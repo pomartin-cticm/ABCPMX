@@ -1,0 +1,162 @@
+﻿
+Public Class Cls_Acier
+
+#Region " Déclarations "
+    Public Const EY As Decimal = 210 * 1000
+    Public Structure strucPlage
+        Dim Ep As Double
+        Dim Fy As Double
+        Dim Fu As Double
+    End Structure
+#End Region
+
+#Region " Attributs "
+
+    Private lUser As Boolean = False
+
+    ''' <summary>
+    ''' nuance de l'acier : S235,S275,S355,S420 ou S460
+    ''' </summary>
+    Public Nuance As String
+
+    ''' <summary>
+    ''' qualité de l'acier : EC3,JR,M,J0W ou MLO
+    ''' </summary>
+    Public Qualite As String
+
+    Public Reduction As String
+
+    ''' <summary>
+    ''' valeur nominale de la limite d'élasticité de la poutre (Pa = N/m²)
+    ''' </summary>
+    Public f_y As (w As Decimal, fs As Decimal, fi As Decimal)
+
+    Public Plages As List(Of strucPlage)
+
+#End Region
+
+#Region " Propriétés "
+
+    ''' <summary>
+    ''' Module d'Young de l'acier (en MPa)
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property EYoung
+        Get
+            Return EY
+        End Get
+    End Property
+
+    Public Function LimiteFy(ByVal Epaisseur As Double) As Decimal
+        '--------------------------------------------------------------------------------
+        '
+        '   04/07/12 :  Création - v3.00 - POM
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   Retourne la limite d'élasticité en fonction de l'épaisseur
+        '
+        '--------------------------------------------------------------------------------
+        '--------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim MyFy As Decimal
+
+        Dim NbPl As Integer = Me.Plages.Count
+        If NbPl = 0 Then Exit Function
+        Dim EpMax As Decimal = Me.Plages(NbPl - 1).Ep
+
+        '--> Traitement
+
+        If Me.lUser Then
+            '--[ Acier défini directement par l'utilisateur
+            'MyFy = FyImpose
+        Else
+            '--[ Acier de la base de donnée : Recherche dans les plages
+            If Plages.Count < 1 Then
+                MyFy = -1
+            Else
+                '--> On commence en dehors des plages
+                If Epaisseur < Plages(0).Ep Then
+                    MyFy = Me.Plages(0).Fy
+                ElseIf Epaisseur > EpMax Then
+                    MyFy = Me.Plages(Plages.Count - 1).Fy
+                    '--> Puis dans les plages
+                ElseIf Plages.Count = 1 Then
+                    MyFy = Plages(0).Fy
+                Else
+
+                    Dim lTrouve As Boolean
+                    Dim i As Integer = 0
+                    lTrouve = (Me.Plages(i).Ep >= Epaisseur)
+
+                    Do While i < Plages.Count - 1 And Not lTrouve
+                        i += 1
+                        lTrouve = (Me.Plages(i).Ep >= Epaisseur)
+                    Loop
+
+                    If lTrouve Then
+                        MyFy = Plages(i - 1).Fy
+                    Else
+                        lTrouve = (Epaisseur <= EpMax)
+                        If lTrouve Then
+                            MyFy = Plages(Plages.Count - 1).Fy
+                        Else
+                            'GestionErreursACB("Cls_SteelNew", "LimiteFy", "Search failure for thickness " & CStr(Epaisseur))
+                        End If
+                    End If
+                End If
+            End If
+        End If
+
+        Return MyFy
+
+    End Function
+
+#End Region
+
+#Region " Constructeur "
+
+    Sub New()
+
+        Me.nuance = "S235"
+        Me.qualite = "EC3"
+
+        Me.f_y.w = 235
+        Me.f_y.fs = 235
+        Me.f_y.fi = 235
+
+        Me.Plages = New List(Of strucPlage)
+
+    End Sub
+
+#End Region
+
+#Region " Ecriture Fichier "
+
+    ''' <summary>
+    ''' Ecriture des attributs pour enregistrement dans un fichier 
+    ''' </summary>
+    ''' <param name="Lines">Lignes d'écriture</param>
+    Public Sub EcrireFile(ByRef Lines As List(Of String))
+
+        Lines.Add("   Nuance        = " & nuance)
+        Lines.Add("   Qualite       = " & qualite)
+        Lines.Add("   Fyw           = " & f_y.w)
+        Lines.Add("   Fyfs          = " & f_y.fs)
+        Lines.Add("   Fyfi          = " & f_y.fi)
+
+    End Sub
+
+#End Region
+
+#Region " Fonction de copie "
+
+    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+        Return Me.MemberwiseClone()
+    End Function
+
+#End Region
+
+End Class

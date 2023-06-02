@@ -1,0 +1,38 @@
+#FRM_JURIDIQUE
+TEXT1					= This software facilitates the preliminary engineering studies with respect to steel constructions. Based on calculation methods complying with the principles of the applied standards, this software enables to make a certain number of verifications in view of evaluating a solution for a pre-design. It does not enable to analyse all situations and to make in an exhaustive way all relevant calculations needed for a study of execution which requires in every case the advice of an external Engineering Office.
+TEXT2					= Given the complexity of the calculation methods, this software is only intended for professional users active in the sector of steel constructions (who are fully aware of the possibilities, limits and its adequacy thereof for specific practical cases). The users shall use the software under his own responsibility and at his own risks.
+TEXT3					= This software may be used free of charge. No right is granted to the user of the software, the property and intellectual rights of which continue to belong exclusively to CTICM. No warranty is granted to the user. CTICM cannot be held liable for any loss or damage directly and/or indirectly sustained as a result of the use of the software. The user undertakes to hold CTICM free and harmless from any claim and any direct, indirect and/or consequential damages, in particular those resulting from an incorrect or inappropriate use or a use made for an inadequate or inappropriate purpose of the software.
+TEXT4					= BY PRESSING THE BUTTON REFERRED TO BELOW AS ''ACCEPT'', THE USER EXPRESSLY DECLARES THAT HE HAS CAREFULLY READ THE ABOVE TEXT AND THAT HE THEREBY ACCEPTS ALL LEGAL CONSEQUENCES AND OBLIGATIONS RESULTING FOR HIM THEREFORE.
+LANGUAGE				= Languages
+WARNING					= Warning
+NOINTERNET				= Connect to the Internet to verify that you are working on the latest version of the software.
+NEWVERSION				= New version of the software is available.
+VERSIONLINK				= Do you want to be redirected to the CTICM website?
+LASTVERSION				= You work on the last version of the software
+AGREE					= Accept
+EXIT					= Exit
+
+#FRM_MAIN
+FILE					= File
+RECENTFILES				= Recent Files
+OPEN					= Open
+NEW						= New
+SAVE					= Save
+SAVEAS					= Save As
+EXIT					= Close
+NPROJET					= New project
+PROJECT					= Project
+PROJECTNAME				= Project name
+SECTIONSLIST			= Sections list
+SECTION					= Section
+COPYPICTURE				= Copy picture
+WARNINGFILE				= Please note that you are opening a file with data from an old version of the software. Please check all data and re-register the file.
+
+#FRM_OUVERTURE
+NEWPROJECT				= New project
+CREATEBEAM				= Create a new beam
+OPENPROJECT				= Open a projet
+BROWSEFILES				= Browse
+RECENTFILES				= Recent Files
+VALIDATE				= Validate
+

@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PMXInterface", "PMXInterface\PMXInterface.vbproj", "{A7147625-2169-41DB-8578-01875078D9B2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D9F6F75A-2C73-4E1B-A27B-791C1098507C} = {D9F6F75A-2C73-4E1B-A27B-791C1098507C}
+	EndProjectSection
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PMXMoteurX", "PMXMoteurX\PMXMoteurX.vbproj", "{D9F6F75A-2C73-4E1B-A27B-791C1098507C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A7147625-2169-41DB-8578-01875078D9B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7147625-2169-41DB-8578-01875078D9B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7147625-2169-41DB-8578-01875078D9B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7147625-2169-41DB-8578-01875078D9B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9F6F75A-2C73-4E1B-A27B-791C1098507C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9F6F75A-2C73-4E1B-A27B-791C1098507C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9F6F75A-2C73-4E1B-A27B-791C1098507C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9F6F75A-2C73-4E1B-A27B-791C1098507C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B05806C9-A4BE-4BB9-AADA-C1B9795B272D}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,39 @@
+#FRM_JURIDIQUE
+TEXT1					= Le présent logiciel facilite les travaux d’études préliminaires dans le cadre de la conception de constructions métalliques. Sur base de méthodes de calcul selon les principes des normes appliquées, il permet d’effectuer un certain nombre de vérifications dans le but de pouvoir évaluer une solution dans le cadre d’un pré dimensionnement. Le logiciel ne permet pas d’analyser toutes les situations et d’effectuer de façon exhaustive tous les calculs justificatifs requis pour une étude d’exécution qui nécessite dans tous les cas le recours au conseil d’un Bureau d’Etudes.
+TEXT2					= En raison de la complexité des méthodes de calcul, ce logiciel s’adresse exclusivement à des utilisateurs professionnels du domaine de la Construction Métallique (qui sont à même de se faire une idée précise de ses possibilités, de ses limites  et de son adéquation aux différents cas d’applications pratiques). L’utilisateur l’utilisera donc sous sa propre responsabilité et à ses risques et périls.
+TEXT3					= Ce logiciel est mis à disposition à titre gratuit. Aucun droit n’est conféré à l’utilisateur du présent logiciel dont la propriété et tous les droits intellectuels continuent à appartenir exclusivement au CTICM. Le CTICM ne peut être tenu responsable d’aucune perte ou dégât directement et/ou indirectement lié au résultat de l’utilisation du logiciel. L’utilisation de ce logiciel ne fait naître aucune obligation de garantie au bénéfice de l’utilisateur, qui s’engage à tenir le CTICM quitte et indemne de tout recours et de tous préjudices directs et/ou indirects découlant notamment d’une utilisation incorrecte ou inappropriée ou d’une utilisation à des fins inadéquates ou inappropriées du logiciel.
+TEXT4					= EN APPUYANT SUR LA TOUCHE ''ACCEPTER'' CI-DESSOUS, L'UTILISATEUR DECLARE EXPRESSEMENT AVOIR LU ATTENTIVEMENT LE TEXTE FIGURANT CI-DESSUS ET EN ACCEPTER TOUS LES EFFETS JURIDIQUES ET OBLIGATIONS QUI EN DECOULENT POUR LUI.
+LANGUAGE				= Langues
+WARNING					= Avertissement
+NOINTERNET				= Connectez-vous à internet pour vérifier que vous travaillez sur la dernière version du logiciel.
+NEWVERSION				= Nouvelle version du logiciel disponible.
+VERSIONLINK     		= Voulez-vous être redirigé vers le site web du CTICM ?
+LASTVERSION				= Vous travaillez sur la dernière version du logiciel
+AGREE					= Accepter
+EXIT					= Quitter
+
+#FRM_MAIN
+FILE					= Fichier
+RECENTFILES				= Fichiers récents
+OPEN					= Ouvrir
+NEW						= Nouveau
+SAVE					= Enregistrer
+SAVEAS					= Enregister sous
+EXIT					= Quitter
+PROJECT					= Projet
+NPROJET					= Nouveau projet
+PROJECTNAME				= Nom du projet
+SECTIONSLIST			= Liste des sections
+SECTION					= Section
+COPYPICTURE				= Copier l'image
+WARNINGFILE				= Attention vous ouvrez un fichier avec des données d'une ancienne version du logiciel. Veuillez vérifier l'ensemble des données et réenregister le fichier.
+
+#FRM_OUVERTURE
+NEWPROJECT				= Nouveau projet
+CREATEASSEMBLY			= Créer une nouvelle section
+OPENPROJECT				= Ouvrir un projet
+BROWSEFILES				= Parcourir
+RECENTFILES				= Fichiers récents
+VALIDATE				= Valider
+
+
