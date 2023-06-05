@@ -4,15 +4,245 @@ Imports System.Collections.Specialized.BitVector32
 Imports System.Drawing.Drawing2D
 Imports PMXMoteur2
 
-
 Module Mod_Dessins
 
 #Region " Variables locales "
 
     Dim MyPenContour As New Pen(Color.Black, 1)
 
+    Const lCONTOURCOTE As Boolean = False
+
+
 #End Region
 
+#Region " Dessins en coupe pour les entraxes (FRM_PORTEE) "
+
+    Public Sub DessinFrmCoupe(MyGr As Graphics, MyPoutre As cls_Poutre,
+                              ByVal pWi As Decimal, ByVal pHi As Decimal,
+                              kAdjust As Double, iSelect As Integer, lCote As Boolean,
+                              ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '------------------------------------------------------------------------------------------------------------------
+        '   05/06/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage du plancher en coupe
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   section     [E] :   Poutre à dessiner
+        '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   iSelect     [E] :   Indique quel est la travée sélectionnée
+        '   lCote       [E] :   Indique si affichage de la cote
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar As Decimal
+        Dim MyParAff As Struc_Affichage
+
+        Dim Largeur, Hauteur As Decimal
+        Dim LargeurBord As Decimal
+        Dim CouleurAcier As Color
+        Dim CouleurBeton As Color
+        Dim CouleurArma As Color
+        Dim hMaxProfile As Decimal = MyPoutre.HauteurMaxiProfiles
+
+        '--> Intialisations
+
+        Largeur = MyPoutre.EntraxeD1 + MyPoutre.EntraxeD2
+        Hauteur = MyPoutre.HauteurTotale
+        dCar = Math.Sqrt(Largeur ^ 2 + Hauteur ^ 2) / 10
+        LargeurBord = Largeur / 5
+
+        '--> Initialisation des paramètres d'affichage
+
+        If MyPoutre.lIntermediaire Then
+            xMin = -MyPoutre.EntraxeD1 - LargeurBord
+            xMax = MyPoutre.EntraxeD2 + LargeurBord
+        End If
+
+        yMin = -dCar - hMaxProfile
+        yMax = MyPoutre.Dalle.zTop + dCar
+
+        If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+        '--> Préparation des Pinceaux utilisés dans le dessin
+
+        CouleurAcier = CouleurAcierNormal
+        CouleurBeton = CouleurBetonNormal
+        CouleurArma = CouleurArmaNormal
+        ' Profilé
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
+        'Béton
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+        ' Armatures
+        Dim myBrushA As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurArma, CouleurArma)
+
+        '--> Affichage
+
+        DessinFrmCoupeStandard(MyGr, MyPoutre, iSelect, dCar, hMaxProfile, MyParAff, myBrushP, myBrushB, myBrushA)
+
+    End Sub
+
+    Private Sub DessinFrmCoupeStandard(ByRef MyGr As Graphics, ByVal MyPoutre As cls_Poutre,
+                                       iSelect As Integer, dCar As Decimal, hMaxProfile As Decimal,
+                                       MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
+        '------------------------------------------------------------------------------------------------------------------
+        '   05/06/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage du plancher en coupe
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MySection   [E] :   Section à dessiner
+        '   iSelect     [E] :   Indice de la cote selectionnée
+        '   MyParaff1   [E] :   Paramètres d'affichage
+        '   lSelect     [E] :   Indique si la section a été selectionnée
+        '   myBrushP    [E] :   Pinceau pour le profilé acier
+        '   myBrushB    [E] :   Pinceau pour le béton
+        '   myBrushA    [E] :   Pinceau pour les armatures
+        '------------------------------------------------------------------------------------------------------------------
+        '   Z de référence : selon specifications
+        '   iSelect     10 : entraxe à gauche
+        '               11 : entraxe à droite
+        '               12 : trémie gauche
+        '               13 : trémie droite
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+
+        Dim IndS As Integer = 1         ' Indice de travée pour représentation des sections
+        Dim lEnrob As Boolean = MyPoutre.Sections(IndS).lEnrobage
+        Const ZREF As Decimal = 0
+
+        '--> Affichage de la section principale
+
+        '# Dessin de béton d'enrobage
+
+        If lEnrob Then _
+        DessinEnrobagePartielBeton(MyGr, MyPoutre.Sections(IndS), MyParaff1, myBrushB)
+
+        '# Dessin de la section acier
+
+        DessinProfileMetal(MyGr, MyPoutre.Sections(IndS).ProfilA, myBrushP, MyParaff1, ZREF)
+
+
+        '--> Affichage de la voisine à gauche
+
+        If MyPoutre.lIntermediaire Then
+
+            '# Dessin de béton d'enrobage
+
+            If lEnrob Then _
+            DessinEnrobagePartielBeton(MyGr, MyPoutre.Sections(IndS), MyParaff1, myBrushB, -MyPoutre.EntraxeD1)
+
+            '# Dessin de la section acier
+
+            DessinProfileMetal(MyGr, MyPoutre.Sections(IndS).ProfilA, myBrushP, MyParaff1, ZREF, -MyPoutre.EntraxeD1)
+
+        End If
+
+        '--> Affichage de la voisine à droite
+
+        '# Dessin de béton d'enrobage
+
+        If lEnrob Then _
+        DessinEnrobagePartielBeton(MyGr, MyPoutre.Sections(IndS), MyParaff1, myBrushB, +MyPoutre.EntraxeD2)
+
+        '# Dessin de la section acier
+
+        DessinProfileMetal(MyGr, MyPoutre.Sections(IndS).ProfilA, myBrushP, MyParaff1, ZREF, MyPoutre.EntraxeD2)
+
+        '--> Affichage de la dalle béton
+
+
+
+
+        '--> Représentation des trémies
+
+
+
+        '--> Affichage des cotes
+
+        DessinFrmCoupeCotes(MyGr, MyPoutre, MyParaff1, iSelect, dCar, hMaxProfile)
+
+    End Sub
+
+    Private Sub DessinFrmCoupeCotes(ByRef MyGr As Graphics, ByVal MyPoutre As cls_Poutre, MyParaff1 As Struc_Affichage,
+                                    iSelect As Integer, dCar As Decimal, hMaxProfile As Decimal)
+        '------------------------------------------------------------------------------------------------------------------
+        '   05/06/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage des cotes du plancher en coupe
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MySection   [E] :   Section à dessiner
+        '   MyParaff1   [E] :   Paramètres d'affichage
+        '   iSelect     [E] :   Indice de la cote selectionnée
+        '   dCar        [E] :   Dimension caractéristique
+        '   hMaxProfile [E] :   Hauteur maxi des profilés
+        '------------------------------------------------------------------------------------------------------------------
+        '   Z de référence : selon specifications
+        '   iSelect     101 : entraxe à gauche
+        '               102 : entraxe à droite
+        '               103 : trémie gauche
+        '               104 : trémie droite
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+
+        Dim yCote As Decimal = -hMaxProfile - dCar
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyColor As Color
+        Const lAffSymbol As Boolean = False
+        Dim Chaine As String
+        Dim MyFontNormal As Font = FontBase
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        '--> Entraxe à gauche
+
+        MyColor = StyleCouleur(iSelect, 101)
+        MyPen.Color = MyColor
+
+        xo = -MyPoutre.EntraxeD1
+        xe = 0
+
+        AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParaff1, True, True)
+
+        If lAffSymbol Then Chaine = "D1" Else Chaine = GetStringNoUnit(MyPoutre.EntraxeD1, Enu_TypeVariable.Longueur)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        '--> Entraxe à droite
+
+        MyColor = StyleCouleur(iSelect, 102)
+        MyPen.Color = MyColor
+
+        xo = 0
+        xe = MyPoutre.EntraxeD2
+
+        AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParaff1, True, True)
+
+        If lAffSymbol Then Chaine = "D2" Else Chaine = GetStringNoUnit(MyPoutre.EntraxeD2, Enu_TypeVariable.Longueur)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        '--> Trémie Gauche
+
+        '--> Trémie Droite
+
+
+
+    End Sub
+
+    Private Sub DessinFrmCoupeSFB()
+
+    End Sub
+
+#End Region
 
 #Region " Dessins pour la portée (FRM_PORTEE) "
 
@@ -26,19 +256,22 @@ Module Mod_Dessins
         '   Affichage des travées dans la fenêtre portées
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   section     [E] :   Section à dessiner
+        '   MyPoutre    [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
-        '   MyFont      [E] :   
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   iSelect     [E] :   Indique quel est la travée sélectionnée
         '   lCote       [E] :   Indique si affichage de la cote
+        '------------------------------------------------------------------------------------------------------------------
+        '   iSelect     0  : console gauche
+        '               i  : travée sur 2 appui no i
+        '               99 : console droite
         '------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
 
         Dim xMin, xMax As Decimal
         Dim yMin, yMax As Decimal
-        Dim dCar As Decimal
+        Dim dCar, dCarApp As Decimal
         Dim MyParAff As Struc_Affichage
         Dim xo, yo As Decimal
         Dim xe, ye As Decimal
@@ -46,21 +279,27 @@ Module Mod_Dessins
         Dim MyBrush As New SolidBrush(Color.LightGray)
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyColor As Color
+        Const lAffSymbol As Boolean = False
+        Dim Chaine As String
+        Dim MyFontNormal As Font = FontBase
+        Dim lTotal As Boolean = False
+        Dim lContour As Boolean = lCONTOURCOTE
 
         '--> Initialisations
 
         Longueur = MyPoutre.LongueurTotale
         Hauteur = MyPoutre.HauteurTotale
-        'dCar = Math.Sqrt(Longueur ^ 2 + Hauteur ^ 2) / 15
-        dCar = Hauteur / 2
+        dCar = Math.Sqrt(Longueur ^ 2 + Hauteur ^ 2) / 20
+        dCarApp = Hauteur / 2
 
         '--> Initialisation des paramètres d'affichage
 
         xMin = 0
         xMax = Longueur
-        yMin = -2 * dCar
+        yMin = -dCar - dCarApp
         yMax = Hauteur + dCar
 
+        If MyPoutre.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
         '--> Représentation de la poutre
@@ -82,18 +321,18 @@ Module Mod_Dessins
         For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
 
             xo = MyPoutre.xPositionAppui(True, i)
-            DessineAppui(MyGr, xo, dCar, MyParAff)
+            DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
         Next
 
         xo = MyPoutre.xPositionAppui(False, MyPoutre.NombreTraveesDeuxAppuis)
-        DessineAppui(MyGr, xo, dCar, MyParAff)
+        DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
         '=== COTES =======================================================
 
         If lCote Then
 
-            Dim yCote As Decimal = -2 * dCar
+            Dim yCote As Decimal = -dCar - dCarApp
 
             xo = 0
             xe = 0
@@ -110,6 +349,10 @@ Module Mod_Dessins
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
+                If lAffSymbol Then Chaine = "Lg" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(0), Enu_TypeVariable.Longueur)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                lTotal = True
             End If
 
             ' Travées principales
@@ -124,6 +367,9 @@ Module Mod_Dessins
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i), Enu_TypeVariable.Longueur)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
             Next
 
             ' Travée console droite
@@ -137,6 +383,25 @@ Module Mod_Dessins
                 xe += MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite)
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                If lAffSymbol Then Chaine = "Ld" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                lTotal = True
+
+            End If
+
+            ' Longueur totale si plusieurs travées
+
+            If lTotal Then
+
+                xo = 0
+                xe = Longueur
+
+                AddFleche(MyGr, MyPen, xo, yCote - dCar, xe, yCote - dCar, MyParAff, True, True)
+
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(Longueur, Enu_TypeVariable.Longueur)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote - dCar, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             End If
 
@@ -214,7 +479,7 @@ Module Mod_Dessins
 
 #Region " Dessins pour le choix des sections "
 
-    Public Sub DessinFrmTypeSection(ByRef MyGr As Graphics, ByVal MySection As cls_Section,
+    Public Sub DessinFrmTypeSection(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As Cls_Dalle,
                                     ByVal pWi As Decimal, ByVal pHi As Decimal, ByVal MyFont As Font,
                                     kAdjust As Double, lSelect As Boolean,
                                     ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
@@ -240,21 +505,6 @@ Module Mod_Dessins
         Dim yMin, yMax As Decimal
         Dim dCar As Decimal
         Dim MyParAff As Struc_Affichage
-
-        '--> Couleur
-
-        'Dim CouleurAcierNormal As Color = BleuCTICM
-        'Dim CouleurAcierSelect As Color = Color.DarkSlateBlue
-        'Dim CouleurBetonNormal As Color = Color.Gray
-        'Dim CouleurBetonSelect As Color = Color.DarkSlateGray
-        'Dim CouleurArmaNormal As Color = Color.Orange
-        'Dim CouleurArmaSelect As Color = Color.DarkOrange
-        Dim CouleurAcierNormal As Color = Color.DarkSlateGray
-        Dim CouleurAcierSelect As Color = BleuCTICM
-        Dim CouleurBetonNormal As Color = Color.LightGray
-        Dim CouleurBetonSelect As Color = Color.DarkSlateGray
-        Dim CouleurArmaNormal As Color = Color.LightSlateGray
-        Dim CouleurArmaSelect As Color = Color.DarkOrange
         Dim CouleurAcier As Color
         Dim CouleurBeton As Color
         Dim CouleurArma As Color
@@ -262,6 +512,8 @@ Module Mod_Dessins
         '--> Initialisations
 
         BfMax = Math.Max(MySection.ProfilA.b_fs, MySection.ProfilA.b_fi)
+
+        '--> Couleur
 
         If lSelect Then
             CouleurAcier = CouleurAcierSelect
@@ -275,7 +527,7 @@ Module Mod_Dessins
 
         '--> Initialisation des paramètres d'affichage
 
-        GenereDimensionsEnveloppes(MySection, lDalleRed, xMin, xMax, yMin, yMax, dCar, BeffRed, 0)
+        GenereDimensionsEnveloppes(MySection, MyDalle, lDalleRed, xMin, xMax, yMin, yMax, dCar, BeffRed, 0)
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
@@ -294,11 +546,11 @@ Module Mod_Dessins
             Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage,
                  cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
 
-                DessinFrmTypeSectionStandard(MyGr, MySection, MyParAff, BeffRed, myBrushP, myBrushB, myBrushA)
+                DessinFrmTypeSectionStandard(MyGr, MySection, MyDalle, MyParAff, BeffRed, myBrushP, myBrushB, myBrushA)
 
             Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
 
-                DessinFrmTypeSFB(MyGr, MySection, MyParAff, myBrushP, myBrushB, myBrushA)
+                DessinFrmTypeSFB(MyGr, MySection, MyDalle, MyParAff, myBrushP, myBrushB, myBrushA)
 
         End Select
 
@@ -310,7 +562,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinFrmTypeSFB(ByRef MyGr As Graphics, ByVal MySection As cls_Section,
+    Private Sub DessinFrmTypeSFB(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As Cls_Dalle,
                                  MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
@@ -334,7 +586,7 @@ Module Mod_Dessins
         '--> Dessin de la dalle pour un SFB mixte
 
         If lMixte Then
-            DessinDalleSlimFloor(MyGr, MySection.Dalle, MySection.ProfilA.ha, MyParaff1, myBrushB)
+            DessinDalleSlimFloor(MyGr, MyDalle, MySection.ProfilA.ha, MyParaff1, myBrushB)
         End If
 
         '--> Dessin de la section acier
@@ -347,9 +599,9 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinFrmTypeSectionStandard(ByRef MyGr As Graphics, ByVal MySection As cls_Section,
+    Private Sub DessinFrmTypeSectionStandard(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As Cls_Dalle,
                                              MyParaff1 As Struc_Affichage, BeffRed As Decimal,
-                                              myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
+                                             myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
@@ -400,9 +652,9 @@ Module Mod_Dessins
 
             '# Dalle béton
 
-            Select Case MySection.Dalle.type
+            Select Case MyDalle.type
                 Case Cls_Dalle.Enum_TypeDalle.Pleine
-                    DessinDallePleine(MyGr, MySection.Dalle, MySection.ProfilA.ha, MySection.ProfilA.b_fs, MyParaff1, myBrushB, BeffRed)
+                    DessinDallePleine(MyGr, MyDalle, MySection.ProfilA.ha, MySection.ProfilA.b_fs, MyParaff1, myBrushB, BeffRed)
                     'Case Cls_Dalle.Enum_TypeDalle.Mixte
                     '    DessinDalleMixte(MyGr, Section.dalle, BeffRed, Section.ha, Section.b_fs, ZREF, MyParAff, myBrushB)
             End Select
@@ -685,7 +937,8 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinProfileMetal(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage, zRef As Decimal)
+    Private Sub DessinProfileMetal(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
+                                   zRef As Decimal, Optional xPos As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------
         '   01/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -696,6 +949,7 @@ Module Mod_Dessins
         '   MyBrush     [E] :   Pinceau utilisé pour le remplissage
         '   MyParrffloc [E] :   Paramètres d'affichage
         '   zRef        [E] :   z de reférence (0 pour la fibre supérieure de la section acier)
+        '   xPos        [E] :   Position x de la section représentée
         '---------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -715,14 +969,17 @@ Module Mod_Dessins
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
                 PrepareContourLamine(MyProfil, xPts, yPts, nbPts)
                 DecalePts(yPts, nbPts, zRef)
+                If Math.Abs(xPos) > 0 Then
+                    DecalePts(xPts, nbPts, xPos)
+                End If
                 RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
 
                 '-< Semelle supérieure >-
 
-                xe = MyProfil.b_fs / 2
-                xo = -MyProfil.b_fs / 2
+                xe = xPos + MyProfil.b_fs / 2
+                xo = xPos + MyProfil.b_fs / 2
                 ye = -zRef                              ' Section.ha / 2
                 yo = -MyProfil.t_fs - zRef               ' Section.ha / 2 - Section.t_fs
 
@@ -730,8 +987,8 @@ Module Mod_Dessins
 
                 '-< Semelle inférieure >-
 
-                xe = MyProfil.b_fi / 2
-                xo = -MyProfil.b_fi / 2
+                xe = xPos + MyProfil.b_fi / 2
+                xo = xPos - MyProfil.b_fi / 2
                 ye = -MyProfil.ha - zRef                  '   - Section.ha / 2
                 yo = -MyProfil.ha + MyProfil.t_fi - zRef
 
@@ -739,8 +996,8 @@ Module Mod_Dessins
 
                 '-< Âme >-
 
-                xe = MyProfil.t_w / 2
-                xo = -MyProfil.t_w / 2
+                xe = xPos + MyProfil.t_w / 2
+                xo = xPos - MyProfil.t_w / 2
                 ye = -MyProfil.t_fs - zRef
                 yo = -MyProfil.ha - zRef + MyProfil.t_fi
 
@@ -807,7 +1064,7 @@ Module Mod_Dessins
 #Region " Outils pour le dessin du béton d'enrobage (y compris les armatures) "
 
     Private Sub DessinEnrobagePartielBeton(ByRef MyGr As Graphics, ByVal MySection As cls_Section,
-                                           MyParAff As Struc_Affichage, MyBrushBp As Brush)
+                                           MyParAff As Struc_Affichage, MyBrushBp As Brush, Optional xPos As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -826,8 +1083,8 @@ Module Mod_Dessins
 
         '--> Dessin bloc béton
 
-        xe = MySection.ProfilA.b_fi / 2 * MySection.enrobage_partiel.Ratio_bc
-        xo = -xe
+        xe = xPos + MySection.ProfilA.b_fi / 2 * MySection.enrobage_partiel.Ratio_bc
+        xo = xPos - MySection.ProfilA.b_fi / 2 * MySection.enrobage_partiel.Ratio_bc
         ye = -MySection.ProfilA.ha + MySection.ProfilA.t_fi
         yo = -MySection.ProfilA.t_fs
 
@@ -929,7 +1186,7 @@ Module Mod_Dessins
         Return MyColor
     End Function
 
-    Private Sub GenereDimensionsEnveloppes(MySection As cls_Section, lDalleReduite As Boolean,
+    Private Sub GenereDimensionsEnveloppes(MySection As cls_Section, MyDalle As Cls_Dalle, lDalleReduite As Boolean,
                                            ByRef xMin As Decimal, ByRef xMax As Decimal, ByRef yMin As Decimal, ByRef yMax As Decimal,
                                            ByRef dCar As Decimal, ByRef BeffRed As Decimal, Optional zRef As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------
@@ -964,11 +1221,11 @@ Module Mod_Dessins
                 yMax = -zRef
 
                 If MySection.lMixte Then
-                    If lDalleReduite Then BeffRed = Math.Min(MySection.Dalle.Beff, 1.5 * Diagonale) Else BeffRed = MySection.Dalle.Beff
-                    yMax += MySection.Dalle.t_d + MySection.Dalle.EpRenformis
+                    If lDalleReduite Then BeffRed = Math.Min(MyDalle.Beff, 1.5 * Diagonale) Else BeffRed = MyDalle.Beff
+                    yMax += MyDalle.t_d + MyDalle.EpRenformis
                     xMin = -Math.Max(BeffRed / 2, BfMax)
                     xMax = -xMin
-                    dCar = Math.Max(Math.Sqrt(((MySection.ProfilA.ha + MySection.Dalle.zTop) ^ 2 + (MySection.ProfilA.b_fs + MySection.ProfilA.b_fi) ^ 2)), BeffRed) / 20
+                    dCar = Math.Max(Math.Sqrt(((MySection.ProfilA.ha + MyDalle.zTop) ^ 2 + (MySection.ProfilA.b_fs + MySection.ProfilA.b_fi) ^ 2)), BeffRed) / 20
                 Else
                     dCar = Math.Sqrt((MySection.ProfilA.ha ^ 2 + (MySection.ProfilA.b_fs + MySection.ProfilA.b_fi) ^ 2)) / 20
                 End If
@@ -980,13 +1237,11 @@ Module Mod_Dessins
                 yMax = MySection.ProfilA.ha
             Case cls_Section.Enum_TypeSection.SFBmixte
                 yMin = -MySection.ProfilA.Plat_t
-                xMin = -MySection.Dalle.Beff / 2
+                xMin = -MyDalle.Beff / 2
                 xMax = -xMin
-                yMax = MySection.ProfilA.ha + MySection.Dalle.t_d
+                yMax = MySection.ProfilA.ha + MyDalle.t_d
 
         End Select
-
-
 
     End Sub
 

@@ -93,10 +93,10 @@ Module Mod_OutilsGraph
         MyGr.DrawString(Chaine, MyFont, MyPenBrush, xEo - xDecal, yEo - yDecal)
     End Sub
 
-    Sub AddTexteFond(ByRef MyGr As Graphics, ByVal MyPenBrush As Brush, ByVal Chaine As String, ByVal MyFont As Font, _
-                     ByVal xo As Single, ByVal yo As Single, ByVal ParAff As struc_Affichage, _
-                     ByVal HAlign As HorizontalAlignment, ByVal VAlign As VerticalAlignement, _
-                     ByVal MyBrushFond As Brush, ByVal MyPen As Pen)
+    Sub AddTexteFond(ByRef MyGr As Graphics, ByVal MyPenBrush As Brush, ByVal Chaine As String, ByVal MyFont As Font,
+                     ByVal xo As Single, ByVal yo As Single, ByVal ParAff As Struc_Affichage,
+                     ByVal HAlign As HorizontalAlignment, ByVal VAlign As VerticalAlignement,
+                     ByVal MyBrushFond As Brush, ByVal MyPen As Pen, Optional lContour As Boolean = True)
         '-------------------------------------------------------------------------------------
         '
         '   Dessin d'un texte sur un fond et entouré dans un Graphics
@@ -116,8 +116,8 @@ Module Mod_OutilsGraph
         '
         '-------------------------------------------------------------------------------------
 
-        Dim xEo As Single = xEcran(ParAff, xo)
-        Dim yEo As Single = yEcran(ParAff, yo)
+        Dim xEo As Single = XEcran(ParAff, xo)
+        Dim yEo As Single = YEcran(ParAff, yo)
         Dim xDecal, yDecal As Single
         Const FLOU As Single = 2
 
@@ -141,7 +141,7 @@ Module Mod_OutilsGraph
         End Select
 
         MyGr.FillRectangle(MyBrushFond, xEo - xDecal - FLOU, yEo - yDecal, SizeChaine.Width + 2 * FLOU, SizeChaine.Height)
-        MyGr.DrawRectangle(MyPen, xEo - xDecal - FLOU, yEo - yDecal, SizeChaine.Width + 2 * FLOU, SizeChaine.Height)
+        If lContour Then MyGr.DrawRectangle(MyPen, xEo - xDecal - FLOU, yEo - yDecal, SizeChaine.Width + 2 * FLOU, SizeChaine.Height)
 
         MyGr.DrawString(Chaine, MyFont, MyPenBrush, xEo - xDecal, yEo - yDecal)
     End Sub

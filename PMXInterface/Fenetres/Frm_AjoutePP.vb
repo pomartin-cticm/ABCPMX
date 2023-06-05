@@ -224,27 +224,27 @@ Public Class Frm_AjoutePP
 
         Select Case sender.name
             Case Me.chk_SectionAcier.Name
-                DessinFrmTypeSection(e.Graphics, MySectionAcier, Me.chk_SectionAcier.ClientRectangle.Width, Me.chk_SectionAcier.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionAcier, MySectionAcier.Dalle, Me.chk_SectionAcier.ClientRectangle.Width, Me.chk_SectionAcier.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.Acier)
 
             Case Me.chk_SectionAcierEnrobe.Name
-                DessinFrmTypeSection(e.Graphics, MySectionAcierEnrobe, Me.chk_SectionAcierEnrobe.ClientRectangle.Width, Me.chk_SectionAcierEnrobe.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionAcierEnrobe, MySectionAcierEnrobe.Dalle, Me.chk_SectionAcierEnrobe.ClientRectangle.Width, Me.chk_SectionAcierEnrobe.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierEnrobage)
 
             Case Me.chk_SectionMixte.Name
-                DessinFrmTypeSection(e.Graphics, MySectionMixte, Me.chk_SectionMixte.ClientRectangle.Width, Me.chk_SectionMixte.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionMixte, MySectionMixte.Dalle, Me.chk_SectionMixte.ClientRectangle.Width, Me.chk_SectionMixte.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.Mixte)
 
             Case Me.chk_SectionMixteEnrobe.Name
-                DessinFrmTypeSection(e.Graphics, MySectionMixteEnrobe, Me.chk_SectionMixteEnrobe.ClientRectangle.Width, Me.chk_SectionMixteEnrobe.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionMixteEnrobe, MySectionMixteEnrobe.Dalle, Me.chk_SectionMixteEnrobe.ClientRectangle.Width, Me.chk_SectionMixteEnrobe.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage)
 
             Case Me.chk_SFBAcier.Name
-                DessinFrmTypeSection(e.Graphics, MySectionSFB, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionSFB, MySectionSFB.Dalle, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB)
 
             Case Me.chk_SFBMixte.Name
-                DessinFrmTypeSection(e.Graphics, MySectionSFBmixte, Me.chk_SFBMixte.ClientRectangle.Width, Me.chk_SFBMixte.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionSFBmixte, MySectionSFBmixte.Dalle, Me.chk_SFBMixte.ClientRectangle.Width, Me.chk_SFBMixte.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFBmixte)
 
         End Select

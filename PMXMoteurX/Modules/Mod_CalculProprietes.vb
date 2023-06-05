@@ -21,216 +21,216 @@
     ''' <param name="zANE">         [S] Position Axe Neutre Elastique   </param>
     ''' <param name="InertieY">     [S] Moment d'inertie de flexion     </param>
 
-    Public Sub CalProprietes(MySection As cls_Section, Signe As Decimal, nEqEc As Decimal, nEqDalle As Decimal, lValeurCalcul As Boolean,
-                             ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef zANP As Decimal, ByRef MplRd As Decimal)
-        '-----------------------------------------------------------------------------------------
-        '   15/04/2023 :    Création - POM
-        '-----------------------------------------------------------------------------------------
-        '   Calcul des propriétés élastiques d'une section
-        '-----------------------------------------------------------------------------------------
-        '   Référence z:    fibre supérieure du profilé en acier
-        '                   z > 0 au dessus du profilé
-        '-----------------------------------------------------------------------------------------
-        '   MySection       [E] :   Section calculée
-        '   Signe           [E] :   Signe du moment de flexion
-        '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
-        '   nEqDalle        [E] :   Coefficient d'équivalence acier béton pour la dalle
-        '   lValeurCalcul   [E] :   Indique si valeur de calcul ou valeur caractéristique
-        '
-        '   zANE            [S] :   Position ANE / fibre sup du profilé
-        '   InertieY        [S] :   Inertie de flexion élastique / axe YY
-        '   zANP            [S] :   Position ANP / fibre sup du profilé
-        '   MplRd           [S] :   Moment plastique
-        '-----------------------------------------------------------------------------------------
+    'Public Sub CalProprietes(MySection As cls_Section, Signe As Decimal, nEqEc As Decimal, nEqDalle As Decimal, lValeurCalcul As Boolean,
+    '                         ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef zANP As Decimal, ByRef MplRd As Decimal)
+    '    '-----------------------------------------------------------------------------------------
+    '    '   15/04/2023 :    Création - POM
+    '    '-----------------------------------------------------------------------------------------
+    '    '   Calcul des propriétés élastiques d'une section
+    '    '-----------------------------------------------------------------------------------------
+    '    '   Référence z:    fibre supérieure du profilé en acier
+    '    '                   z > 0 au dessus du profilé
+    '    '-----------------------------------------------------------------------------------------
+    '    '   MySection       [E] :   Section calculée
+    '    '   Signe           [E] :   Signe du moment de flexion
+    '    '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
+    '    '   nEqDalle        [E] :   Coefficient d'équivalence acier béton pour la dalle
+    '    '   lValeurCalcul   [E] :   Indique si valeur de calcul ou valeur caractéristique
+    '    '
+    '    '   zANE            [S] :   Position ANE / fibre sup du profilé
+    '    '   InertieY        [S] :   Inertie de flexion élastique / axe YY
+    '    '   zANP            [S] :   Position ANP / fibre sup du profilé
+    '    '   MplRd           [S] :   Moment plastique
+    '    '-----------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim MyModele As New cls_ModeleP
-        Dim FySup, FyInf, FyW As Decimal
-        Dim lLamine As Boolean = MySection.lLamine
-        Dim Aire, Epaisseur, Largeur, Fd, zPos As Decimal
-        Dim GammaM As Decimal = MySection.Param.Gamma_M0
-        Dim GammaC As Decimal = MySection.Param.Gamma_C
-        Dim GammaS As Decimal = MySection.Param.Gamma_S
-        Dim Hw As Decimal = MySection.ProfilA.HauteurAmeHw
+    '    Dim MyModele As New cls_ModeleP
+    '    Dim FySup, FyInf, FyW As Decimal
+    '    Dim lLamine As Boolean = MySection.lLamine
+    '    Dim Aire, Epaisseur, Largeur, Fd, zPos As Decimal
+    '    Dim GammaM As Decimal = MySection.Param.Gamma_M0
+    '    Dim GammaC As Decimal = MySection.Param.Gamma_C
+    '    Dim GammaS As Decimal = MySection.Param.Gamma_S
+    '    Dim Hw As Decimal = MySection.ProfilA.HauteurAmeHw
 
-        Dim lMixte As Boolean = MySection.lMixte
-        Dim lModeleRenformis As Boolean = False
-        Dim DeltaCArma As Decimal = 0
-        Dim lArmaComp As Boolean
+    '    Dim lMixte As Boolean = MySection.lMixte
+    '    Dim lModeleRenformis As Boolean = False
+    '    Dim DeltaCArma As Decimal = 0
+    '    Dim lArmaComp As Boolean
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        FySup = MySection.FySup
-        FyW = MySection.FyW
-        FyInf = MySection.FyInf
-        MySection.dalle.AcierArmatures.Es = MySection.Param.ArmaYoung
-        MySection.enrobage_partiel.AcierArmatures.Es = MySection.Param.ArmaYoung
-        lArmaComp = MySection.Param.lArmaComprimee
-        If lArmaComp Then DeltaCArma = 1 Else DeltaCArma = 0
-        Dim RhoV As Decimal
+    '    FySup = MySection.FySup
+    '    FyW = MySection.FyW
+    '    FyInf = MySection.FyInf
+    '    MySection.dalle.AcierArmatures.Es = MySection.Param.ArmaYoung
+    '    MySection.enrobage_partiel.AcierArmatures.Es = MySection.Param.ArmaYoung
+    '    lArmaComp = MySection.Param.lArmaComprimee
+    '    If lArmaComp Then DeltaCArma = 1 Else DeltaCArma = 0
+    '    Dim RhoV As Decimal
 
-        '--> Mise à jour de la section
+    '    '--> Mise à jour de la section
 
-        MySection.InitialisePositionArmaturesEnrobage()
+    '    MySection.InitialisePositionArmaturesEnrobage()
 
-        '--> Modélisation du profilé acier
+    '    '--> Modélisation du profilé acier
 
-        '# Semelle supérieure
+    '    '# Semelle supérieure
 
-        MyModele.AddMaille(MySection.ProfilA.AireFs, MySection.ProfilA.t_fs, -MySection.ProfilA.t_fs / 2, 1, 1, 1, FySup, 1, GammaM)
+    '    MyModele.AddMaille(MySection.ProfilA.AireFs, MySection.ProfilA.t_fs, -MySection.ProfilA.t_fs / 2, 1, 1, 1, FySup, 1, GammaM)
 
-        '# Âme
+    '    '# Âme
 
-        RhoV = MySection.RhoVCalcul
-        MyModele.AddMaille(Hw * MySection.ProfilA.t_w, Hw, -MySection.ProfilA.t_fs - Hw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM)
+    '    RhoV = MySection.RhoVCalcul
+    '    MyModele.AddMaille(Hw * MySection.ProfilA.t_w, Hw, -MySection.ProfilA.t_fs - Hw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM)
 
-        '# Semelle inférieure
+    '    '# Semelle inférieure
 
-        MyModele.AddMaille(MySection.ProfilA.AireFi, MySection.ProfilA.t_fi, -MySection.ProfilA.ha + MySection.ProfilA.t_fi / 2, 1, 1, 1, FyInf, 1, GammaM)
+    '    MyModele.AddMaille(MySection.ProfilA.AireFi, MySection.ProfilA.t_fi, -MySection.ProfilA.ha + MySection.ProfilA.t_fi / 2, 1, 1, 1, FyInf, 1, GammaM)
 
-        '# Congés de raccordement
+    '    '# Congés de raccordement
 
-        If lLamine Then
+    '    If lLamine Then
 
-            '# Congés supérieurs
+    '        '# Congés supérieurs
 
-            MyModele.AddMailleConges(MySection.ProfilA.r_cs, -MySection.ProfilA.t_fs, 1, 1, 1, FyW, (1 - RhoV), GammaM, Cls_Maille.EnuTypeMaille.CongeSup)
+    '        MyModele.AddMailleConges(MySection.ProfilA.r_cs, -MySection.ProfilA.t_fs, 1, 1, 1, FyW, (1 - RhoV), GammaM, Cls_Maille.EnuTypeMaille.CongeSup)
 
-            '# Congés supérieurs
+    '        '# Congés supérieurs
 
-            MyModele.AddMailleConges(MySection.ProfilA.r_ci, -MySection.ProfilA.ha + MySection.ProfilA.t_fs, 1, 1, 1, FyW, (1 - RhoV), GammaM, Cls_Maille.EnuTypeMaille.CongeInf)
+    '        MyModele.AddMailleConges(MySection.ProfilA.r_ci, -MySection.ProfilA.ha + MySection.ProfilA.t_fs, 1, 1, 1, FyW, (1 - RhoV), GammaM, Cls_Maille.EnuTypeMaille.CongeInf)
 
-        End If
+    '    End If
 
-        '# Béton d'enrobage
+    '    '# Béton d'enrobage
 
-        If MySection.lEnrobage Then
+    '    If MySection.lEnrobage Then
 
-            Largeur = (MySection.LargeurEnrobagePartielBc - MySection.ProfilA.t_w)
-            Epaisseur = MySection.ProfilA.HauteurAmeHw
-            Fd = MySection.enrobage_partiel.beton.Fck
-            MyModele.AddMaille(Largeur * Epaisseur, Epaisseur, -MySection.ProfilA.ha / 2, 0, 1, nEqEc, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
+    '        Largeur = (MySection.LargeurEnrobagePartielBc - MySection.ProfilA.t_w)
+    '        Epaisseur = MySection.ProfilA.HauteurAmeHw
+    '        Fd = MySection.enrobage_partiel.beton.Fck
+    '        MyModele.AddMaille(Largeur * Epaisseur, Epaisseur, -MySection.ProfilA.ha / 2, 0, 1, nEqEc, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
 
-            'Pour les profilés laminés, on doit retirer la parties correspondant aux congés
+    '        'Pour les profilés laminés, on doit retirer la parties correspondant aux congés
 
-            If lLamine Then
+    '        If lLamine Then
 
-                '# Congés supérieurs
+    '            '# Congés supérieurs
 
-                MyModele.AddMailleConges(MySection.ProfilA.r_cs, -MySection.ProfilA.t_fs, 0, 1, nEqEc, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+    '            MyModele.AddMailleConges(MySection.ProfilA.r_cs, -MySection.ProfilA.t_fs, 0, 1, nEqEc, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
 
-                '# Congés supérieurs
+    '            '# Congés supérieurs
 
-                MyModele.AddMailleConges(MySection.ProfilA.r_ci, -MySection.ProfilA.ha + MySection.ProfilA.t_fs, 0, 1, nEqEc, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+    '            MyModele.AddMailleConges(MySection.ProfilA.r_ci, -MySection.ProfilA.ha + MySection.ProfilA.t_fs, 0, 1, nEqEc, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
 
-            End If
+    '        End If
 
-        End If
+    '    End If
 
-        '# Armatures de l'enrobage
+    '    '# Armatures de l'enrobage
 
-        If MySection.lEnrobage Then
+    '    If MySection.lEnrobage Then
 
-            Dim ArmaNb As Integer
-            Dim ArmaPhi As Decimal
-            Dim ArmaNeq As Decimal = MySection.acier.EYoung / MySection.enrobage_partiel.AcierArmatures.Es
+    '        Dim ArmaNb As Integer
+    '        Dim ArmaPhi As Decimal
+    '        Dim ArmaNeq As Decimal = MySection.acier.EYoung / MySection.enrobage_partiel.AcierArmatures.Es
 
-            For i As Integer = 0 To 2
+    '        For i As Integer = 0 To 2
 
-                ArmaNb = MySection.enrobage_partiel.LitsArma(i).nbArma * 2
-                ArmaPhi = MySection.enrobage_partiel.LitsArma(i).Phi
+    '            ArmaNb = MySection.enrobage_partiel.LitsArma(i).nbArma * 2
+    '            ArmaPhi = MySection.enrobage_partiel.LitsArma(i).Phi
 
-                Aire = Math.PI * ArmaPhi ^ 2 / 4
+    '            Aire = Math.PI * ArmaPhi ^ 2 / 4
 
-                If MySection.lArmaturesConcentrees Then
-                    MyModele.AddMaille(ArmaNb * Aire, 0, MySection.enrobage_partiel.LitsArma(i).zArma, 1, DeltaCArma,
-                                       ArmaNeq, Fd, 0.85, GammaS, Cls_Maille.EnuTypeMaille.CercleConcentre)
-                Else
-                    MyModele.AddMailleCirculaire(ArmaPhi / 2, MySection.enrobage_partiel.LitsArma(i).zArma, 1, DeltaCArma,
-                                                 ArmaNeq, Fd, 0.85, GammaS, ArmaNb, Cls_Maille.EnuTypeMaille.Circulaire)
-                End If
+    '            If MySection.lArmaturesConcentrees Then
+    '                MyModele.AddMaille(ArmaNb * Aire, 0, MySection.enrobage_partiel.LitsArma(i).zArma, 1, DeltaCArma,
+    '                                   ArmaNeq, Fd, 0.85, GammaS, Cls_Maille.EnuTypeMaille.CercleConcentre)
+    '            Else
+    '                MyModele.AddMailleCirculaire(ArmaPhi / 2, MySection.enrobage_partiel.LitsArma(i).zArma, 1, DeltaCArma,
+    '                                             ArmaNeq, Fd, 0.85, GammaS, ArmaNb, Cls_Maille.EnuTypeMaille.Circulaire)
+    '            End If
 
-            Next
+    '        Next
 
-        End If
+    '    End If
 
-        '--> Dalle béton
+    '    '--> Dalle béton
 
-        If lMixte Then
+    '    If lMixte Then
 
-            '# Dalle
+    '        '# Dalle
 
-            Largeur = MySection.dalle.Beff
-            Epaisseur = MySection.dalle.EpaisseurActive
-            Fd = MySection.dalle.beton.Fck
-            zPos = MySection.dalle.EpRenformis + MySection.dalle.t_d - Epaisseur / 2
+    '        Largeur = MySection.dalle.Beff
+    '        Epaisseur = MySection.dalle.EpaisseurActive
+    '        Fd = MySection.dalle.beton.Fck
+    '        zPos = MySection.dalle.EpRenformis + MySection.dalle.t_d - Epaisseur / 2
 
-            MyModele.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 0, 1, nEqDalle, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
+    '        MyModele.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 0, 1, nEqDalle, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
 
-            '# Renformis
+    '        '# Renformis
 
-            If lModeleRenformis And (MySection.dalle.type = Cls_Dalle.Enum_TypeDalle.Pleine) Then
+    '        If lModeleRenformis And (MySection.dalle.type = Cls_Dalle.Enum_TypeDalle.Pleine) Then
 
-                Largeur = MySection.ProfilA.b_fs
-                Epaisseur = MySection.dalle.t_h
+    '            Largeur = MySection.ProfilA.b_fs
+    '            Epaisseur = MySection.dalle.t_h
 
-                If (Epaisseur > 0) Then
+    '            If (Epaisseur > 0) Then
 
-                    zPos = MySection.dalle.EpRenformis + Epaisseur / 2
+    '                zPos = MySection.dalle.EpRenformis + Epaisseur / 2
 
-                    MyModele.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 0, 1, nEqDalle, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
+    '                MyModele.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 0, 1, nEqDalle, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
 
-                End If
+    '            End If
 
-            End If
+    '        End If
 
-            '# Armatures
+    '        '# Armatures
 
-            Dim NEqArmaD As Decimal = MySection.acier.EYoung / MySection.dalle.AcierArmatures.Es
-            Dim Fsk As Decimal = MySection.dalle.AcierArmatures.FsK
-            Dim NombreS As Decimal
+    '        Dim NEqArmaD As Decimal = MySection.acier.EYoung / MySection.dalle.AcierArmatures.Es
+    '        Dim Fsk As Decimal = MySection.dalle.AcierArmatures.FsK
+    '        Dim NombreS As Decimal
 
-            For iArma As Integer = 0 To 1
+    '        For iArma As Integer = 0 To 1
 
-                Dim zS, PhiS As Decimal
+    '            Dim zS, PhiS As Decimal
 
-                If MySection.dalle.LitArma(iArma).lActive Then
+    '            If MySection.dalle.LitArma(iArma).lActive Then
 
-                    zS = MySection.dalle.zTop - MySection.dalle.LitArma(iArma).z_s
-                    PhiS = MySection.dalle.LitArma(iArma).PhiS
-                    NombreS = MySection.dalle.Beff / MySection.dalle.LitArma(iArma).EspBar
+    '                zS = MySection.dalle.zTop - MySection.dalle.LitArma(iArma).z_s
+    '                PhiS = MySection.dalle.LitArma(iArma).PhiS
+    '                NombreS = MySection.dalle.Beff / MySection.dalle.LitArma(iArma).EspBar
 
-                    If MySection.lArmaturesConcentrees Then
-                    Else
-                        MyModele.AddMailleCirculaire(PhiS / 2, zS, 1, DeltaCArma, NEqArmaD, Fsk, 1, GammaS, NombreS)
-                    End If
+    '                If MySection.lArmaturesConcentrees Then
+    '                Else
+    '                    MyModele.AddMailleCirculaire(PhiS / 2, zS, 1, DeltaCArma, NEqArmaD, Fsk, 1, GammaS, NombreS)
+    '                End If
 
-                End If
+    '            End If
 
-            Next
+    '        Next
 
-        End If
+    '    End If
 
-        '--> Recherche de l'axe neutre élastique
+    '    '--> Recherche de l'axe neutre élastique
 
-        MyModele.RechercheANE(Signe, zANE)
-        'RechercheANE(MyModele, Signe, zANE)
+    '    MyModele.RechercheANE(Signe, zANE)
+    '    'RechercheANE(MyModele, Signe, zANE)
 
-        '--> Calcul de l'inertie
+    '    '--> Calcul de l'inertie
 
-        'InertieY = InertieFlexionY(MyModele, zANE, Signe)
-        InertieY = MyModele.InertieFlexionY(Signe, zANE)
+    '    'InertieY = InertieFlexionY(MyModele, zANE, Signe)
+    '    InertieY = MyModele.InertieFlexionY(Signe, zANE)
 
-        '--> Recherche de l'axe neutre plastique
+    '    '--> Recherche de l'axe neutre plastique
 
-        MyModele.RechercheANP(Signe, zANP, lValeurCalcul)
+    '    MyModele.RechercheANP(Signe, zANP, lValeurCalcul)
 
-        '--> Moment plastique
+    '    '--> Moment plastique
 
-        MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurCalcul)
+    '    MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurCalcul)
 
-    End Sub
+    'End Sub
 
     ''' <summary>
     ''' Recherche de la position de l'Axe Neutre Elastique par dichotomie 

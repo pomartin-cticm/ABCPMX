@@ -14,17 +14,27 @@ Public Class Frm_Portees
     '   99 console droite
     '----------------------------------------------
 
+    Dim MyPoutreLoc As New cls_Poutre
 
 #End Region
 
 #Region "===OUVERTURE==="
 
+    Private Sub Frm_Portees_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        InitialiserFenetre()
+    End Sub
+
     Public Sub InitialiserFenetre()
         GestionLangues()
         GestionStyle()
         GestionUnites()
+        InitialiserVariables()
         AfficherPoutreEnCours()
         lBuild = False
+    End Sub
+
+    Private Sub InitialiserVariables()
+        cls_Poutre.Clone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
     End Sub
 
     Private Sub GestionLangues()
@@ -35,6 +45,10 @@ Public Class Frm_Portees
             BlocLine.CreationBloc(Bloc)
 
             Try
+
+                Me.Text = Bloc("TITRE")
+                Me.btn_OK.Text = Bloc("OK")
+                Me.btn_Annuler.Text = Bloc("CANCEL")
 
                 '=== MENU PRINCIPAL ==============================================================='
 
@@ -55,20 +69,30 @@ Public Class Frm_Portees
 
     Private Sub GestionStyle()
 
+        Me.Icon = Frm_PMX.Icon
+
         Me.lbl_Portees.BackColor = CouleurBackBandeaux
         Me.lbl_Portees.ForeColor = CouleurForeBandeaux
+        Me.lbl_Coupe.BackColor = CouleurBackBandeaux
+        Me.lbl_Coupe.ForeColor = CouleurForeBandeaux
+        Me.lbl_Tremies.BackColor = CouleurBackBandeaux
+        Me.lbl_Tremies.ForeColor = CouleurForeBandeaux
 
         Me.TLPan_Portees.ColumnStyles(0).Width = LargeurColonneSaisie
 
-        Me.TLPan_Gauche.RowStyles(2).Height = 0
+        'Me.TLPan_Gauche.RowStyles(2).Height = 0
 
-        Dim Hcum As Integer = 0
-        For i As Integer = 0 To 1
-            Hcum += Me.TLPan_Gauche.RowStyles(i).Height
-        Next
-        Me.TLPan_Portees.Height = Hcum
+        'Dim Hcum As Integer = 0
+        'For i As Integer = 0 To 1
+        '    Hcum += Me.TLPan_Gauche.RowStyles(i).Height
+        'Next
+        'Me.TLPan_Portees.Height = Hcum
 
         Me.img_Portees.Dock = DockStyle.Fill
+        Me.img_Portees.BorderStyle = BorderStyle.FixedSingle
+        Me.img_Coupe.Dock = DockStyle.Fill
+        Me.img_Coupe.BorderStyle = BorderStyle.FixedSingle
+
     End Sub
 
     Private Sub AfficherPoutreEnCours()
@@ -93,6 +117,8 @@ Public Class Frm_Portees
         Me.etq_UnitL1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+        Me.etq_UnitL4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+        Me.etq_UnitL5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
 
     End Sub
 
@@ -104,14 +130,87 @@ Public Class Frm_Portees
 
     End Sub
 
+    Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
+
+        If ValideSaisieFenetre() Then
+
+            Dim lModif As Boolean = False
+
+            TransfertSaisie(lModif)
+
+            If lModif Then
+
+            End If
+
+            Me.Close()
+        End If
+
+    End Sub
+
+    Private Function ValideSaisieFenetre() As Boolean
+        Return True
+    End Function
+
+    Private Sub TransfertSaisie(ByRef lModif As Boolean)
+
+        Dim Indice As Integer = MyPoutreLoc.IndiceTraveeConsoleDroite
+
+        '--> Portée travée principale
+
+        lModif = False
+        If MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(1) <> MyPoutreLoc.LongueurTravee(1) Then
+            lModif = True
+            MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(1) = MyPoutreLoc.LongueurTravee(1)
+        End If
+
+        '--> Console gauche
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleGauche <> MyPoutreLoc.lTraveeConsoleGauche Then
+            lModif = True
+            MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleGauche = MyPoutreLoc.lTraveeConsoleGauche
+        End If
+
+        If MyPoutreLoc.lTraveeConsoleGauche Then
+            If MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(0) <> MyPoutreLoc.LongueurTravee(0) Then
+                lModif = True
+                MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(0) = MyPoutreLoc.LongueurTravee(0)
+            End If
+        End If
+
+        '--> Console droite
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleDroite <> MyPoutreLoc.lTraveeConsoleDroite Then
+            lModif = True
+            MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleDroite = MyPoutreLoc.lTraveeConsoleDroite
+        End If
+
+        If MyPoutreLoc.lTraveeConsoleDroite Then
+            If MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(Indice) <> MyPoutreLoc.LongueurTravee(Indice) Then
+                lModif = True
+                MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(Indice) = MyPoutreLoc.LongueurTravee(Indice)
+            End If
+        End If
+
+    End Sub
+
+    Private Sub btn_Annuler_Click(sender As Object, e As EventArgs) Handles btn_Annuler.Click
+        Me.Close()
+    End Sub
 
 #End Region
 
 #Region " Dessins "
 
+    Private Sub img_Coupe_Paint(sender As Object, e As PaintEventArgs) Handles img_Coupe.Paint
+
+        DessinFrmCoupe(e.Graphics, MyPoutreLoc, Me.img_Coupe.ClientRectangle.Width, Me.img_Coupe.ClientRectangle.Height, 1, iSelect, True)
+
+    End Sub
+
+
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Portees.Paint
 
-        DessinFrmPortee(e.Graphics, MyProjet.Poutres(MyProjet.IndEnCours), Me.img_Portees.ClientRectangle.Width, Me.img_Portees.ClientRectangle.Height, 1, iSelect, True)
+        DessinFrmPortee(e.Graphics, MyPoutreLoc, Me.img_Portees.ClientRectangle.Width, Me.img_Portees.ClientRectangle.Height, 1, iSelect, True)
 
     End Sub
 
@@ -169,20 +268,120 @@ Public Class Frm_Portees
 
 #Region " Evènements "
 
+    Private Sub img_Portees_Resize(sender As Object, e As EventArgs) Handles img_Portees.Resize
+        Me.img_Portees.Invalidate()
+    End Sub
+
+    Private Sub img_Coupe_Resize(sender As Object, e As EventArgs) Handles img_Coupe.Resize
+        Me.img_Coupe.Invalidate()
+    End Sub
+
+    Private Sub EnterTextBox(sender As Object, e As EventArgs) Handles txt_TremieGauche.Enter, txt_PorteeConsoleG.Enter, txt_PorteeConsoleD.Enter, txt_MainSpan.Enter, txt_D2.Enter, txt_D1.Enter
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.txt_MainSpan.Name : iSelect = 1
+            Case Me.txt_PorteeConsoleG.Name : iSelect = 0
+            Case Me.txt_PorteeConsoleD.Name : iSelect = 99
+            Case Me.txt_D1.Name : iSelect = 101
+            Case Me.txt_D2.Name : iSelect = 102
+
+        End Select
+
+        Me.img_Coupe.Invalidate()
+        Me.img_Portees.Invalidate()
+    End Sub
+
+    Private Sub LeaveTextBox(sender As Object, e As EventArgs) Handles txt_TremieGauche.Leave, txt_PorteeConsoleG.Leave, txt_PorteeConsoleD.Leave, txt_MainSpan.Leave, txt_D2.Leave, txt_D1.Leave
+
+        If lBuild Then Exit Sub
+        iSelect = -1
+
+        Me.img_Coupe.Invalidate()
+        Me.img_Portees.Invalidate()
+
+    End Sub
+
+
 
 #End Region
 
 #Region " Evènements saisie "
+
+    Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_TremieGauche.TextChanged, txt_PorteeConsoleG.TextChanged, txt_PorteeConsoleD.TextChanged, txt_MainSpan.TextChanged, txt_D2.TextChanged, txt_D1.TextChanged
+        If lBuild Then Exit Sub
+        Dim lPortees As Boolean = False
+        Dim lCoupe As Boolean = False
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, valeurui) Then
+
+            Select Case sender.name
+                Case Me.txt_MainSpan.Name
+                    MyPoutreLoc.LongueurTravee(1) = ValeurUI
+                    lPortees = True
+                Case Me.txt_PorteeConsoleG.Name
+                    MyPoutreLoc.LongueurTravee(0) = ValeurUI
+                    lPortees = True
+                Case Me.txt_PorteeConsoleD.Name
+                    MyPoutreLoc.LongueurTravee(MyPoutreLoc.IndiceTraveeConsoleDroite) = ValeurUI
+                    lPortees = True
+            End Select
+
+            If lPortees Then Me.img_Portees.Invalidate()
+            If lCoupe Then Me.img_Coupe.Invalidate()
+
+        End If
+
+
+    End Sub
+
+
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        Dim lOk As Boolean = True
+        ErrorProvider.Clear()
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+        Select Case MyTxt.Name
+            Case Me.txt_MainSpan.Name
+
+                ValMin = PORTEEMIN / kUnit
+                ValMax = PORTEEMAX / kUnit
+
+            Case Me.txt_PorteeConsoleG.Name, Me.txt_PorteeConsoleD.Name
+
+                ValMin = CONSOLEMIN / kUnit
+                ValMax = RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit
+
+        End Select
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+    End Function
 
     Private Sub ChoixConsoles(sender As Object, e As EventArgs) Handles chk_ConsoleGauche.CheckedChanged, chk_ConsoleDroite.CheckedChanged
         If lBuild Then Exit Sub
 
         Select Case sender.name
             Case Me.chk_ConsoleGauche.Name
-                MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleGauche = Me.chk_ConsoleGauche.Checked
+                MyPoutreLoc.lTraveeConsoleGauche = Me.chk_ConsoleGauche.Checked
                 iSelect = 0
             Case Me.chk_ConsoleDroite.Name
-                MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleDroite = Me.chk_ConsoleDroite.Checked
+                MyPoutreLoc.lTraveeConsoleDroite = Me.chk_ConsoleDroite.Checked
                 iSelect = 99
         End Select
 
@@ -192,15 +391,17 @@ Public Class Frm_Portees
 
     Private Sub MAJ_PorteesConsoles()
 
-        Me.txt_PorteeConsoleG.Visible = MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleGauche
-        Me.etq_UnitL2.Visible = MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleGauche
-        Me.img_L2.Visible = MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleGauche
+        Me.txt_PorteeConsoleG.Visible = MyPoutreLoc.lTraveeConsoleGauche
+        Me.etq_UnitL2.Visible = MyPoutreLoc.lTraveeConsoleGauche
+        Me.img_L2.Visible = MyPoutreLoc.lTraveeConsoleGauche
 
-        Me.txt_PorteeConsoleD.Visible = MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleDroite
-        Me.etq_UnitL3.Visible = MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleDroite
-        Me.img_L3.Visible = MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleDroite
+        Me.txt_PorteeConsoleD.Visible = MyPoutreLoc.lTraveeConsoleDroite
+        Me.etq_UnitL3.Visible = MyPoutreLoc.lTraveeConsoleDroite
+        Me.img_L3.Visible = MyPoutreLoc.lTraveeConsoleDroite
 
     End Sub
+
+
 
 
 #End Region

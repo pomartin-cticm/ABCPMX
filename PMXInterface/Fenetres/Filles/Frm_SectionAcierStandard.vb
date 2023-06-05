@@ -1,28 +1,32 @@
-﻿Imports PMXMoteur2
-Imports System.IO
+﻿Imports System.IO
+Imports PMXMoteur2
 
-Public Class Frm_Basic
+Public Class Frm_SectionAcierStandard
 
-#Region " Variables locales "
-
+#Region " Variables "
     Dim lBuild As Boolean = True
-
 #End Region
 
 #Region "===OUVERTURE==="
+
+    Private Sub Frm_SectionAcierStandard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        InitialiserFenetre()
+    End Sub
+
 
     Public Sub InitialiserFenetre()
         GestionLangues()
         GestionStyle()
         GestionUnites()
         AfficherPoutreEnCours()
+        lBuild = False
     End Sub
 
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_BASIC")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_SECTIONACIERSTANDARD")
             BlocLine.CreationBloc(Bloc)
 
             Try
@@ -47,6 +51,14 @@ Public Class Frm_Basic
 
     Private Sub GestionStyle()
 
+        Me.Icon = Frm_PMX.Icon
+
+        Me.lbl_Section.BackColor = CouleurBackBandeaux
+        Me.lbl_Section.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_Acier.BackColor = CouleurBackBandeaux
+        Me.lbl_Acier.ForeColor = CouleurForeBandeaux
+
     End Sub
 
     Private Sub AfficherPoutreEnCours()
@@ -57,23 +69,24 @@ Public Class Frm_Basic
 
 #Region "===FERMETURE==="
 
-    Public Sub TraitementSaisie()
-
+    Private Sub btn_Annuler_Click(sender As Object, e As EventArgs) Handles btn_Annuler.Click
+        Me.Close()
     End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
-        Dim lModif As Boolean = False
         If ValideSaisieFenetre() Then
 
-            TransfertSaisie(lmodif)
+            Dim lModif As Boolean = False
 
-            If lmodif Then
+            TransfertSaisie(lModif)
+
+            If lModif Then
 
             End If
+
             Me.Close()
         End If
     End Sub
-
 
     Private Function ValideSaisieFenetre() As Boolean
         Return True
@@ -85,19 +98,4 @@ Public Class Frm_Basic
 
 #End Region
 
-#Region " Dessins "
-
-
-
-#End Region
-
-#Region " Evènements "
-
-
-#End Region
-
-#Region " Evènements saisie "
-
-
-#End Region
 End Class

@@ -82,10 +82,29 @@ Partial Class Frm_PMX
         Me.cmb_Projet = New System.Windows.Forms.ComboBox()
         Me.pan_ListePoutres = New System.Windows.Forms.Panel()
         Me.TLPan_ListPoutres = New System.Windows.Forms.TableLayoutPanel()
+        Me.TLPan_ZoneDeSaisie = New System.Windows.Forms.TableLayoutPanel()
+        Me.ToolStrip_Poutre = New System.Windows.Forms.ToolStrip()
+        Me.TSbtn_Accueil = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator27 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TSbtn_Portees = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Entraxe = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TSbtn_Dalle = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_SectionA = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Enrobage = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Connexion = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator31 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TSbtn_Maitiens = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Etaiement = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TSbtn_Chargements = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Gamma = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.img_Main = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
         Me.TLPan_Menus = New System.Windows.Forms.TableLayoutPanel()
-        Me.ToolStrip2 = New System.Windows.Forms.ToolStrip()
+        Me.ToolStrip_Main = New System.Windows.Forms.ToolStrip()
         Me.btn_NewN = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
@@ -140,23 +159,6 @@ Partial Class Frm_PMX
         Me.ToolStripButton15 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton16 = New System.Windows.Forms.ToolStripButton()
-        Me.TLPan_ZoneDeSaisie = New System.Windows.Forms.TableLayoutPanel()
-        Me.ToolStrip3 = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripSeparator27 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator29 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_Accueil = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_Portees = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_Entraxe = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_Dalle = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_SectionA = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_Enrobage = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_Connexion = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator31 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_Maitiens = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_Etaiement = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_Chargements = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         Me.ToolStrip_MenuSecondaire.SuspendLayout()
         Me.ToolStrip_MenuPrincipal.SuspendLayout()
@@ -168,16 +170,17 @@ Partial Class Frm_PMX
         Me.TLPanel_SideBar.SuspendLayout()
         Me.Panel_NomProjet.SuspendLayout()
         Me.pan_ListePoutres.SuspendLayout()
+        Me.TLPan_ZoneDeSaisie.SuspendLayout()
+        Me.ToolStrip_Poutre.SuspendLayout()
+        CType(Me.img_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.img_Logo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLPan_Menus.SuspendLayout()
-        Me.ToolStrip2.SuspendLayout()
+        Me.ToolStrip_Main.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.ToolStripContainer1.BottomToolStripPanel.SuspendLayout()
         Me.ToolStripContainer1.SuspendLayout()
         Me.ToolStrip4.SuspendLayout()
-        Me.TLPan_ZoneDeSaisie.SuspendLayout()
-        Me.ToolStrip3.SuspendLayout()
         Me.SuspendLayout()
         '
         'TLPan_Main
@@ -723,6 +726,179 @@ Partial Class Frm_PMX
         Me.TLPan_ListPoutres.Size = New System.Drawing.Size(142, 188)
         Me.TLPan_ListPoutres.TabIndex = 7
         '
+        'TLPan_ZoneDeSaisie
+        '
+        Me.TLPan_ZoneDeSaisie.ColumnCount = 1
+        Me.TLPan_ZoneDeSaisie.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_ZoneDeSaisie.Controls.Add(Me.ToolStrip_Poutre, 0, 0)
+        Me.TLPan_ZoneDeSaisie.Controls.Add(Me.img_Main, 0, 1)
+        Me.TLPan_ZoneDeSaisie.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLPan_ZoneDeSaisie.Location = New System.Drawing.Point(0, 0)
+        Me.TLPan_ZoneDeSaisie.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_ZoneDeSaisie.Name = "TLPan_ZoneDeSaisie"
+        Me.TLPan_ZoneDeSaisie.RowCount = 3
+        Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TLPan_ZoneDeSaisie.Size = New System.Drawing.Size(970, 416)
+        Me.TLPan_ZoneDeSaisie.TabIndex = 0
+        '
+        'ToolStrip_Poutre
+        '
+        Me.ToolStrip_Poutre.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.ToolStrip_Poutre.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ToolStrip_Poutre.GripMargin = New System.Windows.Forms.Padding(0)
+        Me.ToolStrip_Poutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip_Poutre.ImageScalingSize = New System.Drawing.Size(24, 24)
+        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Accueil, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.TSbtn_Entraxe, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maitiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.ToolStripButton1})
+        Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
+        Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
+        Me.ToolStrip_Poutre.Size = New System.Drawing.Size(970, 31)
+        Me.ToolStrip_Poutre.TabIndex = 5
+        Me.ToolStrip_Poutre.Text = "ToolStrip1"
+        '
+        'TSbtn_Accueil
+        '
+        Me.TSbtn_Accueil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Accueil.Image = CType(resources.GetObject("TSbtn_Accueil.Image"), System.Drawing.Image)
+        Me.TSbtn_Accueil.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Accueil.Name = "TSbtn_Accueil"
+        Me.TSbtn_Accueil.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Accueil.Text = "ToolStripButton4"
+        '
+        'ToolStripSeparator27
+        '
+        Me.ToolStripSeparator27.Name = "ToolStripSeparator27"
+        Me.ToolStripSeparator27.Size = New System.Drawing.Size(6, 31)
+        '
+        'TSbtn_Portees
+        '
+        Me.TSbtn_Portees.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Portees.Image = CType(resources.GetObject("TSbtn_Portees.Image"), System.Drawing.Image)
+        Me.TSbtn_Portees.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Portees.Name = "TSbtn_Portees"
+        Me.TSbtn_Portees.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Portees.Text = "ToolStripButton4"
+        '
+        'TSbtn_Entraxe
+        '
+        Me.TSbtn_Entraxe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Entraxe.Image = CType(resources.GetObject("TSbtn_Entraxe.Image"), System.Drawing.Image)
+        Me.TSbtn_Entraxe.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Entraxe.Name = "TSbtn_Entraxe"
+        Me.TSbtn_Entraxe.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Entraxe.Text = "ToolStripButton4"
+        Me.TSbtn_Entraxe.Visible = False
+        '
+        'ToolStripSeparator30
+        '
+        Me.ToolStripSeparator30.Name = "ToolStripSeparator30"
+        Me.ToolStripSeparator30.Size = New System.Drawing.Size(6, 31)
+        '
+        'TSbtn_Dalle
+        '
+        Me.TSbtn_Dalle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Dalle.Image = CType(resources.GetObject("TSbtn_Dalle.Image"), System.Drawing.Image)
+        Me.TSbtn_Dalle.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Dalle.Name = "TSbtn_Dalle"
+        Me.TSbtn_Dalle.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Dalle.Text = "ToolStripButton1"
+        '
+        'TSbtn_SectionA
+        '
+        Me.TSbtn_SectionA.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_SectionA.Image = CType(resources.GetObject("TSbtn_SectionA.Image"), System.Drawing.Image)
+        Me.TSbtn_SectionA.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_SectionA.Name = "TSbtn_SectionA"
+        Me.TSbtn_SectionA.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_SectionA.Text = "ToolStripButton1"
+        '
+        'TSbtn_Enrobage
+        '
+        Me.TSbtn_Enrobage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Enrobage.Image = CType(resources.GetObject("TSbtn_Enrobage.Image"), System.Drawing.Image)
+        Me.TSbtn_Enrobage.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Enrobage.Name = "TSbtn_Enrobage"
+        Me.TSbtn_Enrobage.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Enrobage.Text = "ToolStripButton1"
+        '
+        'TSbtn_Connexion
+        '
+        Me.TSbtn_Connexion.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Connexion.Image = CType(resources.GetObject("TSbtn_Connexion.Image"), System.Drawing.Image)
+        Me.TSbtn_Connexion.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Connexion.Name = "TSbtn_Connexion"
+        Me.TSbtn_Connexion.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Connexion.Text = "ToolStripButton1"
+        '
+        'ToolStripSeparator31
+        '
+        Me.ToolStripSeparator31.Name = "ToolStripSeparator31"
+        Me.ToolStripSeparator31.Size = New System.Drawing.Size(6, 31)
+        '
+        'TSbtn_Maitiens
+        '
+        Me.TSbtn_Maitiens.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Maitiens.Image = CType(resources.GetObject("TSbtn_Maitiens.Image"), System.Drawing.Image)
+        Me.TSbtn_Maitiens.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Maitiens.Name = "TSbtn_Maitiens"
+        Me.TSbtn_Maitiens.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Maitiens.Text = "ToolStripButton1"
+        '
+        'TSbtn_Etaiement
+        '
+        Me.TSbtn_Etaiement.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Etaiement.Image = CType(resources.GetObject("TSbtn_Etaiement.Image"), System.Drawing.Image)
+        Me.TSbtn_Etaiement.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Etaiement.Name = "TSbtn_Etaiement"
+        Me.TSbtn_Etaiement.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Etaiement.Text = "ToolStripButton1"
+        '
+        'ToolStripSeparator32
+        '
+        Me.ToolStripSeparator32.Name = "ToolStripSeparator32"
+        Me.ToolStripSeparator32.Size = New System.Drawing.Size(6, 31)
+        '
+        'TSbtn_Chargements
+        '
+        Me.TSbtn_Chargements.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Chargements.Image = CType(resources.GetObject("TSbtn_Chargements.Image"), System.Drawing.Image)
+        Me.TSbtn_Chargements.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Chargements.Name = "TSbtn_Chargements"
+        Me.TSbtn_Chargements.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Chargements.Text = "ToolStripButton1"
+        '
+        'TSbtn_Gamma
+        '
+        Me.TSbtn_Gamma.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Gamma.Image = CType(resources.GetObject("TSbtn_Gamma.Image"), System.Drawing.Image)
+        Me.TSbtn_Gamma.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Gamma.Name = "TSbtn_Gamma"
+        Me.TSbtn_Gamma.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Gamma.Text = "ToolStripButton1"
+        '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(28, 28)
+        Me.ToolStripButton1.Text = "ToolStripButton1"
+        '
+        'img_Main
+        '
+        Me.img_Main.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_Main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Main.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.img_Main.Location = New System.Drawing.Point(1, 31)
+        Me.img_Main.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.img_Main.Name = "img_Main"
+        Me.img_Main.Size = New System.Drawing.Size(969, 354)
+        Me.img_Main.TabIndex = 6
+        Me.img_Main.TabStop = False
+        '
         'TableLayoutPanel1
         '
         Me.TableLayoutPanel1.ColumnCount = 2
@@ -752,7 +928,7 @@ Partial Class Frm_PMX
         '
         Me.TLPan_Menus.ColumnCount = 1
         Me.TLPan_Menus.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Menus.Controls.Add(Me.ToolStrip2, 0, 1)
+        Me.TLPan_Menus.Controls.Add(Me.ToolStrip_Main, 0, 1)
         Me.TLPan_Menus.Controls.Add(Me.ToolStrip1, 0, 0)
         Me.TLPan_Menus.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Menus.Location = New System.Drawing.Point(0, 0)
@@ -764,20 +940,20 @@ Partial Class Frm_PMX
         Me.TLPan_Menus.Size = New System.Drawing.Size(1023, 60)
         Me.TLPan_Menus.TabIndex = 1
         '
-        'ToolStrip2
+        'ToolStrip_Main
         '
-        Me.ToolStrip2.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.ToolStrip2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ToolStrip2.GripMargin = New System.Windows.Forms.Padding(0)
-        Me.ToolStrip2.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip2.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip2.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btn_NewN, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator23, Me.Btn_AddSectionN, Me.ToolStripButton5, Me.ToolStripButton6, Me.ToolStripSeparator24, Me.ToolStripButton7, Me.ToolStripSeparator25, Me.ToolStripButton8, Me.ToolStripButton9, Me.ToolStripSeparator26, Me.ToolStripButton10, Me.ToolStripButton11, Me.ToolStripButton12})
-        Me.ToolStrip2.Location = New System.Drawing.Point(0, 25)
-        Me.ToolStrip2.Name = "ToolStrip2"
-        Me.ToolStrip2.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
-        Me.ToolStrip2.Size = New System.Drawing.Size(1023, 35)
-        Me.ToolStrip2.TabIndex = 4
-        Me.ToolStrip2.Text = "ToolStrip1"
+        Me.ToolStrip_Main.BackColor = System.Drawing.SystemColors.ButtonFace
+        Me.ToolStrip_Main.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ToolStrip_Main.GripMargin = New System.Windows.Forms.Padding(0)
+        Me.ToolStrip_Main.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip_Main.ImageScalingSize = New System.Drawing.Size(24, 24)
+        Me.ToolStrip_Main.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btn_NewN, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator23, Me.Btn_AddSectionN, Me.ToolStripButton5, Me.ToolStripButton6, Me.ToolStripSeparator24, Me.ToolStripButton7, Me.ToolStripSeparator25, Me.ToolStripButton8, Me.ToolStripButton9, Me.ToolStripSeparator26, Me.ToolStripButton10, Me.ToolStripButton11, Me.ToolStripButton12})
+        Me.ToolStrip_Main.Location = New System.Drawing.Point(0, 25)
+        Me.ToolStrip_Main.Name = "ToolStrip_Main"
+        Me.ToolStrip_Main.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
+        Me.ToolStrip_Main.Size = New System.Drawing.Size(1023, 35)
+        Me.ToolStrip_Main.TabIndex = 4
+        Me.ToolStrip_Main.Text = "ToolStrip1"
         '
         'btn_NewN
         '
@@ -1231,151 +1407,6 @@ Partial Class Frm_PMX
         Me.ToolStripButton16.Size = New System.Drawing.Size(28, 28)
         Me.ToolStripButton16.Text = "Btn_Icon_Config"
         '
-        'TLPan_ZoneDeSaisie
-        '
-        Me.TLPan_ZoneDeSaisie.ColumnCount = 1
-        Me.TLPan_ZoneDeSaisie.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_ZoneDeSaisie.Controls.Add(Me.ToolStrip3, 0, 0)
-        Me.TLPan_ZoneDeSaisie.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_ZoneDeSaisie.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_ZoneDeSaisie.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_ZoneDeSaisie.Name = "TLPan_ZoneDeSaisie"
-        Me.TLPan_ZoneDeSaisie.RowCount = 2
-        Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
-        Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_ZoneDeSaisie.Size = New System.Drawing.Size(970, 416)
-        Me.TLPan_ZoneDeSaisie.TabIndex = 0
-        '
-        'ToolStrip3
-        '
-        Me.ToolStrip3.BackColor = System.Drawing.SystemColors.ButtonFace
-        Me.ToolStrip3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ToolStrip3.GripMargin = New System.Windows.Forms.Padding(0)
-        Me.ToolStrip3.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip3.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip3.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Accueil, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.TSbtn_Entraxe, Me.ToolStripSeparator29, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maitiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements})
-        Me.ToolStrip3.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip3.Name = "ToolStrip3"
-        Me.ToolStrip3.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
-        Me.ToolStrip3.Size = New System.Drawing.Size(970, 31)
-        Me.ToolStrip3.TabIndex = 5
-        Me.ToolStrip3.Text = "ToolStrip1"
-        '
-        'ToolStripSeparator27
-        '
-        Me.ToolStripSeparator27.Name = "ToolStripSeparator27"
-        Me.ToolStripSeparator27.Size = New System.Drawing.Size(6, 31)
-        '
-        'ToolStripSeparator29
-        '
-        Me.ToolStripSeparator29.Name = "ToolStripSeparator29"
-        Me.ToolStripSeparator29.Size = New System.Drawing.Size(6, 31)
-        '
-        'ToolStripSeparator30
-        '
-        Me.ToolStripSeparator30.Name = "ToolStripSeparator30"
-        Me.ToolStripSeparator30.Size = New System.Drawing.Size(6, 31)
-        '
-        'TSbtn_Accueil
-        '
-        Me.TSbtn_Accueil.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Accueil.Image = CType(resources.GetObject("TSbtn_Accueil.Image"), System.Drawing.Image)
-        Me.TSbtn_Accueil.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Accueil.Name = "TSbtn_Accueil"
-        Me.TSbtn_Accueil.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Accueil.Text = "ToolStripButton4"
-        '
-        'TSbtn_Portees
-        '
-        Me.TSbtn_Portees.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Portees.Image = CType(resources.GetObject("TSbtn_Portees.Image"), System.Drawing.Image)
-        Me.TSbtn_Portees.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Portees.Name = "TSbtn_Portees"
-        Me.TSbtn_Portees.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Portees.Text = "ToolStripButton4"
-        '
-        'TSbtn_Entraxe
-        '
-        Me.TSbtn_Entraxe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Entraxe.Image = CType(resources.GetObject("TSbtn_Entraxe.Image"), System.Drawing.Image)
-        Me.TSbtn_Entraxe.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Entraxe.Name = "TSbtn_Entraxe"
-        Me.TSbtn_Entraxe.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Entraxe.Text = "ToolStripButton4"
-        '
-        'TSbtn_Dalle
-        '
-        Me.TSbtn_Dalle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Dalle.Image = CType(resources.GetObject("TSbtn_Dalle.Image"), System.Drawing.Image)
-        Me.TSbtn_Dalle.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Dalle.Name = "TSbtn_Dalle"
-        Me.TSbtn_Dalle.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Dalle.Text = "ToolStripButton1"
-        '
-        'TSbtn_SectionA
-        '
-        Me.TSbtn_SectionA.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_SectionA.Image = CType(resources.GetObject("TSbtn_SectionA.Image"), System.Drawing.Image)
-        Me.TSbtn_SectionA.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_SectionA.Name = "TSbtn_SectionA"
-        Me.TSbtn_SectionA.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_SectionA.Text = "ToolStripButton1"
-        '
-        'TSbtn_Enrobage
-        '
-        Me.TSbtn_Enrobage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Enrobage.Image = CType(resources.GetObject("TSbtn_Enrobage.Image"), System.Drawing.Image)
-        Me.TSbtn_Enrobage.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Enrobage.Name = "TSbtn_Enrobage"
-        Me.TSbtn_Enrobage.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Enrobage.Text = "ToolStripButton1"
-        '
-        'TSbtn_Connexion
-        '
-        Me.TSbtn_Connexion.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Connexion.Image = CType(resources.GetObject("TSbtn_Connexion.Image"), System.Drawing.Image)
-        Me.TSbtn_Connexion.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Connexion.Name = "TSbtn_Connexion"
-        Me.TSbtn_Connexion.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Connexion.Text = "ToolStripButton1"
-        '
-        'ToolStripSeparator31
-        '
-        Me.ToolStripSeparator31.Name = "ToolStripSeparator31"
-        Me.ToolStripSeparator31.Size = New System.Drawing.Size(6, 31)
-        '
-        'TSbtn_Maitiens
-        '
-        Me.TSbtn_Maitiens.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Maitiens.Image = CType(resources.GetObject("TSbtn_Maitiens.Image"), System.Drawing.Image)
-        Me.TSbtn_Maitiens.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Maitiens.Name = "TSbtn_Maitiens"
-        Me.TSbtn_Maitiens.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Maitiens.Text = "ToolStripButton1"
-        '
-        'TSbtn_Etaiement
-        '
-        Me.TSbtn_Etaiement.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Etaiement.Image = CType(resources.GetObject("TSbtn_Etaiement.Image"), System.Drawing.Image)
-        Me.TSbtn_Etaiement.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Etaiement.Name = "TSbtn_Etaiement"
-        Me.TSbtn_Etaiement.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Etaiement.Text = "ToolStripButton1"
-        '
-        'ToolStripSeparator32
-        '
-        Me.ToolStripSeparator32.Name = "ToolStripSeparator32"
-        Me.ToolStripSeparator32.Size = New System.Drawing.Size(6, 31)
-        '
-        'TSbtn_Chargements
-        '
-        Me.TSbtn_Chargements.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Chargements.Image = CType(resources.GetObject("TSbtn_Chargements.Image"), System.Drawing.Image)
-        Me.TSbtn_Chargements.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Chargements.Name = "TSbtn_Chargements"
-        Me.TSbtn_Chargements.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Chargements.Text = "ToolStripButton1"
-        '
         'Frm_PMX
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1402,12 +1433,17 @@ Partial Class Frm_PMX
         Me.TLPanel_SideBar.ResumeLayout(False)
         Me.Panel_NomProjet.ResumeLayout(False)
         Me.pan_ListePoutres.ResumeLayout(False)
+        Me.TLPan_ZoneDeSaisie.ResumeLayout(False)
+        Me.TLPan_ZoneDeSaisie.PerformLayout()
+        Me.ToolStrip_Poutre.ResumeLayout(False)
+        Me.ToolStrip_Poutre.PerformLayout()
+        CType(Me.img_Main, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.img_Logo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TLPan_Menus.ResumeLayout(False)
         Me.TLPan_Menus.PerformLayout()
-        Me.ToolStrip2.ResumeLayout(False)
-        Me.ToolStrip2.PerformLayout()
+        Me.ToolStrip_Main.ResumeLayout(False)
+        Me.ToolStrip_Main.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.ToolStripContainer1.BottomToolStripPanel.ResumeLayout(False)
@@ -1416,10 +1452,6 @@ Partial Class Frm_PMX
         Me.ToolStripContainer1.PerformLayout()
         Me.ToolStrip4.ResumeLayout(False)
         Me.ToolStrip4.PerformLayout()
-        Me.TLPan_ZoneDeSaisie.ResumeLayout(False)
-        Me.TLPan_ZoneDeSaisie.PerformLayout()
-        Me.ToolStrip3.ResumeLayout(False)
-        Me.ToolStrip3.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1483,7 +1515,7 @@ Partial Class Frm_PMX
     Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
     Friend WithEvents img_Logo As PictureBox
     Friend WithEvents TLPan_Menus As TableLayoutPanel
-    Friend WithEvents ToolStrip2 As ToolStrip
+    Friend WithEvents ToolStrip_Main As ToolStrip
     Friend WithEvents btn_NewN As ToolStripButton
     Friend WithEvents ToolStripButton2 As ToolStripButton
     Friend WithEvents ToolStripButton3 As ToolStripButton
@@ -1541,12 +1573,11 @@ Partial Class Frm_PMX
     Friend WithEvents cmb_Projet As ComboBox
     Friend WithEvents pan_ListePoutres As Panel
     Friend WithEvents TLPan_ZoneDeSaisie As TableLayoutPanel
-    Friend WithEvents ToolStrip3 As ToolStrip
+    Friend WithEvents ToolStrip_Poutre As ToolStrip
     Friend WithEvents TSbtn_Accueil As ToolStripButton
     Friend WithEvents ToolStripSeparator27 As ToolStripSeparator
     Friend WithEvents TSbtn_Portees As ToolStripButton
     Friend WithEvents TSbtn_Entraxe As ToolStripButton
-    Friend WithEvents ToolStripSeparator29 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator30 As ToolStripSeparator
     Friend WithEvents TSbtn_Dalle As ToolStripButton
     Friend WithEvents TSbtn_SectionA As ToolStripButton
@@ -1557,4 +1588,7 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_Etaiement As ToolStripButton
     Friend WithEvents ToolStripSeparator32 As ToolStripSeparator
     Friend WithEvents TSbtn_Chargements As ToolStripButton
+    Friend WithEvents TSbtn_Gamma As ToolStripButton
+    Friend WithEvents ToolStripButton1 As ToolStripButton
+    Friend WithEvents img_Main As PictureBox
 End Class

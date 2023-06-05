@@ -2,8 +2,9 @@
 
 #Region " Enumérations et constantes "
 
-    Const PORTEEDEFAUT As Decimal = 10
-    Const PORTEECONSOLEDEFAUT As Decimal = 3
+    Const PORTEEDEFAUT As Decimal = 10.25
+    Const PORTEECONSOLEDEFAUT As Decimal = 3.256
+    Const ENTRAXEDEFAUT As Decimal = 2
 
     Enum EnuTypeTravee
         ConsoleGauche
@@ -44,7 +45,6 @@
     '   en indice pNbTtravees+1 = travee en cosole droite si définie
     '========================================================
 
-
     ''' <summary>
     ''' Longueur de chaque travee
     ''' </summary>
@@ -59,6 +59,27 @@
     ''' Sections par travéee
     ''' </summary>
     Public Sections() As cls_Section
+
+    ''' <summary>
+    ''' Entraxes aux poutres voisines
+    ''' </summary>
+    Public EntraxeD1 As Decimal
+    Public EntraxeD2 As Decimal
+
+    ''' <summary>
+    ''' Type de poutre intermédiaire ou de rive
+    ''' </summary>
+    Public lIntermediaire As Boolean            ' Vrai => Poutre intermédiaire | Faux => Poutre de rive
+
+    ''' <summary>
+    ''' Dalle béton de la poutre
+    ''' </summary>
+    Public Dalle As New Cls_Dalle
+
+    ''' <summary>
+    ''' Options de calcul pour la poutre
+    ''' </summary>
+    Public Param As New Cls_OptionsCalcul
 
 #End Region
 
@@ -105,6 +126,14 @@
         LongueurTravee(2) = PORTEECONSOLEDEFAUT
         TypTravee(2) = EnuTypeTravee.ConsoleDroite
 
+        EntraxeD1 = ENTRAXEDEFAUT
+        EntraxeD2 = ENTRAXEDEFAUT
+
+        lIntermediaire = True
+
+        For i As Int16 = 0 To 2
+            Me.Sections(i) = New cls_Section
+        Next
     End Sub
 
     Private Sub EnrobageDefaut()
@@ -198,6 +227,19 @@
         End Get
     End Property
 
+    Public ReadOnly Property HauteurMaxiProfiles As Decimal
+        Get
+            Dim Indice0 As Integer = Me.IndicePremiereTravee
+            Dim pHauteur As Decimal = Me.Sections(Indice0).ProfilA.ha
+
+            For i As Integer = Me.IndicePremiereTravee + 1 To Me.IndiceDerniereTravee
+                pHauteur = Math.Max(pHauteur, Me.Sections(i).ProfilA.ha)
+            Next
+            Return pHauteur
+        End Get
+    End Property
+
+
     Public Function xPositionAppui(lGauche As Decimal, iTravee As Integer) As Decimal
         '-------------------------------------------------------------------------------------------
         '   02/06/23 :  Création - POM
@@ -223,5 +265,22 @@
     End Function
 #End Region
 
+#Region " Fonctions de copie "
+    Private Function Clone() '--> Utilisé pour dupliquer une soudure
+        Return Me.MemberwiseClone()
+    End Function
 
+
+    Public Shared Sub Clone(PoutreSource As cls_Poutre, PoutreCible As cls_Poutre)
+        '------------------------------------------------------------------------------------------------
+        '   05/06/23 :  Clonage d'une poutre source vers la poutre interne
+        '------------------------------------------------------------------------------------------------
+
+        PoutreCible = PoutreSource.Clone
+        PoutreCible.Dalle = PoutreSource.Dalle.Clone
+
+    End Sub
+
+
+#End Region
 End Class

@@ -12,6 +12,11 @@ Public Class Frm_PMX
         Accueil
         Portees
         Entraxes
+        Dalle
+        Section
+        Enrobage
+        Connexion
+        Etaiement
     End Enum
     Dim FilleEnCours As EnuFilleEnCours = EnuFilleEnCours.Accueil
 
@@ -96,15 +101,25 @@ Public Class Frm_PMX
 
                 Me.Btn_New.ToolTipText = Bloc("NPROJET") & "..."
 
-
                 '=== BARRE d'OUTILS POUR LES POUTRES
 
                 Me.TSbtn_Accueil.ToolTipText = Bloc("TSBACCUEIL")
                 Me.TSbtn_Portees.ToolTipText = Bloc("TSBPORTEES")
                 Me.TSbtn_Entraxe.ToolTipText = Bloc("TSBENTRAXE")
+
                 Me.TSbtn_Dalle.ToolTipText = Bloc("TSBDALLE")
                 Me.TSbtn_SectionA.ToolTipText = Bloc("TSBSECTIONA")
+                Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENROBAGE")
+                Me.TSbtn_Connexion.ToolTipText = Bloc("TSBCONNECTION")
+
                 Me.TSbtn_Etaiement.ToolTipText = Bloc("TSBETAIEMENT")
+
+                '=== MESSAGES GENERAUX
+
+                ErreurCapacite_LNG = Bloc("ERRORCAPACITY")
+                ErreurNonNul_LNG = Bloc("ERROREMPTYCELL")
+                ErreurNonNum_LNG = Bloc("ERRORNONNUMERIC")
+                ErreurHorsBornes_LNG = Bloc("ERROROUTBOUNDS")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangue")
@@ -225,7 +240,7 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Entraxe.Click
+    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Entraxe.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click
 
         Select Case sender.name
             Case Me.TSbtn_Accueil.Name
@@ -234,6 +249,13 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFilleEnCours.Portees
             Case Me.TSbtn_Entraxe.Name
                 FilleEnCours = EnuFilleEnCours.Entraxes
+
+            Case Me.TSbtn_Dalle.Name
+                FilleEnCours = EnuFilleEnCours.Dalle
+            Case Me.TSbtn_SectionA.Name
+                FilleEnCours = EnuFilleEnCours.Section
+            Case Me.TSbtn_Enrobage.Name
+                FilleEnCours = EnuFilleEnCours.Enrobage
 
         End Select
         AfficheFenetreEnCours()
@@ -244,8 +266,24 @@ Public Class Frm_PMX
 
         Select Case FilleEnCours
             Case EnuFilleEnCours.Portees
-                Frm_Portees.InitialiserFenetre()
-                Me.TLPan_ZoneDeSaisie.Controls.Add(Frm_Portees.pan_Main, 0, 1)
+                If LogicielOptions.lFenetres Then
+                    Frm_Portees.ShowDialog()
+                Else
+                    Frm_Portees.InitialiserFenetre()
+                    Me.TLPan_ZoneDeSaisie.Controls.Add(Frm_Portees.pan_Main, 0, 1)
+                End If
+
+            Case EnuFilleEnCours.Dalle
+
+            Case EnuFilleEnCours.Section
+                If LogicielOptions.lFenetres Then
+                    Frm_SectionAcierStandard.ShowDialog()
+                Else
+
+                End If
+
+            Case EnuFilleEnCours.Enrobage
+
         End Select
 
     End Sub
@@ -302,7 +340,6 @@ Public Class Frm_PMX
 
     End Sub
 
-
     Private Sub ChoixSection_CheckedChanged(sender As Object, e As EventArgs)
 
         If lbuild Then Exit Sub
@@ -338,6 +375,7 @@ Public Class Frm_PMX
         Next
 
     End Sub
+
 
 #End Region
 

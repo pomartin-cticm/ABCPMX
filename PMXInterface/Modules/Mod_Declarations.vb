@@ -88,6 +88,7 @@ Module Mod_Declarations
 
         Public lUpdateStart As Boolean              'Vérification des mises à jour au démarrage du logiciel
 
+        Public lFenetres As Boolean                 'Fenêtres indépendantes
     End Structure
 
     Public Structure Struc_InformationLogiciel
@@ -130,31 +131,37 @@ Module Mod_Declarations
         Public Unit_Longueur() As String              'pour les textes
         Public Transfert_Longueur() As Decimal        'pour les conversions
         Public Format_Longueur() As String            'pour l'affichage - précision
+        Public NbDigitMax_Longueur() As Integer     'nombre maxi de decimale pour l'affichage         
 
         '--> Unités d'effort
         Public Unit_Effort() As String              'pour les textes
         Public Transfert_Effort() As Decimal        'pour les conversions
         Public Format_Effort() As String            'pour l'affichage - précision
+        Public NbDigitMax_Effort() As Integer       'nombre maxi de decimale pour l'affichage    
 
         '--> Unités de moment
         Public Unit_Moment() As String              'pour les textes
         Public Transfert_Moment() As Decimal        'pour les conversions
         Public Format_Moment() As String            'pour l'affichage - précision
+        Public NbDigitMax_Moment() As Integer       'nombre maxi de decimale pour l'affichage    
 
         '--> Unités pour les inerties
         Public Unit_Inerties() As String            'pour les textes
         Public Transfert_Inerties() As Decimal      'pour les conversions
         Public Format_Inerties() As String          'pour l'affichage - précision
+        Public NbDigitMax_Inerties() As Integer     'nombre maxi de decimale pour l'affichage    
 
         '--> Unités pour les contraintes
         Public Unit_Contraintes() As String         'pour les textes
         Public Transfert_Contraintes() As Decimal   'pour les conversions
         Public Format_Contraintes() As String       'pour l'affichage - précision
+        Public NbDigitMax_Contraintes() As Integer  'nombre maxi de decimale pour l'affichage    
 
         '--> Unités pour les modules d'élasticité
         Public Unit_ModulesY() As String            'pour les textes
         Public Transfert_ModulesY() As Decimal      'pour les conversions
         Public Format_ModulesY() As String          'pour l'affichage - précision
+        Public NbDigitMax_ModulesY() As Integer     'nombre maxi de decimale pour l'affichage    
 
         'Les unites internes pour les contraintes sont en MPa
     End Structure
@@ -184,12 +191,36 @@ Module Mod_Declarations
 
 #End Region
 
+#Region " Constantes et valeurs par défaut "
+
+    Public Const PORTEEMIN As Decimal = 5
+    Public Const PORTEEMAX As Decimal = 25
+
+    Public Const CONSOLEMIN As Decimal = 0.5
+    Public Const RATIOCONSOLEMAX As Decimal = 0.3
+
+#End Region
+
+
 #Region " Paramètres de STYLE "
 
+    '== Palette CTICM
     Public BleuCTICM As Color = Color.FromArgb(0, 90, 161)
     Public GrisCTICM As Color = Color.FromArgb(156, 169, 171)
 
-    Public CouleurBackBandeaux As Color = SystemColors.ControlDarkDark
+    '== Palette AM
+    Public OrangeAM As Color = Color.FromArgb(255, 65, 10)
+    Public GrisFonceAM As Color = Color.FromArgb(105, 105, 105)
+    Public GrayAM As Color = Color.FromArgb(197, 188, 164)
+    Public PaleGrayAM As Color = Color.FromArgb(220, 212, 194)
+    Public PurpleAM As Color = Color.FromArgb(134, 95, 127)
+    Public BlueAM As Color = Color.FromArgb(92, 127, 146)
+    Public LightBlueAM As Color = Color.FromArgb(157, 177, 201)
+    Public LightGreenAM As Color = Color.FromArgb(186, 196, 140)
+    Public GreenAM As Color = Color.FromArgb(112, 164, 137)
+    Public TamAM As Color = Color.FromArgb(200, 143, 66)
+
+    Public CouleurBackBandeaux As Color = BlueAM     ' SystemColors.ControlDarkDark
     Public CouleurForeBandeaux As Color = SystemColors.ControlLightLight
 
     Public LargeurColonneSaisie As Integer = 250
@@ -201,6 +232,16 @@ Module Mod_Declarations
     Public FontSymbolIndice As New Font("Arial", 8.25)
     Public FontSymbolGrec As New Font("Symbol", 10.25)
 
+    Public FontBase As New Font("Arial", 8.25)
+
+    Public CouleurAcierNormal As Color = Color.DarkSlateGray
+    Public CouleurAcierSelect As Color = BleuCTICM
+    Public CouleurBetonNormal As Color = Color.LightGray
+    Public CouleurBetonSelect As Color = Color.DarkSlateGray
+    Public CouleurArmaNormal As Color = Color.LightSlateGray
+    Public CouleurArmaSelect As Color = Color.DarkOrange
+
+
 #End Region
 
 #Region " Variables globales "
@@ -208,6 +249,13 @@ Module Mod_Declarations
     Public MyProjet As New cls_Projet
     'Public Project As New List(Of Cls_Projet)
     'Public ProjetEnCours As Integer = 0
+
+
+    Public ErreurCapacite_LNG As String
+    Public ErreurNonNul_LNG As String
+    Public ErreurNonNum_LNG As String
+    Public ErreurHorsBornes_LNG As String
+
 
 #End Region
 

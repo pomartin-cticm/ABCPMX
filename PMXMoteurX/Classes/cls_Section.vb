@@ -74,14 +74,9 @@ Public Class cls_Section
     Public enrobage_partiel As New Cls_Enrobage_Partiel
 
     ''' <summary>
-    ''' Dalle béton de la section
+    ''' Dalle béton de la poutre
     ''' </summary>
     Public Dalle As New Cls_Dalle
-
-    ''' <summary>
-    ''' Options de calcul
-    ''' </summary>
-    Public Param As New Cls_OptionsCalcul
 
 #End Region
 
@@ -134,7 +129,7 @@ Public Class cls_Section
 
         Dim zANP, zANE, InertieY, MplRd As Decimal
 
-        CalProprietes(Me, Signe, nEqEc, nEqDal, lValeurCalcul, zANE, InertieY, zANP, MplRd)
+        'CalProprietes(Me, Signe, nEqEc, nEqDal, lValeurCalcul, zANE, InertieY, zANP, MplRd)
 
         'Me.Resultats.InertieY = InertieY
         'Me.Resultats.zANE = zANE
@@ -175,19 +170,18 @@ Public Class cls_Section
         End Get
     End Property
 
-    Public ReadOnly Property VRd As Decimal
-        Get
-            Dim MyVRd As Decimal = 0
+    Public Function VRd(GammaM0 As Decimal) As Decimal
 
-            Select Case Me.typeSection
-                Case Enum_TypeSection.Acier, Enum_TypeSection.AcierEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
-                    MyVRd = Me.AireAv * Me.FyW / Me.Param.Gamma_M0 * kConvMPaPa
+        Dim MyVRd As Decimal = 0
 
-            End Select
+        Select Case Me.typeSection
+            Case Enum_TypeSection.Acier, Enum_TypeSection.AcierEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
+                MyVRd = Me.AireAv * Me.FyW / GammaM0 * kConvMPaPa
 
-            Return MyVRd
-        End Get
-    End Property
+        End Select
+
+        Return MyVRd
+    End Function
 
     Public ReadOnly Property AireAv As Decimal
         Get
@@ -195,10 +189,10 @@ Public Class cls_Section
         End Get
     End Property
 
-    Public Function RhoInteractionMV(VEd As Decimal) As Decimal
+    Public Function RhoInteractionMV(VEd As Decimal, GammaM0 As Decimal) As Decimal
 
         Dim Rho As Decimal
-        Dim VRd As Decimal = Me.VRd
+        Dim VRd As Decimal = Me.VRd(GammaM0)
 
         Dim VEdAbs As Decimal = Math.Abs(VEd)
 
@@ -211,13 +205,13 @@ Public Class cls_Section
         Return Rho
     End Function
 
-    Public ReadOnly Property RhoVCalcul As Decimal
-        Get
-            Dim Rho As Decimal = 0
-            If Me.Param.lInterActionMV Then Rho = Me.RhoInteractionMV(Me.Param.VEd)
-            Return Rho
-        End Get
-    End Property
+    'Public ReadOnly Property RhoVCalcul As Decimal
+    '    Get
+    '        Dim Rho As Decimal = 0
+    '        If Me.Param.lInterActionMV Then Rho = Me.RhoInteractionMV(Me.Param.VEd)
+    '        Return Rho
+    '    End Get
+    'End Property
 
 #End Region
 
@@ -239,7 +233,7 @@ Public Class cls_Section
     ''' <summary>
     ''' Lancement de toutes les fonctions de calcul
     ''' </summary>
-    Public Sub Lancement_Calcul()
+    Public Sub Lancement_Calcul(Param As Cls_OptionsCalcul, dalle As Cls_Dalle)
 
         Calcul_Proprietes()
 
@@ -297,15 +291,15 @@ Public Class cls_Section
         s_destination.enrobage_partiel.arma_longi_inf = s_origine.enrobage_partiel.arma_longi_inf.Clone()
         s_destination.enrobage_partiel.arma_longi_sup = s_origine.enrobage_partiel.arma_longi_sup.Clone()
 
-        s_destination.dalle = s_origine.dalle.Clone()
-        s_destination.dalle.beton = s_origine.dalle.beton.Clone()
-        s_destination.dalle.arma_longi_inf = s_origine.dalle.arma_longi_inf.Clone()
-        s_destination.dalle.arma_longi_sup = s_origine.dalle.arma_longi_sup.Clone()
-        s_destination.dalle.bac_acier = s_origine.dalle.bac_acier.Clone()
+        's_destination.dalle = s_origine.dalle.Clone()
+        's_destination.dalle.beton = s_origine.dalle.beton.Clone()
+        's_destination.dalle.arma_longi_inf = s_origine.dalle.arma_longi_inf.Clone()
+        's_destination.dalle.arma_longi_sup = s_origine.dalle.arma_longi_sup.Clone()
+        's_destination.dalle.bac_acier = s_origine.dalle.bac_acier.Clone()
 
-        s_destination.Param = s_origine.Param.Clone()
-        s_destination.Param.Prop_Elastique_Enrobage = s_origine.Param.Prop_Elastique_Enrobage.Clone()
-        s_destination.Param.Prop_Elastique_Dalle = s_origine.Param.Prop_Elastique_Dalle.Clone()
+        's_destination.Param = s_origine.Param.Clone()
+        's_destination.Param.Prop_Elastique_Enrobage = s_origine.Param.Prop_Elastique_Enrobage.Clone()
+        's_destination.Param.Prop_Elastique_Dalle = s_origine.Param.Prop_Elastique_Dalle.Clone()
 
     End Sub
 
@@ -386,11 +380,11 @@ Public Class cls_Section
         '--> Enrobage
         Me.enrobage_partiel.EcrireFile(Lines)
 
-        '--> Dalle de béton
-        Me.dalle.EcrireFile(Lines)
+        ''--> Dalle de béton
+        'Me.dalle.EcrireFile(Lines)
 
-        '--> Options de calcul
-        Me.Param.EcrireFile(Lines)
+        ''--> Options de calcul
+        'Me.Param.EcrireFile(Lines)
 
         Lines.Add("")
 
@@ -472,76 +466,7 @@ Public Class cls_Section
                         Case "EAHN" : Me.enrobage_partiel.arma_longi_sup.n_s = Mots(nbMots)
                         Case "EAHE" : Me.enrobage_partiel.arma_longi_sup.EspBar = Mots(nbMots)
                         Case "EAHZ" : Me.enrobage_partiel.arma_longi_sup.z_s = Mots(nbMots)
-                            '--> Dalle
-                        Case "DTYP" : Me.dalle.type = Mots(nbMots)
-                        Case "DL_D" : Me.dalle.Beff = Mots(nbMots)
-                        Case "DT_D" : Me.dalle.t_d = Mots(nbMots)
-                        Case "DAIN" : Me.dalle.lArma_Inf = Mots(nbMots)
-                        Case "DASU" : Me.dalle.lArma_Sup = Mots(nbMots)
-                       ' Case "DF_Y" : Me.dalle.acier_armature = Mots(nbMots)
-                            '--> Béton dalle
-                        Case "DBTY" : Me.dalle.beton.Type = Mots(nbMots)
-                        Case "DBCL" : Me.dalle.beton.Classe = Mots(nbMots)
-                        Case "DBFC" : Me.dalle.beton.Fck = Mots(nbMots)
-                            '--> Armature Inf dalle
-                        Case "DABC" : Me.dalle.arma_longi_inf.c_s = Mots(nbMots)
-                        Case "DABD" : Me.dalle.arma_longi_inf.PhiS = Mots(nbMots)
-                        Case "DABN" : Me.dalle.arma_longi_inf.n_s = Mots(nbMots)
-                        Case "DABE" : Me.dalle.arma_longi_inf.EspBar = Mots(nbMots)
-                        Case "DABZ" : Me.dalle.arma_longi_inf.z_s = Mots(nbMots)
-                              '--> Armature Sup dalle
-                        Case "DAHC" : Me.dalle.arma_longi_sup.c_s = Mots(nbMots)
-                        Case "DAHD" : Me.dalle.arma_longi_sup.PhiS = Mots(nbMots)
-                        Case "DAHN" : Me.dalle.arma_longi_sup.n_s = Mots(nbMots)
-                        Case "DAHE" : Me.dalle.arma_longi_sup.EspBar = Mots(nbMots)
-                        Case "DAHZ" : Me.dalle.arma_longi_sup.z_s = Mots(nbMots)
-                            '--> Bac acier
-                        Case "BORI" : Me.dalle.bac_acier.orientation = Mots(nbMots)
-                        Case "BDAT" : Me.dalle.bac_acier.lDatabase = Mots(nbMots)
-                        Case "BETI"
-                            Me.dalle.bac_acier.Etiquettte = ""
-                            For z = 2 To nbMots
-                                If z = nbMots Then
-                                    Me.dalle.bac_acier.Etiquettte += Mots(z)
-                                Else
-                                    Me.dalle.bac_acier.Etiquettte += Mots(z) + " "
-                                End If
-                            Next
-                        Case "BBB" : Me.dalle.bac_acier.b_b = Mots(nbMots)
-                        Case "BBT" : Me.dalle.bac_acier.b_t = Mots(nbMots)
-                        Case "BHPG" : Me.dalle.bac_acier.h_pg = Mots(nbMots)
-                        Case "BHP" : Me.dalle.bac_acier.h_p = Mots(nbMots)
-                        Case "BEP" : Me.dalle.bac_acier.e_p = Mots(nbMots)
-                            '--> Options de calcul
-                        Case "CGM0" : Me.Param.Gamma_M0 = Mots(nbMots)
-                        Case "CGC" : Me.Param.Gamma_C = Mots(nbMots)
-                        Case "CGS" : Me.Param.Gamma_S = Mots(nbMots)
-                        Case "CETA" : Me.Param.Eta = Mots(nbMots)
-                        Case "CNEG" : Me.Param.lCalcul_Flexion_Negative = Mots(nbMots)
-                        Case "CPOS" : Me.Param.lCalcul_Flexion_Positive = Mots(nbMots)
-                        Case "CEXP" : Me.Param.lChargesExploitation = Mots(nbMots)
-                        Case "CRET" : Me.Param.lChargesRetrait = Mots(nbMots)
-                        Case "CPER" : Me.Param.lChargesPermanentes = Mots(nbMots)
-                            '--> Propriétés élastiques de l'enrobage
-                        Case "PERH" : Me.Param.Prop_Elastique_Enrobage.RH = Mots(nbMots)
-                        Case "PEH0" : Me.Param.Prop_Elastique_Enrobage.h_0 = Mots(nbMots)
-                        Case "PETY" : Me.Param.Prop_Elastique_Enrobage.type_def_t = Mots(nbMots)
-                        Case "PET" : Me.Param.Prop_Elastique_Enrobage.t = Mots(nbMots)
-                        Case "PERT" : Me.Param.Prop_Elastique_Enrobage.R_t_0 = Mots(nbMots)
-                        Case "PEPT" : Me.Param.Prop_Elastique_Enrobage.CP_t_0 = Mots(nbMots)
-                        Case "PEEN" : Me.Param.Prop_Elastique_Enrobage.CE_n_L = Mots(nbMots)
-                        Case "PERN" : Me.Param.Prop_Elastique_Enrobage.R_n_L = Mots(nbMots)
-                        Case "PEPN" : Me.Param.Prop_Elastique_Enrobage.CP_n_L = Mots(nbMots)
-                            '--> Propriétés élastiques de la dalle
-                        Case "PDRH" : Me.Param.Prop_Elastique_Dalle.RH = Mots(nbMots)
-                        Case "PDH0" : Me.Param.Prop_Elastique_Dalle.h_0 = Mots(nbMots)
-                        Case "PDTY" : Me.Param.Prop_Elastique_Dalle.type_def_t = Mots(nbMots)
-                        Case "PDT" : Me.Param.Prop_Elastique_Dalle.t = Mots(nbMots)
-                        Case "PDRT" : Me.Param.Prop_Elastique_Dalle.R_t_0 = Mots(nbMots)
-                        Case "PDPT" : Me.Param.Prop_Elastique_Dalle.CP_t_0 = Mots(nbMots)
-                        Case "PDEN" : Me.Param.Prop_Elastique_Dalle.CE_n_L = Mots(nbMots)
-                        Case "PDRN" : Me.Param.Prop_Elastique_Dalle.R_n_L = Mots(nbMots)
-                        Case "PDPN" : Me.Param.Prop_Elastique_Dalle.CP_n_L = Mots(nbMots)
+
                     End Select
                 End If
 

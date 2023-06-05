@@ -52,29 +52,35 @@
 
         '--> Unités
 
-        LogicielInfo.Unit_Longueur = {"mm", "cm", "m"}                    'Unités des longueurs/dimensions - mm pour les dimensions et m pour les longueurs par défaut (interne m)
+        LogicielInfo.Unit_Longueur = {"mm", "cm", "m"}              'Unités des longueurs/dimensions - mm pour les dimensions et m pour les longueurs par défaut (interne m)
         LogicielInfo.Transfert_Longueur = {0.001, 0.01, 1}
-        LogicielInfo.Format_Longueur = {"0.0", "0.00", "0.0000"}
+        LogicielInfo.Format_Longueur = {"0.0", "0.00", "0.000"}
+        LogicielInfo.NbDigitMax_Longueur = {1, 2, 3}
 
-        LogicielInfo.Unit_Effort = {"N", "daN", "kN"}                   'Unités des efforts - kN par défaut     (interne N)
+        LogicielInfo.Unit_Effort = {"N", "daN", "kN"}               'Unités des efforts - kN par défaut     (interne N)
         LogicielInfo.Transfert_Effort = {1, 10, 1000}
         LogicielInfo.Format_Effort = {"0.0", "0.00", "0.0"}
+        LogicielInfo.NbDigitMax_Effort = {0, 1, 3}
 
-        LogicielInfo.Unit_Moment = {"N.m", "daN.m", "kN.m"}             'Unités des moments - kN.m par défaut   (interne Nm)
+        LogicielInfo.Unit_Moment = {"N.m", "daN.m", "kN.m"}         'Unités des moments - kN.m par défaut   (interne Nm)
         LogicielInfo.Transfert_Moment = {1, 10, 1000}
         LogicielInfo.Format_Moment = {"0.0", "0.00", "0.0"}
+        LogicielInfo.NbDigitMax_Longueur = {0, 1, 3}
 
-        LogicielInfo.Unit_Inerties = {"mm4", "cm4", "m4"}               'Unités des inerties - cm4 par défaut    (interne m4)
+        LogicielInfo.Unit_Inerties = {"mm4", "cm4", "m4"}           'Unités des inerties - cm4 par défaut    (interne m4)
         LogicielInfo.Transfert_Inerties = {0.001 ^ 4, 0.01 ^ 4, 1 ^ 4}
         LogicielInfo.Format_Inerties = {"0.0", "0.00", "0.0000"}
+        LogicielInfo.NbDigitMax_Inerties = {0, 0, 6}
 
-        LogicielInfo.Unit_Contraintes = {"P", "kPa", "MPa"}             'Unités des contraintes - MPa par défaut (interne MPa)
+        LogicielInfo.Unit_Contraintes = {"P", "kPa", "MPa"}         'Unités des contraintes - MPa par défaut (interne MPa)
         LogicielInfo.Transfert_Contraintes = {0.000001, 0.0001, 1}
         LogicielInfo.Format_Contraintes = {"0", "0", "0.0"}
+        LogicielInfo.NbDigitMax_Contraintes = {1, 2, 3}
 
-        LogicielInfo.Unit_ModulesY = {"MPa", "GPa"}                     'Unités des modules d'élasticité - GPa par défaut (interne MPa)
+        LogicielInfo.Unit_ModulesY = {"MPa", "GPa"}                 'Unités des modules d'élasticité - GPa par défaut (interne MPa)
         LogicielInfo.Transfert_ModulesY = {1, 1000}
         LogicielInfo.Format_ModulesY = {"0", "0.0"}
+        LogicielInfo.NbDigitMax_ModulesY = {0, 3}
 
         '--> Récûpération des options du logiciel - modifiable par l'utilisateur
         Try
@@ -102,6 +108,8 @@
         Catch ex As Exception
 
         End Try
+
+        LogicielOptions.lFenetres = True
 
         '--> MAJ des noms de fichiers langue
 

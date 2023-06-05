@@ -102,34 +102,34 @@ Module Mod_Outils
 
     End Function
 
-    '''' <summary>
-    '''' Affichage d'un ErrorProvider en fonction d'une erreur
-    '''' </summary>
-    '''' <param name="iSaisie"></param>
-    '''' <param name="Control"></param>
-    '''' <param name="MyErr"></param>
-    '''' <param name="ValMin"></param>
-    '''' <param name="ValMax"></param>
-    '''' <param name="TextError"></param>
-    'Public Sub NotifieErreurSaisie(ByVal iSaisie As Integer, ByVal Control As Control, ByVal MyErr As ErrorProvider, ByVal ValMin As Double, ByVal ValMax As Double, Optional ByVal TextError As String = "")
+    ''' <summary>
+    ''' Affichage d'un ErrorProvider en fonction d'une erreur
+    ''' </summary>
+    ''' <param name="iSaisie"></param>
+    ''' <param name="Control"></param>
+    ''' <param name="MyErr"></param>
+    ''' <param name="ValMin"></param>
+    ''' <param name="ValMax"></param>
+    ''' <param name="TextError"></param>
+    Public Sub NotifieErreurSaisie(ByVal iSaisie As Integer, ByVal Control As Control, ByVal MyErr As ErrorProvider, ByVal ValMin As Double, ByVal ValMax As Double, Optional ByVal TextError As String = "")
 
-    '    Select Case iSaisie
-    '        Case -1
-    '            'Erreur saisie : Textbox vide------------------------------------
-    '            MyErr.SetError(Control, ErreurNonNul_LNG)
-    '        Case -2
-    '            'Erreur saisie : valeur non numérique----------------------------
-    '            MyErr.SetError(Control, ErreurNonNum_LNG)
-    '        Case -3
-    '            'Erreur saisie : valeur hors limite------------------------------
-    '            Dim Chaine As String = ErreurHorsBornes_LNG + " : " & ValMin & " ≤ x ≤ " & ValMax
-    '            MyErr.SetError(Control, Chaine)
-    '        Case -4
-    '            'Erreur : Divers ------------------------------------------------
-    '            MyErr.SetError(Control, TextError)
-    '    End Select
+        Select Case iSaisie
+            Case -1
+                'Erreur saisie : Textbox vide------------------------------------
+                MyErr.SetError(Control, ErreurNonNul_LNG)
+            Case -2
+                'Erreur saisie : valeur non numérique----------------------------
+                MyErr.SetError(Control, ErreurNonNum_LNG)
+            Case -3
+                'Erreur saisie : valeur hors limite------------------------------
+                Dim Chaine As String = ErreurHorsBornes_LNG + " : " & ValMin & " ≤ x ≤ " & ValMax
+                MyErr.SetError(Control, Chaine)
+            Case -4
+                'Erreur : Divers ------------------------------------------------
+                MyErr.SetError(Control, TextError)
+        End Select
 
-    'End Sub
+    End Sub
 
     '''' <summary>
     '''' Affichage d'un ErrorProvider en fonction d'une erreur
@@ -514,54 +514,91 @@ Module Mod_Outils
         Dim Chaine As String
         Dim kUnit As Decimal
         Dim Fmt As String = ""
+        Dim NbDigitMax As Integer = 2
 
         Select Case Type
             Case Enu_TypeVariable.Longueur
                 kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                Fmt = LogicielInfo.Format_Longueur(LogicielOptions.IndUnitLongueur)
+                'Fmt = LogicielInfo.Format_Longueur(LogicielOptions.IndUnitLongueur)
+                NbDigitMax = LogicielInfo.NbDigitMax_Longueur(LogicielOptions.IndUnitLongueur)
 
             Case Enu_TypeVariable.Dimension
                 kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
-                Fmt = LogicielInfo.Format_Longueur(LogicielOptions.IndUnitDimension)
+                'Fmt = LogicielInfo.Format_Longueur(LogicielOptions.IndUnitDimension)
+                NbDigitMax = LogicielInfo.NbDigitMax_Longueur(LogicielOptions.IndUnitDimension)
 
-            'Case Enu_TypeVariable.Dimension
-            '    kUnit = InfoLogiciel.Transfert_Length(OptionsLogiciel.IndUnitDimension)
-            '    Fmt = InfoLogiciel.Format_Length(OptionsLogiciel.IndUnitDimension)
 
 
             'Case Enu_TypeVariable.Millimetres
             '    Chaine = Format(Valeur / kUnitLongueur(indUnitMILLIMETRE), fmtUnitLongueur(indUnitMILLIMETRE))
             Case Enu_TypeVariable.Effort
                 kUnit = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
-                Fmt = LogicielInfo.Format_Effort(LogicielOptions.IndUnitEffort)
+                'Fmt = LogicielInfo.Format_Effort(LogicielOptions.IndUnitEffort)
+                NbDigitMax = LogicielInfo.NbDigitMax_Effort(LogicielOptions.IndUnitEffort)
 
             Case Enu_TypeVariable.Inertie
                 kUnit = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
-                Fmt = LogicielInfo.Format_Inerties(LogicielOptions.IndUnitInerties)
+                'Fmt = LogicielInfo.Format_Inerties(LogicielOptions.IndUnitInerties)
+                NbDigitMax = LogicielInfo.NbDigitMax_Inerties(LogicielOptions.IndUnitInerties)
 
             Case Enu_TypeVariable.SansType
                 kUnit = 1
                 Fmt = "0.00"
+                NbDigitMax = 3
 
             Case Enu_TypeVariable.Moment
                 kUnit = LogicielInfo.Transfert_Moment(LogicielOptions.IndUnitMoment)
                 Fmt = LogicielInfo.Format_Moment(LogicielOptions.IndUnitMoment)
+                NbDigitMax = LogicielInfo.NbDigitMax_Moment(LogicielOptions.IndUnitMoment)
 
             Case Enu_TypeVariable.ModuleY
                 kUnit = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
                 Fmt = LogicielInfo.Format_ModulesY(LogicielOptions.IndUnitModulesY)
+                NbDigitMax = LogicielInfo.NbDigitMax_ModulesY(LogicielOptions.IndUnitModulesY)
 
             Case Enu_TypeVariable.Contrainte
                 kUnit = LogicielInfo.Transfert_Contraintes(LogicielOptions.IndUnitContraintes)
                 Fmt = LogicielInfo.Format_Contraintes(LogicielOptions.IndUnitContraintes)
+                NbDigitMax = LogicielInfo.NbDigitMax_Contraintes(LogicielOptions.IndUnitContraintes)
 
         End Select
 
+        Fmt = GetFormatSignif(Valeur / kUnit, NbDigitMax)
         Chaine = Format(Valeur / kUnit, Fmt)
 
         Return Chaine
 
     End Function
+
+    Private Function GetFormatSignif(Valeur As Decimal, NbDigit As Integer) As String
+        '-----------------------------------------------------------------------------------------
+        '   05/06/23:   Création - POM
+        '-----------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim ValAbs As Decimal = Math.Abs(Valeur)
+        Dim pDec As Decimal = ValAbs - Math.Floor(ValAbs)
+        Dim Compteur As Integer = 0
+
+        Dim Fmt As String = "0."
+        Dim lCont As Boolean = (pDec > 0) And (NbDigit > Compteur)
+
+        '--> Traitement
+
+        Do While lCont
+            Compteur += 1
+            Fmt += "0"
+            pDec = pDec * 10 - Math.Floor(pDec * 10)
+            lCont = (pDec > 0) And (NbDigit > Compteur)
+        Loop
+
+        Return Fmt
+
+    End Function
+
 
 #End Region
 
