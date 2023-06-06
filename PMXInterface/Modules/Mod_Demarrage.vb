@@ -105,6 +105,13 @@
                 Next
             End If
 
+            '--> Fichiers
+            LogicielFichiers.Database_Section = LogicielRep.RepertoireConfig & "\" & RacProfile & ExtensionBase
+            LogicielFichiers.Database_Aciers = LogicielRep.RepertoireConfig & "\" & RacAcier & ExtensionBase
+
+            '--> Base de données
+            InitDatabase_Section()
+
         Catch ex As Exception
 
         End Try

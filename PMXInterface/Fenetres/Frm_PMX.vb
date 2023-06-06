@@ -17,6 +17,10 @@ Public Class Frm_PMX
         Enrobage
         Connexion
         Etaiement
+        Chargements
+        Combinaisons
+        Options
+        Hivoss
     End Enum
     Dim FilleEnCours As EnuFilleEnCours = EnuFilleEnCours.Accueil
 
@@ -240,7 +244,7 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Entraxe.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click
+    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Entraxe.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click
 
         Select Case sender.name
             Case Me.TSbtn_Accueil.Name
@@ -256,6 +260,12 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFilleEnCours.Section
             Case Me.TSbtn_Enrobage.Name
                 FilleEnCours = EnuFilleEnCours.Enrobage
+
+            Case Me.TSbtn_Chargements.Name
+                FilleEnCours = EnuFilleEnCours.Chargements
+
+            Case Me.TSbtn_Hivoss.Name
+                FilleEnCours = EnuFilleEnCours.Hivoss
 
         End Select
         AfficheFenetreEnCours()

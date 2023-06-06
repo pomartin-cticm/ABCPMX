@@ -125,6 +125,7 @@
     <Compile Include="Fenetres\Frm_Test.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Modules\Mod_Database_Section.vb" />
     <Compile Include="Modules\Mod_Declarations.vb" />
     <Compile Include="Modules\Mod_Demarrage.vb" />
     <Compile Include="Modules\Mod_Dessins.vb" />

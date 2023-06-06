@@ -892,4 +892,22 @@ Module Mod_Outils
 
 #End Region
 
+#Region "   Manipulation de chaines de caracteres "
+    Public Function RemplaceDollar(ByVal Chaine As String, ByVal Argument1 As String) As String
+        Dim NewChaine As String = ""
+
+        Dim jStr As Integer
+        jStr = InStr(Chaine, "$")
+
+        If jStr > 0 Then
+            NewChaine = Chaine.Substring(0, jStr - 1) & Argument1 & Chaine.Substring(jStr)
+            Return NewChaine
+        Else
+            Return Chaine
+        End If
+
+    End Function
+
+#End Region
+
 End Module

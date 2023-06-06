@@ -11,6 +11,15 @@ Module Mod_Declarations
 
 #End Region
 
+#Region " Parametrage fichiers "
+
+    Public Const ExtensionBase As String = ".dtb"
+    Public Const RepBase As String = "DataBase"
+    Public Const RacProfile As String = "AM_HRProfiles"
+    Public Const RacAcier As String = "AM_HRSteels"
+
+#End Region
+
 #Region " Structures "
 
     Enum EnuMaitre

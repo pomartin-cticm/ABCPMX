@@ -99,7 +99,7 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Chargements = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Gamma = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Hivoss = New System.Windows.Forms.ToolStripButton()
         Me.img_Main = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
@@ -750,7 +750,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Poutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Poutre.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Accueil, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.TSbtn_Entraxe, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maitiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.ToolStripButton1})
+        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Accueil, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.TSbtn_Entraxe, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maitiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Hivoss})
         Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
         Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -878,14 +878,14 @@ Partial Class Frm_PMX
         Me.TSbtn_Gamma.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Gamma.Text = "ToolStripButton1"
         '
-        'ToolStripButton1
+        'TSbtn_Hivoss
         '
-        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
-        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton1.Name = "ToolStripButton1"
-        Me.ToolStripButton1.Size = New System.Drawing.Size(28, 28)
-        Me.ToolStripButton1.Text = "ToolStripButton1"
+        Me.TSbtn_Hivoss.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Hivoss.Image = CType(resources.GetObject("TSbtn_Hivoss.Image"), System.Drawing.Image)
+        Me.TSbtn_Hivoss.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Hivoss.Name = "TSbtn_Hivoss"
+        Me.TSbtn_Hivoss.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Hivoss.Text = "ToolStripButton1"
         '
         'img_Main
         '
@@ -1589,6 +1589,6 @@ Partial Class Frm_PMX
     Friend WithEvents ToolStripSeparator32 As ToolStripSeparator
     Friend WithEvents TSbtn_Chargements As ToolStripButton
     Friend WithEvents TSbtn_Gamma As ToolStripButton
-    Friend WithEvents ToolStripButton1 As ToolStripButton
+    Friend WithEvents TSbtn_Hivoss As ToolStripButton
     Friend WithEvents img_Main As PictureBox
 End Class
