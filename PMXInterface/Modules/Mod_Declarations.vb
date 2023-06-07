@@ -247,6 +247,7 @@ Module Mod_Declarations
     Public CouleurAcierSelect As Color = BleuCTICM
     Public CouleurBetonNormal As Color = Color.LightGray
     Public CouleurBetonSelect As Color = Color.DarkSlateGray
+    Public CouleurTremieNormal As Color = Color.White
     Public CouleurArmaNormal As Color = Color.LightSlateGray
     Public CouleurArmaSelect As Color = Color.DarkOrange
 

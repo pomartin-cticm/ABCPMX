@@ -287,6 +287,7 @@ Module Mod_Dessins
         Dim LargeurBord As Decimal
         Dim CouleurAcier As Color
         Dim CouleurBeton As Color
+        Dim CouleurTremie As Color
         Dim CouleurArma As Color
         Dim hMaxProfile As Decimal = MyPoutre.HauteurMaxiProfiles
 
@@ -299,10 +300,10 @@ Module Mod_Dessins
 
         '--> Initialisation des paramètres d'affichage
 
-        If MyPoutre.lIntermediaire Then
-            xMin = -MyPoutre.EntraxeD1 - LargeurBord
-            xMax = MyPoutre.EntraxeD2 + LargeurBord
-        End If
+        'If MyPoutre.lIntermediaire Then
+        xMin = -MyPoutre.EntraxeD1 - LargeurBord
+        xMax = MyPoutre.EntraxeD2 + LargeurBord
+        'End If
 
         yMin = -dCar - hMaxProfile
         yMax = MyPoutre.Dalle.zTop + dCar
@@ -314,23 +315,26 @@ Module Mod_Dessins
 
         CouleurAcier = CouleurAcierNormal
         CouleurBeton = CouleurBetonNormal
+        CouleurTremie = CouleurTremieNormal
         CouleurArma = CouleurArmaNormal
         ' Profilé
-        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurAcier, CouleurAcier)
         'Béton
-        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurBeton, CouleurBeton)
+        'Trémie
+        Dim myBrushT As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurTremie, CouleurTremie)
         ' Armatures
         Dim myBrushA As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurArma, CouleurArma)
 
         '--> Affichage
 
-        DessinFrmCoupeStandard(MyGr, MyPoutre, iSelect, dCar, hMaxProfile, MyParAff, myBrushP, myBrushB, myBrushA)
+        DessinFrmCoupeStandard(MyGr, MyPoutre, iSelect, dCar, hMaxProfile, MyParAff, myBrushP, myBrushB, myBrushT, myBrushA)
 
     End Sub
 
     Private Sub DessinFrmCoupeStandard(ByRef MyGr As Graphics, ByVal MyPoutre As cls_Poutre,
                                        iSelect As Integer, dCar As Decimal, hMaxProfile As Decimal,
-                                       MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
+                                       MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushT As Brush, myBrushA As Brush)
         '------------------------------------------------------------------------------------------------------------------
         '   05/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
@@ -354,7 +358,8 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
         Dim IndS As Integer = 1         ' Indice de travée pour représentation des sections
         Dim lEnrob As Boolean = MyPoutre.Sections(IndS).lEnrobage
         Const ZREF As Decimal = 0
@@ -373,9 +378,9 @@ Module Mod_Dessins
 
         '--> Affichage de la voisine à gauche
 
-        If MyPoutre.lIntermediaire Then
+        '# Dessin de béton d'enrobage
 
-            '# Dessin de béton d'enrobage
+        If MyPoutre.lIntermediaire Then
 
             If lEnrob Then _
             DessinEnrobagePartielBeton(MyGr, MyPoutre.Sections(IndS), MyParaff1, myBrushB, -MyPoutre.EntraxeD1)
@@ -399,11 +404,52 @@ Module Mod_Dessins
 
         '--> Affichage de la dalle béton
 
+        If MyPoutre.lIntermediaire Then
+            xo = -3 * MyPoutre.EntraxeD1
+            xe = 3 * MyPoutre.EntraxeD2
+        Else
+            xo = -MyPoutre.EntraxeD1
+            xe = 3 * MyPoutre.EntraxeD2
+        End If
 
+        yo = 0
+        ye = MyPoutre.Dalle.t_d
+
+        AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
 
 
         '--> Représentation des trémies
 
+        If MyPoutre.lIntermediaire Then
+            If MyPoutre.lTremieGauche Then
+                xo = -MyPoutre.EntraxeD1 + MyPoutre.DistanceDsl1
+                xe = -MyPoutre.DistanceDsl1
+                yo = 0
+                ye = MyPoutre.Dalle.t_d
+
+                AddRectanglePlein(MyGr, myBrushT, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
+            End If
+
+            If MyPoutre.lTremieDroite Then
+                xo = MyPoutre.DistanceDsl2
+                xe = MyPoutre.EntraxeD2 - MyPoutre.DistanceDsl2
+                yo = 0
+                ye = MyPoutre.Dalle.t_d
+
+                AddRectanglePlein(MyGr, myBrushT, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
+            End If
+        Else 'Poutre de rive
+            If MyPoutre.lTremieDroite Then
+                xo = MyPoutre.DistanceDsl2
+                xe = MyPoutre.EntraxeD2 - MyPoutre.DistanceDsl2
+                yo = 0
+                ye = MyPoutre.Dalle.t_d
+
+                AddRectanglePlein(MyGr, myBrushT, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
+
+            End If
+
+        End If
 
 
         '--> Affichage des cotes
@@ -517,10 +563,13 @@ Module Mod_Dessins
         Dim MyParAff As Struc_Affichage
         Dim xo, yo As Decimal
         Dim xe, ye As Decimal
-        Dim Longueur, Hauteur As Decimal
-        Dim MyBrush As New SolidBrush(Color.LightGray)
+        Dim LongueurPoutre, HauteurPoutre As Decimal
+        Dim LongueurDalle, HauteurDalle As Decimal
+        Dim MyBrushA As New SolidBrush(Color.LightGray)
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyColor As Color
+        Dim CouleurBeton As Color = CouleurBetonNormal
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
         Const lAffSymbol As Boolean = False
         Dim Chaine As String
         Dim MyFontNormal As Font = FontBase
@@ -529,33 +578,35 @@ Module Mod_Dessins
 
         '--> Initialisations
 
-        Longueur = MyPoutre.LongueurTotale
-        Hauteur = MyPoutre.HauteurTotale
-        dCar = Math.Sqrt(Longueur ^ 2 + Hauteur ^ 2) / 20
-        dCarApp = Hauteur / 2
+        LongueurPoutre = MyPoutre.LongueurTotale
+        HauteurPoutre = MyPoutre.HauteurTotale
+        LongueurDalle = MyPoutre.LongueurTotale
+        HauteurDalle = MyPoutre.Dalle.t_d
+        dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 20
+        dCarApp = HauteurPoutre / 2
 
         '--> Initialisation des paramètres d'affichage
 
         xMin = 0
-        xMax = Longueur
+        xMax = LongueurPoutre
         yMin = -dCar - dCarApp
-        yMax = Hauteur + dCar
+        yMax = HauteurPoutre + dCar
 
         If MyPoutre.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
-        '--> Représentation de la poutre
+        '--> Représentation de la poutre 
 
         xe = 0
         yo = 0
-        ye = Hauteur
+        ye = HauteurPoutre
 
         For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
 
             xo = xe
             xe = xo + MyPoutre.LongueurTravee(i)
 
-            AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+            AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
         Next
 
         '--> Représentation des appuis
@@ -569,6 +620,16 @@ Module Mod_Dessins
 
         xo = MyPoutre.xPositionAppui(False, MyPoutre.NombreTraveesDeuxAppuis)
         DessineAppui(MyGr, xo, dCarApp, MyParAff)
+
+        '--> Représentation de la dalle
+
+        xo = 0
+        yo = HauteurPoutre
+
+        xe = LongueurDalle
+        ye = HauteurPoutre + HauteurDalle
+
+        AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
 
         '=== COTES =======================================================
 
@@ -638,11 +699,11 @@ Module Mod_Dessins
             If lTotal Then
 
                 xo = 0
-                xe = Longueur
+                xe = LongueurPoutre
 
                 AddFleche(MyGr, MyPen, xo, yCote - dCar, xe, yCote - dCar, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(Longueur, Enu_TypeVariable.Longueur)
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(LongueurPoutre, Enu_TypeVariable.Longueur)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote - dCar, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             End If
@@ -1426,6 +1487,7 @@ Module Mod_Dessins
 
 
 #End Region
+
 #Region "=====OUTILS GENERAUX======"
 
     Private Function StyleCouleur(iSelect As Integer, iRef As Integer) As Color

@@ -5,6 +5,7 @@
     Const PORTEEDEFAUT As Decimal = 10.25
     Const PORTEECONSOLEDEFAUT As Decimal = 3.256
     Const ENTRAXEDEFAUT As Decimal = 2
+    Const DISTANCETREMIEDEFAUT As Decimal = ENTRAXEDEFAUT / 2
 
     Enum EnuTypeTravee
         ConsoleGauche
@@ -36,6 +37,16 @@
     Public lTraveeConsoleDroite As Boolean
 
     ''' <summary>
+    ''' Indique si présence d'une trémie à gauche de la poutre
+    ''' </summary>
+    Public lTremieGauche As Boolean
+
+    ''' <summary>
+    ''' Indique si présence d'une trémie à droite de la poutre
+    ''' </summary>
+    Public lTremieDroite As Boolean
+
+    ''' <summary>
     ''' Nombre de travées sur 2 appuis
     ''' </summary>
     Private pNbTravees As Integer
@@ -65,6 +76,12 @@
     ''' </summary>
     Public EntraxeD1 As Decimal
     Public EntraxeD2 As Decimal
+
+    ''' <summary>
+    ''' Distance entre la poutre et le bord des trémies
+    ''' </summary>
+    Public DistanceDsl1 As Decimal
+    Public DistanceDsl2 As Decimal
 
     ''' <summary>
     ''' Type de poutre intermédiaire ou de rive
@@ -117,6 +134,10 @@
         lTraveeConsoleDroite = False
         lTraveeConsoleGauche = False
 
+        lTremieGauche = False
+        lTremieDroite = False
+
+
         LongueurTravee(1) = PORTEEDEFAUT
         TypTravee(1) = EnuTypeTravee.DeuxAppuis
 
@@ -128,6 +149,9 @@
 
         EntraxeD1 = ENTRAXEDEFAUT
         EntraxeD2 = ENTRAXEDEFAUT
+
+        DistanceDsl1 = DISTANCETREMIEDEFAUT
+        DistanceDsl2 = DISTANCETREMIEDEFAUT
 
         lIntermediaire = True
 

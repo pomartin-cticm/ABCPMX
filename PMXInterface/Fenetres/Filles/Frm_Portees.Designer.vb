@@ -32,7 +32,7 @@ Partial Class Frm_Portees
         Me.TLPan_Portees = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Coupe = New System.Windows.Forms.Label()
+        Me.lbl_Entraxe = New System.Windows.Forms.Label()
         Me.lbl_Portees = New System.Windows.Forms.Label()
         Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
         Me.etq_UnitL3 = New System.Windows.Forms.Label()
@@ -65,10 +65,14 @@ Partial Class Frm_Portees
         Me.TLpan_Milieu = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Tremies = New System.Windows.Forms.Label()
         Me.pan_Tremies = New System.Windows.Forms.Panel()
-        Me.chk_TremieGauche = New System.Windows.Forms.CheckBox()
+        Me.etq_UnitL7 = New System.Windows.Forms.Label()
         Me.etq_UnitL6 = New System.Windows.Forms.Label()
+        Me.txt_TremieDroite = New System.Windows.Forms.TextBox()
+        Me.img_TremieDroite = New System.Windows.Forms.PictureBox()
         Me.txt_TremieGauche = New System.Windows.Forms.TextBox()
+        Me.chk_TremieDroite = New System.Windows.Forms.CheckBox()
         Me.img_TremieGauche = New System.Windows.Forms.PictureBox()
+        Me.chk_TremieGauche = New System.Windows.Forms.CheckBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
@@ -91,6 +95,7 @@ Partial Class Frm_Portees
         Me.pan_Milieu.SuspendLayout()
         Me.TLpan_Milieu.SuspendLayout()
         Me.pan_Tremies.SuspendLayout()
+        CType(Me.img_TremieDroite, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_TremieGauche, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -204,7 +209,7 @@ Partial Class Frm_Portees
         '
         Me.TLPan_Gauche.ColumnCount = 1
         Me.TLPan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Controls.Add(Me.lbl_Coupe, 0, 2)
+        Me.TLPan_Gauche.Controls.Add(Me.lbl_Entraxe, 0, 2)
         Me.TLPan_Gauche.Controls.Add(Me.lbl_Portees, 0, 0)
         Me.TLPan_Gauche.Controls.Add(Me.pan_SaisiePortee, 0, 1)
         Me.TLPan_Gauche.Controls.Add(Me.pan_Coupe, 0, 3)
@@ -221,19 +226,19 @@ Partial Class Frm_Portees
         Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 380)
         Me.TLPan_Gauche.TabIndex = 0
         '
-        'lbl_Coupe
+        'lbl_Entraxe
         '
-        Me.lbl_Coupe.AutoSize = True
-        Me.lbl_Coupe.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Coupe.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Coupe.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Coupe.Location = New System.Drawing.Point(0, 200)
-        Me.lbl_Coupe.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Coupe.Name = "lbl_Coupe"
-        Me.lbl_Coupe.Size = New System.Drawing.Size(250, 30)
-        Me.lbl_Coupe.TabIndex = 2
-        Me.lbl_Coupe.Text = "lbl_Coupe"
-        Me.lbl_Coupe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_Entraxe.AutoSize = True
+        Me.lbl_Entraxe.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Entraxe.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Entraxe.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Entraxe.Location = New System.Drawing.Point(0, 200)
+        Me.lbl_Entraxe.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Entraxe.Name = "lbl_Entraxe"
+        Me.lbl_Entraxe.Size = New System.Drawing.Size(250, 30)
+        Me.lbl_Entraxe.TabIndex = 2
+        Me.lbl_Entraxe.Text = "lbl_Entraxe"
+        Me.lbl_Entraxe.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lbl_Portees
         '
@@ -575,8 +580,12 @@ Partial Class Frm_Portees
         'pan_Tremies
         '
         Me.pan_Tremies.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Tremies.Controls.Add(Me.etq_UnitL7)
         Me.pan_Tremies.Controls.Add(Me.etq_UnitL6)
+        Me.pan_Tremies.Controls.Add(Me.txt_TremieDroite)
+        Me.pan_Tremies.Controls.Add(Me.img_TremieDroite)
         Me.pan_Tremies.Controls.Add(Me.txt_TremieGauche)
+        Me.pan_Tremies.Controls.Add(Me.chk_TremieDroite)
         Me.pan_Tremies.Controls.Add(Me.img_TremieGauche)
         Me.pan_Tremies.Controls.Add(Me.chk_TremieGauche)
         Me.pan_Tremies.Dock = System.Windows.Forms.DockStyle.Fill
@@ -586,41 +595,77 @@ Partial Class Frm_Portees
         Me.pan_Tremies.Size = New System.Drawing.Size(249, 150)
         Me.pan_Tremies.TabIndex = 4
         '
-        'chk_TremieGauche
+        'etq_UnitL7
         '
-        Me.chk_TremieGauche.AutoSize = True
-        Me.chk_TremieGauche.Location = New System.Drawing.Point(7, 16)
-        Me.chk_TremieGauche.Name = "chk_TremieGauche"
-        Me.chk_TremieGauche.Size = New System.Drawing.Size(81, 17)
-        Me.chk_TremieGauche.TabIndex = 80
-        Me.chk_TremieGauche.Text = "CheckBox1"
-        Me.chk_TremieGauche.UseVisualStyleBackColor = True
+        Me.etq_UnitL7.AutoSize = True
+        Me.etq_UnitL7.Location = New System.Drawing.Point(187, 100)
+        Me.etq_UnitL7.Name = "etq_UnitL7"
+        Me.etq_UnitL7.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitL7.TabIndex = 83
+        Me.etq_UnitL7.Text = "kN"
         '
         'etq_UnitL6
         '
         Me.etq_UnitL6.AutoSize = True
-        Me.etq_UnitL6.Location = New System.Drawing.Point(190, 52)
+        Me.etq_UnitL6.Location = New System.Drawing.Point(187, 43)
         Me.etq_UnitL6.Name = "etq_UnitL6"
         Me.etq_UnitL6.Size = New System.Drawing.Size(21, 13)
         Me.etq_UnitL6.TabIndex = 83
         Me.etq_UnitL6.Text = "kN"
         '
+        'txt_TremieDroite
+        '
+        Me.txt_TremieDroite.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_TremieDroite.Location = New System.Drawing.Point(123, 96)
+        Me.txt_TremieDroite.Name = "txt_TremieDroite"
+        Me.txt_TremieDroite.Size = New System.Drawing.Size(58, 20)
+        Me.txt_TremieDroite.TabIndex = 81
+        '
+        'img_TremieDroite
+        '
+        Me.img_TremieDroite.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_TremieDroite.Location = New System.Drawing.Point(78, 96)
+        Me.img_TremieDroite.Name = "img_TremieDroite"
+        Me.img_TremieDroite.Size = New System.Drawing.Size(46, 20)
+        Me.img_TremieDroite.TabIndex = 82
+        Me.img_TremieDroite.TabStop = False
+        '
         'txt_TremieGauche
         '
         Me.txt_TremieGauche.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_TremieGauche.Location = New System.Drawing.Point(126, 48)
+        Me.txt_TremieGauche.Location = New System.Drawing.Point(123, 39)
         Me.txt_TremieGauche.Name = "txt_TremieGauche"
         Me.txt_TremieGauche.Size = New System.Drawing.Size(58, 20)
         Me.txt_TremieGauche.TabIndex = 81
         '
+        'chk_TremieDroite
+        '
+        Me.chk_TremieDroite.AutoSize = True
+        Me.chk_TremieDroite.Location = New System.Drawing.Point(7, 73)
+        Me.chk_TremieDroite.Name = "chk_TremieDroite"
+        Me.chk_TremieDroite.Size = New System.Drawing.Size(110, 17)
+        Me.chk_TremieDroite.TabIndex = 80
+        Me.chk_TremieDroite.Text = "chk_TremieDroite"
+        Me.chk_TremieDroite.UseVisualStyleBackColor = True
+        '
         'img_TremieGauche
         '
         Me.img_TremieGauche.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_TremieGauche.Location = New System.Drawing.Point(81, 48)
+        Me.img_TremieGauche.Location = New System.Drawing.Point(78, 39)
         Me.img_TremieGauche.Name = "img_TremieGauche"
         Me.img_TremieGauche.Size = New System.Drawing.Size(46, 20)
         Me.img_TremieGauche.TabIndex = 82
         Me.img_TremieGauche.TabStop = False
+        '
+        'chk_TremieGauche
+        '
+        Me.chk_TremieGauche.AutoSize = True
+        Me.chk_TremieGauche.Location = New System.Drawing.Point(7, 16)
+        Me.chk_TremieGauche.Name = "chk_TremieGauche"
+        Me.chk_TremieGauche.Size = New System.Drawing.Size(120, 17)
+        Me.chk_TremieGauche.TabIndex = 80
+        Me.chk_TremieGauche.Text = "chk_TremieGauche"
+        Me.chk_TremieGauche.UseVisualStyleBackColor = True
         '
         'ErrorProvider
         '
@@ -661,6 +706,7 @@ Partial Class Frm_Portees
         Me.TLpan_Milieu.PerformLayout()
         Me.pan_Tremies.ResumeLayout(False)
         Me.pan_Tremies.PerformLayout()
+        CType(Me.img_TremieDroite, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_TremieGauche, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
@@ -691,7 +737,7 @@ Partial Class Frm_Portees
     Friend WithEvents txt_MainSpan As TextBox
     Friend WithEvents img_L1 As PictureBox
     Friend WithEvents lbl_MainSpan As Label
-    Friend WithEvents lbl_Coupe As Label
+    Friend WithEvents lbl_Entraxe As Label
     Friend WithEvents TLpan_Droite As TableLayoutPanel
     Friend WithEvents img_Coupe As PictureBox
     Friend WithEvents pan_Coupe As Panel
@@ -714,4 +760,8 @@ Partial Class Frm_Portees
     Friend WithEvents txt_TremieGauche As TextBox
     Friend WithEvents img_TremieGauche As PictureBox
     Friend WithEvents ErrorProvider As ErrorProvider
+    Friend WithEvents etq_UnitL7 As Label
+    Friend WithEvents txt_TremieDroite As TextBox
+    Friend WithEvents img_TremieDroite As PictureBox
+    Friend WithEvents chk_TremieDroite As CheckBox
 End Class

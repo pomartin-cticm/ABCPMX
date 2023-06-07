@@ -73,8 +73,8 @@ Public Class Frm_Portees
 
         Me.lbl_Portees.BackColor = CouleurBackBandeaux
         Me.lbl_Portees.ForeColor = CouleurForeBandeaux
-        Me.lbl_Coupe.BackColor = CouleurBackBandeaux
-        Me.lbl_Coupe.ForeColor = CouleurForeBandeaux
+        Me.lbl_Entraxe.BackColor = CouleurBackBandeaux
+        Me.lbl_Entraxe.ForeColor = CouleurForeBandeaux
         Me.lbl_Tremies.BackColor = CouleurBackBandeaux
         Me.lbl_Tremies.ForeColor = CouleurForeBandeaux
 
@@ -107,9 +107,22 @@ Public Class Frm_Portees
             Me.chk_ConsoleDroite.Checked = .lTraveeConsoleDroite
             Me.txt_PorteeConsoleD.Text = GetStringNoUnit(.LongueurTravee(.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur)
 
+            Me.txt_D1.Text = GetStringNoUnit(.EntraxeD1, Enu_TypeVariable.Longueur)
+            Me.txt_D2.Text = GetStringNoUnit(.EntraxeD2, Enu_TypeVariable.Longueur)
+
+            Me.rad_Intermediaire.Checked = MyPoutreLoc.lIntermediaire
+
+            Me.chk_TremieGauche.Checked = .lTremieGauche
+            If .lTremieGauche Then Me.txt_D1.Text = GetStringNoUnit(.DistanceDsl1, Enu_TypeVariable.Longueur)
+
+            Me.chk_TremieDroite.Checked = .lTremieDroite
+            If .lTremieDroite Then Me.txt_D2.Text = GetStringNoUnit(.DistanceDsl2, Enu_TypeVariable.Longueur)
+
         End With
 
         MAJ_PorteesConsoles()
+        MAJ_Tremies()
+
     End Sub
 
     Private Sub GestionUnites()
@@ -119,6 +132,8 @@ Public Class Frm_Portees
         Me.etq_UnitL3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+        Me.etq_UnitL6.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+        Me.etq_UnitL7.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
 
     End Sub
 
@@ -214,7 +229,7 @@ Public Class Frm_Portees
 
     End Sub
 
-    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_L3.Paint, img_L2.Paint, img_L1.Paint
+    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_L3.Paint, img_L2.Paint, img_L1.Paint, img_D1.Paint, img_D2.Paint, img_TremieGauche.Paint, img_TremieDroite.Paint
 
         '--> Déclarations
 
@@ -253,6 +268,22 @@ Public Class Frm_Portees
                 strSymbol = "L"
                 strIndice = "d"
 
+            Case img_D1.Name
+                strSymbol = "d"
+                strIndice = "1"
+
+            Case img_D2.Name
+                strSymbol = "d"
+                strIndice = "2"
+
+            Case Me.img_TremieGauche.Name
+                strSymbol = "d"
+                strIndice = "sl,1"
+
+            Case Me.img_TremieDroite.Name
+                strSymbol = "d"
+                strIndice = "sl,2"
+
         End Select
 
         '--> Dessin
@@ -276,7 +307,7 @@ Public Class Frm_Portees
         Me.img_Coupe.Invalidate()
     End Sub
 
-    Private Sub EnterTextBox(sender As Object, e As EventArgs) Handles txt_TremieGauche.Enter, txt_PorteeConsoleG.Enter, txt_PorteeConsoleD.Enter, txt_MainSpan.Enter, txt_D2.Enter, txt_D1.Enter
+    Private Sub EnterTextBox(sender As Object, e As EventArgs) Handles txt_TremieGauche.Enter, txt_PorteeConsoleG.Enter, txt_PorteeConsoleD.Enter, txt_MainSpan.Enter, txt_D2.Enter, txt_D1.Enter, txt_TremieDroite.Enter, txt_TremieGauche.Enter
         If lBuild Then Exit Sub
 
         Select Case sender.name
@@ -292,7 +323,7 @@ Public Class Frm_Portees
         Me.img_Portees.Invalidate()
     End Sub
 
-    Private Sub LeaveTextBox(sender As Object, e As EventArgs) Handles txt_TremieGauche.Leave, txt_PorteeConsoleG.Leave, txt_PorteeConsoleD.Leave, txt_MainSpan.Leave, txt_D2.Leave, txt_D1.Leave
+    Private Sub LeaveTextBox(sender As Object, e As EventArgs) Handles txt_TremieGauche.Leave, txt_PorteeConsoleG.Leave, txt_PorteeConsoleD.Leave, txt_MainSpan.Leave, txt_D2.Leave, txt_D1.Leave, txt_TremieDroite.Leave, txt_TremieGauche.Leave
 
         If lBuild Then Exit Sub
         iSelect = -1
@@ -308,14 +339,17 @@ Public Class Frm_Portees
 
 #Region " Evènements saisie "
 
-    Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_TremieGauche.TextChanged, txt_PorteeConsoleG.TextChanged, txt_PorteeConsoleD.TextChanged, txt_MainSpan.TextChanged, txt_D2.TextChanged, txt_D1.TextChanged
+    Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_PorteeConsoleG.TextChanged, txt_PorteeConsoleD.TextChanged, txt_MainSpan.TextChanged,
+                                                                     txt_TremieDroite.TextChanged, txt_TremieGauche.TextChanged
+        'txt_D2.TextChanged, txt_D1.TextChanged
+
         If lBuild Then Exit Sub
         Dim lPortees As Boolean = False
         Dim lCoupe As Boolean = False
 
         Dim ValeurUI As Decimal
 
-        If VerificationSaisie(sender, valeurui) Then
+        If VerificationSaisie(sender, ValeurUI) Then
 
             Select Case sender.name
                 Case Me.txt_MainSpan.Name
@@ -327,6 +361,12 @@ Public Class Frm_Portees
                 Case Me.txt_PorteeConsoleD.Name
                     MyPoutreLoc.LongueurTravee(MyPoutreLoc.IndiceTraveeConsoleDroite) = ValeurUI
                     lPortees = True
+                Case Me.txt_TremieGauche.Name
+                    MyPoutreLoc.DistanceDsl1 = ValeurUI
+                    lCoupe = True
+                Case Me.txt_TremieDroite.Name
+                    MyPoutreLoc.DistanceDsl2 = ValeurUI
+                    lCoupe = True
             End Select
 
             If lPortees Then Me.img_Portees.Invalidate()
@@ -358,6 +398,14 @@ Public Class Frm_Portees
 
                 ValMin = CONSOLEMIN / kUnit
                 ValMax = RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit
+
+            Case Me.txt_TremieGauche.Name
+                ValMin = 0
+                ValMax = MyPoutreLoc.EntraxeD1 / 2
+
+            Case Me.txt_TremieDroite.Name
+                ValMin = 0
+                ValMax = MyPoutreLoc.EntraxeD2 / 2
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -400,6 +448,51 @@ Public Class Frm_Portees
         Me.img_L3.Visible = MyPoutreLoc.lTraveeConsoleDroite
 
     End Sub
+
+    Private Sub ChoixPositionPoutre(sender As Object, e As EventArgs) Handles rad_Intermediaire.CheckedChanged
+        If lBuild Then Exit Sub
+
+        MyPoutreLoc.lIntermediaire = rad_Intermediaire.Checked
+
+        If Not MyPoutreLoc.lIntermediaire Then Me.chk_TremieGauche.Checked = False
+
+        Me.chk_TremieGauche.Enabled = MyPoutreLoc.lIntermediaire
+
+        Me.img_Coupe.Invalidate()
+
+    End Sub
+
+    Private Sub ChoixTremies(sender As Object, e As EventArgs) Handles chk_TremieGauche.CheckedChanged, chk_TremieDroite.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.chk_TremieGauche.Name
+                MyPoutreLoc.lTremieGauche = Me.chk_TremieGauche.Checked
+
+            Case Me.chk_TremieDroite.Name
+                MyPoutreLoc.lTremieDroite = Me.chk_TremieDroite.Checked
+
+        End Select
+
+        MAJ_Tremies()
+
+    End Sub
+
+    Private Sub MAJ_Tremies()
+
+        Me.txt_TremieGauche.Visible = MyPoutreLoc.lTremieGauche
+        Me.etq_UnitL6.Visible = MyPoutreLoc.lTremieGauche
+        Me.img_TremieGauche.Visible = MyPoutreLoc.lTremieGauche
+
+        Me.txt_TremieDroite.Visible = MyPoutreLoc.lTremieDroite
+        Me.etq_UnitL7.Visible = MyPoutreLoc.lTremieDroite
+        Me.img_TremieDroite.Visible = MyPoutreLoc.lTremieDroite
+
+    End Sub
+
+
+
+
 
 
 
