@@ -15,7 +15,9 @@ Public Class Frm_AjoutePP
     Dim MySectionMixte As New cls_Section
     Dim MySectionMixteEnrobe As New cls_Section
     Dim MySectionSFB As New cls_Section
+    Dim MySectionSAB As New cls_Section
     Dim MySectionSFBmixte As New cls_Section
+    Dim MySectionSABmixte As New cls_Section
 
     'Dim CouleurAcierNormal As Color = Color.DarkSlateBlue
     'Dim CouleurAcierSelect As Color = Color.DarkOrange
@@ -103,6 +105,8 @@ Public Class Frm_AjoutePP
                 Me.MyToolTip.SetToolTip(Me.chk_SectionMixteEnrobe, tabType(cls_Section.Enum_TypeSection.MixteEnrobage))
                 Me.MyToolTip.SetToolTip(Me.chk_SFBAcier, tabType(cls_Section.Enum_TypeSection.SFB))
                 Me.MyToolTip.SetToolTip(Me.chk_SFBMixte, tabType(cls_Section.Enum_TypeSection.SFBmixte))
+                Me.MyToolTip.SetToolTip(Me.chk_SABAcier, tabType(cls_Section.Enum_TypeSection.SAB))
+                Me.MyToolTip.SetToolTip(Me.chk_SABMixte, tabType(cls_Section.Enum_TypeSection.SABmixte))
 
                 Me.chk_SectionAcier.Text = ""
                 Me.chk_SectionAcierEnrobe.Text = ""
@@ -110,6 +114,8 @@ Public Class Frm_AjoutePP
                 Me.chk_SectionMixteEnrobe.Text = ""
                 Me.chk_SFBAcier.Text = ""
                 Me.chk_SFBMixte.Text = ""
+                Me.chk_SABAcier.Text = ""
+                Me.chk_SABMixte.Text = ""
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_AjoutePP/GestionLangue")
@@ -190,6 +196,16 @@ Public Class Frm_AjoutePP
         MySectionSFB.ProfilA.Plat_t = 0.03
         MySectionSFB.ProfilA.Plat_b = 0.45
 
+        '--> Définition de la section SAB non mixte
+        MySectionSAB.typeSection = cls_Section.Enum_TypeSection.SAB
+        MySectionSAB.ProfilA.b_fs *= 5 / 8
+        MySectionSAB.ProfilA.t_fs = 0.03
+        MySectionSAB.ProfilA.t_fi = 0.03
+        MySectionSAB.ProfilA.r_cs = 0.03
+        MySectionSAB.ProfilA.r_ci = 0.03
+        MySectionSAB.ProfilA.Plat_t = 0.03
+        MySectionSAB.ProfilA.Plat_b = 0.45
+
         '--> Définition de la section SFB non mixte
         MySectionSFBmixte.typeSection = cls_Section.Enum_TypeSection.SFBmixte
         MySectionSFBmixte.ProfilA.t_fs = 0.03
@@ -201,6 +217,17 @@ Public Class Frm_AjoutePP
 
         MySectionSFBmixte.Dalle.t_d = 0.05
         MySectionSFBmixte.Dalle.Beff = 0.75
+
+        '--> Définition de la section SAB non mixte
+        MySectionSABmixte.typeSection = cls_Section.Enum_TypeSection.SABmixte
+        MySectionSABmixte.ProfilA.b_fs *= 5 / 8
+        MySectionSABmixte.ProfilA.t_fs = 0.03
+        MySectionSABmixte.ProfilA.t_fi = 0.03
+        MySectionSABmixte.ProfilA.r_cs = 0.03
+        MySectionSABmixte.ProfilA.r_ci = 0.03
+
+        MySectionSABmixte.Dalle.t_d = 0.05
+        MySectionSABmixte.Dalle.Beff = 0.75
     End Sub
 
 
@@ -243,9 +270,17 @@ Public Class Frm_AjoutePP
                 DessinFrmTypeSection(e.Graphics, MySectionSFB, MySectionSFB.Dalle, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB)
 
+            Case Me.chk_SABAcier.Name
+                DessinFrmTypeSection(e.Graphics, MySectionSAB, MySectionSAB.Dalle, Me.chk_SABAcier.ClientRectangle.Width, Me.chk_SABAcier.Height,
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SAB)
+
             Case Me.chk_SFBMixte.Name
                 DessinFrmTypeSection(e.Graphics, MySectionSFBmixte, MySectionSFBmixte.Dalle, Me.chk_SFBMixte.ClientRectangle.Width, Me.chk_SFBMixte.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFBmixte)
+
+            Case Me.chk_SABMixte.Name
+                DessinFrmTypeSection(e.Graphics, MySectionSABmixte, MySectionSABmixte.Dalle, Me.chk_SABMixte.ClientRectangle.Width, Me.chk_SABMixte.Height,
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SABmixte)
 
         End Select
 
@@ -266,6 +301,8 @@ Public Class Frm_AjoutePP
             Case Me.chk_SectionMixteEnrobe.Name : TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
             Case Me.chk_SFBAcier.Name : TypeSection = cls_Section.Enum_TypeSection.SFB
             Case Me.chk_SFBMixte.Name : TypeSection = cls_Section.Enum_TypeSection.SFBmixte
+            Case Me.chk_SABAcier.Name : TypeSection = cls_Section.Enum_TypeSection.SAB
+            Case Me.chk_SABMixte.Name : TypeSection = cls_Section.Enum_TypeSection.SABmixte
         End Select
 
         lBuild = True
@@ -281,6 +318,8 @@ Public Class Frm_AjoutePP
         Me.chk_SectionMixteEnrobe.Checked = TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
         Me.chk_SFBAcier.Checked = TypeSection = cls_Section.Enum_TypeSection.SFB
         Me.chk_SFBMixte.Checked = TypeSection = cls_Section.Enum_TypeSection.SFBmixte
+        Me.chk_SABAcier.Checked = TypeSection = cls_Section.Enum_TypeSection.SAB
+        Me.chk_SABMixte.Checked = TypeSection = cls_Section.Enum_TypeSection.SABmixte
 
         Me.lbl_TypeSection.Text = strType & " : " & tabType(TypeSection)
 
@@ -342,6 +381,16 @@ Public Class Frm_AjoutePP
             If Me.chk_SFBAcier.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre))
+            End If
+
+            If Me.chk_SABMixte.Checked Then
+                lAjout = True
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre))
+            End If
+
+            If Me.chk_SABAcier.Checked Then
+                lAjout = True
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre))
             End If
 
         End If

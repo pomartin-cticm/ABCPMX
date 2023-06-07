@@ -345,12 +345,12 @@ Partial Class Frm_AjoutePP
         Me.TLpan_ChoixSection.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TLpan_ChoixSection.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TLpan_ChoixSection.Controls.Add(Me.chk_SFBMixte, 0, 2)
-        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox6, 0, 1)
-        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox5, 0, 2)
-        Me.TLpan_ChoixSection.Controls.Add(Me.chk_SABAcier, 0, 1)
-        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox3, 0, 2)
-        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox2, 0, 1)
-        Me.TLpan_ChoixSection.Controls.Add(Me.chk_SABMixte, 0, 2)
+        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox6, 2, 1)
+        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox5, 1, 2)
+        Me.TLpan_ChoixSection.Controls.Add(Me.chk_SABAcier, 3, 1)
+        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox3, 2, 2)
+        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox2, 1, 1)
+        Me.TLpan_ChoixSection.Controls.Add(Me.chk_SABMixte, 3, 2)
         Me.TLpan_ChoixSection.Controls.Add(Me.chk_SFBAcier, 0, 1)
         Me.TLpan_ChoixSection.Controls.Add(Me.chk_SectionMixte, 2, 0)
         Me.TLpan_ChoixSection.Controls.Add(Me.chk_SectionMixteEnrobe, 3, 0)
@@ -419,8 +419,6 @@ Partial Class Frm_AjoutePP
         '
         Me.chk_SABAcier.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_SABAcier.AutoSize = True
-        Me.chk_SABAcier.Checked = True
-        Me.chk_SABAcier.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_SABAcier.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_SABAcier.Location = New System.Drawing.Point(514, 108)
         Me.chk_SABAcier.Margin = New System.Windows.Forms.Padding(1)
@@ -430,7 +428,6 @@ Partial Class Frm_AjoutePP
         Me.chk_SABAcier.Text = "chk_SABAcier"
         Me.chk_SABAcier.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.chk_SABAcier.UseVisualStyleBackColor = True
-        Me.chk_SABAcier.Visible = False
         '
         'CheckBox3
         '
@@ -470,8 +467,6 @@ Partial Class Frm_AjoutePP
         '
         Me.chk_SABMixte.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_SABMixte.AutoSize = True
-        Me.chk_SABMixte.Checked = True
-        Me.chk_SABMixte.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chk_SABMixte.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_SABMixte.Location = New System.Drawing.Point(514, 215)
         Me.chk_SABMixte.Margin = New System.Windows.Forms.Padding(1)
@@ -481,7 +476,6 @@ Partial Class Frm_AjoutePP
         Me.chk_SABMixte.Text = "chk_SABMixte"
         Me.chk_SABMixte.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.chk_SABMixte.UseVisualStyleBackColor = True
-        Me.chk_SABMixte.Visible = False
         '
         'chk_SFBAcier
         '

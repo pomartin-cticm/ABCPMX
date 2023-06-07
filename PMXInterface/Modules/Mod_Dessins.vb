@@ -786,7 +786,8 @@ Module Mod_Dessins
 
         Select Case MySection.typeSection
             Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage,
-                 cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                 cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage,
+                 cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
 
                 DessinFrmTypeSectionStandard(MyGr, MySection, MyDalle, MyParAff, BeffRed, myBrushP, myBrushB, myBrushA)
 
@@ -1292,10 +1293,26 @@ Module Mod_Dessins
                 yPts(i) = yPts(17 - i)
             Next
 
-            For i = 18 To 35
-                xPts(i) = xPts(35 - i)
-                yPts(i) = - .ha - yPts(35 - i)
+            For i = 18 To 23
+                xPts(i) = - .t_w / 2 - .r_ci * (1 + CSng(Math.Cos(Math.PI - (i - 18) * DeltaA)))
+                yPts(i) = - .ha + .t_fi + .r_ci - .r_ci * CSng(Math.Sin(Math.PI - (i - 18) * DeltaA))
             Next
+
+            xPts(24) = - .b_fi / 2
+            yPts(24) = - .ha + .t_fi
+
+            xPts(25) = - .b_fi / 2
+            yPts(25) = - .ha
+
+            For i = 26 To 35
+                xPts(i) = -xPts(51 - i)
+                yPts(i) = yPts(51 - i)
+            Next
+
+            'For i = 18 To 35
+            '    xPts(i) = xPts(35 - i)
+            '    yPts(i) = - .ha - yPts(35 - i)
+            'Next
 
         End With
 
@@ -1456,7 +1473,8 @@ Module Mod_Dessins
 
         Select Case MySection.typeSection
             Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage,
-                 cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                 cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage,
+                cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
                 yMin = -zRef - MySection.ProfilA.ha
                 xMin = -BfMax / 2
                 xMax = -xMin
