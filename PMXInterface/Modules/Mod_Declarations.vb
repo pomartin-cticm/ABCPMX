@@ -208,6 +208,9 @@ Module Mod_Declarations
     Public Const CONSOLEMIN As Decimal = 0.5
     Public Const RATIOCONSOLEMAX As Decimal = 0.3
 
+    Public Const NBPROPPINGMIN As Integer = 0
+    Public Const NBPROPPINGMAX As Integer = 5
+
 #End Region
 
 

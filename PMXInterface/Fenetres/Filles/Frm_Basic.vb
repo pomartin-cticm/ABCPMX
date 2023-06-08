@@ -16,6 +16,7 @@ Public Class Frm_Basic
         GestionStyle()
         GestionUnites()
         AfficherPoutreEnCours()
+        lBuild = False
     End Sub
 
     Private Sub GestionLangues()

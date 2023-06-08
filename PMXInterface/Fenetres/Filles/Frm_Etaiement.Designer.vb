@@ -28,20 +28,26 @@ Partial Class Frm_Etaiement
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.pan_Main = New System.Windows.Forms.Panel()
-        Me.TLPan_Portees = New System.Windows.Forms.TableLayoutPanel()
+        Me.TLPan_Etaiement = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Portees = New System.Windows.Forms.Label()
-        Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
-        Me.img_Portees = New System.Windows.Forms.PictureBox()
+        Me.lbl_Etaiement = New System.Windows.Forms.Label()
+        Me.pan_SaisieEtaiement = New System.Windows.Forms.Panel()
+        Me.chk_EtaisConsole = New System.Windows.Forms.CheckBox()
+        Me.cmb_NbPoint = New System.Windows.Forms.ComboBox()
+        Me.rad_PointPropped = New System.Windows.Forms.RadioButton()
+        Me.rad_FullyPropped = New System.Windows.Forms.RadioButton()
+        Me.rad_UnPropped = New System.Windows.Forms.RadioButton()
+        Me.img_Etaiement = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
-        Me.TLPan_Portees.SuspendLayout()
+        Me.TLPan_Etaiement.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
-        CType(Me.img_Portees, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_SaisieEtaiement.SuspendLayout()
+        CType(Me.img_Etaiement, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -115,28 +121,28 @@ Partial Class Frm_Etaiement
         '
         Me.pan_Main.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Main.Controls.Add(Me.TLPan_Portees)
+        Me.pan_Main.Controls.Add(Me.TLPan_Etaiement)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
         Me.pan_Main.Size = New System.Drawing.Size(794, 404)
         Me.pan_Main.TabIndex = 1
         '
-        'TLPan_Portees
+        'TLPan_Etaiement
         '
-        Me.TLPan_Portees.ColumnCount = 2
-        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
-        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Portees.Controls.Add(Me.pan_Gauche, 0, 0)
-        Me.TLPan_Portees.Controls.Add(Me.img_Portees, 1, 0)
-        Me.TLPan_Portees.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Portees.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Portees.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_Portees.Name = "TLPan_Portees"
-        Me.TLPan_Portees.RowCount = 1
-        Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Portees.Size = New System.Drawing.Size(792, 402)
-        Me.TLPan_Portees.TabIndex = 0
+        Me.TLPan_Etaiement.ColumnCount = 2
+        Me.TLPan_Etaiement.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
+        Me.TLPan_Etaiement.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Etaiement.Controls.Add(Me.pan_Gauche, 0, 0)
+        Me.TLPan_Etaiement.Controls.Add(Me.img_Etaiement, 1, 0)
+        Me.TLPan_Etaiement.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLPan_Etaiement.Location = New System.Drawing.Point(0, 0)
+        Me.TLPan_Etaiement.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_Etaiement.Name = "TLPan_Etaiement"
+        Me.TLPan_Etaiement.RowCount = 1
+        Me.TLPan_Etaiement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Etaiement.Size = New System.Drawing.Size(792, 402)
+        Me.TLPan_Etaiement.TabIndex = 0
         '
         'pan_Gauche
         '
@@ -153,50 +159,104 @@ Partial Class Frm_Etaiement
         '
         Me.TLPan_Gauche.ColumnCount = 1
         Me.TLPan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Controls.Add(Me.lbl_Portees, 0, 0)
-        Me.TLPan_Gauche.Controls.Add(Me.pan_SaisiePortee, 0, 1)
+        Me.TLPan_Gauche.Controls.Add(Me.lbl_Etaiement, 0, 0)
+        Me.TLPan_Gauche.Controls.Add(Me.pan_SaisieEtaiement, 0, 1)
         Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Top
         Me.TLPan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
-        Me.TLPan_Gauche.RowCount = 3
+        Me.TLPan_Gauche.RowCount = 2
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 203)
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 402)
         Me.TLPan_Gauche.TabIndex = 0
         '
-        'lbl_Portees
+        'lbl_Etaiement
         '
-        Me.lbl_Portees.AutoSize = True
-        Me.lbl_Portees.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Portees.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Portees.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Portees.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Portees.Name = "lbl_Portees"
-        Me.lbl_Portees.Size = New System.Drawing.Size(250, 30)
-        Me.lbl_Portees.TabIndex = 0
-        Me.lbl_Portees.Text = "lbl_Portee"
-        Me.lbl_Portees.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_Etaiement.AutoSize = True
+        Me.lbl_Etaiement.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Etaiement.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Etaiement.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Etaiement.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Etaiement.Name = "lbl_Etaiement"
+        Me.lbl_Etaiement.Size = New System.Drawing.Size(250, 30)
+        Me.lbl_Etaiement.TabIndex = 0
+        Me.lbl_Etaiement.Text = "lbl_Etaiement"
+        Me.lbl_Etaiement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'pan_SaisiePortee
+        'pan_SaisieEtaiement
         '
-        Me.pan_SaisiePortee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
-        Me.pan_SaisiePortee.Size = New System.Drawing.Size(250, 170)
-        Me.pan_SaisiePortee.TabIndex = 1
+        Me.pan_SaisieEtaiement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieEtaiement.Controls.Add(Me.chk_EtaisConsole)
+        Me.pan_SaisieEtaiement.Controls.Add(Me.cmb_NbPoint)
+        Me.pan_SaisieEtaiement.Controls.Add(Me.rad_PointPropped)
+        Me.pan_SaisieEtaiement.Controls.Add(Me.rad_FullyPropped)
+        Me.pan_SaisieEtaiement.Controls.Add(Me.rad_UnPropped)
+        Me.pan_SaisieEtaiement.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisieEtaiement.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_SaisieEtaiement.Name = "pan_SaisieEtaiement"
+        Me.pan_SaisieEtaiement.Size = New System.Drawing.Size(250, 372)
+        Me.pan_SaisieEtaiement.TabIndex = 1
         '
-        'img_Portees
+        'chk_EtaisConsole
         '
-        Me.img_Portees.Location = New System.Drawing.Point(251, 0)
-        Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
-        Me.img_Portees.Name = "img_Portees"
-        Me.img_Portees.Size = New System.Drawing.Size(100, 50)
-        Me.img_Portees.TabIndex = 1
-        Me.img_Portees.TabStop = False
+        Me.chk_EtaisConsole.AutoSize = True
+        Me.chk_EtaisConsole.Location = New System.Drawing.Point(90, 160)
+        Me.chk_EtaisConsole.Name = "chk_EtaisConsole"
+        Me.chk_EtaisConsole.Size = New System.Drawing.Size(111, 17)
+        Me.chk_EtaisConsole.TabIndex = 5
+        Me.chk_EtaisConsole.Text = "chk_EtaisConsole"
+        Me.chk_EtaisConsole.UseVisualStyleBackColor = True
+        '
+        'cmb_NbPoint
+        '
+        Me.cmb_NbPoint.FormattingEnabled = True
+        Me.cmb_NbPoint.Location = New System.Drawing.Point(90, 183)
+        Me.cmb_NbPoint.Name = "cmb_NbPoint"
+        Me.cmb_NbPoint.Size = New System.Drawing.Size(111, 21)
+        Me.cmb_NbPoint.TabIndex = 3
+        '
+        'rad_PointPropped
+        '
+        Me.rad_PointPropped.AutoSize = True
+        Me.rad_PointPropped.Location = New System.Drawing.Point(79, 126)
+        Me.rad_PointPropped.Name = "rad_PointPropped"
+        Me.rad_PointPropped.Size = New System.Drawing.Size(110, 17)
+        Me.rad_PointPropped.TabIndex = 2
+        Me.rad_PointPropped.TabStop = True
+        Me.rad_PointPropped.Text = "rad_PointPropped"
+        Me.rad_PointPropped.UseVisualStyleBackColor = True
+        '
+        'rad_FullyPropped
+        '
+        Me.rad_FullyPropped.AutoSize = True
+        Me.rad_FullyPropped.Location = New System.Drawing.Point(79, 87)
+        Me.rad_FullyPropped.Name = "rad_FullyPropped"
+        Me.rad_FullyPropped.Size = New System.Drawing.Size(107, 17)
+        Me.rad_FullyPropped.TabIndex = 1
+        Me.rad_FullyPropped.TabStop = True
+        Me.rad_FullyPropped.Text = "rad_FullyPropped"
+        Me.rad_FullyPropped.UseVisualStyleBackColor = True
+        '
+        'rad_UnPropped
+        '
+        Me.rad_UnPropped.AutoSize = True
+        Me.rad_UnPropped.Location = New System.Drawing.Point(79, 51)
+        Me.rad_UnPropped.Name = "rad_UnPropped"
+        Me.rad_UnPropped.Size = New System.Drawing.Size(100, 17)
+        Me.rad_UnPropped.TabIndex = 0
+        Me.rad_UnPropped.TabStop = True
+        Me.rad_UnPropped.Text = "rad_UnPropped"
+        Me.rad_UnPropped.UseVisualStyleBackColor = True
+        '
+        'img_Etaiement
+        '
+        Me.img_Etaiement.Location = New System.Drawing.Point(251, 0)
+        Me.img_Etaiement.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.img_Etaiement.Name = "img_Etaiement"
+        Me.img_Etaiement.Size = New System.Drawing.Size(100, 50)
+        Me.img_Etaiement.TabIndex = 1
+        Me.img_Etaiement.TabStop = False
         '
         'Frm_Etaiement
         '
@@ -210,11 +270,13 @@ Partial Class Frm_Etaiement
         Me.TLpan_Main.ResumeLayout(False)
         Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.pan_Main.ResumeLayout(False)
-        Me.TLPan_Portees.ResumeLayout(False)
+        Me.TLPan_Etaiement.ResumeLayout(False)
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
-        CType(Me.img_Portees, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_SaisieEtaiement.ResumeLayout(False)
+        Me.pan_SaisieEtaiement.PerformLayout()
+        CType(Me.img_Etaiement, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -225,10 +287,15 @@ Partial Class Frm_Etaiement
     Friend WithEvents btn_OK As Button
     Friend WithEvents btn_Annuler As Button
     Friend WithEvents pan_Main As Panel
-    Friend WithEvents TLPan_Portees As TableLayoutPanel
+    Friend WithEvents TLPan_Etaiement As TableLayoutPanel
     Friend WithEvents pan_Gauche As Panel
     Friend WithEvents TLPan_Gauche As TableLayoutPanel
-    Friend WithEvents lbl_Portees As Label
-    Friend WithEvents pan_SaisiePortee As Panel
-    Friend WithEvents img_Portees As PictureBox
+    Friend WithEvents lbl_Etaiement As Label
+    Friend WithEvents pan_SaisieEtaiement As Panel
+    Friend WithEvents img_Etaiement As PictureBox
+    Friend WithEvents rad_UnPropped As RadioButton
+    Friend WithEvents rad_PointPropped As RadioButton
+    Friend WithEvents rad_FullyPropped As RadioButton
+    Friend WithEvents cmb_NbPoint As ComboBox
+    Friend WithEvents chk_EtaisConsole As CheckBox
 End Class

@@ -261,6 +261,8 @@ Public Class Frm_PMX
             Case Me.TSbtn_Enrobage.Name
                 FilleEnCours = EnuFilleEnCours.Enrobage
 
+            Case Me.TSbtn_Etaiement.Name
+                FilleEnCours = EnuFilleEnCours.Etaiement
             Case Me.TSbtn_Chargements.Name
                 FilleEnCours = EnuFilleEnCours.Chargements
 
@@ -293,6 +295,13 @@ Public Class Frm_PMX
                 End If
 
             Case EnuFilleEnCours.Enrobage
+
+            Case EnuFilleEnCours.Etaiement
+                If LogicielOptions.lFenetres Then
+                    Frm_Etaiement.ShowDialog()
+                Else
+
+                End If
 
         End Select
 

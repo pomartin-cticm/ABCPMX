@@ -6,11 +6,19 @@
     Const PORTEECONSOLEDEFAUT As Decimal = 3.256
     Const ENTRAXEDEFAUT As Decimal = 2
     Const DISTANCETREMIEDEFAUT As Decimal = ENTRAXEDEFAUT / 2
+    Const NBPROPPINGDEFAUT As Integer = 0
+
 
     Enum EnuTypeTravee
         ConsoleGauche
         ConsoleDroite
         DeuxAppuis
+    End Enum
+
+    Enum EnuTypeEtaiement
+        UnPropped
+        FullyPropped
+        PointPropped
     End Enum
 #End Region
 
@@ -65,6 +73,21 @@
     ''' Types des travées
     ''' </summary>
     Public TypTravee() As EnuTypeTravee
+
+    ''' <summary>
+    ''' Type d'étaiement
+    ''' </summary>
+    Public TypeEtaiement As EnuTypeEtaiement
+
+    ''' <summary>
+    ''' Indique si présence d'étais aux extrémités des consoles 
+    ''' </summary>
+    Public lEtaisConsole As Boolean
+
+    ''' <summary>
+    ''' Nombre d'étais disposés par través entre deux appuis consécutifs
+    ''' </summary>
+    Public pNbPropping As Integer
 
     ''' <summary>
     ''' Sections par travéee
@@ -133,6 +156,10 @@
 
         lTraveeConsoleDroite = False
         lTraveeConsoleGauche = False
+
+        TypeEtaiement = EnuTypeEtaiement.UnPropped
+        pNbPropping = NBPROPPINGDEFAUT
+        lEtaisConsole = False
 
         lTremieGauche = False
         lTremieDroite = False
@@ -295,7 +322,7 @@
     End Function
 
 
-    Public Shared Sub Clone(PoutreSource As cls_Poutre, PoutreCible As cls_Poutre)
+    Public Shared Sub Clone(PoutreSource As cls_Poutre, ByRef PoutreCible As cls_Poutre)
         '------------------------------------------------------------------------------------------------
         '   05/06/23 :  Clonage d'une poutre source vers la poutre interne
         '------------------------------------------------------------------------------------------------
