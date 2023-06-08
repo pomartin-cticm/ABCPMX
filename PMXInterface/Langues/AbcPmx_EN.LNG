@@ -25,14 +25,57 @@ PROJECT					= Project
 PROJECTNAME				= Project name
 SECTIONSLIST			= Sections list
 SECTION					= Section
+TSBACCUEIL				= Home
+TSBPORTEES				= Spans
+TSBENTRAXE				= Transverse configuration
+TSBDALLE				= Slab
+TSBSECTIONA				= Steel section
+TSBENROBAGE				= Partial encasement
+TSBCONNECTION			= Connection
+TSBETAIEMENT			= Propping
 COPYPICTURE				= Copy picture
 WARNINGFILE				= Please note that you are opening a file with data from an old version of the software. Please check all data and re-register the file.
+ERRORCAPACITY			= The maximum capacity of the list has been reached, no new additions are possible
+ERROREMPTYCELL			= Empty cell
+ERRORNONNUMERIC			= Non-numeric value
+ERROROUTBOUNDS			= Value out of bounds
 
 #FRM_OUVERTURE
 NEWPROJECT				= New project
 CREATEBEAM				= Create a new beam
-OPENPROJECT				= Open a projet
+OPENPROJECT				= Open a project
 BROWSEFILES				= Browse
 RECENTFILES				= Recent Files
 VALIDATE				= Validate
+
+#FRM_PORTEES
+TITRE					= Definition of the beam
+OK						= OK
+CANCEL					= Cancel
+TRAVEES					= Span lengths
+MAINSPAN				= Main span
+CONSOLEG				= Left cantilever span
+CONSOLED				= Right cantilever span
+
+#FRM_SECTIONACIERSTANDARD
+TITLE					= Definition of the steel profile
+OK						= OK
+CANCEL					= Cancel
+PROFILE					= Profile
+STEEL					= Steel
+HOTROLLED				= Hot rolled profile
+WELDEDSYM				= Bi-symmetrical welded section
+WELDEDP					= Mono-symmetrical welded section
+SERIE					= Serial
+PROFILES				=¨Profiles 
+LOWERF					= Lower flange
+UPPERF					= Upper flange
+WEB						= Web 
+HEIGHT					= Height 
+STEELGRADE				= Steel grade
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+AUTOMATICHW				= Height of the web automatically assessed
+AUTOMATICHA				= Total height automatically assessed
+DELIVERYCOND			= Delivery conditions for $
 

@@ -1,5 +1,13 @@
 ﻿Module Mod_Demarrage
 
+#Region " Déclarations "
+
+    Dim lDebug As Boolean = False
+
+#End Region
+
+
+
 #Region "===DEMARRAGE==="
 
     Public Sub Main()
@@ -12,7 +20,6 @@
 
         Frm_PMX.ShowDialog()
 
-
     End Sub
 
     Public Sub InitialiseLogiciel()
@@ -22,6 +29,8 @@
         '   Initialisation générale des paramètres du logiciel ABCPMX-II
         '---------------------------------------------------------------------------------------------------------------
         '---------------------------------------------------------------------------------------------------------------
+
+        InitialiseDebug()
 
         '--> Récupération des informations générales du logociel - Non modifiable par l'utilisateur
 
@@ -125,6 +134,10 @@
 
     End Sub
 
+    <Conditional("DEBUG")> Private Sub InitialiseDebug()
+        lDebug = True
+    End Sub
+
 #End Region
 
 
@@ -137,9 +150,15 @@
 
         If (LogicielInfo.ListeLangue.Count > 0) AndAlso (LogicielOptions.IndLangue >= 0) AndAlso (LogicielOptions.IndLangue < LogicielInfo.ListeLangue.Count) Then
 
-            'Langue installée
-            LogicielFichiers.Langue = LogicielRep.RepertoireInstall & "\Langues\" & LogicielInfo.Racine & "_" &
-                                      LogicielInfo.ListeLangue(LogicielOptions.IndLangue).Substring(0, 2).ToUpper & ".lng"
+            If lDebug Then
+                LogicielFichiers.Langue = LogicielRep.RepertoireInstall & "\..\..\Langues\" & LogicielInfo.Racine & "_" &
+                                          LogicielInfo.ListeLangue(LogicielOptions.IndLangue).Substring(0, 2).ToUpper & ".lng"
+
+            Else
+                LogicielFichiers.Langue = LogicielRep.RepertoireInstall & "\Langues\" & LogicielInfo.Racine & "_" &
+                                          LogicielInfo.ListeLangue(LogicielOptions.IndLangue).Substring(0, 2).ToUpper & ".lng"
+
+            End If
 
         Else
             LogicielFichiers.Langue = String.Empty
@@ -154,9 +173,13 @@
 
         If (LogicielInfo.ListeLangueNDC.Count > 0) AndAlso (LogicielOptions.IndLangueNDC >= 0) AndAlso (LogicielOptions.IndLangueNDC < LogicielInfo.ListeLangueNDC.Count) Then
 
-            'Langue installée
-            LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\Langues\" & LogicielInfo.Racine & "_" _
-                                       & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
+            If lDebug Then
+                LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\..\..\Langues\" & LogicielInfo.Racine & "_" _
+                                           & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
+            Else
+                LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\Langues\" & LogicielInfo.Racine & "_" _
+                                           & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
+            End If
 
         Else
             LogicielFichiers.Langue = String.Empty
