@@ -811,6 +811,7 @@ Module Mod_Dessins
         Dim LongueurPoutre, HauteurPoutre As Decimal
         Dim LongueurDalle, HauteurDalle As Decimal
         Dim MyBrushA As New SolidBrush(Color.LightGray)
+        Dim MyBrushE As New SolidBrush(Color.LightGray)
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyColor As Color
         Dim CouleurBeton As Color = CouleurBetonNormal
@@ -871,12 +872,12 @@ Module Mod_Dessins
 
             If MyPoutre.lTraveeConsoleGauche Then
                 xo = MyPoutre.xPositionAppui(True, 0)
-                DessineAppui(MyGr, xo, dCarApp, MyParAff)
+                DessineEtais(MyGr, xo, dCarApp, MyParAff)
             End If
 
             If MyPoutre.lTraveeConsoleDroite Then
                 xo = MyPoutre.xPositionAppui(False, MyPoutre.IndiceDerniereTravee)
-                DessineAppui(MyGr, xo, dCarApp, MyParAff)
+                DessineEtais(MyGr, xo, 0.75 * dCarApp, MyParAff)
             End If
 
         End If
@@ -884,10 +885,10 @@ Module Mod_Dessins
         '--> Représentation des étais intermédiaires
         If MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.PointPropped And MyPoutre.pNbPropping <> 0 Then
 
-            For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+            For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
                 For j As Integer = 1 To MyPoutre.pNbPropping
                     xo = MyPoutre.xPositionAppui(True, i) + j * MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1)
-                    DessineAppui(MyGr, xo, dCarApp, MyParAff)
+                    DessineEtais(MyGr, xo, 0.75 * dCarApp, MyParAff)
                 Next
             Next
         End If
@@ -933,22 +934,26 @@ Module Mod_Dessins
 
             For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
 
-                MyColor = StyleCouleur(iSelect, i)
-                MyPen.Color = MyColor
+                For j As Integer = 1 To MyPoutre.pNbPropping + 1
 
-                xo = xe
-                xe += MyPoutre.LongueurTravee(i)
+                    MyColor = StyleCouleur(iSelect, i)
+                    MyPen.Color = MyColor
 
-                AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+                    xo = xe
+                    xe += MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1)
 
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i), Enu_TypeVariable.Longueur)
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+                    AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                    If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1), Enu_TypeVariable.Longueur)
+                    AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                Next
 
             Next
 
-            ' Travée console droite
+                ' Travée console droite
 
-            If MyPoutre.lTraveeConsoleDroite Then
+                If MyPoutre.lTraveeConsoleDroite Then
 
                 MyColor = StyleCouleur(iSelect, 99)
                 MyPen.Color = MyColor
@@ -965,22 +970,36 @@ Module Mod_Dessins
 
             End If
 
-            ' Longueur totale si plusieurs travées
-
-            If lTotal Then
-
-                xo = 0
-                xe = LongueurPoutre
-
-                AddFleche(MyGr, MyPen, xo, yCote - dCar, xe, yCote - dCar, MyParAff, True, True)
-
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(LongueurPoutre, Enu_TypeVariable.Longueur)
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote - dCar, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
-            End If
 
         End If
 
+
+    End Sub
+
+    Private Sub DessineEtais(MyGr As Graphics, xPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage)
+        '------------------------------------------------------------------------------------------------------------------
+        '   02/06/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Dessin d'un appui de travée
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   xPos        [E] :   Position de l'appui
+        '   dCar        [E] :   Dimension caractéristique
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xPts(), yPts() As Single
+        Dim nbPts As Integer
+        Dim MyBrushAp As New SolidBrush(Color.DarkRed)
+
+        '--> Initialisations
+
+        PrepareContourAppui(xPos, dCar, xPts, yPts, nbPts)
+
+        '--> Dessin
+
+        RemplirZone(MyGr, MyBrushAp, xPts, yPts, nbPts, MyParAff, True, True)
 
     End Sub
 

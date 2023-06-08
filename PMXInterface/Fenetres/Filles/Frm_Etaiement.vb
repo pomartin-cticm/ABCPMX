@@ -13,15 +13,15 @@ Public Class Frm_Etaiement
 
 #Region "===OUVERTURE==="
     Private Sub Frm_Etaiement_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        InitialiserFenetre()
+        InitialiserFenetre(sender, e)
     End Sub
 
-    Public Sub InitialiserFenetre()
+    Public Sub InitialiserFenetre(sender As Object, e As EventArgs)
         GestionLangues()
         GestionStyle()
         GestionUnites()
         InitialiserVariables()
-        AfficherPoutreEnCours()
+        AfficherPoutreEnCours(sender, e)
         lBuild = False
     End Sub
 
@@ -76,7 +76,7 @@ Public Class Frm_Etaiement
         Next
     End Sub
 
-    Private Sub AfficherPoutreEnCours()
+    Private Sub AfficherPoutreEnCours(sender As Object, e As EventArgs)
 
         With MyProjet.Poutres(MyProjet.IndEnCours)
 
@@ -103,11 +103,11 @@ Public Class Frm_Etaiement
                     Me.cmb_NbPoint.Visible = True
                     Me.cmb_NbPoint.Text = .pNbPropping
 
-
-
             End Select
 
         End With
+
+        rad_PointPropped_CheckedChanged(sender, e)
 
     End Sub
 
@@ -148,8 +148,12 @@ Public Class Frm_Etaiement
             If (MyPoutreLoc.TypeEtaiement <> .EnuTypeEtaiement.PointPropped) And (.TypeEtaiement <> MyPoutreLoc.TypeEtaiement) Then
                 lModif = True
                 .TypeEtaiement = MyPoutreLoc.TypeEtaiement
+                .pNbPropping = 0
+                .lEtaisConsole = False
 
             ElseIf MyPoutreLoc.TypeEtaiement = .EnuTypeEtaiement.PointPropped Then
+                .TypeEtaiement = MyPoutreLoc.TypeEtaiement
+
                 If .lEtaisConsole <> MyPoutreLoc.lEtaisConsole Then
                     lModif = True
                     .lEtaisConsole = MyPoutreLoc.lEtaisConsole
@@ -195,6 +199,14 @@ Public Class Frm_Etaiement
                 MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.PointPropped
 
                 Me.chk_EtaisConsole.Visible = True
+                If Not MyPoutreLoc.lTraveeConsoleDroite And Not MyPoutreLoc.lTraveeConsoleGauche Then
+                    Me.chk_EtaisConsole.Enabled = False
+                    Me.chk_EtaisConsole.Checked = False
+                Else
+                    Me.chk_EtaisConsole.Enabled = True
+                    Me.chk_EtaisConsole.Checked = True
+                End If
+
                 Me.cmb_NbPoint.Visible = True
 
         End Select
