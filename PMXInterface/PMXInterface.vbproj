@@ -82,6 +82,12 @@
     <Compile Include="Fenetres\Filles\Frm_Basic.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Etaiement.Designer.vb">
+      <DependentUpon>Frm_Etaiement.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Etaiement.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Portees.Designer.vb">
       <DependentUpon>Frm_Portees.vb</DependentUpon>
     </Compile>
@@ -151,6 +157,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Basic.resx">
       <DependentUpon>Frm_Basic.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Etaiement.resx">
+      <DependentUpon>Frm_Etaiement.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Portees.resx">
       <DependentUpon>Frm_Portees.vb</DependentUpon>
