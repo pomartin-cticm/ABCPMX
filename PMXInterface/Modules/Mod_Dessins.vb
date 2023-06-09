@@ -1072,14 +1072,16 @@ Module Mod_Dessins
 
         Select Case MySection.typeSection
             Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage,
-                 cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage,
-                 cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
+                 cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
 
                 DessinFrmTypeSectionStandard(MyGr, MySection, MyDalle, MyParAff, BeffRed, myBrushP, myBrushB, myBrushA)
 
             Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
 
                 DessinFrmTypeSFB(MyGr, MySection, MyDalle, MyParAff, myBrushP, myBrushB, myBrushA)
+
+            Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
+                DessinFrmTypeSAB(MyGr, MySection, MyDalle, MyParAff, myBrushP, myBrushB, myBrushA)
 
         End Select
 
@@ -1088,6 +1090,41 @@ Module Mod_Dessins
         myBrushP.Dispose()
         myBrushB.Dispose()
         myBrushA.Dispose()
+
+    End Sub
+
+    Private Sub DessinFrmTypeSAB(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As Cls_Dalle,
+                                 MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
+
+        '------------------------------------------------------------------------------------------------------------------
+        '   09/06/23 :  Création - FuD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage du type de section dans la fenêtre choix de type de section
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MySection   [E] :   Section à dessiner
+        '   MyParaff1   [E] :   Paramètres d'affichage
+        '   lSelect     [E] :   Indique si la section a été selectionnée
+        '   myBrushP    [E] :   Pinceau pour le profilé acier
+        '   myBrushB    [E] :   Pinceau pour le béton
+        '   myBrushA    [E] :   Pinceau pour les armatures
+        '------------------------------------------------------------------------------------------------------------------
+        '   Position z = 0 : Fibre inférieur du profilé, hors le plat
+        '------------------------------------------------------------------------------------------------------------------
+
+        Dim ZREF As Decimal = MySection.ProfilA.t_fi
+        Dim lMixte As Boolean = (MySection.typeSection = cls_Section.Enum_TypeSection.SABmixte)
+
+        '--> Dessin de la dalle pour un SFB mixte
+
+        If lMixte Then
+            DessinDalleSlimFloor(MyGr, MyDalle, MySection.ProfilA.ha, MyParaff1, myBrushB, ZREF)
+        End If
+
+        '--> Dessin de la section acier
+        ZREF = MySection.ProfilA.ha
+        DessinProfileMetal(MyGr, MySection.ProfilA, myBrushP, MyParaff1, ZREF)
+
 
     End Sub
 
@@ -1201,7 +1238,7 @@ Module Mod_Dessins
 
 #Region " Outils pour le dessin de la dalle "
 
-    Private Sub DessinDalleSlimFloor(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, MyParAffloc As Struc_Affichage, MyBrushB As Brush)
+    Private Sub DessinDalleSlimFloor(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, MyParAffloc As Struc_Affichage, MyBrushB As Brush, Optional ZREF As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/06/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -1226,7 +1263,7 @@ Module Mod_Dessins
         xe = -MyDalle.Beff / 2
         xo = -xe
         ye = Ha + MyDalle.t_d
-        yo = 0
+        yo = ZREF
 
         AddRectanglePlein(MyGr, MyBrushB, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
 
@@ -1760,8 +1797,7 @@ Module Mod_Dessins
 
         Select Case MySection.typeSection
             Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage,
-                 cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage,
-                cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
+                 cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 yMin = -zRef - MySection.ProfilA.ha
                 xMin = -BfMax / 2
                 xMax = -xMin
@@ -1784,6 +1820,18 @@ Module Mod_Dessins
                 yMax = MySection.ProfilA.ha
             Case cls_Section.Enum_TypeSection.SFBmixte
                 yMin = -MySection.ProfilA.Plat_t
+                xMin = -MyDalle.Beff / 2
+                xMax = -xMin
+                yMax = MySection.ProfilA.ha + MyDalle.t_d
+
+            Case cls_Section.Enum_TypeSection.SAB
+                yMin = 0
+                xMin = -BfMax / 2
+                xMax = -xMin
+                yMax = MySection.ProfilA.ha
+
+            Case cls_Section.Enum_TypeSection.SABmixte
+                yMin = 0
                 xMin = -MyDalle.Beff / 2
                 xMax = -xMin
                 yMax = MySection.ProfilA.ha + MyDalle.t_d
