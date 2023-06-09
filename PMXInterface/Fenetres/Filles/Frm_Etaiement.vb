@@ -187,12 +187,14 @@ Public Class Frm_Etaiement
                 MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.FullyPropped
 
                 Me.chk_EtaisConsole.Visible = False
+                Me.chk_EtaisConsole.Checked = False
                 Me.cmb_NbPoint.Visible = False
 
             Case rad_UnPropped.Checked
                 MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.UnPropped
 
                 Me.chk_EtaisConsole.Visible = False
+                Me.chk_EtaisConsole.Checked = False
                 Me.cmb_NbPoint.Visible = False
 
             Case rad_PointPropped.Checked
@@ -204,7 +206,7 @@ Public Class Frm_Etaiement
                     Me.chk_EtaisConsole.Checked = False
                 Else
                     Me.chk_EtaisConsole.Enabled = True
-                    Me.chk_EtaisConsole.Checked = True
+                    Me.chk_EtaisConsole.Checked = MyPoutreLoc.lEtaisConsole
                 End If
 
                 Me.cmb_NbPoint.Visible = True
@@ -221,7 +223,7 @@ Public Class Frm_Etaiement
         img_Etaiement.Invalidate()
     End Sub
 
-    Private Sub cmb_NbPoint_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbPoint.SelectedIndexChanged
+    Private Sub cmb_NbPoint_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbPoint.TextChanged
         MyPoutreLoc.pNbPropping = cmb_NbPoint.Text
 
         img_Etaiement.Invalidate()
