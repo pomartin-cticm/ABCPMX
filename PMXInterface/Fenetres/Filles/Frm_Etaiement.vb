@@ -29,14 +29,23 @@ Public Class Frm_Etaiement
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_BASIC")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_ETAIEMENT")
             BlocLine.CreationBloc(Bloc)
 
             Try
 
+                Me.Text = Bloc("TITLE")
+                Me.btn_OK.Text = Bloc("VALIDATE")
+                Me.btn_Annuler.Text = Bloc("CANCEL")
+
                 '=== MENU PRINCIPAL ==============================================================='
 
-
+                Me.lbl_Etaiement.Text = Bloc("PROPPINGTYPE")
+                Me.rad_UnPropped.Text = Bloc("UNPROPPED")
+                Me.rad_FullyPropped.Text = Bloc("FULLYPROPPED")
+                Me.rad_PointPropped.Text = Bloc("POINTPROPPED")
+                Me.chk_EtaisConsole.Text = Bloc("ETAISCONSOLE")
+                Me.lbl_NbPP.Text = Bloc("NUMBPROPPING")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -86,6 +95,7 @@ Public Class Frm_Etaiement
                     Me.rad_UnPropped.Checked = True
                     Me.chk_EtaisConsole.Visible = False
                     Me.chk_EtaisConsole.Checked = False
+                    Me.lbl_NbPP.Visible = False
                     Me.cmb_NbPoint.Visible = False
                     Me.cmb_NbPoint.Text = 0
 
@@ -93,6 +103,7 @@ Public Class Frm_Etaiement
                     Me.rad_FullyPropped.Checked = True
                     Me.chk_EtaisConsole.Visible = False
                     Me.chk_EtaisConsole.Checked = False
+                    Me.lbl_NbPP.Visible = False
                     Me.cmb_NbPoint.Visible = False
                     Me.cmb_NbPoint.Text = 0
 
@@ -100,6 +111,7 @@ Public Class Frm_Etaiement
                     Me.rad_PointPropped.Checked = True
                     Me.chk_EtaisConsole.Visible = True
                     Me.chk_EtaisConsole.Checked = .lEtaisConsole
+                    Me.lbl_NbPP.Visible = True
                     Me.cmb_NbPoint.Visible = True
                     Me.cmb_NbPoint.Text = .pNbPropping
 
@@ -188,6 +200,7 @@ Public Class Frm_Etaiement
 
                 Me.chk_EtaisConsole.Visible = False
                 Me.chk_EtaisConsole.Checked = False
+                Me.lbl_NbPP.Visible = False
                 Me.cmb_NbPoint.Visible = False
 
             Case rad_UnPropped.Checked
@@ -195,6 +208,7 @@ Public Class Frm_Etaiement
 
                 Me.chk_EtaisConsole.Visible = False
                 Me.chk_EtaisConsole.Checked = False
+                Me.lbl_NbPP.Visible = False
                 Me.cmb_NbPoint.Visible = False
 
             Case rad_PointPropped.Checked
@@ -209,6 +223,7 @@ Public Class Frm_Etaiement
                     Me.chk_EtaisConsole.Checked = MyPoutreLoc.lEtaisConsole
                 End If
 
+                Me.lbl_NbPP.Visible = True
                 Me.cmb_NbPoint.Visible = True
 
         End Select

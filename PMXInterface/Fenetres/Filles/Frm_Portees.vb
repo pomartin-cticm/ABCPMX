@@ -58,6 +58,15 @@ Public Class Frm_Portees
                 Me.chk_ConsoleGauche.Text = Bloc("CONSOLEG")
                 Me.chk_ConsoleDroite.Text = Bloc("CONSOLED")
 
+                Me.lbl_Entraxe.Text = Bloc("SPACINGS")
+                Me.lbl_Entraxes.Text = Bloc("SPACINGS")
+                Me.rad_Intermediaire.Text = Bloc("INTERMEDIATEBEAM")
+                Me.rad_Rive.Text = Bloc("EDGEBEAM")
+                Me.lbl_Tremies.Text = Bloc("OPENINGS")
+                Me.chk_TremieGauche.Text = Bloc("LEFTOPENING")
+                Me.chk_TremieDroite.Text = Bloc("RIGHTOPENING")
+
+
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally

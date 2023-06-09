@@ -39,6 +39,7 @@ Partial Class Frm_Etaiement
         Me.rad_FullyPropped = New System.Windows.Forms.RadioButton()
         Me.rad_UnPropped = New System.Windows.Forms.RadioButton()
         Me.img_Etaiement = New System.Windows.Forms.PictureBox()
+        Me.lbl_NbPP = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -187,6 +188,7 @@ Partial Class Frm_Etaiement
         'pan_SaisieEtaiement
         '
         Me.pan_SaisieEtaiement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieEtaiement.Controls.Add(Me.lbl_NbPP)
         Me.pan_SaisieEtaiement.Controls.Add(Me.chk_EtaisConsole)
         Me.pan_SaisieEtaiement.Controls.Add(Me.cmb_NbPoint)
         Me.pan_SaisieEtaiement.Controls.Add(Me.rad_PointPropped)
@@ -201,7 +203,7 @@ Partial Class Frm_Etaiement
         'chk_EtaisConsole
         '
         Me.chk_EtaisConsole.AutoSize = True
-        Me.chk_EtaisConsole.Location = New System.Drawing.Point(90, 160)
+        Me.chk_EtaisConsole.Location = New System.Drawing.Point(52, 160)
         Me.chk_EtaisConsole.Name = "chk_EtaisConsole"
         Me.chk_EtaisConsole.Size = New System.Drawing.Size(111, 17)
         Me.chk_EtaisConsole.TabIndex = 5
@@ -211,7 +213,7 @@ Partial Class Frm_Etaiement
         'cmb_NbPoint
         '
         Me.cmb_NbPoint.FormattingEnabled = True
-        Me.cmb_NbPoint.Location = New System.Drawing.Point(90, 183)
+        Me.cmb_NbPoint.Location = New System.Drawing.Point(52, 214)
         Me.cmb_NbPoint.Name = "cmb_NbPoint"
         Me.cmb_NbPoint.Size = New System.Drawing.Size(111, 21)
         Me.cmb_NbPoint.TabIndex = 3
@@ -258,6 +260,15 @@ Partial Class Frm_Etaiement
         Me.img_Etaiement.TabIndex = 1
         Me.img_Etaiement.TabStop = False
         '
+        'lbl_NbPP
+        '
+        Me.lbl_NbPP.AutoSize = True
+        Me.lbl_NbPP.Location = New System.Drawing.Point(49, 198)
+        Me.lbl_NbPP.Name = "lbl_NbPP"
+        Me.lbl_NbPP.Size = New System.Drawing.Size(51, 13)
+        Me.lbl_NbPP.TabIndex = 6
+        Me.lbl_NbPP.Text = "lbl_NbPP"
+        '
         'Frm_Etaiement
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -298,4 +309,5 @@ Partial Class Frm_Etaiement
     Friend WithEvents rad_FullyPropped As RadioButton
     Friend WithEvents cmb_NbPoint As ComboBox
     Friend WithEvents chk_EtaisConsole As CheckBox
+    Friend WithEvents lbl_NbPP As Label
 End Class

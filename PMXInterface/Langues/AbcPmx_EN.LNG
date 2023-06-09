@@ -56,6 +56,13 @@ TRAVEES					= Span lengths
 MAINSPAN				= Main span
 CONSOLEG				= Left cantilever span
 CONSOLED				= Right cantilever span
+INTERMEDIATEBEAM		= Intermediate beam
+EDGEBEAM				= Edge beam
+SPACINGS				= Spacings
+OPENINGS				= Openings
+LEFTOPENING				= Left opening
+RIGHTOPENING			= Right opening
+
 
 #FRM_SECTIONACIERSTANDARD
 TITLE					= Definition of the steel profile
@@ -79,3 +86,13 @@ AUTOMATICHW				= Height of the web automatically assessed
 AUTOMATICHA				= Total height automatically assessed
 DELIVERYCOND			= Delivery conditions for $
 
+#FRM_ETAIEMENT
+TITLE					= Propping
+PROPPINGTYPE			= Type of propping
+UNPROPPED				= Unpropped
+FULLYPROPPED			= Fully propped
+POINTPROPPED			= Point propped
+ETAISCONSOLE			= Propping of cantilever end
+NUMBPROPPING			= Number of point propping
+VALIDATE				= Validate
+CANCEL					= Cancel
