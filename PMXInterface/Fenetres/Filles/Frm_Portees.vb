@@ -14,6 +14,8 @@ Public Class Frm_Portees
     '   99 console droite
     '----------------------------------------------
 
+    Const iFRMPORTEES As Integer = 1
+
     Dim MyPoutreLoc As New cls_Poutre
 
 #End Region
@@ -34,7 +36,7 @@ Public Class Frm_Portees
     End Sub
 
     Private Sub InitialiserVariables()
-        cls_Poutre.Clone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
+        cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
     End Sub
 
     Private Sub GestionLangues()
@@ -122,10 +124,12 @@ Public Class Frm_Portees
             Me.rad_Intermediaire.Checked = MyPoutreLoc.lIntermediaire
 
             Me.chk_TremieGauche.Checked = .lTremieGauche
-            If .lTremieGauche Then Me.txt_D1.Text = GetStringNoUnit(.DistanceDsl1, Enu_TypeVariable.Longueur)
+            'If .lTremieGauche Then
+            Me.txt_D1.Text = GetStringNoUnit(.DistanceDsl1, Enu_TypeVariable.Longueur)
 
             Me.chk_TremieDroite.Checked = .lTremieDroite
-            If .lTremieDroite Then Me.txt_D2.Text = GetStringNoUnit(.DistanceDsl2, Enu_TypeVariable.Longueur)
+            'If .lTremieDroite Then
+            Me.txt_D2.Text = GetStringNoUnit(.DistanceDsl2, Enu_TypeVariable.Longueur)
 
         End With
 
@@ -163,8 +167,10 @@ Public Class Frm_Portees
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
+
+            MyProjet.Poutres(MyProjet.IndEnCours).EstValidee(iFRMPORTEES)
 
             Me.Close()
         End If
@@ -212,6 +218,34 @@ Public Class Frm_Portees
             If MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(Indice) <> MyPoutreLoc.LongueurTravee(Indice) Then
                 lModif = True
                 MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(Indice) = MyPoutreLoc.LongueurTravee(Indice)
+            End If
+        End If
+
+        '--> Trémie gauche
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lTremieGauche <> MyPoutreLoc.lTremieGauche Then
+            lModif = True
+            MyProjet.Poutres(MyProjet.IndEnCours).lTremieGauche = MyPoutreLoc.lTremieGauche
+        End If
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lTremieGauche Then
+            If MyProjet.Poutres(MyProjet.IndEnCours).DistanceDsl1 <> MyPoutreLoc.DistanceDsl1 Then
+                lModif = True
+                MyProjet.Poutres(MyProjet.IndEnCours).DistanceDsl1 = MyPoutreLoc.DistanceDsl1
+            End If
+        End If
+
+        '--> Trémie à droite
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lTremieDroite <> MyPoutreLoc.lTremieDroite Then
+            lModif = True
+            MyProjet.Poutres(MyProjet.IndEnCours).lTremieDroite = MyPoutreLoc.lTremieDroite
+        End If
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lTremieDroite Then
+            If MyProjet.Poutres(MyProjet.IndEnCours).DistanceDsl2 <> MyPoutreLoc.DistanceDsl2 Then
+                lModif = True
+                MyProjet.Poutres(MyProjet.IndEnCours).DistanceDsl2 = MyPoutreLoc.DistanceDsl2
             End If
         End If
 
@@ -498,13 +532,6 @@ Public Class Frm_Portees
         Me.img_TremieDroite.Visible = MyPoutreLoc.lTremieDroite
 
     End Sub
-
-
-
-
-
-
-
 
 #End Region
 

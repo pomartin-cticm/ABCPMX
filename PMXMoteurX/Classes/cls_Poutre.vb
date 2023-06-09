@@ -128,17 +128,40 @@
 
 #End Region
 
+#Region " Variables pour les valeurs par défaut et le statut de la poutre "
+
+    ''' <summary>
+    ''' Indique si la définition des portées, entraxes et trémies est celle par défaut
+    ''' </summary>
+    Public lDefautPortee As Boolean
+    Public lDefautEtaiement As Boolean
+
+    ''' <summary>
+    ''' Indique si la poutre est enregistrée
+    ''' </summary>
+    Public lDonneesSauvees As Boolean
+
+    ''' <summary>
+    ''' Indique si nouvelle poutre, jamais encore modifiée
+    ''' </summary>
+    Public NouvellePoutre As Boolean
+
+#End Region
+
 #Region " CONSTRUCTEURS "
 
     Public Sub New()
         Me.TypeSection = cls_Section.Enum_TypeSection.Acier
+        ParametresGenerauxDefaut()
         PoutreDefautAcier()
+
     End Sub
 
     Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String)
 
         Me.TypeSection = MyTypeSection
         Me.Label = NomPoutre
+        ParametresGenerauxDefaut()
 
         '--> Poutre par défaut
 
@@ -150,7 +173,13 @@
                 EnrobageDefaut()
         End Select
 
+    End Sub
 
+    Private Sub ParametresGenerauxDefaut()
+        Me.lDefautPortee = True
+        Me.lDefautEtaiement = True
+        Me.lDonneesSauvees = False
+        Me.NouvellePoutre = True
     End Sub
 
     Private Sub PoutreDefautAcier()
@@ -204,6 +233,37 @@
 #End Region
 
 #Region " Outils divers "
+
+    ''' <summary>
+    ''' Mise à jour des paramètres après modifications
+    ''' </summary>
+    Public Sub EstModifiee()
+        '--------------------------------------------------------------------------
+
+        Me.NouvellePoutre = False
+        Me.lDonneesSauvees = False
+
+    End Sub
+
+    ''' <summary>
+    ''' Identifie les différentes parties modifiées ou validées par l'utilisateur
+    ''' </summary>
+    ''' <param name="iFenetre"></param>
+    Public Sub EstValidee(iFenetre As Integer)
+        '--------------------------------------------------------------------------
+        '   iFenetre    [E] :   Indice de la fenêtre qui modifie
+        '--------------------------------------------------------------------------
+        '   1 : Portées, entraxes et trémies
+        '--------------------------------------------------------------------------
+        Const iFRMPORTEE As Integer = 1
+        Const iFRMETAIEMENT As Integer = 2
+
+        Select Case iFenetre
+            Case iFRMPORTEE : Me.lDefautPortee = False
+            Case iFRMETAIEMENT : Me.lDefautEtaiement = False
+        End Select
+    End Sub
+
 
     ''' <summary>
     ''' Renvoie l'indice de travées où sont stockées les infos sur la console droite
@@ -328,16 +388,19 @@
     End Function
 
 
-    Public Shared Sub Clone(PoutreSource As cls_Poutre, ByRef PoutreCible As cls_Poutre)
+    Public Shared Sub DeepClone(PoutreSource As cls_Poutre, ByRef PoutreCible As cls_Poutre)
         '------------------------------------------------------------------------------------------------
         '   05/06/23 :  Clonage d'une poutre source vers la poutre interne
         '------------------------------------------------------------------------------------------------
 
         PoutreCible = PoutreSource.Clone
+        PoutreCible.LongueurTravee = PoutreSource.LongueurTravee.Clone
+        PoutreCible.TypTravee = PoutreSource.TypTravee.Clone
         PoutreCible.Dalle = PoutreSource.Dalle.Clone
 
     End Sub
 
 
 #End Region
+
 End Class

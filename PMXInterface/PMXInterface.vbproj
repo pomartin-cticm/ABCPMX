@@ -82,6 +82,12 @@
     <Compile Include="Fenetres\Filles\Frm_Basic.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Enrobage.Designer.vb">
+      <DependentUpon>Frm_Enrobage.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Enrobage.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Etaiement.Designer.vb">
       <DependentUpon>Frm_Etaiement.vb</DependentUpon>
     </Compile>
@@ -131,7 +137,7 @@
     <Compile Include="Fenetres\Frm_Test.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Modules\Mod_Database_Section.vb" />
+    <Compile Include="Modules\Mod_BasesDonnees.vb" />
     <Compile Include="Modules\Mod_Declarations.vb" />
     <Compile Include="Modules\Mod_Demarrage.vb" />
     <Compile Include="Modules\Mod_Dessins.vb" />
@@ -157,6 +163,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Basic.resx">
       <DependentUpon>Frm_Basic.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Enrobage.resx">
+      <DependentUpon>Frm_Enrobage.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Etaiement.resx">
       <DependentUpon>Frm_Etaiement.vb</DependentUpon>

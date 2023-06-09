@@ -179,4 +179,12 @@
     End Sub
 
 #End Region
+
+#Region " Fonctions de copie "
+    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+        Return Me.MemberwiseClone()
+    End Function
+
+#End Region
+
 End Class

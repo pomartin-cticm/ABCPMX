@@ -100,7 +100,7 @@
 
         '--> Calculs
 
-        n0 = Cls_Acier.EY / Ecm
+        n0 = Cls_Acier.EYACIER / Ecm
 
         MyBetaFcm = Me.BetaFcm
         MyBeta_t0 = Me.Beta_t0(t0)

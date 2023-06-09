@@ -3,10 +3,23 @@ Imports PMXMoteur2
 
 Public Class Frm_SectionAcierStandard
 
-#Region " Constantes "
+#Region " Constantes et structures "
     Const STARCHAR As String = "*"
     Const RATIOHIGAMME As Double = 0.45
     Dim ColorGridHI As Color = Color.Blue
+    Const EPSILONG As Double = 0.0001
+    Const iFRMSECTION As Integer = 4
+    Structure strucAcierLocal
+        Dim Nuance As String
+        Dim Qualite As String
+        Dim Reduc As String
+        Dim lAvailable As Boolean
+    End Structure
+
+    Enum EnuDrawProperty
+        Fy
+        Fu
+    End Enum
 
 #End Region
 
@@ -21,6 +34,17 @@ Public Class Frm_SectionAcierStandard
     End Enum
     Dim DefinitionHauteur As Enu_DefinitionH = Enu_DefinitionH.HauteurTotale
 
+    Dim DrawProperty As EnuDrawProperty = EnuDrawProperty.Fy
+
+    '--> Couleurs
+    Dim BClrCompatible As Color
+    Dim BClrNotC As Color = Color.LightGray
+    Dim ColorGrade As Color = Color.Crimson
+    Dim ColorNotPossible As Color = Color.LightGray
+
+    '---- Memoriser les lignes tableaux sélectionnées
+    Dim iLignePro, iLigneAcier As Integer
+
     '--> Gestion des dessins
     Dim iSelect As Integer = -1
     Dim kAdjust As Decimal = 0.95
@@ -31,8 +55,11 @@ Public Class Frm_SectionAcierStandard
     Dim str_InfoH(1) As String
 
     '---- Gestion du cas où aucun profilé n'est disponible pour une série
-
     Dim lAvailPro As Boolean = True
+
+    '---- Nuance S235/S275 autorisée (V3.09)
+    Dim lNuancePossible As Boolean
+    Dim NuancesExclues() As String = {"S235", "S275"}
 
 #End Region
 
@@ -124,7 +151,10 @@ Public Class Frm_SectionAcierStandard
 
     Private Sub PreparerFenetre()
 
+        Dim Ratio1, Ratio2 As Single
+
         Me.img_Section.Dock = DockStyle.Fill
+        Me.img_ReductionCurve.Dock = DockStyle.Fill
 
         '== Preparation des options disponibles en fonctions du maitre d'ouvrage
 
@@ -139,12 +169,18 @@ Public Class Frm_SectionAcierStandard
 
         cls_Section.CloneSection(MyProjet.Poutres(MyProjet.IndEnCours).Sections(1), MySectionLoc)
 
+        BClrCompatible = Me.lst_GammeS.BackColor
+
         '== Préparation des listes
 
         RemplirSeries()
         InitialiseLngDeliveryIndex()
 
+        Ratio1 = Me.lbl_Grade.Width / (Me.lbl_Grade.Width + Me.lbl_Qualite.Width + Me.lbl_ReductionCurve.Width)
+        Ratio2 = Me.lbl_Qualite.Width / (Me.lbl_Grade.Width + Me.lbl_Qualite.Width + Me.lbl_ReductionCurve.Width)
+
         PrepareLookGrille(Me.Grid_ProfilesSup, Me.Col_HISTARSup, Me.Col_ListeSup, Me.lst_GammeS.BackColor, RATIOHIGAMME)
+        PrepareLookGrille(Me.GridAciers, Me.Col_Grade, Me.Col_Qualite, Me.Col_ReductionCurve, Me.lst_GammeS.BackColor, Ratio1, Ratio2)
         PrepareLookGrille(Me.GridDelivery, Me.Col_Index, Me.Col_Message, Me.lst_GammeS.BackColor, 0.1)
         PrepareGridDelivery()
 
@@ -190,6 +226,7 @@ Public Class Frm_SectionAcierStandard
         Select Case MySectionLoc.ProfilA.typeProfileAcier
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
                 Me.rdb_Lamine.Checked = True
+                AfficherProfileLamineEnCours()
             Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
                 Me.rdb_PRS_symetrique.Checked = True
             Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
@@ -209,6 +246,52 @@ Public Class Frm_SectionAcierStandard
 
     End Sub
 
+    Private Sub AfficherProfileLamineEnCours()
+        '---------------------------------------------------------------------------------------------------------
+        '   08/06/23 : Création - POM
+        '---------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim MyGam As String = MySectionLoc.ProfilA.Gamme                ' MySection.Gamme
+        Dim MyProf As String = MySectionLoc.ProfilA.NomProfile          ' MySection.Etiquette
+        Dim NbProG As Integer
+
+        If MyCatalogue.Series.ContainsKey(MyGam) Then
+
+            Me.lst_GammeS.Text = MyGam
+            RemplissageGrilleProfile(Me.Grid_ProfilesSup, MyGam, NbProG)
+
+            RemplirDelivery(MyGam, MyProf)
+
+            Dim iPro As Integer = 0
+            Dim lTrouve As Boolean = False
+
+            Do While iPro < Me.Grid_ProfilesSup.Rows.Count And (Not lTrouve)
+                iPro += 1
+                lTrouve = (Me.Grid_ProfilesSup(0, iPro - 1).Value.ToString.Trim = MyProf)
+            Loop
+            If lTrouve Then Me.Grid_ProfilesSup(0, iPro - 1).Selected = True
+            iLignePro = Me.Grid_ProfilesSup.SelectedCells(0).RowIndex
+
+            MAJ_Aciers(MyGam, MyProf)
+
+            Dim iSteel As Integer = 0
+            lTrouve = False
+            Do While iSteel < Me.GridAciers.Rows.Count And Not lTrouve
+                iSteel += 1
+                lTrouve = (Me.GridAciers(0, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Nuance) _
+                      And (Me.GridAciers(1, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Qualite) _
+                      And (Me.GridAciers(2, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Reduction)
+            Loop
+            If lTrouve Then Me.GridAciers(0, iSteel - 1).Selected = True
+        Else
+
+        End If
+
+
+    End Sub
+
     Private Sub RemplirSeries()
 
         '--> Remplissage des series
@@ -221,6 +304,10 @@ Public Class Frm_SectionAcierStandard
         Next
 
     End Sub
+
+#End Region
+
+#Region " Préparation des grilles "
 
     Sub PrepareLookGrille(ByVal MyGrille As DataGridView,
                           ByVal ColHiStar As DataGridViewTextBoxColumn,
@@ -257,6 +344,45 @@ Public Class Frm_SectionAcierStandard
 
     End Sub
 
+    Sub PrepareLookGrille(ByVal MyGrille As DataGridView,
+                          ByVal ColGrade As DataGridViewTextBoxColumn,
+                          ByVal ColQualite As DataGridViewTextBoxColumn,
+                          ByVal ColReduc As DataGridViewTextBoxColumn,
+                          ByVal BackColor As Color, ByVal Ratio1 As Single, ByVal Ratio2 As Single)
+        '--------------------------------------------------------------------------
+        '
+        '   Préparation du "Look" de la grille
+        '
+        '--------------------------------------------------------------------------
+        '
+        '   MyGrille    [E] :   Grille à préparer
+        '   ColGrade
+        '   ColQualite
+        '   ColReduc    [E] :   Colonnes de la grille
+        '   BackColor   [E] :   Color de fond à appliquer à la grille
+        '   RatioHI     [E] :   Ratio pour la largeur de la colonne HiStar
+        '
+        '--------------------------------------------------------------------------
+
+        MyGrille.CellBorderStyle = DataGridViewCellBorderStyle.SingleVertical
+
+        MyGrille.DefaultCellStyle.Padding = New Padding(0)
+        MyGrille.Font = New Font(MyGrille.Font.FontFamily, 8, FontStyle.Regular, GraphicsUnit.Point)
+        MyGrille.BorderStyle = BorderStyle.Fixed3D
+        MyGrille.BackgroundColor = BackColor
+
+        ColGrade.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        ColQualite.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+        ColReduc.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft
+
+        ColGrade.Width = CInt(MyGrille.Width * Ratio1)
+        ColQualite.Width = CInt(MyGrille.Width * Ratio2)
+        ColReduc.Width = CInt(MyGrille.Width * (1 - Ratio1 - Ratio2))
+
+        ColGrade.DefaultCellStyle.ForeColor = ColorGridHI
+
+    End Sub
+
 #End Region
 
 #Region "===FERMETURE==="
@@ -273,8 +399,10 @@ Public Class Frm_SectionAcierStandard
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
+
+            MyProjet.Poutres(MyProjet.IndEnCours).EstValidee(iFRMSECTION)
 
             Me.Close()
         End If
@@ -285,6 +413,8 @@ Public Class Frm_SectionAcierStandard
     End Function
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
+
+        cls_Section.CloneSection(MySectionLoc, MyProjet.Poutres(MyProjet.IndEnCours).Sections(1))
 
     End Sub
 
@@ -300,8 +430,329 @@ Public Class Frm_SectionAcierStandard
 
     End Sub
 
+    Private Sub img_ReductionCurve_Paint(sender As Object, e As PaintEventArgs) Handles img_ReductionCurve.Paint
+
+        DessinPropAcier(e.Graphics, Me.img_ReductionCurve.ClientRectangle.Height, Me.img_ReductionCurve.ClientRectangle.Width, True)
+
+    End Sub
+
+    Sub DessinPropAcier(ByVal MyGr As Graphics, ByVal sHI As Single, ByVal sWI As Single, ByVal lNuanceOK As Boolean)
+        '----------------------------------------------------------------------------------------------
+        '
+        '   23/02/08 :  Création - Version 1.00
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   Affichage graphique de la section dans la fenêtre
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   MyGr            [E] :   Graphics dans lequel on dessine
+        '   sHI, sWI        [E] :   Dimensions du PictureBox
+        '   lNuanceOK       [E] :   Indique si l'utilisateur en mode normal peut sélectionner cette nuance
+        '
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim RCParAff As Struc_Affichage
+        Dim xMin, xMax, yMin, yMax As Double
+        Dim Nuance, Norme, Qualite As String
+        Dim iSteel As Integer
+        Dim EpMin, EpMax, VMax As Double
+        Dim kFact As Double
+
+        Dim EpProfile, FyPro As Double
+
+        Dim ColorPen As Color = Color.Black
+        Dim ColorExclu As Color = ColorNotPossible
+        Dim ColorNormal As Color
+        Dim ColorSelect As Color
+
+        Dim MyPen As Pen 'New Pen(ColorPen)
+        Dim MyBrush As Brush 'New SolidBrush(ColorPen)
+        Dim MyFont As New Font(FontBase.Name, 8, FontStyle.Bold)
+        Dim MyBrushTitre As Brush   'New SolidBrush(Color.DarkRed)
+
+        Dim zBoni, xBoni As Double
+        Dim EpPlagesMax As Double
+
+        '--( Initialisation couleurs
+
+        If lNuanceOK Then
+            MyPen = New Pen(ColorPen)
+            MyBrush = New SolidBrush(ColorPen)
+            ColorNormal = Color.DarkGray
+            ColorSelect = Color.DarkOrange
+            MyBrushTitre = New SolidBrush(Color.DarkRed)
+        Else
+            MyPen = New Pen(ColorExclu)
+            MyBrush = New SolidBrush(ColorExclu)
+            ColorNormal = ColorExclu
+            ColorSelect = ColorExclu
+            MyBrushTitre = New SolidBrush(ColorExclu)
+        End If
+
+        '--( Epaisseur du profilé pour le calcul
+
+        EpProfile = Math.Max(MySectionLoc.ProfilA.t_w, MySectionLoc.ProfilA.t_fs)
+        FyPro = MySectionLoc.Acier.LimiteFy(EpProfile)
+        EpPlagesMax = MySectionLoc.Acier.EpMax
+
+        '--( Initialisation
+
+        If Me.GridAciers.Rows.Count <= 0 Then Exit Sub
+
+        iSteel = Me.GridAciers.SelectedCells(0).RowIndex
+        Nuance = Me.GridAciers(0, iSteel).Value.ToString
+        Qualite = Me.GridAciers(1, iSteel).Value.ToString
+        Norme = Me.GridAciers(2, iSteel).Value.ToString
+
+        ExtraitValeursEnveloppeAciers(Nuance, DrawProperty, EpMin, EpMax, VMax)
+
+        EpMax = Math.Max(EpMax, EpProfile)
+
+        kFact = EpMax / VMax * sHI / sWI
+        xMin = 0
+        xMax = EpMax
+        yMin = 0
+        yMax = VMax * kFact
+
+        ParametresAffichage(RCParAff, xMin, yMin, xMax - xMin, yMax - yMin, sWI, sHI)
+
+        Dim ChaineFy As String = "fy (MPa)"
+        Dim hBoni As Single = MyGr.MeasureString(ChaineFy, MyFont).Height
+        Dim ChaineT As String = "t (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")"
+        Dim wBoni As Single = MyGr.MeasureString(ChaineT, MyFont).Width
+
+        yMax += hBoni / RCParAff.CRed
+        xMax += wBoni / RCParAff.CRed
+        yMin -= 2 * hBoni / RCParAff.CRed
+        'xMin -= wBoni / RCParAff.CRed
+
+        ParametresAffichage(RCParAff, xMin, yMin, xMax - xMin, yMax - yMin, sWI, sHI)
+
+        '--( Dessin des axes
+
+        AddFleche(MyGr, MyPen, 0, 0, xMax, 0, RCParAff, False, True)
+        AddFleche(MyGr, MyPen, 0, 0, 0, yMax, RCParAff, False, True)
+
+        AddTexte(MyGr, MyBrush, ChaineFy, MyFont, 0, yMax, RCParAff, HorizontalAlignment.Right, VerticalAlignement.Middle)
+        AddTexte(MyGr, MyBrush, ChaineT, MyFont, xMax, 0, RCParAff, HorizontalAlignment.Left, VerticalAlignement.Bottom)
+
+        '--( Représentation des courbes
+
+        Dim iEp As Integer
+        Const iEPNORMAL As Integer = 1
+        Const iEPSELECT As Integer = 2
+
+        Dim MyColor As Color
+        Dim lSelect As Boolean
+
+        For Each kvpQualite As KeyValuePair(Of String, strucQualite) In SteelBase.Grades(Nuance).Qualites
+
+            For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
+
+                If Qualite = kvpQualite.Key And Norme = kvpSteel.Key Then
+                    MyColor = ColorSelect
+                    iEp = iEPSELECT
+                    lSelect = True
+                Else
+                    MyColor = ColorNormal
+                    iEp = iEPNORMAL
+                    lSelect = False
+                End If
+
+                If lSelect Then
+                    DrawReductionCurve(MyGr, RCParAff, kFact, lSelect, kvpSteel.Value.EpMax, kvpSteel.Value.Plages, MyColor, iEp, lNuanceOK)
+                End If
+            Next
+
+        Next
+
+        '--( Représentation de la position du profilé dans la courbe de réduction
+
+        zBoni = YUnivers(RCParAff, sHI)
+        xBoni = XUnivers(RCParAff, sWI / 2)
+
+        DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpProfile, FyPro, xBoni, zBoni, MyFont, lNuanceOK)
+
+        '--( Titre
+
+        Dim Chaine As String
+
+        Chaine = Nuance & " - " & Qualite
+        Dim wC, hC As Single
+        Dim MyFontTitre As New Font(FontBase.Name, 8, FontStyle.Bold)
+
+        wC = MyGr.MeasureString(Chaine, MyFontTitre).Width
+        hC = MyGr.MeasureString(Chaine, MyFontTitre).Height
+
+        MyGr.DrawString(Chaine, MyFontTitre, MyBrushTitre, sWI / 2 - wC / 2, 1 / 2 * hC)
+
+        '--( Gestion du message d'avertissement pour les nuances non autorisées
+
+        If Not lNuanceOK Then
+            '     DrawWarningNuance(MyGr, sHI, sWI)
+        End If
+
+        '--( Libérer la mémoire
+
+        MyFont.Dispose()
+        MyPen.Dispose()
+        MyBrush.Dispose()
+        MyFontTitre.Dispose()
+        MyBrushTitre.Dispose()
+    End Sub
+
+    Private Sub DrawReductionCurve(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, ByVal kFact As Double, ByVal lSelect As Boolean,
+                                   ByVal EpMax As Double, ByVal Plages As List(Of Cls_Acier.strucPlage), ByVal MyColor As Color, ByVal iEp As Integer, ByVal lNuanceOK As Boolean)
+        '----------------------------------------------------------------------------------------------
+        '
+        '   21/09/12 :  Création - Version 3.00
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   Affichage de l'épaisseur max et de fy calcul
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   MyGr        [E] :   Graphics dans lequel on dessine
+        '   RcParAff    [E] :   Paramètre d'affichage
+        '   kFact       [E] :   Facteur d'affichage des valeurs fy
+        '
+        '----------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NbPlages As Integer
+        Dim Chaine As String
+
+        Dim MyPen As New Pen(MyColor, iEp)
+        Dim MyPenBlack As Pen 'New Pen(Color.Black, 0.75)
+        Dim MyColorBlack As Color
+
+        '--> Initialisation
+
+        NbPlages = Plages.Count
+        If lNuanceOK Then
+            MyPenBlack = New Pen(Color.Black)
+            MyColorBlack = Color.Black
+        Else
+            MyPenBlack = New Pen(ColorNotPossible)
+            MyColorBlack = ColorNotPossible
+        End If
+
+        '--> Traitement
+
+        If lSelect Then
+
+            For i As Integer = 0 To NbPlages - 2
+
+                AddLigne(MyGr, MyPen, Plages(i).Ep, kFact * Plages(i).Fy, Plages(i + 1).Ep, kFact * Plages(i).Fy, RcParAff)
+                AddLigne(MyGr, MyPenBlack, Plages(i + 1).Ep, kFact * Plages(i).Fy, Plages(i + 1).Ep, kFact * Plages(i + 1).Fy, RcParAff)
+
+            Next
+            AddLigne(MyGr, MyPen, Plages(NbPlages - 1).Ep, kFact * Plages(NbPlages - 1).Fy, EpMax, kFact * Plages(NbPlages - 1).Fy, RcParAff)
 
 
+            For i As Integer = 0 To NbPlages - 1
+
+                AddLigne(MyGr, MyPenBlack, Plages(i).Ep, 0, Plages(i).Ep, kFact * Plages(i).Fy, RcParAff)
+
+            Next
+            AddLigne(MyGr, MyPenBlack, EpMax, 0, EpMax, kFact * Plages(NbPlages - 1).Fy, RcParAff)
+
+        End If
+
+        '--> Cotation
+
+        If lSelect Then
+            For i As Integer = 0 To NbPlages - 2
+                'Chaine = GetStringInUnit(Plages(i).Fy, Enu_TypeVariable.Contrainte, 3, 0, False)
+                Chaine = GetStringInUnit(Plages(i).Fy, Enu_TypeVariable.SansType, 3, 0, False)
+                AddTexte(MyGr, New SolidBrush(MyColor), Chaine, FontBase, (Plages(i).Ep + Plages(i + 1).Ep) / 2, kFact * Plages(i).Fy, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+            Next
+            Chaine = GetStringInUnit(Plages(NbPlages - 1).Fy, Enu_TypeVariable.SansType, 3, 0, False)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, FontBase, (EpMax + Plages(NbPlages - 1).Ep) / 2, kFact * Plages(NbPlages - 1).Fy, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+            For i As Integer = 0 To NbPlages - 1
+                Chaine = GetStringInUnit(Plages(i).Ep, Enu_TypeVariable.Dimension, 3, 0, False)
+                AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, FontBase, Plages(i).Ep, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
+            Next
+            Chaine = GetStringInUnit(EpMax, Enu_TypeVariable.Dimension, 3, 0, False)
+            AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, FontBase, EpMax, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
+        End If
+
+    End Sub
+
+    Private Sub DrawEpEtFyCalcul(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, ByVal kFact As Double,
+                                 ByVal EpPlagesMax As Double, ByVal EpProf As Double, ByVal FyCalcul As Double, ByVal xBoni As Double, ByVal zBoni As Double,
+                                 ByVal MyFont As Font, ByVal lNuanceOK As Boolean)
+        '----------------------------------------------------------------------------------------------
+        '
+        '   21/09/12 :  Création - Version 3.00
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   Affichage de l'épaisseur max et de fy calcul
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   MyGr        [E] :   Graphics dans lequel on dessine
+        '   RcParAff    [E] :   Paramètre d'affichage
+        '   kFact       [E] :   Facteur d'affichage des valeurs fy
+        '   
+        '   EpPlagesMax [E] :   Epaisseur maximale des plages de la courbe de réduction'
+        '   EpProf      [E] :   Epaisseur de profilé pris en compte pour les calcul
+        '   
+        '   xBoni, zBoni[E] :   Position pour l'affichage du texte sur les valeurs de calcul
+        '   MyFont      [E] :   Police d'affichage
+        '   lNuanceOK   [E) :   Indique si la nuance d'acier est accessible à l'utilisateur
+        '
+        '----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Chaine As String
+        Dim MyColor As Color '= Color.DarkOrchid
+        Dim MyPen As Pen    'New Pen(MyColor, 2)
+        Dim MyPenProf As Pen    'New Pen(MyColor, 2)
+
+        '--> Initialisation
+
+        If lNuanceOK Then
+            MyColor = Color.DarkOrchid
+        Else
+            MyColor = ColorNotPossible
+        End If
+        MyPen = New Pen(MyColor, 2)
+        MyPenProf = New Pen(MyColor, 2)
+        If EpProf > EpPlagesMax * (1 + EPSILONG) Then
+            MyPenProf.DashStyle = Drawing2D.DashStyle.Dash
+        End If
+
+        '--> Traitement
+
+        Chaine = GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, False)
+        AddTexte(MyGr, New SolidBrush(MyColor), Chaine, MyFont, EpProf, 0, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+
+        AddLigne(MyGr, MyPenProf, EpProf, 0, EpProf, kFact * FyCalcul, RcParAff)
+        If EpProf > EpPlagesMax * (1 + EPSILONG) Then
+            AddLigne(MyGr, MyPenProf, EpPlagesMax, kFact * FyCalcul, EpProf, kFact * FyCalcul, RcParAff)
+        End If
+
+        Chaine = "t = " & GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, True) & "   -  fy = " & GetStringInUnit(FyCalcul, Enu_TypeVariable.SansType, 3, 0, False) & " MPa"
+        AddTexte(MyGr, New SolidBrush(MyColor), Chaine, MyFont, xBoni, zBoni, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+
+        MyPen.Dispose()
+        MyPenProf.Dispose()
+
+    End Sub
+
+
+#End Region
+
+#Region " Dessin symboles "
 
     Private Sub img_Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_Tw.Paint, img_Tfs.Paint, img_Tfi.Paint, img_Hw.Paint, img_Ht.Paint, img_Bfs.Paint, img_Bfi.Paint
 
@@ -361,8 +812,97 @@ Public Class Frm_SectionAcierStandard
 #Region " Evènements "
 
     Private Sub SaisieDimensions(sender As Object, e As EventArgs) Handles txt_Tw.TextChanged, txt_Tfs.TextChanged, txt_Tfi.TextChanged, txt_Hw.TextChanged, txt_Ha.TextChanged, txt_Bfs.TextChanged, txt_Bfi.TextChanged
+        If lBuild Then Exit Sub
+        lBuild = True
 
+        Dim Valeur As Decimal
+        Dim Hcomp As Decimal
+        Dim lSym As Boolean = (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym)
+
+        If VerificationDonneesPRS(sender, Valeur) Then
+            Select Case sender.name
+                Case Me.txt_Ha.Name
+                    MySectionLoc.ProfilA.ha = Valeur
+                    Hcomp = Valeur - MySectionLoc.ProfilA.t_fi - MySectionLoc.ProfilA.t_fs
+                    Me.txt_Hw.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
+                Case Me.txt_Hw.Name
+                    Hcomp = Valeur + MySectionLoc.ProfilA.t_fi + MySectionLoc.ProfilA.t_fs
+                    Me.txt_Ha.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
+                    MySectionLoc.ProfilA.ha = Hcomp
+                Case Me.txt_Tw.Name
+                    MySectionLoc.ProfilA.t_w = Valeur
+                Case Me.txt_Bfs.Name
+                    MySectionLoc.ProfilA.b_fs = Valeur
+                    If lSym Then
+                        MySectionLoc.ProfilA.b_fi = Valeur
+                        Me.txt_Bfi.Text = Me.txt_Bfs.Text
+                    End If
+                Case Me.txt_Tfs.Name
+                    MySectionLoc.ProfilA.t_fs = Valeur
+                Case Me.txt_Bfi.Name
+                    MySectionLoc.ProfilA.b_fi = Valeur
+                Case Me.txt_Tfi.Name
+                    MySectionLoc.ProfilA.t_fi = Valeur
+            End Select
+        End If
+
+        Me.img_Section.Invalidate()
+
+        lBuild = False
     End Sub
+
+    ''' <summary>
+    ''' Vérifie la saisie des données en cours, pour les dimensions des PRS
+    ''' </summary>
+    Private Function VerificationDonneesPRS(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        Const HWMINI As Decimal = 0.2
+        Const TFMINI As Decimal = 0.06
+        Const TWMINI As Decimal = 0.06
+        Const HWMAXI As Decimal = 2
+        Const BFMINI As Decimal = 0.12
+        Const BFMAXI As Decimal = 0.5
+        Const EPMAXI As Decimal = 0.5
+
+        '--> Déclaration
+        Dim lOk As Boolean = True
+        ErrorProvider.Clear()
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+
+        Select Case MyTxt.Name
+            Case Me.txt_Ha.Name
+                ValMin = HWMINI + 2 * TFMINI
+                ValMax = HWMAXI + 2 * TFMINI
+            Case Me.txt_Hw.Name
+                ValMin = HWMINI
+                ValMax = HWMAXI
+            Case Me.txt_Bfi.Name, Me.txt_Bfs.Name
+                ValMin = BFMINI
+                ValMax = BFMAXI
+            Case Me.txt_Tfi.Name, Me.txt_Tfs.Name
+                ValMin = TFMINI
+                ValMax = EPMAXI
+            Case Me.txt_Tw.Name
+                ValMin = TWMINI
+                ValMax = EPMAXI
+        End Select
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin / kUnit, ValMax / kUnit)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+
+    End Function
 
     Private Sub ChoixTypeProfile(sender As Object, e As EventArgs) Handles rdb_PRS_symetrique.CheckedChanged, rdb_PRS.CheckedChanged, rdb_Lamine.CheckedChanged
         If lBuild Then Exit Sub
@@ -421,7 +961,7 @@ Public Class Frm_SectionAcierStandard
                 Profile = NettoieNomProfil(Me.Grid_ProfilesSup(0, 0).Value.ToString)        '==R16-007
                 TransfertSaisieGridProfile(Gamme, Profile, MySectionLoc)
 
-                'MAJ_Aciers(Gamme, Profile)
+                MAJ_Aciers(Gamme, Profile)
                 'SelectDefaultSteel(True)
                 'GetAcierFromGrid()
                 'MAJNuancesPossibles()
@@ -461,7 +1001,6 @@ Public Class Frm_SectionAcierStandard
             Return Profile
         End If
     End Function
-
 
     Private Sub chk_DefinitionH_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Hw.CheckedChanged, chk_Ht.CheckedChanged
 
@@ -523,7 +1062,7 @@ Public Class Frm_SectionAcierStandard
 
         TransfertSaisieGridProfile(Gamme, Etiquette, MySectionLoc)
 
-        'MAJ_Aciers(Gamme, Etiquette)
+        MAJ_Aciers(Gamme, Etiquette)
         'SelectDefaultSteel(False)
         'GetAcierFromGrid()
 
@@ -552,6 +1091,26 @@ Public Class Frm_SectionAcierStandard
         'For i As Integer = 0 To MyCatalogue.nbStandard - 1
         '    MySection.iStandard(i) = MyCatalogue.Series(Gamme).Profiles(Profile).IndStandart(i)
         'Next
+    End Sub
+
+
+    Private Sub MAJ_Aciers(ByVal Serie As String, ByVal Profile As String)
+        '------------------------------------------------------------------------------------------------
+        '
+        '   03/07/12 :  Création - V3.00
+        '
+        '------------------------------------------------------------------------------------------------
+        '   
+        '   Mise à jour du choix de l'acier en fonction du choix du profilé
+        '   
+        '------------------------------------------------------------------------------------------------
+        '
+        '   Serie, Profile  [E] :   Indentifion du profilé sélectionné
+        '
+        '------------------------------------------------------------------------------------------------
+
+        MAJ_GridAcier(Serie, Profile, OptionsDatabase.ChoiceSteel)
+
     End Sub
 
 #End Region
@@ -650,7 +1209,7 @@ Public Class Frm_SectionAcierStandard
 
             lSoftProfile = kVs.Value.lSoft
 
-            lAffiche = (lSoftProfile Or Not OptionsDatabase_Section.lSoftLimited) And EstCompatibleACB(kVs.Value)
+            lAffiche = (lSoftProfile Or Not OptionsDatabase.lSoftLimited) And EstCompatibleACB(kVs.Value)
 
             If lAffiche Then
                 MyGrille.Rows.Add()
@@ -713,6 +1272,398 @@ Public Class Frm_SectionAcierStandard
 
 
 
+
+#End Region
+
+#Region "   Gestion grille des aciers "
+
+    Private Sub GridAciers_SelectionChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles GridAciers.SelectionChanged
+
+        If lBuild Then Exit Sub
+        If Me.GridAciers.Rows.Count = 0 Then Exit Sub
+
+        GetAcierFromGrid()
+
+        MAJNuancesPossibles()
+
+        ' MAJ_DonneesFinales()
+
+        Me.img_Section.Invalidate()
+        Me.img_ReductionCurve.Invalidate()
+
+    End Sub
+
+    Private Sub GetAcierFromGrid()
+        '-------------------------------------------------------------------------------------------------------------------------
+        '
+        '   Récupération des données acier sélectionnées par l'utilisateur dans la grille
+        '
+        '-------------------------------------------------------------------------------------------------------------------------
+
+        If GridAciers.SelectedCells.Count = 0 Then
+            Me.GridAciers(0, iLigneAcier - 1).Selected = True
+        End If
+
+        Dim indRow As Integer = GridAciers.SelectedCells(0).RowIndex
+        iLigneAcier = indRow
+
+        Dim Nuance, Qualite, Norme As String
+
+        Nuance = GridAciers(0, indRow).Value.ToString.Trim
+        Qualite = GridAciers(1, indRow).Value.ToString.Trim
+        Norme = GridAciers(2, indRow).Value.ToString.Trim
+
+        TransfertGridAcier(Nuance, Qualite, Norme, MySectionLoc)
+
+    End Sub
+
+    Private Sub TransfertGridAcier(ByVal Nuance As String, ByVal Qualite As String, ByVal Reduction As String, ByVal MySection As cls_Section)
+
+        MySectionLoc.Acier.Nuance = Nuance
+        MySectionLoc.Acier.Qualite = Qualite
+        MySectionLoc.Acier.Reduction = Reduction
+
+        MySectionLoc.Acier.EpMax = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).EpMax
+
+        MySectionLoc.Acier.iBase = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).iBase
+        MySectionLoc.Acier.iStandart = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex
+
+        MySectionLoc.Acier.Plages.Clear()
+        Dim MyPlage As Cls_Acier.strucPlage
+        For i As Integer = 0 To SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages.Count - 1
+            MyPlage.Ep = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Ep
+            MyPlage.Fy = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fy
+            MyPlage.Fu = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fu
+            MySectionLoc.Acier.Plages.Add(MyPlage)
+        Next
+
+        Dim iStd As Integer
+
+        iStd = SteelBase.IndexStd.IndexOf(SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex)
+        If iStd > -1 Then
+            MySectionLoc.Acier.NormeProduit = SteelBase.NormeStd(iStd)
+            MySectionLoc.Acier.iTabStandart = iStd
+        End If
+    End Sub
+
+    Private Sub MAJNuancesPossibles()
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   12/11/15 :  Création - V3.09 - POM
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   Gestion de l'affichage en fonction du choix de nuance
+        '   Elimine la possibilité de sélectionner la nuance S235/S275 le cas échéant
+        '
+        '-----------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim MyNuance As String
+        Dim lNuanceOK As Boolean
+
+        '--> Traitement
+
+        MyNuance = MySectionLoc.Acier.Nuance
+
+        '--> La Nuance est elle autorisée
+
+        lNuanceOK = IsMyNuancePossible(MyNuance)
+
+        '--> Gestion de la disponibilité des boutons
+
+        lNuancePossible = lNuanceOK Or LogicielOptions.lExpert
+
+        Me.btn_OK.Enabled = lNuancePossible
+        'If Me.cmd_Precedent.Visible Then Me.cmd_Precedent.Enabled = lNuancePossible
+
+    End Sub
+
+    Private Function IsMyNuancePossible(ByVal MyNuance As String) As Boolean
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   12/11/15 :  Création - V3.09 - POM
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   Indique si une nuance sélectionnée est selectionnable par l'utilisateur
+        '   Elimine la possibilité de sélectionner la nuance S235/S275 le cas échéant
+        '
+        '-----------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lTrouve As Boolean
+        Dim iGrad As Integer
+
+        '--> Traitement
+
+        lTrouve = False
+        iGrad = -1
+
+        If LogicielOptions.lNoS235 Then
+            Do While (Not lTrouve) And (iGrad < NuancesExclues.GetUpperBound(0))
+                iGrad += 1
+                lTrouve = (MyNuance = NuancesExclues(iGrad))
+            Loop
+        End If
+
+        Return (Not lTrouve)
+    End Function
+
+    Private Sub MAJ_GridAcier(ByVal Serie As String, ByVal Profile As String, ByVal ChoiceSteel As EnuChoiceAcier)
+
+        Dim lBuildBack As Boolean = lBuild
+        lBuild = True
+
+        Me.GridAciers.Rows.Clear()
+        Dim GradeEnCours As String = ""
+        Dim QualiteEncours As String = ""
+        Dim lAvailable As Boolean = True
+        Dim iPro As Integer = 0
+        Dim lDisplay As Boolean
+        Dim lIsNuanceCompatibleProfile As Boolean
+
+        Dim nbSteels As Integer
+        Dim MySteel As strucAcierLocal
+        Dim SteelToScreen As New List(Of strucAcierLocal)
+
+        nbSteels = 0
+
+        For Each kvpGrade As KeyValuePair(Of String, strucGrade) In SteelBase.Grades
+
+            For Each kvpQualite As KeyValuePair(Of String, strucQualite) In kvpGrade.Value.Qualites
+
+                For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
+
+                    'lAvailable = (MyCatalogue.Series(Serie).Profiles(Profile).IndStandart(MyCatalogue.CorIndStd(kvpSteel.Value.StIndex) - 1) = 1)
+
+                    'If lAvailable Or Not OptionsDataBase.lShowSteelAvailOnly Then
+
+                    lDisplay = SteelIsToDisplay(Serie, Profile, kvpGrade.Key, kvpQualite.Key, kvpSteel.Key, ChoiceSteel, lIsNuanceCompatibleProfile)
+
+                    If lDisplay Then
+                        MySteel.Nuance = kvpGrade.Key
+                        MySteel.Qualite = kvpQualite.Key
+                        MySteel.Reduc = kvpSteel.Key
+                        MySteel.lAvailable = lIsNuanceCompatibleProfile
+                        SteelToScreen.Add(MySteel)
+                    End If
+
+                Next
+
+            Next
+
+        Next
+
+        Call DisplaySteelToScreen(SteelToScreen, nbSteels, ChoiceSteel)
+
+        If nbSteels = 0 Then
+            Me.img_ReductionCurve.Visible = False
+            '  Me.Pan_Alerte.Visible = True
+            Me.btn_OK.Enabled = False
+        Else
+            Me.img_ReductionCurve.Visible = True
+            Me.img_ReductionCurve.Invalidate()
+            'Me.Pan_Alerte.Visible = False
+            Me.btn_OK.Enabled = True
+        End If
+
+        lBuild = lBuildBack
+
+    End Sub
+
+    Private Function SteelIsToDisplay(ByVal Serie As String, ByVal Profile As String,
+                                      ByVal Nuance As String, ByVal Qualite As String, ByVal Norm As String, ByVal ChoiceAcier As EnuChoiceAcier,
+                                      ByRef lIsNuanceCompatibleProfile As Boolean) As Boolean
+        '------------------------------------------------------------------------------------------------------------------------------------------
+        '
+        '   06/12/12 :  Création - POM - V3.00
+        '
+        '------------------------------------------------------------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim EpMax As Double
+        Dim IndStd() As Integer
+        Dim nbStd As Integer
+
+        '--> Initialisation
+
+        EpMax = Math.Max(MyCatalogue.Series(Serie).Profiles(Profile).Tf, MyCatalogue.Series(Serie).Profiles(Profile).Tw)
+        nbStd = MyCatalogue.Series(Serie).Profiles(Profile).IndStandart.GetUpperBound(0)
+        ReDim IndStd(nbStd)
+        For i As Integer = 0 To nbStd
+            IndStd(i) = CInt(MyCatalogue.Series(Serie).Profiles(Profile).IndStandart(i))
+        Next
+
+        '--> Calcul
+
+        Return SteelIsToCompatibleToProfile(EpMax, IndStd, SteelBase, MyCatalogue.CorIndStd, Nuance, Qualite, Norm, ChoiceAcier, lIsNuanceCompatibleProfile)
+
+    End Function
+
+    Private Sub DisplaySteelToScreen(ByVal Steels As List(Of strucAcierLocal), ByRef nbSteels As Integer, ByVal Choice As EnuChoiceAcier)
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   20/12/12 :  Création - V3.01 - POM
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   Affichage à l'écran de la liste des aciers compatibles
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   Steels      [E] :   Liste des aciers potentiellement compatibles
+        '   nbSteels    [S] :   Nombre d'acier finalement affichés
+        '   Choice      [E] :   Stratégie d'affichage des aciers
+        '
+        '-----------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nDispo As Integer
+        Dim lTous As Boolean
+        Dim GradeEnCours As String, lNewGrade As Boolean
+        Dim QualiteEncours As String, lNewQualite As Boolean
+        Dim iRank As Integer
+
+        '--> Initialisations
+
+        nDispo = 0
+
+        For i As Integer = 0 To Steels.Count - 1
+            If Steels(i).lAvailable Then nDispo += 1
+        Next
+
+        lTous = (Choice <> EnuChoiceAcier.BaseIfNoStandardSteel) Or (Choice = EnuChoiceAcier.BaseIfNoStandardSteel And nDispo = 0)
+
+        '--> Affichage
+
+        nbSteels = 0
+        iRank = 0
+        GradeEnCours = ""
+        QualiteEncours = ""
+
+        For i As Integer = 0 To Steels.Count - 1
+            If lTous Or Steels(i).lAvailable Then
+                lNewGrade = (Steels(i).Nuance <> GradeEnCours)
+                lNewQualite = (Steels(i).Qualite <> QualiteEncours)
+                AddLigneTableauAcier(Steels(i), iRank, lNewGrade, lNewQualite)
+                nbSteels += 1
+                GradeEnCours = Steels(i).Nuance
+                QualiteEncours = Steels(i).Qualite
+            End If
+        Next
+
+    End Sub
+
+    Private Sub AddLigneTableauAcier(ByVal MySteel As strucAcierLocal, ByRef iRank As Integer,
+                                     ByVal lNewGrade As Boolean, ByVal lNewQualite As Boolean)
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   20/12/12 :  Création - V3.01 - POM
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   On rajoute un acier dans le tableau des aciers
+        '
+        '-----------------------------------------------------------------------------------------------------
+
+        '--> On crée la ligne supplémentaire
+
+        Me.GridAciers.Rows.Add()
+        iRank += 1
+        Me.GridAciers.Rows(iRank - 1).Height = 14
+
+        '--> Affichage de la nuance en fonction de nouvelle nuance ou pas ?
+
+        If lNewGrade Then
+            Me.GridAciers(0, iRank - 1).Value = MySteel.Nuance
+            Me.GridAciers(0, iRank - 1).Style.ForeColor = ColorGrade
+        Else
+            Me.GridAciers(0, iRank - 1).Value = MySteel.Nuance
+            Me.GridAciers(0, iRank - 1).Style.ForeColor = Me.GridAciers.BackgroundColor
+        End If
+
+        '--> Affichage de la qualité
+
+        If lNewGrade Or lNewQualite Then
+            Me.GridAciers(1, iRank - 1).Value = MySteel.Qualite
+            If MySteel.Qualite = "HISTAR" Then
+                Me.GridAciers(1, iRank - 1).Style.ForeColor = ColorGridHI
+            Else
+                Me.GridAciers(1, iRank - 1).Style.ForeColor = Color.Black
+            End If
+        Else
+            Me.GridAciers(1, iRank - 1).Value = MySteel.Qualite
+            Me.GridAciers(1, iRank - 1).Style.ForeColor = Me.GridAciers.BackgroundColor
+        End If
+
+        '--> Affichage de la courbe de réduction
+
+        Me.GridAciers(2, iRank - 1).Value = MySteel.Reduc
+
+        Dim ColorBack As Color
+
+        If MySteel.lAvailable Then
+            ColorBack = BClrCompatible
+        Else
+            ColorBack = BClrNotC
+        End If
+        For i As Integer = 0 To 2
+            Me.GridAciers(i, iRank - 1).Style.BackColor = ColorBack
+        Next
+
+    End Sub
+
+
+    Private Sub ExtraitValeursEnveloppeAciers(ByVal Nuance As String, ByVal Variable As EnuDrawProperty,
+                                              ByRef EpMin As Double, ByRef EpMax As Double, ByRef VMax As Double)
+        '------------------------------------------------------------------------------------------------------------------
+        '
+        '   03/07/12 :  Création - V300
+        '
+        '------------------------------------------------------------------------------------------------------------------
+        '
+        '   Extrait les valeurs enveloppes de la nuance sélectionnée
+        '
+        '------------------------------------------------------------------------------------------------------------------
+        '
+        '   
+        '
+        '------------------------------------------------------------------------------------------------------------------
+
+        EpMin = 0
+        EpMax = 0
+        VMax = 0
+
+        For Each kvpQualite As KeyValuePair(Of String, strucQualite) In SteelBase.Grades(Nuance).Qualites
+
+            For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
+                If EpMin = 0 Then
+                    EpMin = kvpSteel.Value.Plages(0).Ep
+                Else
+                    EpMin = Math.Min(EpMin, kvpSteel.Value.Plages(0).Ep)
+                End If
+                EpMax = Math.Max(EpMax, kvpSteel.Value.EpMax)
+
+                For Each kVP As Cls_Acier.strucPlage In kvpSteel.Value.Plages
+                    Select Case Variable
+                        Case EnuDrawProperty.Fu : VMax = Math.Max(VMax, kVP.Fu)
+                        Case EnuDrawProperty.Fy : VMax = Math.Max(VMax, kVP.Fy)
+                    End Select
+
+                Next
+
+
+            Next
+
+        Next
+
+    End Sub
 
 #End Region
 

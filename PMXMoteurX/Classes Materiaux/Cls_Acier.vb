@@ -1,8 +1,12 @@
 ﻿
+
 Public Class Cls_Acier
 
 #Region " Déclarations "
-    Public Const EY As Decimal = 210 * 1000
+    Public Const EYACIER As Decimal = 210 * 1000
+    Public Const RHOACIER As Decimal = 7850
+    Public Const NUANCEDEFAULT As String = "S355"
+
     Public Structure strucPlage
         Dim Ep As Double
         Dim Fy As Double
@@ -26,6 +30,17 @@ Public Class Cls_Acier
 
     Public Reduction As String
 
+    Public NormeProduit As String
+
+    Public EpMax As Double
+    Public iBase As Short
+    Public iTabStandart, iStandart As Short
+
+    '-------------------------------------------------------------------------
+    ' iStandart : no de norme dans la base acier, entre 1 et 20
+    ' iTabStandart : no de norme dans la table interne, entre 1 et nStandart
+    '-------------------------------------------------------------------------
+
     ''' <summary>
     ''' valeur nominale de la limite d'élasticité de la poutre (Pa = N/m²)
     ''' </summary>
@@ -38,12 +53,22 @@ Public Class Cls_Acier
 #Region " Propriétés "
 
     ''' <summary>
+    ''' Masse volumique (en kg/m3)
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Rho As Decimal
+        Get
+            Return RHOACIER
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Module d'Young de l'acier (en MPa)
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property EYoung
+    Public ReadOnly Property EYoung As Decimal
         Get
-            Return EY
+            Return EYACIER
         End Get
     End Property
 

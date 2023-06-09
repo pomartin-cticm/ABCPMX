@@ -98,6 +98,7 @@ Module Mod_Declarations
         Public lUpdateStart As Boolean              'Vérification des mises à jour au démarrage du logiciel
 
         Public lFenetres As Boolean                 'Fenêtres indépendantes
+        Public lNoS235 As Boolean                   'Indique si on applique le filtre empechant la sélection de nuance S235/S275 en mode normal 
     End Structure
 
     Public Structure Struc_InformationLogiciel

@@ -1,10 +1,11 @@
 ﻿Imports System.IO
 Imports PMXMoteur2
-Module Mod_Database_Section
+Module Mod_BasesDonnees
 
 #Region "   Constantes "
 
-    Private Const NFACCES As Integer = 10 'Ajout BD -> suppresssion MyConst.NFACCES
+    Private Const NFACCES As Integer = 10
+    Private Const NFACCESA As Integer = 11
     Private Const KUNITBD As Decimal = 0.001
     Private Const TOS As Integer = 4
     Private Const TOL As Integer = 4
@@ -13,28 +14,92 @@ Module Mod_Database_Section
 
 #End Region
 
+#Region "   Déclaration Base des aciers "
+
+    Public SteelBase As strucBaseAciers
+
+    'Public Structure strucPlage
+    '    Dim Ep As Double
+    '    Dim Fy As Double
+    '    Dim Fu As Double
+    'End Structure
+
+    Public Structure strucReduction
+        Dim Plages As List(Of Cls_Acier.strucPlage)
+        Dim EpMax As Double
+        Dim StIndex As Short
+        Dim iBase As Short
+    End Structure
+
+    Public Structure strucQualite
+        Dim ReductionCurv As Dictionary(Of String, strucReduction)
+    End Structure
+
+    Public Structure strucGrade
+        Dim Qualites As Dictionary(Of String, strucQualite)
+    End Structure
+
+    Public Structure strucBaseAciers
+        Dim Grades As Dictionary(Of String, strucGrade)
+        Dim nbAciersBase, nbSteels As Integer
+        Dim nbAciersStandard As Dictionary(Of Short, Integer)
+        Dim nbStds As Integer
+        Dim IndexStd As List(Of Integer)
+        Dim NormeStd As List(Of String)
+    End Structure
+
+#End Region
+
+#Region "   Déclaration Catalogue de profilés "
+
+    Public MyCatalogue As StrucCatalogue
+
+    Public Structure StrucCatalogue
+        Dim nbGammes As Integer
+        Dim nbSoft As Integer
+        Dim nbDelivery As Integer
+        Dim nbStandard As Integer
+        Dim IndexStand() As Short
+        Dim NormStd() As String
+        Dim SoftLab() As String
+        Dim IndSoft As Integer
+        Dim Series As Dictionary(Of String, StrucGamme)
+        Dim CorIndStd As Dictionary(Of Short, Short)
+        Dim Langues As List(Of String)
+        Dim Delivery() As List(Of String)
+    End Structure
+
+    Public Structure StrucGamme
+        Dim nbProfiles As Integer
+        Dim Profiles As Dictionary(Of String, Cls_SectionNew)
+    End Structure
+
+#End Region
+
 #Region "   MAIN "
 
-    Public Sub InitDatabase_Section()
+    Public Sub InitDatabase_Options()
 
         '--> Options de la base de données
-        OptionsDatabase_Section.lNewBase = True
-        OptionsDatabase_Section.lSoftLimited = True
-        OptionsDatabase_Section.FiltreSoft = "ACB+"
-        OptionsDatabase_Section.lShowSteelAvailOnly = True
-        OptionsDatabase_Section.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel
-        OptionsDatabase_Section.lNoSteelLowThick = True
-        OptionsDatabase_Section.lSaveConfig = False
-        OptionsDatabase_Section.lShowEC3 = True
+        OptionsDatabase.lNewBase = True
+        OptionsDatabase.lSoftLimited = True
+        OptionsDatabase.FiltreSoft = "ACB+"
+        OptionsDatabase.lShowSteelAvailOnly = True
+        OptionsDatabase.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel
+        OptionsDatabase.lNoSteelLowThick = True
+        OptionsDatabase.lSaveConfig = False
+        OptionsDatabase.lShowEC3 = True
 
-        '--> Fichier
+        '--> Fichier pour les profilés
         If Not File.Exists(LogicielFichiers.Database_Section) Then
             'File.Copy(InfoLogiciel.RepertoireInstall & "\Database\AM_HRProfiles.dtb", FichierLogiciel.Database_Section)
             File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacProfile & ExtensionBase, LogicielFichiers.Database_Section)
         End If
 
-        '--> Récupération des données de la database dans le catalogue
-        InitialiseCatalogue(LogicielFichiers.Database_Section, MyCatalogue)
+        '--> Fichier pour les aciers
+        If Not File.Exists(LogicielFichiers.Database_Aciers) Then
+            File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase, LogicielFichiers.Database_Aciers)
+        End If
 
     End Sub
 
@@ -46,7 +111,7 @@ Module Mod_Database_Section
 
         '--> Récupération de la base
 
-        InitialiseBaseAciers(LogicielFichiers.Database_Aciers, NFACCES, SteelBase)
+        'InitialiseBaseAciers(LogicielFichiers.Database_Aciers, NFACCES, SteelBase)
 
     End Sub
 
@@ -205,7 +270,7 @@ Module Mod_Database_Section
 
 #Region "   Options Database "
 
-    Public OptionsDatabase_Section As StrucOptionsDataBase
+    Public OptionsDatabase As StrucOptionsDataBase
 
     Structure StrucOptionsDataBase
         Dim lNewBase As Boolean
@@ -235,45 +300,9 @@ Module Mod_Database_Section
 
 #End Region
 
-#Region "   Déclaration Base des aciers "
-
-    Public SteelBase As strucBaseAciers
-
-    Public Structure strucPlage
-        Dim Ep As Double
-        Dim Fy As Double
-        Dim Fu As Double
-    End Structure
-
-    Public Structure strucReduction
-        Dim Plages As List(Of strucPlage)
-        Dim EpMax As Double
-        Dim StIndex As Short
-        Dim iBase As Short
-    End Structure
-
-    Public Structure strucQualite
-        Dim ReductionCurv As Dictionary(Of String, strucReduction)
-    End Structure
-
-    Public Structure strucGrade
-        Dim Qualites As Dictionary(Of String, strucQualite)
-    End Structure
-
-    Public Structure strucBaseAciers
-        Dim Grades As Dictionary(Of String, strucGrade)
-        Dim nbAciersBase, nbSteels As Integer
-        Dim nbAciersStandard As Dictionary(Of Short, Integer)
-        Dim nbStds As Integer
-        Dim IndexStd As List(Of Integer)
-        Dim NormeStd As List(Of String)
-    End Structure
-
-#End Region
-
 #Region "   Gestion nouvelle base acier "
 
-    Public Sub InitialiseBaseAciers(ByVal NomFichier As String, ByVal nUnit As Integer, ByRef SteelBase As strucBaseAciers)
+    Public Sub InitialiseBaseAciers(ByVal NomFichier As String, ByRef SteelBase As strucBaseAciers)
         '-----------------------------------------------------------------------------------------
         '
         '   02/07/12 :  Création - Version 3.00 - POM
@@ -300,7 +329,7 @@ Module Mod_Database_Section
         Dim nCg, nCq, nCn As Short
         Dim nSteels As Short
         Dim Grade, Qualite, Norm As String
-        Dim Plages As New List(Of strucPlage)
+        Dim Plages As New List(Of Cls_Acier.strucPlage)
         Dim iStandart, iBase As Short
         Dim EpMax As Single
         Dim lOK As Boolean
@@ -319,23 +348,23 @@ Module Mod_Database_Section
 
         Try
             If File.Exists(NomFichier) Then
-                FileOpen(nUnit, NomFichier, OpenMode.Binary)
+                FileOpen(NFACCESA, NomFichier, OpenMode.Binary)
 
-                FileGet(nUnit, ASG, 10)
-                FileGet(nUnit, ASB, 14)
-                FileGet(nUnit, nCg, 30)
-                FileGet(nUnit, nCq, 32)
-                FileGet(nUnit, nCn, 34)
+                FileGet(NFACCESA, ASG, 10)
+                FileGet(NFACCESA, ASB, 14)
+                FileGet(NFACCESA, nCg, 30)
+                FileGet(NFACCESA, nCq, 32)
+                FileGet(NFACCESA, nCn, 34)
 
-                FileGet(nUnit, nSteels, ASG)
-                FileGet(nUnit, TSTE, ASG + 2)
+                FileGet(NFACCESA, nSteels, ASG)
+                FileGet(NFACCESA, TSTE, ASG + 2)
 
-                ExtractStd(nUnit, ASB, SteelBase)
+                ExtractStd(NFACCESA, ASB, SteelBase)
 
                 For iSteel As Integer = 1 To nSteels
 
                     ASGi = ASG + 6 + (iSteel - 1) * TSTE
-                    GetSteelInBase(nUnit, ASGi, nCg, nCq, nCn, Grade, Qualite, Norm, iBase, iStandart, EpMax, Plages)
+                    GetSteelInBase(NFACCESA, ASGi, nCg, nCq, nCn, Grade, Qualite, Norm, iBase, iStandart, EpMax, Plages)
 
                     '-- V4.00: les aciers HLE(nuance>460) et les reductions EC3 uniquement en mode expert   
                     AnalyseGrade(Grade, Qualite, Norm, lOK)
@@ -359,7 +388,7 @@ Module Mod_Database_Section
         Catch ex As Exception
             MessageBox.Show("Error reading file " & NomFichier & " " & ex.Message)
         Finally
-            FileClose(nUnit)
+            FileClose(NFACCESA)
         End Try
 
     End Sub
@@ -624,7 +653,7 @@ Module Mod_Database_Section
     Public Sub GetSteelInBase(ByVal nUnit As Integer, ByVal ASGi As Integer,
                               ByVal nCg As Short, ByVal nCq As Short, ByVal nCn As Short,
                               ByRef Grade As String, ByRef Qualite As String, ByRef Norm As String,
-                              ByRef iBase As Short, ByRef iStandart As Short, ByRef EpMax As Single, ByRef Plages As List(Of strucPlage))
+                              ByRef iBase As Short, ByRef iStandart As Short, ByRef EpMax As Single, ByRef Plages As List(Of Cls_Acier.strucPlage))
         '----------------------------------------------------------------------------------
         '
         '   02/07/12 :  Création - POM - v3.00
@@ -661,7 +690,7 @@ Module Mod_Database_Section
     End Sub
 
     Public Sub GetSteelInBase(ByVal nUnit As Integer, ByVal RecPos As Integer,
-                              ByRef iBase As Short, ByRef iStandart As Short, ByRef EpMax As Single, ByRef Plages As List(Of strucPlage))
+                              ByRef iBase As Short, ByRef iStandart As Short, ByRef EpMax As Single, ByRef Plages As List(Of Cls_Acier.strucPlage))
         '----------------------------------------------------------------------------------
         '
         '   02/07/12 :  Création - POM - v3.00
@@ -691,7 +720,7 @@ Module Mod_Database_Section
         Const TOS As Integer = 4
         Dim iExpert As Short
         Dim nbPlages As Short
-        Dim MyRange As strucPlage
+        Dim MyRange As Cls_Acier.strucPlage
         Dim ADPP As Integer
         Dim Ep, Fy, Fu As Single
         Const kUNIT As Single = 0.001
@@ -718,7 +747,7 @@ Module Mod_Database_Section
     End Sub
 
     Private Sub AddSteelInBaseSteel(ByVal Grade As String, ByVal Qualite As String, ByVal Norm As String,
-                                    ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of strucPlage),
+                                    ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of Cls_Acier.strucPlage),
                                     ByRef SteelBase As strucBaseAciers)
         '-------------------------------------------------------------------------------------------------------
         '
@@ -754,7 +783,7 @@ Module Mod_Database_Section
     End Sub
 
     Private Sub AddQualiteInGrade(ByVal Qualite As String, ByVal Norm As String,
-                                  ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of strucPlage),
+                                  ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of Cls_Acier.strucPlage),
                                   ByRef MyGrade As strucGrade)
         '-------------------------------------------------------------------------------------------------------
         '
@@ -792,7 +821,7 @@ Module Mod_Database_Section
     End Sub
 
     Private Sub AddNormInQualite(ByVal Norm As String,
-                                 ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of strucPlage),
+                                 ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of Cls_Acier.strucPlage),
                                  ByRef MyQualite As strucQualite)
         '-------------------------------------------------------------------------------------------------------
         '
@@ -821,7 +850,7 @@ Module Mod_Database_Section
             Dim MyReduc As strucReduction
 
             MyReduc.EpMax = EpMax
-            MyReduc.Plages = New List(Of strucPlage)
+            MyReduc.Plages = New List(Of Cls_Acier.strucPlage)
             For i As Integer = 0 To Plages.Count - 1
                 MyReduc.Plages.Add(Plages(i))
             Next
@@ -883,7 +912,7 @@ Module Mod_Database_Section
                 lDisplay = lIsNuanceCompatibleProfile
         End Select
 
-        If OptionsDatabase_Section.lNoSteelLowThick Then
+        If OptionsDatabase.lNoSteelLowThick Then
             lCompatible = EpMax <= SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Norm).EpMax * (1.00001)
         Else
             lCompatible = True
@@ -892,32 +921,6 @@ Module Mod_Database_Section
         Return (lDisplay And lCompatible)
 
     End Function
-
-#End Region
-
-#Region "   Déclaration Catalogue de profilés "
-
-    Public MyCatalogue As StrucCatalogue
-
-    Public Structure StrucCatalogue
-        Dim nbGammes As Integer
-        Dim nbSoft As Integer
-        Dim nbDelivery As Integer
-        Dim nbStandard As Integer
-        Dim IndexStand() As Short
-        Dim NormStd() As String
-        Dim SoftLab() As String
-        Dim IndSoft As Integer
-        Dim Series As Dictionary(Of String, StrucGamme)
-        Dim CorIndStd As Dictionary(Of Short, Short)
-        Dim Langues As List(Of String)
-        Dim Delivery() As List(Of String)
-    End Structure
-
-    Public Structure StrucGamme
-        Dim nbProfiles As Integer
-        Dim Profiles As Dictionary(Of String, Cls_SectionNew)
-    End Structure
 
 #End Region
 
@@ -978,9 +981,9 @@ Module Mod_Database_Section
                 '--> Version de la base
                 ExtraireFormatIndiceDtB(NFACCES, iFBase, VerBase)
                 Dim txt() As String = VerBase.Split("_")
-                OptionsDatabase_Section.VersionBaseProfiles.Year = txt(0)
-                OptionsDatabase_Section.VersionBaseProfiles.Indice = txt(1)
-                OptionsDatabase_Section.VersionBaseProfiles.Format = iFBase
+                OptionsDatabase.VersionBaseProfiles.Year = txt(0)
+                OptionsDatabase.VersionBaseProfiles.Indice = txt(1)
+                OptionsDatabase.VersionBaseProfiles.Format = iFBase
 
                 FileGet(NFACCES, AGB, 30)
                 FileGet(NFACCES, ADB, 34)
@@ -1380,7 +1383,7 @@ Module Mod_Database_Section
             jS = -1
             Do While jS < nbSoft - 1 And Not lTrouve
                 jS += 1
-                lTrouve = (OptionsDatabase_Section.FiltreSoft.Trim = Catalogue.SoftLab(jS).Trim)
+                lTrouve = (OptionsDatabase.FiltreSoft.Trim = Catalogue.SoftLab(jS).Trim)
             Loop
             If lTrouve Then
                 Catalogue.IndSoft = jS

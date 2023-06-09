@@ -1,4 +1,6 @@
-﻿Module Mod_Demarrage
+﻿Imports PMXMoteur2
+
+Module Mod_Demarrage
 
 #Region " Déclarations "
 
@@ -40,6 +42,7 @@
         LogicielInfo.Racine = "ABCPMX"
 
         LogicielInfo.Maitre = EnuMaitre.CTICM
+        LogicielOptions.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
 
         LogicielRep.RepertoireInstall = Application.StartupPath
         LogicielRep.RepertoireConfig = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CTICM\" & LogicielInfo.NomLogiciel & "\ConfigV" & LogicielInfo.Version
@@ -91,7 +94,7 @@
         LogicielInfo.Format_ModulesY = {"0", "0.0"}
         LogicielInfo.NbDigitMax_ModulesY = {0, 3}
 
-        '--> Récûpération des options du logiciel - modifiable par l'utilisateur
+        '--> Récupération des options du logiciel - modifiable par l'utilisateur
         Try
             '===> Options générales <============================================================================================
 
@@ -119,7 +122,10 @@
             LogicielFichiers.Database_Aciers = LogicielRep.RepertoireConfig & "\" & RacAcier & ExtensionBase
 
             '--> Base de données
-            InitDatabase_Section()
+            InitDatabase_Options()
+            '--> Récupération des données de la database dans le catalogue
+            InitialiseCatalogue(LogicielFichiers.Database_Section, MyCatalogue)
+            InitialiseBaseAciers(LogicielFichiers.Database_Aciers, SteelBase)
 
         Catch ex As Exception
 

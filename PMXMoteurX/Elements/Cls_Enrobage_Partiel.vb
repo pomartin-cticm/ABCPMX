@@ -196,6 +196,13 @@ Public Class Cls_Enrobage_Partiel
         Return Me.MemberwiseClone()
     End Function
 
+    Public Shared Sub DeepCopie(EnrobageSource As Cls_Enrobage_Partiel, ByRef EnrobageCible As Cls_Enrobage_Partiel)
+
+        EnrobageCible = EnrobageSource.Clone
+        EnrobageCible.LitsArma = EnrobageSource.LitsArma.Clone
+
+    End Sub
+
 #End Region
 
 End Class

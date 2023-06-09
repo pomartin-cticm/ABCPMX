@@ -293,6 +293,12 @@
         Return Me.MemberwiseClone()
     End Function
 
+    Public Shared Sub DeepClone(DalleSource As Cls_Dalle, ByRef DalleCible As Cls_Dalle)
+
+        DalleCible = DalleSource.Clone
+
+    End Sub
+
 #End Region
 
 End Class

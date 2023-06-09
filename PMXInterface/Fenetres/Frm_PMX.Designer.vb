@@ -106,8 +106,8 @@ Partial Class Frm_PMX
         Me.TLPan_Menus = New System.Windows.Forms.TableLayoutPanel()
         Me.ToolStrip_Main = New System.Windows.Forms.ToolStrip()
         Me.btn_NewN = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripButton3 = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_OpenN = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_SaveN = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator23 = New System.Windows.Forms.ToolStripSeparator()
         Me.Btn_AddSectionN = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton5 = New System.Windows.Forms.ToolStripButton()
@@ -159,6 +159,7 @@ Partial Class Frm_PMX
         Me.ToolStripButton15 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton16 = New System.Windows.Forms.ToolStripButton()
+        Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.TLPan_Main.SuspendLayout()
         Me.ToolStrip_MenuSecondaire.SuspendLayout()
         Me.ToolStrip_MenuPrincipal.SuspendLayout()
@@ -947,7 +948,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Main.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Main.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Main.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Main.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btn_NewN, Me.ToolStripButton2, Me.ToolStripButton3, Me.ToolStripSeparator23, Me.Btn_AddSectionN, Me.ToolStripButton5, Me.ToolStripButton6, Me.ToolStripSeparator24, Me.ToolStripButton7, Me.ToolStripSeparator25, Me.ToolStripButton8, Me.ToolStripButton9, Me.ToolStripSeparator26, Me.ToolStripButton10, Me.ToolStripButton11, Me.ToolStripButton12})
+        Me.ToolStrip_Main.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btn_NewN, Me.TSbtn_OpenN, Me.TSbtn_SaveN, Me.ToolStripSeparator23, Me.Btn_AddSectionN, Me.ToolStripButton5, Me.ToolStripButton6, Me.ToolStripSeparator24, Me.ToolStripButton7, Me.ToolStripSeparator25, Me.ToolStripButton8, Me.ToolStripButton9, Me.ToolStripSeparator26, Me.ToolStripButton10, Me.ToolStripButton11, Me.ToolStripButton12})
         Me.ToolStrip_Main.Location = New System.Drawing.Point(0, 25)
         Me.ToolStrip_Main.Name = "ToolStrip_Main"
         Me.ToolStrip_Main.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -964,23 +965,23 @@ Partial Class Frm_PMX
         Me.btn_NewN.Size = New System.Drawing.Size(28, 32)
         Me.btn_NewN.Text = "ToolStripButton1"
         '
-        'ToolStripButton2
+        'TSbtn_OpenN
         '
-        Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton2.Image = CType(resources.GetObject("ToolStripButton2.Image"), System.Drawing.Image)
-        Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton2.Name = "ToolStripButton2"
-        Me.ToolStripButton2.Size = New System.Drawing.Size(28, 32)
-        Me.ToolStripButton2.Text = "ToolStripButton1"
+        Me.TSbtn_OpenN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_OpenN.Image = CType(resources.GetObject("TSbtn_OpenN.Image"), System.Drawing.Image)
+        Me.TSbtn_OpenN.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_OpenN.Name = "TSbtn_OpenN"
+        Me.TSbtn_OpenN.Size = New System.Drawing.Size(28, 32)
+        Me.TSbtn_OpenN.Text = "ToolStripButton1"
         '
-        'ToolStripButton3
+        'TSbtn_SaveN
         '
-        Me.ToolStripButton3.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.ToolStripButton3.Image = CType(resources.GetObject("ToolStripButton3.Image"), System.Drawing.Image)
-        Me.ToolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.ToolStripButton3.Name = "ToolStripButton3"
-        Me.ToolStripButton3.Size = New System.Drawing.Size(28, 32)
-        Me.ToolStripButton3.Text = "ToolStripButton2"
+        Me.TSbtn_SaveN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_SaveN.Image = CType(resources.GetObject("TSbtn_SaveN.Image"), System.Drawing.Image)
+        Me.TSbtn_SaveN.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_SaveN.Name = "TSbtn_SaveN"
+        Me.TSbtn_SaveN.Size = New System.Drawing.Size(28, 32)
+        Me.TSbtn_SaveN.Text = "ToolStripButton2"
         '
         'ToolStripSeparator23
         '
@@ -1407,6 +1408,14 @@ Partial Class Frm_PMX
         Me.ToolStripButton16.Size = New System.Drawing.Size(28, 28)
         Me.ToolStripButton16.Text = "Btn_Icon_Config"
         '
+        'ImgList_Menu
+        '
+        Me.ImgList_Menu.ImageStream = CType(resources.GetObject("ImgList_Menu.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImgList_Menu.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImgList_Menu.Images.SetKeyName(0, "Enregistrer_NotOK")
+        Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
+        Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
+        '
         'Frm_PMX
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1517,8 +1526,8 @@ Partial Class Frm_PMX
     Friend WithEvents TLPan_Menus As TableLayoutPanel
     Friend WithEvents ToolStrip_Main As ToolStrip
     Friend WithEvents btn_NewN As ToolStripButton
-    Friend WithEvents ToolStripButton2 As ToolStripButton
-    Friend WithEvents ToolStripButton3 As ToolStripButton
+    Friend WithEvents TSbtn_OpenN As ToolStripButton
+    Friend WithEvents TSbtn_SaveN As ToolStripButton
     Friend WithEvents ToolStripSeparator23 As ToolStripSeparator
     Friend WithEvents Btn_AddSectionN As ToolStripButton
     Friend WithEvents ToolStripButton5 As ToolStripButton
@@ -1591,4 +1600,5 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_Gamma As ToolStripButton
     Friend WithEvents TSbtn_Hivoss As ToolStripButton
     Friend WithEvents img_Main As PictureBox
+    Friend WithEvents ImgList_Menu As ImageList
 End Class

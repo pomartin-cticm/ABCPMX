@@ -131,7 +131,7 @@ Public Class Cls_OptionsCalcul
         Me.Eta = 1
 
         '--> Module d'young des armatures
-        Me.ArmaYoung = Cls_Acier.EY
+        Me.ArmaYoung = Cls_Acier.EYACIER
 
         '--> Armatures comprimées
         Me.lArmaComprimee = False

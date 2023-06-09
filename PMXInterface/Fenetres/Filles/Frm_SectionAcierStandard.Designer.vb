@@ -22,6 +22,7 @@ Partial Class Frm_SectionAcierStandard
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
@@ -89,7 +90,9 @@ Partial Class Frm_SectionAcierStandard
         Me.rdb_PRS_symetrique = New System.Windows.Forms.RadioButton()
         Me.rdb_Lamine = New System.Windows.Forms.RadioButton()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
+        Me.img_ReductionCurve = New System.Windows.Forms.PictureBox()
         Me.img_Section = New System.Windows.Forms.PictureBox()
+        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -114,7 +117,9 @@ Partial Class Frm_SectionAcierStandard
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_TypeSection.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
+        CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -846,6 +851,7 @@ Partial Class Frm_SectionAcierStandard
         '
         Me.TableLayoutPanel2.ColumnCount = 1
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.img_ReductionCurve, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.img_Section, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(352, 0)
@@ -857,6 +863,15 @@ Partial Class Frm_SectionAcierStandard
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(300, 471)
         Me.TableLayoutPanel2.TabIndex = 2
         '
+        'img_ReductionCurve
+        '
+        Me.img_ReductionCurve.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_ReductionCurve.Location = New System.Drawing.Point(3, 238)
+        Me.img_ReductionCurve.Name = "img_ReductionCurve"
+        Me.img_ReductionCurve.Size = New System.Drawing.Size(100, 50)
+        Me.img_ReductionCurve.TabIndex = 1
+        Me.img_ReductionCurve.TabStop = False
+        '
         'img_Section
         '
         Me.img_Section.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
@@ -865,6 +880,10 @@ Partial Class Frm_SectionAcierStandard
         Me.img_Section.Size = New System.Drawing.Size(100, 50)
         Me.img_Section.TabIndex = 0
         Me.img_Section.TabStop = False
+        '
+        'ErrorProvider
+        '
+        Me.ErrorProvider.ContainerControl = Me
         '
         'Frm_SectionAcierStandard
         '
@@ -906,7 +925,9 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_TypeSection.ResumeLayout(False)
         Me.pan_TypeSection.PerformLayout()
         Me.TableLayoutPanel2.ResumeLayout(False)
+        CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -979,4 +1000,6 @@ Partial Class Frm_SectionAcierStandard
     Friend WithEvents lbl_SemelleSup As Label
     Friend WithEvents lbl_Height As Label
     Friend WithEvents lbl_Delivery As Label
+    Friend WithEvents img_ReductionCurve As PictureBox
+    Friend WithEvents ErrorProvider As ErrorProvider
 End Class

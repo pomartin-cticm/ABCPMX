@@ -113,8 +113,7 @@ Partial Class Frm_Basic
         '
         'pan_Main
         '
-        Me.pan_Main.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_Portees)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
@@ -135,7 +134,7 @@ Partial Class Frm_Basic
         Me.TLPan_Portees.Name = "TLPan_Portees"
         Me.TLPan_Portees.RowCount = 1
         Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Portees.Size = New System.Drawing.Size(792, 402)
+        Me.TLPan_Portees.Size = New System.Drawing.Size(794, 404)
         Me.TLPan_Portees.TabIndex = 0
         '
         'pan_Gauche
@@ -146,7 +145,7 @@ Partial Class Frm_Basic
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(250, 402)
+        Me.pan_Gauche.Size = New System.Drawing.Size(250, 404)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -170,6 +169,7 @@ Partial Class Frm_Basic
         '
         Me.lbl_Portees.AutoSize = True
         Me.lbl_Portees.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Portees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Portees.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_Portees.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Portees.Margin = New System.Windows.Forms.Padding(0)
@@ -181,6 +181,7 @@ Partial Class Frm_Basic
         '
         'pan_SaisiePortee
         '
+        Me.pan_SaisiePortee.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisiePortee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
@@ -191,6 +192,8 @@ Partial Class Frm_Basic
         '
         'img_Portees
         '
+        Me.img_Portees.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_Portees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.img_Portees.Location = New System.Drawing.Point(251, 0)
         Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.img_Portees.Name = "img_Portees"

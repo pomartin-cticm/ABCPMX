@@ -77,6 +77,7 @@
     <Compile Include="Elements\Cls_OptionsCalcul.vb" />
     <Compile Include="Elements\Cls_Prop_Elastique.vb" />
     <Compile Include="Modules\Mod_CalculProprietes.vb" />
+    <Compile Include="Modules\Mod_Declarations.vb" />
     <Compile Include="Outils\Cls_LinesOfFile.vb" />
     <Compile Include="Outils\Mod_LectureFichier.vb" />
     <Compile Include="Classes\cls_Section.vb" />

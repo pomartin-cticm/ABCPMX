@@ -295,6 +295,11 @@ Public Class Frm_PMX
                 End If
 
             Case EnuFilleEnCours.Enrobage
+                If LogicielOptions.lFenetres Then
+                    Frm_Enrobage.ShowDialog()
+                Else
+
+                End If
 
             Case EnuFilleEnCours.Etaiement
                 If LogicielOptions.lFenetres Then
@@ -305,10 +310,40 @@ Public Class Frm_PMX
 
         End Select
 
+        MAJMainToolBar()
+
     End Sub
+
+    Private Sub MAJMainToolBar()
+
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees Then
+                Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_OK")
+            Else
+            If MyProjet.Poutres(MyProjet.IndEnCours).NouvellePoutre Then
+                Me.TSbtn_SaveN.Image = ImgList_Menu.Images("EnregistrerVierge")
+            Else
+
+                Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_NotOK")
+            End If
+        End If
+
+
+    End Sub
+
 
 #End Region
 
+#Region " Barre d'outils principale "
+
+    Private Sub TSbtn_SaveN_Click(sender As Object, e As EventArgs) Handles TSbtn_SaveN.Click
+
+        MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+        MAJMainToolBar()
+
+    End Sub
+
+#End Region
 
 #Region " Affichage des poutres du projet "
 
@@ -394,6 +429,7 @@ Public Class Frm_PMX
         Next
 
     End Sub
+
 
 
 #End Region

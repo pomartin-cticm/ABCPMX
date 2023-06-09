@@ -47,7 +47,7 @@ Public Class Frm_Basic
     End Sub
 
     Private Sub GestionStyle()
-
+        Me.Icon = Frm_PMX.Icon
     End Sub
 
     Private Sub AfficherPoutreEnCours()
@@ -101,4 +101,5 @@ Public Class Frm_Basic
 
 
 #End Region
+
 End Class

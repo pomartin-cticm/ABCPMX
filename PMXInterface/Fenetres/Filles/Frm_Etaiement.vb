@@ -9,6 +9,8 @@ Public Class Frm_Etaiement
 
     Dim MyPoutreLoc As New cls_Poutre
 
+    Const iFRMETAIEMENT As Integer = 2
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -21,7 +23,7 @@ Public Class Frm_Etaiement
         GestionStyle()
         GestionUnites()
         InitialiserVariables()
-        AfficherPoutreEnCours(sender, e)
+        AfficherPoutreEnCours()
         lBuild = False
     End Sub
 
@@ -70,6 +72,8 @@ Public Class Frm_Etaiement
         Me.img_Etaiement.Dock = DockStyle.Fill
         Me.img_Etaiement.BorderStyle = BorderStyle.FixedSingle
 
+        Me.chk_EtaisConsoleGauche.Enabled = MyPoutreLoc.lTraveeConsoleGauche
+        Me.chk_EtaisConsoleDroite.Enabled = MyPoutreLoc.lTraveeConsoleDroite
 
     End Sub
 
@@ -78,55 +82,75 @@ Public Class Frm_Etaiement
     End Sub
 
     Private Sub InitialiserVariables()
-        cls_Poutre.Clone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
+        cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
 
         Me.cmb_NbPoint.Items.Clear()
         For i As Integer = NBPROPPINGMIN To NBPROPPINGMAX
             Me.cmb_NbPoint.Items.Add(i)
         Next
+        Me.cmb_NbPoint.SelectedIndex = 0
+
     End Sub
 
-    Private Sub AfficherPoutreEnCours(sender As Object, e As EventArgs)
+    Private Sub AfficherPoutreEnCours()
 
-        With MyProjet.Poutres(MyProjet.IndEnCours)
+        With MyPoutreLoc
 
             Select Case .TypeEtaiement
 
                 Case .EnuTypeEtaiement.UnPropped
                     Me.rad_UnPropped.Checked = True
-                    Me.chk_EtaisConsoleGauche.Visible = False
-                    Me.chk_EtaisConsoleGauche.Checked = False
-                    Me.chk_EtaisConsoleDroite.Visible = False
-                    Me.chk_EtaisConsoleDroite.Checked = False
-                    Me.lbl_NbPP.Visible = False
-                    Me.cmb_NbPoint.Visible = False
-                    Me.cmb_NbPoint.SelectedItem = 0
+                    'Me.chk_EtaisConsoleGauche.Visible = False
+                    'Me.chk_EtaisConsoleGauche.Checked = False
+                    'Me.chk_EtaisConsoleDroite.Visible = False
+                    'Me.chk_EtaisConsoleDroite.Checked = False
+                    'Me.lbl_NbPP.Visible = False
+                    'Me.cmb_NbPoint.Visible = False
+                    'Me.cmb_NbPoint.SelectedItem = 0
 
                 Case .EnuTypeEtaiement.FullyPropped
                     Me.rad_FullyPropped.Checked = True
-                    Me.chk_EtaisConsoleGauche.Visible = False
-                    Me.chk_EtaisConsoleGauche.Checked = False
-                    Me.chk_EtaisConsoleDroite.Visible = False
-                    Me.chk_EtaisConsoleDroite.Checked = False
-                    Me.lbl_NbPP.Visible = False
-                    Me.cmb_NbPoint.Visible = False
-                    Me.cmb_NbPoint.SelectedItem = 0
+                    'Me.chk_EtaisConsoleGauche.Visible = False
+                    'Me.chk_EtaisConsoleGauche.Checked = False
+                    'Me.chk_EtaisConsoleDroite.Visible = False
+                    'Me.chk_EtaisConsoleDroite.Checked = False
+                    'Me.lbl_NbPP.Visible = False
+                    'Me.cmb_NbPoint.Visible = False
+                    'Me.cmb_NbPoint.SelectedItem = 0
 
                 Case .EnuTypeEtaiement.PointPropped
                     Me.rad_PointPropped.Checked = True
-                    Me.chk_EtaisConsoleGauche.Visible = True
-                    Me.chk_EtaisConsoleGauche.Checked = .lEtaisConsoleGauche
-                    Me.chk_EtaisConsoleDroite.Visible = True
-                    Me.chk_EtaisConsoleDroite.Checked = .lEtaisConsoleDroite
-                    Me.lbl_NbPP.Visible = True
-                    Me.cmb_NbPoint.Visible = True
+                    'Me.chk_EtaisConsoleGauche.Visible = True
+                    'Me.chk_EtaisConsoleDroite.Visible = True
+                    'Me.lbl_NbPP.Visible = True
+                    'Me.cmb_NbPoint.Visible = True
+
+                    If .lTraveeConsoleDroite Then
+                        Me.chk_EtaisConsoleDroite.Checked = False
+                    Else
+                        Me.chk_EtaisConsoleDroite.Checked = .lEtaisConsoleDroite
+                    End If
+                    If .lTraveeConsoleGauche Then
+                        Me.chk_EtaisConsoleGauche.Checked = False
+                    Else
+                        Me.chk_EtaisConsoleGauche.Checked = .lEtaisConsoleGauche
+                    End If
+
                     Me.cmb_NbPoint.SelectedItem = .pNbPropping
 
             End Select
 
         End With
 
-        rad_PointPropped_CheckedChanged(sender, e)
+        '??????????????????
+        'rad_PointPropped_CheckedChanged(sender, e)
+        MAJ_PointProps()
+
+    End Sub
+
+    Private Sub MAJ_PointProps()
+
+        Me.pan_PointProps.Visible = (MyPoutreLoc.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.PointPropped)
 
     End Sub
 
@@ -146,13 +170,14 @@ Public Class Frm_Etaiement
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
+
+            MyProjet.Poutres(MyProjet.IndEnCours).EstValidee(iFRMetaiement)
 
             Me.Close()
         End If
     End Sub
-
 
     Private Function ValideSaisieFenetre() As Boolean
         Return True
@@ -206,55 +231,58 @@ Public Class Frm_Etaiement
 
 #Region " Evènements "
     Private Sub rad_PointPropped_CheckedChanged(sender As Object, e As EventArgs) Handles rad_UnPropped.CheckedChanged, rad_FullyPropped.CheckedChanged, rad_PointPropped.CheckedChanged
+        If lBuild Then Exit Sub
+
         Select Case True
 
             Case rad_FullyPropped.Checked
                 MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.FullyPropped
 
-                Me.chk_EtaisConsoleGauche.Visible = False
-                Me.chk_EtaisConsoleGauche.Checked = False
-                Me.chk_EtaisConsoleDroite.Visible = False
-                Me.chk_EtaisConsoleDroite.Checked = False
-                Me.lbl_NbPP.Visible = False
-                Me.cmb_NbPoint.Visible = False
+                'Me.chk_EtaisConsoleGauche.Visible = False
+                'Me.chk_EtaisConsoleGauche.Checked = False
+                'Me.chk_EtaisConsoleDroite.Visible = False
+                'Me.chk_EtaisConsoleDroite.Checked = False
+                'Me.lbl_NbPP.Visible = False
+                'Me.cmb_NbPoint.Visible = False
 
             Case rad_UnPropped.Checked
                 MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.UnPropped
 
-                Me.chk_EtaisConsoleGauche.Visible = False
-                Me.chk_EtaisConsoleGauche.Checked = False
-                Me.chk_EtaisConsoleDroite.Visible = False
-                Me.chk_EtaisConsoleDroite.Checked = False
-                Me.lbl_NbPP.Visible = False
-                Me.cmb_NbPoint.Visible = False
+                'Me.chk_EtaisConsoleGauche.Visible = False
+                'Me.chk_EtaisConsoleGauche.Checked = False
+                'Me.chk_EtaisConsoleDroite.Visible = False
+                'Me.chk_EtaisConsoleDroite.Checked = False
+                'Me.lbl_NbPP.Visible = False
+                'Me.cmb_NbPoint.Visible = False
 
             Case rad_PointPropped.Checked
                 MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.PointPropped
 
-                Me.chk_EtaisConsoleGauche.Visible = True
-                If Not MyPoutreLoc.lTraveeConsoleGauche Then
-                    Me.chk_EtaisConsoleGauche.Enabled = False
-                    Me.chk_EtaisConsoleGauche.Checked = False
-                Else
-                    Me.chk_EtaisConsoleGauche.Enabled = True
-                    Me.chk_EtaisConsoleGauche.Checked = MyPoutreLoc.lEtaisConsoleGauche
-                End If
+                'Me.chk_EtaisConsoleGauche.Visible = True
+                'If Not MyPoutreLoc.lTraveeConsoleGauche Then
+                '    Me.chk_EtaisConsoleGauche.Enabled = False
+                '    Me.chk_EtaisConsoleGauche.Checked = False
+                'Else
+                '    Me.chk_EtaisConsoleGauche.Enabled = True
+                '    Me.chk_EtaisConsoleGauche.Checked = MyPoutreLoc.lEtaisConsoleGauche
+                'End If
 
-                Me.chk_EtaisConsoleDroite.Visible = True
-                If Not MyPoutreLoc.lTraveeConsoleDroite Then
-                    Me.chk_EtaisConsoleDroite.Enabled = False
-                    Me.chk_EtaisConsoleDroite.Checked = False
-                Else
-                    Me.chk_EtaisConsoleDroite.Enabled = True
-                    Me.chk_EtaisConsoleDroite.Checked = MyPoutreLoc.lEtaisConsoleDroite
-                End If
+                'Me.chk_EtaisConsoleDroite.Visible = True
+                'If Not MyPoutreLoc.lTraveeConsoleDroite Then
+                '    Me.chk_EtaisConsoleDroite.Enabled = False
+                '    Me.chk_EtaisConsoleDroite.Checked = False
+                'Else
+                '    Me.chk_EtaisConsoleDroite.Enabled = True
+                '    Me.chk_EtaisConsoleDroite.Checked = MyPoutreLoc.lEtaisConsoleDroite
+                'End If
 
-                Me.lbl_NbPP.Visible = True
-                Me.cmb_NbPoint.Visible = True
+                'Me.lbl_NbPP.Visible = True
+                'Me.cmb_NbPoint.Visible = True
 
         End Select
 
         img_Etaiement.Invalidate()
+        MAJ_PointProps()
 
     End Sub
 
@@ -277,4 +305,5 @@ Public Class Frm_Etaiement
 
 
 #End Region
+
 End Class

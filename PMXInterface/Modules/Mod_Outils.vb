@@ -421,6 +421,11 @@ Module Mod_Outils
 
             Case Enu_TypeVariable.Longueur
 
+                kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+            Case Enu_TypeVariable.Dimension
+
                 kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
                 Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 

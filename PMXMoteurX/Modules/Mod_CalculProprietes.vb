@@ -1,4 +1,5 @@
-﻿Module Mod_CalculProprietes
+﻿
+Module Mod_CalculProprietes
 
 #Region " Déclarations "
 
@@ -262,7 +263,7 @@
             Boucle += 1
             zANE = (zMin + zMax) / 2
             Mst = MomentStatique(MyModele, Signe, zANE)
-            If MSt > 0 Then
+            If Mst > 0 Then
                 zMin = zANE
             Else
                 zMax = zANE

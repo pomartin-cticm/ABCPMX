@@ -1,9 +1,17 @@
 ﻿Imports System.Collections.Specialized.BitVector32
+Imports System.Runtime.CompilerServices
 
 Public Class cls_Section
 
 
-#Region " Enumérations "
+#Region " Enumérations et structures "
+
+    Structure strucAcierLocal
+        Dim Nuance As String
+        Dim Qualite As String
+        Dim Reduc As String
+        Dim lAvailable As Boolean
+    End Structure
 
     Public Enum Enum_TypeSection
         Acier           ' Section acier
@@ -215,10 +223,7 @@ Public Class cls_Section
 
 #End Region
 
-
 #Region " Fonctions de calcul "
-
-
 
     ''' <summary>
     ''' Calcul des propriétés
@@ -282,9 +287,8 @@ Public Class cls_Section
     ''' <param name="s_origine"></param>
     ''' <param name="s_destination"></param>
     Public Shared Sub CloneSection(ByVal s_origine As cls_Section, ByRef s_destination As cls_Section)
-
         s_destination = s_origine.Clone()
-        s_destination.acier = s_origine.acier.Clone()
+        s_destination.Acier = s_origine.Acier.Clone()
 
         s_destination.enrobage_partiel = s_origine.enrobage_partiel.Clone()
         s_destination.enrobage_partiel.beton = s_origine.enrobage_partiel.beton.Clone()
@@ -332,14 +336,12 @@ Public Class cls_Section
 
         '--> Par défaut définition utilisateur de la section
         Me.lDatabase = True
-
-        Me.acier.Nuance = Nuance
-        Me.acier.Qualite = Qualite
-        Me.acier.Reduction = Reduction
-
-        Me.acier.Plages.Clear()
+        Me.Acier.Nuance = Nuance
+        Me.Acier.Qualite = Qualite
+        Me.Acier.Reduction = Reduction
+        Me.Acier.Plages.Clear()
         For i As Integer = 0 To MyPlages.Count - 1
-            Me.acier.Plages.Add(MyPlages(i))
+            Me.Acier.Plages.Add(MyPlages(i))
         Next
 
     End Sub
@@ -375,7 +377,7 @@ Public Class cls_Section
         'Lines.Add("   R             = " & Me.r_cs)
 
         '--> Acier
-        Me.acier.EcrireFile(Lines)
+        Me.Acier.EcrireFile(Lines)
 
         '--> Enrobage
         Me.enrobage_partiel.EcrireFile(Lines)
@@ -435,18 +437,18 @@ Public Class cls_Section
                         'Case "R" : Me.r_cs = Mots(nbMots)
                             '--> Acier
                         Case "NUAN"
-                            Me.acier.Nuance = ""
+                            Me.Acier.Nuance = ""
                             For z = 2 To nbMots
                                 If z = nbMots Then
-                                    Me.acier.Nuance += Mots(z)
+                                    Me.Acier.Nuance += Mots(z)
                                 Else
-                                    Me.acier.Nuance += Mots(z) + " "
+                                    Me.Acier.Nuance += Mots(z) + " "
                                 End If
                             Next
-                        Case "QUAL" : Me.acier.Qualite = Mots(nbMots)
-                        Case "FYW" : Me.acier.f_y.w = Mots(nbMots)
-                        Case "FYFS" : Me.acier.f_y.fs = Mots(nbMots)
-                        Case "FYFI" : Me.acier.f_y.fi = Mots(nbMots)
+                        Case "QUAL" : Me.Acier.Qualite = Mots(nbMots)
+                        Case "FYW" : Me.Acier.f_y.w = Mots(nbMots)
+                        Case "FYFS" : Me.Acier.f_y.fs = Mots(nbMots)
+                        Case "FYFI" : Me.Acier.f_y.fi = Mots(nbMots)
                             '--> Enrobage
                         Case "EB_C" : Me.enrobage_partiel.b_c = Mots(nbMots)
                        ' Case "EF_Y" : Me.enrobage_partiel.acier_armature = Mots(nbMots)
@@ -562,5 +564,173 @@ Public Class cls_Section
 
 #End Region
 
+#Region "   Recherche d'un acier compatible dans la base de données "
+
+    Public Sub AssocieAcierCompatible(ByVal FileSteels As String, ByVal FileProfiles As String, ByRef lTrouve As Boolean)
+        '--------------------------------------------------------------------------------
+        '
+        '   06/12/12 :  Création - POM - V3.00
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   Associe à une profilé le premier acier compatible dans la base de données
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   FileSteels      [E] :   Nom du fichier binaire base de données de aciers
+        '   FileProfiles    [E] :   Nom du fichier binaire base de données des profilés
+        '
+        '   lTrouve         [S] :   Indique si on a pu trouver un acier compatible
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   On prend le premier acier S355 disponible
+        '   et si on ne le trouve pas, le premier acier tout court
+        '
+        '--------------------------------------------------------------------------------
+
+        'Dim iAcier As Integer
+        'Dim MySteels As New List(Of strucAcierLocal)
+        'Dim SteelBase As strucBaseAciers
+        'Dim iStd As Short
+
+        'Me.ExtraireAciersCompatibles(FileSteels, FileProfiles, MySteels, SteelBase)
+
+        'Me.AnalyseAciersListe(MySteels, True, Cls_Acier.NUANCEDEFAULT, lTrouve, iAcier)
+
+        'If Not lTrouve Then
+        '    Me.AnalyseAciersListe(MySteels, False, "", lTrouve, iAcier)
+        'End If
+
+        'If lTrouve Then
+        '    Me.Acier.Nuance = MySteels(iAcier).Nuance
+        '    Me.Acier.Qualite = MySteels(iAcier).Qualite
+        '    Me.Acier.Reduction = MySteels(iAcier).Reduc
+        '    Me.Acier.EpMax = SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).EpMax
+        '    Me.Acier.iBase = SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).iBase
+        '    Me.Acier.iStandart = SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).StIndex
+
+        '    '==V4.00
+        '    iStd = SteelBase.IndexStd.IndexOf(SteelBase.Grades(Me.Acier.Nuance).Qualites(Me.Acier.Qualite).ReductionCurv(Me.Acier.Reduction).StIndex)
+        '    Me.Acier.iTabStandart = iStd
+
+        '    Me.Acier.Plages.Clear()
+
+        '    For i As Integer = 0 To SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).Plages.Count - 1
+        '        Me.Acier.Plages.Add(SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).Plages(i))
+        '    Next
+        'End If
+    End Sub
+
+    Private Sub AnalyseAciersListe(ByVal MySteels As List(Of strucAcierLocal), ByVal lImposedGrade As Boolean,
+                                   ByVal MyGrade As String, ByRef lTrouve As Boolean, ByRef iAcier As Integer)
+        '--------------------------------------------------------------------------------
+        '
+        '   21/12/12 :  Création - POM - V3.00
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   Extrait tous les aciers compatibles avec un profilé 
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   FileSteels      [E] :   Nom du fichier binaire base de données de aciers
+        '   FileProfiles    [E] :   Nom du fichier binaire base de données des profilés
+        '
+        '--------------------------------------------------------------------------------
+
+        iAcier = -1
+
+        lTrouve = False
+
+        Do While (Not lTrouve) And iAcier < MySteels.Count - 1
+            iAcier += 1
+            If lImposedGrade Then
+                lTrouve = (MySteels(iAcier).Nuance.Trim.ToUpper = MyGrade.ToUpper.Trim)
+            Else
+                lTrouve = True
+            End If
+        Loop
+    End Sub
+
+    Private Sub ExtraireAciersCompatibles(ByVal FileSteels As String, ByVal FileProfiles As String,
+                                          ByVal MySteels As List(Of strucAcierLocal), CorIndStd As Dictionary(Of Short, Short))
+        '--------------------------------------------------------------------------------
+        '
+        '   21/12/12 :  Création - POM - V3.00
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   Extrait tous les aciers compatibles avec un profilé 
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   MySteels        [E] :   Liste des aciers
+        '   lImposedGrade   [E] :   Indique si une nuance est imposée ou pas
+        '   MyGrade         [E] :   Nuance eventuellement imposée
+        '
+        '   lTrouve         [S] :   Indique si on a pu trouver un acier compatible
+        '
+        '
+        '--------------------------------------------------------------------------------
+
+        'Dim CorIndStd As Dictionary(Of Short, Short)
+        'Dim lCompatible As Boolean
+        'Dim EpMax As Double
+        'Dim lIsNuanceCompatibleProfile As Boolean
+        'Dim lAdd As Boolean
+        'Dim SteelLoc As strucAcierLocal
+        'Dim ListeSteel As New List(Of strucAcierLocal)
+        'Dim nbComp As Integer
+
+        ''--> Initialisation
+
+        ''InitialiseBaseAciers(FileSteels, MyConst.NFACCES, SteelBase)
+        'EpMax = Math.Max(Math.Max(Me.ProfilA.t_fi, Me.ProfilA.t_fs), Me.ProfilA.t_w)
+        ''GetTabCorrespondanceIndiceStandart(FileProfiles, CorIndStd)
+        'MySteels.Clear()
+        'ListeSteel.Clear()
+        'nbComp = 0
+
+        ''--> Boucle sur les aciers de la base
+
+        'For Each kvpGrade As KeyValuePair(Of String, strucGrade) In SteelBase.Grades
+
+        '    For Each kvpQualite As KeyValuePair(Of String, strucQualite) In kvpGrade.Value.Qualites
+
+        '        For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
+
+        '            lCompatible = SteelIsToCompatibleToProfile(EpMax, Me.iStandard, SteelBase, CorIndStd, kvpGrade.Key, kvpQualite.Key, kvpSteel.Key, OptionsDataBase.ChoiceSteel, lIsNuanceCompatibleProfile)
+
+        '            If lCompatible Then
+        '                SteelLoc.Nuance = kvpGrade.Key
+        '                SteelLoc.Qualite = kvpQualite.Key
+        '                SteelLoc.Reduc = kvpSteel.Key
+        '                SteelLoc.lAvailable = lIsNuanceCompatibleProfile
+        '                ListeSteel.Add(SteelLoc)
+        '                If lIsNuanceCompatibleProfile Then nbComp += 1
+        '            End If
+
+        '        Next
+        '    Next
+        'Next
+
+        'For i As Integer = 0 To ListeSteel.Count - 1
+        '    If Not ListeSteel(i).lAvailable Then
+        '        If (OptionsDataBase.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel) Then
+        '            lAdd = (nbComp = 0)
+        '        Else
+        '            lAdd = True
+        '        End If
+        '    Else
+        '        lAdd = True
+        '    End If
+        '    If lAdd Then
+        '        MySteels.Add(ListeSteel(i))
+        '    End If
+        'Next
+    End Sub
+
+#End Region
 
 End Class

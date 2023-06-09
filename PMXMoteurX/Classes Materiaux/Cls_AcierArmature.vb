@@ -31,7 +31,7 @@
 
     Public Sub New()
         Me.Classe = "B500"
-        Me.Es = Cls_Acier.EY
+        Me.Es = Cls_Acier.EYACIER
         MAJProprietes()
     End Sub
 
