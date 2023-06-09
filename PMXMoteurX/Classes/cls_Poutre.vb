@@ -80,9 +80,14 @@
     Public TypeEtaiement As EnuTypeEtaiement
 
     ''' <summary>
-    ''' Indique si présence d'étais aux extrémités des consoles 
+    ''' Indique si présence d'un étai à l'extrémité de la console gauche
     ''' </summary>
-    Public lEtaisConsole As Boolean
+    Public lEtaisConsoleGauche As Boolean
+
+    ''' <summary>
+    ''' Indique si présence d'un étai à l'extrémité de la console droite
+    ''' </summary>
+    Public lEtaisConsoleDroite As Boolean
 
     ''' <summary>
     ''' Nombre d'étais disposés par través entre deux appuis consécutifs
@@ -159,7 +164,8 @@
 
         TypeEtaiement = EnuTypeEtaiement.UnPropped
         pNbPropping = NBPROPPINGDEFAUT
-        lEtaisConsole = False
+        lEtaisConsoleGauche = False
+        lEtaisConsoleDroite = False
 
         lTremieGauche = False
         lTremieDroite = False

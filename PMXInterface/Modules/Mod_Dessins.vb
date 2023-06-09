@@ -868,12 +868,16 @@ Module Mod_Dessins
         DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
         '--> Représentation des étais d'extrémité
-        If MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.PointPropped And MyPoutre.lEtaisConsole Then
+        If MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.PointPropped And MyPoutre.lEtaisConsoleGauche Then
 
             If MyPoutre.lTraveeConsoleGauche Then
                 xo = MyPoutre.xPositionAppui(True, 0)
                 DessineEtais(MyGr, xo, dCarApp, MyParAff)
             End If
+
+        End If
+
+        If MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.PointPropped And MyPoutre.lEtaisConsoleDroite Then
 
             If MyPoutre.lTraveeConsoleDroite Then
                 xo = MyPoutre.xPositionAppui(False, MyPoutre.IndiceDerniereTravee)

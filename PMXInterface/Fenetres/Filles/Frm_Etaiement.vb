@@ -44,7 +44,8 @@ Public Class Frm_Etaiement
                 Me.rad_UnPropped.Text = Bloc("UNPROPPED")
                 Me.rad_FullyPropped.Text = Bloc("FULLYPROPPED")
                 Me.rad_PointPropped.Text = Bloc("POINTPROPPED")
-                Me.chk_EtaisConsole.Text = Bloc("ETAISCONSOLE")
+                Me.chk_EtaisConsoleGauche.Text = Bloc("ETAISCONSOLEGAUCHE")
+                Me.chk_EtaisConsoleDroite.Text = Bloc("ETAISCONSOLEDROITE")
                 Me.lbl_NbPP.Text = Bloc("NUMBPROPPING")
 
             Catch ex As Exception
@@ -93,27 +94,33 @@ Public Class Frm_Etaiement
 
                 Case .EnuTypeEtaiement.UnPropped
                     Me.rad_UnPropped.Checked = True
-                    Me.chk_EtaisConsole.Visible = False
-                    Me.chk_EtaisConsole.Checked = False
+                    Me.chk_EtaisConsoleGauche.Visible = False
+                    Me.chk_EtaisConsoleGauche.Checked = False
+                    Me.chk_EtaisConsoleDroite.Visible = False
+                    Me.chk_EtaisConsoleDroite.Checked = False
                     Me.lbl_NbPP.Visible = False
                     Me.cmb_NbPoint.Visible = False
-                    Me.cmb_NbPoint.Text = 0
+                    Me.cmb_NbPoint.SelectedItem = 0
 
                 Case .EnuTypeEtaiement.FullyPropped
                     Me.rad_FullyPropped.Checked = True
-                    Me.chk_EtaisConsole.Visible = False
-                    Me.chk_EtaisConsole.Checked = False
+                    Me.chk_EtaisConsoleGauche.Visible = False
+                    Me.chk_EtaisConsoleGauche.Checked = False
+                    Me.chk_EtaisConsoleDroite.Visible = False
+                    Me.chk_EtaisConsoleDroite.Checked = False
                     Me.lbl_NbPP.Visible = False
                     Me.cmb_NbPoint.Visible = False
-                    Me.cmb_NbPoint.Text = 0
+                    Me.cmb_NbPoint.SelectedItem = 0
 
                 Case .EnuTypeEtaiement.PointPropped
                     Me.rad_PointPropped.Checked = True
-                    Me.chk_EtaisConsole.Visible = True
-                    Me.chk_EtaisConsole.Checked = .lEtaisConsole
+                    Me.chk_EtaisConsoleGauche.Visible = True
+                    Me.chk_EtaisConsoleGauche.Checked = .lEtaisConsoleGauche
+                    Me.chk_EtaisConsoleDroite.Visible = True
+                    Me.chk_EtaisConsoleDroite.Checked = .lEtaisConsoleDroite
                     Me.lbl_NbPP.Visible = True
                     Me.cmb_NbPoint.Visible = True
-                    Me.cmb_NbPoint.Text = .pNbPropping
+                    Me.cmb_NbPoint.SelectedItem = .pNbPropping
 
             End Select
 
@@ -161,14 +168,20 @@ Public Class Frm_Etaiement
                 lModif = True
                 .TypeEtaiement = MyPoutreLoc.TypeEtaiement
                 .pNbPropping = 0
-                .lEtaisConsole = False
+                .lEtaisConsoleGauche = False
+                .lEtaisConsoleDroite = False
 
             ElseIf MyPoutreLoc.TypeEtaiement = .EnuTypeEtaiement.PointPropped Then
                 .TypeEtaiement = MyPoutreLoc.TypeEtaiement
 
-                If .lEtaisConsole <> MyPoutreLoc.lEtaisConsole Then
+                If .lEtaisConsoleGauche <> MyPoutreLoc.lEtaisConsoleGauche Then
                     lModif = True
-                    .lEtaisConsole = MyPoutreLoc.lEtaisConsole
+                    .lEtaisConsoleGauche = MyPoutreLoc.lEtaisConsoleGauche
+                End If
+
+                If .lEtaisConsoleDroite <> MyPoutreLoc.lEtaisConsoleDroite Then
+                    lModif = True
+                    .lEtaisConsoleDroite = MyPoutreLoc.lEtaisConsoleDroite
                 End If
 
                 If .pNbPropping <> MyPoutreLoc.pNbPropping Then
@@ -198,29 +211,42 @@ Public Class Frm_Etaiement
             Case rad_FullyPropped.Checked
                 MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.FullyPropped
 
-                Me.chk_EtaisConsole.Visible = False
-                Me.chk_EtaisConsole.Checked = False
+                Me.chk_EtaisConsoleGauche.Visible = False
+                Me.chk_EtaisConsoleGauche.Checked = False
+                Me.chk_EtaisConsoleDroite.Visible = False
+                Me.chk_EtaisConsoleDroite.Checked = False
                 Me.lbl_NbPP.Visible = False
                 Me.cmb_NbPoint.Visible = False
 
             Case rad_UnPropped.Checked
                 MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.UnPropped
 
-                Me.chk_EtaisConsole.Visible = False
-                Me.chk_EtaisConsole.Checked = False
+                Me.chk_EtaisConsoleGauche.Visible = False
+                Me.chk_EtaisConsoleGauche.Checked = False
+                Me.chk_EtaisConsoleDroite.Visible = False
+                Me.chk_EtaisConsoleDroite.Checked = False
                 Me.lbl_NbPP.Visible = False
                 Me.cmb_NbPoint.Visible = False
 
             Case rad_PointPropped.Checked
                 MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.PointPropped
 
-                Me.chk_EtaisConsole.Visible = True
-                If Not MyPoutreLoc.lTraveeConsoleDroite And Not MyPoutreLoc.lTraveeConsoleGauche Then
-                    Me.chk_EtaisConsole.Enabled = False
-                    Me.chk_EtaisConsole.Checked = False
+                Me.chk_EtaisConsoleGauche.Visible = True
+                If Not MyPoutreLoc.lTraveeConsoleGauche Then
+                    Me.chk_EtaisConsoleGauche.Enabled = False
+                    Me.chk_EtaisConsoleGauche.Checked = False
                 Else
-                    Me.chk_EtaisConsole.Enabled = True
-                    Me.chk_EtaisConsole.Checked = MyPoutreLoc.lEtaisConsole
+                    Me.chk_EtaisConsoleGauche.Enabled = True
+                    Me.chk_EtaisConsoleGauche.Checked = MyPoutreLoc.lEtaisConsoleGauche
+                End If
+
+                Me.chk_EtaisConsoleDroite.Visible = True
+                If Not MyPoutreLoc.lTraveeConsoleDroite Then
+                    Me.chk_EtaisConsoleDroite.Enabled = False
+                    Me.chk_EtaisConsoleDroite.Checked = False
+                Else
+                    Me.chk_EtaisConsoleDroite.Enabled = True
+                    Me.chk_EtaisConsoleDroite.Checked = MyPoutreLoc.lEtaisConsoleDroite
                 End If
 
                 Me.lbl_NbPP.Visible = True
@@ -232,14 +258,15 @@ Public Class Frm_Etaiement
 
     End Sub
 
-    Private Sub chk_EtaisConsole_CheckedChanged(sender As Object, e As EventArgs) Handles chk_EtaisConsole.CheckedChanged
-        MyPoutreLoc.lEtaisConsole = chk_EtaisConsole.Checked
+    Private Sub chk_EtaisConsole_CheckedChanged(sender As Object, e As EventArgs) Handles chk_EtaisConsoleGauche.CheckedChanged, chk_EtaisConsoleDroite.CheckedChanged
+        MyPoutreLoc.lEtaisConsoleGauche = chk_EtaisConsoleGauche.Checked
+        MyPoutreLoc.lEtaisConsoleDroite = chk_EtaisConsoleDroite.Checked
 
         img_Etaiement.Invalidate()
     End Sub
 
     Private Sub cmb_NbPoint_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbPoint.TextChanged
-        MyPoutreLoc.pNbPropping = cmb_NbPoint.Text
+        MyPoutreLoc.pNbPropping = cmb_NbPoint.SelectedItem
 
         img_Etaiement.Invalidate()
     End Sub

@@ -206,7 +206,7 @@ Public Class Frm_AjoutePP
         MySectionSAB.ProfilA.Plat_t = 0.03
         MySectionSAB.ProfilA.Plat_b = 0.45
 
-        '--> Définition de la section SFB non mixte
+        '--> Définition de la section SFB mixte
         MySectionSFBmixte.typeSection = cls_Section.Enum_TypeSection.SFBmixte
         MySectionSFBmixte.ProfilA.t_fs = 0.03
         MySectionSFBmixte.ProfilA.t_fi = 0.03
@@ -218,8 +218,9 @@ Public Class Frm_AjoutePP
         MySectionSFBmixte.Dalle.t_d = 0.05
         MySectionSFBmixte.Dalle.Beff = 0.75
 
-        '--> Définition de la section SAB non mixte
+        '--> Définition de la section SAB mixte
         MySectionSABmixte.typeSection = cls_Section.Enum_TypeSection.SABmixte
+        MySectionSABmixte.ProfilA.t_w = 0.015
         MySectionSABmixte.ProfilA.b_fs *= 5 / 8
         MySectionSABmixte.ProfilA.t_fs = 0.03
         MySectionSABmixte.ProfilA.t_fi = 0.03

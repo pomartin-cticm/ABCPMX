@@ -33,13 +33,14 @@ Partial Class Frm_Etaiement
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Etaiement = New System.Windows.Forms.Label()
         Me.pan_SaisieEtaiement = New System.Windows.Forms.Panel()
-        Me.chk_EtaisConsole = New System.Windows.Forms.CheckBox()
+        Me.chk_EtaisConsoleDroite = New System.Windows.Forms.CheckBox()
+        Me.lbl_NbPP = New System.Windows.Forms.Label()
+        Me.chk_EtaisConsoleGauche = New System.Windows.Forms.CheckBox()
         Me.cmb_NbPoint = New System.Windows.Forms.ComboBox()
         Me.rad_PointPropped = New System.Windows.Forms.RadioButton()
         Me.rad_FullyPropped = New System.Windows.Forms.RadioButton()
         Me.rad_UnPropped = New System.Windows.Forms.RadioButton()
         Me.img_Etaiement = New System.Windows.Forms.PictureBox()
-        Me.lbl_NbPP = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -58,7 +59,7 @@ Partial Class Frm_Etaiement
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(800, 450)
+        Me.pan_General.Size = New System.Drawing.Size(800, 362)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -73,7 +74,7 @@ Partial Class Frm_Etaiement
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(800, 450)
+        Me.TLpan_Main.Size = New System.Drawing.Size(800, 362)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -87,7 +88,7 @@ Partial Class Frm_Etaiement
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 413)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 325)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -126,7 +127,7 @@ Partial Class Frm_Etaiement
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(794, 404)
+        Me.pan_Main.Size = New System.Drawing.Size(794, 316)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Etaiement
@@ -142,7 +143,7 @@ Partial Class Frm_Etaiement
         Me.TLPan_Etaiement.Name = "TLPan_Etaiement"
         Me.TLPan_Etaiement.RowCount = 1
         Me.TLPan_Etaiement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Etaiement.Size = New System.Drawing.Size(792, 402)
+        Me.TLPan_Etaiement.Size = New System.Drawing.Size(792, 314)
         Me.TLPan_Etaiement.TabIndex = 0
         '
         'pan_Gauche
@@ -153,7 +154,7 @@ Partial Class Frm_Etaiement
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(250, 402)
+        Me.pan_Gauche.Size = New System.Drawing.Size(250, 314)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -169,7 +170,7 @@ Partial Class Frm_Etaiement
         Me.TLPan_Gauche.RowCount = 2
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 402)
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 314)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_Etaiement
@@ -188,8 +189,9 @@ Partial Class Frm_Etaiement
         'pan_SaisieEtaiement
         '
         Me.pan_SaisieEtaiement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieEtaiement.Controls.Add(Me.chk_EtaisConsoleDroite)
         Me.pan_SaisieEtaiement.Controls.Add(Me.lbl_NbPP)
-        Me.pan_SaisieEtaiement.Controls.Add(Me.chk_EtaisConsole)
+        Me.pan_SaisieEtaiement.Controls.Add(Me.chk_EtaisConsoleGauche)
         Me.pan_SaisieEtaiement.Controls.Add(Me.cmb_NbPoint)
         Me.pan_SaisieEtaiement.Controls.Add(Me.rad_PointPropped)
         Me.pan_SaisieEtaiement.Controls.Add(Me.rad_FullyPropped)
@@ -197,23 +199,43 @@ Partial Class Frm_Etaiement
         Me.pan_SaisieEtaiement.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieEtaiement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieEtaiement.Name = "pan_SaisieEtaiement"
-        Me.pan_SaisieEtaiement.Size = New System.Drawing.Size(250, 372)
+        Me.pan_SaisieEtaiement.Size = New System.Drawing.Size(250, 284)
         Me.pan_SaisieEtaiement.TabIndex = 1
         '
-        'chk_EtaisConsole
+        'chk_EtaisConsoleDroite
         '
-        Me.chk_EtaisConsole.AutoSize = True
-        Me.chk_EtaisConsole.Location = New System.Drawing.Point(52, 160)
-        Me.chk_EtaisConsole.Name = "chk_EtaisConsole"
-        Me.chk_EtaisConsole.Size = New System.Drawing.Size(111, 17)
-        Me.chk_EtaisConsole.TabIndex = 5
-        Me.chk_EtaisConsole.Text = "chk_EtaisConsole"
-        Me.chk_EtaisConsole.UseVisualStyleBackColor = True
+        Me.chk_EtaisConsoleDroite.AutoSize = True
+        Me.chk_EtaisConsoleDroite.Location = New System.Drawing.Point(52, 176)
+        Me.chk_EtaisConsoleDroite.Name = "chk_EtaisConsoleDroite"
+        Me.chk_EtaisConsoleDroite.Size = New System.Drawing.Size(139, 17)
+        Me.chk_EtaisConsoleDroite.TabIndex = 7
+        Me.chk_EtaisConsoleDroite.Text = "chk_EtaisConsoleDroite"
+        Me.chk_EtaisConsoleDroite.UseVisualStyleBackColor = True
+        '
+        'lbl_NbPP
+        '
+        Me.lbl_NbPP.AutoSize = True
+        Me.lbl_NbPP.Location = New System.Drawing.Point(49, 210)
+        Me.lbl_NbPP.Name = "lbl_NbPP"
+        Me.lbl_NbPP.Size = New System.Drawing.Size(51, 13)
+        Me.lbl_NbPP.TabIndex = 6
+        Me.lbl_NbPP.Text = "lbl_NbPP"
+        '
+        'chk_EtaisConsoleGauche
+        '
+        Me.chk_EtaisConsoleGauche.AutoSize = True
+        Me.chk_EtaisConsoleGauche.Location = New System.Drawing.Point(52, 153)
+        Me.chk_EtaisConsoleGauche.Name = "chk_EtaisConsoleGauche"
+        Me.chk_EtaisConsoleGauche.Size = New System.Drawing.Size(149, 17)
+        Me.chk_EtaisConsoleGauche.TabIndex = 5
+        Me.chk_EtaisConsoleGauche.Text = "chk_EtaisConsoleGauche"
+        Me.chk_EtaisConsoleGauche.UseVisualStyleBackColor = True
         '
         'cmb_NbPoint
         '
+        Me.cmb_NbPoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbPoint.FormattingEnabled = True
-        Me.cmb_NbPoint.Location = New System.Drawing.Point(52, 214)
+        Me.cmb_NbPoint.Location = New System.Drawing.Point(52, 238)
         Me.cmb_NbPoint.Name = "cmb_NbPoint"
         Me.cmb_NbPoint.Size = New System.Drawing.Size(111, 21)
         Me.cmb_NbPoint.TabIndex = 3
@@ -221,7 +243,7 @@ Partial Class Frm_Etaiement
         'rad_PointPropped
         '
         Me.rad_PointPropped.AutoSize = True
-        Me.rad_PointPropped.Location = New System.Drawing.Point(79, 126)
+        Me.rad_PointPropped.Location = New System.Drawing.Point(52, 108)
         Me.rad_PointPropped.Name = "rad_PointPropped"
         Me.rad_PointPropped.Size = New System.Drawing.Size(110, 17)
         Me.rad_PointPropped.TabIndex = 2
@@ -232,7 +254,7 @@ Partial Class Frm_Etaiement
         'rad_FullyPropped
         '
         Me.rad_FullyPropped.AutoSize = True
-        Me.rad_FullyPropped.Location = New System.Drawing.Point(79, 87)
+        Me.rad_FullyPropped.Location = New System.Drawing.Point(52, 69)
         Me.rad_FullyPropped.Name = "rad_FullyPropped"
         Me.rad_FullyPropped.Size = New System.Drawing.Size(107, 17)
         Me.rad_FullyPropped.TabIndex = 1
@@ -243,7 +265,7 @@ Partial Class Frm_Etaiement
         'rad_UnPropped
         '
         Me.rad_UnPropped.AutoSize = True
-        Me.rad_UnPropped.Location = New System.Drawing.Point(79, 51)
+        Me.rad_UnPropped.Location = New System.Drawing.Point(52, 33)
         Me.rad_UnPropped.Name = "rad_UnPropped"
         Me.rad_UnPropped.Size = New System.Drawing.Size(100, 17)
         Me.rad_UnPropped.TabIndex = 0
@@ -260,20 +282,11 @@ Partial Class Frm_Etaiement
         Me.img_Etaiement.TabIndex = 1
         Me.img_Etaiement.TabStop = False
         '
-        'lbl_NbPP
-        '
-        Me.lbl_NbPP.AutoSize = True
-        Me.lbl_NbPP.Location = New System.Drawing.Point(49, 198)
-        Me.lbl_NbPP.Name = "lbl_NbPP"
-        Me.lbl_NbPP.Size = New System.Drawing.Size(51, 13)
-        Me.lbl_NbPP.TabIndex = 6
-        Me.lbl_NbPP.Text = "lbl_NbPP"
-        '
         'Frm_Etaiement
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(800, 362)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Etaiement"
         Me.Text = "Frm_Etaiement"
@@ -308,6 +321,7 @@ Partial Class Frm_Etaiement
     Friend WithEvents rad_PointPropped As RadioButton
     Friend WithEvents rad_FullyPropped As RadioButton
     Friend WithEvents cmb_NbPoint As ComboBox
-    Friend WithEvents chk_EtaisConsole As CheckBox
+    Friend WithEvents chk_EtaisConsoleGauche As CheckBox
     Friend WithEvents lbl_NbPP As Label
+    Friend WithEvents chk_EtaisConsoleDroite As CheckBox
 End Class
