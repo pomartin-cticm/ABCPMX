@@ -204,7 +204,7 @@
 
 #Region " Fonction de copie "
 
-    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+    Public Function Clone() '--> Utilisé pour dupliquer la classe
         Return Me.MemberwiseClone()
     End Function
 

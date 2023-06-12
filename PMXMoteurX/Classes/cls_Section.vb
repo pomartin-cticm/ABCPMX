@@ -225,6 +225,8 @@ Public Class cls_Section
 
 #Region " Fonctions de calcul "
 
+
+
     ''' <summary>
     ''' Calcul des propriétés
     ''' </summary>
@@ -248,11 +250,11 @@ Public Class cls_Section
         If Me.lEnrobage Then
 
             enrobage_partiel.Calcul_Proprietes()
-            enrobage_partiel.beton.Calcul_Proprietes()
+            enrobage_partiel.Beton.Calcul_Proprietes()
 
             Dim h_w As Decimal = ProfilA.HauteurAmeHw
             Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.b_c - ProfilA.t_w) - (4 - Math.PI) * ProfilA.r_cs ^ 2) / (2 * h_w)
-            Param.Prop_Elastique_Enrobage.Calcul_Coeff(E, enrobage_partiel.beton.Fcm, enrobage_partiel.beton.Ecm)
+            Param.Prop_Elastique_Enrobage.Calcul_Coeff(E, enrobage_partiel.Beton.Fcm, enrobage_partiel.Beton.Ecm)
 
         End If
 
@@ -291,9 +293,7 @@ Public Class cls_Section
         s_destination.Acier = s_origine.Acier.Clone()
 
         s_destination.enrobage_partiel = s_origine.enrobage_partiel.Clone()
-        s_destination.enrobage_partiel.beton = s_origine.enrobage_partiel.beton.Clone()
-        s_destination.enrobage_partiel.arma_longi_inf = s_origine.enrobage_partiel.arma_longi_inf.Clone()
-        s_destination.enrobage_partiel.arma_longi_sup = s_origine.enrobage_partiel.arma_longi_sup.Clone()
+        s_destination.enrobage_partiel.Beton = s_origine.enrobage_partiel.Beton.Clone()
 
         's_destination.dalle = s_origine.dalle.Clone()
         's_destination.dalle.beton = s_origine.dalle.beton.Clone()
@@ -453,21 +453,10 @@ Public Class cls_Section
                         Case "EB_C" : Me.enrobage_partiel.b_c = Mots(nbMots)
                        ' Case "EF_Y" : Me.enrobage_partiel.acier_armature = Mots(nbMots)
                             '--> Béton enrobage
-                        Case "EBTY" : Me.enrobage_partiel.beton.Type = Mots(nbMots)
-                        Case "EBCL" : Me.enrobage_partiel.beton.Classe = Mots(nbMots)
-                        Case "EBFC" : Me.enrobage_partiel.beton.Fck = Mots(nbMots)
-                            '--> Armature Inf enrobage
-                        Case "EABC" : Me.enrobage_partiel.arma_longi_inf.c_s = Mots(nbMots)
-                        Case "EABD" : Me.enrobage_partiel.arma_longi_inf.PhiS = Mots(nbMots)
-                        Case "EABN" : Me.enrobage_partiel.arma_longi_inf.n_s = Mots(nbMots)
-                        Case "EABE" : Me.enrobage_partiel.arma_longi_inf.EspBar = Mots(nbMots)
-                        Case "EABZ" : Me.enrobage_partiel.arma_longi_inf.z_s = Mots(nbMots)
-                              '--> Armature Sup enrobage
-                        Case "EAHC" : Me.enrobage_partiel.arma_longi_sup.c_s = Mots(nbMots)
-                        Case "EAHD" : Me.enrobage_partiel.arma_longi_sup.PhiS = Mots(nbMots)
-                        Case "EAHN" : Me.enrobage_partiel.arma_longi_sup.n_s = Mots(nbMots)
-                        Case "EAHE" : Me.enrobage_partiel.arma_longi_sup.EspBar = Mots(nbMots)
-                        Case "EAHZ" : Me.enrobage_partiel.arma_longi_sup.z_s = Mots(nbMots)
+                        Case "EBTY" : Me.enrobage_partiel.Beton.Type = Mots(nbMots)
+                        Case "EBCL" : Me.enrobage_partiel.Beton.Classe = Mots(nbMots)
+                        Case "EBFC" : Me.enrobage_partiel.Beton.Fck = Mots(nbMots)
+
 
                     End Select
                 End If
@@ -492,17 +481,99 @@ Public Class cls_Section
 
         With Me.enrobage_partiel
 
-            .LitsArma(0).zArma = -Me.ProfilA.ha + Me.ProfilA.t_fi + .Etriers_EnrobageZ + .Etriers_Phi + .LitsArma(0).Phi / 2
+            .LitsArmaOLD(0).zArma = -Me.ProfilA.ha + Me.ProfilA.t_fi + .Etriers_EnrobageZ + .Etriers_Phi + .LitsArmaOLD(0).Phi / 2
 
-            .LitsArma(2).zArma = -Me.ProfilA.t_fs - .Etriers_EnrobageZ - .Etriers_Phi - .LitsArma(2).Phi / 2
+            .LitsArmaOLD(2).zArma = -Me.ProfilA.t_fs - .Etriers_EnrobageZ - .Etriers_Phi - .LitsArmaOLD(2).Phi / 2
 
-            .LitsArma(1).zArma = (.LitsArma(0).zArma + .LitsArma(2).zArma) / 2
+            .LitsArmaOLD(1).zArma = (.LitsArmaOLD(0).zArma + .LitsArmaOLD(2).zArma) / 2
 
         End With
 
     End Sub
 
+    ''' <summary>
+    ''' Renvoie la position z d'un lit d'armature dans l'enrobage
+    ''' </summary>
+    ''' <param name="iArma"></param>
+    ''' <returns></returns>
+    Public Function zPositionLitArmaEnrobage(iArma As Integer) As Decimal
+        '------------------------------------------------------------------------------------------------------------
+        '   12/06/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------
+        '   Renvoie la position z d'un lit d'armature de l'enrobage partiel (z pondéré)
+        '------------------------------------------------------------------------------------------------------------
+        '   iArma   [E] :   Indice du lit d'armature (0: inférieur / 1: central / 2: supérieur)
+        '------------------------------------------------------------------------------------------------------------
 
+        Dim zPos As Decimal
+        Dim DeltaZ As Double
+
+        DeltaZ = Me.enrobage_partiel.LitArma(iArma).NbExt * Me.enrobage_partiel.LitArma(iArma).PhiExt ^ 3 / 8
+        DeltaZ += Me.enrobage_partiel.LitArma(iArma).NbMil * Me.enrobage_partiel.LitArma(iArma).PhiMil ^ 3 / 8
+        DeltaZ += Me.enrobage_partiel.LitArma(iArma).NbInt * Me.enrobage_partiel.LitArma(iArma).PhiInt ^ 3 / 8
+
+        DeltaZ = DeltaZ * Math.PI / Me.enrobage_partiel.LitArma(iArma).Aire
+
+        Select Case iArma
+            Case 0
+                zPos = +DeltaZ - Me.ProfilA.ha + Me.ProfilA.t_fi _
+                     + Me.enrobage_partiel.Etriers_EnrobageZ + Me.enrobage_partiel.Etriers_Phi
+
+            Case 1
+                zPos = -Me.enrobage_partiel.LitArma(iArma).zPosRatio * Me.ProfilA.ha
+            Case 2
+                zPos = -DeltaZ - Me.ProfilA.t_fs _
+                     - Me.enrobage_partiel.Etriers_EnrobageZ - Me.enrobage_partiel.Etriers_Phi
+        End Select
+
+        Return zPos
+    End Function
+
+    Public Function zPosArmaEnrobage(iArma As Integer, iPos As Integer, iBarre As Integer) As Decimal
+        '--------------------------------------------------------------------------------------------
+        '   12/06/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Renvoie la position z d'une barre d'armature longi de l'enrobage
+        '--------------------------------------------------------------------------------------------
+        '   iArma       [E] :   Indique lit d'armature (0: inférieur/ 1: milieu/ 2: supérieur)
+        '   iPos        [E] :   Position des barres (0: extérieur/ 1: centre / 2: intérieur)
+        '   iBarre      [E] :   Indice de la barre dans la grappe, de 1 à 3
+        '--------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim zPos As Decimal
+        Dim PhiA, PhiE As Decimal
+        Dim Uz As Decimal
+
+        '--> Intialisations
+
+        Uz = Me.enrobage_partiel.Etriers_EnrobageZ
+        PhiE = Me.enrobage_partiel.Etriers_Phi
+        Select Case iPos
+            Case 0 : PhiA = Me.enrobage_partiel.LitArma(iArma).PhiExt
+            Case 1 : PhiA = Me.enrobage_partiel.LitArma(iArma).PhiMil
+            Case 2 : PhiA = Me.enrobage_partiel.LitArma(iArma).PhiInt
+        End Select
+        '--> Traitement
+
+        Select Case iArma
+
+            Case 0
+                '-- LIT INFERIEUR---------------------------
+                zPos = -Me.ProfilA.ha + Me.ProfilA.t_fi + Uz + PhiE + PhiA / 2
+                If iBarre = 3 Then zPos += PhiA * Math.Sqrt(3) / 2
+            Case 1
+                '-- LIT CENTRAL ----------------------------
+                zPos = zPositionLitArmaEnrobage(1)
+            Case 2
+                '-- LIT SUPERIEUR---------------------------
+                zPos = -Me.ProfilA.t_fs - Uz - PhiE - PhiA / 2
+                If iBarre = 3 Then zPos -= PhiA * Math.Sqrt(3) / 2
+        End Select
+
+        Return zPos
+    End Function
 
 #End Region
 

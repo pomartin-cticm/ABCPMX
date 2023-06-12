@@ -136,6 +136,30 @@ Namespace My
                 Me("indUnitLongueur") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("2")>  _
+        Public Property indUnitContraintes() As Integer
+            Get
+                Return CType(Me("indUnitContraintes"),Integer)
+            End Get
+            Set
+                Me("indUnitContraintes") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+        Public Property indUnitModuleY() As Integer
+            Get
+                Return CType(Me("indUnitModuleY"),Integer)
+            End Get
+            Set
+                Me("indUnitModuleY") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

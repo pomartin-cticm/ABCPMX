@@ -133,8 +133,8 @@ Public Class Frm_Portees
 
         End With
 
-        MAJ_PorteesConsoles()
-        MAJ_Tremies()
+        MAJI_PorteesConsoles()
+        MAJI_Tremies()
 
     End Sub
 
@@ -476,11 +476,11 @@ Public Class Frm_Portees
                 iSelect = 99
         End Select
 
-        MAJ_PorteesConsoles()
+        MAJI_PorteesConsoles()
         Me.img_Portees.Invalidate()
     End Sub
 
-    Private Sub MAJ_PorteesConsoles()
+    Private Sub MAJI_PorteesConsoles()
 
         Me.txt_PorteeConsoleG.Visible = MyPoutreLoc.lTraveeConsoleGauche
         Me.etq_UnitL2.Visible = MyPoutreLoc.lTraveeConsoleGauche
@@ -517,11 +517,11 @@ Public Class Frm_Portees
 
         End Select
 
-        MAJ_Tremies()
+        MAJI_Tremies()
 
     End Sub
 
-    Private Sub MAJ_Tremies()
+    Private Sub MAJI_Tremies()
 
         Me.txt_TremieGauche.Visible = MyPoutreLoc.lTremieGauche
         Me.etq_UnitL6.Visible = MyPoutreLoc.lTremieGauche

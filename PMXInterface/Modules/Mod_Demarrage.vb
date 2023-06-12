@@ -106,8 +106,13 @@ Module Mod_Demarrage
             LogicielOptions.IndLangueNDC = Array.IndexOf(LogicielInfo.ListeLangueNDC, LogicielInfo.ListeLangueNDC(My.Settings.IndLangueNDC))
 
             '--> Unités
+            '# Dimensions Longueurs
             LogicielOptions.IndUnitDimension = Array.IndexOf(LogicielInfo.Unit_Longueur, LogicielInfo.Unit_Longueur(My.Settings.indUnitDimension))
             LogicielOptions.IndUnitLongueur = Array.IndexOf(LogicielInfo.Unit_Longueur, LogicielInfo.Unit_Longueur(My.Settings.indUnitLongueur))
+
+            '# Contraintes et module d'élasticité
+            LogicielOptions.IndUnitContraintes = Array.IndexOf(LogicielInfo.Unit_Contraintes, LogicielInfo.Unit_Contraintes(My.Settings.indUnitContraintes))
+            LogicielOptions.IndUnitModulesY = Array.IndexOf(LogicielInfo.Unit_ModulesY, LogicielInfo.Unit_ModulesY(My.Settings.indUnitmoduley))
 
             '--> Fichiers récents
             LogicielFichiers.RecentFiles = New List(Of String)

@@ -12,6 +12,34 @@ LASTVERSION				= You work on the last version of the software
 AGREE					= Accept
 EXIT					= Exit
 
+
+#FRM_ENROBAGE
+TITLE					= Definition of partial encasement
+OK						= OK
+CANCEL					= Cancel 
+DIMENSIONS				= Dimensions
+WIDTH					= Width
+ETRIERS					= Stirrups
+TYPEE					= Type 
+DIAMETER				= Diameter
+LONGIREBAR				= Longitudinal reinforcement
+STEEL 					= Steel of the reinforcement
+CONCRETE				= Concrete
+CLASS					= Class
+NUMBER					= Number
+EXTERNAL				= External
+INTERNAL				= Internal
+MIDDLE					= Middle
+NONE					= None
+SINGLE					= Single
+DOUBLE					= Double
+TRIPLE					= Triple
+LOWERLAYER				= Lower layer
+MIDDLELAYER				= Central layer
+UPPERLAYER				= Upper layer
+POSITION				= Position
+COVERAGE				= Coverage
+
 #FRM_MAIN
 FILE					= File
 RECENTFILES				= Recent Files

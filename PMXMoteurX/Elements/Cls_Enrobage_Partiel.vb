@@ -13,6 +13,8 @@ Public Class Cls_Enrobage_Partiel
         Dim zArma As Decimal
     End Structure
 
+    Const PhiEtriersDEF As Decimal = 0.006
+
     Enum EnuTypeEtriers
         Cadre
         CadreTraversant
@@ -26,7 +28,7 @@ Public Class Cls_Enrobage_Partiel
     ''' <summary>
     ''' Définiton des lits d'armatures longitudinales
     ''' </summary>
-    Public LitsArma(2) As struc_LitArma
+    Public LitsArmaOLD(2) As struc_LitArma
 
     ''' <summary>
     ''' Indique si armatures de construction dans le lit inf
@@ -60,6 +62,8 @@ Public Class Cls_Enrobage_Partiel
     ''' </summary>
     Public Etriers_EnrobageY As Decimal
 
+    Private pEtriers_EnrobYinterne As Decimal
+
     ''' <summary>
     ''' Enrobage des barres d'étriers // Z (vertical)
     ''' </summary>
@@ -70,19 +74,14 @@ Public Class Cls_Enrobage_Partiel
 #Region " Elements de l'enrobage "
 
     ''' <summary>
-    ''' Armatures longitudinales supérieur
+    ''' Lits d'armature longitudinale (O inférieure / 1 milieu / 2 supérieure)
     ''' </summary>
-    Public arma_longi_sup As New Cls_Armatures_Longi
-
-    ''' <summary>
-    ''' Armatures longitudinales inférieur
-    ''' </summary>
-    Public arma_longi_inf As New Cls_Armatures_Longi
+    Public LitArma(2) As Cls_ArmatureEnrobage
 
     ''' <summary>
     ''' béton de l'enrobage
     ''' </summary>
-    Public beton As New Cls_Beton
+    Public Beton As New Cls_Beton
 
     ''' <summary>
     ''' Acier des armatures
@@ -91,22 +90,27 @@ Public Class Cls_Enrobage_Partiel
 
 #End Region
 
-#Region " Fonction de calcul "
+#Region " Fonctions et outils "
 
     ''' <summary>
     ''' Calcul des propriétés
     ''' </summary>
     Public Sub Calcul_Proprietes()
 
-        With arma_longi_sup
-            .A_s = .n_s * Math.PI * .PhiS ^ 2 / 2
-        End With
 
-        With arma_longi_inf
-            .A_s = .n_s * Math.PI * .PhiS ^ 2 / 2
-        End With
 
     End Sub
+
+    ''' <summary>
+    ''' Renvoie l'enrobage //yy des étriers par rapport à l'âme du profilé
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Etriers_EnrobageYinterne As Decimal
+        Get
+            Return pEtriers_EnrobYinterne
+        End Get
+    End Property
+
 
 #End Region
 
@@ -114,38 +118,41 @@ Public Class Cls_Enrobage_Partiel
 
     Sub New()
 
-
         'Me.b_c = 0.192
 
         Me.Ratio_bc = 1
         Me.Etriers_EnrobageY = 0.01
         Me.Etriers_EnrobageZ = 0.01
-        Me.Etriers_Phi = 0.006
-
-        Me.arma_longi_inf.n_s = 1
-        Me.Etriers_Phi = 0.006
+        Me.pEtriers_EnrobYinterne = 0.01
+        Me.Etriers_Phi = PhiEtriersDEF
 
         Me.Etriers_Type = EnuTypeEtriers.Cadre
 
+        '--> Armatures longitudinales
+
+        For i As Integer = 0 To 2
+            Me.LitArma(i) = New Cls_ArmatureEnrobage
+        Next
+
         '--> Lit d'armatures inférieur
 
-        Me.LitsArma(0).Phi = 0.008
-        Me.LitsArma(0).lArma = True
-        Me.LitsArma(0).nbArma = 2
+        Me.LitsArmaOLD(0).Phi = 0.008
+        Me.LitsArmaOLD(0).lArma = True
+        Me.LitsArmaOLD(0).nbArma = 2
         Me.lArmaConst = False
         ConstPhi = 0.008
 
         '--> Lit intermédiaire
 
-        Me.LitsArma(1).Phi = 0.008
-        Me.LitsArma(1).lArma = False
-        Me.LitsArma(1).nbArma = 2
+        Me.LitsArmaOLD(1).Phi = 0.008
+        Me.LitsArmaOLD(1).lArma = False
+        Me.LitsArmaOLD(1).nbArma = 2
 
         '--> Lit d'armatures supérieur
 
-        Me.LitsArma(2).Phi = 0.008
-        Me.LitsArma(2).lArma = True
-        Me.LitsArma(2).nbArma = 2
+        Me.LitsArmaOLD(2).Phi = 0.008
+        Me.LitsArmaOLD(2).lArma = True
+        Me.LitsArmaOLD(2).nbArma = 2
 
         Me.Beton = New Cls_Beton()
 
@@ -164,27 +171,27 @@ Public Class Cls_Enrobage_Partiel
         Lines.Add("   Eb_c          = " & b_c)
         ' Lines.Add("   Ef_y          = " & acier_armature)
 
-        With beton
-            Lines.Add("   EBType        = " & .type)
-            Lines.Add("   EBClasse      = " & .classe)
+        With Beton
+            Lines.Add("   EBType        = " & .Type)
+            Lines.Add("   EBClasse      = " & .Classe)
             Lines.Add("   EBFck         = " & .Fck)
         End With
 
-        With arma_longi_inf
-            Lines.Add("   EABc          = " & .c_s)
-            Lines.Add("   EABd          = " & .PhiS)
-            Lines.Add("   EABn          = " & .n_s)
-            Lines.Add("   EABz          = " & .z_s)
-            Lines.Add("   EABe          = " & .EspBar)
-        End With
+        'With arma_longi_inf
+        '    Lines.Add("   EABc          = " & .c_s)
+        '    Lines.Add("   EABd          = " & .PhiS)
+        '    Lines.Add("   EABn          = " & .n_s)
+        '    Lines.Add("   EABz          = " & .z_s)
+        '    Lines.Add("   EABe          = " & .EspBar)
+        'End With
 
-        With arma_longi_sup
-            Lines.Add("   EAHc          = " & .c_s)
-            Lines.Add("   EAHd          = " & .PhiS)
-            Lines.Add("   EAHn          = " & .n_s)
-            Lines.Add("   EAHz          = " & .z_s)
-            Lines.Add("   EAHe          = " & .EspBar)
-        End With
+        'With arma_longi_sup
+        '    Lines.Add("   EAHc          = " & .c_s)
+        '    Lines.Add("   EAHd          = " & .PhiS)
+        '    Lines.Add("   EAHn          = " & .n_s)
+        '    Lines.Add("   EAHz          = " & .z_s)
+        '    Lines.Add("   EAHe          = " & .EspBar)
+        'End With
 
     End Sub
 
@@ -199,7 +206,8 @@ Public Class Cls_Enrobage_Partiel
     Public Shared Sub DeepCopie(EnrobageSource As Cls_Enrobage_Partiel, ByRef EnrobageCible As Cls_Enrobage_Partiel)
 
         EnrobageCible = EnrobageSource.Clone
-        EnrobageCible.LitsArma = EnrobageSource.LitsArma.Clone
+        EnrobageCible.LitsArmaOLD = EnrobageSource.LitsArmaOLD.Clone
+        EnrobageCible.Beton = EnrobageSource.Beton.Clone
 
     End Sub
 

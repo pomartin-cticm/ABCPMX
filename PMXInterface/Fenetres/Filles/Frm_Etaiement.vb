@@ -100,30 +100,12 @@ Public Class Frm_Etaiement
 
                 Case .EnuTypeEtaiement.UnPropped
                     Me.rad_UnPropped.Checked = True
-                    'Me.chk_EtaisConsoleGauche.Visible = False
-                    'Me.chk_EtaisConsoleGauche.Checked = False
-                    'Me.chk_EtaisConsoleDroite.Visible = False
-                    'Me.chk_EtaisConsoleDroite.Checked = False
-                    'Me.lbl_NbPP.Visible = False
-                    'Me.cmb_NbPoint.Visible = False
-                    'Me.cmb_NbPoint.SelectedItem = 0
 
                 Case .EnuTypeEtaiement.FullyPropped
                     Me.rad_FullyPropped.Checked = True
-                    'Me.chk_EtaisConsoleGauche.Visible = False
-                    'Me.chk_EtaisConsoleGauche.Checked = False
-                    'Me.chk_EtaisConsoleDroite.Visible = False
-                    'Me.chk_EtaisConsoleDroite.Checked = False
-                    'Me.lbl_NbPP.Visible = False
-                    'Me.cmb_NbPoint.Visible = False
-                    'Me.cmb_NbPoint.SelectedItem = 0
 
                 Case .EnuTypeEtaiement.PointPropped
                     Me.rad_PointPropped.Checked = True
-                    'Me.chk_EtaisConsoleGauche.Visible = True
-                    'Me.chk_EtaisConsoleDroite.Visible = True
-                    'Me.lbl_NbPP.Visible = True
-                    'Me.cmb_NbPoint.Visible = True
 
                     If .lTraveeConsoleDroite Then
                         Me.chk_EtaisConsoleDroite.Checked = False
@@ -142,13 +124,11 @@ Public Class Frm_Etaiement
 
         End With
 
-        '??????????????????
-        'rad_PointPropped_CheckedChanged(sender, e)
-        MAJ_PointProps()
+        MAJI_PointProps()
 
     End Sub
 
-    Private Sub MAJ_PointProps()
+    Private Sub MAJI_PointProps()
 
         Me.pan_PointProps.Visible = (MyPoutreLoc.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.PointPropped)
 
@@ -173,7 +153,7 @@ Public Class Frm_Etaiement
                 MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
 
-            MyProjet.Poutres(MyProjet.IndEnCours).EstValidee(iFRMetaiement)
+            MyProjet.Poutres(MyProjet.IndEnCours).EstValidee(iFRMETAIEMENT)
 
             Me.Close()
         End If
@@ -282,7 +262,7 @@ Public Class Frm_Etaiement
         End Select
 
         img_Etaiement.Invalidate()
-        MAJ_PointProps()
+        MAJI_PointProps()
 
     End Sub
 

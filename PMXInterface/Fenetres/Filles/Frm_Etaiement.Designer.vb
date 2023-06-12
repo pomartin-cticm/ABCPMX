@@ -33,15 +33,15 @@ Partial Class Frm_Etaiement
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Etaiement = New System.Windows.Forms.Label()
         Me.pan_SaisieEtaiement = New System.Windows.Forms.Panel()
-        Me.chk_EtaisConsoleDroite = New System.Windows.Forms.CheckBox()
-        Me.lbl_NbPP = New System.Windows.Forms.Label()
-        Me.chk_EtaisConsoleGauche = New System.Windows.Forms.CheckBox()
-        Me.cmb_NbPoint = New System.Windows.Forms.ComboBox()
         Me.rad_PointPropped = New System.Windows.Forms.RadioButton()
         Me.rad_FullyPropped = New System.Windows.Forms.RadioButton()
         Me.rad_UnPropped = New System.Windows.Forms.RadioButton()
-        Me.img_Etaiement = New System.Windows.Forms.PictureBox()
         Me.pan_PointProps = New System.Windows.Forms.Panel()
+        Me.cmb_NbPoint = New System.Windows.Forms.ComboBox()
+        Me.chk_EtaisConsoleDroite = New System.Windows.Forms.CheckBox()
+        Me.lbl_NbPP = New System.Windows.Forms.Label()
+        Me.chk_EtaisConsoleGauche = New System.Windows.Forms.CheckBox()
+        Me.img_Etaiement = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -50,8 +50,8 @@ Partial Class Frm_Etaiement
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_SaisieEtaiement.SuspendLayout()
-        CType(Me.img_Etaiement, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_PointProps.SuspendLayout()
+        CType(Me.img_Etaiement, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -202,44 +202,6 @@ Partial Class Frm_Etaiement
         Me.pan_SaisieEtaiement.Size = New System.Drawing.Size(250, 259)
         Me.pan_SaisieEtaiement.TabIndex = 1
         '
-        'chk_EtaisConsoleDroite
-        '
-        Me.chk_EtaisConsoleDroite.AutoSize = True
-        Me.chk_EtaisConsoleDroite.Location = New System.Drawing.Point(4, 44)
-        Me.chk_EtaisConsoleDroite.Name = "chk_EtaisConsoleDroite"
-        Me.chk_EtaisConsoleDroite.Size = New System.Drawing.Size(139, 17)
-        Me.chk_EtaisConsoleDroite.TabIndex = 7
-        Me.chk_EtaisConsoleDroite.Text = "chk_EtaisConsoleDroite"
-        Me.chk_EtaisConsoleDroite.UseVisualStyleBackColor = True
-        '
-        'lbl_NbPP
-        '
-        Me.lbl_NbPP.AutoSize = True
-        Me.lbl_NbPP.Location = New System.Drawing.Point(1, 78)
-        Me.lbl_NbPP.Name = "lbl_NbPP"
-        Me.lbl_NbPP.Size = New System.Drawing.Size(51, 13)
-        Me.lbl_NbPP.TabIndex = 6
-        Me.lbl_NbPP.Text = "lbl_NbPP"
-        '
-        'chk_EtaisConsoleGauche
-        '
-        Me.chk_EtaisConsoleGauche.AutoSize = True
-        Me.chk_EtaisConsoleGauche.Location = New System.Drawing.Point(4, 21)
-        Me.chk_EtaisConsoleGauche.Name = "chk_EtaisConsoleGauche"
-        Me.chk_EtaisConsoleGauche.Size = New System.Drawing.Size(149, 17)
-        Me.chk_EtaisConsoleGauche.TabIndex = 5
-        Me.chk_EtaisConsoleGauche.Text = "chk_EtaisConsoleGauche"
-        Me.chk_EtaisConsoleGauche.UseVisualStyleBackColor = True
-        '
-        'cmb_NbPoint
-        '
-        Me.cmb_NbPoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_NbPoint.FormattingEnabled = True
-        Me.cmb_NbPoint.Location = New System.Drawing.Point(68, 97)
-        Me.cmb_NbPoint.Name = "cmb_NbPoint"
-        Me.cmb_NbPoint.Size = New System.Drawing.Size(111, 21)
-        Me.cmb_NbPoint.TabIndex = 3
-        '
         'rad_PointPropped
         '
         Me.rad_PointPropped.AutoSize = True
@@ -273,6 +235,56 @@ Partial Class Frm_Etaiement
         Me.rad_UnPropped.Text = "rad_UnPropped"
         Me.rad_UnPropped.UseVisualStyleBackColor = True
         '
+        'pan_PointProps
+        '
+        Me.pan_PointProps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_PointProps.Controls.Add(Me.cmb_NbPoint)
+        Me.pan_PointProps.Controls.Add(Me.chk_EtaisConsoleDroite)
+        Me.pan_PointProps.Controls.Add(Me.lbl_NbPP)
+        Me.pan_PointProps.Controls.Add(Me.chk_EtaisConsoleGauche)
+        Me.pan_PointProps.Location = New System.Drawing.Point(8, 105)
+        Me.pan_PointProps.Name = "pan_PointProps"
+        Me.pan_PointProps.Size = New System.Drawing.Size(232, 132)
+        Me.pan_PointProps.TabIndex = 8
+        '
+        'cmb_NbPoint
+        '
+        Me.cmb_NbPoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_NbPoint.FormattingEnabled = True
+        Me.cmb_NbPoint.Location = New System.Drawing.Point(68, 97)
+        Me.cmb_NbPoint.Name = "cmb_NbPoint"
+        Me.cmb_NbPoint.Size = New System.Drawing.Size(111, 21)
+        Me.cmb_NbPoint.TabIndex = 3
+        '
+        'chk_EtaisConsoleDroite
+        '
+        Me.chk_EtaisConsoleDroite.AutoSize = True
+        Me.chk_EtaisConsoleDroite.Location = New System.Drawing.Point(4, 44)
+        Me.chk_EtaisConsoleDroite.Name = "chk_EtaisConsoleDroite"
+        Me.chk_EtaisConsoleDroite.Size = New System.Drawing.Size(139, 17)
+        Me.chk_EtaisConsoleDroite.TabIndex = 7
+        Me.chk_EtaisConsoleDroite.Text = "chk_EtaisConsoleDroite"
+        Me.chk_EtaisConsoleDroite.UseVisualStyleBackColor = True
+        '
+        'lbl_NbPP
+        '
+        Me.lbl_NbPP.AutoSize = True
+        Me.lbl_NbPP.Location = New System.Drawing.Point(1, 78)
+        Me.lbl_NbPP.Name = "lbl_NbPP"
+        Me.lbl_NbPP.Size = New System.Drawing.Size(51, 13)
+        Me.lbl_NbPP.TabIndex = 6
+        Me.lbl_NbPP.Text = "lbl_NbPP"
+        '
+        'chk_EtaisConsoleGauche
+        '
+        Me.chk_EtaisConsoleGauche.AutoSize = True
+        Me.chk_EtaisConsoleGauche.Location = New System.Drawing.Point(4, 21)
+        Me.chk_EtaisConsoleGauche.Name = "chk_EtaisConsoleGauche"
+        Me.chk_EtaisConsoleGauche.Size = New System.Drawing.Size(149, 17)
+        Me.chk_EtaisConsoleGauche.TabIndex = 5
+        Me.chk_EtaisConsoleGauche.Text = "chk_EtaisConsoleGauche"
+        Me.chk_EtaisConsoleGauche.UseVisualStyleBackColor = True
+        '
         'img_Etaiement
         '
         Me.img_Etaiement.BackColor = System.Drawing.SystemColors.ControlLightLight
@@ -282,18 +294,6 @@ Partial Class Frm_Etaiement
         Me.img_Etaiement.Size = New System.Drawing.Size(100, 50)
         Me.img_Etaiement.TabIndex = 1
         Me.img_Etaiement.TabStop = False
-        '
-        'pan_PointProps
-        '
-        Me.pan_PointProps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_PointProps.Controls.Add(Me.cmb_NbPoint)
-        Me.pan_PointProps.Controls.Add(Me.chk_EtaisConsoleDroite)
-        Me.pan_PointProps.Controls.Add(Me.lbl_NbPP)
-        Me.pan_PointProps.Controls.Add(Me.chk_EtaisConsoleGauche)
-        Me.pan_PointProps.Location = New System.Drawing.Point(8, 107)
-        Me.pan_PointProps.Name = "pan_PointProps"
-        Me.pan_PointProps.Size = New System.Drawing.Size(237, 132)
-        Me.pan_PointProps.TabIndex = 8
         '
         'Frm_Etaiement
         '
@@ -317,9 +317,9 @@ Partial Class Frm_Etaiement
         Me.TLPan_Gauche.PerformLayout()
         Me.pan_SaisieEtaiement.ResumeLayout(False)
         Me.pan_SaisieEtaiement.PerformLayout()
-        CType(Me.img_Etaiement, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_PointProps.ResumeLayout(False)
         Me.pan_PointProps.PerformLayout()
+        CType(Me.img_Etaiement, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

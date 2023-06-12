@@ -271,9 +271,9 @@ Partial Class Frm_Portees
         Me.pan_SaisiePortee.Controls.Add(Me.lbl_MainSpan)
         Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
-        Me.pan_SaisiePortee.Size = New System.Drawing.Size(250, 170)
+        Me.pan_SaisiePortee.Size = New System.Drawing.Size(250, 169)
         Me.pan_SaisiePortee.TabIndex = 1
         '
         'etq_UnitL3
@@ -504,7 +504,7 @@ Partial Class Frm_Portees
         'img_Portees
         '
         Me.img_Portees.Location = New System.Drawing.Point(1, 0)
-        Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
         Me.img_Portees.Name = "img_Portees"
         Me.img_Portees.Size = New System.Drawing.Size(100, 50)
         Me.img_Portees.TabIndex = 1

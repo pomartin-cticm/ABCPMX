@@ -214,7 +214,6 @@ Module Mod_Declarations
 
 #End Region
 
-
 #Region " Paramètres de STYLE "
 
     '== Palette CTICM
@@ -236,6 +235,8 @@ Module Mod_Declarations
     Public CouleurBackBandeaux As Color = BlueAM     ' SystemColors.ControlDarkDark
     Public CouleurForeBandeaux As Color = SystemColors.ControlLightLight
 
+    Public CouleurReadOnly As Color = GrayAM     ' SystemColors.ControlDark
+
     Public LargeurColonneSaisie As Integer = 250
 
     Public ColorSelect As Color = Color.DarkRed
@@ -254,6 +255,7 @@ Module Mod_Declarations
     Public CouleurTremieNormal As Color = Color.White
     Public CouleurArmaNormal As Color = Color.LightSlateGray
     Public CouleurArmaSelect As Color = Color.DarkOrange
+
 
 
 #End Region

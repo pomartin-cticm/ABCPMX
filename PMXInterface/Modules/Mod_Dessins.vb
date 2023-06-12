@@ -19,7 +19,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Dessin réactif de la section acier et de l'enrobage partiel
     ''' </summary>
-    Public Sub DessinFrmEnrobage(ByRef MyGr As Graphics, ByVal section As cls_Section, MyEnr As Cls_Enrobage_Partiel,
+    Public Sub DessinFrmEnrobage(ByRef MyGr As Graphics, ByVal section As cls_Section, MyEnrob As Cls_Enrobage_Partiel,
                                  ByVal pWi As Decimal, ByVal pHi As Decimal,
                                  kAdjust As Double, lCote As Boolean, lAffSymbol As Boolean, iSelect As Integer,
                                  ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
@@ -30,7 +30,8 @@ Module Mod_Dessins
         '   Représente la section acier + l'enrobage partiel
         '---------------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   
+        '   section     [E] :
+        '   MyEnro      [E] :   
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   lCote       [E] :   Indique si affichage de la cote
@@ -51,42 +52,103 @@ Module Mod_Dessins
         Dim yMin, yMax As Decimal
         Dim dCar As Decimal
         Dim Profile As New cls_ProfilA
-        Profile = section.ProfilA.clone
+        Profile = section.ProfilA.Clone
         Dim lLam As Boolean = (Profile.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
 
         Dim ColorLocalEtriers As Color = CouleurArmaNormal      'ColorEtriers
         Dim ColorLocalArma(2) As Color
+        Dim CouleurBeton As Color = CouleurBetonNormal
+        Dim CouleurAcier As Color = CouleurAcierNormal
+        Dim pColorLocalArma(2, 2) As Color
 
-        Dim zREF As Decimal = -Profile.ha / 2
+        Dim zREF As Decimal = 0
+        Dim i, j As Integer
 
-        '--> Initialisation
+        '--> Initialisation des couleurs
+
+        For i = 0 To 2
+            For j = 0 To 2
+                pColorLocalArma(i, j) = CouleurArmaNormal
+            Next
+        Next
+
         Select Case iSelect
-            Case 1, 2, 3 : ColorLocalEtriers = CouleurArmaNormal ' ColorEtriersSelect
+            Case 0
+                CouleurBeton = CouleurBetonSelect
+                CouleurAcier = CouleurAcierSelect
+            Case 1, 2, 3, 4 : ColorLocalEtriers = CouleurArmaSelect
+
+            Case 5, 7
+                For j = 0 To 2
+                    pColorLocalArma(1, j) = CouleurArmaSelect
+                Next
+            Case 6
+                For j = 0 To 2
+                    pColorLocalArma(0, j) = CouleurArmaSelect
+                Next
+            Case 8
+                For j = 0 To 2
+                    pColorLocalArma(2, j) = CouleurArmaSelect
+                Next
+
+            Case 10, 20
+                pColorLocalArma(0, 0) = CouleurArmaSelect
+
+            Case 11, 21
+                pColorLocalArma(0, 1) = CouleurArmaSelect
+
+            Case 12, 22
+                pColorLocalArma(0, 2) = CouleurArmaSelect
+
+            Case 13, 23
+                pColorLocalArma(1, 0) = CouleurArmaSelect
+
+            Case 14, 24
+                pColorLocalArma(1, 1) = CouleurArmaSelect
+
+            Case 15, 25
+                pColorLocalArma(1, 2) = CouleurArmaSelect
+
+            Case 16, 26
+                pColorLocalArma(2, 0) = CouleurArmaSelect
+
+            Case 17, 27
+                pColorLocalArma(2, 1) = CouleurArmaSelect
+
+            Case 18, 28
+                pColorLocalArma(2, 2) = CouleurArmaSelect
+
         End Select
-        For i As Integer = 0 To 2
+        For i = 0 To 2
             ColorLocalArma(i) = CouleurArmaNormal
         Next
 
         '--> Préparation des Pinceaux utilisés dans le dessin
 
         ' Profilé
-        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcierNormal)
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
         ' Béton
-        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBetonNormal)
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
         ' Etriers
         Dim myBrushE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
         ' Armatures 
-        Dim myBrushA(2) As Brush
-        For i As Integer = 0 To 2
-            myBrushA(i) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalArma(i), ColorLocalArma(i))
+        Dim myBrushASup(2) As Brush
+        Dim myBrushAMid(2) As Brush
+        Dim myBrushAInf(2) As Brush
+        For j = 0 To 2
+            'myBrushA(i) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalArma(i), ColorLocalArma(i))
+            myBrushASup(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(0, j), pColorLocalArma(0, j))
+            myBrushAMid(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(1, j), pColorLocalArma(1, j))
+            myBrushAInf(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(2, j), pColorLocalArma(2, j))
+
         Next
 
         '--> Initialisation des paramètres d'affichage
 
-        yMin = -Profile.ha / 2
+        yMin = -Profile.ha
         xMin = -Math.Max(Profile.b_fs, Profile.b_fi) / 2
         xMax = -xMin
-        yMax = -yMin
+        yMax = 0
 
         'If lCote Then
         dCar = Math.Sqrt((Profile.ha ^ 2 + (Profile.b_fs + Profile.b_fi) ^ 2)) / 20
@@ -100,7 +162,7 @@ Module Mod_Dessins
 
         '--> Dessin de béton
 
-        DessinEnrobagePartielBeton(MyGr, section, MyParAffE, myBrushB, zREF)
+        DessinEnrobagePartielBeton(MyGr, section.ProfilA, MyEnrob.Ratio_bc, MyParAffE, myBrushB)
 
         '--> Dessin de la section acier
 
@@ -108,18 +170,20 @@ Module Mod_Dessins
 
         '--> Dessin des étriers
 
-        DessinEtriers(MyGr, section.ProfilA, MyEnr, MyParAffE, myBrushE, zREF)
+        DessinEtriers(MyGr, section.ProfilA, MyEnrob, MyParAffE, myBrushE, zREF)
 
         '--> Dessin des armatures longitudinales
 
-        DessinArmaLongiEnrobage(MyGr, section, MyParAffE, myBrushA(0), 0)
-        DessinArmaLongiEnrobage(MyGr, section, MyParAffE, myBrushA(1), 1)
-        DessinArmaLongiEnrobage(MyGr, section, MyParAffE, myBrushA(1), 2)
+        DessinArmaLongiEnrobageN(MyGr, section, MyEnrob, MyParAffE, myBrushASup, 0)
+
+        DessinArmaLongiEnrobageN(MyGr, section, MyEnrob, MyParAffE, myBrushAMid, 1)
+
+        DessinArmaLongiEnrobageN(MyGr, section, MyEnrob, MyParAffE, myBrushAInf, 2)
 
         '--> Cotation
 
         If lCote Then
-            DessinCoteFrmEnrobage(MyGr, section, iSelect, zREF, dCar, lAffSymbol, MyParAffE)
+            DessinCoteFrmEnrobage(MyGr, section, MyEnrob, iSelect, zREF, dCar, lAffSymbol, MyParAffE)
         End If
 
         '--> Fin
@@ -130,7 +194,8 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinCoteFrmEnrobage(ByRef MyGr As Graphics, ByVal section As cls_Section, iSelect As Integer, zRef As Decimal, dCar As Decimal,
+    Private Sub DessinCoteFrmEnrobage(ByRef MyGr As Graphics, ByVal section As cls_Section, enrobage As Cls_Enrobage_Partiel,
+                                      iSelect As Integer, zRef As Decimal, dCar As Decimal,
                                       lAffSymbol As Boolean, MyParAffLoc As Struc_Affichage)
         '---------------------------------------------------------------------------------------------------------------------------
         '   05/05/23    :   Création - POM
@@ -158,39 +223,51 @@ Module Mod_Dessins
         Dim Bc, Uy, Uz, PhiE As Decimal
         Dim Bf, Tw, Tf, Rc As Decimal
         Dim lLam As Boolean = section.lLamine
+        Dim lContour As Boolean = lCONTOURCOTE
+        Dim iArma As Integer
+
+        '--> Initialisation
+
+        Uy = enrobage.Etriers_EnrobageY
+        PhiE = enrobage.Etriers_Phi
+        Bc = section.ProfilA.b_fs * enrobage.Ratio_bc
+        Uz = enrobage.Etriers_EnrobageZ
+        Bf = section.ProfilA.b_fs
+        Tw = section.ProfilA.t_w
+        Rc = section.ProfilA.r_cs
+        Tf = section.ProfilA.t_fs
+
+        '--> Affichage des cotes
 
         '# Bc
 
-        MyColor = StyleCouleur(iSelect, 0)
-        MyPen.Color = MyColor
+        If iSelect = 0 Then
+            MyColor = StyleCouleur(iSelect, 0)
+            MyPen.Color = MyColor
 
-        Bc = section.ProfilA.b_fs * section.enrobage_partiel.Ratio_bc
+            xo = -Bc / 2
+            xe = xo - dCar / 2
+            yo = -(section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.8
+            ye = yo
 
-        xo = -Bc / 2
-        xe = xo - dCar / 2
-        yo = (section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.8
-        ye = yo
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
 
-        AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
+            xo = Bc / 2
+            xe = xo + dCar
 
-        xo = Bc / 2
-        xe = xo + dCar
-
-        AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
-        If lAffSymbol Then Chaine = "bc" Else Chaine = GetStringNoUnit(Bc, Enu_TypeVariable.Dimension)
-        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen)
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
+            If lAffSymbol Then Chaine = "bc" Else Chaine = GetStringNoUnit(Bc, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+        End If
 
         '# PhiEtriers
 
         MyColor = StyleCouleur(iSelect, 1)
         MyPen.Color = MyColor
 
-        Uy = section.enrobage_partiel.Etriers_EnrobageY
-        PhiE = section.enrobage_partiel.Etriers_Phi
-
         xo = -Bc / 2 + Uy + PhiE
         xe = xo + dCar / 2
-        yo = (section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.6
+        yo = -(section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.6
         ye = yo
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
 
@@ -199,7 +276,7 @@ Module Mod_Dessins
 
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
         If lAffSymbol Then Chaine = "Phie" Else Chaine = GetStringNoUnit(PhiE, Enu_TypeVariable.Dimension)
-        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         '# UyEtriers
 
@@ -208,7 +285,7 @@ Module Mod_Dessins
 
         xo = -Bc / 2 + Uy
         xe = xo + dCar / 2
-        yo = (section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.4
+        yo = -(section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.4
         ye = yo
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
 
@@ -217,39 +294,33 @@ Module Mod_Dessins
 
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
         If lAffSymbol Then Chaine = "uy" Else Chaine = GetStringNoUnit(Uy, Enu_TypeVariable.Dimension)
-        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         '# UzEtries
 
         MyColor = StyleCouleur(iSelect, 3)
         MyPen.Color = MyColor
 
-        Uz = section.enrobage_partiel.Etriers_EnrobageZ
-        Bf = section.ProfilA.b_fs
-        Tw = section.ProfilA.t_w
-        Rc = section.ProfilA.r_cs
-        Tf = section.ProfilA.t_fs
-
         xo = -Tw / 2 - Rc - ((Bf - Tw) / 2 - Rc) / 2
         xe = xo
-        yo = section.ProfilA.ha / 2 - Uz - Tf
+        yo = -Uz - Tf
         ye = yo - dCar / 2
 
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
 
-        yo = section.ProfilA.ha / 2 - Tf
+        yo = -Tf
         ye = yo + dCar
 
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
         If lAffSymbol Then Chaine = "uz" Else Chaine = GetStringNoUnit(Uz, Enu_TypeVariable.Dimension)
-        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         '# Bf
 
         MyColor = StyleCouleur(0, -1)
         MyPen.Color = MyColor
 
-        yo = -section.ProfilA.ha / 2 - dCar
+        yo = -section.ProfilA.ha - dCar
         ye = yo
         xo = section.ProfilA.b_fi / 2
         xe = -xo
@@ -261,14 +332,61 @@ Module Mod_Dessins
         End If
 
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, True)
-        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        '# Position z du lit central
+
+        If (iSelect = 5) Or (iSelect = 105) Or (iSelect = 115) Then
+
+            Select Case iSelect
+                Case 105 : iArma = 0
+                Case 5 : iArma = 1
+                Case 115 : iArma = 2
+            End Select
+            Dim zPos As Decimal = section.zPositionLitArmaEnrobage(iArma)
+
+            MyColor = StyleCouleur(iSelect, iSelect)
+            MyPen.Color = MyColor
+
+            xo = section.ProfilA.b_fi / 2 - Uy - PhiE - enrobage.LitArma(iArma).PhiExt / 2
+            xe = section.ProfilA.b_fi / 2 + dCar
+            yo = zPos
+            ye = zPos
+
+            AddLigne(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc)
+
+            xo = xe
+            ye = 0
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, True)
+
+            If lAffSymbol Then
+                Chaine = "z"
+            Else
+                Chaine = GetStringNoUnit(Math.Abs(zPos), Enu_TypeVariable.Dimension)
+            End If
+
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, (yo + ye) / 2, MyParAffLoc, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+        End If
+
+        '# Propriétés acier
+
+        If iSelect = 200 Then
+            MyColor = StyleCouleur(iSelect, 200)
+            MyPen.Color = MyColor
+        End If
+
+        '# Propriétés béton
+
+        If iSelect = 201 Then
+            MyColor = StyleCouleur(iSelect, 201)
+            MyPen.Color = MyColor
+        End If
 
     End Sub
 
 #End Region
 
 #Region " Outils pour le dessin des étriers "
-
 
     ''' <summary>
     ''' Dessine les etriers
@@ -290,7 +408,7 @@ Module Mod_Dessins
 
         Select Case enrobage.Etriers_Type
             Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
-                DessinEtriersCadre(MyGr, profile, enrobage, MyParAffloc, MyBrushE, zRef)
+                DessinEtriersCadre(MyGr, profile, enrobage, MyParAffloc, MyBrushE)
             Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant, Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
                 DessinEtriersCadreSouT(MyGr, profile, enrobage, MyParAffloc, MyBrushE, zRef)
         End Select
@@ -347,7 +465,7 @@ Module Mod_Dessins
     ''' Dessine les etriers en cadres normaux
     ''' </summary>
     Private Sub DessinEtriersCadre(ByRef MyGr As Graphics, ByVal profile As cls_ProfilA, enrobage As Cls_Enrobage_Partiel,
-                                   MyParAffloc As Struc_Affichage, MyBrushE As Brush, zRef As Decimal)
+                                   MyParAffloc As Struc_Affichage, MyBrushE As Brush)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -373,8 +491,6 @@ Module Mod_Dessins
 
         PrepareContourEtriersP(profile, enrobage, xPtsP, yPtsP, nbPtsP)
         PrepareContourEtriersG(profile, enrobage, xPts, yPts, nbPts)
-        DecalePts(yPtsP, nbPtsP, -profile.ha / 2 - zRef)
-        DecalePts(yPts, nbPts, -profile.ha / 2 - zRef)
 
         '--> Dessin Contour côté gauche
 
@@ -413,8 +529,8 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim DiaCourbureSup As Decimal = enrobage.LitsArma(2).Phi
-        Dim DiaCourbureInf As Decimal = enrobage.LitsArma(0).Phi
+        Dim DiaCourbureSup As Decimal = enrobage.LitsArmaOLD(2).Phi
+        Dim DiaCourbureInf As Decimal = enrobage.LitsArmaOLD(0).Phi
         Dim LongueurRetour As Decimal = 5 * enrobage.Etriers_Phi
         Dim xc, yc As Single
         Dim xo, yo As Single
@@ -503,8 +619,8 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim DiaCourbureSup As Decimal = enrobage.LitsArma(2).Phi
-        Dim DiaCourbureInf As Decimal = enrobage.LitsArma(0).Phi
+        Dim DiaCourbureSup As Decimal = enrobage.LitsArmaOLD(2).Phi
+        Dim DiaCourbureInf As Decimal = enrobage.LitsArmaOLD(0).Phi
         Dim LongueurRetour As Decimal = 5 * enrobage.Etriers_Phi
         Dim xc, yc As Single
         Dim xo, yo As Single
@@ -592,7 +708,7 @@ Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
-        '   Contour pour les étriers soudés
+        '   Contour pour les étriers soudés - Petite partie en retour supérieur intérieur
         '---------------------------------------------------------------------------------------------------------------------------
         '   profile     [E] :   profilé
         '   enrobage    [E] :   enrobage
@@ -602,7 +718,7 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim DiaCourbureSup As Decimal = enrobage.LitsArma(2).Phi
+        Dim DiaCourbureSup As Decimal = enrobage.LitArma(2).PhiInt
 
         Dim LongueurRetour As Decimal = 3 * enrobage.Etriers_Phi
 
@@ -624,7 +740,7 @@ Module Mod_Dessins
 
         RayonC = DiaCourbureSup / 2
         xc = -Tw / 2 - Uy - (DiaCourbureSup) / 2 - PhiEtrier
-        yc = Ht / 2 - Tf - Uz - DiaCourbureSup / 2 - PhiEtrier
+        yc = -Tf - Uz - DiaCourbureSup / 2 - PhiEtrier
 
         AjouteArcCercle(xc, yc, RayonC, 0, 135, 1, xPts, yPts, nbPts)
 
@@ -654,6 +770,7 @@ Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
+        '   Contour du cadre - Partie principale
         '---------------------------------------------------------------------------------------------------------------------------
         '   profile     [E] :   profilé
         '   enrobage    [E] :   enrobage
@@ -663,8 +780,10 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim DiaCourbureSup As Decimal = enrobage.LitsArma(2).Phi
-        Dim DiaCourbureInf As Decimal = enrobage.LitsArma(0).Phi
+        Dim DiaCourbureSupExt As Decimal = enrobage.LitArma(2).PhiExt
+        Dim DiaCourbureSupInt As Decimal = enrobage.LitArma(2).PhiInt
+        Dim DiaCourbureInfExt As Decimal = enrobage.LitArma(0).PhiExt
+        Dim DiaCourbureInfInt As Decimal = enrobage.LitArma(0).PhiInt
         Dim LongueurRetour As Decimal = 3 * enrobage.Etriers_Phi
         Dim xc, yc As Single
         Dim xo, yo As Single
@@ -674,6 +793,7 @@ Module Mod_Dessins
         Dim Tw As Decimal = profile.t_w
         Dim Tf As Decimal = profile.t_fs
         Dim Uy As Decimal = enrobage.Etriers_EnrobageY
+        Dim UyInt As Decimal = enrobage.Etriers_EnrobageYinterne
         Dim Uz As Decimal = enrobage.Etriers_EnrobageZ
         Dim Bc As Decimal = enrobage.Ratio_bc * Bf
         Dim PhiEtrier As Decimal = enrobage.Etriers_Phi
@@ -684,12 +804,14 @@ Module Mod_Dessins
 
         nbPts = 0
 
-        '--> Contour interieur
+        '--> Contour interieur <-----------------------------------------------------------
 
-        RayonC = DiaCourbureSup / 2
+        '=# Armature supérieure intérieure
 
-        xc = -Tw / 2 - Uy - DiaCourbureSup / 2 - PhiEtrier
-        yc = Ht / 2 - Tf - Uz - DiaCourbureSup / 2 - PhiEtrier
+        RayonC = DiaCourbureSupInt / 2
+
+        xc = -Tw / 2 - UyInt - RayonC - PhiEtrier
+        yc = -Tf - Uz - RayonC - PhiEtrier
 
         xo = xc + Math.Sqrt(2) / 2 * (RayonC - LongueurRetour)
         yo = yc - Math.Sqrt(2) / 2 * (RayonC + LongueurRetour)
@@ -698,59 +820,84 @@ Module Mod_Dessins
 
         AjouteArcCercle(xc, yc, RayonC, -45, 90, 1, xPts, yPts, nbPts)
 
-        xc = -Bc / 2 + Uy + DiaCourbureSup / 2 + PhiEtrier
+        '=# Armature supérieure extérieure
+
+        RayonC = DiaCourbureSupExt / 2
+        xc = -Bc / 2 + Uy + RayonC + PhiEtrier
+        yc = -Tf - Uz - RayonC - PhiEtrier
 
         AjouteArcCercle(xc, yc, RayonC, 90, 180, 1, xPts, yPts, nbPts)
 
-        RayonC = DiaCourbureInf / 2
-        xc = -Bc / 2 + Uy + DiaCourbureInf / 2 + PhiEtrier
-        yc = -Ht / 2 + Tf + Uz + DiaCourbureInf / 2 + PhiEtrier
+        '=# Armature inférieure extérieure
+
+        RayonC = DiaCourbureInfExt / 2
+        xc = -Bc / 2 + Uy + RayonC + PhiEtrier
+        yc = -Ht + Tf + Uz + RayonC + PhiEtrier
 
         AjouteArcCercle(xc, yc, RayonC, 180, 270, 1, xPts, yPts, nbPts)
 
-        xc = -Tw / 2 - Uy - DiaCourbureInf / 2 - PhiEtrier
+        '=# Armature inférieure intérieure
+
+        RayonC = DiaCourbureInfInt / 2
+
+        xc = -Tw / 2 - UyInt - RayonC - PhiEtrier
+        yc = -Ht + Tf + Uz + RayonC + PhiEtrier
 
         AjouteArcCercle(xc, yc, RayonC, 270, 360, 1, xPts, yPts, nbPts)
 
-        xc = -Tw / 2 - Uy - DiaCourbureSup / 2 - PhiEtrier
-        RayonC = DiaCourbureSup / 2 + PhiEtrier
-        yc = Ht / 2 - Tf - Uz - DiaCourbureSup / 2 - PhiEtrier
+        '=# Armature supérieure intérieure
+
+        RayonC = DiaCourbureSupInt / 2 + PhiEtrier
+        xc = -Tw / 2 - UyInt - DiaCourbureSupInt / 2 - PhiEtrier
+        yc = -Tf - Uz - DiaCourbureSupInt / 2 - PhiEtrier
 
         Dim Racine2 As Decimal = Math.Sqrt(2)
 
-        If PhiEtrier < (DiaCourbureSup / (2 * Racine2) * (2 - Racine2)) Then
+        If PhiEtrier < (DiaCourbureSupInt / (2 * Racine2) * (2 - Racine2)) Then
             'Cas 1 : intersection entièrement comprise dans l'arc de cercle extérieur
-            Dim Theta As Single = Math.Acos(DiaCourbureSup / (2 * (DiaCourbureSup / 2 + PhiEtrier)))
+            Dim Theta As Single = Math.Acos(DiaCourbureSupInt / (2 * (DiaCourbureSupInt / 2 + PhiEtrier)))
             AjouteArcCercle(xc, yc, RayonC, 0, -Theta * 180 / Math.PI, 1, xPts, yPts, nbPts)
         Else
             'Cas 2 : intersection en dehors de l'arc de cercle extérieur
-            xo = xc + DiaCourbureSup / 2
-            yo = yc + DiaCourbureSup / 2 - Racine2 * (DiaCourbureSup / 2 + PhiEtrier)
+            xo = xc + DiaCourbureSupInt / 2
+            yo = yc + DiaCourbureSupInt / 2 - Racine2 * (DiaCourbureSupInt / 2 + PhiEtrier)
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
             AjouteArcCercle(xc, yc, RayonC, 0, -45, 1, xPts, yPts, nbPts)
         End If
 
-        '--> Contour extérieur en sens inverse 
+        '--> Contour extérieur en sens inverse <----------------------------------------------------------------------
 
-        RayonC = DiaCourbureInf / 2 + PhiEtrier
-        xc = -Tw / 2 - Uy - DiaCourbureInf / 2 - PhiEtrier
-        yc = -Ht / 2 + Tf + Uz + DiaCourbureInf / 2 + PhiEtrier
+        '=# Armature inférieure intérieure
+
+        RayonC = DiaCourbureInfInt / 2 + PhiEtrier
+        xc = -Tw / 2 - UyInt - DiaCourbureInfInt / 2 - PhiEtrier
+        yc = -Ht + Tf + Uz + DiaCourbureInfInt / 2 + PhiEtrier
 
         AjouteArcCercle(xc, yc, RayonC, 270, 360, -1, xPts, yPts, nbPts)
 
-        xc = -Bc / 2 + Uy + (DiaCourbureInf) / 2 + PhiEtrier
+        '=# Armature inférieure extérieure
+
+        RayonC = DiaCourbureInfExt / 2 + PhiEtrier
+        xc = -Bc / 2 + Uy + (DiaCourbureInfExt) / 2 + PhiEtrier
+        yc = -Ht + Tf + Uz + DiaCourbureInfExt / 2 + PhiEtrier
 
         AjouteArcCercle(xc, yc, RayonC, 180, 270, -1, xPts, yPts, nbPts)
 
-        RayonC = DiaCourbureSup / 2 + PhiEtrier
-        xc = -Bc / 2 + Uy + (DiaCourbureSup) / 2 + PhiEtrier
-        yc = (Ht / 2 - Tf - Uz - DiaCourbureSup / 2 - PhiEtrier)
+        '=# Armature supérieure extérieure
+
+        RayonC = DiaCourbureSupExt / 2 + PhiEtrier
+        xc = -Bc / 2 + Uy + (DiaCourbureSupExt) / 2 + PhiEtrier
+        yc = -Tf - Uz - DiaCourbureSupExt / 2 - PhiEtrier
 
         AjouteArcCercle(xc, yc, RayonC, 90, 180, -1, xPts, yPts, nbPts)
 
-        xc = -Tw / 2 - Uy - DiaCourbureSup / 2 - PhiEtrier
+        '=# Armature supérieure intérieure
+
+        RayonC = DiaCourbureSupInt / 2 + PhiEtrier
+        xc = -Tw / 2 - Uy - DiaCourbureSupInt / 2 - PhiEtrier
+        yc = -Tf - Uz - DiaCourbureSupInt / 2 - PhiEtrier
 
         AjouteArcCercle(xc, yc, RayonC, -45, 90, -1, xPts, yPts, nbPts)
 
@@ -1721,6 +1868,7 @@ Module Mod_Dessins
         Dim MyFontNormal As Font = FontBase
         Dim lTotal As Boolean = False
         Dim lContour As Boolean = lCONTOURCOTE
+        Dim lPointProp As Boolean = (MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.PointPropped)
 
         '--> Initialisations
 
@@ -1768,7 +1916,8 @@ Module Mod_Dessins
         DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
         '--> Représentation des étais d'extrémité
-        If MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.PointPropped And MyPoutre.lEtaisConsoleGauche Then
+
+        If lPointProp And MyPoutre.lEtaisConsoleGauche Then
 
             If MyPoutre.lTraveeConsoleGauche Then
                 xo = MyPoutre.xPositionAppui(True, 0)
@@ -1777,7 +1926,7 @@ Module Mod_Dessins
 
         End If
 
-        If MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.PointPropped And MyPoutre.lEtaisConsoleDroite Then
+        If lPointProp And MyPoutre.lEtaisConsoleDroite Then
 
             If MyPoutre.lTraveeConsoleDroite Then
                 xo = MyPoutre.xPositionAppui(False, MyPoutre.IndiceDerniereTravee)
@@ -1787,12 +1936,37 @@ Module Mod_Dessins
         End If
 
         '--> Représentation des étais intermédiaires
-        If MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.PointPropped And MyPoutre.pNbPropping <> 0 Then
+
+        If lPointProp And MyPoutre.pNbPropping <> 0 Then
 
             For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
                 For j As Integer = 1 To MyPoutre.pNbPropping
                     xo = MyPoutre.xPositionAppui(True, i) + j * MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1)
                     DessineEtais(MyGr, xo, 0.75 * dCarApp, MyParAff)
+                Next
+            Next
+        End If
+
+        '--> Représentation des appuis continus (POM)
+
+        Dim Longueur, LongueurMax, DeltaX As Decimal
+        Dim NbPts As Integer
+
+        If (MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.FullyPropped) Then
+            LongueurMax = MyPoutre.LongueurTraveeMax
+            DeltaX = LongueurMax / 25
+
+            For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
+
+                xo = MyPoutre.xPositionAppui(True, i)
+                Longueur = MyPoutre.LongueurTravee(i)
+
+                NbPts = Math.Floor(Longueur / DeltaX) - 1
+
+                For j As Integer = 1 To NbPts
+                    xe = xo + (j) * DeltaX
+
+                    DessineEtais(MyGr, xe, dCarApp / 2, MyParAff)
                 Next
             Next
         End If
@@ -1838,20 +2012,32 @@ Module Mod_Dessins
 
             For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
 
-                For j As Integer = 1 To MyPoutre.pNbPropping + 1
+                xe = MyPoutre.xPositionAppui(True, i)
+                MyColor = StyleCouleur(iSelect, i)
+                MyPen.Color = MyColor
 
-                    MyColor = StyleCouleur(iSelect, i)
-                    MyPen.Color = MyColor
+                If lPointProp Then
+                    For j As Integer = 1 To MyPoutre.pNbPropping + 1
 
+                        xo = xe
+                        xe += MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1)
+
+                        AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                        If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1), Enu_TypeVariable.Longueur)
+                        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                    Next
+                Else
                     xo = xe
-                    xe += MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1)
+                    xe += MyPoutre.LongueurTravee(i)
 
                     AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                    If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1), Enu_TypeVariable.Longueur)
+                    If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i), Enu_TypeVariable.Longueur)
                     AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
-                Next
+                End If
 
             Next
 
@@ -1873,7 +2059,6 @@ Module Mod_Dessins
                 lTotal = True
 
             End If
-
 
         End If
 
@@ -2593,24 +2778,133 @@ Module Mod_Dessins
 
         DessinEnrobagePartielBeton(MyGr, MySection.ProfilA, MySection.enrobage_partiel.Ratio_bc, MyParAff, MyBrushBp, xPos)
 
-        ''--> Déclaration
-
-        'Dim xe, ye As Decimal
-        'Dim xo, yo As Decimal
-        'Dim MyPenContour As New Pen(Color.Black, 1)
-
-        ''--> Dessin bloc béton
-
-        'xe = xPos + MySection.ProfilA.b_fi / 2 * MySection.enrobage_partiel.Ratio_bc
-        'xo = xPos - MySection.ProfilA.b_fi / 2 * MySection.enrobage_partiel.Ratio_bc
-        'ye = -MySection.ProfilA.ha + MySection.ProfilA.t_fi
-        'yo = -MySection.ProfilA.t_fs
-
-        'AddRectanglePlein(MyGr, MyBrushBp, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
-
     End Sub
 
     Private Sub DessinArmaLongiEnrobage(ByRef MyGr As Graphics, ByVal MySection As cls_Section,
+                                        MyParAffloc As Struc_Affichage, MyBrushA As Brush, iArma As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   18/04/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Représentation d'une dalle mixte
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   section     [E] :   Section à représenter
+        '   zRef        [E] :   Position de référence pour l'axe z (z0), comptée à partir fibre sup du profilé
+        '   MyParAffloc [E] :   Paramètres d'affichage   
+        '   MyBrushA    [E] :   Pinceau pour le remplissage de la dalle
+        '   iArma       [E] :   indice du lit d'armature
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        DessinArmaLongiEnrobage(MyGr, MySection.ProfilA, MySection.enrobage_partiel, MyParAffloc, MyBrushA, iArma)
+
+    End Sub
+
+
+    Private Sub DessinArmaLongiEnrobageN(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyEnrob As Cls_Enrobage_Partiel,
+                                        MyParAffloc As Struc_Affichage, MyBrushA() As Brush, iArma As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   18/04/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Représentation d'une dalle mixte
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   section     [E] :   Section à représenter
+        '   zRef        [E] :   Position de référence pour l'axe z (z0), comptée à partir fibre sup du profilé
+        '   MyParAffloc [E] :   Paramètres d'affichage   
+        '   MyBrushA    [E] :   Pinceau pour le remplissage de la dalle
+        '   iArma       [E] :   indice du lit d'armature
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim MyPenContour As New Pen(Color.Black, 1)
+        Dim xo, yo, xe, xi As Decimal
+        Dim Signe As Decimal = 1
+        Dim uYInterne As Decimal
+        Dim Bfs, Tw As Decimal
+        Dim PhiA As Decimal
+        Dim Uy, Uz, EtriersPhi As Decimal
+        Dim kPos() As Decimal = {0, -0.5, 0.5, 0}
+        Dim kPosE() As Decimal = {0, 0, 1, 0.5}
+
+        '--> Initialisation
+
+        Select Case MyEnrob.Etriers_Type
+            Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : uYInterne = MyEnrob.Etriers_EnrobageYinterne
+            Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant : uYInterne = 0
+            Case Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude : uYInterne = 0
+        End Select
+
+        Uy = MyEnrob.Etriers_EnrobageY
+        Uz = MyEnrob.Etriers_EnrobageZ
+        EtriersPhi = MyEnrob.Etriers_Phi
+        Bfs = MySection.ProfilA.b_fs
+        Tw = MySection.ProfilA.t_w
+
+        '--> Armatures extérieures
+
+        PhiA = MyEnrob.LitArma(iArma).PhiExt
+
+        For jChambre As Integer = 0 To 1
+
+            For i As Integer = 1 To MyEnrob.LitArma(iArma).NbExt
+
+                xo = Signe * (Bfs * MyEnrob.Ratio_bc / 2 - Uy - EtriersPhi - PhiA / 2)
+                yo = MySection.zPosArmaEnrobage(iArma, 0, i)
+
+                AddCerclePlein(MyGr, MyBrushA(0), xo - Signe * kPosE(i) * PhiA, yo, PhiA, MyParAffloc, True)
+
+            Next
+
+            Signe = -Signe
+
+        Next
+
+        '--> Armatures intérieures
+
+        PhiA = MyEnrob.LitArma(iArma).PhiInt
+
+        If MyEnrob.LitArma(iArma).NbInt = 1 Then kPos(1) = 0 Else kPos(1) = -0.5
+
+        For jChambre As Integer = 0 To 1
+
+            For i As Integer = 1 To MyEnrob.LitArma(iArma).NbInt
+
+                yo = MySection.zPosArmaEnrobage(iArma, 2, i)
+                xo = Signe * (Tw / 2 + uYInterne + EtriersPhi + PhiA / 2)
+
+                AddCerclePlein(MyGr, MyBrushA(2), xo + Signe * kPosE(i) * PhiA, yo, PhiA, MyParAffloc, True)
+
+            Next
+
+            Signe = -Signe
+
+        Next
+
+        '--> Armatures centrales
+
+        PhiA = MyEnrob.LitArma(iArma).PhiMil
+
+        If MyEnrob.LitArma(iArma).NbMil = 1 Then kPos(1) = 0 Else kPos(1) = -0.5
+
+        For jChambre As Integer = 0 To 1
+
+            xo = Signe * ((Tw / 2 + uYInterne + EtriersPhi) + (Bfs * MyEnrob.Ratio_bc / 2 - Uy - EtriersPhi)) / 2
+
+            For i As Integer = 1 To MyEnrob.LitArma(iArma).NbMil
+
+                yo = MySection.zPosArmaEnrobage(iArma, 1, i)
+                AddCerclePlein(MyGr, MyBrushA(1), xo + Signe * kPos(i) * PhiA, yo, PhiA, MyParAffloc, True)
+
+            Next
+
+            Signe = -Signe
+
+        Next
+
+    End Sub
+
+    Private Sub DessinArmaLongiEnrobage(ByRef MyGr As Graphics, ByVal MyProfil As cls_ProfilA, MyEnrob As Cls_Enrobage_Partiel,
                                         MyParAffloc As Struc_Affichage, MyBrushA As Brush, iArma As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
@@ -2639,20 +2933,20 @@ Module Mod_Dessins
 
         Select Case iArma
             Case 0
-                yo = -MySection.ProfilA.ha + MySection.ProfilA.t_fi + MySection.enrobage_partiel.Etriers_EnrobageZ + MySection.enrobage_partiel.Etriers_Phi + MySection.enrobage_partiel.LitsArma(iArma).Phi / 2
+                yo = -MyProfil.ha + MyProfil.t_fi + MyEnrob.Etriers_EnrobageZ + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2
             Case 1
-                yo = -MySection.ProfilA.ha / 2
+                yo = -MyProfil.ha / 2
             Case 2
-                yo = -MySection.ProfilA.t_fs - MySection.enrobage_partiel.Etriers_EnrobageZ - MySection.enrobage_partiel.Etriers_Phi - MySection.enrobage_partiel.LitsArma(iArma).Phi / 2
+                yo = -MyProfil.t_fs - MyEnrob.Etriers_EnrobageZ - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2
         End Select
-        Select Case MySection.enrobage_partiel.Etriers_Type
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : uYInterne = MySection.enrobage_partiel.Etriers_EnrobageY
+        Select Case MyEnrob.Etriers_Type
+            Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : uYInterne = MyEnrob.Etriers_EnrobageY
             Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant : uYInterne = 0
             Case Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude : uYInterne = 0
         End Select
         DeltaY(1) = 0
-        If (MySection.enrobage_partiel.Etriers_Type = Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant) Then
-            DeltaY(0) = MySection.enrobage_partiel.Etriers_Phi / 5
+        If (MyEnrob.Etriers_Type = Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant) Then
+            DeltaY(0) = MyEnrob.Etriers_Phi / 5
         Else
             DeltaY(0) = 0
         End If
@@ -2661,19 +2955,19 @@ Module Mod_Dessins
 
         For jChambre As Integer = 0 To 1
 
-            xo = Signe * (MySection.ProfilA.b_fs * MySection.enrobage_partiel.Ratio_bc / 2 - MySection.enrobage_partiel.Etriers_EnrobageY - MySection.enrobage_partiel.Etriers_Phi - MySection.enrobage_partiel.LitsArma(iArma).Phi / 2)
-            xe = Signe * (MySection.ProfilA.t_w / 2 + uYInterne + MySection.enrobage_partiel.Etriers_Phi + MySection.enrobage_partiel.LitsArma(iArma).Phi / 2)
+            xo = Signe * (MyProfil.b_fs * MyEnrob.Ratio_bc / 2 - MyEnrob.Etriers_EnrobageY - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2)
+            xe = Signe * (MyProfil.t_w / 2 + uYInterne + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2)
 
-            If MySection.enrobage_partiel.LitsArma(iArma).nbArma = 1 Then
+            If MyEnrob.LitsArmaOLD(iArma).nbArma = 1 Then
                 Delta = 1
             Else
-                Delta = (xe - xo) / (MySection.enrobage_partiel.LitsArma(iArma).nbArma - 1)
+                Delta = (xe - xo) / (MyEnrob.LitsArmaOLD(iArma).nbArma - 1)
             End If
-            For i As Integer = 1 To MySection.enrobage_partiel.LitsArma(iArma).nbArma
+            For i As Integer = 1 To MyEnrob.LitsArmaOLD(iArma).nbArma
 
                 xi = xo + Delta * (i - 1)
 
-                AddCerclePlein(MyGr, MyBrushA, xi, yo + DeltaY(jChambre), MySection.enrobage_partiel.LitsArma(iArma).Phi, MyParAffloc, True)
+                AddCerclePlein(MyGr, MyBrushA, xi, yo + DeltaY(jChambre), MyEnrob.LitsArmaOLD(iArma).Phi, MyParAffloc, True)
 
             Next
 
@@ -2682,7 +2976,6 @@ Module Mod_Dessins
         Next
 
     End Sub
-
 
 #End Region
 

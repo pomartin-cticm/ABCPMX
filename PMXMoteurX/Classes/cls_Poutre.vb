@@ -134,6 +134,7 @@
     ''' Indique si la définition des portées, entraxes et trémies est celle par défaut
     ''' </summary>
     Public lDefautPortee As Boolean
+    Public lDefautEnrobage As Boolean
     Public lDefautEtaiement As Boolean
 
     ''' <summary>
@@ -178,6 +179,7 @@
     Private Sub ParametresGenerauxDefaut()
         Me.lDefautPortee = True
         Me.lDefautEtaiement = True
+        Me.lDefautEnrobage = True
         Me.lDonneesSauvees = False
         Me.NouvellePoutre = True
     End Sub
@@ -257,10 +259,12 @@
         '--------------------------------------------------------------------------
         Const iFRMPORTEE As Integer = 1
         Const iFRMETAIEMENT As Integer = 2
+        Const iFRMENROBAGE As Integer = 3
 
         Select Case iFenetre
             Case iFRMPORTEE : Me.lDefautPortee = False
             Case iFRMETAIEMENT : Me.lDefautEtaiement = False
+            Case iFRMENROBAGE : Me.lDefautEnrobage = False
         End Select
     End Sub
 
@@ -332,6 +336,21 @@
             Next
 
             Return pLongueur
+        End Get
+    End Property
+
+    Public ReadOnly Property LongueurTraveeMax As Decimal
+        Get
+            Dim Longueur As Decimal
+            Dim i0, i1 As Integer
+            i0 = Me.IndicePremiereTravee
+            i1 = Me.IndiceDerniereTravee
+            Longueur = Me.LongueurTravee(i0)
+            For i As Integer = i0 + 1 To i1
+                Longueur = Math.Max(Longueur, Me.LongueurTravee(i))
+            Next
+
+            Return Longueur
         End Get
     End Property
 
