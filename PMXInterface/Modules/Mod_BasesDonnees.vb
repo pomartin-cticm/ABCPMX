@@ -78,35 +78,10 @@ Module Mod_BasesDonnees
 
 #Region "   MAIN "
 
-    Public Sub InitDatabase_Options()
-
-        '--> Options de la base de données
-        OptionsDatabase.lNewBase = True
-        OptionsDatabase.lSoftLimited = True
-        OptionsDatabase.FiltreSoft = "ACB+"
-        OptionsDatabase.lShowSteelAvailOnly = True
-        OptionsDatabase.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel
-        OptionsDatabase.lNoSteelLowThick = True
-        OptionsDatabase.lSaveConfig = False
-        OptionsDatabase.lShowEC3 = True
-
-        '--> Fichier pour les profilés
-        If Not File.Exists(LogicielFichiers.Database_Section) Then
-            'File.Copy(InfoLogiciel.RepertoireInstall & "\Database\AM_HRProfiles.dtb", FichierLogiciel.Database_Section)
-            File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacProfile & ExtensionBase, LogicielFichiers.Database_Section)
-        End If
-
-        '--> Fichier pour les aciers
-        If Not File.Exists(LogicielFichiers.Database_Aciers) Then
-            File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase, LogicielFichiers.Database_Aciers)
-        End If
-
-    End Sub
-
     Public Sub InitDatabase_Aciers()
         '--> Fichier
-        If Not File.Exists(LogicielFichiers.Database_Aciers) Then
-            File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase, LogicielFichiers.Database_Aciers)
+        If Not File.Exists(LogicielFichiers.Base_Aciers) Then
+            File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase, LogicielFichiers.Base_Aciers)
         End If
 
         '--> Récupération de la base
@@ -862,7 +837,7 @@ Module Mod_BasesDonnees
 
     End Sub
 
-    Public Function SteelIsToCompatibleToProfile(ByVal EpMax As Single, ByVal IndStd() As Integer, ByVal SteelBase As strucBaseAciers, ByVal CorIndStd As Dictionary(Of Short, Short),
+    Public Function SteelIsToCompatibleToProfile(ByVal EpMax As Single, ByVal IndStd() As Short, ByVal SteelBase As strucBaseAciers, ByVal CorIndStd As Dictionary(Of Short, Short),
                                                  ByVal Nuance As String, ByVal Qualite As String, ByVal Norm As String, ByVal ChoiceAcier As EnuChoiceAcier,
                                                  ByRef lIsNuanceCompatibleProfile As Boolean) As Boolean
         '----------------------------------------------------------------------------------------------------------------------------------------

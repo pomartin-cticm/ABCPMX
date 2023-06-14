@@ -12,8 +12,12 @@ LASTVERSION				= You work on the last version of the software
 AGREE					= Accept
 EXIT					= Exit
 
+#FRM_SLAB
+TITLE					= Definition of the slab
+OK						= OK
+CANCEL					= Cancel 
 
-#FRM_ENROBAGE
+#FRM_ENCASEMENT
 TITLE					= Definition of partial encasement
 OK						= OK
 CANCEL					= Cancel 

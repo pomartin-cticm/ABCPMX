@@ -14,9 +14,11 @@ Module Mod_Declarations
 #Region " Parametrage fichiers "
 
     Public Const ExtensionBase As String = ".dtb"
-    Public Const RepBase As String = "DataBase"
+    Public Const RepBase As String = "DataBases"
     Public Const RacProfile As String = "AM_HRProfiles"
     Public Const RacAcier As String = "AM_HRSteels"
+    Public Const RacGoujons As String = "Studs"
+    Public Const RacBacs As String = "Sheetings"
 
 #End Region
 
@@ -47,17 +49,22 @@ Module Mod_Declarations
         ''' <summary>
         ''' Fichier de base de données des sections
         ''' </summary>
-        Public Database_Section As String
+        Public Base_Sections As String
 
         ''' <summary>
         ''' Fichier de base de données des bacs acier
         ''' </summary>
-        Public Database_Bac As String
+        Public Base_Bacs As String
 
         ''' <summary>
         ''' Fichier de base de données des aciers
         ''' </summary>
-        Public Database_Aciers As String
+        Public Base_Aciers As String
+
+        ''' <summary>
+        ''' Fichier de base de données des goujons soudés
+        ''' </summary>
+        Public Base_Goujons As String
 
     End Structure
 
@@ -78,6 +85,7 @@ Module Mod_Declarations
     Public Structure Struc_OptionsLogiciel
 
         Public lExpert As Boolean                   'Activation Mode Expert
+        Public lDebug As Boolean                    'Fonctionnement en mode debug
         Public IndLangue As Integer                 'Indice de la langue de l'interface
         Public IndLangueNDC As Integer              'Indice de la langue de la note de calcul
 

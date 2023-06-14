@@ -167,7 +167,7 @@ Public Class Frm_SectionAcierStandard
 
         '== Transfert vers variable locale
 
-        cls_Section.CloneSection(MyProjet.Poutres(MyProjet.IndEnCours).Sections(1), MySectionLoc)
+        cls_Section.CloneSection(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySectionLoc)
 
         BClrCompatible = Me.lst_GammeS.BackColor
 
@@ -414,7 +414,7 @@ Public Class Frm_SectionAcierStandard
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
-        cls_Section.CloneSection(MySectionLoc, MyProjet.Poutres(MyProjet.IndEnCours).Sections(1))
+        cls_Section.CloneSection(MySectionLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section)
 
     End Sub
 
@@ -1088,9 +1088,11 @@ Public Class Frm_SectionAcierStandard
         MySectionLoc.ProfilA.r_ci = MySectionLoc.ProfilA.r_cs
         MySectionLoc.ProfilA.t_fi = MySectionLoc.ProfilA.t_fs
 
-        'For i As Integer = 0 To MyCatalogue.nbStandard - 1
-        '    MySection.iStandard(i) = MyCatalogue.Series(Gamme).Profiles(Profile).IndStandart(i)
-        'Next
+        For i As Integer = 0 To MyCatalogue.nbStandard - 1
+            MySectionLoc.ProfilA.IndStandart(i) = MyCatalogue.Series(Gamme).Profiles(Profile).IndStandart(i)
+        Next
+
+
     End Sub
 
 
@@ -1487,7 +1489,7 @@ Public Class Frm_SectionAcierStandard
         '--> Déclaration
 
         Dim EpMax As Double
-        Dim IndStd() As Integer
+        Dim IndStd() As Short
         Dim nbStd As Integer
 
         '--> Initialisation
@@ -1618,7 +1620,6 @@ Public Class Frm_SectionAcierStandard
         Next
 
     End Sub
-
 
     Private Sub ExtraitValeursEnveloppeAciers(ByVal Nuance As String, ByVal Variable As EnuDrawProperty,
                                               ByRef EpMin As Double, ByRef EpMax As Double, ByRef VMax As Double)

@@ -92,6 +92,16 @@
     ''' </summary>
     Public Plat_t As Decimal
 
+    ''' <summary>
+    ''' Indices conditions de livraison
+    ''' </summary>
+    Public IndDeliv() As Short
+
+    ''' <summary>
+    ''' Indices normes acier compatibles
+    ''' </summary>
+    Public IndStandart() As Short
+
 #End Region
 
 #Region " Propriétés "
@@ -181,9 +191,18 @@
 #End Region
 
 #Region " Fonctions de copie "
-    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+    Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function
+
+    Public Shared Sub DeepCopie(ProfilSource As cls_ProfilA, ByRef ProfilCible As cls_ProfilA)
+
+        ProfilCible = ProfilSource.Clone
+
+        If Not (ProfilSource.IndDeliv Is Nothing) Then ProfilCible.IndDeliv = ProfilSource.IndDeliv.Clone
+        If (ProfilSource.IndStandart.GetUpperBound(0) > 0) Then ProfilCible.IndStandart = ProfilSource.IndStandart.Clone
+
+    End Sub
 
 #End Region
 

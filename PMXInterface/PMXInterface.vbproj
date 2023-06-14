@@ -88,6 +88,12 @@
     <Compile Include="Fenetres\Filles\Frm_Construction.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Dalle.Designer.vb">
+      <DependentUpon>Frm_Dalle.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Dalle.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Enrobage.Designer.vb">
       <DependentUpon>Frm_Enrobage.vb</DependentUpon>
     </Compile>
@@ -172,6 +178,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Construction.resx">
       <DependentUpon>Frm_Construction.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Dalle.resx">
+      <DependentUpon>Frm_Dalle.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Enrobage.resx">
       <DependentUpon>Frm_Enrobage.vb</DependentUpon>

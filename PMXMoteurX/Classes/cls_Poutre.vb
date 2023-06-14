@@ -97,7 +97,9 @@
     ''' <summary>
     ''' Sections par travéee
     ''' </summary>
-    Public Sections() As cls_Section
+    'Public Sections() As cls_Section
+    Public Section As New cls_Section
+
 
     ''' <summary>
     ''' Entraxes aux poutres voisines
@@ -188,7 +190,6 @@
         pNbTravees = 1
         ReDim LongueurTravee(pNbTravees + 2)
         ReDim TypTravee(pNbTravees + 2)
-        ReDim Sections(pNbTravees + 2)
 
         lTraveeConsoleDroite = False
         lTraveeConsoleGauche = False
@@ -219,9 +220,6 @@
 
         lIntermediaire = True
 
-        For i As Int16 = 0 To 2
-            Me.Sections(i) = New cls_Section
-        Next
     End Sub
 
     Private Sub EnrobageDefaut()
@@ -366,15 +364,12 @@
     Public ReadOnly Property HauteurMaxiProfiles As Decimal
         Get
             Dim Indice0 As Integer = Me.IndicePremiereTravee
-            Dim pHauteur As Decimal = Me.Sections(Indice0).ProfilA.ha
+            Dim pHauteur As Decimal = Me.Section.ProfilA.ha
 
-            For i As Integer = Me.IndicePremiereTravee + 1 To Me.IndiceDerniereTravee
-                pHauteur = Math.Max(pHauteur, Me.Sections(i).ProfilA.ha)
-            Next
+
             Return pHauteur
         End Get
     End Property
-
 
     Public Function xPositionAppui(lGauche As Decimal, iTravee As Integer) As Decimal
         '-------------------------------------------------------------------------------------------
@@ -405,7 +400,6 @@
     Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function
-
 
     Public Shared Sub DeepClone(PoutreSource As cls_Poutre, ByRef PoutreCible As cls_Poutre)
         '------------------------------------------------------------------------------------------------

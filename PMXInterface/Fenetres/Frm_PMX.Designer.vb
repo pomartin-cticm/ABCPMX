@@ -87,14 +87,13 @@ Partial Class Frm_PMX
         Me.TSbtn_Accueil = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator27 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Portees = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_Entraxe = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Dalle = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_SectionA = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Enrobage = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Connexion = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator31 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_Maitiens = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Maintiens = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Etaiement = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Chargements = New System.Windows.Forms.ToolStripButton()
@@ -635,7 +634,7 @@ Partial Class Frm_PMX
         '
         'TLPanel_SideBar
         '
-        Me.TLPanel_SideBar.BackColor = System.Drawing.SystemColors.Info
+        Me.TLPanel_SideBar.BackColor = System.Drawing.Color.Beige
         Me.TLPanel_SideBar.ColumnCount = 1
         Me.TLPanel_SideBar.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPanel_SideBar.Controls.Add(Me.Label_Nom_Projet, 0, 0)
@@ -683,6 +682,7 @@ Partial Class Frm_PMX
         '
         'Panel_NomProjet
         '
+        Me.Panel_NomProjet.BackColor = System.Drawing.Color.Beige
         Me.Panel_NomProjet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel_NomProjet.Controls.Add(Me.cmb_Projet)
         Me.Panel_NomProjet.Dock = System.Windows.Forms.DockStyle.Fill
@@ -706,6 +706,7 @@ Partial Class Frm_PMX
         'pan_ListePoutres
         '
         Me.pan_ListePoutres.AutoScroll = True
+        Me.pan_ListePoutres.BackColor = System.Drawing.Color.Beige
         Me.pan_ListePoutres.Controls.Add(Me.TLPan_ListPoutres)
         Me.pan_ListePoutres.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_ListePoutres.Location = New System.Drawing.Point(0, 76)
@@ -751,7 +752,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Poutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Poutre.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Accueil, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.TSbtn_Entraxe, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maitiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Hivoss})
+        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Accueil, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Hivoss})
         Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
         Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -781,16 +782,6 @@ Partial Class Frm_PMX
         Me.TSbtn_Portees.Name = "TSbtn_Portees"
         Me.TSbtn_Portees.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Portees.Text = "ToolStripButton4"
-        '
-        'TSbtn_Entraxe
-        '
-        Me.TSbtn_Entraxe.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Entraxe.Image = CType(resources.GetObject("TSbtn_Entraxe.Image"), System.Drawing.Image)
-        Me.TSbtn_Entraxe.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Entraxe.Name = "TSbtn_Entraxe"
-        Me.TSbtn_Entraxe.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Entraxe.Text = "ToolStripButton4"
-        Me.TSbtn_Entraxe.Visible = False
         '
         'ToolStripSeparator30
         '
@@ -838,14 +829,14 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator31.Name = "ToolStripSeparator31"
         Me.ToolStripSeparator31.Size = New System.Drawing.Size(6, 31)
         '
-        'TSbtn_Maitiens
+        'TSbtn_Maintiens
         '
-        Me.TSbtn_Maitiens.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Maitiens.Image = CType(resources.GetObject("TSbtn_Maitiens.Image"), System.Drawing.Image)
-        Me.TSbtn_Maitiens.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Maitiens.Name = "TSbtn_Maitiens"
-        Me.TSbtn_Maitiens.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Maitiens.Text = "ToolStripButton1"
+        Me.TSbtn_Maintiens.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Maintiens.Image = CType(resources.GetObject("TSbtn_Maintiens.Image"), System.Drawing.Image)
+        Me.TSbtn_Maintiens.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Maintiens.Name = "TSbtn_Maintiens"
+        Me.TSbtn_Maintiens.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Maintiens.Text = "ToolStripButton1"
         '
         'TSbtn_Etaiement
         '
@@ -1586,14 +1577,13 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_Accueil As ToolStripButton
     Friend WithEvents ToolStripSeparator27 As ToolStripSeparator
     Friend WithEvents TSbtn_Portees As ToolStripButton
-    Friend WithEvents TSbtn_Entraxe As ToolStripButton
     Friend WithEvents ToolStripSeparator30 As ToolStripSeparator
     Friend WithEvents TSbtn_Dalle As ToolStripButton
     Friend WithEvents TSbtn_SectionA As ToolStripButton
     Friend WithEvents TSbtn_Enrobage As ToolStripButton
     Friend WithEvents TSbtn_Connexion As ToolStripButton
     Friend WithEvents ToolStripSeparator31 As ToolStripSeparator
-    Friend WithEvents TSbtn_Maitiens As ToolStripButton
+    Friend WithEvents TSbtn_Maintiens As ToolStripButton
     Friend WithEvents TSbtn_Etaiement As ToolStripButton
     Friend WithEvents ToolStripSeparator32 As ToolStripSeparator
     Friend WithEvents TSbtn_Chargements As ToolStripButton

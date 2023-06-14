@@ -109,7 +109,7 @@ Public Class Frm_PMX
 
                 Me.TSbtn_Accueil.ToolTipText = Bloc("TSBACCUEIL")
                 Me.TSbtn_Portees.ToolTipText = Bloc("TSBPORTEES")
-                Me.TSbtn_Entraxe.ToolTipText = Bloc("TSBENTRAXE")
+                'Me.TSbtn_Entraxe.ToolTipText = Bloc("TSBENTRAXE")
 
                 Me.TSbtn_Dalle.ToolTipText = Bloc("TSBDALLE")
                 Me.TSbtn_SectionA.ToolTipText = Bloc("TSBSECTIONA")
@@ -244,15 +244,15 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Entraxe.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click
+    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click
 
         Select Case sender.name
             Case Me.TSbtn_Accueil.Name
                 FilleEnCours = EnuFilleEnCours.Accueil
             Case Me.TSbtn_Portees.Name
                 FilleEnCours = EnuFilleEnCours.Portees
-            Case Me.TSbtn_Entraxe.Name
-                FilleEnCours = EnuFilleEnCours.Entraxes
+                ' Case Me.TSbtn_Entraxe.Name
+           '     FilleEnCours = EnuFilleEnCours.Entraxes
 
             Case Me.TSbtn_Dalle.Name
                 FilleEnCours = EnuFilleEnCours.Dalle
@@ -286,7 +286,10 @@ Public Class Frm_PMX
                 End If
 
             Case EnuFilleEnCours.Dalle
+                If LogicielOptions.lFenetres Then
+                    Frm_Dalle.ShowDialog()
 
+                End If
             Case EnuFilleEnCours.Section
                 If LogicielOptions.lFenetres Then
                     Frm_SectionAcierStandard.ShowDialog()

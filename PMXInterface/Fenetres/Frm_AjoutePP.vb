@@ -350,6 +350,7 @@ Public Class Frm_AjoutePP
     Public Sub TraitementSaisie()
 
         Dim lAjout As Boolean = False
+        Dim lOK As Boolean
 
         'If Me.chk_NouveauProjet.Checked Then
 
@@ -393,6 +394,8 @@ Public Class Frm_AjoutePP
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre))
             End If
+
+            InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
 
         End If
 

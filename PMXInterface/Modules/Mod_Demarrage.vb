@@ -1,4 +1,6 @@
-﻿Imports PMXMoteur2
+﻿Imports System.IO
+Imports System.Runtime.CompilerServices
+Imports PMXMoteur2
 
 Module Mod_Demarrage
 
@@ -6,9 +8,14 @@ Module Mod_Demarrage
 
     Dim lDebug As Boolean = False
 
+    Structure strucAcierLocal
+        Dim Nuance As String
+        Dim Qualite As String
+        Dim Reduc As String
+        Dim lAvailable As Boolean
+    End Structure
+
 #End Region
-
-
 
 #Region "===DEMARRAGE==="
 
@@ -32,7 +39,6 @@ Module Mod_Demarrage
         '---------------------------------------------------------------------------------------------------------------
         '---------------------------------------------------------------------------------------------------------------
 
-        InitialiseDebug()
 
         '--> Récupération des informations générales du logociel - Non modifiable par l'utilisateur
 
@@ -43,9 +49,12 @@ Module Mod_Demarrage
 
         LogicielInfo.Maitre = EnuMaitre.CTICM
         LogicielOptions.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
+        LogicielOptions.lDebug = False
 
         LogicielRep.RepertoireInstall = Application.StartupPath
         LogicielRep.RepertoireConfig = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CTICM\" & LogicielInfo.NomLogiciel & "\ConfigV" & LogicielInfo.Version
+
+        InitialiseDebug()
 
         '--> Répertoires
 
@@ -112,7 +121,7 @@ Module Mod_Demarrage
 
             '# Contraintes et module d'élasticité
             LogicielOptions.IndUnitContraintes = Array.IndexOf(LogicielInfo.Unit_Contraintes, LogicielInfo.Unit_Contraintes(My.Settings.indUnitContraintes))
-            LogicielOptions.IndUnitModulesY = Array.IndexOf(LogicielInfo.Unit_ModulesY, LogicielInfo.Unit_ModulesY(My.Settings.indUnitmoduley))
+            LogicielOptions.IndUnitModulesY = Array.IndexOf(LogicielInfo.Unit_ModulesY, LogicielInfo.Unit_ModulesY(My.Settings.indUnitModuleY))
 
             '--> Fichiers récents
             LogicielFichiers.RecentFiles = New List(Of String)
@@ -123,14 +132,16 @@ Module Mod_Demarrage
             End If
 
             '--> Fichiers
-            LogicielFichiers.Database_Section = LogicielRep.RepertoireConfig & "\" & RacProfile & ExtensionBase
-            LogicielFichiers.Database_Aciers = LogicielRep.RepertoireConfig & "\" & RacAcier & ExtensionBase
+            LogicielFichiers.Base_Sections = LogicielRep.RepertoireConfig & "\" & RacProfile & ExtensionBase
+            LogicielFichiers.Base_Aciers = LogicielRep.RepertoireConfig & "\" & RacAcier & ExtensionBase
+            LogicielFichiers.Base_Goujons = LogicielRep.RepertoireConfig & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+            LogicielFichiers.Base_Bacs = LogicielRep.RepertoireConfig & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
 
             '--> Base de données
-            InitDatabase_Options()
+            InitialisationBasesDonnees()
             '--> Récupération des données de la database dans le catalogue
-            InitialiseCatalogue(LogicielFichiers.Database_Section, MyCatalogue)
-            InitialiseBaseAciers(LogicielFichiers.Database_Aciers, SteelBase)
+            InitialiseCatalogue(LogicielFichiers.Base_Sections, MyCatalogue)
+            InitialiseBaseAciers(LogicielFichiers.Base_Aciers, SteelBase)
 
         Catch ex As Exception
 
@@ -147,10 +158,302 @@ Module Mod_Demarrage
 
     <Conditional("DEBUG")> Private Sub InitialiseDebug()
         lDebug = True
+        LogicielOptions.lDebug = True
+    End Sub
+
+    Public Sub InitialisationBasesDonnees()
+
+        Dim FichierSource As String
+
+        '--> Options de la base de données
+        OptionsDatabase.lNewBase = True
+        OptionsDatabase.lSoftLimited = True
+        OptionsDatabase.FiltreSoft = "ACB+"
+        OptionsDatabase.lShowSteelAvailOnly = True
+        OptionsDatabase.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel
+        OptionsDatabase.lNoSteelLowThick = True
+        OptionsDatabase.lSaveConfig = False
+        OptionsDatabase.lShowEC3 = True
+
+        '--> Fichier pour les profilés
+
+        If Not File.Exists(LogicielFichiers.Base_Sections) Then
+
+            If LogicielOptions.lDebug Then
+                FichierSource = LogicielRep.RepertoireInstall & "\..\..\" & RepBase & "\" & RacProfile & ExtensionBase
+            Else
+                FichierSource = LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacProfile & ExtensionBase
+            End If
+            ' File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacProfile & ExtensionBase, LogicielFichiers.Database_Section)
+            File.Copy(FichierSource, LogicielFichiers.Base_Sections)
+
+        End If
+
+        '--> Fichier pour les aciers
+        If Not File.Exists(LogicielFichiers.Base_Aciers) Then
+
+            If LogicielOptions.lDebug Then
+                FichierSource = LogicielRep.RepertoireInstall & "\..\..\" & RepBase & "\" & RacAcier & ExtensionBase
+            Else
+                FichierSource = LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase
+            End If
+            'File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase, LogicielFichiers.Database_Aciers)
+            File.Copy(FichierSource, LogicielFichiers.Base_Aciers)
+        End If
+
+        '--> Fichiers pour les bacs
+        If Not File.Exists(LogicielFichiers.Base_Bacs) Then
+
+            If LogicielOptions.lDebug Then
+                FichierSource = LogicielRep.RepertoireInstall & "\..\..\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
+            Else
+                FichierSource = LogicielRep.RepertoireInstall & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
+            End If
+            File.Copy(FichierSource, LogicielFichiers.Base_Bacs)
+        End If
+
+        '--> Fichiers pour les goujons soudés
+        If Not File.Exists(LogicielFichiers.Base_Goujons) Then
+
+            If LogicielOptions.lDebug Then
+                FichierSource = LogicielRep.RepertoireInstall & "\..\..\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+            Else
+                FichierSource = LogicielRep.RepertoireInstall & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+            End If
+            File.Copy(FichierSource, LogicielFichiers.Base_Goujons)
+
+        End If
+
     End Sub
 
 #End Region
 
+#Region " Initialisation de la poutre "
+
+    Public Sub InitialisePoutreDeBases(MyPoutre As cls_Poutre, ByRef lOK As Boolean)
+        '--------------------------------------------------------------------------------
+        '   14/06/23 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------
+        '   Initialisation d'une poutre à partir des paramètres des bases
+        '   Laminés : section et acier
+        '   PRS :   acier
+        '--------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre à initialiser
+        '
+        '   lOK             [S] :   Indique si on a pu trouver un acier compatible
+        '--------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lTrouve As Boolean
+
+        '--> Traitement
+
+        If MyPoutre.Section.lLamine Then
+            TransfertProfileDeBase(MyPoutre.Section.ProfilA, MyPoutre.Section.ProfilA.Gamme, MyPoutre.Section.ProfilA.NomProfile, lOK)
+            AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
+        Else
+        End If
+
+
+    End Sub
+
+    Private Sub TransfertProfileDeBase(MyProfile As cls_ProfilA, ByVal Gamme As String, ByVal Profile As String, ByRef lOK As Boolean)
+        '----------------------------------------------------------------------------
+        '
+        '   03/07/12 :  Création - Version 3.00
+        '
+        '----------------------------------------------------------------------------
+        '
+        '   Récupération d'un profilé dans la nouvelle base de données
+        '
+        '----------------------------------------------------------------------------
+        '
+        '   BaseFile    [E] :   Nom du fichier base de données
+        '   Gamme       [E] :   Gamme du profilé
+        '   Profile     [E] :   Nom du profile
+        '   lOK         [S] :   Indique si récupération OK
+        '
+        '----------------------------------------------------------------------------
+
+        MyProfile.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
+        MyProfile.b_fs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
+        MyProfile.b_fi = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
+        MyProfile.t_fs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
+        MyProfile.t_fi = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
+        MyProfile.t_w = MyCatalogue.Series(Gamme).Profiles(Profile).Tw
+        MyProfile.r_ci = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
+        MyProfile.r_cs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
+
+        ReDim MyProfile.IndStandart(MyCatalogue.nbStandard)
+        For i As Integer = 0 To MyCatalogue.nbStandard - 1
+            MyProfile.IndStandart(i) = MyCatalogue.Series(Gamme).Profiles(Profile).IndStandart(i)
+        Next
+
+    End Sub
+
+    Public Sub AssocieAcierCompatible(MyPoutre As cls_Poutre, ByVal FileSteels As String, ByVal FileProfiles As String, ByRef lTrouve As Boolean)
+        '--------------------------------------------------------------------------------
+        '
+        '   06/12/12 :  Création - POM - V3.00
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   Associe à une profilé le premier acier compatible dans la base de données
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   MyPoutre        [E] :   Poutre à initialiser
+        '   FileSteels      [E] :   Nom du fichier binaire base de données de aciers
+        '   FileProfiles    [E] :   Nom du fichier binaire base de données des profilés
+        '
+        '   lTrouve         [S] :   Indique si on a pu trouver un acier compatible
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   On prend le premier acier S355 disponible
+        '   et si on ne le trouve pas, le premier acier tout court
+        '
+        '--------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iAcier As Integer
+        Dim MySteels As New List(Of strucAcierLocal)
+        Dim iStd As Short
+        Dim EpMax As Decimal = Math.Max(MyPoutre.Section.ProfilA.t_fs, MyPoutre.Section.ProfilA.t_w)
+
+        ExtraireAciersCompatibles(EpMax, MyPoutre.Section.ProfilA.IndStandart, MySteels)
+
+        AnalyseAciersListe(MySteels, True, Cls_Acier.NUANCEDEFAULT, lTrouve, iAcier)
+
+        If Not lTrouve Then
+            AnalyseAciersListe(MySteels, False, "", lTrouve, iAcier)
+        End If
+
+        If lTrouve Then
+            MyPoutre.Section.Acier.Nuance = MySteels(iAcier).Nuance
+            MyPoutre.Section.Acier.Qualite = MySteels(iAcier).Qualite
+            MyPoutre.Section.Acier.Reduction = MySteels(iAcier).Reduc
+            MyPoutre.Section.Acier.EpMax = SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).EpMax
+            MyPoutre.Section.Acier.iBase = SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).iBase
+            MyPoutre.Section.Acier.iStandart = SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).StIndex
+
+            '==V4.00
+            iStd = SteelBase.IndexStd.IndexOf(SteelBase.Grades(MyPoutre.Section.Acier.Nuance).Qualites(MyPoutre.Section.Acier.Qualite).ReductionCurv(MyPoutre.Section.Acier.Reduction).StIndex)
+            MyPoutre.Section.Acier.iTabStandart = iStd
+
+            MyPoutre.Section.Acier.Plages.Clear()
+
+            For i As Integer = 0 To SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).Plages.Count - 1
+                MyPoutre.Section.Acier.Plages.Add(SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).Plages(i))
+            Next
+        End If
+    End Sub
+
+    Private Sub AnalyseAciersListe(ByVal MySteels As List(Of strucAcierLocal), ByVal lImposedGrade As Boolean,
+                                   ByVal MyGrade As String, ByRef lTrouve As Boolean, ByRef iAcier As Integer)
+        '--------------------------------------------------------------------------------
+        '
+        '   21/12/12 :  Création - POM - V3.00
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   Extrait tous les aciers compatibles avec un profilé 
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   FileSteels      [E] :   Nom du fichier binaire base de données de aciers
+        '   FileProfiles    [E] :   Nom du fichier binaire base de données des profilés
+        '
+        '--------------------------------------------------------------------------------
+
+        iAcier = -1
+
+        lTrouve = False
+
+        Do While (Not lTrouve) And iAcier < MySteels.Count - 1
+            iAcier += 1
+            If lImposedGrade Then
+                lTrouve = (MySteels(iAcier).Nuance.Trim.ToUpper = MyGrade.ToUpper.Trim)
+            Else
+                lTrouve = True
+            End If
+        Loop
+    End Sub
+
+    Private Sub ExtraireAciersCompatibles(EpMax As Decimal, iStandard() As Short, ByRef MySteels As List(Of strucAcierLocal))
+        '--------------------------------------------------------------------------------
+        '
+        '   21/12/12 :  Création - POM - V3.00
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   Extrait tous les aciers compatibles avec un profilé 
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   EpMax           [E] :   Epaisseur max du profilé
+        '   iStandard       [E] :   Indice de la norme du profilé
+        '   MySteels        [S] :   Liste des aciers compatibles
+        '
+        '--------------------------------------------------------------------------------
+
+        Dim CorIndStd As Dictionary(Of Short, Short) = Nothing
+        Dim lCompatible As Boolean
+        Dim lIsNuanceCompatibleProfile As Boolean
+        Dim lAdd As Boolean
+        Dim SteelLoc As strucAcierLocal
+        Dim ListeSteel As New List(Of strucAcierLocal)
+        Dim nbComp As Integer
+
+        '--> Initialisation
+
+        GetTabCorrespondanceIndiceStandart(LogicielFichiers.Base_Sections, CorIndStd)
+        MySteels.Clear()
+        ListeSteel.Clear()
+        nbComp = 0
+
+        '--> Boucle sur les aciers de la base
+
+        For Each kvpGrade As KeyValuePair(Of String, strucGrade) In SteelBase.Grades
+
+            For Each kvpQualite As KeyValuePair(Of String, strucQualite) In kvpGrade.Value.Qualites
+
+                For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
+
+                    lCompatible = SteelIsToCompatibleToProfile(EpMax, iStandard, SteelBase, CorIndStd, kvpGrade.Key, kvpQualite.Key, kvpSteel.Key, OptionsDatabase.ChoiceSteel, lIsNuanceCompatibleProfile)
+
+                    If lCompatible Then
+                        SteelLoc.Nuance = kvpGrade.Key
+                        SteelLoc.Qualite = kvpQualite.Key
+                        SteelLoc.Reduc = kvpSteel.Key
+                        SteelLoc.lAvailable = lIsNuanceCompatibleProfile
+                        ListeSteel.Add(SteelLoc)
+                        If lIsNuanceCompatibleProfile Then nbComp += 1
+                    End If
+
+                Next
+            Next
+        Next
+
+        For i As Integer = 0 To ListeSteel.Count - 1
+            If Not ListeSteel(i).lAvailable Then
+                If (OptionsDatabase.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel) Then
+                    lAdd = (nbComp = 0)
+                Else
+                    lAdd = True
+                End If
+            Else
+                lAdd = True
+            End If
+            If lAdd Then
+                MySteels.Add(ListeSteel(i))
+            End If
+        Next
+    End Sub
+
+#End Region
 
 #Region " Gestion Langue "
 

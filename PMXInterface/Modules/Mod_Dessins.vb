@@ -52,7 +52,8 @@ Module Mod_Dessins
         Dim yMin, yMax As Decimal
         Dim dCar As Decimal
         Dim Profile As New cls_ProfilA
-        Profile = section.ProfilA.Clone
+        'Profile = section.ProfilA.Clone
+        cls_ProfilA.DeepCopie(section.ProfilA, Profile)
         Dim lLam As Boolean = (Profile.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
 
         Dim ColorLocalEtriers As Color = CouleurArmaNormal      'ColorEtriers
@@ -1232,9 +1233,9 @@ Module Mod_Dessins
             If lAffSymbol Then
                 If lLam Then Chaine = "tf" Else Chaine = "tfi"
             Else
-                Chaine = GetStringNoUnit(section.ProfilA.t_fi, Enu_TypeVariable.Dimension)
+                Chaine = GetStringInUnit(section.ProfilA.t_fi, Enu_TypeVariable.Dimension, 3, 1, False)
             End If
-            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             '-- Tfs --
 
@@ -1252,7 +1253,7 @@ Module Mod_Dessins
                 yo = 0 - section.ProfilA.t_fs
                 ye = yo - dCar
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
-                If lAffSymbol Then Chaine = "tfs" Else Chaine = GetStringNoUnit(section.ProfilA.t_fs, Enu_TypeVariable.Dimension)
+                If lAffSymbol Then Chaine = "tfs" Else Chaine = GetStringInUnit(section.ProfilA.t_fs, Enu_TypeVariable.Dimension, 3, 1, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             End If
@@ -1294,13 +1295,12 @@ Module Mod_Dessins
             xe = xo + dCar
 
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
-            If lAffSymbol Then Chaine = "tw" Else Chaine = GetStringNoUnit(section.ProfilA.t_w, Enu_TypeVariable.Dimension)
+            If lAffSymbol Then Chaine = "tw" Else Chaine = GetStringInUnit(section.ProfilA.t_w, Enu_TypeVariable.Dimension, 3, 1, False)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         End If
 
     End Sub
-
 
 #End Region
 
@@ -1407,8 +1407,8 @@ Module Mod_Dessins
 
         Dim xo, yo As Decimal
         Dim xe, ye As Decimal
-        Dim IndS As Integer = 1         ' Indice de travée pour représentation des sections
-        Dim lEnrob As Boolean = MyPoutre.Sections(IndS).lEnrobage
+        ' Dim IndS As Integer = 1         ' Indice de travée pour représentation des sections
+        Dim lEnrob As Boolean = MyPoutre.Section.lEnrobage
         Const ZREF As Decimal = 0
 
         '--> Affichage de la section principale
@@ -1416,11 +1416,11 @@ Module Mod_Dessins
         '# Dessin de béton d'enrobage
 
         If lEnrob Then _
-        DessinEnrobagePartielBeton(MyGr, MyPoutre.Sections(IndS), MyParaff1, myBrushB)
+        DessinEnrobagePartielBeton(MyGr, MyPoutre.Section, MyParaff1, myBrushB)
 
         '# Dessin de la section acier
 
-        DessinProfileMetal(MyGr, MyPoutre.Sections(IndS).ProfilA, myBrushP, MyParaff1, ZREF)
+        DessinProfileMetal(MyGr, MyPoutre.Section.ProfilA, myBrushP, MyParaff1, ZREF)
 
 
         '--> Affichage de la voisine à gauche
@@ -1430,11 +1430,11 @@ Module Mod_Dessins
         If MyPoutre.lIntermediaire Then
 
             If lEnrob Then _
-            DessinEnrobagePartielBeton(MyGr, MyPoutre.Sections(IndS), MyParaff1, myBrushB, -MyPoutre.EntraxeD1)
+            DessinEnrobagePartielBeton(MyGr, MyPoutre.Section, MyParaff1, myBrushB, -MyPoutre.EntraxeD1)
 
             '# Dessin de la section acier
 
-            DessinProfileMetal(MyGr, MyPoutre.Sections(IndS).ProfilA, myBrushP, MyParaff1, ZREF, -MyPoutre.EntraxeD1)
+            DessinProfileMetal(MyGr, MyPoutre.Section.ProfilA, myBrushP, MyParaff1, ZREF, -MyPoutre.EntraxeD1)
 
         End If
 
@@ -1443,11 +1443,11 @@ Module Mod_Dessins
         '# Dessin de béton d'enrobage
 
         If lEnrob Then _
-        DessinEnrobagePartielBeton(MyGr, MyPoutre.Sections(IndS), MyParaff1, myBrushB, +MyPoutre.EntraxeD2)
+        DessinEnrobagePartielBeton(MyGr, MyPoutre.Section, MyParaff1, myBrushB, +MyPoutre.EntraxeD2)
 
         '# Dessin de la section acier
 
-        DessinProfileMetal(MyGr, MyPoutre.Sections(IndS).ProfilA, myBrushP, MyParaff1, ZREF, MyPoutre.EntraxeD2)
+        DessinProfileMetal(MyGr, MyPoutre.Section.ProfilA, myBrushP, MyParaff1, ZREF, MyPoutre.EntraxeD2)
 
         '--> Affichage de la dalle béton
 
@@ -1497,7 +1497,6 @@ Module Mod_Dessins
             End If
 
         End If
-
 
         '--> Affichage des cotes
 
