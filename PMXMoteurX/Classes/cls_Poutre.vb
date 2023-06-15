@@ -94,10 +94,11 @@
     ''' </summary>
     Public pNbPropping As Integer
 
+    'Public Sections() As cls_Section
+
     ''' <summary>
     ''' Sections par travéee
     ''' </summary>
-    'Public Sections() As cls_Section
     Public Section As New cls_Section
 
 
@@ -412,6 +413,179 @@
         PoutreCible.Dalle = PoutreSource.Dalle.Clone
 
     End Sub
+
+
+#End Region
+
+#Region "Calculs"
+    ''' <summary>
+    ''' Calcul la largeur de la dalle participante à une position donnée
+    ''' </summary>
+    ''' <param name="xPositionSection">Position de la section par rapport à l'appui gauche le plus proche ou du bord libre</param>
+    ''' <param name="typeTravee">Indique le type de travée à laquelle appartient la section considérée</param>
+    ''' <param name="lSimplifiedModel">Indique si on considère un modèle simplifié pour le calcul de la largeur participante (=True)</param>
+    ''' <param name="lAnalysisModel">Si lSimplifiedModel = True, indique si on considère le modèle pour l'analyse de la poutre (lAnalysisModel = True) ou la vérification de la section (lAnalysisModel = False)</param>
+    ''' <returns>Retourne la valeur de la largeur participante</returns>
+    Public Function EffectiveWidth(xPositionSection As Decimal, typeTravee As EnuTypeTravee, lSimplifiedModel As Boolean, lAnalysisModel As Boolean) As Decimal
+        Dim beff As Decimal
+
+        Dim b1 As Decimal 'Largeur disponible à gauche de la poutre
+        Dim b2 As Decimal 'Largeur disponible à droite de la poutre
+
+        'Variables pour le calcul de la largeur participante à mi-travée
+
+        Dim be1_m As Decimal 'Largeur participante de la dalle à gauche de la poutre à mi-travée
+        Dim be2_m As Decimal 'Largeur participante de la dalle à droite de la poutre à mi-travée
+
+        Dim Le_m As Decimal 'Distance entre points de moment nul pour une section à mi-travée
+
+        Dim beff_m As Decimal 'Largeur participante à mi-travée
+
+        'Variables pour le calcul de la largeur participante sur appui d'extrémité gauche (appui A)
+
+        Dim be1_s_A As Decimal 'Largeur participante de la dalle à gauche de la poutre sur appui d'extrémité gauche
+        Dim be2_s_A As Decimal 'Largeur participante de la dalle à droite de la poutre sur appui d'extrémité gauche
+
+        Dim beta_1_A As Decimal
+        Dim beta_2_A As Decimal
+
+        Dim Le_s_A As Decimal 'Distance entre points de moment nul pour une section sur appui d'extrémité gauche
+
+        Dim beff_s_A As Decimal 'Largeur participante sur appui d'extrémité gauche
+
+        'Variables pour le calcul de la largeur participante sur appui d'extrémité gauche (appui B)
+
+        Dim be1_s_B As Decimal 'Largeur participante de la dalle à gauche de la poutre sur appui d'extrémité droite
+        Dim be2_s_B As Decimal 'Largeur participante de la dalle à droite de la poutre sur appui d'extrémité droite
+
+        Dim beta_1_B As Decimal
+        Dim beta_2_B As Decimal
+
+        Dim Le_s_B As Decimal 'Distance entre points de moment nul pour une section sur appui d'extrémité droite
+
+        Dim beff_s_B As Decimal 'Largeur participante sur appui d'extrémité droite
+
+
+
+        '----- Calcul de la largeur disponible -----
+
+        If lIntermediaire Then 'poutre intermédiaire
+            If lTremieGauche Then
+                b1 = Math.Min(DistanceDsl1, EntraxeD1 / 2)
+            Else
+                b1 = EntraxeD1 / 2
+            End If
+
+            If lTremieDroite Then
+                b2 = Math.Min(DistanceDsl2, EntraxeD2 / 2)
+            Else
+                b2 = EntraxeD2 / 2
+            End If
+
+        Else 'poutre de rive
+
+            b1 = EntraxeD1 'pas de trémie gauche pour les poutres de rive
+
+            If lTremieDroite Then
+                b2 = Math.Min(DistanceDsl2, EntraxeD2 / 2)
+            Else
+                b2 = EntraxeD2 / 2
+            End If
+
+        End If
+
+        '----- Calcul de la largeur participante à mi-travée -----
+
+        If lTraveeConsoleGauche Or lTraveeConsoleDroite Then
+            If lTraveeConsoleGauche And lTraveeConsoleDroite Then
+                Le_m = 0.7 * LongueurTravee(IndicePremiereTravee)
+            Else
+                Le_m = 0.85 * LongueurTravee(IndicePremiereTravee)
+            End If
+        Else
+            Le_m = LongueurTravee(IndicePremiereTravee)
+        End If
+
+        be1_m = Math.Min(Le_m / 8, b1)
+        be2_m = Math.Min(Le_m / 8, b2)
+
+        beff_m = be1_m + be2_m
+
+        '----- Calcul de la largeur participante sur appui d'extrémité gauche (appui A) -----
+
+        If lTraveeConsoleGauche Then
+            Le_s_A = 2 * LongueurTravee(0)
+        Else
+            Le_s_A = Le_m
+        End If
+
+        be1_s_A = Math.Min(Le_s_A / 8, b1)
+        be2_s_A = Math.Min(Le_s_A / 8, b2)
+
+        beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
+        beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
+
+        beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
+
+        '----- Calcul de la largeur participante sur appui d'extrémité droite (appui B) -----
+
+        If lTraveeConsoleDroite Then
+            Le_s_B = 2 * LongueurTravee(IndiceTraveeConsoleDroite)
+        Else
+            Le_s_B = Le_m
+        End If
+
+        be1_s_B = Math.Min(Le_s_B / 8, b1)
+        be2_s_B = Math.Min(Le_s_B / 8, b2)
+
+        beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
+        beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
+
+        beff_s_A = beta_1_B * be1_s_B + beta_2_B * be2_s_B
+
+        '----- Calcul de la largeur participante pour une section quelconque -----
+
+        Select Case typeTravee
+            Case EnuTypeTravee.ConsoleGauche
+                beff = beff_s_A
+
+            Case EnuTypeTravee.DeuxAppuis
+                If lSimplifiedModel Then 'Modèle simplifié pour le calcul de la largeur participante
+                    If lAnalysisModel Then 'Calcul de la largeur participante pour l'analyse
+                        beff = beff_m
+                    Else 'Calcul de la largeur participante pour la vérification de la section
+                        Select Case xPositionSection / LongueurTravee(IndicePremiereTravee)
+                            Case <= 0.15
+                                beff = beff_s_A
+                            Case >= 0.85
+                                beff = beff_s_B
+                            Case Else
+                                beff = beff_m
+                        End Select
+                    End If
+
+                Else
+
+                    Select Case xPositionSection / LongueurTravee(IndicePremiereTravee)
+                        Case <= 0.25
+                            beff = beff_s_A + 4 * xPositionSection / LongueurTravee(IndicePremiereTravee) * (beff_m - beff_s_A)
+                        Case >= 0.75
+                            beff = beff_m + 4 * xPositionSection / LongueurTravee(IndicePremiereTravee) * (beff_s_B - beff_m)
+                        Case Else
+                            beff = beff_m
+                    End Select
+
+                End If
+
+            Case EnuTypeTravee.ConsoleDroite
+                beff = beff_s_B
+
+        End Select
+
+
+        Return beff
+    End Function
+
 
 
 #End Region
