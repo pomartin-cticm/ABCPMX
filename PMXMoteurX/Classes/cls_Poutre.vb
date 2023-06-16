@@ -267,7 +267,7 @@
             Case iFRMPORTEE : Me.lDefautPortee = False
             Case iFRMETAIEMENT : Me.lDefautEtaiement = False
             Case iFRMENROBAGE : Me.lDefautEnrobage = False
-            Case iFRMDALLE : Me.ldefautdalle = False
+            Case iFRMDALLE : Me.lDefautDalle = False
         End Select
     End Sub
 
