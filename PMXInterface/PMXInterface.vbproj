@@ -106,6 +106,12 @@
     <Compile Include="Fenetres\Filles\Frm_Etaiement.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Maintiens.Designer.vb">
+      <DependentUpon>Frm_Maintiens.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Maintiens.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Portees.Designer.vb">
       <DependentUpon>Frm_Portees.vb</DependentUpon>
     </Compile>
@@ -189,6 +195,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Etaiement.resx">
       <DependentUpon>Frm_Etaiement.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Maintiens.resx">
+      <DependentUpon>Frm_Maintiens.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Portees.resx">
       <DependentUpon>Frm_Portees.vb</DependentUpon>
