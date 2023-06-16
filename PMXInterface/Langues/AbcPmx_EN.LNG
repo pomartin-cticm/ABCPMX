@@ -16,6 +16,17 @@ EXIT					= Exit
 TITLE					= Definition of the slab
 OK						= OK
 CANCEL					= Cancel 
+GENERAL					= General
+SOLIDSLAB				= Solid slab
+COMPOSITESLAB			= Composite slab
+PRECASTSLAB				= Partially prefabricated slab
+CONCRETE				= Concrete
+REBARS					= Longitudinal reinforcement
+SHEETING				= Profiled steel sheeting
+SHEETBASE				= From database
+SHEETCUSTOM				= Custom definition
+SHEETCOMPANY			= Manufacturer
+ALL						= All
 
 #FRM_ENCASEMENT
 TITLE					= Definition of partial encasement

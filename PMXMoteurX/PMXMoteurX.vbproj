@@ -84,7 +84,7 @@
     <Compile Include="Classes\cls_Section.vb" />
     <Compile Include="Elements\Cls_Enrobage_Partiel.vb" />
     <Compile Include="Elements\Cls_Armature_Longi.vb" />
-    <Compile Include="Elements\Cls_Bac_Acier.vb" />
+    <Compile Include="Elements\Cls_Bac.vb" />
     <Compile Include="Elements\Cls_Dalle.vb" />
     <Compile Include="Classes\cls_Projet.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

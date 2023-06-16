@@ -138,6 +138,7 @@
     Public lDefautPortee As Boolean
     Public lDefautEnrobage As Boolean
     Public lDefautEtaiement As Boolean
+    Public lDefautDalle As Boolean
 
     ''' <summary>
     ''' Indique si la poutre est enregistrée
@@ -182,6 +183,7 @@
         Me.lDefautPortee = True
         Me.lDefautEtaiement = True
         Me.lDefautEnrobage = True
+        Me.lDefautDalle = True
         Me.lDonneesSauvees = False
         Me.NouvellePoutre = True
     End Sub
@@ -258,11 +260,13 @@
         Const iFRMPORTEE As Integer = 1
         Const iFRMETAIEMENT As Integer = 2
         Const iFRMENROBAGE As Integer = 3
+        Const iFRMDALLE As Integer = 4
 
         Select Case iFenetre
             Case iFRMPORTEE : Me.lDefautPortee = False
             Case iFRMETAIEMENT : Me.lDefautEtaiement = False
             Case iFRMENROBAGE : Me.lDefautEnrobage = False
+            Case iFRMDALLE : Me.ldefautdalle = False
         End Select
     End Sub
 

@@ -61,7 +61,7 @@
     ''' Bac acier de la dalle
     ''' que si dalle mixte
     ''' </summary>
-    Public bac_acier As New Cls_Bac_Acier
+    Public bac_acier As New Cls_Bac
 
     ''' <summary>
     ''' Armatures longitudinales supérieur
@@ -87,6 +87,7 @@
     Public Enum Enum_TypeDalle
         Pleine
         Mixte
+        Prefabriquee
     End Enum
 
 #End Region
@@ -192,10 +193,10 @@
             Select Case Me.type
                 Case Enum_TypeDalle.Mixte
                     Select Case Me.bac_acier.orientation
-                        Case Cls_Bac_Acier.Enum_Orientation.Parallele
+                        Case Cls_Bac.Enum_Orientation.Parallele
                             Ep = Me.t_d - Me.bac_acier.h_p
-                        Case Cls_Bac_Acier.Enum_Orientation.Perpendiculaire
-                            Ep = Me.t_d - Me.bac_acier.h_pg
+                        Case Cls_Bac.Enum_Orientation.Perpendiculaire
+                            Ep = Me.t_d - Me.bac_acier.Hauteur_hpg
                     End Select
                 Case Enum_TypeDalle.Pleine
                     Ep = Me.t_d

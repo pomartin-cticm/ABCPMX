@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 Imports PMXMoteur2
-Module Mod_BasesDonnees
+Module Mod_BasesDonneesBinaires
 
 #Region "   Constantes "
 
@@ -77,7 +77,6 @@ Module Mod_BasesDonnees
 #End Region
 
 #Region "   MAIN "
-
     Public Sub InitDatabase_Aciers()
         '--> Fichier
         If Not File.Exists(LogicielFichiers.Base_Aciers) Then

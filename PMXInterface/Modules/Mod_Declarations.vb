@@ -18,7 +18,7 @@ Module Mod_Declarations
     Public Const RacProfile As String = "AM_HRProfiles"
     Public Const RacAcier As String = "AM_HRSteels"
     Public Const RacGoujons As String = "Studs"
-    Public Const RacBacs As String = "Sheetings"
+    Public Const RacBacs As String = "Sheetings V3"
 
 #End Region
 
@@ -220,6 +220,7 @@ Module Mod_Declarations
     Public Const NBPROPPINGMIN As Integer = 0
     Public Const NBPROPPINGMAX As Integer = 5
 
+
 #End Region
 
 #Region " Paramètres de STYLE "
@@ -280,6 +281,8 @@ Module Mod_Declarations
     Public ErreurNonNum_LNG As String
     Public ErreurHorsBornes_LNG As String
 
+    '--> Séparateur dans les fichiers
+    Public SEPARATEURS() As String = {" ", "=", ";"}
 
 #End Region
 
