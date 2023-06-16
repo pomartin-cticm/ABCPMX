@@ -116,6 +116,17 @@ Public Class Cls_Enrobage_Partiel
     End Property
 
 
+    Public Function Get_Phi_Max() As Decimal
+        Dim phi_max As Decimal
+
+        For i As Integer = 0 To LitArma.Length - 1
+            If LitArma(i).Get_Phi_Max > phi_max Then phi_max = LitArma(i).Get_Phi_Max
+        Next
+
+        Return phi_max
+
+    End Function
+
 #End Region
 
 #Region " Constructeur "

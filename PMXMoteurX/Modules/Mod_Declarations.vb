@@ -8,7 +8,7 @@
     ''' Colonne 2 = Diamètre max quand wk,max = 0.3 mm
     ''' Colonne 3 = Diamètre max quand wk,max = 0.2 mm
     ''' </summary>
-    Public sigma_S1_Ds As Decimal(,) =
+    Private sigma_S1_Ds As Decimal(,) =
         {{160, 40 / 1000, 32 / 1000, 25 / 1000},
         {200, 32 / 1000, 25 / 1000, 16 / 1000},
         {240, 20 / 1000, 16 / 1000, 12 / 1000},
@@ -16,7 +16,61 @@
         {320, 12 / 1000, 10 / 1000, 6 / 1000},
         {360, 10 / 1000, 8 / 1000, 5 / 1000},
         {400, 8 / 1000, 6 / 1000, 4 / 1000},
-        {450, 6 / 1000, 5 / 1000, 0}}
+        {450, 6 / 1000, 5 / 1000, 4 / 1000}}
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="wk_max">Largeur d'ouverture maximale en mètre</param>
+    ''' <param name="phi_max">Diamètre maximal des armatures en mètre</param>
+    ''' <returns></returns>
+    Public Function Get_sigma_S1_Ds(wk_max As Decimal, phi_max As Decimal)
+
+        '------------------------------------------------------------------------------------------------------------------
+        '   16/06/23 :  Création - GuD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Renvoi la contrainte admissible dans les aciers en fonction du diamètre max des aciers
+        '   Recherche le diamètre dans le tableau supérieur à phi_max le plus proche
+        '------------------------------------------------------------------------------------------------------------------
+        '   wk_maw    [E] :   Largeur des fissures admissibles (0.2; 0.3 ou 0.4 mm)
+        '   phi_max   [E] :   Diamètre max des aciers disposés dans la sectoin de béton
+        '   sigma_S1  [S] :   Retourne la contrainte admissible dans les aciers
+        '------------------------------------------------------------------------------------------------------------------
+
+        Dim sigma_S1 As Decimal
+
+        Dim i As Integer 'indice de ligne
+        Dim j As Integer 'indice de colonne
+
+        Select Case wk_max
+            Case 0.4 / 1000
+                j = 1
+
+            Case 0.3 / 1000
+                j = 2
+
+            Case 0.2 / 1000
+                j = 3
+
+            Case Else
+                Throw New Exception("Valeur wk_max hors limite: wk_max = 0.2, 0.3 ou 0.4 mm (variables d'entrée doit être en mètres)")
+
+        End Select
+
+        If phi_max > sigma_S1_Ds(0, j) Then Throw New Exception("Valeur Phi_max hors limite: Phi_max ne peut pas être supérieur à " & sigma_S1_Ds(0, j) & " (m)")
+
+        For i = 0 To sigma_S1_Ds.Length - 1
+            If phi_max > sigma_S1_Ds(i, j) Then
+                sigma_S1 = sigma_S1_Ds(i - 1, 0)
+                Exit For
+            End If
+        Next
+
+        If i = sigma_S1_Ds.Length - 1 Then sigma_S1 = sigma_S1_Ds(i, 0)
+
+        Return sigma_S1
+    End Function
+
 
     ''' <summary>
     ''' Contrainte maximale dans les aciers autorisée en fonction de l'espacement  des barres et de l'ouverture des fissures (cf. Tableau 7.2 de l'EC4)
@@ -25,7 +79,7 @@
     ''' Colonne 2 = Espacement max quand wk,max = 0.3 mm
     ''' Colonne 3 = Espacement max quand wk,max = 0.2 mm
     ''' </summary>
-    Public sigma_S1_es As Decimal(,) =
+    Private sigma_S1_es As Decimal(,) =
         {{160, 300 / 1000, 300 / 1000, 200 / 1000},
         {200, 300 / 1000, 250 / 1000, 150 / 1000},
         {240, 250 / 1000, 200 / 1000, 100 / 1000},
@@ -34,6 +88,53 @@
         {360, 100 / 1000, 50 / 1000, 0}}
 
 #End Region
+
+    Public Function Get_sigma_S1_es(wk_max As Decimal, es_max As Decimal)
+
+        '------------------------------------------------------------------------------------------------------------------
+        '   16/06/23 :  Création - GuD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Renvoi la contrainte admissible dans les aciers en fonction de l'espacement max des aciers
+        '   Recherche le diamètre dans le tableau supérieur à phi_max le plus proche
+        '------------------------------------------------------------------------------------------------------------------
+        '   wk_maw    [E] :   Largeur des fissures admissibles (0.2; 0.3 ou 0.4 mm)
+        '   es_max    [E] :   espacement max des aciers disposés dans la sectoin de béton
+        '   sigma_S1  [S] :   Retourne la contrainte admissible dans les aciers
+        '------------------------------------------------------------------------------------------------------------------
+
+        Dim sigma_S1 As Decimal
+
+        Dim i As Integer 'indice de ligne
+        Dim j As Integer 'indice de colonne
+
+        Select Case wk_max
+            Case 0.4 / 1000
+                j = 1
+
+            Case 0.3 / 1000
+                j = 2
+
+            Case 0.2 / 1000
+                j = 3
+
+            Case Else
+                Throw New Exception("Valeur wk_max hors limite: wk_max = 0.2, 0.3 ou 0.4 mm (variables d'entrée doit être en mètres)")
+
+        End Select
+
+        If es_max > sigma_S1_es(0, j) Then Throw New Exception("Valeur es_max hors limite: Phi_max ne peut pas être supérieur à " & sigma_S1_es(0, j) & " (m)")
+
+        For i = 0 To sigma_S1_es.Length - 1
+            If es_max > sigma_S1_es(i, j) Then
+                sigma_S1 = sigma_S1_es(i - 1, 0)
+                Exit For
+            End If
+        Next
+
+        If i = sigma_S1_es.Length - 1 Then sigma_S1 = sigma_S1_es(i, 0)
+
+        Return sigma_S1
+    End Function
 
 
 

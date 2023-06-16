@@ -76,6 +76,16 @@
         End Get
     End Property
 
+    Public Function Get_Phi_Max() As Decimal
+        Dim phi_max As Decimal
+        If NbExt <> 0 And PhiExt > phi_max Then phi_max = PhiExt
+        If NbMil <> 0 And PhiMil > phi_max Then phi_max = PhiMil
+        If NbInt <> 0 And PhiInt > phi_max Then phi_max = PhiInt
+
+        Return phi_max
+
+    End Function
+
 #End Region
 
 End Class

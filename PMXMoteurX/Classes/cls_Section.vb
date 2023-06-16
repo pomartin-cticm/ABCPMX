@@ -237,6 +237,31 @@ Public Class cls_Section
 
     End Sub
 
+    Public Function Calcul_Armatures_Minimales_Enrobage_Partiel()
+        'Définition des variables locales
+        Dim ks As Decimal
+        Dim kc As Decimal
+        Dim k As Decimal
+        Dim fct_eff As Decimal
+        Dim Act As Decimal
+        Dim sigma_s As Decimal
+        Dim As_min As Decimal
+
+        ks = 0.9
+        kc = 0.6
+        k = 0.8
+        fct_eff = enrobage_partiel.Beton.Fctm
+        Act = enrobage_partiel.Ratio_bc * ProfilA.b_fs * ProfilA.h_w
+        Dim phi_max As Decimal = enrobage_partiel.Get_Phi_Max()
+
+        sigma_s = Mod_Declarations.Get_sigma_S1_Ds(enrobage_partiel.Beton.wk_max, phi_max)
+
+        As_min = ks * kc * k * fct_eff * Act / sigma_s
+
+        Return As_min
+
+    End Function
+
     ''' <summary>
     ''' Lancement de toutes les fonctions de calcul
     ''' </summary>

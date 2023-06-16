@@ -33,6 +33,11 @@
     Public Fcm As Decimal
 
     ''' <summary>
+    ''' résistance à la traction (Pa)
+    ''' </summary>
+    Public Fctm As Decimal
+
+    ''' <summary>
     ''' module sécant du béton
     ''' </summary>
     Public Ecm As Decimal
