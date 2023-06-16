@@ -422,15 +422,20 @@
 #End Region
 
 #Region "Calculs"
-    ''' <summary>
-    ''' Calcul la largeur de la dalle participante à une position donnée
-    ''' </summary>
-    ''' <param name="xPositionSection">Position de la section par rapport à l'appui gauche le plus proche ou du bord libre</param>
-    ''' <param name="typeTravee">Indique le type de travée à laquelle appartient la section considérée</param>
-    ''' <param name="lSimplifiedModel">Indique si on considère un modèle simplifié pour le calcul de la largeur participante (=True)</param>
-    ''' <param name="lAnalysisModel">Si lSimplifiedModel = True, indique si on considère le modèle pour l'analyse de la poutre (lAnalysisModel = True) ou la vérification de la section (lAnalysisModel = False)</param>
-    ''' <returns>Retourne la valeur de la largeur participante</returns>
     Public Function EffectiveWidth(xPositionSection As Decimal, typeTravee As EnuTypeTravee, lSimplifiedModel As Boolean, lAnalysisModel As Boolean) As Decimal
+
+        '------------------------------------------------------------------------------------------------------------------
+        '   16/06/23 :  Création - GuD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Calcul la largeur de la dalle participante à une position donnée
+        '------------------------------------------------------------------------------------------------------------------
+        '   xPositionSection    [E] :   Position de la section par rapport à l'appui gauche le plus proche ou du bord libre
+        '   typeTravee          [E] :   Indique le type de travée à laquelle appartient la section considérée
+        '   lSimplifiedModel    [E] :   Indique si on considère un modèle simplifié pour le calcul de la largeur participante (=True)
+        '   lAnalysisModel      [E] :   Si lSimplifiedModel = True, indique si on considère le modèle pour l'analyse de la poutre (lAnalysisModel = True) ou la vérification de la section (lAnalysisModel = False)
+        '   beff                [S] :   Retourne la valeur de la largeur participante
+        '------------------------------------------------------------------------------------------------------------------
+
         Dim beff As Decimal
 
         Dim b1 As Decimal 'Largeur disponible à gauche de la poutre

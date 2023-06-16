@@ -43,7 +43,7 @@ Public Class Cls_Enrobage_Partiel
     ''' <summary>
     ''' largeur de béton
     ''' </summary>
-    Public b_c As Decimal
+    'Public b_c As Decimal
 
     ''' <summary>
     ''' Ratio largeur de béton/largeur profilé
@@ -91,6 +91,10 @@ Public Class Cls_Enrobage_Partiel
 #End Region
 
 #Region " Fonctions et outils "
+
+    Public Function Get_b_c(bf As Decimal) As Decimal
+        Return Ratio_bc * bf
+    End Function
 
     ''' <summary>
     ''' Calcul des propriétés
@@ -168,7 +172,7 @@ Public Class Cls_Enrobage_Partiel
     ''' <param name="Lines">Lignes d'écriture</param>
     Public Sub EcrireFile(ByRef Lines As List(Of String))
 
-        Lines.Add("   Eb_c          = " & b_c)
+        'Lines.Add("   Eb_c          = " & b_c)
         ' Lines.Add("   Ef_y          = " & acier_armature)
 
         With Beton

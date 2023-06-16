@@ -253,7 +253,8 @@ Public Class cls_Section
             enrobage_partiel.Beton.Calcul_Proprietes()
 
             Dim h_w As Decimal = ProfilA.HauteurAmeHw
-            Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.b_c - ProfilA.t_w) - (4 - Math.PI) * ProfilA.r_cs ^ 2) / (2 * h_w)
+            'Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.b_c - ProfilA.t_w) - (4 - Math.PI) * ProfilA.r_cs ^ 2) / (2 * h_w)
+            Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.Get_b_c(ProfilA.b_fs) - ProfilA.t_w) - (4 - Math.PI) * ProfilA.r_cs ^ 2) / (2 * h_w)
             Param.Prop_Elastique_Enrobage.Calcul_Coeff(E, enrobage_partiel.Beton.Fcm, enrobage_partiel.Beton.Ecm)
 
         End If
@@ -450,7 +451,7 @@ Public Class cls_Section
                         Case "FYFS" : Me.Acier.f_y.fs = Mots(nbMots)
                         Case "FYFI" : Me.Acier.f_y.fi = Mots(nbMots)
                             '--> Enrobage
-                        Case "EB_C" : Me.enrobage_partiel.b_c = Mots(nbMots)
+                        'Case "EB_C" : Me.enrobage_partiel.b_c = Mots(nbMots)
                        ' Case "EF_Y" : Me.enrobage_partiel.acier_armature = Mots(nbMots)
                             '--> Béton enrobage
                         Case "EBTY" : Me.enrobage_partiel.Beton.Type = Mots(nbMots)

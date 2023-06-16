@@ -37,6 +37,16 @@
     ''' </summary>
     Public Ecm As Decimal
 
+    ''' <summary>
+    ''' Indique si l'ouverture des fissures est controlé
+    ''' </summary>
+    Public lCrackingLimitation As Boolean
+
+    ''' <summary>
+    ''' Largeur d'ouverture maximale des fissures autorisée
+    ''' </summary>
+    Public wk_max As Decimal
+
 #End Region
 
 #Region " Enumérations "
@@ -196,6 +206,8 @@
         Me.Type = Enum_TypeBeton.Normal
         Me.Classe = "C20/25"
         Me.Fck = 20
+        Me.lCrackingLimitation = True
+        Me.wk_max = 0.4 / 1000
         Calcul_Proprietes()
 
     End Sub
