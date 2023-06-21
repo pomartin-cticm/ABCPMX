@@ -153,13 +153,7 @@ Public Class Frm_Portees
 #End Region
 
 #Region "===FERMETURE==="
-
-    Public Sub TraitementSaisie()
-
-    End Sub
-
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
-
         If ValideSaisieFenetre() Then
 
             Dim lModif As Boolean = False
@@ -170,11 +164,10 @@ Public Class Frm_Portees
                 MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
 
-            MyProjet.Poutres(MyProjet.IndEnCours).EstValidee(iFRMPORTEES)
+            'MyProjet.Poutres(MyProjet.IndEnCours).EstValidee(iFRMETAIEMENT)
 
             Me.Close()
         End If
-
     End Sub
 
     Private Function ValideSaisieFenetre() As Boolean
@@ -183,78 +176,55 @@ Public Class Frm_Portees
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
-        Dim Indice As Integer = MyPoutreLoc.IndiceTraveeConsoleDroite
-
-        '--> Portée travée principale
-
         lModif = False
-        If MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(1) <> MyPoutreLoc.LongueurTravee(1) Then
-            lModif = True
-            MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(1) = MyPoutreLoc.LongueurTravee(1)
-        End If
 
-        '--> Console gauche
+        With MyProjet.Poutres(MyProjet.IndEnCours)
 
-        If MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleGauche <> MyPoutreLoc.lTraveeConsoleGauche Then
-            lModif = True
-            MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleGauche = MyPoutreLoc.lTraveeConsoleGauche
-        End If
+            For i_travee As Integer = 0 To MyPoutreLoc.IndiceTraveeConsoleDroite
+                If .LongueurTravee(i_travee) <> MyPoutreLoc.LongueurTravee(i_travee) Then
+                    lModif = True
+                    .LongueurTravee(i_travee) = MyPoutreLoc.LongueurTravee(i_travee)
+                End If
+            Next
 
-        If MyPoutreLoc.lTraveeConsoleGauche Then
-            If MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(0) <> MyPoutreLoc.LongueurTravee(0) Then
+            If .lTraveeConsoleGauche <> MyPoutreLoc.lTraveeConsoleGauche Then
                 lModif = True
-                MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(0) = MyPoutreLoc.LongueurTravee(0)
+                .lTraveeConsoleGauche = MyPoutreLoc.lTraveeConsoleGauche
             End If
-        End If
 
-        '--> Console droite
-
-        If MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleDroite <> MyPoutreLoc.lTraveeConsoleDroite Then
-            lModif = True
-            MyProjet.Poutres(MyProjet.IndEnCours).lTraveeConsoleDroite = MyPoutreLoc.lTraveeConsoleDroite
-        End If
-
-        If MyPoutreLoc.lTraveeConsoleDroite Then
-            If MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(Indice) <> MyPoutreLoc.LongueurTravee(Indice) Then
+            If .lTraveeConsoleDroite <> MyPoutreLoc.lTraveeConsoleDroite Then
                 lModif = True
-                MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(Indice) = MyPoutreLoc.LongueurTravee(Indice)
+                .lTraveeConsoleDroite = MyPoutreLoc.lTraveeConsoleDroite
             End If
-        End If
 
-        '--> Trémie gauche
-
-        If MyProjet.Poutres(MyProjet.IndEnCours).lTremieGauche <> MyPoutreLoc.lTremieGauche Then
-            lModif = True
-            MyProjet.Poutres(MyProjet.IndEnCours).lTremieGauche = MyPoutreLoc.lTremieGauche
-        End If
-
-        If MyProjet.Poutres(MyProjet.IndEnCours).lTremieGauche Then
-            If MyProjet.Poutres(MyProjet.IndEnCours).DistanceDsl1 <> MyPoutreLoc.DistanceDsl1 Then
+            If .lIntermediaire <> MyPoutreLoc.lIntermediaire Then
                 lModif = True
-                MyProjet.Poutres(MyProjet.IndEnCours).DistanceDsl1 = MyPoutreLoc.DistanceDsl1
+                .lIntermediaire = MyPoutreLoc.lIntermediaire
             End If
-        End If
 
-        '--> Trémie à droite
-
-        If MyProjet.Poutres(MyProjet.IndEnCours).lTremieDroite <> MyPoutreLoc.lTremieDroite Then
-            lModif = True
-            MyProjet.Poutres(MyProjet.IndEnCours).lTremieDroite = MyPoutreLoc.lTremieDroite
-        End If
-
-        If MyProjet.Poutres(MyProjet.IndEnCours).lTremieDroite Then
-            If MyProjet.Poutres(MyProjet.IndEnCours).DistanceDsl2 <> MyPoutreLoc.DistanceDsl2 Then
+            If .EntraxeD1 <> MyPoutreLoc.EntraxeD1 Then
                 lModif = True
-                MyProjet.Poutres(MyProjet.IndEnCours).DistanceDsl2 = MyPoutreLoc.DistanceDsl2
+                .EntraxeD1 = MyPoutreLoc.EntraxeD1
             End If
-        End If
 
+            If .EntraxeD2 <> MyPoutreLoc.EntraxeD2 Then
+                lModif = True
+                .EntraxeD2 = MyPoutreLoc.EntraxeD2
+            End If
+
+            If .lTremieGauche <> MyPoutreLoc.lTremieGauche Then
+                lModif = True
+                .lTremieGauche = MyPoutreLoc.lTremieGauche
+            End If
+
+            If .lTremieDroite <> MyPoutreLoc.lTremieDroite Then
+                lModif = True
+                .lTremieDroite = MyPoutreLoc.lTremieDroite
+            End If
+
+
+        End With
     End Sub
-
-    Private Sub btn_Annuler_Click(sender As Object, e As EventArgs) Handles btn_Annuler.Click
-        Me.Close()
-    End Sub
-
 #End Region
 
 #Region " Dessins "
@@ -383,8 +353,8 @@ Public Class Frm_Portees
 #Region " Evènements saisie "
 
     Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_PorteeConsoleG.TextChanged, txt_PorteeConsoleD.TextChanged, txt_MainSpan.TextChanged,
-                                                                     txt_TremieDroite.TextChanged, txt_TremieGauche.TextChanged
-        'txt_D2.TextChanged, txt_D1.TextChanged
+                                                                     txt_TremieDroite.TextChanged, txt_TremieGauche.TextChanged,
+                                                                     txt_D1.TextChanged, txt_D2.TextChanged
 
         If lBuild Then Exit Sub
         Dim lPortees As Boolean = False

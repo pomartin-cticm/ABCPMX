@@ -16,6 +16,7 @@ Public Class Frm_PMX
         Section
         Enrobage
         Connexion
+        Maintiens
         Etaiement
         Chargements
         Combinaisons
@@ -244,7 +245,7 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click
+    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click
 
         Select Case sender.name
             Case Me.TSbtn_Accueil.Name
@@ -260,7 +261,8 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFilleEnCours.Section
             Case Me.TSbtn_Enrobage.Name
                 FilleEnCours = EnuFilleEnCours.Enrobage
-
+            Case Me.TSbtn_Maintiens.Name
+                FilleEnCours = EnuFilleEnCours.Maintiens
             Case Me.TSbtn_Etaiement.Name
                 FilleEnCours = EnuFilleEnCours.Etaiement
             Case Me.TSbtn_Chargements.Name
@@ -300,6 +302,13 @@ Public Class Frm_PMX
             Case EnuFilleEnCours.Enrobage
                 If LogicielOptions.lFenetres Then
                     Frm_Enrobage.ShowDialog()
+                Else
+
+                End If
+
+            Case EnuFilleEnCours.Maintiens
+                If LogicielOptions.lFenetres Then
+                    Frm_Maintiens.ShowDialog()
                 Else
 
                 End If

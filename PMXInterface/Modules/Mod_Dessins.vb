@@ -1826,6 +1826,178 @@ Module Mod_Dessins
 
 #End Region
 
+#Region "Dessin pour les maintiens (FRM_MAINTIENS)"
+
+    Public Sub DessinFrmMaintiens(MyGr As Graphics, MyPoutre As cls_Poutre,
+                                ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                kAdjust As Double, iSelect As Integer, lCote As Boolean,
+                                ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '------------------------------------------------------------------------------------------------------------------
+        '   21/06/23 :  Création - GUD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage des travées dans la fenêtre maintiens latéraux
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MyPoutre    [E] :   Poutre à dessiner
+        '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   iSelect     [E] :   Indique quel est la travée sélectionnée
+        '   lCote       [E] :   Indique si affichage de la cote
+        '------------------------------------------------------------------------------------------------------------------
+        '   iSelect     0  : console gauche
+        '               i  : travée sur 2 appui no i
+        '               99 : console droite
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar, dCarApp As Decimal
+        Dim MyParAff As Struc_Affichage
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+        Dim LongueurPoutre, HauteurPoutre As Decimal
+        Dim LongueurDalle, HauteurDalle As Decimal
+        Dim MyBrushA As New SolidBrush(Color.LightGray)
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyColor As Color
+        Dim CouleurBeton As Color = CouleurBetonNormal
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+        Const lAffSymbol As Boolean = False
+        Dim Chaine As String
+        Dim MyFontNormal As Font = FontBase
+        Dim lTotal As Boolean = False
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        '--> Initialisations
+
+        LongueurPoutre = MyPoutre.LongueurTotale
+        HauteurPoutre = MyPoutre.HauteurTotale
+        LongueurDalle = MyPoutre.LongueurTotale
+        HauteurDalle = MyPoutre.Dalle.t_d
+        dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 20
+        dCarApp = HauteurPoutre / 2
+
+        '--> Initialisation des paramètres d'affichage
+
+        xMin = 0
+        xMax = LongueurPoutre
+        yMin = -dCar - dCarApp
+        yMax = HauteurPoutre + dCar
+
+        If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+        '--> Représentation de la poutre 
+
+        xe = 0
+        yo = 0
+        ye = HauteurPoutre
+
+        For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
+
+            xo = xe
+            xe = xo + MyPoutre.LongueurTravee(i)
+
+            AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+        Next
+
+        '--> Représentation des appuis
+
+        For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
+
+            xo = MyPoutre.xPositionAppui(True, i)
+            DessineAppui(MyGr, xo, dCarApp, MyParAff)
+
+        Next
+
+        xo = MyPoutre.xPositionAppui(False, MyPoutre.NombreTraveesDeuxAppuis)
+        DessineAppui(MyGr, xo, dCarApp, MyParAff)
+
+        '=== COTES =======================================================
+
+        If lCote Then
+
+            Dim yCote As Decimal = -dCar - dCarApp
+
+            xo = 0
+            xe = 0
+
+            ' Travée console gauche
+
+            If MyPoutre.lTraveeConsoleGauche Then
+
+                MyColor = StyleCouleur(iSelect, 0)
+                MyPen.Color = MyColor
+
+                xo = 0
+                xe = MyPoutre.LongueurTravee(0)
+
+                AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                If lAffSymbol Then Chaine = "Lg" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(0), Enu_TypeVariable.Longueur)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                lTotal = True
+            End If
+
+            ' Travées principales
+
+            For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
+
+                MyColor = StyleCouleur(iSelect, i)
+                MyPen.Color = MyColor
+
+                xo = xe
+                xe += MyPoutre.LongueurTravee(i)
+
+                AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i), Enu_TypeVariable.Longueur)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            Next
+
+            ' Travée console droite
+
+            If MyPoutre.lTraveeConsoleDroite Then
+
+                MyColor = StyleCouleur(iSelect, 99)
+                MyPen.Color = MyColor
+
+                xo = xe
+                xe += MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite)
+
+                AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                If lAffSymbol Then Chaine = "Ld" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                lTotal = True
+
+            End If
+
+            ' Longueur totale si plusieurs travées
+
+            If lTotal Then
+
+                xo = 0
+                xe = LongueurPoutre
+
+                AddFleche(MyGr, MyPen, xo, yCote - dCar, xe, yCote - dCar, MyParAff, True, True)
+
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(LongueurPoutre, Enu_TypeVariable.Longueur)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote - dCar, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            End If
+
+        End If
+
+    End Sub
+
+#End Region
+
 #Region " Dessins pour la définition de l'étaiement (FRM_ETAIEMENT)"
 
     Public Sub DessinFrmEtaiement(MyGr As Graphics, MyPoutre As cls_Poutre,

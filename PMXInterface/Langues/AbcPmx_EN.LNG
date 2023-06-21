@@ -129,6 +129,14 @@ AUTOMATICHW				= Height of the web automatically assessed
 AUTOMATICHA				= Total height automatically assessed
 DELIVERYCOND			= Delivery conditions for $
 
+#FRM_MAINTIENS
+TITLE 					= Restrain
+OK						= OK
+CANCEL					= Cancel
+MAINSPAN				= Main span
+CONSOLEG				= Left cantilever span
+CONSOLED				= Right cantilever span
+
 #FRM_ETAIEMENT
 TITLE					= Propping
 PROPPINGTYPE			= Type of propping

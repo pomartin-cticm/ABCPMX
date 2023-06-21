@@ -20,6 +20,18 @@
         FullyPropped
         PointPropped
     End Enum
+
+    Enum EnuTypeMaintiensPoutre
+        NonRestrain
+        FullyRestrain
+        PointRestrain
+    End Enum
+
+    Enum EnuPositionMaintienSection
+        SemelleSup
+        SemelleInf
+        DeuxSemelles
+    End Enum
 #End Region
 
 #Region " Variables "
@@ -93,6 +105,19 @@
     ''' Nombre d'étais disposés par través entre deux appuis consécutifs
     ''' </summary>
     Public pNbPropping As Integer
+
+    ''' <summary>
+    ''' Nombre de maintiens disposés sur la travée considérée
+    ''' </summary>
+    Public pNbRestrain() As Integer
+
+    ''' <summary>
+    ''' Position des maintiens disposés sur la travée considérée
+    ''' Le premier indice correspond à la travée considérée
+    ''' Le deuxième indice correspond à la position par rapport à l'appui/bord de gauche
+    ''' Le troisième indice correspond à la position du ou des maintiens
+    ''' </summary>
+    Public x_SLR As (Decimal, EnuPositionMaintienSection)()
 
     'Public Sections() As cls_Section
 
@@ -193,6 +218,7 @@
         pNbTravees = 1
         ReDim LongueurTravee(pNbTravees + 2)
         ReDim TypTravee(pNbTravees + 2)
+        ReDim x_SLR(pNbTravees + 2)
 
         lTraveeConsoleDroite = False
         lTraveeConsoleGauche = False
