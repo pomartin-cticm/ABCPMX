@@ -6,7 +6,7 @@ Public Class Frm_Maintiens
 #Region " Variables locales "
 
     Dim lBuild As Boolean = True
-    Dim iSelect As Integer = -1
+    Dim iSelect As Integer = 1
     '----------------------------------------------
     '   1 pour la travée principale
     '   -1 si rien de selectionné
@@ -21,7 +21,7 @@ Public Class Frm_Maintiens
     Dim strTypeTravee_TraveeCentrale As String
     Dim strTypeTravee_ConsoleDroite As String
 
-    Dim traveeEnCours As cls_Poutre.EnuTypeTravee = cls_Poutre.EnuTypeTravee.DeuxAppuis
+    Dim traveeEnCours As (cls_Poutre.EnuTypeTravee, Integer) = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
 
 #End Region
 
@@ -32,13 +32,13 @@ Public Class Frm_Maintiens
     End Sub
 
     Public Sub InitialiserFenetre()
+        InitialiserVariables()
         GestionLangues()
         GestionStyle()
         GestionUnites()
 
         RemplirComboTypeTravee()
 
-        InitialiserVariables()
         AfficherPoutreEnCours()
         lBuild = False
     End Sub
@@ -69,8 +69,8 @@ Public Class Frm_Maintiens
                 strTypeTravee_ConsoleGauche = Bloc("CONSOLEG")
                 strTypeTravee_ConsoleDroite = Bloc("CONSOLED")
 
-                If MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleGauche Then
-                    If MyPoutreLoc.lTraveeConsoleGauche And MyPoutreLoc.lTraveeConsoleGauche Then
+                If MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleDroite Then
+                    If MyPoutreLoc.lTraveeConsoleGauche And MyPoutreLoc.lTraveeConsoleDroite Then
                         ReDim strTypeTravee(2)
                     Else
                         ReDim strTypeTravee(1)
@@ -158,7 +158,7 @@ Public Class Frm_Maintiens
 #Region " Dessins "
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Maintiens.Paint
 
-        DessinFrmPortee(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, False)
+        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, False)
 
     End Sub
 
@@ -166,6 +166,30 @@ Public Class Frm_Maintiens
 
 #Region " Evènements "
 
+    Private Sub btn_Add_Click(sender As Object, e As EventArgs) Handles btn_Add.Click
+        MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens((MyPoutreLoc.Maintiens.Count + 1) * MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens.Count + 2), cls_Maintiens.EnuPositionMaintienSection.DeuxSemelles))
+
+        MAJ_PositionMaintiens()
+
+        img_Maintiens.Invalidate()
+    End Sub
+
+    Private Sub btn_Delete_Click(sender As Object, e As EventArgs) Handles btn_Delete.Click
+        If MyPoutreLoc.Maintiens.Count <> 0 Then
+            MyPoutreLoc.Maintiens(traveeEnCours.Item2).Remove(MyPoutreLoc.Maintiens(traveeEnCours.Item2).Last)
+            MAJ_PositionMaintiens()
+            img_Maintiens.Invalidate()
+        End If
+
+    End Sub
+
+    Private Sub MAJ_PositionMaintiens()
+        Dim index_maintien As Integer
+        For Each maintiens As cls_Maintiens In MyPoutreLoc.Maintiens(traveeEnCours.Item2)
+            index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
+            maintiens.x_Loc = (index_maintien + 1) * MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens.Count + 1)
+        Next
+    End Sub
 
 #End Region
 
@@ -175,15 +199,19 @@ Public Class Frm_Maintiens
 
         Select Case cmb_Travee.Text
             Case strTypeTravee_ConsoleGauche
-                traveeEnCours = cls_Poutre.EnuTypeTravee.ConsoleGauche
+                traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleGauche, 0)
+                iSelect = 0
 
             Case strTypeTravee_TraveeCentrale
-                traveeEnCours = cls_Poutre.EnuTypeTravee.DeuxAppuis
+                traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
+                iSelect = 1
 
             Case strTypeTravee_ConsoleDroite
-                traveeEnCours = cls_Poutre.EnuTypeTravee.ConsoleDroite
-
+                traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleDroite, MyPoutreLoc.IndiceTraveeConsoleDroite)
+                iSelect = 99
         End Select
+
+        img_Maintiens.Invalidate()
 
     End Sub
 

@@ -1857,10 +1857,17 @@ Module Mod_Dessins
         Dim MyParAff As Struc_Affichage
         Dim xo, yo As Decimal
         Dim xe, ye As Decimal
-        Dim LongueurPoutre, HauteurPoutre As Decimal
-        Dim LongueurDalle, HauteurDalle As Decimal
+        Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre, EpaisseurSemelle, RayonConge As Decimal
+        'Dim LongueurDalle, HauteurDalle As Decimal
         Dim MyBrushA As New SolidBrush(Color.LightGray)
+        Dim MyBrushSemelleBloquee As New SolidBrush(Color.Red)
+        Dim MyBrushSemelleNonBloquee As New SolidBrush(Color.Green)
+        Dim MyBrushMaintienSup As New SolidBrush(Color.Red)
+        Dim MyBrushMaintienInf As New SolidBrush(Color.Red)
         Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyPenDot As New Pen(Color.Black, 1) With {
+            .DashStyle = DashStyle.Dash
+        }
         Dim MyColor As Color
         Dim CouleurBeton As Color = CouleurBetonNormal
         Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
@@ -1873,21 +1880,66 @@ Module Mod_Dessins
         '--> Initialisations
 
         LongueurPoutre = MyPoutre.LongueurTotale
+        LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
+        If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
+        If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
         HauteurPoutre = MyPoutre.HauteurTotale
-        LongueurDalle = MyPoutre.LongueurTotale
-        HauteurDalle = MyPoutre.Dalle.t_d
-        dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 20
+        EpaisseurSemelle = HauteurPoutre / 10
+        RayonConge = EpaisseurSemelle / 2
+        'LongueurDalle = MyPoutre.LongueurTotale
+        'HauteurDalle = MyPoutre.Dalle.t_d
+        dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = HauteurPoutre / 2
 
         '--> Initialisation des paramètres d'affichage
 
-        xMin = 0
-        xMax = LongueurPoutre
+        'Select Case iSelect
+        '    Case 0
+        '        xMin = 0
+        '        xMax = MyPoutre.LongueurTravee(iSelect)
+
+        '    Case 99
+        '        For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee - 1
+        '            xMin += MyPoutre.LongueurTravee(i)
+        '        Next
+        '        xMax = xMin + MyPoutre.LongueurTravee(MyPoutre.IndiceDerniereTravee)
+
+        '    Case Else
+        '        For i As Integer = MyPoutre.IndicePremiereTravee To iSelect - 1
+        '            xMin += MyPoutre.LongueurTravee(i)
+        '        Next
+        '        xMax = xMin + MyPoutre.LongueurTravee(iSelect)
+
+        'End Select
+
+        Select Case iSelect
+            Case 0
+                xMin = 0
+                xMax = LongueurConsoleGauche
+
+            Case 99
+                xMin = LongueurConsoleGauche
+                For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+                    xMin += LongueurTravee
+                Next
+                xMax = xMin + LongueurConsoleDroite
+
+            Case Else
+                xMin = LongueurConsoleGauche
+                For i As Integer = 1 To iSelect - 1
+                    xMin += LongueurTravee
+                Next
+                xMax = xMin + LongueurTravee
+
+        End Select
+
         yMin = -dCar - dCarApp
         yMax = HauteurPoutre + dCar
 
-        If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+
 
         '--> Représentation de la poutre 
 
@@ -1895,104 +1947,143 @@ Module Mod_Dessins
         yo = 0
         ye = HauteurPoutre
 
-        For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
+        xo = 0
+        xe = LongueurConsoleGauche
+        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        yo = 0
+        ye = EpaisseurSemelle
+        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        yo = HauteurPoutre - EpaisseurSemelle
+        ye = HauteurPoutre
+        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        yo = EpaisseurSemelle + RayonConge
+        ye = yo
+        AddLigne(MyGr, MyPenDot, xo, yo, xe, ye, MyParAff)
+
+        yo = HauteurPoutre - RayonConge - EpaisseurSemelle
+        ye = yo
+        AddLigne(MyGr, MyPenDot, xo, yo, xe, ye, MyParAff)
+
+        For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
+
+            yo = 0
+            ye = HauteurPoutre
 
             xo = xe
-            xe = xo + MyPoutre.LongueurTravee(i)
+            xe = xo + LongueurTravee
 
             AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+            yo = 0
+            ye = EpaisseurSemelle
+            AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+            yo = HauteurPoutre - EpaisseurSemelle
+            ye = HauteurPoutre
+            AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+            yo = EpaisseurSemelle + RayonConge
+            ye = yo
+            AddLigne(MyGr, MyPenDot, xo, yo, xe, ye, MyParAff)
+
+            yo = HauteurPoutre - RayonConge - EpaisseurSemelle
+            ye = yo
+            AddLigne(MyGr, MyPenDot, xo, yo, xe, ye, MyParAff)
         Next
 
-        '--> Représentation des appuis
+        yo = 0
+        ye = HauteurPoutre
 
-        For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
+        xo = xe
+        xe = xo + LongueurConsoleDroite
+        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
 
-            xo = MyPoutre.xPositionAppui(True, i)
+        yo = 0
+        ye = EpaisseurSemelle
+        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        yo = HauteurPoutre - EpaisseurSemelle
+        ye = HauteurPoutre
+        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        yo = EpaisseurSemelle + RayonConge
+        ye = yo
+        AddLigne(MyGr, MyPenDot, xo, yo, xe, ye, MyParAff)
+
+        yo = HauteurPoutre - RayonConge - EpaisseurSemelle
+        ye = yo
+        AddLigne(MyGr, MyPenDot, xo, yo, xe, ye, MyParAff)
+
+        '--> Représentation des appuis et les maintiens associés
+
+        For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite
+
+            xo = LongueurConsoleGauche + (i - 1) * LongueurTravee
+
             DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
+            yo = EpaisseurSemelle / 2
+            MyBrushMaintienSup = MyBrushSemelleBloquee
+            AddCerclePlein(MyGr, MyBrushMaintienInf, xo, yo, EpaisseurSemelle, MyParAff, True)
+
+            yo = HauteurPoutre - EpaisseurSemelle / 2
+            MyBrushMaintienInf = MyBrushSemelleBloquee
+            AddCerclePlein(MyGr, MyBrushMaintienSup, xo, yo, EpaisseurSemelle, MyParAff, True)
+
         Next
 
-        xo = MyPoutre.xPositionAppui(False, MyPoutre.NombreTraveesDeuxAppuis)
-        DessineAppui(MyGr, xo, dCarApp, MyParAff)
+        '--> Représentation des maintiens latéraux
 
-        '=== COTES =======================================================
+        For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
+            For Each maintiens As cls_Maintiens In MyPoutre.Maintiens(i)
+                Select Case maintiens.PositionMaintien
+                    Case maintiens.EnuPositionMaintienSection.SemelleSup
+                        MyBrushMaintienSup = MyBrushSemelleBloquee
+                        MyBrushMaintienInf = MyBrushSemelleNonBloquee
 
-        If lCote Then
+                    Case maintiens.EnuPositionMaintienSection.SemelleInf
+                        MyBrushMaintienSup = MyBrushSemelleNonBloquee
+                        MyBrushMaintienInf = MyBrushSemelleBloquee
 
-            Dim yCote As Decimal = -dCar - dCarApp
+                    Case maintiens.EnuPositionMaintienSection.DeuxSemelles
+                        MyBrushMaintienSup = MyBrushSemelleBloquee
+                        MyBrushMaintienInf = MyBrushSemelleBloquee
 
-            xo = 0
-            xe = 0
+                End Select
 
-            ' Travée console gauche
+                Select Case i
+                    Case 0
+                        xo = maintiens.x_Loc / MyPoutre.LongueurTravee(MyPoutre.IndicePremiereTravee) * LongueurConsoleGauche
 
-            If MyPoutre.lTraveeConsoleGauche Then
+                    Case MyPoutre.IndiceTraveeConsoleDroite
+                        xo = LongueurConsoleGauche
+                        For j As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
+                            xo += LongueurTravee
+                        Next
+                        xo += maintiens.x_Loc / MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite) * LongueurConsoleDroite
 
-                MyColor = StyleCouleur(iSelect, 0)
-                MyPen.Color = MyColor
+                    Case Else
+                        xo = LongueurConsoleGauche
+                        For j As Integer = 1 To i - 1
+                            xo += LongueurTravee
+                        Next
+                        xo += maintiens.x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurTravee
 
-                xo = 0
-                xe = MyPoutre.LongueurTravee(0)
 
-                AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "Lg" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(0), Enu_TypeVariable.Longueur)
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+                End Select
 
-                lTotal = True
-            End If
+                yo = EpaisseurSemelle / 2
+                AddCerclePlein(MyGr, MyBrushMaintienInf, xo, yo, EpaisseurSemelle, MyParAff, True)
 
-            ' Travées principales
-
-            For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
-
-                MyColor = StyleCouleur(iSelect, i)
-                MyPen.Color = MyColor
-
-                xo = xe
-                xe += MyPoutre.LongueurTravee(i)
-
-                AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
-
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i), Enu_TypeVariable.Longueur)
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+                yo = HauteurPoutre - EpaisseurSemelle / 2
+                AddCerclePlein(MyGr, MyBrushMaintienSup, xo, yo, EpaisseurSemelle, MyParAff, True)
 
             Next
-
-            ' Travée console droite
-
-            If MyPoutre.lTraveeConsoleDroite Then
-
-                MyColor = StyleCouleur(iSelect, 99)
-                MyPen.Color = MyColor
-
-                xo = xe
-                xe += MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite)
-
-                AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
-
-                If lAffSymbol Then Chaine = "Ld" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur)
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
-                lTotal = True
-
-            End If
-
-            ' Longueur totale si plusieurs travées
-
-            If lTotal Then
-
-                xo = 0
-                xe = LongueurPoutre
-
-                AddFleche(MyGr, MyPen, xo, yCote - dCar, xe, yCote - dCar, MyParAff, True, True)
-
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(LongueurPoutre, Enu_TypeVariable.Longueur)
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote - dCar, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
-            End If
-
-        End If
+        Next
 
     End Sub
 

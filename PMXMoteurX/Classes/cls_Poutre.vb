@@ -2,7 +2,7 @@
 
 #Region " Enumérations et constantes "
 
-    Const PORTEEDEFAUT As Decimal = 10.25
+    Public Const PORTEEDEFAUT As Decimal = 10.25
     Const PORTEECONSOLEDEFAUT As Decimal = 3.256
     Const ENTRAXEDEFAUT As Decimal = 2
     Const DISTANCETREMIEDEFAUT As Decimal = ENTRAXEDEFAUT / 2
@@ -27,11 +27,6 @@
         PointRestrain
     End Enum
 
-    Enum EnuPositionMaintienSection
-        SemelleSup
-        SemelleInf
-        DeuxSemelles
-    End Enum
 #End Region
 
 #Region " Variables "
@@ -112,12 +107,9 @@
     Public pNbRestrain() As Integer
 
     ''' <summary>
-    ''' Position des maintiens disposés sur la travée considérée
-    ''' Le premier indice correspond à la travée considérée
-    ''' Le deuxième indice correspond à la position par rapport à l'appui/bord de gauche
-    ''' Le troisième indice correspond à la position du ou des maintiens
+    ''' Liste des maintiens disposés sur la poutre
     ''' </summary>
-    Public x_SLR As (Decimal, EnuPositionMaintienSection)()
+    Public Maintiens() As List(Of cls_Maintiens)
 
     'Public Sections() As cls_Section
 
@@ -218,7 +210,11 @@
         pNbTravees = 1
         ReDim LongueurTravee(pNbTravees + 2)
         ReDim TypTravee(pNbTravees + 2)
-        ReDim x_SLR(pNbTravees + 2)
+        ReDim Maintiens(pNbTravees + 2)
+
+        For i As Integer = 0 To Maintiens.Length - 1
+            Maintiens(i) = New List(Of cls_Maintiens)
+        Next
 
         lTraveeConsoleDroite = False
         lTraveeConsoleGauche = False

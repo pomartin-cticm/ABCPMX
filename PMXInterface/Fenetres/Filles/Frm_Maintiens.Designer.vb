@@ -32,9 +32,6 @@ Partial Class Frm_Maintiens
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_ControlDessin = New System.Windows.Forms.Panel()
-        Me.btn_Standardize = New System.Windows.Forms.Button()
-        Me.txt_Nslr = New System.Windows.Forms.TextBox()
-        Me.img_Nslr = New System.Windows.Forms.PictureBox()
         Me.btn_Delete = New System.Windows.Forms.Button()
         Me.btn_Add = New System.Windows.Forms.Button()
         Me.lbl_Maintiens = New System.Windows.Forms.Label()
@@ -54,7 +51,6 @@ Partial Class Frm_Maintiens
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_ControlDessin.SuspendLayout()
-        CType(Me.img_Nslr, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Maintiens.SuspendLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -66,7 +62,7 @@ Partial Class Frm_Maintiens
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(1482, 427)
+        Me.pan_General.Size = New System.Drawing.Size(1482, 349)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -81,7 +77,7 @@ Partial Class Frm_Maintiens
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(1482, 427)
+        Me.TLpan_Main.Size = New System.Drawing.Size(1482, 349)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -95,7 +91,7 @@ Partial Class Frm_Maintiens
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 390)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 312)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -132,7 +128,7 @@ Partial Class Frm_Maintiens
         Me.pan_Main.Controls.Add(Me.TLPan_Maintiens)
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(1476, 381)
+        Me.pan_Main.Size = New System.Drawing.Size(1476, 303)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Maintiens
@@ -148,7 +144,7 @@ Partial Class Frm_Maintiens
         Me.TLPan_Maintiens.Name = "TLPan_Maintiens"
         Me.TLPan_Maintiens.RowCount = 1
         Me.TLPan_Maintiens.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Maintiens.Size = New System.Drawing.Size(1476, 381)
+        Me.TLPan_Maintiens.Size = New System.Drawing.Size(1476, 303)
         Me.TLPan_Maintiens.TabIndex = 0
         '
         'pan_Gauche
@@ -159,7 +155,7 @@ Partial Class Frm_Maintiens
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(250, 381)
+        Me.pan_Gauche.Size = New System.Drawing.Size(250, 303)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -178,51 +174,22 @@ Partial Class Frm_Maintiens
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 381)
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 303)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'pan_ControlDessin
         '
         Me.pan_ControlDessin.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ControlDessin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ControlDessin.Controls.Add(Me.btn_Standardize)
-        Me.pan_ControlDessin.Controls.Add(Me.txt_Nslr)
-        Me.pan_ControlDessin.Controls.Add(Me.img_Nslr)
         Me.pan_ControlDessin.Controls.Add(Me.btn_Delete)
         Me.pan_ControlDessin.Controls.Add(Me.btn_Add)
         Me.pan_ControlDessin.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_ControlDessin.Location = New System.Drawing.Point(0, 240)
         Me.pan_ControlDessin.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ControlDessin.Name = "pan_ControlDessin"
-        Me.pan_ControlDessin.Size = New System.Drawing.Size(250, 141)
+        Me.pan_ControlDessin.Size = New System.Drawing.Size(250, 63)
         Me.pan_ControlDessin.TabIndex = 2
-        '
-        'btn_Standardize
-        '
-        Me.btn_Standardize.Location = New System.Drawing.Point(62, 52)
-        Me.btn_Standardize.Name = "btn_Standardize"
-        Me.btn_Standardize.Size = New System.Drawing.Size(114, 28)
-        Me.btn_Standardize.TabIndex = 63
-        Me.btn_Standardize.Text = "btn_Standardize"
-        Me.btn_Standardize.UseVisualStyleBackColor = True
-        '
-        'txt_Nslr
-        '
-        Me.txt_Nslr.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Nslr.Location = New System.Drawing.Point(101, 96)
-        Me.txt_Nslr.Name = "txt_Nslr"
-        Me.txt_Nslr.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Nslr.TabIndex = 61
-        '
-        'img_Nslr
-        '
-        Me.img_Nslr.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Nslr.Location = New System.Drawing.Point(45, 96)
-        Me.img_Nslr.Name = "img_Nslr"
-        Me.img_Nslr.Size = New System.Drawing.Size(57, 20)
-        Me.img_Nslr.TabIndex = 62
-        Me.img_Nslr.TabStop = False
         '
         'btn_Delete
         '
@@ -352,7 +319,7 @@ Partial Class Frm_Maintiens
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1482, 427)
+        Me.ClientSize = New System.Drawing.Size(1482, 349)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Maintiens"
         Me.Text = "Frm_Maintiens"
@@ -365,8 +332,6 @@ Partial Class Frm_Maintiens
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
         Me.pan_ControlDessin.ResumeLayout(False)
-        Me.pan_ControlDessin.PerformLayout()
-        CType(Me.img_Nslr, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Maintiens.ResumeLayout(False)
         Me.pan_Maintiens.PerformLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).EndInit()
@@ -394,8 +359,5 @@ Partial Class Frm_Maintiens
     Friend WithEvents btn_Add As Button
     Friend WithEvents lbl_ControlDessin As Label
     Friend WithEvents lbl_Travee As Label
-    Friend WithEvents txt_Nslr As TextBox
-    Friend WithEvents img_Nslr As PictureBox
-    Friend WithEvents btn_Standardize As Button
     Friend WithEvents rad_NonRestrain As RadioButton
 End Class
