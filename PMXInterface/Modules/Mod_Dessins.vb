@@ -2039,7 +2039,7 @@ Module Mod_Dessins
 
         Next
 
-        '--> Représentation des maintiens latéraux
+        '--> Représentation des maintiens latéraux 
 
         For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
             For Each maintiens As cls_Maintiens In MyPoutre.Maintiens(i)
@@ -2104,6 +2104,135 @@ Module Mod_Dessins
 
             Next
         Next
+
+        '=== COTES =======================================================
+
+        If lCote Then
+
+            Dim yCote As Decimal = -dCar - dCarApp
+
+            MyPen.Color = Color.Black
+
+            Select Case iSelect
+                Case 0
+
+                    For Each maintiens In MyPoutre.Maintiens(iSelect)
+
+                        Dim indice_Maintien_en_cours As Integer = MyPoutre.Maintiens(iSelect).IndexOf(maintiens)
+
+                        If indice_Maintien_en_cours = 0 Then
+                            xo = 0
+                            xe = MyPoutre.Maintiens(iSelect)(indice_Maintien_en_cours).x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurConsoleGauche
+
+                            AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                        Else
+                            xo = MyPoutre.Maintiens(iSelect)(indice_Maintien_en_cours - 1).x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurConsoleGauche
+                            xe = MyPoutre.Maintiens(iSelect)(indice_Maintien_en_cours).x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurConsoleGauche
+
+                            AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+                        End If
+
+                    Next
+
+                    If MyPoutre.Maintiens(iSelect).Count <> 0 Then
+                        xo = MyPoutre.Maintiens(iSelect)(MyPoutre.Maintiens(iSelect).Count - 1).x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurConsoleGauche
+                        xe = LongueurConsoleGauche
+                    End If
+
+                    AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                Case 99
+
+                    For Each maintiens In MyPoutre.Maintiens(MyPoutre.IndiceTraveeConsoleDroite)
+
+                        Dim indice_Maintien_en_cours As Integer = MyPoutre.Maintiens(MyPoutre.IndiceTraveeConsoleDroite).IndexOf(maintiens)
+
+                        xo = LongueurConsoleGauche
+                        For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+                            xo += LongueurTravee
+                        Next
+
+                        If indice_Maintien_en_cours = 0 Then
+                            xe = xo + MyPoutre.Maintiens(MyPoutre.IndiceTraveeConsoleDroite)(indice_Maintien_en_cours).x_Loc / MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite) * LongueurConsoleDroite
+
+                            AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                        Else
+                            xe = xo + MyPoutre.Maintiens(MyPoutre.IndiceTraveeConsoleDroite)(indice_Maintien_en_cours).x_Loc / MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite) * LongueurConsoleDroite
+                            xo += MyPoutre.Maintiens(MyPoutre.IndiceTraveeConsoleDroite)(indice_Maintien_en_cours - 1).x_Loc / MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite) * LongueurConsoleDroite
+
+                            AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+                        End If
+
+                    Next
+
+                    If MyPoutre.Maintiens(MyPoutre.IndiceTraveeConsoleDroite).Count <> 0 Then
+                        xo = LongueurConsoleGauche
+                        For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+                            xo += LongueurTravee
+                        Next
+                        xe = xo
+                        xo += MyPoutre.Maintiens(MyPoutre.IndiceTraveeConsoleDroite)(MyPoutre.Maintiens(MyPoutre.IndiceTraveeConsoleDroite).Count - 1).x_Loc / MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite) * LongueurConsoleDroite
+                        xe += LongueurConsoleDroite
+
+                        AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+
+                    End If
+
+                Case Else
+                    ' Travées principales
+
+                    For Each maintiens In MyPoutre.Maintiens(iSelect)
+
+                        Dim indice_Maintien_en_cours As Integer = MyPoutre.Maintiens(iSelect).IndexOf(maintiens)
+
+                        If indice_Maintien_en_cours = 0 Then
+                            xo = LongueurConsoleGauche
+                            xe = LongueurConsoleGauche + MyPoutre.Maintiens(iSelect)(indice_Maintien_en_cours).x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurTravee
+
+                            AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+                            Chaine = GetStringNoUnit((xe - xo) / LongueurTravee * MyPoutre.LongueurTravee(iSelect), Enu_TypeVariable.Longueur)
+                            AddTexteFond(MyGr, MyBrushMaintienSup, Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlDark), MyPen, lContour)
+
+                        Else
+                            xo = LongueurConsoleGauche + MyPoutre.Maintiens(iSelect)(indice_Maintien_en_cours - 1).x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurTravee
+                            xe = LongueurConsoleGauche + MyPoutre.Maintiens(iSelect)(indice_Maintien_en_cours).x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurTravee
+
+                            AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+                            Chaine = GetStringNoUnit((xe - xo) / LongueurTravee * MyPoutre.LongueurTravee(iSelect), Enu_TypeVariable.Longueur)
+                            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+                        End If
+
+                        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+                        Chaine = GetStringNoUnit((xe - xo) / LongueurTravee * MyPoutre.LongueurTravee(iSelect), Enu_TypeVariable.Longueur)
+                        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                    Next
+
+                    If MyPoutre.Maintiens(iSelect).Count <> 0 Then
+                        xo = LongueurConsoleGauche + MyPoutre.Maintiens(iSelect)(MyPoutre.Maintiens(iSelect).Count - 1).x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurTravee
+                        xe = LongueurConsoleGauche + LongueurTravee
+                    End If
+
+                    AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+                    Chaine = GetStringNoUnit((xe - xo) / LongueurTravee * MyPoutre.LongueurTravee(iSelect), Enu_TypeVariable.Longueur)
+                    AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+
+
+            End Select
+
+
+
+
+
+
+
+
+
+
+        End If
 
     End Sub
 

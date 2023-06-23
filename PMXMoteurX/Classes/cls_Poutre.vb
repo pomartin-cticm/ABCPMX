@@ -443,7 +443,8 @@
         PoutreCible.TypTravee = PoutreSource.TypTravee.Clone
         PoutreCible.Dalle = PoutreSource.Dalle.Clone
 
-      
+
+
     End Sub
 
 

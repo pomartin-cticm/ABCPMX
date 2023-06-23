@@ -43,6 +43,8 @@ Partial Class Frm_Maintiens
         Me.rad_PointRestrain = New System.Windows.Forms.RadioButton()
         Me.rad_FullyRestrain = New System.Windows.Forms.RadioButton()
         Me.img_Maintiens = New System.Windows.Forms.PictureBox()
+        Me.pan_Img_Maintiens = New System.Windows.Forms.Panel()
+        Me.txt_Cotations = New System.Windows.Forms.TextBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -53,6 +55,7 @@ Partial Class Frm_Maintiens
         Me.pan_ControlDessin.SuspendLayout()
         Me.pan_Maintiens.SuspendLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Img_Maintiens.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -137,13 +140,14 @@ Partial Class Frm_Maintiens
         Me.TLPan_Maintiens.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
         Me.TLPan_Maintiens.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Maintiens.Controls.Add(Me.pan_Gauche, 0, 0)
-        Me.TLPan_Maintiens.Controls.Add(Me.img_Maintiens, 1, 0)
+        Me.TLPan_Maintiens.Controls.Add(Me.pan_Img_Maintiens, 1, 0)
         Me.TLPan_Maintiens.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Maintiens.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Maintiens.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Maintiens.Name = "TLPan_Maintiens"
         Me.TLPan_Maintiens.RowCount = 1
         Me.TLPan_Maintiens.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Maintiens.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_Maintiens.Size = New System.Drawing.Size(1476, 303)
         Me.TLPan_Maintiens.TabIndex = 0
         '
@@ -308,12 +312,30 @@ Partial Class Frm_Maintiens
         '
         Me.img_Maintiens.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_Maintiens.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Maintiens.Location = New System.Drawing.Point(251, 0)
+        Me.img_Maintiens.Location = New System.Drawing.Point(1, 0)
         Me.img_Maintiens.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.img_Maintiens.Name = "img_Maintiens"
         Me.img_Maintiens.Size = New System.Drawing.Size(100, 50)
         Me.img_Maintiens.TabIndex = 1
         Me.img_Maintiens.TabStop = False
+        '
+        'pan_Img_Maintiens
+        '
+        Me.pan_Img_Maintiens.Controls.Add(Me.txt_Cotations)
+        Me.pan_Img_Maintiens.Controls.Add(Me.img_Maintiens)
+        Me.pan_Img_Maintiens.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Img_Maintiens.Location = New System.Drawing.Point(250, 0)
+        Me.pan_Img_Maintiens.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Img_Maintiens.Name = "pan_Img_Maintiens"
+        Me.pan_Img_Maintiens.Size = New System.Drawing.Size(1226, 303)
+        Me.pan_Img_Maintiens.TabIndex = 1
+        '
+        'txt_Cotations
+        '
+        Me.txt_Cotations.Location = New System.Drawing.Point(106, 219)
+        Me.txt_Cotations.Name = "txt_Cotations"
+        Me.txt_Cotations.Size = New System.Drawing.Size(100, 20)
+        Me.txt_Cotations.TabIndex = 2
         '
         'Frm_Maintiens
         '
@@ -335,6 +357,8 @@ Partial Class Frm_Maintiens
         Me.pan_Maintiens.ResumeLayout(False)
         Me.pan_Maintiens.PerformLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Img_Maintiens.ResumeLayout(False)
+        Me.pan_Img_Maintiens.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -360,4 +384,6 @@ Partial Class Frm_Maintiens
     Friend WithEvents lbl_ControlDessin As Label
     Friend WithEvents lbl_Travee As Label
     Friend WithEvents rad_NonRestrain As RadioButton
+    Friend WithEvents pan_Img_Maintiens As Panel
+    Friend WithEvents txt_Cotations As TextBox
 End Class

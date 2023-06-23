@@ -124,6 +124,8 @@ Public Class Frm_Maintiens
         Me.img_Maintiens.Dock = DockStyle.Fill
         Me.img_Maintiens.BorderStyle = BorderStyle.FixedSingle
 
+        Me.txt_Cotations.Visible = False
+
     End Sub
 
     Private Sub AfficherPoutreEnCours()
@@ -165,7 +167,7 @@ Public Class Frm_Maintiens
 #Region " Dessins "
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Maintiens.Paint
 
-        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, False)
+        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, True)
 
     End Sub
 
@@ -216,8 +218,6 @@ Public Class Frm_Maintiens
 
 #End Region
 
-
-
 #Region " Evènements "
 
     Private Sub btn_Add_Click(sender As Object, e As EventArgs) Handles btn_Add.Click
@@ -226,6 +226,8 @@ Public Class Frm_Maintiens
         MAJ_PositionMaintiens()
 
         img_Maintiens.Invalidate()
+
+
     End Sub
 
     Private Sub btn_Delete_Click(sender As Object, e As EventArgs) Handles btn_Delete.Click
@@ -270,6 +272,7 @@ Public Class Frm_Maintiens
         img_Maintiens.Invalidate()
 
     End Sub
+
 
 
 
