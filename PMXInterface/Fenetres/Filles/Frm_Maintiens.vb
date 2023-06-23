@@ -167,7 +167,7 @@ Public Class Frm_Maintiens
 #Region " Evènements "
 
     Private Sub btn_Add_Click(sender As Object, e As EventArgs) Handles btn_Add.Click
-        MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens((MyPoutreLoc.Maintiens.Count + 1) * MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens.Count + 2), cls_Maintiens.EnuPositionMaintienSection.DeuxSemelles))
+        MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / 2, cls_Maintiens.EnuPositionMaintienSection.DeuxSemelles))
 
         MAJ_PositionMaintiens()
 
@@ -175,7 +175,7 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub btn_Delete_Click(sender As Object, e As EventArgs) Handles btn_Delete.Click
-        If MyPoutreLoc.Maintiens.Count <> 0 Then
+        If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count <> 0 Then
             MyPoutreLoc.Maintiens(traveeEnCours.Item2).Remove(MyPoutreLoc.Maintiens(traveeEnCours.Item2).Last)
             MAJ_PositionMaintiens()
             img_Maintiens.Invalidate()
@@ -185,9 +185,10 @@ Public Class Frm_Maintiens
 
     Private Sub MAJ_PositionMaintiens()
         Dim index_maintien As Integer
+
         For Each maintiens As cls_Maintiens In MyPoutreLoc.Maintiens(traveeEnCours.Item2)
             index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
-            maintiens.x_Loc = (index_maintien + 1) * MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens.Count + 1)
+            maintiens.x_Loc = (index_maintien + 1) * MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count + 1)
         Next
     End Sub
 

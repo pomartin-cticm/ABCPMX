@@ -2070,7 +2070,7 @@ Module Mod_Dessins
                         For j As Integer = 1 To i - 1
                             xo += LongueurTravee
                         Next
-                        xo += maintiens.x_Loc / MyPoutre.LongueurTravee(iSelect) * LongueurTravee
+                        xo += maintiens.x_Loc / MyPoutre.LongueurTravee(i) * LongueurTravee
 
 
 
