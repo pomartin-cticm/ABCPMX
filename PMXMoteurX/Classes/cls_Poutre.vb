@@ -433,7 +433,7 @@
         Return Me.MemberwiseClone()
     End Function
 
-    Public Shared Sub DeepClone(PoutreSource As cls_Poutre, ByRef PoutreCible As cls_Poutre)
+    Public Shared Sub DeepClone(ByVal PoutreSource As cls_Poutre, ByRef PoutreCible As cls_Poutre)
         '------------------------------------------------------------------------------------------------
         '   05/06/23 :  Clonage d'une poutre source vers la poutre interne
         '------------------------------------------------------------------------------------------------
@@ -443,6 +443,7 @@
         PoutreCible.TypTravee = PoutreSource.TypTravee.Clone
         PoutreCible.Dalle = PoutreSource.Dalle.Clone
 
+      
     End Sub
 
 

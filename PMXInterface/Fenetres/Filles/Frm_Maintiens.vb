@@ -16,6 +16,8 @@ Public Class Frm_Maintiens
 
     Dim MyPoutreLoc As New cls_Poutre
 
+    Dim MaintiensLoc() As List(Of cls_Maintiens)
+
     Dim strTypeTravee() As String
     Dim strTypeTravee_ConsoleGauche As String
     Dim strTypeTravee_TraveeCentrale As String

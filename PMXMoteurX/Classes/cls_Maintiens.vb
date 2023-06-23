@@ -34,6 +34,11 @@
         Me.lMaintienSelectionne = lMaintienSelectionne
     End Sub
 
+
+    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+        Return Me.MemberwiseClone()
+    End Function
+
 #End Region
 
 End Class
