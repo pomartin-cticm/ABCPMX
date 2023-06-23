@@ -1841,6 +1841,8 @@ Module Mod_Dessins
         '   MyPoutre    [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   xSouris     [E] :   Abscisse de la souris dans l'image
+        '   ySouris     [E] :   Ordonnée de la souris dans l'image
         '   iSelect     [E] :   Indique quel est la travée sélectionnée
         '   lCote       [E] :   Indique si affichage de la cote
         '------------------------------------------------------------------------------------------------------------------
@@ -1864,6 +1866,8 @@ Module Mod_Dessins
         Dim MyBrushSemelleNonBloquee As New SolidBrush(Color.Green)
         Dim MyBrushMaintienSup As New SolidBrush(Color.Red)
         Dim MyBrushMaintienInf As New SolidBrush(Color.Red)
+        Dim MyBrushPoigneeNonSelectionnee As New SolidBrush(Color.Yellow)
+        Dim MyBrushPoigneeSelectionnee As New SolidBrush(Color.Orange)
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyPenDot As New Pen(Color.Black, 1) With {
             .DashStyle = DashStyle.Dash
@@ -2039,20 +2043,18 @@ Module Mod_Dessins
 
         For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
             For Each maintiens As cls_Maintiens In MyPoutre.Maintiens(i)
-                Select Case maintiens.PositionMaintien
-                    Case maintiens.EnuPositionMaintienSection.SemelleSup
-                        MyBrushMaintienSup = MyBrushSemelleBloquee
-                        MyBrushMaintienInf = MyBrushSemelleNonBloquee
 
-                    Case maintiens.EnuPositionMaintienSection.SemelleInf
-                        MyBrushMaintienSup = MyBrushSemelleNonBloquee
-                        MyBrushMaintienInf = MyBrushSemelleBloquee
+                If maintiens.lMaintienSemelleSup Then
+                    MyBrushMaintienSup = MyBrushSemelleBloquee
+                Else
+                    MyBrushMaintienSup = MyBrushSemelleNonBloquee
+                End If
 
-                    Case maintiens.EnuPositionMaintienSection.DeuxSemelles
-                        MyBrushMaintienSup = MyBrushSemelleBloquee
-                        MyBrushMaintienInf = MyBrushSemelleBloquee
-
-                End Select
+                If maintiens.lMaintienSemelleInf Then
+                    MyBrushMaintienInf = MyBrushSemelleBloquee
+                Else
+                    MyBrushMaintienInf = MyBrushSemelleNonBloquee
+                End If
 
                 Select Case i
                     Case 0
@@ -2082,10 +2084,228 @@ Module Mod_Dessins
                 yo = HauteurPoutre - EpaisseurSemelle / 2
                 AddCerclePlein(MyGr, MyBrushMaintienSup, xo, yo, EpaisseurSemelle, MyParAff, True)
 
+                '--> Dessin ligne verticale
+
+                AddLigne(MyGr, xo, EpaisseurSemelle, xo, HauteurPoutre - EpaisseurSemelle, MyParAff)
+
+                '--> Dessin poignée
+
+                yo = HauteurPoutre / 2 - EpaisseurSemelle / 2
+                ye = yo + EpaisseurSemelle
+
+                xo -= EpaisseurSemelle / 2
+                xe = xo + EpaisseurSemelle
+
+                If maintiens.lMaintienSelectionne Then
+                    AddRectanglePlein(MyGr, MyBrushPoigneeSelectionnee, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+                Else
+                    AddRectanglePlein(MyGr, MyBrushPoigneeNonSelectionnee, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+                End If
+
             Next
         Next
 
     End Sub
+
+    Public Sub ModificationMaintienSemelle(MyPoutre As cls_Poutre,
+                                ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                kAdjust As Double, iSelect As Integer, indiceTravee As Integer, Optional xSouris As Decimal = 0, Optional ySouris As Decimal = 0,
+                                ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+
+        '-->Déclaration
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar, dCarApp As Decimal
+        Dim MyParAff As Struc_Affichage
+        Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre, EpaisseurSemelle, RayonConge As Decimal
+
+
+
+        '--> Initialisations
+
+        LongueurPoutre = MyPoutre.LongueurTotale
+        LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
+        If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
+        If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
+        HauteurPoutre = MyPoutre.HauteurTotale
+        EpaisseurSemelle = HauteurPoutre / 10
+        RayonConge = EpaisseurSemelle / 2
+        'LongueurDalle = MyPoutre.LongueurTotale
+        'HauteurDalle = MyPoutre.Dalle.t_d
+        dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
+        dCarApp = HauteurPoutre / 2
+
+        '--> Initialisation des paramètres d'affichage
+
+        Select Case iSelect
+            Case 0
+                xMin = 0
+                xMax = LongueurConsoleGauche
+
+            Case 99
+                xMin = LongueurConsoleGauche
+                For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+                    xMin += LongueurTravee
+                Next
+                xMax = xMin + LongueurConsoleDroite
+
+            Case Else
+                xMin = LongueurConsoleGauche
+                For i As Integer = 1 To iSelect - 1
+                    xMin += LongueurTravee
+                Next
+                xMax = xMin + LongueurTravee
+
+        End Select
+
+        yMin = -dCar - dCarApp
+        yMax = HauteurPoutre + dCar
+
+        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+
+        'Distance de la souris, par rapport à l'appui gauche, dans l'univers de la poutre 
+        Dim xSourisUnivers As Decimal = Mod_OutilsGraph.XUnivers(MyParAff, xSouris) - xMin
+        Dim ySourisUnivers As Decimal = Mod_OutilsGraph.YUnivers(MyParAff, ySouris)
+
+
+        'Permet de modifier si une semelle est maintenue ou non; ou de sélectionner un maintien pour le déplacer
+        'La modification opère si on clique dans la zone du maintien dessiné
+
+        Dim xMaintienUnivers As Decimal
+
+        For Each maintiens As cls_Maintiens In MyPoutre.Maintiens(indiceTravee)
+
+            Select Case iSelect
+                Case 0
+                    xMaintienUnivers = maintiens.x_Loc / MyPoutre.LongueurTravee(indiceTravee) * LongueurConsoleGauche
+                Case 99
+                    xMaintienUnivers = maintiens.x_Loc / MyPoutre.LongueurTravee(indiceTravee) * LongueurConsoleDroite
+                Case Else
+                    xMaintienUnivers = maintiens.x_Loc / MyPoutre.LongueurTravee(indiceTravee) * LongueurTravee
+
+            End Select
+
+            If Math.Abs(xSourisUnivers - xMaintienUnivers) <= EpaisseurSemelle Then
+
+                If Math.Abs(ySourisUnivers - EpaisseurSemelle / 2) <= EpaisseurSemelle Then
+                    maintiens.lMaintienSemelleInf = Not maintiens.lMaintienSemelleInf
+                ElseIf Math.Abs(ySourisUnivers - (HauteurPoutre - EpaisseurSemelle / 2)) <= EpaisseurSemelle Then
+                    maintiens.lMaintienSemelleSup = Not maintiens.lMaintienSemelleSup
+                ElseIf Math.Abs(ySourisUnivers - HauteurPoutre / 2) <= EpaisseurSemelle Then
+                    maintiens.lMaintienSelectionne = True
+                    MyPoutre.pIndiceMaintienSelectionne = MyPoutre.Maintiens(indiceTravee).IndexOf(maintiens)
+                End If
+
+
+            End If
+
+        Next
+
+    End Sub
+
+    Public Sub DeplacementMaintienSemelle(MyPoutre As cls_Poutre,
+                                ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                kAdjust As Double, iSelect As Integer, indiceTravee As Integer, Optional xSouris As Decimal = 0,
+                                ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+
+
+
+        '-->Déclaration
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar, dCarApp As Decimal
+        Dim MyParAff As Struc_Affichage
+        Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre, EpaisseurSemelle, RayonConge As Decimal
+
+
+
+        '--> Initialisations
+
+        LongueurPoutre = MyPoutre.LongueurTotale
+        LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
+        If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
+        If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
+        HauteurPoutre = MyPoutre.HauteurTotale
+        EpaisseurSemelle = HauteurPoutre / 10
+        RayonConge = EpaisseurSemelle / 2
+        'LongueurDalle = MyPoutre.LongueurTotale
+        'HauteurDalle = MyPoutre.Dalle.t_d
+        dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
+        dCarApp = HauteurPoutre / 2
+
+        '--> Initialisation des paramètres d'affichage
+
+        Select Case iSelect
+            Case 0
+                xMin = 0
+                xMax = LongueurConsoleGauche
+
+            Case 99
+                xMin = LongueurConsoleGauche
+                For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+                    xMin += LongueurTravee
+                Next
+                xMax = xMin + LongueurConsoleDroite
+
+            Case Else
+                xMin = LongueurConsoleGauche
+                For i As Integer = 1 To iSelect - 1
+                    xMin += LongueurTravee
+                Next
+                xMax = xMin + LongueurTravee
+
+        End Select
+
+        yMin = -dCar - dCarApp
+        yMax = HauteurPoutre + dCar
+
+        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+
+        'Distance de la souris, par rapport à l'appui gauche, dans l'univers de la poutre 
+        Dim xSourisUnivers As Decimal = Mod_OutilsGraph.XUnivers(MyParAff, xSouris) - xMin
+
+
+        'Permet de modifier si une semelle est maintenue ou non; ou de sélectionner un maintien pour le déplacer
+        'La modification opère si on clique dans la zone du maintien dessiné
+
+        Dim x_Loc_min As Decimal
+        Dim x_Loc_max As Decimal
+        Dim x_Loc_local As Decimal
+
+
+
+        Select Case iSelect
+            Case 0
+                x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurConsoleGauche
+            Case 99
+                x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurConsoleDroite
+            Case Else
+                x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurTravee
+        End Select
+
+        If MyPoutre.pIndiceMaintienSelectionne = 0 Then
+            x_Loc_min = 0 + EpaisseurSemelle
+        Else
+            x_Loc_min = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne - 1).x_Loc + EpaisseurSemelle
+        End If
+
+        If MyPoutre.pIndiceMaintienSelectionne = MyPoutre.Maintiens(indiceTravee).Count - 1 Then
+            x_Loc_max = MyPoutre.LongueurTravee(indiceTravee) - EpaisseurSemelle
+        Else
+            x_Loc_max = MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne + 1).x_Loc - EpaisseurSemelle
+        End If
+
+        x_Loc_local = Math.Max(x_Loc_local, x_Loc_min)
+        x_Loc_local = Math.Min(x_Loc_local, x_Loc_max)
+
+        MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne).x_Loc = x_Loc_local
+    End Sub
+
+
 
 #End Region
 

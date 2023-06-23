@@ -1,13 +1,6 @@
 ﻿Public Class cls_Maintiens
 
-#Region "Enumération"
-    Enum EnuPositionMaintienSection
-        SemelleSup
-        SemelleInf
-        DeuxSemelles
-    End Enum
 
-#End Region
 
 #Region "Variables"
 
@@ -17,14 +10,28 @@
     Public x_Loc As Decimal
 
     ''' <summary>
-    ''' Position du maintiens
+    ''' Etat du maintien de la semelle supérieure
     ''' </summary>
-    Public PositionMaintien As EnuPositionMaintienSection
+    Public lMaintienSemelleSup As Boolean
+
+    ''' <summary>
+    ''' Etat du maintien de la semelle inférieure
+    ''' </summary>
+    Public lMaintienSemelleInf As Boolean
+
+    ''' <summary>
+    ''' Indique si le maintien est selectionné ou non (utile pour le dessin)
+    ''' </summary>
+    Public lMaintienSelectionne As Boolean
 
 
-    Sub New(x_Loc As Decimal, PositionMaintien As EnuPositionMaintienSection)
+
+
+    Sub New(x_Loc As Decimal, lMaintienSemelleSup As Boolean, lMaintienSemelleInf As Boolean, lMaintienSelectionne As Boolean)
         Me.x_Loc = x_Loc
-        Me.PositionMaintien = PositionMaintien
+        Me.lMaintienSemelleSup = lMaintienSemelleSup
+        Me.lMaintienSemelleInf = lMaintienSemelleInf
+        Me.lMaintienSelectionne = lMaintienSelectionne
     End Sub
 
 #End Region

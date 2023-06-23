@@ -111,6 +111,11 @@
     ''' </summary>
     Public Maintiens() As List(Of cls_Maintiens)
 
+    ''' <summary>
+    ''' Indice du maintien sélectionné pour le déplacer (utile pour le dessin uniquement)
+    ''' </summary>
+    Public pIndiceMaintienSelectionne As Integer
+
     'Public Sections() As cls_Section
 
     ''' <summary>

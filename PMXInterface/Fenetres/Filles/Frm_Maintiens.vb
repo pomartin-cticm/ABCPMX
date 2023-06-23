@@ -21,6 +21,11 @@ Public Class Frm_Maintiens
     Dim strTypeTravee_TraveeCentrale As String
     Dim strTypeTravee_ConsoleDroite As String
 
+    Dim X_Mousse As Decimal = 0
+    Dim Y_Mousse As Decimal = 0
+
+    Dim lMouseDown As Boolean = False
+
     Dim traveeEnCours As (cls_Poutre.EnuTypeTravee, Integer) = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
 
 #End Region
@@ -164,10 +169,57 @@ Public Class Frm_Maintiens
 
 #End Region
 
+#Region "Gestion de la souris dans l'image"
+
+    Private Sub MousseMove(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseMove
+        If lBuild Then Exit Sub
+        'Position de la sourie dans la fenêtre affichée
+        X_Mousse = e.X
+        Y_Mousse = e.Y
+
+        If lMouseDown Then
+            DeplacementMaintienSemelle(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse)
+        End If
+
+        img_Maintiens.Invalidate()
+
+    End Sub
+
+    Private Sub MouseClickDown(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseDown
+        If lBuild Then Exit Sub
+
+        Mod_Dessins.ModificationMaintienSemelle(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse, Y_Mousse)
+        img_Maintiens.Invalidate()
+
+        lMouseDown = True
+
+    End Sub
+
+    Private Sub MouseClickUp(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseUp
+        If lBuild Then Exit Sub
+
+        For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
+            For Each maintien As cls_Maintiens In MyPoutreLoc.Maintiens(i)
+                maintien.lMaintienSelectionne = False
+            Next
+
+            img_Maintiens.Invalidate()
+
+            lMouseDown = False
+        Next
+    End Sub
+
+
+
+
+#End Region
+
+
+
 #Region " Evènements "
 
     Private Sub btn_Add_Click(sender As Object, e As EventArgs) Handles btn_Add.Click
-        MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / 2, cls_Maintiens.EnuPositionMaintienSection.DeuxSemelles))
+        MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / 2, True, True, False))
 
         MAJ_PositionMaintiens()
 
@@ -182,6 +234,7 @@ Public Class Frm_Maintiens
         End If
 
     End Sub
+
 
     Private Sub MAJ_PositionMaintiens()
         Dim index_maintien As Integer
