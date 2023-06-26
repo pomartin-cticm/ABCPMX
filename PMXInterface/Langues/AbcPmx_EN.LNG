@@ -135,6 +135,15 @@ CANCEL					= Cancel
 MAINSPAN				= Main span
 CONSOLEG				= Left cantilever span
 CONSOLED				= Right cantilever span
+MAINTIENS				= Type of restrain
+TRAVEE					= Span
+NONRESTRAIN				= Non restrain
+FULLYRESTRAIN			= Fully restrain
+POINTRESTRAIN			= Point restrain
+CONTROLDESSIN			= Point restrains
+ADD						= Add
+DELETE					= Delete
+
 
 #FRM_ETAIEMENT
 TITLE					= Propping

@@ -111,6 +111,8 @@
     ''' </summary>
     Public Maintiens() As List(Of cls_Maintiens)
 
+    Public TypeMaintien() As EnuTypeMaintiensPoutre
+
     ''' <summary>
     ''' Indice du maintien sélectionné pour le déplacer (utile pour le dessin uniquement)
     ''' </summary>
@@ -216,6 +218,12 @@
         ReDim LongueurTravee(pNbTravees + 2)
         ReDim TypTravee(pNbTravees + 2)
         ReDim Maintiens(pNbTravees + 2)
+
+        ReDim TypeMaintien(pNbTravees + 2)
+
+        For i As Integer = 0 To TypeMaintien.Length - 1
+            TypeMaintien(i) = EnuTypeMaintiensPoutre.NonRestrain
+        Next
 
         For i As Integer = 0 To Maintiens.Length - 1
             Maintiens(i) = New List(Of cls_Maintiens)
@@ -443,7 +451,20 @@
         PoutreCible.TypTravee = PoutreSource.TypTravee.Clone
         PoutreCible.Dalle = PoutreSource.Dalle.Clone
 
-      
+        ReDim PoutreCible.Maintiens(PoutreSource.Maintiens.Length - 1)
+
+        For i As Integer = 0 To PoutreSource.Maintiens.Length - 1
+
+            PoutreCible.Maintiens(i) = New List(Of cls_Maintiens)
+
+            For Each maintien As cls_Maintiens In PoutreSource.Maintiens(i)
+                Dim maintien_local As New cls_Maintiens()
+                maintien_local = maintien.Clone()
+                PoutreCible.Maintiens(i).Add(maintien_local)
+            Next
+        Next
+
+
     End Sub
 
 

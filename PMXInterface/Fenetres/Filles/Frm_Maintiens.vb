@@ -16,8 +16,6 @@ Public Class Frm_Maintiens
 
     Dim MyPoutreLoc As New cls_Poutre
 
-    Dim MaintiensLoc() As List(Of cls_Maintiens)
-
     Dim strTypeTravee() As String
     Dim strTypeTravee_ConsoleGauche As String
     Dim strTypeTravee_TraveeCentrale As String
@@ -27,6 +25,10 @@ Public Class Frm_Maintiens
     Dim Y_Mousse As Decimal = 0
 
     Dim lMouseDown As Boolean = False
+
+    Dim positionCotesInferieures(,) As Decimal
+    Dim indiceCoteSelectionnee As Integer
+    Dim lClickCote As Boolean = False
 
     Dim traveeEnCours As (cls_Poutre.EnuTypeTravee, Integer) = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
 
@@ -43,9 +45,7 @@ Public Class Frm_Maintiens
         GestionLangues()
         GestionStyle()
         GestionUnites()
-
         RemplirComboTypeTravee()
-
         AfficherPoutreEnCours()
         lBuild = False
     End Sub
@@ -97,6 +97,16 @@ Public Class Frm_Maintiens
 
                 End If
 
+                Me.lbl_Maintiens.Text = Bloc("MAINTIENS")
+                Me.lbl_Travee.Text = Bloc("TRAVEE")
+                Me.rad_NonRestrain.Text = Bloc("NONRESTRAIN")
+                Me.rad_FullyRestrain.Text = Bloc("FULLYRESTRAIN")
+                Me.rad_PointRestrain.Text = Bloc("POINTRESTRAIN")
+
+                Me.lbl_ControlDessin.Text = Bloc("CONTROLDESSIN")
+                Me.btn_Add.Text = Bloc("ADD")
+                Me.btn_Delete.Text = Bloc("DELETE")
+
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -124,9 +134,23 @@ Public Class Frm_Maintiens
         Me.img_Maintiens.Dock = DockStyle.Fill
         Me.img_Maintiens.BorderStyle = BorderStyle.FixedSingle
 
+        Me.txt_Cotations.Visible = False
+
     End Sub
 
     Private Sub AfficherPoutreEnCours()
+        Select Case MyPoutreLoc.TypeMaintien(traveeEnCours.item2)
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
+                rad_NonRestrain.Checked = True
+
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrain
+                rad_FullyRestrain.Checked = True
+
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrain
+                rad_PointRestrain.Checked = True
+        End Select
+
+        MAJ_pan_ControlDessin(rad_PointRestrain.Checked)
 
     End Sub
 
@@ -145,7 +169,7 @@ Public Class Frm_Maintiens
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
             Me.Close()
         End If
@@ -158,6 +182,38 @@ Public Class Frm_Maintiens
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
+        lModif = False
+
+        With MyProjet.Poutres(MyProjet.IndEnCours)
+
+            For i_travee As Integer = 0 To MyPoutreLoc.IndiceTraveeConsoleDroite
+
+
+                If MyPoutreLoc.Maintiens(i_travee).Count <> .Maintiens(i_travee).Count Then
+                    lModif = True
+                    .Maintiens(i_travee) = MyPoutreLoc.Maintiens(i_travee)
+                Else
+                    For Each maintiens In MyPoutreLoc.Maintiens(i_travee)
+                        Dim i_maintiens As Integer = MyPoutreLoc.Maintiens(i_travee).IndexOf(maintiens)
+
+                        If Not maintiens.Equals(.Maintiens(i_travee)(i_maintiens)) Then
+                            lModif = True
+                            .Maintiens(i_travee) = MyPoutreLoc.Maintiens(i_travee)
+                        End If
+
+                    Next
+                End If
+
+                If .TypeMaintien(i_travee) <> MyPoutreLoc.TypeMaintien(i_travee) Then
+                    lModif = True
+                    .TypeMaintien = MyPoutreLoc.TypeMaintien
+                End If
+
+            Next
+
+
+
+        End With
     End Sub
 
 #End Region
@@ -165,7 +221,7 @@ Public Class Frm_Maintiens
 #Region " Dessins "
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Maintiens.Paint
 
-        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, False)
+        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, True, positionCotesInferieures)
 
     End Sub
 
@@ -190,8 +246,37 @@ Public Class Frm_Maintiens
     Private Sub MouseClickDown(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseDown
         If lBuild Then Exit Sub
 
-        Mod_Dessins.ModificationMaintienSemelle(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse, Y_Mousse)
+        Mod_Dessins.GestionClickDownMousse(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse, Y_Mousse)
         img_Maintiens.Invalidate()
+
+        'Regarde si on clique sur une cotation
+        'Le cas échéant, on déplace le txtbox au droit de la cote sélectionnée
+
+        lClickCote = False
+
+        If Not positionCotesInferieures Is Nothing Then
+            For i As Integer = 0 To positionCotesInferieures.GetLength(0) - 1
+
+                If (Math.Abs(positionCotesInferieures(i, 0) - X_Mousse) <= txt_Cotations.Width / 2) And (Math.Abs(positionCotesInferieures(i, 1) - Y_Mousse) <= txt_Cotations.Height / 2) Then
+                    txt_Cotations.Visible = True
+                    txt_Cotations.Location = New Point(positionCotesInferieures(i, 0) - txt_Cotations.Width / 2, positionCotesInferieures(i, 1) - txt_Cotations.Height / 2)
+                    If i = 0 Then
+                        txt_Cotations.Text = GetStringNoUnit(MyPoutreLoc.Maintiens(traveeEnCours.Item2)(0).x_Loc, Enu_TypeVariable.Longueur)
+                    ElseIf i = positionCotesInferieures.GetLength(0) - 1 Then
+                        txt_Cotations.Text = GetStringNoUnit(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i - 1).x_Loc, Enu_TypeVariable.Longueur)
+                    Else
+                        txt_Cotations.Text = GetStringNoUnit(MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i).x_Loc - MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i - 1).x_Loc, Enu_TypeVariable.Longueur)
+                    End If
+
+                    lClickCote = True
+                    indiceCoteSelectionnee = i
+
+                End If
+
+            Next
+        End If
+
+        If Not lClickCote Then txt_Cotations.Visible = False
 
         lMouseDown = True
 
@@ -200,6 +285,7 @@ Public Class Frm_Maintiens
     Private Sub MouseClickUp(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseUp
         If lBuild Then Exit Sub
 
+        'Permet de déselectionner l'ensemble des maintiens une fois que la souris est relachée
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
             For Each maintien As cls_Maintiens In MyPoutreLoc.Maintiens(i)
                 maintien.lMaintienSelectionne = False
@@ -212,38 +298,69 @@ Public Class Frm_Maintiens
     End Sub
 
 
+    Private Sub LeaveTxtCotation(sender As Object, e As EventArgs) Handles txt_Cotations.Leave
 
+        txt_Cotations.Visible = False
+
+    End Sub
+
+    Private Sub KeyPressTxtCotation(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txt_Cotations.KeyPress
+
+        'Gestion de la touche entrée lorsque l'utilisateur est dans un txtbox
+        Select Case e.KeyChar
+            Case Chr(13) 'Retour chariot
+                txt_Cotations.Visible = False
+                Validation_txt_Cotation()
+
+            Case Chr(27) 'Touche echap
+                txt_Cotations.Visible = False
+
+        End Select
+
+    End Sub
 
 #End Region
-
-
 
 #Region " Evènements "
 
     Private Sub btn_Add_Click(sender As Object, e As EventArgs) Handles btn_Add.Click
-        MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / 2, True, True, False))
+        If lBuild Then Exit Sub
 
-        MAJ_PositionMaintiens()
-
-        img_Maintiens.Invalidate()
-    End Sub
-
-    Private Sub btn_Delete_Click(sender As Object, e As EventArgs) Handles btn_Delete.Click
-        If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count <> 0 Then
-            MyPoutreLoc.Maintiens(traveeEnCours.Item2).Remove(MyPoutreLoc.Maintiens(traveeEnCours.Item2).Last)
+        If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count < NBRESTRAINMAX Then
+            MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / 2, True, True, False))
             MAJ_PositionMaintiens()
             img_Maintiens.Invalidate()
         End If
 
     End Sub
 
+    Private Sub btn_Delete_Click(sender As Object, e As EventArgs) Handles btn_Delete.Click
+        If lBuild Then Exit Sub
+
+        If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count > Mod_Declarations.NBRESTRAINMIN Then
+            MyPoutreLoc.Maintiens(traveeEnCours.Item2).Remove(MyPoutreLoc.Maintiens(traveeEnCours.Item2).Last)
+            MAJ_PositionMaintiens()
+            img_Maintiens.Invalidate()
+        End If
+
+    End Sub
+    Private Sub MouseClick_HorsPanImg(sender As Object, e As PaintEventArgs) Handles pan_Maintiens.Paint, pan_ControlDessin.Paint
+        'Rend invisible les textbox lorsqu'on clique ailleurs
+        txt_Cotations.Visible = False
+
+    End Sub
 
     Private Sub MAJ_PositionMaintiens()
-        Dim index_maintien As Integer
+        'Dim index_maintien As Integer
+
+        Dim val As Decimal = 0
+
+        'Lissage des positions des maintiens lorsqu'on ajoute ou supprime un maintien
 
         For Each maintiens As cls_Maintiens In MyPoutreLoc.Maintiens(traveeEnCours.Item2)
-            index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
-            maintiens.x_Loc = (index_maintien + 1) * MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count + 1)
+            'index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
+            val += MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count + 1)
+            maintiens.x_Loc = val
         Next
     End Sub
 
@@ -252,6 +369,8 @@ Public Class Frm_Maintiens
 #Region " Evènements saisie "
     Private Sub comboTraveeSelectionneeChanged(sender As Object, e As EventArgs) Handles cmb_Travee.SelectedIndexChanged
         If lBuild Then Exit Sub
+
+        'permet de mettre à jour les variables locales qui tracent l'indice de la travée en cours 
 
         Select Case cmb_Travee.Text
             Case strTypeTravee_ConsoleGauche
@@ -267,9 +386,110 @@ Public Class Frm_Maintiens
                 iSelect = 99
         End Select
 
+        Select Case True
+            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
+                rad_NonRestrain.Checked = True
+            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrain
+                rad_FullyRestrain.Checked = True
+            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrain
+                rad_PointRestrain.Checked = True
+        End Select
+
         img_Maintiens.Invalidate()
 
+
+
     End Sub
+
+    Private Sub Validation_txt_Cotation()
+
+        'Vérifie et valide le nombre renseigné par l'utilisateur dans la cote sélectionnée
+
+        If IsNumeric(txt_Cotations.Text) Then
+
+            'Définition des variables locales
+            Dim val As Double = CDec(txt_Cotations.Text)
+            Dim xLoc As Decimal
+            Dim nbMaintiens As Integer = MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count
+            Dim longueurTraveeEnCours As Decimal = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2)
+
+            Dim decal As Decimal = MyPoutreLoc.Section.ProfilA.ha
+
+            If val >= 0 Then
+
+                With MyPoutreLoc
+
+                    val = Math.Max(val, decal)
+                    val = Math.Min(val, longueurTraveeEnCours - decal)
+
+                    If indiceCoteSelectionnee = 0 Then
+                        If nbMaintiens = 1 Then
+                            .Maintiens(traveeEnCours.Item2)(0).x_Loc = val
+                        Else
+                            .Maintiens(traveeEnCours.Item2)(0).x_Loc = Math.Min(val, .Maintiens(traveeEnCours.Item2)(1).x_Loc - decal)
+                        End If
+
+                    ElseIf indiceCoteSelectionnee = positionCotesInferieures.GetLength(0) - 1 Then
+                        If nbMaintiens = 1 Then
+                            .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc = longueurTraveeEnCours - val
+                        Else
+                            .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc = Math.Max(longueurTraveeEnCours - val, .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 2).x_Loc + decal)
+                        End If
+                    Else
+                        If nbMaintiens = 2 Then
+                            xLoc = .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc + val
+                            xLoc = Math.Min(xLoc, longueurTraveeEnCours - decal)
+                            .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = xLoc
+                        Else
+                            If indiceCoteSelectionnee = positionCotesInferieures.GetLength(0) - 2 Then
+                                xLoc = .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc + val
+                                xLoc = Math.Min(xLoc, longueurTraveeEnCours - decal)
+                                .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = xLoc
+                            Else
+                                xLoc = .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc + val
+                                xLoc = Math.Min(xLoc, .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee + 1).x_Loc - decal)
+                                .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = xLoc
+                            End If
+                        End If
+                    End If
+                End With
+            End If
+
+
+        End If
+
+        img_Maintiens.Invalidate()
+
+
+    End Sub
+
+    Private Sub rad_Restrain_CheckedChanged(sender As Object, e As EventArgs) Handles rad_NonRestrain.CheckedChanged, rad_FullyRestrain.CheckedChanged, rad_FullyRestrain.CheckedChanged
+        If lBuild Then Exit Sub
+
+        MAJ_PositionMaintiens()
+
+        Select Case True
+            Case rad_NonRestrain.Checked
+                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
+            Case rad_FullyRestrain.Checked
+                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrain
+            Case rad_PointRestrain.Checked
+                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrain
+        End Select
+
+        MAJ_pan_ControlDessin(rad_PointRestrain.Checked)
+
+        img_Maintiens.Invalidate()
+    End Sub
+
+    Private Sub MAJ_pan_ControlDessin(lVisible As Boolean)
+        'Affiche le panel qui permet d'ajouter ou de supprimer des maintiens ponctuels uniquement si rad_PointRestrain est selectionné
+        Me.pan_ControlDessin.Visible = lVisible
+        Me.lbl_ControlDessin.Visible = lVisible
+    End Sub
+
+
+
 
 
 

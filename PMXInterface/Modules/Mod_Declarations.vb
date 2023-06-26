@@ -220,6 +220,10 @@ Module Mod_Declarations
     Public Const NBPROPPINGMIN As Integer = 0
     Public Const NBPROPPINGMAX As Integer = 5
 
+    Public Const NBRESTRAINMIN As Integer = 0
+    Public Const NBRESTRAINMAX As Integer = 5
+
+
 
 #End Region
 
