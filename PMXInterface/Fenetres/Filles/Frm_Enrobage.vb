@@ -948,7 +948,7 @@ Public Class Frm_Enrobage
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Fck.Paint, img_Ecm.Paint, img_Fy.Paint, img_zArma.Paint, img_As.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Fck.Paint, img_Ecm.Paint, img_Fy.Paint, img_zArma.Paint, img_As.Paint, img_uz.Paint, img_ux.Paint, img_PhiEtrier.Paint, img_Bf.Paint, img_BcX.Paint, img_Bc.Paint
 
         '--> Déclarations
 
@@ -1026,10 +1026,6 @@ Public Class Frm_Enrobage
            FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
-
-
-
-
 
 #End Region
 

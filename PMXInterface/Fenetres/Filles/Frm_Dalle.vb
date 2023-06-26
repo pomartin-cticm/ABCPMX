@@ -317,6 +317,10 @@ Public Class Frm_Dalle
 
         MAJI_ProprietesBeton()
 
+        '--> Bac
+
+        AfficherGeometrieBac(MyDalleLoc.Bac)
+
     End Sub
 
 #End Region
@@ -387,7 +391,7 @@ Public Class Frm_Dalle
     End Sub
 
     Private Sub img_Bac_Paint(sender As Object, e As PaintEventArgs) Handles img_Bac.Paint
-        DessineBac(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, MyDalleLoc.bac_acier,
+        DessineBac(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, MyDalleLoc.Bac,
                    MyDalleLoc.t_d, VariableBac, True, True, True, False, 0, 0)
     End Sub
 
@@ -402,11 +406,8 @@ Public Class Frm_Dalle
         '   26/10/21 :  Version 4.01 Beta 8 - Introduction raidisseurs supérieurs
         '
         '-----------------------------------------------------------------------------------------------
-        '
         '   Dessin du Bac Acier
-        '
         '-----------------------------------------------------------------------------------------------
-        '
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   Img         [E] :   Image dans laquelle on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
@@ -421,7 +422,6 @@ Public Class Frm_Dalle
         '   lMemb       [E] :   Indique si on représente la semelle sup de la memb sup
         '   tfSup       [E] :   Epasseur semelle de la membrure superieure
         '   hMax        [E] :   Epaisseur maximale à considérer pour le dessin de la dalle
-        '
         '-----------------------------------------------------------------------------------------------
 
         '--> Declarations
@@ -450,7 +450,7 @@ Public Class Frm_Dalle
         Dim xPts() As Single = Nothing
         Dim yPts() As Single = Nothing
         Dim nbPts As Integer
-        Dim nbOndes As Integer
+        Dim nbOndes As Integer = 5
 
         '--> Initialisation
 
@@ -466,7 +466,7 @@ Public Class Frm_Dalle
         If lCotation Then yMin -= 2 * sDecal
         'xMax = nbOndes * Me.e
         xMax = MyBac.LargeurModule
-        nbondes = Math.Floor(MyBac.LargeurModule / MyBac.e_p)
+        nbOndes = Math.Floor(MyBac.LargeurModule / MyBac.e_p)
         If lCotation And lCotEpTot Then xMax = xMax + 2 * sDecal
         yMax = Math.Max(EpDalle, hMax)
 
@@ -481,7 +481,6 @@ Public Class Frm_Dalle
         Else
             MyBac.PrepareContourDalleBacSimple(nbOndes, EpDalle, xPts, yPts, nbPts)
         End If
-
 
         '--> Remplissage contour
 
@@ -636,11 +635,136 @@ Public Class Frm_Dalle
 
     End Sub
 
+    Private Sub GestionChangeBac(sender As Object, e As EventArgs) Handles Grid_Bac.SelectionChanged
+        If lBuild Then Exit Sub
+
+        Dim indRow As Integer
+
+        indRow = sender.SelectedCells(0).RowIndex
+
+        Dim iBac As Integer = indRow
+
+        Dim Etiquette As String = (Me.Grid_Bac(0, iBac).Value.ToString.Trim)
+
+        TransfertSaisieGridBac(Etiquette, MyDalleLoc.Bac)
+
+        AfficherGeometrieBac(MyDalleLoc.Bac)
+
+        Me.img_Bac.Invalidate()
+    End Sub
+
+    Private Sub TransfertSaisieGridBac(Etiquette As String, ByRef MyBac As Cls_Bac)
+
+        MyBac = MyDicoBacs(Etiquette).Clone
+
+    End Sub
 
 
+    Private Sub AfficherGeometrieBac(MyBac As Cls_Bac)
 
+        Dim lBuildBack As Boolean = lBuild
+        lBuild = True
+
+        Me.txt_Hp.Text = GetStringInUnit(MyBac.h_p, Enu_TypeVariable.Dimension, 3, 1, False)
+        Me.txt_hpg.Text = GetStringInUnit(MyBac.h_p + MyBac.h_rs, Enu_TypeVariable.Dimension, 3, 1, False)
+        Me.txt_ep.Text = GetStringInUnit(MyBac.e_p, Enu_TypeVariable.Dimension, 3, 1, False)
+        Me.txt_Bt.Text = GetStringInUnit(MyBac.b_t, Enu_TypeVariable.Dimension, 3, 1, False)
+        Me.txt_Bb.Text = GetStringInUnit(MyBac.b_b, Enu_TypeVariable.Dimension, 3, 1, False)
+        Me.txt_tp.Text = GetStringInUnit(MyBac.tp, Enu_TypeVariable.Dimension, 3, 1, False)
+
+        lBuild = lBuildBack
+    End Sub
+
+    Private Sub SaisieBacTextChanged(sender As Object, e As EventArgs) Handles txt_tp.TextChanged, txt_hpg.TextChanged, txt_Hp.TextChanged, txt_ep.TextChanged, txt_Bt.TextChanged, txt_Bb.TextChanged
+        If lBuild Then Exit Sub
+
+
+        Dim Valeur As Decimal
+
+        If VerificationDonnees(sender, Valeur) Then
+            Select Case sender.name
+                Case Me.txt_Hp.Name
+                    MyDalleLoc.Bac.h_p = Valeur
+            End Select
+        End If
+
+        Me.img_Bac.Invalidate()
+
+        lBuild = False
+    End Sub
+
+    Private Function VerificationDonnees(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        Return True
+    End Function
 
 
 #End Region
+
+
+#Region " Dessin symboles "
+
+    Private Sub Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_tp.Paint, img_hpg.Paint, img_hp.Paint, Img_Hh.Paint, Img_Hd.Paint, img_Fck.Paint, img_ep.Paint, img_Ecm.Paint, img_Bt.Paint, img_Bb.Paint
+
+        '--> Déclarations
+
+        Dim sWI As Single = sender.Width
+        Dim sHI As Single = sender.Height
+        Dim xStart As Single = sWI * 0.95
+
+        Dim strIndice As String = Nothing
+        Dim strSymbol As String = Nothing
+        Dim lGrec, lIndice As Boolean
+        Dim xPen As Single = xStart
+        Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
+        Dim hIndice As Single = hCar / 2
+        Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+
+        '--> Initialisation
+
+        lIndice = False
+        lGrec = False
+
+        Select Case sender.name
+
+            Case Me.img_Bb.Name
+                strSymbol = "b"
+                strIndice = "b"
+            Case Me.img_Bt.Name
+                strSymbol = "b"
+                strIndice = "t"
+            Case Me.img_hp.Name
+                strSymbol = "h"
+                strIndice = "p"
+            Case Me.img_hpg.Name
+                strSymbol = "h"
+                strIndice = "pg"
+            Case Me.img_ep.Name
+                strSymbol = "e"
+                strIndice = "p"
+            Case Me.img_tp.Name
+                strSymbol = "t"
+                strIndice = "p"
+            Case Me.img_Ecm.Name
+                strSymbol = "E"
+                strIndice = "cm"
+            Case Me.img_Fck.Name
+                strSymbol = "f"
+                strIndice = "ck"
+            Case Me.Img_Hd.Name
+                strSymbol = "t"
+                strIndice = "p"
+        End Select
+
+        '--> Dessin
+
+        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_Alignement.Gauche,
+                   FontSymbolNormal, FontSymbolNormal, FontSymbolIndice, 1.0!, True)
+
+    End Sub
+
+
+#End Region
+
 
 End Class

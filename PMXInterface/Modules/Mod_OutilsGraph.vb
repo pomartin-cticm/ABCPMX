@@ -1160,19 +1160,22 @@ Module Mod_OutilsGraph
 
     End Sub
 
-    Public Sub ContourZone(ByVal MyGr As Graphics, ByVal MyPen As Pen, _
-                           ByVal xPts() As Single, ByVal yPts() As Single, ByVal nbPts As Integer, _
-                           ByVal parAff As struc_Affichage)
+    Public Sub ContourZone(ByVal MyGr As Graphics, ByVal MyPen As Pen,
+                           ByVal xPts() As Single, ByVal yPts() As Single, ByVal nbPts As Integer,
+                           ByVal parAff As Struc_Affichage, Optional lOuvert As Boolean = False)
 
         Dim PointsZone(nbPts - 1) As PointF
 
         For i As Integer = 0 To nbPts - 1
-            PointsZone(i).X = (xEcran(parAff, xPts(i)))
-            PointsZone(i).Y = (yEcran(parAff, yPts(i)))
+            PointsZone(i).X = (XEcran(parAff, xPts(i)))
+            PointsZone(i).Y = (YEcran(parAff, yPts(i)))
         Next
 
-        MyGr.DrawPolygon(MyPen, PointsZone)
-
+        If lOuvert Then
+            MyGr.DrawLines(MyPen, PointsZone)
+        Else
+            MyGr.DrawPolygon(MyPen, PointsZone)
+        End If
     End Sub
 
 #End Region

@@ -139,9 +139,12 @@ Module Mod_Demarrage
 
             '--> Base de données
             InitialisationBasesDonnees()
-            '--> Récupération des données de la database dans le catalogue
+            '--> Récupération des données de la database dans le catalogue (aciers et profilés)
             InitialiseCatalogue(LogicielFichiers.Base_Sections, MyCatalogue)
             InitialiseBaseAciers(LogicielFichiers.Base_Aciers, SteelBase)
+
+            '--> Bacs acier
+            LireBaseBacs(BaseBacs)
 
         Catch ex As Exception
 
@@ -255,6 +258,37 @@ Module Mod_Demarrage
         Else
         End If
 
+
+    End Sub
+
+    Public Sub InitialiseBacDeBase(ByRef MyBac As Cls_Bac, ByRef lTrouve As Boolean)
+        '--------------------------------------------------------------------------------
+        '   25/06/23 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------
+        '   Initialisation d'un bac à partir de la base de données bac
+        '--------------------------------------------------------------------------------
+        '   MyBac           [E] :   Bac à initialiser
+        '
+        '   lOK             [S] :   Indique si on a pu initialiser
+        '--------------------------------------------------------------------------------
+
+        If MyBac.lDatabase Then
+
+            If BaseBacs.ContainsKey(MyBac.Etiquette) Then
+
+                MyBac = BaseBacs(MyBac.Etiquette).Clone
+                lTrouve = True
+
+            Else
+
+                Dim kvp As KeyValuePair(Of String, Cls_Bac) = BaseBacs.First
+
+                MyBac = BaseBacs(kvp.Key).Clone
+
+                lTrouve = False
+            End If
+
+        End If
 
     End Sub
 

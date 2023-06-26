@@ -61,7 +61,7 @@
     ''' Bac acier de la dalle
     ''' que si dalle mixte
     ''' </summary>
-    Public bac_acier As New Cls_Bac
+    Public Bac As New Cls_Bac
 
     ''' <summary>
     ''' Armatures longitudinales supérieur
@@ -133,7 +133,7 @@
                 perimU = 2 * Me.Beff - Bfs + Me.t_h / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd))
 
             Case Enum_TypeDalle.Mixte
-                Ac = Me.Beff * (Me.EpaisseurActive + bac_acier.h_p * bac_acier.LargeurBmoyenne / bac_acier.e_p)
+                Ac = Me.Beff * (Me.EpaisseurActive + Bac.h_p * Bac.LargeurBmoyenne / Bac.e_p)
                 perimU = Me.Beff
 
         End Select
@@ -192,11 +192,11 @@
             Dim Ep As Decimal
             Select Case Me.type
                 Case Enum_TypeDalle.Mixte
-                    Select Case Me.bac_acier.orientation
+                    Select Case Me.Bac.orientation
                         Case Cls_Bac.Enum_Orientation.Parallele
-                            Ep = Me.t_d - Me.bac_acier.h_p
+                            Ep = Me.t_d - Me.Bac.h_p
                         Case Cls_Bac.Enum_Orientation.Perpendiculaire
-                            Ep = Me.t_d - Me.bac_acier.Hauteur_hpg
+                            Ep = Me.t_d - Me.Bac.Hauteur_hpg
                     End Select
                 Case Enum_TypeDalle.Pleine
                     Ep = Me.t_d
@@ -282,7 +282,7 @@
         End With
 
         '--> Bac acier
-        bac_acier.EcrireFile(Lines)
+        Bac.EcrireFile(Lines)
 
     End Sub
 

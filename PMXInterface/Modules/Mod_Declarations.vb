@@ -251,9 +251,9 @@ Module Mod_Declarations
     Public ColorSelect As Color = Color.DarkRed
     Public ColorNonSelect As Color = Color.DarkSlateGray
 
-    Public FontSymbolNormal As New Font("Arial", 10.25)
-    Public FontSymbolIndice As New Font("Arial", 8.25)
-    Public FontSymbolGrec As New Font("Symbol", 10.25)
+    Public FontSymbolNormal As New Font("Arial", 8.25)
+    Public FontSymbolIndice As New Font("Arial", 6.25)
+    Public FontSymbolGrec As New Font("Symbol", 8.25)
 
     Public FontBase As New Font("Arial", 8.25)
 

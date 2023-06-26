@@ -93,14 +93,16 @@ Public Class Cls_Bac
 
     Sub New()
 
-        Me.lDatabase = False
-        Me.orientation = Enum_Orientation.Parallele
+        Me.lDatabase = True
+        Me.orientation = Enum_Orientation.Perpendiculaire
 
         Me.b_b = 0.062
         Me.b_t = 0.101
         Me.h_rs = 0
         Me.h_p = 0.058
         Me.e_p = 0.207
+
+        Me.Etiquette = "Cofraplus_60 1.00"
 
     End Sub
 
@@ -339,6 +341,199 @@ Public Class Cls_Bac
         xPts(nbOndes * 4 + 3) = 0
         yPts(nbOndes * 4 + 3) = CSng(EpDalle)
 
+    End Sub
+
+
+    Public Sub PrepareContourBacSimpleSeul2(ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer, lUn As Boolean)
+
+
+        '--> Déclaration
+
+        Dim nbOndes As Integer
+        Dim wBac As Decimal
+        Dim xp, yp As Decimal
+        Const REBORD As Decimal = 0.2
+        Dim dXnerv As Decimal
+        Dim DeltaX0 As Decimal
+        Dim xCenter As Decimal
+        Dim decalX, decalZ As Decimal
+
+        '--> Initialisation
+
+        If lUn Then
+            nbOndes = 1
+            wBac = Me.e_p
+        Else
+            nbOndes = Math.Max(1, Math.Floor(Me.LargeurModule / Me.e_p))
+            wBac = Math.Max(Me.e_p, Me.LargeurModule)
+        End If
+        dXnerv = (Me.b_t - Me.b_b) / 2
+        DeltaX0 = (wBac - nbOndes * Me.e_p) / 2
+        nbPts = 0
+
+        decalX = Me.tp / 2 / Math.Tan((Math.PI - Math.Atan(Me.h_p / dXnerv)) / 2)
+        decalZ = Me.tp / 2
+
+        '===== SENS ALLER ===============================================================================
+
+        AjoutePoint(0, decalZ, xPts, yPts, nbPts)
+
+        xCenter = DeltaX0 + Me.e_p / 2
+
+        For i As Integer = 1 To nbOndes
+
+            AjoutePoint(xCenter - e_p / 2 + b_b / 2 - decalX, decalZ, xPts, yPts, nbPts)
+            AjoutePoint(xCenter - e_p / 2 + b_t / 2 - decalX, Me.h_p + decalZ, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + e_p / 2 - b_t / 2 + decalX, Me.h_p + decalZ, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + e_p / 2 - b_b / 2 + decalX, decalZ, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + e_p / 2, decalZ, xPts, yPts, nbPts)
+
+            xCenter += Me.e_p
+        Next
+
+        '===== SENS RETOUR ===============================================================================
+
+        AjoutePoint(wBac, -decalZ, xPts, yPts, nbPts)
+
+        xCenter = wBac - DeltaX0 - Me.e_p / 2
+
+        For i As Integer = 1 To nbOndes
+
+            AjoutePoint(xCenter + e_p / 2 - b_b / 2 - decalX, -decalZ, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + e_p / 2 - b_t / 2 - decalX, Me.h_p - decalZ, xPts, yPts, nbPts)
+            AjoutePoint(xCenter - e_p / 2 + b_t / 2 + decalX, Me.h_p - decalZ, xPts, yPts, nbPts)
+            AjoutePoint(xCenter - e_p / 2 + b_b / 2 + decalX, -decalZ, xPts, yPts, nbPts)
+
+            AjoutePoint(xCenter - e_p / 2, -decalZ, xPts, yPts, nbPts)
+
+            xCenter -= Me.e_p
+        Next
+
+    End Sub
+
+    Public Sub PrepareContourBacSimple1Nervure(ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+
+        '--> Déclaration
+
+        Dim nbOndes As Integer
+        Dim wBac As Decimal
+
+        Dim dXnerv As Decimal
+        Dim DeltaX0 As Decimal
+
+        Dim decalX, decalZ As Decimal
+        Dim hP, eP, ptP As Decimal
+        Const kTP As Decimal = 2
+
+        '--> Initialisation
+
+        ptP = kTP * Me.tp
+        hP = Me.h_p
+        eP = Me.e_p
+        nbOndes = 1
+        wBac = eP
+
+        dXnerv = (Me.b_t - Me.b_b) / 2
+        DeltaX0 = (wBac - nbOndes * eP) / 2
+        nbPts = 0
+
+        decalX = Math.Abs(ptP / 2 / Math.Tan((Math.PI - Math.Atan(hP / dXnerv)) / 2))
+        decalZ = ptP / 2
+
+        '===== SENS ALLER ===============================================================================
+
+        AjoutePoint(-eP / 2, hP + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-b_t / 2 + decalX, hP + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-b_b / 2 + decalX, 0 + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(b_b / 2 - decalX, 0 + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(b_t / 2 - decalX, hP + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(eP / 2, hP + decalZ, xPts, yPts, nbPts)
+
+        '===== SENS RETOUR ===============================================================================
+
+        AjoutePoint(eP / 2, hP - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(b_t / 2 + decalX, hP - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(b_b / 2 + decalX, 0 - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-b_b / 2 - decalX, 0 - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-b_t / 2 - decalX, hP - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-eP / 2, hP - decalZ, xPts, yPts, nbPts)
+
+    End Sub
+
+    Public Sub PrepareContourBacSimpleSeul(ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+        '-----------------------------------------------------------------------------------------------
+        '   25/06/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin du Bac Acier - Préparation des points du contour pour le cas sans raidisseur
+        '   Dessin du bac seul, sans dalle,
+        '   Largeur : celle du module
+        '-----------------------------------------------------------------------------------------------
+        '
+        '   xPts, yPts  [S] :   Tableaux des coordonnées des points du contour
+        '   nbPts       [S] :   Nombre de points du contour
+        '
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim nbOndes As Integer
+        Dim wBac As Decimal
+        Dim xp, yp As Decimal
+        Const REBORD As Decimal = 0.2
+        Dim dXnerv As Decimal
+        Dim DeltaX0 As Decimal
+        Dim xCenter As Decimal
+
+        '--> Initialisation
+
+        nbOndes = Math.Max(1, Math.Floor(Me.LargeurModule / Me.e_p))
+        wBac = Math.Max(Me.e_p, Me.LargeurModule)
+        dXnerv = (Me.b_t - Me.b_b) / 2
+        DeltaX0 = (wBac - nbOndes * Me.e_p) / 2
+        nbPts = 0
+
+        '--> Début du module
+
+        If dXnerv > 0 Then
+            xp = -dXnerv * REBORD
+            yp = Me.h_p * REBORD
+
+            AjoutePoint(xp, yp, xPts, yPts, nbPts)
+        End If
+
+        AjoutePoint(0, 0, xPts, yPts, nbPts)
+
+        If DeltaX0 > 0 Then
+            AjoutePoint(DeltaX0, 0, xPts, yPts, nbPts)
+        End If
+
+        '--> Boucle sur les nervures
+
+        xCenter = DeltaX0 + Me.e_p / 2
+
+        For i As Integer = 1 To nbOndes
+
+            AjoutePoint(xCenter - e_p / 2 + b_b / 2, 0, xPts, yPts, nbPts)
+            AjoutePoint(xCenter - e_p / 2 + b_t / 2, Me.h_p, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + e_p / 2 - b_t / 2, Me.h_p, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + e_p / 2 - b_b / 2, 0, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + e_p / 2, 0, xPts, yPts, nbPts)
+
+            xCenter += Me.e_p
+        Next
+
+        '--> Fin du module
+
+        If DeltaX0 > 0 Then
+            AjoutePoint(wBac, 0, xPts, yPts, nbPts)
+        End If
+
+        If dXnerv > 0 Then
+            xp = wBac + dXnerv * REBORD
+            yp = Me.h_p * REBORD
+
+            AjoutePoint(xp, yp, xPts, yPts, nbPts)
+        End If
     End Sub
 
 #End Region

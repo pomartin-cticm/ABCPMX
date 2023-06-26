@@ -106,7 +106,6 @@ OPENINGS				= Openings
 LEFTOPENING				= Left opening
 RIGHTOPENING			= Right opening
 
-
 #FRM_SECTIONACIERSTANDARD
 TITLE					= Definition of the steel profile
 OK						= OK
@@ -148,3 +147,18 @@ ETAISCONSOLEDROITE		= End propping of the right cantilever
 NUMBPROPPING			= Number of point propping
 VALIDATE				= Validate
 CANCEL					= Cancel
+
+#FRM_PSHEETING
+TITLE					= Definition of the steel profiled sheeting
+OK						= OK
+CANCEL					= Cancel
+DATABASE				= DataBase
+FROMDATABASE			= From the database
+COMPANY					= Company
+PROPERTIES				= Dimensions and properties
+FROMDIM					= From dimensions
+NAME					= Name
+ALL						= All
+
+
+

@@ -13,6 +13,7 @@ Public Class Frm_PMX
         Portees
         Entraxes
         Dalle
+        DalleN
         Section
         Enrobage
         Connexion
@@ -245,7 +246,7 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click
+    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click
 
         Select Case sender.name
             Case Me.TSbtn_Accueil.Name
@@ -257,6 +258,8 @@ Public Class Frm_PMX
 
             Case Me.TSbtn_Dalle.Name
                 FilleEnCours = EnuFilleEnCours.Dalle
+            Case Me.TSbtn_DalleN.Name
+                FilleEnCours = EnuFilleEnCours.DalleN
             Case Me.TSbtn_SectionA.Name
                 FilleEnCours = EnuFilleEnCours.Section
             Case Me.TSbtn_Enrobage.Name
@@ -292,6 +295,12 @@ Public Class Frm_PMX
                     Frm_Dalle.ShowDialog()
 
                 End If
+            Case EnuFilleEnCours.DalleN
+                If LogicielOptions.lFenetres Then
+                    Frm_DalleN.ShowDialog()
+
+                End If
+
             Case EnuFilleEnCours.Section
                 If LogicielOptions.lFenetres Then
                     Frm_SectionAcierStandard.ShowDialog()
@@ -320,6 +329,12 @@ Public Class Frm_PMX
 
                 End If
 
+            Case EnuFilleEnCours.Hivoss
+                If LogicielOptions.lFenetres Then
+                    Frm_BacN.ShowDialog()
+                Else
+
+                End If
         End Select
 
         MAJMainToolBar()

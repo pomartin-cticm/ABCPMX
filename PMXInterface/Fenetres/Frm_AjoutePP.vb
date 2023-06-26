@@ -351,10 +351,8 @@ Public Class Frm_AjoutePP
 
         Dim lAjout As Boolean = False
         Dim lOK As Boolean
+        Dim lTrouve As Boolean
 
-        'If Me.chk_NouveauProjet.Checked Then
-
-        'End If
 
         Dim NomPoutre As String = Me.txt_NomNouvellePoutre.Text
 
@@ -396,6 +394,12 @@ Public Class Frm_AjoutePP
             End If
 
             InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
+
+            'If MyProjet.Poutres(MyProjet.Poutres.Count - 1).lmixte Then        'A PROGRAMMER
+
+            InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)
+
+            'End If
 
         End If
 

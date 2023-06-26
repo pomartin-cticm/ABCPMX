@@ -291,7 +291,7 @@ Public Class cls_Section
             dalle.beton.Calcul_Proprietes()
 
             If dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte Then
-                Param.Prop_Elastique_Dalle.h_0 = 2 * (dalle.t_d - dalle.bac_acier.h_p)
+                Param.Prop_Elastique_Dalle.h_0 = 2 * (dalle.t_d - dalle.Bac.h_p)
             Else ' dalle pleine
                 Param.Prop_Elastique_Dalle.h_0 = dalle.t_d
             End If

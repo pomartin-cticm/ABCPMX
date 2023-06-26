@@ -4,6 +4,12 @@ Imports PMXMoteur2
 
 Module Mod_BasesDonneesASCII
 
+#Region " Déclarations des bases "
+
+    Public BaseBacs As New Dictionary(Of String, Cls_Bac)
+
+#End Region
+
 #Region " Base de données des bacs "
 
     Public Sub LireBaseBacs(ByRef DicoBac As Dictionary(Of String, Cls_Bac))
@@ -104,11 +110,11 @@ Module Mod_BasesDonneesASCII
 
             If iDiez >= 0 Then
                 'Cas d'une ligne définissant un bloc associé à un fabricant
-                Fabricant = LinesSheets.Lines(i).Substring(iDiez + 1)
+                Fabricant = LinesSheets.Lines(i).Substring(iDiez + 1).Trim
             Else
                 'Cas d'une ligne définissant un bac
                 iVirg = LinesSheets.Lines(i).IndexOf(",")
-                Etiquette = LinesSheets.Lines(i).Substring(0, iVirg)
+                Etiquette = LinesSheets.Lines(i).Substring(0, iVirg).Trim
                 Parametres = LinesSheets.Lines(i).Substring(iVirg + 1)
 
                 DecomposeLine(Parametres, SEPARATEURS, Mots, nbMots)
@@ -128,7 +134,7 @@ Module Mod_BasesDonneesASCII
                     fy = CDbl(TraiteReal(Mots(iField + 2)))
 
                     If (nbMots > iField + 2) Then
-                        wModule = CDbl(TraiteReal(Mots(iField + 3)))
+                        wModule = CDbl(TraiteReal(Mots(iField + 3))) * kUnit
                         Ieff = CDbl(TraiteReal(Mots(iField + 4)))
                     End If
 

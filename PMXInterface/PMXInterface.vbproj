@@ -79,6 +79,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fenetres\Filles\Frm_BacN.Designer.vb">
+      <DependentUpon>Frm_BacN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_BacN.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Basic.Designer.vb">
       <DependentUpon>Frm_Basic.vb</DependentUpon>
     </Compile>
@@ -95,6 +101,12 @@
       <DependentUpon>Frm_Dalle.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_Dalle.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_DalleN.Designer.vb">
+      <DependentUpon>Frm_DalleN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_DalleN.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_Enrobage.Designer.vb">
@@ -184,6 +196,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_BacN.resx">
+      <DependentUpon>Frm_BacN.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Basic.resx">
       <DependentUpon>Frm_Basic.vb</DependentUpon>
     </EmbeddedResource>
@@ -192,6 +207,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Dalle.resx">
       <DependentUpon>Frm_Dalle.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_DalleN.resx">
+      <DependentUpon>Frm_DalleN.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Enrobage.resx">
       <DependentUpon>Frm_Enrobage.vb</DependentUpon>

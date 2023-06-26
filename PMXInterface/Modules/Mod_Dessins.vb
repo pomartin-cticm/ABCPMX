@@ -10,7 +10,7 @@ Module Mod_Dessins
 
     Dim MyPenContour As New Pen(Color.Black, 1)
 
-    Const lCONTOURCOTE As Boolean = False
+    Public Const lCONTOURCOTE As Boolean = False
 
 #End Region
 
@@ -3463,7 +3463,7 @@ Module Mod_Dessins
 
 #Region "=====OUTILS GENERAUX======"
 
-    Private Function StyleCouleur(iSelect As Integer, iRef As Integer) As Color
+    Public Function StyleCouleur(iSelect As Integer, iRef As Integer) As Color
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------

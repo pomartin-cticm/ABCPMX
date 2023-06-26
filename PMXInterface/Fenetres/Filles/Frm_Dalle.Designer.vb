@@ -58,15 +58,34 @@ Partial Class Frm_Dalle
         Me.pan_Droite = New System.Windows.Forms.Panel()
         Me.TLpan_Droite = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Bac = New System.Windows.Forms.Panel()
+        Me.pan_CustomBac = New System.Windows.Forms.Panel()
+        Me.txt_hpg = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDimB5 = New System.Windows.Forms.Label()
+        Me.img_hpg = New System.Windows.Forms.PictureBox()
+        Me.txt_tp = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDimB6 = New System.Windows.Forms.Label()
+        Me.img_tp = New System.Windows.Forms.PictureBox()
+        Me.txt_Bb = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDimB4 = New System.Windows.Forms.Label()
+        Me.img_Bb = New System.Windows.Forms.PictureBox()
+        Me.txt_Bt = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDimB3 = New System.Windows.Forms.Label()
+        Me.img_Bt = New System.Windows.Forms.PictureBox()
+        Me.txt_ep = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDimB2 = New System.Windows.Forms.Label()
+        Me.img_ep = New System.Windows.Forms.PictureBox()
+        Me.txt_Hp = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDimB1 = New System.Windows.Forms.Label()
+        Me.img_hp = New System.Windows.Forms.PictureBox()
+        Me.img_Bac = New System.Windows.Forms.PictureBox()
+        Me.Grid_Bac = New System.Windows.Forms.DataGridView()
+        Me.Col_ListeSup = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.rdb_BacCustom = New System.Windows.Forms.RadioButton()
         Me.lbl_Producteur = New System.Windows.Forms.Label()
         Me.cmb_Producteur = New System.Windows.Forms.ComboBox()
         Me.rdb_BacBase = New System.Windows.Forms.RadioButton()
         Me.lbl_Bac = New System.Windows.Forms.Label()
         Me.pan_General = New System.Windows.Forms.Panel()
-        Me.Grid_Bac = New System.Windows.Forms.DataGridView()
-        Me.img_Bac = New System.Windows.Forms.PictureBox()
-        Me.Col_ListeSup = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
@@ -83,9 +102,16 @@ Partial Class Frm_Dalle
         Me.pan_Droite.SuspendLayout()
         Me.TLpan_Droite.SuspendLayout()
         Me.pan_Bac.SuspendLayout()
-        Me.pan_General.SuspendLayout()
-        CType(Me.Grid_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_CustomBac.SuspendLayout()
+        CType(Me.img_hpg, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_tp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Bb, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Bt, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_ep, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_hp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.Grid_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_General.SuspendLayout()
         Me.SuspendLayout()
         '
         'TLpan_Main
@@ -520,6 +546,7 @@ Partial Class Frm_Dalle
         '
         Me.pan_Bac.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Bac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Bac.Controls.Add(Me.pan_CustomBac)
         Me.pan_Bac.Controls.Add(Me.img_Bac)
         Me.pan_Bac.Controls.Add(Me.Grid_Bac)
         Me.pan_Bac.Controls.Add(Me.rdb_BacCustom)
@@ -532,6 +559,223 @@ Partial Class Frm_Dalle
         Me.pan_Bac.Name = "pan_Bac"
         Me.pan_Bac.Size = New System.Drawing.Size(500, 433)
         Me.pan_Bac.TabIndex = 7
+        '
+        'pan_CustomBac
+        '
+        Me.pan_CustomBac.Controls.Add(Me.txt_hpg)
+        Me.pan_CustomBac.Controls.Add(Me.etq_UnitDimB5)
+        Me.pan_CustomBac.Controls.Add(Me.img_hpg)
+        Me.pan_CustomBac.Controls.Add(Me.txt_tp)
+        Me.pan_CustomBac.Controls.Add(Me.etq_UnitDimB6)
+        Me.pan_CustomBac.Controls.Add(Me.img_tp)
+        Me.pan_CustomBac.Controls.Add(Me.txt_Bb)
+        Me.pan_CustomBac.Controls.Add(Me.etq_UnitDimB4)
+        Me.pan_CustomBac.Controls.Add(Me.img_Bb)
+        Me.pan_CustomBac.Controls.Add(Me.txt_Bt)
+        Me.pan_CustomBac.Controls.Add(Me.etq_UnitDimB3)
+        Me.pan_CustomBac.Controls.Add(Me.img_Bt)
+        Me.pan_CustomBac.Controls.Add(Me.txt_ep)
+        Me.pan_CustomBac.Controls.Add(Me.etq_UnitDimB2)
+        Me.pan_CustomBac.Controls.Add(Me.img_ep)
+        Me.pan_CustomBac.Controls.Add(Me.txt_Hp)
+        Me.pan_CustomBac.Controls.Add(Me.etq_UnitDimB1)
+        Me.pan_CustomBac.Controls.Add(Me.img_hp)
+        Me.pan_CustomBac.Location = New System.Drawing.Point(261, 39)
+        Me.pan_CustomBac.Name = "pan_CustomBac"
+        Me.pan_CustomBac.Size = New System.Drawing.Size(226, 184)
+        Me.pan_CustomBac.TabIndex = 61
+        '
+        'txt_hpg
+        '
+        Me.txt_hpg.Location = New System.Drawing.Point(61, 29)
+        Me.txt_hpg.Name = "txt_hpg"
+        Me.txt_hpg.Size = New System.Drawing.Size(58, 20)
+        Me.txt_hpg.TabIndex = 89
+        '
+        'etq_UnitDimB5
+        '
+        Me.etq_UnitDimB5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDimB5.AutoSize = True
+        Me.etq_UnitDimB5.Location = New System.Drawing.Point(125, 32)
+        Me.etq_UnitDimB5.Name = "etq_UnitDimB5"
+        Me.etq_UnitDimB5.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDimB5.TabIndex = 88
+        Me.etq_UnitDimB5.Text = "mm"
+        '
+        'img_hpg
+        '
+        Me.img_hpg.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_hpg.Location = New System.Drawing.Point(25, 29)
+        Me.img_hpg.Name = "img_hpg"
+        Me.img_hpg.Size = New System.Drawing.Size(37, 20)
+        Me.img_hpg.TabIndex = 90
+        Me.img_hpg.TabStop = False
+        '
+        'txt_tp
+        '
+        Me.txt_tp.Location = New System.Drawing.Point(61, 135)
+        Me.txt_tp.Name = "txt_tp"
+        Me.txt_tp.Size = New System.Drawing.Size(58, 20)
+        Me.txt_tp.TabIndex = 86
+        '
+        'etq_UnitDimB6
+        '
+        Me.etq_UnitDimB6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDimB6.AutoSize = True
+        Me.etq_UnitDimB6.Location = New System.Drawing.Point(125, 138)
+        Me.etq_UnitDimB6.Name = "etq_UnitDimB6"
+        Me.etq_UnitDimB6.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDimB6.TabIndex = 85
+        Me.etq_UnitDimB6.Text = "mm"
+        '
+        'img_tp
+        '
+        Me.img_tp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_tp.Location = New System.Drawing.Point(25, 135)
+        Me.img_tp.Name = "img_tp"
+        Me.img_tp.Size = New System.Drawing.Size(37, 20)
+        Me.img_tp.TabIndex = 87
+        Me.img_tp.TabStop = False
+        '
+        'txt_Bb
+        '
+        Me.txt_Bb.Location = New System.Drawing.Point(61, 109)
+        Me.txt_Bb.Name = "txt_Bb"
+        Me.txt_Bb.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Bb.TabIndex = 83
+        '
+        'etq_UnitDimB4
+        '
+        Me.etq_UnitDimB4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDimB4.AutoSize = True
+        Me.etq_UnitDimB4.Location = New System.Drawing.Point(125, 112)
+        Me.etq_UnitDimB4.Name = "etq_UnitDimB4"
+        Me.etq_UnitDimB4.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDimB4.TabIndex = 82
+        Me.etq_UnitDimB4.Text = "mm"
+        '
+        'img_Bb
+        '
+        Me.img_Bb.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Bb.Location = New System.Drawing.Point(25, 109)
+        Me.img_Bb.Name = "img_Bb"
+        Me.img_Bb.Size = New System.Drawing.Size(37, 20)
+        Me.img_Bb.TabIndex = 84
+        Me.img_Bb.TabStop = False
+        '
+        'txt_Bt
+        '
+        Me.txt_Bt.Location = New System.Drawing.Point(61, 83)
+        Me.txt_Bt.Name = "txt_Bt"
+        Me.txt_Bt.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Bt.TabIndex = 80
+        '
+        'etq_UnitDimB3
+        '
+        Me.etq_UnitDimB3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDimB3.AutoSize = True
+        Me.etq_UnitDimB3.Location = New System.Drawing.Point(125, 86)
+        Me.etq_UnitDimB3.Name = "etq_UnitDimB3"
+        Me.etq_UnitDimB3.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDimB3.TabIndex = 79
+        Me.etq_UnitDimB3.Text = "mm"
+        '
+        'img_Bt
+        '
+        Me.img_Bt.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Bt.Location = New System.Drawing.Point(25, 83)
+        Me.img_Bt.Name = "img_Bt"
+        Me.img_Bt.Size = New System.Drawing.Size(37, 20)
+        Me.img_Bt.TabIndex = 81
+        Me.img_Bt.TabStop = False
+        '
+        'txt_ep
+        '
+        Me.txt_ep.Location = New System.Drawing.Point(61, 57)
+        Me.txt_ep.Name = "txt_ep"
+        Me.txt_ep.Size = New System.Drawing.Size(58, 20)
+        Me.txt_ep.TabIndex = 77
+        '
+        'etq_UnitDimB2
+        '
+        Me.etq_UnitDimB2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDimB2.AutoSize = True
+        Me.etq_UnitDimB2.Location = New System.Drawing.Point(125, 60)
+        Me.etq_UnitDimB2.Name = "etq_UnitDimB2"
+        Me.etq_UnitDimB2.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDimB2.TabIndex = 76
+        Me.etq_UnitDimB2.Text = "mm"
+        '
+        'img_ep
+        '
+        Me.img_ep.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_ep.Location = New System.Drawing.Point(25, 57)
+        Me.img_ep.Name = "img_ep"
+        Me.img_ep.Size = New System.Drawing.Size(37, 20)
+        Me.img_ep.TabIndex = 78
+        Me.img_ep.TabStop = False
+        '
+        'txt_Hp
+        '
+        Me.txt_Hp.Location = New System.Drawing.Point(61, 3)
+        Me.txt_Hp.Name = "txt_Hp"
+        Me.txt_Hp.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Hp.TabIndex = 74
+        '
+        'etq_UnitDimB1
+        '
+        Me.etq_UnitDimB1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDimB1.AutoSize = True
+        Me.etq_UnitDimB1.Location = New System.Drawing.Point(125, 6)
+        Me.etq_UnitDimB1.Name = "etq_UnitDimB1"
+        Me.etq_UnitDimB1.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDimB1.TabIndex = 73
+        Me.etq_UnitDimB1.Text = "mm"
+        '
+        'img_hp
+        '
+        Me.img_hp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_hp.Location = New System.Drawing.Point(25, 3)
+        Me.img_hp.Name = "img_hp"
+        Me.img_hp.Size = New System.Drawing.Size(37, 20)
+        Me.img_hp.TabIndex = 75
+        Me.img_hp.TabStop = False
+        '
+        'img_Bac
+        '
+        Me.img_Bac.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_Bac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Bac.Location = New System.Drawing.Point(8, 227)
+        Me.img_Bac.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.img_Bac.Name = "img_Bac"
+        Me.img_Bac.Size = New System.Drawing.Size(480, 139)
+        Me.img_Bac.TabIndex = 3
+        Me.img_Bac.TabStop = False
+        '
+        'Grid_Bac
+        '
+        Me.Grid_Bac.AllowUserToAddRows = False
+        Me.Grid_Bac.AllowUserToDeleteRows = False
+        Me.Grid_Bac.AllowUserToResizeColumns = False
+        Me.Grid_Bac.AllowUserToResizeRows = False
+        Me.Grid_Bac.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.Grid_Bac.ColumnHeadersVisible = False
+        Me.Grid_Bac.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Col_ListeSup})
+        Me.Grid_Bac.Location = New System.Drawing.Point(57, 64)
+        Me.Grid_Bac.MultiSelect = False
+        Me.Grid_Bac.Name = "Grid_Bac"
+        Me.Grid_Bac.RowHeadersVisible = False
+        Me.Grid_Bac.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.Grid_Bac.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
+        Me.Grid_Bac.ShowCellToolTips = False
+        Me.Grid_Bac.Size = New System.Drawing.Size(182, 160)
+        Me.Grid_Bac.TabIndex = 60
+        '
+        'Col_ListeSup
+        '
+        Me.Col_ListeSup.HeaderText = "Col_Liste"
+        Me.Col_ListeSup.Name = "Col_ListeSup"
+        Me.Col_ListeSup.ReadOnly = True
         '
         'rdb_BacCustom
         '
@@ -600,42 +844,6 @@ Partial Class Frm_Dalle
         Me.pan_General.Size = New System.Drawing.Size(879, 529)
         Me.pan_General.TabIndex = 3
         '
-        'Grid_Bac
-        '
-        Me.Grid_Bac.AllowUserToAddRows = False
-        Me.Grid_Bac.AllowUserToDeleteRows = False
-        Me.Grid_Bac.AllowUserToResizeColumns = False
-        Me.Grid_Bac.AllowUserToResizeRows = False
-        Me.Grid_Bac.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.Grid_Bac.ColumnHeadersVisible = False
-        Me.Grid_Bac.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.Col_ListeSup})
-        Me.Grid_Bac.Location = New System.Drawing.Point(57, 64)
-        Me.Grid_Bac.MultiSelect = False
-        Me.Grid_Bac.Name = "Grid_Bac"
-        Me.Grid_Bac.RowHeadersVisible = False
-        Me.Grid_Bac.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.Grid_Bac.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.Grid_Bac.ShowCellToolTips = False
-        Me.Grid_Bac.Size = New System.Drawing.Size(182, 160)
-        Me.Grid_Bac.TabIndex = 60
-        '
-        'img_Bac
-        '
-        Me.img_Bac.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_Bac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Bac.Location = New System.Drawing.Point(8, 227)
-        Me.img_Bac.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
-        Me.img_Bac.Name = "img_Bac"
-        Me.img_Bac.Size = New System.Drawing.Size(480, 82)
-        Me.img_Bac.TabIndex = 3
-        Me.img_Bac.TabStop = False
-        '
-        'Col_ListeSup
-        '
-        Me.Col_ListeSup.HeaderText = "Col_Liste"
-        Me.Col_ListeSup.Name = "Col_ListeSup"
-        Me.Col_ListeSup.ReadOnly = True
-        '
         'Frm_Dalle
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -666,9 +874,17 @@ Partial Class Frm_Dalle
         Me.TLpan_Droite.PerformLayout()
         Me.pan_Bac.ResumeLayout(False)
         Me.pan_Bac.PerformLayout()
-        Me.pan_General.ResumeLayout(False)
-        CType(Me.Grid_Bac, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_CustomBac.ResumeLayout(False)
+        Me.pan_CustomBac.PerformLayout()
+        CType(Me.img_hpg, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_tp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Bb, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Bt, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_ep, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_hp, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.Grid_Bac, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_General.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -718,4 +934,23 @@ Partial Class Frm_Dalle
     Friend WithEvents Grid_Bac As DataGridView
     Friend WithEvents img_Bac As PictureBox
     Friend WithEvents Col_ListeSup As DataGridViewTextBoxColumn
+    Friend WithEvents pan_CustomBac As Panel
+    Friend WithEvents txt_hpg As TextBox
+    Friend WithEvents etq_UnitDimB5 As Label
+    Friend WithEvents img_hpg As PictureBox
+    Friend WithEvents txt_tp As TextBox
+    Friend WithEvents etq_UnitDimB6 As Label
+    Friend WithEvents img_tp As PictureBox
+    Friend WithEvents txt_Bb As TextBox
+    Friend WithEvents etq_UnitDimB4 As Label
+    Friend WithEvents img_Bb As PictureBox
+    Friend WithEvents txt_Bt As TextBox
+    Friend WithEvents etq_UnitDimB3 As Label
+    Friend WithEvents img_Bt As PictureBox
+    Friend WithEvents txt_ep As TextBox
+    Friend WithEvents etq_UnitDimB2 As Label
+    Friend WithEvents img_ep As PictureBox
+    Friend WithEvents txt_Hp As TextBox
+    Friend WithEvents etq_UnitDimB1 As Label
+    Friend WithEvents img_hp As PictureBox
 End Class

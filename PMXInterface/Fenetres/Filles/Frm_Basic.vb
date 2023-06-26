@@ -84,6 +84,10 @@ Public Class Frm_Basic
 
     End Sub
 
+    Private Sub Frm_Basic_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
 #End Region
 
 #Region " Dessins "
