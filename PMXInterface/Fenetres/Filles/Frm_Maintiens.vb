@@ -47,9 +47,7 @@ Public Class Frm_Maintiens
         GestionLangues()
         GestionStyle()
         GestionUnites()
-
         RemplirComboTypeTravee()
-
         AfficherPoutreEnCours()
         lBuild = False
     End Sub
@@ -133,6 +131,18 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub AfficherPoutreEnCours()
+        Select Case MyPoutreLoc.TypeMaintien(traveeEnCours.item2)
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
+                rad_NonRestrain.Checked = True
+
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrain
+                rad_FullyRestrain.Checked = True
+
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrain
+                rad_PointRestrain.Checked = True
+        End Select
+
+        MAJ_pan_ControlDessin(rad_PointRestrain.Checked)
 
     End Sub
 
@@ -199,6 +209,9 @@ Public Class Frm_Maintiens
         Mod_Dessins.GestionClickDownMousse(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse, Y_Mousse)
         img_Maintiens.Invalidate()
 
+        'Regarde si on clique sur une cotation
+        'Le cas échéant, on déplace le txtbox au droit de la cote sélectionnée
+
         lClickCote = False
 
         If Not positionCotesInferieures Is Nothing Then
@@ -232,6 +245,7 @@ Public Class Frm_Maintiens
     Private Sub MouseClickUp(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseUp
         If lBuild Then Exit Sub
 
+        'Permet de déselectionner l'ensemble des maintiens une fois que la souris est relachée
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
             For Each maintien As cls_Maintiens In MyPoutreLoc.Maintiens(i)
                 maintien.lMaintienSelectionne = False
@@ -251,6 +265,8 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub KeyPressTxtCotation(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txt_Cotations.KeyPress
+
+        'Gestion de la touche entrée lorsque l'utilisateur est dans un txtbox
         Select Case e.KeyChar
             Case Chr(13) 'Retour chariot
                 txt_Cotations.Visible = False
@@ -289,10 +305,16 @@ Public Class Frm_Maintiens
         End If
 
     End Sub
+    Private Sub MouseClick_HorsPanImg(sender As Object, e As PaintEventArgs) Handles pan_Maintiens.Paint, pan_ControlDessin.Paint
+        'Rend invisible les textbox lorsqu'on clique ailleurs
+        txt_Cotations.Visible = False
 
+    End Sub
 
     Private Sub MAJ_PositionMaintiens()
         Dim index_maintien As Integer
+
+        'Lissage des positions des maintiens lorsqu'on ajoute ou supprime un maintien
 
         For Each maintiens As cls_Maintiens In MyPoutreLoc.Maintiens(traveeEnCours.Item2)
             index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
@@ -305,6 +327,8 @@ Public Class Frm_Maintiens
 #Region " Evènements saisie "
     Private Sub comboTraveeSelectionneeChanged(sender As Object, e As EventArgs) Handles cmb_Travee.SelectedIndexChanged
         If lBuild Then Exit Sub
+
+        'permet de mettre à jour les variables locales qui tracent l'indice de la travée en cours 
 
         Select Case cmb_Travee.Text
             Case strTypeTravee_ConsoleGauche
@@ -320,11 +344,24 @@ Public Class Frm_Maintiens
                 iSelect = 99
         End Select
 
+        Select Case True
+            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
+                rad_NonRestrain.Checked = True
+            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrain
+                rad_FullyRestrain.Checked = True
+            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrain
+                rad_PointRestrain.Checked = True
+        End Select
+
         img_Maintiens.Invalidate()
+
+
 
     End Sub
 
     Private Sub Validation_txt_Cotation()
+
+        'Vérifie et valide le nombre renseigné par l'utilisateur dans la cote sélectionnée
 
         If IsNumeric(txt_Cotations.Text) Then
 
@@ -382,6 +419,31 @@ Public Class Frm_Maintiens
         img_Maintiens.Invalidate()
 
 
+    End Sub
+
+    Private Sub rad_Restrain_CheckedChanged(sender As Object, e As EventArgs) Handles rad_NonRestrain.CheckedChanged, rad_FullyRestrain.CheckedChanged, rad_FullyRestrain.CheckedChanged
+        If lBuild Then Exit Sub
+
+        MAJ_PositionMaintiens()
+
+        Select Case True
+            Case rad_NonRestrain.Checked
+                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
+            Case rad_FullyRestrain.Checked
+                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrain
+            Case rad_PointRestrain.Checked
+                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrain
+        End Select
+
+        MAJ_pan_ControlDessin(rad_PointRestrain.Checked)
+
+        img_Maintiens.Invalidate()
+    End Sub
+
+    Private Sub MAJ_pan_ControlDessin(lVisible As Boolean)
+        'Affiche le panel qui permet d'ajouter ou de supprimer des maintiens ponctuels uniquement si rad_PointRestrain est selectionné
+        Me.pan_ControlDessin.Visible = lVisible
+        Me.lbl_ControlDessin.Visible = lVisible
     End Sub
 
 

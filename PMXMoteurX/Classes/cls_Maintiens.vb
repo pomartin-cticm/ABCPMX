@@ -1,6 +1,8 @@
 ﻿Public Class cls_Maintiens
 
+#Region "Enumération"
 
+#End Region
 
 #Region "Variables"
 

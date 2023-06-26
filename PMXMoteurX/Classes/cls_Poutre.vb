@@ -111,6 +111,8 @@
     ''' </summary>
     Public Maintiens() As List(Of cls_Maintiens)
 
+    Public TypeMaintien() As EnuTypeMaintiensPoutre
+
     ''' <summary>
     ''' Indice du maintien sélectionné pour le déplacer (utile pour le dessin uniquement)
     ''' </summary>
@@ -216,6 +218,12 @@
         ReDim LongueurTravee(pNbTravees + 2)
         ReDim TypTravee(pNbTravees + 2)
         ReDim Maintiens(pNbTravees + 2)
+
+        ReDim TypeMaintien(pNbTravees + 2)
+
+        For i As Integer = 0 To TypeMaintien.Length - 1
+            TypeMaintien(i) = EnuTypeMaintiensPoutre.NonRestrain
+        Next
 
         For i As Integer = 0 To Maintiens.Length - 1
             Maintiens(i) = New List(Of cls_Maintiens)
