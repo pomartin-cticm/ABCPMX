@@ -451,6 +451,18 @@
         PoutreCible.TypTravee = PoutreSource.TypTravee.Clone
         PoutreCible.Dalle = PoutreSource.Dalle.Clone
 
+        ReDim PoutreCible.Maintiens(PoutreSource.Maintiens.Length - 1)
+
+        For i As Integer = 0 To PoutreSource.Maintiens.Length - 1
+
+            PoutreCible.Maintiens(i) = New List(Of cls_Maintiens)
+
+            For Each maintien As cls_Maintiens In PoutreSource.Maintiens(i)
+                Dim maintien_local As New cls_Maintiens()
+                maintien_local = maintien.Clone()
+                PoutreCible.Maintiens(i).Add(maintien_local)
+            Next
+        Next
 
 
     End Sub

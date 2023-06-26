@@ -16,8 +16,6 @@ Public Class Frm_Maintiens
 
     Dim MyPoutreLoc As New cls_Poutre
 
-    Dim MaintiensLoc() As List(Of cls_Maintiens)
-
     Dim strTypeTravee() As String
     Dim strTypeTravee_ConsoleGauche As String
     Dim strTypeTravee_TraveeCentrale As String
@@ -161,7 +159,7 @@ Public Class Frm_Maintiens
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
             Me.Close()
         End If
@@ -174,6 +172,38 @@ Public Class Frm_Maintiens
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
+        lModif = False
+
+        With MyProjet.Poutres(MyProjet.IndEnCours)
+
+            For i_travee As Integer = 0 To MyPoutreLoc.IndiceTraveeConsoleDroite
+
+
+                If MyPoutreLoc.Maintiens(i_travee).Count <> .Maintiens(i_travee).Count Then
+                    lModif = True
+                    .Maintiens(i_travee) = MyPoutreLoc.Maintiens(i_travee)
+                Else
+                    For Each maintiens In MyPoutreLoc.Maintiens(i_travee)
+                        Dim i_maintiens As Integer = MyPoutreLoc.Maintiens(i_travee).IndexOf(maintiens)
+
+                        If Not maintiens.Equals(.Maintiens(i_travee)(i_maintiens)) Then
+                            lModif = True
+                            .Maintiens(i_travee) = MyPoutreLoc.Maintiens(i_travee)
+                        End If
+
+                    Next
+                End If
+
+                If .TypeMaintien(i_travee) <> MyPoutreLoc.TypeMaintien(i_travee) Then
+                    lModif = True
+                    .TypeMaintien = MyPoutreLoc.TypeMaintien
+                End If
+
+            Next
+
+
+
+        End With
     End Sub
 
 #End Region
