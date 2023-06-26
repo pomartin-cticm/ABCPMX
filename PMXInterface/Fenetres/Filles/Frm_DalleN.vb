@@ -1,6 +1,7 @@
 ﻿Imports PMXMoteur2
 Imports System.IO
 Imports System.Drawing.Drawing2D
+Imports System.Collections.Specialized.BitVector32
 
 Public Class Frm_DalleN
 
@@ -130,6 +131,8 @@ Public Class Frm_DalleN
         Me.txt_BacNom.Enabled = False
         Me.txt_BacNom.BackColor = COULEURTXTREADONLY
 
+        Me.img_Bac.BorderStyle = BorderStyle.FixedSingle
+
     End Sub
 
     Private Sub PreparerFenetre()
@@ -178,7 +181,7 @@ Public Class Frm_DalleN
 
         '--> Bac
 
-        Me.txt_BacNom.Text = MyDalleLoc.Bac.Etiquette
+        AfficherBacEnCours()
 
         '--> Acier
 
@@ -189,6 +192,31 @@ Public Class Frm_DalleN
             Me.cmb_Acier.SelectedIndex = 0
         End If
         MAJI_ProprietesAcier()
+
+    End Sub
+
+    Private Sub AfficheNomBacEnCours()
+        Me.txt_BacNom.Text = MyDalleLoc.Bac.Etiquette
+    End Sub
+
+    Private Sub AfficherBacEnCours()
+
+        '--> Nom du bac
+
+        AfficheNomBacEnCours()
+
+        '--> Orientation
+
+        Select Case MyDalleLoc.Bac.orientation
+            Case Cls_Bac.Enum_Orientation.Parallele
+                Me.rdb_BacParallele.Checked = True
+            Case Cls_Bac.Enum_Orientation.Perpendiculaire
+                Me.rdb_BacPerpendiculaire.Checked = True
+        End Select
+
+        '--> Bac prépercé
+
+        Me.chk_BacPreperce.Checked = MyDalleLoc.Bac.lPreperce
 
     End Sub
 
@@ -253,6 +281,11 @@ Public Class Frm_DalleN
             MyProjet.Poutres(MyProjet.IndEnCours).Dalle.AcierArmatures.Classe = MyDalleLoc.AcierArmatures.Classe
         End If
 
+        '--> Bac
+
+        MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Copie(MyDalleLoc.Bac, lModif)
+        MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.CopieAutresParam(MyDalleLoc.Bac, lModif)
+
     End Sub
 
 #End Region
@@ -260,14 +293,16 @@ Public Class Frm_DalleN
 #Region " Dessins "
 
     Private Sub img_Bac_Paint(sender As Object, e As PaintEventArgs) Handles img_Bac.Paint
-        DessineBacTout(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.ClientRectangle.Height, MyDalleLoc.Bac, True)
+        DessineBacTout(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, MyDalleLoc.Bac, True)
     End Sub
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
-
+        DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
+                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================
+
 
     Public Sub DessineBacTout(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyBac As Cls_Bac,
                               ByVal lTitre As Boolean,
@@ -278,7 +313,6 @@ Public Class Frm_DalleN
         '   Dessin du Bac Acier
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
-        '   Img         [E] :   Image dans laquelle on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
         '   EpDalle     [E] :   Epaisseur de la dalle béton
@@ -317,27 +351,20 @@ Public Class Frm_DalleN
         Dim nbPts As Integer
         Dim nbOndes As Integer = 5
 
-        Dim lUn As Boolean = False
+        Dim MyPenBac As New Pen(BleuCTICM, 2)
 
         '--> Initialisation
 
         lRaidSup = MyBac.HasRaidisseurSup
-        If lUn Then
-            dCar = Math.Sqrt(MyBac.h_p ^ 2 + MyBac.e_p ^ 2) / 16
-        Else
-            dCar = (MyBac.e_p + MyBac.b_b) / 2
-        End If
+
+        dCar = (MyBac.e_p + MyBac.b_b) / 2
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
 
-        If lUn Then
-            xMin = -MyBac.e_p / 2
-            xMax = MyBac.e_p / 2
-        Else
-            xMin = 0
-            xMax = MyBac.LargeurModule
-        End If
-        'nbOndes = Math.Floor(MyBac.LargeurModule / MyBac.e_p)
+
+        xMin = 0
+        xMax = MyBac.LargeurModule
+
         yMin = 0
         yMax = MyBac.h_p
 
@@ -346,30 +373,21 @@ Public Class Frm_DalleN
         '--> Calcul des points du pourtour de la dalle
 
         If lRaidSup Then
-            'MyBac.PrepareContourDalleBacRaidi(nbOndes, EpDalle, xPts, yPts, nbPts)
+            MyBac.PrepareContourModuleBacRaidi(xPts, yPts, nbPts)
         Else
-            MyBac.PrepareContourBacSimpleSeul(xPts, yPts, nbPts)
-            'MyBac.PrepareContourBacSimpleSeul2(xPts, yPts, nbPts, lUn)
-
+            MyBac.PrepareContourModuleBacSimple(xPts, yPts, nbPts)
         End If
 
         '--> Remplissage contour
 
         'ContourZone(myGr, New Pen(BlueAM), xPts, yPts, nbPts, MyParAff, True)
 
-        If lUn Then
-            RemplirZone(myGr, myBrushBac, xPts, yPts, nbPts, MyParAff, True)
-        Else
-            ContourZone(myGr, New Pen(BlueAM), xPts, yPts, nbPts, MyParAff, False)
-        End If
+        ContourZone(myGr, MyPenBac, xPts, yPts, nbPts, MyParAff, True)
 
         ''--> Liberation des Font, Pen et Brush
 
-        'myBrushDalle.Dispose()
-        'MyPenBrush.Dispose()
-        'MyPen.Dispose()
-        'MyPenRedBrush.Dispose()
-        'MyPenRed.Dispose()
+        MyPenBac.Dispose()
+
 
     End Sub
 
@@ -379,9 +397,11 @@ Public Class Frm_DalleN
 
     Private Sub btn_ModifierBac_Click(sender As Object, e As EventArgs) Handles btn_ModifierBac.Click
 
+        iFrmAppel = EnuFenetres.DalleN
         Frm_BacN.ShowDialog()
 
-
+        AfficheNomBacEnCours()
+        Me.img_Bac.Invalidate()
     End Sub
 
 #End Region
@@ -476,6 +496,21 @@ Public Class Frm_DalleN
         Me.txt_Fsk.Text = GetStringNoUnit(MyDalleLoc.AcierArmatures.FsK, Enu_TypeVariable.Contrainte)
     End Sub
 
+    Private Sub OrientationBac_checkedChanged(sender As Object, e As EventArgs) Handles rdb_BacParallele.CheckedChanged, rdb_BacPerpendiculaire.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.rdb_BacParallele.Name : MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele
+            Case Me.rdb_BacPerpendiculaire.Name : MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
+        End Select
+
+    End Sub
+
+    Private Sub chk_BacPreperce_CheckedChanged(sender As Object, e As EventArgs) Handles chk_BacPreperce.CheckedChanged
+        If lBuild Then Exit Sub
+
+        MyDalleLoc.Bac.lPreperce = Me.chk_BacPreperce.Checked
+    End Sub
 
 #End Region
 
@@ -525,6 +560,8 @@ Public Class Frm_DalleN
            FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
+
 
 #End Region
 

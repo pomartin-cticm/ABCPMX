@@ -207,6 +207,26 @@ Module Mod_Declarations
         ModuleY
     End Enum
 
+    Public Enum EnuFenetres
+        Accueil
+        Portees
+        Entraxes
+        Dalle
+        DalleN
+        Section
+        Enrobage
+        Connexion
+        Maintiens
+        Etaiement
+        Chargements
+        Combinaisons
+        Options
+        Hivoss
+        Main
+    End Enum
+
+    Public iFrmAppel As EnuFenetres
+
 #End Region
 
 #Region " Constantes et valeurs par défaut "
@@ -289,8 +309,6 @@ Module Mod_Declarations
     Public SEPARATEURS() As String = {" ", "=", ";"}
 
 #End Region
-
-
 
 
 End Module

@@ -115,7 +115,11 @@ Public Class Frm_BacN
     End Sub
 
     Private Sub InitialiseVariablesLocales()
-        MyBac = MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Clone
+        If iFrmAppel = EnuFenetres.DalleN Then
+            MyBac = Frm_DalleN.MyDalleLoc.Bac.Clone
+        Else
+            MyBac = MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Clone
+        End If
         InitialiseProducteursBacs()
     End Sub
 
@@ -332,7 +336,11 @@ Public Class Frm_BacN
         Dim lModif As Boolean = False
         If ValideSaisieFenetre() Then
 
-            TransfertSaisie(MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, lModif)
+            If iFrmAppel = EnuFenetres.DalleN Then
+                TransfertSaisie(Frm_DalleN.MyDalleLoc.Bac, lModif)
+            Else
+                TransfertSaisie(MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, lModif)
+            End If
 
             If lModif Then
 
@@ -353,32 +361,34 @@ Public Class Frm_BacN
 
     Private Sub TransfertSaisie(ByRef BacSave As Cls_Bac, ByRef lModif As Boolean)
 
-        If BacSave.lDatabase <> MyBac.lDatabase Then lModif = True
-        BacSave.lDatabase = MyBac.lDatabase
+        'If BacSave.lDatabase <> MyBac.lDatabase Then lModif = True
+        'BacSave.lDatabase = MyBac.lDatabase
 
-        If BacSave.Etiquette <> MyBac.Etiquette Then lModif = True
-        BacSave.Etiquette = MyBac.Etiquette
+        'If BacSave.Etiquette <> MyBac.Etiquette Then lModif = True
+        'BacSave.Etiquette = MyBac.Etiquette
 
-        If BacSave.fyp <> MyBac.fyp Then lModif = True
-        BacSave.fyp = MyBac.fyp
+        'If BacSave.fyp <> MyBac.fyp Then lModif = True
+        'BacSave.fyp = MyBac.fyp
 
-        If BacSave.h_p <> MyBac.h_p Then lModif = True
-        BacSave.h_p = MyBac.h_p
+        'If BacSave.h_p <> MyBac.h_p Then lModif = True
+        'BacSave.h_p = MyBac.h_p
 
-        If BacSave.h_rs <> MyBac.h_rs Then lModif = True
-        BacSave.h_rs = MyBac.h_rs
+        'If BacSave.h_rs <> MyBac.h_rs Then lModif = True
+        'BacSave.h_rs = MyBac.h_rs
 
-        If BacSave.b_b <> MyBac.b_b Then lModif = True
-        BacSave.b_b = MyBac.b_b
+        'If BacSave.b_b <> MyBac.b_b Then lModif = True
+        'BacSave.b_b = MyBac.b_b
 
-        If BacSave.b_t <> MyBac.b_t Then lModif = True
-        BacSave.b_t = MyBac.b_t
+        'If BacSave.b_t <> MyBac.b_t Then lModif = True
+        'BacSave.b_t = MyBac.b_t
 
-        If BacSave.e_p <> MyBac.e_p Then lModif = True
-        BacSave.e_p = MyBac.e_p
+        'If BacSave.e_p <> MyBac.e_p Then lModif = True
+        'BacSave.e_p = MyBac.e_p
 
-        If BacSave.tp <> MyBac.tp Then lModif = True
-        BacSave.tp = MyBac.tp
+        'If BacSave.tp <> MyBac.tp Then lModif = True
+        'BacSave.tp = MyBac.tp
+
+        BacSave.Copie(MyBac, lModif)
 
     End Sub
 

@@ -1,6 +1,14 @@
-﻿Imports PropMix_Engine.Cls_Dalle
+﻿'Imports PropMix_Engine.Cls_Dalle
 
 Public Class Cls_Bac
+
+#Region " Autres déclarations "
+
+    '-- Ratios pour la représentation des raidisseurs de bac
+    Const RATIOB1R As Double = 0.2
+    Const RATIOB2R As Double = 0.25
+
+#End Region
 
 #Region " Attributs pour l'interface "
 
@@ -78,6 +86,11 @@ Public Class Cls_Bac
     ''' </summary>
     Public Ieff As Decimal
 
+    ''' <summary>
+    ''' Bac prépercé (ou non !)
+    ''' </summary>
+    Public lPreperce As Boolean
+
 #End Region
 
 #Region " Enumérations "
@@ -103,7 +116,7 @@ Public Class Cls_Bac
         Me.e_p = 0.207
 
         Me.Etiquette = "Cofraplus_60 1.00"
-
+        Me.lPreperce = True
     End Sub
 
     Sub New(MyFab As String, ByVal My_etiquette As String, ByVal Mybb As Decimal, ByVal Mybt As Decimal, ByVal Myhp As Decimal, ByVal Myhrs As Decimal,
@@ -170,11 +183,69 @@ Public Class Cls_Bac
 
 #End Region
 
-#Region " Fonction de copie "
+#Region " Fonctions de copie "
 
     Public Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function
+
+    Public Sub Copie(BacSource As Cls_Bac, ByRef lModif As Boolean)
+        '-----------------------------------------------------------------
+        '   26/06/23 : Création - POM
+        '-----------------------------------------------------------------
+        '   Copie d'une bac avec suivi de modif
+        '   (Paramètres définis dans la fenêtre Frm_Bac)
+        '-----------------------------------------------------------------
+        '   BacSource   [E] :   Bac d'origine
+        '   lModif      [S] :   Indique si une paramètre au moinx a été modifié
+        '-----------------------------------------------------------------
+        If Me.lDatabase <> BacSource.lDatabase Then lModif = True
+        Me.lDatabase = BacSource.lDatabase
+
+        If Me.Etiquette <> BacSource.Etiquette Then lModif = True
+        Me.Etiquette = BacSource.Etiquette
+
+        If Me.fyp <> BacSource.fyp Then lModif = True
+        Me.fyp = BacSource.fyp
+
+        If Me.h_p <> BacSource.h_p Then lModif = True
+        Me.h_p = BacSource.h_p
+
+        If Me.h_rs <> BacSource.h_rs Then lModif = True
+        Me.h_rs = BacSource.h_rs
+
+        If Me.b_b <> BacSource.b_b Then lModif = True
+        Me.b_b = BacSource.b_b
+
+        If Me.b_t <> BacSource.b_t Then lModif = True
+        Me.b_t = BacSource.b_t
+
+        If Me.e_p <> BacSource.e_p Then lModif = True
+        Me.e_p = BacSource.e_p
+
+        If Me.tp <> BacSource.tp Then lModif = True
+        Me.tp = BacSource.tp
+
+    End Sub
+
+    Public Sub CopieAutresParam(BacSource As Cls_Bac, ByRef lModif As Boolean)
+        '-----------------------------------------------------------------
+        '   26/06/23 : Création - POM
+        '-----------------------------------------------------------------
+        '   Copie d'une bac avec suivi de modif
+        '   (Paramètres définis dans la fenêtre Frm_DalleN)
+        '-----------------------------------------------------------------
+        '   BacSource   [E] :   Bac d'origine
+        '   lModif      [S] :   Indique si une paramètre au moinx a été modifié
+        '-----------------------------------------------------------------
+
+        If Me.orientation <> BacSource.orientation Then lModif = True
+        Me.orientation = BacSource.orientation
+
+        If Me.lPreperce <> BacSource.lPreperce Then lModif = True
+        Me.lPreperce = BacSource.lPreperce
+
+    End Sub
 
 #End Region
 
@@ -231,9 +302,6 @@ Public Class Cls_Bac
         Dim Hpg As Double = Me.Hauteur_hpg
         Dim b1Raid, b2Raid As Double
         Dim bSupBac As Double
-
-        Const RATIOB1R As Double = 0.2
-        Const RATIOB2R As Double = 0.25
 
         '--> Initialisation
 
@@ -460,9 +528,98 @@ Public Class Cls_Bac
 
     End Sub
 
-    Public Sub PrepareContourBacSimpleSeul(ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+    Public Sub PrepareContourModuleBacRaidi(ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
         '-----------------------------------------------------------------------------------------------
-        '   25/06/23 :  Création - POM
+        '   6/06/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin du Bac Acier - Préparation des points du contour pour le cas avec raidisseur
+        '   Dessin du bac seul, sans dalle,
+        '   Largeur : celle du module
+        '-----------------------------------------------------------------------------------------------
+        '
+        '   xPts, yPts  [S] :   Tableaux des coordonnées des points du contour
+        '   nbPts       [S] :   Nombre de points du contour
+        '
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim nbOndes As Integer
+        Dim wBac As Decimal
+        Dim xp, yp As Decimal
+        Const REBORD As Decimal = 0.2
+        Dim dXnerv As Decimal
+        Dim DeltaX0 As Decimal
+        Dim xCenter As Decimal
+        Dim bbRaid, btRaid As Double
+        Dim bSupBac, hpg As Double
+
+        '--> Initialisation
+
+        nbOndes = Math.Max(1, Math.Floor(Me.LargeurModule / Me.e_p))
+        wBac = Math.Max(Me.e_p, Me.LargeurModule)
+        dXnerv = (Me.b_t - Me.b_b) / 2
+        DeltaX0 = (wBac - nbOndes * Me.e_p) / 2
+        nbPts = 0
+
+        bSupBac = Me.e_p - Me.b_t
+        bbRaid = RATIOB1R * bSupBac
+        btRaid = RATIOB2R * bSupBac
+        hpg = Me.Hauteur_hpg
+
+        '--> Début du module
+
+        If dXnerv > 0 Then
+            xp = -dXnerv * REBORD
+            yp = Me.h_p * REBORD
+
+            AjoutePoint(xp, yp, xPts, yPts, nbPts)
+        End If
+
+        AjoutePoint(0, 0, xPts, yPts, nbPts)
+
+        If DeltaX0 > 0 Then
+            AjoutePoint(DeltaX0, 0, xPts, yPts, nbPts)
+        End If
+
+        '--> Boucle sur les nervures
+
+        xCenter = DeltaX0 + Me.e_p / 2
+
+        For i As Integer = 1 To nbOndes
+
+            AjoutePoint(xCenter - e_p / 2 + b_b / 2, 0, xPts, yPts, nbPts)
+            AjoutePoint(xCenter - e_p / 2 + b_t / 2, Me.h_p, xPts, yPts, nbPts)
+            AjoutePoint(xCenter - bbRaid / 2, Me.h_p, xPts, yPts, nbPts)
+            AjoutePoint(xCenter - btRaid / 2, hpg, xPts, yPts, nbPts)
+
+            AjoutePoint(xCenter + btRaid / 2, hpg, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + bbRaid / 2, Me.h_p, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + e_p / 2 - b_t / 2, Me.h_p, xPts, yPts, nbPts)
+            AjoutePoint(xCenter + e_p / 2 - b_b / 2, 0, xPts, yPts, nbPts)
+
+            AjoutePoint(xCenter + e_p / 2, 0, xPts, yPts, nbPts)
+
+            xCenter += Me.e_p
+        Next
+
+        '--> Fin du module
+
+        If DeltaX0 > 0 Then
+            AjoutePoint(wBac, 0, xPts, yPts, nbPts)
+        End If
+
+        If dXnerv > 0 Then
+            xp = wBac + dXnerv * REBORD
+            yp = Me.h_p * REBORD
+
+            AjoutePoint(xp, yp, xPts, yPts, nbPts)
+        End If
+    End Sub
+
+    Public Sub PrepareContourModuleBacSimple(ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+        '-----------------------------------------------------------------------------------------------
+        '   24/06/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------
         '   Dessin du Bac Acier - Préparation des points du contour pour le cas sans raidisseur
         '   Dessin du bac seul, sans dalle,

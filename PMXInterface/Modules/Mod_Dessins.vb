@@ -14,6 +14,109 @@ Module Mod_Dessins
 
 #End Region
 
+#Region " Dessins pour la définiton de la dalle (FRM_DALLEN) "
+
+    Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyDalle As Cls_Dalle,
+                            MySection As cls_Section, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   26/06/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin du Bac Acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   MyDalle     [E] :   Dalle à dessiner
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Double
+        Dim lMixte, lEnrob, lLamine As Boolean
+        Dim Beff As Decimal
+
+        Dim ColorLocalEtriers As Color = CouleurArmaNormal
+        Dim ColorLocalArma(2) As Color
+        Dim CouleurBeton As Color = CouleurBetonNormal
+        Dim CouleurAcier As Color = CouleurAcierNormal
+        Dim pColorLocalArma(2, 2) As Color
+        Dim ColorArmatures As Color = CouleurArmaNormal
+        Const kADJUST As Decimal = 0.95
+        Const zREF As Decimal = 0
+
+        '--> Initialisation
+
+        lMixte = MyProjet.Poutres(MyProjet.IndEnCours).Section.lMixte
+        lEnrob = MyProjet.Poutres(MyProjet.IndEnCours).Section.lEnrobage
+        lLamine = MyProjet.Poutres(MyProjet.IndEnCours).Section.lLamine
+
+        Beff = LargeurDalleDessin(MySection.ProfilA)
+
+        '--> Preparation de la zone d'affichage - Calcul de ParAff
+
+        xMin = 3 * MySection.ProfilA.b_fs
+        xMax = -xMin
+
+        yMin = -MySection.ProfilA.ha
+        yMax = MyDalle.zTop
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+        '--> Préparation des Pinceaux utilisés dans le dessin
+
+        ' Profilé
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
+        ' Béton
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+        ' Etriers
+        Dim myBrushE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
+        ' Armatures de l'enrobage
+        Dim myBrushArmaE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, ColorArmatures)
+
+        '--> Dessin de béton
+
+        DessinEnrobagePartielBeton(myGr, MySection.ProfilA, MySection.enrobage_partiel.Ratio_bc, MyParAff, myBrushB)
+
+        '--> Dessin de la section acier
+
+        DessinProfileMetal(myGr, MySection.ProfilA, myBrushP, MyParAff, zREF)
+
+        '--> Dessin des étriers
+
+        DessinEtriers(myGr, MySection.ProfilA, MySection.enrobage_partiel, MyParAff, myBrushE, zREF)
+
+    End Sub
+
+
+    Private Function LargeurDalleDessin(Profile As cls_ProfilA) As Decimal
+        '-----------------------------------------------------------------------------------------------
+        '   26/06/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Renvoie la largeur de dalle à représenter
+        '-----------------------------------------------------------------------------------------------
+        '   
+        '-----------------------------------------------------------------------------------------------
+
+
+        '--> Initialisation
+
+        Dim Diagonale As Decimal = Math.Sqrt((Profile.b_fi + Profile.b_fs) ^ 2 / 4 + Profile.ha ^ 2)
+        Dim BfMax As Decimal = Math.Max(Profile.b_fs, Profile.b_fi)
+        Dim BeffRed As Decimal
+
+        '--> Traitement
+
+        BeffRed = 1.5 * Diagonale ' Math.Min(MySection.dalle.Beff, 1.5 * Diagonale)
+
+        Return BeffRed
+
+    End Function
+
+#End Region
+
+
 #Region " Dessins pour la dfiniton de l'enrobage (FRM_ENROBAGE) "
 
     ''' <summary>

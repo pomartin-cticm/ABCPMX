@@ -33,6 +33,13 @@ Partial Class Frm_DalleN
         Me.img_Dalle = New System.Windows.Forms.PictureBox()
         Me.TLpan_TroisColonnes = New System.Windows.Forms.TableLayoutPanel()
         Me.TLpan_Droite = New System.Windows.Forms.TableLayoutPanel()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.txt_Fsk = New System.Windows.Forms.TextBox()
+        Me.img_Fy = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitSigma2 = New System.Windows.Forms.Label()
+        Me.cmb_Acier = New System.Windows.Forms.ComboBox()
+        Me.lbl_ClasseA = New System.Windows.Forms.Label()
+        Me.lbl_Acier = New System.Windows.Forms.Label()
         Me.pan_Armatures = New System.Windows.Forms.Panel()
         Me.lbl_Armatures = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
@@ -71,13 +78,6 @@ Partial Class Frm_DalleN
         Me.cmb_TypeDalle = New System.Windows.Forms.ComboBox()
         Me.lbl_General = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.lbl_Acier = New System.Windows.Forms.Label()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.txt_Fsk = New System.Windows.Forms.TextBox()
-        Me.img_Fy = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitSigma2 = New System.Windows.Forms.Label()
-        Me.cmb_Acier = New System.Windows.Forms.ComboBox()
-        Me.lbl_ClasseA = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -86,6 +86,8 @@ Partial Class Frm_DalleN
         CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLpan_TroisColonnes.SuspendLayout()
         Me.TLpan_Droite.SuspendLayout()
+        Me.Panel2.SuspendLayout()
+        CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.pan_Bac.SuspendLayout()
         CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -97,8 +99,6 @@ Partial Class Frm_DalleN
         CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.Img_Hh, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel2.SuspendLayout()
-        CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -242,6 +242,85 @@ Partial Class Frm_DalleN
         Me.TLpan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
         Me.TLpan_Droite.Size = New System.Drawing.Size(292, 300)
         Me.TLpan_Droite.TabIndex = 2
+        '
+        'Panel2
+        '
+        Me.Panel2.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Panel2.Controls.Add(Me.txt_Fsk)
+        Me.Panel2.Controls.Add(Me.img_Fy)
+        Me.Panel2.Controls.Add(Me.etq_UnitSigma2)
+        Me.Panel2.Controls.Add(Me.cmb_Acier)
+        Me.Panel2.Controls.Add(Me.lbl_ClasseA)
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel2.Location = New System.Drawing.Point(0, 225)
+        Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(292, 75)
+        Me.Panel2.TabIndex = 14
+        '
+        'txt_Fsk
+        '
+        Me.txt_Fsk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Fsk.Location = New System.Drawing.Point(169, 33)
+        Me.txt_Fsk.Name = "txt_Fsk"
+        Me.txt_Fsk.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Fsk.TabIndex = 59
+        '
+        'img_Fy
+        '
+        Me.img_Fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Fy.Location = New System.Drawing.Point(113, 33)
+        Me.img_Fy.Name = "img_Fy"
+        Me.img_Fy.Size = New System.Drawing.Size(57, 20)
+        Me.img_Fy.TabIndex = 60
+        Me.img_Fy.TabStop = False
+        '
+        'etq_UnitSigma2
+        '
+        Me.etq_UnitSigma2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitSigma2.AutoSize = True
+        Me.etq_UnitSigma2.Location = New System.Drawing.Point(233, 36)
+        Me.etq_UnitSigma2.Name = "etq_UnitSigma2"
+        Me.etq_UnitSigma2.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitSigma2.TabIndex = 58
+        Me.etq_UnitSigma2.Text = "mm"
+        '
+        'cmb_Acier
+        '
+        Me.cmb_Acier.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmb_Acier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Acier.FormattingEnabled = True
+        Me.cmb_Acier.Location = New System.Drawing.Point(127, 6)
+        Me.cmb_Acier.Name = "cmb_Acier"
+        Me.cmb_Acier.Size = New System.Drawing.Size(153, 21)
+        Me.cmb_Acier.TabIndex = 57
+        '
+        'lbl_ClasseA
+        '
+        Me.lbl_ClasseA.AutoSize = True
+        Me.lbl_ClasseA.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_ClasseA.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_ClasseA.Location = New System.Drawing.Point(11, 9)
+        Me.lbl_ClasseA.Name = "lbl_ClasseA"
+        Me.lbl_ClasseA.Size = New System.Drawing.Size(61, 13)
+        Me.lbl_ClasseA.TabIndex = 56
+        Me.lbl_ClasseA.Text = "lbl_ClasseA"
+        Me.lbl_ClasseA.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lbl_Acier
+        '
+        Me.lbl_Acier.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.lbl_Acier.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Acier.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Acier.Location = New System.Drawing.Point(0, 195)
+        Me.lbl_Acier.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Acier.Name = "lbl_Acier"
+        Me.lbl_Acier.Size = New System.Drawing.Size(292, 30)
+        Me.lbl_Acier.TabIndex = 13
+        Me.lbl_Acier.Text = "lbl_Acier"
+        Me.lbl_Acier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_Armatures
         '
@@ -678,85 +757,6 @@ Partial Class Frm_DalleN
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'lbl_Acier
-        '
-        Me.lbl_Acier.BackColor = System.Drawing.SystemColors.ControlDark
-        Me.lbl_Acier.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Acier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Acier.Location = New System.Drawing.Point(0, 195)
-        Me.lbl_Acier.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Acier.Name = "lbl_Acier"
-        Me.lbl_Acier.Size = New System.Drawing.Size(292, 30)
-        Me.lbl_Acier.TabIndex = 13
-        Me.lbl_Acier.Text = "lbl_Acier"
-        Me.lbl_Acier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Panel2
-        '
-        Me.Panel2.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel2.Controls.Add(Me.txt_Fsk)
-        Me.Panel2.Controls.Add(Me.img_Fy)
-        Me.Panel2.Controls.Add(Me.etq_UnitSigma2)
-        Me.Panel2.Controls.Add(Me.cmb_Acier)
-        Me.Panel2.Controls.Add(Me.lbl_ClasseA)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel2.Location = New System.Drawing.Point(0, 225)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(292, 75)
-        Me.Panel2.TabIndex = 14
-        '
-        'txt_Fsk
-        '
-        Me.txt_Fsk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Fsk.Location = New System.Drawing.Point(169, 33)
-        Me.txt_Fsk.Name = "txt_Fsk"
-        Me.txt_Fsk.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Fsk.TabIndex = 59
-        '
-        'img_Fy
-        '
-        Me.img_Fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Fy.Location = New System.Drawing.Point(113, 33)
-        Me.img_Fy.Name = "img_Fy"
-        Me.img_Fy.Size = New System.Drawing.Size(57, 20)
-        Me.img_Fy.TabIndex = 60
-        Me.img_Fy.TabStop = False
-        '
-        'etq_UnitSigma2
-        '
-        Me.etq_UnitSigma2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitSigma2.AutoSize = True
-        Me.etq_UnitSigma2.Location = New System.Drawing.Point(233, 36)
-        Me.etq_UnitSigma2.Name = "etq_UnitSigma2"
-        Me.etq_UnitSigma2.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitSigma2.TabIndex = 58
-        Me.etq_UnitSigma2.Text = "mm"
-        '
-        'cmb_Acier
-        '
-        Me.cmb_Acier.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmb_Acier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Acier.FormattingEnabled = True
-        Me.cmb_Acier.Location = New System.Drawing.Point(127, 6)
-        Me.cmb_Acier.Name = "cmb_Acier"
-        Me.cmb_Acier.Size = New System.Drawing.Size(153, 21)
-        Me.cmb_Acier.TabIndex = 57
-        '
-        'lbl_ClasseA
-        '
-        Me.lbl_ClasseA.AutoSize = True
-        Me.lbl_ClasseA.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_ClasseA.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_ClasseA.Location = New System.Drawing.Point(11, 9)
-        Me.lbl_ClasseA.Name = "lbl_ClasseA"
-        Me.lbl_ClasseA.Size = New System.Drawing.Size(61, 13)
-        Me.lbl_ClasseA.TabIndex = 56
-        Me.lbl_ClasseA.Text = "lbl_ClasseA"
-        Me.lbl_ClasseA.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
         'Frm_DalleN
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -775,6 +775,9 @@ Partial Class Frm_DalleN
         Me.TLpan_TroisColonnes.ResumeLayout(False)
         Me.TLpan_Droite.ResumeLayout(False)
         Me.TLpan_Droite.PerformLayout()
+        Me.Panel2.ResumeLayout(False)
+        Me.Panel2.PerformLayout()
+        CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
         Me.pan_Bac.ResumeLayout(False)
@@ -791,9 +794,6 @@ Partial Class Frm_DalleN
         CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.Img_Hh, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel2.ResumeLayout(False)
-        Me.Panel2.PerformLayout()
-        CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

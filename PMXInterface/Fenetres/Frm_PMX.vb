@@ -8,23 +8,8 @@ Public Class Frm_PMX
     Dim lBuild As Boolean = True
     Private lOpenAvecFichier As Boolean = False
 
-    Enum EnuFilleEnCours
-        Accueil
-        Portees
-        Entraxes
-        Dalle
-        DalleN
-        Section
-        Enrobage
-        Connexion
-        Maintiens
-        Etaiement
-        Chargements
-        Combinaisons
-        Options
-        Hivoss
-    End Enum
-    Dim FilleEnCours As EnuFilleEnCours = EnuFilleEnCours.Accueil
+
+    Dim FilleEnCours As EnuFenetres = EnuFenetres.Accueil
 
     '--> Gestion de l'affichage des projets et des poutres
 
@@ -250,29 +235,29 @@ Public Class Frm_PMX
 
         Select Case sender.name
             Case Me.TSbtn_Accueil.Name
-                FilleEnCours = EnuFilleEnCours.Accueil
+                FilleEnCours = EnuFenetres.Accueil
             Case Me.TSbtn_Portees.Name
-                FilleEnCours = EnuFilleEnCours.Portees
+                FilleEnCours = EnuFenetres.Portees
                 ' Case Me.TSbtn_Entraxe.Name
            '     FilleEnCours = EnuFilleEnCours.Entraxes
 
             Case Me.TSbtn_Dalle.Name
-                FilleEnCours = EnuFilleEnCours.Dalle
+                FilleEnCours = EnuFenetres.Dalle
             Case Me.TSbtn_DalleN.Name
-                FilleEnCours = EnuFilleEnCours.DalleN
+                FilleEnCours = EnuFenetres.DalleN
             Case Me.TSbtn_SectionA.Name
-                FilleEnCours = EnuFilleEnCours.Section
+                FilleEnCours = EnuFenetres.Section
             Case Me.TSbtn_Enrobage.Name
-                FilleEnCours = EnuFilleEnCours.Enrobage
+                FilleEnCours = EnuFenetres.Enrobage
             Case Me.TSbtn_Maintiens.Name
-                FilleEnCours = EnuFilleEnCours.Maintiens
+                FilleEnCours = EnuFenetres.Maintiens
             Case Me.TSbtn_Etaiement.Name
-                FilleEnCours = EnuFilleEnCours.Etaiement
+                FilleEnCours = EnuFenetres.Etaiement
             Case Me.TSbtn_Chargements.Name
-                FilleEnCours = EnuFilleEnCours.Chargements
+                FilleEnCours = EnuFenetres.Chargements
 
             Case Me.TSbtn_Hivoss.Name
-                FilleEnCours = EnuFilleEnCours.Hivoss
+                FilleEnCours = EnuFenetres.Hivoss
 
         End Select
         AfficheFenetreEnCours()
@@ -282,7 +267,7 @@ Public Class Frm_PMX
     Private Sub AfficheFenetreEnCours()
 
         Select Case FilleEnCours
-            Case EnuFilleEnCours.Portees
+            Case EnuFenetres.Portees
                 If LogicielOptions.lFenetres Then
                     Frm_Portees.ShowDialog()
                 Else
@@ -290,47 +275,48 @@ Public Class Frm_PMX
                     Me.TLPan_ZoneDeSaisie.Controls.Add(Frm_Portees.pan_Main, 0, 1)
                 End If
 
-            Case EnuFilleEnCours.Dalle
+            Case EnuFenetres.Dalle
                 If LogicielOptions.lFenetres Then
                     Frm_Dalle.ShowDialog()
 
                 End If
-            Case EnuFilleEnCours.DalleN
+            Case EnuFenetres.DalleN
                 If LogicielOptions.lFenetres Then
                     Frm_DalleN.ShowDialog()
 
                 End If
 
-            Case EnuFilleEnCours.Section
+            Case EnuFenetres.Section
                 If LogicielOptions.lFenetres Then
                     Frm_SectionAcierStandard.ShowDialog()
                 Else
 
                 End If
 
-            Case EnuFilleEnCours.Enrobage
+            Case EnuFenetres.Enrobage
                 If LogicielOptions.lFenetres Then
                     Frm_Enrobage.ShowDialog()
                 Else
 
                 End If
 
-            Case EnuFilleEnCours.Maintiens
+            Case EnuFenetres.Maintiens
                 If LogicielOptions.lFenetres Then
                     Frm_Maintiens.ShowDialog()
                 Else
 
                 End If
 
-            Case EnuFilleEnCours.Etaiement
+            Case EnuFenetres.Etaiement
                 If LogicielOptions.lFenetres Then
                     Frm_Etaiement.ShowDialog()
                 Else
 
                 End If
 
-            Case EnuFilleEnCours.Hivoss
+            Case EnuFenetres.Hivoss
                 If LogicielOptions.lFenetres Then
+                    iFrmAppel = EnuFenetres.Main
                     Frm_BacN.ShowDialog()
                 Else
 
