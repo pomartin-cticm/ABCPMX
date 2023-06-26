@@ -42,9 +42,9 @@ Partial Class Frm_Maintiens
         Me.cmb_Travee = New System.Windows.Forms.ComboBox()
         Me.rad_PointRestrain = New System.Windows.Forms.RadioButton()
         Me.rad_FullyRestrain = New System.Windows.Forms.RadioButton()
-        Me.img_Maintiens = New System.Windows.Forms.PictureBox()
         Me.pan_Img_Maintiens = New System.Windows.Forms.Panel()
         Me.txt_Cotations = New System.Windows.Forms.TextBox()
+        Me.img_Maintiens = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -54,8 +54,8 @@ Partial Class Frm_Maintiens
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_ControlDessin.SuspendLayout()
         Me.pan_Maintiens.SuspendLayout()
-        CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Img_Maintiens.SuspendLayout()
+        CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -308,17 +308,6 @@ Partial Class Frm_Maintiens
         Me.rad_FullyRestrain.Text = "rad_FullyRestrain"
         Me.rad_FullyRestrain.UseVisualStyleBackColor = True
         '
-        'img_Maintiens
-        '
-        Me.img_Maintiens.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_Maintiens.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Maintiens.Location = New System.Drawing.Point(1, 0)
-        Me.img_Maintiens.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
-        Me.img_Maintiens.Name = "img_Maintiens"
-        Me.img_Maintiens.Size = New System.Drawing.Size(100, 50)
-        Me.img_Maintiens.TabIndex = 1
-        Me.img_Maintiens.TabStop = False
-        '
         'pan_Img_Maintiens
         '
         Me.pan_Img_Maintiens.Controls.Add(Me.txt_Cotations)
@@ -332,10 +321,21 @@ Partial Class Frm_Maintiens
         '
         'txt_Cotations
         '
-        Me.txt_Cotations.Location = New System.Drawing.Point(106, 219)
+        Me.txt_Cotations.Location = New System.Drawing.Point(308, 141)
         Me.txt_Cotations.Name = "txt_Cotations"
         Me.txt_Cotations.Size = New System.Drawing.Size(100, 20)
         Me.txt_Cotations.TabIndex = 2
+        '
+        'img_Maintiens
+        '
+        Me.img_Maintiens.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_Maintiens.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Maintiens.Location = New System.Drawing.Point(1, 0)
+        Me.img_Maintiens.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.img_Maintiens.Name = "img_Maintiens"
+        Me.img_Maintiens.Size = New System.Drawing.Size(100, 50)
+        Me.img_Maintiens.TabIndex = 1
+        Me.img_Maintiens.TabStop = False
         '
         'Frm_Maintiens
         '
@@ -356,9 +356,9 @@ Partial Class Frm_Maintiens
         Me.pan_ControlDessin.ResumeLayout(False)
         Me.pan_Maintiens.ResumeLayout(False)
         Me.pan_Maintiens.PerformLayout()
-        CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Img_Maintiens.ResumeLayout(False)
         Me.pan_Img_Maintiens.PerformLayout()
+        CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

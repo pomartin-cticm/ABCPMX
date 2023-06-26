@@ -28,6 +28,10 @@ Public Class Frm_Maintiens
 
     Dim lMouseDown As Boolean = False
 
+    Dim positionCotesInferieures(,) As Decimal
+    Dim indiceCoteSelectionnee As Integer
+    Dim lClickCote As Boolean = False
+
     Dim traveeEnCours As (cls_Poutre.EnuTypeTravee, Integer) = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
 
 #End Region
@@ -167,7 +171,7 @@ Public Class Frm_Maintiens
 #Region " Dessins "
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Maintiens.Paint
 
-        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, True)
+        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, True, positionCotesInferieures)
 
     End Sub
 
@@ -192,8 +196,34 @@ Public Class Frm_Maintiens
     Private Sub MouseClickDown(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseDown
         If lBuild Then Exit Sub
 
-        Mod_Dessins.ModificationMaintienSemelle(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse, Y_Mousse)
+        Mod_Dessins.GestionClickDownMousse(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse, Y_Mousse)
         img_Maintiens.Invalidate()
+
+        lClickCote = False
+
+        If Not positionCotesInferieures Is Nothing Then
+            For i As Integer = 0 To positionCotesInferieures.GetLength(0) - 1
+
+                If (Math.Abs(positionCotesInferieures(i, 0) - X_Mousse) <= txt_Cotations.Width / 2) And (Math.Abs(positionCotesInferieures(i, 1) - Y_Mousse) <= txt_Cotations.Height / 2) Then
+                    txt_Cotations.Visible = True
+                    txt_Cotations.Location = New Point(positionCotesInferieures(i, 0) - txt_Cotations.Width / 2, positionCotesInferieures(i, 1) - txt_Cotations.Height / 2)
+                    If i = 0 Then
+                        txt_Cotations.Text = GetStringNoUnit(MyPoutreLoc.Maintiens(traveeEnCours.Item2)(0).x_Loc, Enu_TypeVariable.Longueur)
+                    ElseIf i = positionCotesInferieures.GetLength(0) - 1 Then
+                        txt_Cotations.Text = GetStringNoUnit(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i - 1).x_Loc, Enu_TypeVariable.Longueur)
+                    Else
+                        txt_Cotations.Text = GetStringNoUnit(MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i).x_Loc - MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i - 1).x_Loc, Enu_TypeVariable.Longueur)
+                    End If
+
+                    lClickCote = True
+                    indiceCoteSelectionnee = i
+
+                End If
+
+            Next
+        End If
+
+        If Not lClickCote Then txt_Cotations.Visible = False
 
         lMouseDown = True
 
@@ -214,13 +244,32 @@ Public Class Frm_Maintiens
     End Sub
 
 
+    Private Sub LeaveTxtCotation(sender As Object, e As EventArgs) Handles txt_Cotations.Leave
 
+        txt_Cotations.Visible = False
+
+    End Sub
+
+    Private Sub KeyPressTxtCotation(ByVal sender As System.Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txt_Cotations.KeyPress
+        Select Case e.KeyChar
+            Case Chr(13) 'Retour chariot
+                txt_Cotations.Visible = False
+                Validation_txt_Cotation()
+
+            Case Chr(27) 'Touche echap
+                txt_Cotations.Visible = False
+
+        End Select
+
+    End Sub
 
 #End Region
 
 #Region " Evènements "
 
     Private Sub btn_Add_Click(sender As Object, e As EventArgs) Handles btn_Add.Click
+        If lBuild Then Exit Sub
+
         MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / 2, True, True, False))
 
         MAJ_PositionMaintiens()
@@ -231,6 +280,8 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub btn_Delete_Click(sender As Object, e As EventArgs) Handles btn_Delete.Click
+        If lBuild Then Exit Sub
+
         If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count <> 0 Then
             MyPoutreLoc.Maintiens(traveeEnCours.Item2).Remove(MyPoutreLoc.Maintiens(traveeEnCours.Item2).Last)
             MAJ_PositionMaintiens()
@@ -272,6 +323,34 @@ Public Class Frm_Maintiens
         img_Maintiens.Invalidate()
 
     End Sub
+
+    Private Sub Validation_txt_Cotation()
+
+        If IsNumeric(txt_Cotations.Text) Then
+
+            Dim val As Double = CDec(txt_Cotations.Text)
+
+            If val >= 0 Then
+
+                If indiceCoteSelectionnee = 0 Then
+                    MyPoutreLoc.Maintiens(traveeEnCours.Item2)(0).x_Loc = Math.Min(val, 0.95 * MyPoutreLoc.Maintiens(traveeEnCours.Item2)(0).x_Loc)
+                ElseIf indiceCoteSelectionnee = positionCotesInferieures.GetLength(0) - 1 Then
+                    If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count = 1 Then
+                        MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc = Math.Min(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - val, 0.95 * MyPoutreLoc.LongueurTravee(traveeEnCours.Item2))
+                    Else
+                        MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc = Math.Max(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - val, 1.05 * MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 2).x_Loc)
+                    End If
+                Else
+                    MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = Math.Min(MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc + val, 0.95 * MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee + 1).x_Loc)
+                End If
+
+            End If
+        End If
+
+
+    End Sub
+
+
 
 
 
