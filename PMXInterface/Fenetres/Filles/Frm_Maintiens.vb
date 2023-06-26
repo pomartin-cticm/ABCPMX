@@ -328,24 +328,58 @@ Public Class Frm_Maintiens
 
         If IsNumeric(txt_Cotations.Text) Then
 
+            'Définition des variables locales
             Dim val As Double = CDec(txt_Cotations.Text)
+            Dim xLoc As Decimal
+            Dim nbMaintiens As Integer = MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count
+            Dim longueurTraveeEnCours As Decimal = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2)
+
+            Dim decal As Decimal = MyPoutreLoc.Section.ProfilA.ha
 
             If val >= 0 Then
 
-                If indiceCoteSelectionnee = 0 Then
-                    MyPoutreLoc.Maintiens(traveeEnCours.Item2)(0).x_Loc = Math.Min(val, 0.95 * MyPoutreLoc.Maintiens(traveeEnCours.Item2)(0).x_Loc)
-                ElseIf indiceCoteSelectionnee = positionCotesInferieures.GetLength(0) - 1 Then
-                    If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count = 1 Then
-                        MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc = Math.Min(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - val, 0.95 * MyPoutreLoc.LongueurTravee(traveeEnCours.Item2))
-                    Else
-                        MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc = Math.Max(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - val, 1.05 * MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 2).x_Loc)
-                    End If
-                Else
-                    MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = Math.Min(MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc + val, 0.95 * MyPoutreLoc.Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee + 1).x_Loc)
-                End If
+                With MyPoutreLoc
 
+                    val = Math.Max(val, decal)
+                    val = Math.Min(val, longueurTraveeEnCours - decal)
+
+                    If indiceCoteSelectionnee = 0 Then
+                        If nbMaintiens = 1 Then
+                            .Maintiens(traveeEnCours.Item2)(0).x_Loc = val
+                        Else
+                            .Maintiens(traveeEnCours.Item2)(0).x_Loc = Math.Min(val, .Maintiens(traveeEnCours.Item2)(1).x_Loc - decal)
+                        End If
+
+                    ElseIf indiceCoteSelectionnee = positionCotesInferieures.GetLength(0) - 1 Then
+                        If nbMaintiens = 1 Then
+                            .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc = longueurTraveeEnCours - val
+                        Else
+                            .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc = Math.Max(longueurTraveeEnCours - val, .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 2).x_Loc + decal)
+                        End If
+                    Else
+                        If nbMaintiens = 2 Then
+                            xLoc = .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc + val
+                            xLoc = Math.Min(xLoc, longueurTraveeEnCours - decal)
+                            .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = xLoc
+                        Else
+                            If indiceCoteSelectionnee = positionCotesInferieures.GetLength(0) - 2 Then
+                                xLoc = .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc + val
+                                xLoc = Math.Min(xLoc, longueurTraveeEnCours - decal)
+                                .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = xLoc
+                            Else
+                                xLoc = .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc + val
+                                xLoc = Math.Min(xLoc, .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee + 1).x_Loc - decal)
+                                .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = xLoc
+                            End If
+                        End If
+                    End If
+                End With
             End If
+
+
         End If
+
+        img_Maintiens.Invalidate()
 
 
     End Sub
