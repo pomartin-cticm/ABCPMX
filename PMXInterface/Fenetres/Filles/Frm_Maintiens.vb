@@ -97,6 +97,16 @@ Public Class Frm_Maintiens
 
                 End If
 
+                Me.lbl_Maintiens.Text = Bloc("MAINTIENS")
+                Me.lbl_Travee.Text = Bloc("TRAVEE")
+                Me.rad_NonRestrain.Text = Bloc("NONRESTRAIN")
+                Me.rad_FullyRestrain.Text = Bloc("FULLYRESTRAIN")
+                Me.rad_PointRestrain.Text = Bloc("POINTRESTRAIN")
+
+                Me.lbl_ControlDessin.Text = Bloc("CONTROLDESSIN")
+                Me.btn_Add.Text = Bloc("ADD")
+                Me.btn_Delete.Text = Bloc("DELETE")
+
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -316,19 +326,18 @@ Public Class Frm_Maintiens
     Private Sub btn_Add_Click(sender As Object, e As EventArgs) Handles btn_Add.Click
         If lBuild Then Exit Sub
 
-        MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / 2, True, True, False))
-
-        MAJ_PositionMaintiens()
-
-        img_Maintiens.Invalidate()
-
+        If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count < NBRESTRAINMAX Then
+            MyPoutreLoc.Maintiens(traveeEnCours.Item2).Add(New cls_Maintiens(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / 2, True, True, False))
+            MAJ_PositionMaintiens()
+            img_Maintiens.Invalidate()
+        End If
 
     End Sub
 
     Private Sub btn_Delete_Click(sender As Object, e As EventArgs) Handles btn_Delete.Click
         If lBuild Then Exit Sub
 
-        If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count <> 0 Then
+        If MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count > Mod_Declarations.NBRESTRAINMIN Then
             MyPoutreLoc.Maintiens(traveeEnCours.Item2).Remove(MyPoutreLoc.Maintiens(traveeEnCours.Item2).Last)
             MAJ_PositionMaintiens()
             img_Maintiens.Invalidate()
@@ -342,13 +351,16 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub MAJ_PositionMaintiens()
-        Dim index_maintien As Integer
+        'Dim index_maintien As Integer
+
+        Dim val As Decimal = 0
 
         'Lissage des positions des maintiens lorsqu'on ajoute ou supprime un maintien
 
         For Each maintiens As cls_Maintiens In MyPoutreLoc.Maintiens(traveeEnCours.Item2)
-            index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
-            maintiens.x_Loc = (index_maintien + 1) * MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count + 1)
+            'index_maintien = MyPoutreLoc.Maintiens(traveeEnCours.Item2).IndexOf(maintiens)
+            val += MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) / (MyPoutreLoc.Maintiens(traveeEnCours.Item2).Count + 1)
+            maintiens.x_Loc = val
         Next
     End Sub
 
