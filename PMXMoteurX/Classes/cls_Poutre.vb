@@ -64,7 +64,7 @@
     ''' <summary>
     ''' Nombre de travées sur 2 appuis
     ''' </summary>
-    Public pNbTravees As Integer
+    Private pNbTravees As Integer
     '========================================================
     '   en indice O = travée en console gauche, si définie
     '   en indice 1 = 1ere travée centrale
@@ -365,10 +365,13 @@
         End Get
     End Property
 
-    Public ReadOnly Property NombreTraveesDeuxAppuis As Integer
+    Public Property NombreTraveesDeuxAppuis As Integer
         Get
             Return pNbTravees
         End Get
+        Set(value As Integer)
+            pNbTravees = value
+        End Set
     End Property
 
 
@@ -481,7 +484,7 @@
 
 #End Region
 
-#Region "Calculs"
+#Region " Calculs Largeurs Efficaces "
     Public Function EffectiveWidth(xPositionSection As Decimal, typeTravee As EnuTypeTravee, lSimplifiedModel As Boolean, lAnalysisModel As Boolean) As Decimal
 
         '------------------------------------------------------------------------------------------------------------------

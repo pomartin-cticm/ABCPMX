@@ -225,8 +225,6 @@ Public Class cls_Section
 
 #Region " Fonctions de calcul "
 
-
-
     ''' <summary>
     ''' Calcul des propriétés
     ''' </summary>
@@ -238,6 +236,11 @@ Public Class cls_Section
     End Sub
 
     Public Function Calcul_Armatures_Minimales_Enrobage_Partiel()
+        '--------------------------------------------------------------------------------------
+        '   24/06/23 : Création - GuD
+        '--------------------------------------------------------------------------------------
+        '--------------------------------------------------------------------------------------
+        '--------------------------------------------------------------------------------------
         'Définition des variables locales
         Dim ks As Decimal
         Dim kc As Decimal

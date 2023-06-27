@@ -344,6 +344,7 @@ Partial Class Frm_Maintiens
         Me.ClientSize = New System.Drawing.Size(1482, 349)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Maintiens"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Maintiens"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)

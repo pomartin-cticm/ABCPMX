@@ -136,7 +136,7 @@ Public Class cls_Projet
                 Lines.Add("   ConsoleDroite  =  " & .lTraveeConsoleDroite)
                 Lines.Add("   CTremieGauche  =  " & .lTremieGauche)
                 Lines.Add("   CTremieDroite  =  " & .lTremieDroite)
-                Lines.Add("   NbTravee       =  " & .pNbTravees)
+                Lines.Add("   NbTravee       =  " & .NombreTraveesDeuxAppuis)
 
                 Dim listTravee(.LongueurTravee.Count - 1) As Decimal
 
