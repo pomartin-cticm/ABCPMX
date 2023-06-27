@@ -323,6 +323,11 @@ Public Class Frm_Maintiens
 
 #Region " Evènements "
 
+    Private Sub img_Maintiens_Resize(sender As Object, e As EventArgs) Handles img_Maintiens.Resize
+        Me.img_Maintiens.Invalidate()
+    End Sub
+
+
     Private Sub btn_Add_Click(sender As Object, e As EventArgs) Handles btn_Add.Click
         If lBuild Then Exit Sub
 
@@ -487,9 +492,6 @@ Public Class Frm_Maintiens
         Me.pan_ControlDessin.Visible = lVisible
         Me.lbl_ControlDessin.Visible = lVisible
     End Sub
-
-
-
 
 
 

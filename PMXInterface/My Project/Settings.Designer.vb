@@ -160,6 +160,18 @@ Namespace My
                 Me("indUnitModuleY") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.35")>  _
+        Public Property GammaM0() As Decimal
+            Get
+                Return CType(Me("GammaM0"),Decimal)
+            End Get
+            Set
+                Me("GammaM0") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

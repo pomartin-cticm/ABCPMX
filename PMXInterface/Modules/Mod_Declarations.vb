@@ -107,6 +107,9 @@ Module Mod_Declarations
 
         Public lFenetres As Boolean                 'Fenêtres indépendantes
         Public lNoS235 As Boolean                   'Indique si on applique le filtre empechant la sélection de nuance S235/S275 en mode normal 
+
+        Public Gamma As Cls_Gamma
+
     End Structure
 
     Public Structure Struc_InformationLogiciel

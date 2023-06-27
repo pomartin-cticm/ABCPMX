@@ -89,6 +89,7 @@ Partial Class Frm_PMX
         Me.TSbtn_Portees = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Dalle = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_DalleN = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_SectionA = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Enrobage = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Connexion = New System.Windows.Forms.ToolStripButton()
@@ -159,7 +160,6 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton16 = New System.Windows.Forms.ToolStripButton()
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
-        Me.TSbtn_DalleN = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         Me.ToolStrip_MenuSecondaire.SuspendLayout()
         Me.ToolStrip_MenuPrincipal.SuspendLayout()
@@ -798,6 +798,15 @@ Partial Class Frm_PMX
         Me.TSbtn_Dalle.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Dalle.Text = "ToolStripButton1"
         '
+        'TSbtn_DalleN
+        '
+        Me.TSbtn_DalleN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_DalleN.Image = CType(resources.GetObject("TSbtn_DalleN.Image"), System.Drawing.Image)
+        Me.TSbtn_DalleN.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_DalleN.Name = "TSbtn_DalleN"
+        Me.TSbtn_DalleN.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_DalleN.Text = "ToolStripButton1"
+        '
         'TSbtn_SectionA
         '
         Me.TSbtn_SectionA.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -1407,15 +1416,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(0, "Enregistrer_NotOK")
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
-        '
-        'TSbtn_DalleN
-        '
-        Me.TSbtn_DalleN.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_DalleN.Image = CType(resources.GetObject("TSbtn_DalleN.Image"), System.Drawing.Image)
-        Me.TSbtn_DalleN.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_DalleN.Name = "TSbtn_DalleN"
-        Me.TSbtn_DalleN.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_DalleN.Text = "ToolStripButton1"
         '
         'Frm_PMX
         '

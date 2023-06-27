@@ -146,6 +146,12 @@ Module Mod_Demarrage
             '--> Bacs acier
             LireBaseBacs(BaseBacs)
 
+            '--> Gamma coefficients partiels
+
+            LogicielOptions.Gamma = New Cls_Gamma
+
+            LogicielOptions.Gamma.GammaM0 = My.Settings.GammaM0
+
         Catch ex As Exception
 
         End Try

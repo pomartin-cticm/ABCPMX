@@ -423,6 +423,8 @@ Public Class Frm_PMX
         sender.backcolor = Color.Gold
         lbuild = False
 
+        MsgBox("Poutre activée :" & MyProjet.Poutres(MyProjet.IndEnCours).Label)
+
     End Sub
 
     ''' <summary>
@@ -442,6 +444,7 @@ Public Class Frm_PMX
         Next
 
     End Sub
+
 
 
 

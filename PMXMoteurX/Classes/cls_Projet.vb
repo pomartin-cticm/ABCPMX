@@ -227,7 +227,7 @@ Public Class cls_Projet
 
                 End With
 
-                End With
+            End With
         Next
 
 

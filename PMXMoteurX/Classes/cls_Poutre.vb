@@ -156,6 +156,10 @@
     ''' </summary>
     Public Param As New Cls_OptionsCalcul
 
+    ''' <summary>
+    ''' Coefficients partiels
+    ''' </summary>
+    Public Gamma As New Cls_Gamma
 #End Region
 
 #Region " Variables pour les valeurs par défaut et le statut de la poutre "

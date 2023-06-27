@@ -70,6 +70,7 @@
     <Compile Include="Classes Materiaux\Cls_Acier.vb" />
     <Compile Include="Classes Materiaux\Cls_AcierArmature.vb" />
     <Compile Include="Classes Materiaux\Cls_Beton.vb" />
+    <Compile Include="Classes\Cls_Gamma.vb" />
     <Compile Include="Classes\Cls_Maille.vb" />
     <Compile Include="Classes\cls_ModeleP.vb" />
     <Compile Include="Classes\cls_Poutre.vb" />

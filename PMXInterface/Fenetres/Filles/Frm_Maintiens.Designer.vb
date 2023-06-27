@@ -252,9 +252,9 @@ Partial Class Frm_Maintiens
         Me.pan_Maintiens.Controls.Add(Me.rad_FullyRestrain)
         Me.pan_Maintiens.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Maintiens.Location = New System.Drawing.Point(0, 30)
-        Me.pan_Maintiens.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Maintiens.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Maintiens.Name = "pan_Maintiens"
-        Me.pan_Maintiens.Size = New System.Drawing.Size(250, 180)
+        Me.pan_Maintiens.Size = New System.Drawing.Size(250, 179)
         Me.pan_Maintiens.TabIndex = 1
         '
         'rad_NonRestrain
@@ -310,13 +310,14 @@ Partial Class Frm_Maintiens
         '
         'pan_Img_Maintiens
         '
+        Me.pan_Img_Maintiens.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.pan_Img_Maintiens.Controls.Add(Me.txt_Cotations)
         Me.pan_Img_Maintiens.Controls.Add(Me.img_Maintiens)
-        Me.pan_Img_Maintiens.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Img_Maintiens.Location = New System.Drawing.Point(250, 0)
-        Me.pan_Img_Maintiens.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Img_Maintiens.Location = New System.Drawing.Point(251, 0)
+        Me.pan_Img_Maintiens.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Img_Maintiens.Name = "pan_Img_Maintiens"
-        Me.pan_Img_Maintiens.Size = New System.Drawing.Size(1226, 303)
+        Me.pan_Img_Maintiens.Size = New System.Drawing.Size(1225, 303)
         Me.pan_Img_Maintiens.TabIndex = 1
         '
         'txt_Cotations
@@ -328,10 +329,12 @@ Partial Class Frm_Maintiens
         '
         'img_Maintiens
         '
+        Me.img_Maintiens.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_Maintiens.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_Maintiens.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.img_Maintiens.Location = New System.Drawing.Point(1, 0)
-        Me.img_Maintiens.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.img_Maintiens.Margin = New System.Windows.Forms.Padding(0)
         Me.img_Maintiens.Name = "img_Maintiens"
         Me.img_Maintiens.Size = New System.Drawing.Size(100, 50)
         Me.img_Maintiens.TabIndex = 1
