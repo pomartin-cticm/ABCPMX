@@ -64,7 +64,7 @@
     ''' <summary>
     ''' Nombre de travées sur 2 appuis
     ''' </summary>
-    Private pNbTravees As Integer
+    Public pNbTravees As Integer
     '========================================================
     '   en indice O = travée en console gauche, si définie
     '   en indice 1 = 1ere travée centrale
@@ -111,6 +111,9 @@
     ''' </summary>
     Public Maintiens() As List(Of cls_Maintiens)
 
+    ''' <summary>
+    ''' Type de maintiens considéré sur la travée considérée
+    ''' </summary>
     Public TypeMaintien() As EnuTypeMaintiensPoutre
 
     ''' <summary>

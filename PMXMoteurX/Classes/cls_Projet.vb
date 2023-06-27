@@ -124,6 +124,116 @@ Public Class cls_Projet
         '    s.EcrireFile(Lines)
         'Next
 
+        '==[ Classe Poutre ]=================================================================
+        For Each ptre As cls_Poutre In Me.Poutres
+
+            With ptre
+
+                Lines.Add("BLOCK POUTRE")
+                Lines.Add("   Label          =  " & .Label)
+                Lines.Add("   TypeSsection   =  " & CStr(.TypeSection))
+                Lines.Add("   ConsoleGauche  =  " & .lTraveeConsoleGauche)
+                Lines.Add("   ConsoleDroite  =  " & .lTraveeConsoleDroite)
+                Lines.Add("   CTremieGauche  =  " & .lTremieGauche)
+                Lines.Add("   CTremieDroite  =  " & .lTremieDroite)
+                Lines.Add("   NbTravee       =  " & .pNbTravees)
+
+                Dim listTravee(.LongueurTravee.Count - 1) As Decimal
+
+                For i As Integer = 0 To listTravee.Count - 1
+                    listTravee(i) = .LongueurTravee(i)
+                Next
+                Lines.Add("   LongueurTravee =  " & ConvertListToString(listTravee))
+
+                Dim listTypTravee(.TypTravee.Count - 1) As String
+
+                For i As Integer = 0 To listTypTravee.Count - 1
+                    listTypTravee(i) = CStr(.TypTravee(i))
+                Next
+                Lines.Add("   TypeTravee     =  " & ConvertListStringToString(listTypTravee))
+
+                Lines.Add("   TypeEtaiement  =  " & CStr(.TypeEtaiement))
+                Lines.Add("   EtaisConsoleG  =  " & .lEtaisConsoleGauche)
+                Lines.Add("   EtaisConsoleD  =  " & .lEtaisConsoleDroite)
+                Lines.Add("   NbPropping     =  " & .pNbPropping)
+
+                Dim listRestrain(.pNbRestrain.Count - 1) As Integer
+
+                For i As Integer = 0 To listRestrain.Count - 1
+                    listRestrain(i) = .pNbRestrain(i)
+                Next
+                Lines.Add("   NbRestrain     =  " & ConvertListIntegerToString(listRestrain))
+
+                Dim listTypeMaintien(.TypeMaintien.Count - 1) As String
+
+                For i As Integer = 0 To listTypeMaintien.Count - 1
+                    listTypeMaintien(i) = CStr(.TypeMaintien(i))
+                Next
+                Lines.Add("   TypeMaintien   =  " & ConvertListStringToString(listTypeMaintien))
+
+                Lines.Add("   IndMaintienSel =  " & .pIndiceMaintienSelectionne)
+                Lines.Add("   D1             =  " & .EntraxeD1)
+                Lines.Add("   D2             =  " & .EntraxeD2)
+                Lines.Add("   Dsl1           =  " & .DistanceDsl1)
+                Lines.Add("   Dsl2           =  " & .DistanceDsl2)
+                Lines.Add("   lIntermediaire =  " & .lIntermediaire)
+                Lines.Add("   lDefautPortee  =  " & .lDefautPortee)
+                Lines.Add("   lDefautEnroba  =  " & .lDefautEnrobage)
+                Lines.Add("   lDefautEtaiem  =  " & .lDefautEtaiement)
+                Lines.Add("   lDefautDalle   =  " & .lDefautDalle)
+                Lines.Add("   lDonneesSauv   =  " & .lDonneesSauvees)
+                Lines.Add("   lNouvPoutre    =  " & .NouvellePoutre)
+
+                '==[ Classe Maintien ]=================================================================
+
+                For Each maint In .Maintiens
+                    For i As Integer = 0 To maint.Count - 1
+
+                        With maint(i)
+
+                            Lines.Add("BLOCK MAINTIENTS")
+                            Lines.Add("   indTravee      =  " & i)
+                            Lines.Add("   xloc           =  " & .x_Loc)
+                            Lines.Add("   MaintSemSup    =  " & .lMaintienSemelleSup)
+                            Lines.Add("   MaintSemInf    =  " & .lMaintienSemelleInf)
+
+                        End With
+
+                    Next
+                Next
+
+                '==[ Classe Dalle ]=================================================================
+
+                With .Dalle
+                    Lines.Add("BLOCK DALLE")
+                    Lines.Add("   Type           =  " & CStr(.type))
+                    Lines.Add("   td             =  " & .t_d)
+                    Lines.Add("   th             =  " & .t_h)
+                    Lines.Add("   Beff           =  " & .Beff)
+                    Lines.Add("   lArmInf        =  " & .lArma_Inf)
+                    Lines.Add("   lArmSup        =  " & .lArma_Sup)
+                    Lines.Add("   theta_h        =  " & .Theta_h)
+
+                    '==[ Classe Béton Dalle ]=================================================================
+
+                    With .beton
+                        Lines.Add("BLOCK BETON DALLE")
+                        Lines.Add("   Type           =  " & CStr(.Type))
+                        Lines.Add("   Classe         =  " & .Classe)
+                        Lines.Add("   Fck            =  " & .Fck)
+                        Lines.Add("   Fcm            =  " & .Fck)
+                    End With
+
+
+                End With
+
+                End With
+        Next
+
+
+
+
+
     End Sub
 
     Public Sub RecuperationFile(ByVal FileName As String, ByVal str_warning_file As String,
