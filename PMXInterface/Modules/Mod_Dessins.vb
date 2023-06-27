@@ -56,7 +56,7 @@ Module Mod_Dessins
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
 
-        xMin = 3 * MySection.ProfilA.b_fs
+        xMin = -3 * MySection.ProfilA.b_fs
         xMax = -xMin
 
         yMin = -MySection.ProfilA.ha
@@ -77,6 +77,7 @@ Module Mod_Dessins
 
         '--> Dessin de béton
 
+        If lEnrob Then _
         DessinEnrobagePartielBeton(myGr, MySection.ProfilA, MySection.enrobage_partiel.Ratio_bc, MyParAff, myBrushB)
 
         '--> Dessin de la section acier
@@ -85,8 +86,28 @@ Module Mod_Dessins
 
         '--> Dessin des étriers
 
+        If lEnrob Then _
         DessinEtriers(myGr, MySection.ProfilA, MySection.enrobage_partiel, MyParAff, myBrushE, zREF)
 
+        '--> Dessin de la dalle
+
+        If lMixte Then
+
+            '# Dalle béton
+
+            Select Case MyDalle.type
+                Case Cls_Dalle.Enum_TypeDalle.Pleine
+                    DessinDallePleine(myGr, MyDalle, MySection.ProfilA.ha, MySection.ProfilA.b_fs, MyParAff, myBrushB, Beff)
+                    'Case Cls_Dalle.Enum_TypeDalle.Mixte
+                    '    DessinDalleMixte(MyGr, Section.dalle, BeffRed, Section.ha, Section.b_fs, ZREF, MyParAff, myBrushB)
+            End Select
+
+            '# Armatures
+
+            'DessinLitArmaDalle(MyGr, MySection.Dalle, BeffRed, 0, MySection.ProfilA.ha, MyParAff, myBrushA)
+            'DessinLitArmaDalle(MyGr, MySection.Dalle, BeffRed, 1, MySection.ProfilA.ha, MyParAff, myBrushA)
+
+        End If
     End Sub
 
 

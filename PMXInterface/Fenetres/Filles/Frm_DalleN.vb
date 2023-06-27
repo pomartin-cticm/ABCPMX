@@ -61,9 +61,15 @@ Public Class Frm_DalleN
                 strType(1) = Bloc("COMPOSITESLAB")
                 strType(2) = Bloc("PRECASTSLAB")
 
+                Me.lbl_TypeDalle.Text = "Type"
+                Me.lbl_Epaisseur.Text = "Epaisseur"
+                Me.lbl_Renformis.Text = "Renformis"
+
                 '=== BETON ========================================================================
 
                 Me.lbl_Beton.Text = Bloc("CONCRETE")
+
+                Me.lbl_ClasseE.Text = "Classe"
 
                 '=== BAC ==========================================================================
 
@@ -162,6 +168,7 @@ Public Class Frm_DalleN
             Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
                 Me.cmb_TypeDalle.SelectedIndex = 2
         End Select
+        MAJI_TypeDalle()
 
         '--> Epaisseur
 
@@ -274,6 +281,13 @@ Public Class Frm_DalleN
             MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_d = MyDalleLoc.t_d
         End If
 
+        '--> Béton de la dalle
+
+        If (MyProjet.Poutres(MyProjet.IndEnCours).Dalle.beton.Classe <> MyDalleLoc.beton.Classe) Then
+            lModif = True
+            MyProjet.Poutres(MyProjet.IndEnCours).Dalle.beton.Classe = MyDalleLoc.beton.Classe
+        End If
+
         '--> Acier des armatures
 
         If (MyProjet.Poutres(MyProjet.IndEnCours).Dalle.AcierArmatures.Classe <> MyDalleLoc.AcierArmatures.Classe) Then
@@ -302,7 +316,6 @@ Public Class Frm_DalleN
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================
-
 
     Public Sub DessineBacTout(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyBac As Cls_Bac,
                               ByVal lTitre As Boolean,
@@ -395,13 +408,23 @@ Public Class Frm_DalleN
 
 #Region " Evènements "
 
-    Private Sub btn_ModifierBac_Click(sender As Object, e As EventArgs) Handles btn_ModifierBac.Click
+
+    'Private Sub BacClick(sender As Object, e As EventArgs) Handles 
+
+    'End Sub
+
+    Private Sub btn_ModifierBac_Click(sender As Object, e As EventArgs) Handles btn_ModifierBac.Click, txt_BacNom.Click, img_Bac.Click
 
         iFrmAppel = EnuFenetres.DalleN
         Frm_BacN.ShowDialog()
 
         AfficheNomBacEnCours()
         Me.img_Bac.Invalidate()
+
+    End Sub
+
+    Private Sub img_Dalle_Resize(sender As Object, e As EventArgs) Handles img_Dalle.Resize
+        Me.img_Dalle.Invalidate()
     End Sub
 
 #End Region
@@ -417,7 +440,27 @@ Public Class Frm_DalleN
             Case 2 : MyDalleLoc.type = Cls_Dalle.Enum_TypeDalle.Prefabriquee
         End Select
 
+        MAJI_TypeDalle()
         Me.img_Dalle.Invalidate()
+    End Sub
+
+    Private Sub MAJI_TypeDalle()
+        '------------------------------------------------------------------------------------
+        '   27/06/23 :  Création - POM
+        '------------------------------------------------------------------------------------
+        '   MAJ de l'interface en fonction du type de dalle
+        '------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------
+
+        Select Case MyDalleLoc.type
+            Case Cls_Dalle.Enum_TypeDalle.Pleine
+                Me.pan_Bac.Enabled = False
+            Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
+                Me.pan_Bac.Enabled = False
+            Case Cls_Dalle.Enum_TypeDalle.Mixte
+                Me.pan_Bac.Enabled = True
+        End Select
+
     End Sub
 
     Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_Hd.TextChanged
@@ -512,6 +555,16 @@ Public Class Frm_DalleN
         MyDalleLoc.Bac.lPreperce = Me.chk_BacPreperce.Checked
     End Sub
 
+    Private Sub cmb_ClasseBetonEnrobage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClasseBetonEnrobage.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        MyDalleLoc.beton.Classe = Me.ClasseBeton(Me.cmb_ClasseBetonEnrobage.SelectedIndex)
+
+        MAJI_ProprietesBeton()
+        Me.img_Dalle.Invalidate()
+    End Sub
+
+
 #End Region
 
 #Region " Dessins symboles "
@@ -551,7 +604,9 @@ Public Class Frm_DalleN
             Case Me.Img_Hd.Name
                 strSymbol = "t"
                 strIndice = "d"
-
+            Case Me.Img_Hh.Name
+                strSymbol = "t"
+                strIndice = "h"
         End Select
 
         '--> Dessin

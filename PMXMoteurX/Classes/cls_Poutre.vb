@@ -189,6 +189,7 @@
     Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String)
 
         Me.TypeSection = MyTypeSection
+        Me.Section.typeSection = MyTypeSection
         Me.Label = NomPoutre
         ParametresGenerauxDefaut()
 
@@ -200,6 +201,13 @@
             Case cls_Section.Enum_TypeSection.AcierEnrobage
                 PoutreDefautAcier()
                 EnrobageDefaut()
+            Case cls_Section.Enum_TypeSection.Mixte
+                PoutreDefautAcier()
+                DalleDefaut()
+            Case cls_Section.Enum_TypeSection.MixteEnrobage
+                PoutreDefautAcier()
+                EnrobageDefaut()
+                DalleDefaut()
         End Select
 
     End Sub

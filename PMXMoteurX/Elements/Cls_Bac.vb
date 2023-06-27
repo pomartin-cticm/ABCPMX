@@ -135,7 +135,7 @@ Public Class Cls_Bac
 
         Me.msurf = MymSurf
         Me.fyp = Myfyp
-
+        Me.lPreperce = True
     End Sub
 
 
@@ -158,6 +158,7 @@ Public Class Cls_Bac
 
         Me.Ieff = MyIeff
         Me.LargeurModule = MyLMod
+        Me.lPreperce = True
     End Sub
 
 #End Region
