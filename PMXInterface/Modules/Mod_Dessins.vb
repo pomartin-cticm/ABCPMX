@@ -1479,7 +1479,7 @@ Module Mod_Dessins
         yMin = -dCar - hMaxProfile
         yMax = MyPoutre.Dalle.zTop + dCar
 
-        If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
         '--> Préparation des Pinceaux utilisés dans le dessin
