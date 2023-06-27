@@ -94,16 +94,16 @@ Public Class Frm_PMX
 
                 '=== BARRE d'OUTILS POUR LES POUTRES
 
-                Me.TSbtn_Accueil.ToolTipText = Bloc("TSBACCUEIL")
-                Me.TSbtn_Portees.ToolTipText = Bloc("TSBPORTEES")
-                'Me.TSbtn_Entraxe.ToolTipText = Bloc("TSBENTRAXE")
+                Me.TSbtn_Accueil.ToolTipText = Bloc("TSBHOME")
+                Me.TSbtn_Portees.ToolTipText = Bloc("TSBSPANS")
+                'Me.TSbtn_Entraxe.ToolTipText = Bloc("TSBSPACINGS")
 
-                Me.TSbtn_Dalle.ToolTipText = Bloc("TSBDALLE")
+                Me.TSbtn_Dalle.ToolTipText = Bloc("TSBSLAB")
                 Me.TSbtn_SectionA.ToolTipText = Bloc("TSBSECTIONA")
-                Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENROBAGE")
+                Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENCASEMENT")
                 Me.TSbtn_Connexion.ToolTipText = Bloc("TSBCONNECTION")
 
-                Me.TSbtn_Etaiement.ToolTipText = Bloc("TSBETAIEMENT")
+                Me.TSbtn_Etaiement.ToolTipText = Bloc("TSBPROPPING")
 
                 '=== MESSAGES GENERAUX
 

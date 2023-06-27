@@ -156,10 +156,6 @@
     ''' </summary>
     Public Param As New Cls_OptionsCalcul
 
-    ''' <summary>
-    ''' Coefficients partiels
-    ''' </summary>
-    Public Gamma As New Cls_Gamma
 #End Region
 
 #Region " Variables pour les valeurs par défaut et le statut de la poutre "
@@ -196,7 +192,6 @@
     Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String)
 
         Me.TypeSection = MyTypeSection
-        Me.Section.typeSection = MyTypeSection
         Me.Label = NomPoutre
         ParametresGenerauxDefaut()
 
@@ -208,13 +203,6 @@
             Case cls_Section.Enum_TypeSection.AcierEnrobage
                 PoutreDefautAcier()
                 EnrobageDefaut()
-            Case cls_Section.Enum_TypeSection.Mixte
-                PoutreDefautAcier()
-                DalleDefaut()
-            Case cls_Section.Enum_TypeSection.MixteEnrobage
-                PoutreDefautAcier()
-                EnrobageDefaut()
-                DalleDefaut()
         End Select
 
     End Sub
@@ -373,7 +361,7 @@
         Get
             Return pNbTravees
         End Get
-        Set(value As Integer)
+        Set(ByVal value As Integer)
             pNbTravees = value
         End Set
     End Property
@@ -488,7 +476,7 @@
 
 #End Region
 
-#Region " Calculs Largeurs Efficaces "
+#Region "Calculs"
     Public Function EffectiveWidth(xPositionSection As Decimal, typeTravee As EnuTypeTravee, lSimplifiedModel As Boolean, lAnalysisModel As Boolean) As Decimal
 
         '------------------------------------------------------------------------------------------------------------------

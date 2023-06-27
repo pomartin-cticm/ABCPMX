@@ -73,8 +73,8 @@ Public Class Frm_Maintiens
                 '=== MENU PRINCIPAL ==============================================================='
 
                 strTypeTravee_TraveeCentrale = Bloc("MAINSPAN")
-                strTypeTravee_ConsoleGauche = Bloc("CONSOLEG")
-                strTypeTravee_ConsoleDroite = Bloc("CONSOLED")
+                strTypeTravee_ConsoleGauche = Bloc("LEFTCANT")
+                strTypeTravee_ConsoleDroite = Bloc("RIGHTCANT")
 
                 If MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleDroite Then
                     If MyPoutreLoc.lTraveeConsoleGauche And MyPoutreLoc.lTraveeConsoleDroite Then
@@ -97,13 +97,13 @@ Public Class Frm_Maintiens
 
                 End If
 
-                Me.lbl_Maintiens.Text = Bloc("MAINTIENS")
-                Me.lbl_Travee.Text = Bloc("TRAVEE")
-                Me.rad_NonRestrain.Text = Bloc("NONRESTRAIN")
-                Me.rad_FullyRestrain.Text = Bloc("FULLYRESTRAIN")
-                Me.rad_PointRestrain.Text = Bloc("POINTRESTRAIN")
+                Me.lbl_Maintiens.Text = Bloc("RESTRAINTS")
+                Me.lbl_Travee.Text = Bloc("SPAN")
+                Me.rad_NonRestrain.Text = Bloc("NORESTRAINT")
+                Me.rad_FullyRestrain.Text = Bloc("FULLYRESTRAINED")
+                Me.rad_PointRestrain.Text = Bloc("POINTRESTRAINTS")
 
-                Me.lbl_ControlDessin.Text = Bloc("CONTROLDESSIN")
+                Me.lbl_ControlDessin.Text = Bloc("DRAWCONTROL")
                 Me.btn_Add.Text = Bloc("ADD")
                 Me.btn_Delete.Text = Bloc("DELETE")
 

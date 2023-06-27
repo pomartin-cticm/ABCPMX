@@ -1,173 +1,187 @@
 #FRM_JURIDIQUE
+AGREE					= Accept
+EXIT					= Exit
+LANGUAGE				= Languages
+LASTVERSION				= You work on the last version of the software
+NEWVERSION				= New version of the software is available.
+NOINTERNET				= Connect to the Internet to verify that you are working on the latest version of the software.
 TEXT1					= This software facilitates the preliminary engineering studies with respect to steel constructions. Based on calculation methods complying with the principles of the applied standards, this software enables to make a certain number of verifications in view of evaluating a solution for a pre-design. It does not enable to analyse all situations and to make in an exhaustive way all relevant calculations needed for a study of execution which requires in every case the advice of an external Engineering Office.
 TEXT2					= Given the complexity of the calculation methods, this software is only intended for professional users active in the sector of steel constructions (who are fully aware of the possibilities, limits and its adequacy thereof for specific practical cases). The users shall use the software under his own responsibility and at his own risks.
 TEXT3					= This software may be used free of charge. No right is granted to the user of the software, the property and intellectual rights of which continue to belong exclusively to CTICM. No warranty is granted to the user. CTICM cannot be held liable for any loss or damage directly and/or indirectly sustained as a result of the use of the software. The user undertakes to hold CTICM free and harmless from any claim and any direct, indirect and/or consequential damages, in particular those resulting from an incorrect or inappropriate use or a use made for an inadequate or inappropriate purpose of the software.
 TEXT4					= BY PRESSING THE BUTTON REFERRED TO BELOW AS ''ACCEPT'', THE USER EXPRESSLY DECLARES THAT HE HAS CAREFULLY READ THE ABOVE TEXT AND THAT HE THEREBY ACCEPTS ALL LEGAL CONSEQUENCES AND OBLIGATIONS RESULTING FOR HIM THEREFORE.
-LANGUAGE				= Languages
-WARNING					= Warning
-NOINTERNET				= Connect to the Internet to verify that you are working on the latest version of the software.
-NEWVERSION				= New version of the software is available.
 VERSIONLINK				= Do you want to be redirected to the CTICM website?
-LASTVERSION				= You work on the last version of the software
-AGREE					= Accept
-EXIT					= Exit
+WARNING					= Warning
+
+
 
 #FRM_SLAB
-TITLE					= Definition of the slab
-OK						= OK
-CANCEL					= Cancel 
-GENERAL					= General
-SOLIDSLAB				= Solid slab
-COMPOSITESLAB			= Composite slab
-PRECASTSLAB				= Partially prefabricated slab
-CONCRETE				= Concrete
-REBARS					= Longitudinal reinforcement
-SHEETING				= Profiled steel sheeting
-SHEETBASE				= From database
-SHEETCUSTOM				= Custom definition
-SHEETCOMPANY			= Manufacturer
 ALL						= All
+CANCEL					= Cancel 
+CONCRETE				= Concrete
+COMPOSITESLAB			= Composite slab
+GENERAL					= General
+OK						= OK
+PRECASTSLAB				= Partially prefabricated slab
+REBARS					= Longitudinal reinforcement
+SHEETBASE				= From database
+SHEETCOMPANY			= Manufacturer
+SHEETCUSTOM				= Custom definition
+SHEETING				= Profiled steel sheeting
+SOLIDSLAB				= Solid slab
+TITLE					= Definition of the slab
+
+
 
 #FRM_ENCASEMENT
-TITLE					= Definition of partial encasement
-OK						= OK
 CANCEL					= Cancel 
-DIMENSIONS				= Dimensions
-WIDTH					= Width
-ETRIERS					= Stirrups
-TYPEE					= Type 
-DIAMETER				= Diameter
-LONGIREBAR				= Longitudinal reinforcement
-STEEL 					= Steel of the reinforcement
-CONCRETE				= Concrete
 CLASS					= Class
-NUMBER					= Number
+CONCRETE				= Concrete
+COVERAGE				= Coverage
+DIAMETER				= Diameter
+DIMENSIONS				= Dimensions
+DOUBLE					= Double
 EXTERNAL				= External
 INTERNAL				= Internal
-MIDDLE					= Middle
-NONE					= None
-SINGLE					= Single
-DOUBLE					= Double
-TRIPLE					= Triple
+LONGIREBAR				= Longitudinal reinforcement
 LOWERLAYER				= Lower layer
+MIDDLE					= Middle
 MIDDLELAYER				= Central layer
-UPPERLAYER				= Upper layer
+NONE					= None
+NUMBER					= Number
+OK						= OK
 POSITION				= Position
-COVERAGE				= Coverage
+SINGLE					= Single
+STEEL 					= Steel of the reinforcement
+STIRRUPS				= Stirrups
+TITLE					= Definition of partial encasement
+TRIPLE					= Triple
+TYPEE					= Type 
+UPPERLAYER				= Upper layer
+WIDTH					= Width
+
+
 
 #FRM_MAIN
-FILE					= File
-RECENTFILES				= Recent Files
-OPEN					= Open
-NEW						= New
-SAVE					= Save
-SAVEAS					= Save As
-EXIT					= Close
-NPROJET					= New project
-PROJECT					= Project
-PROJECTNAME				= Project name
-SECTIONSLIST			= Sections list
-SECTION					= Section
-TSBACCUEIL				= Home
-TSBPORTEES				= Spans
-TSBENTRAXE				= Transverse configuration
-TSBDALLE				= Slab
-TSBSECTIONA				= Steel section
-TSBENROBAGE				= Partial encasement
-TSBCONNECTION			= Connection
-TSBETAIEMENT			= Propping
 COPYPICTURE				= Copy picture
-WARNINGFILE				= Please note that you are opening a file with data from an old version of the software. Please check all data and re-register the file.
 ERRORCAPACITY			= The maximum capacity of the list has been reached, no new additions are possible
 ERROREMPTYCELL			= Empty cell
 ERRORNONNUMERIC			= Non-numeric value
 ERROROUTBOUNDS			= Value out of bounds
+EXIT					= Close
+FILE					= File
+NEW						= New
+NPROJET					= New project
+OPEN					= Open
+PROJECT					= Project
+PROJECTNAME				= Project name
+RECENTFILES				= Recent Files
+SAVE					= Save
+SAVEAS					= Save As
+SECTION					= Section
+SECTIONSLIST			= Sections list
+TSBCONNECTION			= Connection
+TSBENCASEMENT			= Partial encasement
+TSBHOME					= Home
+TSBSECTIONA				= Steel section
+TSBSLAB					= Slab
+TSBSPACINGS				= Transverse configuration
+TSBSPANS				= Spans
+TSBPROPPING				= Propping
+WARNINGFILE				= Please note that you are opening a file with data from an old version of the software. Please check all data and re-register the file.
+
+
 
 #FRM_OUVERTURE
-NEWPROJECT				= New project
-CREATEBEAM				= Create a new beam
-OPENPROJECT				= Open a project
 BROWSEFILES				= Browse
+CREATEBEAM				= Create a new beam
+NEWPROJECT				= New project
+OK						= Ok
+OPENPROJECT				= Open a project
 RECENTFILES				= Recent Files
-VALIDATE				= Validate
+
+
 
 #FRM_PORTEES
-TITRE					= Definition of the beam
-OK						= OK
 CANCEL					= Cancel
-TRAVEES					= Span lengths
-MAINSPAN				= Main span
-CONSOLEG				= Left cantilever span
-CONSOLED				= Right cantilever span
-INTERMEDIATEBEAM		= Intermediate beam
 EDGEBEAM				= Edge beam
-SPACINGS				= Spacings
-OPENINGS				= Openings
+INTERMEDIATEBEAM		= Intermediate beam
+LEFTCANT				= Left cantilever span
 LEFTOPENING				= Left opening
+MAINSPAN				= Main span
+OK						= OK
+OPENINGS				= Openings
+RIGHTCANT				= Right cantilever span
 RIGHTOPENING			= Right opening
+SPACINGS				= Spacings
+SPANS					= Span lengths
+TITLE					= Definition of the beam
+
+
 
 #FRM_SECTIONACIERSTANDARD
-TITLE					= Definition of the steel profile
-OK						= OK
+AUTOMATICHA				= Total height automatically assessed
+AUTOMATICHW				= Height of the web automatically assessed
 CANCEL					= Cancel
-PROFILE					= Profile
-STEEL					= Steel
-HOTROLLED				= Hot rolled profile
-WELDEDSYM				= Bi-symmetrical welded section
-WELDEDP					= Mono-symmetrical welded section
-SERIE					= Serial
-PROFILES				=¨Profiles 
-LOWERF					= Lower flange
-UPPERF					= Upper flange
-WEB						= Web 
+DELIVERYCOND			= Delivery conditions for $
 HEIGHT					= Height 
-STEELGRADE				= Steel grade
+HOTROLLED				= Hot rolled profile
+LOWERF					= Lower flange
+OK						= OK
+PROFILE					= Profile
+PROFILES				=¨Profiles 
 QUALITY					= Quality 
 REDUCTIONCURVE			= Reduction curve
-AUTOMATICHW				= Height of the web automatically assessed
-AUTOMATICHA				= Total height automatically assessed
-DELIVERYCOND			= Delivery conditions for $
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+UPPERF					= Upper flange
+WEB						= Web 
+WELDEDSYM				= Bi-symmetrical welded section
+WELDEDP					= Mono-symmetrical welded section
+
+
 
 #FRM_MAINTIENS
-TITLE 					= Restrain
-OK						= OK
-CANCEL					= Cancel
-MAINSPAN				= Main span
-CONSOLEG				= Left cantilever span
-CONSOLED				= Right cantilever span
-MAINTIENS				= Type of restrain
-TRAVEE					= Span
-NONRESTRAIN				= Non restrain
-FULLYRESTRAIN			= Fully restrain
-POINTRESTRAIN			= Point restrain
-CONTROLDESSIN			= Point restrains
 ADD						= Add
+CANCEL					= Cancel
 DELETE					= Delete
+DRAWCONTROL				= Point restraints
+FULLYRESTRAINED			= Fully restrained
+LEFTCANT				= Left cantilever span
+MAINSPAN				= Main span
+NORESTRAINT				= No restraint
+OK						= OK
+POINTRESTRAINTS			= Point restraints
+RESTRAINTS				= Type of restraint
+RIGHTCANT				= Right cantilever span
+SPAN					= Span
+TITLE 					= Restraints
+
 
 
 #FRM_ETAIEMENT
-TITLE					= Propping
-PROPPINGTYPE			= Type of propping
-UNPROPPED				= Unpropped
-FULLYPROPPED			= Fully propped
-POINTPROPPED			= Point propped
-ETAISCONSOLEGAUCHE		= End propping of the left cantilever 
-ETAISCONSOLEDROITE		= End propping of the right cantilever 
-NUMBPROPPING			= Number of point propping
-VALIDATE				= Validate
 CANCEL					= Cancel
+FULLYPROPPED			= Fully propped
+LEFTCANTPROPP			= End propping of the left cantilever .
+NUMBPROPPING			= Number of point propping
+OK						= Ok
+POINTPROPPED			= Point propped
+PROPPINGTYPE			= Type of propping
+RIGHTCANTPROPP			= End propping of the right cantilever 
+TITLE					= Propping
+UNPROPPED				= Unpropped
+
+
 
 #FRM_PSHEETING
-TITLE					= Definition of the steel profiled sheeting
-OK						= OK
+ALL						= All
 CANCEL					= Cancel
+COMPANY					= Company
 DATABASE				= DataBase
 FROMDATABASE			= From the database
-COMPANY					= Company
-PROPERTIES				= Dimensions and properties
 FROMDIM					= From dimensions
 NAME					= Name
-ALL						= All
-
-
-
+OK						= OK
+PROPERTIES				= Dimensions and properties
+TITLE					= Definition of the steel profiled sheeting

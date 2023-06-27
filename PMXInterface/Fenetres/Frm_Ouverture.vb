@@ -40,7 +40,7 @@ Public Class Frm_Ouverture
 
                 Me.Label_RecentFiles.Text = Bloc("RECENTFILES")
 
-                Me.Button_Valider.Text = Bloc("VALIDATE")
+                Me.Button_Valider.Text = Bloc("OK")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_Ouverture/GestionLangue")

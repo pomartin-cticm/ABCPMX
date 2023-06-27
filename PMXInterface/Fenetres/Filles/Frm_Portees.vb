@@ -48,17 +48,17 @@ Public Class Frm_Portees
 
             Try
 
-                Me.Text = Bloc("TITRE")
+                Me.Text = Bloc("TITLE")
                 Me.btn_OK.Text = Bloc("OK")
                 Me.btn_Annuler.Text = Bloc("CANCEL")
 
                 '=== MENU PRINCIPAL ==============================================================='
 
-                Me.lbl_Portees.Text = Bloc("TRAVEES")
+                Me.lbl_Portees.Text = Bloc("SPANS")
 
                 Me.lbl_MainSpan.Text = Bloc("MAINSPAN")
-                Me.chk_ConsoleGauche.Text = Bloc("CONSOLEG")
-                Me.chk_ConsoleDroite.Text = Bloc("CONSOLED")
+                Me.chk_ConsoleGauche.Text = Bloc("LEFTCANT")
+                Me.chk_ConsoleDroite.Text = Bloc("RIGHTCANT")
 
                 Me.lbl_Entraxe.Text = Bloc("SPACINGS")
                 Me.lbl_Entraxes.Text = Bloc("SPACINGS")
