@@ -255,9 +255,13 @@ Public Class cls_Section
         k = 0.8
         fct_eff = enrobage_partiel.Beton.Fctm
         Act = enrobage_partiel.Ratio_bc * ProfilA.b_fs * ProfilA.h_w
-        Dim phi_max As Decimal = enrobage_partiel.Get_Phi_Max()
 
-        sigma_s = Mod_Declarations.Get_sigma_S1_Ds(enrobage_partiel.Beton.wk_max, phi_max)
+        If enrobage_partiel.Beton.lCrackingLimitation Then
+            Dim phi_max As Decimal = enrobage_partiel.Get_Phi_Max()
+            sigma_s = Mod_Declarations.Get_sigma_S1_Ds(enrobage_partiel.Beton.wk_max, phi_max)
+        Else
+            sigma_s = enrobage_partiel.AcierArmatures.FsK
+        End If
 
         As_min = ks * kc * k * fct_eff * Act / sigma_s
 
