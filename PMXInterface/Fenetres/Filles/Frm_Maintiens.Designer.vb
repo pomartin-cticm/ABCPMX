@@ -129,6 +129,7 @@ Partial Class Frm_Maintiens
         '
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_Maintiens)
+        Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
         Me.pan_Main.Size = New System.Drawing.Size(1476, 303)
