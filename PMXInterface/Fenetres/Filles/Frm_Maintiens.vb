@@ -303,13 +303,19 @@ Public Class Frm_Maintiens
 
     Private Sub MousseMove(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseMove
         If lBuild Then Exit Sub
+
         'Position de la sourie dans la fenêtre affichée
         X_Mousse = e.X
         Y_Mousse = e.Y
 
-        'Observe si la souris se trouve sur une cotation, auquel cas on change la souris avec un curseur main
+        If lMouseDown Then
+            DeplacementMaintienSemelle(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse)
 
-        lMouseOnCote = False
+        Else
+
+            'Observe si la souris se trouve sur une cotation, auquel cas on change la souris avec un curseur main
+
+            lMouseOnCote = False
 
         If Not positionCotesInferieuresDessin Is Nothing Then
             For i As Integer = 0 To positionCotesInferieuresDessin.GetLength(0) - 1
@@ -358,8 +364,7 @@ Public Class Frm_Maintiens
 
         'Si la souris bouge alors que le clique est maintenu, et si on est au droit d'un maintien, alors celui-ci peut être déplacé
 
-        If lMouseDown Then
-            DeplacementMaintienSemelle(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse)
+
         End If
 
         img_Maintiens.Invalidate()
