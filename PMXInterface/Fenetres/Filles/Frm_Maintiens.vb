@@ -203,6 +203,14 @@ Public Class Frm_Maintiens
     Private Sub GestionStyle()
         Me.Icon = Frm_PMX.Icon
 
+        Me.lbl_ControlDessin.BackColor = CouleurBackBandeaux
+        Me.lbl_ControlDessin.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_Maintiens.BackColor = CouleurBackBandeaux
+        Me.lbl_Maintiens.ForeColor = CouleurForeBandeaux
+
+        Me.TLpan_Main.ColumnStyles(0).Width = LargeurColonneSaisie
+
         Me.img_Maintiens.Dock = DockStyle.Fill
         Me.img_Maintiens.BorderStyle = BorderStyle.FixedSingle
 
