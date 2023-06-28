@@ -66,6 +66,11 @@ Module Mod_Declarations
         ''' </summary>
         Public Base_Goujons As String
 
+        ''' <summary>
+        ''' Fichier de base de données des icones
+        ''' </summary>
+        Public Icone As String
+
     End Structure
 
     Public Structure Struc_RepertoireLogiciel

@@ -99,8 +99,10 @@ Public Class Frm_Maintiens
     ''' </summary>
     Dim traveeEnCours As (cls_Poutre.EnuTypeTravee, Integer) = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
 
-
-    'Dim MyCursor As New Cursor(LogicielRep & "\FrmMaintien_MoveH.ico")
+    ''' <summary>
+    ''' variable locale qui informe du chemin vers l'icone pour déplacer les maintiens horizontalement
+    ''' </summary>
+    Dim MyCursor As New Cursor(LogicielFichiers.Icone & "\FrmMaintien_MoveH.ico")
 
 #End Region
 
@@ -345,7 +347,7 @@ Public Class Frm_Maintiens
         'Modification du curseur en fonction de ce que survole la souris
 
         If lMouseOnPoigneeMaintien Then
-            Me.img_Maintiens.Cursor = Cursors.Hand
+            Me.img_Maintiens.Cursor = MyCursor
         ElseIf lMouseOnCote Or lMouseOnMaintien Then
             Me.img_Maintiens.Cursor = Cursors.Hand
         Else
@@ -357,7 +359,7 @@ Public Class Frm_Maintiens
         'Si la souris bouge alors que le clique est maintenu, et si on est au droit d'un maintien, alors celui-ci peut être déplacé
 
         If lMouseDown Then
-            DeplacementMaintienSemelle(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse, Y_Mousse)
+            DeplacementMaintienSemelle(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse)
         End If
 
         img_Maintiens.Invalidate()
