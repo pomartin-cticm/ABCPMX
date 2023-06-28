@@ -556,157 +556,188 @@
 
         End If
 
-        '----- Calcul de la largeur participante à mi-travée -----
+        '----- Calcul de la largeur participante -----
 
-        Select Case NbTravees
-            Case 1
-                If lTraveeConsoleGauche Or lTraveeConsoleDroite Then
-                    If lTraveeConsoleGauche And lTraveeConsoleDroite Then
-                        Le_m = 0.7 * LongueurTravee(IndicePremiereTravee)
+        If i_travee = 0 Then 'on est dans la console de gauche
+
+            Le_s_A = 2 * LongueurTravee(0)
+
+            be1_s_A = Math.Min(Le_s_A / 8, b1)
+            be2_s_A = Math.Min(Le_s_A / 8, b2)
+
+            beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
+            beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
+
+            beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
+
+            Return beff_s_A
+
+        ElseIf i_travee = IndiceTraveeConsoleDroite Then 'on est dans la console de droite
+
+            Le_s_B = 2 * LongueurTravee(IndiceTraveeConsoleDroite)
+
+            be1_s_B = Math.Min(Le_s_B / 8, b1)
+            be2_s_B = Math.Min(Le_s_B / 8, b2)
+
+            beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
+            beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
+
+            beff_s_B = beta_1_B * be1_s_B + beta_2_B * be2_s_B
+
+            Return beff_s_B
+
+        Else 'on est dans une travée sur 2 appuis
+
+            '----- Calcul de la largeur participante à mi-travée -----
+
+            Select Case NbTravees
+                Case 1
+                    If lTraveeConsoleGauche Or lTraveeConsoleDroite Then
+                        If lTraveeConsoleGauche And lTraveeConsoleDroite Then
+                            Le_m = 0.7 * LongueurTravee(i_travee)
+                        Else
+                            Le_m = 0.85 * LongueurTravee(i_travee)
+                        End If
                     Else
-                        Le_m = 0.85 * LongueurTravee(IndicePremiereTravee)
+                        Le_m = LongueurTravee(i_travee)
                     End If
-                Else
-                    Le_m = LongueurTravee(IndicePremiereTravee)
-                End If
-            Case 2
-                If i_travee = 1 Then
-                    If lTraveeConsoleGauche Then
-                        Le_m = 0.7 * LongueurTravee(IndicePremiereTravee)
+                Case 2
+                    If i_travee = 1 Then
+                        If lTraveeConsoleGauche Then
+                            Le_m = 0.7 * LongueurTravee(i_travee)
+                        Else
+                            Le_m = 0.85 * LongueurTravee(i_travee)
+                        End If
+                    Else 'i_travee = 2
+                        If lTraveeConsoleDroite Then
+                            Le_m = 0.7 * LongueurTravee(i_travee)
+                        Else
+                            Le_m = 0.85 * LongueurTravee(i_travee)
+                        End If
+                    End If
+                Case Else
+                    If i_travee = 1 Then
+                        If lTraveeConsoleGauche Then
+                            Le_m = 0.7 * LongueurTravee(i_travee)
+                        Else
+                            Le_m = 0.85 * LongueurTravee(i_travee)
+                        End If
+                    ElseIf i_travee = IndiceTraveeConsoleDroite - 1 Then
+                        If lTraveeConsoleDroite Then
+                            Le_m = 0.7 * LongueurTravee(i_travee)
+                        Else
+                            Le_m = 0.85 * LongueurTravee(i_travee)
+                        End If
                     Else
-                        Le_m = 0.85 * LongueurTravee(IndicePremiereTravee)
+                        Le_m = 0.7 * LongueurTravee(i_travee)
                     End If
-                Else 'i_travee = 2
-                    If lTraveeConsoleDroite Then
-                        Le_m = 0.7 * LongueurTravee(IndicePremiereTravee)
-                    Else
-                        Le_m = 0.85 * LongueurTravee(IndicePremiereTravee)
-                    End If
-                End If
-            Case Else
-                If i_travee = 1 Then
-                    If lTraveeConsoleGauche Then
-                        Le_m = 0.7 * LongueurTravee(IndicePremiereTravee)
-                    Else
-                        Le_m = 0.85 * LongueurTravee(IndicePremiereTravee)
-                    End If
-                ElseIf i_travee = IndiceTraveeConsoleDroite - 1 Then
-                    If lTraveeConsoleDroite Then
-                        Le_m = 0.7 * LongueurTravee(IndicePremiereTravee)
-                    Else
-                        Le_m = 0.85 * LongueurTravee(IndicePremiereTravee)
-                    End If
-                Else
-                    Le_m = 0.7 * LongueurTravee(IndicePremiereTravee)
-                End If
 
-        End Select
+            End Select
 
-        be1_m = Math.Min(Le_m / 8, b1)
-        be2_m = Math.Min(Le_m / 8, b2)
+            be1_m = Math.Min(Le_m / 8, b1)
+            be2_m = Math.Min(Le_m / 8, b2)
 
-        beff_m = be1_m + be2_m
+            beff_m = be1_m + be2_m
 
-        '----- Calcul de la largeur participante sur appui gauche (appui A) -----
+            '----- Calcul de la largeur participante sur appui gauche (appui A) -----
 
-        Select Case NbTravees
-            Case 1
-                If lTraveeConsoleGauche Then
-                    Le_s_A = 2 * LongueurTravee(0)
-                Else
-                    Le_s_A = Le_m
-                End If
-            Case Else
-                If i_travee = 1 Then
+            Select Case NbTravees
+                Case 1
                     If lTraveeConsoleGauche Then
                         Le_s_A = 2 * LongueurTravee(0)
                     Else
                         Le_s_A = Le_m
                     End If
-                Else
-                    Le_s_A = 0.25 * (LongueurTravee(i_travee - 1) + LongueurTravee(i_travee))
-                End If
+                Case Else
+                    If i_travee = 1 Then
+                        If lTraveeConsoleGauche Then
+                            Le_s_A = 2 * LongueurTravee(0)
+                        Else
+                            Le_s_A = Le_m
+                        End If
+                    Else
+                        Le_s_A = 0.25 * (LongueurTravee(i_travee - 1) + LongueurTravee(i_travee))
+                    End If
 
-        End Select
+            End Select
 
-        be1_s_A = Math.Min(Le_s_A / 8, b1)
-        be2_s_A = Math.Min(Le_s_A / 8, b2)
+            be1_s_A = Math.Min(Le_s_A / 8, b1)
+            be2_s_A = Math.Min(Le_s_A / 8, b2)
 
-        beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
-        beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
+            beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
+            beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
 
-        beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
+            beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
 
-        '----- Calcul de la largeur participante sur appui droite (appui B) -----
+            '----- Calcul de la largeur participante sur appui droite (appui B) -----
 
-        Select Case NbTravees
-            Case 1
-                If lTraveeConsoleDroite Then
-                    Le_s_B = 2 * LongueurTravee(IndiceTraveeConsoleDroite)
-                Else
-                    Le_s_B = Le_m
-                End If
-            Case Else
-                If i_travee = IndiceTraveeConsoleDroite - 1 Then
+            Select Case NbTravees
+                Case 1
                     If lTraveeConsoleDroite Then
                         Le_s_B = 2 * LongueurTravee(IndiceTraveeConsoleDroite)
                     Else
                         Le_s_B = Le_m
                     End If
-                Else
-                    Le_s_B = 0.25 * (LongueurTravee(i_travee) + LongueurTravee(i_travee + 1))
-                End If
-
-        End Select
-
-        be1_s_B = Math.Min(Le_s_B / 8, b1)
-        be2_s_B = Math.Min(Le_s_B / 8, b2)
-
-        beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
-        beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
-
-        beff_s_A = beta_1_B * be1_s_B + beta_2_B * be2_s_B
-
-        '----- Calcul de la largeur participante pour une section quelconque -----
-
-        Select Case i_travee
-            Case 0
-                beff = beff_s_A
-
-            Case IndiceTraveeConsoleDroite
-                beff = beff_s_B
-
-            Case Else
-                If lSimplifiedModel Then 'Modèle simplifié pour le calcul de la largeur participante
-                    If lAnalysisModel Then 'Calcul de la largeur participante pour l'analyse
-                        beff = beff_m
-                    Else 'Calcul de la largeur participante pour la vérification de la section
-                        Select Case xPositionSection / LongueurTravee(i_travee)
-                            Case <= 0.15
-                                beff = beff_s_A
-                            Case >= 0.85
-                                beff = beff_s_B
-                            Case Else
-                                beff = beff_m
-                        End Select
+                Case Else
+                    If i_travee = IndiceTraveeConsoleDroite - 1 Then
+                        If lTraveeConsoleDroite Then
+                            Le_s_B = 2 * LongueurTravee(IndiceTraveeConsoleDroite)
+                        Else
+                            Le_s_B = Le_m
+                        End If
+                    Else
+                        Le_s_B = 0.25 * (LongueurTravee(i_travee) + LongueurTravee(i_travee + 1))
                     End If
 
-                Else 'Modèle non simplifié
+            End Select
 
+            be1_s_B = Math.Min(Le_s_B / 8, b1)
+            be2_s_B = Math.Min(Le_s_B / 8, b2)
+
+            beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
+            beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
+
+            beff_s_B = beta_1_B * be1_s_B + beta_2_B * be2_s_B
+
+            '----- Calcul de la largeur participante pour une section quelconque -----
+
+
+            If lSimplifiedModel Then 'Modèle simplifié pour le calcul de la largeur participante
+                If lAnalysisModel Then 'Calcul de la largeur participante pour l'analyse
+                    beff = beff_m
+                Else 'Calcul de la largeur participante pour la vérification de la section
                     Select Case xPositionSection / LongueurTravee(i_travee)
-                        Case <= 0.25
-                            beff = beff_s_A + 4 * xPositionSection / LongueurTravee(i_travee) * (beff_m - beff_s_A)
-                        Case >= 0.75
-                            beff = beff_m + 4 * xPositionSection / LongueurTravee(i_travee) * (beff_s_B - beff_m)
+                        Case <= 0.15
+                            beff = beff_s_A
+                        Case >= 0.85
+                            beff = beff_s_B
                         Case Else
                             beff = beff_m
                     End Select
-
                 End If
-        End Select
+
+            Else 'Modèle non simplifié
+
+                Select Case xPositionSection / LongueurTravee(i_travee)
+                    Case <= 0.25
+                        beff = beff_s_A + 4 * xPositionSection / LongueurTravee(i_travee) * (beff_m - beff_s_A)
+                    Case >= 0.75
+                        beff = beff_m + 4 * xPositionSection / LongueurTravee(i_travee) * (beff_s_B - beff_m)
+                    Case Else
+                        beff = beff_m
+                End Select
+
+            End If
+
+            Return beff
+
+        End If
 
 
-        Return beff
+
+
+
+
     End Function
 
 

@@ -38,11 +38,10 @@ Imports PMXMoteur2
 
             Dim beff_m As Decimal = be1 + be2
 
-            Dim beff_ref As Decimal = .EffectiveWidth(.LongueurTravee(0) / 2, .EnuTypeTravee.ConsoleGauche, False, False)
+            Dim beff_ref As Decimal = .EffectiveWidth(.LongueurTravee(0) / 2, 0, False, False)
             Dim tau_beff As Decimal = (beff_m - beff_ref) / beff_ref * 100
             Assert.IsTrue(tau_beff <= 1)
 
-            '--> A discuter avec POM
 
 
             'Calcul de la largeur participante pour l'appui A
