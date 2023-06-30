@@ -590,7 +590,7 @@
 
             '----- Calcul de la largeur participante à mi-travée -----
 
-            Select Case NbTravees
+            Select Case NombreTraveesDeuxAppuis
                 Case 1
                     If lTraveeConsoleGauche Or lTraveeConsoleDroite Then
                         If lTraveeConsoleGauche And lTraveeConsoleDroite Then
@@ -641,7 +641,7 @@
 
             '----- Calcul de la largeur participante sur appui gauche (appui A) -----
 
-            Select Case NbTravees
+            Select Case NombreTraveesDeuxAppuis
                 Case 1
                     If lTraveeConsoleGauche Then
                         Le_s_A = 2 * LongueurTravee(0)
@@ -671,7 +671,7 @@
 
             '----- Calcul de la largeur participante sur appui droite (appui B) -----
 
-            Select Case NbTravees
+            Select Case NombreTraveesDeuxAppuis
                 Case 1
                     If lTraveeConsoleDroite Then
                         Le_s_B = 2 * LongueurTravee(IndiceTraveeConsoleDroite)
@@ -722,7 +722,7 @@
                     Case <= 0.25
                         beff = beff_s_A + 4 * xPositionSection / LongueurTravee(i_travee) * (beff_m - beff_s_A)
                     Case >= 0.75
-                        beff = beff_m + 4 * xPositionSection / LongueurTravee(i_travee) * (beff_s_B - beff_m)
+                        beff = beff_m + 4 * (xPositionSection / LongueurTravee(i_travee) - 0.75) * (beff_s_B - beff_m)
                     Case Else
                         beff = beff_m
                 End Select
