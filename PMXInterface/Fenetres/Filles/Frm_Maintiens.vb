@@ -5,7 +5,14 @@ Public Class Frm_Maintiens
 
 #Region " Variables locales "
 
+    ''' <summary>
+    ''' informe si la fenêtre est en cours de construction ou non
+    ''' </summary>
     Dim lBuild As Boolean = True
+
+    ''' <summary>
+    ''' indice qui informe du numéro de travée en cours
+    ''' </summary>
     Dim iSelect As Integer = 1
     '----------------------------------------------
     '   1 pour la travée principale
@@ -14,23 +21,88 @@ Public Class Frm_Maintiens
     '   99 console droite
     '----------------------------------------------
 
+    ''' <summary>
+    ''' Définition d'une poutre_loc afin d'enregistrer les actions de l'utilisateur
+    ''' </summary>
     Dim MyPoutreLoc As New cls_Poutre
 
+    ''' <summary>
+    ''' Définition d'une liste de string pour remplir le cmb_travee
+    ''' </summary>
     Dim strTypeTravee() As String
     Dim strTypeTravee_ConsoleGauche As String
     Dim strTypeTravee_TraveeCentrale As String
     Dim strTypeTravee_ConsoleDroite As String
 
+    ''' <summary>
+    ''' Abscisse de la souris sur le dessin
+    ''' </summary>
     Dim X_Mousse As Decimal = 0
+
+    ''' <summary>
+    ''' Ordonnée de la souris sur le dessin
+    ''' </summary>
     Dim Y_Mousse As Decimal = 0
 
+    ''' <summary>
+    ''' variable locale qui informe si le clique de la souris est enfoncé ou non
+    ''' </summary>
     Dim lMouseDown As Boolean = False
 
-    Dim positionCotesInferieures(,) As Decimal
-    Dim indiceCoteSelectionnee As Integer
+    ''' <summary>
+    ''' variable locale pour enreristrer la position des cotations sur le dessin.
+    ''' La premiere colonne suit l'abcisse de la cotation
+    ''' La deuxième colonne suit l'ordonnée de la cotation
+    ''' </summary>
+    Dim positionCotesInferieuresDessin(,) As Decimal
+
+    ''' <summary>
+    ''' variable locale pour enregistrer la position des maintiens sur le dessin
+    ''' La première colonne suit l'abcisse des maintiens
+    ''' La deuxième colonne suit l'ordonné min du maintien
+    ''' La troisième colonne suit l'ordonné max du maintien
+    ''' </summary>
+    Dim positionMaintiensDessin(,) As Decimal
+
+    ''' <summary>
+    ''' variable locale qui indique si la souris à cliquer au droit d'une cotation
+    ''' </summary>
     Dim lClickCote As Boolean = False
 
+    ''' <summary>
+    ''' variable locale qui enregistre l'indice de la cotation selectionnée, le cas échéant
+    ''' </summary>
+    Dim indiceCoteSelectionnee As Integer
+
+    ''' <summary>
+    ''' variable locale qui informe si la souris survole ou non une cotation sur le dessin
+    ''' </summary>
+    Dim lMouseOnCote As Boolean = False
+
+    ''' <summary>
+    ''' variable locale qui informe si la souris survole ou non la poignée d'un maintien sur le dessin
+    ''' </summary>
+    Dim lMouseOnPoigneeMaintien As Boolean = False
+
+    ''' <summary>
+    ''' variable locale qui enregistre l'épaisseur de la semelle du dessin affiché
+    ''' </summary>
+    Dim EpaisseurSemelleDessin As Decimal = 0
+
+    ''' <summary>
+    ''' variable locale qui informe si la souris survole ou non un maintien de semelle sur le dessin
+    ''' </summary>
+    Dim lMouseOnMaintien As Boolean = False
+
+    ''' <summary>
+    ''' variable locale qui informe quelle travée est affichée à l'écran
+    ''' </summary>
     Dim traveeEnCours As (cls_Poutre.EnuTypeTravee, Integer) = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
+
+    ''' <summary>
+    ''' variable locale qui informe du chemin vers l'icone pour déplacer les maintiens horizontalement
+    ''' </summary>
+    Dim MyCursor As New Cursor(LogicielFichiers.Icone & "\FrmMaintien_MoveH.ico")
 
 #End Region
 
@@ -73,8 +145,8 @@ Public Class Frm_Maintiens
                 '=== MENU PRINCIPAL ==============================================================='
 
                 strTypeTravee_TraveeCentrale = Bloc("MAINSPAN")
-                strTypeTravee_ConsoleGauche = Bloc("CONSOLEG")
-                strTypeTravee_ConsoleDroite = Bloc("CONSOLED")
+                strTypeTravee_ConsoleGauche = Bloc("LEFTCANT")
+                strTypeTravee_ConsoleDroite = Bloc("RIGHTCANT")
 
                 If MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleDroite Then
                     If MyPoutreLoc.lTraveeConsoleGauche And MyPoutreLoc.lTraveeConsoleDroite Then
@@ -97,13 +169,13 @@ Public Class Frm_Maintiens
 
                 End If
 
-                Me.lbl_Maintiens.Text = Bloc("MAINTIENS")
-                Me.lbl_Travee.Text = Bloc("TRAVEE")
-                Me.rad_NonRestrain.Text = Bloc("NONRESTRAIN")
-                Me.rad_FullyRestrain.Text = Bloc("FULLYRESTRAIN")
-                Me.rad_PointRestrain.Text = Bloc("POINTRESTRAIN")
+                Me.lbl_Maintiens.Text = Bloc("RESTRAINTS")
+                Me.lbl_Travee.Text = Bloc("SPAN")
+                Me.rad_NonRestrain.Text = Bloc("NORESTRAINT")
+                Me.rad_FullyRestrain.Text = Bloc("FULLYRESTRAINED")
+                Me.rad_PointRestrain.Text = Bloc("POINTRESTRAINTS")
 
-                Me.lbl_ControlDessin.Text = Bloc("CONTROLDESSIN")
+                Me.lbl_ControlDessin.Text = Bloc("DRAWCONTROL")
                 Me.btn_Add.Text = Bloc("ADD")
                 Me.btn_Delete.Text = Bloc("DELETE")
 
@@ -131,6 +203,14 @@ Public Class Frm_Maintiens
     Private Sub GestionStyle()
         Me.Icon = Frm_PMX.Icon
 
+        Me.lbl_ControlDessin.BackColor = CouleurBackBandeaux
+        Me.lbl_ControlDessin.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_Maintiens.BackColor = CouleurBackBandeaux
+        Me.lbl_Maintiens.ForeColor = CouleurForeBandeaux
+
+        Me.TLpan_Main.ColumnStyles(0).Width = LargeurColonneSaisie
+
         Me.img_Maintiens.Dock = DockStyle.Fill
         Me.img_Maintiens.BorderStyle = BorderStyle.FixedSingle
 
@@ -139,7 +219,7 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub AfficherPoutreEnCours()
-        Select Case MyPoutreLoc.TypeMaintien(traveeEnCours.item2)
+        Select Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2)
             Case MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
                 rad_NonRestrain.Checked = True
 
@@ -221,7 +301,7 @@ Public Class Frm_Maintiens
 #Region " Dessins "
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Maintiens.Paint
 
-        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, True, positionCotesInferieures)
+        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, True, positionCotesInferieuresDessin, positionMaintiensDessin, EpaisseurSemelleDessin)
 
     End Sub
 
@@ -231,12 +311,68 @@ Public Class Frm_Maintiens
 
     Private Sub MousseMove(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseMove
         If lBuild Then Exit Sub
+
         'Position de la sourie dans la fenêtre affichée
         X_Mousse = e.X
         Y_Mousse = e.Y
 
         If lMouseDown Then
             DeplacementMaintienSemelle(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse)
+
+        Else
+
+            'Observe si la souris se trouve sur une cotation, auquel cas on change la souris avec un curseur main
+
+            lMouseOnCote = False
+
+        If Not positionCotesInferieuresDessin Is Nothing Then
+            For i As Integer = 0 To positionCotesInferieuresDessin.GetLength(0) - 1
+
+                If (Math.Abs(positionCotesInferieuresDessin(i, 0) - X_Mousse) <= txt_Cotations.Width / 2) And (Math.Abs(positionCotesInferieuresDessin(i, 1) - Y_Mousse) <= txt_Cotations.Height / 2) Then
+                    lMouseOnCote = True
+                    Exit For
+                End If
+
+            Next
+        End If
+
+        'Observe si la souris se trouve sur une poignée de maintien, auquel cas on change la souris avec un curseur personnalisé;  ou sur un maintien de semelle sup ou inf, auquel cas on change la souris avec un curseur main
+
+        lMouseOnPoigneeMaintien = False
+        lMouseOnMaintien = False
+
+        If Not positionMaintiensDessin Is Nothing Then
+            For i As Integer = 0 To positionMaintiensDessin.GetLength(0) - 1
+
+                If Math.Abs(positionMaintiensDessin(i, 0) - X_Mousse) <= EpaisseurSemelleDessin Then
+                    If (Math.Abs((positionMaintiensDessin(i, 1) + positionMaintiensDessin(i, 2)) / 2 - Y_Mousse) <= EpaisseurSemelleDessin) Then
+                        lMouseOnPoigneeMaintien = True
+                        Exit For
+                    ElseIf (Math.Abs(positionMaintiensDessin(i, 1) - Y_Mousse) <= EpaisseurSemelleDessin) Or (Math.Abs(positionMaintiensDessin(i, 2) - Y_Mousse) <= EpaisseurSemelleDessin) Then
+                        lMouseOnMaintien = True
+                        Exit For
+                    End If
+
+                End If
+
+            Next
+        End If
+
+        'Modification du curseur en fonction de ce que survole la souris
+
+        If lMouseOnPoigneeMaintien Then
+            Me.img_Maintiens.Cursor = MyCursor
+        ElseIf lMouseOnCote Or lMouseOnMaintien Then
+            Me.img_Maintiens.Cursor = Cursors.Hand
+        Else
+            Me.img_Maintiens.Cursor = Cursors.Default
+        End If
+
+
+
+        'Si la souris bouge alors que le clique est maintenu, et si on est au droit d'un maintien, alors celui-ci peut être déplacé
+
+
         End If
 
         img_Maintiens.Invalidate()
@@ -254,15 +390,15 @@ Public Class Frm_Maintiens
 
         lClickCote = False
 
-        If Not positionCotesInferieures Is Nothing Then
-            For i As Integer = 0 To positionCotesInferieures.GetLength(0) - 1
+        If Not positionCotesInferieuresDessin Is Nothing Then
+            For i As Integer = 0 To positionCotesInferieuresDessin.GetLength(0) - 1
 
-                If (Math.Abs(positionCotesInferieures(i, 0) - X_Mousse) <= txt_Cotations.Width / 2) And (Math.Abs(positionCotesInferieures(i, 1) - Y_Mousse) <= txt_Cotations.Height / 2) Then
+                If (Math.Abs(positionCotesInferieuresDessin(i, 0) - X_Mousse) <= txt_Cotations.Width / 2) And (Math.Abs(positionCotesInferieuresDessin(i, 1) - Y_Mousse) <= txt_Cotations.Height / 2) Then
                     txt_Cotations.Visible = True
-                    txt_Cotations.Location = New Point(positionCotesInferieures(i, 0) - txt_Cotations.Width / 2, positionCotesInferieures(i, 1) - txt_Cotations.Height / 2)
+                    txt_Cotations.Location = New Point(positionCotesInferieuresDessin(i, 0) - txt_Cotations.Width / 2, positionCotesInferieuresDessin(i, 1) - txt_Cotations.Height / 2)
                     If i = 0 Then
                         txt_Cotations.Text = GetStringNoUnit(MyPoutreLoc.Maintiens(traveeEnCours.Item2)(0).x_Loc, Enu_TypeVariable.Longueur)
-                    ElseIf i = positionCotesInferieures.GetLength(0) - 1 Then
+                    ElseIf i = positionCotesInferieuresDessin.GetLength(0) - 1 Then
                         txt_Cotations.Text = GetStringNoUnit(MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i - 1).x_Loc, Enu_TypeVariable.Longueur)
                     Else
                         txt_Cotations.Text = GetStringNoUnit(MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i).x_Loc - MyPoutreLoc.Maintiens(traveeEnCours.Item2)(i - 1).x_Loc, Enu_TypeVariable.Longueur)
@@ -434,7 +570,7 @@ Public Class Frm_Maintiens
                             .Maintiens(traveeEnCours.Item2)(0).x_Loc = Math.Min(val, .Maintiens(traveeEnCours.Item2)(1).x_Loc - decal)
                         End If
 
-                    ElseIf indiceCoteSelectionnee = positionCotesInferieures.GetLength(0) - 1 Then
+                    ElseIf indiceCoteSelectionnee = positionCotesInferieuresDessin.GetLength(0) - 1 Then
                         If nbMaintiens = 1 Then
                             .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc = longueurTraveeEnCours - val
                         Else
@@ -446,7 +582,7 @@ Public Class Frm_Maintiens
                             xLoc = Math.Min(xLoc, longueurTraveeEnCours - decal)
                             .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = xLoc
                         Else
-                            If indiceCoteSelectionnee = positionCotesInferieures.GetLength(0) - 2 Then
+                            If indiceCoteSelectionnee = positionCotesInferieuresDessin.GetLength(0) - 2 Then
                                 xLoc = .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee - 1).x_Loc + val
                                 xLoc = Math.Min(xLoc, longueurTraveeEnCours - decal)
                                 .Maintiens(traveeEnCours.Item2)(indiceCoteSelectionnee).x_Loc = xLoc
@@ -487,10 +623,10 @@ Public Class Frm_Maintiens
         img_Maintiens.Invalidate()
     End Sub
 
-    Private Sub MAJ_pan_ControlDessin(lVisible As Boolean)
+    Private Sub MAJ_pan_ControlDessin(lEnable As Boolean)
         'Affiche le panel qui permet d'ajouter ou de supprimer des maintiens ponctuels uniquement si rad_PointRestrain est selectionné
-        Me.pan_ControlDessin.Visible = lVisible
-        Me.lbl_ControlDessin.Visible = lVisible
+        Me.pan_ControlDessin.Enabled = lEnable
+        Me.lbl_ControlDessin.Enabled = lEnable
     End Sub
 
 

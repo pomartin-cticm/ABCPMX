@@ -37,7 +37,7 @@ Public Class Frm_Etaiement
             Try
 
                 Me.Text = Bloc("TITLE")
-                Me.btn_OK.Text = Bloc("VALIDATE")
+                Me.btn_OK.Text = Bloc("OK")
                 Me.btn_Annuler.Text = Bloc("CANCEL")
 
                 '=== MENU PRINCIPAL ==============================================================='
@@ -46,8 +46,8 @@ Public Class Frm_Etaiement
                 Me.rad_UnPropped.Text = Bloc("UNPROPPED")
                 Me.rad_FullyPropped.Text = Bloc("FULLYPROPPED")
                 Me.rad_PointPropped.Text = Bloc("POINTPROPPED")
-                Me.chk_EtaisConsoleGauche.Text = Bloc("ETAISCONSOLEGAUCHE")
-                Me.chk_EtaisConsoleDroite.Text = Bloc("ETAISCONSOLEDROITE")
+                Me.chk_EtaisConsoleGauche.Text = Bloc("LEFTCANTPROPP")
+                Me.chk_EtaisConsoleDroite.Text = Bloc("RIGHTCANTPROPP")
                 Me.lbl_NbPP.Text = Bloc("NUMBPROPPING")
 
             Catch ex As Exception

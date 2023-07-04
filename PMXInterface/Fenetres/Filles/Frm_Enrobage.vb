@@ -107,7 +107,7 @@ Public Class Frm_Enrobage
                 Me.lbl_Largeur.Text = Bloc("WIDTH")
 
                 '-- Etriers
-                Me.lbl_Etriers.Text = Bloc("ETRIERS")
+                Me.lbl_Etriers.Text = Bloc("STIRRUPS")
                 Me.lbl_Type.Text = Bloc("TYPEE")
                 strTypeEtriers(0) = "Cadre ZZZ "
                 strTypeEtriers(1) = "Etrier soudé ZZZ "

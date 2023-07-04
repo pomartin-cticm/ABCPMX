@@ -66,6 +66,11 @@ Module Mod_Declarations
         ''' </summary>
         Public Base_Goujons As String
 
+        ''' <summary>
+        ''' Fichier de base de données des icones
+        ''' </summary>
+        Public Icone As String
+
     End Structure
 
     Public Structure Struc_RepertoireLogiciel
@@ -236,6 +241,9 @@ Module Mod_Declarations
 
     Public Const PORTEEMIN As Decimal = 5
     Public Const PORTEEMAX As Decimal = 25
+
+    Public Const ENTRAXEMIN As Decimal = 0.5
+    Public Const ENTRAXEMAX As Decimal = 10
 
     Public Const CONSOLEMIN As Decimal = 0.5
     Public Const RATIOCONSOLEMAX As Decimal = 0.3

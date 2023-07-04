@@ -54,6 +54,7 @@ Module Mod_Demarrage
         LogicielRep.RepertoireInstall = Application.StartupPath
         LogicielRep.RepertoireConfig = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CTICM\" & LogicielInfo.NomLogiciel & "\ConfigV" & LogicielInfo.Version
 
+
         InitialiseDebug()
 
         '--> Répertoires
@@ -162,6 +163,10 @@ Module Mod_Demarrage
 
         UpdateLNGFileName()
         UpdateLNGFileName_NDC()
+
+        '--> MAJ du nom fichier icones
+
+        UpdateIconesFileName()
 
     End Sub
 
@@ -543,5 +548,24 @@ Module Mod_Demarrage
 
 #End Region
 
+#Region "Gestion Icones"
+
+    ''' <summary>
+    ''' Mise à jour du nom du fichier icones (à discuter)
+    ''' </summary>
+    Public Sub UpdateIconesFileName()
+
+
+        If lDebug Then
+            LogicielFichiers.Icone = LogicielRep.RepertoireInstall & "\..\..\Icones\"
+
+        Else
+            LogicielFichiers.Langue = LogicielRep.RepertoireInstall & "\Icones\"
+
+        End If
+
+    End Sub
+
+#End Region
 
 End Module

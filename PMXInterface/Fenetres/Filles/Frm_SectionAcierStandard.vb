@@ -101,7 +101,7 @@ Public Class Frm_SectionAcierStandard
                 Me.rdb_PRS.Text = Bloc("WELDEDP")
                 Me.rdb_PRS_symetrique.Text = Bloc("WELDEDSYM")
 
-                Me.lbl_Gamme.Text = Bloc("SERIE")
+                Me.lbl_Gamme.Text = Bloc("SERIAL")
                 Me.lbl_Profiles.Text = Bloc("PROFILE")
 
 

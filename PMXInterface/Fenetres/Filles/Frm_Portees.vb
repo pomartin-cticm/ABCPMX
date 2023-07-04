@@ -48,17 +48,17 @@ Public Class Frm_Portees
 
             Try
 
-                Me.Text = Bloc("TITRE")
+                Me.Text = Bloc("TITLE")
                 Me.btn_OK.Text = Bloc("OK")
                 Me.btn_Annuler.Text = Bloc("CANCEL")
 
                 '=== MENU PRINCIPAL ==============================================================='
 
-                Me.lbl_Portees.Text = Bloc("TRAVEES")
+                Me.lbl_Portees.Text = Bloc("SPANS")
 
                 Me.lbl_MainSpan.Text = Bloc("MAINSPAN")
-                Me.chk_ConsoleGauche.Text = Bloc("CONSOLEG")
-                Me.chk_ConsoleDroite.Text = Bloc("CONSOLED")
+                Me.chk_ConsoleGauche.Text = Bloc("LEFTCANT")
+                Me.chk_ConsoleDroite.Text = Bloc("RIGHTCANT")
 
                 Me.lbl_Entraxe.Text = Bloc("SPACINGS")
                 Me.lbl_Entraxes.Text = Bloc("SPACINGS")
@@ -125,11 +125,11 @@ Public Class Frm_Portees
 
             Me.chk_TremieGauche.Checked = .lTremieGauche
             'If .lTremieGauche Then
-            Me.txt_D1.Text = GetStringNoUnit(.DistanceDsl1, Enu_TypeVariable.Longueur)
+            Me.txt_TremieGauche.Text = GetStringNoUnit(.DistanceDsl1, Enu_TypeVariable.Longueur)
 
             Me.chk_TremieDroite.Checked = .lTremieDroite
             'If .lTremieDroite Then
-            Me.txt_D2.Text = GetStringNoUnit(.DistanceDsl2, Enu_TypeVariable.Longueur)
+            Me.txt_TremieDroite.Text = GetStringNoUnit(.DistanceDsl2, Enu_TypeVariable.Longueur)
 
         End With
 
@@ -215,11 +215,22 @@ Public Class Frm_Portees
             If .lTremieGauche <> MyPoutreLoc.lTremieGauche Then
                 lModif = True
                 .lTremieGauche = MyPoutreLoc.lTremieGauche
+
+            End If
+
+            If .lTremieGauche And (.DistanceDsl1 <> MyPoutreLoc.DistanceDsl1) Then
+                lModif = True
+                .DistanceDsl1 = MyPoutreLoc.DistanceDsl1
             End If
 
             If .lTremieDroite <> MyPoutreLoc.lTremieDroite Then
                 lModif = True
                 .lTremieDroite = MyPoutreLoc.lTremieDroite
+            End If
+
+            If .lTremieDroite And (.DistanceDsl2 <> MyPoutreLoc.DistanceDsl2) Then
+                lModif = True
+                .DistanceDsl2 = MyPoutreLoc.DistanceDsl2
             End If
 
 
@@ -346,6 +357,32 @@ Public Class Frm_Portees
 
     End Sub
 
+    Private Sub MAJ_txt_Tremie(sender As Object, e As EventArgs) Handles txt_TremieGauche.VisibleChanged, txt_TremieDroite.VisibleChanged
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case txt_TremieGauche.Name
+                If txt_TremieGauche.Visible Then
+                    Dim ValMin As Decimal = 0
+                    Dim ValMax As Decimal = MyPoutreLoc.EntraxeD1 / 2
+
+                    txt_TremieGauche.Text = Math.Min(Math.Max(MyPoutreLoc.DistanceDsl1, ValMin), ValMax)
+
+                End If
+
+            Case txt_TremieDroite.Name
+                If txt_TremieDroite.Visible Then
+                    Dim ValMin As Decimal = 0
+                    Dim ValMax As Decimal = MyPoutreLoc.EntraxeD2 / 2
+
+                    txt_TremieDroite.Text = Math.Min(Math.Max(MyPoutreLoc.DistanceDsl2, ValMin), ValMax)
+
+                End If
+
+        End Select
+
+    End Sub
+
 
 
 #End Region
@@ -374,6 +411,12 @@ Public Class Frm_Portees
                 Case Me.txt_PorteeConsoleD.Name
                     MyPoutreLoc.LongueurTravee(MyPoutreLoc.IndiceTraveeConsoleDroite) = ValeurUI
                     lPortees = True
+                Case Me.txt_D1.Name
+                    MyPoutreLoc.EntraxeD1 = ValeurUI
+                    lCoupe = True
+                Case Me.txt_D2.Name
+                    MyPoutreLoc.EntraxeD2 = ValeurUI
+                    lCoupe = True
                 Case Me.txt_TremieGauche.Name
                     MyPoutreLoc.DistanceDsl1 = ValeurUI
                     lCoupe = True
@@ -411,6 +454,11 @@ Public Class Frm_Portees
 
                 ValMin = CONSOLEMIN / kUnit
                 ValMax = RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit
+
+            Case Me.txt_D1.Name, Me.txt_D2.Name
+
+                ValMin = ENTRAXEMIN / kUnit
+                ValMax = ENTRAXEMAX / kUnit
 
             Case Me.txt_TremieGauche.Name
                 ValMin = 0
@@ -488,6 +536,8 @@ Public Class Frm_Portees
         End Select
 
         MAJI_Tremies()
+
+        Me.img_Coupe.Invalidate()
 
     End Sub
 
