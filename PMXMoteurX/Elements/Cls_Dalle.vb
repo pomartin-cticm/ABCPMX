@@ -2,7 +2,8 @@
 
 #Region " Constantes "
 
-    Private Const THETAHDEFAULT As Decimal = 30        ' Angle inclinaison renformis
+    Private Const THETAHDEFAULT As Decimal = 30             ' Angle inclinaison renformis
+    Private Const WAPPUIPREDALLEDEFAUT As Decimal = 0.07    ' Largeur d'appui des prédalles sur la semelle    
 
 #End Region
 
@@ -46,7 +47,17 @@
     ''' <summary>
     ''' angle / verticale du bord des renformis
     ''' </summary>
-    Public Theta_h As Decimal
+    Private pTheta_h As Decimal
+
+    ''' <summary>
+    ''' Epaisseur de prédalle pour les dalles partiellement préfabriquées
+    ''' </summary>
+    Public preDalle_ep As Decimal
+
+    ''' <summary>
+    ''' Epaisseur du joint entre élément de prédalle
+    ''' </summary>
+    Public preDalle_tjoint As Decimal
 
 #End Region
 
@@ -149,11 +160,21 @@
 #Region " Outils "
 
     ''' <summary>
+    ''' Retourne la largeur d'appui d'une prédalle sur la semelle
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property wAppuiPreDalle
+        Get
+            Return WAPPUIPREDALLEDEFAUT
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Angle d'inclinaison bord du renformis, en radians
     ''' </summary>
     Public ReadOnly Property ThetaRd As Decimal
         Get
-            Return Me.Theta_h * Math.PI / 180
+            Return Me.pTheta_h * Math.PI / 180
         End Get
 
     End Property
@@ -216,6 +237,8 @@
         Me.Beff = 1
         Me.t_d = 0.12
         Me.t_h = 0.04
+        Me.preDalle_tjoint = 0.05
+        Me.preDalle_ep = 0.06
 
         Me.lArma_Inf = True
         Me.lArma_Sup = True
@@ -232,7 +255,7 @@
         Me.arma_longi_sup.z_s = 0.015
         Me.arma_longi_sup.c_s = 0.013
 
-        Me.Theta_h = THETAHDEFAULT
+        Me.pTheta_h = THETAHDEFAULT
 
         '--> création des deux lits d'armatures 
         Me.LitArma.Add(New Cls_Armatures_Longi)

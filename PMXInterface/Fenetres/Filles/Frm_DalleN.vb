@@ -19,6 +19,12 @@ Public Class Frm_DalleN
     Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
     Const kADJUST As Decimal = 0.95
 
+    Dim strAppuiTcontinus, strAppuiTRibContinu, strAppuiTBacNonContinu As String
+    Dim strAppuiTDiscontinus As String
+    Dim strAppuiLbacUncut As String
+    Dim strAppuiLbacCut1, strAppuiLbacCut2 As String
+
+    Dim iSelect As Integer = -1
 
 #End Region
 
@@ -80,17 +86,31 @@ Public Class Frm_DalleN
                 Me.rdb_BacParallele.Text = "Parallèle"
                 Me.rdb_BacPerpendiculaire.Text = "Perpendiculaire"
 
+                Me.lbl_HauteurHp.Text = "Hauteur"
+
                 Me.lbl_BacConfiguration.Text = "Configuration des nervures sur appui"
 
                 Me.chk_BacPreperce.Text = "Bac prepercé"
 
                 '=== ARMATURES ====================================================================
 
-                Me.lbl_General.Text = Bloc("REBARS")
+                Me.lbl_Armatures.Text = Bloc("REBARS")
 
                 '=== ACIER DES ARMATURES ==========================================================
 
                 Me.lbl_Acier.Text = "Reinforcement steel"
+                Me.lbl_ClasseA.Text = "Classe"
+
+                '=== MESSAGES =====================================================================
+
+                strAppuiTcontinus = "Nervure et bac continus"
+                strAppuiTRibcontinu = "Nervure continue"
+                strAppuiTBacNonContinu = "Bac discontinu"
+
+                strAppuiTDiscontinus = "Nervure et bac discontinus"
+                strAppuiLbacUncut = "Uncut deck"
+                strAppuiLbacCut1 = "Cut deck"
+                strAppuiLbacCut2 = "the width of the concrete through is equal to the width of the deck through"
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -106,6 +126,7 @@ Public Class Frm_DalleN
 
         Me.etq_UnitDim2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
         Me.etq_UnitSigma1.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
         Me.etq_UnitModule1.Text = LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
@@ -121,6 +142,8 @@ Public Class Frm_DalleN
 
     Private Sub GestionStyle()
         Me.Icon = Frm_PMX.Icon
+
+        Me.rtxt_Configuration.BorderStyle = BorderStyle.None
 
         Me.lbl_General.BackColor = CouleurBackBandeaux
         Me.lbl_General.ForeColor = CouleurForeBandeaux
@@ -138,6 +161,8 @@ Public Class Frm_DalleN
         Me.txt_BacNom.BackColor = COULEURTXTREADONLY
 
         Me.img_Bac.BorderStyle = BorderStyle.FixedSingle
+
+        Me.pan_Orientation.Top = Me.pan_Renformis.Top
 
     End Sub
 
@@ -204,6 +229,7 @@ Public Class Frm_DalleN
 
     Private Sub AfficheNomBacEnCours()
         Me.txt_BacNom.Text = MyDalleLoc.Bac.Etiquette
+        Me.txt_Hp.Text = GetStringInUnit(MyDalleLoc.Bac.h_p, Enu_TypeVariable.Dimension, 4, 3, False)
     End Sub
 
     Private Sub AfficherBacEnCours()
@@ -220,10 +246,31 @@ Public Class Frm_DalleN
             Case Cls_Bac.Enum_Orientation.Perpendiculaire
                 Me.rdb_BacPerpendiculaire.Checked = True
         End Select
+        MAJI_OrientationBac()
 
         '--> Bac prépercé
 
         Me.chk_BacPreperce.Checked = MyDalleLoc.Bac.lPreperce
+
+        '--> Configurations sur appui
+
+        MAJI_ConfigurationAppuiBac()
+
+        Select Case MyDalleLoc.Bac.AppuiL
+            Case Cls_Bac.EnuConfigLAppui.BacCoupe
+                Me.chk_L_PA2.Checked = True
+            Case Cls_Bac.EnuConfigLAppui.BacNonCoupe
+                Me.chk_L_PA1.Checked = True
+        End Select
+
+        Select Case MyDalleLoc.Bac.AppuiT
+            Case Cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                Me.chk_T_PA2.Checked = True
+            Case Cls_Bac.EnuConfigTAppui.Discontinu
+                Me.chk_T_PA3.Checked = True
+            Case Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                Me.chk_T_PA1.Checked = True
+        End Select
 
     End Sub
 
@@ -312,7 +359,7 @@ Public Class Frm_DalleN
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section)
+                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, iSelect)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================
@@ -408,11 +455,6 @@ Public Class Frm_DalleN
 
 #Region " Evènements "
 
-
-    'Private Sub BacClick(sender As Object, e As EventArgs) Handles 
-
-    'End Sub
-
     Private Sub btn_ModifierBac_Click(sender As Object, e As EventArgs) Handles btn_ModifierBac.Click, txt_BacNom.Click, img_Bac.Click
 
         iFrmAppel = EnuFenetres.DalleN
@@ -427,9 +469,101 @@ Public Class Frm_DalleN
         Me.img_Dalle.Invalidate()
     End Sub
 
+    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_Hd.Leave
+        If lBuild Then Exit Sub
+        iSelect = -1
+        Me.img_Dalle.Invalidate()
+    End Sub
+
+    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Enter, txt_Hd.Enter
+        If lBuild Then Exit Sub
+        Select Case sender.name
+            Case Me.txt_Hd.Name
+                iSelect = 0
+            Case Me.txt_Hh.Name
+                iSelect = 1
+        End Select
+        Me.img_Dalle.Invalidate()
+    End Sub
+
 #End Region
 
 #Region " Evènements saisie "
+
+    Private Sub ConfigTCheckedChanged(sender As Object, e As EventArgs) Handles chk_T_PA3.CheckedChanged, chk_T_PA2.CheckedChanged, chk_T_PA1.CheckedChanged, chk_L_PA2.CheckedChanged, chk_L_PA1.CheckedChanged
+        If lBuild Then Exit Sub
+
+
+        Select Case sender.name
+            Case Me.chk_T_PA1.Name
+                'Me.rtxt_Configuration.Text = "Nervure et bac continus"
+                MyDalleLoc.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                UnselectChkTConfig(Me.chk_T_PA1.Name)
+            Case Me.chk_T_PA2.Name
+                'Me.rtxt_Configuration.Text = "Nervure continue" & Chr(13) & "Bac discontinu"
+                MyDalleLoc.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                UnselectChkTConfig(Me.chk_T_PA2.Name)
+            Case Me.chk_T_PA3.Name
+                'Me.rtxt_Configuration.Text = "Nervure et bac discontinus"
+                MyDalleLoc.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.Discontinu
+                UnselectChkTConfig(Me.chk_T_PA3.Name)
+            Case Me.chk_L_PA1.Name
+                'Me.rtxt_Configuration.Text = "Uncut deck"
+                MyDalleLoc.Bac.AppuiL = Cls_Bac.EnuConfigLAppui.BacNonCoupe
+                UnselectChkLConfig(Me.chk_L_PA1.Name)
+            Case Me.chk_L_PA2.Name
+                'Me.rtxt_Configuration.Text = "Uncut deck" & Chr(13) & "the width of the concrete through is equal to the width of the deck through"
+                MyDalleLoc.Bac.AppuiL = Cls_Bac.EnuConfigLAppui.BacCoupe
+                UnselectChkLConfig(Me.chk_L_PA2.Name)
+        End Select
+
+        MAJI_ConfigurationAppuiBac()
+        Me.img_Dalle.Invalidate()
+
+    End Sub
+
+    Private Sub MAJI_ConfigurationAppuiBac()
+        '----------------------------------------------------------------------------------------------------------------
+        '   Mise à jour du texte d'explication en fct de la configuration d'appui du bac
+        '----------------------------------------------------------------------------------------------------------------
+
+        Select Case MyDalleLoc.Bac.orientation
+            Case Cls_Bac.Enum_Orientation.Perpendiculaire
+                Select Case MyDalleLoc.Bac.AppuiT
+                    Case Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                        Me.rtxt_Configuration.Text = strAppuiTcontinus
+                    Case Cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                        Me.rtxt_Configuration.Text = strAppuiTRibContinu & Chr(13) & strAppuiTBacNonContinu
+                    Case Cls_Bac.EnuConfigTAppui.Discontinu
+                        Me.rtxt_Configuration.Text = strAppuiTDiscontinus
+                End Select
+            Case Cls_Bac.Enum_Orientation.Parallele
+                Select Case MyDalleLoc.Bac.AppuiL
+                    Case Cls_Bac.EnuConfigLAppui.BacCoupe
+                        Me.rtxt_Configuration.Text = strAppuiLbacCut1 & Chr(13) & strAppuiLbacCut2
+                    Case Cls_Bac.EnuConfigLAppui.BacNonCoupe
+                        Me.rtxt_Configuration.Text = strAppuiLbacUncut
+                End Select
+        End Select
+
+    End Sub
+
+    Private Sub UnselectChkTConfig(NameSelect As String)
+        Dim lbuildBack As Boolean = lBuild
+        lBuild = True
+        If Me.chk_T_PA1.Name <> NameSelect Then Me.chk_T_PA1.Checked = False
+        If Me.chk_T_PA2.Name <> NameSelect Then Me.chk_T_PA2.Checked = False
+        If Me.chk_T_PA3.Name <> NameSelect Then Me.chk_T_PA3.Checked = False
+        lBuild = lbuildBack
+    End Sub
+
+    Private Sub UnselectChkLConfig(NameSelect As String)
+        Dim lbuildBack As Boolean = lBuild
+        lBuild = True
+        If Me.chk_L_PA1.Name <> NameSelect Then Me.chk_L_PA1.Checked = False
+        If Me.chk_L_PA2.Name <> NameSelect Then Me.chk_L_PA2.Checked = False
+        lBuild = lbuildBack
+    End Sub
 
     Private Sub cmb_TypeDalle_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_TypeDalle.SelectedIndexChanged
         If lBuild Then Exit Sub
@@ -455,10 +589,16 @@ Public Class Frm_DalleN
         Select Case MyDalleLoc.type
             Case Cls_Dalle.Enum_TypeDalle.Pleine
                 Me.pan_Bac.Enabled = False
+                Me.pan_Orientation.Visible = False
+                Me.pan_Renformis.Visible = True
             Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
                 Me.pan_Bac.Enabled = False
+                Me.pan_Orientation.Visible = False
+                Me.pan_Renformis.Visible = False
             Case Cls_Dalle.Enum_TypeDalle.Mixte
                 Me.pan_Bac.Enabled = True
+                Me.pan_Orientation.Visible = True
+                Me.pan_Renformis.Visible = False
         End Select
 
     End Sub
@@ -546,6 +686,16 @@ Public Class Frm_DalleN
             Case Me.rdb_BacParallele.Name : MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele
             Case Me.rdb_BacPerpendiculaire.Name : MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
         End Select
+        MAJI_OrientationBac()
+    End Sub
+
+    Private Sub MAJI_OrientationBac()
+
+        Me.chk_L_PA1.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
+        Me.chk_L_PA2.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
+        Me.chk_T_PA1.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
+        Me.chk_T_PA2.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
+        Me.chk_T_PA3.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
 
     End Sub
 
@@ -569,7 +719,7 @@ Public Class Frm_DalleN
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles Img_Hh.Paint, Img_Hd.Paint, img_Fy.Paint, img_Fck.Paint, img_Ecm.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles Img_Hd.Paint, img_Fy.Paint, img_Fck.Paint, img_Ecm.Paint, img_Hp.Paint, Img_Hh.Paint
 
         '--> Déclarations
 
@@ -607,6 +757,10 @@ Public Class Frm_DalleN
             Case Me.Img_Hh.Name
                 strSymbol = "t"
                 strIndice = "h"
+            Case Me.img_Hp.Name
+                strSymbol = "h"
+                strIndice = "p"
+
         End Select
 
         '--> Dessin
@@ -615,6 +769,7 @@ Public Class Frm_DalleN
            FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
 
 
 

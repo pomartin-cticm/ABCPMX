@@ -30,6 +30,7 @@ Public Class Frm_BacN
     Dim COULEURTXTACCESS As Color = SystemColors.Window
     Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
 
+    Dim iSelect As Integer = -1
 #End Region
 
 #Region "===OUVERTURE==="
@@ -400,7 +401,7 @@ Public Class Frm_BacN
     Private Sub img_Bac_Paint(sender As Object, e As PaintEventArgs) Handles img_Bac.Paint
 
         DessineBac(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, MyBac,
-                   MyBac.Hauteur_hpg * 1.75, 0, True, True, True)
+                   MyBac.Hauteur_hpg * 1.75, iselect, True, True, True)
 
     End Sub
 
@@ -481,7 +482,7 @@ Public Class Frm_BacN
         End If
         'nbOndes = Math.Floor(MyBac.LargeurModule / MyBac.e_p)
         yMin = 0
-        yMax = MyBac.h_p
+        yMax = MyBac.Hauteur_hpg
         If lCotation Then
             yMin = -dCar
             yMax += dCar
@@ -492,10 +493,8 @@ Public Class Frm_BacN
         '--> Calcul des points du pourtour de la dalle
 
         If lRaidSup Then
-            MyBac.PrepareContourDalleBacRaidi(nbOndes, EpDalle, xPts, yPts, nbPts)
+            MyBac.PrepareContourBacRaidi1Nervure(xPts, yPts, nbPts)
         Else
-            'MyBac.PrepareContourBacSimpleSeul(xPts, yPts, nbPts)
-            'MyBac.PrepareContourBacSimpleSeul2(xPts, yPts, nbPts, lUn)
             MyBac.PrepareContourBacSimple1Nervure(xPts, yPts, nbPts)
         End If
 
@@ -518,134 +517,6 @@ Public Class Frm_BacN
         End If
 
 
-        Exit Sub
-
-
-        'sDecal = Math.Min(EpDalle / 5, MyBac.h_p / 2)
-        'tDecal = sDecal / 5
-
-        ''If lCotation Then yMin -= 2 * sDecal
-        ''xMax = nbOndes * Me.e
-        'If lCotation And lCotEpTot Then xMax = xMax + 2 * sDecal
-        'yMax = Math.Max(EpDalle, hMax)
-
-        'If lTitre Then yMax += 2 * EpDalle / 10
-
-
-        ''--> Calcul des points du pourtour de la dalle
-
-        'If lRaidSup Then
-        '    MyBac.PrepareContourDalleBacRaidi(nbOndes, EpDalle, xPts, yPts, nbPts)
-        'Else
-        '    MyBac.PrepareContourDalleBacSimple(nbOndes, EpDalle, xPts, yPts, nbPts)
-        'End If
-
-        ''--> Remplissage contour
-
-        'RemplirZone(myGr, myBrushDalle, xPts, yPts, nbPts, MyParAff, False)
-
-        ''For i = 0 To nbOndes * 4
-        'For i = 0 To nbPts - 4
-        '    AddLigne(myGr, xPts(i), yPts(i), xPts(i + 1), yPts(i + 1), MyParAff)
-        'Next i
-        'AddLigne(myGr, 0, EpDalle, nbOndes * MyBac.e_p, EpDalle, MyParAff)
-
-        'If lCotation Then
-
-        '    Dim MyFont As New Font("Arial", 8)
-
-        '    '--> Cotation b1
-
-        '    If VariableBac = Enu_VariablesBac.b1 Then
-        '        AddFleche(myGr, MyPenRed, 3 * MyBac.e_p / 2 - MyBac.b_b / 2, -sDecal, 3 * MyBac.e_p / 2 + MyBac.b_b / 2, -sDecal, MyParAff, True, True)
-        '        AddTexte(myGr, MyPenRedBrush, "b1", MyFontNormal, 3 * MyBac.e_p / 2, -sDecal - tDecal, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
-        '    Else
-        '        AddFleche(myGr, MyPen, 3 * MyBac.e_p / 2 - MyBac.b_b / 2, -sDecal, 3 * MyBac.e_p / 2 + MyBac.b_b / 2, -sDecal, MyParAff, True, True)
-        '        AddTexte(myGr, MyPenBrush, "b1", MyFontNormal, 3 * MyBac.e_p / 2, -sDecal - tDecal, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
-        '    End If
-
-        '    '--> Cotation b2
-
-        '    If VariableBac = Enu_VariablesBac.b2 Then
-        '        AddFleche(myGr, MyPenRed, 3 * MyBac.e_p / 2 - MyBac.b_t / 2, MyBac.h_p + sDecal, 3 * MyBac.e_p / 2 + MyBac.b_t / 2, MyBac.h_p + sDecal, MyParAff, True, True)
-        '        AddTexte(myGr, MyPenRedBrush, "b2", MyFontNormal, 3 * MyBac.e_p / 2, MyBac.h_p + sDecal + tDecal, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
-        '    Else
-        '        AddFleche(myGr, MyPen, 3 * MyBac.e_p / 2 - MyBac.b_t / 2, MyBac.h_p + sDecal, 3 * MyBac.e_p / 2 + MyBac.b_t / 2, MyBac.h_p + sDecal, MyParAff, True, True)
-        '        AddTexte(myGr, MyPenBrush, "b2", MyFontNormal, 3 * MyBac.e_p / 2, MyBac.h_p + sDecal + tDecal, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
-        '    End If
-
-        '    '--> Cotation h
-
-        '    Dim bMax As Decimal = Math.Max(MyBac.b_t, MyBac.b_b)
-        '    If VariableBac = Enu_VariablesBac.h Then
-        '        AddFleche(myGr, MyPenRed, MyBac.e_p / 2 + bMax / 2 + sDecal, 0, MyBac.e_p / 2 + bMax / 2 + sDecal, MyBac.h_p, MyParAff, True, True)
-        '        AddTexte(myGr, MyPenRedBrush, "h", MyFontNormal, MyBac.e_p / 2 + bMax / 2 + sDecal + tDecal, MyBac.h_p / 2, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
-        '    Else
-        '        AddFleche(myGr, MyPen, MyBac.e_p / 2 + bMax / 2 + sDecal, 0, MyBac.e_p / 2 + bMax / 2 + sDecal, MyBac.h_p, MyParAff, True, True)
-        '        AddTexte(myGr, MyPenBrush, "h", MyFontNormal, MyBac.e_p / 2 + bMax / 2 + sDecal + tDecal, MyBac.h_p / 2, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
-        '    End If
-
-        '    '--> Cotation hpg
-
-        '    If lRaidSup Then
-        '        Dim hpg As Double = MyBac.Hauteur_hpg
-        '        Dim xCote As Double = 2 * MyBac.e_p
-        '        If nbOndes <= 2 Then xCote = 0
-        '        If VariableBac = Enu_VariablesBac.hpg Then
-        '            AddFleche(myGr, MyPenRed, xCote, 0, xCote, hpg, MyParAff, True, True)
-        '            AddTexte(myGr, MyPenRedBrush, "hpg", MyFontNormal, xCote + tDecal, hpg / 2, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
-        '        Else
-        '            AddFleche(myGr, MyPen, xCote, 0, xCote, hpg, MyParAff, True, True)
-        '            AddTexte(myGr, MyPenBrush, "hpg", MyFontNormal, xCote + tDecal, hpg / 2, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
-        '        End If
-        '    End If
-
-        '    '--> Cotation e
-
-        '    If VariableBac = Enu_VariablesBac.e Then
-        '        AddFleche(myGr, MyPenRed, 0, -sDecal, MyBac.e_p, -sDecal, MyParAff, True, True)
-        '        AddTexte(myGr, MyPenRedBrush, "e", MyFontNormal, MyBac.e_p / 2, -sDecal - tDecal, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
-        '    Else
-        '        AddFleche(myGr, MyPen, 0, -sDecal, MyBac.e_p, -sDecal, MyParAff, True, True)
-        '        AddTexte(myGr, MyPenBrush, "e", MyFontNormal, MyBac.e_p / 2, -sDecal - tDecal, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
-        '    End If
-
-        '    '--> Cotation E
-
-        '    If lCotEpTot Then
-        '        AddFleche(myGr, MyPen, nbOndes * MyBac.e_p + sDecal, 0, nbOndes * MyBac.e_p + sDecal, EpDalle, MyParAff, True, True)
-        '        AddTexte(myGr, MyPenBrush, "E", MyFontNormal, nbOndes * MyBac.e_p + sDecal, EpDalle / 2, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
-        '    End If
-
-        '    MyFont.Dispose()
-        'End If
-
-        ''--> Titre du bac
-
-        'If lTitre Then
-        '    AddTexte(myGr, MyPenBrush, MyBac.Etiquette, MyFontNormal, nbOndes * MyBac.e_p / 2, EpDalle * 11 / 10, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
-        'End If
-
-        ''--> Membrure
-
-        'If lMemb Then
-        '    Dim myBrushSup As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.DarkGray, Color.DarkBlue)
-
-        '    AddRectanglePlein(myGr, myBrushSup, Pens.Black, 0, 0, nbOndes * MyBac.e_p, -tfSup, MyParAff, True, False)
-        '    AddLigne(myGr, 0, 0, nbOndes * MyBac.e_p, 0, MyParAff)
-        '    AddLigne(myGr, 0, -tfSup, nbOndes * MyBac.e_p, -tfSup, MyParAff)
-
-        '    myBrushSup.Dispose()
-        'End If
-
-        ''--> Liberation des Font, Pen et Brush
-
-        'myBrushDalle.Dispose()
-        'MyPenBrush.Dispose()
-        'MyPen.Dispose()
-        'MyPenRedBrush.Dispose()
-        'MyPenRed.Dispose()
-
     End Sub
 
     Private Sub CotationBacUn(ByRef myGr As Graphics, MyParAffC As Struc_Affichage, MyBac As Cls_Bac, dCar As Decimal, iSelect As Integer)
@@ -654,11 +525,12 @@ Public Class Frm_BacN
         '-----------------------------------------------------------------------------------------------
         '   Cotation d'une nervure de bac
         '-----------------------------------------------------------------------------------------------
-        '   iSelect :   1 : ep
-        '               2 : bb
-        '               3 : bt
-        '               4 : hp
-        '               5 : tp
+        '   iSelect :   1 : hg
+        '               2 : hpg
+        '               3 : ep
+        '               4 : bt
+        '               5 : bb
+        '               6 : tp
         '-----------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -673,8 +545,9 @@ Public Class Frm_BacN
         Dim lAffSymbol As Boolean = False
         Dim lContour As Boolean = lCONTOURCOTE
 
-        Dim eP, hP, bbP, btP, tP As Decimal
+        Dim eP, hP, bbP, btP, tP, hPg As Decimal
         Const kTP As Decimal = 2
+        Dim lRaid As Boolean = MyBac.HasRaidisseurSup
 
         '--> Initialisation
 
@@ -683,12 +556,13 @@ Public Class Frm_BacN
         btP = MyBac.b_t
         bbP = MyBac.b_b
         tP = MyBac.tp * kTP
+        hpg = MyBac.Hauteur_hpg
 
         '--> Cotes
 
         '#  ep
 
-        MyColor = StyleCouleur(iSelect, 1)
+        MyColor = StyleCouleur(iSelect, 3)
         MyPen.Color = MyColor
 
         xo = -eP / 2
@@ -704,7 +578,7 @@ Public Class Frm_BacN
 
         '# bb
 
-        MyColor = StyleCouleur(iSelect, 2)
+        MyColor = StyleCouleur(iSelect, 5)
         MyPen.Color = MyColor
 
         xo = -bbP / 2
@@ -720,7 +594,7 @@ Public Class Frm_BacN
 
         '# bt
 
-        MyColor = StyleCouleur(iSelect, 3)
+        MyColor = StyleCouleur(iSelect, 4)
         MyPen.Color = MyColor
 
         xo = -btP / 2
@@ -737,7 +611,7 @@ Public Class Frm_BacN
 
         '# hp
 
-        MyColor = StyleCouleur(iSelect, 4)
+        MyColor = StyleCouleur(iSelect, 1)
         MyPen.Color = MyColor
 
         xo = -eP / 2 - dCar
@@ -751,9 +625,27 @@ Public Class Frm_BacN
         If lAffSymbol Then Chaine = "hp" Else Chaine = GetStringNoUnit(hP, Enu_TypeVariable.Dimension)
         AddTexteFond(myGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, (yo + ye) / 2, MyParAffC, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
+        '# hpg
+
+        If lRaid Then
+            MyColor = StyleCouleur(iSelect, 2)
+            MyPen.Color = MyColor
+
+            xo = +eP / 2 + dCar
+            xe = xo
+
+            yo = 0
+            ye = hPg
+
+            AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, True)
+
+            If lAffSymbol Then Chaine = "hpg" Else Chaine = GetStringNoUnit(hPg, Enu_TypeVariable.Dimension)
+            AddTexteFond(myGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, (yo + ye) / 2, MyParAffC, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+        End If
+
         '# tp
 
-        MyColor = StyleCouleur(iSelect, 5)
+        MyColor = StyleCouleur(iSelect, 6)
         MyPen.Color = MyColor
 
         xo = eP / 2 - (eP - btP) / 4
@@ -765,7 +657,7 @@ Public Class Frm_BacN
         AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, False)
 
         yo = hP + tP / 2
-        ye = yo + dCar / 2
+        ye = hPg + dCar / 2
 
         AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, False)
 
@@ -782,6 +674,30 @@ Public Class Frm_BacN
         If lBuild Then Exit Sub
         RemplirGrilleBac(Me.Grid_Bac)
     End Sub
+
+    Private Sub EnterTxtBox(sender As Object, e As EventArgs) Handles txt_tp.Enter, txt_Name.Enter, txt_hpg.Enter, txt_Hp.Enter, txt_ep.Enter, txt_Bt.Enter, txt_Bb.Enter
+        If lBuild Then Exit Sub
+        Select Case sender.name
+            Case Me.txt_Hp.Name : iSelect = 1
+            Case Me.txt_hpg.Name : iSelect = 2
+            Case Me.txt_ep.Name : iSelect = 3
+            Case Me.txt_Bt.Name : iSelect = 4
+            Case Me.txt_Bb.Name : iSelect = 5
+            Case Me.txt_tp.Name : iSelect = 6
+            Case Me.txt_Fyp.Name : iSelect = 7
+            Case Me.txt_MuP.Name : iSelect = 8
+        End Select
+        Me.img_Bac.Invalidate()
+    End Sub
+
+    Private Sub LeaveTextBox(sender As Object, e As EventArgs) Handles txt_tp.Leave, txt_hpg.Leave, txt_Hp.Leave, txt_ep.Leave, txt_Bt.Leave, txt_Bb.Leave
+        If lBuild Then Exit Sub
+        iSelect = 0
+        Me.img_Bac.Invalidate()
+    End Sub
+
+
+
 
 #End Region
 
@@ -1058,8 +974,6 @@ Public Class Frm_BacN
                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, True)
 
     End Sub
-
-
 
 
 #End Region

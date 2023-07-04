@@ -37,6 +37,9 @@ Partial Class Frm_BacN
         Me.lbl_Nom = New System.Windows.Forms.Label()
         Me.txt_Name = New System.Windows.Forms.TextBox()
         Me.pan_CustomBac = New System.Windows.Forms.Panel()
+        Me.txt_MuP = New System.Windows.Forms.TextBox()
+        Me.etq_UnitMuP = New System.Windows.Forms.Label()
+        Me.img_MuP = New System.Windows.Forms.PictureBox()
         Me.txt_Fyp = New System.Windows.Forms.TextBox()
         Me.etq_UnitSigma1 = New System.Windows.Forms.Label()
         Me.img_Fyp = New System.Windows.Forms.PictureBox()
@@ -71,9 +74,6 @@ Partial Class Frm_BacN
         Me.lbl_EtiquetteBac = New System.Windows.Forms.Label()
         Me.img_Bac = New System.Windows.Forms.PictureBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.txt_MuP = New System.Windows.Forms.TextBox()
-        Me.etq_UnitMuP = New System.Windows.Forms.Label()
-        Me.img_MuP = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -83,6 +83,7 @@ Partial Class Frm_BacN
         Me.TableLayoutPanel1.SuspendLayout()
         Me.pan_Droite.SuspendLayout()
         Me.pan_CustomBac.SuspendLayout()
+        CType(Me.img_MuP, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Fyp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_hpg, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_tp, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -96,7 +97,6 @@ Partial Class Frm_BacN
         Me.pan_Representation.SuspendLayout()
         CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_MuP, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -302,6 +302,30 @@ Partial Class Frm_BacN
         Me.pan_CustomBac.Name = "pan_CustomBac"
         Me.pan_CustomBac.Size = New System.Drawing.Size(184, 199)
         Me.pan_CustomBac.TabIndex = 62
+        '
+        'txt_MuP
+        '
+        Me.txt_MuP.Location = New System.Drawing.Point(61, 157)
+        Me.txt_MuP.Name = "txt_MuP"
+        Me.txt_MuP.Size = New System.Drawing.Size(58, 20)
+        Me.txt_MuP.TabIndex = 95
+        '
+        'etq_UnitMuP
+        '
+        Me.etq_UnitMuP.AutoSize = True
+        Me.etq_UnitMuP.Location = New System.Drawing.Point(125, 160)
+        Me.etq_UnitMuP.Name = "etq_UnitMuP"
+        Me.etq_UnitMuP.Size = New System.Drawing.Size(29, 13)
+        Me.etq_UnitMuP.TabIndex = 94
+        Me.etq_UnitMuP.Text = "MuP"
+        '
+        'img_MuP
+        '
+        Me.img_MuP.Location = New System.Drawing.Point(24, 157)
+        Me.img_MuP.Name = "img_MuP"
+        Me.img_MuP.Size = New System.Drawing.Size(37, 20)
+        Me.img_MuP.TabIndex = 96
+        Me.img_MuP.TabStop = False
         '
         'txt_Fyp
         '
@@ -624,30 +648,6 @@ Partial Class Frm_BacN
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'txt_MuP
-        '
-        Me.txt_MuP.Location = New System.Drawing.Point(61, 157)
-        Me.txt_MuP.Name = "txt_MuP"
-        Me.txt_MuP.Size = New System.Drawing.Size(58, 20)
-        Me.txt_MuP.TabIndex = 95
-        '
-        'etq_UnitMuP
-        '
-        Me.etq_UnitMuP.AutoSize = True
-        Me.etq_UnitMuP.Location = New System.Drawing.Point(125, 160)
-        Me.etq_UnitMuP.Name = "etq_UnitMuP"
-        Me.etq_UnitMuP.Size = New System.Drawing.Size(29, 13)
-        Me.etq_UnitMuP.TabIndex = 94
-        Me.etq_UnitMuP.Text = "MuP"
-        '
-        'img_MuP
-        '
-        Me.img_MuP.Location = New System.Drawing.Point(24, 157)
-        Me.img_MuP.Name = "img_MuP"
-        Me.img_MuP.Size = New System.Drawing.Size(37, 20)
-        Me.img_MuP.TabIndex = 96
-        Me.img_MuP.TabStop = False
-        '
         'Frm_BacN
         '
         Me.AcceptButton = Me.btn_OK
@@ -672,6 +672,7 @@ Partial Class Frm_BacN
         Me.pan_Droite.PerformLayout()
         Me.pan_CustomBac.ResumeLayout(False)
         Me.pan_CustomBac.PerformLayout()
+        CType(Me.img_MuP, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Fyp, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_hpg, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_tp, System.ComponentModel.ISupportInitialize).EndInit()
@@ -687,7 +688,6 @@ Partial Class Frm_BacN
         Me.pan_Representation.ResumeLayout(False)
         CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_MuP, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

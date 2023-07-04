@@ -212,7 +212,7 @@ Public Class cls_Projet
                     Lines.Add("   Beff           =  " & .Beff)
                     Lines.Add("   lArmInf        =  " & .lArma_Inf)
                     Lines.Add("   lArmSup        =  " & .lArma_Sup)
-                    Lines.Add("   theta_h        =  " & .Theta_h)
+                    'Lines.Add("   theta_h        =  " & .pTheta_h)
 
                     '==[ Classe Béton Dalle ]=================================================================
 

@@ -5,8 +5,19 @@ Public Class Cls_Bac
 #Region " Autres déclarations "
 
     '-- Ratios pour la représentation des raidisseurs de bac
-    Const RATIOB1R As Double = 0.2
-    Const RATIOB2R As Double = 0.25
+    Public Const RATIOB1R As Double = 0.2
+    Public Const RATIOB2R As Double = 0.25
+
+    Public Enum EnuConfigTAppui
+        Discontinu
+        NervureEtBacContinus
+        BetonSeulContinu
+    End Enum
+
+    Public Enum EnuConfigLAppui
+        BacNonCoupe
+        BacCoupe
+    End Enum
 
 #End Region
 
@@ -91,6 +102,15 @@ Public Class Cls_Bac
     ''' </summary>
     Public lPreperce As Boolean
 
+    ''' <summary>
+    ''' Configuration du bac au droit de l'appui (poutre) dans le cas d'une disposition transversale
+    ''' </summary>
+    Public AppuiT As EnuConfigTAppui
+
+    ''' <summary>
+    ''' Configuration du bac au droit de l'appui (poutre) dans le cas d'une disposition longitudinale
+    ''' </summary>
+    Public AppuiL As EnuConfigLAppui
 #End Region
 
 #Region " Enumérations "
@@ -117,6 +137,8 @@ Public Class Cls_Bac
 
         Me.Etiquette = "Cofraplus_60 1.00"
         Me.lPreperce = True
+        AppuiT = EnuConfigTAppui.BetonSeulContinu
+        AppuiL = EnuConfigLAppui.BacNonCoupe
     End Sub
 
     Sub New(MyFab As String, ByVal My_etiquette As String, ByVal Mybb As Decimal, ByVal Mybt As Decimal, ByVal Myhp As Decimal, ByVal Myhrs As Decimal,
@@ -136,6 +158,8 @@ Public Class Cls_Bac
         Me.msurf = MymSurf
         Me.fyp = Myfyp
         Me.lPreperce = True
+        AppuiT = EnuConfigTAppui.BetonSeulContinu
+        AppuiL = EnuConfigLAppui.BacNonCoupe
     End Sub
 
 
@@ -159,6 +183,8 @@ Public Class Cls_Bac
         Me.Ieff = MyIeff
         Me.LargeurModule = MyLMod
         Me.lPreperce = True
+        AppuiT = EnuConfigTAppui.BetonSeulContinu
+        AppuiL = EnuConfigLAppui.BacNonCoupe
     End Sub
 
 #End Region
@@ -246,6 +272,11 @@ Public Class Cls_Bac
         If Me.lPreperce <> BacSource.lPreperce Then lModif = True
         Me.lPreperce = BacSource.lPreperce
 
+        If Me.AppuiL <> BacSource.AppuiL Then lModif = True
+        Me.AppuiL = BacSource.AppuiL
+
+        If Me.AppuiT <> BacSource.AppuiT Then lModif = True
+        Me.AppuiT = BacSource.AppuiT
     End Sub
 
 #End Region
@@ -480,7 +511,95 @@ Public Class Cls_Bac
 
     End Sub
 
+    Public Sub PrepareContourBacRaidi1Nervure(ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+        '--------------------------------------------------------------------------------------------------------------------
+        '   27/06/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------
+        '   Préparation du contour d'une nervure, avec épaisseur, bac RAIDI
+        '--------------------------------------------------------------------------------------------------------------------
+        '   xPts, yPts  [S] :   Table des points définissant le contour
+        '   nbPts       [S] :   Nombre de pts dans le contour
+        '--------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim nbOndes As Integer
+        Dim wBac As Decimal
+
+        Dim dXnerv As Decimal
+        Dim DeltaX0 As Decimal
+
+        Dim decalX, decalZ As Decimal
+        Dim hP, eP, ptP, hpg As Decimal
+        Const kTP As Decimal = 2
+        Dim bbRaid, btraid As Decimal
+        Dim decalXraid, decalZaid As Decimal
+
+        '--> Initialisation
+
+        ptP = kTP * Me.tp
+        hP = Me.h_p
+        hpg = Me.Hauteur_hpg
+        eP = Me.e_p
+        nbOndes = 1
+        wBac = eP
+        bbRaid = RATIOB1R * (eP - Me.b_t)
+        btraid = RATIOB2R * (eP - Me.b_t)
+
+        dXnerv = (Me.b_t - Me.b_b) / 2
+        DeltaX0 = (wBac - nbOndes * eP) / 2
+        nbPts = 0
+
+        decalX = Math.Abs(ptP / 2 / Math.Tan((Math.PI - Math.Atan(hP / dXnerv)) / 2))
+        decalZ = ptP / 2
+
+        decalZaid = (hpg - hP)
+        decalXraid = Math.Abs(ptP / 2 / Math.Tan((Math.PI - Math.Atan(decalZaid / ((RATIOB2R - RATIOB1R) * (eP - Me.b_t)))) / 2))
+
+        '===== SENS ALLER ===============================================================================
+
+        AjoutePoint(-eP / 2, hpg + decalZ, xPts, yPts, nbPts)
+
+        AjoutePoint(-eP / 2 + btraid + decalXraid, hpg + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-eP / 2 + bbRaid + decalXraid, hP + decalZ, xPts, yPts, nbPts)
+
+        AjoutePoint(-b_t / 2 + decalX, hP + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-b_b / 2 + decalX, 0 + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(b_b / 2 - decalX, 0 + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(b_t / 2 - decalX, hP + decalZ, xPts, yPts, nbPts)
+
+        AjoutePoint(eP / 2 - bbRaid - decalXraid, hP + decalZ, xPts, yPts, nbPts)
+        AjoutePoint(eP / 2 - btraid - decalXraid, hpg + decalZ, xPts, yPts, nbPts)
+
+        AjoutePoint(eP / 2, hpg + decalZ, xPts, yPts, nbPts)
+
+        '===== SENS RETOUR ===============================================================================
+
+        AjoutePoint(eP / 2, hpg - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(eP / 2 - btraid + decalXraid, hpg - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(eP / 2 - bbRaid + decalXraid, hP - decalZ, xPts, yPts, nbPts)
+
+        AjoutePoint(b_t / 2 + decalX, hP - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(b_b / 2 + decalX, 0 - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-b_b / 2 - decalX, 0 - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-b_t / 2 - decalX, hP - decalZ, xPts, yPts, nbPts)
+
+        AjoutePoint(-eP / 2 + bbRaid - decalXraid, hP - decalZ, xPts, yPts, nbPts)
+        AjoutePoint(-eP / 2 + btraid - decalXraid, hpg - decalZ, xPts, yPts, nbPts)
+
+        AjoutePoint(-eP / 2, hpg - decalZ, xPts, yPts, nbPts)
+
+    End Sub
+
     Public Sub PrepareContourBacSimple1Nervure(ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+        '--------------------------------------------------------------------------------------------------------------------
+        '   27/06/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------
+        '   Préparation du contour d'une nervure, avec épaisseur, bac non raidi
+        '--------------------------------------------------------------------------------------------------------------------
+        '   xPts, yPts  [S] :   Table des points définissant le contour
+        '   nbPts       [S] :   Nombre de pts dans le contour
+        '--------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 

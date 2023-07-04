@@ -17,16 +17,22 @@ Module Mod_Dessins
 #Region " Dessins pour la définiton de la dalle (FRM_DALLEN) "
 
     Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyDalle As Cls_Dalle,
-                            MySection As cls_Section, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+                            MySection As cls_Section, iSelect As Integer,
+                            ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   26/06/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
         '   Dessin du Bac Acier
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
-        '   MyDalle     [E] :   Dalle à dessiner
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   MyDalle     [E] :   Dalle à dessiner
+        '   MySection   [E] :   Section à laquelle la dalle est rattachée
+        '   iSelect     [E] :   Indice de la cote selectionnée
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+        '   iSelect:    0 épaisseur de la dalle
+        '               1 épaisseur renformis
         '-----------------------------------------------------------------------------------------------
 
         '--> Declarations
@@ -36,6 +42,7 @@ Module Mod_Dessins
         Dim dCar As Double
         Dim lMixte, lEnrob, lLamine As Boolean
         Dim Beff As Decimal
+        Dim BeffG, BeffD As Decimal
 
         Dim ColorLocalEtriers As Color = CouleurArmaNormal
         Dim ColorLocalArma(2) As Color
@@ -45,6 +52,7 @@ Module Mod_Dessins
         Dim ColorArmatures As Color = CouleurArmaNormal
         Const kADJUST As Decimal = 0.95
         Const zREF As Decimal = 0
+        Dim Ha, Bfs As Decimal
 
         '--> Initialisation
 
@@ -52,14 +60,18 @@ Module Mod_Dessins
         lEnrob = MyProjet.Poutres(MyProjet.IndEnCours).Section.lEnrobage
         lLamine = MyProjet.Poutres(MyProjet.IndEnCours).Section.lLamine
 
+        ' A REVOIR ====
         Beff = LargeurDalleDessin(MySection.ProfilA)
+
+        Ha = MySection.ProfilA.ha
+        Bfs = MySection.ProfilA.b_fs
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
 
         xMin = -3 * MySection.ProfilA.b_fs
         xMax = -xMin
 
-        yMin = -MySection.ProfilA.ha
+        yMin = -MySection.ProfilA.ha * 0.15
         yMax = MyDalle.zTop
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
@@ -70,6 +82,8 @@ Module Mod_Dessins
         Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
         ' Béton
         Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+        ' Béton prefabriqué
+        Dim myBrushPref As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.LightGray, CouleurBeton)
         ' Etriers
         Dim myBrushE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
         ' Armatures de l'enrobage
@@ -89,6 +103,8 @@ Module Mod_Dessins
         If lEnrob Then _
         DessinEtriers(myGr, MySection.ProfilA, MySection.enrobage_partiel, MyParAff, myBrushE, zREF)
 
+        '--> Dessins des connecteurs
+
         '--> Dessin de la dalle
 
         If lMixte Then
@@ -97,9 +113,17 @@ Module Mod_Dessins
 
             Select Case MyDalle.type
                 Case Cls_Dalle.Enum_TypeDalle.Pleine
-                    DessinDallePleine(myGr, MyDalle, MySection.ProfilA.ha, MySection.ProfilA.b_fs, MyParAff, myBrushB, Beff)
-                    'Case Cls_Dalle.Enum_TypeDalle.Mixte
-                    '    DessinDalleMixte(MyGr, Section.dalle, BeffRed, Section.ha, Section.b_fs, ZREF, MyParAff, myBrushB)
+                    DessinDallePleine(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+                Case Cls_Dalle.Enum_TypeDalle.Mixte
+                    Select Case MyDalle.Bac.orientation
+                        Case Cls_Bac.Enum_Orientation.Parallele
+                            DessineDalleMixteParallele(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+                        Case Cls_Bac.Enum_Orientation.Perpendiculaire
+
+                    End Select
+                    'DessinDalleMixte(myGr, Section.dalle, BeffRed, Section.ha, Section.b_fs, zREF, MyParAff, myBrushB)
+                Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
+                    DessinDallePreFab(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
             End Select
 
             '# Armatures
@@ -129,7 +153,7 @@ Module Mod_Dessins
 
         '--> Traitement
 
-        BeffRed = 1.5 * Diagonale ' Math.Min(MySection.dalle.Beff, 1.5 * Diagonale)
+        BeffRed = 2 * Diagonale ' Math.Min(MySection.dalle.Beff, 1.5 * Diagonale)
 
         Return BeffRed
 
@@ -3231,6 +3255,590 @@ Module Mod_Dessins
 
     End Sub
 
+    Private Sub DessineDalleMixteParallele(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
+                                           MyBrushDP As Brush, BeffRed As Decimal)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   29/06/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Représentation d'une dalle mixte avec nervure parallèle
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MyDalle     [E] :   
+        '   Ha          [E] :   Hauteur du profilé métallique
+        '   Bfs         [E] :   Largeur de la semelle supérieure
+        '   MyParAffA   [E] :   Paramètres d'affichage   
+        '   MyBrushDP   [E] :   Pinceau pour le remplissage de la dalle
+        '   BeffRed     [E] :   Largeur de dalle réduite pour le dessin 
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xPts(), yPts() As Single
+        Dim nbPts As Integer
+
+        '--> Contour
+
+        PrepareContourDalleMixteParallel(MyDalle, Bfs, BeffRed / 2, BeffRed / 2, xPts, yPts, nbPts)
+
+        RemplirZone(MyGr, MyBrushDP, xPts, yPts, nbPts, MyParAffA, True, True)
+
+    End Sub
+
+    Private Sub PrepareContourDalleMixteParallelOLD(ByVal MyDalle As Cls_Dalle, Bfs As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/05/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Préparaton des points définissant le contour d'une dalle mixte/ nervures parallèles
+        '---------------------------------------------------------------------------------------------------------------------------
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xo, yo As Single
+        Dim eP, hP, bt, bb, hPg As Decimal
+        Dim bEff As Decimal
+        Dim lCont As Boolean = True
+        Dim xPos As Decimal
+        Dim DeltaB As Decimal
+        Dim xStart As Decimal
+        Dim lRaid As Boolean
+
+        '--> Initialisaiton
+
+        nbPts = 0
+        eP = MyDalle.Bac.e_p
+        hP = MyDalle.Bac.h_p
+        hPg = MyDalle.Bac.Hauteur_hpg
+        bb = MyDalle.Bac.b_b
+        bt = MyDalle.Bac.b_t
+        bEff = MyDalle.Beff
+        DeltaB = (bt - bb) / 2
+
+        lRaid = (((hPg - hP) / hP) > 0.05)
+
+        If (MyDalle.Bac.AppuiL = Cls_Bac.EnuConfigLAppui.BacCoupe) Then
+            xStart = Bfs / 2
+        Else
+            xStart = bb / 2
+        End If
+
+        '--> on commence le contour par le côté droit inférieur
+
+        '# point de départ 
+
+        xo = xStart
+        yo = 0
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        xPos = xo
+        lCont = (xPos + eP < bEff / 2)
+
+        '# boucle sur toutes les nervures complètes
+
+        Do While lCont
+
+            xo += DeltaB
+            yo = hP
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+            If lRaid Then
+
+            Else
+                xo += eP - bt
+
+                AjoutePoint(xo, yo, xPts, yPts, nbPts)
+            End If
+
+            xo += DeltaB
+            yo = 0
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+            xo = xPos + eP
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+            xPos += eP
+
+            lCont = (xPos + eP < bEff / 2)
+        Loop
+
+        '# recherche de l'intersection dans la dernière nervure à droite
+
+        '--> Recherche de l'intersection
+
+        If (xPos + DeltaB >= bEff / 2) Then
+            'Intersection au droit de la partie remontante
+
+            xo = bEff / 2
+            yo = hP * (bEff / 2 - xPos) / DeltaB
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        Else
+            lCont = True
+            xo += DeltaB
+            yo = hP
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+            xPos = xo
+        End If
+        If lCont Then
+            If (xPos + eP - bt >= bEff / 2) Then
+                'Intersection au droit de la partie sup
+                lCont = False
+
+                xo = bEff / 2
+                yo = hP
+
+                AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+            Else
+                lCont = True
+                xo += eP - bt
+                yo = hP
+
+                AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                xPos = xo
+            End If
+
+            If lCont Then
+
+                If (xPos + DeltaB >= bEff / 2) Then
+                    'Intersection au droit de la partie descendante
+                    lCont = False
+
+                    xo = bEff / 2
+                    yo = hP - hP * (bEff / 2 - xPos) / DeltaB
+
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                Else
+
+                    lCont = True
+                    xo += DeltaB
+                    yo = 0
+
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                    xPos = xo
+
+                End If
+
+                If lCont Then
+                    'Il ne reste plus que l'intersection dans la partie inférieure restante
+
+                    xo = bEff / 2
+                    yo = 0
+
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                End If
+
+            End If
+
+        End If
+
+        '--> Partie sup de la dalle
+
+        xo = bEff / 2
+        yo = MyDalle.t_d
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        '--> Par symétrie, partie gauche de la dalle
+
+        Dim n0 As Integer = nbPts
+
+        For i = n0 - 1 To 0 Step -1
+
+            AjoutePoint(-xPts(i), yPts(i), xPts, yPts, nbPts)
+
+        Next
+
+    End Sub
+
+    Private Sub PrepareContourDalleMixteParallel(ByVal MyDalle As Cls_Dalle, Bfs As Decimal, BeffG As Decimal, BeffD As Decimal,
+                                                 ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/05/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Préparaton des points définissant le contour d'une dalle mixte/ nervures parallèles
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyDalle     [E] :   Classe dalle
+        '   Bfs         [E] :   Largeur de la semelle sup
+        '   BeffG       [E] :   Largeur de la dalle représentée à l'écran sur le côté gauche
+        '   BeffD       [E] :   Largeur de la dalle représentée à l'écran sur le côté droite
+        '   xPts, yPts  [S] :   Coordonnées de points définissant le contour
+        '   nbPts       [S] :   Nombre de points dans le contour
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xPtsG(), yPtsG() As Single
+        Dim nbPtsG As Integer
+        Dim xo, yo As Single
+
+        '--> Initialisaiton
+
+        nbPts = 0
+
+        '--> on commence le contour par le côté droit inférieur
+
+        PrepareContourDalleMixteParalleInfDroite(MyDalle, Bfs, BeffD, False, xPts, yPts, nbPts)
+
+        '--> Partie supérieure de la dalle
+
+        xo = BeffD
+        yo = MyDalle.t_d
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        xo = -BeffG
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        '--> Partie gauche de la dalle
+
+        PrepareContourDalleMixteParalleInfDroite(MyDalle, Bfs, BeffG, True, xPtsG, yPtsG, nbPtsG)
+
+        For i = nbPtsG - 1 To 0 Step -1
+
+            AjoutePoint(-xPtsG(i), yPtsG(i), xPts, yPts, nbPts)
+
+        Next
+
+    End Sub
+
+    Private Sub PrepareContourDalleMixteParalleInfDroite(ByVal MyDalle As Cls_Dalle, Bfs As Decimal, BeffD As Decimal, lGauche As Boolean,
+                                                         ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/05/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Préparaton des points définissant le contour de la partie inférieur droite
+        '   d'une dalle mixte à nervure parallèle
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyDalle     [E] :   Classe dalle
+        '   BeffD       [E] :   Largeur de la dalle représentée à l'écran sur le côté droite
+        '   lGauche     [E] :   Indique si partie gauche ou droite
+        '   Bfs         [E] :   Largeur de la semelle sup
+        '   xPts, yPts  [S] :   Coordonnées de points définissant le contour
+        '   nbPts       [S] :   Nombre de points dans le contour
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Nota : on utilise cette routine pour le côté gauche par un mirroir / y
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xo, yo As Single
+        Dim eP, hP, bt, bb, hPg As Decimal
+        Dim lCont As Boolean = True
+        Dim xPos As Decimal
+        Dim DeltaB As Decimal
+        Dim xStart As Decimal
+        Dim lRaid As Boolean
+        Dim bSupBac, dXRaid As Decimal
+        Dim bbRaid, btRaid As Decimal
+
+        '--> Initialisaiton
+
+        nbPts = 0
+        eP = MyDalle.Bac.e_p
+        hP = MyDalle.Bac.h_p
+        hPg = MyDalle.Bac.Hauteur_hpg
+        bb = MyDalle.Bac.b_b
+        bt = MyDalle.Bac.b_t
+        DeltaB = (bt - bb) / 2
+
+        lRaid = (((hPg - hP) / hP) > 0.05)
+        If lRaid Then
+            bSupBac = eP - bt
+            bbRaid = Cls_Bac.RATIOB1R * bSupBac
+            btRaid = Cls_Bac.RATIOB2R * bSupBac
+            dXRaid = btRaid - bbRaid
+        End If
+
+        If (MyDalle.Bac.AppuiL = Cls_Bac.EnuConfigLAppui.BacCoupe) Then
+            xStart = Bfs / 2
+        Else
+            xStart = bb / 2
+        End If
+        '# point de départ 
+
+        xo = xStart
+        yo = 0
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        xPos = xo
+        lCont = (xPos + eP < BeffD)
+
+        '# boucle sur toutes les nervures complètes
+
+        Do While lCont
+
+            xo += DeltaB
+            yo = hP
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+            If lRaid Then
+                xo += bSupBac / 2 - bbRaid / 2
+                AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                xo -= dXRaid / 2
+                yo = hPg
+                AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                xo += btRaid
+                AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                xo -= dXRaid / 2
+                yo = hP
+                AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                xo += bSupBac / 2 - bbRaid / 2
+                AjoutePoint(xo, yo, xPts, yPts, nbPts)
+            Else
+                xo += eP - bt
+
+                AjoutePoint(xo, yo, xPts, yPts, nbPts)
+            End If
+
+            xo += DeltaB
+            yo = 0
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+            xo = xPos + eP
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+            xPos += eP
+
+            lCont = (xPos + eP < BeffD / 2)
+        Loop
+
+        '# recherche de l'intersection dans la dernière nervure à droite
+
+        '--> Recherche de l'intersection
+
+        If (xPos + DeltaB >= BeffD) Then
+            'Intersection au droit de la partie remontante
+
+            xo = BeffD
+            yo = hP * (BeffD - xPos) / DeltaB
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        Else
+            lCont = True
+            xo += DeltaB
+            yo = hP
+
+            AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+            xPos = xo
+        End If
+        If lCont Then
+            If lRaid Then
+                If (xPos + (eP - bt - bbRaid) / 2 >= BeffD) Then
+                    'Intersection au droit de la partie sup du bac, à gauche du raidisseur
+                    lCont = False
+
+                    xo = BeffD
+                    yo = hP
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+                Else
+                    lCont = True
+                    xo += (eP - bt - bbRaid) / 2
+                    yo = hP
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                    xo += -dXRaid / 2
+                    yo = hPg
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                    xPos = xo
+                End If
+
+                If (xPos + (btRaid) >= BeffD) Then
+                    'Intersection au droit de la partie sup du raidisseur
+                    lCont = False
+
+                    xo = BeffD
+                    yo = hPg
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+                Else
+                    lCont = True
+                    xo += btRaid
+                    yo = hPg
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                    xo += -dXRaid / 2
+                    yo = hP
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                    xPos = xo
+                End If
+
+                If (xPos + (eP - bt - bbRaid) / 2 >= BeffD) Then
+                    'Intersection au droit de la partie sup du bac, à droite du raidisseur
+                    lCont = False
+
+                    xo = BeffD
+                    yo = hP
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+                Else
+                    lCont = True
+                    xo += (eP - bt - bbRaid) / 2
+                    yo = hP
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                    xPos = xo
+                End If
+
+            Else
+                If (xPos + eP - bt >= BeffD) Then
+                    'Intersection au droit de la partie sup
+                    lCont = False
+
+                    xo = BeffD
+                    yo = hP
+
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                Else
+                    lCont = True
+                    xo += eP - bt
+                    yo = hP
+
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                    xPos = xo
+                End If
+            End If
+
+
+            If lCont Then
+
+                If (xPos + DeltaB >= BeffD) Then
+                    'Intersection au droit de la partie descendante
+                    lCont = False
+
+                    xo = BeffD
+                    yo = hP - hP * (BeffD - xPos) / DeltaB
+
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                Else
+
+                    lCont = True
+                    xo += DeltaB
+                    yo = 0
+
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                    xPos = xo
+
+                End If
+
+                If lCont Then
+                    'Il ne reste plus que l'intersection dans la partie inférieure restante
+
+                    xo = BeffD
+                    yo = 0
+
+                    AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+                End If
+
+            End If
+
+        End If
+
+    End Sub
+
+    Private Sub DessinDallePreFab(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
+                                  MyBrushDP As Brush, MyBrushPref As Brush,
+                                  Optional BeffRed As Decimal = -1)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   29/06/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Représentation d'une dalle pleine partiellement préfabriquée
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MyDalle     [E] :   
+        '   Ha          [E] :   Hauteur du profilé métallique
+        '   Bfs         [E] :   Largeur de la semelle supérieure
+        '   MyParAffA   [E] :   Paramètres d'affichage   
+        '   MyBrushDP   [E] :   Pinceau pour le remplissage de la dalle
+        '   MyBrushPref [E] :   Pinceau pour le remplissage de la prédalle
+        '   BeffRed     [E] :   Largeur de dalle réduite pour le dessin (si -1, on prend la largeur complète)
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Td As Decimal = MyDalle.t_d
+        Dim Tj As Decimal = MyDalle.preDalle_ep - MyDalle.preDalle_tjoint
+        Dim dCar As Decimal = (MyDalle.t_d) / 5
+        Dim lDalleRed As Boolean
+        Dim BeffDes As Decimal = MyDalle.Beff
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim wApp As Decimal = MyDalle.wAppuiPreDalle
+        Dim pred_ep As Decimal = MyDalle.preDalle_ep
+        Dim xo, xe As Decimal
+
+        '--> Initialisation
+
+        If BeffRed = -1 Then
+            lDalleRed = False
+        Else
+            lDalleRed = (BeffRed < MyDalle.Beff)
+        End If
+        If lDalleRed Then BeffDes = BeffRed
+
+        '--> Affichage de la dalle pleine (nécessairement sans renformis)
+
+        AddRectanglePlein(MyGr, MyBrushDP, MyPen, -BeffDes / 2, 0, BeffDes / 2, Td, MyParAffA, True, False)
+
+        '--> Affichage des deux prédalles
+
+        xe = -Bfs / 2 + wApp
+        xo = -BeffDes / 2
+        AddRectanglePlein(MyGr, MyBrushPref, MyPen, xo, 0, xe, pred_ep, MyParAffA, True, False)
+        AddLigne(MyGr, xe, 0, xe, pred_ep, MyParAffA)
+        AddLigne(MyGr, xo, pred_ep, xe, pred_ep, MyParAffA)
+
+        xe = +Bfs / 2 - wApp
+        xo = +BeffDes / 2
+        AddRectanglePlein(MyGr, MyBrushPref, MyPen, xo, 0, xe, pred_ep, MyParAffA, True, False)
+        AddLigne(MyGr, xe, 0, xe, pred_ep, MyParAffA)
+        AddLigne(MyGr, xo, pred_ep, xe, pred_ep, MyParAffA)
+
+        '--> Joint
+
+        Dim CouleurJ As Color = Color.Linen
+        xe = -Bfs / 2 + wApp
+        xo = -BeffDes / 2
+        AddRectanglePlein(MyGr, CouleurJ, xo, 0, xe, Tj, MyParAffA, False)
+        xe = +Bfs / 2 - wApp
+        xo = +BeffDes / 2
+        AddRectanglePlein(MyGr, CouleurJ, xo, 0, xe, Tj, MyParAffA, False)
+
+        '--> Finitions
+
+        xo = -BeffDes / 2
+        xe = -BeffDes / 2
+        AddLigne(MyGr, xe, 0, xe, 0, MyParAffA)
+        AddLigne(MyGr, xe, Td, xe, Td, MyParAffA)
+
+        '--> Fin
+
+        MyPen.Dispose()
+    End Sub
 
     Private Sub DessinDallePleine(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage, MyBrushDP As Brush,
                                   Optional BeffRed As Decimal = -1)
@@ -3274,7 +3882,6 @@ Module Mod_Dessins
         '--> Préparation des points
 
         PrepareContourDallePleine(MyDalle, BeffDes, Bfs, xPts, yPts, nbPts)
-        'DecalePts(yPts, nbPts, -zRef)
 
         '--> Affichage
 
