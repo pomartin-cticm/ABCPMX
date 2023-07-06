@@ -48,8 +48,8 @@ Module Mod_Dessins
         Dim ColorLocalArma(2) As Color
         Dim CouleurBeton As Color = CouleurBetonNormal
         Dim CouleurAcier As Color = CouleurAcierNormal
-        Dim pColorLocalArma(2, 2) As Color
-        Dim ColorArmatures As Color = CouleurArmaNormal
+        'Dim pColorLocalArma(2, 2) As Color
+        Dim ColorArmatures(1) As Color
         Const kADJUST As Decimal = 0.95
         Const zREF As Decimal = 0
         Dim Ha, Bfs As Decimal
@@ -67,12 +67,13 @@ Module Mod_Dessins
         Bfs = MySection.ProfilA.b_fs
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
+        dCar = MyDalle.EpaisseurActive / 5
 
         xMin = -3 * MySection.ProfilA.b_fs
         xMax = -xMin
 
         yMin = -MySection.ProfilA.ha * 0.15
-        yMax = MyDalle.zTop
+        yMax = MyDalle.zTop + dCar
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
@@ -87,7 +88,24 @@ Module Mod_Dessins
         ' Etriers
         Dim myBrushE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
         ' Armatures de l'enrobage
-        Dim myBrushArmaE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, ColorArmatures)
+        Dim myBrushArmaE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurArmaNormal)
+        ' Etriers
+        Dim myBrushA(1) As Brush
+
+        Select Case iSelect
+            Case 100, 101, 102, 103
+                ColorArmatures(0) = CouleurArmaSelect
+                ColorArmatures(1) = CouleurArmaNormal
+            Case 200, 201, 202, 203
+                ColorArmatures(1) = CouleurArmaSelect
+                ColorArmatures(0) = CouleurArmaNormal
+            Case Else
+                ColorArmatures(0) = CouleurArmaNormal
+                ColorArmatures(1) = CouleurArmaNormal
+        End Select
+        'myBrushA(0) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.LightGray, ColorArmatures(0))
+        myBrushA(0) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorArmatures(0), ColorArmatures(0))
+        myBrushA(1) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorArmatures(1), ColorArmatures(1))
 
         '--> Dessin de béton
 
@@ -128,12 +146,186 @@ Module Mod_Dessins
 
             '# Armatures
 
-            'DessinLitArmaDalle(MyGr, MySection.Dalle, BeffRed, 0, MySection.ProfilA.ha, MyParAff, myBrushA)
-            'DessinLitArmaDalle(MyGr, MySection.Dalle, BeffRed, 1, MySection.ProfilA.ha, MyParAff, myBrushA)
+            DessinLitArmaDalle(myGr, MyDalle, Beff, 0, MySection.ProfilA.ha, iSelect, MyParAff, myBrushA(0))
+            DessinLitArmaDalle(myGr, MyDalle, Beff, 1, MySection.ProfilA.ha, iSelect, MyParAff, myBrushA(1))
 
         End If
     End Sub
 
+    Private Sub DessinLitArmaDalle(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, BeffRed As Decimal, iArma As Integer,
+                                   Ha As Decimal, iSelect As Integer,
+                                   MyParAffA As Struc_Affichage, MyBrushArma As Brush)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   02/05/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Représentation d'un lit d'armatures
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        Dim xBOne As Decimal
+
+        DessinLitArmaDalle(MyGr, MyDalle, BeffRed, iArma, Ha, iSelect, MyParAffA, MyBrushArma, xBOne)
+
+    End Sub
+    Private Sub DessinLitArmaDalle(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, BeffRed As Decimal, iArma As Integer,
+                                   Ha As Decimal, iSelect As Integer,
+                                   MyParAffA As Struc_Affichage, MyBrushArma As Brush, ByRef xBOne As Decimal)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   09/05/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Représentation d'un lit d'armatures
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MyDalle     [E] :   Dalle
+        '   BeffRed     [E] :   Largeur de dalle représentée à l'écran
+        '   iArma       [E] :   Indice du lit d'armature
+        '   Ha          [E] :   Hauteur du profilé
+        '   iSelect     [E] :   Indice de la cote sélectionnée
+        '   MyParAffA   [E] :   Paramètres d'affichage
+        '   MyBrishArma [E] :   Pinceau
+        '   xBone       [S] :   
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Beff, Td, Th As Decimal
+        Dim PhiS, EspBar, Zs As Decimal
+        Dim nbBar As Integer
+        Dim xc, yc As Single
+        Dim zTop As Decimal
+        Dim lCote As Boolean
+        Dim xe, ye As Decimal
+        Dim xo, yo As Decimal
+        Dim dCar As Decimal
+
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyColor As Color
+
+        Dim lContour As Boolean = lCONTOURCOTE
+        Dim MyFontNormal As Font = FontBase
+
+        Dim Chaine As String
+
+        '--> Initialisation
+
+        Beff = BeffRed   ' MyDalle.Beff
+        Td = MyDalle.t_d
+        PhiS = MyDalle.LitArma(iArma).PhiS
+        Zs = MyDalle.LitArma(iArma).z_s
+        EspBar = MyDalle.LitArma(iArma).EspBar
+        Th = MyDalle.EpRenformis
+        zTop = MyDalle.zTop
+
+        lCote = (iSelect > (iArma + 1) * 100) And (iSelect < (iArma + 1) * 100 + 99)
+
+        dCar = MyDalle.EpaisseurActive / 5
+
+        '--> Dessin
+
+        If MyDalle.LitArma(iArma).lActive Then
+
+            If (Beff > 2 * EspBar) Or (Beff < EspBar) Then
+
+                nbBar = Math.Floor((Beff) / (2 * EspBar))
+                xc = 0
+                yc = zTop - Zs
+                AddCerclePlein(MyGr, MyBrushArma, xc, yc, PhiS, MyParAffA, True)
+
+                For i As Integer = 1 To nbBar
+                    AddCerclePlein(MyGr, MyBrushArma, xc + (i) * EspBar, yc, PhiS, MyParAffA, True)
+                    AddCerclePlein(MyGr, MyBrushArma, xc - (i) * EspBar, yc, PhiS, MyParAffA, True)
+                Next
+
+                xBOne = 0 - Math.Min(1, nbBar) * EspBar
+            Else
+
+                nbBar = Math.Floor((Beff) / (EspBar))
+
+                For i As Integer = 1 To nbBar
+
+                    xc = -(nbBar - 1) * EspBar / 2 + (i - 1) * EspBar
+                    yc = zTop - Zs
+
+                    AddCerclePlein(MyGr, MyBrushArma, xc, yc, PhiS, MyParAffA, True)
+
+                Next
+
+                xBOne = -(nbBar - 1) * EspBar / 2 + (Math.Floor(nbBar / 2) - 1) * EspBar
+            End If
+
+        End If
+
+        If lCote Then
+
+            '# diametre
+
+            MyColor = StyleCouleur(iSelect, (iArma + 1) * 100 + 1)
+            MyPen.Color = MyColor
+
+            xo = xBOne
+            xe = xo
+
+            yo = zTop - Zs - PhiS / 2
+            ye = yo - dCar
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffA, True, False)
+
+            yo = zTop - Zs + PhiS / 2
+            ye = zTop + dCar
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffA, True, False)
+            Chaine = GetStringNoUnit(PhiS, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            '# Espacement
+
+            MyColor = StyleCouleur(iSelect, (iArma + 1) * 100 + 2)
+            MyPen.Color = MyColor
+
+            xo = xBOne
+            xe = xo + EspBar
+
+            yo = zTop - Zs - PhiS / 2 - dCar
+            ye = yo
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffA, True, True)
+            Chaine = GetStringNoUnit(EspBar, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), ye, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            '# Position
+
+            MyColor = StyleCouleur(iSelect, (iArma + 1) * 100 + 3)
+            MyPen.Color = MyColor
+
+            xo = xBOne + EspBar
+            xe = xo + PhiS * 1.5
+
+            yo = zTop - Zs
+            ye = yo
+
+            AddLigne(MyGr, MyPen, xo, yo, xe, ye, MyParAffA)
+
+            xo = xBOne + EspBar + PhiS * 1.25
+            xe = xo
+
+            yo = zTop - Zs
+            ye = yo - dCar
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffA, True, False)
+
+            yo = zTop - Zs
+            ye = zTop
+
+            AddLigne(MyGr, MyPen, xo, yo, xe, ye, MyParAffA)
+
+            yo = zTop + dCar
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffA, False, True)
+            Chaine = GetStringNoUnit(Zs, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yo, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
+
+    End Sub
 
     Private Function LargeurDalleDessin(Profile As cls_ProfilA) As Decimal
         '-----------------------------------------------------------------------------------------------
@@ -2076,7 +2268,7 @@ Module Mod_Dessins
         'LongueurDalle = MyPoutre.LongueurTotale
         'HauteurDalle = MyPoutre.Dalle.t_d
         dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
-        dCarApp = HauteurPoutre / 2
+        dCarApp = HauteurPoutre / 4
 
         '--> Initialisation des paramètres d'affichage
 
@@ -2194,23 +2386,23 @@ Module Mod_Dessins
             DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
             If i = 1 Then
-                If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrain Then
+                If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                     xo += EpaisseurSemelle / 2
                 End If
 
                 If MyPoutre.lTraveeConsoleGauche Then
-                    If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrain Then
+                    If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                         xo -= EpaisseurSemelle / 2
                     End If
                 End If
 
             ElseIf i = MyPoutre.IndiceTraveeConsoleDroite Then
-                If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrain Then
+                If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                     xo -= EpaisseurSemelle / 2
                 End If
 
                 If MyPoutre.lTraveeConsoleDroite Then
-                    If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrain Then
+                    If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                         xo += EpaisseurSemelle / 2
                     End If
                 End If
@@ -2233,10 +2425,10 @@ Module Mod_Dessins
         For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
 
             Select Case MyPoutre.TypeMaintien(i)
-                Case MyPoutre.EnuTypeMaintiensPoutre.NonRestrain
+                Case MyPoutre.EnuTypeMaintiensPoutre.NotRestrained
                     lCote = False
 
-                Case MyPoutre.EnuTypeMaintiensPoutre.FullyRestrain
+                Case MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained
 
                     lCote = False
 
@@ -2279,7 +2471,7 @@ Module Mod_Dessins
                     AddRectanglePlein(MyGr, MyBrushMaintienSup, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
 
 
-                Case MyPoutre.EnuTypeMaintiensPoutre.PointRestrain
+                Case MyPoutre.EnuTypeMaintiensPoutre.PointRestrained
 
 
                     For Each maintiens As cls_Maintiens In MyPoutre.Maintiens(i)
@@ -2518,14 +2710,9 @@ Module Mod_Dessins
 
                     End If
 
-
             End Select
 
-
-
         End If
-
-
 
     End Sub
 
@@ -2554,13 +2741,12 @@ Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
 
         '-->Déclaration
+
         Dim xMin, xMax As Decimal
         Dim yMin, yMax As Decimal
         Dim dCar, dCarApp As Decimal
         Dim MyParAff As Struc_Affichage
         Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre, EpaisseurSemelle, RayonConge As Decimal
-
-
 
         '--> Initialisations
 
@@ -2643,8 +2829,6 @@ Module Mod_Dessins
 
             End If
 
-
-
         Next
 
     End Sub
@@ -2675,15 +2859,13 @@ Module Mod_Dessins
 
         If MyPoutre.Maintiens(indiceTravee)(MyPoutre.pIndiceMaintienSelectionne).lMaintienSelectionne Then
 
-
             '-->Déclaration
+
             Dim xMin, xMax As Decimal
             Dim yMin, yMax As Decimal
             Dim dCar, dCarApp As Decimal
             Dim MyParAff As Struc_Affichage
             Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre, EpaisseurSemelle, RayonConge As Decimal
-
-
 
             '--> Initialisations
 
@@ -2740,8 +2922,6 @@ Module Mod_Dessins
             Dim x_Loc_max As Decimal
             Dim x_Loc_local As Decimal
 
-
-
             Select Case iSelect
                 Case 0
                     x_Loc_local = xSourisUnivers * MyPoutre.LongueurTravee(indiceTravee) / LongueurConsoleGauche
@@ -2771,8 +2951,6 @@ Module Mod_Dessins
         End If
 
     End Sub
-
-
 
 #End Region
 

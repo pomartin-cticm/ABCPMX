@@ -106,9 +106,7 @@ Public Class Frm_Portees
 
         'On affiche la possibilités de définir des trémies uniquement pour les poutres mixtes
 
-        If MyPoutreLoc.Section.lMixte Then
-
-        Else
+        If Not MyPoutreLoc.lMixte Then
 
             Me.TLPan_Tremies.ColumnStyles(0).Width = 0
             Me.lbl_Tremies.Visible = False

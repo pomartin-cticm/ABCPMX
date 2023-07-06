@@ -74,15 +74,15 @@
     ''' </summary>
     Public Bac As New Cls_Bac
 
-    ''' <summary>
-    ''' Armatures longitudinales supérieur
-    ''' </summary>
-    Public arma_longi_sup As New Cls_Armatures_Longi
+    '''' <summary>
+    '''' Armatures longitudinales supérieur
+    '''' </summary>
+    'Public arma_longi_sup As New Cls_Armatures_Longi
 
-    ''' <summary>
-    ''' Armatures longitudinales inférieur
-    ''' </summary>
-    Public arma_longi_inf As New Cls_Armatures_Longi
+    '''' <summary>
+    '''' Armatures longitudinales inférieur
+    '''' </summary>
+    'Public arma_longi_inf As New Cls_Armatures_Longi
 
     Public LitArma As New List(Of Cls_Armatures_Longi)
 
@@ -110,19 +110,19 @@
     ''' </summary>
     Public Sub Calcul_Proprietes()
 
-        If lArma_Sup Then
-            With arma_longi_sup
-                .n_s = Beff / .EspBar
-                .A_s = .n_s * Math.PI * .PhiS ^ 2 / 4
-            End With
-        End If
+        'If lArma_Sup Then
+        '    With arma_longi_sup
+        '        .n_s = Beff / .EspBar
+        '        .A_s = .n_s * Math.PI * .PhiS ^ 2 / 4
+        '    End With
+        'End If
 
-        If lArma_Inf Then
-            With arma_longi_inf
-                .n_s = Beff / .EspBar
-                .A_s = .n_s * Math.PI * .PhiS ^ 2 / 4
-            End With
-        End If
+        'If lArma_Inf Then
+        '    With arma_longi_inf
+        '        .n_s = Beff / .EspBar
+        '        .A_s = .n_s * Math.PI * .PhiS ^ 2 / 4
+        '    End With
+        'End If
 
     End Sub
 
@@ -226,6 +226,20 @@
         End Get
     End Property
 
+    ''' <summary>
+    ''' Renvoie le nombre de lit d'armatures actif dans la dalle
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property NbLitsArmaActifs As Integer
+        Get
+            Dim Nombre As Integer = 0
+            For i As Integer = 0 To Me.LitArma.Count - 1
+                If Me.LitArma(i).lActive Then Nombre += 1
+            Next
+            Return Nombre
+        End Get
+    End Property
+
 #End Region
 
 #Region " Constructeur "
@@ -243,18 +257,6 @@
         Me.lArma_Inf = True
         Me.lArma_Sup = True
 
-        'Me.acier_armature = 500 * 10 ^ 6
-
-        Me.arma_longi_inf.EspBar = 0.2
-        Me.arma_longi_inf.n_s = 5
-        Me.arma_longi_inf.z_s = 0.015
-        Me.arma_longi_inf.c_s = 0.013
-
-        Me.arma_longi_sup.EspBar = 0.2
-        Me.arma_longi_sup.n_s = 5
-        Me.arma_longi_sup.z_s = 0.015
-        Me.arma_longi_sup.c_s = 0.013
-
         Me.pTheta_h = THETAHDEFAULT
 
         '--> création des deux lits d'armatures 
@@ -262,6 +264,8 @@
         Me.LitArma.Add(New Cls_Armatures_Longi)
 
         Me.LitArma(1).lActive = False
+
+        Me.LitArma(1).z_s = 0.045
 
     End Sub
 
@@ -288,21 +292,21 @@
             Lines.Add("   DBFck         = " & .Fck)
         End With
 
-        With arma_longi_inf
-            Lines.Add("   DABc          = " & .c_s)
-            Lines.Add("   DABd          = " & .PhiS)
-            Lines.Add("   DABn          = " & .n_s)
-            Lines.Add("   DABz          = " & .z_s)
-            Lines.Add("   DABe          = " & .EspBar)
-        End With
+        'With arma_longi_inf
+        '    Lines.Add("   DABc          = " & .c_s)
+        '    Lines.Add("   DABd          = " & .PhiS)
+        '    Lines.Add("   DABn          = " & .n_s)
+        '    Lines.Add("   DABz          = " & .z_s)
+        '    Lines.Add("   DABe          = " & .EspBar)
+        'End With
 
-        With arma_longi_sup
-            Lines.Add("   DAHc          = " & .c_s)
-            Lines.Add("   DAHd          = " & .PhiS)
-            Lines.Add("   DAHn          = " & .n_s)
-            Lines.Add("   DAHz          = " & .z_s)
-            Lines.Add("   DAHe          = " & .EspBar)
-        End With
+        'With arma_longi_sup
+        '    Lines.Add("   DAHc          = " & .c_s)
+        '    Lines.Add("   DAHd          = " & .PhiS)
+        '    Lines.Add("   DAHn          = " & .n_s)
+        '    Lines.Add("   DAHz          = " & .z_s)
+        '    Lines.Add("   DAHe          = " & .EspBar)
+        'End With
 
         '--> Bac acier
         Bac.EcrireFile(Lines)

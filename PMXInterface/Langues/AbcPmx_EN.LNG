@@ -147,7 +147,15 @@ SHEETCUSTOM				= Custom definition
 SHEETING				= Profiled steel sheeting
 SOLIDSLAB				= Solid slab
 TITLE					= Definition of the slab
-
+REINFLAYER1				= First layer
+REINFLAYER2				= Second layer
+ADDLAYER				= Add a layer of reinforcement
+REMOVELAYER				= Remove the second layer of reinforcement
+DIAMETER				= Diameter
+SPACING					= Spacing
+LOCATION				= Location
+FIRSTLAYER				= First layer of reinforcement
+SECONDLAYER				= Second layer of reinforcement
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam
@@ -158,7 +166,7 @@ INTERMEDIATEBEAM		= Intermediate beam
 LEFTCANT				= Left cantilever span
 LEFTOPENING				= Left opening
 MAINSPAN				= Main span
-OPENINGS				= Openings
+OPENINGS				= Slab openings
 RIGHTCANT				= Right cantilever span
 RIGHTOPENING			= Right opening
 SPACINGS				= Spacings

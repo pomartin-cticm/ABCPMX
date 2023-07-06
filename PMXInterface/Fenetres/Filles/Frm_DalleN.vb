@@ -23,8 +23,11 @@ Public Class Frm_DalleN
     Dim strAppuiTDiscontinus As String
     Dim strAppuiLbacUncut As String
     Dim strAppuiLbacCut1, strAppuiLbacCut2 As String
+    Dim strToolTipAddRebar, strToolTipRemoveRebar As String
+    Dim strLitNo(1) As String
 
     Dim iSelect As Integer = -1
+    Dim iLitSelect As Integer = 0       'Indice du lit d'armatures à l'affichage
 
 #End Region
 
@@ -95,6 +98,16 @@ Public Class Frm_DalleN
                 '=== ARMATURES ====================================================================
 
                 Me.lbl_Armatures.Text = Bloc("REBARS")
+                Me.ToolTipDalle.SetToolTip(Me.chk_Lit1, Bloc("REINFLAYER1"))
+                Me.ToolTipDalle.SetToolTip(Me.chk_Lit2, Bloc("REINFLAYER2"))
+                Me.lbl_Diametre.Text = Bloc("DIAMETER")
+                Me.lbl_Espacement.Text = Bloc("SPACING")
+                Me.lbl_zs.Text = Bloc("LOCATION")
+
+                strToolTipAddRebar = Bloc("ADDLAYER")
+                strToolTipRemoveRebar = Bloc("REMOVELAYER")
+                strLitNo(0) = Bloc("FIRSTLAYER")
+                strLitNo(1) = Bloc("SECONDLAYER")
 
                 '=== ACIER DES ARMATURES ==========================================================
 
@@ -127,6 +140,9 @@ Public Class Frm_DalleN
         Me.etq_UnitDim2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim6.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim7.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
         Me.etq_UnitSigma1.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
         Me.etq_UnitModule1.Text = LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
@@ -179,6 +195,7 @@ Public Class Frm_DalleN
     Private Sub RemplirComboAvecTableau(MyCombo As ComboBox, tabValeurs() As String)
         MyCombo.Items.Clear()
         MyCombo.Items.AddRange(tabValeurs)
+
     End Sub
 
     Private Sub AfficherDalleEnCours()
@@ -224,6 +241,12 @@ Public Class Frm_DalleN
             Me.cmb_Acier.SelectedIndex = 0
         End If
         MAJI_ProprietesAcier()
+
+        '--> Armatures
+
+        MAJI_BOArmatures()
+        MAJI_StatutBOArma()
+        AfficherLitEncours()
 
     End Sub
 
@@ -281,6 +304,38 @@ Public Class Frm_DalleN
         Me.txt_Fck.Text = GetStringNoUnit(MyDalleLoc.beton.Fck, Enu_TypeVariable.Contrainte)
         Me.txt_Ecm.Text = GetStringNoUnit(MyDalleLoc.beton.Ecm, Enu_TypeVariable.ModuleY)
 
+    End Sub
+
+    Private Sub MAJI_BOArmatures()
+        '-------------------------------------------------------------------------------------
+        '   06/07/2023 - MAJ de la barre d'outils des armatures en fonction du nombre de lit
+        '-------------------------------------------------------------------------------------
+
+        Select Case MyDalleLoc.NbLitsArmaActifs
+            Case 1
+                Me.TLpan_ChoixLit.ColumnStyles(1).Width = 0
+                Me.chk_AjouterSupprimerLit.Image = imgList_BOArma.Images("Ajouter")
+                Me.ToolTipDalle.SetToolTip(Me.chk_AjouterSupprimerLit, strToolTipAddRebar)
+                Me.chk_Lit2.Visible = False
+            Case 2
+                Me.TLpan_ChoixLit.ColumnStyles(1).Width = 46
+                Me.chk_AjouterSupprimerLit.Image = imgList_BOArma.Images("Supprimer")
+                Me.ToolTipDalle.SetToolTip(Me.chk_AjouterSupprimerLit, strToolTipRemoveRebar)
+                Me.chk_Lit2.Visible = True
+        End Select
+
+    End Sub
+
+    Private Sub AfficherLitEncours()
+
+        Me.lbl_LitNo.Text = strLitNo(iLitSelect)
+        Me.txt_PhiS.Text = GetStringInUnit(MyDalleLoc.LitArma(iLitSelect).PhiS, Enu_TypeVariable.Dimension, 4, 3, False)
+        Me.txt_esp.Text = GetStringInUnit(MyDalleLoc.LitArma(iLitSelect).EspBar, Enu_TypeVariable.Dimension, 4, 3, False)
+        Me.txt_zs.Text = GetStringInUnit(MyDalleLoc.LitArma(iLitSelect).z_s, Enu_TypeVariable.Dimension, 4, 3, False)
+
+        Me.img_esp.Invalidate()
+        Me.img_PhiS.Invalidate()
+        Me.img_zs.Invalidate()
     End Sub
 
 #End Region
@@ -453,6 +508,81 @@ Public Class Frm_DalleN
 
 #End Region
 
+#Region " Evènements sur la BO Armatures + évènements saisie "
+
+    Private Sub BOArma_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Lit2.CheckedChanged, chk_Lit1.CheckedChanged
+
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.chk_Lit1.Name : iLitSelect = 0 : iSelect = 100
+            Case Me.chk_Lit2.Name : iLitSelect = 1 : iSelect = 200
+        End Select
+
+        AfficherLitEncours()
+        MAJI_StatutBOArma()
+        Me.img_Dalle.Invalidate()
+    End Sub
+
+    Private Sub MAJI_StatutBOArma()
+        Dim lBuildBack As Boolean = lBuild
+        lBuild = True
+
+        Me.chk_Lit1.Checked = (iLitSelect = 0)
+        Me.chk_Lit2.Checked = (iLitSelect = 1)
+
+        Me.chk_AjouterSupprimerLit.Checked = False
+
+        lBuild = lBuildBack
+    End Sub
+
+    Private Sub SaisieArma(sender As Object, e As EventArgs) Handles txt_zs.TextChanged, txt_PhiS.TextChanged, txt_esp.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim Valeur As Decimal
+
+        If VerificationSaisie(sender, Valeur) Then
+
+            Select Case sender.name
+
+                Case Me.txt_PhiS.Name
+                    MyDalleLoc.LitArma(iLitSelect).PhiS = Valeur
+
+                Case Me.txt_esp.Name
+                    MyDalleLoc.LitArma(iLitSelect).EspBar = Valeur
+
+                Case Me.txt_zs.Name
+                    MyDalleLoc.LitArma(iLitSelect).z_s = Valeur
+
+            End Select
+
+            Me.img_Dalle.Invalidate()
+        End If
+
+    End Sub
+
+    Private Sub chk_AjouterSupprimerLit_CheckedChanged(sender As Object, e As EventArgs) Handles chk_AjouterSupprimerLit.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Select Case iLitSelect
+            Case 0
+                '# Cas où on ajoute un lit = on sélectionne le second (créé)
+                MyDalleLoc.LitArma(1).lActive = True
+                iLitSelect = 1 : iSelect = 200
+            Case 1
+                '# Cas où on supprime le second lit : on sélectionne le premier
+                MyDalleLoc.LitArma(1).lActive = False
+                iLitSelect = 0 : iSelect = 100
+        End Select
+
+        Me.img_Dalle.Invalidate()
+        MAJI_BOArmatures()
+        MAJI_StatutBOArma()
+        AfficherLitEncours()
+
+    End Sub
+#End Region
+
 #Region " Evènements "
 
     Private Sub btn_ModifierBac_Click(sender As Object, e As EventArgs) Handles btn_ModifierBac.Click, txt_BacNom.Click, img_Bac.Click
@@ -469,19 +599,26 @@ Public Class Frm_DalleN
         Me.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_Hd.Leave
+    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_Hd.Leave, txt_zs.Leave, txt_PhiS.Leave, txt_esp.Leave
         If lBuild Then Exit Sub
         iSelect = -1
         Me.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Enter, txt_Hd.Enter
+    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Enter, txt_Hd.Enter, txt_zs.Enter, txt_PhiS.Enter, txt_esp.Enter
         If lBuild Then Exit Sub
         Select Case sender.name
             Case Me.txt_Hd.Name
                 iSelect = 0
             Case Me.txt_Hh.Name
                 iSelect = 1
+            Case Me.txt_PhiS.Name
+                iSelect = (iLitSelect + 1) * 100 + 1
+            Case Me.txt_esp.Name
+                iSelect = (iLitSelect + 1) * 100 + 2
+            Case Me.txt_zs.Name
+                iSelect = (iLitSelect + 1) * 100 + 3
+
         End Select
         Me.img_Dalle.Invalidate()
     End Sub
@@ -623,7 +760,6 @@ Public Class Frm_DalleN
 
         lBuild = False
 
-
     End Sub
 
 
@@ -644,12 +780,32 @@ Public Class Frm_DalleN
 
         Const TDMAXI As Decimal = 0.5
         Const TDMINI As Decimal = 0.05
+        Const PHIMIN As Decimal = 0.003
+        Const PHIMAX As Decimal = 0.04
+        Const ESPMIN As Decimal = 0.05
+        Const ESPMAX As Decimal = 0.5
+        Const ZMIN As Decimal = 0.02
 
         Select Case MyTxt.Name
             Case Me.txt_Hd.Name
 
                 ValMin = TDMINI / kUnit
                 ValMax = TDMAXI / kUnit
+
+            Case Me.txt_PhiS.Name
+
+                ValMin = PHIMIN / kUnit
+                ValMax = PHIMAX / kUnit
+
+            Case Me.txt_esp.Name
+
+                ValMin = espMIN / kUnit
+                ValMax = ESPMAX / kUnit
+
+            Case Me.txt_zs.Name
+
+                ValMin = ZMIN / kUnit
+                ValMax = (MyDalleLoc.EpaisseurActive - ZMIN) / kUnit
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -719,7 +875,7 @@ Public Class Frm_DalleN
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles Img_Hd.Paint, img_Fy.Paint, img_Fck.Paint, img_Ecm.Paint, img_Hp.Paint, Img_Hh.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles Img_Hd.Paint, img_Fy.Paint, img_Fck.Paint, img_Ecm.Paint, img_Hp.Paint, Img_Hh.Paint, img_zs.Paint, img_PhiS.Paint, img_esp.Paint
 
         '--> Déclarations
 
@@ -760,6 +916,16 @@ Public Class Frm_DalleN
             Case Me.img_Hp.Name
                 strSymbol = "h"
                 strIndice = "p"
+            Case Me.img_esp.Name
+                strSymbol = "e"
+                strIndice = "s" & (iLitSelect + 1).ToString
+            Case Me.img_PhiS.Name
+                strSymbol = "f"
+                strIndice = "s" & (iLitSelect + 1).ToString
+                lGrec = True
+            Case Me.img_zs.Name
+                strSymbol = "z"
+                strIndice = "s" & (iLitSelect + 1).ToString
 
         End Select
 

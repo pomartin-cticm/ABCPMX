@@ -22,9 +22,9 @@
     End Enum
 
     Enum EnuTypeMaintiensPoutre
-        NonRestrain
-        FullyRestrain
-        PointRestrain
+        NotRestrained
+        FullyRestrained
+        PointRestrained
     End Enum
 
 #End Region
@@ -36,10 +36,10 @@
     ''' </summary>
     Public Label As String
 
-    ''' <summary>
-    ''' Type de section de la poutre
-    ''' </summary>
-    Public TypeSection As cls_Section.Enum_TypeSection
+    '''' <summary>
+    '''' Type de section de la poutre
+    '''' </summary>
+    'Public TypeSection As cls_Section.Enum_TypeSection
 
     ''' <summary>
     ''' Indique si présence d'une travée en console à gauche
@@ -233,7 +233,7 @@
         ReDim TypeMaintien(pNbTravees + 2)
 
         For i As Integer = 0 To TypeMaintien.Length - 1
-            TypeMaintien(i) = EnuTypeMaintiensPoutre.NonRestrain
+            TypeMaintien(i) = EnuTypeMaintiensPoutre.NotRestrained
         Next
 
         For i As Integer = 0 To Maintiens.Length - 1
@@ -282,6 +282,39 @@
 #End Region
 
 #Region " Outils divers "
+
+    ''' <summary>
+    ''' Type de section de la poutre
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property TypeSection As cls_Section.Enum_TypeSection
+        Get
+            Return Me.Section.typeSection
+        End Get
+        Set(value As cls_Section.Enum_TypeSection)
+            Me.Section.typeSection = value
+        End Set
+    End Property
+
+    ''' <summary>
+    ''' Indique si poutre mixte
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lMixte As Boolean
+        Get
+            Return Me.Section.lMixte
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Indique si poutre avec enrobage partiel
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lEnrobage As Boolean
+        Get
+            Return Me.Section.lEnrobage
+        End Get
+    End Property
 
     ''' <summary>
     ''' Mise à jour des paramètres après modifications

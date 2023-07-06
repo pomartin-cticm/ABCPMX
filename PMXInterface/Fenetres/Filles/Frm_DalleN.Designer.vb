@@ -42,6 +42,25 @@ Partial Class Frm_DalleN
         Me.lbl_ClasseA = New System.Windows.Forms.Label()
         Me.lbl_Acier = New System.Windows.Forms.Label()
         Me.pan_Armatures = New System.Windows.Forms.Panel()
+        Me.pan_DonneesArma = New System.Windows.Forms.Panel()
+        Me.lbl_LitNo = New System.Windows.Forms.Label()
+        Me.txt_zs = New System.Windows.Forms.TextBox()
+        Me.lbl_zs = New System.Windows.Forms.Label()
+        Me.etq_UnitDim6 = New System.Windows.Forms.Label()
+        Me.img_zs = New System.Windows.Forms.PictureBox()
+        Me.txt_esp = New System.Windows.Forms.TextBox()
+        Me.lbl_Espacement = New System.Windows.Forms.Label()
+        Me.etq_UnitDim5 = New System.Windows.Forms.Label()
+        Me.img_esp = New System.Windows.Forms.PictureBox()
+        Me.txt_PhiS = New System.Windows.Forms.TextBox()
+        Me.lbl_Diametre = New System.Windows.Forms.Label()
+        Me.etq_UnitDim7 = New System.Windows.Forms.Label()
+        Me.img_PhiS = New System.Windows.Forms.PictureBox()
+        Me.pan_ChoixLit = New System.Windows.Forms.Panel()
+        Me.TLpan_ChoixLit = New System.Windows.Forms.TableLayoutPanel()
+        Me.chk_AjouterSupprimerLit = New System.Windows.Forms.CheckBox()
+        Me.chk_Lit2 = New System.Windows.Forms.CheckBox()
+        Me.chk_Lit1 = New System.Windows.Forms.CheckBox()
         Me.lbl_Armatures = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Bac = New System.Windows.Forms.Panel()
@@ -92,6 +111,8 @@ Partial Class Frm_DalleN
         Me.cmb_TypeDalle = New System.Windows.Forms.ComboBox()
         Me.lbl_General = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.imgList_BOArma = New System.Windows.Forms.ImageList(Me.components)
+        Me.ToolTipDalle = New System.Windows.Forms.ToolTip(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -102,6 +123,13 @@ Partial Class Frm_DalleN
         Me.TLpan_Droite.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Armatures.SuspendLayout()
+        Me.pan_DonneesArma.SuspendLayout()
+        CType(Me.img_zs, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_esp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_ChoixLit.SuspendLayout()
+        Me.TLpan_ChoixLit.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.pan_Bac.SuspendLayout()
         CType(Me.img_Hp, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -345,12 +373,225 @@ Partial Class Frm_DalleN
         '
         Me.pan_Armatures.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Armatures.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Armatures.Controls.Add(Me.pan_DonneesArma)
+        Me.pan_Armatures.Controls.Add(Me.pan_ChoixLit)
         Me.pan_Armatures.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Armatures.Location = New System.Drawing.Point(0, 30)
         Me.pan_Armatures.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Armatures.Name = "pan_Armatures"
         Me.pan_Armatures.Size = New System.Drawing.Size(292, 164)
         Me.pan_Armatures.TabIndex = 7
+        '
+        'pan_DonneesArma
+        '
+        Me.pan_DonneesArma.Controls.Add(Me.lbl_LitNo)
+        Me.pan_DonneesArma.Controls.Add(Me.txt_zs)
+        Me.pan_DonneesArma.Controls.Add(Me.lbl_zs)
+        Me.pan_DonneesArma.Controls.Add(Me.etq_UnitDim6)
+        Me.pan_DonneesArma.Controls.Add(Me.img_zs)
+        Me.pan_DonneesArma.Controls.Add(Me.txt_esp)
+        Me.pan_DonneesArma.Controls.Add(Me.lbl_Espacement)
+        Me.pan_DonneesArma.Controls.Add(Me.etq_UnitDim5)
+        Me.pan_DonneesArma.Controls.Add(Me.img_esp)
+        Me.pan_DonneesArma.Controls.Add(Me.txt_PhiS)
+        Me.pan_DonneesArma.Controls.Add(Me.lbl_Diametre)
+        Me.pan_DonneesArma.Controls.Add(Me.etq_UnitDim7)
+        Me.pan_DonneesArma.Controls.Add(Me.img_PhiS)
+        Me.pan_DonneesArma.Location = New System.Drawing.Point(-1, 58)
+        Me.pan_DonneesArma.Name = "pan_DonneesArma"
+        Me.pan_DonneesArma.Size = New System.Drawing.Size(291, 100)
+        Me.pan_DonneesArma.TabIndex = 1
+        '
+        'lbl_LitNo
+        '
+        Me.lbl_LitNo.AutoSize = True
+        Me.lbl_LitNo.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_LitNo.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_LitNo.Location = New System.Drawing.Point(12, 9)
+        Me.lbl_LitNo.Name = "lbl_LitNo"
+        Me.lbl_LitNo.Size = New System.Drawing.Size(48, 13)
+        Me.lbl_LitNo.TabIndex = 85
+        Me.lbl_LitNo.Text = "lbl_LitNo"
+        Me.lbl_LitNo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txt_zs
+        '
+        Me.txt_zs.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_zs.Location = New System.Drawing.Point(184, 78)
+        Me.txt_zs.Name = "txt_zs"
+        Me.txt_zs.Size = New System.Drawing.Size(58, 20)
+        Me.txt_zs.TabIndex = 83
+        '
+        'lbl_zs
+        '
+        Me.lbl_zs.AutoSize = True
+        Me.lbl_zs.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_zs.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_zs.Location = New System.Drawing.Point(12, 81)
+        Me.lbl_zs.Name = "lbl_zs"
+        Me.lbl_zs.Size = New System.Drawing.Size(33, 13)
+        Me.lbl_zs.TabIndex = 81
+        Me.lbl_zs.Text = "lbl_zs"
+        Me.lbl_zs.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'etq_UnitDim6
+        '
+        Me.etq_UnitDim6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim6.AutoSize = True
+        Me.etq_UnitDim6.Location = New System.Drawing.Point(248, 81)
+        Me.etq_UnitDim6.Name = "etq_UnitDim6"
+        Me.etq_UnitDim6.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim6.TabIndex = 82
+        Me.etq_UnitDim6.Text = "mm"
+        '
+        'img_zs
+        '
+        Me.img_zs.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_zs.Location = New System.Drawing.Point(148, 78)
+        Me.img_zs.Name = "img_zs"
+        Me.img_zs.Size = New System.Drawing.Size(37, 20)
+        Me.img_zs.TabIndex = 84
+        Me.img_zs.TabStop = False
+        '
+        'txt_esp
+        '
+        Me.txt_esp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_esp.Location = New System.Drawing.Point(184, 54)
+        Me.txt_esp.Name = "txt_esp"
+        Me.txt_esp.Size = New System.Drawing.Size(58, 20)
+        Me.txt_esp.TabIndex = 79
+        '
+        'lbl_Espacement
+        '
+        Me.lbl_Espacement.AutoSize = True
+        Me.lbl_Espacement.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Espacement.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Espacement.Location = New System.Drawing.Point(12, 57)
+        Me.lbl_Espacement.Name = "lbl_Espacement"
+        Me.lbl_Espacement.Size = New System.Drawing.Size(82, 13)
+        Me.lbl_Espacement.TabIndex = 77
+        Me.lbl_Espacement.Text = "lbl_Espacement"
+        Me.lbl_Espacement.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'etq_UnitDim5
+        '
+        Me.etq_UnitDim5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim5.AutoSize = True
+        Me.etq_UnitDim5.Location = New System.Drawing.Point(248, 57)
+        Me.etq_UnitDim5.Name = "etq_UnitDim5"
+        Me.etq_UnitDim5.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim5.TabIndex = 78
+        Me.etq_UnitDim5.Text = "mm"
+        '
+        'img_esp
+        '
+        Me.img_esp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_esp.Location = New System.Drawing.Point(148, 54)
+        Me.img_esp.Name = "img_esp"
+        Me.img_esp.Size = New System.Drawing.Size(37, 20)
+        Me.img_esp.TabIndex = 80
+        Me.img_esp.TabStop = False
+        '
+        'txt_PhiS
+        '
+        Me.txt_PhiS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_PhiS.Location = New System.Drawing.Point(184, 30)
+        Me.txt_PhiS.Name = "txt_PhiS"
+        Me.txt_PhiS.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PhiS.TabIndex = 75
+        '
+        'lbl_Diametre
+        '
+        Me.lbl_Diametre.AutoSize = True
+        Me.lbl_Diametre.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Diametre.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Diametre.Location = New System.Drawing.Point(12, 33)
+        Me.lbl_Diametre.Name = "lbl_Diametre"
+        Me.lbl_Diametre.Size = New System.Drawing.Size(65, 13)
+        Me.lbl_Diametre.TabIndex = 73
+        Me.lbl_Diametre.Text = "lbl_Diametre"
+        Me.lbl_Diametre.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'etq_UnitDim7
+        '
+        Me.etq_UnitDim7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim7.AutoSize = True
+        Me.etq_UnitDim7.Location = New System.Drawing.Point(248, 33)
+        Me.etq_UnitDim7.Name = "etq_UnitDim7"
+        Me.etq_UnitDim7.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim7.TabIndex = 74
+        Me.etq_UnitDim7.Text = "mm"
+        '
+        'img_PhiS
+        '
+        Me.img_PhiS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_PhiS.Location = New System.Drawing.Point(148, 30)
+        Me.img_PhiS.Name = "img_PhiS"
+        Me.img_PhiS.Size = New System.Drawing.Size(37, 20)
+        Me.img_PhiS.TabIndex = 76
+        Me.img_PhiS.TabStop = False
+        '
+        'pan_ChoixLit
+        '
+        Me.pan_ChoixLit.Controls.Add(Me.TLpan_ChoixLit)
+        Me.pan_ChoixLit.Location = New System.Drawing.Point(10, 10)
+        Me.pan_ChoixLit.Name = "pan_ChoixLit"
+        Me.pan_ChoixLit.Size = New System.Drawing.Size(269, 45)
+        Me.pan_ChoixLit.TabIndex = 0
+        '
+        'TLpan_ChoixLit
+        '
+        Me.TLpan_ChoixLit.ColumnCount = 5
+        Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
+        Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
+        Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
+        Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
+        Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLpan_ChoixLit.Controls.Add(Me.chk_Lit2, 0, 0)
+        Me.TLpan_ChoixLit.Controls.Add(Me.chk_Lit1, 0, 0)
+        Me.TLpan_ChoixLit.Controls.Add(Me.chk_AjouterSupprimerLit, 4, 0)
+        Me.TLpan_ChoixLit.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_ChoixLit.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_ChoixLit.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_ChoixLit.Name = "TLpan_ChoixLit"
+        Me.TLpan_ChoixLit.RowCount = 1
+        Me.TLpan_ChoixLit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_ChoixLit.Size = New System.Drawing.Size(269, 45)
+        Me.TLpan_ChoixLit.TabIndex = 0
+        '
+        'chk_AjouterSupprimerLit
+        '
+        Me.chk_AjouterSupprimerLit.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_AjouterSupprimerLit.Image = CType(resources.GetObject("chk_AjouterSupprimerLit.Image"), System.Drawing.Image)
+        Me.chk_AjouterSupprimerLit.Location = New System.Drawing.Point(223, 0)
+        Me.chk_AjouterSupprimerLit.Margin = New System.Windows.Forms.Padding(0)
+        Me.chk_AjouterSupprimerLit.Name = "chk_AjouterSupprimerLit"
+        Me.chk_AjouterSupprimerLit.Size = New System.Drawing.Size(44, 44)
+        Me.chk_AjouterSupprimerLit.TabIndex = 3
+        Me.chk_AjouterSupprimerLit.UseVisualStyleBackColor = True
+        '
+        'chk_Lit2
+        '
+        Me.chk_Lit2.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_Lit2.Image = CType(resources.GetObject("chk_Lit2.Image"), System.Drawing.Image)
+        Me.chk_Lit2.Location = New System.Drawing.Point(46, 0)
+        Me.chk_Lit2.Margin = New System.Windows.Forms.Padding(0)
+        Me.chk_Lit2.Name = "chk_Lit2"
+        Me.chk_Lit2.Size = New System.Drawing.Size(44, 44)
+        Me.chk_Lit2.TabIndex = 2
+        Me.chk_Lit2.UseVisualStyleBackColor = True
+        '
+        'chk_Lit1
+        '
+        Me.chk_Lit1.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_Lit1.Image = CType(resources.GetObject("chk_Lit1.Image"), System.Drawing.Image)
+        Me.chk_Lit1.Location = New System.Drawing.Point(0, 0)
+        Me.chk_Lit1.Margin = New System.Windows.Forms.Padding(0)
+        Me.chk_Lit1.Name = "chk_Lit1"
+        Me.chk_Lit1.Size = New System.Drawing.Size(44, 44)
+        Me.chk_Lit1.TabIndex = 1
+        Me.chk_Lit1.UseVisualStyleBackColor = True
         '
         'lbl_Armatures
         '
@@ -916,6 +1157,13 @@ Partial Class Frm_DalleN
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'imgList_BOArma
+        '
+        Me.imgList_BOArma.ImageStream = CType(resources.GetObject("imgList_BOArma.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imgList_BOArma.TransparentColor = System.Drawing.Color.Transparent
+        Me.imgList_BOArma.Images.SetKeyName(0, "Ajouter")
+        Me.imgList_BOArma.Images.SetKeyName(1, "Supprimer")
+        '
         'Frm_DalleN
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -937,6 +1185,14 @@ Partial Class Frm_DalleN
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Armatures.ResumeLayout(False)
+        Me.pan_DonneesArma.ResumeLayout(False)
+        Me.pan_DonneesArma.PerformLayout()
+        CType(Me.img_zs, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_esp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_ChoixLit.ResumeLayout(False)
+        Me.TLpan_ChoixLit.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
         Me.pan_Bac.ResumeLayout(False)
@@ -1031,4 +1287,25 @@ Partial Class Frm_DalleN
     Friend WithEvents rtxt_Configuration As RichTextBox
     Friend WithEvents chk_L_PA1 As CheckBox
     Friend WithEvents chk_L_PA2 As CheckBox
+    Friend WithEvents pan_ChoixLit As Panel
+    Friend WithEvents TLpan_ChoixLit As TableLayoutPanel
+    Friend WithEvents chk_AjouterSupprimerLit As CheckBox
+    Friend WithEvents chk_Lit2 As CheckBox
+    Friend WithEvents chk_Lit1 As CheckBox
+    Friend WithEvents imgList_BOArma As ImageList
+    Friend WithEvents pan_DonneesArma As Panel
+    Friend WithEvents txt_zs As TextBox
+    Friend WithEvents lbl_zs As Label
+    Friend WithEvents etq_UnitDim6 As Label
+    Friend WithEvents img_zs As PictureBox
+    Friend WithEvents txt_esp As TextBox
+    Friend WithEvents lbl_Espacement As Label
+    Friend WithEvents etq_UnitDim5 As Label
+    Friend WithEvents img_esp As PictureBox
+    Friend WithEvents lbl_Diametre As Label
+    Friend WithEvents etq_UnitDim7 As Label
+    Friend WithEvents img_PhiS As PictureBox
+    Friend WithEvents txt_PhiS As TextBox
+    Friend WithEvents ToolTipDalle As ToolTip
+    Friend WithEvents lbl_LitNo As Label
 End Class

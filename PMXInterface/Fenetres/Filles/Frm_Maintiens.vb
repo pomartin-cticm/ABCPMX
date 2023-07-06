@@ -124,7 +124,6 @@ Public Class Frm_Maintiens
 
     Private Sub InitialiserVariables()
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
-
     End Sub
 
     Private Sub GestionLangues()
@@ -220,13 +219,13 @@ Public Class Frm_Maintiens
 
     Private Sub AfficherPoutreEnCours()
         Select Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2)
-            Case MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
                 rad_NonRestrain.Checked = True
 
-            Case MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrain
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
                 rad_FullyRestrain.Checked = True
 
-            Case MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrain
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
                 rad_PointRestrain.Checked = True
         End Select
 
@@ -325,52 +324,52 @@ Public Class Frm_Maintiens
 
             lMouseOnCote = False
 
-        If Not positionCotesInferieuresDessin Is Nothing Then
-            For i As Integer = 0 To positionCotesInferieuresDessin.GetLength(0) - 1
+            If Not positionCotesInferieuresDessin Is Nothing Then
+                For i As Integer = 0 To positionCotesInferieuresDessin.GetLength(0) - 1
 
-                If (Math.Abs(positionCotesInferieuresDessin(i, 0) - X_Mousse) <= txt_Cotations.Width / 2) And (Math.Abs(positionCotesInferieuresDessin(i, 1) - Y_Mousse) <= txt_Cotations.Height / 2) Then
-                    lMouseOnCote = True
-                    Exit For
-                End If
-
-            Next
-        End If
-
-        'Observe si la souris se trouve sur une poignée de maintien, auquel cas on change la souris avec un curseur personnalisé;  ou sur un maintien de semelle sup ou inf, auquel cas on change la souris avec un curseur main
-
-        lMouseOnPoigneeMaintien = False
-        lMouseOnMaintien = False
-
-        If Not positionMaintiensDessin Is Nothing Then
-            For i As Integer = 0 To positionMaintiensDessin.GetLength(0) - 1
-
-                If Math.Abs(positionMaintiensDessin(i, 0) - X_Mousse) <= EpaisseurSemelleDessin Then
-                    If (Math.Abs((positionMaintiensDessin(i, 1) + positionMaintiensDessin(i, 2)) / 2 - Y_Mousse) <= EpaisseurSemelleDessin) Then
-                        lMouseOnPoigneeMaintien = True
-                        Exit For
-                    ElseIf (Math.Abs(positionMaintiensDessin(i, 1) - Y_Mousse) <= EpaisseurSemelleDessin) Or (Math.Abs(positionMaintiensDessin(i, 2) - Y_Mousse) <= EpaisseurSemelleDessin) Then
-                        lMouseOnMaintien = True
+                    If (Math.Abs(positionCotesInferieuresDessin(i, 0) - X_Mousse) <= txt_Cotations.Width / 2) And (Math.Abs(positionCotesInferieuresDessin(i, 1) - Y_Mousse) <= txt_Cotations.Height / 2) Then
+                        lMouseOnCote = True
                         Exit For
                     End If
 
-                End If
+                Next
+            End If
 
-            Next
-        End If
+            'Observe si la souris se trouve sur une poignée de maintien, auquel cas on change la souris avec un curseur personnalisé;  ou sur un maintien de semelle sup ou inf, auquel cas on change la souris avec un curseur main
 
-        'Modification du curseur en fonction de ce que survole la souris
+            lMouseOnPoigneeMaintien = False
+            lMouseOnMaintien = False
 
-        If lMouseOnPoigneeMaintien Then
-            Me.img_Maintiens.Cursor = MyCursor
-        ElseIf lMouseOnCote Or lMouseOnMaintien Then
-            Me.img_Maintiens.Cursor = Cursors.Hand
-        Else
-            Me.img_Maintiens.Cursor = Cursors.Default
-        End If
+            If Not positionMaintiensDessin Is Nothing Then
+                For i As Integer = 0 To positionMaintiensDessin.GetLength(0) - 1
+
+                    If Math.Abs(positionMaintiensDessin(i, 0) - X_Mousse) <= EpaisseurSemelleDessin Then
+                        If (Math.Abs((positionMaintiensDessin(i, 1) + positionMaintiensDessin(i, 2)) / 2 - Y_Mousse) <= EpaisseurSemelleDessin) Then
+                            lMouseOnPoigneeMaintien = True
+                            Exit For
+                        ElseIf (Math.Abs(positionMaintiensDessin(i, 1) - Y_Mousse) <= EpaisseurSemelleDessin) Or (Math.Abs(positionMaintiensDessin(i, 2) - Y_Mousse) <= EpaisseurSemelleDessin) Then
+                            lMouseOnMaintien = True
+                            Exit For
+                        End If
+
+                    End If
+
+                Next
+            End If
+
+            'Modification du curseur en fonction de ce que survole la souris
+
+            If lMouseOnPoigneeMaintien Then
+                Me.img_Maintiens.Cursor = MyCursor
+            ElseIf lMouseOnCote Or lMouseOnMaintien Then
+                Me.img_Maintiens.Cursor = Cursors.Hand
+            Else
+                Me.img_Maintiens.Cursor = Cursors.Default
+            End If
 
 
 
-        'Si la souris bouge alors que le clique est maintenu, et si on est au droit d'un maintien, alors celui-ci peut être déplacé
+            'Si la souris bouge alors que le clique est maintenu, et si on est au droit d'un maintien, alors celui-ci peut être déplacé
 
 
         End If
@@ -528,11 +527,11 @@ Public Class Frm_Maintiens
         End Select
 
         Select Case True
-            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
+            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
                 rad_NonRestrain.Checked = True
-            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrain
+            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
                 rad_FullyRestrain.Checked = True
-            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrain
+            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
                 rad_PointRestrain.Checked = True
         End Select
 
@@ -611,11 +610,11 @@ Public Class Frm_Maintiens
 
         Select Case True
             Case rad_NonRestrain.Checked
-                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NonRestrain
+                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
             Case rad_FullyRestrain.Checked
-                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrain
+                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
             Case rad_PointRestrain.Checked
-                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrain
+                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
         End Select
 
         MAJ_pan_ControlDessin(rad_PointRestrain.Checked)
