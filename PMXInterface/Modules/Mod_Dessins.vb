@@ -1470,6 +1470,11 @@ Module Mod_Dessins
         '   iSelect     [E] :   Indique quel est la travée sélectionnée
         '   lCote       [E] :   Indique si affichage de la cote
         '------------------------------------------------------------------------------------------------------------------
+        '   iSelect     101 : entraxe à gauche
+        '               102 : entraxe à droite
+        '               103 : trémie gauche
+        '               104 : trémie droite
+        '------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
 
@@ -1545,10 +1550,10 @@ Module Mod_Dessins
         '   myBrushA    [E] :   Pinceau pour les armatures
         '------------------------------------------------------------------------------------------------------------------
         '   Z de référence : selon specifications
-        '   iSelect     10 : entraxe à gauche
-        '               11 : entraxe à droite
-        '               12 : trémie gauche
-        '               13 : trémie droite
+        '   iSelect     101 : entraxe à gauche
+        '               102 : entraxe à droite
+        '               103 : trémie gauche
+        '               104 : trémie droite
         '------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -1679,6 +1684,7 @@ Module Mod_Dessins
         Dim xe, ye As Decimal
 
         Dim yCote As Decimal = -hMaxProfile - dCar
+        Dim yCoteS As Decimal = MyPoutre.Dalle.zTop + dCar
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyColor As Color
         Const lAffSymbol As Boolean = False
@@ -1714,7 +1720,36 @@ Module Mod_Dessins
 
         '--> Trémie Gauche
 
+        If MyPoutre.lTremieGauche Then
+            MyColor = StyleCouleur(iSelect, 103)
+            MyPen.Color = MyColor
+
+            xo = 0
+            xe = -MyPoutre.DistanceDsl1
+
+            AddFleche(MyGr, MyPen, xo, yCoteS, xe, yCoteS, MyParaff1, True, True)
+
+            If lAffSymbol Then Chaine = "Dsl1" Else Chaine = GetStringNoUnit(MyPoutre.DistanceDsl1, Enu_TypeVariable.Longueur)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCoteS, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
+
         '--> Trémie Droite
+
+        If MyPoutre.lTremieDroite Then
+            MyColor = StyleCouleur(iSelect, 104)
+            MyPen.Color = MyColor
+
+            xo = 0
+            xe = MyPoutre.DistanceDsl2
+
+            AddFleche(MyGr, MyPen, xo, yCoteS, xe, yCoteS, MyParaff1, True, True)
+
+            If lAffSymbol Then Chaine = "Dsl2" Else Chaine = GetStringNoUnit(MyPoutre.DistanceDsl2, Enu_TypeVariable.Longueur)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCoteS, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
+
 
 
 

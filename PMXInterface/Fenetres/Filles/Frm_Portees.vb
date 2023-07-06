@@ -27,10 +27,10 @@ Public Class Frm_Portees
     End Sub
 
     Public Sub InitialiserFenetre()
+        InitialiserVariables()
         GestionLangues()
         GestionStyle()
         GestionUnites()
-        InitialiserVariables()
         AfficherPoutreEnCours()
         lBuild = False
     End Sub
@@ -43,7 +43,7 @@ Public Class Frm_Portees
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_PORTEES")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_SPANLENGHTS")
             BlocLine.CreationBloc(Bloc)
 
             Try
@@ -103,6 +103,18 @@ Public Class Frm_Portees
         Me.img_Portees.BorderStyle = BorderStyle.FixedSingle
         Me.img_Coupe.Dock = DockStyle.Fill
         Me.img_Coupe.BorderStyle = BorderStyle.FixedSingle
+
+        'On affiche la possibilités de définir des trémies uniquement pour les poutres mixtes
+
+        If MyPoutreLoc.Section.lMixte Then
+
+        Else
+
+            Me.TLPan_Tremies.ColumnStyles(0).Width = 0
+            Me.lbl_Tremies.Visible = False
+            Me.pan_Tremies.Visible = False
+
+        End If
 
     End Sub
 
@@ -340,6 +352,8 @@ Public Class Frm_Portees
             Case Me.txt_PorteeConsoleD.Name : iSelect = 99
             Case Me.txt_D1.Name : iSelect = 101
             Case Me.txt_D2.Name : iSelect = 102
+            Case Me.txt_TremieGauche.Name : iSelect = 103
+            Case Me.txt_TremieDroite.Name : iSelect = 104
 
         End Select
 

@@ -131,7 +131,7 @@ Public Class Frm_Maintiens
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_MAINTIENS")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_LATERALRESTRAINTS")
             BlocLine.CreationBloc(Bloc)
 
             Try

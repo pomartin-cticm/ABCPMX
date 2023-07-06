@@ -82,7 +82,7 @@ Public Class Frm_SectionAcierStandard
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_SECTIONACIERSTANDARD")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_STANDARDSTEELSECTIONS")
             BlocLine.CreationBloc(Bloc)
 
             Try

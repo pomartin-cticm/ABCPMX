@@ -183,6 +183,7 @@
 #Region " CONSTRUCTEURS "
 
     Public Sub New()
+
         Me.TypeSection = cls_Section.Enum_TypeSection.Acier
         ParametresGenerauxDefaut()
         PoutreDefautAcier()
@@ -203,6 +204,13 @@
             Case cls_Section.Enum_TypeSection.AcierEnrobage
                 PoutreDefautAcier()
                 EnrobageDefaut()
+            Case cls_Section.Enum_TypeSection.Mixte
+                PoutreDefautAcier()
+                DalleDefaut()
+            Case cls_Section.Enum_TypeSection.MixteEnrobage
+                PoutreDefautAcier()
+                EnrobageDefaut()
+                DalleDefaut()
         End Select
 
     End Sub
@@ -453,6 +461,7 @@
         '------------------------------------------------------------------------------------------------
 
         PoutreCible = PoutreSource.Clone
+        ReDim PoutreCible.LongueurTravee(PoutreSource.LongueurTravee.GetUpperBound(0))
         PoutreCible.LongueurTravee = PoutreSource.LongueurTravee.Clone
         PoutreCible.TypTravee = PoutreSource.TypTravee.Clone
         PoutreCible.Dalle = PoutreSource.Dalle.Clone

@@ -14,23 +14,6 @@ WARNING					= Warning
 
 
 
-#FRM_SLAB
-ALL						= All
-CANCEL					= Cancel 
-CONCRETE				= Concrete
-COMPOSITESLAB			= Composite slab
-GENERAL					= General
-OK						= OK
-PRECASTSLAB				= Partially prefabricated slab
-REBARS					= Longitudinal reinforcement
-SHEETBASE				= From database
-SHEETCOMPANY			= Manufacturer
-SHEETCUSTOM				= Custom definition
-SHEETING				= Profiled steel sheeting
-SOLIDSLAB				= Solid slab
-TITLE					= Definition of the slab
-
-
 
 #FRM_ENCASEMENT
 CANCEL					= Cancel 
@@ -60,6 +43,23 @@ UPPERLAYER				= Upper layer
 WIDTH					= Width
 
 
+#FRM_LATERALRESTRAINTS
+ADD						= Add
+CANCEL					= Cancel
+OK						= OK
+DELETE					= Delete
+DRAWCONTROL				= Point restraints
+FULLYRESTRAINED			= Fully restrained
+LEFTCANT				= Left cantilever span
+MAINSPAN				= Main span
+NORESTRAINT				= No restraint
+POINTRESTRAINTS			= Point restraints
+RESTRAINTS				= Type of restraint
+RIGHTCANT				= Right cantilever span
+SPAN					= Span
+TITLE 					= Definition of the lateral restraints
+
+
 
 #FRM_MAIN
 COPYPICTURE				= Copy picture
@@ -87,6 +87,10 @@ TSBSLAB					= Slab
 TSBSPACINGS				= Transverse configuration
 TSBSPANS				= Spans
 TSBPROPPING				= Propping
+TSBLOADS				= Loads
+TSBCOMBINATIONS			= Combinations
+TSBGAMMA				= Partial factors and nationally determined factors
+TSBHIVOSS				= Vibratory comfort of the beam
 WARNINGFILE				= Please note that you are opening a file with data from an old version of the software. Please check all data and re-register the file.
 
 
@@ -101,24 +105,67 @@ RECENTFILES				= Recent Files
 
 
 
-#FRM_PORTEES
+#FRM_PROPPING
+TITLE					= Propping of the beam
+OK						= Ok
 CANCEL					= Cancel
+FULLYPROPPED			= Fully propped
+LEFTCANTPROPP			= End propping of the left cantilever .
+NUMBPROPPING			= Number of point propping
+POINTPROPPED			= Point propped
+PROPPINGTYPE			= Type of propping
+RIGHTCANTPROPP			= End propping of the right cantilever 
+UNPROPPED				= Unpropped
+
+
+
+#FRM_PSHEETING
+TITLE					= Definition of the steel profiled sheeting
+OK						= OK
+ALL						= All
+CANCEL					= Cancel
+COMPANY					= Company
+DATABASE				= DataBase
+FROMDATABASE			= From the database
+FROMDIM					= From dimensions
+NAME					= Name
+PROPERTIES				= Dimensions and properties
+
+
+#FRM_SLAB
+ALL						= All
+CANCEL					= Cancel 
+CONCRETE				= Concrete
+COMPOSITESLAB			= Composite slab
+GENERAL					= General
+OK						= OK
+PRECASTSLAB				= Partially prefabricated slab
+REBARS					= Longitudinal reinforcement
+SHEETBASE				= From database
+SHEETCOMPANY			= Manufacturer
+SHEETCUSTOM				= Custom definition
+SHEETING				= Profiled steel sheeting
+SOLIDSLAB				= Solid slab
+TITLE					= Definition of the slab
+
+
+#FRM_SPANLENGHTS
+TITLE					= Definition of the beam
+CANCEL					= Cancel
+OK						= OK
 EDGEBEAM				= Edge beam
 INTERMEDIATEBEAM		= Intermediate beam
 LEFTCANT				= Left cantilever span
 LEFTOPENING				= Left opening
 MAINSPAN				= Main span
-OK						= OK
 OPENINGS				= Openings
 RIGHTCANT				= Right cantilever span
 RIGHTOPENING			= Right opening
 SPACINGS				= Spacings
 SPANS					= Span lengths
-TITLE					= Definition of the beam
 
 
-
-#FRM_SECTIONACIERSTANDARD
+#FRM_STANDARDSTEELSECTIONS
 AUTOMATICHA				= Total height automatically assessed
 AUTOMATICHW				= Height of the web automatically assessed
 CANCEL					= Cancel
@@ -141,47 +188,3 @@ WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
 
 
-
-#FRM_MAINTIENS
-ADD						= Add
-CANCEL					= Cancel
-DELETE					= Delete
-DRAWCONTROL				= Point restraints
-FULLYRESTRAINED			= Fully restrained
-LEFTCANT				= Left cantilever span
-MAINSPAN				= Main span
-NORESTRAINT				= No restraint
-OK						= OK
-POINTRESTRAINTS			= Point restraints
-RESTRAINTS				= Type of restraint
-RIGHTCANT				= Right cantilever span
-SPAN					= Span
-TITLE 					= Restraints
-
-
-
-#FRM_ETAIEMENT
-CANCEL					= Cancel
-FULLYPROPPED			= Fully propped
-LEFTCANTPROPP			= End propping of the left cantilever .
-NUMBPROPPING			= Number of point propping
-OK						= Ok
-POINTPROPPED			= Point propped
-PROPPINGTYPE			= Type of propping
-RIGHTCANTPROPP			= End propping of the right cantilever 
-TITLE					= Propping
-UNPROPPED				= Unpropped
-
-
-
-#FRM_PSHEETING
-ALL						= All
-CANCEL					= Cancel
-COMPANY					= Company
-DATABASE				= DataBase
-FROMDATABASE			= From the database
-FROMDIM					= From dimensions
-NAME					= Name
-OK						= OK
-PROPERTIES				= Dimensions and properties
-TITLE					= Definition of the steel profiled sheeting

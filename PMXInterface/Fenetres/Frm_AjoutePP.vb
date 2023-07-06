@@ -353,7 +353,6 @@ Public Class Frm_AjoutePP
         Dim lOK As Boolean
         Dim lTrouve As Boolean
 
-
         Dim NomPoutre As String = Me.txt_NomNouvellePoutre.Text
 
         If Me.chk_NouvellePoutre.Checked Then

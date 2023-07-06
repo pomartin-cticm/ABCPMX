@@ -105,6 +105,11 @@ Public Class Frm_PMX
 
                 Me.TSbtn_Etaiement.ToolTipText = Bloc("TSBPROPPING")
 
+                Me.TSbtn_Chargements.ToolTipText = Bloc("TSBLOADS")
+                Me.TSbtn_Combinaisons.ToolTipText = Bloc("TSBCOMBINATIONS")
+                Me.TSbtn_Gamma.ToolTipText = Bloc("TSBGAMMA")
+                Me.TSbtn_Hivoss.ToolTipText = Bloc("TSBHIVOSS")
+
                 '=== MESSAGES GENERAUX
 
                 ErreurCapacite_LNG = Bloc("ERRORCAPACITY")
