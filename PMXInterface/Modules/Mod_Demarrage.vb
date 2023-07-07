@@ -152,6 +152,29 @@ Module Mod_Demarrage
             LogicielOptions.Gamma = New Cls_Gamma
 
             LogicielOptions.Gamma.GammaM0 = My.Settings.GammaM0
+            LogicielOptions.Gamma.GammaM1 = My.Settings.GammaM1
+            LogicielOptions.Gamma.GammaM2 = My.Settings.GammaM2
+
+            LogicielOptions.Gamma.GammaC = My.Settings.GammaC
+            LogicielOptions.Gamma.GammaV = My.Settings.GammaV
+            LogicielOptions.Gamma.GammaVs = My.Settings.GammaVs
+            LogicielOptions.Gamma.GammaVp = My.Settings.GammaVp
+            LogicielOptions.Gamma.lGammaV_unique = My.Settings.lGammaV_unique
+            LogicielOptions.Gamma.GammaS = My.Settings.GammaS
+            LogicielOptions.Gamma.GammaP = My.Settings.GammaP
+
+            LogicielOptions.Gamma.GammaM_fi = My.Settings.GammaM_fi
+            LogicielOptions.Gamma.GammaC_fi = My.Settings.GammaC_fi
+            LogicielOptions.Gamma.GammaV_fi = My.Settings.GammaV_fi
+
+            LogicielOptions.Gamma.GammaG_sup = My.Settings.GammaG_sup
+            LogicielOptions.Gamma.GammaG_inf = My.Settings.GammaG_inf
+            LogicielOptions.Gamma.GammaQ = My.Settings.GammaQ
+
+            LogicielOptions.Gamma.Psi0 = My.Settings.Psi0
+            LogicielOptions.Gamma.Psi1 = My.Settings.Psi1
+            LogicielOptions.Gamma.Psi2 = My.Settings.Psi2
+
 
         Catch ex As Exception
 

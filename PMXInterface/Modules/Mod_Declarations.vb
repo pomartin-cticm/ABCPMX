@@ -227,6 +227,7 @@ Module Mod_Declarations
         Maintiens
         Etaiement
         Chargements
+        Gamma
         Combinaisons
         Options
         Hivoss

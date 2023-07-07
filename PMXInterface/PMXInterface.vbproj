@@ -121,6 +121,12 @@
     <Compile Include="Fenetres\Filles\Frm_Etaiement.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Gamma.Designer.vb">
+      <DependentUpon>Frm_Gamma.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Gamma.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Maintiens.Designer.vb">
       <DependentUpon>Frm_Maintiens.vb</DependentUpon>
     </Compile>
@@ -216,6 +222,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Etaiement.resx">
       <DependentUpon>Frm_Etaiement.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Gamma.resx">
+      <DependentUpon>Frm_Gamma.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Maintiens.resx">
       <DependentUpon>Frm_Maintiens.vb</DependentUpon>

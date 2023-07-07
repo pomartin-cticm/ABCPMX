@@ -99,6 +99,7 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Chargements = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Gamma = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Combinaisons = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Hivoss = New System.Windows.Forms.ToolStripButton()
         Me.img_Main = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
@@ -160,7 +161,6 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton16 = New System.Windows.Forms.ToolStripButton()
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
-        Me.TSbtn_Combinaisons = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         Me.ToolStrip_MenuSecondaire.SuspendLayout()
         Me.ToolStrip_MenuPrincipal.SuspendLayout()
@@ -881,6 +881,15 @@ Partial Class Frm_PMX
         Me.TSbtn_Gamma.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Gamma.Text = "ToolStripButton1"
         '
+        'TSbtn_Combinaisons
+        '
+        Me.TSbtn_Combinaisons.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Combinaisons.Image = CType(resources.GetObject("TSbtn_Combinaisons.Image"), System.Drawing.Image)
+        Me.TSbtn_Combinaisons.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Combinaisons.Name = "TSbtn_Combinaisons"
+        Me.TSbtn_Combinaisons.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Combinaisons.Text = "ToolStripButton1"
+        '
         'TSbtn_Hivoss
         '
         Me.TSbtn_Hivoss.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -1417,15 +1426,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(0, "Enregistrer_NotOK")
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
-        '
-        'TSbtn_Combinaisons
-        '
-        Me.TSbtn_Combinaisons.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Combinaisons.Image = CType(resources.GetObject("TSbtn_Combinaisons.Image"), System.Drawing.Image)
-        Me.TSbtn_Combinaisons.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Combinaisons.Name = "TSbtn_Combinaisons"
-        Me.TSbtn_Combinaisons.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Combinaisons.Text = "ToolStripButton1"
         '
         'Frm_PMX
         '

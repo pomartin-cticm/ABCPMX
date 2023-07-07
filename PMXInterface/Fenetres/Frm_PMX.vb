@@ -236,7 +236,7 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click
+    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click, TSbtn_Gamma.Click
 
         Select Case sender.name
             Case Me.TSbtn_Accueil.Name
@@ -260,6 +260,8 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.Etaiement
             Case Me.TSbtn_Chargements.Name
                 FilleEnCours = EnuFenetres.Chargements
+            Case Me.TSbtn_Gamma.Name
+                FilleEnCours = EnuFenetres.Gamma
 
             Case Me.TSbtn_Hivoss.Name
                 FilleEnCours = EnuFenetres.Hivoss
@@ -317,6 +319,11 @@ Public Class Frm_PMX
                     Frm_Etaiement.ShowDialog()
                 Else
 
+                End If
+
+            Case EnuFenetres.Gamma
+                If LogicielOptions.lFenetres Then
+                    Frm_Gamma.ShowDialog()
                 End If
 
             Case EnuFenetres.Hivoss
@@ -449,9 +456,6 @@ Public Class Frm_PMX
         Next
 
     End Sub
-
-
-
 
 #End Region
 

@@ -15,7 +15,7 @@ Option Explicit On
 Namespace My
     
     <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.4.0.0"),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0"),  _
      Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
     Partial Friend NotInheritable Class MySettings
         Inherits Global.System.Configuration.ApplicationSettingsBase
@@ -163,13 +163,229 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("1.35")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.00")>  _
         Public Property GammaM0() As Decimal
             Get
                 Return CType(Me("GammaM0"),Decimal)
             End Get
             Set
                 Me("GammaM0") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
+        Public Property GammaM1() As Decimal
+            Get
+                Return CType(Me("GammaM1"),Decimal)
+            End Get
+            Set
+                Me("GammaM1") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.25")>  _
+        Public Property GammaM2() As Decimal
+            Get
+                Return CType(Me("GammaM2"),Decimal)
+            End Get
+            Set
+                Me("GammaM2") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.5")>  _
+        Public Property GammaC() As Decimal
+            Get
+                Return CType(Me("GammaC"),Decimal)
+            End Get
+            Set
+                Me("GammaC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.25")>  _
+        Public Property GammaV() As Decimal
+            Get
+                Return CType(Me("GammaV"),Decimal)
+            End Get
+            Set
+                Me("GammaV") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.15")>  _
+        Public Property GammaS() As Decimal
+            Get
+                Return CType(Me("GammaS"),Decimal)
+            End Get
+            Set
+                Me("GammaS") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
+        Public Property GammaP() As Decimal
+            Get
+                Return CType(Me("GammaP"),Decimal)
+            End Get
+            Set
+                Me("GammaP") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.25")>  _
+        Public Property GammaVs() As Decimal
+            Get
+                Return CType(Me("GammaVs"),Decimal)
+            End Get
+            Set
+                Me("GammaVs") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.25")>  _
+        Public Property GammaVp() As Decimal
+            Get
+                Return CType(Me("GammaVp"),Decimal)
+            End Get
+            Set
+                Me("GammaVp") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
+        Public Property GammaM_fi() As Decimal
+            Get
+                Return CType(Me("GammaM_fi"),Decimal)
+            End Get
+            Set
+                Me("GammaM_fi") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
+        Public Property GammaC_fi() As Decimal
+            Get
+                Return CType(Me("GammaC_fi"),Decimal)
+            End Get
+            Set
+                Me("GammaC_fi") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
+        Public Property GammaV_fi() As Decimal
+            Get
+                Return CType(Me("GammaV_fi"),Decimal)
+            End Get
+            Set
+                Me("GammaV_fi") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.35")>  _
+        Public Property GammaG_sup() As Decimal
+            Get
+                Return CType(Me("GammaG_sup"),Decimal)
+            End Get
+            Set
+                Me("GammaG_sup") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
+        Public Property GammaG_inf() As Decimal
+            Get
+                Return CType(Me("GammaG_inf"),Decimal)
+            End Get
+            Set
+                Me("GammaG_inf") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.5")>  _
+        Public Property GammaQ() As Decimal
+            Get
+                Return CType(Me("GammaQ"),Decimal)
+            End Get
+            Set
+                Me("GammaQ") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.7")>  _
+        Public Property Psi0() As Decimal
+            Get
+                Return CType(Me("Psi0"),Decimal)
+            End Get
+            Set
+                Me("Psi0") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.5")>  _
+        Public Property Psi1() As Decimal
+            Get
+                Return CType(Me("Psi1"),Decimal)
+            End Get
+            Set
+                Me("Psi1") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.3")>  _
+        Public Property Psi2() As Decimal
+            Get
+                Return CType(Me("Psi2"),Decimal)
+            End Get
+            Set
+                Me("Psi2") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lGammaV_unique() As Boolean
+            Get
+                Return CType(Me("lGammaV_unique"),Boolean)
+            End Get
+            Set
+                Me("lGammaV_unique") = value
             End Set
         End Property
     End Class
