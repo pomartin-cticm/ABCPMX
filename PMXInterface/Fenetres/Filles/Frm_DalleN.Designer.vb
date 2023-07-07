@@ -58,9 +58,9 @@ Partial Class Frm_DalleN
         Me.img_PhiS = New System.Windows.Forms.PictureBox()
         Me.pan_ChoixLit = New System.Windows.Forms.Panel()
         Me.TLpan_ChoixLit = New System.Windows.Forms.TableLayoutPanel()
-        Me.chk_AjouterSupprimerLit = New System.Windows.Forms.CheckBox()
         Me.chk_Lit2 = New System.Windows.Forms.CheckBox()
         Me.chk_Lit1 = New System.Windows.Forms.CheckBox()
+        Me.chk_AjouterSupprimerLit = New System.Windows.Forms.CheckBox()
         Me.lbl_Armatures = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Bac = New System.Windows.Forms.Panel()
@@ -154,7 +154,7 @@ Partial Class Frm_DalleN
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(800, 493)
+        Me.pan_General.Size = New System.Drawing.Size(808, 493)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -169,7 +169,7 @@ Partial Class Frm_DalleN
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(800, 493)
+        Me.TLpan_Main.Size = New System.Drawing.Size(808, 493)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -190,13 +190,13 @@ Partial Class Frm_DalleN
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(794, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(802, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(410, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(414, 3)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
@@ -207,7 +207,7 @@ Partial Class Frm_DalleN
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(270, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(274, 3)
         Me.btn_Annuler.Name = "btn_Annuler"
         Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
         Me.btn_Annuler.TabIndex = 0
@@ -221,7 +221,7 @@ Partial Class Frm_DalleN
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(794, 447)
+        Me.pan_Main.Size = New System.Drawing.Size(802, 447)
         Me.pan_Main.TabIndex = 1
         '
         'TableLayoutPanel1
@@ -238,7 +238,7 @@ Partial Class Frm_DalleN
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(794, 447)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(802, 447)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'img_Dalle
@@ -267,7 +267,7 @@ Partial Class Frm_DalleN
         Me.TLpan_TroisColonnes.Name = "TLpan_TroisColonnes"
         Me.TLpan_TroisColonnes.RowCount = 1
         Me.TLpan_TroisColonnes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_TroisColonnes.Size = New System.Drawing.Size(794, 300)
+        Me.TLpan_TroisColonnes.Size = New System.Drawing.Size(802, 300)
         Me.TLpan_TroisColonnes.TabIndex = 3
         '
         'TLpan_Droite
@@ -287,7 +287,7 @@ Partial Class Frm_DalleN
         Me.TLpan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75.0!))
-        Me.TLpan_Droite.Size = New System.Drawing.Size(292, 300)
+        Me.TLpan_Droite.Size = New System.Drawing.Size(300, 300)
         Me.TLpan_Droite.TabIndex = 2
         '
         'Panel2
@@ -303,13 +303,13 @@ Partial Class Frm_DalleN
         Me.Panel2.Location = New System.Drawing.Point(0, 225)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(292, 75)
+        Me.Panel2.Size = New System.Drawing.Size(300, 75)
         Me.Panel2.TabIndex = 14
         '
         'txt_Fsk
         '
         Me.txt_Fsk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Fsk.Location = New System.Drawing.Point(169, 33)
+        Me.txt_Fsk.Location = New System.Drawing.Point(177, 33)
         Me.txt_Fsk.Name = "txt_Fsk"
         Me.txt_Fsk.Size = New System.Drawing.Size(58, 20)
         Me.txt_Fsk.TabIndex = 59
@@ -317,7 +317,7 @@ Partial Class Frm_DalleN
         'img_Fy
         '
         Me.img_Fy.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Fy.Location = New System.Drawing.Point(113, 33)
+        Me.img_Fy.Location = New System.Drawing.Point(121, 33)
         Me.img_Fy.Name = "img_Fy"
         Me.img_Fy.Size = New System.Drawing.Size(57, 20)
         Me.img_Fy.TabIndex = 60
@@ -327,7 +327,7 @@ Partial Class Frm_DalleN
         '
         Me.etq_UnitSigma2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitSigma2.AutoSize = True
-        Me.etq_UnitSigma2.Location = New System.Drawing.Point(233, 36)
+        Me.etq_UnitSigma2.Location = New System.Drawing.Point(241, 36)
         Me.etq_UnitSigma2.Name = "etq_UnitSigma2"
         Me.etq_UnitSigma2.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitSigma2.TabIndex = 58
@@ -341,7 +341,7 @@ Partial Class Frm_DalleN
         Me.cmb_Acier.FormattingEnabled = True
         Me.cmb_Acier.Location = New System.Drawing.Point(127, 6)
         Me.cmb_Acier.Name = "cmb_Acier"
-        Me.cmb_Acier.Size = New System.Drawing.Size(153, 21)
+        Me.cmb_Acier.Size = New System.Drawing.Size(161, 21)
         Me.cmb_Acier.TabIndex = 57
         '
         'lbl_ClasseA
@@ -364,7 +364,7 @@ Partial Class Frm_DalleN
         Me.lbl_Acier.Location = New System.Drawing.Point(0, 195)
         Me.lbl_Acier.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Acier.Name = "lbl_Acier"
-        Me.lbl_Acier.Size = New System.Drawing.Size(292, 30)
+        Me.lbl_Acier.Size = New System.Drawing.Size(300, 30)
         Me.lbl_Acier.TabIndex = 13
         Me.lbl_Acier.Text = "lbl_Acier"
         Me.lbl_Acier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -379,7 +379,7 @@ Partial Class Frm_DalleN
         Me.pan_Armatures.Location = New System.Drawing.Point(0, 30)
         Me.pan_Armatures.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Armatures.Name = "pan_Armatures"
-        Me.pan_Armatures.Size = New System.Drawing.Size(292, 164)
+        Me.pan_Armatures.Size = New System.Drawing.Size(300, 164)
         Me.pan_Armatures.TabIndex = 7
         '
         'pan_DonneesArma
@@ -399,7 +399,7 @@ Partial Class Frm_DalleN
         Me.pan_DonneesArma.Controls.Add(Me.img_PhiS)
         Me.pan_DonneesArma.Location = New System.Drawing.Point(-1, 58)
         Me.pan_DonneesArma.Name = "pan_DonneesArma"
-        Me.pan_DonneesArma.Size = New System.Drawing.Size(291, 100)
+        Me.pan_DonneesArma.Size = New System.Drawing.Size(246, 100)
         Me.pan_DonneesArma.TabIndex = 1
         '
         'lbl_LitNo
@@ -417,7 +417,7 @@ Partial Class Frm_DalleN
         'txt_zs
         '
         Me.txt_zs.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_zs.Location = New System.Drawing.Point(184, 78)
+        Me.txt_zs.Location = New System.Drawing.Point(139, 78)
         Me.txt_zs.Name = "txt_zs"
         Me.txt_zs.Size = New System.Drawing.Size(58, 20)
         Me.txt_zs.TabIndex = 83
@@ -438,7 +438,7 @@ Partial Class Frm_DalleN
         '
         Me.etq_UnitDim6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDim6.AutoSize = True
-        Me.etq_UnitDim6.Location = New System.Drawing.Point(248, 81)
+        Me.etq_UnitDim6.Location = New System.Drawing.Point(203, 81)
         Me.etq_UnitDim6.Name = "etq_UnitDim6"
         Me.etq_UnitDim6.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim6.TabIndex = 82
@@ -447,7 +447,7 @@ Partial Class Frm_DalleN
         'img_zs
         '
         Me.img_zs.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_zs.Location = New System.Drawing.Point(148, 78)
+        Me.img_zs.Location = New System.Drawing.Point(103, 78)
         Me.img_zs.Name = "img_zs"
         Me.img_zs.Size = New System.Drawing.Size(37, 20)
         Me.img_zs.TabIndex = 84
@@ -456,7 +456,7 @@ Partial Class Frm_DalleN
         'txt_esp
         '
         Me.txt_esp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_esp.Location = New System.Drawing.Point(184, 54)
+        Me.txt_esp.Location = New System.Drawing.Point(139, 54)
         Me.txt_esp.Name = "txt_esp"
         Me.txt_esp.Size = New System.Drawing.Size(58, 20)
         Me.txt_esp.TabIndex = 79
@@ -477,7 +477,7 @@ Partial Class Frm_DalleN
         '
         Me.etq_UnitDim5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDim5.AutoSize = True
-        Me.etq_UnitDim5.Location = New System.Drawing.Point(248, 57)
+        Me.etq_UnitDim5.Location = New System.Drawing.Point(203, 57)
         Me.etq_UnitDim5.Name = "etq_UnitDim5"
         Me.etq_UnitDim5.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim5.TabIndex = 78
@@ -486,7 +486,7 @@ Partial Class Frm_DalleN
         'img_esp
         '
         Me.img_esp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_esp.Location = New System.Drawing.Point(148, 54)
+        Me.img_esp.Location = New System.Drawing.Point(103, 54)
         Me.img_esp.Name = "img_esp"
         Me.img_esp.Size = New System.Drawing.Size(37, 20)
         Me.img_esp.TabIndex = 80
@@ -495,7 +495,7 @@ Partial Class Frm_DalleN
         'txt_PhiS
         '
         Me.txt_PhiS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_PhiS.Location = New System.Drawing.Point(184, 30)
+        Me.txt_PhiS.Location = New System.Drawing.Point(139, 30)
         Me.txt_PhiS.Name = "txt_PhiS"
         Me.txt_PhiS.Size = New System.Drawing.Size(58, 20)
         Me.txt_PhiS.TabIndex = 75
@@ -516,7 +516,7 @@ Partial Class Frm_DalleN
         '
         Me.etq_UnitDim7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDim7.AutoSize = True
-        Me.etq_UnitDim7.Location = New System.Drawing.Point(248, 33)
+        Me.etq_UnitDim7.Location = New System.Drawing.Point(203, 33)
         Me.etq_UnitDim7.Name = "etq_UnitDim7"
         Me.etq_UnitDim7.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim7.TabIndex = 74
@@ -525,7 +525,7 @@ Partial Class Frm_DalleN
         'img_PhiS
         '
         Me.img_PhiS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_PhiS.Location = New System.Drawing.Point(148, 30)
+        Me.img_PhiS.Location = New System.Drawing.Point(103, 30)
         Me.img_PhiS.Name = "img_PhiS"
         Me.img_PhiS.Size = New System.Drawing.Size(37, 20)
         Me.img_PhiS.TabIndex = 76
@@ -541,16 +541,15 @@ Partial Class Frm_DalleN
         '
         'TLpan_ChoixLit
         '
-        Me.TLpan_ChoixLit.ColumnCount = 5
+        Me.TLpan_ChoixLit.ColumnCount = 4
         Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
         Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
         Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
-        Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
         Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_ChoixLit.Controls.Add(Me.chk_Lit2, 0, 0)
         Me.TLpan_ChoixLit.Controls.Add(Me.chk_Lit1, 0, 0)
-        Me.TLpan_ChoixLit.Controls.Add(Me.chk_AjouterSupprimerLit, 4, 0)
+        Me.TLpan_ChoixLit.Controls.Add(Me.chk_AjouterSupprimerLit, 3, 0)
         Me.TLpan_ChoixLit.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_ChoixLit.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_ChoixLit.Margin = New System.Windows.Forms.Padding(0)
@@ -559,17 +558,6 @@ Partial Class Frm_DalleN
         Me.TLpan_ChoixLit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_ChoixLit.Size = New System.Drawing.Size(269, 45)
         Me.TLpan_ChoixLit.TabIndex = 0
-        '
-        'chk_AjouterSupprimerLit
-        '
-        Me.chk_AjouterSupprimerLit.Appearance = System.Windows.Forms.Appearance.Button
-        Me.chk_AjouterSupprimerLit.Image = CType(resources.GetObject("chk_AjouterSupprimerLit.Image"), System.Drawing.Image)
-        Me.chk_AjouterSupprimerLit.Location = New System.Drawing.Point(223, 0)
-        Me.chk_AjouterSupprimerLit.Margin = New System.Windows.Forms.Padding(0)
-        Me.chk_AjouterSupprimerLit.Name = "chk_AjouterSupprimerLit"
-        Me.chk_AjouterSupprimerLit.Size = New System.Drawing.Size(44, 44)
-        Me.chk_AjouterSupprimerLit.TabIndex = 3
-        Me.chk_AjouterSupprimerLit.UseVisualStyleBackColor = True
         '
         'chk_Lit2
         '
@@ -593,6 +581,17 @@ Partial Class Frm_DalleN
         Me.chk_Lit1.TabIndex = 1
         Me.chk_Lit1.UseVisualStyleBackColor = True
         '
+        'chk_AjouterSupprimerLit
+        '
+        Me.chk_AjouterSupprimerLit.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_AjouterSupprimerLit.Image = CType(resources.GetObject("chk_AjouterSupprimerLit.Image"), System.Drawing.Image)
+        Me.chk_AjouterSupprimerLit.Location = New System.Drawing.Point(138, 0)
+        Me.chk_AjouterSupprimerLit.Margin = New System.Windows.Forms.Padding(0)
+        Me.chk_AjouterSupprimerLit.Name = "chk_AjouterSupprimerLit"
+        Me.chk_AjouterSupprimerLit.Size = New System.Drawing.Size(44, 44)
+        Me.chk_AjouterSupprimerLit.TabIndex = 3
+        Me.chk_AjouterSupprimerLit.UseVisualStyleBackColor = True
+        '
         'lbl_Armatures
         '
         Me.lbl_Armatures.AutoSize = True
@@ -602,7 +601,7 @@ Partial Class Frm_DalleN
         Me.lbl_Armatures.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Armatures.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Armatures.Name = "lbl_Armatures"
-        Me.lbl_Armatures.Size = New System.Drawing.Size(292, 30)
+        Me.lbl_Armatures.Size = New System.Drawing.Size(300, 30)
         Me.lbl_Armatures.TabIndex = 3
         Me.lbl_Armatures.Text = "lbl_Armatures"
         Me.lbl_Armatures.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1082,6 +1081,7 @@ Partial Class Frm_DalleN
         '
         'txt_Hd
         '
+        Me.txt_Hd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_Hd.Location = New System.Drawing.Point(152, 34)
         Me.txt_Hd.Name = "txt_Hd"
         Me.txt_Hd.Size = New System.Drawing.Size(58, 20)
@@ -1168,7 +1168,7 @@ Partial Class Frm_DalleN
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 493)
+        Me.ClientSize = New System.Drawing.Size(808, 493)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_DalleN"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

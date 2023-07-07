@@ -53,6 +53,7 @@ Module Mod_Dessins
         Const kADJUST As Decimal = 0.95
         Const zREF As Decimal = 0
         Dim Ha, Bfs As Decimal
+        Dim lCote As Boolean = True
 
         '--> Initialisation
 
@@ -62,6 +63,8 @@ Module Mod_Dessins
 
         ' A REVOIR ====
         Beff = LargeurDalleDessin(MySection.ProfilA)
+        BeffG = Beff / 2
+        BeffD = Beff / 2
 
         Ha = MySection.ProfilA.ha
         Bfs = MySection.ProfilA.b_fs
@@ -69,10 +72,10 @@ Module Mod_Dessins
         '--> Preparation de la zone d'affichage - Calcul de ParAff
         dCar = MyDalle.EpaisseurActive / 5
 
-        xMin = -3 * MySection.ProfilA.b_fs
-        xMax = -xMin
+        xMin = -Beff / 2 - dCar
+        xMax = Beff / 2
 
-        yMin = -MySection.ProfilA.ha * 0.15
+        yMin = -MySection.ProfilA.ha
         yMax = MyDalle.zTop + dCar
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
@@ -150,6 +153,57 @@ Module Mod_Dessins
             DessinLitArmaDalle(myGr, MyDalle, Beff, 1, MySection.ProfilA.ha, iSelect, MyParAff, myBrushA(1))
 
         End If
+
+        If lCote Then
+
+            DessinCoteFrmDalle(myGr, MyDalle, MySection, iSelect, MyParAff, dCar, BeffG, BeffD)
+
+        End If
+    End Sub
+
+    Private Sub DessinCoteFrmDalle(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, MySection As cls_Section, iSelect As Integer,
+                                   MyParAffA As Struc_Affichage, dCar As Decimal, BeffG As Decimal, BeffD As Decimal)
+        '-----------------------------------------------------------------------------------------------
+        '   07/07/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin des cotes de la dalle
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   MyDalle     [E] :   Dalle à dessiner
+        '   MySection   [E] :   Section à laquelle la dalle est rattachée
+        '   iSelect     [E] :   Indice de la cote selectionnée
+        '   MyParAffA   [E] :   Paramètres d'affichage
+        '   dCar        [E] :   Dimension pour l'affichage
+        '   bEffG, BEffD[E] :   Largeur de dalle représentée à gauche et à droite
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xCoteZ As Decimal = -BeffG - dCar
+        Dim xe, ye As Decimal
+        Dim xo, yo As Decimal
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyColor As Color
+
+        Dim lContour As Boolean = lCONTOURCOTE
+        Dim MyFontNormal As Font = FontBase
+
+        Dim Chaine As String
+
+        '--> Cotations
+
+        '# Hauteur de la section
+
+        MyColor = StyleCouleur(iSelect, -2)
+        MyPen.Color = MyColor
+
+        yo = -MySection.ProfilA.ha
+        ye = 0
+
+        AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
+        Chaine = GetStringNoUnit(MySection.ProfilA.ha, Enu_TypeVariable.Dimension)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
     End Sub
 
     Private Sub DessinLitArmaDalle(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, BeffRed As Decimal, iArma As Integer,
