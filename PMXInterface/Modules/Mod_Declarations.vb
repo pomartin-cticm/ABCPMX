@@ -322,5 +322,37 @@ Module Mod_Declarations
 
 #End Region
 
+#Region " Note de calcul "
+
+    Public MyNote As Cls_Rapport
+
+    Public Enum PositionTexteInCell
+        Centre
+        Gauche
+        Droite
+    End Enum
+
+    Public ClePos As New Dictionary(Of PositionTexteInCell, String)
+
+    Public Enum Enum_NiveauDetailNDC
+        'UltraSynthese
+        Synthese
+        Complete
+        'Detaillee
+        'DessinPoutre
+    End Enum
+
+    Public SEPARATEURS_NDC() As String = {" "}
+
+    Public Class Bordures
+        Public Const Aucun As Integer = 0
+        Public Const Gauche As Integer = 1
+        Public Const Haut As Integer = 2
+        Public Const Droite As Integer = 4
+        Public Const Bas As Integer = 8
+        Public Const Tous As Integer = 15
+    End Class
+
+#End Region
 
 End Module

@@ -79,6 +79,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Cls_Rapport.vb" />
     <Compile Include="Fenetres\Filles\Frm_BacN.Designer.vb">
       <DependentUpon>Frm_BacN.vb</DependentUpon>
     </Compile>
