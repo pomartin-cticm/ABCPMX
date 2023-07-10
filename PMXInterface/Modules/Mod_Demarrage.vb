@@ -192,6 +192,10 @@ Module Mod_Demarrage
 
         UpdateIconesFileName()
 
+        '--> Initialisation répertoires
+
+        InitialiseRepImage()
+
     End Sub
 
     <Conditional("DEBUG")> Private Sub InitialiseDebug()
@@ -572,10 +576,10 @@ Module Mod_Demarrage
         If (LogicielInfo.ListeLangueNDC.Count > 0) AndAlso (LogicielOptions.IndLangueNDC >= 0) AndAlso (LogicielOptions.IndLangueNDC < LogicielInfo.ListeLangueNDC.Count) Then
 
             If lDebug Then
-                LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\..\..\Langues\" & LogicielInfo.Racine & "_" _
+                LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\..\..\Langues\" & LogicielInfo.Racine & "_NDC_" _
                                            & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
             Else
-                LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\Langues\" & LogicielInfo.Racine & "_" _
+                LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\Langues\" & LogicielInfo.Racine & "_NDC_" _
                                            & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
             End If
 

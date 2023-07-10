@@ -13,7 +13,28 @@ VERSIONLINK				= Do you want to be redirected to the CTICM website?
 WARNING					= Warning
 
 
-
+#FRM_CALCULATIONSHEET
+TITLE					= Calculation report
+FIRST					= First page
+PREVIOUS				= Previous page
+NEXT					= Next page
+LAST					= Last page
+ZOOMIN					= Zoom in
+ZOOMOUT					= Zoom out
+PRINT					= Print
+EXPORTPDF				= Export in PDF
+LANGUAGE				= Language
+SUMMARY					= Contents
+BTNOPTIONS				= Options
+BTNSYNTHESE				= Synthesis
+BTNCOMPLET				= Intermediate sheet
+BTNDETAILED				= Detailed sheet
+BTNULTRA				= Synthesis of results
+BTNDRAWING				= Drawings of the beam
+NAVPAN					= Navigation pane
+NAVIGATION				= Navigation
+ZOOM					= Zoom
+SAVEAS					= Save As
 
 #FRM_ENCASEMENT
 CANCEL					= Cancel 
