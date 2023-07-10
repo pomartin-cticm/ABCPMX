@@ -9,6 +9,27 @@ Public Class Frm_Gamma
 
     Dim MyPoutreLoc As New cls_Poutre
 
+    'Permet la gestion de l'activation ou non du checkbox
+
+    Dim x_img_GammaCVSP As Decimal
+    Dim x_txt_GammaCVSP As Decimal
+
+    Dim y_txt_GammaC As Decimal
+    Dim y_txt_GammaV As Decimal
+    Dim y_txt_GammaVs As Decimal
+    Dim y_txt_GammaVp As Decimal
+    Dim y_txt_GammaS As Decimal
+    Dim y_txt_GammaP As Decimal
+
+    Dim y_decal As Decimal
+
+    'Dispose de tous les textbox dans une seule liste (utile pour la gestion des erreurs)
+    Dim list_txtbox As New List(Of (TextBox, Boolean))
+
+    'Indique si aucune erreur n'a été constaté et permet de valider ou non la fenetre
+    Dim lFrm_Valide As Boolean = True
+
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -27,6 +48,43 @@ Public Class Frm_Gamma
     End Sub
     Private Sub InitialiserVariables()
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
+
+
+
+        x_img_GammaCVSP = img_GammaC.Location.X
+        x_txt_GammaCVSP = txt_GammaC.Location.X
+
+        y_txt_GammaC = txt_GammaC.Location.Y
+        y_txt_GammaV = txt_GammaV.Location.Y
+        y_txt_GammaVs = txt_GammaVs.Location.Y
+        y_txt_GammaVp = txt_GammaVp.Location.Y
+        y_txt_GammaS = txt_GammaS.Location.Y
+        y_txt_GammaP = txt_GammaP.Location.Y
+
+        y_decal = Math.Abs(y_txt_GammaV - y_txt_GammaS)
+
+        list_txtbox.Add((Me.txt_GammaGsup, True))
+        list_txtbox.Add((txt_GammaGinf, True))
+        list_txtbox.Add((txt_GammaQ, True))
+        list_txtbox.Add((txt_Psi0_Q1, True))
+        list_txtbox.Add((txt_Psi1_Q1, True))
+        list_txtbox.Add((txt_Psi2_Q1, True))
+        list_txtbox.Add((txt_Psi0_Q2, True))
+        list_txtbox.Add((txt_Psi1_Q2, True))
+        list_txtbox.Add((txt_Psi2_Q2, True))
+        list_txtbox.Add((txt_GammaM0, True))
+        list_txtbox.Add((txt_GammaM1, True))
+        list_txtbox.Add((txt_GammaM2, True))
+        list_txtbox.Add((txt_GammaC, True))
+        list_txtbox.Add((txt_GammaV, chk_GammaV_Unique.Checked))
+        list_txtbox.Add((txt_GammaVs, Not chk_GammaV_Unique.Checked))
+        list_txtbox.Add((txt_GammaVp, Not chk_GammaV_Unique.Checked))
+        list_txtbox.Add((txt_GammaS, True))
+        list_txtbox.Add((txt_GammaP, True))
+        list_txtbox.Add((txt_GammaM_fi, True))
+        list_txtbox.Add((txt_GammaC_fi, True))
+        list_txtbox.Add((txt_GammaV_fi, True))
+
     End Sub
 
     Private Sub GestionLangues()
@@ -57,6 +115,8 @@ Public Class Frm_Gamma
     End Sub
 
     Private Sub GestionStyle()
+
+        'Gestion du style graphique
         Me.Icon = Frm_PMX.Icon
 
         Me.lbl_Chargement.BackColor = CouleurBackBandeaux
@@ -70,9 +130,46 @@ Public Class Frm_Gamma
             Me.Tab_Dalle.Visible = False
         End If
 
+        MAJI_GammaV_Unique()
+
+
     End Sub
 
     Private Sub AfficherPoutreEnCours()
+
+        With MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma
+
+            Me.txt_GammaGsup.Text = GetStringNoUnit(.GammaG_sup, Enu_TypeVariable.SansType)
+            Me.txt_GammaGinf.Text = GetStringNoUnit(.GammaG_inf, Enu_TypeVariable.SansType)
+            Me.txt_GammaQ.Text = GetStringNoUnit(.GammaQ, Enu_TypeVariable.SansType)
+
+            Me.txt_Psi0_Q1.Text = GetStringNoUnit(.Psi0_Q1, Enu_TypeVariable.SansType)
+            Me.txt_Psi1_Q1.Text = GetStringNoUnit(.Psi1_Q1, Enu_TypeVariable.SansType)
+            Me.txt_Psi2_Q1.Text = GetStringNoUnit(.Psi2_Q1, Enu_TypeVariable.SansType)
+
+            Me.txt_Psi0_Q2.Text = GetStringNoUnit(.Psi0_Q2, Enu_TypeVariable.SansType)
+            Me.txt_Psi1_Q2.Text = GetStringNoUnit(.Psi1_Q2, Enu_TypeVariable.SansType)
+            Me.txt_Psi2_Q2.Text = GetStringNoUnit(.Psi2_Q2, Enu_TypeVariable.SansType)
+
+            Me.txt_GammaM0.Text = GetStringNoUnit(.GammaM0, Enu_TypeVariable.SansType)
+            Me.txt_GammaM1.Text = GetStringNoUnit(.GammaM1, Enu_TypeVariable.SansType)
+            Me.txt_GammaM2.Text = GetStringNoUnit(.GammaM2, Enu_TypeVariable.SansType)
+
+            Me.txt_GammaC.Text = GetStringNoUnit(.GammaC, Enu_TypeVariable.SansType)
+            Me.chk_GammaV_Unique.Checked = .lGammaV_unique
+            Me.txt_GammaV.Text = GetStringNoUnit(.GammaV, Enu_TypeVariable.SansType)
+            Me.txt_GammaVp.Text = GetStringNoUnit(.GammaVp, Enu_TypeVariable.SansType)
+            Me.txt_GammaVs.Text = GetStringNoUnit(.GammaVs, Enu_TypeVariable.SansType)
+            Me.txt_GammaS.Text = GetStringNoUnit(.GammaS, Enu_TypeVariable.SansType)
+            Me.txt_GammaP.Text = GetStringNoUnit(.GammaP, Enu_TypeVariable.SansType)
+
+            Me.txt_GammaM_fi.Text = GetStringNoUnit(.GammaM_fi, Enu_TypeVariable.SansType)
+            Me.txt_GammaC_fi.Text = GetStringNoUnit(.GammaC_fi, Enu_TypeVariable.SansType)
+            Me.txt_GammaV_fi.Text = GetStringNoUnit(.GammaV_fi, Enu_TypeVariable.SansType)
+
+        End With
+
+        MAJI_GammaV_Unique()
 
     End Sub
 
@@ -91,7 +188,7 @@ Public Class Frm_Gamma
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
             Me.Close()
         End If
@@ -99,27 +196,135 @@ Public Class Frm_Gamma
 
 
     Private Function ValideSaisieFenetre() As Boolean
-        Return True
+        lFrm_Valide = True
+
+        For Each tuple_txtbox_loc As (TextBox, Boolean) In list_txtbox
+            If tuple_txtbox_loc.Item2 Then
+                If Not ErrorProvider.GetError(tuple_txtbox_loc.Item1) = String.Empty Then
+                    lFrm_Valide = False
+                    Exit For
+                End If
+            End If
+        Next
+        Return lFrm_Valide
     End Function
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
+        lModif = False
 
-    End Sub
+        With MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma
 
-    Private Sub Frm_Basic_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+            If .GammaG_sup <> MyPoutreLoc.Param.Gamma.GammaG_sup Then
+                lModif = True
+                .GammaG_sup = MyPoutreLoc.Param.Gamma.GammaG_sup
+            End If
 
-    End Sub
+            If .GammaG_inf <> MyPoutreLoc.Param.Gamma.GammaG_inf Then
+                lModif = True
+                .GammaG_inf = MyPoutreLoc.Param.Gamma.GammaG_inf
+            End If
 
-    Private Sub img_L1_Click(sender As Object, e As EventArgs) Handles img_GammaGsup.Click
+            If .GammaQ <> MyPoutreLoc.Param.Gamma.GammaQ Then
+                lModif = True
+                .GammaQ = MyPoutreLoc.Param.Gamma.GammaQ
+            End If
 
-    End Sub
+            If .Psi0_Q1 <> MyPoutreLoc.Param.Gamma.Psi0_Q1 Then
+                lModif = True
+                .Psi0_Q1 = MyPoutreLoc.Param.Gamma.Psi0_Q1
+            End If
 
-    Private Sub txt_MainSpan_TextChanged(sender As Object, e As EventArgs) Handles txt_GammaGsup.TextChanged
+            If .Psi1_Q1 <> MyPoutreLoc.Param.Gamma.Psi1_Q1 Then
+                lModif = True
+                .Psi1_Q1 = MyPoutreLoc.Param.Gamma.Psi1_Q1
+            End If
 
-    End Sub
+            If .Psi2_Q1 <> MyPoutreLoc.Param.Gamma.Psi2_Q1 Then
+                lModif = True
+                .Psi2_Q1 = MyPoutreLoc.Param.Gamma.Psi2_Q1
+            End If
 
-    Private Sub DataGridView1_CellContentClick(sender As Object, e As DataGridViewCellEventArgs)
+            If .Psi0_Q2 <> MyPoutreLoc.Param.Gamma.Psi0_Q2 Then
+                lModif = True
+                .Psi0_Q2 = MyPoutreLoc.Param.Gamma.Psi0_Q2
+            End If
 
+            If .Psi1_Q2 <> MyPoutreLoc.Param.Gamma.Psi1_Q2 Then
+                lModif = True
+                .Psi1_Q2 = MyPoutreLoc.Param.Gamma.Psi1_Q2
+            End If
+
+            If .Psi2_Q2 <> MyPoutreLoc.Param.Gamma.Psi2_Q2 Then
+                lModif = True
+                .Psi2_Q2 = MyPoutreLoc.Param.Gamma.Psi2_Q2
+            End If
+
+            If .GammaM0 <> MyPoutreLoc.Param.Gamma.GammaM0 Then
+                lModif = True
+                .GammaM0 = MyPoutreLoc.Param.Gamma.GammaM0
+            End If
+
+            If .GammaM1 <> MyPoutreLoc.Param.Gamma.GammaM1 Then
+                lModif = True
+                .GammaM1 = MyPoutreLoc.Param.Gamma.GammaM1
+            End If
+
+            If .GammaM2 <> MyPoutreLoc.Param.Gamma.GammaM2 Then
+                lModif = True
+                .GammaM2 = MyPoutreLoc.Param.Gamma.GammaM2
+            End If
+
+            If .GammaC <> MyPoutreLoc.Param.Gamma.GammaC Then
+                lModif = True
+                .GammaC = MyPoutreLoc.Param.Gamma.GammaC
+            End If
+
+            If .GammaV <> MyPoutreLoc.Param.Gamma.GammaV Then
+                lModif = True
+                .GammaV = MyPoutreLoc.Param.Gamma.GammaV
+            End If
+
+            If .lGammaV_unique <> MyPoutreLoc.Param.Gamma.lGammaV_unique Then
+                lModif = True
+                .lGammaV_unique = MyPoutreLoc.Param.Gamma.lGammaV_unique
+            End If
+
+            If .GammaVs <> MyPoutreLoc.Param.Gamma.GammaVs Then
+                lModif = True
+                .GammaVs = MyPoutreLoc.Param.Gamma.GammaVs
+            End If
+
+            If .GammaVp <> MyPoutreLoc.Param.Gamma.GammaVp Then
+                lModif = True
+                .GammaVp = MyPoutreLoc.Param.Gamma.GammaVp
+            End If
+
+            If .GammaS <> MyPoutreLoc.Param.Gamma.GammaS Then
+                lModif = True
+                .GammaS = MyPoutreLoc.Param.Gamma.GammaS
+            End If
+
+            If .GammaP <> MyPoutreLoc.Param.Gamma.GammaP Then
+                lModif = True
+                .GammaP = MyPoutreLoc.Param.Gamma.GammaP
+            End If
+
+            If .GammaM_fi <> MyPoutreLoc.Param.Gamma.GammaM_fi Then
+                lModif = True
+                .GammaM_fi = MyPoutreLoc.Param.Gamma.GammaM_fi
+            End If
+
+            If .GammaC_fi <> MyPoutreLoc.Param.Gamma.GammaC_fi Then
+                lModif = True
+                .GammaC_fi = MyPoutreLoc.Param.Gamma.GammaC_fi
+            End If
+
+            If .GammaV_fi <> MyPoutreLoc.Param.Gamma.GammaV_fi Then
+                lModif = True
+                .GammaV_fi = MyPoutreLoc.Param.Gamma.GammaV_fi
+            End If
+
+        End With
     End Sub
 
 #End Region
@@ -275,11 +480,166 @@ Public Class Frm_Gamma
 
 #Region " Evènements "
 
+    Private Sub MAJI_GammaV_Unique()
+        If Me.chk_GammaV_Unique.Checked Then
+            y_txt_GammaV = y_txt_GammaC + y_decal
+            y_txt_GammaS = y_txt_GammaV + y_decal
+            y_txt_GammaP = y_txt_GammaS + y_decal
+
+            y_txt_GammaVs = y_txt_GammaP + y_decal
+            y_txt_GammaVp = y_txt_GammaVs + y_decal
+
+
+        Else
+            y_txt_GammaVs = y_txt_GammaC + y_decal
+            y_txt_GammaVp = y_txt_GammaVs + y_decal
+            y_txt_GammaS = y_txt_GammaVp + y_decal
+            y_txt_GammaP = y_txt_GammaS + y_decal
+
+            y_txt_GammaV = y_txt_GammaP + y_decal
+
+        End If
+
+        Me.txt_GammaV.Visible = Me.chk_GammaV_Unique.Checked
+        Me.img_GammaV.Visible = Me.chk_GammaV_Unique.Checked
+        Me.txt_GammaVs.Visible = Not Me.chk_GammaV_Unique.Checked
+        Me.img_GammaVs.Visible = Not Me.chk_GammaV_Unique.Checked
+        Me.txt_GammaVp.Visible = Not Me.chk_GammaV_Unique.Checked
+        Me.img_GammaVp.Visible = Not Me.chk_GammaV_Unique.Checked
+
+        Me.img_GammaV.Location = New Point(x_img_GammaCVSP, y_txt_GammaV)
+        Me.img_GammaVs.Location = New Point(x_img_GammaCVSP, y_txt_GammaVs)
+        Me.img_GammaVp.Location = New Point(x_img_GammaCVSP, y_txt_GammaVp)
+        Me.img_GammaS.Location = New Point(x_img_GammaCVSP, y_txt_GammaS)
+        Me.img_GammaP.Location = New Point(x_img_GammaCVSP, y_txt_GammaP)
+
+        Me.txt_GammaV.Location = New Point(x_txt_GammaCVSP, y_txt_GammaV)
+        Me.txt_GammaVs.Location = New Point(x_txt_GammaCVSP, y_txt_GammaVs)
+        Me.txt_GammaVp.Location = New Point(x_txt_GammaCVSP, y_txt_GammaVp)
+        Me.txt_GammaS.Location = New Point(x_txt_GammaCVSP, y_txt_GammaS)
+        Me.txt_GammaP.Location = New Point(x_txt_GammaCVSP, y_txt_GammaP)
+
+        MyPoutreLoc.Param.Gamma.lGammaV_unique = chk_GammaV_Unique.Checked
+
+        'List(Of (TextBox, Boolean))
+
+    End Sub
+
+    Private Sub chk_GammaV_Unique_CheckedChanged(sender As Object, e As EventArgs) Handles chk_GammaV_Unique.CheckedChanged
+        If lBuild Then Exit Sub
+
+        MAJI_GammaV_Unique()
+
+
+    End Sub
 
 #End Region
 
 #Region " Evènements saisie "
+    Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_GammaGsup.TextChanged, txt_GammaGinf.TextChanged, txt_GammaQ.TextChanged, txt_Psi0_Q1.TextChanged, txt_Psi1_Q1.TextChanged, txt_Psi2_Q1.TextChanged, txt_Psi0_Q2.TextChanged, txt_Psi1_Q2.TextChanged, txt_Psi2_Q2.TextChanged, txt_GammaM0.TextChanged, txt_GammaM1.TextChanged, txt_GammaM2.TextChanged, txt_GammaC.TextChanged, txt_GammaV.TextChanged, txt_GammaVs.TextChanged, txt_GammaVp.TextChanged, txt_GammaS.TextChanged, txt_GammaP.TextChanged, txt_GammaM_fi.TextChanged, txt_GammaC_fi.TextChanged, txt_GammaV_fi.TextAlignChanged
+        If lBuild Then Exit Sub
 
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+
+            With MyPoutreLoc.Param.Gamma
+                Select Case sender.name
+                    Case txt_GammaGsup.Text
+                        .GammaG_sup = ValeurUI
+                    Case txt_GammaGinf.Text
+                        .GammaG_inf = ValeurUI
+                    Case txt_GammaQ.Text
+                        .GammaQ = ValeurUI
+                    Case txt_Psi0_Q1.Text
+                        .Psi0_Q1 = ValeurUI
+                    Case txt_Psi1_Q1.Text
+                        .Psi1_Q1 = ValeurUI
+                    Case txt_Psi2_Q1.Text
+                        .Psi2_Q1 = ValeurUI
+                    Case txt_Psi0_Q2.Text
+                        .Psi0_Q2 = ValeurUI
+                    Case txt_Psi1_Q2.Text
+                        .Psi1_Q2 = ValeurUI
+                    Case txt_Psi2_Q2.Text
+                        .Psi2_Q2 = ValeurUI
+                    Case txt_GammaM0.Text
+                        .GammaM0 = ValeurUI
+                    Case txt_GammaM1.Text
+                        .GammaM1 = ValeurUI
+                    Case txt_GammaM2.Text
+                        .GammaM2 = ValeurUI
+                    Case txt_GammaC.Text
+                        .GammaC = ValeurUI
+                    Case txt_GammaV.Text
+                        .GammaV = ValeurUI
+                    Case txt_GammaVs.Text
+                        .GammaVs = ValeurUI
+                    Case txt_GammaVp.Text
+                        .GammaVp = ValeurUI
+                    Case txt_GammaS.Text
+                        .GammaS = ValeurUI
+                    Case txt_GammaP.Text
+                        .GammaP = ValeurUI
+                    Case txt_GammaM_fi.Text
+                        .GammaM_fi = ValeurUI
+                    Case txt_GammaC_fi.Text
+                        .GammaC_fi = ValeurUI
+                    Case txt_GammaV_fi.Text
+                        .GammaV_fi = ValeurUI
+                End Select
+
+            End With
+
+        End If
+
+    End Sub
+
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        Dim lOk As Boolean = True
+        ErrorProvider.SetError(MyTxt, String.Empty)
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+        Dim GAMMA_ACTION_INF = 0
+        Dim GAMMA_ACTION_SUP = 2
+
+        Dim PSI_COMBINAISON_INF = 0
+        Dim PSI_COMBINAISON_SUP = 1
+
+        Dim GAMMA_RESISTANCE_INF = 0
+        Dim GAMMA_RESISTANCE_SUP = 2
+
+        Select Case MyTxt.Name
+            Case Me.txt_GammaGsup.Name, Me.txt_GammaGinf.Name, Me.txt_GammaQ.Name
+                ValMin = GAMMA_ACTION_INF
+                ValMax = GAMMA_ACTION_SUP
+
+            Case Me.txt_Psi0_Q1.Name, Me.txt_Psi1_Q1.Name, Me.txt_Psi2_Q1.Name, Me.txt_Psi0_Q2.Name, Me.txt_Psi1_Q2.Name, Me.txt_Psi2_Q2.Name
+                ValMin = PSI_COMBINAISON_INF
+                ValMax = PSI_COMBINAISON_SUP
+
+            Case Me.txt_GammaM0.Name, Me.txt_GammaM1.Name, Me.txt_GammaM2.Name, Me.txt_GammaC.Name, Me.txt_GammaV.Name, Me.txt_GammaVs.Name, Me.txt_GammaVp.Name, Me.txt_GammaS.Name, Me.txt_GammaP.Name, Me.txt_GammaM_fi.Name, Me.txt_GammaC_fi.Name, Me.txt_GammaV_fi.Name
+                ValMin = GAMMA_RESISTANCE_INF
+                ValMax = GAMMA_RESISTANCE_SUP
+        End Select
+
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            'ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+    End Function
 
 #End Region
 End Class
