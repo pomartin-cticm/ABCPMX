@@ -262,6 +262,15 @@ Module Mod_Declarations
     Public Const NBRESTRAINMIN As Integer = 0
     Public Const NBRESTRAINMAX As Integer = 5
 
+    Public Const GAMMA_ACTION_INF As Decimal = 0
+    Public Const GAMMA_ACTION_SUP As Decimal = 2
+
+    Public Const PSI_COMBINAISON_INF As Decimal = 0
+    Public Const PSI_COMBINAISON_SUP As Decimal = 1
+
+    Public Const GAMMA_RESISTANCE_INF As Decimal = 0
+    Public Const GAMMA_RESISTANCE_SUP As Decimal = 2
+
 
 
 #End Region

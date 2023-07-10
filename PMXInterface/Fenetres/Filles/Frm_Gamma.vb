@@ -76,9 +76,9 @@ Public Class Frm_Gamma
         list_txtbox.Add((txt_GammaM1, True))
         list_txtbox.Add((txt_GammaM2, True))
         list_txtbox.Add((txt_GammaC, True))
-        list_txtbox.Add((txt_GammaV, chk_GammaV_Unique.Checked))
-        list_txtbox.Add((txt_GammaVs, Not chk_GammaV_Unique.Checked))
-        list_txtbox.Add((txt_GammaVp, Not chk_GammaV_Unique.Checked))
+        list_txtbox.Add((txt_GammaV, MyPoutreLoc.Param.Gamma.lGammaV_unique))
+        list_txtbox.Add((txt_GammaVs, Not MyPoutreLoc.Param.Gamma.lGammaV_unique))
+        list_txtbox.Add((txt_GammaVp, Not MyPoutreLoc.Param.Gamma.lGammaV_unique))
         list_txtbox.Add((txt_GammaS, True))
         list_txtbox.Add((txt_GammaP, True))
         list_txtbox.Add((txt_GammaM_fi, True))
@@ -139,37 +139,36 @@ Public Class Frm_Gamma
 
         With MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma
 
-            Me.txt_GammaGsup.Text = GetStringNoUnit(.GammaG_sup, Enu_TypeVariable.SansType)
-            Me.txt_GammaGinf.Text = GetStringNoUnit(.GammaG_inf, Enu_TypeVariable.SansType)
-            Me.txt_GammaQ.Text = GetStringNoUnit(.GammaQ, Enu_TypeVariable.SansType)
+            Me.txt_GammaGsup.Text = CDec(.GammaG_sup)
+            Me.txt_GammaGinf.Text = CDec(.GammaG_inf)
+            Me.txt_GammaQ.Text = CDec(.GammaQ)
 
-            Me.txt_Psi0_Q1.Text = GetStringNoUnit(.Psi0_Q1, Enu_TypeVariable.SansType)
-            Me.txt_Psi1_Q1.Text = GetStringNoUnit(.Psi1_Q1, Enu_TypeVariable.SansType)
-            Me.txt_Psi2_Q1.Text = GetStringNoUnit(.Psi2_Q1, Enu_TypeVariable.SansType)
+            Me.txt_Psi0_Q1.Text = CDec(.Psi0_Q1)
+            Me.txt_Psi1_Q1.Text = CDec(.Psi1_Q1)
+            Me.txt_Psi2_Q1.Text = CDec(.Psi2_Q1)
 
-            Me.txt_Psi0_Q2.Text = GetStringNoUnit(.Psi0_Q2, Enu_TypeVariable.SansType)
-            Me.txt_Psi1_Q2.Text = GetStringNoUnit(.Psi1_Q2, Enu_TypeVariable.SansType)
-            Me.txt_Psi2_Q2.Text = GetStringNoUnit(.Psi2_Q2, Enu_TypeVariable.SansType)
+            Me.txt_Psi0_Q2.Text = CDec(.Psi0_Q2)
+            Me.txt_Psi1_Q2.Text = CDec(.Psi1_Q2)
+            Me.txt_Psi2_Q2.Text = CDec(.Psi2_Q2)
 
-            Me.txt_GammaM0.Text = GetStringNoUnit(.GammaM0, Enu_TypeVariable.SansType)
-            Me.txt_GammaM1.Text = GetStringNoUnit(.GammaM1, Enu_TypeVariable.SansType)
-            Me.txt_GammaM2.Text = GetStringNoUnit(.GammaM2, Enu_TypeVariable.SansType)
+            Me.txt_GammaM0.Text = CDec(.GammaM0)
+            Me.txt_GammaM1.Text = CDec(.GammaM1)
+            Me.txt_GammaM2.Text = CDec(.GammaM2)
 
-            Me.txt_GammaC.Text = GetStringNoUnit(.GammaC, Enu_TypeVariable.SansType)
+            Me.txt_GammaC.Text = CDec(.GammaC)
             Me.chk_GammaV_Unique.Checked = .lGammaV_unique
-            Me.txt_GammaV.Text = GetStringNoUnit(.GammaV, Enu_TypeVariable.SansType)
-            Me.txt_GammaVp.Text = GetStringNoUnit(.GammaVp, Enu_TypeVariable.SansType)
-            Me.txt_GammaVs.Text = GetStringNoUnit(.GammaVs, Enu_TypeVariable.SansType)
-            Me.txt_GammaS.Text = GetStringNoUnit(.GammaS, Enu_TypeVariable.SansType)
-            Me.txt_GammaP.Text = GetStringNoUnit(.GammaP, Enu_TypeVariable.SansType)
+            Me.txt_GammaV.Text = CDec(.GammaV)
+            Me.txt_GammaVp.Text = CDec(.GammaVp)
+            Me.txt_GammaVs.Text = CDec(.GammaVs)
+            Me.txt_GammaS.Text = CDec(.GammaS)
+            Me.txt_GammaP.Text = CDec(.GammaP)
 
-            Me.txt_GammaM_fi.Text = GetStringNoUnit(.GammaM_fi, Enu_TypeVariable.SansType)
-            Me.txt_GammaC_fi.Text = GetStringNoUnit(.GammaC_fi, Enu_TypeVariable.SansType)
-            Me.txt_GammaV_fi.Text = GetStringNoUnit(.GammaV_fi, Enu_TypeVariable.SansType)
+            Me.txt_GammaM_fi.Text = CDec(.GammaM_fi)
+            Me.txt_GammaC_fi.Text = CDec(.GammaC_fi)
+            Me.txt_GammaV_fi.Text = CDec(.GammaV_fi)
 
         End With
 
-        MAJI_GammaV_Unique()
 
     End Sub
 
@@ -519,7 +518,7 @@ Public Class Frm_Gamma
         Me.txt_GammaS.Location = New Point(x_txt_GammaCVSP, y_txt_GammaS)
         Me.txt_GammaP.Location = New Point(x_txt_GammaCVSP, y_txt_GammaP)
 
-        MyPoutreLoc.Param.Gamma.lGammaV_unique = chk_GammaV_Unique.Checked
+        chk_GammaV_Unique.Checked = MyPoutreLoc.Param.Gamma.lGammaV_unique
 
         'List(Of (TextBox, Boolean))
 
@@ -527,6 +526,8 @@ Public Class Frm_Gamma
 
     Private Sub chk_GammaV_Unique_CheckedChanged(sender As Object, e As EventArgs) Handles chk_GammaV_Unique.CheckedChanged
         If lBuild Then Exit Sub
+
+        MyPoutreLoc.Param.Gamma.lGammaV_unique = chk_GammaV_Unique.Checked
 
         MAJI_GammaV_Unique()
 
@@ -605,15 +606,6 @@ Public Class Frm_Gamma
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
 
-        Dim GAMMA_ACTION_INF = 0
-        Dim GAMMA_ACTION_SUP = 2
-
-        Dim PSI_COMBINAISON_INF = 0
-        Dim PSI_COMBINAISON_SUP = 1
-
-        Dim GAMMA_RESISTANCE_INF = 0
-        Dim GAMMA_RESISTANCE_SUP = 2
-
         Select Case MyTxt.Name
             Case Me.txt_GammaGsup.Name, Me.txt_GammaGinf.Name, Me.txt_GammaQ.Name
                 ValMin = GAMMA_ACTION_INF
@@ -640,6 +632,43 @@ Public Class Frm_Gamma
         lOk = (iErreur = 0)
         Return lOk
     End Function
+
+    Private Sub btn_Reini_Click(sender As Object, e As EventArgs) Handles btn_ReiniChargement.Click, btn_ReiniAccompagnement.Click, btn_ReiniResistanceAcier.Click, btn_ReiniResistanceDalle.Click, btn_ReiniResistanceIncendie.Click
+        Select Case sender.name
+            Case btn_ReiniChargement.Name
+                Me.txt_GammaGsup.Text = LogicielOptions.Gamma.GammaG_sup
+                Me.txt_GammaGinf.Text = LogicielOptions.Gamma.GammaG_inf
+                Me.txt_GammaQ.Text = LogicielOptions.Gamma.GammaQ
+
+            Case btn_ReiniAccompagnement.Name
+                Me.txt_Psi0_Q1.Text = LogicielOptions.Gamma.Psi0_Q1
+                Me.txt_Psi1_Q1.Text = LogicielOptions.Gamma.Psi1_Q1
+                Me.txt_Psi2_Q1.Text = LogicielOptions.Gamma.Psi2_Q1
+
+                Me.txt_Psi0_Q2.Text = LogicielOptions.Gamma.Psi0_Q2
+                Me.txt_Psi1_Q2.Text = LogicielOptions.Gamma.Psi1_Q2
+                Me.txt_Psi2_Q2.Text = LogicielOptions.Gamma.Psi2_Q2
+
+            Case btn_ReiniResistanceAcier.Name
+                Me.txt_GammaM0.Text = LogicielOptions.Gamma.GammaM0
+                Me.txt_GammaM1.Text = LogicielOptions.Gamma.GammaM1
+                Me.txt_GammaM2.Text = LogicielOptions.Gamma.GammaM2
+
+            Case btn_ReiniResistanceDalle.Name
+                Me.txt_GammaC.Text = LogicielOptions.Gamma.GammaC
+                Me.txt_GammaV.Text = LogicielOptions.Gamma.GammaV
+                Me.txt_GammaVs.Text = LogicielOptions.Gamma.GammaVs
+                Me.txt_GammaVp.Text = LogicielOptions.Gamma.GammaVs
+                Me.txt_GammaS.Text = LogicielOptions.Gamma.GammaS
+                Me.txt_GammaP.Text = LogicielOptions.Gamma.GammaP
+
+            Case btn_ReiniResistanceIncendie.Name
+                Me.txt_GammaM_fi.Text = LogicielOptions.Gamma.GammaM_fi
+                Me.txt_GammaC_fi.Text = LogicielOptions.Gamma.GammaC_fi
+                Me.txt_GammaV_fi.Text = LogicielOptions.Gamma.GammaV_fi
+
+        End Select
+    End Sub
 
 #End Region
 End Class

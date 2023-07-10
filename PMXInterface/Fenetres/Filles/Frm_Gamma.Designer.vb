@@ -915,6 +915,7 @@ Partial Class Frm_Gamma
         Me.ClientSize = New System.Drawing.Size(624, 335)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Gamma"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Gamma"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)

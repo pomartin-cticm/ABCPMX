@@ -153,9 +153,9 @@ Public Class Cls_OptionsCalcul
     ''' <param name="Lines">Lignes d'écriture</param>
     Public Sub EcrireFile(ByRef Lines As List(Of String))
 
-        Lines.Add("   CGM0          = " & Gamma_M0)
-        Lines.Add("   CGC           = " & Gamma_C)
-        Lines.Add("   CGS           = " & Gamma_S)
+        'Lines.Add("   CGM0          = " & Gamma_M0)
+        'Lines.Add("   CGC           = " & Gamma_C)
+        'Lines.Add("   CGS           = " & Gamma_S)
         Lines.Add("   CEta          = " & Eta)
 
         Lines.Add("   CNegFlexion   = " & lCalcul_Flexion_Negative)

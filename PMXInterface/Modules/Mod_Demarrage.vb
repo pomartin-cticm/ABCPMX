@@ -171,9 +171,13 @@ Module Mod_Demarrage
             LogicielOptions.Gamma.GammaG_inf = My.Settings.GammaG_inf
             LogicielOptions.Gamma.GammaQ = My.Settings.GammaQ
 
-            LogicielOptions.Gamma.Psi0 = My.Settings.Psi0
-            LogicielOptions.Gamma.Psi1 = My.Settings.Psi1
-            LogicielOptions.Gamma.Psi2 = My.Settings.Psi2
+            LogicielOptions.Gamma.Psi0_Q1 = My.Settings.Psi0
+            LogicielOptions.Gamma.Psi1_Q1 = My.Settings.Psi1
+            LogicielOptions.Gamma.Psi2_Q1 = My.Settings.Psi2
+
+            LogicielOptions.Gamma.Psi0_Q2 = My.Settings.Psi0
+            LogicielOptions.Gamma.Psi1_Q2 = My.Settings.Psi1
+            LogicielOptions.Gamma.Psi2_Q2 = My.Settings.Psi2
 
 
         Catch ex As Exception
@@ -312,6 +316,7 @@ Module Mod_Demarrage
         Else
         End If
 
+        MyPoutre.Param.Gamma = LogicielOptions.Gamma.Clone
 
     End Sub
 
