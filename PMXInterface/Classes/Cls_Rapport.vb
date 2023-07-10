@@ -1168,6 +1168,7 @@ Public Class Cls_Rapport
                     MyGr.DrawImage(MyPicture, xLeftImg, YPen, sWiImg, sHiImg)
                     MyPicture.Dispose()
 
+
                 Case "CORRECT"
 
                     'sHiImg = sWiImg * Frm_NoteCalcul.Btn_Correct.Image.Height / Frm_NoteCalcul.Btn_Correct.Image.Width
