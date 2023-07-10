@@ -605,6 +605,15 @@ Public Class Frm_Gamma
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
 
+        Dim GAMMA_ACTION_INF = 0
+        Dim GAMMA_ACTION_SUP = 2
+
+        Dim PSI_COMBINAISON_INF = 0
+        Dim PSI_COMBINAISON_SUP = 1
+
+        Dim GAMMA_RESISTANCE_INF = 0
+        Dim GAMMA_RESISTANCE_SUP = 2
+
         Select Case MyTxt.Name
             Case Me.txt_GammaGsup.Name, Me.txt_GammaGinf.Name, Me.txt_GammaQ.Name
                 ValMin = GAMMA_ACTION_INF

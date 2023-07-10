@@ -13,21 +13,6 @@ Public Class Cls_OptionsCalcul
 #Region " Attributs "
 
     ''' <summary>
-    ''' Resistance des sections en acier
-    ''' </summary> 
-    Public Gamma_M0 As Decimal
-
-    ''' <summary>
-    ''' Resistance à la compression du béton
-    ''' </summary>
-    Public Gamma_C As Decimal
-
-    ''' <summary>
-    ''' Resistance des armatures en acier
-    ''' </summary>
-    Public Gamma_S As Decimal
-
-    ''' <summary>
     ''' Module d'young pour les armatures
     ''' </summary>
     Public ArmaYoung As Decimal
@@ -112,6 +97,11 @@ Public Class Cls_OptionsCalcul
     ''' </summary>
     Public t0Permanentes(1) As Decimal
 
+    ''' <summary>
+    ''' Coefficients pour le calcul
+    ''' </summary>
+    Public Gamma As Cls_Gamma
+
 #End Region
 
 #Region " Constructeurs "
@@ -119,9 +109,7 @@ Public Class Cls_OptionsCalcul
     Sub New()
 
         '--> Coefficients partiels par défaut
-        Me.Gamma_M0 = 1
-        Me.Gamma_C = 1.5
-        Me.Gamma_S = 1.15
+        Gamma = New Cls_Gamma
 
         '--> Paramètres de calcul par défaut
         Me.lCalcul_Flexion_Positive = True
