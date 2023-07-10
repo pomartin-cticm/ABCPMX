@@ -9,6 +9,9 @@ Public Class Cls_Rapport
         Indice
         Normal
     End Enum
+
+    Const RAPPORTA4 As Single = 297.0! / 210.0!
+
 #End Region
 
 #Region "   Variables de la classe Rapport"
@@ -1160,20 +1163,20 @@ Public Class Cls_Rapport
 
                     Dim MyPicture As Image
                     'MyPicture = Image.FromFile(My.Application.Info.DirectoryPath & "\CTICM_logo.jpg")
-                    MyPicture = Image.FromFile(LogicielRep.Images & "\CTICM_logo.jpg")
+                    'MyPicture = Image.FromFile(LogicielRep.Images & "\CTICM_logo.jpg")
                     sHiImg = sWiImg * MyPicture.Height / MyPicture.Width
                     MyGr.DrawImage(MyPicture, xLeftImg, YPen, sWiImg, sHiImg)
                     MyPicture.Dispose()
 
                 Case "CORRECT"
 
-                    sHiImg = sWiImg * Frm_NoteCalcul.Btn_Correct.Image.Height / Frm_NoteCalcul.Btn_Correct.Image.Width
-                    MyGr.DrawImage(Frm_NoteCalcul.Btn_Correct.Image, xLeftImg, YPen, sWiImg, sHiImg)
+                    'sHiImg = sWiImg * Frm_NoteCalcul.Btn_Correct.Image.Height / Frm_NoteCalcul.Btn_Correct.Image.Width
+                    'MyGr.DrawImage(Frm_NoteCalcul.Btn_Correct.Image, xLeftImg, YPen, sWiImg, sHiImg)
 
                 Case "ERROR"
 
-                    sHiImg = sWiImg * Frm_NoteCalcul.Btn_Error.Image.Height / Frm_NoteCalcul.Btn_Error.Image.Width
-                    MyGr.DrawImage(Frm_NoteCalcul.Btn_Error.Image, xLeftImg, YPen, sWiImg, sHiImg)
+                    'sHiImg = sWiImg * Frm_NoteCalcul.Btn_Error.Image.Height / Frm_NoteCalcul.Btn_Error.Image.Width
+                    'MyGr.DrawImage(Frm_NoteCalcul.Btn_Error.Image, xLeftImg, YPen, sWiImg, sHiImg)
 
 
             End Select
@@ -1864,7 +1867,7 @@ Public Class Cls_Rapport
             Next
             Select Case Niveau
                 Case 1
-                    Numero = ChiffresRomains(Me.IndTitre(0))
+                    'Numero = ChiffresRomains(Me.IndTitre(0))
                 Case Else
                     Numero = Numero & "." & CStr(Me.IndTitre(Niveau - 1))
             End Select
