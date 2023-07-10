@@ -286,6 +286,7 @@
     <Folder Include="Icones\" />
     <Folder Include="Images\" />
     <Folder Include="Langues\" />
+    <Folder Include="UserControl\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ABCPMX II.ico" />

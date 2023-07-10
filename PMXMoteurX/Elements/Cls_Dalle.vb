@@ -91,6 +91,11 @@
     ''' </summary>
     Public AcierArmatures As New Cls_AcierArmature
 
+    ''' <summary>
+    ''' Connecteur acier-béton entre dalle et profilé
+    ''' </summary>
+    Public Connecteur As New Cls_Connecteur
+
 #End Region
 
 #Region " Enumérations "

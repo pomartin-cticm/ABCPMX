@@ -283,6 +283,20 @@ Public Class Cls_Bac
 
 #Region " Outils "
 
+    ''' <summary>
+    ''' Largeur b0 pour les coefficients kT et kL
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property LargeurB0 As Decimal
+        Get
+            Return Math.Min(Me.LargeurBmoyenne, Me.b_t)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Largeur moyenne d'une nervure
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property LargeurBmoyenne As Decimal
         Get
             Return (Me.b_b + Me.b_t) / 2
