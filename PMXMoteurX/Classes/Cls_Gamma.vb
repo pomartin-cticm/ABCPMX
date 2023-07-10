@@ -22,9 +22,13 @@
     Public GammaG_inf As Decimal
     Public GammaQ As Decimal
 
-    Public Psi0 As Decimal
-    Public Psi1 As Decimal
-    Public Psi2 As Decimal
+    Public Psi0_Q1 As Decimal
+    Public Psi1_Q1 As Decimal
+    Public Psi2_Q1 As Decimal
+
+    Public Psi0_Q2 As Decimal
+    Public Psi1_Q2 As Decimal
+    Public Psi2_Q2 As Decimal
 
 #End Region
 
@@ -54,9 +58,13 @@
         Me.GammaG_inf = 1.0
         Me.GammaQ = 1.5
 
-        Me.Psi0 = 0.7
-        Me.Psi1 = 0.5
-        Me.Psi2 = 0.3
+        Me.Psi0_Q1 = 0.7
+        Me.Psi1_Q1 = 0.5
+        Me.Psi2_Q1 = 0.3
+
+        Me.Psi0_Q2 = 0.7
+        Me.Psi1_Q2 = 0.5
+        Me.Psi2_Q2 = 0.3
 
     End Sub
 
