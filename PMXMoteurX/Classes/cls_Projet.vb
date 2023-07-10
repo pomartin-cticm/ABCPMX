@@ -59,6 +59,8 @@ Public Class cls_Projet
 
         IndEnCours = -1
         Me.Nom = ""
+        Me.Utilisateur = ""
+        Me.Entreprise = ""
 
     End Sub
 

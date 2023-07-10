@@ -1,0 +1,17 @@
+#NDC_MAIN
+TITLE					= Calculation report
+USER					= User
+SOCIETE					= Company
+PROJET					= Project
+FOOTNOTE				= Software use conditions apply
+PARAMETERS				= Parameters
+MAINP					= Main parameters
+SPROFILE				= Steel profile
+SLAB					= Slab
+GAMMA					= Partial factors
+LOADS					= Loads
+COMBINATIONS			= Combinations
+LATERALR				= Lateral restraints
+WEXPERT					= Warning: This calculation is carried out in the Expert mode.
+WEXPERT2				= Some parameters may be outside the scope of the software
+GSTEELB					= Steel beam
