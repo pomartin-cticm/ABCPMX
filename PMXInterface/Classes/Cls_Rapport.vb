@@ -122,8 +122,8 @@ Public Class Cls_Rapport
 
 #Region "   Constructeur ========================================================================"
 
-    Public Sub New(ByVal Police As String, _
-            ByVal Bordure As Single, ByVal MargeGauche As Integer, _
+    Public Sub New(ByVal Police As String,
+            ByVal Bordure As Single, ByVal MargeGauche As Integer,
             ByVal MargeDroite As Integer)
 
         '--> Definition de la Police en FontFamily
@@ -745,10 +745,10 @@ Public Class Cls_Rapport
 
 #Region "   Edition de la note ==============================================================================="
 
-    Public Sub DrawPage(ByVal indPage As Integer, ByVal nbPageAffiche As Integer, _
-                        ByRef MyGr As Graphics, _
-                        ByRef MyBrush As System.Drawing.Brush, _
-                        ByVal lImprimante As Boolean, ByVal lFirst As Boolean, _
+    Public Sub DrawPage(ByVal indPage As Integer, ByVal nbPageAffiche As Integer,
+                        ByRef MyGr As Graphics,
+                        ByRef MyBrush As System.Drawing.Brush,
+                        ByVal lImprimante As Boolean, ByVal lFirst As Boolean,
                         ByVal sWi As Single, ByVal sHI As Single, ByVal YTop As Single)
 
         '----------------------------------------------------------------------------------
@@ -842,7 +842,7 @@ Public Class Cls_Rapport
         Dim Chaine As String
         Dim lNormal As Boolean
         Dim lDrawLogo As Boolean
-       
+
         '--[ Initialisation
 
         lNormal = Not (Me.lPageGarde And indPage = 0)
@@ -851,7 +851,7 @@ Public Class Cls_Rapport
         '--[ Cadre général
 
         '--> Rectangle de bordure - trait noir
-        MyGr.DrawRectangle(MyPenBordure, kECH * BORDURE, kECH * (BORDURE + YTop), _
+        MyGr.DrawRectangle(MyPenBordure, kECH * BORDURE, kECH * (BORDURE + YTop),
                                        kECH * (sWi - 2 * BORDURE), kECH * (sWi * RAPPORTA4 - 2 * BORDURE))
 
         If lNormal Then
@@ -995,7 +995,7 @@ Public Class Cls_Rapport
 
     End Sub
 
-    Private Sub DrawLegende(ByVal Legende As String, ByRef MyGr As Graphics, _
+    Private Sub DrawLegende(ByVal Legende As String, ByRef MyGr As Graphics,
                             ByVal iCentre As Integer, ByVal sWi As Single, ByVal myBrush As Brush)
         '----------------------------------------------------------------------------------
         '
@@ -1026,7 +1026,7 @@ Public Class Cls_Rapport
 
     End Sub
 
-    Private Sub DrawTitreDoc(ByRef Ligne As String, ByRef MyGr As Graphics, _
+    Private Sub DrawTitreDoc(ByRef Ligne As String, ByRef MyGr As Graphics,
                              ByVal iTitre As Integer, ByVal sWi As Single)
         '----------------------------------------------------------------------------------
         '
@@ -1076,7 +1076,7 @@ Public Class Cls_Rapport
         MyBrush.Dispose()
     End Sub
 
-    Private Sub DrawTitre(ByRef Ligne As String, ByRef MyGr As Graphics, _
+    Private Sub DrawTitre(ByRef Ligne As String, ByRef MyGr As Graphics,
                           ByVal iTitre As Integer, ByVal sWi As Single)
         '----------------------------------------------------------------------------------
         '
@@ -1117,7 +1117,7 @@ Public Class Cls_Rapport
 
     End Sub
 
-    Private Sub DrawDessin(ByRef MyGr As Graphics, ByVal Ligne As String, _
+    Private Sub DrawDessin(ByRef MyGr As Graphics, ByVal Ligne As String,
                            ByVal sWi As Single, ByVal sHI As Single)
         '----------------------------------------------------------------------------------
         '
@@ -1163,11 +1163,10 @@ Public Class Cls_Rapport
 
                     Dim MyPicture As Image
                     'MyPicture = Image.FromFile(My.Application.Info.DirectoryPath & "\CTICM_logo.jpg")
-                    'MyPicture = Image.FromFile(LogicielRep.Images & "\CTICM_logo.jpg")
+                    MyPicture = Image.FromFile(LogicielRep.Images & "\CTICM_logo.jpg")
                     sHiImg = sWiImg * MyPicture.Height / MyPicture.Width
                     MyGr.DrawImage(MyPicture, xLeftImg, YPen, sWiImg, sHiImg)
                     MyPicture.Dispose()
-
 
                 Case "CORRECT"
 
@@ -1193,7 +1192,7 @@ Public Class Cls_Rapport
 
     End Sub
 
-    Private Sub DrawTableau(ByVal ChainePos As String, ByRef MyGr As Graphics, _
+    Private Sub DrawTableau(ByVal ChainePos As String, ByRef MyGr As Graphics,
                             ByVal sWi As Single)
         '----------------------------------------------------------------------------------
         '
@@ -1364,7 +1363,7 @@ Public Class Cls_Rapport
 
     End Sub
 
-    Private Sub EcrireCellule(ByVal MyGr As Graphics, ByVal Chaine As String, _
+    Private Sub EcrireCellule(ByVal MyGr As Graphics, ByVal Chaine As String,
                               ByVal xPen As Single, ByVal yPen As Single)
         '----------------------------------------------------------------------------------
         '
@@ -1570,9 +1569,9 @@ Public Class Cls_Rapport
 
     End Sub
 
-    Private Sub DrawLigne(ByRef Ligne As String, _
-                          ByRef MyGr As Graphics, ByRef MyBrush As System.Drawing.Brush, _
-                          ByVal lImprimante As Boolean, _
+    Private Sub DrawLigne(ByRef Ligne As String,
+                          ByRef MyGr As Graphics, ByRef MyBrush As System.Drawing.Brush,
+                          ByVal lImprimante As Boolean,
                           ByVal sWi As Single, ByVal sHI As Single)
         '----------------------------------------------------------------------------------
         '
@@ -1732,9 +1731,9 @@ Public Class Cls_Rapport
 
 #Region "   Outils "
 
-    Public Sub GetTitles(ByRef Titres() As String, _
-                         ByRef NiveauTitre() As Integer, _
-                         ByRef PageTitre() As Integer, _
+    Public Sub GetTitles(ByRef Titres() As String,
+                         ByRef NiveauTitre() As Integer,
+                         ByRef PageTitre() As Integer,
                          ByRef nbTitres As Integer)
         '------------------------------------------------------------------------------------------------
         '

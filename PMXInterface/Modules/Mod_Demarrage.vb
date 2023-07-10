@@ -181,11 +181,12 @@ Module Mod_Demarrage
         End Try
 
         LogicielOptions.lFenetres = True
+        LogicielInfo.DetailNDC = Enum_NiveauDetailNDC.Complete
 
         '--> MAJ des noms de fichiers langue
 
-        UpdateLNGFileName()
-        UpdateLNGFileName_NDC()
+        InitialiseLNGFileName()
+        InitialiseLNGFileName_NDC()
 
         '--> MAJ du nom fichier icones
 
@@ -259,6 +260,21 @@ Module Mod_Demarrage
             End If
             File.Copy(FichierSource, LogicielFichiers.Base_Goujons)
 
+        End If
+
+    End Sub
+
+    Private Sub InitialiseRepImage()
+        '--------------------------------------------------------------------------------------------
+        '   10/07/2023 :    Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Initialisation du répertoire images
+        '--------------------------------------------------------------------------------------------
+
+        If lDebug Then
+            LogicielRep.Images = LogicielRep.RepertoireInstall & "\..\..\Images"
+        Else
+            LogicielRep.Images = LogicielRep.RepertoireInstall & "\Images"
         End If
 
     End Sub
@@ -528,7 +544,7 @@ Module Mod_Demarrage
     ''' <summary>
     ''' Mise à jour du nom du fichier langue Interface
     ''' </summary>
-    Public Sub UpdateLNGFileName()
+    Public Sub InitialiseLNGFileName()
 
         If (LogicielInfo.ListeLangue.Count > 0) AndAlso (LogicielOptions.IndLangue >= 0) AndAlso (LogicielOptions.IndLangue < LogicielInfo.ListeLangue.Count) Then
 
@@ -551,7 +567,7 @@ Module Mod_Demarrage
     ''' <summary>
     ''' Mise à jour du nom du fichier langue Note de calcul
     ''' </summary>
-    Public Sub UpdateLNGFileName_NDC()
+    Public Sub InitialiseLNGFileName_NDC()
 
         If (LogicielInfo.ListeLangueNDC.Count > 0) AndAlso (LogicielOptions.IndLangueNDC >= 0) AndAlso (LogicielOptions.IndLangueNDC < LogicielInfo.ListeLangueNDC.Count) Then
 
@@ -571,7 +587,7 @@ Module Mod_Demarrage
 
 #End Region
 
-#Region "Gestion Icones"
+#Region " Gestion Icones "
 
     ''' <summary>
     ''' Mise à jour du nom du fichier icones (à discuter)

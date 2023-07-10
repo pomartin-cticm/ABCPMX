@@ -158,6 +158,12 @@
     <Compile Include="Fenetres\Frm_Juridique.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Frm_NoteCalcul.designer.vb">
+      <DependentUpon>Frm_NoteCalcul.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Frm_NoteCalcul.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Frm_Ouverture.designer.vb">
       <DependentUpon>Frm_Ouverture.vb</DependentUpon>
     </Compile>
@@ -183,6 +189,7 @@
     <Compile Include="Modules\Mod_Declarations.vb" />
     <Compile Include="Modules\Mod_Demarrage.vb" />
     <Compile Include="Modules\Mod_Dessins.vb" />
+    <Compile Include="Modules\Mod_NoteCalcul.vb" />
     <Compile Include="Modules\Mod_Outils.vb" />
     <Compile Include="Modules\Mod_OutilsGraph.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -242,6 +249,9 @@
     <EmbeddedResource Include="Fenetres\Frm_Juridique.resx">
       <DependentUpon>Frm_Juridique.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Frm_NoteCalcul.resx">
+      <DependentUpon>Frm_NoteCalcul.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Frm_Ouverture.resx">
       <DependentUpon>Frm_Ouverture.vb</DependentUpon>
     </EmbeddedResource>
@@ -274,6 +284,7 @@
   <ItemGroup>
     <Folder Include="Controles\" />
     <Folder Include="Icones\" />
+    <Folder Include="Images\" />
     <Folder Include="Langues\" />
   </ItemGroup>
   <ItemGroup>

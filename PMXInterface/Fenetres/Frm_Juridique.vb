@@ -91,7 +91,7 @@ Public Class Frm_Juridique
         End If
 
         '--> Récupération du chemin du fichier
-        UpdateLNGFileName()
+        InitialiseLNGFileName()
 
         '--> MAJ du texte affiché
         GestionLangue()

@@ -231,6 +231,10 @@ Public Class Frm_PMX
         AjouterPoutre()
     End Sub
 
+    Private Sub TSbtn_NoteCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_NoteCalcul.Click
+        AAA_EditionNOTEdeCALCUL(True)
+    End Sub
+
 
 #End Region
 
@@ -456,6 +460,7 @@ Public Class Frm_PMX
         Next
 
     End Sub
+
 
 #End Region
 

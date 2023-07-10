@@ -85,6 +85,10 @@ Module Mod_Declarations
         ''' </summary>
         Public RepertoireInstall As String
 
+        ''' <summary>
+        ''' Répertoire des images à charger
+        ''' </summary>
+        Public Images As String
     End Structure
 
     Public Structure Struc_OptionsLogiciel
@@ -190,6 +194,9 @@ Module Mod_Declarations
         Public NbDigitMax_ModulesY() As Integer     'nombre maxi de decimale pour l'affichage    
 
         'Les unites internes pour les contraintes sont en MPa
+
+        Public DetailNDC As Enum_NiveauDetailNDC    'Niveau de détails de la NDC - synthèse et complète
+
     End Structure
 
 #End Region
@@ -352,6 +359,8 @@ Module Mod_Declarations
         Public Const Bas As Integer = 8
         Public Const Tous As Integer = 15
     End Class
+
+    Public Const RAPPORTA4 As Single = 297.0! / 210.0!
 
 #End Region
 
