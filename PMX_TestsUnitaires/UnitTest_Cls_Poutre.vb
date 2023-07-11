@@ -5,21 +5,21 @@ Imports PMXMoteur2
 <TestClass()> Public Class UnitTest_Cls_Poutre
 
     <TestMethod()> Public Sub TestMethod_EffectiveWidth()
-
-        'Test de la fonction qui calcul la largeur de la dalle participante à une position donnée 
-
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   10/07/23 :  Création GUD
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test de la fonction qui calcule les largeurs de la dalle participante à une position donnée 
+        '----------------------------------------------------------------------------------------------------------------------------------
 
 
 
         '----------------------------------------------------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------------------------------------------------
-        'TEST DE LA CONFIGURATION 1
+        'TEST DE LA CONFIGURATION 1 : 
         '----------------------------------------------------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------------------------------------------------
-
-
 
         Dim poutre As New cls_Poutre()
 
@@ -176,7 +176,7 @@ Imports PMXMoteur2
             .LongueurTravee(1) = 8
             .LongueurTravee(2) = 5
 
-
+            Const PCLim As Decimal = 1
 
             'Calcul de la largeur participante au droit de l'appui A
 
@@ -253,7 +253,7 @@ Imports PMXMoteur2
 
             beff_ref = .EffectiveWidth(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
-            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
             'calcul à 9L/10
 
@@ -263,7 +263,7 @@ Imports PMXMoteur2
 
             beff_ref = .EffectiveWidth(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
-            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
             'calcul au droit de l'appui B, coté console droite 
 
@@ -273,7 +273,7 @@ Imports PMXMoteur2
 
             beff_ref = .EffectiveWidth(x, 2, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
-            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
             'calcul au droit de la mi travée de la console droite
 
@@ -281,7 +281,7 @@ Imports PMXMoteur2
 
             beff_ref = .EffectiveWidth(x, 2, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
-            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
             'calcul au droit du bord libre de la travée droite
 
@@ -289,7 +289,7 @@ Imports PMXMoteur2
 
             beff_ref = .EffectiveWidth(x, 2, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
-            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
         End With
 

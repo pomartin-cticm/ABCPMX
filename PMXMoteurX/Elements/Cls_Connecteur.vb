@@ -45,6 +45,7 @@ Public Class Cls_Connecteur
         '   GammaVS [E] :   Coefficient partiel pour la première équation (acier)
         '   GammaVC [E] :   Coefficient partiel pour la seconde équation (béton)
         '-----------------------------------------------------------------------------------------------------------------
+        '   TU : 
 
         '--> Déclaration
 
