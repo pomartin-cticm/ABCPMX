@@ -8,8 +8,6 @@
 
 #End Region
 
-
-
 #Region " Attributs "
 
     ''' <summary>
@@ -63,7 +61,7 @@
 
 #End Region
 
-#Region " Fonction de calcul "
+#Region " Fonctions de calcul "
 
     ''' <summary>
     ''' Calcul des propriétés
@@ -199,7 +197,7 @@
     End Function
 
     Public Function Beta_t0(t0 As Decimal) As Decimal
-        Return (1 / (1 + t0 ^ 0.2))
+        Return (1 / (0.1 + t0 ^ 0.2))
     End Function
 
 #End Region
