@@ -7,16 +7,27 @@ Public Class Frm_Hivoss
 
     Dim lBuild As Boolean = True
 
+    Dim MyPoutreLoc As cls_Poutre
+
 #End Region
 
 #Region "===OUVERTURE==="
+    Private Sub Frm_Hivoss_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        InitialiserFenetre()
+    End Sub
+
 
     Public Sub InitialiserFenetre()
+        InitialiserVariables()
         GestionLangues()
         GestionStyle()
         GestionUnites()
         AfficherPoutreEnCours()
         lBuild = False
+    End Sub
+
+    Private Sub InitialiserVariables()
+        cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
     End Sub
 
     Private Sub GestionLangues()
@@ -76,6 +87,14 @@ Public Class Frm_Hivoss
     End Sub
 
     Private Sub Frm_Basic_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Private Sub PictureBox8_Click(sender As Object, e As EventArgs) Handles PictureBox8.Click
+
+    End Sub
+
+    Private Sub pan_SaisieAmortissement_Paint(sender As Object, e As PaintEventArgs) Handles pan_SaisieAmortissement.Paint
 
     End Sub
 

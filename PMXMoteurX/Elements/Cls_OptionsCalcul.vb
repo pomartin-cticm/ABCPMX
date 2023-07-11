@@ -102,6 +102,11 @@ Public Class Cls_OptionsCalcul
     ''' </summary>
     Public Gamma As Cls_Gamma
 
+    ''' <summary>
+    ''' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
+    ''' </summary>
+    Public HivossParam As cls_HivossParam
+
 #End Region
 
 #Region " Constructeurs "
@@ -110,6 +115,9 @@ Public Class Cls_OptionsCalcul
 
         '--> Coefficients partiels par défaut
         Gamma = New Cls_Gamma
+
+        '--> Coefficients pour le calcul en dynamique
+        HivossParam = New cls_HivossParam
 
         '--> Paramètres de calcul par défaut
         Me.lCalcul_Flexion_Positive = True

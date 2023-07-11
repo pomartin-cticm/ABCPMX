@@ -340,7 +340,7 @@ Public Class Frm_PMX
             Case EnuFenetres.Hivoss
                 If LogicielOptions.lFenetres Then
                     iFrmAppel = EnuFenetres.Main
-                    Frm_BacN.ShowDialog()
+                    Frm_Hivoss.ShowDialog()
                 Else
 
                 End If

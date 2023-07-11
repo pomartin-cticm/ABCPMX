@@ -28,27 +28,58 @@ Partial Class Frm_Hivoss
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.pan_Main = New System.Windows.Forms.Panel()
-        Me.TLPan_Options = New System.Windows.Forms.TableLayoutPanel()
-        Me.pan_Gauche = New System.Windows.Forms.Panel()
-        Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Options = New System.Windows.Forms.Label()
-        Me.pan_SaisieOptions = New System.Windows.Forms.Panel()
+        Me.TLPan_PartieHaute = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Droite = New System.Windows.Forms.Panel()
         Me.TLPan_Droite = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Amortissement = New System.Windows.Forms.Label()
         Me.pan_SaisieAmortissement = New System.Windows.Forms.Panel()
-        Me.chk_methodeHIVOSS = New System.Windows.Forms.CheckBox()
+        Me.PictureBox7 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox8 = New System.Windows.Forms.PictureBox()
+        Me.lbl_AmortissementTotal = New System.Windows.Forms.Label()
+        Me.PictureBox5 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox6 = New System.Windows.Forms.PictureBox()
+        Me.chk_ChappeFlottante = New System.Windows.Forms.CheckBox()
+        Me.chk_FauxPlafond = New System.Windows.Forms.CheckBox()
+        Me.lbl_AmortissementFinition = New System.Windows.Forms.Label()
+        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
+        Me.lbl_AmortissementMobilier = New System.Windows.Forms.Label()
+        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
+        Me.img_D1 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.lbl_PoutreAcier = New System.Windows.Forms.Label()
+        Me.lbl_AmortissementStructure = New System.Windows.Forms.Label()
+        Me.pan_Gauche = New System.Windows.Forms.Panel()
+        Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.lbl_Options = New System.Windows.Forms.Label()
+        Me.pan_SaisieOptions = New System.Windows.Forms.Panel()
+        Me.cmb_UtilisationPlancher = New System.Windows.Forms.ComboBox()
+        Me.lbl_UtilisationPlancher = New System.Windows.Forms.Label()
+        Me.cmb_choixQ = New System.Windows.Forms.ComboBox()
+        Me.lbl_avec = New System.Windows.Forms.Label()
+        Me.cmb_ratioQ = New System.Windows.Forms.ComboBox()
         Me.lbl_ComboMasseFrequence = New System.Windows.Forms.Label()
+        Me.chk_methodeHIVOSS = New System.Windows.Forms.CheckBox()
+        Me.ComboBox5 = New System.Windows.Forms.ComboBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
-        Me.TLPan_Options.SuspendLayout()
+        Me.TLPan_PartieHaute.SuspendLayout()
+        Me.pan_Droite.SuspendLayout()
+        Me.TLPan_Droite.SuspendLayout()
+        Me.pan_SaisieAmortissement.SuspendLayout()
+        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_D1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_SaisieOptions.SuspendLayout()
-        Me.pan_Droite.SuspendLayout()
-        Me.TLPan_Droite.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -58,7 +89,7 @@ Partial Class Frm_Hivoss
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(800, 450)
+        Me.pan_General.Size = New System.Drawing.Size(666, 336)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -73,7 +104,7 @@ Partial Class Frm_Hivoss
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(800, 450)
+        Me.TLpan_Main.Size = New System.Drawing.Size(666, 336)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -87,20 +118,20 @@ Partial Class Frm_Hivoss
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 413)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 299)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(794, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(660, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(410, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(343, 3)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
@@ -111,7 +142,7 @@ Partial Class Frm_Hivoss
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(270, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(203, 3)
         Me.btn_Annuler.Name = "btn_Annuler"
         Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
         Me.btn_Annuler.TabIndex = 0
@@ -121,92 +152,38 @@ Partial Class Frm_Hivoss
         'pan_Main
         '
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
-        Me.pan_Main.Controls.Add(Me.TLPan_Options)
+        Me.pan_Main.Controls.Add(Me.TLPan_PartieHaute)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(794, 404)
+        Me.pan_Main.Size = New System.Drawing.Size(660, 290)
         Me.pan_Main.TabIndex = 1
         '
-        'TLPan_Options
+        'TLPan_PartieHaute
         '
-        Me.TLPan_Options.ColumnCount = 2
-        Me.TLPan_Options.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_Options.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_Options.Controls.Add(Me.pan_Droite, 0, 0)
-        Me.TLPan_Options.Controls.Add(Me.pan_Gauche, 0, 0)
-        Me.TLPan_Options.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Options.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Options.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_Options.Name = "TLPan_Options"
-        Me.TLPan_Options.RowCount = 1
-        Me.TLPan_Options.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Options.Size = New System.Drawing.Size(794, 404)
-        Me.TLPan_Options.TabIndex = 0
-        '
-        'pan_Gauche
-        '
-        Me.pan_Gauche.AutoScroll = True
-        Me.pan_Gauche.Controls.Add(Me.TLPan_Gauche)
-        Me.pan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
-        Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
-        Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(396, 404)
-        Me.pan_Gauche.TabIndex = 0
-        '
-        'TLPan_Gauche
-        '
-        Me.TLPan_Gauche.ColumnCount = 1
-        Me.TLPan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Controls.Add(Me.lbl_Options, 0, 0)
-        Me.TLPan_Gauche.Controls.Add(Me.pan_SaisieOptions, 0, 1)
-        Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Top
-        Me.TLPan_Gauche.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_Gauche.Name = "TLPan_Gauche"
-        Me.TLPan_Gauche.RowCount = 2
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(396, 404)
-        Me.TLPan_Gauche.TabIndex = 0
-        '
-        'lbl_Options
-        '
-        Me.lbl_Options.AutoSize = True
-        Me.lbl_Options.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Options.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Options.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Options.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Options.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Options.Name = "lbl_Options"
-        Me.lbl_Options.Size = New System.Drawing.Size(396, 30)
-        Me.lbl_Options.TabIndex = 0
-        Me.lbl_Options.Text = "lbl_Options"
-        Me.lbl_Options.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'pan_SaisieOptions
-        '
-        Me.pan_SaisieOptions.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_SaisieOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieOptions.Controls.Add(Me.lbl_ComboMasseFrequence)
-        Me.pan_SaisieOptions.Controls.Add(Me.chk_methodeHIVOSS)
-        Me.pan_SaisieOptions.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieOptions.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisieOptions.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_SaisieOptions.Name = "pan_SaisieOptions"
-        Me.pan_SaisieOptions.Size = New System.Drawing.Size(396, 374)
-        Me.pan_SaisieOptions.TabIndex = 1
+        Me.TLPan_PartieHaute.ColumnCount = 2
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
+        Me.TLPan_PartieHaute.Controls.Add(Me.pan_Droite, 0, 0)
+        Me.TLPan_PartieHaute.Controls.Add(Me.pan_Gauche, 0, 0)
+        Me.TLPan_PartieHaute.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLPan_PartieHaute.Location = New System.Drawing.Point(0, 0)
+        Me.TLPan_PartieHaute.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
+        Me.TLPan_PartieHaute.RowCount = 1
+        Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(660, 290)
+        Me.TLPan_PartieHaute.TabIndex = 0
         '
         'pan_Droite
         '
         Me.pan_Droite.AutoScroll = True
         Me.pan_Droite.Controls.Add(Me.TLPan_Droite)
         Me.pan_Droite.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Droite.Location = New System.Drawing.Point(397, 0)
+        Me.pan_Droite.Location = New System.Drawing.Point(297, 0)
         Me.pan_Droite.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Droite.Name = "pan_Droite"
-        Me.pan_Droite.Size = New System.Drawing.Size(397, 404)
+        Me.pan_Droite.Size = New System.Drawing.Size(363, 290)
         Me.pan_Droite.TabIndex = 1
         '
         'TLPan_Droite
@@ -222,7 +199,7 @@ Partial Class Frm_Hivoss
         Me.TLPan_Droite.RowCount = 2
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Droite.Size = New System.Drawing.Size(397, 404)
+        Me.TLPan_Droite.Size = New System.Drawing.Size(363, 290)
         Me.TLPan_Droite.TabIndex = 0
         '
         'lbl_Amortissement
@@ -234,21 +211,285 @@ Partial Class Frm_Hivoss
         Me.lbl_Amortissement.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Amortissement.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Amortissement.Name = "lbl_Amortissement"
-        Me.lbl_Amortissement.Size = New System.Drawing.Size(397, 30)
+        Me.lbl_Amortissement.Size = New System.Drawing.Size(363, 30)
         Me.lbl_Amortissement.TabIndex = 0
-        Me.lbl_Amortissement.Text = "Label1"
+        Me.lbl_Amortissement.Text = "lbl_Amortissement"
         Me.lbl_Amortissement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_SaisieAmortissement
         '
         Me.pan_SaisieAmortissement.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieAmortissement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieAmortissement.Controls.Add(Me.ComboBox5)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox7)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox8)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_AmortissementTotal)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox5)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox6)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.chk_ChappeFlottante)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.chk_FauxPlafond)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_AmortissementFinition)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.ComboBox4)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_AmortissementMobilier)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox4)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.img_D1)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox2)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox1)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_PoutreAcier)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_AmortissementStructure)
         Me.pan_SaisieAmortissement.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_SaisieAmortissement.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieAmortissement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieAmortissement.Name = "pan_SaisieAmortissement"
-        Me.pan_SaisieAmortissement.Size = New System.Drawing.Size(397, 374)
+        Me.pan_SaisieAmortissement.Size = New System.Drawing.Size(363, 260)
         Me.pan_SaisieAmortissement.TabIndex = 1
+        '
+        'PictureBox7
+        '
+        Me.PictureBox7.Location = New System.Drawing.Point(283, 216)
+        Me.PictureBox7.Name = "PictureBox7"
+        Me.PictureBox7.Size = New System.Drawing.Size(57, 21)
+        Me.PictureBox7.TabIndex = 19
+        Me.PictureBox7.TabStop = False
+        '
+        'PictureBox8
+        '
+        Me.PictureBox8.Location = New System.Drawing.Point(220, 216)
+        Me.PictureBox8.Name = "PictureBox8"
+        Me.PictureBox8.Size = New System.Drawing.Size(57, 21)
+        Me.PictureBox8.TabIndex = 18
+        Me.PictureBox8.TabStop = False
+        '
+        'lbl_AmortissementTotal
+        '
+        Me.lbl_AmortissementTotal.AutoSize = True
+        Me.lbl_AmortissementTotal.Location = New System.Drawing.Point(19, 219)
+        Me.lbl_AmortissementTotal.Name = "lbl_AmortissementTotal"
+        Me.lbl_AmortissementTotal.Size = New System.Drawing.Size(115, 13)
+        Me.lbl_AmortissementTotal.TabIndex = 17
+        Me.lbl_AmortissementTotal.Text = "lbl_AmortissementTotal"
+        '
+        'PictureBox5
+        '
+        Me.PictureBox5.Location = New System.Drawing.Point(283, 171)
+        Me.PictureBox5.Name = "PictureBox5"
+        Me.PictureBox5.Size = New System.Drawing.Size(57, 21)
+        Me.PictureBox5.TabIndex = 16
+        Me.PictureBox5.TabStop = False
+        '
+        'PictureBox6
+        '
+        Me.PictureBox6.Location = New System.Drawing.Point(220, 171)
+        Me.PictureBox6.Name = "PictureBox6"
+        Me.PictureBox6.Size = New System.Drawing.Size(57, 21)
+        Me.PictureBox6.TabIndex = 15
+        Me.PictureBox6.TabStop = False
+        '
+        'chk_ChappeFlottante
+        '
+        Me.chk_ChappeFlottante.AutoSize = True
+        Me.chk_ChappeFlottante.Location = New System.Drawing.Point(34, 187)
+        Me.chk_ChappeFlottante.Name = "chk_ChappeFlottante"
+        Me.chk_ChappeFlottante.Size = New System.Drawing.Size(128, 17)
+        Me.chk_ChappeFlottante.TabIndex = 14
+        Me.chk_ChappeFlottante.Text = "chk_ChappeFlottante"
+        Me.chk_ChappeFlottante.UseVisualStyleBackColor = True
+        '
+        'chk_FauxPlafond
+        '
+        Me.chk_FauxPlafond.AutoSize = True
+        Me.chk_FauxPlafond.Location = New System.Drawing.Point(34, 164)
+        Me.chk_FauxPlafond.Name = "chk_FauxPlafond"
+        Me.chk_FauxPlafond.Size = New System.Drawing.Size(109, 17)
+        Me.chk_FauxPlafond.TabIndex = 13
+        Me.chk_FauxPlafond.Text = "chk_FauxPlafond"
+        Me.chk_FauxPlafond.UseVisualStyleBackColor = True
+        '
+        'lbl_AmortissementFinition
+        '
+        Me.lbl_AmortissementFinition.AutoSize = True
+        Me.lbl_AmortissementFinition.Location = New System.Drawing.Point(19, 137)
+        Me.lbl_AmortissementFinition.Name = "lbl_AmortissementFinition"
+        Me.lbl_AmortissementFinition.Size = New System.Drawing.Size(124, 13)
+        Me.lbl_AmortissementFinition.TabIndex = 12
+        Me.lbl_AmortissementFinition.Text = "lbl_AmortissementFinition"
+        '
+        'ComboBox4
+        '
+        Me.ComboBox4.FormattingEnabled = True
+        Me.ComboBox4.Location = New System.Drawing.Point(31, 104)
+        Me.ComboBox4.Name = "ComboBox4"
+        Me.ComboBox4.Size = New System.Drawing.Size(162, 21)
+        Me.ComboBox4.TabIndex = 7
+        '
+        'lbl_AmortissementMobilier
+        '
+        Me.lbl_AmortissementMobilier.AutoSize = True
+        Me.lbl_AmortissementMobilier.Location = New System.Drawing.Point(19, 75)
+        Me.lbl_AmortissementMobilier.Name = "lbl_AmortissementMobilier"
+        Me.lbl_AmortissementMobilier.Size = New System.Drawing.Size(127, 13)
+        Me.lbl_AmortissementMobilier.TabIndex = 11
+        Me.lbl_AmortissementMobilier.Text = "lbl_AmortissementMobilier"
+        '
+        'PictureBox4
+        '
+        Me.PictureBox4.Location = New System.Drawing.Point(283, 42)
+        Me.PictureBox4.Name = "PictureBox4"
+        Me.PictureBox4.Size = New System.Drawing.Size(57, 21)
+        Me.PictureBox4.TabIndex = 10
+        Me.PictureBox4.TabStop = False
+        '
+        'img_D1
+        '
+        Me.img_D1.Location = New System.Drawing.Point(220, 42)
+        Me.img_D1.Name = "img_D1"
+        Me.img_D1.Size = New System.Drawing.Size(57, 21)
+        Me.img_D1.TabIndex = 9
+        Me.img_D1.TabStop = False
+        '
+        'PictureBox2
+        '
+        Me.PictureBox2.Location = New System.Drawing.Point(283, 104)
+        Me.PictureBox2.Name = "PictureBox2"
+        Me.PictureBox2.Size = New System.Drawing.Size(57, 21)
+        Me.PictureBox2.TabIndex = 10
+        Me.PictureBox2.TabStop = False
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Location = New System.Drawing.Point(220, 104)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(57, 21)
+        Me.PictureBox1.TabIndex = 9
+        Me.PictureBox1.TabStop = False
+        '
+        'lbl_PoutreAcier
+        '
+        Me.lbl_PoutreAcier.AutoSize = True
+        Me.lbl_PoutreAcier.Location = New System.Drawing.Point(31, 46)
+        Me.lbl_PoutreAcier.Name = "lbl_PoutreAcier"
+        Me.lbl_PoutreAcier.Size = New System.Drawing.Size(78, 13)
+        Me.lbl_PoutreAcier.TabIndex = 8
+        Me.lbl_PoutreAcier.Text = "lbl_PoutreAcier"
+        '
+        'lbl_AmortissementStructure
+        '
+        Me.lbl_AmortissementStructure.AutoSize = True
+        Me.lbl_AmortissementStructure.Location = New System.Drawing.Point(19, 16)
+        Me.lbl_AmortissementStructure.Name = "lbl_AmortissementStructure"
+        Me.lbl_AmortissementStructure.Size = New System.Drawing.Size(134, 13)
+        Me.lbl_AmortissementStructure.TabIndex = 7
+        Me.lbl_AmortissementStructure.Text = "lbl_AmortissementStructure"
+        '
+        'pan_Gauche
+        '
+        Me.pan_Gauche.AutoScroll = True
+        Me.pan_Gauche.Controls.Add(Me.TLPan_Gauche)
+        Me.pan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
+        Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
+        Me.pan_Gauche.Name = "pan_Gauche"
+        Me.pan_Gauche.Size = New System.Drawing.Size(296, 290)
+        Me.pan_Gauche.TabIndex = 0
+        '
+        'TLPan_Gauche
+        '
+        Me.TLPan_Gauche.ColumnCount = 1
+        Me.TLPan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Gauche.Controls.Add(Me.lbl_Options, 0, 0)
+        Me.TLPan_Gauche.Controls.Add(Me.pan_SaisieOptions, 0, 1)
+        Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TLPan_Gauche.Location = New System.Drawing.Point(0, 0)
+        Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_Gauche.Name = "TLPan_Gauche"
+        Me.TLPan_Gauche.RowCount = 2
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(296, 290)
+        Me.TLPan_Gauche.TabIndex = 0
+        '
+        'lbl_Options
+        '
+        Me.lbl_Options.AutoSize = True
+        Me.lbl_Options.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Options.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Options.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Options.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Options.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Options.Name = "lbl_Options"
+        Me.lbl_Options.Size = New System.Drawing.Size(296, 30)
+        Me.lbl_Options.TabIndex = 0
+        Me.lbl_Options.Text = "lbl_Options"
+        Me.lbl_Options.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_SaisieOptions
+        '
+        Me.pan_SaisieOptions.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_SaisieOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieOptions.Controls.Add(Me.cmb_UtilisationPlancher)
+        Me.pan_SaisieOptions.Controls.Add(Me.lbl_UtilisationPlancher)
+        Me.pan_SaisieOptions.Controls.Add(Me.cmb_choixQ)
+        Me.pan_SaisieOptions.Controls.Add(Me.lbl_avec)
+        Me.pan_SaisieOptions.Controls.Add(Me.cmb_ratioQ)
+        Me.pan_SaisieOptions.Controls.Add(Me.lbl_ComboMasseFrequence)
+        Me.pan_SaisieOptions.Controls.Add(Me.chk_methodeHIVOSS)
+        Me.pan_SaisieOptions.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_SaisieOptions.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisieOptions.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_SaisieOptions.Name = "pan_SaisieOptions"
+        Me.pan_SaisieOptions.Size = New System.Drawing.Size(296, 260)
+        Me.pan_SaisieOptions.TabIndex = 1
+        '
+        'cmb_UtilisationPlancher
+        '
+        Me.cmb_UtilisationPlancher.FormattingEnabled = True
+        Me.cmb_UtilisationPlancher.Location = New System.Drawing.Point(31, 134)
+        Me.cmb_UtilisationPlancher.Name = "cmb_UtilisationPlancher"
+        Me.cmb_UtilisationPlancher.Size = New System.Drawing.Size(221, 21)
+        Me.cmb_UtilisationPlancher.TabIndex = 6
+        '
+        'lbl_UtilisationPlancher
+        '
+        Me.lbl_UtilisationPlancher.AutoSize = True
+        Me.lbl_UtilisationPlancher.Location = New System.Drawing.Point(16, 107)
+        Me.lbl_UtilisationPlancher.Name = "lbl_UtilisationPlancher"
+        Me.lbl_UtilisationPlancher.Size = New System.Drawing.Size(110, 13)
+        Me.lbl_UtilisationPlancher.TabIndex = 5
+        Me.lbl_UtilisationPlancher.Text = "lbl_UtilisationPlancher"
+        '
+        'cmb_choixQ
+        '
+        Me.cmb_choixQ.FormattingEnabled = True
+        Me.cmb_choixQ.Location = New System.Drawing.Point(168, 72)
+        Me.cmb_choixQ.Name = "cmb_choixQ"
+        Me.cmb_choixQ.Size = New System.Drawing.Size(84, 21)
+        Me.cmb_choixQ.TabIndex = 4
+        '
+        'lbl_avec
+        '
+        Me.lbl_avec.AutoSize = True
+        Me.lbl_avec.Location = New System.Drawing.Point(123, 75)
+        Me.lbl_avec.Name = "lbl_avec"
+        Me.lbl_avec.Size = New System.Drawing.Size(47, 13)
+        Me.lbl_avec.TabIndex = 3
+        Me.lbl_avec.Text = "lbl_avec"
+        '
+        'cmb_ratioQ
+        '
+        Me.cmb_ratioQ.FormattingEnabled = True
+        Me.cmb_ratioQ.Location = New System.Drawing.Point(31, 72)
+        Me.cmb_ratioQ.Name = "cmb_ratioQ"
+        Me.cmb_ratioQ.Size = New System.Drawing.Size(84, 21)
+        Me.cmb_ratioQ.TabIndex = 2
+        '
+        'lbl_ComboMasseFrequence
+        '
+        Me.lbl_ComboMasseFrequence.AutoSize = True
+        Me.lbl_ComboMasseFrequence.Location = New System.Drawing.Point(16, 46)
+        Me.lbl_ComboMasseFrequence.Name = "lbl_ComboMasseFrequence"
+        Me.lbl_ComboMasseFrequence.Size = New System.Drawing.Size(138, 13)
+        Me.lbl_ComboMasseFrequence.TabIndex = 1
+        Me.lbl_ComboMasseFrequence.Text = "lbl_ComboMasseFrequence"
         '
         'chk_methodeHIVOSS
         '
@@ -260,20 +501,19 @@ Partial Class Frm_Hivoss
         Me.chk_methodeHIVOSS.Text = "chk_methodeHIVOSS"
         Me.chk_methodeHIVOSS.UseVisualStyleBackColor = True
         '
-        'lbl_ComboMasseFrequence
+        'ComboBox5
         '
-        Me.lbl_ComboMasseFrequence.AutoSize = True
-        Me.lbl_ComboMasseFrequence.Location = New System.Drawing.Point(16, 46)
-        Me.lbl_ComboMasseFrequence.Name = "lbl_ComboMasseFrequence"
-        Me.lbl_ComboMasseFrequence.Size = New System.Drawing.Size(138, 13)
-        Me.lbl_ComboMasseFrequence.TabIndex = 1
-        Me.lbl_ComboMasseFrequence.Text = "lbl_ComboMasseFrequence"
+        Me.ComboBox5.FormattingEnabled = True
+        Me.ComboBox5.Location = New System.Drawing.Point(283, 144)
+        Me.ComboBox5.Name = "ComboBox5"
+        Me.ComboBox5.Size = New System.Drawing.Size(57, 21)
+        Me.ComboBox5.TabIndex = 20
         '
         'Frm_Hivoss
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(666, 336)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Hivoss"
         Me.Text = "Frm_Hivoss"
@@ -281,15 +521,25 @@ Partial Class Frm_Hivoss
         Me.TLpan_Main.ResumeLayout(False)
         Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.pan_Main.ResumeLayout(False)
-        Me.TLPan_Options.ResumeLayout(False)
+        Me.TLPan_PartieHaute.ResumeLayout(False)
+        Me.pan_Droite.ResumeLayout(False)
+        Me.TLPan_Droite.ResumeLayout(False)
+        Me.TLPan_Droite.PerformLayout()
+        Me.pan_SaisieAmortissement.ResumeLayout(False)
+        Me.pan_SaisieAmortissement.PerformLayout()
+        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_D1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
         Me.pan_SaisieOptions.ResumeLayout(False)
         Me.pan_SaisieOptions.PerformLayout()
-        Me.pan_Droite.ResumeLayout(False)
-        Me.TLPan_Droite.ResumeLayout(False)
-        Me.TLPan_Droite.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -300,7 +550,7 @@ Partial Class Frm_Hivoss
     Friend WithEvents btn_OK As Button
     Friend WithEvents btn_Annuler As Button
     Friend WithEvents pan_Main As Panel
-    Friend WithEvents TLPan_Options As TableLayoutPanel
+    Friend WithEvents TLPan_PartieHaute As TableLayoutPanel
     Friend WithEvents pan_Gauche As Panel
     Friend WithEvents TLPan_Gauche As TableLayoutPanel
     Friend WithEvents lbl_Options As Label
@@ -311,4 +561,26 @@ Partial Class Frm_Hivoss
     Friend WithEvents pan_SaisieAmortissement As Panel
     Friend WithEvents lbl_ComboMasseFrequence As Label
     Friend WithEvents chk_methodeHIVOSS As CheckBox
+    Friend WithEvents cmb_UtilisationPlancher As ComboBox
+    Friend WithEvents lbl_UtilisationPlancher As Label
+    Friend WithEvents cmb_choixQ As ComboBox
+    Friend WithEvents lbl_avec As Label
+    Friend WithEvents cmb_ratioQ As ComboBox
+    Friend WithEvents lbl_PoutreAcier As Label
+    Friend WithEvents lbl_AmortissementStructure As Label
+    Friend WithEvents PictureBox7 As PictureBox
+    Friend WithEvents PictureBox8 As PictureBox
+    Friend WithEvents lbl_AmortissementTotal As Label
+    Friend WithEvents PictureBox5 As PictureBox
+    Friend WithEvents PictureBox6 As PictureBox
+    Friend WithEvents chk_ChappeFlottante As CheckBox
+    Friend WithEvents chk_FauxPlafond As CheckBox
+    Friend WithEvents lbl_AmortissementFinition As Label
+    Friend WithEvents ComboBox4 As ComboBox
+    Friend WithEvents lbl_AmortissementMobilier As Label
+    Friend WithEvents PictureBox4 As PictureBox
+    Friend WithEvents img_D1 As PictureBox
+    Friend WithEvents PictureBox2 As PictureBox
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents ComboBox5 As ComboBox
 End Class
