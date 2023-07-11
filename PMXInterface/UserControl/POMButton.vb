@@ -1,10 +1,12 @@
-﻿Option Explicit Off
+﻿
+Option Explicit Off
 
 
 Imports System.Windows.Forms
 Imports System.ComponentModel
 
-Public Class POMButton
+Public Class POMbutton
+
 
 #Region "   Variables "
 
@@ -432,5 +434,6 @@ Public Class POMButton
     End Sub
 
 #End Region
+
 
 End Class

@@ -183,6 +183,12 @@
     <Compile Include="Fenetres\Frm_Test.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogiciel.Designer.vb">
+      <DependentUpon>Frm_OptionsLogiciel.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogiciel.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\Mod_AccesFichiers.vb" />
     <Compile Include="Modules\Mod_BasesDonneesASCII.vb" />
     <Compile Include="Modules\Mod_BasesDonneesBinaires.vb" />
@@ -207,6 +213,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="UserControl\PomButton.Designer.vb">
+      <DependentUpon>PomButton.vb</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl\PomButton.vb">
+      <SubType>UserControl</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -261,6 +273,9 @@
     <EmbeddedResource Include="Fenetres\Frm_Test.resx">
       <DependentUpon>Frm_Test.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogiciel.resx">
+      <DependentUpon>Frm_OptionsLogiciel.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -286,7 +301,6 @@
     <Folder Include="Icones\" />
     <Folder Include="Images\" />
     <Folder Include="Langues\" />
-    <Folder Include="UserControl\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ABCPMX II.ico" />
