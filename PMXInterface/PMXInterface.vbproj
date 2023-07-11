@@ -252,6 +252,9 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_Gamma.resx">
       <DependentUpon>Frm_Gamma.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Hivoss.resx">
+      <DependentUpon>Frm_Hivoss.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Maintiens.resx">
       <DependentUpon>Frm_Maintiens.vb</DependentUpon>
     </EmbeddedResource>

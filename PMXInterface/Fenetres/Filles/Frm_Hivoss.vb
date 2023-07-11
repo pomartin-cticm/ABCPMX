@@ -63,16 +63,7 @@ Public Class Frm_Hivoss
     End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
-        Dim lModif As Boolean = False
-        If ValideSaisieFenetre() Then
 
-            TransfertSaisie(lModif)
-
-            If lModif Then
-
-            End If
-            Me.Close()
-        End If
     End Sub
 
 
