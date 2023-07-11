@@ -233,4 +233,22 @@ WEB						= Web
 WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
 
+#FRM_GAMMA
+ACCOMPAGNEMENT			= Accompagnement
+CANCEL					= Cancel
+GAMMAV					= single value for γv
+LBL_Q1					= Q1: Live loads 1
+LBL_Q2					= Q2: Live loads 2
+LOADING					= Loading
+OK						= OK
+REINI_ACCOMP			= Reset
+REINI_LOAD				= Reset 
+REINI_RESI_FIRE			= Reset
+REINI_RESI_SLAB			= Reset
+REINI_RESI_STEEL		= Reset 
+RESISTANCE				= Resistance
+TAB_STEEL				= Steel
+TAB_SLAB				= Slab
+TAB_FIRE				= Fire
+TITLE					= Definition of coefficients
 
