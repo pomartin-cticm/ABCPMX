@@ -368,7 +368,7 @@ Partial Class Frm_Gamma
         '
         'btn_ReiniResistanceAcier
         '
-        Me.btn_ReiniResistanceAcier.Location = New System.Drawing.Point(60, 143)
+        Me.btn_ReiniResistanceAcier.Location = New System.Drawing.Point(54, 118)
         Me.btn_ReiniResistanceAcier.Name = "btn_ReiniResistanceAcier"
         Me.btn_ReiniResistanceAcier.Size = New System.Drawing.Size(75, 23)
         Me.btn_ReiniResistanceAcier.TabIndex = 80
@@ -402,7 +402,7 @@ Partial Class Frm_Gamma
         'chk_GammaV_Unique
         '
         Me.chk_GammaV_Unique.AutoSize = True
-        Me.chk_GammaV_Unique.Location = New System.Drawing.Point(20, 17)
+        Me.chk_GammaV_Unique.Location = New System.Drawing.Point(27, 16)
         Me.chk_GammaV_Unique.Name = "chk_GammaV_Unique"
         Me.chk_GammaV_Unique.Size = New System.Drawing.Size(133, 17)
         Me.chk_GammaV_Unique.TabIndex = 99
@@ -415,7 +415,7 @@ Partial Class Frm_Gamma
         Me.txt_GammaVp.Location = New System.Drawing.Point(131, 179)
         Me.txt_GammaVp.Name = "txt_GammaVp"
         Me.txt_GammaVp.Size = New System.Drawing.Size(58, 20)
-        Me.txt_GammaVp.TabIndex = 97
+        Me.txt_GammaVp.TabIndex = 93
         '
         'img_GammaVp
         '
@@ -432,7 +432,7 @@ Partial Class Frm_Gamma
         Me.txt_GammaVs.Location = New System.Drawing.Point(131, 153)
         Me.txt_GammaVs.Name = "txt_GammaVs"
         Me.txt_GammaVs.Size = New System.Drawing.Size(58, 20)
-        Me.txt_GammaVs.TabIndex = 95
+        Me.txt_GammaVs.TabIndex = 91
         '
         'img_GammaVs
         '
@@ -446,15 +446,15 @@ Partial Class Frm_Gamma
         'txt_GammaP
         '
         Me.txt_GammaP.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaP.Location = New System.Drawing.Point(67, 118)
+        Me.txt_GammaP.Location = New System.Drawing.Point(89, 118)
         Me.txt_GammaP.Name = "txt_GammaP"
         Me.txt_GammaP.Size = New System.Drawing.Size(58, 20)
-        Me.txt_GammaP.TabIndex = 93
+        Me.txt_GammaP.TabIndex = 97
         '
         'img_GammaP
         '
         Me.img_GammaP.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaP.Location = New System.Drawing.Point(22, 118)
+        Me.img_GammaP.Location = New System.Drawing.Point(44, 118)
         Me.img_GammaP.Name = "img_GammaP"
         Me.img_GammaP.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaP.TabIndex = 94
@@ -463,15 +463,15 @@ Partial Class Frm_Gamma
         'txt_GammaS
         '
         Me.txt_GammaS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaS.Location = New System.Drawing.Point(67, 91)
+        Me.txt_GammaS.Location = New System.Drawing.Point(89, 91)
         Me.txt_GammaS.Name = "txt_GammaS"
         Me.txt_GammaS.Size = New System.Drawing.Size(58, 20)
-        Me.txt_GammaS.TabIndex = 91
+        Me.txt_GammaS.TabIndex = 95
         '
         'img_GammaS
         '
         Me.img_GammaS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaS.Location = New System.Drawing.Point(22, 91)
+        Me.img_GammaS.Location = New System.Drawing.Point(44, 91)
         Me.img_GammaS.Name = "img_GammaS"
         Me.img_GammaS.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaS.TabIndex = 92
@@ -480,7 +480,7 @@ Partial Class Frm_Gamma
         'txt_GammaV
         '
         Me.txt_GammaV.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaV.Location = New System.Drawing.Point(67, 65)
+        Me.txt_GammaV.Location = New System.Drawing.Point(89, 65)
         Me.txt_GammaV.Name = "txt_GammaV"
         Me.txt_GammaV.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaV.TabIndex = 89
@@ -488,7 +488,7 @@ Partial Class Frm_Gamma
         'img_GammaV
         '
         Me.img_GammaV.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaV.Location = New System.Drawing.Point(22, 65)
+        Me.img_GammaV.Location = New System.Drawing.Point(44, 65)
         Me.img_GammaV.Name = "img_GammaV"
         Me.img_GammaV.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaV.TabIndex = 90
@@ -497,7 +497,7 @@ Partial Class Frm_Gamma
         'txt_GammaC
         '
         Me.txt_GammaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaC.Location = New System.Drawing.Point(67, 39)
+        Me.txt_GammaC.Location = New System.Drawing.Point(89, 39)
         Me.txt_GammaC.Name = "txt_GammaC"
         Me.txt_GammaC.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaC.TabIndex = 87
@@ -505,7 +505,7 @@ Partial Class Frm_Gamma
         'img_GammaC
         '
         Me.img_GammaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaC.Location = New System.Drawing.Point(22, 39)
+        Me.img_GammaC.Location = New System.Drawing.Point(44, 39)
         Me.img_GammaC.Name = "img_GammaC"
         Me.img_GammaC.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaC.TabIndex = 88
@@ -513,7 +513,7 @@ Partial Class Frm_Gamma
         '
         'btn_ReiniResistanceDalle
         '
-        Me.btn_ReiniResistanceDalle.Location = New System.Drawing.Point(50, 181)
+        Me.btn_ReiniResistanceDalle.Location = New System.Drawing.Point(54, 181)
         Me.btn_ReiniResistanceDalle.Name = "btn_ReiniResistanceDalle"
         Me.btn_ReiniResistanceDalle.Size = New System.Drawing.Size(75, 23)
         Me.btn_ReiniResistanceDalle.TabIndex = 81
@@ -540,7 +540,7 @@ Partial Class Frm_Gamma
         'txt_GammaV_fi
         '
         Me.txt_GammaV_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaV_fi.Location = New System.Drawing.Point(97, 72)
+        Me.txt_GammaV_fi.Location = New System.Drawing.Point(89, 81)
         Me.txt_GammaV_fi.Name = "txt_GammaV_fi"
         Me.txt_GammaV_fi.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaV_fi.TabIndex = 91
@@ -548,7 +548,7 @@ Partial Class Frm_Gamma
         'img_GammaV_fi
         '
         Me.img_GammaV_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaV_fi.Location = New System.Drawing.Point(52, 72)
+        Me.img_GammaV_fi.Location = New System.Drawing.Point(44, 81)
         Me.img_GammaV_fi.Name = "img_GammaV_fi"
         Me.img_GammaV_fi.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaV_fi.TabIndex = 92
@@ -557,7 +557,7 @@ Partial Class Frm_Gamma
         'txt_GammaC_fi
         '
         Me.txt_GammaC_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaC_fi.Location = New System.Drawing.Point(97, 46)
+        Me.txt_GammaC_fi.Location = New System.Drawing.Point(89, 55)
         Me.txt_GammaC_fi.Name = "txt_GammaC_fi"
         Me.txt_GammaC_fi.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaC_fi.TabIndex = 89
@@ -565,7 +565,7 @@ Partial Class Frm_Gamma
         'img_GammaC_fi
         '
         Me.img_GammaC_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaC_fi.Location = New System.Drawing.Point(52, 46)
+        Me.img_GammaC_fi.Location = New System.Drawing.Point(44, 55)
         Me.img_GammaC_fi.Name = "img_GammaC_fi"
         Me.img_GammaC_fi.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaC_fi.TabIndex = 90
@@ -574,7 +574,7 @@ Partial Class Frm_Gamma
         'txt_GammaM_fi
         '
         Me.txt_GammaM_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaM_fi.Location = New System.Drawing.Point(97, 20)
+        Me.txt_GammaM_fi.Location = New System.Drawing.Point(89, 29)
         Me.txt_GammaM_fi.Name = "txt_GammaM_fi"
         Me.txt_GammaM_fi.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaM_fi.TabIndex = 87
@@ -582,7 +582,7 @@ Partial Class Frm_Gamma
         'img_GammaM_fi
         '
         Me.img_GammaM_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaM_fi.Location = New System.Drawing.Point(52, 20)
+        Me.img_GammaM_fi.Location = New System.Drawing.Point(44, 29)
         Me.img_GammaM_fi.Name = "img_GammaM_fi"
         Me.img_GammaM_fi.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaM_fi.TabIndex = 88
@@ -590,7 +590,7 @@ Partial Class Frm_Gamma
         '
         'btn_ReiniResistanceIncendie
         '
-        Me.btn_ReiniResistanceIncendie.Location = New System.Drawing.Point(66, 118)
+        Me.btn_ReiniResistanceIncendie.Location = New System.Drawing.Point(54, 118)
         Me.btn_ReiniResistanceIncendie.Name = "btn_ReiniResistanceIncendie"
         Me.btn_ReiniResistanceIncendie.Size = New System.Drawing.Size(75, 23)
         Me.btn_ReiniResistanceIncendie.TabIndex = 82

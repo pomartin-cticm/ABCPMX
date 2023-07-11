@@ -20,6 +20,7 @@ Public Class Frm_Gamma
     Dim y_txt_GammaVp As Decimal
     Dim y_txt_GammaS As Decimal
     Dim y_txt_GammaP As Decimal
+    Dim y_btn_ReiniReistanceDalle As Decimal
 
     Dim y_decal As Decimal
 
@@ -51,15 +52,15 @@ Public Class Frm_Gamma
 
 
 
-        x_img_GammaCVSP = img_GammaC.Location.X
-        x_txt_GammaCVSP = txt_GammaC.Location.X
+        x_img_GammaCVSP = 44
+        x_txt_GammaCVSP = 89
 
-        y_txt_GammaC = txt_GammaC.Location.Y
-        y_txt_GammaV = txt_GammaV.Location.Y
-        y_txt_GammaVs = txt_GammaVs.Location.Y
-        y_txt_GammaVp = txt_GammaVp.Location.Y
-        y_txt_GammaS = txt_GammaS.Location.Y
-        y_txt_GammaP = txt_GammaP.Location.Y
+        y_txt_GammaC = 39
+        y_txt_GammaV = 65
+        y_txt_GammaVs = 153
+        y_txt_GammaVp = 179
+        y_txt_GammaS = 91
+        y_txt_GammaP = 118
 
         y_decal = Math.Abs(y_txt_GammaV - y_txt_GammaS)
 
@@ -91,13 +92,31 @@ Public Class Frm_Gamma
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_BASIC")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_GAMMA")
             BlocLine.CreationBloc(Bloc)
 
             Try
 
+                Me.Text = Bloc("TITLE")
+                Me.btn_OK.Text = Bloc("OK")
+                Me.btn_Annuler.Text = Bloc("CANCEL")
+
                 '=== MENU PRINCIPAL ==============================================================='
 
+                Me.lbl_Chargement.Text = Bloc("LOADING")
+                Me.lbl_Accompagnement.Text = Bloc("ACCOMPAGNEMENT")
+                Me.lbl_Resistance.Text = Bloc("RESISTANCE")
+                Me.lbl_Q1.Text = Bloc("LBL_Q1")
+                Me.lbl_Q2.Text = Bloc("LBL_Q2")
+                Me.btn_ReiniChargement.Text = Bloc("REINI_LOAD")
+                Me.btn_ReiniAccompagnement.Text = Bloc("REINI_ACCOMP")
+                Me.btn_ReiniResistanceAcier.Text = Bloc("REINI_RESI_STEEL")
+                Me.btn_ReiniResistanceDalle.Text = Bloc("REINI_RESI_SLAB")
+                Me.btn_ReiniResistanceIncendie.Text = Bloc("REINI_RESI_FIRE")
+                Me.Tab_Acier.Text = Bloc("TAB_STEEL")
+                Me.Tab_Dalle.Text = Bloc("TAB_SLAB")
+                Me.Tab_Incendie.Text = Bloc("TAB_FIRE")
+                Me.chk_GammaV_Unique.Text = Bloc("GAMMAV")
 
 
             Catch ex As Exception
@@ -129,9 +148,6 @@ Public Class Frm_Gamma
         If Not MyPoutreLoc.lMixte Then
             Me.Tab_Dalle.Visible = False
         End If
-
-        MAJI_GammaV_Unique()
-
 
     End Sub
 
@@ -168,6 +184,8 @@ Public Class Frm_Gamma
             Me.txt_GammaV_fi.Text = CDec(.GammaV_fi)
 
         End With
+
+        MAJI_GammaV_Unique()
 
 
     End Sub
@@ -278,24 +296,26 @@ Public Class Frm_Gamma
                 .GammaC = MyPoutreLoc.Param.Gamma.GammaC
             End If
 
-            If .GammaV <> MyPoutreLoc.Param.Gamma.GammaV Then
-                lModif = True
-                .GammaV = MyPoutreLoc.Param.Gamma.GammaV
-            End If
-
             If .lGammaV_unique <> MyPoutreLoc.Param.Gamma.lGammaV_unique Then
                 lModif = True
                 .lGammaV_unique = MyPoutreLoc.Param.Gamma.lGammaV_unique
             End If
 
-            If .GammaVs <> MyPoutreLoc.Param.Gamma.GammaVs Then
-                lModif = True
-                .GammaVs = MyPoutreLoc.Param.Gamma.GammaVs
-            End If
+            If .lGammaV_unique Then
+                If .GammaV <> MyPoutreLoc.Param.Gamma.GammaV Then
+                    lModif = True
+                    .GammaV = MyPoutreLoc.Param.Gamma.GammaV
+                End If
+            Else
+                If .GammaVs <> MyPoutreLoc.Param.Gamma.GammaVs Then
+                    lModif = True
+                    .GammaVs = MyPoutreLoc.Param.Gamma.GammaVs
+                End If
 
-            If .GammaVp <> MyPoutreLoc.Param.Gamma.GammaVp Then
-                lModif = True
-                .GammaVp = MyPoutreLoc.Param.Gamma.GammaVp
+                If .GammaVp <> MyPoutreLoc.Param.Gamma.GammaVp Then
+                    lModif = True
+                    .GammaVp = MyPoutreLoc.Param.Gamma.GammaVp
+                End If
             End If
 
             If .GammaS <> MyPoutreLoc.Param.Gamma.GammaS Then
@@ -488,6 +508,8 @@ Public Class Frm_Gamma
             y_txt_GammaVs = y_txt_GammaP + y_decal
             y_txt_GammaVp = y_txt_GammaVs + y_decal
 
+            y_btn_ReiniReistanceDalle = y_txt_GammaP + y_decal
+
 
         Else
             y_txt_GammaVs = y_txt_GammaC + y_decal
@@ -496,6 +518,8 @@ Public Class Frm_Gamma
             y_txt_GammaP = y_txt_GammaS + y_decal
 
             y_txt_GammaV = y_txt_GammaP + y_decal
+
+            y_btn_ReiniReistanceDalle = y_txt_GammaP + y_decal
 
         End If
 
@@ -518,7 +542,8 @@ Public Class Frm_Gamma
         Me.txt_GammaS.Location = New Point(x_txt_GammaCVSP, y_txt_GammaS)
         Me.txt_GammaP.Location = New Point(x_txt_GammaCVSP, y_txt_GammaP)
 
-        chk_GammaV_Unique.Checked = MyPoutreLoc.Param.Gamma.lGammaV_unique
+        Me.btn_ReiniResistanceDalle.Location = New Point(btn_ReiniResistanceDalle.Location.X, y_btn_ReiniReistanceDalle)
+
 
         'List(Of (TextBox, Boolean))
 
@@ -528,6 +553,30 @@ Public Class Frm_Gamma
         If lBuild Then Exit Sub
 
         MyPoutreLoc.Param.Gamma.lGammaV_unique = chk_GammaV_Unique.Checked
+
+        list_txtbox.Clear()
+
+        list_txtbox.Add((Me.txt_GammaGsup, True))
+        list_txtbox.Add((txt_GammaGinf, True))
+        list_txtbox.Add((txt_GammaQ, True))
+        list_txtbox.Add((txt_Psi0_Q1, True))
+        list_txtbox.Add((txt_Psi1_Q1, True))
+        list_txtbox.Add((txt_Psi2_Q1, True))
+        list_txtbox.Add((txt_Psi0_Q2, True))
+        list_txtbox.Add((txt_Psi1_Q2, True))
+        list_txtbox.Add((txt_Psi2_Q2, True))
+        list_txtbox.Add((txt_GammaM0, True))
+        list_txtbox.Add((txt_GammaM1, True))
+        list_txtbox.Add((txt_GammaM2, True))
+        list_txtbox.Add((txt_GammaC, True))
+        list_txtbox.Add((txt_GammaV, MyPoutreLoc.Param.Gamma.lGammaV_unique))
+        list_txtbox.Add((txt_GammaVs, Not MyPoutreLoc.Param.Gamma.lGammaV_unique))
+        list_txtbox.Add((txt_GammaVp, Not MyPoutreLoc.Param.Gamma.lGammaV_unique))
+        list_txtbox.Add((txt_GammaS, True))
+        list_txtbox.Add((txt_GammaP, True))
+        list_txtbox.Add((txt_GammaM_fi, True))
+        list_txtbox.Add((txt_GammaC_fi, True))
+        list_txtbox.Add((txt_GammaV_fi, True))
 
         MAJI_GammaV_Unique()
 
