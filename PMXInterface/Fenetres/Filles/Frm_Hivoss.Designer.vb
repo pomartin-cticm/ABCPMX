@@ -33,20 +33,20 @@ Partial Class Frm_Hivoss
         Me.TLPan_Droite = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Amortissement = New System.Windows.Forms.Label()
         Me.pan_SaisieAmortissement = New System.Windows.Forms.Panel()
-        Me.PictureBox7 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox8 = New System.Windows.Forms.PictureBox()
+        Me.img_DtotValue = New System.Windows.Forms.PictureBox()
+        Me.img_DtotSymbol = New System.Windows.Forms.PictureBox()
         Me.lbl_AmortissementTotal = New System.Windows.Forms.Label()
-        Me.PictureBox5 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox6 = New System.Windows.Forms.PictureBox()
+        Me.img_D3Value = New System.Windows.Forms.PictureBox()
+        Me.img_D3Symbol = New System.Windows.Forms.PictureBox()
         Me.chk_ChappeFlottante = New System.Windows.Forms.CheckBox()
         Me.chk_FauxPlafond = New System.Windows.Forms.CheckBox()
         Me.lbl_AmortissementFinition = New System.Windows.Forms.Label()
-        Me.ComboBox4 = New System.Windows.Forms.ComboBox()
+        Me.cmb_AmortissementMobilier = New System.Windows.Forms.ComboBox()
         Me.lbl_AmortissementMobilier = New System.Windows.Forms.Label()
-        Me.PictureBox4 = New System.Windows.Forms.PictureBox()
-        Me.img_D1 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox2 = New System.Windows.Forms.PictureBox()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.img_D1Value = New System.Windows.Forms.PictureBox()
+        Me.img_D1Symbol = New System.Windows.Forms.PictureBox()
+        Me.img_D2Value = New System.Windows.Forms.PictureBox()
+        Me.img_D2Symbol = New System.Windows.Forms.PictureBox()
         Me.lbl_PoutreAcier = New System.Windows.Forms.Label()
         Me.lbl_AmortissementStructure = New System.Windows.Forms.Label()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
@@ -60,7 +60,7 @@ Partial Class Frm_Hivoss
         Me.cmb_ratioQ = New System.Windows.Forms.ComboBox()
         Me.lbl_ComboMasseFrequence = New System.Windows.Forms.Label()
         Me.chk_methodeHIVOSS = New System.Windows.Forms.CheckBox()
-        Me.ComboBox5 = New System.Windows.Forms.ComboBox()
+        Me.cmb_D3Value = New System.Windows.Forms.ComboBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -69,14 +69,14 @@ Partial Class Frm_Hivoss
         Me.pan_Droite.SuspendLayout()
         Me.TLPan_Droite.SuspendLayout()
         Me.pan_SaisieAmortissement.SuspendLayout()
-        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_D1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_DtotValue, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_DtotSymbol, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_D3Value, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_D3Symbol, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_D1Value, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_D1Symbol, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_D2Value, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_D2Symbol, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_SaisieOptions.SuspendLayout()
@@ -220,21 +220,21 @@ Partial Class Frm_Hivoss
         '
         Me.pan_SaisieAmortissement.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieAmortissement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieAmortissement.Controls.Add(Me.ComboBox5)
-        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox7)
-        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox8)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.cmb_D3Value)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.img_DtotValue)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.img_DtotSymbol)
         Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_AmortissementTotal)
-        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox5)
-        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox6)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.img_D3Value)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.img_D3Symbol)
         Me.pan_SaisieAmortissement.Controls.Add(Me.chk_ChappeFlottante)
         Me.pan_SaisieAmortissement.Controls.Add(Me.chk_FauxPlafond)
         Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_AmortissementFinition)
-        Me.pan_SaisieAmortissement.Controls.Add(Me.ComboBox4)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.cmb_AmortissementMobilier)
         Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_AmortissementMobilier)
-        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox4)
-        Me.pan_SaisieAmortissement.Controls.Add(Me.img_D1)
-        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox2)
-        Me.pan_SaisieAmortissement.Controls.Add(Me.PictureBox1)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.img_D1Value)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.img_D1Symbol)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.img_D2Value)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.img_D2Symbol)
         Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_PoutreAcier)
         Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_AmortissementStructure)
         Me.pan_SaisieAmortissement.Dock = System.Windows.Forms.DockStyle.Fill
@@ -244,21 +244,21 @@ Partial Class Frm_Hivoss
         Me.pan_SaisieAmortissement.Size = New System.Drawing.Size(363, 260)
         Me.pan_SaisieAmortissement.TabIndex = 1
         '
-        'PictureBox7
+        'img_DtotValue
         '
-        Me.PictureBox7.Location = New System.Drawing.Point(283, 216)
-        Me.PictureBox7.Name = "PictureBox7"
-        Me.PictureBox7.Size = New System.Drawing.Size(57, 21)
-        Me.PictureBox7.TabIndex = 19
-        Me.PictureBox7.TabStop = False
+        Me.img_DtotValue.Location = New System.Drawing.Point(283, 216)
+        Me.img_DtotValue.Name = "img_DtotValue"
+        Me.img_DtotValue.Size = New System.Drawing.Size(57, 21)
+        Me.img_DtotValue.TabIndex = 19
+        Me.img_DtotValue.TabStop = False
         '
-        'PictureBox8
+        'img_DtotSymbol
         '
-        Me.PictureBox8.Location = New System.Drawing.Point(220, 216)
-        Me.PictureBox8.Name = "PictureBox8"
-        Me.PictureBox8.Size = New System.Drawing.Size(57, 21)
-        Me.PictureBox8.TabIndex = 18
-        Me.PictureBox8.TabStop = False
+        Me.img_DtotSymbol.Location = New System.Drawing.Point(220, 216)
+        Me.img_DtotSymbol.Name = "img_DtotSymbol"
+        Me.img_DtotSymbol.Size = New System.Drawing.Size(57, 21)
+        Me.img_DtotSymbol.TabIndex = 18
+        Me.img_DtotSymbol.TabStop = False
         '
         'lbl_AmortissementTotal
         '
@@ -269,21 +269,21 @@ Partial Class Frm_Hivoss
         Me.lbl_AmortissementTotal.TabIndex = 17
         Me.lbl_AmortissementTotal.Text = "lbl_AmortissementTotal"
         '
-        'PictureBox5
+        'img_D3Value
         '
-        Me.PictureBox5.Location = New System.Drawing.Point(283, 171)
-        Me.PictureBox5.Name = "PictureBox5"
-        Me.PictureBox5.Size = New System.Drawing.Size(57, 21)
-        Me.PictureBox5.TabIndex = 16
-        Me.PictureBox5.TabStop = False
+        Me.img_D3Value.Location = New System.Drawing.Point(283, 171)
+        Me.img_D3Value.Name = "img_D3Value"
+        Me.img_D3Value.Size = New System.Drawing.Size(57, 21)
+        Me.img_D3Value.TabIndex = 16
+        Me.img_D3Value.TabStop = False
         '
-        'PictureBox6
+        'img_D3Symbol
         '
-        Me.PictureBox6.Location = New System.Drawing.Point(220, 171)
-        Me.PictureBox6.Name = "PictureBox6"
-        Me.PictureBox6.Size = New System.Drawing.Size(57, 21)
-        Me.PictureBox6.TabIndex = 15
-        Me.PictureBox6.TabStop = False
+        Me.img_D3Symbol.Location = New System.Drawing.Point(220, 171)
+        Me.img_D3Symbol.Name = "img_D3Symbol"
+        Me.img_D3Symbol.Size = New System.Drawing.Size(57, 21)
+        Me.img_D3Symbol.TabIndex = 15
+        Me.img_D3Symbol.TabStop = False
         '
         'chk_ChappeFlottante
         '
@@ -314,13 +314,13 @@ Partial Class Frm_Hivoss
         Me.lbl_AmortissementFinition.TabIndex = 12
         Me.lbl_AmortissementFinition.Text = "lbl_AmortissementFinition"
         '
-        'ComboBox4
+        'cmb_AmortissementMobilier
         '
-        Me.ComboBox4.FormattingEnabled = True
-        Me.ComboBox4.Location = New System.Drawing.Point(31, 104)
-        Me.ComboBox4.Name = "ComboBox4"
-        Me.ComboBox4.Size = New System.Drawing.Size(162, 21)
-        Me.ComboBox4.TabIndex = 7
+        Me.cmb_AmortissementMobilier.FormattingEnabled = True
+        Me.cmb_AmortissementMobilier.Location = New System.Drawing.Point(31, 104)
+        Me.cmb_AmortissementMobilier.Name = "cmb_AmortissementMobilier"
+        Me.cmb_AmortissementMobilier.Size = New System.Drawing.Size(162, 21)
+        Me.cmb_AmortissementMobilier.TabIndex = 7
         '
         'lbl_AmortissementMobilier
         '
@@ -331,37 +331,37 @@ Partial Class Frm_Hivoss
         Me.lbl_AmortissementMobilier.TabIndex = 11
         Me.lbl_AmortissementMobilier.Text = "lbl_AmortissementMobilier"
         '
-        'PictureBox4
+        'img_D1Value
         '
-        Me.PictureBox4.Location = New System.Drawing.Point(283, 42)
-        Me.PictureBox4.Name = "PictureBox4"
-        Me.PictureBox4.Size = New System.Drawing.Size(57, 21)
-        Me.PictureBox4.TabIndex = 10
-        Me.PictureBox4.TabStop = False
+        Me.img_D1Value.Location = New System.Drawing.Point(283, 42)
+        Me.img_D1Value.Name = "img_D1Value"
+        Me.img_D1Value.Size = New System.Drawing.Size(57, 21)
+        Me.img_D1Value.TabIndex = 10
+        Me.img_D1Value.TabStop = False
         '
-        'img_D1
+        'img_D1Symbol
         '
-        Me.img_D1.Location = New System.Drawing.Point(220, 42)
-        Me.img_D1.Name = "img_D1"
-        Me.img_D1.Size = New System.Drawing.Size(57, 21)
-        Me.img_D1.TabIndex = 9
-        Me.img_D1.TabStop = False
+        Me.img_D1Symbol.Location = New System.Drawing.Point(220, 42)
+        Me.img_D1Symbol.Name = "img_D1Symbol"
+        Me.img_D1Symbol.Size = New System.Drawing.Size(57, 21)
+        Me.img_D1Symbol.TabIndex = 9
+        Me.img_D1Symbol.TabStop = False
         '
-        'PictureBox2
+        'img_D2Value
         '
-        Me.PictureBox2.Location = New System.Drawing.Point(283, 104)
-        Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(57, 21)
-        Me.PictureBox2.TabIndex = 10
-        Me.PictureBox2.TabStop = False
+        Me.img_D2Value.Location = New System.Drawing.Point(283, 104)
+        Me.img_D2Value.Name = "img_D2Value"
+        Me.img_D2Value.Size = New System.Drawing.Size(57, 21)
+        Me.img_D2Value.TabIndex = 10
+        Me.img_D2Value.TabStop = False
         '
-        'PictureBox1
+        'img_D2Symbol
         '
-        Me.PictureBox1.Location = New System.Drawing.Point(220, 104)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(57, 21)
-        Me.PictureBox1.TabIndex = 9
-        Me.PictureBox1.TabStop = False
+        Me.img_D2Symbol.Location = New System.Drawing.Point(220, 104)
+        Me.img_D2Symbol.Name = "img_D2Symbol"
+        Me.img_D2Symbol.Size = New System.Drawing.Size(57, 21)
+        Me.img_D2Symbol.TabIndex = 9
+        Me.img_D2Symbol.TabStop = False
         '
         'lbl_PoutreAcier
         '
@@ -501,13 +501,13 @@ Partial Class Frm_Hivoss
         Me.chk_methodeHIVOSS.Text = "chk_methodeHIVOSS"
         Me.chk_methodeHIVOSS.UseVisualStyleBackColor = True
         '
-        'ComboBox5
+        'cmb_D3Value
         '
-        Me.ComboBox5.FormattingEnabled = True
-        Me.ComboBox5.Location = New System.Drawing.Point(283, 144)
-        Me.ComboBox5.Name = "ComboBox5"
-        Me.ComboBox5.Size = New System.Drawing.Size(57, 21)
-        Me.ComboBox5.TabIndex = 20
+        Me.cmb_D3Value.FormattingEnabled = True
+        Me.cmb_D3Value.Location = New System.Drawing.Point(283, 144)
+        Me.cmb_D3Value.Name = "cmb_D3Value"
+        Me.cmb_D3Value.Size = New System.Drawing.Size(57, 21)
+        Me.cmb_D3Value.TabIndex = 20
         '
         'Frm_Hivoss
         '
@@ -527,14 +527,14 @@ Partial Class Frm_Hivoss
         Me.TLPan_Droite.PerformLayout()
         Me.pan_SaisieAmortissement.ResumeLayout(False)
         Me.pan_SaisieAmortissement.PerformLayout()
-        CType(Me.PictureBox7, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox8, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox6, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox4, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_D1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_DtotValue, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_DtotSymbol, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_D3Value, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_D3Symbol, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_D1Value, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_D1Symbol, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_D2Value, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_D2Symbol, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
@@ -568,19 +568,19 @@ Partial Class Frm_Hivoss
     Friend WithEvents cmb_ratioQ As ComboBox
     Friend WithEvents lbl_PoutreAcier As Label
     Friend WithEvents lbl_AmortissementStructure As Label
-    Friend WithEvents PictureBox7 As PictureBox
-    Friend WithEvents PictureBox8 As PictureBox
+    Friend WithEvents img_DtotValue As PictureBox
+    Friend WithEvents img_DtotSymbol As PictureBox
     Friend WithEvents lbl_AmortissementTotal As Label
-    Friend WithEvents PictureBox5 As PictureBox
-    Friend WithEvents PictureBox6 As PictureBox
+    Friend WithEvents img_D3Value As PictureBox
+    Friend WithEvents img_D3Symbol As PictureBox
     Friend WithEvents chk_ChappeFlottante As CheckBox
     Friend WithEvents chk_FauxPlafond As CheckBox
     Friend WithEvents lbl_AmortissementFinition As Label
-    Friend WithEvents ComboBox4 As ComboBox
+    Friend WithEvents cmb_AmortissementMobilier As ComboBox
     Friend WithEvents lbl_AmortissementMobilier As Label
-    Friend WithEvents PictureBox4 As PictureBox
-    Friend WithEvents img_D1 As PictureBox
-    Friend WithEvents PictureBox2 As PictureBox
-    Friend WithEvents PictureBox1 As PictureBox
-    Friend WithEvents ComboBox5 As ComboBox
+    Friend WithEvents img_D1Value As PictureBox
+    Friend WithEvents img_D1Symbol As PictureBox
+    Friend WithEvents img_D2Value As PictureBox
+    Friend WithEvents img_D2Symbol As PictureBox
+    Friend WithEvents cmb_D3Value As ComboBox
 End Class

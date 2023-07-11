@@ -252,3 +252,17 @@ TAB_SLAB				= Slab
 TAB_FIRE				= Fire
 TITLE					= Definition of coefficients
 
+#FRM_HIVOSS
+CANCEL					= Cancel
+FLOORUSE_CRITAREA		= Critical areas
+FLOORUSE_HOSP			= Hospital, surgeries
+FLOORUSE_SCHOOL			= Schools, training centers
+FLOORUSE_RESIDENTIAL	= Residential buildings
+FLOORUSE_OFFICE			= Office buildings
+FLOORUSE_MEETING		= Meeting rooms
+FLOORUSE_SENIOR			= Senior citizen residential buildings
+FLOORUSE_HOTELS			= Hotels
+FLOORUSE_INDUSTRIAL		= Industrial workshops
+FLOORUSE_SPORTS			= Sports facilities
+OK						= OK
+TITLE					= Floor vibration parameters
