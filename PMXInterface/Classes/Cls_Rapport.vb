@@ -1125,7 +1125,7 @@ Public Class Cls_Rapport
         '
         '----------------------------------------------------------------------------------
         '
-        '   Affichage d'un dessin dans le rapport
+        '   Affichage d'un dessin dans le rapport (balise \IMG)
         '
         '----------------------------------------------------------------------------------
         '
@@ -1167,6 +1167,13 @@ Public Class Cls_Rapport
                     sHiImg = sWiImg * MyPicture.Height / MyPicture.Width
                     MyGr.DrawImage(MyPicture, xLeftImg, YPen, sWiImg, sHiImg)
                     MyPicture.Dispose()
+
+
+                Case "PORTEE"
+
+                    DessinFrmPortee(MyGr, MyProjet.Poutres(MyProjet.IndEnCours), sWiImg, sHiImg, 0.9, -1, True, xLeftImg, YPen)
+
+
 
                 Case "CORRECT"
 
@@ -1867,7 +1874,7 @@ Public Class Cls_Rapport
             Next
             Select Case Niveau
                 Case 1
-                    'Numero = ChiffresRomains(Me.IndTitre(0))
+                    Numero = ChiffresRomains(Me.IndTitre(0))
                 Case Else
                     Numero = Numero & "." & CStr(Me.IndTitre(Niveau - 1))
             End Select

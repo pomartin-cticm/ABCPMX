@@ -31,7 +31,7 @@ Public Class Frm_Etaiement
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_ETAIEMENT")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_PROPPING")
             BlocLine.CreationBloc(Bloc)
 
             Try

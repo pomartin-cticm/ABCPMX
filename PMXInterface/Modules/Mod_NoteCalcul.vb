@@ -269,7 +269,7 @@ Module Mod_NoteCalcul
         End Select
 
 
-
+        AddLigneNDC("\IMG PORTEE 10 80 30 NoCadre")
 
     End Sub
 

@@ -151,7 +151,7 @@ Module Mod_Demarrage
 
             LogicielOptions.Gamma = New Cls_Gamma
 
-            LogicielOptions.Gamma.GammaM0 = My.Settings.GammaM0
+            LogicielOptions.Gamma.GammaM0 = My.Settings.GammaMZero
             LogicielOptions.Gamma.GammaM1 = My.Settings.GammaM1
             LogicielOptions.Gamma.GammaM2 = My.Settings.GammaM2
 

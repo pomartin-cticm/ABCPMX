@@ -258,6 +258,11 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.Section
             Case Me.TSbtn_Enrobage.Name
                 FilleEnCours = EnuFenetres.Enrobage
+
+            Case Me.TSbtn_Connexion.Name
+                FilleEnCours = EnuFenetres.Connexion
+
+
             Case Me.TSbtn_Maintiens.Name
                 FilleEnCours = EnuFenetres.Maintiens
             Case Me.TSbtn_Etaiement.Name
@@ -269,6 +274,8 @@ Public Class Frm_PMX
 
             Case Me.TSbtn_Hivoss.Name
                 FilleEnCours = EnuFenetres.Hivoss
+
+
 
         End Select
         AfficheFenetreEnCours()
