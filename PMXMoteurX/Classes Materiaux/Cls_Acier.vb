@@ -156,6 +156,51 @@ Public Class Cls_Acier
 
     End Sub
 
+    Public Sub InitialiseAcierS355MML()
+        '------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '------------------------------------------------------------------------------------------
+        '   Initialisation d'un acier S355 M/ML pour les tests unitaires (pas d'accès à la base de données)
+        '------------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyPlage As strucPlage
+
+        '--> Initialisations
+
+        Me.Nuance = "S355"
+        Me.Qualite = "M/ML"
+        Me.EpMax = 0.15
+
+        MyPlage.Ep = 0.003
+        MyPlage.Fu = 470
+        MyPlage.Fy = 355
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.016
+        MyPlage.Fu = 470
+        MyPlage.Fy = 345
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.04
+        MyPlage.Fu = 470
+        MyPlage.Fy = 335
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.063
+        MyPlage.Fu = 470
+        MyPlage.Fy = 325
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.1
+        MyPlage.Fu = 470
+        MyPlage.Fy = 320
+        Me.Plages.Add(MyPlage)
+
+    End Sub
+
 #End Region
 
 #Region " Ecriture Fichier "

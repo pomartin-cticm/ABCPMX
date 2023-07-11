@@ -78,6 +78,8 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTest_Cls_Section.vb" />
+    <Compile Include="UnitTest_Cls_ProfilA.vb" />
     <Compile Include="UnitTest_Cls_Beton.vb" />
     <Compile Include="UnitTest_Cls_Poutre.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

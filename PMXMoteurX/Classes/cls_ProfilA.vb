@@ -105,7 +105,24 @@
 #End Region
 
 #Region " Propriétés "
+    ''' <summary>
+    ''' Aire de la section du profilé
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Aire As Decimal
+        Get
+            Dim pAire As Decimal
 
+            pAire = Me.AireFi + Me.AireFs + Me.HauteurAmeHw * Me.t_w + (4 - Math.PI) * (Me.r_ci ^ 2 + Me.r_cs ^ 2) / 2
+
+            Return pAire
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Aire de cisaillement
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property AireAv As Decimal
         Get
             Dim Av As Decimal = 0

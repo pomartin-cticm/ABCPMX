@@ -99,7 +99,7 @@
     ''' <summary>
     ''' Nombre d'étais disposés par través entre deux appuis consécutifs
     ''' </summary>
-    Public pNbPropping As Integer
+    Public pNbPropping As Integer           'Il faut réserver la lettre p aux private
 
     ''' <summary>
     ''' Nombre de maintiens disposés sur la travée considérée
@@ -533,29 +533,31 @@
         '   beff                [S] :   Retourne la valeur de la largeur participante
         '------------------------------------------------------------------------------------------------------------------
 
+        '--> Déclarations
+
         Dim beff As Decimal
 
-        Dim b1 As Decimal 'Largeur disponible à gauche de la poutre
-        Dim b2 As Decimal 'Largeur disponible à droite de la poutre
+        Dim b1 As Decimal       'Largeur disponible à gauche de la poutre
+        Dim b2 As Decimal       'Largeur disponible à droite de la poutre
 
         'Variables pour le calcul de la largeur participante à mi-travée
 
-        Dim be1_m As Decimal 'Largeur participante de la dalle à gauche de la poutre à mi-travée
-        Dim be2_m As Decimal 'Largeur participante de la dalle à droite de la poutre à mi-travée
+        Dim be1_m As Decimal    'Largeur participante de la dalle à gauche de la poutre à mi-travée
+        Dim be2_m As Decimal    'Largeur participante de la dalle à droite de la poutre à mi-travée
 
-        Dim Le_m As Decimal 'Distance entre points de moment nul pour une section à mi-travée
+        Dim Le_m As Decimal     'Distance entre points de moment nul pour une section à mi-travée
 
-        Dim beff_m As Decimal 'Largeur participante à mi-travée
+        Dim beff_m As Decimal   'Largeur participante à mi-travée
 
         'Variables pour le calcul de la largeur participante sur appui d'extrémité gauche (appui A)
 
-        Dim be1_s_A As Decimal 'Largeur participante de la dalle à gauche de la poutre sur appui d'extrémité gauche
-        Dim be2_s_A As Decimal 'Largeur participante de la dalle à droite de la poutre sur appui d'extrémité gauche
+        Dim be1_s_A As Decimal  'Largeur participante de la dalle à gauche de la poutre sur appui d'extrémité gauche
+        Dim be2_s_A As Decimal  'Largeur participante de la dalle à droite de la poutre sur appui d'extrémité gauche
 
         Dim beta_1_A As Decimal
         Dim beta_2_A As Decimal
 
-        Dim Le_s_A As Decimal 'Distance entre points de moment nul pour une section sur appui d'extrémité gauche
+        Dim Le_s_A As Decimal   'Distance entre points de moment nul pour une section sur appui d'extrémité gauche
 
         Dim beff_s_A As Decimal 'Largeur participante sur appui d'extrémité gauche
 

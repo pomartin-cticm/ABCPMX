@@ -72,8 +72,8 @@
     <Compile Include="Classes Materiaux\Cls_Beton.vb" />
     <Compile Include="Classes\Cls_Gamma.vb" />
     <Compile Include="Classes\cls_HivossParam.vb" />
-    <Compile Include="Classes\Cls_Maille.vb" />
-    <Compile Include="Classes\cls_ModeleP.vb" />
+    <Compile Include="Classes Proprietes\Cls_Maille.vb" />
+    <Compile Include="Classes Proprietes\cls_ModeleP.vb" />
     <Compile Include="Classes\cls_Poutre.vb" />
     <Compile Include="Classes\cls_ProfilA.vb" />
     <Compile Include="Classes\cls_Maintiens.vb" />

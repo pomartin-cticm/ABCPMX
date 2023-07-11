@@ -3,7 +3,6 @@ Imports System.Runtime.CompilerServices
 
 Public Class cls_Section
 
-
 #Region " Enumérations et structures "
 
     Structure strucAcierLocal
@@ -82,7 +81,7 @@ Public Class cls_Section
     Public enrobage_partiel As New Cls_Enrobage_Partiel
 
     ''' <summary>
-    ''' Dalle béton de la poutre
+    ''' Dalle béton de la poutre            ' A SUPPRIMER ?
     ''' </summary>
     Public Dalle As New Cls_Dalle
 
@@ -97,7 +96,90 @@ Public Class cls_Section
 
 #End Region
 
-#Region " Propiétés de la section "
+#Region " Propriétés plastiques de la section "
+
+    Public Sub ProprietesPlastiquesM(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, RhoV As Decimal, ByRef zANP As Decimal, ByRef MplRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés plastiques en flexion simple de la section
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   RhoV        [E] :   Coefficient pour l'interaction MV
+        '   zANP        [E] :   Position axe neutre plastique
+        '   MplRd       [E] :   Moment plastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim lLamine As Boolean = Me.lLamine
+
+        '--> Initialisation
+
+        Hw = Me.ProfilA.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.t_fs, -Me.ProfilA.t_fs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+
+        '# Âme
+
+        MyModele.AddMaille(Hw * Me.ProfilA.t_w, Hw, -Me.ProfilA.t_fs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+
+        '# Semelle inférieure
+
+        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.t_fi, -Me.ProfilA.ha + Me.ProfilA.t_fi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+
+        If lLamine Then
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+        '# Béton d'enrobage
+
+        If Me.lEnrobage Then
+
+        End If
+
+        '# Armatures de l'enrobage
+
+        If Me.lEnrobage Then
+
+
+        End If
+
+        '--> Dalle béton
+
+        If lMixte Then
+
+        End If
+
+        '--> Recherche de l'axe neutre plastique
+
+        MyModele.RechercheANP(Signe, zANP, lValeurRd)
+
+        '--> Moment plastique
+
+        MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    End Sub
+
+#End Region
+
+#Region " Propiétés générales de la section "
 
     ''' <summary>
     ''' Indique si la section comprend un enrobage partiel
