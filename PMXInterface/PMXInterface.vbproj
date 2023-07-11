@@ -128,6 +128,12 @@
     <Compile Include="Fenetres\Filles\Frm_Gamma.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Hivoss.Designer.vb">
+      <DependentUpon>Frm_Hivoss.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Hivoss.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Maintiens.Designer.vb">
       <DependentUpon>Frm_Maintiens.vb</DependentUpon>
     </Compile>
