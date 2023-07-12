@@ -8,7 +8,8 @@ Imports PMXMoteur2
         '----------------------------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création POM
         '----------------------------------------------------------------------------------------------------------------------------------
-        ' Test des propriétés d'un profilé acier
+        ' Test des propriétés d'un profilé acier IPE 300
+        '   Références : valeurs catalogue AM
         '----------------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -65,6 +66,12 @@ Imports PMXMoteur2
 
         ValRef = 20.1 * 10 ^ (-8)
         DeltaV = (MyProfil.InertieT - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 10)     '1%
+
+        '# Inertie de gauchissement
+
+        ValRef = 126 * 10 ^ (-9)
+        DeltaV = (MyProfil.InertieW - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub

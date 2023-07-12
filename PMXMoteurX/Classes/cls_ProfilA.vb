@@ -120,6 +120,34 @@
     End Property
 
     ''' <summary>
+    ''' Inertie de gauchissement
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieW As Decimal
+        Get
+            '--> Déclaration
+
+            Dim pInertieW As Decimal
+
+            '--> Calcul
+
+            Select Case Me.typeProfileAcier
+                Case Enum_TypeSectionAcier.Lamine
+                    Dim Bf As Decimal = Me.b_fs
+                    Dim Tf As Decimal = Me.t_fs
+
+                    pInertieW = Tf * Bf ^ 3 / 24 * (ha - Tf) ^ 2
+
+                Case Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
+            End Select
+
+            '--> Fin
+
+            Return pInertieW
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Intertie de torsion du profilé
     ''' </summary>
     ''' <returns></returns>
@@ -140,15 +168,35 @@
                     Dim Rc As Decimal = Me.r_cs
                     Dim Hw As Decimal = Me.HauteurAmeHw
 
-                    'pInertieT = 2.0 * Bf * Tf ^ 3 * (1.0 - 0.63 * Tf / Bf * (1.0# - (Tf / Bf) ^ 4 / 12.0#)) _
-                    '               + Tw ^ 3 * Hw / 3.0# _
-                    '              + 2.0# * Tw / Tf * (0.1# * Rc / Tf + 0.15#) * ((Tf + Rc) ^ 2 + Tw * (Rc + Tw / 4.0#)) ^ 4 / (2.0# * Rc + Tf) ^ 4
-                    pInertieT = 2 / 3 * (Bf - 0.63 * Tf) * Tf ^ 3 _
+                    ''=== Formule du catalogue AM V 2008
+
+                    'pInertieT = 2 / 3 * (Bf - 0.63 * Tf) * Tf ^ 3 _
+                    '          + 1 / 3 * Hw * Tw ^ 3 _
+                    '          + 2 * Tw / Tf * (0.145 + 0.1 * Rc / Tf) * (((Rc + Tw / 2) ^ 2 + (Rc + Tf) ^ 2 - Rc ^ 2) / (2 * Rc + Tf)) ^ 4
+
+                    '=== Formule du guide CTICM sur le déversement, Annexe A1
+
+                    pInertieT = 2 / 3 * (1 - 0.63 * Tf / Bf * (1 - Tf ^ 4 / 12 / Bf ^ 4)) * Bf * Tf ^ 3 _
                               + 1 / 3 * Hw * Tw ^ 3 _
-                              + 2 * Tw / Tf * (0.145 + 0.1 * Rc / Tf) * (((Rc + Tw / 2) ^ 2 + (Rc + Tf) ^ 2 - Rc ^ 2) / (2 * Rc + Tf)) ^ 4
+                              + 2 * Tw / Tf * (0.1 * Rc / Tf + 0.15) * (((Tf + Rc) ^ 2 + Tw * (Rc + Tw / 4)) / (2 * Rc + Tf)) ^ 4
+
+                Case Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
+
+                    '=== Formule du guide CTICM sur le déversement, Annexe A2
+
+                    Dim Itfs, Itfi As Decimal
+                    Dim Itrs, Itri As Decimal
+                    Dim Itw As Decimal
+
+                    Itfs = 1 / 3 * (1 - 0.63 * Me.t_fs / Me.b_fs * (1 - Me.t_fs ^ 4 / 12 / Me.b_fs ^ 4)) * Me.b_fs * Me.t_fs ^ 3
+                    Itfi = 1 / 3 * (1 - 0.63 * Me.t_fi / Me.b_fi * (1 - Me.t_fi ^ 4 / 12 / Me.b_fi ^ 4)) * Me.b_fi * Me.t_fi ^ 3
+                    Itw = 1 / 3 * Me.HauteurAmeHw * Me.t_w ^ 3
+                    Itrs = Me.t_w / Me.t_fs * (0.1 * Me.r_cs / Me.t_fs + 0.15) * (((Me.t_fs + Me.r_cs) ^ 2 + Me.t_w * (Me.r_cs + Me.t_w / 4)) / (2 * Me.r_cs + Me.t_fs)) ^ 4
+                    Itri = Me.t_w / Me.t_fi * (0.1 * Me.r_ci / Me.t_fi + 0.15) * (((Me.t_fi + Me.r_ci) ^ 2 + Me.t_w * (Me.r_ci + Me.t_w / 4)) / (2 * Me.r_ci + Me.t_fi)) ^ 4
+
+                    pInertieT = Itfs + Itfi + Itw + Itrs + Itri
 
             End Select
-
 
             '--> Fin
 
