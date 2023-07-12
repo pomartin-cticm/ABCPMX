@@ -16,7 +16,8 @@ Imports PMXMoteur2
         Dim MySection As New cls_Section
         Dim MyGamma As New Cls_Gamma
         Dim zANP, MplRd As Decimal
-        Dim zANE, MelRd, InertieY As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim InertieY, InertieZ As Decimal
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
 
@@ -74,7 +75,7 @@ Imports PMXMoteur2
         ''DeltaV = (MySection.vplrd - ValRef) / ValRef
         ''Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        '--> Tests des propriétés élastiques
+        '--> Tests des propriétés élastiques / axe YY
 
         MySection.ProprietesElastiquesMyy(1, True, MyGamma, zANE, inertiey, MelRd)
 
@@ -90,6 +91,21 @@ Imports PMXMoteur2
         DeltaV = (InertieY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
+        '--> Tests des propriétés élastiques / axe ZZ
+
+        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, Inertiez, MelRd)
+
+        '# Position ANE
+
+        ValRef = 0
+        DeltaV = (zANE - ValRef) / MySection.ProfilA.ha
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Inertie Z
+
+        ValRef = 604 * 10 ^ (-8)
+        DeltaV = (InertieZ - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
 

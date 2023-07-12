@@ -366,7 +366,7 @@ Public Class cls_ModeleP
     ''' <param name="Signe">    [E] Signe du moment     </param>
     ''' <param name="zAxe">     [E] Position z de l'axe </param>
     ''' <returns></returns>
-    Public Function InertieFlexionY(Signe As Decimal, zAxe As Decimal) As Decimal
+    Public Function InertieFlexion(Signe As Decimal, zAxe As Decimal) As Decimal
         '-------------------------------------------------------------------------------
         '   16/03/2023 :    Création - POM
         '-------------------------------------------------------------------------------

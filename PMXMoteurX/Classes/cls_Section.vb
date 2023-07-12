@@ -256,13 +256,98 @@ Public Class cls_Section
 
         '--> Calcul de l'inertie
 
-        InertieY = MyModele.InertieFlexionY(Signe, zANE)
+        InertieY = MyModele.InertieFlexion(Signe, zANE)
 
         '--> Moment plastique
 
         'MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
 
     End Sub
+
+    Public Sub ProprietesElastiquesMzz(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe faible
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   zANE        [E] :   Position axe neutre élastique
+        '   MelRd       [E] :   Moment élastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+        Dim Rc As Decimal = (Me.ProfilA.r_cs + Me.ProfilA.r_ci) / 2
+
+        '--> Initialisation
+
+        Hw = Me.ProfilA.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.b_fs, 0, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+
+        '# Âme
+
+        MyModele.AddMaille(Hw * Me.ProfilA.t_w, Me.ProfilA.t_w, 0, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+
+        '# Semelle inférieure
+
+        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.b_fi, 0, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+
+        If lLamine Then
+
+            '# Congés supérieurs (c'est à dire, côté gauche)
+
+            MyModele.AddMailleConges(Rc, -Me.ProfilA.t_w / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+
+            '# Congés supérieurs (c'est à dire, côté droite)
+
+            MyModele.AddMailleConges(Rc, +Me.ProfilA.t_w / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+        '# Béton d'enrobage
+
+        If Me.lEnrobage Then
+
+        End If
+
+        '# Armatures de l'enrobage
+
+        If Me.lEnrobage Then
+
+
+        End If
+
+        '--> Dalle béton
+
+        If lMixte Then
+
+        End If
+
+        '--> Recherche de l'axe neutre élastique
+
+        MyModele.RechercheANE(Signe, zANE)
+
+        '--> Calcul de l'inertie
+
+        InertieZ = MyModele.InertieFlexion(Signe, zANE)
+
+        '--> Moment plastique
+
+        'MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    End Sub
+
 
 #End Region
 
