@@ -33,6 +33,7 @@ Partial Class Frm_Hivoss
         Me.TLPan_Droite = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Amortissement = New System.Windows.Forms.Label()
         Me.pan_SaisieAmortissement = New System.Windows.Forms.Panel()
+        Me.cmb_D2Value = New System.Windows.Forms.ComboBox()
         Me.img_DtotValue = New System.Windows.Forms.PictureBox()
         Me.img_DtotSymbol = New System.Windows.Forms.PictureBox()
         Me.lbl_AmortissementTotal = New System.Windows.Forms.Label()
@@ -60,7 +61,6 @@ Partial Class Frm_Hivoss
         Me.cmb_ratioQ = New System.Windows.Forms.ComboBox()
         Me.lbl_ComboMasseFrequence = New System.Windows.Forms.Label()
         Me.chk_methodeHIVOSS = New System.Windows.Forms.CheckBox()
-        Me.cmb_D3Value = New System.Windows.Forms.ComboBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -89,7 +89,7 @@ Partial Class Frm_Hivoss
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(666, 336)
+        Me.pan_General.Size = New System.Drawing.Size(685, 336)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -104,7 +104,7 @@ Partial Class Frm_Hivoss
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(666, 336)
+        Me.TLpan_Main.Size = New System.Drawing.Size(685, 336)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -125,13 +125,13 @@ Partial Class Frm_Hivoss
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(660, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(679, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(343, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(352, 3)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
@@ -142,7 +142,7 @@ Partial Class Frm_Hivoss
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(203, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(212, 3)
         Me.btn_Annuler.Name = "btn_Annuler"
         Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
         Me.btn_Annuler.TabIndex = 0
@@ -156,14 +156,14 @@ Partial Class Frm_Hivoss
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(660, 290)
+        Me.pan_Main.Size = New System.Drawing.Size(679, 290)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_PartieHaute
         '
         Me.TLPan_PartieHaute.ColumnCount = 2
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.0!))
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.0!))
         Me.TLPan_PartieHaute.Controls.Add(Me.pan_Droite, 0, 0)
         Me.TLPan_PartieHaute.Controls.Add(Me.pan_Gauche, 0, 0)
         Me.TLPan_PartieHaute.Dock = System.Windows.Forms.DockStyle.Fill
@@ -172,7 +172,7 @@ Partial Class Frm_Hivoss
         Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
         Me.TLPan_PartieHaute.RowCount = 1
         Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(660, 290)
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(679, 290)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
         'pan_Droite
@@ -180,10 +180,10 @@ Partial Class Frm_Hivoss
         Me.pan_Droite.AutoScroll = True
         Me.pan_Droite.Controls.Add(Me.TLPan_Droite)
         Me.pan_Droite.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Droite.Location = New System.Drawing.Point(297, 0)
+        Me.pan_Droite.Location = New System.Drawing.Point(285, 0)
         Me.pan_Droite.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Droite.Name = "pan_Droite"
-        Me.pan_Droite.Size = New System.Drawing.Size(363, 290)
+        Me.pan_Droite.Size = New System.Drawing.Size(394, 290)
         Me.pan_Droite.TabIndex = 1
         '
         'TLPan_Droite
@@ -199,7 +199,7 @@ Partial Class Frm_Hivoss
         Me.TLPan_Droite.RowCount = 2
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Droite.Size = New System.Drawing.Size(363, 290)
+        Me.TLPan_Droite.Size = New System.Drawing.Size(394, 290)
         Me.TLPan_Droite.TabIndex = 0
         '
         'lbl_Amortissement
@@ -211,7 +211,7 @@ Partial Class Frm_Hivoss
         Me.lbl_Amortissement.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Amortissement.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Amortissement.Name = "lbl_Amortissement"
-        Me.lbl_Amortissement.Size = New System.Drawing.Size(363, 30)
+        Me.lbl_Amortissement.Size = New System.Drawing.Size(394, 30)
         Me.lbl_Amortissement.TabIndex = 0
         Me.lbl_Amortissement.Text = "lbl_Amortissement"
         Me.lbl_Amortissement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -220,7 +220,7 @@ Partial Class Frm_Hivoss
         '
         Me.pan_SaisieAmortissement.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieAmortissement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieAmortissement.Controls.Add(Me.cmb_D3Value)
+        Me.pan_SaisieAmortissement.Controls.Add(Me.cmb_D2Value)
         Me.pan_SaisieAmortissement.Controls.Add(Me.img_DtotValue)
         Me.pan_SaisieAmortissement.Controls.Add(Me.img_DtotSymbol)
         Me.pan_SaisieAmortissement.Controls.Add(Me.lbl_AmortissementTotal)
@@ -241,12 +241,20 @@ Partial Class Frm_Hivoss
         Me.pan_SaisieAmortissement.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieAmortissement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieAmortissement.Name = "pan_SaisieAmortissement"
-        Me.pan_SaisieAmortissement.Size = New System.Drawing.Size(363, 260)
+        Me.pan_SaisieAmortissement.Size = New System.Drawing.Size(394, 260)
         Me.pan_SaisieAmortissement.TabIndex = 1
+        '
+        'cmb_D2Value
+        '
+        Me.cmb_D2Value.FormattingEnabled = True
+        Me.cmb_D2Value.Location = New System.Drawing.Point(302, 77)
+        Me.cmb_D2Value.Name = "cmb_D2Value"
+        Me.cmb_D2Value.Size = New System.Drawing.Size(57, 21)
+        Me.cmb_D2Value.TabIndex = 20
         '
         'img_DtotValue
         '
-        Me.img_DtotValue.Location = New System.Drawing.Point(283, 216)
+        Me.img_DtotValue.Location = New System.Drawing.Point(302, 216)
         Me.img_DtotValue.Name = "img_DtotValue"
         Me.img_DtotValue.Size = New System.Drawing.Size(57, 21)
         Me.img_DtotValue.TabIndex = 19
@@ -254,7 +262,7 @@ Partial Class Frm_Hivoss
         '
         'img_DtotSymbol
         '
-        Me.img_DtotSymbol.Location = New System.Drawing.Point(220, 216)
+        Me.img_DtotSymbol.Location = New System.Drawing.Point(239, 216)
         Me.img_DtotSymbol.Name = "img_DtotSymbol"
         Me.img_DtotSymbol.Size = New System.Drawing.Size(57, 21)
         Me.img_DtotSymbol.TabIndex = 18
@@ -271,7 +279,7 @@ Partial Class Frm_Hivoss
         '
         'img_D3Value
         '
-        Me.img_D3Value.Location = New System.Drawing.Point(283, 171)
+        Me.img_D3Value.Location = New System.Drawing.Point(302, 171)
         Me.img_D3Value.Name = "img_D3Value"
         Me.img_D3Value.Size = New System.Drawing.Size(57, 21)
         Me.img_D3Value.TabIndex = 16
@@ -279,7 +287,7 @@ Partial Class Frm_Hivoss
         '
         'img_D3Symbol
         '
-        Me.img_D3Symbol.Location = New System.Drawing.Point(220, 171)
+        Me.img_D3Symbol.Location = New System.Drawing.Point(239, 171)
         Me.img_D3Symbol.Name = "img_D3Symbol"
         Me.img_D3Symbol.Size = New System.Drawing.Size(57, 21)
         Me.img_D3Symbol.TabIndex = 15
@@ -319,7 +327,7 @@ Partial Class Frm_Hivoss
         Me.cmb_AmortissementMobilier.FormattingEnabled = True
         Me.cmb_AmortissementMobilier.Location = New System.Drawing.Point(31, 104)
         Me.cmb_AmortissementMobilier.Name = "cmb_AmortissementMobilier"
-        Me.cmb_AmortissementMobilier.Size = New System.Drawing.Size(162, 21)
+        Me.cmb_AmortissementMobilier.Size = New System.Drawing.Size(202, 21)
         Me.cmb_AmortissementMobilier.TabIndex = 7
         '
         'lbl_AmortissementMobilier
@@ -333,7 +341,7 @@ Partial Class Frm_Hivoss
         '
         'img_D1Value
         '
-        Me.img_D1Value.Location = New System.Drawing.Point(283, 42)
+        Me.img_D1Value.Location = New System.Drawing.Point(302, 42)
         Me.img_D1Value.Name = "img_D1Value"
         Me.img_D1Value.Size = New System.Drawing.Size(57, 21)
         Me.img_D1Value.TabIndex = 10
@@ -341,7 +349,7 @@ Partial Class Frm_Hivoss
         '
         'img_D1Symbol
         '
-        Me.img_D1Symbol.Location = New System.Drawing.Point(220, 42)
+        Me.img_D1Symbol.Location = New System.Drawing.Point(239, 42)
         Me.img_D1Symbol.Name = "img_D1Symbol"
         Me.img_D1Symbol.Size = New System.Drawing.Size(57, 21)
         Me.img_D1Symbol.TabIndex = 9
@@ -349,7 +357,7 @@ Partial Class Frm_Hivoss
         '
         'img_D2Value
         '
-        Me.img_D2Value.Location = New System.Drawing.Point(283, 104)
+        Me.img_D2Value.Location = New System.Drawing.Point(302, 104)
         Me.img_D2Value.Name = "img_D2Value"
         Me.img_D2Value.Size = New System.Drawing.Size(57, 21)
         Me.img_D2Value.TabIndex = 10
@@ -357,7 +365,7 @@ Partial Class Frm_Hivoss
         '
         'img_D2Symbol
         '
-        Me.img_D2Symbol.Location = New System.Drawing.Point(220, 104)
+        Me.img_D2Symbol.Location = New System.Drawing.Point(239, 104)
         Me.img_D2Symbol.Name = "img_D2Symbol"
         Me.img_D2Symbol.Size = New System.Drawing.Size(57, 21)
         Me.img_D2Symbol.TabIndex = 9
@@ -389,7 +397,7 @@ Partial Class Frm_Hivoss
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(296, 290)
+        Me.pan_Gauche.Size = New System.Drawing.Size(284, 290)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -405,7 +413,7 @@ Partial Class Frm_Hivoss
         Me.TLPan_Gauche.RowCount = 2
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(296, 290)
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(284, 290)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_Options
@@ -417,7 +425,7 @@ Partial Class Frm_Hivoss
         Me.lbl_Options.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Options.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Options.Name = "lbl_Options"
-        Me.lbl_Options.Size = New System.Drawing.Size(296, 30)
+        Me.lbl_Options.Size = New System.Drawing.Size(284, 30)
         Me.lbl_Options.TabIndex = 0
         Me.lbl_Options.Text = "lbl_Options"
         Me.lbl_Options.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -437,7 +445,7 @@ Partial Class Frm_Hivoss
         Me.pan_SaisieOptions.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieOptions.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieOptions.Name = "pan_SaisieOptions"
-        Me.pan_SaisieOptions.Size = New System.Drawing.Size(296, 260)
+        Me.pan_SaisieOptions.Size = New System.Drawing.Size(284, 260)
         Me.pan_SaisieOptions.TabIndex = 1
         '
         'cmb_UtilisationPlancher
@@ -501,21 +509,14 @@ Partial Class Frm_Hivoss
         Me.chk_methodeHIVOSS.Text = "chk_methodeHIVOSS"
         Me.chk_methodeHIVOSS.UseVisualStyleBackColor = True
         '
-        'cmb_D3Value
-        '
-        Me.cmb_D3Value.FormattingEnabled = True
-        Me.cmb_D3Value.Location = New System.Drawing.Point(283, 144)
-        Me.cmb_D3Value.Name = "cmb_D3Value"
-        Me.cmb_D3Value.Size = New System.Drawing.Size(57, 21)
-        Me.cmb_D3Value.TabIndex = 20
-        '
         'Frm_Hivoss
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(666, 336)
+        Me.ClientSize = New System.Drawing.Size(685, 336)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Hivoss"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Hivoss"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
@@ -582,5 +583,5 @@ Partial Class Frm_Hivoss
     Friend WithEvents img_D1Symbol As PictureBox
     Friend WithEvents img_D2Value As PictureBox
     Friend WithEvents img_D2Symbol As PictureBox
-    Friend WithEvents cmb_D3Value As ComboBox
+    Friend WithEvents cmb_D2Value As ComboBox
 End Class

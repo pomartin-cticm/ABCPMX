@@ -254,6 +254,14 @@ TITLE					= Definition of coefficients
 
 #FRM_HIVOSS
 CANCEL					= Cancel
+DAMPINGFURN_TRADOFFICE	= Traditional office with separation walls
+DAMPINGFURN_PAPEROFFICE	= Paperless office
+DAMPINGFURN_OPENOFFICE	= Open plan office
+DAMPINGFURN_LIBRARY		= Library
+DAMPINGFURN_HOUSE		= Houses
+DAMPINGFURN_SCHOOLS		= Schools
+DAMPINGFURN_GYM			= Gymnasium
+DAMPINGFURN_CUSTOM		= Custom damping for furniture
 FLOORUSE_CRITAREA		= Critical areas
 FLOORUSE_HOSP			= Hospital, surgeries
 FLOORUSE_SCHOOL			= Schools, training centers

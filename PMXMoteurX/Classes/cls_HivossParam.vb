@@ -78,22 +78,22 @@
     ''' <summary>
     ''' Amortissement de la structure 
     ''' </summary>
-    Public AmortiStructure As Decimal
+    Public AmortiStructure_D1 As Decimal
 
     ''' <summary>
     ''' Amortissement induit par la présence du mobilier
     ''' </summary>
-    Public AmortiMobilier As Decimal
+    Public AmortiMobilier_D2 As Decimal
 
     ''' <summary>
     ''' Amortissement induit par les finitions (faux plafonds et/ou chappe flottante)
     ''' </summary>
-    Public AmortiFinition As Decimal
+    Public AmortiFinition_D3 As Decimal
 
     ''' <summary>
     ''' Amortissement total pris en compte 
     ''' </summary>
-    Public AmortiTotal As Decimal
+    Public AmortiTotal_Dtot As Decimal
 
 #End Region
 #Region "Constructeur"
@@ -116,38 +116,38 @@
     ''' Calcul les différentes valeurs des amortissements en fonction des différentes paramètres renseignés
     ''' </summary>
     Sub CalculAmortissement()
-        Me.AmortiStructure = 1 / 100
+        Me.AmortiStructure_D1 = 1 / 100
 
         Select Case Mobilier
             Case Enu_Mobiliers.BureauAvecCloison
-                Me.AmortiMobilier = 2 / 100
+                Me.AmortiMobilier_D2 = 2 / 100
             Case Enu_Mobiliers.BureauSansArmoires
-                Me.AmortiMobilier = 0 / 100
+                Me.AmortiMobilier_D2 = 0 / 100
             Case Enu_Mobiliers.BureauPaysager
-                Me.AmortiMobilier = 1 / 100
+                Me.AmortiMobilier_D2 = 1 / 100
             Case Enu_Mobiliers.Bibliotheque
-                Me.AmortiMobilier = 1 / 100
+                Me.AmortiMobilier_D2 = 1 / 100
             Case Enu_Mobiliers.Residentiel
-                Me.AmortiMobilier = 1 / 100
+                Me.AmortiMobilier_D2 = 1 / 100
             Case Enu_Mobiliers.Ecole
-                Me.AmortiMobilier = 0 / 100
+                Me.AmortiMobilier_D2 = 0 / 100
             Case Enu_Mobiliers.SalleDeSport
-                Me.AmortiMobilier = 0 / 100
+                Me.AmortiMobilier_D2 = 0 / 100
             Case Enu_Mobiliers.Personnalise
 
         End Select
 
         If lFauxPlafond Or lChappeFlottante Then
             If lFauxPlafond And lChappeFlottante Then
-                Me.AmortiFinition = 2 / 100
+                Me.AmortiFinition_D3 = 2 / 100
             Else
-                Me.AmortiFinition = 1 / 100
+                Me.AmortiFinition_D3 = 1 / 100
             End If
         Else
-            Me.AmortiFinition = 0 / 100
+            Me.AmortiFinition_D3 = 0 / 100
         End If
 
-        Me.AmortiTotal = Me.AmortiStructure + Me.AmortiMobilier + Me.AmortiFinition
+        Me.AmortiTotal_Dtot = Me.AmortiStructure_D1 + Me.AmortiMobilier_D2 + Me.AmortiFinition_D3
 
     End Sub
 
