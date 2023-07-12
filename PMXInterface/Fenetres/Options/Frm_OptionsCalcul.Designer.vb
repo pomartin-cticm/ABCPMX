@@ -28,10 +28,14 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.PoMBtn_Gamma = New PMXInterface.POMbutton()
         Me.pan_Contenu = New System.Windows.Forms.Panel()
+        Me.TLpan_PourLesBoutons = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_Appliquer = New System.Windows.Forms.Button()
+        Me.btn_Cancel = New System.Windows.Forms.Button()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLpan_Gauche.SuspendLayout()
+        Me.TLpan_PourLesBoutons.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_Main
@@ -77,6 +81,7 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Gauche.ColumnCount = 1
         Me.TLpan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Gauche.Controls.Add(Me.PoMBtn_Gamma, 0, 0)
+        Me.TLpan_Gauche.Controls.Add(Me.TLpan_PourLesBoutons, 0, 6)
         Me.TLpan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(1)
@@ -125,10 +130,49 @@ Partial Class Frm_OptionsCalcul
         Me.pan_Contenu.Size = New System.Drawing.Size(547, 444)
         Me.pan_Contenu.TabIndex = 2
         '
+        'TLpan_PourLesBoutons
+        '
+        Me.TLpan_PourLesBoutons.ColumnCount = 2
+        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Cancel, 1, 0)
+        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Appliquer, 0, 0)
+        Me.TLpan_PourLesBoutons.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_PourLesBoutons.Location = New System.Drawing.Point(0, 412)
+        Me.TLpan_PourLesBoutons.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_PourLesBoutons.Name = "TLpan_PourLesBoutons"
+        Me.TLpan_PourLesBoutons.RowCount = 1
+        Me.TLpan_PourLesBoutons.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.Size = New System.Drawing.Size(242, 30)
+        Me.TLpan_PourLesBoutons.TabIndex = 1
+        '
+        'btn_Appliquer
+        '
+        Me.btn_Appliquer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_Appliquer.Location = New System.Drawing.Point(3, 3)
+        Me.btn_Appliquer.Name = "btn_Appliquer"
+        Me.btn_Appliquer.Size = New System.Drawing.Size(115, 24)
+        Me.btn_Appliquer.TabIndex = 0
+        Me.btn_Appliquer.Text = "btn_Appliquer"
+        Me.btn_Appliquer.UseVisualStyleBackColor = True
+        '
+        'btn_Cancel
+        '
+        Me.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btn_Cancel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_Cancel.Location = New System.Drawing.Point(124, 3)
+        Me.btn_Cancel.Name = "btn_Cancel"
+        Me.btn_Cancel.Size = New System.Drawing.Size(115, 24)
+        Me.btn_Cancel.TabIndex = 1
+        Me.btn_Cancel.Text = "btn_Cancel"
+        Me.btn_Cancel.UseVisualStyleBackColor = True
+        '
         'Frm_OptionsCalcul
         '
+        Me.AcceptButton = Me.btn_Appliquer
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.btn_Cancel
         Me.ClientSize = New System.Drawing.Size(800, 450)
         Me.Controls.Add(Me.pan_Main)
         Me.Name = "Frm_OptionsCalcul"
@@ -138,6 +182,7 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Main.ResumeLayout(False)
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLpan_Gauche.ResumeLayout(False)
+        Me.TLpan_PourLesBoutons.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -148,4 +193,7 @@ Partial Class Frm_OptionsCalcul
     Friend WithEvents TLpan_Gauche As TableLayoutPanel
     Friend WithEvents PoMBtn_Gamma As POMbutton
     Friend WithEvents pan_Contenu As Panel
+    Friend WithEvents TLpan_PourLesBoutons As TableLayoutPanel
+    Friend WithEvents btn_Cancel As Button
+    Friend WithEvents btn_Appliquer As Button
 End Class

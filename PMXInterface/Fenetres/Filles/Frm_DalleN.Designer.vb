@@ -545,7 +545,7 @@ Partial Class Frm_DalleN
         Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
         Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
         Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
-        Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 46.0!))
+        Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 131.0!))
         Me.TLpan_ChoixLit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_ChoixLit.Controls.Add(Me.chk_Lit2, 0, 0)
         Me.TLpan_ChoixLit.Controls.Add(Me.chk_Lit1, 0, 0)
@@ -1166,8 +1166,10 @@ Partial Class Frm_DalleN
         '
         'Frm_DalleN
         '
+        Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(808, 493)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_DalleN"

@@ -278,6 +278,8 @@ WELDEDP					= Mono-symmetrical welded section
 #OPTCALCULMAIN
 TITLE					= Calculation options
 GAMMA					= Default national factors
+APPLY					= Apply
+CANCEL					= Cancel
 
 #OPTCALGAMMA
 TITLE					= Default national factors

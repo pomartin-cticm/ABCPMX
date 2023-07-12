@@ -123,6 +123,9 @@ Public Class Frm_OptionsCalcul
 
             Me.PoMBtn_Gamma.Caption = MyBloc("GAMMA")
 
+            Me.btn_Appliquer.Text = MyBloc("APPLY")
+            Me.btn_Cancel.Text = MyBloc("CANCEL")
+
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
         Finally
@@ -207,5 +210,38 @@ Public Class Frm_OptionsCalcul
 
 #End Region
 
+#Region "===FERMETURE==="
+
+    Private Sub btn_Appliquer_Click(sender As Object, e As EventArgs) Handles btn_Appliquer.Click
+
+        Dim lModif As Boolean
+        If ValideSaisie() Then
+
+            TransfertSaisie(lModif)
+
+            If lModif Then
+
+            End If
+
+        End If
+
+
+    End Sub
+
+    Private Sub TransfertSaisie(ByRef lModif As Boolean)
+
+    End Sub
+
+    Private Function ValideSaisie() As Boolean
+
+
+        Dim lOK As Boolean = True
+        Return lOK
+
+
+    End Function
+
+
+#End Region
 
 End Class
