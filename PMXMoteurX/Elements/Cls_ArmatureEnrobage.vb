@@ -86,6 +86,51 @@
 
     End Function
 
+    Public Function NbBarres(iPos As Integer) As Integer
+        '--------------------------------------------------------------------------------
+        '   12/07/23 :  Création - POM
+        '--------------------------------------------------------------------------------
+        ' Retourne le nombre de barres dans une grappe
+        '--------------------------------------------------------------------------------
+        '   iPos    [E] :   0 pour la grappe exterieure
+        '                   1 pour la grappe intermédiaire
+        '                   2 pour la grappe interieure
+        '--------------------------------------------------------------------------------
+
+        Dim NbB As Integer
+
+        Select Case iPos
+            Case 0 : NbB = Me.NbExt
+            Case 1 : NbB = Me.NbMil
+            Case 2 : NbB = Me.NbInt
+        End Select
+
+        Return NbB
+    End Function
+
+
+    Public Function PhiBarre(iPos As Integer) As Decimal
+        '--------------------------------------------------------------------------------
+        '   12/07/23 :  Création - POM
+        '--------------------------------------------------------------------------------
+        ' Retourne le diamètre de barres dans une grappe
+        '--------------------------------------------------------------------------------
+        '   iPos    [E] :   0 pour la grappe exterieure
+        '                   1 pour la grappe intermédiaire
+        '                   2 pour la grappe interieure
+        '--------------------------------------------------------------------------------
+
+        Dim Phi As Decimal
+
+        Select Case iPos
+            Case 0 : Phi = Me.PhiExt
+            Case 1 : Phi = Me.PhiMil
+            Case 2 : Phi = Me.PhiInt
+        End Select
+
+        Return Phi
+    End Function
+
 #End Region
 
 End Class

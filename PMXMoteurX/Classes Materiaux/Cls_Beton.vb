@@ -87,6 +87,33 @@
     End Function
 
     ''' <summary>
+    ''' Calcul du coefficient d'équivalence acier-béton à court terme
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function CoefficientEquivalenceCT() As Decimal
+        '---------------------------------------------------------------------------------------------------------------
+        '   12/07/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient d'équivalence acier béton à court terme
+        '---------------------------------------------------------------------------------------------------------------
+        '---------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim n0 As Decimal
+
+        '--> Initialisation
+
+        Me.Calcul_Proprietes()
+
+        '--> Calculs
+
+        n0 = Cls_Acier.EYACIER / Ecm
+
+        Return n0
+    End Function
+
+    ''' <summary>
     ''' Calcul du coefficient d'équivalence acier-béton
     ''' </summary>
     ''' <returns></returns>

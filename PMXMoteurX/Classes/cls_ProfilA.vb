@@ -120,6 +120,44 @@
     End Property
 
     ''' <summary>
+    ''' Intertie de torsion du profilé
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieT As Decimal
+        Get
+
+            '--> Déclaration
+
+            Dim pInertieT As Decimal
+
+            '--> Calcul
+
+            Select Case Me.typeProfileAcier
+                Case Enum_TypeSectionAcier.Lamine
+                    Dim Bf As Decimal = Me.b_fs
+                    Dim Tf As Decimal = Me.t_fs
+                    Dim Tw As Decimal = Me.t_w
+                    Dim Rc As Decimal = Me.r_cs
+                    Dim Hw As Decimal = Me.HauteurAmeHw
+
+                    'pInertieT = 2.0 * Bf * Tf ^ 3 * (1.0 - 0.63 * Tf / Bf * (1.0# - (Tf / Bf) ^ 4 / 12.0#)) _
+                    '               + Tw ^ 3 * Hw / 3.0# _
+                    '              + 2.0# * Tw / Tf * (0.1# * Rc / Tf + 0.15#) * ((Tf + Rc) ^ 2 + Tw * (Rc + Tw / 4.0#)) ^ 4 / (2.0# * Rc + Tf) ^ 4
+                    pInertieT = 2 / 3 * (Bf - 0.63 * Tf) * Tf ^ 3 _
+                              + 1 / 3 * Hw * Tw ^ 3 _
+                              + 2 * Tw / Tf * (0.145 + 0.1 * Rc / Tf) * (((Rc + Tw / 2) ^ 2 + (Rc + Tf) ^ 2 - Rc ^ 2) / (2 * Rc + Tf)) ^ 4
+
+            End Select
+
+
+            '--> Fin
+
+            Return pInertieT
+
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Aire de cisaillement
     ''' </summary>
     ''' <returns></returns>

@@ -181,7 +181,8 @@ Public Class cls_Section
 
 #Region " Propriétés élastiques de la section "
 
-    Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+    Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, nEqEc As Decimal,
+                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -190,6 +191,7 @@ Public Class cls_Section
         '   Signe       [E] :   Signe du moment
         '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
         '   Gammas      [E] :   Coefficients partiels
+        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
         '   zANE        [E] :   Position axe neutre élastique
         '   MelRd       [E] :   Moment élastique
         '-------------------------------------------------------------------------------------------------------------------
@@ -200,6 +202,7 @@ Public Class cls_Section
         Dim Hw As Decimal
         Dim lLamine As Boolean = Me.lLamine
         Const RhoV As Decimal = 0
+        Dim LargeurC, EpaisseurC, FdC As Decimal
 
         '--> Initialisation
 
@@ -235,12 +238,55 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
+            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.t_w)
+            EpaisseurC = Me.ProfilA.HauteurAmeHw
+            FdC = Me.enrobage_partiel.Beton.Fck
+
+            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
+
+            'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
+
+            If lLamine Then
+
+                '# Congés supérieurs
+
+                MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+
+                '# Congés supérieurs
+
+                MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+
+            End If
         End If
 
         '# Armatures de l'enrobage
 
         If Me.lEnrobage Then
 
+            Dim zArma, PhiA As Decimal
+            Dim iPos, iBarre As Integer
+            Dim NbBarres As Integer
+            Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
+            Dim ArmaNeq As Decimal = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
+            Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+
+            For iArma As Integer = 0 To 2
+
+                For iPos = 0 To 2
+
+                    NbBarres = Me.enrobage_partiel.LitArma(iArma).NbBarres(iPos)
+
+                    For iBarre = 1 To NbBarres
+                        zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
+                        PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
+
+                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DeltaCArma, ArmaNeq, Fsk, 0.85, Gammas.GammaS, 1, Cls_Maille.EnuTypeMaille.Circulaire)
+
+                    Next
+
+                Next
+
+            Next
 
         End If
 
@@ -273,8 +319,8 @@ Public Class cls_Section
         '   Signe       [E] :   Signe du moment
         '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
         '   Gammas      [E] :   Coefficients partiels
-        '   zANE        [E] :   Position axe neutre élastique
-        '   MelRd       [E] :   Moment élastique
+        '   zANE        [S] :   Position axe neutre élastique
+        '   MelRd       [S] :   Moment élastique
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -319,6 +365,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
+
         End If
 
         '# Armatures de l'enrobage
@@ -347,8 +394,47 @@ Public Class cls_Section
         'MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
 
     End Sub
+    Public Function InertieT()
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en torsion de la section
+        '   Pour un profilé acier avec enrobage, on utilise la formule du guide "Déversement des poutres en acier"
+        '   Pas de prise en compte de la dalle
+        '-------------------------------------------------------------------------------------------------------------------
 
+        '--> Déclaration
 
+        Dim pInertieT As Decimal
+        Dim pInertieTEnrob As Decimal
+        Dim nEq As Decimal
+        Dim Gc, Ga As Decimal
+        Dim hW, Bc As Decimal
+
+        '--> Inertie de torsion du profilé acier seul
+
+        pInertieT = Me.ProfilA.InertieT
+
+        '--> Pour l'enrobage, on ajoute la contribution du béton d'enrobage, avec la formule du guide "Déversement des poutres en acier", page 56 formule (4.19)
+
+        If Me.lEnrobage Then
+
+            nEq = Me.enrobage_partiel.Beton.CoefficientEquivalenceCT
+            hW = Me.ProfilA.HauteurAmeHw
+            Bc = Me.LargeurEnrobagePartielBc
+
+            Gc = 0.3 * Cls_Acier.EYACIER / nEq
+            Ga = Me.Acier.ModuleG
+
+            pInertieTEnrob = 1 / 3 * (1 - 0.63 * Bc / hW) * hW * Bc ^ 3
+
+            pInertieT += 0.1 * pInertieTEnrob * Gc / Ga
+
+        End If
+
+        Return pInertieT
+
+    End Function
 #End Region
 
 #Region " Propiétés générales de la section "

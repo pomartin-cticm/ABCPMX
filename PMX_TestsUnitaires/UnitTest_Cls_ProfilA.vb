@@ -61,6 +61,12 @@ Imports PMXMoteur2
         DeltaV = (MyProfil.Aire - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
+        '# Inertie de torsion
+
+        ValRef = 20.1 * 10 ^ (-8)
+        DeltaV = (MyProfil.InertieT - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
     End Sub
 
 End Class

@@ -6,6 +6,7 @@ Public Class Cls_Acier
     Public Const EYACIER As Decimal = 210 * 1000
     Public Const RHOACIER As Decimal = 7850
     Public Const NUANCEDEFAULT As String = "S355"
+    Public Const NU As Decimal = 0.3
 
     Public Structure strucPlage
         Dim Ep As Double
@@ -69,6 +70,26 @@ Public Class Cls_Acier
     Public ReadOnly Property EYoung As Decimal
         Get
             Return EYACIER
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Coefficient de Poisson
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Poisson As Decimal
+        Get
+            Return NU
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Module de cisaillement
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property ModuleG As Decimal
+        Get
+            Return EYACIER / (2 * (1 + NU))
         End Get
     End Property
 
