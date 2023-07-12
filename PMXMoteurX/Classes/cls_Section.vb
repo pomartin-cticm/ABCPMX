@@ -98,11 +98,11 @@ Public Class cls_Section
 
 #Region " Propriétés plastiques de la section "
 
-    Public Sub ProprietesPlastiquesM(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, RhoV As Decimal, ByRef zANP As Decimal, ByRef MplRd As Decimal)
+    Public Sub ProprietesPlastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, RhoV As Decimal, ByRef zANP As Decimal, ByRef MplRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
-        '   Calcul des propriétés plastiques en flexion simple de la section
+        '   Calcul des propriétés plastiques en flexion simple de la section / axe fort
         '-------------------------------------------------------------------------------------------------------------------
         '   Signe       [E] :   Signe du moment
         '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
@@ -174,6 +174,93 @@ Public Class cls_Section
         '--> Moment plastique
 
         MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    End Sub
+
+#End Region
+
+#Region " Propriétés élastiques de la section "
+
+    Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   zANE        [E] :   Position axe neutre élastique
+        '   MelRd       [E] :   Moment élastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+
+        '--> Initialisation
+
+        Hw = Me.ProfilA.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.t_fs, -Me.ProfilA.t_fs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+
+        '# Âme
+
+        MyModele.AddMaille(Hw * Me.ProfilA.t_w, Hw, -Me.ProfilA.t_fs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+
+        '# Semelle inférieure
+
+        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.t_fi, -Me.ProfilA.ha + Me.ProfilA.t_fi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+
+        If lLamine Then
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+        '# Béton d'enrobage
+
+        If Me.lEnrobage Then
+
+        End If
+
+        '# Armatures de l'enrobage
+
+        If Me.lEnrobage Then
+
+
+        End If
+
+        '--> Dalle béton
+
+        If lMixte Then
+
+        End If
+
+        '--> Recherche de l'axe neutre élastique
+
+        MyModele.RechercheANE(Signe, zANE)
+
+        '--> Calcul de l'inertie
+
+        InertieY = MyModele.InertieFlexionY(Signe, zANE)
+
+        '--> Moment plastique
+
+        'MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
 
     End Sub
 
