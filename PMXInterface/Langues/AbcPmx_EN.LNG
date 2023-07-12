@@ -274,7 +274,6 @@ WEB						= Web
 WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
 
-
 #OPTCALCULMAIN
 TITLE					= Calculation options
 GAMMA					= Default national factors
