@@ -373,4 +373,18 @@ Module Mod_Declarations
 
 #End Region
 
+#Region " Controle de l'affichage "
+
+    Public Enum Enu_OptionsCalcul
+        Gamma
+    End Enum
+
+    Public Structure strucLastIndexWindow
+        Dim OptionsCalcul As Enu_OptionsCalcul
+    End Structure
+
+    Public LastIndexW As strucLastIndexWindow
+
+#End Region
+
 End Module

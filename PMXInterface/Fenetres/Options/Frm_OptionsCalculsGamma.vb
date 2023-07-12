@@ -1,0 +1,199 @@
+﻿Public Class Frm_OptionsCalculsGamma
+
+#Region " Variables et constantes "
+
+    Const BALISE As String = "OPTCALGAMMA"
+
+    Const formatGAMMA As String = "0.00"
+
+#End Region
+
+#Region "===OUVERTURE==="
+    Private Sub Frm_OptionsCalculsGamma_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+    End Sub
+
+    Public Sub InitialiseFrm()
+        GestionLangue(Frm_OptionsCalcul.BlocLangues(BALISE))
+        GestionStyle()
+        GestionUnites()
+        AfficherGammaEnCours()
+    End Sub
+
+    Private Sub GestionLangue(ByVal MyBloc As Dictionary(Of String, String))
+        Try
+
+            Me.lbl_Loads.Text = MyBloc("LOADS")
+            Me.lbl_Combination.Text = MyBloc("COMBINATION")
+            Me.lbl_Materials.Text = MyBloc("MATERIALS")
+
+        Catch ex As Exception
+            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+        Finally
+        End Try
+    End Sub
+
+    Private Sub GestionStyle()
+
+        Me.pan_Gamma.Dock = DockStyle.Fill
+
+        Me.lbl_Loads.BackColor = CouleurBackBandeaux
+        Me.lbl_Loads.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_Combination.BackColor = CouleurBackBandeaux
+        Me.lbl_Combination.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_Materials.BackColor = CouleurBackBandeaux
+        Me.lbl_Materials.ForeColor = CouleurForeBandeaux
+
+    End Sub
+
+    Private Sub GestionUnites()
+
+    End Sub
+
+    Private Sub AfficherGammaEnCours()
+
+        Me.txt_GammaGsup.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaG_sup, formatgamma)
+        Me.txt_GammaGinf.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaG_inf, formatGAMMA)
+        Me.txt_GammaQ.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaQ, formatGAMMA)
+
+        Me.txt_Psi0.Text = Format(Frm_OptionsCalcul.GammaLoc.Psi0_Q1, formatGAMMA)
+        Me.txt_Psi1.Text = Format(Frm_OptionsCalcul.GammaLoc.Psi1_Q1, formatGAMMA)
+        Me.txt_Psi2.Text = Format(Frm_OptionsCalcul.GammaLoc.Psi2_Q1, formatGAMMA)
+
+
+    End Sub
+
+
+#End Region
+
+
+#Region " Dessins "
+
+    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_GammaGsup.Paint, img_GammaGinf.Paint, img_GammaQ.Paint, img_Psi2.Paint, img_Psi1.Paint, img_Psi0.Paint
+
+        '--> Déclarations
+
+        Dim sWI As Single = sender.Width
+        Dim sHI As Single = sender.Height
+        Dim xStart As Single = sWI * 0.95
+
+        Dim strIndice As String = Nothing
+        Dim strSymbol As String = Nothing
+        Dim lGrec, lIndice, lEgal As Boolean
+        Dim xPen As Single = xStart
+        Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
+        Dim hIndice As Single = hCar / 2
+        Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+
+        '--> Initialisation
+
+        lIndice = True
+        lGrec = True
+        lEgal = True
+
+        Select Case sender.name
+
+            Case Me.img_GammaGsup.Name
+
+                strSymbol = "g"
+                strIndice = "G,sup"
+
+            Case Me.img_GammaGinf.Name
+
+                strSymbol = "g"
+                strIndice = "G,inf"
+
+            Case Me.img_GammaQ.Name
+
+                strSymbol = "g"
+                strIndice = "Q"
+
+            Case Me.img_Psi0.Name
+
+                strSymbol = "y"
+                strIndice = "0"
+
+            Case Me.img_Psi1.Name
+
+                strSymbol = "y"
+                strIndice = "1"
+
+            Case Me.img_Psi2.Name
+
+                strSymbol = "y"
+                strIndice = "2"
+
+                'Case Me.img_GammaM0.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "M0"
+
+                'Case Me.img_GammaM1.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "M1"
+
+                'Case Me.img_GammaM2.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "M2"
+
+                'Case Me.img_GammaC.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "C"
+
+                'Case Me.img_GammaV.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "V"
+
+                'Case Me.img_GammaVs.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "Vs"
+
+                'Case Me.img_GammaVp.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "Vp"
+
+                'Case Me.img_GammaS.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "S"
+
+                'Case Me.img_GammaP.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "P"
+
+                'Case Me.img_GammaM_fi.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "M,fi"
+
+                'Case Me.img_GammaC_fi.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "C,fi"
+
+                'Case Me.img_GammaV_fi.Name
+
+                '    strSymbol = "g"
+                '    strIndice = "V,fi"
+
+        End Select
+
+        '--> Dessin
+
+        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_Alignement.Gauche,
+                   FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
+
+    End Sub
+
+#End Region
+
+End Class

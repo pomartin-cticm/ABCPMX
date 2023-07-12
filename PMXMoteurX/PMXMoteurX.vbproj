@@ -79,7 +79,7 @@
     <Compile Include="Classes\cls_Maintiens.vb" />
     <Compile Include="Elements\Cls_ArmatureEnrobage.vb" />
     <Compile Include="Elements\Cls_Connecteur.vb" />
-    <Compile Include="Elements\Cls_OptionsCalcul.vb" />
+    <Compile Include="Classes\Cls_OptionsCalcul.vb" />
     <Compile Include="Elements\Cls_Prop_Elastique.vb" />
     <Compile Include="Modules\Mod_CalculProprietes.vb" />
     <Compile Include="Modules\Mod_Declarations.vb" />

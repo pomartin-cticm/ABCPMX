@@ -30,6 +30,7 @@ Public Class Frm_Gamma
     'Indique si aucune erreur n'a été constaté et permet de valider ou non la fenetre
     Dim lFrm_Valide As Boolean = True
 
+    Const formatGAMMA As String = "0.00"
 
 #End Region
 
@@ -49,8 +50,6 @@ Public Class Frm_Gamma
     End Sub
     Private Sub InitialiserVariables()
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
-
-
 
         x_img_GammaCVSP = 44
         x_txt_GammaCVSP = 89
@@ -155,7 +154,11 @@ Public Class Frm_Gamma
 
         With MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma
 
-            Me.txt_GammaGsup.Text = CDec(.GammaG_sup)
+            '==POM->GUD Ne pas utiliser CDEC pour convertir en text ====================================================
+
+            'Me.txt_GammaGsup.Text = CDec(.GammaG_sup)
+            Me.txt_GammaGsup.Text = Format(.GammaG_sup, formatGAMMA)
+
             Me.txt_GammaGinf.Text = CDec(.GammaG_inf)
             Me.txt_GammaQ.Text = CDec(.GammaQ)
 

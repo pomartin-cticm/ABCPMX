@@ -75,7 +75,6 @@
         Return Me.MemberwiseClone()
     End Function
 
-
 #End Region
 
 End Class

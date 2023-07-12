@@ -128,7 +128,6 @@
     ''' </summary>
     Public Section As New cls_Section
 
-
     ''' <summary>
     ''' Entraxes aux poutres voisines
     ''' </summary>

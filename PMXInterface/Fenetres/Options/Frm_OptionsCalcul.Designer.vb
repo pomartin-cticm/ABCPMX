@@ -1,5 +1,5 @@
 ﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
-Partial Class Frm_OptionsLogiciel
+Partial Class Frm_OptionsCalcul
     Inherits System.Windows.Forms.Form
 
     'Form remplace la méthode Dispose pour nettoyer la liste des composants.
@@ -26,7 +26,8 @@ Partial Class Frm_OptionsLogiciel
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
-        Me.PoMBtn_General = New PMXInterface.POMbutton()
+        Me.PoMBtn_Gamma = New PMXInterface.POMbutton()
+        Me.pan_Contenu = New System.Windows.Forms.Panel()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
@@ -35,13 +36,14 @@ Partial Class Frm_OptionsLogiciel
         '
         'pan_Main
         '
+        Me.pan_Main.BackColor = System.Drawing.SystemColors.ControlLight
         Me.pan_Main.Controls.Add(Me.TLpan_Main)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(0, 0)
         Me.pan_Main.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(800, 399)
-        Me.pan_Main.TabIndex = 0
+        Me.pan_Main.Size = New System.Drawing.Size(800, 450)
+        Me.pan_Main.TabIndex = 1
         '
         'TLpan_Main
         '
@@ -49,31 +51,32 @@ Partial Class Frm_OptionsLogiciel
         Me.TLpan_Main.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
         Me.TLpan_Main.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.Controls.Add(Me.pan_Gauche, 0, 0)
+        Me.TLpan_Main.Controls.Add(Me.pan_Contenu, 1, 0)
         Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
-        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_Main.Margin = New System.Windows.Forms.Padding(2)
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 1
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(800, 399)
+        Me.TLpan_Main.Size = New System.Drawing.Size(800, 450)
         Me.TLpan_Main.TabIndex = 0
         '
         'pan_Gauche
         '
         Me.pan_Gauche.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Gauche.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_Gauche.Controls.Add(Me.TLpan_Gauche)
         Me.pan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
-        Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
+        Me.pan_Gauche.Location = New System.Drawing.Point(3, 3)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(249, 399)
+        Me.pan_Gauche.Size = New System.Drawing.Size(244, 444)
         Me.pan_Gauche.TabIndex = 1
         '
         'TLpan_Gauche
         '
         Me.TLpan_Gauche.ColumnCount = 1
         Me.TLpan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Gauche.Controls.Add(Me.PoMBtn_General, 0, 0)
+        Me.TLpan_Gauche.Controls.Add(Me.PoMBtn_Gamma, 0, 0)
         Me.TLpan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(1)
@@ -86,39 +89,51 @@ Partial Class Frm_OptionsLogiciel
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Gauche.Size = New System.Drawing.Size(249, 399)
+        Me.TLpan_Gauche.Size = New System.Drawing.Size(242, 442)
         Me.TLpan_Gauche.TabIndex = 0
         '
-        'PoMBtn_General
+        'PoMBtn_Gamma
         '
-        Me.PoMBtn_General.Caption = "PoMBtn_General"
-        Me.PoMBtn_General.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
-        Me.PoMBtn_General.Checked = False
-        Me.PoMBtn_General.CouleurChecked = System.Drawing.Color.Orange
-        Me.PoMBtn_General.CouleurContour = System.Drawing.Color.Black
-        Me.PoMBtn_General.CouleurContourChecked = System.Drawing.Color.Black
-        Me.PoMBtn_General.CouleurContourMouseOn = System.Drawing.Color.Black
-        Me.PoMBtn_General.CouleurFond = System.Drawing.Color.WhiteSmoke
-        Me.PoMBtn_General.CouleurForGradient = System.Drawing.Color.WhiteSmoke
-        Me.PoMBtn_General.CouleurMouseOnBtn = System.Drawing.Color.Yellow
-        Me.PoMBtn_General.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PoMBtn_General.Enable = True
-        Me.PoMBtn_General.LContourFond = True
-        Me.PoMBtn_General.Location = New System.Drawing.Point(3, 3)
-        Me.PoMBtn_General.Name = "PoMBtn_General"
-        Me.PoMBtn_General.RatioArrondi = 0!
-        Me.PoMBtn_General.Size = New System.Drawing.Size(243, 44)
-        Me.PoMBtn_General.TabIndex = 0
+        Me.PoMBtn_Gamma.Caption = "PoMBtn_Gamma"
+        Me.PoMBtn_Gamma.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
+        Me.PoMBtn_Gamma.Checked = False
+        Me.PoMBtn_Gamma.CouleurChecked = System.Drawing.Color.Orange
+        Me.PoMBtn_Gamma.CouleurContour = System.Drawing.Color.Black
+        Me.PoMBtn_Gamma.CouleurContourChecked = System.Drawing.Color.Black
+        Me.PoMBtn_Gamma.CouleurContourMouseOn = System.Drawing.Color.Black
+        Me.PoMBtn_Gamma.CouleurFond = System.Drawing.Color.WhiteSmoke
+        Me.PoMBtn_Gamma.CouleurForGradient = System.Drawing.Color.WhiteSmoke
+        Me.PoMBtn_Gamma.CouleurMouseOnBtn = System.Drawing.Color.Yellow
+        Me.PoMBtn_Gamma.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PoMBtn_Gamma.Enable = True
+        Me.PoMBtn_Gamma.LContourFond = True
+        Me.PoMBtn_Gamma.Location = New System.Drawing.Point(5, 5)
+        Me.PoMBtn_Gamma.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMBtn_Gamma.Name = "PoMBtn_Gamma"
+        Me.PoMBtn_Gamma.RatioArrondi = 0!
+        Me.PoMBtn_Gamma.Size = New System.Drawing.Size(232, 40)
+        Me.PoMBtn_Gamma.TabIndex = 0
         '
-        'Frm_OptionsLogiciel
+        'pan_Contenu
+        '
+        Me.pan_Contenu.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Contenu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Contenu.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Contenu.Location = New System.Drawing.Point(250, 3)
+        Me.pan_Contenu.Margin = New System.Windows.Forms.Padding(0, 3, 3, 3)
+        Me.pan_Contenu.Name = "pan_Contenu"
+        Me.pan_Contenu.Size = New System.Drawing.Size(547, 444)
+        Me.pan_Contenu.TabIndex = 2
+        '
+        'Frm_OptionsCalcul
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 399)
+        Me.ClientSize = New System.Drawing.Size(800, 450)
         Me.Controls.Add(Me.pan_Main)
-        Me.Name = "Frm_OptionsLogiciel"
+        Me.Name = "Frm_OptionsCalcul"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "Frm_OptionsLogiciel"
+        Me.Text = "Frm_OptionsCalcul"
         Me.pan_Main.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
         Me.pan_Gauche.ResumeLayout(False)
@@ -129,7 +144,8 @@ Partial Class Frm_OptionsLogiciel
 
     Friend WithEvents pan_Main As Panel
     Friend WithEvents TLpan_Main As TableLayoutPanel
-    Friend WithEvents TLpan_Gauche As TableLayoutPanel
-    Friend WithEvents PoMBtn_General As POMbutton
     Friend WithEvents pan_Gauche As Panel
+    Friend WithEvents TLpan_Gauche As TableLayoutPanel
+    Friend WithEvents PoMBtn_Gamma As POMbutton
+    Friend WithEvents pan_Contenu As Panel
 End Class

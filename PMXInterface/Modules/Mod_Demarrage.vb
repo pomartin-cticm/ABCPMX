@@ -54,6 +54,7 @@ Module Mod_Demarrage
         LogicielRep.RepertoireInstall = Application.StartupPath
         LogicielRep.RepertoireConfig = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CTICM\" & LogicielInfo.NomLogiciel & "\ConfigV" & LogicielInfo.Version
 
+        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Gamma
 
         InitialiseDebug()
 

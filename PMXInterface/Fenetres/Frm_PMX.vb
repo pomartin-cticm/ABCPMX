@@ -372,6 +372,19 @@ Public Class Frm_PMX
 
 #Region " Barre d'outils principale "
 
+    Private Sub TSbtn_OptionsCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_OptionsCalcul.Click
+
+        Frm_OptionsCalcul.ShowDialog()
+
+    End Sub
+
+    Private Sub TSbtn_OptionsLogiciel_Click(sender As Object, e As EventArgs) Handles TSbtn_OptionsLogiciel.Click
+
+        Frm_OptionsLogiciel.ShowDialog()
+
+    End Sub
+
+
     Private Sub TSbtn_SaveN_Click(sender As Object, e As EventArgs) Handles TSbtn_SaveN.Click
 
         MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
@@ -467,6 +480,7 @@ Public Class Frm_PMX
         Next
 
     End Sub
+
 
 
 #End Region
