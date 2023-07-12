@@ -110,6 +110,9 @@
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property Aire As Decimal
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   12/07/23 :  Création POM
+        '-------------------------------------------------------------------------------------------------------------------------------
         Get
             Dim pAire As Decimal
 
@@ -124,6 +127,9 @@
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property InertieW As Decimal
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   12/07/23 :  Création POM
+        '-------------------------------------------------------------------------------------------------------------------------------
         Get
             '--> Déclaration
 
@@ -152,6 +158,12 @@
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property InertieT As Decimal
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   12/07/23 :  Création POM
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   Inertie de torsion du profilé
+        '-------------------------------------------------------------------------------------------------------------------------------
+
         Get
 
             '--> Déclaration
@@ -161,6 +173,9 @@
             '--> Calcul
 
             Select Case Me.typeProfileAcier
+                '====================================================================================================
+                '== LAMINES                                                                                         =
+                '====================================================================================================
                 Case Enum_TypeSectionAcier.Lamine
                     Dim Bf As Decimal = Me.b_fs
                     Dim Tf As Decimal = Me.t_fs
@@ -168,17 +183,22 @@
                     Dim Rc As Decimal = Me.r_cs
                     Dim Hw As Decimal = Me.HauteurAmeHw
 
-                    ''=== Formule du catalogue AM V 2008
+                    Dim Alpha1 As Decimal
+                    Dim DiaD1 As Decimal
 
-                    'pInertieT = 2 / 3 * (Bf - 0.63 * Tf) * Tf ^ 3 _
-                    '          + 1 / 3 * Hw * Tw ^ 3 _
-                    '          + 2 * Tw / Tf * (0.145 + 0.1 * Rc / Tf) * (((Rc + Tw / 2) ^ 2 + (Rc + Tf) ^ 2 - Rc ^ 2) / (2 * Rc + Tf)) ^ 4
+                    ''=== Formume Annexe B.2.2 de l apublication P385 du SCI (formule de Darwish)
 
-                    '=== Formule du guide CTICM sur le déversement, Annexe A1
+                    Alpha1 = -0.042 + 0.2204 * Tw / Tf + 0.1355 * Rc / Tf - 0.0865 * Rc * Tw / Tf ^ 2 - 0.0725 * (Tw / Tf) ^ 2
 
-                    pInertieT = 2 / 3 * (1 - 0.63 * Tf / Bf * (1 - Tf ^ 4 / 12 / Bf ^ 4)) * Bf * Tf ^ 3 _
+                    DiaD1 = ((Tf + Rc) ^ 2 + (Rc + Tw / 2) ^ 2 - Rc ^ 2) / (2 * Rc + Tf)
+
+                    pInertieT = 2 / 3 * (Bf - 0.63 * Tf) * Tf ^ 3 _
                               + 1 / 3 * Hw * Tw ^ 3 _
-                              + 2 * Tw / Tf * (0.1 * Rc / Tf + 0.15) * (((Tf + Rc) ^ 2 + Tw * (Rc + Tw / 4)) / (2 * Rc + Tf)) ^ 4
+                              + 2 * Alpha1 * DiaD1 ^ 4
+
+                '====================================================================================================
+                '== PRS                                                                                             =
+                '====================================================================================================
 
                 Case Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
 
@@ -201,6 +221,18 @@
             '--> Fin
 
             Return pInertieT
+
+            '''=== Formule du catalogue AM V 2008
+
+            ''pInertieT = 2 / 3 * (Bf - 0.63 * Tf) * Tf ^ 3 _
+            ''          + 1 / 3 * Hw * Tw ^ 3 _
+            ''          + 2 * Tw / Tf * (0.145 + 0.1 * Rc / Tf) * (((Rc + Tw / 2) ^ 2 + (Rc + Tf) ^ 2 - Rc ^ 2) / (2 * Rc + Tf)) ^ 4
+
+            '''=== Formule du guide CTICM sur le déversement, Annexe A1
+
+            ''pInertieT = 2 / 3 * (1 - 0.63 * Tf / Bf * (1 - Tf ^ 4 / 12 / Bf ^ 4)) * Bf * Tf ^ 3 _
+            ''          + 1 / 3 * Hw * Tw ^ 3 _
+            ''          + 2 * Tw / Tf * (0.1 * Rc / Tf + 0.15) * (((Tf + Rc) ^ 2 + Tw * (Rc + Tw / 4)) / (2 * Rc + Tf)) ^ 4
 
         End Get
     End Property

@@ -9,6 +9,7 @@ Imports PMXMoteur2
         '   10/07/23 :  Création POM
         '----------------------------------------------------------------------------------------------------------------------------------
         ' Test des propriétés élastiques et plastiques d'une section acier avec profilé laminé
+        '   Références : Catalogue AM
         '----------------------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -107,7 +108,6 @@ Imports PMXMoteur2
         DeltaV = (InertieZ - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-
     End Sub
 
     <TestMethod()> Public Sub TestUnit_ProprietesSectionAcierEnrobeeLamine()
@@ -199,7 +199,8 @@ Imports PMXMoteur2
 
         '# Inertie de torsion
 
-        ValRef = 62.8 * 10 ^ (-8)
+        'ValRef = 62.8 * 10 ^ (-8)  ' Changement de formules
+        ValRef = 64.28 * 10 ^ (-8)
         DeltaV = (MySection.InertieT - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
@@ -278,7 +279,7 @@ Imports PMXMoteur2
         '# Inertie de torsion
 
         ' Valeur de référence légèrement <> de celle de l'article, car n0 est calculé avec Ecm obtenu par la formule, et non la valeur tabulée
-        ValRef = 1129 * 10 ^ (-8)
+        ValRef = 1131 * 10 ^ (-8)
         DeltaV = (MySection.InertieT - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
