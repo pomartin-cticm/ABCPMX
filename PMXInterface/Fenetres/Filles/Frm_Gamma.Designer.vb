@@ -42,7 +42,6 @@ Partial Class Frm_Gamma
         Me.img_GammaM1 = New System.Windows.Forms.PictureBox()
         Me.txt_GammaM0 = New System.Windows.Forms.TextBox()
         Me.img_GammaM0 = New System.Windows.Forms.PictureBox()
-        Me.btn_ReiniResistanceAcier = New System.Windows.Forms.Button()
         Me.Tab_Dalle = New System.Windows.Forms.TabPage()
         Me.chk_GammaV_Unique = New System.Windows.Forms.CheckBox()
         Me.txt_GammaVp = New System.Windows.Forms.TextBox()
@@ -57,7 +56,6 @@ Partial Class Frm_Gamma
         Me.img_GammaV = New System.Windows.Forms.PictureBox()
         Me.txt_GammaC = New System.Windows.Forms.TextBox()
         Me.img_GammaC = New System.Windows.Forms.PictureBox()
-        Me.btn_ReiniResistanceDalle = New System.Windows.Forms.Button()
         Me.Tab_Incendie = New System.Windows.Forms.TabPage()
         Me.txt_GammaV_fi = New System.Windows.Forms.TextBox()
         Me.img_GammaV_fi = New System.Windows.Forms.PictureBox()
@@ -65,7 +63,6 @@ Partial Class Frm_Gamma
         Me.img_GammaC_fi = New System.Windows.Forms.PictureBox()
         Me.txt_GammaM_fi = New System.Windows.Forms.TextBox()
         Me.img_GammaM_fi = New System.Windows.Forms.PictureBox()
-        Me.btn_ReiniResistanceIncendie = New System.Windows.Forms.Button()
         Me.pan_Accompagnement = New System.Windows.Forms.Panel()
         Me.TLPan_Accompagnement = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Accompagnement = New System.Windows.Forms.Label()
@@ -77,7 +74,6 @@ Partial Class Frm_Gamma
         Me.txt_Psi2_Q2 = New System.Windows.Forms.TextBox()
         Me.txt_Psi2_Q1 = New System.Windows.Forms.TextBox()
         Me.img_Psi2 = New System.Windows.Forms.PictureBox()
-        Me.btn_ReiniAccompagnement = New System.Windows.Forms.Button()
         Me.txt_Psi1_Q2 = New System.Windows.Forms.TextBox()
         Me.txt_Psi1_Q1 = New System.Windows.Forms.TextBox()
         Me.txt_Psi0_Q2 = New System.Windows.Forms.TextBox()
@@ -88,7 +84,7 @@ Partial Class Frm_Gamma
         Me.TLPan_Chargement = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Chargement = New System.Windows.Forms.Label()
         Me.pan_SaisieChargement = New System.Windows.Forms.Panel()
-        Me.btn_ReiniChargement = New System.Windows.Forms.Button()
+        Me.btn_Reini = New System.Windows.Forms.Button()
         Me.txt_GammaQ = New System.Windows.Forms.TextBox()
         Me.img_GammaQ = New System.Windows.Forms.PictureBox()
         Me.txt_GammaGinf = New System.Windows.Forms.TextBox()
@@ -144,7 +140,7 @@ Partial Class Frm_Gamma
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(624, 335)
+        Me.pan_General.Size = New System.Drawing.Size(624, 285)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -159,7 +155,7 @@ Partial Class Frm_Gamma
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(624, 335)
+        Me.TLpan_Main.Size = New System.Drawing.Size(624, 285)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -173,7 +169,7 @@ Partial Class Frm_Gamma
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 298)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 248)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -211,7 +207,7 @@ Partial Class Frm_Gamma
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(618, 289)
+        Me.pan_Main.Size = New System.Drawing.Size(618, 239)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_PartieHaute
@@ -229,7 +225,7 @@ Partial Class Frm_Gamma
         Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
         Me.TLPan_PartieHaute.RowCount = 1
         Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(618, 289)
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(618, 239)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
         'pan_Resistance
@@ -240,7 +236,7 @@ Partial Class Frm_Gamma
         Me.pan_Resistance.Location = New System.Drawing.Point(412, 0)
         Me.pan_Resistance.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Resistance.Name = "pan_Resistance"
-        Me.pan_Resistance.Size = New System.Drawing.Size(206, 289)
+        Me.pan_Resistance.Size = New System.Drawing.Size(206, 239)
         Me.pan_Resistance.TabIndex = 2
         '
         'TLPan_Resistance
@@ -257,7 +253,7 @@ Partial Class Frm_Gamma
         Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
         Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Resistance.Size = New System.Drawing.Size(206, 289)
+        Me.TLPan_Resistance.Size = New System.Drawing.Size(206, 239)
         Me.TLPan_Resistance.TabIndex = 0
         '
         'lbl_Resistance
@@ -283,7 +279,7 @@ Partial Class Frm_Gamma
         Me.pan_SaisieResistance.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieResistance.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieResistance.Name = "pan_SaisieResistance"
-        Me.pan_SaisieResistance.Size = New System.Drawing.Size(206, 259)
+        Me.pan_SaisieResistance.Size = New System.Drawing.Size(206, 209)
         Me.pan_SaisieResistance.TabIndex = 1
         '
         'TabControl1
@@ -295,7 +291,7 @@ Partial Class Frm_Gamma
         Me.TabControl1.Location = New System.Drawing.Point(0, 0)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(204, 257)
+        Me.TabControl1.Size = New System.Drawing.Size(204, 207)
         Me.TabControl1.TabIndex = 0
         '
         'Tab_Acier
@@ -306,7 +302,6 @@ Partial Class Frm_Gamma
         Me.Tab_Acier.Controls.Add(Me.img_GammaM1)
         Me.Tab_Acier.Controls.Add(Me.txt_GammaM0)
         Me.Tab_Acier.Controls.Add(Me.img_GammaM0)
-        Me.Tab_Acier.Controls.Add(Me.btn_ReiniResistanceAcier)
         Me.Tab_Acier.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Acier.Name = "Tab_Acier"
         Me.Tab_Acier.Padding = New System.Windows.Forms.Padding(3)
@@ -366,15 +361,6 @@ Partial Class Frm_Gamma
         Me.img_GammaM0.TabIndex = 82
         Me.img_GammaM0.TabStop = False
         '
-        'btn_ReiniResistanceAcier
-        '
-        Me.btn_ReiniResistanceAcier.Location = New System.Drawing.Point(54, 118)
-        Me.btn_ReiniResistanceAcier.Name = "btn_ReiniResistanceAcier"
-        Me.btn_ReiniResistanceAcier.Size = New System.Drawing.Size(75, 23)
-        Me.btn_ReiniResistanceAcier.TabIndex = 80
-        Me.btn_ReiniResistanceAcier.Text = "btn_ReiniResistanceAcier"
-        Me.btn_ReiniResistanceAcier.UseVisualStyleBackColor = True
-        '
         'Tab_Dalle
         '
         Me.Tab_Dalle.Controls.Add(Me.chk_GammaV_Unique)
@@ -390,7 +376,6 @@ Partial Class Frm_Gamma
         Me.Tab_Dalle.Controls.Add(Me.img_GammaV)
         Me.Tab_Dalle.Controls.Add(Me.txt_GammaC)
         Me.Tab_Dalle.Controls.Add(Me.img_GammaC)
-        Me.Tab_Dalle.Controls.Add(Me.btn_ReiniResistanceDalle)
         Me.Tab_Dalle.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Dalle.Name = "Tab_Dalle"
         Me.Tab_Dalle.Padding = New System.Windows.Forms.Padding(3)
@@ -511,15 +496,6 @@ Partial Class Frm_Gamma
         Me.img_GammaC.TabIndex = 88
         Me.img_GammaC.TabStop = False
         '
-        'btn_ReiniResistanceDalle
-        '
-        Me.btn_ReiniResistanceDalle.Location = New System.Drawing.Point(54, 181)
-        Me.btn_ReiniResistanceDalle.Name = "btn_ReiniResistanceDalle"
-        Me.btn_ReiniResistanceDalle.Size = New System.Drawing.Size(75, 23)
-        Me.btn_ReiniResistanceDalle.TabIndex = 81
-        Me.btn_ReiniResistanceDalle.Text = "btn_ReiniResistanceDalle"
-        Me.btn_ReiniResistanceDalle.UseVisualStyleBackColor = True
-        '
         'Tab_Incendie
         '
         Me.Tab_Incendie.Controls.Add(Me.txt_GammaV_fi)
@@ -528,11 +504,10 @@ Partial Class Frm_Gamma
         Me.Tab_Incendie.Controls.Add(Me.img_GammaC_fi)
         Me.Tab_Incendie.Controls.Add(Me.txt_GammaM_fi)
         Me.Tab_Incendie.Controls.Add(Me.img_GammaM_fi)
-        Me.Tab_Incendie.Controls.Add(Me.btn_ReiniResistanceIncendie)
         Me.Tab_Incendie.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Incendie.Name = "Tab_Incendie"
         Me.Tab_Incendie.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_Incendie.Size = New System.Drawing.Size(196, 231)
+        Me.Tab_Incendie.Size = New System.Drawing.Size(196, 181)
         Me.Tab_Incendie.TabIndex = 2
         Me.Tab_Incendie.Text = "Tab_Incendie"
         Me.Tab_Incendie.UseVisualStyleBackColor = True
@@ -588,15 +563,6 @@ Partial Class Frm_Gamma
         Me.img_GammaM_fi.TabIndex = 88
         Me.img_GammaM_fi.TabStop = False
         '
-        'btn_ReiniResistanceIncendie
-        '
-        Me.btn_ReiniResistanceIncendie.Location = New System.Drawing.Point(54, 118)
-        Me.btn_ReiniResistanceIncendie.Name = "btn_ReiniResistanceIncendie"
-        Me.btn_ReiniResistanceIncendie.Size = New System.Drawing.Size(75, 23)
-        Me.btn_ReiniResistanceIncendie.TabIndex = 82
-        Me.btn_ReiniResistanceIncendie.Text = "btn_ReiniResistanceIncendie"
-        Me.btn_ReiniResistanceIncendie.UseVisualStyleBackColor = True
-        '
         'pan_Accompagnement
         '
         Me.pan_Accompagnement.AutoScroll = True
@@ -605,7 +571,7 @@ Partial Class Frm_Gamma
         Me.pan_Accompagnement.Location = New System.Drawing.Point(207, 0)
         Me.pan_Accompagnement.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
         Me.pan_Accompagnement.Name = "pan_Accompagnement"
-        Me.pan_Accompagnement.Size = New System.Drawing.Size(204, 289)
+        Me.pan_Accompagnement.Size = New System.Drawing.Size(204, 239)
         Me.pan_Accompagnement.TabIndex = 1
         '
         'TLPan_Accompagnement
@@ -622,7 +588,7 @@ Partial Class Frm_Gamma
         Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
         Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Accompagnement.Size = New System.Drawing.Size(204, 289)
+        Me.TLPan_Accompagnement.Size = New System.Drawing.Size(204, 239)
         Me.TLPan_Accompagnement.TabIndex = 0
         '
         'lbl_Accompagnement
@@ -650,7 +616,6 @@ Partial Class Frm_Gamma
         Me.pan_SaisieAccompagnement.Controls.Add(Me.txt_Psi2_Q2)
         Me.pan_SaisieAccompagnement.Controls.Add(Me.txt_Psi2_Q1)
         Me.pan_SaisieAccompagnement.Controls.Add(Me.img_Psi2)
-        Me.pan_SaisieAccompagnement.Controls.Add(Me.btn_ReiniAccompagnement)
         Me.pan_SaisieAccompagnement.Controls.Add(Me.txt_Psi1_Q2)
         Me.pan_SaisieAccompagnement.Controls.Add(Me.txt_Psi1_Q1)
         Me.pan_SaisieAccompagnement.Controls.Add(Me.txt_Psi0_Q2)
@@ -661,7 +626,7 @@ Partial Class Frm_Gamma
         Me.pan_SaisieAccompagnement.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieAccompagnement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieAccompagnement.Name = "pan_SaisieAccompagnement"
-        Me.pan_SaisieAccompagnement.Size = New System.Drawing.Size(204, 259)
+        Me.pan_SaisieAccompagnement.Size = New System.Drawing.Size(204, 209)
         Me.pan_SaisieAccompagnement.TabIndex = 1
         '
         'img_Q2
@@ -685,7 +650,7 @@ Partial Class Frm_Gamma
         'lbl_Q2
         '
         Me.lbl_Q2.AutoSize = True
-        Me.lbl_Q2.Location = New System.Drawing.Point(11, 208)
+        Me.lbl_Q2.Location = New System.Drawing.Point(11, 172)
         Me.lbl_Q2.Name = "lbl_Q2"
         Me.lbl_Q2.Size = New System.Drawing.Size(37, 13)
         Me.lbl_Q2.TabIndex = 92
@@ -694,7 +659,7 @@ Partial Class Frm_Gamma
         'lbl_Q1
         '
         Me.lbl_Q1.AutoSize = True
-        Me.lbl_Q1.Location = New System.Drawing.Point(11, 182)
+        Me.lbl_Q1.Location = New System.Drawing.Point(11, 146)
         Me.lbl_Q1.Name = "lbl_Q1"
         Me.lbl_Q1.Size = New System.Drawing.Size(37, 13)
         Me.lbl_Q1.TabIndex = 91
@@ -724,15 +689,6 @@ Partial Class Frm_Gamma
         Me.img_Psi2.Size = New System.Drawing.Size(46, 20)
         Me.img_Psi2.TabIndex = 88
         Me.img_Psi2.TabStop = False
-        '
-        'btn_ReiniAccompagnement
-        '
-        Me.btn_ReiniAccompagnement.Location = New System.Drawing.Point(63, 140)
-        Me.btn_ReiniAccompagnement.Name = "btn_ReiniAccompagnement"
-        Me.btn_ReiniAccompagnement.Size = New System.Drawing.Size(75, 23)
-        Me.btn_ReiniAccompagnement.TabIndex = 80
-        Me.btn_ReiniAccompagnement.Text = "btn_ReiniAccompagnement"
-        Me.btn_ReiniAccompagnement.UseVisualStyleBackColor = True
         '
         'txt_Psi1_Q2
         '
@@ -792,7 +748,7 @@ Partial Class Frm_Gamma
         Me.pan_Chargement.Location = New System.Drawing.Point(0, 0)
         Me.pan_Chargement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Chargement.Name = "pan_Chargement"
-        Me.pan_Chargement.Size = New System.Drawing.Size(206, 289)
+        Me.pan_Chargement.Size = New System.Drawing.Size(206, 239)
         Me.pan_Chargement.TabIndex = 0
         '
         'TLPan_Chargement
@@ -809,7 +765,7 @@ Partial Class Frm_Gamma
         Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
         Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Chargement.Size = New System.Drawing.Size(206, 289)
+        Me.TLPan_Chargement.Size = New System.Drawing.Size(206, 239)
         Me.TLPan_Chargement.TabIndex = 0
         '
         'lbl_Chargement
@@ -830,7 +786,7 @@ Partial Class Frm_Gamma
         '
         Me.pan_SaisieChargement.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieChargement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieChargement.Controls.Add(Me.btn_ReiniChargement)
+        Me.pan_SaisieChargement.Controls.Add(Me.btn_Reini)
         Me.pan_SaisieChargement.Controls.Add(Me.txt_GammaQ)
         Me.pan_SaisieChargement.Controls.Add(Me.img_GammaQ)
         Me.pan_SaisieChargement.Controls.Add(Me.txt_GammaGinf)
@@ -841,17 +797,17 @@ Partial Class Frm_Gamma
         Me.pan_SaisieChargement.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieChargement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieChargement.Name = "pan_SaisieChargement"
-        Me.pan_SaisieChargement.Size = New System.Drawing.Size(206, 259)
+        Me.pan_SaisieChargement.Size = New System.Drawing.Size(206, 209)
         Me.pan_SaisieChargement.TabIndex = 1
         '
-        'btn_ReiniChargement
+        'btn_Reini
         '
-        Me.btn_ReiniChargement.Location = New System.Drawing.Point(57, 140)
-        Me.btn_ReiniChargement.Name = "btn_ReiniChargement"
-        Me.btn_ReiniChargement.Size = New System.Drawing.Size(75, 23)
-        Me.btn_ReiniChargement.TabIndex = 79
-        Me.btn_ReiniChargement.Text = "btn_ReiniChargement"
-        Me.btn_ReiniChargement.UseVisualStyleBackColor = True
+        Me.btn_Reini.Location = New System.Drawing.Point(57, 140)
+        Me.btn_Reini.Name = "btn_Reini"
+        Me.btn_Reini.Size = New System.Drawing.Size(75, 23)
+        Me.btn_Reini.TabIndex = 79
+        Me.btn_Reini.Text = "btn_Reini"
+        Me.btn_Reini.UseVisualStyleBackColor = True
         '
         'txt_GammaQ
         '
@@ -912,7 +868,7 @@ Partial Class Frm_Gamma
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(624, 335)
+        Me.ClientSize = New System.Drawing.Size(624, 285)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Gamma"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -991,7 +947,7 @@ Partial Class Frm_Gamma
     Friend WithEvents img_GammaGsup As PictureBox
     Friend WithEvents txt_GammaGinf As TextBox
     Friend WithEvents img_GammaGinf As PictureBox
-    Friend WithEvents btn_ReiniChargement As Button
+    Friend WithEvents btn_Reini As Button
     Friend WithEvents txt_GammaQ As TextBox
     Friend WithEvents img_GammaQ As PictureBox
     Friend WithEvents TabControl1 As TabControl
@@ -1001,7 +957,6 @@ Partial Class Frm_Gamma
     Friend WithEvents txt_Psi2_Q2 As TextBox
     Friend WithEvents txt_Psi2_Q1 As TextBox
     Friend WithEvents img_Psi2 As PictureBox
-    Friend WithEvents btn_ReiniAccompagnement As Button
     Friend WithEvents txt_Psi1_Q2 As TextBox
     Friend WithEvents txt_Psi1_Q1 As TextBox
     Friend WithEvents txt_Psi0_Q2 As TextBox
@@ -1014,9 +969,6 @@ Partial Class Frm_Gamma
     Friend WithEvents img_GammaM1 As PictureBox
     Friend WithEvents txt_GammaM0 As TextBox
     Friend WithEvents img_GammaM0 As PictureBox
-    Friend WithEvents btn_ReiniResistanceAcier As Button
-    Friend WithEvents btn_ReiniResistanceDalle As Button
-    Friend WithEvents btn_ReiniResistanceIncendie As Button
     Friend WithEvents txt_GammaVp As TextBox
     Friend WithEvents img_GammaVp As PictureBox
     Friend WithEvents txt_GammaVs As TextBox

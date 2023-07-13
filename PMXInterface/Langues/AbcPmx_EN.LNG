@@ -71,11 +71,7 @@ LBL_Q1					= Q1: Live loads 1
 LBL_Q2					= Q2: Live loads 2
 LOADING					= Loading
 OK						= OK
-REINI_ACCOMP			= Reset
-REINI_LOAD				= Reset 
-REINI_RESI_FIRE			= Reset
-REINI_RESI_SLAB			= Reset
-REINI_RESI_STEEL		= Reset 
+REINI					= Reset
 RESISTANCE				= Resistance
 TAB_STEEL				= Steel
 TAB_SLAB				= Slab
@@ -84,6 +80,8 @@ TITLE					= Definition of national factors
 
 #FRM_HIVOSS
 CANCEL					= Cancel
+CEILINGFLOOR			= Ceiling under the floor
+COMBOMASSFREQUENCY		= Combination of masses for the calculation of eigenfrequency
 DAMPINGFURN_TRADOFFICE	= Traditional office with separation walls
 DAMPINGFURN_PAPEROFFICE	= Paperless office
 DAMPINGFURN_OPENOFFICE	= Open plan office
@@ -92,6 +90,8 @@ DAMPINGFURN_HOUSE		= Houses
 DAMPINGFURN_SCHOOLS		= Schools
 DAMPINGFURN_GYM			= Gymnasium
 DAMPINGFURN_CUSTOM		= Custom damping for furniture
+FINISHINGDAMPING		= Finishing damping
+FLOORUSE				= Usage of floor		
 FLOORUSE_CRITAREA		= Critical areas
 FLOORUSE_HOSP			= Hospital, surgeries
 FLOORUSE_SCHOOL			= Schools, training centers
@@ -102,8 +102,16 @@ FLOORUSE_SENIOR			= Senior citizen residential buildings
 FLOORUSE_HOTELS			= Hotels
 FLOORUSE_INDUSTRIAL		= Industrial workshops
 FLOORUSE_SPORTS			= Sports facilities
+FURNITUREDAMPING		= Furniture damping
+HIVOSSMETHOD			= Apply Hivoss method for the assessment of floor vibrations  
 OK						= OK
+STEELBEAM				= Steel beam
+STRUCTURALDAMPING		= Structural damping
+SWIMMINGSCREED			= Swimming screed
 TITLE					= Floor vibration parameters
+TOTALDAMPING			= Total damping
+WITH					= With
+
 
 
 #FRM_LATERALRESTRAINTS

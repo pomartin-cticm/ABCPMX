@@ -107,11 +107,7 @@ Public Class Frm_Gamma
                 Me.lbl_Resistance.Text = Bloc("RESISTANCE")
                 Me.lbl_Q1.Text = Bloc("LBL_Q1")
                 Me.lbl_Q2.Text = Bloc("LBL_Q2")
-                Me.btn_ReiniChargement.Text = Bloc("REINI_LOAD")
-                Me.btn_ReiniAccompagnement.Text = Bloc("REINI_ACCOMP")
-                Me.btn_ReiniResistanceAcier.Text = Bloc("REINI_RESI_STEEL")
-                Me.btn_ReiniResistanceDalle.Text = Bloc("REINI_RESI_SLAB")
-                Me.btn_ReiniResistanceIncendie.Text = Bloc("REINI_RESI_FIRE")
+                Me.btn_Reini.Text = Bloc("REINI")
                 Me.Tab_Acier.Text = Bloc("TAB_STEEL")
                 Me.Tab_Dalle.Text = Bloc("TAB_SLAB")
                 Me.Tab_Incendie.Text = Bloc("TAB_FIRE")
@@ -159,32 +155,32 @@ Public Class Frm_Gamma
             'Me.txt_GammaGsup.Text = CDec(.GammaG_sup)
             Me.txt_GammaGsup.Text = Format(.GammaG_sup, formatGAMMA)
 
-            Me.txt_GammaGinf.Text = CDec(.GammaG_inf)
-            Me.txt_GammaQ.Text = CDec(.GammaQ)
+            Me.txt_GammaGinf.Text = Format(.GammaG_inf, formatGAMMA)
+            Me.txt_GammaQ.Text = Format(.GammaQ, formatGAMMA)
 
-            Me.txt_Psi0_Q1.Text = CDec(.Psi0_Q1)
-            Me.txt_Psi1_Q1.Text = CDec(.Psi1_Q1)
-            Me.txt_Psi2_Q1.Text = CDec(.Psi2_Q1)
+            Me.txt_Psi0_Q1.Text = Format(.Psi0_Q1, formatGAMMA)
+            Me.txt_Psi1_Q1.Text = Format(.Psi1_Q1, formatGAMMA)
+            Me.txt_Psi2_Q1.Text = Format(.Psi2_Q1, formatGAMMA)
 
-            Me.txt_Psi0_Q2.Text = CDec(.Psi0_Q2)
-            Me.txt_Psi1_Q2.Text = CDec(.Psi1_Q2)
-            Me.txt_Psi2_Q2.Text = CDec(.Psi2_Q2)
+            Me.txt_Psi0_Q2.Text = Format(.Psi0_Q2, formatGAMMA)
+            Me.txt_Psi1_Q2.Text = Format(.Psi1_Q2, formatGAMMA)
+            Me.txt_Psi2_Q2.Text = Format(.Psi2_Q2, formatGAMMA)
 
-            Me.txt_GammaM0.Text = CDec(.GammaM0)
-            Me.txt_GammaM1.Text = CDec(.GammaM1)
-            Me.txt_GammaM2.Text = CDec(.GammaM2)
+            Me.txt_GammaM0.Text = Format(.GammaM0, formatGAMMA)
+            Me.txt_GammaM1.Text = Format(.GammaM1, formatGAMMA)
+            Me.txt_GammaM2.Text = Format(.GammaM2, formatGAMMA)
 
-            Me.txt_GammaC.Text = CDec(.GammaC)
+            Me.txt_GammaC.Text = Format(.GammaC, formatGAMMA)
             Me.chk_GammaV_Unique.Checked = .lGammaV_unique
-            Me.txt_GammaV.Text = CDec(.GammaV)
-            Me.txt_GammaVp.Text = CDec(.GammaVp)
-            Me.txt_GammaVs.Text = CDec(.GammaVs)
-            Me.txt_GammaS.Text = CDec(.GammaS)
-            Me.txt_GammaP.Text = CDec(.GammaP)
+            Me.txt_GammaV.Text = Format(.GammaV, formatGAMMA)
+            Me.txt_GammaVp.Text = Format(.GammaVp, formatGAMMA)
+            Me.txt_GammaVs.Text = Format(.GammaVs, formatGAMMA)
+            Me.txt_GammaS.Text = Format(.GammaS, formatGAMMA)
+            Me.txt_GammaP.Text = Format(.GammaP, formatGAMMA)
 
-            Me.txt_GammaM_fi.Text = CDec(.GammaM_fi)
-            Me.txt_GammaC_fi.Text = CDec(.GammaC_fi)
-            Me.txt_GammaV_fi.Text = CDec(.GammaV_fi)
+            Me.txt_GammaM_fi.Text = Format(.GammaM_fi, formatGAMMA)
+            Me.txt_GammaC_fi.Text = Format(.GammaC_fi, formatGAMMA)
+            Me.txt_GammaV_fi.Text = Format(.GammaV_fi, formatGAMMA)
 
         End With
 
@@ -353,7 +349,7 @@ Public Class Frm_Gamma
 
 #Region " Dessins "
 
-    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_GammaGsup.Paint, img_GammaGinf.Paint, img_GammaQ.Paint, img_Psi0.Paint, img_Q1.paint, img_Q2.paint, img_Psi1.Paint, img_Psi2.Paint, img_GammaM0.Paint, img_GammaM1.Paint, img_GammaM2.Paint, img_GammaC.Paint, img_GammaV.Paint, img_GammaVs.Paint, img_GammaVp.Paint, img_GammaS.Paint, img_GammaP.Paint, img_GammaM_fi.Paint, img_GammaC_fi.Paint, img_GammaV_fi.Paint
+    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_GammaGsup.Paint, img_GammaGinf.Paint, img_GammaQ.Paint, img_Psi0.Paint, img_Q1.Paint, img_Q2.Paint, img_Psi1.Paint, img_Psi2.Paint, img_GammaM0.Paint, img_GammaM1.Paint, img_GammaM2.Paint, img_GammaC.Paint, img_GammaV.Paint, img_GammaVs.Paint, img_GammaVp.Paint, img_GammaS.Paint, img_GammaP.Paint, img_GammaM_fi.Paint, img_GammaC_fi.Paint, img_GammaV_fi.Paint
 
         '--> Déclarations
 
@@ -545,9 +541,6 @@ Public Class Frm_Gamma
         Me.txt_GammaS.Location = New Point(x_txt_GammaCVSP, y_txt_GammaS)
         Me.txt_GammaP.Location = New Point(x_txt_GammaCVSP, y_txt_GammaP)
 
-        Me.btn_ReiniResistanceDalle.Location = New Point(btn_ReiniResistanceDalle.Location.X, y_btn_ReiniReistanceDalle)
-
-
         'List(Of (TextBox, Boolean))
 
     End Sub
@@ -685,41 +678,35 @@ Public Class Frm_Gamma
         Return lOk
     End Function
 
-    Private Sub btn_Reini_Click(sender As Object, e As EventArgs) Handles btn_ReiniChargement.Click, btn_ReiniAccompagnement.Click, btn_ReiniResistanceAcier.Click, btn_ReiniResistanceDalle.Click, btn_ReiniResistanceIncendie.Click
-        Select Case sender.name
-            Case btn_ReiniChargement.Name
-                Me.txt_GammaGsup.Text = LogicielOptions.Gamma.GammaG_sup
-                Me.txt_GammaGinf.Text = LogicielOptions.Gamma.GammaG_inf
-                Me.txt_GammaQ.Text = LogicielOptions.Gamma.GammaQ
+    Private Sub btn_Reini_Click(sender As Object, e As EventArgs) Handles btn_Reini.Click
 
-            Case btn_ReiniAccompagnement.Name
-                Me.txt_Psi0_Q1.Text = LogicielOptions.Gamma.Psi0_Q1
-                Me.txt_Psi1_Q1.Text = LogicielOptions.Gamma.Psi1_Q1
-                Me.txt_Psi2_Q1.Text = LogicielOptions.Gamma.Psi2_Q1
+        Me.txt_GammaGsup.Text = Format(LogicielOptions.Gamma.GammaG_sup, formatGAMMA)
+        Me.txt_GammaGinf.Text = Format(LogicielOptions.Gamma.GammaG_inf, formatGAMMA)
+        Me.txt_GammaQ.Text = Format(LogicielOptions.Gamma.GammaQ, formatGAMMA)
 
-                Me.txt_Psi0_Q2.Text = LogicielOptions.Gamma.Psi0_Q2
-                Me.txt_Psi1_Q2.Text = LogicielOptions.Gamma.Psi1_Q2
-                Me.txt_Psi2_Q2.Text = LogicielOptions.Gamma.Psi2_Q2
+        Me.txt_Psi0_Q1.Text = Format(LogicielOptions.Gamma.Psi0_Q1, formatGAMMA)
+        Me.txt_Psi1_Q1.Text = Format(LogicielOptions.Gamma.Psi1_Q1, formatGAMMA)
+        Me.txt_Psi2_Q1.Text = Format(LogicielOptions.Gamma.Psi2_Q1, formatGAMMA)
 
-            Case btn_ReiniResistanceAcier.Name
-                Me.txt_GammaM0.Text = LogicielOptions.Gamma.GammaM0
-                Me.txt_GammaM1.Text = LogicielOptions.Gamma.GammaM1
-                Me.txt_GammaM2.Text = LogicielOptions.Gamma.GammaM2
+        Me.txt_Psi0_Q2.Text = Format(LogicielOptions.Gamma.Psi0_Q2, formatGAMMA)
+        Me.txt_Psi1_Q2.Text = Format(LogicielOptions.Gamma.Psi1_Q2, formatGAMMA)
+        Me.txt_Psi2_Q2.Text = Format(LogicielOptions.Gamma.Psi2_Q2, formatGAMMA)
 
-            Case btn_ReiniResistanceDalle.Name
-                Me.txt_GammaC.Text = LogicielOptions.Gamma.GammaC
-                Me.txt_GammaV.Text = LogicielOptions.Gamma.GammaV
-                Me.txt_GammaVs.Text = LogicielOptions.Gamma.GammaVs
-                Me.txt_GammaVp.Text = LogicielOptions.Gamma.GammaVs
-                Me.txt_GammaS.Text = LogicielOptions.Gamma.GammaS
-                Me.txt_GammaP.Text = LogicielOptions.Gamma.GammaP
+        Me.txt_GammaM0.Text = Format(LogicielOptions.Gamma.GammaM0, formatGAMMA)
+        Me.txt_GammaM1.Text = Format(LogicielOptions.Gamma.GammaM1, formatGAMMA)
+        Me.txt_GammaM2.Text = Format(LogicielOptions.Gamma.GammaM2, formatGAMMA)
 
-            Case btn_ReiniResistanceIncendie.Name
-                Me.txt_GammaM_fi.Text = LogicielOptions.Gamma.GammaM_fi
-                Me.txt_GammaC_fi.Text = LogicielOptions.Gamma.GammaC_fi
-                Me.txt_GammaV_fi.Text = LogicielOptions.Gamma.GammaV_fi
+        Me.txt_GammaC.Text = Format(LogicielOptions.Gamma.GammaC, formatGAMMA)
+        Me.txt_GammaV.Text = Format(LogicielOptions.Gamma.GammaV, formatGAMMA)
+        Me.txt_GammaVs.Text = Format(LogicielOptions.Gamma.GammaVs, formatGAMMA)
+        Me.txt_GammaVp.Text = Format(LogicielOptions.Gamma.GammaVs, formatGAMMA)
+        Me.txt_GammaS.Text = Format(LogicielOptions.Gamma.GammaS, formatGAMMA)
+        Me.txt_GammaP.Text = Format(LogicielOptions.Gamma.GammaP, formatGAMMA)
 
-        End Select
+        Me.txt_GammaM_fi.Text = Format(LogicielOptions.Gamma.GammaM_fi, formatGAMMA)
+        Me.txt_GammaC_fi.Text = Format(LogicielOptions.Gamma.GammaC_fi, formatGAMMA)
+        Me.txt_GammaV_fi.Text = Format(LogicielOptions.Gamma.GammaV_fi, formatGAMMA)
+
     End Sub
 
 #End Region

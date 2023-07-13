@@ -14,12 +14,17 @@ Public Class Frm_Hivoss
     Dim strUtilisationPlancher() As (String, cls_HivossParam.Enu_UtilisationPlancher)
     Dim strAmortissementMobilier() As (String, cls_HivossParam.Enu_Mobiliers)
 
+    Dim strD2Value() As (String, Decimal)
+
     'Repère l'ordonnée de l'image ou du combobox actif indiquant D3 
     Dim y_cmb_img_actif As Decimal
     'Repère l'ordonnée de l'image ou du combobox passif indiquant D3 
     Dim y_cmb_img_passif As Decimal
     'Indique si c'est l'image qui est active (=True) ou non (=False)
     Dim l_img_actif As Boolean
+
+    Const formatAMORTISSEMENT As String = "0"
+
 
 #End Region
 
@@ -68,6 +73,9 @@ Public Class Frm_Hivoss
 
                 '=== MENU PRINCIPAL ==============================================================='
 
+                Me.chk_methodeHIVOSS.Text = Bloc("HIVOSSMETHOD")
+                Me.lbl_ComboMasseFrequence.Text = Bloc("COMBOMASSFREQUENCY")
+
                 ReDim strRatioQ(5)
 
                 strRatioQ(0).Item1 = "G"
@@ -84,6 +92,8 @@ Public Class Frm_Hivoss
                 strRatioQ(4).Item2 = 0.4
                 strRatioQ(5).Item2 = 0.5
 
+                Me.lbl_avec.Text = Bloc("WITH")
+
                 ReDim strChoixQ(1)
 
                 strChoixQ(0).Item1 = "Q1"
@@ -91,6 +101,8 @@ Public Class Frm_Hivoss
 
                 strChoixQ(0).Item2 = cls_HivossParam.Enu_Q.Q1
                 strChoixQ(0).Item2 = cls_HivossParam.Enu_Q.Q2
+
+                Me.lbl_UtilisationPlancher.Text = Bloc("FLOORUSE")
 
                 ReDim strUtilisationPlancher(9)
 
@@ -116,6 +128,10 @@ Public Class Frm_Hivoss
                 strUtilisationPlancher(8).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Industriel
                 strUtilisationPlancher(9).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Sports
 
+                Me.lbl_AmortissementStructure.Text = Bloc("STRUCTURALDAMPING")
+                Me.lbl_PoutreAcier.Text = Bloc("STEELBEAM")
+                Me.lbl_AmortissementMobilier.Text = Bloc("FURNITUREDAMPING")
+
                 ReDim strAmortissementMobilier(7)
 
                 strAmortissementMobilier(0).Item1 = Bloc("DAMPINGFURN_TRADOFFICE")
@@ -136,6 +152,26 @@ Public Class Frm_Hivoss
                 strAmortissementMobilier(6).Item2 = cls_HivossParam.Enu_Mobiliers.SalleDeSport
                 strAmortissementMobilier(7).Item2 = cls_HivossParam.Enu_Mobiliers.Personnalise
 
+                ReDim strD2Value(5)
+
+                strD2Value(0).Item1 = "0 %"
+                strD2Value(1).Item1 = "1 %"
+                strD2Value(2).Item1 = "2 %"
+                strD2Value(3).Item1 = "3 %"
+                strD2Value(4).Item1 = "4 %"
+                strD2Value(5).Item1 = "5 %"
+
+                strD2Value(0).Item2 = 0.00
+                strD2Value(1).Item2 = 0.01
+                strD2Value(2).Item2 = 0.02
+                strD2Value(3).Item2 = 0.03
+                strD2Value(4).Item2 = 0.04
+                strD2Value(5).Item2 = 0.05
+
+                Me.lbl_AmortissementFinition.Text = Bloc("FINISHINGDAMPING")
+                Me.chk_FauxPlafond.Text = Bloc("CEILINGFLOOR")
+                Me.chk_ChappeFlottante.Text = Bloc("SWIMMINGSCREED")
+                Me.lbl_AmortissementTotal.Text = Bloc("TOTALDAMPING")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -175,6 +211,13 @@ Public Class Frm_Hivoss
             Me.cmb_AmortissementMobilier.Items.Add(strAmortissementMobilier(i).Item1)
         Next
         Me.cmb_AmortissementMobilier.SelectedIndex = 0
+
+        Me.cmb_D2Value.Items.Clear()
+        For i As Integer = 0 To strD2Value.Length - 1
+            Me.cmb_D2Value.Items.Add(strD2Value(i).Item1)
+        Next
+        Me.cmb_D2Value.SelectedIndex = 0
+
     End Sub
 
     Private Sub GestionStyle()
@@ -193,6 +236,44 @@ Public Class Frm_Hivoss
 
     Private Sub AfficherPoutreEnCours()
 
+        Me.chk_methodeHIVOSS.Checked = MyPoutreLoc.Param.HivossParam.lHivossMethod
+
+        For i As Integer = 0 To strRatioQ.Length - 1
+            If MyPoutreLoc.Param.HivossParam.ratioQ = strRatioQ(i).Item2 Then
+                cmb_ratioQ.SelectedItem = strRatioQ(i).Item1
+                Exit For
+            End If
+        Next
+
+        For i As Integer = 0 To strChoixQ.Length - 1
+            If MyPoutreLoc.Param.HivossParam.choixQ = strChoixQ(i).Item2 Then
+                cmb_choixQ.SelectedItem = strChoixQ(i).Item1
+                Exit For
+            End If
+        Next
+
+
+        For i As Integer = 0 To strUtilisationPlancher.Length - 1
+            If MyPoutreLoc.Param.HivossParam.UtilisationPlancher = strUtilisationPlancher(i).Item2 Then
+                cmb_UtilisationPlancher.SelectedItem = strUtilisationPlancher(i).Item1
+                Exit For
+            End If
+        Next
+
+        For i As Integer = 0 To strAmortissementMobilier.Length - 1
+            If MyPoutreLoc.Param.HivossParam.Mobilier = strAmortissementMobilier(i).Item2 Then
+                cmb_AmortissementMobilier.SelectedItem = strAmortissementMobilier(i).Item1
+                Exit For
+            End If
+        Next
+
+        MAJI_CoefficientsAmortissementD()
+
+        chk_ChappeFlottante.Checked = MyPoutreLoc.Param.HivossParam.lChappeFlottante
+        chk_FauxPlafond.Checked = MyPoutreLoc.Param.HivossParam.lFauxPlafond
+
+
+
     End Sub
 
 #End Region
@@ -204,7 +285,16 @@ Public Class Frm_Hivoss
     End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
+        Dim lModif As Boolean = False
+        If ValideSaisieFenetre() Then
 
+            TransfertSaisie(lModif)
+
+            If lModif Then
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
+            End If
+            Me.Close()
+        End If
     End Sub
 
 
@@ -214,17 +304,64 @@ Public Class Frm_Hivoss
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
-    End Sub
+        With MyProjet.Poutres(MyProjet.IndEnCours).Param.HivossParam
 
-    Private Sub Frm_Basic_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+            If .lHivossMethod <> MyPoutreLoc.Param.HivossParam.lHivossMethod Then
+                lModif = True
+                .lHivossMethod = MyPoutreLoc.Param.HivossParam.lHivossMethod
+            End If
 
-    End Sub
+            If .ratioQ <> MyPoutreLoc.Param.HivossParam.ratioQ Then
+                lModif = True
+                .ratioQ = MyPoutreLoc.Param.HivossParam.ratioQ
+            End If
 
-    Private Sub PictureBox8_Click(sender As Object, e As EventArgs) Handles img_DtotSymbol.Click
+            If .choixQ <> MyPoutreLoc.Param.HivossParam.choixQ Then
+                lModif = True
+                .choixQ = MyPoutreLoc.Param.HivossParam.choixQ
+            End If
 
-    End Sub
+            If .UtilisationPlancher <> MyPoutreLoc.Param.HivossParam.UtilisationPlancher Then
+                lModif = True
+                .UtilisationPlancher = MyPoutreLoc.Param.HivossParam.UtilisationPlancher
+            End If
 
-    Private Sub pan_SaisieAmortissement_Paint(sender As Object, e As PaintEventArgs) Handles pan_SaisieAmortissement.Paint
+            If .Mobilier <> MyPoutreLoc.Param.HivossParam.Mobilier Then
+                lModif = True
+                .Mobilier = MyPoutreLoc.Param.HivossParam.Mobilier
+            End If
+
+            If .lFauxPlafond <> MyPoutreLoc.Param.HivossParam.lFauxPlafond Then
+                lModif = True
+                .lFauxPlafond = MyPoutreLoc.Param.HivossParam.lFauxPlafond
+            End If
+
+            If .lChappeFlottante <> MyPoutreLoc.Param.HivossParam.lChappeFlottante Then
+                lModif = True
+                .lChappeFlottante = MyPoutreLoc.Param.HivossParam.lChappeFlottante
+            End If
+
+            If .AmortiStructure_D1 <> MyPoutreLoc.Param.HivossParam.AmortiStructure_D1 Then
+                lModif = True
+                .AmortiStructure_D1 = MyPoutreLoc.Param.HivossParam.AmortiStructure_D1
+            End If
+
+            If .AmortiMobilier_D2 <> MyPoutreLoc.Param.HivossParam.AmortiMobilier_D2 Then
+                lModif = True
+                .AmortiMobilier_D2 = MyPoutreLoc.Param.HivossParam.AmortiMobilier_D2
+            End If
+
+            If .AmortiFinition_D3 <> MyPoutreLoc.Param.HivossParam.AmortiFinition_D3 Then
+                lModif = True
+                .AmortiFinition_D3 = MyPoutreLoc.Param.HivossParam.AmortiFinition_D3
+            End If
+
+            If .AmortiTotal_Dtot <> MyPoutreLoc.Param.HivossParam.AmortiTotal_Dtot Then
+                lModif = True
+                .AmortiTotal_Dtot = MyPoutreLoc.Param.HivossParam.AmortiTotal_Dtot
+            End If
+
+        End With
 
     End Sub
 
@@ -277,28 +414,28 @@ Public Class Frm_Hivoss
 
             Case Me.img_D1Value.Name
 
-                strSymbol = CStr(MyPoutreLoc.Param.HivossParam.AmortiStructure_D1 * 100 & " %")
+                strSymbol = CStr(Format(MyPoutreLoc.Param.HivossParam.AmortiStructure_D1 * 100, formatAMORTISSEMENT) & " %")
                 strIndice = " "
 
                 lEgal = False
 
             Case Me.img_D2Value.Name
 
-                strSymbol = CStr(MyPoutreLoc.Param.HivossParam.AmortiMobilier_D2 * 100 & " %")
+                strSymbol = CStr(Format(MyPoutreLoc.Param.HivossParam.AmortiMobilier_D2 * 100, formatAMORTISSEMENT) & " %")
                 strIndice = ""
 
                 lEgal = False
 
             Case Me.img_D3Value.Name
 
-                strSymbol = CStr(MyPoutreLoc.Param.HivossParam.AmortiFinition_D3 * 100 & " %")
+                strSymbol = CStr(Format(MyPoutreLoc.Param.HivossParam.AmortiFinition_D3 * 100, formatAMORTISSEMENT) & " %")
                 strIndice = ""
 
                 lEgal = False
 
             Case Me.img_DtotValue.Name
 
-                strSymbol = CStr(MyPoutreLoc.Param.HivossParam.AmortiTotal_Dtot * 100 & " %")
+                strSymbol = CStr(Format(MyPoutreLoc.Param.HivossParam.AmortiTotal_Dtot * 100, formatAMORTISSEMENT) & " %")
                 strIndice = ""
 
                 lEgal = False
@@ -332,6 +469,14 @@ Public Class Frm_Hivoss
             Me.cmb_D2Value.Location = New Point(Me.img_D3Value.Location.X, y_cmb_img_actif)
             Me.cmb_D2Value.Visible = Not l_img_actif
 
+            For i As Integer = 0 To strD2Value.Length - 1
+                If strD2Value(i).Item2 = MyPoutreLoc.Param.HivossParam.AmortiMobilier_D2 Then
+                    cmb_D2Value.SelectedIndex = i
+
+                    Exit For
+                End If
+            Next
+
         End If
     End Sub
 
@@ -349,10 +494,13 @@ Public Class Frm_Hivoss
 #Region " Evènements saisie "
 
     Private Sub chk_methodeHIVOSS_CheckedChanged(sender As Object, e As EventArgs) Handles chk_methodeHIVOSS.CheckedChanged
+        If lBuild Then Exit Sub
         MyPoutreLoc.Param.HivossParam.lHivossMethod = chk_methodeHIVOSS.Checked
     End Sub
 
     Private Sub cmb_ratioQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ratioQ.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
         For i As Integer = 0 To strRatioQ.Length - 1
             If cmb_ratioQ.SelectedItem = strRatioQ(i).Item1 Then
                 MyPoutreLoc.Param.HivossParam.ratioQ = strRatioQ(i).Item2
@@ -362,6 +510,8 @@ Public Class Frm_Hivoss
     End Sub
 
     Private Sub cmb_choixQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_choixQ.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
         For i As Integer = 0 To strChoixQ.Length - 1
             If cmb_choixQ.SelectedItem = strChoixQ(i).Item1 Then
                 MyPoutreLoc.Param.HivossParam.choixQ = strChoixQ(i).Item2
@@ -371,6 +521,8 @@ Public Class Frm_Hivoss
     End Sub
 
     Private Sub cmb_UtilisationPlancher_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_UtilisationPlancher.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
         For i As Integer = 0 To strUtilisationPlancher.Length - 1
             If cmb_UtilisationPlancher.SelectedItem = strUtilisationPlancher(i).Item1 Then
                 MyPoutreLoc.Param.HivossParam.UtilisationPlancher = strUtilisationPlancher(i).Item2
@@ -380,6 +532,8 @@ Public Class Frm_Hivoss
     End Sub
 
     Private Sub cmb_AmortissementMobilier_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_AmortissementMobilier.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
         For i As Integer = 0 To strAmortissementMobilier.Length - 1
             If cmb_AmortissementMobilier.SelectedItem = strAmortissementMobilier(i).Item1 Then
                 MyPoutreLoc.Param.HivossParam.Mobilier = strAmortissementMobilier(i).Item2
@@ -400,13 +554,24 @@ Public Class Frm_Hivoss
 
     End Sub
 
-    Private Sub chk_FauxPlafond_ChappeFlottante_CheckedChanged(sender As Object, e As EventArgs) Handles chk_FauxPlafond.CheckedChanged, chk_FauxPlafond.CheckedChanged
+    Private Sub chk_FauxPlafond_ChappeFlottante_CheckedChanged(sender As Object, e As EventArgs) Handles chk_FauxPlafond.CheckedChanged, chk_ChappeFlottante.CheckedChanged
+        If lBuild Then Exit Sub
+
         MyPoutreLoc.Param.HivossParam.lFauxPlafond = chk_FauxPlafond.Checked
         MyPoutreLoc.Param.HivossParam.lChappeFlottante = chk_ChappeFlottante.Checked
 
         MAJI_CoefficientsAmortissementD()
 
     End Sub
+
+    Private Sub cmb_D2Value_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_D2Value.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        MyPoutreLoc.Param.HivossParam.AmortiMobilier_D2 = strD2Value(cmb_D2Value.SelectedIndex).Item2
+
+        MAJI_CoefficientsAmortissementD()
+    End Sub
+
 #End Region
 
 End Class
