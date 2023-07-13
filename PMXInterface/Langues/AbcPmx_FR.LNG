@@ -1,39 +1,294 @@
 #FRM_JURIDIQUE
+AGREE					= Accepter
+EXIT					= Quitter
+LANGUAGE				= Langues
+LASTVERSION				= Vous travaillez sur la dernière version du logiciel
+NEWVERSION				= Nouvelle version du logiciel disponible.
+NOINTERNET				= Connectez-vous à internet pour vérifier que vous travaillez sur la dernière version du logiciel.
 TEXT1					= Le présent logiciel facilite les travaux d’études préliminaires dans le cadre de la conception de constructions métalliques. Sur base de méthodes de calcul selon les principes des normes appliquées, il permet d’effectuer un certain nombre de vérifications dans le but de pouvoir évaluer une solution dans le cadre d’un pré dimensionnement. Le logiciel ne permet pas d’analyser toutes les situations et d’effectuer de façon exhaustive tous les calculs justificatifs requis pour une étude d’exécution qui nécessite dans tous les cas le recours au conseil d’un Bureau d’Etudes.
 TEXT2					= En raison de la complexité des méthodes de calcul, ce logiciel s’adresse exclusivement à des utilisateurs professionnels du domaine de la Construction Métallique (qui sont à même de se faire une idée précise de ses possibilités, de ses limites  et de son adéquation aux différents cas d’applications pratiques). L’utilisateur l’utilisera donc sous sa propre responsabilité et à ses risques et périls.
 TEXT3					= Ce logiciel est mis à disposition à titre gratuit. Aucun droit n’est conféré à l’utilisateur du présent logiciel dont la propriété et tous les droits intellectuels continuent à appartenir exclusivement au CTICM. Le CTICM ne peut être tenu responsable d’aucune perte ou dégât directement et/ou indirectement lié au résultat de l’utilisation du logiciel. L’utilisation de ce logiciel ne fait naître aucune obligation de garantie au bénéfice de l’utilisateur, qui s’engage à tenir le CTICM quitte et indemne de tout recours et de tous préjudices directs et/ou indirects découlant notamment d’une utilisation incorrecte ou inappropriée ou d’une utilisation à des fins inadéquates ou inappropriées du logiciel.
 TEXT4					= EN APPUYANT SUR LA TOUCHE ''ACCEPTER'' CI-DESSOUS, L'UTILISATEUR DECLARE EXPRESSEMENT AVOIR LU ATTENTIVEMENT LE TEXTE FIGURANT CI-DESSUS ET EN ACCEPTER TOUS LES EFFETS JURIDIQUES ET OBLIGATIONS QUI EN DECOULENT POUR LUI.
-LANGUAGE				= Langues
-WARNING					= Avertissement
-NOINTERNET				= Connectez-vous à internet pour vérifier que vous travaillez sur la dernière version du logiciel.
-NEWVERSION				= Nouvelle version du logiciel disponible.
 VERSIONLINK     		= Voulez-vous être redirigé vers le site web du CTICM ?
-LASTVERSION				= Vous travaillez sur la dernière version du logiciel
-AGREE					= Accepter
-EXIT					= Quitter
+WARNING					= Avertissement
+
+
+
+#FRM_CALCULATIONSHEET
+TITLE					= Note de calculs
+FIRST					= Première page
+PREVIOUS				= Page précédente
+NEXT					= Page suivante
+LAST					= Dernière page
+ZOOMIN					= Zoom avant
+ZOOMOUT					= Zoom arrière
+PRINT					= Impression
+EXPORTPDF				= Exporter en PDF
+LANGUAGE				= Langue
+SUMMARY					= Sommaire
+BTNOPTIONS				= Options
+BTNSYNTHESE				= Synthèse
+BTNCOMPLET				= Note complète
+BTNDETAILED				= Note détaillée
+BTNULTRA				= Synthèse des résultats
+BTNDRAWING				= Dessin de la poutre
+NAVPAN					= Volet de navigation
+NAVIGATION				= Navigation
+ZOOM					= Zoom
+SAVEAS					= Enresitrer sous
+
+#FRM_ENCASEMENT
+CANCEL					= Annuler 
+CLASS					= Classe
+CONCRETE				= Béton
+COVERAGE				= Enrobage
+DIAMETER				= Diamètre
+DIMENSIONS				= Dimensions
+DOUBLE					= Deux
+EXTERNAL				= Extérieur
+INTERNAL				= Intérieur
+LONGIREBAR				= Armatures longitudinales
+LOWERLAYER				= Nappe inférieure
+MIDDLE					= Centre
+MIDDLELAYER				= Nappe intermédiaire
+NONE					= Aucun
+NUMBER					= Nombre
+OK						= OK
+POSITION				= Position
+SINGLE					= Un
+STEEL 					= Acier des armatures
+STIRRUPS				= Etrier
+TITLE					= Definition de l'enrobage partiel
+TRIPLE					= Trois
+TYPEE					= Type 
+UPPERLAYER				= Nappe supérieure
+WIDTH					= Largeur
+
+#FRM_GAMMA
+ACCOMPAGNEMENT			= Coefficients d'accompagnement
+CANCEL					= Annuler
+GAMMAV					= valeur unique pour γv
+LBL_Q1					= Q1: Charge d'exploitation 1
+LBL_Q2					= Q2: Charge d'exploitation 2
+LOADING					= Chargement
+OK						= OK
+REINI					= Réinitialiser
+RESISTANCE				= Résistance
+TAB_STEEL				= Acier
+TAB_SLAB				= Dalle
+TAB_FIRE				= Incendie
+TITLE					= Définition des coefficients nationaux
+
+#FRM_HIVOSS
+CANCEL					= Annuler
+CEILINGFLOOR			= Faux plafonds
+COMBOMASSFREQUENCY		= Combination de masses pour la fréquence
+DAMPINGFURN_TRADOFFICE	= Bureaux avec cloisons
+DAMPINGFURN_PAPEROFFICE	= Bureaux sans armoire ni étagère
+DAMPINGFURN_OPENOFFICE	= Bureaux paysagers
+DAMPINGFURN_LIBRARY		= Bibliothèque
+DAMPINGFURN_HOUSE		= Résidentiel
+DAMPINGFURN_SCHOOLS		= Ecoles
+DAMPINGFURN_GYM			= Salles de sport
+DAMPINGFURN_CUSTOM		= Amortissement personnalisé
+FINISHINGDAMPING		= Amortissement des finitions
+FLOORUSE				= Utilisation du plancher		
+FLOORUSE_CRITAREA		= Zones sensibles
+FLOORUSE_HOSP			= Santé
+FLOORUSE_SCHOOL			= Education
+FLOORUSE_RESIDENTIAL	= Résidentiel
+FLOORUSE_OFFICE			= Bureaux
+FLOORUSE_MEETING		= Réunion
+FLOORUSE_SENIOR			= Maison de retraite
+FLOORUSE_HOTELS			= Hôtels
+FLOORUSE_INDUSTRIAL		= Industriel
+FLOORUSE_SPORTS			= Sports
+FURNITUREDAMPING		= Amortissement du mobilier
+HIVOSSMETHOD			= Application de la méthode Hivoss  
+OK						= OK
+STEELBEAM				= Poutre acier
+STRUCTURALDAMPING		= Amortissement de la structure
+SWIMMINGSCREED			= Chappe flottante
+TITLE					= Confort vibratoire des planchers
+TOTALDAMPING			= Amortissement total
+WITH					= Avec
+
+
+
+#FRM_LATERALRESTRAINTS
+ADD						= Ajouter
+CANCEL					= Annuler
+OK						= OK
+DELETE					= Supprimer
+DRAWCONTROL				= Maintiens ponctuels
+FULLYRESTRAINED			= Maintien continu
+LEFTCANT				= Console gauche
+MAINSPAN				= Travée principale
+NORESTRAINT				= Pas de maintien intermédiaire
+POINTRESTRAINTS			= Maintiens ponctuels
+RESTRAINTS				= Type de maintien
+RIGHTCANT				= Console droite
+SPAN					= Travée
+TITLE 					= Definition des maintiens latéraux de la poutre
+
+
 
 #FRM_MAIN
+COPYPICTURE				= Copier l'image
+ERRORCAPACITY			= La capacité maximale de la liste a été atteinte, aucun nouvel ajout n'est possible 
+ERROREMPTYCELL			= Cellule vide
+ERRORNONNUMERIC			= Valeur non numérique
+ERROROUTBOUNDS			= Valeur hors limites
+EXIT					= Quitter
 FILE					= Fichier
-RECENTFILES				= Fichiers récents
-OPEN					= Ouvrir
 NEW						= Nouveau
+NPROJET					= Nouveau projet
+OPEN					= Ouvrir
+PROJECT					= Projet
+PROJECTNAME				= Nom du projet
+RECENTFILES				= Fichiers récents
 SAVE					= Enregistrer
 SAVEAS					= Enregister sous
-EXIT					= Quitter
-PROJECT					= Projet
-NPROJET					= Nouveau projet
-PROJECTNAME				= Nom du projet
-SECTIONSLIST			= Liste des sections
 SECTION					= Section
-COPYPICTURE				= Copier l'image
+SECTIONSLIST			= Liste des sections
+TSBCONNECTION			= Connection
+TSBENCASEMENT			= Enrobage partiel
+TSBHOME					= Début
+TSBSECTIONA				= Profilé acier
+TSBSLAB					= Dalle
+TSBSPACINGS				= Configuration transversale
+TSBSPANS				= Portées
+TSBPROPPING				= Etaiement
+TSBLOADS				= Chargement
+TSBCOMBINATIONS			= Combinaisons de charges
+TSBGAMMA				= Coefficients nationaux
+TSBHIVOSS				= Vibration de plancher
 WARNINGFILE				= Attention vous ouvrez un fichier avec des données d'une ancienne version du logiciel. Veuillez vérifier l'ensemble des données et réenregister le fichier.
 
 #FRM_OUVERTURE
-NEWPROJECT				= Nouveau projet
-CREATEASSEMBLY			= Créer une nouvelle section
-OPENPROJECT				= Ouvrir un projet
 BROWSEFILES				= Parcourir
+CREATEASSEMBLY			= Créer une nouvelle section
+NEWPROJECT				= Nouveau projet
+OK						= Ok
+OPENPROJECT				= Ouvrir un projet
 RECENTFILES				= Fichiers récents
-VALIDATE				= Valider
 
 
+
+#FRM_PROPPING
+TITLE					= Etaiement de la poutre
+OK						= Ok
+CANCEL					= Cancel
+FULLYPROPPED			= Entièrement étayé
+LEFTCANTPROPP			= Etaiement de l'extrémité de la console gauche
+NUMBPROPPING			= Nombre d'étais ponctuels
+POINTPROPPED			= Etaiement ponctuel
+PROPPINGTYPE			= Type d'étaiement
+RIGHTCANTPROPP			= Etaiement de l'extrémité de la console droite
+UNPROPPED				= Non étayé
+
+
+
+#FRM_PSHEETING
+TITLE					= Definition du bac acier
+OK						= OK
+ALL						= Toutes
+CANCEL					= Annuler
+COMPANY					= Entreprise
+DATABASE				= Base de données
+FROMDATABASE			= Depuis la base de données
+FROMDIM					= Depuis les dimensions
+NAME					= Nom
+PROPERTIES				= Dimensions et propriétés
+
+
+#FRM_SLAB
+TITLE					= Définition de la dalle
+OK						= OK
+CANCEL					= Annuler
+ADDLAYER				= Ajouter une nappe d'armatures
+ALL						= Tous
+CLASS					= Classe
+COMPOSITESLAB			= Dalle mixte
+CONCRETE				= Béton
+DIAMETER				= Diamètre
+FIRSTLAYER				= Première nappe d'armature
+GENERAL					= Général
+HAUNCH					= Renformis
+JOINT					= Joint béton
+LOCATION				= Position
+PRECASTSLAB				= Dalle partiellement préfabriquée
+PRESLAB					= Parti préfa.
+REBARS					=  Armatures longitudinales
+REINFLAYER1				= Première nappe
+REINFLAYER2				= Deuxième nappe
+REMOVELAYER				= Supprimer la deuxième nappe d'armatures
+SECONDLAYER				= Deuxième nappe d'armature
+SHEETBASE				= Depuis la base de donnée
+SHEETCOMPANY			= Fabricant
+SHEETCUSTOM				= Définition personnalisée
+SHEETING				= Bac acier
+SOLIDSLAB				= Dalle pleine
+SPACING					= Entraxe
+THICKNESS				= Epaisseur
+TYPE					= Type
+NAME					= Nom
+MODIFYSH				= Modifier le bac acier
+RIBORIENT				= Orientation des nervures
+PARALLEL				= Parralèlle
+PERPENDICULAR			= Perpendiculaire
+HEIGHT					= Hauteur
+RIBCONFIG				= Configuration des nervures aux appuis
+REBARSTEEL				= Armatures
+CONNECTORANDSHEET		= Disposition des connecteurs
+THROUGHDECKW			= Soudure à travers le bac
+PREPUNCHED				= Bac pré-percé
+
+#FRM_SPANLENGHTS
+TITLE					= Definition de la poutre
+CANCEL					= Annuler
+OK						= OK
+EDGEBEAM				= Poutre d'extrémité
+INTERMEDIATEBEAM		= Poutre intermédiaire
+LEFTCANT				= Console gauche
+LEFTOPENING				= Ouverture gauche
+MAINSPAN				= Travée principale
+OPENINGS				= Ouvertures
+RIGHTCANT				= Console droite
+RIGHTOPENING			= Ouverture droite
+SPACINGS				= Entraxes
+SPANS					= Portées
+
+#FRM_STANDARDSTEELSECTIONS
+AUTOMATICHA				= Hauteur totale automatiquement calculéee
+AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
+CANCEL					= Annuler
+DELIVERYCOND			= Conditions de livraison pour $
+HEIGHT					= Hauteur 
+HOTROLLED				= Profilé laminé
+LOWERF					= Semelle inférieure
+OK						= OK
+PROFILE					= Profile
+PROFILES				=¨Profiles 
+QUALITY					= Qualité 
+REDUCTIONCURVE			= Courbe de réduction
+SERIAL					= Série
+STEEL					= Acier
+STEELGRADE				= Nuance d'acier
+TITLE					= Définition de la poutre acier
+UPPERF					= Semelle supérieure
+WEB						= Âme 
+WELDEDSYM				= PRS bisymétrique
+WELDEDP					= PRS mono-symétrique
+
+#OPTCALCULMAIN
+TITLE					= Options de calcul
+GAMMA					= Coefficients nationaux par défaut
+APPLY					= Appliquer
+CANCEL					= Annuler
+
+#OPTCALGAMMA
+TITLE					= Coefficients nationaux
+LOADS					= Coefficients partiels
+COMBINATION				= Coefficients d'accompagnement
+MATERIALS				= Matériaux
