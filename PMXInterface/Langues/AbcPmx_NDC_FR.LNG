@@ -1,5 +1,5 @@
 #NDC_MAIN
-TITLE					= Rapport de calcul
+TITLE					= Note de calculs
 USER					= Utilisateur
 SOCIETE					= Entreprise
 PROJET					= Projet
@@ -12,6 +12,6 @@ GAMMA					= Coefficients partiels
 LOADS					= Chargements
 COMBINATIONS			= Combinaisons
 LATERALR				= Maintien latéraux
-WEXPERT					= Warning: This calculation is carried out in the Expert mode.
-WEXPERT2				= Some parameters may be outside the scope of the software
-GSTEELB					= Steel beam
+WEXPERT					= Avertissement: Ce rapport est réalisé en mode expert.
+WEXPERT2				= Certains paramètres peuvent être en dehors du domaine d'application du logiciel
+GSTEELB					= Poutre acier
