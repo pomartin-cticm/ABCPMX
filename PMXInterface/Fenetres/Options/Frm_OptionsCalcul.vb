@@ -230,14 +230,38 @@ Public Class Frm_OptionsCalcul
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
+        lModif = False
+
+        GereTransfertValeur(GammaLoc.GammaC,LogicielOptions.Gamma.GammaC, lModif)
+        GereTransfertValeur(GammaLoc.GammaC_fi, LogicielOptions.Gamma.GammaC_fi, lModif)
+        GereTransfertValeur(GammaLoc.GammaG_inf, LogicielOptions.Gamma.GammaG_inf, lModif)
+        GereTransfertValeur(GammaLoc.GammaG_sup, LogicielOptions.Gamma.GammaG_sup, lModif)
+        GereTransfertValeur(GammaLoc.GammaM0, LogicielOptions.Gamma.GammaM0, lModif)
+        GereTransfertValeur(GammaLoc.GammaM1, LogicielOptions.Gamma.GammaM1, lModif)
+        GereTransfertValeur(GammaLoc.GammaM2, LogicielOptions.Gamma.GammaM2, lModif)
+        GereTransfertValeur(GammaLoc.GammaM_fi, LogicielOptions.Gamma.GammaM_fi, lModif)
+        GereTransfertValeur(GammaLoc.GammaP, LogicielOptions.Gamma.GammaP, lModif)
+        GereTransfertValeur(GammaLoc.GammaQ, LogicielOptions.Gamma.GammaQ, lModif)
+        GereTransfertValeur(GammaLoc.GammaS, LogicielOptions.Gamma.GammaS, lModif)
+
+        GereTransfertValeur(GammaLoc.Psi0_Q1, LogicielOptions.Gamma.Psi0_Q1, lModif)
+        GereTransfertValeur(GammaLoc.Psi1_Q1, LogicielOptions.Gamma.Psi1_Q1, lModif)
+        GereTransfertValeur(GammaLoc.Psi2_Q1, LogicielOptions.Gamma.Psi2_Q1, lModif)
+
+        LogicielOptions.Gamma.Psi0_Q2 = LogicielOptions.Gamma.Psi0_Q1
+        LogicielOptions.Gamma.Psi1_Q2 = LogicielOptions.Gamma.Psi1_Q1
+        LogicielOptions.Gamma.Psi2_Q2 = LogicielOptions.Gamma.Psi2_Q1
+
+    End Sub
+    Private Sub GereTransfertValeur(ByVal ValeurLocale As Decimal, ByRef ValeurGlobale As Decimal, ByRef lModif As Boolean)
+        If ValeurGlobale <> ValeurLocale Then lModif = True
+        ValeurGlobale = ValeurLocale
     End Sub
 
     Private Function ValideSaisie() As Boolean
 
-
         Dim lOK As Boolean = True
         Return lOK
-
 
     End Function
 

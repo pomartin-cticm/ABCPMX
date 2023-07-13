@@ -5,6 +5,7 @@
     Const BALISE As String = "OPTCALGAMMA"
 
     Const formatGAMMA As String = "0.00"
+    Dim lBuild As Boolean
 
 #End Region
 
@@ -14,10 +15,12 @@
     End Sub
 
     Public Sub InitialiseFrm()
+        lBuild = True
         GestionLangue(Frm_OptionsCalcul.BlocLangues(BALISE))
         GestionStyle()
         GestionUnites()
         AfficherGammaEnCours()
+        lBuild = False
     End Sub
 
     Private Sub GestionLangue(ByVal MyBloc As Dictionary(Of String, String))
@@ -54,24 +57,44 @@
 
     Private Sub AfficherGammaEnCours()
 
+        '--> Actions
         Me.txt_GammaGsup.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaG_sup, formatgamma)
         Me.txt_GammaGinf.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaG_inf, formatGAMMA)
         Me.txt_GammaQ.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaQ, formatGAMMA)
 
+        '--> Combination factors
         Me.txt_Psi0.Text = Format(Frm_OptionsCalcul.GammaLoc.Psi0_Q1, formatGAMMA)
         Me.txt_Psi1.Text = Format(Frm_OptionsCalcul.GammaLoc.Psi1_Q1, formatGAMMA)
         Me.txt_Psi2.Text = Format(Frm_OptionsCalcul.GammaLoc.Psi2_Q1, formatGAMMA)
 
+        '-->Acier
+        Me.txt_GammaM0.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaM0, formatGAMMA)
+        Me.txt_GammaM1.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaM1, formatGAMMA)
+        Me.txt_GammaM2.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaM2, formatGAMMA)
+
+        '--> Béton
+
+        Me.txt_GammaC.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaC, formatGAMMA)
+        ' Me.chk_GammaV_Unique.Checked = .lGammaV_unique
+        'Me.txt_GammaV.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaV, formatGAMMA)
+        ' Me.txt_GammaVp.Text = Format(.GammaVp, formatGAMMA)
+        Me.txt_GammaVs.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaVs, formatGAMMA)
+        Me.txt_GammaS.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaS, formatGAMMA)
+        Me.txt_GammaP.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaP, formatGAMMA)
+
+        '--> Incendie
+        Me.txt_GammaM_fi.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaM_fi, formatGAMMA)
+        Me.txt_GammaC_fi.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaC_fi, formatGAMMA)
+        Me.txt_GammaV_fi.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaV_fi, formatGAMMA)
 
     End Sub
 
 
 #End Region
 
+#Region " Dessins Symboles "
 
-#Region " Dessins "
-
-    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_GammaGsup.Paint, img_GammaGinf.Paint, img_GammaQ.Paint, img_Psi2.Paint, img_Psi1.Paint, img_Psi0.Paint
+    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_GammaGsup.Paint, img_GammaGinf.Paint, img_GammaQ.Paint, img_Psi2.Paint, img_Psi1.Paint, img_Psi0.Paint, img_GammaVs.Paint, img_GammaV_fi.Paint, img_GammaV.Paint, img_GammaS.Paint, img_GammaP.Paint, img_GammaM2.Paint, img_GammaM1.Paint, img_GammaM0.Paint, img_GammaM_fi.Paint, img_GammaC_fi.Paint, img_GammaC.Paint
 
         '--> Déclarations
 
@@ -125,65 +148,65 @@
                 strSymbol = "y"
                 strIndice = "2"
 
-                'Case Me.img_GammaM0.Name
+            Case Me.img_GammaM0.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "M0"
+                strSymbol = "g"
+                strIndice = "M0"
 
-                'Case Me.img_GammaM1.Name
+            Case Me.img_GammaM1.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "M1"
+                strSymbol = "g"
+                strIndice = "M1"
 
-                'Case Me.img_GammaM2.Name
+            Case Me.img_GammaM2.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "M2"
+                strSymbol = "g"
+                strIndice = "M2"
 
-                'Case Me.img_GammaC.Name
+            Case Me.img_GammaC.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "C"
+                strSymbol = "g"
+                strIndice = "C"
 
-                'Case Me.img_GammaV.Name
+            Case Me.img_GammaV.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "V"
+                strSymbol = "g"
+                strIndice = "V"
 
-                'Case Me.img_GammaVs.Name
+            Case Me.img_GammaVs.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "Vs"
+                strSymbol = "g"
+                strIndice = "Vs"
 
-                'Case Me.img_GammaVp.Name
+            'Case Me.img_GammaVp.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "Vp"
+            '    strSymbol = "g"
+            '    strIndice = "Vp"
 
-                'Case Me.img_GammaS.Name
+            Case Me.img_GammaS.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "S"
+                strSymbol = "g"
+                strIndice = "S"
 
-                'Case Me.img_GammaP.Name
+            Case Me.img_GammaP.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "P"
+                strSymbol = "g"
+                strIndice = "P"
 
-                'Case Me.img_GammaM_fi.Name
+            Case Me.img_GammaM_fi.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "M,fi"
+                strSymbol = "g"
+                strIndice = "M,fi"
 
-                'Case Me.img_GammaC_fi.Name
+            Case Me.img_GammaC_fi.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "C,fi"
+                strSymbol = "g"
+                strIndice = "C,fi"
 
-                'Case Me.img_GammaV_fi.Name
+            Case Me.img_GammaV_fi.Name
 
-                '    strSymbol = "g"
-                '    strIndice = "V,fi"
+                strSymbol = "g"
+                strIndice = "V,fi"
 
         End Select
 
@@ -193,6 +216,96 @@
                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
+#End Region
+
+#Region " Evènements saisie "
+    Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_GammaGsup.TextChanged, txt_GammaGinf.TextChanged, txt_GammaQ.TextChanged, txt_Psi0.TextChanged, txt_Psi1.TextChanged, txt_Psi2.TextChanged, txt_GammaM0.TextChanged, txt_GammaM1.TextChanged, txt_GammaM2.TextChanged, txt_GammaC.TextChanged, txt_GammaV.TextChanged, txt_GammaVs.TextChanged, txt_GammaS.TextChanged, txt_GammaP.TextChanged, txt_GammaM_fi.TextChanged, txt_GammaC_fi.TextChanged, txt_GammaV_fi.TextAlignChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+
+            Select Case sender.name
+                Case txt_GammaGsup.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaG_sup = ValeurUI
+                Case txt_GammaGinf.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaG_inf = ValeurUI
+                Case txt_GammaQ.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaQ = ValeurUI
+                Case txt_Psi0.Name
+                    Frm_OptionsCalcul.GammaLoc.Psi0_Q1 = ValeurUI
+                Case txt_Psi1.Name
+                    Frm_OptionsCalcul.GammaLoc.Psi2_Q1 = ValeurUI
+                Case txt_Psi1.Name
+                    Frm_OptionsCalcul.GammaLoc.Psi2_Q1 = ValeurUI
+                Case txt_GammaM0.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaM0 = ValeurUI
+                Case txt_GammaM1.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaM1 = ValeurUI
+                Case txt_GammaM2.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaM2 = ValeurUI
+                Case txt_GammaC.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaC = ValeurUI
+                'Case txt_GammaV.Name
+                '    Frm_OptionsCalcul.GammaLoc.GammaV = ValeurUI
+                'Case txt_GammaVs.Name
+                '    Frm_OptionsCalcul.GammaLoc.GammaVs = ValeurUI
+                '    'Case txt_GammaVp.Name
+                '    '    .GammaVp = ValeurUI
+                Case txt_GammaS.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaS = ValeurUI
+                Case txt_GammaP.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaP = ValeurUI
+                Case txt_GammaM_fi.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaM_fi = ValeurUI
+                Case txt_GammaC_fi.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaC_fi = ValeurUI
+                Case txt_GammaV_fi.Name
+                    Frm_OptionsCalcul.GammaLoc.GammaV_fi = ValeurUI
+            End Select
+
+        End If
+
+    End Sub
+
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        Dim lOk As Boolean = True
+        ErrorProvider.SetError(MyTxt, String.Empty)
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+        Select Case MyTxt.Name
+            Case Me.txt_GammaGsup.Name, Me.txt_GammaGinf.Name, Me.txt_GammaQ.Name
+                ValMin = GAMMA_ACTION_INF
+                ValMax = GAMMA_ACTION_SUP
+
+            Case Me.txt_Psi0.Name, Me.txt_Psi1.Name, Me.txt_Psi2.Name
+                ValMin = PSI_COMBINAISON_INF
+                ValMax = PSI_COMBINAISON_SUP
+
+            Case Me.txt_GammaM0.Name, Me.txt_GammaM1.Name, Me.txt_GammaM2.Name, Me.txt_GammaC.Name, Me.txt_GammaV.Name, Me.txt_GammaVs.Name, Me.txt_GammaS.Name, Me.txt_GammaP.Name, Me.txt_GammaM_fi.Name, Me.txt_GammaC_fi.Name, Me.txt_GammaV_fi.Name
+                ValMin = GAMMA_RESISTANCE_INF
+                ValMax = GAMMA_RESISTANCE_SUP
+        End Select
+
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            'ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+    End Function
 
 #End Region
 
