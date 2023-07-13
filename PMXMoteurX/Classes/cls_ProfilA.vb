@@ -1,4 +1,6 @@
-﻿Public Class cls_ProfilA
+﻿Imports System.Security.Policy
+
+Public Class cls_ProfilA
 
 #Region " Attributs "
 
@@ -295,6 +297,176 @@
             Return Me.b_fi * Me.t_fi
         End Get
     End Property
+
+#End Region
+
+#Region " Propriétés plastiques en flexion "
+
+    Public Function ModuleFlexionPlastiqueYY() As Decimal
+        '-------------------------------------------------------------------------------------------------------------------
+        '   13/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul du module plastique du profilé, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        'Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+        Const Fy As Decimal = 235
+        Const GammaM0 As Decimal = 1
+        Const Signe As Decimal = 1
+        Dim zANP, MplRd, Wpl As Decimal
+        Const lValeurRd As Decimal = True
+
+        '--> Initialisation
+
+        Hw = Me.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        MyModele.AddMaille(Me.AireFs, Me.t_fs, -Me.t_fs / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '# Âme
+
+        MyModele.AddMaille(Hw * Me.t_w, Hw, -Me.t_fs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+
+        '# Semelle inférieure
+
+        MyModele.AddMaille(Me.AireFi, Me.t_fi, -Me.ha + Me.t_fi / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        If Me.r_cs > 0 Then
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.r_cs, -Me.t_fs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+
+        End If
+        If Me.r_ci > 0 Then
+
+            '# Congés inférieurs
+
+            MyModele.AddMailleConges(Me.r_ci, -Me.ha + Me.t_fs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+        '--> Recherche de l'axe neutre plastique
+
+        MyModele.RechercheANP(Signe, zANP, lValeurRd)
+
+        '--> Moment plastique
+
+        MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+        '--> Module plastique
+
+        Wpl = MplRd / (Fy * kConvMPaPa)
+
+        Return Wpl
+    End Function
+
+#End Region
+
+#Region " Propriétés élastiques en flexion "
+
+    Public Function ModuleFlexionElastiqueYY()
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul du module élastique de flexion du profilé, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Inertie, zANE, MelRd As Decimal
+        Dim Wel As Decimal
+        Const Fy As Decimal = 235
+
+        '--> Calculs
+
+        Me.ProprietesElastiquesMyy(1, True, 1, zANE, Inertie, melrd)
+
+        Wel = Inertie / Math.Max(Math.Abs(zANE), Math.Abs(-Me.ha - zANE))
+
+        Return Wel
+
+    End Function
+
+    Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   13/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   zANE        [E] :   Position axe neutre élastique
+        '   MelRd       [E] :   Moment élastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        'Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+        Const Fy As Decimal = 235
+
+        '--> Initialisation
+
+        Hw = Me.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        MyModele.AddMaille(Me.AireFs, Me.t_fs, -Me.t_fs / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '# Âme
+
+        MyModele.AddMaille(Hw * Me.t_w, Hw, -Me.t_fs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+
+        '# Semelle inférieure
+
+        MyModele.AddMaille(Me.AireFi, Me.t_fi, -Me.ha + Me.t_fi / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        If Me.r_cs > 0 Then
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.r_cs, -Me.t_fs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+
+        End If
+        If Me.r_ci > 0 Then
+
+            '# Congés inférieurs
+
+            MyModele.AddMailleConges(Me.r_ci, -Me.ha + Me.t_fs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+        '--> Recherche de l'axe neutre élastique
+
+        MyModele.RechercheANE(Signe, zANE)
+
+        '--> Calcul de l'inertie
+
+        InertieY = MyModele.InertieFlexion(Signe, zANE)
+
+        '--> Moment élastique
+
+        'MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    End Sub
 
 #End Region
 

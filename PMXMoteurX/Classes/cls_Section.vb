@@ -117,6 +117,8 @@ Public Class cls_Section
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
         Dim lLamine As Boolean = Me.lLamine
+        Dim LargeurC, EpaisseurC, FdC As Decimal
+        Const nEqEc As Decimal = 1
 
         '--> Initialisation
 
@@ -152,12 +154,56 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
+            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.t_w)
+            EpaisseurC = Me.ProfilA.HauteurAmeHw
+            FdC = Me.enrobage_partiel.Beton.Fck
+
+            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
+
+            'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
+
+            If lLamine Then
+
+                '# Congés supérieurs
+
+                MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+
+                '# Congés supérieurs
+
+                MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+
+            End If
         End If
 
         '# Armatures de l'enrobage
 
         If Me.lEnrobage Then
 
+            Dim zArma, PhiA As Decimal
+            Dim iPos, iBarre As Integer
+            Dim NbBarres As Integer
+            Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
+            Dim ArmaNeq As Decimal = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
+            Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+            Const NBMA As Integer = 2
+
+            For iArma As Integer = 0 To 2
+
+                For iPos = 0 To 2
+
+                    NbBarres = Me.enrobage_partiel.LitArma(iArma).NbBarres(iPos)
+
+                    For iBarre = 1 To NbBarres
+                        zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
+                        PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
+
+                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, Cls_Maille.EnuTypeMaille.Circulaire)
+
+                    Next
+
+                Next
+
+            Next
 
         End If
 
@@ -269,6 +315,7 @@ Public Class cls_Section
             Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
             Dim ArmaNeq As Decimal = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
             Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+            Const NBMA As Integer = 2
 
             For iArma As Integer = 0 To 2
 
@@ -280,7 +327,7 @@ Public Class cls_Section
                         zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
                         PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
 
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DeltaCArma, ArmaNeq, Fsk, 0.85, Gammas.GammaS, 1, Cls_Maille.EnuTypeMaille.Circulaire)
+                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 0.85, Gammas.GammaS, NBMA, Cls_Maille.EnuTypeMaille.Circulaire)
 
                     Next
 
