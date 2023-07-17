@@ -157,9 +157,9 @@ Module Mod_Demarrage
             LogicielOptions.Gamma.GammaM2 = My.Settings.GammaM2
 
             LogicielOptions.Gamma.GammaC = My.Settings.GammaC
-            LogicielOptions.Gamma.GammaV = My.Settings.GammaV
             LogicielOptions.Gamma.GammaVs = My.Settings.GammaVs
-            LogicielOptions.Gamma.GammaVp = My.Settings.GammaVp
+            LogicielOptions.Gamma.GammaVc = My.Settings.GammaVc
+            'LogicielOptions.Gamma.GammaVp = My.Settings.GammaVp
             LogicielOptions.Gamma.lGammaV_unique = My.Settings.lGammaV_unique
             LogicielOptions.Gamma.GammaS = My.Settings.GammaS
             LogicielOptions.Gamma.GammaP = My.Settings.GammaP

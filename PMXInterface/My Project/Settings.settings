@@ -41,9 +41,6 @@
     <Setting Name="GammaC" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1.5</Value>
     </Setting>
-    <Setting Name="GammaV" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">1.25</Value>
-    </Setting>
     <Setting Name="GammaS" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1.15</Value>
     </Setting>
@@ -53,7 +50,7 @@
     <Setting Name="GammaVs" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1.25</Value>
     </Setting>
-    <Setting Name="GammaVp" Type="System.Decimal" Scope="User">
+    <Setting Name="GammaVc" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1.25</Value>
     </Setting>
     <Setting Name="GammaM_fi" Type="System.Decimal" Scope="User">

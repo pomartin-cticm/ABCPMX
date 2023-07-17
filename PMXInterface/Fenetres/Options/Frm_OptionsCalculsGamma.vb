@@ -78,7 +78,7 @@
         ' Me.chk_GammaV_Unique.Checked = .lGammaV_unique
         'Me.txt_GammaV.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaV, formatGAMMA)
         ' Me.txt_GammaVp.Text = Format(.GammaVp, formatGAMMA)
-        Me.txt_GammaVs.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaVs, formatGAMMA)
+        Me.txt_GammaVs.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaVc, formatGAMMA)
         Me.txt_GammaS.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaS, formatGAMMA)
         Me.txt_GammaP.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaP, formatGAMMA)
 
