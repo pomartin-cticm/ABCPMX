@@ -129,6 +129,29 @@
 
     End Function
 
+    ''' <summary>
+    ''' Transforme une liste de short en string
+    ''' </summary>
+    ''' <param name="list">tableau de decimal</param>
+    ''' <returns></returns>
+    Public Function ConvertListShortToString(ByVal list() As Short) As String
+        'GuD - 17/07/23
+
+        Dim text As String = "{"
+
+        For i As Integer = 0 To list.Count - 1
+            text += list(i).ToString
+            If i <> list.Count - 1 Then
+                text += "/"
+            Else
+                text += "}"
+            End If
+        Next
+
+        Return text
+
+    End Function
+
 
     ''' <summary>
     ''' Transforme une liste de string en string
@@ -226,6 +249,38 @@
         'GuD - 26/06/23
 
         Dim list_string(0) As String
+
+        If text.Contains("{") Then 'nouveau fichier
+
+            text = text.Replace("{", "")
+            text = text.Replace("}", "")
+
+            If Not text = "" Then
+                Dim tab_text() As String = text.Split("/")
+                ReDim list_string(tab_text.Length - 1)
+
+                For i As Integer = 0 To tab_text.Length - 1
+                    list_string(i) = TraiteReal(tab_text(i))
+                Next
+            End If
+
+        Else 'ancien fichier
+            list_string(0) = text
+        End If
+
+        Return list_string
+
+    End Function
+
+    ''' <summary>
+    ''' Transforme un string en liste de string
+    ''' </summary>
+    ''' <param name="text">string</param>
+    ''' <returns></returns>
+    Public Function ConvertStringToListShort(ByVal text As String) As Short()
+        'GuD - 26/06/23
+
+        Dim list_string(0) As Short
 
         If text.Contains("{") Then 'nouveau fichier
 

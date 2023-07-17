@@ -99,12 +99,12 @@
     ''' <summary>
     ''' Nombre d'étais disposés par través entre deux appuis consécutifs
     ''' </summary>
-    Public pNbPropping As Integer           'Il faut réserver la lettre p aux private
+    Public NbPropping As Integer           'Il faut réserver la lettre p aux private
 
     ''' <summary>
     ''' Nombre de maintiens disposés sur la travée considérée
     ''' </summary>
-    Public pNbRestrain() As Integer
+    Public NbRestrain() As Integer
 
     ''' <summary>
     ''' Liste des maintiens disposés sur la poutre
@@ -243,7 +243,7 @@
         lTraveeConsoleGauche = False
 
         TypeEtaiement = EnuTypeEtaiement.UnPropped
-        pNbPropping = NBPROPPINGDEFAUT
+        NbPropping = NBPROPPINGDEFAUT
         lEtaisConsoleGauche = False
         lEtaisConsoleDroite = False
 

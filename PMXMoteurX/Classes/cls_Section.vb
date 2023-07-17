@@ -83,7 +83,7 @@ Public Class cls_Section
     ''' <summary>
     ''' Dalle béton de la poutre            ' A SUPPRIMER ?
     ''' </summary>
-    Public Dalle As New Cls_Dalle
+    'Public Dalle As New Cls_Dalle
 
 #End Region
 

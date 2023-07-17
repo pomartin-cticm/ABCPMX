@@ -155,49 +155,51 @@ Public Class Cls_OptionsCalcul
 
 #Region " Ecriture Fichier "
 
+    'GUD --> Déplacé dans la fonction d'enregistrement de la Cls_Poutre 
+
     ''' <summary>
     ''' Ecriture des attributs pour enregistrement dans un fichier 
     ''' </summary>
     ''' <param name="Lines">Lignes d'écriture</param>
-    Public Sub EcrireFile(ByRef Lines As List(Of String))
+    'Public Sub EcrireFile(ByRef Lines As List(Of String))
 
-        'Lines.Add("   CGM0          = " & Gamma_M0)
-        'Lines.Add("   CGC           = " & Gamma_C)
-        'Lines.Add("   CGS           = " & Gamma_S)
-        Lines.Add("   CEta          = " & Eta)
+    '    'Lines.Add("   CGM0          = " & Gamma_M0)
+    '    'Lines.Add("   CGC           = " & Gamma_C)
+    '    'Lines.Add("   CGS           = " & Gamma_S)
+    '    Lines.Add("   CEta          = " & Eta)
 
-        Lines.Add("   CNegFlexion   = " & lCalcul_Flexion_Negative)
-        Lines.Add("   CPosFlexion   = " & lCalcul_Flexion_Positive)
+    '    Lines.Add("   CNegFlexion   = " & lCalcul_Flexion_Negative)
+    '    Lines.Add("   CPosFlexion   = " & lCalcul_Flexion_Positive)
 
-        Lines.Add("   CExplCharges  = " & lChargesExploitation)
-        Lines.Add("   CRetrait      = " & lChargesRetrait)
-        Lines.Add("   CPermCharges  = " & lChargesPermanentes)
+    '    Lines.Add("   CExplCharges  = " & lChargesExploitation)
+    '    Lines.Add("   CRetrait      = " & lChargesRetrait)
+    '    Lines.Add("   CPermCharges  = " & lChargesPermanentes)
 
-        With Prop_Elastique_Enrobage
-            Lines.Add("   PERH          = " & .RH)
-            Lines.Add("   PEH0          = " & .h_0)
-            Lines.Add("   PEType        = " & .type_def_t)
-            Lines.Add("   PEt           = " & .t)
-            Lines.Add("   PERt0         = " & .R_t_0)
-            Lines.Add("   PEPt0         = " & .CP_t_0)
-            Lines.Add("   PEEn_L        = " & .CE_n_L)
-            Lines.Add("   PERn_L        = " & .R_n_L)
-            Lines.Add("   PEPn_L        = " & .CP_n_L)
-        End With
+    '    With Prop_Elastique_Enrobage
+    '        Lines.Add("   PERH          = " & .RH)
+    '        Lines.Add("   PEH0          = " & .h_0)
+    '        Lines.Add("   PEType        = " & .type_def_t)
+    '        Lines.Add("   PEt           = " & .t)
+    '        Lines.Add("   PERt0         = " & .R_t_0)
+    '        Lines.Add("   PEPt0         = " & .CP_t_0)
+    '        Lines.Add("   PEEn_L        = " & .CE_n_L)
+    '        Lines.Add("   PERn_L        = " & .R_n_L)
+    '        Lines.Add("   PEPn_L        = " & .CP_n_L)
+    '    End With
 
-        With Prop_Elastique_Dalle
-            Lines.Add("   PDRH          = " & .RH)
-            Lines.Add("   PDH0          = " & .h_0)
-            Lines.Add("   PDType        = " & .type_def_t)
-            Lines.Add("   PDt           = " & .t)
-            Lines.Add("   PDRt0         = " & .R_t_0)
-            Lines.Add("   PDPt0         = " & .CP_t_0)
-            Lines.Add("   PDEn_L        = " & .CE_n_L)
-            Lines.Add("   PDRn_L        = " & .R_n_L)
-            Lines.Add("   PDPn_L        = " & .CP_n_L)
-        End With
+    '    With Prop_Elastique_Dalle
+    '        Lines.Add("   PDRH          = " & .RH)
+    '        Lines.Add("   PDH0          = " & .h_0)
+    '        Lines.Add("   PDType        = " & .type_def_t)
+    '        Lines.Add("   PDt           = " & .t)
+    '        Lines.Add("   PDRt0         = " & .R_t_0)
+    '        Lines.Add("   PDPt0         = " & .CP_t_0)
+    '        Lines.Add("   PDEn_L        = " & .CE_n_L)
+    '        Lines.Add("   PDRn_L        = " & .R_n_L)
+    '        Lines.Add("   PDPn_L        = " & .CP_n_L)
+    '    End With
 
-    End Sub
+    'End Sub
 
 #End Region
 

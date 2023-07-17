@@ -118,7 +118,7 @@ Public Class Frm_Etaiement
                         Me.chk_EtaisConsoleGauche.Checked = .lEtaisConsoleGauche
                     End If
 
-                    Me.cmb_NbPoint.SelectedItem = .pNbPropping
+                    Me.cmb_NbPoint.SelectedItem = .NbPropping
 
             End Select
 
@@ -172,7 +172,7 @@ Public Class Frm_Etaiement
             If (MyPoutreLoc.TypeEtaiement <> .EnuTypeEtaiement.PointPropped) And (.TypeEtaiement <> MyPoutreLoc.TypeEtaiement) Then
                 lModif = True
                 .TypeEtaiement = MyPoutreLoc.TypeEtaiement
-                .pNbPropping = 0
+                .NbPropping = 0
                 .lEtaisConsoleGauche = False
                 .lEtaisConsoleDroite = False
 
@@ -189,9 +189,9 @@ Public Class Frm_Etaiement
                     .lEtaisConsoleDroite = MyPoutreLoc.lEtaisConsoleDroite
                 End If
 
-                If .pNbPropping <> MyPoutreLoc.pNbPropping Then
+                If .NbPropping <> MyPoutreLoc.NbPropping Then
                     lModif = True
-                    .pNbPropping = MyPoutreLoc.pNbPropping
+                    .NbPropping = MyPoutreLoc.NbPropping
                 End If
             End If
         End With
@@ -274,7 +274,7 @@ Public Class Frm_Etaiement
     End Sub
 
     Private Sub cmb_NbPoint_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbPoint.TextChanged
-        MyPoutreLoc.pNbPropping = cmb_NbPoint.SelectedItem
+        MyPoutreLoc.NbPropping = cmb_NbPoint.SelectedItem
 
         img_Etaiement.Invalidate()
     End Sub

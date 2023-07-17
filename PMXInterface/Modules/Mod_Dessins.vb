@@ -3118,11 +3118,11 @@ Module Mod_Dessins
 
         '--> Représentation des étais intermédiaires
 
-        If lPointProp And MyPoutre.pNbPropping <> 0 Then
+        If lPointProp And MyPoutre.NbPropping <> 0 Then
 
             For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
-                For j As Integer = 1 To MyPoutre.pNbPropping
-                    xo = MyPoutre.xPositionAppui(True, i) + j * MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1)
+                For j As Integer = 1 To MyPoutre.NbPropping
+                    xo = MyPoutre.xPositionAppui(True, i) + j * MyPoutre.LongueurTravee(i) / (MyPoutre.NbPropping + 1)
                     DessineEtais(MyGr, xo, 0.75 * dCarApp, MyParAff)
                 Next
             Next
@@ -3198,14 +3198,14 @@ Module Mod_Dessins
                 MyPen.Color = MyColor
 
                 If lPointProp Then
-                    For j As Integer = 1 To MyPoutre.pNbPropping + 1
+                    For j As Integer = 1 To MyPoutre.NbPropping + 1
 
                         xo = xe
-                        xe += MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1)
+                        xe += MyPoutre.LongueurTravee(i) / (MyPoutre.NbPropping + 1)
 
                         AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                        If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i) / (MyPoutre.pNbPropping + 1), Enu_TypeVariable.Longueur)
+                        If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i) / (MyPoutre.NbPropping + 1), Enu_TypeVariable.Longueur)
                         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                     Next
