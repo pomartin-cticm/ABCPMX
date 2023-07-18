@@ -252,8 +252,8 @@ Public Class cls_Projet
                         Lines.Add("   Ratio_bc       =  " & .Ratio_bc)
                         Lines.Add("   Etrier_Type    =  " & .Etriers_Type)
                         Lines.Add("   Etrier_Phi     =  " & .Etriers_Phi)
-                        Lines.Add("   Etrier_EnrobY  =  " & .Etriers_EnrobageY)
-                        Lines.Add("   Etrier_EnrobZ  =  " & .Etriers_EnrobageZ)
+                        Lines.Add("   Etrier_CY  =  " & .Etriers_EnrobageY)
+                        Lines.Add("   Etrier_CZ  =  " & .Etriers_EnrobageZ)
 
                         '==[ Classe Armature Enrobage Partiel ProfilA ]=================================================================
                         Lines.Add("BLOCK ARMATURE_ENROBAGE_PROFILA")
@@ -434,7 +434,7 @@ Public Class cls_Projet
 
                     '==[ Classe Gamma ]=================================================================
                     With .Gamma
-                        Lines.Add("BLOCK OPT_CALCULs_GAMMA")
+                        Lines.Add("BLOCK OPT_CALCULS_GAMMA")
 
                         Lines.Add("   GammaM0       = " & .GammaM0)
                         Lines.Add("   GammaM1       = " & .GammaM1)
@@ -567,39 +567,101 @@ Public Class cls_Projet
                     ptre_en_cours.Section.ProfilA = profilA_en_cours
 
                 Case "ACIER_PROFILA"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim acier_profilA As Cls_Acier
+                    ReadBlocAcierProfilA(acier_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Section.Acier = acier_profilA
 
                 Case "ENROBAGE_PROFILA"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim enrobage_profilA As Cls_Enrobage_Partiel
+                    ReadBlocEnrobageProfilA(enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Section.enrobage_partiel = enrobage_profilA
 
                 Case "ARMATURE_ENROBAGE_PROFILA"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim armature_enrobage_profilA(2) As Cls_ArmatureEnrobage
+                    ReadBlocArmatureEnrobageProfilA(armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Section.enrobage_partiel.LitArma = armature_enrobage_profilA
 
                 Case "ACIER_ARMATURE_ENROBAGE_PROFILA"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim acier_armature_enrobage_profilA As Cls_AcierArmature
+                    ReadBlocAcierArmatureEnrobageProfilA(acier_armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Section.enrobage_partiel.AcierArmatures = acier_armature_enrobage_profilA
 
                 Case "BETON_ENROBAGE_PROFILA"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim beton_enrobage_profilA As Cls_Beton
+                    ReadBlocBetonEnrobageProfilA(beton_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Section.enrobage_partiel.Beton = beton_enrobage_profilA
 
                 Case "DALLE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim dalle_en_cours As Cls_Dalle
+                    ReadBlocDalle(dalle_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Dalle = dalle_en_cours
 
                 Case "BETON_DALLE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim beton_dalle As Cls_Beton
+                    ReadBlocBetonDalle(beton_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Dalle.beton = beton_dalle
 
                 Case "BAC_DALLE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim bac_en_cours As Cls_Bac
+                    ReadBlocBacDalle(bac_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Dalle.Bac = bac_en_cours
 
                 Case "ARMATURE_DALLE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim armature_dalle As Cls_Armatures_Longi
+                    ReadBlocArmatureDalle(armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Dalle.LitArma.Add(armature_dalle)
 
                 Case "ACIER_ARMATURE_DALLE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim acier_armature_dalle As Cls_AcierArmature
+                    ReadBlocAcierArmatureDalle(acier_armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Dalle.AcierArmatures = acier_armature_dalle
 
                 Case "CONNECTEUR_DALLE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim connecteur_dalle As Cls_Connecteur
+                    ReadBlocConnecteurDalle(connecteur_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Dalle.Connecteur = connecteur_dalle
 
                 Case "OPT_CALCULS"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim opt_calculs_en_cours As Cls_OptionsCalcul
+                    ReadBlocOptionsCalculs(opt_calculs_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Param = opt_calculs_en_cours
+
 
                 Case "OPT_CALCULS_PROP_ELAST_ENROBAGE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim prop_elast_enrob_opt_calculs As Cls_Prop_Elastique
+                    ReadBlocPropElastEnrobageOptionsCalculs(prop_elast_enrob_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Param.Prop_Elastique_Enrobage = prop_elast_enrob_opt_calculs
 
                 Case "OPT_CALCULS_PROP_ELAST_DALLE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim prop_elast_dalle_opt_calculs As Cls_Prop_Elastique
+                    ReadBlocPropElastDalleOptionsCalculs(prop_elast_dalle_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Param.Prop_Elastique_Dalle = prop_elast_dalle_opt_calculs
 
                 Case "OPT_CALCULS_GAMMA"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim gamma_opt_calculs As Cls_Gamma
+                    ReadBlocGammaOptionsCalculs(gamma_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Param.Gamma = gamma_opt_calculs
 
                 Case "OPT_CALCULS_HIVOSS"
-
-
-
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim hivoss_opt_calculs As cls_HivossParam
+                    ReadBlocHivossOptionsCalculs(hivoss_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Param.HivossParam = hivoss_opt_calculs
 
 
                     'Case "IDENTIFICATION"
@@ -723,7 +785,7 @@ Public Class cls_Projet
                         Case "LDEFAUTDAL" : .lDefautDalle = Mots(nbMots)
                         Case "LDONNEESSA" : .lDonneesSauvees = Mots(nbMots)
                         Case "LNOUVPOUTR" : .NouvellePoutre = Mots(nbMots)
-
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
             Next
@@ -759,6 +821,7 @@ Public Class cls_Projet
                         Case "XLOC" : .x_Loc = TraiteReal(Mots(nbMots))
                         Case "LMAINTSEMS" : .lMaintienSemelleSup = Mots(nbMots)
                         Case "LMAINTSEMI" : .lMaintienSemelleInf = Mots(nbMots)
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
             Next
@@ -794,6 +857,7 @@ Public Class cls_Projet
                         Case "LDALLEBETO" : .lDalleBeton = Mots(nbMots)
                         Case "LDATABASE" : .lDatabase = Mots(nbMots)
                         Case "TYPESECTIO" : .typeSection = Mots(nbMots)
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
             Next
@@ -843,7 +907,7 @@ Public Class cls_Projet
                         Case "PLATT" : .Plat_t = TraiteReal(Mots(nbMots))
                         Case "INDDELIV" : .IndDeliv = ConvertStringToListShort(Mots(nbMots))
                         Case "INDSTAND" : .IndStandart = ConvertStringToListShort(Mots(nbMots))
-
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
             Next
@@ -852,6 +916,95 @@ Public Class cls_Projet
 
     End Sub
 
+    ''' <summary>
+    ''' Lecture du bloc Acier_ProfilA
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocAcierProfilA(acier_profilA As Cls_Acier, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+        '--> Traitement
+        With acier_profilA
+            For i = Index0 To IndexFin
+                DecomposeLine(Lignes(i), Mots, nbMots)
+
+                If nbMots > 0 Then
+                    MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+                    Select Case MotCle
+                        Case "NUANCE" : .Nuance = Mots(nbMots)
+                        Case "QUALITE" : .Qualite = Mots(nbMots)
+                        Case "REDUCTION" : .Reduction = Mots(nbMots)
+                        Case "NORMEPRODU" : .NormeProduit = Mots(nbMots)
+                        Case "EPMAX" : .EpMax = TraiteReal(Mots(nbMots))
+                        Case "IBASE" : .iBase = TraiteReal(Mots(nbMots))
+                        Case "ITABSTAND" : .iTabStandart = TraiteReal(Mots(nbMots))
+                        Case "ISTANDARD" : .iStandart = TraiteReal(Mots(nbMots))
+                        Case "F_Y_FS" : .f_y.fs = TraiteReal(Mots(nbMots))
+                        Case "F_Y_W" : .f_y.w = TraiteReal(Mots(nbMots))
+                        Case "F_Y_FI" : .f_y.fi = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End If
+            Next
+
+        End With
+
+    End Sub
+
+
+    ''' <summary>
+    ''' Lecture du bloc Enrobage_ProfilA
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocEnrobageProfilA(enrobage_profilA As Cls_Enrobage_Partiel, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+        '--> Traitement
+        With enrobage_profilA
+            For i = Index0 To IndexFin
+                DecomposeLine(Lignes(i), Mots, nbMots)
+
+                If nbMots > 0 Then
+                    MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+                    Select Case MotCle
+                        Case "LARMACONST" : .lArmaConst = Mots(nbMots)
+                        Case "CONSTPHI" : .ConstPhi = TraiteReal(Mots(nbMots))
+                        Case "RATIOBC" : .Ratio_bc = TraiteReal(Mots(nbMots))
+                        Case "ETRIER_TYP" : .Etriers_Type = Mots(nbMots)
+                        Case "ETRIER_PHI" : .Etriers_Phi = TraiteReal(Mots(nbMots))
+                        Case "ETRIER_CY" : .Etriers_EnrobageY = TraiteReal(Mots(nbMots))
+                        Case "ETRIER_CZ" : .Etriers_EnrobageZ = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End If
+            Next
+
+        End With
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Enrobage_ProfilA
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
     Private Sub ReadBloc_SteelGrade(ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer,
                                     ByRef nuances As List(Of String), ByRef f_y As List(Of Integer))
         '==> Lecture du fichier pour initialiser les attributs
@@ -894,6 +1047,616 @@ Public Class cls_Projet
 
     End Sub
 
+    ''' <summary>
+    ''' Lecture du bloc Armature_Enrobage_ProfilA
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocArmatureEnrobageProfilA(armature_enrobage_profilA() As Cls_ArmatureEnrobage, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+        Dim ind_lit As Integer 'variable locale
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+                If MotCle = "INDLIT" Then
+                    ind_lit = TraiteReal(Mots(nbMots))
+                Else
+                    With armature_enrobage_profilA(ind_lit)
+                        Select Case MotCle
+                            Case "PHIEXT" : .PhiExt = TraiteReal(Mots(nbMots))
+                            Case "NBEXT" : .NbExt = TraiteReal(Mots(nbMots))
+                            Case "PHIMIL" : .PhiMil = TraiteReal(Mots(nbMots))
+                            Case "NBMIL" : .NbMil = TraiteReal(Mots(nbMots))
+                            Case "PHIINT" : .PhiInt = TraiteReal(Mots(nbMots))
+                            Case "NBINT" : .NbInt = TraiteReal(Mots(nbMots))
+                            Case "ZPOSRATIO" : .zPosRatio = TraiteReal(Mots(nbMots))
+                            Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                        End Select
+                    End With
+                End If
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Acier_Armature_Enrobage_ProfilA
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocAcierArmatureEnrobageProfilA(acier_armature_enrobage_profilA As Cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+                With acier_armature_enrobage_profilA
+                    Select Case MotCle
+                        Case "CLASSE" : .Classe = Mots(nbMots)
+                        Case "FSK" : .FsK = TraiteReal(Mots(nbMots))
+                        Case "ES" : .Es = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+
+    ''' <summary>
+    ''' Lecture du bloc Beton_Enrobage_ProfilA
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocBetonEnrobageProfilA(beton_enrobage_profilA As Cls_Beton, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With beton_enrobage_profilA
+                    Select Case MotCle
+                        Case "TYPE" : .Type = Mots(nbMots)
+                        Case "CLASSE" : .Classe = Mots(nbMots)
+                        Case "FCK" : .Fck = TraiteReal(Mots(nbMots))
+                        Case "FCM" : .Fcm = TraiteReal(Mots(nbMots))
+                        Case "FCTM" : .Fctm = TraiteReal(Mots(nbMots))
+                        Case "ECM" : .Ecm = TraiteReal(Mots(nbMots))
+                        Case "LCRACKLIMI" : .lCrackingLimitation = Mots(nbMots)
+                        Case "WK_MAX" : .wk_max = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Dalle
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocDalle(dalle_en_cours As Cls_Dalle, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With dalle_en_cours
+                    Select Case MotCle
+                        Case "TYPE" : .type = Mots(nbMots)
+                        Case "TD" : .t_d = TraiteReal(Mots(nbMots))
+                        Case "TH" : .t_h = TraiteReal(Mots(nbMots))
+                        Case "BEFF" : .Beff = TraiteReal(Mots(nbMots))
+                        Case "LARMINF" : .lArma_Inf = Mots(nbMots)
+                        Case "LARMSUP" : .lArma_Sup = Mots(nbMots)
+                        Case "PREDALLE_E" : .preDalle_ep = TraiteReal(Mots(nbMots))
+                        Case "PREDALLE_T" : .preDalle_tjoint = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Beton_Dalle
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocBetonDalle(beton_dalle As Cls_Beton, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With beton_dalle
+                    Select Case MotCle
+                        Case "TYPE" : .Type = Mots(nbMots)
+                        Case "CLASSE" : .Classe = Mots(nbMots)
+                        Case "FCK" : .Fck = TraiteReal(Mots(nbMots))
+                        Case "FCM" : .Fcm = TraiteReal(Mots(nbMots))
+                        Case "FCTM" : .Fctm = TraiteReal(Mots(nbMots))
+                        Case "ECM" : .Ecm = TraiteReal(Mots(nbMots))
+                        Case "LCRACKLIMI" : .lCrackingLimitation = Mots(nbMots)
+                        Case "WK_MAX" : .wk_max = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Bac_Dalle
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocBacDalle(bac_dalle As Cls_Bac, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With bac_dalle
+                    Select Case MotCle
+                        Case "ETIQUETTE" : .Etiquette = Mots(nbMots)
+                        Case "PRODUCTEUR" : .Producteur = Mots(nbMots)
+                        Case "LDATABASE" : .lDatabase = Mots(nbMots)
+                        Case "H_RS" : .h_rs = TraiteReal(Mots(nbMots))
+                        Case "H_P" : .h_p = TraiteReal(Mots(nbMots))
+                        Case "B_B" : .b_b = TraiteReal(Mots(nbMots))
+                        Case "B_T" : .b_t = TraiteReal(Mots(nbMots))
+                        Case "E_P" : .e_p = TraiteReal(Mots(nbMots))
+                        Case "TP" : .tp = TraiteReal(Mots(nbMots))
+                        Case "ORIENTATIO" : .orientation = Mots(nbMots)
+                        Case "MSURF" : .msurf = TraiteReal(Mots(nbMots))
+                        Case "FYP" : .fyp = TraiteReal(Mots(nbMots))
+                        Case "LARGEURMOD" : .LargeurModule = TraiteReal(Mots(nbMots))
+                        Case "IEFF" : .Ieff = TraiteReal(Mots(nbMots))
+                        Case "LPREPERCE" : .lPreperce = Mots(nbMots)
+                        Case "APPUIT" : .AppuiT = Mots(nbMots)
+                        Case "APPUIL" : .AppuiL = Mots(nbMots)
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Armature_Dalle
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocArmatureDalle(armature_dalle As Cls_Armatures_Longi, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With armature_dalle
+                    Select Case MotCle
+                        Case "ESPBAR" : .EspBar = TraiteReal(Mots(nbMots))
+                        Case "PHIS" : .PhiS = TraiteReal(Mots(nbMots))
+                        Case "Z_S" : .z_s = TraiteReal(Mots(nbMots))
+                        Case "N_S" : .n_s = TraiteReal(Mots(nbMots))
+                        Case "c_S" : .c_s = TraiteReal(Mots(nbMots))
+                        Case "LACTIVE" : .lActive = Mots(nbMots)
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Acier_Armature_Dalle
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocAcierArmatureDalle(acier_armature_dalle As Cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With acier_armature_dalle
+                    Select Case MotCle
+                        Case "CLASSE" : .Classe = Mots(nbMots)
+                        Case "FSK" : .FsK = TraiteReal(Mots(nbMots))
+                        Case "ES" : .Es = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+
+    ''' <summary>
+    ''' Lecture du bloc Connecteur_Dalle
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocConnecteurDalle(connecteur_dalle As Cls_Connecteur, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With connecteur_dalle
+                    Select Case MotCle
+                        Case "HSC" : .hsc = TraiteReal(Mots(nbMots))
+                        Case "D" : .d = TraiteReal(Mots(nbMots))
+                        Case "FU" : .Fu = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Opt_Calculs
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocOptionsCalculs(opt_calculs_en_cours As Cls_OptionsCalcul, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With opt_calculs_en_cours
+                    Select Case MotCle
+                        Case "EARMA" : .ArmaYoung = TraiteReal(Mots(nbMots))
+                        Case "LARMACOMPR" : .lArmaComprimee = Mots(nbMots)
+                        Case "LRENFORMIS" : .lRenformis = Mots(nbMots)
+                        Case "ETA" : .Eta = TraiteReal(Mots(nbMots))
+                        Case "LINTERMV" : .lInterActionMV = Mots(nbMots)
+                        Case "VED" : .VEd = TraiteReal(Mots(nbMots))
+                        Case "LPOSFLEXIO" : .lCalcul_Flexion_Positive = Mots(nbMots)
+                        Case "LNEGFLEXIO" : .lCalcul_Flexion_Negative = Mots(nbMots)
+                        Case "LPERMCHARG" : .lChargesPermanentes = Mots(nbMots)
+                        Case "LRETRAIT" : .lChargesRetrait = Mots(nbMots)
+                        Case "LEXPLCHARG" : .lChargesRetrait = Mots(nbMots)
+                        Case "LCHARGESCU" : .lChargesCustom = Mots(nbMots)
+                        Case "NEQCUSTOM" : .NeqCustom = TraiteReal(Mots(nbMots))
+                        Case "RH" : .RH = TraiteReal(Mots(nbMots))
+                        Case "T0PERMANEN" : .t0Permanentes = ConvertStringToList(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Prop_Elast_Enrobage_Opt_Calculs
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocPropElastEnrobageOptionsCalculs(prop_elast_enrobage_opt_calculs As Cls_Prop_Elastique, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With prop_elast_enrobage_opt_calculs
+                    Select Case MotCle
+                        Case "PEEN_L" : .CE_n_L = TraiteReal(Mots(nbMots))
+                        Case "PERH" : .RH = TraiteReal(Mots(nbMots))
+                        Case "PETYPE" : .type_def_t = Mots(nbMots)
+                        Case "PET" : .t = TraiteReal(Mots(nbMots))
+                        Case "PEH0" : .h_0 = TraiteReal(Mots(nbMots))
+                        Case "PERT0" : .R_t_0 = TraiteReal(Mots(nbMots))
+                        Case "PERN_L" : .R_n_L = TraiteReal(Mots(nbMots))
+                        Case "PEPT0" : .CP_t_0 = TraiteReal(Mots(nbMots))
+                        Case "PEPN_L" : .CP_n_L = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Prop_Elast_Dalle_Opt_Calculs
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocPropElastDalleOptionsCalculs(prop_elast_dalle_opt_calculs As Cls_Prop_Elastique, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With prop_elast_dalle_opt_calculs
+                    Select Case MotCle
+                        Case "PDEN_L" : .CE_n_L = TraiteReal(Mots(nbMots))
+                        Case "PDRH" : .RH = TraiteReal(Mots(nbMots))
+                        Case "PDTYPE" : .type_def_t = Mots(nbMots)
+                        Case "PDT" : .t = TraiteReal(Mots(nbMots))
+                        Case "PDH0" : .h_0 = TraiteReal(Mots(nbMots))
+                        Case "PDRT0" : .R_t_0 = TraiteReal(Mots(nbMots))
+                        Case "PDRN_L" : .R_n_L = TraiteReal(Mots(nbMots))
+                        Case "PDPT0" : .CP_t_0 = TraiteReal(Mots(nbMots))
+                        Case "PDPN_L" : .CP_n_L = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Opt_Calculs_Gamma
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocGammaOptionsCalculs(gamma_opt_calculs As Cls_Gamma, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With gamma_opt_calculs
+                    Select Case MotCle
+                        Case "GAMMAM0" : .GammaM0 = TraiteReal(Mots(nbMots))
+                        Case "GAMMAM1" : .GammaM1 = TraiteReal(Mots(nbMots))
+                        Case "GAMMAM2" : .GammaM2 = TraiteReal(Mots(nbMots))
+                        Case "GAMMAC" : .GammaC = TraiteReal(Mots(nbMots))
+                        Case "GAMMAVS" : .GammaVs = TraiteReal(Mots(nbMots))
+                        Case "GAMMAVC" : .GammaVc = TraiteReal(Mots(nbMots))
+                        Case "LGAMMAVUNI" : .lGammaV_unique = Mots(nbMots)
+                        Case "GAMMAS" : .GammaS = TraiteReal(Mots(nbMots))
+                        Case "GAMMAP" : .GammaP = TraiteReal(Mots(nbMots))
+                        Case "GAMMAM_FI" : .GammaM_fi = TraiteReal(Mots(nbMots))
+                        Case "GAMMAC_FI" : .GammaC_fi = TraiteReal(Mots(nbMots))
+                        Case "GAMMAV_FI" : .GammaV_fi = TraiteReal(Mots(nbMots))
+                        Case "GAMMAG_SUP" : .GammaG_sup = TraiteReal(Mots(nbMots))
+                        Case "GAMMAG_INF" : .GammaG_inf = TraiteReal(Mots(nbMots))
+                        Case "GAMMAQ" : .GammaQ = TraiteReal(Mots(nbMots))
+                        Case "PSI0_Q1" : .Psi0_Q1 = TraiteReal(Mots(nbMots))
+                        Case "PSI1_Q1" : .Psi1_Q1 = TraiteReal(Mots(nbMots))
+                        Case "PSI2_Q1" : .Psi2_Q1 = TraiteReal(Mots(nbMots))
+                        Case "PSI0_Q2" : .Psi0_Q2 = TraiteReal(Mots(nbMots))
+                        Case "PSI1_Q2" : .Psi1_Q2 = TraiteReal(Mots(nbMots))
+                        Case "PSI2_Q2" : .Psi2_Q2 = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Opt_Calculs_Gamma
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocHivossOptionsCalculs(hivoss_opt_calculs As cls_HivossParam, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With hivoss_opt_calculs
+                    Select Case MotCle
+                        Case "LHIVOSSMET" : .lHivossMethod = Mots(nbMots)
+                        Case "RATIOQ" : .ratioQ = TraiteReal(Mots(nbMots))
+                        Case "CHOIXQ" : .choixQ = Mots(nbMots)
+                        Case "UTILISATIO" : .UtilisationPlancher = Mots(nbMots)
+                        Case "MOBILIER" : .Mobilier = Mots(nbMots)
+                        Case "LFAUXPLAFO" : .lFauxPlafond = Mots(nbMots)
+                        Case "AMORTD1" : .AmortiStructure_D1 = Mots(nbMots)
+                        Case "AMORTD2" : .AmortiMobilier_D2 = Mots(nbMots)
+                        Case "AMORTD3" : .AmortiFinition_D3 = Mots(nbMots)
+                        Case "AMORTDTOT" : .AmortiTotal_Dtot = Mots(nbMots)
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+
 #End Region
+
+
+
 
 End Class
