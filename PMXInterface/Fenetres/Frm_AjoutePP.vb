@@ -10,14 +10,35 @@ Public Class Frm_AjoutePP
     Dim strProjet, strPoutre As String
     Dim indProjetN, indPoutreN As Integer
 
-    Dim MySectionAcier As New cls_Section
-    Dim MySectionAcierEnrobe As New cls_Section
-    Dim MySectionMixte As New cls_Section
-    Dim MySectionMixteEnrobe As New cls_Section
-    Dim MySectionSFB As New cls_Section
-    Dim MySectionSAB As New cls_Section
-    Dim MySectionSFBmixte As New cls_Section
-    Dim MySectionSABmixte As New cls_Section
+    'MODIF GUD car Dalle n'est plus dans la Cls_Section
+
+    Dim MyPoutreAcier As New cls_Poutre
+    Dim MyPoutreAcierEnrobe As New cls_Poutre
+    Dim MyPoutreMixte As New cls_Poutre
+    Dim MyPoutreMixteEnrobe As New cls_Poutre
+    Dim MyPoutreSFB As New cls_Poutre
+    Dim MyPoutreSAB As New cls_Poutre
+    Dim MyPoutreSFBmixte As New cls_Poutre
+    Dim MyPoutreSABmixte As New cls_Poutre
+
+    Dim MySectionAcier As cls_Section = MyPoutreAcier.Section
+    Dim MySectionAcierEnrobe As cls_Section = MyPoutreAcierEnrobe.Section
+    Dim MySectionMixte As cls_Section = MyPoutreMixte.Section
+    Dim MySectionMixteEnrobe As cls_Section = MyPoutreMixteEnrobe.Section
+    Dim MySectionSFB As cls_Section = MyPoutreSFB.Section
+    Dim MySectionSAB As cls_Section = MyPoutreSAB.Section
+    Dim MySectionSFBmixte As cls_Section = MyPoutreSFBmixte.Section
+    Dim MySectionSABmixte As cls_Section = MyPoutreSABmixte.Section
+
+
+    'Dim MySectionAcier As New cls_Section
+    'Dim MySectionAcierEnrobe As New cls_Section
+    'Dim MySectionMixte As New cls_Section
+    'Dim MySectionMixteEnrobe As New cls_Section
+    'Dim MySectionSFB As New cls_Section
+    'Dim MySectionSAB As New cls_Section
+    'Dim MySectionSFBmixte As New cls_Section
+    'Dim MySectionSABmixte As New cls_Section
 
     'Dim CouleurAcierNormal As Color = Color.DarkSlateBlue
     'Dim CouleurAcierSelect As Color = Color.DarkOrange
@@ -171,7 +192,8 @@ Public Class Frm_AjoutePP
         MySectionMixte.ProfilA.r_cs = 0.03
         MySectionMixte.ProfilA.r_ci = 0.03
 
-        MySectionMixte.Dalle.Beff = 1
+        MyPoutreMixte.Dalle.Beff = 1
+        'MySectionMixte.Dalle.Beff = 1
 
         '--> Définition de la section mixte enrobée
         MySectionMixteEnrobe.typeSection = cls_Section.Enum_TypeSection.MixteEnrobage
@@ -185,7 +207,8 @@ Public Class Frm_AjoutePP
         MySectionMixteEnrobe.enrobage_partiel.LitsArmaOLD(2).nbArma = 1
         MySectionMixteEnrobe.enrobage_partiel.LitsArmaOLD(2).Phi = 0.025
 
-        MySectionMixteEnrobe.Dalle.Beff = 1
+        MyPoutreMixteEnrobe.Dalle.Beff = 1
+        'MySectionMixteEnrobe.Dalle.Beff = 1
 
         '--> Définition de la section SFB non mixte
         MySectionSFB.typeSection = cls_Section.Enum_TypeSection.SFB
@@ -215,8 +238,10 @@ Public Class Frm_AjoutePP
         MySectionSFBmixte.ProfilA.Plat_t = 0.03
         MySectionSFBmixte.ProfilA.Plat_b = 0.45
 
-        MySectionSFBmixte.Dalle.t_d = 0.05
-        MySectionSFBmixte.Dalle.Beff = 0.75
+        MyPoutreSFBmixte.Dalle.t_d = 0.05
+        'MySectionSFBmixte.Dalle.t_d = 0.05
+        MyPoutreSFBmixte.Dalle.Beff = 0.75
+        'MySectionSFBmixte.Dalle.Beff = 0.75
 
         '--> Définition de la section SAB mixte
         MySectionSABmixte.typeSection = cls_Section.Enum_TypeSection.SABmixte
@@ -227,8 +252,10 @@ Public Class Frm_AjoutePP
         MySectionSABmixte.ProfilA.r_cs = 0.03
         MySectionSABmixte.ProfilA.r_ci = 0.03
 
-        MySectionSABmixte.Dalle.t_d = 0.05
-        MySectionSABmixte.Dalle.Beff = 0.75
+        MyPoutreSABmixte.Dalle.t_d = 0.05
+        'MySectionSABmixte.Dalle.t_d = 0.05
+        MyPoutreSABmixte.Dalle.Beff = 0.75
+        'MySectionSABmixte.Dalle.Beff = 0.75
     End Sub
 
 
@@ -252,38 +279,73 @@ Public Class Frm_AjoutePP
 
         Select Case sender.name
             Case Me.chk_SectionAcier.Name
-                DessinFrmTypeSection(e.Graphics, MySectionAcier, MySectionAcier.Dalle, Me.chk_SectionAcier.ClientRectangle.Width, Me.chk_SectionAcier.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionAcier, MyPoutreAcier.Dalle, Me.chk_SectionAcier.ClientRectangle.Width, Me.chk_SectionAcier.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.Acier)
 
             Case Me.chk_SectionAcierEnrobe.Name
-                DessinFrmTypeSection(e.Graphics, MySectionAcierEnrobe, MySectionAcierEnrobe.Dalle, Me.chk_SectionAcierEnrobe.ClientRectangle.Width, Me.chk_SectionAcierEnrobe.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionAcierEnrobe, MyPoutreAcierEnrobe.Dalle, Me.chk_SectionAcierEnrobe.ClientRectangle.Width, Me.chk_SectionAcierEnrobe.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierEnrobage)
 
             Case Me.chk_SectionMixte.Name
-                DessinFrmTypeSection(e.Graphics, MySectionMixte, MySectionMixte.Dalle, Me.chk_SectionMixte.ClientRectangle.Width, Me.chk_SectionMixte.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionMixte, MyPoutreMixte.Dalle, Me.chk_SectionMixte.ClientRectangle.Width, Me.chk_SectionMixte.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.Mixte)
 
             Case Me.chk_SectionMixteEnrobe.Name
-                DessinFrmTypeSection(e.Graphics, MySectionMixteEnrobe, MySectionMixteEnrobe.Dalle, Me.chk_SectionMixteEnrobe.ClientRectangle.Width, Me.chk_SectionMixteEnrobe.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionMixteEnrobe, MyPoutreMixteEnrobe.Dalle, Me.chk_SectionMixteEnrobe.ClientRectangle.Width, Me.chk_SectionMixteEnrobe.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage)
 
             Case Me.chk_SFBAcier.Name
-                DessinFrmTypeSection(e.Graphics, MySectionSFB, MySectionSFB.Dalle, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionSFB, MyPoutreSFB.Dalle, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB)
 
             Case Me.chk_SABAcier.Name
-                DessinFrmTypeSection(e.Graphics, MySectionSAB, MySectionSAB.Dalle, Me.chk_SABAcier.ClientRectangle.Width, Me.chk_SABAcier.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionSAB, MyPoutreSAB.Dalle, Me.chk_SABAcier.ClientRectangle.Width, Me.chk_SABAcier.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SAB)
 
             Case Me.chk_SFBMixte.Name
-                DessinFrmTypeSection(e.Graphics, MySectionSFBmixte, MySectionSFBmixte.Dalle, Me.chk_SFBMixte.ClientRectangle.Width, Me.chk_SFBMixte.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionSFBmixte, MyPoutreSFBmixte.Dalle, Me.chk_SFBMixte.ClientRectangle.Width, Me.chk_SFBMixte.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFBmixte)
 
             Case Me.chk_SABMixte.Name
-                DessinFrmTypeSection(e.Graphics, MySectionSABmixte, MySectionSABmixte.Dalle, Me.chk_SABMixte.ClientRectangle.Width, Me.chk_SABMixte.Height,
+                DessinFrmTypeSection(e.Graphics, MySectionSABmixte, MyPoutreSABmixte.Dalle, Me.chk_SABMixte.ClientRectangle.Width, Me.chk_SABMixte.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SABmixte)
 
         End Select
+
+        'Select Case sender.name
+        '    Case Me.chk_SectionAcier.Name
+        '        DessinFrmTypeSection(e.Graphics, MySectionAcier, MySectionAcier.Dalle, Me.chk_SectionAcier.ClientRectangle.Width, Me.chk_SectionAcier.Height,
+        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.Acier)
+
+        '    Case Me.chk_SectionAcierEnrobe.Name
+        '        DessinFrmTypeSection(e.Graphics, MySectionAcierEnrobe, MySectionAcierEnrobe.Dalle, Me.chk_SectionAcierEnrobe.ClientRectangle.Width, Me.chk_SectionAcierEnrobe.Height,
+        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierEnrobage)
+
+        '    Case Me.chk_SectionMixte.Name
+        '        DessinFrmTypeSection(e.Graphics, MySectionMixte, MySectionMixte.Dalle, Me.chk_SectionMixte.ClientRectangle.Width, Me.chk_SectionMixte.Height,
+        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.Mixte)
+
+        '    Case Me.chk_SectionMixteEnrobe.Name
+        '        DessinFrmTypeSection(e.Graphics, MySectionMixteEnrobe, MySectionMixteEnrobe.Dalle, Me.chk_SectionMixteEnrobe.ClientRectangle.Width, Me.chk_SectionMixteEnrobe.Height,
+        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage)
+
+        '    Case Me.chk_SFBAcier.Name
+        '        DessinFrmTypeSection(e.Graphics, MySectionSFB, MySectionSFB.Dalle, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
+        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB)
+
+        '    Case Me.chk_SABAcier.Name
+        '        DessinFrmTypeSection(e.Graphics, MySectionSAB, MySectionSAB.Dalle, Me.chk_SABAcier.ClientRectangle.Width, Me.chk_SABAcier.Height,
+        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SAB)
+
+        '    Case Me.chk_SFBMixte.Name
+        '        DessinFrmTypeSection(e.Graphics, MySectionSFBmixte, MySectionSFBmixte.Dalle, Me.chk_SFBMixte.ClientRectangle.Width, Me.chk_SFBMixte.Height,
+        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFBmixte)
+
+        '    Case Me.chk_SABMixte.Name
+        '        DessinFrmTypeSection(e.Graphics, MySectionSABmixte, MySectionSABmixte.Dalle, Me.chk_SABMixte.ClientRectangle.Width, Me.chk_SABMixte.Height,
+        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SABmixte)
+
+        'End Select
 
     End Sub
 
