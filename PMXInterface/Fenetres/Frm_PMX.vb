@@ -318,6 +318,13 @@ Public Class Frm_PMX
 
                 End If
 
+            Case EnuFenetres.Connexion
+                If LogicielOptions.lFenetres Then
+                    Frm_Connection.ShowDialog()
+                Else
+
+                End If
+
             Case EnuFenetres.Maintiens
                 If LogicielOptions.lFenetres Then
                     Frm_Maintiens.ShowDialog()

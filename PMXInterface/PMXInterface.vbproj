@@ -92,6 +92,12 @@
     <Compile Include="Fenetres\Filles\Frm_Basic.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Connection.Designer.vb">
+      <DependentUpon>Frm_Connection.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Connection.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Construction.Designer.vb">
       <DependentUpon>Frm_Construction.vb</DependentUpon>
     </Compile>
@@ -245,6 +251,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Basic.resx">
       <DependentUpon>Frm_Basic.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Connection.resx">
+      <DependentUpon>Frm_Connection.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Construction.resx">
       <DependentUpon>Frm_Construction.vb</DependentUpon>
