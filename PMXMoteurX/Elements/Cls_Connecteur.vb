@@ -4,6 +4,11 @@ Public Class Cls_Connecteur
 #Region " Attributs "
 
     ''' <summary>
+    ''' Nom du goujon
+    ''' </summary>
+    Public nom As String
+
+    ''' <summary>
     ''' Hauteur nominale
     ''' </summary>
     Public hsc As Decimal
@@ -14,9 +19,22 @@ Public Class Cls_Connecteur
     Public d As Decimal
 
     ''' <summary>
+    ''' Limite d'élasticité
+    ''' </summary>
+    Public Fy As Decimal
+
+    ''' <summary>
     ''' Résistance ultime à la traction
     ''' </summary>
     Public Fu As Decimal
+
+    Public ReadOnly Property IndiceDataBase As Integer
+        Get
+            For i As Integer = 0 To goujons_database.Length - 1
+                If nom = goujons_database(i).Item1 Then Return i
+            Next
+        End Get
+    End Property
 
 #End Region
 
@@ -24,11 +42,40 @@ Public Class Cls_Connecteur
 
     Public Sub New()
 
-        Me.d = 0.019
-        Me.hsc = 0.1
-        Me.Fu = 450
+        Me.nom = Mod_Declarations.goujons_database(0).Item1
+        Caracteristiques_Goujons()
 
     End Sub
+
+#End Region
+
+#Region "Outils DataBase"
+    ''' <summary>
+    ''' Fonction qui renvoi la liste des noms des goujons disponibles dans la DataBase du Mod_Declaration (utile pour le Frm_Connexion)
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function Get_ListName_GoujonDatabase() As String()
+        Dim listName As String()
+        ReDim listName(goujons_database.Length - 1)
+
+        For i As Integer = 0 To goujons_database.Length - 1
+            listName(i) = goujons_database(i).Item1
+        Next
+
+        Return listName
+
+    End Function
+
+    Public Sub Caracteristiques_Goujons()
+        Dim ind_en_cours As Integer = IndiceDataBase
+
+        Me.d = goujons_database(ind_en_cours).Item2
+        Me.hsc = goujons_database(ind_en_cours).Item3
+        Me.Fy = goujons_database(ind_en_cours).Item3
+        Me.Fu = goujons_database(ind_en_cours).Item4
+
+    End Sub
+
 
 #End Region
 

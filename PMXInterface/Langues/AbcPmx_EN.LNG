@@ -36,6 +36,29 @@ NAVIGATION				= Navigation
 ZOOM					= Zoom
 SAVEAS					= Save As
 
+#FRM_CONNECTION
+TITLE					= Definition of the connection
+OK						= Ok
+CANCEL					= Cancel
+CONNECTION				= Connection
+CONNECTORS				= Connectors
+DIAMETER				= Diameter
+DISPOSITION_LON_BAC_TR	= Disposition every
+DISPOSITION_LON_NO_BAC	= Longitudinal spacing
+LEFTCANT				= Left cantilever span
+MAINSPAN				= Main span
+RIGHTCANT				= Right cantilever span
+RIB						= Rib
+RIBS					= Ribs
+ROW_NUMBER				= Number of rows
+SPAN					= Span
+STUDS					= Studs
+WIDTH					= Width
+ADD						= Add
+DELETE					= Delete
+
+
+
 #FRM_ENCASEMENT
 CANCEL					= Cancel 
 CLASS					= Class

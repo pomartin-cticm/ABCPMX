@@ -157,6 +157,75 @@
 
 #End Region
 
+#Region "Attributs pour la connection"
+
+    ''' <summary>
+    ''' Indique si l'arrangement des goujons se fait automatiquement (True) ou non (False)
+    ''' </summary>
+    Public lAutomaticDesign As Boolean
+
+    ''' <summary>
+    ''' Indique si l'arrangement tient compte de la présence d'un bac transversal
+    ''' </summary>
+    Public ReadOnly Property LBacTransv As Boolean
+        Get
+            Return Me.Dalle.type = Me.Dalle.Enum_TypeDalle.Mixte
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Indique l'espacement entre deux ondes consécutives dans le cas d'un bac transversal
+    ''' </summary>
+    Public ReadOnly Property Esp_longi_bac As Decimal
+        Get
+            Return Me.Dalle.Bac.e_p
+        End Get
+    End Property
+
+    'Espacement = espacement longi entre les goujons 
+    'Espacement_Bac_Trans = nombre d'ondes entre deux goujons 
+    'nr = nombre de goujons disposés transversalement
+
+    ''' <summary>
+    ''' Longueur de la zone définie.
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' </summary>
+    Public Longueur_Zone(,) As Decimal
+
+    ''' <summary>
+    ''' Nombre de zone définie pour une travée
+    ''' </summary>
+    Public NombreZone() As Integer
+
+    ''' <summary>
+    ''' Espacement longi entre goujons
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' </summary>
+    Public Espacement(,) As Decimal
+
+    ''' <summary>
+    ''' Nombre d'ondes entre deux goujons consécutifs
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' </summary>
+    Public Espacement_Bac_Trans(,) As Integer
+
+    ''' <summary>
+    ''' Nombre de goujons disposés transversalement
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' </summary>
+    Public NombreGoujonsTransv(,) As Integer
+
+    ''' <summary>
+    ''' Nombre total de goujons disposés sur la travée considérée
+    ''' </summary>
+    Public NombreGoujonsTot() As Integer
+
+
+#End Region
+
 #Region " Variables pour les valeurs par défaut et le statut de la poutre "
 
     ''' <summary>
@@ -267,6 +336,30 @@
         DistanceDsl2 = DISTANCETREMIEDEFAUT
 
         lIntermediaire = True
+
+        ReDim Longueur_Zone(pNbTravees + 2, 2)
+        ReDim NombreZone(pNbTravees + 2)
+        ReDim Espacement(pNbTravees + 2, 2)
+        ReDim Espacement_Bac_Trans(pNbTravees + 2, 2)
+        ReDim NombreGoujonsTransv(pNbTravees + 2, 2)
+        ReDim NombreGoujonsTot(pNbTravees + 2)
+
+        For i As Integer = IndicePremiereTravee To IndiceDerniereTravee
+            Longueur_Zone(i, 0) = LongueurTravee(i)
+            NombreZone(i) = 1
+            Espacement(i, 0) = 200 / 1000
+            Espacement(i, 1) = 200 / 1000
+            Espacement(i, 2) = 200 / 1000
+            Espacement_Bac_Trans(i, 0) = 1
+            Espacement_Bac_Trans(i, 1) = 1
+            Espacement_Bac_Trans(i, 2) = 1
+            NombreGoujonsTransv(i, 0) = 1
+            NombreGoujonsTransv(i, 1) = 1
+            NombreGoujonsTransv(i, 2) = 1
+            For j As Integer = 0 To 2
+                NombreGoujonsTot(i) += Longueur_Zone(i, j) / Espacement(i, j)
+            Next
+        Next
 
     End Sub
 

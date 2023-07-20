@@ -271,8 +271,6 @@ Module Mod_Declarations
     Public Const GAMMA_RESISTANCE_INF As Decimal = 0
     Public Const GAMMA_RESISTANCE_SUP As Decimal = 2
 
-
-
 #End Region
 
 #Region " Paramètres de STYLE "
