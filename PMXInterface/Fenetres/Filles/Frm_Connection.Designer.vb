@@ -213,7 +213,7 @@ Partial Class Frm_Connection
         Me.TLPan_Droite.Controls.Add(Me.pan_SaisieConnection, 0, 2)
         Me.TLPan_Droite.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Droite.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Droite.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_Droite.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.TLPan_Droite.Name = "TLPan_Droite"
         Me.TLPan_Droite.RowCount = 3
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -251,10 +251,10 @@ Partial Class Frm_Connection
         '
         'img_Connection
         '
-        Me.img_Connection.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.img_Connection.Location = New System.Drawing.Point(0, 0)
+        Me.img_Connection.Location = New System.Drawing.Point(98, 9)
+        Me.img_Connection.Margin = New System.Windows.Forms.Padding(0)
         Me.img_Connection.Name = "img_Connection"
-        Me.img_Connection.Size = New System.Drawing.Size(531, 176)
+        Me.img_Connection.Size = New System.Drawing.Size(141, 83)
         Me.img_Connection.TabIndex = 75
         Me.img_Connection.TabStop = False
         '
@@ -364,6 +364,7 @@ Partial Class Frm_Connection
         '
         'cmb_EspLongi_I3
         '
+        Me.cmb_EspLongi_I3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_EspLongi_I3.FormattingEnabled = True
         Me.cmb_EspLongi_I3.Location = New System.Drawing.Point(307, 129)
         Me.cmb_EspLongi_I3.Name = "cmb_EspLongi_I3"
@@ -372,6 +373,7 @@ Partial Class Frm_Connection
         '
         'cmb_NbRow_I3
         '
+        Me.cmb_NbRow_I3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I3.FormattingEnabled = True
         Me.cmb_NbRow_I3.Location = New System.Drawing.Point(307, 107)
         Me.cmb_NbRow_I3.Name = "cmb_NbRow_I3"
@@ -380,6 +382,7 @@ Partial Class Frm_Connection
         '
         'cmb_EspLongi_I2
         '
+        Me.cmb_EspLongi_I2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_EspLongi_I2.FormattingEnabled = True
         Me.cmb_EspLongi_I2.Location = New System.Drawing.Point(240, 129)
         Me.cmb_EspLongi_I2.Name = "cmb_EspLongi_I2"
@@ -396,6 +399,7 @@ Partial Class Frm_Connection
         '
         'cmb_NbRow_I2
         '
+        Me.cmb_NbRow_I2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I2.FormattingEnabled = True
         Me.cmb_NbRow_I2.Location = New System.Drawing.Point(240, 107)
         Me.cmb_NbRow_I2.Name = "cmb_NbRow_I2"
@@ -404,6 +408,7 @@ Partial Class Frm_Connection
         '
         'cmb_NbRow_I1
         '
+        Me.cmb_NbRow_I1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I1.FormattingEnabled = True
         Me.cmb_NbRow_I1.Location = New System.Drawing.Point(173, 107)
         Me.cmb_NbRow_I1.Name = "cmb_NbRow_I1"
@@ -543,11 +548,10 @@ Partial Class Frm_Connection
         Me.TLPan_Gauche.Controls.Add(Me.pan_SaisieConnecteurs, 0, 1)
         Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Gauche.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
+        Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
         Me.TLPan_Gauche.RowCount = 2
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 366.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 386)
         Me.TLPan_Gauche.TabIndex = 0
@@ -588,7 +592,7 @@ Partial Class Frm_Connection
         Me.pan_SaisieConnecteurs.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieConnecteurs.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieConnecteurs.Name = "pan_SaisieConnecteurs"
-        Me.pan_SaisieConnecteurs.Size = New System.Drawing.Size(250, 366)
+        Me.pan_SaisieConnecteurs.Size = New System.Drawing.Size(250, 356)
         Me.pan_SaisieConnecteurs.TabIndex = 1
         '
         'img_Stud
@@ -599,7 +603,7 @@ Partial Class Frm_Connection
         Me.img_Stud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.img_Stud.Location = New System.Drawing.Point(37, 186)
         Me.img_Stud.Name = "img_Stud"
-        Me.img_Stud.Size = New System.Drawing.Size(188, 137)
+        Me.img_Stud.Size = New System.Drawing.Size(188, 127)
         Me.img_Stud.TabIndex = 76
         Me.img_Stud.TabStop = False
         '
@@ -709,6 +713,7 @@ Partial Class Frm_Connection
         '
         'cmb_goujons
         '
+        Me.cmb_goujons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_goujons.FormattingEnabled = True
         Me.cmb_goujons.Location = New System.Drawing.Point(37, 12)
         Me.cmb_goujons.Name = "cmb_goujons"

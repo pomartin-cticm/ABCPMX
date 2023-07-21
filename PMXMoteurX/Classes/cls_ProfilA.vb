@@ -67,7 +67,7 @@ Public Class cls_ProfilA
     ''' <summary>
     ''' hauteur totale de l’âme, mesurée entre le nu intérieur des semelles (m)
     ''' </summary>
-    Public h_w As Decimal
+    'Private h_w As Decimal
 
     ''' <summary>
     ''' épaisseur de l'âme (m)

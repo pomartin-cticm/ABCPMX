@@ -344,7 +344,7 @@
         ReDim NombreGoujonsTransv(pNbTravees + 2, 2)
         ReDim NombreGoujonsTot(pNbTravees + 2)
 
-        For i As Integer = IndicePremiereTravee To IndiceDerniereTravee
+        For i As Integer = 0 To pNbTravees + 2
             Longueur_Zone(i, 0) = LongueurTravee(i)
             NombreZone(i) = 1
             Espacement(i, 0) = 200 / 1000

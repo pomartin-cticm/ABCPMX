@@ -641,7 +641,7 @@ Public Class cls_Section
         kc = 0.6
         k = 0.8
         fct_eff = enrobage_partiel.Beton.Fctm
-        Act = enrobage_partiel.Ratio_bc * ProfilA.b_fs * ProfilA.h_w
+        Act = enrobage_partiel.Ratio_bc * ProfilA.b_fs * ProfilA.HauteurAmeHw
 
         If enrobage_partiel.Beton.lCrackingLimitation Then
             Dim phi_max As Decimal = enrobage_partiel.Get_Phi_Max()

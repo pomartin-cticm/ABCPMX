@@ -407,6 +407,270 @@ Module Mod_Dessins
 
 #End Region
 
+#Region "Dessins pour la définition du bac (FRM_BACN)"
+
+    Public Sub DessineBac(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, MyBac As Cls_Bac,
+                          ByVal EpDalle As Double, ByRef iCote As Integer,
+                          ByVal lCotation As Boolean, ByVal lCotEpTot As Boolean,
+                          ByVal lTitre As Boolean,
+                          ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   24/06/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin du Bac Acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   Img         [E] :   Image dans laquelle on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '   EpDalle     [E] :   Epaisseur de la dalle béton
+        '   VariableBac [E] :   Parametre du bac sélectionné (pour affichage en rouge)
+        '   nbOndes     [E] :   Nombre d'ondes sur lequel on représente le bac
+        '   lCotation   [E] :   Indique si on met les cotations sur le dessin
+        '   lCotEpTot   [E] :   Indique si cotation epaisseur bac+dalle
+        '   lTitre      [E] :   Indique si affichage du titre du bac
+        '   ParAff      [S] :   Paramètres d'Affichage
+        '   lMemb       [E] :   Indique si on représente la semelle sup de la memb sup
+        '   tfSup       [E] :   Epasseur semelle de la membrure superieure
+        '   hMax        [E] :   Epaisseur maximale à considérer pour le dessin de la dalle
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim MyParAff As Struc_Affichage
+
+        Dim ColorPen As Color = Color.Blue
+        Dim ColorRedPen As Color = Color.Red
+
+        Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightGray, Color.DarkGray)
+        Dim MyPenBrush As New SolidBrush(ColorPen)
+        Dim MyPenRedBrush As New SolidBrush(ColorRedPen)
+        Dim MyPen As New Pen(ColorPen)
+        Dim MyPenRed As New Pen(ColorRedPen)
+        Dim MyFontNormal As Font = FontBase
+
+        Dim xMin, yMin, xMax, yMax As Double
+        'Dim DeltaX As Double
+        Dim sDecal As Double
+        Dim tDecal As Double
+        Dim dCar As Double
+
+        Dim lRaidSup As Boolean
+
+        Dim i As Integer
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+        Dim nbOndes As Integer = 5
+
+        Dim lUn As Boolean = True
+
+        '--> Initialisation
+
+        lRaidSup = MyBac.HasRaidisseurSup
+        If lUn Then
+            dCar = Math.Sqrt(MyBac.h_p ^ 2 + MyBac.e_p ^ 2) / 16
+        Else
+            dCar = (MyBac.e_p + MyBac.b_b) / 2
+        End If
+
+        '--> Preparation de la zone d'affichage - Calcul de ParAff
+
+        If lUn Then
+            xMin = -MyBac.e_p / 2
+            xMax = MyBac.e_p / 2
+        Else
+            xMin = 0
+            xMax = MyBac.LargeurModule
+        End If
+        'nbOndes = Math.Floor(MyBac.LargeurModule / MyBac.e_p)
+        yMin = 0
+        yMax = MyBac.Hauteur_hpg
+        If lCotation Then
+            yMin = -dCar
+            yMax += dCar
+        End If
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+        '--> Calcul des points du pourtour de la dalle
+
+        If lRaidSup Then
+            MyBac.PrepareContourBacRaidi1Nervure(xPts, yPts, nbPts)
+        Else
+            MyBac.PrepareContourBacSimple1Nervure(xPts, yPts, nbPts)
+        End If
+
+        '--> Remplissage contour
+
+        'RemplirZone(myGr, myBrushDalle, xPts, yPts, nbPts, MyParAff, False)
+        'ContourZone(myGr, New Pen(BlueAM), xPts, yPts, nbPts, MyParAff, True)
+
+        If lUn Then
+            RemplirZone(myGr, myBrushBac, xPts, yPts, nbPts, MyParAff, True)
+        Else
+            ContourZone(myGr, New Pen(BlueAM), xPts, yPts, nbPts, MyParAff, False)
+        End If
+
+
+        If lCotation Then
+
+            CotationBacUn(myGr, MyParAff, MyBac, dCar, iCote)
+
+        End If
+
+
+    End Sub
+
+    Private Sub CotationBacUn(ByRef myGr As Graphics, MyParAffC As Struc_Affichage, MyBac As Cls_Bac, dCar As Decimal, iSelect As Integer)
+        '-----------------------------------------------------------------------------------------------
+        '   24/06/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Cotation d'une nervure de bac
+        '-----------------------------------------------------------------------------------------------
+        '   iSelect :   1 : hg
+        '               2 : hpg
+        '               3 : ep
+        '               4 : bt
+        '               5 : bb
+        '               6 : tp
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim xo, yo As Double
+        Dim xe, ye As Double
+        Dim MyPenNormal As New Pen(ColorNonSelect, 1)
+        Dim MyPenSelect As New Pen(ColorSelect, 1)
+        Dim MyFontNormal As Font = FontBase
+        Dim MyColor As Color
+        Dim Chaine As String
+        Dim lAffSymbol As Boolean = False
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        Dim eP, hP, bbP, btP, tP, hPg As Decimal
+        Const kTP As Decimal = 2
+        Dim lRaid As Boolean = MyBac.HasRaidisseurSup
+
+        '--> Initialisation
+
+        eP = MyBac.e_p
+        hP = MyBac.h_p
+        btP = MyBac.b_t
+        bbP = MyBac.b_b
+        tP = MyBac.tp * kTP
+        hPg = MyBac.Hauteur_hpg
+
+        '--> Cotes
+
+        '#  ep
+
+        MyColor = StyleCouleur(iSelect, 3)
+        MyPen.Color = MyColor
+
+        xo = -eP / 2
+        xe = eP / 2
+
+        yo = -dCar
+        ye = -dCar
+
+        AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, True)
+
+        If lAffSymbol Then Chaine = "ep" Else Chaine = GetStringNoUnit(eP, Enu_TypeVariable.Dimension)
+        AddTexteFond(myGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, ye, MyParAffC, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        '# bb
+
+        MyColor = StyleCouleur(iSelect, 5)
+        MyPen.Color = MyColor
+
+        xo = -bbP / 2
+        xe = -xo
+
+        yo = 0 + dCar / 2
+        ye = 0 + dCar / 2
+
+        AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, True)
+
+        If lAffSymbol Then Chaine = "bb" Else Chaine = GetStringNoUnit(bbP, Enu_TypeVariable.Dimension)
+        AddTexteFond(myGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, (yo + ye) / 2, MyParAffC, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        '# bt
+
+        MyColor = StyleCouleur(iSelect, 4)
+        MyPen.Color = MyColor
+
+        xo = -btP / 2
+        xe = -xo
+
+        yo = hP + dCar / 2
+        ye = hP + dCar / 2
+
+        AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, True)
+
+        If lAffSymbol Then Chaine = "bt" Else Chaine = GetStringNoUnit(btP, Enu_TypeVariable.Dimension)
+        AddTexteFond(myGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, (yo + ye) / 2, MyParAffC, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+
+        '# hp
+
+        MyColor = StyleCouleur(iSelect, 1)
+        MyPen.Color = MyColor
+
+        xo = -eP / 2 - dCar
+        xe = xo
+
+        yo = 0
+        ye = hP
+
+        AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, True)
+
+        If lAffSymbol Then Chaine = "hp" Else Chaine = GetStringNoUnit(hP, Enu_TypeVariable.Dimension)
+        AddTexteFond(myGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, (yo + ye) / 2, MyParAffC, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        '# hpg
+
+        If lRaid Then
+            MyColor = StyleCouleur(iSelect, 2)
+            MyPen.Color = MyColor
+
+            xo = +eP / 2 + dCar
+            xe = xo
+
+            yo = 0
+            ye = hPg
+
+            AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, True)
+
+            If lAffSymbol Then Chaine = "hpg" Else Chaine = GetStringNoUnit(hPg, Enu_TypeVariable.Dimension)
+            AddTexteFond(myGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, (yo + ye) / 2, MyParAffC, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+        End If
+
+        '# tp
+
+        MyColor = StyleCouleur(iSelect, 6)
+        MyPen.Color = MyColor
+
+        xo = eP / 2 - (eP - btP) / 4
+        xe = xo
+
+        yo = hP - tP / 2
+        ye = yo - dCar / 2
+
+        AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, False)
+
+        yo = hP + tP / 2
+        ye = hPg + dCar / 2
+
+        AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, False)
+
+        If lAffSymbol Then Chaine = "tp" Else Chaine = GetStringNoUnit(tP, Enu_TypeVariable.Dimension)
+        AddTexteFond(myGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, ye, MyParAffC, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+    End Sub
+
+#End Region
 
 #Region " Dessins pour la dfiniton de l'enrobage (FRM_ENROBAGE) "
 
@@ -2250,6 +2514,299 @@ Module Mod_Dessins
         yo = -dCar
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+    End Sub
+
+#End Region
+
+#Region "Dessins pour la connection (FRM_CONNECTION)"
+
+    Public Sub DessinFrmConnection_Connecteurs(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, MyPoutreLoc As cls_Poutre,
+                          ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   24/06/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin du Bac Acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '   MyPoutreLoc [E] :   Poutre locale        '   
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim MyParAff As Struc_Affichage
+
+        Dim ColorPen As Color = Color.Blue
+        Dim ColorRedPen As Color = Color.Red
+
+        Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightGray, Color.DarkGray)
+        Dim myBrushBeton As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.Gray, Color.DarkGray)
+        Dim myBrushProfilA As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightBlue, Color.DarkGray)
+        Dim myBrushConnecteur As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightYellow, Color.DarkGray)
+        Dim MyPenBrush As New SolidBrush(ColorPen)
+        Dim MyPenRedBrush As New SolidBrush(ColorRedPen)
+        Dim MyPen As New Pen(ColorPen)
+        Dim MyPenRed As New Pen(ColorRedPen)
+        Dim MyFontNormal As Font = FontBase
+
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Decimal
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+
+        '--> Initialisation
+        dCar = MyPoutreLoc.Dalle.t_d
+
+        '--> Dessin des éléments
+
+        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele Then
+
+            '--> Dessin du bac acier
+
+            With MyPoutreLoc.Dalle.Bac
+
+                '--> Preparation de la zone d'affichage - Calcul de ParAff
+                xMin = - .e_p / 2
+                xMax = .e_p / 2
+
+                yMin = -MyPoutreLoc.Section.ProfilA.t_fs
+                yMax = Math.Max(MyPoutreLoc.Dalle.t_d, MyPoutreLoc.Dalle.Connecteur.hsc)
+
+                ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+                '--> Calcul des points du pourtour du bac
+                .PrepareContourBacSimple1Nervure(xPts, yPts, nbPts)
+
+                '--> Remplissage contour
+                RemplirZone(myGr, myBrushBac, xPts, yPts, nbPts, MyParAff, True)
+            End With
+
+            '--> Dessin de la dalle béton
+
+            '--> Calcul des points du pourtour de la dalle
+
+            Dim xPts_Dalle(xPts.Length / 2 + 1) As Single
+            Dim yPts_Dalle(xPts.Length / 2 + 1) As Single
+
+            For i As Integer = 0 To xPts.Length / 2 - 1
+                xPts_Dalle(i) = xPts(i)
+                yPts_Dalle(i) = yPts(i)
+            Next
+            xPts_Dalle(xPts.Length / 2) = xPts(xPts.Length / 2 - 1)
+            xPts_Dalle(xPts.Length / 2 + 1) = xPts(0)
+
+            yPts_Dalle(xPts.Length / 2) = MyPoutreLoc.Dalle.t_d
+            yPts_Dalle(xPts.Length / 2 + 1) = MyPoutreLoc.Dalle.t_d
+
+            nbPts = xPts_Dalle.Length
+
+            '--> Remplissage contour
+            RemplirZone(myGr, myBrushBeton, xPts_Dalle, yPts_Dalle, nbPts, MyParAff, True)
+
+            '--> Dessin du goujon
+
+            Dim xGoujon As Decimal = 0
+            Dim yGoujon As Decimal = yPts(yPts.Length / 4)
+
+            'Dessin du corps du goujon
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+            'Dessin de la tete du goujon
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - 1.3 * MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - MyPoutreLoc.Dalle.Connecteur.d * 0.7, xGoujon + 1.3 * MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+
+            'Dessin de la semelle supérieure et de l'âme de la poutre
+            Dim xSemelleSup As Decimal = 0
+            Dim ySemelleSup As Decimal = yPts(3 * yPts.Length / 4)
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup - MyPoutreLoc.Section.ProfilA.t_fs, xSemelleSup + MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup, MyParAff, True, True)
+
+            Dim xAme As Decimal = xSemelleSup
+            Dim yAme As Decimal = ySemelleSup - MyPoutreLoc.Section.ProfilA.t_fs
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - MyPoutreLoc.Section.ProfilA.t_w / 2, yAme - MyPoutreLoc.Section.ProfilA.HauteurAmeHw, xAme + MyPoutreLoc.Section.ProfilA.t_w / 2, yAme, MyParAff, True, True)
+
+        Else
+
+            With MyPoutreLoc.Section.ProfilA
+
+                '--> Preparation de la zone d'affichage - Calcul de ParAff
+                xMin = - .b_fs
+                xMax = .b_fs
+
+                yMin = -MyPoutreLoc.Section.ProfilA.t_fs
+                yMax = Math.Max(MyPoutreLoc.Dalle.t_d, MyPoutreLoc.Dalle.Connecteur.hsc)
+
+                ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+            End With
+            '--> Dessin de la dalle béton
+
+            Dim xBeton As Decimal = 0
+            Dim yBeton As Decimal = 0
+
+            AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - MyPoutreLoc.Section.ProfilA.b_fs, yBeton, xBeton + MyPoutreLoc.Section.ProfilA.b_fs, yBeton + MyPoutreLoc.Dalle.t_d, MyParAff, True, True)
+
+            '--> Dessin du goujon
+
+            Dim xGoujon As Decimal = 0
+            Dim yGoujon As Decimal = 0
+
+            'Dessin du corps du goujon
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+            'Dessin de la tete du goujon
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - 1.3 * MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - MyPoutreLoc.Dalle.Connecteur.d * 0.7, xGoujon + 1.3 * MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+
+            'Dessin de la semelle supérieure et de l'âme de la poutre
+            Dim xSemelleSup As Decimal = 0
+            Dim ySemelleSup As Decimal = 0
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup - MyPoutreLoc.Section.ProfilA.t_fs, xSemelleSup + MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup, MyParAff, True, True)
+
+            Dim xAme As Decimal = xSemelleSup
+            Dim yAme As Decimal = ySemelleSup - MyPoutreLoc.Section.ProfilA.t_fs
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - MyPoutreLoc.Section.ProfilA.t_w / 2, yAme - MyPoutreLoc.Section.ProfilA.HauteurAmeHw, xAme + MyPoutreLoc.Section.ProfilA.t_w / 2, yAme, MyParAff, True, True)
+
+        End If
+
+    End Sub
+
+    Public Sub DessinFrmConnection_Connection(MyGr As Graphics, MyPoutre As cls_Poutre,
+                                ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                kAdjust As Double, indTravee As Integer, lCote As Boolean, strStuds As String,
+                                ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '------------------------------------------------------------------------------------------------------------------
+        '   21/07/23 :  Création - GUD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage des travées dans la fenêtre portées
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MyPoutre    [E] :   Poutre à dessiner
+        '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   indTravee   [E] :   Indique quel est la travée sélectionnée
+        '   lCote       [E] :   Indique si affichage de la cote
+        '   strStuds       [E] :   Indique la traduction associée au mot "goujons"
+        '------------------------------------------------------------------------------------------------------------------
+
+
+        '--> Déclarations
+
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar As Decimal
+        Dim MyParAff As Struc_Affichage
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+        'Dim LongueurTotalePoutre As Decimal
+        Dim LongueurTravee As Decimal
+        Dim LargeurSemelle As Decimal
+        Dim NombreGoujonsTrans(2) As Integer
+        Dim LongueurZones(2) As Decimal
+        Dim NombreGoujonsLongiZone(2) As Integer
+        Dim NombreZones As Integer
+        Dim DiametreGoujons As Decimal
+        Dim EspaceLongiGoujons As Decimal
+        Dim MyBrushA As New SolidBrush(Color.LightBlue)
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyColor As Color
+        Dim CouleurConnecteur As Color = Color.White
+        Dim myBrushC As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurConnecteur)
+        Const lAffSymbol As Boolean = False
+        Dim Chaine As String
+        Dim MyFontNormal As Font = FontBase
+        Dim lTotal As Boolean = False
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        '--> Initialisations
+
+        LongueurTravee = MyPoutre.PORTEEDEFAUT
+        LargeurSemelle = LongueurTravee / 8.5
+        For i As Integer = 0 To 2
+            NombreGoujonsTrans(i) = MyPoutre.NombreGoujonsTransv(indTravee, i)
+            LongueurZones(i) = MyPoutre.Longueur_Zone(indTravee, i) / MyPoutre.LongueurTravee(indTravee) * LongueurTravee
+            NombreGoujonsLongiZone(i) = 0.75 * MyPoutre.Longueur_Zone(indTravee, i) / MyPoutre.Espacement(indTravee, i)
+            NombreZones = MyPoutre.NombreZone(indTravee)
+        Next
+
+        DiametreGoujons = LargeurSemelle / 15
+
+        dCar = Math.Sqrt(LongueurTravee ^ 2 + LargeurSemelle ^ 2) / 20
+        'dCarApp = HauteurPoutre / 2
+
+        '--> Initialisation des paramètres d'affichage
+
+        xMin = 0 '- dCar / 4
+        xMax = LongueurTravee '+ dCar / 2
+        yMin = -LargeurSemelle / 2 - dCar / 2 '- dCarApp
+        yMax = LargeurSemelle / 2 + dCar / 2
+
+        If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+        '--> Représentation de la semelle de la poutre 
+
+        xo = 0 - dCar / 2
+        xe = LongueurTravee + dCar / 2
+
+
+        yo = -LargeurSemelle / 2
+        ye = LargeurSemelle / 2
+
+
+        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        'Représentation des goujons sur la semelle supérieure
+
+
+        For i As Integer = 0 To NombreZones - 1
+            xo = 0
+            yo = 0
+            For j As Integer = 0 To i - 1
+                xo += LongueurZones(j)
+            Next
+            EspaceLongiGoujons = LongueurZones(i) / (NombreGoujonsLongiZone(i))
+            For j As Integer = 1 To NombreGoujonsLongiZone(i)
+                xo += EspaceLongiGoujons
+                yo = 0
+                For k As Integer = 1 To NombreGoujonsTrans(i)
+                    yo = -LargeurSemelle / 2 + k * LargeurSemelle / (NombreGoujonsTrans(i) + 1)
+                    AddCerclePlein(MyGr, myBrushC, xo, yo, DiametreGoujons, MyParAff, True)
+                Next
+            Next
+        Next
+
+
+        '=== COTES =======================================================
+
+        If lCote Then
+
+            xo = 0
+            xe = 0
+
+            For i As Integer = 0 To NombreZones - 1
+
+                xo = xe
+                xe += LongueurZones(i)
+
+                'On dessinne la côte inférieure qui donne la longueur de la zone étudiée 
+                Dim yCote As Decimal = -LargeurSemelle / 2 - dCar
+
+                AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.Longueur_Zone(indTravee, i), Enu_TypeVariable.Longueur)
+                AddTexteFond(MyGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+
+                'On dessinne la côte supérieure qui donne le nombre de goujons disposés sur la zone étudiée 
+                yCote = LargeurSemelle / 2 + dCar
+
+                AddFleche(MyGr, New Pen(Color.Red), xo, yCote, xe, yCote, MyParAff, True, True)
+                Chaine = GetStringNoUnit(Math.Floor(MyPoutre.Longueur_Zone(indTravee, i) / MyPoutre.Espacement(indTravee, i)), Enu_TypeVariable.SansType) & " " & strStuds
+                AddTexteFond(MyGr, New SolidBrush(Color.Red), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            Next
+
+
+        End If
 
     End Sub
 

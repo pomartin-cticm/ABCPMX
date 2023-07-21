@@ -71,8 +71,8 @@ Public Class Cls_Connecteur
 
         Me.d = goujons_database(ind_en_cours).Item2
         Me.hsc = goujons_database(ind_en_cours).Item3
-        Me.Fy = goujons_database(ind_en_cours).Item3
-        Me.Fu = goujons_database(ind_en_cours).Item4
+        Me.Fy = goujons_database(ind_en_cours).Item4
+        Me.Fu = goujons_database(ind_en_cours).Item5
 
     End Sub
 

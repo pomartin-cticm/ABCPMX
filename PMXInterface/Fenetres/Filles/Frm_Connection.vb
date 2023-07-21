@@ -27,6 +27,11 @@ Public Class Frm_Connection
     Dim ind_database As Integer
 
     ''' <summary>
+    ''' Importe la liste de noms des goujons disponibles
+    ''' </summary>
+    Dim strGoujonsInit() As String
+
+    ''' <summary>
     ''' Définition d'une liste de string pour remplir le cmb_studs
     ''' </summary>
     Dim strGoujons() As String
@@ -70,6 +75,11 @@ Public Class Frm_Connection
     Dim lMAJAffichage As Boolean
 
     ''' <summary>
+    ''' Indique que l'on vient de cliquer sur le bouton ajouter ou supprimer
+    ''' </summary>
+    Dim lBtnAjouterSupprimer As Boolean
+
+    ''' <summary>
     ''' Définition des valeurs limites pour les textbox
     ''' </summary>
     Dim LONGUEURMIN As Decimal
@@ -89,6 +99,7 @@ Public Class Frm_Connection
     End Sub
 
     Public Sub InitialiserFenetre()
+        lBuild = True
         InitialiserVariables()
         GestionLangues()
         GestionStyle()
@@ -96,7 +107,8 @@ Public Class Frm_Connection
         RemplirComboBox()
         AfficherPoutreEnCours()
         MAJ_Nb_Zone()
-        MAJ_affichage_txt_cmb()
+        MAJ_affichage_txt_connecteurs()
+        MAJ_affichage_txt_cmb_connection()
         lBuild = False
     End Sub
 
@@ -124,6 +136,9 @@ Public Class Frm_Connection
         ltxt_Largeur_I3Enter = False
 
         lMAJAffichage = False
+        lBtnAjouterSupprimer = False
+
+        'Valeurs en mètres
 
         LONGUEURMIN = 0.1 / 1000
         LONGUEURMAX = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2)
@@ -151,10 +166,11 @@ Public Class Frm_Connection
 
                 '=== MENU CONNECTION ==============================================================='
 
-                strGoujons = MyPoutreLoc.Dalle.Connecteur.Get_ListName_GoujonDatabase()
+                strGoujonsInit = MyPoutreLoc.Dalle.Connecteur.Get_ListName_GoujonDatabase()
+                ReDim strGoujons(strGoujonsInit.Length - 1)
 
-                For i As Integer = 0 To strGoujons.Length - 1
-                    strGoujons(i) = Bloc("DIAMETER") & " " & strGoujons(i)
+                For i As Integer = 0 To strGoujonsInit.Length - 1
+                    strGoujons(i) = Bloc("DIAMETER") & " " & strGoujonsInit(i)
                 Next
 
                 Me.txt_Portee.Text = Bloc("SPAN")
@@ -263,7 +279,8 @@ Public Class Frm_Connection
         Me.lbl_Connection.ForeColor = CouleurForeBandeaux
 
         Me.img_Connection.Dock = DockStyle.Fill
-        Me.img_Connection.BorderStyle = BorderStyle.FixedSingle
+        '
+        'Me.img_Connection.BorderStyle = BorderStyle.FixedSingle
 
         Me.txt_hsc.ReadOnly = True
         Me.txt_d.ReadOnly = True
@@ -274,13 +291,6 @@ Public Class Frm_Connection
     End Sub
 
     Private Sub AfficherPoutreEnCours()
-        With MyPoutreLoc.Dalle.Connecteur
-            ind_database = .IndiceDataBase
-            Me.txt_hsc.Text = .hsc
-            Me.txt_d.Text = .d
-            Me.txt_fy.Text = .Fy
-            Me.txt_fu.Text = .Fu
-        End With
 
         'Affiche un cmb ou un txt en fonction de la présence ou non d'un bac transversal
         If lBacTransv Then
@@ -348,7 +358,7 @@ Public Class Frm_Connection
                     Me.txt_Largeur_I2.Text = GetStringInUnit(.Longueur_Zone(traveeEnCours.Item2, 1), Enu_TypeVariable.Longueur, 3, 3, False)
                     Me.cmb_NbRow_I2.SelectedItem = .NombreGoujonsTransv(traveeEnCours.Item2, 1)
                     If Not lBacTransv Then
-                        Me.txt_EspLongi_I2.Text = GetStringInUnit(.Espacement(traveeEnCours.Item2, 1), Enu_TypeVariable.Longueur, 3, 3, False)
+                        Me.txt_EspLongi_I2.Text = GetStringInUnit(.Espacement(traveeEnCours.Item2, 1), Enu_TypeVariable.Dimension, 3, 3, False)
                     Else
                         Me.cmb_EspLongi_I2.Text = .Espacement_Bac_Trans(traveeEnCours.Item2, 1)
                     End If
@@ -356,7 +366,7 @@ Public Class Frm_Connection
                     Me.txt_Largeur_I3.Text = GetStringInUnit(.Longueur_Zone(traveeEnCours.Item2, 2), Enu_TypeVariable.Longueur, 3, 3, False)
                     Me.cmb_NbRow_I2.SelectedItem = .NombreGoujonsTransv(traveeEnCours.Item2, 2)
                     If Not lBacTransv Then
-                        Me.txt_EspLongi_I3.Text = GetStringInUnit(.Espacement(traveeEnCours.Item2, 2), Enu_TypeVariable.Longueur, 3, 3, False)
+                        Me.txt_EspLongi_I3.Text = GetStringInUnit(.Espacement(traveeEnCours.Item2, 2), Enu_TypeVariable.Dimension, 3, 3, False)
                     Else
                         Me.cmb_EspLongi_I3.Text = .Espacement_Bac_Trans(traveeEnCours.Item2, 2)
                     End If
@@ -448,7 +458,7 @@ Public Class Frm_Connection
 
             Case Me.img_d.Name
 
-                strSymbol = "h"
+                strSymbol = "d"
                 strIndice = "  "
 
 
@@ -470,6 +480,14 @@ Public Class Frm_Connection
         DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_Alignement.Gauche,
                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
+    End Sub
+
+    Private Sub DessinConnection(sender As Object, e As PaintEventArgs) Handles img_Connection.Paint
+        DessinFrmConnection_Connection(e.Graphics, MyPoutreLoc, Me.img_Connection.ClientRectangle.Width, Me.img_Connection.ClientRectangle.Height, 1, traveeEnCours.Item2, True, strStud)
+    End Sub
+
+    Private Sub DessinConnecteurs(sender As Object, e As PaintEventArgs) Handles img_Stud.Paint
+        DessinFrmConnection_Connecteurs(e.Graphics, Me.img_Stud.ClientRectangle.Width, Me.img_Stud.ClientRectangle.Height, 1, MyPoutreLoc)
     End Sub
 
 #End Region
@@ -494,13 +512,29 @@ Public Class Frm_Connection
         ltxt_Largeur_I1Enter = sender.name = txt_Largeur_I1.Name
         ltxt_Largeur_I2Enter = sender.name = txt_Largeur_I2.Name
         ltxt_Largeur_I3Enter = sender.name = txt_Largeur_I3.Name
-        MAJ_affichage_txt_cmb()
+        MAJ_affichage_txt_cmb_connection()
     End Sub
 
-    Private Sub MAJ_affichage_txt_cmb()
+    ''' <summary>
+    ''' MAJ des textboxs et comboboxs dans la zone des connecteurs
+    ''' </summary>
+    Private Sub MAJ_affichage_txt_connecteurs()
+        Me.txt_hsc.Text = GetStringInUnit(MyPoutreLoc.Dalle.Connecteur.hsc, Enu_TypeVariable.Millimetre, 3, 3, False)
+        Me.txt_d.Text = GetStringInUnit(MyPoutreLoc.Dalle.Connecteur.d, Enu_TypeVariable.Millimetre, 3, 3, False)
+        Me.txt_fy.Text = GetStringInUnit(MyPoutreLoc.Dalle.Connecteur.Fy, Enu_TypeVariable.ContrainteMPa, 3, 3, False)
+        Me.txt_fu.Text = GetStringInUnit(MyPoutreLoc.Dalle.Connecteur.Fu, Enu_TypeVariable.ContrainteMPa, 3, 3, False)
+    End Sub
+
+    ''' <summary>
+    ''' MAJ des textboxs et combobox dans la zone de connection
+    ''' </summary>
+    Private Sub MAJ_affichage_txt_cmb_connection()
         lMAJAffichage = True
 
         'Met à jours la visibilité des txtbox
+
+        Me.txt_Largeur_I1.ReadOnly = MyPoutreLoc.NombreZone(traveeEnCours.Item2) = 1
+
         Me.txt_I2.Visible = MyPoutreLoc.NombreZone(traveeEnCours.Item2) >= 2
         Me.txt_Largeur_I2.Visible = MyPoutreLoc.NombreZone(traveeEnCours.Item2) >= 2
         Me.cmb_NbRow_I2.Visible = MyPoutreLoc.NombreZone(traveeEnCours.Item2) >= 2
@@ -515,9 +549,9 @@ Public Class Frm_Connection
 
         'Met à jour les valeurs dans les txtbox ou cmbbox 
 
-        If Not ltxt_Largeur_I1Enter Then Me.txt_Largeur_I1.Text = GetStringInUnit(MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0), Enu_TypeVariable.Longueur, 3, 3, False)
-        If Not ltxt_Largeur_I2Enter Then Me.txt_Largeur_I2.Text = GetStringInUnit(MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1), Enu_TypeVariable.Longueur, 3, 3, False)
-        If Not ltxt_Largeur_I3Enter Then Me.txt_Largeur_I3.Text = GetStringInUnit(MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2), Enu_TypeVariable.Longueur, 3, 3, False)
+        If Not ltxt_Largeur_I1Enter Or lBtnAjouterSupprimer Then Me.txt_Largeur_I1.Text = GetStringInUnit(MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0), Enu_TypeVariable.Longueur, 3, 3, False)
+        If Not ltxt_Largeur_I2Enter Or lBtnAjouterSupprimer Then Me.txt_Largeur_I2.Text = GetStringInUnit(MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1), Enu_TypeVariable.Longueur, 3, 3, False)
+        If Not ltxt_Largeur_I3Enter Or lBtnAjouterSupprimer Then Me.txt_Largeur_I3.Text = GetStringInUnit(MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2), Enu_TypeVariable.Longueur, 3, 3, False)
 
         Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours.Item2, 0) - 1
         Me.cmb_NbRow_I2.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours.Item2, 1) - 1
@@ -540,72 +574,69 @@ Public Class Frm_Connection
     Private Sub btn_Ajouter_Click(sender As Object, e As EventArgs) Handles btn_Ajouter.Click
         If lBuild Then Exit Sub
 
+        lBtnAjouterSupprimer = True
+
         If MyPoutreLoc.NombreZone(traveeEnCours.Item2) <= 2 Then MyPoutreLoc.NombreZone(traveeEnCours.Item2) += 1
         Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZone(traveeEnCours.Item2) = 3
         Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZone(traveeEnCours.Item2) = 1
         MAJ_Nb_Zone()
         MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb()
+        MAJ_affichage_txt_cmb_connection()
+
+        lBtnAjouterSupprimer = False
     End Sub
 
     Private Sub btn_Supprimer_Click(sender As Object, e As EventArgs) Handles btn_Supprimer.Click
         If lBuild Then Exit Sub
+
+        lBtnAjouterSupprimer = True
 
         If MyPoutreLoc.NombreZone(traveeEnCours.Item2) >= 2 Then MyPoutreLoc.NombreZone(traveeEnCours.Item2) -= 1
         Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZone(traveeEnCours.Item2) = 3
         Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZone(traveeEnCours.Item2) = 1
         MAJ_Nb_Zone()
         MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb()
+        MAJ_affichage_txt_cmb_connection()
+
+        lBtnAjouterSupprimer = False
     End Sub
 
-    'Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 
-    '    Dim lOk As Boolean = True
-    '    ErrorProvider_Frm_Connection.Clear()
+        Dim lOk As Boolean = True
+        ErrorProvider_Frm_Connection.SetError(MyTxt, String.Empty)
 
-    '    Dim iErreur As Integer
-    '    Dim ValMin, ValMax As Decimal
-    '    Dim lValMax As Boolean = True
-    '    Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal
 
-    '    Select Case MyTxt.Name
-    '        Case Me.txt_MainSpan.Name
+        Select Case MyTxt.Name
+            Case Me.txt_Largeur_I1.Name, Me.txt_Largeur_I2.Name, Me.txt_Largeur_I3.Name
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
 
-    '            ValMin = PORTEEMIN / kUnit
-    '            ValMax = PORTEEMAX / kUnit
+                ValMin = LONGUEURMIN / kUnit
+                ValMax = LONGUEURMAX / kUnit
 
-    '        Case Me.txt_PorteeConsoleG.Name, Me.txt_PorteeConsoleD.Name
+            Case Me.txt_EspLongi_I1.Name, Me.txt_EspLongi_I2.Name, Me.txt_EspLongi_I3.Name
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
 
-    '            ValMin = CONSOLEMIN / kUnit
-    '            ValMax = RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit
+                ValMin = ESPACEMENTMIN / kUnit
+                ValMax = ESPACEMENTMAX / kUnit
 
-    '        Case Me.txt_D1.Name, Me.txt_D2.Name
+        End Select
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
 
-    '            ValMin = ENTRAXEMIN / kUnit
-    '            ValMax = ENTRAXEMAX / kUnit
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider_Frm_Connection, ValMin, ValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            'ErrorProvider_Frm_Connection.Clear()
+        End If
 
-    '        Case Me.txt_TremieGauche.Name
-    '            ValMin = 0
-    '            ValMax = MyPoutreLoc.EntraxeD1 / 2
-
-    '        Case Me.txt_TremieDroite.Name
-    '            ValMin = 0
-    '            ValMax = MyPoutreLoc.EntraxeD2 / 2
-
-    '    End Select
-    '    iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
-
-    '    If iErreur <> 0 Then
-    '        NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
-    '    Else
-    '        ValeurUI = TraiteReal(MyTxt.Text) * kUnit
-    '        ErrorProvider.Clear()
-    '    End If
-
-    '    lOk = (iErreur = 0)
-    '    Return lOk
-    'End Function
+        lOk = (iErreur = 0)
+        Return lOk
+    End Function
 
     Sub MAJ_Nb_Zone()
 
@@ -634,10 +665,12 @@ Public Class Frm_Connection
 
         MyPoutreLoc.NombreGoujonsTot(traveeEnCours.Item2) = 0
         For i As Integer = 0 To 2
-            MyPoutreLoc.NombreGoujonsTot(traveeEnCours.Item2) += MyPoutreLoc.NombreGoujonsTransv(traveeEnCours.Item2, i) * MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, i) / MyPoutreLoc.Espacement(traveeEnCours.Item2, i)
+            MyPoutreLoc.NombreGoujonsTot(traveeEnCours.Item2) += Math.Floor(MyPoutreLoc.NombreGoujonsTransv(traveeEnCours.Item2, i) * MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, i) / MyPoutreLoc.Espacement(traveeEnCours.Item2, i))
         Next
 
         Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonsTot(traveeEnCours.Item2)
+
+        Me.img_Connection.Invalidate()
 
     End Sub
 
@@ -645,43 +678,49 @@ Public Class Frm_Connection
     Private Sub txt_Largeur_I1_I2_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_Largeur_I1.TextChanged, txt_Largeur_I2.TextChanged, txt_Largeur_I3.TextChanged
         If lBuild Or lMAJAffichage Then Exit Sub
 
-        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        Dim ValeurUI As Decimal
 
-        Select Case sender.name
-            Case txt_Largeur_I1.Name
-                If Not ltxt_Largeur_I1Enter Then Exit Sub
-                MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0) = txt_Largeur_I1.Text * kUnit
+        If VerificationSaisie(sender, ValeurUI) Then
 
-                Select Case MyPoutreLoc.NombreZone(traveeEnCours.Item2)
-                    Case 1
-                        MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) = 0
+            Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+            Select Case sender.name
+                Case txt_Largeur_I1.Name
+                    If Not ltxt_Largeur_I1Enter Then Exit Sub
+                    MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0) = txt_Largeur_I1.Text * kUnit
+
+                    Select Case MyPoutreLoc.NombreZone(traveeEnCours.Item2)
+                        Case 1
+                            MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) = 0
+                            MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = 0
+                        Case 2
+                            MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0)
+                            MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = 0
+                        Case 3
+                            MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) = (MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0)) / 2
+                            MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = (MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0)) / 2
+                    End Select
+
+                Case txt_Largeur_I2.Name
+                    If Not ltxt_Largeur_I2Enter Then Exit Sub
+                    MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) = txt_Largeur_I2.Text * kUnit
+
+                    If MyPoutreLoc.NombreZone(traveeEnCours.Item2) = 2 Then
+                        MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0) = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1)
                         MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = 0
-                    Case 2
-                        MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0)
-                        MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = 0
-                    Case 3
-                        MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) = (MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0)) / 2
-                        MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = (MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0)) / 2
-                End Select
+                    Else '3 zones
+                        MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1)
+                    End If
 
-            Case txt_Largeur_I2.Name
-                If Not ltxt_Largeur_I2Enter Then Exit Sub
-                MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) = txt_Largeur_I2.Text * kUnit
+                Case txt_Largeur_I3.Name
+                    If Not ltxt_Largeur_I3Enter Then Exit Sub
+                    MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = txt_Largeur_I3.Text * kUnit
+                    MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0) = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2)
+            End Select
+            MAJ_SommeGoujons()
+            MAJ_affichage_txt_cmb_connection()
 
-                If MyPoutreLoc.NombreZone(traveeEnCours.Item2) = 2 Then
-                    MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0) = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1)
-                    MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = 0
-                Else '3 zones
-                    MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1)
-                End If
-
-            Case txt_Largeur_I3.Name
-                If Not ltxt_Largeur_I3Enter Then Exit Sub
-                MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2) = txt_Largeur_I3.Text * kUnit
-                MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 0) = MyPoutreLoc.LongueurTravee(traveeEnCours.Item2) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 1) - MyPoutreLoc.Longueur_Zone(traveeEnCours.Item2, 2)
-        End Select
-        MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb()
+        End If
     End Sub
 
     Private Sub cmb_NbRow_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbRow_I1.SelectedIndexChanged, cmb_NbRow_I2.SelectedIndexChanged, cmb_NbRow_I3.SelectedIndexChanged
@@ -693,11 +732,11 @@ Public Class Frm_Connection
             Case cmb_NbRow_I2.Name
                 MyPoutreLoc.NombreGoujonsTransv(traveeEnCours.Item2, 1) = cmb_NbRow_I2.SelectedIndex + 1
             Case cmb_NbRow_I3.Name
-                MyPoutreLoc.NombreGoujonsTransv(traveeEnCours.Item2, 2) = cmb_NbRow_I2.SelectedIndex + 1
+                MyPoutreLoc.NombreGoujonsTransv(traveeEnCours.Item2, 2) = cmb_NbRow_I3.SelectedIndex + 1
         End Select
 
         MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb()
+        MAJ_affichage_txt_cmb_connection()
     End Sub
 
 
@@ -716,7 +755,7 @@ Public Class Frm_Connection
                 MyPoutreLoc.Espacement(traveeEnCours.Item2, 2) = MyPoutreLoc.Esp_longi_bac * MyPoutreLoc.Espacement_Bac_Trans(traveeEnCours.Item2, 2)
         End Select
         MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb()
+        MAJ_affichage_txt_cmb_connection()
     End Sub
 
     Private Sub txt_EspLongi_I1_I2_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_EspLongi_I1.TextChanged, txt_EspLongi_I2.TextChanged, txt_EspLongi_I3.TextChanged
@@ -733,6 +772,41 @@ Public Class Frm_Connection
                 MyPoutreLoc.Espacement(traveeEnCours.Item2, 2) = txt_EspLongi_I3.Text * kUnit
         End Select
         MAJ_SommeGoujons()
+    End Sub
+
+    Private Sub cmb_goujons_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_goujons.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        MyPoutreLoc.Dalle.Connecteur.nom = strGoujonsInit(cmb_goujons.SelectedIndex)
+        MyPoutreLoc.Dalle.Connecteur.Caracteristiques_Goujons()
+        MAJ_affichage_txt_connecteurs()
+        img_Stud.Invalidate()
+    End Sub
+
+    Private Sub cmb_Travee_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Travee.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        'permet de mettre à jour les variables locales qui tracent l'indice de la travée en cours 
+
+        Select Case cmb_Travee.Text
+            Case strTypeTravee_ConsoleGauche
+                traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleGauche, 0)
+
+            Case strTypeTravee_TraveeCentrale
+                traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
+
+            Case strTypeTravee_ConsoleDroite
+                traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleDroite, MyPoutreLoc.IndiceTraveeConsoleDroite)
+        End Select
+
+        'Réinitialise les boutons Ajouter/Supprimer
+
+        Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZone(traveeEnCours.Item2) = 3
+        Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZone(traveeEnCours.Item2) = 1
+
+        MAJ_SommeGoujons()
+        MAJ_affichage_txt_cmb_connection()
+
     End Sub
 
 

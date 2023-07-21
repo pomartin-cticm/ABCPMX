@@ -625,7 +625,7 @@ Public Class Frm_Gamma
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
         Dim lValMax As Boolean = True
-        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        'Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
 
         Select Case MyTxt.Name
             Case Me.txt_GammaGsup.Name, Me.txt_GammaGinf.Name, Me.txt_GammaQ.Name
@@ -646,7 +646,7 @@ Public Class Frm_Gamma
         If iErreur <> 0 Then
             NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
         Else
-            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ValeurUI = TraiteReal(MyTxt.Text) '* kUnit
             'ErrorProvider.Clear()
         End If
 
