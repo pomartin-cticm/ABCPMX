@@ -264,12 +264,44 @@ Module Mod_NoteCalcul
 
         Select Case MyBeam.TypeSection
             Case cls_Section.Enum_TypeSection.Acier
-                AddLigneNDC(TABW2 & "\G" & Bloc("GSTEELB") & "\g")
-
+                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF & "\G" & Bloc("GSTEELB") & "\g")
         End Select
 
+        AddLigneNDC(TABW2 & Bloc("NBTOTSPAN") & TABAFF & MyBeam.NbTravees)
 
+        'Tableau récapitulatif de la poutre 
+        AddLigneNDC(TABW2 & Bloc("BEAMCHAR"))
+
+        AddLigneNDC("\TABLEAU 20")
+        InitialiseLigne(5, HLIGNE, True)
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "i")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("TYPE"))
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LENGHT"))
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LEFTSUPPORT"))
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("RIGHTSUPPORT"))
+
+        Dim strTypTravee As String
+
+        For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+            AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, i)
+            Select Case MyBeam.TypTravee(i)
+                Case cls_Poutre.EnuTypeTravee.ConsoleGauche
+                    strTypTravee = Bloc("LEFTCANT")
+                Case cls_Poutre.EnuTypeTravee.DeuxAppuis
+                    strTypTravee = Bloc("SPAN")
+                Case cls_Poutre.EnuTypeTravee.ConsoleDroite
+                    strTypTravee = Bloc("RIGHTCANT")
+            End Select
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, strTypTravee)
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.LongueurTravee(i))
+        Next
+
+
+        FinTableau()
+
+        'Ajout dessin de la poutre en cours
         AddLigneNDC("\IMG PORTEE 10 80 30 NoCadre")
+
 
     End Sub
 
@@ -431,6 +463,79 @@ Module Mod_NoteCalcul
 
         Numerotation = MyNote.GetNumerotationTitre(Niveau) & " - "
         MyNote.AddLigneInRapport("\W0" & CStr(Niveau) & Numerotation & Titre)
+
+    End Sub
+
+    ''' <summary>
+    ''' Ajout d'une cellule dans un tableau (Ajout GuD: Récupéré du logiciel EcliX)
+    ''' 22/01/08 :  Création - Version 1.00
+    ''' </summary>
+    ''' <param name="Largeur">Largeur de la cellule (comme pourcentage de la largeur du graphics)</param>
+    ''' <param name="Bordure">Définit les bordures de la cellules</param>
+    ''' <param name="Position">Position du texte dans la cellule</param>
+    ''' <param name="Chaine">Texte à écrire dans la cellule</param>
+    Private Sub AddCellule(ByVal Largeur As Decimal, ByVal Bordure As Integer,
+                           ByVal Position As PositionTexteInCell, ByVal Chaine As String)
+
+        MyNote.AddLigneInRapport("CELL " & Largeur.ToString & " " & Bordure.ToString & " " & ClePos(Position) & " :" & Chaine)
+
+    End Sub
+
+    ''' <summary>
+    ''' Ajout d'une cellule dans un tableau avec un fond coloré (Ajout GuD: Récupéré du logiciel EcliX)
+    ''' 22/01/08 :  Création - Version 1.00
+    ''' </summary>
+    ''' <param name="Largeur">Largeur de la cellule (comme pourcentage de la largeur du graphics)</param>
+    ''' <param name="Bordure">Définit les bordures de la cellules</param>
+    ''' <param name="Position">Position du texte dans la cellule</param>
+    ''' <param name="Chaine">Texte à écrire dans la cellule</param>
+    Private Sub AddCelluleFond(ByVal Largeur As Single, ByVal Bordure As Integer,
+                               ByVal Position As PositionTexteInCell, ByVal Chaine As String)
+
+        MyNote.AddLigneInRapport("CELF " & Largeur.ToString & " " & Bordure.ToString & " " & ClePos(Position) & " :" & Chaine)
+
+    End Sub
+
+    ''' <summary>
+    ''' Ajout d'une cellule dans un tableau avec un fond coloré (Ajout GuD: Récupéré du logiciel EcliX)
+    ''' 19/07/21 - couleur de fond modifié si valeur correcte ou non
+    ''' </summary>
+    ''' <param name="Largeur">Largeur de la cellule (comme pourcentage de la largeur du graphics)</param>
+    ''' <param name="Bordure">Définit les bordures de la cellules</param>
+    ''' <param name="Position">Position du texte dans la cellule</param>
+    ''' <param name="Chaine">Texte à écrire dans la cellule</param>
+    ''' <param name="correct">Indique si la valeur est correcte ou non</param>
+    Private Sub AddCelluleFond(ByVal Largeur As Single, ByVal Bordure As Integer,
+                               ByVal Position As PositionTexteInCell, ByVal Chaine As String, ByVal correct As Boolean)
+
+        If correct Then
+            MyNote.AddLigneInRapport("CELC " & Largeur.ToString & " " & Bordure.ToString & " " & ClePos(Position) & " :" & Chaine)
+        Else 'erreur
+            MyNote.AddLigneInRapport("CELE " & Largeur.ToString & " " & Bordure.ToString & " " & ClePos(Position) & " :" & Chaine)
+        End If
+
+    End Sub
+
+    ''' <summary>
+    ''' Initialise une nouvelle ligne de tableau (Ajout GuD: Récupéré du logiciel EcliX)
+    ''' 22/01/08 : Création - Version 1.00
+    ''' 19/07/21 : Modif BeD - si tableau peut dépasser la page alors sautPage() 
+    ''' </summary>
+    ''' <param name="NombreCellules">Nombre de cellules de la ligne</param>
+    ''' <param name="hLigne">Hauteur des cellules de la ligne (multiplicateur de la hauteur de police standard)</param>
+    ''' <param name="tableauOutPage">Indique si le tableau va déborder de la page actuelle</param>
+    ''' <param name="texteTableau">Texte pour créer le tableau de la page N+1 (\Tableau 20 par exemple)</param>
+    Private Sub InitialiseLigne(ByVal NombreCellules As Integer, ByVal hLigne As Single, ByVal Optional tableauOutPage As Boolean = False, ByVal Optional texteTableau As String = "")
+
+        If tableauOutPage And nbLignes > MAXLIGNEPPAG Then
+            FinTableau()                        'fin du tableau de la page N
+            SautePage()
+            AddLigneNDC(texteTableau, False)    'début tableau de la page N+1
+        End If
+
+        MyNote.AddLigneInRapport("LTAB " & NombreCellules.ToString & " " & hLigne.ToString)
+
+        nbLignes += hLigne - 0.2 'ajustement des lignes
 
     End Sub
 
