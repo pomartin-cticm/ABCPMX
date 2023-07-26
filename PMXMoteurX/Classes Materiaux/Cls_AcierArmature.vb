@@ -37,6 +37,14 @@
 
 #End Region
 
+#Region "Fonctions de copie"
+
+    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+        Return Me.MemberwiseClone()
+    End Function
+
+#End Region
+
 #Region " Outils "
 
     Public Sub MAJProprietes()

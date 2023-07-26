@@ -2,13 +2,19 @@
 
 Public Class Cls_OptionsCalcul
 
-#Region " Constantes "
+#Region " Enumérations et constantes "
 
     Public Shared tabRH() As Decimal = {50, 80}
 
     'Public Shared t0Retrait As Decimal = 1
 
+    Enum EnuGenerationEC4
+        Generation1
+        Generation2
+    End Enum
+
 #End Region
+
 
 #Region " Attributs "
 
@@ -107,6 +113,11 @@ Public Class Cls_OptionsCalcul
     ''' </summary>
     Public HivossParam As cls_HivossParam
 
+    ''' <summary>
+    ''' Permet de stocker selon quelle génération de l'EC4 on effectue le calcul
+    ''' </summary>
+    Public GenerationEC4 As EnuGenerationEC4
+
 #End Region
 
 #Region " Constructeurs "
@@ -148,6 +159,8 @@ Public Class Cls_OptionsCalcul
         Me.lChargesExploitation = True
         Me.lChargesPermanentes = True
         Me.NeqCustom = 7
+
+        Me.GenerationEC4 = EnuGenerationEC4.Generation1
 
     End Sub
 

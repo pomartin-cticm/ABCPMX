@@ -2,8 +2,8 @@
 
 #Region " Enumérations et constantes "
 
-    Public Const PORTEEDEFAUT As Decimal = 10.25
-    Const PORTEECONSOLEDEFAUT As Decimal = 3.256
+    Public Const PORTEEDEFAUT As Decimal = 10
+    Const PORTEECONSOLEDEFAUT As Decimal = 3
     Const ENTRAXEDEFAUT As Decimal = 2
     Const DISTANCETREMIEDEFAUT As Decimal = ENTRAXEDEFAUT / 2
     Const NBPROPPINGDEFAUT As Integer = 0
@@ -164,14 +164,6 @@
     ''' </summary>
     Public lAutomaticDesign As Boolean
 
-    ''' <summary>
-    ''' Indique si l'arrangement tient compte de la présence d'un bac transversal
-    ''' </summary>
-    Public ReadOnly Property LBacTransv As Boolean
-        Get
-            Return Me.Dalle.type = Me.Dalle.Enum_TypeDalle.Mixte
-        End Get
-    End Property
 
     ''' <summary>
     ''' Indique l'espacement entre deux ondes consécutives dans le cas d'un bac transversal
@@ -297,7 +289,7 @@
         ReDim LongueurTravee(pNbTravees + 2)
         ReDim TypTravee(pNbTravees + 2)
         ReDim Maintiens(pNbTravees + 2)
-
+        ReDim NbRestrain(pNbTravees + 2)
         ReDim TypeMaintien(pNbTravees + 2)
 
         For i As Integer = 0 To TypeMaintien.Length - 1
@@ -346,6 +338,8 @@
 
         For i As Integer = 0 To pNbTravees + 2
             Longueur_Zone(i, 0) = LongueurTravee(i)
+            Longueur_Zone(i, 1) = 0
+            Longueur_Zone(i, 2) = 0
             NombreZone(i) = 1
             Espacement(i, 0) = 200 / 1000
             Espacement(i, 1) = 200 / 1000
@@ -360,6 +354,8 @@
                 NombreGoujonsTot(i) += Longueur_Zone(i, j) / Espacement(i, j)
             Next
         Next
+
+        lAutomaticDesign = False
 
     End Sub
 
@@ -585,10 +581,21 @@
         '   05/06/23 :  Clonage d'une poutre source vers la poutre interne
         '------------------------------------------------------------------------------------------------
 
-        PoutreCible = PoutreSource.Clone
+        PoutreCible = PoutreSource.Clone()
+
         ReDim PoutreCible.LongueurTravee(PoutreSource.LongueurTravee.GetUpperBound(0))
         PoutreCible.LongueurTravee = PoutreSource.LongueurTravee.Clone
+
+        ReDim PoutreCible.TypTravee(PoutreSource.TypTravee.GetUpperBound(0))
         PoutreCible.TypTravee = PoutreSource.TypTravee.Clone
+
+        ReDim PoutreCible.NbRestrain(PoutreSource.NbRestrain.GetUpperBound(0))
+        PoutreCible.NbRestrain = PoutreSource.NbRestrain.Clone
+
+        ReDim PoutreCible.TypeMaintien(PoutreSource.TypeMaintien.GetUpperBound(0))
+        PoutreCible.TypeMaintien = PoutreSource.TypeMaintien.Clone
+
+        Cls_Dalle.DeepClone(PoutreSource.Dalle, PoutreCible.Dalle)
         PoutreCible.Dalle = PoutreSource.Dalle.Clone
 
         ReDim PoutreCible.Maintiens(PoutreSource.Maintiens.Length - 1)
@@ -603,6 +610,31 @@
                 PoutreCible.Maintiens(i).Add(maintien_local)
             Next
         Next
+
+        'Clone des attributs pour la connexion
+        ReDim PoutreCible.Longueur_Zone(PoutreSource.Longueur_Zone.GetUpperBound(0), PoutreSource.Longueur_Zone.GetUpperBound(1))
+        PoutreCible.Longueur_Zone = PoutreSource.Longueur_Zone.Clone
+
+        ReDim PoutreCible.NombreZone(PoutreSource.NombreZone.GetUpperBound(0))
+        PoutreCible.NombreZone = PoutreSource.NombreZone.Clone
+
+        ReDim PoutreCible.Espacement(PoutreSource.Espacement.GetUpperBound(0), PoutreSource.Espacement.GetUpperBound(1))
+        PoutreCible.Espacement = PoutreSource.Espacement.Clone
+
+        ReDim PoutreCible.Espacement_Bac_Trans(PoutreSource.Espacement_Bac_Trans.GetUpperBound(0), PoutreSource.Espacement_Bac_Trans.GetUpperBound(1))
+        PoutreCible.Espacement_Bac_Trans = PoutreSource.Espacement_Bac_Trans.Clone
+
+        ReDim PoutreCible.NombreGoujonsTransv(PoutreSource.NombreGoujonsTransv.GetUpperBound(0), PoutreSource.NombreGoujonsTransv.GetUpperBound(1))
+        PoutreCible.NombreGoujonsTransv = PoutreSource.NombreGoujonsTransv.Clone
+
+        ReDim PoutreCible.NombreGoujonsTot(PoutreSource.NombreGoujonsTot.GetUpperBound(0))
+        PoutreCible.NombreGoujonsTot = PoutreSource.NombreGoujonsTot.Clone
+
+        'Clone Section
+
+
+
+        'Clone param calcul
 
 
     End Sub

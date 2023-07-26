@@ -209,6 +209,16 @@ Public Class Frm_Gamma
         End If
     End Sub
 
+    ''' <summary>
+    ''' Vide la fenêtre des erreurs
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub btn_Annuler_Click(sender As Object, e As EventArgs) Handles btn_Annuler.Click
+        ErrorProvider.Clear()
+    End Sub
+
+
 
     Private Function ValideSaisieFenetre() As Boolean
         lFrm_Valide = True

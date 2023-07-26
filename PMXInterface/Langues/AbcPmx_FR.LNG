@@ -37,6 +37,30 @@ NAVIGATION				= Navigation
 ZOOM					= Zoom
 SAVEAS					= Enresitrer sous
 
+#FRM_CONNECTION
+TITLE					= Définition de la connection
+OK						= Ok
+CANCEL					= Annuler
+CONNECTION				= Connection
+CONNECTORS				= Connecteurs
+DIAMETER				= Diamètre
+AUTOMATICDESIGN				= Dimensionnement automatique de la connection
+DISPOSITION_LON_BAC_TR			= Disposition toutes les 
+DISPOSITION_LON_NO_BAC			= Espacement longitudinal
+LEFTCANT				= Console gauche
+MAINSPAN				= Travée principale
+RECMAXVALUE				= Les valeurs renseignées sont en dehors des valeurs recommandées : 
+RIGHTCANT				= Console droite
+RIB					= Onde
+RIBS					= Ondes
+ROW_NUMBER				= Nombre de files
+SPAN					= Travée
+STUDS					= Goujons
+WIDTH					= Largeur
+WARNING_CMBTRAVEE			= L'ensemble des informations renseignées doivent être correctes pour sélectionner une autre travée
+ADD						= Ajouter
+DELETE					= Supprimer
+
 #FRM_ENCASEMENT
 CANCEL					= Annuler 
 CLASS					= Classe

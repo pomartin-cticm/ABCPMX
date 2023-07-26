@@ -42,10 +42,18 @@ Public Class Cls_Connecteur
 
     Public Sub New()
 
-        Me.nom = Mod_Declarations.goujons_database(0).Item1
+        Me.nom = Mod_Declarations.goujons_database(3
+                                                   ).Item1
         Caracteristiques_Goujons()
 
     End Sub
+
+#End Region
+
+#Region "Fonction de copie"
+    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+        Return Me.MemberwiseClone()
+    End Function
 
 #End Region
 

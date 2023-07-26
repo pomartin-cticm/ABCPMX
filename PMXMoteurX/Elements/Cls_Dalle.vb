@@ -328,8 +328,21 @@
 
     Public Shared Sub DeepClone(DalleSource As Cls_Dalle, ByRef DalleCible As Cls_Dalle)
 
-        DalleCible = DalleSource.Clone
+        DalleCible = DalleSource.Clone()
 
+        DalleCible.beton = DalleSource.beton.Clone()
+        DalleCible.Bac = DalleSource.Bac.Clone()
+
+        DalleCible.LitArma = New List(Of Cls_Armatures_Longi)
+
+        For Each armalongi As Cls_Armatures_Longi In DalleSource.LitArma
+            Dim armalongi_loc As New Cls_Armatures_Longi()
+            armalongi_loc = armalongi.Clone()
+            DalleCible.LitArma.Add(armalongi_loc)
+        Next
+
+        DalleCible.AcierArmatures = DalleSource.AcierArmatures.Clone()
+        DalleCible.Connecteur = DalleSource.Connecteur.Clone()
     End Sub
 
 #End Region

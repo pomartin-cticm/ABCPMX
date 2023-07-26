@@ -502,6 +502,16 @@ Public Class cls_ProfilA
         Return Me.MemberwiseClone()
     End Function
 
+    Public Function DeepClone(ByVal ProfilASource As cls_ProfilA, ByRef ProfilACible As cls_ProfilA)
+        ProfilACible = ProfilASource.Clone()
+
+        ReDim ProfilACible.IndDeliv(ProfilASource.IndDeliv.GetUpperBound(0))
+        ProfilACible.IndDeliv = ProfilASource.IndDeliv.Clone
+
+        ReDim ProfilACible.IndStandart(ProfilASource.IndStandart.GetUpperBound(0))
+        ProfilACible.IndStandart = ProfilASource.IndStandart.Clone
+    End Function
+
     Public Shared Sub DeepCopie(ProfilSource As cls_ProfilA, ByRef ProfilCible As cls_ProfilA)
 
         ProfilCible = ProfilSource.Clone

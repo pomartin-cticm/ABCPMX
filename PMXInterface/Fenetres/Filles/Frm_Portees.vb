@@ -18,6 +18,8 @@ Public Class Frm_Portees
 
     Dim MyPoutreLoc As New cls_Poutre
 
+    Const formatLONGUEUR As String = "0.00"
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -120,26 +122,26 @@ Public Class Frm_Portees
 
         With MyProjet.Poutres(MyProjet.IndEnCours)
 
-            Me.txt_MainSpan.Text = GetStringNoUnit(.LongueurTravee(1), Enu_TypeVariable.Longueur)
+            Me.txt_MainSpan.Text = GetStringInUnit(.LongueurTravee(1), Enu_TypeVariable.Longueur, 4, 2, False)
 
             Me.chk_ConsoleGauche.Checked = .lTraveeConsoleGauche
-            Me.txt_PorteeConsoleG.Text = GetStringNoUnit(.LongueurTravee(0), Enu_TypeVariable.Longueur)
+            Me.txt_PorteeConsoleG.Text = GetStringInUnit(.LongueurTravee(0), Enu_TypeVariable.Longueur, 4, 2, False)
 
             Me.chk_ConsoleDroite.Checked = .lTraveeConsoleDroite
-            Me.txt_PorteeConsoleD.Text = GetStringNoUnit(.LongueurTravee(.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur)
+            Me.txt_PorteeConsoleD.Text = GetStringInUnit(.LongueurTravee(.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur, 4, 2, False)
 
-            Me.txt_D1.Text = GetStringNoUnit(.EntraxeD1, Enu_TypeVariable.Longueur)
-            Me.txt_D2.Text = GetStringNoUnit(.EntraxeD2, Enu_TypeVariable.Longueur)
+            Me.txt_D1.Text = GetStringInUnit(.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, False)
+            Me.txt_D2.Text = GetStringInUnit(.EntraxeD2, Enu_TypeVariable.Longueur, 4, 2, False)
 
             Me.rad_Intermediaire.Checked = MyPoutreLoc.lIntermediaire
 
             Me.chk_TremieGauche.Checked = .lTremieGauche
             'If .lTremieGauche Then
-            Me.txt_TremieGauche.Text = GetStringNoUnit(.DistanceDsl1, Enu_TypeVariable.Longueur)
+            Me.txt_TremieGauche.Text = GetStringInUnit(.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, False)
 
             Me.chk_TremieDroite.Checked = .lTremieDroite
             'If .lTremieDroite Then
-            Me.txt_TremieDroite.Text = GetStringNoUnit(.DistanceDsl2, Enu_TypeVariable.Longueur)
+            Me.txt_TremieDroite.Text = GetStringInUnit(.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, False)
 
         End With
 
@@ -181,7 +183,28 @@ Public Class Frm_Portees
     End Sub
 
     Private Function ValideSaisieFenetre() As Boolean
-        Return True
+        Dim lFrm_Valide As Boolean = True
+
+        Dim list_txtbox As New List(Of TextBox)
+        list_txtbox.Add(txt_MainSpan)
+        If chk_ConsoleGauche.Checked Then list_txtbox.Add(txt_PorteeConsoleG)
+        If chk_ConsoleDroite.Checked Then list_txtbox.Add(txt_PorteeConsoleD)
+        list_txtbox.Add(txt_D1)
+        list_txtbox.Add(txt_D2)
+        If chk_TremieGauche.Checked Then list_txtbox.Add(txt_TremieGauche)
+        If chk_TremieDroite.Checked Then list_txtbox.Add(txt_TremieDroite)
+
+        Dim ValeurUI As Decimal
+
+        For Each txtbox_loc As TextBox In list_txtbox
+            VerificationSaisie(txtbox_loc, ValeurUI)
+            If Not ErrorProvider.GetError(txtbox_loc) = String.Empty Then
+                lFrm_Valide = False
+                Exit For
+            End If
+        Next
+
+        Return lFrm_Valide
     End Function
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
@@ -194,6 +217,7 @@ Public Class Frm_Portees
                 If .LongueurTravee(i_travee) <> MyPoutreLoc.LongueurTravee(i_travee) Then
                     lModif = True
                     .LongueurTravee(i_travee) = MyPoutreLoc.LongueurTravee(i_travee)
+                    Reinitialiser_Connection(i_travee)
                 End If
             Next
 
@@ -244,6 +268,31 @@ Public Class Frm_Portees
             End If
 
 
+        End With
+    End Sub
+
+    ''' <summary>
+    ''' Lorsqu'une travée voit sa longueur modifiée, il faut réinitialiser les paramètres de celle-ci vis-à-vis de la connection
+    ''' </summary>
+    ''' <param name="indTravee"></param>
+    Private Sub Reinitialiser_Connection(ByVal indTravee As Integer)
+        With MyProjet.Poutres(MyProjet.IndEnCours)
+            .Longueur_Zone(indTravee, 0) = .LongueurTravee(indTravee)
+            .Longueur_Zone(indTravee, 1) = 0
+            .Longueur_Zone(indTravee, 2) = 0
+            .NombreZone(indTravee) = 1
+            .Espacement(indTravee, 0) = 200 / 1000
+            .Espacement(indTravee, 1) = 200 / 1000
+            .Espacement(indTravee, 2) = 200 / 1000
+            .Espacement_Bac_Trans(indTravee, 0) = 1
+            .Espacement_Bac_Trans(indTravee, 1) = 1
+            .Espacement_Bac_Trans(indTravee, 2) = 1
+            .NombreGoujonsTransv(indTravee, 0) = 1
+            .NombreGoujonsTransv(indTravee, 1) = 1
+            .NombreGoujonsTransv(indTravee, 2) = 1
+            For j As Integer = 0 To 2
+                .NombreGoujonsTot(indTravee) += .Longueur_Zone(indTravee, j) / .Espacement(indTravee, j)
+            Next
         End With
     End Sub
 #End Region
@@ -378,7 +427,7 @@ Public Class Frm_Portees
                     Dim ValMin As Decimal = 0
                     Dim ValMax As Decimal = MyPoutreLoc.EntraxeD1 / 2
 
-                    txt_TremieGauche.Text = Math.Min(Math.Max(MyPoutreLoc.DistanceDsl1, ValMin), ValMax)
+                    txt_TremieGauche.Text = GetStringInUnit(Math.Min(Math.Max(MyPoutreLoc.DistanceDsl1, ValMin), ValMax), Enu_TypeVariable.Longueur, 4, 2, False)
 
                 End If
 
@@ -387,7 +436,7 @@ Public Class Frm_Portees
                     Dim ValMin As Decimal = 0
                     Dim ValMax As Decimal = MyPoutreLoc.EntraxeD2 / 2
 
-                    txt_TremieDroite.Text = Math.Min(Math.Max(MyPoutreLoc.DistanceDsl2, ValMin), ValMax)
+                    txt_TremieDroite.Text = GetStringInUnit(Math.Min(Math.Max(MyPoutreLoc.DistanceDsl2, ValMin), ValMax), Enu_TypeVariable.Longueur, 4, 2, False)
 
                 End If
 
@@ -449,7 +498,7 @@ Public Class Frm_Portees
     Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 
         Dim lOk As Boolean = True
-        ErrorProvider.Clear()
+        ErrorProvider.SetError(MyTxt, String.Empty)
 
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
@@ -459,26 +508,26 @@ Public Class Frm_Portees
         Select Case MyTxt.Name
             Case Me.txt_MainSpan.Name
 
-                ValMin = PORTEEMIN / kUnit
-                ValMax = PORTEEMAX / kUnit
+                ValMin = Format(PORTEEMIN / kUnit, formatLONGUEUR)
+                ValMax = Format(PORTEEMAX / kUnit, formatLONGUEUR)
 
             Case Me.txt_PorteeConsoleG.Name, Me.txt_PorteeConsoleD.Name
 
-                ValMin = CONSOLEMIN / kUnit
-                ValMax = RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit
+                ValMin = Format(CONSOLEMIN / kUnit, formatLONGUEUR)
+                ValMax = Format(RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit, formatLONGUEUR)
 
             Case Me.txt_D1.Name, Me.txt_D2.Name
 
-                ValMin = ENTRAXEMIN / kUnit
-                ValMax = ENTRAXEMAX / kUnit
+                ValMin = Format(ENTRAXEMIN / kUnit, formatLONGUEUR)
+                ValMax = Format(ENTRAXEMAX / kUnit, formatLONGUEUR)
 
             Case Me.txt_TremieGauche.Name
-                ValMin = 0
-                ValMax = MyPoutreLoc.EntraxeD1 / 2
+                ValMin = Format(0, formatLONGUEUR)
+                ValMax = Format(MyPoutreLoc.EntraxeD1 / 2, formatLONGUEUR)
 
             Case Me.txt_TremieDroite.Name
-                ValMin = 0
-                ValMax = MyPoutreLoc.EntraxeD2 / 2
+                ValMin = Format(0, formatLONGUEUR)
+                ValMax = Format(MyPoutreLoc.EntraxeD2 / 2, formatLONGUEUR)
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -487,7 +536,7 @@ Public Class Frm_Portees
             NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
-            ErrorProvider.Clear()
+            'ErrorProvider.Clear()
         End If
 
         lOk = (iErreur = 0)

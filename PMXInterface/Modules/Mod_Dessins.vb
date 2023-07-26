@@ -2212,7 +2212,7 @@ Module Mod_Dessins
 
         AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParaff1, True, True)
 
-        If lAffSymbol Then Chaine = "D1" Else Chaine = GetStringNoUnit(MyPoutre.EntraxeD1, Enu_TypeVariable.Longueur)
+        If lAffSymbol Then Chaine = "D1" Else Chaine = GetStringInUnit(MyPoutre.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, False)
         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         '--> Entraxe à droite
@@ -2225,7 +2225,7 @@ Module Mod_Dessins
 
         AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParaff1, True, True)
 
-        If lAffSymbol Then Chaine = "D2" Else Chaine = GetStringNoUnit(MyPoutre.EntraxeD2, Enu_TypeVariable.Longueur)
+        If lAffSymbol Then Chaine = "D2" Else Chaine = GetStringInUnit(MyPoutre.EntraxeD2, Enu_TypeVariable.Longueur, 4, 2, False)
         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         '--> Trémie Gauche
@@ -2239,7 +2239,7 @@ Module Mod_Dessins
 
             AddFleche(MyGr, MyPen, xo, yCoteS, xe, yCoteS, MyParaff1, True, True)
 
-            If lAffSymbol Then Chaine = "Dsl1" Else Chaine = GetStringNoUnit(MyPoutre.DistanceDsl1, Enu_TypeVariable.Longueur)
+            If lAffSymbol Then Chaine = "Dsl1" Else Chaine = GetStringInUnit(MyPoutre.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, False)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCoteS, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         End If
@@ -2255,7 +2255,7 @@ Module Mod_Dessins
 
             AddFleche(MyGr, MyPen, xo, yCoteS, xe, yCoteS, MyParaff1, True, True)
 
-            If lAffSymbol Then Chaine = "Dsl2" Else Chaine = GetStringNoUnit(MyPoutre.DistanceDsl2, Enu_TypeVariable.Longueur)
+            If lAffSymbol Then Chaine = "Dsl2" Else Chaine = GetStringInUnit(MyPoutre.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, False)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCoteS, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         End If
@@ -2391,7 +2391,7 @@ Module Mod_Dessins
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "Lg" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(0), Enu_TypeVariable.Longueur)
+                If lAffSymbol Then Chaine = "Lg" Else Chaine = GetStringInUnit(MyPoutre.LongueurTravee(0), Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 lTotal = True
@@ -2409,7 +2409,7 @@ Module Mod_Dessins
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i), Enu_TypeVariable.Longueur)
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(MyPoutre.LongueurTravee(i), Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             Next
@@ -2426,7 +2426,7 @@ Module Mod_Dessins
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "Ld" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur)
+                If lAffSymbol Then Chaine = "Ld" Else Chaine = GetStringInUnit(MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 lTotal = True
@@ -2442,7 +2442,7 @@ Module Mod_Dessins
 
                 AddFleche(MyGr, MyPen, xo, yCote - dCar, xe, yCote - dCar, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(LongueurPoutre, Enu_TypeVariable.Longueur)
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(LongueurPoutre, Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote - dCar, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             End If
@@ -2673,7 +2673,7 @@ Module Mod_Dessins
 
     Public Sub DessinFrmConnection_Connection(MyGr As Graphics, MyPoutre As cls_Poutre,
                                 ByVal pWi As Decimal, ByVal pHi As Decimal,
-                                kAdjust As Double, indTravee As Integer, lCote As Boolean, strStuds As String,
+                                kAdjust As Double, indTravee As Integer, ByVal lCote As Boolean, strStuds As String,
                                 ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '------------------------------------------------------------------------------------------------------------------
         '   21/07/23 :  Création - GUD
@@ -2722,12 +2722,20 @@ Module Mod_Dessins
 
         LongueurTravee = MyPoutre.PORTEEDEFAUT
         LargeurSemelle = LongueurTravee / 8.5
-        For i As Integer = 0 To 2
-            NombreGoujonsTrans(i) = MyPoutre.NombreGoujonsTransv(indTravee, i)
-            LongueurZones(i) = MyPoutre.Longueur_Zone(indTravee, i) / MyPoutre.LongueurTravee(indTravee) * LongueurTravee
-            NombreGoujonsLongiZone(i) = 0.75 * MyPoutre.Longueur_Zone(indTravee, i) / MyPoutre.Espacement(indTravee, i)
-            NombreZones = MyPoutre.NombreZone(indTravee)
-        Next
+        If Not MyPoutre.lAutomaticDesign Then
+            For i As Integer = 0 To 2
+                NombreGoujonsTrans(i) = MyPoutre.NombreGoujonsTransv(indTravee, i)
+                LongueurZones(i) = MyPoutre.Longueur_Zone(indTravee, i) / MyPoutre.LongueurTravee(indTravee) * LongueurTravee
+                NombreGoujonsLongiZone(i) = 0.75 * MyPoutre.Longueur_Zone(indTravee, i) / MyPoutre.Espacement(indTravee, i)
+                NombreZones = MyPoutre.NombreZone(indTravee)
+            Next
+        Else
+            NombreGoujonsTrans(0) = 1
+            LongueurZones(0) = LongueurTravee
+            NombreGoujonsLongiZone(0) = 0.75 * MyPoutre.Longueur_Zone(indTravee, 0) / 0.2
+            NombreZones = 1
+        End If
+
 
         DiametreGoujons = LargeurSemelle / 15
 
@@ -2793,9 +2801,9 @@ Module Mod_Dessins
                 Dim yCote As Decimal = -LargeurSemelle / 2 - dCar
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.Longueur_Zone(indTravee, i), Enu_TypeVariable.Longueur)
+                'If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.Longueur_Zone(indTravee, i), Enu_TypeVariable.Longueur)
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(MyPoutre.Longueur_Zone(indTravee, i), Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
 
                 'On dessinne la côte supérieure qui donne le nombre de goujons disposés sur la zone étudiée 
                 yCote = LargeurSemelle / 2 + dCar

@@ -218,6 +218,22 @@ Public Class Cls_Enrobage_Partiel
         Return Me.MemberwiseClone()
     End Function
 
+    Public Sub DeepClone(ByVal EnrobagePartielSource As Cls_Enrobage_Partiel, ByRef EnrobagePartielCible As Cls_Enrobage_Partiel)
+        EnrobagePartielCible = EnrobagePartielSource.Clone
+
+        ReDim EnrobagePartielCible.LitsArmaOLD(EnrobagePartielSource.LitsArmaOLD.GetUpperBound(0))
+        EnrobagePartielCible.LitsArmaOLD = EnrobagePartielSource.LitsArmaOLD.Clone
+
+        ReDim EnrobagePartielCible.LitArma(EnrobagePartielSource.LitArma.GetUpperBound(0))
+        For i As Integer = 0 To EnrobagePartielCible.LitArma.Length - 1
+            EnrobagePartielCible.LitArma(i) = EnrobagePartielSource.LitArma(i).Clone
+        Next
+
+        EnrobagePartielCible.Beton = EnrobagePartielSource.Beton.Clone
+        EnrobagePartielCible.AcierArmatures = EnrobagePartielSource.AcierArmatures.Clone
+
+    End Sub
+
     Public Shared Sub DeepCopie(EnrobageSource As Cls_Enrobage_Partiel, ByRef EnrobageCible As Cls_Enrobage_Partiel)
 
         EnrobageCible = EnrobageSource.Clone

@@ -79,6 +79,7 @@ Partial Class Frm_Connection
         Me.img_hsc = New System.Windows.Forms.PictureBox()
         Me.cmb_goujons = New System.Windows.Forms.ComboBox()
         Me.ErrorProvider_Frm_Connection = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.chk_AutomaticDesign = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -217,9 +218,8 @@ Partial Class Frm_Connection
         Me.TLPan_Droite.Name = "TLPan_Droite"
         Me.TLPan_Droite.RowCount = 3
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
+        Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
         Me.TLPan_Droite.Size = New System.Drawing.Size(533, 386)
         Me.TLPan_Droite.TabIndex = 0
         '
@@ -246,7 +246,7 @@ Partial Class Frm_Connection
         Me.pan_ImgConnection.Location = New System.Drawing.Point(0, 30)
         Me.pan_ImgConnection.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ImgConnection.Name = "pan_ImgConnection"
-        Me.pan_ImgConnection.Size = New System.Drawing.Size(533, 178)
+        Me.pan_ImgConnection.Size = New System.Drawing.Size(533, 160)
         Me.pan_ImgConnection.TabIndex = 2
         '
         'img_Connection
@@ -262,6 +262,7 @@ Partial Class Frm_Connection
         '
         Me.pan_SaisieConnection.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieConnection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieConnection.Controls.Add(Me.chk_AutomaticDesign)
         Me.pan_SaisieConnection.Controls.Add(Me.txt_Portee)
         Me.pan_SaisieConnection.Controls.Add(Me.cmb_Travee)
         Me.pan_SaisieConnection.Controls.Add(Me.txt_EspLongi_I3)
@@ -287,16 +288,16 @@ Partial Class Frm_Connection
         Me.pan_SaisieConnection.Controls.Add(Me.txt_Largeur)
         Me.pan_SaisieConnection.Controls.Add(Me.txt_Indice)
         Me.pan_SaisieConnection.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieConnection.Location = New System.Drawing.Point(0, 208)
+        Me.pan_SaisieConnection.Location = New System.Drawing.Point(0, 190)
         Me.pan_SaisieConnection.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieConnection.Name = "pan_SaisieConnection"
-        Me.pan_SaisieConnection.Size = New System.Drawing.Size(533, 178)
+        Me.pan_SaisieConnection.Size = New System.Drawing.Size(533, 196)
         Me.pan_SaisieConnection.TabIndex = 1
         '
         'txt_Portee
         '
         Me.txt_Portee.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_Portee.Location = New System.Drawing.Point(20, 21)
+        Me.txt_Portee.Location = New System.Drawing.Point(20, 48)
         Me.txt_Portee.Name = "txt_Portee"
         Me.txt_Portee.ReadOnly = True
         Me.txt_Portee.Size = New System.Drawing.Size(147, 20)
@@ -309,7 +310,7 @@ Partial Class Frm_Connection
         '
         Me.cmb_Travee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_Travee.FormattingEnabled = True
-        Me.cmb_Travee.Location = New System.Drawing.Point(173, 20)
+        Me.cmb_Travee.Location = New System.Drawing.Point(173, 47)
         Me.cmb_Travee.Name = "cmb_Travee"
         Me.cmb_Travee.Size = New System.Drawing.Size(133, 21)
         Me.cmb_Travee.TabIndex = 75
@@ -317,7 +318,7 @@ Partial Class Frm_Connection
         'txt_EspLongi_I3
         '
         Me.txt_EspLongi_I3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EspLongi_I3.Location = New System.Drawing.Point(307, 153)
+        Me.txt_EspLongi_I3.Location = New System.Drawing.Point(307, 165)
         Me.txt_EspLongi_I3.Name = "txt_EspLongi_I3"
         Me.txt_EspLongi_I3.Size = New System.Drawing.Size(66, 20)
         Me.txt_EspLongi_I3.TabIndex = 74
@@ -325,7 +326,7 @@ Partial Class Frm_Connection
         'txt_Largeur_I3
         '
         Me.txt_Largeur_I3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Largeur_I3.Location = New System.Drawing.Point(307, 88)
+        Me.txt_Largeur_I3.Location = New System.Drawing.Point(307, 100)
         Me.txt_Largeur_I3.Name = "txt_Largeur_I3"
         Me.txt_Largeur_I3.Size = New System.Drawing.Size(66, 20)
         Me.txt_Largeur_I3.TabIndex = 74
@@ -333,7 +334,7 @@ Partial Class Frm_Connection
         'txt_EspLongi_I2
         '
         Me.txt_EspLongi_I2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EspLongi_I2.Location = New System.Drawing.Point(240, 153)
+        Me.txt_EspLongi_I2.Location = New System.Drawing.Point(240, 165)
         Me.txt_EspLongi_I2.Name = "txt_EspLongi_I2"
         Me.txt_EspLongi_I2.Size = New System.Drawing.Size(66, 20)
         Me.txt_EspLongi_I2.TabIndex = 74
@@ -341,7 +342,7 @@ Partial Class Frm_Connection
         'txt_Largeur_I2
         '
         Me.txt_Largeur_I2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Largeur_I2.Location = New System.Drawing.Point(240, 88)
+        Me.txt_Largeur_I2.Location = New System.Drawing.Point(240, 100)
         Me.txt_Largeur_I2.Name = "txt_Largeur_I2"
         Me.txt_Largeur_I2.Size = New System.Drawing.Size(66, 20)
         Me.txt_Largeur_I2.TabIndex = 74
@@ -349,7 +350,7 @@ Partial Class Frm_Connection
         'txt_EspLongi_I1
         '
         Me.txt_EspLongi_I1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EspLongi_I1.Location = New System.Drawing.Point(173, 153)
+        Me.txt_EspLongi_I1.Location = New System.Drawing.Point(173, 165)
         Me.txt_EspLongi_I1.Name = "txt_EspLongi_I1"
         Me.txt_EspLongi_I1.Size = New System.Drawing.Size(66, 20)
         Me.txt_EspLongi_I1.TabIndex = 74
@@ -357,7 +358,7 @@ Partial Class Frm_Connection
         'txt_Largeur_I1
         '
         Me.txt_Largeur_I1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Largeur_I1.Location = New System.Drawing.Point(173, 88)
+        Me.txt_Largeur_I1.Location = New System.Drawing.Point(173, 100)
         Me.txt_Largeur_I1.Name = "txt_Largeur_I1"
         Me.txt_Largeur_I1.Size = New System.Drawing.Size(66, 20)
         Me.txt_Largeur_I1.TabIndex = 74
@@ -366,7 +367,7 @@ Partial Class Frm_Connection
         '
         Me.cmb_EspLongi_I3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_EspLongi_I3.FormattingEnabled = True
-        Me.cmb_EspLongi_I3.Location = New System.Drawing.Point(307, 129)
+        Me.cmb_EspLongi_I3.Location = New System.Drawing.Point(307, 141)
         Me.cmb_EspLongi_I3.Name = "cmb_EspLongi_I3"
         Me.cmb_EspLongi_I3.Size = New System.Drawing.Size(66, 21)
         Me.cmb_EspLongi_I3.TabIndex = 63
@@ -375,7 +376,7 @@ Partial Class Frm_Connection
         '
         Me.cmb_NbRow_I3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I3.FormattingEnabled = True
-        Me.cmb_NbRow_I3.Location = New System.Drawing.Point(307, 107)
+        Me.cmb_NbRow_I3.Location = New System.Drawing.Point(307, 119)
         Me.cmb_NbRow_I3.Name = "cmb_NbRow_I3"
         Me.cmb_NbRow_I3.Size = New System.Drawing.Size(66, 21)
         Me.cmb_NbRow_I3.TabIndex = 63
@@ -384,15 +385,16 @@ Partial Class Frm_Connection
         '
         Me.cmb_EspLongi_I2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_EspLongi_I2.FormattingEnabled = True
-        Me.cmb_EspLongi_I2.Location = New System.Drawing.Point(240, 129)
+        Me.cmb_EspLongi_I2.Location = New System.Drawing.Point(240, 141)
         Me.cmb_EspLongi_I2.Name = "cmb_EspLongi_I2"
         Me.cmb_EspLongi_I2.Size = New System.Drawing.Size(66, 21)
         Me.cmb_EspLongi_I2.TabIndex = 62
         '
         'cmb_EspLongi_I1
         '
+        Me.cmb_EspLongi_I1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_EspLongi_I1.FormattingEnabled = True
-        Me.cmb_EspLongi_I1.Location = New System.Drawing.Point(173, 129)
+        Me.cmb_EspLongi_I1.Location = New System.Drawing.Point(173, 141)
         Me.cmb_EspLongi_I1.Name = "cmb_EspLongi_I1"
         Me.cmb_EspLongi_I1.Size = New System.Drawing.Size(66, 21)
         Me.cmb_EspLongi_I1.TabIndex = 61
@@ -401,7 +403,7 @@ Partial Class Frm_Connection
         '
         Me.cmb_NbRow_I2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I2.FormattingEnabled = True
-        Me.cmb_NbRow_I2.Location = New System.Drawing.Point(240, 107)
+        Me.cmb_NbRow_I2.Location = New System.Drawing.Point(240, 119)
         Me.cmb_NbRow_I2.Name = "cmb_NbRow_I2"
         Me.cmb_NbRow_I2.Size = New System.Drawing.Size(66, 21)
         Me.cmb_NbRow_I2.TabIndex = 62
@@ -410,7 +412,7 @@ Partial Class Frm_Connection
         '
         Me.cmb_NbRow_I1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbRow_I1.FormattingEnabled = True
-        Me.cmb_NbRow_I1.Location = New System.Drawing.Point(173, 107)
+        Me.cmb_NbRow_I1.Location = New System.Drawing.Point(173, 119)
         Me.cmb_NbRow_I1.Name = "cmb_NbRow_I1"
         Me.cmb_NbRow_I1.Size = New System.Drawing.Size(66, 21)
         Me.cmb_NbRow_I1.TabIndex = 61
@@ -418,7 +420,7 @@ Partial Class Frm_Connection
         'etq_Somme
         '
         Me.etq_Somme.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.etq_Somme.Location = New System.Drawing.Point(389, 74)
+        Me.etq_Somme.Location = New System.Drawing.Point(389, 86)
         Me.etq_Somme.Name = "etq_Somme"
         Me.etq_Somme.Size = New System.Drawing.Size(100, 14)
         Me.etq_Somme.TabIndex = 60
@@ -428,7 +430,7 @@ Partial Class Frm_Connection
         'btn_Supprimer
         '
         Me.btn_Supprimer.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_Supprimer.Location = New System.Drawing.Point(392, 127)
+        Me.btn_Supprimer.Location = New System.Drawing.Point(392, 157)
         Me.btn_Supprimer.Name = "btn_Supprimer"
         Me.btn_Supprimer.Size = New System.Drawing.Size(96, 24)
         Me.btn_Supprimer.TabIndex = 59
@@ -438,7 +440,7 @@ Partial Class Frm_Connection
         'btn_Ajouter
         '
         Me.btn_Ajouter.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_Ajouter.Location = New System.Drawing.Point(392, 97)
+        Me.btn_Ajouter.Location = New System.Drawing.Point(392, 127)
         Me.btn_Ajouter.Name = "btn_Ajouter"
         Me.btn_Ajouter.Size = New System.Drawing.Size(96, 24)
         Me.btn_Ajouter.TabIndex = 58
@@ -448,7 +450,7 @@ Partial Class Frm_Connection
         'txt_EspacementLongi
         '
         Me.txt_EspacementLongi.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_EspacementLongi.Location = New System.Drawing.Point(25, 130)
+        Me.txt_EspacementLongi.Location = New System.Drawing.Point(25, 142)
         Me.txt_EspacementLongi.Name = "txt_EspacementLongi"
         Me.txt_EspacementLongi.ReadOnly = True
         Me.txt_EspacementLongi.Size = New System.Drawing.Size(147, 20)
@@ -460,7 +462,7 @@ Partial Class Frm_Connection
         'txt_NbRows
         '
         Me.txt_NbRows.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_NbRows.Location = New System.Drawing.Point(25, 109)
+        Me.txt_NbRows.Location = New System.Drawing.Point(25, 121)
         Me.txt_NbRows.Name = "txt_NbRows"
         Me.txt_NbRows.ReadOnly = True
         Me.txt_NbRows.Size = New System.Drawing.Size(147, 20)
@@ -472,7 +474,7 @@ Partial Class Frm_Connection
         'txt_I3
         '
         Me.txt_I3.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_I3.Location = New System.Drawing.Point(307, 67)
+        Me.txt_I3.Location = New System.Drawing.Point(307, 79)
         Me.txt_I3.Name = "txt_I3"
         Me.txt_I3.ReadOnly = True
         Me.txt_I3.Size = New System.Drawing.Size(66, 20)
@@ -484,7 +486,7 @@ Partial Class Frm_Connection
         'txt_I2
         '
         Me.txt_I2.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_I2.Location = New System.Drawing.Point(240, 67)
+        Me.txt_I2.Location = New System.Drawing.Point(240, 79)
         Me.txt_I2.Name = "txt_I2"
         Me.txt_I2.ReadOnly = True
         Me.txt_I2.Size = New System.Drawing.Size(66, 20)
@@ -496,7 +498,7 @@ Partial Class Frm_Connection
         'txt_I1
         '
         Me.txt_I1.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_I1.Location = New System.Drawing.Point(173, 67)
+        Me.txt_I1.Location = New System.Drawing.Point(173, 79)
         Me.txt_I1.Name = "txt_I1"
         Me.txt_I1.ReadOnly = True
         Me.txt_I1.Size = New System.Drawing.Size(66, 20)
@@ -508,7 +510,7 @@ Partial Class Frm_Connection
         'txt_Largeur
         '
         Me.txt_Largeur.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_Largeur.Location = New System.Drawing.Point(25, 88)
+        Me.txt_Largeur.Location = New System.Drawing.Point(25, 100)
         Me.txt_Largeur.Name = "txt_Largeur"
         Me.txt_Largeur.ReadOnly = True
         Me.txt_Largeur.Size = New System.Drawing.Size(147, 20)
@@ -520,7 +522,7 @@ Partial Class Frm_Connection
         'txt_Indice
         '
         Me.txt_Indice.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_Indice.Location = New System.Drawing.Point(145, 67)
+        Me.txt_Indice.Location = New System.Drawing.Point(145, 79)
         Me.txt_Indice.Name = "txt_Indice"
         Me.txt_Indice.ReadOnly = True
         Me.txt_Indice.Size = New System.Drawing.Size(27, 20)
@@ -601,7 +603,7 @@ Partial Class Frm_Connection
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_Stud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Stud.Location = New System.Drawing.Point(37, 186)
+        Me.img_Stud.Location = New System.Drawing.Point(37, 185)
         Me.img_Stud.Name = "img_Stud"
         Me.img_Stud.Size = New System.Drawing.Size(188, 127)
         Me.img_Stud.TabIndex = 76
@@ -724,6 +726,16 @@ Partial Class Frm_Connection
         '
         Me.ErrorProvider_Frm_Connection.ContainerControl = Me
         '
+        'chk_AutomaticDesign
+        '
+        Me.chk_AutomaticDesign.AutoSize = True
+        Me.chk_AutomaticDesign.Location = New System.Drawing.Point(20, 16)
+        Me.chk_AutomaticDesign.Name = "chk_AutomaticDesign"
+        Me.chk_AutomaticDesign.Size = New System.Drawing.Size(130, 17)
+        Me.chk_AutomaticDesign.TabIndex = 77
+        Me.chk_AutomaticDesign.Text = "chk_AutomaticDesign"
+        Me.chk_AutomaticDesign.UseVisualStyleBackColor = True
+        '
         'Frm_Connection
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -817,4 +829,5 @@ Partial Class Frm_Connection
     Friend WithEvents txt_EspLongi_I2 As TextBox
     Friend WithEvents txt_EspLongi_I1 As TextBox
     Friend WithEvents ErrorProvider_Frm_Connection As ErrorProvider
+    Friend WithEvents chk_AutomaticDesign As CheckBox
 End Class

@@ -697,13 +697,23 @@ Public Class cls_Section
 
 #End Region
 
-#Region " Copy de la section "
+#Region " Fonctions de cpoie "
 
     Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function
 
-    ''' <summary>
+    Public Sub DeepClone(ByVal SectionSource As cls_Section, ByRef SectionCible As cls_Section)
+        SectionCible = SectionSource.Clone
+
+        SectionSource.ProfilA.DeepClone(SectionSource.ProfilA, SectionCible.ProfilA)
+        SectionSource.enrobage_partiel.DeepClone(SectionSource.enrobage_partiel, SectionCible.enrobage_partiel)
+
+        SectionCible.Acier = SectionSource.Acier.Clone
+
+    End Sub
+
+    ''' <summary>*
     ''' Fonction de clone à utiliser
     ''' </summary>
     ''' <param name="s_origine"></param>
