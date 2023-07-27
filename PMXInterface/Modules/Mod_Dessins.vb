@@ -1757,7 +1757,16 @@ Module Mod_Dessins
 
         '--> Préparation Pinceau dégradé
 
-        Dim myBrushG As New LinearGradientBrush(New PointF(0, 0), New PointF(Height, Width), Color.DarkGray, CouleurAcierNormal)
+        Dim myBrushG As Brush
+
+        If xLeft <> 0 Or yTop <> 0 Then
+            myBrushG = New LinearGradientBrush(New PointF(0, 0), New PointF(Height, Width), Color.DarkGray, Color.DarkGray)
+        Else
+            myBrushG = New LinearGradientBrush(New PointF(0, 0), New PointF(Height, Width), Color.DarkGray, CouleurAcierNormal)
+        End If
+
+
+
 
         '--> Initialisation des paramètres d'affichage
 
@@ -2029,6 +2038,7 @@ Module Mod_Dessins
         CouleurArma = CouleurArmaNormal
         ' Profilé
         Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurAcier, CouleurAcier)
+        Dim myBrushPSel As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.Red, Color.Red)
         'Béton
         Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurBeton, CouleurBeton)
         'Trémie
@@ -2038,13 +2048,13 @@ Module Mod_Dessins
 
         '--> Affichage
 
-        DessinFrmCoupeStandard(MyGr, MyPoutre, iSelect, dCar, hMaxProfile, MyParAff, myBrushP, myBrushB, myBrushT, myBrushA)
+        DessinFrmCoupeStandard(MyGr, MyPoutre, iSelect, dCar, hMaxProfile, MyParAff, myBrushP, myBrushPSel, myBrushB, myBrushT, myBrushA)
 
     End Sub
 
     Private Sub DessinFrmCoupeStandard(ByRef MyGr As Graphics, ByVal MyPoutre As cls_Poutre,
                                        iSelect As Integer, dCar As Decimal, hMaxProfile As Decimal,
-                                       MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushT As Brush, myBrushA As Brush)
+                                       MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushPSel As Brush, myBrushB As Brush, myBrushT As Brush, myBrushA As Brush)
         '------------------------------------------------------------------------------------------------------------------
         '   05/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
@@ -2083,7 +2093,7 @@ Module Mod_Dessins
 
         '# Dessin de la section acier
 
-        DessinProfileMetal(MyGr, MyPoutre.Section.ProfilA, myBrushP, MyParaff1, ZREF)
+        DessinProfileMetal(MyGr, MyPoutre.Section.ProfilA, myBrushPSel, MyParaff1, ZREF)
 
 
         '--> Affichage de la voisine à gauche
@@ -2115,11 +2125,11 @@ Module Mod_Dessins
         '--> Affichage de la dalle béton
 
         If MyPoutre.lIntermediaire Then
-            xo = -3 * MyPoutre.EntraxeD1
-            xe = 3 * MyPoutre.EntraxeD2
+            xo = -1.5 * MyPoutre.EntraxeD1
+            xe = 1.5 * MyPoutre.EntraxeD2
         Else
             xo = -MyPoutre.EntraxeD1
-            xe = 3 * MyPoutre.EntraxeD2
+            xe = 1.5 * MyPoutre.EntraxeD2
         End If
 
         yo = 0
@@ -2308,7 +2318,12 @@ Module Mod_Dessins
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyColor As Color
         Dim CouleurBeton As Color = CouleurBetonNormal
-        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+        Dim myBrushB As Brush
+        If xLeft <> 0 Or yTop <> 0 Then
+            myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.Gray, Color.Gray)
+        Else
+            myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, Color.Gray)
+        End If
         Const lAffSymbol As Boolean = False
         Dim Chaine As String
         Dim MyFontNormal As Font = FontBase

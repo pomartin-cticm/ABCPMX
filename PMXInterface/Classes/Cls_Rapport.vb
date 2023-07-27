@@ -1173,7 +1173,13 @@ Public Class Cls_Rapport
 
                     DessinFrmPortee(MyGr, MyProjet.Poutres(MyProjet.IndEnCours), sWiImg, sHiImg, 0.9, -1, True, xLeftImg, YPen)
 
+                Case "PORTEE_COUPE"
 
+                    DessinFrmCoupe(MyGr, MyProjet.Poutres(MyProjet.IndEnCours), sWiImg, sHiImg, 0.9, -1, True, xLeftImg, YPen)
+
+                Case "PROFIL_ACIER"
+
+                    DessinProfileAcier(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, sWiImg, sHiImg, FontBase, 0.9, True, False, -1, xLeftImg, YPen)
 
                 Case "CORRECT"
 

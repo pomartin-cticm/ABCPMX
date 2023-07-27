@@ -298,6 +298,46 @@ Public Class cls_ProfilA
         End Get
     End Property
 
+    ''' <summary>
+    ''' Moment d'inertie du profilé selon l'axe y-y
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieY As Decimal
+        Get
+            Return 0
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Moment d'inertie du profilé selon l'axe z-z
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieZ As Decimal
+        Get
+            Return 0
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Module de flexion élastique du profilé selon l'axe y-y
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property ModuleWelY As Decimal
+        Get
+            Return 0
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Module de flexion plastique du profilé selon l'axe y-y
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property ModuleWplY As Decimal
+        Get
+            Return 0
+        End Get
+    End Property
+
 #End Region
 
 #Region " Propriétés plastiques en flexion "
