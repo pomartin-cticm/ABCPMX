@@ -783,24 +783,46 @@ Module Mod_Dessins
         Next
 
         '--> Préparation des Pinceaux utilisés dans le dessin
+        Dim myBrushP As Brush
+        Dim myBrushB As Brush
+        Dim myBrushE As Brush
 
-        ' Profilé
-        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
-        ' Béton
-        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
-        ' Etriers
-        Dim myBrushE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
-        ' Armatures 
         Dim myBrushASup(2) As Brush
         Dim myBrushAMid(2) As Brush
         Dim myBrushAInf(2) As Brush
-        For j = 0 To 2
-            'myBrushA(i) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalArma(i), ColorLocalArma(i))
-            myBrushASup(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(0, j), pColorLocalArma(0, j))
-            myBrushAMid(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(1, j), pColorLocalArma(1, j))
-            myBrushAInf(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(2, j), pColorLocalArma(2, j))
 
-        Next
+        If xLeft <> 0 Or yTop <> 0 Then
+            ' Profilé
+            myBrushP = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurAcier, CouleurAcier)
+            ' Béton
+            myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurBeton, CouleurBeton)
+            ' Etriers
+            myBrushE = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
+
+            ' Armatures 
+            For j = 0 To 2
+                'myBrushA(i) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalArma(i), ColorLocalArma(i))
+                myBrushASup(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(0, j), pColorLocalArma(0, j))
+                myBrushAMid(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(1, j), pColorLocalArma(1, j))
+                myBrushAInf(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(2, j), pColorLocalArma(2, j))
+            Next
+        Else
+            ' Profilé
+            myBrushP = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
+            ' Béton
+            myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+            ' Etriers
+            myBrushE = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
+
+            ' Armatures 
+            For j = 0 To 2
+                'myBrushA(i) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalArma(i), ColorLocalArma(i))
+                myBrushASup(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(0, j), pColorLocalArma(0, j))
+                myBrushAMid(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(1, j), pColorLocalArma(1, j))
+                myBrushAInf(j) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), pColorLocalArma(2, j), pColorLocalArma(2, j))
+            Next
+        End If
+
 
         '--> Initialisation des paramètres d'affichage
 

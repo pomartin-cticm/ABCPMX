@@ -1181,6 +1181,10 @@ Public Class Cls_Rapport
 
                     DessinProfileAcier(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, sWiImg, sHiImg, FontBase, 0.9, True, False, -1, xLeftImg, YPen)
 
+                Case "PARTIAL_ENCASEMENT"
+
+                    DessinFrmEnrobage(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel, sWiImg, sHiImg, 0.9, True, False, -1, xLeftImg, YPen)
+
                 Case "CORRECT"
 
                     'sHiImg = sWiImg * Frm_NoteCalcul.Btn_Correct.Image.Height / Frm_NoteCalcul.Btn_Correct.Image.Width
