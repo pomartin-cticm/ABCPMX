@@ -154,12 +154,12 @@ Public Class cls_Projet
                 Lines.Add("   NbPropping     =  " & .NbPropping)
                 Lines.Add("   NbRestrain     =  " & ConvertListIntegerToString(.NbRestrain))
 
-                Dim listTypeMaintien(.TypeMaintien.Count - 1) As Integer
+                'Dim listTypeMaintien(.TypeMaintien.Count - 1) As Integer
 
-                For i As Integer = 0 To listTypeMaintien.Count - 1
-                    listTypeMaintien(i) = .TypeMaintien(i)
-                Next
-                Lines.Add("   TypeMaintien   =  " & ConvertListIntegerToString(listTypeMaintien))
+                'For i As Integer = 0 To listTypeMaintien.Count - 1
+                '    listTypeMaintien(i) = .TypeMaintien(i)
+                'Next
+                Lines.Add("   TypeMaintien   =  " & .TypeMaintien)
 
                 Lines.Add("   D1             =  " & .EntraxeD1)
                 Lines.Add("   D2             =  " & .EntraxeD2)
@@ -773,7 +773,7 @@ Public Class cls_Projet
                         Case "ETAISCONSD" : .lEtaisConsoleDroite = Mots(nbMots)
                         Case "NBPROPPIN" : .NbPropping = Mots(nbMots)
                         Case "NBRESTRAIN" : .NbRestrain = ConvertStringToListInteger(Mots(nbMots))
-                        Case "TYPEMAINTI" : .TypeMaintien = ConvertStringToListInteger(Mots(nbMots))
+                        Case "TYPEMAINTI" : .TypeMaintien = Mots(nbMots)
                         Case "D1" : .EntraxeD1 = TraiteReal(Mots(nbMots))
                         Case "D2" : .EntraxeD2 = TraiteReal(Mots(nbMots))
                         Case "DSL1" : .DistanceDsl1 = TraiteReal(Mots(nbMots))

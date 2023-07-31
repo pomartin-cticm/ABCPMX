@@ -114,7 +114,7 @@
     ''' <summary>
     ''' Type de maintiens considéré sur la travée considérée
     ''' </summary>
-    Public TypeMaintien() As EnuTypeMaintiensPoutre
+    Public TypeMaintien As EnuTypeMaintiensPoutre
 
     ''' <summary>
     ''' Indice du maintien sélectionné pour le déplacer (utile pour le dessin uniquement)
@@ -290,11 +290,10 @@
         ReDim TypTravee(pNbTravees + 2)
         ReDim Maintiens(pNbTravees + 2)
         ReDim NbRestrain(pNbTravees + 2)
-        ReDim TypeMaintien(pNbTravees + 2)
+        'ReDim TypeMaintien(pNbTravees + 2)
 
-        For i As Integer = 0 To TypeMaintien.Length - 1
-            TypeMaintien(i) = EnuTypeMaintiensPoutre.NotRestrained
-        Next
+
+        TypeMaintien = EnuTypeMaintiensPoutre.NotRestrained
 
         For i As Integer = 0 To Maintiens.Length - 1
             Maintiens(i) = New List(Of cls_Maintiens)
@@ -592,8 +591,8 @@
         ReDim PoutreCible.NbRestrain(PoutreSource.NbRestrain.GetUpperBound(0))
         PoutreCible.NbRestrain = PoutreSource.NbRestrain.Clone
 
-        ReDim PoutreCible.TypeMaintien(PoutreSource.TypeMaintien.GetUpperBound(0))
-        PoutreCible.TypeMaintien = PoutreSource.TypeMaintien.Clone
+        'ReDim PoutreCible.TypeMaintien(PoutreSource.TypeMaintien.GetUpperBound(0))
+        'PoutreCible.TypeMaintien = PoutreSource.TypeMaintien.Clone
 
         Cls_Dalle.DeepClone(PoutreSource.Dalle, PoutreCible.Dalle)
         PoutreCible.Dalle = PoutreSource.Dalle.Clone

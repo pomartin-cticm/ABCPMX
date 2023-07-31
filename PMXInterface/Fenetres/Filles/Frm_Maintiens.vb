@@ -218,7 +218,8 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub AfficherPoutreEnCours()
-        Select Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2)
+        'Select Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2)
+        Select Case MyPoutreLoc.TypeMaintien
             Case MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
                 rad_NonRestrain.Checked = True
 
@@ -283,7 +284,8 @@ Public Class Frm_Maintiens
                     Next
                 End If
 
-                If .TypeMaintien(i_travee) <> MyPoutreLoc.TypeMaintien(i_travee) Then
+                'If .TypeMaintien(i_travee) <> MyPoutreLoc.TypeMaintien(i_travee) Then
+                If .TypeMaintien <> MyPoutreLoc.TypeMaintien Then
                     lModif = True
                     .TypeMaintien = MyPoutreLoc.TypeMaintien
                 End If
@@ -381,7 +383,7 @@ Public Class Frm_Maintiens
     Private Sub MouseClickDown(sender As Object, e As MouseEventArgs) Handles img_Maintiens.MouseDown
         If lBuild Then Exit Sub
 
-        Mod_Dessins.GestionClickDownMousse(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse, Y_Mousse)
+        Mod_Dessins.GestionClickDownMousse(MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, traveeEnCours.Item2, X_Mousse, Y_Mousse, lMouseOnPoigneeMaintien)
         img_Maintiens.Invalidate()
 
         'Regarde si on clique sur une cotation
@@ -526,12 +528,21 @@ Public Class Frm_Maintiens
                 iSelect = 99
         End Select
 
+        'Select Case True
+        '    Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
+        '        rad_NonRestrain.Checked = True
+        '    Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
+        '        rad_FullyRestrain.Checked = True
+        '    Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
+        '        rad_PointRestrain.Checked = True
+        'End Select
+
         Select Case True
-            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
+            Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
                 rad_NonRestrain.Checked = True
-            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
+            Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
                 rad_FullyRestrain.Checked = True
-            Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
+            Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
                 rad_PointRestrain.Checked = True
         End Select
 
@@ -608,13 +619,22 @@ Public Class Frm_Maintiens
 
         MAJ_PositionMaintiens()
 
+        'Select Case True
+        '    Case rad_NonRestrain.Checked
+        '        MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
+        '    Case rad_FullyRestrain.Checked
+        '        MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
+        '    Case rad_PointRestrain.Checked
+        '        MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
+        'End Select
+
         Select Case True
             Case rad_NonRestrain.Checked
-                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
+                MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
             Case rad_FullyRestrain.Checked
-                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
+                MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
             Case rad_PointRestrain.Checked
-                MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
+                MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
         End Select
 
         MAJ_pan_ControlDessin(rad_PointRestrain.Checked)

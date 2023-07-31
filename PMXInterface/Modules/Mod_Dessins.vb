@@ -3041,24 +3041,47 @@ Module Mod_Dessins
 
             DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
+            'If i = 1 Then
+            '    If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+            '        xo += EpaisseurSemelle / 2
+            '    End If
+
+            '    If MyPoutre.lTraveeConsoleGauche Then
+            '        If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+            '            xo -= EpaisseurSemelle / 2
+            '        End If
+            '    End If
+
+            'ElseIf i = MyPoutre.IndiceTraveeConsoleDroite Then
+            '    If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+            '        xo -= EpaisseurSemelle / 2
+            '    End If
+
+            '    If MyPoutre.lTraveeConsoleDroite Then
+            '        If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+            '            xo += EpaisseurSemelle / 2
+            '        End If
+            '    End If
+            'End If
+
             If i = 1 Then
-                If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+                If MyPoutre.TypeMaintien = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                     xo += EpaisseurSemelle / 2
                 End If
 
                 If MyPoutre.lTraveeConsoleGauche Then
-                    If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+                    If MyPoutre.TypeMaintien = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                         xo -= EpaisseurSemelle / 2
                     End If
                 End If
 
             ElseIf i = MyPoutre.IndiceTraveeConsoleDroite Then
-                If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+                If MyPoutre.TypeMaintien = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                     xo -= EpaisseurSemelle / 2
                 End If
 
                 If MyPoutre.lTraveeConsoleDroite Then
-                    If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+                    If MyPoutre.TypeMaintien = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                         xo += EpaisseurSemelle / 2
                     End If
                 End If
@@ -3080,7 +3103,7 @@ Module Mod_Dessins
 
         For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
 
-            Select Case MyPoutre.TypeMaintien(i)
+            Select Case MyPoutre.TypeMaintien
                 Case MyPoutre.EnuTypeMaintiensPoutre.NotRestrained
                     lCote = False
 
@@ -3374,7 +3397,7 @@ Module Mod_Dessins
 
     Public Sub GestionClickDownMousse(MyPoutre As cls_Poutre,
                                 ByVal pWi As Decimal, ByVal pHi As Decimal,
-                                kAdjust As Double, iSelect As Integer, indiceTravee As Integer, Optional xSouris As Decimal = 0, Optional ySouris As Decimal = 0,
+                                kAdjust As Double, iSelect As Integer, indiceTravee As Integer, Optional xSouris As Decimal = 0, Optional ySouris As Decimal = 0, Optional lMouseOnPoigneeMaintien As Boolean = False,
                                 ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
 
         '------------------------------------------------------------------------------------------------------------------
@@ -3473,14 +3496,22 @@ Module Mod_Dessins
 
             End Select
 
-            If Math.Abs(xSourisUnivers - xMaintienUnivers) <= EpaisseurSemelle Then
-                If Math.Abs(ySourisUnivers - EpaisseurSemelle / 2) <= EpaisseurSemelle Then
-                    maintiens.lMaintienSemelleInf = Not maintiens.lMaintienSemelleInf
-                ElseIf Math.Abs(ySourisUnivers - (HauteurPoutre - EpaisseurSemelle / 2)) <= EpaisseurSemelle Then
-                    maintiens.lMaintienSemelleSup = Not maintiens.lMaintienSemelleSup
-                ElseIf Math.Abs(ySourisUnivers - HauteurPoutre / 2) <= EpaisseurSemelle Then
-                    maintiens.lMaintienSelectionne = True
-                    MyPoutre.pIndiceMaintienSelectionne = MyPoutre.Maintiens(indiceTravee).IndexOf(maintiens)
+            If Math.Abs(xSourisUnivers - xMaintienUnivers) <= HauteurPoutre / 2 Then
+                If Math.Abs(ySourisUnivers - EpaisseurSemelle / 2) <= HauteurPoutre / 4 Then 'Maintien de la semelle inf selectionné
+                    If Not lMouseOnPoigneeMaintien Then
+                        maintiens.lMaintienSemelleInf = Not maintiens.lMaintienSemelleInf
+                        If maintiens.lMaintienSemelleInf = False Then maintiens.lMaintienSemelleSup = True 'permet d'imposer qu'au moins 1 des 2 maintiens soit bloqué
+                    End If
+                ElseIf Math.Abs(ySourisUnivers - (HauteurPoutre - EpaisseurSemelle / 2)) <= HauteurPoutre / 4 Then 'Maintien de la semelle sup sélectionné
+                    If Not lMouseOnPoigneeMaintien Then
+                        maintiens.lMaintienSemelleSup = Not maintiens.lMaintienSemelleSup
+                        If maintiens.lMaintienSemelleSup = False Then maintiens.lMaintienSemelleInf = True
+                    End If
+                ElseIf Math.Abs(ySourisUnivers - HauteurPoutre / 2) <= HauteurPoutre / 2 Then 'Poignée centrale sélectionnée
+                    If lMouseOnPoigneeMaintien Then
+                        maintiens.lMaintienSelectionne = True 'permet d'imposer qu'au moins 1 des 2 maintiens soit bloqué
+                        MyPoutre.pIndiceMaintienSelectionne = MyPoutre.Maintiens(indiceTravee).IndexOf(maintiens)
+                    End If
                 End If
 
             End If

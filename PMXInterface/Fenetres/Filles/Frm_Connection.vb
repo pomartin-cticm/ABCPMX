@@ -490,7 +490,7 @@ Public Class Frm_Connection
 
         If MyPoutreLoc.NombreZone(traveeEnCours) >= 1 Then list_txtbox.Add(Me.txt_Largeur_I1)
         If MyPoutreLoc.NombreZone(traveeEnCours) >= 2 Then list_txtbox.Add(Me.txt_Largeur_I2)
-        If MyPoutreLoc.NombreZone(traveeEnCours) >= 2 Then list_txtbox.Add(Me.txt_Largeur_I3)
+        If MyPoutreLoc.NombreZone(traveeEnCours) >= 3 Then list_txtbox.Add(Me.txt_Largeur_I3)
 
         If Not lBacTransv Then
             If MyPoutreLoc.NombreZone(traveeEnCours) >= 1 Then list_txtbox.Add(Me.txt_EspLongi_I1)
