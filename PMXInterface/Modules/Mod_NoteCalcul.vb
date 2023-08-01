@@ -748,7 +748,7 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & Bloc("BT_PSS") & TABAFF & "b\-t\= = " & GetStringInUnit(.b_t, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & Bloc("MUP_PSS") & TABAFF & "\Sm\s\-p\= = " & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
                 AddLigneNDC(TABW2 & Bloc("FP_PSS") & TABAFF & "f\-p\= = " & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("IPU_PSS") & TABAFF & "I\-pu\= = " & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "/m")
+                AddLigneNDC(TABW2 & Bloc("IPU_PSS") & TABAFF & "I\-pu\= = " & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
 
                 If .orientation = Cls_Bac.Enum_Orientation.Parallele Then
                     If .AppuiL = Cls_Bac.EnuConfigLAppui.BacCoupe Then
