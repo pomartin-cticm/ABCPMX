@@ -73,6 +73,9 @@ Public Class Frm_Hivoss
 
                 '=== MENU PRINCIPAL ==============================================================='
 
+                Me.lbl_Options.Text = Bloc("OPTIONS")
+                Me.lbl_Amortissement.Text = Bloc("DAMPING")
+
                 Me.chk_methodeHIVOSS.Text = Bloc("HIVOSSMETHOD")
                 Me.lbl_ComboMasseFrequence.Text = Bloc("COMBOMASSFREQUENCY")
 

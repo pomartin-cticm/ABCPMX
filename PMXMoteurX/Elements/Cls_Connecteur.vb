@@ -252,20 +252,6 @@ Public Class Cls_Connecteur
         Return PRd
     End Function
 
-    'Public ReadOnly Property kcc As Decimal
-    '    '-----------------------------------------------------------------------------------------------------------------
-    '    '   18/07/23 :  Création - POM
-    '    '-----------------------------------------------------------------------------------------------------------------
-    '    '   Calcul de la résistance en dalle pleine / Génération 2 / Equation béton
-    '    '   Coefficient de réduction kcc dans l'équation béton (Eq??? de prEN 1994-1-1)
-    '    '-----------------------------------------------------------------------------------------------------------------
-    '    Get
-    '        Dim pkcc As Decimal = 1
-
-    '        Return pkcc
-    '    End Get
-    'End Property
-
 #End Region
 
 #End Region
@@ -373,7 +359,7 @@ Public Class Cls_Connecteur
 
     '--> 2eme GENERATION
 
-    Public Function PRdBacPerpendiculaireG2v1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As Cls_Bac) As Decimal
+    Public Function PRdBacPerpendiculaireG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As Cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -402,11 +388,11 @@ Public Class Cls_Connecteur
 
     End Function
 
-    Public Function PRdBacPerpendiculaireG2v2Acier(GammaVS As Decimal) As Decimal
+    Public Function PRdBacPerpendiculaireG2_AnnexeG_Acier(GammaVS As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   18/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
-        '   Calcul de la résistance PRd,s avec un bac perpendiculaire lorsque les conditions ne sont pas réunis -> v2 
+        '   Calcul de la résistance PRd,s avec un bac perpendiculaire lorsque les conditions ne sont pas réunis -> Annexe G
         '-----------------------------------------------------------------------------------------------------------------
         '   GammaVS [E] :   Coefficient partiel pour la première équation (acier)
         '-----------------------------------------------------------------------------------------------------------------
@@ -424,40 +410,52 @@ Public Class Cls_Connecteur
         Return PRd
     End Function
 
-    Public Function PRdBacPerpendiculaireG2v2Beton(Fck As Decimal, Ecm As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As Cls_Bac) As Decimal
+    Public Function PRdBacPerpendiculaireG2_AnnexeG_Beton(MyPoutre As cls_Poutre, nr As Integer, GammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   18/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
-        '   Calcul de la résistance PRd,c avec un bac perpendiculaire lorsque les conditions ne sont pas réunis -> v2 
+        '   Calcul de la résistance PRd,c avec un bac perpendiculaire lorsque les conditions ne sont pas réunis -> Annexe G
         '-----------------------------------------------------------------------------------------------------------------
-        '   Fck     [E] :   Résistance caractéristique à la compression du béton
-        '   Ecm     [E] :   Module sécant du béton
-        '   GammaVC [E] :   Coefficient partiel pour la seconde équation (béton)
-        '   nr      [E] :   Nombre de connecteurs / rangée (perp à l'axe de la poutre)
-        '   MyBac   [E] :   Bac acier
+        '   MyDalle     [E] :   Dalle béton
+        '   nr          [E] :   Nombre de goujons disposés transversalement au droit du goujon
+        '   GammaVC     [E] :   Coefficient partiel pour la seconde équation (béton)
         '-----------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
         Dim PRd As Decimal
-        Dim hA, dp, C2, C2_min, C2_max, Wsc, Mpl_sc, ny, sy As Decimal
-
-        hA = hsc - MyBac.h_p
-        dp = 0.82 * MyBac.h_p - d / 2
-        C2_min = 1
-        C2_max = 1.35
-        sy = 4 * d 'A VERIFIER
-        If nr = 1 Then
-            ny = 2
-        Else
-            ny = Math.Min(1 + (hA - 2 * d) / (0.52 * d), 2)
-        End If
-
-        'A DISCUTER
+        Dim hA, dp, C2, C2_min, C2_max, Wsc, Mpl_sc, sy, ku As Decimal
+        Dim ny As Integer
 
         '--> Calcul
 
+        hA = hsc - MyPoutre.Dalle.Bac.h_p
+        dp = 0.82 * MyPoutre.Dalle.Bac.h_p - d / 2
 
+        C2_min = 1
+        C2_max = 1.35
+        C2 = 1.85 * MyPoutre.Dalle.Bac.h_p / MyPoutre.Dalle.Bac.LargeurB0
+        C2 = Math.Max(C2, C2_min)
+        C2 = Math.Min(C2, C2_max)
+
+        If nr = 1 Then
+            ny = 2
+            sy = 0
+        Else
+            ny = Math.Min(1 + (hA - 2 * Me.d) / (0.52 * Me.d), 2)
+            sy = 4 * d
+        End If
+
+        If MyPoutre.Dalle.Bac.lPreperce = False And MyPoutre.Dalle.Bac.tp >= 0.001 Then
+            ku = 1.25
+        Else
+            ku = 1
+        End If
+
+        Wsc = MyPoutre.Dalle.Bac.b_t ^ 2 / 6 * (2.4 * Me.hsc + (nr - 1) * sy) 'm3
+        Mpl_sc = (1 / 6) * Me.Fu * Me.d ^ 3 * kConvMPaPa  'Valeur en N.m
+
+        PRd = Me.kcc * C2 * ku / GammaVC * (MyPoutre.Dalle.beton.Fctk_005 * kConvMPaPa * Wsc / (MyPoutre.Dalle.Bac.h_p * nr) + ny * Mpl_sc / dp) 'N
 
         Return PRd
     End Function

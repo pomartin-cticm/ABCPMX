@@ -218,6 +218,8 @@ Public Class Frm_Connection
 
                 '=== MENU CONNECTEUR ==============================================================='
 
+                Me.lbl_Connecteurs.Text = Bloc("CONNECTORS")
+
                 strGoujonsInit = MyPoutreLoc.Dalle.Connecteur.Get_ListName_GoujonDatabase()
                 ReDim strGoujons(strGoujonsInit.Length - 1)
 
@@ -229,6 +231,8 @@ Public Class Frm_Connection
 
 
                 '=== MENU CONNECTION ==============================================================='
+
+                Me.lbl_Connection.Text = Bloc("CONNECTION")
 
                 Me.chk_AutomaticDesign.Text = Bloc("AUTOMATICDESIGN")
                 Me.txt_Portee.Text = Bloc("SPAN")
@@ -1023,10 +1027,14 @@ Public Class Frm_Connection
 
         'Lorsqu'on modifie le diamètre des goujons, les valeurs limites de hsc, sx et sy changent. On doit corriger les valeurs de certaines variables si nécessaire (utile en cas d'un changement de certaines valeurs dans les fenêtres précédentes)
 
+
+        Dim ValeurUI As Decimal
+        ValeurUI = Me.txt_hsc.Text
         VerificationSaisie(Me.txt_hsc, Me.txt_hsc.Text, False) 'Vérification de la hauteur du goujon
 
         Dim lMAJ_cmb_NbRow As Boolean = False
         Dim lMAJ_cmb_EspLongi As Boolean = False
+
 
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
             For j As Integer = 0 To 2
@@ -1041,9 +1049,16 @@ Public Class Frm_Connection
                         lMAJ_cmb_EspLongi = True
                     End If
                 Else
-                    VerificationSaisie(Me.txt_EspLongi_I1, Me.txt_EspLongi_I1.Text, False)
-                    VerificationSaisie(Me.txt_EspLongi_I2, Me.txt_EspLongi_I2.Text, False)
-                    VerificationSaisie(Me.txt_EspLongi_I3, Me.txt_EspLongi_I3.Text, False)
+
+
+                    ValeurUI = Me.txt_EspLongi_I1.Text
+                    VerificationSaisie(Me.txt_EspLongi_I1, ValeurUI, False)
+
+                    ValeurUI = Me.txt_EspLongi_I2.Text
+                    VerificationSaisie(Me.txt_EspLongi_I2, ValeurUI, False)
+
+                    ValeurUI = Me.txt_EspLongi_I3.Text
+                    VerificationSaisie(Me.txt_EspLongi_I3, ValeurUI, False)
                 End If
             Next
         Next

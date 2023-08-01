@@ -36,6 +36,7 @@ Partial Class Frm_Connection
         Me.pan_ImgConnection = New System.Windows.Forms.Panel()
         Me.img_Connection = New System.Windows.Forms.PictureBox()
         Me.pan_SaisieConnection = New System.Windows.Forms.Panel()
+        Me.chk_AutomaticDesign = New System.Windows.Forms.CheckBox()
         Me.txt_Portee = New System.Windows.Forms.TextBox()
         Me.cmb_Travee = New System.Windows.Forms.ComboBox()
         Me.txt_EspLongi_I3 = New System.Windows.Forms.TextBox()
@@ -79,7 +80,6 @@ Partial Class Frm_Connection
         Me.img_hsc = New System.Windows.Forms.PictureBox()
         Me.cmb_goujons = New System.Windows.Forms.ComboBox()
         Me.ErrorProvider_Frm_Connection = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.chk_AutomaticDesign = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -293,6 +293,16 @@ Partial Class Frm_Connection
         Me.pan_SaisieConnection.Name = "pan_SaisieConnection"
         Me.pan_SaisieConnection.Size = New System.Drawing.Size(533, 196)
         Me.pan_SaisieConnection.TabIndex = 1
+        '
+        'chk_AutomaticDesign
+        '
+        Me.chk_AutomaticDesign.AutoSize = True
+        Me.chk_AutomaticDesign.Location = New System.Drawing.Point(20, 16)
+        Me.chk_AutomaticDesign.Name = "chk_AutomaticDesign"
+        Me.chk_AutomaticDesign.Size = New System.Drawing.Size(130, 17)
+        Me.chk_AutomaticDesign.TabIndex = 77
+        Me.chk_AutomaticDesign.Text = "chk_AutomaticDesign"
+        Me.chk_AutomaticDesign.UseVisualStyleBackColor = True
         '
         'txt_Portee
         '
@@ -726,20 +736,12 @@ Partial Class Frm_Connection
         '
         Me.ErrorProvider_Frm_Connection.ContainerControl = Me
         '
-        'chk_AutomaticDesign
-        '
-        Me.chk_AutomaticDesign.AutoSize = True
-        Me.chk_AutomaticDesign.Location = New System.Drawing.Point(20, 16)
-        Me.chk_AutomaticDesign.Name = "chk_AutomaticDesign"
-        Me.chk_AutomaticDesign.Size = New System.Drawing.Size(130, 17)
-        Me.chk_AutomaticDesign.TabIndex = 77
-        Me.chk_AutomaticDesign.Text = "chk_AutomaticDesign"
-        Me.chk_AutomaticDesign.UseVisualStyleBackColor = True
-        '
         'Frm_Connection
         '
+        Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(789, 432)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog

@@ -26,6 +26,12 @@
     Public Fck As Decimal
 
     ''' <summary>
+    ''' fractile 5% de la résistance à la traction du béton (Pa) 
+    ''' (utilisé pour le calcul de la résistance d'un connecteur selon l'annexe G de l'EC4 G2)
+    ''' </summary>
+    Public Fctk_005 As Decimal
+
+    ''' <summary>
     ''' résistance moyenne à la compression (Pa)
     ''' </summary>
     Public Fcm As Decimal
@@ -70,6 +76,12 @@
 
         Fck = GetFckDeClasse()
         Fcm = Fck + 8
+        If Fck < 50 Then
+            Fctm = 0.3 * Fck ^ (2 / 3)
+        Else
+            Fctm = 2.12 * Math.Log(1 + Fcm / 10)
+        End If
+        Fctk_005 = 0.4 * Fctm
         Ecm = (22 * (Fcm / 10) ^ 0.3) * 10 ^ 3
 
     End Sub

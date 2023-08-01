@@ -128,11 +128,11 @@ Module Mod_Dessins
 
         '--> Dessin de la dalle
 
-        If lMixte Then
+        'If lMixte Then 'Mise en commentaire GUD
 
-            '# Dalle béton
+        '# Dalle béton
 
-            Select Case MyDalle.type
+        Select Case MyDalle.type
                 Case Cls_Dalle.Enum_TypeDalle.Pleine
                     DessinDallePleine(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
                 Case Cls_Dalle.Enum_TypeDalle.Mixte
@@ -152,7 +152,7 @@ Module Mod_Dessins
             DessinLitArmaDalle(myGr, MyDalle, Beff, 0, MySection.ProfilA.ha, iSelect, MyParAff, myBrushA(0))
             DessinLitArmaDalle(myGr, MyDalle, Beff, 1, MySection.ProfilA.ha, iSelect, MyParAff, myBrushA(1))
 
-        End If
+        'End If
 
         If lCote Then
 

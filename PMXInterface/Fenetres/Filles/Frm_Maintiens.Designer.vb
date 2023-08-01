@@ -343,8 +343,10 @@ Partial Class Frm_Maintiens
         '
         'Frm_Maintiens
         '
+        Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(1482, 349)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Maintiens"

@@ -844,8 +844,10 @@ Partial Class Frm_Gamma
         '
         'Frm_Gamma
         '
+        Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(624, 285)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Gamma"
