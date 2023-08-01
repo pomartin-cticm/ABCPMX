@@ -61,8 +61,15 @@ Imports PMXMoteur2
 
             Dim beff_ref As Decimal = .EffectiveWidth(x, 0, False, False)
             Dim tau_beff As Decimal = (beff - beff_ref) / beff_ref * 100
-            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle de calcul classique
 
+            beff_ref = .EffectiveWidth(x, 0, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle simplifié pour la vérification des sections
+
+            beff_ref = .EffectiveWidth(x, 0, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle simplifié pour l'analyse de la poutre
 
 
             'Calcul de la largeur participante pour la console gauche à mi-travée
@@ -72,11 +79,17 @@ Imports PMXMoteur2
             beff_ref = .EffectiveWidth(x, 0, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
-            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle de calcul classique
 
+            beff_ref = .EffectiveWidth(x, 0, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle simplifié pour la vérification des sections
 
+            beff_ref = .EffectiveWidth(x, 0, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle simplifié pour l'analyse de la poutre
 
-            'Calcul de la largeur participante au droit de l'appui A
+            'Calcul de la largeur participante au droit de l'appui A (Vérification avec le modèle classique)
 
             x = .LongueurTravee(0)
 
@@ -95,7 +108,7 @@ Imports PMXMoteur2
 
             Dim beff_a As Decimal = beff 'stockage de la valeur sur appui A pour plus tard
 
-            'Calcul à mi-travée 
+            'Calcul à mi-travée (Vérification avec le modèle classique)
 
             x = .LongueurTravee(1) / 2
 
@@ -115,7 +128,7 @@ Imports PMXMoteur2
 
             Dim beff_m As Decimal = beff 'stockage de la valeur à mi travée pour + tard
 
-            'calcul au droit de l'appui B
+            'calcul au droit de l'appui B (Vérification avec le modèle classique)
 
             x = .LongueurTravee(1)
 
@@ -130,7 +143,7 @@ Imports PMXMoteur2
 
             Dim beff_b As Decimal = beff 'stockage de la valeur sur appui B pour plus tard
 
-            'calcul à L/10
+            'calcul à L/10 (Vérification avec le modèle classique)
 
             x = .LongueurTravee(1) / 10
 
@@ -140,7 +153,7 @@ Imports PMXMoteur2
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
 
-            'calcul à 9L/10
+            'calcul à 9L/10 (Vérification avec le modèle classique)
 
             x = 9 * .LongueurTravee(1) / 10
 
@@ -150,7 +163,107 @@ Imports PMXMoteur2
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
 
+            'Vérification avec le modèle simplifié pour la vérification des sections transversales
 
+            x = .LongueurTravee(0)
+
+            beff = beff_a
+            beff_ref = .EffectiveWidth(x, 0, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+
+            x = 0
+
+            beff = beff_a
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = 0.149 * .LongueurTravee(1)
+
+            beff = beff_a
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = 0.151 * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = (1 - 0.151) * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = (1 - 0.149) * .LongueurTravee(1)
+
+            beff = beff_b
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            'Vérification avec le modèle simplifié pour l'analyse de la poutre
+
+            x = .LongueurTravee(0)
+
+            beff = beff_a
+            beff_ref = .EffectiveWidth(x, 0, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+
+            x = 0
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = 0.149 * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = 0.151 * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = (1 - 0.151) * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = (1 - 0.149) * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
 
 
             '----------------------------------------------------------------------------------------------------------------------------------
@@ -201,6 +314,7 @@ Imports PMXMoteur2
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
 
             beff_a = beff 'stockage de la valeur sur appui A pour plus tard
 
@@ -288,6 +402,159 @@ Imports PMXMoteur2
             x = .LongueurTravee(2)
 
             beff_ref = .EffectiveWidth(x, 2, False, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
+
+            'Vérification avec le modèle simplifié pour la vérification des sections transversales
+
+            x = 0
+
+            beff = beff_a
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = 0.149 * .LongueurTravee(1)
+
+            beff = beff_a
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = 0.151 * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = (1 - 0.151) * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = (1 - 0.149) * .LongueurTravee(1)
+
+            beff = beff_b
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = .LongueurTravee(1)
+
+            beff = beff_b
+            beff_ref = .EffectiveWidth(x, 1, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            'calcul au droit de l'appui B, coté console droite 
+
+            x = 0
+
+            beff = beff_b
+
+            beff_ref = .EffectiveWidth(x, 2, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
+
+            'calcul au droit de la mi travée de la console droite
+
+            x = .LongueurTravee(2) / 2
+
+            beff_ref = .EffectiveWidth(x, 2, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
+
+            'calcul au droit du bord libre de la travée droite
+
+            x = .LongueurTravee(2)
+
+            beff_ref = .EffectiveWidth(x, 2, True, False)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
+
+
+            'Vérification avec le modèle simplifié pour l'analyse de la poutre
+
+            x = 0
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = 0.149 * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = 0.151 * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = (1 - 0.151) * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = (1 - 0.149) * .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            x = .LongueurTravee(1)
+
+            beff = beff_m
+            beff_ref = .EffectiveWidth(x, 1, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+
+            Assert.IsTrue(Math.Abs(tau_beff) <= 1)
+
+            'calcul au droit de l'appui B, coté console droite 
+
+            x = 0
+
+            beff = beff_b
+
+            beff_ref = .EffectiveWidth(x, 2, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
+
+            'calcul au droit de la mi travée de la console droite
+
+            x = .LongueurTravee(2) / 2
+
+            beff_ref = .EffectiveWidth(x, 2, True, True)
+            tau_beff = (beff - beff_ref) / beff_ref * 100
+            Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
+
+            'calcul au droit du bord libre de la travée droite
+
+            x = .LongueurTravee(2)
+
+            beff_ref = .EffectiveWidth(x, 2, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
