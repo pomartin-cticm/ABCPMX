@@ -19,6 +19,11 @@ Public Class Cls_Connecteur
     Public d As Decimal
 
     ''' <summary>
+    ''' Facteur de relaxation à définir par l'utilisateur pour la 2eme génération de l'EC4 uniquement
+    ''' </summary>
+    Public kcc As Decimal
+
+    ''' <summary>
     ''' Limite d'élasticité
     ''' </summary>
     Public Fy As Decimal
@@ -42,8 +47,8 @@ Public Class Cls_Connecteur
 
     Public Sub New()
 
-        Me.nom = Mod_Declarations.goujons_database(3
-                                                   ).Item1
+        Me.nom = Mod_Declarations.goujons_database(3).Item1
+        Me.kcc = 1
         Caracteristiques_Goujons()
 
     End Sub
@@ -247,19 +252,19 @@ Public Class Cls_Connecteur
         Return PRd
     End Function
 
-    Public ReadOnly Property kcc As Decimal
-        '-----------------------------------------------------------------------------------------------------------------
-        '   18/07/23 :  Création - POM
-        '-----------------------------------------------------------------------------------------------------------------
-        '   Calcul de la résistance en dalle pleine / Génération 2 / Equation béton
-        '   Coefficient de réduction kcc dans l'équation béton (Eq??? de prEN 1994-1-1)
-        '-----------------------------------------------------------------------------------------------------------------
-        Get
-            Dim pkcc As Decimal = 1
+    'Public ReadOnly Property kcc As Decimal
+    '    '-----------------------------------------------------------------------------------------------------------------
+    '    '   18/07/23 :  Création - POM
+    '    '-----------------------------------------------------------------------------------------------------------------
+    '    '   Calcul de la résistance en dalle pleine / Génération 2 / Equation béton
+    '    '   Coefficient de réduction kcc dans l'équation béton (Eq??? de prEN 1994-1-1)
+    '    '-----------------------------------------------------------------------------------------------------------------
+    '    Get
+    '        Dim pkcc As Decimal = 1
 
-            Return pkcc
-        End Get
-    End Property
+    '        Return pkcc
+    '    End Get
+    'End Property
 
 #End Region
 
