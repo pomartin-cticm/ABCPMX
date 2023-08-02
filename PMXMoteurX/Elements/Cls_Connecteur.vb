@@ -280,7 +280,7 @@ Public Class Cls_Connecteur
 
         MykT = 0.7 / Math.Sqrt(nr) * b0 / hP * (Me.hsc / hP - 1)
 
-        Return Math.Max(MykT, Me.kTMax(nr, MyBac))
+        Return Math.Min(MykT, Me.kTMax(nr, MyBac)) 'Corr GuD: Math.Max -> Math.Min
 
     End Function
 
@@ -388,6 +388,33 @@ Public Class Cls_Connecteur
 
     End Function
 
+    Public Function PRdBacPerpendiculaireG2_AnnexeG_Acier(MyPoutre As cls_Poutre, nr As Integer, GammaVC As Decimal, GammaVS As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   02/08/23 :  Création - GUD
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Calcul de la résistance PRd avec un bac perpendiculaire lorsque les conditions ne sont pas réunis -> Annexe G
+        '-----------------------------------------------------------------------------------------------------------------
+        '   GammaVS     [E] :   Coefficient partiel pour la première équation (acier)
+        '   MyDalle     [E] :   Dalle béton
+        '   nr          [E] :   Nombre de goujons disposés transversalement au droit du goujon
+        '   GammaVC     [E] :   Coefficient partiel pour la seconde équation (béton)
+        '-----------------------------------------------------------------------------------------------------------------
+
+
+        '--> Déclaration
+
+        Dim PRdC, PRdS As Decimal
+
+        '--> Calcul
+
+        PRdS = PRdBacPerpendiculaireG2_AnnexeG_Acier(GammaVS)
+        PRdC = PRdBacPerpendiculaireG2_AnnexeG_Beton(MyPoutre, nr, GammaVC)
+
+        '--> Fin
+
+        Return Math.Min(PRdC, PRdS)
+    End Function
+
     Public Function PRdBacPerpendiculaireG2_AnnexeG_Acier(GammaVS As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   18/07/23 :  Création - GUD
@@ -425,7 +452,7 @@ Public Class Cls_Connecteur
 
         Dim PRd As Decimal
         Dim hA, dp, C2, C2_min, C2_max, Wsc, Mpl_sc, sy, ku As Decimal
-        Dim ny As Integer
+        Dim ny As Decimal
 
         '--> Calcul
 
@@ -463,12 +490,12 @@ Public Class Cls_Connecteur
 #End Region
 
 #Region "Bac parrallèle"
-    '--> 1ere et 2eme GENERATIONS
-    Public Function PRdBacParrallelleG1G2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As Cls_Bac) As Decimal
+    '--> 1ere GENERATION
+    Public Function PRdBacParrallelleG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As Cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
-        '   Calcul de la résistance en dalle pleine / Génération 1 et Génération 2
+        '   Calcul de la résistance avec un bac parallèle / Génération 1
         '-----------------------------------------------------------------------------------------------------------------
         '   Fck     [E] :   Résistance caractéristique à la compression du béton
         '   Ecm     [E] :   Module sécant du béton
@@ -484,6 +511,35 @@ Public Class Cls_Connecteur
         '--> Calcul
 
         PRd = PRdDallePleineG1(Fck, Ecm, GammaVS, GammaVC)
+        kl = CoefkL(MyBac)
+
+        '--> Fin
+
+        Return kl * PRd
+
+    End Function
+
+    '--> 2eme GENERATION
+    Public Function PRdBacParrallelleG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As Cls_Bac) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------
+        '   17/07/23 :  Création - GUD
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Calcul de la résistance avec un bac parallèle / Génération 2
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Fck     [E] :   Résistance caractéristique à la compression du béton
+        '   Ecm     [E] :   Module sécant du béton
+        '   GammaVS [E] :   Coefficient partiel pour la première équation (acier)
+        '   GammaVC [E] :   Coefficient partiel pour la seconde équation (béton)
+        '   MyBac   [E] :   Bac acier
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim PRd, kl As Decimal
+
+        '--> Calcul
+
+        PRd = PRdDallePleineG2(Fck, Ecm, GammaVS, GammaVC)
         kl = CoefkL(MyBac)
 
         '--> Fin
