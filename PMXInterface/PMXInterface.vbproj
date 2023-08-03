@@ -213,6 +213,24 @@
     <Compile Include="Fenetres\Options\Frm_OptionsLogiciel.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielDirectories.Designer.vb">
+      <DependentUpon>Frm_OptionsLogicielDirectories.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielDirectories.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielGeneral.Designer.vb">
+      <DependentUpon>Frm_OptionsLogicielGeneral.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielGeneral.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielUnits.Designer.vb">
+      <DependentUpon>Frm_OptionsLogicielUnits.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielUnits.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\Mod_AccesFichiers.vb" />
     <Compile Include="Modules\Mod_BasesDonneesASCII.vb" />
     <Compile Include="Modules\Mod_BasesDonneesBinaires.vb" />
@@ -311,6 +329,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogiciel.resx">
       <DependentUpon>Frm_OptionsLogiciel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielDirectories.resx">
+      <DependentUpon>Frm_OptionsLogicielDirectories.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielGeneral.resx">
+      <DependentUpon>Frm_OptionsLogicielGeneral.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielUnits.resx">
+      <DependentUpon>Frm_OptionsLogicielUnits.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

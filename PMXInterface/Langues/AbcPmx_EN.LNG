@@ -321,3 +321,29 @@ TITLE					= Default national factors
 LOADS					= Loads partial factors
 COMBINATION				= Combination factors
 MATERIALS				= Material
+
+#OPTSOFTMAIN
+TITLE					= Software options
+APPLY					= Apply
+CANCEL					= Cancel
+GENERAL					= General parameters
+DIRECTORIES				= Directories
+UNITS					= Units
+DATABASES				= Databases
+EXPERT					= Expert Mode
+
+#OPTSOFTGENERAL
+TITLE					= General settings
+
+#OPTSOFTUNITS
+TITLE					= Units
+UNITS					= Units
+LENGTHS					= Lengths
+DIMENSIONS				= Dimensions
+FORCES					= Forces
+MOMENTS					= Moments
+BENDINGW				= Bending modulus
+STRESSES				= Stresses
+
+
+

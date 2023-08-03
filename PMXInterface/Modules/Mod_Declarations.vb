@@ -377,8 +377,17 @@ Module Mod_Declarations
         Gamma
     End Enum
 
+    Public Enum Enu_OptionsLogiciel
+        General
+        Directories
+        Units
+        Databases
+        Expert
+    End Enum
+
     Public Structure strucLastIndexWindow
         Dim OptionsCalcul As Enu_OptionsCalcul
+        Dim OptionsLogiciel As Enu_OptionsLogiciel
     End Structure
 
     Public LastIndexW As strucLastIndexWindow

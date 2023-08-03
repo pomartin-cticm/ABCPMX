@@ -36,6 +36,10 @@ Partial Class Frm_Dalle
         Me.TLpan_PartageV = New System.Windows.Forms.TableLayoutPanel()
         Me.TLpan_Milieu = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Bac = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.rdb_Preperce = New System.Windows.Forms.RadioButton()
+        Me.rdb_ATraversBac = New System.Windows.Forms.RadioButton()
+        Me.lbl_ConnectorThroughTheWeb = New System.Windows.Forms.Label()
         Me.pan_Orientation = New System.Windows.Forms.Panel()
         Me.lbl_BacOrientation = New System.Windows.Forms.Label()
         Me.rdb_BacPerpendiculaire = New System.Windows.Forms.RadioButton()
@@ -119,10 +123,6 @@ Partial Class Frm_Dalle
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_BOArma = New System.Windows.Forms.ImageList(Me.components)
         Me.ToolTipDalle = New System.Windows.Forms.ToolTip(Me.components)
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.lbl_ConnectorThroughTheWeb = New System.Windows.Forms.Label()
-        Me.rdb_Preperce = New System.Windows.Forms.RadioButton()
-        Me.rdb_ATraversBac = New System.Windows.Forms.RadioButton()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -133,6 +133,7 @@ Partial Class Frm_Dalle
         Me.TLpan_PartageV.SuspendLayout()
         Me.TLpan_Milieu.SuspendLayout()
         Me.pan_Bac.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.pan_Orientation.SuspendLayout()
         CType(Me.img_Hp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_ConfigurationNervures.SuspendLayout()
@@ -156,7 +157,6 @@ Partial Class Frm_Dalle
         CType(Me.img_esp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -328,6 +328,50 @@ Partial Class Frm_Dalle
         Me.pan_Bac.Name = "pan_Bac"
         Me.pan_Bac.Size = New System.Drawing.Size(248, 500)
         Me.pan_Bac.TabIndex = 9
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.rdb_Preperce)
+        Me.Panel1.Controls.Add(Me.rdb_ATraversBac)
+        Me.Panel1.Controls.Add(Me.lbl_ConnectorThroughTheWeb)
+        Me.Panel1.Location = New System.Drawing.Point(3, 390)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(240, 74)
+        Me.Panel1.TabIndex = 86
+        '
+        'rdb_Preperce
+        '
+        Me.rdb_Preperce.AutoSize = True
+        Me.rdb_Preperce.Location = New System.Drawing.Point(37, 25)
+        Me.rdb_Preperce.Name = "rdb_Preperce"
+        Me.rdb_Preperce.Size = New System.Drawing.Size(89, 17)
+        Me.rdb_Preperce.TabIndex = 78
+        Me.rdb_Preperce.TabStop = True
+        Me.rdb_Preperce.Text = "rdb_Preperce"
+        Me.rdb_Preperce.UseVisualStyleBackColor = True
+        '
+        'rdb_ATraversBac
+        '
+        Me.rdb_ATraversBac.AutoSize = True
+        Me.rdb_ATraversBac.Location = New System.Drawing.Point(37, 47)
+        Me.rdb_ATraversBac.Name = "rdb_ATraversBac"
+        Me.rdb_ATraversBac.Size = New System.Drawing.Size(108, 17)
+        Me.rdb_ATraversBac.TabIndex = 79
+        Me.rdb_ATraversBac.TabStop = True
+        Me.rdb_ATraversBac.Text = "rdb_ATraversBac"
+        Me.rdb_ATraversBac.UseVisualStyleBackColor = True
+        '
+        'lbl_ConnectorThroughTheWeb
+        '
+        Me.lbl_ConnectorThroughTheWeb.AutoSize = True
+        Me.lbl_ConnectorThroughTheWeb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_ConnectorThroughTheWeb.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_ConnectorThroughTheWeb.Location = New System.Drawing.Point(9, 7)
+        Me.lbl_ConnectorThroughTheWeb.Name = "lbl_ConnectorThroughTheWeb"
+        Me.lbl_ConnectorThroughTheWeb.Size = New System.Drawing.Size(154, 13)
+        Me.lbl_ConnectorThroughTheWeb.TabIndex = 76
+        Me.lbl_ConnectorThroughTheWeb.Text = "lbl_ConnectorThroughTheWeb"
+        Me.lbl_ConnectorThroughTheWeb.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'pan_Orientation
         '
@@ -1248,50 +1292,6 @@ Partial Class Frm_Dalle
         Me.imgList_BOArma.Images.SetKeyName(0, "Ajouter")
         Me.imgList_BOArma.Images.SetKeyName(1, "Supprimer")
         '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.rdb_Preperce)
-        Me.Panel1.Controls.Add(Me.rdb_ATraversBac)
-        Me.Panel1.Controls.Add(Me.lbl_ConnectorThroughTheWeb)
-        Me.Panel1.Location = New System.Drawing.Point(3, 390)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(240, 74)
-        Me.Panel1.TabIndex = 86
-        '
-        'lbl_ConnectorThroughTheWeb
-        '
-        Me.lbl_ConnectorThroughTheWeb.AutoSize = True
-        Me.lbl_ConnectorThroughTheWeb.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_ConnectorThroughTheWeb.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_ConnectorThroughTheWeb.Location = New System.Drawing.Point(9, 7)
-        Me.lbl_ConnectorThroughTheWeb.Name = "lbl_ConnectorThroughTheWeb"
-        Me.lbl_ConnectorThroughTheWeb.Size = New System.Drawing.Size(154, 13)
-        Me.lbl_ConnectorThroughTheWeb.TabIndex = 76
-        Me.lbl_ConnectorThroughTheWeb.Text = "lbl_ConnectorThroughTheWeb"
-        Me.lbl_ConnectorThroughTheWeb.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'rdb_Preperce
-        '
-        Me.rdb_Preperce.AutoSize = True
-        Me.rdb_Preperce.Location = New System.Drawing.Point(37, 25)
-        Me.rdb_Preperce.Name = "rdb_Preperce"
-        Me.rdb_Preperce.Size = New System.Drawing.Size(89, 17)
-        Me.rdb_Preperce.TabIndex = 78
-        Me.rdb_Preperce.TabStop = True
-        Me.rdb_Preperce.Text = "rdb_Preperce"
-        Me.rdb_Preperce.UseVisualStyleBackColor = True
-        '
-        'rdb_ATraversBac
-        '
-        Me.rdb_ATraversBac.AutoSize = True
-        Me.rdb_ATraversBac.Location = New System.Drawing.Point(37, 47)
-        Me.rdb_ATraversBac.Name = "rdb_ATraversBac"
-        Me.rdb_ATraversBac.Size = New System.Drawing.Size(108, 17)
-        Me.rdb_ATraversBac.TabIndex = 79
-        Me.rdb_ATraversBac.TabStop = True
-        Me.rdb_ATraversBac.Text = "rdb_ATraversBac"
-        Me.rdb_ATraversBac.UseVisualStyleBackColor = True
-        '
         'Frm_Dalle
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1299,6 +1299,7 @@ Partial Class Frm_Dalle
         Me.ClientSize = New System.Drawing.Size(1015, 577)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Dalle"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Dalle"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
@@ -1312,6 +1313,8 @@ Partial Class Frm_Dalle
         Me.TLpan_Milieu.PerformLayout()
         Me.pan_Bac.ResumeLayout(False)
         Me.pan_Bac.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.pan_Orientation.ResumeLayout(False)
         Me.pan_Orientation.PerformLayout()
         CType(Me.img_Hp, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1344,8 +1347,6 @@ Partial Class Frm_Dalle
         CType(Me.img_esp, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
