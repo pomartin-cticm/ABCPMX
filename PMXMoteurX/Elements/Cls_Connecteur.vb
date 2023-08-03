@@ -388,7 +388,7 @@ Public Class Cls_Connecteur
 
     End Function
 
-    Public Function PRdBacPerpendiculaireG2_AnnexeG_Acier(MyPoutre As cls_Poutre, nr As Integer, GammaVC As Decimal, GammaVS As Decimal)
+    Public Function PRdBacPerpendiculaireG2_AnnexeG(MyPoutre As cls_Poutre, nr As Integer, GammaVC As Decimal, GammaVS As Decimal)
         '-----------------------------------------------------------------------------------------------------------------
         '   02/08/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
