@@ -30,7 +30,7 @@ Module Mod_Outils
         If (LogicielInfo.ListeLangueNDC.Count > 0) AndAlso (LogicielOptions.IndLangueNDC >= 0) AndAlso (LogicielOptions.IndLangueNDC < LogicielInfo.ListeLangueNDC.Count) Then
 
             'Langue installée
-            LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\Langues\" & LogicielInfo.NomLogiciel & "_" &
+            LogicielFichiers.LangueNDC = LogicielRep.Install & "\Langues\" & LogicielInfo.NomLogiciel & "_" &
                                          LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
 
         Else
@@ -648,7 +648,7 @@ Module Mod_Outils
             End If
 
             '--> Répertoire du fichier 
-            Dim FichierUpdate As String = LogicielRep.RepertoireConfig & "\Update_PropMix.txt"
+            Dim FichierUpdate As String = LogicielRep.Config & "\Update_PropMix.txt"
 
             '--> Test de connexion à internet
             If My.Computer.Network.IsAvailable Then
@@ -912,6 +912,25 @@ Module Mod_Outils
         End If
 
     End Function
+
+#End Region
+
+#Region " Transfert des valeurs avec suivi de modif "
+
+    Public Sub GereTransfertValeur(ByVal ValeurLocale As Boolean, ByRef ValeurGlobale As Boolean, ByRef lModif As Boolean)
+        If ValeurGlobale <> ValeurLocale Then lModif = True
+        ValeurGlobale = ValeurLocale
+    End Sub
+
+    Public Sub GereTransfertValeur(ByVal ValeurLocale As Decimal, ByRef ValeurGlobale As Decimal, ByRef lModif As Boolean)
+        If ValeurGlobale <> ValeurLocale Then lModif = True
+        ValeurGlobale = ValeurLocale
+    End Sub
+
+    Public Sub GereTransfertValeur(ByVal ValeurLocale As Integer, ByRef ValeurGlobale As Integer, ByRef lModif As Boolean)
+        If ValeurGlobale <> ValeurLocale Then lModif = True
+        ValeurGlobale = ValeurLocale
+    End Sub
 
 #End Region
 

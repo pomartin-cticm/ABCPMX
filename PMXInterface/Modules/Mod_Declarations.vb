@@ -78,17 +78,33 @@ Module Mod_Declarations
         ''' <summary>
         ''' Répertoire de configuration
         ''' </summary>
-        Public RepertoireConfig As String
+        Public Config As String
 
         ''' <summary>
         ''' Répertoire d'installation
         ''' </summary>
-        Public RepertoireInstall As String
+        Public Install As String
 
         ''' <summary>
         ''' Répertoire des images à charger
         ''' </summary>
         Public Images As String
+
+        ''' <summary>
+        ''' Répertoire de travail
+        ''' </summary>
+        Public Travail As String
+
+        ''' <summary>
+        ''' Répertoire de travail par défaut
+        ''' </summary>
+        Public TravailDefaut As String
+
+        ''' <summary>
+        ''' Indique si le répertoire de travail est celui par défaut ou le dernier utilisé
+        ''' </summary>
+        Public lTravailDefaut As Boolean
+
     End Structure
 
     Public Structure Struc_OptionsLogiciel
@@ -273,7 +289,7 @@ Module Mod_Declarations
 
 #End Region
 
-#Region " Paramètres de STYLE "
+#Region " Paramètres de STYLE (Couleurs...) "
 
     '== Palette CTICM
     Public BleuCTICM As Color = Color.FromArgb(0, 90, 161)
@@ -315,7 +331,7 @@ Module Mod_Declarations
     Public CouleurArmaNormal As Color = Color.LightSlateGray
     Public CouleurArmaSelect As Color = Color.DarkOrange
 
-
+    Public ColorFixe As Color = Color.LightGray
 
 #End Region
 

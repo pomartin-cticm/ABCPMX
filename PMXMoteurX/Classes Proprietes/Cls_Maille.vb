@@ -173,7 +173,7 @@ Public Class Cls_Maille
 
                 DecoupeCerclePlein(Me.Rayon, p, AireS, zGs, AireI, zGi, Phi)
 
-                Result = (AireS * DeltaAp - AireI * DeltaAm)
+                Result = (AireS * DeltaAp * (zGs + DeltaZ) - AireI * DeltaAm * (zGi + DeltaZ))
 
             Case EnuTypeMaille.CongeSup
 

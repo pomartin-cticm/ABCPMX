@@ -80,7 +80,7 @@ Module Mod_BasesDonneesBinaires
     Public Sub InitDatabase_Aciers()
         '--> Fichier
         If Not File.Exists(LogicielFichiers.Base_Aciers) Then
-            File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase, LogicielFichiers.Base_Aciers)
+            File.Copy(LogicielRep.Install & "\" & RepBase & "\" & RacAcier & ExtensionBase, LogicielFichiers.Base_Aciers)
         End If
 
         '--> Récupération de la base

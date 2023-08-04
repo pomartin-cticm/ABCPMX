@@ -2,7 +2,6 @@
 
 Public Class Frm_OptionsLogiciel
 
-
 #Region " Variables "
 
     Structure struc_Colors
@@ -25,6 +24,31 @@ Public Class Frm_OptionsLogiciel
 
     End Structure
 
+    Structure Struc_LocalOptionsLogiciel
+
+        Public lExpert As Boolean                   'Activation Mode Expert
+        'Public lDebug As Boolean                    'Fonctionnement en mode debug
+        Public IndLangue As Integer                 'Indice de la langue de l'interface
+        Public IndLangueNDC As Integer              'Indice de la langue de la note de calcul
+
+        Public IndUnitLongueur As Integer           'Indice de l'unité de longueur utilisée
+        Public IndUnitDimension As Integer          'Indice de l'unité de longueur utilisée
+        Public IndUnitEffort As Integer             'Indice de l'unité d'effort utilisée
+        Public IndUnitMoment As Integer             'Indice de l'unité de moment utilisée
+        Public IndUnitInerties As Integer           'Indice de l'unité des inerties
+        Public IndUnitContraintes As Integer        'Indice de l'unité des contraintes
+        Public IndUnitModulesY As Integer           'Indice de l'unité des modules d'élasticité
+
+        Public UserName As String                   'Nom de l'utilisateur
+        Public CompanyName As String                'Nom de l'entreprise
+
+        Public RepertoireTravail As String          'Répertoire de l'espace de travail
+        Public lRepTravailDefault As Boolean        'Répertoire de travail par défaut ou le dernier utilisé
+
+        Public lUpdateStart As Boolean              'Vérification des mises à jour au démarrage du logiciel
+
+    End Structure
+
     Dim lBuild As Boolean = True
 
     Private MyCouleurs As struc_Colors
@@ -32,6 +56,9 @@ Public Class Frm_OptionsLogiciel
     Public BlocLangues As Dictionary(Of String, Dictionary(Of String, String))
     Const BALISE As String = "OPTSOFTMAIN"
 
+    Public pLocalLogicielOptions As Struc_LocalOptionsLogiciel
+    Public pLocalRepWDefaut As String = ""
+    Public pLocallDefaultRepW As Boolean
 
 #End Region
 
@@ -59,7 +86,7 @@ Public Class Frm_OptionsLogiciel
         '--> Déclaration
 
         Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
-        Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTGENERAL", "OPTSOFTUNITS"}
+        Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTGENERAL", "OPTSOFTUNITS", "OPTSOFTDIRECTORIES"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
         Dim MotCle, Argument As String
@@ -191,6 +218,17 @@ Public Class Frm_OptionsLogiciel
 
     Private Sub InitialiseParametresLocaux()
 
+        pLocalLogicielOptions.IndUnitContraintes = LogicielOptions.IndUnitContraintes
+        pLocalLogicielOptions.IndUnitInerties = LogicielOptions.IndUnitInerties
+        pLocalLogicielOptions.IndUnitDimension = LogicielOptions.IndUnitDimension
+        pLocalLogicielOptions.IndUnitEffort = LogicielOptions.IndUnitEffort
+        pLocalLogicielOptions.IndUnitLongueur = LogicielOptions.IndUnitLongueur
+        pLocalLogicielOptions.IndUnitModulesY = LogicielOptions.IndUnitModulesY
+        pLocalLogicielOptions.IndUnitMoment = LogicielOptions.IndUnitMoment
+
+        pLocalRepWDefaut = LogicielRep.TravailDefaut
+        pLocallDefaultRepW = LogicielRep.lTravailDefaut
+
     End Sub
 
     Private Sub AfficherFenetreFille()
@@ -204,6 +242,9 @@ Public Class Frm_OptionsLogiciel
                 Frm_OptionsLogicielGeneral.InitialiseFrm()
 
             Case Enu_OptionsLogiciel.Directories
+
+                Me.pan_Contenu.Controls.Add(Frm_OptionsLogicielDirectories.pan_General)
+                Frm_OptionsLogicielDirectories.InitialiseFrm()
 
             Case Enu_OptionsLogiciel.Units
 
@@ -289,7 +330,41 @@ Public Class Frm_OptionsLogiciel
     End Sub
 
 
+
 #End Region
 
+#Region "===Fermeture==="
 
+    Private Sub btn_Appliquer_Click(sender As Object, e As EventArgs) Handles btn_Appliquer.Click
+
+        Dim lModif As Boolean
+
+        If ValideSaisie() Then
+            TransfereSaisie(lModif)
+            Me.Close()
+        End If
+
+    End Sub
+
+    Private Sub TransfereSaisie(ByRef lModif As Boolean)
+
+        lModif = False
+
+        GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitDimension, LogicielOptions.IndUnitDimension, lModif)
+        GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitLongueur, LogicielOptions.IndUnitLongueur, lModif)
+        GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitContraintes, LogicielOptions.IndUnitContraintes, lModif)
+        GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitEffort, LogicielOptions.IndUnitEffort, lModif)
+        GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitInerties, LogicielOptions.IndUnitInerties, lModif)
+        GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitMoment, LogicielOptions.IndUnitMoment, lModif)
+
+        GereTransfertValeur(Me.pLocallDefaultRepW, LogicielRep.lTravailDefaut, lModif)
+
+    End Sub
+
+    Private Function ValideSaisie() As Boolean
+        Return True
+    End Function
+
+
+#End Region
 End Class

@@ -51,8 +51,8 @@ Module Mod_Demarrage
         LogicielOptions.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
         LogicielOptions.lDebug = False
 
-        LogicielRep.RepertoireInstall = Application.StartupPath
-        LogicielRep.RepertoireConfig = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CTICM\" & LogicielInfo.NomLogiciel & "\ConfigV" & LogicielInfo.Version
+        LogicielRep.Install = Application.StartupPath
+        LogicielRep.Config = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CTICM\" & LogicielInfo.NomLogiciel & "\ConfigV" & LogicielInfo.Version
 
         LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Gamma
         LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.General
@@ -61,9 +61,16 @@ Module Mod_Demarrage
 
         '--> Répertoires
 
-        If Not IO.Directory.Exists(LogicielRep.RepertoireConfig) Then 'R22-001
-            IO.Directory.CreateDirectory(LogicielRep.RepertoireConfig)
+        '# répertoire configuration
+        If Not IO.Directory.Exists(LogicielRep.Config) Then 'R22-001
+            IO.Directory.CreateDirectory(LogicielRep.Config)
         End If
+
+        '# répertoires de travail
+        LogicielRep.TravailDefaut = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+        LogicielRep.lTravailDefaut = False      'Utilisation du dernier fichier ouvert
+        LogicielRep.Travail = LogicielRep.TravailDefaut
+        'If Not Directory.Exists(RepACB.WorkData) Then Directory.CreateDirectory(RepACB.WorkData)
 
         '--> Langues
 
@@ -135,10 +142,10 @@ Module Mod_Demarrage
             End If
 
             '--> Fichiers
-            LogicielFichiers.Base_Sections = LogicielRep.RepertoireConfig & "\" & RacProfile & ExtensionBase
-            LogicielFichiers.Base_Aciers = LogicielRep.RepertoireConfig & "\" & RacAcier & ExtensionBase
-            LogicielFichiers.Base_Goujons = LogicielRep.RepertoireConfig & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
-            LogicielFichiers.Base_Bacs = LogicielRep.RepertoireConfig & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
+            LogicielFichiers.Base_Sections = LogicielRep.Config & "\" & RacProfile & ExtensionBase
+            LogicielFichiers.Base_Aciers = LogicielRep.Config & "\" & RacAcier & ExtensionBase
+            LogicielFichiers.Base_Goujons = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+            LogicielFichiers.Base_Bacs = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
 
             '--> Base de données
             InitialisationBasesDonnees()
@@ -228,9 +235,9 @@ Module Mod_Demarrage
         If Not File.Exists(LogicielFichiers.Base_Sections) Then
 
             If LogicielOptions.lDebug Then
-                FichierSource = LogicielRep.RepertoireInstall & "\..\..\" & RepBase & "\" & RacProfile & ExtensionBase
+                FichierSource = LogicielRep.Install & "\..\..\" & RepBase & "\" & RacProfile & ExtensionBase
             Else
-                FichierSource = LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacProfile & ExtensionBase
+                FichierSource = LogicielRep.Install & "\" & RepBase & "\" & RacProfile & ExtensionBase
             End If
             ' File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacProfile & ExtensionBase, LogicielFichiers.Database_Section)
             File.Copy(FichierSource, LogicielFichiers.Base_Sections)
@@ -241,9 +248,9 @@ Module Mod_Demarrage
         If Not File.Exists(LogicielFichiers.Base_Aciers) Then
 
             If LogicielOptions.lDebug Then
-                FichierSource = LogicielRep.RepertoireInstall & "\..\..\" & RepBase & "\" & RacAcier & ExtensionBase
+                FichierSource = LogicielRep.Install & "\..\..\" & RepBase & "\" & RacAcier & ExtensionBase
             Else
-                FichierSource = LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase
+                FichierSource = LogicielRep.Install & "\" & RepBase & "\" & RacAcier & ExtensionBase
             End If
             'File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase, LogicielFichiers.Database_Aciers)
             File.Copy(FichierSource, LogicielFichiers.Base_Aciers)
@@ -253,9 +260,9 @@ Module Mod_Demarrage
         If Not File.Exists(LogicielFichiers.Base_Bacs) Then
 
             If LogicielOptions.lDebug Then
-                FichierSource = LogicielRep.RepertoireInstall & "\..\..\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
+                FichierSource = LogicielRep.Install & "\..\..\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
             Else
-                FichierSource = LogicielRep.RepertoireInstall & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
+                FichierSource = LogicielRep.Install & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
             End If
             File.Copy(FichierSource, LogicielFichiers.Base_Bacs)
         End If
@@ -264,9 +271,9 @@ Module Mod_Demarrage
         If Not File.Exists(LogicielFichiers.Base_Goujons) Then
 
             If LogicielOptions.lDebug Then
-                FichierSource = LogicielRep.RepertoireInstall & "\..\..\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+                FichierSource = LogicielRep.Install & "\..\..\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
             Else
-                FichierSource = LogicielRep.RepertoireInstall & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+                FichierSource = LogicielRep.Install & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
             End If
             File.Copy(FichierSource, LogicielFichiers.Base_Goujons)
 
@@ -282,9 +289,9 @@ Module Mod_Demarrage
         '--------------------------------------------------------------------------------------------
 
         If lDebug Then
-            LogicielRep.Images = LogicielRep.RepertoireInstall & "\..\..\Images"
+            LogicielRep.Images = LogicielRep.Install & "\..\..\Images"
         Else
-            LogicielRep.Images = LogicielRep.RepertoireInstall & "\Images"
+            LogicielRep.Images = LogicielRep.Install & "\Images"
         End If
 
     End Sub
@@ -560,11 +567,11 @@ Module Mod_Demarrage
         If (LogicielInfo.ListeLangue.Count > 0) AndAlso (LogicielOptions.IndLangue >= 0) AndAlso (LogicielOptions.IndLangue < LogicielInfo.ListeLangue.Count) Then
 
             If lDebug Then
-                LogicielFichiers.Langue = LogicielRep.RepertoireInstall & "\..\..\Langues\" & LogicielInfo.Racine & "_" &
+                LogicielFichiers.Langue = LogicielRep.Install & "\..\..\Langues\" & LogicielInfo.Racine & "_" &
                                           LogicielInfo.ListeLangue(LogicielOptions.IndLangue).Substring(0, 2).ToUpper & ".lng"
 
             Else
-                LogicielFichiers.Langue = LogicielRep.RepertoireInstall & "\Langues\" & LogicielInfo.Racine & "_" &
+                LogicielFichiers.Langue = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_" &
                                           LogicielInfo.ListeLangue(LogicielOptions.IndLangue).Substring(0, 2).ToUpper & ".lng"
 
             End If
@@ -583,10 +590,10 @@ Module Mod_Demarrage
         If (LogicielInfo.ListeLangueNDC.Count > 0) AndAlso (LogicielOptions.IndLangueNDC >= 0) AndAlso (LogicielOptions.IndLangueNDC < LogicielInfo.ListeLangueNDC.Count) Then
 
             If lDebug Then
-                LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\..\..\Langues\" & LogicielInfo.Racine & "_NDC_" _
+                LogicielFichiers.LangueNDC = LogicielRep.Install & "\..\..\Langues\" & LogicielInfo.Racine & "_NDC_" _
                                            & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
             Else
-                LogicielFichiers.LangueNDC = LogicielRep.RepertoireInstall & "\Langues\" & LogicielInfo.Racine & "_NDC_" _
+                LogicielFichiers.LangueNDC = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_NDC_" _
                                            & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
             End If
 
@@ -607,10 +614,10 @@ Module Mod_Demarrage
 
 
         If lDebug Then
-            LogicielFichiers.Icone = LogicielRep.RepertoireInstall & "\..\..\Icones\"
+            LogicielFichiers.Icone = LogicielRep.Install & "\..\..\Icones\"
 
         Else
-            LogicielFichiers.Langue = LogicielRep.RepertoireInstall & "\Icones\"
+            LogicielFichiers.Langue = LogicielRep.Install & "\Icones\"
 
         End If
 

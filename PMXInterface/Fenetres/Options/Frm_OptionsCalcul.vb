@@ -232,7 +232,7 @@ Public Class Frm_OptionsCalcul
 
         lModif = False
 
-        GereTransfertValeur(GammaLoc.GammaC,LogicielOptions.Gamma.GammaC, lModif)
+        GereTransfertValeur(GammaLoc.GammaC, LogicielOptions.Gamma.GammaC, lModif)
         GereTransfertValeur(GammaLoc.GammaC_fi, LogicielOptions.Gamma.GammaC_fi, lModif)
         GereTransfertValeur(GammaLoc.GammaG_inf, LogicielOptions.Gamma.GammaG_inf, lModif)
         GereTransfertValeur(GammaLoc.GammaG_sup, LogicielOptions.Gamma.GammaG_sup, lModif)
@@ -253,10 +253,7 @@ Public Class Frm_OptionsCalcul
         LogicielOptions.Gamma.Psi2_Q2 = LogicielOptions.Gamma.Psi2_Q1
 
     End Sub
-    Private Sub GereTransfertValeur(ByVal ValeurLocale As Decimal, ByRef ValeurGlobale As Decimal, ByRef lModif As Boolean)
-        If ValeurGlobale <> ValeurLocale Then lModif = True
-        ValeurGlobale = ValeurLocale
-    End Sub
+
 
     Private Function ValideSaisie() As Boolean
 

@@ -297,7 +297,23 @@ Imports PMXMoteur2
 
         ValRef = 775.4 * 10 ^ 3
         DeltaV = (MplRd - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 500)        '50% à voir  !!!
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '--> Mêmes calculs en valeurs caractéristiques
+
+        MySection.ProprietesPlastiquesMyy(1, False, MyGamma, 0, zANP, MplRd)
+
+        '# Position ANP
+
+        ValRef = -0.1702
+        DeltaV = (zANP - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Moment plastique
+
+        ValRef = 799.1 * 10 ^ 3
+        DeltaV = (MplRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '--> TESTS en supprimant les armatures
 
@@ -337,6 +353,173 @@ Imports PMXMoteur2
         '# Moment plastique
 
         ValRef = 741.5 * 10 ^ 3
+        DeltaV = (MplRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+    End Sub
+
+
+    <TestMethod()> Public Sub TestUnit_ProprietesSectionAcierEnrobeeLamineSpecial()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   12/07/23 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test des propriétés élastiques et plastiques d'une section acier + enrobage partiel avec profilé laminé
+        '   Références : article RCM 2023/3
+        '   Sans les armatures et sans les congés
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MySection As New cls_Section
+        Dim MyGamma As New Cls_Gamma
+        Dim zANP, MplRd As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim InertieY, InertieZ As Decimal
+        Dim DeltaV, ValRef As Decimal
+        Const DeltaVMAx As Decimal = 1 / 1000
+        Dim nEqEc As Decimal
+
+        '--> Initialisations
+
+        MySection.typeSection = cls_Section.Enum_TypeSection.Acier
+
+        '# IPE 500A
+
+        MySection.ProfilA.ha = 0.497
+        MySection.ProfilA.b_fi = 0.2
+        MySection.ProfilA.b_fs = 0.2
+        MySection.ProfilA.t_fi = 0.0145
+        MySection.ProfilA.t_fs = 0.0145
+        MySection.ProfilA.t_w = 0.0084
+        MySection.ProfilA.r_ci = 0 '.021
+        MySection.ProfilA.r_cs = 0 '.021
+        MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
+
+        '# Acier S355 M/ML
+
+        MySection.Acier.InitialiseAcierS355MML()
+
+        '# Gamma
+
+        MyGamma.GammaM0 = 1
+
+
+        '=== ACIER + ENROBAGE ============================================================================
+
+        '--> Définition de l'enrobage partiel
+
+        MySection.typeSection = cls_Section.Enum_TypeSection.AcierEnrobage
+
+        MySection.enrobage_partiel.Ratio_bc = 1
+        MySection.enrobage_partiel.Beton.Classe = "C25/30"
+        MySection.enrobage_partiel.Beton.Calcul_Proprietes()
+
+        '--> Définition du lit d'armature supérieure
+
+        MySection.enrobage_partiel.AcierArmatures.Classe = "B500"
+
+        MySection.enrobage_partiel.LitArma(2).NbExt = 0
+        MySection.enrobage_partiel.LitArma(2).NbMil = 0
+        MySection.enrobage_partiel.LitArma(2).NbInt = 0
+        MySection.enrobage_partiel.LitArma(2).PhiExt = 0.008
+        MySection.enrobage_partiel.LitArma(2).PhiInt = 0.008
+        MySection.enrobage_partiel.LitArma(2).PhiMil = 0.008
+
+        '--> Définition du lit d'armature intermédiaire
+
+        MySection.enrobage_partiel.LitArma(1).NbExt = 0
+        MySection.enrobage_partiel.LitArma(1).NbMil = 0
+        MySection.enrobage_partiel.LitArma(1).NbInt = 0
+        MySection.enrobage_partiel.LitArma(1).PhiExt = 0.008
+        MySection.enrobage_partiel.LitArma(1).PhiInt = 0.008
+        MySection.enrobage_partiel.LitArma(1).PhiMil = 0.008
+
+        '--> Définition du lit d'armature inférieur
+
+        MySection.enrobage_partiel.LitArma(0).NbExt = 0
+        MySection.enrobage_partiel.LitArma(0).NbMil = 0
+        MySection.enrobage_partiel.LitArma(0).NbInt = 0
+        MySection.enrobage_partiel.LitArma(0).PhiExt = 0.008
+        MySection.enrobage_partiel.LitArma(0).PhiInt = 0.012
+        MySection.enrobage_partiel.LitArma(0).PhiMil = 0.00
+
+        '--> Définition des étriers
+
+        MySection.enrobage_partiel.Etriers_Phi = 0.006
+        MySection.enrobage_partiel.Etriers_EnrobageZ = 0.06 - 0.006 * 2
+
+        '--> Coefficient d'équivalence court terme du béton
+
+        nEqEc = MySection.enrobage_partiel.Beton.CoefficientEquivalence(50, 1, 1, 1, 0)
+
+        '--> Tests des propriétés élastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
+
+
+
+        '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
+
+        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+
+        '# Position ANP
+
+        ValRef = -0.1753
+        DeltaV = (zANP - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Moment plastique
+
+        ValRef = 711.1 * 10 ^ 3
+        DeltaV = (MplRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '=== ACIER + ENROBAGE + CONGES ============================================================================
+
+        MySection.ProfilA.r_ci = 0.021
+        MySection.ProfilA.r_cs = 0.021
+        MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+
+        '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
+
+        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+
+        '# Position ANP
+
+        ValRef = -0.1756
+        DeltaV = (zANP - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Moment plastique
+
+        ValRef = 741.5 * 10 ^ 3
+        DeltaV = (MplRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '=== ACIER + ENROBAGE + SANS CONGES + 1 lit inférieur ============================================================================
+
+        MySection.ProfilA.r_ci = 0
+        MySection.ProfilA.r_cs = 0
+        MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
+
+        MySection.enrobage_partiel.LitArma(0).NbExt = 0
+        MySection.enrobage_partiel.LitArma(0).NbMil = 0
+        MySection.enrobage_partiel.LitArma(0).NbInt = 1
+        MySection.enrobage_partiel.LitArma(0).PhiExt = 0.008
+        MySection.enrobage_partiel.LitArma(0).PhiInt = 0.012
+        MySection.enrobage_partiel.LitArma(0).PhiMil = 0.00
+
+        '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
+
+        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+
+        '# Position ANP
+
+        ValRef = -0.1866
+        DeltaV = (zANP - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Moment plastique
+
+        ValRef = 734.8 * 10 ^ 3
         DeltaV = (MplRd - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 

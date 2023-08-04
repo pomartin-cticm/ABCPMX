@@ -332,6 +332,16 @@ UNITS					= Units
 DATABASES				= Databases
 EXPERT					= Expert Mode
 
+#OPTSOFTDIRECTORIES
+DIRECTORIES				= Directories
+INSTALL					= Installation directory
+CONFIG					= Configuration directory
+WORK					= Current working directory
+DEFAULTWORK				= Default working directory
+DIROPTIONS				= Options for the working directory
+LAST					= Last used directory
+DEFAULT					= Default working directory
+
 #OPTSOFTGENERAL
 TITLE					= General settings
 
@@ -344,6 +354,6 @@ FORCES					= Forces
 MOMENTS					= Moments
 BENDINGW				= Bending modulus
 STRESSES				= Stresses
-
+SMAREA					= Second moment of area
 
 
