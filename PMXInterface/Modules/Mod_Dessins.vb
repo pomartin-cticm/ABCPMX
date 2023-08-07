@@ -2579,10 +2579,15 @@ Module Mod_Dessins
         Dim ColorPen As Color = Color.Blue
         Dim ColorRedPen As Color = Color.Red
 
+        Dim CouleurBeton As Color = CouleurBetonNormal
+        Dim CouleurAcier As Color = CouleurAcierNormal
+        Dim CouleurConnect As Color = CouleurConnecteurNormal
+
         Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightGray, Color.DarkGray)
-        Dim myBrushBeton As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.Gray, Color.DarkGray)
-        Dim myBrushProfilA As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightBlue, Color.DarkGray)
-        Dim myBrushConnecteur As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightYellow, Color.DarkGray)
+        Dim myBrushBeton As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.Gray, CouleurBeton)
+        Dim myBrushProfilA As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurAcier, CouleurAcier)
+        Dim myBrushConnecteur As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurConnect, CouleurConnect)
+
         Dim MyPenBrush As New SolidBrush(ColorPen)
         Dim MyPenRedBrush As New SolidBrush(ColorRedPen)
         Dim MyPen As New Pen(ColorPen)
@@ -2653,7 +2658,9 @@ Module Mod_Dessins
             'Dessin du corps du goujon
             AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
             'Dessin de la tete du goujon
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - 1.3 * MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - MyPoutreLoc.Dalle.Connecteur.d * 0.7, xGoujon + 1.3 * MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+            Dim dTete, hTete As Decimal
+            MyPoutreLoc.Dalle.Connecteur.DimensionsTete(dTete, hTete)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - hTete, xGoujon + dTete, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
 
             'Dessin de la semelle supérieure et de l'âme de la poutre
             Dim xSemelleSup As Decimal = 0
@@ -2693,9 +2700,13 @@ Module Mod_Dessins
             'Dessin du corps du goujon
             AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
             'Dessin de la tete du goujon
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - 1.3 * MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - MyPoutreLoc.Dalle.Connecteur.d * 0.7, xGoujon + 1.3 * MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+            Dim dTete, hTete As Decimal
+            MyPoutreLoc.Dalle.Connecteur.DimensionsTete(dTete, hTete)
 
-            'Dessin de la semelle supérieure et de l'âme de la poutre
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+
+            '--> Dessin de la semelle supérieure et de l'âme de la poutre
+
             Dim xSemelleSup As Decimal = 0
             Dim ySemelleSup As Decimal = 0
             AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup - MyPoutreLoc.Section.ProfilA.t_fs, xSemelleSup + MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup, MyParAff, True, True)

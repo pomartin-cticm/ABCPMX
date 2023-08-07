@@ -331,6 +331,8 @@ Module Mod_Declarations
     Public CouleurArmaNormal As Color = Color.LightSlateGray
     Public CouleurArmaSelect As Color = Color.DarkOrange
 
+    Public CouleurConnecteurNormal As Color = Color.DarkOrange
+
     Public ColorFixe As Color = Color.LightGray
 
 #End Region

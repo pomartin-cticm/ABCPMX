@@ -1008,8 +1008,7 @@ Partial Class Frm_Dalle
         '
         'txt_Hd
         '
-        Me.txt_Hd.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Hd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_Hd.Location = New System.Drawing.Point(152, 34)
         Me.txt_Hd.Name = "txt_Hd"
         Me.txt_Hd.Size = New System.Drawing.Size(58, 20)

@@ -123,6 +123,12 @@ Public Class Frm_Connection
     Dim NB_TRANSV_ROW_MIN As Integer
     Dim NB_TRANSV_ROW_MAX As Integer
 
+
+
+    '== POM
+    Dim tabDiam() As Decimal
+    Dim tabHsc() As Decimal
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -289,10 +295,12 @@ Public Class Frm_Connection
     End Sub
 
     Private Sub GestionUnites()
+
         Me.etq_UnitD.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitHsc.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitFy.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
         Me.etq_UnitFu.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
+
     End Sub
 
     Private Sub RemplirComboBox()

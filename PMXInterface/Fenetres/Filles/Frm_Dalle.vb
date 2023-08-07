@@ -17,7 +17,7 @@ Public Class Frm_Dalle
     Dim ClasseAcierArma() As String = Cls_AcierArmature.tabClasseAcierArma
 
     Public MyDalleLoc As New Cls_Dalle
-    Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
+    'Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
     Const kADJUST As Decimal = 0.95
 
     Dim strAppuiTcontinus, strAppuiTRibContinu, strAppuiTBacNonContinu As String
@@ -165,6 +165,7 @@ Public Class Frm_Dalle
     End Sub
 
     Private Sub GestionStyle()
+
         Me.Icon = Frm_PMX.Icon
 
         Me.rtxt_Configuration.BorderStyle = BorderStyle.None
@@ -181,8 +182,19 @@ Public Class Frm_Dalle
         Me.lbl_Acier.BackColor = CouleurBackBandeaux
         Me.lbl_Acier.ForeColor = CouleurForeBandeaux
 
+        '# Blocage des txtbox non modifiables
+
         Me.txt_BacNom.Enabled = False
-        Me.txt_BacNom.BackColor = COULEURTXTREADONLY
+        Me.txt_BacNom.BackColor = CouleurReadOnly
+
+        Me.txt_Fck.Enabled = False
+        Me.txt_Fck.BackColor = CouleurReadOnly
+        Me.txt_Ecm.Enabled = False
+        Me.txt_Ecm.BackColor = CouleurReadOnly
+        Me.txt_Fsk.Enabled = False
+        Me.txt_Fsk.BackColor = CouleurReadOnly
+
+
 
         Me.img_Bac.BorderStyle = BorderStyle.FixedSingle
 
@@ -201,6 +213,7 @@ Public Class Frm_Dalle
     End Sub
 
     Private Sub RemplirComboAvecTableau(MyCombo As ComboBox, tabValeurs() As String)
+
         MyCombo.Items.Clear()
         MyCombo.Items.AddRange(tabValeurs)
 
@@ -223,6 +236,7 @@ Public Class Frm_Dalle
         '--> Epaisseur
 
         Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
+        Me.txt_Hh.Text = GetStringNoUnit(MyDalleLoc.t_h, Enu_TypeVariable.Dimension)
 
         '--> Béton
 

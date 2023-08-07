@@ -55,14 +55,14 @@ Public Class Cls_Connecteur
 
 #End Region
 
-#Region "Fonction de copie"
+#Region " Fonction de copie "
     Public Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function
 
 #End Region
 
-#Region "Outils DataBase"
+#Region " Outils DataBase "
     ''' <summary>
     ''' Fonction qui renvoi la liste des noms des goujons disponibles dans la DataBase du Mod_Declaration (utile pour le Frm_Connexion)
     ''' </summary>
@@ -89,14 +89,43 @@ Public Class Cls_Connecteur
 
     End Sub
 
+#End Region
+
+#Region " Outils divers "
+
+    Public Sub DimensionsTete(ByRef d2 As Decimal, ByRef hk As Decimal)
+        '---------------------------------------------------------------------------------------------------------
+        '   07/08/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Renvoie les dimensions de la tête d'un connecteur
+        '---------------------------------------------------------------------------------------------------------
+        '   d2      [S] :   Diamètre de la tête
+        '   hk      [S] :   Hauteur de la tête
+        '---------------------------------------------------------------------------------------------------------
+
+        Const kUnit As Decimal = 0.001
+
+        Select Case CInt(Me.d * 1000)
+            Case 16
+                d2 = 32 * kUnit
+                hk = 8 * kUnit
+            Case 19
+                d2 = 32 * kUnit
+                hk = 10 * kUnit
+            Case 22
+                d2 = 35 * kUnit
+                hk = 10 * kUnit
+            Case 25
+                d2 = 40 * kUnit
+                hk = 12 * kUnit
+        End Select
+
+    End Sub
 
 #End Region
 
-#Region " Outils de calcul "
+#Region " Résistance connecteur Dalle Pleine Génération 1 "
 
-#Region "Calculs dalle pleine"
-
-#Region "PRd"
     '--> 1ere GENERATION
     Public Function PRdDallePleineG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
@@ -126,38 +155,6 @@ Public Class Cls_Connecteur
 
     End Function
 
-    '--> 2eme GENERATION
-    Public Function PRdDallePleineG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal) As Decimal
-        '-----------------------------------------------------------------------------------------------------------------
-        '   18/07/23 :  Création - GUD
-        '-----------------------------------------------------------------------------------------------------------------
-        '   Calcul de la résistance en dalle pleine / Génération 1
-        '-----------------------------------------------------------------------------------------------------------------
-        '   Fck     [E] :   Résistance caractéristique à la compression du béton
-        '   Ecm     [E] :   Module sécant du béton
-        '   GammaVS [E] :   Coefficient partiel pour la première équation (acier)
-        '   GammaVC [E] :   Coefficient partiel pour la seconde équation (béton)
-        '-----------------------------------------------------------------------------------------------------------------
-        '   TU : 
-
-        '--> Déclaration
-
-        Dim PRdC, PRdS As Decimal
-
-        '--> Calcul
-
-        PRdS = PRdDallePleineG1G2Acier(GammaVS)
-        PRdC = PRdDallePleineG2Beton(Fck, Ecm, GammaVC)
-
-        '--> Fin
-
-        Return Math.Min(PRdC, PRdS)
-
-    End Function
-
-#End Region
-
-#Region "PRd Acier"
     '--> 1ere et 2eme GENERATIONS
 
     Public Function PRdDallePleineG1G2Acier(GammaVS As Decimal) As Decimal
@@ -183,9 +180,6 @@ Public Class Cls_Connecteur
         Return PRd
     End Function
 
-#End Region
-
-#Region "PRd Beton"
     '--> 1ere GENERATION
     Public Function PRdDallePleineG1Beton(Fck As Decimal, Ecm As Decimal, GammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
@@ -229,6 +223,39 @@ Public Class Cls_Connecteur
         End Get
     End Property
 
+#End Region
+
+#Region " Résistance connecteur Dalle Pleine Génération 2  "
+
+    '--> 2eme GENERATION
+    Public Function PRdDallePleineG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/07/23 :  Création - GUD
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Calcul de la résistance en dalle pleine / Génération 1
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Fck     [E] :   Résistance caractéristique à la compression du béton
+        '   Ecm     [E] :   Module sécant du béton
+        '   GammaVS [E] :   Coefficient partiel pour la première équation (acier)
+        '   GammaVC [E] :   Coefficient partiel pour la seconde équation (béton)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   TU : 
+
+        '--> Déclaration
+
+        Dim PRdC, PRdS As Decimal
+
+        '--> Calcul
+
+        PRdS = PRdDallePleineG1G2Acier(GammaVS)
+        PRdC = PRdDallePleineG2Beton(Fck, Ecm, GammaVC)
+
+        '--> Fin
+
+        Return Math.Min(PRdC, PRdS)
+
+    End Function
+
     '-->2eme GENERATION
     Public Function PRdDallePleineG2Beton(Fck As Decimal, Ecm As Decimal, GammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
@@ -254,9 +281,8 @@ Public Class Cls_Connecteur
 
 #End Region
 
-#End Region
+#Region " Résistance connecteur dalle mixte avec Bac perpendiculaire "
 
-#Region "Bac perpendiculaire"
     '--> 1ere GENERATION
 
     Public Function CoefkT(nr As Decimal, MyBac As Cls_Bac) As Decimal
@@ -489,7 +515,7 @@ Public Class Cls_Connecteur
 
 #End Region
 
-#Region "Bac parrallèle"
+#Region " Résistance dalle mixte avec Bac parrallèle "
     '--> 1ere GENERATION
     Public Function PRdBacParrallelleG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As Cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
@@ -571,9 +597,5 @@ Public Class Cls_Connecteur
 #End Region
 
 
-
-
-
-#End Region
 
 End Class
