@@ -205,7 +205,15 @@
     ''' <returns></returns>
     Public ReadOnly Property zTop As Decimal
         Get
-            Return Me.EpRenformis + Me.t_d
+            Dim MyzTop As Decimal
+
+            MyzTop = Me.EpRenformis + Me.t_d
+
+            If (Me.type = Enum_TypeDalle.Mixte) Then
+                If (Me.Bac.lCofraplus220) Then MyzTop -= Me.Bac.h_p
+            End If
+
+            Return MyzTop
         End Get
     End Property
 

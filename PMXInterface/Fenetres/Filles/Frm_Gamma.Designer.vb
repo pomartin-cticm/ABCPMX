@@ -34,7 +34,7 @@ Partial Class Frm_Gamma
         Me.TLPan_Resistance = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Resistance = New System.Windows.Forms.Label()
         Me.pan_SaisieResistance = New System.Windows.Forms.Panel()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.TabControlGammaM = New System.Windows.Forms.TabControl()
         Me.Tab_Acier = New System.Windows.Forms.TabPage()
         Me.txt_GammaM2 = New System.Windows.Forms.TextBox()
         Me.img_GammaM2 = New System.Windows.Forms.PictureBox()
@@ -90,6 +90,8 @@ Partial Class Frm_Gamma
         Me.txt_GammaGsup = New System.Windows.Forms.TextBox()
         Me.img_GammaGsup = New System.Windows.Forms.PictureBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.lbl_Reset = New System.Windows.Forms.Label()
+        Me.pan_Reset = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -98,7 +100,7 @@ Partial Class Frm_Gamma
         Me.pan_Resistance.SuspendLayout()
         Me.TLPan_Resistance.SuspendLayout()
         Me.pan_SaisieResistance.SuspendLayout()
-        Me.TabControl1.SuspendLayout()
+        Me.TabControlGammaM.SuspendLayout()
         Me.Tab_Acier.SuspendLayout()
         CType(Me.img_GammaM2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_GammaM1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -128,6 +130,7 @@ Partial Class Frm_Gamma
         CType(Me.img_GammaGinf, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_GammaGsup, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Reset.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -230,10 +233,10 @@ Partial Class Frm_Gamma
         Me.pan_Resistance.AutoScroll = True
         Me.pan_Resistance.Controls.Add(Me.TLPan_Resistance)
         Me.pan_Resistance.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Resistance.Location = New System.Drawing.Point(412, 0)
+        Me.pan_Resistance.Location = New System.Drawing.Point(410, 0)
         Me.pan_Resistance.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Resistance.Name = "pan_Resistance"
-        Me.pan_Resistance.Size = New System.Drawing.Size(206, 239)
+        Me.pan_Resistance.Size = New System.Drawing.Size(208, 239)
         Me.pan_Resistance.TabIndex = 2
         '
         'TLPan_Resistance
@@ -250,7 +253,7 @@ Partial Class Frm_Gamma
         Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
         Me.TLPan_Resistance.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Resistance.Size = New System.Drawing.Size(206, 239)
+        Me.TLPan_Resistance.Size = New System.Drawing.Size(208, 239)
         Me.TLPan_Resistance.TabIndex = 0
         '
         'lbl_Resistance
@@ -262,7 +265,7 @@ Partial Class Frm_Gamma
         Me.lbl_Resistance.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Resistance.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Resistance.Name = "lbl_Resistance"
-        Me.lbl_Resistance.Size = New System.Drawing.Size(206, 30)
+        Me.lbl_Resistance.Size = New System.Drawing.Size(208, 30)
         Me.lbl_Resistance.TabIndex = 0
         Me.lbl_Resistance.Text = "lbl_Resistance"
         Me.lbl_Resistance.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -271,25 +274,27 @@ Partial Class Frm_Gamma
         '
         Me.pan_SaisieResistance.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieResistance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieResistance.Controls.Add(Me.TabControl1)
+        Me.pan_SaisieResistance.Controls.Add(Me.TabControlGammaM)
         Me.pan_SaisieResistance.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_SaisieResistance.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieResistance.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieResistance.Name = "pan_SaisieResistance"
-        Me.pan_SaisieResistance.Size = New System.Drawing.Size(206, 209)
+        Me.pan_SaisieResistance.Size = New System.Drawing.Size(208, 209)
         Me.pan_SaisieResistance.TabIndex = 1
         '
-        'TabControl1
+        'TabControlGammaM
         '
-        Me.TabControl1.Controls.Add(Me.Tab_Acier)
-        Me.TabControl1.Controls.Add(Me.Tab_Dalle)
-        Me.TabControl1.Controls.Add(Me.Tab_Incendie)
-        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(204, 207)
-        Me.TabControl1.TabIndex = 0
+        Me.TabControlGammaM.Controls.Add(Me.Tab_Acier)
+        Me.TabControlGammaM.Controls.Add(Me.Tab_Dalle)
+        Me.TabControlGammaM.Controls.Add(Me.Tab_Incendie)
+        Me.TabControlGammaM.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControlGammaM.ItemSize = New System.Drawing.Size(65, 18)
+        Me.TabControlGammaM.Location = New System.Drawing.Point(0, 0)
+        Me.TabControlGammaM.Name = "TabControlGammaM"
+        Me.TabControlGammaM.SelectedIndex = 0
+        Me.TabControlGammaM.Size = New System.Drawing.Size(206, 207)
+        Me.TabControlGammaM.SizeMode = System.Windows.Forms.TabSizeMode.Fixed
+        Me.TabControlGammaM.TabIndex = 0
         '
         'Tab_Acier
         '
@@ -302,7 +307,7 @@ Partial Class Frm_Gamma
         Me.Tab_Acier.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Acier.Name = "Tab_Acier"
         Me.Tab_Acier.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_Acier.Size = New System.Drawing.Size(196, 181)
+        Me.Tab_Acier.Size = New System.Drawing.Size(198, 181)
         Me.Tab_Acier.TabIndex = 0
         Me.Tab_Acier.Text = "Tab_Acier"
         Me.Tab_Acier.UseVisualStyleBackColor = True
@@ -310,7 +315,7 @@ Partial Class Frm_Gamma
         'txt_GammaM2
         '
         Me.txt_GammaM2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaM2.Location = New System.Drawing.Point(89, 81)
+        Me.txt_GammaM2.Location = New System.Drawing.Point(91, 81)
         Me.txt_GammaM2.Name = "txt_GammaM2"
         Me.txt_GammaM2.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaM2.TabIndex = 85
@@ -318,7 +323,7 @@ Partial Class Frm_Gamma
         'img_GammaM2
         '
         Me.img_GammaM2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaM2.Location = New System.Drawing.Point(44, 81)
+        Me.img_GammaM2.Location = New System.Drawing.Point(46, 81)
         Me.img_GammaM2.Name = "img_GammaM2"
         Me.img_GammaM2.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaM2.TabIndex = 86
@@ -327,7 +332,7 @@ Partial Class Frm_Gamma
         'txt_GammaM1
         '
         Me.txt_GammaM1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaM1.Location = New System.Drawing.Point(89, 55)
+        Me.txt_GammaM1.Location = New System.Drawing.Point(91, 55)
         Me.txt_GammaM1.Name = "txt_GammaM1"
         Me.txt_GammaM1.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaM1.TabIndex = 83
@@ -335,7 +340,7 @@ Partial Class Frm_Gamma
         'img_GammaM1
         '
         Me.img_GammaM1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaM1.Location = New System.Drawing.Point(44, 55)
+        Me.img_GammaM1.Location = New System.Drawing.Point(46, 55)
         Me.img_GammaM1.Name = "img_GammaM1"
         Me.img_GammaM1.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaM1.TabIndex = 84
@@ -344,7 +349,7 @@ Partial Class Frm_Gamma
         'txt_GammaM0
         '
         Me.txt_GammaM0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaM0.Location = New System.Drawing.Point(89, 29)
+        Me.txt_GammaM0.Location = New System.Drawing.Point(91, 29)
         Me.txt_GammaM0.Name = "txt_GammaM0"
         Me.txt_GammaM0.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaM0.TabIndex = 81
@@ -352,7 +357,7 @@ Partial Class Frm_Gamma
         'img_GammaM0
         '
         Me.img_GammaM0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaM0.Location = New System.Drawing.Point(44, 29)
+        Me.img_GammaM0.Location = New System.Drawing.Point(46, 29)
         Me.img_GammaM0.Name = "img_GammaM0"
         Me.img_GammaM0.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaM0.TabIndex = 82
@@ -374,7 +379,7 @@ Partial Class Frm_Gamma
         Me.Tab_Dalle.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Dalle.Name = "Tab_Dalle"
         Me.Tab_Dalle.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_Dalle.Size = New System.Drawing.Size(196, 181)
+        Me.Tab_Dalle.Size = New System.Drawing.Size(198, 181)
         Me.Tab_Dalle.TabIndex = 1
         Me.Tab_Dalle.Text = "Tab_Dalle"
         Me.Tab_Dalle.UseVisualStyleBackColor = True
@@ -392,7 +397,7 @@ Partial Class Frm_Gamma
         'txt_GammaVc
         '
         Me.txt_GammaVc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaVc.Location = New System.Drawing.Point(131, 153)
+        Me.txt_GammaVc.Location = New System.Drawing.Point(133, 153)
         Me.txt_GammaVc.Name = "txt_GammaVc"
         Me.txt_GammaVc.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaVc.TabIndex = 91
@@ -400,7 +405,7 @@ Partial Class Frm_Gamma
         'img_GammaVc
         '
         Me.img_GammaVc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaVc.Location = New System.Drawing.Point(86, 153)
+        Me.img_GammaVc.Location = New System.Drawing.Point(88, 153)
         Me.img_GammaVc.Name = "img_GammaVc"
         Me.img_GammaVc.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaVc.TabIndex = 96
@@ -409,7 +414,7 @@ Partial Class Frm_Gamma
         'txt_GammaP
         '
         Me.txt_GammaP.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaP.Location = New System.Drawing.Point(89, 118)
+        Me.txt_GammaP.Location = New System.Drawing.Point(91, 118)
         Me.txt_GammaP.Name = "txt_GammaP"
         Me.txt_GammaP.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaP.TabIndex = 97
@@ -417,7 +422,7 @@ Partial Class Frm_Gamma
         'img_GammaP
         '
         Me.img_GammaP.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaP.Location = New System.Drawing.Point(44, 118)
+        Me.img_GammaP.Location = New System.Drawing.Point(46, 118)
         Me.img_GammaP.Name = "img_GammaP"
         Me.img_GammaP.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaP.TabIndex = 94
@@ -426,7 +431,7 @@ Partial Class Frm_Gamma
         'txt_GammaS
         '
         Me.txt_GammaS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaS.Location = New System.Drawing.Point(89, 91)
+        Me.txt_GammaS.Location = New System.Drawing.Point(91, 91)
         Me.txt_GammaS.Name = "txt_GammaS"
         Me.txt_GammaS.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaS.TabIndex = 95
@@ -434,7 +439,7 @@ Partial Class Frm_Gamma
         'img_GammaS
         '
         Me.img_GammaS.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaS.Location = New System.Drawing.Point(44, 91)
+        Me.img_GammaS.Location = New System.Drawing.Point(46, 91)
         Me.img_GammaS.Name = "img_GammaS"
         Me.img_GammaS.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaS.TabIndex = 92
@@ -443,7 +448,7 @@ Partial Class Frm_Gamma
         'txt_GammaVs
         '
         Me.txt_GammaVs.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaVs.Location = New System.Drawing.Point(89, 65)
+        Me.txt_GammaVs.Location = New System.Drawing.Point(91, 65)
         Me.txt_GammaVs.Name = "txt_GammaVs"
         Me.txt_GammaVs.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaVs.TabIndex = 89
@@ -451,7 +456,7 @@ Partial Class Frm_Gamma
         'img_GammaVs
         '
         Me.img_GammaVs.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaVs.Location = New System.Drawing.Point(44, 65)
+        Me.img_GammaVs.Location = New System.Drawing.Point(46, 65)
         Me.img_GammaVs.Name = "img_GammaVs"
         Me.img_GammaVs.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaVs.TabIndex = 90
@@ -460,7 +465,7 @@ Partial Class Frm_Gamma
         'txt_GammaC
         '
         Me.txt_GammaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaC.Location = New System.Drawing.Point(89, 39)
+        Me.txt_GammaC.Location = New System.Drawing.Point(91, 39)
         Me.txt_GammaC.Name = "txt_GammaC"
         Me.txt_GammaC.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaC.TabIndex = 87
@@ -468,7 +473,7 @@ Partial Class Frm_Gamma
         'img_GammaC
         '
         Me.img_GammaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaC.Location = New System.Drawing.Point(44, 39)
+        Me.img_GammaC.Location = New System.Drawing.Point(46, 39)
         Me.img_GammaC.Name = "img_GammaC"
         Me.img_GammaC.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaC.TabIndex = 88
@@ -485,7 +490,7 @@ Partial Class Frm_Gamma
         Me.Tab_Incendie.Location = New System.Drawing.Point(4, 22)
         Me.Tab_Incendie.Name = "Tab_Incendie"
         Me.Tab_Incendie.Padding = New System.Windows.Forms.Padding(3)
-        Me.Tab_Incendie.Size = New System.Drawing.Size(196, 181)
+        Me.Tab_Incendie.Size = New System.Drawing.Size(198, 181)
         Me.Tab_Incendie.TabIndex = 2
         Me.Tab_Incendie.Text = "Tab_Incendie"
         Me.Tab_Incendie.UseVisualStyleBackColor = True
@@ -493,7 +498,7 @@ Partial Class Frm_Gamma
         'txt_GammaV_fi
         '
         Me.txt_GammaV_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaV_fi.Location = New System.Drawing.Point(91, 81)
+        Me.txt_GammaV_fi.Location = New System.Drawing.Point(93, 81)
         Me.txt_GammaV_fi.Name = "txt_GammaV_fi"
         Me.txt_GammaV_fi.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaV_fi.TabIndex = 91
@@ -501,7 +506,7 @@ Partial Class Frm_Gamma
         'img_GammaV_fi
         '
         Me.img_GammaV_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaV_fi.Location = New System.Drawing.Point(46, 81)
+        Me.img_GammaV_fi.Location = New System.Drawing.Point(48, 81)
         Me.img_GammaV_fi.Name = "img_GammaV_fi"
         Me.img_GammaV_fi.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaV_fi.TabIndex = 92
@@ -510,7 +515,7 @@ Partial Class Frm_Gamma
         'txt_GammaC_fi
         '
         Me.txt_GammaC_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaC_fi.Location = New System.Drawing.Point(91, 55)
+        Me.txt_GammaC_fi.Location = New System.Drawing.Point(93, 55)
         Me.txt_GammaC_fi.Name = "txt_GammaC_fi"
         Me.txt_GammaC_fi.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaC_fi.TabIndex = 89
@@ -518,7 +523,7 @@ Partial Class Frm_Gamma
         'img_GammaC_fi
         '
         Me.img_GammaC_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaC_fi.Location = New System.Drawing.Point(46, 55)
+        Me.img_GammaC_fi.Location = New System.Drawing.Point(48, 55)
         Me.img_GammaC_fi.Name = "img_GammaC_fi"
         Me.img_GammaC_fi.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaC_fi.TabIndex = 90
@@ -527,7 +532,7 @@ Partial Class Frm_Gamma
         'txt_GammaM_fi
         '
         Me.txt_GammaM_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaM_fi.Location = New System.Drawing.Point(91, 29)
+        Me.txt_GammaM_fi.Location = New System.Drawing.Point(93, 29)
         Me.txt_GammaM_fi.Name = "txt_GammaM_fi"
         Me.txt_GammaM_fi.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaM_fi.TabIndex = 87
@@ -535,7 +540,7 @@ Partial Class Frm_Gamma
         'img_GammaM_fi
         '
         Me.img_GammaM_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaM_fi.Location = New System.Drawing.Point(46, 29)
+        Me.img_GammaM_fi.Location = New System.Drawing.Point(48, 29)
         Me.img_GammaM_fi.Name = "img_GammaM_fi"
         Me.img_GammaM_fi.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaM_fi.TabIndex = 88
@@ -546,10 +551,10 @@ Partial Class Frm_Gamma
         Me.pan_Accompagnement.AutoScroll = True
         Me.pan_Accompagnement.Controls.Add(Me.TLPan_Accompagnement)
         Me.pan_Accompagnement.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Accompagnement.Location = New System.Drawing.Point(207, 0)
+        Me.pan_Accompagnement.Location = New System.Drawing.Point(206, 0)
         Me.pan_Accompagnement.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
         Me.pan_Accompagnement.Name = "pan_Accompagnement"
-        Me.pan_Accompagnement.Size = New System.Drawing.Size(204, 239)
+        Me.pan_Accompagnement.Size = New System.Drawing.Size(203, 239)
         Me.pan_Accompagnement.TabIndex = 1
         '
         'TLPan_Accompagnement
@@ -566,7 +571,7 @@ Partial Class Frm_Gamma
         Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
         Me.TLPan_Accompagnement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Accompagnement.Size = New System.Drawing.Size(204, 239)
+        Me.TLPan_Accompagnement.Size = New System.Drawing.Size(203, 239)
         Me.TLPan_Accompagnement.TabIndex = 0
         '
         'lbl_Accompagnement
@@ -578,7 +583,7 @@ Partial Class Frm_Gamma
         Me.lbl_Accompagnement.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Accompagnement.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Accompagnement.Name = "lbl_Accompagnement"
-        Me.lbl_Accompagnement.Size = New System.Drawing.Size(204, 30)
+        Me.lbl_Accompagnement.Size = New System.Drawing.Size(203, 30)
         Me.lbl_Accompagnement.TabIndex = 0
         Me.lbl_Accompagnement.Text = "lbl_Accompagnement"
         Me.lbl_Accompagnement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -604,13 +609,13 @@ Partial Class Frm_Gamma
         Me.pan_SaisieAccompagnement.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieAccompagnement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieAccompagnement.Name = "pan_SaisieAccompagnement"
-        Me.pan_SaisieAccompagnement.Size = New System.Drawing.Size(204, 209)
+        Me.pan_SaisieAccompagnement.Size = New System.Drawing.Size(203, 209)
         Me.pan_SaisieAccompagnement.TabIndex = 1
         '
         'img_Q2
         '
         Me.img_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Q2.Location = New System.Drawing.Point(127, 25)
+        Me.img_Q2.Location = New System.Drawing.Point(126, 25)
         Me.img_Q2.Name = "img_Q2"
         Me.img_Q2.Size = New System.Drawing.Size(58, 20)
         Me.img_Q2.TabIndex = 94
@@ -619,7 +624,7 @@ Partial Class Frm_Gamma
         'img_Q1
         '
         Me.img_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Q1.Location = New System.Drawing.Point(63, 25)
+        Me.img_Q1.Location = New System.Drawing.Point(62, 25)
         Me.img_Q1.Name = "img_Q1"
         Me.img_Q1.Size = New System.Drawing.Size(58, 20)
         Me.img_Q1.TabIndex = 93
@@ -646,7 +651,7 @@ Partial Class Frm_Gamma
         'txt_Psi2_Q2
         '
         Me.txt_Psi2_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi2_Q2.Location = New System.Drawing.Point(127, 103)
+        Me.txt_Psi2_Q2.Location = New System.Drawing.Point(126, 103)
         Me.txt_Psi2_Q2.Name = "txt_Psi2_Q2"
         Me.txt_Psi2_Q2.Size = New System.Drawing.Size(58, 20)
         Me.txt_Psi2_Q2.TabIndex = 90
@@ -654,7 +659,7 @@ Partial Class Frm_Gamma
         'txt_Psi2_Q1
         '
         Me.txt_Psi2_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi2_Q1.Location = New System.Drawing.Point(63, 103)
+        Me.txt_Psi2_Q1.Location = New System.Drawing.Point(62, 103)
         Me.txt_Psi2_Q1.Name = "txt_Psi2_Q1"
         Me.txt_Psi2_Q1.Size = New System.Drawing.Size(58, 20)
         Me.txt_Psi2_Q1.TabIndex = 89
@@ -662,7 +667,7 @@ Partial Class Frm_Gamma
         'img_Psi2
         '
         Me.img_Psi2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi2.Location = New System.Drawing.Point(11, 103)
+        Me.img_Psi2.Location = New System.Drawing.Point(10, 103)
         Me.img_Psi2.Name = "img_Psi2"
         Me.img_Psi2.Size = New System.Drawing.Size(46, 20)
         Me.img_Psi2.TabIndex = 88
@@ -671,7 +676,7 @@ Partial Class Frm_Gamma
         'txt_Psi1_Q2
         '
         Me.txt_Psi1_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi1_Q2.Location = New System.Drawing.Point(127, 77)
+        Me.txt_Psi1_Q2.Location = New System.Drawing.Point(126, 77)
         Me.txt_Psi1_Q2.Name = "txt_Psi1_Q2"
         Me.txt_Psi1_Q2.Size = New System.Drawing.Size(58, 20)
         Me.txt_Psi1_Q2.TabIndex = 85
@@ -679,7 +684,7 @@ Partial Class Frm_Gamma
         'txt_Psi1_Q1
         '
         Me.txt_Psi1_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi1_Q1.Location = New System.Drawing.Point(63, 77)
+        Me.txt_Psi1_Q1.Location = New System.Drawing.Point(62, 77)
         Me.txt_Psi1_Q1.Name = "txt_Psi1_Q1"
         Me.txt_Psi1_Q1.Size = New System.Drawing.Size(58, 20)
         Me.txt_Psi1_Q1.TabIndex = 84
@@ -687,7 +692,7 @@ Partial Class Frm_Gamma
         'txt_Psi0_Q2
         '
         Me.txt_Psi0_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi0_Q2.Location = New System.Drawing.Point(127, 51)
+        Me.txt_Psi0_Q2.Location = New System.Drawing.Point(126, 51)
         Me.txt_Psi0_Q2.Name = "txt_Psi0_Q2"
         Me.txt_Psi0_Q2.Size = New System.Drawing.Size(58, 20)
         Me.txt_Psi0_Q2.TabIndex = 83
@@ -695,7 +700,7 @@ Partial Class Frm_Gamma
         'txt_Psi0_Q1
         '
         Me.txt_Psi0_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Psi0_Q1.Location = New System.Drawing.Point(63, 51)
+        Me.txt_Psi0_Q1.Location = New System.Drawing.Point(62, 51)
         Me.txt_Psi0_Q1.Name = "txt_Psi0_Q1"
         Me.txt_Psi0_Q1.Size = New System.Drawing.Size(58, 20)
         Me.txt_Psi0_Q1.TabIndex = 82
@@ -703,7 +708,7 @@ Partial Class Frm_Gamma
         'img_Psi1
         '
         Me.img_Psi1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi1.Location = New System.Drawing.Point(11, 77)
+        Me.img_Psi1.Location = New System.Drawing.Point(10, 77)
         Me.img_Psi1.Name = "img_Psi1"
         Me.img_Psi1.Size = New System.Drawing.Size(46, 20)
         Me.img_Psi1.TabIndex = 81
@@ -712,7 +717,7 @@ Partial Class Frm_Gamma
         'img_Psi0
         '
         Me.img_Psi0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Psi0.Location = New System.Drawing.Point(11, 51)
+        Me.img_Psi0.Location = New System.Drawing.Point(10, 51)
         Me.img_Psi0.Name = "img_Psi0"
         Me.img_Psi0.Size = New System.Drawing.Size(46, 20)
         Me.img_Psi0.TabIndex = 80
@@ -726,24 +731,27 @@ Partial Class Frm_Gamma
         Me.pan_Chargement.Location = New System.Drawing.Point(0, 0)
         Me.pan_Chargement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Chargement.Name = "pan_Chargement"
-        Me.pan_Chargement.Size = New System.Drawing.Size(206, 239)
+        Me.pan_Chargement.Size = New System.Drawing.Size(205, 239)
         Me.pan_Chargement.TabIndex = 0
         '
         'TLPan_Chargement
         '
         Me.TLPan_Chargement.ColumnCount = 1
         Me.TLPan_Chargement.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Chargement.Controls.Add(Me.lbl_Reset, 0, 2)
         Me.TLPan_Chargement.Controls.Add(Me.lbl_Chargement, 0, 0)
         Me.TLPan_Chargement.Controls.Add(Me.pan_SaisieChargement, 0, 1)
+        Me.TLPan_Chargement.Controls.Add(Me.pan_Reset, 0, 3)
         Me.TLPan_Chargement.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Chargement.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Chargement.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Chargement.Name = "TLPan_Chargement"
-        Me.TLPan_Chargement.RowCount = 2
+        Me.TLPan_Chargement.RowCount = 4
         Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Chargement.Size = New System.Drawing.Size(206, 239)
+        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
+        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLPan_Chargement.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Chargement.Size = New System.Drawing.Size(205, 239)
         Me.TLPan_Chargement.TabIndex = 0
         '
         'lbl_Chargement
@@ -755,7 +763,7 @@ Partial Class Frm_Gamma
         Me.lbl_Chargement.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Chargement.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Chargement.Name = "lbl_Chargement"
-        Me.lbl_Chargement.Size = New System.Drawing.Size(206, 30)
+        Me.lbl_Chargement.Size = New System.Drawing.Size(205, 30)
         Me.lbl_Chargement.TabIndex = 0
         Me.lbl_Chargement.Text = "lbl_Chargement"
         Me.lbl_Chargement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -764,7 +772,6 @@ Partial Class Frm_Gamma
         '
         Me.pan_SaisieChargement.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieChargement.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieChargement.Controls.Add(Me.btn_Reini)
         Me.pan_SaisieChargement.Controls.Add(Me.txt_GammaQ)
         Me.pan_SaisieChargement.Controls.Add(Me.img_GammaQ)
         Me.pan_SaisieChargement.Controls.Add(Me.txt_GammaGinf)
@@ -773,16 +780,16 @@ Partial Class Frm_Gamma
         Me.pan_SaisieChargement.Controls.Add(Me.img_GammaGsup)
         Me.pan_SaisieChargement.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_SaisieChargement.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisieChargement.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_SaisieChargement.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_SaisieChargement.Name = "pan_SaisieChargement"
-        Me.pan_SaisieChargement.Size = New System.Drawing.Size(206, 209)
+        Me.pan_SaisieChargement.Size = New System.Drawing.Size(205, 129)
         Me.pan_SaisieChargement.TabIndex = 1
         '
         'btn_Reini
         '
-        Me.btn_Reini.Location = New System.Drawing.Point(57, 140)
+        Me.btn_Reini.Location = New System.Drawing.Point(9, 13)
         Me.btn_Reini.Name = "btn_Reini"
-        Me.btn_Reini.Size = New System.Drawing.Size(75, 23)
+        Me.btn_Reini.Size = New System.Drawing.Size(185, 23)
         Me.btn_Reini.TabIndex = 79
         Me.btn_Reini.Text = "btn_Reini"
         Me.btn_Reini.UseVisualStyleBackColor = True
@@ -790,7 +797,7 @@ Partial Class Frm_Gamma
         'txt_GammaQ
         '
         Me.txt_GammaQ.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaQ.Location = New System.Drawing.Point(91, 77)
+        Me.txt_GammaQ.Location = New System.Drawing.Point(90, 77)
         Me.txt_GammaQ.Name = "txt_GammaQ"
         Me.txt_GammaQ.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaQ.TabIndex = 77
@@ -798,7 +805,7 @@ Partial Class Frm_Gamma
         'img_GammaQ
         '
         Me.img_GammaQ.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaQ.Location = New System.Drawing.Point(46, 77)
+        Me.img_GammaQ.Location = New System.Drawing.Point(45, 77)
         Me.img_GammaQ.Name = "img_GammaQ"
         Me.img_GammaQ.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaQ.TabIndex = 78
@@ -807,7 +814,7 @@ Partial Class Frm_Gamma
         'txt_GammaGinf
         '
         Me.txt_GammaGinf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaGinf.Location = New System.Drawing.Point(91, 51)
+        Me.txt_GammaGinf.Location = New System.Drawing.Point(90, 51)
         Me.txt_GammaGinf.Name = "txt_GammaGinf"
         Me.txt_GammaGinf.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaGinf.TabIndex = 75
@@ -815,7 +822,7 @@ Partial Class Frm_Gamma
         'img_GammaGinf
         '
         Me.img_GammaGinf.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaGinf.Location = New System.Drawing.Point(46, 51)
+        Me.img_GammaGinf.Location = New System.Drawing.Point(45, 51)
         Me.img_GammaGinf.Name = "img_GammaGinf"
         Me.img_GammaGinf.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaGinf.TabIndex = 76
@@ -824,7 +831,7 @@ Partial Class Frm_Gamma
         'txt_GammaGsup
         '
         Me.txt_GammaGsup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaGsup.Location = New System.Drawing.Point(91, 25)
+        Me.txt_GammaGsup.Location = New System.Drawing.Point(90, 25)
         Me.txt_GammaGsup.Name = "txt_GammaGsup"
         Me.txt_GammaGsup.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaGsup.TabIndex = 73
@@ -832,7 +839,7 @@ Partial Class Frm_Gamma
         'img_GammaGsup
         '
         Me.img_GammaGsup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaGsup.Location = New System.Drawing.Point(46, 25)
+        Me.img_GammaGsup.Location = New System.Drawing.Point(45, 25)
         Me.img_GammaGsup.Name = "img_GammaGsup"
         Me.img_GammaGsup.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaGsup.TabIndex = 74
@@ -841,6 +848,32 @@ Partial Class Frm_Gamma
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
+        '
+        'lbl_Reset
+        '
+        Me.lbl_Reset.AutoSize = True
+        Me.lbl_Reset.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Reset.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Reset.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Reset.Location = New System.Drawing.Point(0, 160)
+        Me.lbl_Reset.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Reset.Name = "lbl_Reset"
+        Me.lbl_Reset.Size = New System.Drawing.Size(205, 30)
+        Me.lbl_Reset.TabIndex = 2
+        Me.lbl_Reset.Text = "lbl_Reset"
+        Me.lbl_Reset.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_Reset
+        '
+        Me.pan_Reset.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Reset.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Reset.Controls.Add(Me.btn_Reini)
+        Me.pan_Reset.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Reset.Location = New System.Drawing.Point(0, 190)
+        Me.pan_Reset.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Reset.Name = "pan_Reset"
+        Me.pan_Reset.Size = New System.Drawing.Size(205, 49)
+        Me.pan_Reset.TabIndex = 3
         '
         'Frm_Gamma
         '
@@ -862,7 +895,7 @@ Partial Class Frm_Gamma
         Me.TLPan_Resistance.ResumeLayout(False)
         Me.TLPan_Resistance.PerformLayout()
         Me.pan_SaisieResistance.ResumeLayout(False)
-        Me.TabControl1.ResumeLayout(False)
+        Me.TabControlGammaM.ResumeLayout(False)
         Me.Tab_Acier.ResumeLayout(False)
         Me.Tab_Acier.PerformLayout()
         CType(Me.img_GammaM2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -899,6 +932,7 @@ Partial Class Frm_Gamma
         CType(Me.img_GammaGinf, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_GammaGsup, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Reset.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -929,7 +963,7 @@ Partial Class Frm_Gamma
     Friend WithEvents btn_Reini As Button
     Friend WithEvents txt_GammaQ As TextBox
     Friend WithEvents img_GammaQ As PictureBox
-    Friend WithEvents TabControl1 As TabControl
+    Friend WithEvents TabControlGammaM As TabControl
     Friend WithEvents Tab_Acier As TabPage
     Friend WithEvents Tab_Dalle As TabPage
     Friend WithEvents Tab_Incendie As TabPage
@@ -970,4 +1004,6 @@ Partial Class Frm_Gamma
     Friend WithEvents img_Q1 As PictureBox
     Friend WithEvents chk_GammaV_Unique As CheckBox
     Friend WithEvents ErrorProvider As ErrorProvider
+    Friend WithEvents lbl_Reset As Label
+    Friend WithEvents pan_Reset As Panel
 End Class

@@ -46,7 +46,7 @@ Public Class cls_Projet
     ''' <summary>
     ''' Chemin du fichier du projet déjà enregistré
     ''' </summary>
-    Public CheminFichier As String
+    Public FileName As String
 
 #End Region
 
@@ -61,6 +61,7 @@ Public Class cls_Projet
         Me.Nom = ""
         Me.Utilisateur = ""
         Me.Entreprise = ""
+        Me.FileName = ""
 
     End Sub
 
@@ -77,6 +78,7 @@ Public Class cls_Projet
         IndEnCours = -1
 
         Me.Nom = ""
+        Me.FileName = ""
 
     End Sub
 
@@ -499,7 +501,7 @@ Public Class cls_Projet
         If File.Exists(FileName) Then
             Lines = New Cls_LinesOfFile(FileName)
             Me.lSave = True
-            Me.CheminFichier = FileName
+            Me.FileName = FileName
         Else
             MsgBox("Fichier n'existe pas | File not exist : " & FileName, MsgBoxStyle.Critical, "Cls_Projet/RecuperationFile")
             Exit Sub
@@ -685,7 +687,6 @@ Public Class cls_Projet
         End If
 
     End Sub
-
 
     Private Sub ReadBloc_Indentification(ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs

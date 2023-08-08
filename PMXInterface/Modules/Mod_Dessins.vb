@@ -54,12 +54,14 @@ Module Mod_Dessins
         Const zREF As Decimal = 0
         Dim Ha, Bfs As Decimal
         Dim lCote As Boolean = True
+        Dim lCofraplus220 As Boolean
 
         '--> Initialisation
 
-        lMixte = MyProjet.Poutres(MyProjet.IndEnCours).Section.lMixte
-        lEnrob = MyProjet.Poutres(MyProjet.IndEnCours).Section.lEnrobage
-        lLamine = MyProjet.Poutres(MyProjet.IndEnCours).Section.lLamine
+        lMixte = MySection.lMixte
+        lEnrob = MySection.lEnrobage
+        lLamine = MySection.lLamine
+        lCofraplus220 = MyDalle.Bac.lCofraplus220
 
         ' A REVOIR ====
         Beff = LargeurDalleDessin(MySection.ProfilA)
@@ -70,9 +72,9 @@ Module Mod_Dessins
         Bfs = MySection.ProfilA.b_fs
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
-        dCar = MyDalle.EpaisseurActive / 5
+        dCar = Math.Sqrt(Beff ^ 2 + (Ha + MyDalle.zTop) ^ 2) / 10
 
-        xMin = -Beff / 2 - dCar
+        xMin = -Beff / 2 - 2 * dCar
         xMax = Beff / 2
 
         yMin = -MySection.ProfilA.ha
@@ -133,24 +135,29 @@ Module Mod_Dessins
         '# Dalle béton
 
         Select Case MyDalle.type
-                Case Cls_Dalle.Enum_TypeDalle.Pleine
-                    DessinDallePleine(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
-                Case Cls_Dalle.Enum_TypeDalle.Mixte
-                    Select Case MyDalle.Bac.orientation
-                        Case Cls_Bac.Enum_Orientation.Parallele
-                            DessineDalleMixteParallele(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
-                        Case Cls_Bac.Enum_Orientation.Perpendiculaire
+            Case Cls_Dalle.Enum_TypeDalle.Pleine
+                DessinDallePleine(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+            Case Cls_Dalle.Enum_TypeDalle.Mixte
+                Select Case MyDalle.Bac.orientation
+                    Case Cls_Bac.Enum_Orientation.Parallele
+                        DessineDalleMixteParallele(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+                    Case Cls_Bac.Enum_Orientation.Perpendiculaire
+                        If lCofraplus220 Then
+                            DessineDalleMixtePerpendiculaireCfp220(myGr, MyDalle, MySection.ProfilA, MyParAff, myBrushB, Beff)
+                        Else
+                            DessineDalleMixtePerpendiculaire(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+                        End If
 
-                    End Select
-                    'DessinDalleMixte(myGr, Section.dalle, BeffRed, Section.ha, Section.b_fs, zREF, MyParAff, myBrushB)
-                Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
-                    DessinDallePreFab(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
-            End Select
+                End Select
 
-            '# Armatures
+            Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
+                DessinDallePreFab(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
+        End Select
 
-            DessinLitArmaDalle(myGr, MyDalle, Beff, 0, MySection.ProfilA.ha, iSelect, MyParAff, myBrushA(0))
-            DessinLitArmaDalle(myGr, MyDalle, Beff, 1, MySection.ProfilA.ha, iSelect, MyParAff, myBrushA(1))
+        '# Armatures
+
+        DessinLitArmaDalle(myGr, MyDalle, Beff, 0, MySection.ProfilA.ha, iSelect, MyParAff, myBrushA(0))
+        DessinLitArmaDalle(myGr, MyDalle, Beff, 1, MySection.ProfilA.ha, iSelect, MyParAff, myBrushA(1))
 
         'End If
 
@@ -192,7 +199,7 @@ Module Mod_Dessins
 
         '--> Cotations
 
-        '# Hauteur de la section
+        '# Hauteur de la section acier
 
         MyColor = StyleCouleur(iSelect, -2)
         MyPen.Color = MyColor
@@ -203,6 +210,28 @@ Module Mod_Dessins
         AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
         Chaine = GetStringNoUnit(MySection.ProfilA.ha, Enu_TypeVariable.Dimension)
         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        '# Hauteur de la dalle 
+
+        yo = MyDalle.EpRenformis
+        ye = MyDalle.zTop
+
+        AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
+        Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        '# Hauteur totale de la section + dalle
+
+        xCoteZ = -BeffG - 2 * dCar
+
+        yo = -MySection.ProfilA.ha
+        ye = MyDalle.zTop
+
+        AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
+        Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
+        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+
 
     End Sub
 
@@ -4152,6 +4181,138 @@ Module Mod_Dessins
 
 #Region " Outils pour le dessin de la dalle "
 
+    Private Sub DessineDalleMixtePerpendiculaireCfp220(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, MyProfil As cls_ProfilA, MyParAffA As Struc_Affichage,
+                                                       MyBrushDP As Brush, BeffRed As Decimal)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   08/08/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Représentation d'une dalle mixte avec nervures perpendiculaires à la poutre - Cas particulier bac Cofraplus 220
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MyDalle     [E] :   
+        '   MyProfil    [E] :   Géométrie du rofilé métallique
+        '   MyParAffA   [E] :   Paramètres d'affichage   
+        '   MyBrushDP   [E] :   Pinceau pour le remplissage de la dalle
+        '   BeffRed     [E] :   Largeur de dalle réduite pour le dessin 
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyPenContour As New Pen(Color.Black, 1)
+
+        Dim Hp As Decimal = MyDalle.Bac.h_p
+        Dim xPts(), yPts() As Single
+        Dim nbPts As Integer
+        Dim Bfs As Decimal = MyProfil.b_fs
+        Dim zTop As Decimal = MyDalle.zTop
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+        Dim wApp As Decimal = MyDalle.Bac.wAppui
+
+        '--> Préparation du contour de la dalle
+
+        nbPts = 0
+        AjoutePoint(-Bfs / 2, 0, xPts, yPts, nbPts)
+        AjoutePoint(Bfs / 2, 0, xPts, yPts, nbPts)
+        AjoutePoint(Bfs / 2, -Hp, xPts, yPts, nbPts)
+        AjoutePoint(BeffRed / 2, -Hp, xPts, yPts, nbPts)
+        AjoutePoint(BeffRed / 2, zTop, xPts, yPts, nbPts)
+        AjoutePoint(-BeffRed / 2, zTop, xPts, yPts, nbPts)
+        AjoutePoint(-BeffRed / 2, -Hp, xPts, yPts, nbPts)
+        AjoutePoint(-Bfs / 2, -Hp, xPts, yPts, nbPts)
+
+        '--> Dessin de la dalle
+
+        RemplirZone(MyGr, MyBrushDP, xPts, yPts, nbPts, MyParAffA, False, True)
+
+        xo = -BeffRed / 2
+        xe = BeffRed / 2
+        AddLigne(MyGr, MyPenContour, xo, zTop, xe, zTop, MyParAffA)
+
+        xo = BeffRed / 2
+        xe = Bfs / 2
+        AddLigne(MyGr, MyPenContour, -xo, -Hp, -xe, -Hp, MyParAffA)
+        AddLigne(MyGr, MyPenContour, -xe, -Hp, -xe, 0, MyParAffA)
+        AddLigne(MyGr, MyPenContour, xo, -Hp, xe, -Hp, MyParAffA)
+        AddLigne(MyGr, MyPenContour, xe, -Hp, xe, 0, MyParAffA)
+
+        '--> Dessin du bac
+
+        AddLigne(MyGr, MyPenContour, -xo, 0, -xe, 0, MyParAffA)
+        AddLigne(MyGr, MyPenContour, xo, 0, xe, 0, MyParAffA)
+
+    End Sub
+
+    Private Sub DessineDalleMixtePerpendiculaire(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
+                                                 MyBrushDP As Brush, BeffRed As Decimal)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   29/06/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Représentation d'une dalle mixte avec nervures perpendiculaires à la poutre
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MyDalle     [E] :   
+        '   Ha          [E] :   Hauteur du profilé métallique
+        '   Bfs         [E] :   Largeur de la semelle supérieure
+        '   MyParAffA   [E] :   Paramètres d'affichage   
+        '   MyBrushDP   [E] :   Pinceau pour le remplissage de la dalle
+        '   BeffRed     [E] :   Largeur de dalle réduite pour le dessin 
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyPenContour As New Pen(Color.Black, 1)
+        Dim Td As Decimal = MyDalle.t_d
+        Dim Hp As Decimal = MyDalle.Bac.h_p
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+        'Dim wApp As Decimal
+
+        '--> Dessins
+
+        xo = -BeffRed / 2
+        xe = BeffRed / 2
+        yo = 0
+        ye = Td
+
+        '# béton
+
+        AddRectanglePlein(MyGr, MyBrushDP, MyPenContour, -BeffRed / 2, 0, BeffRed / 2, Td, MyParAffA, True, False)
+
+        '# Traits dalle
+
+        AddLigne(MyGr, MyPenContour, xo, yo, xe, yo, MyParAffA)
+        AddLigne(MyGr, MyPenContour, xo, ye, xe, ye, MyParAffA)
+
+        '# Représentation des traits pour le bac
+
+        Select Case MyDalle.Bac.AppuiT
+            Case Cls_Bac.EnuConfigTAppui.Discontinu
+                xo = BeffRed / 2
+                xe = Bfs / 2 - MyDalle.Bac.wAppui
+                yo = 0
+                ye = Hp
+
+                AddLigne(MyGr, MyPenContour, -xo, ye, -xe, ye, MyParAffA)
+                AddLigne(MyGr, MyPenContour, -xe, 0, -xe, ye, MyParAffA)
+
+                AddLigne(MyGr, MyPenContour, xo, ye, xe, ye, MyParAffA)
+                AddLigne(MyGr, MyPenContour, xe, 0, xe, ye, MyParAffA)
+
+            Case Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                AddLigne(MyGr, MyPenContour, xo, Hp, xe, Hp, MyParAffA)
+
+            Case Cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                AddLigne(MyGr, MyPenContour, xo, Hp, xe, Hp, MyParAffA)
+                AddLigne(MyGr, MyPenContour, 0, 0, 0, Hp, MyParAffA)
+
+        End Select
+
+        '--> Fin
+
+        MyPenContour.Dispose()
+    End Sub
+
     Private Sub DessinDalleSlimFloor(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, MyParAffloc As Struc_Affichage, MyBrushB As Brush, Optional ZREF As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/06/23    :   Création - POM
@@ -4188,7 +4349,7 @@ Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '   29/06/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
-        '   Représentation d'une dalle mixte avec nervure parallèle
+        '   Représentation d'une dalle mixte avec nervures parallèles à la poutre
         '---------------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
         '   MyDalle     [E] :   

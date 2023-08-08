@@ -30,6 +30,8 @@ Public Class Frm_Dalle
     Dim iSelect As Integer = -1
     Dim iLitSelect As Integer = 0       'Indice du lit d'armatures à l'affichage
 
+    Dim lCofraPlus220 As Boolean
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -162,6 +164,8 @@ Public Class Frm_Dalle
 
         Cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
 
+        lCofraPlus220 = MyDalleLoc.Bac.lCofraplus220
+
     End Sub
 
     Private Sub GestionStyle()
@@ -194,7 +198,8 @@ Public Class Frm_Dalle
         Me.txt_Fsk.Enabled = False
         Me.txt_Fsk.BackColor = CouleurReadOnly
 
-
+        Me.txt_Hp.Enabled = False
+        Me.txt_Hp.BackColor = CouleurReadOnly
 
         Me.img_Bac.BorderStyle = BorderStyle.FixedSingle
 
@@ -209,6 +214,8 @@ Public Class Frm_Dalle
         RemplirComboAvecTableau(Me.cmb_TypeDalle, strType)
         RemplirComboAvecTableau(Me.cmb_ClasseBetonEnrobage, ClasseBeton)
         RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
+
+        MAJI_ChangeBac()
 
     End Sub
 
@@ -614,11 +621,40 @@ Public Class Frm_Dalle
 
     Private Sub btn_ModifierBac_Click(sender As Object, e As EventArgs) Handles btn_ModifierBac.Click, txt_BacNom.Click, img_Bac.Click
 
+        Dim Tc As Decimal = MyDalleLoc.EpaisseurActive
+        Dim lOldCfp220 As Boolean = lCofraPlus220
+
         iFrmAppel = EnuFenetres.DalleN
         Frm_BacN.ShowDialog()
 
+        MAJI_ChangeBac()
+        If lCofraPlus220 <> lOldCfp220 Then
+            Dim Td As Decimal = Tc + MyDalleLoc.Bac.h_p
+            MyDalleLoc.t_d = Td
+            Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
+        End If
+
         AfficheNomBacEnCours()
         Me.img_Bac.Invalidate()
+        Me.img_Dalle.Invalidate()
+
+    End Sub
+
+    Private Sub MAJI_ChangeBac()
+        lCofraPlus220 = MyDalleLoc.Bac.lCofraplus220
+
+        If lCofraPlus220 Then
+            Me.rdb_BacPerpendiculaire.Checked = True
+            Me.rdb_BacParallele.Visible = False
+            Me.pan_ConfigurationNervures.Visible = False
+            'Me.pan_DispoConnecteur.Visible = False
+        Else
+            Me.rdb_BacParallele.Visible = True
+            Me.pan_DispoConnecteur.Visible = True
+            ' Me.pan_ConfigurationNervures.Visible = True
+        End If
+
+        MAJI_OrientationBac()
 
     End Sub
 
@@ -778,7 +814,7 @@ Public Class Frm_Dalle
 
     End Sub
 
-    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_Hd.TextChanged
+    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_Hd.TextChanged, txt_Hh.TextChanged
 
         If lBuild Then Exit Sub
         lBuild = True
@@ -790,6 +826,9 @@ Public Class Frm_Dalle
 
                 Case Me.txt_Hd.Name
                     MyDalleLoc.t_d = Valeur
+
+                Case Me.txt_Hh.Name
+                    MyDalleLoc.t_h = Valeur
 
             End Select
 
@@ -887,15 +926,19 @@ Public Class Frm_Dalle
             Case Me.rdb_BacPerpendiculaire.Name : MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
         End Select
         MAJI_OrientationBac()
+        Me.img_Dalle.Invalidate()
+
     End Sub
 
     Private Sub MAJI_OrientationBac()
 
-        Me.chk_L_PA1.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
-        Me.chk_L_PA2.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
+        Me.chk_L_PA1.Visible = False '   (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
+        Me.chk_L_PA2.Visible = False '   (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
         Me.chk_T_PA1.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
         Me.chk_T_PA2.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
         Me.chk_T_PA3.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
+
+        Me.pan_DispoConnecteur.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
 
     End Sub
 

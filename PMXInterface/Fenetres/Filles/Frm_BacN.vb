@@ -338,7 +338,7 @@ Public Class Frm_BacN
         If ValideSaisieFenetre() Then
 
             If iFrmAppel = EnuFenetres.DalleN Then
-                TransfertSaisie(Frm_DalleN.MyDalleLoc.Bac, lModif)
+                TransfertSaisie(Frm_Dalle.MyDalleLoc.Bac, lModif)
             Else
                 TransfertSaisie(MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, lModif)
             End If

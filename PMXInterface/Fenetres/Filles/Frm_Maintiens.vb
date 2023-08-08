@@ -102,7 +102,7 @@ Public Class Frm_Maintiens
     ''' <summary>
     ''' variable locale qui informe du chemin vers l'icone pour déplacer les maintiens horizontalement
     ''' </summary>
-    Dim MyCursor As New Cursor(LogicielFichiers.Icone & "\FrmMaintien_MoveH.ico")
+    Dim MyCursor As New Cursor(LogicielRep.Images & "\FrmMaintien_MoveH.ico")
 
 #End Region
 

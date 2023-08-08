@@ -8,6 +8,10 @@ Public Class Cls_Bac
     Public Const RATIOB1R As Double = 0.2
     Public Const RATIOB2R As Double = 0.25
 
+    Private Const WAPPMIN As Decimal = 0.05      'Largeur minimal de l'appui d'un bac : 50 mm
+
+    Const cofraplus220 As String = "COFRAPLUS_220"
+
     Public Enum EnuConfigTAppui
         Discontinu
         NervureEtBacContinus
@@ -314,6 +318,32 @@ Public Class Cls_Bac
         Get
             Const EPSILONH As Double = 0.001
             Return (Me.h_rs > EPSILONH)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Renvoie la largeur d'appui minimale du bac sur la semelle
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property wAppui As Decimal
+        Get
+            Return WAPPMIN
+        End Get
+    End Property
+
+    Public ReadOnly Property lCofraplus220 As Boolean
+        Get
+            Dim NomBac As String
+            Dim CharSep As String = " "
+            Dim jSep As Integer = Me.Etiquette.Trim.IndexOf(CharSep)
+
+            If jSep >= 0 Then
+                NomBac = Me.Etiquette.Trim.Substring(0, jSep).ToUpper
+            Else
+                NomBac = Me.Etiquette.Trim.ToUpper
+            End If
+
+            Return NomBac = cofraplus220
         End Get
     End Property
 

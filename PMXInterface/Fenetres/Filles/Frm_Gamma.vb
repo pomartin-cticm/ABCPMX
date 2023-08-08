@@ -106,12 +106,13 @@ Public Class Frm_Gamma
                 Me.lbl_Resistance.Text = Bloc("RESISTANCE")
                 Me.lbl_Q1.Text = Bloc("LBL_Q1")
                 Me.lbl_Q2.Text = Bloc("LBL_Q2")
-                Me.btn_Reini.Text = Bloc("REINI")
+                Me.btn_Reini.Text = Bloc("REINI") & " all values"
                 Me.Tab_Acier.Text = Bloc("TAB_STEEL")
                 Me.Tab_Dalle.Text = Bloc("TAB_SLAB")
                 Me.Tab_Incendie.Text = Bloc("TAB_FIRE")
                 Me.chk_GammaV_Unique.Text = Bloc("GAMMAV")
 
+                Me.lbl_Reset.Text = "Reset"
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -138,6 +139,8 @@ Public Class Frm_Gamma
         Me.lbl_Accompagnement.ForeColor = CouleurForeBandeaux
         Me.lbl_Resistance.BackColor = CouleurBackBandeaux
         Me.lbl_Resistance.ForeColor = CouleurForeBandeaux
+        Me.lbl_Reset.BackColor = CouleurBackBandeaux
+        Me.lbl_Reset.ForeColor = CouleurForeBandeaux
 
         If Not MyPoutreLoc.lMixte Then
             Me.Tab_Dalle.Visible = False

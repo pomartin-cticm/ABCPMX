@@ -15,6 +15,9 @@ Public Class Frm_PMX
 
     Dim tab_ChkSections As List(Of CheckBox)
 
+    Dim CouleurBtnActive As Color = Color.DarkOrange
+    Dim CouleurBtnNormal As Color = GrayAM
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -394,8 +397,50 @@ Public Class Frm_PMX
 
     Private Sub TSbtn_SaveN_Click(sender As Object, e As EventArgs) Handles TSbtn_SaveN.Click
 
-        MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
-        MAJMainToolBar()
+
+
+
+    End Sub
+
+#End Region
+
+#Region " Fonctions de sauvegarde et lecture "
+
+    Private Sub EnregistrerProjetEnCours()
+        '-----------------------------------------------------------------------------------
+        '   11/04/08 :  Création - Version 1.00
+        '-----------------------------------------------------------------------------------
+        '   Enregistrement du projet en cours
+        '-----------------------------------------------------------------------------------
+        '  
+        '-----------------------------------------------------------------------------------
+
+        If My.Computer.FileSystem.FileExists(MyProjet.FileName) Then
+
+            EcrireProjetInFile(MyProjet.FileName)
+            MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            MAJMainToolBar()
+
+            'MemoriserNouveauFichier(MyProjet.FileName)
+
+            LogicielRep.Travail = Repertoire(MyProjet.FileName)
+
+        Else
+
+            EnregistrerSousProjetEnCours()
+
+        End If
+
+    End Sub
+
+    Private Sub EnregistrerSousProjetEnCours()
+        '-----------------------------------------------------------------------------------
+        '   11/04/08 :  Création - Version 1.00
+        '-----------------------------------------------------------------------------------
+        '   Enregistrement du projet en cours
+        '-----------------------------------------------------------------------------------
+        '  
+        '-----------------------------------------------------------------------------------
 
     End Sub
 
@@ -418,8 +463,9 @@ Public Class Frm_PMX
             Me.tab_ChkSections.Add(New CheckBox)
             Me.tab_ChkSections(i).Appearance = Appearance.Button
             Me.tab_ChkSections(i).Dock = DockStyle.Fill
-            Me.tab_ChkSections(i).BackColor = SystemColors.ControlLight 'Me.ToolStrip_Menu_Section.BackColor
-            Me.tab_ChkSections(i).ForeColor = SystemColors.WindowText
+            'Me.tab_ChkSections(i).BackColor = SystemColors.ControlLight 'Me.ToolStrip_Menu_Section.BackColor
+            Me.tab_ChkSections(i).BackColor = CouleurBtnNormal
+            Me.tab_ChkSections(i).ForeColor = SystemColors.WindowText 'Color.White
 
             Me.tab_ChkSections(i).Text = MyProjet.Poutres(i).Label
             Me.tab_ChkSections(i).Name = "MyX" & CStr(i)
@@ -463,10 +509,11 @@ Public Class Frm_PMX
         'AffichageFenetreFille()
 
         sender.checked = lChecked
-        sender.backcolor = Color.Gold
-        lbuild = False
+        sender.backcolor = CouleurBtnActive
+        sender.forecolor = SystemColors.WindowText
+        lBuild = False
 
-        MsgBox("Poutre activée :" & MyProjet.Poutres(MyProjet.IndEnCours).Label)
+        'MsgBox("Poutre activée :" & MyProjet.Poutres(MyProjet.IndEnCours).Label)
 
     End Sub
 

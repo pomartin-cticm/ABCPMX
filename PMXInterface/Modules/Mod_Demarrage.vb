@@ -201,9 +201,9 @@ Module Mod_Demarrage
         InitialiseLNGFileName()
         InitialiseLNGFileName_NDC()
 
-        '--> MAJ du nom fichier icones
+        ' '--> MAJ du nom fichier icones
 
-        UpdateIconesFileName()
+        'UpdateIconesFileName()
 
         '--> Initialisation répertoires
 
@@ -605,24 +605,27 @@ Module Mod_Demarrage
 
 #End Region
 
-#Region " Gestion Icones "
+    '#Region " Gestion Icones "
 
-    ''' <summary>
-    ''' Mise à jour du nom du fichier icones (à discuter)
-    ''' </summary>
-    Public Sub UpdateIconesFileName()
+    '    ''' <summary>
+    '    ''' Mise à jour du nom du fichier icones (à discuter)
+    '    ''' </summary>
+    '    Public Sub UpdateIconesFileName()
 
 
-        If lDebug Then
-            LogicielFichiers.Icone = LogicielRep.Install & "\..\..\Icones\"
+    '====================
+    'Inutile et faux :: ce n'est pas un fichier mais un répertoire
+    '                   il y a déjà un repertoire pour cela 'images'
+    '====================
 
-        Else
-            LogicielFichiers.Langue = LogicielRep.Install & "\Icones\"
+    '        If lDebug Then
+    '            LogicielFichiers.Icone = LogicielRep.Install & "\..\..\Icones\"
+    '        Else
+    '            LogicielFichiers.Icone = LogicielRep.Install & "\Icones\"
+    '        End If
 
-        End If
+    '    End Sub
 
-    End Sub
-
-#End Region
+    '#End Region
 
 End Module

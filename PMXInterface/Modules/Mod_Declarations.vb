@@ -66,10 +66,10 @@ Module Mod_Declarations
         ''' </summary>
         Public Base_Goujons As String
 
-        ''' <summary>
-        ''' Fichier de base de données des icones
-        ''' </summary>
-        Public Icone As String
+        '''' <summary>
+        '''' Fichier de base de données des icones
+        '''' </summary>
+        'Public Icone As String
 
     End Structure
 
@@ -310,7 +310,7 @@ Module Mod_Declarations
     Public CouleurBackBandeaux As Color = BlueAM     ' SystemColors.ControlDarkDark
     Public CouleurForeBandeaux As Color = SystemColors.ControlLightLight
 
-    Public CouleurReadOnly As Color = GrayAM     ' SystemColors.ControlDark
+    Public CouleurReadOnly As Color = SystemColors.Control       'PaleGrayAM     ' SystemColors.ControlDark
 
     Public LargeurColonneSaisie As Integer = 250
 

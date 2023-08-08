@@ -36,7 +36,7 @@ Partial Class Frm_Dalle
         Me.TLpan_PartageV = New System.Windows.Forms.TableLayoutPanel()
         Me.TLpan_Milieu = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Bac = New System.Windows.Forms.Panel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.pan_DispoConnecteur = New System.Windows.Forms.Panel()
         Me.rdb_Preperce = New System.Windows.Forms.RadioButton()
         Me.rdb_ATraversBac = New System.Windows.Forms.RadioButton()
         Me.lbl_ConnectorThroughTheWeb = New System.Windows.Forms.Label()
@@ -133,7 +133,7 @@ Partial Class Frm_Dalle
         Me.TLpan_PartageV.SuspendLayout()
         Me.TLpan_Milieu.SuspendLayout()
         Me.pan_Bac.SuspendLayout()
-        Me.Panel1.SuspendLayout()
+        Me.pan_DispoConnecteur.SuspendLayout()
         Me.pan_Orientation.SuspendLayout()
         CType(Me.img_Hp, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_ConfigurationNervures.SuspendLayout()
@@ -311,7 +311,7 @@ Partial Class Frm_Dalle
         '
         Me.pan_Bac.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Bac.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Bac.Controls.Add(Me.Panel1)
+        Me.pan_Bac.Controls.Add(Me.pan_DispoConnecteur)
         Me.pan_Bac.Controls.Add(Me.pan_Orientation)
         Me.pan_Bac.Controls.Add(Me.txt_Hp)
         Me.pan_Bac.Controls.Add(Me.lbl_HauteurHp)
@@ -329,15 +329,15 @@ Partial Class Frm_Dalle
         Me.pan_Bac.Size = New System.Drawing.Size(248, 500)
         Me.pan_Bac.TabIndex = 9
         '
-        'Panel1
+        'pan_DispoConnecteur
         '
-        Me.Panel1.Controls.Add(Me.rdb_Preperce)
-        Me.Panel1.Controls.Add(Me.rdb_ATraversBac)
-        Me.Panel1.Controls.Add(Me.lbl_ConnectorThroughTheWeb)
-        Me.Panel1.Location = New System.Drawing.Point(3, 390)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(240, 74)
-        Me.Panel1.TabIndex = 86
+        Me.pan_DispoConnecteur.Controls.Add(Me.rdb_Preperce)
+        Me.pan_DispoConnecteur.Controls.Add(Me.rdb_ATraversBac)
+        Me.pan_DispoConnecteur.Controls.Add(Me.lbl_ConnectorThroughTheWeb)
+        Me.pan_DispoConnecteur.Location = New System.Drawing.Point(3, 390)
+        Me.pan_DispoConnecteur.Name = "pan_DispoConnecteur"
+        Me.pan_DispoConnecteur.Size = New System.Drawing.Size(242, 74)
+        Me.pan_DispoConnecteur.TabIndex = 86
         '
         'rdb_Preperce
         '
@@ -1312,8 +1312,8 @@ Partial Class Frm_Dalle
         Me.TLpan_Milieu.PerformLayout()
         Me.pan_Bac.ResumeLayout(False)
         Me.pan_Bac.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
+        Me.pan_DispoConnecteur.ResumeLayout(False)
+        Me.pan_DispoConnecteur.PerformLayout()
         Me.pan_Orientation.ResumeLayout(False)
         Me.pan_Orientation.PerformLayout()
         CType(Me.img_Hp, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1445,7 +1445,7 @@ Partial Class Frm_Dalle
     Friend WithEvents lbl_EpPreDalle As Label
     Friend WithEvents img_EpPredalle As PictureBox
     Friend WithEvents etq_UnitDim8 As Label
-    Friend WithEvents Panel1 As Panel
+    Friend WithEvents pan_DispoConnecteur As Panel
     Friend WithEvents rdb_Preperce As RadioButton
     Friend WithEvents rdb_ATraversBac As RadioButton
     Friend WithEvents lbl_ConnectorThroughTheWeb As Label

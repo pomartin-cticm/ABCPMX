@@ -365,7 +365,10 @@ Public Class Frm_Connection
         Me.txt_d.ReadOnly = True
         Me.txt_fy.ReadOnly = True
         Me.txt_fu.ReadOnly = True
-
+        Me.txt_hsc.BackColor = CouleurReadOnly
+        Me.txt_d.BackColor = CouleurReadOnly
+        Me.txt_fy.BackColor = CouleurReadOnly
+        Me.txt_fu.BackColor = CouleurReadOnly
 
     End Sub
 
