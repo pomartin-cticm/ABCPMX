@@ -79,21 +79,21 @@ Public Class Frm_PMX
                 '=== MENU PRINCIPAL ==============================================================='
 
                 '--> Boutons 'Fichier'
-                Me.Btn_Files.Text = Bloc("FILE")
-                Me.OpenToolStripMenuItem.Text = Bloc("OPEN") & "..."
-                Me.NewToolStripMenuItem.Text = Bloc("NEW")
-                Me.SaveToolStripMenuItem.Text = Bloc("SAVE")
-                Me.SaveAsToolStripMenuItem.Text = Bloc("SAVEAS") & "..."
-                Me.RecentFileToolStripMenuItem.Text = Bloc("RECENTFILES")
-                Me.QuitToolStripMenuItem.Text = Bloc("EXIT")
+                Me.btn_FilesN.Text = Bloc("FILE")
+                Me.OpenToolStripMenuItemN.Text = Bloc("OPEN") & "..."
+                Me.NewToolStripMenuItemN.Text = Bloc("NEW")
+                Me.SaveToolStripMenuItemN.Text = Bloc("SAVE")
+                Me.SaveAsToolStripMenuItemn.Text = Bloc("SAVEAS") & "..."
+                Me.RecentFileToolStripMenuItemN.Text = Bloc("RECENTFILES")
+                Me.QuitToolStripMenuItemN.Text = Bloc("EXIT")
 
                 '--> Boutons 'Projet'
 
-                Me.Btn_Project.Text = "Toto Projet"
+                Me.btn_ProjectN.Text = "Toto Projet"
 
                 '=== CONTENU DE LA FENETRE =========================================================
 
-                Me.Btn_New.ToolTipText = Bloc("NPROJET") & "..."
+                Me.btn_NewN.ToolTipText = Bloc("NPROJET") & "..."
 
                 '=== BARRE d'OUTILS POUR LES POUTRES
 
@@ -141,12 +141,12 @@ Public Class Frm_PMX
         End Select
 
 
-        Me.TLPan_Main.RowStyles(0).Height = 0
-        Me.TLPan_Main.RowStyles(1).Height = 0
+        'Me.TLPan_Main.RowStyles(0).Height = 0
+        'Me.TLPan_Main.RowStyles(1).Height = 0
 
         ' Me.TLPan_Main.RowStyles(2).Height = 0
 
-        Me.TLPan_Main.RowStyles(5).Height = 0
+        ' Me.TLPan_Main.RowStyles(5).Height = 0
     End Sub
 
 #End Region
@@ -202,7 +202,7 @@ Public Class Frm_PMX
 
     End Sub
 
-    Private Sub ClickNouveauProjet(sender As Object, e As EventArgs) Handles btn_NewN.Click, Btn_New.Click
+    Private Sub ClickNouveauProjet(sender As Object, e As EventArgs) Handles btn_NewN.Click
 
         Frm_AjoutePP.ShowDialog()
 
@@ -230,7 +230,7 @@ Public Class Frm_PMX
 
 #Region " Gestion des barres d'outils "
 
-    Private Sub Btn_AddSection_Click(sender As Object, e As EventArgs) Handles Btn_AddSection.Click, Btn_AddSectionN.Click
+    Private Sub Btn_AddSection_Click(sender As Object, e As EventArgs) Handles Btn_AddSectionN.Click
         AjouterPoutre()
     End Sub
 
