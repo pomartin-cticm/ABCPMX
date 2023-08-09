@@ -508,26 +508,31 @@ Public Class Frm_Portees
         Select Case MyTxt.Name
             Case Me.txt_MainSpan.Name
 
-                ValMin = Format(PORTEEMIN / kUnit, formatLONGUEUR)
-                ValMax = Format(PORTEEMAX / kUnit, formatLONGUEUR)
+                'IL NE FAUT PAS TRANFORMER UNE VALEUR NUMERIQUE EN STRING POUR LA METTRE DANS UN DECIMAL
+                'ValMin = Format(OptionsScope.PorteeMin / kUnit, formatLONGUEUR)
+                'ValMax = Format(PORTEEMAX / kUnit, formatLONGUEUR)
+                ValMin = OptionsScope.PorteeMin / kUnit
+                ValMax = PORTEEMAX / kUnit
 
             Case Me.txt_PorteeConsoleG.Name, Me.txt_PorteeConsoleD.Name
 
-                ValMin = Format(CONSOLEMIN / kUnit, formatLONGUEUR)
-                ValMax = Format(RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit, formatLONGUEUR)
+                ValMin = CONSOLEMIN / kUnit
+                ValMax = RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit
+                'ValMin = Format(CONSOLEMIN / kUnit, formatLONGUEUR)
+                'ValMax = Format(RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit, formatLONGUEUR)
 
             Case Me.txt_D1.Name, Me.txt_D2.Name
 
-                ValMin = Format(ENTRAXEMIN / kUnit, formatLONGUEUR)
-                ValMax = Format(ENTRAXEMAX / kUnit, formatLONGUEUR)
+                ValMin = ENTRAXEMIN / kUnit
+                ValMax = ENTRAXEMAX / kUnit
 
             Case Me.txt_TremieGauche.Name
-                ValMin = Format(0, formatLONGUEUR)
-                ValMax = Format(MyPoutreLoc.EntraxeD1 / 2, formatLONGUEUR)
+                ValMin = 0
+                ValMax = MyPoutreLoc.EntraxeD1 / 2
 
             Case Me.txt_TremieDroite.Name
-                ValMin = Format(0, formatLONGUEUR)
-                ValMax = Format(MyPoutreLoc.EntraxeD2 / 2, formatLONGUEUR)
+                ValMin = 0
+                ValMax = MyPoutreLoc.EntraxeD2 / 2
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)

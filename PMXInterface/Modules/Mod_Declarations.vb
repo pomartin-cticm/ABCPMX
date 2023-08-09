@@ -8,6 +8,8 @@ Module Mod_Declarations
     Public LogicielRep As Struc_RepertoireLogiciel
     Public LogicielInfo As Struc_InformationLogiciel
     Public LogicielOptions As Struc_OptionsLogiciel
+    Public OptionsScope As Struc_OptionsScope
+    Public LocalOptionsScope As Struc_OptionsScope          ' Pour la saisie des paramètres dans la fenêtre des options de calcul
 
 #End Region
 
@@ -215,6 +217,25 @@ Module Mod_Declarations
 
     End Structure
 
+    Public Structure Struc_OptionsScope         ' Options définissant le domaine d'application du logiciel
+        Public PorteeMin As Decimal             ' Portée minimale d'une poutre
+        Public EpDalleMin As Decimal            ' Epaisseur minimale de dalle
+        Public ThetaH As Decimal                ' Angle d'inclinaison / verticale des parois d'un renformis
+    End Structure
+
+    Public Sub InitialiseOptionsScope()
+        '-----------------------------------------------------------------------------
+        '   09/08/23 :  Création
+        '-----------------------------------------------------------------------------
+        '   Initialisation des paramètres définissant le domaine d'appication du logiciel
+        '-----------------------------------------------------------------------------
+
+        OptionsScope.PorteeMin = PORTEEMIN
+        OptionsScope.EpDalleMin = 0.05
+        OptionsScope.ThetaH = THETAHDEFAULT
+
+    End Sub
+
 #End Region
 
 #Region " Enumérations "
@@ -263,7 +284,9 @@ Module Mod_Declarations
 
 #Region " Constantes et valeurs par défaut "
 
-    Public Const PORTEEMIN As Decimal = 5
+    Private Const THETAHDEFAULT As Decimal = 30             ' Angle inclinaison renformis
+
+    Private Const PORTEEMIN As Decimal = 5
     Public Const PORTEEMAX As Decimal = 25
 
     Public Const ENTRAXEMIN As Decimal = 0.5
@@ -393,6 +416,7 @@ Module Mod_Declarations
 
     Public Enum Enu_OptionsCalcul
         Gamma
+        Scope
     End Enum
 
     Public Enum Enu_OptionsLogiciel

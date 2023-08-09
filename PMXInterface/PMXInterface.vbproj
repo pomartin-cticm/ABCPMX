@@ -201,6 +201,12 @@
     <Compile Include="Fenetres\Options\Frm_OptionsCalcul.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsCalculScope.Designer.vb">
+      <DependentUpon>Frm_OptionsCalculScope.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsCalculScope.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Options\Frm_OptionsCalculsGamma.Designer.vb">
       <DependentUpon>Frm_OptionsCalculsGamma.vb</DependentUpon>
     </Compile>
@@ -217,6 +223,12 @@
       <DependentUpon>Frm_OptionsLogicielDirectories.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\Options\Frm_OptionsLogicielDirectories.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielExpert.Designer.vb">
+      <DependentUpon>Frm_OptionsLogicielExpert.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielExpert.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Options\Frm_OptionsLogicielGeneral.Designer.vb">
@@ -324,6 +336,9 @@
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalcul.resx">
       <DependentUpon>Frm_OptionsCalcul.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculScope.resx">
+      <DependentUpon>Frm_OptionsCalculScope.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculsGamma.resx">
       <DependentUpon>Frm_OptionsCalculsGamma.vb</DependentUpon>
     </EmbeddedResource>
@@ -332,6 +347,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielDirectories.resx">
       <DependentUpon>Frm_OptionsLogicielDirectories.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielExpert.resx">
+      <DependentUpon>Frm_OptionsLogicielExpert.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielGeneral.resx">
       <DependentUpon>Frm_OptionsLogicielGeneral.vb</DependentUpon>

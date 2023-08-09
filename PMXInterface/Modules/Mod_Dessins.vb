@@ -436,7 +436,7 @@ Module Mod_Dessins
 
 #End Region
 
-#Region "Dessins pour la définition du bac (FRM_BACN)"
+#Region " Dessins pour la définition du bac (FRM_BACN) "
 
     Public Sub DessineBac(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, MyBac As Cls_Bac,
                           ByVal EpDalle As Double, ByRef iCote As Integer,

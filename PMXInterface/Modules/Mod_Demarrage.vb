@@ -196,6 +196,10 @@ Module Mod_Demarrage
         LogicielOptions.lFenetres = True
         LogicielInfo.DetailNDC = Enum_NiveauDetailNDC.Complete
 
+        '--> Options du domaine d'application
+
+        InitialiseOptionsScope()
+
         '--> MAJ des noms de fichiers langue
 
         InitialiseLNGFileName()
@@ -326,6 +330,8 @@ Module Mod_Demarrage
         End If
 
         MyPoutre.Param.Gamma = LogicielOptions.Gamma.Clone
+
+        MyPoutre.Dalle.ThetaRd = OptionsScope.ThetaH
 
     End Sub
 

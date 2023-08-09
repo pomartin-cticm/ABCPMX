@@ -34,6 +34,7 @@ Public Class Frm_OptionsCalcul
 
     Public GammaLoc As New Cls_Gamma
 
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -62,7 +63,7 @@ Public Class Frm_OptionsCalcul
         '--> Déclaration
 
         Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
-        Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA"}
+        Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA", "OPTCALSCOPE"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
         Dim MotCle, Argument As String
@@ -112,6 +113,7 @@ Public Class Frm_OptionsCalcul
     Private Sub InitialiseParametresLocaux()
 
         Me.GammaLoc = LogicielOptions.Gamma.Clone
+        LocalOptionsScope = OptionsScope
 
     End Sub
 
@@ -122,6 +124,7 @@ Public Class Frm_OptionsCalcul
             Me.Text = MyBloc("TITLE")
 
             Me.PoMBtn_Gamma.Caption = MyBloc("GAMMA")
+            Me.PoMbtn_Scope.Caption = MyBloc("SCOPE")
 
             Me.btn_Appliquer.Text = MyBloc("APPLY")
             Me.btn_Cancel.Text = MyBloc("CANCEL")
@@ -142,11 +145,15 @@ Public Class Frm_OptionsCalcul
 
         InitialiseCouleurs()
         PreparePomBouton(PoMBtn_Gamma)
+        PreparePomBouton(PoMbtn_Scope)
 
         Select Case LastIndexW.OptionsCalcul
             Case Enu_OptionsCalcul.Gamma
                 Me.PoMBtn_Gamma.Checked = True
                 Me.PoMBtn_Gamma.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
+            Case Enu_OptionsCalcul.Scope
+                Me.PoMbtn_Scope.Checked = True
+                Me.PoMbtn_Scope.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
 
         End Select
 
@@ -199,11 +206,19 @@ Public Class Frm_OptionsCalcul
 
     Private Sub AfficherFenetreFille()
 
+        Me.pan_Contenu.Controls.Clear()
+
         Select Case LastIndexW.OptionsCalcul
             Case Enu_OptionsCalcul.Gamma
                 ' Me.TLpan_Main.Controls.Add(Frm_OptionsCalculsGamma.pan_Gamma, 1, 0)
                 Me.pan_Contenu.Controls.Add(Frm_OptionsCalculsGamma.pan_Gamma)
                 Frm_OptionsCalculsGamma.InitialiseFrm()
+
+            Case Enu_OptionsCalcul.Scope
+
+                Me.pan_Contenu.Controls.Add(Frm_OptionsCalculScope.pan_Scope)
+                Frm_OptionsCalculScope.InitialiseFrm()
+
         End Select
 
     End Sub
@@ -223,6 +238,7 @@ Public Class Frm_OptionsCalcul
 
             End If
 
+            Me.Close()
         End If
 
 
@@ -231,7 +247,9 @@ Public Class Frm_OptionsCalcul
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
         lModif = False
+        Dim lExpert As Boolean = LogicielOptions.lExpert
 
+        '# Fenêtre Gamma
         GereTransfertValeur(GammaLoc.GammaC, LogicielOptions.Gamma.GammaC, lModif)
         GereTransfertValeur(GammaLoc.GammaC_fi, LogicielOptions.Gamma.GammaC_fi, lModif)
         GereTransfertValeur(GammaLoc.GammaG_inf, LogicielOptions.Gamma.GammaG_inf, lModif)
@@ -252,8 +270,23 @@ Public Class Frm_OptionsCalcul
         LogicielOptions.Gamma.Psi1_Q2 = LogicielOptions.Gamma.Psi1_Q1
         LogicielOptions.Gamma.Psi2_Q2 = LogicielOptions.Gamma.Psi2_Q1
 
+        '# Fenêtre Scope
+        If lExpert Then
+            GereTransfertValeur(LocalOptionsScope.PorteeMin, OptionsScope.PorteeMin, lModif)
+        End If
+        GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
+
+        AppliquerReglagesProjetEnCours()
+
     End Sub
 
+    Private Sub AppliquerReglagesProjetEnCours()
+
+        For i As Integer = 0 To MyProjet.Poutres.Count - 1
+            MyProjet.Poutres(i).Dalle.ThetaRd = OptionsScope.ThetaH
+        Next
+
+    End Sub
 
     Private Function ValideSaisie() As Boolean
 
@@ -264,5 +297,71 @@ Public Class Frm_OptionsCalcul
 
 
 #End Region
+
+
+
+#Region "    Gestion des boutons - Paint Overrides "
+
+    Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs) _
+    Handles PoMBtn_Gamma.Click, PoMbtn_Scope.Click
+
+        If Not sender.checked Then  '-> Si bouton déjà séléctionné :
+            sender.checked = True       'on le garde checké
+            Exit Sub                    'on ne recharge pas la fenêtre fille
+        End If
+
+        Dim SenderName As String = sender.name
+        ' HideToutesLesFilles()
+        UncheckedAllPomBtns(SenderName)
+        Select Case SenderName
+            Case Me.PoMBtn_Gamma.Name
+                LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Gamma
+                AfficherFenetreFille()
+
+            Case Me.PoMbtn_Scope.Name
+                LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Scope
+                AfficherFenetreFille()
+
+        End Select
+        RedrawAllPomBtns()
+
+        '--> Bouton checké ne change pas de couleur quand il est survolé (MouseOn)
+        sender.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
+
+        ' Me.etq_Debug.Text = LastIndexWindow.ConfigurationNEW.ToString
+
+        If LastIndexW.OptionsLogiciel <> Enu_OptionsLogiciel.Expert Then
+            Me.AcceptButton = Me.btn_Appliquer
+        Else
+            Me.AcceptButton = Nothing
+        End If
+
+    End Sub
+
+    Private Sub RedrawAllPomBtns()
+
+        For Each MyPomBtn As Object In Me.TLpan_Gauche.Controls
+            If MyPomBtn.Name.ToUpper.Contains("POM") Then
+                '--> Initialisation de la couleur de survole (MouseOn)
+                MyPomBtn.CouleurMouseOnBtn = MyCouleurs.ColorMouseOnBtn
+                '--> MAJ du bouton
+                MyPomBtn.Invalidate()
+            End If
+        Next
+
+    End Sub
+
+    Private Sub UncheckedAllPomBtns(ByVal SenderName As String)
+
+        If SenderName <> Me.PoMBtn_Gamma.Name Then Me.PoMBtn_Gamma.Checked = False
+        If SenderName <> Me.PoMbtn_Scope.Name Then Me.PoMbtn_Scope.Checked = False
+
+    End Sub
+
+
+
+
+#End Region
+
 
 End Class

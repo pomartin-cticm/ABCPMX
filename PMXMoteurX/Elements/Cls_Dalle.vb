@@ -177,10 +177,13 @@
     ''' <summary>
     ''' Angle d'inclinaison bord du renformis, en radians
     ''' </summary>
-    Public ReadOnly Property ThetaRd As Decimal
+    Public Property ThetaRd As Decimal
         Get
             Return Me.pTheta_h * Math.PI / 180
         End Get
+        Set(value As Decimal)
+            Me.pTheta_h = value
+        End Set
 
     End Property
 

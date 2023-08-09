@@ -75,6 +75,7 @@ Public Class Frm_OptionsLogiciel
         'GestionUnites()
         InitialiseParametresLocaux()
         AfficherFenetreFille()
+        MAJIExpert()
         lBuild = False
     End Sub
 
@@ -86,7 +87,7 @@ Public Class Frm_OptionsLogiciel
         '--> Déclaration
 
         Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
-        Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTGENERAL", "OPTSOFTUNITS", "OPTSOFTDIRECTORIES"}
+        Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTGENERAL", "OPTSOFTUNITS", "OPTSOFTDIRECTORIES", "OPTSOFTEXPERT"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
         Dim MotCle, Argument As String
@@ -142,9 +143,12 @@ Public Class Frm_OptionsLogiciel
             Me.PoMBtn_General.Caption = MyBloc("GENERAL")
             Me.PoMbtn_Directories.Caption = MyBloc("DIRECTORIES")
             Me.PoMbtn_Units.Caption = MyBloc("UNITS")
+            Me.PoMbtn_Expert.Caption = MyBloc("EXPERT")
 
             Me.btn_Appliquer.Text = MyBloc("APPLY")
             Me.btn_Cancel.Text = MyBloc("CANCEL")
+
+            Me.lbl_ExpertMode.Text = MyBloc("EXPERTMODEACTIVE")
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -160,6 +164,9 @@ Public Class Frm_OptionsLogiciel
         PreparePomBouton(PoMBtn_General)
         PreparePomBouton(PoMbtn_Directories)
         PreparePomBouton(PoMbtn_Units)
+        PreparePomBouton(PoMbtn_Expert)
+        PoMbtn_Expert.Visible = LogicielOptions.lExpert
+
         'PreparePomBouton(PoMBtn)
 
         Select Case LastIndexW.OptionsLogiciel
@@ -225,6 +232,7 @@ Public Class Frm_OptionsLogiciel
         pLocalLogicielOptions.IndUnitLongueur = LogicielOptions.IndUnitLongueur
         pLocalLogicielOptions.IndUnitModulesY = LogicielOptions.IndUnitModulesY
         pLocalLogicielOptions.IndUnitMoment = LogicielOptions.IndUnitMoment
+        pLocalLogicielOptions.lExpert = LogicielOptions.lExpert
 
         pLocalRepWDefaut = LogicielRep.TravailDefaut
         pLocallDefaultRepW = LogicielRep.lTravailDefaut
@@ -255,6 +263,8 @@ Public Class Frm_OptionsLogiciel
 
             Case Enu_OptionsLogiciel.Expert
 
+                Me.pan_Contenu.Controls.Add(Frm_OptionsLogicielExpert.pan_Expert)
+                Frm_OptionsLogicielExpert.InitialiseFrm()
 
         End Select
 
@@ -267,7 +277,7 @@ Public Class Frm_OptionsLogiciel
 #Region "    Gestion des boutons - Paint Overrides "
 
     Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-    Handles PoMBtn_General.Click, PoMbtn_Directories.Click, PoMbtn_Units.Click
+    Handles PoMBtn_General.Click, PoMbtn_Directories.Click, PoMbtn_Units.Click, PoMbtn_Expert.Click
 
         If Not sender.checked Then  '-> Si bouton déjà séléctionné :
             sender.checked = True       'on le garde checké
@@ -288,6 +298,10 @@ Public Class Frm_OptionsLogiciel
 
             Case Me.PoMbtn_Units.Name
                 LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.Units
+                AfficherFenetreFille()
+
+            Case Me.PoMbtn_Expert.Name
+                LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.Expert
                 AfficherFenetreFille()
 
         End Select
@@ -324,12 +338,47 @@ Public Class Frm_OptionsLogiciel
         If SenderName <> Me.PoMBtn_General.Name Then Me.PoMBtn_General.Checked = False
         If SenderName <> Me.PoMbtn_Directories.Name Then Me.PoMbtn_Directories.Checked = False
         If SenderName <> Me.PoMbtn_Units.Name Then Me.PoMbtn_Units.Checked = False
+        If SenderName <> Me.PoMbtn_Expert.Name Then Me.PoMbtn_Expert.Checked = False
 
         'If SenderName <> Me.PomBtnExpert.Name Then MAJBtnExpert()
 
     End Sub
 
+#End Region
 
+
+#Region " Gestion Mode Expert "
+
+    Private Sub AccesModeExpert()
+
+        '--> Affichage de la fenêtre fille Expert
+        'AfficheMaFille(Frm_O_Expert.TableLayoutPanel_Contenu)
+        LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.Expert
+        AfficherFenetreFille()
+
+        '--> Maj des boutons
+        Me.PoMbtn_Expert.Visible = True
+        UncheckedAllPomBtns(Me.PoMbtn_Expert.Name)
+        Me.PoMbtn_Expert.Checked = True
+        Me.AcceptButton = Nothing
+        RedrawAllPomBtns()
+        Me.PoMbtn_Expert.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
+
+    End Sub
+
+    Public Sub MAJIExpert()
+        Me.PoMbtn_Expert.Visible = pLocalLogicielOptions.lExpert
+        Me.pan_Expert.Visible = pLocalLogicielOptions.lExpert
+    End Sub
+
+    Public Sub MAJModeExpert(ByVal lMAJ_BtnExpert As Boolean)
+
+        '   If lMAJ_BtnExpert Then Me.PoMbtn_Expert.Visible = Options_Local.lExpertMode
+
+        '  Me.img_Expert.Visible = Options_Local.lExpertMode
+        '  Me.etq_Expert.Visible = Options_Local.lExpertMode
+
+    End Sub
 
 #End Region
 
@@ -339,9 +388,15 @@ Public Class Frm_OptionsLogiciel
 
         Dim lModif As Boolean
 
-        If ValideSaisie() Then
-            TransfereSaisie(lModif)
-            Me.Close()
+        If My.Computer.Keyboard.CtrlKeyDown Then    'touche Ctrl + click OK
+
+            AccesModeExpert()
+
+        Else
+            If ValideSaisie() Then
+                TransfereSaisie(lModif)
+                Me.Close()
+            End If
         End If
 
     End Sub
@@ -358,6 +413,8 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitMoment, LogicielOptions.IndUnitMoment, lModif)
 
         GereTransfertValeur(Me.pLocallDefaultRepW, LogicielRep.lTravailDefaut, lModif)
+
+        GereTransfertValeur(Me.pLocalLogicielOptions.lExpert, LogicielOptions.lExpert, lModif)
 
     End Sub
 
