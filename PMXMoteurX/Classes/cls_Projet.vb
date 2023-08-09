@@ -96,7 +96,7 @@ Public Class cls_Projet
         Lines.Add("'PropMix software - CTICM - Version " & version)
         Lines.Add("'PROJECT USER FILE")
         Lines.Add("'-----------------------------------------------'")
-        Lines.Add("'       /!\    Don't edit this file    /!\")
+        Lines.Add("'       /!\   Don't modify this file   /!\")
         Lines.Add("'       /!\ Ne pas modifier ce fichier /!\")
         Lines.Add("'-----------------------------------------------'")
         Lines.Add("")
@@ -222,8 +222,8 @@ Public Class cls_Projet
                         Lines.Add("   typeProfil     =  " & .typeProfileAcier)
                         Lines.Add("   Platb          =  " & .Plat_b)
                         Lines.Add("   Platt          =  " & .Plat_t)
-                        Lines.Add("   IndDeliv       =  " & ConvertListShortToString(.IndDeliv))
-                        Lines.Add("   IndStand       =  " & ConvertListShortToString(.IndStandart))
+                        ' Lines.Add("   IndDeliv       =  " & ConvertListShortToString(.IndDeliv))
+                        ' Lines.Add("   IndStand       =  " & ConvertListShortToString(.IndStandart))
 
                     End With
 
@@ -479,9 +479,6 @@ Public Class cls_Projet
                 End With
             End With
         Next
-
-
-
 
 
     End Sub

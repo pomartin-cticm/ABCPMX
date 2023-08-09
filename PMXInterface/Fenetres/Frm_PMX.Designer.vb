@@ -74,7 +74,7 @@ Partial Class Frm_PMX
         Me.TSbtn_OptionsCalcul = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton11 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton12 = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.TSMenuPrincipal = New System.Windows.Forms.ToolStrip()
         Me.btn_FilesN = New System.Windows.Forms.ToolStripDropDownButton()
         Me.NewToolStripMenuItemN = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator12 = New System.Windows.Forms.ToolStripSeparator()
@@ -113,6 +113,8 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator28 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton16 = New System.Windows.Forms.ToolStripButton()
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
+        Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
+        Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -129,7 +131,7 @@ Partial Class Frm_PMX
         CType(Me.img_Logo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLPan_Menus.SuspendLayout()
         Me.ToolStrip_Main.SuspendLayout()
-        Me.ToolStrip1.SuspendLayout()
+        Me.TSMenuPrincipal.SuspendLayout()
         Me.ToolStripContainer1.BottomToolStripPanel.SuspendLayout()
         Me.ToolStripContainer1.SuspendLayout()
         Me.ToolStrip4.SuspendLayout()
@@ -139,20 +141,19 @@ Partial Class Frm_PMX
         '
         Me.TLPan_Main.ColumnCount = 1
         Me.TLPan_Main.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Main.Controls.Add(Me.Split_Main, 0, 4)
-        Me.TLPan_Main.Controls.Add(Me.TableLayoutPanel1, 0, 2)
-        Me.TLPan_Main.Controls.Add(Me.Panel2, 0, 3)
+        Me.TLPan_Main.Controls.Add(Me.Split_Main, 0, 2)
+        Me.TLPan_Main.Controls.Add(Me.TableLayoutPanel1, 0, 0)
+        Me.TLPan_Main.Controls.Add(Me.Panel2, 0, 1)
         Me.TLPan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Main.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Main.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Main.Name = "TLPan_Main"
-        Me.TLPan_Main.RowCount = 6
-        Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
+        Me.TLPan_Main.RowCount = 4
         Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2.0!))
         Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12.0!))
+        Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_Main.Size = New System.Drawing.Size(1123, 546)
         Me.TLPan_Main.TabIndex = 0
@@ -161,7 +162,7 @@ Partial Class Frm_PMX
         '
         Me.Split_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Split_Main.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
-        Me.Split_Main.Location = New System.Drawing.Point(0, 118)
+        Me.Split_Main.Location = New System.Drawing.Point(0, 62)
         Me.Split_Main.Margin = New System.Windows.Forms.Padding(0)
         Me.Split_Main.Name = "Split_Main"
         '
@@ -173,7 +174,7 @@ Partial Class Frm_PMX
         'Split_Main.Panel2
         '
         Me.Split_Main.Panel2.Controls.Add(Me.TLPan_ZoneDeSaisie)
-        Me.Split_Main.Size = New System.Drawing.Size(1123, 416)
+        Me.Split_Main.Size = New System.Drawing.Size(1123, 472)
         Me.Split_Main.SplitterDistance = 150
         Me.Split_Main.SplitterIncrement = 5
         Me.Split_Main.SplitterWidth = 3
@@ -186,7 +187,7 @@ Partial Class Frm_PMX
         Me.Panel_SideBar.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel_SideBar.Location = New System.Drawing.Point(3, 0)
         Me.Panel_SideBar.Name = "Panel_SideBar"
-        Me.Panel_SideBar.Size = New System.Drawing.Size(144, 413)
+        Me.Panel_SideBar.Size = New System.Drawing.Size(144, 469)
         Me.Panel_SideBar.TabIndex = 2
         '
         'TLPanel_SideBar
@@ -208,7 +209,7 @@ Partial Class Frm_PMX
         Me.TLPanel_SideBar.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TLPanel_SideBar.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPanel_SideBar.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPanel_SideBar.Size = New System.Drawing.Size(142, 411)
+        Me.TLPanel_SideBar.Size = New System.Drawing.Size(142, 467)
         Me.TLPanel_SideBar.TabIndex = 2
         '
         'Label_Nom_Projet
@@ -269,7 +270,7 @@ Partial Class Frm_PMX
         Me.pan_ListePoutres.Location = New System.Drawing.Point(0, 76)
         Me.pan_ListePoutres.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ListePoutres.Name = "pan_ListePoutres"
-        Me.pan_ListePoutres.Size = New System.Drawing.Size(142, 315)
+        Me.pan_ListePoutres.Size = New System.Drawing.Size(142, 371)
         Me.pan_ListePoutres.TabIndex = 3
         '
         'TLPan_ListPoutres
@@ -299,7 +300,7 @@ Partial Class Frm_PMX
         Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
         Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
-        Me.TLPan_ZoneDeSaisie.Size = New System.Drawing.Size(970, 416)
+        Me.TLPan_ZoneDeSaisie.Size = New System.Drawing.Size(970, 472)
         Me.TLPan_ZoneDeSaisie.TabIndex = 0
         '
         'ToolStrip_Poutre
@@ -462,7 +463,7 @@ Partial Class Frm_PMX
         Me.img_Main.Location = New System.Drawing.Point(1, 31)
         Me.img_Main.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.img_Main.Name = "img_Main"
-        Me.img_Main.Size = New System.Drawing.Size(969, 354)
+        Me.img_Main.Size = New System.Drawing.Size(969, 410)
         Me.img_Main.TabIndex = 6
         Me.img_Main.TabStop = False
         '
@@ -474,7 +475,7 @@ Partial Class Frm_PMX
         Me.TableLayoutPanel1.Controls.Add(Me.img_Logo, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.TLPan_Menus, 0, 0)
         Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 56)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
@@ -496,7 +497,7 @@ Partial Class Frm_PMX
         Me.TLPan_Menus.ColumnCount = 1
         Me.TLPan_Menus.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Menus.Controls.Add(Me.ToolStrip_Main, 0, 1)
-        Me.TLPan_Menus.Controls.Add(Me.ToolStrip1, 0, 0)
+        Me.TLPan_Menus.Controls.Add(Me.TSMenuPrincipal, 0, 0)
         Me.TLPan_Menus.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Menus.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Menus.Margin = New System.Windows.Forms.Padding(0)
@@ -655,19 +656,19 @@ Partial Class Frm_PMX
         Me.ToolStripButton12.Text = "ToolStripButton2"
         Me.ToolStripButton12.Visible = False
         '
-        'ToolStrip1
+        'TSMenuPrincipal
         '
-        Me.ToolStrip1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btn_FilesN, Me.btn_ProjectN, Me.btn_OptionsN, Me.btn_OtherN})
-        Me.ToolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
-        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.ToolStrip1.Name = "ToolStrip1"
-        Me.ToolStrip1.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
-        Me.ToolStrip1.Size = New System.Drawing.Size(1023, 25)
-        Me.ToolStrip1.TabIndex = 2
-        Me.ToolStrip1.Text = "ToolStrip_Menu"
+        Me.TSMenuPrincipal.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TSMenuPrincipal.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.TSMenuPrincipal.ImageScalingSize = New System.Drawing.Size(20, 20)
+        Me.TSMenuPrincipal.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.btn_FilesN, Me.btn_ProjectN, Me.btn_OptionsN, Me.btn_OtherN})
+        Me.TSMenuPrincipal.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
+        Me.TSMenuPrincipal.Location = New System.Drawing.Point(0, 0)
+        Me.TSMenuPrincipal.Name = "TSMenuPrincipal"
+        Me.TSMenuPrincipal.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
+        Me.TSMenuPrincipal.Size = New System.Drawing.Size(1023, 25)
+        Me.TSMenuPrincipal.TabIndex = 2
+        Me.TSMenuPrincipal.Text = "ToolStrip_Menu"
         '
         'btn_FilesN
         '
@@ -904,7 +905,7 @@ Partial Class Frm_PMX
         '
         Me.Panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel2.Location = New System.Drawing.Point(3, 119)
+        Me.Panel2.Location = New System.Drawing.Point(3, 63)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(1117, 1)
         Me.Panel2.TabIndex = 7
@@ -1014,8 +1015,8 @@ Partial Class Frm_PMX
         Me.TLPan_Menus.PerformLayout()
         Me.ToolStrip_Main.ResumeLayout(False)
         Me.ToolStrip_Main.PerformLayout()
-        Me.ToolStrip1.ResumeLayout(False)
-        Me.ToolStrip1.PerformLayout()
+        Me.TSMenuPrincipal.ResumeLayout(False)
+        Me.TSMenuPrincipal.PerformLayout()
         Me.ToolStripContainer1.BottomToolStripPanel.ResumeLayout(False)
         Me.ToolStripContainer1.BottomToolStripPanel.PerformLayout()
         Me.ToolStripContainer1.ResumeLayout(False)
@@ -1054,7 +1055,7 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_OptionsCalcul As ToolStripButton
     Friend WithEvents ToolStripButton11 As ToolStripButton
     Friend WithEvents ToolStripButton12 As ToolStripButton
-    Friend WithEvents ToolStrip1 As ToolStrip
+    Friend WithEvents TSMenuPrincipal As ToolStrip
     Friend WithEvents btn_FilesN As ToolStripDropDownButton
     Friend WithEvents NewToolStripMenuItemN As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator12 As ToolStripSeparator
@@ -1115,4 +1116,6 @@ Partial Class Frm_PMX
     Friend WithEvents ImgList_Menu As ImageList
     Friend WithEvents TSbtn_DalleN As ToolStripButton
     Friend WithEvents TSbtn_Combinaisons As ToolStripButton
+    Friend WithEvents OpenFileDialog_Project As OpenFileDialog
+    Friend WithEvents SaveFileDialog_Project As SaveFileDialog
 End Class

@@ -8,6 +8,7 @@ Public Class Frm_PMX
     Dim lBuild As Boolean = True
     Private lOpenAvecFichier As Boolean = False
 
+    Private ReadOnly ToolFiles As New List(Of ToolStripMenuItem)
 
     Dim FilleEnCours As EnuFenetres = EnuFenetres.Accueil
 
@@ -140,13 +141,7 @@ Public Class Frm_PMX
 
         End Select
 
-
-        'Me.TLPan_Main.RowStyles(0).Height = 0
-        'Me.TLPan_Main.RowStyles(1).Height = 0
-
-        ' Me.TLPan_Main.RowStyles(2).Height = 0
-
-        ' Me.TLPan_Main.RowStyles(5).Height = 0
+        Me.TLPan_Main.RowStyles(3).Height = 0
     End Sub
 
 #End Region
@@ -397,8 +392,7 @@ Public Class Frm_PMX
 
     Private Sub TSbtn_SaveN_Click(sender As Object, e As EventArgs) Handles TSbtn_SaveN.Click
 
-
-
+        EnregistrerProjetEnCours()
 
     End Sub
 
@@ -442,7 +436,175 @@ Public Class Frm_PMX
         '  
         '-----------------------------------------------------------------------------------
 
+        '# Gestion projet en cours (sauvegarde)
+
+        '# Récupération du nom de fichier
+
+        Me.SaveFileDialog_Project.Title = Me.SaveToolStripMenuItemN.Text
+        Me.SaveFileDialog_Project.FileName = MyProjet.Nom
+        Me.SaveFileDialog_Project.DefaultExt = LogicielInfo.Extension
+
+        Me.SaveFileDialog_Project.InitialDirectory = LogicielOptions.RepertoireTravail
+
+        If Me.SaveFileDialog_Project.ShowDialog() = Windows.Forms.DialogResult.OK Then
+
+            '# MAJ paramètres
+            '.Save = True
+            MyProjet.FileName = Me.SaveFileDialog_Project.FileName
+
+            '# AJout dans FichierRecents
+            '   si déjà dans la liste, on le supprime pour le rajouter à la première position
+
+            If LogicielFichiers.RecentFiles.Contains(MyProjet.FileName) Then LogicielFichiers.RecentFiles.Remove(MyProjet.FileName)
+            LogicielFichiers.RecentFiles.Insert(0, MyProjet.FileName)
+
+            '# Enregistrer
+
+            EcrireProjetInFile(MyProjet.FileName)
+
+            '--> MAJ Rep de travail 
+            If Not LogicielOptions.lRepTravailDefault Then
+                LogicielOptions.RepertoireTravail = RecupRepertoire(MyProjet.FileName)
+            End If
+
+            '--> MAJ fichier recent
+            Me.AffichageRecentFiles()
+
+        End If
+
+
     End Sub
+
+#End Region
+
+
+#Region " Fichiers Recents "
+
+    ''' <summary>
+    ''' Affichage des 10 derniers fichiers utilisés
+    ''' </summary>
+    Public Sub AffichageRecentFiles()
+
+        '--> Initialisation
+        Me.RecentFileToolStripMenuItemN.DropDownItems.Clear()
+        Me.ToolFiles.Clear()
+
+        '--> Traitement
+        For i = 0 To LogicielFichiers.RecentFiles.Count - 1
+
+            ToolFiles.Add(New ToolStripMenuItem(LogicielFichiers.RecentFiles(i)))
+            Me.RecentFileToolStripMenuItemN.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {ToolFiles(i)})
+            AddHandler ToolFiles(i).Click, AddressOf Me.Click_RecentFile
+            If i = 9 Then Exit For
+
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Click sur un fichier récent
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub Click_RecentFile(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+        Dim FileName As String = sender.text
+
+        '--> Fichier n'existe plus
+        If Not File.Exists(FileName) Then
+            MsgBox("Le fichier n'existe pas | File doesn't exist : " & FileName, MsgBoxStyle.Critical)
+
+            '--> Suppression de la liste
+            If LogicielFichiers.RecentFiles.Contains(FileName) Then LogicielFichiers.RecentFiles.Remove(FileName)
+            AffichageRecentFiles()
+
+            Exit Sub
+        End If
+
+        If MyProjet.lModif Then '--> Projet  modifié
+
+            '    '--> Affichage Fenetre Avertissement
+            '    Dim dg As DialogResult = Dlg_VerifSave.ShowDialog
+
+            '    If dg = Windows.Forms.DialogResult.OK Then
+
+            '        Me.SaveFileDialog_Project.Title = Me.SaveToolStripMenuItemN.Text
+            '        Me.SaveFileDialog_Project.FileName = MyProjet.Nom
+
+            '        If Save_Project() Then
+
+            '            '--> Lecture du fichier
+            '            ReadInFile(FileName)
+
+            '        End If
+
+            '    ElseIf dg = Windows.Forms.DialogResult.Ignore Then
+            '        '--> Utilisateur ne veut pas sauvegarder l'assemblage en cours
+
+            '        '--> Lecture du fichier
+            '        ReadInFile(FileName)
+
+            '    End If
+
+            'Else '--> Projet en cours déjà sauvegardé et pas modifié --> pas d'avertissement
+
+            '    '--> Lecture du fichier
+            '    ReadInFile(FileName)
+
+        End If
+
+    End Sub
+
+#End Region
+
+#Region "===FERMETURE==="
+
+    Private Sub FermerLogiciel()
+        Me.Close()
+    End Sub
+
+#End Region
+
+#Region " Menu Fichiers "
+
+
+    Private Sub NewToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles NewToolStripMenuItemN.Click
+        '------------------------------------------------------------------------------------------
+        '   MENU FICHIER/NOUVEAU
+        '------------------------------------------------------------------------------------------
+
+    End Sub
+
+    Private Sub OpenToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItemN.Click
+        '------------------------------------------------------------------------------------------
+        '   MENU FICHIER/OUVRIR
+        '------------------------------------------------------------------------------------------
+    End Sub
+
+    Private Sub SaveToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItemN.Click
+        '------------------------------------------------------------------------------------------
+        '   MENU FICHIER/ENREGISTRER
+        '------------------------------------------------------------------------------------------
+        EnregistrerProjetEnCours()
+
+    End Sub
+
+    Private Sub SaveAsToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles SaveAsToolStripMenuItemN.Click
+        '------------------------------------------------------------------------------------------
+        '   MENU FICHIER/ENREGISTRER SOUS
+        '------------------------------------------------------------------------------------------
+        EnregistrerSousProjetEnCours()
+    End Sub
+
+    Private Sub QuitToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles QuitToolStripMenuItemN.Click
+        '------------------------------------------------------------------------------------------
+        '   MENU FICHIER/QUITTER
+        '------------------------------------------------------------------------------------------
+
+        FermerLogiciel()
+
+    End Sub
+
 
 #End Region
 
