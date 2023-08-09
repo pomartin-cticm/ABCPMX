@@ -483,8 +483,15 @@ Public Class cls_Projet
 
     End Sub
 
-    Public Sub RecuperationFile(ByVal FileName As String, ByVal str_warning_file As String,
-                                ByRef nuances As List(Of String), ByRef f_y As List(Of Integer))
+    Public Sub RecuperationFile(ByVal FileName As String, ByVal str_warning_file As String)
+        '---------------------------------------------------------------------------------------------------------
+        '   09/08/23 :  Création
+        '---------------------------------------------------------------------------------------------------------
+        '   Initialisation d'un projet à partir d'un fichier de données
+        '---------------------------------------------------------------------------------------------------------
+        '   FileName    [E] :   Nom du fichier
+        '   str_warning [E] :   Message d'avertissement
+        '---------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
         Dim Lines As Cls_LinesOfFile
@@ -680,7 +687,7 @@ Public Class cls_Projet
         Next
 
         If oldFichier Then
-            MsgBox(str_warning_file, MsgBoxStyle.Critical, "PropMix")
+            MsgBox(str_warning_file, MsgBoxStyle.Critical, NomLogiciel)
         End If
 
     End Sub

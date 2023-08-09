@@ -1,6 +1,12 @@
 ﻿Module Mod_Declarations
 
-#Region " Constantes "
+#Region " Paramètres généraux logiciels "
+
+    Public Const NomLogiciel As String = "ABCPMX"
+
+#End Region
+
+#Region " Tableau 7 EN 1994-1-1 "
     ''' <summary>
     ''' Contrainte maximale dans les aciers autorisée en fonction du diamètre des barres et de l'ouverture des fissures (cf. Tableau 7.1 de l'EC4)
     ''' Colonne 0 = Contrainte autorisée
@@ -87,8 +93,6 @@
         {320, 150 / 1000, 100 / 1000, 0},
         {360, 100 / 1000, 50 / 1000, 0}}
 
-#End Region
-
     Public Function Get_sigma_S1_es(wk_max As Decimal, es_max As Decimal)
 
         '------------------------------------------------------------------------------------------------------------------
@@ -135,6 +139,9 @@
 
         Return sigma_S1
     End Function
+
+#End Region
+
 
     ''' <summary>
     ''' Caractéristiques des goujons (valeurs reprises d'ACB+)

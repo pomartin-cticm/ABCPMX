@@ -19,6 +19,7 @@ Public Class Frm_PMX
     Dim CouleurBtnActive As Color = Color.DarkOrange
     Dim CouleurBtnNormal As Color = GrayAM
 
+    Dim Str_WarningFile As String
 #End Region
 
 #Region "===OUVERTURE==="
@@ -120,6 +121,8 @@ Public Class Frm_PMX
                 ErreurNonNul_LNG = Bloc("ERROREMPTYCELL")
                 ErreurNonNum_LNG = Bloc("ERRORNONNUMERIC")
                 ErreurHorsBornes_LNG = Bloc("ERROROUTBOUNDS")
+
+                Str_WarningFile = "Probleme lecture fichier"
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangue")
@@ -475,8 +478,81 @@ Public Class Frm_PMX
 
     End Sub
 
-#End Region
+    Private Sub OuvrirFichier()
+        '-----------------------------------------------------------------------------------
+        '   09/08/23 :  Création - Version 1.00
+        '-----------------------------------------------------------------------------------
+        '   Gestion de la demande d'ouverture d'un fichier
+        '-----------------------------------------------------------------------------------
 
+        '--> Déclaration
+        Dim FileName As String
+
+        '# Contrôle sauvegarde du projet en cours
+
+        '# Demande nom fichier
+
+        '--> Préparation de la boite de dialogue OpenFile
+
+        Me.OpenFileDialog_Project.InitialDirectory = LogicielOptions.RepertoireTravail
+        Me.OpenFileDialog_Project.DefaultExt = LogicielInfo.Extension
+        Me.OpenFileDialog_Project.ShowDialog()
+
+        FileName = Me.OpenFileDialog_Project.FileName
+
+        '# Ouverture
+
+        '--> Gestion du résultat de la boite de dialogue
+        If FileName <> "" Then
+
+            '--> Lecture du fichier
+            ReadInFile(FileName)
+
+        End If
+
+    End Sub
+
+    Public Sub ReadInFile(ByVal FileName As String)
+        '-----------------------------------------------------------------------------------
+        '   09/08/23 :  Création - Version 1.00
+        '-----------------------------------------------------------------------------------
+        '   Enregistrement du projet en cours
+        '-----------------------------------------------------------------------------------
+
+        '--> Curseur de chargement
+        Cursor.Current = Cursors.WaitCursor
+
+        '--> AJout dans FichierRecents
+        'si déjà dans la liste, on le supprime pour le rajouter à la première position
+        If LogicielFichiers.RecentFiles.Contains(FileName) Then LogicielFichiers.RecentFiles.Remove(FileName)
+        LogicielFichiers.RecentFiles.Insert(0, FileName)
+
+        '--> MAJ Rep de travail 
+        If Not LogicielOptions.lRepTravailDefault Then
+            LogicielOptions.RepertoireTravail = RecupRepertoire(FileName)
+        End If
+
+        '--> Lecture du fichier
+        MyProjet = New cls_Projet
+        MyProjet.RecuperationFile(FileName, Str_WarningFile)
+        MyProjet.IndEnCours = 0
+
+        '--> Aucune modification par rapport au fichier ouvert
+        MyProjet.lModif = False
+
+        '--> Initialisation de l'interface avec le projet ouvert
+        AfficheFenetreEnCours()
+        AffichageTViewChk()
+
+
+        'Frm_MAIN.ModifImageSave()
+
+        '--> Curseur par défaut
+        Cursor.Current = Cursors.Default
+
+    End Sub
+
+#End Region
 
 #Region " Fichiers Recents "
 
@@ -579,6 +655,9 @@ Public Class Frm_PMX
         '------------------------------------------------------------------------------------------
         '   MENU FICHIER/OUVRIR
         '------------------------------------------------------------------------------------------
+
+        OuvrirFichier()
+
     End Sub
 
     Private Sub SaveToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles SaveToolStripMenuItemN.Click
