@@ -35,9 +35,9 @@ Public Class Cls_Connecteur
 
     Public ReadOnly Property IndiceDataBase As Integer
         Get
-            For i As Integer = 0 To goujons_database.Length - 1
-                If nom = goujons_database(i).Item1 Then Return i
-            Next
+            'For i As Integer = 0 To goujons_database.Length - 1
+            '    If nom = goujons_database(i).Item1 Then Return i
+            'Next
         End Get
     End Property
 
@@ -47,10 +47,13 @@ Public Class Cls_Connecteur
 
     Public Sub New()
 
-        Me.nom = Mod_Declarations.goujons_database(3).Item1
+        Me.nom = "19-100"
         Me.kcc = 1
-        Caracteristiques_Goujons()
-
+        'Caracteristiques_Goujons()
+        Me.d = 0.019
+        Me.hsc = 0.1
+        Me.Fu = 450
+        Me.Fy = 350
     End Sub
 
 #End Region
@@ -67,25 +70,25 @@ Public Class Cls_Connecteur
     ''' Fonction qui renvoi la liste des noms des goujons disponibles dans la DataBase du Mod_Declaration (utile pour le Frm_Connexion)
     ''' </summary>
     ''' <returns></returns>
-    Public Function Get_ListName_GoujonDatabase() As String()
-        Dim listName As String()
-        ReDim listName(goujons_database.Length - 1)
+    'Public Function Get_ListName_GoujonDatabase() As String()
+    '    Dim listName As String()
+    '    ReDim listName(goujons_database.Length - 1)
 
-        For i As Integer = 0 To goujons_database.Length - 1
-            listName(i) = goujons_database(i).Item1
-        Next
+    '    For i As Integer = 0 To goujons_database.Length - 1
+    '        listName(i) = goujons_database(i).Item1
+    '    Next
 
-        Return listName
+    '    Return listName
 
-    End Function
+    'End Function
 
     Public Sub Caracteristiques_Goujons()
         Dim ind_en_cours As Integer = IndiceDataBase
 
-        Me.d = goujons_database(ind_en_cours).Item2
-        Me.hsc = goujons_database(ind_en_cours).Item3
-        Me.Fy = goujons_database(ind_en_cours).Item4
-        Me.Fu = goujons_database(ind_en_cours).Item5
+        'Me.d = goujons_database(ind_en_cours).Item2
+        'Me.hsc = goujons_database(ind_en_cours).Item3
+        'Me.Fy = goujons_database(ind_en_cours).Item4
+        'Me.Fu = goujons_database(ind_en_cours).Item5
 
     End Sub
 

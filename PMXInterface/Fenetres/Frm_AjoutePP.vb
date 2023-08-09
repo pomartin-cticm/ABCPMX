@@ -456,11 +456,8 @@ Public Class Frm_AjoutePP
 
             InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
 
-            'If MyProjet.Poutres(MyProjet.Poutres.Count - 1).lmixte Then        'A PROGRAMMER
-
             InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)
-
-            'End If
+            InitialiseGoujonDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Connecteur, lTrouve)
 
         End If
 

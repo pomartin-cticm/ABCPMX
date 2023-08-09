@@ -156,6 +156,9 @@ Module Mod_Demarrage
             '--> Bacs acier
             LireBaseBacs(BaseBacs)
 
+            '--> Connecteurs
+            LireBaseGoujons(LogicielFichiers.Base_Goujons, BaseGoujons)
+
             '--> Gamma coefficients partiels
 
             LogicielOptions.Gamma = New Cls_Gamma
@@ -333,6 +336,55 @@ Module Mod_Demarrage
 
         MyPoutre.Dalle.ThetaRd = OptionsScope.ThetaH
 
+    End Sub
+
+    Public Sub InitialiseGoujonDeBase(ByRef MyG As Cls_Connecteur, ByRef lTrouve As Boolean)
+        '--------------------------------------------------------------------------------
+        '   09/08/23 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------
+        '   Initialisation d'un goujon à partir de la base de données goujon
+        '--------------------------------------------------------------------------------
+        '   MyG             [E/S] : Goujon à initialiser
+        '   lTrouve         [S] :   Indique si on a pu initialiser
+        '--------------------------------------------------------------------------------
+
+        '--> Declaration
+
+        Dim nbStud, iStud As Integer
+
+        '--> Initialisation
+
+        lTrouve = False
+        iStud = -1
+
+        If BaseGoujons Is Nothing Then
+            nbStud = 0
+        Else
+            nbStud = BaseGoujons.GetUpperBound(0) + 1
+        End If
+
+        '--> Recherche du goujons dans la liste
+
+        Do While (Not lTrouve) And (iStud < nbStud - 1)
+            iStud += 1
+            lTrouve = (BaseGoujons(iStud).Item1 = MyG.nom)
+        Loop
+
+        '--> Traitement de la recherche
+
+        If Not lTrouve Then
+            'Si on n'a pas trouvé le connecteur recherché, on prend le premier dans la liste (si elle existe)
+            iStud = 0
+            If nbStud > 0 Then lTrouve = True
+        End If
+
+        If lTrouve Then
+            MyG.nom = BaseGoujons(iStud).Item1
+            MyG.d = BaseGoujons(iStud).Item3
+            MyG.hsc = BaseGoujons(iStud).Item2
+            MyG.Fy = BaseGoujons(iStud).Item4
+            MyG.Fu = BaseGoujons(iStud).Item5
+        End If
     End Sub
 
     Public Sub InitialiseBacDeBase(ByRef MyBac As Cls_Bac, ByRef lTrouve As Boolean)

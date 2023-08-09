@@ -8,6 +8,8 @@ Module Mod_BasesDonneesASCII
 
     Public BaseBacs As New Dictionary(Of String, Cls_Bac)
 
+    Public BaseGoujons As (String, Decimal, Decimal, Decimal, Decimal)() = Nothing
+
 #End Region
 
 #Region " Base de données des bacs "
@@ -148,6 +150,110 @@ Module Mod_BasesDonneesASCII
 
 
         Next
+
+    End Sub
+
+#End Region
+
+#Region " Base de données des connecteurs "
+
+    Public Sub LireBaseGoujons(FileG As String, ByRef MyBaseG As (String, Decimal, Decimal, Decimal, Decimal)())
+        '---------------------------------------------------------------------------------
+        '   09/08/23 :  Création - POM
+        '---------------------------------------------------------------------------------
+        '   Recupération des bacs dans la base de données
+        '---------------------------------------------------------------------------------
+        '   FileG       [E] :   Base des connecteurs
+        '   MyBaseG     [S] :   Base des goujons
+        '---------------------------------------------------------------------------------
+
+        '--> Déclarations 
+
+        Dim iStud As Integer
+        Dim Etiquette, Parametres As String
+        Dim Mots() As String, nMots As Integer
+        Dim lFmtPB As Boolean = False
+
+        Dim LinesG As New Cls_LinesOfFile(FileG, True)
+
+        '--[ Analyse du fichier lu
+
+        For iStud = 1 To LinesG.Lines.Count - 1
+
+            Dim Htot, PhiTige, HTete, PhiTete As Single
+            Dim fy, fu As Single
+
+            '--> Decoupe de la ligne en Label et en paramètres
+            '--> L'étiquette est repérée par la première virgule
+
+            Dim iVirg As Integer = LinesG.Lines(iStud).IndexOf(",")
+            Dim kUnit As Single = 0.001
+
+            If iVirg > 0 Then
+                Etiquette = LinesG.Lines(iStud).Substring(0, iVirg)
+                Parametres = LinesG.Lines(iStud).Substring(iVirg + 1)
+
+                DecomposeLine(Parametres, SEPARATEURS, Mots, nMots)
+
+                Htot = CSng(TraiteReal(Mots(1))) * kUnit
+                PhiTige = CSng(TraiteReal(Mots(2))) * kUnit
+                PhiTete = CSng(TraiteReal(Mots(3))) * kUnit
+                HTete = CSng(TraiteReal(Mots(4))) * kUnit
+                fy = CSng(TraiteReal(Mots(5)))
+                fu = CSng(TraiteReal(Mots(6)))
+
+                AjouteGoujonsBase(Etiquette, Htot, PhiTige, fy, fy, MyBaseG)
+
+            Else
+                lFmtPB = True
+            End If
+
+        Next
+        If lFmtPB Then
+            'UserWarning(RemplaceDollar(BlocMessage("PBFMT"), FileStud))
+        End If
+    End Sub
+
+    Private Sub AjouteGoujonsBase(Label As String, Hsc As Decimal, Phi As Decimal, Fy As Decimal, Fu As Decimal, ByRef MyBaseG As (String, Decimal, Decimal, Decimal, Decimal)())
+        '---------------------------------------------------------------------------------
+        '   09/08/23 :  Création - POM
+        '---------------------------------------------------------------------------------
+        '   Ajout d'un bac dans la base de données des connecteurs 
+        '---------------------------------------------------------------------------------
+        '   MyBaseG     [S] :   Base des goujons
+        '   Label       [E] :   
+        '   Hsc         [E] :   Hauteur totale du connecteur
+        '   Phi         [E] :   Diametre du connecteur
+        '   Fy, Fu      [E] :   Limite d'élasticite et limite ultime à la traction
+        '---------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim nbG As Integer
+
+        '--> Initialisation
+
+        If MyBaseG Is Nothing Then
+            nbG = 0
+        Else
+            nbG = MyBaseG.GetUpperBound(0) + 1
+        End If
+
+        nbG += 1
+
+        If nbG > 0 Then
+            ReDim Preserve MyBaseG(nbG - 1)
+        Else
+            ReDim MyBaseG(nbG)
+        End If
+
+        '--> Infos
+
+        MyBaseG(nbG - 1).Item1 = Label
+        MyBaseG(nbG - 1).Item2 = Hsc
+        MyBaseG(nbG - 1).Item3 = Phi
+        MyBaseG(nbG - 1).Item4 = Fy
+        MyBaseG(nbG - 1).Item5 = Fu
 
     End Sub
 

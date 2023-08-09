@@ -8,6 +8,8 @@ Public Class Frm_Connection
 
     Dim lBuild As Boolean = True
 
+    Const PrefixeG As String = "M "
+
     ''' <summary>
     ''' Définition d'une poutre_loc afin d'enregistrer les actions de l'utilisateur
     ''' </summary>
@@ -29,12 +31,12 @@ Public Class Frm_Connection
     ''' <summary>
     ''' Importe la liste de noms des goujons disponibles
     ''' </summary>
-    Dim strGoujonsInit() As String
+    Dim tabLabelGoujons() As String
 
     ''' <summary>
     ''' Définition d'une liste de string pour remplir le cmb_studs
     ''' </summary>
-    Dim strGoujons() As String
+    Dim tabLabelGoujonsAff() As String
 
     ''' <summary>
     ''' variable locale qui informe quelle travée est affichée à l'écran
@@ -100,28 +102,28 @@ Public Class Frm_Connection
     Dim WarningMessage_CmbTravee As String
 
     'Définition des valeurs limites pour les caractéristiques des goujons
-    Dim HAUTEUR_GOUJON_MIN As Decimal
-    Dim HAUTEUR_GOUJON_MAX_CONSEILLEE As Decimal 'valeur conseillée à ne pas dépasser 
-    Dim HAUTEUR_GOUJON_MAX As Decimal 'valeur à ne pas dépasser dans tous les cas 
-    Dim DIAMETRE_GOUJON_MIN As Decimal
-    Dim DIAMETRE_GOUJON_MAX As Decimal
+    Dim Hauteur_Goujon_MIN As Decimal
+    Dim Hauteur_Goujon_MAX_CONSEILLEE As Decimal 'valeur conseillée à ne pas dépasser 
+    Dim Hauteur_Goujon_MAX As Decimal 'valeur à ne pas dépasser dans tous les cas 
+    Dim Diametre_Goujon_MIN As Decimal
+    Dim Diametre_Goujon_MAX As Decimal
 
     'Définition des valeurs limites pour les caractéristiques longitudinales
-    Dim NB_ZONES_MIN As Integer
-    Dim NB_ZONES_MAX As Integer
-    Dim LONGUEUR_ZONE_MIN As Decimal
-    Dim LONGUEUR_ZONE_MAX As Decimal
-    Dim ESPACEMENT_LONGI_MIN As Decimal 'sxi,min dans les ST
-    Dim ESPACEMENT_LONGI_MAX As Decimal 'sxi,max dans les ST
-    Dim NB_ONDES_MIN As Integer
-    Dim NB_ONDES_MAX As Integer
+    Dim Nb_Zones_MIN As Integer
+    Dim Nb_Zones_MAX As Integer
+    Dim Longueur_Zone_MIN As Decimal
+    Dim Longueur_Zone_MAX As Decimal
+    Dim Espacement_Longi_MIN As Decimal 'sxi,min dans les ST
+    Dim Espacement_Longi_MAX As Decimal 'sxi,max dans les ST
+    Dim Nb_Ondes_MIN As Integer
+    Dim Nb_Ondes_MAX As Integer
 
     'Définition des valeurs limites pour les caractéristiques transversales
-    Dim ESPACEMENT_TRANS_MIN As Decimal
-    Dim PINCE_TRANS_MIN As Decimal 'Correspond à eD,min dans les Specifications Techniques 
+    Dim Espacement_Trans_MIN As Decimal
+    Dim Pince_Trans_MIN As Decimal 'Correspond à eD,min dans les Specifications Techniques 
     Dim b_app_min As Decimal
-    Dim NB_TRANSV_ROW_MIN As Integer
-    Dim NB_TRANSV_ROW_MAX As Integer
+    Dim Nb_TransV_Row_MIN As Integer
+    Dim Nb_TransV_Row_MAX As Integer
 
 
 
@@ -202,9 +204,19 @@ Public Class Frm_Connection
         lMAJAffichage = False
         lBtnAjouterSupprimer = False
 
-
         Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZone(traveeEnCours) = NB_ZONES_MAX
         Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZone(traveeEnCours) = NB_ZONES_MIN
+
+        '--> Initialisation table des variables goujons
+
+        Dim nbStuds As Integer = BaseGoujons.GetUpperBound(0) + 1
+        ReDim tabLabelGoujons(nbStuds - 1)
+        ReDim tabLabelGoujonsAff(nbStuds - 1)
+
+        For iStud As Integer = 0 To nbStuds - 1
+            tabLabelGoujons(iStud) = BaseGoujons(iStud).Item1
+            tabLabelGoujonsAff(iStud) = PrefixeG & BaseGoujons(iStud).Item1
+        Next
 
     End Sub
 
@@ -226,12 +238,6 @@ Public Class Frm_Connection
 
                 Me.lbl_Connecteurs.Text = Bloc("CONNECTORS")
 
-                strGoujonsInit = MyPoutreLoc.Dalle.Connecteur.Get_ListName_GoujonDatabase()
-                ReDim strGoujons(strGoujonsInit.Length - 1)
-
-                For i As Integer = 0 To strGoujonsInit.Length - 1
-                    strGoujons(i) = Bloc("DIAMETER") & " " & strGoujonsInit(i)
-                Next
 
                 strValMaxConseillee = Bloc("RECMAXVALUE")
 
@@ -312,7 +318,7 @@ Public Class Frm_Connection
         Old_SelectedIndex_cmbTravee = Me.cmb_Travee.SelectedIndex
 
         Me.cmb_goujons.Items.Clear()
-        Me.cmb_goujons.Items.AddRange(strGoujons)
+        Me.cmb_goujons.Items.AddRange(tabLabelGoujonsAff)
         Me.cmb_goujons.SelectedIndex = 0
 
         Me.cmb_NbRow_I1.Items.Clear()
@@ -776,7 +782,7 @@ Public Class Frm_Connection
     ''' MAJ des textboxs et comboboxs dans la zone des connecteurs
     ''' </summary>
     Private Sub MAJ_affichage_txt_connecteurs()
-        Me.cmb_goujons.SelectedIndex = Array.IndexOf(strGoujonsInit, MyPoutreLoc.Dalle.Connecteur.nom)
+        Me.cmb_goujons.SelectedIndex = Array.IndexOf(tabLabelGoujons, MyPoutreLoc.Dalle.Connecteur.nom)
         Me.txt_hsc.Text = GetStringInUnit(MyPoutreLoc.Dalle.Connecteur.hsc, Enu_TypeVariable.Dimension, 4, 0, False)
         Me.txt_d.Text = GetStringInUnit(MyPoutreLoc.Dalle.Connecteur.d, Enu_TypeVariable.Dimension, 4, 0, False)
         Me.txt_fy.Text = GetStringInUnit(MyPoutreLoc.Dalle.Connecteur.Fy, Enu_TypeVariable.Contrainte, 4, 0, False)
@@ -1029,8 +1035,14 @@ Public Class Frm_Connection
     Private Sub cmb_goujons_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_goujons.SelectedIndexChanged
         If lBuild Then Exit Sub
 
-        MyPoutreLoc.Dalle.Connecteur.nom = strGoujonsInit(cmb_goujons.SelectedIndex)
-        MyPoutreLoc.Dalle.Connecteur.Caracteristiques_Goujons()
+        Dim iStud As Integer = cmb_goujons.SelectedIndex
+        MyPoutreLoc.Dalle.Connecteur.nom = tabLabelGoujons(istud)
+        'MyPoutreLoc.Dalle.Connecteur.Caracteristiques_Goujons()
+        MyPoutreLoc.Dalle.Connecteur.hsc = BaseGoujons(iStud).Item2
+        MyPoutreLoc.Dalle.Connecteur.d = BaseGoujons(iStud).Item3
+        MyPoutreLoc.Dalle.Connecteur.Fy = BaseGoujons(iStud).Item4
+        MyPoutreLoc.Dalle.Connecteur.Fu = BaseGoujons(iStud).Item5
+
         MAJ_affichage_txt_connecteurs()
         img_Stud.Invalidate()
 

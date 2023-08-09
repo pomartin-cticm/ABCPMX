@@ -33,6 +33,7 @@ Partial Class Frm_Connection
         Me.pan_Droite = New System.Windows.Forms.Panel()
         Me.TLPan_Droite = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Connection = New System.Windows.Forms.Label()
+        Me.pan_ImgConnection = New System.Windows.Forms.Panel()
         Me.img_Connection = New System.Windows.Forms.PictureBox()
         Me.pan_SaisieConnection = New System.Windows.Forms.Panel()
         Me.chk_AutomaticDesign = New System.Windows.Forms.CheckBox()
@@ -62,9 +63,9 @@ Partial Class Frm_Connection
         Me.txt_Indice = New System.Windows.Forms.TextBox()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.img_Stud = New System.Windows.Forms.PictureBox()
         Me.lbl_Connecteurs = New System.Windows.Forms.Label()
         Me.pan_SaisieConnecteurs = New System.Windows.Forms.Panel()
-        Me.img_Stud = New System.Windows.Forms.PictureBox()
         Me.etq_UnitFu = New System.Windows.Forms.Label()
         Me.etq_UnitFy = New System.Windows.Forms.Label()
         Me.etq_UnitD = New System.Windows.Forms.Label()
@@ -79,7 +80,6 @@ Partial Class Frm_Connection
         Me.img_hsc = New System.Windows.Forms.PictureBox()
         Me.cmb_goujons = New System.Windows.Forms.ComboBox()
         Me.ErrorProvider_Frm_Connection = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.pan_ImgConnection = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -87,18 +87,18 @@ Partial Class Frm_Connection
         Me.TLPan_PartieHaute.SuspendLayout()
         Me.pan_Droite.SuspendLayout()
         Me.TLPan_Droite.SuspendLayout()
+        Me.pan_ImgConnection.SuspendLayout()
         CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SaisieConnection.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
-        Me.pan_SaisieConnecteurs.SuspendLayout()
         CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_SaisieConnecteurs.SuspendLayout()
         CType(Me.img_fu, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_fy, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_d, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_hsc, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider_Frm_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_ImgConnection.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -236,6 +236,18 @@ Partial Class Frm_Connection
         Me.lbl_Connection.TabIndex = 0
         Me.lbl_Connection.Text = "lbl_Connection"
         Me.lbl_Connection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_ImgConnection
+        '
+        Me.pan_ImgConnection.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_ImgConnection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ImgConnection.Controls.Add(Me.img_Connection)
+        Me.pan_ImgConnection.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_ImgConnection.Location = New System.Drawing.Point(0, 30)
+        Me.pan_ImgConnection.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_ImgConnection.Name = "pan_ImgConnection"
+        Me.pan_ImgConnection.Size = New System.Drawing.Size(532, 160)
+        Me.pan_ImgConnection.TabIndex = 2
         '
         'img_Connection
         '
@@ -559,6 +571,19 @@ Partial Class Frm_Connection
         Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 386)
         Me.TLPan_Gauche.TabIndex = 0
         '
+        'img_Stud
+        '
+        Me.img_Stud.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Stud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Stud.Location = New System.Drawing.Point(0, 211)
+        Me.img_Stud.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.img_Stud.Name = "img_Stud"
+        Me.img_Stud.Size = New System.Drawing.Size(250, 175)
+        Me.img_Stud.TabIndex = 76
+        Me.img_Stud.TabStop = False
+        '
         'lbl_Connecteurs
         '
         Me.lbl_Connecteurs.AutoSize = True
@@ -596,19 +621,6 @@ Partial Class Frm_Connection
         Me.pan_SaisieConnecteurs.Name = "pan_SaisieConnecteurs"
         Me.pan_SaisieConnecteurs.Size = New System.Drawing.Size(250, 180)
         Me.pan_SaisieConnecteurs.TabIndex = 1
-        '
-        'img_Stud
-        '
-        Me.img_Stud.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
-            Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Stud.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Stud.Location = New System.Drawing.Point(0, 211)
-        Me.img_Stud.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
-        Me.img_Stud.Name = "img_Stud"
-        Me.img_Stud.Size = New System.Drawing.Size(250, 175)
-        Me.img_Stud.TabIndex = 76
-        Me.img_Stud.TabStop = False
         '
         'etq_UnitFu
         '
@@ -718,26 +730,14 @@ Partial Class Frm_Connection
         '
         Me.cmb_goujons.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_goujons.FormattingEnabled = True
-        Me.cmb_goujons.Location = New System.Drawing.Point(37, 12)
+        Me.cmb_goujons.Location = New System.Drawing.Point(83, 15)
         Me.cmb_goujons.Name = "cmb_goujons"
-        Me.cmb_goujons.Size = New System.Drawing.Size(174, 21)
+        Me.cmb_goujons.Size = New System.Drawing.Size(104, 21)
         Me.cmb_goujons.TabIndex = 0
         '
         'ErrorProvider_Frm_Connection
         '
         Me.ErrorProvider_Frm_Connection.ContainerControl = Me
-        '
-        'pan_ImgConnection
-        '
-        Me.pan_ImgConnection.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_ImgConnection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ImgConnection.Controls.Add(Me.img_Connection)
-        Me.pan_ImgConnection.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ImgConnection.Location = New System.Drawing.Point(0, 30)
-        Me.pan_ImgConnection.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_ImgConnection.Name = "pan_ImgConnection"
-        Me.pan_ImgConnection.Size = New System.Drawing.Size(532, 160)
-        Me.pan_ImgConnection.TabIndex = 2
         '
         'Frm_Connection
         '
@@ -759,21 +759,21 @@ Partial Class Frm_Connection
         Me.pan_Droite.ResumeLayout(False)
         Me.TLPan_Droite.ResumeLayout(False)
         Me.TLPan_Droite.PerformLayout()
+        Me.pan_ImgConnection.ResumeLayout(False)
         CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SaisieConnection.ResumeLayout(False)
         Me.pan_SaisieConnection.PerformLayout()
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
+        CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SaisieConnecteurs.ResumeLayout(False)
         Me.pan_SaisieConnecteurs.PerformLayout()
-        CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_fu, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_fy, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_d, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_hsc, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider_Frm_Connection, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_ImgConnection.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
