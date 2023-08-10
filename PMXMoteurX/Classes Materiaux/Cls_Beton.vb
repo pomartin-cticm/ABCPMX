@@ -1,10 +1,12 @@
 ﻿Public Class Cls_Beton
 
-#Region " Tableaux partagés "
+#Region " Constantes et Tableaux partagés "
 
-    Public Shared TabClasseBeton() As String = {"C20/25", "C25/30", "C30/37", "C35/45", "C40/50", "C45/55", "C50/60"}
+    Public Shared TabClasseBeton() As String = {"C20/25", "C25/30", "C30/37", "C35/45", "C40/50", "C45/55", "C50/60", "C70/85"}
+    Public Shared TabClasseBetonLeger() As String = {"LC20/22", "LC25/28", "LC30/33", "LC35/38", "LC40/44", "LC45/50", "LC50/55", "LC60/66"}
 
     Const kUnitMM As Decimal = 1000
+    Const RHOCDEFAUT As Decimal = 2500
 
 #End Region
 
@@ -55,6 +57,16 @@
     ''' Largeur d'ouverture maximale des fissures autorisée
     ''' </summary>
     Public wk_max As Decimal
+
+    ''' <summary>
+    ''' Masse volumique (kg/m3)
+    ''' </summary>
+    Public RhoC As Decimal
+
+    ''' <summary>
+    ''' Indique si béton léger
+    ''' </summary>
+    Public lLeger As Boolean
 
 #End Region
 
@@ -250,6 +262,9 @@
         Me.Fck = 20
         Me.lCrackingLimitation = True
         Me.wk_max = 0.4 / 1000
+        Me.RhoC = RHOCDEFAUT
+        Me.lLeger = False
+
         Calcul_Proprietes()
 
     End Sub

@@ -225,8 +225,11 @@ Module Mod_Declarations
         Public PorteeConsoleMin As Decimal      ' Portée minimale d'une travée en console
         Public RatioPorteeConsoleMax As Decimal ' Valeur maxi du ratio portée console / porte travée adjacente
         Public NbMaxiEtaisP As Integer          ' Nombre maxi d'étais ponctuels / travée normale
-        Public EpDalleMin As Decimal            ' Epaisseur minimale de dalle
+        'Public EpDalleMin As Decimal            ' Epaisseur minimale de dalle
         Public ThetaH As Decimal                ' Angle d'inclinaison / verticale des parois d'un renformis
+        Public EpDallePleineMin As Decimal      ' Epaisseur de dalle plein mini
+        Public RatioEpRenformisMax As Decimal   ' Ratio épaisseur maxi d'un renformis
+        Public EpDalleMixteMin As Decimal       ' Epaisseur de dalle mixte mini (au dessus du bac)
     End Structure
 
     Public Structure Struc_OptionsCalcul        ' Options de calcul
@@ -253,9 +256,11 @@ Module Mod_Declarations
 
         OptionsScope.NbMaxiEtaisP = NBPROPPINGMAX
 
-        OptionsScope.EpDalleMin = 0.05
+        'OptionsScope.EpDalleMin = 0.05
         OptionsScope.ThetaH = THETAHDEFAULT
-
+        OptionsScope.EpDallePleineMin = EPDALLEMINIDEFAUT
+        OptionsScope.RatioEpRenformisMax = RATIOEPRENFORMISMAXDEFAUT
+        OptionsScope.EpDalleMixteMin = EPDALLEMIXTEMINIDEFAUT
 
     End Sub
 
@@ -313,6 +318,10 @@ Module Mod_Declarations
 
 #Region " Constantes et valeurs par défaut "
 
+    Private Const EPDALLEMINIDEFAUT As Decimal = 0.01       ' Epaisseur mini de dalle pleine =10 cm
+    Private Const RATIOEPRENFORMISMAXDEFAUT As Decimal = 0.4
+    Private Const EPDALLEMIXTEMINIDEFAUT As Decimal = 0.005 ' Epaisseur de dalle mixte mini 5 cm au dessus du bac
+
     Private Const THETAHDEFAULT As Decimal = 30             ' Angle inclinaison renformis
 
     Private Const PORTEEMIN As Decimal = 5
@@ -330,14 +339,14 @@ Module Mod_Declarations
     Public Const NBRESTRAINMIN As Integer = 0
     Public Const NBRESTRAINMAX As Integer = 5
 
-    Public Const GAMMA_ACTION_INF As Decimal = 0
-    Public Const GAMMA_ACTION_SUP As Decimal = 2
+    Public Const GAMMA_ACTION_MIN As Decimal = 0
+    Public Const GAMMA_ACTION_MAX As Decimal = 2
 
-    Public Const PSI_COMBINAISON_INF As Decimal = 0
-    Public Const PSI_COMBINAISON_SUP As Decimal = 1
+    Public Const PSI_COMBINAISON_MIN As Decimal = 0
+    Public Const PSI_COMBINAISON_MAX As Decimal = 1
 
-    Public Const GAMMA_RESISTANCE_INF As Decimal = 0
-    Public Const GAMMA_RESISTANCE_SUP As Decimal = 2
+    Public Const GAMMA_RESISTANCE_MIN As Decimal = 1        ' Comment on divise par gamma, autant éviter les valeurs nulles !
+    Public Const GAMMA_RESISTANCE_MAX As Decimal = 2
 
 #End Region
 

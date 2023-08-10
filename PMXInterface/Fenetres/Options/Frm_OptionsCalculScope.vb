@@ -57,6 +57,8 @@
         PrepareTextBoxExpert(Me.txt_PorteeConsoleMin, LogicielOptions.lExpert)
         PrepareTextBoxExpert(Me.txt_RatioConsoleMax, LogicielOptions.lExpert)
 
+        PrepareTextBoxExpert(Me.txt_EpDalleMin, LogicielOptions.lExpert)
+
     End Sub
 
     Private Sub PrepareTextBoxExpert(ByRef MyTxt As TextBox, lExpert As Boolean)
@@ -80,6 +82,7 @@
     End Sub
 
     Private Sub GestionUnites()
+        Me.etq_UnitD1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitL1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
@@ -100,6 +103,9 @@
 
         Me.txt_ThetaH.Text = GetStringInUnit(LocalOptionsScope.ThetaH, Enu_TypeVariable.SansType, 4, 2, False)
 
+        '--> Epaisseurs de dalle
+
+        Me.txt_EpDalleMin.Text = GetStringInUnit(LocalOptionsScope.EpDallePleineMin, Enu_TypeVariable.Dimension, 4, 2, False)
 
     End Sub
 
@@ -109,7 +115,7 @@
 
 
     Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_PorteeMini.TextChanged, txt_ThetaH.TextChanged,
-        txt_PorteeMaxi.TextChanged, txt_PorteeConsoleMin.TextChanged, txt_RatioConsoleMax.TextChanged
+        txt_PorteeMaxi.TextChanged, txt_PorteeConsoleMin.TextChanged, txt_RatioConsoleMax.TextChanged, txt_EpDalleMin.TextChanged
 
         If lBuild Then Exit Sub
         Dim lPortees As Boolean = False
@@ -130,6 +136,8 @@
                     LocalOptionsScope.ThetaH = ValeurUI
                 Case Me.txt_RatioConsoleMax.Name
                     LocalOptionsScope.RatioPorteeConsoleMax = ValeurUI
+                Case Me.txt_EpDalleMin.Name
+                    LocalOptionsScope.EpDallePleineMin = ValeurUI
             End Select
 
         End If
@@ -185,6 +193,12 @@
                 ValMin = 0.1
                 ValMax = 1
 
+            Case Me.txt_EpDalleMin.Name
+
+                ValMin = 0.04
+                ValMax = 1
+                lValMax = False
+
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
 
@@ -204,7 +218,7 @@
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint, img_PorteeL2.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint, img_PorteeL2.Paint, img_Td1.Paint
 
         '--> Déclarations
 
@@ -244,6 +258,10 @@
             Case Me.img_PorteeConsoleMin.Name
                 strSymbol = "L"
                 strIndice = "c"
+
+            Case Me.img_Td1.Name
+                strSymbol = "t"
+                strIndice = "d"
 
         End Select
 

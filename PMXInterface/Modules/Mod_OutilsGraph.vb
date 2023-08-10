@@ -151,9 +151,7 @@ Module Mod_OutilsGraph
                               ByVal HAlignCadre As HorizontalAlignment, ByVal HAlignTexte As HorizontalAlignment, ByVal VAlign As VerticalAlignement,
                               ByVal MyBrushFond As Brush, ByVal MyPen As Pen)
         '-------------------------------------------------------------------------------------
-        '
         '   Dessin d'un texte sur un fond et entouré dans un Graphics
-        '
         '-------------------------------------------------------------------------------------
         '
         '   MyGr        [E] :   Graphics recevant le dessin

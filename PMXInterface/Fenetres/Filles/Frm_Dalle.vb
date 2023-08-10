@@ -5,8 +5,6 @@ Imports System.Drawing.Drawing2D
 
 Public Class Frm_Dalle
 
-
-
 #Region " Variables locales "
 
     Dim lBuild As Boolean = True
@@ -14,6 +12,7 @@ Public Class Frm_Dalle
     Dim strType(2) As String
 
     Dim ClasseBeton() As String = Cls_Beton.TabClasseBeton
+    Dim ClasseBetonLeger() As String = Cls_Beton.TabClasseBetonLeger
     Dim ClasseAcierArma() As String = Cls_AcierArmature.tabClasseAcierArma
 
     Public MyDalleLoc As New Cls_Dalle
@@ -84,6 +83,7 @@ Public Class Frm_Dalle
                 Me.lbl_Beton.Text = Bloc("CONCRETE")
 
                 Me.lbl_ClasseE.Text = Bloc("CLASS")
+                Me.chk_BetonLeger.Text = Bloc("LIGHTCONCRETE")
 
                 '=== BAC ==========================================================================
 
@@ -154,8 +154,7 @@ Public Class Frm_Dalle
         Me.etq_UnitDim8.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim9.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
-        Me.etq_UnitSigma1.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
-        Me.etq_UnitModule1.Text = LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
+        Me.etq_UnitRhoC.Text = "kg/m3"
         Me.etq_UnitSigma2.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
 
     End Sub
@@ -165,6 +164,18 @@ Public Class Frm_Dalle
         Cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
 
         lCofraPlus220 = MyDalleLoc.Bac.lCofraplus220
+
+        'Dans la première génération des EN, on supprime la dernière classes des tableaux
+
+        If OptionsCalcul.Norme = Enu_Normes.Eurocodes_G1 Then
+
+            Dim nbClasse As Integer = ClasseBeton.GetUpperBound(0)
+            ReDim Preserve ClasseBeton(nbClasse - 1)
+
+            nbClasse = ClasseBetonLeger.GetUpperBound(0)
+            ReDim Preserve ClasseBetonLeger(nbClasse - 1)
+
+        End If
 
     End Sub
 
@@ -191,10 +202,9 @@ Public Class Frm_Dalle
         Me.txt_BacNom.Enabled = False
         Me.txt_BacNom.BackColor = CouleurReadOnly
 
-        Me.txt_Fck.Enabled = False
-        Me.txt_Fck.BackColor = CouleurReadOnly
-        Me.txt_Ecm.Enabled = False
-        Me.txt_Ecm.BackColor = CouleurReadOnly
+
+        'Me.txt_RhoC.Enabled = False
+        'Me.txt_RhoC.BackColor = CouleurReadOnly
         Me.txt_Fsk.Enabled = False
         Me.txt_Fsk.BackColor = CouleurReadOnly
 
@@ -212,11 +222,19 @@ Public Class Frm_Dalle
         Me.img_Dalle.Dock = DockStyle.Fill
 
         RemplirComboAvecTableau(Me.cmb_TypeDalle, strType)
-        RemplirComboAvecTableau(Me.cmb_ClasseBetonEnrobage, ClasseBeton)
         RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
+        RemplirComboClasseBeton()
 
         MAJI_ChangeBac()
 
+    End Sub
+
+    Private Sub RemplirComboClasseBeton()
+        If MyDalleLoc.beton.lLeger Then
+            RemplirComboAvecTableau(Me.cmb_ClasseBetonDalle, ClasseBetonLeger)
+        Else
+            RemplirComboAvecTableau(Me.cmb_ClasseBetonDalle, ClasseBeton)
+        End If
     End Sub
 
     Private Sub RemplirComboAvecTableau(MyCombo As ComboBox, tabValeurs() As String)
@@ -250,10 +268,13 @@ Public Class Frm_Dalle
         Dim Chaine As String
         Chaine = MyDalleLoc.beton.Classe
         If Me.ClasseBeton.Contains(Chaine) Then
-            Me.cmb_ClasseBetonEnrobage.SelectedIndex = Array.IndexOf(Me.ClasseBeton, Chaine)
+            Me.cmb_ClasseBetonDalle.SelectedIndex = Array.IndexOf(Me.ClasseBeton, Chaine)
         Else
-            Me.cmb_ClasseBetonEnrobage.SelectedIndex = 0
+            Me.cmb_ClasseBetonDalle.SelectedIndex = 0
         End If
+
+        Me.txt_RhoC.Text = GetStringInUnit(MyDalleLoc.beton.RhoC, Enu_TypeVariable.SansType, 3, 0, False)
+        Me.chk_BetonLeger.Checked = MyDalleLoc.beton.lLeger
 
         MAJI_ProprietesBeton()
 
@@ -335,8 +356,8 @@ Public Class Frm_Dalle
 
         MyDalleLoc.beton.Calcul_Proprietes()
 
-        Me.txt_Fck.Text = GetStringNoUnit(MyDalleLoc.beton.Fck, Enu_TypeVariable.Contrainte)
-        Me.txt_Ecm.Text = GetStringNoUnit(MyDalleLoc.beton.Ecm, Enu_TypeVariable.ModuleY)
+        'Me.txt_Fck.Text = GetStringNoUnit(MyDalleLoc.beton.Fck, Enu_TypeVariable.Contrainte)
+        'Me.txt_RhoC.Text = GetStringNoUnit(MyDalleLoc.beton.Ecm, Enu_TypeVariable.ModuleY)
 
     End Sub
 
@@ -662,13 +683,43 @@ Public Class Frm_Dalle
         Me.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_Hd.Leave, txt_zs.Leave, txt_PhiS.Leave, txt_esp.Leave
+    Private Sub ComboBox_Enter(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.Enter
+        If lBuild Then Exit Sub
+        Select Case sender.name
+            Case Me.cmb_ClasseBetonDalle.Name
+                iSelect = 1000
+        End Select
+        Me.img_Dalle.Invalidate()
+    End Sub
+
+    Private Sub ComboBox_Leave(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.Leave
         If lBuild Then Exit Sub
         iSelect = -1
         Me.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Enter, txt_Hd.Enter, txt_zs.Enter, txt_PhiS.Enter, txt_esp.Enter
+    Private Sub chk_BetonLeger_Enter(sender As Object, e As EventArgs) Handles chk_BetonLeger.Enter
+        If lBuild Then Exit Sub
+
+        iSelect = 1000
+
+        Me.img_Dalle.Invalidate()
+    End Sub
+
+    Private Sub chk_BetonLeger_Leave(sender As Object, e As EventArgs) Handles chk_BetonLeger.Leave
+        If lBuild Then Exit Sub
+        iSelect = -1
+        Me.img_Dalle.Invalidate()
+    End Sub
+
+
+    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_Hd.Leave, txt_zs.Leave, txt_PhiS.Leave, txt_esp.Leave, txt_RhoC.Leave
+        If lBuild Then Exit Sub
+        iSelect = -1
+        Me.img_Dalle.Invalidate()
+    End Sub
+
+    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Enter, txt_Hd.Enter, txt_zs.Enter, txt_PhiS.Enter, txt_esp.Enter, txt_RhoC.Enter
         If lBuild Then Exit Sub
         Select Case sender.name
             Case Me.txt_Hd.Name
@@ -682,6 +733,8 @@ Public Class Frm_Dalle
             Case Me.txt_zs.Name
                 iSelect = (iLitSelect + 1) * 100 + 3
 
+            Case Me.txt_RhoC.Name
+                iSelect = 1000
         End Select
         Me.img_Dalle.Invalidate()
     End Sub
@@ -814,7 +867,7 @@ Public Class Frm_Dalle
 
     End Sub
 
-    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_Hd.TextChanged, txt_Hh.TextChanged
+    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_Hd.TextChanged, txt_Hh.TextChanged, txt_RhoC.TextChanged
 
         If lBuild Then Exit Sub
         lBuild = True
@@ -829,6 +882,9 @@ Public Class Frm_Dalle
 
                 Case Me.txt_Hh.Name
                     MyDalleLoc.t_h = Valeur
+
+                Case Me.txt_RhoC.Name
+                    MyDalleLoc.beton.RhoC = Valeur
 
             End Select
 
@@ -856,7 +912,8 @@ Public Class Frm_Dalle
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
 
         Const TDMAXI As Decimal = 0.5
-        Const TDMINI As Decimal = 0.05
+        'Const TDMINI As Decimal = 0.05
+        Const HPMINI As Decimal = 0.04
         Const PHIMIN As Decimal = 0.003
         Const PHIMAX As Decimal = 0.04
         Const ESPMIN As Decimal = 0.05
@@ -866,8 +923,21 @@ Public Class Frm_Dalle
         Select Case MyTxt.Name
             Case Me.txt_Hd.Name
 
-                ValMin = TDMINI / kUnit
+                Select Case MyDalleLoc.type
+                    Case Cls_Dalle.Enum_TypeDalle.Pleine, Cls_Dalle.Enum_TypeDalle.Prefabriquee
+                        ValMin = OptionsScope.EpDallePleineMin / kUnit
+                    Case Cls_Dalle.Enum_TypeDalle.Mixte
+                        ValMin = (OptionsScope.EpDalleMixteMin + HPMINI) / kUnit
+                End Select
+
                 ValMax = TDMAXI / kUnit
+
+            Case Me.txt_RhoC.Name
+
+                ValMin = 1500
+                ValMax = 0
+                lValMax = False
+                kUnit = 1
 
             Case Me.txt_PhiS.Name
 
@@ -883,6 +953,11 @@ Public Class Frm_Dalle
 
                 ValMin = ZMIN / kUnit
                 ValMax = (MyDalleLoc.EpaisseurActive - ZMIN) / kUnit
+
+            Case Me.txt_Hh.Name
+
+                ValMin = 0
+                ValMax = OptionsScope.RatioEpRenformisMax * MyDalleLoc.t_d / kUnit
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -918,6 +993,22 @@ Public Class Frm_Dalle
         MyDalleLoc.Bac.lPreperce = Me.rdb_Preperce.Checked
     End Sub
 
+    Private Sub chk_BetonLeger_CheckedChanged(sender As Object, e As EventArgs) Handles chk_BetonLeger.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Dim Index As Integer = Me.cmb_ClasseBetonDalle.SelectedIndex
+
+        MyDalleLoc.beton.lLeger = Me.chk_BetonLeger.Checked
+
+        RemplirComboClasseBeton()
+
+        Me.cmb_ClasseBetonDalle.SelectedIndex = Index
+        MyDalleLoc.beton.Classe = Me.cmb_ClasseBetonDalle.Text
+
+        Me.img_Dalle.Invalidate()
+
+    End Sub
+
     Private Sub OrientationBac_checkedChanged(sender As Object, e As EventArgs) Handles rdb_BacParallele.CheckedChanged, rdb_BacPerpendiculaire.CheckedChanged
         If lBuild Then Exit Sub
 
@@ -942,10 +1033,10 @@ Public Class Frm_Dalle
 
     End Sub
 
-    Private Sub cmb_ClasseBetonEnrobage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClasseBetonEnrobage.SelectedIndexChanged
+    Private Sub cmb_ClasseBetonEnrobage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.SelectedIndexChanged
         If lBuild Then Exit Sub
 
-        MyDalleLoc.beton.Classe = Me.ClasseBeton(Me.cmb_ClasseBetonEnrobage.SelectedIndex)
+        MyDalleLoc.beton.Classe = Me.ClasseBeton(Me.cmb_ClasseBetonDalle.SelectedIndex)
 
         MAJI_ProprietesBeton()
         Me.img_Dalle.Invalidate()
@@ -956,8 +1047,7 @@ Public Class Frm_Dalle
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles Img_Hd.Paint, img_Fy.Paint,
-        img_Fck.Paint, img_Ecm.Paint, img_Hp.Paint, Img_Hh.Paint, img_zs.Paint, img_PhiS.Paint, img_esp.Paint,
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles Img_Hd.Paint, img_Fy.Paint, img_RhoC.Paint, img_Hp.Paint, Img_Hh.Paint, img_zs.Paint, img_PhiS.Paint, img_esp.Paint,
         img_EpPredalle.Paint, img_EpJoint.Paint
 
         '--> Déclarations
@@ -973,6 +1063,7 @@ Public Class Frm_Dalle
         Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
         Dim hIndice As Single = hCar / 2
         Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+        Dim AlignH As Enu_AlignementH = Enu_AlignementH.Droite
 
         '--> Initialisation
 
@@ -984,12 +1075,11 @@ Public Class Frm_Dalle
             Case Me.img_Fy.Name
                 strSymbol = "f"
                 strIndice = "sk"
-            Case Me.img_Ecm.Name
-                strSymbol = "E"
-                strIndice = "cm"
-            Case Me.img_Fck.Name
-                strSymbol = "f"
-                strIndice = "ck"
+            Case Me.img_RhoC.Name
+                strSymbol = "r"
+                strIndice = "c"
+                lGrec = True
+
             Case Me.Img_Hd.Name
                 strSymbol = "t"
                 strIndice = "d"
@@ -1020,8 +1110,10 @@ Public Class Frm_Dalle
 
         '--> Dessin
 
-        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_AlignementH.Gauche,
-           FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
+        DrawSymbolN(e.Graphics, Brushes.Black, strSymbol, strIndice, sWI, sHI, lGrec, lIndice, AlignH,
+                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
+        'DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_AlignementH.Gauche,
+        '   FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
 

@@ -51,6 +51,11 @@ Partial Class Frm_OptionsCalculScope
         Me.img_PorteeMini = New System.Windows.Forms.PictureBox()
         Me.lbl_Scope = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lbl_EpDallePleine = New System.Windows.Forms.Label()
+        Me.etq_UnitD1 = New System.Windows.Forms.Label()
+        Me.txt_EpDalleMin = New System.Windows.Forms.TextBox()
+        Me.img_Td1 = New System.Windows.Forms.PictureBox()
         Me.pan_Scope.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
@@ -59,6 +64,7 @@ Partial Class Frm_OptionsCalculScope
         CType(Me.img_ThetaRd, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PorteeMini, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Td1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Scope
@@ -88,6 +94,11 @@ Partial Class Frm_OptionsCalculScope
         '
         'pan_Conteneur
         '
+        Me.pan_Conteneur.Controls.Add(Me.Label1)
+        Me.pan_Conteneur.Controls.Add(Me.lbl_EpDallePleine)
+        Me.pan_Conteneur.Controls.Add(Me.etq_UnitD1)
+        Me.pan_Conteneur.Controls.Add(Me.txt_EpDalleMin)
+        Me.pan_Conteneur.Controls.Add(Me.img_Td1)
         Me.pan_Conteneur.Controls.Add(Me.lbl_Dalle)
         Me.pan_Conteneur.Controls.Add(Me.img_PorteeL2)
         Me.pan_Conteneur.Controls.Add(Me.txt_RatioConsoleMax)
@@ -364,6 +375,55 @@ Partial Class Frm_OptionsCalculScope
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'Label1
+        '
+        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(502, 229)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(13, 13)
+        Me.Label1.TabIndex = 134
+        Me.Label1.Text = "≤"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'lbl_EpDallePleine
+        '
+        Me.lbl_EpDallePleine.AutoSize = True
+        Me.lbl_EpDallePleine.Location = New System.Drawing.Point(42, 230)
+        Me.lbl_EpDallePleine.Name = "lbl_EpDallePleine"
+        Me.lbl_EpDallePleine.Size = New System.Drawing.Size(89, 13)
+        Me.lbl_EpDallePleine.TabIndex = 132
+        Me.lbl_EpDallePleine.Text = "lbl_EpDallePleine"
+        Me.lbl_EpDallePleine.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'etq_UnitD1
+        '
+        Me.etq_UnitD1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitD1.AutoSize = True
+        Me.etq_UnitD1.Location = New System.Drawing.Point(479, 230)
+        Me.etq_UnitD1.Name = "etq_UnitD1"
+        Me.etq_UnitD1.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitD1.TabIndex = 129
+        Me.etq_UnitD1.Text = "mm"
+        '
+        'txt_EpDalleMin
+        '
+        Me.txt_EpDalleMin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EpDalleMin.Location = New System.Drawing.Point(415, 226)
+        Me.txt_EpDalleMin.Name = "txt_EpDalleMin"
+        Me.txt_EpDalleMin.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EpDalleMin.TabIndex = 127
+        '
+        'img_Td1
+        '
+        Me.img_Td1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Td1.Location = New System.Drawing.Point(520, 226)
+        Me.img_Td1.Name = "img_Td1"
+        Me.img_Td1.Size = New System.Drawing.Size(46, 20)
+        Me.img_Td1.TabIndex = 128
+        Me.img_Td1.TabStop = False
+        '
         'Frm_OptionsCalculScope
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -382,6 +442,7 @@ Partial Class Frm_OptionsCalculScope
         CType(Me.img_ThetaRd, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PorteeMini, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Td1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -414,4 +475,9 @@ Partial Class Frm_OptionsCalculScope
     Friend WithEvents lbl_Dalle As Label
     Friend WithEvents img_PorteeL2 As PictureBox
     Friend WithEvents txt_RatioConsoleMax As TextBox
+    Friend WithEvents Label1 As Label
+    Friend WithEvents lbl_EpDallePleine As Label
+    Friend WithEvents etq_UnitD1 As Label
+    Friend WithEvents txt_EpDalleMin As TextBox
+    Friend WithEvents img_Td1 As PictureBox
 End Class

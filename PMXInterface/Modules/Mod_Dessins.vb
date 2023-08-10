@@ -183,6 +183,10 @@ Module Mod_Dessins
         '   dCar        [E] :   Dimension pour l'affichage
         '   bEffG, BEffD[E] :   Largeur de dalle représentée à gauche et à droite
         '-----------------------------------------------------------------------------------------------
+        '   iSelect:    0 : hauteur totale de dalle
+        '               1 : renformis
+        '            1000 : béton dalle  
+        '-----------------------------------------------------------------------------------------------
 
         '--> Déclarations
 
@@ -213,6 +217,9 @@ Module Mod_Dessins
 
         '# Hauteur de la dalle 
 
+        MyColor = StyleCouleur(iSelect, 0)
+        MyPen.Color = MyColor
+
         yo = MyDalle.EpRenformis
         ye = MyDalle.zTop
 
@@ -220,7 +227,26 @@ Module Mod_Dessins
         Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
+        '# Hauteur du renformis
+
+        If (MyDalle.type = Cls_Dalle.Enum_TypeDalle.Pleine) And (MyDalle.t_h > 0) Then
+
+            MyColor = StyleCouleur(iSelect, 1)
+            MyPen.Color = MyColor
+
+            yo = MyDalle.EpRenformis
+            ye = 0
+
+            AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
+            Chaine = GetStringNoUnit(Math.Abs(ye - yo), Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
+
         '# Hauteur totale de la section + dalle
+
+        MyColor = StyleCouleur(iSelect, -2)
+        MyPen.Color = MyColor
 
         xCoteZ = -BeffG - 2 * dCar
 
@@ -231,7 +257,29 @@ Module Mod_Dessins
         Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
+        '# Béton de la dalle
 
+        If iSelect = 1000 Then
+
+            MyColor = StyleCouleur(iSelect, 1000)
+            MyPen.Color = MyColor
+
+            Dim lsChaine As New List(Of String)
+            Dim strBeton As String = "Concrete "
+
+            lsChaine.Clear()
+            lsChaine.Add(strBeton & MyDalle.beton.Classe)
+            lsChaine.Add("fck" & " = " & GetStringInUnit(MyDalle.beton.Fck, Enu_TypeVariable.Contrainte, 3, 1, True))
+            lsChaine.Add("Ecm" & " = " & GetStringInUnit(MyDalle.beton.Ecm, Enu_TypeVariable.ModuleY, 3, 1, True))
+            lsChaine.Add("n0" & " = " & GetStringInUnit(Cls_Acier.EYACIER / MyDalle.beton.Ecm, Enu_TypeVariable.SansType, 3, 2, True))
+            lsChaine.Add("RhoC" & " = " & GetStringInUnit(MyDalle.beton.RhoC, Enu_TypeVariable.SansType, 3, 2, False) & " kg/m3")
+
+            xo = 0
+
+            AddTabTextFond(MyGr, New SolidBrush(MyColor), lsChaine, MyFontNormal, xo, ye, MyParAffA, HorizontalAlignment.Left, HorizontalAlignment.Left, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen)
+
+
+        End If
 
     End Sub
 

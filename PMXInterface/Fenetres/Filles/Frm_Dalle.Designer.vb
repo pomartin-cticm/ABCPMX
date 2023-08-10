@@ -71,13 +71,10 @@ Partial Class Frm_Dalle
         Me.lbl_Acier = New System.Windows.Forms.Label()
         Me.lbl_Armatures = New System.Windows.Forms.Label()
         Me.pan_Beton = New System.Windows.Forms.Panel()
-        Me.txt_Ecm = New System.Windows.Forms.TextBox()
-        Me.img_Ecm = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitModule1 = New System.Windows.Forms.Label()
-        Me.txt_Fck = New System.Windows.Forms.TextBox()
-        Me.img_Fck = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitSigma1 = New System.Windows.Forms.Label()
-        Me.cmb_ClasseBetonEnrobage = New System.Windows.Forms.ComboBox()
+        Me.txt_RhoC = New System.Windows.Forms.TextBox()
+        Me.img_RhoC = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitRhoC = New System.Windows.Forms.Label()
+        Me.cmb_ClasseBetonDalle = New System.Windows.Forms.ComboBox()
         Me.lbl_ClasseE = New System.Windows.Forms.Label()
         Me.lbl_Beton = New System.Windows.Forms.Label()
         Me.pan_Type = New System.Windows.Forms.Panel()
@@ -123,6 +120,7 @@ Partial Class Frm_Dalle
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_BOArma = New System.Windows.Forms.ImageList(Me.components)
         Me.ToolTipDalle = New System.Windows.Forms.ToolTip(Me.components)
+        Me.chk_BetonLeger = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -142,8 +140,7 @@ Partial Class Frm_Dalle
         Me.Panel2.SuspendLayout()
         CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Beton.SuspendLayout()
-        CType(Me.img_Ecm, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Fck, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Type.SuspendLayout()
         Me.pan_Predalle.SuspendLayout()
         CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -732,13 +729,11 @@ Partial Class Frm_Dalle
         '
         Me.pan_Beton.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Beton.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Beton.Controls.Add(Me.txt_Ecm)
-        Me.pan_Beton.Controls.Add(Me.img_Ecm)
-        Me.pan_Beton.Controls.Add(Me.etq_UnitModule1)
-        Me.pan_Beton.Controls.Add(Me.txt_Fck)
-        Me.pan_Beton.Controls.Add(Me.img_Fck)
-        Me.pan_Beton.Controls.Add(Me.etq_UnitSigma1)
-        Me.pan_Beton.Controls.Add(Me.cmb_ClasseBetonEnrobage)
+        Me.pan_Beton.Controls.Add(Me.chk_BetonLeger)
+        Me.pan_Beton.Controls.Add(Me.txt_RhoC)
+        Me.pan_Beton.Controls.Add(Me.img_RhoC)
+        Me.pan_Beton.Controls.Add(Me.etq_UnitRhoC)
+        Me.pan_Beton.Controls.Add(Me.cmb_ClasseBetonDalle)
         Me.pan_Beton.Controls.Add(Me.lbl_ClasseE)
         Me.pan_Beton.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Beton.Location = New System.Drawing.Point(0, 172)
@@ -747,77 +742,50 @@ Partial Class Frm_Dalle
         Me.pan_Beton.Size = New System.Drawing.Size(251, 85)
         Me.pan_Beton.TabIndex = 9
         '
-        'txt_Ecm
+        'txt_RhoC
         '
-        Me.txt_Ecm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Ecm.Location = New System.Drawing.Point(128, 56)
-        Me.txt_Ecm.Name = "txt_Ecm"
-        Me.txt_Ecm.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Ecm.TabIndex = 62
+        Me.txt_RhoC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_RhoC.Location = New System.Drawing.Point(128, 56)
+        Me.txt_RhoC.Name = "txt_RhoC"
+        Me.txt_RhoC.Size = New System.Drawing.Size(58, 20)
+        Me.txt_RhoC.TabIndex = 62
         '
-        'img_Ecm
+        'img_RhoC
         '
-        Me.img_Ecm.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Ecm.Location = New System.Drawing.Point(83, 56)
-        Me.img_Ecm.Name = "img_Ecm"
-        Me.img_Ecm.Size = New System.Drawing.Size(46, 20)
-        Me.img_Ecm.TabIndex = 63
-        Me.img_Ecm.TabStop = False
+        Me.img_RhoC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_RhoC.Location = New System.Drawing.Point(83, 56)
+        Me.img_RhoC.Name = "img_RhoC"
+        Me.img_RhoC.Size = New System.Drawing.Size(46, 20)
+        Me.img_RhoC.TabIndex = 63
+        Me.img_RhoC.TabStop = False
         '
-        'etq_UnitModule1
+        'etq_UnitRhoC
         '
-        Me.etq_UnitModule1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitModule1.AutoSize = True
-        Me.etq_UnitModule1.Location = New System.Drawing.Point(192, 59)
-        Me.etq_UnitModule1.Name = "etq_UnitModule1"
-        Me.etq_UnitModule1.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitModule1.TabIndex = 61
-        Me.etq_UnitModule1.Text = "mm"
+        Me.etq_UnitRhoC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitRhoC.AutoSize = True
+        Me.etq_UnitRhoC.Location = New System.Drawing.Point(192, 59)
+        Me.etq_UnitRhoC.Name = "etq_UnitRhoC"
+        Me.etq_UnitRhoC.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitRhoC.TabIndex = 61
+        Me.etq_UnitRhoC.Text = "mm"
         '
-        'txt_Fck
+        'cmb_ClasseBetonDalle
         '
-        Me.txt_Fck.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Fck.Location = New System.Drawing.Point(128, 32)
-        Me.txt_Fck.Name = "txt_Fck"
-        Me.txt_Fck.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Fck.TabIndex = 59
-        '
-        'img_Fck
-        '
-        Me.img_Fck.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Fck.Location = New System.Drawing.Point(83, 32)
-        Me.img_Fck.Name = "img_Fck"
-        Me.img_Fck.Size = New System.Drawing.Size(46, 20)
-        Me.img_Fck.TabIndex = 60
-        Me.img_Fck.TabStop = False
-        '
-        'etq_UnitSigma1
-        '
-        Me.etq_UnitSigma1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitSigma1.AutoSize = True
-        Me.etq_UnitSigma1.Location = New System.Drawing.Point(192, 35)
-        Me.etq_UnitSigma1.Name = "etq_UnitSigma1"
-        Me.etq_UnitSigma1.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitSigma1.TabIndex = 58
-        Me.etq_UnitSigma1.Text = "mm"
-        '
-        'cmb_ClasseBetonEnrobage
-        '
-        Me.cmb_ClasseBetonEnrobage.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.cmb_ClasseBetonDalle.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmb_ClasseBetonEnrobage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_ClasseBetonEnrobage.FormattingEnabled = True
-        Me.cmb_ClasseBetonEnrobage.Location = New System.Drawing.Point(127, 6)
-        Me.cmb_ClasseBetonEnrobage.Name = "cmb_ClasseBetonEnrobage"
-        Me.cmb_ClasseBetonEnrobage.Size = New System.Drawing.Size(112, 21)
-        Me.cmb_ClasseBetonEnrobage.TabIndex = 57
+        Me.cmb_ClasseBetonDalle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_ClasseBetonDalle.FormattingEnabled = True
+        Me.cmb_ClasseBetonDalle.Location = New System.Drawing.Point(128, 30)
+        Me.cmb_ClasseBetonDalle.Name = "cmb_ClasseBetonDalle"
+        Me.cmb_ClasseBetonDalle.Size = New System.Drawing.Size(111, 21)
+        Me.cmb_ClasseBetonDalle.TabIndex = 57
         '
         'lbl_ClasseE
         '
         Me.lbl_ClasseE.AutoSize = True
         Me.lbl_ClasseE.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_ClasseE.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_ClasseE.Location = New System.Drawing.Point(11, 9)
+        Me.lbl_ClasseE.Location = New System.Drawing.Point(11, 33)
         Me.lbl_ClasseE.Name = "lbl_ClasseE"
         Me.lbl_ClasseE.Size = New System.Drawing.Size(61, 13)
         Me.lbl_ClasseE.TabIndex = 56
@@ -1291,6 +1259,16 @@ Partial Class Frm_Dalle
         Me.imgList_BOArma.Images.SetKeyName(0, "Ajouter")
         Me.imgList_BOArma.Images.SetKeyName(1, "Supprimer")
         '
+        'chk_BetonLeger
+        '
+        Me.chk_BetonLeger.AutoSize = True
+        Me.chk_BetonLeger.Location = New System.Drawing.Point(13, 9)
+        Me.chk_BetonLeger.Name = "chk_BetonLeger"
+        Me.chk_BetonLeger.Size = New System.Drawing.Size(105, 17)
+        Me.chk_BetonLeger.TabIndex = 64
+        Me.chk_BetonLeger.Text = "chk_BetonLeger"
+        Me.chk_BetonLeger.UseVisualStyleBackColor = True
+        '
         'Frm_Dalle
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1327,8 +1305,7 @@ Partial Class Frm_Dalle
         CType(Me.img_Fy, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Beton.ResumeLayout(False)
         Me.pan_Beton.PerformLayout()
-        CType(Me.img_Ecm, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Fck, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Type.ResumeLayout(False)
         Me.pan_Type.PerformLayout()
         Me.pan_Predalle.ResumeLayout(False)
@@ -1398,13 +1375,10 @@ Partial Class Frm_Dalle
     Friend WithEvents cmb_TypeDalle As ComboBox
     Friend WithEvents lbl_Beton As Label
     Friend WithEvents pan_Beton As Panel
-    Friend WithEvents txt_Ecm As TextBox
-    Friend WithEvents img_Ecm As PictureBox
-    Friend WithEvents etq_UnitModule1 As Label
-    Friend WithEvents txt_Fck As TextBox
-    Friend WithEvents img_Fck As PictureBox
-    Friend WithEvents etq_UnitSigma1 As Label
-    Friend WithEvents cmb_ClasseBetonEnrobage As ComboBox
+    Friend WithEvents txt_RhoC As TextBox
+    Friend WithEvents img_RhoC As PictureBox
+    Friend WithEvents etq_UnitRhoC As Label
+    Friend WithEvents cmb_ClasseBetonDalle As ComboBox
     Friend WithEvents lbl_ClasseE As Label
     Friend WithEvents lbl_Armatures As Label
     Friend WithEvents pan_Armatures As Panel
@@ -1449,4 +1423,5 @@ Partial Class Frm_Dalle
     Friend WithEvents rdb_Preperce As RadioButton
     Friend WithEvents rdb_ATraversBac As RadioButton
     Friend WithEvents lbl_ConnectorThroughTheWeb As Label
+    Friend WithEvents chk_BetonLeger As CheckBox
 End Class

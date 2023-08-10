@@ -286,16 +286,16 @@
 
         Select Case MyTxt.Name
             Case Me.txt_GammaGsup.Name, Me.txt_GammaGinf.Name, Me.txt_GammaQ.Name
-                ValMin = GAMMA_ACTION_INF
-                ValMax = GAMMA_ACTION_SUP
+                ValMin = GAMMA_ACTION_MIN
+                ValMax = GAMMA_ACTION_MAX
 
             Case Me.txt_Psi0.Name, Me.txt_Psi1.Name, Me.txt_Psi2.Name
-                ValMin = PSI_COMBINAISON_INF
-                ValMax = PSI_COMBINAISON_SUP
+                ValMin = PSI_COMBINAISON_MIN
+                ValMax = PSI_COMBINAISON_MAX
 
             Case Me.txt_GammaM0.Name, Me.txt_GammaM1.Name, Me.txt_GammaM2.Name, Me.txt_GammaC.Name, Me.txt_GammaV.Name, Me.txt_GammaVs.Name, Me.txt_GammaS.Name, Me.txt_GammaP.Name, Me.txt_GammaM_fi.Name, Me.txt_GammaC_fi.Name, Me.txt_GammaV_fi.Name
-                ValMin = GAMMA_RESISTANCE_INF
-                ValMax = GAMMA_RESISTANCE_SUP
+                ValMin = GAMMA_RESISTANCE_MIN
+                ValMax = GAMMA_RESISTANCE_MAX
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
