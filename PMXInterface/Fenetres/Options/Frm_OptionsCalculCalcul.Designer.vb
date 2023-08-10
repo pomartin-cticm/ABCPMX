@@ -1,0 +1,181 @@
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+Partial Class Frm_OptionsCalculCalcul
+    Inherits System.Windows.Forms.Form
+
+    'Form remplace la méthode Dispose pour nettoyer la liste des composants.
+    <System.Diagnostics.DebuggerNonUserCode()> _
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        Try
+            If disposing AndAlso components IsNot Nothing Then
+                components.Dispose()
+            End If
+        Finally
+            MyBase.Dispose(disposing)
+        End Try
+    End Sub
+
+    'Requise par le Concepteur Windows Form
+    Private components As System.ComponentModel.IContainer
+
+    'REMARQUE : la procédure suivante est requise par le Concepteur Windows Form
+    'Elle peut être modifiée à l'aide du Concepteur Windows Form.  
+    'Ne la modifiez pas à l'aide de l'éditeur de code.
+    <System.Diagnostics.DebuggerStepThrough()> _
+    Private Sub InitializeComponent()
+        Me.pan_Calcul = New System.Windows.Forms.Panel()
+        Me.TLpan_Conteneur = New System.Windows.Forms.TableLayoutPanel()
+        Me.pan_Conteneur = New System.Windows.Forms.Panel()
+        Me.lbl_Norme = New System.Windows.Forms.Label()
+        Me.lbl_PorteeMini = New System.Windows.Forms.Label()
+        Me.etq_UnitL1 = New System.Windows.Forms.Label()
+        Me.txt_PorteeMini = New System.Windows.Forms.TextBox()
+        Me.img_PorteeMini = New System.Windows.Forms.PictureBox()
+        Me.lbl_Calcul = New System.Windows.Forms.Label()
+        Me.cmb_Norme = New System.Windows.Forms.ComboBox()
+        Me.pan_Calcul.SuspendLayout()
+        Me.TLpan_Conteneur.SuspendLayout()
+        Me.pan_Conteneur.SuspendLayout()
+        CType(Me.img_PorteeMini, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SuspendLayout()
+        '
+        'pan_Calcul
+        '
+        Me.pan_Calcul.AutoScroll = True
+        Me.pan_Calcul.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Calcul.Controls.Add(Me.TLpan_Conteneur)
+        Me.pan_Calcul.Location = New System.Drawing.Point(31, 63)
+        Me.pan_Calcul.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Calcul.Name = "pan_Calcul"
+        Me.pan_Calcul.Size = New System.Drawing.Size(739, 472)
+        Me.pan_Calcul.TabIndex = 2
+        '
+        'TLpan_Conteneur
+        '
+        Me.TLpan_Conteneur.ColumnCount = 1
+        Me.TLpan_Conteneur.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_Conteneur.Controls.Add(Me.pan_Conteneur, 0, 0)
+        Me.TLpan_Conteneur.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TLpan_Conteneur.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Conteneur.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_Conteneur.Name = "TLpan_Conteneur"
+        Me.TLpan_Conteneur.RowCount = 1
+        Me.TLpan_Conteneur.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_Conteneur.Size = New System.Drawing.Size(739, 436)
+        Me.TLpan_Conteneur.TabIndex = 0
+        '
+        'pan_Conteneur
+        '
+        Me.pan_Conteneur.Controls.Add(Me.cmb_Norme)
+        Me.pan_Conteneur.Controls.Add(Me.lbl_Norme)
+        Me.pan_Conteneur.Controls.Add(Me.lbl_PorteeMini)
+        Me.pan_Conteneur.Controls.Add(Me.etq_UnitL1)
+        Me.pan_Conteneur.Controls.Add(Me.txt_PorteeMini)
+        Me.pan_Conteneur.Controls.Add(Me.img_PorteeMini)
+        Me.pan_Conteneur.Controls.Add(Me.lbl_Calcul)
+        Me.pan_Conteneur.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Conteneur.Location = New System.Drawing.Point(0, 0)
+        Me.pan_Conteneur.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Conteneur.Name = "pan_Conteneur"
+        Me.pan_Conteneur.Size = New System.Drawing.Size(739, 436)
+        Me.pan_Conteneur.TabIndex = 0
+        '
+        'lbl_Norme
+        '
+        Me.lbl_Norme.AutoSize = True
+        Me.lbl_Norme.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Norme.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Norme.Location = New System.Drawing.Point(8, 36)
+        Me.lbl_Norme.Name = "lbl_Norme"
+        Me.lbl_Norme.Size = New System.Drawing.Size(54, 13)
+        Me.lbl_Norme.TabIndex = 103
+        Me.lbl_Norme.Text = "lbl_Norme"
+        Me.lbl_Norme.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lbl_PorteeMini
+        '
+        Me.lbl_PorteeMini.AutoSize = True
+        Me.lbl_PorteeMini.Location = New System.Drawing.Point(16, 62)
+        Me.lbl_PorteeMini.Name = "lbl_PorteeMini"
+        Me.lbl_PorteeMini.Size = New System.Drawing.Size(73, 13)
+        Me.lbl_PorteeMini.TabIndex = 102
+        Me.lbl_PorteeMini.Text = "lbl_PorteeMini"
+        '
+        'etq_UnitL1
+        '
+        Me.etq_UnitL1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitL1.AutoSize = True
+        Me.etq_UnitL1.Location = New System.Drawing.Point(652, 58)
+        Me.etq_UnitL1.Name = "etq_UnitL1"
+        Me.etq_UnitL1.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitL1.TabIndex = 101
+        Me.etq_UnitL1.Text = "Label1"
+        '
+        'txt_PorteeMini
+        '
+        Me.txt_PorteeMini.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_PorteeMini.Location = New System.Drawing.Point(588, 55)
+        Me.txt_PorteeMini.Name = "txt_PorteeMini"
+        Me.txt_PorteeMini.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PorteeMini.TabIndex = 99
+        '
+        'img_PorteeMini
+        '
+        Me.img_PorteeMini.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_PorteeMini.Location = New System.Drawing.Point(542, 55)
+        Me.img_PorteeMini.Name = "img_PorteeMini"
+        Me.img_PorteeMini.Size = New System.Drawing.Size(46, 20)
+        Me.img_PorteeMini.TabIndex = 100
+        Me.img_PorteeMini.TabStop = False
+        '
+        'lbl_Calcul
+        '
+        Me.lbl_Calcul.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Calcul.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Calcul.Location = New System.Drawing.Point(3, 2)
+        Me.lbl_Calcul.Name = "lbl_Calcul"
+        Me.lbl_Calcul.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_Calcul.TabIndex = 98
+        Me.lbl_Calcul.Text = "lbl_Calcul"
+        Me.lbl_Calcul.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'cmb_Norme
+        '
+        Me.cmb_Norme.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmb_Norme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Norme.FormattingEnabled = True
+        Me.cmb_Norme.Location = New System.Drawing.Point(186, 33)
+        Me.cmb_Norme.Name = "cmb_Norme"
+        Me.cmb_Norme.Size = New System.Drawing.Size(460, 21)
+        Me.cmb_Norme.TabIndex = 104
+        '
+        'Frm_OptionsCalculCalcul
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.ClientSize = New System.Drawing.Size(800, 599)
+        Me.Controls.Add(Me.pan_Calcul)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
+        Me.Name = "Frm_OptionsCalculCalcul"
+        Me.Text = "Frm_OptionsCalculCalcul"
+        Me.pan_Calcul.ResumeLayout(False)
+        Me.TLpan_Conteneur.ResumeLayout(False)
+        Me.pan_Conteneur.ResumeLayout(False)
+        Me.pan_Conteneur.PerformLayout()
+        CType(Me.img_PorteeMini, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.ResumeLayout(False)
+
+    End Sub
+
+    Friend WithEvents pan_Calcul As Panel
+    Friend WithEvents TLpan_Conteneur As TableLayoutPanel
+    Friend WithEvents pan_Conteneur As Panel
+    Friend WithEvents lbl_Norme As Label
+    Friend WithEvents lbl_PorteeMini As Label
+    Friend WithEvents etq_UnitL1 As Label
+    Friend WithEvents txt_PorteeMini As TextBox
+    Friend WithEvents img_PorteeMini As PictureBox
+    Friend WithEvents lbl_Calcul As Label
+    Friend WithEvents cmb_Norme As ComboBox
+End Class

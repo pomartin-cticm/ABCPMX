@@ -10,6 +10,8 @@ Module Mod_Declarations
     Public LogicielOptions As Struc_OptionsLogiciel
     Public OptionsScope As Struc_OptionsScope
     Public LocalOptionsScope As Struc_OptionsScope          ' Pour la saisie des paramètres dans la fenêtre des options de calcul
+    Public OptionsCalcul As Struc_OptionsCalcul
+    Public LocalOptionsCalcul As Struc_OptionsCalcul        ' Pour la saisie des paramètres dans la fenêtre des options de calcul
 
 #End Region
 
@@ -219,9 +221,20 @@ Module Mod_Declarations
 
     Public Structure Struc_OptionsScope         ' Options définissant le domaine d'application du logiciel
         Public PorteeMin As Decimal             ' Portée minimale d'une poutre
+        Public PorteeMax As Decimal             ' Portée maximale d'une poutre
         Public EpDalleMin As Decimal            ' Epaisseur minimale de dalle
         Public ThetaH As Decimal                ' Angle d'inclinaison / verticale des parois d'un renformis
     End Structure
+
+    Public Structure Struc_OptionsCalcul        ' Options de calcul
+        Public Norme As Enu_Normes              ' Norme de calcul
+
+    End Structure
+
+    Public Enum Enu_Normes
+        Eurocodes_G1
+        Eurocodes_G2
+    End Enum
 
     Public Sub InitialiseOptionsScope()
         '-----------------------------------------------------------------------------
@@ -231,8 +244,16 @@ Module Mod_Declarations
         '-----------------------------------------------------------------------------
 
         OptionsScope.PorteeMin = PORTEEMIN
+        OptionsScope.PorteeMax = PORTEEMAX
         OptionsScope.EpDalleMin = 0.05
         OptionsScope.ThetaH = THETAHDEFAULT
+
+
+    End Sub
+
+    Public Sub InitialiseOptionsCalcul()
+
+        OptionsCalcul.Norme = Enu_Normes.Eurocodes_G1
 
     End Sub
 
@@ -287,7 +308,7 @@ Module Mod_Declarations
     Private Const THETAHDEFAULT As Decimal = 30             ' Angle inclinaison renformis
 
     Private Const PORTEEMIN As Decimal = 5
-    Public Const PORTEEMAX As Decimal = 25
+    Private Const PORTEEMAX As Decimal = 25
 
     Public Const ENTRAXEMIN As Decimal = 0.5
     Public Const ENTRAXEMAX As Decimal = 10
@@ -415,6 +436,7 @@ Module Mod_Declarations
 #Region " Controle de l'affichage "
 
     Public Enum Enu_OptionsCalcul
+        Calcul
         Gamma
         Scope
     End Enum

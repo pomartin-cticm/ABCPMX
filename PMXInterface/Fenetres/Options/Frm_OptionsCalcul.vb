@@ -63,7 +63,7 @@ Public Class Frm_OptionsCalcul
         '--> Déclaration
 
         Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
-        Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA", "OPTCALSCOPE"}
+        Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA", "OPTCALSCOPE", "OPTCALCALCUL"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
         Dim MotCle, Argument As String
@@ -114,6 +114,7 @@ Public Class Frm_OptionsCalcul
 
         Me.GammaLoc = LogicielOptions.Gamma.Clone
         LocalOptionsScope = OptionsScope
+        LocalOptionsCalcul = OptionsCalcul
 
     End Sub
 
@@ -125,6 +126,7 @@ Public Class Frm_OptionsCalcul
 
             Me.PoMBtn_Gamma.Caption = MyBloc("GAMMA")
             Me.PoMbtn_Scope.Caption = MyBloc("SCOPE")
+            Me.PoMbtn_Calcul.Caption = MyBloc("CALCUL")
 
             Me.btn_Appliquer.Text = MyBloc("APPLY")
             Me.btn_Cancel.Text = MyBloc("CANCEL")
@@ -146,6 +148,7 @@ Public Class Frm_OptionsCalcul
         InitialiseCouleurs()
         PreparePomBouton(PoMBtn_Gamma)
         PreparePomBouton(PoMbtn_Scope)
+        PreparePomBouton(PoMbtn_Calcul)
 
         Select Case LastIndexW.OptionsCalcul
             Case Enu_OptionsCalcul.Gamma
@@ -154,7 +157,9 @@ Public Class Frm_OptionsCalcul
             Case Enu_OptionsCalcul.Scope
                 Me.PoMbtn_Scope.Checked = True
                 Me.PoMbtn_Scope.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
-
+            Case Enu_OptionsCalcul.Calcul
+                Me.PoMbtn_Calcul.Checked = True
+                Me.PoMbtn_Calcul.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
         End Select
 
     End Sub
@@ -219,6 +224,11 @@ Public Class Frm_OptionsCalcul
                 Me.pan_Contenu.Controls.Add(Frm_OptionsCalculScope.pan_Scope)
                 Frm_OptionsCalculScope.InitialiseFrm()
 
+            Case Enu_OptionsCalcul.Calcul
+
+                Me.pan_Contenu.Controls.Add(Frm_OptionsCalculCalcul.pan_Calcul)
+                Frm_OptionsCalculCalcul.InitialiseFrm()
+
         End Select
 
     End Sub
@@ -276,6 +286,10 @@ Public Class Frm_OptionsCalcul
         End If
         GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
 
+        '# Fenêtre Calcul
+        If OptionsCalcul.Norme <> LocalOptionsCalcul.Norme Then lModif = True
+        OptionsCalcul.Norme = LocalOptionsCalcul.Norme
+
         AppliquerReglagesProjetEnCours()
 
     End Sub
@@ -298,12 +312,10 @@ Public Class Frm_OptionsCalcul
 
 #End Region
 
-
-
 #Region "    Gestion des boutons - Paint Overrides "
 
     Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-    Handles PoMBtn_Gamma.Click, PoMbtn_Scope.Click
+    Handles PoMBtn_Gamma.Click, PoMbtn_Scope.Click, PoMbtn_Calcul.Click
 
         If Not sender.checked Then  '-> Si bouton déjà séléctionné :
             sender.checked = True       'on le garde checké
@@ -322,6 +334,10 @@ Public Class Frm_OptionsCalcul
                 LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Scope
                 AfficherFenetreFille()
 
+            Case Me.PoMbtn_Calcul.Name
+                LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Calcul
+                AfficherFenetreFille()
+
         End Select
         RedrawAllPomBtns()
 
@@ -330,11 +346,11 @@ Public Class Frm_OptionsCalcul
 
         ' Me.etq_Debug.Text = LastIndexWindow.ConfigurationNEW.ToString
 
-        If LastIndexW.OptionsLogiciel <> Enu_OptionsLogiciel.Expert Then
-            Me.AcceptButton = Me.btn_Appliquer
-        Else
-            Me.AcceptButton = Nothing
-        End If
+        'If LastIndexW.OptionsLogiciel <> Enu_OptionsLogiciel.Expert Then
+        '    Me.AcceptButton = Me.btn_Appliquer
+        'Else
+        '    Me.AcceptButton = Nothing
+        'End If
 
     End Sub
 

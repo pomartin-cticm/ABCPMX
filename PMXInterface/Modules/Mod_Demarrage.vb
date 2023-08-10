@@ -199,9 +199,10 @@ Module Mod_Demarrage
         LogicielOptions.lFenetres = True
         LogicielInfo.DetailNDC = Enum_NiveauDetailNDC.Complete
 
-        '--> Options du domaine d'application
+        '--> Options du domaine d'application et options de calcul
 
         InitialiseOptionsScope()
+        InitialiseOptionsCalcul()
 
         '--> MAJ des noms de fichiers langue
 

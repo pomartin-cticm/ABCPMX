@@ -314,8 +314,16 @@ WELDEDP					= Mono-symmetrical welded section
 TITLE					= Calculation options
 GAMMA					= Default national factors
 SCOPE					= Scope of application
+CALCUL					= Calculation options
 APPLY					= Apply
 CANCEL					= Cancel
+
+#OPTCALCALCUL
+TITLE					= Calculation options
+STANDARD				= Standard
+ENGEN1					= First generation of Eurocodes
+ENGEN2					= Second deneration of Eurocodes (drafts)
+
 
 #OPTCALGAMMA
 TITLE					= Default national factors
@@ -331,7 +339,6 @@ TITLE					= Scope of application
 BEAMDEF					= Definition of the beam
 SPANLENGTHMIN			= Minimal span length
 THETAHAUNCH				= Inclination angle of concrete haunches
-
 
 #OPTSOFTMAIN
 TITLE					= Software options

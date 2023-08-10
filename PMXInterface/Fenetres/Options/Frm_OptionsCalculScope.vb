@@ -13,11 +13,6 @@
 
 #Region "===OUVERTURE==="
 
-    Private Sub Frm_OptionsCalculScope_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-    End Sub
-
-
     Public Sub InitialiseFrm()
         lBuild = True
         GestionLangue(Frm_OptionsCalcul.BlocLangues(BALISE))
