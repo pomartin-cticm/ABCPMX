@@ -386,7 +386,6 @@ Public Class cls_Projet
 
                     Lines.Add("BLOCK OPT_CALCULS")
 
-                    Lines.Add("   EArma         = " & .ArmaYoung)
                     Lines.Add("   lArmaComp     = " & .lArmaComprimee)
                     Lines.Add("   lRenformis    = " & .lRenformis)
                     Lines.Add("   Eta          = " & .Eta)
@@ -1448,7 +1447,6 @@ Public Class cls_Projet
 
                 With opt_calculs_en_cours
                     Select Case MotCle
-                        Case "EARMA" : .ArmaYoung = TraiteReal(Mots(nbMots))
                         Case "LARMACOMPR" : .lArmaComprimee = Mots(nbMots)
                         Case "LRENFORMIS" : .lRenformis = Mots(nbMots)
                         Case "ETA" : .Eta = TraiteReal(Mots(nbMots))

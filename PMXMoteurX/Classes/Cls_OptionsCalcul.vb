@@ -8,20 +8,20 @@ Public Class Cls_OptionsCalcul
 
     'Public Shared t0Retrait As Decimal = 1
 
-    Enum EnuGenerationEC4
-        Generation1
-        Generation2
+    Enum Enu_Normes
+        EurocodesG1
+        EurocodesG2
     End Enum
 
 #End Region
 
-
 #Region " Attributs "
 
-    ''' <summary>
-    ''' Module d'young pour les armatures
-    ''' </summary>
-    Public ArmaYoung As Decimal
+    '=== C'est déjà dans la cls_AcierArmatures
+    '''' <summary>
+    '''' Module d'young pour les armatures
+    '''' </summary>
+    'Public ArmaYoung As Decimal
 
     ''' <summary>
     ''' Indique si prise en compte des armatures comprimées
@@ -34,7 +34,7 @@ Public Class Cls_OptionsCalcul
     Public lRenformis As Boolean
 
     ''' <summary>
-    ''' Degré de connexion
+    ''' Degré de connexion ??????
     ''' </summary>
     Public Eta As Decimal
 
@@ -114,9 +114,9 @@ Public Class Cls_OptionsCalcul
     Public HivossParam As cls_HivossParam
 
     ''' <summary>
-    ''' Permet de stocker selon quelle génération de l'EC4 on effectue le calcul
+    ''' Norme de calcul
     ''' </summary>
-    Public GenerationEC4 As EnuGenerationEC4
+    Public Norme As Enu_Normes
 
 #End Region
 
@@ -137,8 +137,8 @@ Public Class Cls_OptionsCalcul
         '--> Degré de connexion
         Me.Eta = 1
 
-        '--> Module d'young des armatures
-        Me.ArmaYoung = Cls_Acier.EYACIER
+        ''--> Module d'young des armatures
+        'Me.ArmaYoung = Cls_Acier.EYACIER
 
         '--> Armatures comprimées
         Me.lArmaComprimee = False
@@ -160,9 +160,15 @@ Public Class Cls_OptionsCalcul
         Me.lChargesPermanentes = True
         Me.NeqCustom = 7
 
-        Me.GenerationEC4 = EnuGenerationEC4.Generation1
+        Me.Norme = Enu_Normes.EurocodesG1
 
     End Sub
+
+#End Region
+
+#Region " Outils "
+
+
 
 #End Region
 

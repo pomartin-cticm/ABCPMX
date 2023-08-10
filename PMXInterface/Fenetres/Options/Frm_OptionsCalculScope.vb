@@ -38,6 +38,9 @@
 
             Me.lbl_Dalle.Text = MyBloc("SLAB")
             Me.lbl_ThetaRd.Text = MyBloc("THETAHAUNCH")
+            Me.lbl_Renformis.Text = MyBloc("HAUNCHTH")
+            Me.lbl_EpDallePleine.Text = MyBloc("SOLIDSLABTH")
+            Me.lbl_EpDalleMixte.Text = MyBloc("COMPOSITESLABTH")
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -58,6 +61,8 @@
         PrepareTextBoxExpert(Me.txt_RatioConsoleMax, LogicielOptions.lExpert)
 
         PrepareTextBoxExpert(Me.txt_EpDalleMin, LogicielOptions.lExpert)
+        PrepareTextBoxExpert(Me.txt_EpDalleMixteMin, LogicielOptions.lExpert)
+        PrepareTextBoxExpert(Me.txt_RatioEpReformis, LogicielOptions.lExpert)
 
     End Sub
 
@@ -83,6 +88,7 @@
 
     Private Sub GestionUnites()
         Me.etq_UnitD1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitD2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitL1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
@@ -106,6 +112,8 @@
         '--> Epaisseurs de dalle
 
         Me.txt_EpDalleMin.Text = GetStringInUnit(LocalOptionsScope.EpDallePleineMin, Enu_TypeVariable.Dimension, 4, 2, False)
+        Me.txt_EpDalleMixteMin.Text = GetStringInUnit(LocalOptionsScope.EpDalleMixteMin, Enu_TypeVariable.Dimension, 4, 2, False)
+        Me.txt_RatioEpReformis.Text = GetStringInUnit(LocalOptionsScope.RatioEpRenformisMax, Enu_TypeVariable.SansType, 4, 2, False)
 
     End Sub
 
@@ -113,9 +121,8 @@
 
 #Region " Evènements saisie "
 
-
     Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_PorteeMini.TextChanged, txt_ThetaH.TextChanged,
-        txt_PorteeMaxi.TextChanged, txt_PorteeConsoleMin.TextChanged, txt_RatioConsoleMax.TextChanged, txt_EpDalleMin.TextChanged
+        txt_PorteeMaxi.TextChanged, txt_PorteeConsoleMin.TextChanged, txt_RatioConsoleMax.TextChanged, txt_EpDalleMin.TextChanged, txt_RatioEpReformis.TextChanged, txt_EpDalleMixteMin.TextChanged
 
         If lBuild Then Exit Sub
         Dim lPortees As Boolean = False
@@ -138,6 +145,10 @@
                     LocalOptionsScope.RatioPorteeConsoleMax = ValeurUI
                 Case Me.txt_EpDalleMin.Name
                     LocalOptionsScope.EpDallePleineMin = ValeurUI
+                Case Me.txt_RatioEpReformis.Name
+                    LocalOptionsScope.RatioEpRenformisMax = ValeurUI
+                Case Me.txt_EpDalleMixteMin.Name
+                    LocalOptionsScope.EpDalleMixteMin = ValeurUI
             End Select
 
         End If
@@ -193,11 +204,17 @@
                 ValMin = 0.1
                 ValMax = 1
 
-            Case Me.txt_EpDalleMin.Name
+            Case Me.txt_EpDalleMin.Name, Me.txt_EpDalleMixteMin.Name
+
 
                 ValMin = 0.04
                 ValMax = 1
                 lValMax = False
+
+            Case Me.txt_RatioEpReformis.Name
+
+                ValMin = 0.1
+                ValMax = 1
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -218,7 +235,7 @@
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint, img_PorteeL2.Paint, img_Td1.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint, img_PorteeL2.Paint, img_Td1.Paint, img_xTd.Paint, img_Th.Paint, img_EpDalleMixte.Paint
 
         '--> Déclarations
 
@@ -238,6 +255,9 @@
         AlignH = Enu_AlignementH.Centre
 
         Select Case sender.name
+            Case Me.img_EpDalleMixte.Name
+                strSymbol = "t"
+                strIndice = "c"
 
             Case Me.img_PorteeMini.Name
                 strSymbol = "L"
@@ -263,6 +283,14 @@
                 strSymbol = "t"
                 strIndice = "d"
 
+            Case Me.img_xTd.Name
+                strSymbol = "x t"
+                strIndice = "d"
+                AlignH = Enu_AlignementH.Gauche
+
+            Case Me.img_Th.Name
+                strSymbol = "t"
+                strIndice = "h"
         End Select
 
         '--> Dessin

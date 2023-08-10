@@ -6,6 +6,11 @@
 
 #End Region
 
+#Region " Enumérations et structures "
+
+
+#End Region
+
 #Region " Tableau 7 EN 1994-1-1 "
     ''' <summary>
     ''' Contrainte maximale dans les aciers autorisée en fonction du diamètre des barres et de l'ouverture des fissures (cf. Tableau 7.1 de l'EC4)

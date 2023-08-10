@@ -286,12 +286,17 @@ Public Class Frm_OptionsCalcul
             GereTransfertValeur(LocalOptionsScope.PorteeMax, OptionsScope.PorteeMax, lModif)
             GereTransfertValeur(LocalOptionsScope.PorteeConsoleMin, OptionsScope.PorteeConsoleMin, lModif)
             GereTransfertValeur(LocalOptionsScope.RatioPorteeConsoleMax, OptionsScope.RatioPorteeConsoleMax, lModif)
+            GereTransfertValeur(LocalOptionsScope.RatioEpRenformisMax, OptionsScope.RatioEpRenformisMax, lModif)
+            GereTransfertValeur(LocalOptionsScope.EpDalleMixteMin, OptionsScope.EpDalleMixteMin, lModif)
+            GereTransfertValeur(LocalOptionsScope.EpDallePleineMin, OptionsScope.EpDallePleineMin, lModif)
         End If
         GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
 
         '# Fenêtre Calcul
         If OptionsCalcul.Norme <> LocalOptionsCalcul.Norme Then lModif = True
         OptionsCalcul.Norme = LocalOptionsCalcul.Norme
+        GereTransfertValeur(LocalOptionsCalcul.lLargeurEfficaceSimplifiee, OptionsCalcul.lLargeurEfficaceSimplifiee, lModif)
+        GereTransfertValeur(LocalOptionsCalcul.lCompressionArma, OptionsCalcul.lCompressionArma, lModif)
 
         AppliquerReglagesProjetEnCours()
 
@@ -301,8 +306,10 @@ Public Class Frm_OptionsCalcul
 
         For i As Integer = 0 To MyProjet.Poutres.Count - 1
             MyProjet.Poutres(i).Dalle.ThetaRd = OptionsScope.ThetaH
+            MyProjet.Poutres(i).Param.Norme = OptionsCalcul.Norme
+            MyProjet.Poutres(i).Param.lArmaComprimee = OptionsCalcul.lCompressionArma
         Next
-
+        'IL faut faire la même chose à l'oouverture des fhciers et la création d'une poutre
     End Sub
 
     Private Function ValideSaisie() As Boolean

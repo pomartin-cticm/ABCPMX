@@ -232,15 +232,16 @@ Module Mod_Declarations
         Public EpDalleMixteMin As Decimal       ' Epaisseur de dalle mixte mini (au dessus du bac)
     End Structure
 
-    Public Structure Struc_OptionsCalcul        ' Options de calcul
-        Public Norme As Enu_Normes              ' Norme de calcul
-
-    End Structure
-
     Public Enum Enu_Normes
         Eurocodes_G1
         Eurocodes_G2
     End Enum
+
+    Public Structure Struc_OptionsCalcul        ' Options de calcul
+        Public Norme As Cls_OptionsCalcul.Enu_Normes             ' Norme de calcul
+        Public lLargeurEfficaceSimplifiee As Boolean    ' Largeur efficace de la dalle béton selon modèle simplifié
+        Public lCompressionArma As Boolean      ' Indique si l'on prend en compte les armatures comprimées dans le calcul des propriétés de section
+    End Structure
 
     Public Sub InitialiseOptionsScope()
         '-----------------------------------------------------------------------------
@@ -267,6 +268,8 @@ Module Mod_Declarations
     Public Sub InitialiseOptionsCalcul()
 
         OptionsCalcul.Norme = Enu_Normes.Eurocodes_G1
+        OptionsCalcul.lCompressionArma = False
+        OptionsCalcul.lLargeurEfficaceSimplifiee = False
 
     End Sub
 
@@ -318,9 +321,9 @@ Module Mod_Declarations
 
 #Region " Constantes et valeurs par défaut "
 
-    Private Const EPDALLEMINIDEFAUT As Decimal = 0.01       ' Epaisseur mini de dalle pleine =10 cm
+    Private Const EPDALLEMINIDEFAUT As Decimal = 0.1       ' Epaisseur mini de dalle pleine =10 cm
     Private Const RATIOEPRENFORMISMAXDEFAUT As Decimal = 0.4
-    Private Const EPDALLEMIXTEMINIDEFAUT As Decimal = 0.005 ' Epaisseur de dalle mixte mini 5 cm au dessus du bac
+    Private Const EPDALLEMIXTEMINIDEFAUT As Decimal = 0.05 ' Epaisseur de dalle mixte mini 5 cm au dessus du bac
 
     Private Const THETAHDEFAULT As Decimal = 30             ' Angle inclinaison renformis
 

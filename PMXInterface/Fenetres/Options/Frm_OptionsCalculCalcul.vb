@@ -1,4 +1,6 @@
-﻿Public Class Frm_OptionsCalculCalcul
+﻿Imports PMXMoteur2
+
+Public Class Frm_OptionsCalculCalcul
 
 
 #Region " Variables locales "
@@ -34,6 +36,12 @@
             tabNorme(0) = MyBloc("ENGEN1")
             tabNorme(1) = MyBloc("ENGEN2")
 
+            Me.lbl_CrossSectionProperties.Text = MyBloc("SECTIONPROP")
+            Me.chk_RebarsInCompression.Text = MyBloc("COMPRESSIONREBARS")
+            Me.chk_SimplifiedEffectiveW.Text = MyBloc("SIMPLIFIEDEFFW")
+
+            Me.lbl_YoungRebars.Text = MyBloc("YOUNGSREBAR")
+
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
         Finally
@@ -66,17 +74,18 @@
         '--> Norme
 
         Select Case LocalOptionsCalcul.Norme
-            Case Enu_Normes.Eurocodes_G1 : Me.cmb_Norme.SelectedIndex = 0
-            Case Enu_Normes.Eurocodes_G2 : Me.cmb_Norme.SelectedIndex = 1
+            Case Cls_OptionsCalcul.Enu_Normes.EurocodesG1 : Me.cmb_Norme.SelectedIndex = 0
+            Case Cls_OptionsCalcul.Enu_Normes.EurocodesG2 : Me.cmb_Norme.SelectedIndex = 1
         End Select
 
         '--> Portée
 
         Me.txt_PorteeMini.Text = GetStringInUnit(LocalOptionsScope.PorteeMin, Enu_TypeVariable.Longueur, 4, 2, False)
 
+        '--> Propriétés des sections
 
-
-
+        Me.chk_RebarsInCompression.Checked = LocalOptionsCalcul.lCompressionArma
+        Me.chk_SimplifiedEffectiveW.Checked = LocalOptionsCalcul.lLargeurEfficaceSimplifiee
 
     End Sub
 
@@ -96,10 +105,21 @@
         If lBuild Then Exit Sub
 
         Select Case Me.cmb_Norme.SelectedIndex
-            Case 0 : LocalOptionsCalcul.Norme = Enu_Normes.Eurocodes_G1
-            Case 1 : LocalOptionsCalcul.Norme = Enu_Normes.Eurocodes_G2
+            Case 0 : LocalOptionsCalcul.Norme = Cls_OptionsCalcul.Enu_Normes.EurocodesG1
+            Case 1 : LocalOptionsCalcul.Norme = Cls_OptionsCalcul.Enu_Normes.EurocodesG2
         End Select
 
+    End Sub
+
+    Private Sub ChangeCheckBoxes(sender As Object, e As EventArgs) Handles chk_SimplifiedEffectiveW.CheckedChanged, chk_RebarsInCompression.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.chk_RebarsInCompression.Name
+                LocalOptionsCalcul.lCompressionArma = Me.chk_RebarsInCompression.Checked
+            Case Me.chk_SimplifiedEffectiveW.Name
+                LocalOptionsCalcul.lLargeurEfficaceSimplifiee = Me.chk_SimplifiedEffectiveW.Checked
+        End Select
     End Sub
 
 #End Region

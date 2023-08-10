@@ -323,8 +323,11 @@ CANCEL					= Cancel
 TITLE					= Calculation options
 STANDARD				= Standard
 ENGEN1					= First generation of Eurocodes
-ENGEN2					= Second deneration of Eurocodes (drafts)
-
+ENGEN2					= Second generation of Eurocodes (drafts)
+SECTIONPROP				= Properties of cross-sections
+COMPRESSIONREBARS		= Rebars in compression taken into account
+SIMPLIFIEDEFFW			= Simplified distribution of the effective of the concrete flange
+YOUNGSREBAR				= Young's modulus of reinforcements
 
 #OPTCALGAMMA
 TITLE					= Default national factors
@@ -344,6 +347,9 @@ SPANLENGTH				= Span length
 CANTILEVERSPAN			= Cantilever span length
 SLAB					= Concrete slab
 THETAHAUNCH				= Inclination angle of concrete haunches
+HAUNCHTH				= Thickness of slab haunch
+SOLIDSLABTH				= Thickness of solid slab
+COMPOSITESLABTH			= Thickness of composite slab (above ribs)
 
 #OPTSOFTMAIN
 TITLE					= Software options
