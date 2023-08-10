@@ -10,7 +10,7 @@ Public Class ConstantesDessin3D
     Public Shared RAPPORTCADRE As Single = 0.9
 End Class
 
-Public Enum Enu_Alignement
+Public Enum Enu_AlignementH
     Centre
     Gauche
     Droite

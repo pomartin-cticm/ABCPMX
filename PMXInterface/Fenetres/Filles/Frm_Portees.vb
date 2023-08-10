@@ -371,7 +371,7 @@ Public Class Frm_Portees
 
         '--> Dessin
 
-        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_Alignement.Gauche,
+        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_AlignementH.Gauche,
                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
@@ -516,8 +516,8 @@ Public Class Frm_Portees
 
             Case Me.txt_PorteeConsoleG.Name, Me.txt_PorteeConsoleD.Name
 
-                ValMin = CONSOLEMIN / kUnit
-                ValMax = RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit
+                ValMin = OptionsScope.PorteeConsoleMin / kUnit
+                ValMax = OptionsScope.RatioPorteeConsoleMax * MyPoutreLoc.LongueurTravee(1) / kUnit
                 'ValMin = Format(CONSOLEMIN / kUnit, formatLONGUEUR)
                 'ValMax = Format(RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit, formatLONGUEUR)
 

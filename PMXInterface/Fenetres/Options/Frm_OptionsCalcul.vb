@@ -283,6 +283,9 @@ Public Class Frm_OptionsCalcul
         '# Fenêtre Scope
         If lExpert Then
             GereTransfertValeur(LocalOptionsScope.PorteeMin, OptionsScope.PorteeMin, lModif)
+            GereTransfertValeur(LocalOptionsScope.PorteeMax, OptionsScope.PorteeMax, lModif)
+            GereTransfertValeur(LocalOptionsScope.PorteeConsoleMin, OptionsScope.PorteeConsoleMin, lModif)
+            GereTransfertValeur(LocalOptionsScope.RatioPorteeConsoleMax, OptionsScope.RatioPorteeConsoleMax, lModif)
         End If
         GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
 
@@ -371,6 +374,7 @@ Public Class Frm_OptionsCalcul
 
         If SenderName <> Me.PoMBtn_Gamma.Name Then Me.PoMBtn_Gamma.Checked = False
         If SenderName <> Me.PoMbtn_Scope.Name Then Me.PoMbtn_Scope.Checked = False
+        If SenderName <> Me.PoMbtn_Calcul.Name Then Me.PoMbtn_Calcul.Checked = False
 
     End Sub
 

@@ -85,7 +85,7 @@ Public Class Frm_Etaiement
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
 
         Me.cmb_NbPoint.Items.Clear()
-        For i As Integer = NBPROPPINGMIN To NBPROPPINGMAX
+        For i As Integer = NBPROPPINGMIN To OptionsScope.NbMaxiEtaisP
             Me.cmb_NbPoint.Items.Add(i)
         Next
         Me.cmb_NbPoint.SelectedIndex = 0

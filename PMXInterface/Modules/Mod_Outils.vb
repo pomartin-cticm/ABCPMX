@@ -765,7 +765,7 @@ Module Mod_Outils
     Public Sub DrawSymbol(ByVal MyGr As Graphics, ByVal BrushEcrire As Brush,
                           ByVal Symbol As String, ByVal Indice As String,
                           ByVal xPen As Single, ByVal yPen As Single,
-                          ByVal lGrec As Boolean, lItalic As Boolean, ByVal Alignement As Enu_Alignement,
+                          ByVal lGrec As Boolean, lItalic As Boolean, ByVal Alignement As Enu_AlignementH,
                           ByVal FontNormal As Font, ByVal FontSymbol As Font,
                           ByVal FontIndice As Font, ByVal kAdjust As Single, ByVal DrawEgal As Boolean)
         '----------------------------------------------------------------------------------------
@@ -798,13 +798,14 @@ Module Mod_Outils
         '--> Positionnement
 
         Select Case Alignement
-            Case Enu_Alignement.Gauche
+            Case Enu_AlignementH.Gauche
                 xStar = xPen - LongueurString
-            Case Enu_Alignement.Droite
+            Case Enu_AlignementH.Droite
                 xStar = xPen
-            Case Enu_Alignement.Centre
+            Case Enu_AlignementH.Centre
                 xStar = xPen - LongueurString / 2
         End Select
+
 
         '--> Préparation de la police
 
@@ -838,6 +839,92 @@ Module Mod_Outils
         End If
 
     End Sub
+
+    Public Sub DrawSymbolN(ByVal MyGr As Graphics, ByVal BrushE As Brush,
+                           ByVal Symbol As String, ByVal Indice As String,
+                           ByVal sWI As Single, ByVal sHI As Single,
+                           ByVal lGrec As Boolean, lItalic As Boolean, ByVal Alignement As Enu_AlignementH,
+                           ByVal FontNormal As Font, ByVal FontSymbol As Font,
+                           ByVal FontIndice As Font, ByVal kAdjust As Single, ByVal DrawEgal As Boolean)
+        '----------------------------------------------------------------------------------------
+        '
+        '   21/02/08 :  Création - Version 1.00
+        '
+        '----------------------------------------------------------------------------------------
+        '
+        '   Fonction qui retourne la longueur d'un symbole (+indice) d'équation
+        '
+        '----------------------------------------------------------------------------------------
+        '
+        '   MyGr        [E] :   Graphics dans lequel on dessine
+        '   BrushE      [E] :   
+        '   Symbol      [E] :   Symbole à dessiner
+        '   Indice      [E] :   Indice du Symbole
+        '   sWI         [E] :   Largeur de l'image
+        '   sHI         [E] :   Hauteur de l'image
+        '   lGrec       [E] :   Indique si symbole de l'alphabet grec
+        '   FontNormal  [E] :   Police de caractère normale
+        '   FontSymbol  [E] :   Police de caractère pour les symboles grecs
+        '   FontIndice  [E] :   Police de caractère pour les indices
+        '
+        '----------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim LongueurString As Single = LongueurChaine(MyGr, Symbol, Indice, lGrec, FontNormal, FontSymbol, FontIndice, kAdjust, DrawEgal)
+        Dim HauteurString As Single = MyGr.MeasureString("X", FontNormal).Height
+
+        Dim xStar As Single
+
+        Dim MARGE As Single = 0.25 * sHI
+        Dim yPen As Single
+
+        '--> Positionnement
+
+        Select Case Alignement
+            Case Enu_AlignementH.Gauche
+                xStar = MARGE
+            Case Enu_AlignementH.Droite
+                xStar = sWI - MARGE - LongueurString
+            Case Enu_AlignementH.Centre
+                xStar = sWI / 2 - LongueurString / 2
+        End Select
+        yPen = sHI / 2 - HauteurString / 2
+
+        '--> Préparation de la police
+
+        Dim MyFontNormal As Font
+        If lItalic Then
+            MyFontNormal = New Font(FontNormal, FontStyle.Italic)
+        Else
+            MyFontNormal = FontNormal
+        End If
+
+        '--> Ecriture Symbole
+
+        If lGrec Then
+            MyGr.DrawString(Symbol, FontSymbol, BrushE, xStar, yPen)
+            xStar += MyGr.MeasureString(Symbol, FontSymbol).Width - kAdjust * MyGr.MeasureString(" ", FontSymbol).Width
+        Else
+            MyGr.DrawString(Symbol, MyFontNormal, BrushE, xStar, yPen)
+            xStar += MyGr.MeasureString(Symbol, MyFontNormal).Width - kAdjust * MyGr.MeasureString(" ", MyFontNormal).Width
+        End If
+
+        '--> Ecriture Indice
+
+        Dim DecalIndice As Single = HauteurString / 3
+
+        MyGr.DrawString(Indice, FontIndice, BrushE, xStar, yPen + DecalIndice)
+
+        If DrawEgal Then
+            xStar += MyGr.MeasureString(Indice, FontIndice).Width ' - kAdjust * MyGr.MeasureString(" ", FontNormal).Width
+
+            MyGr.DrawString("=", FontNormal, BrushE, xStar, yPen)
+        End If
+
+    End Sub
+
+
 
     ''' <summary>
     ''' Fonction qui retourne la longueur d'un symbole (+indice) d'équation

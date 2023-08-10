@@ -220,8 +220,11 @@ Module Mod_Declarations
     End Structure
 
     Public Structure Struc_OptionsScope         ' Options définissant le domaine d'application du logiciel
-        Public PorteeMin As Decimal             ' Portée minimale d'une poutre
-        Public PorteeMax As Decimal             ' Portée maximale d'une poutre
+        Public PorteeMin As Decimal             ' Portée minimale d'une travée normale
+        Public PorteeMax As Decimal             ' Portée maximale d'une travée normale
+        Public PorteeConsoleMin As Decimal      ' Portée minimale d'une travée en console
+        Public RatioPorteeConsoleMax As Decimal ' Valeur maxi du ratio portée console / porte travée adjacente
+        Public NbMaxiEtaisP As Integer          ' Nombre maxi d'étais ponctuels / travée normale
         Public EpDalleMin As Decimal            ' Epaisseur minimale de dalle
         Public ThetaH As Decimal                ' Angle d'inclinaison / verticale des parois d'un renformis
     End Structure
@@ -245,6 +248,11 @@ Module Mod_Declarations
 
         OptionsScope.PorteeMin = PORTEEMIN
         OptionsScope.PorteeMax = PORTEEMAX
+        OptionsScope.PorteeConsoleMin = CONSOLEMIN
+        OptionsScope.RatioPorteeConsoleMax = RATIOCONSOLEMAX
+
+        OptionsScope.NbMaxiEtaisP = NBPROPPINGMAX
+
         OptionsScope.EpDalleMin = 0.05
         OptionsScope.ThetaH = THETAHDEFAULT
 
@@ -313,11 +321,11 @@ Module Mod_Declarations
     Public Const ENTRAXEMIN As Decimal = 0.5
     Public Const ENTRAXEMAX As Decimal = 10
 
-    Public Const CONSOLEMIN As Decimal = 0.5
-    Public Const RATIOCONSOLEMAX As Decimal = 0.3
+    Private Const CONSOLEMIN As Decimal = 0.5
+    Private Const RATIOCONSOLEMAX As Decimal = 0.3
 
     Public Const NBPROPPINGMIN As Integer = 0
-    Public Const NBPROPPINGMAX As Integer = 5
+    Private Const NBPROPPINGMAX As Integer = 5
 
     Public Const NBRESTRAINMIN As Integer = 0
     Public Const NBRESTRAINMAX As Integer = 5

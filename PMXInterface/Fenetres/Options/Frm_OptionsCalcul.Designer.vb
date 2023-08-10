@@ -26,13 +26,13 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
-        Me.PoMbtn_Calcul = New PMXInterface.POMbutton()
-        Me.PoMbtn_Scope = New PMXInterface.POMbutton()
-        Me.PoMBtn_Gamma = New PMXInterface.POMbutton()
         Me.TLpan_PourLesBoutons = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_Cancel = New System.Windows.Forms.Button()
         Me.btn_Appliquer = New System.Windows.Forms.Button()
         Me.pan_Contenu = New System.Windows.Forms.Panel()
+        Me.PoMbtn_Calcul = New PMXInterface.POMbutton()
+        Me.PoMbtn_Scope = New PMXInterface.POMbutton()
+        Me.PoMBtn_Gamma = New PMXInterface.POMbutton()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
@@ -91,82 +91,15 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(1)
         Me.TLpan_Gauche.Name = "TLpan_Gauche"
         Me.TLpan_Gauche.RowCount = 7
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Gauche.Size = New System.Drawing.Size(242, 442)
         Me.TLpan_Gauche.TabIndex = 0
-        '
-        'PoMbtn_Calcul
-        '
-        Me.PoMbtn_Calcul.Caption = "PoMbtn_Calcul"
-        Me.PoMbtn_Calcul.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
-        Me.PoMbtn_Calcul.Checked = False
-        Me.PoMbtn_Calcul.CouleurChecked = System.Drawing.Color.Orange
-        Me.PoMbtn_Calcul.CouleurContour = System.Drawing.Color.Black
-        Me.PoMbtn_Calcul.CouleurContourChecked = System.Drawing.Color.Black
-        Me.PoMbtn_Calcul.CouleurContourMouseOn = System.Drawing.Color.Black
-        Me.PoMbtn_Calcul.CouleurFond = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Calcul.CouleurForGradient = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Calcul.CouleurMouseOnBtn = System.Drawing.Color.Yellow
-        Me.PoMbtn_Calcul.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PoMbtn_Calcul.Enable = True
-        Me.PoMbtn_Calcul.LContourFond = True
-        Me.PoMbtn_Calcul.Location = New System.Drawing.Point(5, 105)
-        Me.PoMbtn_Calcul.Margin = New System.Windows.Forms.Padding(5)
-        Me.PoMbtn_Calcul.Name = "PoMbtn_Calcul"
-        Me.PoMbtn_Calcul.RatioArrondi = 0!
-        Me.PoMbtn_Calcul.Size = New System.Drawing.Size(232, 40)
-        Me.PoMbtn_Calcul.TabIndex = 3
-        '
-        'PoMbtn_Scope
-        '
-        Me.PoMbtn_Scope.Caption = "PoMbtn_Scope"
-        Me.PoMbtn_Scope.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
-        Me.PoMbtn_Scope.Checked = False
-        Me.PoMbtn_Scope.CouleurChecked = System.Drawing.Color.Orange
-        Me.PoMbtn_Scope.CouleurContour = System.Drawing.Color.Black
-        Me.PoMbtn_Scope.CouleurContourChecked = System.Drawing.Color.Black
-        Me.PoMbtn_Scope.CouleurContourMouseOn = System.Drawing.Color.Black
-        Me.PoMbtn_Scope.CouleurFond = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Scope.CouleurForGradient = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Scope.CouleurMouseOnBtn = System.Drawing.Color.Yellow
-        Me.PoMbtn_Scope.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PoMbtn_Scope.Enable = True
-        Me.PoMbtn_Scope.LContourFond = True
-        Me.PoMbtn_Scope.Location = New System.Drawing.Point(5, 55)
-        Me.PoMbtn_Scope.Margin = New System.Windows.Forms.Padding(5)
-        Me.PoMbtn_Scope.Name = "PoMbtn_Scope"
-        Me.PoMbtn_Scope.RatioArrondi = 0!
-        Me.PoMbtn_Scope.Size = New System.Drawing.Size(232, 40)
-        Me.PoMbtn_Scope.TabIndex = 2
-        '
-        'PoMBtn_Gamma
-        '
-        Me.PoMBtn_Gamma.Caption = "PoMBtn_Gamma"
-        Me.PoMBtn_Gamma.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
-        Me.PoMBtn_Gamma.Checked = False
-        Me.PoMBtn_Gamma.CouleurChecked = System.Drawing.Color.Orange
-        Me.PoMBtn_Gamma.CouleurContour = System.Drawing.Color.Black
-        Me.PoMBtn_Gamma.CouleurContourChecked = System.Drawing.Color.Black
-        Me.PoMBtn_Gamma.CouleurContourMouseOn = System.Drawing.Color.Black
-        Me.PoMBtn_Gamma.CouleurFond = System.Drawing.Color.WhiteSmoke
-        Me.PoMBtn_Gamma.CouleurForGradient = System.Drawing.Color.WhiteSmoke
-        Me.PoMBtn_Gamma.CouleurMouseOnBtn = System.Drawing.Color.Yellow
-        Me.PoMBtn_Gamma.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PoMBtn_Gamma.Enable = True
-        Me.PoMBtn_Gamma.LContourFond = True
-        Me.PoMBtn_Gamma.Location = New System.Drawing.Point(5, 5)
-        Me.PoMBtn_Gamma.Margin = New System.Windows.Forms.Padding(5)
-        Me.PoMBtn_Gamma.Name = "PoMBtn_Gamma"
-        Me.PoMBtn_Gamma.RatioArrondi = 0!
-        Me.PoMBtn_Gamma.Size = New System.Drawing.Size(232, 40)
-        Me.PoMBtn_Gamma.TabIndex = 0
         '
         'TLpan_PourLesBoutons
         '
@@ -215,6 +148,72 @@ Partial Class Frm_OptionsCalcul
         Me.pan_Contenu.Name = "pan_Contenu"
         Me.pan_Contenu.Size = New System.Drawing.Size(547, 444)
         Me.pan_Contenu.TabIndex = 2
+        '
+        'PoMbtn_Calcul
+        '
+        Me.PoMbtn_Calcul.Caption = "PoMbtn_Calcul"
+        Me.PoMbtn_Calcul.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
+        Me.PoMbtn_Calcul.Checked = False
+        Me.PoMbtn_Calcul.CouleurChecked = System.Drawing.Color.Orange
+        Me.PoMbtn_Calcul.CouleurContour = System.Drawing.Color.Black
+        Me.PoMbtn_Calcul.CouleurContourChecked = System.Drawing.Color.Black
+        Me.PoMbtn_Calcul.CouleurContourMouseOn = System.Drawing.Color.Black
+        Me.PoMbtn_Calcul.CouleurFond = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Calcul.CouleurForGradient = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Calcul.CouleurMouseOnBtn = System.Drawing.Color.Yellow
+        Me.PoMbtn_Calcul.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PoMbtn_Calcul.Enable = True
+        Me.PoMbtn_Calcul.LContourFond = True
+        Me.PoMbtn_Calcul.Location = New System.Drawing.Point(5, 95)
+        Me.PoMbtn_Calcul.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMbtn_Calcul.Name = "PoMbtn_Calcul"
+        Me.PoMbtn_Calcul.RatioArrondi = 0!
+        Me.PoMbtn_Calcul.Size = New System.Drawing.Size(232, 35)
+        Me.PoMbtn_Calcul.TabIndex = 3
+        '
+        'PoMbtn_Scope
+        '
+        Me.PoMbtn_Scope.Caption = "PoMbtn_Scope"
+        Me.PoMbtn_Scope.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
+        Me.PoMbtn_Scope.Checked = False
+        Me.PoMbtn_Scope.CouleurChecked = System.Drawing.Color.Orange
+        Me.PoMbtn_Scope.CouleurContour = System.Drawing.Color.Black
+        Me.PoMbtn_Scope.CouleurContourChecked = System.Drawing.Color.Black
+        Me.PoMbtn_Scope.CouleurContourMouseOn = System.Drawing.Color.Black
+        Me.PoMbtn_Scope.CouleurFond = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Scope.CouleurForGradient = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Scope.CouleurMouseOnBtn = System.Drawing.Color.Yellow
+        Me.PoMbtn_Scope.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PoMbtn_Scope.Enable = True
+        Me.PoMbtn_Scope.LContourFond = True
+        Me.PoMbtn_Scope.Location = New System.Drawing.Point(5, 50)
+        Me.PoMbtn_Scope.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMbtn_Scope.Name = "PoMbtn_Scope"
+        Me.PoMbtn_Scope.RatioArrondi = 0!
+        Me.PoMbtn_Scope.Size = New System.Drawing.Size(232, 35)
+        Me.PoMbtn_Scope.TabIndex = 2
+        '
+        'PoMBtn_Gamma
+        '
+        Me.PoMBtn_Gamma.Caption = "PoMBtn_Gamma"
+        Me.PoMBtn_Gamma.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
+        Me.PoMBtn_Gamma.Checked = False
+        Me.PoMBtn_Gamma.CouleurChecked = System.Drawing.Color.Orange
+        Me.PoMBtn_Gamma.CouleurContour = System.Drawing.Color.Black
+        Me.PoMBtn_Gamma.CouleurContourChecked = System.Drawing.Color.Black
+        Me.PoMBtn_Gamma.CouleurContourMouseOn = System.Drawing.Color.Black
+        Me.PoMBtn_Gamma.CouleurFond = System.Drawing.Color.WhiteSmoke
+        Me.PoMBtn_Gamma.CouleurForGradient = System.Drawing.Color.WhiteSmoke
+        Me.PoMBtn_Gamma.CouleurMouseOnBtn = System.Drawing.Color.Yellow
+        Me.PoMBtn_Gamma.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PoMBtn_Gamma.Enable = True
+        Me.PoMBtn_Gamma.LContourFond = True
+        Me.PoMBtn_Gamma.Location = New System.Drawing.Point(5, 5)
+        Me.PoMBtn_Gamma.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMBtn_Gamma.Name = "PoMBtn_Gamma"
+        Me.PoMBtn_Gamma.RatioArrondi = 0!
+        Me.PoMBtn_Gamma.Size = New System.Drawing.Size(232, 35)
+        Me.PoMBtn_Gamma.TabIndex = 0
         '
         'Frm_OptionsCalcul
         '

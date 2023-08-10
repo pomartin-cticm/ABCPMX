@@ -337,7 +337,11 @@ FIRE					= Fire
 #OPTCALSCOPE
 TITLE					= Scope of application
 BEAMDEF					= Definition of the beam
-SPANLENGTHMIN			= Minimal span length
+MINIMALV				= Minimal value
+MAXIMALV				= Maximal value
+SPANLENGTH				= Span length
+CANTILEVERSPAN			= Cantilever span length
+SLAB					= Concrete slab
 THETAHAUNCH				= Inclination angle of concrete haunches
 
 #OPTSOFTMAIN

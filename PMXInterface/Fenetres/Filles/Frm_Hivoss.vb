@@ -447,7 +447,7 @@ Public Class Frm_Hivoss
 
         '--> Dessin
 
-        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lItalic, Enu_Alignement.Gauche,
+        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lItalic, Enu_AlignementH.Gauche,
                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
