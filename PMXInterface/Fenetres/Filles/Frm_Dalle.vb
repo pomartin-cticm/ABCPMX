@@ -31,6 +31,12 @@ Public Class Frm_Dalle
 
     Dim lCofraPlus220 As Boolean
 
+    Private Enum Enu_DefEpMixte
+        Totale                  ' Définition d'une dalle mixte par son épaisseur totale
+        Pleine                  ' Définition d'une dalle mixte par son épaisseur au dessus du bac
+    End Enum
+    Dim DefEpMixte As Enu_DefEpMixte = Enu_DefEpMixte.Totale
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -74,6 +80,7 @@ Public Class Frm_Dalle
 
                 Me.lbl_TypeDalle.Text = Bloc("TYPE")
                 Me.lbl_Epaisseur.Text = Bloc("THICKNESS")
+                Me.lbl_EpaisseurM.Text = Bloc("THICKNESS")
                 Me.lbl_Renformis.Text = Bloc("HAUNCH")
                 Me.lbl_EpPreDalle.Text = Bloc("PRESLAB")
                 Me.lbl_EpJoint.Text = Bloc("JOINT")
@@ -221,11 +228,34 @@ Public Class Frm_Dalle
 
         Me.img_Dalle.Dock = DockStyle.Fill
 
+        Const MARGEPAN As Integer = 0
+
+        Me.pan_Type.Controls.Add(Me.pan_Epaisseur)
+        Me.pan_Epaisseur.Left = 5
+        Me.pan_Epaisseur.Top = 35
+
+        Me.pan_Type.Controls.Add(Me.pan_EpaisseurMixte)
+        Me.pan_EpaisseurMixte.Left = 5
+        Me.pan_EpaisseurMixte.Top = Me.pan_Epaisseur.Top
+
+        Me.pan_Type.Controls.Add(Me.pan_Renformis)
+        Me.pan_Renformis.Left = 5
+        Me.pan_Renformis.Top = Me.pan_Epaisseur.Top + Me.pan_Epaisseur.Height + MARGEPAN
+
+        Me.pan_Type.Controls.Add(Me.pan_Predalle)
+        Me.pan_Predalle.Left = 5
+        Me.pan_Predalle.Top = Me.pan_Renformis.Top
+
         RemplirComboAvecTableau(Me.cmb_TypeDalle, strType)
         RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
         RemplirComboClasseBeton()
 
         MAJI_ChangeBac()
+
+        Me.rdb_EpPleine.Checked = (Me.DefEpMixte = Enu_DefEpMixte.Pleine)
+        Me.rdb_EpTotale.Checked = (Me.DefEpMixte = Enu_DefEpMixte.Totale)
+
+        MAJI_SaisieEpMixte()
 
     End Sub
 
@@ -259,6 +289,9 @@ Public Class Frm_Dalle
         MAJI_TypeDalle()
 
         '--> Epaisseur
+
+        Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
+        Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.t_d - MyDalleLoc.Bac.h_p, Enu_TypeVariable.Dimension)
 
         Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
         Me.txt_Hh.Text = GetStringNoUnit(MyDalleLoc.t_h, Enu_TypeVariable.Dimension)
@@ -299,6 +332,14 @@ Public Class Frm_Dalle
         AfficherLitEncours()
 
     End Sub
+
+    Private Sub MAJI_SaisieEpMixte()
+
+        PrepareTextBoxExpert(Me.txt_Td2, DefEpMixte = Enu_DefEpMixte.Totale)
+        PrepareTextBoxExpert(Me.txt_Tc, DefEpMixte = Enu_DefEpMixte.Pleine)
+
+    End Sub
+
 
     Private Sub AfficheNomBacEnCours()
         Me.txt_BacNom.Text = MyDalleLoc.Bac.Etiquette
@@ -713,19 +754,21 @@ Public Class Frm_Dalle
     End Sub
 
 
-    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_Hd.Leave, txt_zs.Leave, txt_PhiS.Leave, txt_esp.Leave, txt_RhoC.Leave
+    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_zs.Leave, txt_PhiS.Leave, txt_esp.Leave, txt_RhoC.Leave, txt_Td2.Leave, txt_Tc.Leave
         If lBuild Then Exit Sub
         iSelect = -1
         Me.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Enter, txt_Hd.Enter, txt_zs.Enter, txt_PhiS.Enter, txt_esp.Enter, txt_RhoC.Enter
+    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Enter, txt_zs.Enter, txt_PhiS.Enter, txt_esp.Enter, txt_RhoC.Enter, txt_Td2.Enter, txt_Tc.Enter
         If lBuild Then Exit Sub
         Select Case sender.name
-            Case Me.txt_Hd.Name
+            Case Me.txt_Hd.Name, Me.txt_Td2.Name
                 iSelect = 0
             Case Me.txt_Hh.Name
                 iSelect = 1
+            Case Me.txt_Tc.Name
+                iSelect = 2
             Case Me.txt_PhiS.Name
                 iSelect = (iLitSelect + 1) * 100 + 1
             Case Me.txt_esp.Name
@@ -844,6 +887,8 @@ Public Class Frm_Dalle
 
                 Me.pan_Renformis.Visible = True
                 Me.pan_Predalle.Visible = False
+                Me.pan_EpaisseurMixte.Visible = False
+                Me.pan_Epaisseur.Visible = True
 
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 255
@@ -852,6 +897,8 @@ Public Class Frm_Dalle
                 Me.pan_Bac.Enabled = False
                 Me.pan_Predalle.Visible = True
                 Me.pan_Renformis.Visible = False
+                Me.pan_EpaisseurMixte.Visible = False
+                Me.pan_Epaisseur.Visible = True
 
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 255
@@ -860,6 +907,8 @@ Public Class Frm_Dalle
                 Me.pan_Bac.Enabled = True
                 Me.pan_Predalle.Visible = False
                 Me.pan_Renformis.Visible = False
+                Me.pan_EpaisseurMixte.Visible = True
+                Me.pan_Epaisseur.Visible = False
 
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 501
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 250
@@ -867,7 +916,7 @@ Public Class Frm_Dalle
 
     End Sub
 
-    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_Hd.TextChanged, txt_Hh.TextChanged, txt_RhoC.TextChanged
+    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_Hh.TextChanged, txt_RhoC.TextChanged, txt_Td2.TextChanged, txt_Tc.TextChanged, txt_Hd.TextChanged
 
         If lBuild Then Exit Sub
         lBuild = True
@@ -879,12 +928,26 @@ Public Class Frm_Dalle
 
                 Case Me.txt_Hd.Name
                     MyDalleLoc.t_d = Valeur
+                    lBuild = True
+                    'Me.txt_Td2.Text = Me.txt_Hd.Text
 
                 Case Me.txt_Hh.Name
                     MyDalleLoc.t_h = Valeur
 
                 Case Me.txt_RhoC.Name
                     MyDalleLoc.beton.RhoC = Valeur
+
+                Case Me.txt_Td2.Name
+                    MyDalleLoc.t_d = Valeur
+                    lBuild = True
+                    Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.t_d - MyDalleLoc.Bac.h_p, Enu_TypeVariable.Dimension)
+                    lBuild = False
+
+                Case Me.txt_Tc.Name
+                    MyDalleLoc.t_d = Valeur + MyDalleLoc.Bac.h_p
+                    lBuild = True
+                    Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
+                    lBuild = False
 
             End Select
 
@@ -921,7 +984,7 @@ Public Class Frm_Dalle
         Const ZMIN As Decimal = 0.02
 
         Select Case MyTxt.Name
-            Case Me.txt_Hd.Name
+            Case Me.txt_Hd.Name, Me.txt_Td2.Name
 
                 Select Case MyDalleLoc.type
                     Case Cls_Dalle.Enum_TypeDalle.Pleine, Cls_Dalle.Enum_TypeDalle.Prefabriquee
@@ -958,6 +1021,11 @@ Public Class Frm_Dalle
 
                 ValMin = 0
                 ValMax = OptionsScope.RatioEpRenformisMax * MyDalleLoc.t_d / kUnit
+
+            Case Me.txt_Tc.Name
+                ValMin = (OptionsScope.EpDalleMixteMin) / kUnit
+                ValMax = 0
+                lValMax = False
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -1009,6 +1077,16 @@ Public Class Frm_Dalle
 
     End Sub
 
+    Private Sub SaisieRdBDefEpMixte(sender As Object, e As EventArgs) Handles rdb_EpTotale.CheckedChanged, rdb_EpPleine.CheckedChanged
+        If lBuild Then Exit Sub
+        If Me.rdb_EpPleine.Checked Then
+            DefEpMixte = Enu_DefEpMixte.Pleine
+        Else
+            DefEpMixte = Enu_DefEpMixte.Totale
+        End If
+        MAJI_SaisieEpMixte()
+    End Sub
+
     Private Sub OrientationBac_checkedChanged(sender As Object, e As EventArgs) Handles rdb_BacParallele.CheckedChanged, rdb_BacPerpendiculaire.CheckedChanged
         If lBuild Then Exit Sub
 
@@ -1047,8 +1125,8 @@ Public Class Frm_Dalle
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles Img_Hd.Paint, img_Fy.Paint, img_RhoC.Paint, img_Hp.Paint, Img_Hh.Paint, img_zs.Paint, img_PhiS.Paint, img_esp.Paint,
-        img_EpPredalle.Paint, img_EpJoint.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Fy.Paint, img_RhoC.Paint, img_Hp.Paint, Img_Hh.Paint, img_zs.Paint, img_PhiS.Paint, img_esp.Paint,
+        img_EpPredalle.Paint, img_EpJoint.Paint, img_Td2.Paint, img_Tc.Paint, Img_Hd.Paint
 
         '--> Déclarations
 
@@ -1079,8 +1157,10 @@ Public Class Frm_Dalle
                 strSymbol = "r"
                 strIndice = "c"
                 lGrec = True
-
-            Case Me.Img_Hd.Name
+            Case Me.img_Tc.Name
+                strSymbol = "t"
+                strIndice = "c"
+            Case Me.Img_Hd.Name, Me.img_Td2.Name
                 strSymbol = "t"
                 strIndice = "d"
             Case Me.Img_Hh.Name

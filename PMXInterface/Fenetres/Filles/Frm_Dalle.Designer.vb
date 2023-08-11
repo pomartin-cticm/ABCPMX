@@ -31,7 +31,6 @@ Partial Class Frm_Dalle
         Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLPan_Dalle = New System.Windows.Forms.TableLayoutPanel()
-        Me.img_Dalle = New System.Windows.Forms.PictureBox()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_PartageV = New System.Windows.Forms.TableLayoutPanel()
         Me.TLpan_Milieu = New System.Windows.Forms.TableLayoutPanel()
@@ -79,24 +78,6 @@ Partial Class Frm_Dalle
         Me.lbl_ClasseE = New System.Windows.Forms.Label()
         Me.lbl_Beton = New System.Windows.Forms.Label()
         Me.pan_Type = New System.Windows.Forms.Panel()
-        Me.pan_Predalle = New System.Windows.Forms.Panel()
-        Me.txt_EpJoint = New System.Windows.Forms.TextBox()
-        Me.lbl_EpJoint = New System.Windows.Forms.Label()
-        Me.img_EpJoint = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitDim9 = New System.Windows.Forms.Label()
-        Me.txt_EpPredalle = New System.Windows.Forms.TextBox()
-        Me.lbl_EpPreDalle = New System.Windows.Forms.Label()
-        Me.img_EpPredalle = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitDim8 = New System.Windows.Forms.Label()
-        Me.pan_Renformis = New System.Windows.Forms.Panel()
-        Me.txt_Hh = New System.Windows.Forms.TextBox()
-        Me.lbl_Renformis = New System.Windows.Forms.Label()
-        Me.Img_Hh = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitDim3 = New System.Windows.Forms.Label()
-        Me.txt_Hd = New System.Windows.Forms.TextBox()
-        Me.lbl_Epaisseur = New System.Windows.Forms.Label()
-        Me.etq_UnitDim2 = New System.Windows.Forms.Label()
-        Me.Img_Hd = New System.Windows.Forms.PictureBox()
         Me.lbl_TypeDalle = New System.Windows.Forms.Label()
         Me.cmb_TypeDalle = New System.Windows.Forms.ComboBox()
         Me.lbl_General = New System.Windows.Forms.Label()
@@ -118,15 +99,45 @@ Partial Class Frm_Dalle
         Me.chk_AjouterSupprimerLit = New System.Windows.Forms.CheckBox()
         Me.chk_Lit2 = New System.Windows.Forms.CheckBox()
         Me.chk_Lit1 = New System.Windows.Forms.CheckBox()
+        Me.pan_Img = New System.Windows.Forms.Panel()
+        Me.pan_Epaisseur = New System.Windows.Forms.Panel()
+        Me.txt_Hd = New System.Windows.Forms.TextBox()
+        Me.lbl_Epaisseur = New System.Windows.Forms.Label()
+        Me.etq_UnitDim2 = New System.Windows.Forms.Label()
+        Me.Img_Hd = New System.Windows.Forms.PictureBox()
+        Me.pan_Predalle = New System.Windows.Forms.Panel()
+        Me.txt_EpJoint = New System.Windows.Forms.TextBox()
+        Me.lbl_EpJoint = New System.Windows.Forms.Label()
+        Me.img_EpJoint = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitDim9 = New System.Windows.Forms.Label()
+        Me.txt_EpPredalle = New System.Windows.Forms.TextBox()
+        Me.lbl_EpPreDalle = New System.Windows.Forms.Label()
+        Me.img_EpPredalle = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitDim8 = New System.Windows.Forms.Label()
+        Me.img_Dalle = New System.Windows.Forms.PictureBox()
+        Me.pan_Renformis = New System.Windows.Forms.Panel()
+        Me.txt_Hh = New System.Windows.Forms.TextBox()
+        Me.lbl_Renformis = New System.Windows.Forms.Label()
+        Me.Img_Hh = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitDim3 = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_BOArma = New System.Windows.Forms.ImageList(Me.components)
         Me.ToolTipDalle = New System.Windows.Forms.ToolTip(Me.components)
+        Me.pan_EpaisseurMixte = New System.Windows.Forms.Panel()
+        Me.txt_Td2 = New System.Windows.Forms.TextBox()
+        Me.lbl_EpaisseurM = New System.Windows.Forms.Label()
+        Me.etq_UnitDim10 = New System.Windows.Forms.Label()
+        Me.img_Td2 = New System.Windows.Forms.PictureBox()
+        Me.txt_Tc = New System.Windows.Forms.TextBox()
+        Me.etq_UnitDim11 = New System.Windows.Forms.Label()
+        Me.img_Tc = New System.Windows.Forms.PictureBox()
+        Me.rdb_EpTotale = New System.Windows.Forms.RadioButton()
+        Me.rdb_EpPleine = New System.Windows.Forms.RadioButton()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
         Me.TLPan_Dalle.SuspendLayout()
-        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Gauche.SuspendLayout()
         Me.TLpan_PartageV.SuspendLayout()
         Me.TLpan_Milieu.SuspendLayout()
@@ -142,18 +153,24 @@ Partial Class Frm_Dalle
         Me.pan_Beton.SuspendLayout()
         CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Type.SuspendLayout()
-        Me.pan_Predalle.SuspendLayout()
-        CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_Renformis.SuspendLayout()
-        CType(Me.Img_Hh, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Armatures.SuspendLayout()
         Me.pan_DonneesArma.SuspendLayout()
         CType(Me.img_zs, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_esp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Img.SuspendLayout()
+        Me.pan_Epaisseur.SuspendLayout()
+        CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Predalle.SuspendLayout()
+        CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Renformis.SuspendLayout()
+        CType(Me.Img_Hh, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_EpaisseurMixte.SuspendLayout()
+        CType(Me.img_Td2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -238,8 +255,8 @@ Partial Class Frm_Dalle
         Me.TLPan_Dalle.ColumnCount = 2
         Me.TLPan_Dalle.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 501.0!))
         Me.TLPan_Dalle.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Dalle.Controls.Add(Me.img_Dalle, 0, 0)
         Me.TLPan_Dalle.Controls.Add(Me.pan_Gauche, 0, 0)
+        Me.TLPan_Dalle.Controls.Add(Me.pan_Img, 1, 0)
         Me.TLPan_Dalle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Dalle.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Dalle.Margin = New System.Windows.Forms.Padding(0)
@@ -248,17 +265,6 @@ Partial Class Frm_Dalle
         Me.TLPan_Dalle.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Dalle.Size = New System.Drawing.Size(1009, 531)
         Me.TLPan_Dalle.TabIndex = 0
-        '
-        'img_Dalle
-        '
-        Me.img_Dalle.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_Dalle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Dalle.Location = New System.Drawing.Point(502, 0)
-        Me.img_Dalle.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
-        Me.img_Dalle.Name = "img_Dalle"
-        Me.img_Dalle.Size = New System.Drawing.Size(100, 50)
-        Me.img_Dalle.TabIndex = 3
-        Me.img_Dalle.TabStop = False
         '
         'pan_Gauche
         '
@@ -820,12 +826,6 @@ Partial Class Frm_Dalle
         '
         Me.pan_Type.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Type.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Type.Controls.Add(Me.pan_Predalle)
-        Me.pan_Type.Controls.Add(Me.pan_Renformis)
-        Me.pan_Type.Controls.Add(Me.txt_Hd)
-        Me.pan_Type.Controls.Add(Me.lbl_Epaisseur)
-        Me.pan_Type.Controls.Add(Me.etq_UnitDim2)
-        Me.pan_Type.Controls.Add(Me.Img_Hd)
         Me.pan_Type.Controls.Add(Me.lbl_TypeDalle)
         Me.pan_Type.Controls.Add(Me.cmb_TypeDalle)
         Me.pan_Type.Dock = System.Windows.Forms.DockStyle.Fill
@@ -834,194 +834,6 @@ Partial Class Frm_Dalle
         Me.pan_Type.Name = "pan_Type"
         Me.pan_Type.Size = New System.Drawing.Size(251, 111)
         Me.pan_Type.TabIndex = 7
-        '
-        'pan_Predalle
-        '
-        Me.pan_Predalle.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pan_Predalle.Controls.Add(Me.txt_EpJoint)
-        Me.pan_Predalle.Controls.Add(Me.lbl_EpJoint)
-        Me.pan_Predalle.Controls.Add(Me.img_EpJoint)
-        Me.pan_Predalle.Controls.Add(Me.etq_UnitDim9)
-        Me.pan_Predalle.Controls.Add(Me.txt_EpPredalle)
-        Me.pan_Predalle.Controls.Add(Me.lbl_EpPreDalle)
-        Me.pan_Predalle.Controls.Add(Me.img_EpPredalle)
-        Me.pan_Predalle.Controls.Add(Me.etq_UnitDim8)
-        Me.pan_Predalle.Location = New System.Drawing.Point(5, 83)
-        Me.pan_Predalle.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_Predalle.Name = "pan_Predalle"
-        Me.pan_Predalle.Size = New System.Drawing.Size(238, 52)
-        Me.pan_Predalle.TabIndex = 86
-        '
-        'txt_EpJoint
-        '
-        Me.txt_EpJoint.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EpJoint.Location = New System.Drawing.Point(147, 26)
-        Me.txt_EpJoint.Name = "txt_EpJoint"
-        Me.txt_EpJoint.Size = New System.Drawing.Size(58, 20)
-        Me.txt_EpJoint.TabIndex = 83
-        '
-        'lbl_EpJoint
-        '
-        Me.lbl_EpJoint.AutoSize = True
-        Me.lbl_EpJoint.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_EpJoint.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_EpJoint.Location = New System.Drawing.Point(9, 29)
-        Me.lbl_EpJoint.Name = "lbl_EpJoint"
-        Me.lbl_EpJoint.Size = New System.Drawing.Size(58, 13)
-        Me.lbl_EpJoint.TabIndex = 81
-        Me.lbl_EpJoint.Text = "lbl_EpJoint"
-        Me.lbl_EpJoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'img_EpJoint
-        '
-        Me.img_EpJoint.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_EpJoint.Location = New System.Drawing.Point(111, 26)
-        Me.img_EpJoint.Name = "img_EpJoint"
-        Me.img_EpJoint.Size = New System.Drawing.Size(37, 20)
-        Me.img_EpJoint.TabIndex = 84
-        Me.img_EpJoint.TabStop = False
-        '
-        'etq_UnitDim9
-        '
-        Me.etq_UnitDim9.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitDim9.AutoSize = True
-        Me.etq_UnitDim9.Location = New System.Drawing.Point(211, 29)
-        Me.etq_UnitDim9.Name = "etq_UnitDim9"
-        Me.etq_UnitDim9.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitDim9.TabIndex = 82
-        Me.etq_UnitDim9.Text = "mm"
-        '
-        'txt_EpPredalle
-        '
-        Me.txt_EpPredalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EpPredalle.Location = New System.Drawing.Point(147, 4)
-        Me.txt_EpPredalle.Name = "txt_EpPredalle"
-        Me.txt_EpPredalle.Size = New System.Drawing.Size(58, 20)
-        Me.txt_EpPredalle.TabIndex = 79
-        '
-        'lbl_EpPreDalle
-        '
-        Me.lbl_EpPreDalle.AutoSize = True
-        Me.lbl_EpPreDalle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_EpPreDalle.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_EpPreDalle.Location = New System.Drawing.Point(9, 7)
-        Me.lbl_EpPreDalle.Name = "lbl_EpPreDalle"
-        Me.lbl_EpPreDalle.Size = New System.Drawing.Size(76, 13)
-        Me.lbl_EpPreDalle.TabIndex = 77
-        Me.lbl_EpPreDalle.Text = "lbl_EpPreDalle"
-        Me.lbl_EpPreDalle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'img_EpPredalle
-        '
-        Me.img_EpPredalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_EpPredalle.Location = New System.Drawing.Point(111, 4)
-        Me.img_EpPredalle.Name = "img_EpPredalle"
-        Me.img_EpPredalle.Size = New System.Drawing.Size(37, 20)
-        Me.img_EpPredalle.TabIndex = 80
-        Me.img_EpPredalle.TabStop = False
-        '
-        'etq_UnitDim8
-        '
-        Me.etq_UnitDim8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitDim8.AutoSize = True
-        Me.etq_UnitDim8.Location = New System.Drawing.Point(211, 7)
-        Me.etq_UnitDim8.Name = "etq_UnitDim8"
-        Me.etq_UnitDim8.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitDim8.TabIndex = 78
-        Me.etq_UnitDim8.Text = "mm"
-        '
-        'pan_Renformis
-        '
-        Me.pan_Renformis.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pan_Renformis.Controls.Add(Me.txt_Hh)
-        Me.pan_Renformis.Controls.Add(Me.lbl_Renformis)
-        Me.pan_Renformis.Controls.Add(Me.Img_Hh)
-        Me.pan_Renformis.Controls.Add(Me.etq_UnitDim3)
-        Me.pan_Renformis.Location = New System.Drawing.Point(5, 56)
-        Me.pan_Renformis.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_Renformis.Name = "pan_Renformis"
-        Me.pan_Renformis.Size = New System.Drawing.Size(238, 27)
-        Me.pan_Renformis.TabIndex = 83
-        '
-        'txt_Hh
-        '
-        Me.txt_Hh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Hh.Location = New System.Drawing.Point(147, 4)
-        Me.txt_Hh.Name = "txt_Hh"
-        Me.txt_Hh.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Hh.TabIndex = 79
-        '
-        'lbl_Renformis
-        '
-        Me.lbl_Renformis.AutoSize = True
-        Me.lbl_Renformis.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Renformis.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Renformis.Location = New System.Drawing.Point(9, 7)
-        Me.lbl_Renformis.Name = "lbl_Renformis"
-        Me.lbl_Renformis.Size = New System.Drawing.Size(70, 13)
-        Me.lbl_Renformis.TabIndex = 77
-        Me.lbl_Renformis.Text = "lbl_Renformis"
-        Me.lbl_Renformis.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Img_Hh
-        '
-        Me.Img_Hh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Img_Hh.Location = New System.Drawing.Point(111, 4)
-        Me.Img_Hh.Name = "Img_Hh"
-        Me.Img_Hh.Size = New System.Drawing.Size(37, 20)
-        Me.Img_Hh.TabIndex = 80
-        Me.Img_Hh.TabStop = False
-        '
-        'etq_UnitDim3
-        '
-        Me.etq_UnitDim3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitDim3.AutoSize = True
-        Me.etq_UnitDim3.Location = New System.Drawing.Point(211, 7)
-        Me.etq_UnitDim3.Name = "etq_UnitDim3"
-        Me.etq_UnitDim3.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitDim3.TabIndex = 78
-        Me.etq_UnitDim3.Text = "mm"
-        '
-        'txt_Hd
-        '
-        Me.txt_Hd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Hd.Location = New System.Drawing.Point(152, 34)
-        Me.txt_Hd.Name = "txt_Hd"
-        Me.txt_Hd.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Hd.TabIndex = 71
-        '
-        'lbl_Epaisseur
-        '
-        Me.lbl_Epaisseur.AutoSize = True
-        Me.lbl_Epaisseur.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Epaisseur.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Epaisseur.Location = New System.Drawing.Point(13, 37)
-        Me.lbl_Epaisseur.Name = "lbl_Epaisseur"
-        Me.lbl_Epaisseur.Size = New System.Drawing.Size(69, 13)
-        Me.lbl_Epaisseur.TabIndex = 69
-        Me.lbl_Epaisseur.Text = "lbl_Epaisseur"
-        Me.lbl_Epaisseur.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'etq_UnitDim2
-        '
-        Me.etq_UnitDim2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitDim2.AutoSize = True
-        Me.etq_UnitDim2.Location = New System.Drawing.Point(217, 37)
-        Me.etq_UnitDim2.Name = "etq_UnitDim2"
-        Me.etq_UnitDim2.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitDim2.TabIndex = 70
-        Me.etq_UnitDim2.Text = "mm"
-        '
-        'Img_Hd
-        '
-        Me.Img_Hd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Img_Hd.Location = New System.Drawing.Point(117, 34)
-        Me.Img_Hd.Name = "Img_Hd"
-        Me.Img_Hd.Size = New System.Drawing.Size(37, 20)
-        Me.Img_Hd.TabIndex = 72
-        Me.Img_Hd.TabStop = False
         '
         'lbl_TypeDalle
         '
@@ -1258,6 +1070,232 @@ Partial Class Frm_Dalle
         Me.chk_Lit1.TabIndex = 2
         Me.chk_Lit1.UseVisualStyleBackColor = True
         '
+        'pan_Img
+        '
+        Me.pan_Img.Controls.Add(Me.pan_EpaisseurMixte)
+        Me.pan_Img.Controls.Add(Me.pan_Epaisseur)
+        Me.pan_Img.Controls.Add(Me.pan_Predalle)
+        Me.pan_Img.Controls.Add(Me.img_Dalle)
+        Me.pan_Img.Controls.Add(Me.pan_Renformis)
+        Me.pan_Img.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Img.Location = New System.Drawing.Point(502, 0)
+        Me.pan_Img.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.pan_Img.Name = "pan_Img"
+        Me.pan_Img.Size = New System.Drawing.Size(507, 531)
+        Me.pan_Img.TabIndex = 1
+        '
+        'pan_Epaisseur
+        '
+        Me.pan_Epaisseur.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Epaisseur.Controls.Add(Me.txt_Hd)
+        Me.pan_Epaisseur.Controls.Add(Me.lbl_Epaisseur)
+        Me.pan_Epaisseur.Controls.Add(Me.etq_UnitDim2)
+        Me.pan_Epaisseur.Controls.Add(Me.Img_Hd)
+        Me.pan_Epaisseur.Location = New System.Drawing.Point(89, 229)
+        Me.pan_Epaisseur.Name = "pan_Epaisseur"
+        Me.pan_Epaisseur.Size = New System.Drawing.Size(237, 25)
+        Me.pan_Epaisseur.TabIndex = 87
+        '
+        'txt_Hd
+        '
+        Me.txt_Hd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Hd.Location = New System.Drawing.Point(146, 3)
+        Me.txt_Hd.Name = "txt_Hd"
+        Me.txt_Hd.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Hd.TabIndex = 75
+        '
+        'lbl_Epaisseur
+        '
+        Me.lbl_Epaisseur.AutoSize = True
+        Me.lbl_Epaisseur.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Epaisseur.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Epaisseur.Location = New System.Drawing.Point(7, 6)
+        Me.lbl_Epaisseur.Name = "lbl_Epaisseur"
+        Me.lbl_Epaisseur.Size = New System.Drawing.Size(69, 13)
+        Me.lbl_Epaisseur.TabIndex = 73
+        Me.lbl_Epaisseur.Text = "lbl_Epaisseur"
+        Me.lbl_Epaisseur.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'etq_UnitDim2
+        '
+        Me.etq_UnitDim2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim2.AutoSize = True
+        Me.etq_UnitDim2.Location = New System.Drawing.Point(211, 6)
+        Me.etq_UnitDim2.Name = "etq_UnitDim2"
+        Me.etq_UnitDim2.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim2.TabIndex = 74
+        Me.etq_UnitDim2.Text = "mm"
+        '
+        'Img_Hd
+        '
+        Me.Img_Hd.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Img_Hd.Location = New System.Drawing.Point(111, 3)
+        Me.Img_Hd.Name = "Img_Hd"
+        Me.Img_Hd.Size = New System.Drawing.Size(37, 20)
+        Me.Img_Hd.TabIndex = 76
+        Me.Img_Hd.TabStop = False
+        '
+        'pan_Predalle
+        '
+        Me.pan_Predalle.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Predalle.Controls.Add(Me.txt_EpJoint)
+        Me.pan_Predalle.Controls.Add(Me.lbl_EpJoint)
+        Me.pan_Predalle.Controls.Add(Me.img_EpJoint)
+        Me.pan_Predalle.Controls.Add(Me.etq_UnitDim9)
+        Me.pan_Predalle.Controls.Add(Me.txt_EpPredalle)
+        Me.pan_Predalle.Controls.Add(Me.lbl_EpPreDalle)
+        Me.pan_Predalle.Controls.Add(Me.img_EpPredalle)
+        Me.pan_Predalle.Controls.Add(Me.etq_UnitDim8)
+        Me.pan_Predalle.Location = New System.Drawing.Point(89, 147)
+        Me.pan_Predalle.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Predalle.Name = "pan_Predalle"
+        Me.pan_Predalle.Size = New System.Drawing.Size(237, 52)
+        Me.pan_Predalle.TabIndex = 86
+        '
+        'txt_EpJoint
+        '
+        Me.txt_EpJoint.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EpJoint.Location = New System.Drawing.Point(146, 26)
+        Me.txt_EpJoint.Name = "txt_EpJoint"
+        Me.txt_EpJoint.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EpJoint.TabIndex = 83
+        '
+        'lbl_EpJoint
+        '
+        Me.lbl_EpJoint.AutoSize = True
+        Me.lbl_EpJoint.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_EpJoint.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_EpJoint.Location = New System.Drawing.Point(9, 29)
+        Me.lbl_EpJoint.Name = "lbl_EpJoint"
+        Me.lbl_EpJoint.Size = New System.Drawing.Size(58, 13)
+        Me.lbl_EpJoint.TabIndex = 81
+        Me.lbl_EpJoint.Text = "lbl_EpJoint"
+        Me.lbl_EpJoint.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'img_EpJoint
+        '
+        Me.img_EpJoint.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_EpJoint.Location = New System.Drawing.Point(110, 26)
+        Me.img_EpJoint.Name = "img_EpJoint"
+        Me.img_EpJoint.Size = New System.Drawing.Size(37, 20)
+        Me.img_EpJoint.TabIndex = 84
+        Me.img_EpJoint.TabStop = False
+        '
+        'etq_UnitDim9
+        '
+        Me.etq_UnitDim9.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim9.AutoSize = True
+        Me.etq_UnitDim9.Location = New System.Drawing.Point(210, 29)
+        Me.etq_UnitDim9.Name = "etq_UnitDim9"
+        Me.etq_UnitDim9.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim9.TabIndex = 82
+        Me.etq_UnitDim9.Text = "mm"
+        '
+        'txt_EpPredalle
+        '
+        Me.txt_EpPredalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EpPredalle.Location = New System.Drawing.Point(146, 4)
+        Me.txt_EpPredalle.Name = "txt_EpPredalle"
+        Me.txt_EpPredalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EpPredalle.TabIndex = 79
+        '
+        'lbl_EpPreDalle
+        '
+        Me.lbl_EpPreDalle.AutoSize = True
+        Me.lbl_EpPreDalle.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_EpPreDalle.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_EpPreDalle.Location = New System.Drawing.Point(9, 7)
+        Me.lbl_EpPreDalle.Name = "lbl_EpPreDalle"
+        Me.lbl_EpPreDalle.Size = New System.Drawing.Size(76, 13)
+        Me.lbl_EpPreDalle.TabIndex = 77
+        Me.lbl_EpPreDalle.Text = "lbl_EpPreDalle"
+        Me.lbl_EpPreDalle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'img_EpPredalle
+        '
+        Me.img_EpPredalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_EpPredalle.Location = New System.Drawing.Point(110, 4)
+        Me.img_EpPredalle.Name = "img_EpPredalle"
+        Me.img_EpPredalle.Size = New System.Drawing.Size(37, 20)
+        Me.img_EpPredalle.TabIndex = 80
+        Me.img_EpPredalle.TabStop = False
+        '
+        'etq_UnitDim8
+        '
+        Me.etq_UnitDim8.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim8.AutoSize = True
+        Me.etq_UnitDim8.Location = New System.Drawing.Point(210, 7)
+        Me.etq_UnitDim8.Name = "etq_UnitDim8"
+        Me.etq_UnitDim8.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim8.TabIndex = 78
+        Me.etq_UnitDim8.Text = "mm"
+        '
+        'img_Dalle
+        '
+        Me.img_Dalle.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_Dalle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Dalle.Location = New System.Drawing.Point(117, 10)
+        Me.img_Dalle.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
+        Me.img_Dalle.Name = "img_Dalle"
+        Me.img_Dalle.Size = New System.Drawing.Size(100, 50)
+        Me.img_Dalle.TabIndex = 3
+        Me.img_Dalle.TabStop = False
+        '
+        'pan_Renformis
+        '
+        Me.pan_Renformis.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Renformis.Controls.Add(Me.txt_Hh)
+        Me.pan_Renformis.Controls.Add(Me.lbl_Renformis)
+        Me.pan_Renformis.Controls.Add(Me.Img_Hh)
+        Me.pan_Renformis.Controls.Add(Me.etq_UnitDim3)
+        Me.pan_Renformis.Location = New System.Drawing.Point(90, 263)
+        Me.pan_Renformis.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Renformis.Name = "pan_Renformis"
+        Me.pan_Renformis.Size = New System.Drawing.Size(237, 27)
+        Me.pan_Renformis.TabIndex = 83
+        '
+        'txt_Hh
+        '
+        Me.txt_Hh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Hh.Location = New System.Drawing.Point(146, 4)
+        Me.txt_Hh.Name = "txt_Hh"
+        Me.txt_Hh.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Hh.TabIndex = 79
+        '
+        'lbl_Renformis
+        '
+        Me.lbl_Renformis.AutoSize = True
+        Me.lbl_Renformis.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Renformis.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Renformis.Location = New System.Drawing.Point(9, 7)
+        Me.lbl_Renformis.Name = "lbl_Renformis"
+        Me.lbl_Renformis.Size = New System.Drawing.Size(70, 13)
+        Me.lbl_Renformis.TabIndex = 77
+        Me.lbl_Renformis.Text = "lbl_Renformis"
+        Me.lbl_Renformis.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Img_Hh
+        '
+        Me.Img_Hh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Img_Hh.Location = New System.Drawing.Point(110, 4)
+        Me.Img_Hh.Name = "Img_Hh"
+        Me.Img_Hh.Size = New System.Drawing.Size(37, 20)
+        Me.Img_Hh.TabIndex = 80
+        Me.Img_Hh.TabStop = False
+        '
+        'etq_UnitDim3
+        '
+        Me.etq_UnitDim3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim3.AutoSize = True
+        Me.etq_UnitDim3.Location = New System.Drawing.Point(210, 7)
+        Me.etq_UnitDim3.Name = "etq_UnitDim3"
+        Me.etq_UnitDim3.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim3.TabIndex = 78
+        Me.etq_UnitDim3.Text = "mm"
+        '
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
@@ -1268,6 +1306,110 @@ Partial Class Frm_Dalle
         Me.imgList_BOArma.TransparentColor = System.Drawing.Color.Transparent
         Me.imgList_BOArma.Images.SetKeyName(0, "Ajouter")
         Me.imgList_BOArma.Images.SetKeyName(1, "Supprimer")
+        '
+        'pan_EpaisseurMixte
+        '
+        Me.pan_EpaisseurMixte.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_EpaisseurMixte.Controls.Add(Me.rdb_EpPleine)
+        Me.pan_EpaisseurMixte.Controls.Add(Me.rdb_EpTotale)
+        Me.pan_EpaisseurMixte.Controls.Add(Me.txt_Tc)
+        Me.pan_EpaisseurMixte.Controls.Add(Me.etq_UnitDim11)
+        Me.pan_EpaisseurMixte.Controls.Add(Me.txt_Td2)
+        Me.pan_EpaisseurMixte.Controls.Add(Me.img_Tc)
+        Me.pan_EpaisseurMixte.Controls.Add(Me.lbl_EpaisseurM)
+        Me.pan_EpaisseurMixte.Controls.Add(Me.etq_UnitDim10)
+        Me.pan_EpaisseurMixte.Controls.Add(Me.img_Td2)
+        Me.pan_EpaisseurMixte.Location = New System.Drawing.Point(90, 303)
+        Me.pan_EpaisseurMixte.Name = "pan_EpaisseurMixte"
+        Me.pan_EpaisseurMixte.Size = New System.Drawing.Size(237, 52)
+        Me.pan_EpaisseurMixte.TabIndex = 88
+        '
+        'txt_Td2
+        '
+        Me.txt_Td2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Td2.Location = New System.Drawing.Point(146, 3)
+        Me.txt_Td2.Name = "txt_Td2"
+        Me.txt_Td2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Td2.TabIndex = 75
+        '
+        'lbl_EpaisseurM
+        '
+        Me.lbl_EpaisseurM.AutoSize = True
+        Me.lbl_EpaisseurM.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_EpaisseurM.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_EpaisseurM.Location = New System.Drawing.Point(7, 6)
+        Me.lbl_EpaisseurM.Name = "lbl_EpaisseurM"
+        Me.lbl_EpaisseurM.Size = New System.Drawing.Size(78, 13)
+        Me.lbl_EpaisseurM.TabIndex = 73
+        Me.lbl_EpaisseurM.Text = "lbl_EpaisseurM"
+        Me.lbl_EpaisseurM.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'etq_UnitDim10
+        '
+        Me.etq_UnitDim10.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim10.AutoSize = True
+        Me.etq_UnitDim10.Location = New System.Drawing.Point(211, 6)
+        Me.etq_UnitDim10.Name = "etq_UnitDim10"
+        Me.etq_UnitDim10.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim10.TabIndex = 74
+        Me.etq_UnitDim10.Text = "mm"
+        '
+        'img_Td2
+        '
+        Me.img_Td2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Td2.Location = New System.Drawing.Point(111, 3)
+        Me.img_Td2.Name = "img_Td2"
+        Me.img_Td2.Size = New System.Drawing.Size(37, 20)
+        Me.img_Td2.TabIndex = 76
+        Me.img_Td2.TabStop = False
+        '
+        'txt_Tc
+        '
+        Me.txt_Tc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Tc.Location = New System.Drawing.Point(146, 24)
+        Me.txt_Tc.Name = "txt_Tc"
+        Me.txt_Tc.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Tc.TabIndex = 90
+        '
+        'etq_UnitDim11
+        '
+        Me.etq_UnitDim11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDim11.AutoSize = True
+        Me.etq_UnitDim11.Location = New System.Drawing.Point(211, 27)
+        Me.etq_UnitDim11.Name = "etq_UnitDim11"
+        Me.etq_UnitDim11.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim11.TabIndex = 89
+        Me.etq_UnitDim11.Text = "mm"
+        '
+        'img_Tc
+        '
+        Me.img_Tc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Tc.Location = New System.Drawing.Point(111, 24)
+        Me.img_Tc.Name = "img_Tc"
+        Me.img_Tc.Size = New System.Drawing.Size(37, 20)
+        Me.img_Tc.TabIndex = 91
+        Me.img_Tc.TabStop = False
+        '
+        'rdb_EpTotale
+        '
+        Me.rdb_EpTotale.AutoSize = True
+        Me.rdb_EpTotale.Location = New System.Drawing.Point(93, 7)
+        Me.rdb_EpTotale.Name = "rdb_EpTotale"
+        Me.rdb_EpTotale.Size = New System.Drawing.Size(14, 13)
+        Me.rdb_EpTotale.TabIndex = 92
+        Me.rdb_EpTotale.TabStop = True
+        Me.rdb_EpTotale.UseVisualStyleBackColor = True
+        '
+        'rdb_EpPleine
+        '
+        Me.rdb_EpPleine.AutoSize = True
+        Me.rdb_EpPleine.Location = New System.Drawing.Point(93, 28)
+        Me.rdb_EpPleine.Name = "rdb_EpPleine"
+        Me.rdb_EpPleine.Size = New System.Drawing.Size(14, 13)
+        Me.rdb_EpPleine.TabIndex = 93
+        Me.rdb_EpPleine.TabStop = True
+        Me.rdb_EpPleine.UseVisualStyleBackColor = True
         '
         'Frm_Dalle
         '
@@ -1283,7 +1425,6 @@ Partial Class Frm_Dalle
         Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.pan_Main.ResumeLayout(False)
         Me.TLPan_Dalle.ResumeLayout(False)
-        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLpan_PartageV.ResumeLayout(False)
         Me.TLpan_Milieu.ResumeLayout(False)
@@ -1308,21 +1449,29 @@ Partial Class Frm_Dalle
         CType(Me.img_RhoC, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Type.ResumeLayout(False)
         Me.pan_Type.PerformLayout()
-        Me.pan_Predalle.ResumeLayout(False)
-        Me.pan_Predalle.PerformLayout()
-        CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_Renformis.ResumeLayout(False)
-        Me.pan_Renformis.PerformLayout()
-        CType(Me.Img_Hh, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Armatures.ResumeLayout(False)
         Me.pan_DonneesArma.ResumeLayout(False)
         Me.pan_DonneesArma.PerformLayout()
         CType(Me.img_zs, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_esp, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_PhiS, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Img.ResumeLayout(False)
+        Me.pan_Epaisseur.ResumeLayout(False)
+        Me.pan_Epaisseur.PerformLayout()
+        CType(Me.Img_Hd, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Predalle.ResumeLayout(False)
+        Me.pan_Predalle.PerformLayout()
+        CType(Me.img_EpJoint, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_EpPredalle, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Dalle, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Renformis.ResumeLayout(False)
+        Me.pan_Renformis.PerformLayout()
+        CType(Me.Img_Hh, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_EpaisseurMixte.ResumeLayout(False)
+        Me.pan_EpaisseurMixte.PerformLayout()
+        CType(Me.img_Td2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Tc, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1367,10 +1516,6 @@ Partial Class Frm_Dalle
     Friend WithEvents lbl_Renformis As Label
     Friend WithEvents Img_Hh As PictureBox
     Friend WithEvents etq_UnitDim3 As Label
-    Friend WithEvents txt_Hd As TextBox
-    Friend WithEvents lbl_Epaisseur As Label
-    Friend WithEvents etq_UnitDim2 As Label
-    Friend WithEvents Img_Hd As PictureBox
     Friend WithEvents lbl_TypeDalle As Label
     Friend WithEvents cmb_TypeDalle As ComboBox
     Friend WithEvents lbl_Beton As Label
@@ -1424,4 +1569,20 @@ Partial Class Frm_Dalle
     Friend WithEvents rdb_ATraversBac As RadioButton
     Friend WithEvents lbl_ConnectorThroughTheWeb As Label
     Friend WithEvents chk_BetonLeger As CheckBox
+    Friend WithEvents pan_Img As Panel
+    Friend WithEvents pan_Epaisseur As Panel
+    Friend WithEvents txt_Hd As TextBox
+    Friend WithEvents lbl_Epaisseur As Label
+    Friend WithEvents etq_UnitDim2 As Label
+    Friend WithEvents Img_Hd As PictureBox
+    Friend WithEvents pan_EpaisseurMixte As Panel
+    Friend WithEvents txt_Tc As TextBox
+    Friend WithEvents etq_UnitDim11 As Label
+    Friend WithEvents txt_Td2 As TextBox
+    Friend WithEvents img_Tc As PictureBox
+    Friend WithEvents lbl_EpaisseurM As Label
+    Friend WithEvents etq_UnitDim10 As Label
+    Friend WithEvents img_Td2 As PictureBox
+    Friend WithEvents rdb_EpPleine As RadioButton
+    Friend WithEvents rdb_EpTotale As RadioButton
 End Class

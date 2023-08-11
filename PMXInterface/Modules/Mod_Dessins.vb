@@ -185,6 +185,7 @@ Module Mod_Dessins
         '-----------------------------------------------------------------------------------------------
         '   iSelect:    0 : hauteur totale de dalle
         '               1 : renformis
+        '               2 : epaisseur dalle au dessus du bac
         '            1000 : béton dalle  
         '-----------------------------------------------------------------------------------------------
 
@@ -200,6 +201,8 @@ Module Mod_Dessins
         Dim MyFontNormal As Font = FontBase
 
         Dim Chaine As String
+        Dim lDalleMixte As Boolean = (MyDalle.type = Cls_Dalle.Enum_TypeDalle.Mixte)
+        Dim dCar2 As Decimal = MyDalle.Bac.h_p / 2
 
         '--> Cotations
 
@@ -240,6 +243,41 @@ Module Mod_Dessins
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
             Chaine = GetStringNoUnit(Math.Abs(ye - yo), Enu_TypeVariable.Dimension)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
+
+        '# Dalle mixte
+
+        If lDalleMixte Then
+
+            '# Epaisseur au dessus du bac
+            MyColor = StyleCouleur(iSelect, 2)
+            MyPen.Color = MyColor
+
+            xCoteZ = -BeffG + dCar
+
+            yo = MyDalle.Bac.h_p
+            ye = MyDalle.zTop
+
+            AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
+            AddLigne(MyGr, MyPen, xCoteZ, ye, xCoteZ, ye + dCar / 2, MyParAffA)
+
+            Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, ye + dCar2 / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            '# Epaisseur du bac
+
+            MyColor = StyleCouleur(iSelect, -2)
+            MyPen.Color = MyColor
+
+            yo = 0
+            ye = MyDalle.Bac.h_p
+
+            AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
+            AddLigne(MyGr, MyPen, xCoteZ, yo - dCar / 2, xCoteZ, yo, MyParAffA)
+
+            Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, yo - dCar2 / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Top, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         End If
 

@@ -964,6 +964,26 @@ Module Mod_Outils
 
 #Region " Preparation des objets "
 
+    Public Sub PrepareTextBoxExpert(ByRef MyTxt As TextBox, lDispo As Boolean)
+        '------------------------------------------------------------------------------------
+        '   10/08/23 :  Création - POM
+        '------------------------------------------------------------------------------------
+        '   Préparation de l'état d'un textbox en fonction du mode expert (bloqué en mode normal)
+        '------------------------------------------------------------------------------------
+        '   MyTxt       [E] :   Textbox à préparer
+        '   lDispo      [E] :   Indicateur si textbox disponible
+        '------------------------------------------------------------------------------------
+
+        If lDispo Then
+            MyTxt.Enabled = True
+            MyTxt.BackColor = SystemColors.Window
+        Else
+            MyTxt.Enabled = False
+            MyTxt.BackColor = CouleurReadOnly
+        End If
+
+    End Sub
+
     ''' <summary>
     ''' Remplissabge d'un comboBox avec une table de valeurs
     ''' </summary>

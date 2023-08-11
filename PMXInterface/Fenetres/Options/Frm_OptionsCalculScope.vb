@@ -66,26 +66,6 @@
 
     End Sub
 
-    Private Sub PrepareTextBoxExpert(ByRef MyTxt As TextBox, lExpert As Boolean)
-        '------------------------------------------------------------------------------------
-        '   10/08/23 :  Création - POM
-        '------------------------------------------------------------------------------------
-        '   Préparation de l'état d'un textbox en fonction du mode expert (bloqué en mode normal)
-        '------------------------------------------------------------------------------------
-        '   MyTxt       [E] :   Textbox à préparer
-        '   lExpert     [E] :   Indicateur mode expert
-        '------------------------------------------------------------------------------------
-
-        If lExpert Then
-            MyTxt.Enabled = True
-            MyTxt.BackColor = SystemColors.Window
-        Else
-            MyTxt.Enabled = False
-            MyTxt.BackColor = CouleurReadOnly
-        End If
-
-    End Sub
-
     Private Sub GestionUnites()
         Me.etq_UnitD1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitD2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
