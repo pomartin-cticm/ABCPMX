@@ -71,6 +71,7 @@ Partial Class Frm_Dalle
         Me.lbl_Acier = New System.Windows.Forms.Label()
         Me.lbl_Armatures = New System.Windows.Forms.Label()
         Me.pan_Beton = New System.Windows.Forms.Panel()
+        Me.chk_BetonLeger = New System.Windows.Forms.CheckBox()
         Me.txt_RhoC = New System.Windows.Forms.TextBox()
         Me.img_RhoC = New System.Windows.Forms.PictureBox()
         Me.etq_UnitRhoC = New System.Windows.Forms.Label()
@@ -120,7 +121,6 @@ Partial Class Frm_Dalle
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.imgList_BOArma = New System.Windows.Forms.ImageList(Me.components)
         Me.ToolTipDalle = New System.Windows.Forms.ToolTip(Me.components)
-        Me.chk_BetonLeger = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -295,13 +295,13 @@ Partial Class Frm_Dalle
         Me.TLpan_Milieu.Controls.Add(Me.lbl_Bac, 0, 0)
         Me.TLpan_Milieu.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Milieu.Location = New System.Drawing.Point(252, 0)
-        Me.TLpan_Milieu.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
+        Me.TLpan_Milieu.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.TLpan_Milieu.Name = "TLpan_Milieu"
         Me.TLpan_Milieu.RowCount = 2
         Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Milieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLpan_Milieu.Size = New System.Drawing.Size(248, 530)
+        Me.TLpan_Milieu.Size = New System.Drawing.Size(249, 530)
         Me.TLpan_Milieu.TabIndex = 2
         '
         'pan_Bac
@@ -323,7 +323,7 @@ Partial Class Frm_Dalle
         Me.pan_Bac.Location = New System.Drawing.Point(0, 30)
         Me.pan_Bac.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Bac.Name = "pan_Bac"
-        Me.pan_Bac.Size = New System.Drawing.Size(248, 500)
+        Me.pan_Bac.Size = New System.Drawing.Size(249, 500)
         Me.pan_Bac.TabIndex = 9
         '
         'pan_DispoConnecteur
@@ -380,7 +380,7 @@ Partial Class Frm_Dalle
         Me.pan_Orientation.Location = New System.Drawing.Point(3, 198)
         Me.pan_Orientation.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Orientation.Name = "pan_Orientation"
-        Me.pan_Orientation.Size = New System.Drawing.Size(241, 67)
+        Me.pan_Orientation.Size = New System.Drawing.Size(242, 67)
         Me.pan_Orientation.TabIndex = 82
         '
         'lbl_BacOrientation
@@ -420,7 +420,7 @@ Partial Class Frm_Dalle
         'txt_Hp
         '
         Me.txt_Hp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Hp.Location = New System.Drawing.Point(154, 141)
+        Me.txt_Hp.Location = New System.Drawing.Point(155, 141)
         Me.txt_Hp.Name = "txt_Hp"
         Me.txt_Hp.Size = New System.Drawing.Size(58, 20)
         Me.txt_Hp.TabIndex = 84
@@ -441,7 +441,7 @@ Partial Class Frm_Dalle
         '
         Me.etq_UnitDim4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDim4.AutoSize = True
-        Me.etq_UnitDim4.Location = New System.Drawing.Point(217, 144)
+        Me.etq_UnitDim4.Location = New System.Drawing.Point(218, 144)
         Me.etq_UnitDim4.Name = "etq_UnitDim4"
         Me.etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim4.TabIndex = 83
@@ -450,7 +450,7 @@ Partial Class Frm_Dalle
         'img_Hp
         '
         Me.img_Hp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Hp.Location = New System.Drawing.Point(117, 141)
+        Me.img_Hp.Location = New System.Drawing.Point(118, 141)
         Me.img_Hp.Name = "img_Hp"
         Me.img_Hp.Size = New System.Drawing.Size(37, 20)
         Me.img_Hp.TabIndex = 85
@@ -554,7 +554,7 @@ Partial Class Frm_Dalle
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_Bac.Location = New System.Drawing.Point(3, 31)
         Me.img_Bac.Name = "img_Bac"
-        Me.img_Bac.Size = New System.Drawing.Size(241, 104)
+        Me.img_Bac.Size = New System.Drawing.Size(242, 104)
         Me.img_Bac.TabIndex = 80
         Me.img_Bac.TabStop = False
         '
@@ -564,7 +564,7 @@ Partial Class Frm_Dalle
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.btn_ModifierBac.Location = New System.Drawing.Point(3, 167)
         Me.btn_ModifierBac.Name = "btn_ModifierBac"
-        Me.btn_ModifierBac.Size = New System.Drawing.Size(241, 27)
+        Me.btn_ModifierBac.Size = New System.Drawing.Size(242, 27)
         Me.btn_ModifierBac.TabIndex = 74
         Me.btn_ModifierBac.Text = "btn_ModifierBac"
         Me.btn_ModifierBac.UseVisualStyleBackColor = True
@@ -587,7 +587,7 @@ Partial Class Frm_Dalle
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_BacNom.Location = New System.Drawing.Point(89, 9)
         Me.txt_BacNom.Name = "txt_BacNom"
-        Me.txt_BacNom.Size = New System.Drawing.Size(155, 20)
+        Me.txt_BacNom.Size = New System.Drawing.Size(156, 20)
         Me.txt_BacNom.TabIndex = 72
         '
         'lbl_Bac
@@ -599,7 +599,7 @@ Partial Class Frm_Dalle
         Me.lbl_Bac.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Bac.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Bac.Name = "lbl_Bac"
-        Me.lbl_Bac.Size = New System.Drawing.Size(248, 30)
+        Me.lbl_Bac.Size = New System.Drawing.Size(249, 30)
         Me.lbl_Bac.TabIndex = 2
         Me.lbl_Bac.Text = "lbl_Bac"
         Me.lbl_Bac.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -737,10 +737,20 @@ Partial Class Frm_Dalle
         Me.pan_Beton.Controls.Add(Me.lbl_ClasseE)
         Me.pan_Beton.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Beton.Location = New System.Drawing.Point(0, 172)
-        Me.pan_Beton.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Beton.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Beton.Name = "pan_Beton"
-        Me.pan_Beton.Size = New System.Drawing.Size(251, 85)
+        Me.pan_Beton.Size = New System.Drawing.Size(251, 84)
         Me.pan_Beton.TabIndex = 9
+        '
+        'chk_BetonLeger
+        '
+        Me.chk_BetonLeger.AutoSize = True
+        Me.chk_BetonLeger.Location = New System.Drawing.Point(13, 9)
+        Me.chk_BetonLeger.Name = "chk_BetonLeger"
+        Me.chk_BetonLeger.Size = New System.Drawing.Size(105, 17)
+        Me.chk_BetonLeger.TabIndex = 64
+        Me.chk_BetonLeger.Text = "chk_BetonLeger"
+        Me.chk_BetonLeger.UseVisualStyleBackColor = True
         '
         'txt_RhoC
         '
@@ -1060,9 +1070,9 @@ Partial Class Frm_Dalle
         Me.pan_Armatures.Controls.Add(Me.chk_Lit1)
         Me.pan_Armatures.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Armatures.Location = New System.Drawing.Point(0, 287)
-        Me.pan_Armatures.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Armatures.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Armatures.Name = "pan_Armatures"
-        Me.pan_Armatures.Size = New System.Drawing.Size(251, 150)
+        Me.pan_Armatures.Size = New System.Drawing.Size(251, 149)
         Me.pan_Armatures.TabIndex = 11
         '
         'pan_DonneesArma
@@ -1258,16 +1268,6 @@ Partial Class Frm_Dalle
         Me.imgList_BOArma.TransparentColor = System.Drawing.Color.Transparent
         Me.imgList_BOArma.Images.SetKeyName(0, "Ajouter")
         Me.imgList_BOArma.Images.SetKeyName(1, "Supprimer")
-        '
-        'chk_BetonLeger
-        '
-        Me.chk_BetonLeger.AutoSize = True
-        Me.chk_BetonLeger.Location = New System.Drawing.Point(13, 9)
-        Me.chk_BetonLeger.Name = "chk_BetonLeger"
-        Me.chk_BetonLeger.Size = New System.Drawing.Size(105, 17)
-        Me.chk_BetonLeger.TabIndex = 64
-        Me.chk_BetonLeger.Text = "chk_BetonLeger"
-        Me.chk_BetonLeger.UseVisualStyleBackColor = True
         '
         'Frm_Dalle
         '

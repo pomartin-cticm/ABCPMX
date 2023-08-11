@@ -33,6 +33,7 @@ Public Class Frm_Maintiens
     Dim strTypeTravee_ConsoleGauche As String
     Dim strTypeTravee_TraveeCentrale As String
     Dim strTypeTravee_ConsoleDroite As String
+    Dim strSpan As String
 
     ''' <summary>
     ''' Abscisse de la souris sur le dessin
@@ -104,6 +105,8 @@ Public Class Frm_Maintiens
     ''' </summary>
     Dim MyCursor As New Cursor(LogicielRep.Images & "\FrmMaintien_MoveH.ico")
 
+    Dim NbTravees As Integer
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -118,6 +121,8 @@ Public Class Frm_Maintiens
         GestionStyle()
         GestionUnites()
         RemplirComboTypeTravee()
+        PrepareFlechesNavigation()
+        MAJI_BtnNavigation()
         AfficherPoutreEnCours()
         lBuild = False
     End Sub
@@ -146,6 +151,7 @@ Public Class Frm_Maintiens
                 strTypeTravee_TraveeCentrale = Bloc("MAINSPAN")
                 strTypeTravee_ConsoleGauche = Bloc("LEFTCANT")
                 strTypeTravee_ConsoleDroite = Bloc("RIGHTCANT")
+                strSpan = Bloc("SPAN")
 
                 If MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleDroite Then
                     If MyPoutreLoc.lTraveeConsoleGauche And MyPoutreLoc.lTraveeConsoleDroite Then
@@ -194,9 +200,59 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub RemplirComboTypeTravee()
+
+        '==POM=============================
+        Dim index As Integer = 0
+
+        NbTravees = MyPoutreLoc.NbTravees
+        ReDim strTypeTravee(NbTravees - 1)
+        Dim lCentral As Boolean = (MyPoutreLoc.NombreTraveesDeuxAppuis = 1)
+        If MyPoutreLoc.lTraveeConsoleGauche Then
+            strTypeTravee(index) = strTypeTravee_ConsoleGauche
+            index += 1
+        End If
+        For i As Integer = 1 To MyPoutreLoc.NombreTraveesDeuxAppuis
+            If lCentral Then
+                strTypeTravee(index) = strTypeTravee_TraveeCentrale
+            Else
+                strTypeTravee(index) = strSpan & " no " & CStr(i)
+            End If
+            index += 1
+        Next
+        If MyPoutreLoc.lTraveeConsoleDroite Then strTypeTravee(index) = strTypeTravee_ConsoleDroite
+        '==================================
+
         Me.cmb_Travee.Items.Clear()
         Me.cmb_Travee.Items.AddRange(strTypeTravee)
-        Me.cmb_Travee.SelectedIndex = 0
+        If MyPoutreLoc.lTraveeConsoleGauche Then
+            Me.cmb_Travee.SelectedIndex = 1
+        Else
+            Me.cmb_Travee.SelectedIndex = 0
+        End If
+    End Sub
+
+    Private Sub PrepareFlechesNavigation()
+        '===POM
+
+        Me.btn_Suivant.Visible = (NbTravees > 1)
+        Me.btn_Precedent.Visible = (NbTravees > 1)
+
+    End Sub
+
+    Private Sub MAJI_BtnNavigation()
+        '===POM
+        If (NbTravees > 1) Then
+            If Me.cmb_Travee.SelectedIndex = 0 Then
+                Me.btn_Precedent.Image = imgList_Navigation.Images("PrecedentNonDispo")
+            Else
+                Me.btn_Precedent.Image = imgList_Navigation.Images("Precedent")
+            End If
+            If Me.cmb_Travee.SelectedIndex = NbTravees - 1 Then
+                Me.btn_Suivant.Image = imgList_Navigation.Images("SuivantNonDispo")
+            Else
+                Me.btn_Suivant.Image = imgList_Navigation.Images("Suivant")
+            End If
+        End If
     End Sub
 
     Private Sub GestionStyle()
@@ -509,24 +565,63 @@ Public Class Frm_Maintiens
 #End Region
 
 #Region " Evènements saisie "
+
+    Private Sub GestionNavigation(sender As Object, e As EventArgs) Handles btn_Suivant.Click, btn_Precedent.Click
+        Dim Index As Integer = Me.cmb_Travee.SelectedIndex
+        Select Case sender.name
+            Case Me.btn_Precedent.Name
+                Me.cmb_Travee.SelectedIndex = Math.Max(0, Index - 1)
+            Case Me.btn_Suivant.Name
+                Me.cmb_Travee.SelectedIndex = Math.Min(NbTravees - 1, Index + 1)
+        End Select
+        MAJI_BtnNavigation()
+    End Sub
+
     Private Sub comboTraveeSelectionneeChanged(sender As Object, e As EventArgs) Handles cmb_Travee.SelectedIndexChanged
         If lBuild Then Exit Sub
 
         'permet de mettre à jour les variables locales qui tracent l'indice de la travée en cours 
 
-        Select Case cmb_Travee.Text
-            Case strTypeTravee_ConsoleGauche
-                traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleGauche, 0)
-                iSelect = 0
+        '===POM
+        'Select Case cmb_Travee.Text
+        '    Case strTypeTravee_ConsoleGauche
+        '        traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleGauche, 0)
+        '        iSelect = 0
 
-            Case strTypeTravee_TraveeCentrale
-                traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
+        '    Case strTypeTravee_TraveeCentrale
+        '        traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
+        '        iSelect = 1
+
+        '    Case strTypeTravee_ConsoleDroite
+        '        traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleDroite, MyPoutreLoc.IndiceTraveeConsoleDroite)
+        '        iSelect = 99
+
+        'End Select
+
+        Select Case Me.cmb_Travee.SelectedIndex
+            Case 0
+                If MyPoutreLoc.lTraveeConsoleGauche Then
+                    traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleGauche, 0)
+                    iSelect = 0
+                Else
+                    traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, 1)
+                    iSelect = 1
+                End If
+            Case NbTravees - 1
+                If MyPoutreLoc.lTraveeConsoleDroite Then
+                    traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleDroite, MyPoutreLoc.IndiceTraveeConsoleDroite)
+                    iSelect = 99
+                Else
+                    traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, NbTravees)
+                    iSelect = 1
+                End If
+            Case Else
+                Dim i0 As Integer
+                If MyPoutreLoc.lTraveeConsoleGauche Then i0 = 0 Else i0 = 1
+                traveeEnCours = (cls_Poutre.EnuTypeTravee.DeuxAppuis, Me.cmb_Travee.SelectedIndex + i0)
                 iSelect = 1
-
-            Case strTypeTravee_ConsoleDroite
-                traveeEnCours = (cls_Poutre.EnuTypeTravee.ConsoleDroite, MyPoutreLoc.IndiceTraveeConsoleDroite)
-                iSelect = 99
         End Select
+
 
         'Select Case True
         '    Case MyPoutreLoc.TypeMaintien(traveeEnCours.Item2) = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
@@ -537,18 +632,25 @@ Public Class Frm_Maintiens
         '        rad_PointRestrain.Checked = True
         'End Select
 
-        Select Case True
-            Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
+        'Select Case True
+        '    Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
+        '        rad_NonRestrain.Checked = True
+        '    Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
+        '        rad_FullyRestrain.Checked = True
+        '    Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
+        '        rad_PointRestrain.Checked = True
+        'End Select
+        '===POM
+        Select Case MyPoutreLoc.TypeMaintien
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.NotRestrained
                 rad_NonRestrain.Checked = True
-            Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.FullyRestrained
                 rad_FullyRestrain.Checked = True
-            Case MyPoutreLoc.TypeMaintien = MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
+            Case MyPoutreLoc.EnuTypeMaintiensPoutre.PointRestrained
                 rad_PointRestrain.Checked = True
         End Select
 
         img_Maintiens.Invalidate()
-
-
 
     End Sub
 
@@ -647,7 +749,6 @@ Public Class Frm_Maintiens
         Me.pan_ControlDessin.Enabled = lEnable
         Me.lbl_ControlDessin.Enabled = lEnable
     End Sub
-
 
 
 #End Region

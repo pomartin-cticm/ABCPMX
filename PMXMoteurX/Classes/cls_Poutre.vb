@@ -157,7 +157,7 @@
 
 #End Region
 
-#Region "Attributs pour la connection"
+#Region " Attributs pour la connection "
 
     ''' <summary>
     ''' Indique si l'arrangement des goujons se fait automatiquement (True) ou non (False)
@@ -641,7 +641,7 @@
 
 #End Region
 
-#Region "Calculs largeur participante"
+#Region " Calculs largeur participante "
     Public Function EffectiveWidth(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean) As Decimal
 
         '------------------------------------------------------------------------------------------------------------------

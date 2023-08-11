@@ -158,8 +158,6 @@ RIGHTCANT				= Right cantilever span
 SPAN					= Span
 TITLE 					= Definition of the lateral restraints
 
-
-
 #FRM_MAIN
 COPYPICTURE				= Copy picture
 ERRORCAPACITY			= The maximum capacity of the list has been reached, no new additions are possible
@@ -203,7 +201,6 @@ OPENPROJECT				= Open a project
 RECENTFILES				= Recent Files
 
 
-
 #FRM_PROPPING
 TITLE					= Propping of the beam
 OK						= Ok
@@ -215,7 +212,6 @@ POINTPROPPED			= Point propped
 PROPPINGTYPE			= Type of propping
 RIGHTCANTPROPP			= End propping of the right cantilever 
 UNPROPPED				= Unpropped
-
 
 
 #FRM_PSHEETING
