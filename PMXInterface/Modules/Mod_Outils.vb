@@ -343,6 +343,85 @@ Module Mod_Outils
 
 #Region " Affichage donnée "
 
+    Public Function GetFormatSignificatifN(ByVal Valeur As Double,
+                                          ByVal nbSignificatif As Integer,
+                                          ByVal nbDigitMax As Integer) As String
+        '---------------------------------------------------------------------------------------------------
+        '   11/08/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Fournit le format d'affichage pour une valeur avec un nb prédéfini de chiffres signicatifs
+        '---------------------------------------------------------------------------------------------------
+        '   Valeur          [E] :   Valeur à afficher
+        '   nbSignificatif  [E] :   Nombre de chiffres significatifs attendus
+        '   nbDigitMax      [E] :   Nombre maxi de chiffres après le séparateur décimal (si -1, pas de limite)
+        '---------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim EpsilonV As Decimal = 0.0000000001#
+        Dim MyFormat As String = "0"
+        Dim Pui As Decimal
+        Dim PuiE As Decimal
+        Dim nbUnit As Integer   ' Nb de chiffres dans la partie entière
+        Dim nbZero As Integer   ' Nb de chiffres à mettre après de le séparateur décimal
+
+        '--> Traitement
+
+        Try
+            If Math.Abs(Valeur) - EpsilonV < 0 Then
+                MyFormat = "0"
+            Else
+
+                Pui = (Math.Log10(Math.Abs(Valeur)))
+
+                If Pui > 0 Then
+                    '# Cas d'une valeur > 1
+                    PuiE = Math.Floor(Pui)
+                    If (PuiE = Pui) Then
+                        nbUnit = PuiE
+                    Else
+                        nbUnit = PuiE + 1
+                    End If
+                    nbZero = Math.Max(0, nbSignificatif - nbUnit)
+                Else
+                    '# Cas d'une valeur < 1
+                    PuiE = Math.Floor(-Pui)
+                    If (PuiE = -Pui) Then
+                        nbZero = PuiE - 1
+                    Else
+                        nbZero = PuiE
+                    End If
+
+                    nbZero += +nbSignificatif
+
+                End If
+
+                '# on écrete le nb de chiffres après la virgule en fct des paramètres d'appel
+                If nbDigitMax > -1 Then
+
+                    nbZero = Math.Min(nbZero, nbDigitMax)
+
+                End If
+
+                '# Préparation du format d'affichage
+                If nbZero > 0 Then
+                    MyFormat = "0."
+                    For i As Integer = 1 To nbZero
+                        MyFormat &= "0"
+                    Next
+                End If
+            End If
+
+        Catch ex As Exception
+            MsgBox("Erreur du traitement", MsgBoxStyle.Critical, "Mod_Outils/GetFormatSignificatifN")
+        End Try
+
+        Return MyFormat
+
+    End Function
+
+
+
     ''' <summary>
     ''' Fournit un format d'affichage pour une valeur avec un nombre prédéfini de chiffres significatifs
     ''' </summary>
@@ -401,10 +480,10 @@ Module Mod_Outils
     ''' <param name="nbSign">Nombre de chiffres significatifs</param>
     ''' <param name="nbDigitMax">Nombre maxi de digits après la virgule</param>
     ''' <param name="lUnite">Indique si affichage des Unités</param>
-    ''' <param name="VA">Indique si la valeur doit être affiché comme une valeur absolue</param>
+    ''' <param name="lAbsolu">Indique si la valeur doit être affiché comme une valeur absolue</param>
     ''' <returns></returns>
     Public Function GetStringInUnit(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
-                                    ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal lUnite As Boolean, Optional ByVal VA As Boolean = False) As String
+                                    ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal lUnite As Boolean, Optional ByVal lAbsolu As Boolean = False) As String
 
         '--[ Déclarations
 
@@ -502,18 +581,19 @@ Module Mod_Outils
         End Select
 
         ValeurU = Valeur / kUnitU
-        MyFormat = GetFormatSignificatif(ValeurU, nbSign, nbDigitMax)
+        'MyFormat = GetFormatSignificatif(ValeurU, nbSign, nbDigitMax)
+        MyFormat = GetFormatSignificatifN(ValeurU, nbSign, nbDigitMax)
 
-        If ValeurU >= 0 Then VA = False '--> Affichage VA seulement si valeur négative
+        If ValeurU >= 0 Then lAbsolu = False '--> Affichage VA seulement si valeur négative
 
         If lUnite Then
-            If VA Then
+            If lAbsolu Then
                 Return "|" & Format(ValeurU, MyFormat) & "|" & Unite
             Else
                 Return Format(ValeurU, MyFormat) & Unite
             End If
         Else
-            If VA Then
+            If lAbsolu Then
                 Return "|" & Format(ValeurU, MyFormat) & "|"
             Else
                 Return Format(ValeurU, MyFormat)
