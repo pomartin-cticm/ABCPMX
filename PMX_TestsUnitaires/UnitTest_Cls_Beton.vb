@@ -23,6 +23,7 @@ Imports PMXMoteur2
         '--> Initialisation
 
         MyBet.Classe = Cls_Beton.TabClasseBeton(1)      '"C25/30"
+        MyBet.lLeger = False
         MyBet.Calcul_Proprietes()
 
         '--> Test des propriétés du béton
@@ -43,6 +44,12 @@ Imports PMXMoteur2
 
         ValRef = 31476
         DeltaV = (MyBet.Ecm - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# fctm
+
+        ValRef = 2.565
+        DeltaV = (MyBet.Fctm - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '--> Test valeur court terme du coefficient d'équivalence
@@ -119,6 +126,7 @@ Imports PMXMoteur2
         '--> Initialisation
 
         MyBet.Classe = Cls_Beton.TabClasseBeton(4)      '"C40/30"
+        MyBet.lLeger = False
         MyBet.Calcul_Proprietes()
 
         '--> Test des propriétés du béton
@@ -139,6 +147,12 @@ Imports PMXMoteur2
 
         ValRef = 35220
         DeltaV = (MyBet.Ecm - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# fctm
+
+        ValRef = 3.509
+        DeltaV = (MyBet.Fctm - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '--> Test valeur court terme du coefficient d'équivalence
@@ -191,6 +205,58 @@ Imports PMXMoteur2
 
         ValRef = 16.37
         DeltaV = (MyBet.CoefficientEquivalence(RH, h0, time_t, time_t0, PsiL) - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+    End Sub
+
+
+    <TestMethod()> Public Sub TestUnit_BetonLeger()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   11/08/23 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test des propriétés d'un béton léger
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyBet As New Cls_Beton
+        Dim n0 As Decimal
+        Dim DeltaV, ValRef As Decimal
+        Const DeltaVMAx As Decimal = 1 / 1000
+        Dim RH, h0, PsiL As Decimal
+        Dim time_t, time_t0 As Decimal
+
+        '--> Initialisation
+
+        MyBet.Classe = Cls_Beton.TabClasseBetonLeger(2)      '"LC30/33"
+        MyBet.lLeger = True
+        MyBet.RhoC = 1500
+        MyBet.Calcul_Proprietes()
+
+        '--> Test des propriétés du béton
+
+        '# Fck
+
+        ValRef = 30
+        DeltaV = (MyBet.Fck - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Fcm 
+
+        ValRef = 30 + 8
+        DeltaV = (MyBet.Fcm - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Ecm
+
+        ValRef = 15265
+        DeltaV = (MyBet.Ecm - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# fctm
+
+        ValRef = 2.343
+        DeltaV = (MyBet.Fctm - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub

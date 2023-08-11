@@ -85,6 +85,18 @@
     ''' Calcul des propriétés
     ''' </summary>
     Public Sub Calcul_Proprietes()
+        '----------------------------------------------------------------------------------
+        '   xx/06/23 :  Création
+        '----------------------------------------------------------------------------------
+        '   Propriétés du béton - Formules du Tableau 3.1 de l'EN 1992-1-1 (béton normal)
+        '                         Formules du Tableau 11.3.1 pour le béton léger
+        '----------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim EtaE, Eta1 As Decimal
+
+        '--> Traitement
 
         Fck = GetFckDeClasse()
         Fcm = Fck + 8
@@ -93,18 +105,29 @@
         Else
             Fctm = 2.12 * Math.Log(1 + Fcm / 10)
         End If
+        If lLeger Then
+            Eta1 = 0.4 + 0.6 * Math.Min(1, Me.RhoC / 2200)
+            Fctm = Eta1 * Fctm
+        End If
+
         Fctk_005 = 0.4 * Fctm
+
         Ecm = (22 * (Fcm / 10) ^ 0.3) * 10 ^ 3
+        If Me.lLeger Then
+            EtaE = Math.Min(1, (Me.RhoC / 2200) ^ 2)
+            Ecm = EtaE * Ecm
+        End If
 
     End Sub
 
     Private Function GetFckDeClasse() As Decimal
 
+        Dim iC As Integer = Me.Classe.IndexOf("C")
         Dim iPoint As Integer = Me.Classe.IndexOf("/") 'InStr(Me.Classe, "/")
         Dim Chaine As String
 
         If iPoint >= 0 Then
-            Chaine = Me.Classe.Substring(1, iPoint - 1)
+            Chaine = Me.Classe.Substring(iC + 1, iPoint - 1 - iC)
             Return CDec(Chaine)
         End If
 
