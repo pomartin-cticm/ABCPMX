@@ -1,6 +1,8 @@
 ﻿
 Module Mod_CalculProprietes
 
+    ' A SUPPRIMER ? POM
+
 #Region " Déclarations "
 
     Const BOUCLEMAX As Integer = 1000

@@ -294,6 +294,9 @@ Module Mod_Declarations
         AireLongueurNDC
         Contrainte
         ModuleY
+        AireCM2
+        ModuleCM3
+        InertieWCM6
     End Enum
 
     Public Enum EnuFenetres

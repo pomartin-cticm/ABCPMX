@@ -1,5 +1,8 @@
 ﻿Public Class Cls_Prop_Elastique
 
+
+    ' A SUPPRIMER ? POM
+
 #Region " Charges d'exploitation "
 
     ''' <summary>
