@@ -59,15 +59,15 @@ Imports PMXMoteur2
 
             Dim beff As Decimal = beta_1 * be1 + beta_2 * be2
 
-            Dim beff_ref As Decimal = .EffectiveWidth(x, 0, False, False)
+            Dim beff_ref As Decimal = .BeffDalle(x, 0, False, False)
             Dim tau_beff As Decimal = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle de calcul classique
 
-            beff_ref = .EffectiveWidth(x, 0, True, False)
+            beff_ref = .BeffDalle(x, 0, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle simplifié pour la vérification des sections
 
-            beff_ref = .EffectiveWidth(x, 0, True, True)
+            beff_ref = .BeffDalle(x, 0, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle simplifié pour l'analyse de la poutre
 
@@ -76,16 +76,16 @@ Imports PMXMoteur2
 
             x = .LongueurTravee(0) / 2
 
-            beff_ref = .EffectiveWidth(x, 0, False, False)
+            beff_ref = .BeffDalle(x, 0, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle de calcul classique
 
-            beff_ref = .EffectiveWidth(x, 0, True, False)
+            beff_ref = .BeffDalle(x, 0, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle simplifié pour la vérification des sections
 
-            beff_ref = .EffectiveWidth(x, 0, True, True)
+            beff_ref = .BeffDalle(x, 0, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1) 'Vérification avec le modèle simplifié pour l'analyse de la poutre
 
@@ -93,7 +93,7 @@ Imports PMXMoteur2
 
             x = .LongueurTravee(0)
 
-            beff_ref = .EffectiveWidth(x, 0, False, False)
+            beff_ref = .BeffDalle(x, 0, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -101,7 +101,7 @@ Imports PMXMoteur2
 
             x = 0
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -122,7 +122,7 @@ Imports PMXMoteur2
 
             beff = beta_1 * be1 + beta_2 * be2
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
 
@@ -137,7 +137,7 @@ Imports PMXMoteur2
 
             beff = beta_1 * be1 + beta_2 * be2
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
 
@@ -149,7 +149,7 @@ Imports PMXMoteur2
 
             beff = beff_a + (beff_m - beff_a) / 0.25 * 0.1
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
 
@@ -159,7 +159,7 @@ Imports PMXMoteur2
 
             beff = beff_m + (beff_b - beff_m) / 0.25 * (0.9 - 0.75)
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
 
@@ -168,7 +168,7 @@ Imports PMXMoteur2
             x = .LongueurTravee(0)
 
             beff = beff_a
-            beff_ref = .EffectiveWidth(x, 0, True, False)
+            beff_ref = .BeffDalle(x, 0, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -177,7 +177,7 @@ Imports PMXMoteur2
             x = 0
 
             beff = beff_a
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -185,7 +185,7 @@ Imports PMXMoteur2
             x = 0.149 * .LongueurTravee(1)
 
             beff = beff_a
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -193,7 +193,7 @@ Imports PMXMoteur2
             x = 0.151 * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -201,7 +201,7 @@ Imports PMXMoteur2
             x = (1 - 0.151) * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -209,7 +209,7 @@ Imports PMXMoteur2
             x = (1 - 0.149) * .LongueurTravee(1)
 
             beff = beff_b
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -219,7 +219,7 @@ Imports PMXMoteur2
             x = .LongueurTravee(0)
 
             beff = beff_a
-            beff_ref = .EffectiveWidth(x, 0, True, True)
+            beff_ref = .BeffDalle(x, 0, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -228,7 +228,7 @@ Imports PMXMoteur2
             x = 0
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -236,7 +236,7 @@ Imports PMXMoteur2
             x = 0.149 * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -244,7 +244,7 @@ Imports PMXMoteur2
             x = 0.151 * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -252,7 +252,7 @@ Imports PMXMoteur2
             x = (1 - 0.151) * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -260,7 +260,7 @@ Imports PMXMoteur2
             x = (1 - 0.149) * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -310,7 +310,7 @@ Imports PMXMoteur2
 
             beff = beta_1 * be1 + beta_2 * be2
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -332,7 +332,7 @@ Imports PMXMoteur2
 
             beff = beta_1 * be1 + beta_2 * be2
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
 
@@ -353,7 +353,7 @@ Imports PMXMoteur2
 
             beff = beta_1 * be1 + beta_2 * be2
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
 
@@ -365,7 +365,7 @@ Imports PMXMoteur2
 
             beff = beff_a + (beff_m - beff_a) / 0.25 * 0.1
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -375,7 +375,7 @@ Imports PMXMoteur2
 
             beff = beff_m + (beff_b - beff_m) / 0.25 * (0.9 - 0.75)
 
-            beff_ref = .EffectiveWidth(x, 1, False, False)
+            beff_ref = .BeffDalle(x, 1, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -385,7 +385,7 @@ Imports PMXMoteur2
 
             beff = beff_b
 
-            beff_ref = .EffectiveWidth(x, 2, False, False)
+            beff_ref = .BeffDalle(x, 2, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -393,7 +393,7 @@ Imports PMXMoteur2
 
             x = .LongueurTravee(2) / 2
 
-            beff_ref = .EffectiveWidth(x, 2, False, False)
+            beff_ref = .BeffDalle(x, 2, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -401,7 +401,7 @@ Imports PMXMoteur2
 
             x = .LongueurTravee(2)
 
-            beff_ref = .EffectiveWidth(x, 2, False, False)
+            beff_ref = .BeffDalle(x, 2, False, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -410,7 +410,7 @@ Imports PMXMoteur2
             x = 0
 
             beff = beff_a
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -418,7 +418,7 @@ Imports PMXMoteur2
             x = 0.149 * .LongueurTravee(1)
 
             beff = beff_a
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -426,7 +426,7 @@ Imports PMXMoteur2
             x = 0.151 * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -434,7 +434,7 @@ Imports PMXMoteur2
             x = (1 - 0.151) * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -442,7 +442,7 @@ Imports PMXMoteur2
             x = (1 - 0.149) * .LongueurTravee(1)
 
             beff = beff_b
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -450,7 +450,7 @@ Imports PMXMoteur2
             x = .LongueurTravee(1)
 
             beff = beff_b
-            beff_ref = .EffectiveWidth(x, 1, True, False)
+            beff_ref = .BeffDalle(x, 1, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -461,7 +461,7 @@ Imports PMXMoteur2
 
             beff = beff_b
 
-            beff_ref = .EffectiveWidth(x, 2, True, False)
+            beff_ref = .BeffDalle(x, 2, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -469,7 +469,7 @@ Imports PMXMoteur2
 
             x = .LongueurTravee(2) / 2
 
-            beff_ref = .EffectiveWidth(x, 2, True, False)
+            beff_ref = .BeffDalle(x, 2, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -477,7 +477,7 @@ Imports PMXMoteur2
 
             x = .LongueurTravee(2)
 
-            beff_ref = .EffectiveWidth(x, 2, True, False)
+            beff_ref = .BeffDalle(x, 2, True, False)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -487,7 +487,7 @@ Imports PMXMoteur2
             x = 0
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -495,7 +495,7 @@ Imports PMXMoteur2
             x = 0.149 * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -503,7 +503,7 @@ Imports PMXMoteur2
             x = 0.151 * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -511,7 +511,7 @@ Imports PMXMoteur2
             x = (1 - 0.151) * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -519,7 +519,7 @@ Imports PMXMoteur2
             x = (1 - 0.149) * .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -527,7 +527,7 @@ Imports PMXMoteur2
             x = .LongueurTravee(1)
 
             beff = beff_m
-            beff_ref = .EffectiveWidth(x, 1, True, True)
+            beff_ref = .BeffDalle(x, 1, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
 
             Assert.IsTrue(Math.Abs(tau_beff) <= 1)
@@ -538,7 +538,7 @@ Imports PMXMoteur2
 
             beff = beff_b
 
-            beff_ref = .EffectiveWidth(x, 2, True, True)
+            beff_ref = .BeffDalle(x, 2, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -546,7 +546,7 @@ Imports PMXMoteur2
 
             x = .LongueurTravee(2) / 2
 
-            beff_ref = .EffectiveWidth(x, 2, True, True)
+            beff_ref = .BeffDalle(x, 2, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 
@@ -554,7 +554,7 @@ Imports PMXMoteur2
 
             x = .LongueurTravee(2)
 
-            beff_ref = .EffectiveWidth(x, 2, True, True)
+            beff_ref = .BeffDalle(x, 2, True, True)
             tau_beff = (beff - beff_ref) / beff_ref * 100
             Assert.IsTrue(Math.Abs(tau_beff) <= PCLim)
 

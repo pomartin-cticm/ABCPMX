@@ -319,6 +319,7 @@ Module Mod_Declarations
         Options
         Hivoss
         Main
+        LargeurEfficace
     End Enum
 
     Public iFrmAppel As EnuFenetres

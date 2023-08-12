@@ -140,6 +140,12 @@
     <Compile Include="Fenetres\Filles\Frm_Hivoss.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_LargeurEfficace.Designer.vb">
+      <DependentUpon>Frm_LargeurEfficace.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_LargeurEfficace.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Maintiens.Designer.vb">
       <DependentUpon>Frm_Maintiens.vb</DependentUpon>
     </Compile>
@@ -311,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Hivoss.resx">
       <DependentUpon>Frm_Hivoss.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_LargeurEfficace.resx">
+      <DependentUpon>Frm_LargeurEfficace.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Maintiens.resx">
       <DependentUpon>Frm_Maintiens.vb</DependentUpon>

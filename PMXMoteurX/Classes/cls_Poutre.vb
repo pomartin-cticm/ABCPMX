@@ -240,6 +240,20 @@
 
 #End Region
 
+#Region " Variables pour la modélisation "
+
+    Public Structure strucBeamNodes
+        Dim nbNodes As Integer              ' Nombre de noeuds de discrétisation le long de la poutre
+        Dim xGlobal() As Decimal            ' Position x globale du noeud / extrémité gauche de la poutre
+        Dim xTravee() As Decimal            ' Position x dans la travée locale / extremité gauche de la travée 
+        '                                     pour un noeud sur 2 travées, x de la travée à gauche
+        Dim iNodeAppui(,) As Integer        ' Table des indices des noeuds au droit des extremités de console (indice 1: indice travée, indice 2 : 0 ou 1 pour extrémité)
+    End Structure
+
+    Public Nodes As strucBeamNodes
+
+#End Region
+
 #Region " CONSTRUCTEURS "
 
     Public Sub New()
@@ -642,12 +656,13 @@
 #End Region
 
 #Region " Calculs largeur participante "
-    Public Function EffectiveWidth(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean) As Decimal
+    Public Function BeffDalle(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean) As Decimal
 
         '------------------------------------------------------------------------------------------------------------------
         '   16/06/23 :  Création - GuD
         '------------------------------------------------------------------------------------------------------------------
         '   Calcul la largeur de la dalle participante à une position donnée
+        '   Selon NF EN 1994-1-1 § 5
         '------------------------------------------------------------------------------------------------------------------
         '   xPositionSection    [E] :   Position de la section par rapport à l'appui gauche le plus proche ou du bord libre
         '   i_travee            [E] :   Indique l'indice de la travée à laquelle appartient la section considérée
@@ -900,15 +915,92 @@
 
         End If
 
-
-
-
-
-
     End Function
 
+#End Region
 
+#Region " Préparation des sections de calcul de la poutre "
+
+    Public Sub PrepareNodes(dEltMax As Decimal, nbMinInter As Integer, nbMinConsole As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   11/08/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Préparation des sections de calcul de la poutre
+        '-------------------------------------------------------------------------------------------
+        '   dEltMax     [E] :   Distance maxi entre 2 noeuds
+        '   nbMinInter  [E] :   Nombre mini de noeuds par travée intermédiaire
+        '   nbMinConsole[E] :   Nombre mini de noeuds par console
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xo, DeltaX As Decimal
+        Dim nDec As Integer
+        Dim Longueur As Decimal
+        Dim lFirst As Boolean = True
+        Dim i0 As Integer = 0
+        Dim iGauche As Integer
+        Dim lConsole As Integer
+        Dim iTraveeG, iTraveeD As Integer
+        Dim nbMin As Integer
+
+        '--> Initialisation
+
+        ReDim Nodes.iNodeAppui(Me.IndiceDerniereTravee, 1)
+
+        '--> Boucle sur les travées
+
+        iTraveeG = Me.IndicePremiereTravee
+        iTraveeD = Me.IndiceDerniereTravee
+
+        For iTravee As Integer = iTraveeG To iTraveeD
+
+            lConsole = (iTravee = 0) Or ((iTravee = iTraveeD) And Me.lTraveeConsoleDroite)
+
+            xo = Me.xPositionAppui(True, iTravee)
+            Longueur = Me.LongueurTravee(iTravee)
+
+            nDec = Math.Floor(Longueur / dEltMax) + 1
+
+            If lConsole Then nbMin = nbMinConsole Else nbMin = nbMinInter
+
+            nDec = Math.Max(nbMin, nDec)
+
+            ' On ne prend que des nombres pairs pour la découpe (cela garantit un point à mi portée)
+            If nDec Mod 2 = 1 Then nDec += 1
+
+            DeltaX = Longueur / nDec
+
+            If lFirst Then
+                Nodes.nbNodes = nDec + 1
+                ReDim Me.Nodes.xTravee(nDec)
+                ReDim Me.Nodes.xGlobal(nDec)
+                Nodes.iNodeAppui(iTravee, 0) = 0
+                Nodes.iNodeAppui(iTravee, 1) = nDec
+                iGauche = 0
+            Else
+                iGauche = Nodes.nbNodes - 1
+                Nodes.iNodeAppui(iTravee, 0) = Nodes.nbNodes - 1
+                Nodes.iNodeAppui(iTravee, 1) = Nodes.nbNodes + nDec - 1
+                Nodes.nbNodes += nDec
+                ReDim Preserve Me.Nodes.xTravee(Nodes.nbNodes - 1)
+                ReDim Preserve Me.Nodes.xGlobal(Nodes.nbNodes - 1)
+            End If
+
+            For i As Integer = i0 To nDec
+                Me.Nodes.xTravee(iGauche + i) = DeltaX * i
+                Me.Nodes.xGlobal(iGauche + i) = xo + DeltaX * i
+            Next
+
+            lFirst = False
+            i0 = 1
+        Next
+
+    End Sub
 
 #End Region
+
+
+
 
 End Class

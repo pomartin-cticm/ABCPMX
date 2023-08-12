@@ -241,9 +241,11 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click, TSbtn_Gamma.Click
+    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click, TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click
 
         Select Case sender.name
+            Case Me.TSbtn_LargeurEfficace.Name
+                FilleEnCours = EnuFenetres.LargeurEfficace
             Case Me.TSbtn_Accueil.Name
                 FilleEnCours = EnuFenetres.Accueil
             Case Me.TSbtn_Portees.Name
@@ -286,6 +288,9 @@ Public Class Frm_PMX
     Private Sub AfficheFenetreEnCours()
 
         Select Case FilleEnCours
+            Case EnuFenetres.LargeurEfficace
+                Frm_LargeurEfficace.ShowDialog()
+
             Case EnuFenetres.Portees
                 If LogicielOptions.lFenetres Then
                     Frm_Portees.ShowDialog()
