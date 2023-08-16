@@ -26,13 +26,14 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.PoMbtn_Calcul = New PMXInterface.POMbutton()
+        Me.PoMbtn_Scope = New PMXInterface.POMbutton()
+        Me.PoMBtn_Gamma = New PMXInterface.POMbutton()
         Me.TLpan_PourLesBoutons = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_Cancel = New System.Windows.Forms.Button()
         Me.btn_Appliquer = New System.Windows.Forms.Button()
         Me.pan_Contenu = New System.Windows.Forms.Panel()
-        Me.PoMbtn_Calcul = New PMXInterface.POMbutton()
-        Me.PoMbtn_Scope = New PMXInterface.POMbutton()
-        Me.PoMBtn_Gamma = New PMXInterface.POMbutton()
+        Me.PoMbtn_Fire = New PMXInterface.POMbutton()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
@@ -82,6 +83,7 @@ Partial Class Frm_OptionsCalcul
         '
         Me.TLpan_Gauche.ColumnCount = 1
         Me.TLpan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Gauche.Controls.Add(Me.PoMbtn_Fire, 0, 3)
         Me.TLpan_Gauche.Controls.Add(Me.PoMbtn_Calcul, 0, 2)
         Me.TLpan_Gauche.Controls.Add(Me.PoMbtn_Scope, 0, 1)
         Me.TLpan_Gauche.Controls.Add(Me.PoMBtn_Gamma, 0, 0)
@@ -98,56 +100,9 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Gauche.Size = New System.Drawing.Size(242, 442)
         Me.TLpan_Gauche.TabIndex = 0
-        '
-        'TLpan_PourLesBoutons
-        '
-        Me.TLpan_PourLesBoutons.ColumnCount = 2
-        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Cancel, 1, 0)
-        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Appliquer, 0, 0)
-        Me.TLpan_PourLesBoutons.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLpan_PourLesBoutons.Location = New System.Drawing.Point(0, 412)
-        Me.TLpan_PourLesBoutons.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLpan_PourLesBoutons.Name = "TLpan_PourLesBoutons"
-        Me.TLpan_PourLesBoutons.RowCount = 1
-        Me.TLpan_PourLesBoutons.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_PourLesBoutons.Size = New System.Drawing.Size(242, 30)
-        Me.TLpan_PourLesBoutons.TabIndex = 1
-        '
-        'btn_Cancel
-        '
-        Me.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btn_Cancel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Cancel.Location = New System.Drawing.Point(124, 3)
-        Me.btn_Cancel.Name = "btn_Cancel"
-        Me.btn_Cancel.Size = New System.Drawing.Size(115, 24)
-        Me.btn_Cancel.TabIndex = 1
-        Me.btn_Cancel.Text = "btn_Cancel"
-        Me.btn_Cancel.UseVisualStyleBackColor = True
-        '
-        'btn_Appliquer
-        '
-        Me.btn_Appliquer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Appliquer.Location = New System.Drawing.Point(3, 3)
-        Me.btn_Appliquer.Name = "btn_Appliquer"
-        Me.btn_Appliquer.Size = New System.Drawing.Size(115, 24)
-        Me.btn_Appliquer.TabIndex = 0
-        Me.btn_Appliquer.Text = "btn_Appliquer"
-        Me.btn_Appliquer.UseVisualStyleBackColor = True
-        '
-        'pan_Contenu
-        '
-        Me.pan_Contenu.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Contenu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Contenu.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Contenu.Location = New System.Drawing.Point(250, 3)
-        Me.pan_Contenu.Margin = New System.Windows.Forms.Padding(0, 3, 3, 3)
-        Me.pan_Contenu.Name = "pan_Contenu"
-        Me.pan_Contenu.Size = New System.Drawing.Size(547, 444)
-        Me.pan_Contenu.TabIndex = 2
         '
         'PoMbtn_Calcul
         '
@@ -215,6 +170,76 @@ Partial Class Frm_OptionsCalcul
         Me.PoMBtn_Gamma.Size = New System.Drawing.Size(232, 35)
         Me.PoMBtn_Gamma.TabIndex = 0
         '
+        'TLpan_PourLesBoutons
+        '
+        Me.TLpan_PourLesBoutons.ColumnCount = 2
+        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Cancel, 1, 0)
+        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Appliquer, 0, 0)
+        Me.TLpan_PourLesBoutons.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_PourLesBoutons.Location = New System.Drawing.Point(0, 412)
+        Me.TLpan_PourLesBoutons.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_PourLesBoutons.Name = "TLpan_PourLesBoutons"
+        Me.TLpan_PourLesBoutons.RowCount = 1
+        Me.TLpan_PourLesBoutons.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.Size = New System.Drawing.Size(242, 30)
+        Me.TLpan_PourLesBoutons.TabIndex = 1
+        '
+        'btn_Cancel
+        '
+        Me.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btn_Cancel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_Cancel.Location = New System.Drawing.Point(124, 3)
+        Me.btn_Cancel.Name = "btn_Cancel"
+        Me.btn_Cancel.Size = New System.Drawing.Size(115, 24)
+        Me.btn_Cancel.TabIndex = 1
+        Me.btn_Cancel.Text = "btn_Cancel"
+        Me.btn_Cancel.UseVisualStyleBackColor = True
+        '
+        'btn_Appliquer
+        '
+        Me.btn_Appliquer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_Appliquer.Location = New System.Drawing.Point(3, 3)
+        Me.btn_Appliquer.Name = "btn_Appliquer"
+        Me.btn_Appliquer.Size = New System.Drawing.Size(115, 24)
+        Me.btn_Appliquer.TabIndex = 0
+        Me.btn_Appliquer.Text = "btn_Appliquer"
+        Me.btn_Appliquer.UseVisualStyleBackColor = True
+        '
+        'pan_Contenu
+        '
+        Me.pan_Contenu.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Contenu.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Contenu.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Contenu.Location = New System.Drawing.Point(250, 3)
+        Me.pan_Contenu.Margin = New System.Windows.Forms.Padding(0, 3, 3, 3)
+        Me.pan_Contenu.Name = "pan_Contenu"
+        Me.pan_Contenu.Size = New System.Drawing.Size(547, 444)
+        Me.pan_Contenu.TabIndex = 2
+        '
+        'PoMbtn_Fire
+        '
+        Me.PoMbtn_Fire.Caption = "PoMbtn_Fire"
+        Me.PoMbtn_Fire.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
+        Me.PoMbtn_Fire.Checked = False
+        Me.PoMbtn_Fire.CouleurChecked = System.Drawing.Color.Orange
+        Me.PoMbtn_Fire.CouleurContour = System.Drawing.Color.Black
+        Me.PoMbtn_Fire.CouleurContourChecked = System.Drawing.Color.Black
+        Me.PoMbtn_Fire.CouleurContourMouseOn = System.Drawing.Color.Black
+        Me.PoMbtn_Fire.CouleurFond = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Fire.CouleurForGradient = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Fire.CouleurMouseOnBtn = System.Drawing.Color.Yellow
+        Me.PoMbtn_Fire.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PoMbtn_Fire.Enable = True
+        Me.PoMbtn_Fire.LContourFond = True
+        Me.PoMbtn_Fire.Location = New System.Drawing.Point(5, 140)
+        Me.PoMbtn_Fire.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMbtn_Fire.Name = "PoMbtn_Fire"
+        Me.PoMbtn_Fire.RatioArrondi = 0!
+        Me.PoMbtn_Fire.Size = New System.Drawing.Size(232, 35)
+        Me.PoMbtn_Fire.TabIndex = 4
+        '
         'Frm_OptionsCalcul
         '
         Me.AcceptButton = Me.btn_Appliquer
@@ -246,4 +271,5 @@ Partial Class Frm_OptionsCalcul
     Friend WithEvents btn_Appliquer As Button
     Friend WithEvents PoMbtn_Calcul As POMbutton
     Friend WithEvents PoMbtn_Scope As POMbutton
+    Friend WithEvents PoMbtn_Fire As POMbutton
 End Class

@@ -312,6 +312,7 @@ TITLE					= Calculation options
 GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
+FIRE					= Fire design
 APPLY					= Apply
 CANCEL					= Cancel
 
@@ -338,6 +339,11 @@ MATERIALS				= Material
 STEEL					= Steel
 CONCRETE				= Concrete
 FIRE					= Fire
+
+#OPTCALFIRE
+TITLE					= Fire design
+CONSTANTS				= Constants
+PARAMETERS				= Parameters
 
 #OPTCALSCOPE
 TITLE					= Scope of application

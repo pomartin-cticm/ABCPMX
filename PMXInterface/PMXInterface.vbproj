@@ -213,6 +213,12 @@
     <Compile Include="Fenetres\Options\Frm_OptionsCalculCalcul.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsCalculIncendie.Designer.vb">
+      <DependentUpon>Frm_OptionsCalculIncendie.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsCalculIncendie.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Options\Frm_OptionsCalculScope.Designer.vb">
       <DependentUpon>Frm_OptionsCalculScope.vb</DependentUpon>
     </Compile>
@@ -353,6 +359,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculCalcul.resx">
       <DependentUpon>Frm_OptionsCalculCalcul.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculIncendie.resx">
+      <DependentUpon>Frm_OptionsCalculIncendie.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculScope.resx">
       <DependentUpon>Frm_OptionsCalculScope.vb</DependentUpon>

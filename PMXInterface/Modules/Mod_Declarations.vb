@@ -478,6 +478,7 @@ Module Mod_Declarations
         Calcul
         Gamma
         Scope
+        Incendie
     End Enum
 
     Public Enum Enu_OptionsLogiciel
