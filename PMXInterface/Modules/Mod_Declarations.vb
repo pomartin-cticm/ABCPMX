@@ -238,10 +238,14 @@ Module Mod_Declarations
         Eurocodes_G2
     End Enum
 
-    Public Structure Struc_OptionsCalcul        ' Options de calcul
-        Public Norme As Cls_OptionsCalcul.Enu_Normes             ' Norme de calcul
+    Public Structure Struc_OptionsCalcul                ' Options de calcul --------------------------------
+        Public Norme As Cls_OptionsCalcul.Enu_Normes    ' Norme de calcul
         Public lLargeurEfficaceSimplifiee As Boolean    ' Largeur efficace de la dalle béton selon modèle simplifié
-        Public lCompressionArma As Boolean      ' Indique si l'on prend en compte les armatures comprimées dans le calcul des propriétés de section
+        Public lCompressionArma As Boolean              ' Indique si l'on prend en compte les armatures comprimées dans le calcul des propriétés de section
+        Public dMaxNodes As Decimal                     ' Distance maximale entre deux noeuds
+        Public nbMinNodesTravee As Integer              ' Nombre mini de noeuds par travée normale
+        Public nbMinNodesConsole As Integer             ' Nombre mini de noeuds par travée console
+        Public EsArmatures As Decimal                   ' Module d'Young des barres d'armature
     End Structure
 
     Public Sub InitialiseOptionsScope()
@@ -273,6 +277,12 @@ Module Mod_Declarations
         OptionsCalcul.Norme = Enu_Normes.Eurocodes_G1
         OptionsCalcul.lCompressionArma = False
         OptionsCalcul.lLargeurEfficaceSimplifiee = False
+
+        OptionsCalcul.dMaxNodes = 1
+        OptionsCalcul.nbMinNodesTravee = 9
+        OptionsCalcul.nbMinNodesTravee = 1
+
+        OptionsCalcul.EsArmatures = 210 * 10 ^ 3
 
     End Sub
 

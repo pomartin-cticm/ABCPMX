@@ -203,7 +203,7 @@
             NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
-            'ErrorProvider.Clear()
+            ErrorProvider.Clear()
         End If
 
         lOk = (iErreur = 0)

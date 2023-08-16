@@ -324,6 +324,11 @@ SECTIONPROP				= Properties of cross-sections
 COMPRESSIONREBARS		= Rebars in compression taken into account
 SIMPLIFIEDEFFW			= Simplified distribution of the effective of the concrete flange
 YOUNGSREBAR				= Young's modulus of reinforcements
+MODEL					= Numerical model parameters
+NODESPACING				= Distance between nodes
+NBNODES					= Number of nodes
+PERCANTILEVERSPAN		= per cantilever span
+PERINTSPAN				= per usual span
 
 #OPTCALGAMMA
 TITLE					= Default national factors

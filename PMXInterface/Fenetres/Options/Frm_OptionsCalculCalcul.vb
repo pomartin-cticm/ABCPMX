@@ -23,7 +23,7 @@ Public Class Frm_OptionsCalculCalcul
         GestionStyle()
         GestionUnites()
         RemplirCombos()
-        AfficherScopeEnCours()
+        AfficherOptionsEnCours()
         lBuild = False
     End Sub
 
@@ -42,6 +42,12 @@ Public Class Frm_OptionsCalculCalcul
 
             Me.lbl_YoungRebars.Text = MyBloc("YOUNGSREBAR")
 
+            Me.lbl_Discretisation.Text = MyBloc("MODEL")
+            Me.lbl_DistanceMaxNoeuds.Text = MyBloc("NODESPACING")
+            Me.lbl_NbNodes.Text = MyBloc("NBNODES")
+            Me.lbl_Console.Text = MyBloc("PERCANTILEVERSPAN")
+            Me.lbl_TraveesI.Text = MyBloc("PERINTSPAN")
+
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
         Finally
@@ -55,21 +61,22 @@ Public Class Frm_OptionsCalculCalcul
         Me.lbl_Calcul.BackColor = CouleurBackBandeaux
         Me.lbl_Calcul.ForeColor = CouleurForeBandeaux
 
-        If Not LogicielOptions.lExpert Then
-            Me.txt_PorteeMini.Enabled = False
-            Me.txt_PorteeMini.BackColor = CouleurReadOnly
-        Else
+        'If Not LogicielOptions.lExpert Then
+        '    Me.txt_Es.Enabled = False
+        '    Me.txt_Es.BackColor = CouleurReadOnly
+        'Else
 
-        End If
+        'End If
 
     End Sub
 
     Private Sub GestionUnites()
+        Me.etq_UnitEs.Text = LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
         Me.etq_UnitL1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
 
     End Sub
 
-    Private Sub AfficherScopeEnCours()
+    Private Sub AfficherOptionsEnCours()
 
         '--> Norme
 
@@ -78,14 +85,17 @@ Public Class Frm_OptionsCalculCalcul
             Case Cls_OptionsCalcul.Enu_Normes.EurocodesG2 : Me.cmb_Norme.SelectedIndex = 1
         End Select
 
-        '--> Portée
+        '--> Modélisation
 
-        Me.txt_PorteeMini.Text = GetStringInUnit(LocalOptionsScope.PorteeMin, Enu_TypeVariable.Longueur, 4, 2, False)
+        Me.txt_EspNoeuds.Text = GetStringInUnit(LocalOptionsCalcul.dMaxNodes, Enu_TypeVariable.Longueur, 4, 3, False)
+        Me.txt_NbMiniNTravee.Text = Format(LocalOptionsCalcul.nbMinNodesTravee, "0")
+        Me.txt_NbMiniNConsole.Text = Format(LocalOptionsCalcul.nbMinNodesConsole, "0")
 
         '--> Propriétés des sections
 
         Me.chk_RebarsInCompression.Checked = LocalOptionsCalcul.lCompressionArma
         Me.chk_SimplifiedEffectiveW.Checked = LocalOptionsCalcul.lLargeurEfficaceSimplifiee
+        Me.txt_Es.Text = GetStringInUnit(LocalOptionsCalcul.EsArmatures, Enu_TypeVariable.ModuleY, 4, 2, False)
 
     End Sub
 
@@ -121,6 +131,119 @@ Public Class Frm_OptionsCalculCalcul
                 LocalOptionsCalcul.lLargeurEfficaceSimplifiee = Me.chk_SimplifiedEffectiveW.Checked
         End Select
     End Sub
+
+
+#End Region
+
+
+
+#Region " Dessins symboles "
+
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_NbNodes2.Paint, img_NbNodes1.Paint, img_Es.Paint, img_dNodes.Paint
+
+        '--> Déclarations
+
+        Dim sWI As Single = sender.Width
+        Dim sHI As Single = sender.Height
+
+        Dim strIndice As String = Nothing
+        Dim strSymbol As String = Nothing
+        Dim lGrec, lIndice, lEgal As Boolean
+        Dim AlignH As Enu_AlignementH
+
+        '--> Initialisation
+
+        lIndice = False
+        lGrec = False
+        lEgal = False
+        AlignH = Enu_AlignementH.Droite
+
+        Select Case sender.name
+            Case Me.img_Es.Name
+                strSymbol = "e"
+                strIndice = "s"
+                lEgal = True
+                'AlignH = Enu_AlignementH.Droite
+            Case Me.img_dNodes.Name
+                strSymbol = "d"
+                strIndice = ""
+            Case Me.img_NbNodes1.Name, Me.img_NbNodes2.Name
+                strSymbol = "n"
+                strIndice = ""
+
+        End Select
+
+        '--> Dessin
+
+        DrawSymbolN(e.Graphics, Brushes.Black, strSymbol, strIndice, sWI, sHI, lGrec, lIndice, AlignH,
+                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
+
+    End Sub
+
+#End Region
+
+#Region " Evènements saisie "
+
+
+    Private Sub SaisieTxtBox_TextChanged(sender As Object, e As EventArgs) Handles txt_EspNoeuds.TextChanged, txt_Es.TextChanged,
+        txt_NbMiniNTravee.TextChanged, txt_NbMiniNConsole.TextChanged
+
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+
+            Select Case sender.name
+                Case Me.txt_Es.Name
+                    LocalOptionsCalcul.EsArmatures = ValeurUI
+
+            End Select
+
+        End If
+
+    End Sub
+
+
+
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        Dim lOk As Boolean = True
+        ErrorProvider.SetError(MyTxt, String.Empty)
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+        'Const PORTEECONSOLEMINMIN As Decimal = 0.2
+        'Const PORTEECONSOLEMINMAX As Decimal = 0.5
+
+        Select Case MyTxt.Name
+            Case Me.txt_Es.Name
+
+                ValMin = 100000
+                ValMax = 500000
+                lValMax = False
+                kUnit = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
+
+            Case Me.txt_EspNoeuds.Name
+                ValMin = 0.1
+                ValMax = 2
+
+        End Select
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+    End Function
 
 #End Region
 
