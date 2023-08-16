@@ -211,6 +211,8 @@ Public Class cls_Section
 
         If lMixte Then
 
+
+
         End If
 
         '--> Recherche de l'axe neutre plastique

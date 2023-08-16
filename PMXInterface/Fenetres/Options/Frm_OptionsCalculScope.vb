@@ -27,20 +27,24 @@
 
             Me.lbl_Scope.Text = MyBloc("TITLE")
 
-            '#--------------------
+            '#-------------------- GEOMETRIE POUTRE
 
             Me.lbl_DefinitionPoutre.Text = MyBloc("BEAMDEF")
 
             Me.lbl_SpanL.Text = MyBloc("SPANLENGTH")
             Me.lbl_PorteeConsole.Text = MyBloc("CANTILEVERSPAN")
 
-            '#--------------------
+            '#-------------------- DALLE
 
             Me.lbl_Dalle.Text = MyBloc("SLAB")
             Me.lbl_ThetaRd.Text = MyBloc("THETAHAUNCH")
             Me.lbl_Renformis.Text = MyBloc("HAUNCHTH")
             Me.lbl_EpDallePleine.Text = MyBloc("SOLIDSLABTH")
             Me.lbl_EpDalleMixte.Text = MyBloc("COMPOSITESLABTH")
+
+            '#-------------------- MATERIAU
+
+            Me.lbl_RhoBetonLeger.Text = MyBloc("RHOLWC")
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -64,6 +68,9 @@
         PrepareTextBoxExpert(Me.txt_EpDalleMixteMin, LogicielOptions.lExpert)
         PrepareTextBoxExpert(Me.txt_RatioEpReformis, LogicielOptions.lExpert)
 
+        PrepareTextBoxExpert(Me.txt_RhoC_LWC_Min, LogicielOptions.lExpert)
+        PrepareTextBoxExpert(Me.txt_RhoC_LWC_Max, LogicielOptions.lExpert)
+
     End Sub
 
     Private Sub GestionUnites()
@@ -73,6 +80,9 @@
         Me.etq_UnitL2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitA1.Text = "°"
+        Me.etq_UnitMassV1.Text = "kg/m3"
+        Me.etq_UnitMassV2.Text = "kg/m3"
+
     End Sub
 
     Private Sub AfficherScopeEnCours()
@@ -95,6 +105,11 @@
         Me.txt_EpDalleMixteMin.Text = GetStringInUnit(LocalOptionsScope.EpDalleMixteMin, Enu_TypeVariable.Dimension, 4, 2, False)
         Me.txt_RatioEpReformis.Text = GetStringInUnit(LocalOptionsScope.RatioEpRenformisMax, Enu_TypeVariable.SansType, 4, 2, False)
 
+        '--> Matériau
+
+        Me.txt_RhoC_LWC_Max.Text = GetStringInUnit(LocalOptionsScope.RhoCBetonLegerMax, Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_RhoC_LWC_Min.Text = GetStringInUnit(LocalOptionsScope.RhoCBetonLegerMin, Enu_TypeVariable.SansType, 4, 2, False)
+
     End Sub
 
 #End Region
@@ -102,7 +117,7 @@
 #Region " Evènements saisie "
 
     Private Sub SaisieText(sender As Object, e As EventArgs) Handles txt_PorteeMini.TextChanged, txt_ThetaH.TextChanged,
-        txt_PorteeMaxi.TextChanged, txt_PorteeConsoleMin.TextChanged, txt_RatioConsoleMax.TextChanged, txt_EpDalleMin.TextChanged, txt_RatioEpReformis.TextChanged, txt_EpDalleMixteMin.TextChanged
+        txt_PorteeMaxi.TextChanged, txt_PorteeConsoleMin.TextChanged, txt_RatioConsoleMax.TextChanged, txt_EpDalleMin.TextChanged, txt_RatioEpReformis.TextChanged, txt_EpDalleMixteMin.TextChanged, txt_RhoC_LWC_Min.TextChanged, txt_RhoC_LWC_Max.TextChanged
 
         If lBuild Then Exit Sub
         Dim lPortees As Boolean = False
@@ -113,6 +128,10 @@
         If VerificationSaisie(sender, ValeurUI) Then
 
             Select Case sender.name
+                Case Me.txt_RhoC_LWC_Min.Name
+                    LocalOptionsScope.RhoCBetonLegerMin = ValeurUI
+                Case Me.txt_RhoC_LWC_Max.Name
+                    LocalOptionsScope.RhoCBetonLegerMax = ValeurUI
                 Case Me.txt_PorteeConsoleMin.Name
                     LocalOptionsScope.PorteeConsoleMin = ValeurUI
                 Case Me.txt_PorteeMini.Name
@@ -133,9 +152,7 @@
 
         End If
 
-
     End Sub
-
 
     Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 
@@ -152,10 +169,10 @@
 
         Const PORTEEMINMIN As Decimal = 2
         Const PORTEEMINMAX As Decimal = 5
-        Const PORTEEMAXMIN As Decimal = 10
-        Const PORTEEMAXMAX As Decimal = 100
-        Const ANGLEMIN As Decimal = 0
-        Const ANGLEMAX As Decimal = 45
+        'Const PORTEEMAXMIN As Decimal = 10
+        'Const PORTEEMAXMAX As Decimal = 100
+        'Const ANGLEMIN As Decimal = 0
+        'Const ANGLEMAX As Decimal = 45
 
         Select Case MyTxt.Name
             Case Me.txt_PorteeConsoleMin.Name
@@ -169,32 +186,31 @@
                 ValMin = PORTEEMINMIN / kUnit
                 ValMax = PORTEEMINMAX / kUnit
 
-            Case Me.txt_PorteeMini.Name
+            Case Me.txt_RhoC_LWC_Max.Name, Me.txt_RhoC_LWC_Min.Name
 
-                ValMin = PORTEEMAXMIN / kUnit
-                ValMax = PORTEEMAXMAX / kUnit
-
-            Case Me.txt_PorteeMini.Name
-
-                ValMin = ANGLEMIN
-                ValMax = ANGLEMAX
+                ValMin = 0
+                ValMax = 3000
+                lValMax = False
+                kUnit = 1
 
             Case Me.txt_RatioConsoleMax.Name
 
                 ValMin = 0.1
                 ValMax = 1
+                kUnit = 1
 
             Case Me.txt_EpDalleMin.Name, Me.txt_EpDalleMixteMin.Name
-
 
                 ValMin = 0.04
                 ValMax = 1
                 lValMax = False
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
 
             Case Me.txt_RatioEpReformis.Name
 
                 ValMin = 0.1
                 ValMax = 1
+                kUnit = 1
 
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -215,7 +231,7 @@
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint, img_PorteeL2.Paint, img_Td1.Paint, img_xTd.Paint, img_Th.Paint, img_EpDalleMixte.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint, img_PorteeL2.Paint, img_Td1.Paint, img_xTd.Paint, img_Th.Paint, img_EpDalleMixte.Paint, img_RhoC.Paint
 
         '--> Déclarations
 
@@ -271,6 +287,11 @@
             Case Me.img_Th.Name
                 strSymbol = "t"
                 strIndice = "h"
+
+            Case Me.img_RhoC.Name
+                strSymbol = "r"
+                strIndice = "c"
+                lGrec = True
         End Select
 
         '--> Dessin
@@ -279,6 +300,7 @@
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
 
 #End Region
 

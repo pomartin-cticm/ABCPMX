@@ -190,7 +190,7 @@ Partial Class Frm_OptionsCalculCalcul
         'lbl_Console
         '
         Me.lbl_Console.AutoSize = True
-        Me.lbl_Console.Location = New System.Drawing.Point(288, 76)
+        Me.lbl_Console.Location = New System.Drawing.Point(237, 76)
         Me.lbl_Console.Name = "lbl_Console"
         Me.lbl_Console.Size = New System.Drawing.Size(61, 13)
         Me.lbl_Console.TabIndex = 127
@@ -199,7 +199,7 @@ Partial Class Frm_OptionsCalculCalcul
         'lbl_TraveesI
         '
         Me.lbl_TraveesI.AutoSize = True
-        Me.lbl_TraveesI.Location = New System.Drawing.Point(288, 53)
+        Me.lbl_TraveesI.Location = New System.Drawing.Point(237, 53)
         Me.lbl_TraveesI.Name = "lbl_TraveesI"
         Me.lbl_TraveesI.Size = New System.Drawing.Size(65, 13)
         Me.lbl_TraveesI.TabIndex = 126

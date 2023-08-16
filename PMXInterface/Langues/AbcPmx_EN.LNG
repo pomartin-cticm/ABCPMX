@@ -351,6 +351,7 @@ THETAHAUNCH				= Inclination angle of concrete haunches
 HAUNCHTH				= Thickness of slab haunch
 SOLIDSLABTH				= Thickness of solid slab
 COMPOSITESLABTH			= Thickness of composite slab (above ribs)
+RHOLWC					= Density of light weight concrete
 
 #OPTSOFTMAIN
 TITLE					= Software options

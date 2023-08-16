@@ -289,6 +289,8 @@ Public Class Frm_OptionsCalcul
             GereTransfertValeur(LocalOptionsScope.RatioEpRenformisMax, OptionsScope.RatioEpRenformisMax, lModif)
             GereTransfertValeur(LocalOptionsScope.EpDalleMixteMin, OptionsScope.EpDalleMixteMin, lModif)
             GereTransfertValeur(LocalOptionsScope.EpDallePleineMin, OptionsScope.EpDallePleineMin, lModif)
+            GereTransfertValeur(LocalOptionsScope.RhoCBetonLegerMax, OptionsScope.RhoCBetonLegerMax, lModif)
+            GereTransfertValeur(LocalOptionsScope.RhoCBetonLegerMin, OptionsScope.RhoCBetonLegerMin, lModif)
         End If
         GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
 
@@ -301,7 +303,6 @@ Public Class Frm_OptionsCalcul
         GereTransfertValeur(LocalOptionsCalcul.dMaxNodes, OptionsCalcul.dMaxNodes, lModif)
         GereTransfertValeur(LocalOptionsCalcul.nbMinNodesConsole, OptionsCalcul.nbMinNodesConsole, lModif)
         GereTransfertValeur(LocalOptionsCalcul.nbMinNodesTravee, OptionsCalcul.nbMinNodesTravee, lModif)
-
 
         AppliquerReglagesProjetEnCours()
 

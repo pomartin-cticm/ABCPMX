@@ -194,14 +194,19 @@ UPPER_FLANGE			= Upper flange
 LOWER_FLANGE			= Lower flange
 X_LOC_RES				= Distance from the nearest left support
 GAMMA					= Partial factors
-LOADING_FACTORS			= Partial factors for loading
+LOADING_FACTORS			= Loads
+COMBINATION_FACTORS		= Combination factors
 COMBINATION_FACTORS_Q1	= Combination factors for the live load Q1
 COMBINATION_FACTORS_Q2	= Combination factors for the live load Q2
-STEEL_RES_FACTORS		= Partial factors for steel resistance
-SLAB_RES_FACTORS		= Partial factors for slab resistance
-FIRE_RES_FACTORS		= Partial factors for fire resistance
+RESISTANCEFACTORS		= Resistance
+STEEL_RES_FACTORS		= Steel resistance
+SLAB_RES_FACTORS		= Slab resistance
+FIRE_RES_FACTORS		= Fire resistance
 LOADS					= Loads
 COMBINATIONS			= Combinations
 WEXPERT					= Warning: This calculation is carried out in the Expert mode.
 WEXPERT2				= Some parameters may be outside the scope of the software
 GSTEELB					= Steel beam
+
+#NDC_SECTIONPROP
+SECTIONSPROPERTIES		= Sections properties

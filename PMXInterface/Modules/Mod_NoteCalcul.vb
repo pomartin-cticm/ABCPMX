@@ -21,6 +21,7 @@ Module Mod_NoteCalcul
     Private Const TABAFF3 As String = " :\T20"
 
     '--> Taille tableau
+    '#POM : Il n'y a jamais 2 tableaux pareils => A mettre au niveau de la routine
     Private Const LC1 As Decimal = 30        'taille colonne 1
     Private Const LC1_2 As Decimal = 20        'taille colonne 1
     Private Const LC2 As Decimal = 15        'taille colonne 2
@@ -29,6 +30,7 @@ Module Mod_NoteCalcul
     Private Const LC4 As Decimal = 5         'taille colonne 4
     Private Const HLIGNE As Decimal = 1.5  'taille ligne
     Private Const HLIGNE2 As Decimal = 1.7  'taille ligne
+    Const HLIGNEENTETE As Single = 1.8
 
     'Nom de l'imprimante virtuelle pour créer un PDF
     Public Const PrintPDFName As String = "Microsoft Print to PDF"
@@ -60,6 +62,7 @@ Module Mod_NoteCalcul
 #Region "   Variables "
 
     Private Bloc As New Dictionary(Of String, String)
+    Private BlocSP As New Dictionary(Of String, String)
 
     Private ReadOnly IndTableau As Integer = 0
     Private ReadOnly IndFigure As Integer = 0
@@ -123,7 +126,7 @@ Module Mod_NoteCalcul
         '
         '----------------------------------------------------------------------------------------------
         '
-        '   prjt        [E] :   Projet traité
+        '   MyPrjt      [E] :   Projet traité
         '
         '----------------------------------------------------------------------------------------------
 
@@ -175,6 +178,12 @@ Module Mod_NoteCalcul
 
         EditionParametres(MyPrjt.Poutres(MyPrjt.IndEnCours))
 
+        '--|=========================================
+        '--| PROPRIETES DES SECTIONS
+        '--|=========================================
+
+        EditionProprietesSection(MyPrjt.Poutres(MyPrjt.IndEnCours))
+
     End Sub
 
     Private Sub InitialiseBlocNDC()
@@ -191,11 +200,15 @@ Module Mod_NoteCalcul
         Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_MAIN")
         BlocLine.CreationBloc(Bloc)
 
+        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_SECTIONPROP")
+        BlocLine.CreationBloc(BlocSP)
+
+
     End Sub
 
 #End Region
 
-#Region " Edition des paramètres "
+#Region "***Edition des paramètres***"
 
     Private Sub EditionParametres(MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
@@ -227,7 +240,7 @@ Module Mod_NoteCalcul
 
         '--[ Dalle
 
-        EditionParametresSlab(MyBeam)
+        EditionParametresDalle(MyBeam)
 
         '--[ Maintiens latéraux
 
@@ -641,11 +654,11 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionParametresSlab(ByVal MyBeam As cls_Poutre)
+    Private Sub EditionParametresDalle(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
         '   10/07/23 :  Création - Version 1.00 - POM
         '----------------------------------------------------------------------------------------------
-        '   Edition des paramètres de base d'une section
+        '   Edition des paramètres de la dalle
         '----------------------------------------------------------------------------------------------
 
         SautePage()
@@ -668,9 +681,6 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & Bloc("TYPE_SLAB") & TABAFF & Bloc("COMPOSITE_SLAB"))
                 AddLigneNDC(TABW2 & Bloc("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
         End Select
-
-
-
 
 
         AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
@@ -872,65 +882,65 @@ Module Mod_NoteCalcul
                     If nbLigneSautePage >= MAXLIGNEPPAG Then SautePage()
 
                     Dim lDalleMixteEtPerp As Boolean = False
-                        If .Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And .Dalle.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire Then
-                            lDalleMixteEtPerp = True
-                        End If
+                    If .Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And .Dalle.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire Then
+                        lDalleMixteEtPerp = True
+                    End If
 
-                        Dim nbColonne As Integer
+                    Dim nbColonne As Integer
 
-                        If lDalleMixteEtPerp Then
-                            AddLigneNDC("\TABLEAU 15")
-                            nbColonne = 5
+                    If lDalleMixteEtPerp Then
+                        AddLigneNDC("\TABLEAU 15")
+                        nbColonne = 5
 
-                        Else
-                            AddLigneNDC("\TABLEAU 20")
-                            nbColonne = 4
-                        End If
+                    Else
+                        AddLigneNDC("\TABLEAU 20")
+                        nbColonne = 4
+                    End If
 
-                        InitialiseLigne(nbColonne, HLIGNE, True)
+                    InitialiseLigne(nbColonne, HLIGNE, True)
 
-                        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
-                        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LENGHT_ZONE") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-                        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("ROW_NUMBER"))
-                        If lDalleMixteEtPerp Then
-                            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("RIB_DISPOSITION"))
-                        End If
-                        AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LONGI_SPACING") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-
-
-
-                        Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
+                    AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LENGHT_ZONE") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("ROW_NUMBER"))
+                    If lDalleMixteEtPerp Then
+                        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("RIB_DISPOSITION"))
+                    End If
+                    AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LONGI_SPACING") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
 
 
-                        For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
-                            For j As Integer = 0 To .NombreZone(i) - 1
 
-                                InitialiseLigne(nbColonne, HLIGNE, True)
-                                AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, i)
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Longueur_Zone(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
-                                If lDalleMixteEtPerp Then
-                                    If .Espacement_Bac_Trans(i, j) = 1 Then
-                                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIB"))
-                                    Else
-                                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIBS"))
-                                        End
-                                    End If
+                    Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
+
+
+                    For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+                        For j As Integer = 0 To .NombreZone(i) - 1
+
+                            InitialiseLigne(nbColonne, HLIGNE, True)
+                            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, i)
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Longueur_Zone(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
+                            If lDalleMixteEtPerp Then
+                                If .Espacement_Bac_Trans(i, j) = 1 Then
+                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIB"))
+                                Else
+                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIBS"))
+                                    End
                                 End If
-                                AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
-
-
-                            Next
-
-                            If Not i = MyBeam.IndiceDerniereTravee Then
-                                InitialiseLigne(1, HLIGNE, True)
-                                AddCelluleFond(LC3 + (nbColonne - 2) * LC2 + LC1_2, Bordures.Tous, PositionTexteInCell.Centre, "")
                             End If
+                            AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
+
 
                         Next
 
-                        FinTableau()
-                    End If
+                        If Not i = MyBeam.IndiceDerniereTravee Then
+                            InitialiseLigne(1, HLIGNE, True)
+                            AddCelluleFond(LC3 + (nbColonne - 2) * LC2 + LC1_2, Bordures.Tous, PositionTexteInCell.Centre, "")
+                        End If
+
+                    Next
+
+                    FinTableau()
+                End If
 
             End With
         End If
@@ -1022,49 +1032,143 @@ Module Mod_NoteCalcul
         '   Edition des coefficients partiels
         '----------------------------------------------------------------------------------------------
 
+        '--> Déclaration 
+
+        Dim MyGamma As Cls_Gamma
+        Const TABEGAL1 As String = "\T27= "
+        Const TABVARL3 As String = "\T45"
+        Const TABVARL4 As String = "\T70"
+        Const TABEGAL2 As String = "\T52= "
+        Const TABEGAL3 As String = "\T77= "
+
+        'On n'affiche les coefficients au feu que si les combinaisons ad hoc sont définies '=== A PROGRAMMER
+        Dim lFire As Boolean = True
+        Dim ChaineFire As String = ""
+        Dim ChaineSlab As String = ""
+
+        '--> Initilisation 
+
+        MyGamma = MyBeam.Param.Gamma.Clone
+
+        '--> Traitement
+
         SautePage()
 
-        With MyBeam.Param.Gamma
+        AddTitreNdC(2, Bloc("GAMMA"))
 
-            AddTitreNdC(2, Bloc("GAMMA"))
+        '# Charges
 
-            AddTitreNdC(3, Bloc("LOADING_FACTORS"))
-            AddLigneNDC(TABVAR2 & "\Sg\s\-G,sup\= = " & .GammaG_sup)
-            AddLigneNDC(TABVAR2 & "\Sg\s\-G,inf\= = " & .GammaG_inf)
-            AddLigneNDC(TABVAR2 & "\Sg\s\-Q\= = " & .GammaQ)
+        AddTitreNdC(3, Bloc("LOADING_FACTORS"))
+        AddLigneNDC(TABVAR2 & "\Sg\s\-G,sup\= " & TABEGAL1 & GetStringInUnit(MyGamma.GammaG_sup, Enu_TypeVariable.SansType, 3, 2, False))
+        AddLigneNDC(TABVAR2 & "\Sg\s\-G,inf\= " & TABEGAL1 & GetStringInUnit(MyGamma.GammaG_inf, Enu_TypeVariable.SansType, 3, 2, False))
+        AddLigneNDC(TABVAR2 & "\Sg\s\-Q\= " & TABEGAL1 & GetStringInUnit(MyGamma.GammaQ, Enu_TypeVariable.SansType, 3, 2, False))
 
-            AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q1"))
-            AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q1\= = " & .Psi0_Q1)
-            AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q1\= = " & .Psi1_Q1)
-            AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q1\= = " & .Psi2_Q1)
+        '# Coefficients de combinaison
 
-            AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q2"))
-            AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q2\= = " & .Psi0_Q2)
-            AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q2\= = " & .Psi1_Q2)
-            AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q2\= = " & .Psi2_Q2)
+        AddTitreNdC(3, Bloc("COMBINATION_FACTORS"))
+        AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q1\= " & TABEGAL1 & MyGamma.Psi0_Q1 & TABVARL3 & "\Sy\s\-0,Q2\= " & TABEGAL2 & MyGamma.Psi0_Q2)
+        AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q1\= " & TABEGAL1 & MyGamma.Psi1_Q1 & TABVARL3 & "\Sy\s\-1,Q2\= " & TABEGAL2 & MyGamma.Psi1_Q2)
+        AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q1\= " & TABEGAL1 & MyGamma.Psi2_Q1 & TABVARL3 & "\Sy\s\-2,Q2\= " & TABEGAL2 & MyGamma.Psi2_Q2)
 
-            AddTitreNdC(3, Bloc("STEEL_RES_FACTORS"))
-            AddLigneNDC(TABVAR2 & "\Sg\s\-M0\= = " & .GammaM0)
-            AddLigneNDC(TABVAR2 & "\Sg\s\-M1\= = " & .GammaM1)
-            AddLigneNDC(TABVAR2 & "\Sg\s\-M2\= = " & .GammaM2)
+        '# Résistances
 
-            AddTitreNdC(3, Bloc("SLAB_RES_FACTORS"))
-            AddLigneNDC(TABVAR2 & "\Sg\s\-C\= = " & .GammaC)
-            If .lGammaV_unique Then
-                AddLigneNDC(TABVAR2 & "\Sg\s\-V\= = " & .GammaVs)
-            Else
-                AddLigneNDC(TABVAR2 & "\Sg\s\-Vs\= = " & .GammaVs)
-                AddLigneNDC(TABVAR2 & "\Sg\s\-Vc\= = " & .GammaVc)
-            End If
-            AddLigneNDC(TABVAR2 & "\Sg\s\-S\= = " & .GammaS)
-            AddLigneNDC(TABVAR2 & "\Sg\s\-P\= = " & .GammaP)
+        AddTitreNdC(3, Bloc("RESISTANCEFACTORS"))
 
-            AddTitreNdC(3, Bloc("FIRE_RES_FACTORS"))
-            AddLigneNDC(TABVAR2 & "\Sg\s\-M,fi\= = " & .GammaM_fi)
-            AddLigneNDC(TABVAR2 & "\Sg\s\-C,fi\= = " & .GammaC_fi)
-            AddLigneNDC(TABVAR2 & "\Sg\s\-V,fi\= = " & .GammaV_fi)
+        If lFire Then
+            ChaineFire = TABVARL4 & Bloc("FIRE_RES_FACTORS")
+        End If
+        AddLigneNDC(TABVAR2 & Bloc("STEEL_RES_FACTORS") & TABVARL3 & Bloc("SLAB_RES_FACTORS") & ChaineFire)
 
-        End With
+        If lFire Then
+            ChaineFire = TABVARL4 & "\Sg\s\-M,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi, Enu_TypeVariable.SansType, 3, 2, False)
+        End If
+        AddLigneNDC(TABVAR2 & "\Sg\s\-M0\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM0, Enu_TypeVariable.SansType, 3, 2, False) _
+                  & TABVARL3 & "\Sg\s\-C\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaC, Enu_TypeVariable.SansType, 3, 2, False) _
+                  & ChaineFire)
+
+        If lFire Then
+            ChaineFire = TABVARL4 & "\Sg\s\-C,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaC_fi, Enu_TypeVariable.SansType, 3, 2, False)
+        End If
+        AddLigneNDC(TABVAR2 & "\Sg\s\-M1\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM1, Enu_TypeVariable.SansType, 3, 2, False) _
+                  & TABVARL3 & "\Sg\s\-C\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaS, Enu_TypeVariable.SansType, 3, 2, False) _
+                  & ChaineFire)
+
+        If lFire Then
+            ChaineFire = TABVARL4 & "\Sg\s\-v,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaV_fi, Enu_TypeVariable.SansType, 3, 2, False)
+        End If
+        If MyGamma.lGammaV_unique Then
+            ChaineSlab = "\Sg\s\-V\="
+        Else
+            ChaineSlab = "\Sg\s\-Vs\="
+        End If
+        AddLigneNDC(TABVAR2 & "\Sg\s\-M2\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM2, Enu_TypeVariable.SansType, 3, 2, False) _
+                  & TABVARL3 & ChaineSlab & TABEGAL2 & GetStringInUnit(MyGamma.GammaVs, Enu_TypeVariable.SansType, 3, 2, False) _
+                  & ChaineFire)
+
+        If Not MyGamma.lGammaV_unique Then
+            AddLigneNDC(TABVARL3 & "\Sg\s\-Vc\=" & TABEGAL2 & GetStringInUnit(MyGamma.GammaVc, Enu_TypeVariable.SansType, 3, 2, False))
+        End If
+
+        AddLigneNDC(TABVARL3 & "\Sg\s\-P\=" & TABEGAL2 & GetStringInUnit(MyGamma.GammaP, Enu_TypeVariable.SansType, 3, 2, False))
+
+    End Sub
+
+    Private Sub EditionParametresCoefGammaOLD(ByVal MyBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   10/07/23 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des coefficients partiels
+        '----------------------------------------------------------------------------------------------
+
+        '--> Déclaration 
+
+        Dim MyGamma As Cls_Gamma
+        Const TABEGAL1 As String = "\T30="
+        '--> Initilisation 
+
+        MyGamma = MyBeam.Param.Gamma.Clone
+
+        '--> Traitement
+
+        SautePage()
+
+        AddTitreNdC(2, Bloc("GAMMA"))
+
+        AddTitreNdC(3, Bloc("LOADING_FACTORS"))
+        AddLigneNDC(TABVAR2 & "\Sg\s\-G,sup\= " & TABEGAL & MyGamma.GammaG_sup)
+        AddLigneNDC(TABVAR2 & "\Sg\s\-G,inf\= " & TABEGAL & MyGamma.GammaG_inf)
+        AddLigneNDC(TABVAR2 & "\Sg\s\-Q\= " & TABEGAL & MyGamma.GammaQ)
+
+        AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q1"))
+        AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q1\= " & TABEGAL & MyGamma.Psi0_Q1)
+        AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q1\= " & TABEGAL & MyGamma.Psi1_Q1)
+        AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q1\= " & TABEGAL & MyGamma.Psi2_Q1)
+
+        AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q2"))
+        AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q2\= = " & MyGamma.Psi0_Q2)
+        AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q2\= = " & MyGamma.Psi1_Q2)
+        AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q2\= = " & MyGamma.Psi2_Q2)
+
+        AddTitreNdC(3, Bloc("STEEL_RES_FACTORS"))
+        AddLigneNDC(TABVAR2 & "\Sg\s\-M0\= = " & MyGamma.GammaM0)
+        AddLigneNDC(TABVAR2 & "\Sg\s\-M1\= = " & MyGamma.GammaM1)
+        AddLigneNDC(TABVAR2 & "\Sg\s\-M2\= = " & MyGamma.GammaM2)
+
+        AddTitreNdC(3, Bloc("SLAB_RES_FACTORS"))
+        AddLigneNDC(TABVAR2 & "\Sg\s\-C\= = " & MyGamma.GammaC)
+        If MyGamma.lGammaV_unique Then
+            AddLigneNDC(TABVAR2 & "\Sg\s\-V\= = " & MyGamma.GammaVs)
+        Else
+            AddLigneNDC(TABVAR2 & "\Sg\s\-Vs\= = " & MyGamma.GammaVs)
+            AddLigneNDC(TABVAR2 & "\Sg\s\-Vc\= = " & MyGamma.GammaVc)
+        End If
+        AddLigneNDC(TABVAR2 & "\Sg\s\-S\= = " & MyGamma.GammaS)
+        AddLigneNDC(TABVAR2 & "\Sg\s\-P\= = " & MyGamma.GammaP)
+
+        AddTitreNdC(3, Bloc("FIRE_RES_FACTORS"))
+        AddLigneNDC(TABVAR2 & "\Sg\s\-M,fi\= = " & MyGamma.GammaM_fi)
+        AddLigneNDC(TABVAR2 & "\Sg\s\-C,fi\= = " & MyGamma.GammaC_fi)
+        AddLigneNDC(TABVAR2 & "\Sg\s\-V,fi\= = " & MyGamma.GammaV_fi)
 
     End Sub
 
@@ -1091,6 +1195,271 @@ Module Mod_NoteCalcul
         SautePage()
 
         AddTitreNdC(2, Bloc("COMBINATIONS"))
+
+    End Sub
+
+#End Region
+
+#Region "***Edition propriétés des sections***"
+
+    Private Sub EditionProprietesSection(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   16/08/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lMixte As Boolean = MyBeam.Section.lMixte
+
+        '--> Initialisation
+
+        SautePage()
+
+        AddTitreNdC(1, BlocSP("SECTIONSPROPERTIES"))
+
+        '--> Traitement
+
+        If lMixte Then
+            EditionProprietesSectionPoutreMixte(MyBeam)
+        Else
+        End If
+
+    End Sub
+
+    Private Sub EditionProprietesSectionPoutreMixte(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   16/08/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections pour une poutre mixte
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NCOL As Integer, LargCol(1) As Integer, PosTab As Integer
+
+        '--> Initialisation du tableau
+
+        NCOL = 8
+        LargCol(0) = 15
+        LargCol(1) = 10
+        PosTab = 5
+
+        InitialiseTableauPropSectionMixte(NCOL, LargCol, PosTab)
+
+        '--> Console gauche
+
+        If MyBeam.lTraveeConsoleGauche Then
+            EditionPropSectionsPMixteConsole(MyBeam, True, NCOL, LargCol, PosTab)
+        End If
+
+        '--> Travées centrales
+
+        For i = 1 To MyBeam.NombreTraveesDeuxAppuis
+            EditionPropSectionsPMixteTravee(MyBeam, i, NCOL, LargCol, PosTab)
+        Next
+
+        '--> Console droite
+
+        If MyBeam.lTraveeConsoleDroite Then
+            EditionPropSectionsPMixteConsole(MyBeam, False, NCOL, LargCol, PosTab)
+        End If
+
+        '--> Fin du tableau
+
+        FinTableau()
+    End Sub
+
+    Private Sub EditionPropSectionsPMixteTravee(MyBeam As cls_Poutre, iTravee As Integer, NCOL As Integer, LargCol() As Integer, PosTab As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   16/08/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections pour une travée d'un poutre mixte
+        '-------------------------------------------------------------------------------------------
+
+        Dim bEff As Decimal
+        Dim LTrav As Decimal
+        Dim mSign As Decimal
+        Dim zANP, MplRd As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim Inertie As Decimal
+        Dim myBord As Integer = Bordures.Tous
+        Dim ChaineT, ChaineS As String
+        Dim n0 As Decimal
+
+        '--> Initialisation
+
+        If MyBeam.NombreTraveesDeuxAppuis = 1 Then
+            ChaineT = "travée principale"
+        Else
+            ChaineT = "travée " & CStr(iTravee)
+        End If
+
+        '--> Sur appui gauche
+
+        bEff = MyBeam.BeffDalle(0, iTravee, False, False)
+        n0 = MyBeam.Dalle.beton.CoefficientEquivalenceCT
+        If iTravee = 1 And (Not MyBeam.lTraveeConsoleGauche) Then
+            mSign = 1
+            ChaineS = "Appui  G (M>0)"
+        Else
+            mSign = -1
+            ChaineS = "Appui  G (M<0)"
+        End If
+
+        MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, n0, zANP, MplRd)
+        MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
+
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, ChaineT)
+        AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, ChaineS)
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+
+        '--> à mi travée
+
+        bEff = MyBeam.BeffDalle(MyBeam.LongueurTravee(iTravee) / 2, iTravee, False, False)
+        mSign = 1
+        ChaineS = "Mi travée (M>0)"
+        MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, n0, zANP, MplRd)
+        MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
+
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, "")
+        AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, ChaineS)
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+
+        '--> Sur appui gauche
+
+        bEff = MyBeam.BeffDalle(MyBeam.LongueurTravee(iTravee), iTravee, False, False)
+        n0 = MyBeam.Dalle.beton.CoefficientEquivalenceCT
+        If iTravee = MyBeam.NombreTraveesDeuxAppuis And (Not MyBeam.lTraveeConsoleDroite) Then
+            mSign = 1
+            ChaineS = "Appui  D (M>0)"
+        Else
+            mSign = -1
+            ChaineS = "Appui  D (M<0)"
+        End If
+
+        MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, n0, zANP, MplRd)
+        MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
+
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, ChaineT)
+        AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, ChaineS)
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+
+    End Sub
+
+    Private Sub EditionPropSectionsPMixteConsole(MyBeam As cls_Poutre, lGauche As Boolean, NCOL As Integer, LargCol() As Integer, PosTab As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   16/08/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections pour la console d'un poutre mixte
+        '-------------------------------------------------------------------------------------------
+        '   lGauche     [E] :   Indique si console gauche
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iTravee As Integer
+        Dim bEff As Decimal
+        Dim LTrav As Decimal
+        Const mSign As Decimal = -1
+        Dim zANP, MplRd As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim Inertie As Decimal
+        Dim myBord As Integer = Bordures.Tous
+        Dim ChaineConsole As String
+
+        '--> Initialisation du tableau
+
+        'NCOL = 7
+        'LargCol(0) = 15
+        'LargCol(1) = 10
+        'PosTab = 10
+
+        'InitialiseTableauPropSectionMixte(NCOL, LargCol, PosTab)
+
+        '--> Calcul des propriétés de la section
+
+        If lGauche Then
+            iTravee = MyBeam.IndicePremiereTravee
+            ChaineConsole = "Console Gauche"
+        Else
+            iTravee = MyBeam.IndiceDerniereTravee
+            ChaineConsole = "Console droite"
+        End If
+        LTrav = MyBeam.LongueurTravee(iTravee)
+        bEff = MyBeam.BeffDalle(LTrav / 2, iTravee, False, False)
+
+        MyBeam.Section.ProprietesPlastiquesMyy(mSign, True, MyBeam.Param.Gamma, 0, zANP, MplRd)
+        MyBeam.Section.ProprietesElastiquesMyy(mSign, True, MyBeam.Param.Gamma, 1, zANE, Inertie, MelRd)
+
+        '--> Propriétés sur toutes les sections
+
+        InitialiseLigne(NCOL, HLIGNE)
+
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, ChaineConsole)
+        AddCellule(LargCol(0), myBord, PositionTexteInCell.Centre, "All sections (M<0)")
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(bEff, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(Inertie, Enu_TypeVariable.InertieCM4, 4, 4, False))
+        AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 4, False))
+
+        ''--> Fin du tableau
+
+        'FinTableau()
+
+    End Sub
+
+    Private Sub InitialiseTableauPropSectionMixte(NCOL As Integer, LargCol() As Integer, PosTab As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   16/08/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entete du tableau pour les propriétés de sections pour la console d'un poutre mixte
+        '-------------------------------------------------------------------------------------------
+
+        Dim myBord As Integer
+
+        AddLigneNDC("\TABLEAU " & PosTab)
+        InitialiseLigne(NCOL, HLIGNEENTETE, True)
+
+        myBord = Bordures.Gauche + Bordures.Droite + Bordures.Haut
+
+        AddCellule(LargCol(1), Bordures.Aucun, PositionTexteInCell.Centre, "")
+        AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "b\-eff\=")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "z\-pl\=")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "M\-pl,Rd\=")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "z\-el\=")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "I\-yy\=")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "M\-el,Rd\=")
+
+        myBord = Bordures.Gauche + Bordures.Droite + Bordures.Bas
+
+        AddCellule(LargCol(1), Bordures.Aucun, PositionTexteInCell.Centre, "")
+        AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment) & ")")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties) & ")")
+        AddCelluleFond(LargCol(1), myBord, PositionTexteInCell.Centre, "(" & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment) & ")")
 
     End Sub
 

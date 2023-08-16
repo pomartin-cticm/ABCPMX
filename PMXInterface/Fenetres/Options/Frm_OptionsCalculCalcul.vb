@@ -197,7 +197,12 @@ Public Class Frm_OptionsCalculCalcul
             Select Case sender.name
                 Case Me.txt_Es.Name
                     LocalOptionsCalcul.EsArmatures = ValeurUI
-
+                Case Me.txt_EspNoeuds.Name
+                    LocalOptionsCalcul.dMaxNodes = ValeurUI
+                Case Me.txt_NbMiniNConsole.Name
+                    LocalOptionsCalcul.nbMinNodesConsole = ValeurUI
+                Case Me.txt_NbMiniNTravee.Name
+                    LocalOptionsCalcul.nbMinNodesTravee = ValeurUI
             End Select
 
         End If
@@ -214,7 +219,7 @@ Public Class Frm_OptionsCalculCalcul
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
         Dim lValMax As Boolean = True
-        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        Dim kUnit As Decimal
 
         'Const PORTEECONSOLEMINMIN As Decimal = 0.2
         'Const PORTEECONSOLEMINMAX As Decimal = 0.5
@@ -222,17 +227,27 @@ Public Class Frm_OptionsCalculCalcul
         Select Case MyTxt.Name
             Case Me.txt_Es.Name
 
-                ValMin = 100000
-                ValMax = 500000
                 lValMax = False
                 kUnit = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
+                ValMin = 100000
+                ValMax = 500000
 
             Case Me.txt_EspNoeuds.Name
                 ValMin = 0.1
                 ValMax = 2
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+            Case Me.txt_NbMiniNTravee.Name
+                ValMin = 1
+                ValMax = 1000
+                kUnit = 1
+            Case Me.txt_NbMiniNConsole.Name
+                ValMin = 1
+                ValMax = 1000
+                kUnit = 1
 
         End Select
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)
 
         If iErreur <> 0 Then
             NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)

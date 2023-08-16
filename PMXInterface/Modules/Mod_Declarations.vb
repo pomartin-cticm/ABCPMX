@@ -231,6 +231,7 @@ Module Mod_Declarations
         Public RatioEpRenformisMax As Decimal   ' Ratio épaisseur maxi d'un renformis
         Public EpDalleMixteMin As Decimal       ' Epaisseur de dalle mixte mini (au dessus du bac)
         Public RhoCBetonLegerMax As Decimal     ' Masse volumique maximale d'un béton léger
+        Public RhoCBetonLegerMin As Decimal     ' Masse volumique minimale d'un béton léger
     End Structure
 
     Public Enum Enu_Normes
@@ -269,6 +270,7 @@ Module Mod_Declarations
         OptionsScope.EpDalleMixteMin = EPDALLEMIXTEMINIDEFAUT
 
         OptionsScope.RhoCBetonLegerMax = 2200
+        OptionsScope.RhoCBetonLegerMin = 800
 
     End Sub
 
@@ -280,7 +282,7 @@ Module Mod_Declarations
 
         OptionsCalcul.dMaxNodes = 1
         OptionsCalcul.nbMinNodesTravee = 9
-        OptionsCalcul.nbMinNodesTravee = 1
+        OptionsCalcul.nbMinNodesConsole = 1
 
         OptionsCalcul.EsArmatures = 210 * 10 ^ 3
 
