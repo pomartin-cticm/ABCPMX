@@ -222,6 +222,57 @@ Public Class Cls_Acier
 
     End Sub
 
+
+    Public Sub InitialiseAcierS275JR()
+        '------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '------------------------------------------------------------------------------------------
+        '   Initialisation d'un acier S275 M/ML pour les tests unitaires (pas d'accès à la base de données)
+        '------------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyPlage As strucPlage
+
+        '--> Initialisations
+
+        Me.Nuance = "S275"
+        Me.Qualite = "JR/J0/J2"
+        Me.EpMax = 0.15
+
+        MyPlage.Ep = 0.003
+        MyPlage.Fu = 470
+        MyPlage.Fy = 275
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.016
+        MyPlage.Fu = 265
+        MyPlage.Fy = 265
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.04
+        MyPlage.Fu = 455
+        MyPlage.Fy = 255
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.063
+        MyPlage.Fu = 470
+        MyPlage.Fy = 245
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.08
+        MyPlage.Fu = 470
+        MyPlage.Fy = 235
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.1
+        MyPlage.Fu = 470
+        MyPlage.Fy = 225
+        Me.Plages.Add(MyPlage)
+
+    End Sub
+
 #End Region
 
 #Region " Ecriture Fichier "

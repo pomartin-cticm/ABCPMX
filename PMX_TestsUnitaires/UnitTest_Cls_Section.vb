@@ -617,4 +617,248 @@ Imports PMXMoteur2
 
 
     End Sub
+
+
+    <TestMethod()> Public Sub TestUnit_ProprietesSectionMixteLamine()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   10/07/23 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test des propriétés élastiques et plastiques d'une section mixte avec profilé laminé
+        '   Références : article RCM 2018-2
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MySection As New cls_Section
+        Dim MyGamma As New Cls_Gamma
+        Dim MyDalle As New Cls_Dalle
+        Dim zANP, MplRd As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim InertieY, InertieZ As Decimal
+        Dim DeltaV, ValRef As Decimal
+        Const DeltaVMAx As Decimal = 1 / 1000
+        Dim bEff, Eta As Decimal
+
+        '--> Initialisations
+
+        MySection.typeSection = cls_Section.Enum_TypeSection.Mixte
+
+        '# IPE 450
+
+        MySection.ProfilA.ha = 0.45
+        MySection.ProfilA.b_fi = 0.19
+        MySection.ProfilA.b_fs = 0.19
+        MySection.ProfilA.t_fi = 0.0146
+        MySection.ProfilA.t_fs = 0.0146
+        MySection.ProfilA.t_w = 0.0094
+        MySection.ProfilA.r_ci = 0.021
+        MySection.ProfilA.r_cs = 0.021
+        MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+
+        '# Acier S275 M/ML
+
+        MySection.Acier.InitialiseAcierS275JR()
+
+        '# Gamma
+
+        MyGamma.GammaM0 = 1
+        MyGamma.GammaC = 1.5
+
+        '# Dalle
+
+        bEff = 3
+        Eta = 1
+        MyDalle.beton.Classe = "C25/30"
+        MyDalle.beton.Calcul_Proprietes()
+        MyDalle.type = Cls_Dalle.Enum_TypeDalle.Mixte
+        MyDalle.t_d = 0.12
+        MyDalle.Bac.InitialiseCofraPlus60()
+        MyDalle.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
+
+        '--> Tests des propriétés plastiques
+
+        MySection.ProprietesPlastiquesMixteMyy(1, True, MyGamma, 0, beff, eta, mydalle, zANP, MplRd)
+
+        '# Position ANP
+
+        ValRef = -0.00079
+        DeltaV = (zANP - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 50)           ' 5%
+
+        '# Moment plastique
+
+        ValRef = 845.9 * 10 ^ 3
+        DeltaV = (MplRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Exit Sub
+        '# Moment plastique des semelles seules
+
+        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 1, zANP, MplRd)
+
+        ValRef = 355 * (15 * 1.07) * (30 - 1.07)
+        DeltaV = (MplRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Effort tranchant plastique
+
+        ''ValRef = 355 / Math.Sqrt(3) * 2570
+        ''DeltaV = (MySection.vplrd - ValRef) / ValRef
+        ''Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '--> Tests des propriétés élastiques / axe YY
+
+        MySection.ProprietesElastiquesMyy(1, True, MyGamma, 1, zANE, InertieY, MelRd)
+
+        '# Position ANE
+
+        ValRef = -0.15
+        DeltaV = (zANE - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Inertie Y
+
+        ValRef = 8356 * 10 ^ (-8)
+        DeltaV = (InertieY - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '--> Tests des propriétés élastiques / axe ZZ
+
+        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, InertieZ, MelRd)
+
+        '# Position ANE
+
+        ValRef = 0
+        DeltaV = (zANE - ValRef) / MySection.ProfilA.ha
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Inertie Z
+
+        ValRef = 604 * 10 ^ (-8)
+        DeltaV = (InertieZ - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+    End Sub
+
+
+    <TestMethod()> Public Sub TestUnit_ProprietesSectionMixteMonosym()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   10/07/23 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test des propriétés élastiques et plastiques d'une section mixte avec profilé PRS monosym
+        '   Références : article RCM 2021-3
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MySection As New cls_Section
+        Dim MyGamma As New Cls_Gamma
+        Dim MyDalle As New Cls_Dalle
+        Dim zANP, MplRd As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim InertieY, InertieZ As Decimal
+        Dim DeltaV, ValRef As Decimal
+        Const DeltaVMAx As Decimal = 1 / 1000
+        Dim bEff, Eta As Decimal
+
+        '--> Initialisations
+
+        MySection.typeSection = cls_Section.Enum_TypeSection.Mixte
+
+        '# Monosym
+
+        MySection.ProfilA.ha = 0.51 + 0.025 + 0.04
+        MySection.ProfilA.b_fi = 0.35
+        MySection.ProfilA.b_fs = 0.25
+        MySection.ProfilA.t_fi = 0.04
+        MySection.ProfilA.t_fs = 0.025
+        MySection.ProfilA.t_w = 0.015
+        MySection.ProfilA.r_ci = 0.0
+        MySection.ProfilA.r_cs = 0.0
+        MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
+
+        '# Acier S355
+
+        MySection.Acier.InitialiseAcierS355MML()
+
+        '# Gamma
+
+        MyGamma.GammaM0 = 1
+        MyGamma.GammaC = 1.5
+
+        '# Dalle
+
+        bEff = 2.65
+        Eta = 1
+        MyDalle.beton.Classe = "C30/37"
+        MyDalle.beton.Calcul_Proprietes()
+        MyDalle.type = Cls_Dalle.Enum_TypeDalle.Pleine
+        MyDalle.t_d = 0.2
+        MyDalle.t_h = 0
+
+        '--> Tests des propriétés plastiques
+
+        MySection.ProprietesPlastiquesMixteMyy(1, True, MyGamma, 0, bEff, Eta, MyDalle, zANP, MplRd)
+
+        '# Position ANP
+
+        ValRef = -0.004
+        DeltaV = (zANP - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 50)           ' 5%
+
+        '# Moment plastique
+
+        ValRef = 4368 * 10 ^ 3
+        DeltaV = (MplRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Exit Sub
+        '# Moment plastique des semelles seules
+
+        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 1, zANP, MplRd)
+
+        ValRef = 355 * (15 * 1.07) * (30 - 1.07)
+        DeltaV = (MplRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Effort tranchant plastique
+
+        ''ValRef = 355 / Math.Sqrt(3) * 2570
+        ''DeltaV = (MySection.vplrd - ValRef) / ValRef
+        ''Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '--> Tests des propriétés élastiques / axe YY
+
+        MySection.ProprietesElastiquesMyy(1, True, MyGamma, 1, zANE, InertieY, MelRd)
+
+        '# Position ANE
+
+        ValRef = -0.15
+        DeltaV = (zANE - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Inertie Y
+
+        ValRef = 8356 * 10 ^ (-8)
+        DeltaV = (InertieY - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '--> Tests des propriétés élastiques / axe ZZ
+
+        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, InertieZ, MelRd)
+
+        '# Position ANE
+
+        ValRef = 0
+        DeltaV = (zANE - ValRef) / MySection.ProfilA.ha
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Inertie Z
+
+        ValRef = 604 * 10 ^ (-8)
+        DeltaV = (InertieZ - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+    End Sub
+
 End Class

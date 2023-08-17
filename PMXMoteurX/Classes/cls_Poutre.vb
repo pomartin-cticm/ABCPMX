@@ -164,7 +164,6 @@
     ''' </summary>
     Public lAutomaticDesign As Boolean
 
-
     ''' <summary>
     ''' Indique l'espacement entre deux ondes consécutives dans le cas d'un bac transversal
     ''' </summary>

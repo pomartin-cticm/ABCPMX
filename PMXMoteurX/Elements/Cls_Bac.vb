@@ -191,6 +191,18 @@ Public Class Cls_Bac
         AppuiL = EnuConfigLAppui.BacNonCoupe
     End Sub
 
+
+    Public Sub InitialiseCofraPlus60()
+        Me.b_b = 0.062
+        Me.b_t = 0.101
+        Me.h_rs = 0
+        Me.h_p = 0.058
+        Me.e_p = 0.207
+
+        Me.Etiquette = "Cofraplus_60 1.00"
+
+    End Sub
+
 #End Region
 
 #Region " Ecriture Fichier "

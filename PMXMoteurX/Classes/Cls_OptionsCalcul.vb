@@ -1,6 +1,10 @@
-﻿Imports PropMix_Engine.Cls_Section
+﻿'Imports PropMix_Engine.Cls_Section
 
 Public Class Cls_OptionsCalcul
+
+
+    '==== A SUPPRIMER ??? Non ==============================
+
 
 #Region " Enumérations et constantes "
 
