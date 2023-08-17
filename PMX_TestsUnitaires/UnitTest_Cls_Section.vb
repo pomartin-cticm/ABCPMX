@@ -691,51 +691,47 @@ Imports PMXMoteur2
         DeltaV = (MplRd - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        Exit Sub
         '# Moment plastique des semelles seules
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 1, zANP, MplRd)
+        ''MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 1, zANP, MplRd)
 
-        ValRef = 355 * (15 * 1.07) * (30 - 1.07)
-        DeltaV = (MplRd - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
-
-        '# Effort tranchant plastique
-
-        ''ValRef = 355 / Math.Sqrt(3) * 2570
-        ''DeltaV = (MySection.vplrd - ValRef) / ValRef
+        ''ValRef = 355 * (15 * 1.07) * (30 - 1.07)
+        ''DeltaV = (MplRd - ValRef) / ValRef
         ''Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '--> Tests des propriétés élastiques / axe YY
 
-        MySection.ProprietesElastiquesMyy(1, True, MyGamma, 1, zANE, InertieY, MelRd)
+        '=== Court terme
+        Dim n0 As Decimal = 6.77
+        MySection.ProprietesElastiquesMixteMyy(1, True, MyGamma, 1, n0, bEff, MyDalle, zANE, InertieY, MelRd)
 
         '# Position ANE
 
-        ValRef = -0.15
+        ValRef = MyDalle.t_d - 0.114
         DeltaV = (zANE - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 20)   ' 2%
 
         '# Inertie Y
 
-        ValRef = 8356 * 10 ^ (-8)
+        ValRef = 106266 * 10 ^ (-8)
         DeltaV = (InertieY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        '--> Tests des propriétés élastiques / axe ZZ
+        '=== Long terme
 
-        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, InertieZ, MelRd)
+        n0 = 3 * n0
+        MySection.ProprietesElastiquesMixteMyy(1, True, MyGamma, 1, n0, bEff, MyDalle, zANE, InertieY, MelRd)
 
         '# Position ANE
 
-        ValRef = 0
-        DeltaV = (zANE - ValRef) / MySection.ProfilA.ha
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        ValRef = MyDalle.t_d - 0.194
+        DeltaV = (zANE - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 20)   ' 2%
 
-        '# Inertie Z
+        '# Inertie Y
 
-        ValRef = 604 * 10 ^ (-8)
-        DeltaV = (InertieZ - ValRef) / ValRef
+        ValRef = 80885 * 10 ^ (-8)
+        DeltaV = (InertieY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
@@ -812,24 +808,26 @@ Imports PMXMoteur2
         DeltaV = (MplRd - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        Exit Sub
-        '# Moment plastique des semelles seules
+        ''Exit Sub
+        ''# Moment plastique des semelles seules
 
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 1, zANP, MplRd)
+        ''MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 1, zANP, MplRd)
 
-        ValRef = 355 * (15 * 1.07) * (30 - 1.07)
-        DeltaV = (MplRd - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
-
-        '# Effort tranchant plastique
-
-        ''ValRef = 355 / Math.Sqrt(3) * 2570
-        ''DeltaV = (MySection.vplrd - ValRef) / ValRef
+        ''ValRef = 355 * (15 * 1.07) * (30 - 1.07)
+        ''DeltaV = (MplRd - ValRef) / ValRef
         ''Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        ''# Effort tranchant plastique
+
+        ''''ValRef = 355 / Math.Sqrt(3) * 2570
+        ''''DeltaV = (MySection.vplrd - ValRef) / ValRef
+        ''''Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '--> Tests des propriétés élastiques / axe YY
 
-        MySection.ProprietesElastiquesMyy(1, True, MyGamma, 1, zANE, InertieY, MelRd)
+        Exit Sub
+        Dim n0 As Decimal = 6
+        MySection.ProprietesElastiquesMixteMyy(1, True, MyGamma, 1, n0, bEff, MyDalle, zANE, InertieY, MelRd)
 
         '# Position ANE
 

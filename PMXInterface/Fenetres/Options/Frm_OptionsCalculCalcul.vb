@@ -135,8 +135,6 @@ Public Class Frm_OptionsCalculCalcul
 
 #End Region
 
-
-
 #Region " Dessins symboles "
 
     Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_NbNodes2.Paint, img_NbNodes1.Paint, img_Es.Paint, img_dNodes.Paint

@@ -344,6 +344,7 @@ FIRE					= Fire
 TITLE					= Fire design
 CONSTANTS				= Constants
 PARAMETERS				= Parameters
+BOLTZMAN				= Boltzman constant
 
 #OPTCALSCOPE
 TITLE					= Scope of application
