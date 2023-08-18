@@ -116,8 +116,8 @@ Public Class Frm_BacN
     End Sub
 
     Private Sub InitialiseVariablesLocales()
-        If iFrmAppel = EnuFenetres.DalleN Then
-            MyBac = Frm_DalleN.MyDalleLoc.Bac.Clone
+        If iFrmAppel = EnuFenetres.Dalle Then
+            MyBac = Frm_Dalle.MyDalleLoc.Bac.Clone
         Else
             MyBac = MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Clone
         End If

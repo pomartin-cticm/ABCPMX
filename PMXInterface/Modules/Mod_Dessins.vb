@@ -17,7 +17,7 @@ Module Mod_Dessins
 #Region " Dessins pour la définiton de la dalle (FRM_DALLEN) "
 
     Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyDalle As Cls_Dalle,
-                            MySection As cls_Section, iSelect As Integer,
+                            MySection As cls_Section, iSelect As Integer, strMsg() As String,
                             ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   26/06/23 :  Version 1.00
@@ -29,6 +29,7 @@ Module Mod_Dessins
         '   MyDalle     [E] :   Dalle à dessiner
         '   MySection   [E] :   Section à laquelle la dalle est rattachée
         '   iSelect     [E] :   Indice de la cote selectionnée
+        '   strMsg      [E] :   Messages issus du fichier langue
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
         '-----------------------------------------------------------------------------------------------
         '   iSelect:    0 épaisseur de la dalle
@@ -98,7 +99,7 @@ Module Mod_Dessins
         Dim myBrushA(1) As Brush
 
         Select Case iSelect
-            Case 100, 101, 102, 103
+            Case 100, 101, 102, 103, 1001
                 ColorArmatures(0) = CouleurArmaSelect
                 ColorArmatures(1) = CouleurArmaNormal
             Case 200, 201, 202, 203
@@ -163,13 +164,13 @@ Module Mod_Dessins
 
         If lCote Then
 
-            DessinCoteFrmDalle(myGr, MyDalle, MySection, iSelect, MyParAff, dCar, BeffG, BeffD)
+            DessinCoteFrmDalle(myGr, MyDalle, MySection, iSelect, MyParAff, dCar, BeffG, BeffD, strMsg)
 
         End If
     End Sub
 
     Private Sub DessinCoteFrmDalle(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, MySection As cls_Section, iSelect As Integer,
-                                   MyParAffA As Struc_Affichage, dCar As Decimal, BeffG As Decimal, BeffD As Decimal)
+                                   MyParAffA As Struc_Affichage, dCar As Decimal, BeffG As Decimal, BeffD As Decimal, strMsg() As String)
         '-----------------------------------------------------------------------------------------------
         '   07/07/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
@@ -182,11 +183,15 @@ Module Mod_Dessins
         '   MyParAffA   [E] :   Paramètres d'affichage
         '   dCar        [E] :   Dimension pour l'affichage
         '   bEffG, BEffD[E] :   Largeur de dalle représentée à gauche et à droite
+        '   strMsg      [E] :   Messages issus du fichier langue
         '-----------------------------------------------------------------------------------------------
         '   iSelect:    0 : hauteur totale de dalle
         '               1 : renformis
         '               2 : epaisseur dalle au dessus du bac
+        '              10 ! epaisseur de la prédalle
+        '              11 ! épaisseur du joint
         '            1000 : béton dalle  
+        '            1001 : acier armature
         '-----------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -243,6 +248,41 @@ Module Mod_Dessins
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
             Chaine = GetStringNoUnit(Math.Abs(ye - yo), Enu_TypeVariable.Dimension)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
+
+        '# Prédalle
+
+        If (MyDalle.type = Cls_Dalle.Enum_TypeDalle.Prefabriquee) And (MyDalle.preDalle_ep > 0) Then
+
+            MyColor = StyleCouleur(iSelect, 10)
+            MyPen.Color = MyColor
+
+            yo = 0
+            ye = MyDalle.preDalle_ep
+
+            xCoteZ = -BeffG + dCar
+
+            AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
+            AddLigne(MyGr, MyPen, xCoteZ, ye, xCoteZ, yo - dCar / 2, MyParAffA)
+            Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, yo - dCar2 / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Top, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            If (MyDalle.preDalle_tjoint > 0) Then
+                MyColor = StyleCouleur(iSelect, 11)
+                MyPen.Color = MyColor
+
+                yo = MyDalle.preDalle_ep
+                ye = MyDalle.preDalle_ep - MyDalle.preDalle_tjoint
+
+                xCoteZ = -BeffG + 1.5 * dCar
+
+                AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
+                AddLigne(MyGr, MyPen, xCoteZ, yo, xCoteZ, 0 - dCar / 2, MyParAffA)
+                Chaine = GetStringNoUnit(Math.Abs(ye - yo), Enu_TypeVariable.Dimension)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, 0 - dCar2 / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Top, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            End If
 
         End If
 
@@ -303,7 +343,7 @@ Module Mod_Dessins
             MyPen.Color = MyColor
 
             Dim lsChaine As New List(Of String)
-            Dim strBeton As String = "Concrete "
+            Dim strBeton As String = strMsg(0).Trim & " "      ' "Concrete "
 
             lsChaine.Clear()
             lsChaine.Add(strBeton & MyDalle.beton.Classe)
@@ -315,6 +355,28 @@ Module Mod_Dessins
             xo = 0
 
             AddTabTextFond(MyGr, New SolidBrush(MyColor), lsChaine, MyFontNormal, xo, ye, MyParAffA, HorizontalAlignment.Left, HorizontalAlignment.Left, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen)
+
+        End If
+
+        '# Acier d'armature
+
+        If iSelect = 1001 Then
+
+            MyColor = StyleCouleur(iSelect, 1001)
+            MyPen.Color = MyColor
+
+            Dim lsChaine As New List(Of String)
+            Dim strRebar As String = strMsg(1).Trim & " "       ' "Steel reinforcement "
+
+            lsChaine.Clear()
+            lsChaine.Add(strRebar & MyDalle.AcierArmatures.Classe)
+            lsChaine.Add("fsk" & " = " & GetStringInUnit(MyDalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 3, 1, True))
+            lsChaine.Add("Es" & " = " & GetStringInUnit(MyDalle.AcierArmatures.Es, Enu_TypeVariable.ModuleY, 3, 1, True))
+
+            xo = 0
+            yo = MyDalle.zTop - MyDalle.LitArma(0).z_s - 1.5 * MyDalle.LitArma(0).PhiS
+
+            AddTabTextFond(MyGr, New SolidBrush(MyColor), lsChaine, MyFontNormal, xo, yo, MyParAffA, HorizontalAlignment.Center, HorizontalAlignment.Left, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen)
 
 
         End If
@@ -4977,7 +5039,9 @@ Module Mod_Dessins
 
         '--> Affichage de la dalle pleine (nécessairement sans renformis)
 
-        AddRectanglePlein(MyGr, MyBrushDP, MyPen, -BeffDes / 2, 0, BeffDes / 2, Td, MyParAffA, True, False)
+        xo = -BeffDes / 2
+        xe = -xo
+        AddRectanglePlein(MyGr, MyBrushDP, MyPen, xo, 0, xe, Td, MyParAffA, True, False)
 
         '--> Affichage des deux prédalles
 
@@ -5006,9 +5070,15 @@ Module Mod_Dessins
         '--> Finitions
 
         xo = -BeffDes / 2
-        xe = -BeffDes / 2
-        AddLigne(MyGr, xe, 0, xe, 0, MyParAffA)
-        AddLigne(MyGr, xe, Td, xe, Td, MyParAffA)
+        xe = BeffDes / 2
+        AddLigne(MyGr, xo, 0, xe, 0, MyParAffA)
+        AddLigne(MyGr, xo, Td, xe, Td, MyParAffA)
+        AddLigne(MyGr, xo, Tj, -Bfs / 2 + wApp, Tj, MyParAffA)
+        AddLigne(MyGr, xe, Tj, +Bfs / 2 - wApp, Tj, MyParAffA)
+
+        AddLigne(MyGr, +Bfs / 2 - wApp, 0, +Bfs / 2 - wApp, pred_ep, MyParAffA)
+        AddLigne(MyGr, -Bfs / 2 + wApp, 0, -Bfs / 2 + wApp, pred_ep, MyParAffA)
+
 
         '--> Fin
 

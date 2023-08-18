@@ -1133,6 +1133,10 @@ Module Mod_Outils
         ValeurGlobale = ValeurLocale
     End Sub
 
+    Public Sub GereTransfertValeur(ByVal ValeurLocale As String, ByRef ValeurGlobale As String, ByRef lModif As Boolean)
+        If ValeurGlobale <> ValeurLocale Then lModif = True
+        ValeurGlobale = ValeurLocale
+    End Sub
 #End Region
 
 End Module

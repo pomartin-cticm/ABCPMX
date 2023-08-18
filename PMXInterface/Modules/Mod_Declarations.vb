@@ -229,6 +229,7 @@ Module Mod_Declarations
         Public ThetaH As Decimal                ' Angle d'inclinaison / verticale des parois d'un renformis
         Public EpDallePleineMin As Decimal      ' Epaisseur de dalle plein mini
         Public RatioEpRenformisMax As Decimal   ' Ratio épaisseur maxi d'un renformis
+        Public RatioEpPredalleMax As Decimal    ' Ratio epaisseur maxi d'une prédalle
         Public EpDalleMixteMin As Decimal       ' Epaisseur de dalle mixte mini (au dessus du bac)
         Public RhoCBetonLegerMax As Decimal     ' Masse volumique maximale d'un béton léger
         Public RhoCBetonLegerMin As Decimal     ' Masse volumique minimale d'un béton léger
@@ -271,6 +272,8 @@ Module Mod_Declarations
 
         OptionsScope.RhoCBetonLegerMax = 2200
         OptionsScope.RhoCBetonLegerMin = 800
+
+        OptionsScope.RatioEpPredalleMax = 0.5
 
     End Sub
 

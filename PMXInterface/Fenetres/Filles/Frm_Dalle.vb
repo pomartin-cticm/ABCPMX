@@ -25,6 +25,7 @@ Public Class Frm_Dalle
     Dim strAppuiLbacCut1, strAppuiLbacCut2 As String
     Dim strToolTipAddRebar, strToolTipRemoveRebar As String
     Dim strLitNo(1) As String
+    Dim msgDessin(1) As String
 
     Dim iSelect As Integer = -1
     Dim iLitSelect As Integer = 0       'Indice du lit d'armatures à l'affichage
@@ -139,6 +140,9 @@ Public Class Frm_Dalle
                 strAppuiLbacUncut = "Uncut deck"
                 strAppuiLbacCut1 = "Cut deck"
                 strAppuiLbacCut2 = "the width of the concrete through is equal to the width of the deck through"
+
+                msgDessin(0) = Bloc("CONCRETE")
+                msgDessin(1) = Bloc("REBARSTEEL")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -295,6 +299,9 @@ Public Class Frm_Dalle
 
         Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
         Me.txt_Hh.Text = GetStringNoUnit(MyDalleLoc.t_h, Enu_TypeVariable.Dimension)
+
+        Me.txt_EpPredalle.Text = GetStringNoUnit(MyDalleLoc.preDalle_ep, Enu_TypeVariable.Dimension)
+        Me.txt_EpJoint.Text = GetStringNoUnit(MyDalleLoc.preDalle_tjoint, Enu_TypeVariable.Dimension)
 
         '--> Béton
 
@@ -467,36 +474,51 @@ Public Class Frm_Dalle
 
         lModif = False
 
-        '-- Dimensions ----------------------------------------------------------------------------------------------------
+        '-- Type et géométrie dalle ----------------------------------------------------------------------------------------------------
 
         If (MyDalleLoc.type <> MyProjet.Poutres(MyProjet.IndEnCours).Dalle.type) Then
             lModif = True
             MyProjet.Poutres(MyProjet.IndEnCours).Dalle.type = MyDalleLoc.type
         End If
 
-        If (MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_d <> MyDalleLoc.t_d) Then
-            lModif = True
-            MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_d = MyDalleLoc.t_d
+        GereTransfertValeur(MyDalleLoc.t_d, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_d, lModif)
+
+        If MyDalleLoc.type = Cls_Dalle.Enum_TypeDalle.Pleine Then _
+        GereTransfertValeur(MyDalleLoc.t_h, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_h, lModif)
+
+        If MyDalleLoc.type = Cls_Dalle.Enum_TypeDalle.Prefabriquee Then
+            GereTransfertValeur(MyDalleLoc.preDalle_ep, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.preDalle_ep, lModif)
+            GereTransfertValeur(MyDalleLoc.preDalle_tjoint, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.preDalle_tjoint, lModif)
         End If
 
         '--> Béton de la dalle
 
-        If (MyProjet.Poutres(MyProjet.IndEnCours).Dalle.beton.Classe <> MyDalleLoc.beton.Classe) Then
-            lModif = True
-            MyProjet.Poutres(MyProjet.IndEnCours).Dalle.beton.Classe = MyDalleLoc.beton.Classe
-        End If
+        GereTransfertValeur(MyDalleLoc.beton.lLeger, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.beton.lLeger, lModif)
+        GereTransfertValeur(MyDalleLoc.beton.RhoC, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.beton.RhoC, lModif)
+
+        GereTransfertValeur(MyDalleLoc.beton.Classe, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.beton.Classe, lModif)
 
         '--> Acier des armatures
 
-        If (MyProjet.Poutres(MyProjet.IndEnCours).Dalle.AcierArmatures.Classe <> MyDalleLoc.AcierArmatures.Classe) Then
-            lModif = True
-            MyProjet.Poutres(MyProjet.IndEnCours).Dalle.AcierArmatures.Classe = MyDalleLoc.AcierArmatures.Classe
-        End If
+        GereTransfertValeur(MyDalleLoc.AcierArmatures.Classe, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.AcierArmatures.Classe, lModif)
 
         '--> Bac
 
         MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Copie(MyDalleLoc.Bac, lModif)
         MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.CopieAutresParam(MyDalleLoc.Bac, lModif)
+
+        '--> Armatures
+
+        ' GereTransfertValeur(MyDalleLoc.NbLitsArmaActifs, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.NbLitsArmaActifs, lModif)
+
+        For i As Integer = 0 To MyDalleLoc.NbLitsArmaActifs - 1
+
+            GereTransfertValeur(MyDalleLoc.LitArma(i).PhiS, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).PhiS, lModif)
+            GereTransfertValeur(MyDalleLoc.LitArma(i).EspBar, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).EspBar, lModif)
+            GereTransfertValeur(MyDalleLoc.LitArma(i).z_s, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).z_s, lModif)
+            GereTransfertValeur(MyDalleLoc.LitArma(i).lActive, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).lActive, lModif)
+
+        Next
 
     End Sub
 
@@ -510,7 +532,7 @@ Public Class Frm_Dalle
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, iSelect)
+                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, iSelect, msgdessin)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================
@@ -686,7 +708,7 @@ Public Class Frm_Dalle
         Dim Tc As Decimal = MyDalleLoc.EpaisseurActive
         Dim lOldCfp220 As Boolean = lCofraPlus220
 
-        iFrmAppel = EnuFenetres.DalleN
+        iFrmAppel = EnuFenetres.Dalle
         Frm_BacN.ShowDialog()
 
         MAJI_ChangeBac()
@@ -733,6 +755,21 @@ Public Class Frm_Dalle
         Me.img_Dalle.Invalidate()
     End Sub
 
+
+    Private Sub LeaveAcierArma(sender As Object, e As EventArgs) Handles cmb_Acier.Leave
+        If lBuild Then Exit Sub
+
+        iSelect = -1
+
+        Me.img_Dalle.Invalidate()
+    End Sub
+
+    Private Sub EnterAcierArma(sender As Object, e As EventArgs) Handles cmb_Acier.Enter
+        If lBuild Then Exit Sub
+        iSelect = 1001
+        Me.img_Dalle.Invalidate()
+    End Sub
+
     Private Sub ComboBox_Leave(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.Leave
         If lBuild Then Exit Sub
         iSelect = -1
@@ -754,13 +791,13 @@ Public Class Frm_Dalle
     End Sub
 
 
-    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_zs.Leave, txt_PhiS.Leave, txt_esp.Leave, txt_RhoC.Leave, txt_Td2.Leave, txt_Tc.Leave
+    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Leave, txt_zs.Leave, txt_PhiS.Leave, txt_esp.Leave, txt_RhoC.Leave, txt_Td2.Leave, txt_Tc.Leave, txt_Hd.Leave, txt_EpPredalle.Leave, txt_EpJoint.Leave
         If lBuild Then Exit Sub
         iSelect = -1
         Me.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Enter, txt_zs.Enter, txt_PhiS.Enter, txt_esp.Enter, txt_RhoC.Enter, txt_Td2.Enter, txt_Tc.Enter
+    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_Hh.Enter, txt_zs.Enter, txt_PhiS.Enter, txt_esp.Enter, txt_RhoC.Enter, txt_Td2.Enter, txt_Tc.Enter, txt_Hd.Enter, txt_EpPredalle.Enter, txt_EpJoint.Enter
         If lBuild Then Exit Sub
         Select Case sender.name
             Case Me.txt_Hd.Name, Me.txt_Td2.Name
@@ -769,6 +806,10 @@ Public Class Frm_Dalle
                 iSelect = 1
             Case Me.txt_Tc.Name
                 iSelect = 2
+            Case Me.txt_EpPredalle.Name
+                iSelect = 10
+            Case Me.txt_EpJoint.Name
+                iSelect = 11
             Case Me.txt_PhiS.Name
                 iSelect = (iLitSelect + 1) * 100 + 1
             Case Me.txt_esp.Name
@@ -916,7 +957,7 @@ Public Class Frm_Dalle
 
     End Sub
 
-    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_Hh.TextChanged, txt_RhoC.TextChanged, txt_Td2.TextChanged, txt_Tc.TextChanged, txt_Hd.TextChanged
+    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_Hh.TextChanged, txt_RhoC.TextChanged, txt_Td2.TextChanged, txt_Tc.TextChanged, txt_Hd.TextChanged, txt_EpPredalle.TextChanged, txt_EpJoint.TextChanged
 
         If lBuild Then Exit Sub
         lBuild = True
@@ -925,6 +966,11 @@ Public Class Frm_Dalle
         If VerificationSaisie(sender, Valeur) Then
 
             Select Case sender.name
+
+                Case Me.txt_EpJoint.Name
+                    MyDalleLoc.preDalle_tjoint = Valeur
+                Case Me.txt_EpPredalle.Name
+                    MyDalleLoc.preDalle_ep = Valeur
 
                 Case Me.txt_Hd.Name
                     MyDalleLoc.t_d = Valeur
@@ -995,6 +1041,13 @@ Public Class Frm_Dalle
 
                 ValMax = TDMAXI / kUnit
 
+            Case txt_EpPredalle.Name
+                ValMin = 0 / kUnit
+                ValMax = OptionsScope.RatioEpPredalleMax * MyDalleLoc.t_d / kUnit
+
+            Case Me.txt_EpJoint.Name
+                ValMin = 0
+                ValMax = MyDalleLoc.preDalle_ep / kUnit
             Case Me.txt_RhoC.Name
 
                 ValMin = 1500
@@ -1108,7 +1161,7 @@ Public Class Frm_Dalle
         Me.chk_T_PA3.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
 
         Me.pan_DispoConnecteur.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
-
+        Me.pan_ConfigurationNervures.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
     End Sub
 
     Private Sub cmb_ClasseBetonEnrobage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.SelectedIndexChanged

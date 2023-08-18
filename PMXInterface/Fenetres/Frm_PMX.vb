@@ -305,10 +305,7 @@ Public Class Frm_PMX
 
                 End If
             Case EnuFenetres.DalleN
-                If LogicielOptions.lFenetres Then
-                    Frm_DalleN.ShowDialog()
 
-                End If
 
             Case EnuFenetres.Section
                 If LogicielOptions.lFenetres Then
