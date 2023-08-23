@@ -53,6 +53,8 @@ Partial Class Frm_PMX
         Me.TSbtn_Gamma = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Combinaisons = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Hivoss = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TSbtn_LargeurEfficace = New System.Windows.Forms.ToolStripButton()
         Me.img_Main = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
@@ -115,8 +117,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
-        Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_LargeurEfficace = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -456,6 +456,20 @@ Partial Class Frm_PMX
         Me.TSbtn_Hivoss.Name = "TSbtn_Hivoss"
         Me.TSbtn_Hivoss.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Hivoss.Text = "ToolStripButton1"
+        '
+        'ToolStripSeparator1
+        '
+        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 31)
+        '
+        'TSbtn_LargeurEfficace
+        '
+        Me.TSbtn_LargeurEfficace.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_LargeurEfficace.Image = CType(resources.GetObject("TSbtn_LargeurEfficace.Image"), System.Drawing.Image)
+        Me.TSbtn_LargeurEfficace.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_LargeurEfficace.Name = "TSbtn_LargeurEfficace"
+        Me.TSbtn_LargeurEfficace.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_LargeurEfficace.Text = "ToolStripButton1"
         '
         'img_Main
         '
@@ -984,20 +998,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(0, "Enregistrer_NotOK")
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
-        '
-        'ToolStripSeparator1
-        '
-        Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 31)
-        '
-        'TSbtn_LargeurEfficace
-        '
-        Me.TSbtn_LargeurEfficace.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_LargeurEfficace.Image = CType(resources.GetObject("TSbtn_LargeurEfficace.Image"), System.Drawing.Image)
-        Me.TSbtn_LargeurEfficace.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_LargeurEfficace.Name = "TSbtn_LargeurEfficace"
-        Me.TSbtn_LargeurEfficace.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_LargeurEfficace.Text = "ToolStripButton1"
         '
         'Frm_PMX
         '

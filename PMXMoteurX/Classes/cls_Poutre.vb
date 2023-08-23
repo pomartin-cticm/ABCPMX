@@ -210,10 +210,37 @@
     Public NombreGoujonsTransv(,) As Integer
 
     ''' <summary>
-    ''' Nombre total de goujons disposés sur la travée considérée
+    ''' Nombre total de goujons disposés sur la travée considérée   (#POM ce devrait être une fonction ou une propriété)
     ''' </summary>
     Public NombreGoujonsTot() As Integer
 
+
+#End Region
+
+#Region " Attributs pour les chargements et les combinaisons "
+
+    '--Cas de charge définis par l'utilisateur
+
+    Public ChargesU As New Dictionary(Of String, Cls_ChargementUtilisateur)
+
+    '--Combinaisons définies par l'utilisateur
+
+    Public Const nbCombELU As Integer = 5
+    Public Const nbCombELS As Integer = 5
+    Public Const nbCombFeu As Integer = 4
+    Public Const nbCombELUConstruction As Integer = 1
+    Public Const nbCombELSConstruction As Integer = 1
+    Public lCombELURules(nbCombELU) As Boolean      'Indique si combinaison réglementaire ELU
+    Public lCombELSRules(nbCombELS) As Boolean      'Indique si combinaison réglementaire ELS
+    Public lCombFeuRules(nbCombFeu) As Boolean      'Indique si combinaison réglementaire Feu
+    Public lCombELCURules(nbCombELUConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
+    Public lCombELCSRules(nbCombELSConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
+
+    Public CoefCombELU(nbCombELU) As List(Of Decimal) 'Table des coefficients des combinaisons ELU
+    Public CoefCombELS(nbCombELS) As List(Of Decimal) 'Table des coefficients des combinaisons ELS
+    Public CoefCombFeu(nbCombFeu) As List(Of Decimal) 'Table des coefficients des combinaisons Feu
+    Public CoefCombELCU(nbCombELUConstruction) As List(Of Decimal) 'Table des coefficients des combinaisons ELU Construction
+    Public CoefCombELCS(nbCombELSConstruction) As List(Of Decimal) 'Table des coefficients des combinaisons ELS Construction
 
 #End Region
 
@@ -255,12 +282,56 @@
 
 #Region " CONSTRUCTEURS "
 
+    Private Sub InitialiseChargements()
+        Me.ChargesU.Add("QC", New Cls_ChargementUtilisateur("Charges de construction", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("G1", New Cls_ChargementUtilisateur("Poids propre", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("G2", New Cls_ChargementUtilisateur("Autres charges permanentes", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("Q1", New Cls_ChargementUtilisateur("Charges d'expoitation 1", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("Q2", New Cls_ChargementUtilisateur("Charges d'expoitation 2", Me.IndiceDerniereTravee))
+    End Sub
+
+    Private Sub InitialiseTablesCombi()
+        Dim nbCharges As Integer = 5
+        Dim i, j As Integer
+        For i = 0 To nbCombELU
+            Me.CoefCombELU(i) = New List(Of Decimal)
+            For j = 1 To nbCharges
+                Me.CoefCombELU(i).Add(0)
+            Next
+        Next
+        For i = 0 To nbCombELS
+            Me.CoefCombELS(i) = New List(Of Decimal)
+            For j = 1 To nbCharges
+                Me.CoefCombELS(i).Add(0)
+            Next
+        Next
+        For i = 0 To nbCombFeu
+            Me.CoefCombFeu(i) = New List(Of Decimal)
+            For j = 1 To nbCharges
+                Me.CoefCombFeu(i).Add(0)
+            Next
+        Next
+        For i = 0 To nbCombELUConstruction
+            Me.CoefCombELCU(i) = New List(Of Decimal)
+            For j = 1 To nbCharges
+                Me.CoefCombELCU(i).Add(0)
+            Next
+        Next
+        For i = 0 To nbCombELSConstruction
+            Me.CoefCombELCS(i) = New List(Of Decimal)
+            For j = 1 To nbCharges
+                Me.CoefCombELCS(i).Add(0)
+            Next
+        Next
+    End Sub
+
     Public Sub New()
 
         Me.TypeSection = cls_Section.Enum_TypeSection.Acier
         ParametresGenerauxDefaut()
         PoutreDefautAcier()
-
+        InitialiseChargements()
+        InitialiseTablesCombi()
     End Sub
 
     Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String)
@@ -285,6 +356,8 @@
                 EnrobageDefaut()
                 DalleDefaut()
         End Select
+        InitialiseChargements()
+        InitialiseTablesCombi()
 
     End Sub
 
@@ -999,7 +1072,164 @@
 
 #End Region
 
+#Region " Chargements, poids propre et combinaisons "
 
+    Public Sub InitialisePoidsPropres()
+        '-------------------------------------------------------------------------------------------
+        '   23/08/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Initialisation des charges réparties de poids propre
+        '-------------------------------------------------------------------------------------------
+        '   
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Const KEYPP As String = "G1"
+        Dim qPP As Decimal
+        Dim qPPA, qPPC, qPPP As Decimal
+        Const G As Decimal = 9.81
+
+        '--> Traitement
+
+        qPPA = Me.Section.ProfilA.Aire * G
+
+        For iTravee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+
+            Me.ChargesU(KEYPP).FReparties(iTravee).Add(New Cls_ForceRepartie(0, qPP, Me.LongueurTravee(iTravee), qPP))
+
+        Next
+
+    End Sub
+
+
+    Public Sub MAJ_CoefficientsCombinaisons()
+        '-------------------------------------------------------------------------------------
+        '
+        '   21/02/08 :  Création - Version 1.00
+        '
+        '-------------------------------------------------------------------------------------
+        '
+        '   Mise à jour des coefficients des combinaisons selon règlement
+        '
+        '-------------------------------------------------------------------------------------
+
+        '--[ Combinaisons ELU ]---------------------------------------------
+
+        '----| Première combinaison ELU
+
+        Me.CoefCombELU(0)(0) = Me.Param.Gamma.GammaG_sup
+        Me.CoefCombELU(0)(1) = Me.Param.Gamma.GammaQ
+        Me.CoefCombELU(0)(2) = Me.Param.Gamma.GammaQ * Me.Param.Gamma.Psi0_Q2
+        Me.CoefCombELU(0)(3) = 0
+        Me.CoefCombELU(0)(4) = 0
+
+        '----| Deuxième combinaison ELU
+
+        Me.CoefCombELU(1)(0) = Me.Param.Gamma.GammaG_sup
+        Me.CoefCombELU(1)(1) = Me.Param.Gamma.GammaQ * Me.Param.Gamma.Psi0_Q1
+        Me.CoefCombELU(1)(2) = Me.Param.Gamma.GammaQ
+        Me.CoefCombELU(1)(3) = 0
+        Me.CoefCombELU(1)(4) = 0
+
+        '----| Troisième combinaison ELU  
+
+        Me.CoefCombELU(2)(0) = Me.Param.Gamma.GammaG_inf
+        Me.CoefCombELU(2)(1) = Me.Param.Gamma.GammaQ
+        Me.CoefCombELU(2)(2) = Me.Param.Gamma.GammaQ * Me.Param.Gamma.Psi0_Q2
+        Me.CoefCombELU(2)(3) = 0
+        Me.CoefCombELU(2)(4) = 0
+
+        '----| Quatrième combinaison ELU
+
+        Me.CoefCombELU(3)(0) = Me.Param.Gamma.GammaG_inf
+        Me.CoefCombELU(3)(1) = Me.Param.Gamma.GammaQ * Me.Param.Gamma.Psi0_Q1
+        Me.CoefCombELU(3)(2) = Me.Param.Gamma.GammaQ
+        Me.CoefCombELU(3)(3) = 0
+        Me.CoefCombELU(3)(4) = 0
+
+        '--[ Combinaisons ELS ]---------------------------------------------
+
+        '----| Première combinaison ELS
+
+        Me.CoefCombELS(0)(0) = 1
+        Me.CoefCombELS(0)(1) = 1
+        Me.CoefCombELS(0)(2) = 0
+        Me.CoefCombELS(0)(3) = 0
+        Me.CoefCombELS(0)(4) = 0
+
+        '----| Deuxième combinaison ELS
+
+        Me.CoefCombELS(1)(0) = 1
+        Me.CoefCombELS(1)(1) = 1
+        Me.CoefCombELS(1)(2) = Me.Param.Gamma.Psi0_Q2
+        Me.CoefCombELS(1)(3) = 0
+        Me.CoefCombELS(1)(4) = 0
+
+        '----| Troisième combinaison ELS
+
+        Me.CoefCombELS(2)(0) = 1
+        Me.CoefCombELS(2)(1) = 0
+        Me.CoefCombELS(2)(2) = 1
+        Me.CoefCombELS(2)(3) = 0
+        Me.CoefCombELS(2)(4) = 0
+
+        '----| Quatrième combinaison ELS
+
+        Me.CoefCombELS(3)(0) = 1
+        Me.CoefCombELS(3)(1) = Me.Param.Gamma.Psi0_Q1
+        Me.CoefCombELS(3)(2) = 1
+        Me.CoefCombELS(3)(3) = 0
+        Me.CoefCombELS(3)(4) = 0
+
+        '--[ Combinaisons FEU ]---------------------------------------------
+
+        '----| Première combinaison ELU Feu
+
+        Me.CoefCombFeu(0)(0) = 1.0!
+        Me.CoefCombFeu(0)(1) = Me.Param.Gamma.Psi1_Q1
+        Me.CoefCombFeu(0)(2) = Me.Param.Gamma.Psi2_Q2
+        Me.CoefCombFeu(0)(3) = 0
+        Me.CoefCombFeu(0)(4) = 0
+
+        '----| Deuxième combinaison ELU Feu
+
+        Me.CoefCombFeu(1)(0) = 1.0!
+        Me.CoefCombFeu(1)(1) = Me.Param.Gamma.Psi0_Q2
+        Me.CoefCombFeu(1)(2) = Me.Param.Gamma.Psi2_Q2
+        Me.CoefCombFeu(1)(3) = 0
+        Me.CoefCombFeu(1)(4) = 0
+
+        '----| Première combinaison ELU Feu
+
+        Me.CoefCombFeu(2)(0) = 1.0!
+        Me.CoefCombFeu(2)(1) = Me.Param.Gamma.Psi2_Q1
+        Me.CoefCombFeu(2)(2) = Me.Param.Gamma.Psi1_Q2
+        Me.CoefCombFeu(2)(3) = 0
+        Me.CoefCombFeu(2)(4) = 0
+
+        '--[ Combinaisons Construction ]---------------------------------------------
+
+        '----| Première combinaison ELU
+
+        Me.CoefCombELCU(0)(0) = 0
+        Me.CoefCombELCU(0)(1) = 0
+        Me.CoefCombELCU(0)(2) = 0
+        Me.CoefCombELCU(0)(3) = Me.Param.Gamma.GammaQ
+        Me.CoefCombELCU(0)(4) = Me.Param.Gamma.GammaG_sup
+
+        '----| Première combinaison ELS
+
+        Me.CoefCombELCS(0)(0) = 0
+        Me.CoefCombELCS(0)(1) = 0
+        Me.CoefCombELCS(0)(2) = 0
+        Me.CoefCombELCS(0)(3) = 1
+        Me.CoefCombELCS(0)(4) = 1
+
+    End Sub
+
+
+#End Region
 
 
 End Class

@@ -36,6 +36,16 @@ NAVIGATION				= Navigation
 ZOOM					= Zoom
 SAVEAS					= Save As
 
+#FRM_COMBINATIONS
+TITLE					= Combinations
+OK						= Ok
+CANCEL					= Cancel
+ULS						= Ultimate limit states
+SLS						= Serviceability limit states
+FLS						= Fire limit states
+PREDEFINED				= Predefined combinations according to EN 1990
+CUSTOM					= Custom combinations
+
 #FRM_CONNECTION
 TITLE					= Definition of the connection
 OK						= Ok

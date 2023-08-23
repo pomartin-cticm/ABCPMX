@@ -67,6 +67,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes Charges\Cls_CasDeCharge.vb" />
+    <Compile Include="Classes Charges\Cls_ChargementUtilisateur.vb" />
+    <Compile Include="Classes Charges\Cls_Force.vb" />
+    <Compile Include="Classes Charges\Cls_ForceRepartie.vb" />
     <Compile Include="Classes Materiaux\Cls_Acier.vb" />
     <Compile Include="Classes Materiaux\Cls_AcierArmature.vb" />
     <Compile Include="Classes Materiaux\Cls_Beton.vb" />
