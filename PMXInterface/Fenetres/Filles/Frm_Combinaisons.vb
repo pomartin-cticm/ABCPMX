@@ -32,6 +32,22 @@ Public Class Frm_Combinaisons
     Private pCoefCombELCU() As List(Of Decimal)     'Table des coefficients des combinaisons ELU Construction
     Private pCoefCombELCS() As List(Of Decimal)     'Table des coefficients des combinaisons ELS Construction
 
+    Dim MyBrush As Brush
+    Dim MyBrushBlue As Brush
+    Dim MyBrushFond As Brush
+
+    Dim MyBrushNoFond As Brush
+    Dim MyBrushUnSelected As Brush
+    Dim BrushBlue As Brush
+    Dim BrushBlack As Brush
+    Dim ColorSelect As Color = Color.LightGray
+    Dim ColorUnSelect As Color
+    Dim ColorFontUnSelected As Color = Color.Gray
+
+    Dim FontNormal As Font
+    Dim FontIndice As Font
+    Dim FontSymbol As Font
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -96,7 +112,7 @@ Public Class Frm_Combinaisons
         '----------------------------------------------------------------------------------------------------------------
 
         For i As Integer = 0 To nbCombi
-            pCombi(i).Clear()
+            pCombi(i) = New List(Of Decimal)
             For j As Integer = 0 To CombiSource(i).Count - 1
                 pCombi(i).Add(CombiSource(i)(j))
             Next
@@ -129,6 +145,19 @@ Public Class Frm_Combinaisons
 
         'Private pCoefCombELCU(nbCombELUConstruction) As List(Of Double) 'Table des coefficients des combinaisons ELU Construction
         ' Private pCoefCombELCS(nbCombELSConstruction) As List(Of Double) 'Table des coefficients des combinaisons ELS Construction
+
+        MyBrush = New SolidBrush(Color.Black)
+        MyBrushBlue = New SolidBrush(Color.Blue)
+        MyBrushFond = New SolidBrush(ColorSelect)
+
+        ColorUnSelect = Me.pan_Predefinies.BackColor
+        MyBrushNoFond = New SolidBrush(ColorUnSelect)
+        MyBrushUnSelected = New SolidBrush(ColorFontUnSelected)
+
+        FontNormal = New Font(Me.chk_Combinaison01.Font.Name, 8)
+        FontIndice = New Font(Me.chk_Combinaison01.Font.Name, 7)
+        FontSymbol = New Font("Symbol", 9)
+
     End Sub
 
     Private Sub GestionUnites()
@@ -156,6 +185,7 @@ Public Class Frm_Combinaisons
 
     End Sub
 
+
 #End Region
 
 #Region "===FERMETURE==="
@@ -163,7 +193,174 @@ Public Class Frm_Combinaisons
 
 #End Region
 
+#Region " Affichage des combinaisons dans les picturebox "
 
+
+    Private Sub AffichageEquations(sender As Object, e As PaintEventArgs) Handles img_EL_Eq01.Paint
+
+        Dim pWi, pHi As Single
+        pWi = Me.img_EL_Eq01.ClientRectangle.Width
+        pHi = Me.img_EL_Eq01.ClientRectangle.Height
+
+        DrawEquationELU(e.Graphics, True, 1, pWi, pHi)
+
+    End Sub
+
+
+    Private Sub DrawEquationELU(ByVal MyGr As Graphics, ByVal lSelect As Boolean, ByVal Indice As Integer,
+                             ByVal sWi As Single, ByVal sHi As Single)
+        '----------------------------------------------------------------------------------------
+        '
+        '   21/02/08 :  Création - Version 1.00
+        '
+        '----------------------------------------------------------------------------------------
+        '
+        '   Affichage d'une combinaison réglementaire dans une Picture Box
+        '
+        '----------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim hCar As Single = MyGr.MeasureString("X", FontNormal).Height
+        Dim hIndice As Single = hCar / 2
+        Dim yLine1 As Single = (sHi / 2 - hCar) / 2
+        Dim yLine2 As Single = yLine1 + sHi / 2
+        Dim IndiceG As String
+        Dim SymbolG As String = "G"         ' tabPoutres(iPoutreEnCours).Chargements(0).Symbole
+        Dim SymbolQ1 As String = "Q1"       ' tabPoutres(iPoutreEnCours).Chargements(1).Symbole
+        Dim SymbolQ2 As String = "Q2"       ' tabPoutres(iPoutreEnCours).Chargements(2).Symbole
+        Dim lPsi0Q1, lPsi0Q2 As Boolean
+        Dim sCar As Single = MyGr.MeasureString("x", FontNormal).Width / 5
+
+        Dim MyGamma As Cls_Gamma
+
+        MyGamma = MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma.Clone
+
+        '--> Initialisations
+
+        If lSelect Then
+            MyGr.FillRectangle(MyBrushFond, 0, 0, sWi, sHi)
+        Else
+            MyGr.FillRectangle(MyBrushNoFond, 0, 0, sWi, sHi)
+        End If
+
+        '--> Tracé
+
+        Dim xStart As Single = sWi * 0.05!
+        Dim xPen As Single = xStart
+        Dim xGroupe2 As Single = 0.35! * sWi
+        Dim xGroupe3 As Single = 0.67! * sWi
+
+        Dim xG As Single = 0.22! * sWi
+        Dim xQ1 As Single = xG + 0.32! * sWi
+        Dim xQ2 As Single = xQ1 + 0.32! * sWi
+        Dim xPlus1 As Single = xG + 0.08! * sWi
+        Dim xPlus2 As Single = xQ1 + 0.08! * sWi
+
+        Dim strGammaG, strCoefQ1, strCoefQ2 As String
+
+        Const kAdjust As Single = 0.5!
+
+        Select Case Indice
+            Case 1
+                IndiceG = "G.Sup"
+                lPsi0Q1 = False
+                lPsi0Q2 = True
+                strGammaG = Format(MyGamma.GammaG_sup, "0.00")
+                strCoefQ1 = Format(MyGamma.GammaQ, "0.00")
+                strCoefQ2 = Format(MyGamma.GammaQ * MyGamma.Psi0_Q2, "0.00")
+            Case 2
+                IndiceG = "G.Sup"
+                lPsi0Q1 = True
+                lPsi0Q2 = False
+                strGammaG = Format(MyGamma.GammaG_sup, "0.00")
+                strCoefQ1 = Format(MyGamma.GammaQ * MyGamma.Psi0_Q1, "0.00")
+                strCoefQ2 = Format(MyGamma.GammaQ, "0.00")
+            Case 3
+                IndiceG = "G.Inf"
+                lPsi0Q1 = False
+                lPsi0Q2 = True
+                strGammaG = Format(MyGamma.GammaG_inf, "0.00")
+                strCoefQ1 = Format(MyGamma.GammaQ, "0.00")
+                strCoefQ2 = Format(MyGamma.GammaQ * MyGamma.Psi0_Q2, "0.00")
+            Case 4
+                IndiceG = "G.Inf"
+                lPsi0Q1 = True
+                lPsi0Q2 = False
+                strGammaG = Format(MyGamma.GammaG_inf, "0.00")
+                strCoefQ1 = Format(MyGamma.GammaQ * MyGamma.Psi0_Q1, "0.00")
+                strCoefQ2 = Format(MyGamma.GammaQ, "0.00")
+        End Select
+
+        If lSelect Then
+            BrushBlue = MyBrushBlue
+            BrushBlack = MyBrush
+        Else
+            BrushBlue = MyBrushUnSelected
+            BrushBlack = MyBrushUnSelected
+        End If
+
+        '===============================================================================
+        '   PREMIERE LIGNE
+        '===============================================================================
+
+        '--> GammaG G
+
+        DrawSymbol(MyGr, BrushBlue, "g", IndiceG, xG - sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+        DrawSymbol(MyGr, BrushBlack, SymbolG, "", xG, yLine1, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+
+        '--> Premier Plus
+
+        MyGr.DrawString("+", FontNormal, BrushBlack, xPlus1, yLine1)
+
+        '--> GammaQ Psi Q1
+
+        If lPsi0Q1 Then
+            DrawSymbol(MyGr, BrushBlue, "y", "0", xQ1 - LongueurChaine(MyGr, "g", "Q", True, FontNormal, FontSymbol, FontIndice, kAdjust) - 2 * sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+        End If
+        DrawSymbol(MyGr, BrushBlue, "g", "Q", xQ1 - sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+        DrawSymbol(MyGr, BrushBlack, SymbolQ1, "", xQ1, yLine1, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+
+        '--> Deuxième Plus
+
+        MyGr.DrawString("+", FontNormal, BrushBlack, xPlus2, yLine1)
+
+        '--> GammaQ Psi Q2
+
+        If lPsi0Q2 Then
+            DrawSymbol(MyGr, BrushBlue, "y", "0", xQ2 - LongueurChaine(MyGr, "g", "Q", True, FontNormal, FontSymbol, FontIndice, kAdjust) - 2 * sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+        End If
+        DrawSymbol(MyGr, BrushBlue, "g", "Q", xQ2 - sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+        DrawSymbol(MyGr, BrushBlack, SymbolQ2, "", xQ2, yLine1, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+
+        '===============================================================================
+        '   DEUXIEME LIGNE
+        '===============================================================================
+
+        DrawSymbol(MyGr, BrushBlue, strGammaG, "", xG - sCar, yLine2, hIndice, False, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+        DrawSymbol(MyGr, BrushBlack, SymbolG, "", xG, yLine2, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+
+        '--> Premier Plus
+
+        MyGr.DrawString("+", FontNormal, BrushBlack, xPlus1, yLine2)
+
+        '--> GammaQ Psi Q1
+
+        DrawSymbol(MyGr, BrushBlue, strCoefQ1, "", xQ1 - sCar, yLine2, hIndice, False, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+        DrawSymbol(MyGr, BrushBlack, SymbolQ1, "", xQ1, yLine2, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+
+        '--> Deuxième Plus
+
+        MyGr.DrawString("+", FontNormal, BrushBlack, xPlus2, yLine2)
+
+        '--> GammaQ Psi Q2
+
+        DrawSymbol(MyGr, BrushBlue, strCoefQ2, "", xQ2 - sCar, yLine2, hIndice, False, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+        DrawSymbol(MyGr, BrushBlack, SymbolQ2, "", xQ2, yLine2, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+
+    End Sub
+
+#End Region
 
 
 End Class

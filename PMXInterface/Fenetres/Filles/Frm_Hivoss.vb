@@ -417,21 +417,21 @@ Public Class Frm_Hivoss
 
             Case Me.img_D1Value.Name
 
-                strSymbol = CStr(Format(MyPoutreLoc.Param.HivossParam.AmortiStructure_D1 * 100, formatAMORTISSEMENT) & " %")
+                strSymbol = Format(MyPoutreLoc.Param.HivossParam.AmortiStructure_D1 * 100, formatAMORTISSEMENT) & " %"
                 strIndice = " "
 
                 lEgal = False
 
             Case Me.img_D2Value.Name
 
-                strSymbol = CStr(Format(MyPoutreLoc.Param.HivossParam.AmortiMobilier_D2 * 100, formatAMORTISSEMENT) & " %")
+                strSymbol = Format(MyPoutreLoc.Param.HivossParam.AmortiMobilier_D2 * 100, formatAMORTISSEMENT) & " %"
                 strIndice = ""
 
                 lEgal = False
 
             Case Me.img_D3Value.Name
 
-                strSymbol = CStr(Format(MyPoutreLoc.Param.HivossParam.AmortiFinition_D3 * 100, formatAMORTISSEMENT) & " %")
+                strSymbol = Format(MyPoutreLoc.Param.HivossParam.AmortiFinition_D3 * 100, formatAMORTISSEMENT) & " %"
                 strIndice = ""
 
                 lEgal = False
@@ -447,7 +447,7 @@ Public Class Frm_Hivoss
 
         '--> Dessin
 
-        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lItalic, Enu_AlignementH.Gauche,
+        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lItalic, Enu_AlignementH.Droite,
                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub

@@ -649,7 +649,7 @@ Module Mod_OutilsGraph
 
 #End Region
 
-#Region "Lignes"
+#Region " Lignes "
 
     ''' <summary>
     ''' Affichage à l'écran d'une ligne
@@ -890,39 +890,39 @@ Module Mod_OutilsGraph
 
 #Region " Symboles "
 
-    ''' <summary>
-    ''' Fonction qui retourne la longueur d'un symbole (+indice) d'équation
-    ''' </summary>
-    ''' <param name="MyGr">Graphics dans lequel on dessine</param>
-    ''' <param name="Symbol">Symbole à dessiner</param>
-    ''' <param name="Indice">Indice du Symbole</param>
-    ''' <param name="lGrec">Indice si symbole de l'alphabet grec</param>
-    ''' <param name="FontNormal">Police de caractère normale</param>
-    ''' <param name="FontSymbol">Police de caractère pour les symboles grecs</param>
-    ''' <param name="FontIndice">Police de caractère pour les indices</param>
-    ''' <param name="kAdjust">Ajustement de la position de l'indice</param>
-    ''' <param name="DrawEgal">Dessin du signe = à la fin</param>
-    ''' <returns>Longueur du symbole</returns>
-    Public Function LongueurChaine(ByVal MyGr As Graphics, ByVal Symbol As String,
-                                   ByVal Indice As String, ByVal lGrec As Boolean,
-                                   ByVal FontNormal As Font, ByVal FontSymbol As Font,
-                                   ByVal FontIndice As Font, ByVal kAdjust As Single, Optional ByVal DrawEgal As Boolean = False) As Single
+    '''' <summary>
+    '''' Fonction qui retourne la longueur d'un symbole (+indice) d'équation
+    '''' </summary>
+    '''' <param name="MyGr">Graphics dans lequel on dessine</param>
+    '''' <param name="Symbol">Symbole à dessiner</param>
+    '''' <param name="Indice">Indice du Symbole</param>
+    '''' <param name="lGrec">Indice si symbole de l'alphabet grec</param>
+    '''' <param name="FontNormal">Police de caractère normale</param>
+    '''' <param name="FontSymbol">Police de caractère pour les symboles grecs</param>
+    '''' <param name="FontIndice">Police de caractère pour les indices</param>
+    '''' <param name="kAdjust">Ajustement de la position de l'indice</param>
+    '''' <param name="DrawEgal">Dessin du signe = à la fin</param>
+    '''' <returns>Longueur du symbole</returns>
+    'Public Function LongueurChaine(ByVal MyGr As Graphics, ByVal Symbol As String,
+    '                               ByVal Indice As String, ByVal lGrec As Boolean,
+    '                               ByVal FontNormal As Font, ByVal FontSymbol As Font,
+    '                               ByVal FontIndice As Font, ByVal kAdjust As Single, Optional ByVal DrawEgal As Boolean = False) As Single
 
-        If lGrec Then
-            If DrawEgal Then
-                Return MyGr.MeasureString(Symbol, FontSymbol).Width + MyGr.MeasureString(Indice, FontIndice).Width - kAdjust * MyGr.MeasureString(" ", FontNormal).Width + MyGr.MeasureString("=", FontNormal).Width
-            Else
-                Return MyGr.MeasureString(Symbol, FontSymbol).Width + MyGr.MeasureString(Indice, FontIndice).Width - kAdjust * MyGr.MeasureString(" ", FontNormal).Width
-            End If
-        Else
-            If DrawEgal Then
-                Return MyGr.MeasureString(Symbol, FontNormal).Width + MyGr.MeasureString(Indice, FontIndice).Width - kAdjust * MyGr.MeasureString(" ", FontNormal).Width + MyGr.MeasureString("=", FontNormal).Width
-            Else
-                Return MyGr.MeasureString(Symbol, FontNormal).Width + MyGr.MeasureString(Indice, FontIndice).Width - kAdjust * MyGr.MeasureString(" ", FontNormal).Width
-            End If
-        End If
+    '    If lGrec Then
+    '        If DrawEgal Then
+    '            Return MyGr.MeasureString(Symbol, FontSymbol).Width + MyGr.MeasureString(Indice, FontIndice).Width - kAdjust * MyGr.MeasureString(" ", FontNormal).Width + MyGr.MeasureString("=", FontNormal).Width
+    '        Else
+    '            Return MyGr.MeasureString(Symbol, FontSymbol).Width + MyGr.MeasureString(Indice, FontIndice).Width - kAdjust * MyGr.MeasureString(" ", FontNormal).Width
+    '        End If
+    '    Else
+    '        If DrawEgal Then
+    '            Return MyGr.MeasureString(Symbol, FontNormal).Width + MyGr.MeasureString(Indice, FontIndice).Width - kAdjust * MyGr.MeasureString(" ", FontNormal).Width + MyGr.MeasureString("=", FontNormal).Width
+    '        Else
+    '            Return MyGr.MeasureString(Symbol, FontNormal).Width + MyGr.MeasureString(Indice, FontIndice).Width - kAdjust * MyGr.MeasureString(" ", FontNormal).Width
+    '        End If
+    '    End If
 
-    End Function
+    'End Function
 
     Public Sub DrawSymbol_Dessin(ByVal MyGr As Graphics, ByVal BrushEcrire As Brush, ByVal Symbol As String,
                                  ByVal Indice As String, ByVal xo As Single, ByVal yo As Single,
@@ -1084,7 +1084,7 @@ Module Mod_OutilsGraph
 
 #End Region
 
-#Region "Remplir une zone quelconque"
+#Region " Remplir une zone quelconque "
 
 
     Public Sub RemplirZone(ByVal MyGr As Graphics, ByVal MyBrush As Brush,
@@ -1178,7 +1178,7 @@ Module Mod_OutilsGraph
 
 #End Region
 
-#Region "Fonctions de calcul des coordonnées à l'écran "
+#Region " Fonctions de calcul des coordonnées à l'écran "
 
     Public Function XEcran(ByVal ParAff As Struc_Affichage, ByVal xReel As Double) As Single
         '
@@ -1212,7 +1212,7 @@ Module Mod_OutilsGraph
 
 #End Region
 
-#Region "Affichage du logo Logiciel"
+#Region " Affichage du logo Logiciel "
 
     ''' <summary>
     ''' Affichage du nom logiciel - Page de garde + En haut à gauche
@@ -1277,7 +1277,7 @@ Module Mod_OutilsGraph
 
 #End Region
 
-#Region "Parametres d'affichage"
+#Region " Parametres d'affichage "
 
     ''' <summary>
     ''' Initialisation des paramètres d'affichage
@@ -1368,5 +1368,7 @@ Module Mod_OutilsGraph
     End Sub
 
 #End Region
+
+
 
 End Module

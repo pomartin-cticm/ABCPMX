@@ -863,15 +863,10 @@ Module Mod_Outils
                           ByVal FontNormal As Font, ByVal FontSymbol As Font,
                           ByVal FontIndice As Font, ByVal kAdjust As Single, ByVal DrawEgal As Boolean)
         '----------------------------------------------------------------------------------------
-        '
         '   21/02/08 :  Création - Version 1.00
-        '
         '----------------------------------------------------------------------------------------
-        '
         '   Fonction qui retourne la longueur d'un symbole (+indice) d'équation
-        '
         '----------------------------------------------------------------------------------------
-        '
         '   MyGr        [E] :   Graphics dans lequel on dessine
         '   Symbol      [E] :   Symbole à dessiner
         '   Indice      [E] :   Indice du Symbole
@@ -879,7 +874,8 @@ Module Mod_Outils
         '   FontNormal  [E] :   Police de caractère normale
         '   FontSymbol  [E] :   Police de caractère pour les symboles grecs
         '   FontIndice  [E] :   Police de caractère pour les indices
-        '
+        '   kAdjust     [E] :   Coef d'ajustement de la position de l'indice
+        '   DrawEgal    [E] :   Indique si affichage du symbole égal
         '----------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -892,10 +888,10 @@ Module Mod_Outils
         '--> Positionnement
 
         Select Case Alignement
-            Case Enu_AlignementH.Gauche
-                xStar = xPen - LongueurString
-            Case Enu_AlignementH.Droite
+            Case Enu_AlignementH.Gauche                 ' Ancrage à gauche : la position correspond à la gauche du texte
                 xStar = xPen
+            Case Enu_AlignementH.Droite                 ' Ancrage à droite : la position correspond à la droite du texte
+                xStar = xPen - LongueurString
             Case Enu_AlignementH.Centre
                 xStar = xPen - LongueurString / 2
         End Select

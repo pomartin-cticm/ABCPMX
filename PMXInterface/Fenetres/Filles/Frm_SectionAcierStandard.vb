@@ -802,7 +802,7 @@ Public Class Frm_SectionAcierStandard
 
         '--> Dessin
 
-        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_AlignementH.Gauche,
+        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_AlignementH.Droite,
                    FontSymbolNormal, FontSymbolNormal, FontSymbolIndice, 1.0!, True)
 
     End Sub

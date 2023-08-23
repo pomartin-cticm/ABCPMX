@@ -23,24 +23,24 @@ Partial Class Frm_Combinaisons
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.pan_General = New System.Windows.Forms.Panel()
-        Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
-        Me.btn_Annuler = New System.Windows.Forms.Button()
-        Me.btn_OK = New System.Windows.Forms.Button()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
+        Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_OK = New System.Windows.Forms.Button()
+        Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLpan_Lignes = New System.Windows.Forms.TableLayoutPanel()
-        Me.TLpan_ChoixEL = New System.Windows.Forms.TableLayoutPanel()
-        Me.rdb_ELU = New System.Windows.Forms.RadioButton()
-        Me.rdb_ELS = New System.Windows.Forms.RadioButton()
-        Me.rdb_ELFire = New System.Windows.Forms.RadioButton()
-        Me.lbl_Predefinies = New System.Windows.Forms.Label()
-        Me.pan_Predefinies = New System.Windows.Forms.Panel()
         Me.lbl_Custom = New System.Windows.Forms.Label()
+        Me.lbl_Predefinies = New System.Windows.Forms.Label()
+        Me.TLpan_ChoixEL = New System.Windows.Forms.TableLayoutPanel()
+        Me.rdb_ELFire = New System.Windows.Forms.RadioButton()
+        Me.rdb_ELS = New System.Windows.Forms.RadioButton()
+        Me.rdb_ELU = New System.Windows.Forms.RadioButton()
+        Me.pan_Predefinies = New System.Windows.Forms.Panel()
         Me.img_EL_Eq01 = New System.Windows.Forms.PictureBox()
         Me.chk_Combinaison01 = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
-        Me.TLPan_PartieBasse.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
+        Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Lignes.SuspendLayout()
         Me.TLpan_ChoixEL.SuspendLayout()
@@ -57,6 +57,21 @@ Partial Class Frm_Combinaisons
         Me.pan_General.Name = "pan_General"
         Me.pan_General.Size = New System.Drawing.Size(473, 498)
         Me.pan_General.TabIndex = 3
+        '
+        'TLpan_Main
+        '
+        Me.TLpan_Main.ColumnCount = 1
+        Me.TLpan_Main.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Main.Controls.Add(Me.TLPan_PartieBasse, 0, 1)
+        Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
+        Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_Main.Name = "TLpan_Main"
+        Me.TLpan_Main.RowCount = 2
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.TLpan_Main.Size = New System.Drawing.Size(473, 498)
+        Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
         '
@@ -79,17 +94,6 @@ Partial Class Frm_Combinaisons
         Me.TLPan_PartieBasse.Size = New System.Drawing.Size(467, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
-        'btn_Annuler
-        '
-        Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(106, 3)
-        Me.btn_Annuler.Name = "btn_Annuler"
-        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
-        Me.btn_Annuler.TabIndex = 0
-        Me.btn_Annuler.Text = "btn_Annuler"
-        Me.btn_Annuler.UseVisualStyleBackColor = True
-        '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
@@ -100,20 +104,16 @@ Partial Class Frm_Combinaisons
         Me.btn_OK.Text = "btn_OK"
         Me.btn_OK.UseVisualStyleBackColor = True
         '
-        'TLpan_Main
+        'btn_Annuler
         '
-        Me.TLpan_Main.ColumnCount = 1
-        Me.TLpan_Main.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.Controls.Add(Me.TLPan_PartieBasse, 0, 1)
-        Me.TLpan_Main.Controls.Add(Me.pan_Main, 0, 0)
-        Me.TLpan_Main.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLpan_Main.Location = New System.Drawing.Point(0, 0)
-        Me.TLpan_Main.Name = "TLpan_Main"
-        Me.TLpan_Main.RowCount = 2
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(473, 498)
-        Me.TLpan_Main.TabIndex = 0
+        Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_Annuler.Location = New System.Drawing.Point(106, 3)
+        Me.btn_Annuler.Name = "btn_Annuler"
+        Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
+        Me.btn_Annuler.TabIndex = 0
+        Me.btn_Annuler.Text = "btn_Annuler"
+        Me.btn_Annuler.UseVisualStyleBackColor = True
         '
         'pan_Main
         '
@@ -146,6 +146,34 @@ Partial Class Frm_Combinaisons
         Me.TLpan_Lignes.Size = New System.Drawing.Size(467, 452)
         Me.TLpan_Lignes.TabIndex = 0
         '
+        'lbl_Custom
+        '
+        Me.lbl_Custom.AutoSize = True
+        Me.lbl_Custom.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Custom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Custom.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Custom.Location = New System.Drawing.Point(0, 290)
+        Me.lbl_Custom.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Custom.Name = "lbl_Custom"
+        Me.lbl_Custom.Size = New System.Drawing.Size(467, 30)
+        Me.lbl_Custom.TabIndex = 4
+        Me.lbl_Custom.Text = "lbl_Custom"
+        Me.lbl_Custom.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'lbl_Predefinies
+        '
+        Me.lbl_Predefinies.AutoSize = True
+        Me.lbl_Predefinies.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Predefinies.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Predefinies.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Predefinies.Location = New System.Drawing.Point(0, 40)
+        Me.lbl_Predefinies.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Predefinies.Name = "lbl_Predefinies"
+        Me.lbl_Predefinies.Size = New System.Drawing.Size(467, 30)
+        Me.lbl_Predefinies.TabIndex = 2
+        Me.lbl_Predefinies.Text = "lbl_Predefinies"
+        Me.lbl_Predefinies.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'TLpan_ChoixEL
         '
         Me.TLpan_ChoixEL.ColumnCount = 3
@@ -164,19 +192,19 @@ Partial Class Frm_Combinaisons
         Me.TLpan_ChoixEL.Size = New System.Drawing.Size(467, 40)
         Me.TLpan_ChoixEL.TabIndex = 0
         '
-        'rdb_ELU
+        'rdb_ELFire
         '
-        Me.rdb_ELU.Appearance = System.Windows.Forms.Appearance.Button
-        Me.rdb_ELU.AutoSize = True
-        Me.rdb_ELU.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_ELU.Location = New System.Drawing.Point(1, 1)
-        Me.rdb_ELU.Margin = New System.Windows.Forms.Padding(1)
-        Me.rdb_ELU.Name = "rdb_ELU"
-        Me.rdb_ELU.Size = New System.Drawing.Size(153, 38)
-        Me.rdb_ELU.TabIndex = 0
-        Me.rdb_ELU.Text = "rdb_ELU"
-        Me.rdb_ELU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.rdb_ELU.UseVisualStyleBackColor = True
+        Me.rdb_ELFire.Appearance = System.Windows.Forms.Appearance.Button
+        Me.rdb_ELFire.AutoSize = True
+        Me.rdb_ELFire.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rdb_ELFire.Location = New System.Drawing.Point(311, 1)
+        Me.rdb_ELFire.Margin = New System.Windows.Forms.Padding(1)
+        Me.rdb_ELFire.Name = "rdb_ELFire"
+        Me.rdb_ELFire.Size = New System.Drawing.Size(155, 38)
+        Me.rdb_ELFire.TabIndex = 2
+        Me.rdb_ELFire.Text = "rdb_ELFire"
+        Me.rdb_ELFire.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.rdb_ELFire.UseVisualStyleBackColor = True
         '
         'rdb_ELS
         '
@@ -192,33 +220,19 @@ Partial Class Frm_Combinaisons
         Me.rdb_ELS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.rdb_ELS.UseVisualStyleBackColor = True
         '
-        'rdb_ELFire
+        'rdb_ELU
         '
-        Me.rdb_ELFire.Appearance = System.Windows.Forms.Appearance.Button
-        Me.rdb_ELFire.AutoSize = True
-        Me.rdb_ELFire.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_ELFire.Location = New System.Drawing.Point(311, 1)
-        Me.rdb_ELFire.Margin = New System.Windows.Forms.Padding(1)
-        Me.rdb_ELFire.Name = "rdb_ELFire"
-        Me.rdb_ELFire.Size = New System.Drawing.Size(155, 38)
-        Me.rdb_ELFire.TabIndex = 2
-        Me.rdb_ELFire.Text = "rdb_ELFire"
-        Me.rdb_ELFire.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.rdb_ELFire.UseVisualStyleBackColor = True
-        '
-        'lbl_Predefinies
-        '
-        Me.lbl_Predefinies.AutoSize = True
-        Me.lbl_Predefinies.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Predefinies.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Predefinies.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Predefinies.Location = New System.Drawing.Point(0, 40)
-        Me.lbl_Predefinies.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Predefinies.Name = "lbl_Predefinies"
-        Me.lbl_Predefinies.Size = New System.Drawing.Size(467, 30)
-        Me.lbl_Predefinies.TabIndex = 2
-        Me.lbl_Predefinies.Text = "lbl_Predefinies"
-        Me.lbl_Predefinies.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.rdb_ELU.Appearance = System.Windows.Forms.Appearance.Button
+        Me.rdb_ELU.AutoSize = True
+        Me.rdb_ELU.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rdb_ELU.Location = New System.Drawing.Point(1, 1)
+        Me.rdb_ELU.Margin = New System.Windows.Forms.Padding(1)
+        Me.rdb_ELU.Name = "rdb_ELU"
+        Me.rdb_ELU.Size = New System.Drawing.Size(153, 38)
+        Me.rdb_ELU.TabIndex = 0
+        Me.rdb_ELU.Text = "rdb_ELU"
+        Me.rdb_ELU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.rdb_ELU.UseVisualStyleBackColor = True
         '
         'pan_Predefinies
         '
@@ -232,20 +246,6 @@ Partial Class Frm_Combinaisons
         Me.pan_Predefinies.Name = "pan_Predefinies"
         Me.pan_Predefinies.Size = New System.Drawing.Size(467, 218)
         Me.pan_Predefinies.TabIndex = 3
-        '
-        'lbl_Custom
-        '
-        Me.lbl_Custom.AutoSize = True
-        Me.lbl_Custom.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Custom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Custom.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Custom.Location = New System.Drawing.Point(0, 290)
-        Me.lbl_Custom.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Custom.Name = "lbl_Custom"
-        Me.lbl_Custom.Size = New System.Drawing.Size(467, 30)
-        Me.lbl_Custom.TabIndex = 4
-        Me.lbl_Custom.Text = "lbl_Custom"
-        Me.lbl_Custom.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'img_EL_Eq01
         '
@@ -277,8 +277,8 @@ Partial Class Frm_Combinaisons
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Combinaisons"
         Me.pan_General.ResumeLayout(False)
-        Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
+        Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.pan_Main.ResumeLayout(False)
         Me.TLpan_Lignes.ResumeLayout(False)
         Me.TLpan_Lignes.PerformLayout()
