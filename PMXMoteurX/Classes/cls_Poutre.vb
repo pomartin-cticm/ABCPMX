@@ -230,9 +230,9 @@
     Public Const nbCombFeu As Integer = 4
     Public Const nbCombELUConstruction As Integer = 1
     Public Const nbCombELSConstruction As Integer = 1
-    Public lCombELURules(nbCombELU) As Boolean      'Indique si combinaison réglementaire ELU
-    Public lCombELSRules(nbCombELS) As Boolean      'Indique si combinaison réglementaire ELS
-    Public lCombFeuRules(nbCombFeu) As Boolean      'Indique si combinaison réglementaire Feu
+    Public lCombELU(nbCombELU) As Boolean           'Indique si combinaison ELU sélectionnée
+    Public lCombELS(nbCombELS) As Boolean           'Indique si combinaison ELS sélectionnée
+    Public lCombFeu(nbCombFeu) As Boolean           'Indique si combinaison Feu sélectionnée
     Public lCombELCURules(nbCombELUConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
     Public lCombELCSRules(nbCombELSConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
 

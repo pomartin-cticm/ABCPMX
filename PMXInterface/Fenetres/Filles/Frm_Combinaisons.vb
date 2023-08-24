@@ -7,22 +7,15 @@ Public Class Frm_Combinaisons
 
     Dim lBuild As Boolean = True
 
-    Private Enum Enu_AffichageEL
-        ELS
-        ELU
-        ELF
-    End Enum
-    Private AffichageEL As Enu_AffichageEL = Enu_AffichageEL.ELU
-
     Dim nbCombELU As Integer
     Dim nbCombELS As Integer
     Dim nbCombFeu As Integer
     Dim nbCombELUConstruction As Integer
     Dim nbCombELSConstruction As Integer
 
-    Private plCombELURules() As Boolean             'Indique si combinaison réglementaire ELU
-    Private plCombELSRules() As Boolean             'Indique si combinaison réglementaire ELS
-    Private plCombFeuRules() As Boolean             'Indique si combinaison réglementaire Feu
+    Private plCombELU() As Boolean                  'Indique si combinaison ELU sélectionnée
+    Private plCombELS() As Boolean                  'Indique si combinaison ELS sélectionnée
+    Private plCombFeu() As Boolean                  'Indique si combinaison Feu sélectionnée
     Private plCombELCURules() As Boolean            'Indique si combinaison réglementaire ELU Phase de construction
     Private plCombELCSRules() As Boolean            'Indique si combinaison réglementaire ELU Phase de construction
 
@@ -32,21 +25,9 @@ Public Class Frm_Combinaisons
     Private pCoefCombELCU() As List(Of Decimal)     'Table des coefficients des combinaisons ELU Construction
     Private pCoefCombELCS() As List(Of Decimal)     'Table des coefficients des combinaisons ELS Construction
 
-    Dim MyBrush As Brush
-    Dim MyBrushBlue As Brush
-    Dim MyBrushFond As Brush
+    Public BlocLangues As Dictionary(Of String, Dictionary(Of String, String))
+    Const BALISE As String = "FRM_COMBINATIONS"
 
-    Dim MyBrushNoFond As Brush
-    Dim MyBrushUnSelected As Brush
-    Dim BrushBlue As Brush
-    Dim BrushBlack As Brush
-    Dim ColorSelect As Color = Color.LightGray
-    Dim ColorUnSelect As Color
-    Dim ColorFontUnSelected As Color = Color.Gray
-
-    Dim FontNormal As Font
-    Dim FontIndice As Font
-    Dim FontSymbol As Font
 
 #End Region
 
@@ -59,48 +40,93 @@ Public Class Frm_Combinaisons
     Private Sub InitialiserFenetre()
         lBuild = True
 
-        GestionLangues()
+        ChargesBlocsLangues()
+        GestionLangues(BlocLangues(BALISE))
         GestionStyle()
         GestionUnites()
         InitialiseVariables()
-        AfficherPoutreEnCours()
-
+        'MAJI_TypeEL()
+        AfficherStatutBtnEL()
+        AfficherCombinaisonsEncours()
         lBuild = False
     End Sub
 
+    Public Sub ChargesBlocsLangues()
+        '----------------------------------------------------------------------------------------
+        '   Récupération des blocs langues pour toutes les fenêtres fille
+        '----------------------------------------------------------------------------------------
 
-    Private Sub GestionLangues()
-        If File.Exists(LogicielFichiers.Langue) Then
+        '--> Déclaration
 
-            Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_COMBINATIONS")
-            BlocLine.CreationBloc(Bloc)
+        Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
+        Dim BlocALire() As String = {"FRM_COMBINATIONS", "FRM_COMBINATIONS1"}
+        Dim lBlocEnCours As Boolean = False
+        Dim BlocEnCours As String = Nothing
+        Dim MotCle, Argument As String
+        Dim MyBloc As Dictionary(Of String, String) = Nothing
+        Dim Index As Integer
 
-            Try
+        '--> Initialisation
 
-                '=== GENERAL ======================================================================
+        BlocLangues = New Dictionary(Of String, Dictionary(Of String, String))
 
-                Me.Text = Bloc("TITLE")
-                Me.btn_OK.Text = Bloc("OK")
-                Me.btn_Annuler.Text = Bloc("CANCEL")
+        '--> Boucle sur les lignes
 
-                '=== CHOIX EL ==============================================================='
+        For i As Integer = 0 To Lines.Lines.Count - 1
 
-                Me.rdb_ELU.Text = Bloc("ULS")
-                Me.rdb_ELS.Text = Bloc("SLS")
-                Me.rdb_ELFire.Text = Bloc("FLS")
+            If Lines.Lines(i).Trim.IndexOf("#") = 0 Then
+                MotCle = Lines.Lines(i).Trim.ToUpper.Substring(1)
+                If (Array.IndexOf(BlocALire, MotCle) > -1) Then
+                    lBlocEnCours = True
+                    BlocEnCours = MotCle
+                    MyBloc = New Dictionary(Of String, String)
+                    MyBloc.Clear()
+                End If
+            ElseIf Lines.Lines(i).Trim.Length = 0 Then
+                If lBlocEnCours Then
+                    BlocLangues.Add(BlocEnCours, MyBloc)
+                End If
+                lBlocEnCours = False
+            ElseIf lBlocEnCours Then
+                Index = Lines.Lines(i).IndexOf("=")
+                If Index > -1 Then
+                    MotCle = Lines.Lines(i).Substring(0, Index).Trim
+                    Argument = Lines.Lines(i).Substring(Index + 1).Trim
+                    MyBloc.Add(MotCle, Argument)
+                End If
 
-                '=== COMBINAISONS
+            End If
 
-                Me.lbl_Predefinies.Text = Bloc("PREDEFINED")
+        Next
 
-            Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
-            Finally
-                Bloc.Clear()
-            End Try
-
+        If lBlocEnCours Then
+            BlocLangues.Add(BlocEnCours, MyBloc)
         End If
+        lBlocEnCours = False
+
+    End Sub
+
+    Private Sub GestionLangues(ByVal MyBloc As Dictionary(Of String, String))
+
+        Try
+
+            '=== GENERAL ======================================================================
+
+            Me.Text = MyBloc("TITLE")
+            Me.btn_OK.Text = MyBloc("OK")
+            Me.btn_Annuler.Text = MyBloc("CANCEL")
+
+            '=== CHOIX EL ==============================================================='
+
+            Me.rdb_ELU.Text = MyBloc("ULSTATES")
+            Me.rdb_ELS.Text = MyBloc("SLSTATES")
+            Me.rdb_ELFire.Text = MyBloc("FLSTATES")
+            Me.rdb_Construction.Text = MyBloc("CONSTRUCTIONSTAGE")
+
+        Catch ex As Exception
+            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+        Finally
+        End Try
 
     End Sub
 
@@ -122,9 +148,9 @@ Public Class Frm_Combinaisons
     Private Sub InitialiseVariables()
 
         nbCombELU = cls_Poutre.nbCombELU
-        ReDim plCombELURules(nbCombELU)
+        ReDim plCombELU(nbCombELU)
         ReDim pCoefCombELU(nbCombELU)
-        plCombELURules = MyProjet.Poutres(MyProjet.IndEnCours).lCombELCURules
+        plCombELU = MyProjet.Poutres(MyProjet.IndEnCours).lCombELU
         TransfereCombi(pCoefCombELU, MyProjet.Poutres(MyProjet.IndEnCours).CoefCombELU, nbCombELU)
         For i As Integer = 0 To nbCombELU
             For j As Integer = 0 To pCoefCombELU(i).Count - 1
@@ -132,13 +158,15 @@ Public Class Frm_Combinaisons
             Next
         Next
 
-            nbCombELS = cls_Poutre.nbCombELS
-        ReDim plCombELSRules(nbCombELS)
+        nbCombELS = cls_Poutre.nbCombELS
+        ReDim plCombELS(nbCombELS)
         ReDim pCoefCombELS(nbCombELS)
+        plCombELS = MyProjet.Poutres(MyProjet.IndEnCours).lCombELS
 
         nbCombFeu = cls_Poutre.nbCombFeu
-        ReDim plCombFeuRules(nbCombFeu)
+        ReDim plCombFeu(nbCombFeu)
         ReDim pCoefCombFeu(nbCombFeu)
+        plCombFeu = MyProjet.Poutres(MyProjet.IndEnCours).lCombFeu
 
         ' Private plCombELCURules(nbCombELUConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
         'Private plCombELCSRules(nbCombELSConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
@@ -146,17 +174,7 @@ Public Class Frm_Combinaisons
         'Private pCoefCombELCU(nbCombELUConstruction) As List(Of Double) 'Table des coefficients des combinaisons ELU Construction
         ' Private pCoefCombELCS(nbCombELSConstruction) As List(Of Double) 'Table des coefficients des combinaisons ELS Construction
 
-        MyBrush = New SolidBrush(Color.Black)
-        MyBrushBlue = New SolidBrush(Color.Blue)
-        MyBrushFond = New SolidBrush(ColorSelect)
 
-        ColorUnSelect = Me.pan_Predefinies.BackColor
-        MyBrushNoFond = New SolidBrush(ColorUnSelect)
-        MyBrushUnSelected = New SolidBrush(ColorFontUnSelected)
-
-        FontNormal = New Font(Me.chk_Combinaison01.Font.Name, 8)
-        FontIndice = New Font(Me.chk_Combinaison01.Font.Name, 7)
-        FontSymbol = New Font("Symbol", 9)
 
     End Sub
 
@@ -166,22 +184,61 @@ Public Class Frm_Combinaisons
 
     Private Sub GestionStyle()
         Me.Icon = Frm_PMX.Icon
-        Me.lbl_Predefinies.BackColor = CouleurBackBandeaux
-        Me.lbl_Predefinies.ForeColor = CouleurForeBandeaux
-        Me.lbl_Custom.BackColor = CouleurBackBandeaux
-        Me.lbl_Custom.ForeColor = CouleurForeBandeaux
+
     End Sub
 
-    Private Sub AfficherPoutreEnCours()
+    Private Sub AfficherStatutBtnEL()
         Select Case AffichageEL
             Case Enu_AffichageEL.ELU : Me.rdb_ELU.Checked = True
             Case Enu_AffichageEL.ELS : Me.rdb_ELS.Checked = True
             Case Enu_AffichageEL.ELF : Me.rdb_ELFire.Checked = True
+            Case Enu_AffichageEL.Construction : Me.rdb_Construction.Checked = True
         End Select
-        AfficherCombinaisonsEncours()
     End Sub
 
     Private Sub AfficherCombinaisonsEncours()
+        Select Case AffichageEL
+            Case Enu_AffichageEL.ELU
+                Me.pan_Contenu.Controls.Add(Frm_CombinaisonsNormales.pan_Combinaisons)
+                Frm_CombinaisonsNormales.InitialiserFenetre(plCombELU, cls_Poutre.nbCombELU + 1, 4, 2)
+            Case Enu_AffichageEL.ELS
+                Me.pan_Contenu.Controls.Add(Frm_CombinaisonsNormales.pan_Combinaisons)
+                Frm_CombinaisonsNormales.InitialiserFenetre(plCombELS, cls_Poutre.nbCombELS + 1, 4, 2)
+            Case Enu_AffichageEL.ELF
+                Me.pan_Contenu.Controls.Add(Frm_CombinaisonsNormales.pan_Combinaisons)
+                Frm_CombinaisonsNormales.InitialiserFenetre(plCombFeu, cls_Poutre.nbCombFeu + 1, 3, 2)
+        End Select
+    End Sub
+
+
+#End Region
+
+#Region " Evènements "
+
+    Private Sub GestionSelectEtatLimite(sender As Object, e As EventArgs) Handles rdb_ELU.CheckedChanged, rdb_ELS.CheckedChanged, rdb_ELFire.CheckedChanged, rdb_Construction.CheckedChanged
+        If lBuild Then Exit Sub
+
+        If Me.rdb_ELU.Checked Then
+            AffichageEL = Enu_AffichageEL.ELU
+        ElseIf Me.rdb_ELS.Checked Then
+            AffichageEL = Enu_AffichageEL.ELS
+        ElseIf Me.rdb_ELFire.Checked Then
+            AffichageEL = Enu_AffichageEL.ELF
+        Else
+            AffichageEL = Enu_AffichageEL.Construction
+        End If
+
+        AfficherCombinaisonsEncours()
+        ' MAJI_Equations()
+    End Sub
+
+    Public Sub ModifieSelectionCombi(Indice As Integer, lEtat As Boolean)
+
+        Select Case AffichageEL
+            Case Enu_AffichageEL.ELU : Me.plCombELU(Indice) = lEtat
+            Case Enu_AffichageEL.ELS : Me.plCombELS(Indice) = lEtat
+            Case Enu_AffichageEL.ELF : Me.plCombFeu(Indice) = lEtat
+        End Select
 
     End Sub
 
@@ -190,173 +247,41 @@ Public Class Frm_Combinaisons
 
 #Region "===FERMETURE==="
 
+    Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
 
-#End Region
+        Dim lModif As Boolean
+        If ValideSaisie() Then
 
-#Region " Affichage des combinaisons dans les picturebox "
+            TransfertSaisie(lModif)
 
+            If lModif Then
 
-    Private Sub AffichageEquations(sender As Object, e As PaintEventArgs) Handles img_EL_Eq01.Paint
+            End If
 
-        Dim pWi, pHi As Single
-        pWi = Me.img_EL_Eq01.ClientRectangle.Width
-        pHi = Me.img_EL_Eq01.ClientRectangle.Height
-
-        DrawEquationELU(e.Graphics, True, 1, pWi, pHi)
+            Me.Close()
+        End If
 
     End Sub
 
+    Private Function ValideSaisie() As Boolean
+        Return True
+    End Function
 
-    Private Sub DrawEquationELU(ByVal MyGr As Graphics, ByVal lSelect As Boolean, ByVal Indice As Integer,
-                             ByVal sWi As Single, ByVal sHi As Single)
-        '----------------------------------------------------------------------------------------
-        '
-        '   21/02/08 :  Création - Version 1.00
-        '
-        '----------------------------------------------------------------------------------------
-        '
-        '   Affichage d'une combinaison réglementaire dans une Picture Box
-        '
-        '----------------------------------------------------------------------------------------
+    Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
-        '--> Déclarations
+        Dim i As Integer
 
-        Dim hCar As Single = MyGr.MeasureString("X", FontNormal).Height
-        Dim hIndice As Single = hCar / 2
-        Dim yLine1 As Single = (sHi / 2 - hCar) / 2
-        Dim yLine2 As Single = yLine1 + sHi / 2
-        Dim IndiceG As String
-        Dim SymbolG As String = "G"         ' tabPoutres(iPoutreEnCours).Chargements(0).Symbole
-        Dim SymbolQ1 As String = "Q1"       ' tabPoutres(iPoutreEnCours).Chargements(1).Symbole
-        Dim SymbolQ2 As String = "Q2"       ' tabPoutres(iPoutreEnCours).Chargements(2).Symbole
-        Dim lPsi0Q1, lPsi0Q2 As Boolean
-        Dim sCar As Single = MyGr.MeasureString("x", FontNormal).Width / 5
+        For i = 0 To nbCombELU
+            GereTransfertValeur(plCombELU(i), MyProjet.Poutres(MyProjet.IndEnCours).lCombELU(i), lModif)
+        Next
 
-        Dim MyGamma As Cls_Gamma
+        For i = 0 To nbCombELS
+            GereTransfertValeur(plCombELS(i), MyProjet.Poutres(MyProjet.IndEnCours).lCombELS(i), lModif)
+        Next
 
-        MyGamma = MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma.Clone
-
-        '--> Initialisations
-
-        If lSelect Then
-            MyGr.FillRectangle(MyBrushFond, 0, 0, sWi, sHi)
-        Else
-            MyGr.FillRectangle(MyBrushNoFond, 0, 0, sWi, sHi)
-        End If
-
-        '--> Tracé
-
-        Dim xStart As Single = sWi * 0.05!
-        Dim xPen As Single = xStart
-        Dim xGroupe2 As Single = 0.35! * sWi
-        Dim xGroupe3 As Single = 0.67! * sWi
-
-        Dim xG As Single = 0.22! * sWi
-        Dim xQ1 As Single = xG + 0.32! * sWi
-        Dim xQ2 As Single = xQ1 + 0.32! * sWi
-        Dim xPlus1 As Single = xG + 0.08! * sWi
-        Dim xPlus2 As Single = xQ1 + 0.08! * sWi
-
-        Dim strGammaG, strCoefQ1, strCoefQ2 As String
-
-        Const kAdjust As Single = 0.5!
-
-        Select Case Indice
-            Case 1
-                IndiceG = "G.Sup"
-                lPsi0Q1 = False
-                lPsi0Q2 = True
-                strGammaG = Format(MyGamma.GammaG_sup, "0.00")
-                strCoefQ1 = Format(MyGamma.GammaQ, "0.00")
-                strCoefQ2 = Format(MyGamma.GammaQ * MyGamma.Psi0_Q2, "0.00")
-            Case 2
-                IndiceG = "G.Sup"
-                lPsi0Q1 = True
-                lPsi0Q2 = False
-                strGammaG = Format(MyGamma.GammaG_sup, "0.00")
-                strCoefQ1 = Format(MyGamma.GammaQ * MyGamma.Psi0_Q1, "0.00")
-                strCoefQ2 = Format(MyGamma.GammaQ, "0.00")
-            Case 3
-                IndiceG = "G.Inf"
-                lPsi0Q1 = False
-                lPsi0Q2 = True
-                strGammaG = Format(MyGamma.GammaG_inf, "0.00")
-                strCoefQ1 = Format(MyGamma.GammaQ, "0.00")
-                strCoefQ2 = Format(MyGamma.GammaQ * MyGamma.Psi0_Q2, "0.00")
-            Case 4
-                IndiceG = "G.Inf"
-                lPsi0Q1 = True
-                lPsi0Q2 = False
-                strGammaG = Format(MyGamma.GammaG_inf, "0.00")
-                strCoefQ1 = Format(MyGamma.GammaQ * MyGamma.Psi0_Q1, "0.00")
-                strCoefQ2 = Format(MyGamma.GammaQ, "0.00")
-        End Select
-
-        If lSelect Then
-            BrushBlue = MyBrushBlue
-            BrushBlack = MyBrush
-        Else
-            BrushBlue = MyBrushUnSelected
-            BrushBlack = MyBrushUnSelected
-        End If
-
-        '===============================================================================
-        '   PREMIERE LIGNE
-        '===============================================================================
-
-        '--> GammaG G
-
-        DrawSymbol(MyGr, BrushBlue, "g", IndiceG, xG - sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-        DrawSymbol(MyGr, BrushBlack, SymbolG, "", xG, yLine1, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-
-        '--> Premier Plus
-
-        MyGr.DrawString("+", FontNormal, BrushBlack, xPlus1, yLine1)
-
-        '--> GammaQ Psi Q1
-
-        If lPsi0Q1 Then
-            DrawSymbol(MyGr, BrushBlue, "y", "0", xQ1 - LongueurChaine(MyGr, "g", "Q", True, FontNormal, FontSymbol, FontIndice, kAdjust) - 2 * sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-        End If
-        DrawSymbol(MyGr, BrushBlue, "g", "Q", xQ1 - sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-        DrawSymbol(MyGr, BrushBlack, SymbolQ1, "", xQ1, yLine1, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-
-        '--> Deuxième Plus
-
-        MyGr.DrawString("+", FontNormal, BrushBlack, xPlus2, yLine1)
-
-        '--> GammaQ Psi Q2
-
-        If lPsi0Q2 Then
-            DrawSymbol(MyGr, BrushBlue, "y", "0", xQ2 - LongueurChaine(MyGr, "g", "Q", True, FontNormal, FontSymbol, FontIndice, kAdjust) - 2 * sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-        End If
-        DrawSymbol(MyGr, BrushBlue, "g", "Q", xQ2 - sCar, yLine1, hIndice, True, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-        DrawSymbol(MyGr, BrushBlack, SymbolQ2, "", xQ2, yLine1, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-
-        '===============================================================================
-        '   DEUXIEME LIGNE
-        '===============================================================================
-
-        DrawSymbol(MyGr, BrushBlue, strGammaG, "", xG - sCar, yLine2, hIndice, False, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-        DrawSymbol(MyGr, BrushBlack, SymbolG, "", xG, yLine2, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-
-        '--> Premier Plus
-
-        MyGr.DrawString("+", FontNormal, BrushBlack, xPlus1, yLine2)
-
-        '--> GammaQ Psi Q1
-
-        DrawSymbol(MyGr, BrushBlue, strCoefQ1, "", xQ1 - sCar, yLine2, hIndice, False, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-        DrawSymbol(MyGr, BrushBlack, SymbolQ1, "", xQ1, yLine2, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-
-        '--> Deuxième Plus
-
-        MyGr.DrawString("+", FontNormal, BrushBlack, xPlus2, yLine2)
-
-        '--> GammaQ Psi Q2
-
-        DrawSymbol(MyGr, BrushBlue, strCoefQ2, "", xQ2 - sCar, yLine2, hIndice, False, Enu_AlignementH.Droite, FontNormal, FontSymbol, FontIndice, kAdjust, False)
-        DrawSymbol(MyGr, BrushBlack, SymbolQ2, "", xQ2, yLine2, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
+        For i = 0 To nbCombFeu
+            GereTransfertValeur(plCombFeu(i), MyProjet.Poutres(MyProjet.IndEnCours).lCombFeu(i), lModif)
+        Next
 
     End Sub
 

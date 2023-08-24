@@ -295,6 +295,15 @@ Module Mod_Declarations
 
 #Region " Enumérations "
 
+    Public Enum Enu_AffichageEL
+        ELS
+        ELU
+        ELF
+        Construction
+    End Enum
+
+    Public AffichageEL As Enu_AffichageEL = Enu_AffichageEL.ELU
+
     ''' <summary>
     ''' Type de variable à afficher
     ''' </summary>

@@ -29,23 +29,18 @@ Partial Class Frm_Combinaisons
         Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLpan_Lignes = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Custom = New System.Windows.Forms.Label()
-        Me.lbl_Predefinies = New System.Windows.Forms.Label()
         Me.TLpan_ChoixEL = New System.Windows.Forms.TableLayoutPanel()
+        Me.rdb_Construction = New System.Windows.Forms.RadioButton()
         Me.rdb_ELFire = New System.Windows.Forms.RadioButton()
         Me.rdb_ELS = New System.Windows.Forms.RadioButton()
         Me.rdb_ELU = New System.Windows.Forms.RadioButton()
-        Me.pan_Predefinies = New System.Windows.Forms.Panel()
-        Me.img_EL_Eq01 = New System.Windows.Forms.PictureBox()
-        Me.chk_Combinaison01 = New System.Windows.Forms.CheckBox()
+        Me.pan_Contenu = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Lignes.SuspendLayout()
         Me.TLpan_ChoixEL.SuspendLayout()
-        Me.pan_Predefinies.SuspendLayout()
-        CType(Me.img_EL_Eq01, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -129,57 +124,29 @@ Partial Class Frm_Combinaisons
         '
         Me.TLpan_Lignes.ColumnCount = 1
         Me.TLpan_Lignes.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Lignes.Controls.Add(Me.lbl_Custom, 0, 3)
-        Me.TLpan_Lignes.Controls.Add(Me.lbl_Predefinies, 0, 1)
         Me.TLpan_Lignes.Controls.Add(Me.TLpan_ChoixEL, 0, 0)
-        Me.TLpan_Lignes.Controls.Add(Me.pan_Predefinies, 0, 2)
+        Me.TLpan_Lignes.Controls.Add(Me.pan_Contenu, 0, 1)
         Me.TLpan_Lignes.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Lignes.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Lignes.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_Lignes.Name = "TLpan_Lignes"
-        Me.TLpan_Lignes.RowCount = 5
+        Me.TLpan_Lignes.RowCount = 2
         Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 220.0!))
-        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLpan_Lignes.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Lignes.Size = New System.Drawing.Size(467, 452)
         Me.TLpan_Lignes.TabIndex = 0
         '
-        'lbl_Custom
-        '
-        Me.lbl_Custom.AutoSize = True
-        Me.lbl_Custom.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Custom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Custom.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Custom.Location = New System.Drawing.Point(0, 290)
-        Me.lbl_Custom.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Custom.Name = "lbl_Custom"
-        Me.lbl_Custom.Size = New System.Drawing.Size(467, 30)
-        Me.lbl_Custom.TabIndex = 4
-        Me.lbl_Custom.Text = "lbl_Custom"
-        Me.lbl_Custom.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'lbl_Predefinies
-        '
-        Me.lbl_Predefinies.AutoSize = True
-        Me.lbl_Predefinies.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Predefinies.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Predefinies.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Predefinies.Location = New System.Drawing.Point(0, 40)
-        Me.lbl_Predefinies.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Predefinies.Name = "lbl_Predefinies"
-        Me.lbl_Predefinies.Size = New System.Drawing.Size(467, 30)
-        Me.lbl_Predefinies.TabIndex = 2
-        Me.lbl_Predefinies.Text = "lbl_Predefinies"
-        Me.lbl_Predefinies.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'TLpan_ChoixEL
         '
-        Me.TLpan_ChoixEL.ColumnCount = 3
-        Me.TLpan_ChoixEL.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TLpan_ChoixEL.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.TLpan_ChoixEL.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TLpan_ChoixEL.ColumnCount = 4
+        Me.TLpan_ChoixEL.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TLpan_ChoixEL.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TLpan_ChoixEL.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TLpan_ChoixEL.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
+        Me.TLpan_ChoixEL.Controls.Add(Me.rdb_Construction, 3, 0)
         Me.TLpan_ChoixEL.Controls.Add(Me.rdb_ELFire, 2, 0)
         Me.TLpan_ChoixEL.Controls.Add(Me.rdb_ELS, 1, 0)
         Me.TLpan_ChoixEL.Controls.Add(Me.rdb_ELU, 0, 0)
@@ -192,15 +159,29 @@ Partial Class Frm_Combinaisons
         Me.TLpan_ChoixEL.Size = New System.Drawing.Size(467, 40)
         Me.TLpan_ChoixEL.TabIndex = 0
         '
+        'rdb_Construction
+        '
+        Me.rdb_Construction.Appearance = System.Windows.Forms.Appearance.Button
+        Me.rdb_Construction.AutoSize = True
+        Me.rdb_Construction.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.rdb_Construction.Location = New System.Drawing.Point(349, 0)
+        Me.rdb_Construction.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
+        Me.rdb_Construction.Name = "rdb_Construction"
+        Me.rdb_Construction.Size = New System.Drawing.Size(118, 39)
+        Me.rdb_Construction.TabIndex = 3
+        Me.rdb_Construction.Text = "rdb_Construction"
+        Me.rdb_Construction.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.rdb_Construction.UseVisualStyleBackColor = True
+        '
         'rdb_ELFire
         '
         Me.rdb_ELFire.Appearance = System.Windows.Forms.Appearance.Button
         Me.rdb_ELFire.AutoSize = True
         Me.rdb_ELFire.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_ELFire.Location = New System.Drawing.Point(311, 1)
-        Me.rdb_ELFire.Margin = New System.Windows.Forms.Padding(1)
+        Me.rdb_ELFire.Location = New System.Drawing.Point(232, 0)
+        Me.rdb_ELFire.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.rdb_ELFire.Name = "rdb_ELFire"
-        Me.rdb_ELFire.Size = New System.Drawing.Size(155, 38)
+        Me.rdb_ELFire.Size = New System.Drawing.Size(116, 39)
         Me.rdb_ELFire.TabIndex = 2
         Me.rdb_ELFire.Text = "rdb_ELFire"
         Me.rdb_ELFire.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -211,10 +192,10 @@ Partial Class Frm_Combinaisons
         Me.rdb_ELS.Appearance = System.Windows.Forms.Appearance.Button
         Me.rdb_ELS.AutoSize = True
         Me.rdb_ELS.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_ELS.Location = New System.Drawing.Point(156, 1)
-        Me.rdb_ELS.Margin = New System.Windows.Forms.Padding(1)
+        Me.rdb_ELS.Location = New System.Drawing.Point(116, 0)
+        Me.rdb_ELS.Margin = New System.Windows.Forms.Padding(0, 0, 1, 1)
         Me.rdb_ELS.Name = "rdb_ELS"
-        Me.rdb_ELS.Size = New System.Drawing.Size(153, 38)
+        Me.rdb_ELS.Size = New System.Drawing.Size(115, 39)
         Me.rdb_ELS.TabIndex = 1
         Me.rdb_ELS.Text = "rdb_ELS"
         Me.rdb_ELS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -225,45 +206,24 @@ Partial Class Frm_Combinaisons
         Me.rdb_ELU.Appearance = System.Windows.Forms.Appearance.Button
         Me.rdb_ELU.AutoSize = True
         Me.rdb_ELU.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.rdb_ELU.Location = New System.Drawing.Point(1, 1)
-        Me.rdb_ELU.Margin = New System.Windows.Forms.Padding(1)
+        Me.rdb_ELU.Location = New System.Drawing.Point(0, 0)
+        Me.rdb_ELU.Margin = New System.Windows.Forms.Padding(0, 0, 1, 1)
         Me.rdb_ELU.Name = "rdb_ELU"
-        Me.rdb_ELU.Size = New System.Drawing.Size(153, 38)
+        Me.rdb_ELU.Size = New System.Drawing.Size(115, 39)
         Me.rdb_ELU.TabIndex = 0
         Me.rdb_ELU.Text = "rdb_ELU"
         Me.rdb_ELU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.rdb_ELU.UseVisualStyleBackColor = True
         '
-        'pan_Predefinies
+        'pan_Contenu
         '
-        Me.pan_Predefinies.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Predefinies.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Predefinies.Controls.Add(Me.img_EL_Eq01)
-        Me.pan_Predefinies.Controls.Add(Me.chk_Combinaison01)
-        Me.pan_Predefinies.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Predefinies.Location = New System.Drawing.Point(0, 71)
-        Me.pan_Predefinies.Margin = New System.Windows.Forms.Padding(0, 1, 0, 1)
-        Me.pan_Predefinies.Name = "pan_Predefinies"
-        Me.pan_Predefinies.Size = New System.Drawing.Size(467, 218)
-        Me.pan_Predefinies.TabIndex = 3
-        '
-        'img_EL_Eq01
-        '
-        Me.img_EL_Eq01.Location = New System.Drawing.Point(181, 11)
-        Me.img_EL_Eq01.Name = "img_EL_Eq01"
-        Me.img_EL_Eq01.Size = New System.Drawing.Size(276, 59)
-        Me.img_EL_Eq01.TabIndex = 8
-        Me.img_EL_Eq01.TabStop = False
-        '
-        'chk_Combinaison01
-        '
-        Me.chk_Combinaison01.AutoSize = True
-        Me.chk_Combinaison01.Location = New System.Drawing.Point(9, 12)
-        Me.chk_Combinaison01.Name = "chk_Combinaison01"
-        Me.chk_Combinaison01.Size = New System.Drawing.Size(122, 17)
-        Me.chk_Combinaison01.TabIndex = 7
-        Me.chk_Combinaison01.Text = "chk_Combinaison01"
-        Me.chk_Combinaison01.UseVisualStyleBackColor = True
+        Me.pan_Contenu.BackColor = System.Drawing.SystemColors.Control
+        Me.pan_Contenu.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Contenu.Location = New System.Drawing.Point(0, 41)
+        Me.pan_Contenu.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.pan_Contenu.Name = "pan_Contenu"
+        Me.pan_Contenu.Size = New System.Drawing.Size(467, 411)
+        Me.pan_Contenu.TabIndex = 5
         '
         'Frm_Combinaisons
         '
@@ -273,6 +233,7 @@ Partial Class Frm_Combinaisons
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(473, 498)
         Me.Controls.Add(Me.pan_General)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "Frm_Combinaisons"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Combinaisons"
@@ -281,12 +242,8 @@ Partial Class Frm_Combinaisons
         Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.pan_Main.ResumeLayout(False)
         Me.TLpan_Lignes.ResumeLayout(False)
-        Me.TLpan_Lignes.PerformLayout()
         Me.TLpan_ChoixEL.ResumeLayout(False)
         Me.TLpan_ChoixEL.PerformLayout()
-        Me.pan_Predefinies.ResumeLayout(False)
-        Me.pan_Predefinies.PerformLayout()
-        CType(Me.img_EL_Eq01, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -302,9 +259,6 @@ Partial Class Frm_Combinaisons
     Friend WithEvents rdb_ELFire As RadioButton
     Friend WithEvents rdb_ELS As RadioButton
     Friend WithEvents rdb_ELU As RadioButton
-    Friend WithEvents lbl_Predefinies As Label
-    Friend WithEvents lbl_Custom As Label
-    Friend WithEvents pan_Predefinies As Panel
-    Friend WithEvents img_EL_Eq01 As PictureBox
-    Friend WithEvents chk_Combinaison01 As CheckBox
+    Friend WithEvents rdb_Construction As RadioButton
+    Friend WithEvents pan_Contenu As Panel
 End Class

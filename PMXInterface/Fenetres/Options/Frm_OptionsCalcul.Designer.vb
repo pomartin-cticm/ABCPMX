@@ -26,6 +26,7 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.PoMbtn_Fire = New PMXInterface.POMbutton()
         Me.PoMbtn_Calcul = New PMXInterface.POMbutton()
         Me.PoMbtn_Scope = New PMXInterface.POMbutton()
         Me.PoMBtn_Gamma = New PMXInterface.POMbutton()
@@ -33,7 +34,6 @@ Partial Class Frm_OptionsCalcul
         Me.btn_Cancel = New System.Windows.Forms.Button()
         Me.btn_Appliquer = New System.Windows.Forms.Button()
         Me.pan_Contenu = New System.Windows.Forms.Panel()
-        Me.PoMbtn_Fire = New PMXInterface.POMbutton()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
@@ -103,6 +103,28 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Gauche.Size = New System.Drawing.Size(242, 442)
         Me.TLpan_Gauche.TabIndex = 0
+        '
+        'PoMbtn_Fire
+        '
+        Me.PoMbtn_Fire.Caption = "PoMbtn_Fire"
+        Me.PoMbtn_Fire.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
+        Me.PoMbtn_Fire.Checked = False
+        Me.PoMbtn_Fire.CouleurChecked = System.Drawing.Color.Orange
+        Me.PoMbtn_Fire.CouleurContour = System.Drawing.Color.Black
+        Me.PoMbtn_Fire.CouleurContourChecked = System.Drawing.Color.Black
+        Me.PoMbtn_Fire.CouleurContourMouseOn = System.Drawing.Color.Black
+        Me.PoMbtn_Fire.CouleurFond = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Fire.CouleurForGradient = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Fire.CouleurMouseOnBtn = System.Drawing.Color.Yellow
+        Me.PoMbtn_Fire.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PoMbtn_Fire.Enable = True
+        Me.PoMbtn_Fire.LContourFond = True
+        Me.PoMbtn_Fire.Location = New System.Drawing.Point(5, 140)
+        Me.PoMbtn_Fire.Margin = New System.Windows.Forms.Padding(5)
+        Me.PoMbtn_Fire.Name = "PoMbtn_Fire"
+        Me.PoMbtn_Fire.RatioArrondi = 0!
+        Me.PoMbtn_Fire.Size = New System.Drawing.Size(232, 35)
+        Me.PoMbtn_Fire.TabIndex = 4
         '
         'PoMbtn_Calcul
         '
@@ -217,28 +239,6 @@ Partial Class Frm_OptionsCalcul
         Me.pan_Contenu.Name = "pan_Contenu"
         Me.pan_Contenu.Size = New System.Drawing.Size(547, 444)
         Me.pan_Contenu.TabIndex = 2
-        '
-        'PoMbtn_Fire
-        '
-        Me.PoMbtn_Fire.Caption = "PoMbtn_Fire"
-        Me.PoMbtn_Fire.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
-        Me.PoMbtn_Fire.Checked = False
-        Me.PoMbtn_Fire.CouleurChecked = System.Drawing.Color.Orange
-        Me.PoMbtn_Fire.CouleurContour = System.Drawing.Color.Black
-        Me.PoMbtn_Fire.CouleurContourChecked = System.Drawing.Color.Black
-        Me.PoMbtn_Fire.CouleurContourMouseOn = System.Drawing.Color.Black
-        Me.PoMbtn_Fire.CouleurFond = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Fire.CouleurForGradient = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Fire.CouleurMouseOnBtn = System.Drawing.Color.Yellow
-        Me.PoMbtn_Fire.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PoMbtn_Fire.Enable = True
-        Me.PoMbtn_Fire.LContourFond = True
-        Me.PoMbtn_Fire.Location = New System.Drawing.Point(5, 140)
-        Me.PoMbtn_Fire.Margin = New System.Windows.Forms.Padding(5)
-        Me.PoMbtn_Fire.Name = "PoMbtn_Fire"
-        Me.PoMbtn_Fire.RatioArrondi = 0!
-        Me.PoMbtn_Fire.Size = New System.Drawing.Size(232, 35)
-        Me.PoMbtn_Fire.TabIndex = 4
         '
         'Frm_OptionsCalcul
         '

@@ -40,11 +40,20 @@ SAVEAS					= Save As
 TITLE					= Combinations
 OK						= Ok
 CANCEL					= Cancel
-ULS						= Ultimate limit states
-SLS						= Serviceability limit states
-FLS						= Fire limit states
+ULSTATES		 		= Ultimate limit states
+SLSTATES				= Serviceability limit states
+FLSTATES				= Fire limit states
+CONSTRUCTIONSTAGE		= Construction stage
+
+#FRM_COMBINATIONS1
 PREDEFINED				= Predefined combinations according to EN 1990
 CUSTOM					= Custom combinations
+COMBINATION				= Combination
+ULS						= ULS
+SLS						= SLS
+FLS						= FLS
+NUMBER					= No
+
 
 #FRM_CONNECTION
 TITLE					= Definition of the connection
