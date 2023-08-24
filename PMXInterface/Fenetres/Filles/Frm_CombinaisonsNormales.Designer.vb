@@ -22,6 +22,7 @@ Partial Class Frm_CombinaisonsNormales
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.pan_Combinaisons = New System.Windows.Forms.Panel()
         Me.TLpan_Lignes = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Custom = New System.Windows.Forms.Label()
@@ -54,6 +55,7 @@ Partial Class Frm_CombinaisonsNormales
         Me.txt_Custom01_G = New System.Windows.Forms.TextBox()
         Me.etq_Custom01_G = New System.Windows.Forms.Label()
         Me.img_CombiCustom01 = New System.Windows.Forms.PictureBox()
+        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_Combinaisons.SuspendLayout()
         Me.TLpan_Lignes.SuspendLayout()
         Me.pan_Predefinies.SuspendLayout()
@@ -66,6 +68,7 @@ Partial Class Frm_CombinaisonsNormales
         CType(Me.img_CombiCustom02, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_CombiCustom01.SuspendLayout()
         CType(Me.img_CombiCustom01, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Combinaisons
@@ -403,6 +406,10 @@ Partial Class Frm_CombinaisonsNormales
         Me.img_CombiCustom01.TabIndex = 12
         Me.img_CombiCustom01.TabStop = False
         '
+        'ErrorProvider
+        '
+        Me.ErrorProvider.ContainerControl = Me
+        '
         'Frm_CombinaisonsNormales
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -429,6 +436,7 @@ Partial Class Frm_CombinaisonsNormales
         Me.pan_CombiCustom01.ResumeLayout(False)
         Me.pan_CombiCustom01.PerformLayout()
         CType(Me.img_CombiCustom01, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -465,4 +473,5 @@ Partial Class Frm_CombinaisonsNormales
     Friend WithEvents txt_Custom01_G As TextBox
     Friend WithEvents etq_Custom01_G As Label
     Friend WithEvents img_CombiCustom01 As PictureBox
+    Friend WithEvents ErrorProvider As ErrorProvider
 End Class

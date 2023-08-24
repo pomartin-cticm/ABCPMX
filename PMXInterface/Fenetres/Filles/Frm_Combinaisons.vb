@@ -152,21 +152,23 @@ Public Class Frm_Combinaisons
         ReDim pCoefCombELU(nbCombELU)
         plCombELU = MyProjet.Poutres(MyProjet.IndEnCours).lCombELU
         TransfereCombi(pCoefCombELU, MyProjet.Poutres(MyProjet.IndEnCours).CoefCombELU, nbCombELU)
-        For i As Integer = 0 To nbCombELU
-            For j As Integer = 0 To pCoefCombELU(i).Count - 1
-                pCoefCombELU(i).Add(MyProjet.Poutres(MyProjet.IndEnCours).CoefCombELU(i)(j))
-            Next
-        Next
+        'For i As Integer = 0 To nbCombELU
+        '    For j As Integer = 0 To pCoefCombELU(i).Count - 1
+        '        pCoefCombELU(i).Add(MyProjet.Poutres(MyProjet.IndEnCours).CoefCombELU(i)(j))
+        '    Next
+        'Next
 
         nbCombELS = cls_Poutre.nbCombELS
         ReDim plCombELS(nbCombELS)
         ReDim pCoefCombELS(nbCombELS)
         plCombELS = MyProjet.Poutres(MyProjet.IndEnCours).lCombELS
+        TransfereCombi(pCoefCombELS, MyProjet.Poutres(MyProjet.IndEnCours).CoefCombELS, nbCombELS)
 
         nbCombFeu = cls_Poutre.nbCombFeu
         ReDim plCombFeu(nbCombFeu)
         ReDim pCoefCombFeu(nbCombFeu)
         plCombFeu = MyProjet.Poutres(MyProjet.IndEnCours).lCombFeu
+        TransfereCombi(pCoefCombFeu, MyProjet.Poutres(MyProjet.IndEnCours).CoefCombFeu, nbCombFeu)
 
         ' Private plCombELCURules(nbCombELUConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
         'Private plCombELCSRules(nbCombELSConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
@@ -200,13 +202,13 @@ Public Class Frm_Combinaisons
         Select Case AffichageEL
             Case Enu_AffichageEL.ELU
                 Me.pan_Contenu.Controls.Add(Frm_CombinaisonsNormales.pan_Combinaisons)
-                Frm_CombinaisonsNormales.InitialiserFenetre(plCombELU, cls_Poutre.nbCombELU + 1, 4, 2)
+                Frm_CombinaisonsNormales.InitialiserFenetre(plCombELU, pCoefCombELU, cls_Poutre.nbCombELU + 1, 4, 2)
             Case Enu_AffichageEL.ELS
                 Me.pan_Contenu.Controls.Add(Frm_CombinaisonsNormales.pan_Combinaisons)
-                Frm_CombinaisonsNormales.InitialiserFenetre(plCombELS, cls_Poutre.nbCombELS + 1, 4, 2)
+                Frm_CombinaisonsNormales.InitialiserFenetre(plCombELS, pCoefCombELS, cls_Poutre.nbCombELS + 1, 4, 2)
             Case Enu_AffichageEL.ELF
                 Me.pan_Contenu.Controls.Add(Frm_CombinaisonsNormales.pan_Combinaisons)
-                Frm_CombinaisonsNormales.InitialiserFenetre(plCombFeu, cls_Poutre.nbCombFeu + 1, 3, 2)
+                Frm_CombinaisonsNormales.InitialiserFenetre(plCombFeu, pCoefCombFeu, cls_Poutre.nbCombFeu + 1, 3, 2)
         End Select
     End Sub
 
@@ -242,7 +244,15 @@ Public Class Frm_Combinaisons
 
     End Sub
 
+    Public Sub ModifieValeurCoefCombi(IndCombi As Integer, IndCharge As Integer, Gamma As Decimal)
 
+        Select Case AffichageEL
+            Case Enu_AffichageEL.ELU : Me.pCoefCombELU(IndCombi)(IndCharge) = Gamma
+            Case Enu_AffichageEL.ELS : Me.pCoefCombELS(IndCombi)(IndCharge) = Gamma
+            Case Enu_AffichageEL.ELF : Me.pCoefCombFeu(IndCombi)(IndCharge) = Gamma
+        End Select
+
+    End Sub
 #End Region
 
 #Region "===FERMETURE==="
@@ -269,18 +279,27 @@ Public Class Frm_Combinaisons
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
-        Dim i As Integer
+        Dim i, j As Integer
 
         For i = 0 To nbCombELU
             GereTransfertValeur(plCombELU(i), MyProjet.Poutres(MyProjet.IndEnCours).lCombELU(i), lModif)
+            For j = 0 To Me.pCoefCombELU(i).Count - 1
+                GereTransfertValeur(pCoefCombELU(i)(j), MyProjet.Poutres(MyProjet.IndEnCours).CoefCombELU(i)(j), lModif)
+            Next
         Next
 
         For i = 0 To nbCombELS
             GereTransfertValeur(plCombELS(i), MyProjet.Poutres(MyProjet.IndEnCours).lCombELS(i), lModif)
+            For j = 0 To Me.pCoefCombELU(i).Count - 1
+                GereTransfertValeur(pCoefCombELS(i)(j), MyProjet.Poutres(MyProjet.IndEnCours).CoefCombELS(i)(j), lModif)
+            Next
         Next
 
         For i = 0 To nbCombFeu
             GereTransfertValeur(plCombFeu(i), MyProjet.Poutres(MyProjet.IndEnCours).lCombFeu(i), lModif)
+            For j = 0 To Me.pCoefCombELU(i).Count - 1
+                GereTransfertValeur(pCoefCombFeu(i)(j), MyProjet.Poutres(MyProjet.IndEnCours).CoefCombFeu(i)(j), lModif)
+            Next
         Next
 
     End Sub

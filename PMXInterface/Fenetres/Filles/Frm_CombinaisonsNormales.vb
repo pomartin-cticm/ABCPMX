@@ -33,15 +33,16 @@ Public Class Frm_CombinaisonsNormales
     Dim FontSymbol As Font
 
     Dim Ind_Custom As Integer
-
+    Dim fmtGamma As String = "0.00"
 
 #End Region
 
 #Region "===OUVERTURE==="
 
-    Public Sub InitialiserFenetre(lComb() As Boolean, nbCombi As Integer, nbPredef As Integer, nbCustom As Integer)
+    Public Sub InitialiserFenetre(lComb() As Boolean, CoefCombi() As List(Of Decimal), nbCombi As Integer, nbPredef As Integer, nbCustom As Integer)
         '--------------------------------------------------------------------------------------------------------------------
         '   lComb       [E] :   Table des combinaisons sélectionnées
+        '   CoefCombi   [E] :   Coefficients des combinaisons
         '   nbCombi     [E] :   Nombre de combinaisons, au total
         '   nbPredef    [E] :   Nombre de combinaisons prédéfinies
         '   nbCustom    [E] :   Nombre de combinaisons personnalisées
@@ -53,7 +54,7 @@ Public Class Frm_CombinaisonsNormales
         PrepareFenetre(nbPredef, nbCustom)
         GestionStyle()
         MAJI_TypeEL()
-        AfficheCombinaisonEnCours(lComb, nbCombi, nbPredef, nbCustom)
+        AfficheCombinaisonEnCours(lComb, CoefCombi, nbCombi, nbPredef, nbCustom)
         MAJI_Equations()
 
         lBuild = False
@@ -162,12 +163,21 @@ Public Class Frm_CombinaisonsNormales
         Me.chk_Combinaison03.Text = Chaine & "3"
         Me.chk_Combinaison04.Text = Chaine & "4"
 
-        Me.chk_CombiCustom01.Text = Chaine & CStr(Ind_custom)
-        Me.chk_CombiCustom02.Text = Chaine & CStr(Ind_custom + 1)
+        Me.chk_CombiCustom01.Text = Chaine & CStr(Ind_Custom)
+        Me.chk_CombiCustom02.Text = Chaine & CStr(Ind_Custom + 1)
 
     End Sub
 
-    Private Sub AfficheCombinaisonEnCours(lComb() As Boolean, nbCombi As Integer, nbPredef As Integer, nbCustom As Integer)
+    Private Sub AfficheCombinaisonEnCours(lComb() As Boolean, CoefCombi() As List(Of Decimal), nbCombi As Integer, nbPredef As Integer, nbCustom As Integer)
+        '--------------------------------------------------------------------------------------------------------------------
+        '   lComb       [E] :   Table des combinaisons sélectionnées
+        '   CoefCombi   [E] :   Coefficients des combinaisons
+        '   nbCombi     [E] :   Nombre de combinaisons, au total
+        '   nbPredef    [E] :   Nombre de combinaisons prédéfinies
+        '   nbCustom    [E] :   Nombre de combinaisons personnalisées
+        '--------------------------------------------------------------------------------------------------------------------
+
+        '--> Combinaisons prédéfinies
 
         If nbPredef >= 1 Then
             Me.chk_Combinaison01.Checked = lComb(0)
@@ -182,6 +192,8 @@ Public Class Frm_CombinaisonsNormales
             Me.chk_Combinaison04.Checked = lComb(3)
         End If
 
+        '--> Combinaisons utilisateurs
+
         If nbCustom >= 1 Then
             Me.chk_CombiCustom01.Checked = lComb(Ind_Custom)
         End If
@@ -189,6 +201,16 @@ Public Class Frm_CombinaisonsNormales
         If nbCustom >= 2 Then
             Me.chk_CombiCustom02.Checked = lComb(Ind_Custom + 1)
         End If
+
+        '--> Coefficients pour les combinaisons utilisateurs
+
+        Me.txt_Custom01_G.Text = Format(CoefCombi(Ind_Custom)(0), fmtGamma)
+        Me.txt_Custom01_Q1.Text = Format(CoefCombi(Ind_Custom)(1), fmtGamma)
+        Me.txt_Custom01_Q2.Text = Format(CoefCombi(Ind_Custom)(2), fmtGamma)
+
+        Me.txt_Custom02_G.Text = Format(CoefCombi(Ind_Custom + 1)(0), fmtGamma)
+        Me.txt_Custom02_Q1.Text = Format(CoefCombi(Ind_Custom + 1)(1), fmtGamma)
+        Me.txt_Custom02_Q2.Text = Format(CoefCombi(Ind_Custom + 1)(2), fmtGamma)
 
     End Sub
 
@@ -214,6 +236,78 @@ Public Class Frm_CombinaisonsNormales
         MAJI_Equations()
 
     End Sub
+
+    Private Sub GestionTextChanged(sender As Object, e As EventArgs) Handles txt_Custom02_Q2.TextChanged, txt_Custom02_Q1.TextChanged, txt_Custom02_G.TextChanged, txt_Custom01_Q2.TextChanged, txt_Custom01_Q1.TextChanged, txt_Custom01_G.TextChanged
+        If lBuild Then Exit Sub
+        lBuild = True
+        Dim Valeur As Decimal
+        Dim IndCombi, IndVar As Integer
+
+        If VerificationSaisie(sender, Valeur) Then
+
+            Select Case sender.name
+
+                Case Me.txt_Custom01_G.Name, Me.txt_Custom01_Q1.Name, Me.txt_Custom01_Q2.Name
+                    IndCombi = Ind_Custom
+                Case Me.txt_Custom02_G.Name, Me.txt_Custom02_Q1.Name, Me.txt_Custom02_Q2.Name
+                    IndCombi = Ind_Custom + 1
+
+            End Select
+
+            Select Case sender.name
+
+                Case Me.txt_Custom01_G.Name, Me.txt_Custom02_G.Name
+                    IndVar = 0
+                Case Me.txt_Custom01_Q1.Name, Me.txt_Custom02_Q1.Name
+                    IndVar = 1
+                Case Me.txt_Custom01_Q2.Name, Me.txt_Custom02_Q2.Name
+                    IndVar = 2
+
+            End Select
+
+            Frm_Combinaisons.ModifieValeurCoefCombi(IndCombi, IndVar, Valeur)
+
+        End If
+
+        lBuild = False
+    End Sub
+
+
+    ''' <summary>
+    ''' Vérification de la saisie des paramètres
+    ''' </summary>
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        '-- Déclaration - Initialisation
+
+        Dim lOk As Boolean = True
+        ErrorProvider.Clear()
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = 1
+
+        Const GammaMAXI As Decimal = 10
+        Const GammaMINI As Decimal = 0
+
+        ValMin = GammaMINI
+        ValMax = GammaMAXI
+        lValMax = True
+
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+
+    End Function
 
 #End Region
 
@@ -415,7 +509,6 @@ Public Class Frm_CombinaisonsNormales
         DrawSymbol(MyGr, BrushBlack, SymbolQ2, "", xQ2, yLine2, 0, False, Enu_AlignementH.Gauche, FontNormal, FontSymbol, FontIndice, kAdjust, False)
 
     End Sub
-
 
     Private Sub DrawEquationELS(ByVal MyGr As Graphics, ByVal lSelect As Boolean, ByVal Indice As Integer,
                                 ByVal sWi As Single, ByVal sHi As Single)
