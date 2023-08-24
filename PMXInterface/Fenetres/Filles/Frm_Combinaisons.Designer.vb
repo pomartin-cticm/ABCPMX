@@ -234,6 +234,8 @@ Partial Class Frm_Combinaisons
         Me.ClientSize = New System.Drawing.Size(473, 498)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_Combinaisons"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Combinaisons"

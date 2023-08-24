@@ -54,6 +54,12 @@ SLS						= SLS
 FLS						= FLS
 NUMBER					= No
 
+#FRM_COMBINATIONS2
+ULSTATES		 		= Ultimate limit states at construction stage
+SLSTATES				= Serviceability limit states at construction stage
+ULS						= ULS
+SLS						= SLS
+COMBINATION				= Combination
 
 #FRM_CONNECTION
 TITLE					= Definition of the connection

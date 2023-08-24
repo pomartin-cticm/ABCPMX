@@ -98,6 +98,12 @@
     <Compile Include="Fenetres\Filles\Frm_Combinaisons.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_CombinaisonsConstruction.Designer.vb">
+      <DependentUpon>Frm_CombinaisonsConstruction.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_CombinaisonsConstruction.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_CombinaisonsNormales.Designer.vb">
       <DependentUpon>Frm_CombinaisonsNormales.vb</DependentUpon>
     </Compile>
@@ -308,6 +314,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Combinaisons.resx">
       <DependentUpon>Frm_Combinaisons.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_CombinaisonsConstruction.resx">
+      <DependentUpon>Frm_CombinaisonsConstruction.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_CombinaisonsNormales.resx">
       <DependentUpon>Frm_CombinaisonsNormales.vb</DependentUpon>

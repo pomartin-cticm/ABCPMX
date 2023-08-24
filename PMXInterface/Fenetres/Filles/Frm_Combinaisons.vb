@@ -59,7 +59,7 @@ Public Class Frm_Combinaisons
         '--> Déclaration
 
         Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
-        Dim BlocALire() As String = {"FRM_COMBINATIONS", "FRM_COMBINATIONS1"}
+        Dim BlocALire() As String = {"FRM_COMBINATIONS", "FRM_COMBINATIONS1", "FRM_COMBINATIONS2"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
         Dim MotCle, Argument As String
@@ -199,6 +199,9 @@ Public Class Frm_Combinaisons
     End Sub
 
     Private Sub AfficherCombinaisonsEncours()
+
+        Me.pan_Contenu.Controls.Clear()
+
         Select Case AffichageEL
             Case Enu_AffichageEL.ELU
                 Me.pan_Contenu.Controls.Add(Frm_CombinaisonsNormales.pan_Combinaisons)
@@ -209,6 +212,9 @@ Public Class Frm_Combinaisons
             Case Enu_AffichageEL.ELF
                 Me.pan_Contenu.Controls.Add(Frm_CombinaisonsNormales.pan_Combinaisons)
                 Frm_CombinaisonsNormales.InitialiserFenetre(plCombFeu, pCoefCombFeu, cls_Poutre.nbCombFeu + 1, 3, 2)
+            Case Enu_AffichageEL.Construction
+                Me.pan_Contenu.Controls.Add(Frm_CombinaisonsConstruction.pan_Combinaisons)
+                Frm_CombinaisonsConstruction.InitialiserFenetre(plCombFeu, pCoefCombFeu, cls_Poutre.nbCombFeu + 1, 3, 2)
         End Select
     End Sub
 

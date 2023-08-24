@@ -144,6 +144,22 @@ Public Class Frm_CombinaisonsNormales
         Me.img_CombiCustom01.Invalidate()
         Me.img_CombiCustom02.Invalidate()
 
+        MAJI_CadreEquation(Me.chk_Combinaison01, Me.img_Combinaison01)
+        MAJI_CadreEquation(Me.chk_Combinaison02, Me.img_Combinaison02)
+        MAJI_CadreEquation(Me.chk_Combinaison03, Me.img_Combinaison03)
+        MAJI_CadreEquation(Me.chk_Combinaison04, Me.img_Combinaison04)
+        MAJI_CadreEquation(Me.chk_CombiCustom01, Me.img_CombiCustom01)
+        MAJI_CadreEquation(Me.chk_CombiCustom02, Me.img_CombiCustom02)
+
+    End Sub
+
+    Private Sub MAJI_CadreEquation(MychkBox As CheckBox, ByRef MyImg As PictureBox)
+        If MychkBox.Checked Then
+            MyImg.BorderStyle = BorderStyle.FixedSingle
+        Else
+            MyImg.BorderStyle = BorderStyle.None
+        End If
+
     End Sub
 
     Private Sub MAJI_TypeEL()
@@ -311,7 +327,6 @@ Public Class Frm_CombinaisonsNormales
 
 #End Region
 
-
 #Region " Affichage des combinaisons dans les picturebox "
 
     Private Sub AffichageFondCustom(sender As Object, e As PaintEventArgs) Handles img_CombiCustom02.Paint, img_CombiCustom01.Paint
@@ -324,9 +339,8 @@ Public Class Frm_CombinaisonsNormales
         Select Case sender.name
             Case Me.img_CombiCustom01.Name : lSelect = Me.chk_CombiCustom01.Checked
             Case Me.img_CombiCustom02.Name : lSelect = Me.chk_CombiCustom02.Checked
-
         End Select
-
+        lSelect = False
         DrawFond(e.Graphics, lSelect, pWi, pHi)
     End Sub
 
@@ -345,6 +359,7 @@ Public Class Frm_CombinaisonsNormales
             Case Me.img_Combinaison03.Name : Indice = 3 : lSelect = Me.chk_Combinaison03.Checked
             Case Me.img_Combinaison04.Name : Indice = 4 : lSelect = Me.chk_Combinaison04.Checked
         End Select
+        'lSelect = False
 
         Select Case AffichageEL
             Case Enu_AffichageEL.ELU
@@ -388,11 +403,11 @@ Public Class Frm_CombinaisonsNormales
 
         '--> Initialisations
 
-        If lSelect Then
-            MyGr.FillRectangle(MyBrushFond, 0, 0, sWi, sHi)
-        Else
-            MyGr.FillRectangle(MyBrushNoFond, 0, 0, sWi, sHi)
-        End If
+        'If lSelect Then
+        '    MyGr.FillRectangle(MyBrushFond, 0, 0, sWi, sHi)
+        'Else
+        '    MyGr.FillRectangle(MyBrushNoFond, 0, 0, sWi, sHi)
+        'End If
 
         '--> Tracé
 
