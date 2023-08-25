@@ -474,12 +474,12 @@ Public Class Frm_BacN
         Me.txt_Name.Text = MyBac.Etiquette
         Me.lbl_EtiquetteBac.Text = MyBac.Etiquette
 
-        Me.txt_Hp.Text = GetStringInUnit(MyBac.h_p, Enu_TypeVariable.Dimension, 3, 3, False)
-        Me.txt_hpg.Text = GetStringInUnit(MyBac.h_p + MyBac.h_rs, Enu_TypeVariable.Dimension, 3, 3, False)
-        Me.txt_ep.Text = GetStringInUnit(MyBac.e_p, Enu_TypeVariable.Dimension, 3, 3, False)
-        Me.txt_Bt.Text = GetStringInUnit(MyBac.b_t, Enu_TypeVariable.Dimension, 3, 3, False)
-        Me.txt_Bb.Text = GetStringInUnit(MyBac.b_b, Enu_TypeVariable.Dimension, 3, 3, False)
-        Me.txt_tp.Text = GetStringInUnit(MyBac.tp, Enu_TypeVariable.Dimension, 3, 3, False)
+        Me.txt_Hp.Text = GetStringInUnit(MyBac.Hp, Enu_TypeVariable.Dimension, 3, 3, False)
+        Me.txt_hpg.Text = GetStringInUnit(MyBac.Hp + MyBac.h_rs, Enu_TypeVariable.Dimension, 3, 3, False)
+        Me.txt_ep.Text = GetStringInUnit(MyBac.Ep, Enu_TypeVariable.Dimension, 3, 3, False)
+        Me.txt_Bt.Text = GetStringInUnit(MyBac.Bt, Enu_TypeVariable.Dimension, 3, 3, False)
+        Me.txt_Bb.Text = GetStringInUnit(MyBac.Bb, Enu_TypeVariable.Dimension, 3, 3, False)
+        Me.txt_tp.Text = GetStringInUnit(MyBac.Tp, Enu_TypeVariable.Dimension, 3, 3, False)
 
         Me.txt_Fyp.Text = GetStringInUnit(MyBac.fyp, Enu_TypeVariable.Contrainte, 3, 1, False)
         Me.txt_MuP.Text = GetStringInUnit(MyBac.msurf, Enu_TypeVariable.SansType, 3, 1, False)
@@ -508,21 +508,21 @@ Public Class Frm_BacN
         If VerificationDonnees(sender, Valeur) Then
             Select Case sender.name
                 Case Me.txt_Hp.Name
-                    MyBac.h_p = Valeur
+                    MyBac.Hp = Valeur
                 Case Me.txt_Bb.Name
-                    MyBac.b_b = Valeur
+                    MyBac.Bb = Valeur
                 Case Me.txt_Bt.Name
-                    MyBac.b_t = Valeur
+                    MyBac.Bt = Valeur
                 Case Me.txt_ep.Name
-                    MyBac.e_p = Valeur
+                    MyBac.Ep = Valeur
                 Case Me.txt_Fyp.Name
                     MyBac.fyp = Valeur
                     'Case Me.txt_Hp.Name
                  '   MyBac. = Valeur
                 Case Me.txt_tp.Name
-                    MyBac.tp = Valeur
+                    MyBac.Tp = Valeur
                 Case Me.txt_hpg.Name
-                    MyBac.h_rs = Valeur - MyBac.h_p
+                    MyBac.h_rs = Valeur - MyBac.Hp
             End Select
         End If
 
@@ -554,7 +554,7 @@ Public Class Frm_BacN
         Select Case MyTxt.Name
             Case Me.txt_Bb.Name, Me.txt_Bt.Name
                 ValMin = 0
-                ValMax = MyBac.e_p
+                ValMax = MyBac.Ep
             Case Me.txt_ep.Name
                 ValMax = EPMAXI
                 ValMin = EPMINI
@@ -565,7 +565,7 @@ Public Class Frm_BacN
                 ValMin = HPMINI
                 ValMax = HPMAXI
             Case Me.txt_hpg.Name
-                ValMin = Math.Max(HPMINI, MyBac.h_p)
+                ValMin = Math.Max(HPMINI, MyBac.Hp)
                 ValMax = HPMAXI
             Case Me.txt_Fyp.Name
                 ValMin = FYMINI

@@ -295,7 +295,7 @@ Public Class Frm_Dalle
         '--> Epaisseur
 
         Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
-        Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.t_d - MyDalleLoc.Bac.h_p, Enu_TypeVariable.Dimension)
+        Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.t_d - MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension)
 
         Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
         Me.txt_Hh.Text = GetStringNoUnit(MyDalleLoc.t_h, Enu_TypeVariable.Dimension)
@@ -350,7 +350,7 @@ Public Class Frm_Dalle
 
     Private Sub AfficheNomBacEnCours()
         Me.txt_BacNom.Text = MyDalleLoc.Bac.Etiquette
-        Me.txt_Hp.Text = GetStringInUnit(MyDalleLoc.Bac.h_p, Enu_TypeVariable.Dimension, 4, 3, False)
+        Me.txt_Hp.Text = GetStringInUnit(MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension, 4, 3, False)
     End Sub
 
     Private Sub AfficherBacEnCours()
@@ -361,7 +361,7 @@ Public Class Frm_Dalle
 
         '--> Orientation
 
-        Select Case MyDalleLoc.Bac.orientation
+        Select Case MyDalleLoc.Bac.Orientation
             Case Cls_Bac.Enum_Orientation.Parallele
                 Me.rdb_BacParallele.Checked = True
             Case Cls_Bac.Enum_Orientation.Perpendiculaire
@@ -590,7 +590,7 @@ Public Class Frm_Dalle
 
         lRaidSup = MyBac.HasRaidisseurSup
 
-        dCar = (MyBac.e_p + MyBac.b_b) / 2
+        dCar = (MyBac.Ep + MyBac.Bb) / 2
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
 
@@ -599,7 +599,7 @@ Public Class Frm_Dalle
         xMax = MyBac.LargeurModule
 
         yMin = 0
-        yMax = MyBac.h_p
+        yMax = MyBac.Hp
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
@@ -713,7 +713,7 @@ Public Class Frm_Dalle
 
         MAJI_ChangeBac()
         If lCofraPlus220 <> lOldCfp220 Then
-            Dim Td As Decimal = Tc + MyDalleLoc.Bac.h_p
+            Dim Td As Decimal = Tc + MyDalleLoc.Bac.Hp
             MyDalleLoc.t_d = Td
             Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
         End If
@@ -863,7 +863,7 @@ Public Class Frm_Dalle
         '   Mise à jour du texte d'explication en fct de la configuration d'appui du bac
         '----------------------------------------------------------------------------------------------------------------
 
-        Select Case MyDalleLoc.Bac.orientation
+        Select Case MyDalleLoc.Bac.Orientation
             Case Cls_Bac.Enum_Orientation.Perpendiculaire
                 Select Case MyDalleLoc.Bac.AppuiT
                     Case Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
@@ -986,11 +986,11 @@ Public Class Frm_Dalle
                 Case Me.txt_Td2.Name
                     MyDalleLoc.t_d = Valeur
                     lBuild = True
-                    Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.t_d - MyDalleLoc.Bac.h_p, Enu_TypeVariable.Dimension)
+                    Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.t_d - MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension)
                     lBuild = False
 
                 Case Me.txt_Tc.Name
-                    MyDalleLoc.t_d = Valeur + MyDalleLoc.Bac.h_p
+                    MyDalleLoc.t_d = Valeur + MyDalleLoc.Bac.Hp
                     lBuild = True
                     Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
                     lBuild = False
@@ -1144,8 +1144,8 @@ Public Class Frm_Dalle
         If lBuild Then Exit Sub
 
         Select Case sender.name
-            Case Me.rdb_BacParallele.Name : MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele
-            Case Me.rdb_BacPerpendiculaire.Name : MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
+            Case Me.rdb_BacParallele.Name : MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Parallele
+            Case Me.rdb_BacPerpendiculaire.Name : MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
         End Select
         MAJI_OrientationBac()
         Me.img_Dalle.Invalidate()
@@ -1156,12 +1156,12 @@ Public Class Frm_Dalle
 
         Me.chk_L_PA1.Visible = False '   (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
         Me.chk_L_PA2.Visible = False '   (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
-        Me.chk_T_PA1.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
-        Me.chk_T_PA2.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
-        Me.chk_T_PA3.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
+        Me.chk_T_PA1.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
+        Me.chk_T_PA2.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
+        Me.chk_T_PA3.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
 
-        Me.pan_DispoConnecteur.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
-        Me.pan_ConfigurationNervures.Visible = (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
+        Me.pan_DispoConnecteur.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
+        Me.pan_ConfigurationNervures.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
     End Sub
 
     Private Sub cmb_ClasseBetonEnrobage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.SelectedIndexChanged

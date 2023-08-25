@@ -263,6 +263,157 @@ Public Class Cls_Maille
 
 #Region "  Outils calcul propriétés élastiques "
 
+    Public Sub MomentElastique(Signe As Decimal, zAxe As Decimal, Inertie As Decimal, IndexG As Integer, ByRef Mel As Decimal, ByRef lActive As Decimal)
+        '-------------------------------------------------------------------------------
+        '   24/08/2023 :    Création - POM
+        '-------------------------------------------------------------------------------
+        '   Calcul du moment élastique de la maille
+        '-------------------------------------------------------------------------------
+        '   Inertie     [E] :   Inertie de la section
+        '   zAXE        [E] :   Position axe de référence
+        '   Signe       [E] :   Signe du moment
+        '   IndexG      [E] :   Index pour le coefficient partiel
+        '   Mel         [S] :   Valeur du moment élastique
+        '   lActive     [S] :   Indique si une valeur a pu être calculée
+        '-------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim vBord As Decimal
+        Dim j As Integer
+        Dim MelI As Decimal
+        Dim lActiveI As Decimal
+
+        '--> Initialisation 
+
+        lActive = False
+        Mel = 0
+
+        '--> Traitement
+
+        If Me.Nombre > 0 Then
+            Select Case Me.TypeM
+                Case EnuTypeMaille.Rectangulaire
+
+                    For j = 0 To 1
+                        vBord = Me.zPos + Me.t / 2 - j * t - zAxe
+                        Mel_vBord(Signe, vBord, Inertie, IndexG, MelI, lActiveI)
+                        If lActiveI Then
+                            If lActive Then
+                                Mel = Signe * Math.Min(Math.Abs(Mel), Math.Abs(MelI))
+                            Else
+                                Mel = MelI
+                                lActive = True
+                            End If
+                        End If
+
+                    Next
+
+                Case EnuTypeMaille.Circulaire
+
+                    For j = 0 To 1
+                        vBord = Me.zPos + Me.Rayon / 2 - j * Rayon - zAxe
+                        Mel_vBord(Signe, vBord, Inertie, IndexG, MelI, lActiveI)
+                        If lActiveI Then
+                            If lActive Then
+                                Mel = Signe * Math.Min(Math.Abs(Mel), Math.Abs(MelI))
+                            Else
+                                Mel = MelI
+                                lActive = True
+                            End If
+                        End If
+
+                    Next
+
+                Case EnuTypeMaille.CercleConcentre
+
+                    vBord = Me.zPos - zAxe
+                    Mel_vBord(Signe, vBord, Inertie, IndexG, MelI, lActiveI)
+                    If lActiveI Then
+                        If lActive Then
+                            Mel = Signe * Math.Min(Math.Abs(Mel), Math.Abs(MelI))
+                        Else
+                            Mel = MelI
+                            lActive = True
+                        End If
+                    End If
+
+                Case EnuTypeMaille.CongeInf
+                    For j = 0 To 1
+                        vBord = Me.zPos + j * Me.Rayon - zAxe
+                        Mel_vBord(Signe, vBord, Inertie, IndexG, MelI, lActiveI)
+                        If lActiveI Then
+                            If lActive Then
+                                Mel = Signe * Math.Min(Math.Abs(Mel), Math.Abs(MelI))
+                            Else
+                                Mel = MelI
+                                lActive = True
+                            End If
+                        End If
+
+                    Next
+
+                Case EnuTypeMaille.CongeSup
+
+                    For j = 0 To 1
+                        vBord = Me.zPos - j * Me.Rayon - zAxe
+                        Mel_vBord(Signe, vBord, Inertie, IndexG, MelI, lActiveI)
+                        If lActiveI Then
+                            If lActive Then
+                                Mel = Signe * Math.Min(Math.Abs(Mel), Math.Abs(MelI))
+                            Else
+                                Mel = MelI
+                                lActive = True
+                            End If
+                        End If
+
+                    Next
+
+            End Select
+
+        End If
+
+    End Sub
+
+    Private Sub Mel_vBord(Signe As Decimal, vBord As Decimal, Inertie As Decimal, IndexG As Integer, ByRef Meli As Decimal, ByRef lActive As Boolean)
+        '-------------------------------------------------------------------------------
+        '   24/08/2023 :    Création - POM
+        '-------------------------------------------------------------------------------
+        '   Calcul du moment élastique de la maille avec une distance v au bord de maille connue
+        '-------------------------------------------------------------------------------
+        '   Inertie     [E] :   Inertie de la section
+        '   vBord       [E] :   Distance au bord de maille traité (v non nul)
+        '   Signe       [E] :   Signe du moment
+        '   IndexG      [E] :   Index pour le coefficient partiel
+        '-------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim SigneSigma As Decimal
+        Const EpsilonV As Decimal = 0.00001
+
+        '--> Initialisation
+
+        lActive = False
+        Meli = 0
+
+        '--> Traitement
+
+        If Math.Abs(vBord) > EpsilonV Then
+            SigneSigma = Math.Sign(Signe * vBord)
+
+            If DeltaFunction(1 / 2 * (1 + SigneSigma)) > 0 Then
+                'Cas où le bord de la maille est activée
+
+                Meli = Signe * Me.Fk * Inertie * Me.n / (vBord * Me.partialFactor(IndexG))
+                lActive = True
+
+            End If
+        End If
+
+    End Sub
+
+
     ''' <summary>
     ''' Moment statique de la maille
     ''' </summary>

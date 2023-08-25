@@ -303,7 +303,7 @@ Public Class Cls_Connecteur
 
         Dim MykT As Decimal
         Dim b0 As Decimal = MyBac.LargeurB0
-        Dim hP As Decimal = MyBac.h_p
+        Dim hP As Decimal = MyBac.Hp
 
         '--> Calcul
 
@@ -335,7 +335,7 @@ Public Class Cls_Connecteur
                 If MyBac.lPreperce Then
                     myKtMax = 0.75
                 Else
-                    If MyBac.tp <= 0.001 Then
+                    If MyBac.Tp <= 0.001 Then
                         myKtMax = 0.85
                     Else
                         myKtMax = 1
@@ -345,7 +345,7 @@ Public Class Cls_Connecteur
                 If MyBac.lPreperce Then
                     myKtMax = 0.6
                 Else
-                    If MyBac.tp <= 0.001 Then
+                    If MyBac.Tp <= 0.001 Then
                         myKtMax = 0.7
                     Else
                         myKtMax = 0.8
@@ -485,12 +485,12 @@ Public Class Cls_Connecteur
 
         '--> Calcul
 
-        hA = hsc - MyPoutre.Dalle.Bac.h_p
-        dp = 0.82 * MyPoutre.Dalle.Bac.h_p - d / 2
+        hA = hsc - MyPoutre.Dalle.Bac.Hp
+        dp = 0.82 * MyPoutre.Dalle.Bac.Hp - d / 2
 
         C2_min = 1
         C2_max = 1.35
-        C2 = 1.85 * MyPoutre.Dalle.Bac.h_p / MyPoutre.Dalle.Bac.LargeurB0
+        C2 = 1.85 * MyPoutre.Dalle.Bac.Hp / MyPoutre.Dalle.Bac.LargeurB0
         C2 = Math.Max(C2, C2_min)
         C2 = Math.Min(C2, C2_max)
 
@@ -502,16 +502,16 @@ Public Class Cls_Connecteur
             sy = 4 * d
         End If
 
-        If MyPoutre.Dalle.Bac.lPreperce = False And MyPoutre.Dalle.Bac.tp >= 0.001 Then
+        If MyPoutre.Dalle.Bac.lPreperce = False And MyPoutre.Dalle.Bac.Tp >= 0.001 Then
             ku = 1.25
         Else
             ku = 1
         End If
 
-        Wsc = MyPoutre.Dalle.Bac.b_t ^ 2 / 6 * (2.4 * Me.hsc + (nr - 1) * sy) 'm3
+        Wsc = MyPoutre.Dalle.Bac.Bt ^ 2 / 6 * (2.4 * Me.hsc + (nr - 1) * sy) 'm3
         Mpl_sc = (1 / 6) * Me.Fu * Me.d ^ 3 * kConvMPaPa  'Valeur en N.m
 
-        PRd = Me.kcc * C2 * ku / GammaVC * (MyPoutre.Dalle.beton.Fctk_005 * kConvMPaPa * Wsc / (MyPoutre.Dalle.Bac.h_p * nr) + ny * Mpl_sc / dp) 'N
+        PRd = Me.kcc * C2 * ku / GammaVC * (MyPoutre.Dalle.beton.Fctk_005 * kConvMPaPa * Wsc / (MyPoutre.Dalle.Bac.Hp * nr) + ny * Mpl_sc / dp) 'N
 
         Return PRd
     End Function
@@ -590,13 +590,14 @@ Public Class Cls_Connecteur
         '--> Déclaration
 
         Dim b0 As Decimal = MyBac.LargeurB0
-        Dim hP As Decimal = MyBac.h_p
+        Dim hP As Decimal = MyBac.Hp
         Dim kLMax As Decimal = 1
         Dim kL As Decimal = 0.6 * b0 / hP * (hsc / hP - 1)
 
         Return Math.Min(kL, kLMax)
 
     End Function
+
 #End Region
 
 

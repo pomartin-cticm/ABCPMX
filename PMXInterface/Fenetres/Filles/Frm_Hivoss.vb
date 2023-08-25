@@ -10,9 +10,9 @@ Public Class Frm_Hivoss
     Dim MyPoutreLoc As cls_Poutre
 
     Dim strRatioQ() As (String, Decimal)
-    Dim strChoixQ() As (String, cls_HivossParam.Enu_Q)
-    Dim strUtilisationPlancher() As (String, cls_HivossParam.Enu_UtilisationPlancher)
-    Dim strAmortissementMobilier() As (String, cls_HivossParam.Enu_Mobiliers)
+    Dim strChoixQ() As (String, cls_OptionsHivoss.Enu_Q)
+    Dim strUtilisationPlancher() As (String, cls_OptionsHivoss.Enu_UtilisationPlancher)
+    Dim strAmortissementMobilier() As (String, cls_OptionsHivoss.Enu_Mobiliers)
 
     Dim strD2Value() As (String, Decimal)
 
@@ -102,8 +102,8 @@ Public Class Frm_Hivoss
                 strChoixQ(0).Item1 = "Q1"
                 strChoixQ(1).Item1 = "Q2"
 
-                strChoixQ(0).Item2 = cls_HivossParam.Enu_Q.Q1
-                strChoixQ(0).Item2 = cls_HivossParam.Enu_Q.Q2
+                strChoixQ(0).Item2 = cls_OptionsHivoss.Enu_Q.Q1
+                strChoixQ(0).Item2 = cls_OptionsHivoss.Enu_Q.Q2
 
                 Me.lbl_UtilisationPlancher.Text = Bloc("FLOORUSE")
 
@@ -120,16 +120,16 @@ Public Class Frm_Hivoss
                 strUtilisationPlancher(8).Item1 = Bloc("FLOORUSE_INDUSTRIAL")
                 strUtilisationPlancher(9).Item1 = Bloc("FLOORUSE_SPORTS")
 
-                strUtilisationPlancher(0).Item2 = cls_HivossParam.Enu_UtilisationPlancher.ZoneSensible
-                strUtilisationPlancher(1).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Sante
-                strUtilisationPlancher(2).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Education
-                strUtilisationPlancher(3).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Residentiel
-                strUtilisationPlancher(4).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Bureau
-                strUtilisationPlancher(5).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Reunion
-                strUtilisationPlancher(6).Item2 = cls_HivossParam.Enu_UtilisationPlancher.MaisonRetraite
-                strUtilisationPlancher(7).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Hotel
-                strUtilisationPlancher(8).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Industriel
-                strUtilisationPlancher(9).Item2 = cls_HivossParam.Enu_UtilisationPlancher.Sports
+                strUtilisationPlancher(0).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.ZoneSensible
+                strUtilisationPlancher(1).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.Sante
+                strUtilisationPlancher(2).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.Education
+                strUtilisationPlancher(3).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.Residentiel
+                strUtilisationPlancher(4).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.Bureau
+                strUtilisationPlancher(5).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.Reunion
+                strUtilisationPlancher(6).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.MaisonRetraite
+                strUtilisationPlancher(7).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.Hotel
+                strUtilisationPlancher(8).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.Industriel
+                strUtilisationPlancher(9).Item2 = cls_OptionsHivoss.Enu_UtilisationPlancher.Sports
 
                 Me.lbl_AmortissementStructure.Text = Bloc("STRUCTURALDAMPING")
                 Me.lbl_PoutreAcier.Text = Bloc("STEELBEAM")
@@ -146,14 +146,14 @@ Public Class Frm_Hivoss
                 strAmortissementMobilier(6).Item1 = Bloc("DAMPINGFURN_GYM")
                 strAmortissementMobilier(7).Item1 = Bloc("DAMPINGFURN_CUSTOM")
 
-                strAmortissementMobilier(0).Item2 = cls_HivossParam.Enu_Mobiliers.BureauAvecCloison
-                strAmortissementMobilier(1).Item2 = cls_HivossParam.Enu_Mobiliers.BureauSansArmoires
-                strAmortissementMobilier(2).Item2 = cls_HivossParam.Enu_Mobiliers.BureauPaysager
-                strAmortissementMobilier(3).Item2 = cls_HivossParam.Enu_Mobiliers.Bibliotheque
-                strAmortissementMobilier(4).Item2 = cls_HivossParam.Enu_Mobiliers.Residentiel
-                strAmortissementMobilier(5).Item2 = cls_HivossParam.Enu_Mobiliers.Ecole
-                strAmortissementMobilier(6).Item2 = cls_HivossParam.Enu_Mobiliers.SalleDeSport
-                strAmortissementMobilier(7).Item2 = cls_HivossParam.Enu_Mobiliers.Personnalise
+                strAmortissementMobilier(0).Item2 = cls_OptionsHivoss.Enu_Mobiliers.BureauAvecCloison
+                strAmortissementMobilier(1).Item2 = cls_OptionsHivoss.Enu_Mobiliers.BureauSansArmoires
+                strAmortissementMobilier(2).Item2 = cls_OptionsHivoss.Enu_Mobiliers.BureauPaysager
+                strAmortissementMobilier(3).Item2 = cls_OptionsHivoss.Enu_Mobiliers.Bibliotheque
+                strAmortissementMobilier(4).Item2 = cls_OptionsHivoss.Enu_Mobiliers.Residentiel
+                strAmortissementMobilier(5).Item2 = cls_OptionsHivoss.Enu_Mobiliers.Ecole
+                strAmortissementMobilier(6).Item2 = cls_OptionsHivoss.Enu_Mobiliers.SalleDeSport
+                strAmortissementMobilier(7).Item2 = cls_OptionsHivoss.Enu_Mobiliers.Personnalise
 
                 ReDim strD2Value(5)
 
@@ -546,7 +546,7 @@ Public Class Frm_Hivoss
 
         MAJI_CoefficientsAmortissementD()
 
-        If MyPoutreLoc.Param.HivossParam.Mobilier = cls_HivossParam.Enu_Mobiliers.Personnalise Then
+        If MyPoutreLoc.Param.HivossParam.Mobilier = cls_OptionsHivoss.Enu_Mobiliers.Personnalise Then
             l_img_actif = False
             MAJI_img_cmb_D3()
         Else

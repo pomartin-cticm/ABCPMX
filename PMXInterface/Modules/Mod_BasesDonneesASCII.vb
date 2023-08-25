@@ -143,7 +143,7 @@ Module Mod_BasesDonneesASCII
                     'ListeBac.Add(New Cls_Bac(Etiquette, b1, b2, h, e, M, fy, lCustom))
                     ListeBac.Add(New Cls_Bac(Fabricant, Etiquette, b1, b2, h, hrs, e, t, M, fy, wModule, Ieff))
 
-                    ListeBac(ListeBac.Count - 1).tp = t
+                    ListeBac(ListeBac.Count - 1).Tp = t
                     ListeBac(ListeBac.Count - 1).h_rs = hrs
                 End If
             End If

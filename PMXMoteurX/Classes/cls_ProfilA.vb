@@ -612,7 +612,7 @@ Public Class cls_ProfilA
 
         '--> Moment élastique
 
-        'MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+        MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
 
     End Sub
 

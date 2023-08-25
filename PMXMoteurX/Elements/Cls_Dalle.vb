@@ -149,7 +149,7 @@
                 perimU = 2 * Me.Beff - Bfs + Me.t_h / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd))
 
             Case Enum_TypeDalle.Mixte
-                Ac = Me.Beff * (Me.EpaisseurActive + Bac.h_p * Bac.LargeurBmoyenne / Bac.e_p)
+                Ac = Me.Beff * (Me.EpaisseurActive + Bac.Hp * Bac.LargeurBmoyenne / Bac.Ep)
                 perimU = Me.Beff
 
         End Select
@@ -213,7 +213,7 @@
             MyzTop = Me.EpRenformis + Me.t_d
 
             If (Me.type = Enum_TypeDalle.Mixte) Then
-                If (Me.Bac.lCofraplus220) Then MyzTop -= Me.Bac.h_p
+                If (Me.Bac.lCofraplus220) Then MyzTop -= Me.Bac.Hp
             End If
 
             Return MyzTop
@@ -229,9 +229,9 @@
             Dim Ep As Decimal
             Select Case Me.type
                 Case Enum_TypeDalle.Mixte
-                    Select Case Me.Bac.orientation
+                    Select Case Me.Bac.Orientation
                         Case Cls_Bac.Enum_Orientation.Parallele
-                            Ep = Me.t_d - Me.Bac.h_p
+                            Ep = Me.t_d - Me.Bac.Hp
                         Case Cls_Bac.Enum_Orientation.Perpendiculaire
                             Ep = Me.t_d - Me.Bac.Hauteur_hpg
                     End Select

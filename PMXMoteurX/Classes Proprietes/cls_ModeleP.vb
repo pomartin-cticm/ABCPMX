@@ -361,6 +361,52 @@ Public Class cls_ModeleP
     End Function
 
     ''' <summary>
+    ''' Calcul du moment élastique
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function MomentElastique(Signe As Decimal, zAxe As Decimal, Inertie As Decimal, lValeurRd As Boolean) As Decimal
+        '-------------------------------------------------------------------------------
+        '   24/08/2023 :    Création - POM
+        '-------------------------------------------------------------------------------
+        '   Calcul du moment élastique d'un maillage
+        '-------------------------------------------------------------------------------
+        '   Inertie     [E] :   Inertie de la section
+        '   zAXE        [E] :   Position axe de référence
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Indique si valeur de calcul ou valeur caractéristique
+        '-------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim i, IndexD As Integer
+        Dim MelRd As Decimal = 0
+        Dim MelI As Decimal
+        Dim lActive, lResult As Boolean
+
+        '--> Initialisation
+
+        lResult = False
+        If lValeurRd Then IndexD = 0 Else IndexD = 1
+
+        '--> Boucle sur les mailles
+
+        For i = 0 To Me.Mailles.Count - 1
+            Me.Mailles(i).MomentElastique(Signe, zAxe, Inertie, IndexD, MelI, lActive)
+            If lActive Then
+                If lResult Then
+                    MelRd = Signe * Math.Min(Math.Abs(MelRd), Math.Abs(MelI))
+                Else
+                    lResult = True
+                    MelRd = MelI
+                End If
+            End If
+        Next
+
+        '--
+        Return MelRd * kConvMPaPa
+    End Function
+
+    ''' <summary>
     ''' Calcul de l'inertie des éléments du modèle
     ''' </summary>
     ''' <param name="Signe">    [E] Signe du moment     </param>

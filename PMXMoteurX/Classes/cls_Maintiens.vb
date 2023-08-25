@@ -1,10 +1,10 @@
 ﻿Public Class cls_Maintiens
 
-#Region "Enumération"
+#Region " Enumération "
 
 #End Region
 
-#Region "Variables"
+#Region " Variables "
 
     ''' <summary>
     ''' Position du maintiens

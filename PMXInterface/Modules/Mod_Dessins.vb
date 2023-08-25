@@ -139,7 +139,7 @@ Module Mod_Dessins
             Case Cls_Dalle.Enum_TypeDalle.Pleine
                 DessinDallePleine(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
             Case Cls_Dalle.Enum_TypeDalle.Mixte
-                Select Case MyDalle.Bac.orientation
+                Select Case MyDalle.Bac.Orientation
                     Case Cls_Bac.Enum_Orientation.Parallele
                         DessineDalleMixteParallele(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
                     Case Cls_Bac.Enum_Orientation.Perpendiculaire
@@ -207,7 +207,7 @@ Module Mod_Dessins
 
         Dim Chaine As String
         Dim lDalleMixte As Boolean = (MyDalle.type = Cls_Dalle.Enum_TypeDalle.Mixte)
-        Dim dCar2 As Decimal = MyDalle.Bac.h_p / 2
+        Dim dCar2 As Decimal = MyDalle.Bac.Hp / 2
 
         '--> Cotations
 
@@ -296,7 +296,7 @@ Module Mod_Dessins
 
             xCoteZ = -BeffG + dCar
 
-            yo = MyDalle.Bac.h_p
+            yo = MyDalle.Bac.Hp
             ye = MyDalle.zTop
 
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
@@ -311,7 +311,7 @@ Module Mod_Dessins
             MyPen.Color = MyColor
 
             yo = 0
-            ye = MyDalle.Bac.h_p
+            ye = MyDalle.Bac.Hp
 
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
             AddLigne(MyGr, MyPen, xCoteZ, yo - dCar / 2, xCoteZ, yo, MyParAffA)
@@ -647,16 +647,16 @@ Module Mod_Dessins
 
         lRaidSup = MyBac.HasRaidisseurSup
         If lUn Then
-            dCar = Math.Sqrt(MyBac.h_p ^ 2 + MyBac.e_p ^ 2) / 16
+            dCar = Math.Sqrt(MyBac.Hp ^ 2 + MyBac.Ep ^ 2) / 16
         Else
-            dCar = (MyBac.e_p + MyBac.b_b) / 2
+            dCar = (MyBac.Ep + MyBac.Bb) / 2
         End If
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
 
         If lUn Then
-            xMin = -MyBac.e_p / 2
-            xMax = MyBac.e_p / 2
+            xMin = -MyBac.Ep / 2
+            xMax = MyBac.Ep / 2
         Else
             xMin = 0
             xMax = MyBac.LargeurModule
@@ -732,11 +732,11 @@ Module Mod_Dessins
 
         '--> Initialisation
 
-        eP = MyBac.e_p
-        hP = MyBac.h_p
-        btP = MyBac.b_t
-        bbP = MyBac.b_b
-        tP = MyBac.tp * kTP
+        eP = MyBac.Ep
+        hP = MyBac.Hp
+        btP = MyBac.Bt
+        bbP = MyBac.Bb
+        tP = MyBac.Tp * kTP
         hPg = MyBac.Hauteur_hpg
 
         '--> Cotes
@@ -2783,15 +2783,15 @@ Module Mod_Dessins
 
         '--> Dessin des éléments
 
-        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele Then
+        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Parallele Then
 
             '--> Dessin du bac acier
 
             With MyPoutreLoc.Dalle.Bac
 
                 '--> Preparation de la zone d'affichage - Calcul de ParAff
-                xMin = - .e_p / 2
-                xMax = .e_p / 2
+                xMin = - .Ep / 2
+                xMax = .Ep / 2
 
                 yMin = -MyPoutreLoc.Section.ProfilA.t_fs
                 yMax = Math.Max(MyPoutreLoc.Dalle.t_d, MyPoutreLoc.Dalle.Connecteur.hsc)
@@ -4348,7 +4348,7 @@ Module Mod_Dessins
 
         Dim MyPenContour As New Pen(Color.Black, 1)
 
-        Dim Hp As Decimal = MyDalle.Bac.h_p
+        Dim Hp As Decimal = MyDalle.Bac.Hp
         Dim xPts(), yPts() As Single
         Dim nbPts As Integer
         Dim Bfs As Decimal = MyProfil.b_fs
@@ -4411,7 +4411,7 @@ Module Mod_Dessins
 
         Dim MyPenContour As New Pen(Color.Black, 1)
         Dim Td As Decimal = MyDalle.t_d
-        Dim Hp As Decimal = MyDalle.Bac.h_p
+        Dim Hp As Decimal = MyDalle.Bac.Hp
         Dim xo, yo As Decimal
         Dim xe, ye As Decimal
         'Dim wApp As Decimal
@@ -4543,11 +4543,11 @@ Module Mod_Dessins
         '--> Initialisaiton
 
         nbPts = 0
-        eP = MyDalle.Bac.e_p
-        hP = MyDalle.Bac.h_p
+        eP = MyDalle.Bac.Ep
+        hP = MyDalle.Bac.Hp
         hPg = MyDalle.Bac.Hauteur_hpg
-        bb = MyDalle.Bac.b_b
-        bt = MyDalle.Bac.b_t
+        bb = MyDalle.Bac.Bb
+        bt = MyDalle.Bac.Bt
         bEff = MyDalle.Beff
         DeltaB = (bt - bb) / 2
 
@@ -4782,11 +4782,11 @@ Module Mod_Dessins
         '--> Initialisaiton
 
         nbPts = 0
-        eP = MyDalle.Bac.e_p
-        hP = MyDalle.Bac.h_p
+        eP = MyDalle.Bac.Ep
+        hP = MyDalle.Bac.Hp
         hPg = MyDalle.Bac.Hauteur_hpg
-        bb = MyDalle.Bac.b_b
-        bt = MyDalle.Bac.b_t
+        bb = MyDalle.Bac.Bb
+        bt = MyDalle.Bac.Bt
         DeltaB = (bt - bb) / 2
 
         lRaid = (((hPg - hP) / hP) > 0.05)

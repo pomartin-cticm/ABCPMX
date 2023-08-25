@@ -169,7 +169,7 @@
     ''' </summary>
     Public ReadOnly Property Esp_longi_bac As Decimal
         Get
-            Return Me.Dalle.Bac.e_p
+            Return Me.Dalle.Bac.Ep
         End Get
     End Property
 
@@ -283,11 +283,11 @@
 #Region " CONSTRUCTEURS "
 
     Private Sub InitialiseChargements()
-        Me.ChargesU.Add("QC", New Cls_ChargementUtilisateur("Charges de construction", Me.IndiceDerniereTravee))
         Me.ChargesU.Add("G1", New Cls_ChargementUtilisateur("Poids propre", Me.IndiceDerniereTravee))
         Me.ChargesU.Add("G2", New Cls_ChargementUtilisateur("Autres charges permanentes", Me.IndiceDerniereTravee))
         Me.ChargesU.Add("Q1", New Cls_ChargementUtilisateur("Charges d'expoitation 1", Me.IndiceDerniereTravee))
         Me.ChargesU.Add("Q2", New Cls_ChargementUtilisateur("Charges d'expoitation 2", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("QC", New Cls_ChargementUtilisateur("Charges de construction", Me.IndiceDerniereTravee))
     End Sub
 
     Private Sub InitialiseTablesCombi()
@@ -332,6 +332,7 @@
         PoutreDefautAcier()
         InitialiseChargements()
         InitialiseTablesCombi()
+
     End Sub
 
     Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String)
@@ -1228,8 +1229,6 @@
 
     End Sub
 
-
 #End Region
-
 
 End Class

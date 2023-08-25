@@ -115,7 +115,7 @@ Public Class Cls_OptionsCalcul
     ''' <summary>
     ''' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
     ''' </summary>
-    Public HivossParam As cls_HivossParam
+    Public HivossParam As cls_OptionsHivoss
 
     ''' <summary>
     ''' Norme de calcul
@@ -132,7 +132,7 @@ Public Class Cls_OptionsCalcul
         Gamma = New Cls_Gamma
 
         '--> Coefficients pour le calcul en dynamique
-        HivossParam = New cls_HivossParam
+        HivossParam = New cls_OptionsHivoss
 
         '--> Paramètres de calcul par défaut
         Me.lCalcul_Flexion_Positive = True

@@ -481,12 +481,11 @@ Public Class cls_Section
 
         InertieY = MyModele.InertieFlexion(Signe, zANE)
 
-        '--> Moment plastique
+        '--> Moment élastique
 
-        'MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+        MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
 
     End Sub
-
 
     Public Sub ProprietesElastiquesMixteMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, nEqEc As Decimal, nEqDalle As Decimal,
                                             bEff As Decimal, MyDalle As Cls_Dalle,
@@ -623,9 +622,9 @@ Public Class cls_Section
 
         InertieY = MyModele.InertieFlexion(Signe, zANE)
 
-        '--> Moment plastique
+        '--> Moment élastique
 
-        'MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+        MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
 
     End Sub
 
@@ -713,6 +712,7 @@ Public Class cls_Section
         'MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
 
     End Sub
+
     Public Function InertieT()
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
@@ -754,6 +754,7 @@ Public Class cls_Section
         Return pInertieT
 
     End Function
+
 #End Region
 
 #Region " Propiétés générales de la section "
@@ -957,7 +958,7 @@ Public Class cls_Section
             dalle.beton.Calcul_Proprietes()
 
             If dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte Then
-                Param.Prop_Elastique_Dalle.h_0 = 2 * (dalle.t_d - dalle.Bac.h_p)
+                Param.Prop_Elastique_Dalle.h_0 = 2 * (dalle.t_d - dalle.Bac.Hp)
             Else ' dalle pleine
                 Param.Prop_Elastique_Dalle.h_0 = dalle.t_d
             End If
@@ -1337,7 +1338,7 @@ Public Class cls_Section
 
 #End Region
 
-#Region "   Recherche d'un acier compatible dans la base de données "
+#Region " Recherche d'un acier compatible dans la base de données "
 
     Public Sub AssocieAcierCompatible(ByVal FileSteels As String, ByVal FileProfiles As String, ByRef lTrouve As Boolean)
         '--------------------------------------------------------------------------------

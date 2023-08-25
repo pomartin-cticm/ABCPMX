@@ -92,6 +92,12 @@ Imports PMXMoteur2
         DeltaV = (InertieY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
+        '# Moment élastique
+
+        ValRef = 197759
+        DeltaV = (MelRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
         '--> Tests des propriétés élastiques / axe ZZ
 
         MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, Inertiez, MelRd)
@@ -181,7 +187,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés élastiques / axe YY du profilé acier seul
 
-        MySection.ProprietesElastiquesMyy(1, True, MyGamma, 1, zANE, InertieY, MelRd)
+        MySection.ProprietesElastiquesMyy(1, False, MyGamma, 1, zANE, InertieY, MelRd)
 
         '# Position ANE
 
@@ -193,6 +199,12 @@ Imports PMXMoteur2
 
         ValRef = 42930 * 10 ^ (-8)
         DeltaV = (InertieY - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Moment élastique
+
+        ValRef = 613286
+        DeltaV = (MelRd - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '--> Tests autres propriétés
@@ -267,6 +279,19 @@ Imports PMXMoteur2
         ValRef = 52814 * 10 ^ (-8)
         DeltaV = (InertieY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 30)       '3%
+
+        '# Moment élastique Rd
+
+        ValRef = 307957
+        DeltaV = (MelRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 10)       '1%
+
+        '# Moment élastique Rk
+
+        MySection.ProprietesElastiquesMyy(1, False, MyGamma, nEqEc, zANE, InertieY, MelRd)
+        ValRef = 461936
+        DeltaV = (MelRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 10)       '1%
 
         '--> Tests autres propriétés
 
@@ -673,7 +698,7 @@ Imports PMXMoteur2
         MyDalle.type = Cls_Dalle.Enum_TypeDalle.Mixte
         MyDalle.t_d = 0.12
         MyDalle.Bac.InitialiseCofraPlus60()
-        MyDalle.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
+        MyDalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
 
         '--> Tests des propriétés plastiques
 

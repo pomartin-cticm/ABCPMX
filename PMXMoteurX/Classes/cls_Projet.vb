@@ -332,12 +332,12 @@ Public Class cls_Projet
                         Lines.Add("   Producteur     =  " & .Producteur)
                         Lines.Add("   lDatabase      =  " & .lDatabase)
                         Lines.Add("   h_rs           =  " & .h_rs)
-                        Lines.Add("   h_p            =  " & .h_p)
-                        Lines.Add("   b_b            =  " & .b_b)
-                        Lines.Add("   b_t            =  " & .b_t)
-                        Lines.Add("   e_p            =  " & .e_p)
-                        Lines.Add("   tp             =  " & .tp)
-                        Lines.Add("   orientation    =  " & .orientation)
+                        Lines.Add("   h_p            =  " & .Hp)
+                        Lines.Add("   b_b            =  " & .Bb)
+                        Lines.Add("   b_t            =  " & .Bt)
+                        Lines.Add("   e_p            =  " & .Ep)
+                        Lines.Add("   tp             =  " & .Tp)
+                        Lines.Add("   orientation    =  " & .Orientation)
                         Lines.Add("   msurf          =  " & .msurf)
                         Lines.Add("   fyp            =  " & .fyp)
                         Lines.Add("   LargeurModule  =  " & .LargeurModule)
@@ -664,7 +664,7 @@ Public Class cls_Projet
 
                 Case "OPT_CALCULS_HIVOSS"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim hivoss_opt_calculs As cls_HivossParam
+                    Dim hivoss_opt_calculs As cls_OptionsHivoss
                     ReadBlocHivossOptionsCalculs(hivoss_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param.HivossParam = hivoss_opt_calculs
 
@@ -1285,12 +1285,12 @@ Public Class cls_Projet
                         Case "PRODUCTEUR" : .Producteur = Mots(nbMots)
                         Case "LDATABASE" : .lDatabase = Mots(nbMots)
                         Case "H_RS" : .h_rs = TraiteReal(Mots(nbMots))
-                        Case "H_P" : .h_p = TraiteReal(Mots(nbMots))
-                        Case "B_B" : .b_b = TraiteReal(Mots(nbMots))
-                        Case "B_T" : .b_t = TraiteReal(Mots(nbMots))
-                        Case "E_P" : .e_p = TraiteReal(Mots(nbMots))
-                        Case "TP" : .tp = TraiteReal(Mots(nbMots))
-                        Case "ORIENTATIO" : .orientation = Mots(nbMots)
+                        Case "H_P" : .Hp = TraiteReal(Mots(nbMots))
+                        Case "B_B" : .Bb = TraiteReal(Mots(nbMots))
+                        Case "B_T" : .Bt = TraiteReal(Mots(nbMots))
+                        Case "E_P" : .Ep = TraiteReal(Mots(nbMots))
+                        Case "TP" : .Tp = TraiteReal(Mots(nbMots))
+                        Case "ORIENTATIO" : .Orientation = Mots(nbMots)
                         Case "MSURF" : .msurf = TraiteReal(Mots(nbMots))
                         Case "FYP" : .fyp = TraiteReal(Mots(nbMots))
                         Case "LARGEURMOD" : .LargeurModule = TraiteReal(Mots(nbMots))
@@ -1618,7 +1618,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocHivossOptionsCalculs(hivoss_opt_calculs As cls_HivossParam, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocHivossOptionsCalculs(hivoss_opt_calculs As cls_OptionsHivoss, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration

@@ -32,12 +32,12 @@ Imports PMXMoteur2
             .Dalle.beton.Calcul_Proprietes()
 
             'CofraPlus 60
-            .Dalle.Bac.h_p = 58 / 1000
+            .Dalle.Bac.Hp = 58 / 1000
             .Dalle.Bac.h_rs = 0 / 1000
-            .Dalle.Bac.e_p = 207 / 1000
-            .Dalle.Bac.b_t = 101 / 1000
-            .Dalle.Bac.b_b = 62 / 1000
-            .Dalle.Bac.tp = 0.75 / 1000
+            .Dalle.Bac.Ep = 207 / 1000
+            .Dalle.Bac.Bt = 101 / 1000
+            .Dalle.Bac.Bb = 62 / 1000
+            .Dalle.Bac.Tp = 0.75 / 1000
             .Dalle.Bac.fyp = 350
 
         End With
@@ -143,8 +143,6 @@ Imports PMXMoteur2
 
     End Sub
 
-
-
     <TestMethod()> Public Sub TestMethod_PRd_G2()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   02/08/23 :  Création GUD
@@ -173,12 +171,12 @@ Imports PMXMoteur2
             .Dalle.beton.Calcul_Proprietes()
 
             'CofraPlus 60
-            .Dalle.Bac.h_p = 58 / 1000
+            .Dalle.Bac.Hp = 58 / 1000
             .Dalle.Bac.h_rs = 0 / 1000
-            .Dalle.Bac.e_p = 207 / 1000
-            .Dalle.Bac.b_t = 101 / 1000
-            .Dalle.Bac.b_b = 62 / 1000
-            .Dalle.Bac.tp = 0.75 / 1000
+            .Dalle.Bac.Ep = 207 / 1000
+            .Dalle.Bac.Bt = 101 / 1000
+            .Dalle.Bac.Bb = 62 / 1000
+            .Dalle.Bac.Tp = 0.75 / 1000
             .Dalle.Bac.fyp = 350
 
         End With
@@ -266,8 +264,6 @@ Imports PMXMoteur2
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-
     End Sub
-
 
 End Class

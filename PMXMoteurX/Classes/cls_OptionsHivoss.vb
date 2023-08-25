@@ -1,6 +1,6 @@
-﻿Public Class cls_HivossParam
+﻿Public Class cls_OptionsHivoss
 
-#Region "Enum"
+#Region " Enumérations "
     ''' <summary>
     ''' Indique si on utilise Q1 ou Q2 dans la combinaison de masses pour la fréquence
     ''' </summary>
@@ -38,7 +38,7 @@
 
 #End Region
 
-#Region "Variables"
+#Region " Variables "
 
     ''' <summary>
     ''' Indique si on applique la méthode Hivoss (=True) ou non (False)
@@ -96,7 +96,8 @@
     Public AmortiTotal_Dtot As Decimal
 
 #End Region
-#Region "Constructeur"
+
+#Region " Constructeur "
     Sub New()
         Me.lHivossMethod = True
         Me.ratioQ = 0.1
@@ -109,9 +110,10 @@
         CalculAmortissement()
 
     End Sub
+
 #End Region
 
-#Region "Calculs Amortissement"
+#Region " Calculs Amortissement "
     ''' <summary>
     ''' Calcul les différentes valeurs des amortissements en fonction des différentes paramètres renseignés
     ''' </summary>
@@ -153,7 +155,7 @@
 
 #End Region
 
-#Region "Fonction de copie"
+#Region " Fonction de copie "
     Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function

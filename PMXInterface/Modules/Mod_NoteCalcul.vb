@@ -755,7 +755,7 @@ Module Mod_NoteCalcul
         If MyBeam.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte Then
             AddTitreNdC(3, Bloc("PROFILED_STEEL_SH"))
 
-            If MyBeam.Dalle.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele Then
+            If MyBeam.Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Parallele Then
                 AddLigneNDC(TABW2 & Bloc("ORIENTATION_SHEET") & TABAFF & Bloc("LONGITUDINAL"))
             Else
                 AddLigneNDC(TABW2 & Bloc("ORIENTATION_SHEET") & TABAFF & Bloc("TRANSVERSAL"))
@@ -775,17 +775,17 @@ Module Mod_NoteCalcul
 
             With MyBeam.Dalle.Bac
 
-                AddLigneNDC(TABW2 & Bloc("TP_PSS") & TABAFF & "t\-p\= = " & GetStringInUnit(.tp, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("EP_PSS") & TABAFF & "e\-p\= = " & GetStringInUnit(.e_p, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("HP_PSS") & TABAFF & "h\-p\= = " & GetStringInUnit(.h_p, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & Bloc("TP_PSS") & TABAFF & "t\-p\= = " & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & Bloc("EP_PSS") & TABAFF & "e\-p\= = " & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & Bloc("HP_PSS") & TABAFF & "h\-p\= = " & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & Bloc("HPG_PSS") & TABAFF & "h\-pg\= = " & GetStringInUnit(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("BB_PSS") & TABAFF & "b\-b\= = " & GetStringInUnit(.b_b, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("BT_PSS") & TABAFF & "b\-t\= = " & GetStringInUnit(.b_t, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & Bloc("BB_PSS") & TABAFF & "b\-b\= = " & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & Bloc("BT_PSS") & TABAFF & "b\-t\= = " & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & Bloc("MUP_PSS") & TABAFF & "\Sm\s\-p\= = " & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
                 AddLigneNDC(TABW2 & Bloc("FP_PSS") & TABAFF & "f\-p\= = " & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
                 AddLigneNDC(TABW2 & Bloc("IPU_PSS") & TABAFF & "I\-pu\= = " & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
 
-                If .orientation = Cls_Bac.Enum_Orientation.Parallele Then
+                If .Orientation = Cls_Bac.Enum_Orientation.Parallele Then
                     If .AppuiL = Cls_Bac.EnuConfigLAppui.BacCoupe Then
                         AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("CUT_DECK"))
                     Else
@@ -884,7 +884,7 @@ Module Mod_NoteCalcul
                     If nbLigneSautePage >= MAXLIGNEPPAG Then SautePage()
 
                     Dim lDalleMixteEtPerp As Boolean = False
-                    If .Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And .Dalle.Bac.orientation = Cls_Bac.Enum_Orientation.Perpendiculaire Then
+                    If .Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And .Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire Then
                         lDalleMixteEtPerp = True
                     End If
 
@@ -1618,20 +1618,14 @@ Module Mod_NoteCalcul
 
     Private Sub AddLigneNDC(ByVal Ligne As String, ByVal NbMiniLignes As Integer)
         '----------------------------------------------------------------------------------------
-        '
         '   20/01/09 :  Création - Version 1.00 Beta 3 - POM
-        '
         '----------------------------------------------------------------------------------------
-        '
         '   Ajoute une ligne dans la note de calcul
         '   La ligne doit être suivie d'un nombre de ligne imposée dans la même page
-        '
         '----------------------------------------------------------------------------------------
-        '
         '   Ligne           [E] :   Texte à rajouter dans la note de calcul
         '   NbMiniLignes    [E] :   Nombre minimal de lignes devant figurer sous le texte,
         '                           dans la même page
-        '
         '----------------------------------------------------------------------------------------
 
         nbLignes += 1
