@@ -74,8 +74,7 @@ Module Mod_Demarrage
 
         '--> Langues
 
-        LogicielInfo.ListeLangue = {"English", "Français"}
-        LogicielInfo.ListeLangueNDC = {"English", "Français"}
+        InitialiseLangues()
 
         '--> Normes
 
@@ -206,7 +205,7 @@ Module Mod_Demarrage
 
         '--> MAJ des noms de fichiers langue
 
-        InitialiseLNGFileName()
+        InitialiseLNGFileName(LogicielOptions.IndLangue, LogicielFichiers.Langue)
         InitialiseLNGFileName_NDC()
 
         ' '--> MAJ du nom fichier icones
@@ -222,6 +221,76 @@ Module Mod_Demarrage
     <Conditional("DEBUG")> Private Sub InitialiseDebug()
         lDebug = True
         LogicielOptions.lDebug = True
+    End Sub
+
+    Private Sub InitialiseLangues()
+        '--------------------------------------------------------------------------------------------------------
+        '   25/08/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------
+        '   Initialisation des langues disponibles
+        '--------------------------------------------------------------------------------------------------------
+        '--------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyRep As String = LogicielRep.Install
+        Dim NbLangues As Integer
+
+        '--> Initialisation
+
+        LogicielInfo.ListeLangue = {"English", "Français"}
+        LogicielInfo.ListeLangueNDC = {"English", "Français"}
+
+        If lDebug Then MyRep = MyRep & "\..\..\Langues"
+
+        '--> Récupération des langues disponibles
+
+        InitialiseLangue(MyRep, "ABCPMX", LogicielInfo.ListeLangue, nblangues)
+        If NbLangues = 0 Then
+            MsgBox("Erreur fichiers langues non disponibles | Error language files missing", MsgBoxStyle.Critical, "Mod_Demmarage/InitialiseLangues")
+            Stop
+        End If
+
+        InitialiseLangue(MyRep, "ABCPMX_NdC", LogicielInfo.ListeLangueNDC, NbLangues)
+        If NbLangues = 0 Then
+            MsgBox("Erreur fichiers langues NdC non disponibles | Error NdC language files missing", MsgBoxStyle.Critical, "Mod_Demmarage/InitialiseLangues")
+            Stop
+        End If
+
+
+    End Sub
+
+    Private Sub InitialiseLangue(RepInstall As String, Racine As String, ByRef ListeLangue() As String, ByRef nbLangues As Integer)
+        '--------------------------------------------------------------------------------------------------------
+        '   25/08/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------
+        '   Initialisation des langues disponibles
+        '--------------------------------------------------------------------------------------------------------
+        '   RepInstall  [E] :   Répertoire d'installation
+        '   Racine      [E] :   Racine du fichier langue
+        '   ListeLangue [S] :   Tableau des langues disponibles dans le répertoire d'installation
+        '   nbLangues   [S] :   Nombre de langues disponibles
+        '--------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim tabLangues As New List(Of String)
+        Dim tabAbb As New List(Of String)
+
+        '--> Récupération des langues disponibles 
+
+        RechercheLangue(RepInstall, Racine, tabLangues, tabAbb)
+
+        nbLangues = tabLangues.Count
+
+        If nbLangues > 0 Then
+            ReDim ListeLangue(nbLangues - 1)
+            For i As Integer = 0 To nbLangues - 1
+                ListeLangue(i) = tabLangues(i)
+            Next
+        End If
+
+
     End Sub
 
     Public Sub InitialisationBasesDonnees()
@@ -438,13 +507,13 @@ Module Mod_Demarrage
         '----------------------------------------------------------------------------
 
         MyProfile.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
-        MyProfile.b_fs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
-        MyProfile.b_fi = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
-        MyProfile.t_fs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
-        MyProfile.t_fi = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
-        MyProfile.t_w = MyCatalogue.Series(Gamme).Profiles(Profile).Tw
-        MyProfile.r_ci = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
-        MyProfile.r_cs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
+        MyProfile.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
+        MyProfile.Bfi = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
+        MyProfile.Tfs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
+        MyProfile.Tfi = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
+        MyProfile.Tw = MyCatalogue.Series(Gamme).Profiles(Profile).Tw
+        MyProfile.Rci = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
+        MyProfile.Rcs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
 
         ReDim MyProfile.IndStandart(MyCatalogue.nbStandard)
         For i As Integer = 0 To MyCatalogue.nbStandard - 1
@@ -482,7 +551,7 @@ Module Mod_Demarrage
         Dim iAcier As Integer
         Dim MySteels As New List(Of strucAcierLocal)
         Dim iStd As Short
-        Dim EpMax As Decimal = Math.Max(MyPoutre.Section.ProfilA.t_fs, MyPoutre.Section.ProfilA.t_w)
+        Dim EpMax As Decimal = Math.Max(MyPoutre.Section.ProfilA.Tfs, MyPoutre.Section.ProfilA.Tw)
 
         ExtraireAciersCompatibles(EpMax, MyPoutre.Section.ProfilA.IndStandart, MySteels)
 
@@ -621,22 +690,30 @@ Module Mod_Demarrage
     ''' <summary>
     ''' Mise à jour du nom du fichier langue Interface
     ''' </summary>
-    Public Sub InitialiseLNGFileName()
+    Public Sub InitialiseLNGFileName(IndLangue As Integer, ByRef FichierLangue As String)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   25/08/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Initialisation du fichier langue en fct du choix utilisateur
+        '-----------------------------------------------------------------------------------------------------------------
+        '   IndLangue       [E] :   Indice de la langue (choisie par l'utilisateur ou option logiciel)
+        '   FichierLangue   [S] :   Fichier langue pour l'interface
+        '-----------------------------------------------------------------------------------------------------------------
 
-        If (LogicielInfo.ListeLangue.Count > 0) AndAlso (LogicielOptions.IndLangue >= 0) AndAlso (LogicielOptions.IndLangue < LogicielInfo.ListeLangue.Count) Then
+        If (LogicielInfo.ListeLangue.Count > 0) AndAlso (IndLangue >= 0) AndAlso (IndLangue < LogicielInfo.ListeLangue.Count) Then
 
-            If lDebug Then
-                LogicielFichiers.Langue = LogicielRep.Install & "\..\..\Langues\" & LogicielInfo.Racine & "_" &
-                                          LogicielInfo.ListeLangue(LogicielOptions.IndLangue).Substring(0, 2).ToUpper & ".lng"
+            If LogicielOptions.lDebug Then
+                FichierLangue = LogicielRep.Install & "\..\..\Langues\" & LogicielInfo.Racine & "_" &
+                                LogicielInfo.ListeLangue(IndLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
 
             Else
-                LogicielFichiers.Langue = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_" &
-                                          LogicielInfo.ListeLangue(LogicielOptions.IndLangue).Substring(0, 2).ToUpper & ".lng"
+                FichierLangue = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_" &
+                                LogicielInfo.ListeLangue(IndLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
 
             End If
 
         Else
-            LogicielFichiers.Langue = String.Empty
+            FichierLangue = String.Empty
         End If
 
     End Sub
@@ -650,10 +727,10 @@ Module Mod_Demarrage
 
             If lDebug Then
                 LogicielFichiers.LangueNDC = LogicielRep.Install & "\..\..\Langues\" & LogicielInfo.Racine & "_NDC_" _
-                                           & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
+                                           & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & EXTENSIONLANGUE
             Else
                 LogicielFichiers.LangueNDC = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_NDC_" _
-                                           & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & ".lng"
+                                           & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & EXTENSIONLANGUE
             End If
 
         Else

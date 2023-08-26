@@ -43,32 +43,32 @@ Public Class cls_ProfilA
     ''' <summary>
     ''' largeur de la semelle supérieure (m)
     ''' </summary>
-    Public b_fs As Decimal
+    Public Bfs As Decimal
 
     ''' <summary>
     ''' épaisseur de la semelle supérieure (m)
     ''' </summary>
-    Public t_fs As Decimal
+    Public Tfs As Decimal
 
     ''' <summary>
     ''' largeur de la semelle inférieure (m)
     ''' </summary>
-    Public b_fi As Decimal
+    Public Bfi As Decimal
 
     ''' <summary>
     ''' épaisseur de la semelle inférieure (m)
     ''' </summary>
-    Public t_fi As Decimal
+    Public Tfi As Decimal
 
     ''' <summary>
     ''' rayon du congé de raccordement supérieur (m)
     ''' </summary>
-    Public r_cs As Decimal
+    Public Rcs As Decimal
 
     ''' <summary>
     ''' rayon du congé de raccordement inférieur (m)
     ''' </summary>
-    Public r_ci As Decimal
+    Public Rci As Decimal
 
     ''' <summary>
     ''' hauteur totale de l’âme, mesurée entre le nu intérieur des semelles (m)
@@ -78,12 +78,12 @@ Public Class cls_ProfilA
     ''' <summary>
     ''' épaisseur de l'âme (m)
     ''' </summary>
-    Public t_w As Decimal
+    Public Tw As Decimal
 
     ''' <summary>
     ''' épaisseur de la gorge des cordons de soudure (m)
     ''' </summary>
-    Public a As Decimal
+    Public aW As Decimal
 
     ''' <summary>
     ''' Type de la section du profilé métallique
@@ -124,7 +124,7 @@ Public Class cls_ProfilA
         Get
             Dim pAire As Decimal
 
-            pAire = Me.AireFi + Me.AireFs + Me.HauteurAmeHw * Me.t_w + (4 - Math.PI) * (Me.r_ci ^ 2 + Me.r_cs ^ 2) / 2
+            pAire = Me.AireFi + Me.AireFs + Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2 + Me.Rcs ^ 2) / 2
 
             Return pAire
         End Get
@@ -147,8 +147,8 @@ Public Class cls_ProfilA
 
             Select Case Me.typeProfileAcier
                 Case Enum_TypeSectionAcier.Lamine
-                    Dim Bf As Decimal = Me.b_fs
-                    Dim Tf As Decimal = Me.t_fs
+                    Dim Bf As Decimal = Me.Bfs
+                    Dim Tf As Decimal = Me.Tfs
 
                     pInertieW = Tf * Bf ^ 3 / 24 * (ha - Tf) ^ 2
 
@@ -185,10 +185,10 @@ Public Class cls_ProfilA
                 '== LAMINES                                                                                         =
                 '====================================================================================================
                 Case Enum_TypeSectionAcier.Lamine
-                    Dim Bf As Decimal = Me.b_fs
-                    Dim Tf As Decimal = Me.t_fs
-                    Dim Tw As Decimal = Me.t_w
-                    Dim Rc As Decimal = Me.r_cs
+                    Dim Bf As Decimal = Me.Bfs
+                    Dim Tf As Decimal = Me.Tfs
+                    Dim Tw As Decimal = Me.Tw
+                    Dim Rc As Decimal = Me.Rcs
                     Dim Hw As Decimal = Me.HauteurAmeHw
 
                     Dim Alpha1 As Decimal
@@ -216,11 +216,11 @@ Public Class cls_ProfilA
                     Dim Itrs, Itri As Decimal
                     Dim Itw As Decimal
 
-                    Itfs = 1 / 3 * (1 - 0.63 * Me.t_fs / Me.b_fs * (1 - Me.t_fs ^ 4 / 12 / Me.b_fs ^ 4)) * Me.b_fs * Me.t_fs ^ 3
-                    Itfi = 1 / 3 * (1 - 0.63 * Me.t_fi / Me.b_fi * (1 - Me.t_fi ^ 4 / 12 / Me.b_fi ^ 4)) * Me.b_fi * Me.t_fi ^ 3
-                    Itw = 1 / 3 * Me.HauteurAmeHw * Me.t_w ^ 3
-                    Itrs = Me.t_w / Me.t_fs * (0.1 * Me.r_cs / Me.t_fs + 0.15) * (((Me.t_fs + Me.r_cs) ^ 2 + Me.t_w * (Me.r_cs + Me.t_w / 4)) / (2 * Me.r_cs + Me.t_fs)) ^ 4
-                    Itri = Me.t_w / Me.t_fi * (0.1 * Me.r_ci / Me.t_fi + 0.15) * (((Me.t_fi + Me.r_ci) ^ 2 + Me.t_w * (Me.r_ci + Me.t_w / 4)) / (2 * Me.r_ci + Me.t_fi)) ^ 4
+                    Itfs = 1 / 3 * (1 - 0.63 * Me.Tfs / Me.Bfs * (1 - Me.Tfs ^ 4 / 12 / Me.Bfs ^ 4)) * Me.Bfs * Me.Tfs ^ 3
+                    Itfi = 1 / 3 * (1 - 0.63 * Me.Tfi / Me.Bfi * (1 - Me.Tfi ^ 4 / 12 / Me.Bfi ^ 4)) * Me.Bfi * Me.Tfi ^ 3
+                    Itw = 1 / 3 * Me.HauteurAmeHw * Me.Tw ^ 3
+                    Itrs = Me.Tw / Me.Tfs * (0.1 * Me.Rcs / Me.Tfs + 0.15) * (((Me.Tfs + Me.Rcs) ^ 2 + Me.Tw * (Me.Rcs + Me.Tw / 4)) / (2 * Me.Rcs + Me.Tfs)) ^ 4
+                    Itri = Me.Tw / Me.Tfi * (0.1 * Me.Rci / Me.Tfi + 0.15) * (((Me.Tfi + Me.Rci) ^ 2 + Me.Tw * (Me.Rci + Me.Tw / 4)) / (2 * Me.Rci + Me.Tfi)) ^ 4
 
                     pInertieT = Itfs + Itfi + Itw + Itrs + Itri
 
@@ -254,11 +254,11 @@ Public Class cls_ProfilA
             Dim Av As Decimal = 0
             Select Case Me.typeProfileAcier
                 Case Enum_TypeSectionAcier.Lamine
-                    Av = Me.HauteurAmeHw * Me.t_w + (4 - Math.PI) * (Me.r_cs ^ 2 + Me.r_ci ^ 2) / 2 _
-                       + Me.t_fs * (2 * Me.r_cs + Me.t_w) / 2 _
-                       + Me.t_fi * (2 * Me.r_ci + Me.t_w) / 2
+                    Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2 + Me.Rci ^ 2) / 2 _
+                       + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2 _
+                       + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
                 Case Else
-                    Av = Me.HauteurAmeHw * Me.t_w
+                    Av = Me.HauteurAmeHw * Me.Tw
             End Select
             Return Av
         End Get
@@ -270,7 +270,7 @@ Public Class cls_ProfilA
     ''' <returns></returns>
     Public ReadOnly Property HauteurAmeHw As Decimal
         Get
-            Return Me.ha - Me.t_fs - Me.t_fi
+            Return Me.ha - Me.Tfs - Me.Tfi
         End Get
     End Property
 
@@ -280,7 +280,7 @@ Public Class cls_ProfilA
     ''' <returns></returns>
     Public ReadOnly Property HauteurAmeDw As Decimal
         Get
-            Return Me.ha - Me.t_fs - Me.t_fi - Me.r_ci - Me.r_cs
+            Return Me.ha - Me.Tfs - Me.Tfi - Me.Rci - Me.Rcs
         End Get
     End Property
 
@@ -290,7 +290,7 @@ Public Class cls_ProfilA
     ''' <returns></returns>
     Public ReadOnly Property AireFs As Decimal
         Get
-            Return Me.b_fs * Me.t_fs
+            Return Me.Bfs * Me.Tfs
         End Get
     End Property
 
@@ -300,7 +300,7 @@ Public Class cls_ProfilA
     ''' <returns></returns>
     Public ReadOnly Property AireFi As Decimal
         Get
-            Return Me.b_fi * Me.t_fi
+            Return Me.Bfi * Me.Tfi
         End Get
     End Property
 
@@ -366,7 +366,7 @@ Public Class cls_ProfilA
 
         Dim zAN As Decimal
         Dim MRd As Decimal
-        Dim Bfm As Decimal = Math.Max(Me.b_fi, Me.b_fs)
+        Dim Bfm As Decimal = Math.Max(Me.Bfi, Me.Bfs)
 
         '--> Calcul
 
@@ -378,7 +378,7 @@ Public Class cls_ProfilA
 
         ProprietesElastiquesMzz(False, 1, zAN, Me.pInertieZ, MRd)
 
-        Me.pModuleWelZ = Me.pInertieZ / Math.Max(bfm / 2 - zAN, zAN + bfm / 2)
+        Me.pModuleWelZ = Me.pInertieZ / Math.Max(Bfm / 2 - zAN, zAN + Bfm / 2)
 
     End Sub
 
@@ -414,28 +414,28 @@ Public Class cls_ProfilA
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.AireFs, Me.t_fs, -Me.t_fs / 2, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFs, Me.Tfs, -Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.t_w, Hw, -Me.t_fs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+        MyModele.AddMaille(Hw * Me.Tw, Hw, -Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.AireFi, Me.t_fi, -Me.ha + Me.t_fi / 2, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFi, Me.Tfi, -Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
 
-        If Me.r_cs > 0 Then
+        If Me.Rcs > 0 Then
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.r_cs, -Me.t_fs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.Rcs, -Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
-        If Me.r_ci > 0 Then
+        If Me.Rci > 0 Then
 
             '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.r_ci, -Me.ha + Me.t_fs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.Rci, -Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -512,27 +512,27 @@ Public Class cls_ProfilA
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.AireFs, Me.b_fs, 0, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFs, Me.Bfs, 0, 1, 1, 1, Fy, 1, GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.t_w, Me.t_w, 0, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Hw * Me.Tw, Me.Tw, 0, 1, 1, 1, Fy, 1, GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.AireFi, Me.b_fi, 0, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFi, Me.Bfi, 0, 1, 1, 1, Fy, 1, GammaM0)
 
         If lLamine Then
 
             '# Congés sous l'âme
 
-            MyModele.AddMailleConges(Me.r_cs, -Me.t_w / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeSup, 0.5)
-            MyModele.AddMailleConges(Me.r_ci, -Me.t_w / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeSup, 0.5)
+            MyModele.AddMailleConges(Me.Rcs, -Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeSup, 0.5)
+            MyModele.AddMailleConges(Me.Rci, -Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeSup, 0.5)
 
             '# Congés au dessus de l'âme
 
-            MyModele.AddMailleConges(Me.r_cs, +Me.t_w / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeInf, 0.5)
-            MyModele.AddMailleConges(Me.r_ci, +Me.t_w / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeInf, 0.5)
+            MyModele.AddMailleConges(Me.Rcs, +Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeInf, 0.5)
+            MyModele.AddMailleConges(Me.Rci, +Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeInf, 0.5)
 
         End If
 
@@ -577,28 +577,28 @@ Public Class cls_ProfilA
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.AireFs, Me.t_fs, -Me.t_fs / 2, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFs, Me.Tfs, -Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.t_w, Hw, -Me.t_fs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+        MyModele.AddMaille(Hw * Me.Tw, Hw, -Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.AireFi, Me.t_fi, -Me.ha + Me.t_fi / 2, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFi, Me.Tfi, -Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
 
-        If Me.r_cs > 0 Then
+        If Me.Rcs > 0 Then
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.r_cs, -Me.t_fs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.Rcs, -Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
-        If Me.r_ci > 0 Then
+        If Me.Rci > 0 Then
 
             '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.r_ci, -Me.ha + Me.t_fs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.Rci, -Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -627,14 +627,14 @@ Public Class cls_ProfilA
         '--> Section par défaut peu importe le type
         Me.ha = 0.3
         'Me.h_w = 0.27
-        Me.t_w = 0.01
-        Me.b_fi = 0.24
-        Me.b_fs = 0.24
-        Me.t_fi = 0.015
-        Me.t_fs = 0.015
-        Me.r_cs = 0.01
-        Me.r_ci = 0.01
-        Me.a = 0.01
+        Me.Tw = 0.01
+        Me.Bfi = 0.24
+        Me.Bfs = 0.24
+        Me.Tfi = 0.015
+        Me.Tfs = 0.015
+        Me.Rcs = 0.01
+        Me.Rci = 0.01
+        Me.aW = 0.01
 
         Me.Gamme = "IPE"
         Me.NomProfile = "IPE 300"

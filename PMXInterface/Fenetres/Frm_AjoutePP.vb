@@ -168,17 +168,17 @@ Public Class Frm_AjoutePP
 
     Private Sub PreparationSectionsType()
         '--> Définition de la section acier
-        MySectionAcier.ProfilA.t_fs = 0.03
-        MySectionAcier.ProfilA.t_fi = 0.03
-        MySectionAcier.ProfilA.r_cs = 0.03
-        MySectionAcier.ProfilA.r_ci = 0.03
+        MySectionAcier.ProfilA.Tfs = 0.03
+        MySectionAcier.ProfilA.Tfi = 0.03
+        MySectionAcier.ProfilA.Rcs = 0.03
+        MySectionAcier.ProfilA.Rci = 0.03
 
         '--> Définition de la section acier enrobée
         MySectionAcierEnrobe.typeSection = cls_Section.Enum_TypeSection.AcierEnrobage
-        MySectionAcierEnrobe.ProfilA.t_fs = 0.03
-        MySectionAcierEnrobe.ProfilA.t_fi = 0.03
-        MySectionAcierEnrobe.ProfilA.r_cs = 0.03
-        MySectionAcierEnrobe.ProfilA.r_ci = 0.03
+        MySectionAcierEnrobe.ProfilA.Tfs = 0.03
+        MySectionAcierEnrobe.ProfilA.Tfi = 0.03
+        MySectionAcierEnrobe.ProfilA.Rcs = 0.03
+        MySectionAcierEnrobe.ProfilA.Rci = 0.03
 
         MySectionAcierEnrobe.enrobage_partiel.LitsArmaOLD(0).nbArma = 1
         MySectionAcierEnrobe.enrobage_partiel.LitsArmaOLD(0).Phi = 0.025
@@ -187,20 +187,20 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section mixte
         MySectionMixte.typeSection = cls_Section.Enum_TypeSection.Mixte
-        MySectionMixte.ProfilA.t_fs = 0.03
-        MySectionMixte.ProfilA.t_fi = 0.03
-        MySectionMixte.ProfilA.r_cs = 0.03
-        MySectionMixte.ProfilA.r_ci = 0.03
+        MySectionMixte.ProfilA.Tfs = 0.03
+        MySectionMixte.ProfilA.Tfi = 0.03
+        MySectionMixte.ProfilA.Rcs = 0.03
+        MySectionMixte.ProfilA.Rci = 0.03
 
         MyPoutreMixte.Dalle.Beff = 1
         'MySectionMixte.Dalle.Beff = 1
 
         '--> Définition de la section mixte enrobée
         MySectionMixteEnrobe.typeSection = cls_Section.Enum_TypeSection.MixteEnrobage
-        MySectionMixteEnrobe.ProfilA.t_fs = 0.03
-        MySectionMixteEnrobe.ProfilA.t_fi = 0.03
-        MySectionMixteEnrobe.ProfilA.r_cs = 0.03
-        MySectionMixteEnrobe.ProfilA.r_ci = 0.03
+        MySectionMixteEnrobe.ProfilA.Tfs = 0.03
+        MySectionMixteEnrobe.ProfilA.Tfi = 0.03
+        MySectionMixteEnrobe.ProfilA.Rcs = 0.03
+        MySectionMixteEnrobe.ProfilA.Rci = 0.03
 
         MySectionMixteEnrobe.enrobage_partiel.LitsArmaOLD(0).nbArma = 1
         MySectionMixteEnrobe.enrobage_partiel.LitsArmaOLD(0).Phi = 0.025
@@ -212,29 +212,29 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section SFB non mixte
         MySectionSFB.typeSection = cls_Section.Enum_TypeSection.SFB
-        MySectionSFB.ProfilA.t_fs = 0.03
-        MySectionSFB.ProfilA.t_fi = 0.03
-        MySectionSFB.ProfilA.r_cs = 0.03
-        MySectionSFB.ProfilA.r_ci = 0.03
+        MySectionSFB.ProfilA.Tfs = 0.03
+        MySectionSFB.ProfilA.Tfi = 0.03
+        MySectionSFB.ProfilA.Rcs = 0.03
+        MySectionSFB.ProfilA.Rci = 0.03
         MySectionSFB.ProfilA.Plat_t = 0.03
         MySectionSFB.ProfilA.Plat_b = 0.45
 
         '--> Définition de la section SAB non mixte
         MySectionSAB.typeSection = cls_Section.Enum_TypeSection.SAB
-        MySectionSAB.ProfilA.b_fs *= 5 / 8
-        MySectionSAB.ProfilA.t_fs = 0.03
-        MySectionSAB.ProfilA.t_fi = 0.03
-        MySectionSAB.ProfilA.r_cs = 0.03
-        MySectionSAB.ProfilA.r_ci = 0.03
+        MySectionSAB.ProfilA.Bfs *= 5 / 8
+        MySectionSAB.ProfilA.Tfs = 0.03
+        MySectionSAB.ProfilA.Tfi = 0.03
+        MySectionSAB.ProfilA.Rcs = 0.03
+        MySectionSAB.ProfilA.Rci = 0.03
         MySectionSAB.ProfilA.Plat_t = 0.03
         MySectionSAB.ProfilA.Plat_b = 0.45
 
         '--> Définition de la section SFB mixte
         MySectionSFBmixte.typeSection = cls_Section.Enum_TypeSection.SFBmixte
-        MySectionSFBmixte.ProfilA.t_fs = 0.03
-        MySectionSFBmixte.ProfilA.t_fi = 0.03
-        MySectionSFBmixte.ProfilA.r_cs = 0.03
-        MySectionSFBmixte.ProfilA.r_ci = 0.03
+        MySectionSFBmixte.ProfilA.Tfs = 0.03
+        MySectionSFBmixte.ProfilA.Tfi = 0.03
+        MySectionSFBmixte.ProfilA.Rcs = 0.03
+        MySectionSFBmixte.ProfilA.Rci = 0.03
         MySectionSFBmixte.ProfilA.Plat_t = 0.03
         MySectionSFBmixte.ProfilA.Plat_b = 0.45
 
@@ -245,12 +245,12 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section SAB mixte
         MySectionSABmixte.typeSection = cls_Section.Enum_TypeSection.SABmixte
-        MySectionSABmixte.ProfilA.t_w = 0.015
-        MySectionSABmixte.ProfilA.b_fs *= 5 / 8
-        MySectionSABmixte.ProfilA.t_fs = 0.03
-        MySectionSABmixte.ProfilA.t_fi = 0.03
-        MySectionSABmixte.ProfilA.r_cs = 0.03
-        MySectionSABmixte.ProfilA.r_ci = 0.03
+        MySectionSABmixte.ProfilA.Tw = 0.015
+        MySectionSABmixte.ProfilA.Bfs *= 5 / 8
+        MySectionSABmixte.ProfilA.Tfs = 0.03
+        MySectionSABmixte.ProfilA.Tfi = 0.03
+        MySectionSABmixte.ProfilA.Rcs = 0.03
+        MySectionSABmixte.ProfilA.Rci = 0.03
 
         MyPoutreSABmixte.Dalle.t_d = 0.05
         'MySectionSABmixte.Dalle.t_d = 0.05

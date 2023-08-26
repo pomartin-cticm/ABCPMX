@@ -85,8 +85,6 @@ WARNING_CMBTRAVEE			= All the input data must be correct to select an other the 
 ADD						= Add
 DELETE					= Delete
 
-
-
 #FRM_ENCASEMENT
 CANCEL					= Cancel 
 CLASS					= Class
@@ -164,8 +162,6 @@ SWIMMINGSCREED			= Swimming screed
 TITLE					= Floor vibration parameters
 TOTALDAMPING			= Total damping
 WITH					= With
-
-
 
 #FRM_LATERALRESTRAINTS
 ADD						= Add
@@ -334,12 +330,12 @@ WELDEDP					= Mono-symmetrical welded section
 
 #OPTCALCULMAIN
 TITLE					= Calculation options
+APPLY					= Apply
+CANCEL					= Cancel
 GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
 FIRE					= Fire design
-APPLY					= Apply
-CANCEL					= Cancel
 
 #OPTCALCALCUL
 TITLE					= Calculation options
@@ -416,6 +412,13 @@ UNVALIDKEY				= Key is not valid
 
 #OPTSOFTGENERAL
 TITLE					= General settings
+LANGUAGES				= Languages
+USERGI					= User interface
+CALCULREPORT			= Calculation report
+IDENTIFICATION			= Identification
+USERNAME				= User name
+FIRM					= Firm
+INTERNETCHECKS			= Internet checks
 
 #OPTSOFTUNITS
 TITLE					= Units

@@ -36,8 +36,8 @@ Partial Class Frm_OptionsLogiciel
         Me.btn_Appliquer = New System.Windows.Forms.Button()
         Me.PoMBtn_General = New PMXInterface.POMbutton()
         Me.pan_Expert = New System.Windows.Forms.Panel()
-        Me.img_Expert = New System.Windows.Forms.PictureBox()
         Me.lbl_ExpertMode = New System.Windows.Forms.Label()
+        Me.img_Expert = New System.Windows.Forms.PictureBox()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
@@ -253,15 +253,6 @@ Partial Class Frm_OptionsLogiciel
         Me.pan_Expert.Size = New System.Drawing.Size(249, 30)
         Me.pan_Expert.TabIndex = 6
         '
-        'img_Expert
-        '
-        Me.img_Expert.Image = CType(resources.GetObject("img_Expert.Image"), System.Drawing.Image)
-        Me.img_Expert.Location = New System.Drawing.Point(6, 3)
-        Me.img_Expert.Name = "img_Expert"
-        Me.img_Expert.Size = New System.Drawing.Size(23, 24)
-        Me.img_Expert.TabIndex = 38
-        Me.img_Expert.TabStop = False
-        '
         'lbl_ExpertMode
         '
         Me.lbl_ExpertMode.AutoSize = True
@@ -270,6 +261,15 @@ Partial Class Frm_OptionsLogiciel
         Me.lbl_ExpertMode.Size = New System.Drawing.Size(80, 13)
         Me.lbl_ExpertMode.TabIndex = 39
         Me.lbl_ExpertMode.Text = "lbl_ExpertMode"
+        '
+        'img_Expert
+        '
+        Me.img_Expert.Image = CType(resources.GetObject("img_Expert.Image"), System.Drawing.Image)
+        Me.img_Expert.Location = New System.Drawing.Point(6, 3)
+        Me.img_Expert.Name = "img_Expert"
+        Me.img_Expert.Size = New System.Drawing.Size(23, 24)
+        Me.img_Expert.TabIndex = 38
+        Me.img_Expert.TabStop = False
         '
         'Frm_OptionsLogiciel
         '

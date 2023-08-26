@@ -535,53 +535,31 @@ Public Class Frm_Connection
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
         With MyProjet.Poutres(MyProjet.IndEnCours)
 
-            If .lAutomaticDesign <> MyPoutreLoc.lAutomaticDesign Then
-                lModif = True
-                .lAutomaticDesign = MyPoutreLoc.lAutomaticDesign
-            End If
+            lModif = False
+
+            GereTransfertValeur(MyPoutreLoc.lAutomaticDesign, .lAutomaticDesign, lModif)
 
             If Not Me.chk_AutomaticDesign.Checked Then
 
-                If .Dalle.Connecteur.nom <> MyPoutreLoc.Dalle.Connecteur.nom Then
-                    lModif = True
-                    .Dalle.Connecteur.nom = MyPoutreLoc.Dalle.Connecteur.nom
-                    .Dalle.Connecteur.Caracteristiques_Goujons()
-                End If
+                GereTransfertValeur(MyPoutreLoc.Dalle.Connecteur.nom, .Dalle.Connecteur.nom, lModif)
+                .Dalle.Connecteur.Caracteristiques_Goujons()
 
                 For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
 
-                    If .NombreZone(i) <> MyPoutreLoc.NombreZone(i) Then
-                        lModif = True
-                        .NombreZone(i) = MyPoutreLoc.NombreZone(i)
-                    End If
-
-                    If .NombreGoujonsTot(i) <> MyPoutreLoc.NombreGoujonsTot(i) Then
-                        lModif = True
-                        .NombreGoujonsTot(i) = MyPoutreLoc.NombreGoujonsTot(i)
-                    End If
+                    GereTransfertValeur(MyPoutreLoc.NombreZone(i), .NombreZone(i), lModif)
+                    GereTransfertValeur(MyPoutreLoc.NombreGoujonsTot(i), .NombreGoujonsTot(i), lModif)
 
                     For j As Integer = 0 To .NombreZone(i) - 1
-                        If .Longueur_Zone(i, j) <> MyPoutreLoc.Longueur_Zone(i, j) Then
-                            lModif = True
-                            .Longueur_Zone(i, j) = MyPoutreLoc.Longueur_Zone(i, j)
-                        End If
 
-                        If .NombreGoujonsTransv(i, j) <> MyPoutreLoc.NombreGoujonsTransv(i, j) Then
-                            lModif = True
-                            .NombreGoujonsTransv(i, j) = MyPoutreLoc.NombreGoujonsTransv(i, j)
-                        End If
+                        GereTransfertValeur(MyPoutreLoc.Longueur_Zone(i, j), .Longueur_Zone(i, j), lModif)
+                        GereTransfertValeur(MyPoutreLoc.NombreGoujonsTransv(i, j), .NombreGoujonsTransv(i, j), lModif)
 
                         If lBacTransv Then
-                            If .Espacement_Bac_Trans(i, j) <> MyPoutreLoc.Espacement_Bac_Trans(i, j) Then
-                                lModif = True
-                                .Espacement_Bac_Trans(i, j) = MyPoutreLoc.Espacement_Bac_Trans(i, j)
-                                .Espacement(i, j) = .Espacement_Bac_Trans(i, j) * .Dalle.Bac.Ep
-                            End If
+                            GereTransfertValeur(MyPoutreLoc.Espacement_Bac_Trans(i, j), .Espacement_Bac_Trans(i, j), lModif)
+                            .Espacement(i, j) = .Espacement_Bac_Trans(i, j) * .Dalle.Bac.Ep
+
                         Else
-                            If .Espacement(i, j) <> MyPoutreLoc.Espacement(i, j) Then
-                                lModif = True
-                                .Espacement(i, j) = MyPoutreLoc.Espacement(i, j)
-                            End If
+                            GereTransfertValeur(MyPoutreLoc.Espacement(i, j), .Espacement(i, j), lModif)
                         End If
                     Next
 
@@ -590,8 +568,69 @@ Public Class Frm_Connection
             End If
         End With
 
-
     End Sub
+
+
+    'Private Sub TransfertSaisie(ByRef lModif As Boolean)
+    '    With MyProjet.Poutres(MyProjet.IndEnCours)
+
+    '        If .lAutomaticDesign <> MyPoutreLoc.lAutomaticDesign Then
+    '            lModif = True
+    '            .lAutomaticDesign = MyPoutreLoc.lAutomaticDesign
+    '        End If
+
+    '        If Not Me.chk_AutomaticDesign.Checked Then
+
+    '            If .Dalle.Connecteur.nom <> MyPoutreLoc.Dalle.Connecteur.nom Then
+    '                lModif = True
+    '                .Dalle.Connecteur.nom = MyPoutreLoc.Dalle.Connecteur.nom
+    '                .Dalle.Connecteur.Caracteristiques_Goujons()
+    '            End If
+
+    '            For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
+
+    '                If .NombreZone(i) <> MyPoutreLoc.NombreZone(i) Then
+    '                    lModif = True
+    '                    .NombreZone(i) = MyPoutreLoc.NombreZone(i)
+    '                End If
+
+    '                If .NombreGoujonsTot(i) <> MyPoutreLoc.NombreGoujonsTot(i) Then
+    '                    lModif = True
+    '                    .NombreGoujonsTot(i) = MyPoutreLoc.NombreGoujonsTot(i)
+    '                End If
+
+    '                For j As Integer = 0 To .NombreZone(i) - 1
+    '                    If .Longueur_Zone(i, j) <> MyPoutreLoc.Longueur_Zone(i, j) Then
+    '                        lModif = True
+    '                        .Longueur_Zone(i, j) = MyPoutreLoc.Longueur_Zone(i, j)
+    '                    End If
+
+    '                    If .NombreGoujonsTransv(i, j) <> MyPoutreLoc.NombreGoujonsTransv(i, j) Then
+    '                        lModif = True
+    '                        .NombreGoujonsTransv(i, j) = MyPoutreLoc.NombreGoujonsTransv(i, j)
+    '                    End If
+
+    '                    If lBacTransv Then
+    '                        If .Espacement_Bac_Trans(i, j) <> MyPoutreLoc.Espacement_Bac_Trans(i, j) Then
+    '                            lModif = True
+    '                            .Espacement_Bac_Trans(i, j) = MyPoutreLoc.Espacement_Bac_Trans(i, j)
+    '                            .Espacement(i, j) = .Espacement_Bac_Trans(i, j) * .Dalle.Bac.Ep
+    '                        End If
+    '                    Else
+    '                        If .Espacement(i, j) <> MyPoutreLoc.Espacement(i, j) Then
+    '                            lModif = True
+    '                            .Espacement(i, j) = MyPoutreLoc.Espacement(i, j)
+    '                        End If
+    '                    End If
+    '                Next
+
+    '            Next
+
+    '        End If
+    '    End With
+
+
+    'End Sub
 
 
 #End Region
@@ -693,7 +732,7 @@ Public Class Frm_Connection
         For i As Integer = 0 To MyPoutreLoc.NombreZone(traveeEnCours) - 1
             nb_goujons_trans_max = Math.Max(nb_goujons_trans_max, MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, i))
         Next
-        If nb_goujons_trans_max >= 2 Then DIAMETRE_GOUJON_MAX = Math.Min(2.5 * MyPoutreLoc.Section.ProfilA.t_fs, DIAMETRE_GOUJON_MAX)
+        If nb_goujons_trans_max >= 2 Then DIAMETRE_GOUJON_MAX = Math.Min(2.5 * MyPoutreLoc.Section.ProfilA.Tfs, DIAMETRE_GOUJON_MAX)
 
         'Définition des valeurs limites pour les caractéristiques longitudinales
         LONGUEUR_ZONE_MIN = Math.Min(1, MyPoutreLoc.LongueurTravee(traveeEnCours))
@@ -719,12 +758,12 @@ Public Class Frm_Connection
         NB_TRANSV_ROW_MIN = 1
         If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire Then
             If MyPoutreLoc.Dalle.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.Discontinu Then
-                NB_TRANSV_ROW_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.b_fs - 2 * b_app_min - 2 * PINCE_TRANS_MIN - MyPoutreLoc.Dalle.Connecteur.d) / ESPACEMENT_TRANS_MIN + 1)
+                NB_TRANSV_ROW_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * b_app_min - 2 * PINCE_TRANS_MIN - MyPoutreLoc.Dalle.Connecteur.d) / ESPACEMENT_TRANS_MIN + 1)
             Else
-                NB_TRANSV_ROW_MAX = Math.Min(2, Math.Floor((MyPoutreLoc.Section.ProfilA.b_fs - 2 * PINCE_TRANS_MIN - MyPoutreLoc.Dalle.Connecteur.d) / ESPACEMENT_TRANS_MIN + 1))
+                NB_TRANSV_ROW_MAX = Math.Min(2, Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * PINCE_TRANS_MIN - MyPoutreLoc.Dalle.Connecteur.d) / ESPACEMENT_TRANS_MIN + 1))
             End If
         Else
-            NB_TRANSV_ROW_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.b_fs - 2 * PINCE_TRANS_MIN - MyPoutreLoc.Dalle.Connecteur.d) / ESPACEMENT_TRANS_MIN + 1)
+            NB_TRANSV_ROW_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * PINCE_TRANS_MIN - MyPoutreLoc.Dalle.Connecteur.d) / ESPACEMENT_TRANS_MIN + 1)
         End If
 
 

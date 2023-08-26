@@ -2,7 +2,7 @@
 
 Public Class Frm_OptionsLogiciel
 
-#Region " Variables "
+#Region " Déclarations "
 
     Structure struc_Colors
 
@@ -49,6 +49,11 @@ Public Class Frm_OptionsLogiciel
 
     End Structure
 
+#End Region
+
+
+#Region " Variables "
+
     Dim lBuild As Boolean = True
 
     Private MyCouleurs As struc_Colors
@@ -60,6 +65,10 @@ Public Class Frm_OptionsLogiciel
     Public pLocalRepWDefaut As String = ""
     Public pLocallDefaultRepW As Boolean
 
+    Dim htBtn As Integer = 40
+
+    Dim pFichierLangue As String
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -69,11 +78,11 @@ Public Class Frm_OptionsLogiciel
 
     Public Sub InitialiserFenetre()
         lBuild = True
+        InitialiseParametresLocaux()
         ChargesBlocsLangues()
         GestionLangues(BlocLangues(BALISE))
         GestionStyle()
         'GestionUnites()
-        InitialiseParametresLocaux()
         AfficherFenetreFille()
         MAJIExpert()
         lBuild = False
@@ -86,7 +95,7 @@ Public Class Frm_OptionsLogiciel
 
         '--> Déclaration
 
-        Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
+        Dim Lines As Cls_LinesOfFile
         Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTGENERAL", "OPTSOFTUNITS", "OPTSOFTDIRECTORIES", "OPTSOFTEXPERT"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
@@ -95,6 +104,9 @@ Public Class Frm_OptionsLogiciel
         Dim Index As Integer
 
         '--> Initialisation
+
+        InitialiseLNGFileName(pLocalLogicielOptions.IndLangue, pFichierLangue)
+        Lines = New Cls_LinesOfFile(pFichierLangue, False)
 
         BlocLangues = New Dictionary(Of String, Dictionary(Of String, String))
 
@@ -132,6 +144,10 @@ Public Class Frm_OptionsLogiciel
         End If
         lBlocEnCours = False
 
+    End Sub
+
+    Public Sub ReinitLangues()
+        GestionLangues(BlocLangues(BALISE))
     End Sub
 
     Private Sub GestionLangues(ByVal MyBloc As Dictionary(Of String, String))
@@ -175,6 +191,10 @@ Public Class Frm_OptionsLogiciel
                 Me.PoMBtn_General.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
 
         End Select
+
+        For i As Integer = 0 To 3
+            Me.TLpan_Gauche.RowStyles(i).Height = htBtn
+        Next
 
     End Sub
 
@@ -233,6 +253,9 @@ Public Class Frm_OptionsLogiciel
         pLocalLogicielOptions.IndUnitModulesY = LogicielOptions.IndUnitModulesY
         pLocalLogicielOptions.IndUnitMoment = LogicielOptions.IndUnitMoment
         pLocalLogicielOptions.lExpert = LogicielOptions.lExpert
+
+        pLocalLogicielOptions.IndLangue = LogicielOptions.IndLangue
+        pLocalLogicielOptions.IndLangueNDC = LogicielOptions.IndLangueNDC
 
         pLocalRepWDefaut = LogicielRep.TravailDefaut
         pLocallDefaultRepW = LogicielRep.lTravailDefaut
@@ -404,6 +427,9 @@ Public Class Frm_OptionsLogiciel
     Private Sub TransfereSaisie(ByRef lModif As Boolean)
 
         lModif = False
+
+        GereTransfertValeur(Me.pLocalLogicielOptions.IndLangue, LogicielOptions.IndLangue, lModif)
+        GereTransfertValeur(Me.pLocalLogicielOptions.IndLangueNDC, LogicielOptions.IndLangueNDC, lModif)
 
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitDimension, LogicielOptions.IndUnitDimension, lModif)
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitLongueur, LogicielOptions.IndUnitLongueur, lModif)

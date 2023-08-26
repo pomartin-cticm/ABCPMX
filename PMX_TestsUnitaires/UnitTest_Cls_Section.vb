@@ -29,13 +29,13 @@ Imports PMXMoteur2
         '# IPE 300
 
         MySection.ProfilA.ha = 0.3
-        MySection.ProfilA.b_fi = 0.15
-        MySection.ProfilA.b_fs = 0.15
-        MySection.ProfilA.t_fi = 0.0107
-        MySection.ProfilA.t_fs = 0.0107
-        MySection.ProfilA.t_w = 0.0071
-        MySection.ProfilA.r_ci = 0.015
-        MySection.ProfilA.r_cs = 0.015
+        MySection.ProfilA.Bfi = 0.15
+        MySection.ProfilA.Bfs = 0.15
+        MySection.ProfilA.Tfi = 0.0107
+        MySection.ProfilA.Tfs = 0.0107
+        MySection.ProfilA.Tw = 0.0071
+        MySection.ProfilA.Rci = 0.015
+        MySection.ProfilA.Rcs = 0.015
         MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
 
         '# Acier S355 M/ML
@@ -142,13 +142,13 @@ Imports PMXMoteur2
         '# IPE 500A
 
         MySection.ProfilA.ha = 0.497
-        MySection.ProfilA.b_fi = 0.2
-        MySection.ProfilA.b_fs = 0.2
-        MySection.ProfilA.t_fi = 0.0145
-        MySection.ProfilA.t_fs = 0.0145
-        MySection.ProfilA.t_w = 0.0084
-        MySection.ProfilA.r_ci = 0.021
-        MySection.ProfilA.r_cs = 0.021
+        MySection.ProfilA.Bfi = 0.2
+        MySection.ProfilA.Bfs = 0.2
+        MySection.ProfilA.Tfi = 0.0145
+        MySection.ProfilA.Tfs = 0.0145
+        MySection.ProfilA.Tw = 0.0084
+        MySection.ProfilA.Rci = 0.021
+        MySection.ProfilA.Rcs = 0.021
         MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
 
         '# Acier S355 M/ML
@@ -411,13 +411,13 @@ Imports PMXMoteur2
         '# IPE 500A
 
         MySection.ProfilA.ha = 0.497
-        MySection.ProfilA.b_fi = 0.2
-        MySection.ProfilA.b_fs = 0.2
-        MySection.ProfilA.t_fi = 0.0145
-        MySection.ProfilA.t_fs = 0.0145
-        MySection.ProfilA.t_w = 0.0084
-        MySection.ProfilA.r_ci = 0 '.021
-        MySection.ProfilA.r_cs = 0 '.021
+        MySection.ProfilA.Bfi = 0.2
+        MySection.ProfilA.Bfs = 0.2
+        MySection.ProfilA.Tfi = 0.0145
+        MySection.ProfilA.Tfs = 0.0145
+        MySection.ProfilA.Tw = 0.0084
+        MySection.ProfilA.Rci = 0 '.021
+        MySection.ProfilA.Rcs = 0 '.021
         MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
 
         '# Acier S355 M/ML
@@ -499,8 +499,8 @@ Imports PMXMoteur2
 
         '=== ACIER + ENROBAGE + CONGES ============================================================================
 
-        MySection.ProfilA.r_ci = 0.021
-        MySection.ProfilA.r_cs = 0.021
+        MySection.ProfilA.Rci = 0.021
+        MySection.ProfilA.Rcs = 0.021
         MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
 
         '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
@@ -521,8 +521,8 @@ Imports PMXMoteur2
 
         '=== ACIER + ENROBAGE + SANS CONGES + 1 lit inférieur ============================================================================
 
-        MySection.ProfilA.r_ci = 0
-        MySection.ProfilA.r_cs = 0
+        MySection.ProfilA.Rci = 0
+        MySection.ProfilA.Rcs = 0
         MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
 
         MySection.enrobage_partiel.LitArma(0).NbExt = 0
@@ -575,13 +575,13 @@ Imports PMXMoteur2
         '# IPE 300
 
         MySection.ProfilA.ha = 0.575
-        MySection.ProfilA.b_fi = 0.35
-        MySection.ProfilA.b_fs = 0.25
-        MySection.ProfilA.t_fi = 0.04
-        MySection.ProfilA.t_fs = 0.025
-        MySection.ProfilA.t_w = 0.015
-        MySection.ProfilA.r_ci = 0.00
-        MySection.ProfilA.r_cs = 0.00
+        MySection.ProfilA.Bfi = 0.35
+        MySection.ProfilA.Bfs = 0.25
+        MySection.ProfilA.Tfi = 0.04
+        MySection.ProfilA.Tfs = 0.025
+        MySection.ProfilA.Tw = 0.015
+        MySection.ProfilA.Rci = 0.00
+        MySection.ProfilA.Rcs = 0.00
         MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
 
         '# Acier S355 M/ML
@@ -671,13 +671,13 @@ Imports PMXMoteur2
         '# IPE 450
 
         MySection.ProfilA.ha = 0.45
-        MySection.ProfilA.b_fi = 0.19
-        MySection.ProfilA.b_fs = 0.19
-        MySection.ProfilA.t_fi = 0.0146
-        MySection.ProfilA.t_fs = 0.0146
-        MySection.ProfilA.t_w = 0.0094
-        MySection.ProfilA.r_ci = 0.021
-        MySection.ProfilA.r_cs = 0.021
+        MySection.ProfilA.Bfi = 0.19
+        MySection.ProfilA.Bfs = 0.19
+        MySection.ProfilA.Tfi = 0.0146
+        MySection.ProfilA.Tfs = 0.0146
+        MySection.ProfilA.Tw = 0.0094
+        MySection.ProfilA.Rci = 0.021
+        MySection.ProfilA.Rcs = 0.021
         MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
 
         '# Acier S275 M/ML
@@ -789,13 +789,13 @@ Imports PMXMoteur2
         '# Monosym
 
         MySection.ProfilA.ha = 0.51 + 0.025 + 0.04
-        MySection.ProfilA.b_fi = 0.35
-        MySection.ProfilA.b_fs = 0.25
-        MySection.ProfilA.t_fi = 0.04
-        MySection.ProfilA.t_fs = 0.025
-        MySection.ProfilA.t_w = 0.015
-        MySection.ProfilA.r_ci = 0.0
-        MySection.ProfilA.r_cs = 0.0
+        MySection.ProfilA.Bfi = 0.35
+        MySection.ProfilA.Bfs = 0.25
+        MySection.ProfilA.Tfi = 0.04
+        MySection.ProfilA.Tfs = 0.025
+        MySection.ProfilA.Tw = 0.015
+        MySection.ProfilA.Rci = 0.0
+        MySection.ProfilA.Rcs = 0.0
         MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
 
         '# Acier S355

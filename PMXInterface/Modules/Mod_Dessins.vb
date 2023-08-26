@@ -70,7 +70,7 @@ Module Mod_Dessins
         BeffD = Beff / 2
 
         Ha = MySection.ProfilA.ha
-        Bfs = MySection.ProfilA.b_fs
+        Bfs = MySection.ProfilA.Bfs
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
         dCar = Math.Sqrt(Beff ^ 2 + (Ha + MyDalle.zTop) ^ 2) / 10
@@ -570,8 +570,8 @@ Module Mod_Dessins
 
         '--> Initialisation
 
-        Dim Diagonale As Decimal = Math.Sqrt((Profile.b_fi + Profile.b_fs) ^ 2 / 4 + Profile.ha ^ 2)
-        Dim BfMax As Decimal = Math.Max(Profile.b_fs, Profile.b_fi)
+        Dim Diagonale As Decimal = Math.Sqrt((Profile.Bfi + Profile.Bfs) ^ 2 / 4 + Profile.ha ^ 2)
+        Dim BfMax As Decimal = Math.Max(Profile.Bfs, Profile.Bfi)
         Dim BeffRed As Decimal
 
         '--> Traitement
@@ -1004,12 +1004,12 @@ Module Mod_Dessins
         '--> Initialisation des paramètres d'affichage
 
         yMin = -Profile.ha
-        xMin = -Math.Max(Profile.b_fs, Profile.b_fi) / 2
+        xMin = -Math.Max(Profile.Bfs, Profile.Bfi) / 2
         xMax = -xMin
         yMax = 0
 
         'If lCote Then
-        dCar = Math.Sqrt((Profile.ha ^ 2 + (Profile.b_fs + Profile.b_fi) ^ 2)) / 20
+        dCar = Math.Sqrt((Profile.ha ^ 2 + (Profile.Bfs + Profile.Bfi) ^ 2)) / 20
         yMin -= dCar
         yMax += dCar
         xMax += dCar
@@ -1088,12 +1088,12 @@ Module Mod_Dessins
 
         Uy = enrobage.Etriers_EnrobageY
         PhiE = enrobage.Etriers_Phi
-        Bc = section.ProfilA.b_fs * enrobage.Ratio_bc
+        Bc = section.ProfilA.Bfs * enrobage.Ratio_bc
         Uz = enrobage.Etriers_EnrobageZ
-        Bf = section.ProfilA.b_fs
-        Tw = section.ProfilA.t_w
-        Rc = section.ProfilA.r_cs
-        Tf = section.ProfilA.t_fs
+        Bf = section.ProfilA.Bfs
+        Tw = section.ProfilA.Tw
+        Rc = section.ProfilA.Rcs
+        Tf = section.ProfilA.Tfs
 
         '--> Affichage des cotes
 
@@ -1105,7 +1105,7 @@ Module Mod_Dessins
 
             xo = -Bc / 2
             xe = xo - dCar / 2
-            yo = -(section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.8
+            yo = -(section.ProfilA.ha / 2 - section.ProfilA.Tfs - section.ProfilA.Rcs) * 0.8
             ye = yo
 
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
@@ -1125,7 +1125,7 @@ Module Mod_Dessins
 
         xo = -Bc / 2 + Uy + PhiE
         xe = xo + dCar / 2
-        yo = -(section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.6
+        yo = -(section.ProfilA.ha / 2 - section.ProfilA.Tfs - section.ProfilA.Rcs) * 0.6
         ye = yo
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
 
@@ -1143,7 +1143,7 @@ Module Mod_Dessins
 
         xo = -Bc / 2 + Uy
         xe = xo + dCar / 2
-        yo = -(section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.4
+        yo = -(section.ProfilA.ha / 2 - section.ProfilA.Tfs - section.ProfilA.Rcs) * 0.4
         ye = yo
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, False)
 
@@ -1180,13 +1180,13 @@ Module Mod_Dessins
 
         yo = -section.ProfilA.ha - dCar
         ye = yo
-        xo = section.ProfilA.b_fi / 2
+        xo = section.ProfilA.Bfi / 2
         xe = -xo
 
         If lAffSymbol Then
             If lLam Then Chaine = "b" Else Chaine = "bfi"
         Else
-            Chaine = GetStringNoUnit(section.ProfilA.b_fi, Enu_TypeVariable.Dimension)
+            Chaine = GetStringNoUnit(section.ProfilA.Bfi, Enu_TypeVariable.Dimension)
         End If
 
         AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAffLoc, True, True)
@@ -1206,8 +1206,8 @@ Module Mod_Dessins
             MyColor = StyleCouleur(iSelect, iSelect)
             MyPen.Color = MyColor
 
-            xo = section.ProfilA.b_fi / 2 - Uy - PhiE - enrobage.LitArma(iArma).PhiExt / 2
-            xe = section.ProfilA.b_fi / 2 + dCar
+            xo = section.ProfilA.Bfi / 2 - Uy - PhiE - enrobage.LitArma(iArma).PhiExt / 2
+            xe = section.ProfilA.Bfi / 2 + dCar
             yo = zPos
             ye = zPos
 
@@ -1393,10 +1393,10 @@ Module Mod_Dessins
         Dim xc, yc As Single
         Dim xo, yo As Single
 
-        Dim Bf As Decimal = profile.b_fs
+        Dim Bf As Decimal = profile.Bfs
         Dim Ht As Decimal = profile.ha
-        Dim Tw As Decimal = profile.t_w
-        Dim Tf As Decimal = profile.t_fs
+        Dim Tw As Decimal = profile.Tw
+        Dim Tf As Decimal = profile.Tfs
         Dim Uy As Decimal = enrobage.Etriers_EnrobageY
         Dim Uz As Decimal = enrobage.Etriers_EnrobageZ
         Dim Bc As Decimal = enrobage.Ratio_bc * Bf
@@ -1483,10 +1483,10 @@ Module Mod_Dessins
         Dim xc, yc As Single
         Dim xo, yo As Single
 
-        Dim Bf As Decimal = profile.b_fs
+        Dim Bf As Decimal = profile.Bfs
         Dim Ht As Decimal = profile.ha
-        Dim Tw As Decimal = profile.t_w
-        Dim Tf As Decimal = profile.t_fs
+        Dim Tw As Decimal = profile.Tw
+        Dim Tf As Decimal = profile.Tfs
         Dim Uy As Decimal = enrobage.Etriers_EnrobageY
         Dim Uz As Decimal = enrobage.Etriers_EnrobageZ
         Dim Bc As Decimal = enrobage.Ratio_bc * Bf
@@ -1583,10 +1583,10 @@ Module Mod_Dessins
         Dim xc, yc As Single
         Dim xo, yo As Single
 
-        Dim Bf As Decimal = profile.b_fs
+        Dim Bf As Decimal = profile.Bfs
         Dim Ht As Decimal = profile.ha
-        Dim Tw As Decimal = profile.t_w
-        Dim Tf As Decimal = profile.t_fs
+        Dim Tw As Decimal = profile.Tw
+        Dim Tf As Decimal = profile.Tfs
         Dim Uy As Decimal = enrobage.Etriers_EnrobageY
         Dim Uz As Decimal = enrobage.Etriers_EnrobageZ
         Dim Bc As Decimal = enrobage.Ratio_bc * Bf
@@ -1646,10 +1646,10 @@ Module Mod_Dessins
         Dim xc, yc As Single
         Dim xo, yo As Single
 
-        Dim Bf As Decimal = profile.b_fs
+        Dim Bf As Decimal = profile.Bfs
         Dim Ht As Decimal = profile.ha
-        Dim Tw As Decimal = profile.t_w
-        Dim Tf As Decimal = profile.t_fs
+        Dim Tw As Decimal = profile.Tw
+        Dim Tf As Decimal = profile.Tfs
         Dim Uy As Decimal = enrobage.Etriers_EnrobageY
         Dim UyInt As Decimal = enrobage.Etriers_EnrobageYinterne
         Dim Uz As Decimal = enrobage.Etriers_EnrobageZ
@@ -1783,10 +1783,10 @@ Module Mod_Dessins
         Dim xc, yc As Single
         Dim xo, yo As Single
 
-        Dim Bf As Decimal = profile.b_fs
+        Dim Bf As Decimal = profile.Bfs
         Dim Ht As Decimal = profile.ha
-        Dim Tw As Decimal = profile.t_w
-        Dim Tf As Decimal = profile.t_fs
+        Dim Tw As Decimal = profile.Tw
+        Dim Tf As Decimal = profile.Tfs
         Dim Uy As Decimal = enrobage.Etriers_EnrobageY
         Dim Uz As Decimal = enrobage.Etriers_EnrobageZ
         Dim Bc As Decimal = enrobage.Ratio_bc * Bf
@@ -1970,12 +1970,12 @@ Module Mod_Dessins
         '--> Initialisation des paramètres d'affichage
 
         yMin = -section.ProfilA.ha
-        xMin = -Math.Max(section.ProfilA.b_fs, section.ProfilA.b_fi) / 2
+        xMin = -Math.Max(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2
         xMax = -xMin
         yMax = 0
 
         'If lCote Then
-        dCar = Math.Sqrt((section.ProfilA.ha ^ 2 + (section.ProfilA.b_fs + section.ProfilA.b_fi) ^ 2)) / 20
+        dCar = Math.Sqrt((section.ProfilA.ha ^ 2 + (section.ProfilA.Bfs + section.ProfilA.Bfi) ^ 2)) / 20
         yMin -= dCar
         yMax += dCar
         xMax += dCar
@@ -2005,7 +2005,7 @@ Module Mod_Dessins
 
             yo = -section.ProfilA.ha
             ye = 0
-            xo = -Math.Max(section.ProfilA.b_fs, section.ProfilA.b_fi) / 2 - dCar
+            xo = -Math.Max(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2 - dCar
             xe = xo
 
             MyColor = StyleCouleur(iSelect, 0)
@@ -2027,7 +2027,7 @@ Module Mod_Dessins
 
             yo = -section.ProfilA.ha - dCar
             ye = yo
-            xo = section.ProfilA.b_fi / 2
+            xo = section.ProfilA.Bfi / 2
             xe = -xo
 
             If lAffSymbol Then
@@ -2038,7 +2038,7 @@ Module Mod_Dessins
                     Chaine = "bfi"
                 End If
             Else
-                Chaine = GetStringNoUnit(section.ProfilA.b_fi, Enu_TypeVariable.Dimension)
+                Chaine = GetStringNoUnit(section.ProfilA.Bfi, Enu_TypeVariable.Dimension)
             End If
 
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
@@ -2053,9 +2053,9 @@ Module Mod_Dessins
 
                 yo = 0 + dCar
                 ye = yo
-                xo = section.ProfilA.b_fs / 2
+                xo = section.ProfilA.Bfs / 2
                 xe = -xo
-                If lAffSymbol Then Chaine = "bfs" Else Chaine = GetStringNoUnit(section.ProfilA.b_fs, Enu_TypeVariable.Dimension)
+                If lAffSymbol Then Chaine = "bfs" Else Chaine = GetStringNoUnit(section.ProfilA.Bfs, Enu_TypeVariable.Dimension)
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
@@ -2068,9 +2068,9 @@ Module Mod_Dessins
                 MyColor = StyleCouleur(iSelect, 7)
                 MyPen.Color = MyColor
 
-                yo = 0 - section.ProfilA.t_fs
-                ye = -section.ProfilA.ha + section.ProfilA.t_fi
-                xo = -Math.Min(section.ProfilA.b_fs, section.ProfilA.b_fi) / 2 + dCar
+                yo = 0 - section.ProfilA.Tfs
+                ye = -section.ProfilA.ha + section.ProfilA.Tfi
+                xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2 + dCar
                 xe = xo
 
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
@@ -2089,17 +2089,17 @@ Module Mod_Dessins
 
             yo = -section.ProfilA.ha - dCar / 2
             ye = -section.ProfilA.ha
-            xo = section.ProfilA.b_fi / 2 - dCar
+            xo = section.ProfilA.Bfi / 2 - dCar
             xe = xo
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
 
-            yo = -section.ProfilA.ha + section.ProfilA.t_fi
+            yo = -section.ProfilA.ha + section.ProfilA.Tfi
             ye = yo + dCar
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
             If lAffSymbol Then
                 If lLam Then Chaine = "tf" Else Chaine = "tfi"
             Else
-                Chaine = GetStringInUnit(section.ProfilA.t_fi, Enu_TypeVariable.Dimension, 3, 1, False)
+                Chaine = GetStringInUnit(section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, 1, False)
             End If
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
@@ -2112,14 +2112,14 @@ Module Mod_Dessins
 
                 yo = 0 + dCar / 2
                 ye = 0
-                xo = section.ProfilA.b_fs / 2 - dCar
+                xo = section.ProfilA.Bfs / 2 - dCar
                 xe = xo
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
 
-                yo = 0 - section.ProfilA.t_fs
+                yo = 0 - section.ProfilA.Tfs
                 ye = yo - dCar
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
-                If lAffSymbol Then Chaine = "tfs" Else Chaine = GetStringInUnit(section.ProfilA.t_fs, Enu_TypeVariable.Dimension, 3, 1, False)
+                If lAffSymbol Then Chaine = "tfs" Else Chaine = GetStringInUnit(section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, 1, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             End If
@@ -2133,14 +2133,14 @@ Module Mod_Dessins
 
                 Dim kProj As Decimal = Math.Sqrt(2) / 2
 
-                yo = 0 - section.ProfilA.t_fs - section.ProfilA.r_cs * (1 - kProj)
+                yo = 0 - section.ProfilA.Tfs - section.ProfilA.Rcs * (1 - kProj)
                 ye = yo - dCar * kProj
 
-                xo = section.ProfilA.t_w / 2 + section.ProfilA.r_cs * (1 - kProj)
+                xo = section.ProfilA.Tw / 2 + section.ProfilA.Rcs * (1 - kProj)
                 xe = xo + dCar * kProj
 
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
-                If lAffSymbol Then Chaine = "r" Else Chaine = GetStringNoUnit(section.ProfilA.r_cs, Enu_TypeVariable.Dimension)
+                If lAffSymbol Then Chaine = "r" Else Chaine = GetStringNoUnit(section.ProfilA.Rcs, Enu_TypeVariable.Dimension)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             End If
@@ -2150,18 +2150,18 @@ Module Mod_Dessins
             MyColor = StyleCouleur(iSelect, 5)
             MyPen.Color = MyColor
 
-            xo = -section.ProfilA.t_w / 2
+            xo = -section.ProfilA.Tw / 2
             xe = xo - dCar / 2
-            yo = -(section.ProfilA.ha / 2 - section.ProfilA.t_fs - section.ProfilA.r_cs) * 0.8
+            yo = -(section.ProfilA.ha / 2 - section.ProfilA.Tfs - section.ProfilA.Rcs) * 0.8
             ye = yo
 
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
 
-            xo = section.ProfilA.t_w / 2
+            xo = section.ProfilA.Tw / 2
             xe = xo + dCar
 
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
-            If lAffSymbol Then Chaine = "tw" Else Chaine = GetStringInUnit(section.ProfilA.t_w, Enu_TypeVariable.Dimension, 3, 1, False)
+            If lAffSymbol Then Chaine = "tw" Else Chaine = GetStringInUnit(section.ProfilA.Tw, Enu_TypeVariable.Dimension, 3, 1, False)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
         End If
@@ -2793,7 +2793,7 @@ Module Mod_Dessins
                 xMin = - .Ep / 2
                 xMax = .Ep / 2
 
-                yMin = -MyPoutreLoc.Section.ProfilA.t_fs
+                yMin = -MyPoutreLoc.Section.ProfilA.Tfs
                 yMax = Math.Max(MyPoutreLoc.Dalle.t_d, MyPoutreLoc.Dalle.Connecteur.hsc)
 
                 ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
@@ -2842,21 +2842,21 @@ Module Mod_Dessins
             'Dessin de la semelle supérieure et de l'âme de la poutre
             Dim xSemelleSup As Decimal = 0
             Dim ySemelleSup As Decimal = yPts(3 * yPts.Length / 4)
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup - MyPoutreLoc.Section.ProfilA.t_fs, xSemelleSup + MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - MyPoutreLoc.Section.ProfilA.Bfs / 2 / 2, ySemelleSup - MyPoutreLoc.Section.ProfilA.Tfs, xSemelleSup + MyPoutreLoc.Section.ProfilA.Bfs / 2 / 2, ySemelleSup, MyParAff, True, True)
 
             Dim xAme As Decimal = xSemelleSup
-            Dim yAme As Decimal = ySemelleSup - MyPoutreLoc.Section.ProfilA.t_fs
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - MyPoutreLoc.Section.ProfilA.t_w / 2, yAme - MyPoutreLoc.Section.ProfilA.HauteurAmeHw, xAme + MyPoutreLoc.Section.ProfilA.t_w / 2, yAme, MyParAff, True, True)
+            Dim yAme As Decimal = ySemelleSup - MyPoutreLoc.Section.ProfilA.Tfs
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - MyPoutreLoc.Section.ProfilA.Tw / 2, yAme - MyPoutreLoc.Section.ProfilA.HauteurAmeHw, xAme + MyPoutreLoc.Section.ProfilA.Tw / 2, yAme, MyParAff, True, True)
 
         Else
 
             With MyPoutreLoc.Section.ProfilA
 
                 '--> Preparation de la zone d'affichage - Calcul de ParAff
-                xMin = - .b_fs
-                xMax = .b_fs
+                xMin = - .Bfs
+                xMax = .Bfs
 
-                yMin = -MyPoutreLoc.Section.ProfilA.t_fs
+                yMin = -MyPoutreLoc.Section.ProfilA.Tfs
                 yMax = Math.Max(MyPoutreLoc.Dalle.t_d, MyPoutreLoc.Dalle.Connecteur.hsc)
 
                 ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
@@ -2867,7 +2867,7 @@ Module Mod_Dessins
             Dim xBeton As Decimal = 0
             Dim yBeton As Decimal = 0
 
-            AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - MyPoutreLoc.Section.ProfilA.b_fs, yBeton, xBeton + MyPoutreLoc.Section.ProfilA.b_fs, yBeton + MyPoutreLoc.Dalle.t_d, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - MyPoutreLoc.Section.ProfilA.Bfs, yBeton, xBeton + MyPoutreLoc.Section.ProfilA.Bfs, yBeton + MyPoutreLoc.Dalle.t_d, MyParAff, True, True)
 
             '--> Dessin du goujon
 
@@ -2886,11 +2886,11 @@ Module Mod_Dessins
 
             Dim xSemelleSup As Decimal = 0
             Dim ySemelleSup As Decimal = 0
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup - MyPoutreLoc.Section.ProfilA.t_fs, xSemelleSup + MyPoutreLoc.Section.ProfilA.b_fs / 2 / 2, ySemelleSup, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xSemelleSup - MyPoutreLoc.Section.ProfilA.Bfs / 2 / 2, ySemelleSup - MyPoutreLoc.Section.ProfilA.Tfs, xSemelleSup + MyPoutreLoc.Section.ProfilA.Bfs / 2 / 2, ySemelleSup, MyParAff, True, True)
 
             Dim xAme As Decimal = xSemelleSup
-            Dim yAme As Decimal = ySemelleSup - MyPoutreLoc.Section.ProfilA.t_fs
-            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - MyPoutreLoc.Section.ProfilA.t_w / 2, yAme - MyPoutreLoc.Section.ProfilA.HauteurAmeHw, xAme + MyPoutreLoc.Section.ProfilA.t_w / 2, yAme, MyParAff, True, True)
+            Dim yAme As Decimal = ySemelleSup - MyPoutreLoc.Section.ProfilA.Tfs
+            AddRectanglePlein(myGr, myBrushProfilA, MyPenContour, xAme - MyPoutreLoc.Section.ProfilA.Tw / 2, yAme - MyPoutreLoc.Section.ProfilA.HauteurAmeHw, xAme + MyPoutreLoc.Section.ProfilA.Tw / 2, yAme, MyParAff, True, True)
 
         End If
 
@@ -4130,7 +4130,7 @@ Module Mod_Dessins
 
         '--> Initialisations
 
-        BfMax = Math.Max(MySection.ProfilA.b_fs, MySection.ProfilA.b_fi)
+        BfMax = Math.Max(MySection.ProfilA.Bfs, MySection.ProfilA.Bfi)
 
         '--> Couleur
 
@@ -4203,7 +4203,7 @@ Module Mod_Dessins
         '   Position z = 0 : Fibre inférieur du profilé, hors le plat
         '------------------------------------------------------------------------------------------------------------------
 
-        Dim ZREF As Decimal = MySection.ProfilA.t_fi
+        Dim ZREF As Decimal = MySection.ProfilA.Tfi
         Dim lMixte As Boolean = (MySection.typeSection = cls_Section.Enum_TypeSection.SABmixte)
 
         '--> Dessin de la dalle pour un SFB mixte
@@ -4311,7 +4311,7 @@ Module Mod_Dessins
 
             Select Case MyDalle.type
                 Case Cls_Dalle.Enum_TypeDalle.Pleine
-                    DessinDallePleine(MyGr, MyDalle, MySection.ProfilA.ha, MySection.ProfilA.b_fs, MyParaff1, myBrushB, BeffRed)
+                    DessinDallePleine(MyGr, MyDalle, MySection.ProfilA.ha, MySection.ProfilA.Bfs, MyParaff1, myBrushB, BeffRed)
                     'Case Cls_Dalle.Enum_TypeDalle.Mixte
                     '    DessinDalleMixte(MyGr, Section.dalle, BeffRed, Section.ha, Section.b_fs, ZREF, MyParAff, myBrushB)
             End Select
@@ -4351,7 +4351,7 @@ Module Mod_Dessins
         Dim Hp As Decimal = MyDalle.Bac.Hp
         Dim xPts(), yPts() As Single
         Dim nbPts As Integer
-        Dim Bfs As Decimal = MyProfil.b_fs
+        Dim Bfs As Decimal = MyProfil.Bfs
         Dim zTop As Decimal = MyDalle.zTop
         Dim xo, yo As Decimal
         Dim xe, ye As Decimal
@@ -5358,28 +5358,28 @@ Module Mod_Dessins
 
                 '-< Semelle supérieure >-
 
-                xe = xPos + MyProfil.b_fs / 2
-                xo = xPos - MyProfil.b_fs / 2
+                xe = xPos + MyProfil.Bfs / 2
+                xo = xPos - MyProfil.Bfs / 2
                 ye = -zRef
-                yo = -MyProfil.t_fs - zRef
+                yo = -MyProfil.Tfs - zRef
 
                 AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
 
                 '-< Semelle inférieure >-
 
-                xe = xPos + MyProfil.b_fi / 2
-                xo = xPos - MyProfil.b_fi / 2
+                xe = xPos + MyProfil.Bfi / 2
+                xo = xPos - MyProfil.Bfi / 2
                 ye = -MyProfil.ha - zRef                  '   - Section.ha / 2
-                yo = -MyProfil.ha + MyProfil.t_fi - zRef
+                yo = -MyProfil.ha + MyProfil.Tfi - zRef
 
                 AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
 
                 '-< Âme >-
 
-                xe = xPos + MyProfil.t_w / 2
-                xo = xPos - MyProfil.t_w / 2
-                ye = -MyProfil.t_fs - zRef
-                yo = -MyProfil.ha - zRef + MyProfil.t_fi
+                xe = xPos + MyProfil.Tw / 2
+                xo = xPos - MyProfil.Tw / 2
+                ye = -MyProfil.Tfs - zRef
+                yo = -MyProfil.ha - zRef + MyProfil.Tfi
 
                 AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
 
@@ -5409,20 +5409,20 @@ Module Mod_Dessins
 
         With myProfil
 
-            xPts(0) = .t_w / 2
+            xPts(0) = .Tw / 2
             yPts(0) = - .ha / 2
 
             Dim DeltaA As Double = Math.PI / 10
 
             For i = 1 To 6
-                xPts(i) = .t_w / 2 + .r_cs * (1 + CSng(Math.Cos(Math.PI - (i - 1) * DeltaA)))
-                yPts(i) = - .t_fs - .r_cs + .r_cs * CSng(Math.Sin(Math.PI - (i - 1) * DeltaA))
+                xPts(i) = .Tw / 2 + .Rcs * (1 + CSng(Math.Cos(Math.PI - (i - 1) * DeltaA)))
+                yPts(i) = - .Tfs - .Rcs + .Rcs * CSng(Math.Sin(Math.PI - (i - 1) * DeltaA))
             Next
 
-            xPts(7) = .b_fs / 2
-            yPts(7) = - .t_fs
+            xPts(7) = .Bfs / 2
+            yPts(7) = - .Tfs
 
-            xPts(8) = .b_fs / 2
+            xPts(8) = .Bfs / 2
             yPts(8) = 0
 
             For i = 9 To 17
@@ -5431,14 +5431,14 @@ Module Mod_Dessins
             Next
 
             For i = 18 To 23
-                xPts(i) = - .t_w / 2 - .r_ci * (1 + CSng(Math.Cos(Math.PI - (i - 18) * DeltaA)))
-                yPts(i) = - .ha + .t_fi + .r_ci - .r_ci * CSng(Math.Sin(Math.PI - (i - 18) * DeltaA))
+                xPts(i) = - .Tw / 2 - .Rci * (1 + CSng(Math.Cos(Math.PI - (i - 18) * DeltaA)))
+                yPts(i) = - .ha + .Tfi + .Rci - .Rci * CSng(Math.Sin(Math.PI - (i - 18) * DeltaA))
             Next
 
-            xPts(24) = - .b_fi / 2
-            yPts(24) = - .ha + .t_fi
+            xPts(24) = - .Bfi / 2
+            yPts(24) = - .ha + .Tfi
 
-            xPts(25) = - .b_fi / 2
+            xPts(25) = - .Bfi / 2
             yPts(25) = - .ha
 
             For i = 26 To 35
@@ -5480,10 +5480,10 @@ Module Mod_Dessins
 
         '--> Dessin bloc béton
 
-        xe = xPos + profile.b_fi / 2 * MyRatioBc
-        xo = xPos - profile.b_fi / 2 * MyRatioBc
-        ye = -profile.ha + profile.t_fi
-        yo = -profile.t_fs
+        xe = xPos + profile.Bfi / 2 * MyRatioBc
+        xo = xPos - profile.Bfi / 2 * MyRatioBc
+        ye = -profile.ha + profile.Tfi
+        yo = -profile.Tfs
 
         AddRectanglePlein(MyGr, MyBrushBp, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
 
@@ -5563,8 +5563,8 @@ Module Mod_Dessins
         Uy = MyEnrob.Etriers_EnrobageY
         Uz = MyEnrob.Etriers_EnrobageZ
         EtriersPhi = MyEnrob.Etriers_Phi
-        Bfs = MySection.ProfilA.b_fs
-        Tw = MySection.ProfilA.t_w
+        Bfs = MySection.ProfilA.Bfs
+        Tw = MySection.ProfilA.Tw
 
         '--> Armatures extérieures
 
@@ -5658,11 +5658,11 @@ Module Mod_Dessins
 
         Select Case iArma
             Case 0
-                yo = -MyProfil.ha + MyProfil.t_fi + MyEnrob.Etriers_EnrobageZ + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2
+                yo = -MyProfil.ha + MyProfil.Tfi + MyEnrob.Etriers_EnrobageZ + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2
             Case 1
                 yo = -MyProfil.ha / 2
             Case 2
-                yo = -MyProfil.t_fs - MyEnrob.Etriers_EnrobageZ - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2
+                yo = -MyProfil.Tfs - MyEnrob.Etriers_EnrobageZ - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2
         End Select
         Select Case MyEnrob.Etriers_Type
             Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : uYInterne = MyEnrob.Etriers_EnrobageY
@@ -5680,8 +5680,8 @@ Module Mod_Dessins
 
         For jChambre As Integer = 0 To 1
 
-            xo = Signe * (MyProfil.b_fs * MyEnrob.Ratio_bc / 2 - MyEnrob.Etriers_EnrobageY - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2)
-            xe = Signe * (MyProfil.t_w / 2 + uYInterne + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2)
+            xo = Signe * (MyProfil.Bfs * MyEnrob.Ratio_bc / 2 - MyEnrob.Etriers_EnrobageY - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2)
+            xe = Signe * (MyProfil.Tw / 2 + uYInterne + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2)
 
             If MyEnrob.LitsArmaOLD(iArma).nbArma = 1 Then
                 Delta = 1
@@ -5744,8 +5744,8 @@ Module Mod_Dessins
 
         '--> Initialisation
 
-        Dim Diagonale As Decimal = Math.Sqrt((MySection.ProfilA.b_fi + MySection.ProfilA.b_fs) ^ 2 / 4 + MySection.ProfilA.ha ^ 2)
-        Dim BfMax As Decimal = Math.Max(MySection.ProfilA.b_fs, MySection.ProfilA.b_fi)
+        Dim Diagonale As Decimal = Math.Sqrt((MySection.ProfilA.Bfi + MySection.ProfilA.Bfs) ^ 2 / 4 + MySection.ProfilA.ha ^ 2)
+        Dim BfMax As Decimal = Math.Max(MySection.ProfilA.Bfs, MySection.ProfilA.Bfi)
 
         '--> Traitement
 
@@ -5762,9 +5762,9 @@ Module Mod_Dessins
                     yMax += MyDalle.t_d + MyDalle.EpRenformis
                     xMin = -Math.Max(BeffRed / 2, BfMax)
                     xMax = -xMin
-                    dCar = Math.Max(Math.Sqrt(((MySection.ProfilA.ha + MyDalle.zTop) ^ 2 + (MySection.ProfilA.b_fs + MySection.ProfilA.b_fi) ^ 2)), BeffRed) / 20
+                    dCar = Math.Max(Math.Sqrt(((MySection.ProfilA.ha + MyDalle.zTop) ^ 2 + (MySection.ProfilA.Bfs + MySection.ProfilA.Bfi) ^ 2)), BeffRed) / 20
                 Else
-                    dCar = Math.Sqrt((MySection.ProfilA.ha ^ 2 + (MySection.ProfilA.b_fs + MySection.ProfilA.b_fi) ^ 2)) / 20
+                    dCar = Math.Sqrt((MySection.ProfilA.ha ^ 2 + (MySection.ProfilA.Bfs + MySection.ProfilA.Bfi) ^ 2)) / 20
                 End If
 
             Case cls_Section.Enum_TypeSection.SFB

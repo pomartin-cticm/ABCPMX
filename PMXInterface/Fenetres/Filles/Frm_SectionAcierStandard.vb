@@ -238,11 +238,11 @@ Public Class Frm_SectionAcierStandard
         Me.txt_Ha.Text = GetStringNoUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension)
         Me.txt_Hw.Text = GetStringNoUnit(MySectionLoc.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension)
 
-        Me.txt_Bfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.b_fi, Enu_TypeVariable.Dimension)
-        Me.txt_Bfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.b_fs, Enu_TypeVariable.Dimension)
-        Me.txt_Tfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.t_fi, Enu_TypeVariable.Dimension)
-        Me.txt_Tfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.t_fs, Enu_TypeVariable.Dimension)
-        Me.txt_Tw.Text = GetStringNoUnit(MySectionLoc.ProfilA.t_w, Enu_TypeVariable.Dimension)
+        Me.txt_Bfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.Bfi, Enu_TypeVariable.Dimension)
+        Me.txt_Bfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension)
+        Me.txt_Tfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension)
+        Me.txt_Tfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension)
+        Me.txt_Tw.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension)
 
     End Sub
 
@@ -414,7 +414,29 @@ Public Class Frm_SectionAcierStandard
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
-        cls_Section.CloneSection(MySectionLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section)
+        lModif = False
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier <> MySectionLoc.ProfilA.typeProfileAcier Then
+            MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier = MySectionLoc.ProfilA.typeProfileAcier
+            lModif = True
+        End If
+
+        GereTransfertValeur(MySectionLoc.ProfilA.ha, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.ha, lModif)
+        GereTransfertValeur(MySectionLoc.ProfilA.Bfs, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Bfs, lModif)
+        GereTransfertValeur(MySectionLoc.ProfilA.Bfi, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Bfi, lModif)
+        GereTransfertValeur(MySectionLoc.ProfilA.Tfs, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Tfs, lModif)
+        GereTransfertValeur(MySectionLoc.ProfilA.Tfi, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Tfi, lModif)
+        GereTransfertValeur(MySectionLoc.ProfilA.Rcs, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Rcs, lModif)
+        GereTransfertValeur(MySectionLoc.ProfilA.Rci, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Rci, lModif)
+        GereTransfertValeur(MySectionLoc.ProfilA.Tw, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Tw, lModif)
+
+        GereTransfertValeur(MySectionLoc.ProfilA.NomProfile, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.NomProfile, lModif)
+
+        GereTransfertValeur(MySectionLoc.Acier.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Nuance, lModif)
+        GereTransfertValeur(MySectionLoc.Acier.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Qualite, lModif)
+        GereTransfertValeur(MySectionLoc.Acier.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.NormeProduit, lModif)
+
+        'cls_Section.CloneSection(MySectionLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section)
 
     End Sub
 
@@ -495,7 +517,7 @@ Public Class Frm_SectionAcierStandard
 
         '--( Epaisseur du profilé pour le calcul
 
-        EpProfile = Math.Max(MySectionLoc.ProfilA.t_w, MySectionLoc.ProfilA.t_fs)
+        EpProfile = Math.Max(MySectionLoc.ProfilA.Tw, MySectionLoc.ProfilA.Tfs)
         FyPro = MySectionLoc.Acier.LimiteFy(EpProfile)
         EpPlagesMax = MySectionLoc.Acier.EpMax
 
@@ -823,26 +845,26 @@ Public Class Frm_SectionAcierStandard
             Select Case sender.name
                 Case Me.txt_Ha.Name
                     MySectionLoc.ProfilA.ha = Valeur
-                    Hcomp = Valeur - MySectionLoc.ProfilA.t_fi - MySectionLoc.ProfilA.t_fs
+                    Hcomp = Valeur - MySectionLoc.ProfilA.Tfi - MySectionLoc.ProfilA.Tfs
                     Me.txt_Hw.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
                 Case Me.txt_Hw.Name
-                    Hcomp = Valeur + MySectionLoc.ProfilA.t_fi + MySectionLoc.ProfilA.t_fs
+                    Hcomp = Valeur + MySectionLoc.ProfilA.Tfi + MySectionLoc.ProfilA.Tfs
                     Me.txt_Ha.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
                     MySectionLoc.ProfilA.ha = Hcomp
                 Case Me.txt_Tw.Name
-                    MySectionLoc.ProfilA.t_w = Valeur
+                    MySectionLoc.ProfilA.Tw = Valeur
                 Case Me.txt_Bfs.Name
-                    MySectionLoc.ProfilA.b_fs = Valeur
+                    MySectionLoc.ProfilA.Bfs = Valeur
                     If lSym Then
-                        MySectionLoc.ProfilA.b_fi = Valeur
+                        MySectionLoc.ProfilA.Bfi = Valeur
                         Me.txt_Bfi.Text = Me.txt_Bfs.Text
                     End If
                 Case Me.txt_Tfs.Name
-                    MySectionLoc.ProfilA.t_fs = Valeur
+                    MySectionLoc.ProfilA.Tfs = Valeur
                 Case Me.txt_Bfi.Name
-                    MySectionLoc.ProfilA.b_fi = Valeur
+                    MySectionLoc.ProfilA.Bfi = Valeur
                 Case Me.txt_Tfi.Name
-                    MySectionLoc.ProfilA.t_fi = Valeur
+                    MySectionLoc.ProfilA.Tfi = Valeur
             End Select
         End If
 
@@ -1079,14 +1101,14 @@ Public Class Frm_SectionAcierStandard
         MySectionLoc.ProfilA.NomProfile = Profile
 
         MySectionLoc.ProfilA.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
-        MySectionLoc.ProfilA.b_fs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
-        MySectionLoc.ProfilA.t_fs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
-        MySectionLoc.ProfilA.t_w = MyCatalogue.Series(Gamme).Profiles(Profile).Tw
-        MySectionLoc.ProfilA.r_cs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
+        MySectionLoc.ProfilA.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
+        MySectionLoc.ProfilA.Tfs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
+        MySectionLoc.ProfilA.Tw = MyCatalogue.Series(Gamme).Profiles(Profile).Tw
+        MySectionLoc.ProfilA.Rcs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
 
-        MySectionLoc.ProfilA.b_fi = MySectionLoc.ProfilA.b_fs
-        MySectionLoc.ProfilA.r_ci = MySectionLoc.ProfilA.r_cs
-        MySectionLoc.ProfilA.t_fi = MySectionLoc.ProfilA.t_fs
+        MySectionLoc.ProfilA.Bfi = MySectionLoc.ProfilA.Bfs
+        MySectionLoc.ProfilA.Rci = MySectionLoc.ProfilA.Rcs
+        MySectionLoc.ProfilA.Tfi = MySectionLoc.ProfilA.Tfs
 
         For i As Integer = 0 To MyCatalogue.nbStandard - 1
             MySectionLoc.ProfilA.IndStandart(i) = MyCatalogue.Series(Gamme).Profiles(Profile).IndStandart(i)

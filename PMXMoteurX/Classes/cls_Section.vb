@@ -132,25 +132,25 @@ Public Class cls_Section
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.t_fs, -Me.ProfilA.t_fs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, -Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.ProfilA.t_w, Hw, -Me.ProfilA.t_fs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, -Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.t_fi, -Me.ProfilA.ha + Me.ProfilA.t_fi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, -Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
 
         If lLamine Then
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -158,7 +158,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.t_w)
+            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
             EpaisseurC = Me.ProfilA.HauteurAmeHw
             FdC = Me.enrobage_partiel.Beton.Fck
 
@@ -170,11 +170,11 @@ Public Class cls_Section
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
 
             End If
         End If
@@ -259,25 +259,25 @@ Public Class cls_Section
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.t_fs, -Me.ProfilA.t_fs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, -Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.ProfilA.t_w, Hw, -Me.ProfilA.t_fs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, -Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.t_fi, -Me.ProfilA.ha + Me.ProfilA.t_fi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, -Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
 
         If lLamine Then
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -285,7 +285,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.t_w)
+            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
             EpaisseurC = Me.ProfilA.HauteurAmeHw
             FdC = Me.enrobage_partiel.Beton.Fck
 
@@ -297,11 +297,11 @@ Public Class cls_Section
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
 
             End If
         End If
@@ -394,25 +394,25 @@ Public Class cls_Section
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.t_fs, -Me.ProfilA.t_fs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, -Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.ProfilA.t_w, Hw, -Me.ProfilA.t_fs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, -Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.t_fi, -Me.ProfilA.ha + Me.ProfilA.t_fi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, -Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
 
         If lLamine Then
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -420,7 +420,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.t_w)
+            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
             EpaisseurC = Me.ProfilA.HauteurAmeHw
             FdC = Me.enrobage_partiel.Beton.Fck
 
@@ -432,11 +432,11 @@ Public Class cls_Section
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
 
             End If
         End If
@@ -523,25 +523,25 @@ Public Class cls_Section
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.t_fs, -Me.ProfilA.t_fs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, -Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.ProfilA.t_w, Hw, -Me.ProfilA.t_fs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, -Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.t_fi, -Me.ProfilA.ha + Me.ProfilA.t_fi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, -Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
 
         If lLamine Then
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -549,7 +549,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.t_w)
+            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
             EpaisseurC = Me.ProfilA.HauteurAmeHw
             FdC = Me.enrobage_partiel.Beton.Fck
 
@@ -561,11 +561,11 @@ Public Class cls_Section
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.r_cs, -Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.r_ci, -Me.ProfilA.ha + Me.ProfilA.t_fs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
 
             End If
         End If
@@ -647,7 +647,7 @@ Public Class cls_Section
         Dim Hw As Decimal
         Dim lLamine As Boolean = Me.lLamine
         Const RhoV As Decimal = 0
-        Dim Rc As Decimal = (Me.ProfilA.r_cs + Me.ProfilA.r_ci) / 2
+        Dim Rc As Decimal = (Me.ProfilA.Rcs + Me.ProfilA.Rci) / 2
 
         '--> Initialisation
 
@@ -657,25 +657,25 @@ Public Class cls_Section
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.b_fs, 0, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Bfs, 0, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.ProfilA.t_w, Me.ProfilA.t_w, 0, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Me.ProfilA.Tw, 0, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.b_fi, 0, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Bfi, 0, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
 
         If lLamine Then
 
             '# Congés supérieurs (c'est à dire, côté gauche)
 
-            MyModele.AddMailleConges(Rc, -Me.ProfilA.t_w / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Rc, -Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs (c'est à dire, côté droite)
 
-            MyModele.AddMailleConges(Rc, +Me.ProfilA.t_w / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Rc, +Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -789,7 +789,7 @@ Public Class cls_Section
 
     Public ReadOnly Property LargeurEnrobagePartielBc As Decimal
         Get
-            Return Me.ProfilA.b_fs * Me.enrobage_partiel.Ratio_bc
+            Return Me.ProfilA.Bfs * Me.enrobage_partiel.Ratio_bc
         End Get
     End Property
 
@@ -814,7 +814,7 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property FySup As Decimal
         Get
-            Return Me.Acier.LimiteFy(Me.ProfilA.t_fs)
+            Return Me.Acier.LimiteFy(Me.ProfilA.Tfs)
         End Get
     End Property
 
@@ -824,7 +824,7 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property FyInf As Decimal
         Get
-            Return Me.Acier.LimiteFy(Me.ProfilA.t_fi)
+            Return Me.Acier.LimiteFy(Me.ProfilA.Tfi)
         End Get
     End Property
 
@@ -834,7 +834,7 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property FyW As Decimal
         Get
-            Return Me.Acier.LimiteFy(Me.ProfilA.t_w)
+            Return Me.Acier.LimiteFy(Me.ProfilA.Tw)
         End Get
     End Property
 
@@ -914,7 +914,7 @@ Public Class cls_Section
         kc = 0.6
         k = 0.8
         fct_eff = enrobage_partiel.Beton.Fctm
-        Act = enrobage_partiel.Ratio_bc * ProfilA.b_fs * ProfilA.HauteurAmeHw
+        Act = enrobage_partiel.Ratio_bc * ProfilA.Bfs * ProfilA.HauteurAmeHw
 
         If enrobage_partiel.Beton.lCrackingLimitation Then
             Dim phi_max As Decimal = enrobage_partiel.Get_Phi_Max()
@@ -946,7 +946,7 @@ Public Class cls_Section
 
             Dim h_w As Decimal = ProfilA.HauteurAmeHw
             'Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.b_c - ProfilA.t_w) - (4 - Math.PI) * ProfilA.r_cs ^ 2) / (2 * h_w)
-            Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.Get_b_c(ProfilA.b_fs) - ProfilA.t_w) - (4 - Math.PI) * ProfilA.r_cs ^ 2) / (2 * h_w)
+            Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.Get_b_c(ProfilA.Bfs) - ProfilA.Tw) - (4 - Math.PI) * ProfilA.Rcs ^ 2) / (2 * h_w)
             Param.Prop_Elastique_Enrobage.Calcul_Coeff(E, enrobage_partiel.Beton.Fcm, enrobage_partiel.Beton.Ecm)
 
         End If
@@ -1184,9 +1184,9 @@ Public Class cls_Section
 
         With Me.enrobage_partiel
 
-            .LitsArmaOLD(0).zArma = -Me.ProfilA.ha + Me.ProfilA.t_fi + .Etriers_EnrobageZ + .Etriers_Phi + .LitsArmaOLD(0).Phi / 2
+            .LitsArmaOLD(0).zArma = -Me.ProfilA.ha + Me.ProfilA.Tfi + .Etriers_EnrobageZ + .Etriers_Phi + .LitsArmaOLD(0).Phi / 2
 
-            .LitsArmaOLD(2).zArma = -Me.ProfilA.t_fs - .Etriers_EnrobageZ - .Etriers_Phi - .LitsArmaOLD(2).Phi / 2
+            .LitsArmaOLD(2).zArma = -Me.ProfilA.Tfs - .Etriers_EnrobageZ - .Etriers_Phi - .LitsArmaOLD(2).Phi / 2
 
             .LitsArmaOLD(1).zArma = (.LitsArmaOLD(0).zArma + .LitsArmaOLD(2).zArma) / 2
 
@@ -1219,13 +1219,13 @@ Public Class cls_Section
 
         Select Case iArma
             Case 0
-                zPos = +DeltaZ - Me.ProfilA.ha + Me.ProfilA.t_fi _
+                zPos = +DeltaZ - Me.ProfilA.ha + Me.ProfilA.Tfi _
                      + Me.enrobage_partiel.Etriers_EnrobageZ + Me.enrobage_partiel.Etriers_Phi
 
             Case 1
                 zPos = -Me.enrobage_partiel.LitArma(iArma).zPosRatio * Me.ProfilA.ha
             Case 2
-                zPos = -DeltaZ - Me.ProfilA.t_fs _
+                zPos = -DeltaZ - Me.ProfilA.Tfs _
                      - Me.enrobage_partiel.Etriers_EnrobageZ - Me.enrobage_partiel.Etriers_Phi
         End Select
 
@@ -1264,14 +1264,14 @@ Public Class cls_Section
 
             Case 0
                 '-- LIT INFERIEUR---------------------------
-                zPos = -Me.ProfilA.ha + Me.ProfilA.t_fi + Uz + PhiE + PhiA / 2
+                zPos = -Me.ProfilA.ha + Me.ProfilA.Tfi + Uz + PhiE + PhiA / 2
                 If iBarre = 3 Then zPos += PhiA * Math.Sqrt(3) / 2
             Case 1
                 '-- LIT CENTRAL ----------------------------
                 zPos = zPositionLitArmaEnrobage(1)
             Case 2
                 '-- LIT SUPERIEUR---------------------------
-                zPos = -Me.ProfilA.t_fs - Uz - PhiE - PhiA / 2
+                zPos = -Me.ProfilA.Tfs - Uz - PhiE - PhiA / 2
                 If iBarre = 3 Then zPos -= PhiA * Math.Sqrt(3) / 2
         End Select
 

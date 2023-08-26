@@ -456,28 +456,28 @@ Module Mod_NoteCalcul
 
         AddLigneNDC(TABW2 & Bloc("HS_PROFILE") & TABAFF & "h\-s\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ha, Enu_TypeVariable.Dimension, 3, -1, True))
         If lLamine Then
-            AddLigneNDC(TABW2 & Bloc("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.b_fs, Enu_TypeVariable.Dimension, 3, -1, True))
-            AddLigneNDC(TABW2 & Bloc("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.t_fs, Enu_TypeVariable.Dimension, 3, -1, True))
+            AddLigneNDC(TABW2 & Bloc("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
+            AddLigneNDC(TABW2 & Bloc("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
         Else
             If lPRSSym Then
-                AddLigneNDC(TABW2 & Bloc("BF_PROFILE") & TABAFF & "b\-fs\==b\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.b_fs, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("TF_PROFILE") & TABAFF & "t\-fs\==t\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.t_fs, Enu_TypeVariable.Dimension, 4, 1, True))
+                AddLigneNDC(TABW2 & Bloc("BF_PROFILE") & TABAFF & "b\-fs\==b\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & Bloc("TF_PROFILE") & TABAFF & "t\-fs\==t\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, True))
             Else
-                AddLigneNDC(TABW2 & Bloc("BFS_PROFILE") & TABAFF & "b\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.b_fs, Enu_TypeVariable.Dimension, 3, -1, True))
-                AddLigneNDC(TABW2 & Bloc("TFS_PROFILE") & TABAFF & "t\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.t_fs, Enu_TypeVariable.Dimension, 3, -1, True))
-                AddLigneNDC(TABW2 & Bloc("BFI_PROFILE") & TABAFF & "b\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.b_fi, Enu_TypeVariable.Dimension, 3, -1, True))
-                AddLigneNDC(TABW2 & Bloc("TFI_PROFILE") & TABAFF & "t\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.t_fi, Enu_TypeVariable.Dimension, 3, -1, True))
+                AddLigneNDC(TABW2 & Bloc("BFS_PROFILE") & TABAFF & "b\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
+                AddLigneNDC(TABW2 & Bloc("TFS_PROFILE") & TABAFF & "t\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
+                AddLigneNDC(TABW2 & Bloc("BFI_PROFILE") & TABAFF & "b\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfi, Enu_TypeVariable.Dimension, 3, -1, True))
+                AddLigneNDC(TABW2 & Bloc("TFI_PROFILE") & TABAFF & "t\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, -1, True))
             End If
         End If
         AddLigneNDC(TABW2 & Bloc("HW_PROFILE") & TABAFF & "h\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 3, -1, True))
         AddLigneNDC(TABW2 & Bloc("DW_PROFILE") & TABAFF & "d\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.HauteurAmeDw, Enu_TypeVariable.Dimension, 3, -1, True))
-        AddLigneNDC(TABW2 & Bloc("TW_PROFILE") & TABAFF & "t\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.t_w, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & Bloc("TW_PROFILE") & TABAFF & "t\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tw, Enu_TypeVariable.Dimension, 3, -1, True))
 
         If lLamine Then
-            AddLigneNDC(TABW2 & Bloc("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.r_cs, Enu_TypeVariable.Dimension, 2, -1, True))
+            AddLigneNDC(TABW2 & Bloc("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Rcs, Enu_TypeVariable.Dimension, 2, -1, True))
             'AddLigneNDC(TABW2 & Bloc("RCI_PROFILE") & TABAFF & "r\-ci\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.r_ci, Enu_TypeVariable.Dimension, 4, 0, True))
         Else
-            AddLigneNDC(TABW2 & Bloc("AWELD_PROFILE") & TABAFF & "a" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.a, Enu_TypeVariable.Dimension, 2, -1, True))
+            AddLigneNDC(TABW2 & Bloc("AWELD_PROFILE") & TABAFF & "a" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.aW, Enu_TypeVariable.Dimension, 2, -1, True))
         End If
 
         SauteLigne()

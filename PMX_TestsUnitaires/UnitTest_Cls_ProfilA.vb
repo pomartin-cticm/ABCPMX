@@ -24,13 +24,13 @@ Imports PMXMoteur2
         '# IPE 300
 
         MyProfil.ha = 0.3
-        MyProfil.b_fi = 0.15
-        MyProfil.b_fs = 0.15
-        MyProfil.t_fi = 0.0107
-        MyProfil.t_fs = 0.0107
-        MyProfil.t_w = 0.0071
-        MyProfil.r_ci = 0.015
-        MyProfil.r_cs = 0.015
+        MyProfil.Bfi = 0.15
+        MyProfil.Bfs = 0.15
+        MyProfil.Tfi = 0.0107
+        MyProfil.Tfs = 0.0107
+        MyProfil.Tw = 0.0071
+        MyProfil.Rci = 0.015
+        MyProfil.Rcs = 0.015
         MyProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
 
         '# Aire de cisaillement
@@ -134,13 +134,13 @@ Imports PMXMoteur2
         '# IPE 300
 
         MyProfil.ha = 0.575
-        MyProfil.b_fi = 0.35
-        MyProfil.b_fs = 0.25
-        MyProfil.t_fi = 0.04
-        MyProfil.t_fs = 0.025
-        MyProfil.t_w = 0.015
-        MyProfil.r_ci = 0.00
-        MyProfil.r_cs = 0.00
+        MyProfil.Bfi = 0.35
+        MyProfil.Bfs = 0.25
+        MyProfil.Tfi = 0.04
+        MyProfil.Tfs = 0.025
+        MyProfil.Tw = 0.015
+        MyProfil.Rci = 0.00
+        MyProfil.Rcs = 0.00
         MyProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
 
         '# Aire de cisaillement

@@ -1135,4 +1135,76 @@ Module Mod_Outils
     End Sub
 #End Region
 
+
+#Region "   Recherche des fichiers langues présents "
+
+    Sub RechercheLangue(ByVal RepRec As String, ByVal Racine As String,
+                        ByRef tabLangue As List(Of String), ByRef tabAbbrege As List(Of String))
+        '------------------------------------------------------------------------------------------------
+        '
+        '   13/09/07 :  Création - Version 1.00
+        '
+        '------------------------------------------------------------------------------------------------
+        '
+        '   Recherche dans le répertoire d'installation des fichiers langue présents
+        '
+        '------------------------------------------------------------------------------------------------
+        '
+        '   RepRec      [E] :   Répertoire dans lequel sont recherchés les fichiers langue
+        '   Racine      [E] :   Racine du nom de fichiers
+        '                       On recherche les fichiers Racine_xx.LNG ou Racine_x.LNG
+        '
+        '   tabLangue   [S] :   table des langues présentes
+        '   tabAbbrege  [S] :   table des langues présentes (abbrviations)
+        '
+        '------------------------------------------------------------------------------------------------
+
+
+        tabAbbrege.Clear()
+        tabLangue.Clear()
+
+        Dim tabFiles As String()
+        Dim RacineComplete As String = RepRec & "\" & Racine
+        Dim IndPoint As Integer
+        Dim RacFichier, Symb As String
+
+        tabFiles = Directory.GetFiles(RepRec, "*.LNG")
+
+        For i As Integer = 0 To tabFiles.GetUpperBound(0)
+
+            IndPoint = tabFiles(i).IndexOf(".LNG")
+
+            If tabFiles(i).Substring(IndPoint - 3, 1) = "_" Then
+                Symb = tabFiles(i).Substring(IndPoint - 2, 2)
+                RacFichier = tabFiles(i).Substring(0, IndPoint - 3)
+            Else
+                Symb = tabFiles(i).Substring(IndPoint - 1, 1)
+                RacFichier = tabFiles(i).Substring(0, IndPoint - 2)
+            End If
+
+            If RacFichier.ToUpper = RacineComplete.ToUpper Then
+                '--[ Si la racine correspond bien :
+                tabAbbrege.Add(Symb)
+                Select Case Symb
+                    Case "EN"
+                        tabLangue.Add("English")
+                    Case "FR"
+                        tabLangue.Add("Français")
+                    Case "ES"
+                        tabLangue.Add("Espanol")
+                    Case "IT"
+                        tabLangue.Add("Italiano")
+                    Case "DE"
+                        tabLangue.Add("Deutsch")
+                    Case "PT"
+                        tabLangue.Add("Português")
+                End Select
+            End If
+
+        Next
+
+    End Sub
+
+#End Region
+
 End Module

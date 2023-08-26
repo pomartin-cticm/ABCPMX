@@ -384,6 +384,12 @@ Module Mod_Declarations
 
 #End Region
 
+#Region " Paramétrage Logiciel "
+
+    Public Const EXTENSIONLANGUE As String = ".LNG"
+
+#End Region
+
 #Region " Paramètres de STYLE (Couleurs...) "
 
     '== Palette CTICM
