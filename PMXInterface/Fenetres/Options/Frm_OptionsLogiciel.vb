@@ -51,7 +51,6 @@ Public Class Frm_OptionsLogiciel
 
 #End Region
 
-
 #Region " Variables "
 
     Dim lBuild As Boolean = True
@@ -260,6 +259,9 @@ Public Class Frm_OptionsLogiciel
         pLocalRepWDefaut = LogicielRep.TravailDefaut
         pLocallDefaultRepW = LogicielRep.lTravailDefaut
 
+        pLocalLogicielOptions.UserName = LogicielOptions.UserName
+        pLocalLogicielOptions.CompanyName = LogicielOptions.CompanyName
+
     End Sub
 
     Private Sub AfficherFenetreFille()
@@ -431,6 +433,9 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocalLogicielOptions.IndLangue, LogicielOptions.IndLangue, lModif)
         GereTransfertValeur(Me.pLocalLogicielOptions.IndLangueNDC, LogicielOptions.IndLangueNDC, lModif)
 
+        GereTransfertValeur(Me.pLocalLogicielOptions.UserName, LogicielOptions.UserName, lModif)
+        GereTransfertValeur(Me.pLocalLogicielOptions.CompanyName, LogicielOptions.CompanyName, lModif)
+
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitDimension, LogicielOptions.IndUnitDimension, lModif)
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitLongueur, LogicielOptions.IndUnitLongueur, lModif)
         GereTransfertValeur(Me.pLocalLogicielOptions.IndUnitContraintes, LogicielOptions.IndUnitContraintes, lModif)
@@ -441,6 +446,7 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocallDefaultRepW, LogicielRep.lTravailDefaut, lModif)
 
         GereTransfertValeur(Me.pLocalLogicielOptions.lExpert, LogicielOptions.lExpert, lModif)
+
 
     End Sub
 

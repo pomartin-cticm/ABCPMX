@@ -1,6 +1,5 @@
 ﻿Public Class Frm_OptionsLogicielGeneral
 
-
 #Region " Variables et constantes "
 
     Const BALISE As String = "OPTSOFTGENERAL"
@@ -31,7 +30,8 @@
             Me.lbl_LangueNdC.Text = MyBloc("CALCULREPORT")
 
             Me.lbl_Identification.Text = MyBloc("IDENTIFICATION")
-
+            Me.lbl_Firm.Text = MyBloc("FIRM")
+            Me.lbl_UserName.Text = MyBloc("USERNAME")
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -58,6 +58,9 @@
         InitialiseLangues(Me.lst_LangueGUI, LogicielInfo.ListeLangue, LogicielOptions.IndLangue)
         InitialiseLangues(Me.lst_LangueNdC, LogicielInfo.ListeLangueNDC, LogicielOptions.IndLangueNDC)
 
+        Me.txt_Firm.Text = Frm_OptionsLogiciel.pLocalLogicielOptions.CompanyName
+        Me.txt_UserName.Text = Frm_OptionsLogiciel.pLocalLogicielOptions.UserName
+
     End Sub
 
 
@@ -82,6 +85,18 @@
 #End Region
 
 #Region " Evènements "
+
+    Private Sub TextChangedIdentification(sender As Object, e As EventArgs) Handles txt_UserName.TextChanged, txt_Firm.TextChanged
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.txt_Firm.Name
+                Frm_OptionsLogiciel.pLocalLogicielOptions.CompanyName = Me.txt_Firm.Text
+            Case Me.txt_UserName.Name
+                Frm_OptionsLogiciel.pLocalLogicielOptions.UserName = Me.txt_UserName.Text
+        End Select
+
+    End Sub
 
     Private Sub GestionChangeLangue(sender As Object, e As EventArgs) Handles lst_LangueNdC.SelectedIndexChanged, lst_LangueGUI.SelectedIndexChanged
 
