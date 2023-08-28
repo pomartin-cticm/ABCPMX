@@ -392,6 +392,14 @@ DATABASES				= Databases
 EXPERT					= Expert Mode
 EXPERTMODEACTIVE		= Expert Mode active
 
+#OPTSOFTDATABASES
+DATABASES				= Databases
+PROFILES				= Hot rolled profiles
+SHEETINGS				= Steel profiled sheetings
+STUDS					= Welded studs
+STEELS					= Structural steels
+
+
 #OPTSOFTDIRECTORIES
 DIRECTORIES				= Directories
 INSTALL					= Installation directory

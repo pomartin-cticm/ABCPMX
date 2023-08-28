@@ -249,6 +249,12 @@
     <Compile Include="Fenetres\Options\Frm_OptionsLogiciel.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielDataBases.Designer.vb">
+      <DependentUpon>Frm_OptionsLogicielDataBases.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielDataBases.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Options\Frm_OptionsLogicielDirectories.Designer.vb">
       <DependentUpon>Frm_OptionsLogicielDirectories.vb</DependentUpon>
     </Compile>
@@ -389,6 +395,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogiciel.resx">
       <DependentUpon>Frm_OptionsLogiciel.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielDataBases.resx">
+      <DependentUpon>Frm_OptionsLogicielDataBases.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielDirectories.resx">
       <DependentUpon>Frm_OptionsLogicielDirectories.vb</DependentUpon>

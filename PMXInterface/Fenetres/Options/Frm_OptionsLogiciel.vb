@@ -95,7 +95,7 @@ Public Class Frm_OptionsLogiciel
         '--> Déclaration
 
         Dim Lines As Cls_LinesOfFile
-        Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTGENERAL", "OPTSOFTUNITS", "OPTSOFTDIRECTORIES", "OPTSOFTEXPERT"}
+        Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTDATABASES", "OPTSOFTDIRECTORIES", "OPTSOFTEXPERT", "OPTSOFTGENERAL", "OPTSOFTUNITS"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
         Dim MotCle, Argument As String
@@ -159,6 +159,7 @@ Public Class Frm_OptionsLogiciel
             Me.PoMbtn_Directories.Caption = MyBloc("DIRECTORIES")
             Me.PoMbtn_Units.Caption = MyBloc("UNITS")
             Me.PoMbtn_Expert.Caption = MyBloc("EXPERT")
+            Me.PoMbtn_Databases.Caption = MyBloc("DATABASES")
 
             Me.btn_Appliquer.Text = MyBloc("APPLY")
             Me.btn_Cancel.Text = MyBloc("CANCEL")
@@ -180,6 +181,7 @@ Public Class Frm_OptionsLogiciel
         PreparePomBouton(PoMbtn_Directories)
         PreparePomBouton(PoMbtn_Units)
         PreparePomBouton(PoMbtn_Expert)
+        PreparePomBouton(PoMbtn_Databases)
         PoMbtn_Expert.Visible = LogicielOptions.lExpert
 
         'PreparePomBouton(PoMBtn)
@@ -286,6 +288,10 @@ Public Class Frm_OptionsLogiciel
 
             Case Enu_OptionsLogiciel.Databases
 
+                Me.pan_Contenu.Controls.Add(Frm_OptionsLogicielDataBases.pan_DataBases)
+                Frm_OptionsLogicielDataBases.InitialiseFrm()
+
+
             Case Enu_OptionsLogiciel.Expert
 
                 Me.pan_Contenu.Controls.Add(Frm_OptionsLogicielExpert.pan_Expert)
@@ -302,7 +308,7 @@ Public Class Frm_OptionsLogiciel
 #Region "    Gestion des boutons - Paint Overrides "
 
     Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-    Handles PoMBtn_General.Click, PoMbtn_Directories.Click, PoMbtn_Units.Click, PoMbtn_Expert.Click
+    Handles PoMBtn_General.Click, PoMbtn_Directories.Click, PoMbtn_Units.Click, PoMbtn_Expert.Click, PoMbtn_Databases.Click
 
         If Not sender.checked Then  '-> Si bouton déjà séléctionné :
             sender.checked = True       'on le garde checké
@@ -327,6 +333,10 @@ Public Class Frm_OptionsLogiciel
 
             Case Me.PoMbtn_Expert.Name
                 LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.Expert
+                AfficherFenetreFille()
+
+            Case Me.PoMbtn_Databases.Name
+                LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.Databases
                 AfficherFenetreFille()
 
         End Select
@@ -364,6 +374,7 @@ Public Class Frm_OptionsLogiciel
         If SenderName <> Me.PoMbtn_Directories.Name Then Me.PoMbtn_Directories.Checked = False
         If SenderName <> Me.PoMbtn_Units.Name Then Me.PoMbtn_Units.Checked = False
         If SenderName <> Me.PoMbtn_Expert.Name Then Me.PoMbtn_Expert.Checked = False
+        If SenderName <> Me.PoMbtn_Databases.Name Then Me.PoMbtn_Databases.Checked = False
 
         'If SenderName <> Me.PomBtnExpert.Name Then MAJBtnExpert()
 
