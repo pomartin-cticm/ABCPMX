@@ -24,6 +24,11 @@ Public Class cls_Projet
     Public Entreprise As String
 
     ''' <summary>
+    ''' Nom du projet
+    ''' </summary>
+    Public Projet As String
+
+    ''' <summary>
     ''' Poutres du projet
     ''' </summary>
     Public Poutres As New List(Of cls_Poutre)
@@ -61,6 +66,7 @@ Public Class cls_Projet
         Me.Nom = ""
         Me.Utilisateur = ""
         Me.Entreprise = ""
+        Me.Projet = ""
         Me.FileName = ""
 
     End Sub

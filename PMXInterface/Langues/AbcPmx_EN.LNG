@@ -163,6 +163,16 @@ TITLE					= Floor vibration parameters
 TOTALDAMPING			= Total damping
 WITH					= With
 
+#FRM_IDENTIFICATION
+CANCEL					= Cancel
+OK						= OK
+TITLE					= Identification 
+USER					= User
+COMPANY					= Company
+PROJECT					= Project
+BEAMID					= Beam ident
+COMMENT					= Comment
+
 #FRM_LATERALRESTRAINTS
 ADD						= Add
 CANCEL					= Cancel
@@ -200,6 +210,7 @@ SECTIONSLIST			= Sections list
 TSBCONNECTION			= Connection
 TSBENCASEMENT			= Partial encasement
 TSBHOME					= Home
+TSBIDENTIFICATION			= Identification
 TSBSECTIONA				= Steel section
 TSBSLAB					= Slab
 TSBSPACINGS				= Transverse configuration

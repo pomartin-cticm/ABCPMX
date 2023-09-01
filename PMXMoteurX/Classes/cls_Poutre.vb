@@ -32,6 +32,16 @@
 #Region " Variables "
 
     ''' <summary>
+    ''' Identifiant de la poutre en cours
+    ''' </summary>
+    Public BeamID As String
+
+    ''' <summary>
+    ''' Commentaire associé à la poutre en cours 
+    ''' </summary>
+    Public Commentaire As String
+
+    ''' <summary>
     ''' Nom de la poutre
     ''' </summary>
     Public Label As String

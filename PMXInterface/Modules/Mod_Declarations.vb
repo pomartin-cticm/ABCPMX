@@ -327,7 +327,7 @@ Module Mod_Declarations
     End Enum
 
     Public Enum EnuFenetres
-        Accueil
+        Identification
         Portees
         Entraxes
         Dalle
