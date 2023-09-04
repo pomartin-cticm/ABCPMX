@@ -208,9 +208,10 @@ SAVEAS					= Save As
 SECTION					= Section
 SECTIONSLIST			= Sections list
 TSBCONNECTION			= Connection
+TSBMAINTIENS			= Lateral restraints
 TSBENCASEMENT			= Partial encasement
 TSBHOME					= Home
-TSBIDENTIFICATION			= Identification
+TSBIDENTIFICATION		= Identification
 TSBSECTIONA				= Steel section
 TSBSLAB					= Slab
 TSBSPACINGS				= Transverse configuration
@@ -220,6 +221,8 @@ TSBLOADS				= Loads
 TSBCOMBINATIONS			= Combinations
 TSBGAMMA				= Partial factors and nationally determined factors
 TSBHIVOSS				= Vibratory comfort of the beam
+TSBOPTIONSINCENDIE		= Fire design options
+TSBNDCPOUTRE			= Calculation report of the current beam
 WARNINGFILE				= Please note that you are opening a file with data from an old version of the software. Please check all data and re-register the file.
 
 

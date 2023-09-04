@@ -1259,6 +1259,7 @@ Public Class Frm_Connection
 
             MAJ_SommeGoujons()
             MAJ_affichage_txt_cmb_connection()
+            MAJI_BtnNavigation()
 
         Else
 

@@ -108,6 +108,7 @@ Public Class Frm_PMX
                 Me.TSbtn_SectionA.ToolTipText = Bloc("TSBSECTIONA")
                 Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENCASEMENT")
                 Me.TSbtn_Connexion.ToolTipText = Bloc("TSBCONNECTION")
+                Me.TSbtn_Maintiens.ToolTipText = Bloc("TSBMAINTIENS")
 
                 Me.TSbtn_Etaiement.ToolTipText = Bloc("TSBPROPPING")
 
@@ -115,6 +116,8 @@ Public Class Frm_PMX
                 Me.TSbtn_Combinaisons.ToolTipText = Bloc("TSBCOMBINATIONS")
                 Me.TSbtn_Gamma.ToolTipText = Bloc("TSBGAMMA")
                 Me.TSbtn_Hivoss.ToolTipText = Bloc("TSBHIVOSS")
+                Me.TSbtn_OptionsIncendie.ToolTipText = Bloc("TSBOPTIONSINCENDIE")
+                Me.TSbtn_NdcPoutre.ToolTipText = Bloc("TSBNDCPOUTRE")
 
                 '=== MESSAGES GENERAUX
 

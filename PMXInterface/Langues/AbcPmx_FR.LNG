@@ -178,6 +178,7 @@ SAVEAS					= Enregister sous
 SECTION					= Section
 SECTIONSLIST			= Liste des sections
 TSBCONNECTION			= Connection
+TSBMAINTIENS			= Maintiens
 TSBENCASEMENT			= Enrobage partiel
 TSBHOME					= Début
 TSBIDENTIFICATION		= Identification
@@ -190,6 +191,8 @@ TSBLOADS				= Chargement
 TSBCOMBINATIONS			= Combinaisons de charges
 TSBGAMMA				= Coefficients nationaux
 TSBHIVOSS				= Vibration de plancher
+TSBOPTIONSINCENDIE		= Options de calcul incendie
+TSBNDCPOUTRE			= Note de calcul de la poutre en cours
 WARNINGFILE				= Attention vous ouvrez un fichier avec des données d'une ancienne version du logiciel. Veuillez vérifier l'ensemble des données et réenregister le fichier.
 
 #FRM_OUVERTURE
