@@ -92,6 +92,12 @@
     <Compile Include="Fenetres\Filles\Frm_Basic.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Chargement.Designer.vb">
+      <DependentUpon>Frm_Chargement.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Chargement.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Combinaisons.Designer.vb">
       <DependentUpon>Frm_Combinaisons.vb</DependentUpon>
     </Compile>
@@ -323,6 +329,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Basic.resx">
       <DependentUpon>Frm_Basic.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Chargement.resx">
+      <DependentUpon>Frm_Chargement.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Combinaisons.resx">
       <DependentUpon>Frm_Combinaisons.vb</DependentUpon>

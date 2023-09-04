@@ -27,6 +27,12 @@
         PointRestrained
     End Enum
 
+    Enum EnuTypeLargeurParticipante
+        LargeurGauche
+        LargeurDroite
+        LargeurTotale
+    End Enum
+
 #End Region
 
 #Region " Variables "
@@ -739,7 +745,7 @@
 #End Region
 
 #Region " Calculs largeur participante "
-    Public Function BeffDalle(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean) As Decimal
+    Public Function BeffDalle(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean, Optional TypeLargeur As EnuTypeLargeurParticipante = EnuTypeLargeurParticipante.LargeurTotale) As Decimal
 
         '------------------------------------------------------------------------------------------------------------------
         '   16/06/23 :  Création - GuD
@@ -751,6 +757,7 @@
         '   i_travee            [E] :   Indique l'indice de la travée à laquelle appartient la section considérée
         '   lSimplifiedModel    [E] :   Indique si on considère un modèle simplifié pour le calcul de la largeur participante (=True)
         '   lAnalysisModel      [E] :   Si lSimplifiedModel = True, indique si on considère le modèle pour l'analyse de la poutre (lAnalysisModel = True) ou la vérification de la section (lAnalysisModel = False)
+        '   TypeLargeur         [E] :   Permet d'indiquer si on souhaite retourner la largeur participante à gauche de la poutre, à droite ou la largeur totale (par défaut)
         '   beff                [S] :   Retourne la valeur de la largeur participante
         '------------------------------------------------------------------------------------------------------------------
 
@@ -833,7 +840,14 @@
             beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
             beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
 
-            beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
+            Select Case TypeLargeur
+                Case EnuTypeLargeurParticipante.LargeurGauche
+                    beff_s_A = beta_1_A * be1_s_A
+                Case EnuTypeLargeurParticipante.LargeurDroite
+                    beff_s_A = beta_2_A * be2_s_A
+                Case EnuTypeLargeurParticipante.LargeurTotale
+                    beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
+            End Select
 
             Return beff_s_A
 
@@ -847,7 +861,14 @@
             beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
             beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
 
-            beff_s_B = beta_1_B * be1_s_B + beta_2_B * be2_s_B
+            Select Case TypeLargeur
+                Case EnuTypeLargeurParticipante.LargeurGauche
+                    beff_s_B = beta_1_B * be1_s_B
+                Case EnuTypeLargeurParticipante.LargeurDroite
+                    beff_s_B = beta_2_B * be2_s_B
+                Case EnuTypeLargeurParticipante.LargeurTotale
+                    beff_s_B = beta_1_B * be1_s_B + beta_2_B * be2_s_B
+            End Select
 
             Return beff_s_B
 
@@ -902,7 +923,15 @@
             be1_m = Math.Min(Le_m / 8, b1)
             be2_m = Math.Min(Le_m / 8, b2)
 
-            beff_m = be1_m + be2_m
+            Select Case TypeLargeur
+                Case EnuTypeLargeurParticipante.LargeurGauche
+                    beff_m = be1_m
+                Case EnuTypeLargeurParticipante.LargeurDroite
+                    beff_m = be2_m
+                Case EnuTypeLargeurParticipante.LargeurTotale
+                    beff_m = be1_m + be2_m
+            End Select
+
 
             '----- Calcul de la largeur participante sur appui gauche (appui A) -----
 
@@ -932,7 +961,15 @@
             beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
             beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
 
-            beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
+            Select Case TypeLargeur
+                Case EnuTypeLargeurParticipante.LargeurGauche
+                    beff_s_A = beta_1_A * be1_s_A
+                Case EnuTypeLargeurParticipante.LargeurDroite
+                    beff_s_A = beta_2_A * be2_s_A
+                Case EnuTypeLargeurParticipante.LargeurTotale
+                    beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
+            End Select
+
 
             '----- Calcul de la largeur participante sur appui droite (appui B) -----
 
@@ -962,7 +999,14 @@
             beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
             beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
 
-            beff_s_B = beta_1_B * be1_s_B + beta_2_B * be2_s_B
+            Select Case TypeLargeur
+                Case EnuTypeLargeurParticipante.LargeurGauche
+                    beff_s_B = beta_1_B * be1_s_B
+                Case EnuTypeLargeurParticipante.LargeurDroite
+                    beff_s_B = beta_2_B * be2_s_B
+                Case EnuTypeLargeurParticipante.LargeurTotale
+                    beff_s_B = beta_1_B * be1_s_B + beta_2_B * be2_s_B
+            End Select
 
             '----- Calcul de la largeur participante pour une section quelconque -----
 
