@@ -144,7 +144,7 @@ Imports PMXMoteur2
 
         '# Aire de cisaillement
 
-        ValRef = 100 ' 76.5 * 10 ^ (-4)
+        ValRef = 76.5 * 10 ^ (-4)
         DeltaV = (MyProfil.AireAv - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
