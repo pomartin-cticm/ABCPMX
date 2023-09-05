@@ -113,7 +113,6 @@ Imports PMXMoteur2
 
     End Sub
 
-
     <TestMethod()> Public Sub TestUnit_ProprietesProfileAcierMonoSym()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création POM
@@ -145,7 +144,7 @@ Imports PMXMoteur2
 
         '# Aire de cisaillement
 
-        ValRef = 76.5 * 10 ^ (-4)
+        ValRef = 100 ' 76.5 * 10 ^ (-4)
         DeltaV = (MyProfil.AireAv - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
@@ -176,4 +175,5 @@ Imports PMXMoteur2
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
+
 End Class

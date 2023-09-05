@@ -78,6 +78,7 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTest_ElementsFinis.vb" />
     <Compile Include="UnitTest_Cls_Bac.vb" />
     <Compile Include="UnitTest_Cls_Connecteur.vb" />
     <Compile Include="UnitTest_Cls_Section.vb" />
@@ -121,6 +122,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DLL_CTICM_RDM\DLL_CTICM_RDM.vbproj">
+      <Project>{4623e43c-c204-42a6-b120-1a905b82b877}</Project>
+      <Name>DLL_CTICM_RDM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PMXMoteurX\PMXMoteurX.vbproj">
       <Project>{d9f6f75a-2c73-4e1b-a27b-791c1098507c}</Project>
       <Name>PMXMoteurX</Name>
