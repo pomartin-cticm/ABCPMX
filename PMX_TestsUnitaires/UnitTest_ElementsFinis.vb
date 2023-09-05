@@ -5,6 +5,8 @@ Imports CTICM_RDM
 
 <TestClass()> Public Class UnitTest_ElementsFinis
 
+    Const DeltaVMAx As Decimal = 1 / 1000
+
     <TestMethod()> Public Sub TestMethodElementsFinis_TEST01()
 
         '=======================================
@@ -182,9 +184,91 @@ Imports CTICM_RDM
         End With
     End Sub
 
+
+    <TestMethod()> Public Sub TestMethodElementsFinis_TESTxx()
+        '=======================================
+        '
+        ' 05/09/2023 : POM
+        '
+        '=======================================
+        '
+        ' Poutre 2 appuis - Effort vertical à mi travée
+        '
+        '=======================================
+
+        Dim MyDonnees As CTICM_RDM.DATA_RDM.Struc_Donnees = Nothing
+
+        Dim L As Decimal = 10     'Longueur totale de la barre en m
+        Dim Force As Decimal = 1000
+
+        With MyDonnees
+            .EYOUNG = 2100000 * 10 ^ 6
+
+            .NbNodes = 21
+
+            'Position des noeuds EF
+            ReDim .xNode(.NbNodes - 1)
+            For i = 0 To .NbNodes - 1
+                .xNode(i) = i * L / (.NbNodes - 1)
+            Next
+
+            'Elements
+            ReDim .Aire(.NbNodes - 2)
+            ReDim .InertieY(.NbNodes - 2)
+
+            '# IPE 300
+            For i = 0 To .NbNodes - 2
+                .Aire(i) = 69 * 10 ^ -4
+                .InertieY(i) = 9800 * 10 ^ -8
+            Next
+
+            'Appuis
+            .NbAppuis = 2
+            .iNodeAppui = {1, .NbNodes}
+            .lAppuiArticule = {False, False}
+
+            .NbForcesPon = 1
+            .NbForcesRep = 0
+            .NbMoments = 0
+
+            ReDim .ForcePon(.NbForcesPon - 1)
+            ReDim .xForcePon(.NbForcesPon - 1)
+            .ForcePon(0) = Force
+            .xForcePon(0) = L / 2
+
+        End With
+
+        '=== LANCER LE CALCUL ===
+        Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
+        Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
+        Dim CodeError_RDM As Integer
+        Dim TextError_RDM As String = String.Empty
+
+        Call MyDLLRDM.CALCULER(MyDonnees, MyOutput_RDM, CodeError_RDM, TextError_RDM)
+
+        '# Controle réaction aux appuis
+
+        Assert.IsTrue(IsEqual(Force / 2, MyOutput_RDM.RZ(0)))
+        Assert.IsTrue(IsEqual(Force / 2, MyOutput_RDM.RZ(1)))
+
+        '# Moment à mi-travée
+
+        Assert.IsTrue(IsEqual(Force * L / 4, MyOutput_RDM.MYY((MyDonnees.NbNodes - 1) / 2, 1)))
+
+        '# Effort tranchant sur appui
+
+        Assert.IsTrue(IsEqual(-Force / 2, MyOutput_RDM.VZ(0, 1)))
+
+        '# Flèche à mi-travée
+
+        Assert.IsTrue(IsEqual(Force * L ^ 2 / (48 * MyDonnees.EYOUNG * MyDonnees.InertieY(0)), MyOutput_RDM.UZ(11)))
+
+    End Sub
+
+
 #Region "COMPARE"
 
-    Private Function IsEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = 0.001) As Boolean
+    Private Function IsEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
         '------------------------------------------
         ' 29/08/2023 : Minh, v 1.00
         '------------------------------------------
@@ -200,7 +284,7 @@ Imports CTICM_RDM
         End If
     End Function
 
-    Private Function IsGreater(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = 0.001) As Boolean
+    Private Function IsGreater(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
         '------------------------------------------
         ' 29/08/2023 : Minh, v 1.00
         '------------------------------------------
@@ -212,7 +296,7 @@ Imports CTICM_RDM
         Return (Not IsEqual(a, b, EPS)) AndAlso (a > b)
     End Function
 
-    Private Function IsGreaterOrEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = 0.001) As Boolean
+    Private Function IsGreaterOrEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
         '------------------------------------------
         ' 29/08/2023 : Minh, v 1.00
         '------------------------------------------
@@ -223,7 +307,7 @@ Imports CTICM_RDM
 
     End Function
 
-    Private Function IsSmaller(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = 0.001) As Boolean
+    Private Function IsSmaller(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
         '------------------------------------------
         ' 29/08/2023 : Minh, v 1.00
         '------------------------------------------
@@ -236,7 +320,7 @@ Imports CTICM_RDM
         Return lIsSmaller
     End Function
 
-    Private Function IsSmallerOrEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = 0.001) As Boolean
+    Private Function IsSmallerOrEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
 
         '------------------------------------------
         ' 29/11/2013
