@@ -23,6 +23,7 @@ Partial Class Frm_Connection
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_Connection))
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
@@ -36,9 +37,13 @@ Partial Class Frm_Connection
         Me.pan_ImgConnection = New System.Windows.Forms.Panel()
         Me.img_Connection = New System.Windows.Forms.PictureBox()
         Me.pan_SaisieConnection = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btn_Precedent = New System.Windows.Forms.Button()
+        Me.btn_Suivant = New System.Windows.Forms.Button()
+        Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
+        Me.cmb_Travee = New System.Windows.Forms.ComboBox()
         Me.chk_AutomaticDesign = New System.Windows.Forms.CheckBox()
         Me.txt_Portee = New System.Windows.Forms.TextBox()
-        Me.cmb_Travee = New System.Windows.Forms.ComboBox()
         Me.txt_EspLongi_I3 = New System.Windows.Forms.TextBox()
         Me.txt_Largeur_I3 = New System.Windows.Forms.TextBox()
         Me.txt_EspLongi_I2 = New System.Windows.Forms.TextBox()
@@ -90,6 +95,7 @@ Partial Class Frm_Connection
         Me.pan_ImgConnection.SuspendLayout()
         CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_SaisieConnection.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
         CType(Me.img_Stud, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -262,9 +268,9 @@ Partial Class Frm_Connection
         '
         Me.pan_SaisieConnection.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisieConnection.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieConnection.Controls.Add(Me.Panel1)
         Me.pan_SaisieConnection.Controls.Add(Me.chk_AutomaticDesign)
         Me.pan_SaisieConnection.Controls.Add(Me.txt_Portee)
-        Me.pan_SaisieConnection.Controls.Add(Me.cmb_Travee)
         Me.pan_SaisieConnection.Controls.Add(Me.txt_EspLongi_I3)
         Me.pan_SaisieConnection.Controls.Add(Me.txt_Largeur_I3)
         Me.pan_SaisieConnection.Controls.Add(Me.txt_EspLongi_I2)
@@ -294,6 +300,58 @@ Partial Class Frm_Connection
         Me.pan_SaisieConnection.Size = New System.Drawing.Size(532, 195)
         Me.pan_SaisieConnection.TabIndex = 1
         '
+        'Panel1
+        '
+        Me.Panel1.Anchor = System.Windows.Forms.AnchorStyles.Top
+        Me.Panel1.Controls.Add(Me.btn_Precedent)
+        Me.Panel1.Controls.Add(Me.btn_Suivant)
+        Me.Panel1.Controls.Add(Me.cmb_Travee)
+        Me.Panel1.Location = New System.Drawing.Point(173, 45)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(199, 28)
+        Me.Panel1.TabIndex = 76
+        '
+        'btn_Precedent
+        '
+        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
+        Me.btn_Precedent.Location = New System.Drawing.Point(1, 2)
+        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Precedent.Name = "btn_Precedent"
+        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Precedent.TabIndex = 12
+        Me.btn_Precedent.TabStop = False
+        Me.btn_Precedent.UseVisualStyleBackColor = True
+        '
+        'btn_Suivant
+        '
+        Me.btn_Suivant.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_Suivant.ImageList = Me.imgList_Navigation
+        Me.btn_Suivant.Location = New System.Drawing.Point(159, 2)
+        Me.btn_Suivant.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Suivant.Name = "btn_Suivant"
+        Me.btn_Suivant.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Suivant.TabIndex = 11
+        Me.btn_Suivant.TabStop = False
+        Me.btn_Suivant.UseVisualStyleBackColor = True
+        '
+        'imgList_Navigation
+        '
+        Me.imgList_Navigation.ImageStream = CType(resources.GetObject("imgList_Navigation.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imgList_Navigation.TransparentColor = System.Drawing.Color.Transparent
+        Me.imgList_Navigation.Images.SetKeyName(0, "Precedent")
+        Me.imgList_Navigation.Images.SetKeyName(1, "PrecedentNonDispo")
+        Me.imgList_Navigation.Images.SetKeyName(2, "Suivant")
+        Me.imgList_Navigation.Images.SetKeyName(3, "SuivantNonDispo")
+        '
+        'cmb_Travee
+        '
+        Me.cmb_Travee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Travee.FormattingEnabled = True
+        Me.cmb_Travee.Location = New System.Drawing.Point(25, 3)
+        Me.cmb_Travee.Name = "cmb_Travee"
+        Me.cmb_Travee.Size = New System.Drawing.Size(133, 21)
+        Me.cmb_Travee.TabIndex = 75
+        '
         'chk_AutomaticDesign
         '
         Me.chk_AutomaticDesign.AutoSize = True
@@ -307,7 +365,7 @@ Partial Class Frm_Connection
         'txt_Portee
         '
         Me.txt_Portee.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_Portee.Location = New System.Drawing.Point(20, 48)
+        Me.txt_Portee.Location = New System.Drawing.Point(25, 48)
         Me.txt_Portee.Name = "txt_Portee"
         Me.txt_Portee.ReadOnly = True
         Me.txt_Portee.Size = New System.Drawing.Size(147, 20)
@@ -315,15 +373,6 @@ Partial Class Frm_Connection
         Me.txt_Portee.TabStop = False
         Me.txt_Portee.Text = "txt_Portee"
         Me.txt_Portee.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'cmb_Travee
-        '
-        Me.cmb_Travee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Travee.FormattingEnabled = True
-        Me.cmb_Travee.Location = New System.Drawing.Point(173, 47)
-        Me.cmb_Travee.Name = "cmb_Travee"
-        Me.cmb_Travee.Size = New System.Drawing.Size(133, 21)
-        Me.cmb_Travee.TabIndex = 75
         '
         'txt_EspLongi_I3
         '
@@ -732,7 +781,7 @@ Partial Class Frm_Connection
         Me.cmb_goujons.FormattingEnabled = True
         Me.cmb_goujons.Location = New System.Drawing.Point(83, 15)
         Me.cmb_goujons.Name = "cmb_goujons"
-        Me.cmb_goujons.Size = New System.Drawing.Size(104, 21)
+        Me.cmb_goujons.Size = New System.Drawing.Size(118, 21)
         Me.cmb_goujons.TabIndex = 0
         '
         'ErrorProvider_Frm_Connection
@@ -763,6 +812,7 @@ Partial Class Frm_Connection
         CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_SaisieConnection.ResumeLayout(False)
         Me.pan_SaisieConnection.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
@@ -835,4 +885,8 @@ Partial Class Frm_Connection
     Friend WithEvents ErrorProvider_Frm_Connection As ErrorProvider
     Friend WithEvents chk_AutomaticDesign As CheckBox
     Friend WithEvents pan_ImgConnection As Panel
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents imgList_Navigation As ImageList
+    Friend WithEvents btn_Precedent As Button
+    Friend WithEvents btn_Suivant As Button
 End Class

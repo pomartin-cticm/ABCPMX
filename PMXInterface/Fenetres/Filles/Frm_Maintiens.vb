@@ -650,6 +650,8 @@ Public Class Frm_Maintiens
                 rad_PointRestrain.Checked = True
         End Select
 
+        MAJI_BtnNavigation()
+
         img_Maintiens.Invalidate()
 
     End Sub

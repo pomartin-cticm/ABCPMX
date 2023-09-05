@@ -22,6 +22,7 @@ Public Class Frm_Connection
     Dim strTypeTravee_ConsoleGauche As String
     Dim strTypeTravee_TraveeCentrale As String
     Dim strTypeTravee_ConsoleDroite As String
+    Dim strSpan As String
 
     ''' <summary>
     ''' Indice de la base de donnée du goujon affiché
@@ -125,6 +126,8 @@ Public Class Frm_Connection
     Dim Nb_TransV_Row_MIN As Integer
     Dim Nb_TransV_Row_MAX As Integer
 
+    Dim NbTravees As Integer
+
 
 
     '== POM
@@ -146,6 +149,8 @@ Public Class Frm_Connection
         GestionStyle()
         GestionUnites()
         RemplirComboBox()
+        PrepareFlechesNavigation()
+        MAJI_BtnNavigation()
         AfficherPoutreEnCours()
         MAJ_Nb_Zone()
         MAJ_SommeGoujons()
@@ -160,6 +165,12 @@ Public Class Frm_Connection
     ''' </summary>
     Private Sub InitialiserVariables()
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
+
+        NbTravees = MyPoutreLoc.NbTravees
+
+        'Par défaut on affiche la première travée sur deux appuis
+        traveeEnCours = 1
+
 
         MAJ_Valeurs_Limites()
 
@@ -187,9 +198,6 @@ Public Class Frm_Connection
                 End If
             Next
         Next
-
-        'Par défaut on affiche la première travée sur deux appuis
-        traveeEnCours = 1
 
         'Il y'a toujours au moins 1 zone 
         Me.txt_Largeur_I1.Visible = True
@@ -251,26 +259,27 @@ Public Class Frm_Connection
                 strTypeTravee_ConsoleGauche = Bloc("LEFTCANT")
                 strTypeTravee_TraveeCentrale = Bloc("MAINSPAN")
                 strTypeTravee_ConsoleDroite = Bloc("RIGHTCANT")
+                strSpan = Bloc("SPAN")
 
-                If MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleDroite Then
-                    If MyPoutreLoc.lTraveeConsoleGauche And MyPoutreLoc.lTraveeConsoleDroite Then
-                        ReDim strTypeTravee(2)
-                    Else
-                        ReDim strTypeTravee(1)
-                    End If
-                Else
-                    ReDim strTypeTravee(0)
-                End If
+                'If MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleDroite Then
+                '    If MyPoutreLoc.lTraveeConsoleGauche And MyPoutreLoc.lTraveeConsoleDroite Then
+                '        ReDim strTypeTravee(2)
+                '    Else
+                '        ReDim strTypeTravee(1)
+                '    End If
+                'Else
+                '    ReDim strTypeTravee(0)
+                'End If
 
-                strTypeTravee(0) = strTypeTravee_TraveeCentrale
-                If MyPoutreLoc.lTraveeConsoleGauche Then strTypeTravee(1) = strTypeTravee_ConsoleGauche
-                If MyPoutreLoc.lTraveeConsoleDroite Then
-                    If MyPoutreLoc.lTraveeConsoleGauche Then
-                        strTypeTravee(2) = strTypeTravee_ConsoleDroite
-                    Else
-                        strTypeTravee(1) = strTypeTravee_ConsoleDroite
-                    End If
-                End If
+                'strTypeTravee(0) = strTypeTravee_TraveeCentrale
+                'If MyPoutreLoc.lTraveeConsoleGauche Then strTypeTravee(1) = strTypeTravee_ConsoleGauche
+                'If MyPoutreLoc.lTraveeConsoleDroite Then
+                '    If MyPoutreLoc.lTraveeConsoleGauche Then
+                '        strTypeTravee(2) = strTypeTravee_ConsoleDroite
+                '    Else
+                '        strTypeTravee(1) = strTypeTravee_ConsoleDroite
+                '    End If
+                'End If
 
                 Me.txt_Largeur.Text = Bloc("WIDTH") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
                 Me.txt_NbRows.Text = Bloc("ROW_NUMBER") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
@@ -310,10 +319,32 @@ Public Class Frm_Connection
     End Sub
 
     Private Sub RemplirComboBox()
+        Dim index As Integer = 0
+
+        NbTravees = MyPoutreLoc.NbTravees
+        ReDim strTypeTravee(NbTravees - 1)
+        Dim lCentral As Boolean = (MyPoutreLoc.NombreTraveesDeuxAppuis = 1)
+        If MyPoutreLoc.lTraveeConsoleGauche Then
+            strTypeTravee(Index) = strTypeTravee_ConsoleGauche
+            Index += 1
+        End If
+        For i As Integer = 1 To MyPoutreLoc.NombreTraveesDeuxAppuis
+            If lCentral Then
+                strTypeTravee(Index) = strTypeTravee_TraveeCentrale
+            Else
+                strTypeTravee(Index) = strSpan & " no " & CStr(i)
+            End If
+            Index += 1
+        Next
+        If MyPoutreLoc.lTraveeConsoleDroite Then strTypeTravee(Index) = strTypeTravee_ConsoleDroite
 
         Me.cmb_Travee.Items.Clear()
         Me.cmb_Travee.Items.AddRange(strTypeTravee)
-        Me.cmb_Travee.SelectedIndex = 0
+        If MyPoutreLoc.lTraveeConsoleGauche Then
+            Me.cmb_Travee.SelectedIndex = 1
+        Else
+            Me.cmb_Travee.SelectedIndex = 0
+        End If
 
         Old_SelectedIndex_cmbTravee = Me.cmb_Travee.SelectedIndex
 
@@ -325,7 +356,7 @@ Public Class Frm_Connection
         Me.cmb_NbRow_I2.Items.Clear()
         Me.cmb_NbRow_I3.Items.Clear()
 
-        For i As Integer = NB_TRANSV_ROW_MIN To NB_TRANSV_ROW_MAX
+        For i As Integer = Nb_TransV_Row_MIN To Nb_TransV_Row_MAX
             Me.cmb_NbRow_I1.Items.Add(i)
             Me.cmb_NbRow_I2.Items.Add(i)
             Me.cmb_NbRow_I3.Items.Add(i)
@@ -341,7 +372,7 @@ Public Class Frm_Connection
             Me.cmb_EspLongi_I2.Items.Clear()
             Me.cmb_EspLongi_I3.Items.Clear()
 
-            For i As Integer = NB_ONDES_MIN To NB_ONDES_MAX
+            For i As Integer = Nb_Ondes_MIN To Nb_Ondes_MAX
                 Me.cmb_EspLongi_I1.Items.Add(i & " " & strRib)
                 Me.cmb_EspLongi_I2.Items.Add(i & " " & strRib)
                 Me.cmb_EspLongi_I3.Items.Add(i & " " & strRib)
@@ -352,6 +383,34 @@ Public Class Frm_Connection
             Me.cmb_EspLongi_I3.SelectedIndex = 0
         End If
 
+    End Sub
+
+    Private Sub PrepareFlechesNavigation()
+
+        Me.btn_Suivant.Visible = (NbTravees > 1)
+        Me.btn_Precedent.Visible = (NbTravees > 1)
+
+        If NbTravees = 1 Then
+            Me.cmb_Travee.Location = New Point(0, Me.cmb_Travee.Location.Y)
+        Else
+            Me.cmb_Travee.Location = New Point(27, Me.cmb_Travee.Location.Y)
+        End If
+
+    End Sub
+
+    Private Sub MAJI_BtnNavigation()
+        If (NbTravees > 1) Then
+            If Me.cmb_Travee.SelectedIndex = 0 Then
+                Me.btn_Precedent.Image = imgList_Navigation.Images("PrecedentNonDispo")
+            Else
+                Me.btn_Precedent.Image = imgList_Navigation.Images("Precedent")
+            End If
+            If Me.cmb_Travee.SelectedIndex = NbTravees - 1 Then
+                Me.btn_Suivant.Image = imgList_Navigation.Images("SuivantNonDispo")
+            Else
+                Me.btn_Suivant.Image = imgList_Navigation.Images("Suivant")
+            End If
+        End If
     End Sub
 
     Private Sub GestionStyle()
@@ -897,6 +956,19 @@ Public Class Frm_Connection
 #End Region
 
 #Region " Evènements saisie "
+
+    Private Sub GestionNavigation(sender As Object, e As EventArgs) Handles btn_Suivant.Click, btn_Precedent.Click
+        Dim Index As Integer = Me.cmb_Travee.SelectedIndex
+        Select Case sender.name
+            Case Me.btn_Precedent.Name
+                Me.cmb_Travee.SelectedIndex = Math.Max(0, Index - 1)
+            Case Me.btn_Suivant.Name
+                Me.cmb_Travee.SelectedIndex = Math.Min(NbTravees - 1, Index + 1)
+        End Select
+        MAJI_BtnNavigation()
+    End Sub
+
+
     Private Sub btn_Ajouter_Click(sender As Object, e As EventArgs) Handles btn_Ajouter.Click
         If lBuild Then Exit Sub
 
@@ -1092,7 +1164,7 @@ Public Class Frm_Connection
 
         Dim ValeurUI As Decimal
         ValeurUI = Me.txt_hsc.Text
-        VerificationSaisie(Me.txt_hsc, Me.txt_hsc.Text, False) 'Vérification de la hauteur du goujon
+        VerificationSaisie(Me.txt_hsc, ValeurUI, False) 'Vérification de la hauteur du goujon
 
         Dim lMAJ_cmb_NbRow As Boolean = False
         Dim lMAJ_cmb_EspLongi As Boolean = False
@@ -1187,6 +1259,7 @@ Public Class Frm_Connection
 
             MAJ_SommeGoujons()
             MAJ_affichage_txt_cmb_connection()
+            MAJI_BtnNavigation()
 
         Else
 

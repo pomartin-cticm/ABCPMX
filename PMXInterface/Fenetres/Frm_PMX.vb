@@ -10,7 +10,7 @@ Public Class Frm_PMX
 
     Private ReadOnly ToolFiles As New List(Of ToolStripMenuItem)
 
-    Dim FilleEnCours As EnuFenetres = EnuFenetres.Accueil
+    Dim FilleEnCours As EnuFenetres = EnuFenetres.Identification
 
     '--> Gestion de l'affichage des projets et des poutres
 
@@ -64,7 +64,7 @@ Public Class Frm_PMX
             Frm_Ouverture.ShowDialog()    '--> Fenetre Ouverture
 
         End If
-        AfficheFenetreEnCours()
+        'AfficheFenetreEnCours() 'GuD: A discuter j'ai un doute (31/08/2023), cela ouvrait directement 
 
     End Sub
 
@@ -85,7 +85,7 @@ Public Class Frm_PMX
                 Me.OpenToolStripMenuItemN.Text = Bloc("OPEN") & "..."
                 Me.NewToolStripMenuItemN.Text = Bloc("NEW")
                 Me.SaveToolStripMenuItemN.Text = Bloc("SAVE")
-                Me.SaveAsToolStripMenuItemn.Text = Bloc("SAVEAS") & "..."
+                Me.SaveAsToolStripMenuItemN.Text = Bloc("SAVEAS") & "..."
                 Me.RecentFileToolStripMenuItemN.Text = Bloc("RECENTFILES")
                 Me.QuitToolStripMenuItemN.Text = Bloc("EXIT")
 
@@ -99,7 +99,8 @@ Public Class Frm_PMX
 
                 '=== BARRE d'OUTILS POUR LES POUTRES
 
-                Me.TSbtn_Accueil.ToolTipText = Bloc("TSBHOME")
+                'Me.TSbtn_Identification.ToolTipText = Bloc("TSBHOME")
+                Me.TSbtn_Identification.ToolTipText = Bloc("TSBIDENTIFICATION")
                 Me.TSbtn_Portees.ToolTipText = Bloc("TSBSPANS")
                 'Me.TSbtn_Entraxe.ToolTipText = Bloc("TSBSPACINGS")
 
@@ -107,6 +108,7 @@ Public Class Frm_PMX
                 Me.TSbtn_SectionA.ToolTipText = Bloc("TSBSECTIONA")
                 Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENCASEMENT")
                 Me.TSbtn_Connexion.ToolTipText = Bloc("TSBCONNECTION")
+                Me.TSbtn_Maintiens.ToolTipText = Bloc("TSBMAINTIENS")
 
                 Me.TSbtn_Etaiement.ToolTipText = Bloc("TSBPROPPING")
 
@@ -114,6 +116,8 @@ Public Class Frm_PMX
                 Me.TSbtn_Combinaisons.ToolTipText = Bloc("TSBCOMBINATIONS")
                 Me.TSbtn_Gamma.ToolTipText = Bloc("TSBGAMMA")
                 Me.TSbtn_Hivoss.ToolTipText = Bloc("TSBHIVOSS")
+                Me.TSbtn_OptionsIncendie.ToolTipText = Bloc("TSBOPTIONSINCENDIE")
+                Me.TSbtn_NdcPoutre.ToolTipText = Bloc("TSBNDCPOUTRE")
 
                 '=== MESSAGES GENERAUX
 
@@ -241,12 +245,12 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Accueil.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click, TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click
+    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click, TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click
 
         Select Case sender.name
 
-            Case Me.TSbtn_Accueil.Name
-                FilleEnCours = EnuFenetres.Accueil
+            Case Me.TSbtn_Identification.Name
+                FilleEnCours = EnuFenetres.Identification
             Case Me.TSbtn_Portees.Name
                 FilleEnCours = EnuFenetres.Portees
                 ' Case Me.TSbtn_Entraxe.Name
@@ -292,6 +296,9 @@ Public Class Frm_PMX
     Private Sub AfficheFenetreEnCours()
 
         Select Case FilleEnCours
+            Case EnuFenetres.Identification
+                Frm_Identification.ShowDialog()
+
             Case EnuFenetres.LargeurEfficace
                 Frm_LargeurEfficace.ShowDialog()
 

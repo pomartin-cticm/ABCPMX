@@ -2979,8 +2979,8 @@ Module Mod_Dessins
 
         '--> Représentation de la semelle de la poutre 
 
-        xo = 0 - dCar / 2
-        xe = LongueurTravee + dCar / 2
+        xo = 0 '- dCar / 2
+        xe = LongueurTravee ' + dCar / 2
 
 
         yo = -LargeurSemelle / 2
@@ -3003,8 +3003,11 @@ Module Mod_Dessins
                 xo += EspaceLongiGoujons
                 yo = 0
                 For k As Integer = 1 To NombreGoujonsTrans(i)
-                    yo = -LargeurSemelle / 2 + k * LargeurSemelle / (NombreGoujonsTrans(i) + 1)
-                    AddCerclePlein(MyGr, myBrushC, xo, yo, DiametreGoujons, MyParAff, True)
+                    If Not (xo >= LongueurTravee - DiametreGoujons Or xo <= DiametreGoujons) Then
+                        yo = -LargeurSemelle / 2 + k * LargeurSemelle / (NombreGoujonsTrans(i) + 1)
+                        AddCerclePlein(MyGr, myBrushC, xo, yo, DiametreGoujons, MyParAff, True)
+                    End If
+
                 Next
             Next
         Next

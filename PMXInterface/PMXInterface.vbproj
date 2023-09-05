@@ -92,6 +92,12 @@
     <Compile Include="Fenetres\Filles\Frm_Basic.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Chargement.Designer.vb">
+      <DependentUpon>Frm_Chargement.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Chargement.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_Combinaisons.Designer.vb">
       <DependentUpon>Frm_Combinaisons.vb</DependentUpon>
     </Compile>
@@ -150,6 +156,12 @@
       <DependentUpon>Frm_Hivoss.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_Hivoss.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Identification.Designer.vb">
+      <DependentUpon>Frm_Identification.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_Identification.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_LargeurEfficace.Designer.vb">
@@ -318,6 +330,9 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_Basic.resx">
       <DependentUpon>Frm_Basic.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Chargement.resx">
+      <DependentUpon>Frm_Chargement.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Combinaisons.resx">
       <DependentUpon>Frm_Combinaisons.vb</DependentUpon>
     </EmbeddedResource>
@@ -329,6 +344,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Connection.resx">
       <DependentUpon>Frm_Connection.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Construction.resx">
       <DependentUpon>Frm_Construction.vb</DependentUpon>
@@ -348,11 +364,15 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_Hivoss.resx">
       <DependentUpon>Frm_Hivoss.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_Identification.resx">
+      <DependentUpon>Frm_Identification.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_LargeurEfficace.resx">
       <DependentUpon>Frm_LargeurEfficace.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Maintiens.resx">
       <DependentUpon>Frm_Maintiens.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Portees.resx">
       <DependentUpon>Frm_Portees.vb</DependentUpon>
@@ -374,6 +394,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Frm_PMX.resx">
       <DependentUpon>Frm_PMX.vb</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Frm_Test.resx">
       <DependentUpon>Frm_Test.vb</DependentUpon>
