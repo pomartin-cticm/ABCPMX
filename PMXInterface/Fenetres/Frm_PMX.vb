@@ -20,6 +20,35 @@ Public Class Frm_PMX
     Dim CouleurBtnNormal As Color = GrayAM
 
     Dim Str_WarningFile As String
+
+#End Region
+
+#Region " Variables locales pour btnPoutres "
+
+    Dim tab_BtnPoutres As List(Of POMbutton)
+
+    Structure struc_Colors
+
+        Dim TextBoxFixe As Color
+        Dim TextBoxEnSaisie As Color
+        Dim TextBoxEnInfo As Color
+        Dim SaisieOK As Color
+        Dim SaisieError As Color
+        Dim Panels As Color
+
+        Dim EtqInfo As Color
+
+        Dim ColorWhiteForGradient As Color
+        Dim ColorMouseOnBtn As Color
+        Dim ColorSelectedBtn As Color
+        Dim ContourNormal As Color
+        Dim ContourSelect As Color
+        Dim ContourMouse As Color
+
+    End Structure
+
+    Private MyCouleurs As struc_Colors
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -705,9 +734,209 @@ Public Class Frm_PMX
 
 #End Region
 
-#Region " Affichage des poutres du projet "
+#Region " Affichage poutres projet PomBtn "
+
+    Private Sub InitialiseCouleurs()
+
+        MyCouleurs.TextBoxEnSaisie = SystemColors.ControlLightLight   ' Me.Panel_SideBar.BackColor
+        MyCouleurs.TextBoxFixe = Color.Gray
+        MyCouleurs.TextBoxEnInfo = Color.LightGray
+
+        MyCouleurs.SaisieOK = Color.Black
+        MyCouleurs.SaisieError = Color.Red
+
+        MyCouleurs.EtqInfo = Color.LightGoldenrodYellow
+        MyCouleurs.EtqInfo = Color.Gold
+
+        MyCouleurs.Panels = SystemColors.ControlLightLight   ' Me.Panel_SideBar.BackColor
+
+        Const ALPHABLEND As Integer = 95  '125
+
+        MyCouleurs.ColorWhiteForGradient = Color.FromArgb(ALPHABLEND, 245, 245, 245)
+        MyCouleurs.ColorMouseOnBtn = Color.FromArgb(ALPHABLEND / 1.5, 255, 215, 0)
+        MyCouleurs.ColorSelectedBtn = Color.FromArgb(ALPHABLEND * 2.5, 255, 215, 0)
+        MyCouleurs.ContourNormal = Color.Orange
+
+    End Sub
+
+    Private Sub PreparePomBouton(ByVal MyPomBtn As POMbutton)
+
+        MyPomBtn.CouleurChecked = MyCouleurs.ColorSelectedBtn           'couleur de fond - btn séléctionné
+        MyPomBtn.CouleurForGradient = MyCouleurs.ColorWhiteForGradient  'couleur de degradé
+        MyPomBtn.CouleurMouseOnBtn = MyCouleurs.ColorMouseOnBtn         'couleur de fond - btn survolé
+        MyPomBtn.BorderStyle = BorderStyle.None
+        MyPomBtn.RatioArrondi = 0.05
+        MyPomBtn.CaptionAlignement = HorizontalAlignment.Center
+        MyPomBtn.CouleurContourChecked = MyCouleurs.ContourNormal             'couleur bordure
+        MyPomBtn.CouleurContourMouseOn = MyCouleurs.ContourNormal
+        MyPomBtn.LContourFond = False
+
+    End Sub
+
 
     Public Sub AffichageTViewChk()
+
+        If MyProjet.Poutres.Count = 0 Then Exit Sub
+        InitialiseCouleurs()
+
+        Me.cmb_Projet.Items.Clear()
+        Me.cmb_Projet.Items.Add(MyProjet.Nom)
+        Me.cmb_Projet.SelectedIndex = 0
+
+        Me.tab_BtnPoutres = New List(Of POMbutton)
+
+        For i As Integer = 0 To MyProjet.Poutres.Count - 1
+
+            Me.tab_BtnPoutres.Add(New POMbutton)
+            PreparePomBouton(Me.tab_BtnPoutres(i))
+
+            Me.tab_BtnPoutres(i).Dock = DockStyle.Fill
+
+            Me.tab_BtnPoutres(i).Caption = MyProjet.Poutres(i).Label
+            Me.tab_BtnPoutres(i).Name = "MyX" & CStr(i)
+            Me.tab_BtnPoutres(i).Tag = CStr(i)
+            AddHandler Me.tab_BtnPoutres(i).Click, AddressOf PomBoutonsClick
+
+
+            'AddHandler Me.tab_ChkSections(i).Paint, AddressOf chkBox_Section_Paint
+        Next
+
+        Me.TLPan_ListPoutres.RowCount = MyProjet.Poutres.Count + 1
+        Me.TLPan_ListPoutres.Controls.Clear()
+        Me.TLPan_ListPoutres.RowStyles.Clear()
+
+        For i As Integer = 0 To MyProjet.Poutres.Count - 1
+
+            Me.TLPan_ListPoutres.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+            'Me.TableLayoutPanel_TreeChk.RowStyles(i).SizeType = SizeType.Absolute
+            'Me.TableLayoutPanel_TreeChk.RowStyles(i).Height = 40.0!
+        Next
+
+        Dim HCum = 0
+        For i As Integer = 0 To MyProjet.Poutres.Count - 1
+            Me.TLPan_ListPoutres.Controls.Add(Me.tab_BtnPoutres(i), 0, i)
+            HCum += Me.TLPan_ListPoutres.RowStyles(i).Height
+        Next
+        Me.TLPan_ListPoutres.Height = HCum
+
+        Me.tab_BtnPoutres(MyProjet.IndEnCours).Checked = True
+
+    End Sub
+
+
+    Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs)
+
+
+        If Not sender.checked Then  '-> Si bouton déjà séléctionné :
+            sender.checked = True       'on le garde checké
+            Exit Sub                    'on ne recharge pas la fenêtre fille
+        End If
+
+        Dim SenderName As String = sender.name
+        ' HideToutesLesFilles()
+        UncheckedAllPomBtns(SenderName)
+        'Select Case SenderName
+        '    Case Me.PoMBtn_Gamma.Name
+        '        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Gamma
+        '        AfficherFenetreFille()
+
+        '    Case Me.PoMbtn_Scope.Name
+        '        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Scope
+        '        AfficherFenetreFille()
+
+        '    Case Me.PoMbtn_Calcul.Name
+        '        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Calcul
+        '        AfficherFenetreFille()
+
+        '    Case Me.PoMbtn_Fire.Name
+        '        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Incendie
+        '        AfficherFenetreFille()
+
+        'End Select
+        RedrawAllPomBtns()
+
+        '--> Bouton checké ne change pas de couleur quand il est survolé (MouseOn)
+        sender.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
+
+        ' Me.etq_Debug.Text = LastIndexWindow.ConfigurationNEW.ToString
+
+        'If LastIndexW.OptionsLogiciel <> Enu_OptionsLogiciel.Expert Then
+        '    Me.AcceptButton = Me.btn_Appliquer
+        'Else
+        '    Me.AcceptButton = Nothing
+        'End If
+
+    End Sub
+
+    Private Sub UncheckedAllPomBtns(ByVal SenderName As String)
+
+        For i As Integer = 0 To Me.tab_BtnPoutres.Count - 1
+            If SenderName <> Me.tab_BtnPoutres(i).Name Then tab_BtnPoutres(i).Checked = False
+        Next
+
+    End Sub
+
+
+    Private Sub RedrawAllPomBtns()
+
+        For Each MyPomBtn As Object In Me.TLPan_ListPoutres.Controls
+            If MyPomBtn.Name.ToUpper.Contains("MYX") Then
+                '--> Initialisation de la couleur de survole (MouseOn)
+                MyPomBtn.CouleurMouseOnBtn = MyCouleurs.ColorMouseOnBtn
+                '--> MAJ du bouton
+                MyPomBtn.Invalidate()
+            End If
+        Next
+
+    End Sub
+
+#End Region
+
+#Region " Affichage des poutres du projet "
+
+
+    Private Sub ChoixSection_CheckedChanged(sender As Object, e As EventArgs)
+
+        If lbuild Then Exit Sub
+        Dim lChecked As Boolean = sender.checked
+        lbuild = True
+
+        DeselectionneTousChk(sender.name)
+
+        Dim Indice As Integer = TraiteReal(sender.name.ToString.Substring(3))
+        MyProjet.IndEnCours = Indice
+        'AffichageFenetreFille()
+
+        sender.checked = lChecked
+        sender.backcolor = CouleurBtnActive
+        sender.forecolor = SystemColors.WindowText
+        lBuild = False
+
+        'MsgBox("Poutre activée :" & MyProjet.Poutres(MyProjet.IndEnCours).Label)
+
+    End Sub
+
+    ''' <summary>
+    ''' Déselectionne tous les checkbox de la fenêtre
+    ''' </summary>
+    '''  ''' <param name="SenderName">[E] Nom du chkbox qui n'est pas déselectionné</param>
+    Private Sub DeselectionneTousChk(Optional SenderName As String = "")
+
+        For Each o As Control In Me.TLPan_ListPoutres.Controls
+            If TypeOf o Is CheckBox Then
+                If o.Name <> SenderName Then
+                    CType(o, CheckBox).Checked = False
+                    CType(o, CheckBox).BackColor = Me.TLPan_ListPoutres.BackColor
+                    'CType(o,CheckBox).
+                End If
+            End If
+        Next
+
+    End Sub
+
+
+
+    Public Sub AffichageTViewChkOLD()
 
         If MyProjet.Poutres.Count = 0 Then Exit Sub
 
@@ -754,48 +983,6 @@ Public Class Frm_PMX
         Me.tab_ChkSections(MyProjet.IndEnCours).Checked = True
 
     End Sub
-
-    Private Sub ChoixSection_CheckedChanged(sender As Object, e As EventArgs)
-
-        If lbuild Then Exit Sub
-        Dim lChecked As Boolean = sender.checked
-        lbuild = True
-
-        DeselectionneTousChk(sender.name)
-
-        Dim Indice As Integer = TraiteReal(sender.name.ToString.Substring(3))
-        MyProjet.IndEnCours = Indice
-        'AffichageFenetreFille()
-
-        sender.checked = lChecked
-        sender.backcolor = CouleurBtnActive
-        sender.forecolor = SystemColors.WindowText
-        lBuild = False
-
-        'MsgBox("Poutre activée :" & MyProjet.Poutres(MyProjet.IndEnCours).Label)
-
-    End Sub
-
-    ''' <summary>
-    ''' Déselectionne tous les checkbox de la fenêtre
-    ''' </summary>
-    '''  ''' <param name="SenderName">[E] Nom du chkbox qui n'est pas déselectionné</param>
-    Private Sub DeselectionneTousChk(Optional SenderName As String = "")
-
-        For Each o As Control In Me.TLPan_ListPoutres.Controls
-            If TypeOf o Is CheckBox Then
-                If o.Name <> SenderName Then
-                    CType(o, CheckBox).Checked = False
-                    CType(o, CheckBox).BackColor = Me.TLPan_ListPoutres.BackColor
-                    'CType(o,CheckBox).
-                End If
-            End If
-        Next
-
-    End Sub
-
-
-
 
 #End Region
 

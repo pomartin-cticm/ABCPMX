@@ -45,6 +45,8 @@ Public Class Frm_Identification
                 Me.btn_OK.Text = Bloc("OK")
                 Me.btn_Annuler.Text = Bloc("CANCEL")
 
+                Me.lbl_Identification.Text = Bloc("TITLE")
+
                 '=== MENU PRINCIPAL ==============================================================='
 
                 Me.lbl_User.Text = Bloc("USER")

@@ -171,10 +171,10 @@ Partial Class Frm_Identification
         Me.pan_SaisiePortee.Controls.Add(Me.txt_Company)
         Me.pan_SaisiePortee.Controls.Add(Me.txt_User)
         Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 31)
+        Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
-        Me.pan_SaisiePortee.Size = New System.Drawing.Size(438, 171)
+        Me.pan_SaisiePortee.Size = New System.Drawing.Size(438, 170)
         Me.pan_SaisiePortee.TabIndex = 1
         '
         'lbl_Comment
