@@ -44,7 +44,7 @@ Imports CTICM_RDM
 
             'Appuis
             .NbAppuis = 2
-            .iNodeAppui = {1, .NbNodes}
+            .iNodeAppui = {0, .NbNodes - 1}
             .lAppuiArticule = {False, False}
 
             .NbForcesPon = 0
@@ -136,7 +136,7 @@ Imports CTICM_RDM
 
             'Appuis
             .NbAppuis = 5
-            .iNodeAppui = {1, 26, 51, 76, 101}
+            .iNodeAppui = {0, 25, 50, 75, 100}
             .lAppuiArticule = {False, False, True, False, False}        'Articulation à l'appui 3            
 
             .NbForcesPon = 0
@@ -224,7 +224,7 @@ Imports CTICM_RDM
 
             'Appuis
             .NbAppuis = 2
-            .iNodeAppui = {1, .NbNodes}
+            .iNodeAppui = {0, .NbNodes - 1}
             .lAppuiArticule = {False, False}
 
             .NbForcesPon = 1

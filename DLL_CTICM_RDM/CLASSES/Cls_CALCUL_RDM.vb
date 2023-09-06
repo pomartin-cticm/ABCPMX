@@ -50,7 +50,7 @@
             .RESN(1, 1) = -1
             'UZ (AXE Z)
             For iAppui = 1 To Donnees.NbAppuis
-                .RESN(2, Donnees.iNodeAppui(iAppui - 1)) = -1
+                .RESN(2, Donnees.iNodeAppui(iAppui - 1) + 1) = -1
             Next
         End With
 
@@ -82,11 +82,11 @@
                 If Donnees.lAppuiArticule(iAppui - 1) Then
                     'Articulation
 
-                    If iNodeAppui = 1 Then
+                    If iNodeAppui = 0 Then
                         'Extremite gauche
                         .RESB(1, 1) = 0
                     Else
-                        .RESB(2, iNodeAppui - 1) = 0
+                        .RESB(2, iNodeAppui) = 0            'iBarre = iNode - 1
                     End If
                 End If
             Next
@@ -338,7 +338,7 @@
 
             'Réaction d'appui RZ
             For iAppui = 1 To Donnees.NbAppuis
-                OUTPUT.RZ(iAppui - 1) += .REACT(1, 2, Donnees.iNodeAppui(iAppui - 1))
+                OUTPUT.RZ(iAppui - 1) += .REACT(1, 2, Donnees.iNodeAppui(iAppui - 1) + 1)
             Next
         End With
 
