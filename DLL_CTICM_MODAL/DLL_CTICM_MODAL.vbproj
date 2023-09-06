@@ -70,6 +70,7 @@
     <Compile Include="MODULES\ModNET_Analyse.vb" />
     <Compile Include="MODULES\Mod_ComDll.vb" />
     <Compile Include="MODULES\Mod_Declarations.vb" />
+    <Compile Include="MODULES\Mod_Tools.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

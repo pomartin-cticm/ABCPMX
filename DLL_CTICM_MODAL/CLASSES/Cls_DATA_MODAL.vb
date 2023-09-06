@@ -1,4 +1,4 @@
-﻿Public Class Cls_DATA_MODAL
+﻿Public Class DATA_MODAL
 
 #Region " Attributs "
     Public Structure Struc_Donnees
