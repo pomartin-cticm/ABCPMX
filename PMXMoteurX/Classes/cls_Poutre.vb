@@ -1651,7 +1651,6 @@ Public Class cls_Poutre
 
     End Sub
 
-
     Public Sub InitialisePoidsPropres()
         '-------------------------------------------------------------------------------------------
         '   23/08/23 :  Création - POM
