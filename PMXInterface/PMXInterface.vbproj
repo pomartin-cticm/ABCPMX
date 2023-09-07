@@ -80,6 +80,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Cls_Rapport.vb" />
+    <Compile Include="Fenetres\EditionBases\Frm_EditBaseBacsAcier.Designer.vb">
+      <DependentUpon>Frm_EditBaseBacsAcier.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\EditionBases\Frm_EditBaseBacsAcier.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_BacN.Designer.vb">
       <DependentUpon>Frm_BacN.vb</DependentUpon>
     </Compile>
@@ -324,6 +330,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Fenetres\EditionBases\Frm_EditBaseBacsAcier.resx">
+      <DependentUpon>Frm_EditBaseBacsAcier.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_BacN.resx">
       <DependentUpon>Frm_BacN.vb</DependentUpon>
     </EmbeddedResource>

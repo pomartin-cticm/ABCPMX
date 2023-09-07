@@ -228,7 +228,6 @@
 
 #End Region
 
-
 #Region " Dessins symboles "
 
     Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_ThetaRd.Paint, img_PorteeMini.Paint, img_PorteeConsoleMin.Paint, img_PorteeL2.Paint, img_Td1.Paint, img_xTd.Paint, img_Th.Paint, img_EpDalleMixte.Paint, img_RhoC.Paint
@@ -303,6 +302,5 @@
 
 
 #End Region
-
 
 End Class

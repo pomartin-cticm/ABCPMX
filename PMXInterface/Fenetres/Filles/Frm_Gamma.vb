@@ -40,6 +40,7 @@ Public Class Frm_Gamma
     End Sub
 
     Public Sub InitialiserFenetre()
+        lBuild = True
         InitialiserVariables()
         GestionLangues()
         GestionStyle()
@@ -699,4 +700,5 @@ Public Class Frm_Gamma
     End Sub
 
 #End Region
+
 End Class

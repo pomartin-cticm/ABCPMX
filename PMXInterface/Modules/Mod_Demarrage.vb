@@ -149,7 +149,7 @@ Module Mod_Demarrage
             '--> Base de données
             InitialisationBasesDonnees()
             '--> Récupération des données de la database dans le catalogue (aciers et profilés)
-            InitialiseCatalogue(LogicielFichiers.Base_Sections, MyCatalogue)
+            InitialiseCatalogueProfiles(LogicielFichiers.Base_Sections, MyCatalogue)
             InitialiseBaseAciers(LogicielFichiers.Base_Aciers, SteelBase)
 
             '--> Bacs acier
@@ -290,22 +290,25 @@ Module Mod_Demarrage
             Next
         End If
 
+    End Sub
 
+    Private Sub InitialiseOptionsDatabases()
+        '--> Options de la base de données
+        OptionsDatabase.lNewBase = True
+        OptionsDatabase.lSoftLimited = True
+        OptionsDatabase.FiltreSoft = "ABC"
+        OptionsDatabase.lShowSteelAvailOnly = True
+        OptionsDatabase.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel
+        OptionsDatabase.lNoSteelLowThick = True
+        OptionsDatabase.lSaveConfig = False
+        OptionsDatabase.lShowEC3 = True
     End Sub
 
     Public Sub InitialisationBasesDonnees()
 
         Dim FichierSource As String
 
-        '--> Options de la base de données
-        OptionsDatabase.lNewBase = True
-        OptionsDatabase.lSoftLimited = True
-        OptionsDatabase.FiltreSoft = "ACB+"
-        OptionsDatabase.lShowSteelAvailOnly = True
-        OptionsDatabase.ChoiceSteel = EnuChoiceAcier.BaseIfNoStandardSteel
-        OptionsDatabase.lNoSteelLowThick = True
-        OptionsDatabase.lSaveConfig = False
-        OptionsDatabase.lShowEC3 = True
+        InitialiseOptionsDatabases()
 
         '--> Fichier pour les profilés
 

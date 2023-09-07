@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Runtime.Remoting.Lifetime
 Imports PMXMoteur2
 Module Mod_BasesDonneesBinaires
 
@@ -255,6 +256,7 @@ Module Mod_BasesDonneesBinaires
         Dim lNoSteelLowThick As Boolean
         Dim lSaveConfig As Boolean
         Dim VersionBaseProfiles As StrucVersionDtB
+        Dim VersionBaseAciers As StrucVersionDtB
         Dim lShowEC3 As Boolean
     End Structure
 
@@ -307,6 +309,8 @@ Module Mod_BasesDonneesBinaires
         Dim iStandart, iBase As Short
         Dim EpMax As Single
         Dim lOK As Boolean
+        Dim iFBase As Short
+        Dim VerBase As String = ""
 
         '--> Initialisation
 
@@ -323,6 +327,13 @@ Module Mod_BasesDonneesBinaires
         Try
             If File.Exists(NomFichier) Then
                 FileOpen(NFACCESA, NomFichier, OpenMode.Binary)
+
+                '--> Version de la base
+                ExtraireFormatIndiceDtB(NFACCESA, iFBase, VerBase)
+                Dim txt() As String = VerBase.Split("_")
+                OptionsDatabase.VersionBaseAciers.Year = txt(0)
+                OptionsDatabase.VersionBaseAciers.Indice = txt(1)
+                OptionsDatabase.VersionBaseAciers.Format = iFBase
 
                 FileGet(NFACCESA, ASG, 10)
                 FileGet(NFACCESA, ASB, 14)
@@ -932,7 +943,7 @@ Module Mod_BasesDonneesBinaires
     ''' </summary>
     ''' <param name="NomFichier">Nom du fichier de la base de données binaires des sections</param>
     ''' <param name="Catalogue">Catalogue de profilés</param>
-    Public Sub InitialiseCatalogue(ByVal NomFichier As String, ByRef Catalogue As StrucCatalogue)
+    Public Sub InitialiseCatalogueProfiles(ByVal NomFichier As String, ByRef Catalogue As StrucCatalogue)
 
         '--> Déclaration
         Dim AGB, ASF, ANB, ADB, RecPos As Integer

@@ -85,6 +85,11 @@ WARNING_CMBTRAVEE			= All the input data must be correct to select an other the 
 ADD						= Add
 DELETE					= Delete
 
+#FRM_EDITSTEELSHEETINGS
+TITLE					= Steel sheetings database
+CLOSE					= Close
+
+
 #FRM_ENCASEMENT
 CANCEL					= Cancel 
 CLASS					= Class
@@ -408,10 +413,36 @@ EXPERTMODEACTIVE		= Expert Mode active
 
 #OPTSOFTDATABASES
 DATABASES				= Databases
-PROFILES				= Hot rolled profiles
+PROFILES				= ArcelorMittal profiles
 SHEETINGS				= Steel profiled sheetings
 STUDS					= Welded studs
 STEELS					= Structural steels
+CLICKTOEDIT				= Click on databases in blue to edit them
+FILTRESOFT				= Software filter
+HIDEFILTER				= Hide unauthorized profiles
+
+#RESERVE
+EPROFILS		= ArcelorMittal Profiles database
+EACIER			= Steels database
+
+STEELAVAIL		= Show only available steels
+CHOIXSTEEL		= Options for the selection of steel
+BASEONLY		= Only base steels
+STANDARDONLY	= Only steel under norms available for the selected profile
+BASEANDSTANDARD = Base steel and steel under norms available for the selected profile
+BASEIFNOSTD		= Base steel if no steel available for the selected profile
+ALLSTEEL		= All steels of the database
+HIDESTEELTHICK	= Hide steels not compatible with profile thickness
+GRPWEBFILES		= Databases from internet update
+NBWEBFILES		= Number of web files
+DELETEWEBF		= Delete all web files
+TTIPEDITBAC		= Click to edit steel sheets database
+TTIPEDITHILTI	= Click to edit Hilti connectors database
+TTIPEDITSTUDS	= Click to edit studs database
+UNIVERSALDTB	= Use generalised databases
+SAVEOPTIONS		= Save these options for the next Expert session
+EXPERTOPT		= Expert options
+SHOWEC3C		= Show EC3 reduction curves	
 
 
 #OPTSOFTDIRECTORIES

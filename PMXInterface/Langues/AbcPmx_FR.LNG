@@ -287,7 +287,7 @@ SPANS					= Portées
 
 #FRM_STANDARDSTEELSECTIONS
 AUTOMATICHA				= Hauteur totale automatiquement calculée
-AUTOMATICHW				= Hauteur de l'Ã¢me automatiquement calculée
+AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
 CANCEL					= Annuler
 DELIVERYCOND			= Conditions de livraison pour $
 HEIGHT					= Hauteur 
@@ -357,6 +357,7 @@ UNITS					= Unités
 DATABASES				= Bases de données
 EXPERT					= Mode Expert
 EXPERTMODEACTIVE		= Mode Expert activé
+
 
 #OPTSOFTDIRECTORIES
 DIRECTORIES				= Répertoire
