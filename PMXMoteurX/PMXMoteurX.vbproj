@@ -137,5 +137,11 @@
   <ItemGroup>
     <Folder Include="Section\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DLL_CTICM_RDM\DLL_CTICM_RDM.vbproj">
+      <Project>{4623e43c-c204-42a6-b120-1a905b82b877}</Project>
+      <Name>DLL_CTICM_RDM</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

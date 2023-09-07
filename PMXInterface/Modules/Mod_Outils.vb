@@ -1135,7 +1135,6 @@ Module Mod_Outils
     End Sub
 #End Region
 
-
 #Region "   Recherche des fichiers langues présents "
 
     Sub RechercheLangue(ByVal RepRec As String, ByVal Racine As String,
@@ -1206,5 +1205,7 @@ Module Mod_Outils
     End Sub
 
 #End Region
+
+
 
 End Module

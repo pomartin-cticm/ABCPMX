@@ -135,7 +135,8 @@ Public Class Frm_LargeurEfficace
 
         '--> Préparation des noeuds de calcul et représentation
 
-        MyPoutre.PrepareNodes(0.5, 10, 5)
+        InitialiseOptionsCalculPoutre(MyProjet.Poutres(MyProjet.IndEnCours))
+        MyPoutre.PrepareNodesN(MyPoutre.Param.dMaxNodes, MyPoutre.Param.nbMinNodesTravee, MyPoutre.Param.nbMinNodesConsole)
 
         For i As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
             xo = MyPoutre.Nodes.xGlobal(i)

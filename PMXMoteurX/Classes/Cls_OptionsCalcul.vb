@@ -3,9 +3,6 @@
 Public Class Cls_OptionsCalcul
 
 
-    '==== A SUPPRIMER ??? Non ==============================
-
-
 #Region " Enumérations et constantes "
 
     Public Shared tabRH() As Decimal = {50, 80}
@@ -20,6 +17,25 @@ Public Class Cls_OptionsCalcul
 #End Region
 
 #Region " Attributs "
+
+
+    Public RH As Decimal                            ' Humidité pour le calcul du béton
+
+    Public Gamma As Cls_Gamma                       ' Coefficients partiels pour le calcul
+    Public HivossParam As cls_OptionsHivoss         ' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
+    Public Norme As Enu_Normes                      ' Norme de calcul
+
+    Public lLargeurEfficaceSimplifiee As Boolean    ' Largeur efficace de la dalle béton selon modèle simplifié
+    Public lCompressionArma As Boolean              ' Indique si l'on prend en compte les armatures comprimées dans le calcul des propriétés de section
+    Public dMaxNodes As Decimal                     ' Distance maximale entre deux noeuds
+    Public nbMinNodesTravee As Integer              ' Nombre mini de noeuds par travée normale
+    Public nbMinNodesConsole As Integer             ' Nombre mini de noeuds par travée console
+
+
+
+#End Region
+
+#Region " Attributs à trier "
 
     '=== C'est déjà dans la cls_AcierArmatures
     '''' <summary>
@@ -87,40 +103,24 @@ Public Class Cls_OptionsCalcul
     ''' </summary>
     Public NeqCustom As Decimal
 
-    ''' <summary>
-    ''' Propriétés élastiques par rapport au béton de l'enrobage
-    ''' </summary>
-    Public Prop_Elastique_Enrobage As New Cls_Prop_Elastique
+    '''' <summary>
+    '''' Propriétés élastiques par rapport au béton de l'enrobage
+    '''' </summary>
+    'Public Prop_Elastique_Enrobage As New Cls_Prop_Elastique
 
-    ''' <summary>
-    ''' Propriétés élastiques par rapport au béton de la dalle
-    ''' </summary>
-    Public Prop_Elastique_Dalle As New Cls_Prop_Elastique
+    '''' <summary>
+    '''' Propriétés élastiques par rapport au béton de la dalle
+    '''' </summary>
+    'Public Prop_Elastique_Dalle As New Cls_Prop_Elastique
 
-    ''' <summary>
-    ''' Humidité pour le calcul du béton
-    ''' </summary>
-    Public RH As Decimal
+
 
     ''' <summary>
     ''' Temps de premier chargement des charges permanentes (0 pour la dalle, 1 pour l'enrobage)
     ''' </summary>
     Public t0Permanentes(1) As Decimal
 
-    ''' <summary>
-    ''' Coefficients pour le calcul
-    ''' </summary>
-    Public Gamma As Cls_Gamma
 
-    ''' <summary>
-    ''' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
-    ''' </summary>
-    Public HivossParam As cls_OptionsHivoss
-
-    ''' <summary>
-    ''' Norme de calcul
-    ''' </summary>
-    Public Norme As Enu_Normes
 
 #End Region
 
@@ -133,6 +133,22 @@ Public Class Cls_OptionsCalcul
 
         '--> Coefficients pour le calcul en dynamique
         HivossParam = New cls_OptionsHivoss
+
+        Me.RH = tabRH(0)
+
+        Me.Norme = Enu_Normes.EurocodesG1
+
+        '--> Paramètres de discrétisation
+
+        Me.dMaxNodes = 0.5
+        Me.nbMinNodesTravee = 10
+        Me.nbMinNodesConsole = 5
+
+        Me.lLargeurEfficaceSimplifiee = False
+        Me.lArmaComprimee = False
+
+        Exit Sub
+
 
         '--> Paramètres de calcul par défaut
         Me.lCalcul_Flexion_Positive = True

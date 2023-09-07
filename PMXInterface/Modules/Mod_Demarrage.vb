@@ -380,6 +380,24 @@ Module Mod_Demarrage
 
 #Region " Initialisation de la poutre "
 
+    Public Sub InitialiseOptionsCalculPoutre(mypoutre As cls_Poutre)
+        '--------------------------------------------------------------------------------
+        '   14/06/23 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------
+        '   Initialisation des paramètres de calcul d'une poutre (avant lancement des calculs)
+        '--------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre à initialiser
+        '--------------------------------------------------------------------------------
+
+        ' A COMPLETER
+
+
+        mypoutre.Param.dMaxNodes = OptionsCalcul.dMaxNodes
+        mypoutre.Param.nbMinNodesConsole = OptionsCalcul.nbMinNodesConsole
+        mypoutre.Param.nbMinNodesTravee = OptionsCalcul.nbMinNodesTravee
+
+    End Sub
+
     Public Sub InitialisePoutreDeBases(MyPoutre As cls_Poutre, ByRef lOK As Boolean)
         '--------------------------------------------------------------------------------
         '   14/06/23 :  Création - POM - V1.00

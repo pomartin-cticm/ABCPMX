@@ -225,7 +225,19 @@ Public Class Frm_EditBaseBacsAcier
         Me.Close()
     End Sub
 
+
 #End Region
 
+#Region " Dessin du bac "
+
+    Private Sub img_Bac_Paint(sender As Object, e As PaintEventArgs) Handles img_Bac.Paint
+
+        'DessineBac(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, 1, BaseBacs(CleBacs(KeyBac)), 0.1, -1, True, False, False)
+
+        DessineBacTout(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, BaseBacs(CleBacs(KeyBac)), True, 1)
+
+    End Sub
+
+#End Region
 
 End Class

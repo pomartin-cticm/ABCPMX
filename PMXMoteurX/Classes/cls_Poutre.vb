@@ -1,4 +1,7 @@
-﻿Public Class cls_Poutre
+﻿Imports System.ComponentModel
+Imports CTICM_RDM
+
+Public Class cls_Poutre
 
 #Region " Enumérations et constantes "
 
@@ -241,22 +244,26 @@
 
     '--Combinaisons définies par l'utilisateur
 
-    Public Const nbCombELU As Integer = 5
-    Public Const nbCombELS As Integer = 5
-    Public Const nbCombFeu As Integer = 4
+    Public Const nbCombELU As Integer = 5                           ' Nombre de combinaisons ELU
+    Public Const nbCombELS As Integer = 5                           ' Nombre de combinaisons ELS
+    Public Const nbCombFeu As Integer = 4                           ' Nombre de combinaisons ELU incendie
     Public Const nbCombELUConstruction As Integer = 1
     Public Const nbCombELSConstruction As Integer = 1
-    Public lCombELU(nbCombELU) As Boolean           'Indique si combinaison ELU sélectionnée
-    Public lCombELS(nbCombELS) As Boolean           'Indique si combinaison ELS sélectionnée
-    Public lCombFeu(nbCombFeu) As Boolean           'Indique si combinaison Feu sélectionnée
+    Public lCombELU(nbCombELU) As Boolean                           'Indique si combinaison ELU sélectionnée
+    Public lCombELS(nbCombELS) As Boolean                           'Indique si combinaison ELS sélectionnée
+    Public lCombFeu(nbCombFeu) As Boolean                           'Indique si combinaison Feu sélectionnée
     Public lCombELCURules(nbCombELUConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
     Public lCombELCSRules(nbCombELSConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
 
-    Public CoefCombELU(nbCombELU) As List(Of Decimal) 'Table des coefficients des combinaisons ELU
-    Public CoefCombELS(nbCombELS) As List(Of Decimal) 'Table des coefficients des combinaisons ELS
-    Public CoefCombFeu(nbCombFeu) As List(Of Decimal) 'Table des coefficients des combinaisons Feu
-    Public CoefCombELCU(nbCombELUConstruction) As List(Of Decimal) 'Table des coefficients des combinaisons ELU Construction
-    Public CoefCombELCS(nbCombELSConstruction) As List(Of Decimal) 'Table des coefficients des combinaisons ELS Construction
+    Public CoefCombELU(nbCombELU) As List(Of Decimal)               'Table des coefficients des combinaisons ELU
+    Public CoefCombELS(nbCombELS) As List(Of Decimal)               'Table des coefficients des combinaisons ELS
+    Public CoefCombFeu(nbCombFeu) As List(Of Decimal)               'Table des coefficients des combinaisons Feu
+    Public CoefCombELCU(nbCombELUConstruction) As List(Of Decimal)  'Table des coefficients des combinaisons ELU Construction
+    Public CoefCombELCS(nbCombELSConstruction) As List(Of Decimal)  'Table des coefficients des combinaisons ELS Construction
+
+    '--Cas de charge pour l'analyse
+
+    Public ChargesA As New List(Of Cls_CasDeCharge)
 
 #End Region
 
@@ -284,6 +291,9 @@
 
 #Region " Variables pour la modélisation "
 
+    Public Nodes As strucBeamNodes
+    Public Elements As New List(Of strucBeamElements)
+
     Public Structure strucBeamNodes
         Dim nbNodes As Integer              ' Nombre de noeuds de discrétisation le long de la poutre
         Dim xGlobal() As Decimal            ' Position x globale du noeud / extrémité gauche de la poutre
@@ -292,7 +302,13 @@
         Dim iNodeAppui(,) As Integer        ' Table des indices des noeuds au droit des extremités de console (indice 1: indice travée, indice 2 : 0 ou 1 pour extrémité)
     End Structure
 
-    Public Nodes As strucBeamNodes
+    Public Structure strucBeamElements
+        Dim lMixte As Boolean               ' Indique si propriétés mixtes ou acier
+        Dim InertieY() As Decimal           ' Table des inerties des sections
+        Dim Aire() As Decimal               ' Table des aires des sections
+        Dim nEqC As Decimal                 ' si mixte, coefficient d'équivalence acier-béton pour la dalle
+        Dim nEqEC As Decimal                ' si mixte, coefficient d'équivalence acier-béton pour l'enrobage partiel
+    End Structure
 
 #End Region
 
@@ -745,6 +761,7 @@
 #End Region
 
 #Region " Calculs largeur participante "
+
     Public Function BeffDalle(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean, Optional TypeLargeur As EnuTypeLargeurParticipante = EnuTypeLargeurParticipante.LargeurTotale) As Decimal
 
         '------------------------------------------------------------------------------------------------------------------
@@ -1125,9 +1142,515 @@
 
     End Sub
 
+    Public Sub PrepareNodesN(dEltMax As Decimal, nbMinInter As Integer, nbMinConsole As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   17/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Préparation des sections de calcul de la poutre
+        '-------------------------------------------------------------------------------------------
+        '   dEltMax     [E] :   Distance maxi entre 2 noeuds
+        '   nbMinInter  [E] :   Nombre mini de noeuds par travée intermédiaire
+        '   nbMinConsole[E] :   Nombre mini de noeuds par console
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xImp As New List(Of Decimal)      ' Position des noeuds imposés
+        Dim xo, xe As Decimal
+        Dim iTravee, i0, iGauche As Integer
+        Dim xCum As Decimal
+        Dim lTrouve As Boolean
+        Dim lConsole As Boolean
+        Dim Longueur, DeltaX As Decimal
+        Dim nDec, nbMin As Integer
+        Dim lFirst As Boolean = True
+        Dim lAppG, lAppD As Boolean
+        Dim dElMaxTravee, dElMaxTroncon As Decimal
+
+        '--> Initialisation des noeuds imposés
+
+        InitialiseNoeudsImposes(xImp)
+        iTravee = Me.IndicePremiereTravee
+        xCum = Me.xPositionAppui(False, iTravee)
+        ReDim Nodes.iNodeAppui(Me.IndiceDerniereTravee, 1)
+        i0 = 0
+        Nodes.nbNodes = 0
+
+        '--> Maillage des tronçons entre noeuds imposés
+
+        For i As Integer = 0 To xImp.Count - 2
+            xo = xImp(i)
+            xe = xImp(i + 1)
+
+            lTrouve = IsSmallerOrEqual(xe, xCum)
+
+            Do While (Not lTrouve) And (iTravee < Me.IndiceDerniereTravee)
+                iTravee += 1
+                xCum = Me.xPositionAppui(False, iTravee)
+                lTrouve = IsSmallerOrEqual(xe, xCum)
+            Loop
+
+            If Not lTrouve Then
+                '== Gestion d'une erreur qui ne doit pas arriver
+                MsgBox("Error creation of nodes", MsgBoxStyle.Critical, "cls_Poutre/PrepareNodeN")
+                Exit Sub
+            End If
+
+            lConsole = (iTravee = 0) Or (iTravee > Me.NombreTraveesDeuxAppuis)
+            lAppG = IsEqual(xo, Me.xPositionAppui(True, iTravee))
+            lAppD = IsEqual(xe, Me.xPositionAppui(False, iTravee))
+
+            Longueur = xe - xo
+
+            If lConsole Then nbMin = nbMinConsole Else nbMin = nbMinInter
+            dElMaxTravee = Me.LongueurTravee(iTravee) / nbMin
+            dElMaxTroncon = Math.Min(dElMaxTravee, dEltMax)
+
+            nDec = Math.Floor(Longueur / dElMaxTroncon)
+            If Not IsEqual(nDec * dElMaxTroncon, Longueur) Then nDec += 1
+
+            DeltaX = Longueur / nDec
+
+            If lFirst Then
+                Nodes.nbNodes = nDec + 1
+                ReDim Me.Nodes.xTravee(nDec)
+                ReDim Me.Nodes.xGlobal(nDec)
+                iGauche = 0
+            Else
+                iGauche = Nodes.nbNodes - 1
+                Nodes.nbNodes += nDec
+                ReDim Preserve Me.Nodes.xTravee(Nodes.nbNodes - 1)
+                ReDim Preserve Me.Nodes.xGlobal(Nodes.nbNodes - 1)
+            End If
+
+            If lAppG Then Nodes.iNodeAppui(iTravee, 0) = Nodes.nbNodes - nDec - 1
+            If lAppD Then Nodes.iNodeAppui(iTravee, 1) = Nodes.nbNodes - 1
+
+            For j As Integer = i0 To nDec
+                Me.Nodes.xTravee(iGauche + j) = DeltaX * j + xo - Me.xPositionAppui(True, iTravee)
+                Me.Nodes.xGlobal(iGauche + j) = xo + DeltaX * j
+            Next
+
+            lFirst = False
+            i0 = 1
+        Next
+    End Sub
+
+    Private Sub InitialiseNoeudsImposes(ByRef xImp As List(Of Decimal))
+
+        '--> Initialisation
+
+        xImp.Clear()
+
+        '--> Définition des noeuds imposés
+
+        '# Extrémités
+
+        AjouteNoeudImpose(0, xImp)
+        AjouteNoeudImpose(Me.LongueurTotale, xImp)
+
+        '# Appuis intermédiaires
+
+        Dim i0 As Integer = Me.IndicePremiereTravee
+        For i As Integer = 0 To Me.NbTravees - 2
+            AjouteNoeudImpose(Me.xPositionAppui(False, i + i0), xImp)
+        Next
+
+        '# Mi-travées des travées intermédiaires
+
+        For i As Integer = 1 To Me.NombreTraveesDeuxAppuis
+            AjouteNoeudImpose(Me.xPositionAppui(True, i) + Me.LongueurTravee(i) / 2, xImp)
+        Next
+
+        '# Position des étais ponctuels
+
+        '# Maitiens latéraux
+
+        '# Position des zones fissurées
+
+        If Me.lMixte And Me.NbTravees > 1 Then
+            For i As Integer = 1 To Me.NombreTraveesDeuxAppuis
+                If (i = 1) Then
+                    If Me.lTraveeConsoleGauche Then
+                        AjouteNoeudImpose(Me.xPositionAppui(True, i) + Me.LongueurTravee(i) * 0.15, xImp)
+                    End If
+                End If
+                If (i < Me.NbTravees) Then
+                    AjouteNoeudImpose(Me.xPositionAppui(True, i) + Me.LongueurTravee(i) * 0.85, xImp)
+                End If
+            Next
+        End If
+
+    End Sub
+
+    Private Sub AjouteNoeudImpose(MyxImp As Decimal, ByRef xImp As List(Of Decimal))
+        '-------------------------------------------------------------------------------------------
+        '   17/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Ajout d'un noeud dans la liste des noeuds imposés
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lTrouve As Boolean = False
+        Dim iX As Integer = 0
+        Dim lCont As Boolean = (iX <= xImp.Count - 1)
+        Const DeltaX As Decimal = 0.01
+
+        '--> La position envoyée est elle déjà dans la liste
+
+        Do While lCont
+
+            lTrouve = IsEqual(MyxImp, xImp(iX), DeltaX)
+
+            If lTrouve Then
+                lCont = False
+            Else
+                iX += 1
+                lCont = (iX <= xImp.Count - 1)
+            End If
+
+        Loop
+
+        If Not lTrouve Then
+            xImp.Add(MyxImp)
+            xImp.Sort()
+        End If
+
+    End Sub
+
+#End Region
+
+#Region " Maillage : propriétés des barres le longe de la poutre "
+
+    Public Function IndiceTabElts(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal) As Integer
+        '-------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM - V1.00
+        '-------------------------------------------------------------------------------------------
+        '   Renvoie l'indice de la table des propriétés des élements à prendre en compte dans le calcul
+        '   Si la table demandée n'existe pas, elle est créée automatiquement
+        '-------------------------------------------------------------------------------------------
+        '   lMixte          [E] :   Indique si propriétés en phase mixte ou non mixte (pour la dalle)
+        '   nEqDal          [E] :   Si mixte, coefficient d'équivalence acier béton pour la dalle
+        '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lTrouve As Boolean = False
+        Dim iTab As Integer = -1
+        Dim indexT As Integer
+        Dim SigneM() As Decimal
+
+        '--> Initialisation
+
+        InitialiseSigneMoment(SigneM)
+
+        '--> On commence par chercher si la table demandée existe
+
+        Do While (Not lTrouve) And (iTab < Me.Elements.Count - 1)
+            iTab += 1
+            lTrouve = (lMixte = Me.Elements(iTab).lMixte) _
+                  And (nEqDal = Me.Elements(iTab).nEqC) _
+                  And (nEqEc = Me.Elements(iTab).nEqEC)
+        Loop
+
+        If lTrouve Then
+            indexT = iTab
+        Else
+            AjouteTabElements(lMixte, nEqDal, nEqEc, SigneM)
+            indexT = Me.Elements.Count - 1
+        End If
+
+        Return indexT
+    End Function
+
+    Private Sub AjouteTabElements(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal, pSigneM() As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM - V1.00
+        '-------------------------------------------------------------------------------------------
+        '   Crée une table des propriétés des élements à prendre en compte dans le calcul
+        '-------------------------------------------------------------------------------------------
+        '   lMixte          [E] :   Indique si propriétés en phase mixte ou non mixte (pour la dalle)
+        '   nEqDal          [E] :   Si mixte, coefficient d'équivalence acier béton pour la dalle
+        '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
+        '   pSigneM         [E] :   Table de signes de moment le long de la poutre
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim MyElts As strucBeamElements
+        Dim iEltO, iEltE As Integer
+        Dim lEnrob As Boolean = Me.lEnrobage
+        Dim lPoutreMixte As Boolean = Me.lMixte
+        Dim Aire, InertieY As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim iElt As Integer
+        Dim Beff As Decimal
+        Dim xm As Decimal
+        Dim BeffPrec As Decimal
+        Dim SigneMprec As Decimal
+        Dim lCalcul As Boolean
+
+        '--> Initialisation
+
+        MyElts.lMixte = lMixte
+        MyElts.nEqC = nEqDal
+        MyElts.nEqEC = nEqEc
+
+        ReDim MyElts.Aire(Me.Nodes.nbNodes - 2)
+        ReDim MyElts.InertieY(Me.Nodes.nbNodes - 2)
+
+        '--> Cas très simple ou tout est constant
+
+        If (Not lMixte) And (Not lEnrob) Then
+            Me.Section.ProfilA.ProprietesElastiquesMyy(1, False, 1, zANE, InertieY, MelRd)
+            Aire = Me.Section.ProfilA.Aire
+            For iElt = 0 To Nodes.nbNodes - 2
+                MyElts.Aire(iElt) = Aire
+                MyElts.InertieY(iElt) = InertieY
+            Next
+        End If
+
+        '--> Boucle sur les travées, dans le cas où il faut prendre en compte le béton
+
+        For iTravee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+            iEltO = Me.Nodes.iNodeAppui(iTravee, 0)
+            iEltE = Me.Nodes.iNodeAppui(iTravee, 1) - 1
+
+            For iElt = iEltO To iEltE
+                xm = (Me.Nodes.xTravee(iElt) + Me.Nodes.xTravee(iElt + 1)) / 2
+                Beff = Me.BeffDalle(xm, iTravee, False, True)
+
+                If iElt = iEltO Then
+                    lCalcul = True
+                Else
+                    lCalcul = Not ((SigneMprec = pSigneM(iElt)) And (BeffPrec = Beff))
+                End If
+
+                If lCalcul Then
+                    InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle)
+                    MyElts.InertieY(iElt) = InertieY
+                    BeffPrec = Beff
+                    SigneMprec = pSigneM(iElt)
+                End If
+                MyElts.InertieY(iElt) = InertieY
+            Next
+
+        Next
+
+        '--> Fin
+
+        Me.Elements.Add(MyElts)
+    End Sub
+
+    Private Sub InitialiseSigneMoment(ByRef pSigneM() As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM - V1.00
+        '-------------------------------------------------------------------------------------------
+        '   Génére pour chaque élément du maillage le signe de moment à considérer pour l'analyse
+        '-------------------------------------------------------------------------------------------
+        '   pSigneM     [S] :   Table de signes de moment
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iEltO, iEltE As Integer
+        Dim lConsole As Boolean
+        Dim lContinuG, lContinuD As Boolean
+        Dim xm, xTo, xTe As Decimal
+
+        '--> Initialisation
+
+        ReDim pSigneM(Me.Nodes.nbNodes - 2)
+
+        '--> Traitement
+
+        For iTravee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+            lConsole = (iTravee = 0) Or (iTravee > Me.NombreTraveesDeuxAppuis)
+            iEltO = Me.Nodes.iNodeAppui(iTravee, 0)
+            iEltE = Me.Nodes.iNodeAppui(iTravee, 1) - 1
+
+            If lConsole Then
+                For i As Integer = iEltO To iEltE
+                    pSigneM(i) = -1
+                Next
+            Else
+                lContinuG = (iTravee > 1) Or ((iTravee = 1) And Me.lTraveeConsoleGauche)
+                lContinuD = (iTravee < Me.NombreTraveesDeuxAppuis) Or ((iTravee = Me.NombreTraveesDeuxAppuis) And Me.lTraveeConsoleDroite)
+                xTo = Me.xPositionAppui(True, iTravee)
+                xTe = Me.xPositionAppui(False, iTravee)
+
+                For iElt As Integer = iEltO To iEltE
+                    xm = (Me.Nodes.xTravee(iElt) + Me.Nodes.xTravee(iElt + 1)) / 2
+                    If IsSmallerOrEqual(xm - xTo, 0.15 * Me.LongueurTravee(iTravee)) Then
+                        If lContinuG Then
+                            pSigneM(iElt) = -1
+                        Else
+                            pSigneM(iElt) = 1
+                        End If
+                    ElseIf IsSmallerOrEqual(xTe - xm, 0.15 * Me.LongueurTravee(iTravee)) Then
+                        If lContinuD Then
+                            pSigneM(iElt) = -1
+                        Else
+                            pSigneM(iElt) = 1
+                        End If
+                    Else
+                        pSigneM(iElt) = 1
+                    End If
+                Next
+
+            End If
+        Next
+    End Sub
+
+    Private Sub ProprieteElement(IndElt As Integer, iTravee As Integer, lMixte As Boolean, nEqC As Decimal, nEqEc As Decimal,
+                                 ByRef Aire As Decimal, ByRef Inertie As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM - V1.00
+        '-------------------------------------------------------------------------------------------
+        '   Propriété d'une élement de la modélisation
+        '-------------------------------------------------------------------------------------------
+        '   IndElt          [E] :   Indice de l'élément
+        '   iTravee         [E] :   Indice de la travée
+        '   lMixte          [E] :   Indique si propriétés en phase mixte ou non mixte (pour la dalle)
+        '   nEqC            [E] :   Si mixte, coefficient d'équivalence acier béton pour la dalle
+        '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
+        '
+        '   Aire            [E] :   Aire de l'élément
+        '   Inertie         [E] :   Inertie / axe fort de l'élément
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xm As Decimal
+
+        '--> Initialisation
+
+        xm = (Me.Nodes.xTravee(IndElt) + Me.Nodes.xTravee(IndElt + 1)) / 2
+
+
+
+    End Sub
+
 #End Region
 
 #Region " Chargements, poids propre et combinaisons "
+
+    Public Sub InitialiseCasdeChargesCalcul()
+        '-------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Initialisation des cas de charges à traiter par le moteur de calcul
+        '-------------------------------------------------------------------------------------------
+        '   
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lMixte As Boolean
+        Dim lEtaitComplet As Boolean
+        Dim lNonEtaye As Boolean
+        Dim lEnrob As Boolean
+
+        Dim nEqDalleCT, nEqDalleLT As Decimal
+        Dim nEqEnrobCT, nEqEnrobLT As Decimal
+
+        Dim strChargesPermanentes As String = "Permanent loads"
+        Dim strPoidsPropre As String = "Self weight"
+        Dim strPoidsPropreEtaye As String = "Self weight with props"
+        Dim strPoidsPropreSansEtais As String = "Self weight without props"
+        Dim strAutresChargesPermanentes As String = "Other permanent loads"
+        Dim strExploitation As String = "Live loads"
+        Dim strConfiguration As String = "Conf. no "
+        Dim strRetraitDalle As String = "Shrinkage of the slab"
+        Dim strRetraitEnrob As String = "Shrinkage of the encasement"
+        Dim strConstruction As String = "Construction loads"
+
+        Dim IndiceG As Integer
+        Dim IndiceQ As Integer
+
+        '--> Initialisation
+
+        lMixte = Me.lMixte
+        lEnrob = Me.lEnrobage
+        lEtaitComplet = (TypeEtaiement = EnuTypeEtaiement.FullyPropped)
+        lNonEtaye = (TypeEtaiement = EnuTypeEtaiement.UnPropped)
+
+        nEqDalleCT = Me.Dalle.beton.CoefficientEquivalenceCT
+        nEqEnrobCT = Me.Section.enrobage_partiel.Beton.CoefficientEquivalenceCT
+        nEqDalleLT = 3 * nEqDalleCT
+        nEqEnrobLT = 3 * nEqEnrobCT
+
+        '--> Traitement des charges permanentes 
+
+        '# Charges permanentes globales
+
+        If (Not lMixte) Or lEtaitComplet Then
+            IndiceG = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
+            Me.ChargesA.Add(New Cls_CasDeCharge(strChargesPermanentes, "G", IndiceG))
+        End If
+
+        '# Charges de poids propres pour les poutres mixtes non étayées
+
+        If lMixte Then
+
+            IndiceG = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
+
+            If lNonEtaye Then
+                Me.ChargesA.Add(New Cls_CasDeCharge(strPoidsPropre, "G1", Me.IndiceTabElts(False, 0, nEqEnrobLT)))
+            Else
+                'Cas de l'étaiement ponctuel
+                Me.ChargesA.Add(New Cls_CasDeCharge(strPoidsPropre, "G1pp", Me.IndiceTabElts(False, 0, nEqEnrobLT)))
+
+                Me.ChargesA.Add(New Cls_CasDeCharge(strPoidsPropre, "G1c", IndiceG))
+
+            End If
+
+            Me.ChargesA.Add(New Cls_CasDeCharge(strAutresChargesPermanentes, "G2", IndiceG))
+
+        End If
+
+        '--> Charges d'exploitation
+
+        IndiceQ = Me.IndiceTabElts(lMixte, nEqDalleCT, nEqEnrobCT)
+
+        If Me.NbTravees = 1 Then
+            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 1", "Q1", IndiceQ))
+            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 2", "Q2", IndiceQ))
+
+        Else
+
+            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 1", "Q1#1", IndiceQ))
+            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 2", "Q1#2", IndiceQ))
+            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 3", "Q1#3", IndiceQ))
+
+            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 1", "Q2#1", IndiceQ))
+            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 2", "Q2#2", IndiceQ))
+            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 3", "Q3#3", IndiceQ))
+
+        End If
+
+        '--> Retrait
+
+        Dim IndiceSH As Integer = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
+
+        If lMixte Then
+            Me.ChargesA.Add(New Cls_CasDeCharge(strRetraitDalle, "SHC", IndiceSH))
+        End If
+
+        If lEnrob Then
+            Me.ChargesA.Add(New Cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH))
+        End If
+
+        '--> Charges de construction
+
+        If lMixte And (Not lEtaitComplet) Then
+            Me.ChargesA.Add(New Cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobLT)))
+        End If
+
+    End Sub
+
 
     Public Sub InitialisePoidsPropres()
         '-------------------------------------------------------------------------------------------
@@ -1288,6 +1811,111 @@
         '-------------------------------------------------------------------------------------
         '   Analyse globale pour tous les cas de charges
         '-------------------------------------------------------------------------------------
+        '   Avant de lancer ce calcul, in est nécessaire d'avoir effectuer InitialiseCalculs
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim jCdc As Integer
+        Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
+        Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
+        Dim CodeError_RDM As Integer
+        Dim TextError_RDM As String = String.Empty
+        Dim DonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees = Nothing
+
+        '--> Préparation du modele EF
+
+        Me.PrepareModeleEF(DonneesEF)
+
+        '--> Boucle sur les cas de charge
+
+        For jCdc = 0 To Me.ChargesA.Count - 1
+            PrepareDonneesEFChargement(jCdc, DonneesEF)
+        Next
+
+        '=== LANCER LE CALCUL ===
+
+        Call MyDLLRDM.CALCULER(DonneesEF, MyOutput_RDM, CodeError_RDM, TextError_RDM)
+
+    End Sub
+
+    Public Sub InitialiseCalculs()
+        '-------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Initialisation des calculs RDM
+        '-------------------------------------------------------------------------------------
+
+        Me.PrepareNodesN(Me.Param.dMaxNodes, Me.Param.nbMinNodesTravee, Me.Param.nbMinNodesConsole)
+        Me.InitialiseCasdeChargesCalcul()
+
+    End Sub
+
+    Private Sub PrepareModeleEF(ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+        '-------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Préparation du modele EF avant lancement des calculs (hors propriétés éléments et chargements)
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim i As Integer
+
+        '--> Paramètres généraux
+
+        pDonneesEF.EYOUNG = Me.Section.Acier.EYoung * kConvMPaPa
+
+        '--> Définition des noeuds
+
+        '# nombre de noeuds
+
+        pDonneesEF.NbNodes = Me.Nodes.nbNodes
+
+        '# Position des noeuds EF
+        ReDim pDonneesEF.xNode(pDonneesEF.NbNodes - 1)
+        For i = 0 To pDonneesEF.NbNodes - 1
+            pDonneesEF.xNode(i) = Me.Nodes.xGlobal(i)
+        Next
+
+        '# Elements (dimensions uniquement)
+        ReDim pDonneesEF.Aire(pDonneesEF.NbNodes - 2)
+        ReDim pDonneesEF.InertieY(pDonneesEF.NbNodes - 2)
+
+        '# Appuis
+        pDonneesEF.NbAppuis = Me.NombreTraveesDeuxAppuis + 1
+
+        ReDim pDonneesEF.iNodeAppui(pDonneesEF.NbAppuis - 1)
+        ReDim pDonneesEF.lAppuiArticule(pDonneesEF.NbAppuis - 1)
+
+        pDonneesEF.iNodeAppui(0) = Me.Nodes.iNodeAppui(1, 0)
+        pDonneesEF.lAppuiArticule(0) = False
+
+        For i = 1 To Me.NombreTraveesDeuxAppuis
+            pDonneesEF.iNodeAppui(i) = Me.Nodes.iNodeAppui(i, 1)
+            pDonneesEF.lAppuiArticule(i) = False
+        Next
+
+    End Sub
+
+    Private Sub PrepareDonneesEFChargement(iCas As Integer, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+        '-------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Préparation du modele EF dépendant du cas de charge (propriétés elements et charges)
+        '-------------------------------------------------------------------------------------
+        '   iCas        [E] :   Indice du cas de charge
+        '   pDonneesEF  [S] :   Donnes pour le calcul EF
+        '-------------------------------------------------------------------------------------
+
+        '--> Transfert des propriétés de section
+
+        For i As Integer = 0 To pDonneesEF.NbNodes - 2
+            pDonneesEF.Aire(i) = Me.Elements(Me.ChargesA(iCas).IndElts).Aire(i)
+            pDonneesEF.InertieY(i) = Me.Elements(Me.ChargesA(iCas).IndElts).InertieY(i)
+        Next
+
+        '--> Transfert des charges
 
     End Sub
 

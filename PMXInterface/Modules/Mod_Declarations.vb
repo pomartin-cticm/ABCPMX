@@ -327,23 +327,24 @@ Module Mod_Declarations
     End Enum
 
     Public Enum EnuFenetres
-        Identification
-        Portees
-        Entraxes
+        CasDeCharge
+        Chargements
+        Combinaisons
+        Connexion
         Dalle
         DalleN
-        Section
         Enrobage
-        Connexion
-        Maintiens
+        Entraxes
         Etaiement
-        Chargements
         Gamma
-        Combinaisons
-        Options
         Hivoss
-        Main
+        Identification
         LargeurEfficace
+        Main
+        Maintiens
+        Options
+        Portees
+        Section
     End Enum
 
     Public iFrmAppel As EnuFenetres

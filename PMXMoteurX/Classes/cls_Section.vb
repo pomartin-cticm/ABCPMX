@@ -363,6 +363,39 @@ Public Class cls_Section
 
 #Region " Propriétés élastiques de la section "
 
+    Public Function InertieYY(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, nEqEc As Decimal,
+                              lDalle As Boolean, nEqDal As Decimal, Beff As Decimal, MyDalle As Cls_Dalle) As Decimal
+        '-------------------------------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   lDalle      [E] :   Position axe neutre élastique
+        '   nEqDal      [E] :   Coefficient d'équivalence acier béton pour la dalle
+        '   Beff        [E] :   Largeur efficace de la dalle
+        '   MyDalle     [E] :   Elément dalle
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim zANe, InertieY, MelRd As Decimal
+
+        '--> Traitement
+
+        If lDalle Then
+            Me.ProprietesElastiquesMixteMyy(Signe, lValeurRd, Gammas, nEqEc, nEqDal, Beff, MyDalle, zANe, InertieY, MelRd)
+        Else
+            Me.ProprietesElastiquesMyy(Signe, lValeurRd, Gammas, nEqEc, zANe, InertieY, MelRd)
+        End If
+
+        Return InertieY
+
+    End Function
+
     Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, nEqEc As Decimal,
                                        ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
@@ -374,8 +407,9 @@ Public Class cls_Section
         '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
         '   Gammas      [E] :   Coefficients partiels
         '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
-        '   zANE        [E] :   Position axe neutre élastique
-        '   MelRd       [E] :   Moment élastique
+        '   zANE        [S] :   Position axe neutre élastique
+        '   InertieY    [S] :   Inertie de flexion / axe fort
+        '   MelRd       [S] :   Moment élastique
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -929,44 +963,44 @@ Public Class cls_Section
 
     End Function
 
-    ''' <summary>
-    ''' Lancement de toutes les fonctions de calcul
-    ''' </summary>
-    Public Sub Lancement_Calcul(Param As Cls_OptionsCalcul, dalle As Cls_Dalle)
+    '''' <summary>
+    '''' Lancement de toutes les fonctions de calcul
+    '''' </summary>
+    'Public Sub Lancement_Calcul(Param As Cls_OptionsCalcul, dalle As Cls_Dalle)
 
-        Calcul_Proprietes()
+    '    Calcul_Proprietes()
 
-        Const E As Decimal = 210000 * 10 ^ (6)
+    '    Const E As Decimal = 210000 * 10 ^ (6)
 
-        'enrobage
-        If Me.lEnrobage Then
+    '    'enrobage
+    '    If Me.lEnrobage Then
 
-            enrobage_partiel.Calcul_Proprietes()
-            enrobage_partiel.Beton.Calcul_Proprietes()
+    '        enrobage_partiel.Calcul_Proprietes()
+    '        enrobage_partiel.Beton.Calcul_Proprietes()
 
-            Dim h_w As Decimal = ProfilA.HauteurAmeHw
-            'Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.b_c - ProfilA.t_w) - (4 - Math.PI) * ProfilA.r_cs ^ 2) / (2 * h_w)
-            Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.Get_b_c(ProfilA.Bfs) - ProfilA.Tw) - (4 - Math.PI) * ProfilA.Rcs ^ 2) / (2 * h_w)
-            Param.Prop_Elastique_Enrobage.Calcul_Coeff(E, enrobage_partiel.Beton.Fcm, enrobage_partiel.Beton.Ecm)
+    '        Dim h_w As Decimal = ProfilA.HauteurAmeHw
+    '        'Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.b_c - ProfilA.t_w) - (4 - Math.PI) * ProfilA.r_cs ^ 2) / (2 * h_w)
+    '        Param.Prop_Elastique_Enrobage.h_0 = 2 * (h_w * (enrobage_partiel.Get_b_c(ProfilA.Bfs) - ProfilA.Tw) - (4 - Math.PI) * ProfilA.Rcs ^ 2) / (2 * h_w)
+    '        Param.Prop_Elastique_Enrobage.Calcul_Coeff(E, enrobage_partiel.Beton.Fcm, enrobage_partiel.Beton.Ecm)
 
-        End If
+    '    End If
 
-        'dalle
-        If lDalleBeton Then
+    '    'dalle
+    '    If lDalleBeton Then
 
-            dalle.Calcul_Proprietes()
-            dalle.beton.Calcul_Proprietes()
+    '        dalle.Calcul_Proprietes()
+    '        dalle.beton.Calcul_Proprietes()
 
-            If dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte Then
-                Param.Prop_Elastique_Dalle.h_0 = 2 * (dalle.t_d - dalle.Bac.Hp)
-            Else ' dalle pleine
-                Param.Prop_Elastique_Dalle.h_0 = dalle.t_d
-            End If
-            Param.Prop_Elastique_Dalle.Calcul_Coeff(E, dalle.beton.Fcm, dalle.beton.Ecm)
+    '        If dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte Then
+    '            Param.Prop_Elastique_Dalle.h_0 = 2 * (dalle.t_d - dalle.Bac.Hp)
+    '        Else ' dalle pleine
+    '            Param.Prop_Elastique_Dalle.h_0 = dalle.t_d
+    '        End If
+    '        Param.Prop_Elastique_Dalle.Calcul_Coeff(E, dalle.beton.Fcm, dalle.beton.Ecm)
 
-        End If
+    '    End If
 
-    End Sub
+    'End Sub
 
 #End Region
 

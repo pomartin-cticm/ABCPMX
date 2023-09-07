@@ -274,7 +274,10 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click, TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click
+    Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) _
+        Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click,
+                TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
+                TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_LoadCases.Click
 
         Select Case sender.name
 
@@ -316,6 +319,8 @@ Public Class Frm_PMX
             Case Me.TSbtn_LargeurEfficace.Name
                 FilleEnCours = EnuFenetres.LargeurEfficace
 
+            Case Me.TSbtn_LoadCases.Name
+                FilleEnCours = EnuFenetres.CasDeCharge
 
         End Select
         AfficheFenetreEnCours()
@@ -328,8 +333,6 @@ Public Class Frm_PMX
             Case EnuFenetres.Identification
                 Frm_Identification.ShowDialog()
 
-            Case EnuFenetres.LargeurEfficace
-                Frm_LargeurEfficace.ShowDialog()
 
             Case EnuFenetres.Portees
                 If LogicielOptions.lFenetres Then
@@ -399,6 +402,15 @@ Public Class Frm_PMX
                 Else
 
                 End If
+
+
+            Case EnuFenetres.LargeurEfficace
+                Frm_LargeurEfficace.ShowDialog()
+
+
+            Case EnuFenetres.CasDeCharge
+                Frm_CasDeCharge.ShowDialog()
+
         End Select
 
         MAJMainToolBar()

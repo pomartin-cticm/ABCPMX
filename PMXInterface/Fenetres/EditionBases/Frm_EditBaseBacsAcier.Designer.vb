@@ -22,12 +22,12 @@ Partial Class Frm_EditBaseBacsAcier
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim DataGridViewCellStyle19 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle20 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle21 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle22 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle23 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
-        Dim DataGridViewCellStyle24 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle25 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle26 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle27 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle28 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle29 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
+        Dim DataGridViewCellStyle30 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
@@ -252,8 +252,8 @@ Partial Class Frm_EditBaseBacsAcier
         '
         'Col_b1
         '
-        DataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Col_b1.DefaultCellStyle = DataGridViewCellStyle19
+        DataGridViewCellStyle25.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Col_b1.DefaultCellStyle = DataGridViewCellStyle25
         Me.Col_b1.Frozen = True
         Me.Col_b1.HeaderText = "b1"
         Me.Col_b1.Name = "Col_b1"
@@ -264,8 +264,8 @@ Partial Class Frm_EditBaseBacsAcier
         '
         'Col_b2
         '
-        DataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Col_b2.DefaultCellStyle = DataGridViewCellStyle20
+        DataGridViewCellStyle26.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Col_b2.DefaultCellStyle = DataGridViewCellStyle26
         Me.Col_b2.Frozen = True
         Me.Col_b2.HeaderText = "b2"
         Me.Col_b2.Name = "Col_b2"
@@ -276,8 +276,8 @@ Partial Class Frm_EditBaseBacsAcier
         '
         'Col_E
         '
-        DataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Col_E.DefaultCellStyle = DataGridViewCellStyle21
+        DataGridViewCellStyle27.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Col_E.DefaultCellStyle = DataGridViewCellStyle27
         Me.Col_E.Frozen = True
         Me.Col_E.HeaderText = "E"
         Me.Col_E.Name = "Col_E"
@@ -288,8 +288,8 @@ Partial Class Frm_EditBaseBacsAcier
         '
         'Col_H
         '
-        DataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Col_H.DefaultCellStyle = DataGridViewCellStyle22
+        DataGridViewCellStyle28.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Col_H.DefaultCellStyle = DataGridViewCellStyle28
         Me.Col_H.Frozen = True
         Me.Col_H.HeaderText = "H"
         Me.Col_H.Name = "Col_H"
@@ -307,8 +307,8 @@ Partial Class Frm_EditBaseBacsAcier
         '
         'Col_T
         '
-        DataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Col_T.DefaultCellStyle = DataGridViewCellStyle23
+        DataGridViewCellStyle29.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Col_T.DefaultCellStyle = DataGridViewCellStyle29
         Me.Col_T.Frozen = True
         Me.Col_T.HeaderText = "T"
         Me.Col_T.Name = "Col_T"
@@ -319,8 +319,8 @@ Partial Class Frm_EditBaseBacsAcier
         '
         'Col_M
         '
-        DataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
-        Me.Col_M.DefaultCellStyle = DataGridViewCellStyle24
+        DataGridViewCellStyle30.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter
+        Me.Col_M.DefaultCellStyle = DataGridViewCellStyle30
         Me.Col_M.Frozen = True
         Me.Col_M.HeaderText = "M"
         Me.Col_M.Name = "Col_M"

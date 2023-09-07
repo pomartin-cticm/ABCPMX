@@ -409,35 +409,35 @@ Public Class cls_Projet
 
                     Lines.Add("   t0Permanent   =  " & ConvertListToString(.t0Permanentes))
 
-                    '==[ Classe Prop Elastique Enrobage ]=================================================================
-                    With .Prop_Elastique_Enrobage
-                        Lines.Add("BLOCK OPT_CALCULS_PROP_ELAST_ENROBAGE")
+                    ''==[ Classe Prop Elastique Enrobage ]=================================================================
+                    'With .Prop_Elastique_Enrobage
+                    '    Lines.Add("BLOCK OPT_CALCULS_PROP_ELAST_ENROBAGE")
 
-                        Lines.Add("   PEEn_L        = " & .CE_n_L)
-                        Lines.Add("   PERH          = " & .RH)
-                        Lines.Add("   PEType        = " & .type_def_t)
-                        Lines.Add("   PEt           = " & .t)
-                        Lines.Add("   PEH0          = " & .h_0)
-                        Lines.Add("   PERt0         = " & .R_t_0)
-                        Lines.Add("   PERn_L        = " & .R_n_L)
-                        Lines.Add("   PEPt0         = " & .CP_t_0)
-                        Lines.Add("   PEPn_L        = " & .CP_n_L)
-                    End With
+                    '    Lines.Add("   PEEn_L        = " & .CE_n_L)
+                    '    Lines.Add("   PERH          = " & .RH)
+                    '    Lines.Add("   PEType        = " & .type_def_t)
+                    '    Lines.Add("   PEt           = " & .t)
+                    '    Lines.Add("   PEH0          = " & .h_0)
+                    '    Lines.Add("   PERt0         = " & .R_t_0)
+                    '    Lines.Add("   PERn_L        = " & .R_n_L)
+                    '    Lines.Add("   PEPt0         = " & .CP_t_0)
+                    '    Lines.Add("   PEPn_L        = " & .CP_n_L)
+                    'End With
 
-                    '==[ Classe Prop Elastique Dalle ]=================================================================
-                    With .Prop_Elastique_Dalle
-                        Lines.Add("BLOCK OPT_CALCULS_PROP_ELAST_DALLE")
+                    ''==[ Classe Prop Elastique Dalle ]=================================================================
+                    'With .Prop_Elastique_Dalle
+                    '    Lines.Add("BLOCK OPT_CALCULS_PROP_ELAST_DALLE")
 
-                        Lines.Add("   PDEn_L        = " & .CE_n_L)
-                        Lines.Add("   PDRH          = " & .RH)
-                        Lines.Add("   PDType        = " & .type_def_t)
-                        Lines.Add("   PDt           = " & .t)
-                        Lines.Add("   PDH0          = " & .h_0)
-                        Lines.Add("   PDRt0         = " & .R_t_0)
-                        Lines.Add("   PDRn_L        = " & .R_n_L)
-                        Lines.Add("   PDPt0         = " & .CP_t_0)
-                        Lines.Add("   PDPn_L        = " & .CP_n_L)
-                    End With
+                    '    Lines.Add("   PDEn_L        = " & .CE_n_L)
+                    '    Lines.Add("   PDRH          = " & .RH)
+                    '    Lines.Add("   PDType        = " & .type_def_t)
+                    '    Lines.Add("   PDt           = " & .t)
+                    '    Lines.Add("   PDH0          = " & .h_0)
+                    '    Lines.Add("   PDRt0         = " & .R_t_0)
+                    '    Lines.Add("   PDRn_L        = " & .R_n_L)
+                    '    Lines.Add("   PDPt0         = " & .CP_t_0)
+                    '    Lines.Add("   PDPn_L        = " & .CP_n_L)
+                    'End With
 
                     '==[ Classe Gamma ]=================================================================
                     With .Gamma
@@ -650,17 +650,17 @@ Public Class cls_Projet
                     ptre_en_cours.Param = opt_calculs_en_cours
 
 
-                Case "OPT_CALCULS_PROP_ELAST_ENROBAGE"
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim prop_elast_enrob_opt_calculs As Cls_Prop_Elastique
-                    ReadBlocPropElastEnrobageOptionsCalculs(prop_elast_enrob_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Param.Prop_Elastique_Enrobage = prop_elast_enrob_opt_calculs
+                'Case "OPT_CALCULS_PROP_ELAST_ENROBAGE"
+                '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                '    Dim prop_elast_enrob_opt_calculs As Cls_Prop_Elastique
+                '    ReadBlocPropElastEnrobageOptionsCalculs(prop_elast_enrob_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                '    ptre_en_cours.Param.Prop_Elastique_Enrobage = prop_elast_enrob_opt_calculs
 
-                Case "OPT_CALCULS_PROP_ELAST_DALLE"
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim prop_elast_dalle_opt_calculs As Cls_Prop_Elastique
-                    ReadBlocPropElastDalleOptionsCalculs(prop_elast_dalle_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Param.Prop_Elastique_Dalle = prop_elast_dalle_opt_calculs
+                'Case "OPT_CALCULS_PROP_ELAST_DALLE"
+                '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                '    Dim prop_elast_dalle_opt_calculs As Cls_Prop_Elastique
+                '    ReadBlocPropElastDalleOptionsCalculs(prop_elast_dalle_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                '    ptre_en_cours.Param.Prop_Elastique_Dalle = prop_elast_dalle_opt_calculs
 
                 Case "OPT_CALCULS_GAMMA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1477,91 +1477,91 @@ Public Class cls_Projet
 
     End Sub
 
-    ''' <summary>
-    ''' Lecture du bloc Prop_Elast_Enrobage_Opt_Calculs
-    ''' </summary>
-    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
-    ''' <param name="Index0">indice du début de la lecture</param>
-    ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocPropElastEnrobageOptionsCalculs(prop_elast_enrobage_opt_calculs As Cls_Prop_Elastique, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
-        '==> Lecture du fichier pour initialiser les attributs
+    '''' <summary>
+    '''' Lecture du bloc Prop_Elast_Enrobage_Opt_Calculs
+    '''' </summary>
+    '''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    '''' <param name="Index0">indice du début de la lecture</param>
+    '''' <param name="IndexFin">indice de la fin de la lecture</param>
+    'Private Sub ReadBlocPropElastEnrobageOptionsCalculs(prop_elast_enrobage_opt_calculs As Cls_Prop_Elastique, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    '    '==> Lecture du fichier pour initialiser les attributs
 
-        '--> Déclaration
-        Dim i As Integer
-        Dim Mots(0) As String, nbMots As Integer
-        Dim MotCle As String
-
-
-        '--> Traitement
-        For i = Index0 To IndexFin
-            DecomposeLine(Lignes(i), Mots, nbMots)
-
-            If nbMots > 0 Then
-                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+    '    '--> Déclaration
+    '    Dim i As Integer
+    '    Dim Mots(0) As String, nbMots As Integer
+    '    Dim MotCle As String
 
 
-                With prop_elast_enrobage_opt_calculs
-                    Select Case MotCle
-                        Case "PEEN_L" : .CE_n_L = TraiteReal(Mots(nbMots))
-                        Case "PERH" : .RH = TraiteReal(Mots(nbMots))
-                        Case "PETYPE" : .type_def_t = Mots(nbMots)
-                        Case "PET" : .t = TraiteReal(Mots(nbMots))
-                        Case "PEH0" : .h_0 = TraiteReal(Mots(nbMots))
-                        Case "PERT0" : .R_t_0 = TraiteReal(Mots(nbMots))
-                        Case "PERN_L" : .R_n_L = TraiteReal(Mots(nbMots))
-                        Case "PEPT0" : .CP_t_0 = TraiteReal(Mots(nbMots))
-                        Case "PEPN_L" : .CP_n_L = TraiteReal(Mots(nbMots))
-                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
-                    End Select
-                End With
+    '    '--> Traitement
+    '    For i = Index0 To IndexFin
+    '        DecomposeLine(Lignes(i), Mots, nbMots)
 
-            End If
-        Next
-
-    End Sub
-
-    ''' <summary>
-    ''' Lecture du bloc Prop_Elast_Dalle_Opt_Calculs
-    ''' </summary>
-    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
-    ''' <param name="Index0">indice du début de la lecture</param>
-    ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocPropElastDalleOptionsCalculs(prop_elast_dalle_opt_calculs As Cls_Prop_Elastique, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
-        '==> Lecture du fichier pour initialiser les attributs
-
-        '--> Déclaration
-        Dim i As Integer
-        Dim Mots(0) As String, nbMots As Integer
-        Dim MotCle As String
+    '        If nbMots > 0 Then
+    '            MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
 
 
-        '--> Traitement
-        For i = Index0 To IndexFin
-            DecomposeLine(Lignes(i), Mots, nbMots)
+    '            With prop_elast_enrobage_opt_calculs
+    '                Select Case MotCle
+    '                    Case "PEEN_L" : .CE_n_L = TraiteReal(Mots(nbMots))
+    '                    Case "PERH" : .RH = TraiteReal(Mots(nbMots))
+    '                    Case "PETYPE" : .type_def_t = Mots(nbMots)
+    '                    Case "PET" : .t = TraiteReal(Mots(nbMots))
+    '                    Case "PEH0" : .h_0 = TraiteReal(Mots(nbMots))
+    '                    Case "PERT0" : .R_t_0 = TraiteReal(Mots(nbMots))
+    '                    Case "PERN_L" : .R_n_L = TraiteReal(Mots(nbMots))
+    '                    Case "PEPT0" : .CP_t_0 = TraiteReal(Mots(nbMots))
+    '                    Case "PEPN_L" : .CP_n_L = TraiteReal(Mots(nbMots))
+    '                    Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+    '                End Select
+    '            End With
 
-            If nbMots > 0 Then
-                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+    '        End If
+    '    Next
+
+    'End Sub
+
+    '''' <summary>
+    '''' Lecture du bloc Prop_Elast_Dalle_Opt_Calculs
+    '''' </summary>
+    '''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    '''' <param name="Index0">indice du début de la lecture</param>
+    '''' <param name="IndexFin">indice de la fin de la lecture</param>
+    'Private Sub ReadBlocPropElastDalleOptionsCalculs(prop_elast_dalle_opt_calculs As Cls_Prop_Elastique, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    '    '==> Lecture du fichier pour initialiser les attributs
+
+    '    '--> Déclaration
+    '    Dim i As Integer
+    '    Dim Mots(0) As String, nbMots As Integer
+    '    Dim MotCle As String
 
 
-                With prop_elast_dalle_opt_calculs
-                    Select Case MotCle
-                        Case "PDEN_L" : .CE_n_L = TraiteReal(Mots(nbMots))
-                        Case "PDRH" : .RH = TraiteReal(Mots(nbMots))
-                        Case "PDTYPE" : .type_def_t = Mots(nbMots)
-                        Case "PDT" : .t = TraiteReal(Mots(nbMots))
-                        Case "PDH0" : .h_0 = TraiteReal(Mots(nbMots))
-                        Case "PDRT0" : .R_t_0 = TraiteReal(Mots(nbMots))
-                        Case "PDRN_L" : .R_n_L = TraiteReal(Mots(nbMots))
-                        Case "PDPT0" : .CP_t_0 = TraiteReal(Mots(nbMots))
-                        Case "PDPN_L" : .CP_n_L = TraiteReal(Mots(nbMots))
-                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
-                    End Select
-                End With
+    '    '--> Traitement
+    '    For i = Index0 To IndexFin
+    '        DecomposeLine(Lignes(i), Mots, nbMots)
 
-            End If
-        Next
+    '        If nbMots > 0 Then
+    '            MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
 
-    End Sub
+
+    '            With prop_elast_dalle_opt_calculs
+    '                Select Case MotCle
+    '                    Case "PDEN_L" : .CE_n_L = TraiteReal(Mots(nbMots))
+    '                    Case "PDRH" : .RH = TraiteReal(Mots(nbMots))
+    '                    Case "PDTYPE" : .type_def_t = Mots(nbMots)
+    '                    Case "PDT" : .t = TraiteReal(Mots(nbMots))
+    '                    Case "PDH0" : .h_0 = TraiteReal(Mots(nbMots))
+    '                    Case "PDRT0" : .R_t_0 = TraiteReal(Mots(nbMots))
+    '                    Case "PDRN_L" : .R_n_L = TraiteReal(Mots(nbMots))
+    '                    Case "PDPT0" : .CP_t_0 = TraiteReal(Mots(nbMots))
+    '                    Case "PDPN_L" : .CP_n_L = TraiteReal(Mots(nbMots))
+    '                    Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+    '                End Select
+    '            End With
+
+    '        End If
+    '    Next
+
+    'End Sub
 
     ''' <summary>
     ''' Lecture du bloc Opt_Calculs_Gamma

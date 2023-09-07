@@ -16,6 +16,93 @@ Module Mod_Dessins
 
 #Region " Dessins pour la définiton de la dalle (FRM_DALLEN) "
 
+
+    Public Sub DessineBacTout(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyBac As Cls_Bac,
+                              ByVal lTitre As Boolean, kAdjust As Decimal,
+                              ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   26/06/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin du Bac Acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '   EpDalle     [E] :   Epaisseur de la dalle béton
+        '   VariableBac [E] :   Parametre du bac sélectionné (pour affichage en rouge)
+        '   nbOndes     [E] :   Nombre d'ondes sur lequel on représente le bac
+        '   lCotation   [E] :   Indique si on met les cotations sur le dessin
+        '   lCotEpTot   [E] :   Indique si cotation epaisseur bac+dalle
+        '   lTitre      [E] :   Indique si affichage du titre du bac
+        '   ParAff      [S] :   Paramètres d'Affichage
+        '   lMemb       [E] :   Indique si on représente la semelle sup de la memb sup
+        '   tfSup       [E] :   Epasseur semelle de la membrure superieure
+        '   hMax        [E] :   Epaisseur maximale à considérer pour le dessin de la dalle
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim MyParAff As Struc_Affichage
+
+        Dim ColorPen As Color = Color.Blue
+        Dim ColorRedPen As Color = Color.Red
+
+        Dim myBrushBac As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), Color.LightGray, Color.DarkGray)
+        Dim MyPenBrush As New SolidBrush(ColorPen)
+        Dim MyPenRedBrush As New SolidBrush(ColorRedPen)
+        Dim MyPen As New Pen(ColorPen)
+        Dim MyPenRed As New Pen(ColorRedPen)
+        Dim MyFontNormal As Font = FontBase
+
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Double
+
+        Dim lRaidSup As Boolean
+
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim nbPts As Integer
+        Dim nbOndes As Integer = 5
+
+        Dim MyPenBac As New Pen(BleuCTICM, 2)
+
+        '--> Initialisation
+
+        lRaidSup = MyBac.HasRaidisseurSup
+
+        dCar = (MyBac.Ep + MyBac.Bb) / 2
+
+        '--> Preparation de la zone d'affichage - Calcul de ParAff
+
+
+        xMin = 0
+        xMax = MyBac.LargeurModule
+
+        yMin = 0
+        yMax = MyBac.Hp
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+        '--> Calcul des points du pourtour de la dalle
+
+        If lRaidSup Then
+            MyBac.PrepareContourModuleBacRaidi(xPts, yPts, nbPts)
+        Else
+            MyBac.PrepareContourModuleBacSimple(xPts, yPts, nbPts)
+        End If
+
+        '--> Remplissage contour
+
+        'ContourZone(myGr, New Pen(BlueAM), xPts, yPts, nbPts, MyParAff, True)
+
+        ContourZone(myGr, MyPenBac, xPts, yPts, nbPts, MyParAff, True)
+
+        ''--> Liberation des Font, Pen et Brush
+
+        MyPenBac.Dispose()
+
+    End Sub
+
     Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyDalle As Cls_Dalle,
                             MySection As cls_Section, iSelect As Integer, strMsg() As String,
                             ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)

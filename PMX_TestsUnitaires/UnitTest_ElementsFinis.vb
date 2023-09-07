@@ -266,7 +266,7 @@ Imports CTICM_RDM
     End Sub
 
 
-#Region "COMPARE"
+#Region " Outils de COMPARaison "
 
     Private Function IsEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
         '------------------------------------------
