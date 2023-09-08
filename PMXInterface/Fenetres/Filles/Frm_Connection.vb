@@ -1336,6 +1336,22 @@ Public Class Frm_Connection
         Return lOk
     End Function
 
+    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
+
+    End Sub
+
+    Private Sub etq_Somme_Click(sender As Object, e As EventArgs) Handles etq_Somme.Click
+
+    End Sub
+
+    Private Sub txt_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_I3.TextChanged
+
+    End Sub
+
+    Private Sub txt_I2_TextChanged(sender As Object, e As EventArgs) Handles txt_I2.TextChanged
+
+    End Sub
+
 #End Region
 
 

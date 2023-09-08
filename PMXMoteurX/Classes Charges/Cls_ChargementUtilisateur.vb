@@ -32,5 +32,32 @@
 
 #End Region
 
+#Region " Fonction de copie "
+    Private Function Clone() '--> Utilisé pour dupliquer une soudure
+        Return Me.MemberwiseClone()
+    End Function
+
+    Public Shared Sub DeepClone(ByVal ChargementSource As Cls_ChargementUtilisateur, ByRef ChargementCible As Cls_ChargementUtilisateur)
+
+        ReDim ChargementCible.QSurf(ChargementSource.QSurf.Length - 1)
+        ChargementCible.QSurf = ChargementSource.QSurf.Clone()
+
+        ReDim ChargementCible.Forces(ChargementSource.Forces.Length - 1)
+        For i As Integer = 0 To ChargementSource.Forces.Length - 1
+            For Each force As Cls_Force In ChargementSource.Forces(i)
+                ChargementCible.Forces(i).Add(force.Clone())
+            Next
+        Next
+
+        ReDim ChargementCible.FReparties(ChargementSource.FReparties.Length - 1)
+        For i As Integer = 0 To ChargementSource.FReparties.Length - 1
+            For Each force As Cls_ForceRepartie In ChargementSource.FReparties(i)
+                ChargementCible.FReparties(i).Add(force.Clone())
+            Next
+        Next
+    End Sub
+
+#End Region
+
 
 End Class

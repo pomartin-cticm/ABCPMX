@@ -754,6 +754,11 @@ Public Class cls_Poutre
 
         'Clone param calcul
 
+        'Clone ChargeUtilisateur
+        PoutreCible.ChargesU = New Dictionary(Of String, Cls_ChargementUtilisateur)
+        For Each element As KeyValuePair(Of String, Cls_ChargementUtilisateur) In PoutreSource.ChargesU
+            PoutreCible.ChargesU.Add(element.Key, element.Value)
+        Next
 
     End Sub
 

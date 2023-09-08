@@ -277,7 +277,7 @@ Public Class Frm_PMX
     Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) _
         Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
-                TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_LoadCases.Click
+                TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_LoadCases.Click, TSbtn_Chargements.Click
 
         Select Case sender.name
 
@@ -381,6 +381,13 @@ Public Class Frm_PMX
             Case EnuFenetres.Etaiement
                 If LogicielOptions.lFenetres Then
                     Frm_Etaiement.ShowDialog()
+                Else
+
+                End If
+
+            Case EnuFenetres.Chargements
+                If LogicielOptions.lFenetres Then
+                    Frm_Chargement.ShowDialog()
                 Else
 
                 End If
@@ -995,6 +1002,7 @@ Public Class Frm_PMX
         Me.tab_ChkSections(MyProjet.IndEnCours).Checked = True
 
     End Sub
+
 
 #End Region
 
