@@ -154,8 +154,8 @@ Public Class Frm_LargeurEfficace
             Dim iGauche As Integer
 
             For i As Integer = MyPoutre.Nodes.iNodeAppui(iTravee, 0) To MyPoutre.Nodes.iNodeAppui(iTravee, 1)
-                Beff(i, 0) = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(i), iTravee, False, False) / 2
-                Beff(i, 1) = Beff(i, 0)
+                Beff(i, 0) = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(i), iTravee, False, False, MyPoutre.EnuTypeLargeurParticipante.LargeurGauche)
+                Beff(i, 1) = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(i), iTravee, False, False, MyPoutre.EnuTypeLargeurParticipante.LargeurDroite)
             Next
 
         Next
