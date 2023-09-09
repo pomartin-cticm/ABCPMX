@@ -13,9 +13,10 @@
 
 #Region " Constructeurs "
 
-    Public Sub New(pxPosT As Decimal, pMoment As Decimal)
+    Public Sub New(pxPosT As Decimal, pMoment As Decimal, xGaucheT As Decimal)
         xPosT = pxPosT
         Moment = pMoment
+        xPosG = pxPosT + xGaucheT
     End Sub
 
 #End Region

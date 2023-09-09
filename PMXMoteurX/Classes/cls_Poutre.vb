@@ -1435,11 +1435,14 @@ Public Class cls_Poutre
 
                 If lCalcul Then
                     InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle)
+                    Aire = Me.Section.ProfilA.Aire      ' A changer pour aire homgonénéisée
                     MyElts.InertieY(iElt) = InertieY
                     BeffPrec = Beff
                     SigneMprec = pSigneM(iElt)
                 End If
                 MyElts.InertieY(iElt) = InertieY
+                MyElts.Aire(iElt) = Aire
+
             Next
 
         Next
@@ -1546,6 +1549,29 @@ Public Class cls_Poutre
 
 #Region " Préparation des cas de charge "
 
+    Private Sub InitialiseChargesPP(ByRef MyCas As cls_CasDeCharge)
+        '-------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Préparation du cas de charge "Poids propre" pour toutes les poutres
+        '-------------------------------------------------------------------------------------------
+        '   MyCas       [S] :   Cas de charge
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim qPP As Decimal = Me.ChargeRepartiePP
+
+        '--> Préparation du cas de charge
+
+        For iTrav As Integer = 1 To Me.NombreTraveesDeuxAppuis
+
+            MyCas.FReparties(iTrav).Add(New cls_ForceRepartie(0, qPP, Me.LongueurTravee(iTrav), qPP, Me.xPositionAppui(True, iTrav)))
+
+        Next
+
+    End Sub
+
     Private Sub InitialiseChargesRetraitDalle(ByRef MyCas As cls_CasDeCharge)
         '-------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
@@ -1563,6 +1589,7 @@ Public Class cls_Poutre
         Dim iTravPrem As Integer = Me.IndicePremiereTravee
         Dim iTravDern As Integer = Me.IndiceDerniereTravee
         Dim xGauche, xDroite As Decimal
+        Dim xApp As Decimal
 
         '--> Initialisation
 
@@ -1572,6 +1599,7 @@ Public Class cls_Poutre
 
         For iTrav As Integer = 1 To Me.NombreTraveesDeuxAppuis
 
+            xApp = Me.xPositionAppui(True, iTrav)
             Me.ParametresRetraitDalle(nEqSH, iTrav, Nsh, Msh)
 
             If iTrav = iTravPrem Then
@@ -1586,8 +1614,8 @@ Public Class cls_Poutre
                 xDroite = 0.85 * Me.LongueurTravee(iTrav)
             End If
 
-            MyCas.Moments(iTrav).Add(New cls_Moment(xGauche, SIGNESH * Msh))
-            MyCas.Moments(iTrav).Add(New cls_Moment(xDroite, -SIGNESH * Msh))
+            MyCas.Moments(iTrav).Add(New cls_Moment(xGauche, SIGNESH * Msh, xApp))
+            MyCas.Moments(iTrav).Add(New cls_Moment(xDroite, -SIGNESH * Msh, xApp))
 
         Next
 
@@ -1685,6 +1713,8 @@ Public Class cls_Poutre
         iTrav0 = Me.IndicePremiereTravee
         NbTrav = Me.NbTravees
 
+        Me.ChargesA.Clear()
+
         '--> Traitement des charges permanentes 
 
         '# Charges permanentes globales
@@ -1702,9 +1732,11 @@ Public Class cls_Poutre
 
             If lNonEtaye Then
                 Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, "G1", Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
+                InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
             Else
                 'Cas de l'étaiement ponctuel
                 Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, "G1pp", Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
+                InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
 
                 Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, "G1c", IndiceG, iTrav0, NbTrav))
 
@@ -1740,6 +1772,7 @@ Public Class cls_Poutre
 
         If lMixte Then
             Me.ChargesA.Add(New cls_CasDeCharge(strRetraitDalle, "SHC", IndiceSH, iTrav0, NbTrav))
+            InitialiseChargesRetraitDalle(Me.ChargesA(Me.ChargesA.Count - 1))
         End If
 
         If lEnrob Then
@@ -1750,7 +1783,6 @@ Public Class cls_Poutre
 
         If lMixte And (Not lEtaitComplet) Then
             Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
-            InitialiseChargesRetraitDalle(Me.ChargesA(Me.ChargesA.Count - 1))
         End If
 
     End Sub
@@ -1769,7 +1801,7 @@ Public Class cls_Poutre
         Const KEYPP As String = "G1"
         Dim qPP As Decimal
         Dim qPPA, qPPC, qPPP As Decimal
-        Const G As Decimal = 9.81
+        Dim G As Decimal = Me.Param.GraviteG
 
         '--> Traitement
 
@@ -1777,11 +1809,43 @@ Public Class cls_Poutre
 
         For iTravee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
 
-            Me.ChargesU(KEYPP).FReparties(iTravee).Add(New cls_ForceRepartie(0, qPP, Me.LongueurTravee(iTravee), qPP))
+            Me.ChargesU(KEYPP).FReparties(iTravee).Add(New cls_ForceRepartie(0, qPP, Me.LongueurTravee(iTravee), qPP, Me.xPositionAppui(True, iTravee)))
 
         Next
 
     End Sub
+
+    Private Function ChargeRepartiePP() As Decimal
+        '-------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Retourne la charge répartie de poids propre
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim qPP As Decimal
+        Dim qPPA, qPPC, qPPP As Decimal
+        Dim G As Decimal = Me.Param.GraviteG
+        Dim RhoA As Decimal = Me.Section.Acier.Rho
+
+        '--> Calcul
+
+        '# Profilé acier
+
+        qPPA = Me.Section.ProfilA.Aire * G * RhoA
+
+        '# Dalle
+
+        '# Bac acier
+
+        '--> Bilan et fin
+
+        qPP = qPPA + qPPC + qPPP
+
+        Return qPP
+
+    End Function
 
     Public Sub MAJ_CoefficientsCombinaisons()
         '-------------------------------------------------------------------------------------
@@ -1946,6 +2010,12 @@ Public Class cls_Poutre
                 '=== LANCER LE CALCUL ===
                 Call MyDLLRDM.CALCULER(DonneesEF, MyOutput_RDM, CodeError_RDM, TextError_RDM)
 
+                If CodeError_RDM = 0 Then
+                    Me.ChargesA(jCdc).RecupereResultats(MyOutput_RDM, DonneesEF.NbNodes)
+                Else
+                    MsgBox("Error calculation of " & Me.ChargesA(jCdc).Nom, MsgBoxStyle.Critical, "cls_Poutre/CalculMNVInternes")
+                End If
+
             End If
         Next
 
@@ -2036,6 +2106,10 @@ Public Class cls_Poutre
 
         '--> Transfert des charges
 
+        pDonneesEF.NbForcesPon = 0
+        pDonneesEF.NbForcesRep = 0
+        pDonneesEF.NbMoments = 0
+
         For iTrav = iTravP To iTravD
 
             '# Charges surfaciques
@@ -2052,7 +2126,41 @@ Public Class cls_Poutre
 
             '# Charges réparties
 
+            For iQqq As Integer = 0 To Me.ChargesA(iCas).FReparties(iTrav).Count - 1
+                AjouteForceRep(Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(1),
+                               Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(1), pDonneesEF)
+            Next
+
         Next
+
+    End Sub
+
+    Private Sub AjouteForceRep(xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+        '-------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Ajout d'une force répartie dans les paramètres préparatoires au calcul EF
+        '-------------------------------------------------------------------------------------
+        '   xo          [E] :   Position gauche de la force répartie
+        '   xe          [E] :   Position droite de la force répartie
+        '   qo          [E] :   Valeur à gauche de la force répartie
+        '   qe          [E] :   Valeur à droite de la force répartie
+        '   pDonneesEF  [S] :   Donnes pour le calcul EF
+        '-------------------------------------------------------------------------------------
+
+        pDonneesEF.NbForcesRep += 1
+        If pDonneesEF.NbForcesRep = 1 Then
+            ReDim pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
+            ReDim pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
+        Else
+            ReDim Preserve pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
+            ReDim Preserve pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
+        End If
+
+        pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 0) = xo
+        pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1) = xe
+        pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 0) = qo
+        pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1) = qe
 
     End Sub
 
@@ -2077,7 +2185,7 @@ Public Class cls_Poutre
         End If
 
         pDonneesEF.Moment(pDonneesEF.NbMoments - 1) = Moment
-        pDonneesEF.xMoment(pDonneesEF.NbMoments - 1) = Moment
+        pDonneesEF.xMoment(pDonneesEF.NbMoments - 1) = xMom
 
     End Sub
 

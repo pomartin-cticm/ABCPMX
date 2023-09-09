@@ -14,6 +14,7 @@
 
         GestionLangues()
         GestionStyle()
+        GestionUnites()
 
         AfficheCasdeCharge()
 
@@ -28,7 +29,15 @@
         Me.btn_OK.Text = "Close"
 
         Me.lbl_Case.Text = "Case"
+        Me.lbl_Etat.Text = "Etat"
+        Me.lbl_RunCalcul.Text = "Calcul effectué ?"
 
+    End Sub
+
+    Private Sub GestionUnites()
+        Me.etq_UnitDim1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitForce1.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+        Me.etq_UnitForce2.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
     End Sub
 
     Private Sub GestionStyle()
@@ -97,6 +106,37 @@
         Else
             Me.lbl_NeqEnrob.Visible = False
         End If
+
+        Dim Chaine As String
+        Dim lCalcul As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(Me.cmb_Symbols.SelectedIndex).lRunCalcul
+
+        If lCalcul Then Chaine = "Oui" Else Chaine = "Non"
+        Me.lbl_RCalcul.Text = Chaine
+
+        PrepareFenetreResults(lCalcul)
+        If lCalcul Then
+
+            With MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(Me.cmb_Symbols.SelectedIndex)
+                Me.txt_RZ1.Text = GetStringInUnit(.RZ(0), Enu_TypeVariable.Effort, 3, 3, False)
+                Me.txt_RZ2.Text = GetStringInUnit(.RZ(1), Enu_TypeVariable.Effort, 3, 3, False)
+                Me.txt_Fleche.Text = GetStringInUnit(.FlecheMax, Enu_TypeVariable.Dimension, 3, 3, False)
+            End With
+
+        End If
+    End Sub
+
+    Private Sub PrepareFenetreResults(lDispo As Boolean)
+
+        Me.lbl_RZ1.Visible = lDispo
+        Me.lbl_RZ2.Visible = lDispo
+        Me.txt_RZ1.Visible = lDispo
+        Me.txt_RZ2.Visible = lDispo
+        Me.etq_UnitForce1.Visible = lDispo
+        Me.etq_UnitForce2.Visible = lDispo
+        Me.etq_UnitDim1.Visible = lDispo
+
+        Me.lbl_Fleche.Visible = lDispo
+        Me.txt_Fleche.Visible = lDispo
 
     End Sub
 

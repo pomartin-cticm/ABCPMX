@@ -33,6 +33,8 @@ Public Class cls_OptionsCalcul
 
     Public EpsilonSH As Decimal                     ' Valeur de la déformation du béton pour le calcul du retrait
 
+    Public GraviteG As Decimal                      ' Accélération gravité
+
 #End Region
 
 #Region " Attributs à trier "
@@ -148,6 +150,8 @@ Public Class cls_OptionsCalcul
         Me.lArmaComprimee = False
 
         Me.EpsilonSH = 325 * 10 ^ -6
+
+        Me.GraviteG = 9.81
 
         Exit Sub
 

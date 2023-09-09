@@ -22,14 +22,15 @@
 
     '--> Résultats de l'analyse
 
-    Public VZ(,) As Decimal                             'Effort tranchant dans l’élément i, aux deux extrémités (0 à NbNodes-2, 0 à 1)
-    Public MYY(,) As Decimal                            'Moment fléchissant dans l’élément i, aux deux extrémités (0 à NbNodes-2, 0 à 1)
+    Public VZ(,) As Decimal                             ' Effort tranchant dans l’élément i, aux deux extrémités (0 à NbNodes-2, 0 à 1)
+    Public MYY(,) As Decimal                            ' Moment fléchissant dans l’élément i, aux deux extrémités (0 à NbNodes-2, 0 à 1)
 
-    Public UZ() As Decimal                              'Déplacement vertical du nœud i (0 à NbNodes-1)
-    Public ROTY() As Decimal                            'Rotation du nœud i (0 à NbNodes-1)
+    Public UZ() As Decimal                              ' Déplacement vertical du nœud i (0 à NbNodes-1)
+    Public ROTY() As Decimal                            ' Rotation du nœud i (0 à NbNodes-1)
 
-    Public RZ() As Decimal                              'Réactions verticales aux nœuds support (0 à NbAppuis-1)
+    Public RZ() As Decimal                              ' Réactions verticales aux nœuds support (0 à NbAppuis-1)
 
+    Public lRunCalcul As Boolean                        ' Indique sir le calcul a été effectué
 #End Region
 
 #Region " Constructeurs "
@@ -63,6 +64,7 @@
             Me.FReparties(i) = New List(Of cls_ForceRepartie)
         Next
 
+        Me.lRunCalcul = False
     End Sub
 
 #End Region
@@ -93,13 +95,60 @@
                 If Not IsEqual(Me.Moments(iTrav)(iCharg).Moment, 0) Then lNonNul = True
             Next
             For iCharg = 0 To Me.FReparties(iTrav).Count - 1
+                If Not IsEqual(Me.FReparties(iTrav)(iCharg).Force(0), 0) Then lNonNul = True
                 If Not IsEqual(Me.FReparties(iTrav)(iCharg).Force(1), 0) Then lNonNul = True
-                If Not IsEqual(Me.FReparties(iTrav)(iCharg).Force(2), 0) Then lNonNul = True
             Next
         Next
 
 
         Return lNonNul
+    End Function
+
+    Public Sub RecupereResultats(MyResults As CTICM_RDM.DATA_RDM.Struc_Output, NbNodes As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Stocke les résultats issus du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+
+        'ReDim Me.VZ(NbNodes - 1, 1)
+        'ReDim Me.MYY(NbNodes - 1, 1)
+        'ReDim Me.UZ(NbNodes - 1)
+
+        Me.VZ = MyResults.VZ.Clone
+        Me.MYY = MyResults.MYY.Clone
+        Me.ROTY = MyResults.ROTY.Clone
+        Me.UZ = MyResults.UZ.Clone
+        Me.RZ = MyResults.RZ.Clone
+
+        Me.lRunCalcul = True
+
+    End Sub
+
+    Public Function FlecheMax() As Decimal
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie la flèche max (valeur absolue) issue des résultats du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Fleche As Decimal = 0
+        Dim NbNodes As Integer
+
+        '--> Traitement
+
+        If Me.lRunCalcul Then
+
+            NbNodes = Me.UZ.GetUpperBound(0) + 1
+            Fleche = Math.Abs(Me.UZ(0))
+            For iNode As Integer = 1 To NbNodes - 1
+                Fleche = Math.Max(Math.Abs(UZ(iNode)), Fleche)
+            Next
+
+        End If
+
     End Function
 
 #End Region

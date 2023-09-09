@@ -12,11 +12,16 @@
 
 #Region " Constructeurs "
 
-    Public Sub New(pxPosTG As Decimal, pForceG As Decimal, pxPosTD As Decimal, pForceD As Decimal)
+    Public Sub New(pxPosTG As Decimal, pForceG As Decimal, pxPosTD As Decimal, pForceD As Decimal, xGaucheT As Decimal)
+
         xPosT(0) = pxPosTG
+        xPosG(0) = xGaucheT + pxPosTG
         Force(0) = pForceG
+
         xPosT(1) = pxPosTD
+        xPosG(1) = xGaucheT + pxPosTD
         Force(1) = pForceD
+
     End Sub
 
 #End Region
