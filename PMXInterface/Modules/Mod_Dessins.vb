@@ -2752,7 +2752,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessineAppui(MyGr As Graphics, xPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage)
+    Public Sub DessineAppui(MyGr As Graphics, xPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage)
         '------------------------------------------------------------------------------------------------------------------
         '   02/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------

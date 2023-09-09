@@ -35,7 +35,7 @@
 
 #Region " Constructeurs "
 
-    Public Sub New(pNom As String, pSymbol As String, IndiceElts As Integer, NbTrav As Integer, iTrav0 As Integer)
+    Public Sub New(pNom As String, pSymbol As String, IndiceElts As Integer, iTrav0 As Integer, NbTrav As Integer)
         '-----------------------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
@@ -149,7 +149,39 @@
 
         End If
 
+        Return Fleche
+
     End Function
+
+    Public Sub EnveloppesFleche(ByRef fMax As Decimal, ByRef fMin As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les flèches enveloppes issues des résultats du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+        '   fMax        [E] :   Valeur max de la flèche
+        '   fMin        [E] :   Valeur min de la flèche
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NbNodes As Integer
+
+        '--> Traitement
+
+        If Me.lRunCalcul Then
+
+            NbNodes = Me.UZ.GetUpperBound(0) + 1
+            fMax = Me.UZ(0)
+            fMin = Me.UZ(0)
+            For iNode As Integer = 1 To NbNodes - 1
+                fMax = Math.Max(UZ(iNode), fMax)
+                fMin = Math.Min(UZ(iNode), fMin)
+            Next
+
+        End If
+
+    End Sub
 
 #End Region
 

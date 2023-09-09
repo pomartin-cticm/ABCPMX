@@ -30,42 +30,42 @@ Partial Class Frm_CasDeCharge
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLPan_CdC = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_CasDeCharges = New System.Windows.Forms.Label()
-        Me.pan_EtatCdC = New System.Windows.Forms.Panel()
-        Me.lbl_NeqEnrob = New System.Windows.Forms.Label()
-        Me.lbl_NeqDalle = New System.Windows.Forms.Label()
-        Me.lbl_Mixte = New System.Windows.Forms.Label()
-        Me.lbl_Name = New System.Windows.Forms.Label()
-        Me.lbl_Case = New System.Windows.Forms.Label()
-        Me.cmb_Symbols = New System.Windows.Forms.ComboBox()
         Me.Pan_Affichage = New System.Windows.Forms.Panel()
         Me.img_Analyse = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_ChoixCas = New System.Windows.Forms.Panel()
-        Me.lbl_Etat = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.cmb_Symbols = New System.Windows.Forms.ComboBox()
+        Me.lbl_Case = New System.Windows.Forms.Label()
+        Me.lbl_Name = New System.Windows.Forms.Label()
+        Me.pan_EtatCdC = New System.Windows.Forms.Panel()
         Me.lbl_nEnrobage = New System.Windows.Forms.Label()
-        Me.lbl_RunCalcul = New System.Windows.Forms.Label()
-        Me.lbl_RCalcul = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lbl_Etat = New System.Windows.Forms.Label()
+        Me.lbl_NeqEnrob = New System.Windows.Forms.Label()
+        Me.lbl_NeqDalle = New System.Windows.Forms.Label()
+        Me.lbl_Mixte = New System.Windows.Forms.Label()
         Me.Pan_Results = New System.Windows.Forms.Panel()
-        Me.lbl_RZ1 = New System.Windows.Forms.Label()
-        Me.lbl_RZ2 = New System.Windows.Forms.Label()
-        Me.txt_RZ1 = New System.Windows.Forms.TextBox()
-        Me.txt_RZ2 = New System.Windows.Forms.TextBox()
-        Me.etq_UnitForce1 = New System.Windows.Forms.Label()
-        Me.etq_UnitForce2 = New System.Windows.Forms.Label()
         Me.etq_UnitDim1 = New System.Windows.Forms.Label()
         Me.txt_Fleche = New System.Windows.Forms.TextBox()
         Me.lbl_Fleche = New System.Windows.Forms.Label()
+        Me.etq_UnitForce2 = New System.Windows.Forms.Label()
+        Me.etq_UnitForce1 = New System.Windows.Forms.Label()
+        Me.txt_RZ2 = New System.Windows.Forms.TextBox()
+        Me.txt_RZ1 = New System.Windows.Forms.TextBox()
+        Me.lbl_RZ2 = New System.Windows.Forms.Label()
+        Me.lbl_RZ1 = New System.Windows.Forms.Label()
+        Me.lbl_RCalcul = New System.Windows.Forms.Label()
+        Me.lbl_RunCalcul = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
         Me.TLPan_CdC.SuspendLayout()
-        Me.pan_EtatCdC.SuspendLayout()
         Me.Pan_Affichage.SuspendLayout()
         CType(Me.img_Analyse, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.pan_ChoixCas.SuspendLayout()
+        Me.pan_EtatCdC.SuspendLayout()
         Me.Pan_Results.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -178,81 +178,6 @@ Partial Class Frm_CasDeCharge
         Me.lbl_CasDeCharges.Text = "lbl_CasDeCharges"
         Me.lbl_CasDeCharges.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'pan_EtatCdC
-        '
-        Me.pan_EtatCdC.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_EtatCdC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_EtatCdC.Controls.Add(Me.lbl_nEnrobage)
-        Me.pan_EtatCdC.Controls.Add(Me.Label1)
-        Me.pan_EtatCdC.Controls.Add(Me.lbl_Etat)
-        Me.pan_EtatCdC.Controls.Add(Me.lbl_NeqEnrob)
-        Me.pan_EtatCdC.Controls.Add(Me.lbl_NeqDalle)
-        Me.pan_EtatCdC.Controls.Add(Me.lbl_Mixte)
-        Me.pan_EtatCdC.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_EtatCdC.Location = New System.Drawing.Point(251, 1)
-        Me.pan_EtatCdC.Margin = New System.Windows.Forms.Padding(1, 1, 0, 0)
-        Me.pan_EtatCdC.Name = "pan_EtatCdC"
-        Me.pan_EtatCdC.Size = New System.Drawing.Size(199, 69)
-        Me.pan_EtatCdC.TabIndex = 4
-        '
-        'lbl_NeqEnrob
-        '
-        Me.lbl_NeqEnrob.AutoSize = True
-        Me.lbl_NeqEnrob.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_NeqEnrob.Location = New System.Drawing.Point(77, 48)
-        Me.lbl_NeqEnrob.Name = "lbl_NeqEnrob"
-        Me.lbl_NeqEnrob.Size = New System.Drawing.Size(71, 13)
-        Me.lbl_NeqEnrob.TabIndex = 58
-        Me.lbl_NeqEnrob.Text = "lbl_NeqEnrob"
-        '
-        'lbl_NeqDalle
-        '
-        Me.lbl_NeqDalle.AutoSize = True
-        Me.lbl_NeqDalle.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_NeqDalle.Location = New System.Drawing.Point(77, 27)
-        Me.lbl_NeqDalle.Name = "lbl_NeqDalle"
-        Me.lbl_NeqDalle.Size = New System.Drawing.Size(67, 13)
-        Me.lbl_NeqDalle.TabIndex = 57
-        Me.lbl_NeqDalle.Text = "lbl_NeqDalle"
-        '
-        'lbl_Mixte
-        '
-        Me.lbl_Mixte.AutoSize = True
-        Me.lbl_Mixte.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Mixte.Location = New System.Drawing.Point(77, 5)
-        Me.lbl_Mixte.Name = "lbl_Mixte"
-        Me.lbl_Mixte.Size = New System.Drawing.Size(48, 13)
-        Me.lbl_Mixte.TabIndex = 56
-        Me.lbl_Mixte.Text = "lbl_Mixte"
-        '
-        'lbl_Name
-        '
-        Me.lbl_Name.AutoSize = True
-        Me.lbl_Name.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Name.Location = New System.Drawing.Point(14, 35)
-        Me.lbl_Name.Name = "lbl_Name"
-        Me.lbl_Name.Size = New System.Drawing.Size(51, 13)
-        Me.lbl_Name.TabIndex = 55
-        Me.lbl_Name.Text = "lbl_Name"
-        '
-        'lbl_Case
-        '
-        Me.lbl_Case.AutoSize = True
-        Me.lbl_Case.Location = New System.Drawing.Point(14, 9)
-        Me.lbl_Case.Name = "lbl_Case"
-        Me.lbl_Case.Size = New System.Drawing.Size(47, 13)
-        Me.lbl_Case.TabIndex = 54
-        Me.lbl_Case.Text = "lbl_Case"
-        '
-        'cmb_Symbols
-        '
-        Me.cmb_Symbols.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Symbols.FormattingEnabled = True
-        Me.cmb_Symbols.Location = New System.Drawing.Point(75, 5)
-        Me.cmb_Symbols.Name = "cmb_Symbols"
-        Me.cmb_Symbols.Size = New System.Drawing.Size(66, 21)
-        Me.cmb_Symbols.TabIndex = 53
-        '
         'Pan_Affichage
         '
         Me.Pan_Affichage.Controls.Add(Me.img_Analyse)
@@ -306,23 +231,50 @@ Partial Class Frm_CasDeCharge
         Me.pan_ChoixCas.Size = New System.Drawing.Size(250, 69)
         Me.pan_ChoixCas.TabIndex = 0
         '
-        'lbl_Etat
+        'cmb_Symbols
         '
-        Me.lbl_Etat.AutoSize = True
-        Me.lbl_Etat.Location = New System.Drawing.Point(12, 6)
-        Me.lbl_Etat.Name = "lbl_Etat"
-        Me.lbl_Etat.Size = New System.Drawing.Size(42, 13)
-        Me.lbl_Etat.TabIndex = 59
-        Me.lbl_Etat.Text = "lbl_Etat"
+        Me.cmb_Symbols.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Symbols.FormattingEnabled = True
+        Me.cmb_Symbols.Location = New System.Drawing.Point(75, 5)
+        Me.cmb_Symbols.Name = "cmb_Symbols"
+        Me.cmb_Symbols.Size = New System.Drawing.Size(66, 21)
+        Me.cmb_Symbols.TabIndex = 53
         '
-        'Label1
+        'lbl_Case
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(12, 27)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(37, 13)
-        Me.Label1.TabIndex = 60
-        Me.Label1.Text = "nDalle"
+        Me.lbl_Case.AutoSize = True
+        Me.lbl_Case.Location = New System.Drawing.Point(14, 9)
+        Me.lbl_Case.Name = "lbl_Case"
+        Me.lbl_Case.Size = New System.Drawing.Size(47, 13)
+        Me.lbl_Case.TabIndex = 54
+        Me.lbl_Case.Text = "lbl_Case"
+        '
+        'lbl_Name
+        '
+        Me.lbl_Name.AutoSize = True
+        Me.lbl_Name.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Name.Location = New System.Drawing.Point(14, 35)
+        Me.lbl_Name.Name = "lbl_Name"
+        Me.lbl_Name.Size = New System.Drawing.Size(51, 13)
+        Me.lbl_Name.TabIndex = 55
+        Me.lbl_Name.Text = "lbl_Name"
+        '
+        'pan_EtatCdC
+        '
+        Me.pan_EtatCdC.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_EtatCdC.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_EtatCdC.Controls.Add(Me.lbl_nEnrobage)
+        Me.pan_EtatCdC.Controls.Add(Me.Label1)
+        Me.pan_EtatCdC.Controls.Add(Me.lbl_Etat)
+        Me.pan_EtatCdC.Controls.Add(Me.lbl_NeqEnrob)
+        Me.pan_EtatCdC.Controls.Add(Me.lbl_NeqDalle)
+        Me.pan_EtatCdC.Controls.Add(Me.lbl_Mixte)
+        Me.pan_EtatCdC.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_EtatCdC.Location = New System.Drawing.Point(251, 1)
+        Me.pan_EtatCdC.Margin = New System.Windows.Forms.Padding(1, 1, 0, 0)
+        Me.pan_EtatCdC.Name = "pan_EtatCdC"
+        Me.pan_EtatCdC.Size = New System.Drawing.Size(199, 69)
+        Me.pan_EtatCdC.TabIndex = 4
         '
         'lbl_nEnrobage
         '
@@ -333,24 +285,53 @@ Partial Class Frm_CasDeCharge
         Me.lbl_nEnrobage.TabIndex = 61
         Me.lbl_nEnrobage.Text = "nEnrobage"
         '
-        'lbl_RunCalcul
+        'Label1
         '
-        Me.lbl_RunCalcul.AutoSize = True
-        Me.lbl_RunCalcul.Location = New System.Drawing.Point(18, 6)
-        Me.lbl_RunCalcul.Name = "lbl_RunCalcul"
-        Me.lbl_RunCalcul.Size = New System.Drawing.Size(72, 13)
-        Me.lbl_RunCalcul.TabIndex = 60
-        Me.lbl_RunCalcul.Text = "lbl_RunCalcul"
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(12, 27)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(37, 13)
+        Me.Label1.TabIndex = 60
+        Me.Label1.Text = "nDalle"
         '
-        'lbl_RCalcul
+        'lbl_Etat
         '
-        Me.lbl_RCalcul.AutoSize = True
-        Me.lbl_RCalcul.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_RCalcul.Location = New System.Drawing.Point(143, 6)
-        Me.lbl_RCalcul.Name = "lbl_RCalcul"
-        Me.lbl_RCalcul.Size = New System.Drawing.Size(60, 13)
-        Me.lbl_RCalcul.TabIndex = 62
-        Me.lbl_RCalcul.Text = "lbl_RCalcul"
+        Me.lbl_Etat.AutoSize = True
+        Me.lbl_Etat.Location = New System.Drawing.Point(12, 6)
+        Me.lbl_Etat.Name = "lbl_Etat"
+        Me.lbl_Etat.Size = New System.Drawing.Size(42, 13)
+        Me.lbl_Etat.TabIndex = 59
+        Me.lbl_Etat.Text = "lbl_Etat"
+        '
+        'lbl_NeqEnrob
+        '
+        Me.lbl_NeqEnrob.AutoSize = True
+        Me.lbl_NeqEnrob.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_NeqEnrob.Location = New System.Drawing.Point(77, 48)
+        Me.lbl_NeqEnrob.Name = "lbl_NeqEnrob"
+        Me.lbl_NeqEnrob.Size = New System.Drawing.Size(71, 13)
+        Me.lbl_NeqEnrob.TabIndex = 58
+        Me.lbl_NeqEnrob.Text = "lbl_NeqEnrob"
+        '
+        'lbl_NeqDalle
+        '
+        Me.lbl_NeqDalle.AutoSize = True
+        Me.lbl_NeqDalle.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_NeqDalle.Location = New System.Drawing.Point(77, 27)
+        Me.lbl_NeqDalle.Name = "lbl_NeqDalle"
+        Me.lbl_NeqDalle.Size = New System.Drawing.Size(67, 13)
+        Me.lbl_NeqDalle.TabIndex = 57
+        Me.lbl_NeqDalle.Text = "lbl_NeqDalle"
+        '
+        'lbl_Mixte
+        '
+        Me.lbl_Mixte.AutoSize = True
+        Me.lbl_Mixte.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Mixte.Location = New System.Drawing.Point(77, 5)
+        Me.lbl_Mixte.Name = "lbl_Mixte"
+        Me.lbl_Mixte.Size = New System.Drawing.Size(48, 13)
+        Me.lbl_Mixte.TabIndex = 56
+        Me.lbl_Mixte.Text = "lbl_Mixte"
         '
         'Pan_Results
         '
@@ -374,60 +355,6 @@ Partial Class Frm_CasDeCharge
         Me.Pan_Results.Size = New System.Drawing.Size(601, 69)
         Me.Pan_Results.TabIndex = 5
         '
-        'lbl_RZ1
-        '
-        Me.lbl_RZ1.AutoSize = True
-        Me.lbl_RZ1.Location = New System.Drawing.Point(112, 28)
-        Me.lbl_RZ1.Name = "lbl_RZ1"
-        Me.lbl_RZ1.Size = New System.Drawing.Size(28, 13)
-        Me.lbl_RZ1.TabIndex = 61
-        Me.lbl_RZ1.Text = "RZ1"
-        Me.lbl_RZ1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'lbl_RZ2
-        '
-        Me.lbl_RZ2.AutoSize = True
-        Me.lbl_RZ2.Location = New System.Drawing.Point(112, 49)
-        Me.lbl_RZ2.Name = "lbl_RZ2"
-        Me.lbl_RZ2.Size = New System.Drawing.Size(28, 13)
-        Me.lbl_RZ2.TabIndex = 63
-        Me.lbl_RZ2.Text = "RZ2"
-        Me.lbl_RZ2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txt_RZ1
-        '
-        Me.txt_RZ1.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_RZ1.Location = New System.Drawing.Point(146, 24)
-        Me.txt_RZ1.Name = "txt_RZ1"
-        Me.txt_RZ1.Size = New System.Drawing.Size(66, 20)
-        Me.txt_RZ1.TabIndex = 64
-        '
-        'txt_RZ2
-        '
-        Me.txt_RZ2.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_RZ2.Location = New System.Drawing.Point(146, 46)
-        Me.txt_RZ2.Name = "txt_RZ2"
-        Me.txt_RZ2.Size = New System.Drawing.Size(66, 20)
-        Me.txt_RZ2.TabIndex = 65
-        '
-        'etq_UnitForce1
-        '
-        Me.etq_UnitForce1.AutoSize = True
-        Me.etq_UnitForce1.Location = New System.Drawing.Point(218, 27)
-        Me.etq_UnitForce1.Name = "etq_UnitForce1"
-        Me.etq_UnitForce1.Size = New System.Drawing.Size(15, 13)
-        Me.etq_UnitForce1.TabIndex = 66
-        Me.etq_UnitForce1.Text = "N"
-        '
-        'etq_UnitForce2
-        '
-        Me.etq_UnitForce2.AutoSize = True
-        Me.etq_UnitForce2.Location = New System.Drawing.Point(218, 49)
-        Me.etq_UnitForce2.Name = "etq_UnitForce2"
-        Me.etq_UnitForce2.Size = New System.Drawing.Size(15, 13)
-        Me.etq_UnitForce2.TabIndex = 67
-        Me.etq_UnitForce2.Text = "N"
-        '
         'etq_UnitDim1
         '
         Me.etq_UnitDim1.AutoSize = True
@@ -444,6 +371,7 @@ Partial Class Frm_CasDeCharge
         Me.txt_Fleche.Name = "txt_Fleche"
         Me.txt_Fleche.Size = New System.Drawing.Size(66, 20)
         Me.txt_Fleche.TabIndex = 69
+        Me.txt_Fleche.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'lbl_Fleche
         '
@@ -454,6 +382,81 @@ Partial Class Frm_CasDeCharge
         Me.lbl_Fleche.TabIndex = 68
         Me.lbl_Fleche.Text = "lbl_Fleche"
         Me.lbl_Fleche.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'etq_UnitForce2
+        '
+        Me.etq_UnitForce2.AutoSize = True
+        Me.etq_UnitForce2.Location = New System.Drawing.Point(218, 49)
+        Me.etq_UnitForce2.Name = "etq_UnitForce2"
+        Me.etq_UnitForce2.Size = New System.Drawing.Size(15, 13)
+        Me.etq_UnitForce2.TabIndex = 67
+        Me.etq_UnitForce2.Text = "N"
+        '
+        'etq_UnitForce1
+        '
+        Me.etq_UnitForce1.AutoSize = True
+        Me.etq_UnitForce1.Location = New System.Drawing.Point(218, 27)
+        Me.etq_UnitForce1.Name = "etq_UnitForce1"
+        Me.etq_UnitForce1.Size = New System.Drawing.Size(15, 13)
+        Me.etq_UnitForce1.TabIndex = 66
+        Me.etq_UnitForce1.Text = "N"
+        '
+        'txt_RZ2
+        '
+        Me.txt_RZ2.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_RZ2.Location = New System.Drawing.Point(146, 46)
+        Me.txt_RZ2.Name = "txt_RZ2"
+        Me.txt_RZ2.Size = New System.Drawing.Size(66, 20)
+        Me.txt_RZ2.TabIndex = 65
+        Me.txt_RZ2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txt_RZ1
+        '
+        Me.txt_RZ1.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_RZ1.Location = New System.Drawing.Point(146, 24)
+        Me.txt_RZ1.Name = "txt_RZ1"
+        Me.txt_RZ1.Size = New System.Drawing.Size(66, 20)
+        Me.txt_RZ1.TabIndex = 64
+        Me.txt_RZ1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'lbl_RZ2
+        '
+        Me.lbl_RZ2.AutoSize = True
+        Me.lbl_RZ2.Location = New System.Drawing.Point(112, 49)
+        Me.lbl_RZ2.Name = "lbl_RZ2"
+        Me.lbl_RZ2.Size = New System.Drawing.Size(28, 13)
+        Me.lbl_RZ2.TabIndex = 63
+        Me.lbl_RZ2.Text = "RZ2"
+        Me.lbl_RZ2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_RZ1
+        '
+        Me.lbl_RZ1.AutoSize = True
+        Me.lbl_RZ1.Location = New System.Drawing.Point(112, 28)
+        Me.lbl_RZ1.Name = "lbl_RZ1"
+        Me.lbl_RZ1.Size = New System.Drawing.Size(28, 13)
+        Me.lbl_RZ1.TabIndex = 61
+        Me.lbl_RZ1.Text = "RZ1"
+        Me.lbl_RZ1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_RCalcul
+        '
+        Me.lbl_RCalcul.AutoSize = True
+        Me.lbl_RCalcul.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_RCalcul.Location = New System.Drawing.Point(143, 6)
+        Me.lbl_RCalcul.Name = "lbl_RCalcul"
+        Me.lbl_RCalcul.Size = New System.Drawing.Size(60, 13)
+        Me.lbl_RCalcul.TabIndex = 62
+        Me.lbl_RCalcul.Text = "lbl_RCalcul"
+        '
+        'lbl_RunCalcul
+        '
+        Me.lbl_RunCalcul.AutoSize = True
+        Me.lbl_RunCalcul.Location = New System.Drawing.Point(18, 6)
+        Me.lbl_RunCalcul.Name = "lbl_RunCalcul"
+        Me.lbl_RunCalcul.Size = New System.Drawing.Size(72, 13)
+        Me.lbl_RunCalcul.TabIndex = 60
+        Me.lbl_RunCalcul.Text = "lbl_RunCalcul"
         '
         'Frm_CasDeCharge
         '
@@ -471,13 +474,13 @@ Partial Class Frm_CasDeCharge
         Me.pan_Main.ResumeLayout(False)
         Me.TLPan_CdC.ResumeLayout(False)
         Me.TLPan_CdC.PerformLayout()
-        Me.pan_EtatCdC.ResumeLayout(False)
-        Me.pan_EtatCdC.PerformLayout()
         Me.Pan_Affichage.ResumeLayout(False)
         CType(Me.img_Analyse, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.pan_ChoixCas.ResumeLayout(False)
         Me.pan_ChoixCas.PerformLayout()
+        Me.pan_EtatCdC.ResumeLayout(False)
+        Me.pan_EtatCdC.PerformLayout()
         Me.Pan_Results.ResumeLayout(False)
         Me.Pan_Results.PerformLayout()
         Me.ResumeLayout(False)
