@@ -56,6 +56,12 @@ Partial Class Frm_CasDeCharge
         Me.lbl_RZ1 = New System.Windows.Forms.Label()
         Me.lbl_RCalcul = New System.Windows.Forms.Label()
         Me.lbl_RunCalcul = New System.Windows.Forms.Label()
+        Me.etq_UnitM2 = New System.Windows.Forms.Label()
+        Me.etq_UnitM1 = New System.Windows.Forms.Label()
+        Me.txt_Mmin = New System.Windows.Forms.TextBox()
+        Me.txt_Mmax = New System.Windows.Forms.TextBox()
+        Me.lbl_Mmin = New System.Windows.Forms.Label()
+        Me.lbl_Mmax = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -337,6 +343,12 @@ Partial Class Frm_CasDeCharge
         '
         Me.Pan_Results.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.Pan_Results.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Pan_Results.Controls.Add(Me.etq_UnitM2)
+        Me.Pan_Results.Controls.Add(Me.etq_UnitM1)
+        Me.Pan_Results.Controls.Add(Me.txt_Mmin)
+        Me.Pan_Results.Controls.Add(Me.txt_Mmax)
+        Me.Pan_Results.Controls.Add(Me.lbl_Mmin)
+        Me.Pan_Results.Controls.Add(Me.lbl_Mmax)
         Me.Pan_Results.Controls.Add(Me.etq_UnitDim1)
         Me.Pan_Results.Controls.Add(Me.txt_Fleche)
         Me.Pan_Results.Controls.Add(Me.lbl_Fleche)
@@ -458,6 +470,62 @@ Partial Class Frm_CasDeCharge
         Me.lbl_RunCalcul.TabIndex = 60
         Me.lbl_RunCalcul.Text = "lbl_RunCalcul"
         '
+        'etq_UnitM2
+        '
+        Me.etq_UnitM2.AutoSize = True
+        Me.etq_UnitM2.Location = New System.Drawing.Point(384, 49)
+        Me.etq_UnitM2.Name = "etq_UnitM2"
+        Me.etq_UnitM2.Size = New System.Drawing.Size(15, 13)
+        Me.etq_UnitM2.TabIndex = 76
+        Me.etq_UnitM2.Text = "N"
+        '
+        'etq_UnitM1
+        '
+        Me.etq_UnitM1.AutoSize = True
+        Me.etq_UnitM1.Location = New System.Drawing.Point(384, 27)
+        Me.etq_UnitM1.Name = "etq_UnitM1"
+        Me.etq_UnitM1.Size = New System.Drawing.Size(15, 13)
+        Me.etq_UnitM1.TabIndex = 75
+        Me.etq_UnitM1.Text = "N"
+        '
+        'txt_Mmin
+        '
+        Me.txt_Mmin.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_Mmin.Location = New System.Drawing.Point(312, 46)
+        Me.txt_Mmin.Name = "txt_Mmin"
+        Me.txt_Mmin.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Mmin.TabIndex = 74
+        Me.txt_Mmin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'txt_Mmax
+        '
+        Me.txt_Mmax.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_Mmax.Location = New System.Drawing.Point(312, 24)
+        Me.txt_Mmax.Name = "txt_Mmax"
+        Me.txt_Mmax.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Mmax.TabIndex = 73
+        Me.txt_Mmax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'lbl_Mmin
+        '
+        Me.lbl_Mmin.AutoSize = True
+        Me.lbl_Mmin.Location = New System.Drawing.Point(271, 49)
+        Me.lbl_Mmin.Name = "lbl_Mmin"
+        Me.lbl_Mmin.Size = New System.Drawing.Size(32, 13)
+        Me.lbl_Mmin.TabIndex = 72
+        Me.lbl_Mmin.Text = "Mmin"
+        Me.lbl_Mmin.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_Mmax
+        '
+        Me.lbl_Mmax.AutoSize = True
+        Me.lbl_Mmax.Location = New System.Drawing.Point(271, 28)
+        Me.lbl_Mmax.Name = "lbl_Mmax"
+        Me.lbl_Mmax.Size = New System.Drawing.Size(35, 13)
+        Me.lbl_Mmax.TabIndex = 71
+        Me.lbl_Mmax.Text = "Mmax"
+        Me.lbl_Mmax.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
         'Frm_CasDeCharge
         '
         Me.AcceptButton = Me.btn_OK
@@ -521,4 +589,10 @@ Partial Class Frm_CasDeCharge
     Friend WithEvents etq_UnitDim1 As Label
     Friend WithEvents txt_Fleche As TextBox
     Friend WithEvents lbl_Fleche As Label
+    Friend WithEvents etq_UnitM2 As Label
+    Friend WithEvents etq_UnitM1 As Label
+    Friend WithEvents txt_Mmin As TextBox
+    Friend WithEvents txt_Mmax As TextBox
+    Friend WithEvents lbl_Mmin As Label
+    Friend WithEvents lbl_Mmax As Label
 End Class

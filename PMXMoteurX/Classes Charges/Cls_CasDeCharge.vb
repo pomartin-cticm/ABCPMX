@@ -159,8 +159,8 @@
         '-----------------------------------------------------------------------------------------------------------
         '   Renvoie les flèches enveloppes issues des résultats du calcul EF
         '-----------------------------------------------------------------------------------------------------------
-        '   fMax        [E] :   Valeur max de la flèche
-        '   fMin        [E] :   Valeur min de la flèche
+        '   fMax        [S] :   Valeur max de la flèche
+        '   fMin        [S] :   Valeur min de la flèche
         '-----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -182,6 +182,72 @@
         End If
 
     End Sub
+
+    Public Sub EnveloppesMoments(ByRef Mmax As Decimal, ByRef Mmin As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les flèches enveloppes issues des résultats du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+        '   fMax        [E] :   Valeur max de la flèche
+        '   fMin        [E] :   Valeur min de la flèche
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NbNodes As Integer
+
+        '--> Calcul
+
+        If Me.lRunCalcul Then
+            NbNodes = Me.UZ.GetUpperBound(0) + 1
+            Me.EnveloppeTableau(Me.MYY, NbNodes, Mmax, Mmin)
+        End If
+
+    End Sub
+
+    Private Sub EnveloppeTableau(MyTab(,) As Decimal, NbNodes As Integer, ByRef ValMax As Decimal, ByRef ValMin As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les valeurs enveloppes d'un tableau à 2 dimensions
+        '-----------------------------------------------------------------------------------------------------------
+        '   MyTab       [E] :   Tableau à traiter
+        '   NbNodes     [E] :   Dimension 1 du tableau
+        '   ValMax      [S] :   Valeur max du tableau
+        '   ValMin      [S] :   Valeur min du tableau
+        '-----------------------------------------------------------------------------------------------------------
+
+        ValMax = Math.Max(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+        ValMin = Math.Min(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+
+        For i As Integer = 1 To NbNodes - 2
+            For j = 0 To 1
+                ValMax = Math.Max(MyTab(i, j), ValMax)
+                ValMin = Math.Min(MyTab(i, j), ValMin)
+            Next
+        Next
+
+    End Sub
+
+    Public Function NombreFRep(iTravP As Integer, iTravD As Integer) As Integer
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie le nombre total de forces réparties dans le cas de charge
+        '-----------------------------------------------------------------------------------------------------------
+        '   iTravP      [E] :   Indice de la première travée
+        '   iTravD      [E] :   Indice de la dernière travée
+        '-----------------------------------------------------------------------------------------------------------
+
+        Dim Nombre As Integer = 0
+
+        For iTrav = iTravP To iTravD
+            Nombre += Me.FReparties(iTrav).Count
+        Next
+
+        Return Nombre
+    End Function
 
 #End Region
 

@@ -22,7 +22,6 @@
 
 #End Region
 
-
 #Region " Outils de COMPARaison "
 
     Const DeltaVMAx As Decimal = 0.001

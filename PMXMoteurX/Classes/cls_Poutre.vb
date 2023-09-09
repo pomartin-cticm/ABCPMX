@@ -1560,11 +1560,11 @@ Public Class cls_Poutre
 
         '--> Déclarations
 
-        Dim qPP As Decimal = Me.ChargeRepartiePP
+        Dim qPP As Decimal = Me.ChargeRepartiePP * 5
 
         '--> Préparation du cas de charge
 
-        For iTrav As Integer = 1 To Me.NombreTraveesDeuxAppuis
+        For iTrav As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
 
             MyCas.FReparties(iTrav).Add(New cls_ForceRepartie(0, qPP, Me.LongueurTravee(iTrav), qPP, Me.xPositionAppui(True, iTrav)))
 
@@ -1585,7 +1585,7 @@ Public Class cls_Poutre
 
         Dim nEqSH As Decimal
         Dim Nsh, Msh As Decimal
-        Const SIGNESH As Decimal = 1
+        Const SIGNESH As Decimal = -1
         Dim iTravPrem As Integer = Me.IndicePremiereTravee
         Dim iTravDern As Integer = Me.IndiceDerniereTravee
         Dim xGauche, xDroite As Decimal
@@ -2096,6 +2096,8 @@ Public Class cls_Poutre
         '--> Déclarations
 
         Dim iTrav As Integer
+        Dim NbfRep As Integer
+        Dim Compteur As Integer = -1
 
         '--> Transfert des propriétés de section
 
@@ -2104,11 +2106,20 @@ Public Class cls_Poutre
             pDonneesEF.InertieY(i) = Me.Elements(Me.ChargesA(iCas).IndElts).InertieY(i)
         Next
 
-        '--> Transfert des charges
+        '--> Initialisation
+
+        NbfRep = Me.ChargesA(iCas).NombreFRep(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
+        pDonneesEF.NbForcesRep = NbfRep
+        If NbfRep > 0 Then
+            ReDim pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
+            ReDim pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
+        End If
 
         pDonneesEF.NbForcesPon = 0
-        pDonneesEF.NbForcesRep = 0
         pDonneesEF.NbMoments = 0
+
+
+        '--> Transfert des charges
 
         For iTrav = iTravP To iTravD
 
@@ -2126,16 +2137,21 @@ Public Class cls_Poutre
 
             '# Charges réparties
 
-            For iQqq As Integer = 0 To Me.ChargesA(iCas).FReparties(iTrav).Count - 1
-                AjouteForceRep(Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(1),
-                               Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(1), pDonneesEF)
-            Next
+            If NbfRep > 0 Then
+
+                For iQqq As Integer = 0 To Me.ChargesA(iCas).FReparties(iTrav).Count - 1
+                    Compteur += 1
+                    AjouteForceRep(Compteur, Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(1),
+                                             Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(1), pDonneesEF)
+                Next
+
+            End If
 
         Next
 
     End Sub
 
-    Private Sub AjouteForceRep(xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+    Private Sub AjouteForceRep(IndFrep As Integer, xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
         '-------------------------------------------------------------------------------------
         '   09/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -2148,19 +2164,10 @@ Public Class cls_Poutre
         '   pDonneesEF  [S] :   Donnes pour le calcul EF
         '-------------------------------------------------------------------------------------
 
-        pDonneesEF.NbForcesRep += 1
-        If pDonneesEF.NbForcesRep = 1 Then
-            ReDim pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
-            ReDim pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
-        Else
-            ReDim Preserve pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
-            ReDim Preserve pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
-        End If
-
-        pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 0) = xo
-        pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1) = xe
-        pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 0) = qo
-        pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1) = qe
+        pDonneesEF.xForceRep(IndFrep, 0) = xo
+        pDonneesEF.xForceRep(IndFrep, 1) = xe
+        pDonneesEF.ForceRep(IndFrep, 0) = qo
+        pDonneesEF.ForceRep(IndFrep, 1) = qe
 
     End Sub
 

@@ -2,10 +2,19 @@
 
 Public Class Frm_CasDeCharge
 
-
 #Region " Variables "
 
     Dim lBuild As Boolean
+
+    Dim tab_fMin() As Decimal
+    Dim tab_fMax() As Decimal
+    Dim fMaxG As Decimal
+    Dim fMinG As Decimal
+
+    Dim tab_Mmin() As Decimal
+    Dim tab_Mmax() As Decimal
+    Dim MmaxG As Decimal
+    Dim MminG As Decimal
 
 #End Region
 
@@ -17,10 +26,12 @@ Public Class Frm_CasDeCharge
         GestionLangues()
         GestionStyle()
         GestionUnites()
+        'InitialiseVariablesLocales()
 
         AfficheCasdeCharge()
 
         lBuild = False
+        Me.img_Analyse.Invalidate()
     End Sub
 
     Private Sub GestionLangues()
@@ -33,13 +44,16 @@ Public Class Frm_CasDeCharge
         Me.lbl_Case.Text = "Case"
         Me.lbl_Etat.Text = "Etat"
         Me.lbl_RunCalcul.Text = "Calcul effectué ?"
-
+        Me.lbl_Fleche.Text = "Flèche maxi"
     End Sub
 
     Private Sub GestionUnites()
         Me.etq_UnitDim1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitForce1.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
         Me.etq_UnitForce2.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+        Me.etq_UnitM1.Text = LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment)
+        Me.etq_UnitM2.Text = LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment)
+
     End Sub
 
     Private Sub GestionStyle()
@@ -55,9 +69,9 @@ Public Class Frm_CasDeCharge
 
     Private Sub AfficheCasdeCharge()
 
-        InitialiseOptionsCalculPoutre(MyProjet.Poutres(MyProjet.IndEnCours))
         MyProjet.Poutres(MyProjet.IndEnCours).InitialiseCalculs()
         MyProjet.Poutres(MyProjet.IndEnCours).CalculMNVInternes()
+        InitialiseVariablesLocales()
 
         Me.cmb_Symbols.Items.Clear()
 
@@ -68,6 +82,38 @@ Public Class Frm_CasDeCharge
         Me.cmb_Symbols.SelectedIndex = 0
 
         MAJI_CasdeCharge()
+
+    End Sub
+
+    Private Sub InitialiseVariablesLocales()
+
+        Dim NbC As Integer = MyProjet.Poutres(MyProjet.IndEnCours).ChargesA.Count
+
+        ReDim tab_fMax(NbC - 1)
+        ReDim tab_fMin(NbC - 1)
+        ReDim tab_Mmax(NbC - 1)
+        ReDim tab_Mmin(NbC - 1)
+
+        For i As Integer = 0 To NbC - 1
+            MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).EnveloppesFleche(tab_fMax(i), tab_fMin(i))
+            If i = 0 Then
+                fMaxG = tab_fMax(i)
+                fMinG = tab_fMin(i)
+            Else
+                fMaxG = Math.Max(fMaxG, tab_fMax(i))
+                fMinG = Math.Min(fMinG, tab_fMin(i))
+            End If
+
+            MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).EnveloppesMoments(tab_Mmax(i), tab_Mmin(i))
+            If i = 0 Then
+                MmaxG = tab_Mmax(i)
+                MminG = tab_Mmin(i)
+            Else
+                MmaxG = Math.Max(MmaxG, tab_Mmax(i))
+                MminG = Math.Min(MminG, tab_Mmin(i))
+            End If
+
+        Next
 
     End Sub
 
@@ -122,6 +168,9 @@ Public Class Frm_CasDeCharge
                 Me.txt_RZ1.Text = GetStringInUnit(.RZ(0), Enu_TypeVariable.Effort, 3, 3, False)
                 Me.txt_RZ2.Text = GetStringInUnit(.RZ(1), Enu_TypeVariable.Effort, 3, 3, False)
                 Me.txt_Fleche.Text = GetStringInUnit(.FlecheMax, Enu_TypeVariable.Dimension, 3, 3, False)
+
+                Me.txt_Mmax.Text = GetStringInUnit(Me.tab_Mmax(Me.cmb_Symbols.SelectedIndex), Enu_TypeVariable.Moment, 3, 3, False)
+                Me.txt_Mmin.Text = GetStringInUnit(Me.tab_Mmin(Me.cmb_Symbols.SelectedIndex), Enu_TypeVariable.Moment, 3, 3, False)
             End With
 
         End If
@@ -140,10 +189,18 @@ Public Class Frm_CasDeCharge
         Me.lbl_Fleche.Visible = lDispo
         Me.txt_Fleche.Visible = lDispo
 
+        Me.lbl_Mmax.Visible = lDispo
+        Me.lbl_Mmin.Visible = lDispo
+        Me.txt_Mmax.Visible = lDispo
+        Me.etq_UnitM1.Visible = lDispo
+        Me.txt_Mmin.Visible = lDispo
+        Me.etq_UnitM2.Visible = lDispo
+
     End Sub
 
     Private Sub cmb_Symbols_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Symbols.SelectedIndexChanged
         MAJI_CasdeCharge()
+        Me.img_Analyse.Invalidate()
     End Sub
 
 
@@ -181,12 +238,16 @@ Public Class Frm_CasDeCharge
         Dim EcartZ As Decimal = Longueur * pHi / pWi
         Dim DiaNode As Decimal = Longueur / 200
         Dim dApp As Decimal = Longueur / 50
-        Dim kEch As Decimal
+        Dim kEch, kEchM As Decimal
+        Dim lResult As Boolean = MyPoutre.ChargesA(iCas).lRunCalcul
+        Const SigneM As Decimal = -1
 
         '--> Initialisation
 
+        If lBuild Then Exit Sub
         Dim MyBrushN As New SolidBrush(Color.White)
         Dim MyPenDef As New Pen(Color.DarkRed)
+        Dim MyPenM As New Pen(Color.Blue)
 
         xMin = 0 - dCar
         xMax = Longueur + dCar
@@ -208,7 +269,8 @@ Public Class Frm_CasDeCharge
 
         '--> Affichage des appuis
 
-        DessineAppui(myGr, MyPoutre.xPositionAppui(True, 1), Dapp, MyParAff)
+        DessineAppui(myGr, MyPoutre.xPositionAppui(True, 1), dApp, MyParAff)
+        DessineAppui(myGr, MyPoutre.xPositionAppui(False, 1), dApp, MyParAff)
 
         '--> Déformée
 
@@ -216,21 +278,67 @@ Public Class Frm_CasDeCharge
         Dim Uz As Decimal
         Dim xo, xe, yo, ye As Decimal
 
-        MyPoutre.ChargesA(iCas).EnveloppesFleche(fMin, fMax)
-        kEch = EcartZ / (2 * Math.Max(Math.Abs(fMin), fMax))
+        'MyPoutre.ChargesA(iCas).EnveloppesFleche(fMin, fMax)
 
-        For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
-            xo = MyPoutre.Nodes.xGlobal(iNode)
-            xe = MyPoutre.Nodes.xGlobal(iNode + 1)
-            yo = MyPoutre.ChargesA(iCas).UZ(iNode) * kEch
-            ye = MyPoutre.ChargesA(iCas).UZ(iNode + 1) * kEch
-            AddLigne(myGr, MyPenDef, xo, yo, xe, ye, MyParAff)
-        Next
+        If ((Not IsEqual(fMinG, 0)) Or (Not (IsEqual(fMinG, 0)))) And lResult Then
 
-        For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
-            Uz = MyPoutre.ChargesA(iCas).UZ(iNode)
-            AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), kEch * Uz, DiaNode, MyParAff, True, mypendef)
-        Next
+            kEch = EcartZ / (2 * Math.Max(Math.Abs(fMinG), fMaxG))
+
+            For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
+                xo = MyPoutre.Nodes.xGlobal(iNode)
+                xe = MyPoutre.Nodes.xGlobal(iNode + 1)
+                yo = MyPoutre.ChargesA(iCas).UZ(iNode) * kEch
+                ye = MyPoutre.ChargesA(iCas).UZ(iNode + 1) * kEch
+                AddLigne(myGr, MyPenDef, xo, yo, xe, ye, MyParAff)
+            Next
+
+            For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
+                Uz = MyPoutre.ChargesA(iCas).UZ(iNode)
+                AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), kEch * Uz, DiaNode, MyParAff, True, MyPenDef)
+            Next
+
+        End If
+
+        '--> Moments de flexion
+
+        If lResult And ((Not IsEqual(Math.Abs(MminG), 0)) Or (Not (IsEqual(MmaxG, 0)))) Then
+
+            kEchM = EcartZ / (2 * Math.Max(Math.Abs(MminG), MmaxG)) * SigneM
+
+
+            xo = 0
+            xe = 0
+            yo = 0
+            ye = MyPoutre.ChargesA(iCas).MYY(0, 1) * kEchM
+            If Not IsEqual(yo, ye) Then
+                AddLigne(myGr, MyPenM, xo, yo, xe, ye, MyParAff)
+            End If
+
+            For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
+                xo = MyPoutre.Nodes.xGlobal(iNode)
+                xe = MyPoutre.Nodes.xGlobal(iNode + 1)
+                yo = MyPoutre.ChargesA(iCas).MYY(iNode, 1) * kEchM
+                ye = MyPoutre.ChargesA(iCas).MYY(iNode + 1, 0) * kEchM
+                AddLigne(myGr, MyPenM, xo, yo, xe, ye, MyParAff)
+
+                If iNode < MyPoutre.Nodes.nbNodes - 2 Then
+                    yo = MyPoutre.ChargesA(iCas).MYY(iNode + 1, 1) * kEchM
+                    If Not IsEqual(yo, ye) Then
+                        AddLigne(myGr, MyPenM, xe, yo, xe, ye, MyParAff)
+                    End If
+                End If
+
+            Next
+
+            xe = MyPoutre.LongueurTotale
+            yo = 0
+            ye = MyPoutre.ChargesA(iCas).MYY(MyPoutre.Nodes.nbNodes - 1, 0) * kEchM
+
+            If Not IsEqual(yo, ye) Then
+                AddLigne(myGr, MyPenM, xe, yo, xe, ye, MyParAff)
+            End If
+
+        End If
 
     End Sub
 
