@@ -26,7 +26,7 @@ Module Mod_BasesDonneesBinaires
     'End Structure
 
     Public Structure strucReduction
-        Dim Plages As List(Of Cls_Acier.strucPlage)
+        Dim Plages As List(Of cls_Acier.strucPlage)
         Dim EpMax As Double
         Dim StIndex As Short
         Dim iBase As Short
@@ -90,7 +90,7 @@ Module Mod_BasesDonneesBinaires
 
     End Sub
 
-    Public Sub RecupereAcierDefaut(ByRef Nuance As String, ByRef Qualite As String, ByRef Reduction As String, Plages As List(Of Cls_Acier.strucPlage))
+    Public Sub RecupereAcierDefaut(ByRef Nuance As String, ByRef Qualite As String, ByRef Reduction As String, Plages As List(Of cls_Acier.strucPlage))
         '-----------------------------------------------------------------------------------------------------------------
         '   29/04/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -132,7 +132,7 @@ Module Mod_BasesDonneesBinaires
 
     End Sub
 
-    Private Sub RecupereAcierDefautNuance(Nuance As String, ByRef Qualite As String, ByRef Reduction As String, Plages As List(Of Cls_Acier.strucPlage))
+    Private Sub RecupereAcierDefautNuance(Nuance As String, ByRef Qualite As String, ByRef Reduction As String, Plages As List(Of cls_Acier.strucPlage))
         '-----------------------------------------------------------------------------------------------------------------
         '   29/04/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -171,7 +171,7 @@ Module Mod_BasesDonneesBinaires
 
     End Sub
 
-    Private Sub RecupereAcierDefautNuanceQualite(Nuance As String, Qualite As String, ByRef Reduction As String, Plages As List(Of Cls_Acier.strucPlage))
+    Private Sub RecupereAcierDefautNuanceQualite(Nuance As String, Qualite As String, ByRef Reduction As String, Plages As List(Of cls_Acier.strucPlage))
         '-----------------------------------------------------------------------------------------------------------------
         '   29/04/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -209,7 +209,7 @@ Module Mod_BasesDonneesBinaires
 
     End Sub
 
-    Private Sub RecupereAcierDefautPlages(Nuance As String, Qualite As String, Reduction As String, Plages As List(Of Cls_Acier.strucPlage))
+    Private Sub RecupereAcierDefautPlages(Nuance As String, Qualite As String, Reduction As String, Plages As List(Of cls_Acier.strucPlage))
         '-----------------------------------------------------------------------------------------------------------------
         '   29/04/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -224,7 +224,7 @@ Module Mod_BasesDonneesBinaires
 
         '--> Déclarations
 
-        Dim MyPlage As Cls_Acier.strucPlage
+        Dim MyPlage As cls_Acier.strucPlage
 
         '--> Récupération des plages
 
@@ -305,7 +305,7 @@ Module Mod_BasesDonneesBinaires
         Dim nCg, nCq, nCn As Short
         Dim nSteels As Short
         Dim Grade, Qualite, Norm As String
-        Dim Plages As New List(Of Cls_Acier.strucPlage)
+        Dim Plages As New List(Of cls_Acier.strucPlage)
         Dim iStandart, iBase As Short
         Dim EpMax As Single
         Dim lOK As Boolean
@@ -638,7 +638,7 @@ Module Mod_BasesDonneesBinaires
     Public Sub GetSteelInBase(ByVal nUnit As Integer, ByVal ASGi As Integer,
                               ByVal nCg As Short, ByVal nCq As Short, ByVal nCn As Short,
                               ByRef Grade As String, ByRef Qualite As String, ByRef Norm As String,
-                              ByRef iBase As Short, ByRef iStandart As Short, ByRef EpMax As Single, ByRef Plages As List(Of Cls_Acier.strucPlage))
+                              ByRef iBase As Short, ByRef iStandart As Short, ByRef EpMax As Single, ByRef Plages As List(Of cls_Acier.strucPlage))
         '----------------------------------------------------------------------------------
         '
         '   02/07/12 :  Création - POM - v3.00
@@ -675,7 +675,7 @@ Module Mod_BasesDonneesBinaires
     End Sub
 
     Public Sub GetSteelInBase(ByVal nUnit As Integer, ByVal RecPos As Integer,
-                              ByRef iBase As Short, ByRef iStandart As Short, ByRef EpMax As Single, ByRef Plages As List(Of Cls_Acier.strucPlage))
+                              ByRef iBase As Short, ByRef iStandart As Short, ByRef EpMax As Single, ByRef Plages As List(Of cls_Acier.strucPlage))
         '----------------------------------------------------------------------------------
         '
         '   02/07/12 :  Création - POM - v3.00
@@ -705,7 +705,7 @@ Module Mod_BasesDonneesBinaires
         Const TOS As Integer = 4
         Dim iExpert As Short
         Dim nbPlages As Short
-        Dim MyRange As Cls_Acier.strucPlage
+        Dim MyRange As cls_Acier.strucPlage
         Dim ADPP As Integer
         Dim Ep, Fy, Fu As Single
         Const kUNIT As Single = 0.001
@@ -732,7 +732,7 @@ Module Mod_BasesDonneesBinaires
     End Sub
 
     Private Sub AddSteelInBaseSteel(ByVal Grade As String, ByVal Qualite As String, ByVal Norm As String,
-                                    ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of Cls_Acier.strucPlage),
+                                    ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of cls_Acier.strucPlage),
                                     ByRef SteelBase As strucBaseAciers)
         '-------------------------------------------------------------------------------------------------------
         '
@@ -768,7 +768,7 @@ Module Mod_BasesDonneesBinaires
     End Sub
 
     Private Sub AddQualiteInGrade(ByVal Qualite As String, ByVal Norm As String,
-                                  ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of Cls_Acier.strucPlage),
+                                  ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of cls_Acier.strucPlage),
                                   ByRef MyGrade As strucGrade)
         '-------------------------------------------------------------------------------------------------------
         '
@@ -806,7 +806,7 @@ Module Mod_BasesDonneesBinaires
     End Sub
 
     Private Sub AddNormInQualite(ByVal Norm As String,
-                                 ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of Cls_Acier.strucPlage),
+                                 ByVal iBase As Short, ByVal iStandart As Short, ByVal EpMax As Single, ByVal Plages As List(Of cls_Acier.strucPlage),
                                  ByRef MyQualite As strucQualite)
         '-------------------------------------------------------------------------------------------------------
         '
@@ -835,7 +835,7 @@ Module Mod_BasesDonneesBinaires
             Dim MyReduc As strucReduction
 
             MyReduc.EpMax = EpMax
-            MyReduc.Plages = New List(Of Cls_Acier.strucPlage)
+            MyReduc.Plages = New List(Of cls_Acier.strucPlage)
             For i As Integer = 0 To Plages.Count - 1
                 MyReduc.Plages.Add(Plages(i))
             Next

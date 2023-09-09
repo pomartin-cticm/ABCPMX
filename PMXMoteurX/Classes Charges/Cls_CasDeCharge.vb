@@ -1,4 +1,4 @@
-﻿Public Class Cls_CasDeCharge
+﻿Public Class cls_CasDeCharge
 
     '#### CLASSE POUR LA CALCUL D'UN CHARGEMENT PAR LE LOGICIEL ######
 
@@ -16,8 +16,9 @@
     '--> Charges
 
     Public QSurf() As Decimal                           ' Charge par unité de surface sur chaque travée
-    Public Forces() As List(Of Cls_Force)               ' Liste des efforts ponctuels sur chaque travée
-    Public FReparties() As List(Of Cls_ForceRepartie)   ' Liste des charges réparties sur chaque travée
+    Public Forces() As List(Of cls_Force)               ' Liste des efforts ponctuels sur chaque travée
+    Public FReparties() As List(Of cls_ForceRepartie)   ' Liste des charges réparties sur chaque travée
+    Public Moments() As List(Of cls_Moment)             ' Liste des moments ponctuels sur chaque travée (a priori, pour définir le retrait)
 
     '--> Résultats de l'analyse
 
@@ -33,13 +34,73 @@
 
 #Region " Constructeurs "
 
-    Public Sub New(pNom As String, pSymbol As String, IndiceElts As Integer)
+    Public Sub New(pNom As String, pSymbol As String, IndiceElts As Integer, NbTrav As Integer, iTrav0 As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Initialisation du cas de charge
+        '-----------------------------------------------------------------------------------------------------------
+        '   pNom        [E] :   Nom du cas de charge (selon langue interface)
+        '   pSymbol     [E] :   Symbol du cas de charge (indépendant de la langue)
+        '   IndiceElts  [E] :   Indice de la table de propriétés des éléments associées au cas de charge
+        '   NbTrav      [E] :   Nombre de travées dans la poutre (pour le dimensionnement des tableaux)
+        '   iTrav0      [E] :   Indice de la première travée
+        '-----------------------------------------------------------------------------------------------------------
 
         Me.Nom = pNom
         Me.Symbol = pSymbol
 
         Me.IndElts = IndiceElts
+
+        ReDim Me.QSurf(NbTrav + iTrav0)
+        ReDim Me.Forces(NbTrav + iTrav0)
+        ReDim Me.Moments(NbTrav + iTrav0)
+        ReDim Me.FReparties(NbTrav + iTrav0)
+
+        For i As Integer = iTrav0 To iTrav0 + NbTrav
+            Me.Forces(i) = New List(Of cls_Force)
+            Me.Moments(i) = New List(Of cls_Moment)
+            Me.FReparties(i) = New List(Of cls_ForceRepartie)
+        Next
+
     End Sub
+
+#End Region
+
+#Region " Outils "
+
+    Public Function EstNonNul(iTravP As Integer, iTravD As Integer) As Boolean
+        '-----------------------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Indique si le cas de charge est non nul (c'est à dire qu'il exite au moins une charge non nulle)
+        '-----------------------------------------------------------------------------------------------------------
+        '   iTravP      [E] :   Indice de la première travée
+        '   iTravD      [E] :   Indice de la dernière travée
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lNonNul As Boolean = False
+        Dim iTrav, iCharg As Integer
+
+        For iTrav = iTravP To iTravD
+            If Not IsEqual(Me.QSurf(iTrav), 0) Then lNonNul = True
+            For iCharg = 0 To Me.Forces(iTrav).Count - 1
+                If Not IsEqual(Me.Forces(iTrav)(iCharg).Force, 0) Then lNonNul = True
+            Next
+            For iCharg = 0 To Me.Moments(iTrav).Count - 1
+                If Not IsEqual(Me.Moments(iTrav)(iCharg).Moment, 0) Then lNonNul = True
+            Next
+            For iCharg = 0 To Me.FReparties(iTrav).Count - 1
+                If Not IsEqual(Me.FReparties(iTrav)(iCharg).Force(1), 0) Then lNonNul = True
+                If Not IsEqual(Me.FReparties(iTrav)(iCharg).Force(2), 0) Then lNonNul = True
+            Next
+        Next
+
+
+        Return lNonNul
+    End Function
 
 #End Region
 

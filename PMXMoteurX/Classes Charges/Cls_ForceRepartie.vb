@@ -1,4 +1,4 @@
-﻿Public Class Cls_ForceRepartie
+﻿Public Class cls_ForceRepartie
 
     '#### CLASSE POUR LA DEFINITION D'UNE CHARGE PONCTUELLE ######
 

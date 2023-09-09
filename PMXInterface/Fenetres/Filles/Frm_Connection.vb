@@ -174,7 +174,7 @@ Public Class Frm_Connection
 
         MAJ_Valeurs_Limites()
 
-        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire Then
+        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
             lBacTransv = True
         Else
             lBacTransv = False
@@ -769,7 +769,7 @@ Public Class Frm_Connection
 
         'Définition des valeurs limites pour les caractéristiques des goujons
         HAUTEUR_GOUJON_MIN = 3 * MyPoutreLoc.Dalle.Connecteur.d
-        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte Then
+        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             HAUTEUR_GOUJON_MIN = Math.Max(HAUTEUR_GOUJON_MIN, MyPoutreLoc.Dalle.Bac.Hp + 2 * MyPoutreLoc.Dalle.Connecteur.d)
         End If
         HAUTEUR_GOUJON_MAX_CONSEILLEE = MyPoutreLoc.Dalle.t_d - 20 / 1000
@@ -777,7 +777,7 @@ Public Class Frm_Connection
 
         DIAMETRE_GOUJON_MIN = 16 / 1000 'Valeur arbitraire (16 mm), je me suis basé sur la clause 6.6.1.2(1) de l'EC4 actuel
         DIAMETRE_GOUJON_MAX = 0
-        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire And (MyPoutreLoc.Dalle.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.NervureEtBacContinus Or MyPoutreLoc.Dalle.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.BetonSeulContinu) Then
+        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire And (MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Or MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.BetonSeulContinu) Then
             If MyPoutreLoc.Dalle.Bac.lPreperce Then
                 DIAMETRE_GOUJON_MAX = 22 / 1000
             Else
@@ -800,7 +800,7 @@ Public Class Frm_Connection
         NB_ZONES_MAX = Math.Min(Math.Floor(MyPoutreLoc.LongueurTravee(traveeEnCours) / LONGUEUR_ZONE_MIN), 3)
         ESPACEMENT_LONGI_MIN = 5 * MyPoutreLoc.Dalle.Connecteur.d
         ESPACEMENT_LONGI_MAX = Math.Min(800 / 1000, 6 * MyPoutreLoc.Dalle.t_d)
-        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire Then
+        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
             NB_ONDES_MIN = 1
             NB_ONDES_MAX = Math.Floor(ESPACEMENT_LONGI_MAX / MyPoutreLoc.Dalle.Bac.Ep)
         End If
@@ -808,15 +808,15 @@ Public Class Frm_Connection
         'Définition des valeurs limites pour les caractéristiques transversales
 
         PINCE_TRANS_MIN = 20 / 1000
-        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte Then
+        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             ESPACEMENT_TRANS_MIN = 4 * MyPoutreLoc.Dalle.Connecteur.d
         Else 'dalle pleine ou préfa
             ESPACEMENT_TRANS_MIN = 2.5 * MyPoutreLoc.Dalle.Connecteur.d
         End If
         b_app_min = 50 / 1000
         NB_TRANSV_ROW_MIN = 1
-        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire Then
-            If MyPoutreLoc.Dalle.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.Discontinu Then
+        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
+            If MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu Then
                 NB_TRANSV_ROW_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * b_app_min - 2 * PINCE_TRANS_MIN - MyPoutreLoc.Dalle.Connecteur.d) / ESPACEMENT_TRANS_MIN + 1)
             Else
                 NB_TRANSV_ROW_MAX = Math.Min(2, Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * PINCE_TRANS_MIN - MyPoutreLoc.Dalle.Connecteur.d) / ESPACEMENT_TRANS_MIN + 1))

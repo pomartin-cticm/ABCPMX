@@ -137,7 +137,7 @@ Module Mod_Declarations
         Public lFenetres As Boolean                 'Fenêtres indépendantes
         Public lNoS235 As Boolean                   'Indique si on applique le filtre empechant la sélection de nuance S235/S275 en mode normal 
 
-        Public Gamma As Cls_Gamma
+        Public Gamma As cls_Gamma
 
     End Structure
 
@@ -241,7 +241,7 @@ Module Mod_Declarations
     End Enum
 
     Public Structure Struc_OptionsCalcul                ' Options de calcul --------------------------------
-        Public Norme As Cls_OptionsCalcul.Enu_Normes    ' Norme de calcul
+        Public Norme As cls_OptionsCalcul.Enu_Normes    ' Norme de calcul
         Public lLargeurEfficaceSimplifiee As Boolean    ' Largeur efficace de la dalle béton selon modèle simplifié
         Public lCompressionArma As Boolean              ' Indique si l'on prend en compte les armatures comprimées dans le calcul des propriétés de section
         Public dMaxNodes As Decimal                     ' Distance maximale entre deux noeuds

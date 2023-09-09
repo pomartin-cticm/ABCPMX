@@ -17,7 +17,7 @@ Module Mod_Dessins
 #Region " Dessins pour la définiton de la dalle (FRM_DALLEN) "
 
 
-    Public Sub DessineBacTout(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyBac As Cls_Bac,
+    Public Sub DessineBacTout(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyBac As cls_Bac,
                               ByVal lTitre As Boolean, kAdjust As Decimal,
                               ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyDalle As Cls_Dalle,
+    Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyDalle As cls_Dalle,
                             MySection As cls_Section, iSelect As Integer, strMsg() As String,
                             ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
@@ -223,13 +223,13 @@ Module Mod_Dessins
         '# Dalle béton
 
         Select Case MyDalle.type
-            Case Cls_Dalle.Enum_TypeDalle.Pleine
+            Case cls_Dalle.Enum_TypeDalle.Pleine
                 DessinDallePleine(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
-            Case Cls_Dalle.Enum_TypeDalle.Mixte
+            Case cls_Dalle.Enum_TypeDalle.Mixte
                 Select Case MyDalle.Bac.Orientation
-                    Case Cls_Bac.Enum_Orientation.Parallele
+                    Case cls_Bac.Enum_Orientation.Parallele
                         DessineDalleMixteParallele(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
-                    Case Cls_Bac.Enum_Orientation.Perpendiculaire
+                    Case cls_Bac.Enum_Orientation.Perpendiculaire
                         If lCofraplus220 Then
                             DessineDalleMixtePerpendiculaireCfp220(myGr, MyDalle, MySection.ProfilA, MyParAff, myBrushB, Beff)
                         Else
@@ -238,7 +238,7 @@ Module Mod_Dessins
 
                 End Select
 
-            Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
                 DessinDallePreFab(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
         End Select
 
@@ -256,7 +256,7 @@ Module Mod_Dessins
         End If
     End Sub
 
-    Private Sub DessinCoteFrmDalle(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, MySection As cls_Section, iSelect As Integer,
+    Private Sub DessinCoteFrmDalle(ByRef MyGr As Graphics, MyDalle As cls_Dalle, MySection As cls_Section, iSelect As Integer,
                                    MyParAffA As Struc_Affichage, dCar As Decimal, BeffG As Decimal, BeffD As Decimal, strMsg() As String)
         '-----------------------------------------------------------------------------------------------
         '   07/07/23 :  Version 1.00
@@ -293,7 +293,7 @@ Module Mod_Dessins
         Dim MyFontNormal As Font = FontBase
 
         Dim Chaine As String
-        Dim lDalleMixte As Boolean = (MyDalle.type = Cls_Dalle.Enum_TypeDalle.Mixte)
+        Dim lDalleMixte As Boolean = (MyDalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
         Dim dCar2 As Decimal = MyDalle.Bac.Hp / 2
 
         '--> Cotations
@@ -324,7 +324,7 @@ Module Mod_Dessins
 
         '# Hauteur du renformis
 
-        If (MyDalle.type = Cls_Dalle.Enum_TypeDalle.Pleine) And (MyDalle.t_h > 0) Then
+        If (MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine) And (MyDalle.t_h > 0) Then
 
             MyColor = StyleCouleur(iSelect, 1)
             MyPen.Color = MyColor
@@ -340,7 +340,7 @@ Module Mod_Dessins
 
         '# Prédalle
 
-        If (MyDalle.type = Cls_Dalle.Enum_TypeDalle.Prefabriquee) And (MyDalle.preDalle_ep > 0) Then
+        If (MyDalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee) And (MyDalle.preDalle_ep > 0) Then
 
             MyColor = StyleCouleur(iSelect, 10)
             MyPen.Color = MyColor
@@ -436,7 +436,7 @@ Module Mod_Dessins
             lsChaine.Add(strBeton & MyDalle.beton.Classe)
             lsChaine.Add("fck" & " = " & GetStringInUnit(MyDalle.beton.Fck, Enu_TypeVariable.Contrainte, 3, 1, True))
             lsChaine.Add("Ecm" & " = " & GetStringInUnit(MyDalle.beton.Ecm, Enu_TypeVariable.ModuleY, 3, 1, True))
-            lsChaine.Add("n0" & " = " & GetStringInUnit(Cls_Acier.EYACIER / MyDalle.beton.Ecm, Enu_TypeVariable.SansType, 3, 2, True))
+            lsChaine.Add("n0" & " = " & GetStringInUnit(cls_Acier.EYACIER / MyDalle.beton.Ecm, Enu_TypeVariable.SansType, 3, 2, True))
             lsChaine.Add("RhoC" & " = " & GetStringInUnit(MyDalle.beton.RhoC, Enu_TypeVariable.SansType, 3, 2, False) & " kg/m3")
 
             xo = 0
@@ -470,7 +470,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinLitArmaDalle(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, BeffRed As Decimal, iArma As Integer,
+    Private Sub DessinLitArmaDalle(ByRef MyGr As Graphics, MyDalle As cls_Dalle, BeffRed As Decimal, iArma As Integer,
                                    Ha As Decimal, iSelect As Integer,
                                    MyParAffA As Struc_Affichage, MyBrushArma As Brush)
         '---------------------------------------------------------------------------------------------------------------------------
@@ -484,7 +484,7 @@ Module Mod_Dessins
         DessinLitArmaDalle(MyGr, MyDalle, BeffRed, iArma, Ha, iSelect, MyParAffA, MyBrushArma, xBOne)
 
     End Sub
-    Private Sub DessinLitArmaDalle(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, BeffRed As Decimal, iArma As Integer,
+    Private Sub DessinLitArmaDalle(ByRef MyGr As Graphics, MyDalle As cls_Dalle, BeffRed As Decimal, iArma As Integer,
                                    Ha As Decimal, iSelect As Integer,
                                    MyParAffA As Struc_Affichage, MyBrushArma As Brush, ByRef xBOne As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
@@ -673,7 +673,7 @@ Module Mod_Dessins
 
 #Region " Dessins pour la définition du bac (FRM_BACN) "
 
-    Public Sub DessineBac(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, MyBac As Cls_Bac,
+    Public Sub DessineBac(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, MyBac As cls_Bac,
                           ByVal EpDalle As Double, ByRef iCote As Integer,
                           ByVal lCotation As Boolean, ByVal lCotEpTot As Boolean,
                           ByVal lTitre As Boolean,
@@ -787,7 +787,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub CotationBacUn(ByRef myGr As Graphics, MyParAffC As Struc_Affichage, MyBac As Cls_Bac, dCar As Decimal, iSelect As Integer)
+    Private Sub CotationBacUn(ByRef myGr As Graphics, MyParAffC As Struc_Affichage, MyBac As cls_Bac, dCar As Decimal, iSelect As Integer)
         '-----------------------------------------------------------------------------------------------
         '   24/06/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
@@ -941,7 +941,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Dessin réactif de la section acier et de l'enrobage partiel
     ''' </summary>
-    Public Sub DessinFrmEnrobage(ByRef MyGr As Graphics, ByVal section As cls_Section, MyEnrob As Cls_Enrobage_Partiel,
+    Public Sub DessinFrmEnrobage(ByRef MyGr As Graphics, ByVal section As cls_Section, MyEnrob As cls_Enrobage_Partiel,
                                  ByVal pWi As Decimal, ByVal pHi As Decimal,
                                  kAdjust As Double, lCote As Boolean, lAffSymbol As Boolean, iSelect As Integer,
                                  ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
@@ -1139,7 +1139,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinCoteFrmEnrobage(ByRef MyGr As Graphics, ByVal section As cls_Section, enrobage As Cls_Enrobage_Partiel,
+    Private Sub DessinCoteFrmEnrobage(ByRef MyGr As Graphics, ByVal section As cls_Section, enrobage As cls_Enrobage_Partiel,
                                       iSelect As Integer, zRef As Decimal, dCar As Decimal,
                                       lAffSymbol As Boolean, MyParAffLoc As Struc_Affichage)
         '---------------------------------------------------------------------------------------------------------------------------
@@ -1336,7 +1336,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Dessine les etriers
     ''' </summary>
-    Private Sub DessinEtriers(ByRef MyGr As Graphics, ByVal profile As cls_ProfilA, enrobage As Cls_Enrobage_Partiel,
+    Private Sub DessinEtriers(ByRef MyGr As Graphics, ByVal profile As cls_ProfilA, enrobage As cls_Enrobage_Partiel,
                               MyParAffloc As Struc_Affichage, MyBrushE As Brush, zRef As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
         '   20/04/23    :   Création - POM
@@ -1352,9 +1352,9 @@ Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
 
         Select Case enrobage.Etriers_Type
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
                 DessinEtriersCadre(MyGr, profile, enrobage, MyParAffloc, MyBrushE)
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant, Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant, cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
                 DessinEtriersCadreSouT(MyGr, profile, enrobage, MyParAffloc, MyBrushE, zRef)
         End Select
 
@@ -1363,7 +1363,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Dessine les etriers soudés
     ''' </summary>
-    Private Sub DessinEtriersCadreSouT(ByRef MyGr As Graphics, ByVal profile As cls_ProfilA, enrobage As Cls_Enrobage_Partiel,
+    Private Sub DessinEtriersCadreSouT(ByRef MyGr As Graphics, ByVal profile As cls_ProfilA, enrobage As cls_Enrobage_Partiel,
                                        MyParAffloc As Struc_Affichage, MyBrushE As Brush, zRef As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
         '   20/04/23    :   Création - POM
@@ -1383,7 +1383,7 @@ Module Mod_Dessins
         Dim MyPenContour As New Pen(Color.Black, 1)
         Dim xPts(), yPts() As Single
         Dim nbPts As Integer
-        Dim lSoude As Boolean = (enrobage.Etriers_Type = Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude)
+        Dim lSoude As Boolean = (enrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude)
 
         '--> Préparation du contour des étriers
 
@@ -1409,7 +1409,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Dessine les etriers en cadres normaux
     ''' </summary>
-    Private Sub DessinEtriersCadre(ByRef MyGr As Graphics, ByVal profile As cls_ProfilA, enrobage As Cls_Enrobage_Partiel,
+    Private Sub DessinEtriersCadre(ByRef MyGr As Graphics, ByVal profile As cls_ProfilA, enrobage As cls_Enrobage_Partiel,
                                    MyParAffloc As Struc_Affichage, MyBrushE As Brush)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
@@ -1465,7 +1465,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Préparation des points définissant le contour d'un étrier traversant
     ''' </summary>
-    Private Sub PrepareContourEtriersTravers(ByVal profile As cls_ProfilA, enrobage As Cls_Enrobage_Partiel,
+    Private Sub PrepareContourEtriersTravers(ByVal profile As cls_ProfilA, enrobage As cls_Enrobage_Partiel,
                                              ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
 
         '---------------------------------------------------------------------------------------------------------------------------
@@ -1549,7 +1549,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Préparation des points définissant le contour d'un étrier soude
     ''' </summary>
-    Private Sub PrepareContourEtriersSoudes(ByVal profile As cls_ProfilA, enrobage As Cls_Enrobage_Partiel,
+    Private Sub PrepareContourEtriersSoudes(ByVal profile As cls_ProfilA, enrobage As cls_Enrobage_Partiel,
                                             ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   20/04/23    :   Création - POM
@@ -1648,7 +1648,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Préparation des points définissant le contour d'un étrier, tronçon secondaire
     ''' </summary>
-    Private Sub PrepareContourEtriersP(ByVal profile As cls_ProfilA, enrobage As Cls_Enrobage_Partiel,
+    Private Sub PrepareContourEtriersP(ByVal profile As cls_ProfilA, enrobage As cls_Enrobage_Partiel,
                                        ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
@@ -1710,7 +1710,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Préparation des points définissant le contour d'un étrier, tronçon principal
     ''' </summary>
-    Private Sub PrepareContourEtriersG(ByVal profile As cls_ProfilA, enrobage As Cls_Enrobage_Partiel,
+    Private Sub PrepareContourEtriersG(ByVal profile As cls_ProfilA, enrobage As cls_Enrobage_Partiel,
                                        ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
@@ -1856,7 +1856,7 @@ Module Mod_Dessins
     ''' <summary>
     ''' Préparation des points définissant le contour d'un étrier
     ''' </summary>
-    Private Sub PrepareContourEtriers(ByVal profile As cls_ProfilA, enrobage As Cls_Enrobage_Partiel,
+    Private Sub PrepareContourEtriers(ByVal profile As cls_ProfilA, enrobage As cls_Enrobage_Partiel,
                                       ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer, Optional lPartiel As Boolean = False)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
@@ -2870,7 +2870,7 @@ Module Mod_Dessins
 
         '--> Dessin des éléments
 
-        If MyPoutreLoc.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Parallele Then
+        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
 
             '--> Dessin du bac acier
 
@@ -4188,7 +4188,7 @@ Module Mod_Dessins
 
 #Region " Dessins pour le choix des sections (FRM_AJOUTEPP) "
 
-    Public Sub DessinFrmTypeSection(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As Cls_Dalle,
+    Public Sub DessinFrmTypeSection(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As cls_Dalle,
                                     ByVal pWi As Decimal, ByVal pHi As Decimal, ByVal MyFont As Font,
                                     kAdjust As Double, lSelect As Boolean,
                                     ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
@@ -4274,7 +4274,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinFrmTypeSAB(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As Cls_Dalle,
+    Private Sub DessinFrmTypeSAB(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As cls_Dalle,
                                  MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
 
         '------------------------------------------------------------------------------------------------------------------
@@ -4309,7 +4309,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinFrmTypeSFB(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As Cls_Dalle,
+    Private Sub DessinFrmTypeSFB(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As cls_Dalle,
                                  MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
@@ -4346,7 +4346,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinFrmTypeSectionStandard(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As Cls_Dalle,
+    Private Sub DessinFrmTypeSectionStandard(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As cls_Dalle,
                                              MyParaff1 As Struc_Affichage, BeffRed As Decimal,
                                              myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
         '------------------------------------------------------------------------------------------------------------------
@@ -4400,7 +4400,7 @@ Module Mod_Dessins
             '# Dalle béton
 
             Select Case MyDalle.type
-                Case Cls_Dalle.Enum_TypeDalle.Pleine
+                Case cls_Dalle.Enum_TypeDalle.Pleine
                     DessinDallePleine(MyGr, MyDalle, MySection.ProfilA.ha, MySection.ProfilA.Bfs, MyParaff1, myBrushB, BeffRed)
                     'Case Cls_Dalle.Enum_TypeDalle.Mixte
                     '    DessinDalleMixte(MyGr, Section.dalle, BeffRed, Section.ha, Section.b_fs, ZREF, MyParAff, myBrushB)
@@ -4419,7 +4419,7 @@ Module Mod_Dessins
 
 #Region " Outils pour le dessin de la dalle "
 
-    Private Sub DessineDalleMixtePerpendiculaireCfp220(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, MyProfil As cls_ProfilA, MyParAffA As Struc_Affichage,
+    Private Sub DessineDalleMixtePerpendiculaireCfp220(ByRef MyGr As Graphics, MyDalle As cls_Dalle, MyProfil As cls_ProfilA, MyParAffA As Struc_Affichage,
                                                        MyBrushDP As Brush, BeffRed As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
         '   08/08/23    :   Création - POM
@@ -4481,7 +4481,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessineDalleMixtePerpendiculaire(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
+    Private Sub DessineDalleMixtePerpendiculaire(ByRef MyGr As Graphics, MyDalle As cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
                                                  MyBrushDP As Brush, BeffRed As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
         '   29/06/23    :   Création - POM
@@ -4525,7 +4525,7 @@ Module Mod_Dessins
         '# Représentation des traits pour le bac
 
         Select Case MyDalle.Bac.AppuiT
-            Case Cls_Bac.EnuConfigTAppui.Discontinu
+            Case cls_Bac.EnuConfigTAppui.Discontinu
                 xo = BeffRed / 2
                 xe = Bfs / 2 - MyDalle.Bac.wAppui
                 yo = 0
@@ -4537,10 +4537,10 @@ Module Mod_Dessins
                 AddLigne(MyGr, MyPenContour, xo, ye, xe, ye, MyParAffA)
                 AddLigne(MyGr, MyPenContour, xe, 0, xe, ye, MyParAffA)
 
-            Case Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+            Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
                 AddLigne(MyGr, MyPenContour, xo, Hp, xe, Hp, MyParAffA)
 
-            Case Cls_Bac.EnuConfigTAppui.BetonSeulContinu
+            Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
                 AddLigne(MyGr, MyPenContour, xo, Hp, xe, Hp, MyParAffA)
                 AddLigne(MyGr, MyPenContour, 0, 0, 0, Hp, MyParAffA)
 
@@ -4551,7 +4551,7 @@ Module Mod_Dessins
         MyPenContour.Dispose()
     End Sub
 
-    Private Sub DessinDalleSlimFloor(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, MyParAffloc As Struc_Affichage, MyBrushB As Brush, Optional ZREF As Decimal = 0)
+    Private Sub DessinDalleSlimFloor(ByRef MyGr As Graphics, MyDalle As cls_Dalle, Ha As Decimal, MyParAffloc As Struc_Affichage, MyBrushB As Brush, Optional ZREF As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/06/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -4582,7 +4582,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessineDalleMixteParallele(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
+    Private Sub DessineDalleMixteParallele(ByRef MyGr As Graphics, MyDalle As cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
                                            MyBrushDP As Brush, BeffRed As Decimal)
         '---------------------------------------------------------------------------------------------------------------------------
         '   29/06/23    :   Création - POM
@@ -4611,7 +4611,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub PrepareContourDalleMixteParallelOLD(ByVal MyDalle As Cls_Dalle, Bfs As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+    Private Sub PrepareContourDalleMixteParallelOLD(ByVal MyDalle As cls_Dalle, Bfs As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/05/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -4643,7 +4643,7 @@ Module Mod_Dessins
 
         lRaid = (((hPg - hP) / hP) > 0.05)
 
-        If (MyDalle.Bac.AppuiL = Cls_Bac.EnuConfigLAppui.BacCoupe) Then
+        If (MyDalle.Bac.AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe) Then
             xStart = Bfs / 2
         Else
             xStart = bb / 2
@@ -4789,7 +4789,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub PrepareContourDalleMixteParallel(ByVal MyDalle As Cls_Dalle, Bfs As Decimal, BeffG As Decimal, BeffD As Decimal,
+    Private Sub PrepareContourDalleMixteParallel(ByVal MyDalle As cls_Dalle, Bfs As Decimal, BeffG As Decimal, BeffD As Decimal,
                                                  ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/05/23    :   Création - POM
@@ -4839,7 +4839,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub PrepareContourDalleMixteParalleInfDroite(ByVal MyDalle As Cls_Dalle, Bfs As Decimal, BeffD As Decimal, lGauche As Boolean,
+    Private Sub PrepareContourDalleMixteParalleInfDroite(ByVal MyDalle As cls_Dalle, Bfs As Decimal, BeffD As Decimal, lGauche As Boolean,
                                                          ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/05/23    :   Création - POM
@@ -4882,12 +4882,12 @@ Module Mod_Dessins
         lRaid = (((hPg - hP) / hP) > 0.05)
         If lRaid Then
             bSupBac = eP - bt
-            bbRaid = Cls_Bac.RATIOB1R * bSupBac
-            btRaid = Cls_Bac.RATIOB2R * bSupBac
+            bbRaid = cls_Bac.RATIOB1R * bSupBac
+            btRaid = cls_Bac.RATIOB2R * bSupBac
             dXRaid = btRaid - bbRaid
         End If
 
-        If (MyDalle.Bac.AppuiL = Cls_Bac.EnuConfigLAppui.BacCoupe) Then
+        If (MyDalle.Bac.AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe) Then
             xStart = Bfs / 2
         Else
             xStart = bb / 2
@@ -5088,7 +5088,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinDallePreFab(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
+    Private Sub DessinDallePreFab(ByRef MyGr As Graphics, MyDalle As cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage,
                                   MyBrushDP As Brush, MyBrushPref As Brush,
                                   Optional BeffRed As Decimal = -1)
         '---------------------------------------------------------------------------------------------------------------------------
@@ -5175,7 +5175,7 @@ Module Mod_Dessins
         MyPen.Dispose()
     End Sub
 
-    Private Sub DessinDallePleine(ByRef MyGr As Graphics, MyDalle As Cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage, MyBrushDP As Brush,
+    Private Sub DessinDallePleine(ByRef MyGr As Graphics, MyDalle As cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage, MyBrushDP As Brush,
                                   Optional BeffRed As Decimal = -1)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/05/23    :   Création - POM
@@ -5257,7 +5257,7 @@ Module Mod_Dessins
         MyPenDot.Dispose()
     End Sub
 
-    Private Sub PrepareContourDallePleine(ByVal MyDalle As Cls_Dalle, BeffDes As Decimal, Bfs As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+    Private Sub PrepareContourDallePleine(ByVal MyDalle As cls_Dalle, BeffDes As Decimal, Bfs As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/05/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -5318,7 +5318,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub PrepareLigneFaceInfDallePleine(ByVal MyDalle As Cls_Dalle, BeffDes As Decimal, Bfs As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+    Private Sub PrepareLigneFaceInfDallePleine(ByVal MyDalle As cls_Dalle, BeffDes As Decimal, Bfs As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   31/05/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -5615,7 +5615,7 @@ Module Mod_Dessins
     End Sub
 
 
-    Private Sub DessinArmaLongiEnrobageN(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyEnrob As Cls_Enrobage_Partiel,
+    Private Sub DessinArmaLongiEnrobageN(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyEnrob As cls_Enrobage_Partiel,
                                         MyParAffloc As Struc_Affichage, MyBrushA() As Brush, iArma As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
@@ -5645,9 +5645,9 @@ Module Mod_Dessins
         '--> Initialisation
 
         Select Case MyEnrob.Etriers_Type
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : uYInterne = MyEnrob.Etriers_EnrobageYinterne
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant : uYInterne = 0
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude : uYInterne = 0
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : uYInterne = MyEnrob.Etriers_EnrobageYinterne
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant : uYInterne = 0
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude : uYInterne = 0
         End Select
 
         Uy = MyEnrob.Etriers_EnrobageY
@@ -5719,7 +5719,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessinArmaLongiEnrobage(ByRef MyGr As Graphics, ByVal MyProfil As cls_ProfilA, MyEnrob As Cls_Enrobage_Partiel,
+    Private Sub DessinArmaLongiEnrobage(ByRef MyGr As Graphics, ByVal MyProfil As cls_ProfilA, MyEnrob As cls_Enrobage_Partiel,
                                         MyParAffloc As Struc_Affichage, MyBrushA As Brush, iArma As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
@@ -5755,12 +5755,12 @@ Module Mod_Dessins
                 yo = -MyProfil.Tfs - MyEnrob.Etriers_EnrobageZ - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2
         End Select
         Select Case MyEnrob.Etriers_Type
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : uYInterne = MyEnrob.Etriers_EnrobageY
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant : uYInterne = 0
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude : uYInterne = 0
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : uYInterne = MyEnrob.Etriers_EnrobageY
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant : uYInterne = 0
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude : uYInterne = 0
         End Select
         DeltaY(1) = 0
-        If (MyEnrob.Etriers_Type = Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant) Then
+        If (MyEnrob.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant) Then
             DeltaY(0) = MyEnrob.Etriers_Phi / 5
         Else
             DeltaY(0) = 0
@@ -5813,7 +5813,7 @@ Module Mod_Dessins
         Return MyColor
     End Function
 
-    Private Sub GenereDimensionsEnveloppes(MySection As cls_Section, MyDalle As Cls_Dalle, lDalleReduite As Boolean,
+    Private Sub GenereDimensionsEnveloppes(MySection As cls_Section, MyDalle As cls_Dalle, lDalleReduite As Boolean,
                                            ByRef xMin As Decimal, ByRef xMax As Decimal, ByRef yMin As Decimal, ByRef yMax As Decimal,
                                            ByRef dCar As Decimal, ByRef BeffRed As Decimal, Optional zRef As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------

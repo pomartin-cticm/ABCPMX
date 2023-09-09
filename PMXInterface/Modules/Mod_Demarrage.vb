@@ -160,7 +160,7 @@ Module Mod_Demarrage
 
             '--> Gamma coefficients partiels
 
-            LogicielOptions.Gamma = New Cls_Gamma
+            LogicielOptions.Gamma = New cls_Gamma
 
             LogicielOptions.Gamma.GammaM0 = My.Settings.GammaMZero
             LogicielOptions.Gamma.GammaM1 = My.Settings.GammaM1
@@ -429,7 +429,7 @@ Module Mod_Demarrage
 
     End Sub
 
-    Public Sub InitialiseGoujonDeBase(ByRef MyG As Cls_Connecteur, ByRef lTrouve As Boolean)
+    Public Sub InitialiseGoujonDeBase(ByRef MyG As cls_Connecteur, ByRef lTrouve As Boolean)
         '--------------------------------------------------------------------------------
         '   09/08/23 :  Création - POM - V1.00
         '--------------------------------------------------------------------------------
@@ -478,7 +478,7 @@ Module Mod_Demarrage
         End If
     End Sub
 
-    Public Sub InitialiseBacDeBase(ByRef MyBac As Cls_Bac, ByRef lTrouve As Boolean)
+    Public Sub InitialiseBacDeBase(ByRef MyBac As cls_Bac, ByRef lTrouve As Boolean)
         '--------------------------------------------------------------------------------
         '   25/06/23 :  Création - POM - V1.00
         '--------------------------------------------------------------------------------
@@ -498,7 +498,7 @@ Module Mod_Demarrage
 
             Else
 
-                Dim kvp As KeyValuePair(Of String, Cls_Bac) = BaseBacs.First
+                Dim kvp As KeyValuePair(Of String, cls_Bac) = BaseBacs.First
 
                 MyBac = BaseBacs(kvp.Key).Clone
 
@@ -576,7 +576,7 @@ Module Mod_Demarrage
 
         ExtraireAciersCompatibles(EpMax, MyPoutre.Section.ProfilA.IndStandart, MySteels)
 
-        AnalyseAciersListe(MySteels, True, Cls_Acier.NUANCEDEFAULT, lTrouve, iAcier)
+        AnalyseAciersListe(MySteels, True, cls_Acier.NUANCEDEFAULT, lTrouve, iAcier)
 
         If Not lTrouve Then
             AnalyseAciersListe(MySteels, False, "", lTrouve, iAcier)

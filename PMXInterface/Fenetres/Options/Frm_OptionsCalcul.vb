@@ -32,7 +32,7 @@ Public Class Frm_OptionsCalcul
     Public BlocLangues As Dictionary(Of String, Dictionary(Of String, String))
     Const BALISE As String = "OPTCALCULMAIN"
 
-    Public GammaLoc As New Cls_Gamma
+    Public GammaLoc As New cls_Gamma
 
 
 #End Region

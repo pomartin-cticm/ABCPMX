@@ -1,5 +1,5 @@
 ﻿
-Public Class Cls_Connecteur
+Public Class cls_Connecteur
 
 #Region " Attributs "
 
@@ -288,7 +288,7 @@ Public Class Cls_Connecteur
 
     '--> 1ere GENERATION
 
-    Public Function CoefkT(nr As Decimal, MyBac As Cls_Bac) As Decimal
+    Public Function CoefkT(nr As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -313,7 +313,7 @@ Public Class Cls_Connecteur
 
     End Function
 
-    Public Function kTMax(nr As Decimal, MyBac As Cls_Bac) As Decimal
+    Public Function kTMax(nr As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -357,7 +357,7 @@ Public Class Cls_Connecteur
 
     End Function
 
-    Public Function PRdBacPerpendiculaireG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As Cls_Bac) As Decimal
+    Public Function PRdBacPerpendiculaireG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -388,7 +388,7 @@ Public Class Cls_Connecteur
 
     '--> 2eme GENERATION
 
-    Public Function PRdBacPerpendiculaireG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As Cls_Bac) As Decimal
+    Public Function PRdBacPerpendiculaireG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -520,7 +520,7 @@ Public Class Cls_Connecteur
 
 #Region " Résistance dalle mixte avec Bac parrallèle "
     '--> 1ere GENERATION
-    Public Function PRdBacParrallelleG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As Cls_Bac) As Decimal
+    Public Function PRdBacParrallelleG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -549,7 +549,7 @@ Public Class Cls_Connecteur
     End Function
 
     '--> 2eme GENERATION
-    Public Function PRdBacParrallelleG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As Cls_Bac) As Decimal
+    Public Function PRdBacParrallelleG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -577,7 +577,7 @@ Public Class Cls_Connecteur
 
     End Function
 
-    Public Function CoefkL(MyBac As Cls_Bac)
+    Public Function CoefkL(MyBac As cls_Bac)
         '-----------------------------------------------------------------------------------------------------------------
         '   18/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------

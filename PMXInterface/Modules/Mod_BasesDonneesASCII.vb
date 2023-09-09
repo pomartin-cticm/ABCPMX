@@ -6,7 +6,7 @@ Module Mod_BasesDonneesASCII
 
 #Region " Déclarations des bases "
 
-    Public BaseBacs As New Dictionary(Of String, Cls_Bac)
+    Public BaseBacs As New Dictionary(Of String, cls_Bac)
 
     Public BaseGoujons As (String, Decimal, Decimal, Decimal, Decimal)() = Nothing
 
@@ -14,7 +14,7 @@ Module Mod_BasesDonneesASCII
 
 #Region " Base de données des bacs "
 
-    Public Sub LireBaseBacs(ByRef DicoBac As Dictionary(Of String, Cls_Bac))
+    Public Sub LireBaseBacs(ByRef DicoBac As Dictionary(Of String, cls_Bac))
         '---------------------------------------------------------------------------------
         '   15/06/23 :  Création - POM
         '---------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ Module Mod_BasesDonneesASCII
 
         '--[ Déclarations
 
-        Dim ListBacs As New List(Of Cls_Bac)
+        Dim ListBacs As New List(Of cls_Bac)
 
         '--[ Récupération de la liste des bacs
 
@@ -43,7 +43,7 @@ Module Mod_BasesDonneesASCII
 
     End Sub
 
-    Sub GetDataBaseBacs(ByRef ListeBac As List(Of Cls_Bac))
+    Sub GetDataBaseBacs(ByRef ListeBac As List(Of cls_Bac))
         '---------------------------------------------------------------------------------
         '   15/06/23 :  Création - POM
         '---------------------------------------------------------------------------------
@@ -69,7 +69,7 @@ Module Mod_BasesDonneesASCII
     End Sub
 
     Private Sub RecupereBacsFromFile(ByVal FileBac As String, ByVal lCustom As Boolean,
-                                     ByRef ListeBac As List(Of Cls_Bac))
+                                     ByRef ListeBac As List(Of cls_Bac))
         '---------------------------------------------------------------------------------
         '
         '   03/07/08 :  Création - Version 1.00 B2
@@ -141,7 +141,7 @@ Module Mod_BasesDonneesASCII
                     End If
 
                     'ListeBac.Add(New Cls_Bac(Etiquette, b1, b2, h, e, M, fy, lCustom))
-                    ListeBac.Add(New Cls_Bac(Fabricant, Etiquette, b1, b2, h, hrs, e, t, M, fy, wModule, Ieff))
+                    ListeBac.Add(New cls_Bac(Fabricant, Etiquette, b1, b2, h, hrs, e, t, M, fy, wModule, Ieff))
 
                     ListeBac(ListeBac.Count - 1).Tp = t
                     ListeBac(ListeBac.Count - 1).h_rs = hrs

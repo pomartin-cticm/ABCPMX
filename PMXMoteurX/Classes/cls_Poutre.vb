@@ -167,12 +167,12 @@ Public Class cls_Poutre
     ''' <summary>
     ''' Dalle béton de la poutre
     ''' </summary>
-    Public Dalle As New Cls_Dalle
+    Public Dalle As New cls_Dalle
 
     ''' <summary>
     ''' Options de calcul pour la poutre
     ''' </summary>
-    Public Param As New Cls_OptionsCalcul
+    Public Param As New cls_OptionsCalcul
 
 #End Region
 
@@ -240,7 +240,7 @@ Public Class cls_Poutre
 
     '--Cas de charge définis par l'utilisateur
 
-    Public ChargesU As New Dictionary(Of String, Cls_ChargementUtilisateur)
+    Public ChargesU As New Dictionary(Of String, cls_ChargementUtilisateur)
 
     '--Combinaisons définies par l'utilisateur
 
@@ -263,7 +263,7 @@ Public Class cls_Poutre
 
     '--Cas de charge pour l'analyse
 
-    Public ChargesA As New List(Of Cls_CasDeCharge)
+    Public ChargesA As New List(Of cls_CasDeCharge)
 
 #End Region
 
@@ -315,11 +315,11 @@ Public Class cls_Poutre
 #Region " CONSTRUCTEURS "
 
     Private Sub InitialiseChargements()
-        Me.ChargesU.Add("G1", New Cls_ChargementUtilisateur("Poids propre", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("G2", New Cls_ChargementUtilisateur("Autres charges permanentes", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("Q1", New Cls_ChargementUtilisateur("Charges d'expoitation 1", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("Q2", New Cls_ChargementUtilisateur("Charges d'expoitation 2", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("QC", New Cls_ChargementUtilisateur("Charges de construction", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur("Poids propre", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur("Autres charges permanentes", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur("Charges d'expoitation 1", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur("Charges d'expoitation 2", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur("Charges de construction", Me.IndiceDerniereTravee))
     End Sub
 
     Private Sub InitialiseTablesCombi()
@@ -713,7 +713,7 @@ Public Class cls_Poutre
         'ReDim PoutreCible.TypeMaintien(PoutreSource.TypeMaintien.GetUpperBound(0))
         'PoutreCible.TypeMaintien = PoutreSource.TypeMaintien.Clone
 
-        Cls_Dalle.DeepClone(PoutreSource.Dalle, PoutreCible.Dalle)
+        cls_Dalle.DeepClone(PoutreSource.Dalle, PoutreCible.Dalle)
         PoutreCible.Dalle = PoutreSource.Dalle.Clone
 
         ReDim PoutreCible.Maintiens(PoutreSource.Maintiens.Length - 1)
@@ -755,8 +755,8 @@ Public Class cls_Poutre
         'Clone param calcul
 
         'Clone ChargeUtilisateur
-        PoutreCible.ChargesU = New Dictionary(Of String, Cls_ChargementUtilisateur)
-        For Each element As KeyValuePair(Of String, Cls_ChargementUtilisateur) In PoutreSource.ChargesU
+        PoutreCible.ChargesU = New Dictionary(Of String, cls_ChargementUtilisateur)
+        For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In PoutreSource.ChargesU
             PoutreCible.ChargesU.Add(element.Key, element.Value)
         Next
 
@@ -1326,7 +1326,7 @@ Public Class cls_Poutre
 
 #End Region
 
-#Region " Maillage : propriétés des barres le longe de la poutre "
+#Region " Maillage : propriétés des barres le long de la poutre "
 
     Public Function IndiceTabElts(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal) As Integer
         '-------------------------------------------------------------------------------------------
@@ -1540,7 +1540,99 @@ Public Class cls_Poutre
 
 #End Region
 
-#Region " Chargements, poids propre et combinaisons "
+#Region " Combinaisons "
+
+#End Region
+
+#Region " Préparation des cas de charge "
+
+    Private Sub InitialiseChargesRetraitDalle(ByRef MyCas As cls_CasDeCharge)
+        '-------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Préparation du cas de charge "Retrait" pour les poutres mixtes usuelles
+        '-------------------------------------------------------------------------------------------
+        '   MyCas       [S] :   Cas de charge
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim nEqSH As Decimal
+        Dim Nsh, Msh As Decimal
+        Const SIGNESH As Decimal = 1
+        Dim iTravPrem As Integer = Me.IndicePremiereTravee
+        Dim iTravDern As Integer = Me.IndiceDerniereTravee
+        Dim xGauche, xDroite As Decimal
+
+        '--> Initialisation
+
+        nEqSH = Me.Elements(MyCas.IndElts).nEqC
+
+        '--> Préparation du cas de charge
+
+        For iTrav As Integer = 1 To Me.NombreTraveesDeuxAppuis
+
+            Me.ParametresRetraitDalle(nEqSH, iTrav, Nsh, Msh)
+
+            If iTrav = iTravPrem Then
+                xGauche = 0
+            Else
+                xGauche = 0.15 * Me.LongueurTravee(iTrav)
+            End If
+
+            If iTrav = iTravDern Then
+                xDroite = Me.LongueurTravee(iTrav)
+            Else
+                xDroite = 0.85 * Me.LongueurTravee(iTrav)
+            End If
+
+            MyCas.Moments(iTrav).Add(New cls_Moment(xGauche, SIGNESH * Msh))
+            MyCas.Moments(iTrav).Add(New cls_Moment(xDroite, -SIGNESH * Msh))
+
+        Next
+
+    End Sub
+
+    Public Sub ParametresRetraitDalle(nEqDal As Decimal, iTrav As Integer, ByRef Nsh As Decimal, ByRef Msh As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Calcul des paramètres permettant le calcul du cas de charge retrait de la dalle
+        '-------------------------------------------------------------------------------------------
+        '   nEqDal      [E] :   Coefficient d'équivalence pour le béton de la dalle
+        '   iTrav       [E] :   Indice de la travée
+        '   Nsh         [S] :   Effort normal dans la dalle du au retrait
+        '   Msh         [S] :   Moment fléchissant correspondant
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Beff As Decimal
+        Dim zANe As Decimal
+        Dim InertieY, MelRd As Decimal
+        Dim nEqEc As Decimal = nEqDal
+        Dim lSimpleM As Boolean = False
+        Dim Tc As Decimal
+        Dim EpsilonSh As Decimal = Me.Param.EpsilonSH
+        Dim DeltaZ As Decimal
+
+        '--> Calcul des propriétés à mi-travée
+
+        Beff = Me.BeffDalle(Me.LongueurTravee(iTrav) / 2, iTrav, lSimpleM, True, Me.EnuTypeLargeurParticipante.LargeurTotale)
+        Tc = Me.Dalle.EpaisseurActive
+        Me.Section.ProprietesElastiquesMixteMyy(1, True, Me.Param.Gamma, nEqEc, nEqDal, Beff, Me.Dalle, zANe, InertieY, MelRd)
+        DeltaZ = Me.Dalle.zTop - Tc / 2 - zANe
+
+        '--> Effort normal dans la dalle
+
+        Nsh = Beff * tc / nEqDal * Me.Section.Acier.EYoung * kConvMPaPa * EpsilonSh
+        Msh = Nsh * deltaz
+
+    End Sub
+
+#End Region
+
+#Region " Chargements, poids propre "
 
     Public Sub InitialiseCasdeChargesCalcul()
         '-------------------------------------------------------------------------------------------
@@ -1561,6 +1653,7 @@ Public Class cls_Poutre
         Dim nEqDalleCT, nEqDalleLT As Decimal
         Dim nEqEnrobCT, nEqEnrobLT As Decimal
 
+        '# ZZZ Assurer la liaison avec les fichiers langue
         Dim strChargesPermanentes As String = "Permanent loads"
         Dim strPoidsPropre As String = "Self weight"
         Dim strPoidsPropreEtaye As String = "Self weight with props"
@@ -1575,6 +1668,8 @@ Public Class cls_Poutre
         Dim IndiceG As Integer
         Dim IndiceQ As Integer
 
+        Dim NbTrav, iTrav0 As Integer
+
         '--> Initialisation
 
         lMixte = Me.lMixte
@@ -1587,13 +1682,16 @@ Public Class cls_Poutre
         nEqDalleLT = 3 * nEqDalleCT
         nEqEnrobLT = 3 * nEqEnrobCT
 
+        iTrav0 = Me.IndicePremiereTravee
+        NbTrav = Me.NbTravees
+
         '--> Traitement des charges permanentes 
 
         '# Charges permanentes globales
 
         If (Not lMixte) Or lEtaitComplet Then
             IndiceG = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
-            Me.ChargesA.Add(New Cls_CasDeCharge(strChargesPermanentes, "G", IndiceG))
+            Me.ChargesA.Add(New cls_CasDeCharge(strChargesPermanentes, "G", IndiceG, iTrav0, NbTrav))
         End If
 
         '# Charges de poids propres pour les poutres mixtes non étayées
@@ -1603,16 +1701,16 @@ Public Class cls_Poutre
             IndiceG = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
 
             If lNonEtaye Then
-                Me.ChargesA.Add(New Cls_CasDeCharge(strPoidsPropre, "G1", Me.IndiceTabElts(False, 0, nEqEnrobLT)))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, "G1", Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
             Else
                 'Cas de l'étaiement ponctuel
-                Me.ChargesA.Add(New Cls_CasDeCharge(strPoidsPropre, "G1pp", Me.IndiceTabElts(False, 0, nEqEnrobLT)))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, "G1pp", Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
 
-                Me.ChargesA.Add(New Cls_CasDeCharge(strPoidsPropre, "G1c", IndiceG))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, "G1c", IndiceG, iTrav0, NbTrav))
 
             End If
 
-            Me.ChargesA.Add(New Cls_CasDeCharge(strAutresChargesPermanentes, "G2", IndiceG))
+            Me.ChargesA.Add(New cls_CasDeCharge(strAutresChargesPermanentes, "G2", IndiceG, iTrav0, NbTrav))
 
         End If
 
@@ -1621,18 +1719,18 @@ Public Class cls_Poutre
         IndiceQ = Me.IndiceTabElts(lMixte, nEqDalleCT, nEqEnrobCT)
 
         If Me.NbTravees = 1 Then
-            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 1", "Q1", IndiceQ))
-            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 2", "Q2", IndiceQ))
+            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1", "Q1", IndiceQ, iTrav0, NbTrav))
+            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2", "Q2", IndiceQ, iTrav0, NbTrav))
 
         Else
 
-            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 1", "Q1#1", IndiceQ))
-            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 2", "Q1#2", IndiceQ))
-            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 3", "Q1#3", IndiceQ))
+            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 1", "Q1#1", IndiceQ, iTrav0, NbTrav))
+            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 2", "Q1#2", IndiceQ, iTrav0, NbTrav))
+            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 3", "Q1#3", IndiceQ, iTrav0, NbTrav))
 
-            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 1", "Q2#1", IndiceQ))
-            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 2", "Q2#2", IndiceQ))
-            Me.ChargesA.Add(New Cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 3", "Q3#3", IndiceQ))
+            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 1", "Q2#1", IndiceQ, iTrav0, NbTrav))
+            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 2", "Q2#2", IndiceQ, iTrav0, NbTrav))
+            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 3", "Q3#3", IndiceQ, iTrav0, NbTrav))
 
         End If
 
@@ -1641,17 +1739,18 @@ Public Class cls_Poutre
         Dim IndiceSH As Integer = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
 
         If lMixte Then
-            Me.ChargesA.Add(New Cls_CasDeCharge(strRetraitDalle, "SHC", IndiceSH))
+            Me.ChargesA.Add(New cls_CasDeCharge(strRetraitDalle, "SHC", IndiceSH, iTrav0, NbTrav))
         End If
 
         If lEnrob Then
-            Me.ChargesA.Add(New Cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH))
+            Me.ChargesA.Add(New cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH, iTrav0, NbTrav))
         End If
 
         '--> Charges de construction
 
         If lMixte And (Not lEtaitComplet) Then
-            Me.ChargesA.Add(New Cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobLT)))
+            Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
+            InitialiseChargesRetraitDalle(Me.ChargesA(Me.ChargesA.Count - 1))
         End If
 
     End Sub
@@ -1678,7 +1777,7 @@ Public Class cls_Poutre
 
         For iTravee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
 
-            Me.ChargesU(KEYPP).FReparties(iTravee).Add(New Cls_ForceRepartie(0, qPP, Me.LongueurTravee(iTravee), qPP))
+            Me.ChargesU(KEYPP).FReparties(iTravee).Add(New cls_ForceRepartie(0, qPP, Me.LongueurTravee(iTravee), qPP))
 
         Next
 
@@ -1826,6 +1925,12 @@ Public Class cls_Poutre
         Dim CodeError_RDM As Integer
         Dim TextError_RDM As String = String.Empty
         Dim DonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees = Nothing
+        Dim iTravP, iTravD As Integer
+
+        '--> Initialisation
+
+        iTravP = Me.IndicePremiereTravee
+        iTravD = Me.IndiceDerniereTravee
 
         '--> Préparation du modele EF
 
@@ -1834,12 +1939,16 @@ Public Class cls_Poutre
         '--> Boucle sur les cas de charge
 
         For jCdc = 0 To Me.ChargesA.Count - 1
-            PrepareDonneesEFChargement(jCdc, DonneesEF)
+            If Me.ChargesA(jCdc).EstNonNul(iTravP, iTravD) Then
+
+                PrepareDonneesEFChargement(jCdc, iTravP, iTravD, DonneesEF)
+
+                '=== LANCER LE CALCUL ===
+                Call MyDLLRDM.CALCULER(DonneesEF, MyOutput_RDM, CodeError_RDM, TextError_RDM)
+
+            End If
         Next
 
-        '=== LANCER LE CALCUL ===
-
-        Call MyDLLRDM.CALCULER(DonneesEF, MyOutput_RDM, CodeError_RDM, TextError_RDM)
 
     End Sub
 
@@ -1902,7 +2011,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub PrepareDonneesEFChargement(iCas As Integer, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+    Private Sub PrepareDonneesEFChargement(iCas As Integer, iTravP As Integer, iTravD As Integer, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
         '-------------------------------------------------------------------------------------
         '   07/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -1910,7 +2019,13 @@ Public Class cls_Poutre
         '-------------------------------------------------------------------------------------
         '   iCas        [E] :   Indice du cas de charge
         '   pDonneesEF  [S] :   Donnes pour le calcul EF
+        '   iTravP      [E] :   Indice première travée
+        '   iTravD      [E] :   Indice dernière travée
         '-------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iTrav As Integer
 
         '--> Transfert des propriétés de section
 
@@ -1920,6 +2035,49 @@ Public Class cls_Poutre
         Next
 
         '--> Transfert des charges
+
+        For iTrav = iTravP To iTravD
+
+            '# Charges surfaciques
+
+
+
+            '# Forces
+
+            '# Moments
+
+            For iMom As Integer = 0 To Me.ChargesA(iCas).Moments(iTrav).Count - 1
+                AjouteMoment(Me.ChargesA(iCas).Moments(iTrav)(iMom).xPosG, Me.ChargesA(iCas).Moments(iTrav)(iMom).Moment, pDonneesEF)
+            Next
+
+            '# Charges réparties
+
+        Next
+
+    End Sub
+
+    Private Sub AjouteMoment(xMom As Decimal, Moment As Decimal, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+        '-------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Ajout d'un moment dans les paramètres préparatoires au calcul EF
+        '-------------------------------------------------------------------------------------
+        '   xMom        [E] :   Position du moment
+        '   Moment      [E] :   Valeur du moment
+        '   pDonneesEF  [S] :   Donnes pour le calcul EF
+        '-------------------------------------------------------------------------------------
+
+        pDonneesEF.NbMoments += 1
+        If pDonneesEF.NbMoments = 1 Then
+            ReDim pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
+            ReDim pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
+        Else
+            ReDim Preserve pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
+            ReDim Preserve pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
+        End If
+
+        pDonneesEF.Moment(pDonneesEF.NbMoments - 1) = Moment
+        pDonneesEF.xMoment(pDonneesEF.NbMoments - 1) = Moment
 
     End Sub
 

@@ -1,6 +1,6 @@
 ﻿Imports System.Security.Policy
 
-Public Class Cls_Maille
+Public Class cls_Maille
 
 #Region " Structures et définitions "
     Enum EnuTypeMaille

@@ -397,7 +397,7 @@ Public Class Frm_CombinaisonsNormales
         Dim lPsi0Q1, lPsi0Q2 As Boolean
         Dim sCar As Single = MyGr.MeasureString("x", FontNormal).Width / 5
 
-        Dim MyGamma As Cls_Gamma
+        Dim MyGamma As cls_Gamma
 
         MyGamma = MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma.Clone
 

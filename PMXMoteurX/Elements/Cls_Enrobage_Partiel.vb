@@ -1,7 +1,7 @@
 ﻿Imports System.Security.Cryptography
 Imports PropMix_Engine.Cls_Dalle
 
-Public Class Cls_Enrobage_Partiel
+Public Class cls_Enrobage_Partiel
 
 #Region " Structures "
 
@@ -76,17 +76,17 @@ Public Class Cls_Enrobage_Partiel
     ''' <summary>
     ''' Lits d'armature longitudinale (O inférieure / 1 milieu / 2 supérieure)
     ''' </summary>
-    Public LitArma(2) As Cls_ArmatureEnrobage
+    Public LitArma(2) As cls_ArmatureEnrobage
 
     ''' <summary>
     ''' béton de l'enrobage
     ''' </summary>
-    Public Beton As New Cls_Beton
+    Public Beton As New cls_Beton
 
     ''' <summary>
     ''' Acier des armatures
     ''' </summary>
-    Public AcierArmatures As New Cls_AcierArmature
+    Public AcierArmatures As New cls_AcierArmature
 
 #End Region
 
@@ -146,7 +146,7 @@ Public Class Cls_Enrobage_Partiel
         '--> Armatures longitudinales
 
         For i As Integer = 0 To 2
-            Me.LitArma(i) = New Cls_ArmatureEnrobage
+            Me.LitArma(i) = New cls_ArmatureEnrobage
         Next
 
         '--> Lit d'armatures inférieur
@@ -169,7 +169,7 @@ Public Class Cls_Enrobage_Partiel
         Me.LitsArmaOLD(2).lArma = True
         Me.LitsArmaOLD(2).nbArma = 2
 
-        Me.Beton = New Cls_Beton()
+        Me.Beton = New cls_Beton()
 
     End Sub
 
@@ -218,7 +218,7 @@ Public Class Cls_Enrobage_Partiel
         Return Me.MemberwiseClone()
     End Function
 
-    Public Sub DeepClone(ByVal EnrobagePartielSource As Cls_Enrobage_Partiel, ByRef EnrobagePartielCible As Cls_Enrobage_Partiel)
+    Public Sub DeepClone(ByVal EnrobagePartielSource As cls_Enrobage_Partiel, ByRef EnrobagePartielCible As cls_Enrobage_Partiel)
         EnrobagePartielCible = EnrobagePartielSource.Clone
 
         ReDim EnrobagePartielCible.LitsArmaOLD(EnrobagePartielSource.LitsArmaOLD.GetUpperBound(0))
@@ -234,7 +234,7 @@ Public Class Cls_Enrobage_Partiel
 
     End Sub
 
-    Public Shared Sub DeepCopie(EnrobageSource As Cls_Enrobage_Partiel, ByRef EnrobageCible As Cls_Enrobage_Partiel)
+    Public Shared Sub DeepCopie(EnrobageSource As cls_Enrobage_Partiel, ByRef EnrobageCible As cls_Enrobage_Partiel)
 
         EnrobageCible = EnrobageSource.Clone
         EnrobageCible.LitsArmaOLD = EnrobageSource.LitsArmaOLD.Clone

@@ -1,4 +1,4 @@
-﻿Public Class Cls_Dalle
+﻿Public Class cls_Dalle
 
 #Region " Constantes "
 
@@ -66,13 +66,13 @@
     ''' <summary>
     ''' béton de la dalle
     ''' </summary>
-    Public beton As New Cls_Beton
+    Public beton As New cls_Beton
 
     ''' <summary>
     ''' Bac acier de la dalle
     ''' que si dalle mixte
     ''' </summary>
-    Public Bac As New Cls_Bac
+    Public Bac As New cls_Bac
 
     '''' <summary>
     '''' Armatures longitudinales supérieur
@@ -89,12 +89,12 @@
     ''' <summary>
     ''' Acier des armatures
     ''' </summary>
-    Public AcierArmatures As New Cls_AcierArmature
+    Public AcierArmatures As New cls_AcierArmature
 
     ''' <summary>
     ''' Connecteur acier-béton entre dalle et profilé
     ''' </summary>
-    Public Connecteur As New Cls_Connecteur
+    Public Connecteur As New cls_Connecteur
 
 #End Region
 
@@ -230,9 +230,9 @@
             Select Case Me.type
                 Case Enum_TypeDalle.Mixte
                     Select Case Me.Bac.Orientation
-                        Case Cls_Bac.Enum_Orientation.Parallele
+                        Case cls_Bac.Enum_Orientation.Parallele
                             Ep = Me.t_d - Me.Bac.Hp
-                        Case Cls_Bac.Enum_Orientation.Perpendiculaire
+                        Case cls_Bac.Enum_Orientation.Perpendiculaire
                             Ep = Me.t_d - Me.Bac.Hauteur_hpg
                     End Select
                 Case Enum_TypeDalle.Pleine
@@ -337,7 +337,7 @@
         Return Me.MemberwiseClone()
     End Function
 
-    Public Shared Sub DeepClone(DalleSource As Cls_Dalle, ByRef DalleCible As Cls_Dalle)
+    Public Shared Sub DeepClone(DalleSource As cls_Dalle, ByRef DalleCible As cls_Dalle)
 
         DalleCible = DalleSource.Clone()
 

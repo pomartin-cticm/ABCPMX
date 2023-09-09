@@ -73,12 +73,12 @@ Public Class cls_Section
     ''' <summary>
     ''' Acier de la section
     ''' </summary>
-    Public Acier As New Cls_Acier
+    Public Acier As New cls_Acier
 
     ''' <summary>
     ''' Enrobage partiel de la section
     ''' </summary>
-    Public enrobage_partiel As New Cls_Enrobage_Partiel
+    Public enrobage_partiel As New cls_Enrobage_Partiel
 
     ''' <summary>
     ''' Dalle béton de la poutre            ' A SUPPRIMER ?
@@ -98,7 +98,7 @@ Public Class cls_Section
 
 #Region " Propriétés plastiques de la section "
 
-    Public Sub ProprietesPlastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, RhoV As Decimal,
+    Public Sub ProprietesPlastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
                                        ByRef zANP As Decimal, ByRef MplRd As Decimal,
                                        Optional bEff As Decimal = 0, Optional Eta As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
@@ -146,11 +146,11 @@ Public Class cls_Section
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -162,7 +162,7 @@ Public Class cls_Section
             EpaisseurC = Me.ProfilA.HauteurAmeHw
             FdC = Me.enrobage_partiel.Beton.Fck
 
-            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
+            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
 
             'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
 
@@ -170,11 +170,11 @@ Public Class cls_Section
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
 
             End If
         End If
@@ -187,10 +187,10 @@ Public Class cls_Section
             Dim iPos, iBarre As Integer
             Dim NbBarres As Integer
             Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
-            Dim ArmaNeq As Decimal = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
+            Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
             Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
             Const NBMA As Integer = 2
-            nEqEc = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
+            nEqEc = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
 
             For iArma As Integer = 0 To 2
 
@@ -202,7 +202,7 @@ Public Class cls_Section
                         zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
                         PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
 
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, Cls_Maille.EnuTypeMaille.Circulaire)
+                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
 
                     Next
 
@@ -222,8 +222,8 @@ Public Class cls_Section
 
     End Sub
 
-    Public Sub ProprietesPlastiquesMixteMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, RhoV As Decimal,
-                                            bEff As Decimal, Eta As Decimal, MyDalle As Cls_Dalle,
+    Public Sub ProprietesPlastiquesMixteMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
+                                            bEff As Decimal, Eta As Decimal, MyDalle As cls_Dalle,
                                             ByRef zANP As Decimal, ByRef MplRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
@@ -273,11 +273,11 @@ Public Class cls_Section
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -289,7 +289,7 @@ Public Class cls_Section
             EpaisseurC = Me.ProfilA.HauteurAmeHw
             FdC = Me.enrobage_partiel.Beton.Fck
 
-            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
+            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
 
             'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
 
@@ -297,11 +297,11 @@ Public Class cls_Section
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
 
             End If
         End If
@@ -314,7 +314,7 @@ Public Class cls_Section
             Dim iPos, iBarre As Integer
             Dim NbBarres As Integer
             Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
-            Dim ArmaNeq As Decimal = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
+            Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
             Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
             Const NBMA As Integer = 2
             'nEqEc = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
@@ -329,7 +329,7 @@ Public Class cls_Section
                         zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
                         PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
 
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, Cls_Maille.EnuTypeMaille.Circulaire)
+                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
 
                     Next
 
@@ -363,8 +363,8 @@ Public Class cls_Section
 
 #Region " Propriétés élastiques de la section "
 
-    Public Function InertieYY(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, nEqEc As Decimal,
-                              lDalle As Boolean, nEqDal As Decimal, Beff As Decimal, MyDalle As Cls_Dalle) As Decimal
+    Public Function InertieYY(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
+                              lDalle As Boolean, nEqDal As Decimal, Beff As Decimal, MyDalle As cls_Dalle) As Decimal
         '-------------------------------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -396,7 +396,7 @@ Public Class cls_Section
 
     End Function
 
-    Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, nEqEc As Decimal,
+    Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
                                        ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
@@ -442,11 +442,11 @@ Public Class cls_Section
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -458,7 +458,7 @@ Public Class cls_Section
             EpaisseurC = Me.ProfilA.HauteurAmeHw
             FdC = Me.enrobage_partiel.Beton.Fck
 
-            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
+            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
 
             'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
 
@@ -466,11 +466,11 @@ Public Class cls_Section
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
 
             End If
         End If
@@ -483,7 +483,7 @@ Public Class cls_Section
             Dim iPos, iBarre As Integer
             Dim NbBarres As Integer
             Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
-            Dim ArmaNeq As Decimal = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
+            Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
             Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
             Const NBMA As Integer = 2
 
@@ -497,7 +497,7 @@ Public Class cls_Section
                         zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
                         PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
 
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 0.85, Gammas.GammaS, NBMA, Cls_Maille.EnuTypeMaille.Circulaire)
+                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 0.85, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
 
                     Next
 
@@ -521,8 +521,8 @@ Public Class cls_Section
 
     End Sub
 
-    Public Sub ProprietesElastiquesMixteMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, nEqEc As Decimal, nEqDalle As Decimal,
-                                            bEff As Decimal, MyDalle As Cls_Dalle,
+    Public Sub ProprietesElastiquesMixteMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal, nEqDalle As Decimal,
+                                            bEff As Decimal, MyDalle As cls_Dalle,
                                             ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   17/08/23 :  Création - POM
@@ -571,11 +571,11 @@ Public Class cls_Section
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -587,7 +587,7 @@ Public Class cls_Section
             EpaisseurC = Me.ProfilA.HauteurAmeHw
             FdC = Me.enrobage_partiel.Beton.Fck
 
-            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
+            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
 
             'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
 
@@ -595,11 +595,11 @@ Public Class cls_Section
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeSup, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
 
                 '# Congés supérieurs
 
-                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, Cls_Maille.EnuTypeMaille.CongeInf, -1)
+                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
 
             End If
         End If
@@ -612,7 +612,7 @@ Public Class cls_Section
             Dim iPos, iBarre As Integer
             Dim NbBarres As Integer
             Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
-            Dim ArmaNeq As Decimal = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
+            Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
             Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
             Const NBMA As Integer = 2
 
@@ -626,7 +626,7 @@ Public Class cls_Section
                         zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
                         PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
 
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 0.85, Gammas.GammaS, NBMA, Cls_Maille.EnuTypeMaille.Circulaire)
+                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 0.85, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
 
                     Next
 
@@ -662,7 +662,7 @@ Public Class cls_Section
 
     End Sub
 
-    Public Sub ProprietesElastiquesMzz(Signe As Decimal, lValeurRd As Boolean, Gammas As Cls_Gamma, ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
+    Public Sub ProprietesElastiquesMzz(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -705,11 +705,11 @@ Public Class cls_Section
 
             '# Congés supérieurs (c'est à dire, côté gauche)
 
-            MyModele.AddMailleConges(Rc, -Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Rc, -Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs (c'est à dire, côté droite)
 
-            MyModele.AddMailleConges(Rc, +Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Rc, +Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -776,7 +776,7 @@ Public Class cls_Section
             hW = Me.ProfilA.HauteurAmeHw
             Bc = Me.LargeurEnrobagePartielBc
 
-            Gc = 0.3 * Cls_Acier.EYACIER / nEq
+            Gc = 0.3 * cls_Acier.EYACIER / nEq
             Ga = Me.Acier.ModuleG
 
             pInertieTEnrob = 1 / 3 * (1 - 0.63 * Bc / hW) * hW * Bc ^ 3
@@ -1066,7 +1066,7 @@ Public Class cls_Section
 
     End Sub
 
-    Sub New(ByVal nom As String, ByVal typeSection As Enum_TypeSection, Nuance As String, Qualite As String, Reduction As String, MyPlages As List(Of Cls_Acier.strucPlage))
+    Sub New(ByVal nom As String, ByVal typeSection As Enum_TypeSection, Nuance As String, Qualite As String, Reduction As String, MyPlages As List(Of cls_Acier.strucPlage))
 
         Me.Nom = nom
         Me.typeSection = typeSection

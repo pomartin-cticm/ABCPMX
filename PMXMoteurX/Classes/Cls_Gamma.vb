@@ -1,4 +1,4 @@
-﻿Public Class Cls_Gamma
+﻿Public Class cls_Gamma
 
 #Region " Attributs "
 

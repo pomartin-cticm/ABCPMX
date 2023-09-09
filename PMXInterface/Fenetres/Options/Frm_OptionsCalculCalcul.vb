@@ -81,8 +81,8 @@ Public Class Frm_OptionsCalculCalcul
         '--> Norme
 
         Select Case LocalOptionsCalcul.Norme
-            Case Cls_OptionsCalcul.Enu_Normes.EurocodesG1 : Me.cmb_Norme.SelectedIndex = 0
-            Case Cls_OptionsCalcul.Enu_Normes.EurocodesG2 : Me.cmb_Norme.SelectedIndex = 1
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG1 : Me.cmb_Norme.SelectedIndex = 0
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG2 : Me.cmb_Norme.SelectedIndex = 1
         End Select
 
         '--> Modélisation
@@ -115,8 +115,8 @@ Public Class Frm_OptionsCalculCalcul
         If lBuild Then Exit Sub
 
         Select Case Me.cmb_Norme.SelectedIndex
-            Case 0 : LocalOptionsCalcul.Norme = Cls_OptionsCalcul.Enu_Normes.EurocodesG1
-            Case 1 : LocalOptionsCalcul.Norme = Cls_OptionsCalcul.Enu_Normes.EurocodesG2
+            Case 0 : LocalOptionsCalcul.Norme = cls_OptionsCalcul.Enu_Normes.EurocodesG1
+            Case 1 : LocalOptionsCalcul.Norme = cls_OptionsCalcul.Enu_Normes.EurocodesG2
         End Select
 
     End Sub

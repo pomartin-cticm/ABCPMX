@@ -537,7 +537,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
 
-        If MyBeam.Section.enrobage_partiel.Beton.Type = Cls_Beton.Enum_TypeBeton.Leger Then
+        If MyBeam.Section.enrobage_partiel.Beton.Type = cls_Beton.Enum_TypeBeton.Leger Then
             AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("LIGHTCONCRETE"))
         Else
             AddLigneNDC(TABW2 & Bloc("TYPE") & TABAFF & Bloc("NORMALCONCRETE"))
@@ -640,11 +640,11 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, Bloc("GEOM_TRANSV_REINF"))
         Select Case MyBeam.Section.enrobage_partiel.Etriers_Type
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
                 AddLigneNDC(TABW2 & Bloc("STIRRUP_ARRANGEMENT") & TABAFF & Bloc("CLOSED_STIRRUPS"))
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
                 AddLigneNDC(TABW2 & Bloc("STIRRUP_ARRANGEMENT") & TABAFF & Bloc("WELDED_STIRRUPS"))
-            Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
                 AddLigneNDC(TABW2 & Bloc("STIRRUP_ARRANGEMENT") & TABAFF & Bloc("THROUGH_STIRRUPS"))
         End Select
         AddLigneNDC(TABW2 & Bloc("DSI_LAYERS") & TABAFF & GetStringInUnit(MyBeam.Section.enrobage_partiel.Etriers_Phi, Enu_TypeVariable.Dimension, 4, 0, True))
@@ -670,16 +670,16 @@ Module Mod_NoteCalcul
         AddTitreNdC(3, Bloc("GEOMETRY_SLAB"))
 
         Select Case MyBeam.Dalle.type
-            Case Cls_Dalle.Enum_TypeDalle.Pleine
+            Case cls_Dalle.Enum_TypeDalle.Pleine
                 AddLigneNDC(TABW2 & Bloc("TYPE_SLAB") & TABAFF & Bloc("SOLID_SLAB"))
                 AddLigneNDC(TABW2 & Bloc("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & Bloc("THICKNESS_HAUNCH") & TABAFF & "t\-h\= = " & GetStringInUnit(MyBeam.Dalle.t_h, Enu_TypeVariable.Dimension, 4, 0, True))
-            Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
                 AddLigneNDC(TABW2 & Bloc("TYPE_SLAB") & TABAFF & Bloc("SOLID_SLAB_PRECAST"))
                 AddLigneNDC(TABW2 & Bloc("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & Bloc("THICKNESS_PRECAST") & TABAFF & "t\-pc\= = " & GetStringInUnit(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & Bloc("THICKNESS_JOINT") & TABAFF & "t\-j\= = " & GetStringInUnit(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, True))
-            Case Cls_Dalle.Enum_TypeDalle.Mixte
+            Case cls_Dalle.Enum_TypeDalle.Mixte
                 AddLigneNDC(TABW2 & Bloc("TYPE_SLAB") & TABAFF & Bloc("COMPOSITE_SLAB"))
                 AddLigneNDC(TABW2 & Bloc("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
         End Select
@@ -687,7 +687,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
 
-        If MyBeam.Dalle.beton.Type = Cls_Beton.Enum_TypeBeton.Leger Then
+        If MyBeam.Dalle.beton.Type = cls_Beton.Enum_TypeBeton.Leger Then
             AddLigneNDC(TABW2 & Bloc("TYPE") & TABAFF & Bloc("LIGHTCONCRETE"))
         Else
             AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("NORMALCONCRETE"))
@@ -752,10 +752,10 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
         AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
 
-        If MyBeam.Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte Then
+        If MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             AddTitreNdC(3, Bloc("PROFILED_STEEL_SH"))
 
-            If MyBeam.Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Parallele Then
+            If MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
                 AddLigneNDC(TABW2 & Bloc("ORIENTATION_SHEET") & TABAFF & Bloc("LONGITUDINAL"))
             Else
                 AddLigneNDC(TABW2 & Bloc("ORIENTATION_SHEET") & TABAFF & Bloc("TRANSVERSAL"))
@@ -785,29 +785,29 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & Bloc("FP_PSS") & TABAFF & "f\-p\= = " & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
                 AddLigneNDC(TABW2 & Bloc("IPU_PSS") & TABAFF & "I\-pu\= = " & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
 
-                If .Orientation = Cls_Bac.Enum_Orientation.Parallele Then
-                    If .AppuiL = Cls_Bac.EnuConfigLAppui.BacCoupe Then
+                If .Orientation = cls_Bac.Enum_Orientation.Parallele Then
+                    If .AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe Then
                         AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("CUT_DECK"))
                     Else
                         AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("UNCUT_DECK"))
                     End If
                 Else
                     Select Case .AppuiT
-                        Case Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                        Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
                             AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("CONTINU_PSS"))
                             If .lPreperce Then
                                 AddLigneNDC(TABW2 & Bloc("CONNECTION_OPT") & TABAFF & Bloc("PREPUNCHED_PSS"))
                             Else
                                 AddLigneNDC(TABW2 & Bloc("CONNECTION_OPT") & TABAFF & Bloc("THROUGH_DECK_PSS"))
                             End If
-                        Case Cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                        Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
                             AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("PART_CONT_PSS"))
                             If .lPreperce Then
                                 AddLigneNDC(TABW2 & Bloc("CONNECTION_OPT") & TABAFF & Bloc("PREPUNCHED_PSS"))
                             Else
                                 AddLigneNDC(TABW2 & Bloc("CONNECTION_OPT") & TABAFF & Bloc("THROUGH_DECK_PSS"))
                             End If
-                        Case Cls_Bac.EnuConfigTAppui.Discontinu
+                        Case cls_Bac.EnuConfigTAppui.Discontinu
                             AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("NO_CONT_PSS"))
                     End Select
 
@@ -884,7 +884,7 @@ Module Mod_NoteCalcul
                     If nbLigneSautePage >= MAXLIGNEPPAG Then SautePage()
 
                     Dim lDalleMixteEtPerp As Boolean = False
-                    If .Dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte And .Dalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire Then
+                    If .Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And .Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
                         lDalleMixteEtPerp = True
                     End If
 
@@ -1036,7 +1036,7 @@ Module Mod_NoteCalcul
 
         '--> Déclaration 
 
-        Dim MyGamma As Cls_Gamma
+        Dim MyGamma As cls_Gamma
         Const TABEGAL1 As String = "\T27= "
         Const TABVARL3 As String = "\T45"
         Const TABVARL4 As String = "\T70"
@@ -1124,7 +1124,7 @@ Module Mod_NoteCalcul
 
         '--> Déclaration 
 
-        Dim MyGamma As Cls_Gamma
+        Dim MyGamma As cls_Gamma
         Const TABEGAL1 As String = "\T30="
         '--> Initilisation 
 

@@ -579,49 +579,49 @@ Public Class cls_Projet
 
                 Case "ACIER_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim acier_profilA As Cls_Acier
+                    Dim acier_profilA As cls_Acier
                     ReadBlocAcierProfilA(acier_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.Acier = acier_profilA
 
                 Case "ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim enrobage_profilA As Cls_Enrobage_Partiel
+                    Dim enrobage_profilA As cls_Enrobage_Partiel
                     ReadBlocEnrobageProfilA(enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.enrobage_partiel = enrobage_profilA
 
                 Case "ARMATURE_ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim armature_enrobage_profilA(2) As Cls_ArmatureEnrobage
+                    Dim armature_enrobage_profilA(2) As cls_ArmatureEnrobage
                     ReadBlocArmatureEnrobageProfilA(armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.enrobage_partiel.LitArma = armature_enrobage_profilA
 
                 Case "ACIER_ARMATURE_ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim acier_armature_enrobage_profilA As Cls_AcierArmature
+                    Dim acier_armature_enrobage_profilA As cls_AcierArmature
                     ReadBlocAcierArmatureEnrobageProfilA(acier_armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.enrobage_partiel.AcierArmatures = acier_armature_enrobage_profilA
 
                 Case "BETON_ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim beton_enrobage_profilA As Cls_Beton
+                    Dim beton_enrobage_profilA As cls_Beton
                     ReadBlocBetonEnrobageProfilA(beton_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.enrobage_partiel.Beton = beton_enrobage_profilA
 
                 Case "DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim dalle_en_cours As Cls_Dalle
+                    Dim dalle_en_cours As cls_Dalle
                     ReadBlocDalle(dalle_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle = dalle_en_cours
 
                 Case "BETON_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim beton_dalle As Cls_Beton
+                    Dim beton_dalle As cls_Beton
                     ReadBlocBetonDalle(beton_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.beton = beton_dalle
 
                 Case "BAC_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim bac_en_cours As Cls_Bac
+                    Dim bac_en_cours As cls_Bac
                     ReadBlocBacDalle(bac_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.Bac = bac_en_cours
 
@@ -633,19 +633,19 @@ Public Class cls_Projet
 
                 Case "ACIER_ARMATURE_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim acier_armature_dalle As Cls_AcierArmature
+                    Dim acier_armature_dalle As cls_AcierArmature
                     ReadBlocAcierArmatureDalle(acier_armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.AcierArmatures = acier_armature_dalle
 
                 Case "CONNECTEUR_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim connecteur_dalle As Cls_Connecteur
+                    Dim connecteur_dalle As cls_Connecteur
                     ReadBlocConnecteurDalle(connecteur_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.Connecteur = connecteur_dalle
 
                 Case "OPT_CALCULS"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim opt_calculs_en_cours As Cls_OptionsCalcul
+                    Dim opt_calculs_en_cours As cls_OptionsCalcul
                     ReadBlocOptionsCalculs(opt_calculs_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param = opt_calculs_en_cours
 
@@ -664,7 +664,7 @@ Public Class cls_Projet
 
                 Case "OPT_CALCULS_GAMMA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim gamma_opt_calculs As Cls_Gamma
+                    Dim gamma_opt_calculs As cls_Gamma
                     ReadBlocGammaOptionsCalculs(gamma_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param.Gamma = gamma_opt_calculs
 
@@ -932,7 +932,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocAcierProfilA(acier_profilA As Cls_Acier, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocAcierProfilA(acier_profilA As cls_Acier, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -976,7 +976,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocEnrobageProfilA(enrobage_profilA As Cls_Enrobage_Partiel, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocEnrobageProfilA(enrobage_profilA As cls_Enrobage_Partiel, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1063,7 +1063,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocArmatureEnrobageProfilA(armature_enrobage_profilA() As Cls_ArmatureEnrobage, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocArmatureEnrobageProfilA(armature_enrobage_profilA() As cls_ArmatureEnrobage, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1107,7 +1107,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocAcierArmatureEnrobageProfilA(acier_armature_enrobage_profilA As Cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocAcierArmatureEnrobageProfilA(acier_armature_enrobage_profilA As cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1144,7 +1144,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocBetonEnrobageProfilA(beton_enrobage_profilA As Cls_Beton, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocBetonEnrobageProfilA(beton_enrobage_profilA As cls_Beton, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1186,7 +1186,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocDalle(dalle_en_cours As Cls_Dalle, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocDalle(dalle_en_cours As cls_Dalle, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1227,7 +1227,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocBetonDalle(beton_dalle As Cls_Beton, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocBetonDalle(beton_dalle As cls_Beton, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1268,7 +1268,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocBacDalle(bac_dalle As Cls_Bac, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocBacDalle(bac_dalle As cls_Bac, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1359,7 +1359,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocAcierArmatureDalle(acier_armature_dalle As Cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocAcierArmatureDalle(acier_armature_dalle As cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1397,7 +1397,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocConnecteurDalle(connecteur_dalle As Cls_Connecteur, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocConnecteurDalle(connecteur_dalle As cls_Connecteur, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1434,7 +1434,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocOptionsCalculs(opt_calculs_en_cours As Cls_OptionsCalcul, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocOptionsCalculs(opt_calculs_en_cours As cls_OptionsCalcul, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1569,7 +1569,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocGammaOptionsCalculs(gamma_opt_calculs As Cls_Gamma, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocGammaOptionsCalculs(gamma_opt_calculs As cls_Gamma, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration

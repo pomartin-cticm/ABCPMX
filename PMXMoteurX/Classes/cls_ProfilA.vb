@@ -428,14 +428,14 @@ Public Class cls_ProfilA
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.Rcs, -Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.Rcs, -Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
         If Me.Rci > 0 Then
 
             '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.Rci, -Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.Rci, -Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -526,13 +526,13 @@ Public Class cls_ProfilA
 
             '# Congés sous l'âme
 
-            MyModele.AddMailleConges(Me.Rcs, -Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeSup, 0.5)
-            MyModele.AddMailleConges(Me.Rci, -Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeSup, 0.5)
+            MyModele.AddMailleConges(Me.Rcs, -Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, cls_Maille.EnuTypeMaille.CongeSup, 0.5)
+            MyModele.AddMailleConges(Me.Rci, -Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, cls_Maille.EnuTypeMaille.CongeSup, 0.5)
 
             '# Congés au dessus de l'âme
 
-            MyModele.AddMailleConges(Me.Rcs, +Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeInf, 0.5)
-            MyModele.AddMailleConges(Me.Rci, +Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, Cls_Maille.EnuTypeMaille.CongeInf, 0.5)
+            MyModele.AddMailleConges(Me.Rcs, +Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, cls_Maille.EnuTypeMaille.CongeInf, 0.5)
+            MyModele.AddMailleConges(Me.Rci, +Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, cls_Maille.EnuTypeMaille.CongeInf, 0.5)
 
         End If
 
@@ -591,14 +591,14 @@ Public Class cls_ProfilA
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.Rcs, -Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.Rcs, -Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
         If Me.Rci > 0 Then
 
             '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.Rci, -Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, Cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.Rci, -Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 

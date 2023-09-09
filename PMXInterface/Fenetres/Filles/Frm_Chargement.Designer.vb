@@ -769,7 +769,7 @@ Partial Class Frm_Chargement
         Me.TLPan_ChargesLineiqueSurfaciques.RowCount = 4
         Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70.0!))
-        Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 41.0!))
+        Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.TLPan_ChargesLineiqueSurfaciques.Size = New System.Drawing.Size(450, 280)
         Me.TLPan_ChargesLineiqueSurfaciques.TabIndex = 2
@@ -807,10 +807,10 @@ Partial Class Frm_Chargement
         Me.pan_ChargesLineiques.Controls.Add(Me.txt_x1_Lineique)
         Me.pan_ChargesLineiques.Controls.Add(Me.txt_Indice_Lineique)
         Me.pan_ChargesLineiques.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_ChargesLineiques.Location = New System.Drawing.Point(0, 141)
+        Me.pan_ChargesLineiques.Location = New System.Drawing.Point(0, 130)
         Me.pan_ChargesLineiques.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ChargesLineiques.Name = "pan_ChargesLineiques"
-        Me.pan_ChargesLineiques.Size = New System.Drawing.Size(450, 139)
+        Me.pan_ChargesLineiques.Size = New System.Drawing.Size(450, 150)
         Me.pan_ChargesLineiques.TabIndex = 3
         '
         'btn_InfoPP
@@ -1129,7 +1129,7 @@ Partial Class Frm_Chargement
         Me.lbl_ChargesLineiques.Location = New System.Drawing.Point(0, 100)
         Me.lbl_ChargesLineiques.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_ChargesLineiques.Name = "lbl_ChargesLineiques"
-        Me.lbl_ChargesLineiques.Size = New System.Drawing.Size(450, 41)
+        Me.lbl_ChargesLineiques.Size = New System.Drawing.Size(450, 30)
         Me.lbl_ChargesLineiques.TabIndex = 2
         Me.lbl_ChargesLineiques.Text = "lbl_ChargesLineiques"
         Me.lbl_ChargesLineiques.TextAlign = System.Drawing.ContentAlignment.MiddleCenter

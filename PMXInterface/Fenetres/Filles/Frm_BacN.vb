@@ -14,7 +14,7 @@ Public Class Frm_BacN
 
     Dim lBuild As Boolean = True
 
-    Dim MyBac As Cls_Bac
+    Dim MyBac As cls_Bac
 
     Dim ProducteursBacs As New List(Of String)
 
@@ -126,7 +126,7 @@ Public Class Frm_BacN
 
     Private Sub InitialiseProducteursBacs()
 
-        For Each kvp As KeyValuePair(Of String, Cls_Bac) In BaseBacs
+        For Each kvp As KeyValuePair(Of String, cls_Bac) In BaseBacs
 
             Dim MyProd As String
             If kvp.Value.Producteur = "" Then
@@ -262,7 +262,7 @@ Public Class Frm_BacN
 
         '--> Boucle sur tous les profilés de la gamme
 
-        For Each kVs As KeyValuePair(Of String, Cls_Bac) In BaseBacs
+        For Each kVs As KeyValuePair(Of String, cls_Bac) In BaseBacs
 
             ProducteurBac = kVs.Value.Producteur
 
@@ -360,7 +360,7 @@ Public Class Frm_BacN
         Return lOK
     End Function
 
-    Private Sub TransfertSaisie(ByRef BacSave As Cls_Bac, ByRef lModif As Boolean)
+    Private Sub TransfertSaisie(ByRef BacSave As cls_Bac, ByRef lModif As Boolean)
 
         'If BacSave.lDatabase <> MyBac.lDatabase Then lModif = True
         'BacSave.lDatabase = MyBac.lDatabase
@@ -460,13 +460,13 @@ Public Class Frm_BacN
         Me.img_Bac.Invalidate()
     End Sub
 
-    Private Sub TransfertSaisieGridBac(Etiquette As String, ByRef MyBac As Cls_Bac)
+    Private Sub TransfertSaisieGridBac(Etiquette As String, ByRef MyBac As cls_Bac)
 
         MyBac = BaseBacs(Etiquette).Clone
 
     End Sub
 
-    Private Sub AfficherParametresBac(MyBac As Cls_Bac)
+    Private Sub AfficherParametresBac(MyBac As cls_Bac)
 
         Dim lBuildBack As Boolean = lBuild
         lBuild = True

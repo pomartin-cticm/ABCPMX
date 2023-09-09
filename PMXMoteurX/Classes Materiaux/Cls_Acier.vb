@@ -1,6 +1,6 @@
 ﻿
 
-Public Class Cls_Acier
+Public Class cls_Acier
 
 #Region " Déclarations "
     Public Const EYACIER As Decimal = 210 * 1000
@@ -166,8 +166,8 @@ Public Class Cls_Acier
 
     Sub New()
 
-        Me.nuance = "S235"
-        Me.qualite = "EC3"
+        Me.Nuance = "S235"
+        Me.Qualite = "EC3"
 
         Me.f_y.w = 235
         Me.f_y.fs = 235
@@ -283,8 +283,8 @@ Public Class Cls_Acier
     ''' <param name="Lines">Lignes d'écriture</param>
     Public Sub EcrireFile(ByRef Lines As List(Of String))
 
-        Lines.Add("   Nuance        = " & nuance)
-        Lines.Add("   Qualite       = " & qualite)
+        Lines.Add("   Nuance        = " & Nuance)
+        Lines.Add("   Qualite       = " & Qualite)
         Lines.Add("   Fyw           = " & f_y.w)
         Lines.Add("   Fyfs          = " & f_y.fs)
         Lines.Add("   Fyfi          = " & f_y.fi)

@@ -13,7 +13,7 @@ Imports PMXMoteur2
 
         '--> Déclarations
 
-        Dim MyBet As New Cls_Beton
+        Dim MyBet As New cls_Beton
         Dim n0 As Decimal
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
@@ -22,7 +22,7 @@ Imports PMXMoteur2
 
         '--> Initialisation
 
-        MyBet.Classe = Cls_Beton.TabClasseBeton(1)      '"C25/30"
+        MyBet.Classe = cls_Beton.TabClasseBeton(1)      '"C25/30"
         MyBet.lLeger = False
         MyBet.Calcul_Proprietes()
 
@@ -116,7 +116,7 @@ Imports PMXMoteur2
 
         '--> Déclarations
 
-        Dim MyBet As New Cls_Beton
+        Dim MyBet As New cls_Beton
         Dim n0 As Decimal
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
@@ -125,7 +125,7 @@ Imports PMXMoteur2
 
         '--> Initialisation
 
-        MyBet.Classe = Cls_Beton.TabClasseBeton(4)      '"C40/30"
+        MyBet.Classe = cls_Beton.TabClasseBeton(4)      '"C40/30"
         MyBet.lLeger = False
         MyBet.Calcul_Proprietes()
 
@@ -219,7 +219,7 @@ Imports PMXMoteur2
 
         '--> Déclarations
 
-        Dim MyBet As New Cls_Beton
+        Dim MyBet As New cls_Beton
         Dim n0 As Decimal
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
@@ -228,7 +228,7 @@ Imports PMXMoteur2
 
         '--> Initialisation
 
-        MyBet.Classe = Cls_Beton.TabClasseBetonLeger(2)      '"LC30/33"
+        MyBet.Classe = cls_Beton.TabClasseBetonLeger(2)      '"LC30/33"
         MyBet.lLeger = True
         MyBet.RhoC = 1500
         MyBet.Calcul_Proprietes()

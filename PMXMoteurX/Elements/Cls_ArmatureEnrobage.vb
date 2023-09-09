@@ -1,4 +1,4 @@
-﻿Public Class Cls_ArmatureEnrobage
+﻿Public Class cls_ArmatureEnrobage
 
 #Region " Constantes "
 

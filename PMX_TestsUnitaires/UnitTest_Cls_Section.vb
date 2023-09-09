@@ -15,7 +15,7 @@ Imports PMXMoteur2
         '--> Déclarations
 
         Dim MySection As New cls_Section
-        Dim MyGamma As New Cls_Gamma
+        Dim MyGamma As New cls_Gamma
         Dim zANP, MplRd As Decimal
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
@@ -127,7 +127,7 @@ Imports PMXMoteur2
         '--> Déclarations
 
         Dim MySection As New cls_Section
-        Dim MyGamma As New Cls_Gamma
+        Dim MyGamma As New cls_Gamma
         Dim zANP, MplRd As Decimal
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
@@ -396,7 +396,7 @@ Imports PMXMoteur2
         '--> Déclarations
 
         Dim MySection As New cls_Section
-        Dim MyGamma As New Cls_Gamma
+        Dim MyGamma As New cls_Gamma
         Dim zANP, MplRd As Decimal
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
@@ -561,7 +561,7 @@ Imports PMXMoteur2
         '--> Déclarations
 
         Dim MySection As New cls_Section
-        Dim MyGamma As New Cls_Gamma
+        Dim MyGamma As New cls_Gamma
         Dim zANP, MplRd As Decimal
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
@@ -655,8 +655,8 @@ Imports PMXMoteur2
         '--> Déclarations
 
         Dim MySection As New cls_Section
-        Dim MyGamma As New Cls_Gamma
-        Dim MyDalle As New Cls_Dalle
+        Dim MyGamma As New cls_Gamma
+        Dim MyDalle As New cls_Dalle
         Dim zANP, MplRd As Decimal
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
@@ -695,10 +695,10 @@ Imports PMXMoteur2
         Eta = 1
         MyDalle.beton.Classe = "C25/30"
         MyDalle.beton.Calcul_Proprietes()
-        MyDalle.type = Cls_Dalle.Enum_TypeDalle.Mixte
+        MyDalle.type = cls_Dalle.Enum_TypeDalle.Mixte
         MyDalle.t_d = 0.12
         MyDalle.Bac.InitialiseCofraPlus60()
-        MyDalle.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
+        MyDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
 
         '--> Tests des propriétés plastiques
 
@@ -773,8 +773,8 @@ Imports PMXMoteur2
         '--> Déclarations
 
         Dim MySection As New cls_Section
-        Dim MyGamma As New Cls_Gamma
-        Dim MyDalle As New Cls_Dalle
+        Dim MyGamma As New cls_Gamma
+        Dim MyDalle As New cls_Dalle
         Dim zANP, MplRd As Decimal
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
@@ -813,7 +813,7 @@ Imports PMXMoteur2
         Eta = 1
         MyDalle.beton.Classe = "C30/37"
         MyDalle.beton.Calcul_Proprietes()
-        MyDalle.type = Cls_Dalle.Enum_TypeDalle.Pleine
+        MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine
         MyDalle.t_d = 0.2
         MyDalle.t_h = 0
 

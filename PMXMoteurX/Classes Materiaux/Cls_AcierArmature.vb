@@ -1,4 +1,4 @@
-﻿Public Class Cls_AcierArmature
+﻿Public Class cls_AcierArmature
 
 #Region " Constantes "
 
@@ -31,7 +31,7 @@
 
     Public Sub New()
         Me.Classe = "B500"
-        Me.Es = Cls_Acier.EYACIER
+        Me.Es = cls_Acier.EYACIER
         MAJProprietes()
     End Sub
 
@@ -49,7 +49,7 @@
 
     Public Sub MAJProprietes()
 
-        Me.FsK = Me.TabFsk(Array.IndexOf(TabClasseAcierArma, Me.Classe))
+        Me.FsK = Me.TabFsk(Array.IndexOf(tabClasseAcierArma, Me.Classe))
 
     End Sub
 

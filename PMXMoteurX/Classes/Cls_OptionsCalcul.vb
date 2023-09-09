@@ -1,6 +1,6 @@
 ﻿'Imports PropMix_Engine.Cls_Section
 
-Public Class Cls_OptionsCalcul
+Public Class cls_OptionsCalcul
 
 
 #Region " Enumérations et constantes "
@@ -21,7 +21,7 @@ Public Class Cls_OptionsCalcul
 
     Public RH As Decimal                            ' Humidité pour le calcul du béton
 
-    Public Gamma As Cls_Gamma                       ' Coefficients partiels pour le calcul
+    Public Gamma As cls_Gamma                       ' Coefficients partiels pour le calcul
     Public HivossParam As cls_OptionsHivoss         ' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
     Public Norme As Enu_Normes                      ' Norme de calcul
 
@@ -31,7 +31,7 @@ Public Class Cls_OptionsCalcul
     Public nbMinNodesTravee As Integer              ' Nombre mini de noeuds par travée normale
     Public nbMinNodesConsole As Integer             ' Nombre mini de noeuds par travée console
 
-
+    Public EpsilonSH As Decimal                     ' Valeur de la déformation du béton pour le calcul du retrait
 
 #End Region
 
@@ -129,7 +129,7 @@ Public Class Cls_OptionsCalcul
     Sub New()
 
         '--> Coefficients partiels par défaut
-        Gamma = New Cls_Gamma
+        Gamma = New cls_Gamma
 
         '--> Coefficients pour le calcul en dynamique
         HivossParam = New cls_OptionsHivoss
@@ -146,6 +146,8 @@ Public Class Cls_OptionsCalcul
 
         Me.lLargeurEfficaceSimplifiee = False
         Me.lArmaComprimee = False
+
+        Me.EpsilonSH = 325 * 10 ^ -6
 
         Exit Sub
 

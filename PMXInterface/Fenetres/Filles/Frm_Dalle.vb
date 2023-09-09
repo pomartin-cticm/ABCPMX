@@ -11,11 +11,11 @@ Public Class Frm_Dalle
 
     Dim strType(2) As String
 
-    Dim ClasseBeton() As String = Cls_Beton.TabClasseBeton
-    Dim ClasseBetonLeger() As String = Cls_Beton.TabClasseBetonLeger
-    Dim ClasseAcierArma() As String = Cls_AcierArmature.tabClasseAcierArma
+    Dim ClasseBeton() As String = cls_Beton.TabClasseBeton
+    Dim ClasseBetonLeger() As String = cls_Beton.TabClasseBetonLeger
+    Dim ClasseAcierArma() As String = cls_AcierArmature.tabClasseAcierArma
 
-    Public MyDalleLoc As New Cls_Dalle
+    Public MyDalleLoc As New cls_Dalle
     'Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
     Const kADJUST As Decimal = 0.95
 
@@ -172,7 +172,7 @@ Public Class Frm_Dalle
 
     Private Sub InitialisationVariablesLocales()
 
-        Cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
+        cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
 
         lCofraPlus220 = MyDalleLoc.Bac.lCofraplus220
 
@@ -283,11 +283,11 @@ Public Class Frm_Dalle
         '--> Type de dalle
 
         Select Case MyDalleLoc.type
-            Case Cls_Dalle.Enum_TypeDalle.Pleine
+            Case cls_Dalle.Enum_TypeDalle.Pleine
                 Me.cmb_TypeDalle.SelectedIndex = 0
-            Case Cls_Dalle.Enum_TypeDalle.Mixte
+            Case cls_Dalle.Enum_TypeDalle.Mixte
                 Me.cmb_TypeDalle.SelectedIndex = 1
-            Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
                 Me.cmb_TypeDalle.SelectedIndex = 2
         End Select
         MAJI_TypeDalle()
@@ -362,9 +362,9 @@ Public Class Frm_Dalle
         '--> Orientation
 
         Select Case MyDalleLoc.Bac.Orientation
-            Case Cls_Bac.Enum_Orientation.Parallele
+            Case cls_Bac.Enum_Orientation.Parallele
                 Me.rdb_BacParallele.Checked = True
-            Case Cls_Bac.Enum_Orientation.Perpendiculaire
+            Case cls_Bac.Enum_Orientation.Perpendiculaire
                 Me.rdb_BacPerpendiculaire.Checked = True
         End Select
         MAJI_OrientationBac()
@@ -383,18 +383,18 @@ Public Class Frm_Dalle
         MAJI_ConfigurationAppuiBac()
 
         Select Case MyDalleLoc.Bac.AppuiL
-            Case Cls_Bac.EnuConfigLAppui.BacCoupe
+            Case cls_Bac.EnuConfigLAppui.BacCoupe
                 Me.chk_L_PA2.Checked = True
-            Case Cls_Bac.EnuConfigLAppui.BacNonCoupe
+            Case cls_Bac.EnuConfigLAppui.BacNonCoupe
                 Me.chk_L_PA1.Checked = True
         End Select
 
         Select Case MyDalleLoc.Bac.AppuiT
-            Case Cls_Bac.EnuConfigTAppui.BetonSeulContinu
+            Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
                 Me.chk_T_PA2.Checked = True
-            Case Cls_Bac.EnuConfigTAppui.Discontinu
+            Case cls_Bac.EnuConfigTAppui.Discontinu
                 Me.chk_T_PA3.Checked = True
-            Case Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+            Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
                 Me.chk_T_PA1.Checked = True
         End Select
 
@@ -483,10 +483,10 @@ Public Class Frm_Dalle
 
         GereTransfertValeur(MyDalleLoc.t_d, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_d, lModif)
 
-        If MyDalleLoc.type = Cls_Dalle.Enum_TypeDalle.Pleine Then _
+        If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Pleine Then _
         GereTransfertValeur(MyDalleLoc.t_h, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_h, lModif)
 
-        If MyDalleLoc.type = Cls_Dalle.Enum_TypeDalle.Prefabriquee Then
+        If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Prefabriquee Then
             GereTransfertValeur(MyDalleLoc.preDalle_ep, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.preDalle_ep, lModif)
             GereTransfertValeur(MyDalleLoc.preDalle_tjoint, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.preDalle_tjoint, lModif)
         End If
@@ -747,23 +747,23 @@ Public Class Frm_Dalle
         Select Case sender.name
             Case Me.chk_T_PA1.Name
                 'Me.rtxt_Configuration.Text = "Nervure et bac continus"
-                MyDalleLoc.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                MyDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus
                 UnselectChkTConfig(Me.chk_T_PA1.Name)
             Case Me.chk_T_PA2.Name
                 'Me.rtxt_Configuration.Text = "Nervure continue" & Chr(13) & "Bac discontinu"
-                MyDalleLoc.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                MyDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.BetonSeulContinu
                 UnselectChkTConfig(Me.chk_T_PA2.Name)
             Case Me.chk_T_PA3.Name
                 'Me.rtxt_Configuration.Text = "Nervure et bac discontinus"
-                MyDalleLoc.Bac.AppuiT = Cls_Bac.EnuConfigTAppui.Discontinu
+                MyDalleLoc.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
                 UnselectChkTConfig(Me.chk_T_PA3.Name)
             Case Me.chk_L_PA1.Name
                 'Me.rtxt_Configuration.Text = "Uncut deck"
-                MyDalleLoc.Bac.AppuiL = Cls_Bac.EnuConfigLAppui.BacNonCoupe
+                MyDalleLoc.Bac.AppuiL = cls_Bac.EnuConfigLAppui.BacNonCoupe
                 UnselectChkLConfig(Me.chk_L_PA1.Name)
             Case Me.chk_L_PA2.Name
                 'Me.rtxt_Configuration.Text = "Uncut deck" & Chr(13) & "the width of the concrete through is equal to the width of the deck through"
-                MyDalleLoc.Bac.AppuiL = Cls_Bac.EnuConfigLAppui.BacCoupe
+                MyDalleLoc.Bac.AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe
                 UnselectChkLConfig(Me.chk_L_PA2.Name)
         End Select
 
@@ -778,20 +778,20 @@ Public Class Frm_Dalle
         '----------------------------------------------------------------------------------------------------------------
 
         Select Case MyDalleLoc.Bac.Orientation
-            Case Cls_Bac.Enum_Orientation.Perpendiculaire
+            Case cls_Bac.Enum_Orientation.Perpendiculaire
                 Select Case MyDalleLoc.Bac.AppuiT
-                    Case Cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+                    Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
                         Me.rtxt_Configuration.Text = strAppuiTcontinus
-                    Case Cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                    Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
                         Me.rtxt_Configuration.Text = strAppuiTRibContinu & Chr(13) & strAppuiTBacNonContinu
-                    Case Cls_Bac.EnuConfigTAppui.Discontinu
+                    Case cls_Bac.EnuConfigTAppui.Discontinu
                         Me.rtxt_Configuration.Text = strAppuiTDiscontinus
                 End Select
-            Case Cls_Bac.Enum_Orientation.Parallele
+            Case cls_Bac.Enum_Orientation.Parallele
                 Select Case MyDalleLoc.Bac.AppuiL
-                    Case Cls_Bac.EnuConfigLAppui.BacCoupe
+                    Case cls_Bac.EnuConfigLAppui.BacCoupe
                         Me.rtxt_Configuration.Text = strAppuiLbacCut1 & Chr(13) & strAppuiLbacCut2
-                    Case Cls_Bac.EnuConfigLAppui.BacNonCoupe
+                    Case cls_Bac.EnuConfigLAppui.BacNonCoupe
                         Me.rtxt_Configuration.Text = strAppuiLbacUncut
                 End Select
         End Select
@@ -819,9 +819,9 @@ Public Class Frm_Dalle
         If lBuild Then Exit Sub
 
         Select Case Me.cmb_TypeDalle.SelectedIndex
-            Case 0 : MyDalleLoc.type = Cls_Dalle.Enum_TypeDalle.Pleine
-            Case 1 : MyDalleLoc.type = Cls_Dalle.Enum_TypeDalle.Mixte
-            Case 2 : MyDalleLoc.type = Cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case 0 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Pleine
+            Case 1 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Mixte
+            Case 2 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Prefabriquee
         End Select
 
         MAJI_TypeDalle()
@@ -837,7 +837,7 @@ Public Class Frm_Dalle
         '------------------------------------------------------------------------------------
 
         Select Case MyDalleLoc.type
-            Case Cls_Dalle.Enum_TypeDalle.Pleine
+            Case cls_Dalle.Enum_TypeDalle.Pleine
                 Me.pan_Bac.Enabled = False
 
                 Me.pan_Renformis.Visible = True
@@ -848,7 +848,7 @@ Public Class Frm_Dalle
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 255
 
-            Case Cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
                 Me.pan_Bac.Enabled = False
                 Me.pan_Predalle.Visible = True
                 Me.pan_Renformis.Visible = False
@@ -858,7 +858,7 @@ Public Class Frm_Dalle
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 255
 
-            Case Cls_Dalle.Enum_TypeDalle.Mixte
+            Case cls_Dalle.Enum_TypeDalle.Mixte
                 Me.pan_Bac.Enabled = True
                 Me.pan_Predalle.Visible = False
                 Me.pan_Renformis.Visible = False
@@ -947,9 +947,9 @@ Public Class Frm_Dalle
             Case Me.txt_Hd.Name, Me.txt_Td2.Name
 
                 Select Case MyDalleLoc.type
-                    Case Cls_Dalle.Enum_TypeDalle.Pleine, Cls_Dalle.Enum_TypeDalle.Prefabriquee
+                    Case cls_Dalle.Enum_TypeDalle.Pleine, cls_Dalle.Enum_TypeDalle.Prefabriquee
                         ValMin = OptionsScope.EpDallePleineMin / kUnit
-                    Case Cls_Dalle.Enum_TypeDalle.Mixte
+                    Case cls_Dalle.Enum_TypeDalle.Mixte
                         ValMin = (OptionsScope.EpDalleMixteMin + HPMINI) / kUnit
                 End Select
 
@@ -1058,8 +1058,8 @@ Public Class Frm_Dalle
         If lBuild Then Exit Sub
 
         Select Case sender.name
-            Case Me.rdb_BacParallele.Name : MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Parallele
-            Case Me.rdb_BacPerpendiculaire.Name : MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire
+            Case Me.rdb_BacParallele.Name : MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele
+            Case Me.rdb_BacPerpendiculaire.Name : MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
         End Select
         MAJI_OrientationBac()
         Me.img_Dalle.Invalidate()
@@ -1070,12 +1070,12 @@ Public Class Frm_Dalle
 
         Me.chk_L_PA1.Visible = False '   (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
         Me.chk_L_PA2.Visible = False '   (MyDalleLoc.Bac.orientation = Cls_Bac.Enum_Orientation.Parallele)
-        Me.chk_T_PA1.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
-        Me.chk_T_PA2.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
-        Me.chk_T_PA3.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire)
+        Me.chk_T_PA1.Visible = (MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+        Me.chk_T_PA2.Visible = (MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+        Me.chk_T_PA3.Visible = (MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
 
-        Me.pan_DispoConnecteur.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
-        Me.pan_ConfigurationNervures.Visible = (MyDalleLoc.Bac.Orientation = Cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
+        Me.pan_DispoConnecteur.Visible = (MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
+        Me.pan_ConfigurationNervures.Visible = (MyDalleLoc.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And Not lCofraPlus220
     End Sub
 
     Private Sub cmb_ClasseBetonEnrobage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.SelectedIndexChanged

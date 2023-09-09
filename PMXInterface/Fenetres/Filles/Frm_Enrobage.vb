@@ -11,7 +11,7 @@ Public Class Frm_Enrobage
 
     Const iFRMENROBAGE As Integer = 3
     Const kAdjust As Decimal = 0.95
-    Dim MyEnrobage As New Cls_Enrobage_Partiel
+    Dim MyEnrobage As New cls_Enrobage_Partiel
 
     Dim MyBf As Decimal
 
@@ -45,8 +45,8 @@ Public Class Frm_Enrobage
     Dim DiametreArmaNormal() As Decimal = {0.008, 0.01, 0.012}
     Dim RatiosLargeur() As Decimal = {1, 0.9, 0.8}
 
-    Dim ClasseBeton() As String = Cls_Beton.TabClasseBeton
-    Dim ClasseAcierArma() As String = Cls_AcierArmature.tabClasseAcierArma ' {"B450", "B500"}
+    Dim ClasseBeton() As String = cls_Beton.TabClasseBeton
+    Dim ClasseAcierArma() As String = cls_AcierArmature.tabClasseAcierArma ' {"B450", "B500"}
 
     Dim TabNb(3) As String
     Dim TabNbAutre(1) As String
@@ -171,7 +171,7 @@ Public Class Frm_Enrobage
     Private Sub InitialiseVariable()
         MyBf = MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Bfs
 
-        Cls_Enrobage_Partiel.DeepCopie(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel, MyEnrobage)
+        cls_Enrobage_Partiel.DeepCopie(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel, MyEnrobage)
 
     End Sub
 
@@ -227,9 +227,9 @@ Public Class Frm_Enrobage
             Me.txt_EtrierUz.Text = GetStringNoUnit(.Etriers_EnrobageZ, Enu_TypeVariable.Dimension)
 
             Select Case .Etriers_Type
-                Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : Me.cmb_TypeEtriers.SelectedIndex = 0
-                Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant : Me.cmb_TypeEtriers.SelectedIndex = 2
-                Case Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude : Me.cmb_TypeEtriers.SelectedIndex = 1
+                Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : Me.cmb_TypeEtriers.SelectedIndex = 0
+                Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant : Me.cmb_TypeEtriers.SelectedIndex = 2
+                Case cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude : Me.cmb_TypeEtriers.SelectedIndex = 1
             End Select
 
             '--> Béton
@@ -325,11 +325,11 @@ Public Class Frm_Enrobage
             Case Enu_LitArmaEnCours.Inferieur
                 iArma = 0
                 Select Case MyEnrobage.Etriers_Type
-                    Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
+                    Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
                         iStart(0) = 1 : iEnd(0) = 3
                         iStart(1) = 0 : iEnd(1) = 3
                         iStart(2) = 1 : iEnd(2) = 3
-                    Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant, Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
+                    Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant, cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
                         iStart(0) = 1 : iEnd(0) = 3
                         iStart(1) = 0 : iEnd(1) = 3
                         iStart(2) = 0 : iEnd(2) = 3
@@ -344,11 +344,11 @@ Public Class Frm_Enrobage
             Case Enu_LitArmaEnCours.Superieur
                 iArma = 2
                 Select Case MyEnrobage.Etriers_Type
-                    Case Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
+                    Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
                         iStart(0) = 1 : iEnd(0) = 1
                         iStart(1) = 0 : iEnd(1) = 0
                         iStart(2) = 1 : iEnd(2) = 1
-                    Case Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant, Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
+                    Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant, cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
                         iStart(0) = 1 : iEnd(0) = 1
                         iStart(1) = 0 : iEnd(1) = 0
                         iStart(2) = 0 : iEnd(2) = 1
@@ -967,9 +967,9 @@ Public Class Frm_Enrobage
                 MyEnrobage.Etriers_Phi = DiametreEtriers(Indice)
             Case Me.cmb_TypeEtriers.Name
                 Select Case Me.cmb_TypeEtriers.SelectedIndex
-                    Case 0 : MyEnrobage.Etriers_Type = Cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
-                    Case 1 : MyEnrobage.Etriers_Type = Cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
-                    Case 2 : MyEnrobage.Etriers_Type = Cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
+                    Case 0 : MyEnrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
+                    Case 1 : MyEnrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
+                    Case 2 : MyEnrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
                 End Select
 
         End Select

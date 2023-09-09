@@ -628,7 +628,7 @@ Public Class Frm_SectionAcierStandard
     End Sub
 
     Private Sub DrawReductionCurve(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, ByVal kFact As Double, ByVal lSelect As Boolean,
-                                   ByVal EpMax As Double, ByVal Plages As List(Of Cls_Acier.strucPlage), ByVal MyColor As Color, ByVal iEp As Integer, ByVal lNuanceOK As Boolean)
+                                   ByVal EpMax As Double, ByVal Plages As List(Of cls_Acier.strucPlage), ByVal MyColor As Color, ByVal iEp As Integer, ByVal lNuanceOK As Boolean)
         '----------------------------------------------------------------------------------------------
         '
         '   21/09/12 :  Création - Version 3.00
@@ -1353,7 +1353,7 @@ Public Class Frm_SectionAcierStandard
         MySectionLoc.Acier.iStandart = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex
 
         MySectionLoc.Acier.Plages.Clear()
-        Dim MyPlage As Cls_Acier.strucPlage
+        Dim MyPlage As cls_Acier.strucPlage
         For i As Integer = 0 To SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages.Count - 1
             MyPlage.Ep = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Ep
             MyPlage.Fy = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fy
@@ -1673,7 +1673,7 @@ Public Class Frm_SectionAcierStandard
                 End If
                 EpMax = Math.Max(EpMax, kvpSteel.Value.EpMax)
 
-                For Each kVP As Cls_Acier.strucPlage In kvpSteel.Value.Plages
+                For Each kVP As cls_Acier.strucPlage In kvpSteel.Value.Plages
                     Select Case Variable
                         Case EnuDrawProperty.Fu : VMax = Math.Max(VMax, kVP.Fu)
                         Case EnuDrawProperty.Fy : VMax = Math.Max(VMax, kVP.Fy)

@@ -6,7 +6,7 @@ Imports PMXMoteur2
 
     <TestMethod()> Public Sub TestUnit_FonctionK1K2()
 
-        Dim MyBac As New Cls_Bac
+        Dim MyBac As New cls_Bac
 
         Dim K1, K2 As Decimal
         Dim lOk As Boolean
@@ -49,7 +49,7 @@ Imports PMXMoteur2
 
         '# Cofraplus 60
 
-        MyBac = New Cls_Bac
+        MyBac = New cls_Bac
 
         MyBac.Ep = 0.207
         MyBac.Hp = 0.058

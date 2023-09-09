@@ -1,4 +1,4 @@
-﻿Public Class Cls_Beton
+﻿Public Class cls_Beton
 
 #Region " Constantes et Tableaux partagés "
 
@@ -155,7 +155,7 @@
 
         '--> Calculs
 
-        n0 = Cls_Acier.EYACIER / Ecm
+        n0 = cls_Acier.EYACIER / Ecm
 
         Return n0
     End Function
@@ -187,7 +187,7 @@
 
         '--> Calculs
 
-        n0 = Cls_Acier.EYACIER / Ecm
+        n0 = cls_Acier.EYACIER / Ecm
 
         MyBetaFcm = Me.BetaFcm
         MyBeta_t0 = Me.Beta_t0(t0)
@@ -218,7 +218,7 @@
 
     Public Function BetaH(RH As Decimal, h0 As Decimal) As Decimal
         Dim MyBetaH As Decimal
-        Dim h0MM As Decimal = h0 * kunitmm
+        Dim h0MM As Decimal = h0 * kUnitMM
 
         If Me.Fcm <= 35 Then
             MyBetaH = Math.Min(1500, 1.5 * (1 + (3 * RH / 250) ^ 18) * h0MM + 250)

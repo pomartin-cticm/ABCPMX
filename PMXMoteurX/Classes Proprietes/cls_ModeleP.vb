@@ -21,7 +21,7 @@ Public Class cls_ModeleP
     ''' <summary>
     ''' Liste des mailles du modèle
     ''' </summary>
-    Public Mailles As List(Of Cls_Maille)
+    Public Mailles As List(Of cls_Maille)
 
 #End Region
 
@@ -30,7 +30,7 @@ Public Class cls_ModeleP
     Public Sub New()
 
         nbElts = 0
-        Mailles = New List(Of Cls_Maille)
+        Mailles = New List(Of cls_Maille)
 
     End Sub
 
@@ -50,7 +50,7 @@ Public Class cls_ModeleP
     ''' <param name="fk">       [E] Valeur caractéristique de la Limite de comportement élastique</param>
     Public Sub AddMaille(Aire As Decimal, Epaisseur As Decimal, zPos As Decimal, DeltaT As Decimal, DeltaC As Decimal, nEq As Decimal,
                          fk As Decimal, kPl As Decimal, Gamma As Decimal,
-                         Optional TypeM As Cls_Maille.EnuTypeMaille = Cls_Maille.EnuTypeMaille.Rectangulaire)
+                         Optional TypeM As cls_Maille.EnuTypeMaille = cls_Maille.EnuTypeMaille.Rectangulaire)
         '------------------------------------------------------------------------------------
         '   15/04/2023 : Création - POM
         '------------------------------------------------------------------------------------
@@ -68,7 +68,7 @@ Public Class cls_ModeleP
         '   TypeM       [E] :   Type de la maille, par défaut rectangle
         '------------------------------------------------------------------------------------
 
-        Mailles.Add(New Cls_Maille(Aire, Epaisseur, 0, 0, zPos, nEq, fk, kPl, Gamma, DeltaC, DeltaT, 1, TypeM))
+        Mailles.Add(New cls_Maille(Aire, Epaisseur, 0, 0, zPos, nEq, fk, kPl, Gamma, DeltaC, DeltaT, 1, TypeM))
 
     End Sub
 
@@ -83,7 +83,7 @@ Public Class cls_ModeleP
 
     Public Sub AddMailleCirculaire(Rayon As Decimal, zPos As Decimal, DeltaT As Decimal, DeltaC As Decimal, nEq As Decimal,
                                    fk As Decimal, kPl As Decimal, Gamma As Decimal,
-                                   Optional Nombre As Integer = 1, Optional TypeM As Cls_Maille.EnuTypeMaille = Cls_Maille.EnuTypeMaille.Circulaire)
+                                   Optional Nombre As Integer = 1, Optional TypeM As cls_Maille.EnuTypeMaille = cls_Maille.EnuTypeMaille.Circulaire)
         '------------------------------------------------------------------------------------
         '   26/04/2023 : Création - POM
         '------------------------------------------------------------------------------------
@@ -101,13 +101,13 @@ Public Class cls_ModeleP
         '   TypeM       [E] :   Type de la maille, par défaut cercle
         '------------------------------------------------------------------------------------
 
-        Mailles.Add(New Cls_Maille(Math.PI * Rayon ^ 2, 0, Rayon, 0, zPos, nEq, fk, kPl, Gamma, DeltaC, DeltaT, Nombre, TypeM))
+        Mailles.Add(New cls_Maille(Math.PI * Rayon ^ 2, 0, Rayon, 0, zPos, nEq, fk, kPl, Gamma, DeltaC, DeltaT, Nombre, TypeM))
 
     End Sub
 
     Public Sub AddMailleConges(Rayon As Decimal, zPos As Decimal, DeltaT As Decimal, DeltaC As Decimal, nEq As Decimal,
                                fk As Decimal, kPl As Decimal, Gamma As Decimal,
-                               TypeM As Cls_Maille.EnuTypeMaille, Optional Nombre As Integer = 1)
+                               TypeM As cls_Maille.EnuTypeMaille, Optional Nombre As Integer = 1)
         '------------------------------------------------------------------------------------
         '   26/04/2023 : Création - POM
         '------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@ Public Class cls_ModeleP
         '   TypeM       [E] :   Type de la maille, par défaut cercle
         '------------------------------------------------------------------------------------
 
-        Mailles.Add(New Cls_Maille((4 - Math.PI) / 2 * Rayon ^ 2, 0, Rayon, 0, zPos, nEq, fk, kPl, Gamma, DeltaC, DeltaT, Nombre, TypeM))
+        Mailles.Add(New cls_Maille((4 - Math.PI) / 2 * Rayon ^ 2, 0, Rayon, 0, zPos, nEq, fk, kPl, Gamma, DeltaC, DeltaT, Nombre, TypeM))
 
     End Sub
 

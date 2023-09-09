@@ -1,6 +1,6 @@
 ﻿'Imports PropMix_Engine.Cls_Dalle
 
-Public Class Cls_Bac
+Public Class cls_Bac
 
 #Region " Autres déclarations "
 
@@ -233,7 +233,7 @@ Public Class Cls_Bac
         Return Me.MemberwiseClone()
     End Function
 
-    Public Sub Copie(BacSource As Cls_Bac, ByRef lModif As Boolean)
+    Public Sub Copie(BacSource As cls_Bac, ByRef lModif As Boolean)
         '-----------------------------------------------------------------
         '   26/06/23 : Création - POM
         '-----------------------------------------------------------------
@@ -272,7 +272,7 @@ Public Class Cls_Bac
 
     End Sub
 
-    Public Sub CopieAutresParam(BacSource As Cls_Bac, ByRef lModif As Boolean)
+    Public Sub CopieAutresParam(BacSource As cls_Bac, ByRef lModif As Boolean)
         '-----------------------------------------------------------------
         '   26/06/23 : Création - POM
         '-----------------------------------------------------------------

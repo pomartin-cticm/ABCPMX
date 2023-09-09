@@ -1,11 +1,11 @@
-﻿Public Class cls_Force
+﻿Public Class cls_Moment
 
-    '#### CLASSE POUR LA DEFINITION D'UNE CHARGE PONCTUELLE ######
+    '#### CLASSE POUR LA DEFINITION D'UN MOMENT PONCTUEL ######
 
 
 #Region " Attributs "
 
-    Public Force As Decimal      ' Valeur de la force (>0 => gravitaire)
+    Public Moment As Decimal      ' Valeur de la force (>0 => gravitaire)
     Public xPosT As Decimal      ' Position par rapport à l'appui gauche de la travée
     Public xPosG As Decimal      ' Position par rapport à l'extrémité gauche de la poutre
 
@@ -13,9 +13,9 @@
 
 #Region " Constructeurs "
 
-    Public Sub New(pxPosT As Decimal, pForce As Decimal)
+    Public Sub New(pxPosT As Decimal, pMoment As Decimal)
         xPosT = pxPosT
-        Force = pForce
+        Moment = pMoment
     End Sub
 
 #End Region

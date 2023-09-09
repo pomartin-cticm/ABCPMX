@@ -46,6 +46,7 @@
 
         InitialiseOptionsCalculPoutre(MyProjet.Poutres(MyProjet.IndEnCours))
         MyProjet.Poutres(MyProjet.IndEnCours).InitialiseCalculs()
+        MyProjet.Poutres(MyProjet.IndEnCours).CalculMNVInternes()
 
         Me.cmb_Symbols.Items.Clear()
 

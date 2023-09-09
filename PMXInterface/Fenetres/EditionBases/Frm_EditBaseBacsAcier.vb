@@ -132,7 +132,7 @@ Public Class Frm_EditBaseBacsAcier
 
         '--> Boucle sur les bacs de la base de données
 
-        For Each kVs As KeyValuePair(Of String, Cls_Bac) In BaseBacs
+        For Each kVs As KeyValuePair(Of String, cls_Bac) In BaseBacs
 
             ProducteurBac = kVs.Value.Producteur
 
@@ -147,7 +147,7 @@ Public Class Frm_EditBaseBacsAcier
         KeyBac = CInt(Me.Grid_Sheets(Me.Col_Ind.Index, Me.Grid_Sheets.SelectedCells(0).RowIndex).Value) - 1
     End Sub
 
-    Private Sub AjouteBacDansGrille(ByVal MyBac As Cls_Bac, ByVal lNew As Boolean)
+    Private Sub AjouteBacDansGrille(ByVal MyBac As cls_Bac, ByVal lNew As Boolean)
         '---------------------------------------------------------------------------------
         '   Ajoute une ligne dans la grille
         '--------------------------------------------------------------------------------------
