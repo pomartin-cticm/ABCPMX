@@ -22,14 +22,14 @@ Partial Class Frm_Chargement
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_Chargement))
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_PartieMilieu = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_Dessin = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Dessin = New System.Windows.Forms.Label()
         Me.pan_Dessin = New System.Windows.Forms.Panel()
-        Me.img_Connection = New System.Windows.Forms.PictureBox()
+        Me.img_Chargement = New System.Windows.Forms.PictureBox()
         Me.TLPan_ReactionsAppuis = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_ReactionsAppuis = New System.Windows.Forms.Label()
         Me.pan_ReactionsAppuis = New System.Windows.Forms.Panel()
@@ -131,12 +131,13 @@ Partial Class Frm_Chargement
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.btn_Annuler = New System.Windows.Forms.Button()
+        Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieMilieu.SuspendLayout()
         Me.TLPan_Dessin.SuspendLayout()
         Me.pan_Dessin.SuspendLayout()
-        CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLPan_ReactionsAppuis.SuspendLayout()
         Me.pan_ReactionsAppuis.SuspendLayout()
         Me.TLPan_PartieHaute.SuspendLayout()
@@ -199,52 +200,37 @@ Partial Class Frm_Chargement
         '
         Me.TLPan_Dessin.ColumnCount = 1
         Me.TLPan_Dessin.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Dessin.Controls.Add(Me.lbl_Dessin, 0, 0)
-        Me.TLPan_Dessin.Controls.Add(Me.pan_Dessin, 0, 1)
+        Me.TLPan_Dessin.Controls.Add(Me.pan_Dessin, 0, 0)
         Me.TLPan_Dessin.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Dessin.Location = New System.Drawing.Point(250, 0)
         Me.TLPan_Dessin.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Dessin.Name = "TLPan_Dessin"
-        Me.TLPan_Dessin.RowCount = 2
-        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
+        Me.TLPan_Dessin.RowCount = 1
+        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200.0!))
+        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_Dessin.Size = New System.Drawing.Size(701, 204)
         Me.TLPan_Dessin.TabIndex = 4
-        '
-        'lbl_Dessin
-        '
-        Me.lbl_Dessin.AutoSize = True
-        Me.lbl_Dessin.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Dessin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Dessin.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Dessin.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Dessin.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Dessin.Name = "lbl_Dessin"
-        Me.lbl_Dessin.Size = New System.Drawing.Size(701, 30)
-        Me.lbl_Dessin.TabIndex = 0
-        Me.lbl_Dessin.Text = "lbl_Dessin"
-        Me.lbl_Dessin.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_Dessin
         '
         Me.pan_Dessin.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Dessin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Dessin.Controls.Add(Me.img_Connection)
+        Me.pan_Dessin.Controls.Add(Me.img_Chargement)
         Me.pan_Dessin.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Dessin.Location = New System.Drawing.Point(0, 30)
+        Me.pan_Dessin.Location = New System.Drawing.Point(0, 0)
         Me.pan_Dessin.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Dessin.Name = "pan_Dessin"
-        Me.pan_Dessin.Size = New System.Drawing.Size(701, 174)
+        Me.pan_Dessin.Size = New System.Drawing.Size(701, 204)
         Me.pan_Dessin.TabIndex = 1
         '
-        'img_Connection
+        'img_Chargement
         '
-        Me.img_Connection.Location = New System.Drawing.Point(19, 23)
-        Me.img_Connection.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_Connection.Name = "img_Connection"
-        Me.img_Connection.Size = New System.Drawing.Size(74, 57)
-        Me.img_Connection.TabIndex = 76
-        Me.img_Connection.TabStop = False
+        Me.img_Chargement.Location = New System.Drawing.Point(19, 23)
+        Me.img_Chargement.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_Chargement.Name = "img_Chargement"
+        Me.img_Chargement.Size = New System.Drawing.Size(74, 57)
+        Me.img_Chargement.TabIndex = 76
+        Me.img_Chargement.TabStop = False
         '
         'TLPan_ReactionsAppuis
         '
@@ -441,7 +427,7 @@ Partial Class Frm_Chargement
         Me.btn_SupprimerPonctuelle.Location = New System.Drawing.Point(134, 211)
         Me.btn_SupprimerPonctuelle.Name = "btn_SupprimerPonctuelle"
         Me.btn_SupprimerPonctuelle.Size = New System.Drawing.Size(75, 23)
-        Me.btn_SupprimerPonctuelle.TabIndex = 83
+        Me.btn_SupprimerPonctuelle.TabIndex = 85
         Me.btn_SupprimerPonctuelle.Text = "btn_Supprimer"
         Me.btn_SupprimerPonctuelle.UseVisualStyleBackColor = True
         '
@@ -818,7 +804,7 @@ Partial Class Frm_Chargement
         Me.btn_InfoPP.Location = New System.Drawing.Point(351, 96)
         Me.btn_InfoPP.Name = "btn_InfoPP"
         Me.btn_InfoPP.Size = New System.Drawing.Size(75, 23)
-        Me.btn_InfoPP.TabIndex = 80
+        Me.btn_InfoPP.TabIndex = 82
         Me.btn_InfoPP.Text = "btn_InfoPP"
         Me.btn_InfoPP.UseVisualStyleBackColor = True
         '
@@ -827,7 +813,7 @@ Partial Class Frm_Chargement
         Me.btn_SupprimerLineique.Location = New System.Drawing.Point(351, 57)
         Me.btn_SupprimerLineique.Name = "btn_SupprimerLineique"
         Me.btn_SupprimerLineique.Size = New System.Drawing.Size(75, 23)
-        Me.btn_SupprimerLineique.TabIndex = 80
+        Me.btn_SupprimerLineique.TabIndex = 81
         Me.btn_SupprimerLineique.Text = "btn_Supprimer"
         Me.btn_SupprimerLineique.UseVisualStyleBackColor = True
         '
@@ -1455,6 +1441,15 @@ Partial Class Frm_Chargement
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
         '
+        'imgList_Navigation
+        '
+        Me.imgList_Navigation.ImageStream = CType(resources.GetObject("imgList_Navigation.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imgList_Navigation.TransparentColor = System.Drawing.Color.Transparent
+        Me.imgList_Navigation.Images.SetKeyName(0, "Precedent")
+        Me.imgList_Navigation.Images.SetKeyName(1, "PrecedentNonDispo")
+        Me.imgList_Navigation.Images.SetKeyName(2, "Suivant")
+        Me.imgList_Navigation.Images.SetKeyName(3, "SuivantNonDispo")
+        '
         'Frm_Chargement
         '
         Me.AcceptButton = Me.btn_OK
@@ -1470,9 +1465,8 @@ Partial Class Frm_Chargement
         Me.TLpan_Main.ResumeLayout(False)
         Me.TLPan_PartieMilieu.ResumeLayout(False)
         Me.TLPan_Dessin.ResumeLayout(False)
-        Me.TLPan_Dessin.PerformLayout()
         Me.pan_Dessin.ResumeLayout(False)
-        CType(Me.img_Connection, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TLPan_ReactionsAppuis.ResumeLayout(False)
         Me.TLPan_ReactionsAppuis.PerformLayout()
         Me.pan_ReactionsAppuis.ResumeLayout(False)
@@ -1515,12 +1509,11 @@ Partial Class Frm_Chargement
     Friend WithEvents pan_ChargesPonctuelles As Panel
     Friend WithEvents TLPan_PartieMilieu As TableLayoutPanel
     Friend WithEvents TLPan_Dessin As TableLayoutPanel
-    Friend WithEvents lbl_Dessin As Label
     Friend WithEvents pan_Dessin As Panel
     Friend WithEvents TLPan_ReactionsAppuis As TableLayoutPanel
     Friend WithEvents lbl_ReactionsAppuis As Label
     Friend WithEvents pan_ReactionsAppuis As Panel
-    Friend WithEvents img_Connection As PictureBox
+    Friend WithEvents img_Chargement As PictureBox
     Friend WithEvents rad_G1 As RadioButton
     Friend WithEvents rad_Qc As RadioButton
     Friend WithEvents rad_Q2 As RadioButton
@@ -1606,4 +1599,5 @@ Partial Class Frm_Chargement
     Friend WithEvents txt_RightSupport As TextBox
     Friend WithEvents lbl_UnitLeftSupport As Label
     Friend WithEvents txt_LeftSupport As TextBox
+    Friend WithEvents imgList_Navigation As ImageList
 End Class

@@ -12,11 +12,42 @@ Public Class Frm_Chargement
     ''' </summary>
     Dim MyPoutreLoc As New cls_Poutre
 
+    ''' <summary>
+    ''' Définition d'une liste de string pour remplir le cmb_travee
+    ''' </summary>
+    Dim strTypeTravee() As String
+    Dim strTypeTravee_ConsoleGauche As String
+    Dim strTypeTravee_TraveeCentrale As String
+    Dim strTypeTravee_ConsoleDroite As String
+    Dim strSpan As String
+
+    'Variables locales
     Dim NbTravees As Integer
     Dim NbChargeLineique, NbChargePonctuelle As Integer
+    Const NbChargeLineiqueMAX As Integer = 4
+    Const NbChargePonctuelleMAX As Integer = 8
 
-    Dim traveeEnCours As Integer
+    Dim traveeEnCours As Integer 'Donne l'indice de la travée en cours (POUR L'OBJET CLS_POUTRE)
+
+    ''' <summary>
+    ''' indice qui informe du numéro de travée en cours (UNIQUEMENT POUR LE DESSIN)
+    ''' </summary>
+    Dim iSelect As Integer = 1
+    '----------------------------------------------
+    '   1 pour la travée principale
+    '   -1 si rien de selectionné
+    '   0 console gauche
+    '   99 console droite
+    '----------------------------------------------
+
     Dim chargeEnCours As String
+    Dim Old_SelectedIndex_cmbTravee As Integer
+    ''' <summary>
+    ''' Message d'avertissement à afficher en cas de changement du cmb_travee alors qu'il y'a des erreurs à corriger
+    ''' </summary>
+    Dim WarningMessage_CmbTravee As String
+
+    Const kConvKNtoN As Decimal = 10 ^ 3
 
     Dim tableau_txtbox_ChargesLineiques(,) As TextBox
     Dim tableau_txtbox_ChargesPonctuelles(,) As TextBox
@@ -27,7 +58,7 @@ Public Class Frm_Chargement
 
 
     Private Sub Frm_Chargement_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+        InitialiserFenetre()
     End Sub
 
     Public Sub InitialiserFenetre()
@@ -35,7 +66,14 @@ Public Class Frm_Chargement
         GestionLangues()
         GestionStyle()
         GestionUnites()
+        RemplirCombobox()
+        PrepareFlechesNavigation()
+        MAJI_BtnNavigation()
         AfficherPoutreEnCours()
+        MAJIAffichageTableauxLineique()
+        MAJIAffichageButtonsLineiques()
+        MAJIAffichageTableauxPonctuel()
+        MAJIAffichageButtonsPonctuels()
         lBuild = False
     End Sub
 
@@ -44,13 +82,30 @@ Public Class Frm_Chargement
 
         NbTravees = MyPoutreLoc.NbTravees
 
+        For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In MyPoutreLoc.ChargesU
+            ReDim Preserve element.Value.QSurf(MyPoutreLoc.IndiceDerniereTravee)
+            ReDim Preserve element.Value.Forces(MyPoutreLoc.IndiceDerniereTravee)
+            ReDim Preserve element.Value.FReparties(MyPoutreLoc.IndiceDerniereTravee)
+
+            For i As Integer = 0 To MyPoutreLoc.IndiceDerniereTravee
+                If element.Value.Forces(i) Is Nothing Then element.Value.Forces(i) = New List(Of cls_Force)
+                If element.Value.FReparties(i) Is Nothing Then element.Value.FReparties(i) = New List(Of cls_ForceRepartie)
+            Next
+        Next
+
         'Par défaut on affiche la première travée sur deux appuis
         traveeEnCours = 1
+
+        'Par défaut on démarre sur G1
         chargeEnCours = "G1"
+        rad_G1.Checked = True
+
+        NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
+        NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
 
         '-----
 
-        ReDim tableau_txtbox_ChargesLineiques(3, 5)
+        ReDim tableau_txtbox_ChargesLineiques(NbChargeLineiqueMAX - 1, 5)
 
         tableau_txtbox_ChargesLineiques(0, 0) = Me.txt_Indice_Lineique_1
         tableau_txtbox_ChargesLineiques(0, 1) = Me.txt_F1_Lineique_1
@@ -78,7 +133,7 @@ Public Class Frm_Chargement
 
         '-----
 
-        ReDim tableau_txtbox_ChargesPonctuelles(7, 2)
+        ReDim tableau_txtbox_ChargesPonctuelles(NbChargePonctuelleMAX - 1, 2)
 
         tableau_txtbox_ChargesPonctuelles(0, 0) = Me.txt_Indice_Ponctuelle_1
         tableau_txtbox_ChargesPonctuelles(0, 1) = Me.txt_x_Ponctuelle_1
@@ -122,8 +177,52 @@ Public Class Frm_Chargement
             BlocLine.CreationBloc(Bloc)
 
             Try
-
                 '=== MENU PRINCIPAL ==============================================================='
+
+                Me.Text = Bloc("TITLE")
+                Me.btn_OK.Text = Bloc("OK")
+                Me.btn_Annuler.Text = Bloc("CANCEL")
+
+                '=== CHOIX DE LA CHARGE ==============================================================='
+
+                Me.lbl_ChoixCharges.Text = Bloc("LOADCASE")
+                Me.lbl_ChoixCharge.Text = Bloc("LOADCASE")
+
+                Me.rad_G1.Text = "G1"
+                Me.rad_G2.Text = "G2"
+                Me.rad_Q1.Text = "Q1"
+                Me.rad_Q2.Text = "Q2"
+                Me.rad_Qc.Text = "QC"
+
+                Me.lbl_ChoixTravee.Text = Bloc("SPAN")
+                strTypeTravee_ConsoleGauche = Bloc("LEFTCANT")
+                strTypeTravee_TraveeCentrale = Bloc("MAINSPAN")
+                strTypeTravee_ConsoleDroite = Bloc("RIGHTCANT")
+                strSpan = Bloc("SPAN")
+
+                WarningMessage_CmbTravee = Bloc("WARNING_CMBTRAVEE")
+
+                '=== FORCE SURFACIQUE ==============================================================='
+                Me.lbl_ChargesSurfaciques.Text = Bloc("SURFACELOAD")
+                Me.lbl_WidthApplication.Text = Bloc("WIDTHAPPLICATION")
+                Me.lbl_UniformLoad.Text = Bloc("UNIFORMLOAD")
+                Me.lbl_ResultingForce.Text = Bloc("RESULTINGFORCE")
+
+                '=== FORCE LINEIQUE ==============================================================='
+                Me.lbl_ChargesLineiques.Text = Bloc("DISTRIBUTEDLOAD")
+                Me.btn_AjouterLineique.Text = Bloc("ADD")
+                Me.btn_SupprimerLineique.Text = Bloc("DELETE")
+                Me.btn_InfoPP.Text = Bloc("INFORMATION")
+
+                '=== FORCE PONCTUELLE ==============================================================='
+                Me.lbl_ChargesPonctuelles.Text = Bloc("CONCENTRATEDLOAD")
+                Me.btn_AjouterPonctuelle.Text = Bloc("ADD")
+                Me.btn_SupprimerPonctuelle.Text = Bloc("DELETE")
+
+                '=== REACTIONS D'APPUIS ==============================================================='
+                lbl_ReactionsAppuis.Text = Bloc("FORCEENDSUPPORT")
+                lbl_LeftSupport.Text = Bloc("LEFTSUPPORT")
+                lbl_RightSupport.Text = Bloc("RIGHTSUPPORT")
 
 
 
@@ -143,6 +242,61 @@ Public Class Frm_Chargement
 
     Private Sub GestionStyle()
         Me.Icon = Frm_PMX.Icon
+
+        Me.img_Chargement.Dock = DockStyle.Fill
+        Me.img_Chargement.BorderStyle = BorderStyle.FixedSingle
+    End Sub
+
+    Private Sub RemplirCombobox()
+        Dim index As Integer = 0
+
+        ReDim strTypeTravee(NbTravees - 1)
+        Dim lCentral As Boolean = (MyPoutreLoc.NombreTraveesDeuxAppuis = 1)
+        If MyPoutreLoc.lTraveeConsoleGauche Then
+            strTypeTravee(Index) = strTypeTravee_ConsoleGauche
+            Index += 1
+        End If
+        For i As Integer = 1 To MyPoutreLoc.NombreTraveesDeuxAppuis
+            If lCentral Then
+                strTypeTravee(Index) = strTypeTravee_TraveeCentrale
+            Else
+                strTypeTravee(Index) = strSpan & " no " & CStr(i)
+            End If
+            Index += 1
+        Next
+        If MyPoutreLoc.lTraveeConsoleDroite Then strTypeTravee(Index) = strTypeTravee_ConsoleDroite
+
+        Me.cmb_Travee.Items.Clear()
+        Me.cmb_Travee.Items.AddRange(strTypeTravee)
+        If MyPoutreLoc.lTraveeConsoleGauche Then
+            Me.cmb_Travee.SelectedIndex = 1
+        Else
+            Me.cmb_Travee.SelectedIndex = 0
+        End If
+
+        Old_SelectedIndex_cmbTravee = Me.cmb_Travee.SelectedIndex
+
+
+    End Sub
+
+    Private Sub PrepareFlechesNavigation()
+        Me.btn_Suivant.Visible = (NbTravees > 1)
+        Me.btn_Precedent.Visible = (NbTravees > 1)
+    End Sub
+
+    Private Sub MAJI_BtnNavigation()
+        If (NbTravees > 1) Then
+            If Me.cmb_Travee.SelectedIndex = 0 Then
+                Me.btn_Precedent.Image = imgList_Navigation.Images("PrecedentNonDispo")
+            Else
+                Me.btn_Precedent.Image = imgList_Navigation.Images("Precedent")
+            End If
+            If Me.cmb_Travee.SelectedIndex = NbTravees - 1 Then
+                Me.btn_Suivant.Image = imgList_Navigation.Images("SuivantNonDispo")
+            Else
+                Me.btn_Suivant.Image = imgList_Navigation.Images("Suivant")
+            End If
+        End If
     End Sub
 
     Private Sub AfficherPoutreEnCours()
@@ -188,7 +342,11 @@ Public Class Frm_Chargement
 
 #Region " Dessins "
 
+    Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Chargement.Paint
 
+        DessinFrmChargement(e.Graphics, MyPoutreLoc, Me.img_Chargement.ClientRectangle.Width, Me.img_Chargement.ClientRectangle.Height, 1, iSelect)
+
+    End Sub
 
 #End Region
 
@@ -199,12 +357,15 @@ Public Class Frm_Chargement
 
 #Region " Evènements saisie "
 
+
     ''' <summary>
     ''' On enregistre le nom de la charge 
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub SelectionChargement(sender As Object, e As EventArgs) Handles rad_G1.CheckedChanged, rad_G2.CheckedChanged, rad_Q1.CheckedChanged, rad_Q2.CheckedChanged, rad_Qc.CheckedChanged
+        If lBuild Then Exit Sub
+
         Select Case sender.name
             Case rad_G1.Name
                 chargeEnCours = "G1"
@@ -218,19 +379,89 @@ Public Class Frm_Chargement
                 chargeEnCours = "QC"
         End Select
 
+        NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
+        NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
+
+        MAJIAffichageButtonsLineiques()
+        MAJIAffichageTableauxLineique()
+        MAJIAffichageButtonsPonctuels()
+        MAJIAffichageTableauxPonctuel()
+
     End Sub
 
-    Private Sub AffichageChargementSelectionne()
-        'Rempli la fenetre avec les valeurs 
+    Private Sub GestionNavigation(sender As Object, e As EventArgs) Handles btn_Suivant.Click, btn_Precedent.Click
+        Dim Index As Integer = Me.cmb_Travee.SelectedIndex
+        Select Case sender.name
+            Case Me.btn_Precedent.Name
+                Me.cmb_Travee.SelectedIndex = Math.Max(0, Index - 1)
+            Case Me.btn_Suivant.Name
+                Me.cmb_Travee.SelectedIndex = Math.Min(NbTravees - 1, Index + 1)
+        End Select
 
-        NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties.Length
-        NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces.Length
+        Select Case cmb_Travee.Text
+            Case strTypeTravee_ConsoleGauche
+                traveeEnCours = 0
+                iSelect = 0
+            Case strTypeTravee_TraveeCentrale
+                traveeEnCours = 1
+                iSelect = 1
+            Case strTypeTravee_ConsoleDroite
+                traveeEnCours = MyPoutreLoc.IndiceTraveeConsoleDroite
+                iSelect = 99
+        End Select
+
+        NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
+        NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
+
+        MAJI_BtnNavigation()
+        MAJIAffichageButtonsLineiques()
+        MAJIAffichageTableauxLineique()
+        MAJIAffichageButtonsPonctuels()
+        MAJIAffichageTableauxPonctuel()
+    End Sub
+
+    Private Sub btn_AjouterSupprimerLineique_Click(sender As Object, e As EventArgs) Handles btn_AjouterLineique.Click, btn_SupprimerLineique.Click
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case btn_AjouterLineique.Name
+                MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Add(New cls_ForceRepartie(0, 1 * kConvKNtoN, 0, 1 * kConvKNtoN, MyPoutreLoc.LongueurTravee(traveeEnCours)))
+                NbChargeLineique = Math.Min(NbChargeLineique + 1, NbChargeLineiqueMAX)
+            Case btn_SupprimerLineique.Name
+                MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).RemoveAt(NbChargeLineique - 1)
+                NbChargeLineique = Math.Max(NbChargeLineique - 1, 0)
+        End Select
+
+
+        MAJIAffichageButtonsLineiques()
+        MAJIAffichageTableauxLineique()
+
+    End Sub
+
+    Private Sub btn_AjouterSupprimerPonctuel_Click(sender As Object, e As EventArgs) Handles btn_AjouterPonctuelle.Click, btn_SupprimerPonctuelle.Click
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case btn_AjouterPonctuelle.Name
+                MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Add(New cls_Force(MyPoutreLoc.LongueurTravee(traveeEnCours), 1 * kConvKNtoN))
+                NbChargePonctuelle = Math.Min(NbChargePonctuelle + 1, NbChargePonctuelleMAX)
+            Case btn_SupprimerPonctuelle.Name
+                MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).RemoveAt(NbChargePonctuelle - 1)
+                NbChargePonctuelle = Math.Max(NbChargePonctuelle - 1, 0)
+        End Select
+
+        MAJIAffichageButtonsPonctuels()
+        MAJIAffichageTableauxPonctuel()
+
+    End Sub
+
+    Private Sub MAJIAffichageTableauxLineique()
 
         'MAJ affichage des tableau 
 
         For i As Integer = 0 To NbChargeLineique - 1
             For j As Integer = 0 To 4
-                tableau_txtbox_ChargesLineiques(i, j).Enabled = True
+                tableau_txtbox_ChargesLineiques(i, j).Visible = True
                 tableau_txtbox_ChargesLineiques(i, 0).Text = i
                 tableau_txtbox_ChargesLineiques(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosG(0)
                 tableau_txtbox_ChargesLineiques(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(0)
@@ -239,12 +470,94 @@ Public Class Frm_Chargement
             Next
         Next
 
-        For i As Integer = NbChargeLineique To 3
+        For i As Integer = NbChargeLineique To NbChargeLineiqueMAX - 1
             For j As Integer = 0 To 4
-                tableau_txtbox_ChargesLineiques(i, j).Enabled = False
+                tableau_txtbox_ChargesLineiques(i, j).Visible = False
                 tableau_txtbox_ChargesLineiques(i, j).Text = ""
             Next
         Next
+
+    End Sub
+
+    Private Sub MAJIAffichageTableauxPonctuel()
+
+        'MAJ affichage des tableau 
+
+        For i As Integer = 0 To NbChargePonctuelle - 1
+            For j As Integer = 0 To 2
+                tableau_txtbox_ChargesPonctuelles(i, j).Visible = True
+                tableau_txtbox_ChargesPonctuelles(i, 0).Text = i
+                tableau_txtbox_ChargesPonctuelles(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).xPosG
+                tableau_txtbox_ChargesPonctuelles(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).Force
+            Next
+        Next
+
+        For i As Integer = NbChargePonctuelle To NbChargePonctuelleMAX - 1
+            For j As Integer = 0 To 2
+                tableau_txtbox_ChargesPonctuelles(i, j).Visible = False
+                tableau_txtbox_ChargesPonctuelles(i, j).Text = ""
+            Next
+        Next
+
+    End Sub
+
+    Private Sub MAJIAffichageButtonsLineiques()
+
+        'MAJ affichage des boutons ajouter, supprimer et information de la section charges linéiques
+
+        btn_InfoPP.Enabled = chargeEnCours = "G1"
+        btn_AjouterLineique.Enabled = Not (NbChargeLineique = NbChargeLineiqueMAX)
+        btn_SupprimerLineique.Enabled = Not (NbChargeLineique = 0)
+
+    End Sub
+
+    Private Sub cmb_Travee_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Travee.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        If ValideSaisieFenetre() Then
+
+            Old_SelectedIndex_cmbTravee = cmb_Travee.SelectedIndex
+
+            'permet de mettre à jour les variables locales qui tracent l'indice de la travée en cours 
+
+            Select Case cmb_Travee.Text
+                Case strTypeTravee_ConsoleGauche
+                    traveeEnCours = 0
+                    iSelect = 0
+                Case strTypeTravee_TraveeCentrale
+                    traveeEnCours = 1
+                    iSelect = 1
+                Case strTypeTravee_ConsoleDroite
+                    traveeEnCours = MyPoutreLoc.IndiceTraveeConsoleDroite
+                    iSelect = 99
+            End Select
+
+            NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
+            NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
+
+
+            MAJI_BtnNavigation()
+
+            MAJIAffichageButtonsLineiques()
+            MAJIAffichageTableauxLineique()
+            MAJIAffichageButtonsPonctuels()
+            MAJIAffichageTableauxPonctuel()
+
+        Else
+
+            If Not cmb_Travee.SelectedIndex = Old_SelectedIndex_cmbTravee Then MsgBox(WarningMessage_CmbTravee)
+            cmb_Travee.SelectedIndex = Old_SelectedIndex_cmbTravee
+
+        End If
+
+    End Sub
+
+    Private Sub MAJIAffichageButtonsPonctuels()
+
+        'MAJ affichage des boutons ajouter et supprimer de la section charges ponctuelles
+
+        btn_AjouterPonctuelle.Enabled = Not (NbChargePonctuelle = NbChargePonctuelleMAX)
+        btn_SupprimerPonctuelle.Enabled = Not (NbChargePonctuelle = 0)
 
     End Sub
 

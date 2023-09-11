@@ -4186,6 +4186,136 @@ Module Mod_Dessins
 
 #End Region
 
+#Region "Dessins pour le chargement (FRM_CHARGEMENT)"
+
+    Public Sub DessinFrmChargement(MyGr As Graphics, MyPoutre As cls_Poutre,
+                                ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                kAdjust As Double, iSelect As Integer,
+                                ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '------------------------------------------------------------------------------------------------------------------
+        '   21/06/23 :  Création - GUD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage des travées dans la fenêtre maintiens latéraux
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MyPoutre    [E] :   Poutre à dessiner
+        '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   xSouris     [E] :   Abscisse de la souris dans l'image
+        '   ySouris     [E] :   Ordonnée de la souris dans l'image
+        '   iSelect     [E] :   Indique quel est la travée sélectionnée
+        '------------------------------------------------------------------------------------------------------------------
+        '   iSelect     0  : console gauche
+        '               i  : travée sur 2 appui no i
+        '               99 : console droite
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar, dCarApp As Decimal
+        Dim MyParAff As Struc_Affichage
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+        Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre As Decimal
+        'Dim LongueurDalle, HauteurDalle As Decimal
+        Dim MyBrushA As New SolidBrush(Color.LightGray)
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyPenDot As New Pen(Color.Black, 1) With {
+            .DashStyle = DashStyle.Dash
+        }
+        Dim MyColor As Color
+        Dim Chaine As String
+        Dim MyFontNormal As Font = FontBase
+        Dim lTotal As Boolean = False
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        '--> Initialisations
+
+        LongueurPoutre = MyPoutre.LongueurTotale
+        LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
+        If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
+        If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
+        HauteurPoutre = LongueurTravee / 70
+        dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
+        dCarApp = LongueurTravee / 30
+
+        '--> Initialisation des paramètres d'affichage
+
+        Select Case iSelect
+            Case 0
+                xMin = 0
+                xMax = LongueurConsoleGauche
+
+            Case 99
+                xMin = LongueurConsoleGauche
+                For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+                    xMin += LongueurTravee
+                Next
+                xMax = xMin + LongueurConsoleDroite
+
+            Case Else
+                xMin = LongueurConsoleGauche
+                For i As Integer = 1 To iSelect - 1
+                    xMin += LongueurTravee
+                Next
+                xMax = xMin + LongueurTravee
+
+        End Select
+
+        yMin = -dCar - dCarApp
+        yMax = HauteurPoutre + dCar
+
+        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+        '--> Représentation de la poutre 
+
+        xe = 0
+        yo = 0
+        ye = HauteurPoutre
+
+        xo = 0
+        xe = LongueurConsoleGauche
+        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
+
+            yo = 0
+            ye = HauteurPoutre
+
+            xo = xe
+            xe = xo + LongueurTravee
+
+            AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        Next
+
+        yo = 0
+        ye = HauteurPoutre
+
+        xo = xe
+        xe = xo + LongueurConsoleDroite
+        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        '--> Représentation des appuis et les maintiens associés
+
+        For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite
+
+            xo = LongueurConsoleGauche + (i - 1) * LongueurTravee
+
+            DessineAppui(MyGr, xo, dCarApp, MyParAff)
+
+        Next
+
+
+
+    End Sub
+
+
+#End Region
+
 #Region " Dessins pour le choix des sections (FRM_AJOUTEPP) "
 
     Public Sub DessinFrmTypeSection(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As cls_Dalle,

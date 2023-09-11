@@ -36,6 +36,29 @@ NAVIGATION				= Navigation
 ZOOM					= Zoom
 SAVEAS					= Save As
 
+#FRM_CHARGEMENT
+TITLE					= Definition of the load cases
+OK						= Ok
+CANCEL					= Cancel
+LOADCASE				= Load case
+LEFTCANT				= Left cantilever span
+MAINSPAN				= Main span
+RIGHTCANT				= Right cantilever span
+SPAN					= Span
+WARNING_CMBTRAVEE			= All the input data must be correct to select an other the span
+SURFACELOAD				= Surface load
+WIDTHAPPLICATION		= Width of application
+UNIFORMLOAD				= Uniform load
+RESULTINGFORCE			= Resulting vertical force
+DISTRIBUTEDLOAD			= Distributed loads 
+CONCENTRATEDLOAD		= Concentrated load
+FORCEENDSUPPORT			= Vertical forces at end supports
+LEFTSUPPORT				= Left support
+RIGHTSUPPORT			= Right support
+ADD						= Add
+DELETE					= Delete
+INFORMATION				= Information
+
 #FRM_COMBINATIONS
 TITLE					= Combinations
 OK						= Ok
