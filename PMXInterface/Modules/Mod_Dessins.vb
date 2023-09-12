@@ -4190,7 +4190,7 @@ Module Mod_Dessins
 
     Public Sub DessinFrmChargement(MyGr As Graphics, MyPoutre As cls_Poutre,
                                 ByVal pWi As Decimal, ByVal pHi As Decimal,
-                                kAdjust As Double, iSelect As Integer,
+                                kAdjust As Double, iSelect As Integer, ByVal traveeEnCours As Integer, ByVal chargeEnCours As String, ByVal Optional iFPonctSelect As Integer = -1, ByVal Optional iFReparSelect As Integer = -1,
                                 ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '------------------------------------------------------------------------------------------------------------------
         '   21/06/23 :  Création - GUD
@@ -4204,6 +4204,7 @@ Module Mod_Dessins
         '   xSouris     [E] :   Abscisse de la souris dans l'image
         '   ySouris     [E] :   Ordonnée de la souris dans l'image
         '   iSelect     [E] :   Indique quel est la travée sélectionnée
+        '   
         '------------------------------------------------------------------------------------------------------------------
         '   iSelect     0  : console gauche
         '               i  : travée sur 2 appui no i
@@ -4235,8 +4236,8 @@ Module Mod_Dessins
 
         LongueurPoutre = MyPoutre.LongueurTotale
         LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
-        If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
-        If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
+        If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee
+        If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee
         HauteurPoutre = LongueurTravee / 70
         dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = LongueurTravee / 30
@@ -4264,7 +4265,7 @@ Module Mod_Dessins
 
         End Select
 
-        yMin = -dCar - dCarApp
+        yMin = dCarApp + 0.6 * dCar
         yMax = HauteurPoutre + dCar
 
         'If MyPoutre.NbTravees > 1 Then yMin -= dCar
@@ -4309,7 +4310,189 @@ Module Mod_Dessins
 
         Next
 
+        '--> Représentation des forces ponctuelles
 
+        For Each force As cls_Force In MyPoutre.ChargesU(chargeEnCours).Forces(traveeEnCours)
+            DessinForcePonctuelle(MyGr, force.xPosG, HauteurPoutre, dCar, MyParAff)
+        Next
+
+
+        '--> Représentation des forces réparties
+        For Each force As cls_ForceRepartie In MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)
+            DessinForceRepartie(MyGr, force.xPosG(0), HauteurPoutre, force.Force(0), force.xPosG(1), HauteurPoutre, force.Force(1), dCar * 0.5, dCar, MyParAff)
+        Next
+
+
+
+    End Sub
+
+
+
+    Public Sub DessinForcePonctuelle(MyGr As Graphics, xPos As Decimal, yPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage)
+        '------------------------------------------------------------------------------------------------------------------
+        '   12/09/23 :  Création - GUD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Dessin d'une flèche pour représenter une force ponctuelle 
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   xPos        [E] :   Position de la charge
+        '   dCar        [E] :   Dimension caractéristique
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xPts(), yPts() As Single
+        Dim nbPts As Integer
+        Dim MyBrushAp As New SolidBrush(Color.DarkGreen)
+
+        'Définition des variables locales pour les dimensions de la fleche
+
+        Dim HauteurExt, HauteurInt, LargeurInt, LargeurExt As Decimal
+
+        HauteurExt = 2.7 * dCar
+        HauteurInt = 0.8 * dCar
+        LargeurInt = 0.4 * dCar
+        LargeurExt = 1.1 * dCar
+
+        '--> Initialisations
+
+        PrepareContourForcePonctuelle(xPos, yPos, HauteurExt, HauteurInt, LargeurInt, LargeurExt, xPts, yPts, nbPts)
+
+        '--> Dessin
+
+        RemplirZone(MyGr, MyBrushAp, xPts, yPts, nbPts, MyParAff, True, True)
+
+
+    End Sub
+
+    Public Sub DessinForceRepartie(MyGr As Graphics, xPosGauche As Decimal, yPosGauche As Decimal, ChargeLinGauche As Decimal, xPosDroite As Decimal, yPosDroite As Decimal, ChargeLinDroite As Decimal, dCar As Decimal, pasFleche As Decimal, MyParAff As Struc_Affichage)
+        '------------------------------------------------------------------------------------------------------------------
+        '   12/09/23 :  Création - GUD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Dessin d'une flèche pour représenter une force ponctuelle 
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   xPos        [E] :   Position de la charge
+        '   dCar        [E] :   Dimension caractéristique
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xPtsGauche(), yPtsGauche() As Single
+        Dim nbPtsGauche As Integer
+        Dim MyBrushAp As New SolidBrush(Color.DarkRed)
+        Dim MyPen As New Pen(Color.DarkRed)
+
+        Dim HauteurExtMax, HauteurExtMin, HauteurExtGauche, HauteurExtDroite, HauteurInt, LargeurInt, LargeurExt As Decimal
+
+        HauteurExtMax = 5.0 * dCar
+        HauteurExtMin = 1 * dCar
+
+
+        If ChargeLinGauche = 0 And ChargeLinDroite = 0 Then
+            HauteurExtGauche = 0
+            HauteurExtDroite = 0
+        ElseIf ChargeLinGauche <= ChargeLinDroite Then
+            HauteurExtGauche = Math.Max(ChargeLinGauche / ChargeLinDroite * HauteurExtMax, HauteurExtMin)
+            HauteurExtDroite = HauteurExtMax
+        Else
+            HauteurExtGauche = HauteurExtMax
+            HauteurExtDroite = Math.Max(ChargeLinDroite / ChargeLinGauche * HauteurExtMax, HauteurExtMin)
+        End If
+        HauteurInt = 0.8 * dCar
+        LargeurInt = 0.4 * dCar
+        LargeurExt = 1.1 * dCar
+
+        '--> Initialisations
+
+        PrepareContourForcePonctuelle(xPosGauche, yPosGauche, HauteurExtGauche, HauteurInt, LargeurInt, LargeurExt, xPtsGauche, yPtsGauche, nbPtsGauche)
+
+        '--> Dessin
+
+        RemplirZone(MyGr, MyBrushAp, xPtsGauche, yPtsGauche, nbPtsGauche, MyParAff, True, True)
+
+        '--> Initialisations
+
+        Dim xPtsDroite(), yPtsDroite() As Single
+        Dim nbPtsDroite As Integer
+
+        PrepareContourForcePonctuelle(xPosDroite, yPosDroite, HauteurExtDroite, HauteurInt, LargeurInt, LargeurExt, xPtsDroite, yPtsDroite, nbPtsDroite)
+
+        '--> Dessin
+
+        RemplirZone(MyGr, MyBrushAp, xPtsDroite, yPtsDroite, nbPtsDroite, MyParAff, True, True)
+
+        '--> Dessin des fleches réparties
+
+        Dim HauteurLoc As Decimal
+
+        For x As Decimal = xPosGauche + pasFleche To xPosDroite Step pasFleche
+            HauteurLoc = HauteurExtGauche + (HauteurExtDroite - HauteurExtGauche) / (xPosDroite - xPosGauche) * x
+            AddFleche(MyGr, MyPen, x, yPosGauche, x, HauteurLoc + yPosGauche, MyParAff, True, False)
+        Next
+
+        AddLigne(MyGr, MyPen, xPosGauche, HauteurExtGauche + yPosGauche, xPosDroite, HauteurExtDroite + yPosGauche, MyParAff)
+
+
+    End Sub
+
+    Private Sub PrepareContourForcePonctuelle(xPos As Decimal, yPos As Decimal, HauteurExt As Decimal, HauteurInt As Decimal, LargeurInt As Decimal, LargeurExt As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   12/09/23    :   Création - GUD
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Préparaton des points définissant le contour d'une flèche pour représenter une force ponctuelle
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   xPos        [E] :   Position de l'appui
+        '   dCar        [E] :   Dimension caractéristique
+        '   xPts, yPts  [S] :   Coordonnées de points définissant le contour
+        '   nbPts       [S] :   Nombre de points dans le contour
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xo, yo As Single
+
+        '--> Initialisaiton
+
+        nbPts = 0
+
+        '--> Contour
+
+        xo = xPos
+        yo = yPos
+
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        xo = xPos - LargeurExt / 2
+        yo = yPos + HauteurInt
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        xo = xPos - LargeurInt / 2
+        yo = yPos + HauteurInt
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        xo = xPos - LargeurInt / 2
+        yo = yPos + HauteurExt
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        xo = xPos + LargeurInt / 2
+        yo = yPos + HauteurExt
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        xo = xPos + LargeurInt / 2
+        yo = yPos + HauteurInt
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
+
+        xo = xPos + LargeurExt / 2
+        yo = yPos + HauteurInt
+
+        AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
     End Sub
 

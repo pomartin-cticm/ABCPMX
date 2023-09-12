@@ -243,8 +243,23 @@ Public Class Frm_Chargement
     Private Sub GestionStyle()
         Me.Icon = Frm_PMX.Icon
 
+        Me.lbl_ChoixCharges.BackColor = CouleurBackBandeaux
+        Me.lbl_ChoixCharges.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_ChargesSurfaciques.BackColor = CouleurBackBandeaux
+        Me.lbl_ChargesSurfaciques.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_ChargesLineiques.BackColor = CouleurBackBandeaux
+        Me.lbl_ChargesLineiques.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_ChargesPonctuelles.BackColor = CouleurBackBandeaux
+        Me.lbl_ChargesPonctuelles.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_ReactionsAppuis.BackColor = CouleurBackBandeaux
+        Me.lbl_ReactionsAppuis.ForeColor = CouleurForeBandeaux
+
         Me.img_Chargement.Dock = DockStyle.Fill
-        Me.img_Chargement.BorderStyle = BorderStyle.FixedSingle
+        'Me.img_Chargement.BorderStyle = BorderStyle.FixedSingle
     End Sub
 
     Private Sub RemplirCombobox()
@@ -253,18 +268,18 @@ Public Class Frm_Chargement
         ReDim strTypeTravee(NbTravees - 1)
         Dim lCentral As Boolean = (MyPoutreLoc.NombreTraveesDeuxAppuis = 1)
         If MyPoutreLoc.lTraveeConsoleGauche Then
-            strTypeTravee(Index) = strTypeTravee_ConsoleGauche
-            Index += 1
+            strTypeTravee(index) = strTypeTravee_ConsoleGauche
+            index += 1
         End If
         For i As Integer = 1 To MyPoutreLoc.NombreTraveesDeuxAppuis
             If lCentral Then
-                strTypeTravee(Index) = strTypeTravee_TraveeCentrale
+                strTypeTravee(index) = strTypeTravee_TraveeCentrale
             Else
-                strTypeTravee(Index) = strSpan & " no " & CStr(i)
+                strTypeTravee(index) = strSpan & " no " & CStr(i)
             End If
-            Index += 1
+            index += 1
         Next
-        If MyPoutreLoc.lTraveeConsoleDroite Then strTypeTravee(Index) = strTypeTravee_ConsoleDroite
+        If MyPoutreLoc.lTraveeConsoleDroite Then strTypeTravee(index) = strTypeTravee_ConsoleDroite
 
         Me.cmb_Travee.Items.Clear()
         Me.cmb_Travee.Items.AddRange(strTypeTravee)
@@ -344,7 +359,7 @@ Public Class Frm_Chargement
 
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Chargement.Paint
 
-        DessinFrmChargement(e.Graphics, MyPoutreLoc, Me.img_Chargement.ClientRectangle.Width, Me.img_Chargement.ClientRectangle.Height, 1, iSelect)
+        DessinFrmChargement(e.Graphics, MyPoutreLoc, Me.img_Chargement.ClientRectangle.Width, Me.img_Chargement.ClientRectangle.Height, 1, iSelect, traveeEnCours, chargeEnCours)
 
     End Sub
 
@@ -418,6 +433,8 @@ Public Class Frm_Chargement
         MAJIAffichageTableauxLineique()
         MAJIAffichageButtonsPonctuels()
         MAJIAffichageTableauxPonctuel()
+
+        img_Chargement.Invalidate()
     End Sub
 
     Private Sub btn_AjouterSupprimerLineique_Click(sender As Object, e As EventArgs) Handles btn_AjouterLineique.Click, btn_SupprimerLineique.Click
@@ -436,6 +453,8 @@ Public Class Frm_Chargement
         MAJIAffichageButtonsLineiques()
         MAJIAffichageTableauxLineique()
 
+        img_Chargement.Invalidate()
+
     End Sub
 
     Private Sub btn_AjouterSupprimerPonctuel_Click(sender As Object, e As EventArgs) Handles btn_AjouterPonctuelle.Click, btn_SupprimerPonctuelle.Click
@@ -452,6 +471,8 @@ Public Class Frm_Chargement
 
         MAJIAffichageButtonsPonctuels()
         MAJIAffichageTableauxPonctuel()
+
+        img_Chargement.Invalidate()
 
     End Sub
 
@@ -542,6 +563,8 @@ Public Class Frm_Chargement
             MAJIAffichageTableauxLineique()
             MAJIAffichageButtonsPonctuels()
             MAJIAffichageTableauxPonctuel()
+
+            img_Chargement.Invalidate()
 
         Else
 

@@ -159,7 +159,7 @@ Partial Class Frm_Chargement
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(951, 524)
+        Me.pan_General.Size = New System.Drawing.Size(961, 524)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -176,7 +176,7 @@ Partial Class Frm_Chargement
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 280.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(951, 524)
+        Me.TLpan_Main.Size = New System.Drawing.Size(961, 524)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieMilieu
@@ -188,12 +188,12 @@ Partial Class Frm_Chargement
         Me.TLPan_PartieMilieu.Controls.Add(Me.TLPan_Dessin, 0, 0)
         Me.TLPan_PartieMilieu.Controls.Add(Me.TLPan_ReactionsAppuis, 0, 0)
         Me.TLPan_PartieMilieu.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieMilieu.Location = New System.Drawing.Point(0, 280)
-        Me.TLPan_PartieMilieu.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_PartieMilieu.Location = New System.Drawing.Point(1, 280)
+        Me.TLPan_PartieMilieu.Margin = New System.Windows.Forms.Padding(1, 0, 1, 1)
         Me.TLPan_PartieMilieu.Name = "TLPan_PartieMilieu"
         Me.TLPan_PartieMilieu.RowCount = 1
         Me.TLPan_PartieMilieu.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieMilieu.Size = New System.Drawing.Size(951, 204)
+        Me.TLPan_PartieMilieu.Size = New System.Drawing.Size(959, 203)
         Me.TLPan_PartieMilieu.TabIndex = 1
         '
         'TLPan_Dessin
@@ -202,13 +202,13 @@ Partial Class Frm_Chargement
         Me.TLPan_Dessin.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Dessin.Controls.Add(Me.pan_Dessin, 0, 0)
         Me.TLPan_Dessin.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Dessin.Location = New System.Drawing.Point(250, 0)
-        Me.TLPan_Dessin.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_Dessin.Location = New System.Drawing.Point(251, 0)
+        Me.TLPan_Dessin.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.TLPan_Dessin.Name = "TLPan_Dessin"
         Me.TLPan_Dessin.RowCount = 1
-        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200.0!))
-        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Dessin.Size = New System.Drawing.Size(701, 204)
+        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 204.0!))
+        Me.TLPan_Dessin.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 204.0!))
+        Me.TLPan_Dessin.Size = New System.Drawing.Size(708, 203)
         Me.TLPan_Dessin.TabIndex = 4
         '
         'pan_Dessin
@@ -218,18 +218,21 @@ Partial Class Frm_Chargement
         Me.pan_Dessin.Controls.Add(Me.img_Chargement)
         Me.pan_Dessin.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Dessin.Location = New System.Drawing.Point(0, 0)
-        Me.pan_Dessin.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Dessin.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Dessin.Name = "pan_Dessin"
-        Me.pan_Dessin.Size = New System.Drawing.Size(701, 204)
+        Me.pan_Dessin.Size = New System.Drawing.Size(708, 203)
         Me.pan_Dessin.TabIndex = 1
         '
         'img_Chargement
         '
-        Me.img_Chargement.Location = New System.Drawing.Point(19, 23)
-        Me.img_Chargement.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_Chargement.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Chargement.Location = New System.Drawing.Point(229, 14)
+        Me.img_Chargement.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.img_Chargement.Name = "img_Chargement"
-        Me.img_Chargement.Size = New System.Drawing.Size(74, 57)
-        Me.img_Chargement.TabIndex = 76
+        Me.img_Chargement.Size = New System.Drawing.Size(247, 174)
+        Me.img_Chargement.TabIndex = 77
         Me.img_Chargement.TabStop = False
         '
         'TLPan_ReactionsAppuis
@@ -245,7 +248,7 @@ Partial Class Frm_Chargement
         Me.TLPan_ReactionsAppuis.RowCount = 2
         Me.TLPan_ReactionsAppuis.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_ReactionsAppuis.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_ReactionsAppuis.Size = New System.Drawing.Size(250, 204)
+        Me.TLPan_ReactionsAppuis.Size = New System.Drawing.Size(250, 203)
         Me.TLPan_ReactionsAppuis.TabIndex = 1
         '
         'lbl_ReactionsAppuis
@@ -272,11 +275,10 @@ Partial Class Frm_Chargement
         Me.pan_ReactionsAppuis.Controls.Add(Me.txt_RightSupport)
         Me.pan_ReactionsAppuis.Controls.Add(Me.lbl_UnitLeftSupport)
         Me.pan_ReactionsAppuis.Controls.Add(Me.txt_LeftSupport)
-        Me.pan_ReactionsAppuis.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_ReactionsAppuis.Location = New System.Drawing.Point(0, 30)
         Me.pan_ReactionsAppuis.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ReactionsAppuis.Name = "pan_ReactionsAppuis"
-        Me.pan_ReactionsAppuis.Size = New System.Drawing.Size(250, 174)
+        Me.pan_ReactionsAppuis.Size = New System.Drawing.Size(250, 173)
         Me.pan_ReactionsAppuis.TabIndex = 1
         '
         'lbl_RightSupport
@@ -338,17 +340,17 @@ Partial Class Frm_Chargement
         Me.TLPan_PartieHaute.ColumnCount = 3
         Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
         Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 450.0!))
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_PartieHaute.Controls.Add(Me.TLPan_ChargesPonctuelles, 2, 0)
         Me.TLPan_PartieHaute.Controls.Add(Me.TLPan_ChargesLineiqueSurfaciques, 1, 0)
         Me.TLPan_PartieHaute.Controls.Add(Me.TLPan_ChoixCharges, 0, 0)
         Me.TLPan_PartieHaute.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieHaute.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_PartieHaute.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_PartieHaute.Location = New System.Drawing.Point(1, 1)
+        Me.TLPan_PartieHaute.Margin = New System.Windows.Forms.Padding(1)
         Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
         Me.TLPan_PartieHaute.RowCount = 1
         Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(951, 280)
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(959, 278)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
         'TLPan_ChargesPonctuelles
@@ -365,7 +367,7 @@ Partial Class Frm_Chargement
         Me.TLPan_ChargesPonctuelles.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_ChargesPonctuelles.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
         Me.TLPan_ChargesPonctuelles.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_ChargesPonctuelles.Size = New System.Drawing.Size(251, 280)
+        Me.TLPan_ChargesPonctuelles.Size = New System.Drawing.Size(259, 278)
         Me.TLPan_ChargesPonctuelles.TabIndex = 3
         '
         'lbl_ChargesPonctuelles
@@ -377,7 +379,7 @@ Partial Class Frm_Chargement
         Me.lbl_ChargesPonctuelles.Location = New System.Drawing.Point(0, 0)
         Me.lbl_ChargesPonctuelles.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_ChargesPonctuelles.Name = "lbl_ChargesPonctuelles"
-        Me.lbl_ChargesPonctuelles.Size = New System.Drawing.Size(251, 30)
+        Me.lbl_ChargesPonctuelles.Size = New System.Drawing.Size(259, 30)
         Me.lbl_ChargesPonctuelles.TabIndex = 0
         Me.lbl_ChargesPonctuelles.Text = "lbl_ChargesPonctuelles"
         Me.lbl_ChargesPonctuelles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -419,7 +421,7 @@ Partial Class Frm_Chargement
         Me.pan_ChargesPonctuelles.Location = New System.Drawing.Point(0, 30)
         Me.pan_ChargesPonctuelles.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ChargesPonctuelles.Name = "pan_ChargesPonctuelles"
-        Me.pan_ChargesPonctuelles.Size = New System.Drawing.Size(251, 250)
+        Me.pan_ChargesPonctuelles.Size = New System.Drawing.Size(259, 248)
         Me.pan_ChargesPonctuelles.TabIndex = 1
         '
         'btn_SupprimerPonctuelle
@@ -445,7 +447,6 @@ Partial Class Frm_Chargement
         Me.txt_F_Ponctuelle_8.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F_Ponctuelle_8.Location = New System.Drawing.Point(143, 182)
         Me.txt_F_Ponctuelle_8.Name = "txt_F_Ponctuelle_8"
-        Me.txt_F_Ponctuelle_8.ReadOnly = True
         Me.txt_F_Ponctuelle_8.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_8.TabIndex = 81
         Me.txt_F_Ponctuelle_8.TabStop = False
@@ -456,7 +457,6 @@ Partial Class Frm_Chargement
         Me.txt_F_Ponctuelle_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F_Ponctuelle_4.Location = New System.Drawing.Point(143, 95)
         Me.txt_F_Ponctuelle_4.Name = "txt_F_Ponctuelle_4"
-        Me.txt_F_Ponctuelle_4.ReadOnly = True
         Me.txt_F_Ponctuelle_4.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_4.TabIndex = 81
         Me.txt_F_Ponctuelle_4.TabStop = False
@@ -467,7 +467,6 @@ Partial Class Frm_Chargement
         Me.txt_F_Ponctuelle_7.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F_Ponctuelle_7.Location = New System.Drawing.Point(143, 160)
         Me.txt_F_Ponctuelle_7.Name = "txt_F_Ponctuelle_7"
-        Me.txt_F_Ponctuelle_7.ReadOnly = True
         Me.txt_F_Ponctuelle_7.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_7.TabIndex = 81
         Me.txt_F_Ponctuelle_7.TabStop = False
@@ -478,7 +477,6 @@ Partial Class Frm_Chargement
         Me.txt_F_Ponctuelle_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F_Ponctuelle_3.Location = New System.Drawing.Point(143, 73)
         Me.txt_F_Ponctuelle_3.Name = "txt_F_Ponctuelle_3"
-        Me.txt_F_Ponctuelle_3.ReadOnly = True
         Me.txt_F_Ponctuelle_3.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_3.TabIndex = 81
         Me.txt_F_Ponctuelle_3.TabStop = False
@@ -489,7 +487,6 @@ Partial Class Frm_Chargement
         Me.txt_F_Ponctuelle_6.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F_Ponctuelle_6.Location = New System.Drawing.Point(143, 139)
         Me.txt_F_Ponctuelle_6.Name = "txt_F_Ponctuelle_6"
-        Me.txt_F_Ponctuelle_6.ReadOnly = True
         Me.txt_F_Ponctuelle_6.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_6.TabIndex = 81
         Me.txt_F_Ponctuelle_6.TabStop = False
@@ -500,7 +497,6 @@ Partial Class Frm_Chargement
         Me.txt_F_Ponctuelle_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F_Ponctuelle_2.Location = New System.Drawing.Point(143, 52)
         Me.txt_F_Ponctuelle_2.Name = "txt_F_Ponctuelle_2"
-        Me.txt_F_Ponctuelle_2.ReadOnly = True
         Me.txt_F_Ponctuelle_2.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_2.TabIndex = 81
         Me.txt_F_Ponctuelle_2.TabStop = False
@@ -511,7 +507,6 @@ Partial Class Frm_Chargement
         Me.txt_x_Ponctuelle_8.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x_Ponctuelle_8.Location = New System.Drawing.Point(76, 182)
         Me.txt_x_Ponctuelle_8.Name = "txt_x_Ponctuelle_8"
-        Me.txt_x_Ponctuelle_8.ReadOnly = True
         Me.txt_x_Ponctuelle_8.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_8.TabIndex = 80
         Me.txt_x_Ponctuelle_8.TabStop = False
@@ -522,7 +517,6 @@ Partial Class Frm_Chargement
         Me.txt_x_Ponctuelle_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x_Ponctuelle_4.Location = New System.Drawing.Point(76, 95)
         Me.txt_x_Ponctuelle_4.Name = "txt_x_Ponctuelle_4"
-        Me.txt_x_Ponctuelle_4.ReadOnly = True
         Me.txt_x_Ponctuelle_4.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_4.TabIndex = 80
         Me.txt_x_Ponctuelle_4.TabStop = False
@@ -533,7 +527,6 @@ Partial Class Frm_Chargement
         Me.txt_x_Ponctuelle_7.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x_Ponctuelle_7.Location = New System.Drawing.Point(76, 160)
         Me.txt_x_Ponctuelle_7.Name = "txt_x_Ponctuelle_7"
-        Me.txt_x_Ponctuelle_7.ReadOnly = True
         Me.txt_x_Ponctuelle_7.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_7.TabIndex = 80
         Me.txt_x_Ponctuelle_7.TabStop = False
@@ -544,7 +537,6 @@ Partial Class Frm_Chargement
         Me.txt_x_Ponctuelle_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x_Ponctuelle_3.Location = New System.Drawing.Point(76, 73)
         Me.txt_x_Ponctuelle_3.Name = "txt_x_Ponctuelle_3"
-        Me.txt_x_Ponctuelle_3.ReadOnly = True
         Me.txt_x_Ponctuelle_3.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_3.TabIndex = 80
         Me.txt_x_Ponctuelle_3.TabStop = False
@@ -555,7 +547,6 @@ Partial Class Frm_Chargement
         Me.txt_x_Ponctuelle_6.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x_Ponctuelle_6.Location = New System.Drawing.Point(76, 139)
         Me.txt_x_Ponctuelle_6.Name = "txt_x_Ponctuelle_6"
-        Me.txt_x_Ponctuelle_6.ReadOnly = True
         Me.txt_x_Ponctuelle_6.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_6.TabIndex = 80
         Me.txt_x_Ponctuelle_6.TabStop = False
@@ -566,7 +557,6 @@ Partial Class Frm_Chargement
         Me.txt_x_Ponctuelle_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x_Ponctuelle_2.Location = New System.Drawing.Point(76, 52)
         Me.txt_x_Ponctuelle_2.Name = "txt_x_Ponctuelle_2"
-        Me.txt_x_Ponctuelle_2.ReadOnly = True
         Me.txt_x_Ponctuelle_2.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_2.TabIndex = 80
         Me.txt_x_Ponctuelle_2.TabStop = False
@@ -577,7 +567,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_8.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_8.Location = New System.Drawing.Point(48, 182)
         Me.txt_Indice_Ponctuelle_8.Name = "txt_Indice_Ponctuelle_8"
-        Me.txt_Indice_Ponctuelle_8.ReadOnly = True
         Me.txt_Indice_Ponctuelle_8.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_8.TabIndex = 79
         Me.txt_Indice_Ponctuelle_8.TabStop = False
@@ -588,7 +577,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_4.Location = New System.Drawing.Point(48, 95)
         Me.txt_Indice_Ponctuelle_4.Name = "txt_Indice_Ponctuelle_4"
-        Me.txt_Indice_Ponctuelle_4.ReadOnly = True
         Me.txt_Indice_Ponctuelle_4.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_4.TabIndex = 79
         Me.txt_Indice_Ponctuelle_4.TabStop = False
@@ -599,7 +587,6 @@ Partial Class Frm_Chargement
         Me.txt_F_Ponctuelle_5.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F_Ponctuelle_5.Location = New System.Drawing.Point(143, 118)
         Me.txt_F_Ponctuelle_5.Name = "txt_F_Ponctuelle_5"
-        Me.txt_F_Ponctuelle_5.ReadOnly = True
         Me.txt_F_Ponctuelle_5.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_5.TabIndex = 81
         Me.txt_F_Ponctuelle_5.TabStop = False
@@ -610,7 +597,6 @@ Partial Class Frm_Chargement
         Me.txt_F_Ponctuelle_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F_Ponctuelle_1.Location = New System.Drawing.Point(143, 31)
         Me.txt_F_Ponctuelle_1.Name = "txt_F_Ponctuelle_1"
-        Me.txt_F_Ponctuelle_1.ReadOnly = True
         Me.txt_F_Ponctuelle_1.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_1.TabIndex = 81
         Me.txt_F_Ponctuelle_1.TabStop = False
@@ -621,7 +607,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_7.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_7.Location = New System.Drawing.Point(48, 160)
         Me.txt_Indice_Ponctuelle_7.Name = "txt_Indice_Ponctuelle_7"
-        Me.txt_Indice_Ponctuelle_7.ReadOnly = True
         Me.txt_Indice_Ponctuelle_7.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_7.TabIndex = 79
         Me.txt_Indice_Ponctuelle_7.TabStop = False
@@ -632,7 +617,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_3.Location = New System.Drawing.Point(48, 73)
         Me.txt_Indice_Ponctuelle_3.Name = "txt_Indice_Ponctuelle_3"
-        Me.txt_Indice_Ponctuelle_3.ReadOnly = True
         Me.txt_Indice_Ponctuelle_3.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_3.TabIndex = 79
         Me.txt_Indice_Ponctuelle_3.TabStop = False
@@ -643,7 +627,6 @@ Partial Class Frm_Chargement
         Me.txt_x_Ponctuelle_5.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x_Ponctuelle_5.Location = New System.Drawing.Point(76, 118)
         Me.txt_x_Ponctuelle_5.Name = "txt_x_Ponctuelle_5"
-        Me.txt_x_Ponctuelle_5.ReadOnly = True
         Me.txt_x_Ponctuelle_5.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_5.TabIndex = 80
         Me.txt_x_Ponctuelle_5.TabStop = False
@@ -654,7 +637,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_6.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_6.Location = New System.Drawing.Point(48, 139)
         Me.txt_Indice_Ponctuelle_6.Name = "txt_Indice_Ponctuelle_6"
-        Me.txt_Indice_Ponctuelle_6.ReadOnly = True
         Me.txt_Indice_Ponctuelle_6.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_6.TabIndex = 79
         Me.txt_Indice_Ponctuelle_6.TabStop = False
@@ -665,7 +647,6 @@ Partial Class Frm_Chargement
         Me.txt_x_Ponctuelle_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x_Ponctuelle_1.Location = New System.Drawing.Point(76, 31)
         Me.txt_x_Ponctuelle_1.Name = "txt_x_Ponctuelle_1"
-        Me.txt_x_Ponctuelle_1.ReadOnly = True
         Me.txt_x_Ponctuelle_1.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_1.TabIndex = 80
         Me.txt_x_Ponctuelle_1.TabStop = False
@@ -676,7 +657,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_2.Location = New System.Drawing.Point(48, 52)
         Me.txt_Indice_Ponctuelle_2.Name = "txt_Indice_Ponctuelle_2"
-        Me.txt_Indice_Ponctuelle_2.ReadOnly = True
         Me.txt_Indice_Ponctuelle_2.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_2.TabIndex = 79
         Me.txt_Indice_Ponctuelle_2.TabStop = False
@@ -687,7 +667,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_5.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_5.Location = New System.Drawing.Point(48, 118)
         Me.txt_Indice_Ponctuelle_5.Name = "txt_Indice_Ponctuelle_5"
-        Me.txt_Indice_Ponctuelle_5.ReadOnly = True
         Me.txt_Indice_Ponctuelle_5.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_5.TabIndex = 79
         Me.txt_Indice_Ponctuelle_5.TabStop = False
@@ -710,7 +689,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_1.Location = New System.Drawing.Point(48, 31)
         Me.txt_Indice_Ponctuelle_1.Name = "txt_Indice_Ponctuelle_1"
-        Me.txt_Indice_Ponctuelle_1.ReadOnly = True
         Me.txt_Indice_Ponctuelle_1.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_1.TabIndex = 79
         Me.txt_Indice_Ponctuelle_1.TabStop = False
@@ -749,15 +727,15 @@ Partial Class Frm_Chargement
         Me.TLPan_ChargesLineiqueSurfaciques.Controls.Add(Me.lbl_ChargesSurfaciques, 0, 0)
         Me.TLPan_ChargesLineiqueSurfaciques.Controls.Add(Me.pan_ChargesSurfaciques, 0, 1)
         Me.TLPan_ChargesLineiqueSurfaciques.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_ChargesLineiqueSurfaciques.Location = New System.Drawing.Point(250, 0)
-        Me.TLPan_ChargesLineiqueSurfaciques.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_ChargesLineiqueSurfaciques.Location = New System.Drawing.Point(251, 0)
+        Me.TLPan_ChargesLineiqueSurfaciques.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
         Me.TLPan_ChargesLineiqueSurfaciques.Name = "TLPan_ChargesLineiqueSurfaciques"
         Me.TLPan_ChargesLineiqueSurfaciques.RowCount = 4
         Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70.0!))
         Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_ChargesLineiqueSurfaciques.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLPan_ChargesLineiqueSurfaciques.Size = New System.Drawing.Size(450, 280)
+        Me.TLPan_ChargesLineiqueSurfaciques.Size = New System.Drawing.Size(448, 278)
         Me.TLPan_ChargesLineiqueSurfaciques.TabIndex = 2
         '
         'pan_ChargesLineiques
@@ -796,7 +774,7 @@ Partial Class Frm_Chargement
         Me.pan_ChargesLineiques.Location = New System.Drawing.Point(0, 130)
         Me.pan_ChargesLineiques.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ChargesLineiques.Name = "pan_ChargesLineiques"
-        Me.pan_ChargesLineiques.Size = New System.Drawing.Size(450, 150)
+        Me.pan_ChargesLineiques.Size = New System.Drawing.Size(448, 148)
         Me.pan_ChargesLineiques.TabIndex = 3
         '
         'btn_InfoPP
@@ -831,7 +809,6 @@ Partial Class Frm_Chargement
         Me.txt_x2_Lineique_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x2_Lineique_4.Location = New System.Drawing.Point(191, 99)
         Me.txt_x2_Lineique_4.Name = "txt_x2_Lineique_4"
-        Me.txt_x2_Lineique_4.ReadOnly = True
         Me.txt_x2_Lineique_4.Size = New System.Drawing.Size(66, 20)
         Me.txt_x2_Lineique_4.TabIndex = 79
         Me.txt_x2_Lineique_4.TabStop = False
@@ -842,7 +819,6 @@ Partial Class Frm_Chargement
         Me.txt_x2_Lineique_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x2_Lineique_3.Location = New System.Drawing.Point(191, 78)
         Me.txt_x2_Lineique_3.Name = "txt_x2_Lineique_3"
-        Me.txt_x2_Lineique_3.ReadOnly = True
         Me.txt_x2_Lineique_3.Size = New System.Drawing.Size(66, 20)
         Me.txt_x2_Lineique_3.TabIndex = 79
         Me.txt_x2_Lineique_3.TabStop = False
@@ -853,7 +829,6 @@ Partial Class Frm_Chargement
         Me.txt_x2_Lineique_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x2_Lineique_2.Location = New System.Drawing.Point(191, 57)
         Me.txt_x2_Lineique_2.Name = "txt_x2_Lineique_2"
-        Me.txt_x2_Lineique_2.ReadOnly = True
         Me.txt_x2_Lineique_2.Size = New System.Drawing.Size(66, 20)
         Me.txt_x2_Lineique_2.TabIndex = 79
         Me.txt_x2_Lineique_2.TabStop = False
@@ -864,7 +839,6 @@ Partial Class Frm_Chargement
         Me.txt_x2_Lineique_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x2_Lineique_1.Location = New System.Drawing.Point(191, 35)
         Me.txt_x2_Lineique_1.Name = "txt_x2_Lineique_1"
-        Me.txt_x2_Lineique_1.ReadOnly = True
         Me.txt_x2_Lineique_1.Size = New System.Drawing.Size(66, 20)
         Me.txt_x2_Lineique_1.TabIndex = 79
         Me.txt_x2_Lineique_1.TabStop = False
@@ -887,7 +861,6 @@ Partial Class Frm_Chargement
         Me.txt_F2_Lineique_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F2_Lineique_4.Location = New System.Drawing.Point(258, 99)
         Me.txt_F2_Lineique_4.Name = "txt_F2_Lineique_4"
-        Me.txt_F2_Lineique_4.ReadOnly = True
         Me.txt_F2_Lineique_4.Size = New System.Drawing.Size(66, 20)
         Me.txt_F2_Lineique_4.TabIndex = 78
         Me.txt_F2_Lineique_4.TabStop = False
@@ -898,7 +871,6 @@ Partial Class Frm_Chargement
         Me.txt_F2_Lineique_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F2_Lineique_3.Location = New System.Drawing.Point(258, 78)
         Me.txt_F2_Lineique_3.Name = "txt_F2_Lineique_3"
-        Me.txt_F2_Lineique_3.ReadOnly = True
         Me.txt_F2_Lineique_3.Size = New System.Drawing.Size(66, 20)
         Me.txt_F2_Lineique_3.TabIndex = 78
         Me.txt_F2_Lineique_3.TabStop = False
@@ -909,7 +881,6 @@ Partial Class Frm_Chargement
         Me.txt_F1_Lineique_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F1_Lineique_4.Location = New System.Drawing.Point(124, 99)
         Me.txt_F1_Lineique_4.Name = "txt_F1_Lineique_4"
-        Me.txt_F1_Lineique_4.ReadOnly = True
         Me.txt_F1_Lineique_4.Size = New System.Drawing.Size(66, 20)
         Me.txt_F1_Lineique_4.TabIndex = 78
         Me.txt_F1_Lineique_4.TabStop = False
@@ -920,7 +891,6 @@ Partial Class Frm_Chargement
         Me.txt_F2_Lineique_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F2_Lineique_2.Location = New System.Drawing.Point(258, 57)
         Me.txt_F2_Lineique_2.Name = "txt_F2_Lineique_2"
-        Me.txt_F2_Lineique_2.ReadOnly = True
         Me.txt_F2_Lineique_2.Size = New System.Drawing.Size(66, 20)
         Me.txt_F2_Lineique_2.TabIndex = 78
         Me.txt_F2_Lineique_2.TabStop = False
@@ -931,7 +901,6 @@ Partial Class Frm_Chargement
         Me.txt_F1_Lineique_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F1_Lineique_3.Location = New System.Drawing.Point(124, 78)
         Me.txt_F1_Lineique_3.Name = "txt_F1_Lineique_3"
-        Me.txt_F1_Lineique_3.ReadOnly = True
         Me.txt_F1_Lineique_3.Size = New System.Drawing.Size(66, 20)
         Me.txt_F1_Lineique_3.TabIndex = 78
         Me.txt_F1_Lineique_3.TabStop = False
@@ -942,7 +911,6 @@ Partial Class Frm_Chargement
         Me.txt_F2_Lineique_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F2_Lineique_1.Location = New System.Drawing.Point(258, 35)
         Me.txt_F2_Lineique_1.Name = "txt_F2_Lineique_1"
-        Me.txt_F2_Lineique_1.ReadOnly = True
         Me.txt_F2_Lineique_1.Size = New System.Drawing.Size(66, 20)
         Me.txt_F2_Lineique_1.TabIndex = 78
         Me.txt_F2_Lineique_1.TabStop = False
@@ -953,7 +921,6 @@ Partial Class Frm_Chargement
         Me.txt_x1_Lineique_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x1_Lineique_4.Location = New System.Drawing.Point(57, 99)
         Me.txt_x1_Lineique_4.Name = "txt_x1_Lineique_4"
-        Me.txt_x1_Lineique_4.ReadOnly = True
         Me.txt_x1_Lineique_4.Size = New System.Drawing.Size(66, 20)
         Me.txt_x1_Lineique_4.TabIndex = 77
         Me.txt_x1_Lineique_4.TabStop = False
@@ -964,7 +931,6 @@ Partial Class Frm_Chargement
         Me.txt_F1_Lineique_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F1_Lineique_2.Location = New System.Drawing.Point(124, 57)
         Me.txt_F1_Lineique_2.Name = "txt_F1_Lineique_2"
-        Me.txt_F1_Lineique_2.ReadOnly = True
         Me.txt_F1_Lineique_2.Size = New System.Drawing.Size(66, 20)
         Me.txt_F1_Lineique_2.TabIndex = 78
         Me.txt_F1_Lineique_2.TabStop = False
@@ -975,7 +941,6 @@ Partial Class Frm_Chargement
         Me.txt_x1_Lineique_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x1_Lineique_3.Location = New System.Drawing.Point(57, 78)
         Me.txt_x1_Lineique_3.Name = "txt_x1_Lineique_3"
-        Me.txt_x1_Lineique_3.ReadOnly = True
         Me.txt_x1_Lineique_3.Size = New System.Drawing.Size(66, 20)
         Me.txt_x1_Lineique_3.TabIndex = 77
         Me.txt_x1_Lineique_3.TabStop = False
@@ -998,7 +963,6 @@ Partial Class Frm_Chargement
         Me.txt_x1_Lineique_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x1_Lineique_2.Location = New System.Drawing.Point(57, 57)
         Me.txt_x1_Lineique_2.Name = "txt_x1_Lineique_2"
-        Me.txt_x1_Lineique_2.ReadOnly = True
         Me.txt_x1_Lineique_2.Size = New System.Drawing.Size(66, 20)
         Me.txt_x1_Lineique_2.TabIndex = 77
         Me.txt_x1_Lineique_2.TabStop = False
@@ -1009,7 +973,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Lineique_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Lineique_4.Location = New System.Drawing.Point(29, 99)
         Me.txt_Indice_Lineique_4.Name = "txt_Indice_Lineique_4"
-        Me.txt_Indice_Lineique_4.ReadOnly = True
         Me.txt_Indice_Lineique_4.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Lineique_4.TabIndex = 75
         Me.txt_Indice_Lineique_4.TabStop = False
@@ -1020,7 +983,6 @@ Partial Class Frm_Chargement
         Me.txt_F1_Lineique_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_F1_Lineique_1.Location = New System.Drawing.Point(124, 35)
         Me.txt_F1_Lineique_1.Name = "txt_F1_Lineique_1"
-        Me.txt_F1_Lineique_1.ReadOnly = True
         Me.txt_F1_Lineique_1.Size = New System.Drawing.Size(66, 20)
         Me.txt_F1_Lineique_1.TabIndex = 78
         Me.txt_F1_Lineique_1.TabStop = False
@@ -1031,7 +993,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Lineique_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Lineique_3.Location = New System.Drawing.Point(29, 78)
         Me.txt_Indice_Lineique_3.Name = "txt_Indice_Lineique_3"
-        Me.txt_Indice_Lineique_3.ReadOnly = True
         Me.txt_Indice_Lineique_3.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Lineique_3.TabIndex = 75
         Me.txt_Indice_Lineique_3.TabStop = False
@@ -1042,7 +1003,6 @@ Partial Class Frm_Chargement
         Me.txt_x1_Lineique_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_x1_Lineique_1.Location = New System.Drawing.Point(57, 35)
         Me.txt_x1_Lineique_1.Name = "txt_x1_Lineique_1"
-        Me.txt_x1_Lineique_1.ReadOnly = True
         Me.txt_x1_Lineique_1.Size = New System.Drawing.Size(66, 20)
         Me.txt_x1_Lineique_1.TabIndex = 77
         Me.txt_x1_Lineique_1.TabStop = False
@@ -1053,7 +1013,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Lineique_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Lineique_2.Location = New System.Drawing.Point(29, 57)
         Me.txt_Indice_Lineique_2.Name = "txt_Indice_Lineique_2"
-        Me.txt_Indice_Lineique_2.ReadOnly = True
         Me.txt_Indice_Lineique_2.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Lineique_2.TabIndex = 75
         Me.txt_Indice_Lineique_2.TabStop = False
@@ -1076,7 +1035,6 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Lineique_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Lineique_1.Location = New System.Drawing.Point(29, 35)
         Me.txt_Indice_Lineique_1.Name = "txt_Indice_Lineique_1"
-        Me.txt_Indice_Lineique_1.ReadOnly = True
         Me.txt_Indice_Lineique_1.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Lineique_1.TabIndex = 75
         Me.txt_Indice_Lineique_1.TabStop = False
@@ -1115,7 +1073,7 @@ Partial Class Frm_Chargement
         Me.lbl_ChargesLineiques.Location = New System.Drawing.Point(0, 100)
         Me.lbl_ChargesLineiques.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_ChargesLineiques.Name = "lbl_ChargesLineiques"
-        Me.lbl_ChargesLineiques.Size = New System.Drawing.Size(450, 30)
+        Me.lbl_ChargesLineiques.Size = New System.Drawing.Size(448, 30)
         Me.lbl_ChargesLineiques.TabIndex = 2
         Me.lbl_ChargesLineiques.Text = "lbl_ChargesLineiques"
         Me.lbl_ChargesLineiques.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1129,7 +1087,7 @@ Partial Class Frm_Chargement
         Me.lbl_ChargesSurfaciques.Location = New System.Drawing.Point(0, 0)
         Me.lbl_ChargesSurfaciques.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_ChargesSurfaciques.Name = "lbl_ChargesSurfaciques"
-        Me.lbl_ChargesSurfaciques.Size = New System.Drawing.Size(450, 30)
+        Me.lbl_ChargesSurfaciques.Size = New System.Drawing.Size(448, 30)
         Me.lbl_ChargesSurfaciques.TabIndex = 0
         Me.lbl_ChargesSurfaciques.Text = "lbl_ChargesSurfaciques"
         Me.lbl_ChargesSurfaciques.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -1151,7 +1109,7 @@ Partial Class Frm_Chargement
         Me.pan_ChargesSurfaciques.Location = New System.Drawing.Point(0, 30)
         Me.pan_ChargesSurfaciques.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ChargesSurfaciques.Name = "pan_ChargesSurfaciques"
-        Me.pan_ChargesSurfaciques.Size = New System.Drawing.Size(450, 70)
+        Me.pan_ChargesSurfaciques.Size = New System.Drawing.Size(448, 70)
         Me.pan_ChargesSurfaciques.TabIndex = 1
         '
         'lbl_ResultingForce
@@ -1214,7 +1172,7 @@ Partial Class Frm_Chargement
         'txt_ResultingForce
         '
         Me.txt_ResultingForce.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_ResultingForce.Location = New System.Drawing.Point(357, 35)
+        Me.txt_ResultingForce.Location = New System.Drawing.Point(355, 35)
         Me.txt_ResultingForce.Name = "txt_ResultingForce"
         Me.txt_ResultingForce.Size = New System.Drawing.Size(58, 20)
         Me.txt_ResultingForce.TabIndex = 76
@@ -1222,7 +1180,7 @@ Partial Class Frm_Chargement
         'txt_UniformLoad
         '
         Me.txt_UniformLoad.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_UniformLoad.Location = New System.Drawing.Point(129, 35)
+        Me.txt_UniformLoad.Location = New System.Drawing.Point(127, 35)
         Me.txt_UniformLoad.Name = "txt_UniformLoad"
         Me.txt_UniformLoad.Size = New System.Drawing.Size(58, 20)
         Me.txt_UniformLoad.TabIndex = 76
@@ -1230,7 +1188,7 @@ Partial Class Frm_Chargement
         'txt_WidthApplication
         '
         Me.txt_WidthApplication.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_WidthApplication.Location = New System.Drawing.Point(129, 13)
+        Me.txt_WidthApplication.Location = New System.Drawing.Point(127, 13)
         Me.txt_WidthApplication.Name = "txt_WidthApplication"
         Me.txt_WidthApplication.Size = New System.Drawing.Size(58, 20)
         Me.txt_WidthApplication.TabIndex = 76
@@ -1248,7 +1206,7 @@ Partial Class Frm_Chargement
         Me.TLPan_ChoixCharges.RowCount = 2
         Me.TLPan_ChoixCharges.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_ChoixCharges.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_ChoixCharges.Size = New System.Drawing.Size(250, 280)
+        Me.TLPan_ChoixCharges.Size = New System.Drawing.Size(250, 278)
         Me.TLPan_ChoixCharges.TabIndex = 1
         '
         'lbl_ChoixCharges
@@ -1281,7 +1239,7 @@ Partial Class Frm_Chargement
         Me.pan_ChoixCharges.Location = New System.Drawing.Point(0, 30)
         Me.pan_ChoixCharges.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ChoixCharges.Name = "pan_ChoixCharges"
-        Me.pan_ChoixCharges.Size = New System.Drawing.Size(250, 250)
+        Me.pan_ChoixCharges.Size = New System.Drawing.Size(250, 248)
         Me.pan_ChoixCharges.TabIndex = 1
         '
         'lbl_ChoixCharge
@@ -1417,13 +1375,13 @@ Partial Class Frm_Chargement
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(945, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(955, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(485, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(490, 3)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
@@ -1434,7 +1392,7 @@ Partial Class Frm_Chargement
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(345, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(350, 3)
         Me.btn_Annuler.Name = "btn_Annuler"
         Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
         Me.btn_Annuler.TabIndex = 0
@@ -1456,7 +1414,7 @@ Partial Class Frm_Chargement
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(951, 524)
+        Me.ClientSize = New System.Drawing.Size(961, 524)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Chargement"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -1509,11 +1467,9 @@ Partial Class Frm_Chargement
     Friend WithEvents pan_ChargesPonctuelles As Panel
     Friend WithEvents TLPan_PartieMilieu As TableLayoutPanel
     Friend WithEvents TLPan_Dessin As TableLayoutPanel
-    Friend WithEvents pan_Dessin As Panel
     Friend WithEvents TLPan_ReactionsAppuis As TableLayoutPanel
     Friend WithEvents lbl_ReactionsAppuis As Label
     Friend WithEvents pan_ReactionsAppuis As Panel
-    Friend WithEvents img_Chargement As PictureBox
     Friend WithEvents rad_G1 As RadioButton
     Friend WithEvents rad_Qc As RadioButton
     Friend WithEvents rad_Q2 As RadioButton
@@ -1600,4 +1556,6 @@ Partial Class Frm_Chargement
     Friend WithEvents lbl_UnitLeftSupport As Label
     Friend WithEvents txt_LeftSupport As TextBox
     Friend WithEvents imgList_Navigation As ImageList
+    Friend WithEvents pan_Dessin As Panel
+    Friend WithEvents img_Chargement As PictureBox
 End Class
