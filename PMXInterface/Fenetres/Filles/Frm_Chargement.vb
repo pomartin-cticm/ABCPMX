@@ -28,26 +28,32 @@ Public Class Frm_Chargement
     Const NbChargePonctuelleMAX As Integer = 8
 
     Dim traveeEnCours As Integer 'Donne l'indice de la travée en cours (POUR L'OBJET CLS_POUTRE)
-
-    ''' <summary>
-    ''' indice qui informe du numéro de travée en cours (UNIQUEMENT POUR LE DESSIN)
-    ''' </summary>
-    Dim iSelect As Integer = 1
+    Dim iSelect As Integer = 1 ' indice qui informe du numéro de travée en cours (UNIQUEMENT POUR LE DESSIN)
     '----------------------------------------------
     '   1 pour la travée principale
     '   -1 si rien de selectionné
     '   0 console gauche
     '   99 console droite
     '----------------------------------------------
-
     Dim chargeEnCours As String
     Dim Old_SelectedIndex_cmbTravee As Integer
-    ''' <summary>
-    ''' Message d'avertissement à afficher en cas de changement du cmb_travee alors qu'il y'a des erreurs à corriger
-    ''' </summary>
-    Dim WarningMessage_CmbTravee As String
 
-    Const kConvKNtoN As Decimal = 10 ^ 3
+    Dim WarningMessage_CmbTravee As String ' Message d'avertissement à afficher en cas de changement du cmb_travee alors qu'il y'a des erreurs à corriger
+
+    Dim forceSurfaciqueMIN As Decimal
+    Dim forceSurfaciqueMAX As Decimal
+    Dim largeurSurfaciqueMIN As Decimal
+    Dim largeurSurfaciqueMAX As Decimal
+
+    Dim forcePonctuelleMIN As Decimal
+    Dim forcePonctuelleMAX As Decimal
+    Dim positionPonctuelleMIN As Decimal
+    Dim positionPonctuelleMAX As Decimal
+
+    Dim forceRepartieMIN As Decimal
+    Dim forceRepartieMAX As Decimal
+    Dim positionRepartieMIN As Decimal
+    Dim positionRepartieMAX As Decimal
 
     Dim tableau_txtbox_ChargesLineiques(,) As TextBox
     Dim tableau_txtbox_ChargesPonctuelles(,) As TextBox
@@ -62,6 +68,7 @@ Public Class Frm_Chargement
     End Sub
 
     Public Sub InitialiserFenetre()
+        lBuild = True
         InitialiserVariables()
         GestionLangues()
         GestionStyle()
@@ -70,6 +77,7 @@ Public Class Frm_Chargement
         PrepareFlechesNavigation()
         MAJI_BtnNavigation()
         AfficherPoutreEnCours()
+        MAJIAffichageChargeSurfacique()
         MAJIAffichageTableauxLineique()
         MAJIAffichageButtonsLineiques()
         MAJIAffichageTableauxPonctuel()
@@ -83,6 +91,7 @@ Public Class Frm_Chargement
         NbTravees = MyPoutreLoc.NbTravees
 
         For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In MyPoutreLoc.ChargesU
+            ReDim Preserve element.Value.WSurf(MyPoutreLoc.IndiceDerniereTravee)
             ReDim Preserve element.Value.QSurf(MyPoutreLoc.IndiceDerniereTravee)
             ReDim Preserve element.Value.Forces(MyPoutreLoc.IndiceDerniereTravee)
             ReDim Preserve element.Value.FReparties(MyPoutreLoc.IndiceDerniereTravee)
@@ -105,31 +114,51 @@ Public Class Frm_Chargement
 
         '-----
 
+        forceSurfaciqueMIN = 0 / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2)
+        forceSurfaciqueMAX = 10 ^ 9 / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2) '10^6 kN/m2
+
+        largeurSurfaciqueMIN = 0 / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        largeurSurfaciqueMAX = (MyPoutreLoc.EntraxeD1 + MyPoutreLoc.EntraxeD2) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+        forceRepartieMIN = 0 / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur))
+        forceRepartieMAX = 10 ^ 9 / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)) '10^6 kN/m
+
+        positionRepartieMIN = 0 / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        positionRepartieMAX = MyPoutreLoc.LongueurTravee(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+        forcePonctuelleMIN = 0 / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+        forcePonctuelleMAX = 10 ^ 9 / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) '10^6 kN
+
+        positionPonctuelleMIN = 0 / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        positionPonctuelleMAX = MyPoutreLoc.LongueurTravee(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+        '-----
+
         ReDim tableau_txtbox_ChargesLineiques(NbChargeLineiqueMAX - 1, 5)
 
         tableau_txtbox_ChargesLineiques(0, 0) = Me.txt_Indice_Lineique_1
-        tableau_txtbox_ChargesLineiques(0, 1) = Me.txt_F1_Lineique_1
-        tableau_txtbox_ChargesLineiques(0, 2) = Me.txt_x1_Lineique_1
-        tableau_txtbox_ChargesLineiques(0, 3) = Me.txt_F2_Lineique_1
-        tableau_txtbox_ChargesLineiques(0, 4) = Me.txt_x2_Lineique_1
+        tableau_txtbox_ChargesLineiques(0, 1) = Me.txt_x1_Lineique_1
+        tableau_txtbox_ChargesLineiques(0, 2) = Me.txt_F1_Lineique_1
+        tableau_txtbox_ChargesLineiques(0, 3) = Me.txt_x2_Lineique_1
+        tableau_txtbox_ChargesLineiques(0, 4) = Me.txt_F2_Lineique_1
 
         tableau_txtbox_ChargesLineiques(1, 0) = Me.txt_Indice_Lineique_2
-        tableau_txtbox_ChargesLineiques(1, 1) = Me.txt_F1_Lineique_2
-        tableau_txtbox_ChargesLineiques(1, 2) = Me.txt_x1_Lineique_2
-        tableau_txtbox_ChargesLineiques(1, 3) = Me.txt_F2_Lineique_2
-        tableau_txtbox_ChargesLineiques(1, 4) = Me.txt_x2_Lineique_2
+        tableau_txtbox_ChargesLineiques(1, 1) = Me.txt_x1_Lineique_2
+        tableau_txtbox_ChargesLineiques(1, 2) = Me.txt_F1_Lineique_2
+        tableau_txtbox_ChargesLineiques(1, 3) = Me.txt_x2_Lineique_2
+        tableau_txtbox_ChargesLineiques(1, 4) = Me.txt_F2_Lineique_2
 
         tableau_txtbox_ChargesLineiques(2, 0) = Me.txt_Indice_Lineique_3
-        tableau_txtbox_ChargesLineiques(2, 1) = Me.txt_F1_Lineique_3
-        tableau_txtbox_ChargesLineiques(2, 2) = Me.txt_x1_Lineique_3
-        tableau_txtbox_ChargesLineiques(2, 3) = Me.txt_F2_Lineique_3
-        tableau_txtbox_ChargesLineiques(2, 4) = Me.txt_x2_Lineique_3
+        tableau_txtbox_ChargesLineiques(2, 1) = Me.txt_x1_Lineique_3
+        tableau_txtbox_ChargesLineiques(2, 2) = Me.txt_F1_Lineique_3
+        tableau_txtbox_ChargesLineiques(2, 3) = Me.txt_x2_Lineique_3
+        tableau_txtbox_ChargesLineiques(2, 4) = Me.txt_F2_Lineique_3
 
         tableau_txtbox_ChargesLineiques(3, 0) = Me.txt_Indice_Lineique_4
-        tableau_txtbox_ChargesLineiques(3, 1) = Me.txt_F1_Lineique_4
-        tableau_txtbox_ChargesLineiques(3, 2) = Me.txt_x1_Lineique_4
-        tableau_txtbox_ChargesLineiques(3, 3) = Me.txt_F2_Lineique_4
-        tableau_txtbox_ChargesLineiques(3, 4) = Me.txt_x2_Lineique_4
+        tableau_txtbox_ChargesLineiques(3, 1) = Me.txt_x1_Lineique_4
+        tableau_txtbox_ChargesLineiques(3, 2) = Me.txt_F1_Lineique_4
+        tableau_txtbox_ChargesLineiques(3, 3) = Me.txt_x2_Lineique_4
+        tableau_txtbox_ChargesLineiques(3, 4) = Me.txt_F2_Lineique_4
 
         '-----
 
@@ -208,21 +237,38 @@ Public Class Frm_Chargement
                 Me.lbl_UniformLoad.Text = Bloc("UNIFORMLOAD")
                 Me.lbl_ResultingForce.Text = Bloc("RESULTINGFORCE")
 
+                Me.lbl_UnitWidthApplication.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+                Me.lbl_UnitUniformLoad.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+                Me.lbl_UnitResultingForce.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+
+                'Me.lbl_ResultingForce.Location = New Point(257, 38)
+
                 '=== FORCE LINEIQUE ==============================================================='
                 Me.lbl_ChargesLineiques.Text = Bloc("DISTRIBUTEDLOAD")
                 Me.btn_AjouterLineique.Text = Bloc("ADD")
                 Me.btn_SupprimerLineique.Text = Bloc("DELETE")
                 Me.btn_InfoPP.Text = Bloc("INFORMATION")
 
+                Me.txt_x1_Lineique.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+                Me.txt_F1_Lineique.Text = "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+                Me.txt_x2_Lineique.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+                Me.txt_F2_Lineique.Text = "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+
                 '=== FORCE PONCTUELLE ==============================================================='
                 Me.lbl_ChargesPonctuelles.Text = Bloc("CONCENTRATEDLOAD")
                 Me.btn_AjouterPonctuelle.Text = Bloc("ADD")
                 Me.btn_SupprimerPonctuelle.Text = Bloc("DELETE")
 
+                Me.txt_x_Ponctuelle.Text = "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+                Me.txt_F_Ponctuelle.Text = "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")"
+
                 '=== REACTIONS D'APPUIS ==============================================================='
-                lbl_ReactionsAppuis.Text = Bloc("FORCEENDSUPPORT")
-                lbl_LeftSupport.Text = Bloc("LEFTSUPPORT")
-                lbl_RightSupport.Text = Bloc("RIGHTSUPPORT")
+                Me.lbl_ReactionsAppuis.Text = Bloc("FORCEENDSUPPORT")
+                Me.lbl_LeftSupport.Text = Bloc("LEFTSUPPORT")
+                Me.lbl_RightSupport.Text = Bloc("RIGHTSUPPORT")
+
+                Me.lbl_UnitLeftSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+                Me.lbl_UnitRightSupport.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
 
 
 
@@ -242,6 +288,8 @@ Public Class Frm_Chargement
 
     Private Sub GestionStyle()
         Me.Icon = Frm_PMX.Icon
+
+        Me.rad_Qc.Visible = MyPoutreLoc.lMixte
 
         Me.lbl_ChoixCharges.BackColor = CouleurBackBandeaux
         Me.lbl_ChoixCharges.ForeColor = CouleurForeBandeaux
@@ -333,7 +381,7 @@ Public Class Frm_Chargement
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
             Me.Close()
         End If
@@ -341,7 +389,49 @@ Public Class Frm_Chargement
 
 
     Private Function ValideSaisieFenetre() As Boolean
-        Return True
+        Dim lFrmValide As Boolean = True
+
+        Dim ValeurUI As Decimal
+
+        VerificationSaisie(txt_WidthApplication, ValeurUI)
+        If Not ErrorProvider_Frm_Chargement.GetError(txt_WidthApplication) = String.Empty Then
+            lFrmValide = False
+            Return lFrmValide
+            Exit Function
+        End If
+
+        VerificationSaisie(txt_UniformLoad, ValeurUI)
+        If Not ErrorProvider_Frm_Chargement.GetError(txt_UniformLoad) = String.Empty Then
+            lFrmValide = False
+            Return lFrmValide
+            Exit Function
+        End If
+
+        For i As Integer = 0 To NbChargeLineique - 1
+            For j As Integer = 1 To 4
+                VerificationSaisie(tableau_txtbox_ChargesLineiques(i, j), ValeurUI)
+                If Not ErrorProvider_Frm_Chargement.GetError(tableau_txtbox_ChargesLineiques(i, j)) = String.Empty Then
+                    lFrmValide = False
+                    Return lFrmValide
+                    Exit Function
+                End If
+            Next
+        Next
+
+        For i As Integer = 0 To NbChargePonctuelle - 1
+            For j As Integer = 1 To 2
+                VerificationSaisie(tableau_txtbox_ChargesPonctuelles(i, j), ValeurUI)
+                If Not ErrorProvider_Frm_Chargement.GetError(tableau_txtbox_ChargesPonctuelles(i, j)) = String.Empty Then
+                    lFrmValide = False
+                    Return lFrmValide
+                    Exit Function
+                End If
+            Next
+        Next
+
+        Return lFrmValide
+
+
     End Function
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
@@ -379,62 +469,124 @@ Public Class Frm_Chargement
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     Private Sub SelectionChargement(sender As Object, e As EventArgs) Handles rad_G1.CheckedChanged, rad_G2.CheckedChanged, rad_Q1.CheckedChanged, rad_Q2.CheckedChanged, rad_Qc.CheckedChanged
-        If lBuild Then Exit Sub
+        If lBuild Or Not sender.checked Then Exit Sub
 
-        Select Case sender.name
-            Case rad_G1.Name
-                chargeEnCours = "G1"
-            Case rad_G2.Name
-                chargeEnCours = "G2"
-            Case rad_Q1.Name
-                chargeEnCours = "Q1"
-            Case rad_Q2.Name
-                chargeEnCours = "Q2"
-            Case rad_Qc.Name
-                chargeEnCours = "QC"
-        End Select
+        Dim OldChargeEnCours As String = chargeEnCours
 
-        NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
-        NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
 
-        MAJIAffichageButtonsLineiques()
-        MAJIAffichageTableauxLineique()
-        MAJIAffichageButtonsPonctuels()
-        MAJIAffichageTableauxPonctuel()
+
+        If ValideSaisieFenetre() Then
+
+            Select Case sender.name
+                Case rad_G1.Name
+                    chargeEnCours = "G1"
+                Case rad_G2.Name
+                    chargeEnCours = "G2"
+                Case rad_Q1.Name
+                    chargeEnCours = "Q1"
+                Case rad_Q2.Name
+                    chargeEnCours = "Q2"
+                Case rad_Qc.Name
+                    chargeEnCours = "QC"
+            End Select
+
+            NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
+            NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
+
+            MAJIAffichageChargeSurfacique()
+            MAJIAffichageButtonsLineiques()
+            MAJIAffichageTableauxLineique()
+            MAJIAffichageButtonsPonctuels()
+            MAJIAffichageTableauxPonctuel()
+
+        Else
+
+            Select Case sender.name
+                Case rad_G1.Name
+                    chargeEnCours = "G1"
+                Case rad_G2.Name
+                    chargeEnCours = "G2"
+                Case rad_Q1.Name
+                    chargeEnCours = "Q1"
+                Case rad_Q2.Name
+                    chargeEnCours = "Q2"
+                Case rad_Qc.Name
+                    chargeEnCours = "QC"
+            End Select
+
+            If Not OldChargeEnCours = chargeEnCours Then MsgBox(WarningMessage_CmbTravee)
+            chargeEnCours = OldChargeEnCours
+
+            lBuild = True
+
+            Select Case chargeEnCours
+                Case "G1"
+                    rad_G1.Checked = True
+                Case "G2"
+                    rad_G2.Checked = True
+                Case "Q1"
+                    rad_Q1.Checked = True
+                Case "Q2"
+                    rad_Q2.Checked = True
+                Case "QC"
+                    rad_Qc.Checked = True
+            End Select
+
+            lBuild = False
+
+        End If
+
+        img_Chargement.Invalidate()
+
 
     End Sub
 
     Private Sub GestionNavigation(sender As Object, e As EventArgs) Handles btn_Suivant.Click, btn_Precedent.Click
-        Dim Index As Integer = Me.cmb_Travee.SelectedIndex
-        Select Case sender.name
-            Case Me.btn_Precedent.Name
-                Me.cmb_Travee.SelectedIndex = Math.Max(0, Index - 1)
-            Case Me.btn_Suivant.Name
-                Me.cmb_Travee.SelectedIndex = Math.Min(NbTravees - 1, Index + 1)
-        End Select
+        If lBuild Then Exit Sub
 
-        Select Case cmb_Travee.Text
-            Case strTypeTravee_ConsoleGauche
-                traveeEnCours = 0
-                iSelect = 0
-            Case strTypeTravee_TraveeCentrale
-                traveeEnCours = 1
-                iSelect = 1
-            Case strTypeTravee_ConsoleDroite
-                traveeEnCours = MyPoutreLoc.IndiceTraveeConsoleDroite
-                iSelect = 99
-        End Select
+        If ValideSaisieFenetre() Then
 
-        NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
-        NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
+            Dim Index As Integer = Me.cmb_Travee.SelectedIndex
+            Select Case sender.name
+                Case Me.btn_Precedent.Name
+                    Me.cmb_Travee.SelectedIndex = Math.Max(0, Index - 1)
+                Case Me.btn_Suivant.Name
+                    Me.cmb_Travee.SelectedIndex = Math.Min(NbTravees - 1, Index + 1)
+            End Select
 
-        MAJI_BtnNavigation()
-        MAJIAffichageButtonsLineiques()
-        MAJIAffichageTableauxLineique()
-        MAJIAffichageButtonsPonctuels()
-        MAJIAffichageTableauxPonctuel()
+            Select Case cmb_Travee.Text
+                Case strTypeTravee_ConsoleGauche
+                    traveeEnCours = 0
+                    iSelect = 0
+                Case strTypeTravee_TraveeCentrale
+                    traveeEnCours = 1
+                    iSelect = 1
+                Case strTypeTravee_ConsoleDroite
+                    traveeEnCours = MyPoutreLoc.IndiceTraveeConsoleDroite
+                    iSelect = 99
+            End Select
 
-        img_Chargement.Invalidate()
+            NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
+            NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
+
+            positionRepartieMAX = MyPoutreLoc.LongueurTravee(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+            positionPonctuelleMAX = MyPoutreLoc.LongueurTravee(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+            MAJI_BtnNavigation()
+            MAJIAffichageChargeSurfacique()
+            MAJIAffichageButtonsLineiques()
+            MAJIAffichageTableauxLineique()
+            MAJIAffichageButtonsPonctuels()
+            MAJIAffichageTableauxPonctuel()
+
+
+
+            img_Chargement.Invalidate()
+
+        Else
+            MsgBox(WarningMessage_CmbTravee)
+            cmb_Travee.SelectedIndex = Old_SelectedIndex_cmbTravee
+        End If
     End Sub
 
     Private Sub btn_AjouterSupprimerLineique_Click(sender As Object, e As EventArgs) Handles btn_AjouterLineique.Click, btn_SupprimerLineique.Click
@@ -442,7 +594,7 @@ Public Class Frm_Chargement
 
         Select Case sender.name
             Case btn_AjouterLineique.Name
-                MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Add(New cls_ForceRepartie(0, 1 * kConvKNtoN, 0, 1 * kConvKNtoN, MyPoutreLoc.LongueurTravee(traveeEnCours)))
+                MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Add(New cls_ForceRepartie(0, 10 ^ 3, MyPoutreLoc.LongueurTravee(traveeEnCours), 10 ^ 3, MyPoutreLoc.xPositionAppui(True, traveeEnCours)))
                 NbChargeLineique = Math.Min(NbChargeLineique + 1, NbChargeLineiqueMAX)
             Case btn_SupprimerLineique.Name
                 MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).RemoveAt(NbChargeLineique - 1)
@@ -462,7 +614,7 @@ Public Class Frm_Chargement
 
         Select Case sender.name
             Case btn_AjouterPonctuelle.Name
-                MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Add(New cls_Force(MyPoutreLoc.LongueurTravee(traveeEnCours), 1 * kConvKNtoN))
+                MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Add(New cls_Force(MyPoutreLoc.LongueurTravee(traveeEnCours) / 2, 10 ^ 3, MyPoutreLoc.xPositionAppui(True, traveeEnCours))) '1kN
                 NbChargePonctuelle = Math.Min(NbChargePonctuelle + 1, NbChargePonctuelleMAX)
             Case btn_SupprimerPonctuelle.Name
                 MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).RemoveAt(NbChargePonctuelle - 1)
@@ -476,6 +628,16 @@ Public Class Frm_Chargement
 
     End Sub
 
+    Private Sub MAJIAffichageChargeSurfacique(Optional lMAJLargeur As Boolean = True, Optional lMAJPression As Boolean = True)
+
+        'MAJ Affichage des valeurs dans la section charge surfacique 
+
+        If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        If lMAJPression Then txt_UniformLoad.Text = MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2)
+        txt_ResultingForce.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+
+    End Sub
+
     Private Sub MAJIAffichageTableauxLineique()
 
         'MAJ affichage des tableau 
@@ -484,10 +646,10 @@ Public Class Frm_Chargement
             For j As Integer = 0 To 4
                 tableau_txtbox_ChargesLineiques(i, j).Visible = True
                 tableau_txtbox_ChargesLineiques(i, 0).Text = i
-                tableau_txtbox_ChargesLineiques(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosG(0)
-                tableau_txtbox_ChargesLineiques(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(0)
-                tableau_txtbox_ChargesLineiques(i, 3).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosG(1)
-                tableau_txtbox_ChargesLineiques(i, 4).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(1)
+                tableau_txtbox_ChargesLineiques(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(0) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                tableau_txtbox_ChargesLineiques(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(0) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur))
+                tableau_txtbox_ChargesLineiques(i, 3).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(1) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                tableau_txtbox_ChargesLineiques(i, 4).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(1) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur))
             Next
         Next
 
@@ -508,8 +670,8 @@ Public Class Frm_Chargement
             For j As Integer = 0 To 2
                 tableau_txtbox_ChargesPonctuelles(i, j).Visible = True
                 tableau_txtbox_ChargesPonctuelles(i, 0).Text = i
-                tableau_txtbox_ChargesPonctuelles(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).xPosG
-                tableau_txtbox_ChargesPonctuelles(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).Force
+                tableau_txtbox_ChargesPonctuelles(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).xPosT / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                tableau_txtbox_ChargesPonctuelles(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).Force / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
             Next
         Next
 
@@ -556,6 +718,9 @@ Public Class Frm_Chargement
             NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
             NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
 
+            positionRepartieMAX = MyPoutreLoc.LongueurTravee(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+            positionPonctuelleMAX = MyPoutreLoc.LongueurTravee(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
 
             MAJI_BtnNavigation()
 
@@ -563,6 +728,8 @@ Public Class Frm_Chargement
             MAJIAffichageTableauxLineique()
             MAJIAffichageButtonsPonctuels()
             MAJIAffichageTableauxPonctuel()
+
+
 
             img_Chargement.Invalidate()
 
@@ -583,6 +750,168 @@ Public Class Frm_Chargement
         btn_SupprimerPonctuelle.Enabled = Not (NbChargePonctuelle = 0)
 
     End Sub
+
+    Private Sub txt_txtbox_ChargementSurfacique_TextChanged(sender As Object, e As EventArgs) Handles txt_WidthApplication.TextChanged, txt_UniformLoad.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            Select Case sender.name
+                Case txt_WidthApplication.Name
+                    MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) = ValeurUI
+                    MAJIAffichageChargeSurfacique(False, True)
+                Case txt_UniformLoad.Name
+                    MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) = ValeurUI
+                    MAJIAffichageChargeSurfacique(True, False)
+            End Select
+
+        End If
+
+        img_Chargement.Invalidate()
+    End Sub
+
+    Private Sub txt_txtbox_ChargementLineique_TextChanged(sender As Object, e As EventArgs) Handles txt_x2_Lineique_4.TextChanged, txt_x2_Lineique_3.TextChanged, txt_x2_Lineique_2.TextChanged, txt_x2_Lineique_1.TextChanged, txt_x1_Lineique_4.TextChanged, txt_x1_Lineique_3.TextChanged, txt_x1_Lineique_2.TextChanged, txt_x1_Lineique_1.TextChanged, txt_F2_Lineique_4.TextChanged, txt_F2_Lineique_3.TextChanged, txt_F2_Lineique_2.TextChanged, txt_F2_Lineique_1.TextChanged, txt_F1_Lineique_4.TextChanged, txt_F1_Lineique_3.TextChanged, txt_F1_Lineique_2.TextChanged, txt_F1_Lineique_1.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+
+            For i As Integer = 0 To NbChargeLineique - 1
+                Select Case sender.Name
+                    Case tableau_txtbox_ChargesLineiques(i, 1).Name
+                        MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(0) = ValeurUI
+
+                    Case tableau_txtbox_ChargesLineiques(i, 2).Name
+                        MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(0) = ValeurUI
+
+                    Case tableau_txtbox_ChargesLineiques(i, 3).Name
+                        MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(1) = ValeurUI
+
+                    Case tableau_txtbox_ChargesLineiques(i, 4).Name
+                        MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(1) = ValeurUI
+
+                End Select
+            Next
+
+
+        End If
+
+        img_Chargement.Invalidate()
+    End Sub
+
+    Private Sub txt_txtbox_ChargementPonctuelle_TextChanged(sender As Object, e As EventArgs) Handles txt_x_Ponctuelle_8.TextChanged, txt_x_Ponctuelle_7.TextChanged, txt_x_Ponctuelle_6.TextChanged, txt_x_Ponctuelle_5.TextChanged, txt_x_Ponctuelle_4.TextChanged, txt_x_Ponctuelle_3.TextChanged, txt_x_Ponctuelle_2.TextChanged, txt_x_Ponctuelle_1.TextChanged, txt_F_Ponctuelle_8.TextChanged, txt_F_Ponctuelle_7.TextChanged, txt_F_Ponctuelle_6.TextChanged, txt_F_Ponctuelle_5.TextChanged, txt_F_Ponctuelle_4.TextChanged, txt_F_Ponctuelle_3.TextChanged, txt_F_Ponctuelle_2.TextChanged, txt_F_Ponctuelle_1.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim ValeurUI As Decimal
+
+
+
+        If VerificationSaisie(sender, ValeurUI) Then
+
+            For i As Integer = 0 To NbChargePonctuelle - 1
+                Select Case sender.name
+                    Case tableau_txtbox_ChargesPonctuelles(i, 1).Name
+                        MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).xPosT = ValeurUI
+
+                    Case tableau_txtbox_ChargesPonctuelles(i, 2).Name
+                        MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).Force = ValeurUI
+
+                End Select
+            Next
+
+
+        End If
+
+        img_Chargement.Invalidate()
+    End Sub
+
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        Dim lOk As Boolean = True
+        ErrorProvider_Frm_Chargement.SetError(MyTxt, String.Empty)
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim kUnit As Decimal
+
+        Select Case MyTxt.Name
+            Case txt_WidthApplication.Name
+
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+
+                ValMin = largeurSurfaciqueMIN / kUnit
+                ValMax = largeurSurfaciqueMAX / kUnit
+
+            Case txt_UniformLoad.Name
+
+                kUnit = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / (LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)) ^ 2
+
+                ValMin = forceSurfaciqueMIN / kUnit
+                ValMax = forceSurfaciqueMAX / kUnit
+
+        End Select
+
+        For i As Integer = 0 To NbChargeLineique - 1
+            Select Case MyTxt.Name
+                Case tableau_txtbox_ChargesLineiques(i, 1).Name
+
+                    kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                    ValMin = positionRepartieMIN / kUnit
+                    ValMax = Math.Min(MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(1) / kUnit, positionRepartieMAX / kUnit)
+
+                Case tableau_txtbox_ChargesLineiques(i, 2).Name
+
+                    kUnit = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                    ValMin = forceRepartieMIN / kUnit
+                    ValMax = forceRepartieMAX / kUnit
+
+                Case tableau_txtbox_ChargesLineiques(i, 3).Name
+
+                    kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                    ValMin = Math.Max(MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(0) / kUnit, positionRepartieMIN / kUnit)
+                    ValMax = positionRepartieMAX / kUnit
+
+                Case tableau_txtbox_ChargesLineiques(i, 4).Name
+
+                    kUnit = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                    ValMin = forceRepartieMIN / kUnit
+                    ValMax = forceRepartieMAX / kUnit
+
+            End Select
+        Next
+
+        For i As Integer = 0 To NbChargePonctuelle - 1
+            Select Case MyTxt.Name
+                Case tableau_txtbox_ChargesPonctuelles(i, 1).Name
+
+                    kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                    ValMin = positionPonctuelleMIN / kUnit
+                    ValMax = positionPonctuelleMAX / kUnit
+
+                Case tableau_txtbox_ChargesPonctuelles(i, 2).Name
+
+                    kUnit = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+                    ValMin = forcePonctuelleMIN / kUnit
+                    ValMax = forcePonctuelleMAX / kUnit
+
+            End Select
+        Next
+
+
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, True, ValMax)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider_Frm_Chargement, ValMin, ValMax)
+        Else
+
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+    End Function
 
 #End Region
 

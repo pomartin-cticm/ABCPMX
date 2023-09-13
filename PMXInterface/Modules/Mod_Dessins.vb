@@ -4310,17 +4310,41 @@ Module Mod_Dessins
 
         Next
 
-        '--> Représentation des forces ponctuelles
-
-        For Each force As cls_Force In MyPoutre.ChargesU(chargeEnCours).Forces(traveeEnCours)
-            DessinForcePonctuelle(MyGr, force.xPosG, HauteurPoutre, dCar, MyParAff)
-        Next
+        '--> Représentation des efforts
 
 
-        '--> Représentation des forces réparties
-        For Each force As cls_ForceRepartie In MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)
-            DessinForceRepartie(MyGr, force.xPosG(0), HauteurPoutre, force.Force(0), force.xPosG(1), HauteurPoutre, force.Force(1), dCar * 0.5, dCar, MyParAff)
-        Next
+
+        For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
+
+            xo = 0
+            For j As Integer = MyPoutre.IndicePremiereTravee To i - 1
+                Select Case j
+                    Case 0
+                        xo += LongueurConsoleGauche
+                    Case MyPoutre.IndiceTraveeConsoleDroite
+                        xo += LongueurConsoleDroite
+                    Case Else
+                        xo += LongueurTravee
+                End Select
+            Next
+
+            '--> Représentation des forces ponctuelles
+            Dim xPosRelative As Decimal
+                For Each force As cls_Force In MyPoutre.ChargesU(chargeEnCours).Forces(i)
+                    xPosRelative = xo + force.xPosT / MyPoutre.LongueurTravee(i) * LongueurTravee
+                    DessinForcePonctuelle(MyGr, xPosRelative, HauteurPoutre, dCar, MyParAff)
+                Next
+
+
+                '--> Représentation des forces réparties
+                Dim xPosRelativeGauche, xPosRelativeDroite As Decimal
+                For Each force As cls_ForceRepartie In MyPoutre.ChargesU(chargeEnCours).FReparties(i)
+                    xPosRelativeGauche = xo + force.xPosT(0) / MyPoutre.LongueurTravee(i) * LongueurTravee
+                    xPosRelativeDroite = xo + force.xPosT(1) / MyPoutre.LongueurTravee(i) * LongueurTravee
+                    DessinForceRepartie(MyGr, xPosRelativeGauche, HauteurPoutre, force.Force(0), xPosRelativeDroite, HauteurPoutre, force.Force(1), dCar * 0.5, dCar, MyParAff)
+                Next
+
+            Next
 
 
 
@@ -4427,7 +4451,7 @@ Module Mod_Dessins
         Dim HauteurLoc As Decimal
 
         For x As Decimal = xPosGauche + pasFleche To xPosDroite Step pasFleche
-            HauteurLoc = HauteurExtGauche + (HauteurExtDroite - HauteurExtGauche) / (xPosDroite - xPosGauche) * x
+            HauteurLoc = HauteurExtGauche + (HauteurExtDroite - HauteurExtGauche) / (xPosDroite - xPosGauche) * (x - xPosGauche)
             AddFleche(MyGr, MyPen, x, yPosGauche, x, HauteurLoc + yPosGauche, MyParAff, True, False)
         Next
 

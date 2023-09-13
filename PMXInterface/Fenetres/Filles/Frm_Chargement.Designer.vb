@@ -132,6 +132,7 @@ Partial Class Frm_Chargement
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
+        Me.ErrorProvider_Frm_Chargement = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieMilieu.SuspendLayout()
@@ -150,6 +151,7 @@ Partial Class Frm_Chargement
         Me.pan_ChoixCharges.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
+        CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -228,6 +230,7 @@ Partial Class Frm_Chargement
         Me.img_Chargement.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Chargement.BackColor = System.Drawing.SystemColors.Window
         Me.img_Chargement.Location = New System.Drawing.Point(229, 14)
         Me.img_Chargement.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.img_Chargement.Name = "img_Chargement"
@@ -283,7 +286,6 @@ Partial Class Frm_Chargement
         '
         'lbl_RightSupport
         '
-        Me.lbl_RightSupport.AutoSize = True
         Me.lbl_RightSupport.Location = New System.Drawing.Point(9, 56)
         Me.lbl_RightSupport.Name = "lbl_RightSupport"
         Me.lbl_RightSupport.Size = New System.Drawing.Size(85, 13)
@@ -293,7 +295,6 @@ Partial Class Frm_Chargement
         '
         'lbl_LeftSupport
         '
-        Me.lbl_LeftSupport.AutoSize = True
         Me.lbl_LeftSupport.Location = New System.Drawing.Point(19, 27)
         Me.lbl_LeftSupport.Name = "lbl_LeftSupport"
         Me.lbl_LeftSupport.Size = New System.Drawing.Size(78, 13)
@@ -313,8 +314,10 @@ Partial Class Frm_Chargement
         'txt_RightSupport
         '
         Me.txt_RightSupport.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_RightSupport.BackColor = System.Drawing.SystemColors.Window
         Me.txt_RightSupport.Location = New System.Drawing.Point(100, 49)
         Me.txt_RightSupport.Name = "txt_RightSupport"
+        Me.txt_RightSupport.ReadOnly = True
         Me.txt_RightSupport.Size = New System.Drawing.Size(58, 20)
         Me.txt_RightSupport.TabIndex = 81
         '
@@ -330,8 +333,10 @@ Partial Class Frm_Chargement
         'txt_LeftSupport
         '
         Me.txt_LeftSupport.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_LeftSupport.BackColor = System.Drawing.SystemColors.Window
         Me.txt_LeftSupport.Location = New System.Drawing.Point(100, 23)
         Me.txt_LeftSupport.Name = "txt_LeftSupport"
+        Me.txt_LeftSupport.ReadOnly = True
         Me.txt_LeftSupport.Size = New System.Drawing.Size(58, 20)
         Me.txt_LeftSupport.TabIndex = 81
         '
@@ -567,6 +572,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_8.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_8.Location = New System.Drawing.Point(48, 182)
         Me.txt_Indice_Ponctuelle_8.Name = "txt_Indice_Ponctuelle_8"
+        Me.txt_Indice_Ponctuelle_8.ReadOnly = True
         Me.txt_Indice_Ponctuelle_8.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_8.TabIndex = 79
         Me.txt_Indice_Ponctuelle_8.TabStop = False
@@ -577,6 +583,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_4.Location = New System.Drawing.Point(48, 95)
         Me.txt_Indice_Ponctuelle_4.Name = "txt_Indice_Ponctuelle_4"
+        Me.txt_Indice_Ponctuelle_4.ReadOnly = True
         Me.txt_Indice_Ponctuelle_4.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_4.TabIndex = 79
         Me.txt_Indice_Ponctuelle_4.TabStop = False
@@ -607,6 +614,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_7.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_7.Location = New System.Drawing.Point(48, 160)
         Me.txt_Indice_Ponctuelle_7.Name = "txt_Indice_Ponctuelle_7"
+        Me.txt_Indice_Ponctuelle_7.ReadOnly = True
         Me.txt_Indice_Ponctuelle_7.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_7.TabIndex = 79
         Me.txt_Indice_Ponctuelle_7.TabStop = False
@@ -617,6 +625,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_3.Location = New System.Drawing.Point(48, 73)
         Me.txt_Indice_Ponctuelle_3.Name = "txt_Indice_Ponctuelle_3"
+        Me.txt_Indice_Ponctuelle_3.ReadOnly = True
         Me.txt_Indice_Ponctuelle_3.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_3.TabIndex = 79
         Me.txt_Indice_Ponctuelle_3.TabStop = False
@@ -637,6 +646,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_6.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_6.Location = New System.Drawing.Point(48, 139)
         Me.txt_Indice_Ponctuelle_6.Name = "txt_Indice_Ponctuelle_6"
+        Me.txt_Indice_Ponctuelle_6.ReadOnly = True
         Me.txt_Indice_Ponctuelle_6.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_6.TabIndex = 79
         Me.txt_Indice_Ponctuelle_6.TabStop = False
@@ -657,6 +667,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_2.Location = New System.Drawing.Point(48, 52)
         Me.txt_Indice_Ponctuelle_2.Name = "txt_Indice_Ponctuelle_2"
+        Me.txt_Indice_Ponctuelle_2.ReadOnly = True
         Me.txt_Indice_Ponctuelle_2.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_2.TabIndex = 79
         Me.txt_Indice_Ponctuelle_2.TabStop = False
@@ -667,6 +678,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_5.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_5.Location = New System.Drawing.Point(48, 118)
         Me.txt_Indice_Ponctuelle_5.Name = "txt_Indice_Ponctuelle_5"
+        Me.txt_Indice_Ponctuelle_5.ReadOnly = True
         Me.txt_Indice_Ponctuelle_5.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_5.TabIndex = 79
         Me.txt_Indice_Ponctuelle_5.TabStop = False
@@ -689,6 +701,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Ponctuelle_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Ponctuelle_1.Location = New System.Drawing.Point(48, 31)
         Me.txt_Indice_Ponctuelle_1.Name = "txt_Indice_Ponctuelle_1"
+        Me.txt_Indice_Ponctuelle_1.ReadOnly = True
         Me.txt_Indice_Ponctuelle_1.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Ponctuelle_1.TabIndex = 79
         Me.txt_Indice_Ponctuelle_1.TabStop = False
@@ -973,6 +986,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Lineique_4.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Lineique_4.Location = New System.Drawing.Point(29, 99)
         Me.txt_Indice_Lineique_4.Name = "txt_Indice_Lineique_4"
+        Me.txt_Indice_Lineique_4.ReadOnly = True
         Me.txt_Indice_Lineique_4.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Lineique_4.TabIndex = 75
         Me.txt_Indice_Lineique_4.TabStop = False
@@ -993,6 +1007,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Lineique_3.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Lineique_3.Location = New System.Drawing.Point(29, 78)
         Me.txt_Indice_Lineique_3.Name = "txt_Indice_Lineique_3"
+        Me.txt_Indice_Lineique_3.ReadOnly = True
         Me.txt_Indice_Lineique_3.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Lineique_3.TabIndex = 75
         Me.txt_Indice_Lineique_3.TabStop = False
@@ -1013,6 +1028,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Lineique_2.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Lineique_2.Location = New System.Drawing.Point(29, 57)
         Me.txt_Indice_Lineique_2.Name = "txt_Indice_Lineique_2"
+        Me.txt_Indice_Lineique_2.ReadOnly = True
         Me.txt_Indice_Lineique_2.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Lineique_2.TabIndex = 75
         Me.txt_Indice_Lineique_2.TabStop = False
@@ -1035,6 +1051,7 @@ Partial Class Frm_Chargement
         Me.txt_Indice_Lineique_1.BackColor = System.Drawing.SystemColors.Window
         Me.txt_Indice_Lineique_1.Location = New System.Drawing.Point(29, 35)
         Me.txt_Indice_Lineique_1.Name = "txt_Indice_Lineique_1"
+        Me.txt_Indice_Lineique_1.ReadOnly = True
         Me.txt_Indice_Lineique_1.Size = New System.Drawing.Size(27, 20)
         Me.txt_Indice_Lineique_1.TabIndex = 75
         Me.txt_Indice_Lineique_1.TabStop = False
@@ -1114,17 +1131,15 @@ Partial Class Frm_Chargement
         '
         'lbl_ResultingForce
         '
-        Me.lbl_ResultingForce.AutoSize = True
-        Me.lbl_ResultingForce.Location = New System.Drawing.Point(257, 38)
+        Me.lbl_ResultingForce.Location = New System.Drawing.Point(229, 38)
         Me.lbl_ResultingForce.Name = "lbl_ResultingForce"
-        Me.lbl_ResultingForce.Size = New System.Drawing.Size(94, 13)
+        Me.lbl_ResultingForce.Size = New System.Drawing.Size(122, 13)
         Me.lbl_ResultingForce.TabIndex = 80
         Me.lbl_ResultingForce.Text = "lbl_ResultingForce"
         Me.lbl_ResultingForce.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'lbl_UniformLoad
         '
-        Me.lbl_UniformLoad.AutoSize = True
         Me.lbl_UniformLoad.Location = New System.Drawing.Point(41, 38)
         Me.lbl_UniformLoad.Name = "lbl_UniformLoad"
         Me.lbl_UniformLoad.Size = New System.Drawing.Size(83, 13)
@@ -1134,7 +1149,6 @@ Partial Class Frm_Chargement
         '
         'lbl_WidthApplication
         '
-        Me.lbl_WidthApplication.AutoSize = True
         Me.lbl_WidthApplication.Location = New System.Drawing.Point(21, 16)
         Me.lbl_WidthApplication.Name = "lbl_WidthApplication"
         Me.lbl_WidthApplication.Size = New System.Drawing.Size(103, 13)
@@ -1172,8 +1186,10 @@ Partial Class Frm_Chargement
         'txt_ResultingForce
         '
         Me.txt_ResultingForce.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_ResultingForce.BackColor = System.Drawing.SystemColors.Window
         Me.txt_ResultingForce.Location = New System.Drawing.Point(355, 35)
         Me.txt_ResultingForce.Name = "txt_ResultingForce"
+        Me.txt_ResultingForce.ReadOnly = True
         Me.txt_ResultingForce.Size = New System.Drawing.Size(58, 20)
         Me.txt_ResultingForce.TabIndex = 76
         '
@@ -1408,6 +1424,10 @@ Partial Class Frm_Chargement
         Me.imgList_Navigation.Images.SetKeyName(2, "Suivant")
         Me.imgList_Navigation.Images.SetKeyName(3, "SuivantNonDispo")
         '
+        'ErrorProvider_Frm_Chargement
+        '
+        Me.ErrorProvider_Frm_Chargement.ContainerControl = Me
+        '
         'Frm_Chargement
         '
         Me.AcceptButton = Me.btn_OK
@@ -1446,6 +1466,7 @@ Partial Class Frm_Chargement
         Me.pan_ChoixCharges.PerformLayout()
         Me.Panel1.ResumeLayout(False)
         Me.TLPan_PartieBasse.ResumeLayout(False)
+        CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1558,4 +1579,5 @@ Partial Class Frm_Chargement
     Friend WithEvents imgList_Navigation As ImageList
     Friend WithEvents pan_Dessin As Panel
     Friend WithEvents img_Chargement As PictureBox
+    Friend WithEvents ErrorProvider_Frm_Chargement As ErrorProvider
 End Class

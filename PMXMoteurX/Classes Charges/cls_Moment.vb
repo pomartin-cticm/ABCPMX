@@ -7,16 +7,19 @@
 
     Public Moment As Decimal      ' Valeur de la force (>0 => gravitaire)
     Public xPosT As Decimal      ' Position par rapport à l'appui gauche de la travée
-    Public xPosG As Decimal      ' Position par rapport à l'extrémité gauche de la poutre
+    Public xGaucheT As Decimal   ' Position de l'appui gauche à l'extrémité gauche de la poutre
+
+    'Public xPosG As Decimal      ' Position par rapport à l'extrémité gauche de la poutre
 
 #End Region
 
 #Region " Constructeurs "
 
-    Public Sub New(pxPosT As Decimal, pMoment As Decimal, xGaucheT As Decimal)
+    Public Sub New(pxPosT As Decimal, pMoment As Decimal, pxGaucheT As Decimal)
+        xGaucheT = pxGaucheT
         xPosT = pxPosT
         Moment = pMoment
-        xPosG = pxPosT + xGaucheT
+        'xPosG = pxPosT + xGaucheT
     End Sub
 
 #End Region
@@ -28,5 +31,14 @@
 
 #End Region
 
+#Region "Propriété"
+
+    Public ReadOnly Property xPosG As Decimal
+        Get
+            Return xPosT + xGaucheT
+        End Get
+    End Property
+
+#End Region
 
 End Class
