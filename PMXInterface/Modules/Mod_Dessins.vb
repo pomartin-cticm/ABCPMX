@@ -4232,6 +4232,8 @@ Module Mod_Dessins
         Dim lTotal As Boolean = False
         Dim lContour As Boolean = lCONTOURCOTE
 
+        Dim lSelect As Boolean = False 'Permet d'indiquer + loin si la charge qui est dessinée est sélectionnée dans la fenetre Frm_Chargement 
+
         '--> Initialisations
 
         LongueurPoutre = MyPoutre.LongueurTotale
@@ -4315,7 +4317,6 @@ Module Mod_Dessins
 
 
         For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
-
             xo = 0
             For j As Integer = MyPoutre.IndicePremiereTravee To i - 1
                 Select Case j
@@ -4330,21 +4331,34 @@ Module Mod_Dessins
 
             '--> Représentation des forces ponctuelles
             Dim xPosRelative As Decimal
-                For Each force As cls_Force In MyPoutre.ChargesU(chargeEnCours).Forces(i)
-                    xPosRelative = xo + force.xPosT / MyPoutre.LongueurTravee(i) * LongueurTravee
-                    DessinForcePonctuelle(MyGr, xPosRelative, HauteurPoutre, dCar, MyParAff)
-                Next
-
-
-                '--> Représentation des forces réparties
-                Dim xPosRelativeGauche, xPosRelativeDroite As Decimal
-                For Each force As cls_ForceRepartie In MyPoutre.ChargesU(chargeEnCours).FReparties(i)
-                    xPosRelativeGauche = xo + force.xPosT(0) / MyPoutre.LongueurTravee(i) * LongueurTravee
-                    xPosRelativeDroite = xo + force.xPosT(1) / MyPoutre.LongueurTravee(i) * LongueurTravee
-                    DessinForceRepartie(MyGr, xPosRelativeGauche, HauteurPoutre, force.Force(0), xPosRelativeDroite, HauteurPoutre, force.Force(1), dCar * 0.5, dCar, MyParAff)
-                Next
-
+            For Each force As cls_Force In MyPoutre.ChargesU(chargeEnCours).Forces(i)
+                xPosRelative = xo + force.xPosT / MyPoutre.LongueurTravee(i) * LongueurTravee
+                lSelect = MyPoutre.ChargesU(chargeEnCours).Forces(i).IndexOf(force) = iFPonctSelect
+                If Not lSelect Then DessinForcePonctuelle(MyGr, xPosRelative, HauteurPoutre, dCar, MyParAff, lSelect)
             Next
+
+            If iFPonctSelect <> -1 And i = traveeEnCours Then 'Permet de dessiner la force sélectionnée en dernier pour que cette dernière soit visible
+                xPosRelative = xo + MyPoutre.ChargesU(chargeEnCours).Forces(i)(iFPonctSelect).xPosT / MyPoutre.LongueurTravee(i) * LongueurTravee
+                DessinForcePonctuelle(MyGr, xPosRelative, HauteurPoutre, dCar, MyParAff, True)
+            End If
+
+
+            '--> Représentation des forces réparties
+            Dim xPosRelativeGauche, xPosRelativeDroite As Decimal
+            For Each force As cls_ForceRepartie In MyPoutre.ChargesU(chargeEnCours).FReparties(i)
+                xPosRelativeGauche = xo + force.xPosT(0) / MyPoutre.LongueurTravee(i) * LongueurTravee
+                xPosRelativeDroite = xo + force.xPosT(1) / MyPoutre.LongueurTravee(i) * LongueurTravee
+                lSelect = MyPoutre.ChargesU(chargeEnCours).FReparties(i).IndexOf(force) = iFReparSelect
+                If Not lSelect Then DessinForceRepartie(MyGr, xPosRelativeGauche, HauteurPoutre, force.Force(0), xPosRelativeDroite, HauteurPoutre, force.Force(1), dCar * 0.5, dCar, MyParAff, lSelect)
+            Next
+
+            If iFReparSelect <> -1 And i = traveeEnCours Then 'Permet de dessiner la force sélectionnée en dernier pour que cette dernière soit visible
+                xPosRelativeGauche = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(i)(iFReparSelect).xPosT(0) / MyPoutre.LongueurTravee(i) * LongueurTravee
+                xPosRelativeDroite = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(i)(iFReparSelect).xPosT(1) / MyPoutre.LongueurTravee(i) * LongueurTravee
+                DessinForceRepartie(MyGr, xPosRelativeGauche, HauteurPoutre, MyPoutre.ChargesU(chargeEnCours).FReparties(i)(iFReparSelect).Force(0), xPosRelativeDroite, HauteurPoutre, MyPoutre.ChargesU(chargeEnCours).FReparties(i)(iFReparSelect).Force(1), dCar * 0.5, dCar, MyParAff, True)
+            End If
+
+        Next
 
 
 
@@ -4352,7 +4366,7 @@ Module Mod_Dessins
 
 
 
-    Public Sub DessinForcePonctuelle(MyGr As Graphics, xPos As Decimal, yPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage)
+    Public Sub DessinForcePonctuelle(MyGr As Graphics, xPos As Decimal, yPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage, Optional lSelect As Boolean = False)
         '------------------------------------------------------------------------------------------------------------------
         '   12/09/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
@@ -4367,7 +4381,13 @@ Module Mod_Dessins
 
         Dim xPts(), yPts() As Single
         Dim nbPts As Integer
-        Dim MyBrushAp As New SolidBrush(Color.DarkGreen)
+        Dim MyBrushAp As SolidBrush
+
+        If lSelect Then
+            MyBrushAp = New SolidBrush(Color.DarkGreen)
+        Else
+            MyBrushAp = New SolidBrush(Color.White)
+        End If
 
         'Définition des variables locales pour les dimensions de la fleche
 
@@ -4389,7 +4409,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Public Sub DessinForceRepartie(MyGr As Graphics, xPosGauche As Decimal, yPosGauche As Decimal, ChargeLinGauche As Decimal, xPosDroite As Decimal, yPosDroite As Decimal, ChargeLinDroite As Decimal, dCar As Decimal, pasFleche As Decimal, MyParAff As Struc_Affichage)
+    Public Sub DessinForceRepartie(MyGr As Graphics, xPosGauche As Decimal, yPosGauche As Decimal, ChargeLinGauche As Decimal, xPosDroite As Decimal, yPosDroite As Decimal, ChargeLinDroite As Decimal, dCar As Decimal, pasFleche As Decimal, MyParAff As Struc_Affichage, Optional lSelect As Boolean = False)
         '------------------------------------------------------------------------------------------------------------------
         '   12/09/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
@@ -4404,8 +4424,19 @@ Module Mod_Dessins
 
         Dim xPtsGauche(), yPtsGauche() As Single
         Dim nbPtsGauche As Integer
-        Dim MyBrushAp As New SolidBrush(Color.DarkRed)
-        Dim MyPen As New Pen(Color.DarkRed)
+        Dim MyBrushAp As SolidBrush
+        Dim MyPen As Pen
+
+        If lSelect Then
+            MyBrushAp = New SolidBrush(Color.DarkRed)
+            MyPen = New Pen(Color.DarkRed)
+        Else
+            MyBrushAp = New SolidBrush(Color.White)
+            MyPen = New Pen(Color.DarkRed)
+        End If
+
+
+
 
         Dim HauteurExtMax, HauteurExtMin, HauteurExtGauche, HauteurExtDroite, HauteurInt, LargeurInt, LargeurExt As Decimal
 

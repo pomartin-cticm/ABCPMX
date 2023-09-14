@@ -19,17 +19,19 @@
 
         Me.Titre = pTitre
 
-        ReDim Me.QSurf(IndiceDerniereTravee)
-        ReDim Me.WSurf(IndiceDerniereTravee)
-        ReDim Me.Forces(IndiceDerniereTravee)
-        ReDim Me.FReparties(IndiceDerniereTravee)
+        ReDim Me.QSurf(IndiceDerniereTravee + 1)
+        ReDim Me.WSurf(IndiceDerniereTravee + 1)
+        ReDim Me.Forces(IndiceDerniereTravee + 1)
+        ReDim Me.FReparties(IndiceDerniereTravee + 1)
 
-        For i As Integer = 0 To IndiceDerniereTravee
+        For i As Integer = 0 To IndiceDerniereTravee + 1
             Forces(i) = New List(Of cls_Force)
             FReparties(i) = New List(Of cls_ForceRepartie)
         Next
 
     End Sub
+
+
 
 
 #End Region
@@ -41,11 +43,14 @@
 
     Public Shared Sub DeepClone(ByVal ChargementSource As cls_ChargementUtilisateur, ByRef ChargementCible As cls_ChargementUtilisateur)
 
+        ChargementCible = ChargementSource.Clone()
+
         ReDim ChargementCible.QSurf(ChargementSource.QSurf.Length - 1)
         ChargementCible.QSurf = ChargementSource.QSurf.Clone()
 
         ReDim ChargementCible.Forces(ChargementSource.Forces.Length - 1)
         For i As Integer = 0 To ChargementSource.Forces.Length - 1
+            ChargementCible.Forces(i) = New List(Of cls_Force)
             For Each force As cls_Force In ChargementSource.Forces(i)
                 ChargementCible.Forces(i).Add(force.Clone())
             Next
@@ -53,8 +58,11 @@
 
         ReDim ChargementCible.FReparties(ChargementSource.FReparties.Length - 1)
         For i As Integer = 0 To ChargementSource.FReparties.Length - 1
+            ChargementCible.FReparties(i) = New List(Of cls_ForceRepartie)
             For Each force As cls_ForceRepartie In ChargementSource.FReparties(i)
-                ChargementCible.FReparties(i).Add(force.Clone())
+                Dim force_loc As New cls_ForceRepartie(0, 0, 0, 0, 0)
+                force_loc.DeepClone(force, force_loc)
+                ChargementCible.FReparties(i).Add(force_loc)
             Next
         Next
     End Sub

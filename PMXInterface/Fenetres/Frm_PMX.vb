@@ -10,7 +10,7 @@ Public Class Frm_PMX
 
     Private ReadOnly ToolFiles As New List(Of ToolStripMenuItem)
 
-    Dim FilleEnCours As EnuFenetres = EnuFenetres.Identification
+    Dim FilleEnCours As EnuFenetres = EnuFenetres.Main
 
     '--> Gestion de l'affichage des projets et des poutres
 
@@ -459,6 +459,12 @@ Public Class Frm_PMX
     End Sub
 
 
+    Private Sub TSbtn_OpenN_Click(sender As Object, e As EventArgs) Handles TSbtn_OpenN.Click
+        OuvrirFichier()
+
+    End Sub
+
+
     Private Sub TSbtn_SaveN_Click(sender As Object, e As EventArgs) Handles TSbtn_SaveN.Click
 
         EnregistrerProjetEnCours()
@@ -607,7 +613,7 @@ Public Class Frm_PMX
         MyProjet.lModif = False
 
         '--> Initialisation de l'interface avec le projet ouvert
-        AfficheFenetreEnCours()
+        'AfficheFenetreEnCours()
         AffichageTViewChk()
 
 
@@ -1002,6 +1008,7 @@ Public Class Frm_PMX
         Me.tab_ChkSections(MyProjet.IndEnCours).Checked = True
 
     End Sub
+
 
 
 #End Region

@@ -19,6 +19,7 @@ Public Class Frm_Etaiement
     End Sub
 
     Public Sub InitialiserFenetre(sender As Object, e As EventArgs)
+        lBuild = True
         GestionLangues()
         GestionStyle()
         GestionUnites()
@@ -274,6 +275,7 @@ Public Class Frm_Etaiement
     End Sub
 
     Private Sub cmb_NbPoint_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbPoint.TextChanged
+        If lBuild Then Exit Sub
         MyPoutreLoc.NbPropping = cmb_NbPoint.SelectedItem
 
         img_Etaiement.Invalidate()

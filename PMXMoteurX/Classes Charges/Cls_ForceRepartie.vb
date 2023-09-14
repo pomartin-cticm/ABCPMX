@@ -31,8 +31,19 @@
 #End Region
 
 #Region " Fonction de copie "
-    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+    Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
+    End Function
+
+    Public Function DeepClone(ByVal ForceRepartieSource As cls_ForceRepartie, ByRef ForceRepartieCible As cls_ForceRepartie)
+        ForceRepartieCible.Force(0) = ForceRepartieSource.Force(0)
+        ForceRepartieCible.Force(1) = ForceRepartieSource.Force(1)
+
+        ForceRepartieCible.xPosT(0) = ForceRepartieSource.xPosT(0)
+        ForceRepartieCible.xPosT(1) = ForceRepartieSource.xPosT(1)
+
+        ForceRepartieCible.xGaucheT = ForceRepartieSource.xGaucheT
+
     End Function
 
 #End Region

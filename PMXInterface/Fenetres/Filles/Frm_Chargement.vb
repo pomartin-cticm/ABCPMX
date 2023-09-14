@@ -28,13 +28,16 @@ Public Class Frm_Chargement
     Const NbChargePonctuelleMAX As Integer = 8
 
     Dim traveeEnCours As Integer 'Donne l'indice de la travée en cours (POUR L'OBJET CLS_POUTRE)
-    Dim iSelect As Integer = 1 ' indice qui informe du numéro de travée en cours (UNIQUEMENT POUR LE DESSIN)
+    Dim iTraveeSelect As Integer = 1 ' indice qui informe du numéro de travée en cours (UNIQUEMENT POUR LE DESSIN)
     '----------------------------------------------
     '   1 pour la travée principale
     '   -1 si rien de selectionné
     '   0 console gauche
     '   99 console droite
     '----------------------------------------------
+    Dim iChargeRepartieSelect As Integer = -1 ' indice qui informe de l'indice de la charge répartie en cours (UNIQUEMENT POUR LE DESSIN)
+    Dim iChargePonctuelleSelect As Integer = -1 ' indice qui informe de l'indice de la charge répartie en cours (UNIQUEMENT POUR LE DESSIN)
+
     Dim chargeEnCours As String
     Dim Old_SelectedIndex_cmbTravee As Integer
 
@@ -86,6 +89,7 @@ Public Class Frm_Chargement
     End Sub
 
     Private Sub InitialiserVariables()
+        MyPoutreLoc = New cls_Poutre()
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
 
         NbTravees = MyPoutreLoc.NbTravees
@@ -383,6 +387,7 @@ Public Class Frm_Chargement
             If lModif Then
                 MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
+            Me.ErrorProvider_Frm_Chargement.Clear()
             Me.Close()
         End If
     End Sub
@@ -436,9 +441,76 @@ Public Class Frm_Chargement
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
+        With MyProjet.Poutres(MyProjet.IndEnCours)
+
+            lModif = False
+
+            For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
+                For Each chgtU As KeyValuePair(Of String, cls_ChargementUtilisateur) In MyPoutreLoc.ChargesU
+
+                    GereTransfertValeur(chgtU.Value.QSurf(i), .ChargesU(chgtU.Key).QSurf(i), lModif)
+                    GereTransfertValeur(chgtU.Value.WSurf(i), .ChargesU(chgtU.Key).WSurf(i), lModif)
+
+                    If chgtU.Value.Forces(i).Count = .ChargesU(chgtU.Key).Forces(i).Count Then
+
+                        For j = 0 To chgtU.Value.Forces(i).Count - 1
+
+                            If Not chgtU.Value.Forces(i)(j).Equals(.ChargesU(chgtU.Key).Forces(i)(j)) Then
+
+                                .ChargesU(chgtU.Key).Forces(i) = New List(Of cls_Force)
+                                .ChargesU(chgtU.Key).Forces(i) = chgtU.Value.Forces(i)
+                                lModif = True
+
+                                Exit For
+                            End If
+
+                        Next
+
+                    Else
+
+                        .ChargesU(chgtU.Key).Forces(i) = New List(Of cls_Force)
+                        .ChargesU(chgtU.Key).Forces(i) = chgtU.Value.Forces(i)
+                        lModif = True
+
+                    End If
+
+
+                    If chgtU.Value.FReparties(i).Count = .ChargesU(chgtU.Key).FReparties(i).Count Then
+
+                        For j = 0 To chgtU.Value.FReparties(i).Count - 1
+
+                            If Not chgtU.Value.FReparties(i)(j).Equals(.ChargesU(chgtU.Key).FReparties(i)(j)) Then
+
+                                .ChargesU(chgtU.Key).FReparties(i) = New List(Of cls_ForceRepartie)
+                                .ChargesU(chgtU.Key).FReparties(i) = chgtU.Value.FReparties(i)
+                                lModif = True
+
+                                Exit For
+                            End If
+
+                        Next
+
+                    Else
+
+                        .ChargesU(chgtU.Key).FReparties(i) = New List(Of cls_ForceRepartie)
+                        .ChargesU(chgtU.Key).FReparties(i) = chgtU.Value.FReparties(i)
+                        lModif = True
+
+                    End If
+
+
+
+                Next
+            Next
+
+
+        End With
+
     End Sub
 
-
+    Private Sub btn_Annuler_Click(sender As Object, e As EventArgs) Handles btn_Annuler.Click
+        ErrorProvider_Frm_Chargement.Clear()
+    End Sub
 
 
 
@@ -449,7 +521,7 @@ Public Class Frm_Chargement
 
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Chargement.Paint
 
-        DessinFrmChargement(e.Graphics, MyPoutreLoc, Me.img_Chargement.ClientRectangle.Width, Me.img_Chargement.ClientRectangle.Height, 1, iSelect, traveeEnCours, chargeEnCours)
+        DessinFrmChargement(e.Graphics, MyPoutreLoc, Me.img_Chargement.ClientRectangle.Width, Me.img_Chargement.ClientRectangle.Height, 1, iTraveeSelect, traveeEnCours, chargeEnCours, iChargePonctuelleSelect, iChargeRepartieSelect)
 
     End Sub
 
@@ -557,13 +629,13 @@ Public Class Frm_Chargement
             Select Case cmb_Travee.Text
                 Case strTypeTravee_ConsoleGauche
                     traveeEnCours = 0
-                    iSelect = 0
+                    iTraveeSelect = 0
                 Case strTypeTravee_TraveeCentrale
                     traveeEnCours = 1
-                    iSelect = 1
+                    iTraveeSelect = 1
                 Case strTypeTravee_ConsoleDroite
                     traveeEnCours = MyPoutreLoc.IndiceTraveeConsoleDroite
-                    iSelect = 99
+                    iTraveeSelect = 99
             End Select
 
             NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
@@ -645,7 +717,7 @@ Public Class Frm_Chargement
         For i As Integer = 0 To NbChargeLineique - 1
             For j As Integer = 0 To 4
                 tableau_txtbox_ChargesLineiques(i, j).Visible = True
-                tableau_txtbox_ChargesLineiques(i, 0).Text = i
+                tableau_txtbox_ChargesLineiques(i, 0).Text = i + 1
                 tableau_txtbox_ChargesLineiques(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(0) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
                 tableau_txtbox_ChargesLineiques(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(0) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur))
                 tableau_txtbox_ChargesLineiques(i, 3).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(1) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
@@ -669,7 +741,7 @@ Public Class Frm_Chargement
         For i As Integer = 0 To NbChargePonctuelle - 1
             For j As Integer = 0 To 2
                 tableau_txtbox_ChargesPonctuelles(i, j).Visible = True
-                tableau_txtbox_ChargesPonctuelles(i, 0).Text = i
+                tableau_txtbox_ChargesPonctuelles(i, 0).Text = i + 1
                 tableau_txtbox_ChargesPonctuelles(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).xPosT / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
                 tableau_txtbox_ChargesPonctuelles(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).Force / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
             Next
@@ -706,13 +778,13 @@ Public Class Frm_Chargement
             Select Case cmb_Travee.Text
                 Case strTypeTravee_ConsoleGauche
                     traveeEnCours = 0
-                    iSelect = 0
+                    iTraveeSelect = 0
                 Case strTypeTravee_TraveeCentrale
                     traveeEnCours = 1
-                    iSelect = 1
+                    iTraveeSelect = 1
                 Case strTypeTravee_ConsoleDroite
                     traveeEnCours = MyPoutreLoc.IndiceTraveeConsoleDroite
-                    iSelect = 99
+                    iTraveeSelect = 99
             End Select
 
             NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
@@ -826,6 +898,110 @@ Public Class Frm_Chargement
 
         img_Chargement.Invalidate()
     End Sub
+
+    ''' <summary>
+    ''' Gère la sélection de la charge répartie en cours (POUR LE DESSIN)
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub txt_txtbox_ChargementLineique_Enter(sender As Object, e As EventArgs) Handles txt_x2_Lineique_4.Enter, txt_x2_Lineique_3.Enter, txt_x2_Lineique_2.Enter, txt_x2_Lineique_1.Enter, txt_x1_Lineique_4.Enter, txt_x1_Lineique_3.Enter, txt_x1_Lineique_2.Enter, txt_x1_Lineique_1.Enter, txt_Indice_Lineique_4.Enter, txt_Indice_Lineique_3.Enter, txt_Indice_Lineique_2.Enter, txt_Indice_Lineique_1.Enter, txt_F2_Lineique_4.Enter, txt_F2_Lineique_3.Enter, txt_F2_Lineique_2.Enter, txt_F2_Lineique_1.Enter, txt_F1_Lineique_4.Enter, txt_F1_Lineique_3.Enter, txt_F1_Lineique_2.Enter, txt_F1_Lineique_1.Enter
+        If lBuild Then Exit Sub
+        iChargeRepartieSelect = -1
+
+        For i As Integer = 0 To NbChargeLineique - 1
+            For j As Integer = 0 To 4
+
+                If sender.name = tableau_txtbox_ChargesLineiques(i, j).Name Then
+                    iChargeRepartieSelect = i
+                    For k As Integer = 0 To 4
+                        tableau_txtbox_ChargesLineiques(i, k).BackColor = Color.LightBlue
+                    Next
+                    img_Chargement.Invalidate()
+                    Exit Sub
+
+                End If
+
+            Next
+        Next
+
+        img_Chargement.Invalidate()
+
+    End Sub
+
+    ''' <summary>
+    ''' Gère la sélection de la charge répartie en cours (POUR LE DESSIN)
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub txt_txtbox_ChargementLineique_Leave(sender As Object, e As EventArgs) Handles txt_x2_Lineique_4.Leave, txt_x2_Lineique_3.Leave, txt_x2_Lineique_2.Leave, txt_x2_Lineique_1.Leave, txt_x1_Lineique_4.Leave, txt_x1_Lineique_3.Leave, txt_x1_Lineique_2.Leave, txt_x1_Lineique_1.Leave, txt_Indice_Lineique_4.Leave, txt_Indice_Lineique_3.Leave, txt_Indice_Lineique_2.Leave, txt_Indice_Lineique_1.Leave, txt_F2_Lineique_4.Leave, txt_F2_Lineique_3.Leave, txt_F2_Lineique_2.Leave, txt_F2_Lineique_1.Leave, txt_F1_Lineique_4.Leave, txt_F1_Lineique_3.Leave, txt_F1_Lineique_2.Leave, txt_F1_Lineique_1.Leave
+        If lBuild Then Exit Sub
+
+        If iChargeRepartieSelect = -1 Then
+            Exit Sub
+        Else
+            For k As Integer = 0 To 4
+                tableau_txtbox_ChargesLineiques(iChargeRepartieSelect, k).BackColor = Color.White
+            Next
+            iChargeRepartieSelect = -1
+
+        End If
+
+        img_Chargement.Invalidate()
+
+    End Sub
+
+    ''' <summary>
+    ''' Gère la sélection de la charge ponctuelle en cours (POUR LE DESSIN)
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub txt_txtbox_ChargementPonctuelle_Enter(sender As Object, e As EventArgs) Handles txt_x_Ponctuelle_8.Enter, txt_x_Ponctuelle_7.Enter, txt_x_Ponctuelle_6.Enter, txt_x_Ponctuelle_5.Enter, txt_x_Ponctuelle_4.Enter, txt_x_Ponctuelle_3.Enter, txt_x_Ponctuelle_2.Enter, txt_x_Ponctuelle_1.Enter, txt_Indice_Ponctuelle_8.Enter, txt_Indice_Ponctuelle_7.Enter, txt_Indice_Ponctuelle_6.Enter, txt_Indice_Ponctuelle_5.Enter, txt_Indice_Ponctuelle_4.Enter, txt_Indice_Ponctuelle_3.Enter, txt_Indice_Ponctuelle_2.Enter, txt_Indice_Ponctuelle_1.Enter, txt_F_Ponctuelle_8.Enter, txt_F_Ponctuelle_7.Enter, txt_F_Ponctuelle_6.Enter, txt_F_Ponctuelle_5.Enter, txt_F_Ponctuelle_4.Enter, txt_F_Ponctuelle_3.Enter, txt_F_Ponctuelle_2.Enter, txt_F_Ponctuelle_1.Enter
+        If lBuild Then Exit Sub
+        iChargePonctuelleSelect = -1
+
+        For i As Integer = 0 To NbChargePonctuelle - 1
+            For j As Integer = 0 To 2
+
+                If sender.name = tableau_txtbox_ChargesPonctuelles(i, j).Name Then
+                    iChargePonctuelleSelect = i
+                    For k As Integer = 0 To 2
+                        tableau_txtbox_ChargesPonctuelles(i, k).BackColor = Color.LightBlue
+                    Next
+                    img_Chargement.Invalidate()
+                    Exit Sub
+
+                End If
+
+            Next
+        Next
+
+        img_Chargement.Invalidate()
+
+    End Sub
+
+    ''' <summary>
+    ''' Gère la sélection de la charge ponctuelle en cours (POUR LE DESSIN)
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub txt_txtbox_ChargementPonctuelle_Leave(sender As Object, e As EventArgs) Handles txt_x_Ponctuelle_8.Leave, txt_x_Ponctuelle_7.Leave, txt_x_Ponctuelle_6.Leave, txt_x_Ponctuelle_5.Leave, txt_x_Ponctuelle_4.Leave, txt_x_Ponctuelle_3.Leave, txt_x_Ponctuelle_2.Leave, txt_x_Ponctuelle_1.Leave, txt_Indice_Ponctuelle_8.Leave, txt_Indice_Ponctuelle_7.Leave, txt_Indice_Ponctuelle_6.Leave, txt_Indice_Ponctuelle_5.Leave, txt_Indice_Ponctuelle_4.Leave, txt_Indice_Ponctuelle_3.Leave, txt_Indice_Ponctuelle_2.Leave, txt_Indice_Ponctuelle_1.Leave, txt_F_Ponctuelle_8.Leave, txt_F_Ponctuelle_7.Leave, txt_F_Ponctuelle_6.Leave, txt_F_Ponctuelle_5.Leave, txt_F_Ponctuelle_4.Leave, txt_F_Ponctuelle_3.Leave, txt_F_Ponctuelle_2.Leave, txt_F_Ponctuelle_1.Leave
+        If lBuild Then Exit Sub
+
+        If iChargePonctuelleSelect = -1 Then
+            Exit Sub
+        Else
+            For k As Integer = 0 To 2
+                tableau_txtbox_ChargesPonctuelles(iChargePonctuelleSelect, k).BackColor = Color.White
+            Next
+            iChargePonctuelleSelect = -1
+
+        End If
+
+        img_Chargement.Invalidate()
+
+    End Sub
+
+
 
     Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 

@@ -1534,7 +1534,6 @@ Partial Class Frm_Chargement
     Friend WithEvents txt_x1_Lineique_1 As TextBox
     Friend WithEvents txt_Indice_Lineique_2 As TextBox
     Friend WithEvents txt_F1_Lineique As TextBox
-    Friend WithEvents txt_Indice_Lineique_1 As TextBox
     Friend WithEvents txt_x1_Lineique As TextBox
     Friend WithEvents txt_Indice_Lineique As TextBox
     Friend WithEvents lbl_ChargesLineiques As Label
@@ -1580,4 +1579,5 @@ Partial Class Frm_Chargement
     Friend WithEvents pan_Dessin As Panel
     Friend WithEvents img_Chargement As PictureBox
     Friend WithEvents ErrorProvider_Frm_Chargement As ErrorProvider
+    Friend WithEvents txt_Indice_Lineique_1 As TextBox
 End Class

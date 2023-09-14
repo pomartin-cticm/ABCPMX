@@ -29,7 +29,20 @@
         Return Me.MemberwiseClone()
     End Function
 
+    'Public Overrides Function Equals(obj As Object) As Boolean
+    '    Dim force = TryCast(obj, cls_Force)
+    '    Return force IsNot Nothing AndAlso
+    '           Me.Force = force.Force AndAlso
+    '           Me.xPosT = force.xPosT AndAlso
+    '           Me.xGaucheT = force.xGaucheT
+    'End Function
+
+
+
 #End Region
+
+
+
 
 #Region "Propriétés"
 

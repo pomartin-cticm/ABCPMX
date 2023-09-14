@@ -180,6 +180,7 @@ Public Class cls_Projet
                 Lines.Add("   lDefautDalle   =  " & .lDefautDalle)
                 Lines.Add("   lDonneesSauv   =  " & .lDonneesSauvees)
                 Lines.Add("   lNouvPoutre    =  " & .NouvellePoutre)
+                Lines.Add("")
 
                 '==[ Classe Maintien ]=================================================================
                 For Each maint In .Maintiens
@@ -192,7 +193,7 @@ Public Class cls_Projet
                             Lines.Add("   xloc           =  " & .x_Loc)
                             Lines.Add("   lMaintSemSup   =  " & .lMaintienSemelleSup)
                             Lines.Add("   lMaintSemInf   =  " & .lMaintienSemelleInf)
-
+                            Lines.Add("")
                         End With
 
                     Next
@@ -206,7 +207,7 @@ Public Class cls_Projet
                     Lines.Add("   lDalleBeton    =  " & .lDalleBeton)
                     Lines.Add("   lDatabase      =  " & .lDatabase)
                     Lines.Add("   typeSection    =  " & .typeSection)
-
+                    Lines.Add("")
 
                     '==[ Classe ProfilA ]=================================================================
                     With .ProfilA
@@ -230,6 +231,7 @@ Public Class cls_Projet
                         Lines.Add("   Platt          =  " & .Plat_t)
                         ' Lines.Add("   IndDeliv       =  " & ConvertListShortToString(.IndDeliv))
                         ' Lines.Add("   IndStand       =  " & ConvertListShortToString(.IndStandart))
+                        Lines.Add("")
 
                     End With
 
@@ -248,6 +250,7 @@ Public Class cls_Projet
                         Lines.Add("   f_y_fs         =  " & .f_y.fs)
                         Lines.Add("   f_y_w          =  " & .f_y.w)
                         Lines.Add("   f_y_fi         =  " & .f_y.fi)
+                        Lines.Add("")
                     End With
 
 
@@ -262,6 +265,7 @@ Public Class cls_Projet
                         Lines.Add("   Etrier_Phi     =  " & .Etriers_Phi)
                         Lines.Add("   Etrier_CY  =  " & .Etriers_EnrobageY)
                         Lines.Add("   Etrier_CZ  =  " & .Etriers_EnrobageZ)
+                        Lines.Add("")
 
                         '==[ Classe Armature Enrobage Partiel ProfilA ]=================================================================
                         Lines.Add("BLOCK ARMATURE_ENROBAGE_PROFILA")
@@ -276,6 +280,7 @@ Public Class cls_Projet
                                 Lines.Add("   PhiInt         =  " & .PhiInt)
                                 Lines.Add("   NbInt          =  " & .NbInt)
                                 If i = 1 Then Lines.Add("   zPosRatio      =  " & .zPosRatio)
+                                Lines.Add("")
                             End With
                         Next
 
@@ -298,6 +303,7 @@ Public Class cls_Projet
                             Lines.Add("   Ecm            =  " & .Ecm)
                             Lines.Add("   lCrackLimit    =  " & .lCrackingLimitation)
                             Lines.Add("   wk_max         =  " & .wk_max)
+                            Lines.Add("")
                         End With
                     End With
                 End With
@@ -315,6 +321,7 @@ Public Class cls_Projet
                     Lines.Add("   preDalle_ep    =  " & .preDalle_ep)
                     Lines.Add("   preDalle_tjoi  =  " & .preDalle_tjoint)
                     'Lines.Add("   theta_h        =  " & .pTheta_h)
+                    Lines.Add("")
 
                     '==[ Classe Béton Dalle ]=================================================================
                     With .beton
@@ -328,6 +335,7 @@ Public Class cls_Projet
                         Lines.Add("   Ecm            =  " & .Ecm)
                         Lines.Add("   lCrackLimit    =  " & .lCrackingLimitation)
                         Lines.Add("   wk_max         =  " & .wk_max)
+                        Lines.Add("")
                     End With
 
                     '==[ Classe Bac Dalle ]=================================================================
@@ -351,6 +359,7 @@ Public Class cls_Projet
                         Lines.Add("   lPreperce      =  " & .lPreperce)
                         Lines.Add("   AppuiT         =  " & .AppuiT)
                         Lines.Add("   AppuiL         =  " & .AppuiL)
+                        Lines.Add("")
                     End With
 
                     '==[ Classe Armature Dalle ]=================================================================
@@ -364,6 +373,7 @@ Public Class cls_Projet
                             Lines.Add("   n_s            =  " & .n_s)
                             Lines.Add("   c_s            =  " & .c_s)
                             Lines.Add("   lActive        =  " & .lActive)
+                            Lines.Add("")
                         End With
                     Next
 
@@ -374,6 +384,7 @@ Public Class cls_Projet
                         Lines.Add("   Classe         =  " & .Classe)
                         Lines.Add("   Fsk            =  " & .FsK)
                         Lines.Add("   Es             =  " & .Es)
+                        Lines.Add("")
                     End With
 
 
@@ -384,6 +395,7 @@ Public Class cls_Projet
                         Lines.Add("   hsc            =  " & .hsc)
                         Lines.Add("   d              =  " & .d)
                         Lines.Add("   fu              =  " & .Fu)
+                        Lines.Add("")
                     End With
                 End With
 
@@ -438,6 +450,7 @@ Public Class cls_Projet
                     '    Lines.Add("   PDPt0         = " & .CP_t_0)
                     '    Lines.Add("   PDPn_L        = " & .CP_n_L)
                     'End With
+                    Lines.Add("")
 
                     '==[ Classe Gamma ]=================================================================
                     With .Gamma
@@ -464,6 +477,7 @@ Public Class cls_Projet
                         Lines.Add("   Psi0_Q2       = " & .Psi0_Q2)
                         Lines.Add("   Psi1_Q2       = " & .Psi1_Q2)
                         Lines.Add("   Psi2_Q2       = " & .Psi2_Q2)
+                        Lines.Add("")
                     End With
 
                     '==[ Classe Hivoss ]=================================================================
@@ -480,6 +494,7 @@ Public Class cls_Projet
                         Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
                         Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
                         Lines.Add("   AmortDtot     = " & .AmortiTotal_Dtot)
+                        Lines.Add("")
                     End With
                 End With
             End With
@@ -536,10 +551,10 @@ Public Class cls_Projet
             MsgBox("Erreur lecture fichier | Error read file", MsgBoxStyle.Critical, "Cls_Project/RecuperationFile")
         End Try
 
-        If Not ListeBlocCle.Contains("IDENTIFICATION") Or Not ListeBlocCle.Contains("POUTRE") Or Not ListeBlocCle.Contains("MAINTIENTS") Or Not ListeBlocCle.Contains("SECTION") Or
-           Not ListeBlocCle.Contains("PROFILA") Or Not ListeBlocCle.Contains("ACIER_PROFILA") Or Not ListeBlocCle.Contains("ENROBAGE_PROFILA") Or Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") Or Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") Or Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") Or
-           Not ListeBlocCle.Contains("DALLE") Or Not ListeBlocCle.Contains("BETON_DALLE") Or Not ListeBlocCle.Contains("BAC_DALLE") Or Not ListeBlocCle.Contains("ARMATURE_DALLE") Or Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") Or Not ListeBlocCle.Contains("CONNECTEUR_DALLE") Or
-           Not ListeBlocCle.Contains("OPT_CALCULS") Or Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") Or Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE") Or Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") Or Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") Then
+        If Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("POUTRE") And Not ListeBlocCle.Contains("MAINTIENTS") And Not ListeBlocCle.Contains("SECTION") And
+           Not ListeBlocCle.Contains("PROFILA") And Not ListeBlocCle.Contains("ACIER_PROFILA") And Not ListeBlocCle.Contains("ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") And
+           Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE") And
+           Not ListeBlocCle.Contains("OPT_CALCULS") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE") And Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") Then
 
             MsgBox("Fichier corrumpu | Corrupted file", MsgBoxStyle.Critical, "Cls_Projet/LectureFile")
 
@@ -550,8 +565,11 @@ Public Class cls_Projet
         '--> Traitement des blocks
 
         For i = 0 To ListeBlocIndex.Count - 1
-            If i = ListeBlocIndex.Count - 1 Then IndexFin = Lines.Lines.Count - 1 Else IndexFin = ListeBlocIndex(i + 1)
+            If i = ListeBlocIndex.Count - 1 Then IndexFin = Lines.Lines.Count - 1 Else IndexFin = ListeBlocIndex(i + 1) - 1
             Select Case ListeBlocCle(i)
+
+                Case "IDENTIFICATION"
+                    ReadBloc_Identification(Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
                 Case "POUTRE"
                     Dim ptre_en_cours As New cls_Poutre
@@ -579,73 +597,78 @@ Public Class cls_Projet
 
                 Case "ACIER_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim acier_profilA As cls_Acier
+                    Dim acier_profilA As New cls_Acier
                     ReadBlocAcierProfilA(acier_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.Acier = acier_profilA
 
                 Case "ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim enrobage_profilA As cls_Enrobage_Partiel
+                    Dim enrobage_profilA As New cls_Enrobage_Partiel
                     ReadBlocEnrobageProfilA(enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.enrobage_partiel = enrobage_profilA
 
                 Case "ARMATURE_ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim armature_enrobage_profilA(2) As cls_ArmatureEnrobage
+
+                    For j As Integer = 0 To armature_enrobage_profilA.Length - 1
+                        armature_enrobage_profilA(j) = New cls_ArmatureEnrobage
+                    Next
+
                     ReadBlocArmatureEnrobageProfilA(armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.enrobage_partiel.LitArma = armature_enrobage_profilA
 
                 Case "ACIER_ARMATURE_ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim acier_armature_enrobage_profilA As cls_AcierArmature
+                    Dim acier_armature_enrobage_profilA As New cls_AcierArmature
                     ReadBlocAcierArmatureEnrobageProfilA(acier_armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.enrobage_partiel.AcierArmatures = acier_armature_enrobage_profilA
 
                 Case "BETON_ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim beton_enrobage_profilA As cls_Beton
+                    Dim beton_enrobage_profilA As New cls_Beton
                     ReadBlocBetonEnrobageProfilA(beton_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.enrobage_partiel.Beton = beton_enrobage_profilA
 
                 Case "DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim dalle_en_cours As cls_Dalle
+                    Dim dalle_en_cours As New cls_Dalle
                     ReadBlocDalle(dalle_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle = dalle_en_cours
 
                 Case "BETON_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim beton_dalle As cls_Beton
+                    Dim beton_dalle As New cls_Beton
                     ReadBlocBetonDalle(beton_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.beton = beton_dalle
 
                 Case "BAC_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim bac_en_cours As cls_Bac
+                    Dim bac_en_cours As New cls_Bac
                     ReadBlocBacDalle(bac_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.Bac = bac_en_cours
 
                 Case "ARMATURE_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim armature_dalle As Cls_Armatures_Longi
+                    Dim armature_dalle As New Cls_Armatures_Longi
                     ReadBlocArmatureDalle(armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.LitArma.Add(armature_dalle)
 
                 Case "ACIER_ARMATURE_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim acier_armature_dalle As cls_AcierArmature
+                    Dim acier_armature_dalle As New cls_AcierArmature
                     ReadBlocAcierArmatureDalle(acier_armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.AcierArmatures = acier_armature_dalle
 
                 Case "CONNECTEUR_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim connecteur_dalle As cls_Connecteur
+                    Dim connecteur_dalle As New cls_Connecteur
                     ReadBlocConnecteurDalle(connecteur_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.Connecteur = connecteur_dalle
 
                 Case "OPT_CALCULS"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim opt_calculs_en_cours As cls_OptionsCalcul
+                    Dim opt_calculs_en_cours As New cls_OptionsCalcul
                     ReadBlocOptionsCalculs(opt_calculs_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param = opt_calculs_en_cours
 
@@ -664,13 +687,13 @@ Public Class cls_Projet
 
                 Case "OPT_CALCULS_GAMMA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim gamma_opt_calculs As cls_Gamma
+                    Dim gamma_opt_calculs As New cls_Gamma
                     ReadBlocGammaOptionsCalculs(gamma_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param.Gamma = gamma_opt_calculs
 
                 Case "OPT_CALCULS_HIVOSS"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim hivoss_opt_calculs As cls_OptionsHivoss
+                    Dim hivoss_opt_calculs As New cls_OptionsHivoss
                     ReadBlocHivossOptionsCalculs(hivoss_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param.HivossParam = hivoss_opt_calculs
 
@@ -697,7 +720,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Private Sub ReadBloc_Indentification(ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBloc_Identification(ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -781,7 +804,7 @@ Public Class cls_Projet
                         Case "TYPEETAIEM" : .TypeEtaiement = TraiteReal(Mots(nbMots))
                         Case "ETAISCONSG" : .lEtaisConsoleGauche = Mots(nbMots)
                         Case "ETAISCONSD" : .lEtaisConsoleDroite = Mots(nbMots)
-                        Case "NBPROPPIN" : .NbPropping = Mots(nbMots)
+                        Case "NBPROPPING" : .NbPropping = Mots(nbMots)
                         Case "NBRESTRAIN" : .NbRestrain = ConvertStringToListInteger(Mots(nbMots))
                         Case "TYPEMAINTI" : .TypeMaintien = Mots(nbMots)
                         Case "D1" : .EntraxeD1 = TraiteReal(Mots(nbMots))
@@ -904,14 +927,14 @@ Public Class cls_Projet
                         Case "HA" : .ha = TraiteReal(Mots(nbMots))
                         Case "HB" : .hb = TraiteReal(Mots(nbMots))
                         Case "BFS" : .Bfs = TraiteReal(Mots(nbMots))
-                        Case "BTS" : .Tfs = TraiteReal(Mots(nbMots))
+                        Case "TFS" : .Tfs = TraiteReal(Mots(nbMots))
                         Case "BFI" : .Bfi = TraiteReal(Mots(nbMots))
                         Case "TFI" : .Tfi = TraiteReal(Mots(nbMots))
                         Case "RCS" : .Rcs = TraiteReal(Mots(nbMots))
                         Case "RCI" : .Rci = TraiteReal(Mots(nbMots))
                         'Case "HW" : .h_w = TraiteReal(Mots(nbMots))
                         Case "TW" : .Tw = TraiteReal(Mots(nbMots))
-                        Case "SOUDUREA" : .aW = TraiteReal(Mots(nbMots))
+                        Case "SOUDURE_A" : .aW = TraiteReal(Mots(nbMots))
                         Case "TYPEPROFIL" : .typeProfileAcier = Mots(nbMots)
                         Case "PLATB" : .Plat_b = TraiteReal(Mots(nbMots))
                         Case "PLATT" : .Plat_t = TraiteReal(Mots(nbMots))
@@ -995,7 +1018,7 @@ Public Class cls_Projet
                     Select Case MotCle
                         Case "LARMACONST" : .lArmaConst = Mots(nbMots)
                         Case "CONSTPHI" : .ConstPhi = TraiteReal(Mots(nbMots))
-                        Case "RATIOBC" : .Ratio_bc = TraiteReal(Mots(nbMots))
+                        Case "RATIO_BC" : .Ratio_bc = TraiteReal(Mots(nbMots))
                         Case "ETRIER_TYP" : .Etriers_Type = Mots(nbMots)
                         Case "ETRIER_PHI" : .Etriers_Phi = TraiteReal(Mots(nbMots))
                         Case "ETRIER_CY" : .Etriers_EnrobageY = TraiteReal(Mots(nbMots))
@@ -1342,7 +1365,7 @@ Public Class cls_Projet
                         Case "PHIS" : .PhiS = TraiteReal(Mots(nbMots))
                         Case "Z_S" : .z_s = TraiteReal(Mots(nbMots))
                         Case "N_S" : .n_s = TraiteReal(Mots(nbMots))
-                        Case "c_S" : .c_s = TraiteReal(Mots(nbMots))
+                        Case "C_S" : .c_s = TraiteReal(Mots(nbMots))
                         Case "LACTIVE" : .lActive = Mots(nbMots)
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
@@ -1453,7 +1476,7 @@ Public Class cls_Projet
 
                 With opt_calculs_en_cours
                     Select Case MotCle
-                        Case "LARMACOMPR" : .lArmaComprimee = Mots(nbMots)
+                        Case "LARMACOMP" : .lArmaComprimee = Mots(nbMots)
                         Case "LRENFORMIS" : .lRenformis = Mots(nbMots)
                         Case "ETA" : .Eta = TraiteReal(Mots(nbMots))
                         Case "LINTERMV" : .lInterActionMV = Mots(nbMots)
@@ -1646,7 +1669,7 @@ Public Class cls_Projet
                         Case "LHIVOSSMET" : .lHivossMethod = Mots(nbMots)
                         Case "RATIOQ" : .ratioQ = TraiteReal(Mots(nbMots))
                         Case "CHOIXQ" : .choixQ = Mots(nbMots)
-                        Case "UTILISATIO" : .UtilisationPlancher = Mots(nbMots)
+                        Case "UTILPLANCH" : .UtilisationPlancher = Mots(nbMots)
                         Case "MOBILIER" : .Mobilier = Mots(nbMots)
                         Case "LFAUXPLAFO" : .lFauxPlafond = Mots(nbMots)
                         Case "AMORTD1" : .AmortiStructure_D1 = Mots(nbMots)

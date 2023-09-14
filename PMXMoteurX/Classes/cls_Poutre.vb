@@ -757,7 +757,9 @@ Public Class cls_Poutre
         'Clone ChargeUtilisateur
         PoutreCible.ChargesU = New Dictionary(Of String, cls_ChargementUtilisateur)
         For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In PoutreSource.ChargesU
-            PoutreCible.ChargesU.Add(element.Key, element.Value)
+            Dim element_local As cls_ChargementUtilisateur
+            element_local.DeepClone(element.Value, element_local)
+            PoutreCible.ChargesU.Add(element.Key, element_local)
         Next
 
     End Sub
@@ -1037,10 +1039,13 @@ Public Class cls_Poutre
                 If lAnalysisModel Then 'Calcul de la largeur participante pour l'analyse
                     beff = beff_m
                 Else 'Calcul de la largeur participante pour la vérification de la section
+
+                    Dim epsilon As Decimal = 10 ^ (-6) 'GuD: On définit une petite valeur pour pouvoir renvoyer la valeur la plus faible entre beff_s et beff_m lorsqu'on est proche de 0.15 ou 0.85
+
                     Select Case xPositionSection / LongueurTravee(i_travee)
-                        Case <= 0.15
+                        Case <= 0.15 + epsilon
                             beff = beff_s_A
-                        Case >= 0.85
+                        Case >= 0.85 - epsilon
                             beff = beff_s_B
                         Case Else
                             beff = beff_m
