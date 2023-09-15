@@ -26,7 +26,7 @@ Public Class cls_Projet
     ''' <summary>
     ''' Nom du projet
     ''' </summary>
-    Public Projet As String
+    'Public Projet As String
 
     ''' <summary>
     ''' Poutres du projet
@@ -66,7 +66,7 @@ Public Class cls_Projet
         Me.Nom = ""
         Me.Utilisateur = ""
         Me.Entreprise = ""
-        Me.Projet = ""
+        'Me.Nom = ""
         Me.FileName = ""
 
     End Sub
@@ -111,7 +111,7 @@ Public Class cls_Projet
         Lines.Add("BLOCK IDENTIFICATION")
         Lines.Add("   Utilisateur   = " & Me.Utilisateur)
         Lines.Add("   Entreprise    = " & Me.Entreprise)
-        Lines.Add("   Nom           = " & Me.Nom)
+        Lines.Add("   NomProjet     = " & Me.Nom)
         Lines.Add("")
 
         '==[ Nuances d'acier utilisateur ]=================================================================
@@ -140,7 +140,8 @@ Public Class cls_Projet
             With ptre
 
                 Lines.Add("BLOCK POUTRE")
-                Lines.Add("   Label          =  " & .Label)
+                Lines.Add("   BeamID           =  " & .BeamID)
+                Lines.Add("   Commentaire       =  " & .Commentaire)
                 Lines.Add("   TypeSection   =  " & .TypeSection)
                 Lines.Add("   ConsoleGauche  =  " & .lTraveeConsoleGauche)
                 Lines.Add("   ConsoleDroite  =  " & .lTraveeConsoleDroite)
@@ -290,13 +291,15 @@ Public Class cls_Projet
                             Lines.Add("   Classe         =  " & .Classe)
                             Lines.Add("   FsK            =  " & .FsK)
                             Lines.Add("   Es             =  " & .Es)
+                            Lines.Add("")
                         End With
 
                         '==[ Classe Béton Enrobage Partiel ProfilA ]=================================================================
                         Lines.Add("BLOCK BETON_ENROBAGE_PROFILA")
                         With .Beton
-                            Lines.Add("   Type           =  " & .Type)
+                            Lines.Add("   Leger          =  " & .lLeger)
                             Lines.Add("   Classe         =  " & .Classe)
+                            Lines.Add("   RhoC         =  " & .RhoC)
                             Lines.Add("   Fck            =  " & .Fck)
                             Lines.Add("   Fcm            =  " & .Fcm)
                             Lines.Add("   Fctm           =  " & .Fctm)
@@ -327,8 +330,9 @@ Public Class cls_Projet
                     With .beton
                         Lines.Add("BLOCK BETON_DALLE")
 
-                        Lines.Add("   Type           =  " & .Type)
+                        Lines.Add("   Leger           =  " & .lLeger)
                         Lines.Add("   Classe         =  " & .Classe)
+                        Lines.Add("   RhoC         =  " & .RhoC)
                         Lines.Add("   Fck            =  " & .Fck)
                         Lines.Add("   Fcm            =  " & .Fck)
                         Lines.Add("   Fctm           =  " & .Fctm)
@@ -340,6 +344,7 @@ Public Class cls_Projet
 
                     '==[ Classe Bac Dalle ]=================================================================
                     With .Bac
+
                         Lines.Add("BLOCK BAC_DALLE")
 
                         Lines.Add("   Etiquette      =  " & .Etiquette)
@@ -365,15 +370,17 @@ Public Class cls_Projet
                     '==[ Classe Armature Dalle ]=================================================================
                     For Each arma_longi As Cls_Armatures_Longi In .LitArma
                         With arma_longi
-                            Lines.Add("BLOCK ARMATURE_DALLE")
-
-                            Lines.Add("   EspBar         =  " & .EspBar)
-                            Lines.Add("   PhiS           =  " & .PhiS)
-                            Lines.Add("   z_s            =  " & .z_s)
-                            Lines.Add("   n_s            =  " & .n_s)
-                            Lines.Add("   c_s            =  " & .c_s)
-                            Lines.Add("   lActive        =  " & .lActive)
-                            Lines.Add("")
+                            If ptre.Dalle.LitArma.IndexOf(arma_longi) = 0 Or (.lActive And ptre.Dalle.LitArma.IndexOf(arma_longi) = 1) Then
+                                Lines.Add("BLOCK ARMATURE_DALLE")
+                                Lines.Add("   indLit         =  " & ptre.Dalle.LitArma.IndexOf(arma_longi))
+                                Lines.Add("   EspBar         =  " & .EspBar)
+                                Lines.Add("   PhiS           =  " & .PhiS)
+                                Lines.Add("   z_s            =  " & .z_s)
+                                Lines.Add("   n_s            =  " & .n_s)
+                                Lines.Add("   c_s            =  " & .c_s)
+                                Lines.Add("   lActive        =  " & .lActive)
+                                Lines.Add("")
+                            End If
                         End With
                     Next
 
@@ -651,8 +658,9 @@ Public Class cls_Projet
                 Case "ARMATURE_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim armature_dalle As New Cls_Armatures_Longi
-                    ReadBlocArmatureDalle(armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Dalle.LitArma.Add(armature_dalle)
+                    Dim ind_travee As Integer
+                    ReadBlocArmatureDalle(armature_dalle, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Dalle.LitArma(ind_travee) = armature_dalle
 
                 Case "ACIER_ARMATURE_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -754,7 +762,7 @@ Public Class cls_Projet
                                 Me.Entreprise += Mots(z) + " "
                             End If
                         Next
-                    Case "NOM"
+                    Case "NOMP"
                         Me.Nom = ""
                         For z = 2 To nbMots
                             If z = nbMots Then
@@ -792,10 +800,11 @@ Public Class cls_Projet
                     MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
 
                     Select Case MotCle
-                        Case "LABEL" : .Label = Mots(nbMots)
+                        Case "BEAMID" : .BeamID = Mots(nbMots)
+                        Case "COMMENTAIR" : .Commentaire = Mots(nbMots)
                         Case "TYPESECTIO" : .TypeSection = Mots(nbMots)
                         Case "CONSOLEGAU" : .lTraveeConsoleGauche = Mots(nbMots)
-                        Case "CONSOLEDRO" : .lTraveeConsoleGauche = Mots(nbMots)
+                        Case "CONSOLEDRO" : .lTraveeConsoleDroite = Mots(nbMots)
                         Case "LTREMIEGAU" : .lTremieGauche = Mots(nbMots)
                         Case "LTREMIEDRO" : .lTremieDroite = Mots(nbMots)
                         Case "NBTRAVEE" : .NombreTraveesDeuxAppuis = TraiteReal(Mots(nbMots))
@@ -1186,8 +1195,9 @@ Public Class cls_Projet
 
                 With beton_enrobage_profilA
                     Select Case MotCle
-                        Case "TYPE" : .Type = Mots(nbMots)
+                        Case "LEGER" : .lLeger = Mots(nbMots)
                         Case "CLASSE" : .Classe = Mots(nbMots)
+                        Case "RHOC" : .RhoC = Mots(nbMots)
                         Case "FCK" : .Fck = TraiteReal(Mots(nbMots))
                         Case "FCM" : .Fcm = TraiteReal(Mots(nbMots))
                         Case "FCTM" : .Fctm = TraiteReal(Mots(nbMots))
@@ -1269,8 +1279,9 @@ Public Class cls_Projet
 
                 With beton_dalle
                     Select Case MotCle
-                        Case "TYPE" : .Type = Mots(nbMots)
+                        Case "LEGER" : .lLeger = Mots(nbMots)
                         Case "CLASSE" : .Classe = Mots(nbMots)
+                        Case "RHOC" : .RhoC = Mots(nbMots)
                         Case "FCK" : .Fck = TraiteReal(Mots(nbMots))
                         Case "FCM" : .Fcm = TraiteReal(Mots(nbMots))
                         Case "FCTM" : .Fctm = TraiteReal(Mots(nbMots))
@@ -1342,7 +1353,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocArmatureDalle(armature_dalle As Cls_Armatures_Longi, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocArmatureDalle(armature_dalle As Cls_Armatures_Longi, ByRef ind_travee As Integer, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1361,6 +1372,7 @@ Public Class cls_Projet
 
                 With armature_dalle
                     Select Case MotCle
+                        Case "INDLIT" : ind_travee = TraiteReal(Mots(nbMots))
                         Case "ESPBAR" : .EspBar = TraiteReal(Mots(nbMots))
                         Case "PHIS" : .PhiS = TraiteReal(Mots(nbMots))
                         Case "Z_S" : .z_s = TraiteReal(Mots(nbMots))

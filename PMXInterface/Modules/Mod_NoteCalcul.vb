@@ -537,7 +537,8 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
 
-        If MyBeam.Section.enrobage_partiel.Beton.Type = cls_Beton.Enum_TypeBeton.Leger Then
+        'If MyBeam.Section.enrobage_partiel.Beton.Type = cls_Beton.Enum_TypeBeton.Leger Then
+        If MyBeam.Section.enrobage_partiel.Beton.lLeger Then
             AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("LIGHTCONCRETE"))
         Else
             AddLigneNDC(TABW2 & Bloc("TYPE") & TABAFF & Bloc("NORMALCONCRETE"))
@@ -687,7 +688,8 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
 
-        If MyBeam.Dalle.beton.Type = cls_Beton.Enum_TypeBeton.Leger Then
+        'If MyBeam.Dalle.beton.Type = cls_Beton.Enum_TypeBeton.Leger Then
+        If MyBeam.Dalle.beton.lLeger Then
             AddLigneNDC(TABW2 & Bloc("TYPE") & TABAFF & Bloc("LIGHTCONCRETE"))
         Else
             AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("NORMALCONCRETE"))

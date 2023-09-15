@@ -73,7 +73,7 @@ Partial Class Frm_BacN
         Me.pan_Representation = New System.Windows.Forms.Panel()
         Me.lbl_EtiquetteBac = New System.Windows.Forms.Label()
         Me.img_Bac = New System.Windows.Forms.PictureBox()
-        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.ErrorProvider_Frm_BacN = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -96,7 +96,7 @@ Partial Class Frm_BacN
         CType(Me.Grid_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Representation.SuspendLayout()
         CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ErrorProvider_Frm_BacN, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -644,9 +644,9 @@ Partial Class Frm_BacN
         Me.img_Bac.TabIndex = 4
         Me.img_Bac.TabStop = False
         '
-        'ErrorProvider
+        'ErrorProvider_Frm_BacN
         '
-        Me.ErrorProvider.ContainerControl = Me
+        Me.ErrorProvider_Frm_BacN.ContainerControl = Me
         '
         'Frm_BacN
         '
@@ -687,7 +687,7 @@ Partial Class Frm_BacN
         CType(Me.Grid_Bac, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Representation.ResumeLayout(False)
         CType(Me.img_Bac, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ErrorProvider_Frm_BacN, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -737,7 +737,7 @@ Partial Class Frm_BacN
     Friend WithEvents img_Fyp As PictureBox
     Friend WithEvents lbl_Nom As Label
     Friend WithEvents txt_Name As TextBox
-    Friend WithEvents ErrorProvider As ErrorProvider
+    Friend WithEvents ErrorProvider_Frm_BacN As ErrorProvider
     Friend WithEvents pan_Representation As Panel
     Friend WithEvents lbl_EtiquetteBac As Label
     Friend WithEvents txt_MuP As TextBox

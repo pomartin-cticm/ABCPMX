@@ -187,7 +187,7 @@ Public Class cls_Enrobage_Partiel
         ' Lines.Add("   Ef_y          = " & acier_armature)
 
         With Beton
-            Lines.Add("   EBType        = " & .Type)
+            Lines.Add("   EBType        = " & .lLeger)
             Lines.Add("   EBClasse      = " & .Classe)
             Lines.Add("   EBFck         = " & .Fck)
         End With

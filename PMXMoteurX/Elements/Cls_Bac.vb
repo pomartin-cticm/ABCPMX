@@ -40,7 +40,7 @@ Public Class cls_Bac
     ''' <summary>
     ''' Indique si il est récupéré de la base de données ou non
     ''' </summary>
-    Public lDatabase As Decimal
+    Public lDatabase As Boolean
 
 #End Region
 
@@ -251,6 +251,9 @@ Public Class cls_Bac
 
         If Me.fyp <> BacSource.fyp Then lModif = True
         Me.fyp = BacSource.fyp
+
+        If Me.msurf <> BacSource.msurf Then lModif = True
+        Me.msurf = BacSource.msurf
 
         If Me.Hp <> BacSource.Hp Then lModif = True
         Me.Hp = BacSource.Hp

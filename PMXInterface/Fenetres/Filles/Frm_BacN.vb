@@ -337,7 +337,7 @@ Public Class Frm_BacN
         Dim lModif As Boolean = False
         If ValideSaisieFenetre() Then
 
-            If iFrmAppel = EnuFenetres.DalleN Then
+            If iFrmAppel = EnuFenetres.Dalle Then 'GUD: /!\ A VERIFIER /!\
                 TransfertSaisie(Frm_Dalle.MyDalleLoc.Bac, lModif)
             Else
                 TransfertSaisie(MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, lModif)
@@ -351,13 +351,52 @@ Public Class Frm_BacN
     End Sub
 
     Private Function ValideSaisieFenetre() As Boolean
-        Dim lOK As Boolean = True
+        Dim lFrm_Valide As Boolean = True
 
-        If Not MyBac.lDatabase Then
+        If Me.rdb_BacCustom.Checked Then
+            If Not ErrorProvider_Frm_BacN.GetError(Me.txt_Hp) = String.Empty Then
+                lFrm_Valide = False
+                Return lFrm_Valide
+            End If
+
+            If Not ErrorProvider_Frm_BacN.GetError(Me.txt_hpg) = String.Empty Then
+                lFrm_Valide = False
+                Return lFrm_Valide
+            End If
+
+            If Not ErrorProvider_Frm_BacN.GetError(Me.txt_ep) = String.Empty Then
+                lFrm_Valide = False
+                Return lFrm_Valide
+            End If
+
+            If Not ErrorProvider_Frm_BacN.GetError(Me.txt_Bt) = String.Empty Then
+                lFrm_Valide = False
+                Return lFrm_Valide
+            End If
+
+            If Not ErrorProvider_Frm_BacN.GetError(Me.txt_Bb) = String.Empty Then
+                lFrm_Valide = False
+                Return lFrm_Valide
+            End If
+
+            If Not ErrorProvider_Frm_BacN.GetError(Me.txt_tp) = String.Empty Then
+                lFrm_Valide = False
+                Return lFrm_Valide
+            End If
+
+            If Not ErrorProvider_Frm_BacN.GetError(Me.txt_Fyp) = String.Empty Then
+                lFrm_Valide = False
+                Return lFrm_Valide
+            End If
+
+            If Not ErrorProvider_Frm_BacN.GetError(Me.txt_MuP) = String.Empty Then
+                lFrm_Valide = False
+                Return lFrm_Valide
+            End If
 
         End If
 
-        Return lOK
+        Return lFrm_Valide
     End Function
 
     Private Sub TransfertSaisie(ByRef BacSave As cls_Bac, ByRef lModif As Boolean)
@@ -499,7 +538,7 @@ Public Class Frm_BacN
 
 
 
-    Private Sub SaisieBacTextChanged(sender As Object, e As EventArgs) Handles txt_tp.TextChanged, txt_hpg.TextChanged, txt_Hp.TextChanged, txt_ep.TextChanged, txt_Bt.TextChanged, txt_Bb.TextChanged
+    Private Sub SaisieBacTextChanged(sender As Object, e As EventArgs) Handles txt_tp.TextChanged, txt_hpg.TextChanged, txt_Hp.TextChanged, txt_ep.TextChanged, txt_Bt.TextChanged, txt_Bb.TextChanged, txt_Fyp.TextChanged, txt_MuP.TextChanged
         If lBuild Then Exit Sub
 
 
@@ -517,6 +556,8 @@ Public Class Frm_BacN
                     MyBac.Ep = Valeur
                 Case Me.txt_Fyp.Name
                     MyBac.fyp = Valeur
+                Case Me.txt_MuP.Name
+                    MyBac.msurf = Valeur
                     'Case Me.txt_Hp.Name
                  '   MyBac. = Valeur
                 Case Me.txt_tp.Name
@@ -541,15 +582,18 @@ Public Class Frm_BacN
         Const EPMINI As Decimal = 0.1
         Const FYMAXI As Decimal = 500
         Const FYMINI As Decimal = 200
+        Const MUPMINI As Decimal = 2 'kg/m2
+        Const MUPMAXI As Decimal = 30 'kg/m2
 
         '--> Déclaration
         Dim lOk As Boolean = True
-        ErrorProvider.Clear()
 
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+
+        ErrorProvider_Frm_BacN.SetError(MyTxt, String.Empty)
 
         Select Case MyTxt.Name
             Case Me.txt_Bb.Name, Me.txt_Bt.Name
@@ -571,15 +615,20 @@ Public Class Frm_BacN
                 ValMin = FYMINI
                 ValMax = FYMAXI
                 kUnit = LogicielInfo.Transfert_Contraintes(LogicielOptions.IndUnitContraintes)
+            Case Me.txt_MuP.Name 'GUD: --> A vérifier
+                ValMin = MUPMINI
+                ValMax = MUPMAXI
+                kUnit = 1  'GuD: A priori on reste en kg/m2
+
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin / kUnit, ValMax / kUnit)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider_Frm_BacN, ValMin / kUnit, ValMax / kUnit)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
-            ErrorProvider.Clear()
+            'ErrorProvider.Clear()
         End If
 
         lOk = (iErreur = 0)
@@ -712,6 +761,10 @@ Public Class Frm_BacN
         DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_AlignementH.Droite,
                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, True)
 
+    End Sub
+
+    Private Sub btn_Annuler_Click(sender As Object, e As EventArgs) Handles btn_Annuler.Click
+        ErrorProvider_Frm_BacN.Clear()
     End Sub
 
 

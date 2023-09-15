@@ -1190,7 +1190,7 @@ Public Class cls_Section
                         'Case "EB_C" : Me.enrobage_partiel.b_c = Mots(nbMots)
                        ' Case "EF_Y" : Me.enrobage_partiel.acier_armature = Mots(nbMots)
                             '--> Béton enrobage
-                        Case "EBTY" : Me.enrobage_partiel.Beton.Type = Mots(nbMots)
+                        Case "EBTY" : Me.enrobage_partiel.Beton.lLeger = Mots(nbMots)
                         Case "EBCL" : Me.enrobage_partiel.Beton.Classe = Mots(nbMots)
                         Case "EBFC" : Me.enrobage_partiel.Beton.Fck = Mots(nbMots)
 

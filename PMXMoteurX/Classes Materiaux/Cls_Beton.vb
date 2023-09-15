@@ -15,7 +15,7 @@
     ''' <summary>
     ''' Type de béton
     ''' </summary>
-    Public Type As Enum_TypeBeton
+    'Public Type As Enum_TypeBeton
 
     ''' <summary>
     ''' classe du béton
@@ -70,14 +70,14 @@
 
 #End Region
 
-#Region " Enumérations "
+    '#Region " Enumérations "
 
-    Public Enum Enum_TypeBeton
-        Normal
-        Leger
-    End Enum
+    '    Public Enum Enum_TypeBeton
+    '        Normal
+    '        Leger
+    '    End Enum
 
-#End Region
+    '#End Region
 
 #Region " Fonctions de calcul "
 
@@ -280,7 +280,7 @@
 
     Sub New()
 
-        Me.Type = Enum_TypeBeton.Normal
+        'Me.Type = Enum_TypeBeton.Normal
         Me.Classe = "C20/25"
         Me.Fck = 20
         Me.lCrackingLimitation = True

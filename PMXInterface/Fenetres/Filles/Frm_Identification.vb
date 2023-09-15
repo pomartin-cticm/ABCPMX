@@ -84,7 +84,7 @@ Public Class Frm_Identification
 
             sUser = .Utilisateur
             sCompany = .Entreprise
-            sProject = .Projet
+            sProject = .Nom
             sBeamID = .Poutres(MyProjet.IndEnCours).BeamID
             sComment = .Poutres(MyProjet.IndEnCours).Commentaire
         End With
@@ -139,9 +139,9 @@ Public Class Frm_Identification
                 .Entreprise = sCompany
             End If
 
-            If .Projet <> sProject Then
+            If .Nom <> sProject Then
                 lModif = True
-                .Projet = sProject
+                .Nom = sProject
             End If
         End With
 

@@ -332,7 +332,7 @@ Public Class Frm_PMX
         Select Case FilleEnCours
             Case EnuFenetres.Identification
                 Frm_Identification.ShowDialog()
-
+                AffichageTViewChk() 'Ajout GuD: MAJ du volet gauche. A voir si c'est pertinent
 
             Case EnuFenetres.Portees
                 If LogicielOptions.lFenetres Then
@@ -428,8 +428,8 @@ Public Class Frm_PMX
 
 
         If MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees Then
-                Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_OK")
-            Else
+            Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_OK")
+        Else
             If MyProjet.Poutres(MyProjet.IndEnCours).NouvellePoutre Then
                 Me.TSbtn_SaveN.Image = ImgList_Menu.Images("EnregistrerVierge")
             Else
@@ -438,6 +438,10 @@ Public Class Frm_PMX
             End If
         End If
 
+
+    End Sub
+
+    Private Sub MAJVoletGauche()
 
     End Sub
 
@@ -817,7 +821,7 @@ Public Class Frm_PMX
 
             Me.tab_BtnPoutres(i).Dock = DockStyle.Fill
 
-            Me.tab_BtnPoutres(i).Caption = MyProjet.Poutres(i).Label
+            Me.tab_BtnPoutres(i).Caption = MyProjet.Poutres(i).BeamID
             Me.tab_BtnPoutres(i).Name = "MyX" & CStr(i)
             Me.tab_BtnPoutres(i).Tag = CStr(i)
             AddHandler Me.tab_BtnPoutres(i).Click, AddressOf PomBoutonsClick
@@ -980,7 +984,7 @@ Public Class Frm_PMX
             Me.tab_ChkSections(i).BackColor = CouleurBtnNormal
             Me.tab_ChkSections(i).ForeColor = SystemColors.WindowText 'Color.White
 
-            Me.tab_ChkSections(i).Text = MyProjet.Poutres(i).Label
+            Me.tab_ChkSections(i).Text = MyProjet.Poutres(i).BeamID
             Me.tab_ChkSections(i).Name = "MyX" & CStr(i)
             Me.tab_ChkSections(i).Tag = CStr(i)
             AddHandler Me.tab_ChkSections(i).CheckedChanged, AddressOf ChoixSection_CheckedChanged

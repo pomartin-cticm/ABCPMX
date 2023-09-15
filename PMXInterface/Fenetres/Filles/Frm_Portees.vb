@@ -134,6 +134,7 @@ Public Class Frm_Portees
             Me.txt_D2.Text = GetStringInUnit(.EntraxeD2, Enu_TypeVariable.Longueur, 4, 2, False)
 
             Me.rad_Intermediaire.Checked = MyPoutreLoc.lIntermediaire
+            Me.rad_Rive.Checked = Not MyPoutreLoc.lIntermediaire
 
             Me.chk_TremieGauche.Checked = .lTremieGauche
             'If .lTremieGauche Then

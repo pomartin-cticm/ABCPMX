@@ -303,7 +303,7 @@
         ' Lines.Add("   Df_y          = " & acier_armature)
 
         With beton
-            Lines.Add("   DBType        = " & .Type)
+            Lines.Add("   DBType        = " & .lLeger)
             Lines.Add("   DBClasse      = " & .Classe)
             Lines.Add("   DBFck         = " & .Fck)
         End With

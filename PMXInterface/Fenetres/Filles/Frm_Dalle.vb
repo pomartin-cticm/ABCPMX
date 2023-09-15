@@ -181,10 +181,10 @@ Public Class Frm_Dalle
         If OptionsCalcul.Norme = Enu_Normes.Eurocodes_G1 Then
 
             Dim nbClasse As Integer = ClasseBeton.GetUpperBound(0)
-            ReDim Preserve ClasseBeton(nbClasse - 1)
+            ReDim Preserve ClasseBeton(nbClasse)
 
             nbClasse = ClasseBetonLeger.GetUpperBound(0)
-            ReDim Preserve ClasseBetonLeger(nbClasse - 1)
+            ReDim Preserve ClasseBetonLeger(nbClasse)
 
         End If
 
@@ -307,8 +307,10 @@ Public Class Frm_Dalle
 
         Dim Chaine As String
         Chaine = MyDalleLoc.beton.Classe
-        If Me.ClasseBeton.Contains(Chaine) Then
+        If Me.ClasseBeton.Contains(Chaine) And Not MyDalleLoc.beton.lLeger Then
             Me.cmb_ClasseBetonDalle.SelectedIndex = Array.IndexOf(Me.ClasseBeton, Chaine)
+        ElseIf Me.ClasseBetonLeger.Contains(Chaine) And MyDalleLoc.beton.lLeger Then
+            Me.cmb_ClasseBetonDalle.SelectedIndex = Array.IndexOf(Me.ClasseBetonLeger, Chaine)
         Else
             Me.cmb_ClasseBetonDalle.SelectedIndex = 0
         End If
@@ -333,6 +335,16 @@ Public Class Frm_Dalle
         MAJI_ProprietesAcier()
 
         '--> Armatures
+
+        'Ajout GuD: Permet de réinitialiser la variable iLitSelect à l'ouverture
+        If MyDalleLoc.LitArma(1).lActive Then
+            iLitSelect = 1
+            iSelect = 200
+        Else
+            iLitSelect = 0
+            iSelect = 100
+
+        End If
 
         MAJI_BOArmatures()
         MAJI_StatutBOArma()
@@ -382,20 +394,25 @@ Public Class Frm_Dalle
 
         MAJI_ConfigurationAppuiBac()
 
-        Select Case MyDalleLoc.Bac.AppuiL
+        Select Case MyDalleLoc.Bac.AppuiL 'Modig GuD: Réinitialise les chkbox, il y'a des cas où plusieurs checkbox étaient sélectionnés
             Case cls_Bac.EnuConfigLAppui.BacCoupe
                 Me.chk_L_PA2.Checked = True
+                UnselectChkTConfig(Me.chk_L_PA2.Name)
             Case cls_Bac.EnuConfigLAppui.BacNonCoupe
                 Me.chk_L_PA1.Checked = True
+                UnselectChkTConfig(Me.chk_L_PA1.Name)
         End Select
 
         Select Case MyDalleLoc.Bac.AppuiT
             Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
                 Me.chk_T_PA2.Checked = True
+                UnselectChkTConfig(Me.chk_T_PA2.Name)
             Case cls_Bac.EnuConfigTAppui.Discontinu
                 Me.chk_T_PA3.Checked = True
+                UnselectChkTConfig(Me.chk_T_PA3.Name)
             Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
                 Me.chk_T_PA1.Checked = True
+                UnselectChkTConfig(Me.chk_T_PA1.Name)
         End Select
 
     End Sub
@@ -511,9 +528,10 @@ Public Class Frm_Dalle
 
         ' GereTransfertValeur(MyDalleLoc.NbLitsArmaActifs, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.NbLitsArmaActifs, lModif)
 
-        For i As Integer = 0 To MyDalleLoc.NbLitsArmaActifs - 1
+        For i As Integer = 0 To 1
 
             GereTransfertValeur(MyDalleLoc.LitArma(i).PhiS, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).PhiS, lModif)
+            GereTransfertValeur(MyDalleLoc.LitArma(i).lActive, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).lActive, lModif)
             GereTransfertValeur(MyDalleLoc.LitArma(i).EspBar, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).EspBar, lModif)
             GereTransfertValeur(MyDalleLoc.LitArma(i).z_s, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).z_s, lModif)
             GereTransfertValeur(MyDalleLoc.LitArma(i).lActive, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).lActive, lModif)
@@ -1081,7 +1099,11 @@ Public Class Frm_Dalle
     Private Sub cmb_ClasseBetonEnrobage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClasseBetonDalle.SelectedIndexChanged
         If lBuild Then Exit Sub
 
-        MyDalleLoc.beton.Classe = Me.ClasseBeton(Me.cmb_ClasseBetonDalle.SelectedIndex)
+        If MyDalleLoc.beton.lLeger Then
+            MyDalleLoc.beton.Classe = Me.ClasseBetonLeger(Me.cmb_ClasseBetonDalle.SelectedIndex)
+        Else
+            MyDalleLoc.beton.Classe = Me.ClasseBeton(Me.cmb_ClasseBetonDalle.SelectedIndex)
+        End If
 
         MAJI_ProprietesBeton()
         Me.img_Dalle.Invalidate()

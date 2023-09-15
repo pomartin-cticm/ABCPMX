@@ -53,7 +53,7 @@ Public Class cls_Poutre
     ''' <summary>
     ''' Nom de la poutre
     ''' </summary>
-    Public Label As String
+    'Public Label As String
 
     '''' <summary>
     '''' Type de section de la poutre
@@ -370,7 +370,7 @@ Public Class cls_Poutre
     Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String)
 
         Me.TypeSection = MyTypeSection
-        Me.Label = NomPoutre
+        Me.BeamID = NomPoutre
         ParametresGenerauxDefaut()
 
         '--> Poutre par défaut
