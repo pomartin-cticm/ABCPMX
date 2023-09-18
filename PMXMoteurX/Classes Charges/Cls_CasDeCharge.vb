@@ -53,12 +53,12 @@
 
         Me.IndElts = IndiceElts
 
-        ReDim Me.QSurf(NbTrav + iTrav0)
-        ReDim Me.Forces(NbTrav + iTrav0)
-        ReDim Me.Moments(NbTrav + iTrav0)
-        ReDim Me.FReparties(NbTrav + iTrav0)
+        ReDim Me.QSurf(NbTrav + iTrav0 - 1)
+        ReDim Me.Forces(NbTrav + iTrav0 - 1)
+        ReDim Me.Moments(NbTrav + iTrav0 - 1)
+        ReDim Me.FReparties(NbTrav + iTrav0 - 1)
 
-        For i As Integer = iTrav0 To iTrav0 + NbTrav
+        For i As Integer = iTrav0 To iTrav0 + NbTrav - 1
             Me.Forces(i) = New List(Of cls_Force)
             Me.Moments(i) = New List(Of cls_Moment)
             Me.FReparties(i) = New List(Of cls_ForceRepartie)
@@ -247,6 +247,31 @@
         Next
 
         Return Nombre
+    End Function
+
+    Public Function EffortPmax(iTravP As Integer, iTravD As Integer) As Decimal
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie le nombre total de forces réparties dans le cas de charge
+        '-----------------------------------------------------------------------------------------------------------
+        '   iTravP      [E] :   Indice de la première travée
+        '   iTravD      [E] :   Indice de la dernière travée
+        '-----------------------------------------------------------------------------------------------------------
+
+        Dim Force As Decimal = 0
+
+        For iTrav As Integer = iTravP To iTravD
+
+            For i As Integer = 0 To Me.Forces(iTrav).Count - 1
+
+                Force = Math.Max(Force, Math.Abs(Me.Forces(iTrav)(i).Force))
+
+            Next
+
+        Next
+
+        Return Force
     End Function
 
 #End Region

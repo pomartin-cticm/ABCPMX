@@ -41,10 +41,7 @@
 
 #End Region
 
-
-
-
-#Region "Propriétés"
+#Region " Propriétés "
 
     Public ReadOnly Property xPosG As Decimal ' Position par rapport à l'extrémité gauche de la poutre
         Get

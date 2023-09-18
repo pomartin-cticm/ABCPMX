@@ -437,6 +437,9 @@ Module Mod_Declarations
 
     Public ColorFixe As Color = Color.LightGray
 
+    Public ColorForceSelect As Color = OrangeAM
+
+
 #End Region
 
 #Region " Variables globales "

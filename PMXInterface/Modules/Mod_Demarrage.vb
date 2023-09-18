@@ -132,6 +132,10 @@ Module Mod_Demarrage
             LogicielOptions.IndUnitContraintes = Array.IndexOf(LogicielInfo.Unit_Contraintes, LogicielInfo.Unit_Contraintes(My.Settings.indUnitContraintes))
             LogicielOptions.IndUnitModulesY = Array.IndexOf(LogicielInfo.Unit_ModulesY, LogicielInfo.Unit_ModulesY(My.Settings.indUnitModuleY))
 
+            '# Efforts et moments
+            LogicielOptions.IndUnitEffort = Array.IndexOf(LogicielInfo.Unit_Effort, LogicielInfo.Unit_Effort(My.Settings.indUnitEffort))
+            LogicielOptions.IndUnitMoment = Array.IndexOf(LogicielInfo.Unit_Moment, LogicielInfo.Unit_Moment(My.Settings.indUnitMoment))
+
             '--> Fichiers récents
             LogicielFichiers.RecentFiles = New List(Of String)
             If My.Settings.RecentFiles IsNot Nothing Then

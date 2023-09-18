@@ -257,6 +257,8 @@ Public Class Frm_CasDeCharge
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
+        dCar = 0.8 * EcartZ / 2
+
         '--> Affichage de la poutre
 
         AddLigne(myGr, 0, 0, Longueur, 0, MyParAff)
@@ -299,12 +301,19 @@ Public Class Frm_CasDeCharge
 
         End If
 
-        '--> Moments de flexion
+        '--> Représentation du chargement
+
+        DessineChargement(myGr, MyPoutre.ChargesA(iCas), MyPoutre.IndicePremiereTravee, MyPoutre.IndiceDerniereTravee, kEch, dCar, MyParAff)
+
+        '--> Inerties
+
+        DessineProp(myGr, MyPoutre, iCas, dCar, MyParAff)
+
+        '--> Diagramme de Moments de flexion
 
         If lResult And ((Not IsEqual(Math.Abs(MminG), 0)) Or (Not (IsEqual(MmaxG, 0)))) Then
 
             kEchM = EcartZ / (2 * Math.Max(Math.Abs(MminG), MmaxG)) * SigneM
-
 
             xo = 0
             xe = 0
@@ -341,6 +350,100 @@ Public Class Frm_CasDeCharge
         End If
 
     End Sub
+
+    Private Sub DessineChargement(ByRef myGr As Graphics, MyChargeA As cls_CasDeCharge, iTravD As Integer, iTravF As Integer,
+                                  kEchDef As Decimal, dCar As Decimal, myParAff As Struc_Affichage)
+        '-----------------------------------------------------------------------------------------------
+        '   18/08/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation du chargement
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   MyChargeA   [E] :   Cas de charge
+        '   myParAff    [E] :   Paramètre affichage
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim xPos, yPos As Decimal
+        Dim dFleche As Decimal
+        Dim fMax As Decimal
+        Dim kFleche As Decimal
+
+        '--> Calcul des coefficients d'échelle
+
+        fMax = MyChargeA.EffortPmax(iTravD, iTravF)
+        If IsEqual(fMax, 0) Then
+            kFleche = 1
+        Else
+            kFleche = dCar / fMax / 2
+        End If
+
+        '--> Représentation des efforts
+
+        For iTrav As Integer = iTravD To iTravF
+
+            For j As Integer = 0 To MyChargeA.Forces(iTrav).Count - 1
+
+                xPos = MyChargeA.Forces(iTrav)(j).xPosG
+                yPos = 0
+                dFleche = MyChargeA.Forces(iTrav)(j).Force * kFleche
+                DessinForcePonctuelle(myGr, xPos, yPos, dFleche, myParAff)
+
+            Next
+
+        Next
+
+    End Sub
+
+    Private Sub DessineProp(ByRef myGr As Graphics, MyPoutre As cls_Poutre, iCas As Integer,
+                            dCar As Decimal, myParAff As Struc_Affichage)
+        '-----------------------------------------------------------------------------------------------
+        '   18/08/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation du chargement
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   MyChargeA   [E] :   Cas de charge
+        '   myParAff    [E] :   Paramètre affichage
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iElts As Integer
+        Dim InertieMax As Decimal
+        Dim i As Integer
+        Dim kIne As Decimal
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+        Const kUnitI As Decimal = 10 ^ 8
+
+        '--> Initialisation
+
+        iElts = MyPoutre.ChargesA(iCas).IndElts
+
+        InertieMax = MyPoutre.Elements(iElts).InertieY(0) * kunitI
+
+        For i = 1 To MyPoutre.Nodes.nbNodes - 2
+            InertieMax = Math.Max(InertieMax, MyPoutre.Elements(iElts).InertieY(i) * kunitI)
+        Next
+
+        If IsEqual(InertieMax, 0) Then kIne = 1 Else kIne = dCar / InertieMax
+
+        '--> Représentation de l'inertie
+
+        For i = 0 To MyPoutre.Nodes.nbNodes - 2
+
+            xo = MyPoutre.Nodes.xGlobal(i)
+            xe = MyPoutre.Nodes.xGlobal(i + 1)
+            yo = MyPoutre.Elements(iElts).InertieY(i) * kIne * kUnitI
+            ye = yo
+            AddLigne(myGr, xo, yo, xe, ye, myParAff)
+
+        Next
+
+    End Sub
+
 
 #End Region
 

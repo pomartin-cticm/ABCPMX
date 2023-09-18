@@ -4314,8 +4314,6 @@ Module Mod_Dessins
 
         '--> Représentation des efforts
 
-
-
         For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
             xo = 0
             For j As Integer = MyPoutre.IndicePremiereTravee To i - 1
@@ -4384,7 +4382,7 @@ Module Mod_Dessins
         Dim MyBrushAp As SolidBrush
 
         If lSelect Then
-            MyBrushAp = New SolidBrush(Color.DarkGreen)
+            MyBrushAp = New SolidBrush(ColorForceSelect)
         Else
             MyBrushAp = New SolidBrush(Color.White)
         End If

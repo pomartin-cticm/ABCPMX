@@ -1663,6 +1663,44 @@ Public Class cls_Poutre
 
     End Sub
 
+    Private Sub InitialiseChargeA(ByRef MyCdCA As cls_CasDeCharge, MyChargeU As cls_ChargementUtilisateur, iTravees As List(Of Integer))
+        '-------------------------------------------------------------------------------------------
+        '   18/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Initialisation d'un cas de charge calcul à partir d'un cas défini par l'utilisateur
+        '-------------------------------------------------------------------------------------------
+        '   MyCdCA      [S] :   Cas de charge pour le calcul
+        '   MyChargeU   [E] :   Chargement défini par l'utilisateur
+        '   iTravees    [E] :   Liste des travées où le chargement est appliqué
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iTrav, i, kTrav As Integer
+        Dim xAppG As Decimal
+
+        '--> Initialisation
+
+
+
+        '--> Traitement
+
+        For iTrav = 0 To iTravees.Count - 1
+
+            kTrav = iTravees(iTrav)
+            xAppG = Me.xPositionAppui(True, kTrav)
+
+            '# charges concentrées
+
+            For i = 0 To MyChargeU.Forces(kTrav).Count - 1
+                MyCdCA.Forces(kTrav).Add(New cls_Force(MyChargeU.Forces(kTrav)(i).xPosT, MyChargeU.Forces(kTrav)(i).Force, xAppG))
+            Next
+
+        Next
+
+    End Sub
+
+
 #End Region
 
 #Region " Chargements, poids propre "
@@ -1703,6 +1741,10 @@ Public Class cls_Poutre
 
         Dim NbTrav, iTrav0 As Integer
 
+        Dim TraveesTous As New List(Of Integer)
+        Dim TraveesConsoles As New List(Of Integer)
+        Dim TraveesCentrale As New List(Of Integer)
+
         '--> Initialisation
 
         lMixte = Me.lMixte
@@ -1719,6 +1761,13 @@ Public Class cls_Poutre
         NbTrav = Me.NbTravees
 
         Me.ChargesA.Clear()
+
+        For i = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+            TraveesTous.Add(i)
+        Next
+        If Me.lTraveeConsoleGauche Then TraveesConsoles.Add(0)
+        If Me.lTraveeConsoleDroite Then TraveesConsoles.Add(Me.IndiceDerniereTravee)
+        TraveesCentrale.Add(1)
 
         '--> Traitement des charges permanentes 
 
@@ -1757,17 +1806,26 @@ Public Class cls_Poutre
 
         If Me.NbTravees = 1 Then
             Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1", "Q1", IndiceQ, iTrav0, NbTrav))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q1"), TraveesTous)
+
             Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2", "Q2", IndiceQ, iTrav0, NbTrav))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q2"), TraveesTous)
 
         Else
 
             Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 1", "Q1#1", IndiceQ, iTrav0, NbTrav))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q1"), TraveesTous)
             Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 2", "Q1#2", IndiceQ, iTrav0, NbTrav))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q1"), TraveesCentrale)
             Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 3", "Q1#3", IndiceQ, iTrav0, NbTrav))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q1"), TraveesConsoles)
 
             Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 1", "Q2#1", IndiceQ, iTrav0, NbTrav))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q2"), TraveesTous)
             Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 2", "Q2#2", IndiceQ, iTrav0, NbTrav))
-            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 3", "Q3#3", IndiceQ, iTrav0, NbTrav))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q2"), TraveesCentrale)
+            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 3", "Q2#3", IndiceQ, iTrav0, NbTrav))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q2"), TraveesConsoles)
 
         End If
 
@@ -2101,8 +2159,10 @@ Public Class cls_Poutre
         '--> Déclarations
 
         Dim iTrav As Integer
-        Dim NbfRep As Integer
+        Dim NbfRep, NbQSurf As Integer
         Dim Compteur As Integer = -1
+        Dim xo, xe As Decimal
+        Dim qsurfD As Decimal
 
         '--> Transfert des propriétés de section
 
@@ -2113,9 +2173,14 @@ Public Class cls_Poutre
 
         '--> Initialisation
 
+        NbQSurf = 0
+        For iTrav = iTravP To iTravD
+            If Not IsEqual(Me.ChargesA(iCas).QSurf(iTrav), 0) Then NbQSurf += 1
+        Next
         NbfRep = Me.ChargesA(iCas).NombreFRep(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
-        pDonneesEF.NbForcesRep = NbfRep
-        If NbfRep > 0 Then
+        pDonneesEF.NbForcesRep = NbfRep + NbQSurf
+
+        If pDonneesEF.NbForcesRep > 0 Then
             ReDim pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
             ReDim pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
         End If
@@ -2130,9 +2195,19 @@ Public Class cls_Poutre
 
             '# Charges surfaciques
 
-
+            qsurfD = Me.ChargesA(iCas).QSurf(iTrav)
+            If Not IsEqual(qsurfD, 0) Then
+                xo = Me.xPositionAppui(True, iTrav)
+                xe = Me.xPositionAppui(False, iTrav)
+                Compteur += 1
+                'AjouteForceRep(Compteur, xo, xe, qsurfD, qsurfD, pDonneesEF)
+            End If
 
             '# Forces
+
+            For iFor As Integer = 0 To Me.ChargesA(iCas).Forces(iTrav).Count - 1
+                AjouteForce(Me.ChargesA(iCas).Forces(iTrav)(iFor).xPosG, Me.ChargesA(iCas).Forces(iTrav)(iFor).Force, pDonneesEF)
+            Next
 
             '# Moments
 
@@ -2198,6 +2273,32 @@ Public Class cls_Poutre
 
         pDonneesEF.Moment(pDonneesEF.NbMoments - 1) = Moment
         pDonneesEF.xMoment(pDonneesEF.NbMoments - 1) = xMom
+
+    End Sub
+
+
+    Private Sub AjouteForce(xFor As Decimal, Force As Decimal, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+        '-------------------------------------------------------------------------------------
+        '   18/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
+        '-------------------------------------------------------------------------------------
+        '   xFor        [E] :   Position de la force
+        '   Force       [E] :   Valeur de la force
+        '   pDonneesEF  [S] :   Donnes pour le calcul EF
+        '-------------------------------------------------------------------------------------
+
+        pDonneesEF.NbForcesPon += 1
+        If pDonneesEF.NbForcesPon = 1 Then
+            ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+            ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+        Else
+            ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+            ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+        End If
+
+        pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
+        pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xFor
 
     End Sub
 
