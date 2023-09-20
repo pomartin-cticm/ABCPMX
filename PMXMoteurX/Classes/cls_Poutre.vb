@@ -118,7 +118,7 @@ Public Class cls_Poutre
     ''' <summary>
     ''' Nombre d'étais disposés par través entre deux appuis consécutifs
     ''' </summary>
-    Public NbPropping As Integer           'Il faut réserver la lettre p aux private
+    Public NbEtaiement As Integer           'Il faut réserver la lettre p aux private
 
     ''' <summary>
     ''' Nombre de maintiens disposés sur la travée considérée
@@ -265,6 +265,11 @@ Public Class cls_Poutre
 
     Public ChargesA As New List(Of cls_CasDeCharge)
 
+    Const symbG1PP As String = "G1pp"
+    Const symbG1C As String = "G1c"
+    Const symbG1 As String = "G1"
+    Const symbG2 As String = "G2"
+
 #End Region
 
 #Region " Variables pour les valeurs par défaut et le statut de la poutre "
@@ -299,7 +304,11 @@ Public Class cls_Poutre
         Dim xGlobal() As Decimal            ' Position x globale du noeud / extrémité gauche de la poutre
         Dim xTravee() As Decimal            ' Position x dans la travée locale / extremité gauche de la travée 
         '                                     pour un noeud sur 2 travées, x de la travée à gauche
-        Dim iNodeAppui(,) As Integer        ' Table des indices des noeuds au droit des extremités de console (indice 1: indice travée, indice 2 : 0 ou 1 pour extrémité)
+        Dim iNodeExtTrav(,) As Integer      ' Table des indices des noeuds au droit des extremités de console (indice 1: indice travée, indice 2 : 0 ou 1 pour extrémité)
+        Dim iNodeAppui() As Integer         ' Table des indices des noeuds appui global
+        Dim NbAppuis As Integer             ' Nombre de noeuds sur appui
+        Dim NbEtais As Integer              ' Nombre de noeuds sur appui temporaire d'étais
+        Dim iNodeEtais() As Integer         ' Table des noeuds pour les appuis d'étais en phase de construction
     End Structure
 
     Public Structure strucBeamElements
@@ -422,7 +431,7 @@ Public Class cls_Poutre
         lTraveeConsoleGauche = False
 
         TypeEtaiement = EnuTypeEtaiement.UnPropped
-        NbPropping = NBPROPPINGDEFAUT
+        NbEtaiement = NBPROPPINGDEFAUT
         lEtaisConsoleGauche = False
         lEtaisConsoleDroite = False
 
@@ -1100,7 +1109,7 @@ Public Class cls_Poutre
 
         '--> Initialisation
 
-        ReDim Nodes.iNodeAppui(Me.IndiceDerniereTravee, 1)
+        ReDim Nodes.iNodeExtTrav(Me.IndiceDerniereTravee, 1)
 
         '--> Boucle sur les travées
 
@@ -1129,13 +1138,13 @@ Public Class cls_Poutre
                 Nodes.nbNodes = nDec + 1
                 ReDim Me.Nodes.xTravee(nDec)
                 ReDim Me.Nodes.xGlobal(nDec)
-                Nodes.iNodeAppui(iTravee, 0) = 0
-                Nodes.iNodeAppui(iTravee, 1) = nDec
+                Nodes.iNodeExtTrav(iTravee, 0) = 0
+                Nodes.iNodeExtTrav(iTravee, 1) = nDec
                 iGauche = 0
             Else
                 iGauche = Nodes.nbNodes - 1
-                Nodes.iNodeAppui(iTravee, 0) = Nodes.nbNodes - 1
-                Nodes.iNodeAppui(iTravee, 1) = Nodes.nbNodes + nDec - 1
+                Nodes.iNodeExtTrav(iTravee, 0) = Nodes.nbNodes - 1
+                Nodes.iNodeExtTrav(iTravee, 1) = Nodes.nbNodes + nDec - 1
                 Nodes.nbNodes += nDec
                 ReDim Preserve Me.Nodes.xTravee(Nodes.nbNodes - 1)
                 ReDim Preserve Me.Nodes.xGlobal(Nodes.nbNodes - 1)
@@ -1176,15 +1185,18 @@ Public Class cls_Poutre
         Dim lFirst As Boolean = True
         Dim lAppG, lAppD As Boolean
         Dim dElMaxTravee, dElMaxTroncon As Decimal
+        Dim x0 As Decimal
 
         '--> Initialisation des noeuds imposés
 
         InitialiseNoeudsImposes(xImp)
         iTravee = Me.IndicePremiereTravee
         xCum = Me.xPositionAppui(False, iTravee)
-        ReDim Nodes.iNodeAppui(Me.IndiceDerniereTravee, 1)
+        ReDim Nodes.iNodeExtTrav(Me.IndiceDerniereTravee, 1)
         i0 = 0
         Nodes.nbNodes = 0
+        Nodes.NbAppuis = Me.NombreTraveesDeuxAppuis + 1
+        ReDim Nodes.iNodeAppui(Nodes.NbAppuis - 1)
 
         '--> Maillage des tronçons entre noeuds imposés
 
@@ -1233,9 +1245,11 @@ Public Class cls_Poutre
                 ReDim Preserve Me.Nodes.xGlobal(Nodes.nbNodes - 1)
             End If
 
-            If lAppG Then Nodes.iNodeAppui(iTravee, 0) = Nodes.nbNodes - nDec - 1
-            If lAppD Then Nodes.iNodeAppui(iTravee, 1) = Nodes.nbNodes - 1
+            '# Si on est sur un tronçon d'extremite, on initialise la table des extrémités
+            If lAppG Then Nodes.iNodeExtTrav(iTravee, 0) = Nodes.nbNodes - nDec - 1
+            If lAppD Then Nodes.iNodeExtTrav(iTravee, 1) = Nodes.nbNodes - 1
 
+            '# Position des noeuds dans le tronçon
             For j As Integer = i0 To nDec
                 Me.Nodes.xTravee(iGauche + j) = DeltaX * j + xo - Me.xPositionAppui(True, iTravee)
                 Me.Nodes.xGlobal(iGauche + j) = xo + DeltaX * j
@@ -1244,9 +1258,53 @@ Public Class cls_Poutre
             lFirst = False
             i0 = 1
         Next
+
+        '--> Initialisation des noeuds sur appui
+
+        Nodes.iNodeAppui(0) = Nodes.iNodeExtTrav(1, 0)
+
+        For i As Integer = 1 To Me.NombreTraveesDeuxAppuis
+            Nodes.iNodeAppui(i) = Nodes.iNodeExtTrav(i, 1)
+        Next
+
+        '--> Initialisation des noeuds appuis temporaire d'étais
+
+        Nodes.NbEtais = 0
+        If Me.lMixte And (Me.TypeEtaiement = EnuTypeEtaiement.PointPropped) Then
+            If Me.lEtaisConsoleGauche Then Nodes.NbEtais += 1
+            If Me.lEtaisConsoleDroite Then Nodes.NbEtais += 1
+
+            Nodes.NbEtais += Me.NbEtaiement
+
+            If Me.NbEtaiement > 0 Then
+                ReDim Nodes.iNodeEtais(Me.NbEtaiement - 1)
+                i0 = 0
+                If Me.lEtaisConsoleGauche Then
+                    Nodes.iNodeEtais(0) = 0
+                    i0 = 1
+                End If
+                x0 = Me.xPositionAppui(True, 1)
+                DeltaX = Me.LongueurTravee(1) / (1 + Me.NbEtaiement)
+                For i As Integer = 1 To Me.NbEtaiement
+                    Nodes.iNodeEtais(i0 + i - 1) = IndiceNodeFromXpos(x0 + i * DeltaX)
+                Next
+                If Me.lEtaisConsoleDroite Then
+                    Nodes.iNodeEtais(Me.NbEtaiement - 1) = Me.Nodes.nbNodes - 1
+                End If
+            End If
+        End If
     End Sub
 
     Private Sub InitialiseNoeudsImposes(ByRef xImp As List(Of Decimal))
+        '-------------------------------------------------------------------------------------------
+        '   17/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Ajout d'un noeud dans la liste des noeuds imposés
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim DeltaX, x0 As Decimal
 
         '--> Initialisation
 
@@ -1273,6 +1331,14 @@ Public Class cls_Poutre
         Next
 
         '# Position des étais ponctuels
+
+        If Me.lMixte And (Me.TypeEtaiement = EnuTypeEtaiement.PointPropped) Then
+            DeltaX = Me.LongueurTravee(1) / (Me.NbEtaiement + 1)
+            x0 = Me.xPositionAppui(True, 1)
+            For i As Integer = 1 To Me.NbEtaiement
+                AjouteNoeudImpose(x0 + i * DeltaX, xImp)
+            Next
+        End If
 
         '# Maitiens latéraux
 
@@ -1328,6 +1394,31 @@ Public Class cls_Poutre
         End If
 
     End Sub
+
+    Private Function IndiceNodeFromXpos(xPos As Decimal, Optional DeltaX As Decimal = 0.001) As Integer
+        '-------------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Retourne l'indice d'un noeud à partir de sa position
+        '-------------------------------------------------------------------------------------------
+        '   xPos        [E] :   Position du noeud
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lTrouve As Boolean = False
+        Dim iNode As Integer = -1
+        Dim myInd As Integer = -1
+
+        '--> Recherche
+
+        Do While (Not lTrouve) And (iNode < Me.Nodes.nbNodes - 1)
+            iNode += 1
+            lTrouve = IsEqual(Nodes.xGlobal(iNode), xPos, DeltaX)
+        Loop
+        If lTrouve Then myInd = iNode
+        Return myInd
+    End Function
 
 #End Region
 
@@ -1425,8 +1516,8 @@ Public Class cls_Poutre
         '--> Boucle sur les travées, dans le cas où il faut prendre en compte le béton
 
         For iTravee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
-            iEltO = Me.Nodes.iNodeAppui(iTravee, 0)
-            iEltE = Me.Nodes.iNodeAppui(iTravee, 1) - 1
+            iEltO = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            iEltE = Me.Nodes.iNodeExtTrav(iTravee, 1) - 1
 
             For iElt = iEltO To iEltE
                 xm = (Me.Nodes.xTravee(iElt) + Me.Nodes.xTravee(iElt + 1)) / 2
@@ -1481,8 +1572,8 @@ Public Class cls_Poutre
 
         For iTravee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
             lConsole = (iTravee = 0) Or (iTravee > Me.NombreTraveesDeuxAppuis)
-            iEltO = Me.Nodes.iNodeAppui(iTravee, 0)
-            iEltE = Me.Nodes.iNodeAppui(iTravee, 1) - 1
+            iEltO = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            iEltE = Me.Nodes.iNodeExtTrav(iTravee, 1) - 1
 
             If lConsole Then
                 For i As Integer = iEltO To iEltE
@@ -1495,7 +1586,7 @@ Public Class cls_Poutre
                 xTe = Me.xPositionAppui(False, iTravee)
 
                 For iElt As Integer = iEltO To iEltE
-                    xm = (Me.Nodes.xTravee(iElt) + Me.Nodes.xTravee(iElt + 1)) / 2
+                    xm = (Me.Nodes.xGlobal(iElt) + Me.Nodes.xGlobal(iElt + 1)) / 2
                     If IsSmallerOrEqual(xm - xTo, 0.15 * Me.LongueurTravee(iTravee)) Then
                         If lContinuG Then
                             pSigneM(iElt) = -1
@@ -1553,6 +1644,92 @@ Public Class cls_Poutre
 #End Region
 
 #Region " Préparation des cas de charge "
+    Private Function IndiceCasG1C() As Integer
+        '-------------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Renvoie l'indice du cas de charge G1C
+        '-------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------
+
+        Return IndiceCasParSymbole(symbG1C)
+
+    End Function
+
+    Public Function IndiceCasG1PP() As Integer
+        '-------------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Renvoie l'indice du cas de charge G1PP
+        '-------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------
+
+        Return IndiceCasParSymbole(symbG1PP)
+
+    End Function
+
+    Private Function IndiceCasParSymbole(symbCas As String) As Integer
+        '-------------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Renvoie l'indice du cas de charge par son symbole
+        '-------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lTrouve As Boolean = False
+        Dim iCas As Integer = -1
+
+        '--> Recherche
+
+        Do While (Not lTrouve) And iCas < Me.ChargesA.Count - 1
+            iCas += 1
+            lTrouve = Me.ChargesA(iCas).Symbol = symbCas
+        Loop
+
+        Return iCas
+    End Function
+
+    Private Sub InitialiseChargeEtais(ByRef MyCas As cls_CasDeCharge, Reactions() As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Initialisation du cas de charges réaction des étais
+        '   A partir des réactions issues du calcul de G1PP
+        '-------------------------------------------------------------------------------------------
+        '   Reactions       [E] :   Réactions issues de G1PP
+        '   MyCas           [S] :   Cas de charge
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iLast As Integer = Me.IndiceDerniereTravee
+        Dim i0 As Integer = 1
+        Const RSigne As Decimal = 1
+        Dim iTrav As Integer
+        Dim xPos, xApp As Decimal
+
+        '--> Traitement des consoles
+
+        If Me.lEtaisConsoleGauche Then
+            MyCas.Forces(0).Add(New cls_Force(0, RSigne * Reactions(0), 0))
+            i0 += 1
+        End If
+        If Me.lEtaisConsoleGauche Then
+            MyCas.Forces(iLast).Add(New cls_Force(Me.LongueurTravee(iLast), RSigne * Reactions(Reactions.GetUpperBound(0)), Me.xPositionAppui(True, iLast)))
+        End If
+
+        '--> Traitement de étais de la travée centrale
+
+        iTrav = 1
+        For i As Integer = 0 To Me.NbEtaiement - 1
+            xApp = Me.xPositionAppui(True, iTrav)
+            xPos = Me.Nodes.xGlobal(Me.Nodes.iNodeEtais(i0 + i - 1)) - xApp
+            MyCas.Forces(iLast).Add(New cls_Force(xPos, RSigne * Reactions(i0 + i), xApp))
+        Next
+
+    End Sub
 
     Private Sub InitialiseChargesPP(ByRef MyCas As cls_CasDeCharge)
         '-------------------------------------------------------------------------------------------
@@ -1658,8 +1835,8 @@ Public Class cls_Poutre
 
         '--> Effort normal dans la dalle
 
-        Nsh = Beff * tc / nEqDal * Me.Section.Acier.EYoung * kConvMPaPa * EpsilonSh
-        Msh = Nsh * deltaz
+        Nsh = Beff * Tc / nEqDal * Me.Section.Acier.EYoung * kConvMPaPa * EpsilonSh
+        Msh = Nsh * DeltaZ
 
     End Sub
 
@@ -1678,6 +1855,7 @@ Public Class cls_Poutre
 
         Dim iTrav, i, kTrav As Integer
         Dim xAppG As Decimal
+        Dim x0, fr0, x1, fr1, xg As Decimal
 
         '--> Initialisation
 
@@ -1695,6 +1873,24 @@ Public Class cls_Poutre
             For i = 0 To MyChargeU.Forces(kTrav).Count - 1
                 MyCdCA.Forces(kTrav).Add(New cls_Force(MyChargeU.Forces(kTrav)(i).xPosT, MyChargeU.Forces(kTrav)(i).Force, xAppG))
             Next
+
+            '# charges réparties
+
+            For i = 0 To MyChargeU.FReparties(kTrav).Count - 1
+
+                x0 = MyChargeU.FReparties(kTrav)(i).xPosT(0)
+                x1 = MyChargeU.FReparties(kTrav)(i).xPosT(1)
+                fr0 = MyChargeU.FReparties(kTrav)(i).Force(0)
+                fr1 = MyChargeU.FReparties(kTrav)(i).Force(1)
+                xg = Me.xPositionAppui(True, kTrav)
+
+                MyCdCA.FReparties(kTrav).Add(New cls_ForceRepartie(x0, fr0, x1, fr1, xg))
+
+            Next
+
+            '# Charges surfaciques
+
+            MyCdCA.QSurf(kTrav) = MyChargeU.QSurf(kTrav)
 
         Next
 
@@ -1751,6 +1947,11 @@ Public Class cls_Poutre
         lEnrob = Me.lEnrobage
         lEtaitComplet = (TypeEtaiement = EnuTypeEtaiement.FullyPropped)
         lNonEtaye = (TypeEtaiement = EnuTypeEtaiement.UnPropped)
+        If (TypeEtaiement = EnuTypeEtaiement.PointPropped) Then
+            If (Not Me.lEtaisConsoleGauche) And (Not Me.lEtaisConsoleDroite) And (Me.NbEtaiement = 0) Then
+                lNonEtaye = True
+            End If
+        End If
 
         nEqDalleCT = Me.Dalle.beton.CoefficientEquivalenceCT
         nEqEnrobCT = Me.Section.enrobage_partiel.Beton.CoefficientEquivalenceCT
@@ -1785,18 +1986,18 @@ Public Class cls_Poutre
             IndiceG = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
 
             If lNonEtaye Then
-                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, "G1", Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1, Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
                 InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
             Else
                 'Cas de l'étaiement ponctuel
-                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, "G1pp", Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1PP, Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav))
                 InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
 
-                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, "G1c", IndiceG, iTrav0, NbTrav))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1C, IndiceG, iTrav0, NbTrav))
 
             End If
 
-            Me.ChargesA.Add(New cls_CasDeCharge(strAutresChargesPermanentes, "G2", IndiceG, iTrav0, NbTrav))
+            Me.ChargesA.Add(New cls_CasDeCharge(strAutresChargesPermanentes, symbG2, IndiceG, iTrav0, NbTrav))
 
         End If
 
@@ -1804,30 +2005,25 @@ Public Class cls_Poutre
 
         IndiceQ = Me.IndiceTabElts(lMixte, nEqDalleCT, nEqEnrobCT)
 
-        If Me.NbTravees = 1 Then
-            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1", "Q1", IndiceQ, iTrav0, NbTrav))
-            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q1"), TraveesTous)
+        Dim LabelQ() As String = {"Q1", "Q2"}
+        Dim lMultiT As Boolean
+        Dim ChaineEx As String
 
-            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2", "Q2", IndiceQ, iTrav0, NbTrav))
-            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q2"), TraveesTous)
-
-        Else
-
-            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 1", "Q1#1", IndiceQ, iTrav0, NbTrav))
-            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q1"), TraveesTous)
-            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 2", "Q1#2", IndiceQ, iTrav0, NbTrav))
-            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q1"), TraveesCentrale)
-            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 1 " & strConfiguration & " 3", "Q1#3", IndiceQ, iTrav0, NbTrav))
-            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q1"), TraveesConsoles)
-
-            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 1", "Q2#1", IndiceQ, iTrav0, NbTrav))
-            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q2"), TraveesTous)
-            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 2", "Q2#2", IndiceQ, iTrav0, NbTrav))
-            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q2"), TraveesCentrale)
-            Me.ChargesA.Add(New cls_CasDeCharge(strExploitation & " 2 " & strConfiguration & " 3", "Q2#3", IndiceQ, iTrav0, NbTrav))
-            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("Q2"), TraveesConsoles)
-
-        End If
+        For iq As Integer = 0 To 1
+            lMultiT = Me.ChargesU(LabelQ(iq)).EstMultiTravee(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
+            ChaineEx = strExploitation & " " & CStr(iq + 1)
+            If (Me.NbTravees = 1) Or (Not lMultiT) Then
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndiceQ, iTrav0, NbTrav))
+                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
+            Else
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 1", LabelQ(iq) & "#1", IndiceQ, iTrav0, NbTrav))
+                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 2", LabelQ(iq) & "#2", IndiceQ, iTrav0, NbTrav))
+                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesCentrale)
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 3", LabelQ(iq) & "#3", IndiceQ, iTrav0, NbTrav))
+                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
+            End If
+        Next
 
         '--> Retrait
 
@@ -2053,6 +2249,10 @@ Public Class cls_Poutre
         Dim TextError_RDM As String = String.Empty
         Dim DonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees = Nothing
         Dim iTravP, iTravD As Integer
+        Dim lPrem As Boolean = True
+        Dim lAppuisEtais As Boolean = False
+        Dim lAppuisEtaisPrec As Boolean = False
+        Dim lAppuisOK As Boolean
 
         '--> Initialisation
 
@@ -2061,17 +2261,39 @@ Public Class cls_Poutre
 
         '--> Préparation du modele EF
 
-        Me.PrepareModeleEF(DonneesEF)
+        Me.PrepareModeleEF(DonneesEF, lAppuisOK)
 
         '--> Boucle sur les cas de charge
 
         For jCdc = 0 To Me.ChargesA.Count - 1
             If Me.ChargesA(jCdc).EstNonNul(iTravP, iTravD) Then
 
+                '# Préparation du chargement
                 PrepareDonneesEFChargement(jCdc, iTravP, iTravD, DonneesEF)
+
+                '# Préparation des appuis (dans le cas des étais ponctuels)
+                If Not lAppuisOK Then
+                    If lPrem Then
+                        lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
+                        PrepareAppuisModeleEF(lAppuisEtais, DonneesEF)
+                        lAppuisEtaisPrec = lAppuisEtais
+                        lPrem = False
+                    Else
+                        lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
+                        If Not (lAppuisEtaisPrec = lAppuisEtais) Then
+                            PrepareAppuisModeleEF(lAppuisEtais, DonneesEF)
+                            lAppuisEtaisPrec = lAppuisEtais
+                        End If
+                    End If
+                End If
 
                 '=== LANCER LE CALCUL ===
                 Call MyDLLRDM.CALCULER(DonneesEF, MyOutput_RDM, CodeError_RDM, TextError_RDM)
+
+                '# Récupération des réactions aux étais pour préparer le cas de charge G1C
+                If (Me.ChargesA(jCdc).Symbol = symbG1PP) Then
+                    Me.InitialiseChargeEtais(Me.ChargesA(Me.IndiceCasG1C), MyOutput_RDM.RZ)
+                End If
 
                 If CodeError_RDM = 0 Then
                     Me.ChargesA(jCdc).RecupereResultats(MyOutput_RDM, DonneesEF.NbNodes)
@@ -2097,7 +2319,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub PrepareModeleEF(ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+    Private Sub PrepareModeleEF(ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees, ByRef lAppuisOK As Boolean)
         '-------------------------------------------------------------------------------------
         '   07/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -2129,19 +2351,115 @@ Public Class cls_Poutre
         ReDim pDonneesEF.InertieY(pDonneesEF.NbNodes - 2)
 
         '# Appuis
-        pDonneesEF.NbAppuis = Me.NombreTraveesDeuxAppuis + 1
+
+        lAppuisOK = False
+        If Me.Nodes.NbAppuis = 0 Then
+            PrepareAppuisModeleEF(False, pDonneesEF)
+            lAppuisOK = True
+        End If
+
+    End Sub
+
+    Private Sub PrepareAppuisModeleEFOld(lEtais As Boolean, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+        '-------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Préparation des appuis du modele EF avant lancement des calculs
+        '   en prenant en compte les appuis des étais, le cas échéant        
+        '-------------------------------------------------------------------------------------
+
+        If lEtais Then
+            pDonneesEF.NbAppuis = Me.Nodes.NbAppuis + Me.Nodes.NbEtais
+        Else
+            pDonneesEF.NbAppuis = Me.Nodes.NbAppuis
+        End If
 
         ReDim pDonneesEF.iNodeAppui(pDonneesEF.NbAppuis - 1)
         ReDim pDonneesEF.lAppuiArticule(pDonneesEF.NbAppuis - 1)
 
-        pDonneesEF.iNodeAppui(0) = Me.Nodes.iNodeAppui(1, 0)
-        pDonneesEF.lAppuiArticule(0) = False
-
-        For i = 1 To Me.NombreTraveesDeuxAppuis
-            pDonneesEF.iNodeAppui(i) = Me.Nodes.iNodeAppui(i, 1)
+        For i As Integer = 0 To Me.Nodes.NbAppuis - 1
+            pDonneesEF.iNodeAppui(i) = Me.Nodes.iNodeAppui(i)
+        Next
+        If lEtais Then
+            For i As Integer = 0 To Me.Nodes.NbEtais - 1
+                pDonneesEF.iNodeAppui(Me.Nodes.NbAppuis - 1 + i) = Me.Nodes.iNodeEtais(i)
+            Next
+            Array.Sort(pDonneesEF.iNodeAppui)
+        End If
+        For i As Integer = 0 To pDonneesEF.NbAppuis - 1
             pDonneesEF.lAppuiArticule(i) = False
         Next
+    End Sub
 
+    Private Sub PrepareAppuisModeleEF(lEtais As Boolean, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+        '-------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Préparation des appuis du modele EF avant lancement des calculs
+        '   en prenant en compte les appuis des étais, le cas échéant        
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NbApp As Integer
+        Dim indAppuis() As Integer
+
+        '--> Initialisation
+
+        ExtraireIndiceNoeudsAppuis(lEtais, indAppuis, NbApp)
+
+        pDonneesEF.NbAppuis = NbApp
+
+        ReDim pDonneesEF.iNodeAppui(pDonneesEF.NbAppuis - 1)
+        ReDim pDonneesEF.lAppuiArticule(pDonneesEF.NbAppuis - 1)
+
+        '--> Traitement
+
+        For i As Integer = 0 To pDonneesEF.NbAppuis - 1
+            pDonneesEF.iNodeAppui(i) = indAppuis(i)
+            pDonneesEF.lAppuiArticule(i) = False
+        Next
+    End Sub
+
+    Public Sub ExtraireIndiceNoeudsAppuis(lEtais As Boolean, ByRef indAppuis() As Integer, ByRef NbApp As Integer)
+        '-------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Préparation des appuis du modele EF avant lancement des calculs
+        '   en prenant en compte les appuis des étais, le cas échéant
+        '-------------------------------------------------------------------------------------
+        '   lEtais      [E] :   INdique si on ajoute les étais ponctuels comme appuis 
+        '   indAppuis   [E] :   Liste des indices des noeuds appuyés
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration 
+
+
+
+        '--> Nombre d'appuis
+
+        If lEtais Then
+            NbApp = Me.Nodes.NbAppuis + Me.Nodes.NbEtais
+        Else
+            NbApp = Me.Nodes.NbAppuis
+        End If
+
+        ReDim indAppuis(NbApp - 1)
+
+        '--> Appuis des travées
+
+        For i As Integer = 0 To Me.Nodes.NbAppuis - 1
+            indAppuis(i) = Me.Nodes.iNodeAppui(i)
+        Next
+
+        '--> Etais
+
+        If lEtais Then
+            For i As Integer = 0 To Me.Nodes.NbEtais - 1
+                indAppuis(Me.Nodes.NbAppuis + i) = Me.Nodes.iNodeEtais(i)
+            Next
+            Array.Sort(indAppuis)
+        End If
     End Sub
 
     Private Sub PrepareDonneesEFChargement(iCas As Integer, iTravP As Integer, iTravD As Integer, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
@@ -2187,7 +2505,6 @@ Public Class cls_Poutre
 
         pDonneesEF.NbForcesPon = 0
         pDonneesEF.NbMoments = 0
-
 
         '--> Transfert des charges
 

@@ -53,7 +53,7 @@
         Return (Not IsEqual(a, b, EPS)) AndAlso (a > b)
     End Function
 
-    Private Function IsGreaterOrEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
+    Public Function IsGreaterOrEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
         '------------------------------------------
         ' 29/08/2023 : Minh, v 1.00
         '------------------------------------------

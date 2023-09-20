@@ -414,9 +414,9 @@ Public Class Frm_PMX
             Case EnuFenetres.LargeurEfficace
                 Frm_LargeurEfficace.ShowDialog()
 
-
             Case EnuFenetres.CasDeCharge
                 Frm_CasDeCharge.ShowDialog()
+                Frm_CasDeCharge.Dispose()
 
         End Select
 

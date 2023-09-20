@@ -15,7 +15,16 @@
 #Region " Constructeurs "
 
     Public Sub New(pxPosTG As Decimal, pForceG As Decimal, pxPosTD As Decimal, pForceD As Decimal, pxGaucheT As Decimal)
-
+        '-----------------------------------------------------------------------------------------------------------------------
+        '   
+        '-----------------------------------------------------------------------------------------------------------------------        
+        '-----------------------------------------------------------------------------------------------------------------------
+        '   pxPosTG     [E] :   Position gauche dans la travée du chargement
+        '   pxPosTD     [E] :   Position droite dans la travée du chargement
+        '   pForceG     [E] :   Force à gauche
+        '   pForceD     [E] :   Force à droite
+        '   pxGaucheT   [E] :   Position / repere general de l'appui gauche de la travée
+        '-----------------------------------------------------------------------------------------------------------------------
         xGaucheT = pxGaucheT
 
         xPosT(0) = pxPosTG
@@ -48,7 +57,7 @@
 
 #End Region
 
-#Region "Propriétés"
+#Region " Propriétés "
     ''' <summary>
     ''' /!\ NE PAS DEPASSER L'INDICE DU TABLEAU RENVOYE /!\
     ''' </summary>

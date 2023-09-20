@@ -29,12 +29,81 @@
             FReparties(i) = New List(Of cls_ForceRepartie)
         Next
 
+
+        '== Je ne comprends pas le plus 1
     End Sub
 
+#End Region
 
+#Region " Outils, functions et propriétés "
 
+    Public Function EstMultiTravee(iTravD As Integer, iTravF As Integer) As Boolean
+        '--------------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Indique si le chargement est appliqué sur plusieurs travées
+        '--------------------------------------------------------------------------------------------
+        '   iTravD      [E] :   Indice de la première travée
+        '   iTravE      [E] :   Indice de la dernière travée
+        '--------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lMulti As Boolean
+        Dim lChargeT() As Boolean
+        Dim iT0, iT1 As Integer
+        Dim Compteur As Integer = 0
+
+        '-->
+
+        If iTravD = iTravF Then
+            lMulti = False
+        Else
+            iT0 = Math.Min(iTravD, iTravF)
+            iT1 = Math.Max(iTravD, iTravF)
+            ReDim lChargeT(iT1)
+
+            For iTrav As Integer = iT0 To iT1
+                lChargeT(iTrav) = EstTraveeChargee(iTrav)
+                If lChargeT(iTrav) Then Compteur += 1
+            Next
+            lMulti = (Compteur > 1) And (lChargeT(1))
+        End If
+
+        Return lMulti
+    End Function
+
+    Private Function EstTraveeChargee(iTrav As Integer) As Boolean
+        '--------------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Indique si un chargement est appliquée sur une travée
+        '--------------------------------------------------------------------------------------------
+        '   iTrav       [E] :   Indice de la travée
+        '--------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lCharge As Boolean = False
+        Dim i As Integer
+
+        '--> On cherche si la travée est chargée
+
+        If Not IsEqual(Math.Abs(Me.QSurf(iTrav)), 0) Then lCharge = True
+
+        For i = 0 To Me.Forces(iTrav).Count - 1
+            If Not IsEqual(Math.Abs(Me.Forces(iTrav)(i).Force), 0) Then lCharge = True
+        Next
+
+        For i = 0 To Me.FReparties(iTrav).Count - 1
+            If Not IsEqual(Math.Abs(Me.FReparties(iTrav)(i).Force(0)), 0) Then lCharge = True
+            If Not IsEqual(Math.Abs(Me.FReparties(iTrav)(i).Force(1)), 0) Then lCharge = True
+        Next
+        Return lCharge
+    End Function
 
 #End Region
+
 
 #Region " Fonction de copie "
     Private Function Clone() '--> Utilisé pour dupliquer une soudure

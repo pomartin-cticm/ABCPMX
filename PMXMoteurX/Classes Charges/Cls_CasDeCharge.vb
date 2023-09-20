@@ -183,14 +183,37 @@
 
     End Sub
 
+    Public Sub EnveloppesTranchants(ByRef Vmax As Decimal, ByRef Vmin As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les efforts tranchants enveloppes issues des résultats du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+        '   VMax        [E] :   Valeur max de V
+        '   VMin        [E] :   Valeur min de V
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NbNodes As Integer
+
+        '--> Calcul
+
+        If Me.lRunCalcul Then
+            NbNodes = Me.UZ.GetUpperBound(0) + 1
+            Me.EnveloppeTableau(Me.MYY, NbNodes, Vmax, Vmin)
+        End If
+
+    End Sub
+
     Public Sub EnveloppesMoments(ByRef Mmax As Decimal, ByRef Mmin As Decimal)
         '-----------------------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
-        '   Renvoie les flèches enveloppes issues des résultats du calcul EF
+        '   Renvoie les moments enveloppes issues des résultats du calcul EF
         '-----------------------------------------------------------------------------------------------------------
-        '   fMax        [E] :   Valeur max de la flèche
-        '   fMin        [E] :   Valeur min de la flèche
+        '   MMax        [E] :   Valeur max de la flèche
+        '   MMin        [E] :   Valeur min de la flèche
         '-----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -247,13 +270,14 @@
         Next
 
         Return Nombre
+
     End Function
 
     Public Function EffortPmax(iTravP As Integer, iTravD As Integer) As Decimal
         '-----------------------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
-        '   Renvoie le nombre total de forces réparties dans le cas de charge
+        '   Renvoie la valeur maximale des charges ponctuelles
         '-----------------------------------------------------------------------------------------------------------
         '   iTravP      [E] :   Indice de la première travée
         '   iTravD      [E] :   Indice de la dernière travée
@@ -266,6 +290,32 @@
             For i As Integer = 0 To Me.Forces(iTrav).Count - 1
 
                 Force = Math.Max(Force, Math.Abs(Me.Forces(iTrav)(i).Force))
+
+            Next
+
+        Next
+
+        Return Force
+    End Function
+
+    Public Function EffortRepMax(iTravP As Integer, iTravD As Integer) As Decimal
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie la valeur maximale des charges réparties 
+        '-----------------------------------------------------------------------------------------------------------
+        '   iTravP      [E] :   Indice de la première travée
+        '   iTravD      [E] :   Indice de la dernière travée
+        '-----------------------------------------------------------------------------------------------------------
+
+        Dim Force As Decimal = 0
+
+        For iTrav As Integer = iTravP To iTravD
+
+            For i As Integer = 0 To Me.FReparties(iTrav).Count - 1
+
+                Force = Math.Max(Force, Math.Abs(Me.FReparties(iTrav)(i).Force(0)))
+                Force = Math.Max(Force, Math.Abs(Me.FReparties(iTrav)(i).Force(1)))
 
             Next
 

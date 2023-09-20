@@ -160,7 +160,7 @@ Public Class cls_Projet
                 Lines.Add("   TypeEtaiement  =  " & .TypeEtaiement)
                 Lines.Add("   EtaisConsG     =  " & .lEtaisConsoleGauche)
                 Lines.Add("   EtaisConsD  =  " & .lEtaisConsoleDroite)
-                Lines.Add("   NbPropping     =  " & .NbPropping)
+                Lines.Add("   NbPropping     =  " & .NbEtaiement)
                 Lines.Add("   NbRestrain     =  " & ConvertListIntegerToString(.NbRestrain))
 
                 'Dim listTypeMaintien(.TypeMaintien.Count - 1) As Integer
@@ -813,7 +813,7 @@ Public Class cls_Projet
                         Case "TYPEETAIEM" : .TypeEtaiement = TraiteReal(Mots(nbMots))
                         Case "ETAISCONSG" : .lEtaisConsoleGauche = Mots(nbMots)
                         Case "ETAISCONSD" : .lEtaisConsoleDroite = Mots(nbMots)
-                        Case "NBPROPPING" : .NbPropping = Mots(nbMots)
+                        Case "NBPROPPING" : .NbEtaiement = Mots(nbMots)
                         Case "NBRESTRAIN" : .NbRestrain = ConvertStringToListInteger(Mots(nbMots))
                         Case "TYPEMAINTI" : .TypeMaintien = Mots(nbMots)
                         Case "D1" : .EntraxeD1 = TraiteReal(Mots(nbMots))

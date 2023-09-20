@@ -1225,7 +1225,7 @@ Module Mod_Outils
         End If
     End Function
 
-    Private Function IsGreater(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
+    Public Function IsGreater(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
         '------------------------------------------
         ' 29/08/2023 : Minh, v 1.00
         '------------------------------------------
@@ -1248,7 +1248,7 @@ Module Mod_Outils
 
     End Function
 
-    Private Function IsSmaller(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
+    Public Function IsSmaller(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
         '------------------------------------------
         ' 29/08/2023 : Minh, v 1.00
         '------------------------------------------
