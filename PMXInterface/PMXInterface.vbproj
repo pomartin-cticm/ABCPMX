@@ -176,6 +176,12 @@
     <Compile Include="Fenetres\Filles\Frm_Identification.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_InformationPP.Designer.vb">
+      <DependentUpon>Frm_InformationPP.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_InformationPP.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_LargeurEfficace.Designer.vb">
       <DependentUpon>Frm_LargeurEfficace.vb</DependentUpon>
     </Compile>
@@ -384,6 +390,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Identification.resx">
       <DependentUpon>Frm_Identification.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_InformationPP.resx">
+      <DependentUpon>Frm_InformationPP.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_LargeurEfficace.resx">
       <DependentUpon>Frm_LargeurEfficace.vb</DependentUpon>

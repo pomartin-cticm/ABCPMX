@@ -2085,7 +2085,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Function ChargeRepartiePP() As StructPoidsPropres
+    Public Function ChargeRepartiePP() As StructPoidsPropres
         '-------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -2110,14 +2110,23 @@ Public Class cls_Poutre
             '# Profilé acier
             .qPP_ProfilAcier = Me.Section.ProfilA.Aire * Me.Section.Acier.Rho * G
 
+            '# Béton d'enrobage
+            If Me.Section.lEnrobage Then
+                .qPP_BetonEnrobage = Me.Section.AireEnrobagePartielAec * Me.Section.enrobage_partiel.Beton.RhoC * G
+            Else
+                .qPP_BetonEnrobage = 0
+            End If
+
             '# Dalle
             .qPP_DalleBeton = Me.Dalle.Aire(dc, Me.Section.ProfilA.Bfs) * Me.Dalle.beton.RhoC * G
 
             '# Bac acier
-            .qPP_BacAcier = Me.Dalle.Bac.msurf * dc * G
+            If Me.Dalle.type = Me.Dalle.Enum_TypeDalle.Mixte Then
+                .qPP_BacAcier = Me.Dalle.Bac.msurf * dc * G
+            Else
+                .qPP_BacAcier = 0
+            End If
 
-            '# Béton d'enrobage
-            .qPP_BetonEnrobage = Me.Section.AireEnrobagePartielAec * Me.Section.enrobage_partiel.Beton.RhoC * G
 
             '--> Bilan et fin
             .qPP_Total = .qPP_ProfilAcier + .qPP_DalleBeton + .qPP_BacAcier + .qPP_BetonEnrobage

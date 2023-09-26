@@ -1019,7 +1019,9 @@ Public Class Frm_Chargement
 
     End Sub
 
-
+    Private Sub btn_InfoPP_Click(sender As Object, e As EventArgs) Handles btn_InfoPP.Click
+        Frm_InformationPP.ShowDialog()
+    End Sub
 
     Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 

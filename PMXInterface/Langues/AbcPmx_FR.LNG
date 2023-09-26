@@ -139,7 +139,29 @@ TITLE					= Confort vibratoire des planchers
 TOTALDAMPING			= Amortissement total
 WITH					= Avec
 
+#FRM_IDENTIFICATION
+CANCEL					= Annuler
+OK						= OK
+TITLE					= Identification 
+USER					= Utilisateur
+COMPANY					= Entreprise
+PROJECT					= Projet
+BEAMID					= Poutre N°
+COMMENT					= Commentaire
 
+#FRM_INFORMATIONPP
+OK						= Ok
+TITLE					= Détail du poids propre
+MAINPARAMETERS			= Paramètres principaux
+PROJECT					= Projet
+BEAMID					= Poutre N°
+GRAVITY					= Gravité
+DEADLOAD_PROFILE		= Poids propre du profilé
+DEADLOAD_SLAB			= Poids propre de la dalle
+STEELPROFILE			= Profilé acier
+PARTIALENCASEMENT		= Enrobage partiel
+CONCRETESLAB			= Dalle béton
+PSHEETING				= Bac acier
 
 #FRM_LATERALRESTRAINTS
 ADD						= Ajouter

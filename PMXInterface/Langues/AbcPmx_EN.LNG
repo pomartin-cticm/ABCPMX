@@ -201,6 +201,20 @@ PROJECT					= Project
 BEAMID					= Beam ident
 COMMENT					= Comment
 
+#FRM_INFORMATIONPP
+OK						= Ok
+TITLE					= Self weight detail
+MAINPARAMETERS			= Main parameters
+PROJECT					= Project
+BEAMID					= Beam ID
+GRAVITY					= Gravity
+DEADLOAD_PROFILE		= Profile self weight 
+DEADLOAD_SLAB			= Slab self weight
+STEELPROFILE			= Steel profile
+PARTIALENCASEMENT		= Partial encasement
+CONCRETESLAB			= Concrete slab
+PSHEETING				= Steel sheeting
+
 #FRM_LATERALRESTRAINTS
 ADD						= Add
 CANCEL					= Cancel
