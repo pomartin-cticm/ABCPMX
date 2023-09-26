@@ -21,9 +21,9 @@ Public Class Frm_Etaiement
     Public Sub InitialiserFenetre(sender As Object, e As EventArgs)
         lBuild = True
         GestionLangues()
+        InitialiserVariables()
         GestionStyle()
         GestionUnites()
-        InitialiserVariables()
         AfficherPoutreEnCours()
         lBuild = False
     End Sub

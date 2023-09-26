@@ -827,6 +827,19 @@ Public Class cls_Section
         End Get
     End Property
 
+    Public ReadOnly Property AireEnrobagePartielAec As Decimal
+        Get
+            Dim Aec As Decimal
+            If Me.lEnrobage Then
+                Aec = Me.ProfilA.HauteurAmeHw * (Me.LargeurEnrobagePartielBc - ProfilA.Tw) - (4 - Math.PI) * ProfilA.Rcs ^ 2 / 2 - (4 - Math.PI) * ProfilA.Rci ^ 2 / 2
+            Else
+                Aec = 0
+            End If
+
+            Return Aec
+        End Get
+    End Property
+
     Public Sub ProprietesElastiquesEtPlastiques(Signe As Decimal, nEqEc As Decimal, nEqDal As Decimal, lValeurCalcul As Boolean)
 
         Dim zANP, zANE, InertieY, MplRd As Decimal

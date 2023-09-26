@@ -61,6 +61,34 @@
 
 #End Region
 
+#Region "Propriétés"
+    ''' <summary>
+    '''  surface par unité de largeur (m²/m)
+    ''' </summary>
+    ''' <param name="dc">largeur de calcul de l'aire</param>
+    ''' <param name="bfs">largeur de la semelle supérieure</param>
+    ''' <returns></returns>
+    Public Function Aire(dc As Decimal, bfs As Decimal) As Decimal
+        Dim Ac As Decimal
+
+        If Me.type = Me.Enum_TypeDalle.Mixte Then
+            Dim tc, bm, hp, ep As Decimal
+            tc = Me.t_d - Me.Bac.Hp
+            Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
+
+        Else 'dalle pleine, avec ou sans dalle préfa
+            Ac = dc * t_d + t_h * (bfs + t_h * Math.Tan(ThetaRd) / 2)
+
+        End If
+
+        Return Ac
+
+    End Function
+
+
+
+#End Region
+
 #Region " Elements de la dalle "
 
     ''' <summary>

@@ -4238,34 +4238,53 @@ Module Mod_Dessins
 
         LongueurPoutre = MyPoutre.LongueurTotale
         LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
-        If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee
-        If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee
+        If MyPoutre.lTraveeConsoleGauche Then
+            LongueurConsoleGauche = LongueurTravee * MyPoutre.LongueurTravee(0) / MyPoutre.LongueurTravee(1)
+        Else
+            LongueurConsoleGauche = 0
+        End If
+        If MyPoutre.lTraveeConsoleDroite Then
+            LongueurConsoleDroite = LongueurTravee * MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite) / MyPoutre.LongueurTravee(1)
+        Else
+            LongueurConsoleDroite = 0
+        End If
         HauteurPoutre = LongueurTravee / 70
         dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = LongueurTravee / 30
 
         '--> Initialisation des paramètres d'affichage
 
-        Select Case iSelect
-            Case 0
-                xMin = 0
-                xMax = LongueurConsoleGauche
+        'Select Case iSelect
+        '    Case 0
+        '        xMin = 0
+        '        xMax = LongueurConsoleGauche
 
-            Case 99
-                xMin = LongueurConsoleGauche
-                For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
-                    xMin += LongueurTravee
-                Next
-                xMax = xMin + LongueurConsoleDroite
+        '    Case 99
+        '        xMin = LongueurConsoleGauche
+        '        For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+        '            xMin += LongueurTravee
+        '        Next
+        '        xMax = xMin + LongueurConsoleDroite
 
-            Case Else
-                xMin = LongueurConsoleGauche
-                For i As Integer = 1 To iSelect - 1
-                    xMin += LongueurTravee
-                Next
-                xMax = xMin + LongueurTravee
+        '    Case Else
+        '        xMin = LongueurConsoleGauche
+        '        For i As Integer = 1 To iSelect - 1
+        '            xMin += LongueurTravee
+        '        Next
+        '        xMax = xMin + LongueurTravee
 
-        End Select
+        'End Select
+
+        xMin = 0
+
+        xMin = LongueurConsoleGauche
+        For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
+            xMin += LongueurTravee
+        Next
+        xMax = xMin + LongueurConsoleDroite
+
+        xMin = 0
+
 
         yMin = dCarApp + 0.6 * dCar
         yMax = HauteurPoutre + dCar
@@ -4314,6 +4333,11 @@ Module Mod_Dessins
 
         '--> Représentation des efforts
 
+        Dim xPosRelative As Decimal
+        Dim xPosRelativeGauche, xPosRelativeDroite As Decimal
+
+        '--> Représentation des efforts non sélectionnées
+
         For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
             xo = 0
             For j As Integer = MyPoutre.IndicePremiereTravee To i - 1
@@ -4328,35 +4352,89 @@ Module Mod_Dessins
             Next
 
             '--> Représentation des forces ponctuelles
-            Dim xPosRelative As Decimal
             For Each force As cls_Force In MyPoutre.ChargesU(chargeEnCours).Forces(i)
-                xPosRelative = xo + force.xPosT / MyPoutre.LongueurTravee(i) * LongueurTravee
+                Select Case i
+                    Case 0
+                        xPosRelative = xo + force.xPosT / MyPoutre.LongueurTravee(i) * LongueurConsoleGauche
+                    Case MyPoutre.IndiceTraveeConsoleDroite
+                        xPosRelative = xo + force.xPosT / MyPoutre.LongueurTravee(i) * LongueurConsoleDroite
+                    Case Else
+                        xPosRelative = xo + force.xPosT / MyPoutre.LongueurTravee(i) * LongueurTravee
+                End Select
                 lSelect = MyPoutre.ChargesU(chargeEnCours).Forces(i).IndexOf(force) = iFPonctSelect
                 If Not lSelect Then DessinForcePonctuelle(MyGr, xPosRelative, HauteurPoutre, dCar, MyParAff, lSelect)
             Next
 
-            If iFPonctSelect <> -1 And i = traveeEnCours Then 'Permet de dessiner la force sélectionnée en dernier pour que cette dernière soit visible
-                xPosRelative = xo + MyPoutre.ChargesU(chargeEnCours).Forces(i)(iFPonctSelect).xPosT / MyPoutre.LongueurTravee(i) * LongueurTravee
-                DessinForcePonctuelle(MyGr, xPosRelative, HauteurPoutre, dCar, MyParAff, True)
-            End If
-
 
             '--> Représentation des forces réparties
-            Dim xPosRelativeGauche, xPosRelativeDroite As Decimal
             For Each force As cls_ForceRepartie In MyPoutre.ChargesU(chargeEnCours).FReparties(i)
-                xPosRelativeGauche = xo + force.xPosT(0) / MyPoutre.LongueurTravee(i) * LongueurTravee
-                xPosRelativeDroite = xo + force.xPosT(1) / MyPoutre.LongueurTravee(i) * LongueurTravee
-                lSelect = MyPoutre.ChargesU(chargeEnCours).FReparties(i).IndexOf(force) = iFReparSelect
+                Select Case i
+                    Case 0
+                        xPosRelativeGauche = xo + force.xPosT(0) / MyPoutre.LongueurTravee(i) * LongueurConsoleGauche
+                        xPosRelativeDroite = xo + force.xPosT(1) / MyPoutre.LongueurTravee(i) * LongueurConsoleGauche
+                    Case MyPoutre.IndiceTraveeConsoleDroite
+                        xPosRelativeGauche = xo + force.xPosT(0) / MyPoutre.LongueurTravee(i) * LongueurConsoleDroite
+                        xPosRelativeDroite = xo + force.xPosT(1) / MyPoutre.LongueurTravee(i) * LongueurConsoleDroite
+                    Case Else
+                        xPosRelativeGauche = xo + force.xPosT(0) / MyPoutre.LongueurTravee(i) * LongueurTravee
+                        xPosRelativeDroite = xo + force.xPosT(1) / MyPoutre.LongueurTravee(i) * LongueurTravee
+                End Select
+                If i = traveeEnCours Then
+                    lSelect = MyPoutre.ChargesU(chargeEnCours).FReparties(i).IndexOf(force) = iFReparSelect
+                Else
+                    lSelect = False
+                End If
+
                 If Not lSelect Then DessinForceRepartie(MyGr, xPosRelativeGauche, HauteurPoutre, force.Force(0), xPosRelativeDroite, HauteurPoutre, force.Force(1), dCar * 0.5, dCar, MyParAff, lSelect)
             Next
 
-            If iFReparSelect <> -1 And i = traveeEnCours Then 'Permet de dessiner la force sélectionnée en dernier pour que cette dernière soit visible
-                xPosRelativeGauche = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(i)(iFReparSelect).xPosT(0) / MyPoutre.LongueurTravee(i) * LongueurTravee
-                xPosRelativeDroite = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(i)(iFReparSelect).xPosT(1) / MyPoutre.LongueurTravee(i) * LongueurTravee
-                DessinForceRepartie(MyGr, xPosRelativeGauche, HauteurPoutre, MyPoutre.ChargesU(chargeEnCours).FReparties(i)(iFReparSelect).Force(0), xPosRelativeDroite, HauteurPoutre, MyPoutre.ChargesU(chargeEnCours).FReparties(i)(iFReparSelect).Force(1), dCar * 0.5, dCar, MyParAff, True)
-            End If
-
         Next
+
+        '--> Représentation des efforts sélectionnés (on le fait en dernier car sinon masqué par les charges non sélectionnées)
+
+        xo = 0
+        For j As Integer = MyPoutre.IndicePremiereTravee To traveeEnCours - 1
+            Select Case j
+                Case 0
+                    xo += LongueurConsoleGauche
+                Case MyPoutre.IndiceTraveeConsoleDroite
+                    xo += LongueurConsoleDroite
+                Case Else
+                    xo += LongueurTravee
+            End Select
+        Next
+
+        '--> Représentation des forces ponctuelles
+        If iFPonctSelect <> -1 Then 'Permet de dessiner la force sélectionnée en dernier pour que cette dernière soit visible
+            Select Case traveeEnCours
+                Case 0
+                    xPosRelative = xo + MyPoutre.ChargesU(chargeEnCours).Forces(traveeEnCours)(iFPonctSelect).xPosT / MyPoutre.LongueurTravee(traveeEnCours) * LongueurConsoleGauche
+                Case MyPoutre.IndiceTraveeConsoleDroite
+                    xPosRelative = xo + MyPoutre.ChargesU(chargeEnCours).Forces(traveeEnCours)(iFPonctSelect).xPosT / MyPoutre.LongueurTravee(traveeEnCours) * LongueurConsoleDroite
+                Case Else
+                    xPosRelative = xo + MyPoutre.ChargesU(chargeEnCours).Forces(traveeEnCours)(iFPonctSelect).xPosT / MyPoutre.LongueurTravee(traveeEnCours) * LongueurTravee
+            End Select
+            DessinForcePonctuelle(MyGr, xPosRelative, HauteurPoutre, dCar, MyParAff, True)
+        End If
+
+        '--> Représentation des forces réparties
+
+        If iFReparSelect <> -1 Then 'Permet de dessiner la force sélectionnée en dernier pour que cette dernière soit visible
+            Select Case traveeEnCours
+                Case 0
+                    xPosRelativeGauche = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)(iFReparSelect).xPosT(0) / MyPoutre.LongueurTravee(traveeEnCours) * LongueurConsoleGauche
+                    xPosRelativeDroite = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)(iFReparSelect).xPosT(1) / MyPoutre.LongueurTravee(traveeEnCours) * LongueurConsoleGauche
+                Case MyPoutre.IndiceTraveeConsoleDroite
+                    xPosRelativeGauche = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)(iFReparSelect).xPosT(0) / MyPoutre.LongueurTravee(traveeEnCours) * LongueurConsoleDroite
+                    xPosRelativeDroite = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)(iFReparSelect).xPosT(1) / MyPoutre.LongueurTravee(traveeEnCours) * LongueurConsoleDroite
+                Case Else
+                    xPosRelativeGauche = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)(iFReparSelect).xPosT(0) / MyPoutre.LongueurTravee(traveeEnCours) * LongueurTravee
+                    xPosRelativeDroite = xo + MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)(iFReparSelect).xPosT(1) / MyPoutre.LongueurTravee(traveeEnCours) * LongueurTravee
+            End Select
+            DessinForceRepartie(MyGr, xPosRelativeGauche, HauteurPoutre, MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)(iFReparSelect).Force(0), xPosRelativeDroite, HauteurPoutre, MyPoutre.ChargesU(chargeEnCours).FReparties(traveeEnCours)(iFReparSelect).Force(1), dCar * 0.5, dCar, MyParAff, True)
+        End If
+
+
 
 
 

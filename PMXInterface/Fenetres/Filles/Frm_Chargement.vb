@@ -7,6 +7,8 @@ Public Class Frm_Chargement
 
     Dim lBuild As Boolean = True
 
+    Const formatTxtBox As String = "0.00"
+
     ''' <summary>
     ''' Définition d'une poutre_loc afin d'enregistrer les actions de l'utilisateur
     ''' </summary>
@@ -91,6 +93,7 @@ Public Class Frm_Chargement
     Private Sub InitialiserVariables()
         MyPoutreLoc = New cls_Poutre()
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
+        MyPoutreLoc.InitialisePoidsPropres()
 
         NbTravees = MyPoutreLoc.NbTravees
 
@@ -608,8 +611,7 @@ Public Class Frm_Chargement
 
         End If
 
-        img_Chargement.Invalidate()
-
+                img_Chargement.Invalidate()
 
     End Sub
 
@@ -718,10 +720,18 @@ Public Class Frm_Chargement
             For j As Integer = 0 To 4
                 tableau_txtbox_ChargesLineiques(i, j).Visible = True
                 tableau_txtbox_ChargesLineiques(i, 0).Text = i + 1
-                tableau_txtbox_ChargesLineiques(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(0) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                tableau_txtbox_ChargesLineiques(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(0) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur))
-                tableau_txtbox_ChargesLineiques(i, 3).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(1) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                tableau_txtbox_ChargesLineiques(i, 4).Text = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(1) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur))
+                tableau_txtbox_ChargesLineiques(i, 1).Text = Format(MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(0) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), formatTxtBox)
+                tableau_txtbox_ChargesLineiques(i, 2).Text = Format(MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(0) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), formatTxtBox)
+                tableau_txtbox_ChargesLineiques(i, 3).Text = Format(MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).xPosT(1) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), formatTxtBox)
+                tableau_txtbox_ChargesLineiques(i, 4).Text = Format(MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours)(i).Force(1) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), formatTxtBox)
+
+                If chargeEnCours = "G1" And i = 0 Then
+                    tableau_txtbox_ChargesLineiques(i, j).ReadOnly = True
+                    tableau_txtbox_ChargesLineiques(i, j).BackColor = Color.LightGray
+                Else
+                    tableau_txtbox_ChargesLineiques(i, j).ReadOnly = False
+                    tableau_txtbox_ChargesLineiques(i, j).BackColor = Color.White
+                End If
             Next
         Next
 
@@ -742,8 +752,8 @@ Public Class Frm_Chargement
             For j As Integer = 0 To 2
                 tableau_txtbox_ChargesPonctuelles(i, j).Visible = True
                 tableau_txtbox_ChargesPonctuelles(i, 0).Text = i + 1
-                tableau_txtbox_ChargesPonctuelles(i, 1).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).xPosT / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                tableau_txtbox_ChargesPonctuelles(i, 2).Text = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).Force / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+                tableau_txtbox_ChargesPonctuelles(i, 1).Text = Format(MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).xPosT / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), formatTxtBox)
+                tableau_txtbox_ChargesPonctuelles(i, 2).Text = Format(MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(i).Force / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort), formatTxtBox)
             Next
         Next
 
@@ -762,7 +772,11 @@ Public Class Frm_Chargement
 
         btn_InfoPP.Enabled = chargeEnCours = "G1"
         btn_AjouterLineique.Enabled = Not (NbChargeLineique = NbChargeLineiqueMAX)
-        btn_SupprimerLineique.Enabled = Not (NbChargeLineique = 0)
+        If chargeEnCours = "G1" Then
+            btn_SupprimerLineique.Enabled = Not (NbChargeLineique = 1)
+        Else
+            btn_SupprimerLineique.Enabled = Not (NbChargeLineique = 0)
+        End If
 
     End Sub
 
@@ -940,7 +954,11 @@ Public Class Frm_Chargement
             Exit Sub
         Else
             For k As Integer = 0 To 4
-                tableau_txtbox_ChargesLineiques(iChargeRepartieSelect, k).BackColor = Color.White
+                If chargeEnCours = "G1" And iChargeRepartieSelect = 0 Then
+                    tableau_txtbox_ChargesLineiques(iChargeRepartieSelect, k).BackColor = Color.LightGray
+                Else
+                    tableau_txtbox_ChargesLineiques(iChargeRepartieSelect, k).BackColor = Color.White
+                End If
             Next
             iChargeRepartieSelect = -1
 

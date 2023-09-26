@@ -1742,14 +1742,17 @@ Public Class cls_Poutre
 
         '--> Déclarations
 
-        Dim qPP As Decimal = Me.ChargeRepartiePP * 5
+        'Dim qPP As Decimal = Me.ChargeRepartiePP().qPP_Total * 5 'GuD: J'ai corrigé pour pouvoir compiler mais je ne sais pas pourquoi on multiplie par 5 ici
+        Dim G_PP As StructPoidsPropres = Me.ChargeRepartiePP()
 
         '--> Préparation du cas de charge
 
         For iTrav As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
-
-            MyCas.FReparties(iTrav).Add(New cls_ForceRepartie(0, qPP, Me.LongueurTravee(iTrav), qPP, Me.xPositionAppui(True, iTrav)))
-
+            If MyCas.FReparties(iTrav).Count = 0 Then
+                MyCas.FReparties(iTrav).Add(New cls_ForceRepartie(0, G_PP.qPP_Total, Me.LongueurTravee(iTrav), G_PP.qPP_Total, Me.xPositionAppui(True, iTrav)))
+            Else
+                MyCas.FReparties(iTrav)(0) = New cls_ForceRepartie(0, G_PP.qPP_Total, Me.LongueurTravee(iTrav), G_PP.qPP_Total, Me.xPositionAppui(True, iTrav))
+            End If
         Next
 
     End Sub
@@ -2046,6 +2049,14 @@ Public Class cls_Poutre
 
     End Sub
 
+    Public Structure StructPoidsPropres
+        Dim qPP_ProfilAcier As Decimal
+        Dim qPP_DalleBeton As Decimal
+        Dim qPP_BacAcier As Decimal
+        Dim qPP_BetonEnrobage As Decimal
+        Dim qPP_Total As Decimal
+    End Structure
+
     Public Sub InitialisePoidsPropres()
         '-------------------------------------------------------------------------------------------
         '   23/08/23 :  Création - POM
@@ -2058,23 +2069,23 @@ Public Class cls_Poutre
         '--> Déclarations
 
         Const KEYPP As String = "G1"
-        Dim qPP As Decimal
-        Dim qPPA, qPPC, qPPP As Decimal
-        Dim G As Decimal = Me.Param.GraviteG
+        Dim G_PP As StructPoidsPropres = Me.ChargeRepartiePP()
+
 
         '--> Traitement
 
-        qPPA = Me.Section.ProfilA.Aire * G
-
         For iTravee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
-
-            Me.ChargesU(KEYPP).FReparties(iTravee).Add(New cls_ForceRepartie(0, qPP, Me.LongueurTravee(iTravee), qPP, Me.xPositionAppui(True, iTravee)))
+            If Me.ChargesU(KEYPP).FReparties(iTravee).Count = 0 Then
+                Me.ChargesU(KEYPP).FReparties(iTravee).Add(New cls_ForceRepartie(0, G_PP.qPP_Total, Me.LongueurTravee(iTravee), G_PP.qPP_Total, Me.xPositionAppui(True, iTravee)))
+            Else
+                Me.ChargesU(KEYPP).FReparties(iTravee)(0) = New cls_ForceRepartie(0, G_PP.qPP_Total, Me.LongueurTravee(iTravee), G_PP.qPP_Total, Me.xPositionAppui(True, iTravee))
+            End If
 
         Next
 
     End Sub
 
-    Private Function ChargeRepartiePP() As Decimal
+    Private Function ChargeRepartiePP() As StructPoidsPropres
         '-------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -2083,26 +2094,37 @@ Public Class cls_Poutre
 
         '--> Déclaration
 
-        Dim qPP As Decimal
-        Dim qPPA, qPPC, qPPP As Decimal
+        Dim G_PP As StructPoidsPropres
         Dim G As Decimal = Me.Param.GraviteG
-        Dim RhoA As Decimal = Me.Section.Acier.Rho
+
+        Dim dc As Decimal 'largeur de calcul pour le PP
+        If lIntermediaire Then
+            dc = Me.EntraxeD1 / 2 + Me.EntraxeD2 / 2
+        Else
+            dc = Me.EntraxeD1 + Me.EntraxeD2 / 2
+        End If
 
         '--> Calcul
+        With G_PP
 
-        '# Profilé acier
+            '# Profilé acier
+            .qPP_ProfilAcier = Me.Section.ProfilA.Aire * Me.Section.Acier.Rho * G
 
-        qPPA = Me.Section.ProfilA.Aire * G * RhoA
+            '# Dalle
+            .qPP_DalleBeton = Me.Dalle.Aire(dc, Me.Section.ProfilA.Bfs) * Me.Dalle.beton.RhoC * G
 
-        '# Dalle
+            '# Bac acier
+            .qPP_BacAcier = Me.Dalle.Bac.msurf * dc * G
 
-        '# Bac acier
+            '# Béton d'enrobage
+            .qPP_BetonEnrobage = Me.Section.AireEnrobagePartielAec * Me.Section.enrobage_partiel.Beton.RhoC * G
 
-        '--> Bilan et fin
+            '--> Bilan et fin
+            .qPP_Total = .qPP_ProfilAcier + .qPP_DalleBeton + .qPP_BacAcier + .qPP_BetonEnrobage
 
-        qPP = qPPA + qPPC + qPPP
+        End With
 
-        Return qPP
+        Return G_PP
 
     End Function
 
