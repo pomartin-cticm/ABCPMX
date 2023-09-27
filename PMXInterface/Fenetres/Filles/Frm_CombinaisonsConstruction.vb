@@ -2,7 +2,6 @@
 
 Public Class Frm_CombinaisonsConstruction
 
-
 #Region " Variables "
     Dim lBuild As Boolean
 
@@ -35,7 +34,6 @@ Public Class Frm_CombinaisonsConstruction
     Dim fmtGamma As String = "0.00"
 
 #End Region
-
 
 #Region "===OUVERTURE==="
 

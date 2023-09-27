@@ -1,7 +1,7 @@
 ﻿Imports PMXMoteur2
 Imports System.Drawing.Drawing2D
 
-Public Class Frm_CasDeCharge
+Public Class Frm_PPCasDeCharge
 
 #Region " Variables "
 

@@ -56,7 +56,8 @@ Partial Class Frm_PMX
         Me.TSbtn_OptionsIncendie = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_LargeurEfficace = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_LoadCases = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_PPLoadCases = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_PPCombi = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_NdcPoutre = New System.Windows.Forms.ToolStripButton()
         Me.img_Main = New System.Windows.Forms.PictureBox()
@@ -181,7 +182,7 @@ Partial Class Frm_PMX
         '
         Me.Split_Main.Panel2.Controls.Add(Me.TLPan_ZoneDeSaisie)
         Me.Split_Main.Size = New System.Drawing.Size(1123, 472)
-        Me.Split_Main.SplitterDistance = 150
+        Me.Split_Main.SplitterDistance = 145
         Me.Split_Main.SplitterIncrement = 5
         Me.Split_Main.SplitterWidth = 3
         Me.Split_Main.TabIndex = 4
@@ -193,12 +194,12 @@ Partial Class Frm_PMX
         Me.Panel_SideBar.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel_SideBar.Location = New System.Drawing.Point(3, 0)
         Me.Panel_SideBar.Name = "Panel_SideBar"
-        Me.Panel_SideBar.Size = New System.Drawing.Size(144, 469)
+        Me.Panel_SideBar.Size = New System.Drawing.Size(139, 469)
         Me.Panel_SideBar.TabIndex = 2
         '
         'TLPanel_SideBar
         '
-        Me.TLPanel_SideBar.BackColor = System.Drawing.Color.Beige
+        Me.TLPanel_SideBar.BackColor = System.Drawing.SystemColors.ControlLight
         Me.TLPanel_SideBar.ColumnCount = 1
         Me.TLPanel_SideBar.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPanel_SideBar.Controls.Add(Me.Label_Nom_Projet, 0, 0)
@@ -215,7 +216,7 @@ Partial Class Frm_PMX
         Me.TLPanel_SideBar.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
         Me.TLPanel_SideBar.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPanel_SideBar.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPanel_SideBar.Size = New System.Drawing.Size(142, 467)
+        Me.TLPanel_SideBar.Size = New System.Drawing.Size(137, 467)
         Me.TLPanel_SideBar.TabIndex = 2
         '
         'Label_Nom_Projet
@@ -226,7 +227,7 @@ Partial Class Frm_PMX
         Me.Label_Nom_Projet.Location = New System.Drawing.Point(0, 0)
         Me.Label_Nom_Projet.Margin = New System.Windows.Forms.Padding(0)
         Me.Label_Nom_Projet.Name = "Label_Nom_Projet"
-        Me.Label_Nom_Projet.Size = New System.Drawing.Size(142, 25)
+        Me.Label_Nom_Projet.Size = New System.Drawing.Size(137, 25)
         Me.Label_Nom_Projet.TabIndex = 2
         Me.Label_Nom_Projet.Text = "Label_Nom_Projet"
         Me.Label_Nom_Projet.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -239,14 +240,14 @@ Partial Class Frm_PMX
         Me.Label_Nav_Poutre.Location = New System.Drawing.Point(0, 51)
         Me.Label_Nav_Poutre.Margin = New System.Windows.Forms.Padding(0)
         Me.Label_Nav_Poutre.Name = "Label_Nav_Poutre"
-        Me.Label_Nav_Poutre.Size = New System.Drawing.Size(142, 25)
+        Me.Label_Nav_Poutre.Size = New System.Drawing.Size(137, 25)
         Me.Label_Nav_Poutre.TabIndex = 1
         Me.Label_Nav_Poutre.Text = "Label_Nav_Poutre"
         Me.Label_Nav_Poutre.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel_NomProjet
         '
-        Me.Panel_NomProjet.BackColor = System.Drawing.Color.Beige
+        Me.Panel_NomProjet.BackColor = System.Drawing.SystemColors.ControlLight
         Me.Panel_NomProjet.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel_NomProjet.Controls.Add(Me.cmb_Projet)
         Me.Panel_NomProjet.Dock = System.Windows.Forms.DockStyle.Fill
@@ -254,7 +255,7 @@ Partial Class Frm_PMX
         Me.Panel_NomProjet.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel_NomProjet.Name = "Panel_NomProjet"
         Me.Panel_NomProjet.Padding = New System.Windows.Forms.Padding(3, 2, 3, 3)
-        Me.Panel_NomProjet.Size = New System.Drawing.Size(142, 26)
+        Me.Panel_NomProjet.Size = New System.Drawing.Size(137, 26)
         Me.Panel_NomProjet.TabIndex = 1
         '
         'cmb_Projet
@@ -264,19 +265,19 @@ Partial Class Frm_PMX
         Me.cmb_Projet.FormattingEnabled = True
         Me.cmb_Projet.Location = New System.Drawing.Point(2, 2)
         Me.cmb_Projet.Name = "cmb_Projet"
-        Me.cmb_Projet.Size = New System.Drawing.Size(136, 21)
+        Me.cmb_Projet.Size = New System.Drawing.Size(131, 21)
         Me.cmb_Projet.TabIndex = 0
         '
         'pan_ListePoutres
         '
         Me.pan_ListePoutres.AutoScroll = True
-        Me.pan_ListePoutres.BackColor = System.Drawing.Color.Beige
+        Me.pan_ListePoutres.BackColor = System.Drawing.SystemColors.ControlLight
         Me.pan_ListePoutres.Controls.Add(Me.TLPan_ListPoutres)
         Me.pan_ListePoutres.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_ListePoutres.Location = New System.Drawing.Point(0, 76)
         Me.pan_ListePoutres.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ListePoutres.Name = "pan_ListePoutres"
-        Me.pan_ListePoutres.Size = New System.Drawing.Size(142, 371)
+        Me.pan_ListePoutres.Size = New System.Drawing.Size(137, 371)
         Me.pan_ListePoutres.TabIndex = 3
         '
         'TLPan_ListPoutres
@@ -289,7 +290,7 @@ Partial Class Frm_PMX
         Me.TLPan_ListPoutres.RowCount = 2
         Me.TLPan_ListPoutres.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.TLPan_ListPoutres.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_ListPoutres.Size = New System.Drawing.Size(142, 188)
+        Me.TLPan_ListPoutres.Size = New System.Drawing.Size(137, 188)
         Me.TLPan_ListPoutres.TabIndex = 7
         '
         'TLPan_ZoneDeSaisie
@@ -306,7 +307,7 @@ Partial Class Frm_PMX
         Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
         Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_ZoneDeSaisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31.0!))
-        Me.TLPan_ZoneDeSaisie.Size = New System.Drawing.Size(970, 472)
+        Me.TLPan_ZoneDeSaisie.Size = New System.Drawing.Size(975, 472)
         Me.TLPan_ZoneDeSaisie.TabIndex = 0
         '
         'ToolStrip_Poutre
@@ -316,11 +317,11 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Poutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Poutre.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.TSbtn_Hivoss, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.TSbtn_LargeurEfficace, Me.TSbtn_LoadCases, Me.ToolStripSeparator2, Me.TSbtn_NdcPoutre})
+        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.TSbtn_Hivoss, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.TSbtn_LargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.ToolStripSeparator2, Me.TSbtn_NdcPoutre})
         Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
         Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
-        Me.ToolStrip_Poutre.Size = New System.Drawing.Size(970, 31)
+        Me.ToolStrip_Poutre.Size = New System.Drawing.Size(975, 31)
         Me.ToolStrip_Poutre.TabIndex = 5
         Me.ToolStrip_Poutre.Text = "ToolStrip1"
         '
@@ -484,14 +485,23 @@ Partial Class Frm_PMX
         Me.TSbtn_LargeurEfficace.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_LargeurEfficace.Text = "ToolStripButton1"
         '
-        'TSbtn_LoadCases
+        'TSbtn_PPLoadCases
         '
-        Me.TSbtn_LoadCases.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_LoadCases.Image = CType(resources.GetObject("TSbtn_LoadCases.Image"), System.Drawing.Image)
-        Me.TSbtn_LoadCases.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_LoadCases.Name = "TSbtn_LoadCases"
-        Me.TSbtn_LoadCases.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_LoadCases.Text = "ToolStripButton1"
+        Me.TSbtn_PPLoadCases.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_PPLoadCases.Image = CType(resources.GetObject("TSbtn_PPLoadCases.Image"), System.Drawing.Image)
+        Me.TSbtn_PPLoadCases.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_PPLoadCases.Name = "TSbtn_PPLoadCases"
+        Me.TSbtn_PPLoadCases.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_PPLoadCases.Text = "ToolStripButton1"
+        '
+        'TSbtn_PPCombi
+        '
+        Me.TSbtn_PPCombi.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_PPCombi.Image = CType(resources.GetObject("TSbtn_PPCombi.Image"), System.Drawing.Image)
+        Me.TSbtn_PPCombi.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_PPCombi.Name = "TSbtn_PPCombi"
+        Me.TSbtn_PPCombi.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_PPCombi.Text = "ToolStripButton1"
         '
         'ToolStripSeparator2
         '
@@ -515,7 +525,7 @@ Partial Class Frm_PMX
         Me.img_Main.Location = New System.Drawing.Point(1, 31)
         Me.img_Main.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.img_Main.Name = "img_Main"
-        Me.img_Main.Size = New System.Drawing.Size(969, 410)
+        Me.img_Main.Size = New System.Drawing.Size(974, 410)
         Me.img_Main.TabIndex = 6
         Me.img_Main.TabStop = False
         '
@@ -1175,5 +1185,6 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_OptionsIncendie As ToolStripButton
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
     Friend WithEvents TSbtn_NdcPoutre As ToolStripButton
-    Friend WithEvents TSbtn_LoadCases As ToolStripButton
+    Friend WithEvents TSbtn_PPLoadCases As ToolStripButton
+    Friend WithEvents TSbtn_PPCombi As ToolStripButton
 End Class

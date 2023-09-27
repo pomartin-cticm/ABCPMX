@@ -241,112 +241,37 @@ Public Class Frm_Gamma
 
         With MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma
 
-            If .GammaG_sup <> MyPoutreLoc.Param.Gamma.GammaG_sup Then
-                lModif = True
-                .GammaG_sup = MyPoutreLoc.Param.Gamma.GammaG_sup
-            End If
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaG_sup, .GammaG_sup, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaG_inf, .GammaG_inf, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaQ, .GammaQ, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi0_Q1, .Psi0_Q1, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi1_Q1, .Psi1_Q1, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q1, .Psi1_Q1, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi0_Q2, .Psi0_Q2, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi1_Q2, .Psi1_Q2, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.Psi2_Q2, .Psi1_Q2, lModif)
 
-            If .GammaG_inf <> MyPoutreLoc.Param.Gamma.GammaG_inf Then
-                lModif = True
-                .GammaG_inf = MyPoutreLoc.Param.Gamma.GammaG_inf
-            End If
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM0, .GammaM0, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM1, .GammaM1, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM2, .GammaM2, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaC, .GammaC, lModif)
 
-            If .GammaQ <> MyPoutreLoc.Param.Gamma.GammaQ Then
-                lModif = True
-                .GammaQ = MyPoutreLoc.Param.Gamma.GammaQ
-            End If
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.lGammaV_unique, .lGammaV_unique, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaVs, .GammaVs, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaVc, .GammaVc, lModif)
 
-            If .Psi0_Q1 <> MyPoutreLoc.Param.Gamma.Psi0_Q1 Then
-                lModif = True
-                .Psi0_Q1 = MyPoutreLoc.Param.Gamma.Psi0_Q1
-            End If
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaS, .GammaS, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaP, .GammaP, lModif)
 
-            If .Psi1_Q1 <> MyPoutreLoc.Param.Gamma.Psi1_Q1 Then
-                lModif = True
-                .Psi1_Q1 = MyPoutreLoc.Param.Gamma.Psi1_Q1
-            End If
-
-            If .Psi2_Q1 <> MyPoutreLoc.Param.Gamma.Psi2_Q1 Then
-                lModif = True
-                .Psi2_Q1 = MyPoutreLoc.Param.Gamma.Psi2_Q1
-            End If
-
-            If .Psi0_Q2 <> MyPoutreLoc.Param.Gamma.Psi0_Q2 Then
-                lModif = True
-                .Psi0_Q2 = MyPoutreLoc.Param.Gamma.Psi0_Q2
-            End If
-
-            If .Psi1_Q2 <> MyPoutreLoc.Param.Gamma.Psi1_Q2 Then
-                lModif = True
-                .Psi1_Q2 = MyPoutreLoc.Param.Gamma.Psi1_Q2
-            End If
-
-            If .Psi2_Q2 <> MyPoutreLoc.Param.Gamma.Psi2_Q2 Then
-                lModif = True
-                .Psi2_Q2 = MyPoutreLoc.Param.Gamma.Psi2_Q2
-            End If
-
-            If .GammaM0 <> MyPoutreLoc.Param.Gamma.GammaM0 Then
-                lModif = True
-                .GammaM0 = MyPoutreLoc.Param.Gamma.GammaM0
-            End If
-
-            If .GammaM1 <> MyPoutreLoc.Param.Gamma.GammaM1 Then
-                lModif = True
-                .GammaM1 = MyPoutreLoc.Param.Gamma.GammaM1
-            End If
-
-            If .GammaM2 <> MyPoutreLoc.Param.Gamma.GammaM2 Then
-                lModif = True
-                .GammaM2 = MyPoutreLoc.Param.Gamma.GammaM2
-            End If
-
-            If .GammaC <> MyPoutreLoc.Param.Gamma.GammaC Then
-                lModif = True
-                .GammaC = MyPoutreLoc.Param.Gamma.GammaC
-            End If
-
-            If .lGammaV_unique <> MyPoutreLoc.Param.Gamma.lGammaV_unique Then
-                lModif = True
-                .lGammaV_unique = MyPoutreLoc.Param.Gamma.lGammaV_unique
-            End If
-
-            If .GammaVs <> MyPoutreLoc.Param.Gamma.GammaVs Then
-                lModif = True
-                .GammaVs = MyPoutreLoc.Param.Gamma.GammaVs
-            End If
-
-            If .GammaVc <> MyPoutreLoc.Param.Gamma.GammaVc Then
-                lModif = True
-                .GammaVc = MyPoutreLoc.Param.Gamma.GammaVc
-            End If
-
-            If .GammaS <> MyPoutreLoc.Param.Gamma.GammaS Then
-                lModif = True
-                .GammaS = MyPoutreLoc.Param.Gamma.GammaS
-            End If
-
-            If .GammaP <> MyPoutreLoc.Param.Gamma.GammaP Then
-                lModif = True
-                .GammaP = MyPoutreLoc.Param.Gamma.GammaP
-            End If
-
-            If .GammaM_fi <> MyPoutreLoc.Param.Gamma.GammaM_fi Then
-                lModif = True
-                .GammaM_fi = MyPoutreLoc.Param.Gamma.GammaM_fi
-            End If
-
-            If .GammaC_fi <> MyPoutreLoc.Param.Gamma.GammaC_fi Then
-                lModif = True
-                .GammaC_fi = MyPoutreLoc.Param.Gamma.GammaC_fi
-            End If
-
-            If .GammaV_fi <> MyPoutreLoc.Param.Gamma.GammaV_fi Then
-                lModif = True
-                .GammaV_fi = MyPoutreLoc.Param.Gamma.GammaV_fi
-            End If
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi, .GammaM_fi, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaC_fi, .GammaC_fi, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaV_fi, .GammaV_fi, lModif)
 
         End With
+
+        If lModif Then
+            MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()
+        End If
     End Sub
 
 #End Region

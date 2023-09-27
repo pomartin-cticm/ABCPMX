@@ -98,7 +98,7 @@ Module Mod_NoteCalcul
 
         MyNote = New Cls_Rapport("Arial", 1.5, 3, 3)
         MyProjet.Poutres(MyProjet.IndEnCours).InitialisePoidsPropres()
-        MyProjet.Poutres(MyProjet.IndEnCours).MAJ_CoefficientsCombinaisons()
+        MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()
 
         '--[ Création de la Note
 

@@ -327,7 +327,8 @@ Module Mod_Declarations
     End Enum
 
     Public Enum EnuFenetres
-        CasDeCharge
+        PPCasDeCharge
+        PPCombinaison
         Chargements
         Combinaisons
         Connexion

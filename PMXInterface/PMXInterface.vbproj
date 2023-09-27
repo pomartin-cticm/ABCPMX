@@ -98,10 +98,10 @@
     <Compile Include="Fenetres\Filles\Frm_Basic.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fenetres\Filles\Frm_CasDeCharge.Designer.vb">
-      <DependentUpon>Frm_CasDeCharge.vb</DependentUpon>
+    <Compile Include="Fenetres\Filles\Frm_PPCasDeCharge.Designer.vb">
+      <DependentUpon>Frm_PPCasDeCharge.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\Filles\Frm_CasDeCharge.vb">
+    <Compile Include="Fenetres\Filles\Frm_PPCasDeCharge.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_Chargement.Designer.vb">
@@ -198,6 +198,12 @@
       <DependentUpon>Frm_Portees.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_Portees.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_PPCombinaison.Designer.vb">
+      <DependentUpon>Frm_PPCombinaison.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_PPCombinaison.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_SectionAcierStandard.Designer.vb">
@@ -351,8 +357,8 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_Basic.resx">
       <DependentUpon>Frm_Basic.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fenetres\Filles\Frm_CasDeCharge.resx">
-      <DependentUpon>Frm_CasDeCharge.vb</DependentUpon>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_PPCasDeCharge.resx">
+      <DependentUpon>Frm_PPCasDeCharge.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Chargement.resx">
       <DependentUpon>Frm_Chargement.vb</DependentUpon>
@@ -403,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Portees.resx">
       <DependentUpon>Frm_Portees.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_PPCombinaison.resx">
+      <DependentUpon>Frm_PPCombinaison.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_SectionAcierStandard.resx">
       <DependentUpon>Frm_SectionAcierStandard.vb</DependentUpon>

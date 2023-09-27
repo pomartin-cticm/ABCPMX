@@ -344,8 +344,8 @@ Module Mod_Outils
 #Region " Affichage donnée "
 
     Public Function GetFormatSignificatifN(ByVal Valeur As Double,
-                                          ByVal nbSignificatif As Integer,
-                                          ByVal nbDigitMax As Integer) As String
+                                           ByVal nbSignificatif As Integer,
+                                           ByVal nbDigitMax As Integer) As String
         '---------------------------------------------------------------------------------------------------
         '   11/08/23 :  Création - POM
         '---------------------------------------------------------------------------------------------------

@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Classes Charges\cls_CasDeCharge.vb" />
     <Compile Include="Classes Charges\cls_ChargementUtilisateur.vb" />
+    <Compile Include="Classes Charges\cls_CombinaisonA.vb" />
     <Compile Include="Classes Charges\cls_Force.vb" />
     <Compile Include="Classes Charges\cls_ForceRepartie.vb" />
     <Compile Include="Classes Charges\cls_Moment.vb" />

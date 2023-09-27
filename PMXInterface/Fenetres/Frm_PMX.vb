@@ -277,7 +277,8 @@ Public Class Frm_PMX
     Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) _
         Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
-                TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_LoadCases.Click, TSbtn_Chargements.Click
+                TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
+                TSbtn_PPCombi.Click
 
         Select Case sender.name
 
@@ -319,8 +320,10 @@ Public Class Frm_PMX
             Case Me.TSbtn_LargeurEfficace.Name
                 FilleEnCours = EnuFenetres.LargeurEfficace
 
-            Case Me.TSbtn_LoadCases.Name
-                FilleEnCours = EnuFenetres.CasDeCharge
+            Case Me.TSbtn_PPLoadCases.Name
+                FilleEnCours = EnuFenetres.PPCasDeCharge
+            Case Me.TSbtn_PPCombi.Name
+                FilleEnCours = EnuFenetres.PPCombinaison
 
         End Select
         AfficheFenetreEnCours()
@@ -414,9 +417,13 @@ Public Class Frm_PMX
             Case EnuFenetres.LargeurEfficace
                 Frm_LargeurEfficace.ShowDialog()
 
-            Case EnuFenetres.CasDeCharge
-                Frm_CasDeCharge.ShowDialog()
-                Frm_CasDeCharge.Dispose()
+            Case EnuFenetres.PPCasDeCharge
+                Frm_PPCasDeCharge.ShowDialog()
+                Frm_PPCasDeCharge.Dispose()
+
+            Case EnuFenetres.PPCombinaison
+                Frm_PPCombinaison.ShowDialog()
+                Frm_PPCombinaison.Dispose()
 
         End Select
 
@@ -919,16 +926,21 @@ Public Class Frm_PMX
 
     End Sub
 
+
+    Private Sub TLPan_ListPoutres_Resize(sender As Object, e As EventArgs) Handles TLPan_ListPoutres.Resize
+        RedrawAllPomBtns()
+    End Sub
+
+
 #End Region
 
 #Region " Affichage des poutres du projet "
 
-
     Private Sub ChoixSection_CheckedChanged(sender As Object, e As EventArgs)
 
-        If lbuild Then Exit Sub
+        If lBuild Then Exit Sub
         Dim lChecked As Boolean = sender.checked
-        lbuild = True
+        lBuild = True
 
         DeselectionneTousChk(sender.name)
 
@@ -962,8 +974,6 @@ Public Class Frm_PMX
         Next
 
     End Sub
-
-
 
     Public Sub AffichageTViewChkOLD()
 

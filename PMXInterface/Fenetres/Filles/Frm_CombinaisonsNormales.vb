@@ -373,7 +373,7 @@ Public Class Frm_CombinaisonsNormales
     End Sub
 
     Private Sub DrawEquationELU(ByVal MyGr As Graphics, ByVal lSelect As Boolean, ByVal Indice As Integer,
-                             ByVal sWi As Single, ByVal sHi As Single)
+                                ByVal sWi As Single, ByVal sHi As Single)
         '----------------------------------------------------------------------------------------
         '   21/08/23 :  Création - Version 1.00
         '----------------------------------------------------------------------------------------
@@ -456,6 +456,13 @@ Public Class Frm_CombinaisonsNormales
                 strCoefQ1 = Format(MyGamma.GammaQ * MyGamma.Psi0_Q1, "0.00")
                 strCoefQ2 = Format(MyGamma.GammaQ, "0.00")
         End Select
+
+        With MyProjet.Poutres(MyProjet.IndEnCours)
+            strGammaG = Format(.CoefCombELU(Indice - 1)(0), "0.00")
+            strCoefQ1 = Format(.CoefCombELU(Indice - 1)(1), "0.00")
+            strCoefQ2 = Format(.CoefCombELU(Indice - 1)(2), "0.00")
+        End With
+
 
         If lSelect Then
             BrushBlue = MyBrushBlue

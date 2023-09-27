@@ -4,6 +4,13 @@
 
 #Region " Attributs "
 
+    Enum EnuType
+        Exploitation
+        Permanente
+        Construction
+        Retrait
+    End Enum
+
     '--> Identifications
 
     Public Nom As String                                ' Dénomination dans la langue utilisateur du cas de charge
@@ -12,6 +19,7 @@
     '--> Paramètres de modélisation
 
     Public IndElts As Integer                           ' Indice de la table BeamElements contenant les propriétés des barres
+    Public Type As EnuType                              ' Type de chargement
 
     '--> Charges
 
@@ -31,11 +39,13 @@
     Public RZ() As Decimal                              ' Réactions verticales aux nœuds support (0 à NbAppuis-1)
 
     Public lRunCalcul As Boolean                        ' Indique sir le calcul a été effectué
+
+
 #End Region
 
 #Region " Constructeurs "
 
-    Public Sub New(pNom As String, pSymbol As String, IndiceElts As Integer, iTrav0 As Integer, NbTrav As Integer)
+    Public Sub New(pNom As String, pSymbol As String, IndiceElts As Integer, iTrav0 As Integer, NbTrav As Integer, pType As EnuType)
         '-----------------------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
@@ -46,6 +56,7 @@
         '   IndiceElts  [E] :   Indice de la table de propriétés des éléments associées au cas de charge
         '   NbTrav      [E] :   Nombre de travées dans la poutre (pour le dimensionnement des tableaux)
         '   iTrav0      [E] :   Indice de la première travée
+        '   pType       [E] :   Type du chargement
         '-----------------------------------------------------------------------------------------------------------
 
         Me.Nom = pNom
@@ -65,6 +76,9 @@
         Next
 
         Me.lRunCalcul = False
+
+        Me.Type = pType
+
     End Sub
 
 #End Region
