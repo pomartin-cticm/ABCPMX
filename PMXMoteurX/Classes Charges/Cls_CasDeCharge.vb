@@ -40,7 +40,6 @@
 
     Public lRunCalcul As Boolean                        ' Indique sir le calcul a été effectué
 
-
 #End Region
 
 #Region " Constructeurs "

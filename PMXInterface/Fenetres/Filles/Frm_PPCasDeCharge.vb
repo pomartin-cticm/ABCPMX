@@ -448,58 +448,58 @@ Public Class Frm_PPCasDeCharge
     End Function
 
 
-    Private Sub DessineDiagrammeRDM(myGr As Graphics, myPoutre As cls_Poutre,
-                                    Courbe(,) As Decimal, kEchC As Decimal, CouleurC As Color, myParAff As Struc_Affichage)
-        '-----------------------------------------------------------------------------------------------
-        '   18/09/23 :  Version 1.00
-        '-----------------------------------------------------------------------------------------------
-        '   Représentation d'un diagramme moment ou effort tranchant
-        '-----------------------------------------------------------------------------------------------
-        '   myGr        [E] :   Graphics dans lequel on dessine
-        '   MyChargeA   [E] :   Cas de charge
-        '   myParAff    [E] :   Paramètre affichage
-        '-----------------------------------------------------------------------------------------------
+    'Private Sub DessineDiagrammeRDM(myGr As Graphics, myPoutre As cls_Poutre,
+    '                                Courbe(,) As Decimal, kEchC As Decimal, CouleurC As Color, myParAff As Struc_Affichage)
+    '    '-----------------------------------------------------------------------------------------------
+    '    '   18/09/23 :  Version 1.00
+    '    '-----------------------------------------------------------------------------------------------
+    '    '   Représentation d'un diagramme moment ou effort tranchant
+    '    '-----------------------------------------------------------------------------------------------
+    '    '   myGr        [E] :   Graphics dans lequel on dessine
+    '    '   MyChargeA   [E] :   Cas de charge
+    '    '   myParAff    [E] :   Paramètre affichage
+    '    '-----------------------------------------------------------------------------------------------
 
-        '--> Déclarations
+    '    '--> Déclarations
 
-        Dim xo, xe, yo, ye As Decimal
-        Dim myPenC As New Pen(CouleurC, 1.5)
+    '    Dim xo, xe, yo, ye As Decimal
+    '    Dim myPenC As New Pen(CouleurC, 1.5)
 
-        '--> Affichage
+    '    '--> Affichage
 
-        xo = 0
-        xe = 0
-        yo = 0
-        ye = Courbe(0, 1) * kEchC
-        If Not IsEqual(yo, ye) Then
-            AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
-        End If
+    '    xo = 0
+    '    xe = 0
+    '    yo = 0
+    '    ye = Courbe(0, 1) * kEchC
+    '    If Not IsEqual(yo, ye) Then
+    '        AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
+    '    End If
 
-        For iNode As Integer = 0 To myPoutre.Nodes.nbNodes - 2
-            xo = myPoutre.Nodes.xGlobal(iNode)
-            xe = myPoutre.Nodes.xGlobal(iNode + 1)
-            yo = Courbe(iNode, 1) * kEchC
-            ye = Courbe(iNode + 1, 0) * kEchC
-            AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
+    '    For iNode As Integer = 0 To myPoutre.Nodes.nbNodes - 2
+    '        xo = myPoutre.Nodes.xGlobal(iNode)
+    '        xe = myPoutre.Nodes.xGlobal(iNode + 1)
+    '        yo = Courbe(iNode, 1) * kEchC
+    '        ye = Courbe(iNode + 1, 0) * kEchC
+    '        AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
 
-            If iNode < myPoutre.Nodes.nbNodes - 2 Then
-                yo = Courbe(iNode + 1, 1) * kEchC
-                If Not IsEqual(yo, ye) Then
-                    AddLigne(myGr, myPenC, xe, yo, xe, ye, myParAff)
-                End If
-            End If
+    '        If iNode < myPoutre.Nodes.nbNodes - 2 Then
+    '            yo = Courbe(iNode + 1, 1) * kEchC
+    '            If Not IsEqual(yo, ye) Then
+    '                AddLigne(myGr, myPenC, xe, yo, xe, ye, myParAff)
+    '            End If
+    '        End If
 
-        Next
+    '    Next
 
-        xe = myPoutre.LongueurTotale
-        yo = 0
-        ye = Courbe(myPoutre.Nodes.nbNodes - 1, 0) * kEchC
+    '    xe = myPoutre.LongueurTotale
+    '    yo = 0
+    '    ye = Courbe(myPoutre.Nodes.nbNodes - 1, 0) * kEchC
 
-        If Not IsEqual(yo, ye) Then
-            AddLigne(myGr, myPenC, xe, yo, xe, ye, myParAff)
-        End If
+    '    If Not IsEqual(yo, ye) Then
+    '        AddLigne(myGr, myPenC, xe, yo, xe, ye, myParAff)
+    '    End If
 
-    End Sub
+    'End Sub
 
     Private Sub DessineChargement(ByRef myGr As Graphics, MyChargeA As cls_CasDeCharge, iTravD As Integer, iTravF As Integer,
                                   kEchDef As Decimal, dCar As Decimal, xSec() As Decimal, NbSec As Integer, myParAff As Struc_Affichage)

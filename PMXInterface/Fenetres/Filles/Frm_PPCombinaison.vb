@@ -1,10 +1,49 @@
-﻿Imports PMXMoteur2
+﻿Imports System.Net.NetworkInformation
+Imports PMXMoteur2
 
 Public Class Frm_PPCombinaison
 
 #Region " Variables "
 
     Dim lBuild As Boolean
+
+    Dim strNoCombi As String
+    Dim lNoCombi As Boolean
+    Dim strUltimate As String
+    Dim strService As String
+    Dim strIncendie As String
+    Dim strConstruction As String
+    Dim strRacineELU As String
+    Dim strRacineELS As String
+    Dim strRacineELF As String
+    Dim strNoCombiELU As String
+    Dim strNoCombiELS As String
+    Dim strNoCombiELF As String
+    Dim strNoCombiELC As String
+
+    Dim iLimitState As Integer
+    Const INDULTIME As Integer = 0
+    Const INDSERVICE As Integer = 1
+    Const INDINCENDIE As Integer = 2
+    Const INDCONST As Integer = 3
+
+    '# Résultats pour la combinaisons sélectionnée
+
+    Dim EL_Uz() As Decimal                  ' Flèches
+    Dim EL_My(,) As Decimal                 ' Moments fléchissants
+    Dim EL_Vz(,) As Decimal                 ' Efforts tranchants
+    Dim fMin, fMax As Decimal               ' Flèches enveloppes
+    Dim Mmin, Mmax As Decimal               ' Moments enveloppes
+    Dim Vmin, Vmax As Decimal               ' Moments enveloppes
+
+    Dim lCombiRetrait As Boolean = True     ' Indique si on combine le retrait ou non
+
+    '# Options pour le dessin
+
+    Dim lDessDeformee As Boolean = True     ' Affichage de la déformée
+    Dim lDessMoment As Boolean = True       ' Affichage diagramme moments
+    Dim lDessEffortT As Boolean = True      ' Affichage diagramme efforts tranchants
+    Dim lDessNumeros As Boolean = False     ' Affichage des numéros noeuds
 
 #End Region
 
@@ -16,6 +55,7 @@ Public Class Frm_PPCombinaison
 
         GestionStyle()
         GestionLangues()
+        GestionUnites()
         InitialiseFenetre()
 
         lBuild = False
@@ -23,23 +63,45 @@ Public Class Frm_PPCombinaison
 
     Private Sub InitialiseFenetre()
 
-        MyProjet.Poutres(MyProjet.IndEnCours).InitialiseCalculs()
-        MyProjet.Poutres(MyProjet.IndEnCours).CalculMNVInternes()
-        MyProjet.Poutres(MyProjet.IndEnCours).InitialiseCombiA_ELU()
+        InitialiseCalcul(MyProjet.Poutres(MyProjet.IndEnCours))
 
-        RemplirComboCombi()
+        RemplirComboLS()
+        RemplirComboCombi(MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU)
+
+        Me.chk_Fleches.Checked = lDessDeformee
+        Me.chk_Moment.Checked = lDessMoment
+        Me.chk_EffortTranchant.Checked = lDessEffortT
+        Me.chk_Numerotation.Checked = lDessNumeros
+        Me.chk_Retrait.Checked = lCombiRetrait
 
     End Sub
 
-    Private Sub RemplirComboCombi()
+    Private Sub InitialiseCalcul(MyPoutre As cls_Poutre)
+
+        MyPoutre.InitialiseCalculs()
+        MyPoutre.CalculMNVInternes()
+        'MyPoutre.InitialiseCombiA_ELU()
+        MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, MyPoutre.lCombELU, MyPoutre.CoefCombELU, strRacineELU, MyPoutre.CombiA_ELU)
+        MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, MyPoutre.lCombELS, MyPoutre.CoefCombELS, strRacineELS, MyPoutre.CombiA_ELS)
+
+    End Sub
+
+    Private Sub RemplirComboCombi(MyCombi As cls_Combinaisons)
 
         Me.cmb_Combi.Items.Clear()
 
-        For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi - 1
+        If MyCombi.nbCombi = 0 Then
+            Me.cmb_Combi.Items.Add(strNoCombi)
+            lNoCombi = True
+        Else
+            For i As Integer = 0 To MyCombi.nbCombi - 1
 
-            Me.cmb_Combi.Items.Add(MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.Symbole(i))
+                Me.cmb_Combi.Items.Add(MyCombi.Symbole(i))
 
-        Next
+            Next
+            lNoCombi = False
+        End If
+
 
         Me.cmb_Combi.SelectedIndex = 0
 
@@ -47,15 +109,53 @@ Public Class Frm_PPCombinaison
 
     End Sub
 
+    Private Sub RemplirComboLS()
+
+        Me.cmb_LimitState.Items.Clear()
+
+        Me.cmb_LimitState.Items.Add(strUltimate)
+        Me.cmb_LimitState.Items.Add(strService)
+        Me.cmb_LimitState.Items.Add(strIncendie)
+        Me.cmb_LimitState.Items.Add(strConstruction)
+
+        Me.cmb_LimitState.SelectedIndex = 0
+        iLimitState = 0
+    End Sub
+
     Private Sub GestionLangues()
 
+        Me.Text = "Combinations"
         Me.lbl_Combi.Text = "Combinaisons"
-
+        Me.lbl_LimitState.Text = "Limit States"
         Me.lbl_SymbCombi.Text = "Combi"
 
         Me.btn_Annuler.Text = "Close"
         Me.btn_OK.Text = "OK"
 
+        'Me.lbl_Case.Text = "Case"
+        'Me.lbl_Etat.Text = "Etat"
+        'Me.lbl_RunCalcul.Text = "Calcul effectué ?"
+        'Me.lbl_Fleche.Text = "Flèche maxi"
+
+        Me.chk_EffortTranchant.Text = "Diagramme V"
+        Me.chk_Moment.Text = "Diagramme M"
+        Me.chk_Numerotation.Text = "Numérotation"
+        Me.chk_Fleches.Text = "Déformée"
+        Me.chk_Retrait.Text = "avec le retrait"
+
+        strNoCombi = "No combination"
+        strUltimate = "Ultimate"
+        strIncendie = "Fire"
+        strConstruction = "Construction"
+        strService = "Serviceability"
+
+        strRacineELU = "ULS"
+        strRacineELS = "SLS"
+        strRacineELF = "FLS"
+        strNoCombiELU = "No defined combinations for ultimate limite state"
+        strNoCombiELC = "No defined combinations for ultimate limite state in construction phase"
+        strNoCombiELF = "No defined combinations for fire limite state"
+        strNoCombiELS = "No defined combinations for serviceability limite state"
     End Sub
 
     Private Sub GestionStyle()
@@ -69,6 +169,17 @@ Public Class Frm_PPCombinaison
 
     End Sub
 
+
+    Private Sub GestionUnites()
+        Me.etq_UnitDim1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitForce1.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+        Me.etq_UnitForce2.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+        Me.etq_UnitM1.Text = LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment)
+        Me.etq_UnitM2.Text = LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment)
+
+    End Sub
+
+
 #End Region
 
 #Region " Evènements "
@@ -77,36 +188,462 @@ Public Class Frm_PPCombinaison
 
         Dim Indice As Integer = Me.cmb_Combi.SelectedIndex
 
+        '--> Affichage de la combinaison sélectionnée
+
+        Select Case iLimitState
+            Case INDULTIME
+                AfficheCombinaisonSelectionnee(Indice, strNoCombiELU, MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.CoefCombi)
+            Case INDSERVICE
+                AfficheCombinaisonSelectionnee(Indice, strNoCombiELU, MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS.CoefCombi)
+        End Select
+        ' AfficheCombinaisonSelectionnee(Indice)
+
+        '--> Initialisation des calculs (flèches, moments etc)
+
+        Select Case iLimitState
+            Case INDULTIME
+                InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU, Indice)
+            Case INDSERVICE
+                InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS, Indice)
+        End Select
+
+        '--> Valeurs enveloppes
+
+        '# Fleches
+
+        ValMaxTableau1D(EL_Uz, fMin, fMax)
+        Me.txt_Fleche.Text = GetStringInUnit(Math.Max(Math.Abs(fMin), fMax), Enu_TypeVariable.Dimension, 3, 3, False)
+
+        '# Moments
+
+        ValMaxTableau2D(EL_My, Mmin, Mmax)
+        Me.txt_Mmax.Text = GetStringInUnit(Mmax, Enu_TypeVariable.Moment, 3, 3, False)
+        Me.txt_Mmin.Text = GetStringInUnit(Mmin, Enu_TypeVariable.Moment, 3, 3, False)
+
+        '# Efforts trachants
+
+        ValMaxTableau2D(EL_Vz, Vmin, Vmax)
+
+    End Sub
+
+    Private Sub InitialiseCalculsCombinaison(MyPoutre As cls_Poutre, ByRef MyCombi As cls_Combinaisons, Indice As Integer)
+        '----------------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Initialisation du calcul des flèches, moments etc pour une combinaison
+        '----------------------------------------------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre traitée
+        '   MyCombi         [E] :   Groupe de combinaisons traité
+        '   Indice          [E] :   Indice de la combinaison traitée
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '# Calcul des flèches
+
+        MyCombi.CombineFleches(Indice, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, Me.EL_Uz, lCombiRetrait)
+
+        '# Calcul des Moments
+
+        MyCombi.CombineMoments(Indice, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, Me.EL_My, lCombiRetrait)
+
+        '# Calcul des efforts tranchants
+
+        MyCombi.CombineEffortsT(Indice, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, Me.EL_Vz, lCombiRetrait)
+
+    End Sub
+
+    Private Sub AfficheCombinaisonSelectionnee(Indice As Integer)
+        '----------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
         Dim Chaine As String = ""
         Dim lFirst As Boolean = True
         Dim nbCharges As Integer = MyProjet.Poutres(MyProjet.IndEnCours).ChargesA.Count
+        Dim lCombi As Boolean
 
-        With MyProjet.Poutres(MyProjet.IndEnCours)
-            For i As Integer = 0 To nbCharges - 1
+        '--> Traitement
 
-                If Not IsEqual(.CombiA_ELU.CoefCombi(Indice)(i), 0) Then
+        If lNoCombi Then
 
-                    If lFirst Then
-                        Chaine = "= "
-                        lFirst = False
-                    Else
-                        Chaine = Chaine & " + "
+            Chaine = "No defined combinations for" & Me.cmb_LimitState.Text & " limite state"
+
+        Else
+
+            Chaine = Me.cmb_Combi.Text
+
+            With MyProjet.Poutres(MyProjet.IndEnCours)
+                For i As Integer = 0 To nbCharges - 1
+
+                    If Not IsEqual(.CombiA_ELU.CoefCombi(Indice)(i), 0) Then
+
+                        If .ChargesA(i).Type = cls_CasDeCharge.EnuType.Retrait Then lCombi = lCombiRetrait Else lCombi = True
+
+                        If lCombi Then
+                            If lFirst Then
+                                Chaine = Chaine & " = "
+                                lFirst = False
+                            Else
+                                Chaine = Chaine & " + "
+                            End If
+
+                            Chaine = Chaine & GetStringInUnit(.CombiA_ELU.CoefCombi(Indice)(i), Enu_TypeVariable.SansType, 3, 2, False) & " " & .ChargesA(i).Symbol
+
+                        End If
                     End If
 
-                    Chaine = Chaine & GetStringInUnit(.CombiA_ELU.CoefCombi(Indice)(i), Enu_TypeVariable.SansType, 3, 2, False) & " " & .ChargesA(i).Symbol
-                End If
-
-            Next
-        End With
+                Next
+            End With
+        End If
 
         Me.lbl_CombiSelect.Text = Chaine
+
+    End Sub
+
+    Private Sub AfficheCombinaisonSelectionnee(Indice As Integer, strMessageNo As String, CoefCombi() As List(Of Decimal))
+        '----------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Affiche dans la fenêtre le détail de la combinaison sélectionnée
+        '----------------------------------------------------------------------------------------------------------------
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Chaine As String = ""
+        Dim lFirst As Boolean = True
+        Dim nbCharges As Integer = MyProjet.Poutres(MyProjet.IndEnCours).ChargesA.Count
+        Dim lCombi As Boolean
+
+        '--> Traitement
+
+        If lNoCombi Then
+
+            Chaine = strMessageNo
+
+        Else
+
+            Chaine = Me.cmb_Combi.Text
+
+            With MyProjet.Poutres(MyProjet.IndEnCours)
+                For i As Integer = 0 To nbCharges - 1
+
+                    If Not IsEqual(CoefCombi(Indice)(i), 0) Then
+
+                        If .ChargesA(i).Type = cls_CasDeCharge.EnuType.Retrait Then lCombi = lCombiRetrait Else lCombi = True
+
+                        If lCombi Then
+                            If lFirst Then
+                                Chaine = Chaine & " = "
+                                lFirst = False
+                            Else
+                                Chaine = Chaine & " + "
+                            End If
+
+                            Chaine = Chaine & GetStringInUnit(CoefCombi(Indice)(i), Enu_TypeVariable.SansType, 3, 2, False) & " " & .ChargesA(i).Symbol
+
+                        End If
+                    End If
+
+                Next
+            End With
+        End If
+
+        Me.lbl_CombiSelect.Text = Chaine
+
+    End Sub
+
+    Private Sub ValMaxTableau2D(MonTableau(,) As Decimal, ByRef ValMin As Decimal, ByRef ValMax As Decimal)
+        '----------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Renvoie les valeurs min et max d'un tableau à une dimension
+        '----------------------------------------------------------------------------------------------------------------
+        '   MonTableau  [E] :   Tableau à traiter
+        '   ValMin      [S] :   
+        '   ValMax      [S] :
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbVal As Integer = MonTableau.GetUpperBound(0)
+
+        '--> Traitement
+
+
+        ValMax = Math.Max(MonTableau(0, 0), MonTableau(0, 1))
+        ValMin = Math.Min(MonTableau(0, 0), MonTableau(0, 1))
+
+        For i As Integer = 1 To nbVal
+            ValMax = Math.Max(ValMax, Math.Max(MonTableau(i, 0), MonTableau(i, 1)))
+            ValMin = Math.Min(ValMin, Math.Min(MonTableau(i, 0), MonTableau(i, 1)))
+        Next
+    End Sub
+
+    Private Sub ValMaxTableau1D(MonTableau() As Decimal, ByRef ValMin As Decimal, ByRef ValMax As Decimal)
+        '----------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Renvoie les valeurs min et max d'un tableau à une dimension
+        '----------------------------------------------------------------------------------------------------------------
+        '   MonTableau  [E] :   Tableau à traiter
+        '   ValMin      [S] :   
+        '   ValMax      [S] :
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbVal As Integer = MonTableau.GetUpperBound(0)
+
+        '--> Traitement
+
+        ValMax = MonTableau.Max
+        ValMin = MonTableau.Min
+        'ValMax = MonTableau(0)
+        'ValMin = MonTableau(0)
+
+        'For i As Integer = 1 To nbVal
+        '    ValMax = Math.Max(ValMax, MonTableau(i))
+        '    ValMin = Math.Min(ValMin, MonTableau(i))
+        'Next
+    End Sub
+
+    Private Sub cmb_LimitState_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_LimitState.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        iLimitState = Me.cmb_LimitState.SelectedIndex
+
+
+
+        Select Case iLimitState
+            Case INDULTIME
+                RemplirComboCombi(MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU)
+            Case INDSERVICE
+                RemplirComboCombi(MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS)
+            Case INDINCENDIE
+            Case INDCONST
+
+        End Select
+
     End Sub
 
     Private Sub cmb_Combi_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Combi.SelectedIndexChanged
+        If lBuild Then Exit Sub
 
         MAJI_Combinaison()
 
     End Sub
+
+
+    Private Sub chk_Fleches_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Fleches.CheckedChanged
+        If lBuild Then Exit Sub
+
+        lDessDeformee = Me.chk_Fleches.Checked
+
+        Me.img_Analyse.Invalidate()
+    End Sub
+
+    Private Sub chk_Moment_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Moment.CheckedChanged
+        If lBuild Then Exit Sub
+
+        lDessMoment = Me.chk_Moment.Checked
+
+        Me.img_Analyse.Invalidate()
+    End Sub
+
+    Private Sub chk_EffortTranchant_CheckedChanged(sender As Object, e As EventArgs) Handles chk_EffortTranchant.CheckedChanged
+        If lBuild Then Exit Sub
+
+        lDessEffortT = Me.chk_EffortTranchant.Checked
+
+        Me.img_Analyse.Invalidate()
+    End Sub
+
+    Private Sub chk_Numerotation_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Numerotation.CheckedChanged
+        If lBuild Then Exit Sub
+
+        lDessNumeros = Me.chk_Numerotation.Checked
+
+        Me.img_Analyse.Invalidate()
+    End Sub
+
+
+    Private Sub chk_Retrait_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Retrait.CheckedChanged
+        If lBuild Then Exit Sub
+
+        lCombiRetrait = Me.chk_Retrait.Checked
+
+        MAJI_Combinaison()
+        Me.img_Analyse.Invalidate()
+
+    End Sub
+
+
+#End Region
+
+#Region " Dessin "
+
+    Private Sub img_Analyse_Paint(sender As Object, e As PaintEventArgs) Handles img_Analyse.Paint
+        DessineRDM(e.Graphics, Me.img_Analyse.ClientRectangle.Width, Me.img_Analyse.ClientRectangle.Height,
+                   MyProjet.Poutres(MyProjet.IndEnCours),
+                   lDessDeformee, lDessMoment, lDessEffortT, lDessNumeros)
+    End Sub
+
+    Public Sub DessineRDM(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
+                          lDef As Boolean, lMom As Boolean, lTranchant As Boolean, lNum As Boolean,
+                           ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   11/08/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation des largeurs efficaces
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   MyPoutre    [E] :   Poutre à dessiner
+        '   lDef        [E] :   Indique si affichage des déformées
+        '   lMom        [E] :   Indique si affichage du diagramme de moment
+        '   lTranchant  [E] :   Indique si affichage du diagramme de tranchant
+        '   lNum        [E] :   Indique si affichage des numéros de noeuds
+        '   lInertie    [E] :   Indique si affichage des inerties
+        '   lChargement [E] :   Indique si affichage du chargement
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Double = 0
+        Const kADJUST As Decimal = 0.95
+        Dim Longueur As Decimal = MyPoutre.LongueurTotale
+        Dim EcartZ As Decimal = Longueur * pHi / pWi
+        Dim dApp As Decimal = Longueur / 50
+        Dim DiaNode As Decimal = Longueur / 200
+
+        Dim Chaine As String
+        Dim MyPenB As New SolidBrush(Color.Gray)
+        Const SigneM As Decimal = -1
+        Const SigneV As Decimal = -1
+        Dim MyFontNum As New Font("Arial", 7)
+
+        Dim ColorDef = Color.DarkOrange
+        Dim ColorDiagM = Color.DarkRed
+        Dim ColorDiagV = Color.DarkBlue
+
+        Dim xo, xe, yo, ye As Decimal
+        Dim kEch As Decimal
+
+        '--> Initialisation
+
+        If lBuild Then Exit Sub
+
+        Dim MyBrushN As New SolidBrush(Color.White)
+        Dim MyPenDef As New Pen(ColorDef)
+        Dim MyPenM As New Pen(Color.Blue)
+
+        xMin = 0 - dCar
+        xMax = Longueur + dCar
+
+        yMin = -EcartZ / 2
+        yMax = +EcartZ / 2
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+        dCar = 0.8 * EcartZ / 2
+
+        '--> Affichage de la poutre
+
+        AddLigne(myGr, 0, 0, Longueur, 0, MyParAff)
+
+        '--> Affichage des noeuds
+
+        For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
+            AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True)
+            If lDessNumeros Then
+                Chaine = "N" & CStr(iNode + 1)
+                AddTexte(myGr, MyPenB, Chaine, MyFontNum, MyPoutre.Nodes.xGlobal(iNode), 0, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+            End If
+        Next
+
+        '--> Affichage des appuis
+
+        'DessineAppui(myGr, MyPoutre.xPositionAppui(True, 1), dApp, MyParAff)
+        'DessineAppui(myGr, MyPoutre.xPositionAppui(False, 1), dApp, MyParAff)
+        Dim indAppuis() As Integer
+        Dim NbApp As Integer
+        MyPoutre.ExtraireIndiceNoeudsAppuis(False, indAppuis, NbApp)
+
+        For iApp As Integer = 0 To NbApp - 1
+            DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
+        Next
+
+        '--> Déformée
+
+        Dim fAbsMax As Decimal
+        Dim Uz As Decimal
+
+        'MyPoutre.ChargesA(iCas).EnveloppesFleche(fMin, fMax)
+
+        If lDef And (Not lNoCombi) Then
+
+            kEch = CoefEchelleDessin(fMin, fMax, EcartZ / 2)
+
+            For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
+                xo = MyPoutre.Nodes.xGlobal(iNode)
+                xe = MyPoutre.Nodes.xGlobal(iNode + 1)
+                yo = EL_Uz(iNode) * kEch
+                ye = EL_Uz(iNode + 1) * kEch
+                AddLigne(myGr, MyPenDef, xo, yo, xe, ye, MyParAff)
+            Next
+
+            For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
+                Uz = EL_Uz(iNode)
+                AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), kEch * Uz, DiaNode, MyParAff, True, MyPenDef)
+            Next
+
+        End If
+
+        '--> Diagramme de Moments de flexion
+
+        If lMom And (Not lNoCombi) Then
+
+            kEch = CoefEchelleDessin(Mmin, Mmax, EcartZ / 2) * SigneM
+
+            DessineDiagrammeRDM(myGr, MyPoutre, EL_My, kEch, ColorDiagM, MyParAff)
+
+        End If
+
+        '--> Diagramme de efforts tranchants
+
+        If lTranchant And (Not lNoCombi) Then
+
+            kEch = CoefEchelleDessin(Vmin, Vmax, EcartZ / 2) * SigneV
+
+            DessineDiagrammeRDM(myGr, MyPoutre, EL_Vz, kEch, ColorDiagV, MyParAff)
+
+        End If
+    End Sub
+
+    Private Function CoefEchelleDessin(valMin As Decimal, valMax As Decimal, dCar As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------
+        '   04/10/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Retourne le coefficient d'échelle à utiliser pour un diagramme
+        '-----------------------------------------------------------------------------------------------
+        '   valMin      [E] :   valeur mini du diagramme
+        '   valMax      [E] :   valeur maxi du diagramme
+        '   dCar        [E] :   valeur caractéristique pour l'affichage du diagramme
+        '-----------------------------------------------------------------------------------------------
+
+        Dim kEch As Decimal
+        Dim valAbsMax As Decimal
+
+        valAbsMax = Math.Max(Math.Abs(valMin), valMax)
+        If IsEqual(valAbsMax, 0) Then kEch = 1 Else kEch = dCar / valAbsMax
+
+        Return kEch
+    End Function
 
 #End Region
 

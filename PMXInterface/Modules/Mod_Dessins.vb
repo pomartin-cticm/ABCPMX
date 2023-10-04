@@ -6238,6 +6238,63 @@ Module Mod_Dessins
 
 #End Region
 
+#Region " Outils généraux pour les diagrammes "
+
+    Public Sub DessineDiagrammeRDM(myGr As Graphics, myPoutre As cls_Poutre,
+                                    Courbe(,) As Decimal, kEchC As Decimal, CouleurC As Color, myParAff As Struc_Affichage)
+        '-----------------------------------------------------------------------------------------------
+        '   18/09/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation d'un diagramme moment ou effort tranchant
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   MyChargeA   [E] :   Cas de charge
+        '   myParAff    [E] :   Paramètre affichage
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xo, xe, yo, ye As Decimal
+        Dim myPenC As New Pen(CouleurC, 1.5)
+
+        '--> Affichage
+
+        xo = 0
+        xe = 0
+        yo = 0
+        ye = Courbe(0, 1) * kEchC
+        If Not IsEqual(yo, ye) Then
+            AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
+        End If
+
+        For iNode As Integer = 0 To myPoutre.Nodes.nbNodes - 2
+            xo = myPoutre.Nodes.xGlobal(iNode)
+            xe = myPoutre.Nodes.xGlobal(iNode + 1)
+            yo = Courbe(iNode, 1) * kEchC
+            ye = Courbe(iNode + 1, 0) * kEchC
+            AddLigne(myGr, myPenC, xo, yo, xe, ye, myParAff)
+
+            If iNode < myPoutre.Nodes.nbNodes - 2 Then
+                yo = Courbe(iNode + 1, 1) * kEchC
+                If Not IsEqual(yo, ye) Then
+                    AddLigne(myGr, myPenC, xe, yo, xe, ye, myParAff)
+                End If
+            End If
+
+        Next
+
+        xe = myPoutre.LongueurTotale
+        yo = 0
+        ye = Courbe(myPoutre.Nodes.nbNodes - 1, 0) * kEchC
+
+        If Not IsEqual(yo, ye) Then
+            AddLigne(myGr, myPenC, xe, yo, xe, ye, myParAff)
+        End If
+
+    End Sub
+
+#End Region
+
 #Region "=====OUTILS GENERAUX======"
 
     Public Function StyleCouleur(iSelect As Integer, iRef As Integer) As Color

@@ -1,0 +1,192 @@
+﻿Public Class cls_Combinaisons
+
+    '===========================================================================================================
+    '   GESTIONS DES COMBINAISONS POUR L'ANALYSE
+    '===========================================================================================================
+
+#Region " Variables "
+
+    Public Symbole() As String                  ' Symbole de la combinaison
+    Public nbCombi As Integer                   ' Nombre de combinaisons 
+    Public CoefCombi() As List(Of Decimal)      ' Tableau des coefficients de combinaisons
+
+#End Region
+
+#Region " Constructeurs "
+
+    Public Sub New()
+        Me.nbCombi = 0
+        'Me.Symbole = ""
+    End Sub
+
+    Public Sub AjouteCombi(pSymb As String, TabCoef() As Decimal, nbCharges As Integer)
+
+        '--> Initialisation du tableau
+
+        Me.nbCombi += 1
+
+        If nbCombi = 1 Then
+            ReDim CoefCombi(nbCombi - 1)
+            ReDim Symbole(nbCombi - 1)
+        Else
+            ReDim Preserve CoefCombi(nbCombi - 1)
+            ReDim Preserve Symbole(nbCombi - 1)
+        End If
+
+        '--> Initialisation des valeurs
+
+        CoefCombi(nbCombi - 1) = New List(Of Decimal)
+        For i As Integer = 0 To nbCharges - 1
+            CoefCombi(nbCombi - 1).Add(TabCoef(i))
+        Next
+
+        Me.Symbole(nbCombi - 1) = pSymb
+    End Sub
+
+#End Region
+
+#Region " Outils "
+
+    Public Sub CombineFleches(iCombi As Integer, nbNodes As Integer, ChargesA As List(Of cls_CasDeCharge), ByRef FlechesUZ() As Decimal, Optional lRetrait As Boolean = True)
+        '-----------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Combine les flèches
+        '-----------------------------------------------------------------------------------------------------------
+        '   iCombi      [E] :   Indice de la combinaison à traiter
+        '   nbNodes     [E] :   Nombre de noeuds dans la modélisation
+        '   ChargesA    [E] :   Tableaux des cas de charges (qui doivent avoir été calculés auparavant
+        '   FlechesUZ   [S] :   Table des flèches
+        '   lRetrait    [E] :   Indique si on prend en compte les charges de retrait
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbCharges As Integer = ChargesA.Count
+        Dim iCas, jNode As Integer
+
+        '--> Initialisation
+
+        ReDim FlechesUZ(nbNodes - 1)
+
+        '--> Combinaisons
+
+        For iCas = 0 To nbCharges - 1
+            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And CombineCas(ChargesA(iCas), lRetrait) Then
+
+                For jNode = 0 To nbNodes - 1
+                    FlechesUZ(jNode) += Me.CoefCombi(iCombi)(iCas) * ChargesA(iCas).UZ(jNode)
+                Next
+            End If
+
+        Next
+
+    End Sub
+
+    Public Sub CombineMoments(iCombi As Integer, nbNodes As Integer, ChargesA As List(Of cls_CasDeCharge), ByRef MomMy(,) As Decimal, Optional lRetrait As Boolean = True)
+        '-----------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Combine les flèches
+        '-----------------------------------------------------------------------------------------------------------
+        '   iCombi      [E] :   Indice de la combinaison à traiter
+        '   nbNodes     [E] :   Nombre de noeuds dans la modélisation
+        '   ChargesA    [E] :   Tableaux des cas de charges (qui doivent avoir été calculés auparavant
+        '   MomMy       [S] :   Table des moments My
+        '   lRetrait    [E] :   Indique si on prend en compte les charges de retrait
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbCharges As Integer = ChargesA.Count
+        Dim iCas, jNode, k As Integer
+
+        '--> Initialisation
+
+        ReDim MomMy(nbNodes - 1, 1)
+
+        '--> Combinaisons
+
+        For iCas = 0 To nbCharges - 1
+            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And CombineCas(ChargesA(iCas), lRetrait) Then
+
+                For jNode = 0 To nbNodes - 1
+                    For k = 0 To 1
+                        MomMy(jNode, k) += Me.CoefCombi(iCombi)(iCas) * ChargesA(iCas).MYY(jNode, k)
+                    Next
+                Next
+
+            End If
+        Next
+
+    End Sub
+
+    Public Sub CombineEffortsT(iCombi As Integer, nbNodes As Integer, ChargesA As List(Of cls_CasDeCharge), ByRef EffVz(,) As Decimal, Optional lRetrait As Boolean = True)
+        '-----------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Combine les flèches
+        '-----------------------------------------------------------------------------------------------------------
+        '   iCombi      [E] :   Indice de la combinaison à traiter
+        '   nbNodes     [E] :   Nombre de noeuds dans la modélisation
+        '   ChargesA    [E] :   Tableaux des cas de charges (qui doivent avoir été calculés auparavant
+        '   EffVz       [S] :   Table des efforts tranchants
+        '   lRetrait    [E] :   Indique si on prend en compte les charges de retrait
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbCharges As Integer = ChargesA.Count
+        Dim iCas, jNode, k As Integer
+
+        '--> Initialisation
+
+        ReDim EffVz(nbNodes - 1, 1)
+
+        '--> Combinaisons
+
+        For iCas = 0 To nbCharges - 1
+            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And CombineCas(ChargesA(iCas), lRetrait) Then
+
+                For jNode = 0 To nbNodes - 1
+                    For k = 0 To 1
+                        EffVz(jNode, k) += Me.CoefCombi(iCombi)(iCas) * ChargesA(iCas).VZ(jNode, k)
+                    Next
+                Next
+
+            End If
+        Next
+
+    End Sub
+
+    Private Function CombineCas(MyChargesA As cls_CasDeCharge, lRetrait As Boolean) As Boolean
+        '-----------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Indique si on combine le cas de charge
+        '-----------------------------------------------------------------------------------------------------------
+        '   MyChargesA  [E] :   Cas de charge
+        '   lRetrait    [E] :   Indique si on prend en compte les charges de retrait
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lCombiCas As Boolean = False
+
+        '--> Est ce que le cas a bien été calculé
+
+        If MyChargesA.lRunCalcul Then
+            '# Si oui, est ce un cas de type de retrait ?
+            If MyChargesA.Type = cls_CasDeCharge.EnuType.Retrait Then
+                lCombiCas = lRetrait
+            Else
+                lCombiCas = True
+            End If
+        End If
+
+        Return lCombiCas
+    End Function
+
+#End Region
+
+End Class

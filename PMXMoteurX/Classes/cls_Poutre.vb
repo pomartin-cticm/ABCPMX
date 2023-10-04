@@ -263,7 +263,8 @@ Public Class cls_Poutre
     '                                                               ' Indices pour les combinaisons utilisateurs :
     '                                                               ' 0 = G ; 1 = Q1 ; 2 = Q2 ; 3 = QC ; 4 : g pour la construction
 
-    Public CombiA_ELU As New cls_CombinaisonA                       'Combinaisons ELU pour l'analyse
+    Public CombiA_ELU As New cls_Combinaisons                       'Combinaisons ELU pour l'analyse
+    Public CombiA_ELS As New cls_Combinaisons                       'Combinaisons ELS pour l'analyse
 
     '--Cas de charge pour l'analyse
 
@@ -1780,7 +1781,7 @@ Public Class cls_Poutre
                                 TabCoef(IndiceQ(j) + k) = Me.CoefCombELU(iCombi)(j) * iMatriceQ(i, k)
                             Next
                         Else
-                            TabCoef(IndiceQ(j)) = Me.CoefCombELU(iCombi)(j)
+                            TabCoef(IndiceQ(j)) = Me.CoefCombELU(iCombi)(j + 1)
                         End If
 
                     Next
@@ -1793,6 +1794,126 @@ Public Class cls_Poutre
         Next
 
     End Sub
+
+
+    Public Sub InitialiseCombiA(nbCombi As Integer, lCombi() As Boolean, CoefCombi() As List(Of Decimal),
+                                RacSymbolEL As String, ByRef MyCombi As cls_Combinaisons)
+        '---------------------------------------------------------------------------
+        '   27/09/23 :  Création - POM 
+        '---------------------------------------------------------------------------
+        '   Préparation des tables de coef de combinaisons 
+        '---------------------------------------------------------------------------
+        '   nbCombi     [E] :   Nombre de combinaisons utilisateurs
+        '   lCombi      [E] :   Table indiquant si la combi utilisateur est prise en compte
+        '   CoefCombi   [E] :   Table des coefficients de combinaison utilisateur
+        '   RacSymbEL   [E] :   Racine pour le symbole de l'état limite
+        '   MyCombi     [S] :   Combinaisons pour l'analyse
+        '---------------------------------------------------------------------------
+
+        If Me.ChargesA.Count = 0 Then Exit Sub
+
+        '--> Déclarations
+
+        Dim iCombi, i, j As Integer
+        Dim TabCoef() As Decimal
+        Dim NbCombQ As Integer = 1
+        Dim IndiceQ(1) As Integer
+        Dim iMatriceQ(,) = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
+        Dim SymboleQ() As String = {symbQ1, symbQ2}
+        ' Dim SymboleQDiez(1) As String
+        Dim lChargeNonNulle() As Boolean
+
+        Dim iTravP As Integer = IndicePremiereTravee
+        Dim iTravd As Integer = IndiceDerniereTravee
+        Dim NbCharges As Integer = Me.ChargesA.Count
+        Dim Symbole As String
+        Dim SymbolExt() As String = {"#1", "#2", "#3"}
+
+        '--> Initialisation
+
+        MyCombi.nbCombi = 0
+        ReDim TabCoef(NbCharges - 1)
+        ReDim lChargeNonNulle(NbCharges - 1)
+        If lMultiQ(1) Or lMultiQ(0) Then NbCombQ = 3
+        For i = 0 To 1
+            If lMultiQ(i) Then
+                IndiceQ(i) = IndiceCasParSymbole(SymboleQ(i) & "#1")
+            Else
+                IndiceQ(i) = IndiceCasParSymbole(SymboleQ(i))
+            End If
+        Next
+        If Not (lMultiQ(0) Or lMultiQ(1)) Then SymbolExt(0) = ""
+
+        For i = 0 To NbCharges - 1
+            If ChargesA(i).Type <> cls_CasDeCharge.EnuType.Retrait Then
+                lChargeNonNulle(i) = Me.ChargesA(i).EstNonNul(iTravP, iTravd)
+            Else
+                lChargeNonNulle(i) = True
+            End If
+        Next
+
+        '--> Boucle sur les combinaisons définies par l'utilisateur
+
+        For iCombi = 0 To nbCombi
+
+            If lCombi(iCombi) And (Not lCombinaisonNulle(iCombi, CoefCombi)) Then
+
+                Symbole = RacSymbolEL & "_0" & CStr(iCombi + 1)
+
+                For i = 0 To NbCharges - 1
+                    Select Case Me.ChargesA(i).Type
+                        Case cls_CasDeCharge.EnuType.Permanente
+                            TabCoef(i) = CoefCombi(iCombi)(0)
+                        Case cls_CasDeCharge.EnuType.Retrait
+                            TabCoef(i) = CoefCombi(iCombi)(0)
+                        Case cls_CasDeCharge.EnuType.Construction
+                            TabCoef(i) = CoefCombi(iCombi)(4)
+                    End Select
+                Next
+
+                For i = 0 To NbCombQ - 1
+
+                    For j = 0 To 1
+
+                        If lMultiQ(j) Then
+                            For k = 0 To 2
+                                TabCoef(IndiceQ(j) + k) = CoefCombi(iCombi)(j) * iMatriceQ(i, k)
+                            Next
+                        Else
+                            TabCoef(IndiceQ(j)) = CoefCombi(iCombi)(j + 1)
+                        End If
+
+                    Next
+
+                    MyCombi.AjouteCombi(Symbole & SymbolExt(i), TabCoef, NbCharges)
+
+                Next
+            End If
+
+        Next
+
+    End Sub
+
+
+    Private Function lCombinaisonNulle(iCombi As Integer, CoefCombi() As List(Of Decimal)) As Boolean
+        '---------------------------------------------------------------------------
+        '   27/09/23 :  Création - POM 
+        '---------------------------------------------------------------------------
+        '   Indique si une combinaison ELU définie par l'utilisateur a tous ses coef nuls
+        '---------------------------------------------------------------------------
+        '   iCombi      [E] :   Indice de la combinaison
+        '   CoefCombi   [E] :   Table des coefficients de combinaison
+        '---------------------------------------------------------------------------
+
+        Dim lNul As Boolean = True
+
+        For i As Integer = 0 To 3
+            If Not IsEqual(CoefCombi(iCombi)(i), 0) Then lNul = False
+        Next
+
+        Return lNul
+
+    End Function
 
     Private Function lCombiELUNulle(iCombi As Integer) As Boolean
         '---------------------------------------------------------------------------
