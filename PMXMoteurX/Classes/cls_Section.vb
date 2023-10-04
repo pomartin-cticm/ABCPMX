@@ -1,4 +1,5 @@
 ﻿Imports System.Collections.Specialized.BitVector32
+Imports System.Reflection
 Imports System.Runtime.CompilerServices
 
 Public Class cls_Section
@@ -96,33 +97,173 @@ Public Class cls_Section
 
 #End Region
 
-#Region " Propriétés plastiques de la section "
+#Region " Maillage pour le calcul des propriétés de section "
 
-    Public Sub ProprietesPlastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
-                                       ByRef zANP As Decimal, ByRef MplRd As Decimal,
-                                       Optional bEff As Decimal = 0, Optional Eta As Decimal = 1)
+    Private Sub MaillageArmaturesDalle(Gammas As cls_Gamma, bEff As Decimal, MyDalle As cls_Dalle, ByRef MyModele As cls_ModeleP)
         '-------------------------------------------------------------------------------------------------------------------
-        '   11/07/23 :  Création - POM
+        '   04/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
-        '   Calcul des propriétés plastiques en flexion simple de la section / axe fort
+        '   Maillage des armatures de la dalle pour le calcul des propriétés / axe YY
         '-------------------------------------------------------------------------------------------------------------------
-        '   Signe       [E] :   Signe du moment
-        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   bEff        [E] :   Largeur participante
+        '   MyDalle     [E] :   Dalle à mailler
+        '   MyModele    [E/S]:  Modèle
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Fsk As Decimal = MyDalle.AcierArmatures.FsK
+        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / MyDalle.AcierArmatures.Es
+        Dim Td As Decimal
+        Dim PhiS, zArma, EspBar As Decimal
+        Dim Ztop, Th As Decimal
+        Dim iArma As Integer
+        Dim nbBar As Decimal
+        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+
+        '--> Initialisation
+
+        Td = MyDalle.t_d
+        Th = MyDalle.EpRenformis
+        Ztop = MyDalle.zTop
+
+        '--> Boucle sur les lits d'armature
+
+        For iArma = 0 To 1
+            If MyDalle.LitArma(iArma).lActive Then
+                PhiS = MyDalle.LitArma(iArma).PhiS
+                zArma = MyDalle.LitArma(iArma).z_s
+                EspBar = MyDalle.LitArma(iArma).EspBar
+                nbBar = bEff / EspBar
+
+                MyModele.AddMailleCirculaire(PhiS / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, nbBar, cls_Maille.EnuTypeMaille.Circulaire)
+
+            End If
+        Next
+
+    End Sub
+
+    Private Sub MaillageDalle(Gammas As cls_Gamma, bEff As Decimal, nEqDalle As Decimal, MyDalle As cls_Dalle, ByRef MyModele As cls_ModeleP)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage de la dalle béton pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Gammas      [E] :   Coefficients partiels
+        '   bEff        [E] :   Largeur participante
+        '   nEqDalle    [E] :   Coefficient d'équivalence pour le béton
+        '   MyDalle     [E] :   Dalle à mailler
+        '   MyModele    [E/S]:  Modèle
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Tc As Decimal = MyDalle.EpaisseurActive
+        Dim Aire As Decimal
+
+        '--> Maillage
+
+        Aire = bEff * Tc
+        MyModele.AddMaille(Aire, Tc, MyDalle.zTop - Tc / 2, 0, 1, nEqDalle, MyDalle.beton.Fck, 0.85, Gammas.GammaC)
+
+    End Sub
+
+    Private Sub MaillageArmaturesEnrobage(Gammas As cls_Gamma, ByRef MyModele As cls_ModeleP)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du des armatures de l'enrobage pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Gammas      [E] :   Coefficients partiels
+        '   MyModele    [E/S]:  Modèle
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim zArma, PhiA As Decimal
+        Dim iPos, iBarre As Integer
+        Dim NbBarres As Integer
+        Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
+        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
+        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+        Const NBMA As Integer = 2       ' Car symétrie des deux chambres
+
+        '--> Boucle sur les lits d'armature
+
+        For iArma As Integer = 0 To 2
+
+            For iPos = 0 To 2
+
+                NbBarres = Me.enrobage_partiel.LitArma(iArma).NbBarres(iPos)
+
+                For iBarre = 1 To NbBarres
+                    zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
+                    PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
+
+                    MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
+
+                Next
+
+            Next
+
+        Next
+
+    End Sub
+
+    Private Sub MaillageEnrobage(Gammas As cls_Gamma, nEq As Decimal, ByRef MyModele As cls_ModeleP)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEq         [E] :   Coefficient d'équivalence acier béton pour le béton d'enrobage
+        '   MyModele    [E/S]:  Modèle
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim LargeurC, EpaisseurC, FdC As Decimal
+
+        '--> Initialisation
+
+        LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
+        EpaisseurC = Me.ProfilA.HauteurAmeHw
+        FdC = Me.enrobage_partiel.Beton.Fck
+
+        MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
+
+        'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
+
+        If lLamine Then
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
+
+        End If
+
+    End Sub
+
+    Private Sub MaillageProfileA(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
         '   Gammas      [E] :   Coefficients partiels
         '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   zANP        [S] :   Position axe neutre plastique
-        '   MplRd       [S] :   Moment plastique
-        '   bEff        [E] :   Largeur efficace de la dalle (si secion mixte)
-        '   Eta         [E] :   Degré de connexion (si section mixte)
+        '   MyModele    [E/S]:  Modèle
         '-------------------------------------------------------------------------------------------------------------------
 
-        '--> Déclarations
+        '--> Déclaration
 
-        Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
-        Dim lLamine As Boolean = Me.lLamine
-        Dim LargeurC, EpaisseurC, FdC As Decimal
-        Dim nEqEc As Decimal
 
         '--> Initialisation
 
@@ -154,61 +295,58 @@ Public Class cls_Section
 
         End If
 
+    End Sub
+
+#End Region
+
+#Region " Propriétés plastiques de la section "
+
+    Public Sub ProprietesPlastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
+                                       ByRef zANP As Decimal, ByRef MplRd As Decimal,
+                                       Optional bEff As Decimal = 0, Optional Eta As Decimal = 1)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés plastiques en flexion simple de la section / axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   RhoV        [E] :   Coefficient pour l'interaction MV
+        '   zANP        [S] :   Position axe neutre plastique
+        '   MplRd       [S] :   Moment plastique
+        '   bEff        [E] :   Largeur efficace de la dalle (si secion mixte)
+        '   Eta         [E] :   Degré de connexion (si section mixte)
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim lLamine As Boolean = Me.lLamine
+        Dim nEqEc As Decimal
+
+        '--> Initialisation
+
+        Hw = Me.ProfilA.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        MaillageProfileA(Gammas, RhoV, MyModele)
+
         '# Béton d'enrobage
 
         If Me.lEnrobage Then
 
-            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
-            EpaisseurC = Me.ProfilA.HauteurAmeHw
-            FdC = Me.enrobage_partiel.Beton.Fck
+            MaillageEnrobage(Gammas, nEqEc, MyModele)
 
-            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
-
-            'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
-
-            If lLamine Then
-
-                '# Congés supérieurs
-
-                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
-
-                '# Congés supérieurs
-
-                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
-
-            End If
         End If
 
         '# Armatures de l'enrobage
 
         If Me.lEnrobage Then
 
-            Dim zArma, PhiA As Decimal
-            Dim iPos, iBarre As Integer
-            Dim NbBarres As Integer
-            Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
-            Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
-            Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
-            Const NBMA As Integer = 2
-            nEqEc = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
-
-            For iArma As Integer = 0 To 2
-
-                For iPos = 0 To 2
-
-                    NbBarres = Me.enrobage_partiel.LitArma(iArma).NbBarres(iPos)
-
-                    For iBarre = 1 To NbBarres
-                        zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
-                        PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
-
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
-
-                    Next
-
-                Next
-
-            Next
+            MaillageArmaturesEnrobage(Gammas, MyModele)
 
         End If
 
@@ -246,7 +384,7 @@ Public Class cls_Section
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
         Dim lLamine As Boolean = Me.lLamine
-        Dim LargeurC, EpaisseurC, FdC As Decimal
+
         Dim nEqEc As Decimal = 1            ' On Applique 1 car calcul plastique
         Const nEqD As Decimal = 1           ' Idem
         Dim Aire As Decimal
@@ -257,85 +395,21 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        '# Semelle supérieure
-
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, -Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
-
-        '# Âme
-
-        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, -Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
-
-        '# Semelle inférieure
-
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, -Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
-
-        If lLamine Then
-
-            '# Congés supérieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
-
-            '# Congés supérieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
-
-        End If
+        MaillageProfileA(Gammas, RhoV, MyModele)
 
         '# Béton d'enrobage
 
         If Me.lEnrobage Then
 
-            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
-            EpaisseurC = Me.ProfilA.HauteurAmeHw
-            FdC = Me.enrobage_partiel.Beton.Fck
+            MaillageEnrobage(Gammas, nEqEc, MyModele)
 
-            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
-
-            'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
-
-            If lLamine Then
-
-                '# Congés supérieurs
-
-                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
-
-                '# Congés supérieurs
-
-                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
-
-            End If
         End If
 
         '# Armatures de l'enrobage
 
         If Me.lEnrobage Then
 
-            Dim zArma, PhiA As Decimal
-            Dim iPos, iBarre As Integer
-            Dim NbBarres As Integer
-            Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
-            Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
-            Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
-            Const NBMA As Integer = 2
-            'nEqEc = Cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
-
-            For iArma As Integer = 0 To 2
-
-                For iPos = 0 To 2
-
-                    NbBarres = Me.enrobage_partiel.LitArma(iArma).NbBarres(iPos)
-
-                    For iBarre = 1 To NbBarres
-                        zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
-                        PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
-
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
-
-                    Next
-
-                Next
-
-            Next
+            MaillageArmaturesEnrobage(Gammas, MyModele)
 
         End If
 
@@ -343,9 +417,7 @@ Public Class cls_Section
 
         If lMixte And (bEff > 0) Then
 
-            Dim Tc As Decimal = MyDalle.EpaisseurActive
-            Aire = bEff * Tc
-            MyModele.AddMaille(Aire, Tc, MyDalle.zTop - Tc / 2, 0, 1, nEqD, MyDalle.beton.Fck, 0.85, Gammas.GammaC)
+            MaillageDalle(Gammas, bEff, nEqD, MyDalle, MyModele)
 
         End If
 
@@ -396,6 +468,7 @@ Public Class cls_Section
 
     End Function
 
+
     Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
                                        ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
@@ -418,7 +491,7 @@ Public Class cls_Section
         Dim Hw As Decimal
         Dim lLamine As Boolean = Me.lLamine
         Const RhoV As Decimal = 0
-        Dim LargeurC, EpaisseurC, FdC As Decimal
+        ' Dim LargeurC, EpaisseurC, FdC As Decimal
 
         '--> Initialisation
 
@@ -426,84 +499,21 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        '# Semelle supérieure
-
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, -Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
-
-        '# Âme
-
-        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, -Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
-
-        '# Semelle inférieure
-
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, -Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
-
-        If lLamine Then
-
-            '# Congés supérieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
-
-            '# Congés supérieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
-
-        End If
+        MaillageProfileA(Gammas, RhoV, MyModele)
 
         '# Béton d'enrobage
 
         If Me.lEnrobage Then
 
-            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
-            EpaisseurC = Me.ProfilA.HauteurAmeHw
-            FdC = Me.enrobage_partiel.Beton.Fck
+            MaillageEnrobage(Gammas, nEqEc, MyModele)
 
-            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
-
-            'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
-
-            If lLamine Then
-
-                '# Congés supérieurs
-
-                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
-
-                '# Congés supérieurs
-
-                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
-
-            End If
         End If
 
         '# Armatures de l'enrobage
 
         If Me.lEnrobage Then
 
-            Dim zArma, PhiA As Decimal
-            Dim iPos, iBarre As Integer
-            Dim NbBarres As Integer
-            Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
-            Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
-            Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
-            Const NBMA As Integer = 2
-
-            For iArma As Integer = 0 To 2
-
-                For iPos = 0 To 2
-
-                    NbBarres = Me.enrobage_partiel.LitArma(iArma).NbBarres(iPos)
-
-                    For iBarre = 1 To NbBarres
-                        zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
-                        PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
-
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 0.85, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
-
-                    Next
-
-                Next
-
-            Next
+            MaillageArmaturesEnrobage(Gammas, MyModele)
 
         End If
 
@@ -547,7 +557,7 @@ Public Class cls_Section
         Dim Hw As Decimal
         Dim lLamine As Boolean = Me.lLamine
         Const RhoV As Decimal = 0
-        Dim LargeurC, EpaisseurC, FdC As Decimal
+        'Dim LargeurC, EpaisseurC, FdC As Decimal
 
         '--> Initialisation
 
@@ -555,96 +565,29 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        '# Semelle supérieure
-
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, -Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
-
-        '# Âme
-
-        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, -Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
-
-        '# Semelle inférieure
-
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, -Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
-
-        If lLamine Then
-
-            '# Congés supérieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
-
-            '# Congés supérieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
-
-        End If
+        MaillageProfileA(Gammas, RhoV, MyModele)
 
         '# Béton d'enrobage
 
         If Me.lEnrobage Then
 
-            LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
-            EpaisseurC = Me.ProfilA.HauteurAmeHw
-            FdC = Me.enrobage_partiel.Beton.Fck
+            MaillageEnrobage(Gammas, nEqEc, MyModele)
 
-            MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
-
-            'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
-
-            If lLamine Then
-
-                '# Congés supérieurs
-
-                MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
-
-                '# Congés supérieurs
-
-                MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEqEc, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
-
-            End If
         End If
 
         '# Armatures de l'enrobage
 
         If Me.lEnrobage Then
 
-            Dim zArma, PhiA As Decimal
-            Dim iPos, iBarre As Integer
-            Dim NbBarres As Integer
-            Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
-            Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
-            Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
-            Const NBMA As Integer = 2
-
-            For iArma As Integer = 0 To 2
-
-                For iPos = 0 To 2
-
-                    NbBarres = Me.enrobage_partiel.LitArma(iArma).NbBarres(iPos)
-
-                    For iBarre = 1 To NbBarres
-                        zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
-                        PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
-
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 0.85, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
-
-                    Next
-
-                Next
-
-            Next
+            MaillageArmaturesEnrobage(Gammas, MyModele)
 
         End If
 
         '--> Dalle béton
 
-        If lMixte And (bEff > 0) Then
+        If Me.lMixte And (bEff > 0) Then
 
-            Dim Tc As Decimal = MyDalle.EpaisseurActive
-            Dim Aire As Decimal
-
-            Aire = bEff * Tc
-            MyModele.AddMaille(Aire, Tc, MyDalle.zTop - Tc / 2, 0, 1, nEqDalle, MyDalle.beton.Fck, 0.85, Gammas.GammaC)
+            MaillageDalle(Gammas, bEff, nEqDalle, MyDalle, MyModele)
 
         End If
 

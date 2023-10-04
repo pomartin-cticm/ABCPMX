@@ -265,6 +265,7 @@ Public Class cls_Poutre
 
     Public CombiA_ELU As New cls_Combinaisons                       'Combinaisons ELU pour l'analyse
     Public CombiA_ELS As New cls_Combinaisons                       'Combinaisons ELS pour l'analyse
+    Public CombiA_ELF As New cls_Combinaisons                       'Combinaisons ELF pour l'analyse
 
     '--Cas de charge pour l'analyse
 

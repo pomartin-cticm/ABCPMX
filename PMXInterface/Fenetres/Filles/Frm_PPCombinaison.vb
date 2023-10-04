@@ -32,6 +32,7 @@ Public Class Frm_PPCombinaison
     Dim EL_Uz() As Decimal                  ' Flèches
     Dim EL_My(,) As Decimal                 ' Moments fléchissants
     Dim EL_Vz(,) As Decimal                 ' Efforts tranchants
+    Dim EL_Rz() As Decimal                  ' Réactions aux appuis
     Dim fMin, fMax As Decimal               ' Flèches enveloppes
     Dim Mmin, Mmax As Decimal               ' Moments enveloppes
     Dim Vmin, Vmax As Decimal               ' Moments enveloppes
@@ -74,6 +75,7 @@ Public Class Frm_PPCombinaison
         Me.chk_Numerotation.Checked = lDessNumeros
         Me.chk_Retrait.Checked = lCombiRetrait
 
+        Me.img_Analyse.Invalidate()
     End Sub
 
     Private Sub InitialiseCalcul(MyPoutre As cls_Poutre)
@@ -83,6 +85,7 @@ Public Class Frm_PPCombinaison
         'MyPoutre.InitialiseCombiA_ELU()
         MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, MyPoutre.lCombELU, MyPoutre.CoefCombELU, strRacineELU, MyPoutre.CombiA_ELU)
         MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, MyPoutre.lCombELS, MyPoutre.CoefCombELS, strRacineELS, MyPoutre.CombiA_ELS)
+        MyPoutre.InitialiseCombiA(cls_Poutre.nbCombFeu, MyPoutre.lCombFeu, MyPoutre.CoefCombFeu, strRacineELF, MyPoutre.CombiA_ELF)
 
     End Sub
 
@@ -101,7 +104,6 @@ Public Class Frm_PPCombinaison
             Next
             lNoCombi = False
         End If
-
 
         Me.cmb_Combi.SelectedIndex = 0
 
@@ -195,34 +197,55 @@ Public Class Frm_PPCombinaison
                 AfficheCombinaisonSelectionnee(Indice, strNoCombiELU, MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.CoefCombi)
             Case INDSERVICE
                 AfficheCombinaisonSelectionnee(Indice, strNoCombiELU, MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS.CoefCombi)
+            Case INDINCENDIE
+                AfficheCombinaisonSelectionnee(Indice, strNoCombiELF, MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELf.CoefCombi)
         End Select
         ' AfficheCombinaisonSelectionnee(Indice)
 
-        '--> Initialisation des calculs (flèches, moments etc)
+        If Not lNoCombi Then
 
-        Select Case iLimitState
-            Case INDULTIME
-                InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU, Indice)
-            Case INDSERVICE
-                InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS, Indice)
-        End Select
+            '--> Initialisation des calculs (flèches, moments etc)
 
-        '--> Valeurs enveloppes
+            Select Case iLimitState
+                Case INDULTIME
+                    InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU, Indice)
+                Case INDSERVICE
+                    InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS, Indice)
+                Case INDINCENDIE
+                    InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_Elf, Indice)
+            End Select
 
-        '# Fleches
+            '--> Valeurs enveloppes
 
-        ValMaxTableau1D(EL_Uz, fMin, fMax)
-        Me.txt_Fleche.Text = GetStringInUnit(Math.Max(Math.Abs(fMin), fMax), Enu_TypeVariable.Dimension, 3, 3, False)
+            '# Fleches
 
-        '# Moments
+            ValMaxTableau1D(EL_Uz, fMin, fMax)
+            Me.txt_Fleche.Text = GetStringInUnit(Math.Max(Math.Abs(fMin), fMax), Enu_TypeVariable.Dimension, 3, 3, False)
 
-        ValMaxTableau2D(EL_My, Mmin, Mmax)
-        Me.txt_Mmax.Text = GetStringInUnit(Mmax, Enu_TypeVariable.Moment, 3, 3, False)
-        Me.txt_Mmin.Text = GetStringInUnit(Mmin, Enu_TypeVariable.Moment, 3, 3, False)
+            '# Moments
 
-        '# Efforts trachants
+            ValMaxTableau2D(EL_My, Mmin, Mmax)
+            Me.txt_Mmax.Text = GetStringInUnit(Mmax, Enu_TypeVariable.Moment, 3, 3, False)
+            Me.txt_Mmin.Text = GetStringInUnit(Mmin, Enu_TypeVariable.Moment, 3, 3, False)
 
-        ValMaxTableau2D(EL_Vz, Vmin, Vmax)
+            '# Efforts trachants
+
+            ValMaxTableau2D(EL_Vz, Vmin, Vmax)
+
+            '# Réactions
+
+            Me.txt_RZ1.Text = GetStringInUnit(EL_Rz(0), Enu_TypeVariable.Effort, 3, 3, False)
+            Me.txt_RZ2.Text = GetStringInUnit(EL_Rz(1), Enu_TypeVariable.Effort, 3, 3, False)
+
+        Else
+
+            Me.txt_Fleche.Text = "-"
+            Me.txt_Mmax.Text = "-"
+            Me.txt_Mmin.Text = "-"
+            Me.txt_RZ1.Text = "-"
+            Me.txt_RZ2.Text = "-"
+
+        End If
 
     End Sub
 
@@ -237,17 +260,23 @@ Public Class Frm_PPCombinaison
         '   Indice          [E] :   Indice de la combinaison traitée
         '----------------------------------------------------------------------------------------------------------------------
 
-        '# Calcul des flèches
+        If lNoCombi Then Exit Sub
+
+        '# Combinaison des flèches
 
         MyCombi.CombineFleches(Indice, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, Me.EL_Uz, lCombiRetrait)
 
-        '# Calcul des Moments
+        '# Combinaison des Moments
 
         MyCombi.CombineMoments(Indice, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, Me.EL_My, lCombiRetrait)
 
-        '# Calcul des efforts tranchants
+        '# Combinaison des efforts tranchants
 
         MyCombi.CombineEffortsT(Indice, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, Me.EL_Vz, lCombiRetrait)
+
+        '# Combinaison des Réactions
+
+        MyCombi.CombineReactions(Indice, MyPoutre.Nodes.NbAppuis, MyPoutre.ChargesA, Me.EL_Rz, lCombiRetrait)
 
     End Sub
 
@@ -414,14 +443,13 @@ Public Class Frm_PPCombinaison
 
         iLimitState = Me.cmb_LimitState.SelectedIndex
 
-
-
         Select Case iLimitState
             Case INDULTIME
                 RemplirComboCombi(MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU)
             Case INDSERVICE
                 RemplirComboCombi(MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS)
             Case INDINCENDIE
+                RemplirComboCombi(MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELF)
             Case INDCONST
 
         End Select
@@ -433,6 +461,7 @@ Public Class Frm_PPCombinaison
 
         MAJI_Combinaison()
 
+        Me.img_Analyse.Invalidate()
     End Sub
 
 
@@ -475,6 +504,7 @@ Public Class Frm_PPCombinaison
         lCombiRetrait = Me.chk_Retrait.Checked
 
         MAJI_Combinaison()
+
         Me.img_Analyse.Invalidate()
 
     End Sub

@@ -72,11 +72,12 @@
         '--> Combinaisons
 
         For iCas = 0 To nbCharges - 1
-            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And CombineCas(ChargesA(iCas), lRetrait) Then
+            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And lCombineCas(ChargesA(iCas), lRetrait) Then
 
                 For jNode = 0 To nbNodes - 1
                     FlechesUZ(jNode) += Me.CoefCombi(iCombi)(iCas) * ChargesA(iCas).UZ(jNode)
                 Next
+
             End If
 
         Next
@@ -108,7 +109,7 @@
         '--> Combinaisons
 
         For iCas = 0 To nbCharges - 1
-            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And CombineCas(ChargesA(iCas), lRetrait) Then
+            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And lCombineCas(ChargesA(iCas), lRetrait) Then
 
                 For jNode = 0 To nbNodes - 1
                     For k = 0 To 1
@@ -146,7 +147,7 @@
         '--> Combinaisons
 
         For iCas = 0 To nbCharges - 1
-            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And CombineCas(ChargesA(iCas), lRetrait) Then
+            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And lCombineCas(ChargesA(iCas), lRetrait) Then
 
                 For jNode = 0 To nbNodes - 1
                     For k = 0 To 1
@@ -159,7 +160,45 @@
 
     End Sub
 
-    Private Function CombineCas(MyChargesA As cls_CasDeCharge, lRetrait As Boolean) As Boolean
+    Public Sub CombineReactions(iCombi As Integer, nbAppuis As Integer, ChargesA As List(Of cls_CasDeCharge), ByRef ReacRz() As Decimal, Optional lRetrait As Boolean = True)
+        '-----------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Combine les flèches
+        '-----------------------------------------------------------------------------------------------------------
+        '   iCombi      [E] :   Indice de la combinaison à traiter
+        '   nbNodes     [E] :   Nombre de noeuds dans la modélisation
+        '   ChargesA    [E] :   Tableaux des cas de charges (qui doivent avoir été calculés auparavant
+        '   EffVz       [S] :   Table des efforts tranchants
+        '   lRetrait    [E] :   Indique si on prend en compte les charges de retrait
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbCharges As Integer = ChargesA.Count
+        Dim iCas, jNode, k As Integer
+
+        '--> Initialisation
+
+        ReDim ReacRz(nbAppuis - 1)
+
+        '--> Combinaisons
+
+        For iCas = 0 To nbCharges - 1
+            If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And lCombineCas(ChargesA(iCas), lRetrait) Then
+
+                For jNode = 0 To nbAppuis - 1
+
+                    ReacRz(jNode) += Me.CoefCombi(iCombi)(iCas) * ChargesA(iCas).RZ(jNode)
+
+                Next
+
+            End If
+        Next
+
+    End Sub
+
+    Private Function lCombineCas(MyChargesA As cls_CasDeCharge, lRetrait As Boolean) As Boolean
         '-----------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
