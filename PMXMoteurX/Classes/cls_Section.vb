@@ -133,7 +133,7 @@ Public Class cls_Section
         For iArma = 0 To 1
             If MyDalle.LitArma(iArma).lActive Then
                 PhiS = MyDalle.LitArma(iArma).PhiS
-                zArma = MyDalle.LitArma(iArma).z_s
+                zArma = Ztop - MyDalle.LitArma(iArma).z_s
                 EspBar = MyDalle.LitArma(iArma).EspBar
                 nbBar = bEff / EspBar
 
@@ -587,7 +587,13 @@ Public Class cls_Section
 
         If Me.lMixte And (bEff > 0) Then
 
+            '# Dalle
+
             MaillageDalle(Gammas, bEff, nEqDalle, MyDalle, MyModele)
+
+            '# Armatures
+
+            MaillageArmaturesDalle(Gammas, bEff, MyDalle, MyModele)
 
         End If
 

@@ -3,6 +3,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports PMXMoteur2
 
 <TestClass()> Public Class UnitTest_Cls_Section
+    Const DeltaVMAx As Decimal = 1 / 1000
 
     <TestMethod()> Public Sub TestUnit_ProprietesSectionAcierLamine()
         '----------------------------------------------------------------------------------------------------------------------------------
@@ -20,7 +21,6 @@ Imports PMXMoteur2
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000
 
         '--> Initialisations
 
@@ -132,7 +132,7 @@ Imports PMXMoteur2
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000
+        ' Const DeltaVMAx As Decimal = 1 / 1000
         Dim nEqEc As Decimal
 
         '--> Initialisations
@@ -383,7 +383,6 @@ Imports PMXMoteur2
 
     End Sub
 
-
     <TestMethod()> Public Sub TestUnit_ProprietesSectionAcierEnrobeeLamineSpecial()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   12/07/23 :  Création POM
@@ -401,7 +400,7 @@ Imports PMXMoteur2
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000
+        'Const DeltaVMAx As Decimal = 1 / 1000
         Dim nEqEc As Decimal
 
         '--> Initialisations
@@ -566,7 +565,7 @@ Imports PMXMoteur2
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000
+        ' Const DeltaVMAx As Decimal = 1 / 1000
 
         '--> Initialisations
 
@@ -643,7 +642,6 @@ Imports PMXMoteur2
 
     End Sub
 
-
     <TestMethod()> Public Sub TestUnit_ProprietesSectionMixteLamine()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création POM
@@ -661,7 +659,7 @@ Imports PMXMoteur2
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000
+        'Const DeltaVMAx As Decimal = 1 / 1000
         Dim bEff, Eta As Decimal
 
         '--> Initialisations
@@ -761,6 +759,112 @@ Imports PMXMoteur2
 
     End Sub
 
+    <TestMethod()> Public Sub TestUnit_ProprietesSectionMixteLamineMMoins()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   10/07/23 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test des propriétés élastiques et plastiques d'une section mixte avec profilé laminé sous moment négatif
+        '   Références : article RCM 2018-2 pour la géométrie seulement - Valeurs de référence par calcul extérieur
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MySection As New cls_Section
+        Dim MyGamma As New cls_Gamma
+        Dim MyDalle As New cls_Dalle
+        Dim zANP, MplRd As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim InertieY, InertieZ As Decimal
+        Dim DeltaV, ValRef As Decimal
+        'Const DeltaVMAx As Decimal = 1 / 1000
+        Dim bEff, Eta As Decimal
+        Const n0 As Decimal = 6.77
+
+        '--> Initialisations
+
+        MySection.typeSection = cls_Section.Enum_TypeSection.Mixte
+
+        '# IPE 450
+
+        MySection.ProfilA.ha = 0.45
+        MySection.ProfilA.Bfi = 0.19
+        MySection.ProfilA.Bfs = 0.19
+        MySection.ProfilA.Tfi = 0.0146
+        MySection.ProfilA.Tfs = 0.0146
+        MySection.ProfilA.Tw = 0.0094
+        MySection.ProfilA.Rci = 0.021
+        MySection.ProfilA.Rcs = 0.021
+        MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+
+        '# Acier S275 M/ML
+
+        MySection.Acier.InitialiseAcierS275JR()
+
+        '# Gamma
+
+        MyGamma.GammaM0 = 1
+        MyGamma.GammaC = 1.5
+
+        '# Dalle
+
+        bEff = 3
+        Eta = 1
+        MyDalle.beton.Classe = "C25/30"
+        MyDalle.beton.Calcul_Proprietes()
+        MyDalle.type = cls_Dalle.Enum_TypeDalle.Mixte
+        MyDalle.t_d = 0.12
+        MyDalle.Bac.InitialiseCofraPlus60()
+        MyDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
+
+        '# Armatures
+
+        MyDalle.lArma_Inf = False
+        MyDalle.lArma_Sup = True
+
+        MyDalle.LitArma(0).EspBar = 0.3
+        MyDalle.LitArma(0).z_s = 0.035
+        MyDalle.LitArma(0).PhiS = 0.016
+
+        MyDalle.AcierArmatures.Classe = cls_AcierArmature.tabClasseAcierArma(1)     '"B500
+        MyDalle.AcierArmatures.MAJProprietes()
+        MyDalle.AcierArmatures.Es = 210 * 1000
+
+        '--> Tests des propriétés élastiques / axe YY sous MOMENT NEGATIF
+
+        MySection.ProprietesElastiquesMixteMyy(-1, True, MyGamma, 1, n0, bEff, MyDalle, zANE, InertieY, MelRd)
+
+        '# Position ANE
+
+        ValRef = -172.6 / 1000
+
+        Assert.IsTrue(IsEqual(zANE, ValRef))
+
+        '# Inertie Y
+
+        ValRef = 49795 * 10 ^ (-8)
+        Assert.IsTrue(IsEqual(InertieY, ValRef))
+
+        '--> Tests avec un module d'Young des armatures <> acier
+
+        MyDalle.AcierArmatures.Es = 190 * 1000
+
+        '--> Tests des propriétés élastiques / axe YY sous MOMENT NEGATIF
+
+        MySection.ProprietesElastiquesMixteMyy(-1, True, MyGamma, 1, n0, bEff, MyDalle, zANE, InertieY, MelRd)
+
+        '# Position ANE
+
+        ValRef = -176.8 / 1000
+
+        Assert.IsTrue(IsEqual(zANE, ValRef))
+
+        '# Inertie Y
+
+        ValRef = 48504 * 10 ^ (-8)
+        Assert.IsTrue(IsEqual(InertieY, ValRef))
+
+
+    End Sub
 
     <TestMethod()> Public Sub TestUnit_ProprietesSectionMixteMonosym()
         '----------------------------------------------------------------------------------------------------------------------------------
@@ -779,7 +883,7 @@ Imports PMXMoteur2
         Dim zANE, MelRd As Decimal
         Dim InertieY, InertieZ As Decimal
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000
+        ' Const DeltaVMAx As Decimal = 1 / 1000
         Dim bEff, Eta As Decimal
 
         '--> Initialisations
@@ -883,5 +987,26 @@ Imports PMXMoteur2
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
+
+#Region " Outils de comparaison "
+
+
+    Public Function IsEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
+        '------------------------------------------
+        ' 29/08/2023 : Minh, v 1.00
+        '------------------------------------------
+        ' Comparer deux valeurs réelles
+        '------------------------------------------
+
+        If Math.Abs(b) <= EPS Then
+            'AVEC DIMENSION
+            Return Math.Abs(a) <= EPS
+        Else
+            'ATTENTION : Lorsqu'on compare la fraction (PAS DE DIMENSION), il faut utiliser 0.001
+            Return Math.Abs(a / b - 1) <= 0.001
+        End If
+    End Function
+
+#End Region
 
 End Class
