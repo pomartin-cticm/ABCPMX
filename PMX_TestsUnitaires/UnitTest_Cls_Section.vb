@@ -1,4 +1,6 @@
-﻿Imports System.Text
+﻿Imports System.Collections.Specialized.BitVector32
+Imports System.Security.Policy
+Imports System.Text
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports PMXMoteur2
 
@@ -100,7 +102,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés élastiques / axe ZZ
 
-        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, Inertiez, MelRd)
+        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, InertieZ, MelRd)
 
         '# Position ANE
 
@@ -700,7 +702,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques
 
-        MySection.ProprietesPlastiquesMixteMyy(1, True, MyGamma, 0, beff, eta, mydalle, zANP, MplRd)
+        MySection.ProprietesPlastiquesMixteMyy(1, True, MyGamma, 0, bEff, Eta, MyDalle, zANP, MplRd)
 
         '# Position ANP
 
@@ -863,8 +865,92 @@ Imports PMXMoteur2
         ValRef = 48504 * 10 ^ (-8)
         Assert.IsTrue(IsEqual(InertieY, ValRef))
 
-
     End Sub
+
+
+
+    <TestMethod()> Public Sub TestUnit_ProprietesSectionMixtePRS_MMoins()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   10/07/23 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test des propriétés élastiques et plastiques d'une section mixte avec profilé PRS sous moment négatif
+        '   Références : cours CHEM
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        Dim MySection As New cls_Section
+        Dim MyGamma As New cls_Gamma
+        Dim MyDalle As New cls_Dalle
+        Dim zANP, MplRd As Decimal
+
+        Dim DeltaV, ValRef As Decimal
+        ' Const DeltaVMAx As Decimal = 1 / 1000
+        Dim bEff, Eta As Decimal
+
+        '--> Initialisations
+
+        MySection.typeSection = cls_Section.Enum_TypeSection.Mixte
+
+        '# Bisym
+
+        MySection.ProfilA.ha = 0.8
+        MySection.ProfilA.Bfi = 0.3
+        MySection.ProfilA.Bfs = 0.3
+        MySection.ProfilA.Tfi = 0.03
+        MySection.ProfilA.Tfs = 0.03
+        MySection.ProfilA.Tw = 0.015
+        MySection.ProfilA.Rci = 0.0
+        MySection.ProfilA.Rcs = 0.0
+        MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
+
+        '# Acier S355
+
+        MySection.Acier.InitialiseAcierS275JR()
+
+        '# Gamma
+
+        MyGamma.GammaM0 = 1
+        MyGamma.GammaC = 1.5
+        MyGamma.GammaS = 1.15
+
+        '# Dalle
+
+        bEff = 2.0
+        Eta = 1
+        MyDalle.beton.Classe = "C30/37"
+        MyDalle.beton.Calcul_Proprietes()
+        MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine
+        MyDalle.t_d = 0.25
+        MyDalle.t_h = 0
+
+        '# Armatures
+
+        MyDalle.lArma_Inf = False
+        MyDalle.lArma_Sup = True
+
+        MyDalle.LitArma(0).EspBar = 0.2
+        MyDalle.LitArma(0).z_s = 0.03
+        MyDalle.LitArma(0).PhiS = 0.02
+
+        MyDalle.AcierArmatures.Classe = cls_AcierArmature.tabClasseAcierArma(1)     '"B500
+        MyDalle.AcierArmatures.MAJProprietes()
+        MyDalle.AcierArmatures.Es = 210 * 1000
+
+        '--> Tests des propriétés plastiques / axe YY sous MOMENT NEGATIF
+
+        MySection.ProprietesPlastiquesMixteMyy(-1, True, MyGamma, 0, bEff, Eta, MyDalle, zANP, MplRd)
+
+        '# Position ANP
+
+        ValRef = -234.4 / 1000
+
+        Assert.IsTrue(IsEqual(zANP, ValRef))
+
+        '# Inertie Y
+
+        ValRef = 3135 * 10 ^ 3
+        Assert.IsTrue(IsEqual(MplRd, ValRef))
+    End Sub
+
 
     <TestMethod()> Public Sub TestUnit_ProprietesSectionMixteMonosym()
         '----------------------------------------------------------------------------------------------------------------------------------

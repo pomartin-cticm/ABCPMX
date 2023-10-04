@@ -417,7 +417,13 @@ Public Class cls_Section
 
         If lMixte And (bEff > 0) Then
 
+            '# Dalle 
+
             MaillageDalle(Gammas, bEff, nEqD, MyDalle, MyModele)
+
+            '# Armatures
+
+            MaillageArmaturesDalle(Gammas, bEff, MyDalle, MyModele)
 
         End If
 
