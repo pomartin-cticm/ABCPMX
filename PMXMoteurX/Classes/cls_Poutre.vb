@@ -286,8 +286,8 @@ Public Class cls_Poutre
 
 #Region " Attributs pour les vérifications "
 
-    Dim VerifAcier() As cls_VerificationsAcier                      ' Classe pour la vérification des poutres acier (ou phase de construction)
-    Dim VerifMixte() As cls_VerificationsMixtes                     ' Classe pour la vérification des poutres mixtes (phase finale)
+    Public VerifAcier() As cls_VerificationsAcier                   ' Classe pour la vérification des poutres acier (ou phase de construction)
+    Public VerifMixte() As cls_VerificationsMixtes                  ' Classe pour la vérification des poutres mixtes (phase finale)
 
 #End Region
 
@@ -1744,10 +1744,11 @@ Public Class cls_Poutre
         '--> Initialisation
 
         ReDim MplRd(Me.Nodes.nbNodes - 1)
+        ReDim zANP(Me.Nodes.nbNodes - 1)
 
         '--> Boucle sur les noeuds
 
-        For iNode = 0 To Me.Nodes.nbNodes
+        For iNode = 0 To Me.Nodes.nbNodes - 1
 
             If IsEqual(Beff(iNode), BeffPrec) Then
                 Beff(iNode) = Beff(iNode - 1)

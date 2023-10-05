@@ -30,8 +30,6 @@ Partial Class Frm_PPVerifications
         Me.TLpan_HAffichage = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.img_Verifications = New System.Windows.Forms.PictureBox()
-        Me.pan_AffichageCombi = New System.Windows.Forms.Panel()
-        Me.lbl_CombiSelect = New System.Windows.Forms.Label()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_Retrait = New System.Windows.Forms.CheckBox()
         Me.chk_Numerotation = New System.Windows.Forms.CheckBox()
@@ -64,8 +62,8 @@ Partial Class Frm_PPVerifications
         Me.pan_ChoixCombi = New System.Windows.Forms.Panel()
         Me.cmb_LimitState = New System.Windows.Forms.ComboBox()
         Me.lbl_LimitState = New System.Windows.Forms.Label()
-        Me.cmb_Combi = New System.Windows.Forms.ComboBox()
-        Me.lbl_SymbCombi = New System.Windows.Forms.Label()
+        Me.cmb_Critere = New System.Windows.Forms.ComboBox()
+        Me.lbl_Critere = New System.Windows.Forms.Label()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.Pan_Affichage.SuspendLayout()
@@ -74,7 +72,6 @@ Partial Class Frm_PPVerifications
         Me.TLpan_HAffichage.SuspendLayout()
         Me.Panel1.SuspendLayout()
         CType(Me.img_Verifications, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_AffichageCombi.SuspendLayout()
         Me.TLpan_Gauche.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.TLpan_Modules.SuspendLayout()
@@ -153,15 +150,14 @@ Partial Class Frm_PPVerifications
         '
         Me.TLpan_HAffichage.ColumnCount = 1
         Me.TLpan_HAffichage.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_HAffichage.Controls.Add(Me.Panel1, 0, 1)
-        Me.TLpan_HAffichage.Controls.Add(Me.pan_AffichageCombi, 0, 0)
+        Me.TLpan_HAffichage.Controls.Add(Me.Panel1, 0, 0)
         Me.TLpan_HAffichage.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_HAffichage.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_HAffichage.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_HAffichage.Name = "TLpan_HAffichage"
-        Me.TLpan_HAffichage.RowCount = 2
-        Me.TLpan_HAffichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_HAffichage.RowCount = 1
         Me.TLpan_HAffichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_HAffichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_HAffichage.Size = New System.Drawing.Size(796, 431)
         Me.TLpan_HAffichage.TabIndex = 0
         '
@@ -169,10 +165,10 @@ Partial Class Frm_PPVerifications
         '
         Me.Panel1.Controls.Add(Me.img_Verifications)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(0, 30)
+        Me.Panel1.Location = New System.Drawing.Point(0, 0)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(796, 401)
+        Me.Panel1.Size = New System.Drawing.Size(796, 431)
         Me.Panel1.TabIndex = 0
         '
         'img_Verifications
@@ -185,27 +181,6 @@ Partial Class Frm_PPVerifications
         Me.img_Verifications.Size = New System.Drawing.Size(100, 34)
         Me.img_Verifications.TabIndex = 2
         Me.img_Verifications.TabStop = False
-        '
-        'pan_AffichageCombi
-        '
-        Me.pan_AffichageCombi.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_AffichageCombi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_AffichageCombi.Controls.Add(Me.lbl_CombiSelect)
-        Me.pan_AffichageCombi.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_AffichageCombi.Location = New System.Drawing.Point(0, 0)
-        Me.pan_AffichageCombi.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_AffichageCombi.Name = "pan_AffichageCombi"
-        Me.pan_AffichageCombi.Size = New System.Drawing.Size(796, 30)
-        Me.pan_AffichageCombi.TabIndex = 1
-        '
-        'lbl_CombiSelect
-        '
-        Me.lbl_CombiSelect.AutoSize = True
-        Me.lbl_CombiSelect.Location = New System.Drawing.Point(12, 8)
-        Me.lbl_CombiSelect.Name = "lbl_CombiSelect"
-        Me.lbl_CombiSelect.Size = New System.Drawing.Size(82, 13)
-        Me.lbl_CombiSelect.TabIndex = 0
-        Me.lbl_CombiSelect.Text = "lbl_CombiSelect"
         '
         'TLpan_Gauche
         '
@@ -570,8 +545,8 @@ Partial Class Frm_PPVerifications
         Me.pan_ChoixCombi.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_ChoixCombi.Controls.Add(Me.cmb_LimitState)
         Me.pan_ChoixCombi.Controls.Add(Me.lbl_LimitState)
-        Me.pan_ChoixCombi.Controls.Add(Me.cmb_Combi)
-        Me.pan_ChoixCombi.Controls.Add(Me.lbl_SymbCombi)
+        Me.pan_ChoixCombi.Controls.Add(Me.cmb_Critere)
+        Me.pan_ChoixCombi.Controls.Add(Me.lbl_Critere)
         Me.pan_ChoixCombi.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_ChoixCombi.Location = New System.Drawing.Point(0, 1)
         Me.pan_ChoixCombi.Margin = New System.Windows.Forms.Padding(0, 1, 1, 0)
@@ -597,23 +572,23 @@ Partial Class Frm_PPVerifications
         Me.lbl_LimitState.TabIndex = 57
         Me.lbl_LimitState.Text = "lbl_LimitState"
         '
-        'cmb_Combi
+        'cmb_Critere
         '
-        Me.cmb_Combi.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Combi.FormattingEnabled = True
-        Me.cmb_Combi.Location = New System.Drawing.Point(96, 34)
-        Me.cmb_Combi.Name = "cmb_Combi"
-        Me.cmb_Combi.Size = New System.Drawing.Size(165, 21)
-        Me.cmb_Combi.TabIndex = 55
+        Me.cmb_Critere.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Critere.FormattingEnabled = True
+        Me.cmb_Critere.Location = New System.Drawing.Point(96, 34)
+        Me.cmb_Critere.Name = "cmb_Critere"
+        Me.cmb_Critere.Size = New System.Drawing.Size(165, 21)
+        Me.cmb_Critere.TabIndex = 55
         '
-        'lbl_SymbCombi
+        'lbl_Critere
         '
-        Me.lbl_SymbCombi.AutoSize = True
-        Me.lbl_SymbCombi.Location = New System.Drawing.Point(12, 37)
-        Me.lbl_SymbCombi.Name = "lbl_SymbCombi"
-        Me.lbl_SymbCombi.Size = New System.Drawing.Size(78, 13)
-        Me.lbl_SymbCombi.TabIndex = 56
-        Me.lbl_SymbCombi.Text = "lbl_SymbCombi"
+        Me.lbl_Critere.AutoSize = True
+        Me.lbl_Critere.Location = New System.Drawing.Point(12, 37)
+        Me.lbl_Critere.Name = "lbl_Critere"
+        Me.lbl_Critere.Size = New System.Drawing.Size(53, 13)
+        Me.lbl_Critere.TabIndex = 56
+        Me.lbl_Critere.Text = "lbl_Critere"
         '
         'Frm_PPVerifications
         '
@@ -622,6 +597,7 @@ Partial Class Frm_PPVerifications
         Me.ClientSize = New System.Drawing.Size(947, 572)
         Me.Controls.Add(Me.pan_Main)
         Me.Name = "Frm_PPVerifications"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_PPVerifications"
         Me.pan_Main.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
@@ -632,8 +608,6 @@ Partial Class Frm_PPVerifications
         Me.TLpan_HAffichage.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         CType(Me.img_Verifications, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_AffichageCombi.ResumeLayout(False)
-        Me.pan_AffichageCombi.PerformLayout()
         Me.TLpan_Gauche.ResumeLayout(False)
         Me.TLpan_Gauche.PerformLayout()
         Me.TLPan_PartieBasse.ResumeLayout(False)
@@ -654,8 +628,6 @@ Partial Class Frm_PPVerifications
     Friend WithEvents TLpan_HAffichage As TableLayoutPanel
     Friend WithEvents Panel1 As Panel
     Friend WithEvents img_Verifications As PictureBox
-    Friend WithEvents pan_AffichageCombi As Panel
-    Friend WithEvents lbl_CombiSelect As Label
     Friend WithEvents TLpan_Gauche As TableLayoutPanel
     Friend WithEvents chk_Retrait As CheckBox
     Friend WithEvents chk_Numerotation As CheckBox
@@ -688,6 +660,6 @@ Partial Class Frm_PPVerifications
     Friend WithEvents pan_ChoixCombi As Panel
     Friend WithEvents cmb_LimitState As ComboBox
     Friend WithEvents lbl_LimitState As Label
-    Friend WithEvents cmb_Combi As ComboBox
-    Friend WithEvents lbl_SymbCombi As Label
+    Friend WithEvents cmb_Critere As ComboBox
+    Friend WithEvents lbl_Critere As Label
 End Class

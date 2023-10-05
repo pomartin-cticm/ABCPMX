@@ -88,6 +88,8 @@
 
             '# Vérification sous moment fléchissant
 
+            Me.CriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdPlus, MplRdMoins)
+
             '# Vérification sous effort tranchant
 
             '# Vérification sous interaction MV
@@ -123,7 +125,7 @@
 
         '--> Boucle sur les noeuds
 
-        For iNode = 0 To nbNodes
+        For iNode = 0 To nbNodes - 1
 
             If Math.Abs(MEd(iNode, 0)) > Math.Abs(MEd(iNode, 1)) Then
                 MEdMax = MEd(iNode, 0)

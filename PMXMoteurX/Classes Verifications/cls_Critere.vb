@@ -7,6 +7,7 @@
     Public CritereMax As Decimal        ' Valeur maximale du critere
     Public iCombiM As Integer           ' Indice de la combinaison donnant le critère max
     Public iNodeM As Integer            ' Indice du noeuds ou on obtient le critère max
+    Public lDefini As Boolean           ' Indique si le critère a été utilisé
 
 #End Region
 
@@ -18,6 +19,7 @@
         iCombiM = -1
         iNodeM = -1
         CritereMax = 0
+        lDefini = False
 
     End Sub
 
@@ -52,6 +54,7 @@
         Me.Critere(iNode) = pCrit
 
         If pCrit > Me.CritereMax Then
+            lDefini = True
             Me.CritereMax = pCrit
             Me.iCombiM = iCombi
             Me.iNodeM = iNodeM
