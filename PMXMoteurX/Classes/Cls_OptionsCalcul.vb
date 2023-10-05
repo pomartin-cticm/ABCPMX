@@ -35,6 +35,12 @@ Public Class cls_OptionsCalcul
 
     Public GraviteG As Decimal                      ' Accélération gravité
 
+    Public PsiLPermanent As Decimal                 ' Coefficient de fluage pour les charges permanentes
+    Public PsiLRetrait As Decimal                   ' Coefficient de fluage pour les charges de retrait
+    Public TimeT0G1() As Decimal                    ' Temps au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
+    Public TimeT0G2() As Decimal                    ' Temps au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
+    Public TimeT0SH() As Decimal                    ' Temps au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
+
 #End Region
 
 #Region " Attributs à trier "
@@ -152,6 +158,14 @@ Public Class cls_OptionsCalcul
         Me.EpsilonSH = 325 * 10 ^ -6
 
         Me.GraviteG = 9.81
+
+        Me.PsiLPermanent = 1.1
+        Me.PsiLRetrait = 0.55
+
+        Me.TimeT0G1 = {28, 56}
+        Me.TimeT0G2 = {28, 56}
+        Me.TimeT0SH = {1, 1}
+
 
         Exit Sub
 

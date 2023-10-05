@@ -407,6 +407,17 @@ NODESPACING				= Distance between nodes
 NBNODES					= Number of nodes
 PERCANTILEVERSPAN		= per cantilever span
 PERINTSPAN				= per usual span
+LOADCASES				= Load cases
+PERMANENTLC				= Permanent loads
+SHRINKAGELC				= Shrinkage loads
+CREEPMULT				= Creep multiplier
+TIMETZERO				= Age of concrete at loading
+SYMBOLFORDAY			= d
+SLAB					= Slab
+ENCASEMENT				= Encasement
+SELFWEIGHT				= Self weight
+OTHERPERMANENT			= Other permanent loads
+SHRINKAGE				= Shrinkage
 
 #OPTCALGAMMA
 TITLE					= Default national factors

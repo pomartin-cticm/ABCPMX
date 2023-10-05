@@ -949,6 +949,7 @@ Imports PMXMoteur2
 
         ValRef = 3135 * 10 ^ 3
         Assert.IsTrue(IsEqual(MplRd, ValRef))
+
     End Sub
 
 

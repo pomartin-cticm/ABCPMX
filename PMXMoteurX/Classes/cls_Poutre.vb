@@ -260,7 +260,7 @@ Public Class cls_Poutre
     Public CoefCombFeu(nbCombFeu) As List(Of Decimal)               'Table des coefficients des combinaisons Feu
     Public CoefCombELCU(nbCombELUConstruction) As List(Of Decimal)  'Table des coefficients des combinaisons ELU Construction
     Public CoefCombELCS(nbCombELSConstruction) As List(Of Decimal)  'Table des coefficients des combinaisons ELS Construction
-    '                                                               ' Indices pour les combinaisons utilisateurs :
+    '                                                               ' Indices pour les combinaisons utilisateurs, dans toutes les tables :
     '                                                               ' 0 = G ; 1 = Q1 ; 2 = Q2 ; 3 = QC ; 4 : g pour la construction
 
     Public CombiA_ELU As New cls_Combinaisons                       'Combinaisons ELU pour l'analyse
@@ -277,7 +277,7 @@ Public Class cls_Poutre
     Const symbG2 As String = "G2"
     Const symbQ1 As String = "Q1"
     Const symbQ2 As String = "Q2"
-    Const symbQ1D1 As String = "Q1#1"
+    'Const symbQ1D1 As String = "Q1#1"
 
     Dim lMultiQ(1) As Boolean                                       ' Indique si les chargements Q1 et Q2 sont appliqués sur plusieurs travées ou non
     Dim indiceCasRetrait As Integer

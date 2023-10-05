@@ -248,6 +248,11 @@ Module Mod_Declarations
         Public nbMinNodesTravee As Integer              ' Nombre mini de noeuds par travée normale
         Public nbMinNodesConsole As Integer             ' Nombre mini de noeuds par travée console
         Public EsArmatures As Decimal                   ' Module d'Young des barres d'armature
+        Public PsiLPermanent As Decimal                 ' Coefficient de fluage pour les charges permanentes
+        Public PsiLRetrait As Decimal                   ' Coefficient de fluage pour les charges de retrait
+        Public TimeT0G1() As Decimal                    ' Temps au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
+        Public TimeT0G2() As Decimal                    ' Temps au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
+        Public TimeT0SH() As Decimal                    ' Temps au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
     End Structure
 
     Public Sub InitialiseOptionsScope()
@@ -289,6 +294,12 @@ Module Mod_Declarations
 
         OptionsCalcul.EsArmatures = 210 * 10 ^ 3
 
+        OptionsCalcul.PsiLPermanent = 1.1
+        OptionsCalcul.PsiLRetrait = 0.55
+
+        OptionsCalcul.TimeT0G1 = {28, 56}
+        OptionsCalcul.TimeT0G2 = {28, 56}
+        OptionsCalcul.TimeT0SH = {1, 1}
     End Sub
 
 #End Region

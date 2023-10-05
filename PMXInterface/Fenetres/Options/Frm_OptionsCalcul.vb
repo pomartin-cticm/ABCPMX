@@ -314,6 +314,17 @@ Public Class Frm_OptionsCalcul
         GereTransfertValeur(LocalOptionsCalcul.nbMinNodesConsole, OptionsCalcul.nbMinNodesConsole, lModif)
         GereTransfertValeur(LocalOptionsCalcul.nbMinNodesTravee, OptionsCalcul.nbMinNodesTravee, lModif)
 
+        If lExpert Then
+            GereTransfertValeur(LocalOptionsCalcul.PsiLPermanent, OptionsCalcul.PsiLPermanent, lModif)
+            GereTransfertValeur(LocalOptionsCalcul.PsiLRetrait, OptionsCalcul.PsiLRetrait, lModif)
+            GereTransfertValeur(LocalOptionsCalcul.TimeT0SH(0), OptionsCalcul.TimeT0SH(0), lModif)
+            GereTransfertValeur(LocalOptionsCalcul.TimeT0SH(1), OptionsCalcul.TimeT0SH(1), lModif)
+        End If
+        GereTransfertValeur(LocalOptionsCalcul.TimeT0G1(0), OptionsCalcul.TimeT0G1(0), lModif)
+        GereTransfertValeur(LocalOptionsCalcul.TimeT0G1(1), OptionsCalcul.TimeT0G1(1), lModif)
+        GereTransfertValeur(LocalOptionsCalcul.TimeT0G2(0), OptionsCalcul.TimeT0G2(0), lModif)
+        GereTransfertValeur(LocalOptionsCalcul.TimeT0G2(1), OptionsCalcul.TimeT0G2(1), lModif)
+
         AppliquerReglagesProjetEnCours()
 
     End Sub
@@ -324,6 +335,16 @@ Public Class Frm_OptionsCalcul
             MyProjet.Poutres(i).Dalle.ThetaRd = OptionsScope.ThetaH
             MyProjet.Poutres(i).Param.Norme = OptionsCalcul.Norme
             MyProjet.Poutres(i).Param.lArmaComprimee = OptionsCalcul.lCompressionArma
+
+            MyProjet.Poutres(i).Param.PsiLPermanent = OptionsCalcul.PsiLPermanent
+            MyProjet.Poutres(i).Param.PsiLRetrait = OptionsCalcul.PsiLRetrait
+
+            For j As Integer = 0 To 1
+                MyProjet.Poutres(i).Param.TimeT0G1(j) = OptionsCalcul.TimeT0G1(j)
+                MyProjet.Poutres(i).Param.TimeT0G2(j) = OptionsCalcul.TimeT0G2(j)
+                MyProjet.Poutres(i).Param.TimeT0SH(j) = OptionsCalcul.TimeT0SH(j)
+            Next
+
         Next
         'IL faut faire la même chose à l'oouverture des fhciers et la création d'une poutre
     End Sub

@@ -11,6 +11,8 @@ Public Class Frm_OptionsCalculCalcul
     Const formatGAMMA As String = "0.00"
     Dim lBuild As Boolean
 
+    Dim strSymbolJour As String = "d"
+
     Dim tabNorme(1) As String
 
 #End Region
@@ -48,6 +50,20 @@ Public Class Frm_OptionsCalculCalcul
             Me.lbl_Console.Text = MyBloc("PERCANTILEVERSPAN")
             Me.lbl_TraveesI.Text = MyBloc("PERINTSPAN")
 
+            Me.lbl_LoadCases.Text = MyBloc("LOADCASES")
+            Me.lbl_CreepMultiplier.Text = MyBloc("CREEPMULT")
+            Me.lbl_PermanentLC.Text = MyBloc("PERMANENTLC")
+            Me.lbl_ShrinkageLC.Text = MyBloc("SHRINKAGELC")
+
+            Me.lbl_TimeT0.Text = MyBloc("TIMETZERO")
+            Me.lbl_Dalle.Text = MyBloc("SLAB")
+            Me.lbl_Enrobage.Text = MyBloc("ENCASEMENT")
+            Me.lbl_G1.Text = "G1"   ' MyBloc("SELFWEIGHT")
+            Me.lbl_G2.Text = "G2"   ' MyBloc("OTHERPERMANENT")
+            Me.lbl_SH.Text = "SH"   ' MyBloc("SHRINKAGE")
+            strSymbolJour = MyBloc("SYMBOLFORDAY")
+
+
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
         Finally
@@ -61,18 +77,24 @@ Public Class Frm_OptionsCalculCalcul
         Me.lbl_Calcul.BackColor = CouleurBackBandeaux
         Me.lbl_Calcul.ForeColor = CouleurForeBandeaux
 
-        'If Not LogicielOptions.lExpert Then
-        '    Me.txt_Es.Enabled = False
-        '    Me.txt_Es.BackColor = CouleurReadOnly
-        'Else
-
-        'End If
+        PrepareTextBoxExpert(Me.txt_PsiLG, LogicielOptions.lExpert)
+        PrepareTextBoxExpert(Me.txt_PsiLSH, LogicielOptions.lExpert)
+        PrepareTextBoxExpert(Me.txt_t0SHEnrob, LogicielOptions.lExpert)
+        PrepareTextBoxExpert(Me.txt_t0SHDalle, LogicielOptions.lExpert)
 
     End Sub
 
     Private Sub GestionUnites()
+
         Me.etq_UnitEs.Text = LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
         Me.etq_UnitL1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+        Me.etq_UnitJour1.Text = strSymbolJour
+        Me.etq_UnitJour2.Text = strSymbolJour
+        Me.etq_UnitJour3.Text = strSymbolJour
+        Me.etq_UnitJour4.Text = strSymbolJour
+        Me.etq_UnitJour5.Text = strSymbolJour
+        Me.etq_UnitJour6.Text = strSymbolJour
 
     End Sub
 
@@ -96,6 +118,18 @@ Public Class Frm_OptionsCalculCalcul
         Me.chk_RebarsInCompression.Checked = LocalOptionsCalcul.lCompressionArma
         Me.chk_SimplifiedEffectiveW.Checked = LocalOptionsCalcul.lLargeurEfficaceSimplifiee
         Me.txt_Es.Text = GetStringInUnit(LocalOptionsCalcul.EsArmatures, Enu_TypeVariable.ModuleY, 4, 2, False)
+
+        '--> Cas de charge
+
+        Me.txt_PsiLG.Text = GetStringInUnit(LocalOptionsCalcul.PsiLPermanent, Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_PsiLSH.Text = GetStringInUnit(LocalOptionsCalcul.PsiLRetrait, Enu_TypeVariable.SansType, 4, 2, False)
+
+        Me.txt_t0G1Dalle.Text = GetStringInUnit(LocalOptionsCalcul.TimeT0G1(0), Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_t0G1Enrob.Text = GetStringInUnit(LocalOptionsCalcul.TimeT0G1(1), Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_t0G2Dalle.Text = GetStringInUnit(LocalOptionsCalcul.TimeT0G2(0), Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_t0G2Enrob.Text = GetStringInUnit(LocalOptionsCalcul.TimeT0G2(1), Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_t0SHDalle.Text = GetStringInUnit(LocalOptionsCalcul.TimeT0SH(0), Enu_TypeVariable.SansType, 4, 2, False)
+        Me.txt_t0SHEnrob.Text = GetStringInUnit(LocalOptionsCalcul.TimeT0SH(1), Enu_TypeVariable.SansType, 4, 2, False)
 
     End Sub
 
@@ -137,7 +171,7 @@ Public Class Frm_OptionsCalculCalcul
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_NbNodes2.Paint, img_NbNodes1.Paint, img_Es.Paint, img_dNodes.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_NbNodes2.Paint, img_NbNodes1.Paint, img_Es.Paint, img_dNodes.Paint, img_PsiLSH.Paint, img_PsiLG.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint
 
         '--> Déclarations
 
@@ -168,7 +202,20 @@ Public Class Frm_OptionsCalculCalcul
             Case Me.img_NbNodes1.Name, Me.img_NbNodes2.Name
                 strSymbol = "n"
                 strIndice = ""
-
+            Case Me.img_PsiLG.Name
+                strSymbol = "y"
+                strIndice = "L"
+                lGrec = True
+                lEgal = True
+            Case Me.img_PsiLSH.Name
+                strSymbol = "y"
+                strIndice = "L"
+                lGrec = True
+                lEgal = True
+            Case Me.img_T0G1.Name, Me.img_T0G2.Name, Me.img_T0SH.Name
+                strSymbol = "t"
+                strIndice = "0"
+                lEgal = True
         End Select
 
         '--> Dessin
@@ -184,7 +231,7 @@ Public Class Frm_OptionsCalculCalcul
 
 
     Private Sub SaisieTxtBox_TextChanged(sender As Object, e As EventArgs) Handles txt_EspNoeuds.TextChanged, txt_Es.TextChanged,
-        txt_NbMiniNTravee.TextChanged, txt_NbMiniNConsole.TextChanged
+        txt_NbMiniNTravee.TextChanged, txt_NbMiniNConsole.TextChanged, txt_PsiLSH.TextChanged, txt_PsiLG.TextChanged, txt_t0SHDalle.TextChanged, txt_t0SHEnrob.TextChanged, txt_t0G2Dalle.TextChanged, txt_t0G2Enrob.TextChanged, txt_t0G1Dalle.TextChanged, txt_t0G1Enrob.TextChanged
 
         If lBuild Then Exit Sub
 
@@ -201,6 +248,24 @@ Public Class Frm_OptionsCalculCalcul
                     LocalOptionsCalcul.nbMinNodesConsole = ValeurUI
                 Case Me.txt_NbMiniNTravee.Name
                     LocalOptionsCalcul.nbMinNodesTravee = ValeurUI
+                Case Me.txt_PsiLG.Name
+                    LocalOptionsCalcul.PsiLPermanent = ValeurUI
+                Case Me.txt_PsiLSH.Name
+                    LocalOptionsCalcul.PsiLRetrait = ValeurUI
+
+                Case Me.txt_t0G1Dalle.Name
+                    LocalOptionsCalcul.TimeT0G1(0) = ValeurUI
+                Case Me.txt_t0G1Enrob.Name
+                    LocalOptionsCalcul.TimeT0G1(1) = ValeurUI
+                Case Me.txt_t0G2Dalle.Name
+                    LocalOptionsCalcul.TimeT0G2(0) = ValeurUI
+                Case Me.txt_t0G2Enrob.Name
+                    LocalOptionsCalcul.TimeT0G2(1) = ValeurUI
+                Case Me.txt_t0SHDalle.Name
+                    LocalOptionsCalcul.TimeT0SH(0) = ValeurUI
+                Case Me.txt_t0SHEnrob.Name
+                    LocalOptionsCalcul.TimeT0SH(1) = ValeurUI
+
             End Select
 
         End If
@@ -243,6 +308,15 @@ Public Class Frm_OptionsCalculCalcul
                 ValMax = 1000
                 kUnit = 1
 
+            Case Me.txt_PsiLG.Name, Me.txt_PsiLSH.Name
+                kUnit = 1
+                ValMin = 0
+                ValMax = 2
+
+            Case Me.txt_t0G1Enrob.Name, Me.txt_t0G1Dalle.Name, Me.txt_t0G2Enrob.Name, Me.txt_t0G2Dalle.Name, Me.txt_t0SHEnrob.Name, Me.txt_t0SHDalle.Name
+                kUnit = 1
+                ValMin = 1
+                ValMax = 100
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)
