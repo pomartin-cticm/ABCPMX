@@ -6,8 +6,9 @@
 
 #End Region
 
-#Region " Enumérations et structures "
+#Region " Enumérations,constantes et structures "
 
+    Public Const kConvMPaPa As Decimal = 1000 ^ 2
 
 #End Region
 

@@ -300,6 +300,7 @@ Module Mod_Declarations
         OptionsCalcul.TimeT0G1 = {28, 56}
         OptionsCalcul.TimeT0G2 = {28, 56}
         OptionsCalcul.TimeT0SH = {1, 1}
+
     End Sub
 
 #End Region
@@ -340,6 +341,7 @@ Module Mod_Declarations
     Public Enum EnuFenetres
         PPCasDeCharge
         PPCombinaison
+        PPVerifications
         Chargements
         Combinaisons
         Connexion

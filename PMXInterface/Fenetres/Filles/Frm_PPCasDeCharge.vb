@@ -104,7 +104,7 @@ Public Class Frm_PPCasDeCharge
     Private Sub AfficheCasdeCharge()
 
         MyProjet.Poutres(MyProjet.IndEnCours).InitialiseCalculs()
-        MyProjet.Poutres(MyProjet.IndEnCours).CalculMNVInternes()
+        MyProjet.Poutres(MyProjet.IndEnCours).AAA_CalculMNVInternes()
         InitialiseVariablesLocales()
 
         Me.cmb_Symbols.Items.Clear()

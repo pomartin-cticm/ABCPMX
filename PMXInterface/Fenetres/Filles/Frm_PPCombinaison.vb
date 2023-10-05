@@ -81,7 +81,7 @@ Public Class Frm_PPCombinaison
     Private Sub InitialiseCalcul(MyPoutre As cls_Poutre)
 
         MyPoutre.InitialiseCalculs()
-        MyPoutre.CalculMNVInternes()
+        MyPoutre.AAA_CalculMNVInternes()
         'MyPoutre.InitialiseCombiA_ELU()
         MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, MyPoutre.lCombELU, MyPoutre.CoefCombELU, strRacineELU, MyPoutre.CombiA_ELU)
         MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, MyPoutre.lCombELS, MyPoutre.CoefCombELS, strRacineELS, MyPoutre.CombiA_ELS)
@@ -134,11 +134,6 @@ Public Class Frm_PPCombinaison
         Me.btn_Annuler.Text = "Close"
         Me.btn_OK.Text = "OK"
 
-        'Me.lbl_Case.Text = "Case"
-        'Me.lbl_Etat.Text = "Etat"
-        'Me.lbl_RunCalcul.Text = "Calcul effectué ?"
-        'Me.lbl_Fleche.Text = "Flèche maxi"
-
         Me.chk_EffortTranchant.Text = "Diagramme V"
         Me.chk_Moment.Text = "Diagramme M"
         Me.chk_Numerotation.Text = "Numérotation"
@@ -158,6 +153,7 @@ Public Class Frm_PPCombinaison
         strNoCombiELC = "No defined combinations for ultimate limite state in construction phase"
         strNoCombiELF = "No defined combinations for fire limite state"
         strNoCombiELS = "No defined combinations for serviceability limite state"
+
     End Sub
 
     Private Sub GestionStyle()
@@ -173,6 +169,7 @@ Public Class Frm_PPCombinaison
 
 
     Private Sub GestionUnites()
+
         Me.etq_UnitDim1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitForce1.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
         Me.etq_UnitForce2.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
@@ -198,7 +195,7 @@ Public Class Frm_PPCombinaison
             Case INDSERVICE
                 AfficheCombinaisonSelectionnee(Indice, strNoCombiELU, MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS.CoefCombi)
             Case INDINCENDIE
-                AfficheCombinaisonSelectionnee(Indice, strNoCombiELF, MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELf.CoefCombi)
+                AfficheCombinaisonSelectionnee(Indice, strNoCombiELF, MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELF.CoefCombi)
         End Select
         ' AfficheCombinaisonSelectionnee(Indice)
 
@@ -212,7 +209,7 @@ Public Class Frm_PPCombinaison
                 Case INDSERVICE
                     InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS, Indice)
                 Case INDINCENDIE
-                    InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_Elf, Indice)
+                    InitialiseCalculsCombinaison(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELF, Indice)
             End Select
 
             '--> Valeurs enveloppes
@@ -371,6 +368,10 @@ Public Class Frm_PPCombinaison
                             End If
 
                             Chaine = Chaine & GetStringInUnit(CoefCombi(Indice)(i), Enu_TypeVariable.SansType, 3, 2, False) & " " & .ChargesA(i).Symbol
+
+                            If (Not .ChargesA(i).lRunCalcul) Then
+                                Chaine = Chaine & "(*)"
+                            End If
 
                         End If
                     End If
@@ -610,7 +611,6 @@ Public Class Frm_PPCombinaison
 
         '--> Déformée
 
-        Dim fAbsMax As Decimal
         Dim Uz As Decimal
 
         'MyPoutre.ChargesA(iCas).EnveloppesFleche(fMin, fMax)

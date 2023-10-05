@@ -206,6 +206,12 @@
     <Compile Include="Fenetres\Filles\Frm_PPCombinaison.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_PPVerifications.Designer.vb">
+      <DependentUpon>Frm_PPVerifications.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_PPVerifications.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_SectionAcierStandard.Designer.vb">
       <DependentUpon>Frm_SectionAcierStandard.vb</DependentUpon>
     </Compile>
@@ -412,6 +418,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_PPCombinaison.resx">
       <DependentUpon>Frm_PPCombinaison.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_PPVerifications.resx">
+      <DependentUpon>Frm_PPVerifications.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_SectionAcierStandard.resx">
       <DependentUpon>Frm_SectionAcierStandard.vb</DependentUpon>

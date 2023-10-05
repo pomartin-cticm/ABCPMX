@@ -278,7 +278,7 @@ Public Class Frm_PMX
         Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
                 TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
-                TSbtn_PPCombi.Click
+                TSbtn_PPCombi.Click, TSbtn_Verifications.Click
 
         Select Case sender.name
 
@@ -324,7 +324,8 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.PPCasDeCharge
             Case Me.TSbtn_PPCombi.Name
                 FilleEnCours = EnuFenetres.PPCombinaison
-
+            Case Me.TSbtn_Verifications.Name
+                FilleEnCours = EnuFenetres.PPVerifications
         End Select
         AfficheFenetreEnCours()
 
@@ -425,6 +426,9 @@ Public Class Frm_PMX
                 Frm_PPCombinaison.ShowDialog()
                 Frm_PPCombinaison.Dispose()
 
+            Case EnuFenetres.PPVerifications
+                Frm_PPVerifications.ShowDialog()
+                Frm_PPVerifications.Dispose()
         End Select
 
         MAJMainToolBar()

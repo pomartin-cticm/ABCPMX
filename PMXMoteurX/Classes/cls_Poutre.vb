@@ -284,6 +284,13 @@ Public Class cls_Poutre
 
 #End Region
 
+#Region " Attributs pour les vérifications "
+
+    Dim VerifAcier() As cls_VerificationsAcier                      ' Classe pour la vérification des poutres acier (ou phase de construction)
+    Dim VerifMixte() As cls_VerificationsMixtes                     ' Classe pour la vérification des poutres mixtes (phase finale)
+
+#End Region
+
 #Region " Variables pour les valeurs par défaut et le statut de la poutre "
 
     ''' <summary>
@@ -1101,6 +1108,63 @@ Public Class cls_Poutre
 
     End Function
 
+    Public Sub MaillageBeff(lSimple As Boolean, lAnalyse As Boolean, ByRef Beff() As Decimal)
+        '--------------------------------------------------------------------------------------------
+        '   05/10/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Calcul des largeurs participantes de dalle le long de la poutre, au droit des noeuds
+        '   Attention : il faut avoir initialisé les noeuds auparavant
+        '--------------------------------------------------------------------------------------------
+        '   lSimple     [E] :   Indique si modèle simplifié
+        '   lAnalyse    [E] :   Indique si modèle pour analyse ou pour vérifications
+        '   Beff        [S] :   Largeurs participantes de dalle (0 to NbNodes-1)
+        '--------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode As Integer
+        Dim iTravee As Integer
+        Dim iTravD, iTravF As Integer
+        Dim iNodD, iNodF As Integer
+        Dim xPos, xExtG As Decimal
+
+        '--> Initialisation
+
+        ReDim Beff(Me.Nodes.nbNodes)
+
+        iTravD = Me.IndicePremiereTravee
+        iTravF = Me.IndiceDerniereTravee
+
+        '--> Calculs en travée
+
+        For iTravee = iTravD To iTravF
+
+            iNodD = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodF = Me.Nodes.iNodeExtTrav(iTravee, 1)
+            xExtG = Me.xPositionAppui(iTravee, 0)
+
+            For iNode = iNodD + 1 To iNodF - 1
+                xPos = Me.Nodes.xGlobal(iNode) - xExtG
+                Beff(iNode) = Me.BeffDalle(xPos, iTravee, lSimple, lAnalyse)
+            Next
+
+        Next
+
+        '--> Calcul aux extrémités
+
+        Beff(0) = Me.BeffDalle(0, iTravD, lSimple, lAnalyse)
+        Beff(Me.Nodes.nbNodes - 1) = Me.BeffDalle(LongueurTravee(iTravF), iTravF, lSimple, lAnalyse)
+
+        '--> Calcul sur les appuis intermédiaires
+
+        For iTravee = iTravD To iTravF - 1
+            iNode = Me.Nodes.iNodeExtTrav(iTravee, 1)
+            Beff(iNode) = Math.Min(Me.BeffDalle(LongueurTravee(iTravee), iTravee, lSimple, lAnalyse),
+                                   Me.BeffDalle(0, iTravee + 1, lSimple, lAnalyse))
+        Next
+
+    End Sub
+
 #End Region
 
 #Region " Préparation des sections de calcul de la poutre "
@@ -1655,6 +1719,45 @@ Public Class cls_Poutre
         xm = (Me.Nodes.xTravee(IndElt) + Me.Nodes.xTravee(IndElt + 1)) / 2
 
 
+
+    End Sub
+
+    Public Sub MaillagePropPlastiquesMixtes(Beff() As Decimal, Signe As Decimal, lValRd As Boolean, ByRef MplRd() As Decimal, zANP() As Decimal)
+        '------------------------------------------------------------------------------
+        '   05/10/23 :  Création - POM
+        '------------------------------------------------------------------------------
+        '   Calcul des moments plastiques le long de la poutre (sur les noeuds du modèle)
+        '------------------------------------------------------------------------------
+        '   Beff        [E] :   Largeur participante de dalle
+        '   Signe       [E] :   Signe du moment à considérer
+        '   lValRd      [E] :   Indique si valeurs de calcul
+        '   MplRd       [S] :   Table des moments plastiques au droit des noeuds du modèle
+        '   zANP        [S] :   Table des position des ANP
+        '------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim BeffPrec As Decimal = -1
+        Dim iNode As Integer
+        Dim Eta As Decimal = 1      '#ALERTE : à adapter sur chaque section
+
+        '--> Initialisation
+
+        ReDim MplRd(Me.Nodes.nbNodes - 1)
+
+        '--> Boucle sur les noeuds
+
+        For iNode = 0 To Me.Nodes.nbNodes
+
+            If IsEqual(Beff(iNode), BeffPrec) Then
+                Beff(iNode) = Beff(iNode - 1)
+                zANP(iNode) = zANP(iNode - 1)
+            Else
+                Me.Section.ProprietesPlastiquesMixteMyy(Signe, lValRd, Me.Param.Gamma, 0, Beff(iNode), Eta, Me.Dalle, zANP(iNode), MplRd(iNode))
+                BeffPrec = Beff(iNode)
+            End If
+
+        Next
 
     End Sub
 
@@ -2582,7 +2685,7 @@ Public Class cls_Poutre
 
 #Region " Analyse "
 
-    Public Sub CalculMNVInternes()
+    Public Sub AAA_CalculMNVInternes()
         '-------------------------------------------------------------------------------------
         '   21/08/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -2969,6 +3072,63 @@ Public Class cls_Poutre
         pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xFor
 
     End Sub
+
+#End Region
+
+#Region " Vérifications "
+
+    Public Sub AAA_Verifications()
+        '-------------------------------------------------------------------------------------
+        '   05/10/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Routine générale pour gérér les vérifications de la poutre
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        'Dim i As Integer
+
+        '--> Initialisation des tableaux de verification
+
+        Select Case Me.TypeSection
+            Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage
+                ReDim Me.VerifAcier(0)
+                Me.VerifAcier(0) = New cls_VerificationsAcier
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                ReDim Me.VerifMixte(0)
+                Me.VerifMixte(0) = New cls_VerificationsMixtes
+                If Me.TypeEtaiement <> EnuTypeEtaiement.FullyPropped Then
+                    ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
+                    ReDim Me.VerifAcier(0)
+                    Me.VerifAcier(0) = New cls_VerificationsAcier
+                End If
+        End Select
+
+        '--> Initialisation des calculs
+
+        Dim strRacineELU As String = "ELU"
+        Dim strRacineELS As String = "ELS"
+        Dim strRacineELF As String = "ELF"
+
+        Me.InitialiseCalculs()
+        Me.AAA_CalculMNVInternes()
+        'MyPoutre.InitialiseCombiA_ELU()
+        Me.InitialiseCombiA(cls_Poutre.nbCombELU, Me.lCombELU, Me.CoefCombELU, strRacineELU, Me.CombiA_ELU)
+        Me.InitialiseCombiA(cls_Poutre.nbCombELS, Me.lCombELS, Me.CoefCombELS, strRacineELS, Me.CombiA_ELS)
+        Me.InitialiseCombiA(cls_Poutre.nbCombFeu, Me.lCombFeu, Me.CoefCombFeu, strRacineELF, Me.CombiA_ELF)
+
+        '--> Vérifications
+
+        Select Case Me.TypeSection
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                '# Vérification des poutres mixtes en phase finale aux ELU
+                Me.VerifMixte(0).VerificationELU(Me)
+
+        End Select
+
+
+    End Sub
+
 
 #End Region
 

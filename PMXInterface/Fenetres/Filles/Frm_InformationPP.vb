@@ -161,7 +161,6 @@ Public Class Frm_InformationPP
 
 #End Region
 
-
 #Region " Dessins "
     Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_rhoa.Paint, img_Aa.Paint, img_qa.Paint, img_rhoec.Paint, img_Aec.Paint, img_qec.Paint, img_rhoc.Paint, img_Ac.Paint, img_qc.Paint, img_mup.Paint, img_dc.Paint, img_qp.Paint, img_qTot.Paint
 

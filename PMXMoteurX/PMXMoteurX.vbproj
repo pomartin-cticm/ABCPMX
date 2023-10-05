@@ -76,6 +76,9 @@
     <Compile Include="Classes Materiaux\cls_Acier.vb" />
     <Compile Include="Classes Materiaux\cls_AcierArmature.vb" />
     <Compile Include="Classes Materiaux\cls_Beton.vb" />
+    <Compile Include="Classes Verifications\cls_Critere.vb" />
+    <Compile Include="Classes Verifications\cls_VerificationsAcier.vb" />
+    <Compile Include="Classes Verifications\cls_VerificationsMixtes.vb" />
     <Compile Include="Classes\cls_Gamma.vb" />
     <Compile Include="Classes\cls_OptionsFeu.vb" />
     <Compile Include="Classes\cls_OptionsHivoss.vb" />
