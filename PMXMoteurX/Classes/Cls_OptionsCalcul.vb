@@ -37,9 +37,11 @@ Public Class cls_OptionsCalcul
 
     Public PsiLPermanent As Decimal                 ' Coefficient de fluage pour les charges permanentes
     Public PsiLRetrait As Decimal                   ' Coefficient de fluage pour les charges de retrait
-    Public TimeT0G1() As Decimal                    ' Temps au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
-    Public TimeT0G2() As Decimal                    ' Temps au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
-    Public TimeT0SH() As Decimal                    ' Temps au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
+    Public TimeT0G1() As Decimal                    ' Age au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
+    Public TimeT0G2() As Decimal                    ' Age au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
+    Public TimeT0SH() As Decimal                    ' Age au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
+
+    Public TimeT As Decimal                         ' Age du béton au temps du calcul
 
 #End Region
 
@@ -166,6 +168,7 @@ Public Class cls_OptionsCalcul
         Me.TimeT0G2 = {28, 56}
         Me.TimeT0SH = {1, 1}
 
+        Me.TimeT = 50 * 365
 
         Exit Sub
 

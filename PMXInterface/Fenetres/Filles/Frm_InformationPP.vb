@@ -131,7 +131,7 @@ Public Class Frm_InformationPP
         Me.txt_qa.Text = GetStringInUnit(PoidsPropreLoc.qPP_ProfilAcier / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 3, False)
 
         If MyPoutreLoc.Section.lEnrobage Then
-            Me.txt_rhoec.Text = Format(MyPoutreLoc.Section.enrobage_partiel.Beton.RhoC, formatTxtBox2)
+            Me.txt_rhoec.Text = Format(MyPoutreLoc.Section.Enrobage.Beton.RhoC, formatTxtBox2)
             Me.txt_Aec.Text = GetStringInUnit(MyPoutreLoc.Section.AireEnrobagePartielAec / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2, Enu_TypeVariable.SansType, 3, 3, False)
             Me.txt_qec.Text = GetStringInUnit(PoidsPropreLoc.qPP_BetonEnrobage / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 3, False)
         Else

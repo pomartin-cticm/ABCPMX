@@ -2212,8 +2212,13 @@ Public Class cls_Poutre
         Dim lNonEtaye As Boolean
         Dim lEnrob As Boolean
 
-        Dim nEqDalleCT, nEqDalleLT As Decimal
-        Dim nEqEnrobCT, nEqEnrobLT As Decimal
+        Dim nEqDalleCT, nEqEnrobCT As Decimal
+        ' Dim nEqDalleCT, nEqDalleLT As Decimal
+        ' Dim nEqEnrobCT, nEqEnrobLT As Decimal
+
+        Dim nEqDalleG1, nEqEnrobG1 As Decimal
+        Dim nEqDalleG2, nEqEnrobG2 As Decimal
+        Dim nEqDalleSH, nEqEnrobSH As Decimal
 
         '# ZZZ Assurer la liaison avec les fichiers langue
         Dim strChargesPermanentes As String = "Permanent loads"
@@ -2229,6 +2234,7 @@ Public Class cls_Poutre
 
         Dim IndiceG As Integer
         Dim IndiceQ As Integer
+        Dim IndiceG1, IndiceG2, IndiceSH As Integer
 
         Dim NbTrav, iTrav0 As Integer
 
@@ -2249,9 +2255,26 @@ Public Class cls_Poutre
         End If
 
         nEqDalleCT = Me.Dalle.beton.CoefficientEquivalenceCT
-        nEqEnrobCT = Me.Section.enrobage_partiel.Beton.CoefficientEquivalenceCT
-        nEqDalleLT = 3 * nEqDalleCT
-        nEqEnrobLT = 3 * nEqEnrobCT
+        nEqEnrobCT = Me.Section.Enrobage.Beton.CoefficientEquivalenceCT
+        'nEqDalleLT = 3 * nEqDalleCT
+        'nEqEnrobLT = 3 * nEqEnrobCT
+
+        Dim RH As Decimal = Me.Param.RH
+        Dim TimeT As Decimal = Me.Param.TimeT
+        Dim H0Dalle As Decimal = Me.Dalle.NotionalSizeH0(Me.Section.ProfilA.Bfs)
+        Dim H0Enrob As Decimal = Me.Section.NotionalSizeEnrobage
+
+        If lMixte Then
+            nEqDalleG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.TimeT0G1(0), Me.Param.PsiLPermanent)
+            nEqDalleG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.TimeT0G2(0), Me.Param.PsiLPermanent)
+            nEqDalleSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.TimeT0SH(0), Me.Param.PsiLRetrait)
+        End If
+
+        If lEnrob Then
+            nEqEnrobG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.TimeT0G1(1), Me.Param.PsiLPermanent)
+            nEqEnrobG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.TimeT0G2(1), Me.Param.PsiLPermanent)
+            nEqEnrobSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.TimeT0SH(1), Me.Param.PsiLRetrait)
+        End If
 
         iTrav0 = Me.IndicePremiereTravee
         NbTrav = Me.NbTravees
@@ -2270,7 +2293,7 @@ Public Class cls_Poutre
         '# Charges permanentes globales
 
         If (Not lMixte) Or lEtaitComplet Then
-            IndiceG = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
+            IndiceG = Me.IndiceTabElts(lMixte, nEqDalleG1, nEqEnrobG1)
             Me.ChargesA.Add(New cls_CasDeCharge(strChargesPermanentes, "G", IndiceG, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
         End If
 
@@ -2278,21 +2301,22 @@ Public Class cls_Poutre
 
         If lMixte Then
 
-            IndiceG = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
+            IndiceG1 = Me.IndiceTabElts(lMixte, nEqDalleG1, nEqEnrobG1)
+            IndiceG2 = Me.IndiceTabElts(lMixte, nEqDalleG2, nEqEnrobG2)
 
             If lNonEtaye Then
-                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1, Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1, Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
                 InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
             Else
                 'Cas de l'étaiement ponctuel
-                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1PP, Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1PP, Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
                 InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
 
-                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1C, IndiceG, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1C, IndiceG1, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
 
             End If
 
-            Me.ChargesA.Add(New cls_CasDeCharge(strAutresChargesPermanentes, symbG2, IndiceG, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
+            Me.ChargesA.Add(New cls_CasDeCharge(strAutresChargesPermanentes, symbG2, IndiceG2, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
 
         End If
 
@@ -2324,7 +2348,7 @@ Public Class cls_Poutre
 
         '--> Retrait
 
-        Dim IndiceSH As Integer = Me.IndiceTabElts(lMixte, nEqDalleLT, nEqEnrobLT)
+        IndiceSH = Me.IndiceTabElts(lMixte, nEqDalleSH, nEqEnrobSH)
         Me.indiceCasRetrait = -1
 
         If lMixte Then
@@ -2340,7 +2364,7 @@ Public Class cls_Poutre
         '--> Charges de construction
 
         If lMixte And (Not lEtaitComplet) Then
-            Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobLT), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Construction))
+            Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Construction))
         End If
 
     End Sub
@@ -2408,7 +2432,7 @@ Public Class cls_Poutre
 
             '# Béton d'enrobage
             If Me.Section.lEnrobage Then
-                .qPP_BetonEnrobage = Me.Section.AireEnrobagePartielAec * Me.Section.enrobage_partiel.Beton.RhoC * G
+                .qPP_BetonEnrobage = Me.Section.AireEnrobagePartielAec * Me.Section.Enrobage.Beton.RhoC * G
             Else
                 .qPP_BetonEnrobage = 0
             End If

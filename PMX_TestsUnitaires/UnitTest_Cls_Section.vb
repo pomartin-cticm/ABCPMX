@@ -224,47 +224,47 @@ Imports PMXMoteur2
 
         MySection.typeSection = cls_Section.Enum_TypeSection.AcierEnrobage
 
-        MySection.enrobage_partiel.Ratio_bc = 1
-        MySection.enrobage_partiel.Beton.Classe = "C25/30"
-        MySection.enrobage_partiel.Beton.Calcul_Proprietes()
+        MySection.Enrobage.Ratio_bc = 1
+        MySection.Enrobage.Beton.Classe = "C25/30"
+        MySection.Enrobage.Beton.Calcul_Proprietes()
 
         '--> Définition du lit d'armature supérieure
 
-        MySection.enrobage_partiel.AcierArmatures.Classe = "B500"
+        MySection.Enrobage.AcierArmatures.Classe = "B500"
 
-        MySection.enrobage_partiel.LitArma(2).NbExt = 1
-        MySection.enrobage_partiel.LitArma(2).NbMil = 0
-        MySection.enrobage_partiel.LitArma(2).NbInt = 1
-        MySection.enrobage_partiel.LitArma(2).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(2).PhiInt = 0.008
-        MySection.enrobage_partiel.LitArma(2).PhiMil = 0.008
+        MySection.Enrobage.LitArma(2).NbExt = 1
+        MySection.Enrobage.LitArma(2).NbMil = 0
+        MySection.Enrobage.LitArma(2).NbInt = 1
+        MySection.Enrobage.LitArma(2).PhiExt = 0.008
+        MySection.Enrobage.LitArma(2).PhiInt = 0.008
+        MySection.Enrobage.LitArma(2).PhiMil = 0.008
 
         '--> Définition du lit d'armature intermédiaire
 
-        MySection.enrobage_partiel.LitArma(1).NbExt = 0
-        MySection.enrobage_partiel.LitArma(1).NbMil = 0
-        MySection.enrobage_partiel.LitArma(1).NbInt = 0
-        MySection.enrobage_partiel.LitArma(1).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(1).PhiInt = 0.008
-        MySection.enrobage_partiel.LitArma(1).PhiMil = 0.008
+        MySection.Enrobage.LitArma(1).NbExt = 0
+        MySection.Enrobage.LitArma(1).NbMil = 0
+        MySection.Enrobage.LitArma(1).NbInt = 0
+        MySection.Enrobage.LitArma(1).PhiExt = 0.008
+        MySection.Enrobage.LitArma(1).PhiInt = 0.008
+        MySection.Enrobage.LitArma(1).PhiMil = 0.008
 
         '--> Définition du lit d'armature inférieur
 
-        MySection.enrobage_partiel.LitArma(0).NbExt = 1
-        MySection.enrobage_partiel.LitArma(0).NbMil = 0
-        MySection.enrobage_partiel.LitArma(0).NbInt = 1
-        MySection.enrobage_partiel.LitArma(0).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(0).PhiInt = 0.012
-        MySection.enrobage_partiel.LitArma(0).PhiMil = 0.00
+        MySection.Enrobage.LitArma(0).NbExt = 1
+        MySection.Enrobage.LitArma(0).NbMil = 0
+        MySection.Enrobage.LitArma(0).NbInt = 1
+        MySection.Enrobage.LitArma(0).PhiExt = 0.008
+        MySection.Enrobage.LitArma(0).PhiInt = 0.012
+        MySection.Enrobage.LitArma(0).PhiMil = 0.00
 
         '--> Définition des étriers
 
-        MySection.enrobage_partiel.Etriers_Phi = 0.006
-        MySection.enrobage_partiel.Etriers_EnrobageZ = 0.06 - 0.006 * 2
+        MySection.Enrobage.Etriers_Phi = 0.006
+        MySection.Enrobage.Etriers_EnrobageZ = 0.06 - 0.006 * 2
 
         '--> Coefficient d'équivalence court terme du béton
 
-        nEqEc = MySection.enrobage_partiel.Beton.CoefficientEquivalence(50, 1, 1, 1, 0)
+        nEqEc = MySection.Enrobage.Beton.CoefficientEquivalence(50, 1, 1, 1, 0)
 
         '--> Tests des propriétés élastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 
@@ -300,7 +300,7 @@ Imports PMXMoteur2
         '# Coefficient d'équivalent CT
 
         ValRef = 6.672
-        DeltaV = (MySection.enrobage_partiel.Beton.CoefficientEquivalenceCT - ValRef) / ValRef
+        DeltaV = (MySection.Enrobage.Beton.CoefficientEquivalenceCT - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Inertie de torsion
@@ -344,30 +344,30 @@ Imports PMXMoteur2
 
         '--> TESTS en supprimant les armatures
 
-        MySection.enrobage_partiel.LitArma(2).NbExt = 0
-        MySection.enrobage_partiel.LitArma(2).NbMil = 0
-        MySection.enrobage_partiel.LitArma(2).NbInt = 0
-        MySection.enrobage_partiel.LitArma(2).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(2).PhiInt = 0.008
-        MySection.enrobage_partiel.LitArma(2).PhiMil = 0.008
+        MySection.Enrobage.LitArma(2).NbExt = 0
+        MySection.Enrobage.LitArma(2).NbMil = 0
+        MySection.Enrobage.LitArma(2).NbInt = 0
+        MySection.Enrobage.LitArma(2).PhiExt = 0.008
+        MySection.Enrobage.LitArma(2).PhiInt = 0.008
+        MySection.Enrobage.LitArma(2).PhiMil = 0.008
 
         '--> Définition du lit d'armature intermédiaire
 
-        MySection.enrobage_partiel.LitArma(1).NbExt = 0
-        MySection.enrobage_partiel.LitArma(1).NbMil = 0
-        MySection.enrobage_partiel.LitArma(1).NbInt = 0
-        MySection.enrobage_partiel.LitArma(1).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(1).PhiInt = 0.008
-        MySection.enrobage_partiel.LitArma(1).PhiMil = 0.008
+        MySection.Enrobage.LitArma(1).NbExt = 0
+        MySection.Enrobage.LitArma(1).NbMil = 0
+        MySection.Enrobage.LitArma(1).NbInt = 0
+        MySection.Enrobage.LitArma(1).PhiExt = 0.008
+        MySection.Enrobage.LitArma(1).PhiInt = 0.008
+        MySection.Enrobage.LitArma(1).PhiMil = 0.008
 
         '--> Définition du lit d'armature inférieur
 
-        MySection.enrobage_partiel.LitArma(0).NbExt = 0
-        MySection.enrobage_partiel.LitArma(0).NbMil = 0
-        MySection.enrobage_partiel.LitArma(0).NbInt = 0
-        MySection.enrobage_partiel.LitArma(0).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(0).PhiInt = 0.012
-        MySection.enrobage_partiel.LitArma(0).PhiMil = 0.00
+        MySection.Enrobage.LitArma(0).NbExt = 0
+        MySection.Enrobage.LitArma(0).NbMil = 0
+        MySection.Enrobage.LitArma(0).NbInt = 0
+        MySection.Enrobage.LitArma(0).PhiExt = 0.008
+        MySection.Enrobage.LitArma(0).PhiInt = 0.012
+        MySection.Enrobage.LitArma(0).PhiMil = 0.00
 
         MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
 
@@ -436,47 +436,47 @@ Imports PMXMoteur2
 
         MySection.typeSection = cls_Section.Enum_TypeSection.AcierEnrobage
 
-        MySection.enrobage_partiel.Ratio_bc = 1
-        MySection.enrobage_partiel.Beton.Classe = "C25/30"
-        MySection.enrobage_partiel.Beton.Calcul_Proprietes()
+        MySection.Enrobage.Ratio_bc = 1
+        MySection.Enrobage.Beton.Classe = "C25/30"
+        MySection.Enrobage.Beton.Calcul_Proprietes()
 
         '--> Définition du lit d'armature supérieure
 
-        MySection.enrobage_partiel.AcierArmatures.Classe = "B500"
+        MySection.Enrobage.AcierArmatures.Classe = "B500"
 
-        MySection.enrobage_partiel.LitArma(2).NbExt = 0
-        MySection.enrobage_partiel.LitArma(2).NbMil = 0
-        MySection.enrobage_partiel.LitArma(2).NbInt = 0
-        MySection.enrobage_partiel.LitArma(2).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(2).PhiInt = 0.008
-        MySection.enrobage_partiel.LitArma(2).PhiMil = 0.008
+        MySection.Enrobage.LitArma(2).NbExt = 0
+        MySection.Enrobage.LitArma(2).NbMil = 0
+        MySection.Enrobage.LitArma(2).NbInt = 0
+        MySection.Enrobage.LitArma(2).PhiExt = 0.008
+        MySection.Enrobage.LitArma(2).PhiInt = 0.008
+        MySection.Enrobage.LitArma(2).PhiMil = 0.008
 
         '--> Définition du lit d'armature intermédiaire
 
-        MySection.enrobage_partiel.LitArma(1).NbExt = 0
-        MySection.enrobage_partiel.LitArma(1).NbMil = 0
-        MySection.enrobage_partiel.LitArma(1).NbInt = 0
-        MySection.enrobage_partiel.LitArma(1).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(1).PhiInt = 0.008
-        MySection.enrobage_partiel.LitArma(1).PhiMil = 0.008
+        MySection.Enrobage.LitArma(1).NbExt = 0
+        MySection.Enrobage.LitArma(1).NbMil = 0
+        MySection.Enrobage.LitArma(1).NbInt = 0
+        MySection.Enrobage.LitArma(1).PhiExt = 0.008
+        MySection.Enrobage.LitArma(1).PhiInt = 0.008
+        MySection.Enrobage.LitArma(1).PhiMil = 0.008
 
         '--> Définition du lit d'armature inférieur
 
-        MySection.enrobage_partiel.LitArma(0).NbExt = 0
-        MySection.enrobage_partiel.LitArma(0).NbMil = 0
-        MySection.enrobage_partiel.LitArma(0).NbInt = 0
-        MySection.enrobage_partiel.LitArma(0).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(0).PhiInt = 0.012
-        MySection.enrobage_partiel.LitArma(0).PhiMil = 0.00
+        MySection.Enrobage.LitArma(0).NbExt = 0
+        MySection.Enrobage.LitArma(0).NbMil = 0
+        MySection.Enrobage.LitArma(0).NbInt = 0
+        MySection.Enrobage.LitArma(0).PhiExt = 0.008
+        MySection.Enrobage.LitArma(0).PhiInt = 0.012
+        MySection.Enrobage.LitArma(0).PhiMil = 0.00
 
         '--> Définition des étriers
 
-        MySection.enrobage_partiel.Etriers_Phi = 0.006
-        MySection.enrobage_partiel.Etriers_EnrobageZ = 0.06 - 0.006 * 2
+        MySection.Enrobage.Etriers_Phi = 0.006
+        MySection.Enrobage.Etriers_EnrobageZ = 0.06 - 0.006 * 2
 
         '--> Coefficient d'équivalence court terme du béton
 
-        nEqEc = MySection.enrobage_partiel.Beton.CoefficientEquivalence(50, 1, 1, 1, 0)
+        nEqEc = MySection.Enrobage.Beton.CoefficientEquivalence(50, 1, 1, 1, 0)
 
         '--> Tests des propriétés élastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 
@@ -526,12 +526,12 @@ Imports PMXMoteur2
         MySection.ProfilA.Rcs = 0
         MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
 
-        MySection.enrobage_partiel.LitArma(0).NbExt = 0
-        MySection.enrobage_partiel.LitArma(0).NbMil = 0
-        MySection.enrobage_partiel.LitArma(0).NbInt = 1
-        MySection.enrobage_partiel.LitArma(0).PhiExt = 0.008
-        MySection.enrobage_partiel.LitArma(0).PhiInt = 0.012
-        MySection.enrobage_partiel.LitArma(0).PhiMil = 0.00
+        MySection.Enrobage.LitArma(0).NbExt = 0
+        MySection.Enrobage.LitArma(0).NbMil = 0
+        MySection.Enrobage.LitArma(0).NbInt = 1
+        MySection.Enrobage.LitArma(0).PhiExt = 0.008
+        MySection.Enrobage.LitArma(0).PhiInt = 0.012
+        MySection.Enrobage.LitArma(0).PhiMil = 0.00
 
         '--> Tests des propriétés plastiques / axe YY du profilé acier avec l'enrobage, en flexion positive
 

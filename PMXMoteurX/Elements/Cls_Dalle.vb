@@ -61,7 +61,7 @@
 
 #End Region
 
-#Region "Propriétés"
+#Region " Propriétés "
     ''' <summary>
     '''  surface par unité de largeur (m²/m)
     ''' </summary>

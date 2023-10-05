@@ -203,7 +203,7 @@ Module Mod_Dessins
         '--> Dessin de béton
 
         If lEnrob Then _
-        DessinEnrobagePartielBeton(myGr, MySection.ProfilA, MySection.enrobage_partiel.Ratio_bc, MyParAff, myBrushB)
+        DessinEnrobagePartielBeton(myGr, MySection.ProfilA, MySection.Enrobage.Ratio_bc, MyParAff, myBrushB)
 
         '--> Dessin de la section acier
 
@@ -212,7 +212,7 @@ Module Mod_Dessins
         '--> Dessin des étriers
 
         If lEnrob Then _
-        DessinEtriers(myGr, MySection.ProfilA, MySection.enrobage_partiel, MyParAff, myBrushE, zREF)
+        DessinEtriers(myGr, MySection.ProfilA, MySection.Enrobage, MyParAff, myBrushE, zREF)
 
         '--> Dessins des connecteurs
 
@@ -6035,7 +6035,7 @@ Module Mod_Dessins
         '---------------------------------------------------------------------------------------------------------------------------
         '---------------------------------------------------------------------------------------------------------------------------
 
-        DessinEnrobagePartielBeton(MyGr, MySection.ProfilA, MySection.enrobage_partiel.Ratio_bc, MyParAff, MyBrushBp, xPos)
+        DessinEnrobagePartielBeton(MyGr, MySection.ProfilA, MySection.Enrobage.Ratio_bc, MyParAff, MyBrushBp, xPos)
 
     End Sub
 
@@ -6054,7 +6054,7 @@ Module Mod_Dessins
         '   iArma       [E] :   indice du lit d'armature
         '---------------------------------------------------------------------------------------------------------------------------
 
-        DessinArmaLongiEnrobage(MyGr, MySection.ProfilA, MySection.enrobage_partiel, MyParAffloc, MyBrushA, iArma)
+        DessinArmaLongiEnrobage(MyGr, MySection.ProfilA, MySection.Enrobage, MyParAffloc, MyBrushA, iArma)
 
     End Sub
 

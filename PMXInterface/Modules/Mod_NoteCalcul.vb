@@ -528,7 +528,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, Bloc("GEOMETRY_PART_ENC"))
 
-        AddLigneNDC(TABW2 & Bloc("RATIO_BC_PART_ENC") & TABAFF & "b\-c\=/b\-f\= = " & GetStringInUnit(MyBeam.Section.enrobage_partiel.Ratio_bc, Enu_TypeVariable.SansType, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("RATIO_BC_PART_ENC") & TABAFF & "b\-c\=/b\-f\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Ratio_bc, Enu_TypeVariable.SansType, 4, 0, True))
         AddLigneNDC(TABW2 & Bloc("BC_PART_ENC") & TABAFF & "b\-c\= = " & GetStringInUnit(MyBeam.Section.LargeurEnrobagePartielBc, Enu_TypeVariable.Dimension, 4, 0, True))
 
 
@@ -538,17 +538,17 @@ Module Mod_NoteCalcul
         AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
 
         'If MyBeam.Section.enrobage_partiel.Beton.Type = cls_Beton.Enum_TypeBeton.Leger Then
-        If MyBeam.Section.enrobage_partiel.Beton.lLeger Then
+        If MyBeam.Section.Enrobage.Beton.lLeger Then
             AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("LIGHTCONCRETE"))
         Else
             AddLigneNDC(TABW2 & Bloc("TYPE") & TABAFF & Bloc("NORMALCONCRETE"))
         End If
 
-        AddLigneNDC(TABW2 & Bloc("CLASS_CONCRETE") & TABAFF & MyBeam.Section.enrobage_partiel.Beton.Classe)
-        AddLigneNDC(TABW2 & Bloc("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & GetStringInUnit(MyBeam.Section.enrobage_partiel.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & GetStringInUnit(MyBeam.Section.enrobage_partiel.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Section.enrobage_partiel.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Section.enrobage_partiel.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("CLASS_CONCRETE") & TABAFF & MyBeam.Section.Enrobage.Beton.Classe)
+        AddLigneNDC(TABW2 & Bloc("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
 
 
@@ -574,7 +574,7 @@ Module Mod_NoteCalcul
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("INTERIOR"))
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "A\-s\=")
 
-        For i As Integer = 0 To MyBeam.Section.enrobage_partiel.LitArma.Count - 1
+        For i As Integer = 0 To MyBeam.Section.Enrobage.LitArma.Count - 1
             InitialiseLigne(6, HLIGNE, True)
             Select Case i
                 Case 0
@@ -585,7 +585,7 @@ Module Mod_NoteCalcul
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("BOTTOM"))
             End Select
 
-            With MyBeam.Section.enrobage_partiel.LitArma(i)
+            With MyBeam.Section.Enrobage.LitArma(i)
 
                 If .NbExt = 0 And .NbMil = 0 And .NbInt = 0 Then
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
@@ -630,9 +630,9 @@ Module Mod_NoteCalcul
 
 
         AddTitreNdC(3, Bloc("MATERIAL_LONGI_REINF"))
-        AddLigneNDC(TABW2 & Bloc("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Section.enrobage_partiel.AcierArmatures.Classe)
-        AddLigneNDC(TABW2 & Bloc("FYS_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Section.enrobage_partiel.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("ES_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Section.enrobage_partiel.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Section.Enrobage.AcierArmatures.Classe)
+        AddLigneNDC(TABW2 & Bloc("FYS_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("ES_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
 
 
 
@@ -640,7 +640,7 @@ Module Mod_NoteCalcul
 
 
         AddTitreNdC(3, Bloc("GEOM_TRANSV_REINF"))
-        Select Case MyBeam.Section.enrobage_partiel.Etriers_Type
+        Select Case MyBeam.Section.Enrobage.Etriers_Type
             Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
                 AddLigneNDC(TABW2 & Bloc("STIRRUP_ARRANGEMENT") & TABAFF & Bloc("CLOSED_STIRRUPS"))
             Case cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
@@ -648,9 +648,9 @@ Module Mod_NoteCalcul
             Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
                 AddLigneNDC(TABW2 & Bloc("STIRRUP_ARRANGEMENT") & TABAFF & Bloc("THROUGH_STIRRUPS"))
         End Select
-        AddLigneNDC(TABW2 & Bloc("DSI_LAYERS") & TABAFF & GetStringInUnit(MyBeam.Section.enrobage_partiel.Etriers_Phi, Enu_TypeVariable.Dimension, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("HOR_COVERAGE") & TABAFF & "u\-y\= =" & GetStringInUnit(MyBeam.Section.enrobage_partiel.Etriers_EnrobageY, Enu_TypeVariable.Dimension, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("VER_COVERAGE") & TABAFF & "u\-z\= =" & GetStringInUnit(MyBeam.Section.enrobage_partiel.Etriers_EnrobageZ, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("DSI_LAYERS") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_Phi, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("HOR_COVERAGE") & TABAFF & "u\-y\= =" & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageY, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("VER_COVERAGE") & TABAFF & "u\-z\= =" & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageZ, Enu_TypeVariable.Dimension, 4, 0, True))
 
 
         AddLigneNDC("\IMG PARTIAL_ENCASEMENT 15 70 25 NoCadre")

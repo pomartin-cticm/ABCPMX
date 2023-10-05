@@ -256,7 +256,7 @@ Public Class cls_Projet
 
 
                     '==[ Classe Enrobage Partiel ProfilA ]=================================================================
-                    With .enrobage_partiel
+                    With .Enrobage
                         Lines.Add("BLOCK ENROBAGE_PROFILA")
 
                         Lines.Add("   lArmaConst     =  " & .lArmaConst)
@@ -612,7 +612,7 @@ Public Class cls_Projet
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim enrobage_profilA As New cls_Enrobage_Partiel
                     ReadBlocEnrobageProfilA(enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Section.enrobage_partiel = enrobage_profilA
+                    ptre_en_cours.Section.Enrobage = enrobage_profilA
 
                 Case "ARMATURE_ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -623,19 +623,19 @@ Public Class cls_Projet
                     Next
 
                     ReadBlocArmatureEnrobageProfilA(armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Section.enrobage_partiel.LitArma = armature_enrobage_profilA
+                    ptre_en_cours.Section.Enrobage.LitArma = armature_enrobage_profilA
 
                 Case "ACIER_ARMATURE_ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim acier_armature_enrobage_profilA As New cls_AcierArmature
                     ReadBlocAcierArmatureEnrobageProfilA(acier_armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Section.enrobage_partiel.AcierArmatures = acier_armature_enrobage_profilA
+                    ptre_en_cours.Section.Enrobage.AcierArmatures = acier_armature_enrobage_profilA
 
                 Case "BETON_ENROBAGE_PROFILA"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim beton_enrobage_profilA As New cls_Beton
                     ReadBlocBetonEnrobageProfilA(beton_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Section.enrobage_partiel.Beton = beton_enrobage_profilA
+                    ptre_en_cours.Section.Enrobage.Beton = beton_enrobage_profilA
 
                 Case "DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last

@@ -171,7 +171,7 @@ Public Class Frm_Enrobage
     Private Sub InitialiseVariable()
         MyBf = MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Bfs
 
-        cls_Enrobage_Partiel.DeepCopie(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel, MyEnrobage)
+        cls_Enrobage_Partiel.DeepCopie(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage, MyEnrobage)
 
     End Sub
 
@@ -484,43 +484,43 @@ Public Class Frm_Enrobage
 
         '-- Dimensions ----------------------------------------------------------------------------------------------------
 
-        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Ratio_bc, MyEnrobage.Ratio_bc, lModif)
+        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Ratio_bc, MyEnrobage.Ratio_bc, lModif)
 
         '-- Etriers -------------------------------------------------------------------------------------------------------
 
-        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Type <> MyEnrobage.Etriers_Type) Then
-            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Type = MyEnrobage.Etriers_Type
+        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_Type <> MyEnrobage.Etriers_Type) Then
+            MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_Type = MyEnrobage.Etriers_Type
             lModif = True
         End If
 
-        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Phi, MyEnrobage.Etriers_Phi, lModif)
-        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageY, MyEnrobage.Etriers_EnrobageY, lModif)
-        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageZ, MyEnrobage.Etriers_EnrobageZ, lModif)
+        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_Phi, MyEnrobage.Etriers_Phi, lModif)
+        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_EnrobageY, MyEnrobage.Etriers_EnrobageY, lModif)
+        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_EnrobageZ, MyEnrobage.Etriers_EnrobageZ, lModif)
 
         '-- Beton ----------------------------------------------------------------------------------------------------------------------
 
-        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Beton.Classe, MyEnrobage.Beton.Classe, lModif)
-        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Beton.Calcul_Proprietes()
+        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Classe, MyEnrobage.Beton.Classe, lModif)
+        MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Calcul_Proprietes()
 
         '-- Acier ---------------------------------------------------------------------------------------------------------------------
 
-        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.AcierArmatures.Classe, MyEnrobage.AcierArmatures.Classe, lModif)
-        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.AcierArmatures.MAJProprietes()
+        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.AcierArmatures.Classe, MyEnrobage.AcierArmatures.Classe, lModif)
+        MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.AcierArmatures.MAJProprietes()
 
         '-- Lits d'armatures ---------------------------------------------------------------------------------------------------------
 
         For i As Integer = 0 To 2
 
-            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiExt, MyEnrobage.LitArma(i).PhiExt, lModif)
-            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbExt, MyEnrobage.LitArma(i).NbExt, lModif)
-            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiMil, MyEnrobage.LitArma(i).PhiMil, lModif)
-            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbMil, MyEnrobage.LitArma(i).NbMil, lModif)
-            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiInt, MyEnrobage.LitArma(i).PhiInt, lModif)
-            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbInt, MyEnrobage.LitArma(i).NbInt, lModif)
+            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiExt, MyEnrobage.LitArma(i).PhiExt, lModif)
+            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbExt, MyEnrobage.LitArma(i).NbExt, lModif)
+            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiMil, MyEnrobage.LitArma(i).PhiMil, lModif)
+            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbMil, MyEnrobage.LitArma(i).NbMil, lModif)
+            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiInt, MyEnrobage.LitArma(i).PhiInt, lModif)
+            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbInt, MyEnrobage.LitArma(i).NbInt, lModif)
 
         Next
 
-        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(1).zPosRatio, MyEnrobage.LitArma(1).zPosRatio, lModif)
+        GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(1).zPosRatio, MyEnrobage.LitArma(1).zPosRatio, lModif)
 
     End Sub
 

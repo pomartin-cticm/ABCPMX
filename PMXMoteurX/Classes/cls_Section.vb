@@ -79,7 +79,7 @@ Public Class cls_Section
     ''' <summary>
     ''' Enrobage partiel de la section
     ''' </summary>
-    Public enrobage_partiel As New cls_Enrobage_Partiel
+    Public Enrobage As New cls_Enrobage_Partiel
 
     ''' <summary>
     ''' Dalle béton de la poutre            ' A SUPPRIMER ?
@@ -184,8 +184,8 @@ Public Class cls_Section
         Dim zArma, PhiA As Decimal
         Dim iPos, iBarre As Integer
         Dim NbBarres As Integer
-        Dim Fsk As Decimal = Me.enrobage_partiel.AcierArmatures.FsK
-        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.enrobage_partiel.AcierArmatures.Es
+        Dim Fsk As Decimal = Me.Enrobage.AcierArmatures.FsK
+        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.Enrobage.AcierArmatures.Es
         Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
         Const NBMA As Integer = 2       ' Car symétrie des deux chambres
 
@@ -195,11 +195,11 @@ Public Class cls_Section
 
             For iPos = 0 To 2
 
-                NbBarres = Me.enrobage_partiel.LitArma(iArma).NbBarres(iPos)
+                NbBarres = Me.Enrobage.LitArma(iArma).NbBarres(iPos)
 
                 For iBarre = 1 To NbBarres
                     zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
-                    PhiA = Me.enrobage_partiel.LitArma(iArma).PhiBarre(iPos)
+                    PhiA = Me.Enrobage.LitArma(iArma).PhiBarre(iPos)
 
                     MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
 
@@ -230,7 +230,7 @@ Public Class cls_Section
 
         LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
         EpaisseurC = Me.ProfilA.HauteurAmeHw
-        FdC = Me.enrobage_partiel.Beton.Fck
+        FdC = Me.Enrobage.Beton.Fck
 
         MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
 
@@ -727,7 +727,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            nEq = Me.enrobage_partiel.Beton.CoefficientEquivalenceCT
+            nEq = Me.Enrobage.Beton.CoefficientEquivalenceCT
             hW = Me.ProfilA.HauteurAmeHw
             Bc = Me.LargeurEnrobagePartielBc
 
@@ -778,9 +778,21 @@ Public Class cls_Section
 
     Public ReadOnly Property LargeurEnrobagePartielBc As Decimal
         Get
-            Return Me.ProfilA.Bfs * Me.enrobage_partiel.Ratio_bc
+            Return Me.ProfilA.Bfs * Me.Enrobage.Ratio_bc
         End Get
     End Property
+
+    Public Function NotionalSizeEnrobage() As Decimal
+        '------------------------------------------------------------------------------------------------------------
+        '   05/10/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------
+        '   Renvoie le rayon moyen pour le calcul de fluage, pour le béton d'enrobage
+        '------------------------------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------------------------------
+
+        Return Me.AireEnrobagePartielAec / Me.ProfilA.HauteurAmeHw
+
+    End Function
 
     Public ReadOnly Property AireEnrobagePartielAec As Decimal
         Get
@@ -915,14 +927,14 @@ Public Class cls_Section
         ks = 0.9
         kc = 0.6
         k = 0.8
-        fct_eff = enrobage_partiel.Beton.Fctm
-        Act = enrobage_partiel.Ratio_bc * ProfilA.Bfs * ProfilA.HauteurAmeHw
+        fct_eff = Enrobage.Beton.Fctm
+        Act = Enrobage.Ratio_bc * ProfilA.Bfs * ProfilA.HauteurAmeHw
 
-        If enrobage_partiel.Beton.lCrackingLimitation Then
-            Dim phi_max As Decimal = enrobage_partiel.Get_Phi_Max()
-            sigma_s = Mod_Declarations.Get_sigma_S1_Ds(enrobage_partiel.Beton.wk_max, phi_max)
+        If Enrobage.Beton.lCrackingLimitation Then
+            Dim phi_max As Decimal = Enrobage.Get_Phi_Max()
+            sigma_s = Mod_Declarations.Get_sigma_S1_Ds(Enrobage.Beton.wk_max, phi_max)
         Else
-            sigma_s = enrobage_partiel.AcierArmatures.FsK
+            sigma_s = Enrobage.AcierArmatures.FsK
         End If
 
         As_min = ks * kc * k * fct_eff * Act / sigma_s
@@ -982,7 +994,7 @@ Public Class cls_Section
         SectionCible = SectionSource.Clone
 
         SectionSource.ProfilA.DeepClone(SectionSource.ProfilA, SectionCible.ProfilA)
-        SectionSource.enrobage_partiel.DeepClone(SectionSource.enrobage_partiel, SectionCible.enrobage_partiel)
+        SectionSource.Enrobage.DeepClone(SectionSource.Enrobage, SectionCible.Enrobage)
 
         SectionCible.Acier = SectionSource.Acier.Clone
 
@@ -997,8 +1009,8 @@ Public Class cls_Section
         s_destination = s_origine.Clone()
         s_destination.Acier = s_origine.Acier.Clone()
 
-        s_destination.enrobage_partiel = s_origine.enrobage_partiel.Clone()
-        s_destination.enrobage_partiel.Beton = s_origine.enrobage_partiel.Beton.Clone()
+        s_destination.Enrobage = s_origine.Enrobage.Clone()
+        s_destination.Enrobage.Beton = s_origine.Enrobage.Beton.Clone()
 
         's_destination.dalle = s_origine.dalle.Clone()
         's_destination.dalle.beton = s_origine.dalle.beton.Clone()
@@ -1085,7 +1097,7 @@ Public Class cls_Section
         Me.Acier.EcrireFile(Lines)
 
         '--> Enrobage
-        Me.enrobage_partiel.EcrireFile(Lines)
+        Me.Enrobage.EcrireFile(Lines)
 
         ''--> Dalle de béton
         'Me.dalle.EcrireFile(Lines)
@@ -1158,9 +1170,9 @@ Public Class cls_Section
                         'Case "EB_C" : Me.enrobage_partiel.b_c = Mots(nbMots)
                        ' Case "EF_Y" : Me.enrobage_partiel.acier_armature = Mots(nbMots)
                             '--> Béton enrobage
-                        Case "EBTY" : Me.enrobage_partiel.Beton.lLeger = Mots(nbMots)
-                        Case "EBCL" : Me.enrobage_partiel.Beton.Classe = Mots(nbMots)
-                        Case "EBFC" : Me.enrobage_partiel.Beton.Fck = Mots(nbMots)
+                        Case "EBTY" : Me.Enrobage.Beton.lLeger = Mots(nbMots)
+                        Case "EBCL" : Me.Enrobage.Beton.Classe = Mots(nbMots)
+                        Case "EBFC" : Me.Enrobage.Beton.Fck = Mots(nbMots)
 
 
                     End Select
@@ -1184,7 +1196,7 @@ Public Class cls_Section
         '   Positionnement des armatures de la section d'enrobage
         '--------------------------------------------------------------------------------------------
 
-        With Me.enrobage_partiel
+        With Me.Enrobage
 
             .LitsArmaOLD(0).zArma = -Me.ProfilA.ha + Me.ProfilA.Tfi + .Etriers_EnrobageZ + .Etriers_Phi + .LitsArmaOLD(0).Phi / 2
 
@@ -1213,22 +1225,22 @@ Public Class cls_Section
         Dim zPos As Decimal
         Dim DeltaZ As Double
 
-        DeltaZ = Me.enrobage_partiel.LitArma(iArma).NbExt * Me.enrobage_partiel.LitArma(iArma).PhiExt ^ 3 / 8
-        DeltaZ += Me.enrobage_partiel.LitArma(iArma).NbMil * Me.enrobage_partiel.LitArma(iArma).PhiMil ^ 3 / 8
-        DeltaZ += Me.enrobage_partiel.LitArma(iArma).NbInt * Me.enrobage_partiel.LitArma(iArma).PhiInt ^ 3 / 8
+        DeltaZ = Me.Enrobage.LitArma(iArma).NbExt * Me.Enrobage.LitArma(iArma).PhiExt ^ 3 / 8
+        DeltaZ += Me.Enrobage.LitArma(iArma).NbMil * Me.Enrobage.LitArma(iArma).PhiMil ^ 3 / 8
+        DeltaZ += Me.Enrobage.LitArma(iArma).NbInt * Me.Enrobage.LitArma(iArma).PhiInt ^ 3 / 8
 
-        DeltaZ = DeltaZ * Math.PI / Me.enrobage_partiel.LitArma(iArma).Aire
+        DeltaZ = DeltaZ * Math.PI / Me.Enrobage.LitArma(iArma).Aire
 
         Select Case iArma
             Case 0
                 zPos = +DeltaZ - Me.ProfilA.ha + Me.ProfilA.Tfi _
-                     + Me.enrobage_partiel.Etriers_EnrobageZ + Me.enrobage_partiel.Etriers_Phi
+                     + Me.Enrobage.Etriers_EnrobageZ + Me.Enrobage.Etriers_Phi
 
             Case 1
-                zPos = -Me.enrobage_partiel.LitArma(iArma).zPosRatio * Me.ProfilA.ha
+                zPos = -Me.Enrobage.LitArma(iArma).zPosRatio * Me.ProfilA.ha
             Case 2
                 zPos = -DeltaZ - Me.ProfilA.Tfs _
-                     - Me.enrobage_partiel.Etriers_EnrobageZ - Me.enrobage_partiel.Etriers_Phi
+                     - Me.Enrobage.Etriers_EnrobageZ - Me.Enrobage.Etriers_Phi
         End Select
 
         Return zPos
@@ -1253,12 +1265,12 @@ Public Class cls_Section
 
         '--> Intialisations
 
-        Uz = Me.enrobage_partiel.Etriers_EnrobageZ
-        PhiE = Me.enrobage_partiel.Etriers_Phi
+        Uz = Me.Enrobage.Etriers_EnrobageZ
+        PhiE = Me.Enrobage.Etriers_Phi
         Select Case iPos
-            Case 0 : PhiA = Me.enrobage_partiel.LitArma(iArma).PhiExt
-            Case 1 : PhiA = Me.enrobage_partiel.LitArma(iArma).PhiMil
-            Case 2 : PhiA = Me.enrobage_partiel.LitArma(iArma).PhiInt
+            Case 0 : PhiA = Me.Enrobage.LitArma(iArma).PhiExt
+            Case 1 : PhiA = Me.Enrobage.LitArma(iArma).PhiMil
+            Case 2 : PhiA = Me.Enrobage.LitArma(iArma).PhiInt
         End Select
         '--> Traitement
 

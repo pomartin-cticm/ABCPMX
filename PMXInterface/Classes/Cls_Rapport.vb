@@ -1183,7 +1183,7 @@ Public Class Cls_Rapport
 
                 Case "PARTIAL_ENCASEMENT"
 
-                    DessinFrmEnrobage(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel, sWiImg, sHiImg, 0.9, True, False, -1, xLeftImg, YPen)
+                    DessinFrmEnrobage(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage, sWiImg, sHiImg, 0.9, True, False, -1, xLeftImg, YPen)
 
                 Case "CORRECT"
 

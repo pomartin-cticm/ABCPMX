@@ -180,10 +180,10 @@ Public Class Frm_AjoutePP
         MySectionAcierEnrobe.ProfilA.Rcs = 0.03
         MySectionAcierEnrobe.ProfilA.Rci = 0.03
 
-        MySectionAcierEnrobe.enrobage_partiel.LitsArmaOLD(0).nbArma = 1
-        MySectionAcierEnrobe.enrobage_partiel.LitsArmaOLD(0).Phi = 0.025
-        MySectionAcierEnrobe.enrobage_partiel.LitsArmaOLD(2).nbArma = 1
-        MySectionAcierEnrobe.enrobage_partiel.LitsArmaOLD(2).Phi = 0.025
+        MySectionAcierEnrobe.Enrobage.LitsArmaOLD(0).nbArma = 1
+        MySectionAcierEnrobe.Enrobage.LitsArmaOLD(0).Phi = 0.025
+        MySectionAcierEnrobe.Enrobage.LitsArmaOLD(2).nbArma = 1
+        MySectionAcierEnrobe.Enrobage.LitsArmaOLD(2).Phi = 0.025
 
         '--> Définition de la section mixte
         MySectionMixte.typeSection = cls_Section.Enum_TypeSection.Mixte
@@ -202,10 +202,10 @@ Public Class Frm_AjoutePP
         MySectionMixteEnrobe.ProfilA.Rcs = 0.03
         MySectionMixteEnrobe.ProfilA.Rci = 0.03
 
-        MySectionMixteEnrobe.enrobage_partiel.LitsArmaOLD(0).nbArma = 1
-        MySectionMixteEnrobe.enrobage_partiel.LitsArmaOLD(0).Phi = 0.025
-        MySectionMixteEnrobe.enrobage_partiel.LitsArmaOLD(2).nbArma = 1
-        MySectionMixteEnrobe.enrobage_partiel.LitsArmaOLD(2).Phi = 0.025
+        MySectionMixteEnrobe.Enrobage.LitsArmaOLD(0).nbArma = 1
+        MySectionMixteEnrobe.Enrobage.LitsArmaOLD(0).Phi = 0.025
+        MySectionMixteEnrobe.Enrobage.LitsArmaOLD(2).nbArma = 1
+        MySectionMixteEnrobe.Enrobage.LitsArmaOLD(2).Phi = 0.025
 
         MyPoutreMixteEnrobe.Dalle.Beff = 1
         'MySectionMixteEnrobe.Dalle.Beff = 1
