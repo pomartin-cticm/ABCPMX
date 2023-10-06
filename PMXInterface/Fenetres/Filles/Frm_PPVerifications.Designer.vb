@@ -157,7 +157,7 @@ Partial Class Frm_PPVerifications
         Me.TLpan_HAffichage.Name = "TLpan_HAffichage"
         Me.TLpan_HAffichage.RowCount = 1
         Me.TLpan_HAffichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_HAffichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLpan_HAffichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 431.0!))
         Me.TLpan_HAffichage.Size = New System.Drawing.Size(796, 431)
         Me.TLpan_HAffichage.TabIndex = 0
         '
@@ -560,7 +560,7 @@ Partial Class Frm_PPVerifications
         Me.cmb_LimitState.FormattingEnabled = True
         Me.cmb_LimitState.Location = New System.Drawing.Point(96, 7)
         Me.cmb_LimitState.Name = "cmb_LimitState"
-        Me.cmb_LimitState.Size = New System.Drawing.Size(165, 21)
+        Me.cmb_LimitState.Size = New System.Drawing.Size(186, 21)
         Me.cmb_LimitState.TabIndex = 58
         '
         'lbl_LimitState
@@ -578,7 +578,7 @@ Partial Class Frm_PPVerifications
         Me.cmb_Critere.FormattingEnabled = True
         Me.cmb_Critere.Location = New System.Drawing.Point(96, 34)
         Me.cmb_Critere.Name = "cmb_Critere"
-        Me.cmb_Critere.Size = New System.Drawing.Size(165, 21)
+        Me.cmb_Critere.Size = New System.Drawing.Size(186, 21)
         Me.cmb_Critere.TabIndex = 55
         '
         'lbl_Critere

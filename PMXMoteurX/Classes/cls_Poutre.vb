@@ -1751,7 +1751,7 @@ Public Class cls_Poutre
         For iNode = 0 To Me.Nodes.nbNodes - 1
 
             If IsEqual(Beff(iNode), BeffPrec) Then
-                Beff(iNode) = Beff(iNode - 1)
+                MplRd(iNode) = MplRd(iNode - 1)
                 zANP(iNode) = zANP(iNode - 1)
             Else
                 Me.Section.ProprietesPlastiquesMixteMyy(Signe, lValRd, Me.Param.Gamma, 0, Beff(iNode), Eta, Me.Dalle, zANP(iNode), MplRd(iNode))

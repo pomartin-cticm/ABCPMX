@@ -3,6 +3,9 @@
 #Region " Attributs "
 
     Public Critere() As Decimal         ' Valeur du critere le long de la barre
+    Public Action() As Decimal          ' Valeur de l'action donnant le critère max en un point donné
+    Public Resistance() As Decimal      ' Valeur de l'action donnant le critère max en un point donné
+    Public iCombiNodeM() As Integer     ' Indice de la combinaison donnant le critère max en un point donné
 
     Public CritereMax As Decimal        ' Valeur maximale du critere
     Public iCombiM As Integer           ' Indice de la combinaison donnant le critère max
@@ -16,6 +19,10 @@
     Public Sub New(NbNodes As Integer)
 
         ReDim Critere(NbNodes - 1)
+        ReDim Action(NbNodes - 1)
+        ReDim Resistance(NbNodes - 1)
+        ReDim iCombiNodeM(NbNodes - 1)
+
         iCombiM = -1
         iNodeM = -1
         CritereMax = 0
@@ -51,7 +58,12 @@
             pCrit = Math.Abs(ValEd / ValRd)
         End If
 
-        Me.Critere(iNode) = pCrit
+        If pCrit > Me.Critere(iNode) Then
+            Me.Critere(iNode) = pCrit
+            Me.Action(iNode) = Math.Abs(ValEd)
+            Me.Resistance(iNode) = Math.Abs(ValRd)
+            Me.iCombiNodeM(iNode) = iCombi
+        End If
 
         If pCrit > Me.CritereMax Then
             lDefini = True
