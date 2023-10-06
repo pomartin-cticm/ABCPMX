@@ -33,9 +33,9 @@ Partial Class Frm_PPVerifications
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_Retrait = New System.Windows.Forms.CheckBox()
         Me.chk_Numerotation = New System.Windows.Forms.CheckBox()
-        Me.chk_EffortTranchant = New System.Windows.Forms.CheckBox()
-        Me.chk_Moment = New System.Windows.Forms.CheckBox()
-        Me.chk_Fleches = New System.Windows.Forms.CheckBox()
+        Me.chk_Resistance = New System.Windows.Forms.CheckBox()
+        Me.chk_Action = New System.Windows.Forms.CheckBox()
+        Me.chk_Critere = New System.Windows.Forms.CheckBox()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.btn_Annuler = New System.Windows.Forms.Button()
@@ -44,21 +44,14 @@ Partial Class Frm_PPVerifications
         Me.Pan_Results = New System.Windows.Forms.Panel()
         Me.etq_UnitM2 = New System.Windows.Forms.Label()
         Me.etq_UnitM1 = New System.Windows.Forms.Label()
-        Me.txt_Mmin = New System.Windows.Forms.TextBox()
-        Me.txt_Mmax = New System.Windows.Forms.TextBox()
-        Me.lbl_Mmin = New System.Windows.Forms.Label()
-        Me.lbl_Mmax = New System.Windows.Forms.Label()
+        Me.txt_Node = New System.Windows.Forms.TextBox()
+        Me.txt_Combi = New System.Windows.Forms.TextBox()
+        Me.lbl_Node = New System.Windows.Forms.Label()
+        Me.lbl_Combinaison = New System.Windows.Forms.Label()
         Me.etq_UnitDim1 = New System.Windows.Forms.Label()
-        Me.txt_Fleche = New System.Windows.Forms.TextBox()
-        Me.lbl_Fleche = New System.Windows.Forms.Label()
-        Me.etq_UnitForce2 = New System.Windows.Forms.Label()
-        Me.etq_UnitForce1 = New System.Windows.Forms.Label()
-        Me.txt_RZ2 = New System.Windows.Forms.TextBox()
-        Me.txt_RZ1 = New System.Windows.Forms.TextBox()
-        Me.lbl_RZ2 = New System.Windows.Forms.Label()
-        Me.lbl_RZ1 = New System.Windows.Forms.Label()
-        Me.lbl_RCalcul = New System.Windows.Forms.Label()
-        Me.lbl_RunCalcul = New System.Windows.Forms.Label()
+        Me.txt_ValMax = New System.Windows.Forms.TextBox()
+        Me.lbl_ValMaxCritere = New System.Windows.Forms.Label()
+        Me.lbl_Resultats = New System.Windows.Forms.Label()
         Me.pan_ChoixCombi = New System.Windows.Forms.Panel()
         Me.cmb_LimitState = New System.Windows.Forms.ComboBox()
         Me.lbl_LimitState = New System.Windows.Forms.Label()
@@ -188,9 +181,9 @@ Partial Class Frm_PPVerifications
         Me.TLpan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Gauche.Controls.Add(Me.chk_Retrait, 0, 4)
         Me.TLpan_Gauche.Controls.Add(Me.chk_Numerotation, 0, 3)
-        Me.TLpan_Gauche.Controls.Add(Me.chk_EffortTranchant, 0, 2)
-        Me.TLpan_Gauche.Controls.Add(Me.chk_Moment, 0, 1)
-        Me.TLpan_Gauche.Controls.Add(Me.chk_Fleches, 0, 0)
+        Me.TLpan_Gauche.Controls.Add(Me.chk_Resistance, 0, 2)
+        Me.TLpan_Gauche.Controls.Add(Me.chk_Action, 0, 1)
+        Me.TLpan_Gauche.Controls.Add(Me.chk_Critere, 0, 0)
         Me.TLpan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(0)
@@ -222,6 +215,7 @@ Partial Class Frm_PPVerifications
         Me.chk_Retrait.Text = "chk_Retrait"
         Me.chk_Retrait.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.chk_Retrait.UseVisualStyleBackColor = True
+        Me.chk_Retrait.Visible = False
         '
         'chk_Numerotation
         '
@@ -237,47 +231,47 @@ Partial Class Frm_PPVerifications
         Me.chk_Numerotation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         Me.chk_Numerotation.UseVisualStyleBackColor = True
         '
-        'chk_EffortTranchant
+        'chk_Resistance
         '
-        Me.chk_EffortTranchant.Appearance = System.Windows.Forms.Appearance.Button
-        Me.chk_EffortTranchant.AutoSize = True
-        Me.chk_EffortTranchant.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_EffortTranchant.Location = New System.Drawing.Point(1, 61)
-        Me.chk_EffortTranchant.Margin = New System.Windows.Forms.Padding(1)
-        Me.chk_EffortTranchant.Name = "chk_EffortTranchant"
-        Me.chk_EffortTranchant.Size = New System.Drawing.Size(148, 28)
-        Me.chk_EffortTranchant.TabIndex = 3
-        Me.chk_EffortTranchant.Text = "chk_EffortTranchant"
-        Me.chk_EffortTranchant.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.chk_EffortTranchant.UseVisualStyleBackColor = True
+        Me.chk_Resistance.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_Resistance.AutoSize = True
+        Me.chk_Resistance.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Resistance.Location = New System.Drawing.Point(1, 61)
+        Me.chk_Resistance.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_Resistance.Name = "chk_Resistance"
+        Me.chk_Resistance.Size = New System.Drawing.Size(148, 28)
+        Me.chk_Resistance.TabIndex = 3
+        Me.chk_Resistance.Text = "chk_Resistance"
+        Me.chk_Resistance.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.chk_Resistance.UseVisualStyleBackColor = True
         '
-        'chk_Moment
+        'chk_Action
         '
-        Me.chk_Moment.Appearance = System.Windows.Forms.Appearance.Button
-        Me.chk_Moment.AutoSize = True
-        Me.chk_Moment.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_Moment.Location = New System.Drawing.Point(1, 31)
-        Me.chk_Moment.Margin = New System.Windows.Forms.Padding(1)
-        Me.chk_Moment.Name = "chk_Moment"
-        Me.chk_Moment.Size = New System.Drawing.Size(148, 28)
-        Me.chk_Moment.TabIndex = 2
-        Me.chk_Moment.Text = "chk_Moment"
-        Me.chk_Moment.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.chk_Moment.UseVisualStyleBackColor = True
+        Me.chk_Action.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_Action.AutoSize = True
+        Me.chk_Action.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Action.Location = New System.Drawing.Point(1, 31)
+        Me.chk_Action.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_Action.Name = "chk_Action"
+        Me.chk_Action.Size = New System.Drawing.Size(148, 28)
+        Me.chk_Action.TabIndex = 2
+        Me.chk_Action.Text = "chk_Action"
+        Me.chk_Action.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.chk_Action.UseVisualStyleBackColor = True
         '
-        'chk_Fleches
+        'chk_Critere
         '
-        Me.chk_Fleches.Appearance = System.Windows.Forms.Appearance.Button
-        Me.chk_Fleches.AutoSize = True
-        Me.chk_Fleches.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_Fleches.Location = New System.Drawing.Point(1, 1)
-        Me.chk_Fleches.Margin = New System.Windows.Forms.Padding(1)
-        Me.chk_Fleches.Name = "chk_Fleches"
-        Me.chk_Fleches.Size = New System.Drawing.Size(148, 28)
-        Me.chk_Fleches.TabIndex = 0
-        Me.chk_Fleches.Text = "chk_Fleches"
-        Me.chk_Fleches.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        Me.chk_Fleches.UseVisualStyleBackColor = True
+        Me.chk_Critere.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_Critere.AutoSize = True
+        Me.chk_Critere.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_Critere.Location = New System.Drawing.Point(1, 1)
+        Me.chk_Critere.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_Critere.Name = "chk_Critere"
+        Me.chk_Critere.Size = New System.Drawing.Size(148, 28)
+        Me.chk_Critere.TabIndex = 0
+        Me.chk_Critere.Text = "chk_Critere"
+        Me.chk_Critere.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.chk_Critere.UseVisualStyleBackColor = True
         '
         'TLPan_PartieBasse
         '
@@ -358,21 +352,14 @@ Partial Class Frm_PPVerifications
         Me.Pan_Results.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Pan_Results.Controls.Add(Me.etq_UnitM2)
         Me.Pan_Results.Controls.Add(Me.etq_UnitM1)
-        Me.Pan_Results.Controls.Add(Me.txt_Mmin)
-        Me.Pan_Results.Controls.Add(Me.txt_Mmax)
-        Me.Pan_Results.Controls.Add(Me.lbl_Mmin)
-        Me.Pan_Results.Controls.Add(Me.lbl_Mmax)
+        Me.Pan_Results.Controls.Add(Me.txt_Node)
+        Me.Pan_Results.Controls.Add(Me.txt_Combi)
+        Me.Pan_Results.Controls.Add(Me.lbl_Node)
+        Me.Pan_Results.Controls.Add(Me.lbl_Combinaison)
         Me.Pan_Results.Controls.Add(Me.etq_UnitDim1)
-        Me.Pan_Results.Controls.Add(Me.txt_Fleche)
-        Me.Pan_Results.Controls.Add(Me.lbl_Fleche)
-        Me.Pan_Results.Controls.Add(Me.etq_UnitForce2)
-        Me.Pan_Results.Controls.Add(Me.etq_UnitForce1)
-        Me.Pan_Results.Controls.Add(Me.txt_RZ2)
-        Me.Pan_Results.Controls.Add(Me.txt_RZ1)
-        Me.Pan_Results.Controls.Add(Me.lbl_RZ2)
-        Me.Pan_Results.Controls.Add(Me.lbl_RZ1)
-        Me.Pan_Results.Controls.Add(Me.lbl_RCalcul)
-        Me.Pan_Results.Controls.Add(Me.lbl_RunCalcul)
+        Me.Pan_Results.Controls.Add(Me.txt_ValMax)
+        Me.Pan_Results.Controls.Add(Me.lbl_ValMaxCritere)
+        Me.Pan_Results.Controls.Add(Me.lbl_Resultats)
         Me.Pan_Results.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Pan_Results.Location = New System.Drawing.Point(301, 1)
         Me.Pan_Results.Margin = New System.Windows.Forms.Padding(1, 1, 0, 0)
@@ -383,161 +370,96 @@ Partial Class Frm_PPVerifications
         'etq_UnitM2
         '
         Me.etq_UnitM2.AutoSize = True
-        Me.etq_UnitM2.Location = New System.Drawing.Point(384, 49)
+        Me.etq_UnitM2.Location = New System.Drawing.Point(310, 49)
         Me.etq_UnitM2.Name = "etq_UnitM2"
         Me.etq_UnitM2.Size = New System.Drawing.Size(15, 13)
         Me.etq_UnitM2.TabIndex = 76
         Me.etq_UnitM2.Text = "N"
+        Me.etq_UnitM2.Visible = False
         '
         'etq_UnitM1
         '
         Me.etq_UnitM1.AutoSize = True
-        Me.etq_UnitM1.Location = New System.Drawing.Point(384, 27)
+        Me.etq_UnitM1.Location = New System.Drawing.Point(310, 27)
         Me.etq_UnitM1.Name = "etq_UnitM1"
         Me.etq_UnitM1.Size = New System.Drawing.Size(15, 13)
         Me.etq_UnitM1.TabIndex = 75
         Me.etq_UnitM1.Text = "N"
+        Me.etq_UnitM1.Visible = False
         '
-        'txt_Mmin
+        'txt_Node
         '
-        Me.txt_Mmin.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_Mmin.Location = New System.Drawing.Point(312, 46)
-        Me.txt_Mmin.Name = "txt_Mmin"
-        Me.txt_Mmin.Size = New System.Drawing.Size(66, 20)
-        Me.txt_Mmin.TabIndex = 74
-        Me.txt_Mmin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.txt_Node.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_Node.Location = New System.Drawing.Point(238, 46)
+        Me.txt_Node.Name = "txt_Node"
+        Me.txt_Node.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Node.TabIndex = 74
+        Me.txt_Node.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'txt_Mmax
+        'txt_Combi
         '
-        Me.txt_Mmax.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_Mmax.Location = New System.Drawing.Point(312, 24)
-        Me.txt_Mmax.Name = "txt_Mmax"
-        Me.txt_Mmax.Size = New System.Drawing.Size(66, 20)
-        Me.txt_Mmax.TabIndex = 73
-        Me.txt_Mmax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.txt_Combi.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_Combi.Location = New System.Drawing.Point(238, 24)
+        Me.txt_Combi.Name = "txt_Combi"
+        Me.txt_Combi.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Combi.TabIndex = 73
+        Me.txt_Combi.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'lbl_Mmin
+        'lbl_Node
         '
-        Me.lbl_Mmin.AutoSize = True
-        Me.lbl_Mmin.Location = New System.Drawing.Point(271, 49)
-        Me.lbl_Mmin.Name = "lbl_Mmin"
-        Me.lbl_Mmin.Size = New System.Drawing.Size(32, 13)
-        Me.lbl_Mmin.TabIndex = 72
-        Me.lbl_Mmin.Text = "Mmin"
-        Me.lbl_Mmin.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_Node.Location = New System.Drawing.Point(125, 45)
+        Me.lbl_Node.Name = "lbl_Node"
+        Me.lbl_Node.Size = New System.Drawing.Size(107, 17)
+        Me.lbl_Node.TabIndex = 72
+        Me.lbl_Node.Text = "lbl_Node"
+        Me.lbl_Node.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'lbl_Mmax
+        'lbl_Combinaison
         '
-        Me.lbl_Mmax.AutoSize = True
-        Me.lbl_Mmax.Location = New System.Drawing.Point(271, 28)
-        Me.lbl_Mmax.Name = "lbl_Mmax"
-        Me.lbl_Mmax.Size = New System.Drawing.Size(35, 13)
-        Me.lbl_Mmax.TabIndex = 71
-        Me.lbl_Mmax.Text = "Mmax"
-        Me.lbl_Mmax.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_Combinaison.Location = New System.Drawing.Point(122, 27)
+        Me.lbl_Combinaison.Name = "lbl_Combinaison"
+        Me.lbl_Combinaison.Size = New System.Drawing.Size(110, 13)
+        Me.lbl_Combinaison.TabIndex = 71
+        Me.lbl_Combinaison.Text = "lbl_Combinaison"
+        Me.lbl_Combinaison.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'etq_UnitDim1
         '
         Me.etq_UnitDim1.AutoSize = True
-        Me.etq_UnitDim1.Location = New System.Drawing.Point(384, 6)
+        Me.etq_UnitDim1.Location = New System.Drawing.Point(310, 6)
         Me.etq_UnitDim1.Name = "etq_UnitDim1"
         Me.etq_UnitDim1.Size = New System.Drawing.Size(15, 13)
         Me.etq_UnitDim1.TabIndex = 70
         Me.etq_UnitDim1.Text = "N"
+        Me.etq_UnitDim1.Visible = False
         '
-        'txt_Fleche
+        'txt_ValMax
         '
-        Me.txt_Fleche.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_Fleche.Location = New System.Drawing.Point(312, 3)
-        Me.txt_Fleche.Name = "txt_Fleche"
-        Me.txt_Fleche.Size = New System.Drawing.Size(66, 20)
-        Me.txt_Fleche.TabIndex = 69
-        Me.txt_Fleche.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.txt_ValMax.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_ValMax.Location = New System.Drawing.Point(238, 3)
+        Me.txt_ValMax.Name = "txt_ValMax"
+        Me.txt_ValMax.Size = New System.Drawing.Size(66, 20)
+        Me.txt_ValMax.TabIndex = 69
+        Me.txt_ValMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'lbl_Fleche
+        'lbl_ValMaxCritere
         '
-        Me.lbl_Fleche.AutoSize = True
-        Me.lbl_Fleche.Location = New System.Drawing.Point(251, 6)
-        Me.lbl_Fleche.Name = "lbl_Fleche"
-        Me.lbl_Fleche.Size = New System.Drawing.Size(55, 13)
-        Me.lbl_Fleche.TabIndex = 68
-        Me.lbl_Fleche.Text = "lbl_Fleche"
-        Me.lbl_Fleche.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_ValMaxCritere.Location = New System.Drawing.Point(119, 6)
+        Me.lbl_ValMaxCritere.Name = "lbl_ValMaxCritere"
+        Me.lbl_ValMaxCritere.Size = New System.Drawing.Size(113, 13)
+        Me.lbl_ValMaxCritere.TabIndex = 68
+        Me.lbl_ValMaxCritere.Text = "lbl_ValMaxCritere"
+        Me.lbl_ValMaxCritere.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
-        'etq_UnitForce2
+        'lbl_Resultats
         '
-        Me.etq_UnitForce2.AutoSize = True
-        Me.etq_UnitForce2.Location = New System.Drawing.Point(218, 49)
-        Me.etq_UnitForce2.Name = "etq_UnitForce2"
-        Me.etq_UnitForce2.Size = New System.Drawing.Size(15, 13)
-        Me.etq_UnitForce2.TabIndex = 67
-        Me.etq_UnitForce2.Text = "N"
-        '
-        'etq_UnitForce1
-        '
-        Me.etq_UnitForce1.AutoSize = True
-        Me.etq_UnitForce1.Location = New System.Drawing.Point(218, 27)
-        Me.etq_UnitForce1.Name = "etq_UnitForce1"
-        Me.etq_UnitForce1.Size = New System.Drawing.Size(15, 13)
-        Me.etq_UnitForce1.TabIndex = 66
-        Me.etq_UnitForce1.Text = "N"
-        '
-        'txt_RZ2
-        '
-        Me.txt_RZ2.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_RZ2.Location = New System.Drawing.Point(146, 46)
-        Me.txt_RZ2.Name = "txt_RZ2"
-        Me.txt_RZ2.Size = New System.Drawing.Size(66, 20)
-        Me.txt_RZ2.TabIndex = 65
-        Me.txt_RZ2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'txt_RZ1
-        '
-        Me.txt_RZ1.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_RZ1.Location = New System.Drawing.Point(146, 24)
-        Me.txt_RZ1.Name = "txt_RZ1"
-        Me.txt_RZ1.Size = New System.Drawing.Size(66, 20)
-        Me.txt_RZ1.TabIndex = 64
-        Me.txt_RZ1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'lbl_RZ2
-        '
-        Me.lbl_RZ2.AutoSize = True
-        Me.lbl_RZ2.Location = New System.Drawing.Point(112, 49)
-        Me.lbl_RZ2.Name = "lbl_RZ2"
-        Me.lbl_RZ2.Size = New System.Drawing.Size(28, 13)
-        Me.lbl_RZ2.TabIndex = 63
-        Me.lbl_RZ2.Text = "RZ2"
-        Me.lbl_RZ2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'lbl_RZ1
-        '
-        Me.lbl_RZ1.AutoSize = True
-        Me.lbl_RZ1.Location = New System.Drawing.Point(112, 28)
-        Me.lbl_RZ1.Name = "lbl_RZ1"
-        Me.lbl_RZ1.Size = New System.Drawing.Size(28, 13)
-        Me.lbl_RZ1.TabIndex = 61
-        Me.lbl_RZ1.Text = "RZ1"
-        Me.lbl_RZ1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'lbl_RCalcul
-        '
-        Me.lbl_RCalcul.AutoSize = True
-        Me.lbl_RCalcul.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_RCalcul.Location = New System.Drawing.Point(143, 6)
-        Me.lbl_RCalcul.Name = "lbl_RCalcul"
-        Me.lbl_RCalcul.Size = New System.Drawing.Size(60, 13)
-        Me.lbl_RCalcul.TabIndex = 62
-        Me.lbl_RCalcul.Text = "lbl_RCalcul"
-        '
-        'lbl_RunCalcul
-        '
-        Me.lbl_RunCalcul.AutoSize = True
-        Me.lbl_RunCalcul.Location = New System.Drawing.Point(18, 6)
-        Me.lbl_RunCalcul.Name = "lbl_RunCalcul"
-        Me.lbl_RunCalcul.Size = New System.Drawing.Size(72, 13)
-        Me.lbl_RunCalcul.TabIndex = 60
-        Me.lbl_RunCalcul.Text = "lbl_RunCalcul"
+        Me.lbl_Resultats.AutoSize = True
+        Me.lbl_Resultats.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Resultats.Location = New System.Drawing.Point(18, 6)
+        Me.lbl_Resultats.Name = "lbl_Resultats"
+        Me.lbl_Resultats.Size = New System.Drawing.Size(67, 13)
+        Me.lbl_Resultats.TabIndex = 60
+        Me.lbl_Resultats.Text = "lbl_Resultats"
         '
         'pan_ChoixCombi
         '
@@ -631,9 +553,9 @@ Partial Class Frm_PPVerifications
     Friend WithEvents TLpan_Gauche As TableLayoutPanel
     Friend WithEvents chk_Retrait As CheckBox
     Friend WithEvents chk_Numerotation As CheckBox
-    Friend WithEvents chk_EffortTranchant As CheckBox
-    Friend WithEvents chk_Moment As CheckBox
-    Friend WithEvents chk_Fleches As CheckBox
+    Friend WithEvents chk_Resistance As CheckBox
+    Friend WithEvents chk_Action As CheckBox
+    Friend WithEvents chk_Critere As CheckBox
     Friend WithEvents TLPan_PartieBasse As TableLayoutPanel
     Friend WithEvents btn_OK As Button
     Friend WithEvents btn_Annuler As Button
@@ -642,21 +564,14 @@ Partial Class Frm_PPVerifications
     Friend WithEvents Pan_Results As Panel
     Friend WithEvents etq_UnitM2 As Label
     Friend WithEvents etq_UnitM1 As Label
-    Friend WithEvents txt_Mmin As TextBox
-    Friend WithEvents txt_Mmax As TextBox
-    Friend WithEvents lbl_Mmin As Label
-    Friend WithEvents lbl_Mmax As Label
+    Friend WithEvents txt_Node As TextBox
+    Friend WithEvents txt_Combi As TextBox
+    Friend WithEvents lbl_Node As Label
+    Friend WithEvents lbl_Combinaison As Label
     Friend WithEvents etq_UnitDim1 As Label
-    Friend WithEvents txt_Fleche As TextBox
-    Friend WithEvents lbl_Fleche As Label
-    Friend WithEvents etq_UnitForce2 As Label
-    Friend WithEvents etq_UnitForce1 As Label
-    Friend WithEvents txt_RZ2 As TextBox
-    Friend WithEvents txt_RZ1 As TextBox
-    Friend WithEvents lbl_RZ2 As Label
-    Friend WithEvents lbl_RZ1 As Label
-    Friend WithEvents lbl_RCalcul As Label
-    Friend WithEvents lbl_RunCalcul As Label
+    Friend WithEvents txt_ValMax As TextBox
+    Friend WithEvents lbl_ValMaxCritere As Label
+    Friend WithEvents lbl_Resultats As Label
     Friend WithEvents pan_ChoixCombi As Panel
     Friend WithEvents cmb_LimitState As ComboBox
     Friend WithEvents lbl_LimitState As Label

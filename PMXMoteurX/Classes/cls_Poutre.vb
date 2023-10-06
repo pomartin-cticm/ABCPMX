@@ -1141,7 +1141,7 @@ Public Class cls_Poutre
 
             iNodD = Me.Nodes.iNodeExtTrav(iTravee, 0)
             iNodF = Me.Nodes.iNodeExtTrav(iTravee, 1)
-            xExtG = Me.xPositionAppui(iTravee, 0)
+            xExtG = Me.xPositionAppui(True, iTravee)
 
             For iNode = iNodD + 1 To iNodF - 1
                 xPos = Me.Nodes.xGlobal(iNode) - xExtG

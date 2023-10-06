@@ -40,6 +40,7 @@ Public Class Frm_PPVerifications
         MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications()
         GestionLangues()
         GestionStyle()
+        PrepareFenetre()
         RemplirComboLS()
         RemplirComboCriteres(MyProjet.Poutres(MyProjet.IndEnCours))
         MAJ_CritereAAfficher(MyProjet.Poutres(MyProjet.IndEnCours))
@@ -59,9 +60,18 @@ Public Class Frm_PPVerifications
 
     Private Sub GestionLangues()
 
-
         Me.lbl_LimitState.Text = "Limit State"
         Me.lbl_Critere.Text = "Criteria"
+
+        Me.chk_Action.Text = "Actions"
+        Me.chk_Resistance.Text = "Resistances"
+        Me.chk_Numerotation.Text = "Node numbers"
+        Me.chk_Critere.Text = "Criterion"
+
+        Me.lbl_Resultats.Text = "Resuts"
+        Me.lbl_ValMaxCritere.Text = "Valeur maximale"
+        Me.lbl_Node.Text = "Node"
+        Me.lbl_Combinaison.Text = "Combination"
 
         strUltimate = "Ultimate"
         strIncendie = "Fire"
@@ -73,6 +83,7 @@ Public Class Frm_PPVerifications
         strCritereMV = "Resistance to MV interaction"
 
         strNoCritere = "No criterion"
+
     End Sub
 
     Private Sub RemplirComboLS()
@@ -143,6 +154,13 @@ Public Class Frm_PPVerifications
 
     End Sub
 
+    Private Sub PrepareFenetre()
+        Me.chk_Critere.Checked = lDessCritere
+        Me.chk_Action.Checked = lDessAction
+        Me.chk_Resistance.Checked = lDessResistance
+        Me.chk_Numerotation.Checked = lDessNumeros
+    End Sub
+
 #End Region
 
 #Region " Evènements "
@@ -174,6 +192,9 @@ Public Class Frm_PPVerifications
 
         End Select
 
+        Me.txt_Combi.Text = Format(CritereA.iCombiM, "0")
+        Me.txt_Node.Text = Format(CritereA.iNodeM, "0")
+        Me.txt_ValMax.Text = GetStringInUnit(CritereA.CritereMax, Enu_TypeVariable.SansType, 4, 3, False)
 
     End Sub
 
@@ -187,6 +208,27 @@ Public Class Frm_PPVerifications
         CritereA.iCombiM = MyCritere.iCombiM
         CritereA.iNodeM = MyCritere.iNodeM
 
+    End Sub
+
+
+    Private Sub chk_Critere_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Critere.CheckedChanged
+        lDessCritere = Me.chk_Critere.Checked
+        Me.img_Verifications.Invalidate()
+    End Sub
+
+    Private Sub chk_Action_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Action.CheckedChanged
+        lDessAction = Me.chk_Action.Checked
+        Me.img_Verifications.Invalidate()
+    End Sub
+
+    Private Sub chk_Resistance_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Resistance.CheckedChanged
+        lDessResistance = Me.chk_Resistance.Checked
+        Me.img_Verifications.Invalidate()
+    End Sub
+
+    Private Sub chk_Numerotation_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Numerotation.CheckedChanged
+        lDessNumeros = Me.chk_Numerotation.Checked
+        Me.img_Verifications.Invalidate()
     End Sub
 
 #End Region
@@ -233,16 +275,23 @@ Public Class Frm_PPVerifications
 
         Dim Chaine As String
         Dim MyPenB As New SolidBrush(Color.Gray)
-        Const SigneM As Decimal = -1
-        Const SigneV As Decimal = -1
+
         Dim MyFontNum As New Font("Arial", 7)
 
-        Dim ColorResistance = Color.DarkOrange
-        Dim ColorCrit = Color.DarkRed
-        Dim ColorAction = Color.DarkBlue
+        Dim ColorResistance As Color = Color.DarkOrange
+        Dim ColorCrit As Color = Color.DarkRed
+        Dim ColorAction As Color = Color.DarkBlue
+        Dim ColorPoutre As Color = Color.DarkGray
+        Dim ColorSelect As Color = Color.OrangeRed
 
         Dim xo, xe, yo, ye As Decimal
         Dim kEch As Decimal
+
+        Dim valEdMax, valRdMax As Decimal
+        Dim valMax As Decimal
+
+        Dim MyPenPoutre As New Pen(ColorPoutre)
+        Dim MyPenSelect As New Pen(ColorSelect)
 
         '--> Initialisation
 
@@ -260,16 +309,20 @@ Public Class Frm_PPVerifications
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
-        dCar = 0.8 * EcartZ / 2
+        dCar = 0.95 * EcartZ / 2
 
         '--> Affichage de la poutre
 
-        AddLigne(myGr, 0, 0, Longueur, 0, MyParAff)
+        AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
         '--> Affichage des noeuds
 
         For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
-            AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True)
+            If iNode = myCritere.iNodeM Then
+                AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True, MyPenSelect)
+            Else
+                AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True, MyPenPoutre)
+            End If
             If lDessNumeros Then
                 Chaine = "N" & CStr(iNode + 1)
                 AddTexte(myGr, MyPenB, Chaine, MyFontNum, MyPoutre.Nodes.xGlobal(iNode), 0, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
@@ -294,7 +347,79 @@ Public Class Frm_PPVerifications
 
         '--> Affichage des actions et résistances
 
+        If lAction Or lResistance Then
 
+            valEdMax = CritereA.Action.Max
+            valRdMax = CritereA.Resistance.Max
+            valMax = Math.Max(valEdMax, valRdMax)
+
+            If IsEqual(valMax, 0) Then kEch = 1 Else kEch = dCar / valMax
+
+            If lAction Then DessineTableau(myGr, CritereA.Action, kEch, MyPoutre, ColorAction, 1, MyParAff)
+            If lResistance Then DessineTableau(myGr, CritereA.Resistance, kEch, MyPoutre, ColorResistance, 1, MyParAff)
+
+        End If
+
+    End Sub
+
+    Private Sub DessineTableau(MyGr As Graphics, Tableau() As Decimal, kEch As Decimal, MyPoutre As cls_Poutre,
+                               MyCouleur As Color, iPen As Integer, MyParAff As Struc_Affichage)
+        '-----------------------------------------------------------------------------------------------
+        '   06/10/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation du critère 
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   Tableau     [E] :   Table des valeurs à afficher (en diagramme le long de la poutre)
+        '   kEch        [E] :   Facteur d'échelle
+        '   MyPoutre    [E] :   Poutre à dessiner
+        '   MyCouleur   [E] :   Couleur du pinceau
+        '   iPen        [E] :   Largeur du trait
+        '   MyParAff    [E] :   Paramètres d'affichage
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim MyPen As New Pen(MyCouleur, iPen)
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+
+        '--> Représentation de la courbe du critère
+
+        For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
+
+            xo = MyPoutre.Nodes.xGlobal(iNode)
+            xe = MyPoutre.Nodes.xGlobal(iNode + 1)
+            yo = kEch * Tableau(iNode)
+            ye = kEch * Tableau(iNode + 1)
+
+            AddLigne(MyGr, MyPen, xo, yo, xe, ye, MyParAff)
+
+        Next
+
+        '--> Extrémités
+
+        If Not IsEqual(Tableau(0), 0) Then
+
+            xo = 0
+            xe = xo
+            yo = 0
+            ye = kEch * Tableau(0)
+
+            AddLigne(MyGr, MyPen, xo, yo, xe, ye, MyParAff)
+
+        End If
+
+        If Not IsEqual(Tableau(MyPoutre.Nodes.nbNodes - 1), 0) Then
+
+            xo = MyPoutre.Nodes.xGlobal(MyPoutre.Nodes.nbNodes - 1)
+            xe = xo
+            yo = 0
+            ye = kEch * Tableau(MyPoutre.Nodes.nbNodes - 1)
+
+            AddLigne(MyGr, MyPen, xo, yo, xe, ye, MyParAff)
+
+        End If
 
     End Sub
 
@@ -316,9 +441,6 @@ Public Class Frm_PPVerifications
 
         Dim pValMax As Decimal = Math.Ceiling(valMax)
         Dim kEch As Decimal
-        Dim MyPen As New Pen(MyCouleur)
-        Dim xo, yo As Decimal
-        Dim xe, ye As Decimal
 
         '--> Initialisation
 
@@ -328,21 +450,10 @@ Public Class Frm_PPVerifications
 
         '--> Représentation de la courbe du critère
 
-        For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
-
-            xo = MyPoutre.Nodes.xGlobal(iNode)
-            xe = MyPoutre.Nodes.xGlobal(iNode + 1)
-            yo = kEch * CritereA.Critere(iNode)
-            ye = kEch * CritereA.Critere(iNode + 1)
-
-            AddLigne(MyGr, MyPen, xo, yo, xe, ye, MyParAff)
-
-        Next
-
+        DessineTableau(MyGr, valCrit, kEch, MyPoutre, MyCouleur, 2, MyParAff)
 
 
     End Sub
-
 
 
 #End Region
