@@ -59,17 +59,17 @@
         Me.lbl_Scope.BackColor = CouleurBackBandeaux
         Me.lbl_Scope.ForeColor = CouleurForeBandeaux
 
-        PrepareTextBoxExpert(Me.txt_PorteeMini, LogicielOptions.lExpert)
-        PrepareTextBoxExpert(Me.txt_PorteeMaxi, LogicielOptions.lExpert)
-        PrepareTextBoxExpert(Me.txt_PorteeConsoleMin, LogicielOptions.lExpert)
-        PrepareTextBoxExpert(Me.txt_RatioConsoleMax, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_PorteeMini, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_PorteeMaxi, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_PorteeConsoleMin, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_RatioConsoleMax, LogicielOptions.lExpert)
 
-        PrepareTextBoxExpert(Me.txt_EpDalleMin, LogicielOptions.lExpert)
-        PrepareTextBoxExpert(Me.txt_EpDalleMixteMin, LogicielOptions.lExpert)
-        PrepareTextBoxExpert(Me.txt_RatioEpReformis, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_EpDalleMin, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_EpDalleMixteMin, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_RatioEpReformis, LogicielOptions.lExpert)
 
-        PrepareTextBoxExpert(Me.txt_RhoC_LWC_Min, LogicielOptions.lExpert)
-        PrepareTextBoxExpert(Me.txt_RhoC_LWC_Max, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_RhoC_LWC_Min, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_RhoC_LWC_Max, LogicielOptions.lExpert)
 
     End Sub
 

@@ -192,8 +192,8 @@ Public Class Frm_PPVerifications
 
         End Select
 
-        Me.txt_Combi.Text = Format(CritereA.iCombiM, "0")
-        Me.txt_Node.Text = Format(CritereA.iNodeM, "0")
+        Me.txt_Combi.Text = MyPoutre.CombiA_ELU.Symbole(CritereA.iCombiM)            ' Format(CritereA.iCombiM, "0")
+        Me.txt_Node.Text = Format(CritereA.iNodeM + 1, "0")
         Me.txt_ValMax.Text = GetStringInUnit(CritereA.CritereMax, Enu_TypeVariable.SansType, 4, 3, False)
 
     End Sub
@@ -291,7 +291,7 @@ Public Class Frm_PPVerifications
         Dim valMax As Decimal
 
         Dim MyPenPoutre As New Pen(ColorPoutre)
-        Dim MyPenSelect As New Pen(ColorSelect)
+        Dim MyPenSelect As New Pen(ColorSelect, 2)
 
         '--> Initialisation
 

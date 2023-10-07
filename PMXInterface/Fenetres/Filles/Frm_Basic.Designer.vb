@@ -22,6 +22,7 @@ Partial Class Frm_Basic
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_Basic))
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
@@ -34,6 +35,9 @@ Partial Class Frm_Basic
         Me.lbl_Portees = New System.Windows.Forms.Label()
         Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
         Me.img_Portees = New System.Windows.Forms.PictureBox()
+        Me.btn_Precedent = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btn_Moins = New System.Windows.Forms.Button()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -41,6 +45,7 @@ Partial Class Frm_Basic
         Me.TLPan_Portees.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
+        Me.pan_SaisiePortee.SuspendLayout()
         CType(Me.img_Portees, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -183,6 +188,9 @@ Partial Class Frm_Basic
         '
         Me.pan_SaisiePortee.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisiePortee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisiePortee.Controls.Add(Me.btn_Moins)
+        Me.pan_SaisiePortee.Controls.Add(Me.Button1)
+        Me.pan_SaisiePortee.Controls.Add(Me.btn_Precedent)
         Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0)
@@ -201,6 +209,39 @@ Partial Class Frm_Basic
         Me.img_Portees.TabIndex = 1
         Me.img_Portees.TabStop = False
         '
+        'btn_Precedent
+        '
+        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
+        Me.btn_Precedent.Location = New System.Drawing.Point(126, 73)
+        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Precedent.Name = "btn_Precedent"
+        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Precedent.TabIndex = 11
+        Me.btn_Precedent.TabStop = False
+        Me.btn_Precedent.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.Image = CType(resources.GetObject("Button1.Image"), System.Drawing.Image)
+        Me.Button1.Location = New System.Drawing.Point(149, 73)
+        Me.Button1.Margin = New System.Windows.Forms.Padding(0)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(23, 12)
+        Me.Button1.TabIndex = 12
+        Me.Button1.TabStop = False
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'btn_Moins
+        '
+        Me.btn_Moins.Image = CType(resources.GetObject("btn_Moins.Image"), System.Drawing.Image)
+        Me.btn_Moins.Location = New System.Drawing.Point(149, 84)
+        Me.btn_Moins.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Moins.Name = "btn_Moins"
+        Me.btn_Moins.Size = New System.Drawing.Size(23, 12)
+        Me.btn_Moins.TabIndex = 13
+        Me.btn_Moins.TabStop = False
+        Me.btn_Moins.UseVisualStyleBackColor = True
+        '
         'Frm_Basic
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -217,6 +258,7 @@ Partial Class Frm_Basic
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
+        Me.pan_SaisiePortee.ResumeLayout(False)
         CType(Me.img_Portees, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -234,4 +276,7 @@ Partial Class Frm_Basic
     Friend WithEvents lbl_Portees As Label
     Friend WithEvents pan_SaisiePortee As Panel
     Friend WithEvents img_Portees As PictureBox
+    Friend WithEvents btn_Moins As Button
+    Friend WithEvents Button1 As Button
+    Friend WithEvents btn_Precedent As Button
 End Class

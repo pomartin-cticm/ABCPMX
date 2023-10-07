@@ -1054,7 +1054,7 @@ Module Mod_Outils
 
 #Region " Preparation des objets "
 
-    Public Sub PrepareTextBoxExpert(ByRef MyTxt As TextBox, lDispo As Boolean)
+    Public Sub PrepareTextBoxDipo(ByRef MyTxt As TextBox, lDispo As Boolean)
         '------------------------------------------------------------------------------------
         '   10/08/23 :  Création - POM
         '------------------------------------------------------------------------------------

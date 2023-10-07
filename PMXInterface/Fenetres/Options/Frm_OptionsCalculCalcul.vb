@@ -77,10 +77,10 @@ Public Class Frm_OptionsCalculCalcul
         Me.lbl_Calcul.BackColor = CouleurBackBandeaux
         Me.lbl_Calcul.ForeColor = CouleurForeBandeaux
 
-        PrepareTextBoxExpert(Me.txt_PsiLG, LogicielOptions.lExpert)
-        PrepareTextBoxExpert(Me.txt_PsiLSH, LogicielOptions.lExpert)
-        PrepareTextBoxExpert(Me.txt_t0SHEnrob, LogicielOptions.lExpert)
-        PrepareTextBoxExpert(Me.txt_t0SHDalle, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_PsiLG, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_PsiLSH, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_t0SHEnrob, LogicielOptions.lExpert)
+        PrepareTextBoxDipo(Me.txt_t0SHDalle, LogicielOptions.lExpert)
 
     End Sub
 

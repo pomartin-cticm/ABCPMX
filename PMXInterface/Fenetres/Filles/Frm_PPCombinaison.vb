@@ -35,7 +35,8 @@ Public Class Frm_PPCombinaison
     Dim EL_Rz() As Decimal                  ' Réactions aux appuis
     Dim fMin, fMax As Decimal               ' Flèches enveloppes
     Dim Mmin, Mmax As Decimal               ' Moments enveloppes
-    Dim Vmin, Vmax As Decimal               ' Moments enveloppes
+    Dim Vmin, Vmax As Decimal               ' Effort tranchants enveloppes
+    Dim iNodeMmax, iNodeMmin As Integer     ' Position des moments enveloppes
 
     Dim lCombiRetrait As Boolean = True     ' Indique si on combine le retrait ou non
 
@@ -221,7 +222,7 @@ Public Class Frm_PPCombinaison
 
             '# Moments
 
-            ValMaxTableau2D(EL_My, Mmin, Mmax)
+            ValMaxTableau2D(EL_My, Mmin, Mmax, iNodeMmax, iNodeMmin)
             Me.txt_Mmax.Text = GetStringInUnit(Mmax, Enu_TypeVariable.Moment, 3, 3, False)
             Me.txt_Mmin.Text = GetStringInUnit(Mmin, Enu_TypeVariable.Moment, 3, 3, False)
 
@@ -411,6 +412,57 @@ Public Class Frm_PPCombinaison
         Next
     End Sub
 
+
+    Private Sub ValMaxTableau2D(MonTableau(,) As Decimal, ByRef ValMin As Decimal, ByRef ValMax As Decimal,
+                                ByRef iNodeMax As Integer, ByRef iNodeMin As Integer)
+        '----------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Renvoie les valeurs min et max d'un tableau à une dimension
+        '----------------------------------------------------------------------------------------------------------------
+        '   MonTableau  [E] :   Tableau à traiter
+        '   ValMin      [S] :   Valeur mini du tableau    
+        '   ValMax      [S] :   Valeur maxi du tableau
+        '   iNodeMax    [S] :   Indice du tableau ou est obtenue la valeur max
+        '   iNodeMin    [S] :   Indice du tableau ou est obtenue la valeur min
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbVal() As Integer = {MonTableau.GetUpperBound(0), MonTableau.GetUpperBound(1)}
+        Dim i, j As Integer
+
+        '--> Traitement
+
+        ValMax = MonTableau(0, 0)
+        ValMin = MonTableau(0, 0)
+
+        For j = 1 To nbVal(1)
+            ValMax = Math.Max(ValMax, MonTableau(0, j))
+            ValMin = Math.Min(ValMin, MonTableau(0, j))
+        Next
+        iNodeMin = 0
+        iNodeMax = 0
+
+        For i = 1 To nbVal(0)
+
+            For j = 0 To nbVal(1)
+
+                If IsGreater(MonTableau(i, j), ValMax) Then
+                    ValMax = MonTableau(i, j)
+                    iNodeMax = i
+                End If
+
+                If IsSmaller(MonTableau(i, j), ValMin) Then
+                    ValMin = MonTableau(i, j)
+                    iNodeMin = i
+                End If
+
+            Next
+
+        Next
+    End Sub
+
     Private Sub ValMaxTableau1D(MonTableau() As Decimal, ByRef ValMin As Decimal, ByRef ValMax As Decimal)
         '----------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
@@ -565,6 +617,12 @@ Public Class Frm_PPCombinaison
         Dim xo, xe, yo, ye As Decimal
         Dim kEch As Decimal
 
+        Dim ColorPoutre As Color = Color.DarkGray
+
+        Dim MyPenPoutre As New Pen(ColorPoutre)
+        Dim MyPenSelect As New Pen(ColorSelect, 2)
+        Dim MyPen As Pen
+
         '--> Initialisation
 
         If lBuild Then Exit Sub
@@ -590,7 +648,9 @@ Public Class Frm_PPCombinaison
         '--> Affichage des noeuds
 
         For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
-            AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True)
+            If iNode = iNodeMmax Then MyPen = MyPenSelect Else MyPen = MyPenPoutre
+
+            AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True, MyPen)
             If lDessNumeros Then
                 Chaine = "N" & CStr(iNode + 1)
                 AddTexte(myGr, MyPenB, Chaine, MyFontNum, MyPoutre.Nodes.xGlobal(iNode), 0, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)

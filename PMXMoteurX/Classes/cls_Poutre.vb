@@ -3133,4 +3133,42 @@ Public Class cls_Poutre
 
 #End Region
 
+#Region " Outils poutres mixtes "
+
+    Public Sub MaillageDegreConnexion(bEff() As Decimal, SigneM As Decimal, ByRef DegreC() As Decimal)
+        '------------------------------------------------------------------------------------------------------------------
+        '    07/10/23 : Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Calcul du degré de connexion le long de la barre (au droit des noeuds du maillage)
+        '------------------------------------------------------------------------------------------------------------------
+        '   bEff        [E] :   Largeur de dalle
+        '   SigneM      [E] :   Signe du moment
+        '   DegreC      [S] :   Degré de connexion
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim RConnexG, RConnexD, RConnex As Decimal
+
+        '--> Initialisation
+
+        ReDim DegreC(Me.Nodes.nbNodes - 1)
+
+
+        '--> Boucle sur les noeuds
+
+        For iNode As Integer = 0 To Me.Nodes.nbNodes - 1
+
+            'RConnexG = ResistanceConnexionMixte(xSec, MyBeam.PorteeH, MyBeam.SectionSup.Bf, MyBeam.Dalle, CoefGammaVRd1, CoefGammaVRd2, False, True)
+            'RConnexD = ResistanceConnexionMixte(xSec, MyBeam.PorteeH, MyBeam.SectionSup.Bf, MyBeam.Dalle, CoefGammaVRd1, CoefGammaVRd2, False, False)
+            RConnex = Math.Min(RConnexG, RConnexD)
+
+
+        Next
+
+    End Sub
+
+
+#End Region
+
 End Class

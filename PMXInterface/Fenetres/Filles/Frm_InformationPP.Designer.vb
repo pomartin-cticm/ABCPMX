@@ -30,11 +30,17 @@ Partial Class Frm_InformationPP
         Me.TLPan_PartieHaute = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.img_qp = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitQp = New System.Windows.Forms.Label()
         Me.lbl_BacAcier = New System.Windows.Forms.Label()
+        Me.etq_UnitQc = New System.Windows.Forms.Label()
         Me.img_qc = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitDc = New System.Windows.Forms.Label()
         Me.lbl_DalleBeton = New System.Windows.Forms.Label()
+        Me.etq_UnitAc = New System.Windows.Forms.Label()
         Me.img_dc = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitMup = New System.Windows.Forms.Label()
         Me.txt_qp = New System.Windows.Forms.TextBox()
+        Me.etq_UnitRhoc = New System.Windows.Forms.Label()
         Me.img_Ac = New System.Windows.Forms.PictureBox()
         Me.txt_qc = New System.Windows.Forms.TextBox()
         Me.img_mup = New System.Windows.Forms.PictureBox()
@@ -45,6 +51,12 @@ Partial Class Frm_InformationPP
         Me.txt_rhoc = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.img_qec = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitQec = New System.Windows.Forms.Label()
+        Me.etq_UnitQa = New System.Windows.Forms.Label()
+        Me.etq_UnitAec = New System.Windows.Forms.Label()
+        Me.etq_UnitAa = New System.Windows.Forms.Label()
+        Me.etq_UnitRhoec = New System.Windows.Forms.Label()
+        Me.etq_UnitRhoa = New System.Windows.Forms.Label()
         Me.img_qa = New System.Windows.Forms.PictureBox()
         Me.img_Aec = New System.Windows.Forms.PictureBox()
         Me.img_Aa = New System.Windows.Forms.PictureBox()
@@ -61,6 +73,8 @@ Partial Class Frm_InformationPP
         Me.lbl_PP_Profile = New System.Windows.Forms.Label()
         Me.lbl_PP_Dalle = New System.Windows.Forms.Label()
         Me.pan_ParametresGeneraux = New System.Windows.Forms.Panel()
+        Me.etq_UnitQTot = New System.Windows.Forms.Label()
+        Me.etq_UnitGravite = New System.Windows.Forms.Label()
         Me.img_qTot = New System.Windows.Forms.PictureBox()
         Me.lbl_Gravite = New System.Windows.Forms.Label()
         Me.txt_Gravite = New System.Windows.Forms.TextBox()
@@ -70,20 +84,6 @@ Partial Class Frm_InformationPP
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_General = New System.Windows.Forms.Panel()
-        Me.etq_UnitGravite = New System.Windows.Forms.Label()
-        Me.etq_UnitQTot = New System.Windows.Forms.Label()
-        Me.etq_UnitRhoa = New System.Windows.Forms.Label()
-        Me.etq_UnitAa = New System.Windows.Forms.Label()
-        Me.etq_UnitQa = New System.Windows.Forms.Label()
-        Me.etq_UnitRhoec = New System.Windows.Forms.Label()
-        Me.etq_UnitAec = New System.Windows.Forms.Label()
-        Me.etq_UnitQec = New System.Windows.Forms.Label()
-        Me.etq_UnitRhoc = New System.Windows.Forms.Label()
-        Me.etq_UnitMup = New System.Windows.Forms.Label()
-        Me.etq_UnitAc = New System.Windows.Forms.Label()
-        Me.etq_UnitDc = New System.Windows.Forms.Label()
-        Me.etq_UnitQc = New System.Windows.Forms.Label()
-        Me.etq_UnitQp = New System.Windows.Forms.Label()
         Me.TLPan_PartieHaute.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.img_qp, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -223,6 +223,15 @@ Partial Class Frm_InformationPP
         Me.img_qp.TabIndex = 79
         Me.img_qp.TabStop = False
         '
+        'etq_UnitQp
+        '
+        Me.etq_UnitQp.AutoSize = True
+        Me.etq_UnitQp.Location = New System.Drawing.Point(456, 105)
+        Me.etq_UnitQp.Name = "etq_UnitQp"
+        Me.etq_UnitQp.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitQp.TabIndex = 80
+        Me.etq_UnitQp.Text = "kN"
+        '
         'lbl_BacAcier
         '
         Me.lbl_BacAcier.Anchor = System.Windows.Forms.AnchorStyles.Left
@@ -233,6 +242,15 @@ Partial Class Frm_InformationPP
         Me.lbl_BacAcier.Text = "lbl_BacAcier"
         Me.lbl_BacAcier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'etq_UnitQc
+        '
+        Me.etq_UnitQc.AutoSize = True
+        Me.etq_UnitQc.Location = New System.Drawing.Point(219, 105)
+        Me.etq_UnitQc.Name = "etq_UnitQc"
+        Me.etq_UnitQc.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitQc.TabIndex = 80
+        Me.etq_UnitQc.Text = "kN"
+        '
         'img_qc
         '
         Me.img_qc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -241,6 +259,15 @@ Partial Class Frm_InformationPP
         Me.img_qc.Size = New System.Drawing.Size(46, 20)
         Me.img_qc.TabIndex = 79
         Me.img_qc.TabStop = False
+        '
+        'etq_UnitDc
+        '
+        Me.etq_UnitDc.AutoSize = True
+        Me.etq_UnitDc.Location = New System.Drawing.Point(456, 76)
+        Me.etq_UnitDc.Name = "etq_UnitDc"
+        Me.etq_UnitDc.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitDc.TabIndex = 80
+        Me.etq_UnitDc.Text = "kN"
         '
         'lbl_DalleBeton
         '
@@ -252,6 +279,15 @@ Partial Class Frm_InformationPP
         Me.lbl_DalleBeton.Text = "lbl_DalleBeton"
         Me.lbl_DalleBeton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'etq_UnitAc
+        '
+        Me.etq_UnitAc.AutoSize = True
+        Me.etq_UnitAc.Location = New System.Drawing.Point(219, 76)
+        Me.etq_UnitAc.Name = "etq_UnitAc"
+        Me.etq_UnitAc.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitAc.TabIndex = 80
+        Me.etq_UnitAc.Text = "kN"
+        '
         'img_dc
         '
         Me.img_dc.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -261,6 +297,15 @@ Partial Class Frm_InformationPP
         Me.img_dc.TabIndex = 79
         Me.img_dc.TabStop = False
         '
+        'etq_UnitMup
+        '
+        Me.etq_UnitMup.AutoSize = True
+        Me.etq_UnitMup.Location = New System.Drawing.Point(456, 50)
+        Me.etq_UnitMup.Name = "etq_UnitMup"
+        Me.etq_UnitMup.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitMup.TabIndex = 80
+        Me.etq_UnitMup.Text = "kN"
+        '
         'txt_qp
         '
         Me.txt_qp.Anchor = System.Windows.Forms.AnchorStyles.Left
@@ -269,6 +314,15 @@ Partial Class Frm_InformationPP
         Me.txt_qp.ReadOnly = True
         Me.txt_qp.Size = New System.Drawing.Size(110, 20)
         Me.txt_qp.TabIndex = 77
+        '
+        'etq_UnitRhoc
+        '
+        Me.etq_UnitRhoc.AutoSize = True
+        Me.etq_UnitRhoc.Location = New System.Drawing.Point(219, 50)
+        Me.etq_UnitRhoc.Name = "etq_UnitRhoc"
+        Me.etq_UnitRhoc.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitRhoc.TabIndex = 80
+        Me.etq_UnitRhoc.Text = "kN"
         '
         'img_Ac
         '
@@ -381,6 +435,60 @@ Partial Class Frm_InformationPP
         Me.img_qec.Size = New System.Drawing.Size(46, 20)
         Me.img_qec.TabIndex = 79
         Me.img_qec.TabStop = False
+        '
+        'etq_UnitQec
+        '
+        Me.etq_UnitQec.AutoSize = True
+        Me.etq_UnitQec.Location = New System.Drawing.Point(456, 103)
+        Me.etq_UnitQec.Name = "etq_UnitQec"
+        Me.etq_UnitQec.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitQec.TabIndex = 80
+        Me.etq_UnitQec.Text = "kN"
+        '
+        'etq_UnitQa
+        '
+        Me.etq_UnitQa.AutoSize = True
+        Me.etq_UnitQa.Location = New System.Drawing.Point(219, 103)
+        Me.etq_UnitQa.Name = "etq_UnitQa"
+        Me.etq_UnitQa.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitQa.TabIndex = 80
+        Me.etq_UnitQa.Text = "kN"
+        '
+        'etq_UnitAec
+        '
+        Me.etq_UnitAec.AutoSize = True
+        Me.etq_UnitAec.Location = New System.Drawing.Point(456, 74)
+        Me.etq_UnitAec.Name = "etq_UnitAec"
+        Me.etq_UnitAec.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitAec.TabIndex = 80
+        Me.etq_UnitAec.Text = "kN"
+        '
+        'etq_UnitAa
+        '
+        Me.etq_UnitAa.AutoSize = True
+        Me.etq_UnitAa.Location = New System.Drawing.Point(219, 74)
+        Me.etq_UnitAa.Name = "etq_UnitAa"
+        Me.etq_UnitAa.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitAa.TabIndex = 80
+        Me.etq_UnitAa.Text = "kN"
+        '
+        'etq_UnitRhoec
+        '
+        Me.etq_UnitRhoec.AutoSize = True
+        Me.etq_UnitRhoec.Location = New System.Drawing.Point(456, 48)
+        Me.etq_UnitRhoec.Name = "etq_UnitRhoec"
+        Me.etq_UnitRhoec.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitRhoec.TabIndex = 80
+        Me.etq_UnitRhoec.Text = "kN"
+        '
+        'etq_UnitRhoa
+        '
+        Me.etq_UnitRhoa.AutoSize = True
+        Me.etq_UnitRhoa.Location = New System.Drawing.Point(219, 48)
+        Me.etq_UnitRhoa.Name = "etq_UnitRhoa"
+        Me.etq_UnitRhoa.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitRhoa.TabIndex = 80
+        Me.etq_UnitRhoa.Text = "kN"
         '
         'img_qa
         '
@@ -550,6 +658,24 @@ Partial Class Frm_InformationPP
         Me.pan_ParametresGeneraux.Size = New System.Drawing.Size(510, 110)
         Me.pan_ParametresGeneraux.TabIndex = 1
         '
+        'etq_UnitQTot
+        '
+        Me.etq_UnitQTot.AutoSize = True
+        Me.etq_UnitQTot.Location = New System.Drawing.Point(456, 50)
+        Me.etq_UnitQTot.Name = "etq_UnitQTot"
+        Me.etq_UnitQTot.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitQTot.TabIndex = 80
+        Me.etq_UnitQTot.Text = "kN"
+        '
+        'etq_UnitGravite
+        '
+        Me.etq_UnitGravite.AutoSize = True
+        Me.etq_UnitGravite.Location = New System.Drawing.Point(219, 76)
+        Me.etq_UnitGravite.Name = "etq_UnitGravite"
+        Me.etq_UnitGravite.Size = New System.Drawing.Size(21, 13)
+        Me.etq_UnitGravite.TabIndex = 80
+        Me.etq_UnitGravite.Text = "kN"
+        '
         'img_qTot
         '
         Me.img_qTot.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -650,132 +776,6 @@ Partial Class Frm_InformationPP
         Me.pan_General.Name = "pan_General"
         Me.pan_General.Size = New System.Drawing.Size(512, 544)
         Me.pan_General.TabIndex = 4
-        '
-        'etq_UnitGravite
-        '
-        Me.etq_UnitGravite.AutoSize = True
-        Me.etq_UnitGravite.Location = New System.Drawing.Point(219, 76)
-        Me.etq_UnitGravite.Name = "etq_UnitGravite"
-        Me.etq_UnitGravite.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitGravite.TabIndex = 80
-        Me.etq_UnitGravite.Text = "kN"
-        '
-        'etq_UnitQTot
-        '
-        Me.etq_UnitQTot.AutoSize = True
-        Me.etq_UnitQTot.Location = New System.Drawing.Point(456, 50)
-        Me.etq_UnitQTot.Name = "etq_UnitQTot"
-        Me.etq_UnitQTot.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitQTot.TabIndex = 80
-        Me.etq_UnitQTot.Text = "kN"
-        '
-        'etq_UnitRhoa
-        '
-        Me.etq_UnitRhoa.AutoSize = True
-        Me.etq_UnitRhoa.Location = New System.Drawing.Point(219, 48)
-        Me.etq_UnitRhoa.Name = "etq_UnitRhoa"
-        Me.etq_UnitRhoa.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitRhoa.TabIndex = 80
-        Me.etq_UnitRhoa.Text = "kN"
-        '
-        'etq_UnitAa
-        '
-        Me.etq_UnitAa.AutoSize = True
-        Me.etq_UnitAa.Location = New System.Drawing.Point(219, 74)
-        Me.etq_UnitAa.Name = "etq_UnitAa"
-        Me.etq_UnitAa.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitAa.TabIndex = 80
-        Me.etq_UnitAa.Text = "kN"
-        '
-        'etq_UnitQa
-        '
-        Me.etq_UnitQa.AutoSize = True
-        Me.etq_UnitQa.Location = New System.Drawing.Point(219, 103)
-        Me.etq_UnitQa.Name = "etq_UnitQa"
-        Me.etq_UnitQa.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitQa.TabIndex = 80
-        Me.etq_UnitQa.Text = "kN"
-        '
-        'etq_UnitRhoec
-        '
-        Me.etq_UnitRhoec.AutoSize = True
-        Me.etq_UnitRhoec.Location = New System.Drawing.Point(456, 48)
-        Me.etq_UnitRhoec.Name = "etq_UnitRhoec"
-        Me.etq_UnitRhoec.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitRhoec.TabIndex = 80
-        Me.etq_UnitRhoec.Text = "kN"
-        '
-        'etq_UnitAec
-        '
-        Me.etq_UnitAec.AutoSize = True
-        Me.etq_UnitAec.Location = New System.Drawing.Point(456, 74)
-        Me.etq_UnitAec.Name = "etq_UnitAec"
-        Me.etq_UnitAec.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitAec.TabIndex = 80
-        Me.etq_UnitAec.Text = "kN"
-        '
-        'etq_UnitQec
-        '
-        Me.etq_UnitQec.AutoSize = True
-        Me.etq_UnitQec.Location = New System.Drawing.Point(456, 103)
-        Me.etq_UnitQec.Name = "etq_UnitQec"
-        Me.etq_UnitQec.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitQec.TabIndex = 80
-        Me.etq_UnitQec.Text = "kN"
-        '
-        'etq_UnitRhoc
-        '
-        Me.etq_UnitRhoc.AutoSize = True
-        Me.etq_UnitRhoc.Location = New System.Drawing.Point(219, 50)
-        Me.etq_UnitRhoc.Name = "etq_UnitRhoc"
-        Me.etq_UnitRhoc.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitRhoc.TabIndex = 80
-        Me.etq_UnitRhoc.Text = "kN"
-        '
-        'etq_UnitMup
-        '
-        Me.etq_UnitMup.AutoSize = True
-        Me.etq_UnitMup.Location = New System.Drawing.Point(456, 50)
-        Me.etq_UnitMup.Name = "etq_UnitMup"
-        Me.etq_UnitMup.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitMup.TabIndex = 80
-        Me.etq_UnitMup.Text = "kN"
-        '
-        'etq_UnitAc
-        '
-        Me.etq_UnitAc.AutoSize = True
-        Me.etq_UnitAc.Location = New System.Drawing.Point(219, 76)
-        Me.etq_UnitAc.Name = "etq_UnitAc"
-        Me.etq_UnitAc.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitAc.TabIndex = 80
-        Me.etq_UnitAc.Text = "kN"
-        '
-        'etq_UnitDc
-        '
-        Me.etq_UnitDc.AutoSize = True
-        Me.etq_UnitDc.Location = New System.Drawing.Point(456, 76)
-        Me.etq_UnitDc.Name = "etq_UnitDc"
-        Me.etq_UnitDc.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitDc.TabIndex = 80
-        Me.etq_UnitDc.Text = "kN"
-        '
-        'etq_UnitQc
-        '
-        Me.etq_UnitQc.AutoSize = True
-        Me.etq_UnitQc.Location = New System.Drawing.Point(219, 105)
-        Me.etq_UnitQc.Name = "etq_UnitQc"
-        Me.etq_UnitQc.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitQc.TabIndex = 80
-        Me.etq_UnitQc.Text = "kN"
-        '
-        'etq_UnitQp
-        '
-        Me.etq_UnitQp.AutoSize = True
-        Me.etq_UnitQp.Location = New System.Drawing.Point(456, 105)
-        Me.etq_UnitQp.Name = "etq_UnitQp"
-        Me.etq_UnitQp.Size = New System.Drawing.Size(21, 13)
-        Me.etq_UnitQp.TabIndex = 80
-        Me.etq_UnitQp.Text = "kN"
         '
         'Frm_InformationPP
         '

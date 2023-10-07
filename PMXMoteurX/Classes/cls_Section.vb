@@ -852,7 +852,7 @@ Public Class cls_Section
         End Get
     End Property
 
-    Public Function VRd(GammaM0 As Decimal) As Decimal
+    Public Function VplRd(GammaM0 As Decimal) As Decimal
 
         Dim MyVRd As Decimal = 0
 
@@ -874,7 +874,7 @@ Public Class cls_Section
     Public Function RhoInteractionMV(VEd As Decimal, GammaM0 As Decimal) As Decimal
 
         Dim Rho As Decimal
-        Dim VRd As Decimal = Me.VRd(GammaM0)
+        Dim VRd As Decimal = Me.VplRd(GammaM0)
 
         Dim VEdAbs As Decimal = Math.Abs(VEd)
 

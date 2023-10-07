@@ -394,7 +394,7 @@ Partial Class Frm_PPVerifications
         Me.txt_Node.Name = "txt_Node"
         Me.txt_Node.Size = New System.Drawing.Size(66, 20)
         Me.txt_Node.TabIndex = 74
-        Me.txt_Node.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.txt_Node.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'txt_Combi
         '
@@ -403,7 +403,7 @@ Partial Class Frm_PPVerifications
         Me.txt_Combi.Name = "txt_Combi"
         Me.txt_Combi.Size = New System.Drawing.Size(66, 20)
         Me.txt_Combi.TabIndex = 73
-        Me.txt_Combi.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.txt_Combi.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lbl_Node
         '
@@ -440,7 +440,7 @@ Partial Class Frm_PPVerifications
         Me.txt_ValMax.Name = "txt_ValMax"
         Me.txt_ValMax.Size = New System.Drawing.Size(66, 20)
         Me.txt_ValMax.TabIndex = 69
-        Me.txt_ValMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.txt_ValMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
         'lbl_ValMaxCritere
         '

@@ -8,8 +8,9 @@
 
 #Region " Attributs "
 
-    Public CritereM As cls_Critere
-    Public CritereV As cls_Critere
+    Public CritereM As cls_Critere                  ' Resistance à la flexion
+    Public CritereV As cls_Critere                  ' Resistance effort tranchant
+    Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
 
 #End Region
 
@@ -23,6 +24,7 @@
 
         Me.CritereM = New cls_Critere(NbNodes)
         Me.CritereV = New cls_Critere(NbNodes)
+        Me.CritereVb = New cls_Critere(NbNodes)
 
     End Sub
 
@@ -53,6 +55,7 @@
         Dim ClasseSection(,) As Integer                 ' Tableau dimensions (NbNodes, 0 ou 1 pour moments positifs et négatifs resp.)
         Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
         Dim lSimple As Boolean = False
+        Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
 
         '--> Initialisations
 
@@ -74,9 +77,18 @@
         '# Classes de la section
 
 
+
         '--> Boucle sur les combinaisons
 
         For iCombi = 0 To MyPoutre.CombiA_ELU.nbCombi - 1
+
+            '# Controle de la classe des sections
+
+
+
+            '# Degré de connexion
+
+
 
             '# Combinaisons des moments, efforts tranchants
 
@@ -91,6 +103,10 @@
             Me.CriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdPlus, MplRdMoins)
 
             '# Vérification sous effort tranchant
+
+
+            '# Vérification au voilement par cisaillement
+
 
             '# Vérification sous interaction MV
 

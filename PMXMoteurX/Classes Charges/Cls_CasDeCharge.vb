@@ -219,14 +219,16 @@
 
     End Sub
 
-    Public Sub EnveloppesMoments(ByRef Mmax As Decimal, ByRef Mmin As Decimal)
+    Public Sub EnveloppesMoments(ByRef Mmax As Decimal, ByRef iNodeMax As Integer, ByRef Mmin As Decimal, ByRef iNodeMin As Integer)
         '-----------------------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
         '   Renvoie les moments enveloppes issues des résultats du calcul EF
         '-----------------------------------------------------------------------------------------------------------
-        '   MMax        [E] :   Valeur max de la flèche
-        '   MMin        [E] :   Valeur min de la flèche
+        '   MMax        [S] :   Valeur max de la flèche
+        '   MMin        [S] :   Valeur min de la flèche
+        '   iNodeMax    [S] :   Indice du noeud avec le moment maxi
+        '   iNodeMin    [S] :   Indice du noeud avec le moment mini
         '-----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -237,7 +239,7 @@
 
         If Me.lRunCalcul Then
             NbNodes = Me.UZ.GetUpperBound(0) + 1
-            Me.EnveloppeTableau(Me.MYY, NbNodes, Mmax, Mmin)
+            Me.EnveloppeTableau(Me.MYY, NbNodes, Mmax, Mmin, iNodeMax, iNodeMin)
         End If
 
     End Sub
@@ -261,6 +263,41 @@
             For j = 0 To 1
                 ValMax = Math.Max(MyTab(i, j), ValMax)
                 ValMin = Math.Min(MyTab(i, j), ValMin)
+            Next
+        Next
+
+    End Sub
+
+    Private Sub EnveloppeTableau(MyTab(,) As Decimal, NbNodes As Integer, ByRef ValMax As Decimal, ByRef ValMin As Decimal,
+                                 ByRef iNodeValMax As Integer, ByRef iNodeValMin As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les valeurs enveloppes d'un tableau à 2 dimensions
+        '-----------------------------------------------------------------------------------------------------------
+        '   MyTab       [E] :   Tableau à traiter
+        '   NbNodes     [E] :   Dimension 1 du tableau
+        '   ValMax      [S] :   Valeur max du tableau
+        '   ValMin      [S] :   Valeur min du tableau
+        '   iNodeValMax [S] :   Indice du noeud pour la valeur maxi
+        '   iNodeValMin [S] :   Indice du noeud pour la valeur mini
+        '-----------------------------------------------------------------------------------------------------------
+
+        ValMax = Math.Max(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+        ValMin = Math.Min(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+        iNodeValMax = 0
+        iNodeValMin = 0
+
+        For i As Integer = 1 To NbNodes - 2
+            For j = 0 To 1
+                If IsGreater(MyTab(i, j), ValMax) Then
+                    ValMax = MyTab(i, j)
+                    iNodeValMax = i
+                End If
+                If IsSmaller(MyTab(i, j), ValMin) Then
+                    ValMin = MyTab(i, j)
+                    iNodeValMin = i
+                End If
             Next
         Next
 

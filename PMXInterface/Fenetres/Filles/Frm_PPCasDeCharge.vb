@@ -13,7 +13,9 @@ Public Class Frm_PPCasDeCharge
     Dim fMinG As Decimal
 
     Dim tab_Mmin() As Decimal
+    Dim tab_iNodeMmin() As Decimal
     Dim tab_Mmax() As Decimal
+    Dim tab_iNodeMmax() As Decimal
     Dim tab_Vmin() As Decimal
     Dim tab_Vmax() As Decimal
     Dim MmaxG As Decimal
@@ -30,6 +32,7 @@ Public Class Frm_PPCasDeCharge
     Dim lDessEchLocal As Boolean = False
 
     Private ColorDeg As Color = Color.Cornsilk
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -127,6 +130,8 @@ Public Class Frm_PPCasDeCharge
         ReDim tab_fMin(NbC - 1)
         ReDim tab_Mmax(NbC - 1)
         ReDim tab_Mmin(NbC - 1)
+        ReDim tab_iNodeMmax(NbC - 1)
+        ReDim tab_iNodeMmin(NbC - 1)
         ReDim tab_Vmax(NbC - 1)
         ReDim tab_Vmin(NbC - 1)
 
@@ -140,7 +145,7 @@ Public Class Frm_PPCasDeCharge
                 fMinG = Math.Min(fMinG, tab_fMin(i))
             End If
 
-            MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).EnveloppesMoments(tab_Mmax(i), tab_Mmin(i))
+            MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).EnveloppesMoments(tab_Mmax(i), tab_iNodeMmax(i), tab_Mmin(i), tab_iNodeMmin(i))
             If i = 0 Then
                 MmaxG = tab_Mmax(i)
                 MminG = tab_Mmin(i)
@@ -298,11 +303,19 @@ Public Class Frm_PPCasDeCharge
         Dim MyFontNum As New Font("Arial", 7)
         Dim Chaine As String
         Dim MyPenB As New SolidBrush(Color.Gray)
-        Dim valMin, valMax As Decimal
+        'Dim valMin, valMax As Decimal
 
         Dim ColorDef = Color.DarkOrange
         Dim ColorDiagM = Color.DarkRed
         Dim ColorDiagV = Color.DarkBlue
+
+        Dim iNodeMax, iNodeMin As Integer
+
+        Dim ColorPoutre As Color = Color.DarkGray
+
+        Dim MyPenPoutre As New Pen(ColorPoutre)
+        Dim MyPenSelect As New Pen(ColorSelect, 2)
+        Dim MyPen As Pen
 
         '--> Initialisation
 
@@ -323,14 +336,27 @@ Public Class Frm_PPCasDeCharge
 
         dCar = 0.8 * EcartZ / 2
 
+        'If SigneM = 1 Then
+        iNodeMax = tab_iNodeMmax(iCas)
+            iNodeMin = tab_iNodeMmin(iCas)
+        'Else
+        'iNodeMax = tab_iNodeMmin(iCas)
+        'iNodeMin = tab_iNodeMmax(iCas)
+        'End If
+
         '--> Affichage de la poutre
 
-        AddLigne(myGr, 0, 0, Longueur, 0, MyParAff)
+        AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
         '--> Affichage des noeuds
 
         For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
-            AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True)
+            If iNode = iNodeMax Then
+                MyPen = MyPenSelect
+            Else
+                MyPen = MyPenPoutre
+            End If
+            AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True, MyPen)
             If lDessNumeros Then
                 Chaine = "N" & CStr(iNode + 1)
                 AddTexte(myGr, MyPenB, Chaine, MyFontNum, MyPoutre.Nodes.xGlobal(iNode), 0, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)

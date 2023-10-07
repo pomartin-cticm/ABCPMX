@@ -354,8 +354,8 @@ Public Class Frm_Dalle
 
     Private Sub MAJI_SaisieEpMixte()
 
-        PrepareTextBoxExpert(Me.txt_Td2, DefEpMixte = Enu_DefEpMixte.Totale)
-        PrepareTextBoxExpert(Me.txt_Tc, DefEpMixte = Enu_DefEpMixte.Pleine)
+        PrepareTextBoxDipo(Me.txt_Td2, DefEpMixte = Enu_DefEpMixte.Totale)
+        PrepareTextBoxDipo(Me.txt_Tc, DefEpMixte = Enu_DefEpMixte.Pleine)
 
     End Sub
 
