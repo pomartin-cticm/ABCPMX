@@ -118,6 +118,7 @@ Partial Class Frm_Chargement
         Me.lbl_ChoixCharges = New System.Windows.Forms.Label()
         Me.pan_ChoixCharges = New System.Windows.Forms.Panel()
         Me.lbl_ChoixCharge = New System.Windows.Forms.Label()
+        Me.lbl_NameLoad = New System.Windows.Forms.Label()
         Me.lbl_ChoixTravee = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btn_Precedent = New System.Windows.Forms.Button()
@@ -1244,6 +1245,7 @@ Partial Class Frm_Chargement
         Me.pan_ChoixCharges.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ChoixCharges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_ChoixCharges.Controls.Add(Me.lbl_ChoixCharge)
+        Me.pan_ChoixCharges.Controls.Add(Me.lbl_NameLoad)
         Me.pan_ChoixCharges.Controls.Add(Me.lbl_ChoixTravee)
         Me.pan_ChoixCharges.Controls.Add(Me.Panel1)
         Me.pan_ChoixCharges.Controls.Add(Me.rad_Qc)
@@ -1267,10 +1269,19 @@ Partial Class Frm_Chargement
         Me.lbl_ChoixCharge.TabIndex = 79
         Me.lbl_ChoixCharge.Text = "lbl_ChoixCharge"
         '
+        'lbl_NameLoad
+        '
+        Me.lbl_NameLoad.Location = New System.Drawing.Point(14, 120)
+        Me.lbl_NameLoad.Name = "lbl_NameLoad"
+        Me.lbl_NameLoad.Size = New System.Drawing.Size(215, 29)
+        Me.lbl_NameLoad.TabIndex = 78
+        Me.lbl_NameLoad.Text = "lbl_NameLoad"
+        Me.lbl_NameLoad.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        '
         'lbl_ChoixTravee
         '
         Me.lbl_ChoixTravee.AutoSize = True
-        Me.lbl_ChoixTravee.Location = New System.Drawing.Point(14, 149)
+        Me.lbl_ChoixTravee.Location = New System.Drawing.Point(14, 163)
         Me.lbl_ChoixTravee.Name = "lbl_ChoixTravee"
         Me.lbl_ChoixTravee.Size = New System.Drawing.Size(83, 13)
         Me.lbl_ChoixTravee.TabIndex = 78
@@ -1282,7 +1293,7 @@ Partial Class Frm_Chargement
         Me.Panel1.Controls.Add(Me.btn_Precedent)
         Me.Panel1.Controls.Add(Me.btn_Suivant)
         Me.Panel1.Controls.Add(Me.cmb_Travee)
-        Me.Panel1.Location = New System.Drawing.Point(27, 176)
+        Me.Panel1.Location = New System.Drawing.Point(27, 190)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(185, 28)
         Me.Panel1.TabIndex = 77
@@ -1580,4 +1591,5 @@ Partial Class Frm_Chargement
     Friend WithEvents img_Chargement As PictureBox
     Friend WithEvents ErrorProvider_Frm_Chargement As ErrorProvider
     Friend WithEvents txt_Indice_Lineique_1 As TextBox
+    Friend WithEvents lbl_NameLoad As Label
 End Class

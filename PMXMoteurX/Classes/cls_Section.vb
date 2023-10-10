@@ -865,6 +865,38 @@ Public Class cls_Section
         Return MyVRd
     End Function
 
+    Public Function VbRd(GammaM1 As Decimal, EtaW As Decimal, lTwoAdjacentCantilevers As Boolean) As Decimal
+
+        'lTwoAdjacentCantilevers: indique la présence de deux travées adjacentes en consoles (True) ou non
+
+        Dim lambda_w As Decimal
+        Dim k_tau As Decimal
+        Dim epsilon_w As Decimal
+        Dim khi_w As Decimal
+        Dim MyVbRd As Decimal
+
+        k_tau = 5.34
+        epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
+        lambda_w = (Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) * (1 / (37.4 * epsilon_w * Math.Sqrt(k_tau)))
+
+        If lambda_w <= 0.83 / EtaW Then
+            khi_w = EtaW
+        ElseIf lambda_w <= 1.08 Then
+            khi_w = 0.83 / lambda_w
+        Else 'lambda_w>1.08
+            If lTwoAdjacentCantilevers Then
+                khi_w = 1.37 / (0.7 + lambda_w)
+            Else
+                khi_w = 0.83 / lambda_w
+            End If
+        End If
+
+        MyVbRd = khi_w * Me.ProfilA.HauteurAmeHw * Me.ProfilA.Tw * Me.Acier.f_y.w / (Math.Sqrt(3) * GammaM1)
+
+        Return MyVbRd
+
+    End Function
+
     Public ReadOnly Property AireAv As Decimal
         Get
             Return Me.ProfilA.AireAv
@@ -984,7 +1016,7 @@ Public Class cls_Section
 
 #End Region
 
-#Region " Fonctions de cpoie "
+#Region " Fonctions de copie "
 
     Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
@@ -1023,6 +1055,323 @@ Public Class cls_Section
         's_destination.Param.Prop_Elastique_Dalle = s_origine.Param.Prop_Elastique_Dalle.Clone()
 
     End Sub
+
+#End Region
+
+#Region "Classification section acier"
+
+    Public Function ClasseSectionSansEnrobage(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean) As Integer
+
+        '----------------------------------------------------------------------------------------------------------
+        '   10/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul de la classe d'une section acier usuelle (sans enrobage)
+        '----------------------------------------------------------------------------------------------------------
+        '   zANP                [E] :   Position de l'ANP (compté algébriquement depuis la face supérieure du profilé)
+        '   zANE                [E] :   Position de l'ANE (compté algébriquement depuis la face supérieure du profilé)
+        '   lFlexionPositive    [E] :   Indique si le calcul se fait en considérant une flexion positive (True) ou non (False)
+
+        '----------------------------------------------------------------------------------------------------------
+
+        Dim classeSemellesSup, classeAme, classeSemellesInf, classeSection As Integer
+        Dim cfsup, cw, cfinf As Decimal
+        Dim epsilon_fsup, epsilon_w, epsilon_finf As Decimal
+        Dim alpha, psi As Decimal
+
+        If lFlexionPositive Then
+
+            '### Calcul avec hypothèse répartition plastique
+
+
+            ' --> Calcul classe semelle supérieure
+            If Me.ProfilA.Tfs <= -zANP Then 'semelle sup comprimée
+
+                cfsup = (Me.ProfilA.Bfs - Me.ProfilA.Tw) / 2 - Me.ProfilA.Rcs
+                epsilon_fsup = Math.Sqrt(235 / Me.Acier.f_y.fs)
+
+                Select Case cfsup / Me.ProfilA.Tfs
+                    Case <= 9 * epsilon_fsup
+                        classeSemellesSup = 1
+                    Case <= 10 * epsilon_fsup
+                        classeSemellesSup = 2
+                    Case <= 14 * epsilon_fsup
+                        classeSemellesSup = 3
+                    Case Else
+                        classeSemellesSup = 4
+                End Select
+
+            Else 'semelle sup tendue
+
+                classeSemellesSup = 1
+
+            End If
+
+
+            ' --> Calcul classe semelle inférieure
+
+            classeSemellesInf = 1
+
+
+            ' --> Calcul classe âme
+
+            cw = Me.ProfilA.HauteurAmeDw
+            epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
+
+            If zANP >= -(Me.ProfilA.Tfs + Me.ProfilA.Rcs) Then 'Ame entierement tendue
+                classeAme = 1
+
+            Else 'Ame en partie ou totalement comprimée
+
+                If zANP <= -(Me.ProfilA.Tfs + Me.ProfilA.Rcs + Me.ProfilA.HauteurAmeDw) Then 'Ame entierement comprimée
+                    alpha = 1
+                Else 'Ame partiellement comprimée
+                    alpha = (-zANP - Me.ProfilA.Tfs - Me.ProfilA.Rcs) / Me.ProfilA.HauteurAmeDw
+                End If
+
+                If alpha > 0.5 Then
+                    Select Case cw / Me.ProfilA.Tw
+                        Case <= 396 * epsilon_w / (13 * alpha - 1)
+                            classeAme = 1
+                        Case <= 456 * epsilon_w / (13 * alpha - 1)
+                            classeAme = 2
+                        Case Else
+                            classeAme = 3
+                    End Select
+                Else 'alpha<=0.5
+                    Select Case cw / Me.ProfilA.Tw
+                        Case <= 36 * epsilon_w / alpha
+                            classeAme = 1
+                        Case <= 41.5 * epsilon_w / alpha
+                            classeAme = 2
+                        Case Else
+                            classeAme = 3
+                    End Select
+                End If
+
+            End If
+
+            classeSection = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, classeAme))
+
+            If classeSection = 3 Then
+                '### Calcul avec hypothèse répartition élastique
+
+                If Me.ProfilA.Tfs <= -zANE Then 'semelle sup comprimée
+
+                    cfsup = (Me.ProfilA.Bfs - Me.ProfilA.Tw) / 2 - Me.ProfilA.Rcs
+                    epsilon_fsup = Math.Sqrt(235 / Me.Acier.f_y.fs)
+
+                    Select Case cfsup / Me.ProfilA.Tfs
+                        Case <= 9 * epsilon_fsup
+                            classeSemellesSup = 1
+                        Case <= 10 * epsilon_fsup
+                            classeSemellesSup = 2
+                        Case <= 14 * epsilon_fsup
+                            classeSemellesSup = 3
+                        Case Else
+                            classeSemellesSup = 4
+                    End Select
+
+                Else 'semelle sup tendue
+
+                    classeSemellesSup = 1
+
+                End If
+
+
+                ' --> Calcul classe semelle inférieure
+
+                classeSemellesInf = 1
+
+                ' --> Calcul classe âme
+
+                If zANE >= -(Me.ProfilA.Tfs + Me.ProfilA.Rcs) Then 'Ame entierement tendue
+                    classeAme = 1
+
+                Else 'Ame en partie ou totalement comprimée
+
+                    psi = (-zANE - (Me.ProfilA.ha - Me.ProfilA.Tfi - Me.ProfilA.Plat_t - Me.ProfilA.Rci)) / (-zANE - Me.ProfilA.Tfs - Me.ProfilA.Rcs)
+
+                    If psi > -1 Then
+                        If cw / Me.ProfilA.Tw <= 42 * epsilon_w / (0.67 + 0.33 * psi) Then
+                            classeAme = 3
+                        Else
+                            classeAme = 4
+                        End If
+
+                    Else 'psi<=-1
+                        If cw / Me.ProfilA.Tw <= 62 * epsilon_w * (1 - psi) * Math.Sqrt(-psi) Then
+                            classeAme = 3
+                        Else
+                            classeAme = 4
+                        End If
+                    End If
+
+                End If
+
+                classeSection = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, classeAme))
+                classeSection = Math.Max(classeSection, 3)
+
+            End If
+
+        Else 'Flexion négative
+
+            '### Calcul avec hypothèse répartition plastique
+
+
+            ' --> Calcul classe semelle supérieure
+
+            If Me.ProfilA.Tfs >= -zANP Then 'semelle sup comprimée
+
+                cfsup = (Me.ProfilA.Bfs - Me.ProfilA.Tw) / 2 - Me.ProfilA.Rcs
+                epsilon_fsup = Math.Sqrt(235 / Me.Acier.f_y.fs)
+
+                Select Case cfsup / Me.ProfilA.Tfs
+                    Case <= 9 * epsilon_fsup
+                        classeSemellesSup = 1
+                    Case <= 10 * epsilon_fsup
+                        classeSemellesSup = 2
+                    Case <= 14 * epsilon_fsup
+                        classeSemellesSup = 3
+                    Case Else
+                        classeSemellesSup = 4
+                End Select
+
+            Else 'semelle sup tendue
+
+                classeSemellesSup = 1
+
+            End If
+
+
+            ' --> Calcul classe semelle inférieure
+
+            cfinf = (Me.ProfilA.Bfi - Me.ProfilA.Tw) / 2 - Me.ProfilA.Rci
+            epsilon_finf = Math.Sqrt(235 / Me.Acier.f_y.fi)
+
+            Select Case cfinf / Me.ProfilA.Tfi
+                Case <= 9 * epsilon_finf
+                    classeSemellesInf = 1
+                Case <= 10 * epsilon_finf
+                    classeSemellesInf = 2
+                Case <= 14 * epsilon_finf
+                    classeSemellesInf = 3
+                Case Else
+                    classeSemellesInf = 4
+            End Select
+
+
+
+            ' --> Calcul classe âme
+
+            cw = Me.ProfilA.HauteurAmeDw
+            epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
+
+            If zANP >= -(Me.ProfilA.Tfs + Me.ProfilA.Rcs + Me.ProfilA.HauteurAmeDw) Then 'Ame entierement tendue
+                classeAme = 1
+
+            Else 'Ame en partie ou totalement comprimée
+
+                If zANP <= -(Me.ProfilA.Tfs + Me.ProfilA.Rcs) Then 'Ame entierement comprimée
+                    alpha = 1
+                Else 'Ame partiellement comprimée
+                    alpha = (Me.ProfilA.ha - Me.ProfilA.Tfi - Me.ProfilA.Plat_t - Me.ProfilA.Rci + zANP) / Me.ProfilA.HauteurAmeDw
+                End If
+
+                If alpha > 0.5 Then
+                    Select Case cw / Me.ProfilA.Tw
+                        Case <= 396 * epsilon_w / (13 * alpha - 1)
+                            classeAme = 1
+                        Case <= 456 * epsilon_w / (13 * alpha - 1)
+                            classeAme = 2
+                        Case Else
+                            classeAme = 3
+                    End Select
+                Else 'alpha<=0.5
+                    Select Case cw / Me.ProfilA.Tw
+                        Case <= 36 * epsilon_w / alpha
+                            classeAme = 1
+                        Case <= 41.5 * epsilon_w / alpha
+                            classeAme = 2
+                        Case Else
+                            classeAme = 3
+                    End Select
+                End If
+
+            End If
+
+            classeSection = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, classeAme))
+
+
+            If classeSection = 3 Then
+                '### Calcul avec hypothèse répartition élastique
+
+                If Me.ProfilA.Tfs >= -zANE Then 'semelle sup comprimée
+
+                    cfsup = (Me.ProfilA.Bfs - Me.ProfilA.Tw) / 2 - Me.ProfilA.Rcs
+                    epsilon_fsup = Math.Sqrt(235 / Me.Acier.f_y.fs)
+
+                    Select Case cfsup / Me.ProfilA.Tfs
+                        Case <= 9 * epsilon_fsup
+                            classeSemellesSup = 1
+                        Case <= 10 * epsilon_fsup
+                            classeSemellesSup = 2
+                        Case <= 14 * epsilon_fsup
+                            classeSemellesSup = 3
+                        Case Else
+                            classeSemellesSup = 4
+                    End Select
+
+                Else 'semelle sup tendue
+
+                    classeSemellesSup = 1
+
+                End If
+
+
+                ' --> Calcul classe semelle inférieure
+
+                classeSemellesInf = 1
+
+                ' --> Calcul classe âme
+
+                If zANE >= -(Me.ProfilA.Tfs + Me.ProfilA.Rcs) Then 'Ame entierement tendue
+                    classeAme = 1
+
+                Else 'Ame en partie ou totalement comprimée
+
+                    psi = (-zANE - (Me.ProfilA.ha - Me.ProfilA.Tfi - Me.ProfilA.Plat_t - Me.ProfilA.Rci)) / (-zANE - Me.ProfilA.Tfs - Me.ProfilA.Rcs)
+
+                    If psi > -1 Then
+                        If cw / Me.ProfilA.Tw <= 42 * epsilon_w / (0.67 + 0.33 * psi) Then
+                            classeAme = 3
+                        Else
+                            classeAme = 4
+                        End If
+
+                    Else 'psi<=-1
+                        If cw / Me.ProfilA.Tw <= 62 * epsilon_w * (1 - psi) * Math.Sqrt(-psi) Then
+                            classeAme = 3
+                        Else
+                            classeAme = 4
+                        End If
+                    End If
+
+                End If
+
+                classeSection = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, classeAme))
+                classeSection = Math.Max(classeSection, 3)
+
+            End If
+
+        End If
+
+        Return classeSection
+
+    End Function
+
+    Public Function ClasseSectionAvecEnrobage() As Integer
+
+    End Function
 
 #End Region
 

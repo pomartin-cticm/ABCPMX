@@ -194,6 +194,10 @@ Module Mod_Demarrage
             LogicielOptions.Gamma.Psi1_Q2 = My.Settings.Psi1
             LogicielOptions.Gamma.Psi2_Q2 = My.Settings.Psi2
 
+            '--> Coefficient pour le voilement par cisaillement de la poutre acier
+
+            LogicielOptions.EtaW = My.Settings.EtaW
+
 
         Catch ex As Exception
 

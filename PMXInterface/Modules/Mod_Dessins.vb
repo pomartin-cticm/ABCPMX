@@ -4233,6 +4233,12 @@ Module Mod_Dessins
         Dim LongueurPoutre, LongueurTravee, LongueurConsoleGauche, LongueurConsoleDroite, HauteurPoutre As Decimal
         'Dim LongueurDalle, HauteurDalle As Decimal
         Dim MyBrushA As New SolidBrush(Color.LightGray)
+        Dim MyBrushSelectTravee As SolidBrush
+        If MyPoutre.lTraveeConsoleGauche Or MyPoutre.lTraveeConsoleDroite Then
+            MyBrushSelectTravee = New SolidBrush(Color.LightSalmon)
+        Else
+            MyBrushSelectTravee = MyBrushA
+        End If
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyPenDot As New Pen(Color.Black, 1) With {
             .DashStyle = DashStyle.Dash
@@ -4311,7 +4317,16 @@ Module Mod_Dessins
 
         xo = 0
         xe = LongueurConsoleGauche
-        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+        If traveeEnCours = 0 Then
+            AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+        Else
+            AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+        End If
+
+
+        'If traveeEnCours = 0 Then
+        '    AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo - dCar, yo - dCar, xe + dCar, ye + dCar, MyParAff, True, True)
+        'End If
 
         For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
 
@@ -4323,6 +4338,16 @@ Module Mod_Dessins
 
             AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
 
+            If traveeEnCours = i Then
+                AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+            Else
+                AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+            End If
+
+            'If traveeEnCours = i Then
+            '    AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo - dCar, yo - dCar, xe + dCar, ye + dCar, MyParAff, True, True)
+            'End If
+
         Next
 
         yo = 0
@@ -4330,7 +4355,16 @@ Module Mod_Dessins
 
         xo = xe
         xe = xo + LongueurConsoleDroite
-        AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+
+        If traveeEnCours = MyPoutre.IndiceTraveeConsoleDroite Then
+            AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+        Else
+            AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+        End If
+
+        'If traveeEnCours = MyPoutre.IndiceTraveeConsoleDroite Then
+        '    AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo - dCar, yo - dCar, xe + dCar, ye + dCar, MyParAff, True, True)
+        'End If
 
         '--> Représentation des appuis et les maintiens associés
 

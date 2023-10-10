@@ -37,13 +37,13 @@ Partial Class Frm_Etaiement
         Me.rad_FullyPropped = New System.Windows.Forms.RadioButton()
         Me.rad_UnPropped = New System.Windows.Forms.RadioButton()
         Me.pan_PointProps = New System.Windows.Forms.Panel()
+        Me.cmb_LocPP = New System.Windows.Forms.ComboBox()
         Me.cmb_NbPoint = New System.Windows.Forms.ComboBox()
+        Me.lbl_LocPP = New System.Windows.Forms.Label()
         Me.chk_EtaisConsoleDroite = New System.Windows.Forms.CheckBox()
         Me.lbl_NbPP = New System.Windows.Forms.Label()
         Me.chk_EtaisConsoleGauche = New System.Windows.Forms.CheckBox()
         Me.img_Etaiement = New System.Windows.Forms.PictureBox()
-        Me.lbl_LocPP = New System.Windows.Forms.Label()
-        Me.cmb_LocPP = New System.Windows.Forms.ComboBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -251,6 +251,15 @@ Partial Class Frm_Etaiement
         Me.pan_PointProps.Size = New System.Drawing.Size(232, 183)
         Me.pan_PointProps.TabIndex = 8
         '
+        'cmb_LocPP
+        '
+        Me.cmb_LocPP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_LocPP.FormattingEnabled = True
+        Me.cmb_LocPP.Location = New System.Drawing.Point(68, 149)
+        Me.cmb_LocPP.Name = "cmb_LocPP"
+        Me.cmb_LocPP.Size = New System.Drawing.Size(137, 21)
+        Me.cmb_LocPP.TabIndex = 3
+        '
         'cmb_NbPoint
         '
         Me.cmb_NbPoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
@@ -259,6 +268,15 @@ Partial Class Frm_Etaiement
         Me.cmb_NbPoint.Name = "cmb_NbPoint"
         Me.cmb_NbPoint.Size = New System.Drawing.Size(111, 21)
         Me.cmb_NbPoint.TabIndex = 3
+        '
+        'lbl_LocPP
+        '
+        Me.lbl_LocPP.AutoSize = True
+        Me.lbl_LocPP.Location = New System.Drawing.Point(1, 130)
+        Me.lbl_LocPP.Name = "lbl_LocPP"
+        Me.lbl_LocPP.Size = New System.Drawing.Size(55, 13)
+        Me.lbl_LocPP.TabIndex = 6
+        Me.lbl_LocPP.Text = "lbl_LocPP"
         '
         'chk_EtaisConsoleDroite
         '
@@ -298,24 +316,6 @@ Partial Class Frm_Etaiement
         Me.img_Etaiement.Size = New System.Drawing.Size(100, 50)
         Me.img_Etaiement.TabIndex = 1
         Me.img_Etaiement.TabStop = False
-        '
-        'lbl_LocPP
-        '
-        Me.lbl_LocPP.AutoSize = True
-        Me.lbl_LocPP.Location = New System.Drawing.Point(1, 130)
-        Me.lbl_LocPP.Name = "lbl_LocPP"
-        Me.lbl_LocPP.Size = New System.Drawing.Size(55, 13)
-        Me.lbl_LocPP.TabIndex = 6
-        Me.lbl_LocPP.Text = "lbl_LocPP"
-        '
-        'cmb_LocPP
-        '
-        Me.cmb_LocPP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_LocPP.FormattingEnabled = True
-        Me.cmb_LocPP.Location = New System.Drawing.Point(68, 149)
-        Me.cmb_LocPP.Name = "cmb_LocPP"
-        Me.cmb_LocPP.Size = New System.Drawing.Size(137, 21)
-        Me.cmb_LocPP.TabIndex = 3
         '
         'Frm_Etaiement
         '

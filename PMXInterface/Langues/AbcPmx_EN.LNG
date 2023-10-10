@@ -58,6 +58,12 @@ RIGHTSUPPORT			= Right support
 ADD						= Add
 DELETE					= Delete
 INFORMATION				= Information
+INFO_G					= Permanent loads
+INFO_G1					= Permanent loads (before concrete pouring)
+INFO_G2					= Additional permanent loads (after concrete pouring)
+INFO_Q1					= Live load 1
+INFO_Q2					= Live load 2
+INFO_QC					= Construction phase live load
 
 #FRM_COMBINATIONS
 TITLE					= Combinations

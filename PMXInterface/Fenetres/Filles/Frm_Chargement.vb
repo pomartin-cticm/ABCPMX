@@ -23,6 +23,14 @@ Public Class Frm_Chargement
     Dim strTypeTravee_ConsoleDroite As String
     Dim strSpan As String
 
+    'Définition de strings locaux pour le nom de la variable en cours 
+    Dim strInfoG As String
+    Dim strInfoG1 As String
+    Dim strInfoG2 As String
+    Dim strInfoQ1 As String
+    Dim strInfoQ2 As String
+    Dim strInfoQc As String
+
     'Variables locales
     Dim NbTravees As Integer
     Dim NbChargeLineique, NbChargePonctuelle As Integer
@@ -82,6 +90,7 @@ Public Class Frm_Chargement
         PrepareFlechesNavigation()
         MAJI_BtnNavigation()
         AfficherPoutreEnCours()
+        MAJIAffichageNomChargeEnCours()
         MAJIAffichageChargeSurfacique()
         MAJIAffichageTableauxLineique()
         MAJIAffichageButtonsLineiques()
@@ -238,6 +247,13 @@ Public Class Frm_Chargement
 
                 WarningMessage_CmbTravee = Bloc("WARNING_CMBTRAVEE")
 
+                strInfoG = Bloc("INFO_G")
+                strInfoG1 = Bloc("INFO_G1")
+                strInfoG2 = Bloc("INFO_G2")
+                strInfoQ1 = Bloc("INFO_Q1")
+                strInfoQ2 = Bloc("INFO_Q2")
+                strInfoQc = Bloc("INFO_QC")
+
                 '=== FORCE SURFACIQUE ==============================================================='
                 Me.lbl_ChargesSurfaciques.Text = Bloc("SURFACELOAD")
                 Me.lbl_WidthApplication.Text = Bloc("WIDTHAPPLICATION")
@@ -297,6 +313,13 @@ Public Class Frm_Chargement
         Me.Icon = Frm_PMX.Icon
 
         Me.rad_Qc.Visible = MyPoutreLoc.lMixte
+        If MyPoutreLoc.lMixte Then
+            Me.rad_G1.Text = "G1"
+        Else
+            Me.rad_G1.Text = "G"
+        End If
+        Me.rad_G2.Visible = MyPoutreLoc.lMixte
+
 
         Me.lbl_ChoixCharges.BackColor = CouleurBackBandeaux
         Me.lbl_ChoixCharges.ForeColor = CouleurForeBandeaux
@@ -531,7 +554,25 @@ Public Class Frm_Chargement
 #End Region
 
 #Region " Evènements "
+    Private Sub MAJIAffichageNomChargeEnCours()
+        Select Case True
+            Case rad_G1.Checked
+                If MyPoutreLoc.lMixte Then
+                    Me.lbl_NameLoad.Text = strInfoG1
+                Else
+                    Me.lbl_NameLoad.Text = strInfoG
+                End If
 
+            Case rad_G2.Checked
+                Me.lbl_NameLoad.Text = strInfoG2
+            Case rad_Q1.Checked
+                Me.lbl_NameLoad.Text = strInfoQ1
+            Case rad_Q2.Checked
+                Me.lbl_NameLoad.Text = strInfoQ2
+            Case rad_Qc.Checked
+                Me.lbl_NameLoad.Text = strInfoQc
+        End Select
+    End Sub
 
 #End Region
 
@@ -568,6 +609,7 @@ Public Class Frm_Chargement
             NbChargeLineique = MyPoutreLoc.ChargesU(chargeEnCours).FReparties(traveeEnCours).Count
             NbChargePonctuelle = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
 
+            MAJIAffichageNomChargeEnCours()
             MAJIAffichageChargeSurfacique()
             MAJIAffichageButtonsLineiques()
             MAJIAffichageTableauxLineique()
@@ -611,7 +653,7 @@ Public Class Frm_Chargement
 
         End If
 
-                img_Chargement.Invalidate()
+        img_Chargement.Invalidate()
 
     End Sub
 

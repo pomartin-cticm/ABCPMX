@@ -115,13 +115,13 @@ Public Class Frm_Etaiement
                 Case .EnuTypeEtaiement.PointPropped
                     Me.rad_PointPropped.Checked = True
 
-                    If .lTraveeConsoleDroite Then
+                    If Not .lTraveeConsoleDroite Then
                         Me.chk_EtaisConsoleDroite.Checked = False
                     Else
                         Me.chk_EtaisConsoleDroite.Checked = .lEtaisConsoleDroite
                     End If
 
-                    If .lTraveeConsoleGauche Then
+                    If Not .lTraveeConsoleGauche Then
                         Me.chk_EtaisConsoleGauche.Checked = False
                     Else
                         Me.chk_EtaisConsoleGauche.Checked = .lEtaisConsoleGauche
@@ -306,8 +306,9 @@ Public Class Frm_Etaiement
 
         MyPoutreLoc.lEtaisSousProfileAcier = cmb_LocPP.SelectedIndex = 0
 
-    End Sub
+        img_Etaiement.Invalidate()
 
+    End Sub
 
 #End Region
 

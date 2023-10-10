@@ -45,10 +45,15 @@
 
         Dim iCombi As Integer
         Dim MEd(,), VEd(,) As Decimal
+        Dim VplRd As Decimal = 0                        ' Effort tranchant résistant (a priori constant le long de la poutre)
+        Dim VbRd As Decimal = 0                         ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
+        Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
         Dim MplRdPlus() As Decimal = {0}                ' Moments plastiques positifs
         Dim MplRdMoins() As Decimal = {0}               ' Moments plastiques négatifs
         Dim zANPPlus() As Decimal = {0}                 ' Position des ANP sous moment > 0
         Dim zANPMoins() As Decimal = {0}                ' Position des ANP sous moment < 0
+        Dim zANEPlus() As Decimal = {0}                 ' Position des ANE sous moment > 0
+        Dim zANEMoins() As Decimal = {0}                ' Position des ANE sous moment < 0
         Const lCombiRetrait = False                     '#ALERTE Pour le moment, à pondérer plus tard
         Dim lRElastiqueImpose As Boolean = False        ' Vérification élastique imposée
         Dim lRElastique As Boolean
@@ -66,6 +71,14 @@
         '# Largeurs participantes
 
         MyPoutre.MaillageBeff(lSimple, False, Beff)
+
+        '# Tranchant résistant
+        VplRd = MyPoutre.Section.VplRd(MyPoutre.Param.Gamma.GammaM0)
+
+        '# Résistance au voilement par cisaillement
+        lTwoAdjacentCantilevers = MyPoutre.lTraveeConsoleGauche And MyPoutre.lTraveeConsoleDroite
+
+        VbRd = MyPoutre.Section.VbRd(MyPoutre.Param.Gamma.GammaM1, MyPoutre.Param.EtaW, lTwoAdjacentCantilevers)
 
         '# Moments plastiques
 
@@ -103,7 +116,7 @@
             Me.CriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdPlus, MplRdMoins)
 
             '# Vérification sous effort tranchant
-
+            Me.CritereTranchants(MyPoutre, iCombi, VEd, VplRd)
 
             '# Vérification au voilement par cisaillement
 
@@ -161,7 +174,73 @@
 
     End Sub
 
-    Private Sub CritereTranchants()
+    Private Sub CritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   10/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'effort tranchant 
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   VEd     [E] :   Table des efforts tranchants le long de la barre
+        '   VplRd   [E] :   Table des efforts tranchants résistant plastique le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Critere As Decimal
+        Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim iNode As Integer
+        Dim VEdMax As Decimal
+
+        '--> Boucle sur les noeuds
+
+        For iNode = 0 To nbNodes - 1
+
+            If Math.Abs(VEd(iNode, 0)) > Math.Abs(VEd(iNode, 1)) Then
+                VEdMax = VEd(iNode, 0)
+            Else
+                VEdMax = VEd(iNode, 1)
+            End If
+
+            Me.CritereV.EnregistreCritere(iNode, iCombi, VEdMax, VplRd)
+
+        Next
+
+    End Sub
+
+    Private Sub CritereVoilementCisaillement(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VbRd As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   10/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'effort tranchant 
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   VEd     [E] :   Table des efforts tranchants le long de la barre
+        '   VRd     [E] :   Table des résistances au voilement par cisaillement le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Critere As Decimal
+        Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim iNode As Integer
+        Dim VEdMax As Decimal
+
+        '--> Boucle sur les noeuds
+
+        For iNode = 0 To nbNodes - 1
+
+            If Math.Abs(VEd(iNode, 0)) > Math.Abs(VEd(iNode, 1)) Then
+                VEdMax = VEd(iNode, 0)
+            Else
+                VEdMax = VEd(iNode, 1)
+            End If
+
+            Me.CritereVb.EnregistreCritere(iNode, iCombi, VEdMax, VbRd)
+
+        Next
 
     End Sub
 

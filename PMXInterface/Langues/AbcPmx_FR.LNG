@@ -37,6 +37,60 @@ NAVIGATION				= Navigation
 ZOOM					= Zoom
 SAVEAS					= Enresitrer sous
 
+#FRM_CHARGEMENT
+TITLE					= Définition des cas de charge
+OK						= Ok
+CANCEL					= Annuler
+LOADCASE				= Cas de charge 
+LEFTCANT				= Console gauche
+MAINSPAN				= Travée principale
+RIGHTCANT				= Console droite
+SPAN					= Travée
+WARNING_CMBTRAVEE			= L'ensemble des données doivent être correctes pour pouvoir sélectionner une autre travée 
+SURFACELOAD				= Charge surfacique
+WIDTHAPPLICATION		= Largeur d'application
+UNIFORMLOAD				= Charge uniforme
+RESULTINGFORCE			= Force verticale résultante
+DISTRIBUTEDLOAD			= Charge linéique
+CONCENTRATEDLOAD		= Charge ponctuelle
+FORCEENDSUPPORT			= Réactions d'appuis
+LEFTSUPPORT				= Appui gauche
+RIGHTSUPPORT			= Appui droit
+ADD						= Ajouter
+DELETE					= Supprimer
+INFORMATION				= Information
+INFO_G					= Charge permanente
+INFO_G1					= Charge permanente (avant coulage du béton)
+INFO_G2					= Charge permanente additionnelle (après coulage du béton)
+INFO_Q1					= Charge d'exploitation 1
+INFO_Q2					= Charge d'exploitation 2
+INFO_QC					= Charge de construction
+
+#FRM_COMBINATIONS
+TITLE					= Combinaisons
+OK						= Ok
+CANCEL					= Annuler
+ULSTATES		 		= Etats limites ultimes
+SLSTATES				= Etats limites de service
+FLSTATES				= Etats limites incendie
+CONSTRUCTIONSTAGE		= Phase de construction
+
+#FRM_COMBINATIONS1
+PREDEFINED				= Combinaisons prédéfinies selon l'EN 1990
+CUSTOM					= Combinaison personnalisée
+COMBINATION				= Combinaison
+ULS						= ELU
+SLS						= ELS
+FLS						= ELF
+NUMBER					= No
+
+#FRM_COMBINATIONS2
+ULSTATES		 		= Etats limites ultimes durant la construction
+SLSTATES				= Etats limites de service durant la construction
+ULS						= ELU
+SLS						= ELS
+COMBINATION				= Combinaison
+
 #FRM_CONNECTION
 TITLE					= Définition de la connection
 OK						= Ok

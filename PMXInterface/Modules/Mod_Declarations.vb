@@ -139,6 +139,8 @@ Module Mod_Declarations
 
         Public Gamma As cls_Gamma
 
+        Public EtaW As Decimal                      ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
+
     End Structure
 
     Public Structure Struc_InformationLogiciel
