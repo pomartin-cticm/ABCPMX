@@ -3947,6 +3947,7 @@ Module Mod_Dessins
         Dim MyParAff As Struc_Affichage
         Dim xo, yo As Decimal
         Dim xe, ye As Decimal
+        Dim yPosEtais As Decimal
         Dim LongueurPoutre, HauteurPoutre As Decimal
         Dim LongueurDalle, HauteurDalle As Decimal
         Dim MyBrushA As New SolidBrush(Color.LightGray)
@@ -3977,6 +3978,12 @@ Module Mod_Dessins
         xMax = LongueurPoutre
         yMin = -dCar - dCarApp
         yMax = HauteurPoutre + dCar
+
+        If MyPoutre.lEtaisSousProfileAcier Then
+            yPosEtais = 0
+        Else
+            yPosEtais = HauteurPoutre
+        End If
 
         If MyPoutre.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
@@ -4013,7 +4020,7 @@ Module Mod_Dessins
 
             If MyPoutre.lTraveeConsoleGauche Then
                 xo = MyPoutre.xPositionAppui(True, 0)
-                DessineEtais(MyGr, xo, dCarApp, MyParAff)
+                DessineEtais(MyGr, xo, yPosEtais, dCarApp, MyParAff)
             End If
 
         End If
@@ -4022,7 +4029,7 @@ Module Mod_Dessins
 
             If MyPoutre.lTraveeConsoleDroite Then
                 xo = MyPoutre.xPositionAppui(False, MyPoutre.IndiceDerniereTravee)
-                DessineEtais(MyGr, xo, 0.75 * dCarApp, MyParAff)
+                DessineEtais(MyGr, xo, yPosEtais, 0.75 * dCarApp, MyParAff)
             End If
 
         End If
@@ -4034,7 +4041,7 @@ Module Mod_Dessins
             For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
                 For j As Integer = 1 To MyPoutre.NbEtaiement
                     xo = MyPoutre.xPositionAppui(True, i) + j * MyPoutre.LongueurTravee(i) / (MyPoutre.NbEtaiement + 1)
-                    DessineEtais(MyGr, xo, 0.75 * dCarApp, MyParAff)
+                    DessineEtais(MyGr, xo, yPosEtais, 0.75 * dCarApp, MyParAff)
                 Next
             Next
         End If
@@ -4058,7 +4065,7 @@ Module Mod_Dessins
                 For j As Integer = 1 To NbPts
                     xe = xo + (j) * DeltaX
 
-                    DessineEtais(MyGr, xe, dCarApp / 2, MyParAff)
+                    DessineEtais(MyGr, xe, 0, dCarApp / 2, MyParAff)
                 Next
             Next
         End If
@@ -4157,7 +4164,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub DessineEtais(MyGr As Graphics, xPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage)
+    Private Sub DessineEtais(MyGr As Graphics, xPos As Decimal, yPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage)
         '------------------------------------------------------------------------------------------------------------------
         '   02/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
@@ -4177,6 +4184,10 @@ Module Mod_Dessins
         '--> Initialisations
 
         PrepareContourAppui(xPos, dCar, xPts, yPts, nbPts)
+
+        For i As Integer = 0 To yPts.Length - 1
+            yPts(i) += yPos
+        Next
 
         '--> Dessin
 

@@ -1065,10 +1065,10 @@ Module Mod_Outils
         '------------------------------------------------------------------------------------
 
         If lDispo Then
-            MyTxt.Enabled = True
+            MyTxt.ReadOnly = True
             MyTxt.BackColor = SystemColors.Window
         Else
-            MyTxt.Enabled = False
+            MyTxt.ReadOnly = False
             MyTxt.BackColor = CouleurReadOnly
         End If
 

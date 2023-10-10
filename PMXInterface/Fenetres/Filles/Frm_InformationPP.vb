@@ -110,6 +110,8 @@ Public Class Frm_InformationPP
 
         Me.lbl_PP_Dalle.ForeColor = CouleurForeBandeaux
         Me.lbl_PP_Dalle.BackColor = CouleurBackBandeaux
+
+
     End Sub
 
     Private Sub AfficherPoutreEnCours()

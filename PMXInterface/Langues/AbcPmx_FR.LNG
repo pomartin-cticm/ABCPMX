@@ -236,6 +236,10 @@ POINTPROPPED			= Etaiement ponctuel
 PROPPINGTYPE			= Type d'étaiement
 RIGHTCANTPROPP			= Etaiement de l'extrémité de la console droite
 UNPROPPED				= Non étayé
+PROPPINGLOC				= Position de l'étaiement
+UNDERSTEELBEAM			= Sous la poutre acier
+UNDERSLAB				= Sous la dalle béton
+
 
 #FRM_PSHEETING
 TITLE					= Definition du bac acier

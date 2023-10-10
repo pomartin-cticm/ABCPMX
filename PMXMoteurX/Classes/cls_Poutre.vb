@@ -121,6 +121,11 @@ Public Class cls_Poutre
     Public NbEtaiement As Integer           'Il faut réserver la lettre p aux private
 
     ''' <summary>
+    ''' Indique si les étais sont positionnés sous le profilé métallique (True) ou sous la dalle (False)
+    ''' </summary>
+    Public lEtaisSousProfileAcier As Boolean
+
+    ''' <summary>
     ''' Nombre de maintiens disposés sur la travée considérée
     ''' </summary>
     Public NbRestrain() As Integer
@@ -462,6 +467,8 @@ Public Class cls_Poutre
         NbEtaiement = NBPROPPINGDEFAUT
         lEtaisConsoleGauche = False
         lEtaisConsoleDroite = False
+
+        lEtaisSousProfileAcier = True
 
         lTremieGauche = False
         lTremieDroite = False

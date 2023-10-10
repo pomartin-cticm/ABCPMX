@@ -50,6 +50,13 @@ Public Class Frm_Etaiement
                 Me.chk_EtaisConsoleGauche.Text = Bloc("LEFTCANTPROPP")
                 Me.chk_EtaisConsoleDroite.Text = Bloc("RIGHTCANTPROPP")
                 Me.lbl_NbPP.Text = Bloc("NUMBPROPPING")
+                Me.lbl_LocPP.Text = Bloc("PROPPINGLOC")
+
+                Me.cmb_LocPP.Items.Clear()
+                Me.cmb_LocPP.Items.Add(Bloc("UNDERSTEELBEAM"))
+                Me.cmb_LocPP.Items.Add(Bloc("UNDERSLAB"))
+                Me.cmb_LocPP.SelectedIndex = 0
+
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -113,6 +120,7 @@ Public Class Frm_Etaiement
                     Else
                         Me.chk_EtaisConsoleDroite.Checked = .lEtaisConsoleDroite
                     End If
+
                     If .lTraveeConsoleGauche Then
                         Me.chk_EtaisConsoleGauche.Checked = False
                     Else
@@ -120,6 +128,13 @@ Public Class Frm_Etaiement
                     End If
 
                     Me.cmb_NbPoint.SelectedItem = .NbEtaiement
+
+                    If .lEtaisSousProfileAcier Then
+                        Me.cmb_LocPP.SelectedIndex = 0
+                    Else
+                        Me.cmb_LocPP.SelectedIndex = 1
+                    End If
+
 
             End Select
 
@@ -193,6 +208,11 @@ Public Class Frm_Etaiement
                 If .NbEtaiement <> MyPoutreLoc.NbEtaiement Then
                     lModif = True
                     .NbEtaiement = MyPoutreLoc.NbEtaiement
+                End If
+
+                If .lEtaisSousProfileAcier <> MyPoutreLoc.lEtaisSousProfileAcier Then
+                    lModif = True
+                    .lEtaisSousProfileAcier = MyPoutreLoc.lEtaisSousProfileAcier
                 End If
             End If
         End With
@@ -280,6 +300,14 @@ Public Class Frm_Etaiement
 
         img_Etaiement.Invalidate()
     End Sub
+
+    Private Sub cmb_LocPP_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_LocPP.TextChanged
+        If lBuild Then Exit Sub
+
+        MyPoutreLoc.lEtaisSousProfileAcier = cmb_LocPP.SelectedIndex = 0
+
+    End Sub
+
 
 #End Region
 

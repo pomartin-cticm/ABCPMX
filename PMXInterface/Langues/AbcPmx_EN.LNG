@@ -289,6 +289,9 @@ POINTPROPPED			= Point propped
 PROPPINGTYPE			= Type of propping
 RIGHTCANTPROPP			= End propping of the right cantilever 
 UNPROPPED				= Unpropped
+PROPPINGLOC				= Propping location
+UNDERSTEELBEAM			= Under the steel beam
+UNDERSLAB				= Under the concrete slab
 
 
 #FRM_PSHEETING
