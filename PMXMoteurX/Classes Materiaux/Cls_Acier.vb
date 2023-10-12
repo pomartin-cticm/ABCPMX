@@ -205,7 +205,7 @@ Public Class cls_Acier
         Me.f_y.w = 235
         Me.f_y.fs = 235
         Me.f_y.fi = 235
-        Me.f_y.sp = 235
+        Me.f_y.sp_SFB = 235
 
         Me.Plages = New List(Of strucPlage)
 

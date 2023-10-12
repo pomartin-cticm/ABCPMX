@@ -63,6 +63,7 @@ Module Mod_NoteCalcul
 
     Private Bloc As New Dictionary(Of String, String)
     Private BlocSP As New Dictionary(Of String, String)
+    Private BlocELU As New Dictionary(Of String, String)
 
     Private ReadOnly IndTableau As Integer = 0
     Private ReadOnly IndFigure As Integer = 0
@@ -186,6 +187,13 @@ Module Mod_NoteCalcul
 
         EditionProprietesSection(MyPrjt.Poutres(MyPrjt.IndEnCours))
 
+
+        '--|=========================================
+        '--| VERIFICATION DES CRITERES
+        '--|=========================================
+
+        EditionVerificationsELU(MyPrjt.Poutres(MyPrjt.IndEnCours))
+
     End Sub
 
     Private Sub InitialiseBlocNDC()
@@ -204,6 +212,9 @@ Module Mod_NoteCalcul
 
         BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_SECTIONPROP")
         BlocLine.CreationBloc(BlocSP)
+
+        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSULS")
+        BlocLine.CreationBloc(BlocELU)
 
 
     End Sub
@@ -1467,6 +1478,70 @@ Module Mod_NoteCalcul
 
     End Sub
 
+#End Region
+
+#Region "***Edition vérifications ELU***"
+    Private Sub EditionVerificationsELU(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   12/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des vérifications ELU
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        '--> Initialisation
+
+        SautePage()
+
+        AddTitreNdC(1, BlocELU("ULS"))
+
+        '--> Traitement
+        EditionVerificationsELUSummary(MyBeam)
+        EditionVerificationsELUCombo(MyBeam)
+
+    End Sub
+
+    Private Sub EditionVerificationsELUSummary(MyBeam As cls_Poutre)
+        AddTitreNdC(2, BlocELU("CRITERIA_SUM"))
+
+        AddLigneNDC(TABW2 & BlocELU("INFO_S") & "   " & BlocELU("INFO_NS"))
+        SauteLigne()
+        AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
+        AddLigneNDC(TABW2 & BlocELU("V_CRITERIA") & TABAFF & "\SG\s\-V\=" & TABEGAL & 0)
+        AddLigneNDC(TABW2 & BlocELU("MV_CRITERIA") & TABAFF & "\SG\s\-MV\=" & TABEGAL & 0)
+        AddLigneNDC(TABW2 & BlocELU("LTB_CRTIERIA") & TABAFF & "\SG\s\-LT\=" & TABEGAL & 0)
+        AddLigneNDC(TABW2 & BlocELU("REINF_CRITERIA") & TABAFF & "\Sr\s\-s\=" & TABEGAL & 0)
+        If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("LOWPLATE_SLIMFLOOR_CRITERIA") & TABAFF & "\SG\s\-q\=" & TABEGAL & 0)
+        If Not MyBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-w\=" & TABEGAL & 0)
+        If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-u\=" & TABEGAL & 0)
+
+
+
+
+    End Sub
+
+    Private Sub EditionVerificationsELUCombo(MyBeam As cls_Poutre)
+        SautePage()
+
+        AddTitreNdC(2, BlocELU("ULS_COMBO_CHECK"))
+        AddTitreNdC(3, BlocELU("ULS_COMBOS") & "1.35 G /!\/!\/!\")
+
+        SauteLigne()
+
+        AddLigneNDC("\TABLEAU 18")
+
+        InitialiseLigne(6, HLIGNE, True)
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SECTION"))
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SPAN"))
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x(m)GUD")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+
+
+        FinTableau()
+    End Sub
 #End Region
 
 #Region "   Page de garde "
