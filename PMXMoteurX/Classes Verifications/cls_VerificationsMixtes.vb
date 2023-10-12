@@ -45,8 +45,8 @@
 
         Dim iCombi As Integer
         Dim MEd(,), VEd(,) As Decimal
-        Dim VplRd As Decimal = 0                        ' Effort tranchant résistant (a priori constant le long de la poutre)
-        Dim VbRd As Decimal = 0                         ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
+        Dim VplRd As Decimal                        ' Effort tranchant résistant (a priori constant le long de la poutre)
+        Dim VbRd As Decimal                          ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
         Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
         Dim MplRdPlus() As Decimal = {0}                ' Moments plastiques positifs
         Dim MplRdMoins() As Decimal = {0}               ' Moments plastiques négatifs
@@ -60,7 +60,7 @@
         Dim ClasseSection(,) As Integer                 ' Tableau dimensions (NbNodes, 0 ou 1 pour moments positifs et négatifs resp.)
         Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
         Dim lSimple As Boolean = False
-        Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
+        'Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
 
         '--> Initialisations
 
@@ -89,13 +89,19 @@
 
         '# Classes de la section
 
+        ReDim ClasseSection(MyPoutre.Nodes.nbNodes - 1, 1)
 
+        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+            ClasseSection(iNode, 0) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANEPlus(iNode), True, MyPoutre.Param.Norme = MyPoutre.Param.Enu_Normes.EurocodesG1, MyPoutre.Dalle.t_d)
+            ClasseSection(iNode, 1) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANEMoins(iNode), False, MyPoutre.Param.Norme = MyPoutre.Param.Enu_Normes.EurocodesG1, MyPoutre.Dalle.t_d)
+        Next
 
         '--> Boucle sur les combinaisons
 
         For iCombi = 0 To MyPoutre.CombiA_ELU.nbCombi - 1
 
             '# Controle de la classe des sections
+
 
 
 

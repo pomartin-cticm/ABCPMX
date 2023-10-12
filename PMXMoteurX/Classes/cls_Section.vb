@@ -749,6 +749,37 @@ Public Class cls_Section
 #Region " Propiétés générales de la section "
 
     ''' <summary>
+    ''' Calcul et renvoi la hauteur d'enrobage du profilé acier dans le cas d'une slim floor
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property hec As Decimal
+        Get
+            Select Case Me.typeSection
+                Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                    Return Me.ProfilA.hb
+                Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                    Return Me.ProfilA.ha - Me.ProfilA.Plat_t
+                Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                    Return Me.ProfilA.ha - Me.ProfilA.Tfi
+                Case Me.Enum_TypeSection.SAB, Me.Enum_TypeSection.SABmixte
+                    Return Me.ProfilA.ha - Me.ProfilA.Tfi
+                Case Else
+                    Return 0
+            End Select
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Indique si la section est slimfloor ou non
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lSlimFloor As Boolean
+        Get
+            Return Not (Me.typeSection = Me.Enum_TypeSection.Acier Or Me.typeSection = Me.Enum_TypeSection.AcierEnrobage Or Me.typeSection = Me.Enum_TypeSection.Mixte Or Me.typeSection = Me.Enum_TypeSection.MixteEnrobage)
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Indique si la section comprend un enrobage partiel
     ''' </summary>
     Public ReadOnly Property lEnrobage As Boolean
@@ -1060,74 +1091,82 @@ Public Class cls_Section
 
 #Region "Classification section acier"
 
-    Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean, lEnrobage As Boolean, lG1_EN As Boolean) As Integer
+    Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean, lG1_EN As Boolean, td As Decimal) As Integer
 
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
         '   Calcul de la classe d'une section acier usuelle (sans enrobage)
         '----------------------------------------------------------------------------------------------------------
-        '   zANP                [E] :   Position de l'ANP (compté algébriquement depuis la face supérieure du profilé)
-        '   zANE                [E] :   Position de l'ANE (compté algébriquement depuis la face supérieure du profilé)
+        '   zANP                [E] :   Position de l'ANP (compté algébriquement depuis la face inférieure de la dalle béton)
+        '   zANE                [E] :   Position de l'ANE (compté algébriquement depuis la face inférieure de la dalle béton)
         '   lFlexionPositive    [E] :   Indique si le calcul se fait en considérant une flexion positive (True) ou non (False)
-        '   lEnrobage           [E] :   Indique si on tient compte d'un enrobage partiel (True) ou non (False)
         '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
+        '   td                  [E] :  Epaisseur totale de la dalle (hors renformis)
         '----------------------------------------------------------------------------------------------------------
 
-        Dim classeSemellesSup, classeAme, classeSemellesInf, classeSectionTotale As Integer
-        Dim lSemelleSupComprimee, lSemelleInfComprimee As Boolean
-        Dim cfsup, cw, cfinf As Decimal
-        Dim epsilon_fsup, epsilon_w, epsilon_finf As Decimal
+        Dim classeSemellesSup, classeAme, classeSemellesInf, classePlatInfSFB, classeSectionTotale As Integer
+        Dim lSemelleSupComprimeeLoc, lSemelleInfComprimeeLoc As Boolean
+        Dim cfsup, tfsup, cw, cfinf, tfinf, cplat, tplat As Decimal
+        Dim epsilon_fsup As Decimal = Me.Acier.epsilon_fs
+        Dim epsilon_finf As Decimal = Me.Acier.epsilon_fi
+        Dim epsilon_platSFB As Decimal = 0
         Dim alpha, psi As Decimal
-
-
 
         '### Calcul avec hypothèse répartition plastique
 
+        ' --> Initialisation des variables locales 
+
+        calcul_cf_tf(cfsup, tfsup, cfinf, tfinf, cplat, tplat)
 
         ' --> Calcul classe semelle supérieure
-        If lFlexionPositive Then
-            lSemelleSupComprimee = Me.ProfilA.Tfs <= -zANP
+
+        lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANE)
+        classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, cfsup, tfsup, epsilon_fsup)
+
+        If Me.typeSection = Me.Enum_TypeSection.IFB_B Or Me.typeSection = Me.typeSection.IFB_Bmixte Then
+            If td - hec >= Math.Max(50 / 1000, Me.ProfilA.Plat_b / 6) Then classeSemellesSup = Math.Min(classeSemellesSup, 2)
         Else
-            lSemelleSupComprimee = Me.ProfilA.Tfs >= -zANP
+            If td - hec >= Math.Max(50 / 1000, Me.ProfilA.Bfs / 6) Then classeSemellesSup = Math.Min(classeSemellesSup, 2)
         End If
 
-        cfsup = (Me.ProfilA.Bfs - Me.ProfilA.Tw) / 2 - Me.ProfilA.Rcs
-        epsilon_fsup = Math.Sqrt(235 / Me.Acier.f_y.fs)
-        classeSemellesSup = ClasseSemellesConsole(lSemelleSupComprimee, lEnrobage, cfsup, Me.ProfilA.Tfs, epsilon_fsup)
-
         ' --> Calcul classe semelle inférieure
-        lSemelleInfComprimee = Not lFlexionPositive
-        cfinf = (Me.ProfilA.Bfi - Me.ProfilA.Tw) / 2 - Me.ProfilA.Rci
-        epsilon_finf = Math.Sqrt(235 / Me.Acier.f_y.fi)
-        classeSemellesInf = ClasseSemellesConsole(lSemelleInfComprimee, lEnrobage, cfinf, Me.ProfilA.Tfi, epsilon_finf)
+        lSemelleInfComprimeeLoc = Not lFlexionPositive
+        classeSemellesInf = ClasseSemelle(lSemelleInfComprimeeLoc, cfinf, tfinf, epsilon_finf)
+
+        ' --> Calcul classe semelle plat inférieur dans le cas d'un SFB
+        If Me.typeSection = Me.Enum_TypeSection.SFB Or Me.typeSection = Me.Enum_TypeSection.SFBmixte Then
+            epsilon_platSFB = Me.Acier.epsilon_sp
+            classePlatInfSFB = ClasseSemelle(lSemelleInfComprimeeLoc, cplat, tplat, epsilon_platSFB)
+        End If
+
 
         ' --> Calcul classe âme
+        classeAme = ClasseAmeFlechie(lFlexionPositive, zANP, lG1_EN)
 
-        cw = Me.ProfilA.HauteurAmeDw
-        epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
-        classeAme = ClasseAmeFlechie(lFlexionPositive, Me, zANP, lG1_EN)
+        ' --> Calcul classe section totale 
+        classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, Math.Max(classePlatInfSFB, classeAme)))
 
-        classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, classeAme))
+
 
         If classeSectionTotale = 3 Then
             '### Calcul avec hypothèse répartition élastique
 
             ' --> Calcul classe semelle supérieure
-            If lFlexionPositive Then
-                lSemelleSupComprimee = Me.ProfilA.Tfs <= -zANE
-            Else
-                lSemelleSupComprimee = Me.ProfilA.Tfs >= -zANE
-            End If
-            classeSemellesSup = ClasseSemellesConsole(lSemelleSupComprimee, lEnrobage, cfsup, Me.ProfilA.Tfs, epsilon_fsup)
+            lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANE)
+            classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, cfsup, tfsup, epsilon_fsup)
 
             ' --> Calcul classe semelle inférieure inchangé
 
+            ' --> Calcul classe plat inférieur dans le cas d'une section SFB inchangé
+
             ' --> Calcul classe âme
 
-            classeAme = ClasseAmeFlechie(lFlexionPositive, Me, zANE, lG1_EN)
+            classeAme = ClasseAmeFlechie(lFlexionPositive, zANE, lG1_EN)
 
-            classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, classeAme))
+            ' --> Calcul classe section totale
+
+            classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, Math.Max(classePlatInfSFB, classeAme)))
             classeSectionTotale = Math.Max(classeSectionTotale, 3)
 
         End If
@@ -1136,14 +1175,101 @@ Public Class cls_Section
 
     End Function
 
-    Public Function ClasseSemellesConsole(lComprimee As Boolean, lEnrobage As Boolean, c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
+    Public Function lSemelleSupComprimee(lFlexionPositive As Boolean, zAN As Decimal) As Boolean
+        If lFlexionPositive Then
+            If lSlimFloor Then
+                Select Case Me.typeSection
+                    Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                        lSemelleSupComprimee = zAN <= Me.hec - Me.ProfilA.Plat_t
+                    Case Else
+                        lSemelleSupComprimee = zAN <= Me.hec - Me.ProfilA.Tfs
+                End Select
+            Else
+                lSemelleSupComprimee = zAN <= -Me.ProfilA.Tfs
+            End If
+        Else
+            If lSlimFloor Then
+                lSemelleSupComprimee = zAN >= Me.hec
+            Else
+                lSemelleSupComprimee = zAN >= -Me.ProfilA.Tfs
+            End If
+        End If
+    End Function
+
+    Public Sub calcul_cf_tf(ByRef cfsup As Decimal, ByRef tfsup As Decimal, ByRef cfinf As Decimal, ByRef tfinf As Decimal, ByRef cplat As Decimal, ByRef tplat As Decimal)
+        With Me.ProfilA
+            Select Case Me.typeSection
+                Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                    cfsup = (.Bfs - .Tw) / 2 - .Rcs
+                    tfsup = .Tfs
+                    cfinf = (.Bfi - .Tw) / 2 - .Rci
+                    tfinf = .Tfi
+                    cplat = (.Plat_b - .Bfi) / 2
+                    tplat = .Plat_t
+                Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                    cfsup = (.Bfs - .Tw) / 2 - .Rcs
+                    tfsup = .Tfs
+                    cfinf = (.Plat_b - .Tw) / 2
+                    tfinf = .Plat_t
+                    cplat = 0
+                    tplat = 0
+                Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                    cfsup = (.Plat_b - .Tw) / 2
+                    tfsup = .Plat_t
+                    cfinf = (.Bfi - .Tw) / 2 - .Rci
+                    tfinf = .Tfi
+                    cplat = 0
+                    tplat = 0
+                Case Me.Enum_TypeSection.SAB, Me.Enum_TypeSection.SABmixte
+                    cfsup = (.Bfs - .Tw) / 2 - .Rcs
+                    tfsup = .Tfs
+                    cfinf = (.Bfi - .Tw) / 2 - .Rci
+                    tfinf = .Tfi
+                    cplat = 0
+                    tplat = 0
+                Case Else
+                    cfsup = (.Bfs - .Tw) / 2 - .Rcs
+                    tfsup = .Tfs
+                    cfinf = (.Bfi - .Tw) / 2 - .Rci
+                    tfinf = .Tfi
+                    cplat = 0
+                    tplat = 0
+            End Select
+        End With
+    End Sub
+
+    Public Function ClasseSemelle(lComprimee As Boolean, c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
         '   Calcul de la classe d'une ame flechie non enrobée, en considérant une répartition plastique des contraintes, selon la 1ere génération des Eurocodes
         '----------------------------------------------------------------------------------------------------------
         '   lComprimee       [E] :   indique si la paroi est entierement comprimee (True) ou non (False)
-        '   lEnrobage        [E] :   indique si présence d'un enrobage (True) ou non (False)
+        '   c                [E] :   hauteur de la paroi en console
+        '   t                [E] :   epaisseur de la paroi en console
+        '   epsilon          [E] :   epsilon de la paroi en console 
+        '----------------------------------------------------------------------------------------------------------
+
+        If lSlimFloor Then
+            Return ClasseSemelleSlimFloor(lComprimee, c, t, epsilon_f)
+        Else
+            If lEnrobage Then
+                Return ClasseSemelleEnrobe(lComprimee, c, t, epsilon_f)
+            Else
+                Return ClasseSemelleConsole(lComprimee, c, t, epsilon_f)
+            End If
+        End If
+
+    End Function
+
+
+    Public Function ClasseSemelleConsole(lComprimee As Boolean, c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
+        '----------------------------------------------------------------------------------------------------------
+        '   11/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul de la classe d'une ame flechie non enrobée, en considérant une répartition plastique des contraintes, selon la 1ere génération des Eurocodes
+        '----------------------------------------------------------------------------------------------------------
+        '   lComprimee       [E] :   indique si la paroi est entierement comprimee (True) ou non (False)
         '   c                [E] :   hauteur de la paroi en console
         '   t                [E] :   epaisseur de la paroi en console
         '   epsilon          [E] :   epsilon de la paroi en console 
@@ -1154,38 +1280,95 @@ Public Class cls_Section
         Dim classeSemelle As Integer
 
         If lComprimee Then
-            If lEnrobage Then 'Enrobage partiel
-                Select Case c / t
-                    Case <= 9 * epsilon_f
-                        classeSemelle = 1
-                    Case <= 14 * epsilon_f
-                        classeSemelle = 2
-                    Case <= 20 * epsilon_f
-                        classeSemelle = 3
-                    Case Else
-                        classeSemelle = 4
-                End Select
-            Else 'sans enrobage partiel
-                Select Case c / t
-                    Case <= 9 * epsilon_f
-                        classeSemelle = 1
-                    Case <= 10 * epsilon_f
-                        classeSemelle = 2
-                    Case <= 14 * epsilon_f
-                        classeSemelle = 3
-                    Case Else
-                        classeSemelle = 4
-                End Select
-            End If
+            Select Case c / t
+                Case <= 9 * epsilon_f
+                    classeSemelle = 1
+                Case <= 10 * epsilon_f
+                    classeSemelle = 2
+                Case <= 14 * epsilon_f
+                    classeSemelle = 3
+                Case Else
+                    classeSemelle = 4
+            End Select
         Else
             classeSemelle = 1
         End If
 
-        Return classeSemelle
 
+        Return classeSemelle
     End Function
 
-    Public Function ClasseAmeFlechie(lFlexionPositive As Boolean, SectionLoc As cls_Section, zAN As Decimal, lG1_EN As Boolean) As Integer
+    Public Function ClasseSemelleEnrobe(lComprimee As Boolean, c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
+        '----------------------------------------------------------------------------------------------------------
+        '   11/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul de la classe d'une ame flechie non enrobée, en considérant une répartition plastique des contraintes, selon la 1ere génération des Eurocodes
+        '----------------------------------------------------------------------------------------------------------
+        '   lComprimee       [E] :   indique si la paroi est entierement comprimee (True) ou non (False)
+        '   c                [E] :   hauteur de la paroi en console
+        '   t                [E] :   epaisseur de la paroi en console
+        '   epsilon          [E] :   epsilon de la paroi en console 
+        '----------------------------------------------------------------------------------------------------------
+
+        If t = 0 Then Return 4 'Permet d'éviter le bug quand t = 0
+
+        Dim classeSemelle As Integer
+
+        If lComprimee Then
+            Select Case c / t
+                Case <= 9 * epsilon_f
+                    classeSemelle = 1
+                Case <= 14 * epsilon_f
+                    classeSemelle = 2
+                Case <= 20 * epsilon_f
+                    classeSemelle = 3
+                Case Else
+                    classeSemelle = 4
+            End Select
+        Else
+            classeSemelle = 1
+        End If
+
+
+        Return classeSemelle
+    End Function
+
+    Public Function ClasseSemelleSlimFloor(lComprimee As Boolean, c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
+        '----------------------------------------------------------------------------------------------------------
+        '   11/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul de la classe d'une ame flechie non enrobée, en considérant une répartition plastique des contraintes, selon la 1ere génération des Eurocodes
+        '----------------------------------------------------------------------------------------------------------
+        '   lComprimee       [E] :   indique si la paroi est entierement comprimee (True) ou non (False)
+        '   c                [E] :   hauteur de la paroi en console
+        '   t                [E] :   epaisseur de la paroi en console
+        '   epsilon          [E] :   epsilon de la paroi en console 
+        '----------------------------------------------------------------------------------------------------------
+
+        If t = 0 Then Return 4 'Permet d'éviter le bug quand t = 0
+
+        Dim classeSemelle As Integer
+
+        If lComprimee Then
+            Select Case c / t
+                Case <= 33 * epsilon_f
+                    classeSemelle = 1
+                Case <= 38 * epsilon_f
+                    classeSemelle = 2
+                Case <= 42 * epsilon_f
+                    classeSemelle = 3
+                Case Else
+                    classeSemelle = 4
+            End Select
+        Else
+            classeSemelle = 1
+        End If
+
+
+        Return classeSemelle
+    End Function
+
+    Public Function ClasseAmeFlechie(lFlexionPositive As Boolean, zAN As Decimal, lG1_EN As Boolean) As Integer
 
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
@@ -1198,77 +1381,29 @@ Public Class cls_Section
         '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
         '----------------------------------------------------------------------------------------------------------
 
-
-        Dim epsilon_w As Decimal
+        Dim epsilon_w As Decimal = Me.Acier.epsilon_w
+        Dim lAmeEntierementTendue As Boolean
         Dim alpha, psi As Decimal
         Dim classeAme As Integer
 
-        epsilon_w = Math.Sqrt(235 / SectionLoc.Acier.f_y.w)
 
-        With SectionLoc.ProfilA
 
-            If lFlexionPositive Then
-                '# Hypothese d'une répartition plastique
-                If zAN >= -(.Tfs + .Rcs) Then 'Ame entierement tendue
-                    classeAme = 1
-                Else
-                    If zAN <= -(.Tfs + .Rcs + .HauteurAmeDw) Then 'Ame entierement comprimee
-                        alpha = 1
-                    Else 'Ame partiellement comprimee
-                        alpha = (-zAN - .Tfs - .Rcs) / .HauteurAmeDw
-                    End If
+        With Me.ProfilA
 
-                    If lG1_EN Then
-                        classeAme = ClasseAmeFlechiePlastiqueG1(.HauteurAmeDw, .Tw, epsilon_w, alpha)
-                    Else
-                        classeAme = ClasseAmeFlechiePlastiqueG2(.HauteurAmeDw, .Tw, epsilon_w, alpha)
-                    End If
+            '# Hypothese d'une répartition plastique
 
-                End If
+            If lAmeEntierementTendue Then
+                classeAme = 1
+            Else 'Ame au moins en partie comprimée 
+                CalculAlpha(lFlexionPositive, zAN)
+                classeAme = ClasseAmeFlechiePlastique(.HauteurAmeDw, .Tw, epsilon_w, alpha, lG1_EN)
+            End If
 
-                    If classeAme >= 3 Then
-                    '# Hypothese d'une répartition élastique
-                    psi = (-zAN - (.ha - .Tfi - .Plat_t - .Rci)) / (-zAN - .Tfs - .Rcs)
+            If classeAme >= 3 Then
+                '# Hypothese d'une répartition élastique
 
-                    If lG1_EN Then
-                        classeAme = ClasseAmeFlechieElastiqueG1(.HauteurAmeDw, .Tw, epsilon_w, psi)
-                    Else
-                        classeAme = ClasseAmeFlechieElastiqueG2(.HauteurAmeDw, .Tw, epsilon_w, psi)
-                    End If
-
-                End If
-
-            Else
-
-                If zAN >= -(.Tfs + .Rcs + .HauteurAmeDw) Then 'Ame entierement tendue
-                    classeAme = 1
-                Else
-
-                    If zAN <= -(.Tfs + .Rcs) Then 'Ame entierement comprimee
-                        alpha = 1
-                    Else 'Ame partiellement comprimee
-                        alpha = (.ha - .Tfi - .Plat_t - .Rci + zAN) / .HauteurAmeDw
-                    End If
-
-                    If lG1_EN Then
-                        classeAme = ClasseAmeFlechiePlastiqueG1(.HauteurAmeDw, .Tw, epsilon_w, alpha)
-                    Else
-                        classeAme = ClasseAmeFlechiePlastiqueG2(.HauteurAmeDw, .Tw, epsilon_w, alpha)
-                    End If
-
-                End If
-
-                If classeAme = 3 Then
-                    '# Hypothese d'une répartition élastique
-                    psi = (-zAN - .Tfs - .Rcs) / (-zAN - (.ha - .Tfi - .Plat_t - .Rci))
-
-                    If lG1_EN Then
-                        classeAme = ClasseAmeFlechieElastiqueG1(.HauteurAmeDw, .Tw, epsilon_w, psi)
-                    Else
-                        classeAme = ClasseAmeFlechieElastiqueG2(.HauteurAmeDw, .Tw, epsilon_w, psi)
-                    End If
-
-                End If
+                CalculPsi(lFlexionPositive, zAN)
+                classeAme = ClasseAmeFlechieElastique(.HauteurAmeDw, .Tw, epsilon_w, psi, lG1_EN)
 
             End If
 
@@ -1278,7 +1413,140 @@ Public Class cls_Section
 
     End Function
 
-    Public Function ClasseAmeFlechiePlastiqueG1(c As Decimal, t As Decimal, epsilon As Decimal, alpha As Decimal) As Integer
+
+    Public Function lAmeEntierementTendue(lFlexionPositive As Boolean, zAN As Decimal) As Boolean
+
+        'Permet de savoir si l'ame flechie est entierement tendue ou non (nécessaire avant le calcul de alpha ou psi)
+        With Me.ProfilA
+
+            If lFlexionPositive Then
+                If lSlimFloor Then
+                    Select Case Me.typeSection
+                        Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                            Return zAN >= Me.hec - .Plat_t
+                        Case Else
+                            Return zAN >= Me.hec - .Rcs - .Tfs
+                    End Select
+                Else 'section classique
+                    Return zAN >= -(.Tfs + .Rcs)  'Ame entierement tendue
+                End If
+            Else 'flexion négative
+                If lSlimFloor Then
+                    Select Case Me.typeSection
+                        Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                            Return zAN <= .Tfi + .Rci
+                        Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                            Return zAN <= 0
+                        Case Else
+                            Return zAN <= .Rci
+                    End Select
+                Else
+                    Return zAN <= -(.Tfs + .Rcs + .HauteurAmeDw)
+                End If
+            End If
+
+        End With
+    End Function
+
+    Public Function lAmeEntierementComprimee(lFlexionPositive As Boolean, zAN As Decimal) As Boolean
+        'Permet de savoir si l'ame flechie est entierement comprimee ou non (nécessaire pour le calcul de alpha)
+        Return lAmeEntierementTendue(Not lFlexionPositive, zAN)
+    End Function
+
+
+    Public Function CalculAlpha(ByVal lFlexionPositive As Boolean, ByVal zAN As Decimal) As Decimal
+
+        'Calcul de alpha. Suppose que l'ame est au moins en partie comprimée 
+
+        Dim alpha As Decimal
+
+        With Me.ProfilA
+
+            If lAmeEntierementComprimee(lFlexionPositive, zAN) Then
+                alpha = 1
+            Else
+                If lFlexionPositive Then
+
+                    If lSlimFloor Then
+                        Select Case Me.typeSection
+                            Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                                alpha = (Me.hec - .Plat_t - zAN) / .HauteurAmeDw
+                            Case Else
+                                alpha = (Me.hec - .Tfs - .Rcs - zAN) / .HauteurAmeDw
+                        End Select
+                    Else 'section classique
+                        alpha = (-zAN - .Tfs - .Rcs) / .HauteurAmeDw
+                    End If
+                Else
+                    If lSlimFloor Then
+                        Select Case Me.typeSection
+                            Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                                alpha = (zAN - .Tfi - .Rci) / .HauteurAmeDw
+                            Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                                alpha = zAN / .HauteurAmeDw
+                            Case Else
+                                alpha = (zAN - .Rci) / .HauteurAmeDw
+                        End Select
+                    Else
+                        alpha = (.ha - .Tfi - .Rci + zAN) / .HauteurAmeDw
+                    End If
+                End If
+            End If
+
+            Return alpha
+
+        End With
+    End Function
+
+
+
+    Public Function CalculPsi(ByVal lFlexionPositive As Boolean, ByVal zAN As Decimal) As Decimal
+
+        'Calcul de alpha. Suppose que l'ame est au moins en partie comprimée 
+
+        Dim psi As Decimal
+
+        With Me.ProfilA
+
+            If lFlexionPositive Then
+
+                If lSlimFloor Then
+                    Select Case Me.typeSection
+                        Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                            psi = (-zAN + .Tfi + .Rci) / (-zAN + Me.hec - .Tfs - .Rcs)
+                        Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                            psi = (-zAN) / (-zAN + Me.hec - .Tfs - .Rcs)
+                        Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                            psi = (-zAN + .Rci) / (-zAN + Me.hec - .Plat_t)
+                        Case Me.Enum_TypeSection.SAB, Me.Enum_TypeSection.SABmixte
+                            psi = (-zAN + .Rci) / (-zAN + Me.hec - .Tfs - .Rcs)
+                    End Select
+                Else 'section classique
+                    psi = (-zAN - (.ha - .Tfi - .Rci)) / (-zAN - .Tfs - .Rcs)
+                End If
+            Else
+                If lSlimFloor Then
+                    Select Case Me.typeSection
+                        Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                            psi = (-zAN + Me.hec - .Tfs - .Rcs) / (-zAN + .Tfi + .Rci)
+                        Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                            psi = (-zAN + Me.hec - .Tfs - .Rcs) / (-zAN)
+                        Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                            psi = (-zAN + Me.hec - .Plat_t) / (-zAN + .Rci)
+                        Case Me.Enum_TypeSection.SAB, Me.Enum_TypeSection.SABmixte
+                            psi = (-zAN + Me.hec - .Tfs - .Rcs) / (-zAN + .Rci)
+                    End Select
+                Else
+                    psi = (-zAN - .Tfs - .Rcs) / (-zAN - (.ha - .Tfi - .Rci))
+                End If
+            End If
+
+            Return psi
+
+        End With
+    End Function
+
+    Public Function ClasseAmeFlechiePlastique(c As Decimal, t As Decimal, epsilon As Decimal, alpha As Decimal, lG1_EN As Boolean) As Integer
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
@@ -1290,31 +1558,57 @@ Public Class cls_Section
         '   alpha            [E] :   portion de la paroi interne comprimée 
         '----------------------------------------------------------------------------------------------------------
         Dim classe As Integer
-        If alpha > 0.5 Then
-            Select Case c / t
-                Case <= 396 * epsilon / (13 * alpha - 1)
-                    classe = 1
-                Case <= 456 * epsilon / (13 * alpha - 1)
-                    classe = 2
-                Case Else
-                    classe = 3
-            End Select
-        Else 'alpha <=0.5
-            Select Case c / t
-                Case <= 36 * epsilon / alpha
-                    classe = 1
-                Case <= 41.5 * epsilon / alpha
-                    classe = 2
-                Case Else
-                    classe = 3
-            End Select
+
+        If lG1_EN Then
+            If alpha > 0.5 Then
+                Select Case c / t
+                    Case <= 396 * epsilon / (13 * alpha - 1)
+                        classe = 1
+                    Case <= 456 * epsilon / (13 * alpha - 1)
+                        classe = 2
+                    Case Else
+                        classe = 3
+                End Select
+            Else 'alpha <=0.5
+                Select Case c / t
+                    Case <= 36 * epsilon / alpha
+                        classe = 1
+                    Case <= 41.5 * epsilon / alpha
+                        classe = 2
+                    Case Else
+                        classe = 3
+                End Select
+            End If
+        Else 'deuxieme generation d'EC
+            If alpha > 0.5 Then
+                Select Case c / t
+                    Case <= 126 * epsilon / (5.5 * alpha - 1)
+                        classe = 1
+                    Case <= 188 * epsilon / (6.53 * alpha - 1)
+                        classe = 2
+                    Case Else
+                        classe = 3
+                End Select
+            Else 'alpha <=0.5
+                Select Case c / t
+                    Case <= 36 * epsilon / alpha
+                        classe = 1
+                    Case <= 41.5 * epsilon / alpha
+                        classe = 2
+                    Case Else
+                        classe = 3
+                End Select
+            End If
         End If
+
+
 
         Return classe
 
     End Function
 
-    Public Function ClasseAmeFlechieElastiqueG1(c As Decimal, t As Decimal, epsilon As Decimal, psi As Decimal) As Integer
+
+    Public Function ClasseAmeFlechieElastique(c As Decimal, t As Decimal, epsilon As Decimal, psi As Decimal, lG1_EN As Boolean) As Integer
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
@@ -1326,86 +1620,36 @@ Public Class cls_Section
         '   psi              [E] :   portion de la paroi interne comprimée 
         '----------------------------------------------------------------------------------------------------------
         Dim classe As Integer
-        If psi > -1 Then
-            If c / t <= 42 * epsilon / (0.67 + 0.33 * psi) Then
-                classe = 3
-            Else
-                classe = 4
-            End If
-        Else 'psi<=-1
-            If c / t <= 62 * epsilon * (1 - psi) * Math.Sqrt(-psi) Then
-                classe = 3
-            Else
-                classe = 4
-            End If
-        End If
-
-        Return classe
-
-    End Function
-
-    Public Function ClasseAmeFlechiePlastiqueG2(c As Decimal, t As Decimal, epsilon As Decimal, alpha As Decimal) As Integer
-        '----------------------------------------------------------------------------------------------------------
-        '   11/10/23 :  Création - GUD
-        '----------------------------------------------------------------------------------------------------------
-        '   Calcul de la classe d'une ame flechie non enrobée, en considérant une répartition plastique des contraintes, selon la 2e génération des Eurocodes
-        '----------------------------------------------------------------------------------------------------------
-        '   c                [E] :   hauteur de la paroi interne
-        '   t                [E] :   epaisseur de la paroi interne
-        '   epsilon          [E] :   epsilon de la paroi interne 
-        '   alpha            [E] :   portion de la paroi interne comprimée 
-        '----------------------------------------------------------------------------------------------------------
-
-        Dim classe As Integer
-        If alpha > 0.5 Then
-            Select Case c / t
-                Case <= 126 * epsilon / (5.5 * alpha - 1)
-                    classe = 1
-                Case <= 188 * epsilon / (6.53 * alpha - 1)
-                    classe = 2
-                Case Else
+        If lG1_EN Then
+            If psi > -1 Then
+                If c / t <= 42 * epsilon / (0.67 + 0.33 * psi) Then
                     classe = 3
-            End Select
-        Else 'alpha <=0.5
-            Select Case c / t
-                Case <= 36 * epsilon / alpha
-                    classe = 1
-                Case <= 41.5 * epsilon / alpha
-                    classe = 2
-                Case Else
+                Else
+                    classe = 4
+                End If
+            Else 'psi<=-1
+                If c / t <= 62 * epsilon * (1 - psi) * Math.Sqrt(-psi) Then
                     classe = 3
-            End Select
-        End If
-
-        Return classe
-
-    End Function
-
-    Public Function ClasseAmeFlechieElastiqueG2(c As Decimal, t As Decimal, epsilon As Decimal, psi As Decimal) As Integer
-        '----------------------------------------------------------------------------------------------------------
-        '   11/10/23 :  Création - GUD
-        '----------------------------------------------------------------------------------------------------------
-        '   Calcul de la classe d'une ame flechie non enrobée, en considérant une répartition élastique des contraintes, selon la 2e génération des Eurocodes
-        '----------------------------------------------------------------------------------------------------------
-        '   c                [E] :   hauteur de la paroi interne
-        '   t                [E] :   epaisseur de la paroi interne
-        '   epsilon          [E] :   epsilon de la paroi interne 
-        '   psi              [E] :   portion de la paroi interne comprimée 
-        '----------------------------------------------------------------------------------------------------------
-        Dim classe As Integer
-        If psi > -1 Then
-            If c / t <= 38 * epsilon / (0.608 + 0.343 * psi + 0.049 * psi ^ 2) Then
-                classe = 3
-            Else
-                classe = 4
+                Else
+                    classe = 4
+                End If
             End If
-        Else 'psi<=-1
-            If c / t <= 60.5 * epsilon * (1 - psi) Then
-                classe = 3
-            Else
-                classe = 4
+        Else
+            If psi > -1 Then
+                If c / t <= 38 * epsilon / (0.608 + 0.343 * psi + 0.049 * psi ^ 2) Then
+                    classe = 3
+                Else
+                    classe = 4
+                End If
+            Else 'psi<=-1
+                If c / t <= 60.5 * epsilon * (1 - psi) Then
+                    classe = 3
+                Else
+                    classe = 4
+                End If
             End If
         End If
+
 
         Return classe
 
