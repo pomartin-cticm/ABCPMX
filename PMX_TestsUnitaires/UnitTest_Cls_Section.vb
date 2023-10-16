@@ -1075,6 +1075,106 @@ Imports PMXMoteur2
 
     End Sub
 
+    <TestMethod()> Public Sub TestUnit_ClasseSectionAcierClassique()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   16/10/23 :  Création GUD
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test du calcul de la fonction qui calcul la classe d'une ame fléchie non enrobée en considérant une répartition des contraintes élastique
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim section As New cls_Section
+        With section.ProfilA
+            .Bfs = 300 / 1000
+            .Tfs = 15 / 1000
+            .Rcs = 5 / 1000
+            .Bfi = 250 / 1000
+            .Tfi = 10 / 1000
+            .Rci = 6 / 1000
+            .ha = 290 / 1000
+            .Tw = 7 / 1000
+        End With
+
+        section.Acier.f_y.fs = 250
+        section.Acier.f_y.fi = 275
+        section.Acier.f_y.w = 300
+
+        section.typeSection = section.Enum_TypeSection.Acier
+
+
+        Dim alpha, psi, c_sem_sup, t_sem_sup, epsilon_sem_sup, c_sem_inf, t_sem_inf, epsilon_sem_inf, c_ame, t_ame, epsilon_ame, td As Decimal
+        Dim z_ANE As Decimal
+        Dim lFlexionPositive, lGEN_1_EC As Boolean
+        Dim ValRef, DeltaV As Decimal
+
+        c_sem_sup = 141.5 / 1000
+        t_sem_sup = 15 / 1000 'c/t(sem,sup) = 9.43
+        c_ame = 254 / 1000
+        t_ame = 7 / 1000 'c/t(ame) = 36.28
+        c_sem_inf = 115.5 / 1000
+        t_sem_inf = 10 / 1000 'c/t(sem inf) = 11.55
+
+        td = 500 / 1000
+
+        'dw = 254
+
+        epsilon_sem_sup = 0.9695
+        epsilon_sem_inf = 0.9244
+        epsilon_ame = 0.885
+
+        'Cas M>0 avec ANE dans la dalle
+        lFlexionPositive = True
+        lGEN_1_EC = True
+        z_ANE = 20 / 1000 'ANE dans la dalle
+
+        Dim classeSection As Integer = section.ClasseSection(z_ANE, 0, lFlexionPositive, lGEN_1_EC, td)
+        ValRef = 1
+        DeltaV = (classeSection - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        'Cas M>0 avec ANE dans l'ame
+        z_ANE = -50 / 1000
+        'alpha = 0.118
+        classeSection = section.ClasseSection(z_ANE, 0, lFlexionPositive, lGEN_1_EC, td)
+        ValRef = 2
+        DeltaV = (classeSection - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        'Cas identique précédent mais avec semelle sup de classe 3
+        section.Acier.f_y.fs = 275
+        epsilon_sem_sup = 0.9244
+        'psi = -7.466
+        classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, lGEN_1_EC, td)
+        ValRef = 3
+        DeltaV = (classeSection - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        'Cas identique précédent mais avec M<0 et zAN dans la dalle
+        z_ANE = 50 / 1000
+        lFlexionPositive = False
+        classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, lGEN_1_EC, td)
+        'psi = 0.216
+        ValRef = 3
+        DeltaV = (classeSection - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        'Cas M>0, ANE dans l'ame et section du type IFB-B
+        z_ANE = -50 / 1000
+        lFlexionPositive = True
+        section.typeSection = section.Enum_TypeSection.IFB_B
+        section.ProfilA.Plat_b = 300 / 1000
+        section.ProfilA.Plat_t = 15 / 1000
+        c_sem_sup = 146.5 / 1000
+        t_sem_sup = 15 / 1000 'c/t(sem,sup) = 9.766
+        epsilon_sem_sup = 0.9244
+        classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, lGEN_1_EC, td)
+        ValRef = 3
+        DeltaV = (classeSection - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+    End Sub
+
 #Region " Outils de comparaison "
 
 
