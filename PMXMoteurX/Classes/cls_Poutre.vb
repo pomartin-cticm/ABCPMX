@@ -278,8 +278,8 @@ Public Class cls_Poutre
         Dim InertieY() As Decimal           ' Table des inerties des sections
         Dim Aire() As Decimal               ' Table des aires des sections
         Dim zANE() As Decimal               ' Table des positions des axe neutres élastiques (pour le calcul des contraintes)
-        Dim nEqC As Decimal                 ' si mixte, coefficient d'équivalence acier-béton pour la dalle
-        Dim nEqEC As Decimal                ' si mixte, coefficient d'équivalence acier-béton pour l'enrobage partiel
+        Dim nEqDalle As Decimal             ' si mixte, coefficient d'équivalence acier-béton pour la dalle
+        Dim nEqEnrob As Decimal             ' si mixte, coefficient d'équivalence acier-béton pour l'enrobage partiel
     End Structure
 
 #End Region
@@ -1482,8 +1482,8 @@ Public Class cls_Poutre
         Do While (Not lTrouve) And (iTab < Me.Elements.Count - 1)
             iTab += 1
             lTrouve = (lMixte = Me.Elements(iTab).lMixte) _
-                  And (nEqDal = Me.Elements(iTab).nEqC) _
-                  And (nEqEc = Me.Elements(iTab).nEqEC)
+                  And (nEqDal = Me.Elements(iTab).nEqDalle) _
+                  And (nEqEc = Me.Elements(iTab).nEqEnrob)
         Loop
 
         If lTrouve Then
@@ -1526,8 +1526,8 @@ Public Class cls_Poutre
         '--> Initialisation
 
         MyElts.lMixte = lMixte
-        MyElts.nEqC = nEqDal
-        MyElts.nEqEC = nEqEc
+        MyElts.nEqDalle = nEqDal
+        MyElts.nEqEnrob = nEqEc
 
         ReDim MyElts.Aire(Me.Nodes.nbNodes - 2)
         ReDim MyElts.InertieY(Me.Nodes.nbNodes - 2)
@@ -1670,6 +1670,63 @@ Public Class cls_Poutre
 
     End Sub
 
+    Public Sub MaillagePropElastiquesNonMixtes(Signe As Decimal, lValRd As Boolean, ByRef InertieY(,) As Decimal, ByRef zANE(,) As Decimal)
+
+    End Sub
+
+    Public Sub MaillagePropElastiquesMixtes(Beff(,) As Decimal, Signe As Decimal, lValRd As Boolean, nEqEnrob As Decimal, nEqDalle As Decimal,
+                                            ByRef InertieY(,) As Decimal, ByRef zANE(,) As Decimal, Optional lDalle As Boolean = True)
+        '------------------------------------------------------------------------------
+        '   05/10/23 :  Création - POM
+        '------------------------------------------------------------------------------
+        '   Calcul des moments plastiques le long de la poutre (sur les noeuds du modèle)
+        '------------------------------------------------------------------------------
+        '   Beff        [E] :   Largeur participante de dalle
+        '   Signe       [E] :   Signe du moment à considérer
+        '   lValRd      [E] :   Indique si valeurs de calcul
+        '   MplRd       [S] :   Table des moments plastiques au droit des noeuds du modèle
+        '   zANP        [S] :   Table des position des ANP
+        '   lDalle      [E] :   Indique si on prend en compte la dalle, pour les poutres mixtes (cela permet le calcul en acier seul)
+        '------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode As Integer
+        Dim k, kDeb, kFin As Integer
+        Dim BeffPrec As Decimal = -1
+        Dim pInertieY, p_zANE As Decimal
+        Dim pMelRd As Decimal
+        Dim lNonMixte As Boolean = (Me.Section.typeSection = cls_Section.Enum_TypeSection.Acier)
+
+        '--> Initialisation
+
+        ReDim InertieY(Me.Nodes.nbNodes - 1, 1)
+        ReDim zANE(Me.Nodes.nbNodes - 1, 1)
+
+        '--> Boucle sur les noeuds
+
+        For iNode = 0 To Me.Nodes.nbNodes - 1
+            If iNode = 0 Then kDeb = 1 Else kDeb = 0
+            If iNode = Me.Nodes.nbNodes - 1 Then kFin = 0 Else kFin = 1
+
+            For k = kDeb To kFin
+                If IsEqual(Beff(iNode, k), BeffPrec) Then
+                    InertieY(iNode, k) = pInertieY
+                    zANE(iNode, k) = p_zANE
+                Else
+                    If lNonMixte Then
+                        Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, p_zANE, pInertieY, pMelRd)
+                    Else
+                        Me.Section.ProprietesElastiquesMixteMyy(Signe, lValRd, Me.Param.Gamma, nEqEnrob, nEqDalle, Beff(iNode, k), Me.Dalle, p_zANE, pInertieY, pMelRd, lDalle)
+                    End If
+                    InertieY(iNode, k) = pInertieY
+                    zANE(iNode, k) = p_zANE
+                End If
+
+            Next
+        Next
+    End Sub
+
     Public Sub MaillagePropPlastiquesMixtes(Beff() As Decimal, Signe As Decimal, lValRd As Boolean, ByRef MplRd() As Decimal, ByRef zANP() As Decimal)
         '------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
@@ -1733,7 +1790,7 @@ Public Class cls_Poutre
 
         '# Elastiques
 
-        Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, zANE, inertiey, MelRd)
+        Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, zANE, InertieY, MelRd)
 
         '# Plastiques
 
@@ -2154,7 +2211,7 @@ Public Class cls_Poutre
 
         '--> Initialisation
 
-        nEqSH = Me.Elements(MyCas.IndElts).nEqC
+        nEqSH = Me.Elements(MyCas.IndElts).nEqDalle
 
         '--> Préparation du cas de charge
 
@@ -2703,9 +2760,9 @@ Public Class cls_Poutre
         iTravP = Me.IndicePremiereTravee
         iTravD = Me.IndiceDerniereTravee
 
-        If lSigma Then
-            Me.PtsSigma.Initialise(Me)
-        End If
+        'If lSigma Then
+        '    Me.PtsSigma.Initialise(Me)
+        'End If
 
         '--> Préparation du modele EF
 
@@ -2745,9 +2802,9 @@ Public Class cls_Poutre
 
                 If CodeError_RDM = 0 Then
                     Me.ChargesA(jCdc).RecupereResultats(MyOutput_RDM, DonneesEF.NbNodes)
-                    If lSigma Then
-                        xxx
-                    End If
+                    'If lSigma Then
+                    '    Me.PtsSigma.CalculsContraintes(Me, Me.ChargesA(jCdc), Me.ChargesA(jCdc).Sigma)
+                    'End If
                 Else
                     MsgBox("Error calculation of " & Me.ChargesA(jCdc).Nom, MsgBoxStyle.Critical, "cls_Poutre/CalculMNVInternes")
                 End If

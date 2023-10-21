@@ -586,7 +586,8 @@ Public Class cls_Section
 
     Public Sub ProprietesElastiquesMixteMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal, nEqDalle As Decimal,
                                             bEff As Decimal, MyDalle As cls_Dalle,
-                                            ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+                                            ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
+                                            Optional lPriseEnCompteDalle As Boolean = True)
         '-------------------------------------------------------------------------------------------------------------------
         '   17/08/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -602,6 +603,7 @@ Public Class cls_Section
         '   zANE        [S] :   Position axe neutre élastique
         '   InertieY    [S] :   Inertie de flexion / y
         '   MelRd       [S] :   Moment élastique
+        '   lPriseEnCompteDalle[E] :    Indique si pour une poutre mixte, on prend ou pas en compte la dalle
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -638,7 +640,7 @@ Public Class cls_Section
 
         '--> Dalle béton
 
-        If Me.lMixte And (bEff > 0) Then
+        If Me.lMixte And (bEff > 0) And lPriseEnCompteDalle Then
 
             '# Dalle
 

@@ -154,13 +154,13 @@ Public Class Frm_PPCasDeCharge
                 MminG = Math.Min(MminG, tab_Mmin(i))
             End If
 
-            MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).EnveloppesTranchants(tab_vmax(i), tab_vmin(i))
+            MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).EnveloppesTranchants(tab_Vmax(i), tab_Vmin(i))
             If i = 0 Then
-                VmaxG = tab_vmax(i)
-                VminG = tab_vmin(i)
+                VmaxG = tab_Vmax(i)
+                VminG = tab_Vmin(i)
             Else
-                VmaxG = Math.Max(VmaxG, tab_vmax(i))
-                VminG = Math.Min(VminG, tab_vmin(i))
+                VmaxG = Math.Max(VmaxG, tab_Vmax(i))
+                VminG = Math.Min(VminG, tab_Vmin(i))
             End If
 
         Next
@@ -186,8 +186,8 @@ Public Class Frm_PPCasDeCharge
 
         Dim IndexElts As Integer = MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(Me.cmb_Symbols.SelectedIndex).IndElts
         Dim lMixte As Boolean = MyProjet.Poutres(MyProjet.IndEnCours).Elements(IndexElts).lMixte
-        Dim nEqDalle As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Elements(IndexElts).nEqC
-        Dim nEqEnrob As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Elements(IndexElts).nEqEC
+        Dim nEqDalle As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Elements(IndexElts).nEqDalle
+        Dim nEqEnrob As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Elements(IndexElts).nEqEnrob
 
         If lMixte Then
             Me.lbl_Mixte.Text = "mixte"
@@ -338,7 +338,7 @@ Public Class Frm_PPCasDeCharge
 
         'If SigneM = 1 Then
         iNodeMax = tab_iNodeMmax(iCas)
-            iNodeMin = tab_iNodeMmin(iCas)
+        iNodeMin = tab_iNodeMmin(iCas)
         'Else
         'iNodeMax = tab_iNodeMmin(iCas)
         'iNodeMin = tab_iNodeMmax(iCas)

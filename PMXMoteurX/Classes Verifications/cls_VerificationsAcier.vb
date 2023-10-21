@@ -53,6 +53,7 @@
         Dim lGeneration1 As Boolean = (MyPoutre.Param.Norme = MyPoutre.Param.Enu_Normes.EurocodesG1)
         Dim ClasseP, ClasseM As Integer 'Classes de la section en flexion positive et négative
         Dim lClasse4 As Boolean
+        Dim lSigma As Boolean
 
         '--> Initialisations
 
@@ -72,6 +73,16 @@
 
         ClasseP = MyPoutre.Section.ClasseSection(zANP, zANE, True, lGeneration1)
         ClasseM = MyPoutre.Section.ClasseSection(zANP, zANE, False, lGeneration1)
+
+        '# Contraintes
+
+        lSigma = MyPoutre.Param.lElasticDesign Or (ClasseP > 2) Or (ClasseM > 2)
+        lSigma = True       ' EN phase debug
+        If lSigma Then
+            MyPoutre.PtsSigma.Initialise(MyPoutre)
+
+        End If
+
 
         '--> Boucle sur les combinaisons
 

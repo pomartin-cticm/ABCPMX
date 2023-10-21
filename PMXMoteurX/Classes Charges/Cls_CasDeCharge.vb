@@ -46,6 +46,8 @@
 
     Public lRunCalcul As Boolean                        ' Indique sir le calcul a été effectué
 
+    'Public Sigma(,,) As Decimal                         ' Contraintes normales aux points de calcul
+
 #End Region
 
 #Region " Constructeurs "
