@@ -72,6 +72,8 @@ Public Class Frm_Enrobage
         GestionStyle()
         GestionUnites()
 
+        InitialiseVariable()
+
         MAJI_AffichageLitArma()
         RemplirComboTypeEtriers()
 
@@ -80,7 +82,6 @@ Public Class Frm_Enrobage
         RemplirComboAvecTableau(Me.cmb_ClasseBetonEnrobage, ClasseBeton)
         RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
 
-        InitialiseVariable()
         AfficherEnrobageEnCours()
         lBuild = False
     End Sub

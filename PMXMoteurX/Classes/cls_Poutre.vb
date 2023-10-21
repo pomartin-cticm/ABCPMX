@@ -40,45 +40,35 @@ Public Class cls_Poutre
 
 #Region " Variables "
 
-    ''' <summary>
-    ''' Identifiant de la poutre en cours
-    ''' </summary>
-    Public BeamID As String
+    '#####################################################################################
+    '# Identification
+    '#####################################################################################
+
+    Public BeamID As String                                 ' Identifiant de la poutre 
+    Public Commentaire As String                            ' Commentaire associé à la poutre 
+
+    '#####################################################################################
+    '# Définition de la poutre
+    '#####################################################################################
+
+    Public Section As New cls_Section                   ' Section (uniforme sur toute la longueur de la poutre)
+    Public Dalle As New cls_Dalle                       ' Dalle béton de la poutre
+
+    Public lIntermediaire As Boolean                    ' Vrai => Poutre intermédiaire | Faux => Poutre de rive
+    Public EntraxeD1 As Decimal                         ' Entraxes aux poutres voisines
+    Public EntraxeD2 As Decimal
+
+    Public lTraveeConsoleGauche As Boolean              ' Indique si présence d'une travée en console à gauche
+    Public lTraveeConsoleDroite As Boolean              ' Indique si présence d'une travée en console à droite
 
     ''' <summary>
-    ''' Commentaire associé à la poutre en cours 
+    ''' Distance entre la poutre et le bord des trémies
     ''' </summary>
-    Public Commentaire As String
+    Public DistanceDsl1 As Decimal                      ' Distance entre la poutre et le bord des trémies
+    Public DistanceDsl2 As Decimal
 
-    ''' <summary>
-    ''' Nom de la poutre
-    ''' </summary>
-    'Public Label As String
-
-    '''' <summary>
-    '''' Type de section de la poutre
-    '''' </summary>
-    'Public TypeSection As cls_Section.Enum_TypeSection
-
-    ''' <summary>
-    ''' Indique si présence d'une travée en console à gauche
-    ''' </summary>
-    Public lTraveeConsoleGauche As Boolean
-
-    ''' <summary>
-    ''' Indique si présence d'une travée en console à droite
-    ''' </summary>
-    Public lTraveeConsoleDroite As Boolean
-
-    ''' <summary>
-    ''' Indique si présence d'une trémie à gauche de la poutre
-    ''' </summary>
-    Public lTremieGauche As Boolean
-
-    ''' <summary>
-    ''' Indique si présence d'une trémie à droite de la poutre
-    ''' </summary>
-    Public lTremieDroite As Boolean
+    Public lTremieGauche As Boolean                     ' Indique si présence d'une trémie à gauche de la poutre
+    Public lTremieDroite As Boolean                     ' Indique si présence d'une trémie à droite de la poutre
 
     ''' <summary>
     ''' Nombre de travées sur 2 appuis
@@ -90,89 +80,34 @@ Public Class cls_Poutre
     '   en indice pNbTtravees+1 = travee en cosole droite si définie
     '========================================================
 
-    ''' <summary>
-    ''' Longueur de chaque travee
-    ''' </summary>
-    Public LongueurTravee() As Decimal
+    Public LongueurTravee() As Decimal                  ' Tableau des longueurs de travée
+    Public TypTravee() As EnuTypeTravee                 ' Type des travées
 
-    ''' <summary>
-    ''' Types des travées
-    ''' </summary>
-    Public TypTravee() As EnuTypeTravee
+    '#####################################################################################
+    '# Définition de l'étaiement
+    '#####################################################################################
 
-    ''' <summary>
-    ''' Type d'étaiement
-    ''' </summary>
-    Public TypeEtaiement As EnuTypeEtaiement
+    Public TypeEtaiement As EnuTypeEtaiement            ' Type d'étaiement (pour les poutres mixtes)
 
-    ''' <summary>
-    ''' Indique si présence d'un étai à l'extrémité de la console gauche
-    ''' </summary>
-    Public lEtaisConsoleGauche As Boolean
+    Public lEtaisConsoleGauche As Boolean               ' Indique si présence d'un étai à l'extrémité de la console gauche
+    Public lEtaisConsoleDroite As Boolean               ' Indique si présence d'un étai à l'extrémité de la console droite
 
-    ''' <summary>
-    ''' Indique si présence d'un étai à l'extrémité de la console droite
-    ''' </summary>
-    Public lEtaisConsoleDroite As Boolean
+    Public NbEtaiement As Integer                       ' Nombre d'étais disposés par través entre deux appuis consécutifs
+    Public lEtaisSousProfileAcier As Boolean            ' Indique si les étais sont positionnés sous le profilé métallique (True) ou sous la dalle (False)
 
-    ''' <summary>
-    ''' Nombre d'étais disposés par través entre deux appuis consécutifs
-    ''' </summary>
-    Public NbEtaiement As Integer           'Il faut réserver la lettre p aux private
+    '#####################################################################################
+    '# Définition des maintiens latéraux
+    '#####################################################################################
 
-    ''' <summary>
-    ''' Indique si les étais sont positionnés sous le profilé métallique (True) ou sous la dalle (False)
-    ''' </summary>
-    Public lEtaisSousProfileAcier As Boolean
+    Public NbRestrain() As Integer                      ' Nombre de maintiens disposés sur la travée considérée
+    Public Maintiens() As List(Of cls_Maintiens)        ' Liste des maintiens disposés sur la poutre
+    Public TypeMaintien As EnuTypeMaintiensPoutre       ' Type de maintiens considéré sur la travée considérée
 
-    ''' <summary>
-    ''' Nombre de maintiens disposés sur la travée considérée
-    ''' </summary>
-    Public NbRestrain() As Integer
+    Public pIndiceMaintienSelectionne As Integer        ' Indice du maintien sélectionné pour le déplacer (utile pour le dessin uniquement)
 
-    ''' <summary>
-    ''' Liste des maintiens disposés sur la poutre
-    ''' </summary>
-    Public Maintiens() As List(Of cls_Maintiens)
-
-    ''' <summary>
-    ''' Type de maintiens considéré sur la travée considérée
-    ''' </summary>
-    Public TypeMaintien As EnuTypeMaintiensPoutre
-
-    ''' <summary>
-    ''' Indice du maintien sélectionné pour le déplacer (utile pour le dessin uniquement)
-    ''' </summary>
-    Public pIndiceMaintienSelectionne As Integer
-
-    'Public Sections() As cls_Section
-
-    ''' <summary>
-    ''' Sections par travéee
-    ''' </summary>
-    Public Section As New cls_Section
-
-    ''' <summary>
-    ''' Entraxes aux poutres voisines
-    ''' </summary>
-    Public EntraxeD1 As Decimal
-    Public EntraxeD2 As Decimal
-
-    ''' <summary>
-    ''' Distance entre la poutre et le bord des trémies
-    ''' </summary>
-    Public DistanceDsl1 As Decimal
-    Public DistanceDsl2 As Decimal
-
-    ''' <summary>
-    ''' Type de poutre intermédiaire ou de rive
-    ''' </summary>
-    Public lIntermediaire As Boolean            ' Vrai => Poutre intermédiaire | Faux => Poutre de rive
-
-    ''' <summary>
-    ''' Dalle béton de la poutre
-    ''' </summary>
-    Public Dalle As New cls_Dalle
+    '#####################################################################################
+    '# Paramètres pour les options de calcul
+    '#####################################################################################
 
     ''' <summary>
     ''' Options de calcul pour la poutre
@@ -287,6 +222,9 @@ Public Class cls_Poutre
     Dim lMultiQ(1) As Boolean                                       ' Indique si les chargements Q1 et Q2 sont appliqués sur plusieurs travées ou non
     Dim indiceCasRetrait As Integer
 
+    '--Points de calcul des contraintes normales
+    Public PtsSigma As New cls_PointsSigma
+
 #End Region
 
 #Region " Attributs pour les vérifications "
@@ -339,6 +277,7 @@ Public Class cls_Poutre
         Dim lMixte As Boolean               ' Indique si propriétés mixtes ou acier
         Dim InertieY() As Decimal           ' Table des inerties des sections
         Dim Aire() As Decimal               ' Table des aires des sections
+        Dim zANE() As Decimal               ' Table des positions des axe neutres élastiques (pour le calcul des contraintes)
         Dim nEqC As Decimal                 ' si mixte, coefficient d'équivalence acier-béton pour la dalle
         Dim nEqEC As Decimal                ' si mixte, coefficient d'équivalence acier-béton pour l'enrobage partiel
     End Structure
@@ -1515,7 +1454,6 @@ Public Class cls_Poutre
 #End Region
 
 #Region " Maillage : propriétés des barres le long de la poutre "
-
     Public Function IndiceTabElts(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal) As Integer
         '-------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM - V1.00
@@ -1593,6 +1531,7 @@ Public Class cls_Poutre
 
         ReDim MyElts.Aire(Me.Nodes.nbNodes - 2)
         ReDim MyElts.InertieY(Me.Nodes.nbNodes - 2)
+        ReDim MyElts.zANE(Me.Nodes.nbNodes - 2)
 
         '--> Cas très simple ou tout est constant
 
@@ -1602,6 +1541,7 @@ Public Class cls_Poutre
             For iElt = 0 To Nodes.nbNodes - 2
                 MyElts.Aire(iElt) = Aire
                 MyElts.InertieY(iElt) = InertieY
+                MyElts.zANE(iElt) = zANE
             Next
         End If
 
@@ -1622,8 +1562,9 @@ Public Class cls_Poutre
                 End If
 
                 If lCalcul Then
-                    InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle)
+                    InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, zANE)
                     Aire = Me.Section.ProfilA.Aire      ' A changer pour aire homgonénéisée
+
                     MyElts.InertieY(iElt) = InertieY
                     BeffPrec = Beff
                     SigneMprec = pSigneM(iElt)
@@ -1729,7 +1670,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub MaillagePropPlastiquesMixtes(Beff() As Decimal, Signe As Decimal, lValRd As Boolean, ByRef MplRd() As Decimal, zANP() As Decimal)
+    Public Sub MaillagePropPlastiquesMixtes(Beff() As Decimal, Signe As Decimal, lValRd As Boolean, ByRef MplRd() As Decimal, ByRef zANP() As Decimal)
         '------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '------------------------------------------------------------------------------
@@ -1768,6 +1709,38 @@ Public Class cls_Poutre
         Next
 
     End Sub
+
+    Public Sub ProprietesVerifAcier(lValRd As Boolean, ByRef MplRd As Decimal, ByRef zANP As Decimal, ByRef MelRd As Decimal, ByRef zANE As Decimal)
+        '------------------------------------------------------------------------------
+        '   20/10/23 :  Création - POM
+        '------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques et élastiques des sections le long d'une poutre acier,
+        '   Pour les vérifications
+        '   Pour une poutre acier, les propriétés de section sont constantes le long d'une poutre
+        '------------------------------------------------------------------------------
+        '   lValRd      [E] :   Indique si valeurs de calcul
+        '   MplRd       [S] :   Moment plastique
+        '   zANP        [S] :   Position des ANP
+        '   MelRd       [S] :   Moment élastique
+        '   zANE        [S] :   Position des ANE
+        '------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim InertieY As Decimal
+
+        '--> Propriétés
+
+        '# Elastiques
+
+        Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, zANE, inertiey, MelRd)
+
+        '# Plastiques
+
+        Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, 0, zANP, MplRd)
+
+    End Sub
+
 
 #End Region
 
@@ -2352,6 +2325,9 @@ Public Class cls_Poutre
         Dim TraveesTous As New List(Of Integer)
         Dim TraveesConsoles As New List(Of Integer)
         Dim TraveesCentrale As New List(Of Integer)
+        Dim pEtatDalle As cls_CasDeCharge.EnuEtatDalle
+        Dim pEtatDalleNonMixte As cls_CasDeCharge.EnuEtatDalle = cls_CasDeCharge.EnuEtatDalle.Acier
+        Dim pEtatDalleMixte As cls_CasDeCharge.EnuEtatDalle = cls_CasDeCharge.EnuEtatDalle.Mixte
 
         '--> Initialisation
 
@@ -2403,9 +2379,13 @@ Public Class cls_Poutre
 
         '# Charges permanentes globales
 
+        If Not lMixte Then pEtatDalle = cls_CasDeCharge.EnuEtatDalle.Acier Else pEtatDalle = cls_CasDeCharge.EnuEtatDalle.Mixte
+
         If (Not lMixte) Or lEtaitComplet Then
             IndiceG = Me.IndiceTabElts(lMixte, nEqDalleG1, nEqEnrobG1)
-            Me.ChargesA.Add(New cls_CasDeCharge(strChargesPermanentes, "G", IndiceG, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
+
+            Me.ChargesA.Add(New cls_CasDeCharge(strChargesPermanentes, "G", IndiceG, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalle))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("G1"), TraveesTous)
         End If
 
         '# Charges de poids propres pour les poutres mixtes non étayées
@@ -2416,18 +2396,18 @@ Public Class cls_Poutre
             IndiceG2 = Me.IndiceTabElts(lMixte, nEqDalleG2, nEqEnrobG2)
 
             If lNonEtaye Then
-                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1, Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1, Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalleNonMixte))
                 InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
             Else
                 'Cas de l'étaiement ponctuel
-                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1PP, Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1PP, Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalleNonMixte))
                 InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
 
-                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1C, IndiceG1, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
+                Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1C, IndiceG1, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalleMixte))
 
             End If
 
-            Me.ChargesA.Add(New cls_CasDeCharge(strAutresChargesPermanentes, symbG2, IndiceG2, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente))
+            Me.ChargesA.Add(New cls_CasDeCharge(strAutresChargesPermanentes, symbG2, IndiceG2, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalleMixte))
 
         End If
 
@@ -2445,14 +2425,14 @@ Public Class cls_Poutre
             Me.lMultiQ(iq) = lMultiT
             ChaineEx = strExploitation & " " & CStr(iq + 1)
             If (Me.NbTravees = 1) Or (Not lMultiT) Then
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
             Else
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 1", LabelQ(iq) & "#1", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 1", LabelQ(iq) & "#1", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 2", LabelQ(iq) & "#2", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 2", LabelQ(iq) & "#2", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesCentrale)
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 3", LabelQ(iq) & "#3", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 3", LabelQ(iq) & "#3", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
             End If
         Next
@@ -2463,19 +2443,19 @@ Public Class cls_Poutre
         Me.indiceCasRetrait = -1
 
         If lMixte Then
-            Me.ChargesA.Add(New cls_CasDeCharge(strRetraitDalle, "SHC", IndiceSH, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Retrait))
+            Me.ChargesA.Add(New cls_CasDeCharge(strRetraitDalle, "SHC", IndiceSH, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Retrait, pEtatDalleMixte))
             InitialiseChargesRetraitDalle(Me.ChargesA(Me.ChargesA.Count - 1))
             Me.indiceCasRetrait = Me.ChargesA.Count - 1
         End If
 
         If lEnrob Then
-            Me.ChargesA.Add(New cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Retrait))
+            Me.ChargesA.Add(New cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Retrait, pEtatDalle))
         End If
 
         '--> Charges de construction
 
         If lMixte And (Not lEtaitComplet) Then
-            Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Construction))
+            Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Construction, pEtatDalleNonMixte))
         End If
 
     End Sub
@@ -2693,13 +2673,15 @@ Public Class cls_Poutre
 
 #Region " Analyse "
 
-    Public Sub AAA_CalculMNVInternes()
+    Public Sub AAA_CalculMNVInternes(Optional lSigma As Boolean = False)
         '-------------------------------------------------------------------------------------
         '   21/08/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
         '   Analyse globale pour tous les cas de charges
         '-------------------------------------------------------------------------------------
-        '   Avant de lancer ce calcul, in est nécessaire d'avoir effectuer InitialiseCalculs
+        '   Avant de lancer ce calcul, il est nécessaire d'avoir effectuer InitialiseCalculs
+        '-------------------------------------------------------------------------------------
+        '   lSigma      [E] :   Indique si on calcule aussi les contraintes
         '-------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -2720,6 +2702,10 @@ Public Class cls_Poutre
 
         iTravP = Me.IndicePremiereTravee
         iTravD = Me.IndiceDerniereTravee
+
+        If lSigma Then
+            Me.PtsSigma.Initialise(Me)
+        End If
 
         '--> Préparation du modele EF
 
@@ -2759,13 +2745,15 @@ Public Class cls_Poutre
 
                 If CodeError_RDM = 0 Then
                     Me.ChargesA(jCdc).RecupereResultats(MyOutput_RDM, DonneesEF.NbNodes)
+                    If lSigma Then
+                        xxx
+                    End If
                 Else
                     MsgBox("Error calculation of " & Me.ChargesA(jCdc).Nom, MsgBoxStyle.Critical, "cls_Poutre/CalculMNVInternes")
                 End If
 
             End If
         Next
-
 
     End Sub
 
@@ -3083,6 +3071,221 @@ Public Class cls_Poutre
 
 #End Region
 
+#Region " Outils analyse "
+
+    Public Sub AnalyseDiagrammeMoments(MEd(,) As Decimal, ByRef iNodeMmax() As Integer, ByRef Mmax() As Decimal,
+                                       ByRef xMZero(,) As Decimal, ByRef lTraveeMomNeg() As Boolean)
+        '-------------------------------------------------------------------------------------
+        '   19/10/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Analyse d'un diagramme de moments pour les travées intermédiaires
+        '   Recherche du point de moment maxi
+        '   Recherche des points de moments nuls
+        '-------------------------------------------------------------------------------------
+        '   MEd             [E] :   Diagrame de moments, sur tous les noeuds de la poutre
+        '   iNodeMmax       [S] :   Indice du noeud de moment max, pour les travées intermédiaires
+        '   Mmax            [S] :   Tableau des valeurs de moment max, pour les travées intermédiaires
+        '   xMZero          [S] :   Tableau de la position x où les moment sont nuls (iTravee,k), k=0 à gauche, 1 à droite)
+        '   lTraveeMomNeg   [S] :   Indique une travée entièrement sous moment négatif
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iTravee As Integer
+
+        '--> Initialisation
+
+        ReDim iNodeMmax(Me.NombreTraveesDeuxAppuis)
+        ReDim Mmax(Me.NombreTraveesDeuxAppuis)
+        ReDim lTraveeMomNeg(Me.NombreTraveesDeuxAppuis)
+        ReDim xMZero(Me.NombreTraveesDeuxAppuis, 1)
+
+        '--> Calcul par travée
+
+        For iTravee = 1 To Me.NombreTraveesDeuxAppuis
+            lTraveeMomNeg(iTravee) = Me.EstTraveeEntierementMomentNegatif(iTravee, MEd)
+            If Not lTraveeMomNeg(iTravee) Then
+                RechercheMomentMaxTravee(iTravee, MEd, iNodeMmax(iTravee), Mmax(iTravee))
+                RechercheMomentsNuls(iTravee, MEd, Mmax(iTravee), iNodeMmax(iTravee), True, xMZero(iTravee, 0))
+                RechercheMomentsNuls(iTravee, MEd, Mmax(iTravee), iNodeMmax(iTravee), False, xMZero(iTravee, 1))
+            End If
+        Next
+
+    End Sub
+
+    Private Function EstTraveeEntierementMomentNegatif(iTravee As Integer, MEd(,) As Decimal) As Boolean
+        '-------------------------------------------------------------------------------------
+        '   20/10/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Détecte une travée entièrement sous moment négatif
+        '-------------------------------------------------------------------------------------
+        '   iTravee     [E] :   Indice de la travée
+        '   MEd         [E] :   Diagrame de moments, sur tous les noeuds de la poutre
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iNode, iDeb, iFin As Integer
+        Dim lNeg As Boolean = True
+        Dim MedZero As Decimal = -1
+
+        '--> Initialisation
+
+        iDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+        iFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+
+        '--> Extremités
+
+        lNeg = (IsSmaller(MEd(iDeb, 1), MedZero)) And (IsSmaller(MEd(iFin, 0), MedZero))
+
+        '--> Travée
+
+        iNode = iDeb
+        Do While (lNeg And (iNode < iFin - 1))
+            iNode += 1
+            lNeg = (IsSmaller(MEd(iNode, 1), MedZero)) And (IsSmaller(MEd(iNode, 0), MedZero))
+        Loop
+
+        Return lNeg
+    End Function
+
+    Private Sub RechercheMomentsNuls(iTravee As Integer, MEd(,) As Decimal, Mmax As Decimal,
+                                     iNodeMMax As Integer, lGauche As Boolean, ByRef xMZero As Decimal)
+        '-------------------------------------------------------------------------------------
+        '   20/10/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Recherche dans un diagramme de moment
+        '   du point de moment nul dans une travée particulière
+        '   Cela suppose que l'on a auparavant déterminé la position du point de moment max
+        '   et que la travée n'est pas entièrement sous moment négatif
+        '-------------------------------------------------------------------------------------
+        '   iTravee     [E] :   Indice de la travée
+        '   MEd         [E] :   Diagrame de moments, sur tous les noeuds de la poutre
+        '   iNodeMmax   [E] :   Indice du noeud de moment max, pour la travée calculée
+        '   Mmax        [E] :   Valeur de moment max, pour la travée calculée
+        '   lGauche     [E] :   Indique si on cherche le point de moment nul à gauche ou à droite du pt de moment max
+        '   xMzero      [S] :   Position x du point de moment nul
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iNode, iDeb, iFin, iStep, kDeb As Integer
+        Dim MZero As Decimal
+        Dim lTrouve As Boolean
+
+        '--> Initialisation
+
+        iFin = iNodeMMax
+        If lGauche Then
+            iDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            iStep = 1
+        Else
+            iStep = -1
+            iDeb = Me.Nodes.iNodeExtTrav(iTravee, 1)
+        End If
+        MZero = Mmax / 10000
+        kDeb = 0.5 + iStep / 2
+
+        '--> Recherche du point de moment nul
+
+        lTrouve = IsSmaller(MEd(iDeb, kDeb), MZero)
+        iNode = iDeb
+
+        If lTrouve Then
+            xMZero = Me.Nodes.xTravee(iNode)
+        Else
+
+            Do While (Not lTrouve) And (iNode <> iFin + iStep)
+                iNode += iStep
+                lTrouve = IsSmaller(Math.Abs(MEd(iNode, 0)), MZero) And IsSmaller(Math.Abs(MEd(iNode, 1)), MZero)
+
+                If lTrouve Then
+                    xMZero = Me.Nodes.xTravee(iNode)
+                Else
+
+                    lTrouve = IsSmaller(MEd(iNode - iStep, 1), -MZero) And IsGreater(MEd(iNode, 0), MZero)
+
+                    If lTrouve Then
+
+                        xMZero = Me.Nodes.xTravee(iNode - iStep) _
+                               + (Me.Nodes.xTravee(iNode) - Me.Nodes.xTravee(iNode - iStep)) / (MEd(iNode, 1) - MEd(iNode - iStep, 0)) _
+                               * (MEd(iNode, 1))
+
+                    End If
+
+                End If
+
+            Loop
+
+        End If
+
+        If Not lTrouve Then
+            xMZero = -1
+        End If
+    End Sub
+
+    Private Sub RechercheMomentMaxTravee(iTravee As Integer, MEd(,) As Decimal, ByRef iNodeMm As Integer, ByRef Mmax As Decimal)
+        '-------------------------------------------------------------------------------------
+        '   19/10/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Recherche dans un diagramme de moment
+        '   du moment max dans une travée particulière
+        '-------------------------------------------------------------------------------------
+        '   iTravee     [E] :   Indice de la travée
+        '   MEd         [E] :   Diagrame de moments, sur tous les noeuds de la poutre
+        '   iNodeMmax   [S] :   Indice du noeud de moment max, pour la travée calculée
+        '   Mmax        [S] :   Valeur de moment max, pour la travée calculée
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iNode, iDeb, iFin As Integer
+        Dim iT1, iT2 As Integer
+        Dim pMmax As Decimal = 0
+        Dim kFin As Integer
+
+        '--> Initialisation
+
+        iDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+        iFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+
+        '--> Traitement
+
+        pMmax = MEd(iDeb, 1)
+        iT1 = iDeb
+        iT2 = iT1
+
+        kFin = 1
+
+        For iNode = iDeb + 1 To iFin
+
+            If iNode = iFin Then kFin = 0
+            For k = 0 To kFin
+                If IsGreater(MEd(iNode, k), pMmax) Then
+                    pMmax = MEd(iNode, k)
+                    iT1 = iNode
+                    iT2 = iNode
+                ElseIf IsEqual(MEd(iNode, k), pMmax) Then
+                    iT2 = iNode
+                Else
+
+                End If
+            Next
+
+        Next
+
+        If iT2 > iT1 Then
+            iNodeMm = Math.Floor((iT2 + iT1) / 2)
+            Mmax = pMmax
+        Else
+            iNodeMm = iT1
+            Mmax = pMmax
+        End If
+
+    End Sub
+
+#End Region
+
 #Region " Vérifications "
 
     Public Sub AAA_Verifications()
@@ -3131,6 +3334,9 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 '# Vérification des poutres mixtes en phase finale aux ELU
                 Me.VerifMixte(0).VerificationELU(Me)
+
+            Case cls_Section.Enum_TypeSection.Acier
+                Me.VerifAcier(0).VerificationELU(Me)
 
         End Select
 

@@ -11,6 +11,11 @@
         Retrait
     End Enum
 
+    Enum EnuEtatDalle
+        Mixte
+        Acier
+    End Enum
+
     '--> Identifications
 
     Public Nom As String                                ' Dénomination dans la langue utilisateur du cas de charge
@@ -20,6 +25,7 @@
 
     Public IndElts As Integer                           ' Indice de la table BeamElements contenant les propriétés des barres
     Public Type As EnuType                              ' Type de chargement
+    Public EtatDalle As EnuEtatDalle                    ' Indique l'état de la dalle pour le cas de charge (acier = pas de mixité avec la dalle)
 
     '--> Charges
 
@@ -44,7 +50,8 @@
 
 #Region " Constructeurs "
 
-    Public Sub New(pNom As String, pSymbol As String, IndiceElts As Integer, iTrav0 As Integer, NbTrav As Integer, pType As EnuType)
+    Public Sub New(pNom As String, pSymbol As String, IndiceElts As Integer, iTrav0 As Integer, NbTrav As Integer,
+                   pType As EnuType, pEtatDalle As EnuEtatDalle)
         '-----------------------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
@@ -56,6 +63,7 @@
         '   NbTrav      [E] :   Nombre de travées dans la poutre (pour le dimensionnement des tableaux)
         '   iTrav0      [E] :   Indice de la première travée
         '   pType       [E] :   Type du chargement
+        '   pEtatDalle  [E] :   Etat de la dalle pour le chargement
         '-----------------------------------------------------------------------------------------------------------
 
         Me.Nom = pNom
@@ -77,6 +85,7 @@
         Me.lRunCalcul = False
 
         Me.Type = pType
+        Me.EtatDalle = pEtatDalle
 
     End Sub
 

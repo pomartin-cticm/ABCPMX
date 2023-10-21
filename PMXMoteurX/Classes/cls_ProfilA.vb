@@ -22,9 +22,11 @@ Public Class cls_ProfilA
 
     Private pInertieY As Decimal            ' Inertie de flexion / axe fort
     Private pInertieZ As Decimal            ' Inertie de flexion / axe faible
-    Private pModuleWplY As Decimal           ' Module de flexion plastique / axe fort
-    Private pModuleWelY As Decimal           ' Module de flexion élastique / axe fort
-    Private pModuleWelZ As Decimal           ' Module de flexion élastique / axe faible
+    Private pModuleWplY As Decimal          ' Module de flexion plastique / axe fort
+    Private pModuleWelY As Decimal          ' Module de flexion élastique / axe fort
+    Private pModuleWelZ As Decimal          ' Module de flexion élastique / axe faible
+
+    Private pzCdG As Decimal                ' Position du CdG
 
 #End Region
 
@@ -375,12 +377,22 @@ Public Class cls_ProfilA
         ProprietesElastiquesMyy(1, False, 1, zAN, Me.pInertieY, MRd)
 
         Me.pModuleWelY = Me.pInertieY / Math.Max(Math.Abs(zAN), Math.Abs(-Me.ha - zAN))
+        Me.pzCdG = zAN
 
         ProprietesElastiquesMzz(False, 1, zAN, Me.pInertieZ, MRd)
 
         Me.pModuleWelZ = Me.pInertieZ / Math.Max(Bfm / 2 - zAN, zAN + Bfm / 2)
 
     End Sub
+
+    Public ReadOnly Property zCdG
+        Get
+            Dim zAN As Decimal
+            Dim MRd As Decimal
+            ProprietesElastiquesMyy(1, False, 1, zAN, Me.pInertieY, MRd)
+            Return zan
+        End Get
+    End Property
 
 #End Region
 

@@ -1474,8 +1474,8 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim DiaCourbureSup As Decimal = enrobage.LitsArmaOLD(2).Phi
-        Dim DiaCourbureInf As Decimal = enrobage.LitsArmaOLD(0).Phi
+        Dim DiaCourbureSup As Decimal = enrobage.LitArma(2).PhiExt  'enrobage.LitsArmaOLD(2).Phi
+        Dim DiaCourbureInf As Decimal = enrobage.LitArma(0).PhiExt  'enrobage.LitsArmaOLD(0).Phi
         Dim LongueurRetour As Decimal = 5 * enrobage.Etriers_Phi
         Dim xc, yc As Single
         Dim xo, yo As Single
@@ -1564,8 +1564,8 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim DiaCourbureSup As Decimal = enrobage.LitsArmaOLD(2).Phi
-        Dim DiaCourbureInf As Decimal = enrobage.LitsArmaOLD(0).Phi
+        Dim DiaCourbureSup As Decimal = enrobage.LitArma(2).PhiExt       ' enrobage.LitsArmaOLD(2).Phi
+        Dim DiaCourbureInf As Decimal = enrobage.LitArma(0).PhiExt       ' enrobage.LitsArmaOLD(0).Phi
         Dim LongueurRetour As Decimal = 5 * enrobage.Etriers_Phi
         Dim xc, yc As Single
         Dim xo, yo As Single
@@ -6237,11 +6237,13 @@ Module Mod_Dessins
 
         Select Case iArma
             Case 0
-                yo = -MyProfil.ha + MyProfil.Tfi + MyEnrob.Etriers_EnrobageZ + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2
+                ' yo = -MyProfil.ha + MyProfil.Tfi + MyEnrob.Etriers_EnrobageZ + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2
+                yo = -MyProfil.ha + MyProfil.Tfi + MyEnrob.Etriers_EnrobageZ + MyEnrob.Etriers_Phi + MyEnrob.LitArma(iArma).PhiExt / 2
             Case 1
                 yo = -MyProfil.ha / 2
             Case 2
-                yo = -MyProfil.Tfs - MyEnrob.Etriers_EnrobageZ - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2
+                'yo = -MyProfil.Tfs - MyEnrob.Etriers_EnrobageZ - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2
+                yo = -MyProfil.Tfs - MyEnrob.Etriers_EnrobageZ - MyEnrob.Etriers_Phi - MyEnrob.LitArma(iArma).PhiExt / 2
         End Select
         Select Case MyEnrob.Etriers_Type
             Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : uYInterne = MyEnrob.Etriers_EnrobageY
@@ -6259,19 +6261,22 @@ Module Mod_Dessins
 
         For jChambre As Integer = 0 To 1
 
-            xo = Signe * (MyProfil.Bfs * MyEnrob.Ratio_bc / 2 - MyEnrob.Etriers_EnrobageY - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2)
-            xe = Signe * (MyProfil.Tw / 2 + uYInterne + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2)
+            'xo = Signe * (MyProfil.Bfs * MyEnrob.Ratio_bc / 2 - MyEnrob.Etriers_EnrobageY - MyEnrob.Etriers_Phi - MyEnrob.LitsArmaOLD(iArma).Phi / 2)
+            'xe = Signe * (MyProfil.Tw / 2 + uYInterne + MyEnrob.Etriers_Phi + MyEnrob.LitsArmaOLD(iArma).Phi / 2)
+            xo = Signe * (MyProfil.Bfs * MyEnrob.Ratio_bc / 2 - MyEnrob.Etriers_EnrobageY - MyEnrob.Etriers_Phi - MyEnrob.LitArma(iArma).PhiExt / 2)
+            xe = Signe * (MyProfil.Tw / 2 + uYInterne + MyEnrob.Etriers_Phi + MyEnrob.LitArma(iArma).PhiExt / 2)
 
-            If MyEnrob.LitsArmaOLD(iArma).nbArma = 1 Then
-                Delta = 1
-            Else
-                Delta = (xe - xo) / (MyEnrob.LitsArmaOLD(iArma).nbArma - 1)
-            End If
-            For i As Integer = 1 To MyEnrob.LitsArmaOLD(iArma).nbArma
+            'If MyEnrob.LitsArmaOLD(iArma).nbArma = 1 Then
+            Delta = 1
+            'Else
+            '    Delta = (xe - xo) / (MyEnrob.LitsArmaOLD(iArma).nbArma - 1)
+            'End If
+            For i As Integer = 1 To 1 ' MyEnrob.LitsArmaOLD(iArma).nbArma
 
                 xi = xo + Delta * (i - 1)
 
-                AddCerclePlein(MyGr, MyBrushA, xi, yo + DeltaY(jChambre), MyEnrob.LitsArmaOLD(iArma).Phi, MyParAffloc, True)
+                'AddCerclePlein(MyGr, MyBrushA, xi, yo + DeltaY(jChambre), MyEnrob.LitsArmaOLD(iArma).Phi, MyParAffloc, True)
+                AddCerclePlein(MyGr, MyBrushA, xi, yo + DeltaY(jChambre), MyEnrob.LitArma(iArma).PhiExt, MyParAffloc, True)
 
             Next
 

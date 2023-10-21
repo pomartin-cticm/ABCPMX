@@ -1,6 +1,7 @@
 ﻿Imports System.Collections.Specialized.BitVector32
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
+Imports System.Security.Policy
 
 Public Class cls_Section
 
@@ -302,8 +303,7 @@ Public Class cls_Section
 #Region " Propriétés plastiques de la section "
 
     Public Sub ProprietesPlastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
-                                       ByRef zANP As Decimal, ByRef MplRd As Decimal,
-                                       Optional bEff As Decimal = 0, Optional Eta As Decimal = 1)
+                                       ByRef zANP As Decimal, ByRef MplRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -442,7 +442,7 @@ Public Class cls_Section
 #Region " Propriétés élastiques de la section "
 
     Public Function InertieYY(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
-                              lDalle As Boolean, nEqDal As Decimal, Beff As Decimal, MyDalle As cls_Dalle) As Decimal
+                              lDalle As Boolean, nEqDal As Decimal, Beff As Decimal, MyDalle As cls_Dalle, ByRef zANE As Decimal) As Decimal
         '-------------------------------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -460,7 +460,7 @@ Public Class cls_Section
 
         '--> Déclaration
 
-        Dim zANe, InertieY, MelRd As Decimal
+        Dim InertieY, MelRd As Decimal
 
         '--> Traitement
 
@@ -474,6 +474,53 @@ Public Class cls_Section
 
     End Function
 
+
+    Public Sub ProprietesElastiquesAcierMyy(lValeurRd As Boolean, Gammas As cls_Gamma,
+                                            ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   20/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '   Pour une section acier, sans enrobage partiel
+        '-------------------------------------------------------------------------------------------------------------------
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   zANE        [S] :   Position axe neutre élastique
+        '   InertieY    [S] :   Inertie de flexion / axe fort
+        '   MelRd       [S] :   Moment élastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+        Const Signe As Decimal = 1
+
+        '--> Initialisation
+
+        Hw = Me.ProfilA.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        MaillageProfileA(Gammas, RhoV, MyModele)
+
+        '--> Recherche de l'axe neutre élastique
+
+        MyModele.RechercheANE(Signe, zANE)
+
+        '--> Calcul de l'inertie
+
+        InertieY = MyModele.InertieFlexion(Signe, zANE)
+
+        '--> Moment élastique
+
+        MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
+
+    End Sub
 
     Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
                                        ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
@@ -1814,24 +1861,24 @@ Public Class cls_Section
 
 #Region " Outils "
 
-    Public Sub InitialisePositionArmaturesEnrobage()
-        '--------------------------------------------------------------------------------------------
-        '   26/04/23 :  Création - POM
-        '--------------------------------------------------------------------------------------------
-        '   Positionnement des armatures de la section d'enrobage
-        '--------------------------------------------------------------------------------------------
+    'Public Sub InitialisePositionArmaturesEnrobage()
+    '    '--------------------------------------------------------------------------------------------
+    '    '   26/04/23 :  Création - POM
+    '    '--------------------------------------------------------------------------------------------
+    '    '   Positionnement des armatures de la section d'enrobage
+    '    '--------------------------------------------------------------------------------------------
 
-        With Me.Enrobage
+    '    With Me.Enrobage
 
-            .LitsArmaOLD(0).zArma = -Me.ProfilA.ha + Me.ProfilA.Tfi + .Etriers_EnrobageZ + .Etriers_Phi + .LitsArmaOLD(0).Phi / 2
+    '        .LitsArmaOLD(0).zArma = -Me.ProfilA.ha + Me.ProfilA.Tfi + .Etriers_EnrobageZ + .Etriers_Phi + .LitsArmaOLD(0).Phi / 2
 
-            .LitsArmaOLD(2).zArma = -Me.ProfilA.Tfs - .Etriers_EnrobageZ - .Etriers_Phi - .LitsArmaOLD(2).Phi / 2
+    '        .LitsArmaOLD(2).zArma = -Me.ProfilA.Tfs - .Etriers_EnrobageZ - .Etriers_Phi - .LitsArmaOLD(2).Phi / 2
 
-            .LitsArmaOLD(1).zArma = (.LitsArmaOLD(0).zArma + .LitsArmaOLD(2).zArma) / 2
+    '        .LitsArmaOLD(1).zArma = (.LitsArmaOLD(0).zArma + .LitsArmaOLD(2).zArma) / 2
 
-        End With
+    '    End With
 
-    End Sub
+    'End Sub
 
     ''' <summary>
     ''' Renvoie la position z d'un lit d'armature dans l'enrobage

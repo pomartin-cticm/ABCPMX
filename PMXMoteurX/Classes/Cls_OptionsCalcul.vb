@@ -18,7 +18,6 @@ Public Class cls_OptionsCalcul
 
 #Region " Attributs "
 
-
     Public RH As Decimal                            ' Humidité pour le calcul du béton
 
     Public Gamma As cls_Gamma                       ' Coefficients partiels pour le calcul
@@ -44,6 +43,8 @@ Public Class cls_OptionsCalcul
     Public TimeT0SH() As Decimal                    ' Age au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
 
     Public TimeT As Decimal                         ' Age du béton au temps du calcul
+
+    Public lElasticDesign As Decimal                ' Indique quand un dimensionnement élastique est imposé
 
 #End Region
 
@@ -171,6 +172,8 @@ Public Class cls_OptionsCalcul
         Me.TimeT0SH = {1, 1}
 
         Me.TimeT = 50 * 365
+
+        Me.lElasticDesign = False
 
         Exit Sub
 

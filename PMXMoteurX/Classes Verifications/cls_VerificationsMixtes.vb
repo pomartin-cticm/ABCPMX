@@ -61,6 +61,11 @@
         Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
         Dim lSimple As Boolean = False
         'Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
+        Dim lGeneration1 As Boolean = (MyPoutre.Param.Norme = MyPoutre.Param.Enu_Normes.EurocodesG1)
+
+        Dim iNodeMmax() As Integer, Mmax() As Decimal
+        Dim xMZero(,) As Decimal = Nothing
+        Dim lTraveeMomNeg() As Boolean
 
         '--> Initialisations
 
@@ -73,9 +78,11 @@
         MyPoutre.MaillageBeff(lSimple, False, Beff)
 
         '# Tranchant résistant
+
         VplRd = MyPoutre.Section.VplRd(MyPoutre.Param.Gamma.GammaM0)
 
         '# Résistance au voilement par cisaillement
+
         lTwoAdjacentCantilevers = MyPoutre.lTraveeConsoleGauche And MyPoutre.lTraveeConsoleDroite
 
         VbRd = MyPoutre.Section.VbRd(MyPoutre.Param.Gamma.GammaM1, MyPoutre.Param.EtaW, lTwoAdjacentCantilevers)
@@ -92,22 +99,13 @@
         ReDim ClasseSection(MyPoutre.Nodes.nbNodes - 1, 1)
 
         For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
-            ClasseSection(iNode, 0) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANEPlus(iNode), True, MyPoutre.Param.Norme = MyPoutre.Param.Enu_Normes.EurocodesG1, MyPoutre.Dalle.t_d)
-            ClasseSection(iNode, 1) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANEMoins(iNode), False, MyPoutre.Param.Norme = MyPoutre.Param.Enu_Normes.EurocodesG1, MyPoutre.Dalle.t_d)
+            ' ClasseSection(iNode, 0) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANEPlus(iNode), True,lGeneration1, MyPoutre.Dalle.t_d)
+            ' ClasseSection(iNode, 1) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANEMoins(iNode), False, lGeneration1, MyPoutre.Dalle.t_d)
         Next
 
         '--> Boucle sur les combinaisons
 
         For iCombi = 0 To MyPoutre.CombiA_ELU.nbCombi - 1
-
-            '# Controle de la classe des sections
-
-
-
-
-            '# Degré de connexion
-
-
 
             '# Combinaisons des moments, efforts tranchants
 
@@ -117,11 +115,24 @@
 
             MyPoutre.CombiA_ELU.CombineEffortsT(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, VEd, False)
 
+            '# Controle de la classe des sections
+
+
+            '# Analyse du diagramme de moment
+
+            MyPoutre.AnalyseDiagrammeMoments(MEd, iNodeMmax, Mmax, xMZero, lTraveeMomNeg)
+
+            '# Degré de connexion
+
+
+
+
             '# Vérification sous moment fléchissant
 
             Me.CriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdPlus, MplRdMoins)
 
             '# Vérification sous effort tranchant
+
             Me.CritereTranchants(MyPoutre, iCombi, VEd, VplRd)
 
             '# Vérification au voilement par cisaillement

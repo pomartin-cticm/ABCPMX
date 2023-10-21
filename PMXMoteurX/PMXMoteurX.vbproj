@@ -73,6 +73,7 @@
     <Compile Include="Classes Charges\cls_Force.vb" />
     <Compile Include="Classes Charges\cls_ForceRepartie.vb" />
     <Compile Include="Classes Charges\cls_Moment.vb" />
+    <Compile Include="Classes Charges\cls_PointsSigma.vb" />
     <Compile Include="Classes Materiaux\cls_Acier.vb" />
     <Compile Include="Classes Materiaux\cls_AcierArmature.vb" />
     <Compile Include="Classes Materiaux\cls_Beton.vb" />

@@ -28,7 +28,7 @@ Public Class cls_Enrobage_Partiel
     ''' <summary>
     ''' Définiton des lits d'armatures longitudinales
     ''' </summary>
-    Public LitsArmaOLD(2) As struc_LitArma
+    'Public LitsArmaOLD(2) As struc_LitArma
 
     ''' <summary>
     ''' Indique si armatures de construction dans le lit inf
@@ -39,11 +39,6 @@ Public Class cls_Enrobage_Partiel
     ''' Diametre des armatures de construction
     ''' </summary>
     Public ConstPhi As Decimal
-
-    ''' <summary>
-    ''' largeur de béton
-    ''' </summary>
-    'Public b_c As Decimal
 
     ''' <summary>
     ''' Ratio largeur de béton/largeur profilé
@@ -151,23 +146,23 @@ Public Class cls_Enrobage_Partiel
 
         '--> Lit d'armatures inférieur
 
-        Me.LitsArmaOLD(0).Phi = 0.008
-        Me.LitsArmaOLD(0).lArma = True
-        Me.LitsArmaOLD(0).nbArma = 2
+        'Me.LitsArmaOLD(0).Phi = 0.008
+        'Me.LitsArmaOLD(0).lArma = True
+        'Me.LitsArmaOLD(0).nbArma = 2
         Me.lArmaConst = False
         ConstPhi = 0.008
 
         '--> Lit intermédiaire
 
-        Me.LitsArmaOLD(1).Phi = 0.008
-        Me.LitsArmaOLD(1).lArma = False
-        Me.LitsArmaOLD(1).nbArma = 2
+        'Me.LitsArmaOLD(1).Phi = 0.008
+        'Me.LitsArmaOLD(1).lArma = False
+        'Me.LitsArmaOLD(1).nbArma = 2
 
         '--> Lit d'armatures supérieur
 
-        Me.LitsArmaOLD(2).Phi = 0.008
-        Me.LitsArmaOLD(2).lArma = True
-        Me.LitsArmaOLD(2).nbArma = 2
+        'Me.LitsArmaOLD(2).Phi = 0.008
+        'Me.LitsArmaOLD(2).lArma = True
+        'Me.LitsArmaOLD(2).nbArma = 2
 
         Me.Beton = New cls_Beton()
 
@@ -221,8 +216,8 @@ Public Class cls_Enrobage_Partiel
     Public Sub DeepClone(ByVal EnrobagePartielSource As cls_Enrobage_Partiel, ByRef EnrobagePartielCible As cls_Enrobage_Partiel)
         EnrobagePartielCible = EnrobagePartielSource.Clone
 
-        ReDim EnrobagePartielCible.LitsArmaOLD(EnrobagePartielSource.LitsArmaOLD.GetUpperBound(0))
-        EnrobagePartielCible.LitsArmaOLD = EnrobagePartielSource.LitsArmaOLD.Clone
+        'ReDim EnrobagePartielCible.LitsArmaOLD(EnrobagePartielSource.LitsArmaOLD.GetUpperBound(0))
+        'EnrobagePartielCible.LitsArmaOLD = EnrobagePartielSource.LitsArmaOLD.Clone
 
         ReDim EnrobagePartielCible.LitArma(EnrobagePartielSource.LitArma.GetUpperBound(0))
         For i As Integer = 0 To EnrobagePartielCible.LitArma.Length - 1
@@ -237,7 +232,7 @@ Public Class cls_Enrobage_Partiel
     Public Shared Sub DeepCopie(EnrobageSource As cls_Enrobage_Partiel, ByRef EnrobageCible As cls_Enrobage_Partiel)
 
         EnrobageCible = EnrobageSource.Clone
-        EnrobageCible.LitsArmaOLD = EnrobageSource.LitsArmaOLD.Clone
+        'EnrobageCible.LitsArmaOLD = EnrobageSource.LitsArmaOLD.Clone
         EnrobageCible.Beton = EnrobageSource.Beton.Clone
 
     End Sub

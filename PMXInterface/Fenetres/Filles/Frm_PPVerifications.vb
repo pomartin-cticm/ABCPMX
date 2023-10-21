@@ -31,6 +31,13 @@ Public Class Frm_PPVerifications
 
     Dim CritereA As New cls_Critere(MyProjet.Poutres(MyProjet.IndEnCours).Nodes.nbNodes)
 
+    Const pDecAxe As Decimal = 0.05
+    Const kADJV As Decimal = 0.95
+    Const kTiret As Decimal = 0.025
+
+    Dim TypeEffet As Enu_TypeVariable
+
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -73,6 +80,9 @@ Public Class Frm_PPVerifications
         Me.lbl_Node.Text = "Node"
         Me.lbl_Combinaison.Text = "Combination"
 
+        Me.btn_OK.Text = "Close"
+        Me.btn_Annuler.Text = "Annuler"
+
         strUltimate = "Ultimate"
         strIncendie = "Fire"
         strConstruction = "Construction"
@@ -107,6 +117,7 @@ Public Class Frm_PPVerifications
 
                 Select Case MyPoutre.TypeSection
                     Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage
+                        RemplirComboCriterePoutreAcierELU(MyPoutre)
                     Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                         RemplirComboCriterePoutreMixteELU(MyPoutre)
                 End Select
@@ -119,6 +130,22 @@ Public Class Frm_PPVerifications
 
     End Sub
 
+    Private Sub RemplirComboCriterePoutreAcierELU(MyPoutre As cls_Poutre)
+        Me.cmb_Critere.Items.Clear()
+
+        Const iVerif As Integer = 0
+
+        lNoCritere = True
+
+        If Not (MyPoutre.VerifAcier Is Nothing) Then
+            AjouteCritereDansCombo(strCritereM, MyPoutre.VerifAcier(iVerif).CritereM, lNoCritere)
+            AjouteCritereDansCombo(strCritereV, MyPoutre.VerifAcier(iVerif).CritereV, lNoCritere)
+        End If
+
+        If lNoCritere Then
+            Me.cmb_Critere.Items.Add(strNoCritere)
+        End If
+    End Sub
     Private Sub RemplirComboCriterePoutreMixteELU(MyPoutre As cls_Poutre)
 
         Me.cmb_Critere.Items.Clear()
@@ -183,15 +210,36 @@ Public Class Frm_PPVerifications
 
                 Select Case MyPoutre.TypeSection
                     Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage
+
+                        Select Case Me.cmb_Critere.Text
+                            Case strCritereM
+                                TransfertCritere(MyPoutre.VerifAcier(0).CritereM)
+                                TypeEffet = Enu_TypeVariable.Moment
+                            Case strCritereV
+                                TransfertCritere(MyPoutre.VerifAcier(0).CritereV)
+                                TypeEffet = Enu_TypeVariable.Effort
+                            Case strNoCritere
+                                lNoCritere = True
+                        End Select
+
                     Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
 
-                        If Me.cmb_Critere.Text = strCritereM Then
-                            TransfertCritere(MyPoutre.VerifMixte(0).CritereM)
-                        End If
+                        Select Case Me.cmb_Critere.Text
+                            Case strCritereM
+                                TransfertCritere(MyPoutre.VerifMixte(0).CritereM)
+                                TypeEffet = Enu_TypeVariable.Moment
+                            Case strCritereV
+                                TransfertCritere(MyPoutre.VerifMixte(0).CritereV)
+                                TypeEffet = Enu_TypeVariable.Effort
+                            Case strNoCritere
+                                lNoCritere = True
+                        End Select
+
                 End Select
 
         End Select
 
+        If CritereA.iCombiM > -1 Then _
         Me.txt_Combi.Text = MyPoutre.CombiA_ELU.Symbole(CritereA.iCombiM)            ' Format(CritereA.iCombiM, "0")
         Me.txt_Node.Text = Format(CritereA.iNodeM + 1, "0")
         Me.txt_ValMax.Text = GetStringInUnit(CritereA.CritereMax, Enu_TypeVariable.SansType, 4, 3, False)
@@ -292,6 +340,7 @@ Public Class Frm_PPVerifications
 
         Dim MyPenPoutre As New Pen(ColorPoutre)
         Dim MyPenSelect As New Pen(ColorSelect, 2)
+        Dim xAxe As Decimal
 
         '--> Initialisation
 
@@ -301,10 +350,11 @@ Public Class Frm_PPVerifications
         ' Dim MyPenDef As New Pen(ColorDef)
         'Dim MyPenM As New Pen(Color.Blue)
 
+        dCar = Longueur * pDecAxe
         xMin = 0 - dCar
         xMax = Longueur + dCar
 
-        yMin = -EcartZ / 2
+        yMin = 0
         yMax = +EcartZ / 2
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
@@ -341,24 +391,75 @@ Public Class Frm_PPVerifications
 
         '--> Affichage du critère
 
-        If lCritere Then
+        If lCritere And (Not lNoCritere) Then
             DessineCritere(myGr, myCritere.Critere, myCritere.CritereMax, MyPoutre, dCar, ColorCrit, MyParAff)
         End If
 
         '--> Affichage des actions et résistances
 
-        If lAction Or lResistance Then
+        If (lAction Or lResistance) And (Not lNoCritere) Then
 
             valEdMax = CritereA.Action.Max
             valRdMax = CritereA.Resistance.Max
             valMax = Math.Max(valEdMax, valRdMax)
 
-            If IsEqual(valMax, 0) Then kEch = 1 Else kEch = dCar / valMax
+            If IsEqual(valMax, 0) Then kEch = 1 Else kEch = dCar / valMax * kADJV
 
             If lAction Then DessineTableau(myGr, CritereA.Action, kEch, MyPoutre, ColorAction, 1, MyParAff)
             If lResistance Then DessineTableau(myGr, CritereA.Resistance, kEch, MyPoutre, ColorResistance, 1, MyParAff)
 
+            xAxe = -Longueur * pDecAxe
+            DessineAxeEffets(myGr, xAxe, valRdMax, valEdMax, kEch, dCar, ColorAction, ColorResistance, TypeEffet, MyParAff)
+
         End If
+
+    End Sub
+
+    Private Sub DessineAxeEffets(MyGr As Graphics, xAxe As Decimal, ValMaxR As Decimal, ValMaxA As Decimal,
+                                  kEch As Decimal, dCar As Decimal, CouleurA As Color, CouleurR As Color,
+                                 TypeV As Enu_TypeVariable, MyParAff As Struc_Affichage)
+        '-----------------------------------------------------------------------------------------------
+        '   20/10/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation de l'axe pour les effets (actions et résistances) 
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   xAxe        [E] :   Position de l'axe
+        '   ValMaxR     [E] :   Valeur maximale des résistances
+        '   ValMaxA     [E] :   Valeur maxi de l'action
+        '   kEch        [E] :   Facteur d'échelle
+        '   dCar        [E] :   
+        '   Longueur    [E] :   Longueur de la poutre
+        '   MyParAff    [E] :   Paramètres d'affichage
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim PenAxe As New Pen(Color.Black)
+        Dim MyPenB As SolidBrush
+        Dim Chaine As String = ""
+        Dim MyFont As New Font("Arial", 8)
+        Dim pVal As Decimal
+        Dim PenLimit As New Pen(Color.DarkRed, 0.5)
+        Dim dTiret As Decimal = kTiret * dCar
+
+        '--> Axe
+
+        AddFleche(MyGr, PenAxe, xAxe, 0, xAxe, dCar, MyParAff, False, True)
+
+        '--> Valeur maximale le long de l'axe pour la résistance
+
+        MyPenB = New SolidBrush(CouleurR)
+        Chaine = GetStringInUnit(ValMaxR, TypeV, 2, 1, False)
+        AddLigne(MyGr, xAxe, kEch * ValMaxR, xAxe + dTiret, kEch * ValMaxR, MyParAff)
+        AddTexte(MyGr, MyPenB, Chaine, MyFont, xAxe, kEch * ValMaxR, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+
+        '--> Valeur maxi de l'effet
+
+        MyPenB = New SolidBrush(CouleurA)
+        Chaine = GetStringInUnit(ValMaxA, TypeV, 2, 1, False)
+        AddLigne(MyGr, xAxe, kEch * ValMaxA, xAxe + dTiret, kEch * ValMaxA, MyParAff)
+        AddTexte(MyGr, MyPenB, Chaine, MyFont, xAxe, kEch * ValMaxA, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
 
     End Sub
 
@@ -441,19 +542,91 @@ Public Class Frm_PPVerifications
 
         Dim pValMax As Decimal = Math.Ceiling(valMax)
         Dim kEch As Decimal
+        Dim xAxe As Decimal = MyPoutre.LongueurTotale * (1 + pDecAxe)
 
         '--> Initialisation
 
-        If IsEqual(pValMax, 0) Then kEch = 1 Else kEch = dCar / pValMax
+        If IsEqual(pValMax, 0) Then kEch = 1 Else kEch = kADJV * dCar / pValMax
 
         '--> Représentation de l'axe
+
+        DessineAxeCritere(MyGr, xAxe, pValMax, valMax, kEch, dCar, MyPoutre.LongueurTotale, MyParAff)
 
         '--> Représentation de la courbe du critère
 
         DessineTableau(MyGr, valCrit, kEch, MyPoutre, MyCouleur, 2, MyParAff)
 
+    End Sub
+
+    Private Sub DessineAxeCritere(MyGr As Graphics, xAxe As Decimal, pValMax As Decimal, ValMaxC As Decimal,
+                                  kEch As Decimal, dCar As Decimal, Longueur As Decimal, MyParAff As Struc_Affichage)
+        '-----------------------------------------------------------------------------------------------
+        '   20/10/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation de l'axe pour les critères
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   xAxe        [E] :   Position de l'axe
+        '   pValMax     [E] :   Valeur maximale du critère affichée sur l'axe
+        '   ValMax      [E] :   Valeur maxi du critère
+        '   kEch        [E] :   Facteur d'échelle
+        '   dCar        [E] :   
+        '   Longueur    [E] :   Longueur de la poutre
+        '   MyParAff    [E] :   Paramètres d'affichage
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim PenAxe As New Pen(Color.Black)
+        Dim MyPenB As New SolidBrush(Color.Black)
+        Dim Chaine As String = ""
+        Dim MyFont As New Font("Arial", 8)
+        Dim pVal As Decimal
+        Dim PenLimit As New Pen(Color.DarkRed, 0.5)
+        Dim dTiret As Decimal = kTiret * dCar
+
+        '--> Axe
+
+        AddFleche(MyGr, PenAxe, xAxe, 0, xAxe, dCar, MyParAff, False, True)
+
+        '--> Valeur maximale le long de l'axe
+
+        Chaine = GetStringInUnit(pValMax, Enu_TypeVariable.SansType, 2, 1, False)
+        AddLigne(MyGr, xAxe, kEch * pValMax, xAxe * (1 - pDecAxe / 4), kEch * pValMax, MyParAff)
+        AddTexte(MyGr, MyPenB, Chaine, MyFont, xAxe, kEch * pValMax, MyParAff, HorizontalAlignment.Right, VerticalAlignement.Middle)
+
+        '--> Valeur 1
+
+        If Not IsEqual(pValMax, 1) Then
+            pVal = 1
+
+            Chaine = GetStringInUnit(pVal, Enu_TypeVariable.SansType, 2, 1, False)
+            AddLigne(MyGr, xAxe, kEch * pVal, xAxe - dTiret, kEch * pVal, MyParAff)
+            AddTexte(MyGr, MyPenB, Chaine, MyFont, xAxe, kEch * pVal, MyParAff, HorizontalAlignment.Right, VerticalAlignement.Middle)
+
+            AddLigne(MyGr, PenLimit, 0, kEch * pVal, Longueur, kEch * pVal, MyParAff)
+
+        End If
+
+        '--> Valeur maxi
+
+        If Not IsEqual(pValMax, ValMaxC) Then
+            pVal = ValMaxC
+
+            Chaine = GetStringInUnit(pVal, Enu_TypeVariable.SansType, 2, 1, False)
+            AddLigne(MyGr, xAxe, kEch * pVal, xAxe - dTiret, kEch * pVal, MyParAff)
+            AddTexte(MyGr, MyPenB, Chaine, MyFont, xAxe, kEch * pVal, MyParAff, HorizontalAlignment.Right, VerticalAlignement.Middle)
+
+            AddLigne(MyGr, PenLimit, 0, kEch * pVal, Longueur, kEch * pVal, MyParAff)
+
+        End If
+
+        '--> Divisions
+
+
 
     End Sub
+
 
 
 #End Region
