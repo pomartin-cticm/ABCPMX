@@ -416,7 +416,7 @@ Public Class Frm_PMX
 
 
             Case EnuFenetres.LargeurEfficace
-                Frm_LargeurEfficace.ShowDialog()
+                Frm_PPLargeurEfficace.ShowDialog()
 
             Case EnuFenetres.PPCasDeCharge
                 Frm_PPCasDeCharge.ShowDialog()

@@ -1,6 +1,6 @@
 ﻿Imports PMXMoteur2
 
-Public Class Frm_LargeurEfficace
+Public Class Frm_PPLargeurEfficace
 
 #Region " Attributs "
 

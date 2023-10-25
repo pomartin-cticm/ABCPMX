@@ -45,19 +45,18 @@
 
         Dim iCombi As Integer
         Dim MEd(,), VEd(,) As Decimal
-        Dim VplRd As Decimal                        ' Effort tranchant résistant (a priori constant le long de la poutre)
-        Dim VbRd As Decimal                          ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
+        Dim VplRd As Decimal                            ' Effort tranchant résistant (a priori constant le long de la poutre)
+        Dim VbRd As Decimal                             ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
         Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
         Dim MplRdPlus() As Decimal = {0}                ' Moments plastiques positifs
         Dim MplRdMoins() As Decimal = {0}               ' Moments plastiques négatifs
         Dim zANPPlus() As Decimal = {0}                 ' Position des ANP sous moment > 0
         Dim zANPMoins() As Decimal = {0}                ' Position des ANP sous moment < 0
-        Dim zANEPlus() As Decimal = {0}                 ' Position des ANE sous moment > 0
-        Dim zANEMoins() As Decimal = {0}                ' Position des ANE sous moment < 0
+        Dim zANE(,) As Decimal = Nothing                ' Position des ANE sous moment 
         Const lCombiRetrait = False                     '#ALERTE Pour le moment, à pondérer plus tard
         Dim lRElastiqueImpose As Boolean = False        ' Vérification élastique imposée
         Dim lRElastique As Boolean
-        Dim ClasseSection(,) As Integer                 ' Tableau dimensions (NbNodes, 0 ou 1 pour moments positifs et négatifs resp.)
+        Dim ClasseSection(,) As Integer                 ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite)
         Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
         Dim lSimple As Boolean = False
         'Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
@@ -67,7 +66,16 @@
         Dim xMZero(,) As Decimal = Nothing
         Dim lTraveeMomNeg() As Boolean
 
+        Const lRetraitElastique As Boolean = True
+        Dim SigmaP(,,,) As Decimal = Nothing        ' Contraintes normales dans l'hypothèse d'un moment positif
+        Dim SigmaM(,,,) As Decimal = Nothing        ' Contraintes normales dans l'hypothèse d'un moment négatif
+        Dim SigmaELU(,,) As Decimal = Nothing       ' Contraintes normales sous 1 combinaison ELU
+
+        Dim lClasse3, lClasse4 As Boolean           ' Indique si présence d'au moins une section de classe 3 ou de classe 4
+
         '--> Initialisations
+
+        ReDim ClasseSection(MyPoutre.Nodes.nbNodes - 1, 1)
 
         '# Critères
 
@@ -94,14 +102,11 @@
 
         '# Propriétés élastiques
 
-        '# Classes de la section
+        '# Calcul des contraintes élastiques pour les cas de charges
 
-        ReDim ClasseSection(MyPoutre.Nodes.nbNodes - 1, 1)
-
-        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
-            ' ClasseSection(iNode, 0) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANEPlus(iNode), True,lGeneration1, MyPoutre.Dalle.t_d)
-            ' ClasseSection(iNode, 1) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANEMoins(iNode), False, lGeneration1, MyPoutre.Dalle.t_d)
-        Next
+        MyPoutre.PtsSigma.Initialise(MyPoutre)
+        MyPoutre.PtsSigma.CalculContraintesCharges(MyPoutre, 1, SigmaP)
+        MyPoutre.PtsSigma.CalculContraintesCharges(MyPoutre, -1, SigmaM)
 
         '--> Boucle sur les combinaisons
 
@@ -115,8 +120,37 @@
 
             MyPoutre.CombiA_ELU.CombineEffortsT(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, VEd, False)
 
+            '# Combinaison des contraintes élastiques
+
+            MyPoutre.CombiA_ELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, MyPoutre.PtsSigma.zPos.Count, MyPoutre.Nodes.nbNodes,
+                                                   MyPoutre.ChargesA, MEd, SigmaP, SigmaM, lretraitElastique, sigmaelu)
+
+            '# Position de l'ANE en fonction des contraintes dans le profilé
+
+            MyPoutre.RechercheANEFromSigma(SigmaELU, MEd, MyPoutre.Nodes.nbNodes, zane)
+
+            '# Classes de la section
+
+            For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+                For k = 0 To 1
+                    If MEd(iNode, k) > 0 Then
+                        ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANE(iNode, k), True, lGeneration1, MyPoutre.Dalle.t_d)
+                    Else
+                        ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANE(iNode, k), False, lGeneration1, MyPoutre.Dalle.t_d)
+                    End If
+                Next
+            Next
+
             '# Controle de la classe des sections
 
+            lClasse3 = False
+            lClasse4 = False
+            For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+                For k = 0 To 1
+                    If ClasseSection(iNode, k) = 3 Then lClasse3 = True
+                    If ClasseSection(iNode, k) = 4 Then lClasse4 = True
+                Next
+            Next
 
             '# Analyse du diagramme de moment
 

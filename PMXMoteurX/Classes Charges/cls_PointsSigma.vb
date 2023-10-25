@@ -224,7 +224,7 @@
         Dim DeltaI() As Integer = {-1, 0}
         Dim DeltaZ, zCdG As Decimal
 
-        Dim Beff(,) As Decimal
+        Dim Beff() As Decimal = Nothing
         Dim InertieY(,) As Decimal = Nothing
         Dim zANE(,) As Decimal = Nothing
         Dim nEqEnrob As Decimal
@@ -246,7 +246,7 @@
         '--> Largeur efficace de dalle
 
         If lDalle Then
-
+            MyPoutre.MaillageBeff(MyPoutre.Param.lLargeurEfficaceSimplifiee, False, Beff)
         End If
 
         '--> Calcul des propriétés de section

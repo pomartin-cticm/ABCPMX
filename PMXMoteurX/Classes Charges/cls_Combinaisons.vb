@@ -84,11 +84,80 @@
 
     End Sub
 
+    Public Sub CombineContraintes(iCombi As Integer, NbCas As Integer, NbPts As Integer, nbNodes As Integer, ChargesA As List(Of cls_CasDeCharge),
+                                  Med(,) As Decimal, SigmaP(,,,) As Decimal, SigmaM(,,,) As Decimal,
+                                  lRetrait As Decimal, ByRef SigmaELU(,,) As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Combine les contraintes
+        '-----------------------------------------------------------------------------------------------------------
+        '   iCombi      [E] :   Indice de la combinaison à traiter
+        '   NbCas       [E] :   Nombre de cas de charges élémentaires
+        '   NbPts       [E] ;   Nombre de points de calcul des contraintes
+        '   nbNodes     [E] :   Nombre de noeuds dans la modélisation
+        '   ChargesA    [E] :   Tableaux des cas de charges (qui doivent avoir été calculés auparavant
+        '   MEd         [E] :   Table des moments ELU (déjà combinés)
+        '   SigmaP      [E] :   Table des contraintes élastiques sous cas de charges élémentaires, hyp de M > 0
+        '   SigmaM      [E] :   Table des contraintes élastiques sous cas de charges élémentaires, hyp de M < 0
+        '   lRetrait    [E] :   Indique si on prend en compte les charges de retrait
+        '   SigmaELU    [S] :   Table des contraintes combinées
+        '-----------------------------------------------------------------------------------------------------------
+        '   Dimensions de SigmaP et SigmaM :    (NbCas - 1, NbPts - 1, NbNodes - 1, 1)
+        '   Dimensions de SigmaELU         :    (NbPts - 1, NbNodes - 1, 1)
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iCas, jNode, iPts, k As Integer
+        Const CONVSIGNE As Decimal = 1
+
+        '--> Initialisation
+
+        ReDim SigmaELU(NbPts - 1, nbNodes - 1, 1)
+
+        '--> Combinaisons
+
+        For jNode = 0 To nbNodes - 1
+            For k = 0 To 1
+
+                If CONVSIGNE * Med(jNode, k) > 0 Then
+                    '== MOMENTS POSITIFS =====================================================================================
+                    For iCas = 0 To NbCas - 1
+                        If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And lCombineCas(ChargesA(iCas), lRetrait) Then
+
+                            For iPts = 0 To NbPts - 1
+                                SigmaELU(iPts, jNode, k) += Me.CoefCombi(iCombi)(iCas) * SigmaP(iCas, iPts, jNode, k)
+                            Next
+
+                        End If
+                    Next
+                Else
+                    '== MOMENTS NEGATIFS =====================================================================================
+                    For iCas = 0 To NbCas - 1
+                        If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And lCombineCas(ChargesA(iCas), lRetrait) Then
+
+                            For iPts = 0 To NbPts - 1
+                                SigmaELU(iPts, jNode, k) += Me.CoefCombi(iCombi)(iCas) * SigmaM(iCas, iPts, jNode, k)
+                            Next
+
+                        End If
+                    Next
+
+                    '=========================================================================================================
+
+                End If
+
+            Next
+        Next
+
+    End Sub
+
     Public Sub CombineMoments(iCombi As Integer, nbNodes As Integer, ChargesA As List(Of cls_CasDeCharge), ByRef MomMy(,) As Decimal, Optional lRetrait As Boolean = True)
         '-----------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
-        '   Combine les flèches
+        '   Combine les moments
         '-----------------------------------------------------------------------------------------------------------
         '   iCombi      [E] :   Indice de la combinaison à traiter
         '   nbNodes     [E] :   Nombre de noeuds dans la modélisation

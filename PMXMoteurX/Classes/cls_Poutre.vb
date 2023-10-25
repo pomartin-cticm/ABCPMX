@@ -1674,7 +1674,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub MaillagePropElastiquesMixtes(Beff(,) As Decimal, Signe As Decimal, lValRd As Boolean, nEqEnrob As Decimal, nEqDalle As Decimal,
+    Public Sub MaillagePropElastiquesMixtes(Beff() As Decimal, Signe As Decimal, lValRd As Boolean, nEqEnrob As Decimal, nEqDalle As Decimal,
                                             ByRef InertieY(,) As Decimal, ByRef zANE(,) As Decimal, Optional lDalle As Boolean = True)
         '------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
@@ -1696,12 +1696,15 @@ Public Class cls_Poutre
         Dim BeffPrec As Decimal = -1
         Dim pInertieY, p_zANE As Decimal
         Dim pMelRd As Decimal
-        Dim lNonMixte As Boolean = (Me.Section.typeSection = cls_Section.Enum_TypeSection.Acier)
+        Dim lNonMixte As Boolean = (Me.Section.typeSection = cls_Section.Enum_TypeSection.Acier) Or (Not lDalle)
 
         '--> Initialisation
 
         ReDim InertieY(Me.Nodes.nbNodes - 1, 1)
         ReDim zANE(Me.Nodes.nbNodes - 1, 1)
+        If lNonMixte Then
+            Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, p_zANE, pInertieY, pMelRd)
+        End If
 
         '--> Boucle sur les noeuds
 
@@ -1710,17 +1713,24 @@ Public Class cls_Poutre
             If iNode = Me.Nodes.nbNodes - 1 Then kFin = 0 Else kFin = 1
 
             For k = kDeb To kFin
-                If IsEqual(Beff(iNode, k), BeffPrec) Then
+
+                If lNonMixte Then
+                    '== PROPRIETES SANS PRISE EN COMPTE DE LA DALLE 
+                    ' qui est forcément constante le long de la poutre
                     InertieY(iNode, k) = pInertieY
                     zANE(iNode, k) = p_zANE
                 Else
-                    If lNonMixte Then
-                        Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, p_zANE, pInertieY, pMelRd)
+                    '== PROPRIETES AVEC PRISE EN COMPTE DE LA DALLE
+                    If IsEqual(Beff(iNode), BeffPrec) Then
+                        InertieY(iNode, k) = pInertieY
+                        zANE(iNode, k) = p_zANE
                     Else
-                        Me.Section.ProprietesElastiquesMixteMyy(Signe, lValRd, Me.Param.Gamma, nEqEnrob, nEqDalle, Beff(iNode, k), Me.Dalle, p_zANE, pInertieY, pMelRd, lDalle)
+
+                        Me.Section.ProprietesElastiquesMixteMyy(Signe, lValRd, Me.Param.Gamma, nEqEnrob, nEqDalle, Beff(iNode), Me.Dalle, p_zANE, pInertieY, pMelRd, lDalle)
+
+                        InertieY(iNode, k) = pInertieY
+                        zANE(iNode, k) = p_zANE
                     End If
-                    InertieY(iNode, k) = pInertieY
-                    zANE(iNode, k) = p_zANE
                 End If
 
             Next
@@ -3128,7 +3138,7 @@ Public Class cls_Poutre
 
 #End Region
 
-#Region " Outils analyse "
+#Region " Outils post traitement de l'analyse "
 
     Public Sub AnalyseDiagrammeMoments(MEd(,) As Decimal, ByRef iNodeMmax() As Integer, ByRef Mmax() As Decimal,
                                        ByRef xMZero(,) As Decimal, ByRef lTraveeMomNeg() As Boolean)
@@ -3338,6 +3348,77 @@ Public Class cls_Poutre
             iNodeMm = iT1
             Mmax = pMmax
         End If
+
+    End Sub
+
+    Public Sub RechercheANEFromSigma(SigmaELU(,,) As Decimal, MEd(,) As Decimal, NbNodes As Integer, ByRef m_zANE(,) As Decimal)
+        '--------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - Version 1.00 - POM
+        '--------------------------------------------------------------------------------------------
+        '   Calcul de la position de l'ANE à partir des contraintes élastiques
+        '--------------------------------------------------------------------------------------------
+        '   SigmaELU        [E] :   Table des contraintes normales aux ELU
+        '   MEd             [E] :   Table des moments ELU
+        '   NbNodes         [E] :   Nombre de noeuds dans le modèle
+        '   m_zANE          [S] :   Table de la position des ANE
+        '--------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Const iTOP As Integer = 1       ' Indice du point de calcul de la contrainte dans la semelle sup
+        Const iBOT As Integer = 5       ' Indice du point de calcul de la contrainte dans la semelle inf
+
+        Dim zTop As Decimal = 0
+        Dim zBot As Decimal = -Me.Section.ProfilA.ha
+
+        Dim iNode, k As Integer
+        Dim kDeb, kFin As Integer
+
+        Const CONVMPOS As Decimal = 1
+        Const CONVSIGCOMP As Decimal = -1
+
+        '--> Initialisation
+
+        ReDim m_zANE(NbNodes - 1, 1)
+
+        '--> Traitement
+
+        If (Me.PtsSigma.iProfile(0) >= 0) _
+        And ((Me.PtsSigma.iProfile(1) - Me.PtsSigma.iProfile(0)) >= (iBOT - iTOP)) Then
+
+            For iNode = 0 To NbNodes - 1
+
+                If iNode = 0 Then kDeb = 1 Else kDeb = 1
+                If iNode = NbNodes - 1 Then kFin = 0 Else kFin = 1
+
+                For k = kDeb To kFin
+
+                    If IsEqual(SigmaELU(iTOP, iNode, k), SigmaELU(iBOT, iNode, k)) Then
+                        '== Si les contraintes sont égales
+                        If (CONVMPOS * MEd(iNode, k) >= 0) Then
+                            If CONVSIGCOMP * SigmaELU(iTOP, iNode, k) >= 0 Then
+                                m_zANE(iNode, k) = zTop
+                            Else
+                                m_zANE(iNode, k) = zBot
+                            End If
+                        Else
+                            If CONVSIGCOMP * SigmaELU(iTOP, iNode, k) < 0 Then
+                                m_zANE(iNode, k) = zTop
+                            Else
+                                m_zANE(iNode, k) = zBot
+                            End If
+                        End If
+
+                    Else
+                        m_zANE(iNode, k) = zTop + (zBot - zTop) / (SigmaELU(iBOT, iNode, k) - SigmaELU(iTOP, iNode, k)) * (0 - SigmaELU(iBOT, iNode, k))
+                    End If
+
+                Next
+
+            Next
+        End If
+
+
 
     End Sub
 
