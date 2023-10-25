@@ -3377,6 +3377,8 @@ Public Class cls_Poutre
         Const CONVMPOS As Decimal = 1
         Const CONVSIGCOMP As Decimal = -1
 
+        Dim SigmaTop, SigmaBot As Decimal
+
         '--> Initialisation
 
         ReDim m_zANE(NbNodes - 1, 1)
@@ -3393,16 +3395,16 @@ Public Class cls_Poutre
 
                 For k = kDeb To kFin
 
-                    If IsEqual(SigmaELU(iTOP, iNode, k), SigmaELU(iBOT, iNode, k)) Then
+                    If IsEqual(SigmaELU(Me.PtsSigma.iProfile(0 + iTOP - 1), iNode, k), SigmaELU(iBOT, iNode, k)) Then
                         '== Si les contraintes sont égales
                         If (CONVMPOS * MEd(iNode, k) >= 0) Then
-                            If CONVSIGCOMP * SigmaELU(iTOP, iNode, k) >= 0 Then
+                            If CONVSIGCOMP * SigmaELU(Me.PtsSigma.iProfile(0 + iTOP - 1), iNode, k) >= 0 Then
                                 m_zANE(iNode, k) = zTop
                             Else
                                 m_zANE(iNode, k) = zBot
                             End If
                         Else
-                            If CONVSIGCOMP * SigmaELU(iTOP, iNode, k) < 0 Then
+                            If CONVSIGCOMP * SigmaELU(Me.PtsSigma.iProfile(0 + iTOP - 1), iNode, k) < 0 Then
                                 m_zANE(iNode, k) = zTop
                             Else
                                 m_zANE(iNode, k) = zBot
@@ -3410,7 +3412,10 @@ Public Class cls_Poutre
                         End If
 
                     Else
-                        m_zANE(iNode, k) = zTop + (zBot - zTop) / (SigmaELU(iBOT, iNode, k) - SigmaELU(iTOP, iNode, k)) * (0 - SigmaELU(iBOT, iNode, k))
+                        SigmaTop = SigmaELU(Me.PtsSigma.iProfile(0 + iTOP - 1), iNode, k)
+                        SigmaBot = SigmaELU(Me.PtsSigma.iProfile(0 + iBOT - 1), iNode, k)
+
+                        m_zANE(iNode, k) = zTop + (zBot - zTop) / (SigmaBot - SigmaTop) * (0 - SigmaBot)
                     End If
 
                 Next

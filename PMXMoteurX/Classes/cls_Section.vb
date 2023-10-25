@@ -474,7 +474,6 @@ Public Class cls_Section
 
     End Function
 
-
     Public Sub ProprietesElastiquesAcierMyy(lValeurRd As Boolean, Gammas As cls_Gamma,
                                             ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
@@ -908,7 +907,15 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property FySup As Decimal
         Get
-            Return Me.Acier.LimiteFy(Me.ProfilA.Tfs)
+            Dim MyFy As Decimal
+
+            If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
+            Else
+                MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tfs)
+            End If
+
+            Return MyFy
         End Get
     End Property
 
@@ -918,7 +925,16 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property FyInf As Decimal
         Get
-            Return Me.Acier.LimiteFy(Me.ProfilA.Tfi)
+            'Return Me.Acier.LimiteFy(Me.ProfilA.Tfi)
+            Dim MyFy As Decimal
+
+            If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfi, Me.ProfilA.Tw))
+            Else
+                MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tfi)
+            End If
+
+            Return MyFy
         End Get
     End Property
 
@@ -928,7 +944,16 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property FyW As Decimal
         Get
-            Return Me.Acier.LimiteFy(Me.ProfilA.Tw)
+            'Return Me.Acier.LimiteFy(Me.ProfilA.Tw)
+            Dim MyFy As Decimal
+
+            If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
+            Else
+                MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tw)
+            End If
+
+            Return MyFy
         End Get
     End Property
 

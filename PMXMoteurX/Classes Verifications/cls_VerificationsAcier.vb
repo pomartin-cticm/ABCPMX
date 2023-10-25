@@ -80,9 +80,7 @@
         lSigma = True       ' EN phase debug
         If lSigma Then
             MyPoutre.PtsSigma.Initialise(MyPoutre)
-
         End If
-
 
         '--> Boucle sur les combinaisons
 

@@ -12,6 +12,12 @@
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
 
+    Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
+    Public CritereSigmaC As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton de la dalle
+    Public CritereSigmaArmaC As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures de la dalle
+    Public CritereSigmaE As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton d'enrobage
+    Public CritereSigmaArmaE As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures d'enrobage
+
 #End Region
 
 #Region " Constructeurs "
@@ -25,6 +31,23 @@
         Me.CritereM = New cls_Critere(NbNodes)
         Me.CritereV = New cls_Critere(NbNodes)
         Me.CritereVb = New cls_Critere(NbNodes)
+
+    End Sub
+
+    Private Sub InitialiseCriteresVM(NbNodes As Integer, lArma As Boolean)
+        '-------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '-------------------------------------------------------------------
+        '   Initialisation des critères pour les contraintes normales
+        '-------------------------------------------------------------------
+
+        Me.CritereSigmaA = New cls_Critere(NbNodes)
+        Me.CritereSigmaC = New cls_Critere(NbNodes)
+        Me.CritereSigmaE = New cls_Critere(NbNodes)
+        If lArma Then
+            Me.CritereSigmaArmaC = New cls_Critere(NbNodes)
+            Me.CritereSigmaArmaE = New cls_Critere(NbNodes)
+        End If
 
     End Sub
 
@@ -129,7 +152,7 @@
 
             MyPoutre.RechercheANEFromSigma(SigmaELU, MEd, MyPoutre.Nodes.nbNodes, zane)
 
-            '# Classes de la section
+            '# Classes des sections
 
             For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
                 For k = 0 To 1
@@ -163,11 +186,12 @@
 
             '# Vérification sous moment fléchissant
 
-            Me.CriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdPlus, MplRdMoins)
+            Me.RunCritereMoments(MyPoutre, iCombi, lClasse3, MEd, SigmaELU, MplRdPlus, MplRdMoins)
+            'Me.RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdPlus, MplRdMoins)
 
             '# Vérification sous effort tranchant
 
-            Me.CritereTranchants(MyPoutre, iCombi, VEd, VplRd)
+            Me.RunCritereTranchants(MyPoutre, iCombi, VEd, VplRd)
 
             '# Vérification au voilement par cisaillement
 
@@ -175,13 +199,164 @@
             '# Vérification sous interaction MV
 
 
+            '# 
 
         Next
 
 
     End Sub
 
-    Private Sub CriteresMomentsPlastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
+    Private Sub RunCritereMoments(MyPoutre As cls_Poutre, iCombi As Integer, lClasse3 As Boolean,
+                                  MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance au moment fléchissant 
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   lClasse3[E] :   Indique si présence de section de classe 3
+        '   MEd     [E] :   Table des moments fléchissants le long de la barre
+        '   SigmaELU[E] :   Contraintes normales aux ELU
+        '   MplRdP  [E] :   Table des moments plastiques > 0 le long de la barre
+        '   MplRdM  [E] :   Table des moments plastiques < 0 le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Critère de résistance en flexion
+
+        If MyPoutre.Param.lElasticDesign Then
+            '# Résistance élastique VM imposée
+            Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage)
+            RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
+        ElseIf lClasse3 Then
+            '# Présence d'au moins une section de classe 3
+            RunCritereMomentsElastiques(MyPoutre, iCombi, MEd)
+        Else
+            '# Résistance plastique possible
+            RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdP, MplRdM)
+        End If
+    End Sub
+
+    Private Sub RunCritereFlexionResistanceElastiqueVM(MyPoutre As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en flexion par les critères de VM
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   SigmaELU[E] :   Contraintes normales aux ELU
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim FydSup, FySup As Decimal
+        Dim FydW, FyW As Decimal
+        Dim FydInf, FyInf As Decimal
+
+        Dim Fcd, Fck As Decimal
+        Dim Fecd, Feck As Decimal
+
+        Dim iPro0 As Integer = MyPoutre.PtsSigma.iProfile(0)
+        Dim iDal0 As Integer = MyPoutre.PtsSigma.iBetonDalle(0)
+        Dim iEnrob0 As Integer = MyPoutre.PtsSigma.iBetonEnrob(0)
+
+        '--> Initialisation
+
+        FySup = MyPoutre.Section.FySup
+        FydSup = FySup / MyPoutre.Param.Gamma.GammaM0
+        FyW = MyPoutre.Section.FyW
+        FydW = FyW / MyPoutre.Param.Gamma.GammaM0
+        FyInf = MyPoutre.Section.FyInf
+        FydInf = FyInf / MyPoutre.Param.Gamma.GammaM0
+
+        Fck = MyPoutre.Dalle.beton.Fck
+        Fcd = Fck / MyPoutre.Param.Gamma.GammaC
+
+        Feck = MyPoutre.Section.Enrobage.Beton.Fck
+        Fecd = Feck / MyPoutre.Param.Gamma.GammaC
+
+        '--> Calculs
+
+        '# Contraintes dans le profilé
+
+        If (iPro0 > -1) Then
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
+        End If
+
+        '# Contraintes dans le béton d'enrobage
+
+        If MyPoutre.lEnrobage And (iEnrob0 > -1) Then
+            RunCritereFlexionVM(MyPoutre, iCombi, iDal0 + 0, SigmaELU, Fecd, Me.CritereSigmaC)
+            RunCritereFlexionVM(MyPoutre, iCombi, iDal0 + 1, SigmaELU, Fecd, Me.CritereSigmaC)
+        End If
+
+        '# Contraintes dans les armatures d'enrobage
+
+        If MyPoutre.lEnrobage Then
+
+        End If
+
+        '# Contraintes dans le béton de la dalle
+
+        If MyPoutre.lMixte And (iDal0 > -1) Then
+            RunCritereFlexionVM(MyPoutre, iCombi, iDal0 + 0, SigmaELU, Fcd, Me.CritereSigmaE)
+        End If
+
+        '# Contraintes dans les armatures de la dalle
+
+        If MyPoutre.lMixte And MyPoutre.NbTravees > 1 Then
+
+        End If
+
+    End Sub
+
+    Private Sub RunCritereFlexionVM(MyPoutre As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,
+                                    SigmaU As Decimal, MyCritereM As cls_Critere)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en flexion par les critères de VM en un point de calcul de section
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   iPoint  [E] :   Indice du point de calcul des contraintes
+        '   SigmaELU[E] :   Contraintes normales aux ELU
+        '   SigmaU  [E] :   Valeur ultime de la contrainte normale au point iPoint
+        '   CritereM[E] :   Critere de la contrainte de flexion
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode As Integer
+        Dim Sigma As Decimal
+
+        '--> Traitement
+
+        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+
+            If Math.Abs(SigmaELU(iPoint, iNode, 0)) > Math.Abs(SigmaELU(iPoint, iNode, 1)) Then
+                Sigma = SigmaELU(iPoint, iNode, 0)
+            Else
+                Sigma = SigmaELU(iPoint, iNode, 1)
+            End If
+
+            MyCritereM.EnregistreCritere(iNode, iCombi, Sigma, SigmaU)
+
+        Next
+
+
+    End Sub
+
+    Private Sub RunCritereMomentsElastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal)
+
+    End Sub
+
+    Private Sub RunCriteresMomentsPlastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -225,7 +400,7 @@
 
     End Sub
 
-    Private Sub CritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
+    Private Sub RunCritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
@@ -260,7 +435,7 @@
 
     End Sub
 
-    Private Sub CritereVoilementCisaillement(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VbRd As Decimal)
+    Private Sub RunCritereVoilementCisaillement(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VbRd As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
