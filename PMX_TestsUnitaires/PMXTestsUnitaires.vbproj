@@ -78,6 +78,7 @@
     <Import Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTest_Contraintes.vb" />
     <Compile Include="UnitTest_ElementsFinis.vb" />
     <Compile Include="UnitTest_Cls_Bac.vb" />
     <Compile Include="UnitTest_Cls_Connecteur.vb" />

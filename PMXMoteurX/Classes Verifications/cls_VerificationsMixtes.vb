@@ -449,7 +449,7 @@
 
         '--> Déclarations
 
-        Dim Critere As Decimal
+        'Dim Critere As Decimal
         Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
         Dim iNode As Integer
         Dim VEdMax As Decimal

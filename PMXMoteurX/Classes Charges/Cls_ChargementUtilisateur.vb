@@ -104,7 +104,6 @@
 
 #End Region
 
-
 #Region " Fonction de copie "
     Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
