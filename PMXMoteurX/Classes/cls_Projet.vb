@@ -568,6 +568,7 @@ Public Class cls_Projet
         End If
 
         Dim oldFichier As Boolean = False
+        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
 
         '--> Traitement des blocks
 
@@ -579,7 +580,7 @@ Public Class cls_Projet
                     ReadBloc_Identification(Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
                 Case "POUTRE"
-                    Dim ptre_en_cours As New cls_Poutre
+                    Dim ptre_en_cours As New cls_Poutre(NomCas)
                     ReadBlocPoutre(ptre_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     Me.Poutres.Add(ptre_en_cours)
 

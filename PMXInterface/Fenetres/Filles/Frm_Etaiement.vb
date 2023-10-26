@@ -7,7 +7,7 @@ Public Class Frm_Etaiement
 
     Dim lBuild As Boolean = True
 
-    Dim MyPoutreLoc As New cls_Poutre
+    Dim MyPoutreLoc As New cls_Poutre(NomChargements)
 
     Const iFRMETAIEMENT As Integer = 2
 

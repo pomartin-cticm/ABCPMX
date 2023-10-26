@@ -5,7 +5,13 @@ Imports PMXMoteur2
 
 <TestClass()> Public Class UnitTest_Contraintes
 
+
+#Region " Déclarations et attributs "
+
+    Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
     Const DeltaVMAx As Decimal = 1 / 1000
+
+#End Region
 
     <TestMethod()> Public Sub TestContraintesSectionAcier()
 
@@ -21,7 +27,7 @@ Imports PMXMoteur2
 
         '--> Déclaration
 
-        Dim TU_poutre As New cls_Poutre()
+        Dim TU_poutre As New cls_Poutre(NomCas)
         Const Portee As Decimal = 8
         Const Q1 As Decimal = 1000
         Const GammaQ As Decimal = 1.5

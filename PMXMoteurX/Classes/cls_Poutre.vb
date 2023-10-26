@@ -286,12 +286,27 @@ Public Class cls_Poutre
 
 #Region " CONSTRUCTEURS "
 
-    Private Sub InitialiseChargements()
-        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur("Poids propre", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur("Autres charges permanentes", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur("Charges d'expoitation 1", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur("Charges d'expoitation 2", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur("Charges de construction", Me.IndiceDerniereTravee))
+    Private Sub InitialiseChargements(MsgChargements() As String)
+        '-------------------------------------------------------------------------------------------------------
+        '   00/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------
+        '   Initialisation des cas de charges utilisateur
+        '-------------------------------------------------------------------------------------------------------
+        '   MsgChargements  [E] :   Nom des cas de charges dans la langue utilisateur
+        '-------------------------------------------------------------------------------------------------------
+
+        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(MsgChargements(0), Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(MsgChargements(1), Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(MsgChargements(2) & " 1", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(MsgChargements(2) & " 2", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(MsgChargements(3), Me.IndiceDerniereTravee))
+
+        'Me.ChargesU.Add("G1", New cls_ChargementUtilisateur("Poids propre", Me.IndiceDerniereTravee))
+        'Me.ChargesU.Add("G2", New cls_ChargementUtilisateur("Autres charges permanentes", Me.IndiceDerniereTravee))
+        'Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur("Charges d'expoitation 1", Me.IndiceDerniereTravee))
+        'Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur("Charges d'expoitation 2", Me.IndiceDerniereTravee))
+        'Me.ChargesU.Add("QC", New cls_ChargementUtilisateur("Charges de construction", Me.IndiceDerniereTravee))
+
     End Sub
 
     Private Sub InitialiseTablesCombi()
@@ -338,17 +353,17 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub New()
+    Public Sub New(MsgChargements() As String)
 
         Me.TypeSection = cls_Section.Enum_TypeSection.Acier
         ParametresGenerauxDefaut()
         PoutreDefautAcier()
-        InitialiseChargements()
+        InitialiseChargements(MsgChargements)
         InitialiseTablesCombi()
 
     End Sub
 
-    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String)
+    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String, MsgChargements() As String)
 
         Me.TypeSection = MyTypeSection
         Me.BeamID = NomPoutre
@@ -370,7 +385,7 @@ Public Class cls_Poutre
                 EnrobageDefaut()
                 DalleDefaut()
         End Select
-        InitialiseChargements()
+        InitialiseChargements(MsgChargements)
         InitialiseTablesCombi()
 
     End Sub

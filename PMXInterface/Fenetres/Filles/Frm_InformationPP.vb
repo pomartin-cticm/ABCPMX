@@ -13,7 +13,7 @@ Public Class Frm_InformationPP
     ''' <summary>
     ''' Définition d'une poutre_loc afin d'enregistrer les actions de l'utilisateur
     ''' </summary>
-    Dim MyPoutreLoc As New cls_Poutre
+    Dim MyPoutreLoc As New cls_Poutre(NomChargements)
 
     Dim PoidsPropreLoc As cls_Poutre.StructPoidsPropres
 
@@ -36,7 +36,7 @@ Public Class Frm_InformationPP
 
     Private Sub InitialiserVariables()
 
-        MyPoutreLoc = New cls_Poutre()
+        MyPoutreLoc = New cls_Poutre(NomChargements)
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
         PoidsPropreLoc = MyPoutreLoc.ChargeRepartiePP()
 

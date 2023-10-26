@@ -71,6 +71,7 @@ Public Class Frm_PMX
 
         '--> Préparation de la fenêtre
 
+        GestionLangueMessageGeneraux()
         GestionLangue()
         GestionStyle()
 
@@ -95,6 +96,31 @@ Public Class Frm_PMX
         End If
         'AfficheFenetreEnCours() 'GuD: A discuter j'ai un doute (31/08/2023), cela ouvrait directement 
 
+    End Sub
+
+    Private Sub GestionLangueMessageGeneraux()
+        '----------------------------------------------------------------------------------------
+        '   26/10/23 :  Création - pOM
+        '----------------------------------------------------------------------------------------
+        '   Récupération des messages généraux dans le fichier langue
+        '----------------------------------------------------------------------------------------
+        If File.Exists(LogicielFichiers.Langue) Then
+            Dim Bloc As New Dictionary(Of String, String)
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#GENERAL")
+            BlocLine.CreationBloc(Bloc)
+
+            Try
+
+                ReDim NomChargements(3)
+                NomChargements(0) = Bloc("SELFWEIGHT")
+                NomChargements(1) = Bloc("OTHERG")
+                NomChargements(2) = Bloc("QLOADS")
+                NomChargements(3) = Bloc("CLOADS")
+
+            Catch ex As Exception
+
+            End Try
+        End If
     End Sub
 
     Private Sub GestionLangue()

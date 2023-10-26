@@ -4,6 +4,12 @@ Imports PMXMoteur2
 
 <TestClass()> Public Class UnitTest_Cls_Poutre
 
+#Region " Déclarations et attributs "
+
+    Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
+
+#End Region
+
     <TestMethod()> Public Sub TestMethod_EffectiveWidth()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création GUD
@@ -21,7 +27,7 @@ Imports PMXMoteur2
         '----------------------------------------------------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------------------------------------------------
 
-        Dim poutre As New cls_Poutre()
+        Dim poutre As New cls_Poutre(NomCas)
 
         'Définition des caractéristiques de la poutre test
 

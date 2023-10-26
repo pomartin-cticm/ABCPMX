@@ -393,6 +393,13 @@ WEB						= Web
 WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
 
+#GENERAL
+SELFWEIGHT				= Self-weight
+OTHERG					= Other permanent loads
+QLOADS					= Live loads
+CLOADS					= Construction loads
+
+
 #OPTCALCULMAIN
 TITLE					= Calculation options
 APPLY					= Apply

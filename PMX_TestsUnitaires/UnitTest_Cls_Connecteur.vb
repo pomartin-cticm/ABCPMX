@@ -4,6 +4,8 @@ Imports PMXMoteur2
 
 <TestClass()> Public Class UnitTest_Cls_Connecteur
 
+    Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
+
     <TestMethod()> Public Sub TestMethod_PRd_G1()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   02/08/23 :  Création GUD
@@ -14,7 +16,7 @@ Imports PMXMoteur2
 
         '--> Déclaration
 
-        Dim poutre As New cls_Poutre()
+        Dim poutre As New cls_Poutre(NomCas)
 
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
@@ -153,7 +155,7 @@ Imports PMXMoteur2
 
         '--> Déclaration
 
-        Dim poutre As New cls_Poutre()
+        Dim poutre As New cls_Poutre(NomCas)
 
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
