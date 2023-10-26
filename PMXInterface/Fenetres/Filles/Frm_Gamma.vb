@@ -49,6 +49,7 @@ Public Class Frm_Gamma
         lBuild = False
     End Sub
     Private Sub InitialiserVariables()
+
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
 
         x_img_GammaCVSP = 44

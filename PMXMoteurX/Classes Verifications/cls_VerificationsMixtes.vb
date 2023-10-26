@@ -78,12 +78,12 @@
         Dim zANE(,) As Decimal = Nothing                ' Position des ANE sous moment 
         Const lCombiRetrait = False                     '#ALERTE Pour le moment, à pondérer plus tard
         Dim lRElastiqueImpose As Boolean = False        ' Vérification élastique imposée
-        Dim lRElastique As Boolean
+        'Dim lRElastique As Boolean
         Dim ClasseSection(,) As Integer                 ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite)
         Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
         Dim lSimple As Boolean = False
         'Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
-        Dim lGeneration1 As Boolean = (MyPoutre.Param.Norme = MyPoutre.Param.Enu_Normes.EurocodesG1)
+        Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
 
         Dim iNodeMmax() As Integer, Mmax() As Decimal
         Dim xMZero(,) As Decimal = Nothing

@@ -283,6 +283,21 @@ OK						= Ok
 OPENPROJECT				= Open a project
 RECENTFILES				= Recent Files
 
+#FRM_PPLOADCASE
+TITLE					= Load cases
+LOADCASE 				= Load cases
+CLOSE 					= Close
+CASE 					= Case
+STATE 					= State
+CALCULATIONOK 			= Calculation carried out ?
+MAXDEFLECTION 			= Max. deflection
+LOADS					= Load
+CURVEV					= V Diagram
+CURVEM					= M Diagram
+NUMBERING				= Numbering
+DEFLECTION				= Deflection
+INERTIA					= Second moment of area of elements
+EDITMODEL				= Edit FEM model
 
 #FRM_PROPPING
 TITLE					= Propping of the beam

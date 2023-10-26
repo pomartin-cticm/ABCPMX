@@ -216,7 +216,11 @@ Public Class cls_OptionsCalcul
 
 #Region " Outils "
 
-
+    Public ReadOnly Property lGeneration1 As Boolean
+        Get
+            Return (Me.Norme = Enu_Normes.EurocodesG1)
+        End Get
+    End Property
 
 #End Region
 

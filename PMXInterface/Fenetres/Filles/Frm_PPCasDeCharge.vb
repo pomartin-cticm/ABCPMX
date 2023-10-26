@@ -1,5 +1,6 @@
 ﻿Imports PMXMoteur2
 Imports System.Drawing.Drawing2D
+Imports System.IO
 
 Public Class Frm_PPCasDeCharge
 
@@ -53,24 +54,36 @@ Public Class Frm_PPCasDeCharge
 
     Private Sub GestionLangues()
 
-        Me.Text = "Load cases"
-        Me.lbl_CasDeCharges.Text = "Load cases"
-        Me.btn_Annuler.Text = "Cancel"
-        Me.btn_OK.Text = "Close"
 
-        Me.lbl_Case.Text = "Case"
-        Me.lbl_Etat.Text = "Etat"
-        Me.lbl_RunCalcul.Text = "Calcul effectué ?"
-        Me.lbl_Fleche.Text = "Flèche maxi"
+        If File.Exists(LogicielFichiers.Langue) Then
 
+            Dim Bloc As New Dictionary(Of String, String)
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_GAMMA")
+            BlocLine.CreationBloc(Bloc)
 
-        Me.chk_Chargement.Text = "Chargement"
-        Me.chk_EffortTranchant.Text = "Diagramme V"
-        Me.chk_Moment.Text = "Diagramme M"
-        Me.chk_Numerotation.Text = "Numérotation"
-        Me.chk_Fleches.Text = "Déformée"
-        Me.chk_Inerties.Text = "Inerties des barres"
-        Me.btn_EditModel.Text = "Editer le modèle"
+            Try
+                Me.Text = Bloc("TITLE")                             ' "Load cases"
+                Me.lbl_CasDeCharges.Text = Bloc("LOADCASE")         ' "Load cases"
+                Me.btn_Annuler.Text = "Cancel"
+                Me.btn_OK.Text = Bloc("CLOSE")                      ' "Close"
+
+                Me.lbl_Case.Text = Bloc("CASE")                     ' "Case"
+                Me.lbl_Etat.Text = Bloc("STATE")                    ' "Etat"
+                Me.lbl_RunCalcul.Text = Bloc("CALCULATIONOK")       ' "Calcul effectué ?"
+                Me.lbl_Fleche.Text = Bloc("MAXDEFLECTION")          ' "Flèche maxi"
+
+                Me.chk_Chargement.Text = Bloc("LOADS")              ' "Chargement"
+                Me.chk_EffortTranchant.Text = Bloc("CURVEV")        ' "Diagramme V"
+                Me.chk_Moment.Text = Bloc("CURVEM")                 ' "Diagramme M"
+                Me.chk_Numerotation.Text = Bloc("NUMBERING")        ' "Numérotation"
+                Me.chk_Fleches.Text = Bloc("DEFLECTION")            ' "Déformée"
+                Me.chk_Inerties.Text = Bloc("INERTIA")              ' "Inerties des barres"
+                Me.btn_EditModel.Text = Bloc("EDITMODEL")           ' "Editer le modèle"
+
+            Catch ex As Exception
+
+            End Try
+        End If
 
     End Sub
 
