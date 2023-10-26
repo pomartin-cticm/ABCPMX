@@ -58,7 +58,7 @@ Public Class Frm_PPCasDeCharge
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_GAMMA")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_PPLOADCASE")
             BlocLine.CreationBloc(Bloc)
 
             Try
@@ -104,6 +104,9 @@ Public Class Frm_PPCasDeCharge
         Me.lbl_CasDeCharges.ForeColor = CouleurForeBandeaux
 
         Me.img_Analyse.Dock = DockStyle.Fill
+
+        Me.TLPan_PartieBasse.ColumnStyles(1).Width = 0
+        Me.TLPan_PartieBasse.ColumnStyles(2).Width = 0
 
     End Sub
 

@@ -1,6 +1,8 @@
 ﻿Imports System.Net.NetworkInformation
+Imports Microsoft
+Imports System.Reflection
 Imports PMXMoteur2
-
+Imports System.IO
 Public Class Frm_PPCombinaison
 
 #Region " Variables "
@@ -127,33 +129,45 @@ Public Class Frm_PPCombinaison
 
     Private Sub GestionLangues()
 
-        Me.Text = "Combinations"
-        Me.lbl_Combi.Text = "Combinaisons"
-        Me.lbl_LimitState.Text = "Limit States"
-        Me.lbl_SymbCombi.Text = "Combi"
+        If File.Exists(LogicielFichiers.Langue) Then
 
-        Me.btn_Annuler.Text = "Close"
-        Me.btn_OK.Text = "OK"
+            Dim Bloc As New Dictionary(Of String, String)
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_PPCOMBINATIONS")
+            BlocLine.CreationBloc(Bloc)
 
-        Me.chk_EffortTranchant.Text = "Diagramme V"
-        Me.chk_Moment.Text = "Diagramme M"
-        Me.chk_Numerotation.Text = "Numérotation"
-        Me.chk_Fleches.Text = "Déformée"
-        Me.chk_Retrait.Text = "avec le retrait"
+            Try
+                Me.Text = Bloc("TITLE")                              ' "Combinations"
+                Me.lbl_Combi.Text = Bloc("COMBINATIONS")             ' "Combinaisons"
+                Me.lbl_LimitState.Text = Bloc("LIMITSTATE")          ' "Limit States"
+                Me.lbl_SymbCombi.Text = Bloc("COMBI")                ' "Combi"
 
-        strNoCombi = "No combination"
-        strUltimate = "Ultimate"
-        strIncendie = "Fire"
-        strConstruction = "Construction"
-        strService = "Serviceability"
+                'Me.btn_Annuler.Text = Bloc("TITLE")                          ' "Close"
+                Me.btn_OK.Text = Bloc("CLOSE")                       ' "OK"
 
-        strRacineELU = "ULS"
-        strRacineELS = "SLS"
-        strRacineELF = "FLS"
-        strNoCombiELU = "No defined combinations for ultimate limite state"
-        strNoCombiELC = "No defined combinations for ultimate limite state in construction phase"
-        strNoCombiELF = "No defined combinations for fire limite state"
-        strNoCombiELS = "No defined combinations for serviceability limite state"
+                Me.chk_EffortTranchant.Text = Bloc("CURVEV")        '"Diagramme V"
+                Me.chk_Moment.Text = Bloc("CURVEM")                 ' "Diagramme M"
+                Me.chk_Numerotation.Text = Bloc("NUMBERING")        ' "Numérotation"
+                Me.chk_Fleches.Text = Bloc("DEFLECTION")            ' "Déformée"
+                Me.chk_Retrait.Text = Bloc("WITHSHRNKAGE")          ' "avec le retrait"
+
+                strNoCombi = Bloc("NOCOMBINATION")                  ' "No combination"
+                strUltimate = Bloc("ULTIMATE")                      ' "Ultimate"
+                strIncendie = Bloc("FIRE")                          ' "Fire"
+                strConstruction = Bloc("CONSTRUCTION")              ' "Construction"
+                strService = Bloc("SERVICEABILITY")                          ' "Serviceability"
+
+                strRacineELU = Bloc("ULS")                              ' "ULS"
+                strRacineELS = Bloc("SLS")                              ' "SLS"
+                strRacineELF = Bloc("FLS")                              ' "FLS"
+                strNoCombiELU = Bloc("NOCOMBINATIONFORULS")             ' "No defined combinations for ultimate limite state"
+                strNoCombiELC = Bloc("NOCOMBINATIONFORULSC")            ' "No defined combinations for ultimate limite state in construction phase"
+                strNoCombiELF = Bloc("NOCOMBINATIONFORFLS")             ' "No defined combinations for fire limite state"
+                strNoCombiELS = Bloc("NOCOMBINATIONFORSLS")             ' "No defined combinations for serviceability limite state"
+            Catch ex As Exception
+
+            End Try
+
+        End If
 
     End Sub
 
@@ -165,6 +179,9 @@ Public Class Frm_PPCombinaison
         Me.lbl_Combi.ForeColor = CouleurForeBandeaux
 
         Me.img_Analyse.Dock = DockStyle.Fill
+
+        Me.TLPan_PartieBasse.ColumnStyles(1).Width = 0
+        Me.TLPan_PartieBasse.ColumnStyles(2).Width = 0
 
     End Sub
 
@@ -550,6 +567,9 @@ Public Class Frm_PPCombinaison
         Me.img_Analyse.Invalidate()
     End Sub
 
+    Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
+        Me.Close()
+    End Sub
 
     Private Sub chk_Retrait_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Retrait.CheckedChanged
         If lBuild Then Exit Sub

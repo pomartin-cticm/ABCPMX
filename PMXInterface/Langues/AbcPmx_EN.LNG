@@ -299,6 +299,31 @@ DEFLECTION				= Deflection
 INERTIA					= Second moment of area of elements
 EDITMODEL				= Edit FEM model
 
+#FRM_PPCOMBINATIONS
+TITLE					= Combinations
+COMBINATIONS			= Combinations
+LIMITSTATE				= Limit States
+COMBI					= Combi.
+CLOSE					= Close
+CURVEV					= V Diagram
+CURVEM					= M Diagram
+NUMBERING				= Numbering
+DEFLECTION				= Deflection
+WITHSHRNKAGE			= Including shrinkage
+NOCOMBINATION			= No combination
+ULTIMATE				= Ultimate
+FIRE					= Fire
+CONSTRUCTION			= Construction
+SERVICEABILITY 			= Serviceability
+ULS						= ULS
+SLS						= SLS
+FLS						= FLS
+NOCOMBINATIONFORULS		= No defined combinations for ultimate limit state
+NOCOMBINATIONFORULSC	= No defined combinations for ultimate limit state in construction phase
+NOCOMBINATIONFORFLS		= No defined combinations for fire limit state
+NOCOMBINATIONFORSLS 	= No defined combinations for serviceability limit state
+
+
 #FRM_PROPPING
 TITLE					= Propping of the beam
 OK						= Ok

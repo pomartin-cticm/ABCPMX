@@ -63,6 +63,10 @@ Public Class Frm_PPVerifications
         Me.lbl_Verification.ForeColor = CouleurForeBandeaux
 
         Me.img_Verifications.Dock = DockStyle.Fill
+
+        Me.TLPan_PartieBasse.ColumnStyles(1).Width = 0
+        Me.TLPan_PartieBasse.ColumnStyles(2).Width = 0
+
     End Sub
 
     Private Sub GestionLangues()
