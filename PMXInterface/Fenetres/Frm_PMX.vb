@@ -117,6 +117,18 @@ Public Class Frm_PMX
                 NomChargements(2) = Bloc("QLOADS")
                 NomChargements(3) = Bloc("CLOADS")
 
+                ReDim NomChargesA(9)
+                NomChargesA(0) = Bloc("PERMANENTLOADS")
+                NomChargesA(1) = Bloc("SELFWEIGHT")
+                NomChargesA(2) = Bloc("SELFWEIGHTPROPPED")
+                NomChargesA(3) = Bloc("SELFWEIGHTNOPROPS")
+                NomChargesA(4) = Bloc("OTHERG")
+                NomChargesA(5) = Bloc("QLOADS")
+                NomChargesA(6) = Bloc("CONFIGURATION")
+                NomChargesA(7) = Bloc("SHRINKAGESLAB")
+                NomChargesA(8) = Bloc("SHRINKAGEENCASEMENT")
+                NomChargesA(9) = Bloc("CLOADS")
+
             Catch ex As Exception
 
             End Try

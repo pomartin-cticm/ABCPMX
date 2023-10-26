@@ -10,6 +10,7 @@ Imports PMXMoteur2
 
     Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
     Const DeltaVMAx As Decimal = 1 / 1000
+    Dim NomCasA() As String = {"G", "G1", "G1PP", "G1C", "G2", "Q", "Conf", "SHC", "SHE", "QC"}
 
 #End Region
 
@@ -80,7 +81,7 @@ Imports PMXMoteur2
 
         '--> Calculs
 
-        TU_poutre.InitialiseCalculs()
+        TU_poutre.InitialiseCalculs(NomCasA)
         TU_poutre.AAA_CalculMNVInternes()
         TU_poutre.InitialiseCombiA(cls_Poutre.nbCombELU, TU_poutre.lCombELU, TU_poutre.CoefCombELU, "ELU", TU_poutre.CombiA_ELU)
 

@@ -398,7 +398,12 @@ SELFWEIGHT				= Self-weight
 OTHERG					= Other permanent loads
 QLOADS					= Live loads
 CLOADS					= Construction loads
-
+PERMANENTLOADS			= Permanent loads
+SELFWEIGHTPROPPED		= Self weight with props
+SELFWEIGHTNOPROPS		= Self weight without props
+CONFIGURATION			= Conf. no
+SHRINKAGESLAB			= Shrinkage of the slab
+SHRINKAGEENCASEMENT		= Shrinkage of the encasement
 
 #OPTCALCULMAIN
 TITLE					= Calculation options

@@ -538,7 +538,8 @@ Module Mod_Declarations
 
 #Region " Gestion des langues "
 
-    Public NomChargements() As String           ' Nom des cas de charge
+    Public NomChargements() As String           ' Nom des cas de charge utilisateur
+    Public NomChargesA() As String              ' Nom des cas de charge analyse
 
 #End Region
 

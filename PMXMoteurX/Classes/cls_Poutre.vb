@@ -2362,7 +2362,7 @@ Public Class cls_Poutre
 
 #Region " Chargements, poids propre "
 
-    Public Sub InitialiseCasdeChargesCalcul()
+    Public Sub InitialiseCasdeChargesCalcul(NomChargesA() As String)
         '-------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -2387,16 +2387,16 @@ Public Class cls_Poutre
         Dim nEqDalleSH, nEqEnrobSH As Decimal
 
         '# ZZZ Assurer la liaison avec les fichiers langue
-        Dim strChargesPermanentes As String = "Permanent loads"
-        Dim strPoidsPropre As String = "Self weight"
-        Dim strPoidsPropreEtaye As String = "Self weight with props"
-        Dim strPoidsPropreSansEtais As String = "Self weight without props"
-        Dim strAutresChargesPermanentes As String = "Other permanent loads"
-        Dim strExploitation As String = "Live loads"
-        Dim strConfiguration As String = "Conf. no "
-        Dim strRetraitDalle As String = "Shrinkage of the slab"
-        Dim strRetraitEnrob As String = "Shrinkage of the encasement"
-        Dim strConstruction As String = "Construction loads"
+        Dim strChargesPermanentes As String = NomChargesA(0)        ' "Permanent loads"
+        Dim strPoidsPropre As String = NomChargesA(1)               ' "Self weight"
+        Dim strPoidsPropreEtaye As String = NomChargesA(2)          ' "Self weight with props"
+        Dim strPoidsPropreSansEtais As String = NomChargesA(3)      ' "Self weight without props"
+        Dim strAutresChargesPermanentes As String = NomChargesA(4)  ' "Other permanent loads"
+        Dim strExploitation As String = NomChargesA(5)              ' "Live loads"
+        Dim strConfiguration As String = NomChargesA(6)             ' "Conf. no "
+        Dim strRetraitDalle As String = NomChargesA(7)              ' "Shrinkage of the slab"
+        Dim strRetraitEnrob As String = NomChargesA(8)              ' "Shrinkage of the encasement"
+        Dim strConstruction As String = NomChargesA(9)              ' "Construction loads"
 
         Dim IndiceG As Integer
         Dim IndiceQ As Integer
@@ -2839,7 +2839,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub InitialiseCalculs()
+    Public Sub InitialiseCalculs(NomChargesA() As String)
         '-------------------------------------------------------------------------------------
         '   07/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -2847,7 +2847,7 @@ Public Class cls_Poutre
         '-------------------------------------------------------------------------------------
 
         Me.PrepareNodesN(Me.Param.dMaxNodes, Me.Param.nbMinNodesTravee, Me.Param.nbMinNodesConsole)
-        Me.InitialiseCasdeChargesCalcul()
+        Me.InitialiseCasdeChargesCalcul(NomChargesA)
 
     End Sub
 
@@ -3409,17 +3409,19 @@ Public Class cls_Poutre
                 If iNode = NbNodes - 1 Then kFin = 0 Else kFin = 1
 
                 For k = kDeb To kFin
+                    SigmaTop = SigmaELU(Me.PtsSigma.iProfile(0) + iTOP - 1, iNode, k)
+                    SigmaBot = SigmaELU(Me.PtsSigma.iProfile(0) + iBOT - 1, iNode, k)
 
-                    If IsEqual(SigmaELU(Me.PtsSigma.iProfile(0 + iTOP - 1), iNode, k), SigmaELU(iBOT, iNode, k)) Then
+                    If IsEqual(SigmaTop, SigmaBot) Then
                         '== Si les contraintes sont égales
                         If (CONVMPOS * MEd(iNode, k) >= 0) Then
-                            If CONVSIGCOMP * SigmaELU(Me.PtsSigma.iProfile(0 + iTOP - 1), iNode, k) >= 0 Then
+                            If CONVSIGCOMP * SigmaTop >= 0 Then
                                 m_zANE(iNode, k) = zTop
                             Else
                                 m_zANE(iNode, k) = zBot
                             End If
                         Else
-                            If CONVSIGCOMP * SigmaELU(Me.PtsSigma.iProfile(0 + iTOP - 1), iNode, k) < 0 Then
+                            If CONVSIGCOMP * SigmaTop < 0 Then
                                 m_zANE(iNode, k) = zTop
                             Else
                                 m_zANE(iNode, k) = zBot
@@ -3427,8 +3429,6 @@ Public Class cls_Poutre
                         End If
 
                     Else
-                        SigmaTop = SigmaELU(Me.PtsSigma.iProfile(0 + iTOP - 1), iNode, k)
-                        SigmaBot = SigmaELU(Me.PtsSigma.iProfile(0 + iBOT - 1), iNode, k)
 
                         m_zANE(iNode, k) = zTop + (zBot - zTop) / (SigmaBot - SigmaTop) * (0 - SigmaBot)
                     End If
@@ -3446,7 +3446,7 @@ Public Class cls_Poutre
 
 #Region " Vérifications "
 
-    Public Sub AAA_Verifications()
+    Public Sub AAA_Verifications(NomCharges() As String)
         '-------------------------------------------------------------------------------------
         '   05/10/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -3479,7 +3479,7 @@ Public Class cls_Poutre
         Dim strRacineELS As String = "ELS"
         Dim strRacineELF As String = "ELF"
 
-        Me.InitialiseCalculs()
+        Me.InitialiseCalculs(NomCharges)
         Me.AAA_CalculMNVInternes()
         'MyPoutre.InitialiseCombiA_ELU()
         Me.InitialiseCombiA(cls_Poutre.nbCombELU, Me.lCombELU, Me.CoefCombELU, strRacineELU, Me.CombiA_ELU)
