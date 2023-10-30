@@ -13,6 +13,7 @@
     Public CritereM As cls_Critere                  ' Resistance à la flexion
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
+    Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
 
 #End Region
 
@@ -22,9 +23,21 @@
 
     End Sub
 
-    Private Sub InitialiseCriteres(NbNodes As Integer)
+    Private Sub InitialiseCriteres(NbNodes As Integer, lElastic As Boolean)
+        '----------------------------------------------------------------------------------------------------------
+        '   30/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Initialisation des critères pour une poutre acier sans enrobage
+        '----------------------------------------------------------------------------------------------------------
+        '   NbNodes     [E] :   Nombre de noeuds
+        '   lElastic    [E] :   Cas d'un dimensionnement élastique VM
+        '----------------------------------------------------------------------------------------------------------
 
-        Me.CritereM = New cls_Critere(NbNodes)
+        If lElastic Then
+            Me.CritereSigmaA = New cls_Critere(NbNodes)
+        Else
+            Me.CritereM = New cls_Critere(NbNodes)
+        End If
         Me.CritereV = New cls_Critere(NbNodes)
         Me.CritereVb = New cls_Critere(NbNodes)
 
@@ -50,16 +63,19 @@
         Dim MEd(,), VEd(,) As Decimal
         Dim MplRd, zANP As Decimal
         Dim MelRd, zANE As Decimal
-        Dim lGeneration1 As Boolean = (MyPoutre.Param.Norme = MyPoutre.Param.Enu_Normes.EurocodesG1)
+        Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
         Dim ClasseP, ClasseM As Integer 'Classes de la section en flexion positive et négative
         Dim lClasse4 As Boolean
         Dim lSigma As Boolean
+        Dim SigmaELU(,,) As Decimal = Nothing           ' Contraintes normales sous 1 combinaison ELU
+        Dim SigmaCas(,,,) As Decimal = Nothing          ' Contraintes normales pour les cas de charges
+        Dim lRetraitElastique As Boolean = True
 
         '--> Initialisations
 
         '# Critères
 
-        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes)
+        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, MyPoutre.Param.lElasticDesign)
 
         '# Tranchant résistant
 
@@ -80,6 +96,7 @@
         lSigma = True       ' EN phase debug
         If lSigma Then
             MyPoutre.PtsSigma.Initialise(MyPoutre)
+            MyPoutre.PtsSigma.CalculContraintesCharges(MyPoutre, 1, SigmaCas)
         End If
 
         '--> Boucle sur les combinaisons
@@ -94,12 +111,19 @@
 
             MyPoutre.CombiA_ELU.CombineEffortsT(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, VEd, False)
 
+            '# Combinaisons des contraintes
+
+            If lSigma Then
+                MyPoutre.CombiA_ELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, MyPoutre.PtsSigma.zPos.Count, MyPoutre.Nodes.nbNodes,
+                                                       MyPoutre.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
+            End If
+
             '# Vérification sous moment fléchissant
 
             If MyPoutre.Param.lElasticDesign Then
-
+                RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
             Else
-                Me.CritereFlexionAcier(MyPoutre, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lclasse4)
+                Me.RunCritereFlexionAcier(MyPoutre, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
             End If
 
             ' Me.CriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdPlus, MplRdMoins)
@@ -112,7 +136,87 @@
 
 #Region " Vérifications d'une poutre acier sans enrobage "
 
-    Private Sub CritereFlexionAcier(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal,
+
+    Private Sub RunCritereFlexionResistanceElastiqueVM(MyPoutre As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en flexion par les critères de VM
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   SigmaELU[E] :   Contraintes normales aux ELU
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim FydSup, FySup As Decimal
+        Dim FydW, FyW As Decimal
+        Dim FydInf, FyInf As Decimal
+
+        Dim iPro0 As Integer = MyPoutre.PtsSigma.iProfile(0)
+
+        '--> Initialisation
+
+        FySup = MyPoutre.Section.FySup
+        FydSup = FySup / MyPoutre.Param.Gamma.GammaM0
+        FyW = MyPoutre.Section.FyW
+        FydW = FyW / MyPoutre.Param.Gamma.GammaM0
+        FyInf = MyPoutre.Section.FyInf
+        FydInf = FyInf / MyPoutre.Param.Gamma.GammaM0
+
+        '--> Calculs
+
+        '# Contraintes dans le profilé
+
+        If (iPro0 > -1) Then
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
+            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
+        End If
+
+    End Sub
+
+    Private Sub RunCritereFlexionVM(MyPoutre As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,
+                                    SigmaU As Decimal, MyCritereM As cls_Critere)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en flexion par les critères de VM en un point de calcul de section
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   iPoint  [E] :   Indice du point de calcul des contraintes
+        '   SigmaELU[E] :   Contraintes normales aux ELU
+        '   SigmaU  [E] :   Valeur ultime de la contrainte normale au point iPoint
+        '   CritereM[E] :   Critere de la contrainte de flexion
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode As Integer
+        Dim Sigma As Decimal
+
+        '--> Traitement
+
+        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+
+            If Math.Abs(SigmaELU(iPoint, iNode, 0)) > Math.Abs(SigmaELU(iPoint, iNode, 1)) Then
+                Sigma = SigmaELU(iPoint, iNode, 0)
+            Else
+                Sigma = SigmaELU(iPoint, iNode, 1)
+            End If
+
+            MyCritereM.EnregistreCritere(iNode, iCombi, Sigma, SigmaU)
+
+        Next
+
+
+    End Sub
+
+    Private Sub RunCritereFlexionAcier(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal,
                                     MplRd As Decimal, MelRd As Decimal, ClasseP As Integer, ClasseM As Integer, ByRef lClasse4 As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM

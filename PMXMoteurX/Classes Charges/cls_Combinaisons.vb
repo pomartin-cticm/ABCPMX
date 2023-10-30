@@ -84,13 +84,58 @@
 
     End Sub
 
+    Public Sub CombineContraintes(iCombi As Integer, NbCas As Integer, NbPts As Integer, nbNodes As Integer,
+                                  ChargesA As List(Of cls_CasDeCharge), SigmaCas(,,,) As Decimal,
+                                  lRetrait As Decimal, ByRef SigmaELU(,,) As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Combine les contraintes - Cas général pour les poutres mixtes avec prise en compte du signe du moment
+        '-----------------------------------------------------------------------------------------------------------
+        '   iCombi      [E] :   Indice de la combinaison à traiter
+        '   NbCas       [E] :   Nombre de cas de charges élémentaires
+        '   NbPts       [E] ;   Nombre de points de calcul des contraintes
+        '   nbNodes     [E] :   Nombre de noeuds dans la modélisation
+        '   ChargesA    [E] :   Tableaux des cas de charges (qui doivent avoir été calculés auparavant
+        '   SigmaCas    [E] :   Table des contraintes élastiques sous cas de charges élémentaires
+        '   lRetrait    [E] :   Indique si on prend en compte les charges de retrait
+        '   SigmaELU    [S] :   Table des contraintes combinées
+        '-----------------------------------------------------------------------------------------------------------
+        '   Dimensions de SigmaCas          :    (NbCas - 1, NbPts - 1, NbNodes - 1, 1)
+        '   Dimensions de SigmaELU         :    (NbPts - 1, NbNodes - 1, 1)
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Initialisation
+
+        ReDim SigmaELU(NbPts - 1, nbNodes - 1, 1)
+
+        '--> Combinaisons
+
+        For jNode = 0 To nbNodes - 1
+            For k = 0 To 1
+
+                For iCas = 0 To NbCas - 1
+                    If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And lCombineCas(ChargesA(iCas), lRetrait) Then
+
+                        For iPts = 0 To NbPts - 1
+                            SigmaELU(iPts, jNode, k) += Me.CoefCombi(iCombi)(iCas) * SigmaCas(iCas, iPts, jNode, k)
+                        Next
+
+                    End If
+                Next
+
+            Next
+        Next
+
+    End Sub
+
     Public Sub CombineContraintes(iCombi As Integer, NbCas As Integer, NbPts As Integer, nbNodes As Integer, ChargesA As List(Of cls_CasDeCharge),
                                   Med(,) As Decimal, SigmaP(,,,) As Decimal, SigmaM(,,,) As Decimal,
                                   lRetrait As Decimal, ByRef SigmaELU(,,) As Decimal)
         '-----------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
-        '   Combine les contraintes
+        '   Combine les contraintes - Cas général pour les poutres mixtes avec prise en compte du signe du moment
         '-----------------------------------------------------------------------------------------------------------
         '   iCombi      [E] :   Indice de la combinaison à traiter
         '   NbCas       [E] :   Nombre de cas de charges élémentaires

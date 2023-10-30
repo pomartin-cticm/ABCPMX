@@ -582,7 +582,6 @@ Public Class Frm_PPCombinaison
 
     End Sub
 
-
 #End Region
 
 #Region " Dessin "

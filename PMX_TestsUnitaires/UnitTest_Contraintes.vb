@@ -101,8 +101,8 @@ Imports PMXMoteur2
 
         Assert.IsTrue(IsEqual(Mmax, MmaxRef))
 
-        Dim SigmaSup As Decimal = SigmaELU(0, iNodeMax, 0) / 10 ^ 6
-        Dim SigmaInf As Decimal = SigmaELU(4, iNodeMax, 0) / 10 ^ 6
+        Dim SigmaSup As Decimal = SigmaELU(0, iNodeMax, 0)
+        Dim SigmaInf As Decimal = SigmaELU(4, iNodeMax, 0)
 
         Wel = 557.1
 

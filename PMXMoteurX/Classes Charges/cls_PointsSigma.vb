@@ -272,7 +272,7 @@
 
                         DeltaZ = zCdG - Me.zPos(iPts)
 
-                        Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ
+                        Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ / kConvMPaPa
 
                     Next
 
@@ -284,7 +284,7 @@
 
                             DeltaZ = zCdG - Me.zPos(iPts)
 
-                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqDalle
+                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqDalle / kConvMPaPa
 
                         Next
 
@@ -298,7 +298,7 @@
 
                             DeltaZ = zCdG - Me.zPos(iPts)
 
-                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * neqarma
+                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqArma / kConvMPaPa
 
                         Next
 
@@ -312,7 +312,7 @@
 
                             DeltaZ = zCdG - Me.zPos(iPts)
 
-                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqEnrob
+                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqEnrob / kConvMPaPa
 
                         Next
 
@@ -326,7 +326,7 @@
 
                             DeltaZ = zCdG - Me.zPos(iPts)
 
-                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqArma
+                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqArma / kConvMPaPa
 
                         Next
 
@@ -361,6 +361,7 @@
         Dim kDeb, kFin, iElt As Integer
         Dim DeltaI() As Integer = {-1, 0}
         Dim DeltaZ, zCdG As Decimal
+        Dim MEd, InertieY As Decimal
 
         '--> Traitement
 
@@ -378,8 +379,10 @@
                     For iPts = Me.iProfile(0) To Me.iProfile(1)
 
                         DeltaZ = zCdG - Me.zPos(iPts)
+                        MEd = MyPoutre.ChargesA(iCas).MYY(iNode, k)
+                        InertieY = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).InertieY(iElt)
 
-                        Sigma(iCas, iPts, iNode, k) = MyPoutre.ChargesA(iCas).MYY(iNode, k) / MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).InertieY(iElt) * DeltaZ
+                        Sigma(iCas, iPts, iNode, k) = MEd / InertieY * DeltaZ / kConvMPaPa
 
                     Next
                 End If

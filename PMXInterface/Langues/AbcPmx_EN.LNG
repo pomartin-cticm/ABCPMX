@@ -307,7 +307,7 @@ COMBI					= Combi.
 CLOSE					= Close
 CURVEV					= V Diagram
 CURVEM					= M Diagram
-NUMBERING				= Numbering
+NUMBERING				= Nodes nunbers
 DEFLECTION				= Deflection
 WITHSHRNKAGE			= Including shrinkage
 NOCOMBINATION			= No combination
@@ -323,6 +323,30 @@ NOCOMBINATIONFORULSC	= No defined combinations for ultimate limit state in const
 NOCOMBINATIONFORFLS		= No defined combinations for fire limit state
 NOCOMBINATIONFORSLS 	= No defined combinations for serviceability limit state
 
+#FRM_PPVERIFICATIONS
+TITLE					= Verifications
+VERIFICATIONS			= Verifications
+LIMITSTATE				= Limit States
+CRITERIA				= Criteria
+ACTIONS					= Actions
+RESISTANCES				= Resistances
+NUMBERING				= Nodes numbers
+CRITERION				= Criterion
+RESULTS					= Results
+MAXVALUE				= Maximal value
+NODE					= At Node
+COMBINATION				= Combination
+CLOSE					= Close
+ULTIMATE				= Ultimate
+FIRE					= Fire
+CONSTRUCTION			= Construction
+SERVICEABILITY 			= Serviceability
+CRITERIONM				= Resistance to bending moments
+CRITERIONV				= Resistance to shear force
+CRITERIONMV				= Resistance to MV interaction
+CRITERIONSIGMAA			= Elastic stress in the steel profile
+CRITERIONSIGMAC			= Elastic stress in the concrete slab
+NOCRITERIA				= No criteria
 
 #FRM_PROPPING
 TITLE					= Propping of the beam

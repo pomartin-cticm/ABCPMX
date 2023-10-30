@@ -1,4 +1,8 @@
 ﻿Imports PMXMoteur2
+Imports System.IO
+'Imports System.Net.WebRequestMethods
+Imports System.Reflection
+Imports System.Security.Cryptography
 
 Public Class Frm_PPVerifications
 
@@ -20,6 +24,8 @@ Public Class Frm_PPVerifications
 
     Dim lNoCritere As Boolean
     Dim strCritereM As String
+    Dim strCritereSigmaA As String
+    Dim strCritereSigmaC As String
     Dim strCritereV As String
     Dim strCritereMV As String
     Dim strNoCritere As String
@@ -44,6 +50,7 @@ Public Class Frm_PPVerifications
     Private Sub Frm_PPVerifications_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lBuild = True
 
+        MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesign = True
         MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA)
         GestionLangues()
         GestionStyle()
@@ -71,32 +78,52 @@ Public Class Frm_PPVerifications
 
     Private Sub GestionLangues()
 
-        Me.lbl_LimitState.Text = "Limit State"
-        Me.lbl_Critere.Text = "Criteria"
+        If File.Exists(LogicielFichiers.Langue) Then
 
-        Me.chk_Action.Text = "Actions"
-        Me.chk_Resistance.Text = "Resistances"
-        Me.chk_Numerotation.Text = "Node numbers"
-        Me.chk_Critere.Text = "Criterion"
+            Dim Bloc As New Dictionary(Of String, String)
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_PPVERIFICATIONS")
+            BlocLine.CreationBloc(Bloc)
 
-        Me.lbl_Resultats.Text = "Resuts"
-        Me.lbl_ValMaxCritere.Text = "Valeur maximale"
-        Me.lbl_Node.Text = "Node"
-        Me.lbl_Combinaison.Text = "Combination"
+            Try
 
-        Me.btn_OK.Text = "Close"
-        Me.btn_Annuler.Text = "Annuler"
+                Me.Text = Bloc("TITLE")
 
-        strUltimate = "Ultimate"
-        strIncendie = "Fire"
-        strConstruction = "Construction"
-        strService = "Serviceability"
+                Me.lbl_Verification.Text = Bloc("VERIFICATION")
 
-        strCritereM = "Resistance to bending moments"
-        strCritereV = "Resistance to shear forces"
-        strCritereMV = "Resistance to MV interaction"
+                Me.lbl_LimitState.Text = Bloc("LIMITSTATE")         ' "Limit State"
+                Me.lbl_Critere.Text = Bloc("CRITERIA")              '  "Criteria"
 
-        strNoCritere = "No criterion"
+                Me.chk_Action.Text = Bloc("ACTIONS")                '  "Actions"
+                Me.chk_Resistance.Text = Bloc("RESISTANCES")        ' "Resistances"
+                Me.chk_Numerotation.Text = Bloc("NUMBERING")        '  "Node numbers"
+                Me.chk_Critere.Text = Bloc("CRITERION")             '  "Criterion"
+
+                Me.lbl_Resultats.Text = Bloc("RESULTS")             '  "Resuts"
+                Me.lbl_ValMaxCritere.Text = Bloc("MAXVALUE")        '  "Valeur maximale"
+                Me.lbl_Node.Text = Bloc("NODE")                     '  "Node"
+                Me.lbl_Combinaison.Text = Bloc("COMBINATION")       '  "Combination"
+
+                Me.btn_OK.Text = Bloc("CLOSE")                      ' "Close"
+                'Me.btn_Annuler.Text = Bloc("")                      ' "Annuler"
+
+                strUltimate = Bloc("ULTIMATE")                      ' "Ultimate"
+                strIncendie = Bloc("FIRE")                          ' "Fire"
+                strConstruction = Bloc("CONSTRUCTION")              ' "Construction"
+                strService = Bloc("SERVICEABILITY")                 ' "Serviceability"
+
+                strCritereM = Bloc("CRITERIONM")                    ' "Resistance to bending moments"
+                strCritereSigmaA = Bloc("CRITERIONSIGMAA")          ' "Resistance to bending moments"
+                strCritereSigmaC = Bloc("CRITERIONSIGMAC")          ' "Resistance to bending moments"
+                strCritereV = Bloc("CRITERIONV")                    ' "Resistance to shear forces"
+                strCritereMV = Bloc("CRITERIONMV")                  ' "Resistance to MV interaction"
+
+                strNoCritere = Bloc("NOCRITERIA")                    ' "No criterion"
+
+            Catch ex As Exception
+            End Try
+        End If
+
+        ' VERIFICATIONS = Verifications
 
     End Sub
 
@@ -143,6 +170,7 @@ Public Class Frm_PPVerifications
 
         If Not (MyPoutre.VerifAcier Is Nothing) Then
             AjouteCritereDansCombo(strCritereM, MyPoutre.VerifAcier(iVerif).CritereM, lNoCritere)
+            AjouteCritereDansCombo(strCritereSigmaA, MyPoutre.VerifAcier(iVerif).CritereSigmaA, lNoCritere)
             AjouteCritereDansCombo(strCritereV, MyPoutre.VerifAcier(iVerif).CritereV, lNoCritere)
         End If
 
@@ -160,6 +188,8 @@ Public Class Frm_PPVerifications
 
         If Not (MyPoutre.VerifMixte Is Nothing) Then
             AjouteCritereDansCombo(strCritereM, MyPoutre.VerifMixte(iVerif).CritereM, lNoCritere)
+            AjouteCritereDansCombo(strCritereSigmaA, MyPoutre.VerifMixte(iVerif).CritereSigmaA, lNoCritere)
+            AjouteCritereDansCombo(strCritereSigmaC, MyPoutre.VerifMixte(iVerif).CritereSigmaC, lNoCritere)
             AjouteCritereDansCombo(strCritereV, MyPoutre.VerifMixte(iVerif).CritereV, lNoCritere)
 
         End If
@@ -219,6 +249,9 @@ Public Class Frm_PPVerifications
                             Case strCritereM
                                 TransfertCritere(MyPoutre.VerifAcier(0).CritereM)
                                 TypeEffet = Enu_TypeVariable.Moment
+                            Case strCritereSigmaA
+                                TransfertCritere(MyPoutre.VerifAcier(0).CritereSigmaA)
+                                TypeEffet = Enu_TypeVariable.Contrainte
                             Case strCritereV
                                 TransfertCritere(MyPoutre.VerifAcier(0).CritereV)
                                 TypeEffet = Enu_TypeVariable.Effort
@@ -235,6 +268,12 @@ Public Class Frm_PPVerifications
                             Case strCritereV
                                 TransfertCritere(MyPoutre.VerifMixte(0).CritereV)
                                 TypeEffet = Enu_TypeVariable.Effort
+                            Case strCritereSigmaA
+                                TransfertCritere(MyPoutre.VerifMixte(0).CritereSigmaA)
+                                TypeEffet = Enu_TypeVariable.Contrainte
+                            Case strCritereSigmaC
+                                TransfertCritere(MyPoutre.VerifMixte(0).CritereSigmaC)
+                                TypeEffet = Enu_TypeVariable.Contrainte
                             Case strNoCritere
                                 lNoCritere = True
                         End Select
@@ -282,6 +321,11 @@ Public Class Frm_PPVerifications
         lDessNumeros = Me.chk_Numerotation.Checked
         Me.img_Verifications.Invalidate()
     End Sub
+
+    Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
+        Me.Close()
+    End Sub
+
 
 #End Region
 
