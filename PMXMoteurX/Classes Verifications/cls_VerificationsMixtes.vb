@@ -79,7 +79,7 @@
         Const lCombiRetrait = False                     '#ALERTE Pour le moment, à pondérer plus tard
         Dim lRElastiqueImpose As Boolean = False        ' Vérification élastique imposée
         'Dim lRElastique As Boolean
-        Dim ClasseSection(,) As Integer                 ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite)
+        Dim ClasseSection(,) As Integer = Nothing       ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite)
         Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
         Dim lSimple As Boolean = False
         'Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
@@ -87,7 +87,7 @@
 
         Dim iNodeMmax() As Integer, Mmax() As Decimal
         Dim xMZero(,) As Decimal = Nothing
-        Dim lTraveeMomNeg() As Boolean
+        Dim lTraveeMomNeg() As Boolean = Nothing
 
         Const lRetraitElastique As Boolean = True
         Dim SigmaP(,,,) As Decimal = Nothing        ' Contraintes normales dans l'hypothèse d'un moment positif
@@ -95,10 +95,13 @@
         Dim SigmaELU(,,) As Decimal = Nothing       ' Contraintes normales sous 1 combinaison ELU
 
         Dim lClasse3, lClasse4 As Boolean           ' Indique si présence d'au moins une section de classe 3 ou de classe 4
+        Dim DeltaRd() As List(Of Decimal) = Nothing
+        Dim DegConnex(,) As Decimal = Nothing
+
+        Dim zANP(,) As Decimal = Nothing                ' Position ANP, tenant compte de MEd et du degré de connexion
+        Dim MplRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de MEd et du degré de connexion
 
         '--> Initialisations
-
-        ReDim ClasseSection(MyPoutre.Nodes.nbNodes - 1, 1)
 
         '# Critères
 
@@ -152,42 +155,29 @@
 
             MyPoutre.RechercheANEFromSigma(SigmaELU, MEd, MyPoutre.Nodes.nbNodes, zane)
 
-            '# Classes des sections
-
-            For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
-                For k = 0 To 1
-                    If MEd(iNode, k) > 0 Then
-                        ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANE(iNode, k), True, lGeneration1, MyPoutre.Dalle.t_d)
-                    Else
-                        ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANE(iNode, k), False, lGeneration1, MyPoutre.Dalle.t_d)
-                    End If
-                Next
-            Next
-
-            '# Controle de la classe des sections
-
-            lClasse3 = False
-            lClasse4 = False
-            For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
-                For k = 0 To 1
-                    If ClasseSection(iNode, k) = 3 Then lClasse3 = True
-                    If ClasseSection(iNode, k) = 4 Then lClasse4 = True
-                Next
-            Next
-
             '# Analyse du diagramme de moment
 
             MyPoutre.AnalyseDiagrammeMoments(MEd, iNodeMmax, Mmax, xMZero, lTraveeMomNeg)
 
+            '# Calcul des propriétés plastiques le long de la barre
+
+            MyPoutre.MaillageRConnexion(xMZero, DeltaRd)
+            Me.MaillageProprietesPlastiques(MyPoutre, MEd, DeltaRd, Beff, zANP, mplrd)
+
+            '# Classes des sections
+
+            'Me.CalculeClasseSectionsMaillage(MyPoutre, MEd, zANE, zANPPlus, zANPMoins, ClasseSection, lClasse3, lClasse4)
+            Me.CalculeClasseSectionsMaillage(MyPoutre, MEd, zANE, zANP, ClasseSection, lClasse3, lClasse4)
+
             '# Degré de connexion
 
-
-
+            If Not (lClasse3 Or lClasse4) Then
+                Me.CheckDegreConnexion(MyPoutre, DeltaRd, iNodeMmax, DegConnex)
+            End If
 
             '# Vérification sous moment fléchissant
 
             Me.RunCritereMoments(MyPoutre, iCombi, lClasse3, MEd, SigmaELU, MplRdPlus, MplRdMoins)
-            'Me.RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdPlus, MplRdMoins)
 
             '# Vérification sous effort tranchant
 
@@ -205,6 +195,168 @@
 
 
     End Sub
+
+    Private Sub MaillageProprietesPlastiques(MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal,
+                                             ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   02/11/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés plastique le long de la barre en fonction de 
+        '   du moment sollicitant et du degré de connection
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre traitée
+        '   MEd             [E] :   Diagramme de moment aux ELU
+        '   DeltaRd         [E] :   Cumul des résistance des PRd entre les sections et les points de moment nul
+        '   bEff            [E] :   Largeur efficace de dalle
+        '   pzANP           [S] :   position ANP
+        '   pMplRd          [S] :   moment plastique (en fonction du signe de MEd)
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim iTravee As Integer
+        Dim iTravDeb, iTravFin As Integer
+        Dim iNode As Integer
+        Dim iNode0 As Integer
+        Dim kDeb, kfin, k As Integer
+        Const RhoV As Decimal = 1
+
+        '--> Initialisation
+
+        iTravDeb = MyPoutre.IndicePremiereTravee
+        iTravFin = MyPoutre.IndiceDerniereTravee
+        ReDim pzANP(NbNodes - 1, 1)
+        ReDim pMPlRd(NbNodes - 1, 1)
+
+        '--> Traitement
+
+        For iTravee = iTravDeb To iTravFin
+
+            iNode0 = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+
+            For iNode = iNode0 To MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+                If iNode = iNode0 Then kDeb = 1 Else kDeb = 0
+                If iNode = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1) Then kfin = 0 Else kfin = 1
+
+                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Math.Sign(MEd(iNode, kDeb)), True, MyPoutre.Param.Gamma, RhoV,
+                                                                 bEff(iNode), DeltaRd(iTravee)(iNode0 + iNode), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
+
+                If kfin > kDeb Then
+                    pzANP(iNode, kfin) = pzANP(iNode, kDeb)
+                    pMPlRd(iNode, kfin) = pMPlRd(iNode, kDeb)
+                End If
+            Next
+
+        Next
+
+    End Sub
+
+    Private Sub CalculeClasseSectionsMaillage(MyPoutre As cls_Poutre, MEd(,) As Decimal, zANE(,) As Decimal,
+                                              zANPPlus() As Decimal, zANPMoins() As Decimal, ByRef ClasseSection(,) As Integer,
+                                              ByRef lClasse3 As Boolean, ByRef lClasse4 As Boolean)
+        '----------------------------------------------------------------------------------------------------------
+        '   02/11/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul de la calsse des sections le long du maillage
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre à traiter
+        '   MEd             [E] :   Diagramme des moments aux ELU
+        '   zANPPlus        [E] :   Positions des ANP plastiques sous moments > 0
+        '   zANPMoins       [E] :   Positions des ANP plastiques sous moments < 0
+        '   zANE            [E] :   Position de l'ANE au droit du noeud
+        '   ClasseSection   [S] :   Classe des sections (calculée en fonction du signe de MEd)
+        '   lClasse3        [S] :   Indique si au moins une des sections est de classe 3
+        '   lClasse4        [S] :   Indique si au moins une des sections est de classe 4
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
+
+        '--> Initialisation
+
+        ReDim ClasseSection(MyPoutre.Nodes.nbNodes - 1, 1)
+
+        '--> Boucle sur les noeuds
+
+        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+            For k = 0 To 1
+                If MEd(iNode, k) > 0 Then
+                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANE(iNode, k), True, lGeneration1, MyPoutre.Dalle.t_d)
+                Else
+                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANE(iNode, k), False, lGeneration1, MyPoutre.Dalle.t_d)
+                End If
+            Next
+        Next
+
+        '# Controle de la classe des sections
+
+        lClasse3 = False
+        lClasse4 = False
+        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+            For k = 0 To 1
+                If ClasseSection(iNode, k) = 3 Then lClasse3 = True
+                If ClasseSection(iNode, k) = 4 Then lClasse4 = True
+            Next
+        Next
+
+    End Sub
+
+
+    Private Sub CalculeClasseSectionsMaillage(MyPoutre As cls_Poutre, MEd(,) As Decimal, zANE(,) As Decimal,
+                                              zANP(,) As Decimal, ByRef ClasseSection(,) As Integer,
+                                              ByRef lClasse3 As Boolean, ByRef lClasse4 As Boolean)
+        '----------------------------------------------------------------------------------------------------------
+        '   02/11/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul de la calsse des sections le long du maillage
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre à traiter
+        '   MEd             [E] :   Diagramme des moments aux ELU
+        '   zANP            [E] :   Positions des ANP plastiques sous le moment ELU
+        '   zANE            [E] :   Position de l'ANE au droit du noeud
+        '   ClasseSection   [S] :   Classe des sections (calculée en fonction du signe de MEd)
+        '   lClasse3        [S] :   Indique si au moins une des sections est de classe 3
+        '   lClasse4        [S] :   Indique si au moins une des sections est de classe 4
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
+        Dim kDeb, kFin As Integer
+
+        '--> Initialisation
+
+        ReDim ClasseSection(MyPoutre.Nodes.nbNodes - 1, 1)
+
+        '--> Boucle sur les noeuds
+
+        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+
+            If iNode = 0 Then kDeb = 1 Else kDeb = 0
+            If iNode = MyPoutre.Nodes.nbNodes - 1 Then kFin = 0 Else kFin = 1
+
+            For k = kDeb To kFin
+
+                ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANP(iNode, k), zANE(iNode, k), True, lGeneration1, MyPoutre.Dalle.t_d)
+
+            Next
+        Next
+
+        '# Controle de la classe des sections
+
+        lClasse3 = False
+        lClasse4 = False
+        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+            For k = 0 To 1
+                If ClasseSection(iNode, k) = 3 Then lClasse3 = True
+                If ClasseSection(iNode, k) = 4 Then lClasse4 = True
+            Next
+        Next
+
+    End Sub
+
 
     Private Sub RunCritereMoments(MyPoutre As cls_Poutre, iCombi As Integer, lClasse3 As Boolean,
                                   MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
@@ -471,5 +623,105 @@
     End Sub
 
 #End Region
+
+#Region " Degré de connexion "
+
+    Private Sub CheckDegreConnexion(MyPoutre As cls_Poutre, DeltaRd() As List(Of Decimal), iNodeMmax() As Integer, ByRef DegConnex(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   05/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU d'une poutre mixte acier béton
+        '----------------------------------------------------------------------------------------------------------
+        '   DeltaRd     [E] :   Somme des PRd entre les points du maillage et les points de moments nuls
+        '   iNodeMMax   [E] :   Indice des neouds de moment >0 max
+        '   DegConnex   [E] :   Degré de connexion, par travée, en moment >0 et moment <0
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NArma, NDalle, NProfile As Decimal
+        Dim NConnex As Decimal
+        Dim iNode, iNode0 As Integer
+        Dim Beff As Decimal
+        Dim lSimple As Decimal = MyPoutre.Param.lLargeurEfficaceSimplifiee
+        Dim gammaS As Decimal = MyPoutre.Param.Gamma.GammaS
+        Dim gammaM0 As Decimal = MyPoutre.Param.Gamma.GammaM0
+        Dim gammaC As Decimal = MyPoutre.Param.Gamma.GammaC
+        Dim iTravee As Integer
+        Dim iTravDeb, iTravFin As Integer
+
+        '--> Initialisation
+
+        iTravDeb = MyPoutre.IndicePremiereTravee
+        iTravFin = MyPoutre.IndiceDerniereTravee
+        ReDim DegConnex(iTravFin, 1)
+
+        '##ZZZ A compléter dans le cas des profilés enrobés
+        NProfile = MyPoutre.Section.ResistanceTractionProfile(gammaM0)
+
+        '--> Boucle sur les travées
+
+        '# Travée console gauche
+
+        If MyPoutre.lTraveeConsoleGauche Then
+            iNode = MyPoutre.Nodes.iNodeExtTrav(0, 1)
+            Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(0), 0, lSimple, False)
+            NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+            NConnex = Math.Min(NArma, NProfile)
+            DegConnex(0, 1) = DeltaRd(0)(iNode) / NConnex
+            DegConnex(0, 0) = -1
+        End If
+
+        '# Travée console droite
+
+        If MyPoutre.lTraveeConsoleDroite Then
+
+            iNode = MyPoutre.Nodes.iNodeExtTrav(iTravFin, 0)
+            Beff = MyPoutre.BeffDalle(0, iTravFin, lSimple, False)
+            NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+            NConnex = Math.Min(NArma, NProfile)
+            DegConnex(iTravFin, 1) = DeltaRd(iTravFin)(0) / NConnex
+            DegConnex(iTravFin, 0) = -1
+        End If
+
+        '# Boucle sur les travées intermédiaires
+
+        For iTravee = 1 To MyPoutre.NombreTraveesDeuxAppuis
+            iNode0 = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+
+            '# Appui gauche
+            If iTravee > iTravDeb Then
+                '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
+                Beff = MyPoutre.BeffDalle(0, iTravee, lSimple, False)
+                NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+                NConnex = Math.Min(NArma, NProfile)
+                DegConnex(iTravee, 1) = DeltaRd(iTravee)(0) / NConnex
+            End If
+
+            '# En travée
+            Beff = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(iNodeMmax(iTravee)), iTravee, lSimple, False)
+            NDalle = MyPoutre.Dalle.NResistanceCompressionDalle(Beff, gammaC)
+            NConnex = Math.Min(NDalle, NProfile)
+            DegConnex(iTravee, 0) = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex
+
+            '# Appui droite
+            If iTravee < iTravFin Then
+                '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
+                iNode = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+                Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(iTravee), iTravee, lSimple, False)
+                NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+                NConnex = Math.Min(NArma, NProfile)
+                If (iTravee > iTravDeb) Then
+                    DegConnex(iTravee, 1) = Math.Min(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
+                Else
+                    DegConnex(iTravee, 1) = DeltaRd(iTravee)(iNode - iNode0) / NConnex
+                End If
+            End If
+
+        Next
+    End Sub
+
+#End Region
+
 
 End Class

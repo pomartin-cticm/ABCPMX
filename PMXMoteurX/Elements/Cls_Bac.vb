@@ -363,6 +363,32 @@ Public Class cls_Bac
         End Get
     End Property
 
+    Public ReadOnly Property lNervuresOuvertes As Boolean
+        '-----------------------------------------------------------------
+        '   Indique si bac à nervure ouverte
+        '-----------------------------------------------------------------
+        Get
+            Return IsGreaterOrEqual(Me.Bt, Me.Bb)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Indique si les nervures sont orientées perpendiculairement à l'axe de la poutre
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lPerpendiculaire As Boolean
+        Get
+            Return Me.Orientation = Enum_Orientation.Perpendiculaire
+        End Get
+    End Property
+
+    Public ReadOnly Property lNervuresContinues As Boolean
+        Get
+            Return (Not (Me.AppuiT = EnuConfigTAppui.Discontinu))
+        End Get
+    End Property
+
+
 #End Region
 
 #Region " Outils pour le dessin "

@@ -41,6 +41,16 @@
     ''' </summary>
     Public A_s As Decimal
 
+    ''' <summary>
+    ''' Aire d'armature par unité de largeur de dalle
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property AireParULargeur As Decimal
+        Get
+            Return Math.PI * Me.PhiS ^ 2 / (4 * Me.EspBar)
+        End Get
+    End Property
+
 #End Region
 
 #Region " Constructeur "

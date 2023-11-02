@@ -136,7 +136,7 @@
 
 #End Region
 
-#Region " Fonction de calcul "
+#Region " Propriétés "
 
     ''' <summary>
     ''' Calcul des propriétés
@@ -187,10 +187,73 @@
         Return MyH0
     End Function
 
+    Public Function NResistanceArmatures(Beff As Decimal, GammaS As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------
+        '   31/10/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Calcul de la résistance à la traction des armatures de la dalle
+        '---------------------------------------------------------------------------------------------
+        '   Beff    [E] :   Largeur participante de la dalle
+        '   GammaS  [E] :   Coefficient partiel pour les armatures
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pNArma As Decimal = 0
+
+        '--> Calcul
+
+        For i As Integer = 0 To Me.LitArma.Count - 1
+            If Me.LitArma(i).lActive Then
+                pNArma += Me.LitArma(i).AireParULargeur * Beff * Me.AcierArmatures.FsK / GammaS
+            End If
+        Next
+
+        '--> Fin
+
+        Return pNArma * kConvMPaPa
+
+    End Function
+
+    Public Function NResistanceCompressionDalle(Beff As Decimal, GammaC As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------
+        '   31/10/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Calcul de la résistance à la compresion de la dalle
+        ' ##ZZZ à compléter pour génération 2
+        '---------------------------------------------------------------------------------------------
+        '   Beff    [E] :   Largeur participante de la dalle
+        '   GammaC  [E] :   Coefficient partiel pour le béton
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pNDalle As Decimal = 0
+        Dim kDalle As Decimal = 0.85
+
+        '--> Calcul
+
+        pNDalle = Beff * Me.EpaisseurActive * Me.beton.Fck * kDalle / GammaC
+
+        '--> Fin
+
+        Return pNDalle * kConvMPaPa
+    End Function
 
 #End Region
 
 #Region " Outils "
+
+    ''' <summary>
+    ''' Indique si la dalle est mixte
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property lMixte As Boolean
+        Get
+            Return (Me.type = Enum_TypeDalle.Mixte)
+        End Get
+    End Property
+
 
     ''' <summary>
     ''' Retourne la largeur d'appui d'une prédalle sur la semelle

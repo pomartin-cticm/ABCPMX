@@ -702,7 +702,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques
 
-        MySection.ProprietesPlastiquesMixteMyy(1, True, MyGamma, 0, bEff, Eta, MyDalle, zANP, MplRd)
+        MySection.ProprietesPlastiquesMixteMyy(1, True, MyGamma, 0, bEff, MyDalle, zANP, MplRd)
 
         '# Position ANP
 
@@ -937,7 +937,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques / axe YY sous MOMENT NEGATIF
 
-        MySection.ProprietesPlastiquesMixteMyy(-1, True, MyGamma, 0, bEff, Eta, MyDalle, zANP, MplRd)
+        MySection.ProprietesPlastiquesMixteMyy(-1, True, MyGamma, 0, bEff, MyDalle, zANP, MplRd)
 
         '# Position ANP
 
@@ -1010,7 +1010,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés plastiques
 
-        MySection.ProprietesPlastiquesMixteMyy(1, True, MyGamma, 0, bEff, Eta, MyDalle, zANP, MplRd)
+        MySection.ProprietesPlastiquesMixteMyy(1, True, MyGamma, 0, bEff, MyDalle, zANP, MplRd)
 
         '# Position ANP
 

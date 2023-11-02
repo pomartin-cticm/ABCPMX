@@ -88,7 +88,7 @@ Public Class Frm_PPVerifications
 
                 Me.Text = Bloc("TITLE")
 
-                Me.lbl_Verification.Text = Bloc("VERIFICATION")
+                Me.lbl_Verification.Text = Bloc("VERIFICATIONS")
 
                 Me.lbl_LimitState.Text = Bloc("LIMITSTATE")         ' "Limit State"
                 Me.lbl_Critere.Text = Bloc("CRITERIA")              '  "Criteria"
@@ -380,7 +380,7 @@ Public Class Frm_PPVerifications
         Dim ColorPoutre As Color = Color.DarkGray
         Dim ColorSelect As Color = Color.OrangeRed
 
-        Dim xo, xe, yo, ye As Decimal
+        'Dim xo, xe, yo, ye As Decimal
         Dim kEch As Decimal
 
         Dim valEdMax, valRdMax As Decimal
@@ -395,8 +395,6 @@ Public Class Frm_PPVerifications
         If lBuild Then Exit Sub
 
         Dim MyBrushN As New SolidBrush(Color.White)
-        ' Dim MyPenDef As New Pen(ColorDef)
-        'Dim MyPenM As New Pen(Color.Blue)
 
         dCar = Longueur * pDecAxe
         xMin = 0 - dCar

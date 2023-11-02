@@ -600,6 +600,99 @@ Public Class cls_Connecteur
 
 #End Region
 
+#Region " Resistance du connecteur - Fonction globale "
 
+    Public Function ResistancePRd(lGeneration1 As Boolean, lDallePleine As Boolean, lPerpendiculaire As Boolean,
+                                  MyBac As cls_Bac, nR As Integer,
+                                  Fck As Decimal, Ecm As Decimal, gammaVS As Decimal, gammaVC As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------
+        '   31/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Fonction générale pour retourner la résistance du connecteur
+        '-----------------------------------------------------------------------------------------------------------------
+        '   lGeneration1    [E] :   Indique si première ou seconde génération de l'EN
+        '   lDallePleine    [E] :   Indique si dalle pleine ou dalle mixte
+        '   lPerpendiculaire[E] :   Indique si bac perpendiculaire, pour les dalles mixtes
+        '   MyBac           [E] :   Bac pour les dalles mixtes
+        '   nR              [E] :   Nombre de connecteur par rangée
+        '   FcK, Ecm        [E] :   Résistance à la compression et module élastique du béton
+        '   gammaVS         [E] :   Coefficient partiel pour le terme lié à l'acier du connecteur
+        '   gammaVC         [E] :   Coefficient partiel pour le terme lié au béton
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pPRd As Decimal = 0
+
+        '--> Traitement
+
+        If lGeneration1 Then
+            '# Génération 1 de l'EN 
+
+            If lDallePleine Then
+                pPRd = Me.PRdDallePleineG1(Fck, Ecm, gammaVS, gammaVC)
+            Else
+                If lPerpendiculaire Then
+                    pPRd = Me.PRdBacPerpendiculaireG1(Fck, Ecm, gammaVS, gammaVC, nR, MyBac)
+                Else
+                    pPRd = Me.PRdBacParrallelleG1(Fck, Ecm, gammaVS, gammaVC, MyBac)
+                End If
+            End If
+
+        Else
+            '# Génération 2 de l'EN 
+
+            If lDallePleine Then
+                pPRd = Me.PRdDallePleineG2(Fck, Ecm, gammaVS, gammaVC)
+            Else
+                If lPerpendiculaire Then
+
+                    If Me.lAnnexeG(MyBac) Then
+                        'pPRd = Me.PRdBacPerpendiculaireG2_AnnexeG(, nR, gammaVC, gammaVS)
+                    Else
+                        pPRd = Me.PRdBacPerpendiculaireG2(Fck, Ecm, gammaVS, gammaVC, nR, MyBac)
+                    End If
+                Else
+                    pPRd = Me.PRdBacParrallelleG2(Fck, Ecm, gammaVS, gammaVC, MyBac)
+                End If
+            End If
+
+        End If
+
+        '--> Fin
+
+        Return pPRd
+
+    End Function
+
+    Public Function lAnnexeG(MyBac As cls_Bac) As Boolean
+        '-----------------------------------------------------------------------------------------------------------------
+        '   31/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Indique si l'annexe G doit être utilisée pour le calcul du PRd, dans le cas d'une dalle mixte en Génération 2
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim plAnnexG As Boolean = False
+        Const EkAnnexG As Decimal = 0.06
+        Dim hAAnnexG As Decimal = 2.7 * Me.d
+
+        '--> Traitement
+
+        If MyBac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
+            If MyBac.lNervuresOuvertes Then
+                If IsSmaller(MyBac.LargeurBmoyenne, EkAnnexG) Then plAnnexG = True
+                If IsSmaller(Me.hsc - MyBac.Hp, hAAnnexG) Then plAnnexG = True
+            End If
+        End If
+
+        '--> Fin
+
+        Return plAnnexG
+
+    End Function
+
+#End Region
 
 End Class

@@ -887,7 +887,7 @@ Module Mod_NoteCalcul
                     nbLigneSautePage += (HLIGNE - 0.2)
 
                     For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
-                        For j As Integer = 0 To .NombreZone(i) - 1
+                        For j As Integer = 0 To .NombreZones(i) - 1
                             nbLigneSautePage += (HLIGNE - 0.2)
                         Next
                         If Not i = MyBeam.IndiceDerniereTravee Then
@@ -928,21 +928,21 @@ Module Mod_NoteCalcul
 
 
                     For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
-                        For j As Integer = 0 To .NombreZone(i) - 1
+                        For j As Integer = 0 To .NombreZones(i) - 1
 
                             InitialiseLigne(nbColonne, HLIGNE, True)
                             AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, i)
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Longueur_Zone(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneLongueur(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneNombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                             If lDalleMixteEtPerp Then
-                                If .Espacement_Bac_Trans(i, j) = 1 Then
-                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIB"))
+                                If .ZoneEspacement_Bac_Trans(i, j) = 1 Then
+                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIB"))
                                 Else
-                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIBS"))
+                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIBS"))
                                     End
                                 End If
                             End If
-                            AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
+                            AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
 
 
                         Next

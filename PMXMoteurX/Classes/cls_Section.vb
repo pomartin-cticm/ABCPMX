@@ -39,62 +39,32 @@ Public Class cls_Section
 
 #End Region
 
-#Region " Attributs "
+#Region " Attributs généraux "
 
-    ''' <summary>
-    ''' Nom de la section
-    ''' </summary>
-    Public Nom As String
 
-    ''' <summary>
-    ''' Indique si l'utilisateur a défini une dalle de béton
-    ''' </summary>
-    Public lDalleBeton As Boolean
+    Public Nom As String                        ' Nom de la section
 
-    ''' <summary>
-    ''' Indique si la section est définie par une base de données
-    ''' </summary>
-    Public lDatabase As Boolean
+    Public lDalleBeton As Boolean               ' Indique si l'utilisateur a défini une dalle de béton
+    Public lDatabase As Boolean                 ' Indique si la section est définie par une base de données
 
-    ''' <summary>
-    ''' Type de la section
-    ''' </summary>
-    Public typeSection As Enum_TypeSection
+    Public typeSection As Enum_TypeSection      ' Type de section
 
 #End Region
 
-#Region " Elements de la section "
+#Region " Attributs de définition de la section "
 
-    '''' <summary>
-    '''' Profilé acier
-    '''' </summary>
-    'Public pProfil As New cls_Profil
+    Public ProfilA As New cls_ProfilA           ' Profilé métallique
 
-    Public ProfilA As New cls_ProfilA
+    Public Acier As New cls_Acier               ' Acier du profilé
 
-    ''' <summary>
-    ''' Acier de la section
-    ''' </summary>
-    Public Acier As New cls_Acier
-
-    ''' <summary>
-    ''' Enrobage partiel de la section
-    ''' </summary>
-    Public Enrobage As New cls_Enrobage_Partiel
-
-    ''' <summary>
-    ''' Dalle béton de la poutre            ' A SUPPRIMER ?
-    ''' </summary>
-    'Public Dalle As New Cls_Dalle
+    Public Enrobage As New cls_Enrobage_Partiel ' Enrobage (pour les profilé enrobés)
 
 #End Region
 
 #Region " Autres attributs "
 
-    ''' <summary>
-    ''' Indique si on modélise les armatures par un cercle concentré
-    ''' </summary>
-    Public lArmaturesConcentrees As Boolean
+    '# A DEGAGER ?
+    Public lArmaturesConcentrees As Boolean     ' Indique si on modélise les armatures par un cercle concentré
 
 #End Region
 
@@ -144,6 +114,40 @@ Public Class cls_Section
         Next
 
     End Sub
+
+    Private Sub MaillageDalle(Gammas As cls_Gamma, bEff As Decimal, nEqDalle As Decimal, DeltaPRd As Decimal, MyDalle As cls_Dalle, ByRef MyModele As cls_ModeleP)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   02/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage de la dalle béton pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Gammas      [E] :   Coefficients partiels
+        '   bEff        [E] :   Largeur participante
+        '   nEqDalle    [E] :   Coefficient d'équivalence pour le béton
+        '   DeltaPRd    [E] :   Cumul de résistance des connecteurs jusqu'au point de moment nul
+        '   MyDalle     [E] :   Dalle à mailler
+        '   MyModele    [E/S]:  Modèle
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NArma As Decimal
+        Dim Tc As Decimal = MyDalle.EpaisseurActive
+        Dim Aire As Decimal
+        Dim kPlDalle As Decimal = 0.85
+
+        '--> Initialisation
+
+        NArma = MyDalle.NResistanceCompressionDalle(bEff, Gammas.GammaC)
+
+        '--> Maillage
+
+        Tc = Math.Min(NArma, DeltaPRd) / (bEff * kPlDalle * MyDalle.beton.Fck / Gammas.GammaC)
+        Aire = bEff * Tc
+        MyModele.AddMaille(Aire, Tc, MyDalle.zTop - Tc / 2, 0, 1, nEqDalle, MyDalle.beton.Fck, 0.85, Gammas.GammaC)
+
+    End Sub
+
 
     Private Sub MaillageDalle(Gammas As cls_Gamma, bEff As Decimal, nEqDalle As Decimal, MyDalle As cls_Dalle, ByRef MyModele As cls_ModeleP)
         '-------------------------------------------------------------------------------------------------------------------
@@ -360,8 +364,89 @@ Public Class cls_Section
 
     End Sub
 
+
+
+    Public Sub ProprietesPlastiquesMixteMyyEta(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
+                                               bEff As Decimal, DeltaRd As Decimal, MyDalle As cls_Dalle,
+                                               ByRef zANP As Decimal, ByRef MplRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés plastiques en flexion simple de la section / axe fort prenant en compte la mixité avec la dalle
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   RhoV        [E] :   Coefficient pour l'interaction MV
+        '   bEff        [E] :   Largeur efficace de la dalle (si secion mixte)
+        '   DeltaRd     [E] :   Cumul des résistance des connecteurs de la dalle jusqu'au point de moment nul (si section mixte)
+        '   MyDalle     [E] :   Dalle
+        '   zANP        [S] :   Position axe neutre plastique
+        '   MplRd       [S] :   Moment plastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim lLamine As Boolean = Me.lLamine
+
+        Dim nEqEc As Decimal = 1            ' On Applique 1 car calcul plastique
+        Const nEqD As Decimal = 1           ' Idem
+        Dim NPro As Decimal
+
+        '--> Initialisation
+
+        Hw = Me.ProfilA.HauteurAmeHw
+        NPro = Me.ResistanceTractionProfile(Gammas.GammaM0)
+
+        '--> Modélisation du profilé acier
+
+        MaillageProfileA(Gammas, RhoV, MyModele)
+
+        '# Béton d'enrobage
+
+        If Me.lEnrobage Then
+
+            MaillageEnrobage(Gammas, nEqEc, MyModele)
+
+        End If
+
+        '# Armatures de l'enrobage
+
+        If Me.lEnrobage Then
+
+            MaillageArmaturesEnrobage(Gammas, MyModele)
+
+        End If
+
+        '--> Dalle béton
+
+        If lMixte And (bEff > 0) Then
+
+            '# Dalle 
+
+            MaillageDalle(Gammas, bEff, nEqD, Math.Min(DeltaRd, npro), MyDalle, MyModele)
+
+            '# Armatures
+
+            MaillageArmaturesDalle(Gammas, bEff, MyDalle, MyModele)
+
+        End If
+
+        '--> Recherche de l'axe neutre plastique
+
+        MyModele.RechercheANP(Signe, zANP, lValeurRd)
+
+        '--> Moment plastique
+
+        MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    End Sub
+
+
     Public Sub ProprietesPlastiquesMixteMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
-                                            bEff As Decimal, Eta As Decimal, MyDalle As cls_Dalle,
+                                            bEff As Decimal, MyDalle As cls_Dalle,
                                             ByRef zANP As Decimal, ByRef MplRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
@@ -436,6 +521,37 @@ Public Class cls_Section
         MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
 
     End Sub
+
+    Public Function ResistanceTractionProfile(gammaM0 As Decimal) As Decimal
+        '-------------------------------------------------------------------------------------------------------------------
+        '   31/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la résistance à la traction du profilé métallique seul
+        '-------------------------------------------------------------------------------------------------------------------
+        '   gammaM0     [E] :   Coefficient partiel pour l'acier
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pNPro As Decimal = 0
+        Dim Afs, Afi As Decimal
+
+        '--> Initialisation
+
+        Afs = Me.ProfilA.AireFs
+        Afi = Me.ProfilA.AireFi
+
+        '--> Calcul
+
+        pNPro = Afs * Me.FySup
+        pNPro += Afi * Me.FyInf
+        pNPro += (Me.ProfilA.Aire - Afi - Afs) * Me.FyW
+
+        '--> Fin
+
+        Return pNPro / gammaM0 * kConvMPaPa
+
+    End Function
 
 #End Region
 

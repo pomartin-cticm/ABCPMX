@@ -278,21 +278,21 @@ Public Class Frm_Portees
     ''' <param name="indTravee"></param>
     Private Sub Reinitialiser_Connection(ByVal indTravee As Integer)
         With MyProjet.Poutres(MyProjet.IndEnCours)
-            .Longueur_Zone(indTravee, 0) = .LongueurTravee(indTravee)
-            .Longueur_Zone(indTravee, 1) = 0
-            .Longueur_Zone(indTravee, 2) = 0
-            .NombreZone(indTravee) = 1
-            .Espacement(indTravee, 0) = 200 / 1000
-            .Espacement(indTravee, 1) = 200 / 1000
-            .Espacement(indTravee, 2) = 200 / 1000
-            .Espacement_Bac_Trans(indTravee, 0) = 1
-            .Espacement_Bac_Trans(indTravee, 1) = 1
-            .Espacement_Bac_Trans(indTravee, 2) = 1
-            .NombreGoujonsTransv(indTravee, 0) = 1
-            .NombreGoujonsTransv(indTravee, 1) = 1
-            .NombreGoujonsTransv(indTravee, 2) = 1
+            .ZoneLongueur(indTravee, 0) = .LongueurTravee(indTravee)
+            .ZoneLongueur(indTravee, 1) = 0
+            .ZoneLongueur(indTravee, 2) = 0
+            .NombreZones(indTravee) = 1
+            .ZoneEspacement(indTravee, 0) = 200 / 1000
+            .ZoneEspacement(indTravee, 1) = 200 / 1000
+            .ZoneEspacement(indTravee, 2) = 200 / 1000
+            .ZoneEspacement_Bac_Trans(indTravee, 0) = 1
+            .ZoneEspacement_Bac_Trans(indTravee, 1) = 1
+            .ZoneEspacement_Bac_Trans(indTravee, 2) = 1
+            .ZoneNombreGoujonsTransv(indTravee, 0) = 1
+            .ZoneNombreGoujonsTransv(indTravee, 1) = 1
+            .ZoneNombreGoujonsTransv(indTravee, 2) = 1
             For j As Integer = 0 To 2
-                .NombreGoujonsTot(indTravee) += .Longueur_Zone(indTravee, j) / .Espacement(indTravee, j)
+                .NombreGoujonsTot(indTravee) += .ZoneLongueur(indTravee, j) / .ZoneEspacement(indTravee, j)
             Next
         End With
     End Sub
