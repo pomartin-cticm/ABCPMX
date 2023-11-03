@@ -14,6 +14,11 @@ Public Class cls_AnalyseModale
     Dim pErrorText As String
     Dim pErrorCode As Integer
 
+    Dim pMassTotal As Decimal       ' Masse totale prise en compte pour l'analyse modale
+    Dim pMassModal As Decimal       ' Masse modale
+
+    Dim pDeformee() As Decimal      ' Deformée modale
+
 #End Region
 
 #Region " Constructeur "
@@ -47,6 +52,18 @@ Public Class cls_AnalyseModale
     Public ReadOnly Property ErrorMsg As String
         Get
             Return pErrorText
+        End Get
+    End Property
+
+    Public ReadOnly Property MassModal As Decimal
+        Get
+            Return Me.pMassModal
+        End Get
+    End Property
+
+    Public ReadOnly Property MassTotal As Decimal
+        Get
+            Return Me.pMassTotal
         End Get
     End Property
 
@@ -123,6 +140,15 @@ Public Class cls_AnalyseModale
                 Me.pPeriod = 1 / Me.pFrequence
             End If
 
+            Me.pMassModal = MyOutput_MOD.MasseMod(0)
+            Me.pMassTotal = MyOutput_MOD.MasseTot
+
+            ReDim Me.pDeformee(MyPoutre.Nodes.nbNodes - 1)
+
+            For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
+                Me.pDeformee(iNode) = MyOutput_MOD.VectProp(0, iNode)
+            Next
+
         Else
 
         End If
@@ -180,8 +206,8 @@ Public Class cls_AnalyseModale
         '# Charges d'exploitation
 
         If IndiceQ > 0 Then
-            If MyPoutre.ChargesU(labelQ(IndiceQ)).EstDefinie Then
-                TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU(labelQ(IndiceQ)), pDonneesEF, RatioQ)
+            If MyPoutre.ChargesU(labelQ(IndiceQ - 1)).EstDefinie Then
+                TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU(labelQ(IndiceQ - 1)), pDonneesEF, RatioQ)
             End If
         End If
 

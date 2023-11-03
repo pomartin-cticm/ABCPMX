@@ -1,4 +1,5 @@
-﻿Imports PMXMoteur2
+﻿Imports System.Net.NetworkInformation
+Imports PMXMoteur2
 
 Public Class Frm_PPModePropre
 
@@ -9,6 +10,8 @@ Public Class Frm_PPModePropre
     Dim lDefinieQ(2) As Boolean
     Dim IndiceQ As New List(Of Integer)
     Dim LabelQ() As String = {"Q1", "Q2"}
+
+    Dim lDessNumeros As Boolean = True
 
 #End Region
 
@@ -36,6 +39,9 @@ Public Class Frm_PPModePropre
         Me.lbl_Periode.Text = "Period"
         Me.lbl_Resultats.Text = "Results"
 
+        Me.lbl_MassTotale.Text = "Masse totale"
+        Me.lbl_MassModal.Text = "Masse modale"
+
         Me.btn_OK.Text = "Close"
 
     End Sub
@@ -51,10 +57,9 @@ Public Class Frm_PPModePropre
 
         Me.TLPan_PartieBasse.ColumnStyles(1).Width = 0
         Me.TLPan_PartieBasse.ColumnStyles(2).Width = 0
-
     End Sub
 
-    Private Sub PrepareFenetre(MyPoutre As cls_poutre)
+    Private Sub PrepareFenetre(MyPoutre As cls_Poutre)
 
         lDefinieQ(1) = MyPoutre.ChargesU("Q1").EstDefinie
         lDefinieQ(2) = MyPoutre.ChargesU("Q2").EstDefinie
@@ -132,18 +137,172 @@ Public Class Frm_PPModePropre
         If MyPoutre.Modal.ErrorCode = 0 Then
             Me.txt_Frequence.Text = GetStringInUnit(MyPoutre.Modal.Frequence, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_Periode.Text = GetStringInUnit(MyPoutre.Modal.Periode, Enu_TypeVariable.SansType, 3, 2, False)
+            Me.txt_MassModal.Text = GetStringInUnit(MyPoutre.Modal.MassModal, Enu_TypeVariable.SansType, 3, 0, False)
+            Me.txt_MassTotale.Text = GetStringInUnit(MyPoutre.Modal.MassTotal, Enu_TypeVariable.SansType, 3, 0, False)
             Me.Rtxt_Error.Visible = False
         Else
             Me.txt_Frequence.Text = "-"
             Me.txt_Periode.Text = "-"
+            Me.txt_MassTotale.Text = "-"
+            Me.txt_MassModal.Text = "-"
             Me.Rtxt_Error.Visible = True
             Me.Rtxt_Error.Text = MyPoutre.Modal.ErrorMsg
         End If
     End Sub
 
+
 #End Region
 
 #Region " Evènements "
+
+    Private Sub cmb_RatioQ_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_RatioQ.SelectedIndexChanged
+        If lBuild Then Exit Sub
+        AfficheCalculModal(MyProjet.Poutres(MyProjet.IndEnCours))
+    End Sub
+
+    Private Sub cmb_Q_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Q.SelectedIndexChanged
+        If lBuild Then Exit Sub
+        AfficheCalculModal(MyProjet.Poutres(MyProjet.IndEnCours))
+    End Sub
+#End Region
+
+#Region " Dessin "
+
+    Private Sub img_Analyse_Paint(sender As Object, e As PaintEventArgs) Handles img_ModePropre.Paint
+        DessineMode(e.Graphics, Me.img_ModePropre.ClientRectangle.Width, Me.img_ModePropre.ClientRectangle.Height,
+                    MyProjet.Poutres(MyProjet.IndEnCours), lDessNumeros)
+    End Sub
+
+    Public Sub DessineMode(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
+                           lNum As Boolean, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   11/08/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Représentation des largeurs efficaces
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   MyPoutre    [E] :   Poutre à dessiner
+        '   iCas        [E] :   Cas de charge à afficher
+        '   lDef        [E] :   Indique si affichage des déformées
+        '   lMom        [E] :   Indique si affichage du diagramme de moment
+        '   lTranchant  [E] :   Indique si affichage du diagramme de tranchant
+        '   lNum        [E] :   Indique si affichage des numéros de noeuds
+        '   lInertie    [E] :   Indique si affichage des inerties
+        '   lChargement [E] :   Indique si affichage du chargement
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Double = 0
+        Const kADJUST As Decimal = 0.95
+        Dim Longueur As Decimal = MyPoutre.LongueurTotale
+
+        Dim EcartZ As Decimal = Longueur * pHi / pWi
+        Dim DiaNode As Decimal = Longueur / 200
+        Dim dApp As Decimal = Longueur / 50
+        Dim kEch, kEchM As Decimal
+        'Dim lResult As Boolean = MyPoutre.ChargesA(iCas).lRunCalcul
+        Const SigneM As Decimal = -1
+        Const SigneV As Decimal = -1
+        Dim MyFontNum As New Font("Arial", 7)
+        Dim Chaine As String
+        Dim MyPenB As New SolidBrush(Color.Gray)
+        'Dim valMin, valMax As Decimal
+
+        Dim ColorDef = Color.DarkOrange
+        Dim ColorDiagM = Color.DarkRed
+        Dim ColorDiagV = Color.DarkBlue
+
+        Dim iNodeMax, iNodeMin As Integer
+
+        Dim ColorPoutre As Color = Color.DarkGray
+
+        Dim MyPenPoutre As New Pen(ColorPoutre)
+        Dim MyPenSelect As New Pen(ColorSelect, 2)
+        Dim MyPen As Pen
+
+        '--> Initialisation
+
+        If lBuild Then Exit Sub
+
+
+        Dim MyBrushN As New SolidBrush(Color.White)
+        Dim MyPenDef As New Pen(ColorDef)
+        Dim MyPenM As New Pen(Color.Blue)
+
+        xMin = 0 - dCar
+        xMax = Longueur + dCar
+
+        yMin = -EcartZ / 2
+        yMax = +EcartZ / 2
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+        dCar = 0.8 * EcartZ / 2
+
+        '--> Affichage de la poutre
+
+        AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
+
+        '--> Affichage des noeuds
+
+        For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
+            If iNode = iNodeMax Then
+                MyPen = MyPenSelect
+            Else
+                MyPen = MyPenPoutre
+            End If
+            AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True, MyPen)
+            If lDessNumeros Then
+                Chaine = "N" & CStr(iNode + 1)
+                AddTexte(myGr, MyPenB, Chaine, MyFontNum, MyPoutre.Nodes.xGlobal(iNode), 0, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+            End If
+        Next
+
+        '--> Affichage des appuis
+
+        Dim indAppuis() As Integer = Nothing
+        Dim NbApp As Integer
+        Dim lEtais As Boolean = False
+        MyPoutre.ExtraireIndiceNoeudsAppuis(lEtais, indAppuis, NbApp)
+
+        For iApp As Integer = 0 To NbApp - 1
+            DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
+        Next
+
+        '--> Déformée
+
+        Dim fMin, fMax As Decimal
+        Dim Uz As Decimal
+        Dim xo, xe, yo, ye As Decimal
+
+
+        'If ((Not IsEqual(fMinG, 0)) Or (Not (IsEqual(fMinG, 0)))) And lResult And lDef Then
+
+        '    ' kEch = EcartZ / (2 * Math.Max(Math.Abs(fMinG), fMaxG))
+        '    kEch = CoefEchelleDessin(fMaxG, fMinG, tab_fMax(iCas), tab_fMin(iCas), EcartZ / 2, 10 ^ -9)
+
+        '    For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
+        '        xo = MyPoutre.Nodes.xGlobal(iNode)
+        '        xe = MyPoutre.Nodes.xGlobal(iNode + 1)
+        '        yo = MyPoutre.ChargesA(iCas).UZ(iNode) * kEch
+        '        ye = MyPoutre.ChargesA(iCas).UZ(iNode + 1) * kEch
+        '        AddLigne(myGr, MyPenDef, xo, yo, xe, ye, MyParAff)
+        '    Next
+
+        '    For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
+        '        Uz = MyPoutre.ChargesA(iCas).UZ(iNode)
+        '        AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), kEch * Uz, DiaNode, MyParAff, True, MyPenDef)
+        '    Next
+
+        'End If
+
+
+    End Sub
 
 
 #End Region
