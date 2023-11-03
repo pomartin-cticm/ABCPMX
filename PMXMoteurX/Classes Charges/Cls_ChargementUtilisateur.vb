@@ -102,6 +102,36 @@
         Return lCharge
     End Function
 
+    ''' <summary>
+    ''' Indique si au moins une charge est définie
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property EstDefinie As Boolean
+
+        Get
+            Dim lDefini As Boolean = False
+            Dim iForc As Integer
+            Dim NbTravees As Integer = Me.QSurf.GetUpperBound(0)
+
+            For iTrav As Integer = 0 To NbTravees
+
+                If Not IsEqual(Math.Abs(Me.QSurf(iTrav)), 0) Then lDefini = True
+
+                For iForc = 0 To Me.Forces(iTrav).Count - 1
+                    If Not IsEqual(Forces(iTrav)(iForc).Force, 0) Then lDefini = True
+                Next
+
+                For iForc = 0 To Me.FReparties(iTrav).Count - 1
+                    If (Not IsEqual(FReparties(iTrav)(iForc).Force(0), 0)) _
+                    Or (Not IsEqual(FReparties(iTrav)(iForc).Force(1), 0)) Then lDefini = True
+                Next
+
+            Next
+
+            Return lDefini
+        End Get
+    End Property
+
 #End Region
 
 #Region " Fonction de copie "

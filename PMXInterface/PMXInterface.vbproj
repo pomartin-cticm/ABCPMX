@@ -206,6 +206,12 @@
     <Compile Include="Fenetres\Filles\Frm_PPCombinaison.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_PPModePropre.Designer.vb">
+      <DependentUpon>Frm_PPModePropre.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_PPModePropre.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_PPVerifications.Designer.vb">
       <DependentUpon>Frm_PPVerifications.vb</DependentUpon>
     </Compile>
@@ -418,6 +424,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_PPCombinaison.resx">
       <DependentUpon>Frm_PPCombinaison.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_PPModePropre.resx">
+      <DependentUpon>Frm_PPModePropre.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_PPVerifications.resx">
       <DependentUpon>Frm_PPVerifications.vb</DependentUpon>

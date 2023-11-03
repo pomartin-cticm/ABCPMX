@@ -272,8 +272,16 @@ TSBHIVOSS				= Vibratory comfort of the beam
 TSBOPTIONSINCENDIE		= Fire design options
 TSBNDCPOUTRE			= Calculation report of the current beam
 WARNINGFILE				= Please note that you are opening a file with data from an old version of the software. Please check all data and re-register the file.
-
-
+TSPPCOMBINATIONS		= Post-processing : Combinations of loads
+TSPPEFFWIDTHS			= Post-processing : Effective widths of slab
+TSPPLOADCASES			= Post-processing : Load cases
+TSPPVERIFICATIONS		= Post-processing : Verifications
+TSPPGENERAL				= Post-processing
+PPCOMBINATIONS			= Combinations of loads
+PPEFFWIDTHS				= Effective widths of slab
+PPLOADCASES				= Load cases
+PPVERIFICATIONS			= Verifications
+PPEIGENMODE				= Eigen mode
 
 #FRM_OUVERTURE
 BROWSEFILES				= Browse

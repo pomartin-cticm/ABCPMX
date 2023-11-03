@@ -341,9 +341,6 @@ Module Mod_Declarations
     End Enum
 
     Public Enum EnuFenetres
-        PPCasDeCharge
-        PPCombinaison
-        PPVerifications
         Chargements
         Combinaisons
         Connexion
@@ -355,11 +352,15 @@ Module Mod_Declarations
         Gamma
         Hivoss
         Identification
-        LargeurEfficace
         Main
         Maintiens
         Options
         Portees
+        PPCasDeCharge
+        PPCombinaison
+        PPLargeurEfficace
+        PPModePropre
+        PPVerifications
         Section
     End Enum
 

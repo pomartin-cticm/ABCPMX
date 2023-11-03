@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports CTICM_RDM
 Imports CTICM_DATA_DLLS
+Imports System.Security.Policy
 
 Public Class cls_Poutre
 
@@ -229,6 +230,9 @@ Public Class cls_Poutre
 
     '--Points de calcul des contraintes normales
     Public PtsSigma As New cls_PointsSigma
+
+
+    Public Modal As New cls_AnalyseModale                           ' Analyse modale
 
 #End Region
 
@@ -1212,6 +1216,17 @@ Public Class cls_Poutre
 
     End Sub
 
+    Public Sub PrepareNodeN()
+        '-------------------------------------------------------------------------------------------
+        '   03/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Préparation des sections de calcul de la poutre
+        '-------------------------------------------------------------------------------------------
+
+        Me.PrepareNodesN(Me.Param.dMaxNodes, Me.Param.nbMinNodesTravee, Me.Param.nbMinNodesConsole)
+
+    End Sub
+
     Public Sub PrepareNodesN(dEltMax As Decimal, nbMinInter As Integer, nbMinConsole As Integer)
         '-------------------------------------------------------------------------------------------
         '   17/09/23 :  Création - POM
@@ -1491,11 +1506,11 @@ Public Class cls_Poutre
         Dim lTrouve As Boolean = False
         Dim iTab As Integer = -1
         Dim indexT As Integer
-        Dim SigneM() As Decimal
+        Dim SigneM() As Decimal = Nothing
 
         '--> Initialisation
 
-        InitialiseSigneMoment(SigneM)
+        Me.InitialiseSigneMoment(SigneM)
 
         '--> On commence par chercher si la table demandée existe
 
@@ -1531,17 +1546,17 @@ Public Class cls_Poutre
         '--> Déclaration
 
         Dim MyElts As strucBeamElements
-        Dim iEltO, iEltE As Integer
         Dim lEnrob As Boolean = Me.lEnrobage
         Dim lPoutreMixte As Boolean = Me.lMixte
-        Dim Aire, InertieY As Decimal
-        Dim zANE, MelRd As Decimal
-        Dim iElt As Integer
-        Dim Beff As Decimal
-        Dim xm As Decimal
-        Dim BeffPrec As Decimal
-        Dim SigneMprec As Decimal
-        Dim lCalcul As Boolean
+        'Dim iEltO, iEltE As Integer
+        'Dim Aire, InertieY As Decimal
+        'Dim zANE, MelRd As Decimal
+        'Dim iElt As Integer
+        'Dim Beff As Decimal
+        'Dim xm As Decimal
+        'Dim BeffPrec As Decimal
+        'Dim SigneMprec As Decimal
+        'Dim lCalcul As Boolean
 
         '--> Initialisation
 
@@ -1556,14 +1571,86 @@ Public Class cls_Poutre
         '--> Cas très simple ou tout est constant
 
         If (Not lMixte) And (Not lEnrob) Then
-            Me.Section.ProfilA.ProprietesElastiquesMyy(1, False, 1, zANE, InertieY, MelRd)
-            Aire = Me.Section.ProfilA.Aire
-            For iElt = 0 To Nodes.nbNodes - 2
-                MyElts.Aire(iElt) = Aire
-                MyElts.InertieY(iElt) = InertieY
-                MyElts.zANE(iElt) = zANE
-            Next
+
+            Me.MaillageProprietesElementsAcierNonEnrob(MyElts)
+
         End If
+
+        '--> Boucle sur les travées, dans le cas où il faut prendre en compte le béton
+
+        Me.MaillageProprietesElementsMixteouEnrob(lMixte, nEqDal, nEqEc, pSigneM, MyElts)
+
+        '--> Fin
+
+        Me.Elements.Add(MyElts)
+    End Sub
+
+    Public Sub MaillageProprietesElements(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal, pSigneM() As Decimal, ByRef pMyElts As strucBeamElements)
+        '---------------------------------------------------------------------------------------------
+        '   03/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Calcul des propriétés des barres du maillage
+        '---------------------------------------------------------------------------------------------
+        '   lMixte          [E] :   Indique si propriétés en phase mixte ou non mixte (pour la dalle)
+        '   nEqDal          [E] :   Si mixte, coefficient d'équivalence acier béton pour la dalle
+        '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
+        '   pSigneM         [E] :   Table de signes de moment le long de la poutre
+        '   pMyElts         [S] :   Propriétés des éléments
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lEnrob As Boolean = Me.lEnrobage
+
+        '--> Initialisation
+
+        pMyElts.lMixte = lMixte
+        pMyElts.nEqDalle = nEqDal
+        pMyElts.nEqEnrob = nEqEc
+
+        ReDim pMyElts.Aire(Me.Nodes.nbNodes - 2)
+        ReDim pMyElts.InertieY(Me.Nodes.nbNodes - 2)
+        ReDim pMyElts.zANE(Me.Nodes.nbNodes - 2)
+
+        '--> Traitement selon le type de section
+
+        If (Not lMixte) And (Not lEnrob) Then
+
+            '# Cas d'une poutre non mixte et sans enrobage
+
+            Me.MaillageProprietesElementsAcierNonEnrob(pMyElts)
+
+        Else
+            '# Poutre mixte ou avec enrobage
+
+            Me.MaillageProprietesElementsMixteouEnrob(lMixte, nEqDal, nEqEc, pSigneM, pMyElts)
+
+        End If
+
+    End Sub
+
+    Private Sub MaillageProprietesElementsMixteouEnrob(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal, pSigneM() As Decimal, ByRef pMyElts As strucBeamElements)
+        '---------------------------------------------------------------------------------------------
+        '   03/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Calcul des propriétés des barres du maillage pour une poutre acier sans enrobage
+        '   (Propiétés constantes le long de la barre)
+        '---------------------------------------------------------------------------------------------
+        '   lMixte          [E] :   Indique si propriétés en phase mixte ou non mixte (pour la dalle)
+        '   nEqDal          [E] :   Si mixte, coefficient d'équivalence acier béton pour la dalle
+        '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
+        '   pSigneM         [E] :   Table de signes de moment le long de la poutre
+        '   pMyElts         [S] :   Propriétés des éléments
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iEltO, iEltE As Integer
+        Dim Beff, xm As Decimal
+        Dim BeffPrec As Decimal
+        Dim SigneMprec As Decimal
+        Dim lCalcul As Boolean
+        Dim Aire, InertieY, zANe As Decimal
 
         '--> Boucle sur les travées, dans le cas où il faut prendre en compte le béton
 
@@ -1585,23 +1672,52 @@ Public Class cls_Poutre
                     InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, zANE)
                     Aire = Me.Section.ProfilA.Aire      ' A changer pour aire homgonénéisée
 
-                    MyElts.InertieY(iElt) = InertieY
+                    pMyElts.InertieY(iElt) = InertieY
                     BeffPrec = Beff
                     SigneMprec = pSigneM(iElt)
                 End If
-                MyElts.InertieY(iElt) = InertieY
-                MyElts.Aire(iElt) = Aire
+                pMyElts.InertieY(iElt) = InertieY
+                pMyElts.Aire(iElt) = Aire
 
             Next
 
         Next
 
-        '--> Fin
-
-        Me.Elements.Add(MyElts)
     End Sub
 
-    Private Sub InitialiseSigneMoment(ByRef pSigneM() As Decimal)
+    Private Sub MaillageProprietesElementsAcierNonEnrob(ByRef pMyElts As strucBeamElements)
+        '---------------------------------------------------------------------------------------------
+        '   03/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Calcul des propriétés des barres du maillage pour une poutre acier sans enrobage
+        '   (Propiétés constantes le long de la barre)
+        '---------------------------------------------------------------------------------------------
+        '   pMyElts     [S] :   Propriétés des éléments
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Aire, InertieY As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim iElt As Integer
+
+        '--> Calculs des propriétés
+
+        Me.Section.ProfilA.ProprietesElastiquesMyy(1, False, 1, zANE, InertieY, MelRd)
+        Aire = Me.Section.ProfilA.Aire
+
+        '--> Attribution à tous les éléments 
+
+        For iElt = 0 To Nodes.nbNodes - 2
+            pMyElts.Aire(iElt) = Aire
+            pMyElts.InertieY(iElt) = InertieY
+            pMyElts.zANE(iElt) = zANE
+        Next
+
+    End Sub
+
+
+    Public Sub InitialiseSigneMoment(ByRef pSigneM() As Decimal)
         '-------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM - V1.00
         '-------------------------------------------------------------------------------------------
@@ -2856,7 +2972,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub PrepareModeleEF(ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByRef lAppuisOK As Boolean)
+    Public Sub PrepareModeleEF(ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByRef lAppuisOK As Boolean)
         '-------------------------------------------------------------------------------------
         '   07/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -2928,7 +3044,7 @@ Public Class cls_Poutre
         Next
     End Sub
 
-    Private Sub PrepareAppuisModeleEF(lEtais As Boolean, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Public Sub PrepareAppuisModeleEF(lEtais As Boolean, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
         '-------------------------------------------------------------------------------------
         '   20/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------

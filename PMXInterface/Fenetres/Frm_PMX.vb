@@ -186,6 +186,18 @@ Public Class Frm_PMX
                 Me.TSbtn_OptionsIncendie.ToolTipText = Bloc("TSBOPTIONSINCENDIE")
                 Me.TSbtn_NdcPoutre.ToolTipText = Bloc("TSBNDCPOUTRE")
 
+                Me.TSbtn_PPCombi.Text = Bloc("TSPPCOMBINATIONS")
+                Me.TSbtn_PPLargeurEfficace.Text = Bloc("TSPPEFFWIDTHS")
+                Me.TSbtn_PPLoadCases.Text = Bloc("TSPPLOADCASES")
+                Me.TSbtn_PPVerifications.Text = Bloc("TSPPVERIFICATIONS")
+                Me.TSbtn_PostT.Text = Bloc("TSPPGENERAL")
+
+                Me.TSmenuPPLargeurEfficace.Text = Bloc("PPEFFWIDTHS")
+                Me.TSmenuPPChargements.Text = Bloc("PPLOADCASES")
+                Me.TSmenuPPCombinaisons.Text = Bloc("PPCOMBINATIONS")
+                Me.TSmenuPPVerifications.Text = Bloc("PPVERIFICATIONS")
+                Me.TSmenuPPModePropre.Text = Bloc("PPEIGENMODE")
+
                 '=== MESSAGES GENERAUX
 
                 ErreurCapacite_LNG = Bloc("ERRORCAPACITY")
@@ -312,11 +324,37 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
+
+    Private Sub TSmenuPP_Click(sender As Object, e As EventArgs) Handles TSmenuPPLargeurEfficace.Click,
+        TSmenuPPChargements.Click, TSmenuPPCombinaisons.Click, TSmenuPPVerifications.Click, TSmenuPPModePropre.Click
+
+        Select Case sender.name
+            Case Me.TSmenuPPChargements.Name
+                FilleEnCours = EnuFenetres.PPCasDeCharge
+
+            Case Me.TSmenuPPCombinaisons.Name
+                FilleEnCours = EnuFenetres.PPCombinaison
+
+            Case Me.TSmenuPPLargeurEfficace.Name
+                FilleEnCours = EnuFenetres.PPLargeurEfficace
+
+            Case Me.TSmenuPPModePropre.Name
+                FilleEnCours = EnuFenetres.PPModePropre
+
+            Case Me.TSmenuPPVerifications.Name
+                FilleEnCours = EnuFenetres.PPVerifications
+
+        End Select
+        AfficheFenetreEnCours()
+    End Sub
+
+
+
     Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) _
         Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
-                TSbtn_Gamma.Click, TSbtn_LargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
-                TSbtn_PPCombi.Click, TSbtn_Verifications.Click
+                TSbtn_Gamma.Click, TSbtn_PPLargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
+                TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click
 
         Select Case sender.name
 
@@ -355,14 +393,14 @@ Public Class Frm_PMX
             Case Me.TSbtn_Hivoss.Name
                 FilleEnCours = EnuFenetres.Hivoss
 
-            Case Me.TSbtn_LargeurEfficace.Name
-                FilleEnCours = EnuFenetres.LargeurEfficace
+            Case Me.TSbtn_PPLargeurEfficace.Name
+                FilleEnCours = EnuFenetres.PPLargeurEfficace
 
             Case Me.TSbtn_PPLoadCases.Name
                 FilleEnCours = EnuFenetres.PPCasDeCharge
             Case Me.TSbtn_PPCombi.Name
                 FilleEnCours = EnuFenetres.PPCombinaison
-            Case Me.TSbtn_Verifications.Name
+            Case Me.TSbtn_PPVerifications.Name
                 FilleEnCours = EnuFenetres.PPVerifications
         End Select
         AfficheFenetreEnCours()
@@ -453,8 +491,9 @@ Public Class Frm_PMX
                 End If
 
 
-            Case EnuFenetres.LargeurEfficace
+            Case EnuFenetres.PPLargeurEfficace
                 Frm_PPLargeurEfficace.ShowDialog()
+                Frm_PPLargeurEfficace.Dispose()
 
             Case EnuFenetres.PPCasDeCharge
                 Frm_PPCasDeCharge.ShowDialog()
@@ -463,6 +502,10 @@ Public Class Frm_PMX
             Case EnuFenetres.PPCombinaison
                 Frm_PPCombinaison.ShowDialog()
                 Frm_PPCombinaison.Dispose()
+
+            Case EnuFenetres.PPModePropre
+                Frm_PPModePropre.ShowDialog()
+                Frm_PPModePropre.Dispose()
 
             Case EnuFenetres.PPVerifications
                 Frm_PPVerifications.ShowDialog()
@@ -1064,7 +1107,6 @@ Public Class Frm_PMX
         Me.tab_ChkSections(MyProjet.IndEnCours).Checked = True
 
     End Sub
-
 
 
 #End Region
