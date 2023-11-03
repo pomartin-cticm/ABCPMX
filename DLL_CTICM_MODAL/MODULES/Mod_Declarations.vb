@@ -1,7 +1,7 @@
 ﻿#Region " INTERNAL VARIABLES - MODAL "
 
 Friend Structure MATERIAU
-    Dim E As Double             'module d'élasticité        
+    Dim E As Double             'module d'élasticité    
 End Structure
 
 Friend Structure STR_NOEUDS
@@ -43,17 +43,9 @@ End Structure
 
 Friend Structure MOD_RESULTATS
     Dim VALP(,) As Double       'valeurs propres                                          VALP(NCAS,NBVALP)
-    Dim VECTP(,,) As Double      'vecteurs propres (Excitation horizontale)             H_VECTP(NCAS,NBVALP,3*NNT)        
-    Dim MAS_TOT() As Double     'Masse totale                                             MAS_TOT(NCAS)
-    Dim OMT(,,) As Double       'rotations globales des barres (Excitation horizontale) H_OMT(NCAS,NBVALP,NBT)    
-    Dim H_MAS_MOD(,) As Double     'Masse modale (Excitation horizontale)                 H_MAS_MOD(NCAS,NBVALP)
-    Dim H_aMD_FX(,,) As Double    'effort suivant X aux noeuds (Excitation horizontale)   H_aMD_FX(NCAS,NBVALP,NNT)
-    Dim H_aMD_FY(,,) As Double    'effort suivant Y aux noeuds (Excitation horizontale)   H_aMD_FY(NCAS,NBVALP,NNT)
-    Dim H_aMD_MZ(,,) As Double    'Moment autour Z aux noeuds (Excitation horizontale)    H_aMD_MZ(NCAS,NBVALP,NNT)
-    Dim V_MAS_MOD(,) As Double     'Masse modale (Excitation horizontale)                 V_MAS_MOD(NCAS,NBVALP)        
-    Dim V_aMD_FX(,,) As Double    'effort suivant X aux noeuds (Excitation horizontale)   V_aMD_FX(NCAS,NBVALP,NNT)
-    Dim V_aMD_FY(,,) As Double    'effort suivant Y aux noeuds (Excitation horizontale)   V_aMD_FY(NCAS,NBVALP,NNT)
-    Dim V_aMD_MZ(,,) As Double    'Moment autour Z aux noeuds (Excitation horizontale)    V_aMD_MZ(NCAS,NBVALP,NNT)
+    Dim VECTP(,,) As Double      'vecteurs propres                                          VECTP(NCAS,NBVALP,3*NNT)        
+    Dim MAS_TOT() As Double     'Masse totale                                             MAS_TOT(NCAS)    
+    Dim MAS_MOD(,) As Double     'Masse modale                                          MAS_MOD(NCAS,NBVALP)            
 End Structure
 
 #End Region

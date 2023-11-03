@@ -53,7 +53,7 @@
 
 #End Region
 
-#Region " Outils de vérification "
+#Region " Gestion globale de la vérification "
 
     Public Sub VerificationELU(MyPoutre As cls_Poutre)
         '----------------------------------------------------------------------------------------------------------
@@ -177,7 +177,8 @@
 
             '# Vérification sous moment fléchissant
 
-            Me.RunCritereMoments(MyPoutre, iCombi, lClasse3, MEd, SigmaELU, MplRdPlus, MplRdMoins)
+            'Me.RunCritereMoments(MyPoutre, iCombi, lClasse3, MEd, SigmaELU, MplRdPlus, MplRdMoins)
+            Me.RunCritereMoments(MyPoutre, iCombi, lClasse3, MEd, SigmaELU, MplRd)
 
             '# Vérification sous effort tranchant
 
@@ -221,6 +222,7 @@
         Dim iNode0 As Integer
         Dim kDeb, kfin, k As Integer
         Const RhoV As Decimal = 1
+        Dim Signe As Decimal
 
         '--> Initialisation
 
@@ -239,7 +241,9 @@
                 If iNode = iNode0 Then kDeb = 1 Else kDeb = 0
                 If iNode = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1) Then kfin = 0 Else kfin = 1
 
-                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Math.Sign(MEd(iNode, kDeb)), True, MyPoutre.Param.Gamma, RhoV,
+                If IsEqual(MEd(iNode, kDeb), 0) Then Signe = 1 Else Signe = Math.Sign(MEd(iNode, kDeb))
+
+                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, RhoV,
                                                                  bEff(iNode), DeltaRd(iTravee)(iNode0 + iNode), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
 
                 If kfin > kDeb Then
@@ -357,6 +361,9 @@
 
     End Sub
 
+#End Region
+
+#Region " Critères de vérification "
 
     Private Sub RunCritereMoments(MyPoutre As cls_Poutre, iCombi As Integer, lClasse3 As Boolean,
                                   MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
@@ -386,6 +393,37 @@
         Else
             '# Résistance plastique possible
             RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdP, MplRdM)
+        End If
+    End Sub
+
+    Private Sub RunCritereMoments(MyPoutre As cls_Poutre, iCombi As Integer, lClasse3 As Boolean,
+                                  MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance au moment fléchissant 
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   lClasse3[E] :   Indique si présence de section de classe 3
+        '   MEd     [E] :   Table des moments fléchissants le long de la barre
+        '   SigmaELU[E] :   Contraintes normales aux ELU
+        '   MplRdP  [E] :   Table des moments plastiques > 0 le long de la barre
+        '   MplRdM  [E] :   Table des moments plastiques < 0 le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Critère de résistance en flexion
+
+        If MyPoutre.Param.lElasticDesign Then
+            '# Résistance élastique VM imposée
+            Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage)
+            RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
+        ElseIf lClasse3 Then
+            '# Présence d'au moins une section de classe 3
+            RunCritereMomentsElastiques(MyPoutre, iCombi, MEd)
+        Else
+            '# Résistance plastique possible
+            RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRd)
         End If
     End Sub
 
@@ -505,6 +543,42 @@
     End Sub
 
     Private Sub RunCritereMomentsElastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal)
+
+    End Sub
+
+    Private Sub RunCriteresMomentsPlastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MplRd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   05/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance au moment fléchissant (critère de résistance plastique)
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   MEd     [E] :   Table des moments fléchissants le long de la barre
+        '   MplRd   [E] :   Table des moments plastiques le long de la barre (calculés en fonction du signe de MEd)
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim iNode As Integer
+
+        Dim k, kDeb, kFin As Integer
+
+        '--> Boucle sur les noeuds
+
+        For iNode = 0 To nbNodes - 1
+
+            If iNode = 0 Then kDeb = 1 Else kDeb = 0
+            If iNode = nbNodes - 1 Then kFin = 0 Else kFin = 1
+
+            For k = kDeb To kFin
+
+                Me.CritereM.EnregistreCritere(iNode, iCombi, MEd(iNode, k), MplRd(iNode, k))
+
+            Next
+
+        Next
 
     End Sub
 

@@ -142,7 +142,7 @@ Public Class cls_Section
 
         '--> Maillage
 
-        Tc = Math.Min(NArma, DeltaPRd) / (bEff * kPlDalle * MyDalle.beton.Fck / Gammas.GammaC)
+        Tc = Math.Min(NArma, DeltaPRd) / (bEff * kPlDalle * MyDalle.beton.Fck * kConvMPaPa / Gammas.GammaC)
         Aire = bEff * Tc
         MyModele.AddMaille(Aire, Tc, MyDalle.zTop - Tc / 2, 0, 1, nEqDalle, MyDalle.beton.Fck, 0.85, Gammas.GammaC)
 
@@ -426,7 +426,8 @@ Public Class cls_Section
 
             '# Dalle 
 
-            MaillageDalle(Gammas, bEff, nEqD, Math.Min(DeltaRd, npro), MyDalle, MyModele)
+            'MaillageDalle(Gammas, bEff, nEqD, Math.Min(DeltaRd, NPro), MyDalle, MyModele)
+            MaillageDalle(Gammas, bEff, nEqD, DeltaRd, MyDalle, MyModele)
 
             '# Armatures
 

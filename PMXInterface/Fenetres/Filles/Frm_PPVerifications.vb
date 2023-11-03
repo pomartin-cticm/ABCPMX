@@ -50,7 +50,7 @@ Public Class Frm_PPVerifications
     Private Sub Frm_PPVerifications_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lBuild = True
 
-        MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesign = True
+        'MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesign = True
         MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA)
         GestionLangues()
         GestionStyle()

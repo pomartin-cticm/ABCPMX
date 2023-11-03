@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8993E97E-DAA1-4BF9-A62C-66B0D7ACE505}</ProjectGuid>
+    <ProjectGuid>{53876D64-8FEE-4E62-B907-0F707563C53E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>CTICM_MODAL</RootNamespace>
-    <AssemblyName>CTICM_MODAL</AssemblyName>
+    <RootNamespace>CTICM_DATA_DLLS</RootNamespace>
+    <AssemblyName>CTICM_DATA_DLLS</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
@@ -19,7 +19,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>CTICM_MODAL.xml</DocumentationFile>
+    <DocumentationFile>CTICM_DATA_DLLS.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -28,7 +28,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>CTICM_MODAL.xml</DocumentationFile>
+    <DocumentationFile>CTICM_DATA_DLLS.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -44,12 +44,8 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CTICM_DATA_DLLS">
-      <HintPath>..\DLL_CTICM_DATA\bin\Debug\CTICM_DATA_DLLS.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -66,14 +62,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLASSES INTERNES\Cls_CONSTANTS.vb" />
-    <Compile Include="CLASSES\Cls_CALCUL_MODAL.vb" />
-    <Compile Include="CLASSES\Cls_DATA_MODAL.vb" />
-    <Compile Include="MODULES\ModNET_Analyse.vb" />
-    <Compile Include="MODULES\ModNET_ProtectDll.vb" />
-    <Compile Include="MODULES\Mod_ComDll.vb" />
-    <Compile Include="MODULES\Mod_Declarations.vb" />
-    <Compile Include="MODULES\Mod_Tools.vb" />
+    <Compile Include="Cls_DATA_DLLS.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

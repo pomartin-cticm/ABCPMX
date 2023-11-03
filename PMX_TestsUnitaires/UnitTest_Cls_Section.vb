@@ -1175,25 +1175,4 @@ Imports PMXMoteur2
 
     End Sub
 
-#Region " Outils de comparaison "
-
-
-    Public Function IsEqual(ByVal a As Decimal, ByVal b As Decimal, Optional ByVal EPS As Decimal = DeltaVMAx) As Boolean
-        '------------------------------------------
-        ' 29/08/2023 : Minh, v 1.00
-        '------------------------------------------
-        ' Comparer deux valeurs réelles
-        '------------------------------------------
-
-        If Math.Abs(b) <= EPS Then
-            'AVEC DIMENSION
-            Return Math.Abs(a) <= EPS
-        Else
-            'ATTENTION : Lorsqu'on compare la fraction (PAS DE DIMENSION), il faut utiliser 0.001
-            Return Math.Abs(a / b - 1) <= 0.001
-        End If
-    End Function
-
-#End Region
-
 End Class

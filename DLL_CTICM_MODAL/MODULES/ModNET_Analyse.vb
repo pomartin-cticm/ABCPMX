@@ -4,15 +4,15 @@ Option Explicit On
 Module ModNET_Analyse
 
     'Code Erreur
-    Public CodeERR As Short
-    Public TextERR As String
+    Friend CodeERR As Short
+    Friend TextERR As String
 
     '================================================================================================
     'Déclarations pour le Module Analyse
     '================================================================================================
 
-    Sub ANALYSE(ByRef MAT As Modal2D.MATERIAU, ByRef NOEUDS As Modal2D.STR_NOEUDS, ByRef BARRES As Modal2D.STR_BARRES, _
-                 ByRef MASSES As Modal2D.MAS_BARRES, ByVal RESOLUTION As Modal2D.MOD_RESOLUTION, ByRef RESULTATS As Modal2D.MOD_RESULTATS)
+    Sub ANALYSE(ByRef MAT As MATERIAU, ByRef NOEUDS As STR_NOEUDS, ByRef BARRES As STR_BARRES,
+                 ByRef MASSES As MAS_BARRES, ByVal RESOLUTION As MOD_RESOLUTION, ByRef RESULTATS As MOD_RESULTATS)
         '==============================================================================================================================================================
         '
         '   R O U T I N E    D ' A N A L Y S E      M O D A L E    D E    S T R U C T U R E S     2 D
@@ -70,9 +70,8 @@ Module ModNET_Analyse
 
         Dim NCAS As Integer
         Dim IERREUR As Integer
-        Dim H_DELTA() As Double
-        Dim V_DELTA() As Double
-        Dim DM, DMD, H_DMDELTA, V_DMDELTA As Double
+        Dim DELTA() As Double
+        Dim DM, DMD, DMDELTA As Double
         Dim MASSE_TOTALE As Double
         Dim DEPT() As Double
         Dim DEPL() As Double
@@ -205,15 +204,7 @@ Module ModNET_Analyse
         ReDim RESULTATS.VALP(NCAS, NBVP)
         ReDim RESULTATS.MAS_TOT(NCAS)
         ReDim RESULTATS.VECTP(NCAS, NBVP, IDIM)
-        ReDim RESULTATS.OMT(NCAS, NBVP, NBT)
-        ReDim RESULTATS.H_MAS_MOD(NCAS, NBVP)        
-        ReDim RESULTATS.H_aMD_FX(NCAS, NBVP, NNT)
-        ReDim RESULTATS.H_aMD_FY(NCAS, NBVP, NNT)
-        ReDim RESULTATS.H_aMD_MZ(NCAS, NBVP, NNT)        
-        ReDim RESULTATS.V_MAS_MOD(NCAS, NBVP)
-        ReDim RESULTATS.V_aMD_FX(NCAS, NBVP, NNT)
-        ReDim RESULTATS.V_aMD_FY(NCAS, NBVP, NNT)
-        ReDim RESULTATS.V_aMD_MZ(NCAS, NBVP, NNT)
+        ReDim RESULTATS.MAS_MOD(NCAS, NBVP)
 
         'TRAITEMENT DES SUPPORTS
         '-----------------------
@@ -246,18 +237,10 @@ Module ModNET_Analyse
         Next IB
 
         'CONTRUCTION DU VECTEUR SOLLICITATION
-        '------------------------------------
-
-        '=== HORIZONTALE ===
-        ReDim H_DELTA(IDIM)
+        '------------------------------------        
+        ReDim DELTA(IDIM)
         For I = 1 To NNT
-            H_DELTA((I - 1) * 3 + 1) = 1
-        Next
-
-        '=== VERTICALE ===
-        ReDim V_DELTA(IDIM)
-        For I = 1 To NNT
-            V_DELTA((I - 1) * 3 + 2) = 1            
+            DELTA((I - 1) * 3 + 2) = 1
         Next
 
 
@@ -316,10 +299,10 @@ Module ModNET_Analyse
             CodeERR = 12
 
             ReDim VALP(NBVP)
-            ReDim VECTP(NBVP, IDIM)            
+            ReDim VECTP(NBVP, IDIM)
 
             '------------------------------------- L A P A C K -----------------------------------------------
-            Call ResolVP(SK, SM, IDIM, RESOLUTION.TOLERANCE, RESOLUTION.NOVECTP, _
+            Call ResolVP(SK, SM, IDIM, RESOLUTION.TOLERANCE, RESOLUTION.NOVECTP,
                          RESOLUTION.TXT_RECEPTEUR, RESOLUTION.TXT_PROGRESS, VALP, VECTP, RESOLUTION.NBVALP, RESOLUTION.DUMP)
             '-------------------------------------------------------------------------------------------------
 
@@ -351,8 +334,7 @@ Module ModNET_Analyse
                 RESULTATS.MAS_TOT(ICAS) = MASSE_TOTALE
 
                 DMD = 0
-                H_DMDELTA = 0
-                V_DMDELTA = 0
+                DMDELTA = 0
 
                 For I = 1 To IDIM
                     'D^T*M
@@ -363,38 +345,17 @@ Module ModNET_Analyse
                     'D^T*M*D
                     DMD += DM * VECTP(IV, I)
 
-                    'D^T*M*DELTA
-                    H_DMDELTA += DM * H_DELTA(I)
-                    V_DMDELTA += DM * V_DELTA(I)
+                    DMDELTA += DM * DELTA(I)
                 Next
 
-                ' Masse modale
-                RESULTATS.H_MAS_MOD(ICAS, IV) = H_DMDELTA ^ 2 / DMD
-                RESULTATS.V_MAS_MOD(ICAS, IV) = V_DMDELTA ^ 2 / DMD
+                ' Masse modale                
+                RESULTATS.MAS_MOD(ICAS, IV) = DMDELTA ^ 2 / DMD
 
                 'NORMALISATION DU VECTEUR PROPRE : DT.M.D = 1
                 '--------------------------------------------
                 For I = 1 To IDIM
                     VECTP(IV, I) = VECTP(IV, I) / Math.Sqrt(DMD)
                 Next
-
-                DMD = 0
-                H_DMDELTA = 0
-                V_DMDELTA = 0
-
-                For I = 1 To IDIM
-                    'D^T*M
-                    DM = 0
-                    For J = 1 To IDIM
-                        DM = DM + VECTP(IV, J) * MatriceM(J, I)
-                    Next                    
-
-                    'D^T*M*DELTA
-                    H_DMDELTA += DM * H_DELTA(I)
-                    V_DMDELTA += DM * V_DELTA(I)
-                Next
-
-
 
                 ' EFFORTS AUX NOEUDS
                 '-------------------
@@ -408,15 +369,6 @@ Module ModNET_Analyse
                             MD(K) = MD(K) + MatriceM(3 * (I - 1) + K, J) * VECTP(IV, J)
                         Next
                     Next
-
-                    'F = AJ * M * D avec : AJ = DMDELTA / DMD = DMDELTA SI NORMALISE DMD = 1
-                    RESULTATS.H_aMD_FX(ICAS, IV, I) = H_DMDELTA * MD(1)
-                    RESULTATS.H_aMD_FY(ICAS, IV, I) = H_DMDELTA * MD(2)
-                    RESULTATS.H_aMD_MZ(ICAS, IV, I) = H_DMDELTA * MD(3)
-
-                    RESULTATS.V_aMD_FX(ICAS, IV, I) = V_DMDELTA * MD(1)
-                    RESULTATS.V_aMD_FY(ICAS, IV, I) = V_DMDELTA * MD(2)
-                    RESULTATS.V_aMD_MZ(ICAS, IV, I) = V_DMDELTA * MD(3)
                 Next I
             Next
 
@@ -443,8 +395,6 @@ Module ModNET_Analyse
                     '-Déplacements d'extrémités en local
                     ReDim DEPL(6)
                     Call DEPLOC(CX(IB), CY(IB), JEXB(1, IB), JEXB(2, IB), DEPT, DEPL)
-
-                    RESULTATS.OMT(ICAS, I, IB) = (DEPL(5) - DEPL(2)) / XLONG(IB)
                 Next
             Next
         Next

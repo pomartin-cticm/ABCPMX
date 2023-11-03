@@ -144,6 +144,10 @@
     <Folder Include="Section\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DLL_CTICM_DATA\DLL_CTICM_DATA.vbproj">
+      <Project>{53876d64-8fee-4e62-b907-0f707563c53e}</Project>
+      <Name>DLL_CTICM_DATA</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DLL_CTICM_RDM\DLL_CTICM_RDM.vbproj">
       <Project>{4623e43c-c204-42a6-b120-1a905b82b877}</Project>
       <Name>DLL_CTICM_RDM</Name>

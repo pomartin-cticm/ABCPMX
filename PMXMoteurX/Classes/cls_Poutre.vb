@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports CTICM_RDM
+Imports CTICM_DATA_DLLS
 
 Public Class cls_Poutre
 
@@ -2777,7 +2778,7 @@ Public Class cls_Poutre
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
         Dim CodeError_RDM As Integer
         Dim TextError_RDM As String = String.Empty
-        Dim DonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees = Nothing
+        Dim DonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
         Dim iTravP, iTravD As Integer
         Dim lPrem As Boolean = True
         Dim lAppuisEtais As Boolean = False
@@ -2855,7 +2856,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub PrepareModeleEF(ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees, ByRef lAppuisOK As Boolean)
+    Private Sub PrepareModeleEF(ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByRef lAppuisOK As Boolean)
         '-------------------------------------------------------------------------------------
         '   07/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -2896,7 +2897,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub PrepareAppuisModeleEFOld(lEtais As Boolean, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+    Private Sub PrepareAppuisModeleEFOld(lEtais As Boolean, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
         '-------------------------------------------------------------------------------------
         '   20/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -2927,7 +2928,7 @@ Public Class cls_Poutre
         Next
     End Sub
 
-    Private Sub PrepareAppuisModeleEF(lEtais As Boolean, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+    Private Sub PrepareAppuisModeleEF(lEtais As Boolean, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
         '-------------------------------------------------------------------------------------
         '   20/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -2998,7 +2999,7 @@ Public Class cls_Poutre
         End If
     End Sub
 
-    Private Sub PrepareDonneesEFChargement(iCas As Integer, iTravP As Integer, iTravD As Integer, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+    Private Sub PrepareDonneesEFChargement(iCas As Integer, iTravP As Integer, iTravD As Integer, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
         '-------------------------------------------------------------------------------------
         '   07/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -3084,7 +3085,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub AjouteForceRep(IndFrep As Integer, xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+    Private Sub AjouteForceRep(IndFrep As Integer, xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
         '-------------------------------------------------------------------------------------
         '   09/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -3104,7 +3105,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub AjouteMoment(xMom As Decimal, Moment As Decimal, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+    Private Sub AjouteMoment(xMom As Decimal, Moment As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
         '-------------------------------------------------------------------------------------
         '   09/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -3130,7 +3131,7 @@ Public Class cls_Poutre
     End Sub
 
 
-    Private Sub AjouteForce(xFor As Decimal, Force As Decimal, ByRef pDonneesEF As CTICM_RDM.DATA_RDM.Struc_Donnees)
+    Private Sub AjouteForce(xFor As Decimal, Force As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
         '-------------------------------------------------------------------------------------
         '   18/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
