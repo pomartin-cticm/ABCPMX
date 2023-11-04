@@ -182,7 +182,6 @@ Imports CTICM_RDM
         End With
     End Sub
 
-
     <TestMethod()> Public Sub TestMethodElementsFinis_TESTxx()
         '=======================================
         '
@@ -262,6 +261,8 @@ Imports CTICM_RDM
         Assert.IsTrue(IsEqual(Force * L ^ 2 / (48 * MyDonnees.EYOUNG * MyDonnees.InertieY(0)), MyOutput_RDM.UZ(11)))
 
     End Sub
+
+
 
 
 End Class

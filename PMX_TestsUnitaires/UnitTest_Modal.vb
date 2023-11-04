@@ -3,6 +3,9 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
 
 <TestClass()> Public Class UnitTest_Modal
+    '========================================================================================================================================
+    '   CLASSE POUR LES TESTS UNITAITRES DES PROJETS CTICM_RDM
+    '========================================================================================================================================
 
     <TestMethod()> Public Sub TestMethodAnalyseModale_Uniforme()
 

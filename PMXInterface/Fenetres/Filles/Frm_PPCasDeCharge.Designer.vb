@@ -73,6 +73,7 @@ Partial Class Frm_PPCasDeCharge
         Me.lbl_RZ1 = New System.Windows.Forms.Label()
         Me.lbl_RCalcul = New System.Windows.Forms.Label()
         Me.lbl_RunCalcul = New System.Windows.Forms.Label()
+        Me.pan_PanneauGauche = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -87,6 +88,7 @@ Partial Class Frm_PPCasDeCharge
         Me.pan_ChoixCas.SuspendLayout()
         Me.pan_EtatCdC.SuspendLayout()
         Me.Pan_Results.SuspendLayout()
+        Me.pan_PanneauGauche.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -213,8 +215,8 @@ Partial Class Frm_PPCasDeCharge
         Me.TableLayoutPanel2.ColumnCount = 2
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel2.Controls.Add(Me.pan_PanneauGauche, 0, 0)
         Me.TableLayoutPanel2.Controls.Add(Me.pan_Image, 1, 0)
-        Me.TableLayoutPanel2.Controls.Add(Me.TLpan_Gauche, 0, 0)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
@@ -272,7 +274,7 @@ Partial Class Frm_PPCasDeCharge
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLpan_Gauche.Size = New System.Drawing.Size(150, 441)
+        Me.TLpan_Gauche.Size = New System.Drawing.Size(148, 439)
         Me.TLpan_Gauche.TabIndex = 4
         '
         'chk_LocalEchelle
@@ -281,9 +283,9 @@ Partial Class Frm_PPCasDeCharge
         Me.chk_LocalEchelle.AutoSize = True
         Me.chk_LocalEchelle.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_LocalEchelle.Location = New System.Drawing.Point(1, 181)
-        Me.chk_LocalEchelle.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_LocalEchelle.Margin = New System.Windows.Forms.Padding(1, 1, 1, 0)
         Me.chk_LocalEchelle.Name = "chk_LocalEchelle"
-        Me.chk_LocalEchelle.Size = New System.Drawing.Size(148, 28)
+        Me.chk_LocalEchelle.Size = New System.Drawing.Size(146, 29)
         Me.chk_LocalEchelle.TabIndex = 7
         Me.chk_LocalEchelle.Text = "chk_LocalEchelle"
         Me.chk_LocalEchelle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -295,9 +297,9 @@ Partial Class Frm_PPCasDeCharge
         Me.chk_Chargement.AutoSize = True
         Me.chk_Chargement.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Chargement.Location = New System.Drawing.Point(1, 151)
-        Me.chk_Chargement.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_Chargement.Margin = New System.Windows.Forms.Padding(1, 1, 1, 0)
         Me.chk_Chargement.Name = "chk_Chargement"
-        Me.chk_Chargement.Size = New System.Drawing.Size(148, 28)
+        Me.chk_Chargement.Size = New System.Drawing.Size(146, 29)
         Me.chk_Chargement.TabIndex = 6
         Me.chk_Chargement.Text = "chk_Chargement"
         Me.chk_Chargement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -309,9 +311,9 @@ Partial Class Frm_PPCasDeCharge
         Me.chk_Inerties.AutoSize = True
         Me.chk_Inerties.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Inerties.Location = New System.Drawing.Point(1, 121)
-        Me.chk_Inerties.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_Inerties.Margin = New System.Windows.Forms.Padding(1, 1, 1, 0)
         Me.chk_Inerties.Name = "chk_Inerties"
-        Me.chk_Inerties.Size = New System.Drawing.Size(148, 28)
+        Me.chk_Inerties.Size = New System.Drawing.Size(146, 29)
         Me.chk_Inerties.TabIndex = 5
         Me.chk_Inerties.Text = "chk_Inerties"
         Me.chk_Inerties.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -323,9 +325,9 @@ Partial Class Frm_PPCasDeCharge
         Me.chk_Numerotation.AutoSize = True
         Me.chk_Numerotation.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Numerotation.Location = New System.Drawing.Point(1, 91)
-        Me.chk_Numerotation.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_Numerotation.Margin = New System.Windows.Forms.Padding(1, 1, 1, 0)
         Me.chk_Numerotation.Name = "chk_Numerotation"
-        Me.chk_Numerotation.Size = New System.Drawing.Size(148, 28)
+        Me.chk_Numerotation.Size = New System.Drawing.Size(146, 29)
         Me.chk_Numerotation.TabIndex = 4
         Me.chk_Numerotation.Text = "chk_Numerotation"
         Me.chk_Numerotation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -337,9 +339,9 @@ Partial Class Frm_PPCasDeCharge
         Me.chk_EffortTranchant.AutoSize = True
         Me.chk_EffortTranchant.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_EffortTranchant.Location = New System.Drawing.Point(1, 61)
-        Me.chk_EffortTranchant.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_EffortTranchant.Margin = New System.Windows.Forms.Padding(1, 1, 1, 0)
         Me.chk_EffortTranchant.Name = "chk_EffortTranchant"
-        Me.chk_EffortTranchant.Size = New System.Drawing.Size(148, 28)
+        Me.chk_EffortTranchant.Size = New System.Drawing.Size(146, 29)
         Me.chk_EffortTranchant.TabIndex = 3
         Me.chk_EffortTranchant.Text = "chk_EffortTranchant"
         Me.chk_EffortTranchant.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -351,9 +353,9 @@ Partial Class Frm_PPCasDeCharge
         Me.chk_Moment.AutoSize = True
         Me.chk_Moment.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Moment.Location = New System.Drawing.Point(1, 31)
-        Me.chk_Moment.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_Moment.Margin = New System.Windows.Forms.Padding(1, 1, 1, 0)
         Me.chk_Moment.Name = "chk_Moment"
-        Me.chk_Moment.Size = New System.Drawing.Size(148, 28)
+        Me.chk_Moment.Size = New System.Drawing.Size(146, 29)
         Me.chk_Moment.TabIndex = 2
         Me.chk_Moment.Text = "chk_Moment"
         Me.chk_Moment.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -365,9 +367,9 @@ Partial Class Frm_PPCasDeCharge
         Me.chk_Fleches.AutoSize = True
         Me.chk_Fleches.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_Fleches.Location = New System.Drawing.Point(1, 1)
-        Me.chk_Fleches.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_Fleches.Margin = New System.Windows.Forms.Padding(1, 1, 1, 0)
         Me.chk_Fleches.Name = "chk_Fleches"
-        Me.chk_Fleches.Size = New System.Drawing.Size(148, 28)
+        Me.chk_Fleches.Size = New System.Drawing.Size(146, 29)
         Me.chk_Fleches.TabIndex = 0
         Me.chk_Fleches.Text = "chk_Fleches"
         Me.chk_Fleches.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -376,10 +378,10 @@ Partial Class Frm_PPCasDeCharge
         'btn_EditModel
         '
         Me.btn_EditModel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_EditModel.Location = New System.Drawing.Point(1, 412)
+        Me.btn_EditModel.Location = New System.Drawing.Point(1, 410)
         Me.btn_EditModel.Margin = New System.Windows.Forms.Padding(1)
         Me.btn_EditModel.Name = "btn_EditModel"
-        Me.btn_EditModel.Size = New System.Drawing.Size(148, 28)
+        Me.btn_EditModel.Size = New System.Drawing.Size(146, 28)
         Me.btn_EditModel.TabIndex = 1
         Me.btn_EditModel.Text = "btn_EditModel"
         Me.btn_EditModel.UseVisualStyleBackColor = True
@@ -705,6 +707,18 @@ Partial Class Frm_PPCasDeCharge
         Me.lbl_RunCalcul.TabIndex = 60
         Me.lbl_RunCalcul.Text = "lbl_RunCalcul"
         '
+        'pan_PanneauGauche
+        '
+        Me.pan_PanneauGauche.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_PanneauGauche.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_PanneauGauche.Controls.Add(Me.TLpan_Gauche)
+        Me.pan_PanneauGauche.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_PanneauGauche.Location = New System.Drawing.Point(0, 0)
+        Me.pan_PanneauGauche.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_PanneauGauche.Name = "pan_PanneauGauche"
+        Me.pan_PanneauGauche.Size = New System.Drawing.Size(150, 441)
+        Me.pan_PanneauGauche.TabIndex = 3
+        '
         'Frm_PPCasDeCharge
         '
         Me.AcceptButton = Me.btn_OK
@@ -734,6 +748,7 @@ Partial Class Frm_PPCasDeCharge
         Me.pan_EtatCdC.PerformLayout()
         Me.Pan_Results.ResumeLayout(False)
         Me.Pan_Results.PerformLayout()
+        Me.pan_PanneauGauche.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -789,4 +804,5 @@ Partial Class Frm_PPCasDeCharge
     Friend WithEvents chk_Numerotation As CheckBox
     Friend WithEvents chk_Chargement As CheckBox
     Friend WithEvents chk_LocalEchelle As CheckBox
+    Friend WithEvents pan_PanneauGauche As Panel
 End Class

@@ -134,6 +134,8 @@ Partial Class Frm_Chargement
         Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
         Me.ErrorProvider_Frm_Chargement = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.pan_ChoixCas = New System.Windows.Forms.Panel()
+        Me.pan_ChoixTravee = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieMilieu.SuspendLayout()
@@ -153,6 +155,8 @@ Partial Class Frm_Chargement
         Me.Panel1.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_ChoixCas.SuspendLayout()
+        Me.pan_ChoixTravee.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -232,10 +236,10 @@ Partial Class Frm_Chargement
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.img_Chargement.BackColor = System.Drawing.SystemColors.Window
-        Me.img_Chargement.Location = New System.Drawing.Point(229, 14)
+        Me.img_Chargement.Location = New System.Drawing.Point(5, 10)
         Me.img_Chargement.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.img_Chargement.Name = "img_Chargement"
-        Me.img_Chargement.Size = New System.Drawing.Size(247, 174)
+        Me.img_Chargement.Size = New System.Drawing.Size(51, 42)
         Me.img_Chargement.TabIndex = 77
         Me.img_Chargement.TabStop = False
         '
@@ -1244,15 +1248,10 @@ Partial Class Frm_Chargement
         '
         Me.pan_ChoixCharges.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ChoixCharges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChoixCharges.Controls.Add(Me.pan_ChoixTravee)
+        Me.pan_ChoixCharges.Controls.Add(Me.pan_ChoixCas)
         Me.pan_ChoixCharges.Controls.Add(Me.lbl_ChoixCharge)
         Me.pan_ChoixCharges.Controls.Add(Me.lbl_NameLoad)
-        Me.pan_ChoixCharges.Controls.Add(Me.lbl_ChoixTravee)
-        Me.pan_ChoixCharges.Controls.Add(Me.Panel1)
-        Me.pan_ChoixCharges.Controls.Add(Me.rad_Qc)
-        Me.pan_ChoixCharges.Controls.Add(Me.rad_Q2)
-        Me.pan_ChoixCharges.Controls.Add(Me.rad_G2)
-        Me.pan_ChoixCharges.Controls.Add(Me.rad_Q1)
-        Me.pan_ChoixCharges.Controls.Add(Me.rad_G1)
         Me.pan_ChoixCharges.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_ChoixCharges.Location = New System.Drawing.Point(0, 30)
         Me.pan_ChoixCharges.Margin = New System.Windows.Forms.Padding(0)
@@ -1271,17 +1270,18 @@ Partial Class Frm_Chargement
         '
         'lbl_NameLoad
         '
-        Me.lbl_NameLoad.Location = New System.Drawing.Point(14, 120)
+        Me.lbl_NameLoad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_NameLoad.Location = New System.Drawing.Point(12, 121)
         Me.lbl_NameLoad.Name = "lbl_NameLoad"
-        Me.lbl_NameLoad.Size = New System.Drawing.Size(215, 29)
+        Me.lbl_NameLoad.Size = New System.Drawing.Size(217, 29)
         Me.lbl_NameLoad.TabIndex = 78
         Me.lbl_NameLoad.Text = "lbl_NameLoad"
-        Me.lbl_NameLoad.TextAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.lbl_NameLoad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lbl_ChoixTravee
         '
         Me.lbl_ChoixTravee.AutoSize = True
-        Me.lbl_ChoixTravee.Location = New System.Drawing.Point(14, 163)
+        Me.lbl_ChoixTravee.Location = New System.Drawing.Point(3, 1)
         Me.lbl_ChoixTravee.Name = "lbl_ChoixTravee"
         Me.lbl_ChoixTravee.Size = New System.Drawing.Size(83, 13)
         Me.lbl_ChoixTravee.TabIndex = 78
@@ -1289,11 +1289,10 @@ Partial Class Frm_Chargement
         '
         'Panel1
         '
-        Me.Panel1.Anchor = System.Windows.Forms.AnchorStyles.Top
         Me.Panel1.Controls.Add(Me.btn_Precedent)
         Me.Panel1.Controls.Add(Me.btn_Suivant)
         Me.Panel1.Controls.Add(Me.cmb_Travee)
-        Me.Panel1.Location = New System.Drawing.Point(27, 190)
+        Me.Panel1.Location = New System.Drawing.Point(16, 28)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(185, 28)
         Me.Panel1.TabIndex = 77
@@ -1332,7 +1331,7 @@ Partial Class Frm_Chargement
         'rad_Qc
         '
         Me.rad_Qc.AutoSize = True
-        Me.rad_Qc.Location = New System.Drawing.Point(136, 92)
+        Me.rad_Qc.Location = New System.Drawing.Point(114, 53)
         Me.rad_Qc.Name = "rad_Qc"
         Me.rad_Qc.Size = New System.Drawing.Size(60, 17)
         Me.rad_Qc.TabIndex = 0
@@ -1343,7 +1342,7 @@ Partial Class Frm_Chargement
         'rad_Q2
         '
         Me.rad_Q2.AutoSize = True
-        Me.rad_Q2.Location = New System.Drawing.Point(136, 69)
+        Me.rad_Q2.Location = New System.Drawing.Point(114, 30)
         Me.rad_Q2.Name = "rad_Q2"
         Me.rad_Q2.Size = New System.Drawing.Size(60, 17)
         Me.rad_Q2.TabIndex = 0
@@ -1354,7 +1353,7 @@ Partial Class Frm_Chargement
         'rad_G2
         '
         Me.rad_G2.AutoSize = True
-        Me.rad_G2.Location = New System.Drawing.Point(37, 69)
+        Me.rad_G2.Location = New System.Drawing.Point(15, 30)
         Me.rad_G2.Name = "rad_G2"
         Me.rad_G2.Size = New System.Drawing.Size(60, 17)
         Me.rad_G2.TabIndex = 0
@@ -1365,7 +1364,7 @@ Partial Class Frm_Chargement
         'rad_Q1
         '
         Me.rad_Q1.AutoSize = True
-        Me.rad_Q1.Location = New System.Drawing.Point(136, 46)
+        Me.rad_Q1.Location = New System.Drawing.Point(114, 7)
         Me.rad_Q1.Name = "rad_Q1"
         Me.rad_Q1.Size = New System.Drawing.Size(60, 17)
         Me.rad_Q1.TabIndex = 0
@@ -1376,7 +1375,7 @@ Partial Class Frm_Chargement
         'rad_G1
         '
         Me.rad_G1.AutoSize = True
-        Me.rad_G1.Location = New System.Drawing.Point(37, 46)
+        Me.rad_G1.Location = New System.Drawing.Point(15, 7)
         Me.rad_G1.Name = "rad_G1"
         Me.rad_G1.Size = New System.Drawing.Size(60, 17)
         Me.rad_G1.TabIndex = 0
@@ -1439,6 +1438,29 @@ Partial Class Frm_Chargement
         '
         Me.ErrorProvider_Frm_Chargement.ContainerControl = Me
         '
+        'pan_ChoixCas
+        '
+        Me.pan_ChoixCas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChoixCas.Controls.Add(Me.rad_G1)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_Q1)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_G2)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_Q2)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_Qc)
+        Me.pan_ChoixCas.Location = New System.Drawing.Point(12, 35)
+        Me.pan_ChoixCas.Name = "pan_ChoixCas"
+        Me.pan_ChoixCas.Size = New System.Drawing.Size(217, 80)
+        Me.pan_ChoixCas.TabIndex = 78
+        '
+        'pan_ChoixTravee
+        '
+        Me.pan_ChoixTravee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChoixTravee.Controls.Add(Me.lbl_ChoixTravee)
+        Me.pan_ChoixTravee.Controls.Add(Me.Panel1)
+        Me.pan_ChoixTravee.Location = New System.Drawing.Point(12, 157)
+        Me.pan_ChoixTravee.Name = "pan_ChoixTravee"
+        Me.pan_ChoixTravee.Size = New System.Drawing.Size(217, 77)
+        Me.pan_ChoixTravee.TabIndex = 78
+        '
         'Frm_Chargement
         '
         Me.AcceptButton = Me.btn_OK
@@ -1478,6 +1500,10 @@ Partial Class Frm_Chargement
         Me.Panel1.ResumeLayout(False)
         Me.TLPan_PartieBasse.ResumeLayout(False)
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_ChoixCas.ResumeLayout(False)
+        Me.pan_ChoixCas.PerformLayout()
+        Me.pan_ChoixTravee.ResumeLayout(False)
+        Me.pan_ChoixTravee.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1592,4 +1618,6 @@ Partial Class Frm_Chargement
     Friend WithEvents ErrorProvider_Frm_Chargement As ErrorProvider
     Friend WithEvents txt_Indice_Lineique_1 As TextBox
     Friend WithEvents lbl_NameLoad As Label
+    Friend WithEvents pan_ChoixTravee As Panel
+    Friend WithEvents pan_ChoixCas As Panel
 End Class

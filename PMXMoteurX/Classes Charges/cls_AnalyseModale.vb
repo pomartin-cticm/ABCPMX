@@ -67,6 +67,12 @@ Public Class cls_AnalyseModale
         End Get
     End Property
 
+    Public ReadOnly Property Deformee As Decimal()
+        Get
+            Return pDeformee
+        End Get
+    End Property
+
 #End Region
 
 #Region " Calculs "
@@ -99,7 +105,7 @@ Public Class cls_AnalyseModale
         nEqDalleCT = MyPoutre.Dalle.beton.CoefficientEquivalenceCT
         nEqEnrobCT = MyPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
 
-        MyPoutre.PrepareNodeN()
+        MyPoutre.PrepareNodesN()
         MyPoutre.InitialiseSigneMoment(SigneM)
 
         DonneesEF.PESANTEUR = MyPoutre.Param.GraviteG
@@ -184,37 +190,65 @@ Public Class cls_AnalyseModale
         '--> Déclaration
 
         Dim iTravP, iTravD As Integer
-        Dim labelQ() As String = {"Q1", "Q2"}
+        ' Dim labelQ() As String = {"Q1", "Q2"}
+        Dim labelCharges() As String = {"G1", "G2", "Q1", "Q2"}
+        Dim NbCharges As Integer = labelCharges.GetUpperBound(0) + 1
+        Dim lCalcul(NbCharges - 1) As Boolean                          ' Indique les charges définies
+        Dim NombreForceReparties As Integer = 0
+        Dim i As Integer
+        Dim CompteurRep As Integer = -1
+        Dim RatioC() As Decimal = {1, 1, 0, 0}                         ' Indique les pondérations de charges
 
         '--> Initialisation
 
         iTravP = MyPoutre.IndicePremiereTravee
         iTravD = MyPoutre.IndiceDerniereTravee
 
+        If IndiceQ > 0 Then
+            RatioC(1 + IndiceQ) = RatioQ
+        End If
+
+        For i = 0 To NbCharges - 1
+            lCalcul(i) = MyPoutre.ChargesU(labelCharges(i)).EstDefinie And (Not IsEqual(RatioC(i), 0))
+            If lCalcul(i) Then NombreForceReparties += MyPoutre.ChargesU(labelCharges(i)).NombreForceReparties(iTravP, iTravD)
+        Next
+
+        pDonneesEF.NbForcesRep = NombreForceReparties
+        If NombreForceReparties > 0 Then
+            ReDim pDonneesEF.ForceRep(NombreForceReparties - 1, 1)
+            ReDim pDonneesEF.xForceRep(NombreForceReparties - 1, 1)
+        End If
+
         '--> Transfert des charges
 
-        '# Poids propre
-
-        TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU("G1"), pDonneesEF)
-
-        '# Autres charges permanentes
-
-        If MyPoutre.ChargesU("G2").EstDefinie Then
-            TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU("G2"), pDonneesEF)
-        End If
-
-        '# Charges d'exploitation
-
-        If IndiceQ > 0 Then
-            If MyPoutre.ChargesU(labelQ(IndiceQ - 1)).EstDefinie Then
-                TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU(labelQ(IndiceQ - 1)), pDonneesEF, RatioQ)
+        For i = 0 To NbCharges - 1
+            If lCalcul(i) Then
+                TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU(labelCharges(i)), pDonneesEF, CompteurRep, RatioC(i))
             End If
-        End If
+        Next
+
+        ''# Poids propre
+
+        'TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU("G1"), pDonneesEF, CompteurRep)
+
+        ''# Autres charges permanentes
+
+        'If MyPoutre.ChargesU("G2").EstDefinie Then
+        '    TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU("G2"), pDonneesEF, CompteurRep)
+        'End If
+
+        ''# Charges d'exploitation
+
+        'If IndiceQ > 0 Then
+        '    If MyPoutre.ChargesU(labelQ(IndiceQ - 1)).EstDefinie Then
+        '        TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU(labelQ(IndiceQ - 1)), pDonneesEF, CompteurRep, RatioQ)
+        '    End If
+        'End If
 
     End Sub
 
     Private Sub TransfertChargementU(iTravP As Integer, iTravD As Integer, MyChargesU As cls_ChargementUtilisateur,
-                                     ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, Optional Ratio As Decimal = 1)
+                                     ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByRef pCompteurRep As Integer, Optional Ratio As Decimal = 1)
         '---------------------------------------------------------------------------------------------------
         '   03/11/23 :  Création - POM
         '---------------------------------------------------------------------------------------------------
@@ -224,6 +258,7 @@ Public Class cls_AnalyseModale
         '   iTravD      [E] :   Indice de la dernière travée
         '   MyChargesU  [E] :   Chargement utilisateur à transférer
         '   pDonneesEF  [S] :   Construction du maillage EF et de son chargement
+        '   pCompterRep [E/S] : Compteur des forces reparties
         '   Ratio       [E] :   Pondération du cas de charge
         '---------------------------------------------------------------------------------------------------
 
@@ -246,7 +281,7 @@ Public Class cls_AnalyseModale
 
                 Me.AjouteForceRep(MyChargesU.FReparties(iTrav)(i).xPosG(0), MyChargesU.FReparties(iTrav)(i).xPosG(1),
                                   MyChargesU.FReparties(iTrav)(i).Force(0) * Ratio,
-                                  MyChargesU.FReparties(iTrav)(i).Force(1) * Ratio, pDonneesEF)
+                                  MyChargesU.FReparties(iTrav)(i).Force(1) * Ratio, pDonneesEF, pCompteurRep)
 
             Next
 
@@ -267,7 +302,8 @@ Public Class cls_AnalyseModale
 
 #Region " Outils "
 
-    Private Sub AjouteForceRep(xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Private Sub AjouteForceRep(xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal,
+                               ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByRef pComptRep As Integer)
         '-------------------------------------------------------------------------------------
         '   09/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -278,24 +314,15 @@ Public Class cls_AnalyseModale
         '   qo          [E] :   Valeur à gauche de la force répartie
         '   qe          [E] :   Valeur à droite de la force répartie
         '   pDonneesEF  [S] :   Donnes pour le calcul EF
+        '   pComptRep   [E/S] : Compteur de forces réparties
         '-------------------------------------------------------------------------------------
 
-        pDonneesEF.NbForcesRep += 1
+        pComptRep += 1
 
-        If pDonneesEF.NbForcesRep = 1 Then
-            ReDim pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
-            ReDim pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
-        Else
-            ReDim Preserve pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
-            ReDim Preserve pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
-        End If
-
-        Dim IndFRep As Integer = pDonneesEF.NbForcesRep - 1
-
-        pDonneesEF.xForceRep(IndFrep, 0) = xo
-        pDonneesEF.xForceRep(IndFrep, 1) = xe
-        pDonneesEF.ForceRep(IndFrep, 0) = qo
-        pDonneesEF.ForceRep(IndFrep, 1) = qe
+        pDonneesEF.xForceRep(pComptRep, 0) = xo
+        pDonneesEF.xForceRep(pComptRep, 1) = xe
+        pDonneesEF.ForceRep(pComptRep, 0) = qo
+        pDonneesEF.ForceRep(pComptRep, 1) = qe
 
     End Sub
 

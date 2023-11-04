@@ -5,7 +5,17 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports PMXMoteur2
 
 <TestClass()> Public Class UnitTest_Cls_Section
+    '========================================================================================================================================
+    '   CLASSE POUR LES PROPRIETES DE SECTIONS
+    '========================================================================================================================================
+
+#Region " Déclarations et attributs "
+
     Const DeltaVMAx As Decimal = 1 / 1000
+
+#End Region
+
+#Region " TU pour les sections acier "
 
     <TestMethod()> Public Sub TestUnit_ProprietesSectionAcierLamine()
         '----------------------------------------------------------------------------------------------------------------------------------
@@ -117,6 +127,103 @@ Imports PMXMoteur2
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
+
+    <TestMethod()> Public Sub TestUnit_ProprietesSectionAcierMonoSym()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   13/07/23 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        ' Test des propriétés élastiques et plastiques d'une section acier avec profilé laminé
+        '   Références : section acier de l'article RCM 3/2021
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MySection As New cls_Section
+        Dim MyGamma As New cls_Gamma
+        Dim zANP, MplRd As Decimal
+        Dim zANE, MelRd As Decimal
+        Dim InertieY, InertieZ As Decimal
+        Dim DeltaV, ValRef As Decimal
+        ' Const DeltaVMAx As Decimal = 1 / 1000
+
+        '--> Initialisations
+
+        MySection.typeSection = cls_Section.Enum_TypeSection.Acier
+
+        '# IPE 300
+
+        MySection.ProfilA.ha = 0.575
+        MySection.ProfilA.Bfi = 0.35
+        MySection.ProfilA.Bfs = 0.25
+        MySection.ProfilA.Tfi = 0.04
+        MySection.ProfilA.Tfs = 0.025
+        MySection.ProfilA.Tw = 0.015
+        MySection.ProfilA.Rci = 0.00
+        MySection.ProfilA.Rcs = 0.00
+        MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
+
+        '# Acier S355 M/ML
+
+        MySection.Acier.InitialiseAcierS355MML()
+
+        '# Gamma
+
+        MyGamma.GammaM0 = 1
+
+        '--> Tests des propriétés plastiques
+
+        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
+
+        '# Position ANP
+
+        ValRef = -0.5311
+        DeltaV = (zANP - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Moment plastique
+
+        ValRef = 1915.67 * 10 ^ 3
+        DeltaV = (MplRd - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '--> Tests des propriétés élastiques / axe YY
+
+        MySection.ProprietesElastiquesMyy(1, True, MyGamma, 1, zANE, InertieY, MelRd)
+
+        '# Position ANE
+
+        ValRef = -0.3581
+        DeltaV = (zANE - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Inertie Y
+
+        ValRef = 150394 * 10 ^ (-8)
+        DeltaV = (InertieY - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '--> Tests des propriétés élastiques / axe ZZ
+
+        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, InertieZ, MelRd)
+
+        '# Position ANE
+
+        ValRef = 0
+        DeltaV = (zANE - ValRef) / MySection.ProfilA.ha
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Inertie Z
+
+        ValRef = 17561 * 10 ^ (-8)
+        DeltaV = (InertieZ - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+
+    End Sub
+
+#End Region
+
+#Region " TU pour les sections acier + enrobage "
 
     <TestMethod()> Public Sub TestUnit_ProprietesSectionAcierEnrobeeLamine()
         '----------------------------------------------------------------------------------------------------------------------------------
@@ -551,98 +658,9 @@ Imports PMXMoteur2
 
     End Sub
 
-    <TestMethod()> Public Sub TestUnit_ProprietesSectionAcierMonoSym()
-        '----------------------------------------------------------------------------------------------------------------------------------
-        '   13/07/23 :  Création POM
-        '----------------------------------------------------------------------------------------------------------------------------------
-        ' Test des propriétés élastiques et plastiques d'une section acier avec profilé laminé
-        '   Références : section acier de l'article RCM 3/2021
-        '----------------------------------------------------------------------------------------------------------------------------------
+#End Region
 
-        '--> Déclarations
-
-        Dim MySection As New cls_Section
-        Dim MyGamma As New cls_Gamma
-        Dim zANP, MplRd As Decimal
-        Dim zANE, MelRd As Decimal
-        Dim InertieY, InertieZ As Decimal
-        Dim DeltaV, ValRef As Decimal
-        ' Const DeltaVMAx As Decimal = 1 / 1000
-
-        '--> Initialisations
-
-        MySection.typeSection = cls_Section.Enum_TypeSection.Acier
-
-        '# IPE 300
-
-        MySection.ProfilA.ha = 0.575
-        MySection.ProfilA.Bfi = 0.35
-        MySection.ProfilA.Bfs = 0.25
-        MySection.ProfilA.Tfi = 0.04
-        MySection.ProfilA.Tfs = 0.025
-        MySection.ProfilA.Tw = 0.015
-        MySection.ProfilA.Rci = 0.00
-        MySection.ProfilA.Rcs = 0.00
-        MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-
-        '# Acier S355 M/ML
-
-        MySection.Acier.InitialiseAcierS355MML()
-
-        '# Gamma
-
-        MyGamma.GammaM0 = 1
-
-        '--> Tests des propriétés plastiques
-
-        MySection.ProprietesPlastiquesMyy(1, True, MyGamma, 0, zANP, MplRd)
-
-        '# Position ANP
-
-        ValRef = -0.5311
-        DeltaV = (zANP - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
-
-        '# Moment plastique
-
-        ValRef = 1915.67 * 10 ^ 3
-        DeltaV = (MplRd - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
-
-        '--> Tests des propriétés élastiques / axe YY
-
-        MySection.ProprietesElastiquesMyy(1, True, MyGamma, 1, zANE, InertieY, MelRd)
-
-        '# Position ANE
-
-        ValRef = -0.3581
-        DeltaV = (zANE - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
-
-        '# Inertie Y
-
-        ValRef = 150394 * 10 ^ (-8)
-        DeltaV = (InertieY - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
-
-        '--> Tests des propriétés élastiques / axe ZZ
-
-        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, InertieZ, MelRd)
-
-        '# Position ANE
-
-        ValRef = 0
-        DeltaV = (zANE - ValRef) / MySection.ProfilA.ha
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
-
-        '# Inertie Z
-
-        ValRef = 17561 * 10 ^ (-8)
-        DeltaV = (InertieZ - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
-
-
-    End Sub
+#Region " TU pour les sections mixtes "
 
     <TestMethod()> Public Sub TestUnit_ProprietesSectionMixteLamine()
         '----------------------------------------------------------------------------------------------------------------------------------
@@ -867,8 +885,6 @@ Imports PMXMoteur2
 
     End Sub
 
-
-
     <TestMethod()> Public Sub TestUnit_ProprietesSectionMixtePRS_MMoins()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création POM
@@ -951,7 +967,6 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(MplRd, ValRef))
 
     End Sub
-
 
     <TestMethod()> Public Sub TestUnit_ProprietesSectionMixteMonosym()
         '----------------------------------------------------------------------------------------------------------------------------------
@@ -1075,6 +1090,10 @@ Imports PMXMoteur2
 
     End Sub
 
+#End Region
+
+#Region " Classe des sections "
+
     <TestMethod()> Public Sub TestUnit_ClasseSectionAcierClassique()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   16/10/23 :  Création GUD
@@ -1174,5 +1193,8 @@ Imports PMXMoteur2
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
+
+
+#End Region
 
 End Class

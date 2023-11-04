@@ -6,7 +6,7 @@ Imports PMXMoteur2
 
 #Region " Déclarations et attributs "
 
-    Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
+    Dim NomCharges() As String = {"G1", "G2", "Q", "QC"}
 
 #End Region
 
@@ -27,7 +27,7 @@ Imports PMXMoteur2
         '----------------------------------------------------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------------------------------------------------
 
-        Dim poutre As New cls_Poutre(NomCas)
+        Dim poutre As New cls_Poutre(NomCharges)
 
         'Définition des caractéristiques de la poutre test
 

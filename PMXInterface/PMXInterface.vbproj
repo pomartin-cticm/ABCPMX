@@ -516,6 +516,10 @@
     <Content Include="ABCPMX II.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DLL_CTICM_DATA\DLL_CTICM_DATA.vbproj">
+      <Project>{53876d64-8fee-4e62-b907-0f707563c53e}</Project>
+      <Name>DLL_CTICM_DATA</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PMXMoteurX\PMXMoteurX.vbproj">
       <Project>{d9f6f75a-2c73-4e1b-a27b-791c1098507c}</Project>
       <Name>PMXMoteurX</Name>

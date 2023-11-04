@@ -1,5 +1,6 @@
 ﻿Imports PMXMoteur2
 Imports System.IO
+Imports CTICM_DATA_DLLS
 
 Public Class Frm_Chargement
 
@@ -71,10 +72,12 @@ Public Class Frm_Chargement
     Dim tableau_txtbox_ChargesLineiques(,) As TextBox
     Dim tableau_txtbox_ChargesPonctuelles(,) As TextBox
 
+    Dim DonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+    Dim SigneM() As Decimal = Nothing
+
 #End Region
 
 #Region "===OUVERTURE==="
-
 
     Private Sub Frm_Chargement_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitialiserFenetre()
@@ -103,6 +106,7 @@ Public Class Frm_Chargement
         MyPoutreLoc = New cls_Poutre(NomChargements)
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
         MyPoutreLoc.InitialisePoidsPropres()
+        PreparerCalculEF(MyPoutreLoc)
 
         NbTravees = MyPoutreLoc.NbTravees
 
@@ -338,6 +342,9 @@ Public Class Frm_Chargement
 
         Me.img_Chargement.Dock = DockStyle.Fill
         'Me.img_Chargement.BorderStyle = BorderStyle.FixedSingle
+
+        '==POM
+        Me.pan_ChoixTravee.Visible = (MyProjet.Poutres(MyProjet.IndEnCours).NbTravees > 1)
     End Sub
 
     Private Sub RemplirCombobox()
@@ -553,6 +560,67 @@ Public Class Frm_Chargement
 
 #End Region
 
+#Region " RDM "
+
+    Private Sub PreparerCalculEF(MyPoutre As cls_Poutre)
+        '--------------------------------------------------------------------------------------
+        '   04/11/23 :  Création - POM
+        '--------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim zANE, InertieY, MelRd, Aire As Decimal
+
+        '--> Noeuds
+
+        MyPoutre.PrepareNodesN()
+
+        '--> Préparation du modèle EF
+
+        '# Maillage
+
+        MyPoutre.Analyse = New cls_AnalyseEFinis(MyPoutre.Section.Acier.EYoung, MyPoutre.Param.GraviteG, MyPoutre.Nodes)
+
+        '# Appuis
+
+        MyPoutre.Analyse.Appuis(MyPoutre.Nodes, False)
+
+        '# Propriétés des éléments
+
+        MyPoutre.Section.ProfilA.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        Aire = MyPoutre.Section.ProfilA.Aire
+
+        MyPoutre.Analyse.AttribuerProprietesConstantes(InertieY, Aire)
+
+    End Sub
+
+
+    Private Sub MAJIReactions()
+
+        Dim lOk As Boolean
+
+        MyPoutreLoc.Analyse.TransfertChargementU(MyPoutreLoc.ChargesU(chargeEnCours), MyPoutreLoc.IndicePremiereTravee, MyPoutreLoc.IndiceDerniereTravee,
+                                                 MyPoutreLoc.LongueurTravee, MyPoutreLoc.LargeurInfluence)
+
+        MyPoutreLoc.Analyse.RunRDM(lok)
+
+        If lOk Then
+
+            Me.txt_LeftSupport.Text = GetStringInUnit(MyPoutreLoc.Analyse.Reaction(0), Enu_TypeVariable.Effort, 3, 2, False)
+            Me.txt_RightSupport.Text = GetStringInUnit(MyPoutreLoc.Analyse.Reaction(1), Enu_TypeVariable.Effort, 3, 2, False)
+
+        Else
+
+            Me.txt_LeftSupport.Text = "-"
+            Me.txt_RightSupport.Text = "-"
+
+
+        End If
+
+    End Sub
+
+#End Region
+
 #Region " Evènements "
     Private Sub MAJIAffichageNomChargeEnCours()
         Select Case True
@@ -721,6 +789,8 @@ Public Class Frm_Chargement
         MAJIAffichageButtonsLineiques()
         MAJIAffichageTableauxLineique()
 
+        MAJIReactions()
+
         img_Chargement.Invalidate()
 
     End Sub
@@ -739,6 +809,8 @@ Public Class Frm_Chargement
 
         MAJIAffichageButtonsPonctuels()
         MAJIAffichageTableauxPonctuel()
+
+        MAJIReactions()
 
         img_Chargement.Invalidate()
 
@@ -894,6 +966,8 @@ Public Class Frm_Chargement
                     MAJIAffichageChargeSurfacique(True, False)
             End Select
 
+            MAJIReactions()
+
         End If
 
         img_Chargement.Invalidate()
@@ -923,7 +997,7 @@ Public Class Frm_Chargement
                 End Select
             Next
 
-
+            MAJIReactions()
         End If
 
         img_Chargement.Invalidate()
@@ -949,7 +1023,7 @@ Public Class Frm_Chargement
                 End Select
             Next
 
-
+            MAJIReactions()
         End If
 
         img_Chargement.Invalidate()

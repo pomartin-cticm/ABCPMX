@@ -67,6 +67,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes Charges\cls_AnalyseEFinis.vb" />
     <Compile Include="Classes Charges\cls_AnalyseModale.vb" />
     <Compile Include="Classes Charges\cls_CasDeCharge.vb" />
     <Compile Include="Classes Charges\cls_ChargementUtilisateur.vb" />

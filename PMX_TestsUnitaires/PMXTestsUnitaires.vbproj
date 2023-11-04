@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mod_Outils.vb" />
+    <Compile Include="UnitTest_ClsPoutre_EltsFinis.vb" />
     <Compile Include="UnitTest_Modal.vb" />
     <Compile Include="UnitTest_Contraintes.vb" />
     <Compile Include="UnitTest_ElementsFinis.vb" />

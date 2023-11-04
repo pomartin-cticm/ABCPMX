@@ -132,6 +132,58 @@
         End Get
     End Property
 
+    Public Function NombreForceReparties(iTravP As Integer, iTravD As Integer) As Integer
+        '-----------------------------------------------------------------------------------------------------
+        '   04/11/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------
+        '   Renvoie le nombre de charges uniformément réparties dans le cas de charge (sur toutes les travées)
+        '-----------------------------------------------------------------------------------------------------
+        '   iTravP, iTravP [E] :    Indices de la première et de la dernière travée
+        '-----------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NbCharges As Integer = 0
+
+        '--> Boucle sur les travées
+
+        For iTrav As Integer = iTravP To iTravD
+            NbCharges += Me.FReparties(iTrav).Count
+        Next
+
+        '--> Fin
+
+        Return NbCharges
+
+    End Function
+
+    Public Function NombreChargesSurf(iTravP As Integer, iTravD As Integer) As Integer
+        '-----------------------------------------------------------------------------------------------------
+        '   04/11/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------
+        '   Renvoie le nombre de charges uniformément réparties dans le cas de charge (sur toutes les travées)
+        '-----------------------------------------------------------------------------------------------------
+        '   iTravP, iTravP [E] :    Indices de la première et de la dernière travée
+        '-----------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NbCharges As Integer = 0
+
+        '--> Boucle sur les travées
+
+        For iTrav As Integer = iTravP To iTravD
+
+            If (Not IsEqual(Me.QSurf(iTrav), 0)) Then NbCharges += 1
+
+        Next
+
+        '--> Fin
+
+        Return NbCharges
+
+    End Function
+
 #End Region
 
 #Region " Fonction de copie "

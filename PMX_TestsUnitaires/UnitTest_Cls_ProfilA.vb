@@ -4,6 +4,13 @@ Imports PMXMoteur2
 
 <TestClass()> Public Class UnitTest_Cls_ProfilA
 
+    '========================================================================================================================================
+    '   CLASSE POUR LES PROPRIETES DES PROFILES ACIER
+    '========================================================================================================================================
+
+#Region " Profiles laminés "
+
+
     <TestMethod()> Public Sub TestUnit_ProprietesProfileAcierLamine()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création POM
@@ -23,77 +30,69 @@ Imports PMXMoteur2
 
         '# IPE 300
 
-        MyProfil.ha = 0.3
-        MyProfil.Bfi = 0.15
-        MyProfil.Bfs = 0.15
-        MyProfil.Tfi = 0.0107
-        MyProfil.Tfs = 0.0107
-        MyProfil.Tw = 0.0071
-        MyProfil.Rci = 0.015
-        MyProfil.Rcs = 0.015
-        MyProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+        GenereProfileIPE300(MyProfil)
 
         '# Aire de cisaillement
 
         ValRef = 25.7 * 10 ^ (-4)
-        DeltaV = (MyProfil.AireAv - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Assert.IsTrue(IsEqual(MyProfil.AireAv, ValRef))
 
         '# Hauteur d'âme entre semelles
 
         ValRef = 278.6 * 10 ^ (-3)
-        DeltaV = (MyProfil.HauteurAmeHw - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Assert.IsTrue(IsEqual(MyProfil.HauteurAmeHw, ValRef))
 
         '# Hauteur d'âme entre congés
 
         ValRef = 248.6 * 10 ^ (-3)
-        DeltaV = (MyProfil.HauteurAmeDw - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Assert.IsTrue(IsEqual(MyProfil.HauteurAmeDw, ValRef))
 
         '# Aire de la semelle supérieure
 
         ValRef = 1605 * 10 ^ (-6)
-        DeltaV = (MyProfil.AireFs - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Assert.IsTrue(IsEqual(MyProfil.AireFs, ValRef))
 
         '# Aire de la section
 
         ValRef = 5380 * 10 ^ (-6)
-        DeltaV = (MyProfil.Aire - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Assert.IsTrue(IsEqual(MyProfil.Aire, ValRef))
 
         '# Inertie de torsion
 
         ' ValRef = 20.1 * 10 ^ (-8)      ' Changement de formule
         ValRef = 19.91 * 10 ^ (-8)
-        DeltaV = (MyProfil.InertieT - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 10)     '1%
+
+        Assert.IsTrue(IsEqual(MyProfil.InertieT, ValRef, DeltaVMAx * 10)) '1%
 
         '# Inertie de gauchissement
 
         ValRef = 126 * 10 ^ (-9)
-        DeltaV = (MyProfil.InertieW - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Assert.IsTrue(IsEqual(MyProfil.InertieW, ValRef))
 
         '# Inertie de flexion YY
 
         MyProfil.ProprietesElastiquesMyy(1, True, 1, zANE, Inertie, MelRd)
         ValRef = 8356 * 10 ^ (-8)
-        DeltaV = (Inertie - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Assert.IsTrue(IsEqual(Inertie, ValRef))
 
         '# Module de flexion élastique / yy
 
         ValRef = 557.0 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Assert.IsTrue(IsEqual(MyProfil.ModuleFlexionElastiqueYY, ValRef))
 
         '# Module de flexion plastique / yy
 
         ValRef = 628.3 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionPlastiqueYY - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        Assert.IsTrue(IsEqual(MyProfil.ModuleFlexionPlastiqueYY, ValRef))
 
         '# Inertie de flexion zz
 
@@ -101,17 +100,23 @@ Imports PMXMoteur2
         Inertie = MyProfil.InertieZ
 
         ValRef = 603.8 * 10 ^ (-8)
-        DeltaV = (Inertie - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 2)        ' (0,2%)
+
+        Assert.IsTrue(IsEqual(Inertie, ValRef, DeltaVMAx * 2))  ' (0,2%)
 
         '# Module de flexion élastique / zz
 
         ValRef = 80.5 * 10 ^ (-6)
         Valeur = MyProfil.ModuleWelZ
-        DeltaV = (Valeur - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 2)        ' (0,2%)
+
+        Assert.IsTrue(IsEqual(MyProfil.ModuleWelZ, ValRef, DeltaVMAx * 2))  ' (0,2%)
 
     End Sub
+
+
+
+#End Region
+
+#Region " Profilés PRS "
 
     <TestMethod()> Public Sub TestUnit_ProprietesProfileAcierMonoSym()
         '----------------------------------------------------------------------------------------------------------------------------------
@@ -175,5 +180,14 @@ Imports PMXMoteur2
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
+
+#End Region
+
+#Region " Profilés Slim floors "
+
+
+
+#End Region
+
 
 End Class

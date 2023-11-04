@@ -231,8 +231,13 @@ Public Class cls_Poutre
     '--Points de calcul des contraintes normales
     Public PtsSigma As New cls_PointsSigma
 
+#End Region
+
+#Region " Attibuts pour les analyses "
 
     Public Modal As New cls_AnalyseModale                           ' Analyse modale
+
+    Public Analyse As cls_AnalyseEFinis                             ' Analyse par éléments finis
 
 #End Region
 
@@ -495,6 +500,24 @@ Public Class cls_Poutre
 #End Region
 
 #Region " Outils divers "
+
+    ''' <summary>
+    ''' Largeur surlaquelle sont appliquée les charges surfaciques
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property LargeurInfluence
+        Get
+            Dim Largeur As Decimal = 0
+
+            If Me.lIntermediaire Then
+                Largeur = (Me.EntraxeD1 + Me.EntraxeD2) / 2
+            Else
+                Largeur = Me.EntraxeD1 + (Me.EntraxeD2) / 2
+            End If
+
+            Return Largeur
+        End Get
+    End Property
 
     ''' <summary>
     ''' Type de section de la poutre
@@ -1139,84 +1162,84 @@ Public Class cls_Poutre
 
 #Region " Préparation des sections de calcul de la poutre "
 
-    Public Sub PrepareNodes(dEltMax As Decimal, nbMinInter As Integer, nbMinConsole As Integer)
-        '-------------------------------------------------------------------------------------------
-        '   11/08/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------
-        '   Préparation des sections de calcul de la poutre
-        '-------------------------------------------------------------------------------------------
-        '   dEltMax     [E] :   Distance maxi entre 2 noeuds
-        '   nbMinInter  [E] :   Nombre mini de noeuds par travée intermédiaire
-        '   nbMinConsole[E] :   Nombre mini de noeuds par console
-        '-------------------------------------------------------------------------------------------
+    'Public Sub PrepareNodes(dEltMax As Decimal, nbMinInter As Integer, nbMinConsole As Integer)
+    '    '-------------------------------------------------------------------------------------------
+    '    '   11/08/23 :  Création - POM
+    '    '-------------------------------------------------------------------------------------------
+    '    '   Préparation des sections de calcul de la poutre
+    '    '-------------------------------------------------------------------------------------------
+    '    '   dEltMax     [E] :   Distance maxi entre 2 noeuds
+    '    '   nbMinInter  [E] :   Nombre mini de noeuds par travée intermédiaire
+    '    '   nbMinConsole[E] :   Nombre mini de noeuds par console
+    '    '-------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim xo, DeltaX As Decimal
-        Dim nDec As Integer
-        Dim Longueur As Decimal
-        Dim lFirst As Boolean = True
-        Dim i0 As Integer = 0
-        Dim iGauche As Integer
-        Dim lConsole As Integer
-        Dim iTraveeG, iTraveeD As Integer
-        Dim nbMin As Integer
+    '    Dim xo, DeltaX As Decimal
+    '    Dim nDec As Integer
+    '    Dim Longueur As Decimal
+    '    Dim lFirst As Boolean = True
+    '    Dim i0 As Integer = 0
+    '    Dim iGauche As Integer
+    '    Dim lConsole As Integer
+    '    Dim iTraveeG, iTraveeD As Integer
+    '    Dim nbMin As Integer
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        ReDim Nodes.iNodeExtTrav(Me.IndiceDerniereTravee, 1)
+    '    ReDim Nodes.iNodeExtTrav(Me.IndiceDerniereTravee, 1)
 
-        '--> Boucle sur les travées
+    '    '--> Boucle sur les travées
 
-        iTraveeG = Me.IndicePremiereTravee
-        iTraveeD = Me.IndiceDerniereTravee
+    '    iTraveeG = Me.IndicePremiereTravee
+    '    iTraveeD = Me.IndiceDerniereTravee
 
-        For iTravee As Integer = iTraveeG To iTraveeD
+    '    For iTravee As Integer = iTraveeG To iTraveeD
 
-            lConsole = (iTravee = 0) Or ((iTravee = iTraveeD) And Me.lTraveeConsoleDroite)
+    '        lConsole = (iTravee = 0) Or ((iTravee = iTraveeD) And Me.lTraveeConsoleDroite)
 
-            xo = Me.xPositionAppui(True, iTravee)
-            Longueur = Me.LongueurTravee(iTravee)
+    '        xo = Me.xPositionAppui(True, iTravee)
+    '        Longueur = Me.LongueurTravee(iTravee)
 
-            nDec = Math.Floor(Longueur / dEltMax) + 1
+    '        nDec = Math.Floor(Longueur / dEltMax) + 1
 
-            If lConsole Then nbMin = nbMinConsole Else nbMin = nbMinInter
+    '        If lConsole Then nbMin = nbMinConsole Else nbMin = nbMinInter
 
-            nDec = Math.Max(nbMin, nDec)
+    '        nDec = Math.Max(nbMin, nDec)
 
-            ' On ne prend que des nombres pairs pour la découpe (cela garantit un point à mi portée)
-            If nDec Mod 2 = 1 Then nDec += 1
+    '        ' On ne prend que des nombres pairs pour la découpe (cela garantit un point à mi portée)
+    '        If nDec Mod 2 = 1 Then nDec += 1
 
-            DeltaX = Longueur / nDec
+    '        DeltaX = Longueur / nDec
 
-            If lFirst Then
-                Nodes.nbNodes = nDec + 1
-                ReDim Me.Nodes.xTravee(nDec)
-                ReDim Me.Nodes.xGlobal(nDec)
-                Nodes.iNodeExtTrav(iTravee, 0) = 0
-                Nodes.iNodeExtTrav(iTravee, 1) = nDec
-                iGauche = 0
-            Else
-                iGauche = Nodes.nbNodes - 1
-                Nodes.iNodeExtTrav(iTravee, 0) = Nodes.nbNodes - 1
-                Nodes.iNodeExtTrav(iTravee, 1) = Nodes.nbNodes + nDec - 1
-                Nodes.nbNodes += nDec
-                ReDim Preserve Me.Nodes.xTravee(Nodes.nbNodes - 1)
-                ReDim Preserve Me.Nodes.xGlobal(Nodes.nbNodes - 1)
-            End If
+    '        If lFirst Then
+    '            Nodes.nbNodes = nDec + 1
+    '            ReDim Me.Nodes.xTravee(nDec)
+    '            ReDim Me.Nodes.xGlobal(nDec)
+    '            Nodes.iNodeExtTrav(iTravee, 0) = 0
+    '            Nodes.iNodeExtTrav(iTravee, 1) = nDec
+    '            iGauche = 0
+    '        Else
+    '            iGauche = Nodes.nbNodes - 1
+    '            Nodes.iNodeExtTrav(iTravee, 0) = Nodes.nbNodes - 1
+    '            Nodes.iNodeExtTrav(iTravee, 1) = Nodes.nbNodes + nDec - 1
+    '            Nodes.nbNodes += nDec
+    '            ReDim Preserve Me.Nodes.xTravee(Nodes.nbNodes - 1)
+    '            ReDim Preserve Me.Nodes.xGlobal(Nodes.nbNodes - 1)
+    '        End If
 
-            For i As Integer = i0 To nDec
-                Me.Nodes.xTravee(iGauche + i) = DeltaX * i
-                Me.Nodes.xGlobal(iGauche + i) = xo + DeltaX * i
-            Next
+    '        For i As Integer = i0 To nDec
+    '            Me.Nodes.xTravee(iGauche + i) = DeltaX * i
+    '            Me.Nodes.xGlobal(iGauche + i) = xo + DeltaX * i
+    '        Next
 
-            lFirst = False
-            i0 = 1
-        Next
+    '        lFirst = False
+    '        i0 = 1
+    '    Next
 
-    End Sub
+    'End Sub
 
-    Public Sub PrepareNodeN()
+    Public Sub PrepareNodesN()
         '-------------------------------------------------------------------------------------------
         '   03/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------

@@ -148,6 +148,9 @@ Public Class Frm_PPModePropre
             Me.Rtxt_Error.Visible = True
             Me.Rtxt_Error.Text = MyPoutre.Modal.ErrorMsg
         End If
+
+        Me.img_ModePropre.Invalidate()
+
     End Sub
 
 
@@ -225,9 +228,13 @@ Public Class Frm_PPModePropre
         Dim MyPenSelect As New Pen(ColorSelect, 2)
         Dim MyPen As Pen
 
+        Dim dMax As Decimal
+
         '--> Initialisation
 
         If lBuild Then Exit Sub
+
+        Me.EnveloppeTableau(MyPoutre.Modal.Deformee, MyPoutre.Nodes.nbNodes, dmax, iNodeMax)
 
 
         Dim MyBrushN As New SolidBrush(Color.White)
@@ -276,34 +283,60 @@ Public Class Frm_PPModePropre
 
         '--> Déformée
 
-        Dim fMin, fMax As Decimal
-        Dim Uz As Decimal
-        Dim xo, xe, yo, ye As Decimal
+        Dim xo, xe, yo, ye, uZ As Decimal
+        Dim Deformee() As Decimal = MyPoutre.Modal.Deformee
 
-
-        'If ((Not IsEqual(fMinG, 0)) Or (Not (IsEqual(fMinG, 0)))) And lResult And lDef Then
-
-        '    ' kEch = EcartZ / (2 * Math.Max(Math.Abs(fMinG), fMaxG))
-        '    kEch = CoefEchelleDessin(fMaxG, fMinG, tab_fMax(iCas), tab_fMin(iCas), EcartZ / 2, 10 ^ -9)
-
-        '    For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
-        '        xo = MyPoutre.Nodes.xGlobal(iNode)
-        '        xe = MyPoutre.Nodes.xGlobal(iNode + 1)
-        '        yo = MyPoutre.ChargesA(iCas).UZ(iNode) * kEch
-        '        ye = MyPoutre.ChargesA(iCas).UZ(iNode + 1) * kEch
-        '        AddLigne(myGr, MyPenDef, xo, yo, xe, ye, MyParAff)
-        '    Next
-
-        '    For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
-        '        Uz = MyPoutre.ChargesA(iCas).UZ(iNode)
-        '        AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), kEch * Uz, DiaNode, MyParAff, True, MyPenDef)
-        '    Next
-
-        'End If
+        If (Not IsEqual(dMax, 0)) And (MyPoutre.Modal.ErrorCode = 0) Then
+            kEch = EcartZ / 2 / dMax
+            For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
+                xo = MyPoutre.Nodes.xGlobal(iNode)
+                xe = MyPoutre.Nodes.xGlobal(iNode + 1)
+                yo = Deformee(iNode) * kEch
+                ye = Deformee(iNode + 1) * kEch
+                AddLigne(myGr, MyPenDef, xo, yo, xe, ye, MyParAff)
+            Next
+            For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
+                If iNode = iNodeMax Then
+                    MyPen = MyPenSelect
+                Else
+                    MyPen = MyPenDef
+                End If
+                uZ = Deformee(iNode)
+                AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), kEch * uZ, DiaNode, MyParAff, True, MyPen)
+            Next
+        End If
 
 
     End Sub
 
+
+    Private Sub EnveloppeTableau(Table() As Decimal, NbNodes As Integer, ByRef TableMax As Decimal, ByRef iNodeMax As Integer)
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   03/11/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   Renvoie la valeur max d'un tableau
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   Table       [E] :   Tableau à tester
+        '   NbNodes     [E] :   Dimension du tableau
+        '   TableMax    [S] :   Valeur maxi du tableau
+        '   iNodeMax    [S] :   Indice du tableau pour lequel valeur max
+        '-----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Initialisation
+
+        iNodeMax = 0
+        TableMax = Math.Abs(Table(0))
+
+        '--> Boucle
+
+        For i As Integer = 1 To NbNodes - 1
+            If IsGreater(Math.Abs(Table(i)), TableMax) Then
+                TableMax = Math.Abs(Table(i))
+                iNodeMax = i
+            End If
+        Next
+
+    End Sub
 
 #End Region
 

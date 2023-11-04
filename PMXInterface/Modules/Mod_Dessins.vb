@@ -4265,9 +4265,9 @@ Module Mod_Dessins
         Else
             LongueurConsoleDroite = 0
         End If
-        HauteurPoutre = LongueurTravee / 70
+        HauteurPoutre = MyPoutre.Section.ProfilA.ha + MyPoutre.Dalle.zTop 'LongueurTravee / 70
         dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
-        dCarApp = LongueurTravee / 30
+        dCarApp = Math.Min(HauteurPoutre, LongueurTravee / 30)
 
         '--> Initialisation des paramètres d'affichage
 
