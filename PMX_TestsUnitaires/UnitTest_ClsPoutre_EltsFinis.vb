@@ -123,6 +123,114 @@ Imports PMXMoteur2
     End Sub
 
 
+    <TestMethod()> Public Sub TU_Poutre2AppuisAcierChargeConcentree()
+        '---------------------------------------------------------------------------------------
+        '   04/11/23 :  Création - POM 
+        '---------------------------------------------------------------------------------------
+        '   Test unitaire pour une poutre acier simple, analyse EF
+        '---------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lOk As Boolean
+        Dim pPoutre As New cls_Poutre(NomCharges)
+        Const pForce As Decimal = 10000
+
+        Dim Longueur As Decimal = 8
+        Dim Aire, zANE, InertieY, MelRd As Decimal
+        Dim ValRef As Decimal
+        Dim MomMax, VMax, fMax, Rz As Decimal
+        Const kConvMPaPa As Decimal = 10 ^ 6
+
+        '--> Définition des caractéristiques de la poutre test
+
+        With pPoutre
+
+            .lTraveeConsoleGauche = False
+            .lTraveeConsoleDroite = False
+
+            .EntraxeD1 = 3
+            .lTremieGauche = False
+
+
+            .EntraxeD2 = 2
+            .lTremieDroite = False
+
+            .LongueurTravee(1) = Longueur
+
+            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.Acier
+
+        End With
+
+        '--> Définition des caractéristiques de la section
+
+        '# IPE 300
+
+        GenereProfileIPE300(pPoutre.Section.ProfilA)
+
+        '--> Définition d'une chargement Q, charge uniformément répartie
+
+        GenereChargeConcentree(1, 0, Longueur / 2, pForce, pPoutre.ChargesU("G1"))
+
+        '--> Génération des noeuds de calcul
+
+        pPoutre.PrepareNodesN()
+
+        '--> Préparation du modèle EF
+
+        '# Maillage
+
+        pPoutre.Analyse = New cls_AnalyseEFinis(pPoutre.Section.Acier.EYoung, pPoutre.Param.GraviteG, pPoutre.Nodes)
+
+        '# Appuis
+
+        pPoutre.Analyse.Appuis(pPoutre.Nodes, False)
+
+        '# Propriétés des éléments
+
+        pPoutre.Section.ProfilA.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        Aire = pPoutre.Section.ProfilA.Aire
+
+        pPoutre.Analyse.AttribuerProprietesConstantes(InertieY, Aire)
+
+        '# Chargements
+
+        pPoutre.Analyse.TransfertChargementU(pPoutre.ChargesU("G1"), 1, 1, pPoutre.LongueurTravee, pPoutre.LargeurInfluence)
+
+        '--> Calcul EF
+
+        pPoutre.Analyse.RunRDM(lOk)
+
+        '========= TESTS SUR LES RESULTATS DES CALCULS EF ==============================
+
+        '# Moment de flexion maxi
+
+        MomMax = pPoutre.Analyse.MomentMax
+        ValRef = pForce * Longueur / 4
+
+        Assert.IsTrue(IsEqual(MomMax, ValRef))
+
+        '# Effort tranchant maxi
+
+        VMax = pPoutre.Analyse.TranchantMax
+        ValRef = pForce / 2
+        Assert.IsTrue(IsEqual(VMax, ValRef))
+
+        '# Flèche maxi
+
+        fMax = pPoutre.Analyse.FlecheMaxAbs
+        ValRef = pForce * Longueur ^ 3 / (48 * pPoutre.Section.Acier.EYoung * InertieY * kConvMPaPa)
+
+        Assert.IsTrue(IsEqual(fMax, ValRef))
+
+        '# Réactions
+
+        Rz = pPoutre.Analyse.Reaction(0)
+        ValRef = pForce / 2
+        Assert.IsTrue(IsEqual(Rz, ValRef))
+
+    End Sub
+
     <TestMethod()> Public Sub TU_Poutre2AppuisAcierChargeSurfacique()
         '---------------------------------------------------------------------------------------
         '   04/11/23 :  Création - POM 
@@ -233,6 +341,10 @@ Imports PMXMoteur2
 
 #End Region
 
+#Region " TU pour les poutres mixtes "
 
+
+
+#End Region
 
 End Class

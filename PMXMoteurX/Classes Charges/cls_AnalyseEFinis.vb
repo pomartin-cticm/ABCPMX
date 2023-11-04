@@ -43,6 +43,24 @@ Public Class cls_AnalyseEFinis
         End Get
     End Property
 
+    Public ReadOnly Property Tranchants As Decimal(,)
+        Get
+            Return Me.pResults_RDM.VZ
+        End Get
+    End Property
+
+    Public ReadOnly Property Fleches As Decimal()
+        Get
+            Return Me.pResults_RDM.UZ
+        End Get
+    End Property
+
+    Public ReadOnly Property Rotations As Decimal()
+        Get
+            Return Me.pResults_RDM.ROTY
+        End Get
+    End Property
+
     Public ReadOnly Property MomentMax As Decimal
         Get
             Dim MomMax As Decimal = pResults_RDM.MYY(0, 1)
@@ -101,9 +119,97 @@ Public Class cls_AnalyseEFinis
         Return pResults_RDM.RZ(iAppui)
     End Function
 
+    Public ReadOnly Property Reactions As Decimal()
+        Get
+            Return Me.pResults_RDM.RZ
+        End Get
+    End Property
+
 #End Region
 
 #Region " Chargements "
+
+    Public Sub TransfertChargementA(MyChargA As cls_CasDeCharge, iTravP As Integer, iTravD As Integer, LongueurT() As Decimal, LargeurD As Decimal)
+        '---------------------------------------------------------------------------------------------
+        '   04/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Transfert d'un chargement utilisateur vers le modèle EF
+        '---------------------------------------------------------------------------------------------
+        '   MyChargA    [E] :   Chargement interne pour analyse
+        '   iTravP      [E] :   Indice première travée
+        '   iTravD      [E] :   Indice dernière travée
+        '   LongueurT   [E] :   Table des longueur de travées
+        '   LargeurD    [E] :   Largeur sur laquelle s'appliquent les charges surfaciques
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iForce, iTrav, iMom As Integer
+        Dim NbForceRep As Integer = 0
+        Dim iCompteur As Integer = -1
+        Dim xo, xe, qo, qe As Decimal
+        Dim Cumul As Decimal = 0
+
+        '--> Initialisations
+
+        pDonneesEF.NbForcesPon = 0
+        pDonneesEF.NbForcesRep = 0
+
+        NbForceRep = MyChargA.NombreFRep(iTravP, iTravD) + MyChargA.NombreChargesSurf(iTravP, iTravD)
+
+        pDonneesEF.NbForcesRep = NbForceRep
+        If NbForceRep > 0 Then
+            ReDim pDonneesEF.ForceRep(NbForceRep - 1, 1)
+            ReDim pDonneesEF.xForceRep(NbForceRep - 1, 1)
+        End If
+
+        '--> Transfert 
+
+        For iTrav = iTravP To iTravD
+            '# Transfert des charges ponctuelles
+
+            For iForce = 0 To MyChargA.Forces(iTrav).Count - 1
+
+                AjouteForce(MyChargA.Forces(iTrav)(iForce).xPosG, MyChargA.Forces(iTrav)(iForce).Force)
+
+            Next
+
+            '# Moments
+
+            For iMom = 0 To MyChargA.Moments(iTrav).Count - 1
+                AjouteMoment(MyChargA.Moments(iTrav)(iMom).xPosG, MyChargA.Moments(iTrav)(iMom).Moment)
+            Next
+
+            '# Transfert des charges réparties
+
+            For iForce = 0 To MyChargA.FReparties(iTrav).Count - 1
+
+                xo = MyChargA.FReparties(iTrav)(iForce).xPosG(0)
+                xe = MyChargA.FReparties(iTrav)(iForce).xPosG(1)
+                qo = MyChargA.FReparties(iTrav)(iForce).Force(0)
+                qe = MyChargA.FReparties(iTrav)(iForce).Force(1)
+
+                AjouteForceRep(xo, xe, qo, qe, iCompteur)
+
+            Next
+
+            '# Charges surfaciques
+
+            If Not IsEqual(MyChargA.QSurf(iTrav), 0) Then
+
+                xo = Cumul
+                xe = xo + LongueurT(iTrav)
+                qo = MyChargA.QSurf(iTrav) * LargeurD
+                qe = qo
+
+                AjouteForceRep(xo, xe, qo, qe, iCompteur)
+
+            End If
+
+            Cumul += LongueurT(iTrav)
+
+        Next
+    End Sub
 
     Public Sub TransfertChargementU(MyChargU As cls_ChargementUtilisateur, iTravP As Integer, iTravD As Integer, LongueurT() As Decimal, LargeurD As Decimal)
         '---------------------------------------------------------------------------------------------
@@ -180,10 +286,32 @@ Public Class cls_AnalyseEFinis
 
         Next
 
-
-
     End Sub
 
+    Private Sub AjouteMoment(xMom As Decimal, Moment As Decimal)
+        '-------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Ajout d'un moment dans les paramètres préparatoires au calcul EF
+        '-------------------------------------------------------------------------------------
+        '   xMom        [E] :   Position du moment
+        '   Moment      [E] :   Valeur du moment
+        '   pDonneesEF  [S] :   Donnes pour le calcul EF
+        '-------------------------------------------------------------------------------------
+
+        pDonneesEF.NbMoments += 1
+        If pDonneesEF.NbMoments = 1 Then
+            ReDim pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
+            ReDim pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
+        Else
+            ReDim Preserve pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
+            ReDim Preserve pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
+        End If
+
+        pDonneesEF.Moment(pDonneesEF.NbMoments - 1) = Moment
+        pDonneesEF.xMoment(pDonneesEF.NbMoments - 1) = xMom
+
+    End Sub
 
     Private Sub AjouteForceRep(xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pComptRep As Integer)
         '-------------------------------------------------------------------------------------
@@ -235,7 +363,6 @@ Public Class cls_AnalyseEFinis
 
 
 #End Region
-
 
 #Region " Initialisation du modèle "
 
@@ -384,6 +511,25 @@ Public Class cls_AnalyseEFinis
 
     End Sub
 
+    Public Sub AttribueProprietesElements(Aire() As Decimal, InertieY() As Decimal)
+        '-------------------------------------------------------------------------------------
+        '   04/11/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Attribue des propriétés d'éléments variables le long de la barre
+        '-------------------------------------------------------------------------------------
+        '   InertieY    [E] :   Table des inertieq des éléments
+        '   Aire        [E] :   Table des aires des éléments
+        '-------------------------------------------------------------------------------------
+
+        '--> Transfert des propriétés de section
+
+        For i As Integer = 0 To pDonneesEF.NbNodes - 2
+            pDonneesEF.Aire(i) = Aire(i)
+            pDonneesEF.InertieY(i) = InertieY(i)
+        Next
+
+
+    End Sub
 
 
 

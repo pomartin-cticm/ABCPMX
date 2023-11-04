@@ -2899,9 +2899,9 @@ Public Class cls_Poutre
 
 #Region " Analyse "
 
-    Public Sub AAA_CalculMNVInternes(Optional lSigma As Boolean = False)
+    Public Sub AAA_CalculMNVInternesN(Optional lSigma As Boolean = False)
         '-------------------------------------------------------------------------------------
-        '   21/08/23 :  Création - Version 1.00 - POM
+        '   04/11/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
         '   Analyse globale pour tous les cas de charges
         '-------------------------------------------------------------------------------------
@@ -2912,76 +2912,157 @@ Public Class cls_Poutre
 
         '--> Déclarations
 
-        Dim jCdc As Integer
-        Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
-        Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
-        Dim CodeError_RDM As Integer
-        Dim TextError_RDM As String = String.Empty
-        Dim DonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
         Dim iTravP, iTravD As Integer
+        Dim jCdc As Integer
         Dim lPrem As Boolean = True
-        Dim lAppuisEtais As Boolean = False
-        Dim lAppuisEtaisPrec As Boolean = False
-        Dim lAppuisOK As Boolean
+        Dim lAppuisOK As Boolean = False
+        Dim lOK As Boolean
+        Dim IndEltPrec As Integer = -1
+        Dim lAppuisEtais As Boolean
+        Dim lAppuisEtaisPrec As Boolean
 
         '--> Initialisation
 
         iTravP = Me.IndicePremiereTravee
         iTravD = Me.IndiceDerniereTravee
 
-        'If lSigma Then
-        '    Me.PtsSigma.Initialise(Me)
-        'End If
-
         '--> Préparation du modele EF
 
-        Me.PrepareModeleEF(DonneesEF, lAppuisOK)
+        Me.Analyse = New cls_AnalyseEFinis(Me.Section.Acier.EYoung, Me.Param.GraviteG, Me.Nodes)
 
         '--> Boucle sur les cas de charge
 
         For jCdc = 0 To Me.ChargesA.Count - 1
             If Me.ChargesA(jCdc).EstNonNul(iTravP, iTravD) Then
 
-                '# Préparation du chargement
-                PrepareDonneesEFChargement(jCdc, iTravP, iTravD, DonneesEF)
+                '# Préparation des propriétés des éléments
+                If (IndEltPrec <> Me.ChargesA(jCdc).IndElts) Then
+                    Me.Analyse.AttribueProprietesElements(Me.Elements(Me.ChargesA(jCdc).IndElts).Aire, Me.Elements(Me.ChargesA(jCdc).IndElts).InertieY)
+                    IndEltPrec = Me.ChargesA(jCdc).IndElts
+                End If
+
+                '# Transfert du chargement
+                Me.Analyse.TransfertChargementA(Me.ChargesA(jCdc), iTravP, iTravD, Me.LongueurTravee, Me.LargeurInfluence)
 
                 '# Préparation des appuis (dans le cas des étais ponctuels)
-                If Not lAppuisOK Then
-                    If lPrem Then
-                        lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
-                        PrepareAppuisModeleEF(lAppuisEtais, DonneesEF)
+                lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
+
+                If lPrem Then
+                    Me.Analyse.Appuis(Me.Nodes, lAppuisEtais)
+                    lAppuisEtaisPrec = lAppuisEtais
+                    lPrem = False
+                Else
+                    If Not (lAppuisEtaisPrec = lAppuisEtais) Then
+                        Me.Analyse.Appuis(Me.Nodes, lAppuisEtais)
                         lAppuisEtaisPrec = lAppuisEtais
-                        lPrem = False
-                    Else
-                        lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
-                        If Not (lAppuisEtaisPrec = lAppuisEtais) Then
-                            PrepareAppuisModeleEF(lAppuisEtais, DonneesEF)
-                            lAppuisEtaisPrec = lAppuisEtais
-                        End If
                     End If
                 End If
 
                 '=== LANCER LE CALCUL ===
-                Call MyDLLRDM.CALCULER(DonneesEF, MyOutput_RDM, CodeError_RDM, TextError_RDM)
+                Me.Analyse.RunRDM(lOK)
 
+                '== Récupération des résultats
                 '# Récupération des réactions aux étais pour préparer le cas de charge G1C
                 If (Me.ChargesA(jCdc).Symbol = symbG1PP) Then
-                    Me.InitialiseChargeEtais(Me.ChargesA(Me.IndiceCasG1C), MyOutput_RDM.RZ)
+                    Me.InitialiseChargeEtais(Me.ChargesA(Me.IndiceCasG1C), Me.Analyse.Reactions)
                 End If
 
-                If CodeError_RDM = 0 Then
-                    Me.ChargesA(jCdc).RecupereResultats(MyOutput_RDM, DonneesEF.NbNodes)
-                    'If lSigma Then
-                    '    Me.PtsSigma.CalculsContraintes(Me, Me.ChargesA(jCdc), Me.ChargesA(jCdc).Sigma)
-                    'End If
+                If lOK Then
+                    Me.ChargesA(jCdc).RecupereResultats(Me.Analyse.Tranchants, Me.Analyse.Moments, Me.Analyse.Fleches, Me.Analyse.Rotations, Me.Analyse.Reactions)
+
                 Else
-                    MsgBox("Error calculation of " & Me.ChargesA(jCdc).Nom, MsgBoxStyle.Critical, "cls_Poutre/CalculMNVInternes")
+                    MsgBox("Error calculation of " & Me.ChargesA(jCdc).Nom, MsgBoxStyle.Critical, "cls_Poutre/AAA_CalculMNVInternesN")
                 End If
+
 
             End If
         Next
 
     End Sub
+
+    'Public Sub AAA_CalculMNVInternes(Optional lSigma As Boolean = False)
+    '    '-------------------------------------------------------------------------------------
+    '    '   21/08/23 :  Création - Version 1.00 - POM
+    '    '-------------------------------------------------------------------------------------
+    '    '   Analyse globale pour tous les cas de charges
+    '    '-------------------------------------------------------------------------------------
+    '    '   Avant de lancer ce calcul, il est nécessaire d'avoir effectuer InitialiseCalculs
+    '    '-------------------------------------------------------------------------------------
+    '    '   lSigma      [E] :   Indique si on calcule aussi les contraintes
+    '    '-------------------------------------------------------------------------------------
+
+    '    '--> Déclarations
+
+    '    Dim jCdc As Integer
+    '    Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
+    '    Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
+    '    Dim CodeError_RDM As Integer
+    '    Dim TextError_RDM As String = String.Empty
+    '    Dim DonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+    '    Dim iTravP, iTravD As Integer
+    '    Dim lPrem As Boolean = True
+    '    Dim lAppuisEtais As Boolean = False
+    '    Dim lAppuisEtaisPrec As Boolean = False
+    '    Dim lAppuisOK As Boolean
+
+    '    '--> Initialisation
+
+    '    iTravP = Me.IndicePremiereTravee
+    '    iTravD = Me.IndiceDerniereTravee
+
+    '    'If lSigma Then
+    '    '    Me.PtsSigma.Initialise(Me)
+    '    'End If
+
+    '    '--> Préparation du modele EF
+
+    '    Me.PrepareModeleEF(DonneesEF, lAppuisOK)
+
+    '    '--> Boucle sur les cas de charge
+
+    '    For jCdc = 0 To Me.ChargesA.Count - 1
+    '        If Me.ChargesA(jCdc).EstNonNul(iTravP, iTravD) Then
+
+    '            '# Préparation du chargement
+    '            PrepareDonneesEFChargement(jCdc, iTravP, iTravD, DonneesEF)
+
+    '            '# Préparation des appuis (dans le cas des étais ponctuels)
+    '            If Not lAppuisOK Then
+    '                If lPrem Then
+    '                    lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
+    '                    PrepareAppuisModeleEF(lAppuisEtais, DonneesEF)
+    '                    lAppuisEtaisPrec = lAppuisEtais
+    '                    lPrem = False
+    '                Else
+    '                    lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
+    '                    If Not (lAppuisEtaisPrec = lAppuisEtais) Then
+    '                        PrepareAppuisModeleEF(lAppuisEtais, DonneesEF)
+    '                        lAppuisEtaisPrec = lAppuisEtais
+    '                    End If
+    '                End If
+    '            End If
+
+    '            '=== LANCER LE CALCUL ===
+    '            Call MyDLLRDM.CALCULER(DonneesEF, MyOutput_RDM, CodeError_RDM, TextError_RDM)
+
+    '            '# Récupération des réactions aux étais pour préparer le cas de charge G1C
+    '            If (Me.ChargesA(jCdc).Symbol = symbG1PP) Then
+    '                Me.InitialiseChargeEtais(Me.ChargesA(Me.IndiceCasG1C), MyOutput_RDM.RZ)
+    '            End If
+
+    '            If CodeError_RDM = 0 Then
+    '                Me.ChargesA(jCdc).RecupereResultats(MyOutput_RDM, DonneesEF.NbNodes)
+    '                'If lSigma Then
+    '                '    Me.PtsSigma.CalculsContraintes(Me, Me.ChargesA(jCdc), Me.ChargesA(jCdc).Sigma)
+    '                'End If
+    '            Else
+    '                MsgBox("Error calculation of " & Me.ChargesA(jCdc).Nom, MsgBoxStyle.Critical, "cls_Poutre/CalculMNVInternes")
+    '            End If
+
+    '        End If
+    '    Next
+
+    'End Sub
 
     Public Sub InitialiseCalculs(NomChargesA() As String)
         '-------------------------------------------------------------------------------------
@@ -3138,162 +3219,162 @@ Public Class cls_Poutre
         End If
     End Sub
 
-    Private Sub PrepareDonneesEFChargement(iCas As Integer, iTravP As Integer, iTravD As Integer, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
-        '-------------------------------------------------------------------------------------
-        '   07/09/23 :  Création - Version 1.00 - POM
-        '-------------------------------------------------------------------------------------
-        '   Préparation du modele EF dépendant du cas de charge (propriétés elements et charges)
-        '-------------------------------------------------------------------------------------
-        '   iCas        [E] :   Indice du cas de charge
-        '   pDonneesEF  [S] :   Donnes pour le calcul EF
-        '   iTravP      [E] :   Indice première travée
-        '   iTravD      [E] :   Indice dernière travée
-        '-------------------------------------------------------------------------------------
+    'Private Sub PrepareDonneesEFChargement(iCas As Integer, iTravP As Integer, iTravD As Integer, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    '    '-------------------------------------------------------------------------------------
+    '    '   07/09/23 :  Création - Version 1.00 - POM
+    '    '-------------------------------------------------------------------------------------
+    '    '   Préparation du modele EF dépendant du cas de charge (propriétés elements et charges)
+    '    '-------------------------------------------------------------------------------------
+    '    '   iCas        [E] :   Indice du cas de charge
+    '    '   pDonneesEF  [S] :   Donnes pour le calcul EF
+    '    '   iTravP      [E] :   Indice première travée
+    '    '   iTravD      [E] :   Indice dernière travée
+    '    '-------------------------------------------------------------------------------------
 
-        '--> Déclarations
+    '    '--> Déclarations
 
-        Dim iTrav As Integer
-        Dim NbfRep, NbQSurf As Integer
-        Dim Compteur As Integer = -1
-        Dim xo, xe As Decimal
-        Dim qsurfD As Decimal
+    '    Dim iTrav As Integer
+    '    Dim NbfRep, NbQSurf As Integer
+    '    Dim Compteur As Integer = -1
+    '    Dim xo, xe As Decimal
+    '    Dim qsurfD As Decimal
 
-        '--> Transfert des propriétés de section
+    '    '--> Transfert des propriétés de section
 
-        For i As Integer = 0 To pDonneesEF.NbNodes - 2
-            pDonneesEF.Aire(i) = Me.Elements(Me.ChargesA(iCas).IndElts).Aire(i)
-            pDonneesEF.InertieY(i) = Me.Elements(Me.ChargesA(iCas).IndElts).InertieY(i)
-        Next
+    '    For i As Integer = 0 To pDonneesEF.NbNodes - 2
+    '        pDonneesEF.Aire(i) = Me.Elements(Me.ChargesA(iCas).IndElts).Aire(i)
+    '        pDonneesEF.InertieY(i) = Me.Elements(Me.ChargesA(iCas).IndElts).InertieY(i)
+    '    Next
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        NbQSurf = 0
-        For iTrav = iTravP To iTravD
-            If Not IsEqual(Me.ChargesA(iCas).QSurf(iTrav), 0) Then NbQSurf += 1
-        Next
-        NbfRep = Me.ChargesA(iCas).NombreFRep(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
-        pDonneesEF.NbForcesRep = NbfRep + NbQSurf
+    '    NbQSurf = 0
+    '    For iTrav = iTravP To iTravD
+    '        If Not IsEqual(Me.ChargesA(iCas).QSurf(iTrav), 0) Then NbQSurf += 1
+    '    Next
+    '    NbfRep = Me.ChargesA(iCas).NombreFRep(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
+    '    pDonneesEF.NbForcesRep = NbfRep + NbQSurf
 
-        If pDonneesEF.NbForcesRep > 0 Then
-            ReDim pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
-            ReDim pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
-        End If
+    '    If pDonneesEF.NbForcesRep > 0 Then
+    '        ReDim pDonneesEF.xForceRep(pDonneesEF.NbForcesRep - 1, 1)
+    '        ReDim pDonneesEF.ForceRep(pDonneesEF.NbForcesRep - 1, 1)
+    '    End If
 
-        pDonneesEF.NbForcesPon = 0
-        pDonneesEF.NbMoments = 0
+    '    pDonneesEF.NbForcesPon = 0
+    '    pDonneesEF.NbMoments = 0
 
-        '--> Transfert des charges
+    '    '--> Transfert des charges
 
-        For iTrav = iTravP To iTravD
+    '    For iTrav = iTravP To iTravD
 
-            '# Charges surfaciques
+    '        '# Charges surfaciques
 
-            qsurfD = Me.ChargesA(iCas).QSurf(iTrav)
-            If Not IsEqual(qsurfD, 0) Then
-                xo = Me.xPositionAppui(True, iTrav)
-                xe = Me.xPositionAppui(False, iTrav)
-                Compteur += 1
-                'AjouteForceRep(Compteur, xo, xe, qsurfD, qsurfD, pDonneesEF)
-            End If
+    '        qsurfD = Me.ChargesA(iCas).QSurf(iTrav)
+    '        If Not IsEqual(qsurfD, 0) Then
+    '            xo = Me.xPositionAppui(True, iTrav)
+    '            xe = Me.xPositionAppui(False, iTrav)
+    '            Compteur += 1
+    '            'AjouteForceRep(Compteur, xo, xe, qsurfD, qsurfD, pDonneesEF)
+    '        End If
 
-            '# Forces
+    '        '# Forces
 
-            For iFor As Integer = 0 To Me.ChargesA(iCas).Forces(iTrav).Count - 1
-                AjouteForce(Me.ChargesA(iCas).Forces(iTrav)(iFor).xPosG, Me.ChargesA(iCas).Forces(iTrav)(iFor).Force, pDonneesEF)
-            Next
+    '        For iFor As Integer = 0 To Me.ChargesA(iCas).Forces(iTrav).Count - 1
+    '            AjouteForce(Me.ChargesA(iCas).Forces(iTrav)(iFor).xPosG, Me.ChargesA(iCas).Forces(iTrav)(iFor).Force, pDonneesEF)
+    '        Next
 
-            '# Moments
+    '        '# Moments
 
-            For iMom As Integer = 0 To Me.ChargesA(iCas).Moments(iTrav).Count - 1
-                AjouteMoment(Me.ChargesA(iCas).Moments(iTrav)(iMom).xPosG, Me.ChargesA(iCas).Moments(iTrav)(iMom).Moment, pDonneesEF)
-            Next
+    '        For iMom As Integer = 0 To Me.ChargesA(iCas).Moments(iTrav).Count - 1
+    '            AjouteMoment(Me.ChargesA(iCas).Moments(iTrav)(iMom).xPosG, Me.ChargesA(iCas).Moments(iTrav)(iMom).Moment, pDonneesEF)
+    '        Next
 
-            '# Charges réparties
+    '        '# Charges réparties
 
-            If NbfRep > 0 Then
+    '        If NbfRep > 0 Then
 
-                For iQqq As Integer = 0 To Me.ChargesA(iCas).FReparties(iTrav).Count - 1
-                    Compteur += 1
-                    AjouteForceRep(Compteur, Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(1),
-                                             Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(1), pDonneesEF)
-                Next
+    '            For iQqq As Integer = 0 To Me.ChargesA(iCas).FReparties(iTrav).Count - 1
+    '                Compteur += 1
+    '                AjouteForceRep(Compteur, Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).xPosG(1),
+    '                                         Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(0), Me.ChargesA(iCas).FReparties(iTrav)(iQqq).Force(1), pDonneesEF)
+    '            Next
 
-            End If
+    '        End If
 
-        Next
+    '    Next
 
-    End Sub
+    'End Sub
 
-    Private Sub AjouteForceRep(IndFrep As Integer, xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
-        '-------------------------------------------------------------------------------------
-        '   09/09/23 :  Création - Version 1.00 - POM
-        '-------------------------------------------------------------------------------------
-        '   Ajout d'une force répartie dans les paramètres préparatoires au calcul EF
-        '-------------------------------------------------------------------------------------
-        '   xo          [E] :   Position gauche de la force répartie
-        '   xe          [E] :   Position droite de la force répartie
-        '   qo          [E] :   Valeur à gauche de la force répartie
-        '   qe          [E] :   Valeur à droite de la force répartie
-        '   pDonneesEF  [S] :   Donnes pour le calcul EF
-        '-------------------------------------------------------------------------------------
+    'Private Sub AjouteForceRep(IndFrep As Integer, xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    '    '-------------------------------------------------------------------------------------
+    '    '   09/09/23 :  Création - Version 1.00 - POM
+    '    '-------------------------------------------------------------------------------------
+    '    '   Ajout d'une force répartie dans les paramètres préparatoires au calcul EF
+    '    '-------------------------------------------------------------------------------------
+    '    '   xo          [E] :   Position gauche de la force répartie
+    '    '   xe          [E] :   Position droite de la force répartie
+    '    '   qo          [E] :   Valeur à gauche de la force répartie
+    '    '   qe          [E] :   Valeur à droite de la force répartie
+    '    '   pDonneesEF  [S] :   Donnes pour le calcul EF
+    '    '-------------------------------------------------------------------------------------
 
-        pDonneesEF.xForceRep(IndFrep, 0) = xo
-        pDonneesEF.xForceRep(IndFrep, 1) = xe
-        pDonneesEF.ForceRep(IndFrep, 0) = qo
-        pDonneesEF.ForceRep(IndFrep, 1) = qe
+    '    pDonneesEF.xForceRep(IndFrep, 0) = xo
+    '    pDonneesEF.xForceRep(IndFrep, 1) = xe
+    '    pDonneesEF.ForceRep(IndFrep, 0) = qo
+    '    pDonneesEF.ForceRep(IndFrep, 1) = qe
 
-    End Sub
+    'End Sub
 
-    Private Sub AjouteMoment(xMom As Decimal, Moment As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
-        '-------------------------------------------------------------------------------------
-        '   09/09/23 :  Création - Version 1.00 - POM
-        '-------------------------------------------------------------------------------------
-        '   Ajout d'un moment dans les paramètres préparatoires au calcul EF
-        '-------------------------------------------------------------------------------------
-        '   xMom        [E] :   Position du moment
-        '   Moment      [E] :   Valeur du moment
-        '   pDonneesEF  [S] :   Donnes pour le calcul EF
-        '-------------------------------------------------------------------------------------
+    'Private Sub AjouteMoment(xMom As Decimal, Moment As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    '    '-------------------------------------------------------------------------------------
+    '    '   09/09/23 :  Création - Version 1.00 - POM
+    '    '-------------------------------------------------------------------------------------
+    '    '   Ajout d'un moment dans les paramètres préparatoires au calcul EF
+    '    '-------------------------------------------------------------------------------------
+    '    '   xMom        [E] :   Position du moment
+    '    '   Moment      [E] :   Valeur du moment
+    '    '   pDonneesEF  [S] :   Donnes pour le calcul EF
+    '    '-------------------------------------------------------------------------------------
 
-        pDonneesEF.NbMoments += 1
-        If pDonneesEF.NbMoments = 1 Then
-            ReDim pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
-            ReDim pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
-        Else
-            ReDim Preserve pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
-            ReDim Preserve pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
-        End If
+    '    pDonneesEF.NbMoments += 1
+    '    If pDonneesEF.NbMoments = 1 Then
+    '        ReDim pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
+    '        ReDim pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
+    '    Else
+    '        ReDim Preserve pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
+    '        ReDim Preserve pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
+    '    End If
 
-        pDonneesEF.Moment(pDonneesEF.NbMoments - 1) = Moment
-        pDonneesEF.xMoment(pDonneesEF.NbMoments - 1) = xMom
+    '    pDonneesEF.Moment(pDonneesEF.NbMoments - 1) = Moment
+    '    pDonneesEF.xMoment(pDonneesEF.NbMoments - 1) = xMom
 
-    End Sub
+    'End Sub
 
 
-    Private Sub AjouteForce(xFor As Decimal, Force As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
-        '-------------------------------------------------------------------------------------
-        '   18/09/23 :  Création - Version 1.00 - POM
-        '-------------------------------------------------------------------------------------
-        '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
-        '-------------------------------------------------------------------------------------
-        '   xFor        [E] :   Position de la force
-        '   Force       [E] :   Valeur de la force
-        '   pDonneesEF  [S] :   Donnes pour le calcul EF
-        '-------------------------------------------------------------------------------------
+    'Private Sub AjouteForce(xFor As Decimal, Force As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    '    '-------------------------------------------------------------------------------------
+    '    '   18/09/23 :  Création - Version 1.00 - POM
+    '    '-------------------------------------------------------------------------------------
+    '    '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
+    '    '-------------------------------------------------------------------------------------
+    '    '   xFor        [E] :   Position de la force
+    '    '   Force       [E] :   Valeur de la force
+    '    '   pDonneesEF  [S] :   Donnes pour le calcul EF
+    '    '-------------------------------------------------------------------------------------
 
-        pDonneesEF.NbForcesPon += 1
-        If pDonneesEF.NbForcesPon = 1 Then
-            ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-            ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-        Else
-            ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-            ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-        End If
+    '    pDonneesEF.NbForcesPon += 1
+    '    If pDonneesEF.NbForcesPon = 1 Then
+    '        ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+    '        ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+    '    Else
+    '        ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+    '        ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+    '    End If
 
-        pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
-        pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xFor
+    '    pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
+    '    pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xFor
 
-    End Sub
+    'End Sub
 
 #End Region
 
@@ -3656,7 +3737,7 @@ Public Class cls_Poutre
         Dim strRacineELF As String = "ELF"
 
         Me.InitialiseCalculs(NomCharges)
-        Me.AAA_CalculMNVInternes()
+        Me.AAA_CalculMNVInternesN()
         'MyPoutre.InitialiseCombiA_ELU()
         Me.InitialiseCombiA(cls_Poutre.nbCombELU, Me.lCombELU, Me.CoefCombELU, strRacineELU, Me.CombiA_ELU)
         Me.InitialiseCombiA(cls_Poutre.nbCombELS, Me.lCombELS, Me.CoefCombELS, strRacineELS, Me.CombiA_ELS)

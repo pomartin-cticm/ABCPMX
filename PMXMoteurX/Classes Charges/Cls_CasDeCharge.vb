@@ -128,6 +128,23 @@
         Return lNonNul
     End Function
 
+    Public Sub RecupereResultats(myVz(,) As Decimal, myMy(,) As Decimal, myUz() As Decimal, myRotY() As Decimal, myRz() As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   04/11/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Stocke les résultats issus du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+
+        Me.VZ = myVz.Clone
+        Me.MYY = myMy.Clone
+        Me.ROTY = myRotY.Clone
+        Me.UZ = myUz.Clone
+        Me.RZ = myRz.Clone
+
+        Me.lRunCalcul = True
+
+    End Sub
+
     Public Sub RecupereResultats(MyResults As CTICM_RDM.DATA_RDM.Struc_Output, NbNodes As Integer)
         '-----------------------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
@@ -331,6 +348,33 @@
         Next
 
         Return Nombre
+
+    End Function
+
+    Public Function NombreChargesSurf(iTravP As Integer, iTravD As Integer) As Integer
+        '-----------------------------------------------------------------------------------------------------
+        '   04/11/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------
+        '   Renvoie le nombre de charges uniformément réparties dans le cas de charge (sur toutes les travées)
+        '-----------------------------------------------------------------------------------------------------
+        '   iTravP, iTravP [E] :    Indices de la première et de la dernière travée
+        '-----------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NbCharges As Integer = 0
+
+        '--> Boucle sur les travées
+
+        For iTrav As Integer = iTravP To iTravD
+
+            If (Not IsEqual(Me.QSurf(iTrav), 0)) Then NbCharges += 1
+
+        Next
+
+        '--> Fin
+
+        Return NbCharges
 
     End Function
 

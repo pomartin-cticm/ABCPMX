@@ -92,6 +92,27 @@ Module Mod_Outils
 
     End Sub
 
+
+    Public Sub GenereChargeConcentree(iTravee As Integer, xAppui As Decimal, xPosT As Decimal, Force As Decimal,
+                                      ByRef MyChargeU As cls_ChargementUtilisateur)
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   04/11/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   Génére une charge utilisateur avec une force concentrée
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   iTravee     [E] :   Indice de la travée
+        '   xAppui      [E] :   Position de l'appui gauche
+        '   xPosT       [E] :   Position dans la travée
+        '   Force       [E] :   Force
+        '   MyChargeU   [S] :   Charge utilisateur générée
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        MyChargeU.Forces(iTravee).Add(New cls_Force(xPosT, Force, xAppui))
+
+    End Sub
+
     Public Sub GenereChargeSurfacique(iTravP As Integer, iTravD As Integer, QSurf As Decimal,
                                       ByRef MyChargeU As cls_ChargementUtilisateur)
         '----------------------------------------------------------------------------------------------------------------------------------

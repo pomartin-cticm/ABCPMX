@@ -82,7 +82,7 @@ Imports PMXMoteur2
         '--> Calculs
 
         TU_poutre.InitialiseCalculs(NomCasA)
-        TU_poutre.AAA_CalculMNVInternes()
+        TU_poutre.AAA_CalculMNVInternesN()
         TU_poutre.InitialiseCombiA(cls_Poutre.nbCombELU, TU_poutre.lCombELU, TU_poutre.CoefCombELU, "ELU", TU_poutre.CombiA_ELU)
 
         TU_poutre.CombiA_ELU.CombineMoments(iCombi, TU_poutre.Nodes.nbNodes, TU_poutre.ChargesA, Med, lRetraitEl)

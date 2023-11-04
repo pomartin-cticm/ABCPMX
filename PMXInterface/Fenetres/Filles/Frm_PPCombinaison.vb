@@ -84,7 +84,7 @@ Public Class Frm_PPCombinaison
     Private Sub InitialiseCalcul(MyPoutre As cls_Poutre)
 
         MyPoutre.InitialiseCalculs(NomChargesA)
-        MyPoutre.AAA_CalculMNVInternes()
+        MyPoutre.AAA_CalculMNVInternesN()
         'MyPoutre.InitialiseCombiA_ELU()
         MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, MyPoutre.lCombELU, MyPoutre.CoefCombELU, strRacineELU, MyPoutre.CombiA_ELU)
         MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, MyPoutre.lCombELS, MyPoutre.CoefCombELS, strRacineELS, MyPoutre.CombiA_ELS)
