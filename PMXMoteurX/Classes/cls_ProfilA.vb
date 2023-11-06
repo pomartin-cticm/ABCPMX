@@ -8,6 +8,10 @@ Public Class cls_ProfilA
         Lamine          ' Profilé laminé
         PRS_Mono_Sym    ' Section PRS bi-symétrique
         PRS_Bi_Sym      ' Section PRS mono-symétrique
+        LamineSlimSAB   ' Section slim floor à base de profilé laminé
+        LamineSlimIFBA  ' Section slim floor à base de profilé laminé
+        LamineSlimIFBB  ' Section slim floor à base de profilé laminé
+        LamineSlimSFB   ' Section slim floor à base de profilé laminé
     End Enum
 
     ''' <summary>
@@ -126,7 +130,12 @@ Public Class cls_ProfilA
         Get
             Dim pAire As Decimal
 
-            pAire = Me.AireFi + Me.AireFs + Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2 + Me.Rcs ^ 2) / 2
+            Select Case Me.typeProfileAcier
+                Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
+                    pAire = Me.AireFi + Me.AireFs + Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2 + Me.Rcs ^ 2) / 2
+
+            End Select
+
 
             Return pAire
         End Get
@@ -155,6 +164,7 @@ Public Class cls_ProfilA
                     pInertieW = Tf * Bf ^ 3 / 24 * (ha - Tf) ^ 2
 
                 Case Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
+
             End Select
 
             '--> Fin
@@ -259,8 +269,10 @@ Public Class cls_ProfilA
                     Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2 + Me.Rci ^ 2) / 2 _
                        + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2 _
                        + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
-                Case Else
+                Case Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym
                     Av = Me.HauteurAmeHw * Me.Tw
+                Case Else
+
             End Select
             Return Av
         End Get
@@ -398,12 +410,27 @@ Public Class cls_ProfilA
 
 #Region " Propriétés plastiques en flexion "
 
+    Public Function MomentPlastiqueSlimYY(lValRd As Boolean, GammaS As cls_Gamma) As Decimal
+        '-------------------------------------------------------------------------------------------------------------------
+        '   13/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul du module plastique du profilé, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   lValRd      [E] :   Indique si valeur Rd (true) ou valeur Rk (false)
+        '   GammaS      [E] :   Coefficients partiels
+        '-------------------------------------------------------------------------------------------------------------------
+
+
+    End Function
+
+
     Public Function ModuleFlexionPlastiqueYY() As Decimal
         '-------------------------------------------------------------------------------------------------------------------
         '   13/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
         '   Calcul du module plastique du profilé, par rapport à l'axe fort
         '-------------------------------------------------------------------------------------------------------------------
+        '   A COMPLETER
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -606,6 +633,7 @@ Public Class cls_ProfilA
             MyModele.AddMailleConges(Me.Rcs, -Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
+
         If Me.Rci > 0 Then
 
             '# Congés inférieurs
