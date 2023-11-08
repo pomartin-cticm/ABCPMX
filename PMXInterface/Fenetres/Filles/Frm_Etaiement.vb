@@ -52,10 +52,13 @@ Public Class Frm_Etaiement
                 Me.lbl_NbPP.Text = Bloc("NUMBPROPPING")
                 Me.lbl_LocPP.Text = Bloc("PROPPINGLOC")
 
-                Me.cmb_LocPP.Items.Clear()
-                Me.cmb_LocPP.Items.Add(Bloc("UNDERSTEELBEAM"))
-                Me.cmb_LocPP.Items.Add(Bloc("UNDERSLAB"))
-                Me.cmb_LocPP.SelectedIndex = 0
+                'Me.cmb_LocPP.Items.Clear()
+                'Me.cmb_LocPP.Items.Add(Bloc("UNDERSTEELBEAM"))
+                'Me.cmb_LocPP.Items.Add(Bloc("UNDERSLAB"))
+                'Me.cmb_LocPP.SelectedIndex = 0
+
+                Me.rad_UnderBeam.Text = (Bloc("UNDERSTEELBEAM"))
+                Me.rad_UnderSlab.Text = (Bloc("UNDERSLAB"))
 
 
             Catch ex As Exception
@@ -98,6 +101,8 @@ Public Class Frm_Etaiement
         Next
         Me.cmb_NbPoint.SelectedIndex = 0
 
+        Me.rad_UnderBeam.Checked = True
+
     End Sub
 
     Private Sub AfficherPoutreEnCours()
@@ -130,9 +135,11 @@ Public Class Frm_Etaiement
                     Me.cmb_NbPoint.SelectedItem = .NbEtaiement
 
                     If .lEtaisSousProfileAcier Then
-                        Me.cmb_LocPP.SelectedIndex = 0
+                        'Me.cmb_LocPP.SelectedIndex = 0
+                        Me.rad_UnderBeam.Checked = True
                     Else
-                        Me.cmb_LocPP.SelectedIndex = 1
+                        'Me.cmb_LocPP.SelectedIndex = 1
+                        Me.rad_UnderSlab.Checked = True
                     End If
 
 
@@ -280,6 +287,14 @@ Public Class Frm_Etaiement
                 'Me.lbl_NbPP.Visible = True
                 'Me.cmb_NbPoint.Visible = True
 
+                If MyPoutreLoc.lEtaisSousProfileAcier Then
+                    'Me.cmb_LocPP.SelectedIndex = 0
+                    Me.rad_UnderBeam.Checked = True
+                Else
+                    'Me.cmb_LocPP.SelectedIndex = 1
+                    Me.rad_UnderSlab.Checked = True
+                End If
+
         End Select
 
         img_Etaiement.Invalidate()
@@ -301,10 +316,11 @@ Public Class Frm_Etaiement
         img_Etaiement.Invalidate()
     End Sub
 
-    Private Sub cmb_LocPP_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_LocPP.TextChanged
+    Private Sub cmb_LocPP_SelectedIndexChanged(sender As Object, e As EventArgs) Handles rad_UnderSlab.CheckedChanged, rad_UnderBeam.CheckedChanged
         If lBuild Then Exit Sub
 
-        MyPoutreLoc.lEtaisSousProfileAcier = cmb_LocPP.SelectedIndex = 0
+        'MyPoutreLoc.lEtaisSousProfileAcier = cmb_LocPP.SelectedIndex = 0
+        MyPoutreLoc.lEtaisSousProfileAcier = rad_UnderBeam.Checked
 
         img_Etaiement.Invalidate()
 

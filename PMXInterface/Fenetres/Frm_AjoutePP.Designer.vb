@@ -47,11 +47,11 @@ Partial Class Frm_AjoutePP
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.TLpan_ChoixSection = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_SFBMixte = New System.Windows.Forms.CheckBox()
-        Me.CheckBox6 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox5 = New System.Windows.Forms.CheckBox()
+        Me.chk_IFB_B_Acier = New System.Windows.Forms.CheckBox()
+        Me.chk_IFB_A_Mixte = New System.Windows.Forms.CheckBox()
         Me.chk_SABAcier = New System.Windows.Forms.CheckBox()
-        Me.CheckBox3 = New System.Windows.Forms.CheckBox()
-        Me.CheckBox2 = New System.Windows.Forms.CheckBox()
+        Me.chk_IFB_B_Mixte = New System.Windows.Forms.CheckBox()
+        Me.chk_IFB_A_Acier = New System.Windows.Forms.CheckBox()
         Me.chk_SABMixte = New System.Windows.Forms.CheckBox()
         Me.chk_SFBAcier = New System.Windows.Forms.CheckBox()
         Me.chk_SectionMixte = New System.Windows.Forms.CheckBox()
@@ -345,11 +345,11 @@ Partial Class Frm_AjoutePP
         Me.TLpan_ChoixSection.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TLpan_ChoixSection.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
         Me.TLpan_ChoixSection.Controls.Add(Me.chk_SFBMixte, 0, 2)
-        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox6, 2, 1)
-        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox5, 1, 2)
+        Me.TLpan_ChoixSection.Controls.Add(Me.chk_IFB_B_Acier, 2, 1)
+        Me.TLpan_ChoixSection.Controls.Add(Me.chk_IFB_A_Mixte, 1, 2)
         Me.TLpan_ChoixSection.Controls.Add(Me.chk_SABAcier, 3, 1)
-        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox3, 2, 2)
-        Me.TLpan_ChoixSection.Controls.Add(Me.CheckBox2, 1, 1)
+        Me.TLpan_ChoixSection.Controls.Add(Me.chk_IFB_B_Mixte, 2, 2)
+        Me.TLpan_ChoixSection.Controls.Add(Me.chk_IFB_A_Acier, 1, 1)
         Me.TLpan_ChoixSection.Controls.Add(Me.chk_SABMixte, 3, 2)
         Me.TLpan_ChoixSection.Controls.Add(Me.chk_SFBAcier, 0, 1)
         Me.TLpan_ChoixSection.Controls.Add(Me.chk_SectionMixte, 2, 0)
@@ -381,39 +381,33 @@ Partial Class Frm_AjoutePP
         Me.chk_SFBMixte.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.chk_SFBMixte.UseVisualStyleBackColor = True
         '
-        'CheckBox6
+        'chk_IFB_B_Acier
         '
-        Me.CheckBox6.Appearance = System.Windows.Forms.Appearance.Button
-        Me.CheckBox6.AutoSize = True
-        Me.CheckBox6.Checked = True
-        Me.CheckBox6.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBox6.Location = New System.Drawing.Point(343, 108)
-        Me.CheckBox6.Margin = New System.Windows.Forms.Padding(1)
-        Me.CheckBox6.Name = "CheckBox6"
-        Me.CheckBox6.Size = New System.Drawing.Size(169, 105)
-        Me.CheckBox6.TabIndex = 10
-        Me.CheckBox6.Text = "CheckBox6"
-        Me.CheckBox6.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.CheckBox6.UseVisualStyleBackColor = True
-        Me.CheckBox6.Visible = False
+        Me.chk_IFB_B_Acier.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_IFB_B_Acier.AutoSize = True
+        Me.chk_IFB_B_Acier.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_IFB_B_Acier.Location = New System.Drawing.Point(343, 108)
+        Me.chk_IFB_B_Acier.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_IFB_B_Acier.Name = "chk_IFB_B_Acier"
+        Me.chk_IFB_B_Acier.Size = New System.Drawing.Size(169, 105)
+        Me.chk_IFB_B_Acier.TabIndex = 10
+        Me.chk_IFB_B_Acier.Text = "chk_IFB_B_Acier"
+        Me.chk_IFB_B_Acier.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.chk_IFB_B_Acier.UseVisualStyleBackColor = True
         '
-        'CheckBox5
+        'chk_IFB_A_Mixte
         '
-        Me.CheckBox5.Appearance = System.Windows.Forms.Appearance.Button
-        Me.CheckBox5.AutoSize = True
-        Me.CheckBox5.Checked = True
-        Me.CheckBox5.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBox5.Location = New System.Drawing.Point(172, 215)
-        Me.CheckBox5.Margin = New System.Windows.Forms.Padding(1)
-        Me.CheckBox5.Name = "CheckBox5"
-        Me.CheckBox5.Size = New System.Drawing.Size(169, 105)
-        Me.CheckBox5.TabIndex = 9
-        Me.CheckBox5.Text = "CheckBox5"
-        Me.CheckBox5.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.CheckBox5.UseVisualStyleBackColor = True
-        Me.CheckBox5.Visible = False
+        Me.chk_IFB_A_Mixte.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_IFB_A_Mixte.AutoSize = True
+        Me.chk_IFB_A_Mixte.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_IFB_A_Mixte.Location = New System.Drawing.Point(172, 215)
+        Me.chk_IFB_A_Mixte.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_IFB_A_Mixte.Name = "chk_IFB_A_Mixte"
+        Me.chk_IFB_A_Mixte.Size = New System.Drawing.Size(169, 105)
+        Me.chk_IFB_A_Mixte.TabIndex = 9
+        Me.chk_IFB_A_Mixte.Text = "chk_IFB_A_Mixte"
+        Me.chk_IFB_A_Mixte.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.chk_IFB_A_Mixte.UseVisualStyleBackColor = True
         '
         'chk_SABAcier
         '
@@ -429,39 +423,33 @@ Partial Class Frm_AjoutePP
         Me.chk_SABAcier.TextAlign = System.Drawing.ContentAlignment.BottomCenter
         Me.chk_SABAcier.UseVisualStyleBackColor = True
         '
-        'CheckBox3
+        'chk_IFB_B_Mixte
         '
-        Me.CheckBox3.Appearance = System.Windows.Forms.Appearance.Button
-        Me.CheckBox3.AutoSize = True
-        Me.CheckBox3.Checked = True
-        Me.CheckBox3.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBox3.Location = New System.Drawing.Point(343, 215)
-        Me.CheckBox3.Margin = New System.Windows.Forms.Padding(1)
-        Me.CheckBox3.Name = "CheckBox3"
-        Me.CheckBox3.Size = New System.Drawing.Size(169, 105)
-        Me.CheckBox3.TabIndex = 7
-        Me.CheckBox3.Text = "CheckBox3"
-        Me.CheckBox3.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.CheckBox3.UseVisualStyleBackColor = True
-        Me.CheckBox3.Visible = False
+        Me.chk_IFB_B_Mixte.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_IFB_B_Mixte.AutoSize = True
+        Me.chk_IFB_B_Mixte.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_IFB_B_Mixte.Location = New System.Drawing.Point(343, 215)
+        Me.chk_IFB_B_Mixte.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_IFB_B_Mixte.Name = "chk_IFB_B_Mixte"
+        Me.chk_IFB_B_Mixte.Size = New System.Drawing.Size(169, 105)
+        Me.chk_IFB_B_Mixte.TabIndex = 7
+        Me.chk_IFB_B_Mixte.Text = "chk_IFB_B_Mixte"
+        Me.chk_IFB_B_Mixte.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.chk_IFB_B_Mixte.UseVisualStyleBackColor = True
         '
-        'CheckBox2
+        'chk_IFB_A_Acier
         '
-        Me.CheckBox2.Appearance = System.Windows.Forms.Appearance.Button
-        Me.CheckBox2.AutoSize = True
-        Me.CheckBox2.Checked = True
-        Me.CheckBox2.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.CheckBox2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.CheckBox2.Location = New System.Drawing.Point(172, 108)
-        Me.CheckBox2.Margin = New System.Windows.Forms.Padding(1)
-        Me.CheckBox2.Name = "CheckBox2"
-        Me.CheckBox2.Size = New System.Drawing.Size(169, 105)
-        Me.CheckBox2.TabIndex = 6
-        Me.CheckBox2.Text = "CheckBox2"
-        Me.CheckBox2.TextAlign = System.Drawing.ContentAlignment.BottomCenter
-        Me.CheckBox2.UseVisualStyleBackColor = True
-        Me.CheckBox2.Visible = False
+        Me.chk_IFB_A_Acier.Appearance = System.Windows.Forms.Appearance.Button
+        Me.chk_IFB_A_Acier.AutoSize = True
+        Me.chk_IFB_A_Acier.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.chk_IFB_A_Acier.Location = New System.Drawing.Point(172, 108)
+        Me.chk_IFB_A_Acier.Margin = New System.Windows.Forms.Padding(1)
+        Me.chk_IFB_A_Acier.Name = "chk_IFB_A_Acier"
+        Me.chk_IFB_A_Acier.Size = New System.Drawing.Size(169, 105)
+        Me.chk_IFB_A_Acier.TabIndex = 6
+        Me.chk_IFB_A_Acier.Text = "chk_IFB_A_Acier"
+        Me.chk_IFB_A_Acier.TextAlign = System.Drawing.ContentAlignment.BottomCenter
+        Me.chk_IFB_A_Acier.UseVisualStyleBackColor = True
         '
         'chk_SABMixte
         '
@@ -622,10 +610,10 @@ Partial Class Frm_AjoutePP
     Friend WithEvents lbl_NouvellePoutre As Label
     Friend WithEvents lbl_NouveauProjet As Label
     Friend WithEvents chk_SFBMixte As CheckBox
-    Friend WithEvents CheckBox6 As CheckBox
-    Friend WithEvents CheckBox5 As CheckBox
+    Friend WithEvents chk_IFB_B_Acier As CheckBox
+    Friend WithEvents chk_IFB_A_Mixte As CheckBox
     Friend WithEvents chk_SABAcier As CheckBox
-    Friend WithEvents CheckBox3 As CheckBox
-    Friend WithEvents CheckBox2 As CheckBox
+    Friend WithEvents chk_IFB_B_Mixte As CheckBox
+    Friend WithEvents chk_IFB_A_Acier As CheckBox
     Friend WithEvents chk_SABMixte As CheckBox
 End Class

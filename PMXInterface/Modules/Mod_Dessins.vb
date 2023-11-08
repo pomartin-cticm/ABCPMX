@@ -3124,7 +3124,8 @@ Module Mod_Dessins
                 yCote = LargeurSemelle / 2 + dCar
 
                 AddFleche(MyGr, New Pen(Color.Red), xo, yCote, xe, yCote, MyParAff, True, True)
-                Chaine = GetStringNoUnit(Math.Floor(MyPoutre.ZoneLongueur(indTravee, i) / MyPoutre.ZoneEspacement(indTravee, i)), Enu_TypeVariable.SansType) & " " & strStuds
+                'Chaine = GetStringNoUnit(Math.Floor(MyPoutre.ZoneLongueur(indTravee, i) / MyPoutre.ZoneEspacement(indTravee, i)), Enu_TypeVariable.SansType) & " " & strStuds
+                Chaine = GetStringNoUnit(MyPoutre.NombreGoujonTotParZone(indTravee, i), Enu_TypeVariable.SansType) & " " & strStuds
                 AddTexteFond(MyGr, New SolidBrush(Color.Red), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
             Next
 
@@ -4750,6 +4751,14 @@ Module Mod_Dessins
 
                 DessinFrmTypeSFB(MyGr, MySection, MyDalle, MyParAff, myBrushP, myBrushB, myBrushA)
 
+            Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
+
+                DessinFrmTypeIFB_A(MyGr, MySection, MyDalle, MyParAff, myBrushP, myBrushB, myBrushA)
+
+            Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
+
+                DessinFrmTypeIFB_B(MyGr, MySection, MyDalle, MyParAff, myBrushP, myBrushB, myBrushA)
+
             Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
                 DessinFrmTypeSAB(MyGr, MySection, MyDalle, MyParAff, myBrushP, myBrushB, myBrushA)
 
@@ -4832,6 +4841,80 @@ Module Mod_Dessins
         '--> Dessin du plat
 
         DessinPlat(MyGr, MySection.ProfilA, myBrushP, MyParaff1, -MySection.ProfilA.Plat_t)
+
+    End Sub
+
+    Private Sub DessinFrmTypeIFB_A(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As cls_Dalle,
+                                 MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
+        '------------------------------------------------------------------------------------------------------------------
+        '   31/05/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage du type de section dans la fenêtre choix de type de section
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MySection   [E] :   Section à dessiner
+        '   MyParaff1   [E] :   Paramètres d'affichage
+        '   lSelect     [E] :   Indique si la section a été selectionnée
+        '   myBrushP    [E] :   Pinceau pour le profilé acier
+        '   myBrushB    [E] :   Pinceau pour le béton
+        '   myBrushA    [E] :   Pinceau pour les armatures
+        '------------------------------------------------------------------------------------------------------------------
+        '   Position z = 0 : Fibre inférieur du profilé, hors le plat
+        '------------------------------------------------------------------------------------------------------------------
+
+        Dim ZREF As Decimal = MySection.ProfilA.ha
+        Dim lMixte As Boolean = (MySection.typeSection = cls_Section.Enum_TypeSection.IFB_Amixte)
+
+        '--> Dessin de la dalle pour un SFB mixte
+
+        If lMixte Then
+            DessinDalleSlimFloor(MyGr, MyDalle, MySection.ProfilA.ha, MyParaff1, myBrushB)
+        End If
+
+        '--> Dessin de la section acier
+
+        DessinProfileMetal(MyGr, MySection.ProfilA, myBrushP, MyParaff1, ZREF)
+
+        '--> Dessin du plat
+
+        DessinPlat(MyGr, MySection.ProfilA, myBrushP, MyParaff1, -MySection.ProfilA.Plat_t)
+
+    End Sub
+
+    Private Sub DessinFrmTypeIFB_B(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyDalle As cls_Dalle,
+                                 MyParaff1 As Struc_Affichage, myBrushP As Brush, myBrushB As Brush, myBrushA As Brush)
+        '------------------------------------------------------------------------------------------------------------------
+        '   31/05/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage du type de section dans la fenêtre choix de type de section
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MySection   [E] :   Section à dessiner
+        '   MyParaff1   [E] :   Paramètres d'affichage
+        '   lSelect     [E] :   Indique si la section a été selectionnée
+        '   myBrushP    [E] :   Pinceau pour le profilé acier
+        '   myBrushB    [E] :   Pinceau pour le béton
+        '   myBrushA    [E] :   Pinceau pour les armatures
+        '------------------------------------------------------------------------------------------------------------------
+        '   Position z = 0 : Fibre inférieur du profilé, hors le plat
+        '------------------------------------------------------------------------------------------------------------------
+
+        Dim ZREF As Decimal = MySection.ProfilA.ha - MySection.ProfilA.Tfi
+        Dim lMixte As Boolean = (MySection.typeSection = cls_Section.Enum_TypeSection.IFB_Bmixte)
+
+        '--> Dessin de la dalle pour un SFB mixte
+
+        If lMixte Then
+            DessinDalleSlimFloor(MyGr, MyDalle, MySection.ProfilA.ha, MyParaff1, myBrushB)
+        End If
+
+        '--> Dessin de la section acier
+
+        DessinProfileMetal(MyGr, MySection.ProfilA, myBrushP, MyParaff1, ZREF)
+
+        '--> Dessin du plat
+
+        DessinPlat(MyGr, MySection.ProfilA, myBrushP, MyParaff1, MySection.ProfilA.ha - MySection.ProfilA.Plat_t)
 
     End Sub
 
@@ -6414,6 +6497,18 @@ Module Mod_Dessins
                 xMax = -xMin
                 yMax = MySection.ProfilA.ha
             Case cls_Section.Enum_TypeSection.SFBmixte
+                yMin = -MySection.ProfilA.Plat_t
+                xMin = -MyDalle.Beff / 2
+                xMax = -xMin
+                yMax = MySection.ProfilA.ha + MyDalle.t_d
+
+            Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B
+                yMin = -MySection.ProfilA.Plat_t
+                xMin = -BfMax / 2
+                xMax = -xMin
+                yMax = MySection.ProfilA.ha
+
+            Case cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte
                 yMin = -MySection.ProfilA.Plat_t
                 xMin = -MyDalle.Beff / 2
                 xMax = -xMin

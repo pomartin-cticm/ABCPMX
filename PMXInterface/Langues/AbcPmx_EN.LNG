@@ -12,6 +12,30 @@ TEXT4					= BY PRESSING THE BUTTON REFERRED TO BELOW AS ''ACCEPT'', THE USER EXP
 VERSIONLINK				= Do you want to be redirected to the CTICM website?
 WARNING					= Warning
 
+#FRM_AJOUTEPP
+TITLE					= New project
+OK						= Ok
+CANCEL					= Cancel
+PROJECT					= Project
+PROJECTNAME				= Name of the project :
+CURRENTPROJECT			= Current project :
+BEAM					= Beam
+NEWBEAM					= Add the beam
+MODIFYBEAM				= Modify the beam :
+SECTIONTYPE				= Section type
+STEELSECTION			= Non composite section
+STEELSECTIONPARTENC		= Steel section with partial encasement
+COMPOSITESECTION		= Composite section
+COMPOSITESECTIONPARTENC	= Composite section with partial encasement
+SLIMFLOORSFB			= Non composite slim floor SFB
+SLIMFLOORSFBCOMPO		= Composite slim floor SFB
+SLIMFLOORIFB_A			= Non composite slim floor IFB-A
+SLIMFLOORIFB_ACOMPO		= Composite slim floor IFB-A
+SLIMFLOORIFB_B			= Non composite slim floor IFB-B
+SLIMFLOORIFB_BCOMPO		= Composite slim floor IFB-B
+SLIMFLOORSAB			= Non composite slim floor SAB
+SLIMFLOORSABCOMPO		= Composite slim floor SAB
+
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report

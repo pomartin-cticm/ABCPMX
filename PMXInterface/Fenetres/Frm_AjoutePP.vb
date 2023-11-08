@@ -19,8 +19,12 @@ Public Class Frm_AjoutePP
     Dim MyPoutreMixte As New cls_Poutre(NomCas)
     Dim MyPoutreMixteEnrobe As New cls_Poutre(NomCas)
     Dim MyPoutreSFB As New cls_Poutre(NomCas)
+    Dim MyPoutreIFB_A As New cls_Poutre(NomCas)
+    Dim MyPoutreIFB_B As New cls_Poutre(NomCas)
     Dim MyPoutreSAB As New cls_Poutre(NomCas)
     Dim MyPoutreSFBmixte As New cls_Poutre(NomCas)
+    Dim MyPoutreIFB_Amixte As New cls_Poutre(NomCas)
+    Dim MyPoutreIFB_Bmixte As New cls_Poutre(NomCas)
     Dim MyPoutreSABmixte As New cls_Poutre(NomCas)
 
     Dim MySectionAcier As cls_Section = MyPoutreAcier.Section
@@ -28,8 +32,12 @@ Public Class Frm_AjoutePP
     Dim MySectionMixte As cls_Section = MyPoutreMixte.Section
     Dim MySectionMixteEnrobe As cls_Section = MyPoutreMixteEnrobe.Section
     Dim MySectionSFB As cls_Section = MyPoutreSFB.Section
+    Dim MySectionIFB_A As cls_Section = MyPoutreIFB_A.Section
+    Dim MySectionIFB_B As cls_Section = MyPoutreIFB_B.Section
     Dim MySectionSAB As cls_Section = MyPoutreSAB.Section
     Dim MySectionSFBmixte As cls_Section = MyPoutreSFBmixte.Section
+    Dim MySectionIFB_Amixte As cls_Section = MyPoutreIFB_Amixte.Section
+    Dim MySectionIFB_Bmixte As cls_Section = MyPoutreIFB_Bmixte.Section
     Dim MySectionSABmixte As cls_Section = MyPoutreSABmixte.Section
 
 
@@ -85,42 +93,57 @@ Public Class Frm_AjoutePP
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_AjoutePP")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_AJOUTEPP")
             BlocLine.CreationBloc(Bloc)
 
             Try
 
-                Me.Text = "Nouveau projet ZZ"
+                Me.Text = Bloc("TITLE")
 
-                Me.btn_Annuler.Text = "Annuler ZZ"
-                Me.btn_OK.Text = "OK ZZ"
+                Me.btn_Annuler.Text = Bloc("CANCEL")
+                Me.btn_OK.Text = Bloc("OK")
 
                 Me.chk_NouveauProjet.Text = ""
-                Me.lbl_NouveauProjet.Text = "Nom du projet:"
-                Me.chk_ProjetEnCours.Text = "Projet :"
+                Me.lbl_NouveauProjet.Text = Bloc("PROJECTNAME")
+                Me.chk_ProjetEnCours.Text = Bloc("PROJECT")
 
                 Me.chk_NouvellePoutre.Text = ""
-                Me.lbl_NouvellePoutre.Text = "Ajouter la poutre :"
-                Me.chk_PoutreEnCours.Text = "Modifier la poutre :"
+                Me.lbl_NouvellePoutre.Text = Bloc("NEWBEAM")
+                Me.chk_PoutreEnCours.Text = Bloc("MODIFYBEAM")
 
-                strProjet = "Project"
-                strPoutre = "Poutre"
+                strProjet = Bloc("PROJECT")
+                strPoutre = Bloc("BEAM")
 
-                Me.lbl_TypeSection.Text = "Type de section"
-                strType = "Type de section"
+                Me.lbl_TypeSection.Text = Bloc("SECTIONTYPE")
+                strType = Bloc("SECTIONTYPE")
 
                 'Me.chk_SectionAcier.Text = "Section non mixte"
                 'Me.chk_SectionAcierEnrobe.Text = "Section acier avec enrobage partiel"
 
+
+                'tabType.Clear()
+                'tabType.Add(cls_Section.Enum_TypeSection.Acier, "Section non mixte")
+                'tabType.Add(cls_Section.Enum_TypeSection.AcierEnrobage, "Section acier avec enrobage partiel")
+                'tabType.Add(cls_Section.Enum_TypeSection.Mixte, "Section mixte")
+                'tabType.Add(cls_Section.Enum_TypeSection.MixteEnrobage, "Section mixte avec enrobage partiel")
+                'tabType.Add(cls_Section.Enum_TypeSection.SFB, "Section dalle mince SFB non mixte")
+                'tabType.Add(cls_Section.Enum_TypeSection.SFBmixte, "Section dalle mince SFB mixte")
+                'tabType.Add(cls_Section.Enum_TypeSection.SAB, "Section dalle mince SAB non mixte")
+                'tabType.Add(cls_Section.Enum_TypeSection.SABmixte, "Section dalle mince SAB mixte")
+
                 tabType.Clear()
-                tabType.Add(cls_Section.Enum_TypeSection.Acier, "Section non mixte")
-                tabType.Add(cls_Section.Enum_TypeSection.AcierEnrobage, "Section acier avec enrobage partiel")
-                tabType.Add(cls_Section.Enum_TypeSection.Mixte, "Section mixte")
-                tabType.Add(cls_Section.Enum_TypeSection.MixteEnrobage, "Section mixte avec enrobage partiel")
-                tabType.Add(cls_Section.Enum_TypeSection.SFB, "Section dalle mince SFB non mixte")
-                tabType.Add(cls_Section.Enum_TypeSection.SFBmixte, "Section dalle mince SFB mixte")
-                tabType.Add(cls_Section.Enum_TypeSection.SAB, "Section dalle mince SAB non mixte")
-                tabType.Add(cls_Section.Enum_TypeSection.SABmixte, "Section dalle mince SAB mixte")
+                tabType.Add(cls_Section.Enum_TypeSection.Acier, Bloc("STEELSECTION"))
+                tabType.Add(cls_Section.Enum_TypeSection.AcierEnrobage, Bloc("STEELSECTIONPARTENC"))
+                tabType.Add(cls_Section.Enum_TypeSection.Mixte, Bloc("COMPOSITESECTION"))
+                tabType.Add(cls_Section.Enum_TypeSection.MixteEnrobage, Bloc("COMPOSITESECTIONPARTENC"))
+                tabType.Add(cls_Section.Enum_TypeSection.SFB, Bloc("SLIMFLOORSFB"))
+                tabType.Add(cls_Section.Enum_TypeSection.SFBmixte, Bloc("SLIMFLOORSFBCOMPO"))
+                tabType.Add(cls_Section.Enum_TypeSection.IFB_A, Bloc("SLIMFLOORIFB_A"))
+                tabType.Add(cls_Section.Enum_TypeSection.IFB_Amixte, Bloc("SLIMFLOORIFB_ACOMPO"))
+                tabType.Add(cls_Section.Enum_TypeSection.IFB_B, Bloc("SLIMFLOORIFB_B"))
+                tabType.Add(cls_Section.Enum_TypeSection.IFB_Bmixte, Bloc("SLIMFLOORIFB_BCOMPO"))
+                tabType.Add(cls_Section.Enum_TypeSection.SAB, Bloc("SLIMFLOORSAB"))
+                tabType.Add(cls_Section.Enum_TypeSection.SABmixte, Bloc("SLIMFLOORSABCOMPO"))
 
                 Me.MyToolTip.SetToolTip(Me.chk_SectionAcier, tabType(cls_Section.Enum_TypeSection.Acier))
                 Me.MyToolTip.SetToolTip(Me.chk_SectionAcierEnrobe, tabType(cls_Section.Enum_TypeSection.AcierEnrobage))
@@ -128,6 +151,10 @@ Public Class Frm_AjoutePP
                 Me.MyToolTip.SetToolTip(Me.chk_SectionMixteEnrobe, tabType(cls_Section.Enum_TypeSection.MixteEnrobage))
                 Me.MyToolTip.SetToolTip(Me.chk_SFBAcier, tabType(cls_Section.Enum_TypeSection.SFB))
                 Me.MyToolTip.SetToolTip(Me.chk_SFBMixte, tabType(cls_Section.Enum_TypeSection.SFBmixte))
+                Me.MyToolTip.SetToolTip(Me.chk_IFB_A_Acier, tabType(cls_Section.Enum_TypeSection.IFB_A))
+                Me.MyToolTip.SetToolTip(Me.chk_IFB_A_Mixte, tabType(cls_Section.Enum_TypeSection.IFB_Amixte))
+                Me.MyToolTip.SetToolTip(Me.chk_IFB_B_Acier, tabType(cls_Section.Enum_TypeSection.IFB_B))
+                Me.MyToolTip.SetToolTip(Me.chk_IFB_B_Mixte, tabType(cls_Section.Enum_TypeSection.IFB_Bmixte))
                 Me.MyToolTip.SetToolTip(Me.chk_SABAcier, tabType(cls_Section.Enum_TypeSection.SAB))
                 Me.MyToolTip.SetToolTip(Me.chk_SABMixte, tabType(cls_Section.Enum_TypeSection.SABmixte))
 
@@ -137,6 +164,10 @@ Public Class Frm_AjoutePP
                 Me.chk_SectionMixteEnrobe.Text = ""
                 Me.chk_SFBAcier.Text = ""
                 Me.chk_SFBMixte.Text = ""
+                Me.chk_IFB_A_Acier.Text = ""
+                Me.chk_IFB_A_Mixte.Text = ""
+                Me.chk_IFB_B_Acier.Text = ""
+                Me.chk_IFB_B_Mixte.Text = ""
                 Me.chk_SABAcier.Text = ""
                 Me.chk_SABMixte.Text = ""
 
@@ -221,6 +252,25 @@ Public Class Frm_AjoutePP
         MySectionSFB.ProfilA.Plat_t = 0.03
         MySectionSFB.ProfilA.Plat_b = 0.45
 
+        '--> Définition de la section IFB_A non mixte
+        MySectionIFB_A.typeSection = cls_Section.Enum_TypeSection.IFB_A
+        MySectionIFB_A.ProfilA.Tfs = 0.03
+        MySectionIFB_A.ProfilA.Tfi = 0
+        MySectionIFB_A.ProfilA.Rcs = 0.03
+        MySectionIFB_A.ProfilA.Rci = 0
+        MySectionIFB_A.ProfilA.Plat_t = 0.03
+        MySectionIFB_A.ProfilA.Plat_b = 0.45
+
+        '--> Définition de la section IFB_B non mixte
+        MySectionIFB_B.typeSection = cls_Section.Enum_TypeSection.IFB_B
+        MySectionIFB_B.ProfilA.Bfs = 0
+        MySectionIFB_B.ProfilA.Tfs = 0
+        MySectionIFB_B.ProfilA.Tfi = 0.03
+        MySectionIFB_B.ProfilA.Rcs = 0
+        MySectionIFB_B.ProfilA.Rci = 0.03
+        MySectionIFB_B.ProfilA.Plat_t = 0.03
+        MySectionIFB_B.ProfilA.Plat_b = 2 * MySectionIFB_B.ProfilA.Bfi / 3
+
         '--> Définition de la section SAB non mixte
         MySectionSAB.typeSection = cls_Section.Enum_TypeSection.SAB
         MySectionSAB.ProfilA.Bfs *= 5 / 8
@@ -243,6 +293,35 @@ Public Class Frm_AjoutePP
         MyPoutreSFBmixte.Dalle.t_d = 0.05
         'MySectionSFBmixte.Dalle.t_d = 0.05
         MyPoutreSFBmixte.Dalle.Beff = 0.75
+        'MySectionSFBmixte.Dalle.Beff = 0.75
+
+        '--> Définition de la section IFB_A mixte
+        MySectionIFB_Amixte.typeSection = cls_Section.Enum_TypeSection.IFB_Amixte
+        MySectionIFB_Amixte.ProfilA.Tfs = 0.03
+        MySectionIFB_Amixte.ProfilA.Tfi = 0
+        MySectionIFB_Amixte.ProfilA.Rcs = 0.03
+        MySectionIFB_Amixte.ProfilA.Rci = 0
+        MySectionIFB_Amixte.ProfilA.Plat_t = 0.03
+        MySectionIFB_Amixte.ProfilA.Plat_b = 0.45
+
+        MyPoutreIFB_Amixte.Dalle.t_d = 0.05
+        'MySectionSFBmixte.Dalle.t_d = 0.05
+        MyPoutreIFB_Amixte.Dalle.Beff = 0.75
+        'MySectionSFBmixte.Dalle.Beff = 0.75
+
+        '--> Définition de la section IFB_B mixte
+        MySectionIFB_Bmixte.typeSection = cls_Section.Enum_TypeSection.IFB_Bmixte
+        MySectionIFB_Bmixte.ProfilA.Bfs = 0
+        MySectionIFB_Bmixte.ProfilA.Tfs = 0
+        MySectionIFB_Bmixte.ProfilA.Tfi = 0.03
+        MySectionIFB_Bmixte.ProfilA.Rcs = 0
+        MySectionIFB_Bmixte.ProfilA.Rci = 0.03
+        MySectionIFB_Bmixte.ProfilA.Plat_t = 0.03
+        MySectionIFB_Bmixte.ProfilA.Plat_b = 2 * MySectionIFB_Bmixte.ProfilA.Bfi / 3
+
+        MyPoutreIFB_Bmixte.Dalle.t_d = 0.05
+        'MySectionSFBmixte.Dalle.t_d = 0.05
+        MyPoutreIFB_Bmixte.Dalle.Beff = 0.75
         'MySectionSFBmixte.Dalle.Beff = 0.75
 
         '--> Définition de la section SAB mixte
@@ -274,7 +353,7 @@ Public Class Frm_AjoutePP
 
 #Region " DESSINS "
 
-    Private Sub PaintBoutons(sender As Object, e As PaintEventArgs) Handles chk_SectionAcier.Paint, chk_SectionAcierEnrobe.Paint, chk_SectionMixteEnrobe.Paint, chk_SectionMixte.Paint, chk_SFBAcier.Paint, chk_SFBMixte.Paint, chk_SABMixte.Paint, chk_SABAcier.Paint, CheckBox6.Paint, CheckBox5.Paint, CheckBox3.Paint, CheckBox2.Paint
+    Private Sub PaintBoutons(sender As Object, e As PaintEventArgs) Handles chk_SectionAcier.Paint, chk_SectionAcierEnrobe.Paint, chk_SectionMixteEnrobe.Paint, chk_SectionMixte.Paint, chk_SFBAcier.Paint, chk_SFBMixte.Paint, chk_SABMixte.Paint, chk_SABAcier.Paint, chk_IFB_B_Acier.Paint, chk_IFB_A_Mixte.Paint, chk_IFB_B_Mixte.Paint, chk_IFB_A_Acier.Paint
 
         Const kAdjust As Single = 0.9
         Dim MyFont As New Font("Arial", 8)
@@ -299,6 +378,22 @@ Public Class Frm_AjoutePP
             Case Me.chk_SFBAcier.Name
                 DessinFrmTypeSection(e.Graphics, MySectionSFB, MyPoutreSFB.Dalle, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
                                      MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB)
+
+            Case Me.chk_IFB_A_Acier.Name
+                DessinFrmTypeSection(e.Graphics, MySectionIFB_A, MyPoutreIFB_A.Dalle, Me.chk_IFB_A_Acier.ClientRectangle.Width, Me.chk_IFB_A_Acier.Height,
+                MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_A)
+
+            Case Me.chk_IFB_A_Mixte.Name
+                DessinFrmTypeSection(e.Graphics, MySectionIFB_Amixte, MyPoutreIFB_Amixte.Dalle, Me.chk_IFB_A_Mixte.ClientRectangle.Width, Me.chk_IFB_A_Mixte.Height,
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte)
+
+            Case Me.chk_IFB_B_Acier.Name
+                DessinFrmTypeSection(e.Graphics, MySectionIFB_B, MyPoutreIFB_B.Dalle, Me.chk_IFB_B_Acier.ClientRectangle.Width, Me.chk_IFB_B_Acier.Height,
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_B)
+
+            Case Me.chk_IFB_B_Mixte.Name
+                DessinFrmTypeSection(e.Graphics, MySectionIFB_Bmixte, MyPoutreIFB_Bmixte.Dalle, Me.chk_IFB_B_Mixte.ClientRectangle.Width, Me.chk_IFB_B_Mixte.Height,
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte)
 
             Case Me.chk_SABAcier.Name
                 DessinFrmTypeSection(e.Graphics, MySectionSAB, MyPoutreSAB.Dalle, Me.chk_SABAcier.ClientRectangle.Width, Me.chk_SABAcier.Height,
@@ -356,7 +451,7 @@ Public Class Frm_AjoutePP
 
 #Region " Evènements "
 
-    Private Sub ChoixSection_Changed(sender As Object, e As EventArgs) Handles chk_SectionAcierEnrobe.CheckedChanged, chk_SectionAcier.CheckedChanged, chk_SectionMixteEnrobe.CheckedChanged, chk_SectionMixte.CheckedChanged, chk_SFBAcier.CheckedChanged, chk_SFBMixte.CheckedChanged, chk_SABMixte.CheckedChanged, chk_SABAcier.CheckedChanged, CheckBox6.CheckedChanged, CheckBox5.CheckedChanged, CheckBox3.CheckedChanged, CheckBox2.CheckedChanged
+    Private Sub ChoixSection_Changed(sender As Object, e As EventArgs) Handles chk_SectionAcierEnrobe.CheckedChanged, chk_SectionAcier.CheckedChanged, chk_SectionMixteEnrobe.CheckedChanged, chk_SectionMixte.CheckedChanged, chk_SFBAcier.CheckedChanged, chk_SFBMixte.CheckedChanged, chk_SABMixte.CheckedChanged, chk_SABAcier.CheckedChanged, chk_IFB_B_Acier.CheckedChanged, chk_IFB_A_Mixte.CheckedChanged, chk_IFB_B_Mixte.CheckedChanged, chk_IFB_A_Acier.CheckedChanged
         If lBuild Then Exit Sub
 
         Select Case sender.name
@@ -366,6 +461,10 @@ Public Class Frm_AjoutePP
             Case Me.chk_SectionMixteEnrobe.Name : TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
             Case Me.chk_SFBAcier.Name : TypeSection = cls_Section.Enum_TypeSection.SFB
             Case Me.chk_SFBMixte.Name : TypeSection = cls_Section.Enum_TypeSection.SFBmixte
+            Case Me.chk_IFB_A_Acier.Name : TypeSection = cls_Section.Enum_TypeSection.IFB_A
+            Case Me.chk_IFB_A_Mixte.Name : TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte
+            Case Me.chk_IFB_B_Acier.Name : TypeSection = cls_Section.Enum_TypeSection.IFB_B
+            Case Me.chk_IFB_B_Mixte.Name : TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte
             Case Me.chk_SABAcier.Name : TypeSection = cls_Section.Enum_TypeSection.SAB
             Case Me.chk_SABMixte.Name : TypeSection = cls_Section.Enum_TypeSection.SABmixte
         End Select
@@ -383,6 +482,10 @@ Public Class Frm_AjoutePP
         Me.chk_SectionMixteEnrobe.Checked = TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
         Me.chk_SFBAcier.Checked = TypeSection = cls_Section.Enum_TypeSection.SFB
         Me.chk_SFBMixte.Checked = TypeSection = cls_Section.Enum_TypeSection.SFBmixte
+        Me.chk_IFB_A_Acier.Checked = TypeSection = cls_Section.Enum_TypeSection.IFB_A
+        Me.chk_IFB_A_Mixte.Checked = TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte
+        Me.chk_IFB_B_Acier.Checked = TypeSection = cls_Section.Enum_TypeSection.IFB_B
+        Me.chk_IFB_B_Mixte.Checked = TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte
         Me.chk_SABAcier.Checked = TypeSection = cls_Section.Enum_TypeSection.SAB
         Me.chk_SABMixte.Checked = TypeSection = cls_Section.Enum_TypeSection.SABmixte
 

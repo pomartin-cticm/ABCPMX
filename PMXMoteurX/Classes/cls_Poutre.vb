@@ -171,9 +171,9 @@ Public Class cls_Poutre
     Public ZoneNombreGoujonsTransv(,) As Integer
 
     ''' <summary>
-    ''' Nombre total de goujons disposés sur la travée considérée   (#POM ce devrait être une fonction ou une propriété ?)
+    ''' Nombre total de goujons disposés sur la travée considérée   
     ''' </summary>
-    Public NombreGoujonsTot() As Integer
+    'Public NombreGoujonsTot() As Integer
 
     ''' <summary>
     ''' Densité de connexion par zone de connexion (PRd / unité de longueur)
@@ -374,6 +374,7 @@ Public Class cls_Poutre
         PoutreDefautAcier()
         InitialiseChargements(MsgChargements)
         InitialiseTablesCombi()
+        InitialisePoidsPropres()
 
     End Sub
 
@@ -401,6 +402,7 @@ Public Class cls_Poutre
         End Select
         InitialiseChargements(MsgChargements)
         InitialiseTablesCombi()
+        InitialisePoidsPropres()
 
     End Sub
 
@@ -464,7 +466,7 @@ Public Class cls_Poutre
         ReDim ZoneEspacement(pNbTravees + 2, 2)
         ReDim ZoneEspacement_Bac_Trans(pNbTravees + 2, 2)
         ReDim ZoneNombreGoujonsTransv(pNbTravees + 2, 2)
-        ReDim NombreGoujonsTot(pNbTravees + 2)
+        'ReDim NombreGoujonsTot(pNbTravees + 2)
 
         For i As Integer = 0 To pNbTravees + 2
             ZoneLongueur(i, 0) = LongueurTravee(i)
@@ -480,9 +482,9 @@ Public Class cls_Poutre
             ZoneNombreGoujonsTransv(i, 0) = 1
             ZoneNombreGoujonsTransv(i, 1) = 1
             ZoneNombreGoujonsTransv(i, 2) = 1
-            For j As Integer = 0 To 2
-                NombreGoujonsTot(i) += ZoneLongueur(i, j) / ZoneEspacement(i, j)
-            Next
+            'For j As Integer = 0 To 2
+            'NombreGoujonsTot(i) += ZoneLongueur(i, j) / ZoneEspacement(i, j)
+            'Next
         Next
 
         lAutomaticDesign = False
@@ -775,8 +777,8 @@ Public Class cls_Poutre
         ReDim PoutreCible.ZoneNombreGoujonsTransv(PoutreSource.ZoneNombreGoujonsTransv.GetUpperBound(0), PoutreSource.ZoneNombreGoujonsTransv.GetUpperBound(1))
         PoutreCible.ZoneNombreGoujonsTransv = PoutreSource.ZoneNombreGoujonsTransv.Clone
 
-        ReDim PoutreCible.NombreGoujonsTot(PoutreSource.NombreGoujonsTot.GetUpperBound(0))
-        PoutreCible.NombreGoujonsTot = PoutreSource.NombreGoujonsTot.Clone
+        'ReDim PoutreCible.NombreGoujonsTot(PoutreSource.NombreGoujonsTot.GetUpperBound(0))
+        'PoutreCible.NombreGoujonsTot = PoutreSource.NombreGoujonsTot.Clone
 
         'Clone Section
 
@@ -3696,6 +3698,27 @@ Public Class cls_Poutre
         '--> Fin
 
         Return xCum
+
+    End Function
+
+    'Fonction qui retourne le nombre de goujon tot sur la travée en argument
+    Public Function NombreGoujonTot(indTravee As Integer)
+        Dim resultat As Integer = 0
+
+        For j As Integer = 0 To 2
+            resultat += NombreGoujonTotParZone(indTravee, j)
+        Next
+
+        Return resultat
+
+    End Function
+
+    Public Function NombreGoujonTotParZone(indTravee As Integer, indZone As Integer)
+        Dim resultat As Integer = 0
+
+        resultat += ZoneNombreGoujonsTransv(indTravee, indZone) * ZoneLongueur(indTravee, indZone) / ZoneEspacement(indTravee, indZone)
+
+        Return resultat
 
     End Function
 

@@ -291,9 +291,9 @@ Public Class Frm_Portees
             .ZoneNombreGoujonsTransv(indTravee, 0) = 1
             .ZoneNombreGoujonsTransv(indTravee, 1) = 1
             .ZoneNombreGoujonsTransv(indTravee, 2) = 1
-            For j As Integer = 0 To 2
-                .NombreGoujonsTot(indTravee) += .ZoneLongueur(indTravee, j) / .ZoneEspacement(indTravee, j)
-            Next
+            'For j As Integer = 0 To 2
+            '    .NombreGoujonsTot(indTravee) += .ZoneLongueur(indTravee, j) / .ZoneEspacement(indTravee, j)
+            'Next
         End With
     End Sub
 #End Region

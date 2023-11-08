@@ -99,19 +99,20 @@ Public Class Frm_Chargement
         MAJIAffichageButtonsLineiques()
         MAJIAffichageTableauxPonctuel()
         MAJIAffichageButtonsPonctuels()
+        MAJIReactions()
         lBuild = False
     End Sub
 
     Private Sub InitialiserVariables()
         MyPoutreLoc = New cls_Poutre(NomChargements)
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
-        MyPoutreLoc.InitialisePoidsPropres()
+        'MyPoutreLoc.InitialisePoidsPropres()
         PreparerCalculEF(MyPoutreLoc)
 
         NbTravees = MyPoutreLoc.NbTravees
 
         For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In MyPoutreLoc.ChargesU
-            ReDim Preserve element.Value.WSurf(MyPoutreLoc.IndiceDerniereTravee)
+            'ReDim Preserve element.Value.WSurf(MyPoutreLoc.IndiceDerniereTravee)
             ReDim Preserve element.Value.QSurf(MyPoutreLoc.IndiceDerniereTravee)
             ReDim Preserve element.Value.Forces(MyPoutreLoc.IndiceDerniereTravee)
             ReDim Preserve element.Value.FReparties(MyPoutreLoc.IndiceDerniereTravee)
@@ -482,7 +483,7 @@ Public Class Frm_Chargement
                 For Each chgtU As KeyValuePair(Of String, cls_ChargementUtilisateur) In MyPoutreLoc.ChargesU
 
                     GereTransfertValeur(chgtU.Value.QSurf(i), .ChargesU(chgtU.Key).QSurf(i), lModif)
-                    GereTransfertValeur(chgtU.Value.WSurf(i), .ChargesU(chgtU.Key).WSurf(i), lModif)
+                    'GereTransfertValeur(chgtU.Value.WSurf(i), .ChargesU(chgtU.Key).WSurf(i), lModif)
 
                     If chgtU.Value.Forces(i).Count = .ChargesU(chgtU.Key).Forces(i).Count Then
 
@@ -820,9 +821,11 @@ Public Class Frm_Chargement
 
         'MAJ Affichage des valeurs dans la section charge surfacique 
 
-        If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        'If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+        If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.LargeurInfluence
         If lMAJPression Then txt_UniformLoad.Text = MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2)
-        txt_ResultingForce.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+        'txt_ResultingForce.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+        txt_ResultingForce.Text = MyPoutreLoc.LargeurInfluence * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
 
     End Sub
 
@@ -959,7 +962,7 @@ Public Class Frm_Chargement
         If VerificationSaisie(sender, ValeurUI) Then
             Select Case sender.name
                 Case txt_WidthApplication.Name
-                    MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) = ValeurUI
+                    'MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) = ValeurUI
                     MAJIAffichageChargeSurfacique(False, True)
                 Case txt_UniformLoad.Name
                     MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) = ValeurUI

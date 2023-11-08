@@ -7,7 +7,7 @@
     Public Titre As String                             ' Titre du cas de charge 
 
     Public QSurf() As Decimal                           ' Charge par unité de surface sur chaque travée
-    Public WSurf() As Decimal                           ' Largeur d'application de la charge surfacique sur chaque travée
+    'Public WSurf() As Decimal                           ' Largeur d'application de la charge surfacique sur chaque travée
     Public Forces() As List(Of cls_Force)               ' Liste des efforts ponctuels sur chaque travée
     Public FReparties() As List(Of cls_ForceRepartie)   ' Liste des charges réparties sur chaque travée
 
@@ -20,7 +20,7 @@
         Me.Titre = pTitre
 
         ReDim Me.QSurf(IndiceDerniereTravee + 1)
-        ReDim Me.WSurf(IndiceDerniereTravee + 1)
+        'ReDim Me.WSurf(IndiceDerniereTravee + 1)
         ReDim Me.Forces(IndiceDerniereTravee + 1)
         ReDim Me.FReparties(IndiceDerniereTravee + 1)
 

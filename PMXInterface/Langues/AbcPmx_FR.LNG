@@ -12,6 +12,29 @@ TEXT4					= EN APPUYANT SUR LA TOUCHE ''ACCEPTER'' CI-DESSOUS, L'UTILISATEUR DEC
 VERSIONLINK     		= Voulez-vous être redirigé vers le site web du CTICM ?
 WARNING					= Avertissement
 
+#FRM_AJOUTEPP
+TITLE					= Nouveau projet
+OK						= Ok
+CANCEL					= Annuler
+PROJECT					= Projet
+PROJECTNAME				= Nom du projet :
+CURRENTPROJECT			= Projet en cours :
+BEAM					= Poutre
+NEWBEAM					= Ajouter la poutre :
+MODIFYBEAM				= Modifier la poutre :
+SECTIONTYPE				= Type de section
+STEELSECTION			= Section non mixte
+STEELSECTIONPARTENC		= Section acier avec enrobage partiel
+COMPOSITESECTION		= Section mixte
+COMPOSITESECTIONPARTENC	= Section mixte avec enrobage partiel
+SLIMFLOORSFB			= Section dalle mince SFB non mixte
+SLIMFLOORSFBCOMPO		= Section dalle mince SFB mixte
+SLIMFLOORIFB_A			= Section dalle mince IFB-A non mixte
+SLIMFLOORIFB_ACOMPO		= Section dalle mince IFB-A mixte
+SLIMFLOORIFB_B			= Section dalle mince IFB-B non mixte
+SLIMFLOORIFB_BCOMPO		= Section dalle mince IFB-B mixte
+SLIMFLOORSAB			= Section dalle mince SAB non mixte
+SLIMFLOORSABCOMPO		= Section dalle mince SAB mixte
 
 
 #FRM_CALCULATIONSHEET

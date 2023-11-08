@@ -117,25 +117,25 @@ Partial Class Frm_Chargement
         Me.TLPan_ChoixCharges = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_ChoixCharges = New System.Windows.Forms.Label()
         Me.pan_ChoixCharges = New System.Windows.Forms.Panel()
-        Me.lbl_ChoixCharge = New System.Windows.Forms.Label()
-        Me.lbl_NameLoad = New System.Windows.Forms.Label()
+        Me.pan_ChoixTravee = New System.Windows.Forms.Panel()
         Me.lbl_ChoixTravee = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.btn_Precedent = New System.Windows.Forms.Button()
         Me.btn_Suivant = New System.Windows.Forms.Button()
         Me.cmb_Travee = New System.Windows.Forms.ComboBox()
-        Me.rad_Qc = New System.Windows.Forms.RadioButton()
-        Me.rad_Q2 = New System.Windows.Forms.RadioButton()
-        Me.rad_G2 = New System.Windows.Forms.RadioButton()
-        Me.rad_Q1 = New System.Windows.Forms.RadioButton()
+        Me.pan_ChoixCas = New System.Windows.Forms.Panel()
         Me.rad_G1 = New System.Windows.Forms.RadioButton()
+        Me.rad_Q1 = New System.Windows.Forms.RadioButton()
+        Me.rad_G2 = New System.Windows.Forms.RadioButton()
+        Me.rad_Q2 = New System.Windows.Forms.RadioButton()
+        Me.rad_Qc = New System.Windows.Forms.RadioButton()
+        Me.lbl_ChoixCharge = New System.Windows.Forms.Label()
+        Me.lbl_NameLoad = New System.Windows.Forms.Label()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
         Me.ErrorProvider_Frm_Chargement = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.pan_ChoixCas = New System.Windows.Forms.Panel()
-        Me.pan_ChoixTravee = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieMilieu.SuspendLayout()
@@ -152,11 +152,11 @@ Partial Class Frm_Chargement
         Me.pan_ChargesSurfaciques.SuspendLayout()
         Me.TLPan_ChoixCharges.SuspendLayout()
         Me.pan_ChoixCharges.SuspendLayout()
+        Me.pan_ChoixTravee.SuspendLayout()
         Me.Panel1.SuspendLayout()
+        Me.pan_ChoixCas.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_ChoixCas.SuspendLayout()
-        Me.pan_ChoixTravee.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -1211,6 +1211,7 @@ Partial Class Frm_Chargement
         Me.txt_WidthApplication.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_WidthApplication.Location = New System.Drawing.Point(127, 13)
         Me.txt_WidthApplication.Name = "txt_WidthApplication"
+        Me.txt_WidthApplication.ReadOnly = True
         Me.txt_WidthApplication.Size = New System.Drawing.Size(58, 20)
         Me.txt_WidthApplication.TabIndex = 76
         '
@@ -1259,24 +1260,15 @@ Partial Class Frm_Chargement
         Me.pan_ChoixCharges.Size = New System.Drawing.Size(250, 248)
         Me.pan_ChoixCharges.TabIndex = 1
         '
-        'lbl_ChoixCharge
+        'pan_ChoixTravee
         '
-        Me.lbl_ChoixCharge.AutoSize = True
-        Me.lbl_ChoixCharge.Location = New System.Drawing.Point(11, 16)
-        Me.lbl_ChoixCharge.Name = "lbl_ChoixCharge"
-        Me.lbl_ChoixCharge.Size = New System.Drawing.Size(83, 13)
-        Me.lbl_ChoixCharge.TabIndex = 79
-        Me.lbl_ChoixCharge.Text = "lbl_ChoixCharge"
-        '
-        'lbl_NameLoad
-        '
-        Me.lbl_NameLoad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_NameLoad.Location = New System.Drawing.Point(12, 121)
-        Me.lbl_NameLoad.Name = "lbl_NameLoad"
-        Me.lbl_NameLoad.Size = New System.Drawing.Size(217, 29)
-        Me.lbl_NameLoad.TabIndex = 78
-        Me.lbl_NameLoad.Text = "lbl_NameLoad"
-        Me.lbl_NameLoad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.pan_ChoixTravee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChoixTravee.Controls.Add(Me.lbl_ChoixTravee)
+        Me.pan_ChoixTravee.Controls.Add(Me.Panel1)
+        Me.pan_ChoixTravee.Location = New System.Drawing.Point(12, 157)
+        Me.pan_ChoixTravee.Name = "pan_ChoixTravee"
+        Me.pan_ChoixTravee.Size = New System.Drawing.Size(217, 77)
+        Me.pan_ChoixTravee.TabIndex = 78
         '
         'lbl_ChoixTravee
         '
@@ -1328,38 +1320,29 @@ Partial Class Frm_Chargement
         Me.cmb_Travee.Size = New System.Drawing.Size(133, 21)
         Me.cmb_Travee.TabIndex = 75
         '
-        'rad_Qc
+        'pan_ChoixCas
         '
-        Me.rad_Qc.AutoSize = True
-        Me.rad_Qc.Location = New System.Drawing.Point(114, 53)
-        Me.rad_Qc.Name = "rad_Qc"
-        Me.rad_Qc.Size = New System.Drawing.Size(60, 17)
-        Me.rad_Qc.TabIndex = 0
-        Me.rad_Qc.TabStop = True
-        Me.rad_Qc.Text = "rad_Qc"
-        Me.rad_Qc.UseVisualStyleBackColor = True
+        Me.pan_ChoixCas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ChoixCas.Controls.Add(Me.rad_G1)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_Q1)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_G2)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_Q2)
+        Me.pan_ChoixCas.Controls.Add(Me.rad_Qc)
+        Me.pan_ChoixCas.Location = New System.Drawing.Point(12, 35)
+        Me.pan_ChoixCas.Name = "pan_ChoixCas"
+        Me.pan_ChoixCas.Size = New System.Drawing.Size(217, 80)
+        Me.pan_ChoixCas.TabIndex = 78
         '
-        'rad_Q2
+        'rad_G1
         '
-        Me.rad_Q2.AutoSize = True
-        Me.rad_Q2.Location = New System.Drawing.Point(114, 30)
-        Me.rad_Q2.Name = "rad_Q2"
-        Me.rad_Q2.Size = New System.Drawing.Size(60, 17)
-        Me.rad_Q2.TabIndex = 0
-        Me.rad_Q2.TabStop = True
-        Me.rad_Q2.Text = "rad_Q2"
-        Me.rad_Q2.UseVisualStyleBackColor = True
-        '
-        'rad_G2
-        '
-        Me.rad_G2.AutoSize = True
-        Me.rad_G2.Location = New System.Drawing.Point(15, 30)
-        Me.rad_G2.Name = "rad_G2"
-        Me.rad_G2.Size = New System.Drawing.Size(60, 17)
-        Me.rad_G2.TabIndex = 0
-        Me.rad_G2.TabStop = True
-        Me.rad_G2.Text = "rad_G2"
-        Me.rad_G2.UseVisualStyleBackColor = True
+        Me.rad_G1.AutoSize = True
+        Me.rad_G1.Location = New System.Drawing.Point(15, 7)
+        Me.rad_G1.Name = "rad_G1"
+        Me.rad_G1.Size = New System.Drawing.Size(60, 17)
+        Me.rad_G1.TabIndex = 0
+        Me.rad_G1.TabStop = True
+        Me.rad_G1.Text = "rad_G1"
+        Me.rad_G1.UseVisualStyleBackColor = True
         '
         'rad_Q1
         '
@@ -1372,16 +1355,57 @@ Partial Class Frm_Chargement
         Me.rad_Q1.Text = "rad_Q1"
         Me.rad_Q1.UseVisualStyleBackColor = True
         '
-        'rad_G1
+        'rad_G2
         '
-        Me.rad_G1.AutoSize = True
-        Me.rad_G1.Location = New System.Drawing.Point(15, 7)
-        Me.rad_G1.Name = "rad_G1"
-        Me.rad_G1.Size = New System.Drawing.Size(60, 17)
-        Me.rad_G1.TabIndex = 0
-        Me.rad_G1.TabStop = True
-        Me.rad_G1.Text = "rad_G1"
-        Me.rad_G1.UseVisualStyleBackColor = True
+        Me.rad_G2.AutoSize = True
+        Me.rad_G2.Location = New System.Drawing.Point(15, 30)
+        Me.rad_G2.Name = "rad_G2"
+        Me.rad_G2.Size = New System.Drawing.Size(60, 17)
+        Me.rad_G2.TabIndex = 0
+        Me.rad_G2.TabStop = True
+        Me.rad_G2.Text = "rad_G2"
+        Me.rad_G2.UseVisualStyleBackColor = True
+        '
+        'rad_Q2
+        '
+        Me.rad_Q2.AutoSize = True
+        Me.rad_Q2.Location = New System.Drawing.Point(114, 30)
+        Me.rad_Q2.Name = "rad_Q2"
+        Me.rad_Q2.Size = New System.Drawing.Size(60, 17)
+        Me.rad_Q2.TabIndex = 0
+        Me.rad_Q2.TabStop = True
+        Me.rad_Q2.Text = "rad_Q2"
+        Me.rad_Q2.UseVisualStyleBackColor = True
+        '
+        'rad_Qc
+        '
+        Me.rad_Qc.AutoSize = True
+        Me.rad_Qc.Location = New System.Drawing.Point(114, 53)
+        Me.rad_Qc.Name = "rad_Qc"
+        Me.rad_Qc.Size = New System.Drawing.Size(60, 17)
+        Me.rad_Qc.TabIndex = 0
+        Me.rad_Qc.TabStop = True
+        Me.rad_Qc.Text = "rad_Qc"
+        Me.rad_Qc.UseVisualStyleBackColor = True
+        '
+        'lbl_ChoixCharge
+        '
+        Me.lbl_ChoixCharge.AutoSize = True
+        Me.lbl_ChoixCharge.Location = New System.Drawing.Point(11, 16)
+        Me.lbl_ChoixCharge.Name = "lbl_ChoixCharge"
+        Me.lbl_ChoixCharge.Size = New System.Drawing.Size(83, 13)
+        Me.lbl_ChoixCharge.TabIndex = 79
+        Me.lbl_ChoixCharge.Text = "lbl_ChoixCharge"
+        '
+        'lbl_NameLoad
+        '
+        Me.lbl_NameLoad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_NameLoad.Location = New System.Drawing.Point(12, 121)
+        Me.lbl_NameLoad.Name = "lbl_NameLoad"
+        Me.lbl_NameLoad.Size = New System.Drawing.Size(217, 29)
+        Me.lbl_NameLoad.TabIndex = 78
+        Me.lbl_NameLoad.Text = "lbl_NameLoad"
+        Me.lbl_NameLoad.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'TLPan_PartieBasse
         '
@@ -1438,29 +1462,6 @@ Partial Class Frm_Chargement
         '
         Me.ErrorProvider_Frm_Chargement.ContainerControl = Me
         '
-        'pan_ChoixCas
-        '
-        Me.pan_ChoixCas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ChoixCas.Controls.Add(Me.rad_G1)
-        Me.pan_ChoixCas.Controls.Add(Me.rad_Q1)
-        Me.pan_ChoixCas.Controls.Add(Me.rad_G2)
-        Me.pan_ChoixCas.Controls.Add(Me.rad_Q2)
-        Me.pan_ChoixCas.Controls.Add(Me.rad_Qc)
-        Me.pan_ChoixCas.Location = New System.Drawing.Point(12, 35)
-        Me.pan_ChoixCas.Name = "pan_ChoixCas"
-        Me.pan_ChoixCas.Size = New System.Drawing.Size(217, 80)
-        Me.pan_ChoixCas.TabIndex = 78
-        '
-        'pan_ChoixTravee
-        '
-        Me.pan_ChoixTravee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ChoixTravee.Controls.Add(Me.lbl_ChoixTravee)
-        Me.pan_ChoixTravee.Controls.Add(Me.Panel1)
-        Me.pan_ChoixTravee.Location = New System.Drawing.Point(12, 157)
-        Me.pan_ChoixTravee.Name = "pan_ChoixTravee"
-        Me.pan_ChoixTravee.Size = New System.Drawing.Size(217, 77)
-        Me.pan_ChoixTravee.TabIndex = 78
-        '
         'Frm_Chargement
         '
         Me.AcceptButton = Me.btn_OK
@@ -1497,13 +1498,13 @@ Partial Class Frm_Chargement
         Me.TLPan_ChoixCharges.PerformLayout()
         Me.pan_ChoixCharges.ResumeLayout(False)
         Me.pan_ChoixCharges.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
-        Me.TLPan_PartieBasse.ResumeLayout(False)
-        CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_ChoixCas.ResumeLayout(False)
-        Me.pan_ChoixCas.PerformLayout()
         Me.pan_ChoixTravee.ResumeLayout(False)
         Me.pan_ChoixTravee.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.pan_ChoixCas.ResumeLayout(False)
+        Me.pan_ChoixCas.PerformLayout()
+        Me.TLPan_PartieBasse.ResumeLayout(False)
+        CType(Me.ErrorProvider_Frm_Chargement, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

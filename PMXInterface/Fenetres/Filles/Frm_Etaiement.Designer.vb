@@ -37,7 +37,8 @@ Partial Class Frm_Etaiement
         Me.rad_FullyPropped = New System.Windows.Forms.RadioButton()
         Me.rad_UnPropped = New System.Windows.Forms.RadioButton()
         Me.pan_PointProps = New System.Windows.Forms.Panel()
-        Me.cmb_LocPP = New System.Windows.Forms.ComboBox()
+        Me.rad_UnderSlab = New System.Windows.Forms.RadioButton()
+        Me.rad_UnderBeam = New System.Windows.Forms.RadioButton()
         Me.cmb_NbPoint = New System.Windows.Forms.ComboBox()
         Me.lbl_LocPP = New System.Windows.Forms.Label()
         Me.chk_EtaisConsoleDroite = New System.Windows.Forms.CheckBox()
@@ -240,7 +241,8 @@ Partial Class Frm_Etaiement
         'pan_PointProps
         '
         Me.pan_PointProps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_PointProps.Controls.Add(Me.cmb_LocPP)
+        Me.pan_PointProps.Controls.Add(Me.rad_UnderSlab)
+        Me.pan_PointProps.Controls.Add(Me.rad_UnderBeam)
         Me.pan_PointProps.Controls.Add(Me.cmb_NbPoint)
         Me.pan_PointProps.Controls.Add(Me.lbl_LocPP)
         Me.pan_PointProps.Controls.Add(Me.chk_EtaisConsoleDroite)
@@ -248,23 +250,36 @@ Partial Class Frm_Etaiement
         Me.pan_PointProps.Controls.Add(Me.chk_EtaisConsoleGauche)
         Me.pan_PointProps.Location = New System.Drawing.Point(8, 105)
         Me.pan_PointProps.Name = "pan_PointProps"
-        Me.pan_PointProps.Size = New System.Drawing.Size(232, 183)
+        Me.pan_PointProps.Size = New System.Drawing.Size(232, 202)
         Me.pan_PointProps.TabIndex = 8
         '
-        'cmb_LocPP
+        'rad_UnderSlab
         '
-        Me.cmb_LocPP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_LocPP.FormattingEnabled = True
-        Me.cmb_LocPP.Location = New System.Drawing.Point(68, 149)
-        Me.cmb_LocPP.Name = "cmb_LocPP"
-        Me.cmb_LocPP.Size = New System.Drawing.Size(137, 21)
-        Me.cmb_LocPP.TabIndex = 3
+        Me.rad_UnderSlab.AutoSize = True
+        Me.rad_UnderSlab.Location = New System.Drawing.Point(68, 167)
+        Me.rad_UnderSlab.Name = "rad_UnderSlab"
+        Me.rad_UnderSlab.Size = New System.Drawing.Size(96, 17)
+        Me.rad_UnderSlab.TabIndex = 8
+        Me.rad_UnderSlab.Text = "rad_UnderSlab"
+        Me.rad_UnderSlab.UseVisualStyleBackColor = True
+        '
+        'rad_UnderBeam
+        '
+        Me.rad_UnderBeam.AutoSize = True
+        Me.rad_UnderBeam.Checked = True
+        Me.rad_UnderBeam.Location = New System.Drawing.Point(68, 141)
+        Me.rad_UnderBeam.Name = "rad_UnderBeam"
+        Me.rad_UnderBeam.Size = New System.Drawing.Size(102, 17)
+        Me.rad_UnderBeam.TabIndex = 8
+        Me.rad_UnderBeam.TabStop = True
+        Me.rad_UnderBeam.Text = "rad_UnderBeam"
+        Me.rad_UnderBeam.UseVisualStyleBackColor = True
         '
         'cmb_NbPoint
         '
         Me.cmb_NbPoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NbPoint.FormattingEnabled = True
-        Me.cmb_NbPoint.Location = New System.Drawing.Point(68, 96)
+        Me.cmb_NbPoint.Location = New System.Drawing.Point(68, 94)
         Me.cmb_NbPoint.Name = "cmb_NbPoint"
         Me.cmb_NbPoint.Size = New System.Drawing.Size(111, 21)
         Me.cmb_NbPoint.TabIndex = 3
@@ -272,7 +287,7 @@ Partial Class Frm_Etaiement
         'lbl_LocPP
         '
         Me.lbl_LocPP.AutoSize = True
-        Me.lbl_LocPP.Location = New System.Drawing.Point(1, 130)
+        Me.lbl_LocPP.Location = New System.Drawing.Point(1, 119)
         Me.lbl_LocPP.Name = "lbl_LocPP"
         Me.lbl_LocPP.Size = New System.Drawing.Size(55, 13)
         Me.lbl_LocPP.TabIndex = 6
@@ -291,7 +306,7 @@ Partial Class Frm_Etaiement
         'lbl_NbPP
         '
         Me.lbl_NbPP.AutoSize = True
-        Me.lbl_NbPP.Location = New System.Drawing.Point(1, 77)
+        Me.lbl_NbPP.Location = New System.Drawing.Point(1, 75)
         Me.lbl_NbPP.Name = "lbl_NbPP"
         Me.lbl_NbPP.Size = New System.Drawing.Size(51, 13)
         Me.lbl_NbPP.TabIndex = 6
@@ -368,6 +383,7 @@ Partial Class Frm_Etaiement
     Friend WithEvents lbl_NbPP As Label
     Friend WithEvents chk_EtaisConsoleDroite As CheckBox
     Friend WithEvents pan_PointProps As Panel
-    Friend WithEvents cmb_LocPP As ComboBox
     Friend WithEvents lbl_LocPP As Label
+    Friend WithEvents rad_UnderSlab As RadioButton
+    Friend WithEvents rad_UnderBeam As RadioButton
 End Class

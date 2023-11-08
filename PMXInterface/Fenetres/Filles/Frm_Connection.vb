@@ -522,7 +522,8 @@ Public Class Frm_Connection
             '    Me.txt_EspLongi_I3.Text = GetStringInUnit(.Espacement(traveeEnCours, 2), Enu_TypeVariable.Dimension, 4, 0, False)
             'End If
 
-            Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonsTot(traveeEnCours) & " " & strStud
+            'Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonsTot(traveeEnCours) & " " & strStud
+            Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonTot(traveeEnCours) & " " & strStud
 
         End With
     End Sub
@@ -606,7 +607,7 @@ Public Class Frm_Connection
                 For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
 
                     GereTransfertValeur(MyPoutreLoc.NombreZones(i), .NombreZones(i), lModif)
-                    GereTransfertValeur(MyPoutreLoc.NombreGoujonsTot(i), .NombreGoujonsTot(i), lModif)
+                    'GereTransfertValeur(MyPoutreLoc.NombreGoujonsTot(i), .NombreGoujonsTot(i), lModif)
 
                     For j As Integer = 0 To .NombreZones(i) - 1
 
@@ -797,7 +798,13 @@ Public Class Frm_Connection
         Longueur_Zone_MIN = Math.Min(1, MyPoutreLoc.LongueurTravee(traveeEnCours))
         Longueur_Zone_MAX = MyPoutreLoc.LongueurTravee(traveeEnCours)
         Nb_Zones_MIN = 1
-        Nb_Zones_MAX = Math.Min(Math.Floor(MyPoutreLoc.LongueurTravee(traveeEnCours) / Longueur_Zone_MIN), 3)
+
+        If traveeEnCours = 0 Or traveeEnCours = MyPoutreLoc.IndiceTraveeConsoleDroite Then
+            Nb_Zones_MAX = 1 'dans le cas de consoles, on impose une seule zone de connection 
+        Else 'cas d'une travée courante
+            Nb_Zones_MAX = Math.Min(Math.Floor(MyPoutreLoc.LongueurTravee(traveeEnCours) / Longueur_Zone_MIN), 3)
+        End If
+
         Espacement_Longi_MIN = 5 * MyPoutreLoc.Dalle.Connecteur.d
         Espacement_Longi_MAX = Math.Min(800 / 1000, 6 * MyPoutreLoc.Dalle.t_d)
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
@@ -1028,12 +1035,13 @@ Public Class Frm_Connection
     Private Sub MAJ_SommeGoujons()
         'MAJ du calcul de la somme des goujons après les modifications des valeurs
 
-        MyPoutreLoc.NombreGoujonsTot(traveeEnCours) = 0
-        For i As Integer = 0 To 2
-            MyPoutreLoc.NombreGoujonsTot(traveeEnCours) += Math.Floor(MyPoutreLoc.ZoneNombreGoujonsTransv(traveeEnCours, i) * MyPoutreLoc.ZoneLongueur(traveeEnCours, i) / MyPoutreLoc.ZoneEspacement(traveeEnCours, i))
-        Next
+        'MyPoutreLoc.NombreGoujonsTot(traveeEnCours) = 0
+        'For i As Integer = 0 To 2
+        '    MyPoutreLoc.NombreGoujonsTot(traveeEnCours) += Math.Floor(MyPoutreLoc.ZoneNombreGoujonsTransv(traveeEnCours, i) * MyPoutreLoc.ZoneLongueur(traveeEnCours, i) / MyPoutreLoc.ZoneEspacement(traveeEnCours, i))
+        'Next
 
-        Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonsTot(traveeEnCours) & " " & strStud
+        'Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonsTot(traveeEnCours) & " " & strStud
+        Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonTot(traveeEnCours) & " " & strStud
 
         Me.img_Connection.Invalidate()
 
