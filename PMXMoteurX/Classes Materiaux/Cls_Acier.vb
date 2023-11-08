@@ -46,7 +46,7 @@ Public Class cls_Acier
     ''' valeur nominale de la limite d'élasticité de la poutre (Pa = N/m²)
     ''' /!\ fysp n'est a priori utile que pour les slimfloors SFB (a discuter) /!\
     ''' </summary>
-    Public f_y As (w As Decimal, fs As Decimal, fi As Decimal, sp_SFB As Decimal)
+    Public f_y As (w As Decimal, fs As Decimal, fi As Decimal, spd As Decimal)
 
 
     Public Plages As List(Of strucPlage)
@@ -75,7 +75,7 @@ Public Class cls_Acier
 
     Public ReadOnly Property epsilon_sp
         Get
-            Return get_epsilon(Me.f_y.sp_SFB)
+            Return get_epsilon(Me.f_y.spd)
         End Get
     End Property
 
@@ -205,7 +205,7 @@ Public Class cls_Acier
         Me.f_y.w = 235
         Me.f_y.fs = 235
         Me.f_y.fi = 235
-        Me.f_y.sp_SFB = 235
+        Me.f_y.spd = 235
 
         Me.Plages = New List(Of strucPlage)
 

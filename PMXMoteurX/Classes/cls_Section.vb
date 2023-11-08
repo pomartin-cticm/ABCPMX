@@ -269,6 +269,7 @@ Public Class cls_Section
         '--> Déclaration
 
         Dim Hw As Decimal
+        Dim zRef As Decimal = Me.ProfilA.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
 
         '--> Initialisation
 
@@ -278,27 +279,33 @@ Public Class cls_Section
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, -Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, zRef - Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, -Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, zRef - Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, -Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, zRef - Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
 
         If lLamine Then
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, zRef - Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, zRef - Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
+
+        '# Plat soudé inférieur dans le cas d'une section IFB-A ou SFB
+        If Me.ProfilA.typeProfileAcier = Me.ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Or Me.ProfilA.typeProfileAcier = Me.ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Then MyModele.AddMaille(Me.ProfilA.AirePlat, Me.ProfilA.Plat_t, zRef - Me.ProfilA.ha + Me.ProfilA.Plat_t / 2, 1, 1, 1, Me.FySpd, 1, Gammas.GammaM0)
+
+        '# Plat soudé supérieur dans le cas d'une section IFB-B
+        If Me.ProfilA.typeProfileAcier = ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then MyModele.AddMaille(Me.ProfilA.AirePlat, Me.ProfilA.Plat_t, zRef - Me.ProfilA.Plat_t / 2, 1, 1, 1, Me.FySpd, 1, Gammas.GammaM0)
 
     End Sub
 
@@ -535,17 +542,19 @@ Public Class cls_Section
         '--> Déclaration
 
         Dim pNPro As Decimal = 0
-        Dim Afs, Afi As Decimal
+        Dim Afs, Afi, Aspd As Decimal
 
         '--> Initialisation
 
         Afs = Me.ProfilA.AireFs
         Afi = Me.ProfilA.AireFi
+        Aspd = Me.ProfilA.AirePlat 'Ajout GuD pour couvrir le cas des slimfloor qui possèdent un plat soudé
 
         '--> Calcul
 
         pNPro = Afs * Me.FySup
         pNPro += Afi * Me.FyInf
+        pNPro += Aspd * Me.FySpd
         pNPro += (Me.ProfilA.Aire - Afi - Afs) * Me.FyW
 
         '--> Fin
@@ -833,6 +842,9 @@ Public Class cls_Section
 
         End If
 
+        '# Plat soudé dans le cas de SFB, IFB-A et IFB-B
+        If Me.ProfilA.Plat_t > 0 Then MyModele.AddMaille(Me.ProfilA.AirePlat, Me.ProfilA.Plat_t, 0, 1, 1, 1, Me.FySpd, 1, Gammas.GammaM0)
+
         '# Béton d'enrobage
 
         If Me.lEnrobage Then
@@ -968,7 +980,7 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property lLamine As Boolean
         Get
-            Return (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
+            Return (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine) Or (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB) Or (Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB)
         End Get
     End Property
 
@@ -1071,6 +1083,13 @@ Public Class cls_Section
             End If
 
             Return MyFy
+        End Get
+    End Property
+
+    Public ReadOnly Property FySpd As Decimal
+        Get
+            'GUD: /!\ A discuter car j'ai un doute /!\
+            Return Me.Acier.LimiteFy(Me.ProfilA.Plat_t)
         End Get
     End Property
 

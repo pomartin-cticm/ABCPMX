@@ -307,6 +307,23 @@ Public Class cls_ProfilA
         End Get
     End Property
 
+    Public ReadOnly Property zRefAraseSup As Decimal
+        Get
+            Select Case Me.typeProfileAcier
+                Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
+                    Return 0
+                Case Enum_TypeSectionAcier.LamineSlimSFB
+                    Return Me.hb
+                Case Enum_TypeSectionAcier.LamineSlimIFBA
+                    Return Me.ha - Me.Plat_t
+                Case Enum_TypeSectionAcier.LamineSlimIFBB
+                    Return Me.ha - Me.Tfi
+                Case Enum_TypeSectionAcier.LamineSlimSAB
+                    Return Me.hb - Me.Tfi
+            End Select
+        End Get
+    End Property
+
     ''' <summary>
     ''' Aire de la semelle supérieure
     ''' </summary>
@@ -324,6 +341,16 @@ Public Class cls_ProfilA
     Public ReadOnly Property AireFi As Decimal
         Get
             Return Me.Bfi * Me.Tfi
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Aire du plat soudé dans le cas d'un profilé SFB, IFB-A et IFB-B
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property AirePlat As Decimal
+        Get
+            Return Me.Plat_b * Me.Plat_t
         End Get
     End Property
 
@@ -419,18 +446,18 @@ Public Class cls_ProfilA
 
 #Region " Propriétés plastiques en flexion "
 
-    Public Function MomentPlastiqueSlimYY(lValRd As Boolean, GammaS As cls_Gamma) As Decimal
-        '-------------------------------------------------------------------------------------------------------------------
-        '   13/07/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Calcul du module plastique du profilé, par rapport à l'axe fort
-        '-------------------------------------------------------------------------------------------------------------------
-        '   lValRd      [E] :   Indique si valeur Rd (true) ou valeur Rk (false)
-        '   GammaS      [E] :   Coefficients partiels
-        '-------------------------------------------------------------------------------------------------------------------
+    'Public Function MomentPlastiqueSlimYY(lValRd As Boolean, GammaS As cls_Gamma) As Decimal
+    '    '-------------------------------------------------------------------------------------------------------------------
+    '    '   13/07/23 :  Création - POM
+    '    '-------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul du module plastique du profilé, par rapport à l'axe fort
+    '    '-------------------------------------------------------------------------------------------------------------------
+    '    '   lValRd      [E] :   Indique si valeur Rd (true) ou valeur Rk (false)
+    '    '   GammaS      [E] :   Coefficients partiels
+    '    '-------------------------------------------------------------------------------------------------------------------
 
 
-    End Function
+    'End Function
 
 
     Public Function ModuleFlexionPlastiqueYY() As Decimal
@@ -439,13 +466,12 @@ Public Class cls_ProfilA
         '-------------------------------------------------------------------------------------------------------------------
         '   Calcul du module plastique du profilé, par rapport à l'axe fort
         '-------------------------------------------------------------------------------------------------------------------
-        '   A COMPLETER
-        '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
 
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
+        Dim zRef As Decimal = Me.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
         'Dim lLamine As Boolean = Me.lLamine
         Const RhoV As Decimal = 0
         Const Fy As Decimal = 235
@@ -462,30 +488,36 @@ Public Class cls_ProfilA
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.AireFs, Me.Tfs, -Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFs, Me.Tfs, zRef - Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.Tw, Hw, -Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+        MyModele.AddMaille(Hw * Me.Tw, Hw, zRef - Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.AireFi, Me.Tfi, -Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFi, Me.Tfi, zRef - Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
 
         If Me.Rcs > 0 Then
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.Rcs, -Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.Rcs, zRef - Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
         If Me.Rci > 0 Then
 
             '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.Rci, -Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.Rci, zRef - Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
+
+        '# Plat soudé inférieur dans le cas d'une section IFB-A ou SFB
+        If Me.typeProfileAcier = Enum_TypeSectionAcier.LamineSlimIFBA Or Me.typeProfileAcier = Enum_TypeSectionAcier.LamineSlimSFB Then MyModele.AddMaille(Me.AirePlat, Me.Plat_t, zRef - Me.ha + Me.Plat_t / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '# Plat soudé supérieur dans le cas d'une section IFB-B
+        If Me.typeProfileAcier = Enum_TypeSectionAcier.LamineSlimIFBB Then MyModele.AddMaille(Me.AirePlat, Me.Plat_t, zRef - Me.Plat_t / 2, 1, 1, 1, Fy, 1, GammaM0)
 
         '--> Recherche de l'axe neutre plastique
 
@@ -584,6 +616,9 @@ Public Class cls_ProfilA
 
         End If
 
+        '# Plat soudé dans le cas de SFB, IFB-A et IFB-B
+        If Me.Plat_t > 0 Then MyModele.AddMaille(Me.AirePlat, Me.Plat_t, 0, 1, 1, 1, Fy, 1, GammaM0)
+
         '--> Recherche de l'axe neutre élastique
 
         MyModele.RechercheANE(Signe, zANE)
@@ -605,6 +640,7 @@ Public Class cls_ProfilA
         '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
         '   Gammas      [E] :   Coefficients partiels
         '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   zRef        [E] :   Position de l'arase supérieure de la semelle supérieure du profilé 
         '   zANE        [E] :   Position axe neutre élastique
         '   MelRd       [E] :   Moment élastique
         '-------------------------------------------------------------------------------------------------------------------
@@ -613,6 +649,7 @@ Public Class cls_ProfilA
 
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
+        Dim zRef As Decimal = Me.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
         'Dim lLamine As Boolean = Me.lLamine
         Const RhoV As Decimal = 0
         Const Fy As Decimal = 235
@@ -625,21 +662,21 @@ Public Class cls_ProfilA
 
         '# Semelle supérieure
 
-        MyModele.AddMaille(Me.AireFs, Me.Tfs, -Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFs, Me.Tfs, zRef - Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
 
         '# Âme
 
-        MyModele.AddMaille(Hw * Me.Tw, Hw, -Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+        MyModele.AddMaille(Hw * Me.Tw, Hw, zRef - Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
 
         '# Semelle inférieure
 
-        MyModele.AddMaille(Me.AireFi, Me.Tfi, -Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AireFi, Me.Tfi, zRef - Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
 
         If Me.Rcs > 0 Then
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.Rcs, -Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
+            MyModele.AddMailleConges(Me.Rcs, zRef - Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
 
@@ -647,9 +684,15 @@ Public Class cls_ProfilA
 
             '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.Rci, -Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.Rci, zRef - Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
+
+        '# Plat soudé inférieur dans le cas d'une section IFB-A ou SFB
+        If Me.typeProfileAcier = Enum_TypeSectionAcier.LamineSlimIFBA Or Me.typeProfileAcier = Enum_TypeSectionAcier.LamineSlimSFB Then MyModele.AddMaille(Me.AirePlat, Me.Plat_t, zRef - Me.ha + Me.Plat_t / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '# Plat soudé supérieur dans le cas d'une section IFB-B
+        If Me.typeProfileAcier = Enum_TypeSectionAcier.LamineSlimIFBB Then MyModele.AddMaille(Me.AirePlat, Me.Plat_t, zRef - Me.Plat_t / 2, 1, 1, 1, Fy, 1, GammaM0)
 
         '--> Recherche de l'axe neutre élastique
 
