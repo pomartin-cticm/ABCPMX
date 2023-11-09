@@ -19,12 +19,12 @@
 
         Me.Titre = pTitre
 
-        ReDim Me.QSurf(IndiceDerniereTravee + 1)
+        ReDim Me.QSurf(IndiceDerniereTravee)
         'ReDim Me.WSurf(IndiceDerniereTravee + 1)
-        ReDim Me.Forces(IndiceDerniereTravee + 1)
-        ReDim Me.FReparties(IndiceDerniereTravee + 1)
+        ReDim Me.Forces(IndiceDerniereTravee)
+        ReDim Me.FReparties(IndiceDerniereTravee)
 
-        For i As Integer = 0 To IndiceDerniereTravee + 1
+        For i As Integer = 0 To IndiceDerniereTravee
             Forces(i) = New List(Of cls_Force)
             FReparties(i) = New List(Of cls_ForceRepartie)
         Next

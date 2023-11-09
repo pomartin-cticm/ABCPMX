@@ -14,6 +14,165 @@ Module Mod_Dessins
 
 #End Region
 
+#Region "Dessins pour la fenetre principale (FRM_MAIN)"
+    Public Sub DessinFrmMain_Coupe(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyDalle As cls_Dalle,
+                            MySection As cls_Section,
+                            ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   26/06/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin du Bac Acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   MyDalle     [E] :   Dalle à dessiner
+        '   MySection   [E] :   Section à laquelle la dalle est rattachée
+        '   iSelect     [E] :   Indice de la cote selectionnée
+        '   strMsg      [E] :   Messages issus du fichier langue
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+        '   iSelect:    0 épaisseur de la dalle
+        '               1 épaisseur renformis
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Double
+        Dim lMixte, lEnrob, lLamine As Boolean
+        Dim Beff As Decimal
+        Dim BeffG, BeffD As Decimal
+
+        Dim ColorLocalEtriers As Color = CouleurArmaNormal
+        Dim ColorLocalArma(2) As Color
+        Dim CouleurBeton As Color = CouleurBetonNormal
+        Dim CouleurAcier As Color = CouleurAcierNormal
+        'Dim pColorLocalArma(2, 2) As Color
+        Dim ColorArmatures(1) As Color
+        Const kADJUST As Decimal = 0.95
+        Const zREF As Decimal = 0
+        Dim Ha, Bfs As Decimal
+        Dim lCote As Boolean = True
+        Dim lCofraplus220 As Boolean
+
+        '--> Initialisation
+
+        lMixte = MySection.lMixte
+        lEnrob = MySection.lEnrobage
+        lLamine = MySection.lLamine
+        lCofraplus220 = MyDalle.Bac.lCofraplus220
+
+        ' A REVOIR ====
+        Beff = LargeurDalleDessin(MySection.ProfilA)
+        BeffG = Beff / 2
+        BeffD = Beff / 2
+
+        Ha = MySection.ProfilA.ha
+        Bfs = MySection.ProfilA.Bfs
+
+        '--> Preparation de la zone d'affichage - Calcul de ParAff
+        dCar = Math.Sqrt(Beff ^ 2 + (Ha + MyDalle.zTop) ^ 2) / 10
+
+        xMin = -Beff / 2 - 2 * dCar
+        xMax = Beff / 2
+
+        yMin = -MySection.ProfilA.ha
+        yMax = MyDalle.zTop + dCar
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+        '--> Préparation des Pinceaux utilisés dans le dessin
+
+        ' Profilé
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
+        ' Béton
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+        ' Béton prefabriqué
+        Dim myBrushPref As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.LightGray, CouleurBeton)
+        ' Etriers
+        Dim myBrushE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
+        ' Armatures de l'enrobage
+        Dim myBrushArmaE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurArmaNormal)
+        ' Etriers
+        Dim myBrushA(1) As Brush
+
+        'Select Case iSelect
+        '    Case 100, 101, 102, 103, 1001
+        '        ColorArmatures(0) = CouleurArmaSelect
+        '        ColorArmatures(1) = CouleurArmaNormal
+        '    Case 200, 201, 202, 203
+        '        ColorArmatures(1) = CouleurArmaSelect
+        '        ColorArmatures(0) = CouleurArmaNormal
+        '    Case Else
+        '        ColorArmatures(0) = CouleurArmaNormal
+        '        ColorArmatures(1) = CouleurArmaNormal
+        'End Select
+
+        ColorArmatures(0) = CouleurArmaNormal
+        ColorArmatures(1) = CouleurArmaNormal
+
+        'myBrushA(0) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.LightGray, ColorArmatures(0))
+        myBrushA(0) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorArmatures(0), ColorArmatures(0))
+        myBrushA(1) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorArmatures(1), ColorArmatures(1))
+
+        '--> Dessin de béton
+
+        If lEnrob Then _
+        DessinEnrobagePartielBeton(myGr, MySection.ProfilA, MySection.Enrobage.Ratio_bc, MyParAff, myBrushB)
+
+        '--> Dessin de la section acier
+
+        DessinProfileMetal(myGr, MySection.ProfilA, myBrushP, MyParAff, zREF)
+
+        '--> Dessin des étriers
+
+        If lEnrob Then _
+        DessinEtriers(myGr, MySection.ProfilA, MySection.Enrobage, MyParAff, myBrushE, zREF)
+
+        '--> Dessins des connecteurs
+
+        '--> Dessin de la dalle
+
+        'If lMixte Then 'Mise en commentaire GUD
+
+        '# Dalle béton
+
+        Select Case MyDalle.type
+            Case cls_Dalle.Enum_TypeDalle.Pleine
+                DessinDallePleine(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+            Case cls_Dalle.Enum_TypeDalle.Mixte
+                Select Case MyDalle.Bac.Orientation
+                    Case cls_Bac.Enum_Orientation.Parallele
+                        DessineDalleMixteParallele(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+                    Case cls_Bac.Enum_Orientation.Perpendiculaire
+                        If lCofraplus220 Then
+                            DessineDalleMixtePerpendiculaireCfp220(myGr, MyDalle, MySection.ProfilA, MyParAff, myBrushB, Beff)
+                        Else
+                            DessineDalleMixtePerpendiculaire(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+                        End If
+
+                End Select
+
+            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
+                DessinDallePreFab(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
+        End Select
+
+        '# Armatures
+
+        DessinLitArmaDalle(myGr, MyDalle, Beff, 0, MySection.ProfilA.ha, -1, MyParAff, myBrushA(0))
+        DessinLitArmaDalle(myGr, MyDalle, Beff, 1, MySection.ProfilA.ha, -1, MyParAff, myBrushA(1))
+
+        'End If
+
+        If lCote Then
+            Dim strMsg As String()
+            DessinCoteFrmDalle(myGr, MyDalle, MySection, -1, MyParAff, dCar, BeffG, BeffD, strMsg)
+
+        End If
+    End Sub
+#End Region
+
 #Region " Dessins pour la définiton de la dalle (FRM_DALLEN) "
 
 

@@ -1108,6 +1108,20 @@ Public Class Frm_PMX
 
     End Sub
 
+#End Region
+
+#Region "Dessins"
+
+    Private Sub img_Main_Paint(sender As Object, e As PaintEventArgs) Handles img_Main.Paint
+        'DessineBacTout(e.Graphics, Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, True, 1)
+        Dim msgDalle As String()
+        ReDim msgDalle(1)
+        msgDalle(0) = "bvhj,"
+        msgDalle(1) = "4555,"
+
+
+        DessinFrmMain_Coupe(e.Graphics, Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height, MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyProjet.Poutres(MyProjet.IndEnCours).Section)
+    End Sub
 
 #End Region
 

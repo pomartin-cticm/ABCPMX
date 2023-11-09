@@ -59,9 +59,14 @@ Partial Class Frm_PMX
         Me.TSbtn_PPLoadCases = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_PPCombi = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_PPVerifications = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_PostT = New System.Windows.Forms.ToolStripSplitButton()
+        Me.TSmenuPPLargeurEfficace = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TSmenuPPChargements = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TSmenuPPCombinaisons = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TSmenuPPVerifications = New System.Windows.Forms.ToolStripMenuItem()
+        Me.TSmenuPPModePropre = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_NdcPoutre = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_PostT = New System.Windows.Forms.ToolStripSplitButton()
         Me.img_Main = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
@@ -124,11 +129,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
-        Me.TSmenuPPLargeurEfficace = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TSmenuPPChargements = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TSmenuPPCombinaisons = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TSmenuPPVerifications = New System.Windows.Forms.ToolStripMenuItem()
-        Me.TSmenuPPModePropre = New System.Windows.Forms.ToolStripMenuItem()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -519,6 +519,46 @@ Partial Class Frm_PMX
         Me.TSbtn_PPVerifications.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_PPVerifications.Text = "ToolStripButton1"
         '
+        'TSbtn_PostT
+        '
+        Me.TSbtn_PostT.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_PostT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSmenuPPLargeurEfficace, Me.TSmenuPPChargements, Me.TSmenuPPCombinaisons, Me.TSmenuPPVerifications, Me.TSmenuPPModePropre})
+        Me.TSbtn_PostT.Image = CType(resources.GetObject("TSbtn_PostT.Image"), System.Drawing.Image)
+        Me.TSbtn_PostT.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_PostT.Name = "TSbtn_PostT"
+        Me.TSbtn_PostT.Size = New System.Drawing.Size(40, 28)
+        Me.TSbtn_PostT.Text = "ToolStripSplitButton1"
+        '
+        'TSmenuPPLargeurEfficace
+        '
+        Me.TSmenuPPLargeurEfficace.Name = "TSmenuPPLargeurEfficace"
+        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPLargeurEfficace.Text = "Largeur efficace"
+        '
+        'TSmenuPPChargements
+        '
+        Me.TSmenuPPChargements.Name = "TSmenuPPChargements"
+        Me.TSmenuPPChargements.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPChargements.Text = "Chargements"
+        '
+        'TSmenuPPCombinaisons
+        '
+        Me.TSmenuPPCombinaisons.Name = "TSmenuPPCombinaisons"
+        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPCombinaisons.Text = "Combinaisons"
+        '
+        'TSmenuPPVerifications
+        '
+        Me.TSmenuPPVerifications.Name = "TSmenuPPVerifications"
+        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPVerifications.Text = "Vérifications"
+        '
+        'TSmenuPPModePropre
+        '
+        Me.TSmenuPPModePropre.Name = "TSmenuPPModePropre"
+        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPModePropre.Text = "Mode propre"
+        '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
@@ -532,16 +572,6 @@ Partial Class Frm_PMX
         Me.TSbtn_NdcPoutre.Name = "TSbtn_NdcPoutre"
         Me.TSbtn_NdcPoutre.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_NdcPoutre.Text = "ToolStripButton1"
-        '
-        'TSbtn_PostT
-        '
-        Me.TSbtn_PostT.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_PostT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSmenuPPLargeurEfficace, Me.TSmenuPPChargements, Me.TSmenuPPCombinaisons, Me.TSmenuPPVerifications, Me.TSmenuPPModePropre})
-        Me.TSbtn_PostT.Image = CType(resources.GetObject("TSbtn_PostT.Image"), System.Drawing.Image)
-        Me.TSbtn_PostT.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_PostT.Name = "TSbtn_PostT"
-        Me.TSbtn_PostT.Size = New System.Drawing.Size(40, 28)
-        Me.TSbtn_PostT.Text = "ToolStripSplitButton1"
         '
         'img_Main
         '
@@ -1070,36 +1100,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(0, "Enregistrer_NotOK")
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
-        '
-        'TSmenuPPLargeurEfficace
-        '
-        Me.TSmenuPPLargeurEfficace.Name = "TSmenuPPLargeurEfficace"
-        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(180, 22)
-        Me.TSmenuPPLargeurEfficace.Text = "Largeur efficace"
-        '
-        'TSmenuPPChargements
-        '
-        Me.TSmenuPPChargements.Name = "TSmenuPPChargements"
-        Me.TSmenuPPChargements.Size = New System.Drawing.Size(180, 22)
-        Me.TSmenuPPChargements.Text = "Chargements"
-        '
-        'TSmenuPPCombinaisons
-        '
-        Me.TSmenuPPCombinaisons.Name = "TSmenuPPCombinaisons"
-        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(180, 22)
-        Me.TSmenuPPCombinaisons.Text = "Combinaisons"
-        '
-        'TSmenuPPVerifications
-        '
-        Me.TSmenuPPVerifications.Name = "TSmenuPPVerifications"
-        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(180, 22)
-        Me.TSmenuPPVerifications.Text = "Vérifications"
-        '
-        'TSmenuPPModePropre
-        '
-        Me.TSmenuPPModePropre.Name = "TSmenuPPModePropre"
-        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(180, 22)
-        Me.TSmenuPPModePropre.Text = "Mode propre"
         '
         'Frm_PMX
         '
