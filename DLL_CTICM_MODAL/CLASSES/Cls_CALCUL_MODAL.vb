@@ -254,6 +254,40 @@
 
 #Region " RESULTATS D'ANALYSE "
 
+    'Private Sub UPDATE_RESULTS(PESANTEUR As Decimal, ByRef OUTPUT As DATA_MODAL.Struc_Output)
+    '    '=============================================
+    '    '
+    '    ' 26/09/2023 : TMN, v 1.00
+    '    '
+    '    '=============================================
+    '    '
+    '    ' MISE A JOUR DES RESULTATS DU CALCUL MODAL
+    '    '
+    '    '=============================================
+    '    '        
+    '    ' Donnees       [E] : donnees d'entree
+    '    '
+    '    '=============================================
+    '    '        
+    '    ' OUTPUT        [S] : résultats
+    '    '
+    '    '=============================================
+
+    '    'Initialiser
+    '    ReDim OUTPUT.FreqProp(RESOLUTION.NBVALP - 1)
+    '    ReDim OUTPUT.VectProp(RESOLUTION.NBVALP - 1, NOEUDS.NNT - 1)
+    '    ReDim OUTPUT.MasseMod(RESOLUTION.NBVALP - 1)
+
+    '    For iMode = 1 To RESOLUTION.NBVALP
+    '        OUTPUT.FreqProp(iMode - 1) = RESULTATS.VALP(1, iMode) ^ 0.5 / 2 / Math.PI
+    '        For iNode = 1 To NOEUDS.NNT
+    '            OUTPUT.VectProp(iMode - 1, iNode - 1) = RESULTATS.VECTP(1, iMode, 3 * (iNode - 1) + 2)
+    '        Next
+    '        OUTPUT.MasseMod(iMode - 1) = RESULTATS.MAS_MOD(1, iMode) * PESANTEUR          'Meme unite que la force
+    '    Next
+    '    OUTPUT.MasseTot = RESULTATS.MAS_TOT(1) * PESANTEUR          'Meme unite que la force
+    'End Sub
+
     Private Sub UPDATE_RESULTS(PESANTEUR As Decimal, ByRef OUTPUT As DATA_MODAL.Struc_Output)
         '=============================================
         '
@@ -283,10 +317,11 @@
             For iNode = 1 To NOEUDS.NNT
                 OUTPUT.VectProp(iMode - 1, iNode - 1) = RESULTATS.VECTP(1, iMode, 3 * (iNode - 1) + 2)
             Next
-            OUTPUT.MasseMod(iMode - 1) = RESULTATS.MAS_MOD(1, iMode) * PESANTEUR          'Meme unite que la force
+            OUTPUT.MasseMod(iMode - 1) = RESULTATS.MAS_MOD(1, iMode)
         Next
-        OUTPUT.MasseTot = RESULTATS.MAS_TOT(1) * PESANTEUR          'Meme unite que la force
+        OUTPUT.MasseTot = RESULTATS.MAS_TOT(1)
     End Sub
+
 
 #End Region
 
