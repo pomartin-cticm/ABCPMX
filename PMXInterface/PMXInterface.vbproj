@@ -514,6 +514,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ABCPMX II.ico" />
+    <None Include="Resources\ZoomPlus.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DLL_CTICM_DATA\DLL_CTICM_DATA.vbproj">

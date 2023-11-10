@@ -57,12 +57,16 @@ Module Mod_NoteCalcul
     'Valeur du zoom
     Public ZoomValue As Integer = 100
 
+    'Paramètre de gestion d'affichage des valeurs pour la partie Analyse
+    Const formatEFFORTS As String = "0.00"
+
 #End Region
 
 #Region "   Variables "
 
     Private Bloc As New Dictionary(Of String, String)
     Private BlocSP As New Dictionary(Of String, String)
+    Private BlocAnalyse As New Dictionary(Of String, String)
     Private BlocELU As New Dictionary(Of String, String)
 
     Private ReadOnly IndTableau As Integer = 0
@@ -189,6 +193,12 @@ Module Mod_NoteCalcul
 
 
         '--|=========================================
+        '--| ANALYSE DE LA POUTRE
+        '--|=========================================
+
+        EditionAnalysePoutre(MyPrjt.Poutres(MyPrjt.IndEnCours))
+
+        '--|=========================================
         '--| VERIFICATION DES CRITERES
         '--|=========================================
 
@@ -212,6 +222,9 @@ Module Mod_NoteCalcul
 
         BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_SECTIONPROP")
         BlocLine.CreationBloc(BlocSP)
+
+        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_ANALYSE")
+        BlocLine.CreationBloc(BlocAnalyse)
 
         BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSULS")
         BlocLine.CreationBloc(BlocELU)
@@ -1480,6 +1493,106 @@ Module Mod_NoteCalcul
 
 #End Region
 
+
+#Region "***Edition vérifications ELU***"
+
+    Private Sub EditionAnalysePoutre(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   10/11/23 :  Création - GUD
+        '-------------------------------------------------------------------------------------------
+        '   Edition des efforts dans la poutre après analyse
+        '-------------------------------------------------------------------------------------------
+
+        SautePage()
+
+        AddTitreNdC(1, BlocAnalyse("ANALYSIS"))
+        AddTitreNdC(2, BlocAnalyse("ELEMNTRY_LC"))
+
+        For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).ChargesA.Count - 1
+            EditionAnalyseChargeA(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i))
+            SautePage()
+        Next
+
+
+        AddTitreNdC(2, BlocAnalyse("ELEMNTRY_ULS"))
+
+
+
+    End Sub
+
+
+    Private Sub EditionAnalyseChargeA(MyPoutreLoc As cls_Poutre, ChargeA As cls_CasDeCharge)
+        AddTitreNdC(3, ChargeA.Symbol & " :" & ChargeA.Nom)
+
+        If Not ChargeA.lRunCalcul Then
+            AddLigneNDC(TABW2 & BlocAnalyse("NOTCALCULATION"))
+            Exit Sub
+        End If
+
+
+
+        AddLigneNDC("\TABLEAU 10")
+
+        InitialiseLigne(8, HLIGNE, True)
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("NODE"))
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("SPAN"))
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-" & BlocAnalyse("SPAN") & "\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-" & BlocAnalyse("GLOBAL") & "\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-L\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-R\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-L\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-R\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+
+        Dim indTravee As Integer()
+        For i As Integer = 0 To MyPoutreLoc.Nodes.nbNodes - 1
+            indTravee = IndiceTravee(i, MyPoutreLoc.Nodes.iNodeAppui)
+
+            InitialiseLigne(8, HLIGNE, True)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, i)
+            If indTravee(0) = indTravee(1) Then
+                AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, indTravee(0))
+            Else
+                AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, indTravee(0) & "/" & indTravee(1))
+            End If
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, MyPoutreLoc.Nodes.xTravee(i))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, MyPoutreLoc.Nodes.xGlobal(i))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.VZ(i, 0), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.VZ(i, 1), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.MYY(i, 0), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.MYY(i, 1), Enu_TypeVariable.SansType, 3, 2, False))
+
+        Next
+
+
+        FinTableau()
+    End Sub
+
+    Private Function IndiceTravee(Node As Integer, iNodeAppui As Integer()) As Integer()
+        '-------------------------------------------------------------------------------------------
+        '   10/11/23 :  Création - GUD
+        '-------------------------------------------------------------------------------------------
+        '   Permet de renvoyer l'indice de la travée à laquelle appartient le noeud 
+        '   Dans le cas où le noeud appartient à deux travées, l'indice de la travée renvoyée est celle de gauche (sauf pour le tout premier noeud)
+        '-------------------------------------------------------------------------------------------
+
+        Dim indTravee(1) As Integer
+
+        For j As Integer = 0 To iNodeAppui.Count - 1 'On ne commence pas à l'indice 0 exprès car l'indice de la travée du premier noeud est 1
+            If Node <= iNodeAppui(j) Then
+                indTravee(0) = j + 1
+                If Node = iNodeAppui(j) And j <> iNodeAppui.Count - 1 Then
+                    indTravee(1) = indTravee(0) + 1
+                Else
+                    indTravee(1) = indTravee(0)
+                End If
+                Return indTravee
+                End If
+        Next
+
+    End Function
+
+#End Region
+
 #Region "***Edition vérifications ELU***"
     Private Sub EditionVerificationsELU(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
@@ -1538,6 +1651,15 @@ Module Mod_NoteCalcul
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+
+        InitialiseLigne(6, HLIGNE, True)
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SECTION"))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SPAN"))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x(m)GUD")
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+
 
 
         FinTableau()

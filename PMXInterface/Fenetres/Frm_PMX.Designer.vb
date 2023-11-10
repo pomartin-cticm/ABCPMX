@@ -68,6 +68,9 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_NdcPoutre = New System.Windows.Forms.ToolStripButton()
         Me.img_Main = New System.Windows.Forms.PictureBox()
+        Me.TSGestionImagePoutre = New System.Windows.Forms.ToolStrip()
+        Me.TSbtn_ZoomPlus = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_ZoomMoins = New System.Windows.Forms.ToolStripButton()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
         Me.TLPan_Menus = New System.Windows.Forms.TableLayoutPanel()
@@ -141,6 +144,7 @@ Partial Class Frm_PMX
         Me.TLPan_ZoneDeSaisie.SuspendLayout()
         Me.ToolStrip_Poutre.SuspendLayout()
         CType(Me.img_Main, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TSGestionImagePoutre.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         CType(Me.img_Logo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLPan_Menus.SuspendLayout()
@@ -306,6 +310,7 @@ Partial Class Frm_PMX
         Me.TLPan_ZoneDeSaisie.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_ZoneDeSaisie.Controls.Add(Me.ToolStrip_Poutre, 0, 0)
         Me.TLPan_ZoneDeSaisie.Controls.Add(Me.img_Main, 0, 1)
+        Me.TLPan_ZoneDeSaisie.Controls.Add(Me.TSGestionImagePoutre, 0, 2)
         Me.TLPan_ZoneDeSaisie.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_ZoneDeSaisie.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_ZoneDeSaisie.Margin = New System.Windows.Forms.Padding(0)
@@ -584,6 +589,33 @@ Partial Class Frm_PMX
         Me.img_Main.Size = New System.Drawing.Size(974, 410)
         Me.img_Main.TabIndex = 6
         Me.img_Main.TabStop = False
+        '
+        'TSGestionImagePoutre
+        '
+        Me.TSGestionImagePoutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_ZoomPlus, Me.TSbtn_ZoomMoins})
+        Me.TSGestionImagePoutre.Location = New System.Drawing.Point(0, 441)
+        Me.TSGestionImagePoutre.Name = "TSGestionImagePoutre"
+        Me.TSGestionImagePoutre.Size = New System.Drawing.Size(975, 25)
+        Me.TSGestionImagePoutre.TabIndex = 7
+        Me.TSGestionImagePoutre.Text = "TSGestionImagePoutre"
+        '
+        'TSbtn_ZoomPlus
+        '
+        Me.TSbtn_ZoomPlus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_ZoomPlus.Image = Global.PMXInterface.My.Resources.Resources.ZoomPlus
+        Me.TSbtn_ZoomPlus.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_ZoomPlus.Name = "TSbtn_ZoomPlus"
+        Me.TSbtn_ZoomPlus.Size = New System.Drawing.Size(23, 22)
+        Me.TSbtn_ZoomPlus.Text = "TSbtn_ZoomPlus"
+        '
+        'TSbtn_ZoomMoins
+        '
+        Me.TSbtn_ZoomMoins.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_ZoomMoins.Image = CType(resources.GetObject("TSbtn_ZoomMoins.Image"), System.Drawing.Image)
+        Me.TSbtn_ZoomMoins.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_ZoomMoins.Name = "TSbtn_ZoomMoins"
+        Me.TSbtn_ZoomMoins.Size = New System.Drawing.Size(23, 22)
+        Me.TSbtn_ZoomMoins.Text = "TSbtn_ZoomMoins"
         '
         'TableLayoutPanel1
         '
@@ -1127,6 +1159,8 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.ResumeLayout(False)
         Me.ToolStrip_Poutre.PerformLayout()
         CType(Me.img_Main, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TSGestionImagePoutre.ResumeLayout(False)
+        Me.TSGestionImagePoutre.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
         CType(Me.img_Logo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TLPan_Menus.ResumeLayout(False)
@@ -1250,4 +1284,7 @@ Partial Class Frm_PMX
     Friend WithEvents TSmenuPPCombinaisons As ToolStripMenuItem
     Friend WithEvents TSmenuPPVerifications As ToolStripMenuItem
     Friend WithEvents TSmenuPPModePropre As ToolStripMenuItem
+    Friend WithEvents TSGestionImagePoutre As ToolStrip
+    Friend WithEvents TSbtn_ZoomPlus As ToolStripButton
+    Friend WithEvents TSbtn_ZoomMoins As ToolStripButton
 End Class

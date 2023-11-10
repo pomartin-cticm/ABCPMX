@@ -211,6 +211,15 @@ GSTEELB					= Steel beam
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties
 
+#NDC_ANALYSE
+ANALYSIS				= Analysis - Internal forces and moments
+ELEMNTRY_LC				= Elementary load cases
+ELEMNTRY_ULS			= ULS Combination
+SPAN					= Span
+GLOBAL					= Global
+NODE					= Node
+NOTCALCULATION			= Calculation not carried out 
+
 #NDC_VERIFICATIONSULS
 ULS						= Ultimate Limit States
 CRITERIA_SUM			= Sumary of the criteria

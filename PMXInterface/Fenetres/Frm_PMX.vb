@@ -21,6 +21,8 @@ Public Class Frm_PMX
 
     Dim Str_WarningFile As String
 
+    Dim lZoomPlus As Boolean
+
 #End Region
 
 #Region " Variables locales pour btnPoutres "
@@ -74,6 +76,8 @@ Public Class Frm_PMX
         GestionLangueMessageGeneraux()
         GestionLangue()
         GestionStyle()
+
+        lZoomPlus = False
 
         '--> Affichage
 
@@ -1114,10 +1118,20 @@ Public Class Frm_PMX
 #Region "Dessins"
 
     Private Sub img_Main_Paint(sender As Object, e As PaintEventArgs) Handles img_Main.Paint
-        DessinFrmMain_Coupe(e.Graphics, Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height, MyProjet.Poutres(MyProjet.IndEnCours))
+        DessinFrmMain_Coupe(e.Graphics, Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height, MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus)
     End Sub
 
     Private Sub Frm_PMX_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
+        img_Main.Invalidate()
+    End Sub
+
+    Private Sub TSbtn_ZoomPlusMoins_Click(sender As Object, e As EventArgs) Handles TSbtn_ZoomPlus.Click, TSbtn_ZoomMoins.Click
+        lZoomPlus = sender.name = TSbtn_ZoomPlus.Name
+        img_Main.Invalidate()
+    End Sub
+
+    Private Sub PictureBox_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles img_Main.MouseWheel
+        lZoomPlus = e.Delta > 0 'Gère si le scrool est en avant (>0) ou en arrière (<0)
         img_Main.Invalidate()
     End Sub
 
