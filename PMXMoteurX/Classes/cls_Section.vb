@@ -295,9 +295,9 @@ Public Class cls_Section
 
             MyModele.AddMailleConges(Me.ProfilA.Rcs, zRef - Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
-            '# Congés supérieurs
+            '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rci, zRef - Me.ProfilA.ha + Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, zRef - Me.ProfilA.ha + Me.ProfilA.Tfi, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 

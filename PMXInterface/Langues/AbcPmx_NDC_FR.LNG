@@ -202,3 +202,6 @@ COMBINATIONS			= Combinaisons
 WEXPERT					= Avertissement: Ce rapport est réalisé en mode expert.
 WEXPERT2				= Certains paramètres peuvent être en dehors du domaine d'application du logiciel
 GSTEELB					= Poutre acier
+ULS						= ELU
+SLS						= ELS
+FLS						= ELF

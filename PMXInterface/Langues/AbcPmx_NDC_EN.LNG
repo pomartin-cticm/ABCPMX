@@ -34,6 +34,13 @@ PINNED					= PinnedZZ
 FIXED					= FixedZZ
 FREE					= FreeZZ
 SPAN					= Span
+TYPEOFBEAM				= Type of beam
+TYPEOFSLAB				= Type of slab
+TYPEOFSTEELSECTION		= Type of steel section
+COMPOSITE				= Composite
+NONCOMPOSITE			= Non composite
+PARTIALLY_ENCASED		= Partially encased
+NOT_PARTIALLY_ENCASED	= Not partially encased
 TRANSPARAMETERS			= Transversal parameters
 BEAMPOSITION			= Position of the beam
 EDGEBEAM				= Edge beam
@@ -207,6 +214,9 @@ COMBINATIONS			= Combinations
 WEXPERT					= Warning: This calculation is carried out in the Expert mode.
 WEXPERT2				= Some parameters may be outside the scope of the software
 GSTEELB					= Steel beam
+ULS						= ULS
+SLS						= SLS
+FLS						= FLS
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties

@@ -293,7 +293,15 @@ Public Class cls_ProfilA
     ''' <returns></returns>
     Public ReadOnly Property HauteurAmeHw As Decimal
         Get
-            Return Me.ha - Me.Tfs - Me.Tfi
+            Select Case Me.typeProfileAcier
+                Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.LamineSlimSAB, Enum_TypeSectionAcier.LamineSlimSFB
+                    Return Me.hb - Me.Tfs - Me.Tfi
+                Case Enum_TypeSectionAcier.LamineSlimIFBA
+                    Return Me.ha - Me.Tfs - Me.Plat_t
+                Case Enum_TypeSectionAcier.LamineSlimIFBB
+                    Return Me.ha - Me.Plat_t - Me.Tfi
+            End Select
+
         End Get
     End Property
 
@@ -550,13 +558,34 @@ Public Class cls_ProfilA
 
         Dim Inertie, zANE, MelRd As Decimal
         Dim Wel As Decimal
+        Dim zSup, zInf As Decimal
         Const Fy As Decimal = 235
+
+        '--> Initialisation
+
+        Select Case Me.typeProfileAcier
+            Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
+                zSup = 0
+                zInf = -Me.ha
+            Case Enum_TypeSectionAcier.LamineSlimSFB
+                zSup = Me.hb
+                zInf = -Me.Plat_t
+            Case Enum_TypeSectionAcier.LamineSlimIFBA
+                zSup = Me.ha - Me.Plat_t
+                zInf = -Me.Plat_t
+            Case Enum_TypeSectionAcier.LamineSlimIFBB
+                zSup = Me.ha - Me.Tfi
+                zInf = -Me.Tfi
+            Case Enum_TypeSectionAcier.LamineSlimSAB
+                zSup = Me.hb - Me.Tfi
+                zInf = -Me.Tfi
+        End Select
 
         '--> Calculs
 
         Me.ProprietesElastiquesMyy(1, True, 1, zANE, Inertie, MelRd)
 
-        Wel = Inertie / Math.Max(Math.Abs(zANE), Math.Abs(-Me.ha - zANE))
+        Wel = Inertie / Math.Max(Math.Abs(zSup - zANE), Math.Abs(zANE - zInf))
 
         Return Wel
 
@@ -645,6 +674,37 @@ Public Class cls_ProfilA
         '   MelRd       [E] :   Moment élastique
         '-------------------------------------------------------------------------------------------------------------------
 
+        Select Case Me.typeProfileAcier
+            Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
+                ProprietesElastiquesMyyProfilesUsuels(Signe, lValeurRd, GammaM0, zANE, InertieY, MelRd)
+            Case Enum_TypeSectionAcier.LamineSlimSFB
+                ProprietesElastiquesMyySlimfloorsSFB(Signe, lValeurRd, GammaM0, zANE, InertieY, MelRd)
+            Case Enum_TypeSectionAcier.LamineSlimIFBA
+                ProprietesElastiquesMyySlimfloorsIFB_A(Signe, lValeurRd, GammaM0, zANE, InertieY, MelRd)
+            Case Enum_TypeSectionAcier.LamineSlimIFBB
+                ProprietesElastiquesMyySlimfloorsIFB_B(Signe, lValeurRd, GammaM0, zANE, InertieY, MelRd)
+            Case Enum_TypeSectionAcier.LamineSlimSAB
+                ProprietesElastiquesMyySlimfloorsSAB(Signe, lValeurRd, GammaM0, zANE, InertieY, MelRd)
+        End Select
+
+    End Sub
+
+    Public Sub ProprietesElastiquesMyyProfilesUsuels(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   13/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   zRef        [E] :   Position de l'arase supérieure de la semelle supérieure du profilé 
+        '   zANE        [E] :   Position axe neutre élastique
+        '   MelRd       [E] :   Moment élastique
+        '-------------------------------------------------------------------------------------------------------------------
+
         '--> Déclarations
 
         Dim MyModele As New cls_ModeleP
@@ -684,15 +744,305 @@ Public Class cls_ProfilA
 
             '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.Rci, zRef - Me.ha + Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+            MyModele.AddMailleConges(Me.Rci, zRef - Me.ha + Me.Tfi, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
-        '# Plat soudé inférieur dans le cas d'une section IFB-A ou SFB
-        If Me.typeProfileAcier = Enum_TypeSectionAcier.LamineSlimIFBA Or Me.typeProfileAcier = Enum_TypeSectionAcier.LamineSlimSFB Then MyModele.AddMaille(Me.AirePlat, Me.Plat_t, zRef - Me.ha + Me.Plat_t / 2, 1, 1, 1, Fy, 1, GammaM0)
+              '--> Recherche de l'axe neutre élastique
+
+        MyModele.RechercheANE(Signe, zANE)
+
+        '--> Calcul de l'inertie
+
+        InertieY = MyModele.InertieFlexion(Signe, zANE)
+
+        '--> Moment élastique
+
+        MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
+
+    End Sub
+
+    Public Sub ProprietesElastiquesMyySlimfloorsSFB(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   13/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   zRef        [E] :   Position de l'arase supérieure de la semelle supérieure du profilé 
+        '   zANE        [E] :   Position axe neutre élastique
+        '   MelRd       [E] :   Moment élastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim zRef As Decimal = Me.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
+        'Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+        Const Fy As Decimal = 235
+
+        '--> Initialisation
+
+        Hw = Me.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        MyModele.AddMaille(Me.AireFs, Me.Tfs, zRef - Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '# Âme
+
+        MyModele.AddMaille(Hw * Me.Tw, Hw, zRef - Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+
+        '# Semelle inférieure
+
+        MyModele.AddMaille(Me.AireFi, Me.Tfi, zRef - Me.hb + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '# Congés supérieurs
+
+        If Me.Rcs > 0 Then
+
+            MyModele.AddMailleConges(Me.Rcs, zRef - Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
+
+        End If
+
+
+        '# Congés inférieurs
+
+        If Me.Rci > 0 Then
+
+            MyModele.AddMailleConges(Me.Rci, zRef - Me.hb + Me.Tfi, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+
+        '# Plat soudé inférieur dans le cas d'une section SFB
+        MyModele.AddMaille(Me.AirePlat, Me.Plat_t, zRef - Me.ha + Me.Plat_t / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '--> Recherche de l'axe neutre élastique
+
+        MyModele.RechercheANE(Signe, zANE)
+
+        '--> Calcul de l'inertie
+
+        InertieY = MyModele.InertieFlexion(Signe, zANE)
+
+        '--> Moment élastique
+
+        MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
+
+    End Sub
+
+    Public Sub ProprietesElastiquesMyySlimfloorsIFB_A(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   13/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   zRef        [E] :   Position de l'arase supérieure de la semelle supérieure du profilé 
+        '   zANE        [E] :   Position axe neutre élastique
+        '   MelRd       [E] :   Moment élastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim zRef As Decimal = Me.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
+        'Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+        Const Fy As Decimal = 235
+
+        '--> Initialisation
+
+        Hw = Me.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        MyModele.AddMaille(Me.AireFs, Me.Tfs, zRef - Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '# Âme
+
+        MyModele.AddMaille(Hw * Me.Tw, Hw, zRef - Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+
+        If Me.Rcs > 0 Then
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.Rcs, zRef - Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
+
+        End If
+
+        If Me.Rci > 0 Then
+
+            '# Congés inférieurs
+
+            MyModele.AddMailleConges(Me.Rci, zRef - Me.ha + Me.Plat_t, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+        '# Plat soudé inférieur dans le cas d'une section IFB-A 
+
+        MyModele.AddMaille(Me.AirePlat, Me.Plat_t, zRef - Me.ha + Me.Plat_t / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '--> Recherche de l'axe neutre élastique
+
+        MyModele.RechercheANE(Signe, zANE)
+
+        '--> Calcul de l'inertie
+
+        InertieY = MyModele.InertieFlexion(Signe, zANE)
+
+        '--> Moment élastique
+
+        MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
+
+    End Sub
+
+    Public Sub ProprietesElastiquesMyySlimfloorsIFB_B(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   13/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   zRef        [E] :   Position de l'arase supérieure de la semelle supérieure du profilé 
+        '   zANE        [E] :   Position axe neutre élastique
+        '   MelRd       [E] :   Moment élastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim zRef As Decimal = Me.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
+        'Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+        Const Fy As Decimal = 235
+
+        '--> Initialisation
+
+        Hw = Me.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
 
         '# Plat soudé supérieur dans le cas d'une section IFB-B
-        If Me.typeProfileAcier = Enum_TypeSectionAcier.LamineSlimIFBB Then MyModele.AddMaille(Me.AirePlat, Me.Plat_t, zRef - Me.Plat_t / 2, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AirePlat, Me.Plat_t, zRef - Me.Plat_t / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '# Âme
+
+        MyModele.AddMaille(Hw * Me.Tw, Hw, zRef - Me.Plat_t - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+
+        '# Semelle inférieure
+
+        MyModele.AddMaille(Me.AireFi, Me.Tfi, zRef - Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        If Me.Rcs > 0 Then
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.Rcs, zRef - Me.Plat_t, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
+
+        End If
+
+        If Me.Rci > 0 Then
+
+            '# Congés inférieurs
+
+            MyModele.AddMailleConges(Me.Rci, zRef - Me.ha + Me.Tfi, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+        '--> Recherche de l'axe neutre élastique
+
+        MyModele.RechercheANE(Signe, zANE)
+
+        '--> Calcul de l'inertie
+
+        InertieY = MyModele.InertieFlexion(Signe, zANE)
+
+        '--> Moment élastique
+
+        MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
+
+    End Sub
+
+    Public Sub ProprietesElastiquesMyySlimfloorsSAB(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   13/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   zRef        [E] :   Position de l'arase supérieure de la semelle supérieure du profilé 
+        '   zANE        [E] :   Position axe neutre élastique
+        '   MelRd       [E] :   Moment élastique
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim zRef As Decimal = Me.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
+        'Dim lLamine As Boolean = Me.lLamine
+        Const RhoV As Decimal = 0
+        Const Fy As Decimal = 235
+
+        '--> Initialisation
+
+        Hw = Me.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        MyModele.AddMaille(Me.AireFs, Me.Tfs, zRef - Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        '# Âme
+
+        MyModele.AddMaille(Hw * Me.Tw, Hw, zRef - Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+
+        '# Semelle inférieure
+
+        MyModele.AddMaille(Me.AireFi, Me.Tfi, zRef - Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
+
+        If Me.Rcs > 0 Then
+
+            '# Congés supérieurs
+
+            MyModele.AddMailleConges(Me.Rcs, zRef - Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
+
+        End If
+
+        If Me.Rci > 0 Then
+
+            '# Congés inférieurs
+
+            MyModele.AddMailleConges(Me.Rci, zRef - Me.ha + Me.Tfi, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
 
         '--> Recherche de l'axe neutre élastique
 

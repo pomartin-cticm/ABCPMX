@@ -63,6 +63,9 @@ Module Mod_NoteCalcul
 #End Region
 
 #Region "   Variables "
+    Private strRacineELU As String
+    Private strRacineELS As String
+    Private strRacineELF As String
 
     Private Bloc As New Dictionary(Of String, String)
     Private BlocSP As New Dictionary(Of String, String)
@@ -99,11 +102,31 @@ Module Mod_NoteCalcul
         '
         '----------------------------------------------------------------------------------------------
 
+        '--[ Chargement des blocs langues (GUD: Je le déplace ici car je vais avoir besoin d'un string pour les fonctions de calcul de RDM)
+
+        InitialiseBlocNDC()
+
         '--[ Initialisations
 
         MyNote = New Cls_Rapport("Arial", 1.5, 3, 3)
         MyProjet.Poutres(MyProjet.IndEnCours).InitialisePoidsPropres()
         MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()
+
+        '--[ Analyse calcul RDM (Ajout GUD car le calcul est initialisé seulement à l'ouverture des fenetres Frm_PPCasDeCharge)
+
+        strRacineELU = Bloc("ULS")
+        strRacineELS = Bloc("SLS")
+        strRacineELF = Bloc("FLS")
+
+        With MyProjet.Poutres(MyProjet.IndEnCours)
+            .InitialiseCalculs(NomChargesA)
+            .AAA_CalculMNVInternesN()
+            .InitialiseCombiA(cls_Poutre.nbCombELU, .lCombELU, .CoefCombELU, strRacineELU, .CombiA_ELU)
+            .InitialiseCombiA(cls_Poutre.nbCombELS, .lCombELS, .CoefCombELS, strRacineELS, .CombiA_ELS)
+            .InitialiseCombiA(cls_Poutre.nbCombFeu, .lCombFeu, .CoefCombFeu, strRacineELF, .CombiA_ELF)
+        End With
+
+
 
         '--[ Création de la Note
 
@@ -140,10 +163,6 @@ Module Mod_NoteCalcul
         'Dim lControleOK As Boolean
 
         lChapitreOutOfScope = False
-
-        '--[ Chargement des blocs langues
-
-        InitialiseBlocNDC()
 
         '--[ Initialisation
 
@@ -388,6 +407,24 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & Bloc("RIGHTSUPPORT") & TABAFF2 & Bloc("PINNED"))
             AddLigneNDC(TABW2 & Bloc("LEFTSUPPORT") & TABAFF2 & Bloc("PINNED"))
 
+        End If
+
+        If MyBeam.lMixte Then
+            AddLigneNDC(TABW2 & Bloc("TYPEOFBEAM") & TABAFF2 & Bloc("COMPOSITE"))
+        Else
+            AddLigneNDC(TABW2 & Bloc("TYPEOFBEAM") & TABAFF2 & Bloc("NONCOMPOSITE"))
+        End If
+
+        If MyBeam.Dalle.lMixte Then
+            AddLigneNDC(TABW2 & Bloc("TYPEOFSLAB") & TABAFF2 & Bloc("COMPOSITE"))
+        Else
+            AddLigneNDC(TABW2 & Bloc("TYPEOFSLAB") & TABAFF2 & Bloc("NONCOMPOSITE"))
+        End If
+
+        If MyBeam.Section.lEnrobage Then
+            AddLigneNDC(TABW2 & Bloc("TYPEOFSTEELSECTION") & TABAFF2 & Bloc("PARTIALLY_ENCASED"))
+        Else
+            AddLigneNDC(TABW2 & Bloc("TYPEOFSTEELSECTION") & TABAFF2 & Bloc("NOT_PARTIALLY_ENCASED"))
         End If
 
         'Ajout dessin de la poutre en cours
