@@ -425,11 +425,116 @@ Module Mod_Demarrage
 
         '--> Traitement
 
-        If MyPoutre.Section.lLamine Then
-            TransfertProfileDeBase(MyPoutre.Section.ProfilA, MyPoutre.Section.ProfilA.Gamme, MyPoutre.Section.ProfilA.NomProfile, lOK)
-            AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
-        Else
-        End If
+        TransfertProfileDeBase(MyPoutre.Section.ProfilA, MyPoutre.Section.ProfilA.Gamme, MyPoutre.Section.ProfilA.NomProfile, lOK)
+
+
+        'AJOUT GUD
+        ' --> Sécurité supplémentaire pour s'assurer que les valeurs qui n'ont pas de sens restent égales à 0
+
+        Dim ha_loc, hb_loc, bfs_loc, tfs_loc, rcs_loc, bfi_loc, tfi_loc, rci_loc, tw_loc, aw_loc, plat_b_loc, plat_t_loc As Decimal
+        With MyPoutre.Section.ProfilA
+            ha_loc = .ha
+            hb_loc = .hb
+            bfs_loc = .Bfs
+            tfs_loc = .Tfs
+            rcs_loc = .Rcs
+            bfi_loc = .Bfi
+            tfi_loc = .Tfi
+            rci_loc = .Rci
+            tw_loc = .Tw
+            aw_loc = .aW
+            plat_b_loc = .Plat_b
+            plat_t_loc = .Plat_t
+        End With
+
+
+        With MyPoutre.Section.ProfilA
+            Select Case .typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                    .ha = ha_loc
+                    .hb = hb_loc
+                    .Bfs = bfs_loc
+                    .Tfs = tfs_loc
+                    .Rcs = rcs_loc
+                    .Bfi = bfi_loc
+                    .Tfi = tfi_loc
+                    .Rci = rci_loc
+                    .Tw = tw_loc
+                    .aW = 0
+                    .Plat_b = 0
+                    .Plat_t = 0
+                Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
+                    .ha = ha_loc
+                    .hb = hb_loc
+                    .Bfs = bfs_loc / 2
+                    .Tfs = tfs_loc
+                    .Rcs = 0
+                    .Bfi = bfi_loc
+                    .Tfi = tfi_loc
+                    .Rci = 0
+                    .Tw = tw_loc
+                    .aW = Math.Floor(tw_loc / 2)
+                    .Plat_b = 0
+                    .Plat_t = 0
+                Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
+                    .ha = ha_loc
+                    .hb = hb_loc
+                    .Bfs = bfs_loc
+                    .Tfs = tfs_loc
+                    .Rcs = 0
+                    .Bfi = bfi_loc
+                    .Tfi = tfi_loc
+                    .Rci = 0
+                    .Tw = tw_loc
+                    .aW = Math.Floor(tw_loc / 2)
+                    .Plat_b = 0
+                    .Plat_t = 0
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                    .ha = ha_loc
+                    .hb = hb_loc
+                    .Bfs = bfs_loc
+                    .Tfs = tfs_loc
+                    .Rcs = rcs_loc
+                    .Bfi = bfi_loc
+                    .Tfi = tfi_loc
+                    .Rci = rci_loc
+                    .Tw = tw_loc
+                    .aW = 0
+                    .Plat_b = bfi_loc * 1.5
+                    .Plat_t = tfi_loc
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                    .ha = 0.7 * ha_loc
+                    .hb = hb_loc
+                    .Bfs = bfs_loc
+                    .Tfs = tfs_loc
+                    .Rcs = rcs_loc
+                    .Bfi = 0
+                    .Tfi = 0
+                    .Rci = 0
+                    .Tw = tw_loc
+                    .aW = Math.Floor(tw_loc / 2)
+                    .Plat_b = bfi_loc * 1.5
+                    .Plat_t = tfi_loc
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                    .ha = 0.7 * ha_loc
+                    .hb = hb_loc
+                    .Bfs = 0
+                    .Tfs = 0
+                    .Rcs = 0
+                    .Bfi = bfi_loc
+                    .Tfi = tfi_loc
+                    .Rci = rci_loc
+                    .Tw = tw_loc
+                    .aW = Math.Floor(tw_loc / 2)
+                    .Plat_b = bfs_loc * 0.75
+                    .Plat_t = tfs_loc
+            End Select
+
+        End With
+
+        'Fin Ajout GUD
+
+        AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
 
         MyPoutre.Param.Gamma = LogicielOptions.Gamma.Clone
 
@@ -536,6 +641,7 @@ Module Mod_Demarrage
         '----------------------------------------------------------------------------
 
         MyProfile.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
+        MyProfile.hb = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
         MyProfile.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
         MyProfile.Bfi = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
         MyProfile.Tfs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf

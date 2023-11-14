@@ -51,7 +51,7 @@ Imports PMXMoteur2
 
             .LongueurTravee(1) = Longueur
 
-            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.Acier
+            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         End With
 
@@ -158,7 +158,7 @@ Imports PMXMoteur2
 
             .LongueurTravee(1) = Longueur
 
-            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.Acier
+            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         End With
 
@@ -266,7 +266,7 @@ Imports PMXMoteur2
 
             .LongueurTravee(1) = Longueur
 
-            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.Acier
+            pPoutre.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         End With
 

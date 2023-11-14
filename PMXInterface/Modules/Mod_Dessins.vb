@@ -5704,7 +5704,7 @@ Module Mod_Dessins
         '--> Renvoi vers les routines de dessin en fonction du type
 
         Select Case MySection.typeSection
-            Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage,
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage,
                  cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
 
                 DessinFrmTypeSectionStandard(MyGr, MySection, MyDalle, MyParAff, BeffRed, myBrushP, myBrushB, myBrushA)
@@ -7439,7 +7439,7 @@ Module Mod_Dessins
         '--> Traitement
 
         Select Case MySection.typeSection
-            Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage,
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage,
                  cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 yMin = -zRef - MySection.ProfilA.ha
                 xMin = -BfMax / 2

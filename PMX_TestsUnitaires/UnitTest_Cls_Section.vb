@@ -36,7 +36,7 @@ Imports PMXMoteur2
 
         '--> Initialisations
 
-        MySection.typeSection = cls_Section.Enum_TypeSection.Acier
+        MySection.typeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         '# IPE 300
 
@@ -148,7 +148,7 @@ Imports PMXMoteur2
 
         '--> Initialisations
 
-        MySection.typeSection = cls_Section.Enum_TypeSection.Acier
+        MySection.typeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         '# IPE 300
 
@@ -246,7 +246,7 @@ Imports PMXMoteur2
 
         '--> Initialisations
 
-        MySection.typeSection = cls_Section.Enum_TypeSection.Acier
+        MySection.typeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         '# IPE 500A
 
@@ -329,7 +329,7 @@ Imports PMXMoteur2
 
         '--> Définition de l'enrobage partiel
 
-        MySection.typeSection = cls_Section.Enum_TypeSection.AcierEnrobage
+        MySection.typeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage
 
         MySection.Enrobage.Ratio_bc = 1
         MySection.Enrobage.Beton.Classe = "C25/30"
@@ -514,7 +514,7 @@ Imports PMXMoteur2
 
         '--> Initialisations
 
-        MySection.typeSection = cls_Section.Enum_TypeSection.Acier
+        MySection.typeSection = cls_Section.Enum_TypeSection.AcierSeul
 
         '# IPE 500A
 
@@ -541,7 +541,7 @@ Imports PMXMoteur2
 
         '--> Définition de l'enrobage partiel
 
-        MySection.typeSection = cls_Section.Enum_TypeSection.AcierEnrobage
+        MySection.typeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage
 
         MySection.Enrobage.Ratio_bc = 1
         MySection.Enrobage.Beton.Classe = "C25/30"
@@ -1119,7 +1119,7 @@ Imports PMXMoteur2
         section.Acier.f_y.fi = 275
         section.Acier.f_y.w = 300
 
-        section.typeSection = section.Enum_TypeSection.Acier
+        section.typeSection = section.Enum_TypeSection.AcierSeul
 
 
         Dim alpha, psi, c_sem_sup, t_sem_sup, epsilon_sem_sup, c_sem_inf, t_sem_inf, epsilon_sem_inf, c_ame, t_ame, epsilon_ame, td As Decimal

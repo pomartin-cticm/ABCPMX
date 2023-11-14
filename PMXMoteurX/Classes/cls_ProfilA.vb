@@ -1347,6 +1347,7 @@ Public Class cls_ProfilA
 
         '--> Section par défaut peu importe le type
         Me.ha = 0.3
+        Me.hb = 0.3
         'Me.h_w = 0.27
         Me.Tw = 0.01
         Me.Bfi = 0.24

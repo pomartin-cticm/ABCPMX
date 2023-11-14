@@ -369,7 +369,7 @@ Public Class cls_Poutre
 
     Public Sub New(MsgChargements() As String)
 
-        Me.TypeSection = cls_Section.Enum_TypeSection.Acier
+        Me.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
         ParametresGenerauxDefaut()
         PoutreDefautAcier()
         InitialiseChargements(MsgChargements)
@@ -387,9 +387,9 @@ Public Class cls_Poutre
         '--> Poutre par défaut
 
         Select Case MyTypeSection
-            Case cls_Section.Enum_TypeSection.Acier
+            Case cls_Section.Enum_TypeSection.AcierSeul
                 PoutreDefautAcier()
-            Case cls_Section.Enum_TypeSection.AcierEnrobage
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 PoutreDefautAcier()
                 EnrobageDefaut()
             Case cls_Section.Enum_TypeSection.Mixte
@@ -400,6 +400,7 @@ Public Class cls_Poutre
                 EnrobageDefaut()
                 DalleDefaut()
         End Select
+
         InitialiseChargements(MsgChargements)
         InitialiseTablesCombi()
         InitialisePoidsPropres()
@@ -1694,7 +1695,7 @@ Public Class cls_Poutre
                 End If
 
                 If lCalcul Then
-                    InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, zANE)
+                    InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, zANe)
                     Aire = Me.Section.ProfilA.Aire      ' A changer pour aire homgonénéisée
 
                     pMyElts.InertieY(iElt) = InertieY
@@ -1857,7 +1858,7 @@ Public Class cls_Poutre
         Dim BeffPrec As Decimal = -1
         Dim pInertieY, p_zANE As Decimal
         Dim pMelRd As Decimal
-        Dim lNonMixte As Boolean = (Me.Section.typeSection = cls_Section.Enum_TypeSection.Acier) Or (Not lDalle)
+        Dim lNonMixte As Boolean = (Me.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul) Or (Not lDalle)
 
         '--> Initialisation
 
@@ -3740,7 +3741,7 @@ Public Class cls_Poutre
         '--> Initialisation des tableaux de verification
 
         Select Case Me.TypeSection
-            Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 ReDim Me.VerifAcier(0)
                 Me.VerifAcier(0) = New cls_VerificationsAcier
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
@@ -3773,7 +3774,7 @@ Public Class cls_Poutre
                 '# Vérification des poutres mixtes en phase finale aux ELU
                 Me.VerifMixte(0).VerificationELU(Me)
 
-            Case cls_Section.Enum_TypeSection.Acier
+            Case cls_Section.Enum_TypeSection.AcierSeul
                 Me.VerifAcier(0).VerificationELU(Me)
 
         End Select

@@ -147,7 +147,7 @@ Public Class Frm_PPVerifications
             Case INDULTIME
 
                 Select Case MyPoutre.TypeSection
-                    Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage
+                    Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                         RemplirComboCriterePoutreAcierELU(MyPoutre)
                     Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                         RemplirComboCriterePoutreMixteELU(MyPoutre)
@@ -243,7 +243,7 @@ Public Class Frm_PPVerifications
             Case INDULTIME
 
                 Select Case MyPoutre.TypeSection
-                    Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage
+                    Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
 
                         Select Case Me.cmb_Critere.Text
                             Case strCritereM

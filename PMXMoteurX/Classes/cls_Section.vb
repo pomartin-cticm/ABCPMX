@@ -15,8 +15,8 @@ Public Class cls_Section
     End Structure
 
     Public Enum Enum_TypeSection
-        Acier           ' Section acier
-        AcierEnrobage   ' Section acier avec enrobage partiel
+        AcierSeul           ' Section acier
+        AcierSeulEnrobage   ' Section acier avec enrobage partiel
         Mixte           ' Section mixte acier-béton
         MixteEnrobage   ' Section mixte acier-béton avec enrobage partiel
         SFB             ' Section Slim floor SFB non mixte
@@ -591,9 +591,9 @@ Public Class cls_Section
         '--> Traitement
 
         If lDalle Then
-            Me.ProprietesElastiquesMixteMyy(Signe, lValeurRd, Gammas, nEqEc, nEqDal, Beff, MyDalle, zANe, InertieY, MelRd)
+            Me.ProprietesElastiquesMixteMyy(Signe, lValeurRd, Gammas, nEqEc, nEqDal, Beff, MyDalle, zANE, InertieY, MelRd)
         Else
-            Me.ProprietesElastiquesMyy(Signe, lValeurRd, Gammas, nEqEc, zANe, InertieY, MelRd)
+            Me.ProprietesElastiquesMyy(Signe, lValeurRd, Gammas, nEqEc, zANE, InertieY, MelRd)
         End If
 
         Return InertieY
@@ -952,7 +952,7 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property lSlimFloor As Boolean
         Get
-            Return Not (Me.typeSection = Me.Enum_TypeSection.Acier Or Me.typeSection = Me.Enum_TypeSection.AcierEnrobage Or Me.typeSection = Me.Enum_TypeSection.Mixte Or Me.typeSection = Me.Enum_TypeSection.MixteEnrobage)
+            Return Not (Me.typeSection = Me.Enum_TypeSection.AcierSeul Or Me.typeSection = Me.Enum_TypeSection.AcierSeulEnrobage Or Me.typeSection = Me.Enum_TypeSection.Mixte Or Me.typeSection = Me.Enum_TypeSection.MixteEnrobage)
         End Get
     End Property
 
@@ -961,7 +961,7 @@ Public Class cls_Section
     ''' </summary>
     Public ReadOnly Property lEnrobage As Boolean
         Get
-            Return (Me.typeSection = Enum_TypeSection.AcierEnrobage) Or (Me.typeSection = Enum_TypeSection.MixteEnrobage)
+            Return (Me.typeSection = Enum_TypeSection.AcierSeulEnrobage) Or (Me.typeSection = Enum_TypeSection.MixteEnrobage)
         End Get
     End Property
 
@@ -1098,7 +1098,7 @@ Public Class cls_Section
         Dim MyVRd As Decimal = 0
 
         Select Case Me.typeSection
-            Case Enum_TypeSection.Acier, Enum_TypeSection.AcierEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
+            Case Enum_TypeSection.AcierSeul, Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
                 MyVRd = Me.AireAv * Me.FyW / GammaM0 * kConvMPaPa
 
         End Select

@@ -330,9 +330,9 @@ Module Mod_NoteCalcul
         AddTitreNdC(3, Bloc("LONGIPARAMETERS"))
 
         Select Case MyBeam.TypeSection
-            Case cls_Section.Enum_TypeSection.Acier
+            Case cls_Section.Enum_TypeSection.AcierSeul
                 AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("NONCOMPOBEAM") & "\g")
-            Case cls_Section.Enum_TypeSection.AcierEnrobage
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("NONCOMPOBEAMPARTENCAS") & "\g")
             Case cls_Section.Enum_TypeSection.Mixte
                 AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("COMPOBEAM") & "\g")
@@ -882,9 +882,9 @@ Module Mod_NoteCalcul
         Dim lConnection As Boolean = False
 
         Select Case MyBeam.TypeSection
-            Case cls_Section.Enum_TypeSection.Acier
+            Case cls_Section.Enum_TypeSection.AcierSeul
                 'Pas de connection entre le profilé et la dalle
-            Case cls_Section.Enum_TypeSection.AcierEnrobage
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
                   'Pas de connection entre le profilé et la dalle
             Case cls_Section.Enum_TypeSection.Mixte
                 lConnection = True

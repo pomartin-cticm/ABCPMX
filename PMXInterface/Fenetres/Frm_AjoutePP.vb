@@ -53,7 +53,7 @@ Public Class Frm_AjoutePP
     'Dim CouleurAcierNormal As Color = Color.DarkSlateBlue
     'Dim CouleurAcierSelect As Color = Color.DarkOrange
 
-    Dim TypeSection As cls_Section.Enum_TypeSection = cls_Section.Enum_TypeSection.Acier
+    Dim TypeSection As cls_Section.Enum_TypeSection = cls_Section.Enum_TypeSection.AcierSeul
 
     Dim strType As String
     Dim tabType As New Dictionary(Of cls_Section.Enum_TypeSection, String)
@@ -132,8 +132,8 @@ Public Class Frm_AjoutePP
                 'tabType.Add(cls_Section.Enum_TypeSection.SABmixte, "Section dalle mince SAB mixte")
 
                 tabType.Clear()
-                tabType.Add(cls_Section.Enum_TypeSection.Acier, Bloc("STEELSECTION"))
-                tabType.Add(cls_Section.Enum_TypeSection.AcierEnrobage, Bloc("STEELSECTIONPARTENC"))
+                tabType.Add(cls_Section.Enum_TypeSection.AcierSeul, Bloc("STEELSECTION"))
+                tabType.Add(cls_Section.Enum_TypeSection.AcierSeulEnrobage, Bloc("STEELSECTIONPARTENC"))
                 tabType.Add(cls_Section.Enum_TypeSection.Mixte, Bloc("COMPOSITESECTION"))
                 tabType.Add(cls_Section.Enum_TypeSection.MixteEnrobage, Bloc("COMPOSITESECTIONPARTENC"))
                 tabType.Add(cls_Section.Enum_TypeSection.SFB, Bloc("SLIMFLOORSFB"))
@@ -145,8 +145,8 @@ Public Class Frm_AjoutePP
                 tabType.Add(cls_Section.Enum_TypeSection.SAB, Bloc("SLIMFLOORSAB"))
                 tabType.Add(cls_Section.Enum_TypeSection.SABmixte, Bloc("SLIMFLOORSABCOMPO"))
 
-                Me.MyToolTip.SetToolTip(Me.chk_SectionAcier, tabType(cls_Section.Enum_TypeSection.Acier))
-                Me.MyToolTip.SetToolTip(Me.chk_SectionAcierEnrobe, tabType(cls_Section.Enum_TypeSection.AcierEnrobage))
+                Me.MyToolTip.SetToolTip(Me.chk_SectionAcier, tabType(cls_Section.Enum_TypeSection.AcierSeul))
+                Me.MyToolTip.SetToolTip(Me.chk_SectionAcierEnrobe, tabType(cls_Section.Enum_TypeSection.AcierSeulEnrobage))
                 Me.MyToolTip.SetToolTip(Me.chk_SectionMixte, tabType(cls_Section.Enum_TypeSection.Mixte))
                 Me.MyToolTip.SetToolTip(Me.chk_SectionMixteEnrobe, tabType(cls_Section.Enum_TypeSection.MixteEnrobage))
                 Me.MyToolTip.SetToolTip(Me.chk_SFBAcier, tabType(cls_Section.Enum_TypeSection.SFB))
@@ -207,7 +207,7 @@ Public Class Frm_AjoutePP
         MySectionAcier.ProfilA.Rci = 0.03
 
         '--> Définition de la section acier enrobée
-        MySectionAcierEnrobe.typeSection = cls_Section.Enum_TypeSection.AcierEnrobage
+        MySectionAcierEnrobe.typeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage
         MySectionAcierEnrobe.ProfilA.Tfs = 0.03
         MySectionAcierEnrobe.ProfilA.Tfi = 0.03
         MySectionAcierEnrobe.ProfilA.Rcs = 0.03
@@ -361,11 +361,11 @@ Public Class Frm_AjoutePP
         Select Case sender.name
             Case Me.chk_SectionAcier.Name
                 DessinFrmTypeSection(e.Graphics, MySectionAcier, MyPoutreAcier.Dalle, Me.chk_SectionAcier.ClientRectangle.Width, Me.chk_SectionAcier.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.Acier)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierSeul)
 
             Case Me.chk_SectionAcierEnrobe.Name
                 DessinFrmTypeSection(e.Graphics, MySectionAcierEnrobe, MyPoutreAcierEnrobe.Dalle, Me.chk_SectionAcierEnrobe.ClientRectangle.Width, Me.chk_SectionAcierEnrobe.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierEnrobage)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage)
 
             Case Me.chk_SectionMixte.Name
                 DessinFrmTypeSection(e.Graphics, MySectionMixte, MyPoutreMixte.Dalle, Me.chk_SectionMixte.ClientRectangle.Width, Me.chk_SectionMixte.Height,
@@ -455,8 +455,8 @@ Public Class Frm_AjoutePP
         If lBuild Then Exit Sub
 
         Select Case sender.name
-            Case Me.chk_SectionAcier.Name : TypeSection = cls_Section.Enum_TypeSection.Acier
-            Case Me.chk_SectionAcierEnrobe.Name : TypeSection = cls_Section.Enum_TypeSection.AcierEnrobage
+            Case Me.chk_SectionAcier.Name : TypeSection = cls_Section.Enum_TypeSection.AcierSeul
+            Case Me.chk_SectionAcierEnrobe.Name : TypeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage
             Case Me.chk_SectionMixte.Name : TypeSection = cls_Section.Enum_TypeSection.Mixte
             Case Me.chk_SectionMixteEnrobe.Name : TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
             Case Me.chk_SFBAcier.Name : TypeSection = cls_Section.Enum_TypeSection.SFB
@@ -476,8 +476,8 @@ Public Class Frm_AjoutePP
 
     Private Sub MAJ_EtatChkSection()
 
-        Me.chk_SectionAcier.Checked = TypeSection = cls_Section.Enum_TypeSection.Acier
-        Me.chk_SectionAcierEnrobe.Checked = TypeSection = cls_Section.Enum_TypeSection.AcierEnrobage
+        Me.chk_SectionAcier.Checked = TypeSection = cls_Section.Enum_TypeSection.AcierSeul
+        Me.chk_SectionAcierEnrobe.Checked = TypeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage
         Me.chk_SectionMixte.Checked = TypeSection = cls_Section.Enum_TypeSection.Mixte
         Me.chk_SectionMixteEnrobe.Checked = TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
         Me.chk_SFBAcier.Checked = TypeSection = cls_Section.Enum_TypeSection.SFB
@@ -526,12 +526,12 @@ Public Class Frm_AjoutePP
 
             If Me.chk_SectionAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Acier, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre, NomChargements))
             End If
 
             If Me.chk_SectionAcierEnrobe.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierEnrobage, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre, NomChargements))
             End If
 
             If Me.chk_SectionMixte.Checked Then
@@ -549,15 +549,42 @@ Public Class Frm_AjoutePP
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre, NomChargements))
             End If
 
-            If Me.chk_SABMixte.Checked Then
+            If Me.chk_SFBMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre, NomChargements))
             End If
+
+            If Me.chk_IFB_A_Acier.Checked Then
+                lAjout = True
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre, NomChargements))
+            End If
+
+            If Me.chk_IFB_A_Mixte.Checked Then
+                lAjout = True
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre, NomChargements))
+            End If
+
+            If Me.chk_IFB_B_Acier.Checked Then
+                lAjout = True
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre, NomChargements))
+            End If
+
+            If Me.chk_IFB_B_Mixte.Checked Then
+                lAjout = True
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre, NomChargements))
+            End If
+
 
             If Me.chk_SABAcier.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre, NomChargements))
             End If
+
+            If Me.chk_SABMixte.Checked Then
+                lAjout = True
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, NomChargements))
+            End If
+
 
             InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
 

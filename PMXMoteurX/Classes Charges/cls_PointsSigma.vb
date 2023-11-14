@@ -53,7 +53,7 @@
         Me.iArmaEnrob(1) = -1
 
         Select Case MyPoutre.Section.typeSection
-            Case cls_Section.Enum_TypeSection.AcierEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
                 Me.iArmaEnrob(0) = Me.zPos.Count
 
                 '# Lit inférieur
@@ -77,7 +77,7 @@
         Me.iBetonEnrob(1) = -1
 
         Select Case MyPoutre.Section.typeSection
-            Case cls_Section.Enum_TypeSection.AcierEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
                 Me.iBetonEnrob(0) = Me.zPos.Count
 
                 '# Fibre supérieure
@@ -122,7 +122,7 @@
         Me.iProfile(1) = -1
 
         Select Case MyPoutre.Section.typeSection
-            Case cls_Section.Enum_TypeSection.Acier, cls_Section.Enum_TypeSection.AcierEnrobage,
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage,
                  cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
 
                 '# Fibre supérieure de la semelle supérieure
@@ -181,7 +181,7 @@
 
         ReDim Sigma(NbCas - 1, NbPts - 1, NbNodes - 1, 1)
 
-        lAcierNonEnrob = (MyPoutre.Section.typeSection = cls_Section.Enum_TypeSection.Acier) '_
+        lAcierNonEnrob = (MyPoutre.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul) '_
         ' Or ((MyPoutre.Section.typeSection = cls_Section.Enum_TypeSection.Mixte) And (MyCas.EtatDalle = cls_CasDeCharge.EnuEtatDalle.Acier))
 
         '--> Boucle sur tous les cas de charges
@@ -412,7 +412,7 @@
 
         '--> Initialisation
 
-        lAcierNonEnrob = (MyPoutre.Section.typeSection = cls_Section.Enum_TypeSection.Acier) _
+        lAcierNonEnrob = (MyPoutre.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul) _
                       Or ((MyPoutre.Section.typeSection = cls_Section.Enum_TypeSection.Mixte) And (MyCas.EtatDalle = cls_CasDeCharge.EnuEtatDalle.Acier))
 
         '--> Calcul des contraintes
