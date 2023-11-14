@@ -1262,6 +1262,8 @@ Public Class Frm_Connection
 
             'Réinitialise les boutons Ajouter/Supprimer
 
+            MAJ_Valeurs_Limites()
+
             Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MAX
             Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MIN
 

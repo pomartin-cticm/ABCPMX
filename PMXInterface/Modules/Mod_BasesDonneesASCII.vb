@@ -190,7 +190,11 @@ Module Mod_BasesDonneesASCII
             Dim kUnit As Single = 0.001
 
             If iVirg > 0 Then
+                'Etiquette = LinesG.Lines(iStud).Substring(0, iVirg)
                 Etiquette = LinesG.Lines(iStud).Substring(0, iVirg)
+                DecomposeLine(Etiquette, SEPARATEURS, Mots, nMots)
+                Etiquette = Mots(2) 'Rajout GUD car il y'a le mot "Diametre" qui est inscrit dans la dtb et qui gene la lecture 
+
                 Parametres = LinesG.Lines(iStud).Substring(iVirg + 1)
 
                 DecomposeLine(Parametres, SEPARATEURS, Mots, nMots)

@@ -99,6 +99,7 @@ Public Class Frm_PMX
 
         End If
         'AfficheFenetreEnCours() 'GuD: A discuter j'ai un doute (31/08/2023), cela ouvrait directement 
+        MAJToolBarPoutre()
 
     End Sub
 
@@ -535,6 +536,42 @@ Public Class Frm_PMX
             End If
         End If
 
+
+    End Sub
+
+    ''' <summary>
+    ''' Ajout GUD: Permet de gérer l'affichage des Frm_Filles en fonction du type de la poutre affichée 
+    ''' </summary>
+    Private Sub MAJToolBarPoutre()
+
+        Dim lFrmConnection As Boolean = True
+        Dim lFrmEnrobage As Boolean = True
+
+        Select Case MyProjet.Poutres(MyProjet.IndEnCours).TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul
+                lFrmConnection = False
+                lFrmEnrobage = False
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                lFrmConnection = False
+            Case cls_Section.Enum_TypeSection.Mixte
+                lFrmEnrobage = False
+            Case cls_Section.Enum_TypeSection.MixteEnrobage
+            Case cls_Section.Enum_TypeSection.SFB
+                lFrmEnrobage = False
+            Case cls_Section.Enum_TypeSection.SFBmixte
+            Case cls_Section.Enum_TypeSection.IFB_A
+                lFrmEnrobage = False
+            Case cls_Section.Enum_TypeSection.IFB_Amixte
+            Case cls_Section.Enum_TypeSection.IFB_B
+                lFrmEnrobage = False
+            Case cls_Section.Enum_TypeSection.IFB_Bmixte
+            Case cls_Section.Enum_TypeSection.SAB
+                lFrmEnrobage = False
+            Case cls_Section.Enum_TypeSection.SABmixte
+        End Select
+
+        Me.TSbtn_Connexion.Visible = lFrmConnection
+        Me.TSbtn_Enrobage.Visible = lFrmEnrobage
 
     End Sub
 

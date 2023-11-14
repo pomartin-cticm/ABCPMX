@@ -382,6 +382,7 @@ Partial Class Frm_PMX
         Me.TSbtn_DalleN.Name = "TSbtn_DalleN"
         Me.TSbtn_DalleN.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_DalleN.Text = "ToolStripButton1"
+        Me.TSbtn_DalleN.Visible = False
         '
         'TSbtn_SectionA
         '
