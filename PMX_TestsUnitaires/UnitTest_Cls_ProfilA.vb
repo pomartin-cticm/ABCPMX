@@ -197,8 +197,8 @@ Imports PMXMoteur2
 
         Dim MyProfil As New cls_ProfilA
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 100
-        Dim zANE, InertieY, MelRd As Decimal
+        Const DeltaVMAx As Decimal = 2 / 1000
+        Dim zANE, InertieY, InertieZ, MelRd As Decimal
 
         '--> Initialisation
 
@@ -247,10 +247,24 @@ Imports PMXMoteur2
         DeltaV = (zANE - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        '# module élastique flexion élastique
+        '# module élastique flexion élastique selon l'axe YY
 
         ValRef = 634.723 * 10 ^ (-6)
         DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Inertie ZZ
+
+        MyProfil.ProprietesElastiquesMzz(True, 1, zANE, InertieZ, MelRd)
+
+        ValRef = 2163.975 * 10 ^ (-8)
+        DeltaV = (InertieZ - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Position ANE
+
+        ValRef = 0 * 10 ^ (-3)
+        DeltaV = (zANE - ValRef)
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
@@ -267,8 +281,8 @@ Imports PMXMoteur2
 
         Dim MyProfil As New cls_ProfilA
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 100
-        Dim zANE, InertieY, MelRd As Decimal
+        Const DeltaVMAx As Decimal = 2 / 1000
+        Dim zANE, InertieY, InertieZ, MelRd As Decimal
 
         '--> Initialisation
 
@@ -322,6 +336,20 @@ Imports PMXMoteur2
         DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
+        '# Inertie ZZ
+
+        MyProfil.ProprietesElastiquesMzz(True, 1, zANE, InertieZ, MelRd)
+
+        ValRef = 1864.789 * 10 ^ (-8)
+        DeltaV = (InertieZ - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Position ANE
+
+        ValRef = 0 * 10 ^ (-3)
+        DeltaV = (zANE - ValRef)
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
     End Sub
 
     <TestMethod()> Public Sub TestUnit_ProprietesProfileAcierSlimFloorIFB_B()
@@ -336,8 +364,8 @@ Imports PMXMoteur2
 
         Dim MyProfil As New cls_ProfilA
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 100
-        Dim zANE, InertieY, MelRd As Decimal
+        Const DeltaVMAx As Decimal = 2 / 1000
+        Dim zANE, InertieY, InertieZ, MelRd As Decimal
 
         '--> Initialisation
 
@@ -392,6 +420,20 @@ Imports PMXMoteur2
         DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
+        '# Inertie ZZ
+
+        MyProfil.ProprietesElastiquesMzz(True, 1, zANE, InertieZ, MelRd)
+
+        ValRef = 390.179 * 10 ^ (-8)
+        DeltaV = (InertieZ - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Position ANE
+
+        ValRef = 0 * 10 ^ (-3)
+        DeltaV = (zANE - ValRef)
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
     End Sub
 
     <TestMethod()> Public Sub TestUnit_ProprietesProfileAcierSlimFloorSAB()
@@ -406,8 +448,8 @@ Imports PMXMoteur2
 
         Dim MyProfil As New cls_ProfilA
         Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 1 / 100
-        Dim zANE, InertieY, MelRd As Decimal
+        Const DeltaVMAx As Decimal = 4 / 1000
+        Dim zANE, InertieY, InertieZ, MelRd As Decimal
 
         '--> Initialisation
 
@@ -454,6 +496,20 @@ Imports PMXMoteur2
 
         ValRef = 364.893 * 10 ^ (-6)
         DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Inertie ZZ
+
+        MyProfil.ProprietesElastiquesMzz(True, 1, zANE, InertieZ, MelRd)
+
+        ValRef = 340.54 * 10 ^ (-8)
+        DeltaV = (InertieZ - ValRef) / ValRef
+        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Position ANE
+
+        ValRef = 0 * 10 ^ (-3)
+        DeltaV = (zANE - ValRef)
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub

@@ -4,8 +4,8 @@ Public Class cls_ModeleP
 
 #Region " Structures et définitions "
 
-    Const BOUCLEMAX As Integer = 1000
-    Const Tolerance As Decimal = 0.05
+    Const BOUCLEMAX As Integer = 10000
+    Const Tolerance As Decimal = 0.01
     Const ToleranceR As Decimal = 10
     Const ToleranceS As Decimal = 1
 
