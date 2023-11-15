@@ -140,7 +140,7 @@ Public Class cls_Projet
             With ptre
 
                 Lines.Add("BLOCK POUTRE")
-                Lines.Add("   BeamID           =  " & .BeamID)
+                Lines.Add("   BeaIden           =  " & .BeamID)
                 Lines.Add("   Commentaire       =  " & .Commentaire)
                 Lines.Add("   TypeSection   =  " & .TypeSection)
                 Lines.Add("   ConsoleGauche  =  " & .lTraveeConsoleGauche)
@@ -213,8 +213,8 @@ Public Class cls_Projet
                     '==[ Classe ProfilA ]=================================================================
                     With .ProfilA
                         Lines.Add("BLOCK PROFILA")
-
                         Lines.Add("   Gamme          =  " & .Gamme)
+
                         Lines.Add("   NomProfile     =  " & .NomProfile)
                         Lines.Add("   ha             =  " & .ha)
                         Lines.Add("   hb             =  " & .hb)
@@ -788,7 +788,7 @@ Public Class cls_Projet
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
-        Dim i As Integer
+        Dim i, iFirst As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
 
@@ -801,8 +801,20 @@ Public Class cls_Projet
                     MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
 
                     Select Case MotCle
-                        Case "BEAMID" : .BeamID = Mots(nbMots)
-                        Case "COMMENTAIR" : .Commentaire = Mots(nbMots)
+                        Case "BEAIDEN"
+                            If nbMots >= 2 Then
+                                iFirst = InStr(Lignes(i), Mots(2))
+                                .BeamID = Lignes(i).Substring(iFirst - 1)
+                            Else
+                                .BeamID = ""
+                            End If
+                        Case "COMMENTAIR"
+                            If nbMots >= 2 Then
+                                iFirst = InStr(Lignes(i), Mots(2))
+                                .Commentaire = Lignes(i).Substring(iFirst - 1)
+                            Else
+                                .Commentaire = ""
+                            End If
                         Case "TYPESECTIO" : .TypeSection = Mots(nbMots)
                         Case "CONSOLEGAU" : .lTraveeConsoleGauche = Mots(nbMots)
                         Case "CONSOLEDRO" : .lTraveeConsoleDroite = Mots(nbMots)
@@ -919,7 +931,7 @@ Public Class cls_Projet
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
-        Dim i As Integer
+        Dim i, iFirst As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
 
@@ -932,8 +944,12 @@ Public Class cls_Projet
                     MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
 
                     Select Case MotCle
-                        Case "GAMME" : .Gamme = Mots(nbMots)
-                        Case "NOMPROFILE" : .NomProfile = Mots(nbMots)
+                        Case "GAMME"
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            .Gamme = Lignes(i).Substring(iFirst - 1)
+                        Case "NOMPROFILE"
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            .NomProfile = Lignes(i).Substring(iFirst - 1)
                         Case "HA" : .ha = TraiteReal(Mots(nbMots))
                         Case "HB" : .hb = TraiteReal(Mots(nbMots))
                         Case "BFS" : .Bfs = TraiteReal(Mots(nbMots))
@@ -969,7 +985,7 @@ Public Class cls_Projet
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
-        Dim i As Integer
+        Dim i, iFirst As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
 
@@ -982,10 +998,22 @@ Public Class cls_Projet
                     MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
 
                     Select Case MotCle
-                        Case "NUANCE" : .Nuance = Mots(nbMots)
-                        Case "QUALITE" : .Qualite = Mots(nbMots)
-                        Case "REDUCTION" : .Reduction = Mots(nbMots)
-                        Case "NORMEPRODU" : .NormeProduit = Mots(nbMots)
+                        Case "NUANCE"
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            .Nuance = Lignes(i).Substring(iFirst - 1)
+                        Case "QUALITE"
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            .Qualite = Lignes(i).Substring(iFirst - 1)
+                        Case "REDUCTION"
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            .Reduction = Lignes(i).Substring(iFirst - 1)
+                        Case "NORMEPRODU"
+                            If nbMots >= 2 Then
+                                iFirst = InStr(Lignes(i), Mots(2))
+                                .NormeProduit = Lignes(i).Substring(iFirst - 1)
+                            Else
+                                .NormeProduit = ""
+                            End If
                         Case "EPMAX" : .EpMax = TraiteReal(Mots(nbMots))
                         Case "IBASE" : .iBase = TraiteReal(Mots(nbMots))
                         Case "ITABSTAND" : .iTabStandart = TraiteReal(Mots(nbMots))
@@ -1307,7 +1335,7 @@ Public Class cls_Projet
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
-        Dim i As Integer
+        Dim i, iFirst As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
 
@@ -1322,8 +1350,20 @@ Public Class cls_Projet
 
                 With bac_dalle
                     Select Case MotCle
-                        Case "ETIQUETTE" : .Etiquette = AggregationMotsTableau(Mots, 2, Mots.Count - 1)
-                        Case "PRODUCTEUR" : .Producteur = Mots(nbMots)
+                        Case "ETIQUETTE"
+                            If nbMots >= 2 Then
+                                iFirst = InStr(Lignes(i), Mots(2))
+                                .Etiquette = Lignes(i).Substring(iFirst - 1)
+                            Else
+                                .Etiquette = ""
+                            End If
+                        Case "PRODUCTEUR"
+                            If nbMots >= 2 Then
+                                iFirst = InStr(Lignes(i), Mots(2))
+                                .Producteur = Lignes(i).Substring(iFirst - 1)
+                            Else
+                                .Producteur = ""
+                            End If
                         Case "LDATABASE" : .lDatabase = Mots(nbMots)
                         Case "H_RS" : .h_rs = TraiteReal(Mots(nbMots))
                         Case "H_P" : .Hp = TraiteReal(Mots(nbMots))

@@ -5,7 +5,7 @@
     ''' </summary>
     Public SEPARATEURS() As String = {" ", "=", ";"}
 
-    Public Sub DecomposeLine(ByVal Line As String, ByRef Words() As String, ByRef nbWords As Integer, Optional lConservationSeparateur As Boolean = False)
+    Public Sub DecomposeLine(ByVal Line As String, ByRef Words() As String, ByRef nbWords As Integer)
         '
         '   08/03/06 :  Création - Version 1.00
         '
@@ -326,17 +326,6 @@
         End If
 
         Return Chaine
-
-    End Function
-
-    Public Function AggregationMotsTableau(TableauxMots() As String, indDebut As Integer, indFin As Integer) As String
-        Dim chaineRetour As String = ""
-
-        For i As Integer = indDebut To indFin
-            chaineRetour += TableauxMots(i)
-        Next
-
-        Return chaineRetour
 
     End Function
 

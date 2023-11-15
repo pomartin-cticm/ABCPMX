@@ -20,6 +20,8 @@ Public Class Frm_PMX
     Dim CouleurBtnNormal As Color = GrayAM
 
     Dim Str_WarningFile As String
+    'Ajout GUD: Permet de stocker la traduction du terme "File" pour la fenetre d'ouverture du projet (voir la fonction "OuvrirFichier")
+    Dim strFiltresExtension As String
 
     Dim lZoomPlus As Boolean
 
@@ -154,6 +156,7 @@ Public Class Frm_PMX
 
                 '--> Boutons 'Fichier'
                 Me.btn_FilesN.Text = Bloc("FILE")
+                strFiltresExtension = Bloc("FILE")
                 Me.OpenToolStripMenuItemN.Text = Bloc("OPEN") & "..."
                 Me.NewToolStripMenuItemN.Text = Bloc("NEW")
                 Me.SaveToolStripMenuItemN.Text = Bloc("SAVE")
@@ -163,11 +166,46 @@ Public Class Frm_PMX
 
                 '--> Boutons 'Projet'
 
-                Me.btn_ProjectN.Text = "Toto Projet"
+                Me.btn_ProjectN.Text = Bloc("PROJECT")
+                Me.AddPoutreTSMenuItemN.Text = Bloc("ADDBEAM")
+                Me.DeletePoutreTSMenuItemN.Text = Bloc("DELBEAM")
+                Me.DuplicatePoutreTSMenuItemN.Text = Bloc("DUPBEAM")
+                Me.CalculCoeffToolStripMenuItemN.Text = Bloc("CALCULATION")
+                Me.CalculationSheetToolStripMenuItemN.Text = Bloc("CALCULATIONREPORT")
+
+                '--> Bouton 'Options'
+                Me.btn_OptionsN.Text = Bloc("OPTIONS")
+                Me.ConfigToolStripMenuItemN.Text = Bloc("SOFTOPT")
+                Me.CalculOptionToolStripMenuItemN.Text = Bloc("CALCULOPTIONS")
+
+                '--> Bouton 'Other'
+                Me.btn_OtherN.Text = Bloc("OTHER")
+                Me.AboutToolStripMenuItemN.Text = Bloc("ABOUT")
+                Me.SupportToolStripMenuItemN.Text = Bloc("SUPPORT")
+                Me.TechnicalToolStripMenuItemN.Text = Bloc("TECHNICALMANUEL")
+                Me.ValidationToolStripMenuItemN.Text = Bloc("VALIDATIONMANUEL")
+
+                '=== CONTENU DE LA FENETRE DE NAVIGATION GAUCHE =========================================================
+
+                Me.Label_Nom_Projet.Text = Bloc("PROJECTNAME")
+                Me.Label_Nav_Poutre.Text = Bloc("PROJECTNAVIGATION")
 
                 '=== CONTENU DE LA FENETRE =========================================================
 
-                Me.btn_NewN.ToolTipText = Bloc("NPROJET") & "..."
+                Me.TSBbtn_NewN.ToolTipText = Bloc("NPROJET") '& "..."
+                Me.TSbtn_OpenN.ToolTipText = Bloc("OPEN")
+                Me.TSbtn_SaveN.ToolTipText = Bloc("SAVE")
+                Me.TSbtn_AddBeamN.ToolTipText = Bloc("ADDBEAM")
+                Me.TSbtn_SupprBeam.ToolTipText = Bloc("DELBEAM")
+                Me.TSbtn_DupBeam.ToolTipText = Bloc("DUPBEAM")
+                Me.TSbtn_Calcul.ToolTipText = Bloc("CALCULATION")
+                Me.TSbtn_NoteCalcul.Text = Bloc("CALCULATIONREPORT")
+
+                Me.TSbtn_OptionsCalcul.ToolTipText = Bloc("CALCULOPTIONS")
+                Me.TSbtn_OptionsLogiciel.ToolTipText = Bloc("SOFTOPT")
+
+                Me.TSbtn_ZoomPlus.ToolTipText = Bloc("ZOOMIN")
+                Me.TSbtn_ZoomMoins.ToolTipText = Bloc("ZOOMOUT")
 
                 '=== BARRE d'OUTILS POUR LES POUTRES
 
@@ -288,7 +326,7 @@ Public Class Frm_PMX
 
     End Sub
 
-    Private Sub ClickNouveauProjet(sender As Object, e As EventArgs) Handles btn_NewN.Click
+    Private Sub ClickNouveauProjet(sender As Object, e As EventArgs) Handles TSBbtn_NewN.Click
 
         Frm_AjoutePP.ShowDialog()
 
@@ -316,7 +354,7 @@ Public Class Frm_PMX
 
 #Region " Gestion des barres d'outils "
 
-    Private Sub Btn_AddSection_Click(sender As Object, e As EventArgs) Handles Btn_AddSectionN.Click
+    Private Sub Btn_AddSection_Click(sender As Object, e As EventArgs) Handles TSbtn_AddBeamN.Click
         AjouterPoutre()
     End Sub
 
@@ -518,6 +556,7 @@ Public Class Frm_PMX
         End Select
 
         MAJMainToolBar()
+        GestionModificationPoutreEnCours()
         img_Main.Invalidate()
 
     End Sub
@@ -537,6 +576,41 @@ Public Class Frm_PMX
         End If
 
 
+    End Sub
+
+    ''' <summary>
+    ''' Méthode qui permet de gérer les conséquences sur la poutre lorsqu'on sort d'une fenetre fille et qu'elle a été modifiée 
+    ''' </summary>
+    Private Sub GestionModificationPoutreEnCours()
+        With MyProjet.Poutres(MyProjet.IndEnCours)
+            If .lPoutreModifiee Then
+                Select Case FilleEnCours
+                    Case EnuFenetres.Portees
+                        .InitialisePoidsPropres()
+                    Case EnuFenetres.Dalle
+                        .InitialisePoidsPropres()
+                    Case EnuFenetres.Section
+                        .InitialisePoidsPropres()
+                    Case EnuFenetres.Enrobage
+                        .InitialisePoidsPropres()
+                    Case EnuFenetres.Connexion
+
+                    Case EnuFenetres.Maintiens
+
+                    Case EnuFenetres.Etaiement
+
+                    Case EnuFenetres.Chargements
+
+                    Case EnuFenetres.Gamma
+
+                    Case EnuFenetres.Combinaisons
+
+                    Case EnuFenetres.Hivoss
+
+                End Select
+            End If
+
+        End With
     End Sub
 
     ''' <summary>
@@ -683,6 +757,9 @@ Public Class Frm_PMX
             '--> MAJ fichier recent
             Me.AffichageRecentFiles()
 
+            MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            MAJMainToolBar()
+
         End If
 
 
@@ -705,7 +782,9 @@ Public Class Frm_PMX
         '--> Préparation de la boite de dialogue OpenFile
 
         Me.OpenFileDialog_Project.InitialDirectory = LogicielOptions.RepertoireTravail
-        Me.OpenFileDialog_Project.DefaultExt = LogicielInfo.Extension
+        'Me.OpenFileDialog_Project.DefaultExt = LogicielInfo.Extension
+        Me.OpenFileDialog_Project.Filter = strFiltresExtension & " (*." & LogicielInfo.Extension & ")|*." & LogicielInfo.Extension
+        Me.OpenFileDialog_Project.FileName = ""
         Me.OpenFileDialog_Project.ShowDialog()
 
         FileName = Me.OpenFileDialog_Project.FileName

@@ -262,7 +262,15 @@ SPAN					= Span
 TITLE 					= Definition of the lateral restraints
 
 #FRM_MAIN
+ABOUT					= About
+ADDBEAM					= Add beam
+CALCULATION				= Calculation
+CALCULOPTIONS			= Calculation options
+CALCULATIONREPORT		= Calculation report
+SOFTOPT					= Software options
 COPYPICTURE				= Copy picture
+DELBEAM					= Delete beam
+DUPBEAM					= Duplicate beam
 ERRORCAPACITY			= The maximum capacity of the list has been reached, no new additions are possible
 ERROREMPTYCELL			= Empty cell
 ERRORNONNUMERIC			= Non-numeric value
@@ -272,13 +280,19 @@ FILE					= File
 NEW						= New
 NPROJET					= New project
 OPEN					= Open
+OPTIONS					= Options
+OTHER					= Other
 PROJECT					= Project
 PROJECTNAME				= Project name
+PROJECTNAVIGATION		= Project navigation
 RECENTFILES				= Recent Files
 SAVE					= Save
 SAVEAS					= Save As
 SECTION					= Section
 SECTIONSLIST			= Sections list
+SUPPORT					= Support
+TECHNICALMANUEL			= Technical manuel
+VALIDATIONMANUEL		= Validation manuel
 TSBCONNECTION			= Connection
 TSBMAINTIENS			= Lateral restraints
 TSBENCASEMENT			= Partial encasement
@@ -306,6 +320,8 @@ PPEFFWIDTHS				= Effective widths of slab
 PPLOADCASES				= Load cases
 PPVERIFICATIONS			= Verifications
 PPEIGENMODE				= Eigen mode
+ZOOMIN					= Zoom in
+ZOOMOUT					= Zoom out
 
 #FRM_OUVERTURE
 BROWSEFILES				= Browse

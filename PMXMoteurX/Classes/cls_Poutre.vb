@@ -268,6 +268,8 @@ Public Class cls_Poutre
     ''' </summary>
     Public NouvellePoutre As Boolean
 
+    Public lPoutreModifiee As Boolean
+
 #End Region
 
 #Region " Variables pour la modélisation "
@@ -309,17 +311,11 @@ Public Class cls_Poutre
         '   MsgChargements  [E] :   Nom des cas de charges dans la langue utilisateur
         '-------------------------------------------------------------------------------------------------------
 
-        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(MsgChargements(0), Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(MsgChargements(1), Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(MsgChargements(2) & " 1", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(MsgChargements(2) & " 2", Me.IndiceDerniereTravee))
-        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(MsgChargements(3), Me.IndiceDerniereTravee))
-
-        'Me.ChargesU.Add("G1", New cls_ChargementUtilisateur("Poids propre", Me.IndiceDerniereTravee))
-        'Me.ChargesU.Add("G2", New cls_ChargementUtilisateur("Autres charges permanentes", Me.IndiceDerniereTravee))
-        'Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur("Charges d'expoitation 1", Me.IndiceDerniereTravee))
-        'Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur("Charges d'expoitation 2", Me.IndiceDerniereTravee))
-        'Me.ChargesU.Add("QC", New cls_ChargementUtilisateur("Charges de construction", Me.IndiceDerniereTravee))
+        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(MsgChargements(0), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(MsgChargements(1), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(MsgChargements(2) & " 1", Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(MsgChargements(2) & " 2", Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(MsgChargements(3), Me.IndiceTraveeConsoleDroite))
 
     End Sub
 
@@ -414,15 +410,16 @@ Public Class cls_Poutre
         Me.lDefautDalle = True
         Me.lDonneesSauvees = False
         Me.NouvellePoutre = True
+        Me.lPoutreModifiee = False
     End Sub
 
     Private Sub PoutreDefautAcier()
         pNbTravees = 1
-        ReDim LongueurTravee(pNbTravees + 2)
-        ReDim TypTravee(pNbTravees + 2)
-        ReDim Maintiens(pNbTravees + 2)
-        ReDim NbRestrain(pNbTravees + 2)
-        'ReDim TypeMaintien(pNbTravees + 2)
+        ReDim LongueurTravee(IndiceTraveeConsoleDroite)
+        ReDim TypTravee(IndiceTraveeConsoleDroite)
+        ReDim Maintiens(IndiceTraveeConsoleDroite)
+        ReDim NbRestrain(IndiceTraveeConsoleDroite)
+        'ReDim TypeMaintien(IndiceTraveeConsoleDroite + 2)
 
 
         TypeMaintien = EnuTypeMaintiensPoutre.NotRestrained
@@ -462,14 +459,14 @@ Public Class cls_Poutre
 
         lIntermediaire = True
 
-        ReDim ZoneLongueur(pNbTravees + 2, 2)
-        ReDim NombreZones(pNbTravees + 2)
-        ReDim ZoneEspacement(pNbTravees + 2, 2)
-        ReDim ZoneEspacement_Bac_Trans(pNbTravees + 2, 2)
-        ReDim ZoneNombreGoujonsTransv(pNbTravees + 2, 2)
-        'ReDim NombreGoujonsTot(pNbTravees + 2)
+        ReDim ZoneLongueur(IndiceTraveeConsoleDroite, 2)
+        ReDim NombreZones(IndiceTraveeConsoleDroite)
+        ReDim ZoneEspacement(IndiceTraveeConsoleDroite, 2)
+        ReDim ZoneEspacement_Bac_Trans(IndiceTraveeConsoleDroite, 2)
+        ReDim ZoneNombreGoujonsTransv(IndiceTraveeConsoleDroite, 2)
+        'ReDim NombreGoujonsTot(IndiceTraveeConsoleDroite + 2)
 
-        For i As Integer = 0 To pNbTravees + 2
+        For i As Integer = 0 To IndiceTraveeConsoleDroite
             ZoneLongueur(i, 0) = LongueurTravee(i)
             ZoneLongueur(i, 1) = 0
             ZoneLongueur(i, 2) = 0
@@ -563,6 +560,7 @@ Public Class cls_Poutre
 
         Me.NouvellePoutre = False
         Me.lDonneesSauvees = False
+        Me.lPoutreModifiee = True
 
     End Sub
 
@@ -720,6 +718,98 @@ Public Class cls_Poutre
 
         Return xPos
     End Function
+
+    ''' <summary>
+    ''' Routine qui permet de réinitialiser les dimensions des tableaux de la classe poutre lorsque le nombre de travée a été modifié 
+    ''' (sera utile + tard quand on pourra modifier le nombre de travées sur 2 appuis)
+    ''' </summary>
+    Public Sub MAJI_Tableaux_NbTravee_Modifie()
+
+        'MAJ de la partie concernant les dimensions de la poutre
+
+        ReDim Preserve Me.TypTravee(IndiceTraveeConsoleDroite)
+        For i As Integer = 0 To IndiceTraveeConsoleDroite
+            Select Case i
+                Case 0 : Me.TypTravee(i) = EnuTypeTravee.ConsoleGauche
+                Case IndiceTraveeConsoleDroite : Me.TypTravee(i) = EnuTypeTravee.ConsoleDroite
+                Case Else : Me.TypTravee(i) = EnuTypeTravee.DeuxAppuis
+            End Select
+        Next
+
+        ReDim Preserve Me.LongueurTravee(IndiceTraveeConsoleDroite)
+        For i As Integer = 0 To IndiceTraveeConsoleDroite
+            If Me.LongueurTravee(i) = 0 Then 'Permet de savoir si la dimension i est remplie d'éléments nuls, auquel cas on initialise avec les paramètres par défaut
+                Select Case Me.TypTravee(i)
+                    Case EnuTypeTravee.ConsoleGauche, EnuTypeTravee.ConsoleDroite : LongueurTravee(i) = PORTEECONSOLEDEFAUT
+                    Case EnuTypeTravee.DeuxAppuis : LongueurTravee(i) = PORTEEDEFAUT
+                End Select
+            End If
+        Next
+
+        'MAJ de la partie concernant la connection 
+
+        ReDim Preserve ZoneLongueur(IndiceTraveeConsoleDroite, 2)
+        ReDim Preserve NombreZones(IndiceTraveeConsoleDroite)
+        ReDim Preserve ZoneEspacement(IndiceTraveeConsoleDroite, 2)
+        ReDim Preserve ZoneEspacement_Bac_Trans(IndiceTraveeConsoleDroite, 2)
+        ReDim Preserve ZoneNombreGoujonsTransv(IndiceTraveeConsoleDroite, 2)
+
+        For i As Integer = 0 To IndiceTraveeConsoleDroite
+            If ZoneLongueur(i, 0) = 0 Then 'Permet de savoir si la dimension i est remplie d'éléments nuls, auquel cas on initialise avec les paramètres par défaut
+                ZoneLongueur(i, 0) = LongueurTravee(i)
+                ZoneLongueur(i, 1) = 0
+                ZoneLongueur(i, 2) = 0
+                NombreZones(i) = 1
+                ZoneEspacement(i, 0) = 200 / 1000
+                ZoneEspacement(i, 1) = 200 / 1000
+                ZoneEspacement(i, 2) = 200 / 1000
+                ZoneEspacement_Bac_Trans(i, 0) = 1
+                ZoneEspacement_Bac_Trans(i, 1) = 1
+                ZoneEspacement_Bac_Trans(i, 2) = 1
+                ZoneNombreGoujonsTransv(i, 0) = 1
+                ZoneNombreGoujonsTransv(i, 1) = 1
+                ZoneNombreGoujonsTransv(i, 2) = 1
+            End If
+        Next
+
+        'MAJ de la partie concernant les maintiens latéraux
+        ReDim Preserve Me.NbRestrain(IndiceTraveeConsoleDroite)
+        ReDim Preserve Me.Maintiens(IndiceTraveeConsoleDroite)
+
+        For i As Integer = 0 To IndiceTraveeConsoleDroite
+            If IsNothing(Me.Maintiens(i)) Then
+                Me.Maintiens(i) = New List(Of cls_Maintiens)
+            End If
+        Next
+
+
+
+
+        'MAJ de la partie concernant le chargement 
+
+        For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In Me.ChargesU
+
+
+            ReDim Preserve Me.ChargesU(element.Key).FReparties(IndiceTraveeConsoleDroite)
+            For i As Integer = 0 To IndiceTraveeConsoleDroite
+                If IsNothing(Me.ChargesU(element.Key).FReparties(i)) Then
+                    Me.ChargesU(element.Key).FReparties(i) = New List(Of cls_ForceRepartie)
+                End If
+            Next
+
+            ReDim Preserve Me.ChargesU(element.Key).Forces(IndiceTraveeConsoleDroite)
+            For i As Integer = 0 To IndiceTraveeConsoleDroite
+                If IsNothing(Me.ChargesU(element.Key).Forces(i)) Then
+                    Me.ChargesU(element.Key).Forces(i) = New List(Of cls_Force)
+                End If
+            Next
+
+            ReDim Preserve Me.ChargesU(element.Key).QSurf(IndiceDerniereTravee) 'pas besoin de faire appel au constructeur ici car c'est un tableau de décimal
+
+        Next
+
+
+    End Sub
 #End Region
 
 #Region " Fonctions de copie "
