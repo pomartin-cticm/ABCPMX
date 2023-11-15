@@ -1322,7 +1322,7 @@ Public Class cls_Projet
 
                 With bac_dalle
                     Select Case MotCle
-                        Case "ETIQUETTE" : .Etiquette = Mots(nbMots)
+                        Case "ETIQUETTE" : .Etiquette = AggregationMotsTableau(Mots, 2, Mots.Count - 1)
                         Case "PRODUCTEUR" : .Producteur = Mots(nbMots)
                         Case "LDATABASE" : .lDatabase = Mots(nbMots)
                         Case "H_RS" : .h_rs = TraiteReal(Mots(nbMots))
