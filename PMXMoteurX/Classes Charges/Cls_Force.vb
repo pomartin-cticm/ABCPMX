@@ -15,6 +15,10 @@
 
 #Region " Constructeurs "
 
+    Public Sub New()
+
+    End Sub
+
     Public Sub New(pxPosT As Decimal, pForce As Decimal, pxGaucheT As Decimal)
         xGaucheT = pxGaucheT
         xPosT = pxPosT

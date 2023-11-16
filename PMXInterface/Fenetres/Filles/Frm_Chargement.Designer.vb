@@ -1209,6 +1209,7 @@ Partial Class Frm_Chargement
         'txt_WidthApplication
         '
         Me.txt_WidthApplication.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_WidthApplication.BackColor = System.Drawing.SystemColors.Window
         Me.txt_WidthApplication.Location = New System.Drawing.Point(127, 13)
         Me.txt_WidthApplication.Name = "txt_WidthApplication"
         Me.txt_WidthApplication.ReadOnly = True

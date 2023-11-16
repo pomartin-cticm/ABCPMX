@@ -189,7 +189,7 @@ Public Class cls_Projet
 
                         With maint(i)
 
-                            Lines.Add("BLOCK MAINTIENTS")
+                            Lines.Add("BLOCK MAINTIENS")
                             Lines.Add("   indTravee      =  " & i)
                             Lines.Add("   xloc           =  " & .x_Loc)
                             Lines.Add("   lMaintSemSup   =  " & .lMaintienSemelleSup)
@@ -504,6 +504,42 @@ Public Class cls_Projet
                         Lines.Add("")
                     End With
                 End With
+
+                '==[ Classe ChargementU ]=================================================================
+                For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In .ChargesU
+                    For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
+                        Lines.Add("BLOCK CHGTU_QSURF")
+                        Lines.Add("   CleDic      =  " & elemnts.Key)
+                        Lines.Add("   indTravee      =  " & i)
+                        Lines.Add("   QSurf      =  " & elemnts.Value.QSurf(i))
+                        Lines.Add("")
+
+                        For Each force As cls_Force In elemnts.Value.Forces(i)
+                            Lines.Add("BLOCK CHGTU_FORCE")
+                            Lines.Add("   CleDic      =  " & elemnts.Key)
+                            Lines.Add("   indTravee      =  " & i)
+                            Lines.Add("   Force      =  " & force.Force)
+                            Lines.Add("   xPosT      =  " & force.xPosT)
+                            Lines.Add("   xGaucheT   =  " & force.xGaucheT)
+                            Lines.Add("")
+                        Next
+
+                        For Each frepart As cls_ForceRepartie In elemnts.Value.FReparties(i)
+                            If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = ptre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
+                                Lines.Add("BLOCK CHGTU_FREPAR")
+                                Lines.Add("   CleDic      =  " & elemnts.Key)
+                                Lines.Add("   indTravee      =  " & i)
+                                Lines.Add("   F0      =  " & frepart.Force(0))
+                                Lines.Add("   F1      =  " & frepart.Force(1))
+                                Lines.Add("   xPosT0      =  " & frepart.xPosT(0))
+                                Lines.Add("   xPosT1      =  " & frepart.xPosT(1))
+                                Lines.Add("   xGaucheT      =  " & frepart.xGaucheT)
+                                Lines.Add("")
+                            End If
+                        Next
+                    Next
+                Next
+
             End With
         Next
 
@@ -558,7 +594,7 @@ Public Class cls_Projet
             MsgBox("Erreur lecture fichier | Error read file", MsgBoxStyle.Critical, "Cls_Project/RecuperationFile")
         End Try
 
-        If Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("POUTRE") And Not ListeBlocCle.Contains("MAINTIENTS") And Not ListeBlocCle.Contains("SECTION") And
+        If Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("POUTRE") And Not ListeBlocCle.Contains("MAINTIENS") And Not ListeBlocCle.Contains("SECTION") And
            Not ListeBlocCle.Contains("PROFILA") And Not ListeBlocCle.Contains("ACIER_PROFILA") And Not ListeBlocCle.Contains("ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") And
            Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE") And
            Not ListeBlocCle.Contains("OPT_CALCULS") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE") And Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") Then
@@ -706,6 +742,29 @@ Public Class cls_Projet
                     ReadBlocHivossOptionsCalculs(hivoss_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param.HivossParam = hivoss_opt_calculs
 
+                Case "CHGTU_QSURF"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim QSurf_en_cours As Decimal
+                    Dim cle_dic As String
+                    Dim ind_travee As Integer
+                    ReadBlocQSurf(QSurf_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.ChargesU(cle_dic).QSurf(ind_travee) = QSurf_en_cours
+
+                Case "CHGTU_FORCE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim force_en_cours As New cls_Force
+                    Dim cle_dic As String
+                    Dim ind_travee As Integer
+                    ReadBlocForce(force_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.ChargesU(cle_dic).Forces(ind_travee).Add(force_en_cours)
+
+                Case "CHGTU_FREPAR"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim frepart_en_cours As New cls_ForceRepartie
+                    Dim cle_dic As String
+                    Dim ind_travee As Integer
+                    ReadBlocFRepartie(frepart_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.ChargesU(cle_dic).FReparties(ind_travee).Add(frepart_en_cours)
 
                     'Case "IDENTIFICATION"
                     '    Me.ReadBloc_Indentification(Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
@@ -1733,6 +1792,115 @@ Public Class cls_Projet
                     End Select
                 End With
 
+            End If
+        Next
+
+    End Sub
+
+
+    ''' <summary>
+    ''' Lecture du bloc QSurf
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocQSurf(ByRef QSurf_en_cours As Decimal, ByRef cle_dictionnaire As String, ByRef ind_travee As Integer, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+                Select Case MotCle
+                    Case "CLEDIC" : cle_dictionnaire = Mots(nbMots)
+                    Case "INDTRAVEE" : ind_travee = TraiteReal(Mots(nbMots))
+                    Case "QSURF" : QSurf_en_cours = TraiteReal(Mots(nbMots))
+                    Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                End Select
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Force
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocForce(force_en_cours As cls_Force, ByRef cle_dictionnaire As String, ByRef ind_travee As Integer, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+                Select Case MotCle
+                    Case "CLEDIC" : cle_dictionnaire = Mots(nbMots)
+                    Case "INDTRAVEE" : ind_travee = TraiteReal(Mots(nbMots))
+                    Case "FORCE" : force_en_cours.Force = TraiteReal(Mots(nbMots))
+                    Case "XPOST" : force_en_cours.xPosT = TraiteReal(Mots(nbMots))
+                    Case "XGAUCHET" : force_en_cours.xGaucheT = TraiteReal(Mots(nbMots))
+                    Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                End Select
+
+            End If
+        Next
+
+    End Sub
+
+
+    ''' <summary>
+    ''' Lecture du bloc FRepartie
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocFRepartie(frepartie_en_cours As cls_ForceRepartie, ByRef cle_dictionnaire As String, ByRef ind_travee As Integer, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+                Select Case MotCle
+                    Case "CLEDIC" : cle_dictionnaire = Mots(nbMots)
+                    Case "INDTRAVEE" : ind_travee = TraiteReal(Mots(nbMots))
+                    Case "F0" : frepartie_en_cours.Force(0) = TraiteReal(Mots(nbMots))
+                    Case "F1" : frepartie_en_cours.Force(1) = TraiteReal(Mots(nbMots))
+                    Case "XPOST0" : frepartie_en_cours.xPosT(0) = TraiteReal(Mots(nbMots))
+                    Case "XPOST1" : frepartie_en_cours.xPosT(1) = TraiteReal(Mots(nbMots))
+                    Case "XGAUCHET" : frepartie_en_cours.xGaucheT = TraiteReal(Mots(nbMots))
+                    Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                End Select
             End If
         Next
 

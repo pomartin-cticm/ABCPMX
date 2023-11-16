@@ -14,6 +14,9 @@
 
 #Region " Constructeurs "
 
+    Public Sub New()
+
+    End Sub
     Public Sub New(pxPosTG As Decimal, pForceG As Decimal, pxPosTD As Decimal, pForceD As Decimal, pxGaucheT As Decimal)
         '-----------------------------------------------------------------------------------------------------------------------
         '   

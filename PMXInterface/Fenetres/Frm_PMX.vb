@@ -796,6 +796,8 @@ Public Class Frm_PMX
 
             '--> Lecture du fichier
             ReadInFile(FileName)
+            MAJToolBarPoutre()
+            Me.img_Main.Invalidate()
 
         End If
 

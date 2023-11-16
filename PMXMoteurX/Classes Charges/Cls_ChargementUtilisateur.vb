@@ -4,7 +4,7 @@
     '#### CONCERNE : QC, G2, Q1 et Q2  (G1 ?)
 
 #Region " Attributs "
-    Public Titre As String                             ' Titre du cas de charge 
+    'Public Titre As String                             ' Titre du cas de charge 'GUD: je l'ai enlevé car fait doublon avec la clé du dictionnaire ChargeU
 
     Public QSurf() As Decimal                           ' Charge par unité de surface sur chaque travée
     'Public WSurf() As Decimal                           ' Largeur d'application de la charge surfacique sur chaque travée
@@ -15,9 +15,9 @@
 
 #Region " Constructeurs "
 
-    Public Sub New(pTitre As String, IndiceDerniereTravee As Integer)
+    Public Sub New(IndiceDerniereTravee As Integer)
 
-        Me.Titre = pTitre
+        'Me.Titre = pTitre
 
         ReDim Me.QSurf(IndiceDerniereTravee)
         'ReDim Me.WSurf(IndiceDerniereTravee + 1)

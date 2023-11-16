@@ -435,10 +435,38 @@ Public Class Frm_SectionAcierStandard
         GereTransfertValeur(MySectionLoc.Acier.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Nuance, lModif)
         GereTransfertValeur(MySectionLoc.Acier.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Qualite, lModif)
         GereTransfertValeur(MySectionLoc.Acier.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.NormeProduit, lModif)
+        GereTransfertValeur(MySectionLoc.Acier.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Reduction, lModif)
 
-        'cls_Section.CloneSection(MySectionLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section)
+        With MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA ' --> Sécurité supplémentaire pour s'assurer que les valeurs qui n'ont pas de sens restent égales à 0
+            Select Case .typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                    .hb = .ha
+                    .aW = 0
+                    .Plat_b = 0
+                    .Plat_t = 0
+                Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
+                    .hb = 0
+                    .Rcs = 0
+                    .Rci = 0
+                    .Plat_b = 0
+                    .Plat_t = 0
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                    .hb = .ha
+                    .aW = 0
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                    .Bfi = 0
+                    .Tfi = 0
+                    .Rci = 0
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                    .Bfs = 0
+                    .Tfs = 0
+                    .Rcs = 0
+            End Select
+
+        End With
 
     End Sub
+
 
 
 #End Region
@@ -1110,6 +1138,7 @@ Public Class Frm_SectionAcierStandard
         MySectionLoc.ProfilA.Rci = MySectionLoc.ProfilA.Rcs
         MySectionLoc.ProfilA.Tfi = MySectionLoc.ProfilA.Tfs
 
+        ReDim MySectionLoc.ProfilA.IndStandart(MyCatalogue.nbStandard)
         For i As Integer = 0 To MyCatalogue.nbStandard - 1
             MySectionLoc.ProfilA.IndStandart(i) = MyCatalogue.Series(Gamme).Profiles(Profile).IndStandart(i)
         Next

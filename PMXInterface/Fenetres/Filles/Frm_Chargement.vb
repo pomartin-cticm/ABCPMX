@@ -825,7 +825,7 @@ Public Class Frm_Chargement
         If lMAJLargeur Then txt_WidthApplication.Text = MyPoutreLoc.LargeurInfluence
         If lMAJPression Then txt_UniformLoad.Text = MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2)
         'txt_ResultingForce.Text = MyPoutreLoc.ChargesU(chargeEnCours).WSurf(traveeEnCours) * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
-        txt_ResultingForce.Text = MyPoutreLoc.LargeurInfluence * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+        txt_ResultingForce.Text = MyPoutreLoc.LongueurTravee(traveeEnCours) * MyPoutreLoc.LargeurInfluence * MyPoutreLoc.ChargesU(chargeEnCours).QSurf(traveeEnCours) / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
 
     End Sub
 

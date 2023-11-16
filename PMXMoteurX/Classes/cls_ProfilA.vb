@@ -295,7 +295,7 @@ Public Class cls_ProfilA
         Get
             Select Case Me.typeProfileAcier
                 Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.LamineSlimSAB, Enum_TypeSectionAcier.LamineSlimSFB
-                    Return Me.hb - Me.Tfs - Me.Tfi
+                    Return Me.ha - Me.Tfs - Me.Tfi
                 Case Enum_TypeSectionAcier.LamineSlimIFBA
                     Return Me.ha - Me.Tfs - Me.Plat_t
                 Case Enum_TypeSectionAcier.LamineSlimIFBB

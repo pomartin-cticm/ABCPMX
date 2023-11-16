@@ -465,7 +465,7 @@ Module Mod_Demarrage
                     .Plat_t = 0
                 Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
                     .ha = ha_loc
-                    .hb = hb_loc
+                    .hb = 0
                     .Bfs = bfs_loc / 2
                     .Tfs = tfs_loc
                     .Rcs = 0
@@ -478,7 +478,7 @@ Module Mod_Demarrage
                     .Plat_t = 0
                 Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
                     .ha = ha_loc
-                    .hb = hb_loc
+                    .hb = 0
                     .Bfs = bfs_loc
                     .Tfs = tfs_loc
                     .Rcs = 0
