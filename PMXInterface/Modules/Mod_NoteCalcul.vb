@@ -1,4 +1,5 @@
-﻿Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+﻿Imports System.Runtime.InteropServices
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports PMXMoteur2
 
 Module Mod_NoteCalcul
@@ -112,21 +113,9 @@ Module Mod_NoteCalcul
         MyProjet.Poutres(MyProjet.IndEnCours).InitialisePoidsPropres()
         MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()
 
-        '--[ Analyse calcul RDM (Ajout GUD car le calcul est initialisé seulement à l'ouverture des fenetres Frm_PPCasDeCharge)
-
         strRacineELU = Bloc("ULS")
         strRacineELS = Bloc("SLS")
         strRacineELF = Bloc("FLS")
-
-        With MyProjet.Poutres(MyProjet.IndEnCours)
-            .InitialiseCalculs(NomChargesA)
-            .AAA_CalculMNVInternesN()
-            .InitialiseCombiA(cls_Poutre.nbCombELU, .lCombELU, .CoefCombELU, strRacineELU, .CombiA_ELU)
-            .InitialiseCombiA(cls_Poutre.nbCombELS, .lCombELS, .CoefCombELS, strRacineELS, .CombiA_ELS)
-            .InitialiseCombiA(cls_Poutre.nbCombFeu, .lCombFeu, .CoefCombFeu, strRacineELF, .CombiA_ELF)
-        End With
-
-
 
         '--[ Création de la Note
 
@@ -209,7 +198,6 @@ Module Mod_NoteCalcul
         '--|=========================================
 
         EditionProprietesSection(MyPrjt.Poutres(MyPrjt.IndEnCours))
-
 
         '--|=========================================
         '--| ANALYSE DE LA POUTRE
@@ -1531,7 +1519,7 @@ Module Mod_NoteCalcul
 #End Region
 
 
-#Region "***Edition vérifications ELU***"
+#Region " Edition des analyses (M+V) / cas de charge et combinaisons "
 
     Private Sub EditionAnalysePoutre(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
@@ -1540,25 +1528,462 @@ Module Mod_NoteCalcul
         '   Edition des efforts dans la poutre après analyse
         '-------------------------------------------------------------------------------------------
 
+        '--> Déclaration
+
+        '--> Initialisation
+
         SautePage()
 
         AddTitreNdC(1, BlocAnalyse("ANALYSIS"))
+
+        '--> Analyses par cas de charge
+
         AddTitreNdC(2, BlocAnalyse("ELEMNTRY_LC"))
 
         For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).ChargesA.Count - 1
-            EditionAnalyseChargeA(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i))
-            SautePage()
+
+            '--> On affiche le cas de charge uniquement si le cas de charge est disponible
+            If MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).lRunCalcul Then
+                EditionAnalyseChargeA(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i))
+                SautePage()
+            End If
         Next
 
+        '--> Analyses par combinaisons ELU
 
         AddTitreNdC(2, BlocAnalyse("ELEMNTRY_ULS"))
 
+        For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi - 1
+
+            EditionAnalyseCombiELU(MyProjet.Poutres(MyProjet.IndEnCours), i)
+
+        Next
 
 
     End Sub
 
+    Private Sub EditionAnalyseCombiELU(myPoutre As cls_Poutre, iCombi As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des efforts dans la poutre après analyse pour une combinaison
+        '-------------------------------------------------------------------------------------------
+        '   myPoutre    [E] :   Indice de la poutre
+        '   iCombi      [E] :   Indice de la combinaison ELU
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lRetrait As Boolean = True
+        Dim MEd(,) As Decimal = Nothing
+        Dim VEd(,) As Decimal = Nothing
+        Dim lMultispan As Boolean
+        Dim NCol, PosTab As Integer
+        Dim iTravee, i As Integer
+        Dim iNodeO, iNodeE As Integer
+        Dim iTravDeb, iTravFin As Integer
+        Dim iCompteur As Integer = 0
+        Dim NbLignesMax() As Integer = {25, 30}
+        Dim iTab As Integer = 0
+
+        '--> Initialisation
+
+        lRetrait = True
+        lMultispan = (myPoutre.NbTravees > 1)
+        iTravDeb = myPoutre.IndicePremiereTravee
+        iTravFin = myPoutre.IndiceDerniereTravee
+
+        '--> Affichage de la combinaison
+
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELU, "ELU_0" & CStr(iCombi), iCombi, lRetrait)
+
+        '--> Calcul des M et V
+
+        myPoutre.CombiA_ELU.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
+        myPoutre.CombiA_ELU.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
+
+        '--> Affichage de la combinaison
+
+        '# Entête
+
+        EnteteTableauAnalyseCombi(lMultispan, NCol, PosTab)
+
+        '# Tableau
+
+        For iTravee = iTravDeb To iTravFin
+            iNodeO = myPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeE = myPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            '=== Extrémité gauche
+
+            If iTravee = iTravDeb Then
+                LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, i, iTravee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
+                                             VEd(0, 1), MEd(0, 1))
+            End If
+
+            '=== Lignes intermédiaires
+
+            For i = iNodeO + 1 To iNodeE - 1
+
+                iCompteur += 1
+
+                If iCompteur > NbLignesMax(iTab) Then
+                    FinTableau()
+                    iCompteur = 0
+                    iTab = 1
+                    SautePage()
+                    EnteteTableauAnalyseCombi(lMultispan, NCol, PosTab)
+                End If
+
+                If i = iNodeO Then
+                ElseIf i = iNodeE Then
+                Else
+                    LigneTableauMVCombi(lMultispan, NCol, PosTab, i, iTravee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
+                                        VEd(i, 0), VEd(i, 1), MEd(i, 0), MEd(i, 1))
+                End If
+            Next
+
+            '=== Appui droite
+
+            If iTravee = iTravFin Then
+                LigneTableauMVCombiExtremite(lMultispan, False, NCol, PosTab, iNodeE, iTravee, myPoutre.Nodes.xTravee(iNodeE), myPoutre.Nodes.xGlobal(iNodeE),
+                                             VEd(iNodeE, 0), MEd(iNodeE, 0))
+            Else
+                LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTravee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
+                                         VEd(i, 0), VEd(i, 1), MEd(i, 0), MEd(i, 1))
+            End If
+        Next
+
+        '# Fin du Tableau
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub LigneTableauMVCombiExtremite(lMultiSpan As Boolean, lGauche As Boolean, NCol As Integer, Pos As Integer,
+                                             iNode As Integer, iTravee As Integer, xPosT As Decimal, xPosG As Decimal,
+                                             VEd As Decimal, MEd As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage d'une ligne de tableau MV - cas noeud d'extremité de la poutre
+        '-------------------------------------------------------------------------------------------
+        '   lMultiSpan  [E] :   Indique si plusieurs travées
+        '   lGauche     [E] :   Indique si extremité gauche ou droite de la poutre
+        '   NCol        [E] :   Nombre de colonnes
+        '   Pos         [E] :   Position du tableau / bord gauche
+        '   iNode       [E] :   Indice du noeud
+        '   iTravee     [E] :   Indice de la travée
+        '   xposG,xPosT [E] :   Position globale et dans la travée du noeud
+        '   VEd         [E] :   Valeur de l'effort tranchant
+        '   MEd         [E] :   Valeur du moment fléchissant
+        '-------------------------------------------------------------------------------------------
+
+        InitialiseLigne(NCol, HLIGNE, True)
+
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, iNode)
+
+        '# Position et travée
+
+        If lMultiSpan Then
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, xPosT)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, xPosG)
+        Else
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, xPosG)
+
+        End If
+
+        '# Effort tranchant
+
+        If lGauche Then
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False))
+        Else
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
+        End If
+
+        If lGauche Then
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False))
+        Else
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
+        End If
+
+    End Sub
+
+    Private Sub LigneTableauMVCombiAppui(NCol As Integer, Pos As Integer,
+                                         iNode As Integer, iTravee As Integer, xPosT As Decimal, xPosG As Decimal,
+                                         VEdG As Decimal, VEdd As Decimal, MEdG As Decimal, MEdD As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage d'une ligne de tableau MV - cas d'un noeud sur appui intermédiaire
+        '-------------------------------------------------------------------------------------------
+        '   lMultiSpan  [E] :   Indique si plusieurs travées
+        '   NCol        [E] :   Nombre de colonnes
+        '   Pos         [E] :   Position du tableau / bord gauche
+        '   iNode       [E] :   Indice du noeud
+        '   iTravee     [E] :   Indice de la travée (celle de gauche)
+        '   xposG,xPosT [E] :   Position globale et dans la travée du noeud
+        '   VEdG, VEdD  [E] :   Valeur des efforts tranchants
+        '   MEdG, MEdD  [E] :   Valeur des moments fléchissants
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pNColLigne As Integer
+        Dim lOneM As Boolean
+        Dim lOneV As Boolean
+
+        '--> Initialisation
+
+        lOneM = IsEqual(MEdD, MEdG)
+        lOneV = IsEqual(VEdd, VEdG)
+
+        pNColLigne = NCol - 2
+        If Not lOneM Then pNColLigne += 1
+        If Not lOneV Then pNColLigne += 1
+
+        InitialiseLigne(pNColLigne, HLIGNE, True)
+
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
+
+        '# Position et travée
+
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee + 1) & " / " & CStr(iTravee + 2))
+
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosT, Enu_TypeVariable.Longueur, 3, 2, False) & " / 0")
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosG, Enu_TypeVariable.Longueur, 3, 2, False))
+
+        '# Effort tranchant
+
+        If lOneV Then
+            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False))
+        Else
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdd, Enu_TypeVariable.Effort, 3, 2, False))
+        End If
+
+        '# Moment fléchissant
+
+        If lOneM Then
+            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdG, Enu_TypeVariable.Moment, 3, 2, False))
+        Else
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdG, Enu_TypeVariable.Moment, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdD, Enu_TypeVariable.Moment, 3, 2, False))
+        End If
+
+
+    End Sub
+
+    Private Sub LigneTableauMVCombi(lMultiSpan As Boolean, NCol As Integer, Pos As Integer,
+                                    iNode As Integer, iTravee As Integer, xPosG As Decimal, xPosT As Decimal,
+                                    VEdG As Decimal, VEdd As Decimal, MEdG As Decimal, MEdD As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage d'une ligne de tableau MV - cas général
+        '-------------------------------------------------------------------------------------------
+        '   lMultiSpan  [E] :   Indique si plusieurs travées
+        '   NCol        [E] :   Nombre de colonnes
+        '   Pos         [E] :   Position du tableau / bord gauche
+        '   iNode       [E] :   Indice du noeud
+        '   iTravee     [E] :   Indice de la travée
+        '   xposG,xPosT [E] :   Position globale et dans la travée du noeud
+        '   VEdG, VEdD  [E] :   Valeur des efforts tranchants
+        '   MEdG, MEdD  [E] :   Valeur des moments fléchissants
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pNColLigne As Integer
+        Dim lOneM As Boolean
+        Dim lOneV As Boolean
+
+        '--> Initialisation
+
+        lOneM = IsEqual(MEdD, MEdG)
+        lOneV = IsEqual(VEdd, VEdG)
+
+        pNColLigne = NCol - 2
+        If Not lOneM Then pNColLigne += 1
+        If Not lOneV Then pNColLigne += 1
+
+        InitialiseLigne(pNColLigne, HLIGNE, True)
+
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
+
+        '# Position et travée
+
+        If lMultiSpan Then
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee + 1))
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosT, Enu_TypeVariable.Longueur, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosG, Enu_TypeVariable.Longueur, 3, 2, False))
+        Else
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosT, Enu_TypeVariable.Longueur, 3, 2, False))
+
+        End If
+
+        '# Effort tranchant
+
+        If lOneV Then
+            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False))
+        Else
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdd, Enu_TypeVariable.Effort, 3, 2, False))
+        End If
+
+        '# Moment fléchissant
+
+        If lOneM Then
+            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdG, Enu_TypeVariable.Moment, 3, 2, False))
+        Else
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdG, Enu_TypeVariable.Moment, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdD, Enu_TypeVariable.Moment, 3, 2, False))
+        End If
+
+    End Sub
+
+    Private Sub EnteteTableauAnalyseCombi(lMultiSpan As Boolean, ByRef NCol As Integer, ByRef Pos As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entete du tableau pour l'affichage des sollicitations sous combi ELU
+        '-------------------------------------------------------------------------------------------
+        '   lMultiSpan  [E] :   Indique si plusieurs travées
+        '   NCol        [S] :   Nombre de colonnes
+        '   Pos         [S] :   Position du tableau / bord gauche
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim IndGauche As String = IndiceGaucheDroite(True)
+        Dim IndDroite As String = IndiceGaucheDroite(False)
+
+        '--> Initialisation
+
+        Pos = 10
+        If lMultiSpan Then NCol = 8 Else NCol = 6
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos))
+
+        InitialiseLigne(NCol, HLIGNEENTETE, True)
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("NODE"))
+        If lMultiSpan Then
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("SPAN"))
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-" & BlocAnalyse("SPAN") & "\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-" & BlocAnalyse("GLOBAL") & "\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        Else
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        End If
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-" & IndGauche & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-" & IndDroite & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-" & IndGauche & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitMoment) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-" & IndDroite & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitMoment) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+
+    End Sub
+
+    Private Function IndiceGaucheDroite(lGauche) As String
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Définition l'indice gauche/droite pour la note de calcul, en fonction de la version CTICM ou AM
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim myIndiceGD As String
+
+        '--> Traitement
+
+        If LogicielInfo.Maitre = EnuMaitre.ArcelorMittal Then
+
+            If lGauche Then myIndiceGD = "L" Else myIndiceGD = "R"
+
+        Else
+
+            If lGauche Then myIndiceGD = "g" Else myIndiceGD = "d"
+
+        End If
+
+        Return myIndiceGD
+    End Function
+
+    Private Sub AffichageCombinaisonCharge(myPoutre As cls_Poutre, myCombi As cls_Combinaisons, TitreCombi As String, iCombi As Integer, lRetrait As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des efforts dans la poutre après analyse pour une combinaison
+        '-------------------------------------------------------------------------------------------
+        '   myPoutre    [E] :   Indice de la poutre
+        '   myCombi     [E] :   Combinaison à afficher
+        '   TitreCombi  [E] :   Titre de la combinaison
+        '   iCombi      [E] :   Indice de la combinaison
+        '   lRetrait    [E] :   Prise en compte ou non du retrait
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Chaine As String
+        Dim jCdc As Integer
+        Dim sPlus As String = ""
+        Dim lFirst As Boolean = True
+        Dim lAffiche As Boolean
+
+        '--> Initialisation
+
+        'Chaine = TitreCombi & " = "
+        Chaine = myCombi.Symbole(iCombi) & " = "
+
+        For jCdc = 0 To myPoutre.ChargesA.Count - 1
+
+            lAffiche = lRetrait Or ((Not lRetrait) And (myPoutre.ChargesA(jCdc).Type <> cls_CasDeCharge.EnuType.Retrait))
+
+            If (Not IsEqual(myCombi.CoefCombi(iCombi)(jCdc), 0)) And lAffiche Then
+
+                Chaine += sPlus & GetStringInUnit(myCombi.CoefCombi(iCombi)(jCdc), Enu_TypeVariable.SansType, 3, 2, False) & " " & myPoutre.ChargesA(jCdc).Symbol
+
+                If lFirst Then
+                    sPlus = " + "
+                    lFirst = False
+                End If
+
+            End If
+
+        Next
+
+        '--> Affichage
+
+        AddTitreNdC(3, myCombi.Symbole(iCombi))
+        AddLigneNDC(TABW2 & Chaine)
+        SauteLigne()
+
+    End Sub
 
     Private Sub EditionAnalyseChargeA(MyPoutreLoc As cls_Poutre, ChargeA As cls_CasDeCharge)
+        '-------------------------------------------------------------------------------------------
+        '   10/11/23 :  Création - GUD
+        '-------------------------------------------------------------------------------------------
+        '   Edition des efforts dans la poutre après analyse pour un cas de charge
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim IndGauche As String
+        Dim IndDroite As String
+
+        '--> Initialisation
+
+        IndGauche = IndiceGaucheDroite(True)
+        IndDroite = IndiceGaucheDroite(False)
+
         AddTitreNdC(3, ChargeA.Symbol & " :" & ChargeA.Nom)
 
         If Not ChargeA.lRunCalcul Then
@@ -1566,7 +1991,7 @@ Module Mod_NoteCalcul
             Exit Sub
         End If
 
-
+        '--> Entête => A mettre dans une routine séparée et gérer le nombre de ligne dans la tableau
 
         AddLigneNDC("\TABLEAU 10")
 
@@ -1575,28 +2000,35 @@ Module Mod_NoteCalcul
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("SPAN"))
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-" & BlocAnalyse("SPAN") & "\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-" & BlocAnalyse("GLOBAL") & "\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-L\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-R\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-L\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-R\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-" & IndGauche & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-" & IndDroite & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-" & IndGauche & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitMoment) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-" & IndDroite & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitMoment) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
 
         Dim indTravee As Integer()
         For i As Integer = 0 To MyPoutreLoc.Nodes.nbNodes - 1
             indTravee = IndiceTravee(i, MyPoutreLoc.Nodes.iNodeAppui)
 
             InitialiseLigne(8, HLIGNE, True)
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, i)
-            If indTravee(0) = indTravee(1) Then
-                AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, indTravee(0))
-            Else
-                AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, indTravee(0) & "/" & indTravee(1))
-            End If
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, MyPoutreLoc.Nodes.xTravee(i))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, MyPoutreLoc.Nodes.xGlobal(i))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.VZ(i, 0), Enu_TypeVariable.SansType, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.VZ(i, 1), Enu_TypeVariable.SansType, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.MYY(i, 0), Enu_TypeVariable.SansType, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.MYY(i, 1), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(i))
+
+
+            '# BUG
+            'If indTravee(0) = indTravee(1) Then
+            'AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(indTravee(0)))
+            'Else
+            '    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(indTravee(0)) & "/" & CStr(indTravee(1)))
+            'End If
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(0))
+
+
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyPoutreLoc.Nodes.xTravee(i), Enu_TypeVariable.Longueur, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyPoutreLoc.Nodes.xGlobal(i), Enu_TypeVariable.Longueur, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.VZ(i, 0), Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.VZ(i, 1), Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.MYY(i, 0), Enu_TypeVariable.Moment, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.MYY(i, 1), Enu_TypeVariable.Moment, 3, 2, False))
 
         Next
 
@@ -1623,7 +2055,7 @@ Module Mod_NoteCalcul
                     indTravee(1) = indTravee(0)
                 End If
                 Return indTravee
-                End If
+            End If
         Next
 
     End Function
@@ -1647,21 +2079,40 @@ Module Mod_NoteCalcul
         AddTitreNdC(1, BlocELU("ULS"))
 
         '--> Traitement
+
         EditionVerificationsELUSummary(MyBeam)
-        EditionVerificationsELUCombo(MyBeam)
+        EditionVerificationsELUCombi(MyBeam)
 
     End Sub
 
     Private Sub EditionVerificationsELUSummary(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Synthèse des critères ELU
+        '-------------------------------------------------------------------------------------------
+
+        '--> Titre
+
         AddTitreNdC(2, BlocELU("CRITERIA_SUM"))
 
         AddLigneNDC(TABW2 & BlocELU("INFO_S") & "   " & BlocELU("INFO_NS"))
         SauteLigne()
+
+        Select Case MyBeam.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                EditionVerificationsELUSummaryMIXTE(MyBeam, 0)
+        End Select
+
+        Exit Sub
         AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
         AddLigneNDC(TABW2 & BlocELU("V_CRITERIA") & TABAFF & "\SG\s\-V\=" & TABEGAL & 0)
         AddLigneNDC(TABW2 & BlocELU("MV_CRITERIA") & TABAFF & "\SG\s\-MV\=" & TABEGAL & 0)
         AddLigneNDC(TABW2 & BlocELU("LTB_CRTIERIA") & TABAFF & "\SG\s\-LT\=" & TABEGAL & 0)
         AddLigneNDC(TABW2 & BlocELU("REINF_CRITERIA") & TABAFF & "\Sr\s\-s\=" & TABEGAL & 0)
+
+
         If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("LOWPLATE_SLIMFLOOR_CRITERIA") & TABAFF & "\SG\s\-q\=" & TABEGAL & 0)
         If Not MyBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-w\=" & TABEGAL & 0)
         If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-u\=" & TABEGAL & 0)
@@ -1671,7 +2122,84 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionVerificationsELUCombo(MyBeam As cls_Poutre)
+    Private Sub EditionVerificationsELUSummaryMIXTE(MyBeam As cls_Poutre, iVerif As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Synthèse des critères ELU pour une poutre mixte (avec ou sans enrobage)
+        '-------------------------------------------------------------------------------------------
+
+        If MyBeam.Param.lElasticDesign Then
+            '--> Calcul élastique imposé
+
+            AddLigneNDC(TABW2 & "Calcul élastique imposé")
+
+        Else
+
+            If MyBeam.VerifMixte(iVerif).lCalculPlastic Then
+                '--> Calcul Plastique
+
+                AddLigneNDC(TABW2 & "Calcul plastique")
+                'AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
+                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+
+            Else
+
+                '--> Calcul élastique classe 3
+
+                AddLigneNDC(TABW2 & "Calcul élastique (classe 3)")
+
+                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+
+
+            End If
+        End If
+
+
+
+
+    End Sub
+
+    Private Sub AfficheSyntheseCritere(Critere As cls_Critere, Symbol As String, Titre As String)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage de la synthèse d'un critère
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim strGras, strFinGras As String
+        Dim TABOK As String = "\T85"
+        Dim TABInfo As String = "\T70"
+        Dim strOK As String
+        Dim Valeur As Decimal = Critere.CritereMax
+
+        '--> Initialisation
+
+        If IsGreater(Valeur, 1) Then
+            strGras = "\G"
+            strFinGras = "\g"
+            strOK = ">1   NS"
+        Else
+            strGras = ""
+            strFinGras = ""
+            strOK = "<= 1  S"
+        End If
+
+        '--> Affichage
+
+        AddLigneNDC(TABW2 & Titre & TABAFF & strGras &
+                    Symbol & TABEGAL & GetStringInUnit(Valeur, Enu_TypeVariable.SansType, 3, 2, False) &
+                    strFinGras & TABInfo & "(N" & CStr(Critere.iNodeM + 1) & "/" & strRacineELU & "_" & CStr(Critere.iCombiM + 1) & ")" & strGras & TABOK & strOK & strFinGras)
+
+
+    End Sub
+
+
+    Private Sub EditionVerificationsELUCombi(MyBeam As cls_Poutre)
         SautePage()
 
         AddTitreNdC(2, BlocELU("ULS_COMBO_CHECK"))

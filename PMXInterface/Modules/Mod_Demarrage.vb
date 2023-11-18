@@ -388,7 +388,21 @@ Module Mod_Demarrage
 
 #Region " Initialisation de la poutre "
 
-    Public Sub InitialiseOptionsCalculPoutre(mypoutre As cls_Poutre)
+    Public Sub InitialiseDalleDefault(ByRef myDalle As cls_Dalle)
+        '--------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------
+        '   Initialisation des paramètres de la dalle
+        '--------------------------------------------------------------------------------
+        '   myDalle         [E/S] :   Dalle à initialiser
+        '--------------------------------------------------------------------------------
+
+        myDalle.type = cls_Dalle.Enum_TypeDalle.Mixte
+        myDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
+
+    End Sub
+
+    Public Sub InitialiseOptionsCalculPoutre(myPoutre As cls_Poutre)
         '--------------------------------------------------------------------------------
         '   14/06/23 :  Création - POM - V1.00
         '--------------------------------------------------------------------------------
@@ -400,9 +414,9 @@ Module Mod_Demarrage
         ' A COMPLETER
 
 
-        mypoutre.Param.dMaxNodes = OptionsCalcul.dMaxNodes
-        mypoutre.Param.nbMinNodesConsole = OptionsCalcul.nbMinNodesConsole
-        mypoutre.Param.nbMinNodesTravee = OptionsCalcul.nbMinNodesTravee
+        myPoutre.Param.dMaxNodes = OptionsCalcul.dMaxNodes
+        myPoutre.Param.nbMinNodesConsole = OptionsCalcul.nbMinNodesConsole
+        myPoutre.Param.nbMinNodesTravee = OptionsCalcul.nbMinNodesTravee
 
     End Sub
 
@@ -536,7 +550,8 @@ Module Mod_Demarrage
 
         AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
 
-        MyPoutre.Param.Gamma = LogicielOptions.Gamma.Clone
+        '# Cela ne marche pas !!!!
+        'MyPoutre.Param.Gamma = LogicielOptions.Gamma.Clone
 
         MyPoutre.Dalle.ThetaRd = OptionsScope.ThetaH
 

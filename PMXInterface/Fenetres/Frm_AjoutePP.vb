@@ -631,6 +631,8 @@ Public Class Frm_AjoutePP
             InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)
             InitialiseGoujonDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Connecteur, lTrouve)
 
+            InitialiseDalleDefault(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle)
+
             MyProjet.Poutres(MyProjet.Poutres.Count - 1).Initialise_CoefficientsCombinaisons()
 
         End If

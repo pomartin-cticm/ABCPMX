@@ -322,6 +322,9 @@ PPVERIFICATIONS			= Verifications
 PPEIGENMODE				= Eigen mode
 ZOOMIN					= Zoom in
 ZOOMOUT					= Zoom out
+ULS						= ULS
+SLS						= SLS
+FLS						= FLS
 
 #FRM_OUVERTURE
 BROWSEFILES				= Browse

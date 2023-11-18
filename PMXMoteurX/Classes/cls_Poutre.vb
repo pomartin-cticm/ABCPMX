@@ -3824,7 +3824,7 @@ Public Class cls_Poutre
 
 #Region " Vérifications "
 
-    Public Sub AAA_Verifications(NomCharges() As String)
+    Public Sub AAA_Verifications(NomCharges() As String, strRacineELU As String, strRacineELS As String, strRacineELF As String)
         '-------------------------------------------------------------------------------------
         '   05/10/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -3852,10 +3852,6 @@ Public Class cls_Poutre
         End Select
 
         '--> Initialisation des calculs
-
-        Dim strRacineELU As String = "ELU"
-        Dim strRacineELS As String = "ELS"
-        Dim strRacineELF As String = "ELF"
 
         Me.InitialiseCalculs(NomCharges)
         Me.AAA_CalculMNVInternesN()

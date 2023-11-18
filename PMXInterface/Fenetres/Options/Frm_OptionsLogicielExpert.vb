@@ -94,7 +94,6 @@
 
     End Sub
 
-
     Private Sub TraitementSaisie()
         '--> Traitement du texte saisie par l'utilisateur
 
@@ -106,9 +105,9 @@
         If nMots >= 2 Then
             Dim n1, n2 As Integer
             n1 = Math.Min(4, Mots(1).Length)
-            n2 = Math.Min(4, Mots(2).Length)
+            n2 = Math.Min(5, Mots(2).Length)
             If Mots(1).ToUpper.Substring(0, n1) = "EXPE" Then
-                If Mots(2).ToUpper.Substring(0, n2) = "PMX" Then
+                If Mots(2).ToUpper.Substring(0, n2) = "PI314" Then
                     Frm_OptionsLogiciel.pLocalLogicielOptions.lExpert = True
                 ElseIf Mots(2).ToUpper.Substring(0, n2) = "NO" Then
                     Frm_OptionsLogiciel.pLocalLogicielOptions.lExpert = True

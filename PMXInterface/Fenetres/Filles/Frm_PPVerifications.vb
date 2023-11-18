@@ -43,6 +43,10 @@ Public Class Frm_PPVerifications
 
     Dim TypeEffet As Enu_TypeVariable
 
+    Dim strRacineELU As String = "ELU"
+    Dim strRacineELS As String = "ELS"
+    Dim strRacineELF As String = "ELF"
+
 
 #End Region
 
@@ -51,7 +55,7 @@ Public Class Frm_PPVerifications
         lBuild = True
 
         'MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesign = True
-        MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA)
+        MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF)
         GestionLangues()
         GestionStyle()
         PrepareFenetre()

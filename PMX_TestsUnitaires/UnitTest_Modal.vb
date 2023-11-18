@@ -11,7 +11,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         '=======================================
         '
-        ' 10/10/2023 : TMN
+        ' 10/10/2023 : POM
         '
         '=======================================
         '
@@ -25,6 +25,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
         Dim MyAire As Decimal = 53.81 / 100 ^ 2
         Dim MyInertie As Decimal = 8356.1 / 100 ^ 4
+        Dim MasseTotale As Decimal
 
         Dim L As Decimal = 10       ' m
         With MyDonnees
@@ -83,6 +84,8 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             MyOutput_MOD_REF.FreqProp(0) = 1 / (2 / Math.PI * Math.Sqrt(Masse * L ^ 3 / (.EYOUNG * MyInertie)))
 
             Assert.IsTrue(IsEqual(MyOutput_MOD_REF.FreqProp(0), MyOutput_MOD.FreqProp(0)))
+
+            MasseTotale = MyOutput_MOD.MasseTot
 
         End With
     End Sub
@@ -173,7 +176,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
 
-        Dim L As Decimal = 10     'Longueur totale de la barre en cm
+        Dim L As Decimal = 10     'Longueur totale de la barre en m
         With MyDonnees
             .EYOUNG = 2100000 * 10 ^ 6
             .PESANTEUR = 9.81 'm/s2

@@ -18,12 +18,14 @@
     Public CritereSigmaE As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton d'enrobage
     Public CritereSigmaArmaE As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures d'enrobage
 
+    Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
+
 #End Region
 
 #Region " Constructeurs "
 
     Public Sub New()
-
+        lCalculPlastic = False
     End Sub
 
     Private Sub InitialiseCriteres(NbNodes As Integer)
@@ -423,6 +425,7 @@
             RunCritereMomentsElastiques(MyPoutre, iCombi, MEd)
         Else
             '# Résistance plastique possible
+            Me.lCalculPlastic = True
             RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRd)
         End If
     End Sub

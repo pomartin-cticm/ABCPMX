@@ -22,6 +22,9 @@ Public Class Frm_PMX
     Dim Str_WarningFile As String
     'Ajout GUD: Permet de stocker la traduction du terme "File" pour la fenetre d'ouverture du projet (voir la fonction "OuvrirFichier")
     Dim strFiltresExtension As String
+    Dim strRacineELU As String
+    Dim strRacineELS As String
+    Dim strRacineELF As String
 
     Dim lZoomPlus As Boolean
 
@@ -52,6 +55,8 @@ Public Class Frm_PMX
     End Structure
 
     Private MyCouleurs As struc_Colors
+
+    Const RACnomBTN As String = "MyX"
 
 #End Region
 
@@ -135,6 +140,10 @@ Public Class Frm_PMX
                 NomChargesA(7) = Bloc("SHRINKAGESLAB")
                 NomChargesA(8) = Bloc("SHRINKAGEENCASEMENT")
                 NomChargesA(9) = Bloc("CLOADS")
+
+                strRacineELU = Bloc("ULS")                              ' "ULS"
+                strRacineELS = Bloc("SLS")                              ' "SLS"
+                strRacineELF = Bloc("FLS")                              ' "FLS"
 
             Catch ex As Exception
 
@@ -345,6 +354,7 @@ Public Class Frm_PMX
 
             '--> Mise à jour du TreeView
             AffichageTViewChk()
+            Me.img_Main.Invalidate()
 
         End If
     End Sub
@@ -359,9 +369,59 @@ Public Class Frm_PMX
     End Sub
 
     Private Sub TSbtn_NoteCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_NoteCalcul.Click
-        AAA_EditionNOTEdeCALCUL(True)
+        CalculsEtNdC()
     End Sub
 
+
+#End Region
+
+#Region " Note de calculs "
+
+    Private Sub CalculsEtNdC()
+        '--------------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------------
+        '   La poutre en cours est elle conforme pour le calcul
+        '   Si oui, execution du calcul et édition de la note de calcul
+        '--------------------------------------------------------------------------------------------------
+        '--------------------------------------------------------------------------------------------------
+
+        '--[ Déclarations
+
+        Dim lOK As Boolean
+
+        '--[ Test de la poutre
+
+        lOK = MaPoutreOKpourleCalcul(MyProjet.Poutres(MyProjet.IndEnCours))
+
+        '--[ Analyse calcul RDM 
+
+        If lOK Then
+            MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF)
+        End If
+
+        '--[ Edition de la note de calcul
+
+        AAA_EditionNOTEdeCALCUL(True)
+
+    End Sub
+
+    Private Function MaPoutreOKpourleCalcul(myPoutre As cls_Poutre) As Boolean
+        '--------------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------------
+        '   Indique si le calcul de la poutre peut être effectué
+        '--------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lOK As Boolean = True
+
+        '--> Traitement
+
+        Return lOK
+
+    End Function
 
 #End Region
 
@@ -1037,7 +1097,7 @@ Public Class Frm_PMX
             Me.tab_BtnPoutres(i).Dock = DockStyle.Fill
 
             Me.tab_BtnPoutres(i).Caption = MyProjet.Poutres(i).BeamID
-            Me.tab_BtnPoutres(i).Name = "MyX" & CStr(i)
+            Me.tab_BtnPoutres(i).Name = RACnomBTN & CStr(i)
             Me.tab_BtnPoutres(i).Tag = CStr(i)
             AddHandler Me.tab_BtnPoutres(i).Click, AddressOf PomBoutonsClick
 
@@ -1069,7 +1129,15 @@ Public Class Frm_PMX
 
 
     Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs)
+        '-------------------------------------------------------------------------------------------
+        '   Gestion de la selection de la poutre à afficher
+        '-------------------------------------------------------------------------------------------
 
+        '--> Déclarations
+
+        Dim iPos, Indice As Integer
+
+        '--> Gestion
 
         If Not sender.checked Then  '-> Si bouton déjà séléctionné :
             sender.checked = True       'on le garde checké
@@ -1079,36 +1147,22 @@ Public Class Frm_PMX
         Dim SenderName As String = sender.name
         ' HideToutesLesFilles()
         UncheckedAllPomBtns(SenderName)
-        'Select Case SenderName
-        '    Case Me.PoMBtn_Gamma.Name
-        '        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Gamma
-        '        AfficherFenetreFille()
 
-        '    Case Me.PoMbtn_Scope.Name
-        '        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Scope
-        '        AfficherFenetreFille()
-
-        '    Case Me.PoMbtn_Calcul.Name
-        '        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Calcul
-        '        AfficherFenetreFille()
-
-        '    Case Me.PoMbtn_Fire.Name
-        '        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Incendie
-        '        AfficherFenetreFille()
-
-        'End Select
         RedrawAllPomBtns()
 
+        '--> Selection de la poutre correspondant au bouton
+
+        iPos = RACnomBTN.Length
+        Indice = CInt(SenderName.Substring(iPos))
+
+        MyProjet.IndEnCours = Indice
+
+        Me.img_Main.Invalidate()
+
         '--> Bouton checké ne change pas de couleur quand il est survolé (MouseOn)
+
         sender.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
 
-        ' Me.etq_Debug.Text = LastIndexWindow.ConfigurationNEW.ToString
-
-        'If LastIndexW.OptionsLogiciel <> Enu_OptionsLogiciel.Expert Then
-        '    Me.AcceptButton = Me.btn_Appliquer
-        'Else
-        '    Me.AcceptButton = Nothing
-        'End If
 
     End Sub
 
