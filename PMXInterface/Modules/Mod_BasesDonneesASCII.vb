@@ -193,7 +193,8 @@ Module Mod_BasesDonneesASCII
                 'Etiquette = LinesG.Lines(iStud).Substring(0, iVirg)
                 Etiquette = LinesG.Lines(iStud).Substring(0, iVirg)
                 DecomposeLine(Etiquette, SEPARATEURS, Mots, nMots)
-                Etiquette = Mots(2) 'Rajout GUD car il y'a le mot "Diametre" qui est inscrit dans la dtb et qui gene la lecture 
+                'Introduction d'un bug !!!
+                ''Etiquette = Mots(2) 'Rajout GUD car il y'a le mot "Diametre" qui est inscrit dans la dtb et qui gene la lecture 
 
                 Parametres = LinesG.Lines(iStud).Substring(iVirg + 1)
 
@@ -206,7 +207,7 @@ Module Mod_BasesDonneesASCII
                 fy = CSng(TraiteReal(Mots(5)))
                 fu = CSng(TraiteReal(Mots(6)))
 
-                AjouteGoujonsBase(Etiquette, Htot, PhiTige, fy, fy, MyBaseG)
+                AjouteGoujonsBase(Etiquette, Htot, PhiTige, fy, fu, MyBaseG)
 
             Else
                 lFmtPB = True

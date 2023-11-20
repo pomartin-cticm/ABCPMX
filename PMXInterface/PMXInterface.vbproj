@@ -327,6 +327,12 @@
     <Compile Include="Fenetres\Options\Frm_OptionsLogicielUnits.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_ModularRatio.Designer.vb">
+      <DependentUpon>Frm_ModularRatio.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Utilitaires\Frm_ModularRatio.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Modules\Mod_AccesFichiers.vb" />
     <Compile Include="Modules\Mod_BasesDonneesASCII.vb" />
     <Compile Include="Modules\Mod_BasesDonneesBinaires.vb" />
@@ -485,6 +491,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielUnits.resx">
       <DependentUpon>Frm_OptionsLogicielUnits.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Utilitaires\Frm_ModularRatio.resx">
+      <DependentUpon>Frm_ModularRatio.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

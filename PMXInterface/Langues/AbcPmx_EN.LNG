@@ -322,6 +322,18 @@ PPVERIFICATIONS			= Verifications
 PPEIGENMODE				= Eigen mode
 ZOOMIN					= Zoom in
 ZOOMOUT					= Zoom out
+EDIT					= Edit
+EDITPROFILES			= Edit ArcelorMittal profiles
+EDITSTUDS				= Edit Studs
+EDITDECKS				= Edit Steel profiled sheetings
+
+#FRM_MODULARRATIOTOOL
+TITLE					= Modular ratio tool
+CLOSE					= Close
+CANCEL					= Cancel
+PARAMETERS				= Parameters
+RELATIVEHUMIDITY		= Relative humidity
+PSIL					= Creep multiplier
 
 
 #FRM_OUVERTURE

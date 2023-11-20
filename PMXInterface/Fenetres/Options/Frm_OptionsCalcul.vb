@@ -113,6 +113,7 @@ Public Class Frm_OptionsCalcul
     Private Sub InitialiseParametresLocaux()
 
         Me.GammaLoc = LogicielOptions.Gamma.Clone
+        ' Me.GammaLoc.TransfertFrom(LogicielOptions.Gamma)
         LocalOptionsScope = OptionsScope
         LocalOptionsCalcul = OptionsCalcul
 

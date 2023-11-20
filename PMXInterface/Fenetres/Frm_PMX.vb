@@ -146,7 +146,7 @@ Public Class Frm_PMX
                 strRacineELF = Bloc("FLS")                              ' "FLS"
 
             Catch ex As Exception
-
+                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangueMessagesGeneraux")
             End Try
         End If
     End Sub
@@ -163,7 +163,7 @@ Public Class Frm_PMX
 
                 '=== MENU PRINCIPAL ==============================================================='
 
-                '--> Boutons 'Fichier'
+                '--> Menu 'Fichier'
                 Me.btn_FilesN.Text = Bloc("FILE")
                 strFiltresExtension = Bloc("FILE")
                 Me.OpenToolStripMenuItemN.Text = Bloc("OPEN") & "..."
@@ -173,8 +173,13 @@ Public Class Frm_PMX
                 Me.RecentFileToolStripMenuItemN.Text = Bloc("RECENTFILES")
                 Me.QuitToolStripMenuItemN.Text = Bloc("EXIT")
 
-                '--> Boutons 'Projet'
+                '--> Menu 'Edit'
+                Me.TSbtn_Edit.Text = Bloc("EDIT")
+                Me.TSbtn_EditBacs.Text = Bloc("EDITDECKS")
+                Me.TSbtn_EditProfiles.Text = Bloc("EDITPROFILES")
+                Me.TSbtn_EditStuds.Text = Bloc("EDITSTUDS")
 
+                '--> Menu 'Projet'
                 Me.btn_ProjectN.Text = Bloc("PROJECT")
                 Me.AddPoutreTSMenuItemN.Text = Bloc("ADDBEAM")
                 Me.DeletePoutreTSMenuItemN.Text = Bloc("DELBEAM")
@@ -182,13 +187,13 @@ Public Class Frm_PMX
                 Me.CalculCoeffToolStripMenuItemN.Text = Bloc("CALCULATION")
                 Me.CalculationSheetToolStripMenuItemN.Text = Bloc("CALCULATIONREPORT")
 
-                '--> Bouton 'Options'
+                '--> Menu 'Options'
                 Me.btn_OptionsN.Text = Bloc("OPTIONS")
                 Me.ConfigToolStripMenuItemN.Text = Bloc("SOFTOPT")
                 Me.CalculOptionToolStripMenuItemN.Text = Bloc("CALCULOPTIONS")
 
-                '--> Bouton 'Other'
-                Me.btn_OtherN.Text = Bloc("OTHER")
+                '--> Menu 'Other'
+                Me.btn_OtherN.Text = "?"     ' Bloc("OTHER")
                 Me.AboutToolStripMenuItemN.Text = Bloc("ABOUT")
                 Me.SupportToolStripMenuItemN.Text = Bloc("SUPPORT")
                 Me.TechnicalToolStripMenuItemN.Text = Bloc("TECHNICALMANUEL")
@@ -370,6 +375,11 @@ Public Class Frm_PMX
 
     Private Sub TSbtn_NoteCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_NoteCalcul.Click
         CalculsEtNdC()
+    End Sub
+
+    Private Sub TSbtn_Calcul_Click(sender As Object, e As EventArgs) Handles TSbtn_Calcul.Click
+        Frm_ModularRatio.ShowDialog()
+        Frm_ModularRatio.Dispose()
     End Sub
 
 
@@ -1038,6 +1048,12 @@ Public Class Frm_PMX
 
 #End Region
 
+#Region " Menu Edit "
+
+
+
+#End Region
+
 #Region " Affichage poutres projet PomBtn "
 
     Private Sub InitialiseCouleurs()
@@ -1306,6 +1322,8 @@ Public Class Frm_PMX
         lZoomPlus = e.Delta > 0 'Gère si le scrool est en avant (>0) ou en arrière (<0)
         img_Main.Invalidate()
     End Sub
+
+
 
 #End Region
 

@@ -73,6 +73,38 @@
         Return Me.MemberwiseClone()
     End Function
 
+    Public Sub TransfertFrom(MyGamma As cls_Gamma)
+
+        Me.GammaM0 = MyGamma.GammaM0
+        Me.GammaM1 = MyGamma.GammaM1
+        Me.GammaM2 = MyGamma.GammaM2
+
+        Me.GammaC = MyGamma.GammaC
+        Me.GammaVs = MyGamma.GammaVs
+        Me.GammaVc = MyGamma.GammaVc
+        Me.GammaS = MyGamma.GammaS
+        Me.GammaP = MyGamma.GammaP
+        'Me.GammaVp = 1.25
+        Me.lGammaV_unique = MyGamma.lGammaV_unique
+
+        Me.GammaM_fi = MyGamma.GammaM_fi
+        Me.GammaC_fi = MyGamma.GammaC_fi
+        Me.GammaV_fi = MyGamma.GammaV_fi
+
+        Me.GammaG_sup = MyGamma.GammaG_sup
+        Me.GammaG_inf = MyGamma.GammaG_inf
+        Me.GammaQ = MyGamma.GammaQ
+
+        Me.Psi0_Q1 = MyGamma.Psi0_Q1
+        Me.Psi1_Q1 = MyGamma.Psi1_Q1
+        Me.Psi2_Q1 = MyGamma.Psi2_Q1
+
+        Me.Psi0_Q2 = MyGamma.Psi0_Q2
+        Me.Psi1_Q2 = MyGamma.Psi1_Q2
+        Me.Psi2_Q2 = MyGamma.Psi2_Q2
+
+    End Sub
+
 #End Region
 
 End Class
