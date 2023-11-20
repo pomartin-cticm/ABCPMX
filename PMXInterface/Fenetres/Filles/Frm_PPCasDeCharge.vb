@@ -1130,7 +1130,7 @@ Public Class Frm_PPCasDeCharge
     End Sub
 
     Private Sub btn_EditModel_Click(sender As Object, e As EventArgs) Handles btn_EditModel.Click
-
+        ABB_EditeModeleCalcul(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(Me.cmb_Symbols.SelectedIndex).IndElts)
     End Sub
 
     Private Sub chk_LocalEchelle_CheckedChanged(sender As Object, e As EventArgs) Handles chk_LocalEchelle.CheckedChanged
@@ -1141,7 +1141,8 @@ Public Class Frm_PPCasDeCharge
         Me.img_Analyse.Invalidate()
     End Sub
 
-
 #End Region
+
+
 
 End Class

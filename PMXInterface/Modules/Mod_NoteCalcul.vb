@@ -241,6 +241,7 @@ Module Mod_NoteCalcul
 
 #End Region
 
+
 #Region "***Edition des paramètres***"
 
     Private Sub EditionParametres(MyBeam As cls_Poutre)
@@ -1518,7 +1519,6 @@ Module Mod_NoteCalcul
 
 #End Region
 
-
 #Region " Edition des analyses (M+V) / cas de charge et combinaisons "
 
     Private Sub EditionAnalysePoutre(MyBeam As cls_Poutre)
@@ -1619,6 +1619,7 @@ Module Mod_NoteCalcul
             If iTravee = iTravDeb Then
                 LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, i, iTravee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
                                              VEd(0, 1), MEd(0, 1))
+                iCompteur += 1
             End If
 
             '=== Lignes intermédiaires
@@ -1652,6 +1653,7 @@ Module Mod_NoteCalcul
                 LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTravee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
                                          VEd(i, 0), VEd(i, 1), MEd(i, 0), MEd(i, 1))
             End If
+            iCompteur += 1
         Next
 
         '# Fin du Tableau
@@ -2063,11 +2065,12 @@ Module Mod_NoteCalcul
 #End Region
 
 #Region "***Edition vérifications ELU***"
+
     Private Sub EditionVerificationsELU(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
         '   12/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Edition des vérifications ELU
+        '   Edition des vérifications ELU (en phase finale pour les poutres mixtes)
         '-------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -2076,12 +2079,42 @@ Module Mod_NoteCalcul
 
         SautePage()
 
-        AddTitreNdC(1, BlocELU("ULS"))
+        If MyBeam.lMixte Then
+            AddTitreNdC(1, BlocELU("ULS_CHECKS_FINAL"))
+        Else
+            AddTitreNdC(1, BlocELU("ULS_CHECKS"))
+        End If
+
+        If Not MyBeam.VerificationsELUDispo(MyBeam.lMixte) Then Exit Sub
 
         '--> Traitement
 
+        '# Synthèse des critères
+
         EditionVerificationsELUSummary(MyBeam)
+
+        '# Calcul détaillé des critères
+
         EditionVerificationsELUCombi(MyBeam)
+
+        '# Poutres mixtes : ferraillage transversal
+
+        If MyBeam.lMixte Then
+            EditionFerraillageTransversal(MyBeam)
+        End If
+
+    End Sub
+
+    Private Sub EditionFerraillageTransversal(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Détail du calcul des armatures transversales
+        '-------------------------------------------------------------------------------------------
+
+        AddTitreNdC(2, BlocELU("CRITERIA_TRANSREBAR"))
+
+
 
     End Sub
 
@@ -2200,10 +2233,15 @@ Module Mod_NoteCalcul
 
 
     Private Sub EditionVerificationsELUCombi(MyBeam As cls_Poutre)
+
         SautePage()
 
-        AddTitreNdC(2, BlocELU("ULS_COMBO_CHECK"))
-        AddTitreNdC(3, BlocELU("ULS_COMBOS") & "1.35 G /!\/!\/!\")
+        AddTitreNdC(2, BlocELU("ULS_COMBI_CHECK"))
+
+        For i = 0 To MyBeam.CombiA_ELU.nbCombi - 1
+            AddTitreNdC(3, BlocELU("ULS_COMBIS") & " " & MyBeam.CombiA_ELU.Symbole(i))
+
+        Next
 
         SauteLigne()
 
@@ -2544,5 +2582,416 @@ Module Mod_NoteCalcul
     End Function
 
 #End Region
+
+    '###############################################################################################################################################
+
+#Region " Edition du modèle de calcul "
+
+    Public Sub ABB_EditeModeleCalcul(MyPoutre As cls_Poutre, indTabElt As Integer)
+        '---------------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Edition du modèle EF d'un cas de charge
+        '---------------------------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre traitée
+        '   indTabElt       [E] :   Indice de la table d'éléments associée au modèle EF
+        '---------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        '--> Initialisation
+
+        MyNote = New Cls_Rapport("Arial", 1.5, 3, 3)
+
+        '--> Génération de la note
+
+        ABB_GenereNoteModeleCalcul(MyPoutre, indTabElt)
+
+        '--> Ouverture de la fenêtre
+        Frm_NoteCalcul.ShowDialog()
+        Frm_NoteCalcul.Dispose()
+        '--> Liberation de la note
+        MyNote.Dispose()
+
+    End Sub
+
+    Private Sub ABB_GenereNoteModeleCalcul(MyPoutre As cls_Poutre, indTabElt As Integer)
+        '---------------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Edition du modèle EF d'un cas de charge
+        '---------------------------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre traitée
+        '   indTabElt       [E] :   Indice de la table d'éléments associée au modèle EF
+        '---------------------------------------------------------------------------------------------------
+
+        SautePage()
+
+        '--> Type de calcul (prise en compte de la dalle)
+
+        If MyPoutre.lMixte Or MyPoutre.lEnrobage Then
+
+            Model_EditAssumptions(MyPoutre, indTabElt)
+
+        End If
+
+        '--> Maillage noeud
+
+        Model_EditNodes(MyPoutre)
+
+        '--> Eléments
+
+        Model_EditElements(MyPoutre, indTabElt)
+
+    End Sub
+
+    Private Sub Model_EditElements(MyPoutre As cls_Poutre, indTabElt As Integer)
+        '---------------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Edition des éléments du modèle EF d'un cas de charge 
+        '---------------------------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre traitée
+        '   indTabElt       [E] :   Indice de la table d'éléments associée au modèle EF
+        '---------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iTravDeb, iTravFin As Integer
+        Dim lMultispan As Boolean
+        Dim NCol, PosTab As Integer
+        Dim iTravee, i As Integer
+        Dim iEltO, iEltE As Integer
+        Dim iCompteur As Integer = 0
+        Dim NbLignesMax() As Integer = {25, 30}
+        Dim iTab As Integer = 0
+        Dim Ai, Iyi As Decimal
+
+        '--> Initialisation
+
+        If nbLignes > MAXLIGNEPPAG - 10 Then
+            SautePage()
+        End If
+        lMultispan = (MyPoutre.NbTravees > 1)
+        iTravDeb = MyPoutre.IndicePremiereTravee
+        iTravFin = MyPoutre.IndiceDerniereTravee
+        NbLignesMax(0) = NbLignesMax(1) - nbLignes
+
+        '--> Titre du paragraphe
+
+        AddTitreNdC(1, "Elements")
+
+        '--> Liste des noeuds
+
+        '# Entête
+
+        Model_EnteteTableauElements(lMultispan, NCol, PosTab)
+
+        '# Tableau
+
+        For iTravee = iTravDeb To iTravFin
+            iEltO = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iEltE = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1) - 1
+
+            For i = iEltO To iEltE
+                iCompteur += 1
+
+                If iCompteur > NbLignesMax(iTab) Then
+                    FinTableau()
+                    iCompteur = 0
+                    iTab = 1
+                    SautePage()
+                    Model_EnteteTableauElements(lMultispan, NCol, PosTab)
+                End If
+
+                Ai = MyPoutre.Elements(indTabElt).Aire(i)
+                Iyi = MyPoutre.Elements(indTabElt).InertieY(i)
+
+                Model_LigneTableauElement(lMultispan, NCol, PosTab, i, iTravee, ai, iyi)
+
+            Next
+
+        Next
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub Model_EditNodes(MyPoutre As cls_Poutre)
+        '---------------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Edition des noeuds du modèle EF d'un cas de charge 
+        '---------------------------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre traitée
+        '---------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iTravDeb, iTravFin As Integer
+        Dim lMultispan As Boolean
+        Dim NCol, PosTab As Integer
+        Dim iTravee, i As Integer
+        Dim iNodeO, iNodeE As Integer
+        Dim iCompteur As Integer = 0
+        Dim NbLignesMax() As Integer = {25, 30}
+        Dim iTab As Integer = 0
+
+        '--> Initialisation
+
+        lMultispan = (MyPoutre.NbTravees > 1)
+        iTravDeb = MyPoutre.IndicePremiereTravee
+        iTravFin = MyPoutre.IndiceDerniereTravee
+        NbLignesMax(0) = NbLignesMax(1) - nbLignes
+
+        '--> Titre
+
+        AddTitreNdC(1, "Nodes")
+
+        '--> Liste des noeuds
+
+        '# Entête
+
+        Model_EnteteTableauNoeuds(lMultispan, NCol, PosTab)
+
+        '# Tableau
+
+        For iTravee = iTravDeb To iTravFin
+            iNodeO = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeE = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            '=== Extrémité gauche
+
+            If iTravee = iTravDeb Then
+                Model_LigneTableauNoeuds(lMultispan, NCol, PosTab, 0, iTravee, MyPoutre.Nodes.xTravee(0), MyPoutre.Nodes.xGlobal(0))
+            End If
+
+            '=== Lignes intermédiaires
+
+            For i = iNodeO + 1 To iNodeE - 1
+
+                iCompteur += 1
+
+                If iCompteur > NbLignesMax(iTab) Then
+                    FinTableau()
+                    iCompteur = 0
+                    iTab = 1
+                    SautePage()
+                    Model_EnteteTableauNoeuds(lMultispan, NCol, PosTab)
+                End If
+
+                Model_LigneTableauNoeuds(lMultispan, NCol, PosTab, i, iTravee, MyPoutre.Nodes.xTravee(i), MyPoutre.Nodes.xGlobal(i))
+
+            Next
+
+            '=== Appui droite
+
+            Model_LigneTableauNoeuds(lMultispan, NCol, PosTab, iNodeE, iTravee,
+                                     MyPoutre.Nodes.xTravee(iNodeE), MyPoutre.Nodes.xGlobal(iNodeE), Not (iTravee = iTravFin))
+
+            iCompteur += 1
+        Next
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub Model_LigneTableauNoeuds(lMultiSpan As Boolean, NCol As Integer, Pos As Integer,
+                                         iNode As Integer, iTravee As Integer, xPosG As Decimal, xPosT As Decimal, Optional lAppuiInter As Boolean = False)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage d'une ligne de du tableau des noeuds du maillage EF
+        '-------------------------------------------------------------------------------------------
+        '   lMultiSpan  [E] :   Indique si plusieurs travées
+        '   NCol        [E] :   Nombre de colonnes
+        '   Pos         [E] :   Position du tableau / bord gauche
+        '   iNode       [E] :   Indice du noeud
+        '   iTravee     [E] :   Indice de la travée
+        '   xposG,xPosT [E] :   Position globale et dans la travée du noeud
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        '--> Initialisation
+
+        InitialiseLigne(NCol, HLIGNE, True)
+
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
+
+        '# Position et travée
+
+        If lMultiSpan Then
+            If lAppuiInter Then
+                AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee + 1) & " / " & CStr(iTravee + 2))
+                AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosT, Enu_TypeVariable.Longueur, 3, 2, False) & " / 0")
+            Else
+                AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee + 1))
+                AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosT, Enu_TypeVariable.Longueur, 3, 2, False))
+            End If
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosG, Enu_TypeVariable.Longueur, 3, 2, False))
+        Else
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosT, Enu_TypeVariable.Longueur, 3, 2, False))
+
+        End If
+
+    End Sub
+
+    Private Sub Model_LigneTableauElement(lMultiSpan As Boolean, NCol As Integer, Pos As Integer,
+                                          iElt As Integer, iTravee As Integer, Ai As Decimal, Iyi As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage d'une ligne de du tableau des noeuds du maillage EF
+        '-------------------------------------------------------------------------------------------
+        '   lMultiSpan  [E] :   Indique si plusieurs travées
+        '   NCol        [E] :   Nombre de colonnes
+        '   Pos         [E] :   Position du tableau / bord gauche
+        '   iElt        [E] :   Indice de l'élément
+        '   iTravee     [E] :   Indice de la travée
+        '   Ai, Iyi     [E] :   Aire et inertie de l'élément
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        '--> Initialisation
+
+        InitialiseLigne(NCol, HLIGNE, True)
+
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iElt + 1))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "N" & CStr(iElt + 1) & "-N" & CStr(iElt + 2))
+
+        '# Travée
+
+        If lMultiSpan Then
+
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee + 1))
+
+        End If
+
+        '# Propriétés
+
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(Ai, Enu_TypeVariable.AireCM2, 4, 3, False))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(Iyi, Enu_TypeVariable.Inertie, 4, 3, False))
+
+    End Sub
+
+    Private Sub Model_EnteteTableauNoeuds(lMultiSpan As Boolean, ByRef NCol As Integer, ByRef Pos As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entete du tableau pour l'affichage des noeuds du modèle EF
+        '-------------------------------------------------------------------------------------------
+        '   lMultiSpan  [E] :   Indique si plusieurs travées
+        '   NCol        [S] :   Nombre de colonnes
+        '   Pos         [S] :   Position du tableau / bord gauche
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        '--> Initialisation
+
+        Pos = 10
+        If lMultiSpan Then NCol = 4 Else NCol = 2
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos))
+
+        InitialiseLigne(NCol, HLIGNEENTETE, True)
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "NODE")
+        If lMultiSpan Then
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "SPAN")
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-span\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-global\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        Else
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        End If
+
+    End Sub
+
+    Private Sub Model_EnteteTableauElements(lMultiSpan As Boolean, ByRef NCol As Integer, ByRef Pos As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entete du tableau pour l'affichage des noeuds du modèle EF
+        '-------------------------------------------------------------------------------------------
+        '   lMultiSpan  [E] :   Indique si plusieurs travées
+        '   NCol        [S] :   Nombre de colonnes
+        '   Pos         [S] :   Position du tableau / bord gauche
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        '--> Initialisation
+
+        Pos = 10
+        If lMultiSpan Then NCol = 5 Else NCol = 4
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos))
+
+        InitialiseLigne(NCol, HLIGNEENTETE, True)
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "ELEMENT")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "CONNECTIVITY")
+        If lMultiSpan Then
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "SPAN")
+        End If
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Ai (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & "\+2\=)")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Iyi (" & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties) & ")")
+
+    End Sub
+
+    Private Sub Model_EditAssumptions(MyPoutre As cls_Poutre, indTabElt As Integer)
+        '---------------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Edition du modèle EF d'un cas de charge - Hypothèses de calcul (poutres mixtes)
+        '---------------------------------------------------------------------------------------------------
+        '   MyPoutre        [E] :   Poutre traitée
+        '   indTabElt       [E] :   Indice de la table d'éléments associée au modèle EF
+        '---------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim nEqDalle As Decimal = MyPoutre.Elements(indTabElt).nEqDalle
+        Dim nEqEnrob As Decimal = MyPoutre.Elements(indTabElt).nEqEnrob
+        Const TAB20 As String = "\T20"
+        Const TAB50 As String = "\T50"
+
+        '--> Titre
+
+        AddTitreNdC(1, "Assumptions")
+
+        '--> Hypothèses relatives à la dalle
+
+        If MyPoutre.lMixte Then
+            AddTitreNdC(2, "Slab")
+            If MyPoutre.Elements(indTabElt).lMixte Then
+                AddLigneNDC(TAB20 & "Composite action")
+                AddLigneNDC(TAB20 & "Modular ratio:" & TAB50 & "n = " & GetStringInUnit(nEqDalle, Enu_TypeVariable.SansType, 3, 2, False))
+                If MyPoutre.Param.lLargeurEfficaceSimplifiee Then
+                    AddLigneNDC(TAB20 & "Effective width:" & TAB50 & "according to EN 1994-1-1 § 5.4.1.2 (4)")
+                Else
+                    AddLigneNDC(TAB20 & "Effective width:" & TAB50 & "according to EN 1994-1-1 Figure 5.1")
+                End If
+
+            Else
+                AddLigneNDC(TAB20 & "The slab is not taken into account (no composite action)")
+            End If
+        End If
+
+        '--> Hypothèses relatives à l'enrobage partiel
+
+        If MyPoutre.lEnrobage Then
+            AddTitreNdC(2, "Partial encasement")
+            AddLigneNDC(TAB20 & "Composite action")
+            AddLigneNDC(TAB20 & "Modular ratio:" & TAB50 & "n = " & GetStringInUnit(nEqEnrob, Enu_TypeVariable.SansType, 3, 2, False))
+        End If
+
+    End Sub
+
+#End Region
+
+
 
 End Module

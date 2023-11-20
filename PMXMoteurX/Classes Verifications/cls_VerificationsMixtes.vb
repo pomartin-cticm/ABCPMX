@@ -800,5 +800,31 @@
 
 #End Region
 
+#Region " Outils "
+
+    Public Function CriteresInitialises() As Boolean
+        '----------------------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Indique si les critères ont bien été initialisés (et sont donc exploitables)
+        '----------------------------------------------------------------------------------------------------------
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lOK As Boolean = True
+
+        '--> Traitement
+
+        If Me.CritereV Is Nothing Then lOK = False
+        If Me.CritereM Is Nothing Then lOK = False
+        'If Me.CritereVb Is Nothing Then lOK = False
+        'If Me.CritereV Is Nothing Then lOK = False
+
+        Return lOK
+    End Function
+
+
+#End Region
 
 End Class

@@ -2659,6 +2659,7 @@ Public Class cls_Poutre
 
         '--> Initialisation
 
+        Me.Elements.Clear()
         lMixte = Me.lMixte
         lEnrob = Me.lEnrobage
         lEtaitComplet = (TypeEtaiement = EnuTypeEtaiement.FullyPropped)
@@ -3874,6 +3875,60 @@ Public Class cls_Poutre
 
 
     End Sub
+
+    Public Function VerificationsELUDispo(vlMixte As Boolean) As Boolean
+        '-------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Indique si les vérifications ont été effectuées et sont disponibles
+        '-------------------------------------------------------------------------------------
+        '    vlMixte    [E] :   Indique si on teste la verification mixte ou acier
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lOK As Boolean = True
+
+        '--> Traitement
+
+        '# La classe a t elle été créée ?
+
+        If vlMixte Then
+            If Me.VerifMixte Is Nothing Then
+                lOK = False
+            Else
+                If Me.VerifMixte.GetUpperBound(0) < 0 Then
+                    lOK = False
+                Else
+                    If Me.VerifMixte(0) Is Nothing Then lOK = False
+                End If
+            End If
+        Else
+            If Me.VerifAcier Is Nothing Then
+                lOK = False
+            Else
+                If Me.VerifAcier.GetUpperBound(0) < 0 Then
+                    lOK = False
+                Else
+                    If Me.VerifAcier(0) Is Nothing Then lOK = False
+                End If
+            End If
+
+        End If
+
+        '# Les critères de la classe sont ils définis
+
+        If lOK Then
+            If vlMixte Then
+                lOK = Me.VerifMixte(0).CriteresInitialises
+            Else
+            End If
+        End If
+
+
+        Return lOK
+
+    End Function
 
 
 #End Region

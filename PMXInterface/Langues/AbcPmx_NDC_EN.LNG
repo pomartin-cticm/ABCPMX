@@ -231,19 +231,21 @@ NODE					= Node
 NOTCALCULATION			= Calculation not carried out 
 
 #NDC_VERIFICATIONSULS
-ULS						= Ultimate Limit States
-CRITERIA_SUM			= Sumary of the criteria
+ULS_CHECKS				= Ultimate Limit States
+ULS_CHECKS_FINAL		= Ultimate Limit States at final stage
+CRITERIA_SUM			= Summary of the criteria
 INFO_S					= S = Satisfactory
 INFO_NS					= NS = NOT Satisfactory
 M_CRITERIA				= Resistance to bending moment
 V_CRITERIA				= Resistance to shear force
 MV_CRITERIA				= Resistance to MV interaction
 LTB_CRTIERIA			= Resistance to lateral torsional buckling
-REINF_CRITERIA				= Longitudinal reinforcements 
+REINF_CRITERIA			= Longitudinal reinforcements 
 LOWPLATE_SLIMFLOOR_CRITERIA	= Resistance of the lower flange/plate 
-WELD_CRITERIA		= Resistance of welds 
-ULS_COMBO_CHECK		= ULS Combinations checkings
-ULS_COMBOS			= ULS Combination 
-SECTION			= Section
-SPAN			= Span
-POSITION		= Position
+WELD_CRITERIA			= Resistance of welds 
+ULS_COMBI_CHECK			= ULS Combinations checkings
+ULS_COMBIS				= ULS Combination 
+SECTION					= Section
+SPAN					= Span
+POSITION				= Position
+CRITERIA_TRANSREBAR		= Transverse reinforcements

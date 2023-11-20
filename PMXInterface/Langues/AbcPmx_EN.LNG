@@ -322,9 +322,7 @@ PPVERIFICATIONS			= Verifications
 PPEIGENMODE				= Eigen mode
 ZOOMIN					= Zoom in
 ZOOMOUT					= Zoom out
-ULS						= ULS
-SLS						= SLS
-FLS						= FLS
+
 
 #FRM_OUVERTURE
 BROWSEFILES				= Browse
@@ -519,6 +517,9 @@ SELFWEIGHTNOPROPS		= Self weight without props
 CONFIGURATION			= Conf. no
 SHRINKAGESLAB			= Shrinkage of the slab
 SHRINKAGEENCASEMENT		= Shrinkage of the encasement
+ULS						= ULS
+SLS						= SLS
+FLS						= FLS
 
 #OPTCALCULMAIN
 TITLE					= Calculation options
