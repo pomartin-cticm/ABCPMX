@@ -2663,13 +2663,13 @@ Module Mod_NoteCalcul
         Dim iTravee, i As Integer
         Dim iEltO, iEltE As Integer
         Dim iCompteur As Integer = 0
-        Dim NbLignesMax() As Integer = {25, 30}
+        Dim NbLignesMax() As Integer = {25, 35}
         Dim iTab As Integer = 0
         Dim Ai, Iyi As Decimal
 
         '--> Initialisation
 
-        If nbLignes > MAXLIGNEPPAG - 10 Then
+        If (nbLignes > MAXLIGNEPPAG - 10) Or (nbLignes > NbLignesMax(1) - 5) Then
             SautePage()
         End If
         lMultispan = (MyPoutre.NbTravees > 1)
@@ -2874,7 +2874,7 @@ Module Mod_NoteCalcul
         '# Propriétés
 
         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(Ai, Enu_TypeVariable.AireCM2, 4, 3, False))
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(Iyi, Enu_TypeVariable.Inertie, 4, 3, False))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(Iyi, Enu_TypeVariable.InertieCM4, 4, 3, False))
 
     End Sub
 
@@ -2932,12 +2932,12 @@ Module Mod_NoteCalcul
 
         InitialiseLigne(NCol, HLIGNEENTETE, True)
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "ELEMENT")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "CONNECTIVITY")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Connec.")
         If lMultiSpan Then
             AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "SPAN")
         End If
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Ai (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & "\+2\=)")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Iyi (" & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties) & ")")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Ai (cm\+2\=)")
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Iyi (cm4)")
 
     End Sub
 

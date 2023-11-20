@@ -561,6 +561,11 @@ Module Mod_Outils
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 6
                 Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+6\="
 
+            Case Enu_TypeVariable.Inertie
+
+                kUnitU = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
+                Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
+
             Case Enu_TypeVariable.ModuleCM3
 
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 3
