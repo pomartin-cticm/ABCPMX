@@ -334,7 +334,11 @@ CANCEL					= Cancel
 PARAMETERS				= Parameters
 RELATIVEHUMIDITY		= Relative humidity
 PSIL					= Creep multiplier
-
+CONCRETEPROP			= Properties of concrete
+RESULTS					= Results
+AGET					= Age of concrete
+AGET0					= Age of concrete at loading
+CONCRETE				= Concrete class
 
 #FRM_OUVERTURE
 BROWSEFILES				= Browse
