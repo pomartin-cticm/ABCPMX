@@ -548,7 +548,6 @@ Partial Class Frm_OptionsCalculPoutre
         Me.chk_LargeursPartipantesSimples.TabIndex = 115
         Me.chk_LargeursPartipantesSimples.Text = "chk_LargeursPartipantesSimples"
         Me.chk_LargeursPartipantesSimples.UseVisualStyleBackColor = True
-        Me.chk_LargeursPartipantesSimples.Visible = False
         '
         'chk_ArmaComprimees
         '
@@ -559,7 +558,6 @@ Partial Class Frm_OptionsCalculPoutre
         Me.chk_ArmaComprimees.TabIndex = 116
         Me.chk_ArmaComprimees.Text = "chk_ArmaComprimees"
         Me.chk_ArmaComprimees.UseVisualStyleBackColor = True
-        Me.chk_ArmaComprimees.Visible = False
         '
         'Frm_OptionsCalculPoutre
         '

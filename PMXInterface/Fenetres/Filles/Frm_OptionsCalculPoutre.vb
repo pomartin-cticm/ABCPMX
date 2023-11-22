@@ -158,6 +158,7 @@ Public Class Frm_OptionsCalculPoutre
         '==> Propriétés sections
 
         Me.chk_LargeursPartipantesSimples.Checked = MyParam.lLargeurEfficaceSimplifiee
+        Me.chk_ArmaComprimees.Checked = MyParam.lCompressionArma
 
     End Sub
 
@@ -190,6 +191,8 @@ Public Class Frm_OptionsCalculPoutre
         GereTransfertValeur(MyParam.EpsilonSH, MyProjet.Poutres(MyProjet.IndEnCours).Param.EpsilonSH, lModif)
         GereTransfertValeur(MyParam.ArmaYoung, MyProjet.Poutres(MyProjet.IndEnCours).Param.ArmaYoung, lModif)
         GereTransfertValeur(MyParam.lRetraitEnrobage, MyProjet.Poutres(MyProjet.IndEnCours).Param.lRetraitEnrobage, lModif)
+        GereTransfertValeur(MyParam.lLargeurEfficaceSimplifiee, MyProjet.Poutres(MyProjet.IndEnCours).Param.lLargeurEfficaceSimplifiee, lModif)
+        GereTransfertValeur(MyParam.lCompressionArma, MyProjet.Poutres(MyProjet.IndEnCours).Param.lCompressionArma, lModif)
 
     End Sub
 
@@ -200,7 +203,6 @@ Public Class Frm_OptionsCalculPoutre
 #End Region
 
 #Region " Evènements "
-
 
     Private Sub ULSSectionDesign_CheckedChanged_1(sender As Object, e As EventArgs) Handles rdb_NormalDesign.CheckedChanged, rdb_ElasticDesign.CheckedChanged
 
@@ -216,7 +218,13 @@ Public Class Frm_OptionsCalculPoutre
         MyParam.lRetraitEnrobage = Me.chk_RetraitEnrobage.Checked
     End Sub
 
+    Private Sub chk_LargeursPartipantesSimples_CheckedChanged(sender As Object, e As EventArgs) Handles chk_LargeursPartipantesSimples.CheckedChanged
+        MyParam.lLargeurEfficaceSimplifiee = Me.chk_LargeursPartipantesSimples.Checked
+    End Sub
 
+    Private Sub chk_ArmaComprimees_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ArmaComprimees.CheckedChanged
+        MyParam.lCompressionArma = Me.chk_ArmaComprimees.Checked
+    End Sub
 
     Private Sub txt_EpsilonSh_TextChanged(sender As Object, e As EventArgs) Handles txt_EpsilonSh.TextChanged, txt_Es.TextChanged
         If lBuild Then Exit Sub
@@ -323,7 +331,6 @@ Public Class Frm_OptionsCalculPoutre
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
-
 
 
 #End Region

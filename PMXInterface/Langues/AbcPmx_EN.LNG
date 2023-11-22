@@ -55,6 +55,8 @@ SHRINKAGEDEFORMATION	= Deformation of concrete shrinkage
 SHRINKAGETOENCASEMENT	= Shrinkage applied to the concrete of partial encasements
 YOUNGSMODULUSREBAR		= Young's modulus of rebars
 SECTIONSPROP			= Properties of cross-sections
+SIMPLIFIEDBEFF			= Simplified distribution of slab effective width
+REBARSINCOMPRESSION		= Rebars in compression taken into account
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
