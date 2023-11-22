@@ -2503,7 +2503,6 @@ Module Mod_NoteCalcul
 
 #Region "***Edition des calculs aux ELS***"
 
-
     Private Sub EditionVerificationsELS(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
@@ -2521,8 +2520,9 @@ Module Mod_NoteCalcul
 
         EditionELSFleches(MyBeam)
 
-    End Sub
+        EditionELSFrequencesPropres(MyBeam)
 
+    End Sub
 
     Private Sub EditionELSFleches(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
@@ -2533,14 +2533,33 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(2, BlocELS("DEFLECTIONS"))
 
+        '--> Flèches par cas de charge
+
         AddTitreNdC(3, BlocELS("DEFLECTIONS_LOADCASES"))
 
         EditionSLSFlechesParCdC(MyBeam)
 
+        '--> Flèches par combinaison
+
         AddTitreNdC(3, BlocELS("DEFLECTIONS_COMBI"))
 
+        EditionSLSFlechesParCombi(MyBeam)
 
     End Sub
+
+    Private Sub EditionELSFrequencesPropres(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des flèches 
+        '-------------------------------------------------------------------------------------------
+
+        AddTitreNdC(2, BlocELS("EIGENFREQUENCIES"))
+
+    End Sub
+
+
+    '=== EDITION DES FLECHES ==========================================================================================
 
     Private Sub EditionSLSFlechesParCombi(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
@@ -2566,10 +2585,77 @@ Module Mod_NoteCalcul
         '--> Boucle sur les cas de charge
 
         For jCombi As Integer = 0 To MyBeam.CombiA_ELS.nbCombi - 1
+            'If MyBeam.ChargesA(jCdc).lRunCalcul Then
 
+            If nbLignes + MyBeam.NbTravees * 1.5 > MAXLIGNEPPAG Then
+                FinTableau()
+                SautePage()
+                EnteteTableauFlecheCdC(lMultispan, NCOL, LargCol, True)
+            End If
+
+            LigneTableauFlecheCombi(MyBeam, jCombi, lMultispan, NCOL, LargCol)
+
+            'End If
         Next
 
         FinTableau()
+    End Sub
+
+    Private Sub LigneTableauFlecheCombi(MyBeam As cls_Poutre, iCombi As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Ligne pour le tableau des flèches par cdc
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyBordures(MyBeam.IndiceDerniereTravee) As Integer
+        Dim iTraveeDeb As Integer = MyBeam.IndicePremiereTravee
+        Dim iTraveeFin As Integer = MyBeam.IndiceDerniereTravee
+        Dim FlechesMax() As Decimal = Nothing
+        Dim iCell As Integer
+        Dim RatioX As Decimal
+        Dim ChaineRatioX As String
+        Dim UZCombi() As Decimal = Nothing
+        Const lCombiRetrait As Boolean = True
+
+        '--> Initialisations
+
+        For i As Integer = iTraveeDeb To iTraveeFin
+            MyBordures(i) = Bordures.Gauche + Bordures.Droite
+        Next
+        MyBordures(iTraveeDeb) += Bordures.Haut
+        MyBordures(iTraveeFin) += Bordures.Bas
+
+        MyBeam.CombiA_ELS.CombineFleches(iCombi, MyBeam.Nodes.nbNodes, MyBeam.ChargesA, UZCombi, lCombiRetrait)
+
+        ExtraireFlecheEnveloppes(UZCombi, iTraveeDeb, iTraveeFin, MyBeam.Nodes.iNodeExtTrav, FlechesMax)
+
+        '--> Traitement
+
+        For i As Integer = iTraveeDeb To iTraveeFin
+            iCell = 0
+            InitialiseLigne(NCOL, HLIGNE)
+            If i = iTraveeDeb Then
+                AddCellule(LargCol(0), MyBordures(i), PositionTexteInCell.Gauche, MyBeam.CombiA_ELS.Symbole(iCombi))
+            Else
+                AddCellule(LargCol(0), MyBordures(i), PositionTexteInCell.Centre, "")
+            End If
+            If lMultiSpan Then
+                AddCellule(LargCol(1), MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
+                iCell = 1
+            End If
+            AddCellule(LargCol(iCell + 1), MyBordures(i) - Bordures.Droite, PositionTexteInCell.Gauche, GetStringInUnit(-FlechesMax(i), Enu_TypeVariable.Dimension, 3, 3, True))
+            If Math.Abs(FlechesMax(i)) > 0 Then
+                RatioX = Math.Abs(MyBeam.LongueurTravee(i) / FlechesMax(i))
+                ChaineRatioX = "(L/" & GetStringInUnit(RatioX, Enu_TypeVariable.SansType, 3, 0, False) & ")"
+            Else
+                ChaineRatioX = ""
+            End If
+            AddCellule(LargCol(iCell + 2), MyBordures(i) - Bordures.Gauche, PositionTexteInCell.Gauche, ChaineRatioX)
+
+        Next
     End Sub
 
     Private Sub EditionSLSFlechesParCdC(MyBeam As cls_Poutre)

@@ -257,5 +257,7 @@ DEFLECTIONS				= Deflections
 DEFLECTIONS_LOADCASES	= Under elementary load cases
 DEFLECTIONS_COMBI		= Under SLS combinations
 LOADCASE				= Load case
+COMBINATION				= Combination
 SPAN					= Span
+EIGENFREQUENCIES		= Eigen frequencies
 
