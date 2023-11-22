@@ -72,6 +72,7 @@ Module Mod_NoteCalcul
     Private BlocSP As New Dictionary(Of String, String)
     Private BlocAnalyse As New Dictionary(Of String, String)
     Private BlocELU As New Dictionary(Of String, String)
+    Private BlocELS As New Dictionary(Of String, String)
 
     Private ReadOnly IndTableau As Integer = 0
     Private ReadOnly IndFigure As Integer = 0
@@ -206,10 +207,16 @@ Module Mod_NoteCalcul
         EditionAnalysePoutre(MyPrjt.Poutres(MyPrjt.IndEnCours))
 
         '--|=========================================
-        '--| VERIFICATION DES CRITERES
+        '--| VERIFICATION DES CRITERES ELU
         '--|=========================================
 
         EditionVerificationsELU(MyPrjt.Poutres(MyPrjt.IndEnCours))
+
+        '--|=========================================
+        '--| VERIFICATION DES CRITERES ELS
+        '--|=========================================
+
+        EditionVerificationsELS(MyPrjt.Poutres(MyPrjt.IndEnCours))
 
     End Sub
 
@@ -236,6 +243,8 @@ Module Mod_NoteCalcul
         BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSULS")
         BlocLine.CreationBloc(BlocELU)
 
+        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSSLS")
+        BlocLine.CreationBloc(BlocELS)
 
     End Sub
 
@@ -2490,6 +2499,258 @@ Module Mod_NoteCalcul
 
         FinTableau()
     End Sub
+#End Region
+
+#Region "***Edition des calculs aux ELS***"
+
+
+    Private Sub EditionVerificationsELS(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des vérifications ELS (en phase finale pour les poutres mixtes)
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        '--> Initialisation
+
+        SautePage()
+
+        AddTitreNdC(1, BlocELS("SLS_CHECKS"))
+
+        EditionELSFleches(MyBeam)
+
+    End Sub
+
+
+    Private Sub EditionELSFleches(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des flèches 
+        '-------------------------------------------------------------------------------------------
+
+        AddTitreNdC(2, BlocELS("DEFLECTIONS"))
+
+        AddTitreNdC(3, BlocELS("DEFLECTIONS_LOADCASES"))
+
+        EditionSLSFlechesParCdC(MyBeam)
+
+        AddTitreNdC(3, BlocELS("DEFLECTIONS_COMBI"))
+
+
+    End Sub
+
+    Private Sub EditionSLSFlechesParCombi(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des flèches par combinaison
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lMultispan As Boolean = (MyBeam.NbTravees > 1)
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+
+        '--> Initialisation
+
+        If MyBeam.CombiA_ELS.nbCombi = 0 Then Exit Sub
+
+        '--> Tableau Entête
+
+        EnteteTableauFlecheCdC(lMultispan, NCOL, LargCol, True)
+
+        '--> Boucle sur les cas de charge
+
+        For jCombi As Integer = 0 To MyBeam.CombiA_ELS.nbCombi - 1
+
+        Next
+
+        FinTableau()
+    End Sub
+
+    Private Sub EditionSLSFlechesParCdC(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des flèches par cas de charge
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lMultispan As Boolean = (MyBeam.NbTravees > 1)
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+
+        '--> Tableau Entête
+
+        EnteteTableauFlecheCdC(lMultispan, NCOL, LargCol, False)
+
+        '--> Boucle sur les cas de charge
+
+        For jCdc As Integer = 0 To MyBeam.ChargesA.Count - 1
+            If MyBeam.ChargesA(jCdc).lRunCalcul Then
+
+                If nbLignes + MyBeam.NbTravees * 1.5 > MAXLIGNEPPAG Then
+                    FinTableau()
+                    SautePage()
+                    EnteteTableauFlecheCdC(lMultispan, NCOL, LargCol, False)
+                End If
+
+                LigneTableauFlecheCdc(MyBeam, jCdc, lMultispan, NCOL, LargCol)
+
+            End If
+        Next
+
+        FinTableau()
+    End Sub
+
+    Private Sub LigneTableauFlecheCdc(MyBeam As cls_Poutre, iCase As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Ligne pour le tableau des flèches par cdc
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyBordures(MyBeam.IndiceDerniereTravee) As Integer
+        Dim iTraveeDeb As Integer = MyBeam.IndicePremiereTravee
+        Dim iTraveeFin As Integer = MyBeam.IndiceDerniereTravee
+        Dim FlechesMax() As Decimal
+        Dim iCell As Integer
+        Dim RatioX As Decimal
+        Dim ChaineRatioX As String
+
+        '--> Initialisations
+
+        For i As Integer = iTraveeDeb To iTraveeFin
+            MyBordures(i) = Bordures.Gauche + Bordures.Droite
+        Next
+        MyBordures(iTraveeDeb) += Bordures.Haut
+        MyBordures(iTraveeFin) += Bordures.Bas
+
+        ExtraireFlecheEnveloppes(MyBeam.ChargesA(iCase).UZ, iTraveeDeb, iTraveeFin, MyBeam.Nodes.iNodeExtTrav, FlechesMax)
+
+        '--> Traitement
+
+        For i As Integer = iTraveeDeb To iTraveeFin
+            iCell = 0
+            InitialiseLigne(NCOL, HLIGNE)
+            If i = iTraveeDeb Then
+                AddCellule(LargCol(0), MyBordures(i), PositionTexteInCell.Gauche, MyBeam.ChargesA(iCase).Nom & " (" & MyBeam.ChargesA(iCase).Symbol & ")")
+            Else
+                AddCellule(LargCol(0), MyBordures(i), PositionTexteInCell.Centre, "")
+            End If
+            If lMultiSpan Then
+                AddCellule(LargCol(1), MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
+                iCell = 1
+            End If
+            AddCellule(LargCol(iCell + 1), MyBordures(i) - Bordures.Droite, PositionTexteInCell.Gauche, GetStringInUnit(-FlechesMax(i), Enu_TypeVariable.Dimension, 3, 3, True))
+            If Math.Abs(FlechesMax(i)) > 0 Then
+                RatioX = Math.Abs(MyBeam.LongueurTravee(i) / FlechesMax(i))
+                ChaineRatioX = "(L/" & GetStringInUnit(RatioX, Enu_TypeVariable.SansType, 3, 0, False) & ")"
+            Else
+                ChaineRatioX = ""
+            End If
+            AddCellule(LargCol(iCell + 2), MyBordures(i) - Bordures.Gauche, PositionTexteInCell.Gauche, ChaineRatioX)
+
+        Next
+    End Sub
+
+    Private Sub ExtraireFlecheEnveloppes(UZ() As Decimal, iTravDeb As Integer, iTravFin As Integer, IndiceNoteT(,) As Integer, ByRef FlechesMaxi() As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Recherche des valeurs de flèches maxi par travée
+        '-------------------------------------------------------------------------------------------
+        '   UZ          [E] :   Tableau des flèches par noeuds
+        '   iTravDeb    [E] :   Indice de la première travée
+        '   iTravFin    [E] :   Indice de la dernière travée
+        '   IndiceNoteT [E] :   Indice des noeuds aux extrémités des travées
+        '   FlechesMaxi [S] :   Flèches maxi par travée
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim jTravee As Integer
+        Dim iNode As Integer
+
+        '--> Initialisation
+
+        ReDim FlechesMaxi(iTravFin)
+
+        '--> Boucle sur les travées
+
+        For jTravee = iTravDeb To iTravFin
+            FlechesMaxi(jTravee) = UZ(IndiceNoteT(jTravee, 0))
+            For iNode = IndiceNoteT(jTravee, 0) + 1 To IndiceNoteT(jTravee, 1)
+
+                If IsGreater(Math.Abs(UZ(iNode)), Math.Abs(FlechesMaxi(jTravee))) Then
+
+                    FlechesMaxi(jTravee) = UZ(iNode)
+
+                End If
+
+            Next
+        Next
+
+    End Sub
+
+    Private Sub EnteteTableauFlecheCdC(lMultiSpan As Boolean, ByRef NCOL As Integer, ByRef LargCol() As Single, lCombi As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition de l'entete pour le tableau des flèches par cdc
+        '-------------------------------------------------------------------------------------------
+        '   lMutliSpan  [E] :   Indique si poutre multitravée
+        '   NCOL        [S] :   Indique si tableau pour les cas de charge ou pour les combinaisons
+        '   LargCol     [S] :   Largeurs des colonnes du tableau
+        '   LCombi      [E] :   Indique si teableau pour les combinaisons ou les cas de charges
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Pos As Integer
+        Dim iCell As Integer = 0
+
+        '--> Initialisation
+
+        NCOL = 3
+        If lMultiSpan Then NCOL += 1
+
+        Pos = 10
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos))
+
+        ReDim LargCol(NCOL - 1)
+        LargCol(0) = CSng(35)
+        LargCol(1) = CSng(LC3)
+
+        LargCol(NCOL - 2) = CSng(LC3)
+        LargCol(NCOL - 1) = CSng(15)
+
+        '--> Entete
+
+        InitialiseLigne(NCOL, HLIGNEENTETE)
+        If lCombi Then
+            AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Gauche, BlocELS("COMBINATION"))
+        Else
+            AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Gauche, BlocELS("LOADCASE"))
+        End If
+        If lMultiSpan Then
+            AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Gauche, BlocELS("SPAN"))
+            iCell = 1
+        End If
+        AddCelluleFond(LargCol(iCell + 1), Bordures.Tous - Bordures.Droite, PositionTexteInCell.Gauche, BlocELS("DEFLECTIONS"))
+        AddCelluleFond(LargCol(iCell + 2), Bordures.Tous - Bordures.Gauche, PositionTexteInCell.Centre, "")
+
+
+    End Sub
+
 #End Region
 
 #Region "   Page de garde "

@@ -468,7 +468,7 @@ Public Class Frm_PMX
         Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
                 TSbtn_Gamma.Click, TSbtn_PPLargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
-                TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click
+                TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click
 
         Select Case sender.name
 
@@ -497,12 +497,19 @@ Public Class Frm_PMX
             Case Me.TSbtn_Etaiement.Name
                 FilleEnCours = EnuFenetres.Etaiement
 
+                '--> Chargements, combinaisons, Coefficients
+
             Case Me.TSbtn_Chargements.Name
                 FilleEnCours = EnuFenetres.Chargements
             Case Me.TSbtn_Gamma.Name
                 FilleEnCours = EnuFenetres.Gamma
             Case Me.TSbtn_Combinaisons.Name
                 FilleEnCours = EnuFenetres.Combinaisons
+
+                '--> Options
+
+            Case Me.TSbtn_OptionsCalculPoutre.Name
+                FilleEnCours = EnuFenetres.OptionsCalculPoutre
 
             Case Me.TSbtn_Hivoss.Name
                 FilleEnCours = EnuFenetres.Hivoss
@@ -604,6 +611,9 @@ Public Class Frm_PMX
 
                 End If
 
+            Case EnuFenetres.OptionsCalculPoutre
+                Frm_OptionsCalculPoutre.ShowDialog()
+                Frm_OptionsCalculPoutre.Dispose()
 
             Case EnuFenetres.PPLargeurEfficace
                 Frm_PPLargeurEfficace.ShowDialog()

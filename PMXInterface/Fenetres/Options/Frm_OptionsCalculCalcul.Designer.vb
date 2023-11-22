@@ -26,6 +26,36 @@ Partial Class Frm_OptionsCalculCalcul
         Me.pan_Calcul = New System.Windows.Forms.Panel()
         Me.TLpan_Conteneur = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Conteneur = New System.Windows.Forms.Panel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.img_T0SH = New System.Windows.Forms.PictureBox()
+        Me.img_T0G2 = New System.Windows.Forms.PictureBox()
+        Me.img_T0G1 = New System.Windows.Forms.PictureBox()
+        Me.lbl_SH = New System.Windows.Forms.Label()
+        Me.lbl_G2 = New System.Windows.Forms.Label()
+        Me.lbl_G1 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour6 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour4 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour2 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour5 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour3 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour1 = New System.Windows.Forms.Label()
+        Me.txt_t0SHDalle = New System.Windows.Forms.TextBox()
+        Me.txt_t0SHEnrob = New System.Windows.Forms.TextBox()
+        Me.txt_t0G2Dalle = New System.Windows.Forms.TextBox()
+        Me.txt_t0G2Enrob = New System.Windows.Forms.TextBox()
+        Me.txt_t0G1Dalle = New System.Windows.Forms.TextBox()
+        Me.txt_t0G1Enrob = New System.Windows.Forms.TextBox()
+        Me.lbl_Enrobage = New System.Windows.Forms.Label()
+        Me.lbl_Dalle = New System.Windows.Forms.Label()
+        Me.lbl_TimeT0 = New System.Windows.Forms.Label()
+        Me.txt_PsiLSH = New System.Windows.Forms.TextBox()
+        Me.img_PsiLSH = New System.Windows.Forms.PictureBox()
+        Me.lbl_ShrinkageLC = New System.Windows.Forms.Label()
+        Me.lbl_PermanentLC = New System.Windows.Forms.Label()
+        Me.txt_PsiLG = New System.Windows.Forms.TextBox()
+        Me.img_PsiLG = New System.Windows.Forms.PictureBox()
+        Me.lbl_CreepMultiplier = New System.Windows.Forms.Label()
+        Me.lbl_LoadCases = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
@@ -54,39 +84,15 @@ Partial Class Frm_OptionsCalculCalcul
         Me.lbl_Norme = New System.Windows.Forms.Label()
         Me.lbl_Calcul = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.txt_PsiLSH = New System.Windows.Forms.TextBox()
-        Me.img_PsiLSH = New System.Windows.Forms.PictureBox()
-        Me.lbl_ShrinkageLC = New System.Windows.Forms.Label()
-        Me.lbl_PermanentLC = New System.Windows.Forms.Label()
-        Me.txt_PsiLG = New System.Windows.Forms.TextBox()
-        Me.img_PsiLG = New System.Windows.Forms.PictureBox()
-        Me.lbl_CreepMultiplier = New System.Windows.Forms.Label()
-        Me.lbl_LoadCases = New System.Windows.Forms.Label()
-        Me.lbl_TimeT0 = New System.Windows.Forms.Label()
-        Me.lbl_Dalle = New System.Windows.Forms.Label()
-        Me.lbl_Enrobage = New System.Windows.Forms.Label()
-        Me.txt_t0G1Enrob = New System.Windows.Forms.TextBox()
-        Me.txt_t0G1Dalle = New System.Windows.Forms.TextBox()
-        Me.txt_t0G2Dalle = New System.Windows.Forms.TextBox()
-        Me.txt_t0G2Enrob = New System.Windows.Forms.TextBox()
-        Me.txt_t0SHDalle = New System.Windows.Forms.TextBox()
-        Me.txt_t0SHEnrob = New System.Windows.Forms.TextBox()
-        Me.etq_UnitJour1 = New System.Windows.Forms.Label()
-        Me.etq_UnitJour3 = New System.Windows.Forms.Label()
-        Me.etq_UnitJour5 = New System.Windows.Forms.Label()
-        Me.etq_UnitJour6 = New System.Windows.Forms.Label()
-        Me.etq_UnitJour4 = New System.Windows.Forms.Label()
-        Me.etq_UnitJour2 = New System.Windows.Forms.Label()
-        Me.lbl_G1 = New System.Windows.Forms.Label()
-        Me.lbl_G2 = New System.Windows.Forms.Label()
-        Me.lbl_SH = New System.Windows.Forms.Label()
-        Me.img_T0G1 = New System.Windows.Forms.PictureBox()
-        Me.img_T0G2 = New System.Windows.Forms.PictureBox()
-        Me.img_T0SH = New System.Windows.Forms.PictureBox()
         Me.pan_Calcul.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
+        Me.Panel3.SuspendLayout()
+        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_PsiLSH, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_PsiLG, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel2.SuspendLayout()
         CType(Me.img_NbNodes2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_NbNodes1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -94,12 +100,6 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel1.SuspendLayout()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel3.SuspendLayout()
-        CType(Me.img_PsiLSH, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_PsiLG, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Calcul
@@ -141,6 +141,316 @@ Partial Class Frm_OptionsCalculCalcul
         Me.pan_Conteneur.Name = "pan_Conteneur"
         Me.pan_Conteneur.Size = New System.Drawing.Size(739, 637)
         Me.pan_Conteneur.TabIndex = 0
+        '
+        'Panel3
+        '
+        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel3.Controls.Add(Me.img_T0SH)
+        Me.Panel3.Controls.Add(Me.img_T0G2)
+        Me.Panel3.Controls.Add(Me.img_T0G1)
+        Me.Panel3.Controls.Add(Me.lbl_SH)
+        Me.Panel3.Controls.Add(Me.lbl_G2)
+        Me.Panel3.Controls.Add(Me.lbl_G1)
+        Me.Panel3.Controls.Add(Me.etq_UnitJour6)
+        Me.Panel3.Controls.Add(Me.etq_UnitJour4)
+        Me.Panel3.Controls.Add(Me.etq_UnitJour2)
+        Me.Panel3.Controls.Add(Me.etq_UnitJour5)
+        Me.Panel3.Controls.Add(Me.etq_UnitJour3)
+        Me.Panel3.Controls.Add(Me.etq_UnitJour1)
+        Me.Panel3.Controls.Add(Me.txt_t0SHDalle)
+        Me.Panel3.Controls.Add(Me.txt_t0SHEnrob)
+        Me.Panel3.Controls.Add(Me.txt_t0G2Dalle)
+        Me.Panel3.Controls.Add(Me.txt_t0G2Enrob)
+        Me.Panel3.Controls.Add(Me.txt_t0G1Dalle)
+        Me.Panel3.Controls.Add(Me.txt_t0G1Enrob)
+        Me.Panel3.Controls.Add(Me.lbl_Enrobage)
+        Me.Panel3.Controls.Add(Me.lbl_Dalle)
+        Me.Panel3.Controls.Add(Me.lbl_TimeT0)
+        Me.Panel3.Controls.Add(Me.txt_PsiLSH)
+        Me.Panel3.Controls.Add(Me.img_PsiLSH)
+        Me.Panel3.Controls.Add(Me.lbl_ShrinkageLC)
+        Me.Panel3.Controls.Add(Me.lbl_PermanentLC)
+        Me.Panel3.Controls.Add(Me.txt_PsiLG)
+        Me.Panel3.Controls.Add(Me.img_PsiLG)
+        Me.Panel3.Controls.Add(Me.lbl_CreepMultiplier)
+        Me.Panel3.Controls.Add(Me.lbl_LoadCases)
+        Me.Panel3.Location = New System.Drawing.Point(3, 359)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(732, 254)
+        Me.Panel3.TabIndex = 107
+        '
+        'img_T0SH
+        '
+        Me.img_T0SH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_T0SH.Location = New System.Drawing.Point(476, 141)
+        Me.img_T0SH.Name = "img_T0SH"
+        Me.img_T0SH.Size = New System.Drawing.Size(46, 20)
+        Me.img_T0SH.TabIndex = 150
+        Me.img_T0SH.TabStop = False
+        '
+        'img_T0G2
+        '
+        Me.img_T0G2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_T0G2.Location = New System.Drawing.Point(476, 119)
+        Me.img_T0G2.Name = "img_T0G2"
+        Me.img_T0G2.Size = New System.Drawing.Size(46, 20)
+        Me.img_T0G2.TabIndex = 149
+        Me.img_T0G2.TabStop = False
+        '
+        'img_T0G1
+        '
+        Me.img_T0G1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_T0G1.Location = New System.Drawing.Point(476, 97)
+        Me.img_T0G1.Name = "img_T0G1"
+        Me.img_T0G1.Size = New System.Drawing.Size(46, 20)
+        Me.img_T0G1.TabIndex = 148
+        Me.img_T0G1.TabStop = False
+        '
+        'lbl_SH
+        '
+        Me.lbl_SH.AutoSize = True
+        Me.lbl_SH.Location = New System.Drawing.Point(237, 144)
+        Me.lbl_SH.Name = "lbl_SH"
+        Me.lbl_SH.Size = New System.Drawing.Size(38, 13)
+        Me.lbl_SH.TabIndex = 147
+        Me.lbl_SH.Text = "lbl_SH"
+        '
+        'lbl_G2
+        '
+        Me.lbl_G2.AutoSize = True
+        Me.lbl_G2.Location = New System.Drawing.Point(237, 122)
+        Me.lbl_G2.Name = "lbl_G2"
+        Me.lbl_G2.Size = New System.Drawing.Size(37, 13)
+        Me.lbl_G2.TabIndex = 146
+        Me.lbl_G2.Text = "lbl_G2"
+        '
+        'lbl_G1
+        '
+        Me.lbl_G1.AutoSize = True
+        Me.lbl_G1.Location = New System.Drawing.Point(237, 100)
+        Me.lbl_G1.Name = "lbl_G1"
+        Me.lbl_G1.Size = New System.Drawing.Size(37, 13)
+        Me.lbl_G1.TabIndex = 145
+        Me.lbl_G1.Text = "lbl_G1"
+        '
+        'etq_UnitJour6
+        '
+        Me.etq_UnitJour6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour6.AutoSize = True
+        Me.etq_UnitJour6.Location = New System.Drawing.Point(674, 144)
+        Me.etq_UnitJour6.Name = "etq_UnitJour6"
+        Me.etq_UnitJour6.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour6.TabIndex = 144
+        Me.etq_UnitJour6.Text = "j"
+        '
+        'etq_UnitJour4
+        '
+        Me.etq_UnitJour4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour4.AutoSize = True
+        Me.etq_UnitJour4.Location = New System.Drawing.Point(674, 122)
+        Me.etq_UnitJour4.Name = "etq_UnitJour4"
+        Me.etq_UnitJour4.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour4.TabIndex = 143
+        Me.etq_UnitJour4.Text = "j"
+        '
+        'etq_UnitJour2
+        '
+        Me.etq_UnitJour2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour2.AutoSize = True
+        Me.etq_UnitJour2.Location = New System.Drawing.Point(674, 100)
+        Me.etq_UnitJour2.Name = "etq_UnitJour2"
+        Me.etq_UnitJour2.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour2.TabIndex = 142
+        Me.etq_UnitJour2.Text = "j"
+        '
+        'etq_UnitJour5
+        '
+        Me.etq_UnitJour5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour5.AutoSize = True
+        Me.etq_UnitJour5.Location = New System.Drawing.Point(587, 144)
+        Me.etq_UnitJour5.Name = "etq_UnitJour5"
+        Me.etq_UnitJour5.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour5.TabIndex = 141
+        Me.etq_UnitJour5.Text = "j"
+        '
+        'etq_UnitJour3
+        '
+        Me.etq_UnitJour3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour3.AutoSize = True
+        Me.etq_UnitJour3.Location = New System.Drawing.Point(587, 122)
+        Me.etq_UnitJour3.Name = "etq_UnitJour3"
+        Me.etq_UnitJour3.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour3.TabIndex = 140
+        Me.etq_UnitJour3.Text = "j"
+        '
+        'etq_UnitJour1
+        '
+        Me.etq_UnitJour1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour1.AutoSize = True
+        Me.etq_UnitJour1.Location = New System.Drawing.Point(587, 100)
+        Me.etq_UnitJour1.Name = "etq_UnitJour1"
+        Me.etq_UnitJour1.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour1.TabIndex = 139
+        Me.etq_UnitJour1.Text = "j"
+        '
+        'txt_t0SHDalle
+        '
+        Me.txt_t0SHDalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0SHDalle.Location = New System.Drawing.Point(523, 141)
+        Me.txt_t0SHDalle.Name = "txt_t0SHDalle"
+        Me.txt_t0SHDalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0SHDalle.TabIndex = 138
+        Me.txt_t0SHDalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0SHEnrob
+        '
+        Me.txt_t0SHEnrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0SHEnrob.Location = New System.Drawing.Point(612, 141)
+        Me.txt_t0SHEnrob.Name = "txt_t0SHEnrob"
+        Me.txt_t0SHEnrob.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0SHEnrob.TabIndex = 137
+        Me.txt_t0SHEnrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0G2Dalle
+        '
+        Me.txt_t0G2Dalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0G2Dalle.Location = New System.Drawing.Point(523, 119)
+        Me.txt_t0G2Dalle.Name = "txt_t0G2Dalle"
+        Me.txt_t0G2Dalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0G2Dalle.TabIndex = 136
+        Me.txt_t0G2Dalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0G2Enrob
+        '
+        Me.txt_t0G2Enrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0G2Enrob.Location = New System.Drawing.Point(612, 119)
+        Me.txt_t0G2Enrob.Name = "txt_t0G2Enrob"
+        Me.txt_t0G2Enrob.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0G2Enrob.TabIndex = 135
+        Me.txt_t0G2Enrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0G1Dalle
+        '
+        Me.txt_t0G1Dalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0G1Dalle.Location = New System.Drawing.Point(523, 97)
+        Me.txt_t0G1Dalle.Name = "txt_t0G1Dalle"
+        Me.txt_t0G1Dalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0G1Dalle.TabIndex = 134
+        Me.txt_t0G1Dalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0G1Enrob
+        '
+        Me.txt_t0G1Enrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0G1Enrob.Location = New System.Drawing.Point(612, 97)
+        Me.txt_t0G1Enrob.Name = "txt_t0G1Enrob"
+        Me.txt_t0G1Enrob.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0G1Enrob.TabIndex = 133
+        Me.txt_t0G1Enrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_Enrobage
+        '
+        Me.lbl_Enrobage.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Enrobage.AutoSize = True
+        Me.lbl_Enrobage.Location = New System.Drawing.Point(607, 81)
+        Me.lbl_Enrobage.Name = "lbl_Enrobage"
+        Me.lbl_Enrobage.Size = New System.Drawing.Size(69, 13)
+        Me.lbl_Enrobage.TabIndex = 132
+        Me.lbl_Enrobage.Text = "lbl_Enrobage"
+        '
+        'lbl_Dalle
+        '
+        Me.lbl_Dalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Dalle.AutoSize = True
+        Me.lbl_Dalle.Location = New System.Drawing.Point(530, 81)
+        Me.lbl_Dalle.Name = "lbl_Dalle"
+        Me.lbl_Dalle.Size = New System.Drawing.Size(47, 13)
+        Me.lbl_Dalle.TabIndex = 131
+        Me.lbl_Dalle.Text = "lbl_Dalle"
+        '
+        'lbl_TimeT0
+        '
+        Me.lbl_TimeT0.AutoSize = True
+        Me.lbl_TimeT0.Location = New System.Drawing.Point(39, 81)
+        Me.lbl_TimeT0.Name = "lbl_TimeT0"
+        Me.lbl_TimeT0.Size = New System.Drawing.Size(59, 13)
+        Me.lbl_TimeT0.TabIndex = 130
+        Me.lbl_TimeT0.Text = "lbl_TimeT0"
+        '
+        'txt_PsiLSH
+        '
+        Me.txt_PsiLSH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_PsiLSH.Location = New System.Drawing.Point(610, 50)
+        Me.txt_PsiLSH.Name = "txt_PsiLSH"
+        Me.txt_PsiLSH.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PsiLSH.TabIndex = 128
+        Me.txt_PsiLSH.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'img_PsiLSH
+        '
+        Me.img_PsiLSH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_PsiLSH.Location = New System.Drawing.Point(563, 50)
+        Me.img_PsiLSH.Name = "img_PsiLSH"
+        Me.img_PsiLSH.Size = New System.Drawing.Size(46, 20)
+        Me.img_PsiLSH.TabIndex = 129
+        Me.img_PsiLSH.TabStop = False
+        '
+        'lbl_ShrinkageLC
+        '
+        Me.lbl_ShrinkageLC.AutoSize = True
+        Me.lbl_ShrinkageLC.Location = New System.Drawing.Point(237, 53)
+        Me.lbl_ShrinkageLC.Name = "lbl_ShrinkageLC"
+        Me.lbl_ShrinkageLC.Size = New System.Drawing.Size(84, 13)
+        Me.lbl_ShrinkageLC.TabIndex = 127
+        Me.lbl_ShrinkageLC.Text = "lbl_ShrinkageLC"
+        '
+        'lbl_PermanentLC
+        '
+        Me.lbl_PermanentLC.AutoSize = True
+        Me.lbl_PermanentLC.Location = New System.Drawing.Point(237, 30)
+        Me.lbl_PermanentLC.Name = "lbl_PermanentLC"
+        Me.lbl_PermanentLC.Size = New System.Drawing.Size(87, 13)
+        Me.lbl_PermanentLC.TabIndex = 126
+        Me.lbl_PermanentLC.Text = "lbl_PermanentLC"
+        '
+        'txt_PsiLG
+        '
+        Me.txt_PsiLG.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_PsiLG.Location = New System.Drawing.Point(610, 27)
+        Me.txt_PsiLG.Name = "txt_PsiLG"
+        Me.txt_PsiLG.Size = New System.Drawing.Size(58, 20)
+        Me.txt_PsiLG.TabIndex = 107
+        Me.txt_PsiLG.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'img_PsiLG
+        '
+        Me.img_PsiLG.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_PsiLG.Location = New System.Drawing.Point(563, 27)
+        Me.img_PsiLG.Name = "img_PsiLG"
+        Me.img_PsiLG.Size = New System.Drawing.Size(46, 20)
+        Me.img_PsiLG.TabIndex = 108
+        Me.img_PsiLG.TabStop = False
+        '
+        'lbl_CreepMultiplier
+        '
+        Me.lbl_CreepMultiplier.AutoSize = True
+        Me.lbl_CreepMultiplier.Location = New System.Drawing.Point(39, 30)
+        Me.lbl_CreepMultiplier.Name = "lbl_CreepMultiplier"
+        Me.lbl_CreepMultiplier.Size = New System.Drawing.Size(92, 13)
+        Me.lbl_CreepMultiplier.TabIndex = 106
+        Me.lbl_CreepMultiplier.Text = "lbl_CreepMultiplier"
+        '
+        'lbl_LoadCases
+        '
+        Me.lbl_LoadCases.AutoSize = True
+        Me.lbl_LoadCases.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_LoadCases.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_LoadCases.Location = New System.Drawing.Point(5, 5)
+        Me.lbl_LoadCases.Name = "lbl_LoadCases"
+        Me.lbl_LoadCases.Size = New System.Drawing.Size(76, 13)
+        Me.lbl_LoadCases.TabIndex = 105
+        Me.lbl_LoadCases.Text = "lbl_LoadCases"
+        Me.lbl_LoadCases.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'Panel2
         '
@@ -438,316 +748,6 @@ Partial Class Frm_OptionsCalculCalcul
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'Panel3
-        '
-        Me.Panel3.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel3.Controls.Add(Me.img_T0SH)
-        Me.Panel3.Controls.Add(Me.img_T0G2)
-        Me.Panel3.Controls.Add(Me.img_T0G1)
-        Me.Panel3.Controls.Add(Me.lbl_SH)
-        Me.Panel3.Controls.Add(Me.lbl_G2)
-        Me.Panel3.Controls.Add(Me.lbl_G1)
-        Me.Panel3.Controls.Add(Me.etq_UnitJour6)
-        Me.Panel3.Controls.Add(Me.etq_UnitJour4)
-        Me.Panel3.Controls.Add(Me.etq_UnitJour2)
-        Me.Panel3.Controls.Add(Me.etq_UnitJour5)
-        Me.Panel3.Controls.Add(Me.etq_UnitJour3)
-        Me.Panel3.Controls.Add(Me.etq_UnitJour1)
-        Me.Panel3.Controls.Add(Me.txt_t0SHDalle)
-        Me.Panel3.Controls.Add(Me.txt_t0SHEnrob)
-        Me.Panel3.Controls.Add(Me.txt_t0G2Dalle)
-        Me.Panel3.Controls.Add(Me.txt_t0G2Enrob)
-        Me.Panel3.Controls.Add(Me.txt_t0G1Dalle)
-        Me.Panel3.Controls.Add(Me.txt_t0G1Enrob)
-        Me.Panel3.Controls.Add(Me.lbl_Enrobage)
-        Me.Panel3.Controls.Add(Me.lbl_Dalle)
-        Me.Panel3.Controls.Add(Me.lbl_TimeT0)
-        Me.Panel3.Controls.Add(Me.txt_PsiLSH)
-        Me.Panel3.Controls.Add(Me.img_PsiLSH)
-        Me.Panel3.Controls.Add(Me.lbl_ShrinkageLC)
-        Me.Panel3.Controls.Add(Me.lbl_PermanentLC)
-        Me.Panel3.Controls.Add(Me.txt_PsiLG)
-        Me.Panel3.Controls.Add(Me.img_PsiLG)
-        Me.Panel3.Controls.Add(Me.lbl_CreepMultiplier)
-        Me.Panel3.Controls.Add(Me.lbl_LoadCases)
-        Me.Panel3.Location = New System.Drawing.Point(3, 359)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(732, 254)
-        Me.Panel3.TabIndex = 107
-        '
-        'txt_PsiLSH
-        '
-        Me.txt_PsiLSH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_PsiLSH.Location = New System.Drawing.Point(610, 50)
-        Me.txt_PsiLSH.Name = "txt_PsiLSH"
-        Me.txt_PsiLSH.Size = New System.Drawing.Size(58, 20)
-        Me.txt_PsiLSH.TabIndex = 128
-        Me.txt_PsiLSH.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'img_PsiLSH
-        '
-        Me.img_PsiLSH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_PsiLSH.Location = New System.Drawing.Point(563, 50)
-        Me.img_PsiLSH.Name = "img_PsiLSH"
-        Me.img_PsiLSH.Size = New System.Drawing.Size(46, 20)
-        Me.img_PsiLSH.TabIndex = 129
-        Me.img_PsiLSH.TabStop = False
-        '
-        'lbl_ShrinkageLC
-        '
-        Me.lbl_ShrinkageLC.AutoSize = True
-        Me.lbl_ShrinkageLC.Location = New System.Drawing.Point(237, 53)
-        Me.lbl_ShrinkageLC.Name = "lbl_ShrinkageLC"
-        Me.lbl_ShrinkageLC.Size = New System.Drawing.Size(84, 13)
-        Me.lbl_ShrinkageLC.TabIndex = 127
-        Me.lbl_ShrinkageLC.Text = "lbl_ShrinkageLC"
-        '
-        'lbl_PermanentLC
-        '
-        Me.lbl_PermanentLC.AutoSize = True
-        Me.lbl_PermanentLC.Location = New System.Drawing.Point(237, 30)
-        Me.lbl_PermanentLC.Name = "lbl_PermanentLC"
-        Me.lbl_PermanentLC.Size = New System.Drawing.Size(87, 13)
-        Me.lbl_PermanentLC.TabIndex = 126
-        Me.lbl_PermanentLC.Text = "lbl_PermanentLC"
-        '
-        'txt_PsiLG
-        '
-        Me.txt_PsiLG.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_PsiLG.Location = New System.Drawing.Point(610, 27)
-        Me.txt_PsiLG.Name = "txt_PsiLG"
-        Me.txt_PsiLG.Size = New System.Drawing.Size(58, 20)
-        Me.txt_PsiLG.TabIndex = 107
-        Me.txt_PsiLG.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'img_PsiLG
-        '
-        Me.img_PsiLG.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_PsiLG.Location = New System.Drawing.Point(563, 27)
-        Me.img_PsiLG.Name = "img_PsiLG"
-        Me.img_PsiLG.Size = New System.Drawing.Size(46, 20)
-        Me.img_PsiLG.TabIndex = 108
-        Me.img_PsiLG.TabStop = False
-        '
-        'lbl_CreepMultiplier
-        '
-        Me.lbl_CreepMultiplier.AutoSize = True
-        Me.lbl_CreepMultiplier.Location = New System.Drawing.Point(39, 30)
-        Me.lbl_CreepMultiplier.Name = "lbl_CreepMultiplier"
-        Me.lbl_CreepMultiplier.Size = New System.Drawing.Size(92, 13)
-        Me.lbl_CreepMultiplier.TabIndex = 106
-        Me.lbl_CreepMultiplier.Text = "lbl_CreepMultiplier"
-        '
-        'lbl_LoadCases
-        '
-        Me.lbl_LoadCases.AutoSize = True
-        Me.lbl_LoadCases.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_LoadCases.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_LoadCases.Location = New System.Drawing.Point(5, 5)
-        Me.lbl_LoadCases.Name = "lbl_LoadCases"
-        Me.lbl_LoadCases.Size = New System.Drawing.Size(76, 13)
-        Me.lbl_LoadCases.TabIndex = 105
-        Me.lbl_LoadCases.Text = "lbl_LoadCases"
-        Me.lbl_LoadCases.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'lbl_TimeT0
-        '
-        Me.lbl_TimeT0.AutoSize = True
-        Me.lbl_TimeT0.Location = New System.Drawing.Point(39, 81)
-        Me.lbl_TimeT0.Name = "lbl_TimeT0"
-        Me.lbl_TimeT0.Size = New System.Drawing.Size(59, 13)
-        Me.lbl_TimeT0.TabIndex = 130
-        Me.lbl_TimeT0.Text = "lbl_TimeT0"
-        '
-        'lbl_Dalle
-        '
-        Me.lbl_Dalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_Dalle.AutoSize = True
-        Me.lbl_Dalle.Location = New System.Drawing.Point(530, 81)
-        Me.lbl_Dalle.Name = "lbl_Dalle"
-        Me.lbl_Dalle.Size = New System.Drawing.Size(47, 13)
-        Me.lbl_Dalle.TabIndex = 131
-        Me.lbl_Dalle.Text = "lbl_Dalle"
-        '
-        'lbl_Enrobage
-        '
-        Me.lbl_Enrobage.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_Enrobage.AutoSize = True
-        Me.lbl_Enrobage.Location = New System.Drawing.Point(607, 81)
-        Me.lbl_Enrobage.Name = "lbl_Enrobage"
-        Me.lbl_Enrobage.Size = New System.Drawing.Size(69, 13)
-        Me.lbl_Enrobage.TabIndex = 132
-        Me.lbl_Enrobage.Text = "lbl_Enrobage"
-        '
-        'txt_t0G1Enrob
-        '
-        Me.txt_t0G1Enrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_t0G1Enrob.Location = New System.Drawing.Point(612, 97)
-        Me.txt_t0G1Enrob.Name = "txt_t0G1Enrob"
-        Me.txt_t0G1Enrob.Size = New System.Drawing.Size(58, 20)
-        Me.txt_t0G1Enrob.TabIndex = 133
-        Me.txt_t0G1Enrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_t0G1Dalle
-        '
-        Me.txt_t0G1Dalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_t0G1Dalle.Location = New System.Drawing.Point(523, 97)
-        Me.txt_t0G1Dalle.Name = "txt_t0G1Dalle"
-        Me.txt_t0G1Dalle.Size = New System.Drawing.Size(58, 20)
-        Me.txt_t0G1Dalle.TabIndex = 134
-        Me.txt_t0G1Dalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_t0G2Dalle
-        '
-        Me.txt_t0G2Dalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_t0G2Dalle.Location = New System.Drawing.Point(523, 119)
-        Me.txt_t0G2Dalle.Name = "txt_t0G2Dalle"
-        Me.txt_t0G2Dalle.Size = New System.Drawing.Size(58, 20)
-        Me.txt_t0G2Dalle.TabIndex = 136
-        Me.txt_t0G2Dalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_t0G2Enrob
-        '
-        Me.txt_t0G2Enrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_t0G2Enrob.Location = New System.Drawing.Point(612, 119)
-        Me.txt_t0G2Enrob.Name = "txt_t0G2Enrob"
-        Me.txt_t0G2Enrob.Size = New System.Drawing.Size(58, 20)
-        Me.txt_t0G2Enrob.TabIndex = 135
-        Me.txt_t0G2Enrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_t0SHDalle
-        '
-        Me.txt_t0SHDalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_t0SHDalle.Location = New System.Drawing.Point(523, 141)
-        Me.txt_t0SHDalle.Name = "txt_t0SHDalle"
-        Me.txt_t0SHDalle.Size = New System.Drawing.Size(58, 20)
-        Me.txt_t0SHDalle.TabIndex = 138
-        Me.txt_t0SHDalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'txt_t0SHEnrob
-        '
-        Me.txt_t0SHEnrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_t0SHEnrob.Location = New System.Drawing.Point(612, 141)
-        Me.txt_t0SHEnrob.Name = "txt_t0SHEnrob"
-        Me.txt_t0SHEnrob.Size = New System.Drawing.Size(58, 20)
-        Me.txt_t0SHEnrob.TabIndex = 137
-        Me.txt_t0SHEnrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'etq_UnitJour1
-        '
-        Me.etq_UnitJour1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitJour1.AutoSize = True
-        Me.etq_UnitJour1.Location = New System.Drawing.Point(587, 100)
-        Me.etq_UnitJour1.Name = "etq_UnitJour1"
-        Me.etq_UnitJour1.Size = New System.Drawing.Size(9, 13)
-        Me.etq_UnitJour1.TabIndex = 139
-        Me.etq_UnitJour1.Text = "j"
-        '
-        'etq_UnitJour3
-        '
-        Me.etq_UnitJour3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitJour3.AutoSize = True
-        Me.etq_UnitJour3.Location = New System.Drawing.Point(587, 122)
-        Me.etq_UnitJour3.Name = "etq_UnitJour3"
-        Me.etq_UnitJour3.Size = New System.Drawing.Size(9, 13)
-        Me.etq_UnitJour3.TabIndex = 140
-        Me.etq_UnitJour3.Text = "j"
-        '
-        'etq_UnitJour5
-        '
-        Me.etq_UnitJour5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitJour5.AutoSize = True
-        Me.etq_UnitJour5.Location = New System.Drawing.Point(587, 144)
-        Me.etq_UnitJour5.Name = "etq_UnitJour5"
-        Me.etq_UnitJour5.Size = New System.Drawing.Size(9, 13)
-        Me.etq_UnitJour5.TabIndex = 141
-        Me.etq_UnitJour5.Text = "j"
-        '
-        'etq_UnitJour6
-        '
-        Me.etq_UnitJour6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitJour6.AutoSize = True
-        Me.etq_UnitJour6.Location = New System.Drawing.Point(674, 144)
-        Me.etq_UnitJour6.Name = "etq_UnitJour6"
-        Me.etq_UnitJour6.Size = New System.Drawing.Size(9, 13)
-        Me.etq_UnitJour6.TabIndex = 144
-        Me.etq_UnitJour6.Text = "j"
-        '
-        'etq_UnitJour4
-        '
-        Me.etq_UnitJour4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitJour4.AutoSize = True
-        Me.etq_UnitJour4.Location = New System.Drawing.Point(674, 122)
-        Me.etq_UnitJour4.Name = "etq_UnitJour4"
-        Me.etq_UnitJour4.Size = New System.Drawing.Size(9, 13)
-        Me.etq_UnitJour4.TabIndex = 143
-        Me.etq_UnitJour4.Text = "j"
-        '
-        'etq_UnitJour2
-        '
-        Me.etq_UnitJour2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitJour2.AutoSize = True
-        Me.etq_UnitJour2.Location = New System.Drawing.Point(674, 100)
-        Me.etq_UnitJour2.Name = "etq_UnitJour2"
-        Me.etq_UnitJour2.Size = New System.Drawing.Size(9, 13)
-        Me.etq_UnitJour2.TabIndex = 142
-        Me.etq_UnitJour2.Text = "j"
-        '
-        'lbl_G1
-        '
-        Me.lbl_G1.AutoSize = True
-        Me.lbl_G1.Location = New System.Drawing.Point(237, 100)
-        Me.lbl_G1.Name = "lbl_G1"
-        Me.lbl_G1.Size = New System.Drawing.Size(37, 13)
-        Me.lbl_G1.TabIndex = 145
-        Me.lbl_G1.Text = "lbl_G1"
-        '
-        'lbl_G2
-        '
-        Me.lbl_G2.AutoSize = True
-        Me.lbl_G2.Location = New System.Drawing.Point(237, 122)
-        Me.lbl_G2.Name = "lbl_G2"
-        Me.lbl_G2.Size = New System.Drawing.Size(37, 13)
-        Me.lbl_G2.TabIndex = 146
-        Me.lbl_G2.Text = "lbl_G2"
-        '
-        'lbl_SH
-        '
-        Me.lbl_SH.AutoSize = True
-        Me.lbl_SH.Location = New System.Drawing.Point(237, 144)
-        Me.lbl_SH.Name = "lbl_SH"
-        Me.lbl_SH.Size = New System.Drawing.Size(38, 13)
-        Me.lbl_SH.TabIndex = 147
-        Me.lbl_SH.Text = "lbl_SH"
-        '
-        'img_T0G1
-        '
-        Me.img_T0G1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_T0G1.Location = New System.Drawing.Point(476, 97)
-        Me.img_T0G1.Name = "img_T0G1"
-        Me.img_T0G1.Size = New System.Drawing.Size(46, 20)
-        Me.img_T0G1.TabIndex = 148
-        Me.img_T0G1.TabStop = False
-        '
-        'img_T0G2
-        '
-        Me.img_T0G2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_T0G2.Location = New System.Drawing.Point(476, 119)
-        Me.img_T0G2.Name = "img_T0G2"
-        Me.img_T0G2.Size = New System.Drawing.Size(46, 20)
-        Me.img_T0G2.TabIndex = 149
-        Me.img_T0G2.TabStop = False
-        '
-        'img_T0SH
-        '
-        Me.img_T0SH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_T0SH.Location = New System.Drawing.Point(476, 141)
-        Me.img_T0SH.Name = "img_T0SH"
-        Me.img_T0SH.Size = New System.Drawing.Size(46, 20)
-        Me.img_T0SH.TabIndex = 150
-        Me.img_T0SH.TabStop = False
-        '
         'Frm_OptionsCalculCalcul
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -761,6 +761,13 @@ Partial Class Frm_OptionsCalculCalcul
         Me.TLpan_Conteneur.ResumeLayout(False)
         Me.pan_Conteneur.ResumeLayout(False)
         Me.pan_Conteneur.PerformLayout()
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
+        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_PsiLSH, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_PsiLG, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
         CType(Me.img_NbNodes2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -770,13 +777,6 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel1.PerformLayout()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel3.ResumeLayout(False)
-        Me.Panel3.PerformLayout()
-        CType(Me.img_PsiLSH, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_PsiLG, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

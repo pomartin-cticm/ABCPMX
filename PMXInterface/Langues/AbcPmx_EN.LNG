@@ -37,6 +37,19 @@ SLIMFLOORSAB			= Non composite slim floor SAB
 SLIMFLOORSABCOMPO		= Composite slim floor SAB
 
 
+#FRM_BEAMOPTIONS
+TITLE					= Calculation options
+OK						= Ok
+CANCEL					= Cancel
+TSTANDARD				= Standard
+ENGEN1					= First generation of Eurocodes
+ENGEN2					= Second generation of Eurocodes (drafts)
+TELUOPTIONS				= Options at Ultimate Limit States
+TELSOPTIONS				= Options at Serviceability Limit States
+ELASTICDESIGN			= Elastic design of sections
+NORMALDESIGN			= Design of sections according to their class
+
+
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
 FIRST					= First page

@@ -250,3 +250,12 @@ SECTION					= Section
 SPAN					= Span
 POSITION				= Position
 CRITERIA_TRANSREBAR		= Transverse reinforcements
+
+#NDC_VERIFICATIONSSLS
+SLS_CHECKS				= Serviceability Limit States
+DEFLECTIONS				= Deflections
+DEFLECTIONS_LOADCASES	= Under elementary load cases
+DEFLECTIONS_COMBI		= Under SLS combinations
+LOADCASE				= Load case
+SPAN					= Span
+

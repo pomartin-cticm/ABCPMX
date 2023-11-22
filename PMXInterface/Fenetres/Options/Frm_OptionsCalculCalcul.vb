@@ -332,6 +332,7 @@ Public Class Frm_OptionsCalculCalcul
         Return lOk
     End Function
 
+
 #End Region
 
 End Class

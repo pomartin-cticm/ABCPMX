@@ -355,6 +355,7 @@ Module Mod_Declarations
         Main
         Maintiens
         Options
+        OptionsCalculPoutre
         Portees
         PPCasDeCharge
         PPCombinaison

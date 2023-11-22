@@ -71,6 +71,8 @@ Partial Class Frm_PMX
         Me.TSGestionImagePoutre = New System.Windows.Forms.ToolStrip()
         Me.TSbtn_ZoomPlus = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_ZoomMoins = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TSbtn_ExpertMode = New System.Windows.Forms.ToolStripButton()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
         Me.TLPan_Menus = New System.Windows.Forms.TableLayoutPanel()
@@ -137,8 +139,8 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_ExpertMode = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TSbtn_OptionsCalculPoutre = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -336,7 +338,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Poutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Poutre.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.TSbtn_Hivoss, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PostT, Me.TSbtn_PPVerifications, Me.ToolStripSeparator2, Me.TSbtn_NdcPoutre})
+        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.ToolStripSeparator5, Me.TSbtn_OptionsCalculPoutre, Me.TSbtn_Hivoss, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PostT, Me.TSbtn_PPVerifications, Me.ToolStripSeparator2, Me.TSbtn_NdcPoutre})
         Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
         Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -624,6 +626,20 @@ Partial Class Frm_PMX
         Me.TSbtn_ZoomMoins.Name = "TSbtn_ZoomMoins"
         Me.TSbtn_ZoomMoins.Size = New System.Drawing.Size(23, 22)
         Me.TSbtn_ZoomMoins.Text = "TSbtn_ZoomMoins"
+        '
+        'ToolStripSeparator4
+        '
+        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
+        '
+        'TSbtn_ExpertMode
+        '
+        Me.TSbtn_ExpertMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_ExpertMode.Image = CType(resources.GetObject("TSbtn_ExpertMode.Image"), System.Drawing.Image)
+        Me.TSbtn_ExpertMode.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_ExpertMode.Name = "TSbtn_ExpertMode"
+        Me.TSbtn_ExpertMode.Size = New System.Drawing.Size(23, 22)
+        Me.TSbtn_ExpertMode.Text = "ToolStripButton1"
         '
         'TableLayoutPanel1
         '
@@ -1177,19 +1193,19 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
         '
-        'ToolStripSeparator4
+        'ToolStripSeparator5
         '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 31)
         '
-        'TSbtn_ExpertMode
+        'TSbtn_OptionsCalculPoutre
         '
-        Me.TSbtn_ExpertMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_ExpertMode.Image = CType(resources.GetObject("TSbtn_ExpertMode.Image"), System.Drawing.Image)
-        Me.TSbtn_ExpertMode.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_ExpertMode.Name = "TSbtn_ExpertMode"
-        Me.TSbtn_ExpertMode.Size = New System.Drawing.Size(23, 22)
-        Me.TSbtn_ExpertMode.Text = "ToolStripButton1"
+        Me.TSbtn_OptionsCalculPoutre.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_OptionsCalculPoutre.Image = CType(resources.GetObject("TSbtn_OptionsCalculPoutre.Image"), System.Drawing.Image)
+        Me.TSbtn_OptionsCalculPoutre.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_OptionsCalculPoutre.Name = "TSbtn_OptionsCalculPoutre"
+        Me.TSbtn_OptionsCalculPoutre.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_OptionsCalculPoutre.Text = "ToolStripButton1"
         '
         'Frm_PMX
         '
@@ -1352,4 +1368,6 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_EditProfiles As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
     Friend WithEvents TSbtn_ExpertMode As ToolStripButton
+    Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
+    Friend WithEvents TSbtn_OptionsCalculPoutre As ToolStripButton
 End Class
