@@ -280,6 +280,10 @@ Module Mod_NoteCalcul
 
         EditionParametresMaintiens(MyBeam)
 
+        '--[ Etaiement
+
+        If MyBeam.lMixte Then EditionParametresEtaiement(MyBeam)
+
         '--[ Chargements
 
         EditionParametresChargement(MyBeam)
@@ -582,8 +586,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & Bloc("BC_PART_ENC") & TABAFF & "b\-c\= = " & GetStringInUnit(MyBeam.Section.LargeurEnrobagePartielBc, Enu_TypeVariable.Dimension, 4, 0, True))
 
 
-
-
+        '--> Béton
 
         AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
 
@@ -591,7 +594,7 @@ Module Mod_NoteCalcul
         If MyBeam.Section.Enrobage.Beton.lLeger Then
             AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("LIGHTCONCRETE"))
         Else
-            AddLigneNDC(TABW2 & Bloc("TYPE") & TABAFF & Bloc("NORMALCONCRETE"))
+            AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("NORMALCONCRETE"))
         End If
 
         AddLigneNDC(TABW2 & Bloc("CLASS_CONCRETE") & TABAFF & MyBeam.Section.Enrobage.Beton.Classe)
@@ -600,10 +603,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & Bloc("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
         AddLigneNDC(TABW2 & Bloc("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
-
-
-
-
+        '--> Armatures
 
         AddTitreNdC(3, Bloc("GEOM_LONGI_REINF"))
 
@@ -612,10 +612,7 @@ Module Mod_NoteCalcul
 
         AddLigneNDC("\TABLEAU 18")
 
-
-
         InitialiseLigne(6, HLIGNE, True)
-
 
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LAYER"))
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "z\-s\=")
@@ -718,6 +715,8 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(2, Bloc("SLAB"))
 
+        '--> Géométrie
+
         AddTitreNdC(3, Bloc("GEOMETRY_SLAB"))
 
         Select Case MyBeam.Dalle.type
@@ -735,6 +734,7 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & Bloc("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
         End Select
 
+        '--> Béton de la dalle
 
         AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
 
@@ -751,10 +751,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & Bloc("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
         AddLigneNDC(TABW2 & Bloc("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
-
-
-
-
+        '--> Armatures longitudinales
 
         AddTitreNdC(3, Bloc("LONGI_REINFORCEMENTS"))
 
@@ -798,11 +795,13 @@ Module Mod_NoteCalcul
 
         SauteLigne()
         AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
+        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
+        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
+        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
+        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
+        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
+
+        '--> Bac acier
 
         If MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             AddTitreNdC(3, Bloc("PROFILED_STEEL_SH"))
@@ -1001,6 +1000,30 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionParametresEtaiement(MyBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition de l'étaiement d'une poutre mixte
+        '----------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NbBesoinLignes As Integer = 5     ' A ajuster
+
+        '--> Initialisation
+
+        If NbBesoinLignes + nbLignes > MAXLIGNEPPAG Then
+            SautePage()
+        End If
+        AddTitreNdC(2, Bloc("DATAPROPPING"))
+
+        '--> Affichage de l'étaiement
+
+        ' A COMPLETER
+
+    End Sub
+
     Private Sub EditionParametresMaintiens(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
         '   10/07/23 :  Création - Version 1.00 - POM
@@ -1008,7 +1031,25 @@ Module Mod_NoteCalcul
         '   Edition des maintiens latéraux d'une poutre
         '----------------------------------------------------------------------------------------------
 
-        SautePage()
+        '--> Déclaration
+
+        Dim NbBesoinLignes As Integer
+        Dim iTraveeDeb, iTraveeFin As Integer
+
+        '--> Initialisation
+
+        Select Case MyBeam.TypeMaintien
+            Case cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained, cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
+                NbBesoinLignes = 3
+            Case cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained
+                NbBesoinLignes = 5 + MyBeam.NombreTotalMaintiensLateraux
+        End Select
+
+        If NbBesoinLignes + nbLignes > MAXLIGNEPPAG Then
+            SautePage()
+        End If
+
+        '--> Affichage des maitiens latéraux
 
         AddTitreNdC(2, Bloc("LATERALR"))
 
@@ -1029,8 +1070,10 @@ Module Mod_NoteCalcul
 
                 Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
 
+                iTraveeDeb = MyBeam.IndicePremiereTravee
+                iTraveeFin = MyBeam.IndiceDerniereTravee
 
-                For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+                For i As Integer = iTraveeDeb To iTraveeFin
                     For Each maintien In MyBeam.Maintiens(i)
                         InitialiseLigne(3, HLIGNE, True)
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, i)
@@ -1046,18 +1089,26 @@ Module Mod_NoteCalcul
                         End If
                     Next
 
-
                     lDerniereTravee = True
 
-                    If i = MyBeam.IndiceDerniereTravee Then
-                        lDerniereTravee = True
-                    Else
-                        For j As Integer = i + 1 To MyBeam.IndiceDerniereTravee
-                            If MyBeam.Maintiens(j).Count <> 0 Then
-                                lDerniereTravee = False
-                                Exit For
-                            End If
-                        Next
+                    'If i = MyBeam.IndiceDerniereTravee Then
+                    '    lDerniereTravee = True
+                    'Else
+                    '    For j As Integer = i + 1 To MyBeam.IndiceDerniereTravee
+                    '        If MyBeam.Maintiens(j).Count <> 0 Then
+                    '            lDerniereTravee = False
+                    '            Exit For
+                    '        End If
+                    '    Next
+                    'End If
+                    '==POM => eviter les Exit For 
+
+                    If i < iTraveeFin Then
+                        Dim j As Integer = i
+                        Do While (lDerniereTravee) And (j < iTraveeFin)
+                            j += 1
+                            If (MyBeam.Maintiens(j).Count <> 0) Then lDerniereTravee = False
+                        Loop
                     End If
 
                     If Not lDerniereTravee Then
@@ -1071,9 +1122,6 @@ Module Mod_NoteCalcul
 
                 AddLigneNDC(TABW2 & Bloc("WITH"))
                 AddLigneNDC(TABW2 & "x : " & Bloc("X_LOC_RES"))
-
-
-
 
         End Select
 
@@ -1167,64 +1215,64 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionParametresCoefGammaOLD(ByVal MyBeam As cls_Poutre)
-        '----------------------------------------------------------------------------------------------
-        '   10/07/23 :  Création - Version 1.00 - POM
-        '----------------------------------------------------------------------------------------------
-        '   Edition des coefficients partiels
-        '----------------------------------------------------------------------------------------------
+    'Private Sub EditionParametresCoefGammaOLD(ByVal MyBeam As cls_Poutre)
+    '    '----------------------------------------------------------------------------------------------
+    '    '   10/07/23 :  Création - Version 1.00 - POM
+    '    '----------------------------------------------------------------------------------------------
+    '    '   Edition des coefficients partiels
+    '    '----------------------------------------------------------------------------------------------
 
-        '--> Déclaration 
+    '    '--> Déclaration 
 
-        Dim MyGamma As cls_Gamma
-        Const TABEGAL1 As String = "\T30="
-        '--> Initilisation 
+    '    Dim MyGamma As cls_Gamma
+    '    Const TABEGAL1 As String = "\T30="
+    '    '--> Initilisation 
 
-        MyGamma = MyBeam.Param.Gamma.Clone
+    '    MyGamma = MyBeam.Param.Gamma.Clone
 
-        '--> Traitement
+    '    '--> Traitement
 
-        SautePage()
+    '    SautePage()
 
-        AddTitreNdC(2, Bloc("GAMMA"))
+    '    AddTitreNdC(2, Bloc("GAMMA"))
 
-        AddTitreNdC(3, Bloc("LOADING_FACTORS"))
-        AddLigneNDC(TABVAR2 & "\Sg\s\-G,sup\= " & TABEGAL & MyGamma.GammaG_sup)
-        AddLigneNDC(TABVAR2 & "\Sg\s\-G,inf\= " & TABEGAL & MyGamma.GammaG_inf)
-        AddLigneNDC(TABVAR2 & "\Sg\s\-Q\= " & TABEGAL & MyGamma.GammaQ)
+    '    AddTitreNdC(3, Bloc("LOADING_FACTORS"))
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-G,sup\= " & TABEGAL & MyGamma.GammaG_sup)
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-G,inf\= " & TABEGAL & MyGamma.GammaG_inf)
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-Q\= " & TABEGAL & MyGamma.GammaQ)
 
-        AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q1"))
-        AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q1\= " & TABEGAL & MyGamma.Psi0_Q1)
-        AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q1\= " & TABEGAL & MyGamma.Psi1_Q1)
-        AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q1\= " & TABEGAL & MyGamma.Psi2_Q1)
+    '    AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q1"))
+    '    AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q1\= " & TABEGAL & MyGamma.Psi0_Q1)
+    '    AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q1\= " & TABEGAL & MyGamma.Psi1_Q1)
+    '    AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q1\= " & TABEGAL & MyGamma.Psi2_Q1)
 
-        AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q2"))
-        AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q2\= = " & MyGamma.Psi0_Q2)
-        AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q2\= = " & MyGamma.Psi1_Q2)
-        AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q2\= = " & MyGamma.Psi2_Q2)
+    '    AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q2"))
+    '    AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q2\= = " & MyGamma.Psi0_Q2)
+    '    AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q2\= = " & MyGamma.Psi1_Q2)
+    '    AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q2\= = " & MyGamma.Psi2_Q2)
 
-        AddTitreNdC(3, Bloc("STEEL_RES_FACTORS"))
-        AddLigneNDC(TABVAR2 & "\Sg\s\-M0\= = " & MyGamma.GammaM0)
-        AddLigneNDC(TABVAR2 & "\Sg\s\-M1\= = " & MyGamma.GammaM1)
-        AddLigneNDC(TABVAR2 & "\Sg\s\-M2\= = " & MyGamma.GammaM2)
+    '    AddTitreNdC(3, Bloc("STEEL_RES_FACTORS"))
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-M0\= = " & MyGamma.GammaM0)
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-M1\= = " & MyGamma.GammaM1)
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-M2\= = " & MyGamma.GammaM2)
 
-        AddTitreNdC(3, Bloc("SLAB_RES_FACTORS"))
-        AddLigneNDC(TABVAR2 & "\Sg\s\-C\= = " & MyGamma.GammaC)
-        If MyGamma.lGammaV_unique Then
-            AddLigneNDC(TABVAR2 & "\Sg\s\-V\= = " & MyGamma.GammaVs)
-        Else
-            AddLigneNDC(TABVAR2 & "\Sg\s\-Vs\= = " & MyGamma.GammaVs)
-            AddLigneNDC(TABVAR2 & "\Sg\s\-Vc\= = " & MyGamma.GammaVc)
-        End If
-        AddLigneNDC(TABVAR2 & "\Sg\s\-S\= = " & MyGamma.GammaS)
-        AddLigneNDC(TABVAR2 & "\Sg\s\-P\= = " & MyGamma.GammaP)
+    '    AddTitreNdC(3, Bloc("SLAB_RES_FACTORS"))
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-C\= = " & MyGamma.GammaC)
+    '    If MyGamma.lGammaV_unique Then
+    '        AddLigneNDC(TABVAR2 & "\Sg\s\-V\= = " & MyGamma.GammaVs)
+    '    Else
+    '        AddLigneNDC(TABVAR2 & "\Sg\s\-Vs\= = " & MyGamma.GammaVs)
+    '        AddLigneNDC(TABVAR2 & "\Sg\s\-Vc\= = " & MyGamma.GammaVc)
+    '    End If
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-S\= = " & MyGamma.GammaS)
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-P\= = " & MyGamma.GammaP)
 
-        AddTitreNdC(3, Bloc("FIRE_RES_FACTORS"))
-        AddLigneNDC(TABVAR2 & "\Sg\s\-M,fi\= = " & MyGamma.GammaM_fi)
-        AddLigneNDC(TABVAR2 & "\Sg\s\-C,fi\= = " & MyGamma.GammaC_fi)
-        AddLigneNDC(TABVAR2 & "\Sg\s\-V,fi\= = " & MyGamma.GammaV_fi)
+    '    AddTitreNdC(3, Bloc("FIRE_RES_FACTORS"))
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-M,fi\= = " & MyGamma.GammaM_fi)
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-C,fi\= = " & MyGamma.GammaC_fi)
+    '    AddLigneNDC(TABVAR2 & "\Sg\s\-V,fi\= = " & MyGamma.GammaV_fi)
 
-    End Sub
+    'End Sub
 
     Private Sub EditionParametresChargement(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
@@ -2017,7 +2065,7 @@ Module Mod_NoteCalcul
 
             '# BUG
             'If indTravee(0) = indTravee(1) Then
-            'AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(indTravee(0)))
+            '    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(indTravee(0)))
             'Else
             '    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(indTravee(0)) & "/" & CStr(indTravee(1)))
             'End If
@@ -2093,7 +2141,7 @@ Module Mod_NoteCalcul
 
         EditionVerificationsELUSummary(MyBeam)
 
-        '# Calcul détaillé des critères
+        '# Calcul détaillé des critères sous combinaisons ELU
 
         EditionVerificationsELUCombi(MyBeam)
 
@@ -2232,11 +2280,186 @@ Module Mod_NoteCalcul
     End Sub
 
 
+    Private Sub EnteteTableauCriteresELU(MyBeam As cls_Poutre, ByRef NCOL As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entête du tableau des critères ELU par combinaison
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim PostTab As Integer = 20
+        Dim lMultiSpan As Boolean = (MyBeam.NbTravees > 1)
+        Dim lElastic As Boolean = (MyBeam.Param.lElasticDesign)
+
+        '--> Initialisation
+
+        NCOL = 3
+        If lMultiSpan Then NCOL += 1
+        If lElastic Then
+            If MyBeam.lMixte Then
+                If lMultiSpan Then NCOL += 2 Else NCOL += 1
+            End If
+            If MyBeam.lEnrobage Then NCOL += 2
+        End If
+
+        AddLigneNDC("\TABLEAU " & CStr(PostTab))
+
+        '--> Entête
+
+        InitialiseLigne(NCOL, HLIGNEENTETE, False)
+
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "Combi")
+        If lMultiSpan Then
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SPAN"))
+        End If
+
+        If lElastic Then
+            '# Contraintes acier
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,a\=")
+            If MyBeam.lMixte Then
+                '# Contraintes dalle béton
+                AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,c\=")
+                If lMultiSpan Then
+                    '# Contraintes armatures
+                    AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,s\=")
+                End If
+            End If
+
+            If MyBeam.lEnrobage Then
+                '# Contraintes béton enrobage
+                AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,ce\=")
+                '# Contraintes armatures enrobage
+                AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,se\=")
+            End If
+
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-t\s,a\=")
+
+        Else
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        End If
+
+    End Sub
+
+    Private Sub AffichageTableauCriteresELU(MyBeam As cls_Poutre, lMultiSpan As Boolean, ByRef NCOL As Integer, iCombi As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage dans le tableau des critères ELU des résultats pour une combinaison
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iTraveeDeb As Integer = MyBeam.IndicePremiereTravee
+        Dim iTraveeFin As Integer = MyBeam.IndiceDerniereTravee
+        Dim MyBordures(iTraveeFin) As Integer
+        Dim i As Integer
+        Dim lElastic As Boolean = MyBeam.Param.lElasticDesign
+        Dim iNodeD, iNodeF As Integer
+        Dim lMixte As Boolean = MyBeam.lMixte
+        Const iVerif As Integer = 0
+
+        '--> Initialisation
+
+        For i = iTraveeDeb To iTraveeFin
+            MyBordures(i) = Bordures.Gauche + Bordures.Droite
+        Next
+        MyBordures(0) += Bordures.Haut
+        MyBordures(MyBordures.GetUpperBound(0)) += Bordures.Bas
+
+        '--> Traitement
+
+        For i = iTraveeDeb To iTraveeFin
+            iNodeD = MyBeam.Nodes.iNodeExtTrav(i, 0)
+            iNodeF = MyBeam.Nodes.iNodeExtTrav(i, 1)
+
+            InitialiseLigne(NCOL, HLIGNE, False)
+            AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, MyBeam.CombiA_ELU.Symbole(iCombi))
+            If lMultiSpan Then
+                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
+            End If
+            If lElastic Then
+            Else
+                '** Affichage de GammaM
+                If lMixte Then
+                    AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
+                Else
+                    AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
+                End If
+                '** Affichage de GammaV
+                If lMixte Then
+                    AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
+                Else
+                    AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
+                End If
+            End If
+        Next
+
+    End Sub
+
+    Private Sub AffichageCritereELU(Critere As cls_Critere, iNode1 As Integer, iNode2 As Integer, vBordure As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Extraction et affichage de la valeur d'un critère sur une travée
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim ValCrit As Decimal
+        Dim iNodeM As Integer
+        Dim lMaxi As Boolean
+
+        Dim StyleG As String = ""
+        Dim StyleGFin As String = ""
+
+        '--> Initialisation
+
+        Critere.EnveloppeCritereTravee(iNode1, iNode2, ValCrit, iNodeM)
+        lMaxi = IsEqual(ValCrit, Critere.CritereMax)
+        If lMaxi Then
+            StyleG = "\G"
+            StyleGFin = "\g"
+        End If
+
+        '--> Affichage
+
+        AddCellule(LC3, vBordure, PositionTexteInCell.Centre, StyleG & GetStringInUnit(ValCrit, Enu_TypeVariable.SansType, 3, 2, False) & " (N" & CStr(iNodeM) & ")" & StyleGFin)
+
+    End Sub
+
     Private Sub EditionVerificationsELUCombi(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage détaillé des critères ELU par combinaison
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim NCOL As Integer
+        Dim iCombi As Integer
+
+        '--> Initialisation
 
         SautePage()
 
         AddTitreNdC(2, BlocELU("ULS_COMBI_CHECK"))
+
+        '--> Tableau
+
+        EnteteTableauCriteresELU(MyBeam, ncol)
+
+        For iCombi = 0 To MyBeam.CombiA_ELU.nbCombi - 1
+            AffichageTableauCriteresELU(MyBeam, (MyBeam.NbTravees > 1), NCOL, iCombi)
+        Next
+
+        FinTableau()
+
+        Exit Sub
+
 
         For i = 0 To MyBeam.CombiA_ELU.nbCombi - 1
             AddTitreNdC(3, BlocELU("ULS_COMBIS") & " " & MyBeam.CombiA_ELU.Symbole(i))

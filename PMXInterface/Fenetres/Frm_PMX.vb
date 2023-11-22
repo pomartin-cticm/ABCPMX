@@ -107,6 +107,7 @@ Public Class Frm_PMX
         End If
         'AfficheFenetreEnCours() 'GuD: A discuter j'ai un doute (31/08/2023), cela ouvrait directement 
         MAJToolBarPoutre()
+        MAJI_BOBasse()
 
     End Sub
 
@@ -734,9 +735,17 @@ Public Class Frm_PMX
 
     End Sub
 
+    Private Sub MAJI_BOBasse()
+
+        Me.TSbtn_ExpertMode.Visible = LogicielOptions.lExpert
+
+    End Sub
+
+
     Private Sub TSbtn_OptionsLogiciel_Click(sender As Object, e As EventArgs) Handles TSbtn_OptionsLogiciel.Click
 
         Frm_OptionsLogiciel.ShowDialog()
+        MAJI_BOBasse()
 
     End Sub
 
@@ -1179,6 +1188,7 @@ Public Class Frm_PMX
 
         sender.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
 
+        MAJToolBarPoutre()
 
     End Sub
 

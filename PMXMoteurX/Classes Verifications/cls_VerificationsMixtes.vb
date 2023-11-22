@@ -164,7 +164,8 @@
             '# Calcul des propriétés plastiques le long de la barre
 
             MyPoutre.MaillageRConnexion(xMZero, DeltaRd)
-            Me.MaillageProprietesPlastiques(MyPoutre, MEd, DeltaRd, Beff, zANP, mplrd)
+            Exit Sub
+            Me.MaillageProprietesPlastiques(MyPoutre, MEd, DeltaRd, Beff, zANP, MplRd)
 
             '# Classes des sections
 

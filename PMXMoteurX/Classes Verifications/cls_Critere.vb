@@ -75,6 +75,33 @@
 
     End Sub
 
+    Public Sub EnveloppeCritereTravee(iNode1 As Integer, iNode2 As Integer, ByRef CritMax As Decimal, ByRef NodeMax As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Renvoie la valeur max du critère pour une travée (entre deux noeuds)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   iNode1, iNode2  [E] :   Noeuds limite du tronçon à explorer
+        '   CritMax         [S] :   Valeur maxi du critère sur le tronçon
+        '   NodeMax         [S] :   Indice du noeud donnant la valeur maxi
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Initialisation
+
+        CritMax = Me.Critere(iNode1)
+        NodeMax = iNode1
+
+        '--> Recherche
+
+        For i As Integer = iNode1 + 1 To iNode2
+            If Me.Critere(i) > CritMax Then
+                CritMax = Me.Critere(i)
+                NodeMax = i
+            End If
+        Next
+
+    End Sub
+
 #End Region
 
 End Class

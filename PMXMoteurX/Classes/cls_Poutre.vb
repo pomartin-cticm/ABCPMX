@@ -509,6 +509,21 @@ Public Class cls_Poutre
 #Region " Outils divers "
 
     ''' <summary>
+    ''' Renvoie le nombre total de maitiens latéraux sur la poutre
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property NombreTotalMaintiensLateraux As Integer
+        Get
+            Dim Nombre As Integer = 0
+            Dim iTravee As Integer
+            For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+                Nombre += Me.Maintiens(iTravee).Count
+            Next
+            Return Nombre
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Largeur surlaquelle sont appliquée les charges surfaciques
     ''' </summary>
     ''' <returns></returns>

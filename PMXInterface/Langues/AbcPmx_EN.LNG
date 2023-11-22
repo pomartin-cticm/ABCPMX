@@ -339,6 +339,13 @@ RESULTS					= Results
 AGET					= Age of concrete
 AGET0					= Age of concrete at loading
 CONCRETE				= Concrete class
+NOTIONALSIZE			= Notional size of the concrete element
+COEFANNEXB				= Coefficients / Annex B EN 1992-1-1
+LONGTERM_N				= Modular ratio for permanent loads
+SHORTTERM_N				= Modular ratio for live loads
+RCOMPRESSION			= Resistances to compression
+RTENSION				= Resistance to tension
+
 
 #FRM_OUVERTURE
 BROWSEFILES				= Browse

@@ -113,15 +113,23 @@ Public Class Frm_ModularRatio
                 Me.btn_Annuler.Text = Bloc("CANCEL")
                 Me.btn_OK.Text = Bloc("CLOSE")
 
+                Me.lbl_Parameters.Text = Bloc("PARAMETERS")
                 Me.lbl_Beton.Text = Bloc("CONCRETE")
                 Me.lbl_PsiL.Text = Bloc("PSIL")
                 Me.lbl_RelativeRH.Text = Bloc("RELATIVEHUMIDITY")
                 Me.lbl_AgeT.Text = Bloc("AGET")
                 Me.lbl_AgeT0.Text = Bloc("AGET0")
+                Me.lbl_DimensionH0.Text = Bloc("NOTIONALSIZE")
 
                 Me.lbl_PropBeton.Text = Bloc("CONCRETEPROP")
+                Me.lbl_ResistanceCompression.Text = Bloc("RCOMPRESSION")
+                Me.lbl_ResistanceTraction.Text = Bloc("RTENSION")
 
                 Me.lbl_Resultats.Text = Bloc("RESULTS")
+                Me.lbl_CoefLongTerme.Text = Bloc("LONGTERM_N")
+                Me.lbl_CoefCourtTerme.Text = Bloc("SHORTTERM_N")
+
+                Me.lbl_CoefficientAnnexB.Text = Bloc("COEFANNEXB")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_ModularRatio/GestionLangue")
@@ -149,10 +157,24 @@ Public Class Frm_ModularRatio
         Me.lbl_Resultats.BackColor = CouleurBackBandeaux
         Me.lbl_Resultats.ForeColor = CouleurForeBandeaux
 
+        Me.lbl_CoefficientAnnexB.BackColor = CouleurBackBandeaux
+        Me.lbl_CoefficientAnnexB.ForeColor = CouleurForeBandeaux
+
+
         PrepareTextBoxDipo(Me.txt_Ecm, False)
         PrepareTextBoxDipo(Me.txt_Fck, False)
         PrepareTextBoxDipo(Me.txt_Fcm, False)
         PrepareTextBoxDipo(Me.txt_Fctm, False)
+
+        PrepareTextBoxDipo(Me.txt_BetaC, False)
+        PrepareTextBoxDipo(Me.txt_BetaFcm, False)
+        PrepareTextBoxDipo(Me.txt_BetaT0, False)
+        PrepareTextBoxDipo(Me.txt_Phi0, False)
+        PrepareTextBoxDipo(Me.txt_PhiRH, False)
+        PrepareTextBoxDipo(Me.txt_PhiT, False)
+
+        PrepareTextBoxDipo(Me.txt_n0, False)
+        PrepareTextBoxDipo(Me.txt_nL, False)
 
     End Sub
 
@@ -170,9 +192,9 @@ Public Class Frm_ModularRatio
         MonBeton.Calcul_Proprietes()
 
         Me.txt_Ecm.Text = GetStringInUnit(MonBeton.Ecm, Enu_TypeVariable.ContrainteGPa, 4, 3, False)
-        Me.txt_Fck.Text = GetStringInUnit(MonBeton.Fck, Enu_TypeVariable.ContrainteMPa, 3, 0, False)
-        Me.txt_Fcm.Text = GetStringInUnit(MonBeton.Fcm, Enu_TypeVariable.ContrainteMPa, 3, 0, False)
-        Me.txt_Fctm.Text = GetStringInUnit(MonBeton.Fctm, Enu_TypeVariable.ContrainteMPa, 3, 0, False)
+        Me.txt_Fck.Text = GetStringInUnit(MonBeton.Fck, Enu_TypeVariable.ContrainteMPa, 3, 2, False)
+        Me.txt_Fcm.Text = GetStringInUnit(MonBeton.Fcm, Enu_TypeVariable.ContrainteMPa, 3, 2, False)
+        Me.txt_Fctm.Text = GetStringInUnit(MonBeton.Fctm, Enu_TypeVariable.ContrainteMPa, 3, 2, False)
 
     End Sub
 
@@ -185,6 +207,30 @@ Public Class Frm_ModularRatio
 
         Me.txt_n0.Text = GetStringInUnit(n0, Enu_TypeVariable.SansType, 3, 2, False)
         Me.txt_nL.Text = GetStringInUnit(nL, Enu_TypeVariable.SansType, 3, 2, False)
+
+        Dim PhiRH As Decimal = MonBeton.PhiRH(RH, RayonH0)
+
+        Me.txt_PhiRH.Text = GetStringInUnit(PhiRH, Enu_TypeVariable.SansType, 3, 2, False)
+
+        Dim BetaFcm As Decimal = MonBeton.BetaFcm
+
+        Me.txt_BetaFcm.Text = GetStringInUnit(BetaFcm, Enu_TypeVariable.SansType, 3, 2, False)
+
+        Dim BetaT0 As Decimal = MonBeton.Beta_t0(AgeT0)
+
+        Me.txt_BetaT0.Text = GetStringInUnit(BetaT0, Enu_TypeVariable.SansType, 3, 2, False)
+
+        Dim Phi0 As Decimal = PhiRH * BetaFcm * BetaT0
+
+        Me.txt_Phi0.Text = GetStringInUnit(Phi0, Enu_TypeVariable.SansType, 3, 2, False)
+
+        Dim BetaC As Decimal = MonBeton.BetaC_tt0(RH, RayonH0, AgeT, AgeT0)
+
+        Me.txt_BetaC.Text = GetStringInUnit(BetaC, Enu_TypeVariable.SansType, 3, 2, False)
+
+        Dim PhiT As Decimal = Phi0 * BetaC
+
+        Me.txt_PhiT.Text = GetStringInUnit(PhiT, Enu_TypeVariable.SansType, 3, 2, False)
 
     End Sub
 
@@ -218,12 +264,78 @@ Public Class Frm_ModularRatio
     Private Sub txt_Age_TextChanged(sender As Object, e As EventArgs) Handles txt_AgeT.TextChanged, txt_AgeT0.TextChanged
         If lBuild Then Exit Sub
 
+        Dim Valeur As Decimal
+
+        If VerificationSaisie(sender, Valeur) Then
+
+            Select Case sender.name
+                Case Me.txt_AgeT.Name
+                    AgeT = Valeur
+                Case Me.txt_AgeT0.Name
+                    AgeT0 = Valeur
+            End Select
+        End If
+        MAJI_Coefficients()
     End Sub
+
+    Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
+
+        '-- Déclaration - Initialisation
+
+        Dim lOk As Boolean = True
+        ErrorProvider.Clear()
+
+        Dim iErreur As Integer
+        Dim ValMin, ValMax As Decimal
+        Dim lValMax As Boolean = True
+        Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+
+        Select Case MyTxt.Name
+
+            Case Me.txt_AgeT.Name
+                ValMin = AgeT0 + 1
+                lValMax = False
+
+            Case Me.txt_AgeT0.Name
+                ValMin = 1
+                ValMax = AgeT - 1
+                lValMax = True
+
+            Case Me.txt_H0.Name
+                ValMin = 0.02 / kUnit
+                lValMax = False
+        End Select
+
+        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+
+        If iErreur <> 0 Then
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+        Else
+            ValeurUI = TraiteReal(MyTxt.Text) * kUnit
+            ErrorProvider.Clear()
+        End If
+
+        lOk = (iErreur = 0)
+        Return lOk
+
+    End Function
 
     Private Sub txt_H0_TextChanged(sender As Object, e As EventArgs) Handles txt_H0.TextChanged
 
         If lBuild Then Exit Sub
 
+        Dim Valeur As Decimal
+
+        If VerificationSaisie(sender, Valeur) Then
+
+            Select Case sender.name
+                Case Me.txt_H0.Name
+                    RayonH0 = Valeur
+
+            End Select
+        End If
+
+        MAJI_Coefficients()
     End Sub
 
 

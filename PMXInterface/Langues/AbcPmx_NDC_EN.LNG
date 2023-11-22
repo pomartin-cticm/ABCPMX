@@ -217,6 +217,7 @@ GSTEELB					= Steel beam
 ULS						= ULS
 SLS						= SLS
 FLS						= FLS
+DATAPROPPING			= Propping
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties
