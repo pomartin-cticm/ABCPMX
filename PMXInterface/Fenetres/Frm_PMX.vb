@@ -240,6 +240,8 @@ Public Class Frm_PMX
                 Me.TSbtn_Chargements.ToolTipText = Bloc("TSBLOADS")
                 Me.TSbtn_Combinaisons.ToolTipText = Bloc("TSBCOMBINATIONS")
                 Me.TSbtn_Gamma.ToolTipText = Bloc("TSBGAMMA")
+
+                Me.TSbtn_OptionsCalculPoutre.ToolTipText = Bloc("TSOPTIONS")
                 Me.TSbtn_Hivoss.ToolTipText = Bloc("TSBHIVOSS")
                 Me.TSbtn_OptionsIncendie.ToolTipText = Bloc("TSBOPTIONSINCENDIE")
                 Me.TSbtn_NdcPoutre.ToolTipText = Bloc("TSBNDCPOUTRE")

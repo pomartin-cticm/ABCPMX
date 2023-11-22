@@ -2476,6 +2476,22 @@ Public Class cls_Poutre
 
     End Sub
 
+    Private Sub InitialiseRetraitEnrobage(ByRef MyCas As cls_CasDeCharge)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Préparation du cas de charge "Retrait" de l'enrobage pour les poutres partiellement enrobées
+        '-------------------------------------------------------------------------------------------
+        '   MyCas       [S] :   Cas de charge
+        '-------------------------------------------------------------------------------------------
+
+        '/!\
+
+        '=== JE pense qu'il n'y a pas de retrait dans l'enrobage
+
+
+    End Sub
+
     Private Sub InitialiseChargesRetraitDalle(ByRef MyCas As cls_CasDeCharge)
         '-------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
@@ -2792,7 +2808,7 @@ Public Class cls_Poutre
             Me.indiceCasRetrait = Me.ChargesA.Count - 1
         End If
 
-        If lEnrob Then
+        If lEnrob And Me.Param.lRetraitEnrobage Then
             Me.ChargesA.Add(New cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Retrait, pEtatDalle))
         End If
 
@@ -3189,6 +3205,9 @@ Public Class cls_Poutre
 
         Me.PrepareNodesN(Me.Param.dMaxNodes, Me.Param.nbMinNodesTravee, Me.Param.nbMinNodesConsole)
         Me.InitialiseCasdeChargesCalcul(NomChargesA)
+
+        Me.Dalle.AcierArmatures.Es = Me.Param.ArmaYoung
+        Me.Section.Enrobage.AcierArmatures.Es = Me.Param.ArmaYoung
 
     End Sub
 

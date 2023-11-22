@@ -48,7 +48,13 @@ TELUOPTIONS				= Options at Ultimate Limit States
 TELSOPTIONS				= Options at Serviceability Limit States
 ELASTICDESIGN			= Elastic design of sections
 NORMALDESIGN			= Design of sections according to their class
-
+TCONCRETE				= Properties of concrete
+CONCRETEMSG				= Properties used for composite section (slab or encasement)
+RELATIVEHUMIDITY		= Relative humidity
+SHRINKAGEDEFORMATION	= Deformation of concrete shrinkage
+SHRINKAGETOENCASEMENT	= Shrinkage applied to the concrete of partial encasements
+YOUNGSMODULUSREBAR		= Young's modulus of rebars
+SECTIONSPROP			= Properties of cross-sections
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
@@ -304,8 +310,8 @@ SAVEAS					= Save As
 SECTION					= Section
 SECTIONSLIST			= Sections list
 SUPPORT					= Support
-TECHNICALMANUEL			= Technical manuel
-VALIDATIONMANUEL		= Validation manuel
+TECHNICALMANUEL			= Technical manual
+VALIDATIONMANUEL		= Validation manual
 TSBCONNECTION			= Connection
 TSBMAINTIENS			= Lateral restraints
 TSBENCASEMENT			= Partial encasement
@@ -318,6 +324,7 @@ TSBSPANS				= Spans
 TSBPROPPING				= Propping
 TSBLOADS				= Loads
 TSBCOMBINATIONS			= Combinations
+TSOPTIONS				= Calculation options
 TSBGAMMA				= Partial factors and nationally determined factors
 TSBHIVOSS				= Vibratory comfort of the beam
 TSBOPTIONSINCENDIE		= Fire design options

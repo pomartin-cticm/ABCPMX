@@ -33,6 +33,8 @@ Public Class cls_OptionsCalcul
     Public nbMinNodesConsole As Integer             ' Nombre mini de noeuds par travée console
 
     Public EpsilonSH As Decimal                     ' Valeur de la déformation du béton pour le calcul du retrait
+    Public lRetraitEnrobage As Boolean              ' Indique si on applique le retrait du béton à l'enrobage partiel
+    Public ArmaYoung As Decimal                     ' Limite d'élasticité des armatures
 
     Public GraviteG As Decimal                      ' Accélération gravité
 
@@ -49,89 +51,6 @@ Public Class cls_OptionsCalcul
 #End Region
 
 #Region " Attributs à trier "
-
-    '=== C'est déjà dans la cls_AcierArmatures
-    '''' <summary>
-    '''' Module d'young pour les armatures
-    '''' </summary>
-    'Public ArmaYoung As Decimal
-
-    ''' <summary>
-    ''' Indique si prise en compte des armatures comprimées
-    ''' </summary>
-    Public lArmaComprimee As Boolean
-
-    ''' <summary>
-    ''' Indique si on prend en compte le renformis dans le calcul des propriétés
-    ''' </summary>
-    Public lRenformis As Boolean
-
-    ''' <summary>
-    ''' Degré de connexion ??????
-    ''' </summary>
-    Public Eta As Decimal
-
-    ''' <summary>
-    ''' Indique si on prend en compte l'interaction MV pour le calcul plastique
-    ''' </summary>
-    Public lInterActionMV As Boolean
-
-    ''' <summary>
-    ''' Effort tranchant pour la prise en compte de l'interaction MV
-    ''' </summary>
-    Public VEd As Decimal
-
-    ''' <summary>
-    ''' Calcul en flexion positive
-    ''' </summary>
-    Public lCalcul_Flexion_Positive As Boolean
-
-    ''' <summary>
-    ''' Calcul en flexion négative
-    ''' </summary>
-    Public lCalcul_Flexion_Negative As Boolean
-
-    ''' <summary>
-    ''' Prise en compte ou non des charges permanentes pour le calcul élastique (coef d'équivalence)
-    ''' </summary>
-    Public lChargesPermanentes As Boolean
-
-    ''' <summary>
-    ''' Prise en compte ou non du retrait pour le calcul élastique (coef d'équivalence)
-    ''' </summary>
-    Public lChargesRetrait As Boolean
-
-    ''' <summary>
-    ''' Prise en compte ou non des charges d'exploitation pour le calcul élastique (coef d'équivalence)
-    ''' </summary>
-    Public lChargesExploitation As Boolean
-
-    ''' <summary>
-    ''' Prise en compte d'une valeur personnalisée du coef d'équivalence
-    ''' </summary>
-    Public lChargesCustom As Boolean
-
-    ''' <summary>
-    ''' Valeur personnalisée du coefficient d'équivalence
-    ''' </summary>
-    Public NeqCustom As Decimal
-
-    '''' <summary>
-    '''' Propriétés élastiques par rapport au béton de l'enrobage
-    '''' </summary>
-    'Public Prop_Elastique_Enrobage As New Cls_Prop_Elastique
-
-    '''' <summary>
-    '''' Propriétés élastiques par rapport au béton de la dalle
-    '''' </summary>
-    'Public Prop_Elastique_Dalle As New Cls_Prop_Elastique
-
-
-
-    ''' <summary>
-    ''' Temps de premier chargement des charges permanentes (0 pour la dalle, 1 pour l'enrobage)
-    ''' </summary>
-    Public t0Permanentes(1) As Decimal
 
 
 
@@ -158,9 +77,11 @@ Public Class cls_OptionsCalcul
         Me.nbMinNodesConsole = 5
 
         Me.lLargeurEfficaceSimplifiee = False
-        Me.lArmaComprimee = False
+        Me.lCompressionArma = False
 
         Me.EpsilonSH = 325 * 10 ^ -6
+        Me.lRetraitEnrobage = False
+        Me.ArmaYoung = 210000
 
         Me.GraviteG = 9.81
 
@@ -175,40 +96,7 @@ Public Class cls_OptionsCalcul
 
         Me.lElasticDesign = False
 
-        Exit Sub
 
-
-        '--> Paramètres de calcul par défaut
-        Me.lCalcul_Flexion_Positive = True
-        Me.lCalcul_Flexion_Negative = False
-
-        '--> Degré de connexion
-        Me.Eta = 1
-
-        ''--> Module d'young des armatures
-        'Me.ArmaYoung = Cls_Acier.EYACIER
-
-        '--> Armatures comprimées
-        Me.lArmaComprimee = False
-
-        '--> Renformis 
-        Me.lRenformis = False
-
-        '--> Interaction MV
-        Me.lInterActionMV = False
-        Me.VEd = 0
-
-        '--> Paramètres pour les coefficients d'équivalence acier béton
-        Me.RH = tabRH(0)
-        Me.t0Permanentes(0) = 28
-        Me.t0Permanentes(1) = 28
-        Me.lChargesRetrait = False
-        Me.lChargesCustom = False
-        Me.lChargesExploitation = True
-        Me.lChargesPermanentes = True
-        Me.NeqCustom = 7
-
-        Me.Norme = Enu_Normes.EurocodesG1
 
     End Sub
 

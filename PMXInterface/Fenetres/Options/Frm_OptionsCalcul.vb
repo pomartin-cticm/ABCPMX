@@ -335,7 +335,7 @@ Public Class Frm_OptionsCalcul
         For i As Integer = 0 To MyProjet.Poutres.Count - 1
             MyProjet.Poutres(i).Dalle.ThetaRd = OptionsScope.ThetaH
             MyProjet.Poutres(i).Param.Norme = OptionsCalcul.Norme
-            MyProjet.Poutres(i).Param.lArmaComprimee = OptionsCalcul.lCompressionArma
+            MyProjet.Poutres(i).Param.lCompressionArma = OptionsCalcul.lCompressionArma
 
             MyProjet.Poutres(i).Param.PsiLPermanent = OptionsCalcul.PsiLPermanent
             MyProjet.Poutres(i).Param.PsiLRetrait = OptionsCalcul.PsiLRetrait

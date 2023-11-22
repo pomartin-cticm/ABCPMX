@@ -410,53 +410,9 @@ Public Class cls_Projet
                 With .Param
 
                     Lines.Add("BLOCK OPT_CALCULS")
-
-                    Lines.Add("   lArmaComp     = " & .lArmaComprimee)
-                    Lines.Add("   lRenformis    = " & .lRenformis)
-                    Lines.Add("   Eta          = " & .Eta)
-                    Lines.Add("   lInterMV      = " & .lInterActionMV)
-                    Lines.Add("   VEd           = " & .VEd)
-                    Lines.Add("   lPosFlexion   = " & .lCalcul_Flexion_Positive)
-                    Lines.Add("   lNegFlexion   = " & .lCalcul_Flexion_Negative)
-
-                    Lines.Add("   lPermCharges  = " & .lChargesPermanentes)
-                    Lines.Add("   lRetrait      = " & .lChargesRetrait)
-                    Lines.Add("   lExplCharges  = " & .lChargesExploitation)
-                    Lines.Add("   lChargesCust  = " & .lChargesCustom)
-                    Lines.Add("   NeqCustom     = " & .NeqCustom)
                     Lines.Add("   RH            = " & .RH)
 
-                    Lines.Add("   t0Permanent   =  " & ConvertListToString(.t0Permanentes))
 
-                    ''==[ Classe Prop Elastique Enrobage ]=================================================================
-                    'With .Prop_Elastique_Enrobage
-                    '    Lines.Add("BLOCK OPT_CALCULS_PROP_ELAST_ENROBAGE")
-
-                    '    Lines.Add("   PEEn_L        = " & .CE_n_L)
-                    '    Lines.Add("   PERH          = " & .RH)
-                    '    Lines.Add("   PEType        = " & .type_def_t)
-                    '    Lines.Add("   PEt           = " & .t)
-                    '    Lines.Add("   PEH0          = " & .h_0)
-                    '    Lines.Add("   PERt0         = " & .R_t_0)
-                    '    Lines.Add("   PERn_L        = " & .R_n_L)
-                    '    Lines.Add("   PEPt0         = " & .CP_t_0)
-                    '    Lines.Add("   PEPn_L        = " & .CP_n_L)
-                    'End With
-
-                    ''==[ Classe Prop Elastique Dalle ]=================================================================
-                    'With .Prop_Elastique_Dalle
-                    '    Lines.Add("BLOCK OPT_CALCULS_PROP_ELAST_DALLE")
-
-                    '    Lines.Add("   PDEn_L        = " & .CE_n_L)
-                    '    Lines.Add("   PDRH          = " & .RH)
-                    '    Lines.Add("   PDType        = " & .type_def_t)
-                    '    Lines.Add("   PDt           = " & .t)
-                    '    Lines.Add("   PDH0          = " & .h_0)
-                    '    Lines.Add("   PDRt0         = " & .R_t_0)
-                    '    Lines.Add("   PDRn_L        = " & .R_n_L)
-                    '    Lines.Add("   PDPt0         = " & .CP_t_0)
-                    '    Lines.Add("   PDPn_L        = " & .CP_n_L)
-                    'End With
                     Lines.Add("")
 
                     '==[ Classe Gamma ]=================================================================
@@ -1588,20 +1544,9 @@ Public Class cls_Projet
 
                 With opt_calculs_en_cours
                     Select Case MotCle
-                        Case "LARMACOMP" : .lArmaComprimee = Mots(nbMots)
-                        Case "LRENFORMIS" : .lRenformis = Mots(nbMots)
-                        Case "ETA" : .Eta = TraiteReal(Mots(nbMots))
-                        Case "LINTERMV" : .lInterActionMV = Mots(nbMots)
-                        Case "VED" : .VEd = TraiteReal(Mots(nbMots))
-                        Case "LPOSFLEXIO" : .lCalcul_Flexion_Positive = Mots(nbMots)
-                        Case "LNEGFLEXIO" : .lCalcul_Flexion_Negative = Mots(nbMots)
-                        Case "LPERMCHARG" : .lChargesPermanentes = Mots(nbMots)
-                        Case "LRETRAIT" : .lChargesRetrait = Mots(nbMots)
-                        Case "LEXPLCHARG" : .lChargesRetrait = Mots(nbMots)
-                        Case "LCHARGESCU" : .lChargesCustom = Mots(nbMots)
-                        Case "NEQCUSTOM" : .NeqCustom = TraiteReal(Mots(nbMots))
+
                         Case "RH" : .RH = TraiteReal(Mots(nbMots))
-                        Case "T0PERMANEN" : .t0Permanentes = ConvertStringToList(Mots(nbMots))
+
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With
