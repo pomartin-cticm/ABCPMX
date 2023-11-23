@@ -349,6 +349,108 @@
 
 #End Region
 
+#Region " Outils pour la méthode Hivoss "
+
+    Public Function InertieTransversaleH(nEq As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   23/11/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Calcul de l'inertie transversale homogénéisée (par unité de largeur)
+        '---------------------------------------------------------------------------------------------------
+        '   nEq     [E] :   Coefficient d'équivalence
+        '---------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pInertieH As Decimal
+
+        '--> Calcul
+
+        Select Case Me.type
+            Case Enum_TypeDalle.Pleine, Enum_TypeDalle.Prefabriquee
+                pInertieH = Me.t_d ^ 3 / 12
+            Case Enum_TypeDalle.Mixte
+                Select Case Me.Bac.Orientation
+                    Case cls_Bac.Enum_Orientation.Parallele
+                        pInertieH = Me.EpaisseurActive ^ 3 / 12
+                    Case cls_Bac.Enum_Orientation.Perpendiculaire
+                        pInertieH = Me.InertieDalleMixteT
+                End Select
+        End Select
+
+        Return pInertieH / nEq
+
+    End Function
+
+    Private Function InertieDalleMixteT() As Decimal
+        '-------------------------------------------------------------------------------------------------
+        '   23/11/23 :  Création - POM - V1
+        '-------------------------------------------------------------------------------------------------
+        '   Calcul de l'inertie d'une dalle mixte dans le sens transversal (partie béton seul)
+        '-------------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Aa(2) As Decimal
+        Dim Zz(2) As Decimal
+        Dim Ii(2) As Decimal
+        Dim nbNerv As Decimal
+        Dim bMin, bMax As Decimal
+        Dim MStat As Decimal = 0
+        Dim Aire As Decimal = 0
+        Dim i As Integer
+        Dim Inertie As Decimal = 0
+        Dim zG As Decimal
+        Dim pTc As Decimal = Me.EpaisseurActive
+
+        '--> Initialisations
+
+        bMin = Math.Min(Me.Bac.Bb, Me.Bac.Bt)
+        bMax = Math.Max(Me.Bac.Bb, Me.Bac.Bt)
+
+        '   Partie pleine de la dalle
+
+        Aa(0) = pTc
+        Ii(0) = (pTc) ^ 3 / 12
+        Zz(0) = pTc / 2
+
+        '   Nervures partie centrale
+
+        nbNerv = 1 / Me.Bac.Ep
+        Aa(1) = nbNerv * bMin * Me.Bac.Hp
+        Zz(1) = Me.Bac.Hp / 2
+        Ii(1) = nbNerv * bMin * Me.Bac.Hp ^ 3 / 12
+
+        '   Nervures partie triangulaire
+
+        Aa(2) = nbNerv * (bMax - bMin) / 2 * Me.Bac.Hp
+        Ii(2) = nbNerv * 2 * (bMax - bMin) / 2 * Me.Bac.Hp ^ 3 / 36
+        If (Me.Bac.Bb > Me.Bac.Bt) Then
+            Zz(2) = pTc + Me.Bac.Hp / 3
+        Else
+            Zz(2) = Me.t_d - Me.Bac.Hp / 3
+        End If
+
+        '--> Calcul
+
+        For i = 0 To 2
+            MStat += Aa(i) * Zz(i)
+            Aire += Aa(i)
+            Inertie += Ii(i)
+        Next
+
+        zG = MStat / Aire
+
+        For i = 0 To 2
+            Inertie += Aa(i) * (Zz(i) - zG) ^ 2
+        Next
+
+        Return Inertie
+    End Function
+
+#End Region
+
 #Region " Constructeur "
 
     Sub New()

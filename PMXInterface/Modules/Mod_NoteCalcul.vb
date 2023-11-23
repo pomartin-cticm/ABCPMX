@@ -73,6 +73,7 @@ Module Mod_NoteCalcul
     Private BlocAnalyse As New Dictionary(Of String, String)
     Private BlocELU As New Dictionary(Of String, String)
     Private BlocELS As New Dictionary(Of String, String)
+    Private BlocHiVoss As New Dictionary(Of String, String)
 
     Private ReadOnly IndTableau As Integer = 0
     Private ReadOnly IndFigure As Integer = 0
@@ -222,13 +223,9 @@ Module Mod_NoteCalcul
 
     Private Sub InitialiseBlocNDC()
         '---------------------------------------------------------------------------------------------------
-        '
-        '   28/02/09 :  Création - Version 1.00 B5 - POM
-        '
+        '   19/06/23 :  Création - Version 1.00 - POM
         '---------------------------------------------------------------------------------------------------
-        '
         '   Initilisation des blocs de la NdC dans la langue d'édition de la Note
-        '
         '---------------------------------------------------------------------------------------------------
 
         Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_MAIN")
@@ -245,6 +242,9 @@ Module Mod_NoteCalcul
 
         BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSSLS")
         BlocLine.CreationBloc(BlocELS)
+
+        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_HIVOSS")
+        BlocLine.CreationBloc(BlocHiVoss)
 
     End Sub
 
@@ -2518,10 +2518,19 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(1, BlocELS("SLS_CHECKS"))
 
+        '# Edition des flèches
+
         EditionELSFleches(MyBeam)
+
+        '# Edtion des fréquences propres
 
         EditionELSFrequencesPropres(MyBeam)
 
+        '# Edition de la méthode Hivoss
+
+        If MyBeam.Param.HivossParam.lHivossMethod Then
+            EditionMethodeHivoss(MyBeam)
+        End If
     End Sub
 
     Private Sub EditionELSFleches(MyBeam As cls_Poutre)
@@ -2546,6 +2555,8 @@ Module Mod_NoteCalcul
         EditionSLSFlechesParCombi(MyBeam)
 
     End Sub
+
+    '=== EDITION DES FREQUENCES PROPRES ==========================================================================================
 
     Private Sub EditionELSFrequencesPropres(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
@@ -2834,6 +2845,145 @@ Module Mod_NoteCalcul
         AddCelluleFond(LargCol(iCell + 1), Bordures.Tous - Bordures.Droite, PositionTexteInCell.Gauche, BlocELS("DEFLECTIONS"))
         AddCelluleFond(LargCol(iCell + 2), Bordures.Tous - Bordures.Gauche, PositionTexteInCell.Centre, "")
 
+
+    End Sub
+
+#End Region
+
+
+#Region "   Edition ELS méthode HIVOSS "
+
+    Private Sub EditionMethodeHivoss(ByVal MyBeam As cls_Poutre) ', ByVal MyFreq(,) As Double, ByVal FlechesCasElem(,) As Double)
+        '----------------------------------------------------------------------------------------------
+        '   23/11/23 :  Création - Version 1 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des résultats de la méthode Hivoss
+        '----------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre traitée
+        '   MyFreq          [E] :   Table des frequences propres pour les combinaisons de masse
+        '   FlecheCasElem   [E] :   Table des flèches verticales sous charges élémentaires
+        '----------------------------------------------------------------------------------------------
+
+        '--[ Déclarations
+
+        Dim AllFloorVibration As New Dictionary(Of Integer, strHivossTable)
+        Const TABVAR As String = " :\T45"
+        Const DFORMAT As String = "0"
+        Dim Frequency, ModalMass As Decimal
+        Dim HResult As String
+        Dim HVal As Decimal
+        Dim Reactions() As Decimal
+        Dim IndConfort As Integer
+        Dim TableConfort(2) As String
+        Dim TableUsage As New List(Of String)
+        Dim lDefini() As Boolean
+        Dim lMixte As Boolean
+        Dim FreqDalle As Decimal
+        Dim FreqBeam As Decimal
+        Dim MySymb As String
+
+        '--[ Titre
+
+        SautePage()
+        AddTitreNdC(2, BlocHiVoss("HIVOSSTITLE"))
+
+        '--[ Initialisations
+
+        lMixte = MyBeam.lMixte
+
+        TableConfort(0) = BlocHiVoss("CRECOMMENDED")
+        TableConfort(1) = BlocHiVoss("CCRITICAL")
+        TableConfort(2) = BlocHiVoss("CNOTRECOMMENDED")
+        TableUsage.Clear()
+        TableUsage.Add(BlocHiVoss("UCRITICAL"))
+        TableUsage.Add(BlocHiVoss("UHOSPITAL"))
+        TableUsage.Add(BlocHiVoss("USCHOOL"))
+        TableUsage.Add(BlocHiVoss("URESIDENTIAL"))
+        TableUsage.Add(BlocHiVoss("UOFFICE"))
+        TableUsage.Add(BlocHiVoss("UMEETING"))
+        TableUsage.Add(BlocHiVoss("USENIOR"))
+        TableUsage.Add(BlocHiVoss("UHOTEL"))
+        TableUsage.Add(BlocHiVoss("UINDUSTRIAL"))
+        TableUsage.Add(BlocHiVoss("USPORTS"))
+
+        MyBeam.Param.HivossParam.CalculAmortissement()
+
+        ChargerValeursHivoss(AllFloorVibration)
+
+        'Frequency = CDec(MyFreq(MyBeam.HivossParam.IndCombiQ, MyBeam.HivossParam.IndChargeQ))
+        'ModalMass = ModalMasses(MyBeam)
+
+        ''--[ Prise en compte de la fréquence propre de dalle pour les poutres mixtes:
+
+        'If lMixte And MyBeam.HivossParam.lFreqDalle And InfoACB.lExpert Then
+        '    FrequenceDalle(MyBeam, FreqDalle)
+        '    FreqBeam = Frequency
+        '    Frequency = CDec(1 / Math.Sqrt(1 / FreqBeam ^ 2 + 1 / FreqDalle ^ 2))
+        'End If
+
+        ''--[ Affichages des données
+
+        'AddLigneNDC(TABW2 & BlocELS("USAGE") & TABVAR & TableUsage(MyBeam.HivossParam.IndUsage))
+        'SauteLigne()
+        'AddLigneNDC(TABW2 & BlocELS("DSTRUC") & TABVAR & "D1 = " & Format(MyBeam.HivossParam.Amortissement(1), DFORMAT) & " %")
+        'AddLigneNDC(TABW2 & BlocELS("DFURNITURE") & TABVAR & "D2 = " & Format(MyBeam.HivossParam.Amortissement(2), DFORMAT) & " %")
+        'AddLigneNDC(TABW2 & BlocELS("DFINISHING") & TABVAR & "D3 = " & Format(MyBeam.HivossParam.Amortissement(3), DFORMAT) & " %")
+        'AddLigneNDC(TABW2 & BlocELS("DTOTAL") & TABVAR & "D = " & Format(MyBeam.HivossParam.Amortissement(0), DFORMAT) & " %")
+
+        'SauteLigne()
+
+        'AddLigneNDC(TABW2 & BlocELS("COMBIMASS") & TABVAR & "G + 0." & Format(MyBeam.HivossParam.IndCombiQ, DFORMAT) & " Q" & Format(MyBeam.HivossParam.IndChargeQ + 1, "0"))
+
+        'MyBeam.ChargementsDefinis(lDefini)
+        'If MyBeam.HivossParam.IndCombiQ > 0 Then
+        '    If lDefini(MyBeam.HivossParam.IndChargeQ + 1) Then
+        '        If Not (FlecheMaxQ(FlechesCasElem, MyBeam.nSec, MyBeam.HivossParam.IndChargeQ + 1) > 0) Then
+        '            AddLigneNDC(TABW2 & RemplaceDollar(BlocELS("WARNNOQ3"), CStr(MyBeam.HivossParam.IndChargeQ + 1)))
+        '            AddLigneNDC(TABW2 & BlocELS("WARNNOQ2"))
+        '        End If
+        '    Else
+        '        AddLigneNDC(TABW2 & RemplaceDollar(BlocELS("WARNNOQ1"), CStr(MyBeam.HivossParam.IndChargeQ + 1)))
+        '        AddLigneNDC(TABW2 & BlocELS("WARNNOQ2"))
+        '    End If
+        'End If
+        ''--[ Affichage des fréquences propres et de la masse modale
+
+        'SauteLigne()
+        'If lMixte And MyBeam.HivossParam.lFreqDalle And InfoACB.lExpert Then
+        '    AddLigneNDC(TABW2 & BlocELS("EIGENFB") & TABVAR & GetStringInUnit(FreqBeam, Enu_TypeVariable.Frequence, 3, 1, True))
+        '    AddLigneNDC(TABW2 & BlocELS("EIGENFS") & TABVAR & GetStringInUnit(FreqDalle, Enu_TypeVariable.Frequence, 3, 1, True))
+        '    AddLigneNDC(TABW2 & BlocELS("EIGENFC") & TABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 1, True))
+        'Else
+        '    AddLigneNDC(TABW2 & BlocELS("EIGENF") & TABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 1, True))
+        'End If
+        'SauteLigne()
+        'AddLigneNDC(TABW2 & BlocELS("MODALMASS") & TABVAR & GetStringInUnit(ModalMass, Enu_TypeVariable.SansDimension, 3, 0, False) & " kg")
+
+        ''--[ Calcul Hivoss
+
+        'CalculMethodHivoss(AllFloorVibration, CInt(MyBeam.HivossParam.Amortissement(0)), CDec(Frequency), CDec(ModalMass), HResult, HVal)
+        'IndConfort = HivossConfortAssessment(MyBeam, HResult)
+
+        'SauteLigne()
+        'If HResult = "A" Then
+        '    MySymb = "<"
+        'ElseIf HResult = "!" Then
+        '    MySymb = ">"
+        'Else
+        '    MySymb = "="
+        'End If
+
+        'AddLigneNDC(TABW2 & BlocELS("OSRMS") & TABVAR & "OS-RMS\-90\= " & MySymb & " " & GetStringInUnit(HVal, Enu_TypeVariable.SansDimension, 3, 1, False) & " m/s")
+        'AddLigneNDC(TABW2 & BlocELS("CPERCEPTION") & TABVAR & HResult)
+        'AddLigneNDC(TABW2 & BlocELS("COMFORTASS") & TABVAR & TableConfort(IndConfort))
+
+        'SautePage()
+
+        'MyNote.AddLigneInRapport("\IMG HIVOSS 5 85 80 NoCadre " _
+        '                       & Format(MyBeam.HivossParam.Amortissement(0), DFORMAT) & " " _
+        '                       & Format(Frequency, "0.00") & " " _
+        '                       & Format(ModalMass, "0.00") & " " _
+        '                       & BlocELS("DAMPING"))
 
     End Sub
 

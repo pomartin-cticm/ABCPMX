@@ -345,6 +345,7 @@
     <Compile Include="Modules\Mod_Declarations.vb" />
     <Compile Include="Modules\Mod_Demarrage.vb" />
     <Compile Include="Modules\Mod_Dessins.vb" />
+    <Compile Include="Modules\Mod_MethodeHivoss.vb" />
     <Compile Include="Modules\Mod_NoteCalcul.vb" />
     <Compile Include="Modules\Mod_Outils.vb" />
     <Compile Include="Modules\Mod_OutilsGraph.vb" />
