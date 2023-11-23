@@ -32,6 +32,10 @@ Partial Class Frm_OptionsCalculPoutre
         Me.TLPan_Portees = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.pan_Sections = New System.Windows.Forms.Panel()
+        Me.chk_ArmaComprimees = New System.Windows.Forms.CheckBox()
+        Me.chk_LargeursPartipantesSimples = New System.Windows.Forms.CheckBox()
+        Me.lbl_CadreSections = New System.Windows.Forms.Label()
         Me.lbl_CadreBeton = New System.Windows.Forms.Label()
         Me.pan_OptionsELS = New System.Windows.Forms.Panel()
         Me.lbl_CadreELS = New System.Windows.Forms.Label()
@@ -59,10 +63,38 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_RH = New System.Windows.Forms.Label()
         Me.lbl_BetonMessage = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.lbl_CadreSections = New System.Windows.Forms.Label()
-        Me.pan_Sections = New System.Windows.Forms.Panel()
-        Me.chk_LargeursPartipantesSimples = New System.Windows.Forms.CheckBox()
-        Me.chk_ArmaComprimees = New System.Windows.Forms.CheckBox()
+        Me.lbl_CombinationVibration = New System.Windows.Forms.Label()
+        Me.lbl_CadreParametres = New System.Windows.Forms.Label()
+        Me.pan_Parametres = New System.Windows.Forms.Panel()
+        Me.img_T0SH = New System.Windows.Forms.PictureBox()
+        Me.img_T0G2 = New System.Windows.Forms.PictureBox()
+        Me.img_T0G1 = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitJour6 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour4 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour2 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour5 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour3 = New System.Windows.Forms.Label()
+        Me.etq_UnitJour1 = New System.Windows.Forms.Label()
+        Me.txt_t0SHDalle = New System.Windows.Forms.TextBox()
+        Me.txt_t0SHEnrob = New System.Windows.Forms.TextBox()
+        Me.txt_t0G2Dalle = New System.Windows.Forms.TextBox()
+        Me.txt_t0G2Enrob = New System.Windows.Forms.TextBox()
+        Me.txt_t0G1Dalle = New System.Windows.Forms.TextBox()
+        Me.txt_t0G1Enrob = New System.Windows.Forms.TextBox()
+        Me.lbl_Enrobage = New System.Windows.Forms.Label()
+        Me.lbl_Dalle = New System.Windows.Forms.Label()
+        Me.lbl_TimeT0 = New System.Windows.Forms.Label()
+        Me.lbl_SH = New System.Windows.Forms.Label()
+        Me.lbl_G2 = New System.Windows.Forms.Label()
+        Me.lbl_G1 = New System.Windows.Forms.Label()
+        Me.lbl_AgeT = New System.Windows.Forms.Label()
+        Me.img_AgeT = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitJour7 = New System.Windows.Forms.Label()
+        Me.txt_AgeT = New System.Windows.Forms.TextBox()
+        Me.img_G = New System.Windows.Forms.PictureBox()
+        Me.cmb_GraviteG = New System.Windows.Forms.ComboBox()
+        Me.lbl_GraviteG = New System.Windows.Forms.Label()
+        Me.etq_UnitG = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -70,6 +102,8 @@ Partial Class Frm_OptionsCalculPoutre
         Me.TLPan_Portees.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
+        Me.pan_Sections.SuspendLayout()
+        Me.pan_OptionsELS.SuspendLayout()
         Me.pan_OptionsELU.SuspendLayout()
         Me.pan_Norm.SuspendLayout()
         Me.pan_Beton.SuspendLayout()
@@ -77,7 +111,12 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_Sections.SuspendLayout()
+        Me.pan_Parametres.SuspendLayout()
+        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_AgeT, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_G, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -187,6 +226,8 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.TLPan_Gauche.ColumnCount = 1
         Me.TLPan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Gauche.Controls.Add(Me.pan_Parametres, 0, 11)
+        Me.TLPan_Gauche.Controls.Add(Me.lbl_CadreParametres, 0, 10)
         Me.TLPan_Gauche.Controls.Add(Me.pan_Sections, 0, 9)
         Me.TLPan_Gauche.Controls.Add(Me.lbl_CadreSections, 0, 8)
         Me.TLPan_Gauche.Controls.Add(Me.lbl_CadreBeton, 0, 6)
@@ -201,7 +242,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.TLPan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
-        Me.TLPan_Gauche.RowCount = 11
+        Me.TLPan_Gauche.RowCount = 13
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -209,12 +250,61 @@ Partial Class Frm_OptionsCalculPoutre
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 180.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 240.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(442, 757)
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(442, 897)
         Me.TLPan_Gauche.TabIndex = 0
+        '
+        'pan_Sections
+        '
+        Me.pan_Sections.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Sections.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Sections.Controls.Add(Me.chk_ArmaComprimees)
+        Me.pan_Sections.Controls.Add(Me.chk_LargeursPartipantesSimples)
+        Me.pan_Sections.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Sections.Location = New System.Drawing.Point(0, 645)
+        Me.pan_Sections.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.pan_Sections.Name = "pan_Sections"
+        Me.pan_Sections.Size = New System.Drawing.Size(442, 69)
+        Me.pan_Sections.TabIndex = 8
+        '
+        'chk_ArmaComprimees
+        '
+        Me.chk_ArmaComprimees.AutoSize = True
+        Me.chk_ArmaComprimees.Location = New System.Drawing.Point(11, 37)
+        Me.chk_ArmaComprimees.Name = "chk_ArmaComprimees"
+        Me.chk_ArmaComprimees.Size = New System.Drawing.Size(131, 17)
+        Me.chk_ArmaComprimees.TabIndex = 116
+        Me.chk_ArmaComprimees.Text = "chk_ArmaComprimees"
+        Me.chk_ArmaComprimees.UseVisualStyleBackColor = True
+        '
+        'chk_LargeursPartipantesSimples
+        '
+        Me.chk_LargeursPartipantesSimples.AutoSize = True
+        Me.chk_LargeursPartipantesSimples.Location = New System.Drawing.Point(11, 14)
+        Me.chk_LargeursPartipantesSimples.Name = "chk_LargeursPartipantesSimples"
+        Me.chk_LargeursPartipantesSimples.Size = New System.Drawing.Size(180, 17)
+        Me.chk_LargeursPartipantesSimples.TabIndex = 115
+        Me.chk_LargeursPartipantesSimples.Text = "chk_LargeursPartipantesSimples"
+        Me.chk_LargeursPartipantesSimples.UseVisualStyleBackColor = True
+        '
+        'lbl_CadreSections
+        '
+        Me.lbl_CadreSections.AutoSize = True
+        Me.lbl_CadreSections.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_CadreSections.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_CadreSections.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_CadreSections.Location = New System.Drawing.Point(0, 615)
+        Me.lbl_CadreSections.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_CadreSections.Name = "lbl_CadreSections"
+        Me.lbl_CadreSections.Size = New System.Drawing.Size(442, 30)
+        Me.lbl_CadreSections.TabIndex = 6
+        Me.lbl_CadreSections.Text = "lbl_CadreSections (8)"
+        Me.lbl_CadreSections.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lbl_CadreBeton
         '
@@ -227,13 +317,14 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreBeton.Name = "lbl_CadreBeton"
         Me.lbl_CadreBeton.Size = New System.Drawing.Size(442, 30)
         Me.lbl_CadreBeton.TabIndex = 6
-        Me.lbl_CadreBeton.Text = "lbl_CadreBeton"
+        Me.lbl_CadreBeton.Text = "lbl_CadreBeton (6)"
         Me.lbl_CadreBeton.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_OptionsELS
         '
         Me.pan_OptionsELS.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_OptionsELS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_OptionsELS.Controls.Add(Me.lbl_CombinationVibration)
         Me.pan_OptionsELS.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_OptionsELS.Location = New System.Drawing.Point(0, 225)
         Me.pan_OptionsELS.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
@@ -252,7 +343,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreELS.Name = "lbl_CadreELS"
         Me.lbl_CadreELS.Size = New System.Drawing.Size(442, 30)
         Me.lbl_CadreELS.TabIndex = 4
-        Me.lbl_CadreELS.Text = "lbl_CadreELS"
+        Me.lbl_CadreELS.Text = "lbl_CadreELS (4)"
         Me.lbl_CadreELS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_OptionsELU
@@ -301,7 +392,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreELU.Name = "lbl_CadreELU"
         Me.lbl_CadreELU.Size = New System.Drawing.Size(442, 30)
         Me.lbl_CadreELU.TabIndex = 2
-        Me.lbl_CadreELU.Text = "lbl_CadreELU"
+        Me.lbl_CadreELU.Text = "lbl_CadreELU (2)"
         Me.lbl_CadreELU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lbl_CadreNorm
@@ -315,7 +406,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreNorm.Name = "lbl_CadreNorm"
         Me.lbl_CadreNorm.Size = New System.Drawing.Size(442, 30)
         Me.lbl_CadreNorm.TabIndex = 0
-        Me.lbl_CadreNorm.Text = "lbl_CadreNorm"
+        Me.lbl_CadreNorm.Text = "lbl_CadreNorm (0)"
         Me.lbl_CadreNorm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_Norm
@@ -358,6 +449,31 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.pan_Beton.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Beton.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Beton.Controls.Add(Me.img_AgeT)
+        Me.pan_Beton.Controls.Add(Me.etq_UnitJour7)
+        Me.pan_Beton.Controls.Add(Me.txt_AgeT)
+        Me.pan_Beton.Controls.Add(Me.lbl_AgeT)
+        Me.pan_Beton.Controls.Add(Me.lbl_SH)
+        Me.pan_Beton.Controls.Add(Me.lbl_G2)
+        Me.pan_Beton.Controls.Add(Me.lbl_G1)
+        Me.pan_Beton.Controls.Add(Me.lbl_TimeT0)
+        Me.pan_Beton.Controls.Add(Me.img_T0SH)
+        Me.pan_Beton.Controls.Add(Me.img_T0G2)
+        Me.pan_Beton.Controls.Add(Me.img_T0G1)
+        Me.pan_Beton.Controls.Add(Me.etq_UnitJour6)
+        Me.pan_Beton.Controls.Add(Me.etq_UnitJour4)
+        Me.pan_Beton.Controls.Add(Me.etq_UnitJour2)
+        Me.pan_Beton.Controls.Add(Me.etq_UnitJour5)
+        Me.pan_Beton.Controls.Add(Me.etq_UnitJour3)
+        Me.pan_Beton.Controls.Add(Me.etq_UnitJour1)
+        Me.pan_Beton.Controls.Add(Me.txt_t0SHDalle)
+        Me.pan_Beton.Controls.Add(Me.txt_t0SHEnrob)
+        Me.pan_Beton.Controls.Add(Me.txt_t0G2Dalle)
+        Me.pan_Beton.Controls.Add(Me.txt_t0G2Enrob)
+        Me.pan_Beton.Controls.Add(Me.txt_t0G1Dalle)
+        Me.pan_Beton.Controls.Add(Me.txt_t0G1Enrob)
+        Me.pan_Beton.Controls.Add(Me.lbl_Enrobage)
+        Me.pan_Beton.Controls.Add(Me.lbl_Dalle)
         Me.pan_Beton.Controls.Add(Me.etq_UnitModuleY)
         Me.pan_Beton.Controls.Add(Me.txt_Es)
         Me.pan_Beton.Controls.Add(Me.img_Es)
@@ -376,7 +492,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Beton.Location = New System.Drawing.Point(0, 375)
         Me.pan_Beton.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Beton.Name = "pan_Beton"
-        Me.pan_Beton.Size = New System.Drawing.Size(442, 179)
+        Me.pan_Beton.Size = New System.Drawing.Size(442, 239)
         Me.pan_Beton.TabIndex = 7
         '
         'etq_UnitModuleY
@@ -512,52 +628,314 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'lbl_CadreSections
+        'lbl_CombinationVibration
         '
-        Me.lbl_CadreSections.AutoSize = True
-        Me.lbl_CadreSections.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_CadreSections.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_CadreSections.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_CadreSections.Location = New System.Drawing.Point(0, 555)
-        Me.lbl_CadreSections.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_CadreSections.Name = "lbl_CadreSections"
-        Me.lbl_CadreSections.Size = New System.Drawing.Size(442, 30)
-        Me.lbl_CadreSections.TabIndex = 6
-        Me.lbl_CadreSections.Text = "lbl_CadreSections"
-        Me.lbl_CadreSections.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_CombinationVibration.AutoSize = True
+        Me.lbl_CombinationVibration.Location = New System.Drawing.Point(18, 15)
+        Me.lbl_CombinationVibration.Name = "lbl_CombinationVibration"
+        Me.lbl_CombinationVibration.Size = New System.Drawing.Size(122, 13)
+        Me.lbl_CombinationVibration.TabIndex = 61
+        Me.lbl_CombinationVibration.Text = "lbl_CombinationVibration"
         '
-        'pan_Sections
+        'lbl_CadreParametres
         '
-        Me.pan_Sections.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Sections.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Sections.Controls.Add(Me.chk_ArmaComprimees)
-        Me.pan_Sections.Controls.Add(Me.chk_LargeursPartipantesSimples)
-        Me.pan_Sections.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Sections.Location = New System.Drawing.Point(0, 585)
-        Me.pan_Sections.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
-        Me.pan_Sections.Name = "pan_Sections"
-        Me.pan_Sections.Size = New System.Drawing.Size(442, 119)
-        Me.pan_Sections.TabIndex = 8
+        Me.lbl_CadreParametres.AutoSize = True
+        Me.lbl_CadreParametres.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_CadreParametres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_CadreParametres.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_CadreParametres.Location = New System.Drawing.Point(0, 715)
+        Me.lbl_CadreParametres.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_CadreParametres.Name = "lbl_CadreParametres"
+        Me.lbl_CadreParametres.Size = New System.Drawing.Size(442, 30)
+        Me.lbl_CadreParametres.TabIndex = 9
+        Me.lbl_CadreParametres.Text = "lbl_CadreParameters (10)"
+        Me.lbl_CadreParametres.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'chk_LargeursPartipantesSimples
+        'pan_Parametres
         '
-        Me.chk_LargeursPartipantesSimples.AutoSize = True
-        Me.chk_LargeursPartipantesSimples.Location = New System.Drawing.Point(11, 14)
-        Me.chk_LargeursPartipantesSimples.Name = "chk_LargeursPartipantesSimples"
-        Me.chk_LargeursPartipantesSimples.Size = New System.Drawing.Size(180, 17)
-        Me.chk_LargeursPartipantesSimples.TabIndex = 115
-        Me.chk_LargeursPartipantesSimples.Text = "chk_LargeursPartipantesSimples"
-        Me.chk_LargeursPartipantesSimples.UseVisualStyleBackColor = True
+        Me.pan_Parametres.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Parametres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Parametres.Controls.Add(Me.etq_UnitG)
+        Me.pan_Parametres.Controls.Add(Me.img_G)
+        Me.pan_Parametres.Controls.Add(Me.cmb_GraviteG)
+        Me.pan_Parametres.Controls.Add(Me.lbl_GraviteG)
+        Me.pan_Parametres.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Parametres.Location = New System.Drawing.Point(0, 745)
+        Me.pan_Parametres.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.pan_Parametres.Name = "pan_Parametres"
+        Me.pan_Parametres.Size = New System.Drawing.Size(442, 119)
+        Me.pan_Parametres.TabIndex = 10
         '
-        'chk_ArmaComprimees
+        'img_T0SH
         '
-        Me.chk_ArmaComprimees.AutoSize = True
-        Me.chk_ArmaComprimees.Location = New System.Drawing.Point(11, 37)
-        Me.chk_ArmaComprimees.Name = "chk_ArmaComprimees"
-        Me.chk_ArmaComprimees.Size = New System.Drawing.Size(131, 17)
-        Me.chk_ArmaComprimees.TabIndex = 116
-        Me.chk_ArmaComprimees.Text = "chk_ArmaComprimees"
-        Me.chk_ArmaComprimees.UseVisualStyleBackColor = True
+        Me.img_T0SH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_T0SH.Location = New System.Drawing.Point(194, 185)
+        Me.img_T0SH.Name = "img_T0SH"
+        Me.img_T0SH.Size = New System.Drawing.Size(46, 20)
+        Me.img_T0SH.TabIndex = 167
+        Me.img_T0SH.TabStop = False
+        '
+        'img_T0G2
+        '
+        Me.img_T0G2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_T0G2.Location = New System.Drawing.Point(194, 163)
+        Me.img_T0G2.Name = "img_T0G2"
+        Me.img_T0G2.Size = New System.Drawing.Size(46, 20)
+        Me.img_T0G2.TabIndex = 166
+        Me.img_T0G2.TabStop = False
+        '
+        'img_T0G1
+        '
+        Me.img_T0G1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_T0G1.Location = New System.Drawing.Point(194, 141)
+        Me.img_T0G1.Name = "img_T0G1"
+        Me.img_T0G1.Size = New System.Drawing.Size(46, 20)
+        Me.img_T0G1.TabIndex = 165
+        Me.img_T0G1.TabStop = False
+        '
+        'etq_UnitJour6
+        '
+        Me.etq_UnitJour6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour6.AutoSize = True
+        Me.etq_UnitJour6.Location = New System.Drawing.Point(392, 188)
+        Me.etq_UnitJour6.Name = "etq_UnitJour6"
+        Me.etq_UnitJour6.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour6.TabIndex = 164
+        Me.etq_UnitJour6.Text = "j"
+        '
+        'etq_UnitJour4
+        '
+        Me.etq_UnitJour4.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour4.AutoSize = True
+        Me.etq_UnitJour4.Location = New System.Drawing.Point(392, 166)
+        Me.etq_UnitJour4.Name = "etq_UnitJour4"
+        Me.etq_UnitJour4.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour4.TabIndex = 163
+        Me.etq_UnitJour4.Text = "j"
+        '
+        'etq_UnitJour2
+        '
+        Me.etq_UnitJour2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour2.AutoSize = True
+        Me.etq_UnitJour2.Location = New System.Drawing.Point(392, 144)
+        Me.etq_UnitJour2.Name = "etq_UnitJour2"
+        Me.etq_UnitJour2.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour2.TabIndex = 162
+        Me.etq_UnitJour2.Text = "j"
+        '
+        'etq_UnitJour5
+        '
+        Me.etq_UnitJour5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour5.AutoSize = True
+        Me.etq_UnitJour5.Location = New System.Drawing.Point(305, 188)
+        Me.etq_UnitJour5.Name = "etq_UnitJour5"
+        Me.etq_UnitJour5.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour5.TabIndex = 161
+        Me.etq_UnitJour5.Text = "j"
+        '
+        'etq_UnitJour3
+        '
+        Me.etq_UnitJour3.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour3.AutoSize = True
+        Me.etq_UnitJour3.Location = New System.Drawing.Point(305, 166)
+        Me.etq_UnitJour3.Name = "etq_UnitJour3"
+        Me.etq_UnitJour3.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour3.TabIndex = 160
+        Me.etq_UnitJour3.Text = "j"
+        '
+        'etq_UnitJour1
+        '
+        Me.etq_UnitJour1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour1.AutoSize = True
+        Me.etq_UnitJour1.Location = New System.Drawing.Point(305, 144)
+        Me.etq_UnitJour1.Name = "etq_UnitJour1"
+        Me.etq_UnitJour1.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour1.TabIndex = 159
+        Me.etq_UnitJour1.Text = "j"
+        '
+        'txt_t0SHDalle
+        '
+        Me.txt_t0SHDalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0SHDalle.Location = New System.Drawing.Point(241, 185)
+        Me.txt_t0SHDalle.Name = "txt_t0SHDalle"
+        Me.txt_t0SHDalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0SHDalle.TabIndex = 158
+        Me.txt_t0SHDalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0SHEnrob
+        '
+        Me.txt_t0SHEnrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0SHEnrob.Location = New System.Drawing.Point(330, 185)
+        Me.txt_t0SHEnrob.Name = "txt_t0SHEnrob"
+        Me.txt_t0SHEnrob.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0SHEnrob.TabIndex = 157
+        Me.txt_t0SHEnrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0G2Dalle
+        '
+        Me.txt_t0G2Dalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0G2Dalle.Location = New System.Drawing.Point(241, 163)
+        Me.txt_t0G2Dalle.Name = "txt_t0G2Dalle"
+        Me.txt_t0G2Dalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0G2Dalle.TabIndex = 156
+        Me.txt_t0G2Dalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0G2Enrob
+        '
+        Me.txt_t0G2Enrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0G2Enrob.Location = New System.Drawing.Point(330, 163)
+        Me.txt_t0G2Enrob.Name = "txt_t0G2Enrob"
+        Me.txt_t0G2Enrob.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0G2Enrob.TabIndex = 155
+        Me.txt_t0G2Enrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0G1Dalle
+        '
+        Me.txt_t0G1Dalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0G1Dalle.Location = New System.Drawing.Point(241, 141)
+        Me.txt_t0G1Dalle.Name = "txt_t0G1Dalle"
+        Me.txt_t0G1Dalle.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0G1Dalle.TabIndex = 154
+        Me.txt_t0G1Dalle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'txt_t0G1Enrob
+        '
+        Me.txt_t0G1Enrob.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_t0G1Enrob.Location = New System.Drawing.Point(330, 141)
+        Me.txt_t0G1Enrob.Name = "txt_t0G1Enrob"
+        Me.txt_t0G1Enrob.Size = New System.Drawing.Size(58, 20)
+        Me.txt_t0G1Enrob.TabIndex = 153
+        Me.txt_t0G1Enrob.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_Enrobage
+        '
+        Me.lbl_Enrobage.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Enrobage.AutoSize = True
+        Me.lbl_Enrobage.Location = New System.Drawing.Point(325, 125)
+        Me.lbl_Enrobage.Name = "lbl_Enrobage"
+        Me.lbl_Enrobage.Size = New System.Drawing.Size(69, 13)
+        Me.lbl_Enrobage.TabIndex = 152
+        Me.lbl_Enrobage.Text = "lbl_Enrobage"
+        '
+        'lbl_Dalle
+        '
+        Me.lbl_Dalle.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Dalle.AutoSize = True
+        Me.lbl_Dalle.Location = New System.Drawing.Point(248, 125)
+        Me.lbl_Dalle.Name = "lbl_Dalle"
+        Me.lbl_Dalle.Size = New System.Drawing.Size(47, 13)
+        Me.lbl_Dalle.TabIndex = 151
+        Me.lbl_Dalle.Text = "lbl_Dalle"
+        '
+        'lbl_TimeT0
+        '
+        Me.lbl_TimeT0.AutoSize = True
+        Me.lbl_TimeT0.Location = New System.Drawing.Point(8, 114)
+        Me.lbl_TimeT0.Name = "lbl_TimeT0"
+        Me.lbl_TimeT0.Size = New System.Drawing.Size(59, 13)
+        Me.lbl_TimeT0.TabIndex = 168
+        Me.lbl_TimeT0.Text = "lbl_TimeT0"
+        '
+        'lbl_SH
+        '
+        Me.lbl_SH.AutoSize = True
+        Me.lbl_SH.Location = New System.Drawing.Point(42, 188)
+        Me.lbl_SH.Name = "lbl_SH"
+        Me.lbl_SH.Size = New System.Drawing.Size(38, 13)
+        Me.lbl_SH.TabIndex = 171
+        Me.lbl_SH.Text = "lbl_SH"
+        '
+        'lbl_G2
+        '
+        Me.lbl_G2.AutoSize = True
+        Me.lbl_G2.Location = New System.Drawing.Point(42, 166)
+        Me.lbl_G2.Name = "lbl_G2"
+        Me.lbl_G2.Size = New System.Drawing.Size(37, 13)
+        Me.lbl_G2.TabIndex = 170
+        Me.lbl_G2.Text = "lbl_G2"
+        '
+        'lbl_G1
+        '
+        Me.lbl_G1.AutoSize = True
+        Me.lbl_G1.Location = New System.Drawing.Point(42, 144)
+        Me.lbl_G1.Name = "lbl_G1"
+        Me.lbl_G1.Size = New System.Drawing.Size(37, 13)
+        Me.lbl_G1.TabIndex = 169
+        Me.lbl_G1.Text = "lbl_G1"
+        '
+        'lbl_AgeT
+        '
+        Me.lbl_AgeT.AutoSize = True
+        Me.lbl_AgeT.Location = New System.Drawing.Point(8, 214)
+        Me.lbl_AgeT.Name = "lbl_AgeT"
+        Me.lbl_AgeT.Size = New System.Drawing.Size(49, 13)
+        Me.lbl_AgeT.TabIndex = 172
+        Me.lbl_AgeT.Text = "lbl_AgeT"
+        '
+        'img_AgeT
+        '
+        Me.img_AgeT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_AgeT.Location = New System.Drawing.Point(194, 211)
+        Me.img_AgeT.Name = "img_AgeT"
+        Me.img_AgeT.Size = New System.Drawing.Size(46, 20)
+        Me.img_AgeT.TabIndex = 175
+        Me.img_AgeT.TabStop = False
+        '
+        'etq_UnitJour7
+        '
+        Me.etq_UnitJour7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour7.AutoSize = True
+        Me.etq_UnitJour7.Location = New System.Drawing.Point(305, 214)
+        Me.etq_UnitJour7.Name = "etq_UnitJour7"
+        Me.etq_UnitJour7.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour7.TabIndex = 174
+        Me.etq_UnitJour7.Text = "j"
+        '
+        'txt_AgeT
+        '
+        Me.txt_AgeT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_AgeT.Location = New System.Drawing.Point(241, 211)
+        Me.txt_AgeT.Name = "txt_AgeT"
+        Me.txt_AgeT.Size = New System.Drawing.Size(58, 20)
+        Me.txt_AgeT.TabIndex = 173
+        Me.txt_AgeT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'img_G
+        '
+        Me.img_G.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_G.Location = New System.Drawing.Point(193, 14)
+        Me.img_G.Name = "img_G"
+        Me.img_G.Size = New System.Drawing.Size(46, 20)
+        Me.img_G.TabIndex = 112
+        Me.img_G.TabStop = False
+        '
+        'cmb_GraviteG
+        '
+        Me.cmb_GraviteG.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_GraviteG.FormattingEnabled = True
+        Me.cmb_GraviteG.Location = New System.Drawing.Point(241, 13)
+        Me.cmb_GraviteG.Name = "cmb_GraviteG"
+        Me.cmb_GraviteG.Size = New System.Drawing.Size(91, 21)
+        Me.cmb_GraviteG.TabIndex = 111
+        '
+        'lbl_GraviteG
+        '
+        Me.lbl_GraviteG.AutoSize = True
+        Me.lbl_GraviteG.Location = New System.Drawing.Point(8, 16)
+        Me.lbl_GraviteG.Name = "lbl_GraviteG"
+        Me.lbl_GraviteG.Size = New System.Drawing.Size(65, 13)
+        Me.lbl_GraviteG.TabIndex = 110
+        Me.lbl_GraviteG.Text = "lbl_GraviteG"
+        '
+        'etq_UnitG
+        '
+        Me.etq_UnitG.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitG.AutoSize = True
+        Me.etq_UnitG.Location = New System.Drawing.Point(338, 16)
+        Me.etq_UnitG.Name = "etq_UnitG"
+        Me.etq_UnitG.Size = New System.Drawing.Size(28, 13)
+        Me.etq_UnitG.TabIndex = 119
+        Me.etq_UnitG.Text = "GPa"
         '
         'Frm_OptionsCalculPoutre
         '
@@ -581,6 +959,10 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
+        Me.pan_Sections.ResumeLayout(False)
+        Me.pan_Sections.PerformLayout()
+        Me.pan_OptionsELS.ResumeLayout(False)
+        Me.pan_OptionsELS.PerformLayout()
         Me.pan_OptionsELU.ResumeLayout(False)
         Me.pan_OptionsELU.PerformLayout()
         Me.pan_Norm.ResumeLayout(False)
@@ -591,8 +973,13 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_Sections.ResumeLayout(False)
-        Me.pan_Sections.PerformLayout()
+        Me.pan_Parametres.ResumeLayout(False)
+        Me.pan_Parametres.PerformLayout()
+        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_AgeT, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_G, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -637,4 +1024,36 @@ Partial Class Frm_OptionsCalculPoutre
     Friend WithEvents chk_ArmaComprimees As CheckBox
     Friend WithEvents chk_LargeursPartipantesSimples As CheckBox
     Friend WithEvents lbl_CadreSections As Label
+    Friend WithEvents pan_Parametres As Panel
+    Friend WithEvents lbl_CadreParametres As Label
+    Friend WithEvents lbl_CombinationVibration As Label
+    Friend WithEvents img_T0SH As PictureBox
+    Friend WithEvents img_T0G2 As PictureBox
+    Friend WithEvents img_T0G1 As PictureBox
+    Friend WithEvents etq_UnitJour6 As Label
+    Friend WithEvents etq_UnitJour4 As Label
+    Friend WithEvents etq_UnitJour2 As Label
+    Friend WithEvents etq_UnitJour5 As Label
+    Friend WithEvents etq_UnitJour3 As Label
+    Friend WithEvents etq_UnitJour1 As Label
+    Friend WithEvents txt_t0SHDalle As TextBox
+    Friend WithEvents txt_t0SHEnrob As TextBox
+    Friend WithEvents txt_t0G2Dalle As TextBox
+    Friend WithEvents txt_t0G2Enrob As TextBox
+    Friend WithEvents txt_t0G1Dalle As TextBox
+    Friend WithEvents txt_t0G1Enrob As TextBox
+    Friend WithEvents lbl_Enrobage As Label
+    Friend WithEvents lbl_Dalle As Label
+    Friend WithEvents lbl_TimeT0 As Label
+    Friend WithEvents lbl_SH As Label
+    Friend WithEvents lbl_G2 As Label
+    Friend WithEvents lbl_G1 As Label
+    Friend WithEvents img_AgeT As PictureBox
+    Friend WithEvents etq_UnitJour7 As Label
+    Friend WithEvents txt_AgeT As TextBox
+    Friend WithEvents lbl_AgeT As Label
+    Friend WithEvents etq_UnitG As Label
+    Friend WithEvents img_G As PictureBox
+    Friend WithEvents cmb_GraviteG As ComboBox
+    Friend WithEvents lbl_GraviteG As Label
 End Class

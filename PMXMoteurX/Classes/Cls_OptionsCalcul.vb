@@ -6,6 +6,7 @@ Public Class cls_OptionsCalcul
 #Region " Enumérations et constantes "
 
     Public Shared tabRH() As Decimal = {50, 80}
+    Public Shared tabGraviteG() As Decimal = {9.81, 10}
 
     'Public Shared t0Retrait As Decimal = 1
 
@@ -40,11 +41,11 @@ Public Class cls_OptionsCalcul
 
     Public PsiLPermanent As Decimal                 ' Coefficient de fluage pour les charges permanentes
     Public PsiLRetrait As Decimal                   ' Coefficient de fluage pour les charges de retrait
-    Public TimeT0G1() As Decimal                    ' Age au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
-    Public TimeT0G2() As Decimal                    ' Age au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
-    Public TimeT0SH() As Decimal                    ' Age au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
+    Public AgeT0G1() As Decimal                    ' Age au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
+    Public AgeT0G2() As Decimal                    ' Age au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
+    Public AgeT0SH() As Decimal                    ' Age au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
 
-    Public TimeT As Decimal                         ' Age du béton au temps du calcul
+    Public AgeT As Decimal                         ' Age du béton au temps du calcul
 
     Public lElasticDesign As Decimal                ' Indique quand un dimensionnement élastique est imposé
 
@@ -83,16 +84,16 @@ Public Class cls_OptionsCalcul
         Me.lRetraitEnrobage = False
         Me.ArmaYoung = 210000
 
-        Me.GraviteG = 9.81
+        Me.GraviteG = tabGraviteG(0)
 
         Me.PsiLPermanent = 1.1
         Me.PsiLRetrait = 0.55
 
-        Me.TimeT0G1 = {28, 56}
-        Me.TimeT0G2 = {28, 56}
-        Me.TimeT0SH = {1, 1}
+        Me.AgeT0G1 = {28, 56}
+        Me.AgeT0G2 = {28, 56}
+        Me.AgeT0SH = {1, 1}
 
-        Me.TimeT = 50 * 365
+        Me.AgeT = 50 * 365
 
         Me.lElasticDesign = False
 

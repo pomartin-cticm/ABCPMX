@@ -341,9 +341,9 @@ Public Class Frm_OptionsCalcul
             MyProjet.Poutres(i).Param.PsiLRetrait = OptionsCalcul.PsiLRetrait
 
             For j As Integer = 0 To 1
-                MyProjet.Poutres(i).Param.TimeT0G1(j) = OptionsCalcul.TimeT0G1(j)
-                MyProjet.Poutres(i).Param.TimeT0G2(j) = OptionsCalcul.TimeT0G2(j)
-                MyProjet.Poutres(i).Param.TimeT0SH(j) = OptionsCalcul.TimeT0SH(j)
+                MyProjet.Poutres(i).Param.AgeT0G1(j) = OptionsCalcul.TimeT0G1(j)
+                MyProjet.Poutres(i).Param.AgeT0G2(j) = OptionsCalcul.TimeT0G2(j)
+                MyProjet.Poutres(i).Param.AgeT0SH(j) = OptionsCalcul.TimeT0SH(j)
             Next
 
         Next

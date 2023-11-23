@@ -11,6 +11,7 @@ Public Class Frm_OptionsCalculPoutre
     ' Dim ArmaYoung As Decimal
 
     Dim tabNorme(1) As String
+    Dim SymbolJour As String
 
     Const kUnitEpsilon As Decimal = 10 ^ -6
 
@@ -36,6 +37,7 @@ Public Class Frm_OptionsCalculPoutre
         MyParam = MyProjet.Poutres(MyProjet.IndEnCours).Param.Clone
         RemplirComboStandard()
         RemplirComboRH()
+        RemplirComboG()
     End Sub
 
     Private Sub GestionLangues()
@@ -61,6 +63,7 @@ Public Class Frm_OptionsCalculPoutre
                 Me.rdb_ElasticDesign.Text = Bloc("ELASTICDESIGN")
 
                 Me.lbl_CadreELS.Text = Bloc("TELSOPTIONS")
+                Me.lbl_CombinationVibration.Text = Bloc("COMBINATIONFREQ")
 
                 Me.lbl_CadreBeton.Text = Bloc("TCONCRETE")
                 Me.lbl_BetonMessage.Text = Bloc("CONCRETEMSG")
@@ -69,9 +72,21 @@ Public Class Frm_OptionsCalculPoutre
                 Me.chk_RetraitEnrobage.Text = Bloc("SHRINKAGETOENCASEMENT")
                 Me.lbl_ArmaYoung.Text = Bloc("YOUNGSMODULUSREBAR")
 
+                Me.lbl_AgeT.Text = Bloc("AGET")
+                Me.lbl_TimeT0.Text = Bloc("AGET0")
+                SymbolJour = Bloc("SYMBOLFORDAY")
+                Me.lbl_Dalle.Text = Bloc("SLAB")
+                Me.lbl_Enrobage.Text = Bloc("ENCASEMENT")
+                Me.lbl_G1.Text = Bloc("SELFWEIGHT")
+                Me.lbl_G2.Text = Bloc("OTHERPERM")
+                Me.lbl_SH.Text = Bloc("SHRINKAGE")
+
                 Me.lbl_CadreSections.Text = Bloc("SECTIONSPROP")
                 Me.chk_ArmaComprimees.Text = Bloc("REBARSINCOMPRESSION")
                 Me.chk_LargeursPartipantesSimples.Text = Bloc("SIMPLIFIEDBEFF")
+
+                Me.lbl_CadreParametres.Text = Bloc("TPARAMETERS")
+                Me.lbl_GraviteG.Text = Bloc("GFORCE")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -80,6 +95,15 @@ Public Class Frm_OptionsCalculPoutre
             End Try
 
         End If
+
+    End Sub
+
+    Private Sub RemplirComboG()
+        Me.cmb_GraviteG.Items.Clear()
+
+        For i = 0 To cls_OptionsCalcul.tabGraviteG.GetUpperBound(0)
+            Me.cmb_GraviteG.Items.Add(GetStringInUnit(cls_OptionsCalcul.tabGraviteG(i), Enu_TypeVariable.SansType, 3, 2, False))
+        Next
 
     End Sub
 
@@ -104,7 +128,15 @@ Public Class Frm_OptionsCalculPoutre
     End Sub
 
     Private Sub GestionUnites()
+        Me.etq_UnitJour1.Text = SymbolJour
+        Me.etq_UnitJour2.Text = SymbolJour
+        Me.etq_UnitJour3.Text = SymbolJour
+        Me.etq_UnitJour4.Text = SymbolJour
+        Me.etq_UnitJour5.Text = SymbolJour
+        Me.etq_UnitJour6.Text = SymbolJour
+        Me.etq_UnitJour7.Text = SymbolJour
 
+        Me.etq_UnitG.Text = "m/s2"
     End Sub
 
     Private Sub GestionStyle()
@@ -124,6 +156,12 @@ Public Class Frm_OptionsCalculPoutre
 
         Me.lbl_CadreSections.BackColor = CouleurBackBandeaux
         Me.lbl_CadreSections.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_CadreParametres.BackColor = CouleurBackBandeaux
+        Me.lbl_CadreParametres.ForeColor = CouleurForeBandeaux
+
+        PrepareTextBoxDipo(Me.txt_t0SHDalle, False)
+        PrepareTextBoxDipo(Me.txt_t0SHEnrob, False)
 
     End Sub
 
@@ -155,10 +193,22 @@ Public Class Frm_OptionsCalculPoutre
         Me.chk_RetraitEnrobage.Checked = MyParam.lRetraitEnrobage
         Me.txt_Es.Text = GetStringInUnit(MyParam.ArmaYoung, Enu_TypeVariable.ModuleY, 3, 1, False)
 
+        Me.txt_AgeT.Text = GetStringInUnit(MyParam.AgeT, Enu_TypeVariable.SansType, 4, 0, False)
+        Me.txt_t0G1Dalle.Text = GetStringInUnit(MyParam.AgeT0G1(0), Enu_TypeVariable.SansType, 4, 0, False)
+        Me.txt_t0G2Dalle.Text = GetStringInUnit(MyParam.AgeT0G2(0), Enu_TypeVariable.SansType, 4, 0, False)
+        Me.txt_t0SHDalle.Text = GetStringInUnit(MyParam.AgeT0SH(0), Enu_TypeVariable.SansType, 4, 0, False)
+        Me.txt_t0G1Enrob.Text = GetStringInUnit(MyParam.AgeT0G1(1), Enu_TypeVariable.SansType, 4, 0, False)
+        Me.txt_t0G2Enrob.Text = GetStringInUnit(MyParam.AgeT0G2(1), Enu_TypeVariable.SansType, 4, 0, False)
+        Me.txt_t0SHEnrob.Text = GetStringInUnit(MyParam.AgeT0SH(1), Enu_TypeVariable.SansType, 4, 0, False)
+
         '==> Propriétés sections
 
         Me.chk_LargeursPartipantesSimples.Checked = MyParam.lLargeurEfficaceSimplifiee
         Me.chk_ArmaComprimees.Checked = MyParam.lCompressionArma
+
+        '==> Paramètres
+
+        Me.cmb_GraviteG.SelectedIndex = Array.IndexOf(cls_OptionsCalcul.tabGraviteG, MyParam.GraviteG)
 
     End Sub
 
@@ -187,12 +237,21 @@ Public Class Frm_OptionsCalculPoutre
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
         GereTransfertValeur(MyParam.lElasticDesign, MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesign, lModif)
+
         GereTransfertValeur(MyParam.RH, MyProjet.Poutres(MyProjet.IndEnCours).Param.RH, lModif)
         GereTransfertValeur(MyParam.EpsilonSH, MyProjet.Poutres(MyProjet.IndEnCours).Param.EpsilonSH, lModif)
         GereTransfertValeur(MyParam.ArmaYoung, MyProjet.Poutres(MyProjet.IndEnCours).Param.ArmaYoung, lModif)
         GereTransfertValeur(MyParam.lRetraitEnrobage, MyProjet.Poutres(MyProjet.IndEnCours).Param.lRetraitEnrobage, lModif)
+        GereTransfertValeur(MyParam.AgeT, MyProjet.Poutres(MyProjet.IndEnCours).Param.AgeT, lModif)
+        GereTransfertValeur(MyParam.AgeT0G1(0), MyProjet.Poutres(MyProjet.IndEnCours).Param.AgeT0G1(0), lModif)
+        GereTransfertValeur(MyParam.AgeT0G1(1), MyProjet.Poutres(MyProjet.IndEnCours).Param.AgeT0G1(1), lModif)
+        GereTransfertValeur(MyParam.AgeT0G2(0), MyProjet.Poutres(MyProjet.IndEnCours).Param.AgeT0G2(0), lModif)
+        GereTransfertValeur(MyParam.AgeT0G2(1), MyProjet.Poutres(MyProjet.IndEnCours).Param.AgeT0G2(1), lModif)
+
         GereTransfertValeur(MyParam.lLargeurEfficaceSimplifiee, MyProjet.Poutres(MyProjet.IndEnCours).Param.lLargeurEfficaceSimplifiee, lModif)
         GereTransfertValeur(MyParam.lCompressionArma, MyProjet.Poutres(MyProjet.IndEnCours).Param.lCompressionArma, lModif)
+
+        GereTransfertValeur(MyParam.GraviteG, MyProjet.Poutres(MyProjet.IndEnCours).Param.GraviteG, lModif)
 
     End Sub
 
@@ -208,6 +267,10 @@ Public Class Frm_OptionsCalculPoutre
 
         MyParam.lElasticDesign = Me.rdb_ElasticDesign.Checked
 
+    End Sub
+
+    Private Sub cmb_GraviteG_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_GraviteG.SelectedIndexChanged
+        MyParam.GraviteG = cls_OptionsCalcul.tabGraviteG(Me.cmb_GraviteG.SelectedIndex)
     End Sub
 
     Private Sub cmb_RH_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_RH.SelectedIndexChanged
@@ -243,6 +306,27 @@ Public Class Frm_OptionsCalculPoutre
     End Sub
 
 
+    Private Sub ChangeAgeT(sender As Object, e As EventArgs) Handles txt_t0G2Enrob.TextChanged, txt_t0G2Dalle.TextChanged, txt_t0G1Enrob.TextChanged, txt_t0G1Dalle.TextChanged, txt_AgeT.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim Valeur As Decimal
+
+        If VerificationSaisie(sender, Valeur) Then
+
+            Select Case sender.name
+                Case Me.txt_AgeT.Name
+                    MyParam.AgeT = Valeur
+                Case Me.txt_t0G1Dalle.Name
+                    MyParam.AgeT0G1(0) = Valeur
+                Case Me.txt_t0G2Dalle.Name
+                    MyParam.AgeT0G2(0) = Valeur
+                Case Me.txt_t0G1Enrob.Name
+                    MyParam.AgeT0G1(1) = Valeur
+                Case Me.txt_t0G2Enrob.Name
+                    MyParam.AgeT0G2(1) = Valeur
+            End Select
+        End If
+    End Sub
     Private Function VerificationSaisie(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 
         '-- Déclaration - Initialisation
@@ -267,6 +351,15 @@ Public Class Frm_OptionsCalculPoutre
                 ValMax = 210000 / kUnit
                 lValMax = True
 
+            Case Me.txt_AgeT.Name
+                lValMax = False
+                ValMin = 365
+                kUnit = 1
+            Case Me.txt_t0G1Dalle.Name, Me.txt_t0G2Dalle.Name, Me.txt_t0G1Enrob.Name, Me.txt_t0G2Enrob.Name
+                lValMax = True
+                ValMin = 28
+                ValMax = 200
+                kUnit = 1
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -287,7 +380,7 @@ Public Class Frm_OptionsCalculPoutre
 
 #Region " Dessin des symboles "
 
-    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint
+    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_AgeT.Paint, img_G.Paint
         '--> Déclarations
 
         Dim sWI As Single = sender.Width
@@ -323,6 +416,18 @@ Public Class Frm_OptionsCalculPoutre
                 strIndice = "sh"
                 lGrec = True
 
+            Case Me.img_G.Name
+                strSymbol = "g"
+                strIndice = ""
+
+            Case Me.img_AgeT.Name
+                strSymbol = "t"
+                strIndice = ""
+
+            Case Me.img_T0G1.Name, Me.img_T0G2.Name, Me.img_T0SH.Name
+                strSymbol = "t"
+                strIndice = "0"
+
         End Select
 
         '--> Dessin
@@ -331,6 +436,8 @@ Public Class Frm_OptionsCalculPoutre
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
+
 
 
 #End Region

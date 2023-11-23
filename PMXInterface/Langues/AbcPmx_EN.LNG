@@ -46,6 +46,7 @@ ENGEN1					= First generation of Eurocodes
 ENGEN2					= Second generation of Eurocodes (drafts)
 TELUOPTIONS				= Options at Ultimate Limit States
 TELSOPTIONS				= Options at Serviceability Limit States
+COMBINATIONFREQ			= Combination of loads for the eigen frequency
 ELASTICDESIGN			= Elastic design of sections
 NORMALDESIGN			= Design of sections according to their class
 TCONCRETE				= Properties of concrete
@@ -57,6 +58,16 @@ YOUNGSMODULUSREBAR		= Young's modulus of rebars
 SECTIONSPROP			= Properties of cross-sections
 SIMPLIFIEDBEFF			= Simplified distribution of slab effective width
 REBARSINCOMPRESSION		= Rebars in compression taken into account
+AGET					= Age of concrete
+AGET0					= Age of concrete at loading
+SYMBOLFORDAY			= d
+SLAB					= Slab
+ENCASEMENT				= Encasement
+SELFWEIGHT				= Self-weight
+OTHERPERM				= Other permanent loads
+SHRINKAGE				= Shrinkage
+TPARAMETERS				= Parameters
+GFORCE					= G-force
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report

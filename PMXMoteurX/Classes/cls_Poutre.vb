@@ -2707,20 +2707,20 @@ Public Class cls_Poutre
         'nEqEnrobLT = 3 * nEqEnrobCT
 
         Dim RH As Decimal = Me.Param.RH
-        Dim TimeT As Decimal = Me.Param.TimeT
+        Dim TimeT As Decimal = Me.Param.AgeT
         Dim H0Dalle As Decimal = Me.Dalle.NotionalSizeH0(Me.Section.ProfilA.Bfs)
         Dim H0Enrob As Decimal = Me.Section.NotionalSizeEnrobage
 
         If lMixte Then
-            nEqDalleG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.TimeT0G1(0), Me.Param.PsiLPermanent)
-            nEqDalleG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.TimeT0G2(0), Me.Param.PsiLPermanent)
-            nEqDalleSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.TimeT0SH(0), Me.Param.PsiLRetrait)
+            nEqDalleG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.AgeT0G1(0), Me.Param.PsiLPermanent)
+            nEqDalleG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.AgeT0G2(0), Me.Param.PsiLPermanent)
+            nEqDalleSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Dalle, TimeT, Me.Param.AgeT0SH(0), Me.Param.PsiLRetrait)
         End If
 
         If lEnrob Then
-            nEqEnrobG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.TimeT0G1(1), Me.Param.PsiLPermanent)
-            nEqEnrobG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.TimeT0G2(1), Me.Param.PsiLPermanent)
-            nEqEnrobSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.TimeT0SH(1), Me.Param.PsiLRetrait)
+            nEqEnrobG1 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0G1(1), Me.Param.PsiLPermanent)
+            nEqEnrobG2 = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0G2(1), Me.Param.PsiLPermanent)
+            nEqEnrobSH = Me.Dalle.beton.CoefficientEquivalence(RH, H0Enrob, TimeT, Me.Param.AgeT0SH(1), Me.Param.PsiLRetrait)
         End If
 
         iTrav0 = Me.IndicePremiereTravee
