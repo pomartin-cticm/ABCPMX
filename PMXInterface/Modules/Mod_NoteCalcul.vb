@@ -1029,7 +1029,44 @@ Module Mod_NoteCalcul
 
         '--> Affichage de l'étaiement
 
-        ' A COMPLETER
+        Select Case MyBeam.TypeEtaiement
+            Case cls_Poutre.EnuTypeEtaiement.FullyPropped
+                AddLigneNDC(TABW2 & Bloc("TYPE_PROPPING") & TABAFF & Bloc("FULLYPROPPED"))
+            Case cls_Poutre.EnuTypeEtaiement.UnPropped
+                AddLigneNDC(TABW2 & Bloc("TYPE_PROPPING") & TABAFF & Bloc("UNPROPPED"))
+            Case cls_Poutre.EnuTypeEtaiement.PointPropped
+                AddLigneNDC(TABW2 & Bloc("TYPE_PROPPING") & TABAFF & Bloc("POINTPROPPED"))
+
+                If MyBeam.lTraveeConsoleGauche Then
+                    If MyBeam.lEtaisConsoleGauche Then
+                        AddLigneNDC(TABW2 & Bloc("ENDPROPPEDLEFTCANT") & TABAFF & Bloc("YES"))
+                    Else
+                        AddLigneNDC(TABW2 & Bloc("ENDPROPPEDLEFTCANT") & TABAFF & Bloc("NO"))
+                    End If
+                End If
+
+                If MyBeam.lTraveeConsoleDroite Then
+                    If MyBeam.lEtaisConsoleDroite Then
+                        AddLigneNDC(TABW2 & Bloc("ENDPROPPEDRIGHTCANT") & TABAFF & Bloc("YES"))
+                    Else
+                        AddLigneNDC(TABW2 & Bloc("ENDPROPPEDRIGHTCANT") & TABAFF & Bloc("NO"))
+                    End If
+                End If
+
+                If MyBeam.lTraveeConsoleGauche Or MyBeam.lTraveeConsoleDroite Then
+                    AddLigneNDC(TABW2 & Bloc("NBPROPPINGWITHCANT") & TABAFF & MyBeam.NbEtaiement)
+                Else
+                    AddLigneNDC(TABW2 & Bloc("NBPROPPINGWITHOUTCANT") & TABAFF & MyBeam.NbEtaiement)
+                End If
+
+                If MyBeam.lEtaisSousProfileAcier Then
+                    AddLigneNDC(TABW2 & Bloc("PROPPINGLOCATION") & TABAFF & Bloc("UNDERSTEEL"))
+                Else
+                    AddLigneNDC(TABW2 & Bloc("PROPPINGLOCATION") & TABAFF & Bloc("UNDERSLAB"))
+                End If
+
+
+        End Select
 
     End Sub
 

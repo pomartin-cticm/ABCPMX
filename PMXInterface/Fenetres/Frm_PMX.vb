@@ -732,32 +732,40 @@ Public Class Frm_PMX
 
         Dim lFrmConnection As Boolean = True
         Dim lFrmEnrobage As Boolean = True
+        Dim lFrmProppin As Boolean = True
 
         Select Case MyProjet.Poutres(MyProjet.IndEnCours).TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul
                 lFrmConnection = False
                 lFrmEnrobage = False
+                lFrmProppin = False
             Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 lFrmConnection = False
+                lFrmProppin = False
             Case cls_Section.Enum_TypeSection.Mixte
                 lFrmEnrobage = False
             Case cls_Section.Enum_TypeSection.MixteEnrobage
             Case cls_Section.Enum_TypeSection.SFB
                 lFrmEnrobage = False
+                lFrmProppin = False
             Case cls_Section.Enum_TypeSection.SFBmixte
             Case cls_Section.Enum_TypeSection.IFB_A
                 lFrmEnrobage = False
+                lFrmProppin = False
             Case cls_Section.Enum_TypeSection.IFB_Amixte
             Case cls_Section.Enum_TypeSection.IFB_B
                 lFrmEnrobage = False
+                lFrmProppin = False
             Case cls_Section.Enum_TypeSection.IFB_Bmixte
             Case cls_Section.Enum_TypeSection.SAB
                 lFrmEnrobage = False
+                lFrmProppin = False
             Case cls_Section.Enum_TypeSection.SABmixte
         End Select
 
         Me.TSbtn_Connexion.Visible = lFrmConnection
         Me.TSbtn_Enrobage.Visible = lFrmEnrobage
+        Me.TSbtn_Etaiement.Visible = lFrmProppin
 
     End Sub
 

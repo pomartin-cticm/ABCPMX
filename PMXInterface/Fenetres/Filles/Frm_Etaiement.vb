@@ -192,6 +192,14 @@ Public Class Frm_Etaiement
 
         With MyProjet.Poutres(MyProjet.IndEnCours)
 
+            If MyPoutreLoc.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.PointPropped _
+                And Not MyPoutreLoc.lTraveeConsoleGauche And Not MyPoutreLoc.lTraveeConsoleDroite _
+                And Not MyPoutreLoc.lEtaisConsoleGauche And Not MyPoutreLoc.lEtaisConsoleDroite And MyPoutreLoc.NbEtaiement = 0 Then
+
+                MyPoutreLoc.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.UnPropped
+
+            End If
+
             If (MyPoutreLoc.TypeEtaiement <> .EnuTypeEtaiement.PointPropped) And (.TypeEtaiement <> MyPoutreLoc.TypeEtaiement) Then
                 lModif = True
                 .TypeEtaiement = MyPoutreLoc.TypeEtaiement

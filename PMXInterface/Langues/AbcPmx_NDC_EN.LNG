@@ -218,6 +218,17 @@ ULS						= ULS
 SLS						= SLS
 FLS						= FLS
 DATAPROPPING			= Propping
+TYPE_PROPPING			= Type of propping
+UNPROPPED				= Unpropped
+FULLYPROPPED			= Fully propped
+POINTPROPPED			= Point propped
+ENDPROPPEDLEFTCANT		= End propping of the left cantilever
+ENDPROPPEDRIGHTCANT		= End propping of the right cantilever
+NBPROPPINGWITHCANT		= Number of intermediate point proppings in the middle span
+NBPROPPINGWITHOUTCANT	= Number of intermediate point proppings 
+PROPPINGLOCATION		= Propping location
+UNDERSTEEL				= Under the steel beam
+UNDERSLAB				= Under the concrete slab
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties

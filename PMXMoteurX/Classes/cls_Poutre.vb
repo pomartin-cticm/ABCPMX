@@ -112,9 +112,11 @@ Public Class cls_Poutre
     Public ReadOnly Property NombreTotalMaintiens As Integer
         Get
             Dim tot As Integer = 0
-            For i As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
-                tot += Maintiens(i).Count
-            Next
+            If Me.TypeMaintien = EnuTypeEtaiement.PointPropped Then
+                For i As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+                    tot += Maintiens(i).Count
+                Next
+            End If
             Return tot
         End Get
     End Property
