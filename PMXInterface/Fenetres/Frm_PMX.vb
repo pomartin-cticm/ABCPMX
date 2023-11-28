@@ -85,6 +85,7 @@ Public Class Frm_PMX
         GestionStyle()
 
         lZoomPlus = False
+        MAJ_btnZoomPlus()
 
         '--> Affichage
 
@@ -1366,13 +1367,22 @@ Public Class Frm_PMX
     Private Sub TSbtn_ZoomPlusMoins_Click(sender As Object, e As EventArgs) Handles TSbtn_ZoomPlus.Click, TSbtn_ZoomMoins.Click
         lZoomPlus = sender.name = TSbtn_ZoomPlus.Name
         img_Main.Invalidate()
+        MAJ_btnZoomPlus()
     End Sub
 
     Private Sub PictureBox_MouseWheel(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles img_Main.MouseWheel
         lZoomPlus = e.Delta > 0 'Gère si le scrool est en avant (>0) ou en arrière (<0)
         img_Main.Invalidate()
+        MAJ_btnZoomPlus()
     End Sub
 
+    ''' <summary>
+    ''' Fonction qui permet de gérer l'affichage du zoom en cours 
+    ''' </summary>
+    Private Sub MAJ_btnZoomPlus()
+        Me.TSbtn_ZoomPlus.Checked = lZoomPlus
+        Me.TSbtn_ZoomMoins.Checked = Not lZoomPlus
+    End Sub
 
 
 #End Region

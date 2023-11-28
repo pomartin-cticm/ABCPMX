@@ -108,6 +108,17 @@ Public Class cls_Poutre
 
     Public pIndiceMaintienSelectionne As Integer        ' Indice du maintien sélectionné pour le déplacer (utile pour le dessin uniquement)
 
+    'Renvoi la somme de tous les maintiens disposés sur l'ensemble des travées 
+    Public ReadOnly Property NombreTotalMaintiens As Integer
+        Get
+            Dim tot As Integer = 0
+            For i As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+                tot += Maintiens(i).Count
+            Next
+            Return tot
+        End Get
+    End Property
+
     '#####################################################################################
     '# Paramètres pour les options de calcul
     '#####################################################################################

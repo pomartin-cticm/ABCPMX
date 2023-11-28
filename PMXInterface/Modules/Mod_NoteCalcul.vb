@@ -1163,7 +1163,13 @@ Module Mod_NoteCalcul
 
         '--> Traitement
 
-        SautePage()
+        Dim NbBesoinLignes As Integer = 21    ' A ajuster
+
+        '--> Initialisation
+
+        If NbBesoinLignes + nbLignes > MAXLIGNEPPAG Then
+            SautePage()
+        End If
 
         AddTitreNdC(2, Bloc("GAMMA"))
 
@@ -1289,8 +1295,13 @@ Module Mod_NoteCalcul
         '----------------------------------------------------------------------------------------------
         '   Edition des coefficients partiels
         '----------------------------------------------------------------------------------------------
+        Dim NbBesoinLignes As Integer = 5     ' A ajuster
 
-        SautePage()
+        '--> Initialisation
+
+        If NbBesoinLignes + nbLignes > MAXLIGNEPPAG Then
+            SautePage()
+        End If
 
         AddTitreNdC(2, Bloc("LOADS"))
 
@@ -1303,7 +1314,13 @@ Module Mod_NoteCalcul
         '   Edition des coefficients partiels
         '----------------------------------------------------------------------------------------------
 
-        SautePage()
+        Dim NbBesoinLignes As Integer = 5     ' A ajuster
+
+        '--> Initialisation
+
+        If NbBesoinLignes + nbLignes > MAXLIGNEPPAG Then
+            SautePage()
+        End If
 
         AddTitreNdC(2, Bloc("COMBINATIONS"))
 

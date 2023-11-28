@@ -341,6 +341,8 @@ Public Class Frm_Maintiens
                 End If
 
                 'If .TypeMaintien(i_travee) <> MyPoutreLoc.TypeMaintien(i_travee) Then
+                If MyPoutreLoc.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained And MyPoutreLoc.NombreTotalMaintiens = 0 Then MyPoutreLoc.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
+
                 If .TypeMaintien <> MyPoutreLoc.TypeMaintien Then
                     lModif = True
                     .TypeMaintien = MyPoutreLoc.TypeMaintien
