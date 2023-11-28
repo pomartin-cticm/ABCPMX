@@ -8,7 +8,8 @@ Module Mod_BasesDonneesASCII
 
     Public BaseBacs As New Dictionary(Of String, cls_Bac)
 
-    Public BaseGoujons As (String, Decimal, Decimal, Decimal, Decimal)() = Nothing
+    'Public BaseGoujons As (String, Decimal, Decimal, Decimal, Decimal, Decimal, Decimal, Boolean)() = Nothing
+    Public BaseGoujons As New List(Of cls_Connecteur)
 
 #End Region
 
@@ -157,7 +158,41 @@ Module Mod_BasesDonneesASCII
 
 #Region " Base de données des connecteurs "
 
-    Public Sub LireBaseGoujons(FileG As String, ByRef MyBaseG As (String, Decimal, Decimal, Decimal, Decimal)())
+    Public Sub GetDataBaseStuds(ByRef ListeStud As List(Of cls_Connecteur))
+        '---------------------------------------------------------------------------------
+        '
+        '   27/11/23 :  Ajout GUD (issu d'ACB+)
+        '
+        '---------------------------------------------------------------------------------
+        '
+        '   Recupération des connecteurs des bases fixe et custom
+        '
+        '---------------------------------------------------------------------------------
+        '
+        '   MyBaseG    [S] :   Liste des bacs contenus dans les base fixe et custom
+        '
+        '---------------------------------------------------------------------------------
+
+        '--[ Initialisation
+
+        ListeStud.Clear()
+
+        '==== Chargements connecteurs NELSON ====
+
+        '--[ Récupération des connecteurs dans la base fixe
+
+        LireBaseGoujons(LogicielFichiers.Base_Goujons, False, ListeStud)
+
+        '--[ Récupération des connecteurs dans la base perso
+
+        If My.Computer.FileSystem.FileExists(LogicielFichiers.Base_Goujons_Perso) Then
+            LireBaseGoujons(LogicielFichiers.Base_Goujons_Perso, True, ListeStud)
+        End If
+
+    End Sub
+
+    Private Sub LireBaseGoujons(FileG As String, ByVal lCustom As Boolean,
+                                ByRef ListeStud As List(Of cls_Connecteur))
         '---------------------------------------------------------------------------------
         '   09/08/23 :  Création - POM
         '---------------------------------------------------------------------------------
@@ -193,11 +228,8 @@ Module Mod_BasesDonneesASCII
                 'Etiquette = LinesG.Lines(iStud).Substring(0, iVirg)
                 Etiquette = LinesG.Lines(iStud).Substring(0, iVirg)
                 DecomposeLine(Etiquette, SEPARATEURS, Mots, nMots)
-                'Introduction d'un bug !!!
-                ''Etiquette = Mots(2) 'Rajout GUD car il y'a le mot "Diametre" qui est inscrit dans la dtb et qui gene la lecture 
 
                 Parametres = LinesG.Lines(iStud).Substring(iVirg + 1)
-
                 DecomposeLine(Parametres, SEPARATEURS, Mots, nMots)
 
                 Htot = CSng(TraiteReal(Mots(1))) * kUnit
@@ -207,7 +239,11 @@ Module Mod_BasesDonneesASCII
                 fy = CSng(TraiteReal(Mots(5)))
                 fu = CSng(TraiteReal(Mots(6)))
 
-                AjouteGoujonsBase(Etiquette, Htot, PhiTige, fy, fu, MyBaseG)
+                ListeStud.Add(New cls_Connecteur(Etiquette, Htot, PhiTige, PhiTete, HTete, fy, fu))
+
+                'AjouteGoujonsBase(Etiquette, Htot, PhiTige, PhiTete, HTete, fy, fu, lCustom, MyBaseG)
+
+                ListeStud(ListeStud.Count - 1).lCustom = lCustom
 
             Else
                 lFmtPB = True
@@ -219,48 +255,51 @@ Module Mod_BasesDonneesASCII
         End If
     End Sub
 
-    Private Sub AjouteGoujonsBase(Label As String, Hsc As Decimal, Phi As Decimal, Fy As Decimal, Fu As Decimal, ByRef MyBaseG As (String, Decimal, Decimal, Decimal, Decimal)())
-        '---------------------------------------------------------------------------------
-        '   09/08/23 :  Création - POM
-        '---------------------------------------------------------------------------------
-        '   Ajout d'un bac dans la base de données des connecteurs 
-        '---------------------------------------------------------------------------------
-        '   MyBaseG     [S] :   Base des goujons
-        '   Label       [E] :   
-        '   Hsc         [E] :   Hauteur totale du connecteur
-        '   Phi         [E] :   Diametre du connecteur
-        '   Fy, Fu      [E] :   Limite d'élasticite et limite ultime à la traction
-        '---------------------------------------------------------------------------------
+    'Private Sub AjouteGoujonsBase(Label As String, Hsc As Decimal, PhiTige As Decimal, PhiTete As Decimal, HTete As Decimal, Fy As Decimal, Fu As Decimal, lCustom As Boolean, ByRef MyBaseG As (String, Decimal, Decimal, Decimal, Decimal, Decimal, Decimal, Boolean)())
+    '    '---------------------------------------------------------------------------------
+    '    '   09/08/23 :  Création - POM
+    '    '---------------------------------------------------------------------------------
+    '    '   Ajout d'un bac dans la base de données des connecteurs 
+    '    '---------------------------------------------------------------------------------
+    '    '   MyBaseG     [S] :   Base des goujons
+    '    '   Label       [E] :   
+    '    '   Hsc         [E] :   Hauteur totale du connecteur
+    '    '   Phi         [E] :   Diametre du connecteur
+    '    '   Fy, Fu      [E] :   Limite d'élasticite et limite ultime à la traction
+    '    '---------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim nbG As Integer
+    '    Dim nbG As Integer
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        If MyBaseG Is Nothing Then
-            nbG = 0
-        Else
-            nbG = MyBaseG.GetUpperBound(0) + 1
-        End If
+    '    If MyBaseG Is Nothing Then
+    '        nbG = 0
+    '    Else
+    '        nbG = MyBaseG.GetUpperBound(0) + 1
+    '    End If
 
-        nbG += 1
+    '    nbG += 1
 
-        If nbG > 0 Then
-            ReDim Preserve MyBaseG(nbG - 1)
-        Else
-            ReDim MyBaseG(nbG)
-        End If
+    '    If nbG > 0 Then
+    '        ReDim Preserve MyBaseG(nbG - 1)
+    '    Else
+    '        ReDim MyBaseG(nbG)
+    '    End If
 
-        '--> Infos
+    '    '--> Infos
 
-        MyBaseG(nbG - 1).Item1 = Label
-        MyBaseG(nbG - 1).Item2 = Hsc
-        MyBaseG(nbG - 1).Item3 = Phi
-        MyBaseG(nbG - 1).Item4 = Fy
-        MyBaseG(nbG - 1).Item5 = Fu
+    '    MyBaseG(nbG - 1).Item1 = Label
+    '    MyBaseG(nbG - 1).Item2 = Hsc
+    '    MyBaseG(nbG - 1).Item3 = PhiTige
+    '    MyBaseG(nbG - 1).Item4 = Fy
+    '    MyBaseG(nbG - 1).Item5 = Fu
+    '    MyBaseG(nbG - 1).Item6 = PhiTete
+    '    MyBaseG(nbG - 1).Item7 = HTete
+    '    MyBaseG(nbG - 1).Item8 = lCustom
 
-    End Sub
+    'End Sub
 
 #End Region
 

@@ -1115,6 +1115,74 @@ Module Mod_Outils
 
     End Function
 
+    Sub CompleteChaine(ByRef Chaine As String, ByVal Motif As String, ByVal Longueur As Integer)
+        '
+        '   Complete une chaine de caractères par un motif jusqu'à obtenir la longueur désirée
+        '
+        '---------------------------------------------------------------------------------------
+
+        Dim nbMotif As Integer = Longueur - Chaine.Length
+
+        For i As Integer = 1 To nbMotif
+            Chaine = Chaine & Motif.Substring(0, 1)
+        Next
+
+    End Sub
+
+    Sub PositionneDansChaine(ByRef Chaine As String, ByVal iPos As Integer, ByVal APlacer As String)
+        '
+        '   13/09/07 :  Création - Version 1.00
+        '
+        '------------------------------------------------------------------------------------------
+        '
+        '   Rajoute la chaine APlacer dans la Chaine à la position indiquée
+        '
+        '------------------------------------------------------------------------------------------
+        '
+        '   Chaine      [E/S] : Chaine de caractères à completer
+        '   iPos        [E] :   Position où est insérée la nouvelle chaine
+        '   APlacer     [E] :   Caractères à placer dans la chaine
+        '
+        '------------------------------------------------------------------------------------------
+
+        If Chaine.Length < iPos Then
+            CompleteChaine(Chaine, " ", iPos)
+        End If
+        Chaine = Chaine & APlacer
+    End Sub
+
+    Function FrmReel(ByVal Valeur As Double, ByVal iDec As Integer) As String
+        '----------------------------------------------------------------------------------------
+        '
+        '   Transforme un entier en chaine / la chaine utilise le point comme separateur decimal
+        '
+        '----------------------------------------------------------------------------------------
+        '
+        '   iDec    [E] :   Nombre de decimales
+        '
+        '----------------------------------------------------------------------------------------
+
+        Dim sb As New System.Text.StringBuilder
+        Dim Zero As Char = CChar("0")
+
+        Dim PartieE As Integer, PartieD As Single
+        If iDec = 0 Then
+            PartieE = CInt(Math.Round(Valeur))
+        Else
+            PartieE = CInt(Math.Floor(Valeur))
+        End If
+        sb.Append(PartieE.ToString)
+        If iDec > 0 Then
+            Dim sf As New System.Text.StringBuilder
+            sb.Append(".")
+            PartieD = CSng(Math.Round((Valeur - PartieE) * Math.Pow(10, iDec)))
+            sf.Append(Zero, iDec)
+            sb.Append(Format(PartieD, sf.ToString))
+        End If
+
+        Return sb.ToString
+    End Function
+
 #End Region
 
 #Region " Transfert des valeurs avec suivi de modif "
@@ -1276,6 +1344,126 @@ Module Mod_Outils
 
         Return IsEqual(a, b, EPS) OrElse (a < b)
     End Function
+
+#End Region
+
+#Region "   Fonctions de confirmation ou d'information "
+
+    Public Function DemandeConfirmation(ByVal Message As String) As Boolean
+        '
+        '   Demande de confirmation auprès utilisateur
+        '
+        '---------------------------------------------------------------------------
+
+        If MessageBox.Show(Message, LogicielInfo.NomLogiciel, MessageBoxButtons.OKCancel, MessageBoxIcon.Question) = DialogResult.OK Then
+            Return True
+        Else
+            Return False
+        End If
+
+
+    End Function
+
+    Public Function DemandeConfirmationYesNoCancel(ByVal Message As String) As DialogResult
+
+        Return MessageBox.Show(Message, LogicielInfo.NomLogiciel, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+
+    End Function
+
+    Public Sub UserInformation(ByVal Message As String)
+        MessageBox.Show(Message, LogicielInfo.NomLogiciel, MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+    Public Sub UserWarning(ByVal Message As String)
+        MessageBox.Show(Message, LogicielInfo.NomLogiciel, MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    End Sub
+
+#End Region
+
+#Region "   Controle des saisies dans les textbox "
+
+    Function ValideSaisieTextBox(ByRef txtSaisie As TextBox,
+                                 ByVal lValMin As Boolean, ByVal ValMin As Double,
+                                 ByVal lValMax As Boolean, ByVal ValMax As Double,
+                                 ByRef ValNum As Double) As Integer
+        '------------------------------------------------------------------
+        '
+        '   04/03/07 :  Création - Version 1.00
+        '   13/05/09 :  Modification - Vercion 1.04
+        '
+        '------------------------------------------------------------------
+        '
+        '   Controle de la valeur numérique saisie dans une textbox
+        '   Version 1.04 : Prise en compte tolérance dans la limite des bornes
+        '
+        '------------------------------------------------------------------
+        '
+        '   txtSaisie   : [E]   TextBox à vérifier
+        '   lValMin     : [E]   Indique si controle borne inférieure
+        '   ValMin      : [E]   Borne Inférieure Autorisée
+        '   lValMax     : [E]   Indique si controle borne supérieure
+        '   ValMax      : [E]   Borne Supérieure Autorisée
+        '   
+        '   ValNum      : [S]   Valeur numérique saisie, quand elle existe
+        '
+        '   Code retour :       0 saisie correcte
+        '                       -1 champ vide
+        '                       -2 chaine non numérique
+        '                       -3 valeur inférieure borne inférieure
+        '                       -4 valeur supérieure borne supérieure
+        '
+        '------------------------------------------------------------------
+
+        Dim Chaine As String = TraiteReal(txtSaisie.Text)
+
+        '--> Controle de champ vide
+
+        If Chaine = "" Then Return -1
+
+        '--> Controle de champ non numerique
+
+        If Not IsNumeric(Chaine) Then Return -2
+
+        '--> Controle de la valeur saisie
+
+        '===Rajouter un test sur la longueur de la chaine
+
+        ValNum = CDbl(Chaine)
+
+        If lValMin And (ValNum < ValMin * (1 - DELTASAISIE)) Then Return -3
+
+        If lValMax And (ValNum > ValMax * (1 + DELTASAISIE)) Then Return -4
+
+        Return 0
+
+    End Function
+
+#End Region
+
+#Region " Gestion des erreurs"
+
+    Sub PrepareErreurTextBox(ByVal MyErrPo As ErrorProvider, ByVal MyTxtBox As TextBox, ByVal lGauche As Boolean)
+        '
+        '   03/08/07 :  Création - Version 1.00
+        '
+        '--------------------------------------------------------------------------------------------
+        '
+        '   Prépare l'Error Provider d'une Texte Box
+        '
+        '--------------------------------------------------------------------------------------------
+        '
+        '   lGauche     [E] :   Indique si on fait apparaitre le ErrorProvider à gauche ou à droite
+        '
+        '--------------------------------------------------------------------------------------------
+
+        If lGauche Then
+            MyErrPo.SetIconAlignment(MyTxtBox, ErrorIconAlignment.MiddleLeft)
+        Else
+            MyErrPo.SetIconAlignment(MyTxtBox, ErrorIconAlignment.MiddleRight)
+        End If
+        MyErrPo.SetIconPadding(MyTxtBox, 2)
+        MyErrPo.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink
+
+    End Sub
 
 #End Region
 

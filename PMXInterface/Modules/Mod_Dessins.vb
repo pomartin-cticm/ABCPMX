@@ -3998,7 +3998,7 @@ Module Mod_Dessins
         LargeurSemelle = LongueurTravee / 8.5
         If Not MyPoutre.lAutomaticDesign Then
             For i As Integer = 0 To 2
-                NombreGoujonsTrans(i) = MyPoutre.ZoneNombreGoujonsTransv(indTravee, i)
+                NombreGoujonsTrans(i) = MyPoutre.NombreGoujonsTransv(indTravee, i)
                 LongueurZones(i) = MyPoutre.ZoneLongueur(indTravee, i) / MyPoutre.LongueurTravee(indTravee) * LongueurTravee
                 NombreGoujonsLongiZone(i) = 0.75 * MyPoutre.ZoneLongueur(indTravee, i) / MyPoutre.ZoneEspacement(indTravee, i)
                 NombreZones = MyPoutre.NombreZones(indTravee)

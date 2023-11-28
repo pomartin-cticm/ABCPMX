@@ -14,9 +14,19 @@ Public Class cls_Connecteur
     Public hsc As Decimal
 
     ''' <summary>
-    ''' Diamètre
+    ''' Hauteur de la tete du goujon 
+    ''' </summary>
+    Public h_tete As Decimal
+
+    ''' <summary>
+    ''' Diamètre du corps du goujon
     ''' </summary>
     Public d As Decimal
+
+    ''' <summary>
+    ''' Diametre de la tete du boulon
+    ''' </summary>
+    Public d_tete As Decimal
 
     ''' <summary>
     ''' Facteur de relaxation à définir par l'utilisateur pour la 2eme génération de l'EC4 uniquement
@@ -32,6 +42,11 @@ Public Class cls_Connecteur
     ''' Résistance ultime à la traction
     ''' </summary>
     Public Fu As Decimal
+
+    ''' <summary>
+    ''' Indique si le goujon 
+    ''' </summary>
+    Public lCustom As Boolean = False 'indique si provient de la base personnelle
 
     Public ReadOnly Property IndiceDataBase As Integer
         Get
@@ -54,6 +69,24 @@ Public Class cls_Connecteur
         Me.hsc = 0.1
         Me.Fu = 450
         Me.Fy = 350
+    End Sub
+
+    Public Sub New(ByVal Nom As String, ByVal hsc As Double, ByVal PhiTige As Double,
+                   ByVal PhiTete As Double, ByVal HTete As Double, ByVal fy As Double, ByVal fu As Double)
+
+        '---------------------------------------------------------------------------------------
+        '
+        '   Constructeur pour connecteur soudé
+        '
+        '---------------------------------------------------------------------------------------
+
+        Me.nom = Nom
+        Me.hsc = hsc
+        Me.h_tete = HTete
+        Me.d_tete = PhiTete
+        Me.d = PhiTige
+        Me.Fu = fu
+        Me.Fy = fy
     End Sub
 
 #End Region

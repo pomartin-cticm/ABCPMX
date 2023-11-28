@@ -28,6 +28,11 @@
     Public Fck As Decimal
 
     ''' <summary>
+    ''' résistance de calcul à la compression du béton
+    ''' </summary>
+    Public Fcd As Decimal
+
+    ''' <summary>
     ''' fractile 5% de la résistance à la traction du béton (Pa) 
     ''' (utilisé pour le calcul de la résistance d'un connecteur selon l'annexe G de l'EC4 G2)
     ''' </summary>

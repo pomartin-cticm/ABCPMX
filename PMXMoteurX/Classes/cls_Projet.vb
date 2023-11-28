@@ -399,6 +399,7 @@ Public Class cls_Projet
                     With .Connecteur
                         Lines.Add("BLOCK CONNECTEUR_DALLE")
 
+                        Lines.Add("   nom            =  " & .nom)
                         Lines.Add("   hsc            =  " & .hsc)
                         Lines.Add("   d              =  " & .d)
                         Lines.Add("   fu              =  " & .Fu)
@@ -1492,7 +1493,7 @@ Public Class cls_Projet
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
-        Dim i As Integer
+        Dim i, iFirst As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
 
@@ -1507,6 +1508,13 @@ Public Class cls_Projet
 
                 With connecteur_dalle
                     Select Case MotCle
+                        Case "NOM"
+                            If nbMots >= 2 Then
+                                iFirst = InStr(Lignes(i), Mots(2))
+                                .nom = Lignes(i).Substring(iFirst - 1)
+                            Else
+                                .nom = ""
+                            End If
                         Case "HSC" : .hsc = TraiteReal(Mots(nbMots))
                         Case "D" : .d = TraiteReal(Mots(nbMots))
                         Case "FU" : .Fu = TraiteReal(Mots(nbMots))

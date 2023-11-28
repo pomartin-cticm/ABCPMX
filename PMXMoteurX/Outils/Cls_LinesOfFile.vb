@@ -238,4 +238,42 @@ Public Class Cls_LinesOfFile
 
     End Sub
 
+    Public Shared Sub EcrireFile(ByVal FileName As String, ByRef Lines As List(Of String))
+        '
+        '   27/11/23 :  Ajout GUD (issu d'ACB+)
+        '
+        '--------------------------------------------------------------------------------------
+        '
+        '   Ecriture d'un fichier - Transfert d'une liste de lignes dans le fichier
+        '
+        '--------------------------------------------------------------------------------------
+        '
+        '   FileName    [E] :   Nom du fichier
+        '   Lines       [E] :   Lignes du fichiers
+        '
+        '--------------------------------------------------------------------------------------
+
+        Dim MyFile As System.IO.StreamWriter
+
+        Try 'Gestion des erreurs à l'ouverture et la lecture du fichier            
+            'FileOpen(MyConst.NFACCES, FileName, OpenMode.Output)
+            'For i As Integer = 0 To Lines.Count - 1
+            '    WriteLine(MyConst.NFACCES, Lines(i))
+            'Next
+
+            MyFile = My.Computer.FileSystem.OpenTextFileWriter(FileName, False)
+            For i As Integer = 0 To Lines.Count - 1
+                MyFile.WriteLine(Lines(i))
+            Next
+
+
+        Catch
+            MsgBox("Erreur Lecture Fichier " & FileName)
+        Finally
+            'FileClose(MyConst.NFACCES)
+            MyFile.Close()
+        End Try
+
+    End Sub
+
 End Class

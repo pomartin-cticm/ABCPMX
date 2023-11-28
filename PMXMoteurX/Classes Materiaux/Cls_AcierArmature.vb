@@ -21,6 +21,11 @@
     Public FsK As Decimal
 
     ''' <summary>
+    ''' Limite d'élasticité de calcul 
+    ''' </summary>
+    Public Fsd As Decimal
+
+    ''' <summary>
     ''' Module d'élasticité
     ''' </summary>
     Public Es As Decimal

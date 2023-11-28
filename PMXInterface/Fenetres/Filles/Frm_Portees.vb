@@ -288,9 +288,9 @@ Public Class Frm_Portees
             .ZoneEspacement_Bac_Trans(indTravee, 0) = 1
             .ZoneEspacement_Bac_Trans(indTravee, 1) = 1
             .ZoneEspacement_Bac_Trans(indTravee, 2) = 1
-            .ZoneNombreGoujonsTransv(indTravee, 0) = 1
-            .ZoneNombreGoujonsTransv(indTravee, 1) = 1
-            .ZoneNombreGoujonsTransv(indTravee, 2) = 1
+            .NombreGoujonsTransv(indTravee, 0) = 1
+            .NombreGoujonsTransv(indTravee, 1) = 1
+            .NombreGoujonsTransv(indTravee, 2) = 1
             'For j As Integer = 0 To 2
             '    .NombreGoujonsTot(indTravee) += .ZoneLongueur(indTravee, j) / .ZoneEspacement(indTravee, j)
             'Next

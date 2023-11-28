@@ -92,6 +92,11 @@ Public Class cls_Bac
     Public fyp As Decimal
 
     ''' <summary>
+    ''' Limite d'élasticité de calcul du bac
+    ''' </summary>
+    Public fypd As Decimal
+
+    ''' <summary>
     ''' Largeur d'un bac livré par le fabricant
     ''' </summary>
     Public LargeurModule As Decimal
@@ -124,6 +129,32 @@ Public Class cls_Bac
         Parallele
         Perpendiculaire
     End Enum
+
+#End Region
+
+#Region "Propriétés"
+    ''' <summary>
+    ''' Renvoi l'aire par unité de longueur d'un bac acier (utile pour le calcul des armatures transversales)
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property Ape As Decimal
+        Get
+            'Déclaration
+            Dim tp, ep, bb, bt, hp, Ape_loc As Decimal
+
+            'Initialisation
+            tp = Me.Tp
+            ep = Me.Ep
+            bb = Me.Bb
+            bt = Me.Bt
+            hp = Me.Hp
+
+            Ape_loc = tp / ep * (ep + bb - bt + Math.Sqrt((bb - bt) ^ 2 + 4 * hp ^ 2))
+
+            Return Ape_loc
+
+        End Get
+    End Property
 
 #End Region
 

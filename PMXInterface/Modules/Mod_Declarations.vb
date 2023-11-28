@@ -70,6 +70,11 @@ Module Mod_Declarations
         ''' </summary>
         Public Base_Goujons As String
 
+        ''' <summary>
+        ''' Fichier de base de données des connecteurs personnalisés
+        ''' </summary>
+        Public Base_Goujons_Perso As String
+
         '''' <summary>
         '''' Fichier de base de données des icones
         '''' </summary>
@@ -400,6 +405,11 @@ Module Mod_Declarations
 
     Public Const GAMMA_RESISTANCE_MIN As Decimal = 1        ' Comment on divise par gamma, autant éviter les valeurs nulles !
     Public Const GAMMA_RESISTANCE_MAX As Decimal = 2
+
+    Public Const DIASTUDMIN As Double = 0.016       ' Diametre minimal des goujons
+    Public Const DIASTUDMAX As Double = 0.022       ' Diametre maximal des goujons
+
+    Public Const DELTASAISIE As Double = 0.001       ' Tolérance sur les bornes de saisie  (issu d'ACB+)
 
 #End Region
 

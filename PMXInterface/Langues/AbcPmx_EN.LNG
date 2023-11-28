@@ -12,6 +12,33 @@ TEXT4					= BY PRESSING THE BUTTON REFERRED TO BELOW AS ''ACCEPT'', THE USER EXP
 VERSIONLINK				= Do you want to be redirected to the CTICM website?
 WARNING					= Warning
 
+#FRMADDSTUD
+TITLEADD		= Add a new stud
+TITLEMODIFY		= Modify the stud
+TITLEEDIT		= Edit the stud
+OK				= OK
+CANCEL			= Cancel
+CLOSE			= Close
+LABEL			= Label of the stud
+PHIROD			= Rod diameter
+PHIHEAD			= Head diameter
+DEPTHHEAD		= Head depth
+HTOTAL			= Total depth
+FY				= Yielding strength
+FU				= Ultimate strength
+ERRLABEL		= Define a label
+ERRLABELBASE	= Label not valid - already used for an other stud
+ERRVALEUR		= Enter a value
+ERRVALNUM		= Enter a numerical value
+ERRVALHLIM		= Value out of limits 
+ERRFULTFY		= The ultimate strength should be greater than the yielding strength
+ERRDHLTDT		= The head diameter should be greater than 1.5 times the rod diameter (i.e. $)
+ERRHHGTHT		= The head depth should be less than the total depth
+ERRHH04D		= The head depth should be greater than 0.4 x the rod diameter (i.e. $)
+ERRHT3D			= The stud height should be greater than 3 x the rod diameter (i.e. $)
+ERROR			= Check the parameters for the following criteria:
+ERRORFRM		= Parameters errors
+
 #FRM_AJOUTEPP
 TITLE					= New project
 OK						= Ok
@@ -170,9 +197,69 @@ WARNING_CMBTRAVEE			= All the input data must be correct to select an other the 
 ADD						= Add
 DELETE					= Delete
 
+#FRMEDITSTUDS	
+TITLE			= Studs data base
+OK				= OK
+CANCEL			= Cancel
+CLOSE			= Close
+SUPPRESS		= Suppress
+ADD				= Add
+LABEL			= Label of the stud
+PHIROD			= Rod diameter
+PHIHEAD			= Head diameter
+DEPTHHEAD		= Head depth
+HTOTAL			= Total depth
+FY				= Yielding strength
+FU				= Ultimate strength
+INDICE			= Index
+DELETEALL		= Delete all studs ?
+CONFIRM			= Confirm the removing of following studs
+SAVEBASE		= $ studs saved in the data base
+SAVEMODIF		= Do you want to save the modifications of the Studs database ?
+TTMNUNEW		= Add a new stud
+TTMNUMODIFY		= Modify the stud
+TTMNUDELETE		= Remove selected studs
+TTMNUSAVE		= Save studs data base
+ERRLABEL		= Define a label
+ERRLABELBASE	= Label not valid - already defined
+ERRVALEUR		= Enter a value
+ERRVALNUM		= Enter a numerical value
+ERRVALHLIM		= Value out of limits 
+ERRFULTFY		= The ultimate strength should be greater than the yielding strength
+ERRDHLTDT		= The head diameter should be greater than the rod diameter
+ERRHHGTHT		= The head depth should be less than the total depth
+
 #FRM_EDITSTEELSHEETINGS
-TITLE					= Steel sheetings database
-CLOSE					= Close
+TITLE			= Studs data base
+OK				= OK
+CANCEL			= Cancel
+CLOSE			= Close
+SUPPRESS		= Suppress
+ADD				= Add
+LABEL			= Label of the stud
+PHIROD			= Rod diameter
+PHIHEAD			= Head diameter
+DEPTHHEAD		= Head depth
+HTOTAL			= Total depth
+FY				= Yielding strength
+FU				= Ultimate strength
+INDICE			= Index
+DELETEALL		= Delete all studs ?
+CONFIRM			= Confirm the removing of following studs
+SAVEBASE		= $ studs saved in the data base
+SAVEMODIF		= Do you want to save the modifications of the Studs database ?
+TTMNUNEW		= Add a new stud
+TTMNUMODIFY		= Modify the stud
+TTMNUDELETE		= Remove selected studs
+TTMNUSAVE		= Save studs data base
+ERRLABEL		= Define a label
+ERRLABELBASE	= Label not valid - already defined
+ERRVALEUR		= Enter a value
+ERRVALNUM		= Enter a numerical value
+ERRVALHLIM		= Value out of limits 
+ERRFULTFY		= The ultimate strength should be greater than the yielding strength
+ERRDHLTDT		= The head diameter should be greater than the rod diameter
+ERRHHGTHT		= The head depth should be less than the total depth
 
 
 #FRM_ENCASEMENT

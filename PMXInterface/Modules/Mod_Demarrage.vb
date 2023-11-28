@@ -148,6 +148,7 @@ Module Mod_Demarrage
             LogicielFichiers.Base_Sections = LogicielRep.Config & "\" & RacProfile & ExtensionBase
             LogicielFichiers.Base_Aciers = LogicielRep.Config & "\" & RacAcier & ExtensionBase
             LogicielFichiers.Base_Goujons = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+            LogicielFichiers.Base_Goujons_Perso = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacGoujons & "Custom" & ExtensionBase
             LogicielFichiers.Base_Bacs = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
 
             '--> Base de données
@@ -160,7 +161,8 @@ Module Mod_Demarrage
             LireBaseBacs(BaseBacs)
 
             '--> Connecteurs
-            LireBaseGoujons(LogicielFichiers.Base_Goujons, BaseGoujons)
+            'LireBaseGoujons(LogicielFichiers.Base_Goujons, BaseGoujons)
+            GetDataBaseStuds(BaseGoujons)
 
             '--> Gamma coefficients partiels
 
@@ -578,14 +580,14 @@ Module Mod_Demarrage
         If BaseGoujons Is Nothing Then
             nbStud = 0
         Else
-            nbStud = BaseGoujons.GetUpperBound(0) + 1
+            nbStud = BaseGoujons.Count
         End If
 
         '--> Recherche du goujons dans la liste
 
         Do While (Not lTrouve) And (iStud < nbStud - 1)
             iStud += 1
-            lTrouve = (BaseGoujons(iStud).Item1 = MyG.nom)
+            lTrouve = (BaseGoujons(iStud).nom = MyG.nom)
         Loop
 
         '--> Traitement de la recherche
@@ -597,11 +599,11 @@ Module Mod_Demarrage
         End If
 
         If lTrouve Then
-            MyG.nom = BaseGoujons(iStud).Item1
-            MyG.d = BaseGoujons(iStud).Item3
-            MyG.hsc = BaseGoujons(iStud).Item2
-            MyG.Fy = BaseGoujons(iStud).Item4
-            MyG.Fu = BaseGoujons(iStud).Item5
+            MyG.nom = BaseGoujons(iStud).nom
+            MyG.d = BaseGoujons(iStud).d
+            MyG.hsc = BaseGoujons(iStud).hsc
+            MyG.Fy = BaseGoujons(iStud).Fy
+            MyG.Fu = BaseGoujons(iStud).Fu
         End If
     End Sub
 

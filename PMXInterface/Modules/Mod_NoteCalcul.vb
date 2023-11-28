@@ -980,7 +980,7 @@ Module Mod_NoteCalcul
                             InitialiseLigne(nbColonne, HLIGNE, True)
                             AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, i)
                             AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneLongueur(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneNombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                             If lDalleMixteEtPerp Then
                                 If .ZoneEspacement_Bac_Trans(i, j) = 1 Then
                                     AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIB"))

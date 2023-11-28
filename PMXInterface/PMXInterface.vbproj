@@ -80,10 +80,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Cls_Rapport.vb" />
+    <Compile Include="Fenetres\EditionBases\Frm_AddGoujon.Designer.vb">
+      <DependentUpon>Frm_AddGoujon.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\EditionBases\Frm_AddGoujon.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\EditionBases\Frm_EditBaseBacsAcier.Designer.vb">
       <DependentUpon>Frm_EditBaseBacsAcier.vb</DependentUpon>
     </Compile>
     <Compile Include="Fenetres\EditionBases\Frm_EditBaseBacsAcier.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\EditionBases\Frm_EditGoujons.Designer.vb">
+      <DependentUpon>Frm_EditGoujons.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\EditionBases\Frm_EditGoujons.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_BacN.Designer.vb">
@@ -373,8 +385,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Fenetres\EditionBases\Frm_AddGoujon.resx">
+      <DependentUpon>Frm_AddGoujon.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\EditionBases\Frm_EditBaseBacsAcier.resx">
       <DependentUpon>Frm_EditBaseBacsAcier.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\EditionBases\Frm_EditGoujons.resx">
+      <DependentUpon>Frm_EditGoujons.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_BacN.resx">
       <DependentUpon>Frm_BacN.vb</DependentUpon>
