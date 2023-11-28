@@ -5,7 +5,6 @@ Public Class Frm_EditGoujons
 #Region " Variables locales "
 
     Dim lBuild As Boolean = True
-    Dim lGoujonModifie As Boolean
 
     Public ColorModifie As Color = Color.Blue
 
@@ -13,10 +12,10 @@ Public Class Frm_EditGoujons
         Dim Info() As Integer
     End Structure
 
-    Public ListGoujons As New List(Of cls_Connecteur)
+    Public ListGoujons As List(Of cls_Connecteur)
 
-    Dim tabModif As New List(Of TableMod)
-    Dim tabErreurs As New Dictionary(Of String, String)
+    Dim tabModif As List(Of TableMod)
+    Dim tabErreurs As Dictionary(Of String, String)
 
     Public IndGoujon As Integer    'Communication avec la fenetre AddGoujon
     '                           'Si non nul, on modifie un goujon, sinon on ajoute
@@ -50,16 +49,23 @@ Public Class Frm_EditGoujons
     End Sub
 
     Public Sub InitialiserFenetre()
+        InitialisationVariables()
         GestionLangues()
         GestionStyle()
         lBuild = False
     End Sub
 
+    Private Sub InitialisationVariables()
+        ListGoujons = New List(Of cls_Connecteur)
+        tabModif = New List(Of TableMod)
+        tabErreurs = New Dictionary(Of String, String)
+    End Sub
+
     Private Sub GestionLangues()
         If File.Exists(LogicielFichiers.Langue) Then
 
-            Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_BASIC")
+            'Dim Bloc As New Dictionary(Of String, String)
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRMEDITSTUDS")
             BlocLine.CreationBloc(Bloc)
 
             Try
@@ -68,7 +74,6 @@ Public Class Frm_EditGoujons
 
                 Me.Text = Bloc("TITLE")
                 Me.btn_OK.Text = Bloc("OK")
-                Me.btn_Cancel.Text = Bloc("CANCEL")
 
                 '--> Entetes de la grille
 
@@ -108,8 +113,8 @@ Public Class Frm_EditGoujons
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
-            Finally
-                Bloc.Clear()
+                'Finally
+                'Bloc.Clear()
             End Try
 
         End If
@@ -137,11 +142,11 @@ Public Class Frm_EditGoujons
         lBuild = True
         'Me.cmd_Supprimer.Enabled = (nCaseSelect > 0)
         Me.Grid_Studs.Rows.Clear()
-        Me.btn_OK.Visible = False
+        Me.btn_Ok.Visible = True
 
         '--> Recupération des connecteurs dans les bases de données fixe et personnelles
 
-        GetDataBaseStuds(BaseGoujons)
+        GetDataBaseStuds(ListGoujons)
 
         'Dim LinesStuds As New cls_LinesOfFile(FileACB.Studs)
 
@@ -163,9 +168,9 @@ Public Class Frm_EditGoujons
 
         '--> On place tous les connecteurs dans le tableau
 
-        For iStud = 0 To BaseGoujons.Count - 1
+        For iStud = 0 To ListGoujons.Count - 1
 
-            AddGoujonDansGrille(BaseGoujons(iStud))
+            AddGoujonDansGrille(ListGoujons(iStud))
 
         Next
 
@@ -211,8 +216,8 @@ Public Class Frm_EditGoujons
         Me.Grid_Studs(i0 + 2, iStud - 1).Value = GetStringNoUnit(MyBaseG_loc.d, Enu_TypeVariable.Dimension) 'diametre 
         Me.Grid_Studs(i0 + 3, iStud - 1).Value = GetStringNoUnit(MyBaseG_loc.d_tete, Enu_TypeVariable.Dimension) 'diametre tete
         Me.Grid_Studs(i0 + 4, iStud - 1).Value = GetStringNoUnit(MyBaseG_loc.h_tete, Enu_TypeVariable.Dimension) 'hauteur tete
-        Me.Grid_Studs(i0 + 5, iStud - 1).Value = GetStringNoUnit(MyBaseG_loc.Fy, Enu_TypeVariable.ContrainteMPa) 'fy
-        Me.Grid_Studs(i0 + 6, iStud - 1).Value = GetStringNoUnit(MyBaseG_loc.Fu, Enu_TypeVariable.ContrainteMPa) 'fu
+        Me.Grid_Studs(i0 + 5, iStud - 1).Value = GetStringNoUnit(MyBaseG_loc.Fy, Enu_TypeVariable.Contrainte) 'fy
+        Me.Grid_Studs(i0 + 6, iStud - 1).Value = GetStringNoUnit(MyBaseG_loc.Fu, Enu_TypeVariable.Contrainte) 'fu
         Me.Grid_Studs(1, iStud - 1).Value = iStud
 
         If MyBaseG_loc.lCustom Then
@@ -250,8 +255,8 @@ Public Class Frm_EditGoujons
         Me.Grid_Studs(i0 + 2, iStud - 1).Value = GetStringNoUnit(PhiTige, Enu_TypeVariable.Dimension)
         Me.Grid_Studs(i0 + 3, iStud - 1).Value = GetStringNoUnit(PhiTete, Enu_TypeVariable.Dimension)
         Me.Grid_Studs(i0 + 4, iStud - 1).Value = GetStringNoUnit(HTete, Enu_TypeVariable.Dimension)
-        Me.Grid_Studs(i0 + 5, iStud - 1).Value = GetStringNoUnit(fy, Enu_TypeVariable.ContrainteMPa)
-        Me.Grid_Studs(i0 + 6, iStud - 1).Value = GetStringNoUnit(fu, Enu_TypeVariable.ContrainteMPa)
+        Me.Grid_Studs(i0 + 5, iStud - 1).Value = GetStringNoUnit(fy, Enu_TypeVariable.Contrainte)
+        Me.Grid_Studs(i0 + 6, iStud - 1).Value = GetStringNoUnit(fu, Enu_TypeVariable.Contrainte)
         Me.Grid_Studs(1, iStud - 1).Value = iStud
 
         If lAff Then
@@ -321,7 +326,7 @@ Public Class Frm_EditGoujons
     '    Me.Close()
     'End Sub
 
-    Private Sub cmd_Annuler_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_Cancel.Click
+    Private Sub cmd_Annuler_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btn_Ok.Click
         Me.Close()
     End Sub
     Private Sub Frm_EditGoujons_FormClosing(ByVal sender As System.Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles MyBase.FormClosing
@@ -346,7 +351,7 @@ Public Class Frm_EditGoujons
 
 #Region "Gestion de la Grille"
 
-    Private Sub Grid_Studs_CellMouseClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.DataGridViewCellMouseEventArgs) Handles Grid_Studs.CellMouseClick
+    Private Sub Grid_Studs_CellMouseClick(sender As Object, e As DataGridViewCellEventArgs) Handles Grid_Studs.CellEnter
         Dim indCol As Integer = e.ColumnIndex
         Dim indRow As Integer = e.RowIndex
 
@@ -367,7 +372,7 @@ Public Class Frm_EditGoujons
 
         End If
 
-        MAJ_BarreOutils(indRow)
+        If Not indRow = -1 Then MAJ_BarreOutils(indRow)
     End Sub
 
     Sub MAJ_BarreOutils(ByVal IndiceStud As Integer)
@@ -464,7 +469,7 @@ Public Class Frm_EditGoujons
             Frm_AddGoujon.Dispose()
 
 
-            If lGoujonModifie Then
+            If ListGoujons(IndGoujon - 1).lGoujonModifie Then
                 'Si on a modifié le goujon, il faut mettre à jour le tableau
 
                 'Dim ColorCell As Color
@@ -498,18 +503,21 @@ Public Class Frm_EditGoujons
                     Me.Grid_Studs(FIRSTCOL + 4, IndGoujon - 1).Value = Chaine
                     lModif = True
                 End If
-                Chaine = GetStringNoUnit(ListGoujons(IndGoujon - 1).Fy, Enu_TypeVariable.ContrainteMPa).Trim
+                Chaine = GetStringNoUnit(ListGoujons(IndGoujon - 1).Fy, Enu_TypeVariable.Contrainte).Trim
                 If Chaine <> Me.Grid_Studs(FIRSTCOL + 5, IndGoujon - 1).Value.ToString.Trim Then
                     Me.Grid_Studs(FIRSTCOL + 5, IndGoujon - 1).Style.ForeColor = ColorModifie
                     Me.Grid_Studs(FIRSTCOL + 5, IndGoujon - 1).Value = Chaine
                     lModif = True
                 End If
-                Chaine = GetStringNoUnit(ListGoujons(IndGoujon - 1).Fu, Enu_TypeVariable.ContrainteMPa).Trim
+                Chaine = GetStringNoUnit(ListGoujons(IndGoujon - 1).Fu, Enu_TypeVariable.Contrainte).Trim
                 If Chaine <> Me.Grid_Studs(FIRSTCOL + 6, IndGoujon - 1).Value.ToString.Trim Then
                     Me.Grid_Studs(FIRSTCOL + 6, IndGoujon - 1).Style.ForeColor = ColorModifie
                     Me.Grid_Studs(FIRSTCOL + 6, IndGoujon - 1).Value = Chaine
                     lModif = True
                 End If
+
+                ListGoujons(IndGoujon - 1).lGoujonModifie = False 'on vient d'afficher les modifications du goujons, cette variable est réinitialisée à False 
+
             End If
             If lModif Then Me.MenuEnregistrerBase.Enabled = True
 
@@ -754,12 +762,12 @@ Public Class Frm_EditGoujons
                 nbPerso += 1
 
                 Chaine = Me.ListGoujons(i).nom & ","
-                PositionneDansChaine(Chaine, tabTabul(0), FrmReel(Me.ListGoujons(i).hsc * kUnit, 1))
-                PositionneDansChaine(Chaine, tabTabul(1), FrmReel(Me.ListGoujons(i).d * kUnit, 1))
-                PositionneDansChaine(Chaine, tabTabul(2), FrmReel(Me.ListGoujons(i).d_tete * kUnit, 1))    '==Correction V1.01
-                PositionneDansChaine(Chaine, tabTabul(3), FrmReel(Me.ListGoujons(i).h_tete * kUnit, 1))      '==Correction V1.01
-                PositionneDansChaine(Chaine, tabTabul(4), FrmReel(Me.ListGoujons(i).Fy, 1))
-                PositionneDansChaine(Chaine, tabTabul(5), FrmReel(Me.ListGoujons(i).Fu, 2))
+                PositionneDansChaine(Chaine, tabTabul(0), FrmReel(Me.ListGoujons(i).hsc * kUnit, 3))
+                PositionneDansChaine(Chaine, tabTabul(1), FrmReel(Me.ListGoujons(i).d * kUnit, 3))
+                PositionneDansChaine(Chaine, tabTabul(2), FrmReel(Me.ListGoujons(i).d_tete * kUnit, 3))    '==Correction V1.01
+                PositionneDansChaine(Chaine, tabTabul(3), FrmReel(Me.ListGoujons(i).h_tete * kUnit, 3))      '==Correction V1.01
+                PositionneDansChaine(Chaine, tabTabul(4), FrmReel(Me.ListGoujons(i).Fy, 3))
+                PositionneDansChaine(Chaine, tabTabul(5), FrmReel(Me.ListGoujons(i).Fu, 3))
                 Lines.Add(Chaine)
             End If
         Next
@@ -799,6 +807,9 @@ Public Class Frm_EditGoujons
 
         '--[ Sauvegarde du nouveau fichier
         StockeBase(LogicielFichiers.Base_Goujons_Perso, nbPerso)
+
+        '--[ MAJ de l'ancienne BDD
+        BaseGoujons = ListGoujons
 
         '--[ Information utilisateur
         If nbPerso > 0 Then

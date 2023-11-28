@@ -1162,25 +1162,28 @@ Module Mod_Outils
         '
         '----------------------------------------------------------------------------------------
 
-        Dim sb As New System.Text.StringBuilder
-        Dim Zero As Char = CChar("0")
+        'Dim sb As New System.Text.StringBuilder
+        'Dim Zero As Char = CChar("0")
 
-        Dim PartieE As Integer, PartieD As Single
-        If iDec = 0 Then
-            PartieE = CInt(Math.Round(Valeur))
-        Else
-            PartieE = CInt(Math.Floor(Valeur))
-        End If
-        sb.Append(PartieE.ToString)
-        If iDec > 0 Then
-            Dim sf As New System.Text.StringBuilder
-            sb.Append(".")
-            PartieD = CSng(Math.Round((Valeur - PartieE) * Math.Pow(10, iDec)))
-            sf.Append(Zero, iDec)
-            sb.Append(Format(PartieD, sf.ToString))
-        End If
+        'Dim PartieE As Integer, PartieD As Single
 
-        Return sb.ToString
+        'If iDec = 0 Then
+        '    PartieE = CInt(Math.Round(Valeur))
+        'Else
+        '    PartieE = CInt(Math.Floor(Valeur))
+        'End If
+        'sb.Append(PartieE.ToString)
+        'If iDec > 0 Then
+        '    Dim sf As New System.Text.StringBuilder
+        '    sb.Append(".")
+        '    PartieD = CSng(Math.Round((Valeur - PartieE) * Math.Pow(10, iDec)))
+        '    sf.Append(Zero, iDec)
+        '    sb.Append(Format(PartieD, sf.ToString))
+        'End If
+
+        'Return sb.ToString
+
+        Return Math.Round(Valeur, iDec)
     End Function
 
 #End Region

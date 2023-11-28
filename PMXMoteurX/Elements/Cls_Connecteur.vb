@@ -48,6 +48,8 @@ Public Class cls_Connecteur
     ''' </summary>
     Public lCustom As Boolean = False 'indique si provient de la base personnelle
 
+    Public lGoujonModifie As Boolean = False 'indique si le goujon a été modifié depuis la fenetre Frm_AddGoujon, permet de mettre a jour l'affichage du Frm_EditGoujon si besoin
+
     Public ReadOnly Property IndiceDataBase As Integer
         Get
             'For i As Integer = 0 To goujons_database.Length - 1

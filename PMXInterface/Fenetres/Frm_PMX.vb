@@ -362,6 +362,7 @@ Public Class Frm_PMX
 
             '--> Mise à jour du TreeView
             AffichageTViewChk()
+            MAJToolBarPoutre()
             Me.img_Main.Invalidate()
 
         End If
@@ -440,6 +441,20 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
+    Private Sub GestionBoutonsBarreOutilGenerale(sender As Object, e As EventArgs) Handles TSbtn_EditStuds.Click, TSbtn_EditProfiles.Click, TSbtn_EditBacs.Click
+
+        Select Case sender.name
+            Case Me.TSbtn_EditStuds.Name
+                FilleEnCours = EnuFenetres.EditGoujons
+            Case Me.TSbtn_EditProfiles.Name
+                FilleEnCours = EnuFenetres.EditSection
+            Case Me.TSbtn_EditBacs.Name
+                FilleEnCours = EnuFenetres.EditBac
+        End Select
+
+        AfficheFenetreEnCours()
+
+    End Sub
 
     Private Sub TSmenuPP_Click(sender As Object, e As EventArgs) Handles TSmenuPPLargeurEfficace.Click,
         TSmenuPPChargements.Click, TSmenuPPCombinaisons.Click, TSmenuPPVerifications.Click, TSmenuPPModePropre.Click
@@ -636,6 +651,19 @@ Public Class Frm_PMX
             Case EnuFenetres.PPVerifications
                 Frm_PPVerifications.ShowDialog()
                 Frm_PPVerifications.Dispose()
+
+            Case EnuFenetres.EditGoujons
+                If LogicielOptions.lFenetres Then
+                    Frm_EditGoujons.ShowDialog()
+                End If
+
+            Case EnuFenetres.EditBac
+                If LogicielOptions.lFenetres Then
+                    Frm_EditBaseBacsAcier.ShowDialog()
+                End If
+
+
+
         End Select
 
         MAJMainToolBar()

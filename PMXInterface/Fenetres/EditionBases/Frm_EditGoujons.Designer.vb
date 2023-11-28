@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Frm_EditGoujons
     Inherits System.Windows.Forms.Form
 
     'Form remplace la méthode Dispose pour nettoyer la liste des composants.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Frm_EditGoujons
     'REMARQUE : la procédure suivante est requise par le Concepteur Windows Form
     'Elle peut être modifiée à l'aide du Concepteur Windows Form.  
     'Ne la modifiez pas à l'aide de l'éditeur de code.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_EditGoujons))
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
@@ -48,8 +48,7 @@ Partial Class Frm_EditGoujons
         Me.Col_UltimateStrength = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.Col_Vide = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.etq_test = New System.Windows.Forms.Label()
-        Me.btn_Cancel = New System.Windows.Forms.Button()
-        Me.btn_OK = New System.Windows.Forms.Button()
+        Me.btn_Ok = New System.Windows.Forms.Button()
         Me.ToolStrip1.SuspendLayout()
         CType(Me.Grid_Studs, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -247,39 +246,27 @@ Partial Class Frm_EditGoujons
         Me.etq_test.Text = "Label1"
         Me.etq_test.Visible = False
         '
-        'btn_Cancel
+        'btn_Ok
         '
-        Me.btn_Cancel.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btn_Cancel.Location = New System.Drawing.Point(576, 496)
-        Me.btn_Cancel.Name = "btn_Cancel"
-        Me.btn_Cancel.Size = New System.Drawing.Size(82, 24)
-        Me.btn_Cancel.TabIndex = 16
-        Me.btn_Cancel.Text = "btn_Cancel"
-        Me.btn_Cancel.UseVisualStyleBackColor = True
-        '
-        'btn_OK
-        '
-        Me.btn_OK.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_OK.Location = New System.Drawing.Point(488, 496)
-        Me.btn_OK.Name = "btn_OK"
-        Me.btn_OK.Size = New System.Drawing.Size(82, 24)
-        Me.btn_OK.TabIndex = 15
-        Me.btn_OK.Text = "btn_OK"
-        Me.btn_OK.UseVisualStyleBackColor = True
+        Me.btn_Ok.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_Ok.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btn_Ok.Location = New System.Drawing.Point(576, 496)
+        Me.btn_Ok.Name = "btn_Ok"
+        Me.btn_Ok.Size = New System.Drawing.Size(82, 24)
+        Me.btn_Ok.TabIndex = 16
+        Me.btn_Ok.Text = "btn_Ok"
+        Me.btn_Ok.UseVisualStyleBackColor = True
         '
         'Frm_EditGoujons
         '
-        Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.CancelButton = Me.btn_Cancel
+        Me.CancelButton = Me.btn_Ok
         Me.ClientSize = New System.Drawing.Size(675, 530)
         Me.Controls.Add(Me.ToolStrip1)
         Me.Controls.Add(Me.etq_test)
         Me.Controls.Add(Me.Grid_Studs)
-        Me.Controls.Add(Me.btn_Cancel)
-        Me.Controls.Add(Me.btn_OK)
+        Me.Controls.Add(Me.btn_Ok)
         Me.MaximumSize = New System.Drawing.Size(691, 800)
         Me.MinimumSize = New System.Drawing.Size(691, 500)
         Me.Name = "Frm_EditGoujons"
@@ -312,6 +299,5 @@ Partial Class Frm_EditGoujons
     Friend WithEvents Col_UltimateStrength As DataGridViewTextBoxColumn
     Friend WithEvents Col_Vide As DataGridViewTextBoxColumn
     Friend WithEvents etq_test As Label
-    Friend WithEvents btn_Cancel As Button
-    Friend WithEvents btn_OK As Button
+    Friend WithEvents btn_Ok As Button
 End Class

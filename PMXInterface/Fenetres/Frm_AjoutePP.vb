@@ -544,7 +544,7 @@ Public Class Frm_AjoutePP
     End Sub
 
     Private Sub Frm_AjoutePP_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        MsgBox("pom2")
+        'MsgBox("pom2")
     End Sub
 
     'Private Sub Frm_AjoutePP_Deactivate(sender As Object, e As EventArgs) Handles MyBase.Deactivate

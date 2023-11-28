@@ -351,6 +351,9 @@ Module Mod_Declarations
         Connexion
         Dalle
         DalleN
+        EditBac
+        EditGoujons
+        EditSection
         Enrobage
         Entraxes
         Etaiement
