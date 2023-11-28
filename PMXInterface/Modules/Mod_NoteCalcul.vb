@@ -1656,6 +1656,7 @@ Module Mod_NoteCalcul
         Dim iTravee, i As Integer
         Dim iNodeO, iNodeE As Integer
         Dim iTravDeb, iTravFin As Integer
+        Dim iTraveeAffichee As Integer = 1
         Dim iCompteur As Integer = 0
         Dim NbLignesMax() As Integer = {25, 30}
         Dim iTab As Integer = 0
@@ -1691,7 +1692,7 @@ Module Mod_NoteCalcul
             '=== Extrémité gauche
 
             If iTravee = iTravDeb Then
-                LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, i, iTravee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
+                LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, i, iTraveeAffichee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
                                              VEd(0, 1), MEd(0, 1))
                 iCompteur += 1
             End If
@@ -1710,24 +1711,21 @@ Module Mod_NoteCalcul
                     EnteteTableauAnalyseCombi(lMultispan, NCol, PosTab)
                 End If
 
-                If i = iNodeO Then
-                ElseIf i = iNodeE Then
-                Else
-                    LigneTableauMVCombi(lMultispan, NCol, PosTab, i, iTravee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
+                LigneTableauMVCombi(lMultispan, NCol, PosTab, i, iTraveeAffichee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
                                         VEd(i, 0), VEd(i, 1), MEd(i, 0), MEd(i, 1))
-                End If
             Next
 
             '=== Appui droite
 
             If iTravee = iTravFin Then
-                LigneTableauMVCombiExtremite(lMultispan, False, NCol, PosTab, iNodeE, iTravee, myPoutre.Nodes.xTravee(iNodeE), myPoutre.Nodes.xGlobal(iNodeE),
+                LigneTableauMVCombiExtremite(lMultispan, False, NCol, PosTab, iNodeE, iTraveeAffichee, myPoutre.Nodes.xTravee(iNodeE), myPoutre.Nodes.xGlobal(iNodeE),
                                              VEd(iNodeE, 0), MEd(iNodeE, 0))
             Else
-                LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTravee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
+                LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTraveeAffichee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
                                          VEd(i, 0), VEd(i, 1), MEd(i, 0), MEd(i, 1))
             End If
             iCompteur += 1
+            iTraveeAffichee += 1
         Next
 
         '# Fin du Tableau
@@ -1831,7 +1829,7 @@ Module Mod_NoteCalcul
 
         '# Position et travée
 
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee + 1) & " / " & CStr(iTravee + 2))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee) & " / " & CStr(iTravee + 1))
 
         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosT, Enu_TypeVariable.Longueur, 3, 2, False) & " / 0")
         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosG, Enu_TypeVariable.Longueur, 3, 2, False))
@@ -1892,12 +1890,12 @@ Module Mod_NoteCalcul
 
         InitialiseLigne(pNColLigne, HLIGNE, True)
 
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode))
 
         '# Position et travée
 
         If lMultiSpan Then
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee + 1))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee))
 
             AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosT, Enu_TypeVariable.Longueur, 3, 2, False))
             AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosG, Enu_TypeVariable.Longueur, 3, 2, False))
@@ -1945,8 +1943,13 @@ Module Mod_NoteCalcul
 
         '--> Initialisation
 
-        Pos = 10
-        If lMultiSpan Then NCol = 8 Else NCol = 6
+        If lMultiSpan Then
+            NCol = 8
+            Pos = 10
+        Else
+            NCol = 6
+            Pos = 20
+        End If
 
         AddLigneNDC("\TABLEAU " & CStr(Pos))
 
@@ -2052,13 +2055,26 @@ Module Mod_NoteCalcul
 
         '--> Déclaration
 
-        Dim IndGauche As String
-        Dim IndDroite As String
+        '--> Déclarations
+
+        Dim lRetrait As Boolean = True
+        Dim lMultispan As Boolean
+        Dim NCol, PosTab As Integer
+        Dim iTravee, i As Integer
+        Dim iNodeO, iNodeE As Integer
+        Dim iTravDeb, iTravFin As Integer
+        Dim iTraveeAffichee As Integer = 1
+        Dim iCompteur As Integer = 0
+        Dim NbLignesMax() As Integer = {25, 30}
+        Dim iTab As Integer = 0
 
         '--> Initialisation
 
-        IndGauche = IndiceGaucheDroite(True)
-        IndDroite = IndiceGaucheDroite(False)
+        lMultispan = (MyPoutreLoc.NbTravees > 1)
+        iTravDeb = MyPoutreLoc.IndicePremiereTravee
+        iTravFin = MyPoutreLoc.IndiceDerniereTravee
+
+        '--> Affichage de la combinaison
 
         AddTitreNdC(3, ChargeA.Symbol & " :" & ChargeA.Nom)
 
@@ -2067,47 +2083,59 @@ Module Mod_NoteCalcul
             Exit Sub
         End If
 
-        '--> Entête => A mettre dans une routine séparée et gérer le nombre de ligne dans la tableau
+        '--> Affichage de la combinaison
 
-        AddLigneNDC("\TABLEAU 10")
+        '# Entête
 
-        InitialiseLigne(8, HLIGNE, True)
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("NODE"))
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("SPAN"))
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-" & BlocAnalyse("SPAN") & "\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x\-" & BlocAnalyse("GLOBAL") & "\= (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-" & IndGauche & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "V\-" & IndDroite & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-" & IndGauche & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitMoment) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "M\-" & IndDroite & "\= (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitMoment) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        EnteteTableauAnalyseCombi(lMultispan, NCol, PosTab)
 
-        Dim indTravee As Integer()
-        For i As Integer = 0 To MyPoutreLoc.Nodes.nbNodes - 1
-            indTravee = IndiceTravee(i, MyPoutreLoc.Nodes.iNodeAppui)
+        '# Tableau
 
-            InitialiseLigne(8, HLIGNE, True)
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(i))
+        For iTravee = iTravDeb To iTravFin
+            iNodeO = MyPoutreLoc.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeE = MyPoutreLoc.Nodes.iNodeExtTrav(iTravee, 1)
 
+            '=== Extrémité gauche
 
-            '# BUG
-            'If indTravee(0) = indTravee(1) Then
-            '    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(indTravee(0)))
-            'Else
-            '    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(indTravee(0)) & "/" & CStr(indTravee(1)))
-            'End If
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(0))
+            If iTravee = iTravDeb Then
+                LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, i, iTraveeAffichee, MyPoutreLoc.Nodes.xTravee(i), MyPoutreLoc.Nodes.xGlobal(i),
+                                            ChargeA.VZ(0, 1), ChargeA.MYY(0, 1))
+                iCompteur += 1
+            End If
 
+            '=== Lignes intermédiaires
 
+            For i = iNodeO + 1 To iNodeE - 1
 
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyPoutreLoc.Nodes.xTravee(i), Enu_TypeVariable.Longueur, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyPoutreLoc.Nodes.xGlobal(i), Enu_TypeVariable.Longueur, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.VZ(i, 0), Enu_TypeVariable.Effort, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.VZ(i, 1), Enu_TypeVariable.Effort, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.MYY(i, 0), Enu_TypeVariable.Moment, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(ChargeA.MYY(i, 1), Enu_TypeVariable.Moment, 3, 2, False))
+                iCompteur += 1
 
+                If iCompteur > NbLignesMax(iTab) Then
+                    FinTableau()
+                    iCompteur = 0
+                    iTab = 1
+                    SautePage()
+                    EnteteTableauAnalyseCombi(lMultispan, NCol, PosTab)
+                End If
+
+                LigneTableauMVCombi(lMultispan, NCol, PosTab, i, iTraveeAffichee, MyPoutreLoc.Nodes.xTravee(i), MyPoutreLoc.Nodes.xGlobal(i),
+                                        ChargeA.VZ(i, 0), ChargeA.VZ(i, 1), ChargeA.MYY(i, 0), ChargeA.MYY(i, 1))
+
+            Next
+
+            '=== Appui droite
+
+            If iTravee = iTravFin Then
+                LigneTableauMVCombiExtremite(lMultispan, False, NCol, PosTab, iNodeE, iTraveeAffichee, MyPoutreLoc.Nodes.xTravee(iNodeE), MyPoutreLoc.Nodes.xGlobal(iNodeE),
+                                             ChargeA.VZ(iNodeE, 0), ChargeA.MYY(iNodeE, 0))
+            Else
+                LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTraveeAffichee, MyPoutreLoc.Nodes.xTravee(i), MyPoutreLoc.Nodes.xGlobal(i),
+                                         ChargeA.VZ(i, 0), ChargeA.VZ(i, 1), ChargeA.MYY(i, 0), ChargeA.MYY(i, 1))
+            End If
+            iCompteur += 1
+            iTraveeAffichee += 1
         Next
 
+        '# Fin du Tableau
 
         FinTableau()
     End Sub
