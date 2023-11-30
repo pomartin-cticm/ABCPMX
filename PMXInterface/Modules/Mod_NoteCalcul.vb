@@ -3794,6 +3794,124 @@ Module Mod_NoteCalcul
 
 #End Region
 
+#Region "   Edition Note Catalogue "
+
+    Sub AAA_EditionCATALOGUE(ByVal lEdite As Boolean, MyProfilA_loc As cls_ProfilA)
+        '----------------------------------------------------------------------------------------------
+        '
+        '   30/11/23 :  Création - GUD
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   Routine générale pilotant la Création et l'Edition de la Note de Calcul
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '                       Ou si elle est deja ouverte (lCreation=False)
+        '
+        '----------------------------------------------------------------------------------------------
+        '
+        '   lEdite      [E] :   Indique si on ouvre la fenetre ou pas
+        '
+        '----------------------------------------------------------------------------------------------
+
+        '--[ Initialisation des fichiers langues
+
+
+        Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_MAIN")
+        BlocLine.CreationBloc(Bloc)
+
+        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_SECTIONPROP")
+        BlocLine.CreationBloc(BlocSP)
+
+        '--[ Initialisations
+
+        MyNote = New Cls_Rapport("Arial", 1.5, 3, 3)
+
+        '--[ Création de la Note
+
+        lChapitreOutOfScope = False
+
+        '--[ Initialisation
+
+        MyNote.Clear()
+
+        'Initialiser les indices
+        For I = 0 To 2
+            MyNote.IndTitre(I) = 0
+        Next
+
+        If MyProjet.Entreprise.Trim = "" Then
+            MyNote.EntetePrincipal = MyProjet.Utilisateur
+        Else
+            MyNote.EntetePrincipal = MyProjet.Entreprise & " - " & MyProjet.Utilisateur
+        End If
+        MyNote.EnteteSecond = MyProjet.Nom
+
+        MyNote.EtiquetteLigne(0, 0) = Bloc("USER")
+        MyNote.EtiquetteLigne(1, 0) = Bloc("SOCIETE")
+        MyNote.EtiquetteLigne(2, 0) = Bloc("PROJET")
+
+        Const DPTS As String = ":  "
+        MyNote.EtiquetteLigne(0, 1) = DPTS & MyProjet.Utilisateur
+        MyNote.EtiquetteLigne(1, 1) = DPTS & MyProjet.Entreprise
+        MyNote.EtiquetteLigne(2, 1) = DPTS & MyProjet.Nom
+
+        MyNote.FootNote = Bloc("FOOTNOTE")
+
+        '--|=========================================
+        '--| PAGE DE GARDE
+        '--|=========================================
+
+        EditionPageDeGarde(MyProjet.Nom)
+
+        '--|=========================================
+        '--| PARAMETRES
+        '--|=========================================
+
+
+        SautePage()
+
+        AddTitreNdC(1, Bloc("SPROFILE"))
+
+        AddLigneNDC(TABW2 & Bloc("HS_PROFILE") & TABAFF & "h\-s\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ha, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & Bloc("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & Bloc("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & Bloc("HW_PROFILE") & TABAFF & "h\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.HauteurAmeHw, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & Bloc("DW_PROFILE") & TABAFF & "d\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.HauteurAmeDw, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & Bloc("TW_PROFILE") & TABAFF & "t\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.Tw, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & Bloc("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnit(MyProfilA_loc.Rcs, Enu_TypeVariable.Dimension, 2, -1, True))
+
+        SauteLigne()
+
+        AddLigneNDC(TABW2 & Bloc("A_PROFILE") & TABAFF & "A" & TABEGAL & GetStringInUnit(MyProfilA_loc.Aire, Enu_TypeVariable.AireCM2, 4, 1, True))
+        AddLigneNDC(TABW2 & Bloc("AV_PROFILE") & TABAFF & "A\-v\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.AireAv, Enu_TypeVariable.AireCM2, 4, 1, True))
+        AddLigneNDC(TABW2 & Bloc("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieY, Enu_TypeVariable.InertieCM4, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("IZ_PROFILE") & TABAFF & "I\-z\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("WEL_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & Bloc("WEL_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & Bloc("WPL_PROFILE") & TABAFF & "W\-pl\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & Bloc("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
+        AddLigneNDC(TABW2 & Bloc("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
+
+        AddLigneNDC("\IMG PROFIL_ACIER 10 80 30 NoCadre")
+
+        '--[ Edition de la Note dans l'Editeur
+
+        If lEdite Then
+            '--> Ouverture de la fenêtre
+            Frm_NoteCalcul.ShowDialog()
+            Frm_NoteCalcul.Dispose()
+            '--> Liberation de la note
+            MyNote.Dispose()
+        End If
+
+
+    End Sub
+
+
+
+#End Region
 
 
 End Module

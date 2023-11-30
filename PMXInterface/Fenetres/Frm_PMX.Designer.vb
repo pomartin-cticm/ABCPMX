@@ -52,6 +52,8 @@ Partial Class Frm_PMX
         Me.TSbtn_Chargements = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Gamma = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Combinaisons = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TSbtn_OptionsCalculPoutre = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Hivoss = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_OptionsIncendie = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -139,8 +141,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
-        Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_OptionsCalculPoutre = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -474,6 +474,20 @@ Partial Class Frm_PMX
         Me.TSbtn_Combinaisons.Name = "TSbtn_Combinaisons"
         Me.TSbtn_Combinaisons.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Combinaisons.Text = "TSbtn_Combinaisons"
+        '
+        'ToolStripSeparator5
+        '
+        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
+        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 31)
+        '
+        'TSbtn_OptionsCalculPoutre
+        '
+        Me.TSbtn_OptionsCalculPoutre.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_OptionsCalculPoutre.Image = CType(resources.GetObject("TSbtn_OptionsCalculPoutre.Image"), System.Drawing.Image)
+        Me.TSbtn_OptionsCalculPoutre.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_OptionsCalculPoutre.Name = "TSbtn_OptionsCalculPoutre"
+        Me.TSbtn_OptionsCalculPoutre.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_OptionsCalculPoutre.Text = "ToolStripButton1"
         '
         'TSbtn_Hivoss
         '
@@ -1192,20 +1206,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(0, "Enregistrer_NotOK")
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
-        '
-        'ToolStripSeparator5
-        '
-        Me.ToolStripSeparator5.Name = "ToolStripSeparator5"
-        Me.ToolStripSeparator5.Size = New System.Drawing.Size(6, 31)
-        '
-        'TSbtn_OptionsCalculPoutre
-        '
-        Me.TSbtn_OptionsCalculPoutre.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_OptionsCalculPoutre.Image = CType(resources.GetObject("TSbtn_OptionsCalculPoutre.Image"), System.Drawing.Image)
-        Me.TSbtn_OptionsCalculPoutre.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_OptionsCalculPoutre.Name = "TSbtn_OptionsCalculPoutre"
-        Me.TSbtn_OptionsCalculPoutre.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_OptionsCalculPoutre.Text = "ToolStripButton1"
         '
         'Frm_PMX
         '

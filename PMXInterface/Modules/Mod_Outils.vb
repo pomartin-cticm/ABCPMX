@@ -503,6 +503,11 @@ Module Mod_Outils
                 kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
                 Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
 
+            Case Enu_TypeVariable.LongueurCM
+
+                kUnitU = LogicielInfo.Transfert_Longueur(1)
+                Unite = SEP & LogicielInfo.Unit_Longueur(1)
+
             Case Enu_TypeVariable.Dimension
 
                 kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)

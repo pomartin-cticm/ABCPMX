@@ -663,6 +663,11 @@ Public Class Frm_PMX
                     Frm_EditBaseBacsAcier.ShowDialog()
                 End If
 
+            Case EnuFenetres.EditSection
+                If LogicielOptions.lFenetres Then
+                    Frm_Catalogue.ShowDialog()
+                End If
+
 
 
         End Select
@@ -1390,6 +1395,10 @@ Public Class Frm_PMX
     Private Sub MAJ_btnZoomPlus()
         Me.TSbtn_ZoomPlus.Checked = lZoomPlus
         Me.TSbtn_ZoomMoins.Checked = Not lZoomPlus
+    End Sub
+
+    Private Sub TSbtn_NdcPoutre_Click(sender As Object, e As EventArgs) Handles TSbtn_NdcPoutre.Click
+
     End Sub
 
 

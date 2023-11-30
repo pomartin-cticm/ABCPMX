@@ -119,6 +119,35 @@ NAVIGATION				= Navigation
 ZOOM					= Zoom
 SAVEAS					= Save As
 
+#FRMCATALOGUE
+TITLE 			= Catalogue
+CLOSE			= Fermer
+PROFIL			= Profilés
+SERIE			= Séries
+DIMENSIONS	 	= Dimensions
+PROPERTIES		= Propriétés
+UNIT_DIM		= Unité Dimension :
+TOOLTIP_G 		= Masse par unité de longueur
+TOOLTIP_A		= Aire de section
+TOOLTIP_IY		= Moment d'inertie de flexion / Axe fort
+TOOLTIP_WELY	= Module de flexion élastique / Axe fort
+TOOLTIP_WPLY	= Module de flexion plastique / Axe fort
+TOOLTIP_IY2		= Rayon de giration / Axe fort
+TOOLTIP_AVZ		= Aire de cisaillement
+TOOLTIP_IZ 		= Moment d'inertie de flexion / Axe faible
+TOOLTIP_WELZ 	= Module de flexion élastique / Axe faible
+TOOLTIP_WPLZ	= Module de flexion plastique / Axe faible
+TOOLTIP_IZ2		= Rayon de giration / Axe faible
+TOOLTIP_IT		= Moment d'inertie de torsion
+TOOLTIP_HT		= Hauteur du profilé
+TOOLTIP_BF		= Largeur du profilé
+TOOLTIP_TF		= Épaisseur d'aile
+TOOLTIP_TW		= Épaisseur d'âme
+TOOLTIP_RC		= Rayon de congé
+NOTE			= Fiche Section
+CARA			= Caractéristiques
+VAL 			= Valeurs
+
 #FRM_CHARGEMENT
 TITLE					= Definition of the load cases
 OK						= Ok

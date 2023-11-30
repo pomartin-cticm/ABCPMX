@@ -328,6 +328,7 @@ Module Mod_Declarations
     ''' </summary>
     Public Enum Enu_TypeVariable
         Longueur
+        LongueurCM
         Dimension
         Effort
         Moment
