@@ -362,6 +362,16 @@ Public Class cls_Poutre
     '--Points de calcul des contraintes normales
     Public PtsSigma As New cls_PointsSigma
 
+    Public Function GetNbCombo(lComb As Boolean()) As Integer
+        Dim nbRetour As Integer
+
+        For i As Integer = 0 To lComb.Count - 1
+            If lComb(i) Then nbRetour += 1
+        Next
+
+        Return nbRetour
+    End Function
+
 #End Region
 
 #Region " Attibuts pour les analyses "

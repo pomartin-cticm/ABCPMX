@@ -230,6 +230,12 @@ NBPROPPINGWITHOUTCANT	= Number of intermediate point proppings
 PROPPINGLOCATION		= Propping location
 UNDERSTEEL				= Under the steel beam
 UNDERSLAB				= Under the concrete slab
+ULSTATES		 		= Ultimate limit states
+SLSTATES				= Serviceability limit states
+FLSTATES				= Fire limit states
+ELCUSTATES				= Construction stage ultimate limit states
+ELCSSTATES				= Construction stage serviceability limit states
+NOCOMBO					= No combination have been defined for this limite state
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties

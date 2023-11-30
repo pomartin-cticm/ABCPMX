@@ -1360,8 +1360,85 @@ Module Mod_NoteCalcul
             SautePage()
         End If
 
+
         AddTitreNdC(2, Bloc("COMBINATIONS"))
 
+
+        AddTitreNdC(3, Bloc("ULSTATES"))
+        If MyBeam.GetNbCombo(MyBeam.lCombELU) = 0 Then
+            AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+        Else
+            EditionTableauCombinaison(MyBeam.lCombELU, MyBeam.CoefCombELU)
+        End If
+
+
+
+        AddTitreNdC(3, Bloc("SLSTATES"))
+        If MyBeam.GetNbCombo(MyBeam.lCombELS) = 0 Then
+            AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+        Else
+            EditionTableauCombinaison(MyBeam.lCombELS, MyBeam.CoefCombELS)
+        End If
+
+
+        AddTitreNdC(3, Bloc("FLSTATES"))
+        If MyBeam.GetNbCombo(MyBeam.lCombFeu) = 0 Then
+            AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+        Else
+            EditionTableauCombinaison(MyBeam.lCombFeu, MyBeam.CoefCombFeu)
+        End If
+
+        If MyBeam.lMixte Then
+            If MyBeam.GetNbCombo(MyBeam.lCombELCURules) = 0 Then
+                AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+            Else
+                AddTitreNdC(3, Bloc("ELCUSTATES"))
+                EditionTableauCombinaison(MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
+            End If
+
+            If MyBeam.GetNbCombo(MyBeam.lCombELCURules) = 0 Then
+                AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+            Else
+                AddTitreNdC(3, Bloc("ELCSSTATES"))
+                EditionTableauCombinaison(MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
+            End If
+        End If
+
+    End Sub
+
+    Private Sub EditionTableauCombinaison(ByVal lCombo As Boolean(), CoefComb As List(Of Decimal)())
+        Dim strCombo As String = ""
+
+        For i As Integer = 0 To lCombo.Count - 1
+            If lCombo(i) Then
+                For j = 0 To CoefComb(i).Count - 1
+                    If Not CoefComb(i)(j) = 0 Then
+
+                        If strCombo = "" Then
+                            strCombo += GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 3, False)
+                        Else
+                            strCombo += " + " & GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 3, False)
+                        End If
+
+                        Select Case j
+                            Case 0
+                                strCombo += " G "
+                            Case 1
+                                strCombo += " Q1 "
+                            Case 2
+                                strCombo += " Q2 "
+                            Case 3
+                                strCombo += " QC "
+                            Case Else
+                                strCombo += " g "
+                        End Select
+                    End If
+                Next
+
+                AddLigneNDC(TABW2 & strCombo)
+
+            End If
+        Next
     End Sub
 
 #End Region
