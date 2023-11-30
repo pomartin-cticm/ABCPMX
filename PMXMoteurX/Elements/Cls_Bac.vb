@@ -94,7 +94,7 @@ Public Class cls_Bac
     ''' <summary>
     ''' Limite d'élasticité de calcul du bac
     ''' </summary>
-    Public fypd As Decimal
+    'Public fypd As Decimal
 
     ''' <summary>
     ''' Largeur d'un bac livré par le fabricant

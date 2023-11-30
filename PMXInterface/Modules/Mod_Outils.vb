@@ -708,6 +708,28 @@ Module Mod_Outils
 
     End Function
 
+    ''' <summary>
+    ''' Prend en argument un angle donné en radian, renvoi un argument un angle donné en degré 
+    ''' </summary>
+    ''' <param name="angleRadian">angle donné en radian (donnée d'entrée)</param>
+    ''' <returns></returns>
+    Function GetAngleInDegree(angleRadian As Decimal) As Decimal
+        Dim angleDegre As Decimal
+        angleDegre = 180 / Math.PI * angleRadian
+        Return angleDegre
+    End Function
+
+    ''' <summary>
+    ''' Prend en argument un angle donné en degré, renvoi un argument un angle donné en radian 
+    ''' </summary>
+    ''' <param name="angleDegre">angle donné en degré (donnée d'entrée)</param>
+    ''' <returns></returns>
+    Function GetAngleInRad(angleDegre As Decimal) As Decimal
+        Dim angleRad As Decimal
+        angleRad = Math.PI / 180 * angleDegre
+        Return angleRad
+    End Function
+
 
 #End Region
 

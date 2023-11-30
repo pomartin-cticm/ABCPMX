@@ -253,12 +253,63 @@ Public Class cls_Poutre
     Public Thetaf(,,) As Decimal
 
     ''' <summary>
+    ''' Angle min de la bielle de compression (dépend de si la zone se situe en flexion positive ou négative)
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' </summary>
+    Public Thetaf_min(,) As Decimal
+
+    ''' <summary>
+    ''' Vérification de la bielle de compression 
+    ''' (GUD: pour l'instant je mets ici l'attribut car le critère est constant le long d'une zone de connexion. A voir s'il faut le déplacer dans la classe vérification)
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
+    ''' </summary>
+    Public Gamma_sf(,,) As Decimal
+
+    ''' <summary>
     ''' Aire par unité de longueur des armatures transversales / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
     ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
     ''' </summary>
     Public As_s_transv(,,) As Decimal
+
+    ''' <summary>
+    ''' Propriétés renvoyant le nombre de lits d'armatures transversales disposées 
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property NbTransverseLayer As Integer
+        Get
+            Dim NbLayer As Integer
+
+            If Me.Dalle.lMixte Then
+                NbLayer = 1
+            Else
+                If Me.Dalle.Connecteur.hsc - 70 / 1000 <= Me.Dalle.t_h Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
+                    NbLayer = 3
+                Else
+                    NbLayer = 2
+                End If
+
+            End If
+
+            Return NbLayer
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Propriétés renvoyant la densité d'armatures min à disposer
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property rho_t_min As Decimal
+        Get
+            Dim rho_loc As Decimal
+            rho_loc = 0.08 * Math.Sqrt(Me.Dalle.beton.Fck) / Me.Dalle.AcierArmatures.FsK
+            Return rho_loc
+        End Get
+    End Property
 
 #End Region
 
@@ -554,6 +605,8 @@ Public Class cls_Poutre
 
         ReDim TauEd(IndiceTraveeConsoleDroite, 2, 2)
         ReDim Thetaf(IndiceTraveeConsoleDroite, 2, 2)
+        ReDim Thetaf_min(IndiceTraveeConsoleDroite, 2)
+        ReDim Gamma_sf(IndiceTraveeConsoleDroite, 2, 2)
         ReDim As_s_transv(IndiceTraveeConsoleDroite, 2, 2)
 
         For i As Integer = 0 To IndiceTraveeConsoleDroite
@@ -1782,6 +1835,7 @@ Public Class cls_Poutre
         Dim lDallePleine As Boolean
         Dim lPerp As Boolean
         Dim Ecm, Fck, Fcd, nu As Decimal
+        Dim fypd, fsd As Decimal
         Dim gammaVs, gammaVc As Decimal
         Dim v_x_Ed As Decimal
         Dim k_sf_aa_sA, k_sf_bb_sA, k_sf_dd_sA As Decimal 'Definition des coefficients lorsque l'on se trouve au droit de l'appui A (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
@@ -1794,6 +1848,7 @@ Public Class cls_Poutre
         Dim k_bacPE1 As Decimal 'coefficient qui indique la présence du bac acier (=1) ou non (=0)
         Dim xDebutZoneLoc, xFinZoneLoc As Decimal(,)
         Dim lSupportA, lSupportB, lMiTravee As Boolean 'sera utile pour + tard, permet de savoir si la zone de connection etudiee empiete sur la zone de support A, B ou mi-travee (selon la Figure 5.1 de l'EC4)
+        Dim thetaf_min_pos, thetaf_min_neg, thetaf_max As Decimal 'angle min de la bielle de compression en fonction de si on se trouve en zone de flexion positive ou négative 
 
         '--> Initialisation
         lGeneration1 = Me.Param.lGeneration1
@@ -1801,7 +1856,9 @@ Public Class cls_Poutre
         lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck
-        Fcd = Me.Dalle.beton.Fcd
+        Fcd = Me.Dalle.beton.Fck / Me.Param.Gamma.GammaC
+        fypd = Me.Dalle.Bac.fyp / Me.Param.Gamma.GammaP
+        fsd = Me.Dalle.AcierArmatures.FsK / Me.Param.Gamma.GammaS
         If Me.Param.lGeneration1 Then
             nu = 0.6 * (1 - Fck / 250)
         Else
@@ -1809,8 +1866,11 @@ Public Class cls_Poutre
         End If
         gammaVs = Me.Param.Gamma.GammaVs
         gammaVc = Me.Param.Gamma.GammaVc
-        PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
         LargeurParticipante(0, 0) = 0 'initialisation avec une valeur quelconque pour pas que le tableau soit considéré comme Nothing dans la fonction BeffDalle
+
+        thetaf_min_pos = 27 / 180 * Math.PI 'angle min de la bielle en zone de flexion positive
+        thetaf_min_neg = 36 / 180 * Math.PI 'angle min  de la bielle en zone de flexion négative
+        thetaf_max = Math.PI / 4
 
         If Me.Dalle.lMixte Then
             b0min = 4 * Me.Dalle.Connecteur.d
@@ -1830,6 +1890,7 @@ Public Class cls_Poutre
                 '---
 
                 nr = Me.NombreGoujonsTransv(i_travee, j_zone)
+                PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
                 sx = Me.ZoneEspacement(i_travee, j_zone)
                 v_x_Ed = nr * PRd / sx
 
@@ -1864,6 +1925,8 @@ Public Class cls_Poutre
                         Me.TauEd(i_travee, j_zone, 1) = k_sf_bb_sA * v_x_Ed / hf_bb
                         Me.TauEd(i_travee, j_zone, 2) = k_sf_dd_sA * v_x_Ed / hf_dd
 
+                        Me.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+
                     Case Me.IndiceTraveeConsoleDroite 'on est dans le cas de la console droite 
 
                         'Les consoles sont forcement en flexion négative, on calcul uniquement le coefficient au droit de l'appui B
@@ -1880,6 +1943,8 @@ Public Class cls_Poutre
                         Me.TauEd(i_travee, j_zone, 0) = k_sf_aa_sB * v_x_Ed / hf_aa
                         Me.TauEd(i_travee, j_zone, 1) = k_sf_bb_sB * v_x_Ed / hf_bb
                         Me.TauEd(i_travee, j_zone, 2) = k_sf_dd_sB * v_x_Ed / hf_dd
+
+                        Me.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
 
                     Case Else 'on est dans le cas d'une travée centrale
 
@@ -2011,25 +2076,47 @@ Public Class cls_Poutre
                             Me.TauEd(i_travee, j_zone, 2) = Math.Max(Me.TauEd(i_travee, j_zone, 2), k_sf_dd_sB * v_x_Ed / hf_dd)
                         End If
 
+                        If lSupportA Or lSupportB Then 'la zone de connection étudiée traverse au moins une zone de flexion négative
+                            Me.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+                        Else 'la zone de connection étudiée est entièrement en zone de flexion comprimée 
+                            Me.Thetaf_min(i_travee, j_zone) = thetaf_min_pos
+                        End If
+
                 End Select
 
                 '---
                 'CALCUL DE L'ANGLE DE LA BIELLE DE COMPRESSION ET DE LA QUANTITE D'ARMATURE PAR UNITE DE LONGUEUR NECESSAIRE
                 '---
 
-                For k_ruine As Integer = 0 To 2
-                        Me.Thetaf(i_travee, j_zone, k_ruine) = 0.5 * Math.Asin(2 * TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd))
-                    Next
+                Dim TauEd_max As Decimal = nu * Fcd / 2
 
-                    If Me.Dalle.lMixte And Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire And Me.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Then
-                        k_bacPE1 = 1
-                    Else
-                        k_bacPE1 = 0
+                For k_ruine As Integer = 0 To 2
+                    'Conversion de Pa a MPa des contraintes tangentielles
+                    Me.TauEd(i_travee, j_zone, k_ruine) /= kConvMPaPa
+
+                    If TauEd(i_travee, j_zone, k_ruine) <= TauEd_max Then
+                        Me.Thetaf(i_travee, j_zone, k_ruine) = 0.5 * Math.Asin(2 * TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd))
+                    Else 'la contrainte tangentielle est trop importante, la bielle de compression n'est pas vérifiée. On considère alors l'angle de la bielle max pour la suite du calcul 
+                        Me.Thetaf(i_travee, j_zone, k_ruine) = thetaf_max
                     End If
 
-                Me.As_s_transv(i_travee, j_zone, 0) = Math.Max((TauEd(i_travee, j_zone, 0) * hf_aa * Math.Tan(Me.Thetaf(i_travee, j_zone, 0)) - k_bacPE1 * Me.Dalle.Bac.Ape * Me.Dalle.Bac.fypd) / Me.Dalle.AcierArmatures.Fsd, 0)
-                Me.As_s_transv(i_travee, j_zone, 1) = Math.Max((TauEd(i_travee, j_zone, 1) * hf_bb * Math.Tan(Me.Thetaf(i_travee, j_zone, 1)) - k_bacPE1 * Me.Dalle.Bac.Ape * Me.Dalle.Bac.fypd) / Me.Dalle.AcierArmatures.Fsd, 0)
-                Me.As_s_transv(i_travee, j_zone, 2) = Math.Max((TauEd(i_travee, j_zone, 2) * hf_dd * Math.Tan(Me.Thetaf(i_travee, j_zone, 2)) - k_bacPE1 * Me.Dalle.Bac.Ape * Me.Dalle.Bac.fypd) / Me.Dalle.AcierArmatures.Fsd, 0)
+                    Me.Thetaf(i_travee, j_zone, k_ruine) = Math.Min(Me.Thetaf(i_travee, j_zone, k_ruine), thetaf_max)
+                    Me.Thetaf(i_travee, j_zone, k_ruine) = Math.Max(Me.Thetaf(i_travee, j_zone, k_ruine), Me.Thetaf_min(i_travee, j_zone))
+
+                    'Calcul du critère de vérification de la bielle de compression
+                    Me.Gamma_sf(i_travee, j_zone, k_ruine) = Me.TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd * Math.Sin(Me.Thetaf(i_travee, j_zone, k_ruine)) * Math.Cos(Me.Thetaf(i_travee, j_zone, k_ruine)))
+
+                Next
+
+                If Me.Dalle.lMixte And Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire And Me.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Then
+                    k_bacPE1 = 1
+                Else
+                    k_bacPE1 = 0
+                    End If
+
+                Me.As_s_transv(i_travee, j_zone, 0) = Math.Max((TauEd(i_travee, j_zone, 0) * hf_aa * Math.Tan(Me.Thetaf(i_travee, j_zone, 0)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / Fsd, 0)
+                Me.As_s_transv(i_travee, j_zone, 1) = Math.Max((TauEd(i_travee, j_zone, 1) * hf_bb * Math.Tan(Me.Thetaf(i_travee, j_zone, 1)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / Fsd, 0)
+                Me.As_s_transv(i_travee, j_zone, 2) = Math.Max((TauEd(i_travee, j_zone, 2) * hf_dd * Math.Tan(Me.Thetaf(i_travee, j_zone, 2)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / Fsd, 0)
 
 
             Next
@@ -4584,7 +4671,7 @@ Public Class cls_Poutre
         '--> Traitement
 
         For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
-            For iZone = 0 To Me.NombreZones(iTravee)
+            For iZone = 0 To Me.NombreZones(iTravee) - 1
 
                 If lBacNervuresPerpContinues Then
                     pEspace = Me.ZoneEspacement_Bac_Trans(iTravee, iZone) * Me.Dalle.Bac.Ep

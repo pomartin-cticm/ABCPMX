@@ -114,6 +114,7 @@ Module Mod_NoteCalcul
         MyNote = New Cls_Rapport("Arial", 1.5, 3, 3)
         MyProjet.Poutres(MyProjet.IndEnCours).InitialisePoidsPropres()
         MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()
+        MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
 
         strRacineELU = Bloc("ULS")
         strRacineELS = Bloc("SLS")
@@ -2253,8 +2254,92 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(2, BlocELU("CRITERIA_TRANSREBAR"))
 
+        AddLigneNDC(TABW2 & BlocELU("NBTRANSVERSELAYER") & TABAFF & MyBeam.NbTransverseLayer)
+        AddLigneNDC(TABW2 & BlocELU("MINTRANSVERSEREINF") & TABAFF & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnit(MyBeam.rho_t_min, Enu_TypeVariable.SansType, 3, -1, True) & " (UNITE ???)")
+
+        Dim strFailureMode As String = ""
+        Dim str_aa, str_bb, str_dd As String
+        str_aa = "a-a"
+        str_bb = "b-b"
+        str_dd = "d-d"
+
+        Dim l_aa, l_bb, l_dd As Boolean 'indique quels mode de ruine on vérifie
+        If Not MyBeam.Dalle.lMixte Then
+            If MyBeam.NbTransverseLayer = 2 Then 'cas solid slab without prefabricated part (Table 51 du MT)
+                strFailureMode = str_aa & ", " & str_bb
+                l_aa = True
+                l_bb = True
+                l_dd = False
+            Else 'cas solid slab with prefabricated part (table 51 du MT)
+                strFailureMode = str_aa & ", " & str_dd
+                l_aa = True
+                l_bb = False
+                l_dd = True
+            End If
+        Else
+            strFailureMode = str_aa
+            l_aa = True
+            l_bb = False
+            l_dd = False
+        End If
+
+        AddLigneNDC(TABW2 & BlocELU("POTENTIALSHEARFAILURE") & TABAFF & strFailureMode)
+
+        SauteLigne()
+
+        If l_aa Then EditionVerificationELUArmaturesTransv(MyBeam, str_aa, 0)
+        If l_bb Then EditionVerificationELUArmaturesTransv(MyBeam, str_bb, 1)
+        If l_dd Then EditionVerificationELUArmaturesTransv(MyBeam, str_dd, 2)
+
+    End Sub
+
+    ''' <summary>
+    ''' Edition du tableau de vérification des armatures transversales
+    ''' </summary>
+    ''' <param name="MyBeam"> Poutre en cours </param>
+    ''' <param name="str_failureArea"> nom du mode de ruine à afficher </param>
+    ''' <param name="ind_failureArea"> indice du mode de ruine associé :0a-a = 0, b-b = 1, d-d = 2</param>
+    Private Sub EditionVerificationELUArmaturesTransv(MyBeam As cls_Poutre, str_failureArea As String, ind_failureArea As Integer)
 
 
+        AddTitreNdC(3, BlocELU("SHEARFAILUREAREA") & " : " & str_failureArea)
+
+        AddLigneNDC("\TABLEAU 10")
+
+        Dim nbColonne = 8
+
+        If nbLignes + 2 * HLIGNE > MAXLIGNEPPAG Then SautePage()
+
+        InitialiseLigne(nbColonne, HLIGNE, True)
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("ZONE"))
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "n\-r\=")
+        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\St\s\-Ed," & str_failureArea & "\= " & "(" & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes) & ")")
+        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-f,min," & str_failureArea & "\= (rad)")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-f," & str_failureArea & "\= (rad)")
+        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-sf," & str_failureArea & "\=")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "(A\-sf\=/s\-f\=)\-" & str_failureArea & "\= (cm\+2\=/m)")
+
+        'SauteLigne()
+
+        For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+            For j As Integer = 0 To MyBeam.NombreZones(i) - 1
+
+                If nbLignes + HLIGNE > MAXLIGNEPPAG Then SautePage()
+
+                InitialiseLigne(nbColonne, HLIGNE, True)
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, i)
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, j + 1)
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
+                AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.TauEd(i, j, ind_failureArea), Enu_TypeVariable.Contrainte, 4, 2, False))
+                AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.Thetaf_min(i, j)), Enu_TypeVariable.SansType, 4, 2, False))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.Thetaf(i, j, ind_failureArea)), Enu_TypeVariable.SansType, 4, 2, False))
+                AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Gamma_sf(i, j, ind_failureArea), Enu_TypeVariable.SansType, 4, 2, False))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.As_s_transv(i, j, ind_failureArea), Enu_TypeVariable.AireCM2, 4, 2, False))
+            Next
+        Next
+
+        FinTableau()
     End Sub
 
     Private Sub EditionVerificationsELUSummary(MyBeam As cls_Poutre)
@@ -2541,7 +2626,7 @@ Module Mod_NoteCalcul
 
         '--> Tableau
 
-        EnteteTableauCriteresELU(MyBeam, ncol)
+        EnteteTableauCriteresELU(MyBeam, NCOL)
 
         For iCombi = 0 To MyBeam.CombiA_ELU.nbCombi - 1
             AffichageTableauCriteresELU(MyBeam, (MyBeam.NbTravees > 1), NCOL, iCombi)
@@ -3509,7 +3594,7 @@ Module Mod_NoteCalcul
                 Ai = MyPoutre.Elements(indTabElt).Aire(i)
                 Iyi = MyPoutre.Elements(indTabElt).InertieY(i)
 
-                Model_LigneTableauElement(lMultispan, NCol, PosTab, i, iTravee, ai, iyi)
+                Model_LigneTableauElement(lMultispan, NCol, PosTab, i, iTravee, Ai, Iyi)
 
             Next
 

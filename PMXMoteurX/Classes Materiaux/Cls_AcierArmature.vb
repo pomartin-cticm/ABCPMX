@@ -23,7 +23,7 @@
     ''' <summary>
     ''' Limite d'élasticité de calcul 
     ''' </summary>
-    Public Fsd As Decimal
+    'Public Fsd As Decimal
 
     ''' <summary>
     ''' Module d'élasticité

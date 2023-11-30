@@ -185,6 +185,7 @@ FUSC_CONNECTORS			= Ultimate strenght of the steel
 CONNECTION_ARR			= Connection arrangement
 AUTOMATIC_DESIGN		= Automatic design ? 
 CONNECTION_ZONE			= Connection zone
+ZONE					= Zone
 LENGHT_ZONE				= Zone lenght
 ROW_NUMBER				= Number of rows
 RIB_DISPOSITION			= Disposition every
@@ -261,6 +262,11 @@ SECTION					= Section
 SPAN					= Span
 POSITION				= Position
 CRITERIA_TRANSREBAR		= Transverse reinforcements
+NBTRANSVERSELAYER		= Number of transverse reinforcement layers
+MINTRANSVERSEREINF		= Minimum transverse reinforcement
+POTENTIALSHEARFAILURE	= Potential areas of shear failure
+AND						= and
+SHEARFAILUREAREA		= Shear failure area
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States

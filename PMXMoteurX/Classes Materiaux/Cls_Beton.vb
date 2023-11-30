@@ -30,7 +30,7 @@
     ''' <summary>
     ''' résistance de calcul à la compression du béton
     ''' </summary>
-    Public Fcd As Decimal
+    'Public Fcd As Decimal
 
     ''' <summary>
     ''' fractile 5% de la résistance à la traction du béton (Pa) 
