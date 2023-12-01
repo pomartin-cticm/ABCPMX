@@ -170,7 +170,7 @@ Imports PMXMoteur2
 
         '--> Définition d'une chargement Q, charge uniformément répartie
 
-        GenereChargeConcentree(1, 0, Longueur / 2, pForce, pPoutre.ChargesU("G1"))
+        GenereChargeConcentree(1, 0, Longueur / 2, pForce, pPoutre.ChargesU("Q1"))
 
         '--> Génération des noeuds de calcul
 
@@ -195,7 +195,7 @@ Imports PMXMoteur2
 
         '# Chargements
 
-        pPoutre.Analyse.TransfertChargementU(pPoutre.ChargesU("G1"), 1, 1, pPoutre.LongueurTravee, pPoutre.LargeurInfluence)
+        pPoutre.Analyse.TransfertChargementU(pPoutre.ChargesU("Q1"), 1, 1, pPoutre.LongueurTravee, pPoutre.LargeurInfluence)
 
         '--> Calcul EF
 
@@ -280,7 +280,7 @@ Imports PMXMoteur2
 
         '--> Définition d'une chargement Q, charge uniformément répartie
 
-        GenereChargeSurfacique(1, 1, QSurf, pPoutre.ChargesU("G1"))
+        GenereChargeSurfacique(1, 1, QSurf, pPoutre.ChargesU("Q1"))
 
         '--> Génération des noeuds de calcul
 
@@ -305,7 +305,7 @@ Imports PMXMoteur2
 
         '# Chargements
 
-        pPoutre.Analyse.TransfertChargementU(pPoutre.ChargesU("G1"), 1, 1, pPoutre.LongueurTravee, pPoutre.LargeurInfluence)
+        pPoutre.Analyse.TransfertChargementU(pPoutre.ChargesU("Q1"), 1, 1, pPoutre.LongueurTravee, pPoutre.LargeurInfluence)
 
         '--> Calcul EF
 

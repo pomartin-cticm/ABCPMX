@@ -488,7 +488,7 @@ Public Class cls_ProfilA
         Me.pModuleWelZ = ModuleFlexionElastiqueZZ()
         Me.pModuleWplZ = ModuleFlexionPlastiqueZZ()
 
-        ProprietesElastiquesMzz(1, False, 1, zAN, Me.pInertieZ, MRd)
+        ProprietesElastiquesMzz(False, 1, zAN, Me.pInertieZ, MRd)
 
         'Me.pModuleWelZ = Me.pInertieZ / Math.Max(Bfm / 2 - zAN, zAN + Bfm / 2)
 
@@ -654,7 +654,7 @@ Public Class cls_ProfilA
 
         '--> Calculs
 
-        Me.ProprietesElastiquesMzz(1, True, 1, zANE, Inertie, MelRd)
+        Me.ProprietesElastiquesMzz(True, 1, zANE, Inertie, MelRd)
 
         Wel = Inertie / Math.Max(Math.Abs(zSup - zANE), Math.Abs(zANE - zInf))
 
@@ -662,8 +662,8 @@ Public Class cls_ProfilA
 
     End Function
 
-    Private Sub ProprietesElastiquesMzz(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
-                                       ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
+    Public Sub ProprietesElastiquesMzz(lValeurRd As Boolean, GammaM0 As Decimal,
+                                        ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/08/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -678,21 +678,21 @@ Public Class cls_ProfilA
 
         Select Case Me.typeProfileAcier
             Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
-                ProprietesElastiquesMzzProfilesUsuels(Signe, lValeurRd, GammaM0, zANE, InertieZ, MelRd)
+                ProprietesElastiquesMzzProfilesUsuels(lValeurRd, GammaM0, zANE, InertieZ, MelRd)
             Case Enum_TypeSectionAcier.LamineSlimSFB
-                ProprietesElastiquesMzzSlimfloorsSFB(Signe, lValeurRd, GammaM0, zANE, InertieZ, MelRd)
+                ProprietesElastiquesMzzSlimfloorsSFB(lValeurRd, GammaM0, zANE, InertieZ, MelRd)
             Case Enum_TypeSectionAcier.LamineSlimIFBA
-                ProprietesElastiquesMzzSlimfloorsIFB_A(Signe, lValeurRd, GammaM0, zANE, InertieZ, MelRd)
+                ProprietesElastiquesMzzSlimfloorsIFB_A(lValeurRd, GammaM0, zANE, InertieZ, MelRd)
             Case Enum_TypeSectionAcier.LamineSlimIFBB
-                ProprietesElastiquesMzzSlimfloorsIFB_B(Signe, lValeurRd, GammaM0, zANE, InertieZ, MelRd)
+                ProprietesElastiquesMzzSlimfloorsIFB_B(lValeurRd, GammaM0, zANE, InertieZ, MelRd)
             Case Enum_TypeSectionAcier.LamineSlimSAB
-                ProprietesElastiquesMzzSlimfloorsSAB(Signe, lValeurRd, GammaM0, zANE, InertieZ, MelRd)
+                ProprietesElastiquesMzzSlimfloorsSAB(lValeurRd, GammaM0, zANE, InertieZ, MelRd)
         End Select
 
     End Sub
 
-    Private Sub ProprietesElastiquesMzzProfilesUsuels(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
-                                       ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
+    Private Sub ProprietesElastiquesMzzProfilesUsuels(lValeurRd As Boolean, GammaM0 As Decimal,
+                                                      ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/08/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -710,7 +710,7 @@ Public Class cls_ProfilA
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
         Const Fy As Decimal = 235
-        'Const Signe As Decimal = 1
+        Const Signe As Decimal = 1
         'Dim lLamine As Boolean = (Me.typeProfileAcier = Enum_TypeSectionAcier.Lamine)
 
         '--> Initialisation
@@ -763,7 +763,7 @@ Public Class cls_ProfilA
 
     End Sub
 
-    Private Sub ProprietesElastiquesMzzSlimfloorsSFB(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+    Private Sub ProprietesElastiquesMzzSlimfloorsSFB(lValeurRd As Boolean, GammaM0 As Decimal,
                                        ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/08/23 :  Création - POM
@@ -782,7 +782,7 @@ Public Class cls_ProfilA
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
         Const Fy As Decimal = 235
-        'Const Signe As Decimal = 1
+        Const Signe As Decimal = 1
         'Dim lLamine As Boolean = (Me.typeProfileAcier = Enum_TypeSectionAcier.Lamine)
 
         '--> Initialisation
@@ -838,7 +838,7 @@ Public Class cls_ProfilA
 
     End Sub
 
-    Private Sub ProprietesElastiquesMzzSlimfloorsIFB_A(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+    Private Sub ProprietesElastiquesMzzSlimfloorsIFB_A(lValeurRd As Boolean, GammaM0 As Decimal,
                                        ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/08/23 :  Création - POM
@@ -857,7 +857,7 @@ Public Class cls_ProfilA
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
         Const Fy As Decimal = 235
-        'Const Signe As Decimal = 1
+        Const Signe As Decimal = 1
         'Dim lLamine As Boolean = (Me.typeProfileAcier = Enum_TypeSectionAcier.Lamine)
 
         '--> Initialisation
@@ -899,7 +899,7 @@ Public Class cls_ProfilA
 
     End Sub
 
-    Private Sub ProprietesElastiquesMzzSlimfloorsIFB_B(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+    Private Sub ProprietesElastiquesMzzSlimfloorsIFB_B(lValeurRd As Boolean, GammaM0 As Decimal,
                                        ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/08/23 :  Création - POM
@@ -918,7 +918,7 @@ Public Class cls_ProfilA
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
         Const Fy As Decimal = 235
-        'Const Signe As Decimal = 1
+        Const Signe As Decimal = 1
         'Dim lLamine As Boolean = (Me.typeProfileAcier = Enum_TypeSectionAcier.Lamine)
 
         '--> Initialisation
@@ -964,7 +964,7 @@ Public Class cls_ProfilA
 
     End Sub
 
-    Private Sub ProprietesElastiquesMzzSlimfloorsSAB(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
+    Private Sub ProprietesElastiquesMzzSlimfloorsSAB(lValeurRd As Boolean, GammaM0 As Decimal,
                                        ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/08/23 :  Création - POM
@@ -983,7 +983,7 @@ Public Class cls_ProfilA
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
         Const Fy As Decimal = 235
-        'Const Signe As Decimal = 1
+        Const Signe As Decimal = 1
         'Dim lLamine As Boolean = (Me.typeProfileAcier = Enum_TypeSectionAcier.Lamine)
 
         '--> Initialisation
@@ -1040,7 +1040,7 @@ Public Class cls_ProfilA
 
 #Region " Propriétés axe YY "
 
-    Private Function ModuleFlexionElastiqueYY()
+    Public Function ModuleFlexionElastiqueYY()
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------

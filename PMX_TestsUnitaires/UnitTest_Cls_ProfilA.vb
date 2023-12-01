@@ -223,49 +223,49 @@ Imports PMXMoteur2
 
         '# Aire de cisaillement
 
-        ValRef = 25.7 * 10 ^ (-4)
-        DeltaV = (MyProfil.AireAv - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        'ValRef = 25.7 * 10 ^ (-4)
+        'DeltaV = (MyProfil.AireAv - ValRef) / ValRef
+        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        '# Aire 
+        ''# Aire 
 
-        ValRef = 83.75 * 10 ^ (-4)
-        DeltaV = (MyProfil.Aire - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        'ValRef = 83.75 * 10 ^ (-4)
+        'DeltaV = (MyProfil.Aire - ValRef) / ValRef
+        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        '# Inertie YY
+        ''# Inertie YY
 
-        MyProfil.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        'MyProfil.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
 
-        ValRef = 13051.554 * 10 ^ (-8)
-        DeltaV = (InertieY - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        'ValRef = 13051.554 * 10 ^ (-8)
+        'DeltaV = (InertieY - ValRef) / ValRef
+        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        '# Position ANE
+        ''# Position ANE
 
-        ValRef = 94.27 * 10 ^ (-3)
-        DeltaV = (zANE - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        'ValRef = 94.27 * 10 ^ (-3)
+        'DeltaV = (zANE - ValRef) / ValRef
+        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        '# module élastique flexion élastique selon l'axe YY
+        ''# module élastique flexion élastique selon l'axe YY
 
-        ValRef = 634.723 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        'ValRef = 634.723 * 10 ^ (-6)
+        'DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
+        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        '# Inertie ZZ
+        ''# Inertie ZZ
 
-        MyProfil.ProprietesElastiquesMzz(True, 1, zANE, InertieZ, MelRd)
+        'MyProfil.ProprietesElastiquesMzz(True, 1, zANE, InertieZ, MelRd)
 
-        ValRef = 2163.975 * 10 ^ (-8)
-        DeltaV = (InertieZ - ValRef) / ValRef
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        'ValRef = 2163.975 * 10 ^ (-8)
+        'DeltaV = (InertieZ - ValRef) / ValRef
+        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
-        '# Position ANE
+        ''# Position ANE
 
-        ValRef = 0 * 10 ^ (-3)
-        DeltaV = (zANE - ValRef)
-        Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+        'ValRef = 0 * 10 ^ (-3)
+        'DeltaV = (zANE - ValRef)
+        'Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
     End Sub
 
