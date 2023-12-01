@@ -128,8 +128,8 @@ Public Class Frm_EditGoujons
     Private Sub GestionStyle()
 
         Dim iStud As Integer
-        Dim Etiquette, Parametres As String
-        Dim Mots() As String, nMots As Integer
+        'Dim Etiquette, Parametres As String
+        'Dim Mots() As String, nMots As Integer
         Dim Row(6) As String
 
         '--> Icone et Help

@@ -23,23 +23,25 @@
 
     End Sub
 
-    Private Sub InitialiseCriteres(NbNodes As Integer, lElastic As Boolean)
+    Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer, lElastic As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   30/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Initialisation des critères pour une poutre acier sans enrobage
         '----------------------------------------------------------------------------------------------------------
         '   NbNodes     [E] :   Nombre de noeuds
+        '   NbCombi     [E] :   Nombre de combinaisons
+        '   IndDerniereT[E] :   Indice de la dernière travée
         '   lElastic    [E] :   Cas d'un dimensionnement élastique VM
         '----------------------------------------------------------------------------------------------------------
 
         If lElastic Then
-            Me.CritereSigmaA = New cls_Critere(NbNodes)
+            Me.CritereSigmaA = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Else
-            Me.CritereM = New cls_Critere(NbNodes)
+            Me.CritereM = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         End If
-        Me.CritereV = New cls_Critere(NbNodes)
-        Me.CritereVb = New cls_Critere(NbNodes)
+        Me.CritereV = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+        Me.CritereVb = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
 
     End Sub
 
@@ -60,7 +62,8 @@
 
         Dim VplRd As Decimal
         Dim iCombi As Integer
-        Dim MEd(,), VEd(,) As Decimal
+        Dim MEd(,) As Decimal = Nothing
+        Dim VEd(,) As Decimal = Nothing
         Dim MplRd, zANP As Decimal
         Dim MelRd, zANE As Decimal
         Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
@@ -75,7 +78,7 @@
 
         '# Critères
 
-        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, MyPoutre.Param.lElasticDesign)
+        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee, MyPoutre.Param.lElasticDesign)
 
         '# Tranchant résistant
 
@@ -196,23 +199,49 @@
 
         '--> Déclaration
 
-        Dim iNode As Integer
-        Dim Sigma As Decimal
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
 
         '--> Traitement
 
-        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+        For iTravee = iDebT To iFinT
+            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
+            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-            If Math.Abs(SigmaELU(iPoint, iNode, 0)) > Math.Abs(SigmaELU(iPoint, iNode, 1)) Then
-                Sigma = SigmaELU(iPoint, iNode, 0)
-            Else
-                Sigma = SigmaELU(iPoint, iNode, 1)
-            End If
-
-            MyCritereM.EnregistreCritere(iNode, iCombi, Sigma, SigmaU)
-
+            For iNode = iDebN To iFinN
+                For k = iDebK To iFinK
+                    MyCritereM.EnregistreCritere(iNode, iCombi, iTravee, SigmaELU(iPoint, iNode, k), SigmaU)
+                Next
+            Next
         Next
 
+        ''--> Déclaration
+
+        'Dim iNode As Integer
+        'Dim Sigma As Decimal
+
+        ''--> Traitement
+
+        'For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+
+        '    If Math.Abs(SigmaELU(iPoint, iNode, 0)) > Math.Abs(SigmaELU(iPoint, iNode, 1)) Then
+        '        Sigma = SigmaELU(iPoint, iNode, 0)
+        '    Else
+        '        Sigma = SigmaELU(iPoint, iNode, 1)
+        '    End If
+
+        '    MyCritereM.EnregistreCritere(iNode, iCombi, Sigma, SigmaU)
+
+        'Next
 
     End Sub
 
@@ -233,60 +262,116 @@
         '   lClasse4[S] :   Indique qu'au moins une des sections est de classe 4
         '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclarations
+        '--> Déclaration
 
-        'Dim Critere As Decimal
-        Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        Dim iNode As Integer
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
         Const SIGNEM As Decimal = 1
         Dim MRd As Decimal
-        Dim MEdMax As Decimal
-        Dim lOk As Boolean
 
-        '--> Initialisation
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
 
         lClasse4 = False
 
-        '--> Boucle sur les noeuds
+        '--> Traitement
 
-        For iNode = 0 To nbNodes - 1
+        For iTravee = iDebT To iFinT
+            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
+            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-            If Math.Abs(MEd(iNode, 0)) > Math.Abs(MEd(iNode, 1)) Then
-                MEdMax = MEd(iNode, 0)
-            Else
-                MEdMax = MEd(iNode, 1)
-            End If
+            For iNode = iDebN To iFinN
+                For k = iDebK To iFinK
 
-            lOk = True
-            If MEdMax * SIGNEM > 0 Then
+                    If MEd(iNode, k) * SIGNEM > 0 Then
 
-                Select Case ClasseP
-                    Case 1, 2
-                        MRd = MplRd
-                    Case 3
-                        MRd = MelRd
-                    Case 4
-                        lClasse4 = True
-                        lOk = False
-                End Select
+                        Select Case ClasseP
+                            Case 1, 2
+                                MRd = MplRd
+                            Case 3
+                                MRd = MelRd
+                            Case 4
+                                lClasse4 = True
+                                'lOk = False
+                        End Select
 
-            Else
+                    Else
 
-                Select Case ClasseM
-                    Case 1, 2
-                        MRd = MplRd
-                    Case 3
-                        MRd = MelRd
-                    Case 4
-                        lClasse4 = True
-                        lOk = False
-                End Select
+                        Select Case ClasseM
+                            Case 1, 2
+                                MRd = MplRd
+                            Case 3
+                                MRd = MelRd
+                            Case 4
+                                lClasse4 = True
+                                'lOk = False
+                        End Select
 
-            End If
+                    End If
 
-            Me.CritereM.EnregistreCritere(iNode, iCombi, MEdMax, MRd)
-
+                    Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MRd)
+                Next
+            Next
         Next
+
+        ''--> Déclarations
+
+        ''Dim Critere As Decimal
+        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
+        'Dim iNode As Integer
+        'Dim MEdMax As Decimal
+        'Dim lOk As Boolean
+
+        ''--> Initialisation
+
+        'lClasse4 = False
+
+        ''--> Boucle sur les noeuds
+
+        'For iNode = 0 To nbNodes - 1
+
+        '    If Math.Abs(MEd(iNode, 0)) > Math.Abs(MEd(iNode, 1)) Then
+        '        MEdMax = MEd(iNode, 0)
+        '    Else
+        '        MEdMax = MEd(iNode, 1)
+        '    End If
+
+        '    lOk = True
+        '    If MEdMax * SIGNEM > 0 Then
+
+        '        Select Case ClasseP
+        '            Case 1, 2
+        '                MRd = MplRd
+        '            Case 3
+        '                MRd = MelRd
+        '            Case 4
+        '                lClasse4 = True
+        '                lOk = False
+        '        End Select
+
+        '    Else
+
+        '        Select Case ClasseM
+        '            Case 1, 2
+        '                MRd = MplRd
+        '            Case 3
+        '                MRd = MelRd
+        '            Case 4
+        '                lClasse4 = True
+        '                lOk = False
+        '        End Select
+
+        '    End If
+
+        '    Me.CritereM.EnregistreCritere(iNode, iCombi, MEdMax, MRd)
+
+        'Next
     End Sub
 
 #End Region

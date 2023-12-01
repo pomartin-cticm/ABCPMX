@@ -302,10 +302,10 @@ Public Class cls_Section
         End If
 
         '# Plat soudé inférieur dans le cas d'une section IFB-A ou SFB
-        If Me.ProfilA.typeProfileAcier = Me.ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Or Me.ProfilA.typeProfileAcier = Me.ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Then MyModele.AddMaille(Me.ProfilA.AirePlat, Me.ProfilA.Plat_t, zRef - Me.ProfilA.ha + Me.ProfilA.Plat_t / 2, 1, 1, 1, Me.FySpd, 1, Gammas.GammaM0)
+        If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Or Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Then MyModele.AddMaille(Me.ProfilA.AirePlat, Me.ProfilA.Plat_t, zRef - Me.ProfilA.ha + Me.ProfilA.Plat_t / 2, 1, 1, 1, Me.FySpd, 1, Gammas.GammaM0)
 
         '# Plat soudé supérieur dans le cas d'une section IFB-B
-        If Me.ProfilA.typeProfileAcier = ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then MyModele.AddMaille(Me.ProfilA.AirePlat, Me.ProfilA.Plat_t, zRef - Me.ProfilA.Plat_t / 2, 1, 1, 1, Me.FySpd, 1, Gammas.GammaM0)
+        If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then MyModele.AddMaille(Me.ProfilA.AirePlat, Me.ProfilA.Plat_t, zRef - Me.ProfilA.Plat_t / 2, 1, 1, 1, Me.FySpd, 1, Gammas.GammaM0)
 
     End Sub
 
@@ -480,7 +480,6 @@ Public Class cls_Section
 
         Dim nEqEc As Decimal = 1            ' On Applique 1 car calcul plastique
         Const nEqD As Decimal = 1           ' Idem
-        Dim Aire As Decimal
 
         '--> Initialisation
 
@@ -932,13 +931,13 @@ Public Class cls_Section
     Public ReadOnly Property hec As Decimal
         Get
             Select Case Me.typeSection
-                Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                     Return Me.ProfilA.hb
-                Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
                     Return Me.ProfilA.ha - Me.ProfilA.Plat_t
-                Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                     Return Me.ProfilA.ha - Me.ProfilA.Tfi
-                Case Me.Enum_TypeSection.SAB, Me.Enum_TypeSection.SABmixte
+                Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
                     Return Me.ProfilA.ha - Me.ProfilA.Tfi
                 Case Else
                     Return 0
@@ -952,7 +951,10 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property lSlimFloor As Boolean
         Get
-            Return Not (Me.typeSection = Me.Enum_TypeSection.AcierSeul Or Me.typeSection = Me.Enum_TypeSection.AcierSeulEnrobage Or Me.typeSection = Me.Enum_TypeSection.Mixte Or Me.typeSection = Me.Enum_TypeSection.MixteEnrobage)
+            Return Not (Me.typeSection = cls_Section.Enum_TypeSection.AcierSeul _
+                     Or Me.typeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage _
+                     Or Me.typeSection = cls_Section.Enum_TypeSection.Mixte _
+                     Or Me.typeSection = cls_Section.Enum_TypeSection.MixteEnrobage)
         End Get
     End Property
 
@@ -1017,7 +1019,7 @@ Public Class cls_Section
 
     Public Sub ProprietesElastiquesEtPlastiques(Signe As Decimal, nEqEc As Decimal, nEqDal As Decimal, lValeurCalcul As Boolean)
 
-        Dim zANP, zANE, InertieY, MplRd As Decimal
+        ' Dim zANP, zANE, InertieY, MplRd As Decimal
 
         'CalProprietes(Me, Signe, nEqEc, nEqDal, lValeurCalcul, zANE, InertieY, zANP, MplRd)
 
@@ -1317,11 +1319,11 @@ Public Class cls_Section
 
         Dim classeSemellesSup, classeAme, classeSemellesInf, classePlatInfSFB, classeSectionTotale As Integer
         Dim lSemelleSupComprimeeLoc, lSemelleInfComprimeeLoc As Boolean
-        Dim cfsup, tfsup, cw, cfinf, tfinf, cplat, tplat As Decimal
+        Dim cfsup, tfsup, cfinf, tfinf, cplat, tplat As Decimal
         Dim epsilon_fsup As Decimal = Me.Acier.epsilon_fs
         Dim epsilon_finf As Decimal = Me.Acier.epsilon_fi
         Dim epsilon_platSFB As Decimal = 0
-        Dim alpha, psi As Decimal
+        ' Dim alpha, psi As Decimal
 
         '### Calcul avec hypothèse répartition plastique
 
@@ -1335,7 +1337,7 @@ Public Class cls_Section
         classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, cfsup, tfsup, epsilon_fsup)
 
         If lSlimFloor Then
-            If Me.typeSection = Me.Enum_TypeSection.IFB_B Or Me.typeSection = Me.typeSection.IFB_Bmixte Then
+            If Me.typeSection = cls_Section.Enum_TypeSection.IFB_B Or Me.typeSection = cls_Section.Enum_TypeSection.IFB_Bmixte Then
                 If td - hec >= Math.Max(50 / 1000, Me.ProfilA.Plat_b / 6) Then classeSemellesSup = Math.Min(classeSemellesSup, 2)
             Else
                 If td - hec >= Math.Max(50 / 1000, Me.ProfilA.Bfs / 6) Then classeSemellesSup = Math.Min(classeSemellesSup, 2)
@@ -1348,7 +1350,7 @@ Public Class cls_Section
         classeSemellesInf = ClasseSemelle(lSemelleInfComprimeeLoc, cfinf, tfinf, epsilon_finf)
 
         ' --> Calcul classe semelle plat inférieur dans le cas d'un SFB
-        If Me.typeSection = Me.Enum_TypeSection.SFB Or Me.typeSection = Me.Enum_TypeSection.SFBmixte Then
+        If Me.typeSection = cls_Section.Enum_TypeSection.SFB Or Me.typeSection = cls_Section.Enum_TypeSection.SFBmixte Then
             epsilon_platSFB = Me.Acier.epsilon_sp
             classePlatInfSFB = ClasseSemelle(lSemelleInfComprimeeLoc, cplat, tplat, epsilon_platSFB)
         Else
@@ -1394,7 +1396,7 @@ Public Class cls_Section
         If lFlexionPositive Then
             If lSlimFloor Then
                 Select Case Me.typeSection
-                    Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                    Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                         lSemelleSupComprimee = zAN <= Me.hec - Me.ProfilA.Plat_t
                     Case Else
                         lSemelleSupComprimee = zAN <= Me.hec - Me.ProfilA.Tfs
@@ -1414,28 +1416,28 @@ Public Class cls_Section
     Public Sub calcul_cf_tf(ByRef cfsup As Decimal, ByRef tfsup As Decimal, ByRef cfinf As Decimal, ByRef tfinf As Decimal, ByRef cplat As Decimal, ByRef tplat As Decimal)
         With Me.ProfilA
             Select Case Me.typeSection
-                Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                     cfsup = (.Bfs - .Tw) / 2 - .Rcs
                     tfsup = .Tfs
                     cfinf = (.Bfi - .Tw) / 2 - .Rci
                     tfinf = .Tfi
                     cplat = (.Plat_b - .Bfi) / 2
                     tplat = .Plat_t
-                Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
                     cfsup = (.Bfs - .Tw) / 2 - .Rcs
                     tfsup = .Tfs
                     cfinf = (.Plat_b - .Tw) / 2
                     tfinf = .Plat_t
                     cplat = 0
                     tplat = 0
-                Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                     cfsup = (.Plat_b - .Tw) / 2
                     tfsup = .Plat_t
                     cfinf = (.Bfi - .Tw) / 2 - .Rci
                     tfinf = .Tfi
                     cplat = 0
                     tplat = 0
-                Case Me.Enum_TypeSection.SAB, Me.Enum_TypeSection.SABmixte
+                Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
                     cfsup = (.Bfs - .Tw) / 2 - .Rcs
                     tfsup = .Tfs
                     cfinf = (.Bfi - .Tw) / 2 - .Rci
@@ -1625,7 +1627,7 @@ Public Class cls_Section
             If lFlexionPositive Then
                 If lSlimFloor Then
                     Select Case Me.typeSection
-                        Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                        Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                             Return zAN >= Me.hec - .Plat_t
                         Case Else
                             Return zAN >= Me.hec - .Rcs - .Tfs
@@ -1636,9 +1638,9 @@ Public Class cls_Section
             Else 'flexion négative
                 If lSlimFloor Then
                     Select Case Me.typeSection
-                        Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                        Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                             Return zAN <= .Tfi + .Rci
-                        Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                        Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
                             Return zAN <= 0
                         Case Else
                             Return zAN <= .Rci
@@ -1672,7 +1674,7 @@ Public Class cls_Section
 
                     If lSlimFloor Then
                         Select Case Me.typeSection
-                            Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                            Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                                 alpha = (Me.hec - .Plat_t - zAN) / .HauteurAmeDw
                             Case Else
                                 alpha = (Me.hec - .Tfs - .Rcs - zAN) / .HauteurAmeDw
@@ -1683,9 +1685,9 @@ Public Class cls_Section
                 Else
                     If lSlimFloor Then
                         Select Case Me.typeSection
-                            Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                            Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                                 alpha = (zAN - .Tfi - .Rci) / .HauteurAmeDw
-                            Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                            Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
                                 alpha = zAN / .HauteurAmeDw
                             Case Else
                                 alpha = (zAN - .Rci) / .HauteurAmeDw
@@ -1715,13 +1717,13 @@ Public Class cls_Section
 
                 If lSlimFloor Then
                     Select Case Me.typeSection
-                        Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                        Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                             psi = (-zAN + .Tfi + .Rci) / (-zAN + Me.hec - .Tfs - .Rcs)
-                        Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+                        Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
                             psi = (-zAN) / (-zAN + Me.hec - .Tfs - .Rcs)
-                        Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+                        Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                             psi = (-zAN + .Rci) / (-zAN + Me.hec - .Plat_t)
-                        Case Me.Enum_TypeSection.SAB, Me.Enum_TypeSection.SABmixte
+                        Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
                             psi = (-zAN + .Rci) / (-zAN + Me.hec - .Tfs - .Rcs)
                     End Select
                 Else 'section classique
@@ -1730,17 +1732,27 @@ Public Class cls_Section
             Else
                 If lSlimFloor Then
                     Select Case Me.typeSection
-                        Case Me.Enum_TypeSection.SFB, Me.Enum_TypeSection.SFBmixte
+                        Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
+
                             psi = (-zAN + Me.hec - .Tfs - .Rcs) / (-zAN + .Tfi + .Rci)
-                        Case Me.Enum_TypeSection.IFB_A, Me.Enum_TypeSection.IFB_Amixte
+
+                        Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
+
                             psi = (-zAN + Me.hec - .Tfs - .Rcs) / (-zAN)
-                        Case Me.Enum_TypeSection.IFB_B, Me.Enum_TypeSection.IFB_Bmixte
+
+                        Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
+
                             psi = (-zAN + Me.hec - .Plat_t) / (-zAN + .Rci)
-                        Case Me.Enum_TypeSection.SAB, Me.Enum_TypeSection.SABmixte
+
+                        Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
+
                             psi = (-zAN + Me.hec - .Tfs - .Rcs) / (-zAN + .Rci)
+
                     End Select
                 Else
+
                     psi = (-zAN - .Tfs - .Rcs) / (-zAN - (.ha - .Tfi - .Rci))
+
                 End If
             End If
 

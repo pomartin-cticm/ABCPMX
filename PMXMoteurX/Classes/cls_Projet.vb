@@ -24,11 +24,6 @@ Public Class cls_Projet
     Public Entreprise As String
 
     ''' <summary>
-    ''' Nom du projet
-    ''' </summary>
-    'Public Projet As String
-
-    ''' <summary>
     ''' Poutres du projet
     ''' </summary>
     Public Poutres As New List(Of cls_Poutre)
@@ -482,7 +477,7 @@ Public Class cls_Projet
                         Next
 
                         For Each frepart As cls_ForceRepartie In elemnts.Value.FReparties(i)
-                            If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = ptre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
+                            If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = cls_Poutre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
                                 Lines.Add("BLOCK CHGTU_FREPAR")
                                 Lines.Add("   CleDic      =  " & elemnts.Key)
                                 Lines.Add("   indTravee      =  " & i)
@@ -702,7 +697,7 @@ Public Class cls_Projet
                 Case "CHGTU_QSURF"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim QSurf_en_cours As Decimal
-                    Dim cle_dic As String
+                    Dim cle_dic As String = ""
                     Dim ind_travee As Integer
                     ReadBlocQSurf(QSurf_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.ChargesU(cle_dic).QSurf(ind_travee) = QSurf_en_cours
@@ -710,7 +705,7 @@ Public Class cls_Projet
                 Case "CHGTU_FORCE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim force_en_cours As New cls_Force
-                    Dim cle_dic As String
+                    Dim cle_dic As String = ""
                     Dim ind_travee As Integer
                     ReadBlocForce(force_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.ChargesU(cle_dic).Forces(ind_travee).Add(force_en_cours)
@@ -718,7 +713,7 @@ Public Class cls_Projet
                 Case "CHGTU_FREPAR"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim frepart_en_cours As New cls_ForceRepartie
-                    Dim cle_dic As String
+                    Dim cle_dic As String = ""
                     Dim ind_travee As Integer
                     ReadBlocFRepartie(frepart_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.ChargesU(cle_dic).FReparties(ind_travee).Add(frepart_en_cours)

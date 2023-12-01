@@ -680,7 +680,7 @@ Public Class Frm_PPCombinaison
 
         'DessineAppui(myGr, MyPoutre.xPositionAppui(True, 1), dApp, MyParAff)
         'DessineAppui(myGr, MyPoutre.xPositionAppui(False, 1), dApp, MyParAff)
-        Dim indAppuis() As Integer
+        Dim indAppuis() As Integer = Nothing
         Dim NbApp As Integer
         MyPoutre.ExtraireIndiceNoeudsAppuis(False, indAppuis, NbApp)
 

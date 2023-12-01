@@ -151,8 +151,6 @@ Public Class Frm_PPLargeurEfficace
 
         For iTravee As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
 
-            Dim iGauche As Integer
-
             For i As Integer = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0) To MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
                 If i = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0) Then 'Ajout GUD pour corriger bug du tracé de la largeur efficace
                     Beff(i, 0) = MyPoutre.BeffDalle(0, iTravee, False, False, cls_Poutre.EnuTypeLargeurParticipante.LargeurGauche)

@@ -13,11 +13,14 @@
 
     Public lDefini As Boolean           ' Indique si le critère a été utilisé
 
+    Public CritereCombiT(,) As Decimal  ' Table donnant la valeur maxi du critère par combinaison et par travée
+    Public CritereCombiN(,) As Decimal  ' Table donnant l'indice du noeud ou le critere maxi par combinaison et par travée est obtenu
+
 #End Region
 
 #Region " Constructeur "
 
-    Public Sub New(NbNodes As Integer)
+    Public Sub New(NbNodes As Integer, nbCombi As Integer, indDerniereT As Integer)
 
         ReDim Critere(NbNodes - 1)
         ReDim Action(NbNodes - 1)
@@ -29,13 +32,16 @@
         CritereMax = 0
         lDefini = False
 
+        ReDim CritereCombiT(nbCombi - 1, indDerniereT)
+        ReDim CritereCombiN(nbCombi - 1, indDerniereT)
+
     End Sub
 
 #End Region
 
 #Region " Outils "
 
-    Public Sub EnregistreCritere(iNode As Integer, iCombi As Integer, ValEd As Decimal, ValRd As Decimal)
+    Public Sub EnregistreCritere(iNode As Integer, iCombi As Integer, iTravee As Integer, ValEd As Decimal, ValRd As Decimal)
         '--------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '--------------------------------------------------------------------------------------------------------
@@ -59,6 +65,8 @@
             pCrit = Math.Abs(ValEd / ValRd)
         End If
 
+        '# Valeur maximale au noeud
+
         If pCrit > Me.Critere(iNode) Then
             Me.Critere(iNode) = pCrit
             Me.Action(iNode) = Math.Abs(ValEd)
@@ -66,11 +74,20 @@
             Me.iCombiNodeM(iNode) = iCombi
         End If
 
+        '# Valeur maximale du critere
+
         If pCrit > Me.CritereMax Then
             lDefini = True
             Me.CritereMax = pCrit
             Me.iCombiM = iCombi
             Me.iNodeM = iNode
+        End If
+
+        '# Valeur maximale du critere pour la combi et la travée
+
+        If pCrit > Me.CritereCombiT(iCombi, iTravee) Then
+            Me.CritereCombiT(iCombi, iTravee) = pCrit
+            Me.CritereCombiN(iCombi, iTravee) = iNode
         End If
 
     End Sub

@@ -224,7 +224,8 @@ Module Mod_Dessins
         '--> Déclaration
 
         Dim MyPenContour As New Pen(Color.Black, 1)
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
         'Dim dCar As Decimal = (MyDalle.t_h + MyDalle.t_d) / 5
         Dim BeffDes As Decimal = MyDalle.Beff
@@ -391,9 +392,7 @@ Module Mod_Dessins
 
         Dim Td As Decimal = MyDalle.t_d
         Dim Tj As Decimal = MyDalle.preDalle_ep - MyDalle.preDalle_tjoint
-        'Dim dCar As Decimal = (MyDalle.t_d) / 5
-        Dim lDalleRed As Boolean
-        'Dim BeffDes As Decimal = MyDalle.Beff
+
         Dim MyPen As New Pen(Color.Black, 1)
         Dim wApp As Decimal = MyDalle.wAppuiPreDalle
         Dim pred_ep As Decimal = MyDalle.preDalle_ep
@@ -525,14 +524,12 @@ Module Mod_Dessins
         Dim nbBar As Integer
         Dim xc, yc As Single
         Dim zTop As Decimal
-        Dim lCote As Boolean
-        Dim xe, ye As Decimal
-        Dim xo, yo As Decimal
+
         Dim MyPen As New Pen(Color.Black, 1)
-        Dim MyColor As Color
+
         Dim lContour As Boolean = lCONTOURCOTE
         Dim MyFontNormal As Font = FontBase
-        Dim Chaine As String
+
         Dim xLeft As Decimal
 
         '--> Initialisation
@@ -600,7 +597,8 @@ Module Mod_Dessins
 
         '--> Déclaration
 
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
 
 
@@ -632,7 +630,8 @@ Module Mod_Dessins
 
         '--> Déclaration
 
-        Dim xPtsG(), yPtsG() As Single
+        Dim xPtsG() As Single = Nothing
+        Dim yPtsG() As Single = Nothing
         Dim nbPtsG As Integer
         Dim xo, yo As Single
         Dim decalBac As Decimal
@@ -824,12 +823,12 @@ Module Mod_Dessins
         Dim MyPenContour As New Pen(Color.Black, 1)
 
         Dim Hp As Decimal = MyDalle.Bac.Hp
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
         Dim Bfs As Decimal = MyProfil.Bfs
         Dim zTop As Decimal = MyDalle.zTop
-        Dim xo, yo As Decimal
-        Dim xe, ye As Decimal
+        Dim xo, xe As Decimal
         Dim wApp As Decimal = MyDalle.Bac.wAppui
 
         '--> Préparation du contour de la dalle
@@ -1245,7 +1244,7 @@ Module Mod_Dessins
         '--> Déclarations
 
         Dim xCoteZ As Decimal = -BeffG - dCar
-        Dim xe, ye As Decimal
+        Dim ye As Decimal
         Dim xo, yo As Decimal
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyColor As Color
@@ -1675,14 +1674,10 @@ Module Mod_Dessins
         Dim MyFontNormal As Font = FontBase
 
         Dim xMin, yMin, xMax, yMax As Double
-        'Dim DeltaX As Double
-        Dim sDecal As Double
-        Dim tDecal As Double
+
         Dim dCar As Double
 
         Dim lRaidSup As Boolean
-
-        Dim i As Integer
 
         Dim xPts() As Single = Nothing
         Dim yPts() As Single = Nothing
@@ -2342,7 +2337,8 @@ Module Mod_Dessins
         '--> Déclaration
 
         Dim MyPenContour As New Pen(Color.Black, 1)
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
         Dim lSoude As Boolean = (enrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude)
 
@@ -2388,9 +2384,12 @@ Module Mod_Dessins
         '--> Déclaration
 
         Dim MyPenContour As New Pen(Color.Black, 1)
-        Dim xPts(), yPts() As Single
+
         Dim nbPts As Integer
-        Dim xPtsP(), yPtsP() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
+        Dim xPtsP() As Single = Nothing
+        Dim yPtsP() As Single = Nothing
         Dim nbPtsP As Integer
 
         '--> Préparation du contour des étriers
@@ -2937,7 +2936,7 @@ Module Mod_Dessins
         '--> Déclaration
 
         Dim nDis As Integer
-        Dim DeltaAlpha, AlphaInt As Single
+        Dim DeltaAlpha As Single
         Const UnitAlpha As Single = 5     ' Decoupage par 5°
         Dim AlphaMax, AlphaMin As Single
         Dim kConv As Single = Math.PI / 180
@@ -3448,8 +3447,7 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim xo, yo As Decimal
-        Dim xe, ye As Decimal
+        Dim xo, xe As Decimal
 
         Dim yCote As Decimal = -hMaxProfile - dCar
         Dim yCoteS As Decimal = MyPoutre.Dalle.zTop + dCar
@@ -3727,7 +3725,8 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
         Dim MyBrushAp As New SolidBrush(Color.DarkGreen)
 
@@ -3983,7 +3982,7 @@ Module Mod_Dessins
         Dim EspaceLongiGoujons As Decimal
         Dim MyBrushA As New SolidBrush(Color.LightBlue)
         Dim MyPen As New Pen(Color.Black, 1)
-        Dim MyColor As Color
+
         Dim CouleurConnecteur As Color = Color.White
         Dim myBrushC As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurConnecteur)
         Const lAffSymbol As Boolean = False
@@ -3994,7 +3993,7 @@ Module Mod_Dessins
 
         '--> Initialisations
 
-        LongueurTravee = MyPoutre.PORTEEDEFAUT
+        LongueurTravee = cls_Poutre.PORTEEDEFAUT
         LargeurSemelle = LongueurTravee / 8.5
         If Not MyPoutre.lAutomaticDesign Then
             For i As Integer = 0 To 2
@@ -4147,7 +4146,7 @@ Module Mod_Dessins
         Dim MyColor As Color
         Dim CouleurBeton As Color = CouleurBetonNormal
         Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
-        Const lAffSymbol As Boolean = False
+        'Const lAffSymbol As Boolean = False
         Dim Chaine As String
         Dim MyFontNormal As Font = FontBase
         Dim lTotal As Boolean = False
@@ -4156,7 +4155,7 @@ Module Mod_Dessins
         '--> Initialisations
 
         LongueurPoutre = MyPoutre.LongueurTotale
-        LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
+        LongueurTravee = cls_Poutre.PORTEEDEFAUT / 1.5
         If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
         If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
         HauteurPoutre = MyPoutre.HauteurTotale
@@ -4306,23 +4305,23 @@ Module Mod_Dessins
             'End If
 
             If i = 1 Then
-                If MyPoutre.TypeMaintien = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+                If MyPoutre.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                     xo += EpaisseurSemelle / 2
                 End If
 
                 If MyPoutre.lTraveeConsoleGauche Then
-                    If MyPoutre.TypeMaintien = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+                    If MyPoutre.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                         xo -= EpaisseurSemelle / 2
                     End If
                 End If
 
             ElseIf i = MyPoutre.IndiceTraveeConsoleDroite Then
-                If MyPoutre.TypeMaintien = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+                If MyPoutre.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                     xo -= EpaisseurSemelle / 2
                 End If
 
                 If MyPoutre.lTraveeConsoleDroite Then
-                    If MyPoutre.TypeMaintien = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+                    If MyPoutre.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained Then
                         xo += EpaisseurSemelle / 2
                     End If
                 End If
@@ -4345,10 +4344,10 @@ Module Mod_Dessins
         For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
 
             Select Case MyPoutre.TypeMaintien
-                Case MyPoutre.EnuTypeMaintiensPoutre.NotRestrained
+                Case cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
                     lCote = False
 
-                Case MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained
+                Case cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained
 
                     lCote = False
 
@@ -4391,7 +4390,7 @@ Module Mod_Dessins
                     AddRectanglePlein(MyGr, MyBrushMaintienSup, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
 
 
-                Case MyPoutre.EnuTypeMaintiensPoutre.PointRestrained
+                Case cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained
 
 
                     For Each maintiens As cls_Maintiens In MyPoutre.Maintiens(i)
@@ -4671,7 +4670,7 @@ Module Mod_Dessins
         '--> Initialisations
 
         LongueurPoutre = MyPoutre.LongueurTotale
-        LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
+        LongueurTravee = cls_Poutre.PORTEEDEFAUT / 1.5
         If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
         If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
         HauteurPoutre = MyPoutre.HauteurTotale
@@ -4798,7 +4797,7 @@ Module Mod_Dessins
             '--> Initialisations
 
             LongueurPoutre = MyPoutre.LongueurTotale
-            LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
+            LongueurTravee = cls_Poutre.PORTEEDEFAUT / 1.5
             If MyPoutre.lTraveeConsoleGauche Then LongueurConsoleGauche = LongueurTravee / 2
             If MyPoutre.lTraveeConsoleDroite Then LongueurConsoleDroite = LongueurTravee / 2
             HauteurPoutre = MyPoutre.HauteurTotale
@@ -4924,7 +4923,7 @@ Module Mod_Dessins
         Dim MyFontNormal As Font = FontBase
         Dim lTotal As Boolean = False
         Dim lContour As Boolean = lCONTOURCOTE
-        Dim lPointProp As Boolean = (MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.PointPropped)
+        Dim lPointProp As Boolean = (MyPoutre.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.PointPropped)
 
         '--> Initialisations
 
@@ -5014,7 +5013,7 @@ Module Mod_Dessins
         Dim Longueur, LongueurMax, DeltaX As Decimal
         Dim NbPts As Integer
 
-        If (MyPoutre.TypeEtaiement = MyPoutre.EnuTypeEtaiement.FullyPropped) Then
+        If (MyPoutre.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.FullyPropped) Then
             LongueurMax = MyPoutre.LongueurTraveeMax
             DeltaX = LongueurMax / 25
 
@@ -5140,7 +5139,8 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
         Dim MyBrushAp As New SolidBrush(Color.DarkRed)
 
@@ -5206,8 +5206,7 @@ Module Mod_Dessins
         Dim MyPenDot As New Pen(Color.Black, 1) With {
             .DashStyle = DashStyle.Dash
         }
-        Dim MyColor As Color
-        Dim Chaine As String
+
         Dim MyFontNormal As Font = FontBase
         Dim lTotal As Boolean = False
         Dim lContour As Boolean = lCONTOURCOTE
@@ -5217,7 +5216,7 @@ Module Mod_Dessins
         '--> Initialisations
 
         LongueurPoutre = MyPoutre.LongueurTotale
-        LongueurTravee = MyPoutre.PORTEEDEFAUT / 1.5
+        LongueurTravee = cls_Poutre.PORTEEDEFAUT / 1.5
         If MyPoutre.lTraveeConsoleGauche Then
             LongueurConsoleGauche = LongueurTravee * MyPoutre.LongueurTravee(0) / MyPoutre.LongueurTravee(1)
         Else
@@ -5463,7 +5462,8 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
         Dim MyBrushAp As SolidBrush
 
@@ -5506,7 +5506,8 @@ Module Mod_Dessins
 
         '--> Déclarations
 
-        Dim xPtsGauche(), yPtsGauche() As Single
+        Dim xPtsGauche() As Single = Nothing
+        Dim yPtsGauche() As Single = Nothing
         Dim nbPtsGauche As Integer
         Dim MyBrushAp As SolidBrush
         Dim MyPen As Pen
@@ -5552,7 +5553,8 @@ Module Mod_Dessins
 
         '--> Initialisations
 
-        Dim xPtsDroite(), yPtsDroite() As Single
+        Dim xPtsDroite() As Single = Nothing
+        Dim yPtsDroite() As Single = Nothing
         Dim nbPtsDroite As Integer
 
         PrepareContourForcePonctuelle(xPosDroite, yPosDroite, HauteurExtDroite, HauteurInt, LargeurInt, LargeurExt, xPtsDroite, yPtsDroite, nbPtsDroite)
@@ -5973,12 +5975,12 @@ Module Mod_Dessins
         Dim MyPenContour As New Pen(Color.Black, 1)
 
         Dim Hp As Decimal = MyDalle.Bac.Hp
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
         Dim Bfs As Decimal = MyProfil.Bfs
         Dim zTop As Decimal = MyDalle.zTop
-        Dim xo, yo As Decimal
-        Dim xe, ye As Decimal
+        Dim xo, xe As Decimal
         Dim wApp As Decimal = MyDalle.Bac.wAppui
 
         '--> Préparation du contour de la dalle
@@ -6134,7 +6136,8 @@ Module Mod_Dessins
 
         '--> Déclaration
 
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
 
         '--> Contour
@@ -6340,7 +6343,8 @@ Module Mod_Dessins
 
         '--> Déclaration
 
-        Dim xPtsG(), yPtsG() As Single
+        Dim xPtsG() As Single = Nothing
+        Dim yPtsG() As Single = Nothing
         Dim nbPtsG As Integer
         Dim xo, yo As Single
 
@@ -6731,7 +6735,8 @@ Module Mod_Dessins
         '--> Déclaration
 
         Dim MyPenContour As New Pen(Color.Black, 1)
-        Dim xPts(), yPts() As Single
+        Dim xPts() As Single = Nothing
+        Dim yPts() As Single = Nothing
         Dim nbPts As Integer
         Dim lDalleRed As Boolean
         Dim dCar As Decimal = (MyDalle.t_h + MyDalle.t_d) / 5
@@ -7170,7 +7175,7 @@ Module Mod_Dessins
         '--> Déclaration
 
         Dim MyPenContour As New Pen(Color.Black, 1)
-        Dim xo, yo, xe, xi As Decimal
+        Dim xo, yo As Decimal
         Dim Signe As Decimal = 1
         Dim uYInterne As Decimal
         Dim Bfs, Tw As Decimal

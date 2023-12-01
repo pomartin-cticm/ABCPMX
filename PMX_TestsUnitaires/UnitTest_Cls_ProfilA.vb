@@ -22,7 +22,7 @@ Imports PMXMoteur2
         '--> Déclaration
 
         Dim MyProfil As New cls_ProfilA
-        Dim DeltaV, ValRef, Valeur As Decimal
+        Dim ValRef, Valeur As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
         Dim zANE, Inertie, MelRd As Decimal
 
@@ -196,9 +196,6 @@ Imports PMXMoteur2
         '--> Déclaration
 
         Dim MyProfil As New cls_ProfilA
-        Dim DeltaV, ValRef As Decimal
-        Const DeltaVMAx As Decimal = 2 / 1000
-        Dim zANE, InertieY, InertieZ, MelRd As Decimal
 
         '--> Initialisation
 

@@ -1,5 +1,5 @@
 ﻿Imports System.Security.Cryptography
-Imports PropMix_Engine.Cls_Dalle
+'Imports PropMix_Engine.Cls_Dalle
 
 Public Class cls_Enrobage_Partiel
 
@@ -24,11 +24,6 @@ Public Class cls_Enrobage_Partiel
 #End Region
 
 #Region " Attributs "
-
-    ''' <summary>
-    ''' Définiton des lits d'armatures longitudinales
-    ''' </summary>
-    'Public LitsArmaOLD(2) As struc_LitArma
 
     ''' <summary>
     ''' Indique si armatures de construction dans le lit inf

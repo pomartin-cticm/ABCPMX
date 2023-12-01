@@ -253,7 +253,7 @@ Public Class Cls_LinesOfFile
         '
         '--------------------------------------------------------------------------------------
 
-        Dim MyFile As System.IO.StreamWriter
+        Dim MyFile As System.IO.StreamWriter = Nothing
 
         Try 'Gestion des erreurs à l'ouverture et la lecture du fichier            
             'FileOpen(MyConst.NFACCES, FileName, OpenMode.Output)

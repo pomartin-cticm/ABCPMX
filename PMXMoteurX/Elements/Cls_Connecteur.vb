@@ -55,6 +55,7 @@ Public Class cls_Connecteur
             'For i As Integer = 0 To goujons_database.Length - 1
             '    If nom = goujons_database(i).Item1 Then Return i
             'Next
+            Return 0
         End Get
     End Property
 
@@ -101,10 +102,10 @@ Public Class cls_Connecteur
 #End Region
 
 #Region " Outils DataBase "
-    ''' <summary>
-    ''' Fonction qui renvoi la liste des noms des goujons disponibles dans la DataBase du Mod_Declaration (utile pour le Frm_Connexion)
-    ''' </summary>
-    ''' <returns></returns>
+    '''' <summary>
+    '''' Fonction qui renvoi la liste des noms des goujons disponibles dans la DataBase du Mod_Declaration (utile pour le Frm_Connexion)
+    '''' </summary>
+    '''' <returns></returns>
     'Public Function Get_ListName_GoujonDatabase() As String()
     '    Dim listName As String()
     '    ReDim listName(goujons_database.Length - 1)

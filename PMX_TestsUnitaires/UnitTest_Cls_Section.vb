@@ -239,7 +239,7 @@ Imports PMXMoteur2
         Dim MyGamma As New cls_Gamma
         Dim zANP, MplRd As Decimal
         Dim zANE, MelRd As Decimal
-        Dim InertieY, InertieZ As Decimal
+        Dim InertieY As Decimal
         Dim DeltaV, ValRef As Decimal
         ' Const DeltaVMAx As Decimal = 1 / 1000
         Dim nEqEc As Decimal
@@ -506,8 +506,7 @@ Imports PMXMoteur2
         Dim MySection As New cls_Section
         Dim MyGamma As New cls_Gamma
         Dim zANP, MplRd As Decimal
-        Dim zANE, MelRd As Decimal
-        Dim InertieY, InertieZ As Decimal
+
         Dim DeltaV, ValRef As Decimal
         'Const DeltaVMAx As Decimal = 1 / 1000
         Dim nEqEc As Decimal
@@ -677,7 +676,7 @@ Imports PMXMoteur2
         Dim MyDalle As New cls_Dalle
         Dim zANP, MplRd As Decimal
         Dim zANE, MelRd As Decimal
-        Dim InertieY, InertieZ As Decimal
+        Dim InertieY As Decimal
         Dim DeltaV, ValRef As Decimal
         'Const DeltaVMAx As Decimal = 1 / 1000
         Dim bEff, Eta As Decimal
@@ -792,11 +791,11 @@ Imports PMXMoteur2
         Dim MySection As New cls_Section
         Dim MyGamma As New cls_Gamma
         Dim MyDalle As New cls_Dalle
-        Dim zANP, MplRd As Decimal
+
         Dim zANE, MelRd As Decimal
-        Dim InertieY, InertieZ As Decimal
-        Dim DeltaV, ValRef As Decimal
-        'Const DeltaVMAx As Decimal = 1 / 1000
+        Dim InertieY As Decimal
+        Dim ValRef As Decimal
+
         Dim bEff, Eta As Decimal
         Const n0 As Decimal = 6.77
 
@@ -898,8 +897,8 @@ Imports PMXMoteur2
         Dim MyDalle As New cls_Dalle
         Dim zANP, MplRd As Decimal
 
-        Dim DeltaV, ValRef As Decimal
-        ' Const DeltaVMAx As Decimal = 1 / 1000
+        Dim ValRef As Decimal
+
         Dim bEff, Eta As Decimal
 
         '--> Initialisations
@@ -1119,10 +1118,10 @@ Imports PMXMoteur2
         section.Acier.f_y.fi = 275
         section.Acier.f_y.w = 300
 
-        section.typeSection = section.Enum_TypeSection.AcierSeul
+        section.typeSection = cls_Section.Enum_TypeSection.AcierSeul
 
 
-        Dim alpha, psi, c_sem_sup, t_sem_sup, epsilon_sem_sup, c_sem_inf, t_sem_inf, epsilon_sem_inf, c_ame, t_ame, epsilon_ame, td As Decimal
+        Dim c_sem_sup, t_sem_sup, epsilon_sem_sup, c_sem_inf, t_sem_inf, epsilon_sem_inf, c_ame, t_ame, epsilon_ame, td As Decimal
         Dim z_ANE As Decimal
         Dim lFlexionPositive, lGEN_1_EC As Boolean
         Dim ValRef, DeltaV As Decimal
@@ -1181,7 +1180,7 @@ Imports PMXMoteur2
         'Cas M>0, ANE dans l'ame et section du type IFB-B
         z_ANE = -50 / 1000
         lFlexionPositive = True
-        section.typeSection = section.Enum_TypeSection.IFB_B
+        section.typeSection = cls_Section.Enum_TypeSection.IFB_B
         section.ProfilA.Plat_b = 300 / 1000
         section.ProfilA.Plat_t = 15 / 1000
         c_sem_sup = 146.5 / 1000

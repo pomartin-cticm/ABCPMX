@@ -304,7 +304,9 @@ Module Mod_BasesDonneesBinaires
         Dim ASG, ASGi, TSTE, ASB As Integer
         Dim nCg, nCq, nCn As Short
         Dim nSteels As Short
-        Dim Grade, Qualite, Norm As String
+        Dim Grade As String = ""
+        Dim Qualite As String = ""
+        Dim Norm As String = ""
         Dim Plages As New List(Of cls_Acier.strucPlage)
         Dim iStandart, iBase As Short
         Dim EpMax As Single
@@ -406,7 +408,7 @@ Module Mod_BasesDonneesBinaires
             If Not LogicielOptions.lExpert Then lAutorise = False
         ElseIf IsReductionCurveEC3(Qualite, ReducNorm) Then
             ''On autorise pour le moment toutes les versions EC3
-            '''If Not (OptionsDatabase_Section.lShowEC3 And OptionsLogiciel.lExpertMode) Then lAutorise = False
+            ''If Not (OptionsDatabase_Section.lShowEC3 And OptionsLogiciel.lExpertMode) Then lAutorise = False
 
         End If
 

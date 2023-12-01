@@ -148,7 +148,7 @@ Public Class Frm_InformationPP
         Me.txt_Ac.Text = GetStringInUnit(MyPoutreLoc.Dalle.Aire(dc, MyPoutreLoc.Section.ProfilA.Bfs) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2, Enu_TypeVariable.SansType, 3, 3, False)
         Me.txt_qc.Text = GetStringInUnit(PoidsPropreLoc.qPP_DalleBeton / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 3, False)
 
-        If MyPoutreLoc.Dalle.type = MyPoutreLoc.Dalle.Enum_TypeDalle.Mixte Then
+        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             Me.txt_mup.Text = Format(MyPoutreLoc.Dalle.Bac.msurf, formatTxtBox)
             Me.txt_dc.Text = GetStringInUnit(dc / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), Enu_TypeVariable.SansType, 3, 3, False)
             Me.txt_qp.Text = GetStringInUnit(PoidsPropreLoc.qPP_BacAcier / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 3, False)

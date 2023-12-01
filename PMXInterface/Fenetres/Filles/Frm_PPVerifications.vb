@@ -35,7 +35,8 @@ Public Class Frm_PPVerifications
     Dim lDessResistance As Boolean = True   ' Affichage diagramme resistance
     Dim lDessNumeros As Boolean = False     ' Affichage des numéros noeuds
 
-    Dim CritereA As New cls_Critere(MyProjet.Poutres(MyProjet.IndEnCours).Nodes.nbNodes)
+    Dim CritereA As New cls_Critere(MyProjet.Poutres(MyProjet.IndEnCours).Nodes.nbNodes, cls_Poutre.nbCombELU, MyProjet.Poutres(MyProjet.IndEnCours).IndiceDerniereTravee)
+    'Dim CritereA As New cls_Critere(MyProjet.Poutres(MyProjet.IndEnCours).Nodes.nbNodes)
 
     Const pDecAxe As Decimal = 0.05
     Const kADJV As Decimal = 0.95
@@ -489,7 +490,7 @@ Public Class Frm_PPVerifications
         Dim MyPenB As SolidBrush
         Dim Chaine As String = ""
         Dim MyFont As New Font("Arial", 8)
-        Dim pVal As Decimal
+
         Dim PenLimit As New Pen(Color.DarkRed, 0.5)
         Dim dTiret As Decimal = kTiret * dCar
 

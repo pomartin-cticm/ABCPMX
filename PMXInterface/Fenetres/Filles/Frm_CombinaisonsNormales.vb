@@ -164,7 +164,7 @@ Public Class Frm_CombinaisonsNormales
 
     Private Sub MAJI_TypeEL()
         Dim Chaine As String = str_Combinaison
-        Dim ChaineEL As String
+        Dim ChaineEL As String = ""
 
         Select Case AffichageEL
             Case Enu_AffichageEL.ELF : ChaineEL = strELF
@@ -393,7 +393,7 @@ Public Class Frm_CombinaisonsNormales
         Dim hIndice As Single = hCar / 2
         Dim yLine1 As Single = (sHi / 2 - hCar) / 2
         Dim yLine2 As Single = yLine1 + sHi / 2
-        Dim IndiceG As String
+        Dim IndiceG As String = ""
         Dim lPsi0Q1, lPsi0Q2 As Boolean
         Dim sCar As Single = MyGr.MeasureString("x", FontNormal).Width / 5
 
@@ -568,7 +568,9 @@ Public Class Frm_CombinaisonsNormales
         Dim xPlus1 As Single = xG + 0.08! * sWi
         Dim xPlus2 As Single = xQ1 + 0.08! * sWi
 
-        Dim strGammaG, strCoefQ1, strCoefQ2 As String
+        Dim strGammaG As String = ""
+        Dim strCoefQ1 As String = ""
+        Dim strCoefQ2 As String = ""
         Dim lQ1, lQ2 As Boolean
 
         Const kAdjust As Single = 0.5!
@@ -700,7 +702,8 @@ Public Class Frm_CombinaisonsNormales
         Dim hIndice As Single = hCar / 2
         Dim yLine1 As Single = (sHi / 2 - hCar) / 2
         Dim yLine2 As Single = yLine1 + sHi / 2
-        Dim IndiceQ1, IndiceQ2 As String
+        Dim IndiceQ1 As String = ""
+        Dim IndiceQ2 As String = ""
 
         Dim sCar As Single = MyGr.MeasureString("x", FontNormal).Width / 5
 
@@ -721,7 +724,8 @@ Public Class Frm_CombinaisonsNormales
         Dim xPlus1 As Single = xG + 0.08! * sWi
         Dim xPlus2 As Single = xQ1 + 0.08! * sWi
 
-        Dim strCoefQ1, strCoefQ2 As String
+        Dim strCoefQ2 As String = ""
+        Dim strCoefQ1 As String = ""
 
         Const kAdjust As Single = 0.5!
 

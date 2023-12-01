@@ -117,10 +117,10 @@ Public Class cls_OptionsCalcul
 
     'GUD --> Déplacé dans la fonction d'enregistrement de la Cls_Poutre 
 
-    ''' <summary>
-    ''' Ecriture des attributs pour enregistrement dans un fichier 
-    ''' </summary>
-    ''' <param name="Lines">Lignes d'écriture</param>
+    '''' <summary>
+    '''' Ecriture des attributs pour enregistrement dans un fichier 
+    '''' </summary>
+    '''' <param name="Lines">Lignes d'écriture</param>
     'Public Sub EcrireFile(ByRef Lines As List(Of String))
 
     '    'Lines.Add("   CGM0          = " & Gamma_M0)

@@ -290,7 +290,7 @@
         '--> Déclarations
 
         Dim nbCharges As Integer = ChargesA.Count
-        Dim iCas, jNode, k As Integer
+        Dim iCas, jNode As Integer
 
         '--> Initialisation
 

@@ -92,11 +92,6 @@ Public Class cls_Bac
     Public fyp As Decimal
 
     ''' <summary>
-    ''' Limite d'élasticité de calcul du bac
-    ''' </summary>
-    'Public fypd As Decimal
-
-    ''' <summary>
     ''' Largeur d'un bac livré par le fabricant
     ''' </summary>
     Public LargeurModule As Decimal
@@ -568,8 +563,7 @@ Public Class cls_Bac
 
         Dim nbOndes As Integer
         Dim wBac As Decimal
-        Dim xp, yp As Decimal
-        Const REBORD As Decimal = 0.2
+        ' Const REBORD As Decimal = 0.2
         Dim dXnerv As Decimal
         Dim DeltaX0 As Decimal
         Dim xCenter As Decimal

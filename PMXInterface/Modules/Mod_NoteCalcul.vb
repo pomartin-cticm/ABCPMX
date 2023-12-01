@@ -251,7 +251,6 @@ Module Mod_NoteCalcul
 
 #End Region
 
-
 #Region "***Edition des paramètres***"
 
     Private Sub EditionParametres(MyBeam As cls_Poutre)
@@ -375,7 +374,7 @@ Module Mod_NoteCalcul
             AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LEFTSUPPORT"))
             AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("RIGHTSUPPORT"))
 
-            Dim strTypTravee As String
+            Dim strTypTravee As String = ""
 
             For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
                 InitialiseLigne(5, HLIGNE, True)
@@ -970,9 +969,7 @@ Module Mod_NoteCalcul
                     End If
                     AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LONGI_SPACING") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
 
-
-
-                    Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
+                    '                    Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
 
 
                     For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
@@ -1522,7 +1519,6 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
 
         Dim bEff As Decimal
-        Dim LTrav As Decimal
         Dim mSign As Decimal
         Dim zANP, MplRd As Decimal
         Dim zANE, MelRd As Decimal
@@ -2629,7 +2625,11 @@ Module Mod_NoteCalcul
             iNodeF = MyBeam.Nodes.iNodeExtTrav(i, 1)
 
             InitialiseLigne(NCOL, HLIGNE, False)
-            AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, MyBeam.CombiA_ELU.Symbole(iCombi))
+            If i = iTraveeDeb Then
+                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, MyBeam.CombiA_ELU.Symbole(iCombi))
+            Else
+                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, "")
+            End If
             If lMultiSpan Then
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
@@ -2714,30 +2714,30 @@ Module Mod_NoteCalcul
         Exit Sub
 
 
-        For i = 0 To MyBeam.CombiA_ELU.nbCombi - 1
-            AddTitreNdC(3, BlocELU("ULS_COMBIS") & " " & MyBeam.CombiA_ELU.Symbole(i))
+        'For i = 0 To MyBeam.CombiA_ELU.nbCombi - 1
+        '    AddTitreNdC(3, BlocELU("ULS_COMBIS") & " " & MyBeam.CombiA_ELU.Symbole(i))
 
-        Next
+        'Next
 
-        SauteLigne()
+        'SauteLigne()
 
-        AddLigneNDC("\TABLEAU 18")
+        'AddLigneNDC("\TABLEAU 18")
 
-        InitialiseLigne(6, HLIGNE, True)
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SECTION"))
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SPAN"))
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x(m)GUD")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+        'InitialiseLigne(6, HLIGNE, True)
+        'AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SECTION"))
+        'AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SPAN"))
+        'AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x(m)GUD")
+        'AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        'AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        'AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
 
-        InitialiseLigne(6, HLIGNE, True)
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SECTION"))
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SPAN"))
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x(m)GUD")
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+        'InitialiseLigne(6, HLIGNE, True)
+        'AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SECTION"))
+        'AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocELU("SPAN"))
+        'AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "x(m)GUD")
+        'AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        'AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        'AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
 
 
 
@@ -2961,7 +2961,7 @@ Module Mod_NoteCalcul
         Dim MyBordures(MyBeam.IndiceDerniereTravee) As Integer
         Dim iTraveeDeb As Integer = MyBeam.IndicePremiereTravee
         Dim iTraveeFin As Integer = MyBeam.IndiceDerniereTravee
-        Dim FlechesMax() As Decimal
+        Dim FlechesMax() As Decimal = Nothing
         Dim iCell As Integer
         Dim RatioX As Decimal
         Dim ChaineRatioX As String
@@ -3111,20 +3111,20 @@ Module Mod_NoteCalcul
         '--[ Déclarations
 
         Dim AllFloorVibration As New Dictionary(Of Integer, strHivossTable)
-        Const TABVAR As String = " :\T45"
-        Const DFORMAT As String = "0"
-        Dim Frequency, ModalMass As Decimal
-        Dim HResult As String
-        Dim HVal As Decimal
-        Dim Reactions() As Decimal
-        Dim IndConfort As Integer
+        'Const TABVAR As String = " :\T45"
+        'Const DFORMAT As String = "0"
+        'Dim Frequency, ModalMass As Decimal
+        'Dim HResult As String
+        'Dim HVal As Decimal
+        'Dim Reactions() As Decimal
+        'Dim IndConfort As Integer
         Dim TableConfort(2) As String
         Dim TableUsage As New List(Of String)
-        Dim lDefini() As Boolean
+        'Dim lDefini() As Boolean
         Dim lMixte As Boolean
-        Dim FreqDalle As Decimal
-        Dim FreqBeam As Decimal
-        Dim MySymb As String
+        'Dim FreqDalle As Decimal
+        'Dim FreqBeam As Decimal
+        'Dim MySymb As String
 
         '--[ Titre
 

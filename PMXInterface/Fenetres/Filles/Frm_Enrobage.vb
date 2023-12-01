@@ -960,7 +960,7 @@ Public Class Frm_Enrobage
 
     Private Sub comboEtriersChanged(sender As Object, e As EventArgs) Handles cmb_TypeEtriers.SelectedIndexChanged, cmb_DiametreEtriers.SelectedIndexChanged
         If lBuild Then Exit Sub
-        Dim Indice, iArma As Integer
+        Dim Indice As Integer
 
         Select Case sender.name
             Case Me.cmb_DiametreEtriers.Name

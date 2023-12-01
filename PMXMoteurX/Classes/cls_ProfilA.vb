@@ -77,9 +77,9 @@ Public Class cls_ProfilA
     ''' </summary>
     Public Rci As Decimal
 
-    ''' <summary>
-    ''' hauteur totale de l’âme, mesurée entre le nu intérieur des semelles (m)
-    ''' </summary>
+    '''' <summary>
+    '''' hauteur totale de l’âme, mesurée entre le nu intérieur des semelles (m)
+    '''' </summary>
     'Private h_w As Decimal
 
     ''' <summary>
@@ -248,13 +248,13 @@ Public Class cls_ProfilA
 
             Return pInertieT
 
-            '''=== Formule du catalogue AM V 2008
+            ''''=== Formule du catalogue AM V 2008
 
             ''pInertieT = 2 / 3 * (Bf - 0.63 * Tf) * Tf ^ 3 _
             ''          + 1 / 3 * Hw * Tw ^ 3 _
             ''          + 2 * Tw / Tf * (0.145 + 0.1 * Rc / Tf) * (((Rc + Tw / 2) ^ 2 + (Rc + Tf) ^ 2 - Rc ^ 2) / (2 * Rc + Tf)) ^ 4
 
-            '''=== Formule du guide CTICM sur le déversement, Annexe A1
+            ''''=== Formule du guide CTICM sur le déversement, Annexe A1
 
             ''pInertieT = 2 / 3 * (1 - 0.63 * Tf / Bf * (1 - Tf ^ 4 / 12 / Bf ^ 4)) * Bf * Tf ^ 3 _
             ''          + 1 / 3 * Hw * Tw ^ 3 _
@@ -294,15 +294,16 @@ Public Class cls_ProfilA
     ''' <returns></returns>
     Public ReadOnly Property HauteurAmeHw As Decimal
         Get
+            Dim MyHw As Decimal = 0
             Select Case Me.typeProfileAcier
                 Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.LamineSlimSAB, Enum_TypeSectionAcier.LamineSlimSFB
-                    Return Me.ha - Me.Tfs - Me.Tfi
+                    MyHw = Me.ha - Me.Tfs - Me.Tfi
                 Case Enum_TypeSectionAcier.LamineSlimIFBA
-                    Return Me.ha - Me.Tfs - Me.Plat_t
+                    MyHw = Me.ha - Me.Tfs - Me.Plat_t
                 Case Enum_TypeSectionAcier.LamineSlimIFBB
-                    Return Me.ha - Me.Plat_t - Me.Tfi
+                    MyHw = Me.ha - Me.Plat_t - Me.Tfi
             End Select
-
+            Return MyHw
         End Get
     End Property
 
@@ -312,15 +313,16 @@ Public Class cls_ProfilA
     ''' <returns></returns>
     Public ReadOnly Property HauteurAmeDw As Decimal
         Get
+            Dim MyDw As Decimal
             Select Case Me.typeProfileAcier
                 Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.LamineSlimSAB, Enum_TypeSectionAcier.LamineSlimSFB
-                    Return Me.ha - Me.Tfs - Me.Tfi - Me.Rci - Me.Rcs
+                    MyDw = Me.ha - Me.Tfs - Me.Tfi - Me.Rci - Me.Rcs
                 Case Enum_TypeSectionAcier.LamineSlimIFBA
-                    Return Me.ha - Me.Tfs - Me.Rcs - Me.Plat_t
+                    MyDw = Me.ha - Me.Tfs - Me.Rcs - Me.Plat_t
                 Case Enum_TypeSectionAcier.LamineSlimIFBB
-                    Return Me.ha - Me.Plat_t - Me.Tfi - Me.Rci
+                    MyDw = Me.ha - Me.Plat_t - Me.Tfi - Me.Rci
             End Select
-
+            Return MyDw
         End Get
     End Property
 
@@ -330,18 +332,20 @@ Public Class cls_ProfilA
     ''' <returns></returns>
     Public ReadOnly Property zRefAraseSup As Decimal
         Get
+            Dim myZ As Decimal = 0
             Select Case Me.typeProfileAcier
                 Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
-                    Return 0
+                    myZ = 0
                 Case Enum_TypeSectionAcier.LamineSlimSFB
-                    Return Me.hb
+                    myZ = Me.hb
                 Case Enum_TypeSectionAcier.LamineSlimIFBA
-                    Return Me.ha - Me.Plat_t
+                    myZ = Me.ha - Me.Plat_t
                 Case Enum_TypeSectionAcier.LamineSlimIFBB
-                    Return Me.ha - Me.Tfi
+                    myZ = Me.ha - Me.Tfi
                 Case Enum_TypeSectionAcier.LamineSlimSAB
-                    Return Me.hb - Me.Tfi
+                    myZ = Me.hb - Me.Tfi
             End Select
+            Return myZ
         End Get
     End Property
 
@@ -630,7 +634,7 @@ Public Class cls_ProfilA
         Dim Inertie, zANE, MelRd As Decimal
         Dim Wel As Decimal
         Dim zSup, zInf As Decimal
-        Const Fy As Decimal = 235
+        'Const Fy As Decimal = 235
 
         '--> Initialisation
 
@@ -1053,7 +1057,7 @@ Public Class cls_ProfilA
         Dim Inertie, zANE, MelRd As Decimal
         Dim Wel As Decimal
         Dim zSup, zInf As Decimal
-        Const Fy As Decimal = 235
+        'Const Fy As Decimal = 235
 
         '--> Initialisation
 

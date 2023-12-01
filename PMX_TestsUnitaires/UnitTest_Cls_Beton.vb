@@ -220,11 +220,10 @@ Imports PMXMoteur2
         '--> Déclarations
 
         Dim MyBet As New cls_Beton
-        Dim n0 As Decimal
+
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
-        Dim RH, h0, PsiL As Decimal
-        Dim time_t, time_t0 As Decimal
+
 
         '--> Initialisation
 

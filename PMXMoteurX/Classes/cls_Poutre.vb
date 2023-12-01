@@ -226,9 +226,9 @@ Public Class cls_Poutre
     ''' </summary>
     Public NombreGoujonsTransv(,) As Integer
 
-    ''' <summary>
-    ''' Nombre total de goujons disposés sur la travée considérée   
-    ''' </summary>
+    '''' <summary>
+    '''' Nombre total de goujons disposés sur la travée considérée   
+    '''' </summary>
     'Public NombreGoujonsTot() As Integer
 
     ''' <summary>
@@ -2693,7 +2693,7 @@ Public Class cls_Poutre
 
         '--> Boucle sur les combinaisons définies par l'utilisateur
 
-        For iCombi = 0 To Me.nbCombELU
+        For iCombi = 0 To cls_Poutre.nbCombELU
 
             If lCombELU(iCombi) And (Not lCombiELUNulle(iCombi)) Then
 
@@ -3076,7 +3076,7 @@ Public Class cls_Poutre
 
         '--> Calcul des propriétés à mi-travée
 
-        Beff = Me.BeffDalle(Me.LongueurTravee(iTrav) / 2, iTrav, lSimpleM, True, Me.EnuTypeLargeurParticipante.LargeurTotale)
+        Beff = Me.BeffDalle(Me.LongueurTravee(iTrav) / 2, iTrav, lSimpleM, True, cls_Poutre.EnuTypeLargeurParticipante.LargeurTotale)
         Tc = Me.Dalle.EpaisseurActive
         Me.Section.ProprietesElastiquesMixteMyy(1, True, Me.Param.Gamma, nEqEc, nEqDal, Beff, Me.Dalle, zANe, InertieY, MelRd)
         DeltaZ = Me.Dalle.zTop - Tc / 2 - zANe
@@ -3400,7 +3400,7 @@ Public Class cls_Poutre
             .qPP_DalleBeton = Me.Dalle.Aire(dc, Me.Section.ProfilA.Bfs) * Me.Dalle.beton.RhoC * G
 
             '# Bac acier
-            If Me.Dalle.type = Me.Dalle.Enum_TypeDalle.Mixte Then
+            If Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
                 .qPP_BacAcier = Me.Dalle.Bac.msurf * dc * G
             Else
                 .qPP_BacAcier = 0
@@ -3804,7 +3804,7 @@ Public Class cls_Poutre
         '--> Déclarations
 
         Dim NbApp As Integer
-        Dim indAppuis() As Integer
+        Dim indAppuis() As Integer = Nothing
 
         '--> Initialisation
 

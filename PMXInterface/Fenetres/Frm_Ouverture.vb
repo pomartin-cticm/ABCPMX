@@ -92,7 +92,7 @@ Public Class Frm_Ouverture
     Private Sub Button_OpenProject_Click(sender As Object, e As EventArgs) Handles Button_OpenProject.Click
 
         '--> Déclaration
-        Dim FileName As String
+        Dim FileName As String = ""
 
         '--> Préparation de la boite de dialogue OpenFile
         ' Frm_MAIN.OpenFileDialog_Project.InitialDirectory = OptionsLogiciel.RepertoireTravail

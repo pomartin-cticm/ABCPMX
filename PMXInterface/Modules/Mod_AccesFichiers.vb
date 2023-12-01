@@ -157,7 +157,8 @@
     End Function
 
     Public Function NomFichierSeul(ByVal NomComplet As String) As String
-        Dim Repertoire, Fichier As String
+        Dim Repertoire As String = ""
+        Dim Fichier As String = ""
         DecomposeChemin(NomComplet, Repertoire, Fichier)
         Return Fichier
     End Function

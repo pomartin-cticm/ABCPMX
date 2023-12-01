@@ -28,27 +28,27 @@
         lCalculPlastic = False
     End Sub
 
-    Private Sub InitialiseCriteres(NbNodes As Integer)
+    Private Sub InitialiseCriteres(NbNodes As Integer, nbCombi As Integer, IndDerniereT As Integer)
 
-        Me.CritereM = New cls_Critere(NbNodes)
-        Me.CritereV = New cls_Critere(NbNodes)
-        Me.CritereVb = New cls_Critere(NbNodes)
+        Me.CritereM = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereV = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereVb = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
 
     End Sub
 
-    Private Sub InitialiseCriteresVM(NbNodes As Integer, lArma As Boolean)
+    Private Sub InitialiseCriteresVM(NbNodes As Integer, lArma As Boolean, nbCombi As Integer, IndDerniereT As Integer)
         '-------------------------------------------------------------------
         '   25/10/23 :  Création - POM
         '-------------------------------------------------------------------
         '   Initialisation des critères pour les contraintes normales
         '-------------------------------------------------------------------
 
-        Me.CritereSigmaA = New cls_Critere(NbNodes)
-        Me.CritereSigmaC = New cls_Critere(NbNodes)
-        Me.CritereSigmaE = New cls_Critere(NbNodes)
+        Me.CritereSigmaA = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereSigmaC = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereSigmaE = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         If lArma Then
-            Me.CritereSigmaArmaC = New cls_Critere(NbNodes)
-            Me.CritereSigmaArmaE = New cls_Critere(NbNodes)
+            Me.CritereSigmaArmaC = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+            Me.CritereSigmaArmaE = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         End If
 
     End Sub
@@ -69,7 +69,8 @@
         '--> Déclarations
 
         Dim iCombi As Integer
-        Dim MEd(,), VEd(,) As Decimal
+        Dim MEd(,) As Decimal = Nothing
+        Dim VEd(,) As Decimal = Nothing
         Dim VplRd As Decimal                            ' Effort tranchant résistant (a priori constant le long de la poutre)
         Dim VbRd As Decimal                             ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
         Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
@@ -87,7 +88,8 @@
         'Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
         Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
 
-        Dim iNodeMmax() As Integer, Mmax() As Decimal
+        Dim iNodeMmax() As Integer = Nothing
+        Dim Mmax() As Decimal = Nothing
         Dim xMZero(,) As Decimal = Nothing
         Dim lTraveeMomNeg() As Boolean = Nothing
 
@@ -107,7 +109,7 @@
 
         '# Critères
 
-        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes)
+        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee)
 
         '# Largeurs participantes
 
@@ -164,7 +166,7 @@
             '# Calcul des propriétés plastiques le long de la barre
 
             MyPoutre.MaillageRConnexion(xMZero, DeltaRd)
-            Exit Sub
+
             Me.MaillageProprietesPlastiques(MyPoutre, MEd, DeltaRd, Beff, zANP, MplRd)
 
             '# Classes des sections
@@ -222,8 +224,8 @@
         Dim iTravee As Integer
         Dim iTravDeb, iTravFin As Integer
         Dim iNode As Integer
-        Dim iNode0 As Integer
-        Dim kDeb, kfin, k As Integer
+        Dim iNodeDeb, iNodeFin As Integer
+        Dim kDeb, kfin As Integer
         Const RhoV As Decimal = 1
         Dim Signe As Decimal
 
@@ -238,16 +240,19 @@
 
         For iTravee = iTravDeb To iTravFin
 
-            iNode0 = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeDeb = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For iNode = iNode0 To MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
-                If iNode = iNode0 Then kDeb = 1 Else kDeb = 0
-                If iNode = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1) Then kfin = 0 Else kfin = 1
+            For iNode = iNodeDeb To iNodeFin
+                If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
+                If iNode = iNodeFin Then kfin = 0 Else kfin = 1
 
                 If IsEqual(MEd(iNode, kDeb), 0) Then Signe = 1 Else Signe = Math.Sign(MEd(iNode, kDeb))
 
+                'MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, RhoV,
+                '                                                 bEff(iNode), DeltaRd(iTravee)(iNodeDeb + iNode), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
                 MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, RhoV,
-                                                                 bEff(iNode), DeltaRd(iTravee)(iNode0 + iNode), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
+                                                                 bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
 
                 If kfin > kDeb Then
                     pzANP(iNode, kfin) = pzANP(iNode, kDeb)
@@ -388,7 +393,7 @@
 
         If MyPoutre.Param.lElasticDesign Then
             '# Résistance élastique VM imposée
-            Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage)
+            Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee)
             RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
         ElseIf lClasse3 Then
             '# Présence d'au moins une section de classe 3
@@ -419,7 +424,7 @@
 
         If MyPoutre.Param.lElasticDesign Then
             '# Résistance élastique VM imposée
-            Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage)
+            Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee)
             RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
         ElseIf lClasse3 Then
             '# Présence d'au moins une section de classe 3
@@ -526,22 +531,42 @@
 
         '--> Déclaration
 
-        Dim iNode As Integer
-        Dim Sigma As Decimal
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
 
         '--> Traitement
 
-        For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+        For iTravee = iDebT To iFinT
+            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
+            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-            If Math.Abs(SigmaELU(iPoint, iNode, 0)) > Math.Abs(SigmaELU(iPoint, iNode, 1)) Then
-                Sigma = SigmaELU(iPoint, iNode, 0)
-            Else
-                Sigma = SigmaELU(iPoint, iNode, 1)
-            End If
-
-            MyCritereM.EnregistreCritere(iNode, iCombi, Sigma, SigmaU)
-
+            For iNode = iDebN To iFinN
+                For k = iDebK To iFinK
+                    MyCritereM.EnregistreCritere(iNode, iCombi, iTravee, SigmaELU(iPoint, iNode, k), SigmaU)
+                Next
+            Next
         Next
+
+        'For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
+
+        '    If Math.Abs(SigmaELU(iPoint, iNode, 0)) > Math.Abs(SigmaELU(iPoint, iNode, 1)) Then
+        '        Sigma = SigmaELU(iPoint, iNode, 0)
+        '    Else
+        '        Sigma = SigmaELU(iPoint, iNode, 1)
+        '    End If
+
+        '    MyCritereM.EnregistreCritere(iNode, iCombi, Sigma, SigmaU)
+
+        'Next
 
 
     End Sub
@@ -562,27 +587,55 @@
         '   MplRd   [E] :   Table des moments plastiques le long de la barre (calculés en fonction du signe de MEd)
         '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclarations
+        '--> Déclaration
 
-        Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        Dim iNode As Integer
+        Dim iNode, k As Integer
+        'Dim Sigma As Decimal
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
 
-        Dim k, kDeb, kFin As Integer
+        '--> Déclaration
 
-        '--> Boucle sur les noeuds
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
 
-        For iNode = 0 To nbNodes - 1
+        '--> Traitement
 
-            If iNode = 0 Then kDeb = 1 Else kDeb = 0
-            If iNode = nbNodes - 1 Then kFin = 0 Else kFin = 1
+        For iTravee = iDebT To iFinT
+            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
+            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For k = kDeb To kFin
-
-                Me.CritereM.EnregistreCritere(iNode, iCombi, MEd(iNode, k), MplRd(iNode, k))
-
+            For iNode = iDebN To iFinN
+                For k = iDebK To iFinK
+                    Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MplRd(iNode, k))
+                Next
             Next
-
         Next
+
+        ''--> Déclarations
+
+        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
+        'Dim iNode As Integer
+
+        'Dim k, kDeb, kFin As Integer
+
+        ''--> Boucle sur les noeuds
+
+        'For iNode = 0 To nbNodes - 1
+
+        '    If iNode = 0 Then kDeb = 1 Else kDeb = 0
+        '    If iNode = nbNodes - 1 Then kFin = 0 Else kFin = 1
+
+        '    For k = kDeb To kFin
+
+        '        Me.CritereM.EnregistreCritere(iNode, iCombi, MEd(iNode, k), MplRd(iNode, k))
+
+        '    Next
+
+        'Next
 
     End Sub
 
@@ -599,34 +652,68 @@
         '   MplRdM  [E] :   Table des moments plastiques < 0 le long de la barre
         '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclarations
+        '--> Déclaration
 
-        Dim Critere As Decimal
-        Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        Dim iNode As Integer
+        Dim iNode, k As Integer
+        'Dim Sigma As Decimal
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
         Const SIGNEM As Decimal = 1
         Dim MRd As Decimal
-        Dim MEdMax As Decimal
 
-        '--> Boucle sur les noeuds
+        '--> Déclaration
 
-        For iNode = 0 To nbNodes - 1
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
 
-            If Math.Abs(MEd(iNode, 0)) > Math.Abs(MEd(iNode, 1)) Then
-                MEdMax = MEd(iNode, 0)
-            Else
-                MEdMax = MEd(iNode, 1)
-            End If
+        '--> Traitement
 
-            If MEdMax * SIGNEM > 0 Then
-                MRd = MplRdP(iNode)
-            Else
-                MRd = MplRdM(iNode)
-            End If
+        For iTravee = iDebT To iFinT
+            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
+            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-            Me.CritereM.EnregistreCritere(iNode, iCombi, MEdMax, MRd)
-
+            For iNode = iDebN To iFinN
+                For k = iDebK To iFinK
+                    If MEd(iNode, k) * SIGNEM > 0 Then
+                        MRd = MplRdP(iNode)
+                    Else
+                        MRd = MplRdM(iNode)
+                    End If
+                    Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MRd)
+                Next
+            Next
         Next
+
+
+        ''--> Déclarations
+
+        'Dim Critere As Decimal
+        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
+        'Dim iNode As Integer
+        'Dim MEdMax As Decimal
+
+        ''--> Boucle sur les noeuds
+
+        'For iNode = 0 To nbNodes - 1
+
+        '    If Math.Abs(MEd(iNode, 0)) > Math.Abs(MEd(iNode, 1)) Then
+        '        MEdMax = MEd(iNode, 0)
+        '    Else
+        '        MEdMax = MEd(iNode, 1)
+        '    End If
+
+        '    If MEdMax * SIGNEM > 0 Then
+        '        MRd = MplRdP(iNode)
+        '    Else
+        '        MRd = MplRdM(iNode)
+        '    End If
+
+        '    Me.CritereM.EnregistreCritere(iNode, iCombi, MEdMax, MRd)
+
+        'Next
 
     End Sub
 
@@ -642,26 +729,53 @@
         '   VplRd   [E] :   Table des efforts tranchants résistant plastique le long de la barre
         '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclarations
+        '--> Déclaration
 
-        Dim Critere As Decimal
-        Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        Dim iNode As Integer
-        Dim VEdMax As Decimal
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
 
-        '--> Boucle sur les noeuds
+        '--> Déclaration
 
-        For iNode = 0 To nbNodes - 1
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
 
-            If Math.Abs(VEd(iNode, 0)) > Math.Abs(VEd(iNode, 1)) Then
-                VEdMax = VEd(iNode, 0)
-            Else
-                VEdMax = VEd(iNode, 1)
-            End If
+        '--> Traitement
 
-            Me.CritereV.EnregistreCritere(iNode, iCombi, VEdMax, VplRd)
+        For iTravee = iDebT To iFinT
+            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
+            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
+            For iNode = iDebN To iFinN
+                For k = iDebK To iFinK
+                    Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VplRd)
+                Next
+            Next
         Next
+
+        ''--> Déclarations
+
+        'Dim Critere As Decimal
+        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
+        'Dim iNode As Integer
+        'Dim VEdMax As Decimal
+
+        ''--> Boucle sur les noeuds
+
+        'For iNode = 0 To nbNodes - 1
+
+        '    If Math.Abs(VEd(iNode, 0)) > Math.Abs(VEd(iNode, 1)) Then
+        '        VEdMax = VEd(iNode, 0)
+        '    Else
+        '        VEdMax = VEd(iNode, 1)
+        '    End If
+
+        '    Me.CritereV.EnregistreCritere(iNode, iCombi, VEdMax, VplRd)
+
+        'Next
 
     End Sub
 
@@ -677,26 +791,53 @@
         '   VRd     [E] :   Table des résistances au voilement par cisaillement le long de la barre
         '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclarations
+        '--> Déclaration
 
-        'Dim Critere As Decimal
-        Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        Dim iNode As Integer
-        Dim VEdMax As Decimal
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
 
-        '--> Boucle sur les noeuds
+        '--> Déclaration
 
-        For iNode = 0 To nbNodes - 1
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
 
-            If Math.Abs(VEd(iNode, 0)) > Math.Abs(VEd(iNode, 1)) Then
-                VEdMax = VEd(iNode, 0)
-            Else
-                VEdMax = VEd(iNode, 1)
-            End If
+        '--> Traitement
 
-            Me.CritereVb.EnregistreCritere(iNode, iCombi, VEdMax, VbRd)
+        For iTravee = iDebT To iFinT
+            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
+            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
+            For iNode = iDebN To iFinN
+                For k = iDebK To iFinK
+                    Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VbRd)
+                Next
+            Next
         Next
+
+        ''--> Déclarations
+
+        ''Dim Critere As Decimal
+        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
+        'Dim iNode As Integer
+        'Dim VEdMax As Decimal
+
+        ''--> Boucle sur les noeuds
+
+        'For iNode = 0 To nbNodes - 1
+
+        '    If Math.Abs(VEd(iNode, 0)) > Math.Abs(VEd(iNode, 1)) Then
+        '        VEdMax = VEd(iNode, 0)
+        '    Else
+        '        VEdMax = VEd(iNode, 1)
+        '    End If
+
+        '    Me.CritereVb.EnregistreCritere(iNode, iCombi, VEdMax, VbRd)
+
+        'Next
 
     End Sub
 

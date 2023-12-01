@@ -13,11 +13,6 @@
 #Region " Attributs "
 
     ''' <summary>
-    ''' Type de béton
-    ''' </summary>
-    'Public Type As Enum_TypeBeton
-
-    ''' <summary>
     ''' classe du béton
     ''' </summary>
     Public Classe As String
@@ -26,11 +21,6 @@
     ''' résistance caractéristique à la compression du béton, d’après les valeurs du Tableau 3, en fonction de la classe de béton (Pa)
     ''' </summary>
     Public Fck As Decimal
-
-    ''' <summary>
-    ''' résistance de calcul à la compression du béton
-    ''' </summary>
-    'Public Fcd As Decimal
 
     ''' <summary>
     ''' fractile 5% de la résistance à la traction du béton (Pa) 
@@ -130,12 +120,14 @@
         Dim iC As Integer = Me.Classe.IndexOf("C")
         Dim iPoint As Integer = Me.Classe.IndexOf("/") 'InStr(Me.Classe, "/")
         Dim Chaine As String
+        Dim MyResult As Decimal = 0
 
         If iPoint >= 0 Then
             Chaine = Me.Classe.Substring(iC + 1, iPoint - 1 - iC)
-            Return CDec(Chaine)
+            MyResult = CDec(Chaine)
         End If
 
+        Return MyResult
     End Function
 
     ''' <summary>

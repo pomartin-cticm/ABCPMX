@@ -47,7 +47,7 @@
         Return Me.MemberwiseClone()
     End Function
 
-    Public Function DeepClone(ByVal ForceRepartieSource As cls_ForceRepartie, ByRef ForceRepartieCible As cls_ForceRepartie)
+    Public Sub DeepClone(ByVal ForceRepartieSource As cls_ForceRepartie, ByRef ForceRepartieCible As cls_ForceRepartie)
         ForceRepartieCible.Force(0) = ForceRepartieSource.Force(0)
         ForceRepartieCible.Force(1) = ForceRepartieSource.Force(1)
 
@@ -56,7 +56,7 @@
 
         ForceRepartieCible.xGaucheT = ForceRepartieSource.xGaucheT
 
-    End Function
+    End Sub
 
 #End Region
 

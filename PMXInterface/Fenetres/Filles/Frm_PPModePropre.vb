@@ -207,10 +207,8 @@ Public Class Frm_PPModePropre
         Dim EcartZ As Decimal = Longueur * pHi / pWi
         Dim DiaNode As Decimal = Longueur / 200
         Dim dApp As Decimal = Longueur / 50
-        Dim kEch, kEchM As Decimal
-        'Dim lResult As Boolean = MyPoutre.ChargesA(iCas).lRunCalcul
-        Const SigneM As Decimal = -1
-        Const SigneV As Decimal = -1
+        Dim kEch As Decimal
+
         Dim MyFontNum As New Font("Arial", 7)
         Dim Chaine As String
         Dim MyPenB As New SolidBrush(Color.Gray)
@@ -220,7 +218,7 @@ Public Class Frm_PPModePropre
         Dim ColorDiagM = Color.DarkRed
         Dim ColorDiagV = Color.DarkBlue
 
-        Dim iNodeMax, iNodeMin As Integer
+        Dim iNodeMax As Integer
 
         Dim ColorPoutre As Color = Color.DarkGray
 

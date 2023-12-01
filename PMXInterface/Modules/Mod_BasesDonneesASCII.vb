@@ -99,7 +99,7 @@ Module Mod_BasesDonneesASCII
         Dim b1, b2, e, h, t, hrs As Double
         Dim M, fy, wModule, Ieff As Double
         Dim iField As Integer
-        Dim Fabricant As String
+        Dim Fabricant As String = ""
 
         '--[ Initialisation
 
@@ -206,7 +206,8 @@ Module Mod_BasesDonneesASCII
 
         Dim iStud As Integer
         Dim Etiquette, Parametres As String
-        Dim Mots() As String, nMots As Integer
+        Dim Mots() As String = Nothing
+        Dim nMots As Integer
         Dim lFmtPB As Boolean = False
 
         Dim LinesG As New Cls_LinesOfFile(FileG, True)

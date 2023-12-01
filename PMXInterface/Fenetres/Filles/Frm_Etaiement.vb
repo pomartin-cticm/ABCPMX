@@ -111,13 +111,13 @@ Public Class Frm_Etaiement
 
             Select Case .TypeEtaiement
 
-                Case .EnuTypeEtaiement.UnPropped
+                Case cls_Poutre.EnuTypeEtaiement.UnPropped
                     Me.rad_UnPropped.Checked = True
 
-                Case .EnuTypeEtaiement.FullyPropped
+                Case cls_Poutre.EnuTypeEtaiement.FullyPropped
                     Me.rad_FullyPropped.Checked = True
 
-                Case .EnuTypeEtaiement.PointPropped
+                Case cls_Poutre.EnuTypeEtaiement.PointPropped
                     Me.rad_PointPropped.Checked = True
 
                     If Not .lTraveeConsoleDroite Then
@@ -200,14 +200,14 @@ Public Class Frm_Etaiement
 
             End If
 
-            If (MyPoutreLoc.TypeEtaiement <> .EnuTypeEtaiement.PointPropped) And (.TypeEtaiement <> MyPoutreLoc.TypeEtaiement) Then
+            If (MyPoutreLoc.TypeEtaiement <> cls_Poutre.EnuTypeEtaiement.PointPropped) And (.TypeEtaiement <> MyPoutreLoc.TypeEtaiement) Then
                 lModif = True
                 .TypeEtaiement = MyPoutreLoc.TypeEtaiement
                 .NbEtaiement = 0
                 .lEtaisConsoleGauche = False
                 .lEtaisConsoleDroite = False
 
-            ElseIf MyPoutreLoc.TypeEtaiement = .EnuTypeEtaiement.PointPropped Then
+            ElseIf MyPoutreLoc.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.PointPropped Then
                 .TypeEtaiement = MyPoutreLoc.TypeEtaiement
 
                 If .lEtaisConsoleGauche <> MyPoutreLoc.lEtaisConsoleGauche Then
@@ -252,7 +252,7 @@ Public Class Frm_Etaiement
         Select Case True
 
             Case rad_FullyPropped.Checked
-                MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.FullyPropped
+                MyPoutreLoc.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.FullyPropped
 
                 'Me.chk_EtaisConsoleGauche.Visible = False
                 'Me.chk_EtaisConsoleGauche.Checked = False
@@ -262,7 +262,7 @@ Public Class Frm_Etaiement
                 'Me.cmb_NbPoint.Visible = False
 
             Case rad_UnPropped.Checked
-                MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.UnPropped
+                MyPoutreLoc.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.UnPropped
 
                 'Me.chk_EtaisConsoleGauche.Visible = False
                 'Me.chk_EtaisConsoleGauche.Checked = False
@@ -272,7 +272,7 @@ Public Class Frm_Etaiement
                 'Me.cmb_NbPoint.Visible = False
 
             Case rad_PointPropped.Checked
-                MyPoutreLoc.TypeEtaiement = MyPoutreLoc.EnuTypeEtaiement.PointPropped
+                MyPoutreLoc.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.PointPropped
 
                 'Me.chk_EtaisConsoleGauche.Visible = True
                 'If Not MyPoutreLoc.lTraveeConsoleGauche Then

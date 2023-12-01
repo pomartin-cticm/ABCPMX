@@ -71,8 +71,8 @@
     Public Function Aire(dc As Decimal, bfs As Decimal) As Decimal
         Dim Ac As Decimal
 
-        If Me.type = Me.Enum_TypeDalle.Mixte Then
-            Dim tc, bm, hp, ep As Decimal
+        If Me.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+            Dim tc As Decimal
             tc = Me.t_d - Me.Bac.Hp
             Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
 

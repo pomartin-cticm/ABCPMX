@@ -220,7 +220,7 @@
         Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
 
         Dim iNode, iPts, k As Integer
-        Dim kDeb, kFin, iElt As Integer
+        Dim kDeb, kFin As Integer
         Dim DeltaI() As Integer = {-1, 0}
         Dim DeltaZ, zCdG As Decimal
 

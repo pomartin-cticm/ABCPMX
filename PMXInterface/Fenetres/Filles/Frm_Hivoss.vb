@@ -49,7 +49,7 @@ Public Class Frm_Hivoss
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
         y_cmb_img_passif = 77
         y_cmb_img_actif = 104
-        If MyPoutreLoc.Param.HivossParam.Mobilier = MyPoutreLoc.Param.HivossParam.Enu_Mobiliers.Personnalise Then
+        If MyPoutreLoc.Param.HivossParam.Mobilier = cls_OptionsHivoss.Enu_Mobiliers.Personnalise Then
             l_img_actif = False
         Else
             l_img_actif = True

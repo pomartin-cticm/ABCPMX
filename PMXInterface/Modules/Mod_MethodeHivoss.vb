@@ -616,8 +616,6 @@ Module Mod_MethodeHivoss
     ''' </summary>
     ''' <param name="AllFloorVibration">[E] :Table contenant les courbes Hoivoss</param>
     ''' <param name="Pourcent">[E] : Pourcentage d'amortissement, entre 1 et 9</param>
-    ''' <param name="Frequence">[E] : Fréquence propre de la poutre (Hz)</param>
-    ''' <param name="Masse">[E] : Masse modale de la poutre (kg)</param>
     ''' <param name="ResultText">[S] : Catégorie lue dans les abaques Hivoss</param>
     ''' <param name="ResultVal">[S] : OsRms issue des abaques Hivoss</param>
     ''' <remarks> </remarks>
@@ -1028,12 +1026,7 @@ Module Mod_MethodeHivoss
     'End Sub
 
 
-    ''' <summary>
-    ''' Calcul de la fréquence propre de la dalle pour application de la méthode Hivoss
-    ''' </summary>
-    ''' <param name="MyBeam">[E] : Poutre traitée</param>
-    ''' <param name="MyFreq">[S] : Fréquence de la dalle</param>
-    ''' <remarks></remarks>
+
     'Public Sub FrequenceDalle(ByVal MyBeam As Cls_Beam, ByRef MyFreq As Decimal)
     '    '-------------------------------------------------------------------------------------------------
     '    '
@@ -1108,12 +1101,7 @@ Module Mod_MethodeHivoss
 
     'End Sub
 
-    ''' <summary>
-    ''' Calcul de l'inertie d'une dalle mixte pour des ondes dans le sens transversal (par unité de longueur)
-    ''' </summary>
-    ''' <param name="MyDalle">[E] : Dalle</param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
+
     'Private Function InertieDalleMixteT(ByVal MyDalle As cls_Dalle) As Decimal
     '    '-------------------------------------------------------------------------------------------------
     '    '
@@ -1196,19 +1184,19 @@ Module Mod_MethodeHivoss
     Private Coeff As Decimal = 3.5          'Coeff multiplicateur sur les ordonnées (Hz) 
     Private nbFrontières As Integer = 6     'Nombre de lignes frontière
 
-    ''' <summary>
-    ''' Représentation de l'abaque Hivoss dans la NdC
-    ''' </summary>
-    ''' <param name="MyBeam">[E] Poutre traitée</param>
-    ''' <param name="MyGr">[E] Graphics</param>
-    ''' <param name="xLeft">[E] Position gauche du dessin</param>
-    ''' <param name="yTop">[E] Position top du dessin</param>
-    ''' <param name="Width">[E] Largeur du dessin</param>
-    ''' <param name="Height">[E] Hauteur du dessin</param>
-    ''' <param name="MyDamp">[E] Amortissement</param>
-    ''' <param name="MyFreq">[E] Frequence propre</param>
-    ''' <param name="MyMass">{E] Masse modale</param>
-    ''' <remarks></remarks>
+    '''' <summary>
+    '''' Représentation de l'abaque Hivoss dans la NdC
+    '''' </summary>
+    '''' <param name="MyBeam">[E] Poutre traitée</param>
+    '''' <param name="MyGr">[E] Graphics</param>
+    '''' <param name="xLeft">[E] Position gauche du dessin</param>
+    '''' <param name="yTop">[E] Position top du dessin</param>
+    '''' <param name="Width">[E] Largeur du dessin</param>
+    '''' <param name="Height">[E] Hauteur du dessin</param>
+    '''' <param name="MyDamp">[E] Amortissement</param>
+    '''' <param name="MyFreq">[E] Frequence propre</param>
+    '''' <param name="MyMass">{E] Masse modale</param>
+    '''' <remarks></remarks>
     'Public Sub DessinCourbeHivoss(ByVal MyBeam As Cls_Beam, ByVal MyGr As Graphics,
     '                              ByVal xLeft As Single, ByVal yTop As Single,
     '                              ByVal Width As Single, ByVal Height As Single,

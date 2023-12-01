@@ -92,8 +92,6 @@ Public Class Frm_CombinaisonsConstruction
         Me.etq_Custom02_Q1.Text = SymbolQ1
 
         Dim Chaine As String = str_Combinaison
-        Dim ChaineEL As String
-
 
         Chaine = str_Combinaison & " "
 
