@@ -441,7 +441,7 @@ Public Class cls_Projet
 
                 End With
                 '==[ Classe Hivoss ]=================================================================
-                With .CalculHivoss
+                With .Hivoss
                     Lines.Add("BLOCK OPT_CALCULS_HIVOSS")
 
                     Lines.Add("   lHivossMethod = " & .lHivossMethod)
@@ -692,7 +692,7 @@ Public Class cls_Projet
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim hivoss_opt_calculs As New cls_MethodHivoss
                     ReadBlocHivossOptionsCalculs(hivoss_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.CalculHivoss = hivoss_opt_calculs
+                    ptre_en_cours.Hivoss = hivoss_opt_calculs
 
                 Case "CHGTU_QSURF"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last

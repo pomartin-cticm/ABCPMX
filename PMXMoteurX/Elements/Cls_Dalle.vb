@@ -351,6 +351,56 @@
 
 #Region " Outils pour la méthode Hivoss "
 
+    Public Function FrequenceDalle(LPoutre As Decimal, PorteeDalle As Decimal, LargInfluence As Decimal, MasseProfile As Decimal, G As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------
+        '   01/12/23 :  Création - POM
+        '---------------------------------------------------------------------------------------------------
+        '   Calcul de la frequence propre de la dalle
+        '---------------------------------------------------------------------------------------------------
+        '   LPoutre     [E] :   Longueur de la poutre
+        '   PorteeDalle [E] :   Portée de la dalle
+        '   LargInfleunce[E] :  Largeur d'influence des charges sur la dalle
+        '   MasseProfile[E] :   Masse du profilé acier
+        '---------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim RatioTsL As Decimal
+        Dim Mu As Decimal
+        Dim EIx As Decimal
+        Dim Delta As Decimal
+        Dim MyFreq As Decimal
+        Dim pQ As Decimal
+        Dim Surface As Decimal
+
+        '--> Initialisation
+
+        RatioTsL = PorteeDalle / LPoutre
+        Surface = LPoutre * LargInfluence
+
+        ' MassesToCharges(MyBeam, Masses)
+        '==== A COMPLETER
+
+        Mu = 1 '(Masses(0) - MasseProfile + MyBeam.HivossParam.IndCombiQ / 10 * Masses(MyBeam.HivossParam.IndChargeQ + 1)) / Surface
+
+        '--> Calcul inertie dalle / unite de longueur
+
+        EIx = cls_Acier.EYACIER * kConvMPaPa * Me.InertieTransversaleH(Me.beton.CoefficientEquivalenceCT)
+
+        '--> Flèche de la dalle sous charges Gravitaires
+
+        pQ = Mu * G * PorteeDalle
+        Delta = 5 / 384 * pQ * PorteeDalle ^ 3 / EIx
+        Const kMM As Decimal = 1000
+
+        '--> Résultat final
+
+        MyFreq = 18 / Math.Sqrt(Delta * kMM)
+
+        Return MyFreq
+    End Function
+
+
     Public Function InertieTransversaleH(nEq As Decimal) As Decimal
         '---------------------------------------------------------------------------------------------------
         '   23/11/23 :  Création - POM

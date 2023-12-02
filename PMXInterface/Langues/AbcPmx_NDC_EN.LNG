@@ -284,6 +284,8 @@ COMBINATION				= Combination
 SPAN					= Span
 EIGENFREQUENCIES		= Eigen frequencies
 
+
+
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations
 DSTRUC					= Structural damping

@@ -518,6 +518,10 @@ Module Mod_Outils
                 kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
                 Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
 
+            Case Enu_TypeVariable.Frequence
+                kUnitU = 1
+                Unite = "Hz"
+
             Case Enu_TypeVariable.Moment
 
                 kUnitU = LogicielInfo.Transfert_Moment(LogicielOptions.IndUnitMoment)

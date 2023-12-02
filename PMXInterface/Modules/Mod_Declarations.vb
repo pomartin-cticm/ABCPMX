@@ -327,23 +327,24 @@ Module Mod_Declarations
     ''' Type de variable à afficher
     ''' </summary>
     Public Enum Enu_TypeVariable
-        Longueur
-        LongueurCM
-        Dimension
-        Effort
-        Moment
-        Inertie
-        ContrainteMPa
-        ContrainteGPa
-        SansType
-        InertieCM4
-        Millimetre
+        AireCM2
         AireLongueurNDC
         Contrainte
-        ModuleY
-        AireCM2
-        ModuleCM3
+        ContrainteGPa
+        ContrainteMPa
+        Dimension
+        Effort
+        Frequence
+        Inertie
+        InertieCM4
         InertieWCM6
+        Longueur
+        LongueurCM
+        Millimetre
+        ModuleCM3
+        ModuleY
+        Moment
+        SansType
     End Enum
 
     Public Enum EnuFenetres

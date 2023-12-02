@@ -2855,7 +2855,7 @@ Module Mod_NoteCalcul
 
         '# Edition de la méthode Hivoss
 
-        If MyBeam.CalculHivoss.lHivossMethod Then
+        If MyBeam.Hivoss.lHivossMethod Then
             EditionMethodeHivoss(MyBeam)
         End If
     End Sub
@@ -3193,21 +3193,25 @@ Module Mod_NoteCalcul
 
         '--[ Déclarations
 
+        Const pTABVAR As String = "\T45"
+        Const kPC As Decimal = 100
         Dim AllFloorVibration As New Dictionary(Of Integer, strHivossTable)
         'Const TABVAR As String = " :\T45"
-        'Const DFORMAT As String = "0"
-        'Dim Frequency, ModalMass As Decimal
-        'Dim HResult As String
-        'Dim HVal As Decimal
+        Const DFORMAT As String = "0"
+        Dim Frequency, ModalMass As Decimal
+        Dim HResult As String = ""
+        Dim HVal As Decimal
         'Dim Reactions() As Decimal
-        'Dim IndConfort As Integer
+        Dim IndConfort As Integer
         Dim TableConfort(2) As String
-        Dim TableUsage As New List(Of String)
+        Dim PorteeDalle As Decimal
+        Dim MasseProfil As Decimal
+
         'Dim lDefini() As Boolean
-        Dim lMixte As Boolean
-        'Dim FreqDalle As Decimal
-        'Dim FreqBeam As Decimal
-        'Dim MySymb As String
+        Dim lMixte As Boolean = MyBeam.lMixte
+        Dim FreqDalle, FreqBeam As Decimal
+        Dim MySymb As String = ""
+        Dim Chaine As String = ""
 
         '--[ Titre
 
@@ -3221,45 +3225,51 @@ Module Mod_NoteCalcul
         TableConfort(0) = BlocHiVoss("CRECOMMENDED")
         TableConfort(1) = BlocHiVoss("CCRITICAL")
         TableConfort(2) = BlocHiVoss("CNOTRECOMMENDED")
-        TableUsage.Clear()
-        TableUsage.Add(BlocHiVoss("UCRITICAL"))
-        TableUsage.Add(BlocHiVoss("UHOSPITAL"))
-        TableUsage.Add(BlocHiVoss("USCHOOL"))
-        TableUsage.Add(BlocHiVoss("URESIDENTIAL"))
-        TableUsage.Add(BlocHiVoss("UOFFICE"))
-        TableUsage.Add(BlocHiVoss("UMEETING"))
-        TableUsage.Add(BlocHiVoss("USENIOR"))
-        TableUsage.Add(BlocHiVoss("UHOTEL"))
-        TableUsage.Add(BlocHiVoss("UINDUSTRIAL"))
-        TableUsage.Add(BlocHiVoss("USPORTS"))
 
-        MyBeam.CalculHivoss.CalculAmortissement()
+        MyBeam.Hivoss.CalculAmortissement()
 
         ChargerValeursHivoss(AllFloorVibration)
 
-        'Frequency = CDec(MyFreq(MyBeam.HivossParam.IndCombiQ, MyBeam.HivossParam.IndChargeQ))
-        'ModalMass = ModalMasses(MyBeam)
+        MyBeam.Modal.Analyse(MyBeam, MyBeam.Hivoss.ratioQ, MyBeam.Hivoss.IndexQ)
+        frequency = MyBeam.Modal.Frequence
+
+        ModalMass = MyBeam.Modal.MassTotal / 2              ' A MODIFIER ? pour les multispan
 
         ''--[ Prise en compte de la fréquence propre de dalle pour les poutres mixtes:
 
-        'If lMixte And MyBeam.HivossParam.lFreqDalle And InfoACB.lExpert Then
-        '    FrequenceDalle(MyBeam, FreqDalle)
-        '    FreqBeam = Frequency
-        '    Frequency = CDec(1 / Math.Sqrt(1 / FreqBeam ^ 2 + 1 / FreqDalle ^ 2))
-        'End If
+        If MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert Then
+            MasseProfil = MyBeam.Section.ProfilA.Aire * cls_Acier.RHOACIER
+            PorteeDalle = MyBeam.PorteeDalle
+
+            MyBeam.Dalle.FrequenceDalle(MyBeam.LongueurTravee(1), PorteeDalle, MyBeam.LargeurInfluence, MasseProfil, MyBeam.Param.GraviteG)
+            FreqBeam = Frequency
+            Frequency = CDec(1 / Math.Sqrt(1 / FreqBeam ^ 2 + 1 / FreqDalle ^ 2))
+        End If
 
         ''--[ Affichages des données
 
-        'AddLigneNDC(TABW2 & BlocELS("USAGE") & TABVAR & TableUsage(MyBeam.HivossParam.IndUsage))
-        'SauteLigne()
-        'AddLigneNDC(TABW2 & BlocELS("DSTRUC") & TABVAR & "D1 = " & Format(MyBeam.HivossParam.Amortissement(1), DFORMAT) & " %")
-        'AddLigneNDC(TABW2 & BlocELS("DFURNITURE") & TABVAR & "D2 = " & Format(MyBeam.HivossParam.Amortissement(2), DFORMAT) & " %")
-        'AddLigneNDC(TABW2 & BlocELS("DFINISHING") & TABVAR & "D3 = " & Format(MyBeam.HivossParam.Amortissement(3), DFORMAT) & " %")
-        'AddLigneNDC(TABW2 & BlocELS("DTOTAL") & TABVAR & "D = " & Format(MyBeam.HivossParam.Amortissement(0), DFORMAT) & " %")
+        Select Case MyBeam.Hivoss.UtilisationPlancher
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.Bureau : Chaine = BlocHiVoss("UOFFICE")
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.Education : Chaine = BlocHiVoss("USCHOOL")
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.Hotel : Chaine = BlocHiVoss("UHOTEL")
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.Industriel : Chaine = BlocHiVoss("UINDUSTRIAL")
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.MaisonRetraite : Chaine = BlocHiVoss("USENIOR")
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.Residentiel : Chaine = BlocHiVoss("URESIDENTIAL")
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.Reunion : Chaine = BlocHiVoss("UMEETING")
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.Sante : Chaine = BlocHiVoss("UHOSPITAL")
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.Sports : Chaine = BlocHiVoss("USPORTS")
+            Case cls_MethodHivoss.Enu_UtilisationPlancher.ZoneSensible : Chaine = BlocHiVoss("UCRITICAL")
+        End Select
+        AddLigneNDC(TABW2 & BlocHiVoss("USAGE") & pTABVAR & Chaine)
+        SauteLigne()
+        AddLigneNDC(TABW2 & BlocHiVoss("DSTRUC") & pTABVAR & "D1 = " & Format(MyBeam.Hivoss.AmortiStructure_D1 * kPC, DFORMAT) & " %")
+        AddLigneNDC(TABW2 & BlocHiVoss("DFURNITURE") & pTABVAR & "D2 = " & Format(MyBeam.Hivoss.AmortiMobilier_D2 * kPC, DFORMAT) & " %")
+        AddLigneNDC(TABW2 & BlocHiVoss("DFINISHING") & pTABVAR & "D3 = " & Format(MyBeam.Hivoss.AmortiFinition_D3 * kPC, DFORMAT) & " %")
+        AddLigneNDC(TABW2 & BlocHiVoss("DTOTAL") & pTABVAR & "D = " & Format(MyBeam.Hivoss.AmortiTotal_Dtot * kPC, DFORMAT) & " %")
 
-        'SauteLigne()
+        SauteLigne()
 
-        'AddLigneNDC(TABW2 & BlocELS("COMBIMASS") & TABVAR & "G + 0." & Format(MyBeam.HivossParam.IndCombiQ, DFORMAT) & " Q" & Format(MyBeam.HivossParam.IndChargeQ + 1, "0"))
+        AddLigneNDC(TABW2 & BlocHiVoss("COMBIMASS") & pTABVAR & "G + " & GetStringInUnit(MyBeam.Hivoss.ratioQ, Enu_TypeVariable.SansType, 3, 1, False) & " Q" & Format(MyBeam.Hivoss.IndexQ, "0"))
 
         'MyBeam.ChargementsDefinis(lDefini)
         'If MyBeam.HivossParam.IndCombiQ > 0 Then
@@ -3273,36 +3283,37 @@ Module Mod_NoteCalcul
         '        AddLigneNDC(TABW2 & BlocELS("WARNNOQ2"))
         '    End If
         'End If
-        ''--[ Affichage des fréquences propres et de la masse modale
 
-        'SauteLigne()
-        'If lMixte And MyBeam.HivossParam.lFreqDalle And InfoACB.lExpert Then
-        '    AddLigneNDC(TABW2 & BlocELS("EIGENFB") & TABVAR & GetStringInUnit(FreqBeam, Enu_TypeVariable.Frequence, 3, 1, True))
-        '    AddLigneNDC(TABW2 & BlocELS("EIGENFS") & TABVAR & GetStringInUnit(FreqDalle, Enu_TypeVariable.Frequence, 3, 1, True))
-        '    AddLigneNDC(TABW2 & BlocELS("EIGENFC") & TABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 1, True))
-        'Else
-        '    AddLigneNDC(TABW2 & BlocELS("EIGENF") & TABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 1, True))
-        'End If
-        'SauteLigne()
-        'AddLigneNDC(TABW2 & BlocELS("MODALMASS") & TABVAR & GetStringInUnit(ModalMass, Enu_TypeVariable.SansDimension, 3, 0, False) & " kg")
+        '--[ Affichage des fréquences propres et de la masse modale
+
+        SauteLigne()
+        If MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert Then
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFB") & pTABVAR & GetStringInUnit(FreqBeam, Enu_TypeVariable.Frequence, 3, 1, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFS") & pTABVAR & GetStringInUnit(FreqDalle, Enu_TypeVariable.Frequence, 3, 1, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFC") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 1, True))
+        Else
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENF") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 1, True))
+        End If
+        SauteLigne()
+        AddLigneNDC(TABW2 & BlocHiVoss("MODALMASS") & pTABVAR & GetStringInUnit(ModalMass, Enu_TypeVariable.SansType, 3, 0, False) & " kg")
 
         ''--[ Calcul Hivoss
 
-        'CalculMethodHivoss(AllFloorVibration, CInt(MyBeam.HivossParam.Amortissement(0)), CDec(Frequency), CDec(ModalMass), HResult, HVal)
-        'IndConfort = HivossConfortAssessment(MyBeam, HResult)
+        MyBeam.Hivoss.CalculMethodHivoss(CInt(MyBeam.Hivoss.AmortiTotal_Dtot * kPC), Frequency, ModalMass, HResult, HVal)
+        IndConfort = MyBeam.Hivoss.ConfortAssessment(HResult)
 
-        'SauteLigne()
-        'If HResult = "A" Then
-        '    MySymb = "<"
-        'ElseIf HResult = "!" Then
-        '    MySymb = ">"
-        'Else
-        '    MySymb = "="
-        'End If
+        SauteLigne()
+        If HResult = "A" Then
+            MySymb = "<"
+        ElseIf HResult = "!" Then
+            MySymb = ">"
+        Else
+            MySymb = "="
+        End If
 
-        'AddLigneNDC(TABW2 & BlocELS("OSRMS") & TABVAR & "OS-RMS\-90\= " & MySymb & " " & GetStringInUnit(HVal, Enu_TypeVariable.SansDimension, 3, 1, False) & " m/s")
-        'AddLigneNDC(TABW2 & BlocELS("CPERCEPTION") & TABVAR & HResult)
-        'AddLigneNDC(TABW2 & BlocELS("COMFORTASS") & TABVAR & TableConfort(IndConfort))
+        AddLigneNDC(TABW2 & BlocHiVoss("OSRMS") & pTABVAR & "OS-RMS\-90\= " & MySymb & " " & GetStringInUnit(HVal, Enu_TypeVariable.SansType, 3, 1, False) & " m/s")
+        AddLigneNDC(TABW2 & BlocHiVoss("CPERCEPTION") & pTABVAR & HResult)
+        AddLigneNDC(TABW2 & BlocHiVoss("COMFORTASS") & pTABVAR & TableConfort(IndConfort))
 
         'SautePage()
 

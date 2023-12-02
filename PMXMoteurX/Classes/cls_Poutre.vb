@@ -371,7 +371,7 @@ Public Class cls_Poutre
 
     Public Analyse As cls_AnalyseEFinis                             ' Analyse par éléments finis
 
-    Public CalculHivoss As cls_MethodHivoss         ' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
+    Public Hivoss As cls_MethodHivoss         ' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
 
 #End Region
 
@@ -554,7 +554,7 @@ Public Class cls_Poutre
 
         '--> Initialisation Hivoss
 
-        Me.CalculHivoss = New cls_MethodHivoss
+        Me.Hivoss = New cls_MethodHivoss
     End Sub
 
     Private Sub PoutreDefautAcier()
@@ -650,6 +650,33 @@ Public Class cls_Poutre
 #End Region
 
 #Region " Outils divers "
+
+    Public ReadOnly Property PorteeDalle As Decimal
+        Get
+            Dim portee As Decimal
+
+            If Me.lIntermediaire Then
+                portee = (Me.EntraxeD1 + Me.EntraxeD2) / 2
+            Else
+                portee = Me.EntraxeD2
+            End If
+            Return portee
+        End Get
+    End Property
+    'Public ReadOnly Property LargeurInfluence As Decimal
+    '    Get
+    '        Dim Largeur As Decimal
+
+    '        If Me.lIntermediaire Then
+    '            Largeur = (Me.EntraxeD1 + Me.EntraxeD2) / 2
+    '        Else
+    '            portee = Me.EntraxeD2
+    '        End If
+
+    '        Return Largeur
+    '    End Get
+    'End Property
+
     Public Function GetNbCombi(lComb As Boolean()) As Integer
         Dim nbRetour As Integer
 
