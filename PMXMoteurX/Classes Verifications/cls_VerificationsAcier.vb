@@ -15,12 +15,14 @@
     Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
 
+    Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
+
 #End Region
 
 #Region " Constructeurs "
 
     Public Sub New()
-
+        lCalculPlastic = True
     End Sub
 
     Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer, lElastic As Boolean)
@@ -49,7 +51,7 @@
 
 #Region " Outils de vérification "
 
-    Public Sub VerificationELU(MyPoutre As cls_Poutre)
+    Public Sub Z_VerificationELU(MyPoutre As cls_Poutre)
         '----------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -129,7 +131,16 @@
                 Me.RunCritereFlexionAcier(MyPoutre, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
             End If
 
-            ' Me.CriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdPlus, MplRdMoins)
+            '# Vérification sous effort tranchant
+
+            If MyPoutre.Param.lElasticDesign Then
+            Else
+                Me.RunCritereTranchants(MyPoutre, iCombi, VEd, VplRd)
+            End If
+
+            '# Vérification au déversement
+
+
 
         Next
 
@@ -138,7 +149,6 @@
 #End Region
 
 #Region " Vérifications d'une poutre acier sans enrobage "
-
 
     Private Sub RunCritereFlexionResistanceElastiqueVM(MyPoutre As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal)
         '----------------------------------------------------------------------------------------------------------
@@ -212,12 +222,13 @@
         '--> Traitement
 
         For iTravee = iDebT To iFinT
-            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
-            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+
             iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
             iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
                 For k = iDebK To iFinK
                     MyCritereM.EnregistreCritere(iNode, iCombi, iTravee, SigmaELU(iPoint, iNode, k), SigmaU)
                 Next
@@ -281,12 +292,14 @@
         '--> Traitement
 
         For iTravee = iDebT To iFinT
-            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
-            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+
             iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
             iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
                 For k = iDebK To iFinK
 
                     If MEd(iNode, k) * SIGNEM > 0 Then
@@ -320,58 +333,48 @@
             Next
         Next
 
-        ''--> Déclarations
+    End Sub
 
-        ''Dim Critere As Decimal
-        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        'Dim iNode As Integer
-        'Dim MEdMax As Decimal
-        'Dim lOk As Boolean
+    Private Sub RunCritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   10/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'effort tranchant 
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   VEd     [E] :   Table des efforts tranchants le long de la barre
+        '   VplRd   [E] :   Table des efforts tranchants résistant plastique le long de la barre
+        '----------------------------------------------------------------------------------------------------------
 
-        ''--> Initialisation
+        '--> Déclaration
 
-        'lClasse4 = False
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
 
-        ''--> Boucle sur les noeuds
+        '--> Déclaration
 
-        'For iNode = 0 To nbNodes - 1
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
 
-        '    If Math.Abs(MEd(iNode, 0)) > Math.Abs(MEd(iNode, 1)) Then
-        '        MEdMax = MEd(iNode, 0)
-        '    Else
-        '        MEdMax = MEd(iNode, 1)
-        '    End If
+        '--> Traitement
 
-        '    lOk = True
-        '    If MEdMax * SIGNEM > 0 Then
+        For iTravee = iDebT To iFinT
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-        '        Select Case ClasseP
-        '            Case 1, 2
-        '                MRd = MplRd
-        '            Case 3
-        '                MRd = MelRd
-        '            Case 4
-        '                lClasse4 = True
-        '                lOk = False
-        '        End Select
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
 
-        '    Else
+                For k = iDebK To iFinK
+                    Me.CritereV.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VplRd)
+                Next
+            Next
+        Next
 
-        '        Select Case ClasseM
-        '            Case 1, 2
-        '                MRd = MplRd
-        '            Case 3
-        '                MRd = MelRd
-        '            Case 4
-        '                lClasse4 = True
-        '                lOk = False
-        '        End Select
-
-        '    End If
-
-        '    Me.CritereM.EnregistreCritere(iNode, iCombi, MEdMax, MRd)
-
-        'Next
     End Sub
 
 #End Region

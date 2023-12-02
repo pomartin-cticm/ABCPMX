@@ -22,7 +22,7 @@ Public Class cls_OptionsCalcul
     Public RH As Decimal                            ' Humidité pour le calcul du béton
 
     Public Gamma As cls_Gamma                       ' Coefficients partiels pour le calcul
-    Public HivossParam As cls_OptionsHivoss         ' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
+    'Public HivossParam As cls_OptionsHivoss         ' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
     Public Norme As Enu_Normes                      ' Norme de calcul
 
     Public EtaW As Decimal                           ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
@@ -41,13 +41,13 @@ Public Class cls_OptionsCalcul
 
     Public PsiLPermanent As Decimal                 ' Coefficient de fluage pour les charges permanentes
     Public PsiLRetrait As Decimal                   ' Coefficient de fluage pour les charges de retrait
-    Public AgeT0G1() As Decimal                    ' Age au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
-    Public AgeT0G2() As Decimal                    ' Age au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
-    Public AgeT0SH() As Decimal                    ' Age au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
+    Public AgeT0G1() As Decimal                     ' Age au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
+    Public AgeT0G2() As Decimal                     ' Age au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
+    Public AgeT0SH() As Decimal                     ' Age au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
 
-    Public AgeT As Decimal                         ' Age du béton au temps du calcul
+    Public AgeT As Decimal                          ' Age du béton au temps du calcul
 
-    Public lElasticDesign As Decimal                ' Indique quand un dimensionnement élastique est imposé
+    Public lElasticDesign As Boolean                ' Indique quand un dimensionnement élastique est imposé
 
 #End Region
 
@@ -64,8 +64,8 @@ Public Class cls_OptionsCalcul
         '--> Coefficients partiels par défaut
         Gamma = New cls_Gamma
 
-        '--> Coefficients pour le calcul en dynamique
-        HivossParam = New cls_OptionsHivoss
+        ''--> Coefficients pour le calcul en dynamique
+        'HivossParam = New cls_MethodHivoss
 
         Me.RH = tabRH(0)
 

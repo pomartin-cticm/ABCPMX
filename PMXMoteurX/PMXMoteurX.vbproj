@@ -84,7 +84,7 @@
     <Compile Include="Classes Verifications\cls_VerificationsMixtes.vb" />
     <Compile Include="Classes\cls_Gamma.vb" />
     <Compile Include="Classes\cls_OptionsFeu.vb" />
-    <Compile Include="Classes\cls_OptionsHivoss.vb" />
+    <Compile Include="Classes\cls_MethodHivoss.vb" />
     <Compile Include="Classes Proprietes\cls_Maille.vb" />
     <Compile Include="Classes Proprietes\cls_ModeleP.vb" />
     <Compile Include="Classes\cls_Poutre.vb" />

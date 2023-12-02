@@ -1362,7 +1362,7 @@ Module Mod_NoteCalcul
 
 
         AddTitreNdC(3, Bloc("ULSTATES"))
-        If MyBeam.GetNbCombo(MyBeam.lCombELU) = 0 Then
+        If MyBeam.GetNbCombi(MyBeam.lCombELU) = 0 Then
             AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
         Else
             EditionTableauCombinaison(MyBeam.lCombELU, MyBeam.CoefCombELU)
@@ -1371,7 +1371,7 @@ Module Mod_NoteCalcul
 
 
         AddTitreNdC(3, Bloc("SLSTATES"))
-        If MyBeam.GetNbCombo(MyBeam.lCombELS) = 0 Then
+        If MyBeam.GetNbCombi(MyBeam.lCombELS) = 0 Then
             AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
         Else
             EditionTableauCombinaison(MyBeam.lCombELS, MyBeam.CoefCombELS)
@@ -1379,21 +1379,21 @@ Module Mod_NoteCalcul
 
 
         AddTitreNdC(3, Bloc("FLSTATES"))
-        If MyBeam.GetNbCombo(MyBeam.lCombFeu) = 0 Then
+        If MyBeam.GetNbCombi(MyBeam.lCombFeu) = 0 Then
             AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
         Else
             EditionTableauCombinaison(MyBeam.lCombFeu, MyBeam.CoefCombFeu)
         End If
 
         If MyBeam.lMixte Then
-            If MyBeam.GetNbCombo(MyBeam.lCombELCURules) = 0 Then
+            If MyBeam.GetNbCombi(MyBeam.lCombELCURules) = 0 Then
                 AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
             Else
                 AddTitreNdC(3, Bloc("ELCUSTATES"))
                 EditionTableauCombinaison(MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
             End If
 
-            If MyBeam.GetNbCombo(MyBeam.lCombELCURules) = 0 Then
+            If MyBeam.GetNbCombi(MyBeam.lCombELCURules) = 0 Then
                 AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
             Else
                 AddTitreNdC(3, Bloc("ELCSSTATES"))
@@ -2443,26 +2443,57 @@ Module Mod_NoteCalcul
 
         Select Case MyBeam.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul
+                EditionVerificationsELUSummaryACIER(MyBeam, 0)
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 EditionVerificationsELUSummaryMIXTE(MyBeam, 0)
         End Select
 
         Exit Sub
-        AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
-        AddLigneNDC(TABW2 & BlocELU("V_CRITERIA") & TABAFF & "\SG\s\-V\=" & TABEGAL & 0)
-        AddLigneNDC(TABW2 & BlocELU("MV_CRITERIA") & TABAFF & "\SG\s\-MV\=" & TABEGAL & 0)
-        AddLigneNDC(TABW2 & BlocELU("LTB_CRTIERIA") & TABAFF & "\SG\s\-LT\=" & TABEGAL & 0)
-        AddLigneNDC(TABW2 & BlocELU("REINF_CRITERIA") & TABAFF & "\Sr\s\-s\=" & TABEGAL & 0)
+        'AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
+        'AddLigneNDC(TABW2 & BlocELU("V_CRITERIA") & TABAFF & "\SG\s\-V\=" & TABEGAL & 0)
+        'AddLigneNDC(TABW2 & BlocELU("MV_CRITERIA") & TABAFF & "\SG\s\-MV\=" & TABEGAL & 0)
+        'AddLigneNDC(TABW2 & BlocELU("LTB_CRTIERIA") & TABAFF & "\SG\s\-LT\=" & TABEGAL & 0)
+        'AddLigneNDC(TABW2 & BlocELU("REINF_CRITERIA") & TABAFF & "\Sr\s\-s\=" & TABEGAL & 0)
 
 
-        If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("LOWPLATE_SLIMFLOOR_CRITERIA") & TABAFF & "\SG\s\-q\=" & TABEGAL & 0)
-        If Not MyBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-w\=" & TABEGAL & 0)
-        If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-u\=" & TABEGAL & 0)
+        'If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("LOWPLATE_SLIMFLOOR_CRITERIA") & TABAFF & "\SG\s\-q\=" & TABEGAL & 0)
+        'If Not MyBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-w\=" & TABEGAL & 0)
+        'If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-u\=" & TABEGAL & 0)
 
 
 
 
     End Sub
+
+    Private Sub EditionVerificationsELUSummaryACIER(MyBeam As cls_Poutre, iVerif As Integer)
+
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Synthèse des critères ELU pour une poutre acier (avec ou sans enrobage)
+        '-------------------------------------------------------------------------------------------
+
+        If MyBeam.Param.lElasticDesign Then
+            '--> Calcul élastique imposé
+
+            AddLigneNDC(TABW2 & "Calcul élastique imposé")
+
+        Else
+
+            If MyBeam.VerifAcier(iVerif).lCalculPlastic Then
+                '--> Calcul Plastique
+
+                AddLigneNDC(TABW2 & "Calcul plastique")
+                'AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
+                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+            Else
+
+            End If
+        End If
+
+    End Sub
+
 
     Private Sub EditionVerificationsELUSummaryMIXTE(MyBeam As cls_Poutre, iVerif As Integer)
         '-------------------------------------------------------------------------------------------
@@ -2824,7 +2855,7 @@ Module Mod_NoteCalcul
 
         '# Edition de la méthode Hivoss
 
-        If MyBeam.Param.HivossParam.lHivossMethod Then
+        If MyBeam.CalculHivoss.lHivossMethod Then
             EditionMethodeHivoss(MyBeam)
         End If
     End Sub
@@ -3202,7 +3233,7 @@ Module Mod_NoteCalcul
         TableUsage.Add(BlocHiVoss("UINDUSTRIAL"))
         TableUsage.Add(BlocHiVoss("USPORTS"))
 
-        MyBeam.Param.HivossParam.CalculAmortissement()
+        MyBeam.CalculHivoss.CalculAmortissement()
 
         ChargerValeursHivoss(AllFloorVibration)
 

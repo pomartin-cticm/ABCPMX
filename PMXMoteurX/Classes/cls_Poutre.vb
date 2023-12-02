@@ -362,15 +362,6 @@ Public Class cls_Poutre
     '--Points de calcul des contraintes normales
     Public PtsSigma As New cls_PointsSigma
 
-    Public Function GetNbCombo(lComb As Boolean()) As Integer
-        Dim nbRetour As Integer
-
-        For i As Integer = 0 To lComb.Count - 1
-            If lComb(i) Then nbRetour += 1
-        Next
-
-        Return nbRetour
-    End Function
 
 #End Region
 
@@ -379,6 +370,8 @@ Public Class cls_Poutre
     Public Modal As New cls_AnalyseModale                           ' Analyse modale
 
     Public Analyse As cls_AnalyseEFinis                             ' Analyse par éléments finis
+
+    Public CalculHivoss As cls_MethodHivoss         ' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
 
 #End Region
 
@@ -558,6 +551,10 @@ Public Class cls_Poutre
         Me.lDonneesSauvees = False
         Me.NouvellePoutre = True
         Me.lPoutreModifiee = False
+
+        '--> Initialisation Hivoss
+
+        Me.CalculHivoss = New cls_MethodHivoss
     End Sub
 
     Private Sub PoutreDefautAcier()
@@ -653,6 +650,15 @@ Public Class cls_Poutre
 #End Region
 
 #Region " Outils divers "
+    Public Function GetNbCombi(lComb As Boolean()) As Integer
+        Dim nbRetour As Integer
+
+        For i As Integer = 0 To lComb.Count - 1
+            If lComb(i) Then nbRetour += 1
+        Next
+
+        Return nbRetour
+    End Function
 
     ''' <summary>
     ''' Renvoie le nombre total de maitiens latéraux sur la poutre
@@ -4412,7 +4418,7 @@ Public Class cls_Poutre
                 Me.VerifMixte(0).Z_VerificationELU(Me)
 
             Case cls_Section.Enum_TypeSection.AcierSeul
-                Me.VerifAcier(0).VerificationELU(Me)
+                Me.VerifAcier(0).Z_VerificationELU(Me)
 
         End Select
 

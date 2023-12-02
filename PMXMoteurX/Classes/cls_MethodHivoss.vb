@@ -1,4 +1,4 @@
-﻿Public Class cls_OptionsHivoss
+﻿Public Class cls_MethodHivoss
 
 #Region " Enumérations "
     ''' <summary>

@@ -439,22 +439,22 @@ Public Class cls_Projet
                         Lines.Add("")
                     End With
 
-                    '==[ Classe Hivoss ]=================================================================
-                    With .HivossParam
-                        Lines.Add("BLOCK OPT_CALCULS_HIVOSS")
+                End With
+                '==[ Classe Hivoss ]=================================================================
+                With .CalculHivoss
+                    Lines.Add("BLOCK OPT_CALCULS_HIVOSS")
 
-                        Lines.Add("   lHivossMethod = " & .lHivossMethod)
-                        Lines.Add("   RatioQ        = " & .ratioQ)
-                        Lines.Add("   ChoixQ        = " & .choixQ)
-                        Lines.Add("   UtilPlancher  = " & .UtilisationPlancher)
-                        Lines.Add("   Mobilier      = " & .Mobilier)
-                        Lines.Add("   lFauxPlafond  = " & .lFauxPlafond)
-                        Lines.Add("   AmortD1       = " & .AmortiStructure_D1)
-                        Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
-                        Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
-                        Lines.Add("   AmortDtot     = " & .AmortiTotal_Dtot)
-                        Lines.Add("")
-                    End With
+                    Lines.Add("   lHivossMethod = " & .lHivossMethod)
+                    Lines.Add("   RatioQ        = " & .ratioQ)
+                    Lines.Add("   ChoixQ        = " & .choixQ)
+                    Lines.Add("   UtilPlancher  = " & .UtilisationPlancher)
+                    Lines.Add("   Mobilier      = " & .Mobilier)
+                    Lines.Add("   lFauxPlafond  = " & .lFauxPlafond)
+                    Lines.Add("   AmortD1       = " & .AmortiStructure_D1)
+                    Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
+                    Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
+                    Lines.Add("   AmortDtot     = " & .AmortiTotal_Dtot)
+                    Lines.Add("")
                 End With
 
                 '==[ Classe ChargementU ]=================================================================
@@ -690,9 +690,9 @@ Public Class cls_Projet
 
                 Case "OPT_CALCULS_HIVOSS"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim hivoss_opt_calculs As New cls_OptionsHivoss
+                    Dim hivoss_opt_calculs As New cls_MethodHivoss
                     ReadBlocHivossOptionsCalculs(hivoss_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Param.HivossParam = hivoss_opt_calculs
+                    ptre_en_cours.CalculHivoss = hivoss_opt_calculs
 
                 Case "CHGTU_QSURF"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1707,7 +1707,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocHivossOptionsCalculs(hivoss_opt_calculs As cls_OptionsHivoss, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocHivossOptionsCalculs(hivoss_opt_calculs As cls_MethodHivoss, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration

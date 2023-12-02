@@ -760,27 +760,6 @@
             Next
         Next
 
-        ''--> Déclarations
-
-        'Dim Critere As Decimal
-        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        'Dim iNode As Integer
-        'Dim VEdMax As Decimal
-
-        ''--> Boucle sur les noeuds
-
-        'For iNode = 0 To nbNodes - 1
-
-        '    If Math.Abs(VEd(iNode, 0)) > Math.Abs(VEd(iNode, 1)) Then
-        '        VEdMax = VEd(iNode, 0)
-        '    Else
-        '        VEdMax = VEd(iNode, 1)
-        '    End If
-
-        '    Me.CritereV.EnregistreCritere(iNode, iCombi, VEdMax, VplRd)
-
-        'Next
-
     End Sub
 
     Private Sub RunCritereVoilementCisaillement(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VbRd As Decimal)
