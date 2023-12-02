@@ -471,7 +471,11 @@ Module Mod_Declarations
 
     Public ColorForceSelect As Color = OrangeAM
 
-
+    Public CouleurTraveeSelect As Color = Color.DarkOrange 'OrangeAM
+    Public CouleurTraveeMouse As Color = OrangeAM
+    Public CouleurAppui As Color = GreenAM
+    Public CouleurProfile As Color = Color.LightGray
+    Public CouleurDalle As Color = Color.DarkGray
 #End Region
 
 #Region " Variables globales "

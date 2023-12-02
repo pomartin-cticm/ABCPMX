@@ -137,7 +137,7 @@ Public Class Frm_Combinaisons
         '   nbCombi     [E] :   Nombre de combinaisons à transférer
         '----------------------------------------------------------------------------------------------------------------
 
-        For i As Integer = 0 To nbCombi
+        For i As Integer = 0 To nbCombi - 1
             pCombi(i) = New List(Of Decimal)
             For j As Integer = 0 To CombiSource(i).Count - 1
                 pCombi(i).Add(CombiSource(i)(j))
@@ -287,21 +287,21 @@ Public Class Frm_Combinaisons
 
         Dim i, j As Integer
 
-        For i = 0 To nbCombELU
+        For i = 0 To nbCombELU - 1
             GereTransfertValeur(plCombELU(i), MyProjet.Poutres(MyProjet.IndEnCours).lCombELU(i), lModif)
             For j = 0 To Me.pCoefCombELU(i).Count - 1
                 GereTransfertValeur(pCoefCombELU(i)(j), MyProjet.Poutres(MyProjet.IndEnCours).CoefCombELU(i)(j), lModif)
             Next
         Next
 
-        For i = 0 To nbCombELS
+        For i = 0 To nbCombELS - 1
             GereTransfertValeur(plCombELS(i), MyProjet.Poutres(MyProjet.IndEnCours).lCombELS(i), lModif)
             For j = 0 To Me.pCoefCombELU(i).Count - 1
                 GereTransfertValeur(pCoefCombELS(i)(j), MyProjet.Poutres(MyProjet.IndEnCours).CoefCombELS(i)(j), lModif)
             Next
         Next
 
-        For i = 0 To nbCombFeu
+        For i = 0 To nbCombFeu - 1
             GereTransfertValeur(plCombFeu(i), MyProjet.Poutres(MyProjet.IndEnCours).lCombFeu(i), lModif)
             For j = 0 To Me.pCoefCombELU(i).Count - 1
                 GereTransfertValeur(pCoefCombFeu(i)(j), MyProjet.Poutres(MyProjet.IndEnCours).CoefCombFeu(i)(j), lModif)

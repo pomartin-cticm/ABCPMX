@@ -38,8 +38,9 @@ Public Class Frm_Chargement
     Const NbChargeLineiqueMAX As Integer = 4
     Const NbChargePonctuelleMAX As Integer = 8
 
-    Dim traveeEnCours As Integer 'Donne l'indice de la travée en cours (POUR L'OBJET CLS_POUTRE)
-    Dim iTraveeSelect As Integer = 1 ' indice qui informe du numéro de travée en cours (UNIQUEMENT POUR LE DESSIN)
+    Dim traveeEnCours As Integer        'Donne l'indice de la travée en cours (POUR L'OBJET CLS_POUTRE)
+    Dim traveeMouse As Integer = -1     'Donne l'indice de la travée surlaquelle se situe la souris
+    Dim iTraveeSelect As Integer = 1    ' indice qui informe du numéro de travée en cours (UNIQUEMENT POUR LE DESSIN)
     '----------------------------------------------
     '   1 pour la travée principale
     '   -1 si rien de selectionné
@@ -75,6 +76,8 @@ Public Class Frm_Chargement
     Dim DonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
     Dim SigneM() As Decimal = Nothing
 
+
+    Dim MyParAff As Struc_Affichage
 #End Region
 
 #Region "===OUVERTURE==="
@@ -555,7 +558,7 @@ Public Class Frm_Chargement
 
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Chargement.Paint
 
-        DessinFrmChargement(e.Graphics, MyPoutreLoc, Me.img_Chargement.ClientRectangle.Width, Me.img_Chargement.ClientRectangle.Height, 1, iTraveeSelect, traveeEnCours, chargeEnCours, iChargePonctuelleSelect, iChargeRepartieSelect)
+        DessinFrmChargementN(e.Graphics, MyPoutreLoc, Me.img_Chargement.ClientRectangle.Width, Me.img_Chargement.ClientRectangle.Height, 1, traveeEnCours, traveeMouse, chargeEnCours, MyParAff, iChargePonctuelleSelect, iChargeRepartieSelect)
 
     End Sub
 
@@ -1227,6 +1230,80 @@ Public Class Frm_Chargement
         lOk = (iErreur = 0)
         Return lOk
     End Function
+
+#End Region
+
+#Region " Gestion de la souris "
+
+    Private Sub img_Chargement_MouseMove(sender As Object, e As MouseEventArgs) Handles img_Chargement.MouseMove
+
+        Dim xSouris, ySouris As Single
+        Dim xReel, yReel As Decimal
+
+        '# Coordonnées de la souris dans l'univers écran
+
+        xSouris = e.X
+        ySouris = e.Y
+
+        '# Conversion dans le repère de la poutre
+
+        xReel = XUnivers(MyParAff, xSouris)
+        yReel = YUnivers(MyParAff, ySouris)
+
+        '# Recherche dans quelle partie se situe-t-on
+
+        WhereIsTheMouse(xReel, yReel)
+
+    End Sub
+
+    Private Sub WhereIsTheMouse(xReel As Decimal, yReel As Decimal)
+        '--------------------------------------------------------------------------------------------------------
+        '   01/12/23 :      Création - POM
+        '--------------------------------------------------------------------------------------------------------
+        '   Recherche de la position de la souris dans la poutre (quelle travée est survolée par la souris
+        '--------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lTrouve As Boolean = False
+        Dim iTravee As Integer = MyPoutreLoc.IndicePremiereTravee
+        Dim iFinT As Integer = MyPoutreLoc.IndiceDerniereTravee
+        Dim zDalle As Decimal = MyPoutreLoc.Dalle.zTop
+        Dim zSem As Decimal = -MyPoutreLoc.Section.ProfilA.ha
+        Dim traveeMouseEnCours As Integer = traveeMouse
+
+        '--> On recherche si la souris est positionnée sur une travée
+
+        Do While (Not lTrouve) And (iTravee <= ifint)
+
+            If IsGreater(xReel, MyPoutreLoc.xPositionAppui(True, iTravee)) And IsSmaller(xReel, MyPoutreLoc.xPositionAppui(False, iTravee)) _
+            And IsGreater(yReel, zSem) And IsSmaller(yReel, zDalle) Then
+                lTrouve = True
+                traveeMouse = iTravee
+            Else
+                iTravee += 1
+            End If
+
+        Loop
+
+        If Not lTrouve Then traveeMouse = -1
+
+        If traveeMouse <> traveeMouseEnCours Then
+            Me.img_Chargement.Invalidate()
+        End If
+
+    End Sub
+
+    Private Sub img_Chargement_MouseUp(sender As Object, e As MouseEventArgs) Handles img_Chargement.MouseUp
+
+        '--> Gestion de la selection d'une travée par la souris
+
+        If traveeMouse <> -1 Then
+            Me.cmb_Travee.SelectedIndex = traveeMouse - MyPoutreLoc.IndicePremiereTravee
+
+        End If
+
+    End Sub
 
 #End Region
 

@@ -2,6 +2,7 @@
 
 Imports System.Collections.Specialized.BitVector32
 Imports System.Drawing.Drawing2D
+Imports System.Windows
 Imports PMXMoteur2
 
 Module Mod_Dessins
@@ -3560,7 +3561,8 @@ Module Mod_Dessins
         Dim xe, ye As Decimal
         Dim LongueurPoutre, HauteurPoutre As Decimal
         Dim LongueurDalle, HauteurDalle As Decimal
-        Dim MyBrushA As New SolidBrush(Color.LightGray)
+        ' Dim MyBrushA As New SolidBrush(Color.LightGray)
+        Dim MyBrushA As New SolidBrush(CouleurProfile)
         Dim MyPen As New Pen(Color.Black, 1)
         Dim MyColor As Color
         Dim CouleurBeton As Color = CouleurBetonNormal
@@ -3568,7 +3570,8 @@ Module Mod_Dessins
         If xLeft <> 0 Or yTop <> 0 Then
             myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.Gray, Color.Gray)
         Else
-            myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, Color.Gray)
+            'myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, Color.Gray)
+            myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurDalle, Color.Gray)
         End If
         Const lAffSymbol As Boolean = False
         Dim Chaine As String
@@ -3712,7 +3715,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Public Sub DessineAppui(MyGr As Graphics, xPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage)
+    Public Sub DessineAppui(MyGr As Graphics, xPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage, Optional yPos As Decimal = 0)
         '------------------------------------------------------------------------------------------------------------------
         '   02/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
@@ -3728,11 +3731,11 @@ Module Mod_Dessins
         Dim xPts() As Single = Nothing
         Dim yPts() As Single = Nothing
         Dim nbPts As Integer
-        Dim MyBrushAp As New SolidBrush(Color.DarkGreen)
+        Dim MyBrushAp As New SolidBrush(CouleurAppui)
 
         '--> Initialisations
 
-        PrepareContourAppui(xPos, dCar, xPts, yPts, nbPts)
+        PrepareContourAppui(xPos, dCar, xPts, yPts, nbPts, yPos)
 
         '--> Dessin
 
@@ -3740,7 +3743,7 @@ Module Mod_Dessins
 
     End Sub
 
-    Private Sub PrepareContourAppui(xPos As Decimal, dCar As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
+    Private Sub PrepareContourAppui(xPos As Decimal, dCar As Decimal, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer, Optional yPos As Decimal = 0)
         '---------------------------------------------------------------------------------------------------------------------------
         '   02/05/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -3763,17 +3766,17 @@ Module Mod_Dessins
         '--> Contour
 
         xo = xPos
-        yo = 0
+        yo = yPos '0
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
         xo = xPos - dCar / 2
-        yo = -dCar
+        yo = yPos - dCar
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
         xo = xPos + dCar / 2
-        yo = -dCar
+        yo = yPos - dCar
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -5163,9 +5166,10 @@ Module Mod_Dessins
 #Region "Dessins pour le chargement (FRM_CHARGEMENT)"
 
     Public Sub DessinFrmChargement(MyGr As Graphics, MyPoutre As cls_Poutre,
-                                ByVal pWi As Decimal, ByVal pHi As Decimal,
-                                kAdjust As Double, iSelect As Integer, ByVal traveeEnCours As Integer, ByVal chargeEnCours As String, ByVal Optional iFPonctSelect As Integer = -1, ByVal Optional iFReparSelect As Integer = -1,
-                                ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+                                   ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                   kAdjust As Double, iSelect As Integer, ByVal traveeEnCours As Integer, ByVal chargeEnCours As String,
+                                   ByVal Optional iFPonctSelect As Integer = -1, ByVal Optional iFReparSelect As Integer = -1,
+                                   ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '------------------------------------------------------------------------------------------------------------------
         '   21/06/23 :  Création - GUD
         '------------------------------------------------------------------------------------------------------------------
@@ -5279,6 +5283,7 @@ Module Mod_Dessins
 
         xo = 0
         xe = LongueurConsoleGauche
+
         If traveeEnCours = 0 Then
             AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
         Else
@@ -5327,6 +5332,14 @@ Module Mod_Dessins
         'If traveeEnCours = MyPoutre.IndiceTraveeConsoleDroite Then
         '    AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo - dCar, yo - dCar, xe + dCar, ye + dCar, MyParAff, True, True)
         'End If
+
+
+        '--> Représentation interface dalle-profile
+        xo = 0
+        yo = MyPoutre.Section.ProfilA.ha
+        xe = LongueurPoutre
+        ye = yo
+        AddLigne(MyGr, xo, yo, xe, ye, MyParAff)
 
         '--> Représentation des appuis et les maintiens associés
 
@@ -5448,6 +5461,205 @@ Module Mod_Dessins
     End Sub
 
 
+    Public Sub DessinFrmChargementN(MyGr As Graphics, MyPoutre As cls_Poutre,
+                                    ByVal pWi As Decimal, ByVal pHi As Decimal,
+                                    kAdjust As Double, ByVal traveeEnCours As Integer, traveeMouse As Integer, ByVal chargeEnCours As String,
+                                    ByRef vParAff As Struc_Affichage,
+                                    ByVal Optional iFPonctSelect As Integer = -1, ByVal Optional iFReparSelect As Integer = -1,
+                                    ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '------------------------------------------------------------------------------------------------------------------
+        '   21/06/23 :  Création - GUD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Affichage des travées dans la fenêtre maintiens latéraux
+        '------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   MyPoutre    [E] :   Poutre à dessiner
+        '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
+        '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   xSouris     [E] :   Abscisse de la souris dans l'image
+        '   ySouris     [E] :   Ordonnée de la souris dans l'image
+        '   iSelect     [E] :   Indique quel est la travée sélectionnée
+        '   
+        '------------------------------------------------------------------------------------------------------------------
+        '   iSelect     0  : console gauche
+        '               i  : travée sur 2 appui no i
+        '               99 : console droite
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar, dCarApp As Decimal
+
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+        Dim LongueurPoutre, HauteurPoutre As Decimal
+
+        Dim MyBrushA As New SolidBrush(CouleurProfile)
+        Dim myBrushB As Brush
+        If xLeft <> 0 Or yTop <> 0 Then
+            myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.Gray, Color.Gray)
+        Else
+            'myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, Color.Gray)
+            myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurDalle, Color.Gray)
+        End If
+
+        Dim MyBrushSelectTravee As SolidBrush
+        If MyPoutre.lTraveeConsoleGauche Or MyPoutre.lTraveeConsoleDroite Then
+            MyBrushSelectTravee = New SolidBrush(CouleurTraveeSelect)
+        Else
+            MyBrushSelectTravee = MyBrushA
+        End If
+        Dim myBrushMouse As New SolidBrush(CouleurTraveeMouse)
+
+        Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyPenDot As New Pen(Color.Black, 1) With {
+            .DashStyle = DashStyle.Dash
+        }
+
+        Dim MyFontNormal As Font = FontBase
+        Dim lTotal As Boolean = False
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        Dim lSelect As Boolean = False 'Permet d'indiquer + loin si la charge qui est dessinée est sélectionnée dans la fenetre Frm_Chargement 
+        Dim zDalle, zSem As Decimal
+        Dim iTravee As Integer
+        Dim DeltaT As Decimal
+
+        '--> Initialisations
+
+        LongueurPoutre = MyPoutre.LongueurTotale
+
+        HauteurPoutre = MyPoutre.Section.ProfilA.ha + MyPoutre.Dalle.zTop 'LongueurTravee / 70
+        DeltaT = HauteurPoutre / 10
+
+        dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 25
+        dCarApp = HauteurPoutre / 2 ' Math.Min(HauteurPoutre, LongueurTravee / 30)
+        zDalle = MyPoutre.Dalle.zTop
+        zSem = -MyPoutre.Section.ProfilA.ha
+
+        '--> Initialisation des paramètres d'affichage
+
+        xMin = 0
+
+        xMax = LongueurPoutre
+
+        yMin = -MyPoutre.Section.ProfilA.ha - dCarApp '- 0.6 * dCar
+        yMax = MyPoutre.Dalle.zTop + dCar
+
+        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        ParametresAffichage(vParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+        '--> Représentation de la poutre 
+
+        Dim iDebT As Integer = MyPoutre.IndicePremiereTravee
+        Dim iFinT As Integer = MyPoutre.IndiceDerniereTravee
+        Dim xCum As Decimal = 0
+
+        yo = zSem
+        ye = zDalle
+
+        For iTravee = iDebT To iFinT
+
+            xo = xCum
+            xe = xo + MyPoutre.LongueurTravee(iTravee)
+
+            If (iTravee = traveeEnCours) And (MyPoutre.NbTravees > 1) Then
+                AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo, yo, xe, ye, vParAff, True, True)
+            Else
+                AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, 0, vParAff, True, True)
+                AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, 0, xe, ye, vParAff, True, True)
+            End If
+
+            If (MyPoutre.NbTravees > 1) And (iTravee = traveeMouse) Then
+                AddRectanglePlein(MyGr, myBrushMouse, MyPenContour, xo + DeltaT, yo + DeltaT, xe - DeltaT, ye - DeltaT, vParAff, True, True)
+            End If
+
+            xCum = xe
+        Next
+
+        '--> Représentation interface dalle-profile
+
+        xo = 0
+        xe = LongueurPoutre
+
+        AddLigne(MyGr, xo, 0, xe, 0, vParAff)
+
+        '--> Représentation des appuis et les maintiens associés
+
+        xo = MyPoutre.xPositionAppui(True, 1)
+        DessineAppui(MyGr, xo, dCarApp, vParAff, zSem)
+
+        For iTravee = 1 To MyPoutre.NombreTraveesDeuxAppuis
+            xo = MyPoutre.xPositionAppui(False, 1)
+            DessineAppui(MyGr, xo, dCarApp, vParAff, zSem)
+        Next
+
+        '--> Représentation des efforts
+
+        Dim xPosRelative As Decimal
+
+        '# Efforts non sélectionnés
+
+        xo = 0
+        For iTravee = iDebT To iFinT
+
+            '[ Forces ponctuelles
+
+            For Each force As cls_Force In MyPoutre.ChargesU(chargeEnCours).Forces(iTravee)
+                xPosRelative = xo + force.xPosT
+                lSelect = MyPoutre.ChargesU(chargeEnCours).Forces(iTravee).IndexOf(force) = iFPonctSelect
+                If Not lSelect Then DessinForcePonctuelle(MyGr, xPosRelative, zDalle, dCar, vParAff, lSelect)
+            Next
+
+            '[ Forces réparties
+
+            For Each force As cls_ForceRepartie In MyPoutre.ChargesU(chargeEnCours).FReparties(iTravee)
+                If iTravee = traveeEnCours Then
+                    lSelect = MyPoutre.ChargesU(chargeEnCours).FReparties(iTravee).IndexOf(force) = iFReparSelect
+                Else
+                    lSelect = False
+                End If
+
+                If Not lSelect Then DessinForceRepartie(MyGr, xo + force.xPosT(0), zDalle, force.Force(0), xo + force.xPosT(1), zDalle,
+                                                        force.Force(1), dCar * 0.5, dCar, vParAff, lSelect)
+            Next
+
+            xo += MyPoutre.LongueurTravee(iTravee)
+        Next
+
+        '# Efforts  sélectionnés
+
+        xo = 0
+        For iTravee = iDebT To iFinT
+
+            '[ Forces ponctuelles
+
+            For Each force As cls_Force In MyPoutre.ChargesU(chargeEnCours).Forces(iTravee)
+                xPosRelative = xo + force.xPosT
+                lSelect = MyPoutre.ChargesU(chargeEnCours).Forces(iTravee).IndexOf(force) = iFPonctSelect
+                If lSelect Then DessinForcePonctuelle(MyGr, xPosRelative, zDalle, dCar, vParAff, lSelect)
+            Next
+
+            '[ Forces réparties
+
+            For Each force As cls_ForceRepartie In MyPoutre.ChargesU(chargeEnCours).FReparties(iTravee)
+                If iTravee = traveeEnCours Then
+                    lSelect = MyPoutre.ChargesU(chargeEnCours).FReparties(iTravee).IndexOf(force) = iFReparSelect
+                Else
+                    lSelect = False
+                End If
+
+                If lSelect Then DessinForceRepartie(MyGr, xo + force.xPosT(0), zDalle, force.Force(0), xo + force.xPosT(1), zDalle,
+                                                    force.Force(1), dCar * 0.5, dCar, vParAff, lSelect)
+            Next
+
+            xo += MyPoutre.LongueurTravee(iTravee)
+        Next
+
+
+    End Sub
 
     Public Sub DessinForcePonctuelle(MyGr As Graphics, xPos As Decimal, yPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage, Optional lSelect As Boolean = False)
         '------------------------------------------------------------------------------------------------------------------

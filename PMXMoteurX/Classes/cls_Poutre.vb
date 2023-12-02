@@ -321,22 +321,22 @@ Public Class cls_Poutre
 
     '--Combinaisons définies par l'utilisateur
 
-    Public Const nbCombELU As Integer = 5                           ' Nombre de combinaisons ELU
-    Public Const nbCombELS As Integer = 5                           ' Nombre de combinaisons ELS
-    Public Const nbCombFeu As Integer = 4                           ' Nombre de combinaisons ELU incendie
-    Public Const nbCombELUConstruction As Integer = 1
-    Public Const nbCombELSConstruction As Integer = 1
-    Public lCombELU(nbCombELU) As Boolean                           'Indique si combinaison ELU sélectionnée
-    Public lCombELS(nbCombELS) As Boolean                           'Indique si combinaison ELS sélectionnée
-    Public lCombFeu(nbCombFeu) As Boolean                           'Indique si combinaison Feu sélectionnée
-    Public lCombELCURules(nbCombELUConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
-    Public lCombELCSRules(nbCombELSConstruction) As Boolean         'Indique si combinaison réglementaire ELU Phase de construction
+    Public Const nbCombELU As Integer = 6                           ' Nombre de combinaisons ELU
+    Public Const nbCombELS As Integer = 6                           ' Nombre de combinaisons ELS
+    Public Const nbCombFeu As Integer = 5                           ' Nombre de combinaisons ELU incendie
+    Public Const nbCombELUConstruction As Integer = 2
+    Public Const nbCombELSConstruction As Integer = 2
+    Public lCombELU(nbCombELU - 1) As Boolean                        'Indique si combinaison ELU sélectionnée
+    Public lCombELS(nbCombELS - 1) As Boolean                        'Indique si combinaison ELS sélectionnée
+    Public lCombFeu(nbCombFeu - 1) As Boolean                        'Indique si combinaison Feu sélectionnée
+    Public lCombELCURules(nbCombELUConstruction - 1) As Boolean      'Indique si combinaison réglementaire ELU Phase de construction
+    Public lCombELCSRules(nbCombELSConstruction - 1) As Boolean      'Indique si combinaison réglementaire ELU Phase de construction
 
-    Public CoefCombELU(nbCombELU) As List(Of Decimal)               'Table des coefficients des combinaisons ELU
-    Public CoefCombELS(nbCombELS) As List(Of Decimal)               'Table des coefficients des combinaisons ELS
-    Public CoefCombFeu(nbCombFeu) As List(Of Decimal)               'Table des coefficients des combinaisons Feu
-    Public CoefCombELCU(nbCombELUConstruction) As List(Of Decimal)  'Table des coefficients des combinaisons ELU Construction
-    Public CoefCombELCS(nbCombELSConstruction) As List(Of Decimal)  'Table des coefficients des combinaisons ELS Construction
+    Public CoefCombELU(nbCombELU - 1) As List(Of Decimal)            'Table des coefficients des combinaisons ELU
+    Public CoefCombELS(nbCombELS - 1) As List(Of Decimal)            'Table des coefficients des combinaisons ELS
+    Public CoefCombFeu(nbCombFeu - 1) As List(Of Decimal)            'Table des coefficients des combinaisons Feu
+    Public CoefCombELCU(nbCombELUConstruction - 1) As List(Of Decimal)  'Table des coefficients des combinaisons ELU Construction
+    Public CoefCombELCS(nbCombELSConstruction - 1) As List(Of Decimal)  'Table des coefficients des combinaisons ELS Construction
     '                                                               ' Indices pour les combinaisons utilisateurs, dans toutes les tables :
     '                                                               ' 0 = G ; 1 = Q1 ; 2 = Q2 ; 3 = QC ; 4 : g pour la construction
 
@@ -469,7 +469,7 @@ Public Class cls_Poutre
     Private Sub InitialiseTablesCombi()
         Dim nbCharges As Integer = 5
         Dim i, j As Integer
-        For i = 0 To nbCombELU
+        For i = 0 To nbCombELU - 1
             Me.CoefCombELU(i) = New List(Of Decimal)
             For j = 1 To nbCharges
                 Me.CoefCombELU(i).Add(0)
@@ -477,7 +477,7 @@ Public Class cls_Poutre
             Me.lCombELU(i) = False
         Next
         Me.lCombELU(0) = True
-        For i = 0 To nbCombELS
+        For i = 0 To nbCombELS - 1
             Me.CoefCombELS(i) = New List(Of Decimal)
             For j = 1 To nbCharges
                 Me.CoefCombELS(i).Add(0)
@@ -485,14 +485,14 @@ Public Class cls_Poutre
             Me.lCombELS(i) = False
         Next
         Me.lCombELS(0) = True
-        For i = 0 To nbCombFeu
+        For i = 0 To nbCombFeu - 1
             Me.CoefCombFeu(i) = New List(Of Decimal)
             For j = 1 To nbCharges
                 Me.CoefCombFeu(i).Add(0)
             Next
             Me.lCombFeu(i) = False
         Next
-        For i = 0 To nbCombELUConstruction
+        For i = 0 To nbCombELUConstruction - 1
             Me.CoefCombELCU(i) = New List(Of Decimal)
             For j = 1 To nbCharges
                 Me.CoefCombELCU(i).Add(0)
@@ -500,7 +500,7 @@ Public Class cls_Poutre
             Me.lCombELCURules(i) = False
         Next
         lCombELCURules(0) = True
-        For i = 0 To nbCombELSConstruction
+        For i = 0 To nbCombELSConstruction - 1
             Me.CoefCombELCS(i) = New List(Of Decimal)
             For j = 1 To nbCharges
                 Me.CoefCombELCS(i).Add(0)
@@ -2122,11 +2122,11 @@ Public Class cls_Poutre
                     k_bacPE1 = 1
                 Else
                     k_bacPE1 = 0
-                    End If
+                End If
 
-                Me.As_s_transv(i_travee, j_zone, 0) = Math.Max((TauEd(i_travee, j_zone, 0) * hf_aa * Math.Tan(Me.Thetaf(i_travee, j_zone, 0)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / Fsd, 0)
-                Me.As_s_transv(i_travee, j_zone, 1) = Math.Max((TauEd(i_travee, j_zone, 1) * hf_bb * Math.Tan(Me.Thetaf(i_travee, j_zone, 1)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / Fsd, 0)
-                Me.As_s_transv(i_travee, j_zone, 2) = Math.Max((TauEd(i_travee, j_zone, 2) * hf_dd * Math.Tan(Me.Thetaf(i_travee, j_zone, 2)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / Fsd, 0)
+                Me.As_s_transv(i_travee, j_zone, 0) = Math.Max((TauEd(i_travee, j_zone, 0) * hf_aa * Math.Tan(Me.Thetaf(i_travee, j_zone, 0)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / fsd, 0)
+                Me.As_s_transv(i_travee, j_zone, 1) = Math.Max((TauEd(i_travee, j_zone, 1) * hf_bb * Math.Tan(Me.Thetaf(i_travee, j_zone, 1)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / fsd, 0)
+                Me.As_s_transv(i_travee, j_zone, 2) = Math.Max((TauEd(i_travee, j_zone, 2) * hf_dd * Math.Tan(Me.Thetaf(i_travee, j_zone, 2)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / fsd, 0)
 
 
             Next
@@ -2792,7 +2792,7 @@ Public Class cls_Poutre
 
         '--> Boucle sur les combinaisons définies par l'utilisateur
 
-        For iCombi = 0 To nbCombi
+        For iCombi = 0 To nbCombi - 1
 
             If lCombi(iCombi) And (Not lCombinaisonNulle(iCombi, CoefCombi)) Then
 
@@ -2831,7 +2831,6 @@ Public Class cls_Poutre
         Next
 
     End Sub
-
 
     Private Function lCombinaisonNulle(iCombi As Integer, CoefCombi() As List(Of Decimal)) As Boolean
         '---------------------------------------------------------------------------
@@ -4410,7 +4409,7 @@ Public Class cls_Poutre
         Select Case Me.TypeSection
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 '# Vérification des poutres mixtes en phase finale aux ELU
-                Me.VerifMixte(0).VerificationELU(Me)
+                Me.VerifMixte(0).Z_VerificationELU(Me)
 
             Case cls_Section.Enum_TypeSection.AcierSeul
                 Me.VerifAcier(0).VerificationELU(Me)

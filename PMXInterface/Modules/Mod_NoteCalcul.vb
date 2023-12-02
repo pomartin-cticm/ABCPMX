@@ -2277,46 +2277,7 @@ Module Mod_NoteCalcul
 
 #End Region
 
-#Region "***Edition vérifications ELU***"
-
-    Private Sub EditionVerificationsELU(MyBeam As cls_Poutre)
-        '-------------------------------------------------------------------------------------------
-        '   12/10/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------
-        '   Edition des vérifications ELU (en phase finale pour les poutres mixtes)
-        '-------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        '--> Initialisation
-
-        SautePage()
-
-        If MyBeam.lMixte Then
-            AddTitreNdC(1, BlocELU("ULS_CHECKS_FINAL"))
-        Else
-            AddTitreNdC(1, BlocELU("ULS_CHECKS"))
-        End If
-
-        If Not MyBeam.VerificationsELUDispo(MyBeam.lMixte) Then Exit Sub
-
-        '--> Traitement
-
-        '# Synthèse des critères
-
-        EditionVerificationsELUSummary(MyBeam)
-
-        '# Calcul détaillé des critères sous combinaisons ELU
-
-        EditionVerificationsELUCombi(MyBeam)
-
-        '# Poutres mixtes : ferraillage transversal
-
-        If MyBeam.lMixte Then
-            EditionFerraillageTransversal(MyBeam)
-        End If
-
-    End Sub
+#Region "***Feraillage transversal***"
 
     Private Sub EditionFerraillageTransversal(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
@@ -2373,7 +2334,15 @@ Module Mod_NoteCalcul
     ''' <param name="str_failureArea"> nom du mode de ruine à afficher </param>
     ''' <param name="ind_failureArea"> indice du mode de ruine associé :0a-a = 0, b-b = 1, d-d = 2</param>
     Private Sub EditionVerificationELUArmaturesTransv(MyBeam As cls_Poutre, str_failureArea As String, ind_failureArea As Integer)
-
+        '-------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - GUD
+        '-------------------------------------------------------------------------------------------
+        '   Tableau des armatures transversales
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam              [E] :   Poutre en cours 
+        '   str_failureArea     [E] :   nom du mode de ruine à afficher
+        '   ind_failureArea     [E] :   indice du mode de ruine associé :0a-a = 0, b-b = 1, d-d = 2
+        '-------------------------------------------------------------------------------------------
 
         AddTitreNdC(3, BlocELU("SHEARFAILUREAREA") & " : " & str_failureArea)
 
@@ -2401,8 +2370,8 @@ Module Mod_NoteCalcul
                 If nbLignes + HLIGNE > MAXLIGNEPPAG Then SautePage()
 
                 InitialiseLigne(nbColonne, HLIGNE, True)
-                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, i)
-                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, j + 1)
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i + 1))
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(j + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                 AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.TauEd(i, j, ind_failureArea), Enu_TypeVariable.Contrainte, 4, 2, False))
                 AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.Thetaf_min(i, j)), Enu_TypeVariable.SansType, 4, 2, False))
@@ -2413,6 +2382,49 @@ Module Mod_NoteCalcul
         Next
 
         FinTableau()
+    End Sub
+
+#End Region
+
+#Region "***Edition vérifications ELU***"
+
+    Private Sub EditionVerificationsELU(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   12/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des vérifications ELU (en phase finale pour les poutres mixtes)
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        '--> Initialisation
+
+        SautePage()
+
+        If MyBeam.lMixte Then
+            AddTitreNdC(1, BlocELU("ULS_CHECKS_FINAL"))
+        Else
+            AddTitreNdC(1, BlocELU("ULS_CHECKS"))
+        End If
+
+        If Not MyBeam.VerificationsELUDispo(MyBeam.lMixte) Then Exit Sub
+
+        '--> Traitement
+
+        '# Synthèse des critères
+
+        EditionVerificationsELUSummary(MyBeam)
+
+        '# Calcul détaillé des critères sous combinaisons ELU
+
+        EditionVerificationsELUCombi(MyBeam)
+
+        '# Poutres mixtes : ferraillage transversal
+
+        If MyBeam.lMixte Then
+            EditionFerraillageTransversal(MyBeam)
+        End If
+
     End Sub
 
     Private Sub EditionVerificationsELUSummary(MyBeam As cls_Poutre)
@@ -2525,9 +2537,7 @@ Module Mod_NoteCalcul
                     Symbol & TABEGAL & GetStringInUnit(Valeur, Enu_TypeVariable.SansType, 3, 2, False) &
                     strFinGras & TABInfo & "(N" & CStr(Critere.iNodeM + 1) & "/" & strRacineELU & "_" & CStr(Critere.iCombiM + 1) & ")" & strGras & TABOK & strOK & strFinGras)
 
-
     End Sub
-
 
     Private Sub EnteteTableauCriteresELU(MyBeam As cls_Poutre, ByRef NCOL As Integer)
         '-------------------------------------------------------------------------------------------
@@ -2637,18 +2647,60 @@ Module Mod_NoteCalcul
             Else
                 '** Affichage de GammaM
                 If lMixte Then
-                    AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
+                    'AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
+                    AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereM, i, iCombi, MyBordures(i))
                 Else
-                    AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
+                    'AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
+                    AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereM, i, iCombi, MyBordures(i))
                 End If
                 '** Affichage de GammaV
                 If lMixte Then
-                    AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
+                    'AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
+                    AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereV, i, iCombi, MyBordures(i))
                 Else
-                    AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
+                    'AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
+                    AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereV, i, iCombi, MyBordures(i))
                 End If
             End If
         Next
+
+    End Sub
+
+    Private Sub AffichageCritereELU_N(Critere As cls_Critere, iTravee As Integer, iCombi As Integer, vBordure As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Extraction et affichage de la valeur d'un critère sur une travée
+        '-------------------------------------------------------------------------------------------
+        '   Critere         [E] :   Critère affiché dans la cellule
+        '   iTravee         [E] :   Indice de la travée
+        '   iCombi          [E] :   Indice de la combinaison
+        '   vBordure        [E] :   Gestion des bordures de la cellule
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim ValCrit As Decimal
+        Dim iNodeM As Integer
+        Dim lMaxi As Boolean
+
+        Dim StyleG As String = ""
+        Dim StyleGFin As String = ""
+
+        '--> Initialisation
+
+        ValCrit = Critere.CritereCombiT(iCombi, iTravee)
+        lMaxi = IsEqual(ValCrit, Critere.CritereMax)
+        If lMaxi Then
+            StyleG = "\G"
+            StyleGFin = "\g"
+        End If
+
+        iNodeM = Critere.CritereCombiN(iCombi, iTravee) + 1
+
+        '--> Affichage
+
+        AddCellule(LC3, vBordure, PositionTexteInCell.Centre, StyleG & GetStringInUnit(ValCrit, Enu_TypeVariable.SansType, 3, 2, False) & " (N" & CStr(iNodeM) & ")" & StyleGFin)
 
     End Sub
 

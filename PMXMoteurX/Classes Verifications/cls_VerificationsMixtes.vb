@@ -57,7 +57,7 @@
 
 #Region " Gestion globale de la vérification "
 
-    Public Sub VerificationELU(MyPoutre As cls_Poutre)
+    Public Sub Z_VerificationELU(MyPoutre As cls_Poutre)
         '----------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -153,11 +153,11 @@
             '# Combinaison des contraintes élastiques
 
             MyPoutre.CombiA_ELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, MyPoutre.PtsSigma.zPos.Count, MyPoutre.Nodes.nbNodes,
-                                                   MyPoutre.ChargesA, MEd, SigmaP, SigmaM, lretraitElastique, sigmaelu)
+                                                   MyPoutre.ChargesA, MEd, SigmaP, SigmaM, lRetraitElastique, SigmaELU)
 
             '# Position de l'ANE en fonction des contraintes dans le profilé
 
-            MyPoutre.RechercheANEFromSigma(SigmaELU, MEd, MyPoutre.Nodes.nbNodes, zane)
+            MyPoutre.RechercheANEFromSigma(SigmaELU, MEd, MyPoutre.Nodes.nbNodes, zANE)
 
             '# Analyse du diagramme de moment
 
@@ -544,12 +544,13 @@
         '--> Traitement
 
         For iTravee = iDebT To iFinT
-            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
-            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
             iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
             iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
                 For k = iDebK To iFinK
                     MyCritereM.EnregistreCritere(iNode, iCombi, iTravee, SigmaELU(iPoint, iNode, k), SigmaU)
                 Next
@@ -603,12 +604,13 @@
         '--> Traitement
 
         For iTravee = iDebT To iFinT
-            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
-            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
+
             iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
             iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
                 For k = iDebK To iFinK
                     Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MplRd(iNode, k))
                 Next
@@ -670,12 +672,13 @@
         '--> Traitement
 
         For iTravee = iDebT To iFinT
-            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
-            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
             iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
             iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
                 For k = iDebK To iFinK
                     If MEd(iNode, k) * SIGNEM > 0 Then
                         MRd = MplRdP(iNode)
@@ -744,14 +747,15 @@
         '--> Traitement
 
         For iTravee = iDebT To iFinT
-            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
-            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
             iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
             iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
                 For k = iDebK To iFinK
-                    Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VplRd)
+                    Me.CritereV.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VplRd)
                 Next
             Next
         Next
@@ -806,14 +810,15 @@
         '--> Traitement
 
         For iTravee = iDebT To iFinT
-            If iTravee = iDebT Then iDebK = 1 Else iDebK = 0
-            If iTravee = iFinT Then iFinK = 0 Else iFinK = 1
             iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
             iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
                 For k = iDebK To iFinK
-                    Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VbRd)
+                    Me.CritereVb.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VbRd)
                 Next
             Next
         Next
