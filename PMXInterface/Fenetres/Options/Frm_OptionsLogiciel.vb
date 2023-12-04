@@ -68,6 +68,12 @@ Public Class Frm_OptionsLogiciel
 
     Dim pFichierLangue As String
 
+    Public pLocalOptionsNdC As struc_LocalOptionsNdC
+
+
+    Structure struc_LocalOptionsNdC
+        Dim lShowHivossCurve As Boolean
+    End Structure
 #End Region
 
 #Region "===OUVERTURE==="
@@ -95,7 +101,7 @@ Public Class Frm_OptionsLogiciel
         '--> Déclaration
 
         Dim Lines As Cls_LinesOfFile
-        Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTDATABASES", "OPTSOFTDIRECTORIES", "OPTSOFTEXPERT", "OPTSOFTGENERAL", "OPTSOFTUNITS"}
+        Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTDATABASES", "OPTSOFTDIRECTORIES", "OPTSOFTEXPERT", "OPTSOFTGENERAL", "OPTSOFTUNITS", "OPTSOFTCALCULSHEET"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
         Dim MotCle, Argument As String
@@ -160,6 +166,7 @@ Public Class Frm_OptionsLogiciel
             Me.PoMbtn_Units.Caption = MyBloc("UNITS")
             Me.PoMbtn_Expert.Caption = MyBloc("EXPERT")
             Me.PoMbtn_Databases.Caption = MyBloc("DATABASES")
+            Me.PoMbtn_NdC.Caption = MyBloc("CALCULSHEET")
 
             Me.btn_Appliquer.Text = MyBloc("APPLY")
             Me.btn_Cancel.Text = MyBloc("CANCEL")
@@ -182,6 +189,7 @@ Public Class Frm_OptionsLogiciel
         PreparePomBouton(PoMbtn_Units)
         PreparePomBouton(PoMbtn_Expert)
         PreparePomBouton(PoMbtn_Databases)
+        PreparePomBouton(PoMbtn_NdC)
         PoMbtn_Expert.Visible = LogicielOptions.lExpert
 
         'PreparePomBouton(PoMBtn)
@@ -264,6 +272,7 @@ Public Class Frm_OptionsLogiciel
         pLocalLogicielOptions.UserName = LogicielOptions.UserName
         pLocalLogicielOptions.CompanyName = LogicielOptions.CompanyName
 
+        pLocalOptionsNdC.lShowHivossCurve = OptionsNdC.lShowHivossCurve
     End Sub
 
     Private Sub AfficherFenetreFille()
@@ -291,6 +300,9 @@ Public Class Frm_OptionsLogiciel
                 Me.pan_Contenu.Controls.Add(Frm_OptionsLogicielDataBases.pan_DataBases)
                 Frm_OptionsLogicielDataBases.InitialiseFrm()
 
+            Case Enu_OptionsLogiciel.NoteCalcul
+                Me.pan_Contenu.Controls.Add(Frm_OptionsLogicielNdC.pan_NdC)
+                Frm_OptionsLogicielNdC.InitialiseFrm()
 
             Case Enu_OptionsLogiciel.Expert
 
@@ -304,11 +316,10 @@ Public Class Frm_OptionsLogiciel
 
 #End Region
 
-
 #Region "    Gestion des boutons - Paint Overrides "
 
     Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-    Handles PoMBtn_General.Click, PoMbtn_Directories.Click, PoMbtn_Units.Click, PoMbtn_Expert.Click, PoMbtn_Databases.Click
+    Handles PoMBtn_General.Click, PoMbtn_Directories.Click, PoMbtn_Units.Click, PoMbtn_Expert.Click, PoMbtn_Databases.Click, PoMbtn_NdC.Click
 
         If Not sender.checked Then  '-> Si bouton déjà séléctionné :
             sender.checked = True       'on le garde checké
@@ -337,6 +348,10 @@ Public Class Frm_OptionsLogiciel
 
             Case Me.PoMbtn_Databases.Name
                 LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.Databases
+                AfficherFenetreFille()
+
+            Case Me.PoMbtn_NdC.Name
+                LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.NoteCalcul
                 AfficherFenetreFille()
 
         End Select
@@ -374,6 +389,7 @@ Public Class Frm_OptionsLogiciel
         If SenderName <> Me.PoMbtn_Directories.Name Then Me.PoMbtn_Directories.Checked = False
         If SenderName <> Me.PoMbtn_Units.Name Then Me.PoMbtn_Units.Checked = False
         If SenderName <> Me.PoMbtn_Expert.Name Then Me.PoMbtn_Expert.Checked = False
+        If SenderName <> Me.PoMbtn_NdC.Name Then Me.PoMbtn_NdC.Checked = False
         If SenderName <> Me.PoMbtn_Databases.Name Then Me.PoMbtn_Databases.Checked = False
 
         'If SenderName <> Me.PomBtnExpert.Name Then MAJBtnExpert()
@@ -381,7 +397,6 @@ Public Class Frm_OptionsLogiciel
     End Sub
 
 #End Region
-
 
 #Region " Gestion Mode Expert "
 
@@ -458,6 +473,7 @@ Public Class Frm_OptionsLogiciel
 
         GereTransfertValeur(Me.pLocalLogicielOptions.lExpert, LogicielOptions.lExpert, lModif)
 
+        GereTransfertValeur(Me.pLocalOptionsNdC.lShowHivossCurve, OptionsNdC.lShowHivossCurve, lModif)
 
     End Sub
 

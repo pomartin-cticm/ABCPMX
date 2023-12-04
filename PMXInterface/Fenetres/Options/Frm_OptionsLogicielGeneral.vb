@@ -43,11 +43,11 @@
 
         Me.pan_General.Dock = DockStyle.Fill
 
-        Me.lbl_Langues.BackColor = CouleurBackBandeaux
-        Me.lbl_Langues.ForeColor = CouleurForeBandeaux
-
         Me.lbl_Identification.BackColor = CouleurBackBandeaux
         Me.lbl_Identification.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_Langues.BackColor = CouleurBackBandeaux
+        Me.lbl_Langues.ForeColor = CouleurForeBandeaux
 
 
         ' Me.lst_LangueNdC.Items(Me.lst_LangueNdC.SelectedIndex)
@@ -86,7 +86,7 @@
 
 #Region " Evènements "
 
-    Private Sub TextChangedIdentification(sender As Object, e As EventArgs) Handles txt_UserName.TextChanged, txt_Firm.TextChanged
+    Private Sub TextChangedIdentification(sender As Object, e As EventArgs) 
         If lBuild Then Exit Sub
 
         Select Case sender.name
@@ -98,7 +98,7 @@
 
     End Sub
 
-    Private Sub GestionChangeLangue(sender As Object, e As EventArgs) Handles lst_LangueNdC.SelectedIndexChanged, lst_LangueGUI.SelectedIndexChanged
+    Private Sub GestionChangeLangue(sender As Object, e As EventArgs)
 
         If lBuild Then Exit Sub
 

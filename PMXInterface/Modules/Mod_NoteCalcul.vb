@@ -3315,13 +3315,17 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocHiVoss("CPERCEPTION") & pTABVAR & HResult)
         AddLigneNDC(TABW2 & BlocHiVoss("COMFORTASS") & pTABVAR & TableConfort(IndConfort))
 
-        'SautePage()
+        If OptionsNdC.lShowHivossCurve Then
+            SautePage()
 
-        'MyNote.AddLigneInRapport("\IMG HIVOSS 5 85 80 NoCadre " _
-        '                       & Format(MyBeam.HivossParam.Amortissement(0), DFORMAT) & " " _
-        '                       & Format(Frequency, "0.00") & " " _
-        '                       & Format(ModalMass, "0.00") & " " _
-        '                       & BlocELS("DAMPING"))
+            MyNote.AddLigneInRapport("\IMG HIVOSS 5 85 80 NoCadre " _
+                                   & Format(MyBeam.Hivoss.AmortiTotal_Dtot * kPC, DFORMAT) & " " _
+                                   & Format(Frequency, "0.00") & " " _
+                                   & Format(ModalMass, "0.00") & " " _
+                                   & BlocHiVoss("DAMPING"))
+        End If
+
+
 
     End Sub
 

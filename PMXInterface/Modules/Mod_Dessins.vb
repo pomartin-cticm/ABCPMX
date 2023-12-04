@@ -7959,4 +7959,269 @@ Module Mod_Dessins
 
 #End Region
 
+
+#Region " Dessins des courbes HIVOSS "
+
+    '--> Paramètres du dessin
+    Private Colors As Color() = {Color.Red, Color.Orange, Color.Yellow, Color.LimeGreen, Color.Blue, Color.DarkBlue, Color.White}
+    Private Coeff As Decimal = 3.5          'Coeff multiplicateur sur les ordonnées (Hz) 
+    Private nbFrontières As Integer = 6     'Nombre de lignes frontière
+    Private LimitesIntervalles As Decimal() = {51.2, 12.8, 3.2, 0.8, 0.2, 0.1, 0}   '--> Constantes des frontières
+    Private LettresIntervalles As Char() = {"!", "F", "E", "D", "C", "B", "A"}      '--> Catégories
+
+    ''' <summary>
+    ''' Représentation de l'abaque Hivoss dans la NdC
+    ''' </summary>
+    ''' <param name="MyBeam">[E] Poutre traitée</param>
+    ''' <param name="MyGr">[E] Graphics</param>
+    ''' <param name="xLeft">[E] Position gauche du dessin</param>
+    ''' <param name="yTop">[E] Position top du dessin</param>
+    ''' <param name="Width">[E] Largeur du dessin</param>
+    ''' <param name="Height">[E] Hauteur du dessin</param>
+    ''' <param name="MyDamp">[E] Amortissement</param>
+    ''' <param name="MyFreq">[E] Frequence propre</param>
+    ''' <param name="MyMass">{E] Masse modale</param>
+    ''' <remarks></remarks>
+    Public Sub DessinCourbeHivoss(MyHivoss As cls_MethodHivoss, ByVal MyGr As Graphics,
+                                  ByVal xLeft As Single, ByVal yTop As Single,
+                                  ByVal Width As Single, ByVal Height As Single,
+                                  ByVal MyDamp As Integer, ByVal MyFreq As Decimal, ByVal MyMass As Decimal, ByVal strDamp As String)
+        '--------------------------------------------------------------------------------------------------
+        '   04/12/23 :  Création - Version 1.00 - POM (repris de ACB+)
+        '--------------------------------------------------------------------------------------------------
+        '   Représentation d'un abaque Hivoss dans la NdC
+        '--------------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre représentée dans la Note de Calcul
+        '   MyGr            [E] :   Graphics dans lequel on dessine
+        '   xLeft, yTop     [E] :   Position haut gauche du dessin
+        '   Width, Height   [E] :   Largeur et hauteur du dessin
+        '
+        '   MyDamp          [E] :   Amortissement
+        '   MyFreq          [E] :   Fréquence propre
+        '   MyMass          [E] :   Masse modale de la poutre
+        '--------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim i, j As Integer
+
+        Dim MyFont As Font
+        Dim AllFloorVibration As New Dictionary(Of Integer, strHivossTable)
+
+        Dim MyParAff As Struc_Affichage
+        Dim yMin, yMax, xMin, xMax As Double
+        Dim kECH As Single = 1
+
+        Dim nbPoints As Integer    'Nombre de points par ligne frontière
+        Dim DonneeY() As Decimal                            'Ensemble des points y (Hz)
+        Dim DonneeX As New List(Of Decimal())
+        Dim MyPen As New Pen(Color.Black)
+        Dim MyPenbrush As New SolidBrush(Color.Black)
+        Dim MyBrush As SolidBrush
+        Dim dCar, Decal As Double
+        Dim Balise() As Decimal = {100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000}
+        Dim xPts(), yPts() As Single
+        Dim nbPts As Integer
+
+        '--> Intialisation
+
+        MyFont = New Font("Arial", 8.25, FontStyle.Regular)
+        ChargerValeursHivoss(AllFloorVibration)
+        nbPoints = AllFloorVibration(MyDamp).nbLigne
+        ReDim DonneeY(nbPoints - 1)
+
+        dCar = (((Math.Log10(100000) - Math.Log10(100)) ^ 2 + (Math.Log10(20) - Math.Log10(1)) ^ 2) ^ 0.5) / 10
+        Decal = dCar / 2
+
+        '--> Récupération des données
+
+        MyHivoss.RecupereDonnees(MyDamp, nbPoints, DonneeX, DonneeY)
+        TraitementDonnees(nbPoints, DonneeX, DonneeY)
+
+        '--> Paramètres d'affichage 
+
+        xMin = Math.Log10(100)
+        xMax = Math.Log10(100000)
+        yMin = Math.Log10(1) * Coeff
+        yMax = Math.Log10(20) * Coeff
+
+        ParametresAffichage(MyParAff, xMin, yMin, (xMax - xMin) / kECH, (yMax - yMin) / kECH, Width, Height, xLeft, yTop)
+
+        '==> Dessin Frontières <=======================================================================================
+
+        '--> Zone A (blanc)
+
+        MyBrush = New SolidBrush(Colors(6))
+
+        nbPts = 4
+        xPts = New Single() {100, 100, 100000, 100000}
+        yPts = New Single() {1, 20, 20, 1}
+
+        PreparePoints(nbPts, xPts, yPts)
+
+        RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAff, True)
+
+        '--> Zona B à !
+        For i = nbFrontières - 1 To 0 Step -1   '--> boucle sur les frontières
+
+            MyBrush = New SolidBrush(Colors(i))
+
+            nbPts = nbPoints + 2
+            ReDim xPts(nbPts - 1)
+            ReDim yPts(nbPts - 1)
+
+            xPts(0) = 100 : yPts(0) = 20
+            xPts(1) = 100 : yPts(1) = 1
+            For j = 0 To nbPoints - 1
+                xPts(j + 2) = DonneeX.Item(j)(i)
+                yPts(j + 2) = DonneeY(j)
+            Next
+            PreparePoints(nbPts, xPts, yPts)
+
+            RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAff, True)
+
+        Next
+
+        '===> Dessin Quadrillage <=====================================================================================
+
+        '==> Traits horizontaux Fréquences propres (1 à 20 Hz)
+
+        For i = 1 To 20 Step 1
+            AddLigne(MyGr, MyPen, Math.Log10(100), Math.Log10(i) * Coeff, Math.Log10(100000), Math.Log10(i) * Coeff, MyParAff)
+            AddTexte(MyGr, MyPenbrush, i.ToString, MyFont, Math.Log10(100) - Decal / 2.5, Math.Log10(i) * Coeff, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle)
+        Next
+
+        '==> Traits verticaux Masses modales
+
+        '--> 200 à 1000
+        For i = 200 To 1000 Step 100
+
+            AddLigne(MyGr, MyPen, Math.Log10(i), Math.Log10(1) * Coeff, Math.Log10(i), Math.Log10(20) * Coeff, MyParAff)
+
+        Next
+
+        '--> 2000 à 10000
+
+        For i = 2000 To 10000 Step 1000
+
+            AddLigne(MyGr, MyPen, Math.Log10(i), Math.Log10(1) * Coeff, Math.Log10(i), Math.Log10(20) * Coeff, MyParAff)
+
+        Next
+
+        '--> 20000 à 90000
+
+        For i = 20000 To 90000 Step 10000
+
+            AddLigne(MyGr, MyPen, Math.Log10(i), Math.Log10(1) * Coeff, Math.Log10(i), Math.Log10(20) * Coeff, MyParAff)
+
+        Next
+
+        For i = 0 To Balise.GetUpperBound(0)
+            AddTexte(MyGr, MyPenbrush, Balise(i).ToString, MyFont, Math.Log10(Balise(i)), Math.Log10(1) * Coeff - Decal / 2.5, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle)
+        Next
+
+        '==> Dessin Légende <==========================================================================================
+
+        Dim d As Decimal = (Math.Log10(100000) - Math.Log10(100)) / 7
+        nbPts = 5
+        ReDim xPts(nbPts - 1)
+        ReDim yPts(nbPts - 1)
+        Const kDec As Double = 1.25
+        Dim FontColors() As Color = {Color.White, Color.Black, Color.Black, Color.Black, Color.White, Color.White, Color.Black}
+        Dim MyFontLeg = New Font("Arial", 8.25, FontStyle.Bold)
+
+        For i = 0 To 6
+
+            xPts(0) = Math.Log10(100) + d * i : yPts(0) = Math.Log10(1) * Coeff - Decal * kDec
+            xPts(1) = Math.Log10(100) + d * (i + 1) : yPts(1) = Math.Log10(1) * Coeff - Decal * kDec
+            xPts(2) = Math.Log10(100) + d * (i + 1) : yPts(2) = Math.Log10(1) * Coeff - Decal * (kDec + 0.5)
+            xPts(3) = Math.Log10(100) + d * i : yPts(3) = Math.Log10(1) * Coeff - Decal * (kDec + 0.5)
+            xPts(4) = Math.Log10(100) + d * i : yPts(4) = Math.Log10(1) * Coeff - Decal * kDec
+
+            MyBrush = New SolidBrush(Colors(i))
+
+            RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAff, True)
+
+            AddTexte(MyGr, New SolidBrush(FontColors(i)), LettresIntervalles(i), MyFontLeg, Math.Log10(100) + (d * (i + 1)) - d / 2, Math.Log10(1) * Coeff - Decal * kDec, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+
+            If i <> 6 Then
+                AddTexte(MyGr, MyPenbrush, LimitesIntervalles(i), MyFont, Math.Log10(100) + (d * (i + 1)), Math.Log10(1) * Coeff - Decal * (kDec + 0.5), MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+            End If
+
+        Next
+
+        AddTexte(MyGr, MyPenbrush, "OS-RMS90 (m/s)", MyFontLeg, Math.Log10(100), Math.Log10(1) * Coeff - Decal * (kDec + 0.5), MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+
+        AddTexte(MyGr, MyPenbrush, "f (Hz)", MyFontLeg, Math.Log10(100), Math.Log10(20) * Coeff + 0.75 * Decal, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle)
+        AddTexte(MyGr, MyPenbrush, "m (kg)", MyFontLeg, Math.Log10(100000), Math.Log10(1) * Coeff - 0.75 * Decal, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle)
+
+        '==> TITRE AMORTISSEMENT <======================================================================================
+
+        Dim xo, xe, yo, ye As Single
+        Dim Titre As String = strDamp & " = " & MyDamp.ToString & "%"
+        Dim LargeurT As Single = MyGr.MeasureString(Titre, MyFontLeg).Width / MyParAff.CRed
+        Dim HauteurT As Single = MyGr.MeasureString(Titre, MyFontLeg).Height / MyParAff.CRed
+        Const kCoefL As Single = 1.33
+        Dim Marge As Single = LargeurT / 1.5
+
+        xo = (Math.Log10(MASSMODMIN) + Math.Log10(MASSMODMAX)) / 2 - LargeurT * kCoefL / 2 - Marge
+        xe = (Math.Log10(MASSMODMIN) + Math.Log10(MASSMODMAX)) / 2 + LargeurT * kCoefL / 2 + Marge
+        yo = Math.Log10(20) * Coeff + 0.75 * Decal + HauteurT * kCoefL / 2
+        ye = Math.Log10(20) * Coeff + 0.75 * Decal - HauteurT * kCoefL / 2
+        AddRectanglePlein(MyGr, Color.Gray, xo, yo, xe, ye, MyParAff, False)
+        AddTexte(MyGr, New SolidBrush(Color.White), Titre, MyFontLeg, (Math.Log10(MASSMODMIN) + Math.Log10(MASSMODMAX)) / 2, Math.Log10(20) * Coeff + 0.75 * Decal, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle)
+
+        '==> Dessin Point donné <=======================================================================================
+
+        MyPen.Width = 2
+
+        Dim Frequence As Decimal = Math.Min(20, Math.Max(2, MyFreq))
+        Dim Masse As Decimal = Math.Min(MASSMODMAX, Math.Max(MASSMODMIN, MyMass))
+
+        AddLigne(MyGr, MyPen, Math.Log10(Masse), Math.Log10(Frequence) * Coeff - Decal / 4, Math.Log10(Masse), Math.Log10(Frequence) * Coeff + Decal / 4, MyParAff)
+        AddLigne(MyGr, MyPen, Math.Log10(Masse) - Decal / 4, Math.Log10(Frequence) * Coeff, Math.Log10(Masse) + Decal / 4, Math.Log10(Frequence) * Coeff, MyParAff)
+        AddCercle(MyGr, MyPen, Math.Log10(Masse), Math.Log10(Frequence) * Coeff, Decal / 2, MyParAff)
+
+    End Sub
+
+    Private Sub TraitementDonnees(ByVal nbPoints As Integer, ByRef DonneeX As List(Of Decimal()), ByRef DonneeY() As Decimal)
+
+        Dim i As Integer
+
+        '--> Modification des données pour le dessin
+        For i = 0 To nbPoints - 1
+
+            ' -1 au débout = 100
+            Dim y As Integer = 0
+            If DonneeX.Item(i)(0) = -1 Then
+                While DonneeX.Item(i)(y) = -1 And y < 6
+                    DonneeX.Item(i)(y) = 100
+                    y += 1
+                End While
+            End If
+
+            ' -1 à la fin = 100000
+            Dim z As Integer = 5
+            If DonneeX.Item(i)(5) = -1 Then
+                While DonneeX.Item(i)(z) = -1 And z >= 0
+                    DonneeX.Item(i)(z) = 100000
+                    z -= 1
+                End While
+            End If
+
+        Next
+
+    End Sub
+    Private Sub PreparePoints(ByVal nbPts As Integer, ByRef xPts() As Single, ByRef yPts() As Single)
+
+        For i As Integer = 0 To nbPts - 1
+            xPts(i) = CSng(Math.Log10(xPts(i)))
+            yPts(i) = CSng(Math.Log10(yPts(i)) * Coeff)
+        Next
+
+    End Sub
+
+#End Region
+
+
 End Module

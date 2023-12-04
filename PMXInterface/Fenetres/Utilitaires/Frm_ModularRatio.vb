@@ -451,7 +451,7 @@ Public Class Frm_ModularRatio
     Private Sub img_BetaFcm_Paint(sender As Object, e As PaintEventArgs) Handles img_BetaFcm.Paint
         Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
         ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        Dim myFormul As String = "\Sb\s(\If\i\-cm\=) ="
+        Dim myFormul As String = "\Sb\s(" & strItal & "f\i\-cm\=) ="
 
         DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
 
@@ -460,7 +460,7 @@ Public Class Frm_ModularRatio
     Private Sub img_PhiT_Paint(sender As Object, e As PaintEventArgs) Handles img_PhiT.Paint
         Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
         ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        Dim myFormul As String = "\Sj\s(\It\i, \It\i\-0\=) ="
+        Dim myFormul As String = "\Sj\s(" & strItal & "t\i, " & strItal & "t\i\-0\=) ="
 
         DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
 
@@ -469,7 +469,7 @@ Public Class Frm_ModularRatio
     Private Sub imgBetaC_Paint(sender As Object, e As PaintEventArgs) Handles imgBetaC.Paint
         Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
         ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        Dim myFormul As String = "\Sb\s\-c\=(\It\i, \It\i\-0\=) ="
+        Dim myFormul As String = "\Sb\s\-c\=(" & strItal & "t\i, " & strItal & "t\i\-0\=) ="
 
         DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
 
@@ -487,13 +487,13 @@ Public Class Frm_ModularRatio
     Private Sub img_BetaT0_Paint(sender As Object, e As PaintEventArgs) Handles img_BetaT0.Paint
         Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
         ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
-        Dim myFormul As String = "\Sb\s(\It\i\-0\=) ="
+        Dim myFormul As String = "\Sb\s(" & strItal & "t\i\-0\=) ="
 
         DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
 
     End Sub
 
-
+    Const strItal As String = "\i"
 #End Region
 
 End Class

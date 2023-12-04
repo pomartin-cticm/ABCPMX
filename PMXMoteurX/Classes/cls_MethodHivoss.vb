@@ -1,5 +1,6 @@
 ﻿Imports System.Xml
 
+
 Public Class cls_MethodHivoss
 
 #Region " Enumérations "
@@ -1126,6 +1127,56 @@ Public Class cls_MethodHivoss
         Return Indice
 
     End Function
+
+
+#End Region
+
+
+#Region " Outils pour les routines dessins "
+
+    Public Sub RecupereDonnees(ByVal MyDamp As Integer, ByVal nbPoints As Integer, ByRef DonneeX As List(Of Decimal()), ByRef DonneeY() As Decimal)
+        '--------------------------------------------------------------------------------------------------
+        '   04/12/23 :  Création - Version 1.00
+        '--------------------------------------------------------------------------------------------------
+        '   Récupération des points à tracer pour le diagramme (en fonction de l'amortissement)
+        '--------------------------------------------------------------------------------------------------
+        '   MyDamp          [E] :   Amortissement
+        '   nbPoints        [E] :   Nombre de points dans les courbes
+        '   DonneeX         [S] :   Liste des abscisses
+        '   DonneeY         [S] :   Liste des ordonnées
+        '--------------------------------------------------------------------------------------------------
+        Select Case MyDamp
+            Case 1
+                TransfertTable(P1, nbPoints, DonneeX, DonneeY)
+            Case 2
+                TransfertTable(P2, nbPoints, DonneeX, DonneeY)
+            Case 3
+                TransfertTable(P3, nbPoints, DonneeX, DonneeY)
+            Case 4
+                TransfertTable(P4, nbPoints, DonneeX, DonneeY)
+            Case 5
+                TransfertTable(P5, nbPoints, DonneeX, DonneeY)
+            Case 6
+                TransfertTable(P6, nbPoints, DonneeX, DonneeY)
+            Case 7
+                TransfertTable(P7, nbPoints, DonneeX, DonneeY)
+            Case 8
+                TransfertTable(P8, nbPoints, DonneeX, DonneeY)
+            Case 9
+                TransfertTable(P9, nbPoints, DonneeX, DonneeY)
+        End Select
+
+    End Sub
+    Private Sub TransfertTable(ByVal MyP As strHivossTable, ByVal nbPoints As Integer, ByRef DonneeX As List(Of Decimal()), ByRef DonneeY() As Decimal)
+
+        Dim i As Integer
+
+        For i = 0 To nbPoints - 1
+            DonneeY(i) = MyP.listeFrequence(i)
+            DonneeX.Add(MyP.listeLigneMasse(i).valeurs.Clone)
+        Next
+
+    End Sub
 
 
 #End Region

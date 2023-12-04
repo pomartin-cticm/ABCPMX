@@ -345,6 +345,12 @@
     <Compile Include="Fenetres\Options\Frm_OptionsLogicielGeneral.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielNdC.Designer.vb">
+      <DependentUpon>Frm_OptionsLogicielNdC.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Options\Frm_OptionsLogicielNdC.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Options\Frm_OptionsLogicielUnits.Designer.vb">
       <DependentUpon>Frm_OptionsLogicielUnits.vb</DependentUpon>
     </Compile>
@@ -525,6 +531,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielGeneral.resx">
       <DependentUpon>Frm_OptionsLogicielGeneral.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielNdC.resx">
+      <DependentUpon>Frm_OptionsLogicielNdC.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsLogicielUnits.resx">
       <DependentUpon>Frm_OptionsLogicielUnits.vb</DependentUpon>

@@ -300,6 +300,30 @@ Module Mod_OutilsGraph
 
 #Region "   Cercles "
 
+    Sub AddCercle(ByRef MyGr As Graphics, ByVal MyPen As Pen,
+                  ByVal xC As Double, ByVal yC As Double,
+                  ByVal Diametre As Double,
+                  ByVal ParAff As Struc_Affichage)
+        '----------------------------------------------------------------------------------------
+        '   04/12/23 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------
+        '   Affichage d'un cercle
+        '----------------------------------------------------------------------------------------
+        '   MyGr        [E] :   
+        '   MyPen       [E] :   
+        '   xC, yC      [E] :   Centre du cercle
+        '   Diametre    [E] :   Diamètre du cercle
+        '   ParAff      [E] :   Paramètre d'affichage
+        '----------------------------------------------------------------------------------------
+
+        Dim xEo As Single = XEcran(ParAff, xC)
+        Dim yEo As Single = YEcran(ParAff, yC)
+        Dim DiaE As Single = CSng(ParAff.CRed * Diametre)
+
+        MyGr.DrawEllipse(MyPen, xEo - DiaE / 2, yEo - DiaE / 2, DiaE, DiaE)
+
+    End Sub
+
     Sub AddCercleTronque(ByVal MyGr As Graphics, ByVal MyBrush As Brush, ByVal MyHatch As Brush, _
                          ByVal xC As Double, ByVal yC As Double, ByVal Diametre As Double, _
                          ByVal xCoupe As Double, ByVal lGauche As Boolean, ByVal MyParAff As struc_Affichage)

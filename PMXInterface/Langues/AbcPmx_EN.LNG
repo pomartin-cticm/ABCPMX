@@ -766,8 +766,15 @@ GENERAL					= General parameters
 DIRECTORIES				= Directories
 UNITS					= Units
 DATABASES				= Databases
+CALCULSHEET				= Calculation sheet
 EXPERT					= Expert Mode
 EXPERTMODEACTIVE		= Expert Mode active
+
+#OPTSOFTCALCULSHEET
+FORCESANDMOMENTS		= Forces and moments
+SLS						= Serviceability Limit States
+HIVOSS					= Hivoss method for vibratory comfort
+SHOWHIVOSSCURVE			= Show Hivoss diagram
 
 #OPTSOFTDATABASES
 DATABASES				= Databases

@@ -28,6 +28,8 @@ Partial Class Frm_OptionsLogiciel
         Me.pan_Contenu = New System.Windows.Forms.Panel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.PoMbtn_NdC = New PMXInterface.POMbutton()
+        Me.PoMbtn_Databases = New PMXInterface.POMbutton()
         Me.PoMbtn_Expert = New PMXInterface.POMbutton()
         Me.PoMbtn_Units = New PMXInterface.POMbutton()
         Me.PoMbtn_Directories = New PMXInterface.POMbutton()
@@ -38,7 +40,6 @@ Partial Class Frm_OptionsLogiciel
         Me.pan_Expert = New System.Windows.Forms.Panel()
         Me.lbl_ExpertMode = New System.Windows.Forms.Label()
         Me.img_Expert = New System.Windows.Forms.PictureBox()
-        Me.PoMbtn_Databases = New PMXInterface.POMbutton()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
@@ -100,18 +101,20 @@ Partial Class Frm_OptionsLogiciel
         '
         Me.TLpan_Gauche.ColumnCount = 1
         Me.TLpan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_Gauche.Controls.Add(Me.PoMbtn_NdC, 0, 4)
         Me.TLpan_Gauche.Controls.Add(Me.PoMbtn_Databases, 0, 3)
-        Me.TLpan_Gauche.Controls.Add(Me.PoMbtn_Expert, 0, 4)
+        Me.TLpan_Gauche.Controls.Add(Me.PoMbtn_Expert, 0, 5)
         Me.TLpan_Gauche.Controls.Add(Me.PoMbtn_Units, 0, 2)
         Me.TLpan_Gauche.Controls.Add(Me.PoMbtn_Directories, 0, 1)
-        Me.TLpan_Gauche.Controls.Add(Me.TLpan_PourLesBoutons, 0, 7)
+        Me.TLpan_Gauche.Controls.Add(Me.TLpan_PourLesBoutons, 0, 8)
         Me.TLpan_Gauche.Controls.Add(Me.PoMBtn_General, 0, 0)
-        Me.TLpan_Gauche.Controls.Add(Me.pan_Expert, 0, 6)
+        Me.TLpan_Gauche.Controls.Add(Me.pan_Expert, 0, 7)
         Me.TLpan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLpan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(1)
         Me.TLpan_Gauche.Name = "TLpan_Gauche"
-        Me.TLpan_Gauche.RowCount = 8
+        Me.TLpan_Gauche.RowCount = 9
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
@@ -123,6 +126,48 @@ Partial Class Frm_OptionsLogiciel
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Gauche.Size = New System.Drawing.Size(249, 453)
         Me.TLpan_Gauche.TabIndex = 0
+        '
+        'PoMbtn_NdC
+        '
+        Me.PoMbtn_NdC.Caption = "PoMbtn_NdC"
+        Me.PoMbtn_NdC.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
+        Me.PoMbtn_NdC.Checked = False
+        Me.PoMbtn_NdC.CouleurChecked = System.Drawing.Color.Orange
+        Me.PoMbtn_NdC.CouleurContour = System.Drawing.Color.Black
+        Me.PoMbtn_NdC.CouleurContourChecked = System.Drawing.Color.Black
+        Me.PoMbtn_NdC.CouleurContourMouseOn = System.Drawing.Color.Black
+        Me.PoMbtn_NdC.CouleurFond = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_NdC.CouleurForGradient = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_NdC.CouleurMouseOnBtn = System.Drawing.Color.Yellow
+        Me.PoMbtn_NdC.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PoMbtn_NdC.Enable = True
+        Me.PoMbtn_NdC.LContourFond = True
+        Me.PoMbtn_NdC.Location = New System.Drawing.Point(3, 163)
+        Me.PoMbtn_NdC.Name = "PoMbtn_NdC"
+        Me.PoMbtn_NdC.RatioArrondi = 0!
+        Me.PoMbtn_NdC.Size = New System.Drawing.Size(243, 34)
+        Me.PoMbtn_NdC.TabIndex = 8
+        '
+        'PoMbtn_Databases
+        '
+        Me.PoMbtn_Databases.Caption = "PoMbtn_DataBases"
+        Me.PoMbtn_Databases.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
+        Me.PoMbtn_Databases.Checked = False
+        Me.PoMbtn_Databases.CouleurChecked = System.Drawing.Color.Orange
+        Me.PoMbtn_Databases.CouleurContour = System.Drawing.Color.Black
+        Me.PoMbtn_Databases.CouleurContourChecked = System.Drawing.Color.Black
+        Me.PoMbtn_Databases.CouleurContourMouseOn = System.Drawing.Color.Black
+        Me.PoMbtn_Databases.CouleurFond = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Databases.CouleurForGradient = System.Drawing.Color.WhiteSmoke
+        Me.PoMbtn_Databases.CouleurMouseOnBtn = System.Drawing.Color.Yellow
+        Me.PoMbtn_Databases.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PoMbtn_Databases.Enable = True
+        Me.PoMbtn_Databases.LContourFond = True
+        Me.PoMbtn_Databases.Location = New System.Drawing.Point(3, 123)
+        Me.PoMbtn_Databases.Name = "PoMbtn_Databases"
+        Me.PoMbtn_Databases.RatioArrondi = 0!
+        Me.PoMbtn_Databases.Size = New System.Drawing.Size(243, 34)
+        Me.PoMbtn_Databases.TabIndex = 7
         '
         'PoMbtn_Expert
         '
@@ -139,7 +184,7 @@ Partial Class Frm_OptionsLogiciel
         Me.PoMbtn_Expert.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PoMbtn_Expert.Enable = True
         Me.PoMbtn_Expert.LContourFond = True
-        Me.PoMbtn_Expert.Location = New System.Drawing.Point(3, 163)
+        Me.PoMbtn_Expert.Location = New System.Drawing.Point(3, 203)
         Me.PoMbtn_Expert.Name = "PoMbtn_Expert"
         Me.PoMbtn_Expert.RatioArrondi = 0!
         Me.PoMbtn_Expert.Size = New System.Drawing.Size(243, 34)
@@ -274,27 +319,6 @@ Partial Class Frm_OptionsLogiciel
         Me.img_Expert.TabIndex = 38
         Me.img_Expert.TabStop = False
         '
-        'PoMbtn_Databases
-        '
-        Me.PoMbtn_Databases.Caption = "PoMbtn_DataBases"
-        Me.PoMbtn_Databases.CaptionAlignement = System.Windows.Forms.HorizontalAlignment.Center
-        Me.PoMbtn_Databases.Checked = False
-        Me.PoMbtn_Databases.CouleurChecked = System.Drawing.Color.Orange
-        Me.PoMbtn_Databases.CouleurContour = System.Drawing.Color.Black
-        Me.PoMbtn_Databases.CouleurContourChecked = System.Drawing.Color.Black
-        Me.PoMbtn_Databases.CouleurContourMouseOn = System.Drawing.Color.Black
-        Me.PoMbtn_Databases.CouleurFond = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Databases.CouleurForGradient = System.Drawing.Color.WhiteSmoke
-        Me.PoMbtn_Databases.CouleurMouseOnBtn = System.Drawing.Color.Yellow
-        Me.PoMbtn_Databases.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PoMbtn_Databases.Enable = True
-        Me.PoMbtn_Databases.LContourFond = True
-        Me.PoMbtn_Databases.Location = New System.Drawing.Point(3, 123)
-        Me.PoMbtn_Databases.Name = "PoMbtn_Databases"
-        Me.PoMbtn_Databases.RatioArrondi = 0!
-        Me.PoMbtn_Databases.Size = New System.Drawing.Size(243, 34)
-        Me.PoMbtn_Databases.TabIndex = 7
-        '
         'Frm_OptionsLogiciel
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -332,4 +356,5 @@ Partial Class Frm_OptionsLogiciel
     Friend WithEvents lbl_ExpertMode As Label
     Friend WithEvents img_Expert As PictureBox
     Friend WithEvents PoMbtn_Databases As POMbutton
+    Friend WithEvents PoMbtn_NdC As POMbutton
 End Class

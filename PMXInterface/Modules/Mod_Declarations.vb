@@ -498,6 +498,15 @@ Module Mod_Declarations
 
 #Region " Note de calcul "
 
+    Public Structure struc_OptionsNdC
+        Dim lShowHivossCurve As Boolean
+    End Structure
+    Public OptionsNdC As struc_OptionsNdC
+
+    Public Sub InitialiseOptionsNdC()
+        OptionsNdC.lShowHivossCurve = True
+    End Sub
+
     Public MyNote As Cls_Rapport
 
     Public Enum PositionTexteInCell
@@ -546,6 +555,7 @@ Module Mod_Declarations
         Units
         Databases
         Expert
+        NoteCalcul
     End Enum
 
     Public Structure strucLastIndexWindow

@@ -424,6 +424,7 @@ Public Class Frm_OptionsCalcul
         If SenderName <> Me.PoMBtn_Gamma.Name Then Me.PoMBtn_Gamma.Checked = False
         If SenderName <> Me.PoMbtn_Scope.Name Then Me.PoMbtn_Scope.Checked = False
         If SenderName <> Me.PoMbtn_Calcul.Name Then Me.PoMbtn_Calcul.Checked = False
+        If SenderName <> Me.PoMbtn_Fire.Name Then Me.PoMbtn_Fire.Checked = False
 
     End Sub
 

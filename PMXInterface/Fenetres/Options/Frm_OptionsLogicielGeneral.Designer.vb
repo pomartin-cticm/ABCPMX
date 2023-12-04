@@ -23,7 +23,11 @@ Partial Class Frm_OptionsLogicielGeneral
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.pan_General = New System.Windows.Forms.Panel()
-        Me.pan_Indentification = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.lbl_UserName = New System.Windows.Forms.Label()
+        Me.txt_UserName = New System.Windows.Forms.TextBox()
+        Me.lbl_Firm = New System.Windows.Forms.Label()
+        Me.txt_Firm = New System.Windows.Forms.TextBox()
         Me.lbl_Identification = New System.Windows.Forms.Label()
         Me.pan_Langues = New System.Windows.Forms.Panel()
         Me.lbl_LangueNdC = New System.Windows.Forms.Label()
@@ -31,19 +35,15 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_LangueGUI = New System.Windows.Forms.Label()
         Me.lst_LangueGUI = New System.Windows.Forms.ListBox()
         Me.lbl_Langues = New System.Windows.Forms.Label()
-        Me.lbl_UserName = New System.Windows.Forms.Label()
-        Me.txt_UserName = New System.Windows.Forms.TextBox()
-        Me.lbl_Firm = New System.Windows.Forms.Label()
-        Me.txt_Firm = New System.Windows.Forms.TextBox()
         Me.pan_General.SuspendLayout()
-        Me.pan_Indentification.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.pan_Langues.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
         '
         Me.pan_General.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_General.Controls.Add(Me.pan_Indentification)
+        Me.pan_General.Controls.Add(Me.Panel1)
         Me.pan_General.Controls.Add(Me.pan_Langues)
         Me.pan_General.Location = New System.Drawing.Point(83, 30)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
@@ -51,19 +51,51 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.pan_General.Size = New System.Drawing.Size(739, 472)
         Me.pan_General.TabIndex = 1
         '
-        'pan_Indentification
+        'Panel1
         '
-        Me.pan_Indentification.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pan_Indentification.Controls.Add(Me.lbl_UserName)
-        Me.pan_Indentification.Controls.Add(Me.txt_UserName)
-        Me.pan_Indentification.Controls.Add(Me.lbl_Firm)
-        Me.pan_Indentification.Controls.Add(Me.txt_Firm)
-        Me.pan_Indentification.Controls.Add(Me.lbl_Identification)
-        Me.pan_Indentification.Location = New System.Drawing.Point(3, 146)
-        Me.pan_Indentification.Name = "pan_Indentification"
-        Me.pan_Indentification.Size = New System.Drawing.Size(733, 96)
-        Me.pan_Indentification.TabIndex = 99
+        Me.Panel1.Controls.Add(Me.lbl_UserName)
+        Me.Panel1.Controls.Add(Me.txt_UserName)
+        Me.Panel1.Controls.Add(Me.lbl_Firm)
+        Me.Panel1.Controls.Add(Me.txt_Firm)
+        Me.Panel1.Controls.Add(Me.lbl_Identification)
+        Me.Panel1.Location = New System.Drawing.Point(3, 144)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(733, 96)
+        Me.Panel1.TabIndex = 101
+        '
+        'lbl_UserName
+        '
+        Me.lbl_UserName.Location = New System.Drawing.Point(6, 58)
+        Me.lbl_UserName.Name = "lbl_UserName"
+        Me.lbl_UserName.Size = New System.Drawing.Size(78, 20)
+        Me.lbl_UserName.TabIndex = 100
+        Me.lbl_UserName.Text = "lbl_Us.."
+        Me.lbl_UserName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txt_UserName
+        '
+        Me.txt_UserName.Location = New System.Drawing.Point(90, 59)
+        Me.txt_UserName.Name = "txt_UserName"
+        Me.txt_UserName.Size = New System.Drawing.Size(189, 20)
+        Me.txt_UserName.TabIndex = 99
+        '
+        'lbl_Firm
+        '
+        Me.lbl_Firm.Location = New System.Drawing.Point(6, 32)
+        Me.lbl_Firm.Name = "lbl_Firm"
+        Me.lbl_Firm.Size = New System.Drawing.Size(78, 20)
+        Me.lbl_Firm.TabIndex = 98
+        Me.lbl_Firm.Text = "lbl_Firm"
+        Me.lbl_Firm.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'txt_Firm
+        '
+        Me.txt_Firm.Location = New System.Drawing.Point(90, 33)
+        Me.txt_Firm.Name = "txt_Firm"
+        Me.txt_Firm.Size = New System.Drawing.Size(189, 20)
+        Me.txt_Firm.TabIndex = 97
         '
         'lbl_Identification
         '
@@ -86,10 +118,10 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.pan_Langues.Controls.Add(Me.lbl_LangueGUI)
         Me.pan_Langues.Controls.Add(Me.lst_LangueGUI)
         Me.pan_Langues.Controls.Add(Me.lbl_Langues)
-        Me.pan_Langues.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Langues.Location = New System.Drawing.Point(3, 1)
         Me.pan_Langues.Name = "pan_Langues"
         Me.pan_Langues.Size = New System.Drawing.Size(733, 137)
-        Me.pan_Langues.TabIndex = 98
+        Me.pan_Langues.TabIndex = 100
         '
         'lbl_LangueNdC
         '
@@ -139,38 +171,6 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_Langues.Text = "lbl_Langues"
         Me.lbl_Langues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'lbl_UserName
-        '
-        Me.lbl_UserName.Location = New System.Drawing.Point(6, 58)
-        Me.lbl_UserName.Name = "lbl_UserName"
-        Me.lbl_UserName.Size = New System.Drawing.Size(78, 20)
-        Me.lbl_UserName.TabIndex = 100
-        Me.lbl_UserName.Text = "lbl_Us.."
-        Me.lbl_UserName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txt_UserName
-        '
-        Me.txt_UserName.Location = New System.Drawing.Point(90, 59)
-        Me.txt_UserName.Name = "txt_UserName"
-        Me.txt_UserName.Size = New System.Drawing.Size(189, 20)
-        Me.txt_UserName.TabIndex = 99
-        '
-        'lbl_Firm
-        '
-        Me.lbl_Firm.Location = New System.Drawing.Point(6, 32)
-        Me.lbl_Firm.Name = "lbl_Firm"
-        Me.lbl_Firm.Size = New System.Drawing.Size(78, 20)
-        Me.lbl_Firm.TabIndex = 98
-        Me.lbl_Firm.Text = "lbl_Firm"
-        Me.lbl_Firm.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txt_Firm
-        '
-        Me.txt_Firm.Location = New System.Drawing.Point(90, 33)
-        Me.txt_Firm.Name = "txt_Firm"
-        Me.txt_Firm.Size = New System.Drawing.Size(189, 20)
-        Me.txt_Firm.TabIndex = 97
-        '
         'Frm_OptionsLogicielGeneral
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -181,8 +181,8 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.Name = "Frm_OptionsLogicielGeneral"
         Me.Text = "Frm_OptionsLogicielGeneral"
         Me.pan_General.ResumeLayout(False)
-        Me.pan_Indentification.ResumeLayout(False)
-        Me.pan_Indentification.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.pan_Langues.ResumeLayout(False)
         Me.pan_Langues.PerformLayout()
         Me.ResumeLayout(False)
@@ -190,16 +190,16 @@ Partial Class Frm_OptionsLogicielGeneral
     End Sub
 
     Friend WithEvents pan_General As Panel
-    Friend WithEvents lbl_Langues As Label
-    Friend WithEvents pan_Indentification As Panel
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents lbl_UserName As Label
+    Friend WithEvents txt_UserName As TextBox
+    Friend WithEvents lbl_Firm As Label
+    Friend WithEvents txt_Firm As TextBox
     Friend WithEvents lbl_Identification As Label
     Friend WithEvents pan_Langues As Panel
     Friend WithEvents lbl_LangueNdC As Label
     Friend WithEvents lst_LangueNdC As ListBox
     Friend WithEvents lbl_LangueGUI As Label
     Friend WithEvents lst_LangueGUI As ListBox
-    Friend WithEvents lbl_UserName As Label
-    Friend WithEvents txt_UserName As TextBox
-    Friend WithEvents lbl_Firm As Label
-    Friend WithEvents txt_Firm As TextBox
+    Friend WithEvents lbl_Langues As Label
 End Class

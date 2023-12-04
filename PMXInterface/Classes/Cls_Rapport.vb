@@ -1185,6 +1185,21 @@ Public Class Cls_Rapport
 
                     DessinFrmEnrobage(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage, sWiImg, sHiImg, 0.9, False, False, -1, xLeftImg, YPen)
 
+                Case "HIVOSS"
+
+                    Dim MyDamp As Integer
+                    Dim MyFreq As Decimal
+                    Dim MyMass As Decimal
+                    Dim strDamp As String
+
+                    MyDamp = CInt(TraiteReal(Mots(6)))
+                    MyFreq = CDec(TraiteReal(Mots(7)))
+                    MyMass = CDec(TraiteReal(Mots(8)))
+                    strDamp = Mots(9)
+
+                    DessinCourbeHivoss(MyProjet.Poutres(MyProjet.IndEnCours).Hivoss, MyGr, xLeftImg, YPen, sWiImg, sHiImg, MyDamp, MyFreq, MyMass, strDamp)
+
+
                 Case "CORRECT"
 
                     'sHiImg = sWiImg * Frm_NoteCalcul.Btn_Correct.Image.Height / Frm_NoteCalcul.Btn_Correct.Image.Width

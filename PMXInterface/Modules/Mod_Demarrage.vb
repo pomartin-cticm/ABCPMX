@@ -76,6 +76,10 @@ Module Mod_Demarrage
 
         InitialiseLangues()
 
+        '--> Options de la NdC
+
+        InitialiseOptionsNdC()
+
         '--> Normes
 
         LogicielInfo.ListeNorme = {"EN 1994-1-1", "prEN 1994-1-1"} 'Normes
