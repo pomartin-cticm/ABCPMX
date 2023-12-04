@@ -180,6 +180,14 @@ Public Class Frm_ModularRatio
 
 #End Region
 
+#Region " FERMETURE "
+
+    Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
+        Me.Close()
+    End Sub
+
+#End Region
+
 #Region " Mise à jour de la fenêtre"
 
     Private Sub MAJI_ProprietesBeton()
@@ -420,6 +428,68 @@ Public Class Frm_ModularRatio
 
         DrawSymbolN(e.Graphics, Brushes.Black, strSymbol, strIndice, sWI, sHI, lGrec, lIndice, AlignH,
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
+
+    End Sub
+
+
+#End Region
+
+
+#Region " Dessin des expressions (symboles) "
+
+    Private Sub PaintExpression(sender As Object, e As PaintEventArgs) Handles img_PhiRH.Paint
+
+        Dim myFormul As String = ""
+        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
+        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
+        myFormul = "\Sj\s\-RH\= ="
+
+        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_PhiRH.ClientRectangle.Width, Me.img_PhiRH.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
+
+    End Sub
+
+    Private Sub img_BetaFcm_Paint(sender As Object, e As PaintEventArgs) Handles img_BetaFcm.Paint
+        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
+        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
+        Dim myFormul As String = "\Sb\s(\If\i\-cm\=) ="
+
+        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
+
+    End Sub
+
+    Private Sub img_PhiT_Paint(sender As Object, e As PaintEventArgs) Handles img_PhiT.Paint
+        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
+        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
+        Dim myFormul As String = "\Sj\s(\It\i, \It\i\-0\=) ="
+
+        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
+
+    End Sub
+
+    Private Sub imgBetaC_Paint(sender As Object, e As PaintEventArgs) Handles imgBetaC.Paint
+        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
+        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
+        Dim myFormul As String = "\Sb\s\-c\=(\It\i, \It\i\-0\=) ="
+
+        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
+
+    End Sub
+
+    Private Sub img_Phi0_Paint(sender As Object, e As PaintEventArgs) Handles img_Phi0.Paint
+        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
+        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
+        Dim myFormul As String = "\Sj\s\-0\= ="
+
+        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
+
+    End Sub
+
+    Private Sub img_BetaT0_Paint(sender As Object, e As PaintEventArgs) Handles img_BetaT0.Paint
+        Dim MyFontNormal As New Font(Me.txt_AgeT.Font.Name, Me.txt_AgeT.Font.Size)
+        ' myFormul = "σ\-w\- = B\-ω\- / I\-w\- [MPa]"
+        Dim myFormul As String = "\Sb\s(\It\i\-0\=) ="
+
+        DrawExpression(e.Graphics, Brushes.Black, myFormul, Me.img_BetaFcm.ClientRectangle.Width, Me.img_BetaFcm.ClientRectangle.Height, MyFontNormal, Enu_AlignementH.Droite)
 
     End Sub
 

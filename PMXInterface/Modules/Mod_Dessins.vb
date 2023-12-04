@@ -3,6 +3,8 @@
 Imports System.Collections.Specialized.BitVector32
 Imports System.Drawing.Drawing2D
 Imports System.Windows
+Imports PMXInterface.Cls_Rapport
+Imports PMXInterface.Mod_MethodeHivoss
 Imports PMXMoteur2
 
 Module Mod_Dessins
@@ -7753,5 +7755,208 @@ Module Mod_Dessins
 
 #End Region
 
+#Region " Affichage d'expressions "
+
+    Public Sub DrawExpression(ByVal MyGr As Graphics, ByVal MyBrush As Brush,
+                              ByVal Expression As String, ByVal pWI As Single, ByVal pHI As Single,
+                              ByVal FontNormal As Font, Alignement As Enu_AlignementH)
+        '----------------------------------------------------------------------------------------
+        '   03/11/23 :  Création - LeT (créé pour le logiciel TORSION)
+        '----------------------------------------------------------------------------------------
+        '   Affichage d'une expréssion complète contenant plusieurs indices
+        '   Les indices sont encadrés par des "\-"
+        '   Les fractions sont encadrés par des "\f"
+        '   Le numérateur et le dénominateur des fractions sont séparés par "\d"
+        '----------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics dans lequel on dessine
+        '   MyBrush     [E] :   Pinceau pour écrire
+        '   Expression  [E] :   Expression à dessiner
+        '   xPen, yPen  [E] :   Position du stylo pour écrire
+        '   Alignement  [E] :   Alignement de l'expression
+        '   FontNormal  [E] :   Police de caractère normale
+        '   FontIndice  [E] :   Police de caractère pour les indices
+        '   DrawEgal    [E] :   Dessin du signe = à la fin
+        '----------------------------------------------------------------------------------------
+
+
+        '--> Déclarations
+
+        Dim Keys() As String = {"g", "G", "N", "n", "I", "i", "+", "-", "=", "S", "s"}
+        Dim kAdjust As Single = 0.75
+
+        Dim xPos As Single
+        Dim yPos As Single
+        Dim expressionW As Single
+        Dim expressionH As Single = MyGr.MeasureString("X", FontNormal).Height
+        Dim expressionClean As String = Expression
+        Dim lSymbol As Boolean, lIndice As Boolean, lGras As Boolean, lItalic As Boolean
+
+        '--> Initialisation
+
+        lSymbol = False
+        lIndice = False
+        lGras = False
+        lItalic = False
+
+        For i As Integer = 0 To Keys.GetUpperBound(0)
+            expressionClean = Replace(expressionClean, "\" & Keys(i), "")
+        Next
+
+        expressionW = LongueurExpression(MyGr, expressionClean, FontNormal)
+
+        Select Case Alignement
+            Case Enu_AlignementH.Gauche
+                'xPos = xPen - expressionWidth
+                xPos = pWI * (1 - kAdjust) / 2
+            Case Enu_AlignementH.Droite
+                xPos = pWI * (kAdjust + 1) / 2 - expressionW
+            Case Enu_AlignementH.Centre
+                xPos = pWI / 2 - expressionW / 2
+        End Select
+
+        yPos = pHI / 2 - expressionH / 2
+
+
+        DrawLigneExpression(MyGr, xPos, yPos, Expression, MyBrush, FontNormal, lSymbol, lIndice, lGras, lItalic)
+
+
+    End Sub
+
+    Private Sub GetMyPolice(FontNormalName As String, TaillePolice As Single, lSymbol As Boolean, lIndice As Boolean, lGras As Boolean, lItalic As Boolean,
+                            ByRef PoliceEnCours As Font, ByRef YDecal As Single)
+        '----------------------------------------------------------------------------------
+        '   04/12/23 :  Creation - POM - Version 1.00
+        '----------------------------------------------------------------------------------
+        '   Reglage de la police pour l'affichage d'une expression
+        '----------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim StyleEnCours As FontStyle
+        Dim NomPolice As String = ""
+        Dim DeltaT As Single
+        'Const TaillePolice As Single = 8
+
+        '--> Réglages
+
+        StyleEnCours = FontStyle.Regular
+        If lGras Then StyleEnCours = FontStyle.Bold
+        If lItalic Then StyleEnCours = StyleEnCours Or FontStyle.Italic
+        If lSymbol Then NomPolice = "Symbol" Else NomPolice = FontNormalName
+
+        If lIndice Then
+            DeltaT = 1
+            YDecal = +5 * TaillePolice / 10
+        Else
+            DeltaT = 0
+            YDecal = 0
+        End If
+
+        PoliceEnCours = New Font(NomPolice, (TaillePolice - DeltaT), StyleEnCours)
+
+    End Sub
+
+    Private Sub DrawLigneExpression(ByRef MyGr As Graphics, xPen As Single, yPen As Single, ByRef Expression As String,
+                                    ByRef MyBrush As System.Drawing.Brush, MyFont As Font,
+                                    ByRef lSymbol As Boolean, ByRef lIndice As Boolean, ByRef lGras As Boolean, ByRef lItalic As Boolean)
+        '----------------------------------------------------------------------------------
+        '   04/12/23 :  Creation - POM - Version 1.00
+        '----------------------------------------------------------------------------------
+        '   Affichage d'une expression
+        '----------------------------------------------------------------------------------
+        '   Expression  [E] :   Ligne à afficher
+        '   MyGr        [E] :   Graphics dans lequel on affiche
+        '   MyBrush     [E] :   Pinceau avec lequel on affiche
+        '   
+        '----------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Const AntiSlash As Char = "\"c
+
+        Dim Indice As Integer
+        Dim Mot, Cle As String
+        Dim Length As Integer = Expression.Length
+        'Dim MyText As String
+
+        ' HLIGNE = 0
+        Dim Police As Font = Nothing
+        Dim YDecal As Single
+
+        '--[ Recherche Mot Clé (repéré par antislash)
+
+        Indice = Expression.IndexOf(AntiSlash)
+
+        If Indice = -1 Then
+            '--[ Pas de mot clé : on écrit directement toute la ligne
+            GetMyPolice(MyFont.Name, MyFont.Size, lSymbol, lIndice, lGras, lItalic, Police, YDecal)
+            MyGr.DrawString(Expression, Police, MyBrush, xPen, yPen + YDecal)
+
+        Else
+            '--[ Au moins un mot clé dans la ligne
+            '--> Si le mot clé n'est pas au début, on écrit ce qu'il y a avant
+            If Indice > 0 Then
+                GetMyPolice(MyFont.Name, MyFont.Size, lSymbol, lIndice, lGras, lItalic, Police, YDecal)
+                Mot = Expression.Substring(0, Indice)
+                MyGr.DrawString(Mot, Police, MyBrush, xPen, yPen + YDecal)
+
+                xPen += MyGr.MeasureString(Mot, Police, New PointF(0, 0), StringFormat.GenericTypographic).Width
+            End If
+
+            '--> Traitement du mot clé
+
+            Cle = Expression.Substring(Indice + 1, Math.Min(1, Length - Indice - 1))
+            Dim lSuite As Boolean   'Indicateur pour savoir si il faut traiter la suite comme une ligne
+            Dim iMotCle As Integer
+            lSuite = (Length - Indice - 1) > 0
+            iMotCle = 1
+
+            Select Case Cle
+
+
+                Case "G" : lGras = True      'Mise en gras
+                Case "g" : lGras = False     'Fin du gras
+                Case "I" : lItalic = True    'Mise en italique
+                Case "i" : lItalic = False   'Fin Italique
+                Case "S" : lSymbol = True    'Police Symbol
+                Case "s" : lSymbol = False   'Police Normale
+                Case "=" : lIndice = False
+                'Case "+" : Me.StatutPolice = Enu_StatutPolice.Exposant
+                Case "-" : lIndice = True
+                Case "N", "n" : lSymbol = False : lGras = False : lItalic = False
+
+            End Select
+
+            If lSuite Then
+                DrawLigneExpression(MyGr, xPen, yPen, Expression.Substring(Indice + 1 + iMotCle), MyBrush, MyFont, lSymbol, lIndice, lGras, lItalic)
+            End If
+        End If
+
+    End Sub
+
+
+
+    Private Function LongueurExpression(ByVal MyGr As Graphics, ByVal Expression As String,
+                                        ByVal FontNormal As Font, Optional ByVal DrawEgal As Boolean = False) As Single
+        '----------------------------------------------------------------------------------------
+        '   20/09/23 :  Création - LeT (créé pour le logiciel TORSION)
+        '----------------------------------------------------------------------------------------
+        '   Fonction qui retourne la longueur d'une expression
+        '----------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics dans lequel on dessine
+        '   Expression  [E] :   Expression à dessiner
+        '   FontNormal  [E] :   Police de caractère normale
+        '   DrawEgal    [E] :   Dessin du signe = à la fin de l'expression
+        '----------------------------------------------------------------------------------------
+
+        If DrawEgal Then
+            Return MyGr.MeasureString(Expression, FontNormal).Width + MyGr.MeasureString("= ", FontNormal).Width
+        Else
+            Return MyGr.MeasureString(Expression, FontNormal).Width
+        End If
+
+    End Function
+
+#End Region
 
 End Module
