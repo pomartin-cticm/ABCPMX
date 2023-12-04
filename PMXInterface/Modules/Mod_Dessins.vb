@@ -7966,8 +7966,10 @@ Module Mod_Dessins
     Private Colors As Color() = {Color.Red, Color.Orange, Color.Yellow, Color.LimeGreen, Color.Blue, Color.DarkBlue, Color.White}
     Private Coeff As Decimal = 3.5          'Coeff multiplicateur sur les ordonnées (Hz) 
     Private nbFrontières As Integer = 6     'Nombre de lignes frontière
-    Private LimitesIntervalles As Decimal() = {51.2, 12.8, 3.2, 0.8, 0.2, 0.1, 0}   '--> Constantes des frontières
-    Private LettresIntervalles As Char() = {"!", "F", "E", "D", "C", "B", "A"}      '--> Catégories
+
+
+    Public Const MASSMODMIN As Decimal = 100
+    Public Const MASSMODMAX As Decimal = 100000
 
     ''' <summary>
     ''' Représentation de l'abaque Hivoss dans la NdC
@@ -8006,7 +8008,7 @@ Module Mod_Dessins
         Dim i, j As Integer
 
         Dim MyFont As Font
-        Dim AllFloorVibration As New Dictionary(Of Integer, strHivossTable)
+        Dim AllFloorVibration As New Dictionary(Of Integer, cls_MethodHivoss.strHivossTable)
 
         Dim MyParAff As Struc_Affichage
         Dim yMin, yMax, xMin, xMax As Double
@@ -8022,11 +8024,16 @@ Module Mod_Dessins
         Dim Balise() As Decimal = {100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000}
         Dim xPts(), yPts() As Single
         Dim nbPts As Integer
+        Dim LimitesIntervalles As Decimal() = Nothing   '--> Constantes des frontières
+        Dim LettresIntervalles As Char() = Nothing      '--> Catégories
 
         '--> Intialisation
 
         MyFont = New Font("Arial", 8.25, FontStyle.Regular)
-        ChargerValeursHivoss(AllFloorVibration)
+        MyHivoss.ChargerValeursHivoss(AllFloorVibration)
+        LimitesIntervalles = MyHivoss.LimitesIntervalles
+        LettresIntervalles = MyHivoss.LettresIntervalles
+
         nbPoints = AllFloorVibration(MyDamp).nbLigne
         ReDim DonneeY(nbPoints - 1)
 

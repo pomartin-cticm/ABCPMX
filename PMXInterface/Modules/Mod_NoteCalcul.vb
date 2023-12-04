@@ -3180,6 +3180,15 @@ Module Mod_NoteCalcul
 
 #Region "   Edition ELS méthode HIVOSS "
 
+
+    'Private Structure strHivossTable
+
+    '    Public nbLigne As Integer
+    '    Public listeLigneMasse As Ligne()
+    '    Public listeFrequence As Decimal()
+
+    'End Structure
+
     Private Sub EditionMethodeHivoss(ByVal MyBeam As cls_Poutre) ', ByVal MyFreq(,) As Double, ByVal FlechesCasElem(,) As Double)
         '----------------------------------------------------------------------------------------------
         '   23/11/23 :  Création - Version 1 - POM
@@ -3195,7 +3204,7 @@ Module Mod_NoteCalcul
 
         Const pTABVAR As String = "\T45"
         Const kPC As Decimal = 100
-        Dim AllFloorVibration As New Dictionary(Of Integer, strHivossTable)
+        Dim AllFloorVibration As New Dictionary(Of Integer, cls_MethodHivoss.strHivossTable)
         'Const TABVAR As String = " :\T45"
         Const DFORMAT As String = "0"
         Dim Frequency, ModalMass As Decimal
@@ -3228,7 +3237,7 @@ Module Mod_NoteCalcul
 
         MyBeam.Hivoss.CalculAmortissement()
 
-        ChargerValeursHivoss(AllFloorVibration)
+        MyBeam.Hivoss.ChargerValeursHivoss(AllFloorVibration)
 
         MyBeam.Modal.Analyse(MyBeam, MyBeam.Hivoss.ratioQ, MyBeam.Hivoss.IndexQ)
         frequency = MyBeam.Modal.Frequence
