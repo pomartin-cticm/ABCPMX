@@ -141,6 +141,7 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
+        Me.TSMenuPP_Hivoss = New System.Windows.Forms.ToolStripMenuItem()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -542,7 +543,7 @@ Partial Class Frm_PMX
         'TSbtn_PostT
         '
         Me.TSbtn_PostT.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_PostT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSmenuPPLargeurEfficace, Me.TSmenuPPChargements, Me.TSmenuPPCombinaisons, Me.TSmenuPPVerifications, Me.TSmenuPPModePropre})
+        Me.TSbtn_PostT.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSmenuPPLargeurEfficace, Me.TSmenuPPChargements, Me.TSmenuPPCombinaisons, Me.TSmenuPPVerifications, Me.TSmenuPPModePropre, Me.TSMenuPP_Hivoss})
         Me.TSbtn_PostT.Image = CType(resources.GetObject("TSbtn_PostT.Image"), System.Drawing.Image)
         Me.TSbtn_PostT.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.TSbtn_PostT.Name = "TSbtn_PostT"
@@ -552,31 +553,31 @@ Partial Class Frm_PMX
         'TSmenuPPLargeurEfficace
         '
         Me.TSmenuPPLargeurEfficace.Name = "TSmenuPPLargeurEfficace"
-        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(180, 22)
         Me.TSmenuPPLargeurEfficace.Text = "Largeur efficace"
         '
         'TSmenuPPChargements
         '
         Me.TSmenuPPChargements.Name = "TSmenuPPChargements"
-        Me.TSmenuPPChargements.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPChargements.Size = New System.Drawing.Size(180, 22)
         Me.TSmenuPPChargements.Text = "Chargements"
         '
         'TSmenuPPCombinaisons
         '
         Me.TSmenuPPCombinaisons.Name = "TSmenuPPCombinaisons"
-        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(180, 22)
         Me.TSmenuPPCombinaisons.Text = "Combinaisons"
         '
         'TSmenuPPVerifications
         '
         Me.TSmenuPPVerifications.Name = "TSmenuPPVerifications"
-        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(180, 22)
         Me.TSmenuPPVerifications.Text = "Vérifications"
         '
         'TSmenuPPModePropre
         '
         Me.TSmenuPPModePropre.Name = "TSmenuPPModePropre"
-        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(180, 22)
         Me.TSmenuPPModePropre.Text = "Mode propre"
         '
         'TSbtn_PPVerifications
@@ -1207,6 +1208,12 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
         '
+        'TSMenuPP_Hivoss
+        '
+        Me.TSMenuPP_Hivoss.Name = "TSMenuPP_Hivoss"
+        Me.TSMenuPP_Hivoss.Size = New System.Drawing.Size(180, 22)
+        Me.TSMenuPP_Hivoss.Text = "Hivoss"
+        '
         'Frm_PMX
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1370,4 +1377,5 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_ExpertMode As ToolStripButton
     Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
     Friend WithEvents TSbtn_OptionsCalculPoutre As ToolStripButton
+    Friend WithEvents TSMenuPP_Hivoss As ToolStripMenuItem
 End Class

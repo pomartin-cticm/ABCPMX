@@ -369,6 +369,7 @@ Module Mod_Declarations
         Portees
         PPCasDeCharge
         PPCombinaison
+        PPHivoss
         PPLargeurEfficace
         PPModePropre
         PPVerifications

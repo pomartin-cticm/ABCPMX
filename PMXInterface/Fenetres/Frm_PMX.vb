@@ -458,7 +458,7 @@ Public Class Frm_PMX
     End Sub
 
     Private Sub TSmenuPP_Click(sender As Object, e As EventArgs) Handles TSmenuPPLargeurEfficace.Click,
-        TSmenuPPChargements.Click, TSmenuPPCombinaisons.Click, TSmenuPPVerifications.Click, TSmenuPPModePropre.Click
+        TSmenuPPChargements.Click, TSmenuPPCombinaisons.Click, TSmenuPPVerifications.Click, TSmenuPPModePropre.Click, TSMenuPP_Hivoss.Click
 
         Select Case sender.name
             Case Me.TSmenuPPChargements.Name
@@ -476,10 +476,12 @@ Public Class Frm_PMX
             Case Me.TSmenuPPVerifications.Name
                 FilleEnCours = EnuFenetres.PPVerifications
 
+            Case Me.TSMenuPP_Hivoss.Name
+                FilleEnCours = EnuFenetres.Hivoss
+
         End Select
         AfficheFenetreEnCours()
     End Sub
-
 
 
     Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) _
@@ -644,6 +646,10 @@ Public Class Frm_PMX
             Case EnuFenetres.PPCombinaison
                 Frm_PPCombinaison.ShowDialog()
                 Frm_PPCombinaison.Dispose()
+
+            Case EnuFenetres.Hivoss
+                Frm_PPHivoss.ShowDialog()
+                Frm_PPHivoss.Dispose()
 
             Case EnuFenetres.PPModePropre
                 Frm_PPModePropre.ShowDialog()
@@ -1400,6 +1406,7 @@ Public Class Frm_PMX
     Private Sub TSbtn_NdcPoutre_Click(sender As Object, e As EventArgs) Handles TSbtn_NdcPoutre.Click
 
     End Sub
+
 
 
 #End Region

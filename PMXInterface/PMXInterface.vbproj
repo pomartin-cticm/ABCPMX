@@ -206,6 +206,12 @@
     <Compile Include="Fenetres\Filles\Frm_InformationPP.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_PPHivoss.Designer.vb">
+      <DependentUpon>Frm_PPHivoss.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_PPHivoss.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_PPLargeurEfficace.Designer.vb">
       <DependentUpon>Frm_PPLargeurEfficace.vb</DependentUpon>
     </Compile>
