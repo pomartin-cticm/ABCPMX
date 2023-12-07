@@ -150,6 +150,10 @@
       <Project>{53876d64-8fee-4e62-b907-0f707563c53e}</Project>
       <Name>DLL_CTICM_DATA</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DLL_CTICM_LTB\DLL_CTICM_LTB.vbproj">
+      <Project>{52236c7b-8fd2-4df3-8e6a-06537499fbe6}</Project>
+      <Name>DLL_CTICM_LTB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DLL_CTICM_MODAL\DLL_CTICM_MODAL.vbproj">
       <Project>{8993e97e-daa1-4bf9-a62c-66b0d7ace505}</Project>
       <Name>DLL_CTICM_MODAL</Name>

@@ -1715,6 +1715,12 @@ Module Mod_NoteCalcul
 
         '--> Déclaration
 
+        '--> En fonction des options NDC
+
+        If Not (OptionsNdC.lDispFM_FLS Or OptionsNdC.lDispFM_SLS Or OptionsNdC.lDispFM_ULS Or OptionsNdC.lDispFMLoadCase) Then
+            Exit Sub
+        End If
+
         '--> Initialisation
 
         SautePage()
@@ -1723,27 +1729,54 @@ Module Mod_NoteCalcul
 
         '--> Analyses par cas de charge
 
-        AddTitreNdC(2, BlocAnalyse("ELEMNTRY_LC"))
+        If OptionsNdC.lDispFMLoadCase Then
+            AddTitreNdC(2, BlocAnalyse("ELEMNTRY_LC"))
 
-        For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).ChargesA.Count - 1
+            For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).ChargesA.Count - 1
 
-            '--> On affiche le cas de charge uniquement si le cas de charge est disponible
-            If MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).lRunCalcul Then
-                EditionAnalyseChargeA(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i))
-                SautePage()
-            End If
-        Next
+                '--> On affiche le cas de charge uniquement si le cas de charge est disponible
+                If MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).lRunCalcul Then
+                    EditionAnalyseChargeA(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i))
+                    SautePage()
+                End If
+            Next
+        End If
 
         '--> Analyses par combinaisons ELU
 
-        AddTitreNdC(2, BlocAnalyse("ELEMNTRY_ULS"))
+        If OptionsNdC.lDispFM_ULS Then
+            AddTitreNdC(2, BlocAnalyse("ELEMNTRY_ULS"))
 
-        For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi - 1
+            For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi - 1
 
-            EditionAnalyseCombiELU(MyProjet.Poutres(MyProjet.IndEnCours), i)
+                EditionAnalyseCombiELU(MyProjet.Poutres(MyProjet.IndEnCours), i)
 
-        Next
+            Next
+        End If
 
+        '--> Analyses par combinaisons ELS
+
+        If OptionsNdC.lDispFM_SLS Then
+            AddTitreNdC(2, BlocAnalyse("ELEMNTRY_SLS"))
+
+            For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS.nbCombi - 1
+
+                EditionAnalyseCombiELS(MyProjet.Poutres(MyProjet.IndEnCours), i)
+
+            Next
+        End If
+
+        '--> Analyses par combinaisons ELF
+
+        If OptionsNdC.lDispFM_FLS Then
+            AddTitreNdC(2, BlocAnalyse("ELEMNTRY_FLS"))
+
+            For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELF.nbCombi - 1
+
+                EditionAnalyseCombiELF(MyProjet.Poutres(MyProjet.IndEnCours), i)
+
+            Next
+        End If
 
     End Sub
 
@@ -1762,6 +1795,37 @@ Module Mod_NoteCalcul
         Dim lRetrait As Boolean = True
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
+
+        '--> Initialisation
+
+        lRetrait = True
+
+        '--> Affichage de la combinaison
+
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELU, "ELU_0" & CStr(iCombi), iCombi, lRetrait)
+
+        '--> Calcul des M et V
+
+        myPoutre.CombiA_ELU.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
+        myPoutre.CombiA_ELU.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
+
+        '--> Affichage de la combinaison
+
+        EditionTableauEfforts(myPoutre, MEd, VEd)
+
+    End Sub
+
+    Private Sub EditionTableauEfforts(myPoutre As cls_Poutre, MEd(,) As Decimal, VEd(,) As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition d'un tableau d'efforts et moments
+        '-------------------------------------------------------------------------------------------
+        '   myPoutre        [E]
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
         Dim lMultispan As Boolean
         Dim NCol, PosTab As Integer
         Dim iTravee, i As Integer
@@ -1774,21 +1838,11 @@ Module Mod_NoteCalcul
 
         '--> Initialisation
 
-        lRetrait = True
         lMultispan = (myPoutre.NbTravees > 1)
         iTravDeb = myPoutre.IndicePremiereTravee
         iTravFin = myPoutre.IndiceDerniereTravee
 
-        '--> Affichage de la combinaison
-
-        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELU, "ELU_0" & CStr(iCombi), iCombi, lRetrait)
-
-        '--> Calcul des M et V
-
-        myPoutre.CombiA_ELU.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
-        myPoutre.CombiA_ELU.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
-
-        '--> Affichage de la combinaison
+        '--> Affichage
 
         '# Entête
 
@@ -1845,6 +1899,76 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionAnalyseCombiELF(myPoutre As cls_Poutre, iCombi As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des efforts dans la poutre après analyse pour une combinaison feu
+        '-------------------------------------------------------------------------------------------
+        '   myPoutre    [E] :   Indice de la poutre
+        '   iCombi      [E] :   Indice de la combinaison ELU
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lRetrait As Boolean = True
+        Dim MEd(,) As Decimal = Nothing
+        Dim VEd(,) As Decimal = Nothing
+
+        '--> Initialisation
+
+        lRetrait = True
+
+        '--> Affichage de la combinaison
+
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELF, "ELF_0" & CStr(iCombi), iCombi, lRetrait)
+
+        '--> Calcul des M et V
+
+        myPoutre.CombiA_ELF.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
+        myPoutre.CombiA_ELF.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
+
+        '--> Affichage de la combinaison
+
+        EditionTableauEfforts(myPoutre, MEd, VEd)
+
+    End Sub
+
+    Private Sub EditionAnalyseCombiELS(myPoutre As cls_Poutre, iCombi As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des efforts dans la poutre après analyse pour une combinaison ELS
+        '-------------------------------------------------------------------------------------------
+        '   myPoutre    [E] :   Indice de la poutre
+        '   iCombi      [E] :   Indice de la combinaison ELU
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lRetrait As Boolean = True
+        Dim MEd(,) As Decimal = Nothing
+        Dim VEd(,) As Decimal = Nothing
+
+        '--> Initialisation
+
+        lRetrait = True
+
+        '--> Affichage de la combinaison
+
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELS, "ELS_0" & CStr(iCombi), iCombi, lRetrait)
+
+        '--> Calcul des M et V
+
+        myPoutre.CombiA_ELS.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
+        myPoutre.CombiA_ELS.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
+
+        '--> Affichage de la combinaison
+
+        EditionTableauEfforts(myPoutre, MEd, VEd)
+
+    End Sub
+
     Private Sub LigneTableauMVCombiExtremite(lMultiSpan As Boolean, lGauche As Boolean, NCol As Integer, Pos As Integer,
                                              iNode As Integer, iTravee As Integer, xPosT As Decimal, xPosG As Decimal,
                                              VEd As Decimal, MEd As Decimal)
@@ -1866,18 +1990,18 @@ Module Mod_NoteCalcul
 
         InitialiseLigne(NCol, HLIGNE, True)
 
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, iNode)
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
 
         '# Position et travée
 
         If lMultiSpan Then
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee))
 
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, xPosT)
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, xPosG)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosT, Enu_TypeVariable.Longueur, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosG, Enu_TypeVariable.Longueur, 3, 2, False))
         Else
 
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, xPosG)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(xPosG, Enu_TypeVariable.Longueur, 3, 2, False))
 
         End If
 
@@ -2001,7 +2125,7 @@ Module Mod_NoteCalcul
 
         InitialiseLigne(pNColLigne, HLIGNE, True)
 
-        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode))
+        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
 
         '# Position et travée
 

@@ -242,8 +242,10 @@ SECTIONSPROPERTIES		= Sections properties
 
 #NDC_ANALYSE
 ANALYSIS				= Analysis - Internal forces and moments
-ELEMNTRY_LC				= Elementary load cases
-ELEMNTRY_ULS			= ULS Combination
+ELEMNTRY_LC				= Load cases
+ELEMNTRY_ULS			= ULS Combinations
+ELEMNTRY_SLS			= SLS Combinations
+ELEMNTRY_FLS			= Fire LS Combinations
 SPAN					= Span
 GLOBAL					= Global
 NODE					= Node

@@ -501,11 +501,19 @@ Module Mod_Declarations
 
     Public Structure struc_OptionsNdC
         Dim lShowHivossCurve As Boolean
+        Dim lDispFMLoadCase As Boolean
+        Dim lDispFM_ULS As Boolean
+        Dim lDispFM_SLS As Boolean
+        Dim lDispFM_FLS As Boolean
     End Structure
     Public OptionsNdC As struc_OptionsNdC
 
     Public Sub InitialiseOptionsNdC()
         OptionsNdC.lShowHivossCurve = True
+        OptionsNdC.lDispFMLoadCase = True
+        OptionsNdC.lDispFM_ULS = True
+        OptionsNdC.lDispFM_SLS = False
+        OptionsNdC.lDispFM_FLS = False
     End Sub
 
     Public MyNote As Cls_Rapport

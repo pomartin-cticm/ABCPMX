@@ -26,6 +26,9 @@
     ''' </summary>
     Public lMaintienSelectionne As Boolean
 
+#End Region
+
+#Region " Constructeurs "
     Sub New()
         Me.New(0, False, False, False)
     End Sub
@@ -38,6 +41,9 @@
         Me.lMaintienSelectionne = lMaintienSelectionne
     End Sub
 
+#End Region
+
+#Region " Outils "
 
     Public Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
@@ -51,6 +57,12 @@
                lMaintienSemelleInf = maintiens.lMaintienSemelleInf AndAlso
                lMaintienSelectionne = maintiens.lMaintienSelectionne
     End Function
+
+    Public ReadOnly Property EstEfficace As Boolean
+        Get
+            Return Me.lMaintienSemelleInf Or Me.lMaintienSemelleSup
+        End Get
+    End Property
 
 
 

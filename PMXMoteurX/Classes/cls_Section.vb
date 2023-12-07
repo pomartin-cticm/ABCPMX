@@ -652,6 +652,7 @@ Public Class cls_Section
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
         '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '   ON NE PREND PAS EN COMPTE LA DALLE DANS LE CAS D'UNE SECTION MIXTE
         '-------------------------------------------------------------------------------------------------------------------
         '   Signe       [E] :   Signe du moment
         '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique

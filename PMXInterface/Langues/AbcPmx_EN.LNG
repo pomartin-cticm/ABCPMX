@@ -774,7 +774,11 @@ EXPERTMODEACTIVE		= Expert Mode active
 FORCESANDMOMENTS		= Forces and moments
 SLS						= Serviceability Limit States
 HIVOSS					= Hivoss method for vibratory comfort
-SHOWHIVOSSCURVE			= Show Hivoss diagram
+SHOWHIVOSSCURVE			= Display Hivoss diagram
+DISPLAYFMLOADCASES		= Display forces and moments for load cases
+DISPLAYFMULS			= Display forces and moments at ultimate LS
+DISPLAYFMSLS			= Display forces and moments at serviceability LS
+DISPLAYFMFLS			= Display forces and moments at fire LS
 
 #OPTSOFTDATABASES
 DATABASES				= Databases

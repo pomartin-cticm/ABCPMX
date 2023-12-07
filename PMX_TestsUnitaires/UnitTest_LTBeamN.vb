@@ -16,6 +16,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 19.5     'Longueur totale de la barre
         With MyDonnees
@@ -31,25 +32,6 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             Next
 
             'Maintien ponctuel
-            .NbMaintiensPon = 3
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
-
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 50
-            .MaintienPonV(1) = -1
-            .MaintienPonTheta(1) = -1
-
-            .iNodeMaintienPon(2) = 100
-            .MaintienPonV(2) = -1
-            .MaintienPonTheta(2) = -1
 
             'Elements            
             ReDim .Aire(.NbNodes - 2)
@@ -92,6 +74,29 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .zForcePonC(1) = 0.0
         End With
 
+        '# Paramètres LTB
+
+        ParamLTB.NbMaintiensPon = 3
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 50
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
+        ParamLTB.iNodeMaintienPon(2) = 100
+        ParamLTB.MaintienPonV(2) = -1
+        ParamLTB.MaintienPonTheta(2) = -1
+
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -114,7 +119,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 14.852
@@ -138,6 +143,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 19.5     'Longueur totale de la barre
         With MyDonnees
@@ -152,26 +158,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien ponctuel
-            .NbMaintiensPon = 3
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
 
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 50
-            .MaintienPonV(1) = -1
-            .MaintienPonTheta(1) = -1
-
-            .iNodeMaintienPon(2) = 100
-            .MaintienPonV(2) = -1
-            .MaintienPonTheta(2) = -1
 
             'Elements            
             ReDim .Aire(.NbNodes - 2)
@@ -219,6 +206,27 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .xForceRep(1, 1) = L
         End With
 
+        '# Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 3
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 50
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
+        ParamLTB.iNodeMaintienPon(2) = 100
+        ParamLTB.MaintienPonV(2) = -1
+        ParamLTB.MaintienPonTheta(2) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -241,7 +249,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 9.4102
@@ -263,6 +271,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 19.5     'Longueur totale de la barre
         With MyDonnees
@@ -277,26 +286,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien ponctuel
-            .NbMaintiensPon = 3
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
 
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 50
-            .MaintienPonV(1) = -1
-            .MaintienPonTheta(1) = -1
-
-            .iNodeMaintienPon(2) = 100
-            .MaintienPonV(2) = -1
-            .MaintienPonTheta(2) = -1
 
             'Elements            
             ReDim .Aire(.NbNodes - 2)
@@ -336,6 +326,27 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .zForcePonC(0) = 0.0
         End With
 
+        '* Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 3
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 50
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
+        ParamLTB.iNodeMaintienPon(2) = 100
+        ParamLTB.MaintienPonV(2) = -1
+        ParamLTB.MaintienPonTheta(2) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -358,7 +369,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 8.0646
@@ -380,6 +391,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 19.5     'Longueur totale de la barre
         With MyDonnees
@@ -394,26 +406,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien ponctuel
-            .NbMaintiensPon = 3
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
 
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 50
-            .MaintienPonV(1) = -1
-            .MaintienPonTheta(1) = -1
-
-            .iNodeMaintienPon(2) = 100
-            .MaintienPonV(2) = -1
-            .MaintienPonTheta(2) = -1
 
             'Elements            
             ReDim .Aire(.NbNodes - 2)
@@ -455,6 +448,27 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .xForceRep(0, 1) = L / 2
         End With
 
+        '* Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 3
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 50
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
+        ParamLTB.iNodeMaintienPon(2) = 100
+        ParamLTB.MaintienPonV(2) = -1
+        ParamLTB.MaintienPonTheta(2) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -477,7 +491,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 4.7196
@@ -499,6 +513,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 18     'Longueur totale de la barre
         With MyDonnees
@@ -513,26 +528,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien ponctuel
-            .NbMaintiensPon = 3
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
 
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 50
-            .MaintienPonV(1) = -1
-            .MaintienPonTheta(1) = -1
-
-            .iNodeMaintienPon(2) = 100
-            .MaintienPonV(2) = -1
-            .MaintienPonTheta(2) = -1
 
             'Elements            
             ReDim .Aire(.NbNodes - 2)
@@ -574,6 +570,27 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .xForceRep(0, 1) = L
         End With
 
+        'Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 3
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 50
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
+        ParamLTB.iNodeMaintienPon(2) = 100
+        ParamLTB.MaintienPonV(2) = -1
+        ParamLTB.MaintienPonTheta(2) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -596,7 +613,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 6.9718
@@ -618,6 +635,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 18     'Longueur totale de la barre
         With MyDonnees
@@ -632,26 +650,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien ponctuel
-            .NbMaintiensPon = 3
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
 
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 25
-            .MaintienPonV(1) = -1
-            .zMaintienPonC(1) = 0.2405
-
-            .iNodeMaintienPon(2) = 100
-            .MaintienPonV(2) = -1
-            .MaintienPonTheta(2) = -1
 
             'Elements            
             ReDim .Aire(.NbNodes - 2)
@@ -693,6 +692,27 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .xForceRep(0, 1) = L
         End With
 
+        '* Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 3
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 25
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.zMaintienPonC(1) = 0.2405
+
+        ParamLTB.iNodeMaintienPon(2) = 100
+        ParamLTB.MaintienPonV(2) = -1
+        ParamLTB.MaintienPonTheta(2) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -715,7 +735,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 5.1207
@@ -737,6 +757,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 18     'Longueur totale de la barre
         With MyDonnees
@@ -751,25 +772,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien ponctuel
-            .NbMaintiensPon = 3
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
 
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 25
-            .MaintienPonV(1) = -1
-
-            .iNodeMaintienPon(2) = 100
-            .MaintienPonV(2) = -1
-            .MaintienPonTheta(2) = -1
 
             'Elements            
             ReDim .Aire(.NbNodes - 2)
@@ -811,6 +814,26 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .xForceRep(0, 1) = L
         End With
 
+        '* Maintien ponctuel
+        ParamLTB.NbMaintiensPon = 3
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 25
+        ParamLTB.MaintienPonV(1) = -1
+
+        ParamLTB.iNodeMaintienPon(2) = 100
+        ParamLTB.MaintienPonV(2) = -1
+        ParamLTB.MaintienPonTheta(2) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -833,7 +856,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 4.7467
@@ -855,6 +878,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 18     'Longueur totale de la barre
         With MyDonnees
@@ -869,26 +893,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien ponctuel
-            .NbMaintiensPon = 3
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
 
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 25
-            .MaintienPonV(1) = -1
-            .zMaintienPonC(1) = -0.2405
-
-            .iNodeMaintienPon(2) = 100
-            .MaintienPonV(2) = -1
-            .MaintienPonTheta(2) = -1
 
             'Elements            
             ReDim .Aire(.NbNodes - 2)
@@ -930,6 +935,27 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .xForceRep(0, 1) = L
         End With
 
+        '* Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 3
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 25
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.zMaintienPonC(1) = -0.2405
+
+        ParamLTB.iNodeMaintienPon(2) = 100
+        ParamLTB.MaintienPonV(2) = -1
+        ParamLTB.MaintienPonTheta(2) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -952,7 +978,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 2.9876
@@ -974,6 +1000,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 18     'Longueur totale de la barre
         With MyDonnees
@@ -988,22 +1015,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien ponctuel
-            .NbMaintiensPon = 2
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
 
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 100
-            .MaintienPonV(1) = -1
-            .MaintienPonTheta(1) = -1
 
             'Maintien continu
             .NbMaintiensCon = 1
@@ -1057,6 +1069,23 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .xForceRep(0, 1) = L
         End With
 
+        '* Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 2
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB .MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 100
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -1079,7 +1108,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 2.5775
@@ -1101,6 +1130,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 18     'Longueur totale de la barre
         With MyDonnees
@@ -1114,23 +1144,6 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             For i = 0 To .NbNodes - 1
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
-
-            'Maintien ponctuel
-            .NbMaintiensPon = 2
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
-
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 100
-            .MaintienPonV(1) = -1
-            .MaintienPonTheta(1) = -1
 
             'Maintien continu
             .NbMaintiensCon = 1
@@ -1185,6 +1198,23 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .xForceRep(0, 1) = L
         End With
 
+        '* Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 2
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 100
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -1207,7 +1237,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 2.5482
@@ -1229,6 +1259,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '=======================================
 
         Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim L As Decimal = 18     'Longueur totale de la barre
         With MyDonnees
@@ -1243,23 +1274,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien ponctuel
-            .NbMaintiensPon = 2
 
-            ReDim .iNodeMaintienPon(.NbMaintiensPon - 1)
-            ReDim .MaintienPonV(.NbMaintiensPon - 1)
-            ReDim .MaintienPonTheta(.NbMaintiensPon - 1)
-            ReDim .MaintienPonVP(.NbMaintiensPon - 1)
-            ReDim .MaintienPonThetaP(.NbMaintiensPon - 1)
-            ReDim .zMaintienPonC(.NbMaintiensPon - 1)
-
-            .iNodeMaintienPon(0) = 0
-            .MaintienPonV(0) = -1
-            .MaintienPonTheta(0) = -1
-
-            .iNodeMaintienPon(1) = 100
-            .MaintienPonV(1) = -1
-            .MaintienPonTheta(1) = -1
 
             'Maintien continu
             .NbMaintiensCon = 1
@@ -1314,6 +1329,24 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .xForceRep(0, 1) = L
         End With
 
+        '* Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 2
+
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = 100
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
         '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
         Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
         Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
@@ -1336,7 +1369,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
 
-        Call MyDLL_LTB.CALCULER(MyDonnees, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '=== VALEURS DE REFERENCE ANSYS ===
         Dim MuiCrRef As Double = 1.8389

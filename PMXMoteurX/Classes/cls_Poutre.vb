@@ -102,7 +102,7 @@ Public Class cls_Poutre
     '# Définition des maintiens latéraux
     '#####################################################################################
 
-    Public NbRestrain() As Integer                      ' Nombre de maintiens disposés sur la travée considérée
+    Public NbMaintiens() As Integer                      ' Nombre de maintiens disposés sur la travée considérée
     Public Maintiens() As List(Of cls_Maintiens)        ' Liste des maintiens disposés sur la poutre
     Public TypeMaintien As EnuTypeMaintiensPoutre       ' Type de maintiens considéré sur la travée considérée
 
@@ -362,7 +362,6 @@ Public Class cls_Poutre
     '--Points de calcul des contraintes normales
     Public PtsSigma As New cls_PointsSigma
 
-
 #End Region
 
 #Region " Attibuts pour les analyses "
@@ -562,7 +561,7 @@ Public Class cls_Poutre
         ReDim LongueurTravee(IndiceTraveeConsoleDroite)
         ReDim TypTravee(IndiceTraveeConsoleDroite)
         ReDim Maintiens(IndiceTraveeConsoleDroite)
-        ReDim NbRestrain(IndiceTraveeConsoleDroite)
+        ReDim NbMaintiens(IndiceTraveeConsoleDroite)
         'ReDim TypeMaintien(IndiceTraveeConsoleDroite + 2)
 
 
@@ -974,7 +973,7 @@ Public Class cls_Poutre
         Next
 
         'MAJ de la partie concernant les maintiens latéraux
-        ReDim Preserve Me.NbRestrain(IndiceTraveeConsoleDroite)
+        ReDim Preserve Me.NbMaintiens(IndiceTraveeConsoleDroite)
         ReDim Preserve Me.Maintiens(IndiceTraveeConsoleDroite)
 
         For i As Integer = 0 To IndiceTraveeConsoleDroite
@@ -1031,8 +1030,8 @@ Public Class cls_Poutre
         ReDim PoutreCible.TypTravee(PoutreSource.TypTravee.GetUpperBound(0))
         PoutreCible.TypTravee = PoutreSource.TypTravee.Clone
 
-        ReDim PoutreCible.NbRestrain(PoutreSource.NbRestrain.GetUpperBound(0))
-        PoutreCible.NbRestrain = PoutreSource.NbRestrain.Clone
+        ReDim PoutreCible.NbMaintiens(PoutreSource.NbMaintiens.GetUpperBound(0))
+        PoutreCible.NbMaintiens = PoutreSource.NbMaintiens.Clone
 
         'ReDim PoutreCible.TypeMaintien(PoutreSource.TypeMaintien.GetUpperBound(0))
         'PoutreCible.TypeMaintien = PoutreSource.TypeMaintien.Clone
@@ -1509,84 +1508,7 @@ Public Class cls_Poutre
 
 #End Region
 
-#Region " Préparation des sections de calcul de la poutre "
-
-    'Public Sub PrepareNodes(dEltMax As Decimal, nbMinInter As Integer, nbMinConsole As Integer)
-    '    '-------------------------------------------------------------------------------------------
-    '    '   11/08/23 :  Création - POM
-    '    '-------------------------------------------------------------------------------------------
-    '    '   Préparation des sections de calcul de la poutre
-    '    '-------------------------------------------------------------------------------------------
-    '    '   dEltMax     [E] :   Distance maxi entre 2 noeuds
-    '    '   nbMinInter  [E] :   Nombre mini de noeuds par travée intermédiaire
-    '    '   nbMinConsole[E] :   Nombre mini de noeuds par console
-    '    '-------------------------------------------------------------------------------------------
-
-    '    '--> Déclaration
-
-    '    Dim xo, DeltaX As Decimal
-    '    Dim nDec As Integer
-    '    Dim Longueur As Decimal
-    '    Dim lFirst As Boolean = True
-    '    Dim i0 As Integer = 0
-    '    Dim iGauche As Integer
-    '    Dim lConsole As Integer
-    '    Dim iTraveeG, iTraveeD As Integer
-    '    Dim nbMin As Integer
-
-    '    '--> Initialisation
-
-    '    ReDim Nodes.iNodeExtTrav(Me.IndiceDerniereTravee, 1)
-
-    '    '--> Boucle sur les travées
-
-    '    iTraveeG = Me.IndicePremiereTravee
-    '    iTraveeD = Me.IndiceDerniereTravee
-
-    '    For iTravee As Integer = iTraveeG To iTraveeD
-
-    '        lConsole = (iTravee = 0) Or ((iTravee = iTraveeD) And Me.lTraveeConsoleDroite)
-
-    '        xo = Me.xPositionAppui(True, iTravee)
-    '        Longueur = Me.LongueurTravee(iTravee)
-
-    '        nDec = Math.Floor(Longueur / dEltMax) + 1
-
-    '        If lConsole Then nbMin = nbMinConsole Else nbMin = nbMinInter
-
-    '        nDec = Math.Max(nbMin, nDec)
-
-    '        ' On ne prend que des nombres pairs pour la découpe (cela garantit un point à mi portée)
-    '        If nDec Mod 2 = 1 Then nDec += 1
-
-    '        DeltaX = Longueur / nDec
-
-    '        If lFirst Then
-    '            Nodes.nbNodes = nDec + 1
-    '            ReDim Me.Nodes.xTravee(nDec)
-    '            ReDim Me.Nodes.xGlobal(nDec)
-    '            Nodes.iNodeExtTrav(iTravee, 0) = 0
-    '            Nodes.iNodeExtTrav(iTravee, 1) = nDec
-    '            iGauche = 0
-    '        Else
-    '            iGauche = Nodes.nbNodes - 1
-    '            Nodes.iNodeExtTrav(iTravee, 0) = Nodes.nbNodes - 1
-    '            Nodes.iNodeExtTrav(iTravee, 1) = Nodes.nbNodes + nDec - 1
-    '            Nodes.nbNodes += nDec
-    '            ReDim Preserve Me.Nodes.xTravee(Nodes.nbNodes - 1)
-    '            ReDim Preserve Me.Nodes.xGlobal(Nodes.nbNodes - 1)
-    '        End If
-
-    '        For i As Integer = i0 To nDec
-    '            Me.Nodes.xTravee(iGauche + i) = DeltaX * i
-    '            Me.Nodes.xGlobal(iGauche + i) = xo + DeltaX * i
-    '        Next
-
-    '        lFirst = False
-    '        i0 = 1
-    '    Next
-
-    'End Sub
+#Region " Préparation des sections de calcul de la poutre et outils sur les noeuds "
 
     Public Sub PrepareNodesN()
         '-------------------------------------------------------------------------------------------
@@ -1780,6 +1702,17 @@ Public Class cls_Poutre
 
         '# Maitiens latéraux
 
+        For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+            x0 = Me.xPositionAppui(True, iTravee)
+            For jm = 0 To Me.NbMaintiens(iTravee) - 1
+
+                If Me.Maintiens(iTravee)(jm).EstEfficace Then
+                    AjouteNoeudImpose(x0 + Me.Maintiens(iTravee)(jm).x_Loc, xImp)
+                End If
+
+            Next
+        Next
+
         '# Position des zones fissurées
 
         If Me.lMixte And Me.NbTravees > 1 Then
@@ -1858,6 +1791,33 @@ Public Class cls_Poutre
         Return myInd
     End Function
 
+
+    Public Function GetIndiceNoeudFromXglobal(XPos As Decimal) As Integer
+        '------------------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Retourne l'indice d'un noeud à partir d'une position X globale
+        '------------------------------------------------------------------------------------------------------------------
+        '   xPos    [E] :   Position X dans le repère global
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lTrouve As Boolean = False
+        Dim iNode As Integer = -1
+        Const EPSILONX As Decimal = 0.001
+
+        '--> Recherche du noeud
+
+        Do While (Not lTrouve) And (iNode < Me.Nodes.nbNodes - 1)
+            iNode += 1
+            lTrouve = IsEqual(XPos, Me.Nodes.xGlobal(iNode), EPSILONX)
+        Loop
+
+        If Not lTrouve Then iNode = -1
+
+        Return iNode
+    End Function
 #End Region
 
 
@@ -1881,9 +1841,9 @@ Public Class cls_Poutre
         Dim fypd, fsd As Decimal
         Dim gammaVs, gammaVc As Decimal
         Dim v_x_Ed As Decimal
-        Dim k_sf_aa_sA, k_sf_bb_sA, k_sf_dd_sA As Decimal 'Definition des coefficients lorsque l'on se trouve au droit de l'appui A (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
-        Dim k_sf_aa_m, k_sf_bb_m, k_sf_dd_m As Decimal 'Definition des coefficients lorsque l'on se trouve à mi-travee (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
-        Dim k_sf_aa_sB, k_sf_bb_sB, k_sf_dd_sB As Decimal 'Definition des coefficients lorsque l'on se trouve au droit de l'appui B (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+        Dim k_sf_aa_sA, k_sf_bb_sA, k_sf_dd_sA As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui A (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+        Dim k_sf_aa_m, k_sf_bb_m, k_sf_dd_m As Decimal      'Definition des coefficients lorsque l'on se trouve à mi-travee (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+        Dim k_sf_aa_sB, k_sf_bb_sB, k_sf_dd_sB As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui B (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
         Dim hf_aa, hf_bb, hf_dd As Decimal
         Dim b0, b0min As Decimal
         Dim LargeurParticipante(0, 0) As Decimal

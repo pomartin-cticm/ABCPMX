@@ -24,11 +24,15 @@ Partial Class Frm_OptionsLogicielNdC
     Private Sub InitializeComponent()
         Me.pan_NdC = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.lbl_Hivoss = New System.Windows.Forms.Label()
+        Me.chk_ShowHivossDiagram = New System.Windows.Forms.CheckBox()
         Me.lbl_ELS = New System.Windows.Forms.Label()
         Me.pan_Sollicitations = New System.Windows.Forms.Panel()
         Me.lbl_Sollicitations = New System.Windows.Forms.Label()
-        Me.chk_ShowHivossDiagram = New System.Windows.Forms.CheckBox()
-        Me.lbl_Hivoss = New System.Windows.Forms.Label()
+        Me.chk_DisplayLoadCases = New System.Windows.Forms.CheckBox()
+        Me.chk_DisplayFM_ELU = New System.Windows.Forms.CheckBox()
+        Me.chk_DisplayFM_ELS = New System.Windows.Forms.CheckBox()
+        Me.chk_DisplayFM_ELF = New System.Windows.Forms.CheckBox()
         Me.pan_NdC.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.pan_Sollicitations.SuspendLayout()
@@ -57,6 +61,27 @@ Partial Class Frm_OptionsLogicielNdC
         Me.Panel1.Size = New System.Drawing.Size(733, 96)
         Me.Panel1.TabIndex = 101
         '
+        'lbl_Hivoss
+        '
+        Me.lbl_Hivoss.AutoSize = True
+        Me.lbl_Hivoss.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Hivoss.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Hivoss.Location = New System.Drawing.Point(3, 31)
+        Me.lbl_Hivoss.Name = "lbl_Hivoss"
+        Me.lbl_Hivoss.Size = New System.Drawing.Size(55, 13)
+        Me.lbl_Hivoss.TabIndex = 100
+        Me.lbl_Hivoss.Text = "lbl_Hivoss"
+        '
+        'chk_ShowHivossDiagram
+        '
+        Me.chk_ShowHivossDiagram.AutoSize = True
+        Me.chk_ShowHivossDiagram.Location = New System.Drawing.Point(25, 54)
+        Me.chk_ShowHivossDiagram.Name = "chk_ShowHivossDiagram"
+        Me.chk_ShowHivossDiagram.Size = New System.Drawing.Size(148, 17)
+        Me.chk_ShowHivossDiagram.TabIndex = 97
+        Me.chk_ShowHivossDiagram.Text = "chk_ShowHivossDiagram"
+        Me.chk_ShowHivossDiagram.UseVisualStyleBackColor = True
+        '
         'lbl_ELS
         '
         Me.lbl_ELS.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -73,6 +98,10 @@ Partial Class Frm_OptionsLogicielNdC
         '
         Me.pan_Sollicitations.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Sollicitations.Controls.Add(Me.chk_DisplayFM_ELF)
+        Me.pan_Sollicitations.Controls.Add(Me.chk_DisplayFM_ELS)
+        Me.pan_Sollicitations.Controls.Add(Me.chk_DisplayFM_ELU)
+        Me.pan_Sollicitations.Controls.Add(Me.chk_DisplayLoadCases)
         Me.pan_Sollicitations.Controls.Add(Me.lbl_Sollicitations)
         Me.pan_Sollicitations.Location = New System.Drawing.Point(3, 3)
         Me.pan_Sollicitations.Name = "pan_Sollicitations"
@@ -91,26 +120,45 @@ Partial Class Frm_OptionsLogicielNdC
         Me.lbl_Sollicitations.Text = "lbl_Sollicitations"
         Me.lbl_Sollicitations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'chk_ShowHivossDiagram
+        'chk_DisplayLoadCases
         '
-        Me.chk_ShowHivossDiagram.AutoSize = True
-        Me.chk_ShowHivossDiagram.Location = New System.Drawing.Point(25, 54)
-        Me.chk_ShowHivossDiagram.Name = "chk_ShowHivossDiagram"
-        Me.chk_ShowHivossDiagram.Size = New System.Drawing.Size(148, 17)
-        Me.chk_ShowHivossDiagram.TabIndex = 97
-        Me.chk_ShowHivossDiagram.Text = "chk_ShowHivossDiagram"
-        Me.chk_ShowHivossDiagram.UseVisualStyleBackColor = True
+        Me.chk_DisplayLoadCases.AutoSize = True
+        Me.chk_DisplayLoadCases.Location = New System.Drawing.Point(25, 35)
+        Me.chk_DisplayLoadCases.Name = "chk_DisplayLoadCases"
+        Me.chk_DisplayLoadCases.Size = New System.Drawing.Size(137, 17)
+        Me.chk_DisplayLoadCases.TabIndex = 98
+        Me.chk_DisplayLoadCases.Text = "chk_DisplayLoadCases"
+        Me.chk_DisplayLoadCases.UseVisualStyleBackColor = True
         '
-        'lbl_Hivoss
+        'chk_DisplayFM_ELU
         '
-        Me.lbl_Hivoss.AutoSize = True
-        Me.lbl_Hivoss.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Hivoss.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Hivoss.Location = New System.Drawing.Point(3, 31)
-        Me.lbl_Hivoss.Name = "lbl_Hivoss"
-        Me.lbl_Hivoss.Size = New System.Drawing.Size(55, 13)
-        Me.lbl_Hivoss.TabIndex = 100
-        Me.lbl_Hivoss.Text = "lbl_Hivoss"
+        Me.chk_DisplayFM_ELU.AutoSize = True
+        Me.chk_DisplayFM_ELU.Location = New System.Drawing.Point(25, 58)
+        Me.chk_DisplayFM_ELU.Name = "chk_DisplayFM_ELU"
+        Me.chk_DisplayFM_ELU.Size = New System.Drawing.Size(126, 17)
+        Me.chk_DisplayFM_ELU.TabIndex = 99
+        Me.chk_DisplayFM_ELU.Text = "chk_DisplayFM_ELU"
+        Me.chk_DisplayFM_ELU.UseVisualStyleBackColor = True
+        '
+        'chk_DisplayFM_ELS
+        '
+        Me.chk_DisplayFM_ELS.AutoSize = True
+        Me.chk_DisplayFM_ELS.Location = New System.Drawing.Point(25, 81)
+        Me.chk_DisplayFM_ELS.Name = "chk_DisplayFM_ELS"
+        Me.chk_DisplayFM_ELS.Size = New System.Drawing.Size(125, 17)
+        Me.chk_DisplayFM_ELS.TabIndex = 100
+        Me.chk_DisplayFM_ELS.Text = "chk_DisplayFM_ELS"
+        Me.chk_DisplayFM_ELS.UseVisualStyleBackColor = True
+        '
+        'chk_DisplayFM_ELF
+        '
+        Me.chk_DisplayFM_ELF.AutoSize = True
+        Me.chk_DisplayFM_ELF.Location = New System.Drawing.Point(25, 104)
+        Me.chk_DisplayFM_ELF.Name = "chk_DisplayFM_ELF"
+        Me.chk_DisplayFM_ELF.Size = New System.Drawing.Size(124, 17)
+        Me.chk_DisplayFM_ELF.TabIndex = 101
+        Me.chk_DisplayFM_ELF.Text = "chk_DisplayFM_ELF"
+        Me.chk_DisplayFM_ELF.UseVisualStyleBackColor = True
         '
         'Frm_OptionsLogicielNdC
         '
@@ -126,6 +174,7 @@ Partial Class Frm_OptionsLogicielNdC
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.pan_Sollicitations.ResumeLayout(False)
+        Me.pan_Sollicitations.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -137,4 +186,8 @@ Partial Class Frm_OptionsLogicielNdC
     Friend WithEvents lbl_Sollicitations As Label
     Friend WithEvents chk_ShowHivossDiagram As CheckBox
     Friend WithEvents lbl_Hivoss As Label
+    Friend WithEvents chk_DisplayFM_ELF As CheckBox
+    Friend WithEvents chk_DisplayFM_ELS As CheckBox
+    Friend WithEvents chk_DisplayFM_ELU As CheckBox
+    Friend WithEvents chk_DisplayLoadCases As CheckBox
 End Class

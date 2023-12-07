@@ -12,7 +12,7 @@
 
 #Region " MODELE E.F "
 
-    Private Sub CREATE_MODEL_LTB(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Private Sub CREATE_MODEL_LTB(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByVal LTBParam As DATA_LTB.struc_DonneesLTB)
         '-----------------------------------------------------
         '
         ' 06/09/2023 : TMN, v 1.0.0
@@ -23,7 +23,8 @@
         '
         '-----------------------------------------------------
         '
-        ' DONNEES   [E] : Données d'entrée
+        '   DONNEES     [E] :   Données d'entrée (Paramètres généraux)
+        '   LTBParam    [E] :   Données d'entrée (paramètres LTB)
         '
         '-----------------------------------------------------
         'Variables locales
@@ -75,13 +76,13 @@
             ReDim .RTP(Donnees.NbNodes)
             ReDim .ZRC(Donnees.NbNodes)
 
-            For I = 0 To Donnees.NbMaintiensPon - 1
-                iNode = Donnees.iNodeMaintienPon(I)
-                .RV(iNode + 1) = Donnees.MaintienPonV(I)
-                .RVP(iNode + 1) = Donnees.MaintienPonVP(I)
-                .RT(iNode + 1) = Donnees.MaintienPonTheta(I)
-                .RTP(iNode + 1) = Donnees.MaintienPonThetaP(I)
-                .ZRC(iNode + 1) = Donnees.zMaintienPonC(I)
+            For I = 0 To LTBParam.NbMaintiensPon - 1
+                iNode = LTBParam.iNodeMaintienPon(I)
+                .RV(iNode + 1) = LTBParam.MaintienPonV(I)
+                .RVP(iNode + 1) = LTBParam.MaintienPonVP(I)
+                .RT(iNode + 1) = LTBParam.MaintienPonTheta(I)
+                .RTP(iNode + 1) = LTBParam.MaintienPonThetaP(I)
+                .ZRC(iNode + 1) = LTBParam.zMaintienPonC(I)
             Next
 
             For I = 0 To Donnees.NbMaintiensCon - 1
@@ -91,8 +92,8 @@
                 For J = iNode1 To iNode2
 
                     lTrouve = False
-                    For K = 0 To Donnees.NbMaintiensPon - 1
-                        iNode = Donnees.iNodeMaintienPon(K)
+                    For K = 0 To LTBParam.NbMaintiensPon - 1
+                        iNode = LTBParam.iNodeMaintienPon(K)
                         If J = iNode Then
                             lTrouve = True
                             Exit For
@@ -201,6 +202,7 @@
 #Region " LANCER LE CALCUL "
 
     Public Sub CALCULER(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees,
+                        ByVal DonneesLTB As DATA_LTB.struc_DonneesLTB,
                         ByRef Output_LTB As DATA_LTB.Struc_Output,
                         ByRef ErrorCode As Integer,
                         ByRef ErrorText As String)
@@ -214,18 +216,19 @@
         '
         '-----------------------------------------------------
         '
-        '   DONNEES         [E] : Données d'entrée        
+        '   DONNEES         [E] :   Données d'entrée
+        '   DonneesLTB      [E] :   Paramètres spécifiques LTB
         '
         '-----------------------------------------------------
         '
-        '   Output_LTB      [S] : Resultats d'analyse
-        '   ErrorCode       [S] : code d'erreur (=0) s'il n'y a pas d'erreur
-        '   ErrorText       [S] : texte d'erreur
+        '   Output_LTB      [S] :   Resultats d'analyse
+        '   ErrorCode       [S] :   code d'erreur (=0) s'il n'y a pas d'erreur
+        '   ErrorText       [S] :   texte d'erreur
         '
         '-----------------------------------------------------                
 
         'Créer le modèle E.F
-        CREATE_MODEL_LTB(Donnees)
+        CREATE_MODEL_LTB(Donnees, DonneesLTB)
 
         'Chargement
         LOADING_LTB(Donnees)

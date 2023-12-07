@@ -73,6 +73,11 @@ Public Class Frm_OptionsLogiciel
 
     Structure struc_LocalOptionsNdC
         Dim lShowHivossCurve As Boolean
+        Dim lDispFMLoadCase As Boolean
+        Dim lDispFM_ULS As Boolean
+        Dim lDispFM_SLS As Boolean
+        Dim lDispFM_FLS As Boolean
+
     End Structure
 #End Region
 
@@ -273,6 +278,10 @@ Public Class Frm_OptionsLogiciel
         pLocalLogicielOptions.CompanyName = LogicielOptions.CompanyName
 
         pLocalOptionsNdC.lShowHivossCurve = OptionsNdC.lShowHivossCurve
+        pLocalOptionsNdC.lDispFMLoadCase = OptionsNdC.lDispFMLoadCase
+        pLocalOptionsNdC.lDispFM_SLS = OptionsNdC.lDispFM_SLS
+        pLocalOptionsNdC.lDispFM_FLS = OptionsNdC.lDispFM_FLS
+        pLocalOptionsNdC.lDispFM_ULS = OptionsNdC.lDispFM_ULS
     End Sub
 
     Private Sub AfficherFenetreFille()
@@ -474,6 +483,10 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocalLogicielOptions.lExpert, LogicielOptions.lExpert, lModif)
 
         GereTransfertValeur(Me.pLocalOptionsNdC.lShowHivossCurve, OptionsNdC.lShowHivossCurve, lModif)
+        GereTransfertValeur(Me.pLocalOptionsNdC.lDispFM_ULS, OptionsNdC.lDispFM_ULS, lModif)
+        GereTransfertValeur(Me.pLocalOptionsNdC.lDispFM_SLS, OptionsNdC.lDispFM_SLS, lModif)
+        GereTransfertValeur(Me.pLocalOptionsNdC.lDispFM_FLS, OptionsNdC.lDispFM_FLS, lModif)
+        GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMLoadCase, OptionsNdC.lDispFMLoadCase, lModif)
 
     End Sub
 

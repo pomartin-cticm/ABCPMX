@@ -1,4 +1,6 @@
-﻿Public Class cls_VerificationsAcier
+﻿Imports System.Security.Cryptography
+
+Public Class cls_VerificationsAcier
 
 
     '=========================================================================================================
@@ -140,11 +142,284 @@
 
             '# Vérification au déversement
 
+            Me.RunCritereDeversement(MyPoutre, iCombi, MEd)
 
 
         Next
 
     End Sub
+
+#End Region
+
+#Region " Vérifications de la résistance au déversement "
+
+    Private Sub RunCritereDeversement(myPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance au déversement
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim AlphaCr As Decimal
+        Dim lOK As Boolean
+
+        '--> Calcul Alpha Critique
+
+        Exit Sub
+        CalculAlphaCritique(myPoutre, iCombi, MEd, AlphaCr, lOK)
+
+    End Sub
+
+    Private Sub CalculAlphaCritique(myPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, ByRef AlphaCr As Decimal, ByRef lOK As Boolean)
+        '----------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance au déversement
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   MEd     [E] :   Diagramme de flexion
+        '   AlphaCr [S] :   Alpha Critique
+        '   lOK     [S] :   Indique si le calcul s'est bien déroulé
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim i, j, k As Integer
+
+        Dim pDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim paramLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
+
+        Dim MyDLL_LTB As New CTICM_LTB.CALCUL_LTB
+        Dim MyOutput_LTB As CTICM_LTB.DATA_LTB.Struc_Output = Nothing
+        Dim CodeError_LTB As Integer
+        Dim TextError_LTB As String = String.Empty
+        Dim pAire, pInertieY, pInertieZ, pInertieW, pInertieT As Decimal
+        Dim nEqEc, zAne, mElRd As Decimal
+        Dim lEnrob As Boolean = myPoutre.lEnrobage
+
+        '--> Préparation des données pour le calcul LTBeamN
+
+        pDonnees.EYOUNG = cls_Acier.EYACIER * kConvMPaPa
+        pDonnees.GSHEAR = cls_Acier.EYACIER * kConvMPaPa / 2 / (1 + cls_Acier.NU)
+
+        '# Noeuds 
+
+        pDonnees.NbNodes = myPoutre.Nodes.nbNodes
+
+        '# Position des noeuds EF
+
+        ReDim pDonnees.xNode(pDonnees.NbNodes - 1)
+        For i = 0 To pDonnees.NbNodes - 1
+            pDonnees.xNode(i) = myPoutre.Nodes.xGlobal(i)
+        Next
+
+        '# Elements
+
+        '---[ Dimensionnement des tableaux
+
+        ReDim pDonnees.Aire(pDonnees.NbNodes - 2)
+        ReDim pDonnees.InertieY(pDonnees.NbNodes - 2)
+        ReDim pDonnees.RayGirPol(pDonnees.NbNodes - 2)
+        ReDim pDonnees.InertieT(pDonnees.NbNodes - 2)
+        ReDim pDonnees.InertieZ(pDonnees.NbNodes - 2)
+        ReDim pDonnees.InertieW(pDonnees.NbNodes - 2)
+        ReDim pDonnees.PositionCG(pDonnees.NbNodes - 2)
+        ReDim pDonnees.CoefBetaZ(pDonnees.NbNodes - 2)
+        ReDim pDonnees.MomentFle(pDonnees.NbNodes - 2, 1)
+
+        '---[ Propriétés élémentaires
+
+        pAire = myPoutre.Section.ProfilA.Aire
+        If lEnrob Then nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
+        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd)
+        pInertieT = myPoutre.Section.InertieT
+        pInertieW = myPoutre.Section.ProfilA.InertieW
+
+        '---[ Remplissage des tableaux
+
+        For i = 0 To pDonnees.NbNodes - 2
+            pDonnees.Aire(i) = pAire
+            pDonnees.InertieY(i) = pInertieY
+            '.RayGirPol(i) = 13.49 * 0.01   'm
+            pDonnees.InertieT(i) = pInertieT
+            pDonnees.InertieZ(i) = pInertieZ
+            pDonnees.InertieW(i) = pInertieW
+            '.CoefBetaZ(i) = 0.0 * 0.01      'm                
+            '.PositionCG(i) = 0.0 * 0.01      'm                
+        Next
+
+        '# Appuis de la poutre
+
+        pDonnees.NbAppuis = myPoutre.Nodes.NbAppuis
+        ReDim pDonnees.iNodeAppui(pDonnees.NbAppuis - 1)
+        ReDim pDonnees.lAppuiArticule(pDonnees.NbAppuis - 1)
+
+        For i = 0 To pDonnees.NbAppuis - 1
+            pDonnees.iNodeAppui(i) = myPoutre.Nodes.iNodeAppui(i)
+            pDonnees.lAppuiArticule(i) = False
+        Next
+
+        '.NbForcesPon = 2
+        '.NbForcesRep = 0
+        '.NbMoments = 0
+
+        'ReDim .ForcePon(.NbForcesPon - 1)
+        'ReDim .xForcePon(.NbForcesPon - 1)
+        'ReDim .zForcePonC(.NbForcesPon - 1)
+        '.ForcePon(0) = 10 * 1000        'N
+        '.xForcePon(0) = 4.875
+        '.zForcePonC(0) = 0.0
+        '.ForcePon(1) = 10 * 1000        'N
+        '.xForcePon(1) = 14.75
+        '.zForcePonC(1) = 0.0
+
+        '# Moments fléchissants
+
+        'For j = 0 To pDonnees.NbNodes - 1
+
+        '    For k = 0 To 1
+        '        pDonnees.MomentFle(j, k) = MEd(j, k)
+        '    Next
+
+        'Next
+        pDonnees.MomentFle = MEd
+
+        '--> Lancement du calcul LTBeamN
+
+        Call MyDLL_LTB.CALCULER(pDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+
+        '--> Exploitation des résultats
+
+        AlphaCr = MyOutput_LTB.CoefCr
+        lOK = (CodeError_LTB = 0)
+
+    End Sub
+
+    Private Sub ExtraireMaintiensLateraux(myPoutre As cls_Poutre, ByRef ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB)
+        '----------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Préparation des paramètres de calcul relatifs aux maintiens latéraux
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre    [E] :   Poutre traitée
+        '   paramLTB    [S] :   Paramètres pour le calcul LTB
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iNode, jM As Integer
+        Dim iTravee As Integer
+        Dim iDebT, iFinT As Integer
+        Dim cTheta, cVP, cThetaP As Decimal
+        Dim lMaintien As Boolean
+        Dim zMaintien As Decimal
+        Dim x0 As Decimal
+
+        '--> Initialisation
+
+        iDebT = myPoutre.IndicePremiereTravee
+        iFinT = myPoutre.IndiceDerniereTravee
+
+        '=== APPUIS SIMPLES
+
+        ParamLTB.NbMaintiensPon = myPoutre.Nodes.NbAppuis
+        ReDim ParamLTB.iNodeMaintienPon(myPoutre.Nodes.NbAppuis - 1)
+        ReDim ParamLTB.MaintienPonV(myPoutre.Nodes.NbAppuis - 1)
+        ReDim ParamLTB.MaintienPonThetaP(myPoutre.Nodes.NbAppuis - 1)
+        ReDim ParamLTB.MaintienPonTheta(myPoutre.Nodes.NbAppuis - 1)
+        ReDim ParamLTB.MaintienPonVP(myPoutre.Nodes.NbAppuis - 1)
+        ReDim ParamLTB.zMaintienPonC(myPoutre.Nodes.NbAppuis - 1)
+
+        For iNode = 0 To myPoutre.Nodes.NbAppuis - 1
+            ParamLTB.iNodeMaintienPon(iNode) = myPoutre.Nodes.iNodeAppui(iNode)
+            ParamLTB.MaintienPonV(iNode) = -1
+            ParamLTB.MaintienPonTheta(iNode) = -1
+        Next
+
+        '=== AUTRES MAINTIENS
+
+        cVP = 0
+        cThetaP = 0
+
+        For iTravee = iDebT To iFinT
+
+            x0 = myPoutre.xPositionAppui(True, iTravee)
+
+            For jM = 0 To myPoutre.NbMaintiens(iTravee)
+
+                lMaintien = True
+
+                If myPoutre.Maintiens(iTravee)(jM).lMaintienSemelleInf And myPoutre.Maintiens(iTravee)(jM).lMaintienSemelleSup Then
+                    cTheta = -1
+                    zMaintien = 0
+                ElseIf myPoutre.Maintiens(iTravee)(jM).lMaintienSemelleInf Then
+                    cTheta = 0
+                    zMaintien = -myPoutre.Section.ProfilA.ha / 2
+                ElseIf myPoutre.Maintiens(iTravee)(jM).lMaintienSemelleSup Then
+                    cTheta = 0
+                    zMaintien = +myPoutre.Section.ProfilA.ha / 2
+                Else
+                    lMaintien = False
+                End If
+
+                iNode = myPoutre.GetIndiceNoeudFromXglobal(x0 + myPoutre.Maintiens(iTravee)(jM).x_Loc)
+
+                '# Protection contre les erreurs
+                If iNode = -1 Then
+                    lMaintien = False
+                    MsgBox("convergence error", MsgBoxStyle.Critical, "[cls_VerificationsAcier|GetIndiceNoeudFromXglobal]")
+                End If
+
+                If lMaintien Then _
+                AjouteMaintien(ParamLTB, iNode, -1, cTheta, cVP, cThetaP, zMaintien)
+            Next
+
+        Next
+    End Sub
+
+    Private Sub AjouteMaintien(ByRef paramLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB,
+                               iNode As Integer, condV As Decimal, condTheta As Decimal, condVP As Decimal, condThetaP As Decimal, Optional zMaintien As Decimal = 0)
+        '----------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Ajout d'une considtion de maintien latéral
+        '----------------------------------------------------------------------------------------------------------
+        '   paramLTB        [S] :   Paramètres LTB
+        '   iNode           [E] :   Indice du noeud avec le blocage
+        '   condV, condVP   [E] :   Conditions de maintien V et V prime
+        '   condTheta       [E] :   Condition de maintien theta
+        '   condThetaP      [E] :   Condition de maintien theta P
+        '   zMaintien       [E] :   Position du maintien (par défaut cdg du profilé)
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Initialisation
+
+        paramLTB.NbMaintiensPon += 1
+
+        ReDim Preserve paramLTB.iNodeMaintienPon(paramLTB.NbMaintiensPon - 1)
+        ReDim Preserve paramLTB.MaintienPonV(paramLTB.NbMaintiensPon - 1)
+        ReDim Preserve paramLTB.MaintienPonThetaP(paramLTB.NbMaintiensPon - 1)
+        ReDim Preserve paramLTB.MaintienPonTheta(paramLTB.NbMaintiensPon - 1)
+        ReDim Preserve paramLTB.MaintienPonVP(paramLTB.NbMaintiensPon - 1)
+        ReDim Preserve paramLTB.zMaintienPonC(paramLTB.NbMaintiensPon - 1)
+
+        '--> Remplissage des valeurs
+
+        paramLTB.iNodeMaintienPon(paramLTB.NbMaintiensPon - 1) = iNode
+
+        paramLTB.MaintienPonV(paramLTB.NbMaintiensPon - 1) = condV
+        paramLTB.MaintienPonThetaP(paramLTB.NbMaintiensPon - 1) = condThetaP
+        paramLTB.MaintienPonTheta(paramLTB.NbMaintiensPon - 1) = condTheta
+        paramLTB.MaintienPonVP(paramLTB.NbMaintiensPon - 1) = condVP
+        paramLTB.zMaintienPonC(paramLTB.NbMaintiensPon - 1) = zMaintien
+
+    End Sub
+
 
 #End Region
 
