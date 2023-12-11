@@ -18,7 +18,7 @@ Module Mod_Dessins
 #End Region
 
 #Region "Dessins pour la fenetre principale (FRM_MAIN)"
-    Public Sub DessinFrmMain_Coupe(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre, lZoomPlus As Boolean,
+    Public Sub DessinFrmMain_Coupe(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre, lZoomPlus As Boolean, lCotation As Boolean,
                                    ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   26/06/23 :  Version 1.00
@@ -62,6 +62,18 @@ Module Mod_Dessins
         Dim lCote As Boolean = True
         Dim lCofraplus220 As Boolean
 
+        'Partie qui concene la cotation 
+        Dim Chaine As String
+        Dim xo_cotes, xe_cotes, yo_cotes, ye_cotes As Decimal
+        Dim MyPen As New Pen(Color.Black, 1) 'Pen utilise pour les fleches/cotations 
+        Dim MyFontNormal As Font = FontBase
+        Dim lContour As Boolean = lCONTOURCOTE
+        Dim CouleurTremie As Color = CouleurTremieNormal
+        Dim myBrushT As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurTremie, CouleurTremie)
+        Dim yInfTremieG, ySupTremieG, yInfTremieD, ySupTremieD As Decimal
+
+
+
         '--> Initialisation
 
         lMixte = MySection.lMixte
@@ -69,8 +81,6 @@ Module Mod_Dessins
         lLamine = MySection.lLamine
         lCofraplus220 = MyDalle.Bac.lCofraplus220
 
-        ' A REVOIR ====
-        'Beff = LargeurDalleDessin(MySection.ProfilA)
         EntraxeD1 = MyPoutre.EntraxeD1
         EntraxeD2 = MyPoutre.EntraxeD2
         EntraxeTot = EntraxeD1 + EntraxeD2
@@ -160,6 +170,53 @@ Module Mod_Dessins
         ' Dessin de la section acier
         DessinProfileMetal(myGr, MySection.ProfilA, myBrushP, MyParAff, zREF, EntraxeD2)
 
+
+        '--> Dessin des cotations pour les profilés
+
+        If lCotation And Not lZoomPlus Then
+
+            'cotation à gauche 
+            xo_cotes = -EntraxeD1
+            xe_cotes = 0
+            yo_cotes = zREF - dCar
+            ye_cotes = yo_cotes
+
+            AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
+            Chaine = GetStringNoUnit(EntraxeD1, Enu_TypeVariable.Dimension)
+            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+
+            'cotation à droite
+            xo_cotes = EntraxeD2
+            xe_cotes = 0
+            yo_cotes = zREF - dCar
+            ye_cotes = yo_cotes
+
+            AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
+            Chaine = GetStringNoUnit(EntraxeD2, Enu_TypeVariable.Dimension)
+            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
+
+        ' Affichage du nom du profilé
+        If MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine And lCotation Then
+            If lZoomPlus Then
+                xo_cotes = dCar / 4
+            Else
+                xo_cotes = dCar / 2
+            End If
+            xe_cotes = xo_cotes
+            yo_cotes = zREF
+            ye_cotes = yo_cotes - MySection.ProfilA.ha
+
+            Chaine = MySection.ProfilA.NomProfile
+            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
+
+
+
+
         '--> Dessin de la dalle
 
         'If lMixte Then 
@@ -195,13 +252,125 @@ Module Mod_Dessins
 
         If MyPoutre.lMixte Then DessinConnecteurs_Frm_Main(myGr, MyPoutre, MyParAff, myBrushC, EntraxeD2, MyPoutre.lIntermediaire, EntraxeD1)
 
-        'End If
+        '# Dessin tremies
 
-        'If lCote Then
-        '    Dim strMsg As String()
-        '    DessinCoteFrmDalle(myGr, MyDalle, MySection, -1, MyParAff, dCar, BeffG, BeffD, strMsg)
+        If MyPoutre.lTremieGauche Or MyPoutre.lTremieDroite Then
+            If lCofraplus220 Then
+                yInfTremieG = zREF - MyDalle.Bac.Hp - MySection.ProfilA.Tfs
+                ySupTremieG = zREF + MyPoutre.Dalle.t_d + MySection.ProfilA.Tfs
 
-        'End If
+                yInfTremieD = yInfTremieG
+                ySupTremieD = ySupTremieG
+            ElseIf MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine Then
+                If MyPoutre.DistanceDsl1 <= MyPoutre.Section.ProfilA.Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd) Then
+                    yInfTremieG = zREF
+                    ySupTremieG = zREF + MyPoutre.Dalle.t_d + MyPoutre.Dalle.t_h + MySection.ProfilA.Tfs
+                Else
+                    yInfTremieG = zREF + MyPoutre.Dalle.t_h - MySection.ProfilA.Tfs
+                    ySupTremieG = zREF + MyPoutre.Dalle.t_d + MyPoutre.Dalle.t_h + MySection.ProfilA.Tfs
+                End If
+
+                If MyPoutre.DistanceDsl2 <= MyPoutre.Section.ProfilA.Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd) Then
+                    yInfTremieD = zREF
+                    ySupTremieD = zREF + MyPoutre.Dalle.t_d + MyPoutre.Dalle.t_h + MySection.ProfilA.Tfs
+                Else
+                    yInfTremieD = zREF + MyPoutre.Dalle.t_h - MySection.ProfilA.Tfs
+                    ySupTremieD = zREF + MyPoutre.Dalle.t_d + MyPoutre.Dalle.t_h + MySection.ProfilA.Tfs
+                End If
+            Else
+                yInfTremieG = zREF - MySection.ProfilA.Tfs
+                ySupTremieG = zREF + MyPoutre.Dalle.t_d + MySection.ProfilA.Tfs
+
+                yInfTremieD = yInfTremieG
+                ySupTremieD = ySupTremieG
+            End If
+
+
+        End If
+
+        '--> Trémie gauche
+        If MyPoutre.lTremieGauche Then
+            AddRectanglePlein(myGr, myBrushT, MyPenContour, -MyPoutre.EntraxeD1 + MyPoutre.DistanceDsl1, yInfTremieG, -MyPoutre.DistanceDsl1, ySupTremieG, MyParAff, True, True, True, False, False)
+
+            If lCotation And Not lZoomPlus Then
+
+                'cotation de l'axe au bord
+                xo_cotes = -MyPoutre.DistanceDsl1
+                xe_cotes = 0
+                yo_cotes = ySupTremieG + dCar / 4
+                ye_cotes = yo_cotes
+
+                AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
+                Chaine = GetStringNoUnit(MyPoutre.DistanceDsl1, Enu_TypeVariable.Dimension)
+                AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+
+                'cotation de la tremie gauche
+                xo_cotes = -EntraxeD1 + MyPoutre.DistanceDsl1
+                xe_cotes = -MyPoutre.DistanceDsl1
+
+                AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
+                Chaine = GetStringNoUnit(Math.Abs(xe_cotes - xo_cotes), Enu_TypeVariable.Dimension)
+                AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            End If
+
+        End If
+
+        '--> Trémie droite  
+        If MyPoutre.lTremieDroite Then
+            AddRectanglePlein(myGr, myBrushT, MyPenContour, MyPoutre.DistanceDsl2, yInfTremieD, MyPoutre.EntraxeD2 - MyPoutre.DistanceDsl2, ySupTremieD, MyParAff, True, True, True, False, False)
+
+            If lCotation And Not lZoomPlus Then
+
+                'cotationde l'axe au bord droit 
+                xo_cotes = 0
+                xe_cotes = MyPoutre.DistanceDsl2
+                yo_cotes = ySupTremieD + dCar / 4
+                ye_cotes = yo_cotes
+
+                AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
+                Chaine = GetStringNoUnit(MyPoutre.DistanceDsl2, Enu_TypeVariable.Dimension)
+                AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                'cotation de la tremie gauche
+                xo_cotes = MyPoutre.DistanceDsl2
+                xe_cotes = EntraxeD2 - MyPoutre.DistanceDsl2
+
+                AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
+                Chaine = GetStringNoUnit(Math.Abs(xe_cotes - xo_cotes), Enu_TypeVariable.Dimension)
+                AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+
+            End If
+
+
+        End If
+
+
+        'Affichage nom du goujon disposé, le cas écheant
+
+        If MyPoutre.lMixte And lCotation Then
+            'Cotation
+            If lZoomPlus Then
+                xo_cotes = -MyPoutre.Section.ProfilA.Bfs / 2 - dCar / 4
+            Else
+                xo_cotes = -MyPoutre.Section.ProfilA.Bfs / 2 - dCar / 2
+            End If
+            xe_cotes = xo_cotes
+
+            If lZoomPlus Then
+                yo_cotes = zREF - MyPoutre.Section.ProfilA.Tfs - dCar / 4
+            Else
+                yo_cotes = zREF - MyPoutre.Section.ProfilA.Tfs - dCar / 4
+            End If
+
+            ye_cotes = yo_cotes
+
+            Chaine = MyPoutre.Dalle.Connecteur.nom
+            AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+        End If
+
     End Sub
 
     Private Sub DessinDallePleine_Frm_Main(ByRef MyGr As Graphics, MyDalle As cls_Dalle, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage, MyBrushDP As Brush, EntraxeD2 As Decimal, lIntermediaire As Boolean,

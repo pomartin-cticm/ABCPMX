@@ -26,7 +26,10 @@ Public Class Frm_PMX
     Dim strRacineELS As String
     Dim strRacineELF As String
 
-    Dim lZoomPlus As Boolean
+    ''' <summary>
+    ''' Booleens utilisés pour les controles du dessin
+    ''' </summary>
+    Dim lZoomPlus, lCotation As Boolean
 
 #End Region
 
@@ -85,7 +88,9 @@ Public Class Frm_PMX
         GestionStyle()
 
         lZoomPlus = False
+        lCotation = True
         MAJ_btnZoomPlus()
+        MAJ_btnCotation()
 
         '--> Affichage
 
@@ -1376,7 +1381,7 @@ Public Class Frm_PMX
 #Region "Dessins"
 
     Private Sub img_Main_Paint(sender As Object, e As PaintEventArgs) Handles img_Main.Paint
-        DessinFrmMain_Coupe(e.Graphics, Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height, MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus)
+        DessinFrmMain_Coupe(e.Graphics, Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height, MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation)
     End Sub
 
     Private Sub Frm_PMX_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
@@ -1401,6 +1406,16 @@ Public Class Frm_PMX
     Private Sub MAJ_btnZoomPlus()
         Me.TSbtn_ZoomPlus.Checked = lZoomPlus
         Me.TSbtn_ZoomMoins.Checked = Not lZoomPlus
+    End Sub
+
+    Private Sub MAJ_btnCotation()
+        Me.TSbtn_Cotations.Checked = lCotation
+    End Sub
+
+    Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
+        lCotation = Not lCotation
+        MAJ_btnCotation()
+        img_Main.Invalidate()
     End Sub
 
     Private Sub TSbtn_NdcPoutre_Click(sender As Object, e As EventArgs) Handles TSbtn_NdcPoutre.Click

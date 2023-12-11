@@ -671,6 +671,50 @@ Module Mod_OutilsGraph
 
     End Sub
 
+    Sub AddRectanglePlein(ByRef MyGr As Graphics,
+                          ByVal MyBrush As Brush, ByVal MyPen As Pen,
+                          ByVal xo As Double, ByVal yo As Double,
+                          ByVal xe As Double, ByVal ye As Double,
+                          ByVal ParAff As Struc_Affichage,
+                          ByVal lRemplissage As Boolean, ByVal lContourGauche As Boolean, ByVal lContourDroite As Boolean, ByVal lContourHaut As Boolean, ByVal lContourBas As Boolean, Optional lPointille As Boolean = False)
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   08/12/2023 :  Creation GUD - v1.00
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   Affichage d'un rectangle plein avec possibilité de maitriser le dessin des contours 
+        '
+        '-----------------------------------------------------------------------------------------------------
+        '
+        '   MyGr            [E] :   Graphics recevant le dessin
+        '   MyBrush         [E] :   Pinceau pour le remplissage
+        '   MyPen           [E] :   Stylo pour le contour
+        '   xo, yo          [E] :   Coordonnées du premier point definissant le rectangle
+        '   xe, ye          [E] :   Coordonnées du second point definissant le rectangle
+        '   ParAff          [E] :   Paramètres de l'affichage
+        '   lRemplissage    [E] :   Indique si remplissage
+        '   lContourGauche  [E] :   Indique si contour de gauche est dessine
+        '   lContourDroite  [E] :   Indique si contour de droite est dessine
+        '   lContourHaut    [E] :   Indique si contour haut est dessine
+        '   lContourBas     [E] :   Indique si contour bas est dessine
+        '
+        '----------------------------------------------------------------------------------------------------
+
+        Dim xEo As Single = XEcran(ParAff, xo)
+        Dim xEe As Single = XEcran(ParAff, xe)
+        Dim yEo As Single = YEcran(ParAff, yo)
+        Dim yEe As Single = YEcran(ParAff, ye)
+
+        If lRemplissage Then MyGr.FillRectangle(MyBrush, Math.Min(xEo, xEe), Math.Min(yEo, yEe), Math.Abs(xEe - xEo), Math.Abs(yEe - yEo))
+
+        If lContourGauche Then MyGr.DrawLine(MyPen, xEo, yEo, xEo, yEe)
+        If lContourDroite Then MyGr.DrawLine(MyPen, xEe, yEo, xEe, yEe)
+        If lContourHaut Then MyGr.DrawLine(MyPen, xEo, yEe, xEe, yEe)
+        If lContourBas Then MyGr.DrawLine(MyPen, xEo, yEo, xEe, yEo)
+
+    End Sub
+
 #End Region
 
 #Region " Lignes "

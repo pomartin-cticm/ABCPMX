@@ -574,6 +574,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ABCPMX II.ico" />
+    <None Include="Resources\cotations.png" />
     <None Include="Resources\ZoomPlus.ico" />
   </ItemGroup>
   <ItemGroup>
