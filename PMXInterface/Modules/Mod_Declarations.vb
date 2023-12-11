@@ -165,6 +165,16 @@ Module Mod_Declarations
         Public Version As String
 
         ''' <summary>
+        ''' Année de la dernière version deployee
+        ''' </summary>
+        Public AnneeVersion As String
+
+        ''' <summary>
+        ''' Adresse mail du support à contacter
+        ''' </summary>
+        Public MailSupport As String
+
+        ''' <summary>
         ''' Extension des fichiers du logiciel
         ''' </summary>
         Public Extension As String
@@ -348,6 +358,7 @@ Module Mod_Declarations
     End Enum
 
     Public Enum EnuFenetres
+        About
         Chargements
         Combinaisons
         Connexion

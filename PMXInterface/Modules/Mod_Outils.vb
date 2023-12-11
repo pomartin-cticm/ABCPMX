@@ -264,7 +264,7 @@ Module Mod_Outils
     Public Sub PrepareMailSupport()
 
         '--> Déclaration
-        Dim destinataire As String = "support.logiciels@cticm.com"
+        Dim destinataire As String = LogicielInfo.MailSupport
         Dim objet As String '--> sujet du mail
         Dim corps As String '--> Corps du mail
 
@@ -303,8 +303,8 @@ Module Mod_Outils
             System.Diagnostics.Process.Start(String.Format("mailto:{0}?subject={1}&body={2}", destinataire, objet, corps))
         Catch ex As Exception
             MsgBox("Error Email Support : " & Chr(13) &
-                   " - Ecrire un mail à support.logiciels@cticm.com avec comme objet 'Support " & LogicielInfo.NomLogiciel & "'" & Chr(13) &
-                   " - Write an email at support.logiciels@cticm.com with the subject 'Support " & LogicielInfo.NomLogiciel & "'", MsgBoxStyle.Critical, "Mod_Outils/PrepareMailSupport")
+                   " - Ecrire un mail à " & LogicielInfo.MailSupport & "avec comme objet 'Support " & LogicielInfo.NomLogiciel & "'" & Chr(13) &
+                   " - Write an email at " & LogicielInfo.MailSupport & " with the subject 'Support " & LogicielInfo.NomLogiciel & "'", MsgBoxStyle.Critical, "Mod_Outils/PrepareMailSupport")
         End Try
 
     End Sub

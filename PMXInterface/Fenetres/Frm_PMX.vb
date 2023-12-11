@@ -447,7 +447,7 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsBarreOutilGenerale(sender As Object, e As EventArgs) Handles TSbtn_EditStuds.Click, TSbtn_EditProfiles.Click, TSbtn_EditBacs.Click
+    Private Sub GestionBoutonsBarreOutilGenerale(sender As Object, e As EventArgs) Handles TSbtn_EditStuds.Click, TSbtn_EditProfiles.Click, TSbtn_EditBacs.Click, AboutToolStripMenuItemN.Click
 
         Select Case sender.name
             Case Me.TSbtn_EditStuds.Name
@@ -456,6 +456,8 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.EditSection
             Case Me.TSbtn_EditBacs.Name
                 FilleEnCours = EnuFenetres.EditBac
+            Case Me.AboutToolStripMenuItemN.Name
+                FilleEnCours = EnuFenetres.About
         End Select
 
         AfficheFenetreEnCours()
@@ -679,6 +681,10 @@ Public Class Frm_PMX
                     Frm_Catalogue.ShowDialog()
                 End If
 
+            Case EnuFenetres.About
+                If LogicielOptions.lFenetres Then
+                    Frm_About.InitialiserFenetre(LogicielInfo.Maitre = EnuMaitre.CTICM)
+                End If
 
 
         End Select
@@ -1418,9 +1424,6 @@ Public Class Frm_PMX
         img_Main.Invalidate()
     End Sub
 
-    Private Sub TSbtn_NdcPoutre_Click(sender As Object, e As EventArgs) Handles TSbtn_NdcPoutre.Click
-
-    End Sub
 
 
 

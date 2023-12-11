@@ -98,6 +98,12 @@
     <Compile Include="Fenetres\EditionBases\Frm_EditGoujons.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_About.Designer.vb">
+      <DependentUpon>Frm_About.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_About.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_BacN.Designer.vb">
       <DependentUpon>Frm_BacN.vb</DependentUpon>
     </Compile>
@@ -410,6 +416,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\EditionBases\Frm_EditGoujons.resx">
       <DependentUpon>Frm_EditGoujons.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_About.resx">
+      <DependentUpon>Frm_About.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_BacN.resx">
       <DependentUpon>Frm_BacN.vb</DependentUpon>

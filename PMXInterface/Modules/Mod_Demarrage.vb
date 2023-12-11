@@ -44,6 +44,8 @@ Module Mod_Demarrage
 
         LogicielInfo.NomLogiciel = "ABCPMX-II"
         LogicielInfo.Version = "1.0"
+        LogicielInfo.AnneeVersion = "2024"
+        LogicielInfo.MailSupport = "support.logiciels@cticm.com"
         LogicielInfo.Extension = "pmx"
         LogicielInfo.Racine = "ABCPMX"
 
