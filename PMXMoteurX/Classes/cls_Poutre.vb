@@ -207,6 +207,42 @@ Public Class cls_Poutre
     End Property
 
     ''' <summary>
+    ''' Permet de renvoyer la valeur min de nr sur toute la poutre
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property nr_min As Integer
+        Get
+            Dim nr_retour As Integer = Me.NombreGoujonsTransv(Me.IndicePremiereTravee, 0)
+
+            For i_travee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+                For j_zone As Integer = 0 To Me.NombreZones(i_travee) - 1
+                    nr_retour = Math.Min(nr_retour, Me.NombreGoujonsTransv(i_travee, j_zone))
+                Next
+            Next
+
+            Return nr_retour
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Permt de renvoyer la valeur max de nr sur toute la poutre 
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property nr_max As Integer
+        Get
+            Dim nr_retour As Integer = Me.NombreGoujonsTransv(Me.IndicePremiereTravee, 0)
+
+            For i_travee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+                For j_zone As Integer = 0 To Me.NombreZones(i_travee) - 1
+                    nr_retour = Math.Max(nr_retour, Me.NombreGoujonsTransv(i_travee, j_zone))
+                Next
+            Next
+
+            Return nr_retour
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Espacement longi entre goujons
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
     ''' </summary>

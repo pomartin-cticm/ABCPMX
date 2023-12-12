@@ -166,7 +166,7 @@ Public Class cls_Connecteur
 #Region " Résistance connecteur Dalle Pleine Génération 1 "
 
     '--> 1ere GENERATION
-    Public Function PRdDallePleineG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal) As Decimal
+    Private Function PRdDallePleineG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -196,7 +196,7 @@ Public Class cls_Connecteur
 
     '--> 1ere et 2eme GENERATIONS
 
-    Public Function PRdDallePleineG1G2Acier(GammaVS As Decimal) As Decimal
+    Private Function PRdDallePleineG1G2Acier(GammaVS As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ Public Class cls_Connecteur
     End Function
 
     '--> 1ere GENERATION
-    Public Function PRdDallePleineG1Beton(Fck As Decimal, Ecm As Decimal, GammaVC As Decimal) As Decimal
+    Private Function PRdDallePleineG1Beton(Fck As Decimal, Ecm As Decimal, GammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -242,7 +242,7 @@ Public Class cls_Connecteur
         Return PRd
     End Function
 
-    Public ReadOnly Property Alpha As Decimal
+    Private ReadOnly Property Alpha As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -267,7 +267,7 @@ Public Class cls_Connecteur
 #Region " Résistance connecteur Dalle Pleine Génération 2  "
 
     '--> 2eme GENERATION
-    Public Function PRdDallePleineG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal) As Decimal
+    Private Function PRdDallePleineG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   18/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -296,7 +296,7 @@ Public Class cls_Connecteur
     End Function
 
     '-->2eme GENERATION
-    Public Function PRdDallePleineG2Beton(Fck As Decimal, Ecm As Decimal, GammaVC As Decimal) As Decimal
+    Private Function PRdDallePleineG2Beton(Fck As Decimal, Ecm As Decimal, GammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   18/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -349,7 +349,7 @@ Public Class cls_Connecteur
 
     End Function
 
-    Public Function kTMax(nr As Decimal, MyBac As cls_Bac) As Decimal
+    Private Function kTMax(nr As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -393,7 +393,7 @@ Public Class cls_Connecteur
 
     End Function
 
-    Public Function PRdBacPerpendiculaireG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As cls_Bac) As Decimal
+    Private Function PRdBacPerpendiculaireG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -424,7 +424,7 @@ Public Class cls_Connecteur
 
     '--> 2eme GENERATION
 
-    Public Function PRdBacPerpendiculaireG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As cls_Bac) As Decimal
+    Private Function PRdBacPerpendiculaireG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, nr As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -453,7 +453,7 @@ Public Class cls_Connecteur
 
     End Function
 
-    Public Function PRdBacPerpendiculaireG2_AnnexeG(MyPoutre As cls_Poutre, nr As Integer, GammaVC As Decimal, GammaVS As Decimal)
+    Private Function PRdBacPerpendiculaireG2_AnnexeG(MyPoutre As cls_Poutre, nr As Integer, GammaVC As Decimal, GammaVS As Decimal)
         '-----------------------------------------------------------------------------------------------------------------
         '   02/08/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -480,7 +480,7 @@ Public Class cls_Connecteur
         Return Math.Min(PRdC, PRdS)
     End Function
 
-    Public Function PRdBacPerpendiculaireG2_AnnexeG_Acier(GammaVS As Decimal) As Decimal
+    Private Function PRdBacPerpendiculaireG2_AnnexeG_Acier(GammaVS As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   18/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -502,7 +502,7 @@ Public Class cls_Connecteur
         Return PRd
     End Function
 
-    Public Function PRdBacPerpendiculaireG2_AnnexeG_Beton(MyPoutre As cls_Poutre, nr As Integer, GammaVC As Decimal) As Decimal
+    Private Function PRdBacPerpendiculaireG2_AnnexeG_Beton(MyPoutre As cls_Poutre, nr As Integer, GammaVC As Decimal) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   18/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -556,7 +556,7 @@ Public Class cls_Connecteur
 
 #Region " Résistance dalle mixte avec Bac parrallèle "
     '--> 1ere GENERATION
-    Public Function PRdBacParrallelleG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As cls_Bac) As Decimal
+    Private Function PRdBacParrallelleG1(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -585,7 +585,7 @@ Public Class cls_Connecteur
     End Function
 
     '--> 2eme GENERATION
-    Public Function PRdBacParrallelleG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As cls_Bac) As Decimal
+    Private Function PRdBacParrallelleG2(Fck As Decimal, Ecm As Decimal, GammaVS As Decimal, GammaVC As Decimal, MyBac As cls_Bac) As Decimal
         '-----------------------------------------------------------------------------------------------------------------
         '   17/07/23 :  Création - GUD
         '-----------------------------------------------------------------------------------------------------------------
@@ -701,7 +701,7 @@ Public Class cls_Connecteur
 
     End Function
 
-    Public Function lAnnexeG(MyBac As cls_Bac) As Boolean
+    Private Function lAnnexeG(MyBac As cls_Bac) As Boolean
         '-----------------------------------------------------------------------------------------------------------------
         '   31/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
