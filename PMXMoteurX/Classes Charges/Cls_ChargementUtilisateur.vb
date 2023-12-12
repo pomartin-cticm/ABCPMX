@@ -4,7 +4,7 @@
     '#### CONCERNE : QC, G2, Q1 et Q2  (G1 ?)
 
 #Region " Attributs "
-    'Public Titre As String                             ' Titre du cas de charge 'GUD: je l'ai enlevé car fait doublon avec la clé du dictionnaire ChargeU
+    Public Titre As String                             ' Titre du cas de charge dans la langue utilisateur 
 
     Public QSurf() As Decimal                           ' Charge par unité de surface sur chaque travée
     'Public WSurf() As Decimal                           ' Largeur d'application de la charge surfacique sur chaque travée
@@ -15,9 +15,9 @@
 
 #Region " Constructeurs "
 
-    Public Sub New(IndiceDerniereTravee As Integer)
+    Public Sub New(pTitre As String, IndiceDerniereTravee As Integer)
 
-        'Me.Titre = pTitre
+        Me.Titre = pTitre
 
         ReDim Me.QSurf(IndiceDerniereTravee)
         'ReDim Me.WSurf(IndiceDerniereTravee + 1)
@@ -131,6 +131,31 @@
             Return lDefini
         End Get
     End Property
+
+    Public Function NombreForcePonctuelles(iTravP As Integer, iTravD As Integer) As Integer
+        '-----------------------------------------------------------------------------------------------------
+        '   12/12/23 :  Création - GUD (complete les fonctions ci-dessous)
+        '-----------------------------------------------------------------------------------------------------
+        '   Renvoie le nombre de charges ponctuelles dans le cas de charge (sur toutes les travées)
+        '-----------------------------------------------------------------------------------------------------
+        '   iTravP, iTravP [E] :    Indices de la première et de la dernière travée
+        '-----------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NbCharges As Integer = 0
+
+        '--> Boucle sur les travées
+
+        For iTrav As Integer = iTravP To iTravD
+            NbCharges += Me.Forces(iTrav).Count
+        Next
+
+        '--> Fin
+
+        Return NbCharges
+
+    End Function
 
     Public Function NombreForceReparties(iTravP As Integer, iTravD As Integer) As Integer
         '-----------------------------------------------------------------------------------------------------

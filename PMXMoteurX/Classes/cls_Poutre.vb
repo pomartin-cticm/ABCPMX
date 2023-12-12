@@ -444,17 +444,11 @@ Public Class cls_Poutre
         '   MsgChargements  [E] :   Nom des cas de charges dans la langue utilisateur
         '-------------------------------------------------------------------------------------------------------
 
-        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(Me.IndiceTraveeConsoleDroite))
-
-        'Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(MsgChargements(0), Me.IndiceTraveeConsoleDroite))
-        'Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(MsgChargements(1), Me.IndiceTraveeConsoleDroite))
-        'Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(MsgChargements(2) & " 1", Me.IndiceTraveeConsoleDroite))
-        'Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(MsgChargements(2) & " 2", Me.IndiceTraveeConsoleDroite))
-        'Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(MsgChargements(3), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(MsgChargements(0), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(MsgChargements(1), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(MsgChargements(2) & " 1", Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(MsgChargements(2) & " 2", Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(MsgChargements(3), Me.IndiceTraveeConsoleDroite))
 
     End Sub
 

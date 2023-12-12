@@ -235,7 +235,16 @@ SLSTATES				= Serviceability limit states
 FLSTATES				= Fire limit states
 ELCUSTATES				= Construction stage ultimate limit states
 ELCSSTATES				= Construction stage serviceability limit states
+QSURF					= Surface load
+FREP					= Linear load
+FPONC					= Point load
 NOCOMBO					= No combination have been defined for this limite state
+NOLOADDEFINED			= No load is defined for this load case
+NOQSURF					= No surface load defined for this load case
+NOFREP					= No linear load defined for this load case 
+NOFPONC					= No point load defined for this load case 
+QSURF_WIDTH				= Width of application
+QSURF_VALUE				= Uniform load
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties

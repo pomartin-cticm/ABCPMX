@@ -1339,6 +1339,134 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(2, Bloc("LOADS"))
 
+        For Each elmnt As KeyValuePair(Of String, cls_ChargementUtilisateur) In MyBeam.ChargesU
+            AddTitreNdC(3, elmnt.Key & " : " & elmnt.Value.Titre)
+            If elmnt.Value.EstDefinie Then
+
+                'Partie qui concerne les charges surfacique
+
+                If elmnt.Value.NombreChargesSurf(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) = 0 Then
+                    SauteLigne()
+                    If nbLignes + 2 > MAXLIGNEPPAG Then SautePage()
+                    AddLigneNDC(TABW2 & Bloc("NOQSURF"))
+                Else
+                    SauteLigne()
+                    If nbLignes + 1.5 * (elmnt.Value.NombreChargesSurf(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
+                    AddLigneNDC(TABW2 & "\G\I" & Bloc("QSURF") & "\i\g")
+
+                    AddLigneNDC("\TABLEAU 18")
+                    InitialiseLigne(2, HLIGNE, True)
+                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
+                    AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("QSURF_VALUE") & " (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\=)")
+
+
+                    For iTravee As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+
+                        InitialiseLigne(2, HLIGNE, True)
+                        AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+
+                        If elmnt.Value.NombreChargesSurf(iTravee, iTravee) = 0 Then
+                            AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+                        Else
+                            AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(elmnt.Value.QSurf(iTravee) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2), Enu_TypeVariable.SansType, 3, 2, False))
+                        End If
+
+                    Next
+
+                    FinTableau()
+                End If
+
+
+                'Partie qui concerne les forces linéiques
+
+
+
+                If elmnt.Value.NombreForceReparties(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) = 0 Then
+                    SauteLigne()
+                    If nbLignes + 2 > MAXLIGNEPPAG Then SautePage()
+                    AddLigneNDC(TABW2 & Bloc("NOFREP"))
+                Else
+                    SauteLigne()
+                    If nbLignes + 1.5 * (elmnt.Value.NombreForceReparties(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
+                    AddLigneNDC(TABW2 & "\G\I" & Bloc("FREP") & "\i\g")
+
+                    AddLigneNDC("\TABLEAU 18")
+                    InitialiseLigne(5, HLIGNE, True)
+                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+
+                    For iTravee As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+                        If elmnt.Value.NombreForceReparties(iTravee, iTravee) = 0 Then 'aucune charge définie sur la travée en cours 
+                            InitialiseLigne(5, HLIGNE, True)
+                            AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+                        Else 'au moins une charge linéique est définie pour la travée en cours
+                            For Each f_rep As cls_ForceRepartie In elmnt.Value.FReparties(iTravee)
+                                InitialiseLigne(5, HLIGNE, True)
+                                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.xPosT(0) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), Enu_TypeVariable.SansType, 3, 2, False))
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.Force(0) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 2, False))
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.xPosT(1) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), Enu_TypeVariable.SansType, 3, 2, False))
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.Force(1) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 2, False))
+                            Next
+
+                        End If
+                    Next
+
+                    FinTableau()
+                End If
+
+
+                'partie qui concerne les forces ponctuelles
+
+
+                If elmnt.Value.NombreForcePonctuelles(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) = 0 Then
+                    SauteLigne()
+                    If nbLignes + 2 > MAXLIGNEPPAG Then SautePage()
+                    AddLigneNDC(TABW2 & Bloc("NOFPONC"))
+                Else
+                    SauteLigne()
+                    If nbLignes + 1.5 * (elmnt.Value.NombreForcePonctuelles(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
+                    AddLigneNDC(TABW2 & "\G\I" & Bloc("FPONC") & "\i\g")
+
+                    AddLigneNDC("\TABLEAU 18")
+                    InitialiseLigne(3, HLIGNE, True)
+                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+
+                    For iTravee As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+                        If elmnt.Value.NombreForcePonctuelles(iTravee, iTravee) = 0 Then 'aucune charge définie sur la travée en cours 
+                            InitialiseLigne(3, HLIGNE, True)
+                            AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+                        Else 'au moins une charge linéique est définie pour la travée en cours
+                            For Each f_ponc As cls_Force In elmnt.Value.Forces(iTravee)
+                                InitialiseLigne(3, HLIGNE, True)
+                                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_ponc.xPosT / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), Enu_TypeVariable.SansType, 3, 2, False))
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_ponc.Force / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort), Enu_TypeVariable.SansType, 3, 2, False))
+                            Next
+
+                        End If
+                    Next
+
+                    FinTableau()
+
+                End If
+
+            Else
+                AddLigneNDC(TABW2 & Bloc("NOLOADDEFINED"))
+            End If
+        Next
+
     End Sub
 
     Private Sub EditionParametresCombinaisons(ByVal MyBeam As cls_Poutre)
@@ -2310,7 +2438,7 @@ Module Mod_NoteCalcul
 
         '--> Affichage de la combinaison
 
-        AddTitreNdC(3, ChargeA.Symbol & " :" & ChargeA.Nom)
+        AddTitreNdC(3, ChargeA.Symbol & " : " & ChargeA.Nom)
 
         If Not ChargeA.lRunCalcul Then
             AddLigneNDC(TABW2 & BlocAnalyse("NOTCALCULATION"))
