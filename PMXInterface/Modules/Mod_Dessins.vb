@@ -1236,7 +1236,7 @@ Module Mod_Dessins
     End Sub
 
     Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyDalle As cls_Dalle,
-                            MySection As cls_Section, iSelect As Integer, strMsg() As String,
+                            MySection As cls_Section, iSelect As Integer, strMsg() As String, ByVal lCote As Boolean,
                             ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   26/06/23 :  Version 1.00
@@ -1273,7 +1273,7 @@ Module Mod_Dessins
         Const kADJUST As Decimal = 0.95
         Const zREF As Decimal = 0
         Dim Ha, Bfs As Decimal
-        Dim lCote As Boolean = True
+        'Dim lCote As Boolean = True
         Dim lCofraplus220 As Boolean
 
         '--> Initialisation
@@ -1304,16 +1304,29 @@ Module Mod_Dessins
 
         '--> Préparation des Pinceaux utilisés dans le dessin
 
+        '' Profilé
+        'Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
+        '' Béton
+        'Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+        '' Béton prefabriqué
+        'Dim myBrushPref As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.LightGray, CouleurBeton)
+        '' Etriers
+        'Dim myBrushE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
+        '' Armatures de l'enrobage
+        'Dim myBrushArmaE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurArmaNormal)
+        '' Etriers
+        'Dim myBrushA(1) As Brush
+
         ' Profilé
-        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurAcier, CouleurAcier)
         ' Béton
-        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurBeton, CouleurBeton)
         ' Béton prefabriqué
-        Dim myBrushPref As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.LightGray, CouleurBeton)
+        Dim myBrushPref As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurBeton, CouleurBeton)
         ' Etriers
         Dim myBrushE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
         ' Armatures de l'enrobage
-        Dim myBrushArmaE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurArmaNormal)
+        Dim myBrushArmaE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurArmaNormal, CouleurArmaNormal)
         ' Etriers
         Dim myBrushA(1) As Brush
 

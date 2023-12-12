@@ -802,15 +802,14 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & Bloc("FYS_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
         AddLigneNDC(TABW2 & Bloc("ES_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
 
-        SauteLigne()
-        AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
-        'AddLigneNDC(TABW2 & "ZZZZZ GUD: AJOUTER LA FIGURE QUAND ELLE SERA TERMINEE ZZZZZ")
+        'SauteLigne()
+        AddLigneNDC("\IMG SLAB 5 80 30 NoCadre")
+        nbLignes += 30
 
         '--> Bac acier
+
+
+        If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
 
         If MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             AddTitreNdC(3, Bloc("PROFILED_STEEL_SH"))

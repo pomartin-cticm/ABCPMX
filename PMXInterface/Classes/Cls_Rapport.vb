@@ -1185,6 +1185,11 @@ Public Class Cls_Rapport
 
                     DessinFrmEnrobage(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage, sWiImg, sHiImg, 0.9, False, False, -1, xLeftImg, YPen)
 
+                Case "SLAB"
+
+                    Dim msgDessin(1) As String
+                    DessineDalle(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyProjet.Poutres(MyProjet.IndEnCours).Section, -1, msgDessin, False, xLeftImg, YPen)
+
                 Case "HIVOSS"
 
                     Dim MyDamp As Integer

@@ -26,6 +26,7 @@ Public Class Frm_Dalle
     Dim strToolTipAddRebar, strToolTipRemoveRebar As String
     Dim strLitNo(1) As String
     Dim msgDessin(1) As String
+    Dim lCote As Boolean = True 'indique si on affiche les cotations ou non
 
     Dim iSelect As Integer = -1
     Dim iLitSelect As Integer = 0       'Indice du lit d'armatures à l'affichage
@@ -567,7 +568,7 @@ Public Class Frm_Dalle
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, iSelect, msgdessin)
+                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, iSelect, msgDessin, lCote)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================
