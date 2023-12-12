@@ -319,7 +319,7 @@ Partial Class Frm_Chargement
         'txt_RightSupport
         '
         Me.txt_RightSupport.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_RightSupport.BackColor = System.Drawing.SystemColors.Window
+        Me.txt_RightSupport.BackColor = System.Drawing.Color.LightGray
         Me.txt_RightSupport.Location = New System.Drawing.Point(100, 49)
         Me.txt_RightSupport.Name = "txt_RightSupport"
         Me.txt_RightSupport.ReadOnly = True
@@ -338,7 +338,7 @@ Partial Class Frm_Chargement
         'txt_LeftSupport
         '
         Me.txt_LeftSupport.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_LeftSupport.BackColor = System.Drawing.SystemColors.Window
+        Me.txt_LeftSupport.BackColor = System.Drawing.Color.LightGray
         Me.txt_LeftSupport.Location = New System.Drawing.Point(100, 23)
         Me.txt_LeftSupport.Name = "txt_LeftSupport"
         Me.txt_LeftSupport.ReadOnly = True
@@ -1191,7 +1191,7 @@ Partial Class Frm_Chargement
         'txt_ResultingForce
         '
         Me.txt_ResultingForce.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_ResultingForce.BackColor = System.Drawing.SystemColors.Window
+        Me.txt_ResultingForce.BackColor = System.Drawing.Color.LightGray
         Me.txt_ResultingForce.Location = New System.Drawing.Point(355, 35)
         Me.txt_ResultingForce.Name = "txt_ResultingForce"
         Me.txt_ResultingForce.ReadOnly = True
@@ -1209,7 +1209,7 @@ Partial Class Frm_Chargement
         'txt_WidthApplication
         '
         Me.txt_WidthApplication.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_WidthApplication.BackColor = System.Drawing.SystemColors.Window
+        Me.txt_WidthApplication.BackColor = System.Drawing.Color.LightGray
         Me.txt_WidthApplication.Location = New System.Drawing.Point(127, 13)
         Me.txt_WidthApplication.Name = "txt_WidthApplication"
         Me.txt_WidthApplication.ReadOnly = True
