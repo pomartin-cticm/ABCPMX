@@ -32,6 +32,20 @@ Public Class Frm_Dalle
 
     Dim lCofraPlus220 As Boolean
 
+    ''' <summary>
+    ''' Ajout GUD: les positions des lits d'armatures peuvent être relatives dans le cas de plusieurs nappes 
+    ''' </summary>
+    Dim zMin_Rel, zMax_Rel As Decimal
+
+    Private Const TDMAXI As Decimal = 0.5
+    'Private Const TDMINI As Decimal = 0.05
+    Private Const HPMINI As Decimal = 0.04
+    Private Const PHIMIN As Decimal = 0.003
+    Private Const PHIMAX As Decimal = 0.04
+    Private Const ESPMIN As Decimal = 0.05
+    Private Const ESPMAX As Decimal = 0.5
+    Private Const ZMIN As Decimal = 0.02
+
     Private Enum Enu_DefEpMixte
         Totale                  ' Définition d'une dalle mixte par son épaisseur totale
         Pleine                  ' Définition d'une dalle mixte par son épaisseur au dessus du bac
@@ -187,6 +201,9 @@ Public Class Frm_Dalle
             ReDim Preserve ClasseBetonLeger(nbClasse)
 
         End If
+
+        MAJ_ValeursLimites()
+
 
     End Sub
 
@@ -569,8 +586,14 @@ Public Class Frm_Dalle
             Case Me.chk_Lit2.Name : iLitSelect = 1 : iSelect = 200
         End Select
 
+        MAJ_ValeursLimites()
+
+        'Dim ValeurUI As Decimal
+        'VerificationSaisie(Me.txt_zs, ValeurUI)
+
         AfficherLitEncours()
         MAJI_StatutBOArma()
+
         Me.img_Dalle.Invalidate()
     End Sub
 
@@ -628,6 +651,7 @@ Public Class Frm_Dalle
         Me.img_Dalle.Invalidate()
         MAJI_BOArmatures()
         MAJI_StatutBOArma()
+        MAJ_ValeursLimites()
         AfficherLitEncours()
 
     End Sub
@@ -843,6 +867,11 @@ Public Class Frm_Dalle
         End Select
 
         MAJI_TypeDalle()
+
+        MAJ_ValeursLimites()
+        'Dim ValeurUI As Decimal
+        'VerificationSaisie(Me.txt_zs, ValeurUI)
+        AfficherLitEncours() 'Permet de relancer la vérification 
         Me.img_Dalle.Invalidate()
     End Sub
 
@@ -929,6 +958,11 @@ Public Class Frm_Dalle
 
             End Select
 
+            MAJ_ValeursLimites()
+            AfficherLitEncours() 'Permet de relancer les vérifications
+            'Dim ValeurUI As Decimal
+            'VerificationSaisie(Me.txt_zs, ValeurUI)
+
             Me.img_Dalle.Invalidate()
         End If
 
@@ -952,14 +986,7 @@ Public Class Frm_Dalle
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
 
-        Const TDMAXI As Decimal = 0.5
-        'Const TDMINI As Decimal = 0.05
-        Const HPMINI As Decimal = 0.04
-        Const PHIMIN As Decimal = 0.003
-        Const PHIMAX As Decimal = 0.04
-        Const ESPMIN As Decimal = 0.05
-        Const ESPMAX As Decimal = 0.5
-        Const ZMIN As Decimal = 0.02
+
 
         Select Case MyTxt.Name
             Case Me.txt_Hd.Name, Me.txt_Td2.Name
@@ -999,8 +1026,8 @@ Public Class Frm_Dalle
 
             Case Me.txt_zs.Name
 
-                ValMin = ZMIN / kUnit
-                ValMax = (MyDalleLoc.EpaisseurActive - ZMIN) / kUnit
+                ValMin = Me.zMin_Rel / kUnit
+                ValMax = Me.zMax_Rel / kUnit
 
             Case Me.txt_Hh.Name
 
@@ -1026,6 +1053,21 @@ Public Class Frm_Dalle
         Return lOk
 
     End Function
+
+    Private Sub MAJ_ValeursLimites()
+
+        Me.zMin_Rel = ZMIN
+        Me.zMax_Rel = (MyDalleLoc.EpaisseurActive - ZMIN)
+
+        If Me.MyDalleLoc.NbLitsArmaActifs = 2 Then
+            If iLitSelect = 0 Then 'permiere nappe
+                Me.zMax_Rel = Math.Min(Me.zMax_Rel, Me.MyDalleLoc.LitArma(1).z_s - Me.MyDalleLoc.LitArma(1).PhiS / 2)
+            Else 'deuxieme nappe
+                Me.zMin_Rel = Math.Max(Me.zMin_Rel, Me.MyDalleLoc.LitArma(0).z_s + Me.MyDalleLoc.LitArma(0).PhiS / 2)
+            End If
+        End If
+
+    End Sub
 
     Private Sub cmb_Acier_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Acier.SelectedIndexChanged
         If lBuild Then Exit Sub
@@ -1061,6 +1103,7 @@ Public Class Frm_Dalle
         Me.img_Dalle.Invalidate()
 
     End Sub
+
 
     Private Sub SaisieRdBDefEpMixte(sender As Object, e As EventArgs) Handles rdb_EpTotale.CheckedChanged, rdb_EpPleine.CheckedChanged
         If lBuild Then Exit Sub
