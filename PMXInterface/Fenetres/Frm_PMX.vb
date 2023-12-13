@@ -484,7 +484,7 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.PPVerifications
 
             Case Me.TSMenuPP_Hivoss.Name
-                FilleEnCours = EnuFenetres.Hivoss
+                FilleEnCours = EnuFenetres.PPHivoss
 
         End Select
         AfficheFenetreEnCours()

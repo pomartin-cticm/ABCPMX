@@ -476,6 +476,9 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_InformationPP.resx">
       <DependentUpon>Frm_InformationPP.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_PPHivoss.resx">
+      <DependentUpon>Frm_PPHivoss.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_PPLargeurEfficace.resx">
       <DependentUpon>Frm_PPLargeurEfficace.vb</DependentUpon>
     </EmbeddedResource>

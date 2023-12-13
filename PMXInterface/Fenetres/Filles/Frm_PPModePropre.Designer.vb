@@ -42,6 +42,12 @@ Partial Class Frm_PPModePropre
         Me.lbl_ModePropre = New System.Windows.Forms.Label()
         Me.TLpan_Modules = New System.Windows.Forms.TableLayoutPanel()
         Me.Pan_Results = New System.Windows.Forms.Panel()
+        Me.etq_UnitMass2 = New System.Windows.Forms.Label()
+        Me.txt_MassModal = New System.Windows.Forms.TextBox()
+        Me.lbl_MassModal = New System.Windows.Forms.Label()
+        Me.etq_Masse = New System.Windows.Forms.Label()
+        Me.txt_MassTotale = New System.Windows.Forms.TextBox()
+        Me.lbl_MassTotale = New System.Windows.Forms.Label()
         Me.Rtxt_Error = New System.Windows.Forms.RichTextBox()
         Me.etq_UnitPeriod = New System.Windows.Forms.Label()
         Me.txt_Periode = New System.Windows.Forms.TextBox()
@@ -55,12 +61,6 @@ Partial Class Frm_PPModePropre
         Me.cmb_RatioQ = New System.Windows.Forms.ComboBox()
         Me.lbl_Masses = New System.Windows.Forms.Label()
         Me.cmb_Q = New System.Windows.Forms.ComboBox()
-        Me.etq_Masse = New System.Windows.Forms.Label()
-        Me.txt_MassTotale = New System.Windows.Forms.TextBox()
-        Me.lbl_MassTotale = New System.Windows.Forms.Label()
-        Me.etq_UnitMass2 = New System.Windows.Forms.Label()
-        Me.txt_MassModal = New System.Windows.Forms.TextBox()
-        Me.lbl_MassModal = New System.Windows.Forms.Label()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.Pan_Affichage.SuspendLayout()
@@ -330,7 +330,7 @@ Partial Class Frm_PPModePropre
         Me.lbl_ModePropre.Name = "lbl_ModePropre"
         Me.lbl_ModePropre.Size = New System.Drawing.Size(1077, 30)
         Me.lbl_ModePropre.TabIndex = 4
-        Me.lbl_ModePropre.Text = "lbl_Verification"
+        Me.lbl_ModePropre.Text = "lbl_ModePropre"
         Me.lbl_ModePropre.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'TLpan_Modules
@@ -374,6 +374,60 @@ Partial Class Frm_PPModePropre
         Me.Pan_Results.Name = "Pan_Results"
         Me.Pan_Results.Size = New System.Drawing.Size(776, 69)
         Me.Pan_Results.TabIndex = 6
+        '
+        'etq_UnitMass2
+        '
+        Me.etq_UnitMass2.AutoSize = True
+        Me.etq_UnitMass2.Location = New System.Drawing.Point(538, 28)
+        Me.etq_UnitMass2.Name = "etq_UnitMass2"
+        Me.etq_UnitMass2.Size = New System.Drawing.Size(19, 13)
+        Me.etq_UnitMass2.TabIndex = 82
+        Me.etq_UnitMass2.Text = "kg"
+        '
+        'txt_MassModal
+        '
+        Me.txt_MassModal.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_MassModal.Location = New System.Drawing.Point(466, 24)
+        Me.txt_MassModal.Name = "txt_MassModal"
+        Me.txt_MassModal.Size = New System.Drawing.Size(66, 20)
+        Me.txt_MassModal.TabIndex = 81
+        Me.txt_MassModal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_MassModal
+        '
+        Me.lbl_MassModal.Location = New System.Drawing.Point(347, 27)
+        Me.lbl_MassModal.Name = "lbl_MassModal"
+        Me.lbl_MassModal.Size = New System.Drawing.Size(113, 13)
+        Me.lbl_MassModal.TabIndex = 80
+        Me.lbl_MassModal.Text = "lbl_MassModal"
+        Me.lbl_MassModal.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'etq_Masse
+        '
+        Me.etq_Masse.AutoSize = True
+        Me.etq_Masse.Location = New System.Drawing.Point(538, 7)
+        Me.etq_Masse.Name = "etq_Masse"
+        Me.etq_Masse.Size = New System.Drawing.Size(19, 13)
+        Me.etq_Masse.TabIndex = 79
+        Me.etq_Masse.Text = "kg"
+        '
+        'txt_MassTotale
+        '
+        Me.txt_MassTotale.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_MassTotale.Location = New System.Drawing.Point(466, 3)
+        Me.txt_MassTotale.Name = "txt_MassTotale"
+        Me.txt_MassTotale.Size = New System.Drawing.Size(66, 20)
+        Me.txt_MassTotale.TabIndex = 78
+        Me.txt_MassTotale.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_MassTotale
+        '
+        Me.lbl_MassTotale.Location = New System.Drawing.Point(347, 6)
+        Me.lbl_MassTotale.Name = "lbl_MassTotale"
+        Me.lbl_MassTotale.Size = New System.Drawing.Size(113, 13)
+        Me.lbl_MassTotale.TabIndex = 77
+        Me.lbl_MassTotale.Text = "lbl_MassTotale"
+        Me.lbl_MassTotale.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Rtxt_Error
         '
@@ -498,60 +552,6 @@ Partial Class Frm_PPModePropre
         Me.cmb_Q.Name = "cmb_Q"
         Me.cmb_Q.Size = New System.Drawing.Size(48, 21)
         Me.cmb_Q.TabIndex = 55
-        '
-        'etq_Masse
-        '
-        Me.etq_Masse.AutoSize = True
-        Me.etq_Masse.Location = New System.Drawing.Point(538, 7)
-        Me.etq_Masse.Name = "etq_Masse"
-        Me.etq_Masse.Size = New System.Drawing.Size(19, 13)
-        Me.etq_Masse.TabIndex = 79
-        Me.etq_Masse.Text = "kg"
-        '
-        'txt_MassTotale
-        '
-        Me.txt_MassTotale.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_MassTotale.Location = New System.Drawing.Point(466, 3)
-        Me.txt_MassTotale.Name = "txt_MassTotale"
-        Me.txt_MassTotale.Size = New System.Drawing.Size(66, 20)
-        Me.txt_MassTotale.TabIndex = 78
-        Me.txt_MassTotale.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'lbl_MassTotale
-        '
-        Me.lbl_MassTotale.Location = New System.Drawing.Point(347, 6)
-        Me.lbl_MassTotale.Name = "lbl_MassTotale"
-        Me.lbl_MassTotale.Size = New System.Drawing.Size(113, 13)
-        Me.lbl_MassTotale.TabIndex = 77
-        Me.lbl_MassTotale.Text = "lbl_MassTotale"
-        Me.lbl_MassTotale.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'etq_UnitMass2
-        '
-        Me.etq_UnitMass2.AutoSize = True
-        Me.etq_UnitMass2.Location = New System.Drawing.Point(538, 28)
-        Me.etq_UnitMass2.Name = "etq_UnitMass2"
-        Me.etq_UnitMass2.Size = New System.Drawing.Size(19, 13)
-        Me.etq_UnitMass2.TabIndex = 82
-        Me.etq_UnitMass2.Text = "kg"
-        '
-        'txt_MassModal
-        '
-        Me.txt_MassModal.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_MassModal.Location = New System.Drawing.Point(466, 24)
-        Me.txt_MassModal.Name = "txt_MassModal"
-        Me.txt_MassModal.Size = New System.Drawing.Size(66, 20)
-        Me.txt_MassModal.TabIndex = 81
-        Me.txt_MassModal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'lbl_MassModal
-        '
-        Me.lbl_MassModal.Location = New System.Drawing.Point(347, 27)
-        Me.lbl_MassModal.Name = "lbl_MassModal"
-        Me.lbl_MassModal.Size = New System.Drawing.Size(113, 13)
-        Me.lbl_MassModal.TabIndex = 80
-        Me.lbl_MassModal.Text = "lbl_MassModal"
-        Me.lbl_MassModal.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         '
         'Frm_PPModePropre
         '
