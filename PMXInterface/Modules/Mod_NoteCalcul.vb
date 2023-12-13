@@ -743,6 +743,8 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & Bloc("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
         End Select
 
+        AddLigneNDC(TABW2 & Bloc("NOTIONALSIZE") & TABAFF & "h\-0\= = " & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA.Bfs), Enu_TypeVariable.Dimension, 4, 0, True))
+
         '--> Béton de la dalle
 
         AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))

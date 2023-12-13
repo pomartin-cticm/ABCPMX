@@ -144,6 +144,7 @@ THICKNESS_SLAB			= Thickness of the slab
 THICKNESS_HAUNCH		= Thickness of the haunch
 THICKNESS_JOINT			= Thickness of the joint
 THICKNESS_PRECAST		= Thickness of the precast elements
+NOTIONALSIZE			= Notional size
 ORIENTATION_SHEET		= Orientation of the profiled steel sheeting
 LONGITUDINAL			= Longitudinal
 TRANSVERSAL				= Transversal
