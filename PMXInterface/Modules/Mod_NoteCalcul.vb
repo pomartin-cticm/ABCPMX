@@ -593,6 +593,7 @@ Module Mod_NoteCalcul
 
         AddLigneNDC(TABW2 & Bloc("RATIO_BC_PART_ENC") & TABAFF & "b\-c\=/b\-f\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Ratio_bc, Enu_TypeVariable.SansType, 4, 0, True))
         AddLigneNDC(TABW2 & Bloc("BC_PART_ENC") & TABAFF & "b\-c\= = " & GetStringInUnit(MyBeam.Section.LargeurEnrobagePartielBc, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & Bloc("NOTIONALSIZE") & TABAFF & "h\-0\= = " & GetStringInUnit(MyBeam.Section.NotionalSizeEnrobage, Enu_TypeVariable.Dimension, 4, 0, True))
 
 
         '--> Béton
