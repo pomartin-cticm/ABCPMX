@@ -224,7 +224,7 @@
 
     End Sub
 
-    Public Sub EnveloppesTranchants(ByRef Vmax As Decimal, ByRef Vmin As Decimal)
+    Public Sub EnveloppesTranchants(ByRef Vmax As Decimal, ByRef iNodeMax As Integer, ByRef Vmin As Decimal, ByRef iNodeMin As Integer)
         '-----------------------------------------------------------------------------------------------------------
         '   09/09/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
@@ -242,7 +242,7 @@
 
         If Me.lRunCalcul Then
             NbNodes = Me.UZ.GetUpperBound(0) + 1
-            Me.EnveloppeTableau(Me.MYY, NbNodes, Vmax, Vmin)
+            Me.EnveloppeTableau(Me.VZ, NbNodes, Vmax, Vmin, iNodeMax, iNodeMin)
         End If
 
     End Sub
@@ -311,11 +311,22 @@
         '   iNodeValMin [S] :   Indice du noeud pour la valeur mini
         '-----------------------------------------------------------------------------------------------------------
 
-        ValMax = Math.Max(MyTab(0, 1), MyTab(NbNodes - 1, 0))
-        ValMin = Math.Min(MyTab(0, 1), MyTab(NbNodes - 1, 0))
-        iNodeValMax = 0
-        iNodeValMin = 0
+        'ValMax = Math.Max(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+        'ValMin = Math.Min(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+        'iNodeValMax = 0
+        'iNodeValMin = 0
 
+        If IsGreater(MyTab(0, 1), MyTab(NbNodes - 1, 0)) Then 'Ajout GUD : induit un BUG quand la val max se trouve au droit des appuis d extremités 
+            ValMax = MyTab(0, 1)
+            ValMin = MyTab(NbNodes - 1, 0)
+            iNodeValMax = 0
+            iNodeValMin = NbNodes - 1
+        Else
+            ValMax = MyTab(NbNodes - 1, 0)
+            ValMin = MyTab(0, 1)
+            iNodeValMax = NbNodes - 1
+            iNodeValMin = 0
+        End If
         For i As Integer = 1 To NbNodes - 2
             For j = 0 To 1
                 If IsGreater(MyTab(i, j), ValMax) Then

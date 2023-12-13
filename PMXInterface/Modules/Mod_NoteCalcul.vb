@@ -200,7 +200,11 @@ Module Mod_NoteCalcul
         '--| PROPRIETES DES SECTIONS
         '--|=========================================
 
-        EditionProprietesSection(MyPrjt.Poutres(MyPrjt.IndEnCours))
+        If MyPrjt.Poutres(MyPrjt.IndEnCours).lMixte Then 'Ajout GUD : Cette partie n'a pas d'interet si la section n'est pas mixte
+
+            EditionProprietesSection(MyPrjt.Poutres(MyPrjt.IndEnCours))
+
+        End If
 
         '--|=========================================
         '--| ANALYSE DE LA POUTRE
@@ -1901,6 +1905,16 @@ Module Mod_NoteCalcul
                 '--> On affiche le cas de charge uniquement si le cas de charge est disponible
                 If MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).lRunCalcul Then
                     EditionAnalyseChargeA(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i))
+
+                    With MyNote.DiagrammesNDC
+                        .lDessCharges = False
+                        .lDessDeformee = False
+                        .lDessEffortT = True
+                        .lDessMoment = True
+                        .lDessInerties = False
+                        .lDessNumeros = False
+                    End With
+                    AddLigneNDC("\DIA RDM_CHARGESA " & i & " 10 80 30 NoCadre")
                     SautePage()
                 End If
             Next
