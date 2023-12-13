@@ -160,8 +160,8 @@ Module Mod_Outils
 
         '--> Initialisation
 
-        ' MyChargeU = New cls_ChargementUtilisateur("TU", iTravD)
-        MyChargeU = New cls_ChargementUtilisateur(iTravD)
+        MyChargeU = New cls_ChargementUtilisateur("TU", iTravD)
+        ' MyChargeU = New cls_ChargementUtilisateur(iTravD)
 
         '--> Boucle sur les travées
 
