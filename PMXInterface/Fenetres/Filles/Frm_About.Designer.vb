@@ -30,44 +30,44 @@ Partial Class Frm_About
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLPan_PartieHaute = New System.Windows.Forms.TableLayoutPanel()
-        Me.Pan_logo = New System.Windows.Forms.Panel()
-        Me.img_CTICM = New System.Windows.Forms.PictureBox()
-        Me.img_AM = New System.Windows.Forms.PictureBox()
-        Me.TLPan_Maitre = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Maitre = New System.Windows.Forms.Label()
-        Me.pan_SaisieMaitre = New System.Windows.Forms.Panel()
-        Me.TLPan_Description = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Description = New System.Windows.Forms.Label()
-        Me.pan_SaisieDescription = New System.Windows.Forms.Panel()
-        Me.lbl_DescriptionContain = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TLPan_Information = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Information = New System.Windows.Forms.Label()
         Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
         Me.lbl_Support = New System.Windows.Forms.Label()
         Me.lbl_Year = New System.Windows.Forms.Label()
         Me.lbl_Version = New System.Windows.Forms.Label()
-        Me.ImgList_logos = New System.Windows.Forms.ImageList(Me.components)
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.TLPan_Description = New System.Windows.Forms.TableLayoutPanel()
+        Me.lbl_Description = New System.Windows.Forms.Label()
+        Me.pan_SaisieDescription = New System.Windows.Forms.Panel()
+        Me.lbl_DescriptionContain = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.TLPan_Maitre = New System.Windows.Forms.TableLayoutPanel()
+        Me.lbl_Maitre = New System.Windows.Forms.Label()
+        Me.pan_SaisieMaitre = New System.Windows.Forms.Panel()
         Me.lbl_Copyrights = New System.Windows.Forms.Label()
+        Me.Pan_logo = New System.Windows.Forms.Panel()
+        Me.img_CTICM = New System.Windows.Forms.PictureBox()
+        Me.img_AM = New System.Windows.Forms.PictureBox()
+        Me.ImgList_logos = New System.Windows.Forms.ImageList(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
         Me.TLPan_PartieHaute.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        Me.TLPan_Information.SuspendLayout()
+        Me.pan_SaisiePortee.SuspendLayout()
+        Me.Panel2.SuspendLayout()
+        Me.TLPan_Description.SuspendLayout()
+        Me.pan_SaisieDescription.SuspendLayout()
+        Me.Panel3.SuspendLayout()
+        Me.TLPan_Maitre.SuspendLayout()
+        Me.pan_SaisieMaitre.SuspendLayout()
         Me.Pan_logo.SuspendLayout()
         CType(Me.img_CTICM, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_AM, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TLPan_Maitre.SuspendLayout()
-        Me.pan_SaisieMaitre.SuspendLayout()
-        Me.TLPan_Description.SuspendLayout()
-        Me.pan_SaisieDescription.SuspendLayout()
-        Me.TLPan_Information.SuspendLayout()
-        Me.pan_SaisiePortee.SuspendLayout()
-        Me.Panel1.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        Me.Panel3.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -151,137 +151,15 @@ Partial Class Frm_About
         Me.TLPan_PartieHaute.Size = New System.Drawing.Size(458, 306)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
-        'Pan_logo
+        'Panel1
         '
-        Me.Pan_logo.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Pan_logo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Pan_logo.Controls.Add(Me.img_CTICM)
-        Me.Pan_logo.Controls.Add(Me.img_AM)
-        Me.Pan_logo.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Pan_logo.Location = New System.Drawing.Point(1, 130)
-        Me.Pan_logo.Margin = New System.Windows.Forms.Padding(1, 0, 1, 1)
-        Me.Pan_logo.Name = "Pan_logo"
-        Me.Pan_logo.Size = New System.Drawing.Size(227, 175)
-        Me.Pan_logo.TabIndex = 4
-        '
-        'img_CTICM
-        '
-        Me.img_CTICM.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_CTICM.Image = CType(resources.GetObject("img_CTICM.Image"), System.Drawing.Image)
-        Me.img_CTICM.InitialImage = CType(resources.GetObject("img_CTICM.InitialImage"), System.Drawing.Image)
-        Me.img_CTICM.Location = New System.Drawing.Point(120, 57)
-        Me.img_CTICM.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_CTICM.Name = "img_CTICM"
-        Me.img_CTICM.Size = New System.Drawing.Size(76, 43)
-        Me.img_CTICM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.img_CTICM.TabIndex = 4
-        Me.img_CTICM.TabStop = False
-        '
-        'img_AM
-        '
-        Me.img_AM.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_AM.Image = CType(resources.GetObject("img_AM.Image"), System.Drawing.Image)
-        Me.img_AM.Location = New System.Drawing.Point(0, 0)
-        Me.img_AM.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_AM.Name = "img_AM"
-        Me.img_AM.Size = New System.Drawing.Size(76, 43)
-        Me.img_AM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.img_AM.TabIndex = 4
-        Me.img_AM.TabStop = False
-        '
-        'TLPan_Maitre
-        '
-        Me.TLPan_Maitre.ColumnCount = 1
-        Me.TLPan_Maitre.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Maitre.Controls.Add(Me.lbl_Maitre, 0, 0)
-        Me.TLPan_Maitre.Controls.Add(Me.pan_SaisieMaitre, 0, 1)
-        Me.TLPan_Maitre.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Maitre.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Maitre.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_Maitre.Name = "TLPan_Maitre"
-        Me.TLPan_Maitre.RowCount = 2
-        Me.TLPan_Maitre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Maitre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Maitre.Size = New System.Drawing.Size(228, 175)
-        Me.TLPan_Maitre.TabIndex = 3
-        '
-        'lbl_Maitre
-        '
-        Me.lbl_Maitre.AutoSize = True
-        Me.lbl_Maitre.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Maitre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Maitre.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Maitre.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Maitre.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Maitre.Name = "lbl_Maitre"
-        Me.lbl_Maitre.Size = New System.Drawing.Size(228, 30)
-        Me.lbl_Maitre.TabIndex = 0
-        Me.lbl_Maitre.Text = "lbl_Maitre"
-        Me.lbl_Maitre.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'pan_SaisieMaitre
-        '
-        Me.pan_SaisieMaitre.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_SaisieMaitre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieMaitre.Controls.Add(Me.lbl_Copyrights)
-        Me.pan_SaisieMaitre.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieMaitre.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisieMaitre.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_SaisieMaitre.Name = "pan_SaisieMaitre"
-        Me.pan_SaisieMaitre.Size = New System.Drawing.Size(228, 145)
-        Me.pan_SaisieMaitre.TabIndex = 1
-        '
-        'TLPan_Description
-        '
-        Me.TLPan_Description.ColumnCount = 1
-        Me.TLPan_Description.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Description.Controls.Add(Me.lbl_Description, 0, 0)
-        Me.TLPan_Description.Controls.Add(Me.pan_SaisieDescription, 0, 1)
-        Me.TLPan_Description.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Description.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Description.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_Description.Name = "TLPan_Description"
-        Me.TLPan_Description.RowCount = 2
-        Me.TLPan_Description.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Description.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Description.Size = New System.Drawing.Size(228, 128)
-        Me.TLPan_Description.TabIndex = 2
-        '
-        'lbl_Description
-        '
-        Me.lbl_Description.AutoSize = True
-        Me.lbl_Description.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Description.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Description.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Description.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Description.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Description.Name = "lbl_Description"
-        Me.lbl_Description.Size = New System.Drawing.Size(228, 30)
-        Me.lbl_Description.TabIndex = 0
-        Me.lbl_Description.Text = "lbl_Description"
-        Me.lbl_Description.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'pan_SaisieDescription
-        '
-        Me.pan_SaisieDescription.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_SaisieDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieDescription.Controls.Add(Me.lbl_DescriptionContain)
-        Me.pan_SaisieDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieDescription.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisieDescription.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_SaisieDescription.Name = "pan_SaisieDescription"
-        Me.pan_SaisieDescription.Size = New System.Drawing.Size(228, 98)
-        Me.pan_SaisieDescription.TabIndex = 1
-        '
-        'lbl_DescriptionContain
-        '
-        Me.lbl_DescriptionContain.Dock = System.Windows.Forms.DockStyle.Top
-        Me.lbl_DescriptionContain.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_DescriptionContain.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_DescriptionContain.Name = "lbl_DescriptionContain"
-        Me.lbl_DescriptionContain.Size = New System.Drawing.Size(226, 97)
-        Me.lbl_DescriptionContain.TabIndex = 2
-        Me.lbl_DescriptionContain.Text = "lbl_DescriptionContain"
+        Me.Panel1.Controls.Add(Me.TLPan_Information)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(1, 1)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(227, 128)
+        Me.Panel1.TabIndex = 5
         '
         'TLPan_Information
         '
@@ -354,23 +232,6 @@ Partial Class Frm_About
         Me.lbl_Version.TabIndex = 0
         Me.lbl_Version.Text = "lbl_Version"
         '
-        'ImgList_logos
-        '
-        Me.ImgList_logos.ImageStream = CType(resources.GetObject("ImgList_logos.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImgList_logos.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImgList_logos.Images.SetKeyName(0, "CTICM_logo.jpg")
-        Me.ImgList_logos.Images.SetKeyName(1, "ARCELORMITTAL_logo.png")
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.TLPan_Information)
-        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel1.Location = New System.Drawing.Point(1, 1)
-        Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(227, 128)
-        Me.Panel1.TabIndex = 5
-        '
         'Panel2
         '
         Me.Panel2.Controls.Add(Me.TLPan_Description)
@@ -380,6 +241,58 @@ Partial Class Frm_About
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(228, 128)
         Me.Panel2.TabIndex = 6
+        '
+        'TLPan_Description
+        '
+        Me.TLPan_Description.ColumnCount = 1
+        Me.TLPan_Description.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Description.Controls.Add(Me.lbl_Description, 0, 0)
+        Me.TLPan_Description.Controls.Add(Me.pan_SaisieDescription, 0, 1)
+        Me.TLPan_Description.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLPan_Description.Location = New System.Drawing.Point(0, 0)
+        Me.TLPan_Description.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_Description.Name = "TLPan_Description"
+        Me.TLPan_Description.RowCount = 2
+        Me.TLPan_Description.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLPan_Description.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Description.Size = New System.Drawing.Size(228, 128)
+        Me.TLPan_Description.TabIndex = 2
+        '
+        'lbl_Description
+        '
+        Me.lbl_Description.AutoSize = True
+        Me.lbl_Description.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Description.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Description.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Description.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Description.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Description.Name = "lbl_Description"
+        Me.lbl_Description.Size = New System.Drawing.Size(228, 30)
+        Me.lbl_Description.TabIndex = 0
+        Me.lbl_Description.Text = "lbl_Description"
+        Me.lbl_Description.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_SaisieDescription
+        '
+        Me.pan_SaisieDescription.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_SaisieDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieDescription.Controls.Add(Me.lbl_DescriptionContain)
+        Me.pan_SaisieDescription.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_SaisieDescription.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisieDescription.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_SaisieDescription.Name = "pan_SaisieDescription"
+        Me.pan_SaisieDescription.Size = New System.Drawing.Size(228, 98)
+        Me.pan_SaisieDescription.TabIndex = 1
+        '
+        'lbl_DescriptionContain
+        '
+        Me.lbl_DescriptionContain.Dock = System.Windows.Forms.DockStyle.Top
+        Me.lbl_DescriptionContain.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_DescriptionContain.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_DescriptionContain.Name = "lbl_DescriptionContain"
+        Me.lbl_DescriptionContain.Size = New System.Drawing.Size(226, 97)
+        Me.lbl_DescriptionContain.TabIndex = 2
+        Me.lbl_DescriptionContain.Text = "lbl_DescriptionContain"
         '
         'Panel3
         '
@@ -391,6 +304,48 @@ Partial Class Frm_About
         Me.Panel3.Size = New System.Drawing.Size(228, 175)
         Me.Panel3.TabIndex = 7
         '
+        'TLPan_Maitre
+        '
+        Me.TLPan_Maitre.ColumnCount = 1
+        Me.TLPan_Maitre.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Maitre.Controls.Add(Me.lbl_Maitre, 0, 0)
+        Me.TLPan_Maitre.Controls.Add(Me.pan_SaisieMaitre, 0, 1)
+        Me.TLPan_Maitre.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLPan_Maitre.Location = New System.Drawing.Point(0, 0)
+        Me.TLPan_Maitre.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_Maitre.Name = "TLPan_Maitre"
+        Me.TLPan_Maitre.RowCount = 2
+        Me.TLPan_Maitre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLPan_Maitre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Maitre.Size = New System.Drawing.Size(228, 175)
+        Me.TLPan_Maitre.TabIndex = 3
+        '
+        'lbl_Maitre
+        '
+        Me.lbl_Maitre.AutoSize = True
+        Me.lbl_Maitre.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_Maitre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Maitre.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Maitre.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Maitre.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_Maitre.Name = "lbl_Maitre"
+        Me.lbl_Maitre.Size = New System.Drawing.Size(228, 30)
+        Me.lbl_Maitre.TabIndex = 0
+        Me.lbl_Maitre.Text = "lbl_Maitre"
+        Me.lbl_Maitre.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_SaisieMaitre
+        '
+        Me.pan_SaisieMaitre.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_SaisieMaitre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisieMaitre.Controls.Add(Me.lbl_Copyrights)
+        Me.pan_SaisieMaitre.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_SaisieMaitre.Location = New System.Drawing.Point(0, 30)
+        Me.pan_SaisieMaitre.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_SaisieMaitre.Name = "pan_SaisieMaitre"
+        Me.pan_SaisieMaitre.Size = New System.Drawing.Size(228, 145)
+        Me.pan_SaisieMaitre.TabIndex = 1
+        '
         'lbl_Copyrights
         '
         Me.lbl_Copyrights.Dock = System.Windows.Forms.DockStyle.Top
@@ -400,6 +355,51 @@ Partial Class Frm_About
         Me.lbl_Copyrights.Size = New System.Drawing.Size(226, 143)
         Me.lbl_Copyrights.TabIndex = 3
         Me.lbl_Copyrights.Text = "lbl_Copyrights"
+        '
+        'Pan_logo
+        '
+        Me.Pan_logo.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Pan_logo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.Pan_logo.Controls.Add(Me.img_CTICM)
+        Me.Pan_logo.Controls.Add(Me.img_AM)
+        Me.Pan_logo.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Pan_logo.Location = New System.Drawing.Point(1, 130)
+        Me.Pan_logo.Margin = New System.Windows.Forms.Padding(1, 0, 1, 1)
+        Me.Pan_logo.Name = "Pan_logo"
+        Me.Pan_logo.Size = New System.Drawing.Size(227, 175)
+        Me.Pan_logo.TabIndex = 4
+        '
+        'img_CTICM
+        '
+        Me.img_CTICM.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_CTICM.Image = CType(resources.GetObject("img_CTICM.Image"), System.Drawing.Image)
+        Me.img_CTICM.InitialImage = CType(resources.GetObject("img_CTICM.InitialImage"), System.Drawing.Image)
+        Me.img_CTICM.Location = New System.Drawing.Point(120, 57)
+        Me.img_CTICM.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_CTICM.Name = "img_CTICM"
+        Me.img_CTICM.Size = New System.Drawing.Size(76, 43)
+        Me.img_CTICM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.img_CTICM.TabIndex = 4
+        Me.img_CTICM.TabStop = False
+        '
+        'img_AM
+        '
+        Me.img_AM.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_AM.Image = CType(resources.GetObject("img_AM.Image"), System.Drawing.Image)
+        Me.img_AM.Location = New System.Drawing.Point(0, 0)
+        Me.img_AM.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_AM.Name = "img_AM"
+        Me.img_AM.Size = New System.Drawing.Size(76, 43)
+        Me.img_AM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.img_AM.TabIndex = 4
+        Me.img_AM.TabStop = False
+        '
+        'ImgList_logos
+        '
+        Me.ImgList_logos.ImageStream = CType(resources.GetObject("ImgList_logos.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImgList_logos.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImgList_logos.Images.SetKeyName(0, "CTICM_logo.jpg")
+        Me.ImgList_logos.Images.SetKeyName(1, "ARCELORMITTAL_logo.png")
         '
         'Frm_About
         '
@@ -412,28 +412,29 @@ Partial Class Frm_About
         Me.MaximizeBox = False
         Me.Name = "Frm_About"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_About"
         Me.pan_General.ResumeLayout(False)
         Me.TLpan_Main.ResumeLayout(False)
         Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.pan_Main.ResumeLayout(False)
         Me.TLPan_PartieHaute.ResumeLayout(False)
-        Me.Pan_logo.ResumeLayout(False)
-        CType(Me.img_CTICM, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_AM, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.TLPan_Maitre.ResumeLayout(False)
-        Me.TLPan_Maitre.PerformLayout()
-        Me.pan_SaisieMaitre.ResumeLayout(False)
-        Me.TLPan_Description.ResumeLayout(False)
-        Me.TLPan_Description.PerformLayout()
-        Me.pan_SaisieDescription.ResumeLayout(False)
+        Me.Panel1.ResumeLayout(False)
         Me.TLPan_Information.ResumeLayout(False)
         Me.TLPan_Information.PerformLayout()
         Me.pan_SaisiePortee.ResumeLayout(False)
         Me.pan_SaisiePortee.PerformLayout()
-        Me.Panel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
+        Me.TLPan_Description.ResumeLayout(False)
+        Me.TLPan_Description.PerformLayout()
+        Me.pan_SaisieDescription.ResumeLayout(False)
         Me.Panel3.ResumeLayout(False)
+        Me.TLPan_Maitre.ResumeLayout(False)
+        Me.TLPan_Maitre.PerformLayout()
+        Me.pan_SaisieMaitre.ResumeLayout(False)
+        Me.Pan_logo.ResumeLayout(False)
+        CType(Me.img_CTICM, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_AM, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

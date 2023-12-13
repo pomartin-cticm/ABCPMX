@@ -654,7 +654,7 @@ Public Class Frm_PMX
                 Frm_PPCombinaison.ShowDialog()
                 Frm_PPCombinaison.Dispose()
 
-            Case EnuFenetres.Hivoss
+            Case EnuFenetres.PPHivoss
                 Frm_PPHivoss.ShowDialog()
                 Frm_PPHivoss.Dispose()
 
@@ -683,7 +683,8 @@ Public Class Frm_PMX
 
             Case EnuFenetres.About
                 If LogicielOptions.lFenetres Then
-                    Frm_About.InitialiserFenetre(LogicielInfo.Maitre = EnuMaitre.CTICM)
+                    Frm_About.ShowDialog()
+                    Frm_About.Dispose()
                 End If
 
 

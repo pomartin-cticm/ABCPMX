@@ -6,17 +6,19 @@ Public Class Frm_About
 #Region " Variables locales "
 
     Dim lBuild As Boolean = True
+    Dim lCTICM As Boolean
 
 #End Region
 
 #Region "===OUVERTURE==="
 
-    Public Sub InitialiserFenetre(ByVal lCTICM As Boolean)
+    Private Sub Frm_About_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        lBuild = True
+        lCTICM = (LogicielInfo.Maitre = EnuMaitre.CTICM)
         GestionLangues()
         GestionStyle(lCTICM)
-        GestionUnites()
-        AfficherPoutreEnCours()
-        Me.ShowDialog()
+        '  GestionUnites()
+        ' AfficherPoutreEnCours()
         lBuild = False
     End Sub
 
@@ -64,9 +66,9 @@ Public Class Frm_About
 
     End Sub
 
-    Private Sub GestionUnites()
+    'Private Sub GestionUnites()
 
-    End Sub
+    'End Sub
 
     Private Sub GestionStyle(ByVal lCTICM As Boolean)
         Me.Icon = Frm_PMX.Icon
@@ -95,13 +97,15 @@ Public Class Frm_About
 
     End Sub
 
-    Private Sub AfficherPoutreEnCours()
+    'Private Sub AfficherPoutreEnCours()
 
-    End Sub
+    'End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
         Me.Close()
     End Sub
+
+
 
 #End Region
 
