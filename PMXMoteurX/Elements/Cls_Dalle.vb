@@ -174,11 +174,20 @@
         Select Case Me.type
             Case Enum_TypeDalle.Pleine
                 Ac = Me.Beff * Me.t_d + Me.t_h * (Bfs + Me.t_h * Math.Tan(Me.ThetaRd))
-                perimU = 2 * Me.Beff - Bfs + Me.t_h / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd))
+                'perimU = 2 * Me.Beff - Bfs +  Me.t_h / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 
+                perimU = 2 * Me.Beff - Bfs + 2 * Me.t_h / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
 
-            Case Enum_TypeDalle.Mixte
-                Ac = Me.Beff * (Me.EpaisseurActive + Bac.Hp * Bac.LargeurBmoyenne / Bac.Ep)
-                perimU = Me.Beff
+            Case Enum_TypeDalle.Mixte 'Ne faut-il pas différencier le cas du bac perpendiculaire et // ?
+                If Me.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
+                    Ac = Me.Beff * (Me.EpaisseurActive + Bac.Hp * Bac.LargeurBmoyenne / Bac.Ep)
+                    perimU = Me.Beff
+                Else 'RAJOUT GUD: j'ai rajouter le IF + les formules du ELSE
+                    Ac = Me.Beff * Me.EpaisseurActive
+                    perimU = Me.Beff
+                End If
+            Case Enum_TypeDalle.Prefabriquee 'Rajout GUD: il manquait ce cas (à mon avis il vaut mieux différencier ce cas de la dalle pleine, au cas où la valeur de theta n'aurait pas été initialisée à 0 pour le cas de la dalle préfa)
+                Ac = Me.Beff * Me.t_d
+                perimU = 2 * Me.Beff - Bfs
 
         End Select
 
