@@ -626,7 +626,6 @@ Public Class Frm_AjoutePP
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, NomChargements))
             End If
 
-
             InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
             InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)
             InitialiseGoujonDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Connecteur, lTrouve)
@@ -634,6 +633,7 @@ Public Class Frm_AjoutePP
             InitialiseDalleDefault(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle)
 
             MyProjet.Poutres(MyProjet.Poutres.Count - 1).Initialise_CoefficientsCombinaisons()
+            MyProjet.Poutres(MyProjet.Poutres.Count - 1).InitialisePoidsPropres()
 
         End If
 

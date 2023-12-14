@@ -792,6 +792,8 @@ Public Class cls_Poutre
         Me.lDonneesSauvees = False
         Me.lPoutreModifiee = True
 
+        Me.InitialisePoidsPropres()
+
     End Sub
 
     ''' <summary>

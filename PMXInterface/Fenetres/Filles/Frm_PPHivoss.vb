@@ -7,6 +7,8 @@ Public Class Frm_PPHivoss
     Dim lBuild As Boolean
 
     Dim fDamp, fFreq, fMass As Decimal
+    Dim strDamp As String = "Amortissement"
+
 
 #End Region
 
@@ -29,6 +31,10 @@ Public Class Frm_PPHivoss
 
         Me.Icon = Frm_PMX.Icon
 
+        Const RATIOH As Single = 0.95
+        Me.Height = My.Computer.Screen.WorkingArea.Height * RATIOH
+        Me.Top = My.Computer.Screen.WorkingArea.Height * (1 - RATIOH) / 2
+
         Me.lbl_Hivoss.BackColor = CouleurBackBandeaux
         Me.lbl_Hivoss.ForeColor = CouleurForeBandeaux
 
@@ -37,7 +43,6 @@ Public Class Frm_PPHivoss
         Me.TLPan_PartieBasse.ColumnStyles(1).Width = 0
         Me.TLPan_PartieBasse.ColumnStyles(2).Width = 0
 
-        Me.TLpan_AffichageCentral.ColumnStyles(0).Width = 0
 
     End Sub
 
@@ -46,15 +51,20 @@ Public Class Frm_PPHivoss
         Me.Text = "Analyse Hivoss"
         Me.lbl_Hivoss.Text = "Résultats"
 
-        Me.lbl_Masses.Text = "Masses"
+
         Me.lbl_Frequence.Text = "Frequency"
-        Me.lbl_Periode.Text = "Period"
+
         Me.lbl_Resultats.Text = "Results"
 
-        Me.lbl_MassTotale.Text = "Masse totale"
+        Me.lbl_Amortissement.Text = "Amortissement"
         Me.lbl_MassModal.Text = "Masse modale"
 
+        Me.lbl_Classe.Text = "Classe"
+        Me.lbl_OSRMS.Text = "OS-RMS90"
+
         Me.btn_OK.Text = "Close"
+
+        strDamp = "Amortissement"
 
     End Sub
 
@@ -93,8 +103,8 @@ Public Class Frm_PPHivoss
         End If
 
         Me.txt_Frequence.Text = GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 1, False)
-
         Me.txt_MassModal.Text = GetStringInUnit(ModalMass, Enu_TypeVariable.SansType, 3, 0, False)
+        Me.txt_Amortissement.Text = GetStringInUnit(MyBeam.Hivoss.AmortiTotal_Dtot * kPC, Enu_TypeVariable.SansType, 3, 0, False)
 
         ''--[ Calcul Hivoss
 
@@ -105,6 +115,8 @@ Public Class Frm_PPHivoss
         fFreq = Frequency
         fMass = ModalMass
 
+        Me.txt_OSRMS.Text = GetStringInUnit(HVal, Enu_TypeVariable.SansType, 3, 2, False)
+        Me.txt_Classe.Text = HResult
     End Sub
 
 #End Region
@@ -123,7 +135,6 @@ Public Class Frm_PPHivoss
         Dim sWiImg As Single = Me.img_Hivoss.ClientRectangle.Width
         Dim sHiImg As Single = Me.img_Hivoss.ClientRectangle.Height
 
-        Const strDamp As String = "Amortissement"
         DessinCourbeHivoss(MyProjet.Poutres(MyProjet.IndEnCours).Hivoss, e.Graphics, 0, 0, sWiImg, sHiImg, fDamp, fFreq, fMass, strDamp)
 
     End Sub

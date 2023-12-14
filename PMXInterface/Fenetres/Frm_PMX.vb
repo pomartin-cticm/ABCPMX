@@ -717,35 +717,38 @@ Public Class Frm_PMX
     ''' Méthode qui permet de gérer les conséquences sur la poutre lorsqu'on sort d'une fenetre fille et qu'elle a été modifiée 
     ''' </summary>
     Private Sub GestionModificationPoutreEnCours()
-        With MyProjet.Poutres(MyProjet.IndEnCours)
-            If .lPoutreModifiee Then
-                Select Case FilleEnCours
-                    Case EnuFenetres.Portees
-                        .InitialisePoidsPropres()
-                    Case EnuFenetres.Dalle
-                        .InitialisePoidsPropres()
-                    Case EnuFenetres.Section
-                        .InitialisePoidsPropres()
-                    Case EnuFenetres.Enrobage
-                        .InitialisePoidsPropres()
-                    Case EnuFenetres.Connexion
+        'il faut gérer les mises à jour de la poutre après modification dans la routine cls_Poutre.estmodifiee
 
-                    Case EnuFenetres.Maintiens
+        'With MyProjet.Poutres(MyProjet.IndEnCours)
+        '    If .lPoutreModifiee Then
 
-                    Case EnuFenetres.Etaiement
+        '        'Select Case FilleEnCours
+        '        '    Case EnuFenetres.Portees
+        '        '        .InitialisePoidsPropres()
+        '        '    Case EnuFenetres.Dalle
+        '        '        .InitialisePoidsPropres()
+        '        '    Case EnuFenetres.Section
+        '        '        .InitialisePoidsPropres()
+        '        '    Case EnuFenetres.Enrobage
+        '        '        .InitialisePoidsPropres()
+        '        '    Case EnuFenetres.Connexion
 
-                    Case EnuFenetres.Chargements
+        '        '    Case EnuFenetres.Maintiens
 
-                    Case EnuFenetres.Gamma
+        '        '    Case EnuFenetres.Etaiement
 
-                    Case EnuFenetres.Combinaisons
+        '        '    Case EnuFenetres.Chargements
 
-                    Case EnuFenetres.Hivoss
+        '        '    Case EnuFenetres.Gamma
 
-                End Select
-            End If
+        '        '    Case EnuFenetres.Combinaisons
 
-        End With
+        '        '    Case EnuFenetres.Hivoss
+
+        '        'End Select
+        '    End If
+
+        'End With
     End Sub
 
     ''' <summary>

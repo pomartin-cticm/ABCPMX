@@ -9048,6 +9048,7 @@ Public Module Mod_Dessins
         Dim MyParAff As Struc_Affichage
         Dim yMin, yMax, xMin, xMax As Double
         Dim kECH As Single = 1
+        Const kDec As Double = 1.25
 
         Dim nbPoints As Integer    'Nombre de points par ligne frontière
         Dim DonneeY() As Decimal                            'Ensemble des points y (Hz)
@@ -9084,7 +9085,7 @@ Public Module Mod_Dessins
 
         xMin = Math.Log10(100)
         xMax = Math.Log10(100000)
-        yMin = Math.Log10(1) * Coeff
+        yMin = Math.Log10(1) * Coeff - Decal * (kDec + 0.5)
         yMax = Math.Log10(20) * Coeff
 
         ParametresAffichage(MyParAff, xMin, yMin, (xMax - xMin) / kECH, (yMax - yMin) / kECH, Width, Height, xLeft, yTop)
@@ -9168,7 +9169,6 @@ Public Module Mod_Dessins
         nbPts = 5
         ReDim xPts(nbPts - 1)
         ReDim yPts(nbPts - 1)
-        Const kDec As Double = 1.25
         Dim FontColors() As Color = {Color.White, Color.Black, Color.Black, Color.Black, Color.White, Color.White, Color.Black}
         Dim MyFontLeg = New Font("Arial", 8.25, FontStyle.Bold)
 
