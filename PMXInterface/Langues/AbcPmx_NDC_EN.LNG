@@ -249,6 +249,10 @@ NOFREP					= No linear load defined for this load case
 NOFPONC					= No point load defined for this load case 
 QSURF_WIDTH				= Width of application
 QSURF_VALUE				= Uniform load
+LEFTCANTILEVER			= Left cantilever span
+RIGHTCANTILEVER			= Right cantilever span
+SPAN_MAIN				= Main span
+SPAN_N					= Span no
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties
@@ -288,6 +292,12 @@ MINTRANSVERSEREINF		= Minimum transverse reinforcement
 POTENTIALSHEARFAILURE	= Potential areas of shear failure
 AND						= and
 SHEARFAILUREAREA		= Shear failure area
+DEGREEOFSHEARCONNEC		= Degree of shear connection
+MINDEGREE				= Minimum degree of connection
+CONNECTION				= Connection
+PLASTIC_DESIGN			= Plastic design
+ELASTIC_DESIGN			= Elastic design (Class 3)
+ELASTIC_DESIGN_IMPOSED	= Imposed elastic design
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States

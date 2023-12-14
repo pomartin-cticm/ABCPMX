@@ -68,7 +68,7 @@ Module Mod_NoteCalcul
     Private strRacineELS As String
     Private strRacineELF As String
 
-    Private Bloc As New Dictionary(Of String, String)
+    Private BlocG As New Dictionary(Of String, String)
     Private BlocSP As New Dictionary(Of String, String)
     Private BlocAnalyse As New Dictionary(Of String, String)
     Private BlocELU As New Dictionary(Of String, String)
@@ -116,9 +116,9 @@ Module Mod_NoteCalcul
         MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()
         MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
 
-        strRacineELU = Bloc("ULS")
-        strRacineELS = Bloc("SLS")
-        strRacineELF = Bloc("FLS")
+        strRacineELU = BlocG("ULS")
+        strRacineELS = BlocG("SLS")
+        strRacineELF = BlocG("FLS")
 
         '--[ Création de la Note
 
@@ -172,16 +172,16 @@ Module Mod_NoteCalcul
         End If
         MyNote.EnteteSecond = MyPrjt.Nom
 
-        MyNote.EtiquetteLigne(0, 0) = Bloc("USER")
-        MyNote.EtiquetteLigne(1, 0) = Bloc("SOCIETE")
-        MyNote.EtiquetteLigne(2, 0) = Bloc("PROJET")
+        MyNote.EtiquetteLigne(0, 0) = BlocG("USER")
+        MyNote.EtiquetteLigne(1, 0) = BlocG("SOCIETE")
+        MyNote.EtiquetteLigne(2, 0) = BlocG("PROJET")
 
         Const DPTS As String = ":  "
         MyNote.EtiquetteLigne(0, 1) = DPTS & MyPrjt.Utilisateur
         MyNote.EtiquetteLigne(1, 1) = DPTS & MyPrjt.Entreprise
         MyNote.EtiquetteLigne(2, 1) = DPTS & MyPrjt.Nom
 
-        MyNote.FootNote = Bloc("FOOTNOTE")
+        MyNote.FootNote = BlocG("FOOTNOTE")
 
         '--|=========================================
         '--| PAGE DE GARDE
@@ -234,7 +234,7 @@ Module Mod_NoteCalcul
         '---------------------------------------------------------------------------------------------------
 
         Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_MAIN")
-        BlocLine.CreationBloc(Bloc)
+        BlocLine.CreationBloc(BlocG)
 
         BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_SECTIONPROP")
         BlocLine.CreationBloc(BlocSP)
@@ -320,63 +320,63 @@ Module Mod_NoteCalcul
 
         SautePage()
 
-        AddTitreNdC(1, Bloc("PARAMETERS"))
+        AddTitreNdC(1, BlocG("PARAMETERS"))
 
         '--[ Avertissement si Mode Expert
 
         If LogicielOptions.lExpert Then
-            AddLigneNDC(TABW1 & "\G" & Bloc("WEXPERT") & "\g")
-            AddLigneNDC(TABW1 & "\G" & Bloc("WEXPERT2") & "\g")
+            AddLigneNDC(TABW1 & "\G" & BlocG("WEXPERT") & "\g")
+            AddLigneNDC(TABW1 & "\G" & BlocG("WEXPERT2") & "\g")
         End If
 
         '--[ Paramètres Généraux
 
-        AddTitreNdC(2, Bloc("MAINP"))
+        AddTitreNdC(2, BlocG("MAINP"))
 
-        AddTitreNdC(3, Bloc("LONGIPARAMETERS"))
+        AddTitreNdC(3, BlocG("LONGIPARAMETERS"))
 
         Select Case MyBeam.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("NONCOMPOBEAM") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("NONCOMPOBEAM") & "\g")
             Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("NONCOMPOBEAMPARTENCAS") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("NONCOMPOBEAMPARTENCAS") & "\g")
             Case cls_Section.Enum_TypeSection.Mixte
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("COMPOBEAM") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("COMPOBEAM") & "\g")
             Case cls_Section.Enum_TypeSection.MixteEnrobage
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("COMPOBEAMPARTENCAS") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("COMPOBEAMPARTENCAS") & "\g")
             Case cls_Section.Enum_TypeSection.SFB
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("NONCOMPOSFB") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("NONCOMPOSFB") & "\g")
             Case cls_Section.Enum_TypeSection.SFBmixte
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("COMPOSFB") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("COMPOSFB") & "\g")
             Case cls_Section.Enum_TypeSection.IFB_A
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("NONCOMPOIFB_A") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("NONCOMPOIFB_A") & "\g")
             Case cls_Section.Enum_TypeSection.IFB_Amixte
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("COMPOIFB_A") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("COMPOIFB_A") & "\g")
             Case cls_Section.Enum_TypeSection.IFB_B
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("NONCOMPOIFB_B") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("NONCOMPOIFB_B") & "\g")
             Case cls_Section.Enum_TypeSection.IFB_Bmixte
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("COMPOIFB_B") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("COMPOIFB_B") & "\g")
             Case cls_Section.Enum_TypeSection.SAB
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("NONCOMPOSAB") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("NONCOMPOSAB") & "\g")
             Case cls_Section.Enum_TypeSection.SABmixte
-                AddLigneNDC(TABW2 & Bloc("CSTYPE") & TABAFF2 & "\G" & Bloc("COMPOSAB") & "\g")
+                AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("COMPOSAB") & "\g")
         End Select
 
-        AddLigneNDC(TABW2 & Bloc("LENGHTBEAM") & TABAFF2 & "L\-tot\= = " & GetStringInUnit(MyBeam.LongueurTotale, Enu_TypeVariable.Longueur, 4, 2, True))
-        AddLigneNDC(TABW2 & Bloc("NBTOTSPAN") & TABAFF2 & GetStringInUnit(MyBeam.NbTravees, Enu_TypeVariable.SansType, 2, 0, True))
+        AddLigneNDC(TABW2 & BlocG("LENGHTBEAM") & TABAFF2 & "L\-tot\= = " & GetStringInUnit(MyBeam.LongueurTotale, Enu_TypeVariable.Longueur, 4, 2, True))
+        AddLigneNDC(TABW2 & BlocG("NBTOTSPAN") & TABAFF2 & GetStringInUnit(MyBeam.NbTravees, Enu_TypeVariable.SansType, 2, 0, True))
 
 
         ' -->Tableau récapitulatif de la poutre 
         If MyBeam.NbTravees > 1 Then
-            AddLigneNDC(TABW2 & Bloc("BEAMCHAR"))
+            AddLigneNDC(TABW2 & BlocG("BEAMCHAR"))
             SauteLigne()
             AddLigneNDC("\TABLEAU 18")
             InitialiseLigne(5, HLIGNE, True)
             AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "i")
-            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("TYPE_BEAM"))
-            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LENGHT") & "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LEFTSUPPORT"))
-            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("RIGHTSUPPORT"))
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("TYPE_BEAM"))
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LENGHT") & "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LEFTSUPPORT"))
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("RIGHTSUPPORT"))
 
             Dim strTypTravee As String = ""
 
@@ -385,24 +385,24 @@ Module Mod_NoteCalcul
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, i)
                 Select Case MyBeam.TypTravee(i)
                     Case cls_Poutre.EnuTypeTravee.ConsoleGauche
-                        strTypTravee = Bloc("LEFTCANT")
+                        strTypTravee = BlocG("LEFTCANT")
                     Case cls_Poutre.EnuTypeTravee.DeuxAppuis
-                        strTypTravee = Bloc("SPAN")
+                        strTypTravee = BlocG("SPAN")
                     Case cls_Poutre.EnuTypeTravee.ConsoleDroite
-                        strTypTravee = Bloc("RIGHTCANT")
+                        strTypTravee = BlocG("RIGHTCANT")
                 End Select
                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, strTypTravee)
                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.LongueurTravee(i))
                 Select Case MyBeam.TypTravee(i)
                     Case cls_Poutre.EnuTypeTravee.ConsoleGauche
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("FREE"))
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("PINNED"))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("FREE"))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("PINNED"))
                     Case cls_Poutre.EnuTypeTravee.DeuxAppuis
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("PINNED"))
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("PINNED"))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("PINNED"))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("PINNED"))
                     Case cls_Poutre.EnuTypeTravee.ConsoleDroite
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("PINNED"))
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("FREE"))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("PINNED"))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("FREE"))
                 End Select
 
             Next
@@ -410,27 +410,27 @@ Module Mod_NoteCalcul
             FinTableau()
 
         Else
-            AddLigneNDC(TABW2 & Bloc("RIGHTSUPPORT") & TABAFF2 & Bloc("PINNED"))
-            AddLigneNDC(TABW2 & Bloc("LEFTSUPPORT") & TABAFF2 & Bloc("PINNED"))
+            AddLigneNDC(TABW2 & BlocG("RIGHTSUPPORT") & TABAFF2 & BlocG("PINNED"))
+            AddLigneNDC(TABW2 & BlocG("LEFTSUPPORT") & TABAFF2 & BlocG("PINNED"))
 
         End If
 
         If MyBeam.lMixte Then
-            AddLigneNDC(TABW2 & Bloc("TYPEOFBEAM") & TABAFF2 & Bloc("COMPOSITE"))
+            AddLigneNDC(TABW2 & BlocG("TYPEOFBEAM") & TABAFF2 & BlocG("COMPOSITE"))
         Else
-            AddLigneNDC(TABW2 & Bloc("TYPEOFBEAM") & TABAFF2 & Bloc("NONCOMPOSITE"))
+            AddLigneNDC(TABW2 & BlocG("TYPEOFBEAM") & TABAFF2 & BlocG("NONCOMPOSITE"))
         End If
 
         If MyBeam.Dalle.lMixte Then
-            AddLigneNDC(TABW2 & Bloc("TYPEOFSLAB") & TABAFF2 & Bloc("COMPOSITE"))
+            AddLigneNDC(TABW2 & BlocG("TYPEOFSLAB") & TABAFF2 & BlocG("COMPOSITE"))
         Else
-            AddLigneNDC(TABW2 & Bloc("TYPEOFSLAB") & TABAFF2 & Bloc("NONCOMPOSITE"))
+            AddLigneNDC(TABW2 & BlocG("TYPEOFSLAB") & TABAFF2 & BlocG("NONCOMPOSITE"))
         End If
 
         If MyBeam.Section.lEnrobage Then
-            AddLigneNDC(TABW2 & Bloc("TYPEOFSTEELSECTION") & TABAFF2 & Bloc("PARTIALLY_ENCASED"))
+            AddLigneNDC(TABW2 & BlocG("TYPEOFSTEELSECTION") & TABAFF2 & BlocG("PARTIALLY_ENCASED"))
         Else
-            AddLigneNDC(TABW2 & Bloc("TYPEOFSTEELSECTION") & TABAFF2 & Bloc("NOT_PARTIALLY_ENCASED"))
+            AddLigneNDC(TABW2 & BlocG("TYPEOFSTEELSECTION") & TABAFF2 & BlocG("NOT_PARTIALLY_ENCASED"))
         End If
 
         'Ajout dessin de la poutre en cours
@@ -438,36 +438,36 @@ Module Mod_NoteCalcul
         SauteLigne()
 
         '--[ Position de la poutre
-        AddTitreNdC(3, Bloc("TRANSPARAMETERS"))
+        AddTitreNdC(3, BlocG("TRANSPARAMETERS"))
         If MyBeam.lIntermediaire Then
-            AddLigneNDC(TABW2 & Bloc("BEAMPOSITION") & TABAFF2 & Bloc("INTERMEDIATEBEAM"))
+            AddLigneNDC(TABW2 & BlocG("BEAMPOSITION") & TABAFF2 & BlocG("INTERMEDIATEBEAM"))
         Else
-            AddLigneNDC(TABW2 & Bloc("BEAMPOSITION") & TABAFF2 & Bloc("EDGEBEAM"))
+            AddLigneNDC(TABW2 & BlocG("BEAMPOSITION") & TABAFF2 & BlocG("EDGEBEAM"))
         End If
 
         If MyBeam.lMixte And (MyBeam.lTremieGauche Or MyBeam.lTremieDroite) Then SauteLigne()
 
-        AddLigneNDC(TABW2 & Bloc("LEFTSPACING") & TABAFF2 & "d\-1\= = " & GetStringInUnit(MyBeam.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, True))
+        AddLigneNDC(TABW2 & BlocG("LEFTSPACING") & TABAFF2 & "d\-1\= = " & GetStringInUnit(MyBeam.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, True))
         If MyBeam.lMixte Then
             If MyBeam.lTremieGauche Then
-                AddLigneNDC(TABW2 & Bloc("ISLEFTOPENING") & TABAFF2 & Bloc("YES"))
-                AddLigneNDC(TABW2 & Bloc("DISTLEFTOPENING") & TABAFF2 & "d\-sl,1\= = " & GetStringInUnit(MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, True))
+                AddLigneNDC(TABW2 & BlocG("ISLEFTOPENING") & TABAFF2 & BlocG("YES"))
+                AddLigneNDC(TABW2 & BlocG("DISTLEFTOPENING") & TABAFF2 & "d\-sl,1\= = " & GetStringInUnit(MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, True))
                 'AddLigneNDC(TABW2 & Bloc("WIDTHLEFTOPENING") & TABAFF2 & GetStringInUnit(MyBeam.EntraxeD1 - 2 * MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, True))
             Else
-                AddLigneNDC(TABW2 & Bloc("ISLEFTOPENING") & TABAFF2 & Bloc("NO"))
+                AddLigneNDC(TABW2 & BlocG("ISLEFTOPENING") & TABAFF2 & BlocG("NO"))
             End If
         End If
 
         If MyBeam.lMixte And (MyBeam.lTremieGauche Or MyBeam.lTremieDroite) Then SauteLigne()
 
-        AddLigneNDC(TABW2 & Bloc("RIGHTSPACING") & TABAFF2 & "d\-2\= = " & GetStringInUnit(MyBeam.EntraxeD2, Enu_TypeVariable.Longueur, 4, 2, True))
+        AddLigneNDC(TABW2 & BlocG("RIGHTSPACING") & TABAFF2 & "d\-2\= = " & GetStringInUnit(MyBeam.EntraxeD2, Enu_TypeVariable.Longueur, 4, 2, True))
         If MyBeam.lMixte Then
             If MyBeam.lTremieDroite Then
-                AddLigneNDC(TABW2 & Bloc("ISRIGHTOPENING") & TABAFF2 & Bloc("YES"))
-                AddLigneNDC(TABW2 & Bloc("DISTRIGHTOPENING") & TABAFF2 & "d\-sl,2\= = " & GetStringInUnit(MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, True))
+                AddLigneNDC(TABW2 & BlocG("ISRIGHTOPENING") & TABAFF2 & BlocG("YES"))
+                AddLigneNDC(TABW2 & BlocG("DISTRIGHTOPENING") & TABAFF2 & "d\-sl,2\= = " & GetStringInUnit(MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, True))
                 'AddLigneNDC(TABW2 & Bloc("WIDTHRIGHTOPENING") & TABAFF2 & GetStringInUnit(MyBeam.EntraxeD2 - 2 * MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, True))
             Else
-                AddLigneNDC(TABW2 & Bloc("ISRIGHTOPENING") & TABAFF2 & Bloc("NO"))
+                AddLigneNDC(TABW2 & BlocG("ISRIGHTOPENING") & TABAFF2 & BlocG("NO"))
             End If
         End If
 
@@ -505,79 +505,79 @@ Module Mod_NoteCalcul
 
         SautePage()
 
-        AddTitreNdC(2, Bloc("SPROFILE"))
-        AddTitreNdC(3, Bloc("GENERAL"))
+        AddTitreNdC(2, BlocG("SPROFILE"))
+        AddTitreNdC(3, BlocG("GENERAL"))
         Select Case MyBeam.Section.ProfilA.typeProfileAcier
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
-                AddLigneNDC(TABW2 & Bloc("STYPE") & TABAFF & Bloc("HOTROLLED"))
-                AddLigneNDC(TABW2 & Bloc("SNAME") & TABAFF & MyBeam.Section.ProfilA.NomProfile)
+                AddLigneNDC(TABW2 & BlocG("STYPE") & TABAFF & BlocG("HOTROLLED"))
+                AddLigneNDC(TABW2 & BlocG("SNAME") & TABAFF & MyBeam.Section.ProfilA.NomProfile)
             Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
-                AddLigneNDC(TABW2 & Bloc("STYPE") & TABAFF & Bloc("PRS_BI_SYM"))
+                AddLigneNDC(TABW2 & BlocG("STYPE") & TABAFF & BlocG("PRS_BI_SYM"))
             Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                AddLigneNDC(TABW2 & Bloc("STYPE") & TABAFF & Bloc("PRS_MONO_SYM"))
+                AddLigneNDC(TABW2 & BlocG("STYPE") & TABAFF & BlocG("PRS_MONO_SYM"))
         End Select
 
         SauteLigne()
 
-        AddTitreNdC(3, Bloc("CHAR_PROFILE"))
+        AddTitreNdC(3, BlocG("CHAR_PROFILE"))
 
-        AddLigneNDC(TABW2 & Bloc("HS_PROFILE") & TABAFF & "h\-s\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ha, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("HS_PROFILE") & TABAFF & "h\-s\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ha, Enu_TypeVariable.Dimension, 3, -1, True))
         If lLamine Then
-            AddLigneNDC(TABW2 & Bloc("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
-            AddLigneNDC(TABW2 & Bloc("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
+            AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
+            AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
         Else
             If lPRSSym Then
-                AddLigneNDC(TABW2 & Bloc("BF_PROFILE") & TABAFF & "b\-fs\==b\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("TF_PROFILE") & TABAFF & "t\-fs\==t\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, True))
+                AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-fs\==b\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-fs\==t\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, True))
             Else
-                AddLigneNDC(TABW2 & Bloc("BFS_PROFILE") & TABAFF & "b\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
-                AddLigneNDC(TABW2 & Bloc("TFS_PROFILE") & TABAFF & "t\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
-                AddLigneNDC(TABW2 & Bloc("BFI_PROFILE") & TABAFF & "b\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfi, Enu_TypeVariable.Dimension, 3, -1, True))
-                AddLigneNDC(TABW2 & Bloc("TFI_PROFILE") & TABAFF & "t\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, -1, True))
+                AddLigneNDC(TABW2 & BlocG("BFS_PROFILE") & TABAFF & "b\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
+                AddLigneNDC(TABW2 & BlocG("TFS_PROFILE") & TABAFF & "t\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
+                AddLigneNDC(TABW2 & BlocG("BFI_PROFILE") & TABAFF & "b\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfi, Enu_TypeVariable.Dimension, 3, -1, True))
+                AddLigneNDC(TABW2 & BlocG("TFI_PROFILE") & TABAFF & "t\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, -1, True))
             End If
         End If
-        AddLigneNDC(TABW2 & Bloc("HW_PROFILE") & TABAFF & "h\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 3, -1, True))
-        AddLigneNDC(TABW2 & Bloc("DW_PROFILE") & TABAFF & "d\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.HauteurAmeDw, Enu_TypeVariable.Dimension, 3, -1, True))
-        AddLigneNDC(TABW2 & Bloc("TW_PROFILE") & TABAFF & "t\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tw, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("HW_PROFILE") & TABAFF & "h\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("DW_PROFILE") & TABAFF & "d\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.HauteurAmeDw, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("TW_PROFILE") & TABAFF & "t\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tw, Enu_TypeVariable.Dimension, 3, -1, True))
 
         If lLamine Then
-            AddLigneNDC(TABW2 & Bloc("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Rcs, Enu_TypeVariable.Dimension, 2, -1, True))
+            AddLigneNDC(TABW2 & BlocG("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Rcs, Enu_TypeVariable.Dimension, 2, -1, True))
             'AddLigneNDC(TABW2 & Bloc("RCI_PROFILE") & TABAFF & "r\-ci\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.r_ci, Enu_TypeVariable.Dimension, 4, 0, True))
         Else
-            AddLigneNDC(TABW2 & Bloc("AWELD_PROFILE") & TABAFF & "a" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.aW, Enu_TypeVariable.Dimension, 2, -1, True))
+            AddLigneNDC(TABW2 & BlocG("AWELD_PROFILE") & TABAFF & "a" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.aW, Enu_TypeVariable.Dimension, 2, -1, True))
         End If
 
         SauteLigne()
 
         MyBeam.Section.ProfilA.InitialiseProprietes()
 
-        AddLigneNDC(TABW2 & Bloc("A_PROFILE") & TABAFF & "A" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Aire, Enu_TypeVariable.AireCM2, 4, 1, True))
-        AddLigneNDC(TABW2 & Bloc("AV_PROFILE") & TABAFF & "A\-v\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.AireAv, Enu_TypeVariable.AireCM2, 4, 1, True))
-        AddLigneNDC(TABW2 & Bloc("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieY, Enu_TypeVariable.InertieCM4, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("IZ_PROFILE") & TABAFF & "I\-z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("WEL_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("A_PROFILE") & TABAFF & "A" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Aire, Enu_TypeVariable.AireCM2, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("AV_PROFILE") & TABAFF & "A\-v\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.AireAv, Enu_TypeVariable.AireCM2, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieY, Enu_TypeVariable.InertieCM4, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("IZ_PROFILE") & TABAFF & "I\-z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("WEL_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
         If lLamine Then
-            AddLigneNDC(TABW2 & Bloc("WEL_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+            AddLigneNDC(TABW2 & BlocG("WEL_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 1, True))
         End If
-        AddLigneNDC(TABW2 & Bloc("WPL_PROFILE") & TABAFF & "W\-pl\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
-        AddLigneNDC(TABW2 & Bloc("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
-        AddLigneNDC(TABW2 & Bloc("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("WPL_PROFILE") & TABAFF & "W\-pl\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
+        AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
 
         AddLigneNDC("\IMG PROFIL_ACIER 10 80 30 NoCadre")
 
         If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
 
-        AddTitreNdC(3, Bloc("MATERIAL_PROFILE"))
-        AddLigneNDC(TABW2 & Bloc("E_PROFILE") & TABAFF & "E" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.EYoung, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("RHO_PROFILE") & TABAFF & "\Sr\s" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.Rho, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+3\=")
-        AddLigneNDC(TABW2 & Bloc("GRADE_PROFILE") & TABAFF & MyBeam.Section.Acier.Nuance)
-        AddLigneNDC(TABW2 & Bloc("STANDARD_PROFILE") & TABAFF & MyBeam.Section.Acier.Reduction)
-        AddLigneNDC(TABW2 & Bloc("QUALITY_PROFILE") & TABAFF & MyBeam.Section.Acier.Qualite)
+        AddTitreNdC(3, BlocG("MATERIAL_PROFILE"))
+        AddLigneNDC(TABW2 & BlocG("E_PROFILE") & TABAFF & "E" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.EYoung, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("RHO_PROFILE") & TABAFF & "\Sr\s" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.Rho, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+3\=")
+        AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & MyBeam.Section.Acier.Nuance)
+        AddLigneNDC(TABW2 & BlocG("STANDARD_PROFILE") & TABAFF & MyBeam.Section.Acier.Reduction)
+        AddLigneNDC(TABW2 & BlocG("QUALITY_PROFILE") & TABAFF & MyBeam.Section.Acier.Qualite)
         If lLamine Then
         Else
-            AddLigneNDC(TABW2 & Bloc("FYFS_PROFILE") & TABAFF & "f\-y,fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.f_y.fs, Enu_TypeVariable.Contrainte, 4, 0, True))
-            AddLigneNDC(TABW2 & Bloc("FYW_PROFILE") & TABAFF & "f\-y,w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.f_y.w, Enu_TypeVariable.Contrainte, 4, 0, True))
-            AddLigneNDC(TABW2 & Bloc("FYFI_PROFILE") & TABAFF & "f\-y,fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.f_y.fi, Enu_TypeVariable.Contrainte, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("FYFS_PROFILE") & TABAFF & "f\-y,fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.f_y.fs, Enu_TypeVariable.Contrainte, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("FYW_PROFILE") & TABAFF & "f\-y,w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.f_y.w, Enu_TypeVariable.Contrainte, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("FYFI_PROFILE") & TABAFF & "f\-y,fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.f_y.fi, Enu_TypeVariable.Contrainte, 4, 0, True))
         End If
 
     End Sub
@@ -591,59 +591,59 @@ Module Mod_NoteCalcul
 
         SautePage()
 
-        AddTitreNdC(2, Bloc("PARTIAL_ENCASEMENT"))
+        AddTitreNdC(2, BlocG("PARTIAL_ENCASEMENT"))
 
-        AddTitreNdC(3, Bloc("GEOMETRY_PART_ENC"))
+        AddTitreNdC(3, BlocG("GEOMETRY_PART_ENC"))
 
-        AddLigneNDC(TABW2 & Bloc("RATIO_BC_PART_ENC") & TABAFF & "b\-c\=/b\-f\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Ratio_bc, Enu_TypeVariable.SansType, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("BC_PART_ENC") & TABAFF & "b\-c\= = " & GetStringInUnit(MyBeam.Section.LargeurEnrobagePartielBc, Enu_TypeVariable.Dimension, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("NOTIONALSIZE") & TABAFF & "h\-0\= = " & GetStringInUnit(MyBeam.Section.NotionalSizeEnrobage, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("RATIO_BC_PART_ENC") & TABAFF & "b\-c\=/b\-f\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Ratio_bc, Enu_TypeVariable.SansType, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("BC_PART_ENC") & TABAFF & "b\-c\= = " & GetStringInUnit(MyBeam.Section.LargeurEnrobagePartielBc, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\= = " & GetStringInUnit(MyBeam.Section.NotionalSizeEnrobage, Enu_TypeVariable.Dimension, 4, 0, True))
 
 
         '--> Béton
 
-        AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
+        AddTitreNdC(3, BlocG("CONCRETE_MATERIAL"))
 
         'If MyBeam.Section.enrobage_partiel.Beton.Type = cls_Beton.Enum_TypeBeton.Leger Then
         If MyBeam.Section.Enrobage.Beton.lLeger Then
-            AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("LIGHTCONCRETE"))
+            AddLigneNDC(TABW2 & BlocG("TYPE_CONCRETE") & TABAFF & BlocG("LIGHTCONCRETE"))
         Else
-            AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("NORMALCONCRETE"))
+            AddLigneNDC(TABW2 & BlocG("TYPE_CONCRETE") & TABAFF & BlocG("NORMALCONCRETE"))
         End If
 
-        AddLigneNDC(TABW2 & Bloc("CLASS_CONCRETE") & TABAFF & MyBeam.Section.Enrobage.Beton.Classe)
-        AddLigneNDC(TABW2 & Bloc("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("CLASS_CONCRETE") & TABAFF & MyBeam.Section.Enrobage.Beton.Classe)
+        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
         '--> Armatures
 
-        AddTitreNdC(3, Bloc("GEOM_LONGI_REINF"))
+        AddTitreNdC(3, BlocG("GEOM_LONGI_REINF"))
 
-        AddLigneNDC(TABW2 & Bloc("GEOM_LONGI_REINF") & " :")
+        AddLigneNDC(TABW2 & BlocG("GEOM_LONGI_REINF") & " :")
         SauteLigne()
 
         AddLigneNDC("\TABLEAU 18")
 
         InitialiseLigne(6, HLIGNE, True)
 
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LAYER"))
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LAYER"))
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "z\-s\=")
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("EXTERIOR"))
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("MIDDLE"))
-        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("INTERIOR"))
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("EXTERIOR"))
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("MIDDLE"))
+        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("INTERIOR"))
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "A\-s\=")
 
         For i As Integer = 0 To MyBeam.Section.Enrobage.LitArma.Count - 1
             InitialiseLigne(6, HLIGNE, True)
             Select Case i
                 Case 0
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("TOP"))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("TOP"))
                 Case 1
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("MIDDLE"))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("MIDDLE"))
                 Case 2
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("BOTTOM"))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("BOTTOM"))
             End Select
 
             With MyBeam.Section.Enrobage.LitArma(i)
@@ -655,19 +655,19 @@ Module Mod_NoteCalcul
                 End If
 
                 If .NbExt = 0 Then
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("NONE"))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("NONE"))
                 Else
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NbExt, Enu_TypeVariable.SansType, 4, 0, False) & " x " & GetStringInUnit(.PhiExt, Enu_TypeVariable.Dimension, 4, 0, True))
                 End If
 
                 If .NbMil = 0 Then
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("NONE"))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("NONE"))
                 Else
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NbMil, Enu_TypeVariable.SansType, 4, 0, False) & " x " & GetStringInUnit(.PhiMil, Enu_TypeVariable.Dimension, 4, 0, True))
                 End If
 
                 If .NbInt = 0 Then
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("NONE"))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("NONE"))
                 Else
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NbInt, Enu_TypeVariable.SansType, 4, 0, False) & " x " & GetStringInUnit(.PhiInt, Enu_TypeVariable.Dimension, 4, 0, True))
                 End If
@@ -681,37 +681,37 @@ Module Mod_NoteCalcul
         Next
         FinTableau()
 
-        AddLigneNDC(TABW2 & Bloc("WITH") & " :")
-        AddLigneNDC(TABW2 & "z\-s\= : " & TABVAR1 & Bloc("ZS_REINF"))
-        AddLigneNDC(TABW2 & "A\-s\= : " & TABVAR1 & Bloc("AS_REINF"))
+        AddLigneNDC(TABW2 & BlocG("WITH") & " :")
+        AddLigneNDC(TABW2 & "z\-s\= : " & TABVAR1 & BlocG("ZS_REINF"))
+        AddLigneNDC(TABW2 & "A\-s\= : " & TABVAR1 & BlocG("AS_REINF"))
 
 
 
 
 
 
-        AddTitreNdC(3, Bloc("MATERIAL_LONGI_REINF"))
-        AddLigneNDC(TABW2 & Bloc("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Section.Enrobage.AcierArmatures.Classe)
-        AddLigneNDC(TABW2 & Bloc("FYS_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("ES_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddTitreNdC(3, BlocG("MATERIAL_LONGI_REINF"))
+        AddLigneNDC(TABW2 & BlocG("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Section.Enrobage.AcierArmatures.Classe)
+        AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
 
 
 
 
 
 
-        AddTitreNdC(3, Bloc("GEOM_TRANSV_REINF"))
+        AddTitreNdC(3, BlocG("GEOM_TRANSV_REINF"))
         Select Case MyBeam.Section.Enrobage.Etriers_Type
             Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
-                AddLigneNDC(TABW2 & Bloc("STIRRUP_ARRANGEMENT") & TABAFF & Bloc("CLOSED_STIRRUPS"))
+                AddLigneNDC(TABW2 & BlocG("STIRRUP_ARRANGEMENT") & TABAFF & BlocG("CLOSED_STIRRUPS"))
             Case cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
-                AddLigneNDC(TABW2 & Bloc("STIRRUP_ARRANGEMENT") & TABAFF & Bloc("WELDED_STIRRUPS"))
+                AddLigneNDC(TABW2 & BlocG("STIRRUP_ARRANGEMENT") & TABAFF & BlocG("WELDED_STIRRUPS"))
             Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
-                AddLigneNDC(TABW2 & Bloc("STIRRUP_ARRANGEMENT") & TABAFF & Bloc("THROUGH_STIRRUPS"))
+                AddLigneNDC(TABW2 & BlocG("STIRRUP_ARRANGEMENT") & TABAFF & BlocG("THROUGH_STIRRUPS"))
         End Select
-        AddLigneNDC(TABW2 & Bloc("DSI_LAYERS") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_Phi, Enu_TypeVariable.Dimension, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("HOR_COVERAGE") & TABAFF & "u\-y\= =" & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageY, Enu_TypeVariable.Dimension, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("VER_COVERAGE") & TABAFF & "u\-z\= =" & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageZ, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("DSI_LAYERS") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_Phi, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("HOR_COVERAGE") & TABAFF & "u\-y\= =" & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageY, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("VER_COVERAGE") & TABAFF & "u\-z\= =" & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageZ, Enu_TypeVariable.Dimension, 4, 0, True))
 
 
         AddLigneNDC("\IMG PARTIAL_ENCASEMENT 15 70 25 NoCadre")
@@ -727,51 +727,51 @@ Module Mod_NoteCalcul
 
         SautePage()
 
-        AddTitreNdC(2, Bloc("SLAB"))
+        AddTitreNdC(2, BlocG("SLAB"))
 
         '--> Géométrie
 
-        AddTitreNdC(3, Bloc("GEOMETRY_SLAB"))
+        AddTitreNdC(3, BlocG("GEOMETRY_SLAB"))
 
         Select Case MyBeam.Dalle.type
             Case cls_Dalle.Enum_TypeDalle.Pleine
-                AddLigneNDC(TABW2 & Bloc("TYPE_SLAB") & TABAFF & Bloc("SOLID_SLAB"))
-                AddLigneNDC(TABW2 & Bloc("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("THICKNESS_HAUNCH") & TABAFF & "t\-h\= = " & GetStringInUnit(MyBeam.Dalle.t_h, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB"))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_HAUNCH") & TABAFF & "t\-h\= = " & GetStringInUnit(MyBeam.Dalle.t_h, Enu_TypeVariable.Dimension, 4, 0, True))
             Case cls_Dalle.Enum_TypeDalle.Prefabriquee
-                AddLigneNDC(TABW2 & Bloc("TYPE_SLAB") & TABAFF & Bloc("SOLID_SLAB_PRECAST"))
-                AddLigneNDC(TABW2 & Bloc("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("THICKNESS_PRECAST") & TABAFF & "t\-pc\= = " & GetStringInUnit(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("THICKNESS_JOINT") & TABAFF & "t\-j\= = " & GetStringInUnit(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB_PRECAST"))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_PRECAST") & TABAFF & "t\-pc\= = " & GetStringInUnit(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_JOINT") & TABAFF & "t\-j\= = " & GetStringInUnit(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, True))
             Case cls_Dalle.Enum_TypeDalle.Mixte
-                AddLigneNDC(TABW2 & Bloc("TYPE_SLAB") & TABAFF & Bloc("COMPOSITE_SLAB"))
-                AddLigneNDC(TABW2 & Bloc("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("COMPOSITE_SLAB"))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
         End Select
 
-        AddLigneNDC(TABW2 & Bloc("NOTIONALSIZE") & TABAFF & "h\-0\= = " & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA.Bfs), Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\= = " & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA.Bfs), Enu_TypeVariable.Dimension, 4, 0, True))
 
         '--> Béton de la dalle
 
-        AddTitreNdC(3, Bloc("CONCRETE_MATERIAL"))
+        AddTitreNdC(3, BlocG("CONCRETE_MATERIAL"))
 
         'If MyBeam.Dalle.beton.Type = cls_Beton.Enum_TypeBeton.Leger Then
         If MyBeam.Dalle.beton.lLeger Then
-            AddLigneNDC(TABW2 & Bloc("TYPE") & TABAFF & Bloc("LIGHTCONCRETE"))
+            AddLigneNDC(TABW2 & BlocG("TYPE") & TABAFF & BlocG("LIGHTCONCRETE"))
         Else
-            AddLigneNDC(TABW2 & Bloc("TYPE_CONCRETE") & TABAFF & Bloc("NORMALCONCRETE"))
+            AddLigneNDC(TABW2 & BlocG("TYPE_CONCRETE") & TABAFF & BlocG("NORMALCONCRETE"))
         End If
 
-        AddLigneNDC(TABW2 & Bloc("CLASS_CONCRETE") & TABAFF & MyBeam.Dalle.beton.Classe)
-        AddLigneNDC(TABW2 & Bloc("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("CLASS_CONCRETE") & TABAFF & MyBeam.Dalle.beton.Classe)
+        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
         '--> Armatures longitudinales
 
-        AddTitreNdC(3, Bloc("LONGI_REINFORCEMENTS"))
+        AddTitreNdC(3, BlocG("LONGI_REINFORCEMENTS"))
 
-        AddLigneNDC(TABW2 & Bloc("NB_LAYERS") & TABAFF & GetStringInUnit(MyBeam.Dalle.NbLitsArmaActifs, Enu_TypeVariable.SansType, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("NB_LAYERS") & TABAFF & GetStringInUnit(MyBeam.Dalle.NbLitsArmaActifs, Enu_TypeVariable.SansType, 4, 0, True))
         SauteLigne()
 
         AddLigneNDC("\TABLEAU 18")
@@ -795,19 +795,19 @@ Module Mod_NoteCalcul
 
         FinTableau()
 
-        AddLigneNDC(TABW2 & Bloc("WITH"))
-        AddLigneNDC(TABW2 & "e\-si\= : " & TABVAR1 & Bloc("ESI_LAYERS"))
-        AddLigneNDC(TABW2 & "d\-si\= : " & TABVAR1 & Bloc("DSI_LAYERS"))
-        AddLigneNDC(TABW2 & "z\-si\= : " & TABVAR1 & Bloc("ZSI_LAYERS"))
-        AddLigneNDC(TABW2 & "A\-si\= : " & TABVAR1 & Bloc("ASI_LAYERS"))
+        AddLigneNDC(TABW2 & BlocG("WITH"))
+        AddLigneNDC(TABW2 & "e\-si\= : " & TABVAR1 & BlocG("ESI_LAYERS"))
+        AddLigneNDC(TABW2 & "d\-si\= : " & TABVAR1 & BlocG("DSI_LAYERS"))
+        AddLigneNDC(TABW2 & "z\-si\= : " & TABVAR1 & BlocG("ZSI_LAYERS"))
+        AddLigneNDC(TABW2 & "A\-si\= : " & TABVAR1 & BlocG("ASI_LAYERS"))
 
 
 
 
-        AddTitreNdC(3, Bloc("MATERIAL_LONGI_REINF"))
-        AddLigneNDC(TABW2 & Bloc("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Dalle.AcierArmatures.Classe)
-        AddLigneNDC(TABW2 & Bloc("FYS_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("ES_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddTitreNdC(3, BlocG("MATERIAL_LONGI_REINF"))
+        AddLigneNDC(TABW2 & BlocG("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Dalle.AcierArmatures.Classe)
+        AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
 
         'SauteLigne()
         AddLigneNDC("\IMG SLAB 5 80 30 NoCadre")
@@ -819,62 +819,62 @@ Module Mod_NoteCalcul
         If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
 
         If MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
-            AddTitreNdC(3, Bloc("PROFILED_STEEL_SH"))
+            AddTitreNdC(3, BlocG("PROFILED_STEEL_SH"))
 
             If MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
-                AddLigneNDC(TABW2 & Bloc("ORIENTATION_SHEET") & TABAFF & Bloc("LONGITUDINAL"))
+                AddLigneNDC(TABW2 & BlocG("ORIENTATION_SHEET") & TABAFF & BlocG("LONGITUDINAL"))
             Else
-                AddLigneNDC(TABW2 & Bloc("ORIENTATION_SHEET") & TABAFF & Bloc("TRANSVERSAL"))
+                AddLigneNDC(TABW2 & BlocG("ORIENTATION_SHEET") & TABAFF & BlocG("TRANSVERSAL"))
             End If
 
             If MyBeam.Dalle.Bac.lDatabase Then
-                AddLigneNDC(TABW2 & Bloc("PSS_FROM") & TABAFF & Bloc("DATABASE"))
-                AddLigneNDC(TABW2 & Bloc("SOCIETE") & TABAFF & MyBeam.Dalle.Bac.Producteur)
-                AddLigneNDC(TABW2 & Bloc("NAME_PSS") & TABAFF & MyBeam.Dalle.Bac.Etiquette)
+                AddLigneNDC(TABW2 & BlocG("PSS_FROM") & TABAFF & BlocG("DATABASE"))
+                AddLigneNDC(TABW2 & BlocG("SOCIETE") & TABAFF & MyBeam.Dalle.Bac.Producteur)
+                AddLigneNDC(TABW2 & BlocG("NAME_PSS") & TABAFF & MyBeam.Dalle.Bac.Etiquette)
             Else
-                AddLigneNDC(TABW2 & Bloc("PSS_FROM") & TABAFF & Bloc("DIMENSIONS_PSS"))
+                AddLigneNDC(TABW2 & BlocG("PSS_FROM") & TABAFF & BlocG("DIMENSIONS_PSS"))
             End If
 
             SauteLigne()
 
-            AddLigneNDC(TABW2 & Bloc("CHAR_PSS"))
+            AddLigneNDC(TABW2 & BlocG("CHAR_PSS"))
 
             With MyBeam.Dalle.Bac
 
-                AddLigneNDC(TABW2 & Bloc("TP_PSS") & TABAFF & "t\-p\= = " & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("EP_PSS") & TABAFF & "e\-p\= = " & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("HP_PSS") & TABAFF & "h\-p\= = " & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("HPG_PSS") & TABAFF & "h\-pg\= = " & GetStringInUnit(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("BB_PSS") & TABAFF & "b\-b\= = " & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("BT_PSS") & TABAFF & "b\-t\= = " & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("MUP_PSS") & TABAFF & "\Sm\s\-p\= = " & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
-                AddLigneNDC(TABW2 & Bloc("FP_PSS") & TABAFF & "f\-p\= = " & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("IPU_PSS") & TABAFF & "I\-pu\= = " & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
+                AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\= = " & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\= = " & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("HP_PSS") & TABAFF & "h\-p\= = " & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("HPG_PSS") & TABAFF & "h\-pg\= = " & GetStringInUnit(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\= = " & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\= = " & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\= = " & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
+                AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\= = " & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\= = " & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
 
                 If .Orientation = cls_Bac.Enum_Orientation.Parallele Then
                     If .AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe Then
-                        AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("CUT_DECK"))
+                        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CUT_DECK"))
                     Else
-                        AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("UNCUT_DECK"))
+                        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("UNCUT_DECK"))
                     End If
                 Else
                     Select Case .AppuiT
                         Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
-                            AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("CONTINU_PSS"))
+                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINU_PSS"))
                             If .lPreperce Then
-                                AddLigneNDC(TABW2 & Bloc("CONNECTION_OPT") & TABAFF & Bloc("PREPUNCHED_PSS"))
+                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
                             Else
-                                AddLigneNDC(TABW2 & Bloc("CONNECTION_OPT") & TABAFF & Bloc("THROUGH_DECK_PSS"))
+                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
                             End If
                         Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
-                            AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("PART_CONT_PSS"))
+                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("PART_CONT_PSS"))
                             If .lPreperce Then
-                                AddLigneNDC(TABW2 & Bloc("CONNECTION_OPT") & TABAFF & Bloc("PREPUNCHED_PSS"))
+                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
                             Else
-                                AddLigneNDC(TABW2 & Bloc("CONNECTION_OPT") & TABAFF & Bloc("THROUGH_DECK_PSS"))
+                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
                             End If
                         Case cls_Bac.EnuConfigTAppui.Discontinu
-                            AddLigneNDC(TABW2 & Bloc("CONFIG_SUPPORT_PSS") & TABAFF & Bloc("NO_CONT_PSS"))
+                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("NO_CONT_PSS"))
                     End Select
 
                 End If
@@ -913,14 +913,14 @@ Module Mod_NoteCalcul
 
         If lConnection Then
 
-            AddTitreNdC(3, Bloc("CONNECTORS"))
+            AddTitreNdC(3, BlocG("CONNECTORS"))
 
             With MyBeam.Dalle.Connecteur
-                AddLigneNDC(TABW2 & Bloc("NAME_CONNECTORS") & TABAFF & .nom)
-                AddLigneNDC(TABW2 & Bloc("HSC_CONNECTORS") & TABAFF & "h\-sc\= = " & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("D_CONNECTORS") & TABAFF & "d = " & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("FYSC_CONNECTORS") & TABAFF & "f\-ysc\= = " & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
-                AddLigneNDC(TABW2 & Bloc("FUSC_CONNECTORS") & TABAFF & "f\-usc\= = " & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
+                AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\= = " & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d = " & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\= = " & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\= = " & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
 
                 Dim lGeneration1, lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
                 Dim nr_min, nr_max As Integer
@@ -941,30 +941,30 @@ Module Mod_NoteCalcul
                 gammaVc = MyBeam.Param.Gamma.GammaVc
 
                 If lDallePleine Then
-                    AddLigneNDC(TABW2 & Bloc("PRD_CONNECTORS") & TABAFF & "P\-Rd\= = " & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
+                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= = " & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
                 Else 'dalle mixte
                     If lPerp Then
                         For nr_boucle As Integer = nr_min To nr_max
-                            AddLigneNDC(TABW2 & Bloc("PRD_CONNECTORS") & TABAFF & "P\-Rd\= = " & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
-                            AddLigneNDC(TABW2 & Bloc("KL_CONNECTORS") & TABAFF & "k\-t\= = " & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= = " & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                            AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= = " & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
                         Next
                     Else 'dalle parallèlle
-                        AddLigneNDC(TABW2 & Bloc("PRD_CONNECTORS") & TABAFF & "P\-Rd\= = " & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
-                        AddLigneNDC(TABW2 & Bloc("KL_CONNECTORS") & TABAFF & "k\-l\= = " & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
+                        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= = " & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
+                        AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= = " & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
                     End If
                 End If
 
 
             End With
 
-            AddTitreNdC(3, Bloc("CONNECTION_ARR"))
+            AddTitreNdC(3, BlocG("CONNECTION_ARR"))
 
             With MyBeam
 
                 If .lAutomaticDesign Then
-                    AddLigneNDC(TABW2 & Bloc("AUTOMATIC_DESIGN") & TABAFF & Bloc("YES"))
+                    AddLigneNDC(TABW2 & BlocG("AUTOMATIC_DESIGN") & TABAFF & BlocG("YES"))
                 Else
-                    AddLigneNDC(TABW2 & Bloc("AUTOMATIC_DESIGN") & TABAFF & Bloc("NO"))
+                    AddLigneNDC(TABW2 & BlocG("AUTOMATIC_DESIGN") & TABAFF & BlocG("NO"))
 
                     SauteLigne()
 
@@ -1001,13 +1001,13 @@ Module Mod_NoteCalcul
 
                     InitialiseLigne(nbColonne, HLIGNE, True)
 
-                    AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LENGHT_ZONE") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("ROW_NUMBER"))
+                    AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LENGHT_ZONE") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ROW_NUMBER"))
                     If lDalleMixteEtPerp Then
-                        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("RIB_DISPOSITION"))
+                        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("RIB_DISPOSITION"))
                     End If
-                    AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LONGI_SPACING") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+                    AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LONGI_SPACING") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
 
                     '                    Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
 
@@ -1021,9 +1021,9 @@ Module Mod_NoteCalcul
                             AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                             If lDalleMixteEtPerp Then
                                 If .ZoneEspacement_Bac_Trans(i, j) = 1 Then
-                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIB"))
+                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIB"))
                                 Else
-                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & Bloc("RIBS"))
+                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIBS"))
                                     End
                                 End If
                             End If
@@ -1063,44 +1063,44 @@ Module Mod_NoteCalcul
         If NbBesoinLignes + nbLignes > MAXLIGNEPPAG Then
             SautePage()
         End If
-        AddTitreNdC(2, Bloc("DATAPROPPING"))
+        AddTitreNdC(2, BlocG("DATAPROPPING"))
 
         '--> Affichage de l'étaiement
 
         Select Case MyBeam.TypeEtaiement
             Case cls_Poutre.EnuTypeEtaiement.FullyPropped
-                AddLigneNDC(TABW2 & Bloc("TYPE_PROPPING") & TABAFF & Bloc("FULLYPROPPED"))
+                AddLigneNDC(TABW2 & BlocG("TYPE_PROPPING") & TABAFF & BlocG("FULLYPROPPED"))
             Case cls_Poutre.EnuTypeEtaiement.UnPropped
-                AddLigneNDC(TABW2 & Bloc("TYPE_PROPPING") & TABAFF & Bloc("UNPROPPED"))
+                AddLigneNDC(TABW2 & BlocG("TYPE_PROPPING") & TABAFF & BlocG("UNPROPPED"))
             Case cls_Poutre.EnuTypeEtaiement.PointPropped
-                AddLigneNDC(TABW2 & Bloc("TYPE_PROPPING") & TABAFF & Bloc("POINTPROPPED"))
+                AddLigneNDC(TABW2 & BlocG("TYPE_PROPPING") & TABAFF & BlocG("POINTPROPPED"))
 
                 If MyBeam.lTraveeConsoleGauche Then
                     If MyBeam.lEtaisConsoleGauche Then
-                        AddLigneNDC(TABW2 & Bloc("ENDPROPPEDLEFTCANT") & TABAFF & Bloc("YES"))
+                        AddLigneNDC(TABW2 & BlocG("ENDPROPPEDLEFTCANT") & TABAFF & BlocG("YES"))
                     Else
-                        AddLigneNDC(TABW2 & Bloc("ENDPROPPEDLEFTCANT") & TABAFF & Bloc("NO"))
+                        AddLigneNDC(TABW2 & BlocG("ENDPROPPEDLEFTCANT") & TABAFF & BlocG("NO"))
                     End If
                 End If
 
                 If MyBeam.lTraveeConsoleDroite Then
                     If MyBeam.lEtaisConsoleDroite Then
-                        AddLigneNDC(TABW2 & Bloc("ENDPROPPEDRIGHTCANT") & TABAFF & Bloc("YES"))
+                        AddLigneNDC(TABW2 & BlocG("ENDPROPPEDRIGHTCANT") & TABAFF & BlocG("YES"))
                     Else
-                        AddLigneNDC(TABW2 & Bloc("ENDPROPPEDRIGHTCANT") & TABAFF & Bloc("NO"))
+                        AddLigneNDC(TABW2 & BlocG("ENDPROPPEDRIGHTCANT") & TABAFF & BlocG("NO"))
                     End If
                 End If
 
                 If MyBeam.lTraveeConsoleGauche Or MyBeam.lTraveeConsoleDroite Then
-                    AddLigneNDC(TABW2 & Bloc("NBPROPPINGWITHCANT") & TABAFF & MyBeam.NbEtaiement)
+                    AddLigneNDC(TABW2 & BlocG("NBPROPPINGWITHCANT") & TABAFF & MyBeam.NbEtaiement)
                 Else
-                    AddLigneNDC(TABW2 & Bloc("NBPROPPINGWITHOUTCANT") & TABAFF & MyBeam.NbEtaiement)
+                    AddLigneNDC(TABW2 & BlocG("NBPROPPINGWITHOUTCANT") & TABAFF & MyBeam.NbEtaiement)
                 End If
 
                 If MyBeam.lEtaisSousProfileAcier Then
-                    AddLigneNDC(TABW2 & Bloc("PROPPINGLOCATION") & TABAFF & Bloc("UNDERSTEEL"))
+                    AddLigneNDC(TABW2 & BlocG("PROPPINGLOCATION") & TABAFF & BlocG("UNDERSTEEL"))
                 Else
-                    AddLigneNDC(TABW2 & Bloc("PROPPINGLOCATION") & TABAFF & Bloc("UNDERSLAB"))
+                    AddLigneNDC(TABW2 & BlocG("PROPPINGLOCATION") & TABAFF & BlocG("UNDERSLAB"))
                 End If
 
 
@@ -1135,22 +1135,22 @@ Module Mod_NoteCalcul
 
         '--> Affichage des maitiens latéraux
 
-        AddTitreNdC(2, Bloc("LATERALR"))
+        AddTitreNdC(2, BlocG("LATERALR"))
 
         Select Case MyBeam.TypeMaintien
             Case cls_Poutre.EnuTypeMaintiensPoutre.FullyRestrained
-                AddLigneNDC(TABW2 & Bloc("TYPE_RES") & TABAFF & Bloc("FULLY_RES"))
+                AddLigneNDC(TABW2 & BlocG("TYPE_RES") & TABAFF & BlocG("FULLY_RES"))
             Case cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
-                AddLigneNDC(TABW2 & Bloc("TYPE_RES") & TABAFF & Bloc("NO_INTER_RES"))
+                AddLigneNDC(TABW2 & BlocG("TYPE_RES") & TABAFF & BlocG("NO_INTER_RES"))
             Case cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained
-                AddLigneNDC(TABW2 & Bloc("TYPE_RES") & TABAFF & Bloc("POINT_RES"))
+                AddLigneNDC(TABW2 & BlocG("TYPE_RES") & TABAFF & BlocG("POINT_RES"))
 
                 SauteLigne()
                 AddLigneNDC("\TABLEAU 29")
                 InitialiseLigne(3, HLIGNE, True)
-                AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
+                AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
                 AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-                AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LATERALR"))
+                AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LATERALR"))
 
                 Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
 
@@ -1163,12 +1163,12 @@ Module Mod_NoteCalcul
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, i)
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(maintien.x_Loc, Enu_TypeVariable.Longueur, 4, 0, False))
                         If maintien.lMaintienSemelleInf And maintien.lMaintienSemelleSup Then
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("BOTH_FLANGES"))
+                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("BOTH_FLANGES"))
                         Else
                             If maintien.lMaintienSemelleInf Then
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("LOWER_FLANGE"))
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LOWER_FLANGE"))
                             Else
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("UPPER_FLANGE"))
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("UPPER_FLANGE"))
                             End If
                         End If
                     Next
@@ -1204,8 +1204,8 @@ Module Mod_NoteCalcul
 
                 FinTableau()
 
-                AddLigneNDC(TABW2 & Bloc("WITH"))
-                AddLigneNDC(TABW2 & "x : " & Bloc("X_LOC_RES"))
+                AddLigneNDC(TABW2 & BlocG("WITH"))
+                AddLigneNDC(TABW2 & "x : " & BlocG("X_LOC_RES"))
 
         End Select
 
@@ -1246,30 +1246,30 @@ Module Mod_NoteCalcul
             SautePage()
         End If
 
-        AddTitreNdC(2, Bloc("GAMMA"))
+        AddTitreNdC(2, BlocG("GAMMA"))
 
         '# Charges
 
-        AddTitreNdC(3, Bloc("LOADING_FACTORS"))
+        AddTitreNdC(3, BlocG("LOADING_FACTORS"))
         AddLigneNDC(TABVAR2 & "\Sg\s\-G,sup\= " & TABEGAL1 & GetStringInUnit(MyGamma.GammaG_sup, Enu_TypeVariable.SansType, 3, 2, False))
         AddLigneNDC(TABVAR2 & "\Sg\s\-G,inf\= " & TABEGAL1 & GetStringInUnit(MyGamma.GammaG_inf, Enu_TypeVariable.SansType, 3, 2, False))
         AddLigneNDC(TABVAR2 & "\Sg\s\-Q\= " & TABEGAL1 & GetStringInUnit(MyGamma.GammaQ, Enu_TypeVariable.SansType, 3, 2, False))
 
         '# Coefficients de combinaison
 
-        AddTitreNdC(3, Bloc("COMBINATION_FACTORS"))
+        AddTitreNdC(3, BlocG("COMBINATION_FACTORS"))
         AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q1\= " & TABEGAL1 & MyGamma.Psi0_Q1 & TABVARL3 & "\Sy\s\-0,Q2\= " & TABEGAL2 & MyGamma.Psi0_Q2)
         AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q1\= " & TABEGAL1 & MyGamma.Psi1_Q1 & TABVARL3 & "\Sy\s\-1,Q2\= " & TABEGAL2 & MyGamma.Psi1_Q2)
         AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q1\= " & TABEGAL1 & MyGamma.Psi2_Q1 & TABVARL3 & "\Sy\s\-2,Q2\= " & TABEGAL2 & MyGamma.Psi2_Q2)
 
         '# Résistances
 
-        AddTitreNdC(3, Bloc("RESISTANCEFACTORS"))
+        AddTitreNdC(3, BlocG("RESISTANCEFACTORS"))
 
         If lFire Then
-            ChaineFire = TABVARL4 & Bloc("FIRE_RES_FACTORS")
+            ChaineFire = TABVARL4 & BlocG("FIRE_RES_FACTORS")
         End If
-        AddLigneNDC(TABVAR2 & Bloc("STEEL_RES_FACTORS") & TABVARL3 & Bloc("SLAB_RES_FACTORS") & ChaineFire)
+        AddLigneNDC(TABVAR2 & BlocG("STEEL_RES_FACTORS") & TABVARL3 & BlocG("SLAB_RES_FACTORS") & ChaineFire)
 
         If lFire Then
             ChaineFire = TABVARL4 & "\Sg\s\-M,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi, Enu_TypeVariable.SansType, 3, 2, False)
@@ -1378,7 +1378,7 @@ Module Mod_NoteCalcul
             SautePage()
         End If
 
-        AddTitreNdC(2, Bloc("LOADS"))
+        AddTitreNdC(2, BlocG("LOADS"))
 
         For Each elmnt As KeyValuePair(Of String, cls_ChargementUtilisateur) In MyBeam.ChargesU
             AddTitreNdC(3, elmnt.Key & " : " & elmnt.Value.Titre)
@@ -1389,16 +1389,16 @@ Module Mod_NoteCalcul
                 If elmnt.Value.NombreChargesSurf(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) = 0 Then
                     SauteLigne()
                     If nbLignes + 2 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & Bloc("NOQSURF"))
+                    AddLigneNDC(TABW2 & BlocG("NOQSURF"))
                 Else
                     SauteLigne()
                     If nbLignes + 1.5 * (elmnt.Value.NombreChargesSurf(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & "\G\I" & Bloc("QSURF") & "\i\g")
+                    AddLigneNDC(TABW2 & "\G\I" & BlocG("QSURF") & "\i\g")
 
                     AddLigneNDC("\TABLEAU 18")
                     InitialiseLigne(2, HLIGNE, True)
-                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
-                    AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, Bloc("QSURF_VALUE") & " (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\=)")
+                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
+                    AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("QSURF_VALUE") & " (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\=)")
 
 
                     For iTravee As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
@@ -1425,15 +1425,15 @@ Module Mod_NoteCalcul
                 If elmnt.Value.NombreForceReparties(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) = 0 Then
                     SauteLigne()
                     If nbLignes + 2 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & Bloc("NOFREP"))
+                    AddLigneNDC(TABW2 & BlocG("NOFREP"))
                 Else
                     SauteLigne()
                     If nbLignes + 1.5 * (elmnt.Value.NombreForceReparties(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & "\G\I" & Bloc("FREP") & "\i\g")
+                    AddLigneNDC(TABW2 & "\G\I" & BlocG("FREP") & "\i\g")
 
                     AddLigneNDC("\TABLEAU 18")
                     InitialiseLigne(5, HLIGNE, True)
-                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
+                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
                     AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
                     AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
                     AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
@@ -1470,15 +1470,15 @@ Module Mod_NoteCalcul
                 If elmnt.Value.NombreForcePonctuelles(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) = 0 Then
                     SauteLigne()
                     If nbLignes + 2 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & Bloc("NOFPONC"))
+                    AddLigneNDC(TABW2 & BlocG("NOFPONC"))
                 Else
                     SauteLigne()
                     If nbLignes + 1.5 * (elmnt.Value.NombreForcePonctuelles(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & "\G\I" & Bloc("FPONC") & "\i\g")
+                    AddLigneNDC(TABW2 & "\G\I" & BlocG("FPONC") & "\i\g")
 
                     AddLigneNDC("\TABLEAU 18")
                     InitialiseLigne(3, HLIGNE, True)
-                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
+                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
                     AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
                     AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
 
@@ -1504,7 +1504,7 @@ Module Mod_NoteCalcul
                 End If
 
             Else
-                AddLigneNDC(TABW2 & Bloc("NOLOADDEFINED"))
+                AddLigneNDC(TABW2 & BlocG("NOLOADDEFINED"))
             End If
         Next
 
@@ -1526,45 +1526,45 @@ Module Mod_NoteCalcul
         End If
 
 
-        AddTitreNdC(2, Bloc("COMBINATIONS"))
+        AddTitreNdC(2, BlocG("COMBINATIONS"))
 
 
-        AddTitreNdC(3, Bloc("ULSTATES"))
+        AddTitreNdC(3, BlocG("ULSTATES"))
         If MyBeam.GetNbCombi(MyBeam.lCombELU) = 0 Then
-            AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+            AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
         Else
             EditionTableauCombinaison(MyBeam.lCombELU, MyBeam.CoefCombELU)
         End If
 
 
 
-        AddTitreNdC(3, Bloc("SLSTATES"))
+        AddTitreNdC(3, BlocG("SLSTATES"))
         If MyBeam.GetNbCombi(MyBeam.lCombELS) = 0 Then
-            AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+            AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
         Else
             EditionTableauCombinaison(MyBeam.lCombELS, MyBeam.CoefCombELS)
         End If
 
 
-        AddTitreNdC(3, Bloc("FLSTATES"))
+        AddTitreNdC(3, BlocG("FLSTATES"))
         If MyBeam.GetNbCombi(MyBeam.lCombFeu) = 0 Then
-            AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+            AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
         Else
             EditionTableauCombinaison(MyBeam.lCombFeu, MyBeam.CoefCombFeu)
         End If
 
         If MyBeam.lMixte Then
             If MyBeam.GetNbCombi(MyBeam.lCombELCURules) = 0 Then
-                AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+                AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
             Else
-                AddTitreNdC(3, Bloc("ELCUSTATES"))
+                AddTitreNdC(3, BlocG("ELCUSTATES"))
                 EditionTableauCombinaison(MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
             End If
 
             If MyBeam.GetNbCombi(MyBeam.lCombELCURules) = 0 Then
-                AddLigneNDC(TABW2 & Bloc("NOCOMBO"))
+                AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
             Else
-                AddTitreNdC(3, Bloc("ELCSSTATES"))
+                AddTitreNdC(3, BlocG("ELCSSTATES"))
                 EditionTableauCombinaison(MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
             End If
         End If
@@ -2655,8 +2655,8 @@ Module Mod_NoteCalcul
         If nbLignes + 2 * HLIGNE > MAXLIGNEPPAG Then SautePage()
 
         InitialiseLigne(nbColonne, HLIGNE, True)
-        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("SPAN"))
-        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, Bloc("ZONE"))
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ZONE"))
         AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "n\-r\=")
         AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\St\s\-Ed," & str_failureArea & "\= " & "(" & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes) & ")")
         AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-f,min," & str_failureArea & "\= (rad)")
@@ -2807,23 +2807,27 @@ Module Mod_NoteCalcul
         If MyBeam.Param.lElasticDesign Then
             '--> Calcul élastique imposé
 
-            AddLigneNDC(TABW2 & "Calcul élastique imposé")
+            AddLigneNDC(TABW2 & BlocELU("ELASTIC_DESIGN_IMPOSED"))
 
         Else
 
             If MyBeam.VerifMixte(iVerif).lCalculPlastic Then
                 '--> Calcul Plastique
 
-                AddLigneNDC(TABW2 & "Calcul plastique")
+                AddLigneNDC(TABW2 & BlocELU("PLASTIC_DESIGN"))
                 'AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA"))
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+
+                SauteLigne()
+
+                EditionVerificationsELUSummaryMIXTEDegConnexion(MyBeam, iVerif)
 
             Else
 
                 '--> Calcul élastique classe 3
 
-                AddLigneNDC(TABW2 & "Calcul élastique (classe 3)")
+                AddLigneNDC(TABW2 & BlocELU("ELASTIC_DESIGN"))
 
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA"))
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
@@ -2832,10 +2836,118 @@ Module Mod_NoteCalcul
             End If
         End If
 
+    End Sub
 
+    Private Sub EditionVerificationsELUSummaryMIXTEDegConnexion(MyBeam As cls_Poutre, iVerif As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Synthèse des degrés de connexion pour une poutre mixte (avec ou sans enrobage)
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre à traiter
+        '   iVerif      [E] :   Indice de la vérification
+        '-------------------------------------------------------------------------------------------
 
+        '--> Déclarations
+
+        Dim iTravee As Integer
+        Dim iDebTrav, iFinTrav As Integer
+        Dim lMulti As Boolean
+        Const TVAR1 As String = "\T20"
+
+        '--> Initialisations
+
+        iDebTrav = MyBeam.IndicePremiereTravee
+        iFinTrav = MyBeam.IndiceDerniereTravee
+        lMulti = (iFinTrav > iDebTrav)
+
+        '--> Traitement
+
+        AddLigneNDC(TABW2 & BlocELU("CONNECTION"))
+
+        '--> Console gauche
+
+        If MyBeam.lTraveeConsoleGauche Then
+
+            AddLigneNDC(TVAR1 & "\U" & BlocG("LEFTCANTILEVER") & "\u")
+
+            AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(0, 1), 1, -1)
+
+        End If
+
+        '--> Travées centrales
+
+        For iTravee = 1 To MyBeam.NombreTraveesDeuxAppuis
+
+            If lMulti Then
+                If MyBeam.NombreTraveesDeuxAppuis = 1 Then
+                    AddLigneNDC(TVAR1 & "\U" & BlocG("SPAN_MAIN") & " " & CStr(iTravee) & "\u")
+                Else
+                    AddLigneNDC(TVAR1 & "\U" & BlocG("SPAN_N") & CStr(iTravee) & "\u")
+                End If
+            End If
+
+            AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(iTravee, 0), MyBeam.VerifMixte(iVerif).DegConnexMin(iTravee), 1)
+            If lMulti Then
+                AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(iTravee, 1), 1, -1)
+            End If
+        Next
+
+        '--> Console droite
+
+        If MyBeam.lTraveeConsoleDroite Then
+
+            AddLigneNDC(TVAR1 & "\U" & BlocG("RIGHTCANTILEVER") & "\u")
+
+            AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(iFinTrav, 1), 1, -1)
+
+        End If
 
     End Sub
+
+    Private Sub AfficheDegreConnexion(Eta As Decimal, EtaMin As Decimal, SigneM As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage du degré de connexion d'une travée et de la valeur mini
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre à traiter
+        '   iVerif      [E] :   Indice de la vérification
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim strGras, strFinGras As String
+        Const Symbol As String = "\Sh\s"
+        Const SymbolMin As String = "\Sh\s\-min\="
+        Dim TABOK As String = "\T85"
+        Dim TABInfo As String = "\T70"
+        Dim strOK As String
+        Dim infoM As String
+
+        '--> Initialisation
+
+        If SigneM > 0 Then infoM = " (M>0)" Else infoM = " (M<0)"
+
+        If IsSmaller(Eta, EtaMin) Then
+            strGras = "\G"
+            strFinGras = "\g"
+            strOK = "NS"
+        Else
+            strGras = ""
+            strFinGras = ""
+            strOK = "S"
+        End If
+
+        AddLigneNDC(TABW2 & BlocELU("DEGREEOFSHEARCONNEC") & infoM & TABAFF & strGras &
+                    Symbol & TABEGAL & GetStringInUnit(Eta, Enu_TypeVariable.SansType, 3, 2, False) &
+                    TABOK & strOK & strFinGras)
+        AddLigneNDC(TABW2 & BlocELU("MINDEGREE") & TABAFF & strGras &
+                    SymbolMin & TABEGAL & GetStringInUnit(EtaMin, Enu_TypeVariable.SansType, 3, 2, False) &
+                    strFinGras)
+
+    End Sub
+
 
     Private Sub AfficheSyntheseCritere(Critere As cls_Critere, Symbol As String, Titre As String)
         '-------------------------------------------------------------------------------------------
@@ -3479,7 +3591,6 @@ Module Mod_NoteCalcul
 
 #End Region
 
-
 #Region "   Edition ELS méthode HIVOSS "
 
 
@@ -3542,7 +3653,7 @@ Module Mod_NoteCalcul
         MyBeam.Hivoss.ChargerValeursHivoss(AllFloorVibration)
 
         MyBeam.Modal.Analyse(MyBeam, MyBeam.Hivoss.ratioQ, MyBeam.Hivoss.IndexQ)
-        frequency = MyBeam.Modal.Frequence
+        Frequency = MyBeam.Modal.Frequence
 
         ModalMass = MyBeam.Modal.MassTotal / 2              ' A MODIFIER ? pour les multispan
 
@@ -3667,7 +3778,7 @@ Module Mod_NoteCalcul
         SauteLigne()
 
 
-        AddTitreDoc(0, Bloc("TITLE").ToUpper)
+        AddTitreDoc(0, BlocG("TITLE").ToUpper)
         AddTitreDoc(1, projectName)
 
         SauteLigne()
@@ -4390,7 +4501,7 @@ Module Mod_NoteCalcul
 
 
         Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_MAIN")
-        BlocLine.CreationBloc(Bloc)
+        BlocLine.CreationBloc(BlocG)
 
         BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_SECTIONPROP")
         BlocLine.CreationBloc(BlocSP)
@@ -4419,16 +4530,16 @@ Module Mod_NoteCalcul
         End If
         MyNote.EnteteSecond = MyProjet.Nom
 
-        MyNote.EtiquetteLigne(0, 0) = Bloc("USER")
-        MyNote.EtiquetteLigne(1, 0) = Bloc("SOCIETE")
-        MyNote.EtiquetteLigne(2, 0) = Bloc("PROJET")
+        MyNote.EtiquetteLigne(0, 0) = BlocG("USER")
+        MyNote.EtiquetteLigne(1, 0) = BlocG("SOCIETE")
+        MyNote.EtiquetteLigne(2, 0) = BlocG("PROJET")
 
         Const DPTS As String = ":  "
         MyNote.EtiquetteLigne(0, 1) = DPTS & MyProjet.Utilisateur
         MyNote.EtiquetteLigne(1, 1) = DPTS & MyProjet.Entreprise
         MyNote.EtiquetteLigne(2, 1) = DPTS & MyProjet.Nom
 
-        MyNote.FootNote = Bloc("FOOTNOTE")
+        MyNote.FootNote = BlocG("FOOTNOTE")
 
         '--|=========================================
         '--| PAGE DE GARDE
@@ -4443,27 +4554,27 @@ Module Mod_NoteCalcul
 
         SautePage()
 
-        AddTitreNdC(1, Bloc("SPROFILE"))
+        AddTitreNdC(1, BlocG("SPROFILE"))
 
-        AddLigneNDC(TABW2 & Bloc("HS_PROFILE") & TABAFF & "h\-s\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ha, Enu_TypeVariable.Dimension, 3, -1, True))
-        AddLigneNDC(TABW2 & Bloc("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
-        AddLigneNDC(TABW2 & Bloc("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
-        AddLigneNDC(TABW2 & Bloc("HW_PROFILE") & TABAFF & "h\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.HauteurAmeHw, Enu_TypeVariable.Dimension, 3, -1, True))
-        AddLigneNDC(TABW2 & Bloc("DW_PROFILE") & TABAFF & "d\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.HauteurAmeDw, Enu_TypeVariable.Dimension, 3, -1, True))
-        AddLigneNDC(TABW2 & Bloc("TW_PROFILE") & TABAFF & "t\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.Tw, Enu_TypeVariable.Dimension, 3, -1, True))
-        AddLigneNDC(TABW2 & Bloc("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnit(MyProfilA_loc.Rcs, Enu_TypeVariable.Dimension, 2, -1, True))
+        AddLigneNDC(TABW2 & BlocG("HS_PROFILE") & TABAFF & "h\-s\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ha, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-f\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("HW_PROFILE") & TABAFF & "h\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.HauteurAmeHw, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("DW_PROFILE") & TABAFF & "d\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.HauteurAmeDw, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("TW_PROFILE") & TABAFF & "t\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.Tw, Enu_TypeVariable.Dimension, 3, -1, True))
+        AddLigneNDC(TABW2 & BlocG("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnit(MyProfilA_loc.Rcs, Enu_TypeVariable.Dimension, 2, -1, True))
 
         SauteLigne()
 
-        AddLigneNDC(TABW2 & Bloc("A_PROFILE") & TABAFF & "A" & TABEGAL & GetStringInUnit(MyProfilA_loc.Aire, Enu_TypeVariable.AireCM2, 4, 1, True))
-        AddLigneNDC(TABW2 & Bloc("AV_PROFILE") & TABAFF & "A\-v\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.AireAv, Enu_TypeVariable.AireCM2, 4, 1, True))
-        AddLigneNDC(TABW2 & Bloc("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieY, Enu_TypeVariable.InertieCM4, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("IZ_PROFILE") & TABAFF & "I\-z\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, True))
-        AddLigneNDC(TABW2 & Bloc("WEL_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
-        AddLigneNDC(TABW2 & Bloc("WEL_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 1, True))
-        AddLigneNDC(TABW2 & Bloc("WPL_PROFILE") & TABAFF & "W\-pl\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
-        AddLigneNDC(TABW2 & Bloc("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
-        AddLigneNDC(TABW2 & Bloc("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("A_PROFILE") & TABAFF & "A" & TABEGAL & GetStringInUnit(MyProfilA_loc.Aire, Enu_TypeVariable.AireCM2, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("AV_PROFILE") & TABAFF & "A\-v\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.AireAv, Enu_TypeVariable.AireCM2, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieY, Enu_TypeVariable.InertieCM4, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("IZ_PROFILE") & TABAFF & "I\-z\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("WEL_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("WEL_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("WPL_PROFILE") & TABAFF & "W\-pl\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
+        AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
 
         AddLigneNDC("\IMG PROFIL_ACIER 10 80 30 NoCadre")
 

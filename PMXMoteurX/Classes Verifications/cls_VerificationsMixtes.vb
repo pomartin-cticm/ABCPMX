@@ -20,6 +20,9 @@
 
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
+    Public DegConnex(,) As Decimal = Nothing        ' Degré de connexion : 1er indice : travée, 2eme indice : 0 pour M>0 et 1 pour M<0
+    Public DegConnexMin() As Decimal = Nothing      ' Degré minimal de connexion en moment positif (indice de la travée)
+
 #End Region
 
 #Region " Constructeurs "
@@ -100,12 +103,15 @@
 
         Dim lClasse3, lClasse4 As Boolean           ' Indique si présence d'au moins une section de classe 3 ou de classe 4
         Dim DeltaRd() As List(Of Decimal) = Nothing
-        Dim DegConnex(,) As Decimal = Nothing
 
         Dim zANP(,) As Decimal = Nothing                ' Position ANP, tenant compte de MEd et du degré de connexion
         Dim MplRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de MEd et du degré de connexion
 
         '--> Initialisations
+
+        '# Degré de connexion
+
+        Me.InitialiseDegreConnexion(MyPoutre.IndiceDerniereTravee)
 
         '# Critères
 
@@ -177,7 +183,7 @@
             '# Degré de connexion
 
             If Not (lClasse3 Or lClasse4) Then
-                Me.CheckDegreConnexion(MyPoutre, DeltaRd, iNodeMmax, DegConnex)
+                Me.CheckDegreConnexion(MyPoutre, DeltaRd, iNodeMmax)
             End If
 
             '# Vérification sous moment fléchissant
@@ -557,18 +563,6 @@
             Next
         Next
 
-        'For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
-
-        '    If Math.Abs(SigmaELU(iPoint, iNode, 0)) > Math.Abs(SigmaELU(iPoint, iNode, 1)) Then
-        '        Sigma = SigmaELU(iPoint, iNode, 0)
-        '    Else
-        '        Sigma = SigmaELU(iPoint, iNode, 1)
-        '    End If
-
-        '    MyCritereM.EnregistreCritere(iNode, iCombi, Sigma, SigmaU)
-
-        'Next
-
 
     End Sub
 
@@ -617,27 +611,6 @@
             Next
         Next
 
-        ''--> Déclarations
-
-        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        'Dim iNode As Integer
-
-        'Dim k, kDeb, kFin As Integer
-
-        ''--> Boucle sur les noeuds
-
-        'For iNode = 0 To nbNodes - 1
-
-        '    If iNode = 0 Then kDeb = 1 Else kDeb = 0
-        '    If iNode = nbNodes - 1 Then kFin = 0 Else kFin = 1
-
-        '    For k = kDeb To kFin
-
-        '        Me.CritereM.EnregistreCritere(iNode, iCombi, MEd(iNode, k), MplRd(iNode, k))
-
-        '    Next
-
-        'Next
 
     End Sub
 
@@ -690,33 +663,6 @@
             Next
         Next
 
-
-        ''--> Déclarations
-
-        'Dim Critere As Decimal
-        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        'Dim iNode As Integer
-        'Dim MEdMax As Decimal
-
-        ''--> Boucle sur les noeuds
-
-        'For iNode = 0 To nbNodes - 1
-
-        '    If Math.Abs(MEd(iNode, 0)) > Math.Abs(MEd(iNode, 1)) Then
-        '        MEdMax = MEd(iNode, 0)
-        '    Else
-        '        MEdMax = MEd(iNode, 1)
-        '    End If
-
-        '    If MEdMax * SIGNEM > 0 Then
-        '        MRd = MplRdP(iNode)
-        '    Else
-        '        MRd = MplRdM(iNode)
-        '    End If
-
-        '    Me.CritereM.EnregistreCritere(iNode, iCombi, MEdMax, MRd)
-
-        'Next
 
     End Sub
 
@@ -802,38 +748,37 @@
             Next
         Next
 
-        ''--> Déclarations
-
-        ''Dim Critere As Decimal
-        'Dim nbNodes As Integer = MyPoutre.Nodes.nbNodes
-        'Dim iNode As Integer
-        'Dim VEdMax As Decimal
-
-        ''--> Boucle sur les noeuds
-
-        'For iNode = 0 To nbNodes - 1
-
-        '    If Math.Abs(VEd(iNode, 0)) > Math.Abs(VEd(iNode, 1)) Then
-        '        VEdMax = VEd(iNode, 0)
-        '    Else
-        '        VEdMax = VEd(iNode, 1)
-        '    End If
-
-        '    Me.CritereVb.EnregistreCritere(iNode, iCombi, VEdMax, VbRd)
-
-        'Next
-
     End Sub
 
 #End Region
 
 #Region " Degré de connexion "
 
-    Private Sub CheckDegreConnexion(MyPoutre As cls_Poutre, DeltaRd() As List(Of Decimal), iNodeMmax() As Integer, ByRef DegConnex(,) As Decimal)
+    Private Sub InitialiseDegreConnexion(iTravFin As Integer)
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Initialisation des tableaux de degré de connexion
+        '----------------------------------------------------------------------------------------------------------
+        '   iTravFin    [E] :   Indice de la dernière travée
+        '----------------------------------------------------------------------------------------------------------
+
+
+        ReDim DegConnex(iTravFin, 1)
+        ReDim DegConnexMin(iTravFin)
+
+        For i As Integer = 0 To iTravFin
+            DegConnex(i, 0) = -1
+            DegConnex(i, 1) = -1
+        Next
+
+    End Sub
+
+    Private Sub CheckDegreConnexion(MyPoutre As cls_Poutre, DeltaRd() As List(Of Decimal), iNodeMmax() As Integer)
         '----------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU d'une poutre mixte acier béton
+        '   Vérification aux ELU d'une poutre mixte acier béton - dégré de connexion
         '----------------------------------------------------------------------------------------------------------
         '   DeltaRd     [E] :   Somme des PRd entre les points du maillage et les points de moments nuls
         '   iNodeMMax   [E] :   Indice des neouds de moment >0 max
@@ -852,15 +797,21 @@
         Dim gammaC As Decimal = MyPoutre.Param.Gamma.GammaC
         Dim iTravee As Integer
         Dim iTravDeb, iTravFin As Integer
+        Dim Fy As Decimal ' = Math.Max(MyPoutre)
+        Dim AfSup, AfInf As Decimal
+        Dim Le As Decimal
 
         '--> Initialisation
 
         iTravDeb = MyPoutre.IndicePremiereTravee
         iTravFin = MyPoutre.IndiceDerniereTravee
-        ReDim DegConnex(iTravFin, 1)
 
         '##ZZZ A compléter dans le cas des profilés enrobés
         NProfile = MyPoutre.Section.ResistanceTractionProfile(gammaM0)
+
+        AfSup = MyPoutre.Section.ProfilA.AireFs
+        AfInf = MyPoutre.Section.ProfilA.AireFi
+        Fy = Math.Max(MyPoutre.Section.FySup, MyPoutre.Section.FyInf)
 
         '--> Boucle sur les travées
 
@@ -871,7 +822,8 @@
             Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(0), 0, lSimple, False)
             NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
             NConnex = Math.Min(NArma, NProfile)
-            DegConnex(0, 1) = DeltaRd(0)(iNode) / NConnex
+            'DegConnex(0, 1) = DeltaRd(0)(iNode) / NConnex
+            EnregistreDegreConnex(DegConnex(0, 1), DeltaRd(0)(iNode) / NConnex)
             DegConnex(0, 0) = -1
         End If
 
@@ -883,7 +835,8 @@
             Beff = MyPoutre.BeffDalle(0, iTravFin, lSimple, False)
             NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
             NConnex = Math.Min(NArma, NProfile)
-            DegConnex(iTravFin, 1) = DeltaRd(iTravFin)(0) / NConnex
+            'DegConnex(iTravFin, 1) = DeltaRd(iTravFin)(0) / NConnex
+            EnregistreDegreConnex(DegConnex(iTravFin, 1), DeltaRd(iTravFin)(0) / NConnex)
             DegConnex(iTravFin, 0) = -1
         End If
 
@@ -898,14 +851,24 @@
                 Beff = MyPoutre.BeffDalle(0, iTravee, lSimple, False)
                 NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
                 NConnex = Math.Min(NArma, NProfile)
-                DegConnex(iTravee, 1) = DeltaRd(iTravee)(0) / NConnex
+                'DegConnex(iTravee, 1) = DeltaRd(iTravee)(0) / NConnex
+                EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(0) / NConnex)
             End If
 
             '# En travée
+
+            '---| Degré de connexion en zone de moment positif
             Beff = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(iNodeMmax(iTravee)), iTravee, lSimple, False)
             NDalle = MyPoutre.Dalle.NResistanceCompressionDalle(Beff, gammaC)
             NConnex = Math.Min(NDalle, NProfile)
-            DegConnex(iTravee, 0) = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex
+            'DegConnex(iTravee, 0) = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex
+            EnregistreDegreConnex(DegConnex(iTravee, 0), DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex)
+
+            '---| Degré de connexion mini en zone de moment positif
+            Le = MyPoutre.LongueurTravee(iTravee)
+            If iTravee > iTravDeb Then Le -= 0.15 * Le
+            If iTravee < iTravFin Then Le -= 0.15 * Le
+            DegConnexMin(iTravee) = Me.EtaMinFlanges(Fy, Le, AfSup, AfInf)
 
             '# Appui droite
             If iTravee < iTravFin Then
@@ -914,15 +877,137 @@
                 Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(iTravee), iTravee, lSimple, False)
                 NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
                 NConnex = Math.Min(NArma, NProfile)
-                If (iTravee > iTravDeb) Then
-                    DegConnex(iTravee, 1) = Math.Min(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
-                Else
-                    DegConnex(iTravee, 1) = DeltaRd(iTravee)(iNode - iNode0) / NConnex
-                End If
+                'If (iTravee > iTravDeb) Then
+                '    DegConnex(iTravee, 1) = Math.Min(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
+                'Else
+                '    DegConnex(iTravee, 1) = DeltaRd(iTravee)(iNode - iNode0) / NConnex
+                'End If
+                EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
             End If
 
         Next
     End Sub
+
+    Private Sub EnregistreDegreConnex(ByRef ValTable As Decimal, ValCalcul As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Enregistrement d'une valeur de degré de connexion
+        '----------------------------------------------------------------------------------------------------------
+        '   ValTable        [E/S] : Valeur Tableau où on enregistre
+        '   ValCalcul       [E] :   Valeur calculée à traiter
+        '----------------------------------------------------------------------------------------------------------
+
+        If ValTable = -1 Then
+            ValTable = ValCalcul
+        Else
+            ValTable = Math.Min(ValTable, ValCalcul)
+        End If
+
+    End Sub
+
+    Private Function EtaMin() As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Valeur minimale du Degré minimal de connexion pour une poute mixte 
+        '   d'après formules (6.12) et (6.14) de la NF EN 1994-1-1
+        '----------------------------------------------------------------------------------------------------------
+        '----------------------------------------------------------------------------------------------------------
+
+        Const ETAMINREF As Decimal = 0.4
+
+        Return etaminref
+
+    End Function
+
+    Public Function EtaMinEqualFlanges(Fy As Decimal, Le As Decimal) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Degré minimal de connexion pour une poute mixte à semelles égales
+        '   d'après formule (6.12) de la NF EN 1994-1-1
+        '----------------------------------------------------------------------------------------------------------
+        '   Fy      [E] :   Limite d'élasticité
+        '   Le      [E) :   Distance entre points de moments nuls
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Eta0 As Decimal
+
+        '--> Traitement
+
+        If IsGreater(Le, 25) Then
+            Eta0 = 1
+        Else
+            Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.75 - 0.03 * Le)))
+        End If
+        Return Eta0
+
+    End Function
+
+    Public Function EtaMinInEqualFlanges3(Fy As Decimal, Le As Decimal) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Degré minimal de connexion pour une poute mixte à semelles inégales, la semelle inf ayant une aire = 3 x aire semelle sup
+        '   d'après formule (6.14) de la NF EN 1994-1-1
+        '----------------------------------------------------------------------------------------------------------
+        '   Fy      [E] :   Limite d'élasticité
+        '   Le      [E) :   Distance entre points de moments nuls
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Eta0 As Decimal
+
+        '--> Traitement
+
+        If IsGreater(Le, 20) Then
+            Eta0 = 1
+        Else
+            Eta0 = Math.Max(EtaMin, (1 - 355 / Fy * (0.3 - 0.015 * Le)))
+        End If
+        Return Eta0
+
+    End Function
+
+    Public Function EtaMinFlanges(Fy As Decimal, Le As Decimal, AfSup As Decimal, AfInf As Decimal) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Degré minimal de connexion pour une poute mixte à semelles égales
+        '   d'après formule (6.14) de la NF EN 1994-1-1
+        '----------------------------------------------------------------------------------------------------------
+        '   Fy      [E] :   Limite d'élasticité
+        '   Le      [E] :   Distance entre points de moments nuls
+        '   AfSup   [E] :   Aire de la semelle supérieure
+        '   AfInf   [E] :   Aire de la semelle inférieure
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim RatioAire As Decimal = AfInf / AfSup
+        Dim Eta As Decimal = -1
+        Dim EtaEqualF As Decimal
+        Dim EtaInEqualF As Decimal
+
+        '--> Traitement hors domaine application
+
+        If IsGreater(RatioAire, 3) Or IsSmaller(RatioAire, 1) Then
+            MsgBox("Wrong ratio of flanges areas", MsgBoxStyle.Critical, "cls_VerificationsMixtes/EtaMinFlanges")
+            Return Eta
+        End If
+
+        '--> Traitement normal
+
+        EtaInEqualF = EtaMinInEqualFlanges3(Fy, Le)
+        EtaEqualF = EtaMinEqualFlanges(Fy, Le)
+
+        Eta = EtaEqualF + (EtaInEqualF - EtaEqualF) / 2 * (RatioAire - 1)
+        Return Eta
+    End Function
 
 #End Region
 
