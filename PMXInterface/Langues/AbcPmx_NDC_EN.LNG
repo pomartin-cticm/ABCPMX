@@ -263,6 +263,8 @@ SPAN_N					= Span no
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties
+EPROPERTIES				= Elastic properties
+PPROPERTIES				= Plastic properties
 
 #NDC_ANALYSE
 ANALYSIS				= Analysis - Internal forces and moments

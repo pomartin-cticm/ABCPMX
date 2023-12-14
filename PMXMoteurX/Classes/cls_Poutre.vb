@@ -1852,7 +1852,6 @@ Public Class cls_Poutre
     End Function
 #End Region
 
-
 #Region "Calcul des armatures transversales"
 
     Sub CalculArmaturesTransversales()
@@ -2164,6 +2163,24 @@ Public Class cls_Poutre
 #End Region
 
 #Region " Maillage : propriétés des barres le long de la poutre "
+
+    Public Sub ExtraireNeqEnrobage(ByRef Neq As List(Of Decimal))
+        '-------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM - V1.00
+        '-------------------------------------------------------------------------------------------
+        '   Récupération de la liste des coefficients equivalence pour l'enrobage
+        '-------------------------------------------------------------------------------------------
+        '   Neq     [S] :   Liste des coefficients d'équivalence
+        '-------------------------------------------------------------------------------------------
+
+        Neq = New List(Of Decimal)
+
+        For iTab As Integer = 0 To Me.Elements.Count - 1
+            Neq.Add(Me.Elements(iTab).nEqEnrob)
+        Next
+
+    End Sub
+
     Public Function IndiceTabElts(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal) As Integer
         '-------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM - V1.00

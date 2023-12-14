@@ -1,4 +1,5 @@
-﻿Imports System.Reflection
+﻿Imports System.Collections.Specialized.BitVector32
+Imports System.Reflection
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports PMXMoteur2
@@ -201,18 +202,14 @@ Module Mod_NoteCalcul
         '--| PROPRIETES DES SECTIONS
         '--|=========================================
 
-        If MyPrjt.Poutres(MyPrjt.IndEnCours).lMixte Then 'Ajout GUD : Cette partie n'a pas d'interet si la section n'est pas mixte
-
-            EditionProprietesSection(MyPrjt.Poutres(MyPrjt.IndEnCours))
-
-        End If
+        EditionProprietesSection(MyPrjt.Poutres(MyPrjt.IndEnCours))
 
         '--|=========================================
         '--| ANALYSE DE LA POUTRE
         '--|=========================================
 
         EditionAnalysePoutre(MyPrjt.Poutres(MyPrjt.IndEnCours))
-
+        Exit Sub
         '--|=========================================
         '--| VERIFICATION DES CRITERES ELU
         '--|=========================================
@@ -792,6 +789,29 @@ Module Mod_NoteCalcul
 
         '=== Armatures longitudinales ======================================================================
 
+        EditionParametresArmaLongiDalle(MyBeam)
+
+        '=== Bac acier ==========================================================================
+
+        If MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+
+            EditionParametresBac(MyBeam)
+
+        End If
+
+        '=== CONNECTEURS & CONNEXION ===========================================================================================
+
+        EditionParametresConnecteursEtConnexion(MyBeam)
+
+    End Sub
+
+    Private Sub EditionParametresArmaLongiDalle(MyBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - Version 1.00 - GUD
+        '----------------------------------------------------------------------------------------------
+        '   Edition des armatures longi d'une dalle
+        '----------------------------------------------------------------------------------------------
+
         AddTitreNdC(3, BlocG("LONGI_REINFORCEMENTS"))
 
         '--> Géométrie
@@ -800,7 +820,7 @@ Module Mod_NoteCalcul
         SauteLigne()
 
         AddLigneNDC("\TABLEAU 18")
-        InitialiseLigne(5, HLIGNE, True)
+        InitialiseLigne(5, HLIGNEENTETE, True)
         AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "i")
         AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "e\-si\=" & "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
         AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "d\-si\=" & "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
@@ -839,93 +859,98 @@ Module Mod_NoteCalcul
         AddLigneNDC("\IMG SLAB 5 80 30 NoCadre")
         nbLignes += 30
 
-        '=== Bac acier ==========================================================================
+    End Sub
 
-        If MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+    Private Sub EditionParametresBac(MyBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - Version 1.00 - GUD
+        '----------------------------------------------------------------------------------------------
+        '   Edition d'un bac d'une dalle mixte
+        '----------------------------------------------------------------------------------------------
 
-            If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
+        If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
 
-            AddTitreNdC(3, BlocG("PROFILED_STEEL_SH"))
+        AddTitreNdC(3, BlocG("PROFILED_STEEL_SH"))
 
-            If MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
-                AddLigneNDC(TABW2 & BlocG("ORIENTATION_SHEET") & TABAFF & BlocG("LONGITUDINAL"))
-            Else
-                AddLigneNDC(TABW2 & BlocG("ORIENTATION_SHEET") & TABAFF & BlocG("TRANSVERSAL"))
-            End If
-
-            If MyBeam.Dalle.Bac.lDatabase Then
-                AddLigneNDC(TABW2 & BlocG("PSS_FROM") & TABAFF & BlocG("DATABASE"))
-                'AddLigneNDC(TABW2 & BlocG("SOCIETE") & TABAFF & MyBeam.Dalle.Bac.Producteur)
-                AddLigneNDC(TABW2 & BlocG("NAME_PSS") & TABAFF & MyBeam.Dalle.Bac.Etiquette)
-                AddLigneNDC(TABW2 & BlocG("NAME_PSS") & TABAFF & MyBeam.Dalle.Bac.Producteur & " / " & MyBeam.Dalle.Bac.Etiquette)
-            Else
-                AddLigneNDC(TABW2 & BlocG("PSS_FROM") & TABAFF & BlocG("DIMENSIONS_PSS"))
-            End If
-
-            SauteLigne()
-
-            AddLigneNDC(TABW2 & BlocG("CHAR_PSS"))
-
-            With MyBeam.Dalle.Bac
-
-                AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\=" & TABEGAL & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\=" & TABEGAL & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
-
-                If .HasRaidisseurSup Then
-                    'AddLigneNDC(TABW2 & BlocG("HP_PSS") & TABAFF & "h\-p\= =" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
-                    AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
-                    AddLigneNDC(TABW2 & BlocG("HPG_PSS") & TABAFF & "h\-pg\=" & TABEGAL & GetStringInUnit(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, True))
-                Else
-                    AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
-                End If
-
-                AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\=" & TABEGAL & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\=" & TABEGAL & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\=" & TABEGAL & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
-                AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\=" & TABEGAL & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\=" & TABEGAL & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
-
-                'If .Orientation = cls_Bac.Enum_Orientation.Parallele Then
-                '    If .AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe Then
-                '        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CUT_DECK"))
-                '    Else
-                '        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("UNCUT_DECK"))
-                '    End If
-                'Else
-                If .Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
-                    Select Case .AppuiT
-                        Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
-
-                            'AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINU_PSS"))
-                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINUOUS_RIB"))
-                            AddLigneNDC(TABAFF & BlocG("CONTINUOUS_DECK"))
-                            If .lPreperce Then
-                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
-                            Else
-                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
-                            End If
-                        Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
-                            'AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("PART_CONT_PSS"))
-                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINUOUS_RIB"))
-                            AddLigneNDC(TABAFF & BlocG("NONCONTINUOUS_DECK"))
-                            If .lPreperce Then
-                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
-                            Else
-                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
-                            End If
-                        Case cls_Bac.EnuConfigTAppui.Discontinu
-                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("NO_CONT_PSS"))
-                    End Select
-                End If
-            End With
+        If MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
+            AddLigneNDC(TABW2 & BlocG("ORIENTATION_SHEET") & TABAFF & BlocG("LONGITUDINAL"))
+        Else
+            AddLigneNDC(TABW2 & BlocG("ORIENTATION_SHEET") & TABAFF & BlocG("TRANSVERSAL"))
         End If
+
+        If MyBeam.Dalle.Bac.lDatabase Then
+            AddLigneNDC(TABW2 & BlocG("PSS_FROM") & TABAFF & BlocG("DATABASE"))
+            'AddLigneNDC(TABW2 & BlocG("SOCIETE") & TABAFF & MyBeam.Dalle.Bac.Producteur)
+            AddLigneNDC(TABW2 & BlocG("NAME_PSS") & TABAFF & MyBeam.Dalle.Bac.Etiquette)
+            AddLigneNDC(TABW2 & BlocG("NAME_PSS") & TABAFF & MyBeam.Dalle.Bac.Producteur & " / " & MyBeam.Dalle.Bac.Etiquette)
+        Else
+            AddLigneNDC(TABW2 & BlocG("PSS_FROM") & TABAFF & BlocG("DIMENSIONS_PSS"))
+        End If
+
+        SauteLigne()
+
+        AddLigneNDC(TABW2 & BlocG("CHAR_PSS"))
+
+        With MyBeam.Dalle.Bac
+
+            AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\=" & TABEGAL & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\=" & TABEGAL & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
+
+            If .HasRaidisseurSup Then
+                'AddLigneNDC(TABW2 & BlocG("HP_PSS") & TABAFF & "h\-p\= =" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("HPG_PSS") & TABAFF & "h\-pg\=" & TABEGAL & GetStringInUnit(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, True))
+            Else
+                AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
+            End If
+
+            AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\=" & TABEGAL & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\=" & TABEGAL & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\=" & TABEGAL & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
+            AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\=" & TABEGAL & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\=" & TABEGAL & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
+
+            'If .Orientation = cls_Bac.Enum_Orientation.Parallele Then
+            '    If .AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe Then
+            '        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CUT_DECK"))
+            '    Else
+            '        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("UNCUT_DECK"))
+            '    End If
+            'Else
+            If .Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
+                Select Case .AppuiT
+                    Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+
+                        'AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINU_PSS"))
+                        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINUOUS_RIB"))
+                        AddLigneNDC(TABAFF & BlocG("CONTINUOUS_DECK"))
+                        If .lPreperce Then
+                            AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
+                        Else
+                            AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
+                        End If
+                    Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                        'AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("PART_CONT_PSS"))
+                        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINUOUS_RIB"))
+                        AddLigneNDC(TABAFF & BlocG("NONCONTINUOUS_DECK"))
+                        If .lPreperce Then
+                            AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
+                        Else
+                            AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
+                        End If
+                    Case cls_Bac.EnuConfigTAppui.Discontinu
+                        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("NO_CONT_PSS"))
+                End Select
+            End If
+        End With
+
     End Sub
 
     Private Sub EditionParametresConnecteursEtConnexion(MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - Version 1.00 - POM
         '----------------------------------------------------------------------------------------------
-        '   Edition de l'étaiement d'une poutre mixte
+        '   Edition de la connexion et des connecteurs d'une poutre mixte
         '----------------------------------------------------------------------------------------------
 
         Dim lConnection As Boolean = False
@@ -1669,20 +1694,106 @@ Module Mod_NoteCalcul
 
         '--> Déclaration
 
-        Dim lMixte As Boolean = MyBeam.Section.lMixte
+        Dim lMixte As Boolean = MyBeam.lMixte
+        Dim lEnrob As Boolean = MyBeam.lEnrobage
 
         '--> Initialisation
 
-        SautePage()
+        If lEnrob Or lMixte Then
+            SautePage()
 
-        AddTitreNdC(1, BlocSP("SECTIONSPROPERTIES"))
+            AddTitreNdC(1, BlocSP("SECTIONSPROPERTIES"))
+        End If
 
         '--> Traitement
 
         If lMixte Then
             EditionProprietesSectionPoutreMixte(MyBeam)
-        Else
+        ElseIf lEnrob Then
+            EditionProprietesSectionAcierEnrobee(MyBeam)
         End If
+
+    End Sub
+
+    Private Sub EditionProprietesSectionAcierEnrobee(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections pour une poutre acier avec enrobage partiel
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NeqEnrob As List(Of Decimal) = Nothing
+        Const NCOL As Integer = 6
+        Const pLC1 As Single = 8
+        Const pLC2 As Single = 10
+        Dim zANE, InertieY, MelRd As Decimal
+        Dim InertieT, InertieZ As Decimal
+        Dim zANP, MplRd As Decimal
+
+        '--> Récupération des Coefficients d'équivalence
+
+        MyBeam.ExtraireNeqEnrobage(NeqEnrob)
+
+        '--> Tri des valeurs
+
+        NeqEnrob.Sort()
+
+        '--> Propriétés élastiques
+
+        AddTitreNdC(2, BlocSP("EPROPERTIES"))
+
+        '--> Calcul des propriétés sous M>0
+
+        AddLigneNDC("\TABLEAU 20")
+
+        '# Entete
+
+        InitialiseLigne(NCOL, HLIGNEENTETE, True)
+
+        AddCelluleFond(pLC1, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-el,y\=")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "z\-el,y\=")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-t\=")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-z\=")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "M\-el,Rd\=")
+
+        InitialiseLigne(NCOL, HLIGNEENTETE, True)
+
+        AddCelluleFond(pLC1, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "mm")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment))
+
+        '# Boucle sur les valeurs de q
+
+        For iTab As Integer = 0 To NeqEnrob.Count - 1
+
+            MyBeam.Section.ProprietesElastiquesMyy(1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), zANE, InertieY, MelRd)
+
+            InitialiseLigne(NCOL, HLIGNE, True)
+
+            AddCellule(pLC1, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(NeqEnrob(iTab), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieY, Enu_TypeVariable.InertieCM4, 4, 0, False))
+            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(-zANE, Enu_TypeVariable.Dimension, 3, 2, False))
+            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieT, Enu_TypeVariable.InertieCM4, 4, 0, False))
+            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, False))
+            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MelRd, Enu_TypeVariable.Moment, 4, 0, False))
+
+        Next
+
+        '#
+        FinTableau()
+
+        '--> Propriétés plastiques
+
+        AddTitreNdC(2, BlocSP("PPROPERTIES"))
+
+        MyBeam.Section.ProprietesPlastiquesMyy(1, True, MyBeam.Param.Gamma, 0, zANP, MplRd)
+
 
     End Sub
 
