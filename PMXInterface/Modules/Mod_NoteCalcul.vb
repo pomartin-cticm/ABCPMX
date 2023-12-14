@@ -362,7 +362,7 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("COMPOSAB") & "\g")
         End Select
 
-        AddLigneNDC(TABW2 & BlocG("LENGHTBEAM") & TABAFF2 & "L\-tot\= = " & GetStringInUnit(MyBeam.LongueurTotale, Enu_TypeVariable.Longueur, 4, 2, True))
+        AddLigneNDC(TABW2 & BlocG("LENGTHBEAM") & TABAFF2 & "L\-tot\= = " & GetStringInUnit(MyBeam.LongueurTotale, Enu_TypeVariable.Longueur, 4, 2, True))
         AddLigneNDC(TABW2 & BlocG("NBTOTSPAN") & TABAFF2 & GetStringInUnit(MyBeam.NbTravees, Enu_TypeVariable.SansType, 2, 0, True))
 
 
@@ -410,8 +410,8 @@ Module Mod_NoteCalcul
             FinTableau()
 
         Else
-            AddLigneNDC(TABW2 & BlocG("RIGHTSUPPORT") & TABAFF2 & BlocG("PINNED"))
-            AddLigneNDC(TABW2 & BlocG("LEFTSUPPORT") & TABAFF2 & BlocG("PINNED"))
+            'AddLigneNDC(TABW2 & BlocG("RIGHTSUPPORT") & TABAFF2 & BlocG("PINNED"))
+            'AddLigneNDC(TABW2 & BlocG("LEFTSUPPORT") & TABAFF2 & BlocG("PINNED"))
 
         End If
 
@@ -427,11 +427,11 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocG("TYPEOFSLAB") & TABAFF2 & BlocG("NONCOMPOSITE"))
         End If
 
-        If MyBeam.Section.lEnrobage Then
-            AddLigneNDC(TABW2 & BlocG("TYPEOFSTEELSECTION") & TABAFF2 & BlocG("PARTIALLY_ENCASED"))
-        Else
-            AddLigneNDC(TABW2 & BlocG("TYPEOFSTEELSECTION") & TABAFF2 & BlocG("NOT_PARTIALLY_ENCASED"))
-        End If
+        'If MyBeam.Section.lEnrobage Then
+        '    AddLigneNDC(TABW2 & BlocG("TYPEOFSTEELSECTION") & TABAFF2 & BlocG("PARTIALLY_ENCASED"))
+        'Else
+        '    AddLigneNDC(TABW2 & BlocG("TYPEOFSTEELSECTION") & TABAFF2 & BlocG("NOT_PARTIALLY_ENCASED"))
+        'End If
 
         'Ajout dessin de la poutre en cours
         AddLigneNDC("\IMG PORTEE 2 95 13 NoCadre")
@@ -448,28 +448,49 @@ Module Mod_NoteCalcul
         If MyBeam.lMixte And (MyBeam.lTremieGauche Or MyBeam.lTremieDroite) Then SauteLigne()
 
         AddLigneNDC(TABW2 & BlocG("LEFTSPACING") & TABAFF2 & "d\-1\= = " & GetStringInUnit(MyBeam.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, True))
-        If MyBeam.lMixte Then
-            If MyBeam.lTremieGauche Then
-                AddLigneNDC(TABW2 & BlocG("ISLEFTOPENING") & TABAFF2 & BlocG("YES"))
-                AddLigneNDC(TABW2 & BlocG("DISTLEFTOPENING") & TABAFF2 & "d\-sl,1\= = " & GetStringInUnit(MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, True))
-                'AddLigneNDC(TABW2 & Bloc("WIDTHLEFTOPENING") & TABAFF2 & GetStringInUnit(MyBeam.EntraxeD1 - 2 * MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, True))
-            Else
-                AddLigneNDC(TABW2 & BlocG("ISLEFTOPENING") & TABAFF2 & BlocG("NO"))
-            End If
-        End If
-
-        If MyBeam.lMixte And (MyBeam.lTremieGauche Or MyBeam.lTremieDroite) Then SauteLigne()
-
         AddLigneNDC(TABW2 & BlocG("RIGHTSPACING") & TABAFF2 & "d\-2\= = " & GetStringInUnit(MyBeam.EntraxeD2, Enu_TypeVariable.Longueur, 4, 2, True))
+
+        '==> POM
+
         If MyBeam.lMixte Then
-            If MyBeam.lTremieDroite Then
-                AddLigneNDC(TABW2 & BlocG("ISRIGHTOPENING") & TABAFF2 & BlocG("YES"))
-                AddLigneNDC(TABW2 & BlocG("DISTRIGHTOPENING") & TABAFF2 & "d\-sl,2\= = " & GetStringInUnit(MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, True))
-                'AddLigneNDC(TABW2 & Bloc("WIDTHRIGHTOPENING") & TABAFF2 & GetStringInUnit(MyBeam.EntraxeD2 - 2 * MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, True))
-            Else
-                AddLigneNDC(TABW2 & BlocG("ISRIGHTOPENING") & TABAFF2 & BlocG("NO"))
+
+            If MyBeam.lTremieGauche Then
+                AddLigneNDC(TABW2 & BlocG("LEFTOPENING") & TABAFF2 & "d\-sl,1\= = " & GetStringInUnit(MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, True))
             End If
+
+            If MyBeam.lTremieDroite Then
+                AddLigneNDC(TABW2 & BlocG("RIGHTOPENING") & TABAFF2 & "d\-sl,2\= = " & GetStringInUnit(MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, True))
+            End If
+
+            If ((Not MyBeam.lTremieDroite) And (Not MyBeam.lTremieGauche)) Then
+                AddLigneNDC(TABW2 & BlocG("NOSLABOPENING"))
+            End If
+
         End If
+
+        'If MyBeam.lMixte Then
+        '    If MyBeam.lTremieGauche Then
+        '        AddLigneNDC(TABW2 & BlocG("ISLEFTOPENING") & TABAFF2 & BlocG("YES"))
+        '        AddLigneNDC(TABW2 & BlocG("DISTLEFTOPENING") & TABAFF2 & "d\-sl,1\= = " & GetStringInUnit(MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, True))
+        '        'AddLigneNDC(TABW2 & Bloc("WIDTHLEFTOPENING") & TABAFF2 & GetStringInUnit(MyBeam.EntraxeD1 - 2 * MyBeam.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, True))
+        '    Else
+        '        AddLigneNDC(TABW2 & BlocG("ISLEFTOPENING") & TABAFF2 & BlocG("NO"))
+        '    End If
+        'End If
+
+        'If MyBeam.lMixte And (MyBeam.lTremieGauche Or MyBeam.lTremieDroite) Then SauteLigne()
+
+        'If MyBeam.lMixte Then
+        '    If MyBeam.lTremieDroite Then
+        '        AddLigneNDC(TABW2 & BlocG("ISRIGHTOPENING") & TABAFF2 & BlocG("YES"))
+        '        AddLigneNDC(TABW2 & BlocG("DISTRIGHTOPENING") & TABAFF2 & "d\-sl,2\= = " & GetStringInUnit(MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, True))
+        '        'AddLigneNDC(TABW2 & Bloc("WIDTHRIGHTOPENING") & TABAFF2 & GetStringInUnit(MyBeam.EntraxeD2 - 2 * MyBeam.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, True))
+        '    Else
+        '        AddLigneNDC(TABW2 & BlocG("ISRIGHTOPENING") & TABAFF2 & BlocG("NO"))
+        '    End If
+        'End If
+
+        '==
 
         'Ajout dessin de la position de la poutre
 
