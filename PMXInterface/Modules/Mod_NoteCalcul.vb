@@ -924,45 +924,40 @@ Module Mod_NoteCalcul
             End With
         End If
 
+
+
+    End Sub
+
+    Private Sub EditionParametresConnecteursEtConnexion(MyBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition de l'étaiement d'une poutre mixte
+        '----------------------------------------------------------------------------------------------
+
         Dim lConnection As Boolean = False
 
         Select Case MyBeam.TypeSection
-            Case cls_Section.Enum_TypeSection.AcierSeul
-                'Pas de connection entre le profilé et la dalle
-            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
-                  'Pas de connection entre le profilé et la dalle
-            Case cls_Section.Enum_TypeSection.Mixte
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 lConnection = True
-            Case cls_Section.Enum_TypeSection.MixteEnrobage
-                lConnection = True
-            Case cls_Section.Enum_TypeSection.SFB
-                  'Pas de connection entre le profilé et la dalle
-            Case cls_Section.Enum_TypeSection.SFBmixte
-                lConnection = True
-            Case cls_Section.Enum_TypeSection.IFB_A
-                  'Pas de connection entre le profilé et la dalle
-            Case cls_Section.Enum_TypeSection.IFB_Amixte
-                lConnection = True
-            Case cls_Section.Enum_TypeSection.IFB_B
-                  'Pas de connection entre le profilé et la dalle
-            Case cls_Section.Enum_TypeSection.IFB_Bmixte
-                lConnection = True
-            Case cls_Section.Enum_TypeSection.SAB
-                  'Pas de connection entre le profilé et la dalle
-            Case cls_Section.Enum_TypeSection.SABmixte
+            Case cls_Section.Enum_TypeSection.SFBmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte
                 lConnection = True
         End Select
 
         If lConnection Then
 
+            '=== CONNECTEURS =================================================================================================================
+
+            If nbLignes + 12 > MAXLIGNEPPAG Then SautePage()
+
             AddTitreNdC(3, BlocG("CONNECTORS"))
 
             With MyBeam.Dalle.Connecteur
-                AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
-                AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\= = " & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d = " & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\= = " & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\= = " & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
+                'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
+                AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\= =" & TABEGAL & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d = " & TABEGAL & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\= =" & TABEGAL & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\= =" & TABEGAL & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
 
                 Dim lGeneration1, lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
                 Dim nr_min, nr_max As Integer
@@ -983,21 +978,26 @@ Module Mod_NoteCalcul
                 gammaVc = MyBeam.Param.Gamma.GammaVc
 
                 If lDallePleine Then
-                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= = " & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
+                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
                 Else 'dalle mixte
                     If lPerp Then
                         For nr_boucle As Integer = nr_min To nr_max
-                            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= = " & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
-                            AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= = " & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                            ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                            AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
                         Next
                     Else 'dalle parallèlle
-                        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= = " & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
-                        AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= = " & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
+                        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
+                        ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
+                        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
                     End If
                 End If
 
-
             End With
+
+            '=== CONNEXION =================================================================================================================
+
+            If nbLignes + 12 > MAXLIGNEPPAG Then SautePage()
 
             AddTitreNdC(3, BlocG("CONNECTION_ARR"))
 
@@ -1006,9 +1006,9 @@ Module Mod_NoteCalcul
                 If .lAutomaticDesign Then
                     AddLigneNDC(TABW2 & BlocG("AUTOMATIC_DESIGN") & TABAFF & BlocG("YES"))
                 Else
-                    AddLigneNDC(TABW2 & BlocG("AUTOMATIC_DESIGN") & TABAFF & BlocG("NO"))
+                    'AddLigneNDC(TABW2 & BlocG("AUTOMATIC_DESIGN") & TABAFF & BlocG("NO"))
 
-                    SauteLigne()
+                    'SauteLigne()
 
                     'Calcul si on a besoin d'effectuer un saut de page au préalable
                     Dim nbLigneSautePage As Integer = nbLignes
@@ -1071,7 +1071,6 @@ Module Mod_NoteCalcul
                             End If
                             AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
 
-
                         Next
 
                         If Not i = MyBeam.IndiceDerniereTravee Then
@@ -1086,11 +1085,6 @@ Module Mod_NoteCalcul
 
             End With
         End If
-
-    End Sub
-
-    Private Sub EditionParametresConnecteursEtConnexion(MyBeam As cls_Poutre)
-
     End Sub
 
 
