@@ -1,4 +1,5 @@
-﻿Imports System.Runtime.InteropServices
+﻿Imports System.Reflection
+Imports System.Runtime.InteropServices
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports PMXMoteur2
 
@@ -617,9 +618,9 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("GEOMETRY_PART_ENC"))
 
-        AddLigneNDC(TABW2 & BlocG("RATIO_BC_PART_ENC") & TABAFF & "b\-c\=/b\-f\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Ratio_bc, Enu_TypeVariable.SansType, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("BC_PART_ENC") & TABAFF & "b\-c\= = " & GetStringInUnit(MyBeam.Section.LargeurEnrobagePartielBc, Enu_TypeVariable.Dimension, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\= = " & GetStringInUnit(MyBeam.Section.NotionalSizeEnrobage, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("RATIO_BC_PART_ENC") & TABAFF & "b\-c\=/b\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Ratio_bc, Enu_TypeVariable.SansType, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("BC_PART_ENC") & TABAFF & "b\-c\=" & TABEGAL & GetStringInUnit(MyBeam.Section.LargeurEnrobagePartielBc, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\=" & TABEGAL & GetStringInUnit(MyBeam.Section.NotionalSizeEnrobage, Enu_TypeVariable.Dimension, 4, 0, True))
 
 
         '--> Béton
@@ -634,10 +635,10 @@ Module Mod_NoteCalcul
         End If
 
         AddLigneNDC(TABW2 & BlocG("CLASS_CONCRETE") & TABAFF & MyBeam.Section.Enrobage.Beton.Classe)
-        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
         '--> Armatures
 
@@ -709,9 +710,6 @@ Module Mod_NoteCalcul
 
 
 
-
-
-
         AddTitreNdC(3, BlocG("MATERIAL_LONGI_REINF"))
         AddLigneNDC(TABW2 & BlocG("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Section.Enrobage.AcierArmatures.Classe)
         AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
@@ -732,12 +730,11 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("STIRRUP_ARRANGEMENT") & TABAFF & BlocG("THROUGH_STIRRUPS"))
         End Select
         AddLigneNDC(TABW2 & BlocG("DSI_LAYERS") & TABAFF & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_Phi, Enu_TypeVariable.Dimension, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("HOR_COVERAGE") & TABAFF & "u\-y\= =" & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageY, Enu_TypeVariable.Dimension, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("VER_COVERAGE") & TABAFF & "u\-z\= =" & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageZ, Enu_TypeVariable.Dimension, 4, 0, True))
-
+        AddLigneNDC(TABW2 & BlocG("HOR_COVERAGE") & TABAFF & "u\-y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageY, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("VER_COVERAGE") & TABAFF & "u\-z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Etriers_EnrobageZ, Enu_TypeVariable.Dimension, 4, 0, True))
 
         AddLigneNDC("\IMG PARTIAL_ENCASEMENT 15 70 25 NoCadre")
-
+        nbLignes += 15
     End Sub
 
     Private Sub EditionParametresDalle(ByVal MyBeam As cls_Poutre)
@@ -761,20 +758,20 @@ Module Mod_NoteCalcul
         Select Case MyBeam.Dalle.type
             Case cls_Dalle.Enum_TypeDalle.Pleine
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_HAUNCH") & TABAFF & "t\-h\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_h, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_HAUNCH") & TABAFF & "t\-h\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_h, Enu_TypeVariable.Dimension, 4, 0, True))
             Case cls_Dalle.Enum_TypeDalle.Prefabriquee
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB_PRECAST"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_PRECAST") & TABAFF & "t\-pc\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_JOINT") & TABAFF & "t\-j\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_PRECAST") & TABAFF & "t\-pc\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_JOINT") & TABAFF & "t\-j\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, True))
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("COMPOSITE_SLAB"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_ABOVE_DECK") & TABAFF & "t\-c\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.EpaisseurActive, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_ABOVE_DECK") & TABAFF & "t\-c\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.EpaisseurActive, Enu_TypeVariable.Dimension, 4, 0, True))
         End Select
 
-        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA.Bfs), Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA.Bfs), Enu_TypeVariable.Dimension, 4, 0, True))
 
         '--> Béton de la dalle
 
@@ -788,10 +785,10 @@ Module Mod_NoteCalcul
         End If
 
         AddLigneNDC(TABW2 & BlocG("CLASS_CONCRETE") & TABAFF & MyBeam.Dalle.beton.Classe)
-        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
         '=== Armatures longitudinales ======================================================================
 
@@ -838,6 +835,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
 
         'SauteLigne()
+        If nbLignes + 30 > MAXLIGNEPPAG Then SautePage()
         AddLigneNDC("\IMG SLAB 5 80 30 NoCadre")
         nbLignes += 30
 
@@ -870,22 +868,22 @@ Module Mod_NoteCalcul
 
             With MyBeam.Dalle.Bac
 
-                AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\= =" & TABEGAL & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\= =" & TABEGAL & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\=" & TABEGAL & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\=" & TABEGAL & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
 
                 If .HasRaidisseurSup Then
                     'AddLigneNDC(TABW2 & BlocG("HP_PSS") & TABAFF & "h\-p\= =" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
-                    AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\= =" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
-                    AddLigneNDC(TABW2 & BlocG("HPG_PSS") & TABAFF & "h\-pg\= =" & TABEGAL & GetStringInUnit(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, True))
+                    AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
+                    AddLigneNDC(TABW2 & BlocG("HPG_PSS") & TABAFF & "h\-pg\=" & TABEGAL & GetStringInUnit(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, True))
                 Else
-                    AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\= =" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
+                    AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\=" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
                 End If
 
-                AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\= =" & TABEGAL & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\= =" & TABEGAL & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\= =" & TABEGAL & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
-                AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\= =" & TABEGAL & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\= =" & TABEGAL & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
+                AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\=" & TABEGAL & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\=" & TABEGAL & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\=" & TABEGAL & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
+                AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\=" & TABEGAL & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\=" & TABEGAL & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
 
                 'If .Orientation = cls_Bac.Enum_Orientation.Parallele Then
                 '    If .AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe Then
@@ -895,37 +893,32 @@ Module Mod_NoteCalcul
                 '    End If
                 'Else
                 If .Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
-                        Select Case .AppuiT
+                    Select Case .AppuiT
                         Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
 
                             'AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINU_PSS"))
                             AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINUOUS_RIB"))
                             AddLigneNDC(TABAFF & BlocG("CONTINUOUS_DECK"))
                             If .lPreperce Then
-                                    AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
-                                Else
-                                    AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
-                                End If
-                            Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
+                            Else
+                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
+                            End If
+                        Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
                             'AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("PART_CONT_PSS"))
                             AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINUOUS_RIB"))
                             AddLigneNDC(TABAFF & BlocG("NONCONTINUOUS_DECK"))
                             If .lPreperce Then
-                                    AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
-                                Else
-                                    AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
-                                End If
-                            Case cls_Bac.EnuConfigTAppui.Discontinu
-                                AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("NO_CONT_PSS"))
-                        End Select
-
-                    End If
-
+                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
+                            Else
+                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
+                            End If
+                        Case cls_Bac.EnuConfigTAppui.Discontinu
+                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("NO_CONT_PSS"))
+                    End Select
+                End If
             End With
         End If
-
-
-
     End Sub
 
     Private Sub EditionParametresConnecteursEtConnexion(MyBeam As cls_Poutre)
@@ -948,145 +941,166 @@ Module Mod_NoteCalcul
 
             '=== CONNECTEURS =================================================================================================================
 
-            If nbLignes + 12 > MAXLIGNEPPAG Then SautePage()
-
-            AddTitreNdC(3, BlocG("CONNECTORS"))
-
-            With MyBeam.Dalle.Connecteur
-                'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
-                AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\= =" & TABEGAL & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d = " & TABEGAL & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\= =" & TABEGAL & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\= =" & TABEGAL & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
-
-                Dim lGeneration1, lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
-                Dim nr_min, nr_max As Integer
-                Dim Ecm, Fck As Decimal
-                Dim gammaVs, gammaVc As Decimal
-
-                lGeneration1 = MyBeam.Param.lGeneration1
-                lDallePleine = (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
-                lPerp = (MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
-
-                nr_min = MyBeam.nr_min
-                nr_max = MyBeam.nr_max
-
-                Ecm = MyBeam.Dalle.beton.Ecm
-                Fck = MyBeam.Dalle.beton.Fck
-
-                gammaVs = MyBeam.Param.Gamma.GammaVs
-                gammaVc = MyBeam.Param.Gamma.GammaVc
-
-                If lDallePleine Then
-                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
-                Else 'dalle mixte
-                    If lPerp Then
-                        For nr_boucle As Integer = nr_min To nr_max
-                            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
-                            ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
-                            AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
-                        Next
-                    Else 'dalle parallèlle
-                        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
-                        ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
-                        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
-                    End If
-                End If
-
-            End With
+            EditionParametresConnecteurs(MyBeam)
 
             '=== CONNEXION =================================================================================================================
 
-            If nbLignes + 12 > MAXLIGNEPPAG Then SautePage()
-
-            AddTitreNdC(3, BlocG("CONNECTION_ARR"))
-
-            With MyBeam
-
-                If .lAutomaticDesign Then
-                    AddLigneNDC(TABW2 & BlocG("AUTOMATIC_DESIGN") & TABAFF & BlocG("YES"))
-                Else
-                    'AddLigneNDC(TABW2 & BlocG("AUTOMATIC_DESIGN") & TABAFF & BlocG("NO"))
-
-                    'SauteLigne()
-
-                    'Calcul si on a besoin d'effectuer un saut de page au préalable
-                    Dim nbLigneSautePage As Integer = nbLignes
-
-                    nbLigneSautePage += (HLIGNE - 0.2)
-
-                    For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
-                        For j As Integer = 0 To .NombreZones(i) - 1
-                            nbLigneSautePage += (HLIGNE - 0.2)
-                        Next
-                        If Not i = MyBeam.IndiceDerniereTravee Then
-                            nbLigneSautePage += (HLIGNE - 0.2)
-                        End If
-                    Next
-                    If nbLigneSautePage >= MAXLIGNEPPAG Then SautePage()
-
-                    Dim lDalleMixteEtPerp As Boolean = False
-                    If .Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And .Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
-                        lDalleMixteEtPerp = True
-                    End If
-
-                    Dim nbColonne As Integer
-
-                    If lDalleMixteEtPerp Then
-                        AddLigneNDC("\TABLEAU 15")
-                        nbColonne = 5
-
-                    Else
-                        AddLigneNDC("\TABLEAU 20")
-                        nbColonne = 4
-                    End If
-
-                    InitialiseLigne(nbColonne, HLIGNE, True)
-
-                    AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LENGHT_ZONE") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ROW_NUMBER"))
-                    If lDalleMixteEtPerp Then
-                        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("RIB_DISPOSITION"))
-                    End If
-                    AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LONGI_SPACING") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-
-                    '                    Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
-
-
-                    For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
-                        For j As Integer = 0 To .NombreZones(i) - 1
-
-                            InitialiseLigne(nbColonne, HLIGNE, True)
-                            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, i)
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneLongueur(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
-                            If lDalleMixteEtPerp Then
-                                If .ZoneEspacement_Bac_Trans(i, j) = 1 Then
-                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIB"))
-                                Else
-                                    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIBS"))
-                                    End
-                                End If
-                            End If
-                            AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
-
-                        Next
-
-                        If Not i = MyBeam.IndiceDerniereTravee Then
-                            InitialiseLigne(1, HLIGNE, True)
-                            AddCelluleFond(LC3 + (nbColonne - 2) * LC2 + LC1_2, Bordures.Tous, PositionTexteInCell.Centre, "")
-                        End If
-
-                    Next
-
-                    FinTableau()
-                End If
-
-            End With
+            EditionParametresConnexion(MyBeam)
         End If
     End Sub
 
+    Private Sub EditionParametresConnecteurs(MyBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition définition connecteurs
+        '----------------------------------------------------------------------------------------------
+
+        If nbLignes + 12 > MAXLIGNEPPAG Then SautePage()
+
+        AddTitreNdC(3, BlocG("CONNECTORS"))
+
+        With MyBeam.Dalle.Connecteur
+            'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
+            AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\=" & TABEGAL & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d = " & TABEGAL & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\=" & TABEGAL & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\=" & TABEGAL & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
+
+            Dim lGeneration1, lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
+            Dim nr_min, nr_max As Integer
+            Dim Ecm, Fck As Decimal
+            Dim gammaVs, gammaVc As Decimal
+
+            lGeneration1 = MyBeam.Param.lGeneration1
+            lDallePleine = (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
+            lPerp = (MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+
+            nr_min = MyBeam.nr_min
+            nr_max = MyBeam.nr_max
+
+            Ecm = MyBeam.Dalle.beton.Ecm
+            Fck = MyBeam.Dalle.beton.Fck
+
+            gammaVs = MyBeam.Param.Gamma.GammaVs
+            gammaVc = MyBeam.Param.Gamma.GammaVc
+
+            If lDallePleine Then
+                AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
+            Else 'dalle mixte
+                If lPerp Then
+                    For nr_boucle As Integer = nr_min To nr_max
+                        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                        ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                    Next
+                Else 'dalle parallèlle
+                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
+                    ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
+                    AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
+                End If
+            End If
+
+        End With
+
+    End Sub
+
+    Private Sub EditionParametresConnexion(MyBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition définition connexion
+        '----------------------------------------------------------------------------------------------
+
+        If nbLignes + 12 > MAXLIGNEPPAG Then SautePage()
+
+        AddTitreNdC(3, BlocG("CONNECTION_ARR"))
+
+        With MyBeam
+
+            If .lAutomaticDesign Then
+                AddLigneNDC(TABW2 & BlocG("AUTOMATIC_DESIGN") & TABAFF & BlocG("YES"))
+            Else
+                'AddLigneNDC(TABW2 & BlocG("AUTOMATIC_DESIGN") & TABAFF & BlocG("NO"))
+
+                'SauteLigne()
+
+                'Calcul si on a besoin d'effectuer un saut de page au préalable
+                Dim nbLigneSautePage As Integer = nbLignes
+
+                nbLigneSautePage += (HLIGNE - 0.2)
+
+                For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+                    For j As Integer = 0 To .NombreZones(i) - 1
+                        nbLigneSautePage += (HLIGNE - 0.2)
+                    Next
+                    If Not i = MyBeam.IndiceDerniereTravee Then
+                        nbLigneSautePage += (HLIGNE - 0.2)
+                    End If
+                Next
+                If nbLigneSautePage >= MAXLIGNEPPAG Then SautePage()
+
+                Dim lDalleMixteEtPerp As Boolean = False
+                If .Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And .Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
+                    lDalleMixteEtPerp = True
+                End If
+
+                Dim nbColonne As Integer
+
+                If lDalleMixteEtPerp Then
+                    AddLigneNDC("\TABLEAU 15")
+                    nbColonne = 5
+
+                Else
+                    AddLigneNDC("\TABLEAU 20")
+                    nbColonne = 4
+                End If
+
+                InitialiseLigne(nbColonne, HLIGNEENTETE, True)
+
+                AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
+                AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LENGHT_ZONE") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+                AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ROW_NUMBER"))
+                If lDalleMixteEtPerp Then
+                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("RIB_DISPOSITION"))
+                End If
+                AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LONGI_SPACING") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+
+                '                    Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
+
+
+                For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+                    For j As Integer = 0 To .NombreZones(i) - 1
+
+                        InitialiseLigne(nbColonne, HLIGNE, True)
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, i)
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneLongueur(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
+                        If lDalleMixteEtPerp Then
+                            If .ZoneEspacement_Bac_Trans(i, j) = 1 Then
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIB"))
+                            Else
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIBS"))
+                                End
+                            End If
+                        End If
+                        AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
+
+                    Next
+
+                    If Not i = MyBeam.IndiceDerniereTravee Then
+                        InitialiseLigne(1, HLIGNE, True)
+                        AddCelluleFond(LC3 + (nbColonne - 2) * LC2 + LC1_2, Bordures.Tous, PositionTexteInCell.Centre, "")
+                    End If
+
+                Next
+
+                FinTableau()
+            End If
+
+        End With
+
+    End Sub
 
     Private Sub EditionParametresEtaiement(MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
@@ -1346,64 +1360,6 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    'Private Sub EditionParametresCoefGammaOLD(ByVal MyBeam As cls_Poutre)
-    '    '----------------------------------------------------------------------------------------------
-    '    '   10/07/23 :  Création - Version 1.00 - POM
-    '    '----------------------------------------------------------------------------------------------
-    '    '   Edition des coefficients partiels
-    '    '----------------------------------------------------------------------------------------------
-
-    '    '--> Déclaration 
-
-    '    Dim MyGamma As cls_Gamma
-    '    Const TABEGAL1 As String = "\T30="
-    '    '--> Initilisation 
-
-    '    MyGamma = MyBeam.Param.Gamma.Clone
-
-    '    '--> Traitement
-
-    '    SautePage()
-
-    '    AddTitreNdC(2, Bloc("GAMMA"))
-
-    '    AddTitreNdC(3, Bloc("LOADING_FACTORS"))
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-G,sup\= " & TABEGAL & MyGamma.GammaG_sup)
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-G,inf\= " & TABEGAL & MyGamma.GammaG_inf)
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-Q\= " & TABEGAL & MyGamma.GammaQ)
-
-    '    AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q1"))
-    '    AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q1\= " & TABEGAL & MyGamma.Psi0_Q1)
-    '    AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q1\= " & TABEGAL & MyGamma.Psi1_Q1)
-    '    AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q1\= " & TABEGAL & MyGamma.Psi2_Q1)
-
-    '    AddTitreNdC(3, Bloc("COMBINATION_FACTORS_Q2"))
-    '    AddLigneNDC(TABVAR2 & "\Sy\s\-0,Q2\= = " & MyGamma.Psi0_Q2)
-    '    AddLigneNDC(TABVAR2 & "\Sy\s\-1,Q2\= = " & MyGamma.Psi1_Q2)
-    '    AddLigneNDC(TABVAR2 & "\Sy\s\-2,Q2\= = " & MyGamma.Psi2_Q2)
-
-    '    AddTitreNdC(3, Bloc("STEEL_RES_FACTORS"))
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-M0\= = " & MyGamma.GammaM0)
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-M1\= = " & MyGamma.GammaM1)
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-M2\= = " & MyGamma.GammaM2)
-
-    '    AddTitreNdC(3, Bloc("SLAB_RES_FACTORS"))
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-C\= = " & MyGamma.GammaC)
-    '    If MyGamma.lGammaV_unique Then
-    '        AddLigneNDC(TABVAR2 & "\Sg\s\-V\= = " & MyGamma.GammaVs)
-    '    Else
-    '        AddLigneNDC(TABVAR2 & "\Sg\s\-Vs\= = " & MyGamma.GammaVs)
-    '        AddLigneNDC(TABVAR2 & "\Sg\s\-Vc\= = " & MyGamma.GammaVc)
-    '    End If
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-S\= = " & MyGamma.GammaS)
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-P\= = " & MyGamma.GammaP)
-
-    '    AddTitreNdC(3, Bloc("FIRE_RES_FACTORS"))
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-M,fi\= = " & MyGamma.GammaM_fi)
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-C,fi\= = " & MyGamma.GammaC_fi)
-    '    AddLigneNDC(TABVAR2 & "\Sg\s\-V,fi\= = " & MyGamma.GammaV_fi)
-
-    'End Sub
 
     Private Sub EditionParametresChargement(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
@@ -1411,9 +1367,15 @@ Module Mod_NoteCalcul
         '----------------------------------------------------------------------------------------------
         '   Edition des coefficients partiels
         '----------------------------------------------------------------------------------------------
-        Dim NbBesoinLignes As Integer = 5     ' A ajuster
+
+        Dim NbBesoinLignes As Integer = 15     ' A ajuster
+        Dim lMultiSpan As Boolean = (MyBeam.NbTravees > 1)
+        Dim iDebTrav, iFinTrav As Integer
 
         '--> Initialisation
+
+        iDebTrav = MyBeam.IndicePremiereTravee
+        iFinTrav = MyBeam.IndiceDerniereTravee
 
         If NbBesoinLignes + nbLignes > MAXLIGNEPPAG Then
             SautePage()
@@ -1421,135 +1383,182 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(2, BlocG("LOADS"))
 
+        AddLigneNDC(TABW2 & BlocG("LISTULOADS"))
+
         For Each elmnt As KeyValuePair(Of String, cls_ChargementUtilisateur) In MyBeam.ChargesU
-            AddTitreNdC(3, elmnt.Key & " : " & elmnt.Value.Titre)
             If elmnt.Value.EstDefinie Then
+                AddTitreNdC(3, elmnt.Key & " : " & elmnt.Value.Titre)
 
-                'Partie qui concerne les charges surfacique
+                '=== Charges surfaciques =================================================================================================
 
-                If elmnt.Value.NombreChargesSurf(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) = 0 Then
-                    SauteLigne()
-                    If nbLignes + 2 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & BlocG("NOQSURF"))
-                Else
-                    SauteLigne()
-                    If nbLignes + 1.5 * (elmnt.Value.NombreChargesSurf(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & "\G\I" & BlocG("QSURF") & "\i\g")
+                If Not IsEqual(elmnt.Value.NombreChargesSurf(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee), 0) Then
 
-                    AddLigneNDC("\TABLEAU 18")
-                    InitialiseLigne(2, HLIGNE, True)
-                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
-                    AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("QSURF_VALUE") & " (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\=)")
+                    If lMultiSpan Then
+                        EditionParametresTableauQsurfTravee(MyBeam, elmnt.Value)
+                    Else
+                        AddLigneNDC(TABW2 & "\G\I" & BlocG("QSURF") & "\i\g" & TABAFF & "Q =" & GetStringInUnit(elmnt.Value.QSurf(1), Enu_TypeVariable.ChargeSurfacique, 3, 2, False))
+                    End If
 
-
-                    For iTravee As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
-
-                        InitialiseLigne(2, HLIGNE, True)
-                        AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
-
-                        If elmnt.Value.NombreChargesSurf(iTravee, iTravee) = 0 Then
-                            AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, "-")
-                        Else
-                            AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(elmnt.Value.QSurf(iTravee) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2), Enu_TypeVariable.SansType, 3, 2, False))
-                        End If
-
-                    Next
-
-                    FinTableau()
                 End If
 
+                '=== Forces linéiques ==================================================================================================
 
-                'Partie qui concerne les forces linéiques
-
-
-
-                If elmnt.Value.NombreForceReparties(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) = 0 Then
-                    SauteLigne()
-                    If nbLignes + 2 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & BlocG("NOFREP"))
-                Else
+                If elmnt.Value.NombreForceReparties(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) > 0 Then
                     SauteLigne()
                     If nbLignes + 1.5 * (elmnt.Value.NombreForceReparties(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
                     AddLigneNDC(TABW2 & "\G\I" & BlocG("FREP") & "\i\g")
 
-                    AddLigneNDC("\TABLEAU 18")
-                    InitialiseLigne(5, HLIGNE, True)
-                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+                    EditionParametresTableauForcesRep(iDebTrav, iFinTrav, elmnt.Value)
 
-                    For iTravee As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
-                        If elmnt.Value.NombreForceReparties(iTravee, iTravee) = 0 Then 'aucune charge définie sur la travée en cours 
-                            InitialiseLigne(5, HLIGNE, True)
-                            AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
-                        Else 'au moins une charge linéique est définie pour la travée en cours
-                            For Each f_rep As cls_ForceRepartie In elmnt.Value.FReparties(iTravee)
-                                InitialiseLigne(5, HLIGNE, True)
-                                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.xPosT(0) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), Enu_TypeVariable.SansType, 3, 2, False))
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.Force(0) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 2, False))
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.xPosT(1) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), Enu_TypeVariable.SansType, 3, 2, False))
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.Force(1) / (LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)), Enu_TypeVariable.SansType, 3, 2, False))
-                            Next
-
-                        End If
-                    Next
-
-                    FinTableau()
                 End If
 
 
-                'partie qui concerne les forces ponctuelles
+                '=== Forces ponctuelles ===================================================================================================
 
+                If elmnt.Value.NombreForcePonctuelles(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) > 0 Then
 
-                If elmnt.Value.NombreForcePonctuelles(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) = 0 Then
-                    SauteLigne()
-                    If nbLignes + 2 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC(TABW2 & BlocG("NOFPONC"))
-                Else
                     SauteLigne()
                     If nbLignes + 1.5 * (elmnt.Value.NombreForcePonctuelles(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
                     AddLigneNDC(TABW2 & "\G\I" & BlocG("FPONC") & "\i\g")
 
-                    AddLigneNDC("\TABLEAU 18")
-                    InitialiseLigne(3, HLIGNE, True)
-                    AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
-                    AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
-
-                    For iTravee As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
-                        If elmnt.Value.NombreForcePonctuelles(iTravee, iTravee) = 0 Then 'aucune charge définie sur la travée en cours 
-                            InitialiseLigne(3, HLIGNE, True)
-                            AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
-                            AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
-                        Else 'au moins une charge linéique est définie pour la travée en cours
-                            For Each f_ponc As cls_Force In elmnt.Value.Forces(iTravee)
-                                InitialiseLigne(3, HLIGNE, True)
-                                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_ponc.xPosT / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur), Enu_TypeVariable.SansType, 3, 2, False))
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_ponc.Force / LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort), Enu_TypeVariable.SansType, 3, 2, False))
-                            Next
-
-                        End If
-                    Next
-
-                    FinTableau()
+                    EditionParametresTableauForcesConcentrees(iDebTrav, iFinTrav, elmnt.Value)
 
                 End If
 
-            Else
-                AddLigneNDC(TABW2 & BlocG("NOLOADDEFINED"))
             End If
         Next
 
     End Sub
+
+    Private Sub EditionParametresTableauForcesConcentrees(iDebTrav As Integer, iFinTrav As Integer, MyChargeU As cls_ChargementUtilisateur)
+        '----------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - Version 1.00 - GUD+POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition du tableau des charges concentrées
+        '----------------------------------------------------------------------------------------------
+
+        '--> Déclaration 
+
+        Dim lMultiS As Boolean = (iFinTrav > iDebTrav)
+        Dim NCOL As Integer
+
+        '--> Initialisation
+
+        If lMultiS Then NCOL = 3 Else NCOL = 2
+
+        AddLigneNDC("\TABLEAU 18")
+        InitialiseLigne(NCOL, HLIGNEENTETE, True)
+        If lMultiS Then _
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & ")")
+
+        For iTravee As Integer = iDebTrav To iFinTrav
+            'If MyChargeU.NombreForcePonctuelles(iTravee, iTravee) = 0 Then 'aucune charge définie sur la travée en cours 
+            '    InitialiseLigne(3, HLIGNE, True)
+            '    AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+            '    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+            '    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+            'Else 'au moins une charge linéique est définie pour la travée en cours
+            For Each f_ponc As cls_Force In MyChargeU.Forces(iTravee)
+                InitialiseLigne(NCOL, HLIGNE, True)
+                If lMultiS Then _
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee + 1))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_ponc.xPosT, Enu_TypeVariable.Longueur, 3, 2, False))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_ponc.Force, Enu_TypeVariable.Effort, 3, 2, False))
+            Next
+
+            'End If
+        Next
+
+        FinTableau()
+    End Sub
+
+    Private Sub EditionParametresTableauForcesRep(iDebTrav As Integer, iFinTrav As Integer, MyChargeU As cls_ChargementUtilisateur)
+        '----------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - Version 1.00 - GUD+POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition du tableau des charges réparties
+        '----------------------------------------------------------------------------------------------
+
+        '--> Déclaration 
+
+        Dim lMultiS As Boolean = (iFinTrav > iDebTrav)
+        Dim NCOL As Integer
+
+        '--> Initialisation
+
+        If lMultiS Then NCOL = 5 Else NCOL = 4
+
+        AddLigneNDC("\TABLEAU 18")
+        InitialiseLigne(NCOL, HLIGNEENTETE, True)
+        If lMultiS Then _
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "x (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "F (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+
+        For iTravee As Integer = iDebTrav To iFinTrav
+            'If MyChargeU.NombreForceReparties(iTravee, iTravee) = 0 Then 'aucune charge définie sur la travée en cours 
+            '    InitialiseLigne(5, HLIGNE, True)
+            '    AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+            '    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+            '    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+            '    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+            '    AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+            'Else 'au moins une charge linéique est définie pour la travée en cours
+            For Each f_rep As cls_ForceRepartie In MyChargeU.FReparties(iTravee)
+                InitialiseLigne(NCOL, HLIGNE, True)
+                If lMultiS Then _
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(iTravee + 1))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.xPosT(0), Enu_TypeVariable.Longueur, 3, 2, False))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.Force(0), Enu_TypeVariable.ForceRepartie, 3, 2, False))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.xPosT(1), Enu_TypeVariable.Longueur, 3, 2, False))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(f_rep.Force(1), Enu_TypeVariable.ForceRepartie, 3, 2, False))
+            Next
+
+            'End If
+        Next
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub EditionParametresTableauQsurfTravee(ByVal MyBeam As cls_Poutre, MyChargeU As cls_ChargementUtilisateur)
+        '----------------------------------------------------------------------------------------------
+        '   10/07/23 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition du tableau des charges surfaciques par travée
+        '----------------------------------------------------------------------------------------------
+
+        If nbLignes + 1.5 * (MyChargeU.NombreChargesSurf(MyBeam.IndicePremiereTravee, MyBeam.IndiceDerniereTravee) + 1) + 1 > MAXLIGNEPPAG Then SautePage()
+        AddLigneNDC(TABW2 & "\G\I" & BlocG("QSURF") & "\i\g")
+
+        AddLigneNDC("\TABLEAU 18")
+
+        InitialiseLigne(2, HLIGNEENTETE, True)
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
+        'AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("QSURF_VALUE") & " (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\=)")
+        AddCelluleFond(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, "Q" & " (" & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\=)")
+
+        For iTravee As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
+
+            InitialiseLigne(2, HLIGNE, True)
+            AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTravee)
+
+            'If MyChargeU.NombreChargesSurf(iTravee, iTravee) = 0 Then
+            '    AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, "-")
+            'Else
+            AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyChargeU.QSurf(iTravee), Enu_TypeVariable.ChargeSurfacique, 3, 2, False))
+            'End If
+
+        Next
+
+        FinTableau()
+
+    End Sub
+
 
     Private Sub EditionParametresCombinaisons(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------

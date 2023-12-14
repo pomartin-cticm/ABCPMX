@@ -344,6 +344,8 @@ Module Mod_Declarations
         ContrainteMPa
         Dimension
         Effort
+        ForceRepartie
+        ChargeSurfacique
         Frequence
         Inertie
         InertieCM4

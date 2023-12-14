@@ -518,6 +518,14 @@ Module Mod_Outils
                 kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
                 Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
 
+            Case Enu_TypeVariable.ChargeSurfacique
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\="
+
+            Case Enu_TypeVariable.ForceRepartie
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
             Case Enu_TypeVariable.Frequence
                 kUnitU = 1
                 Unite = "Hz"
