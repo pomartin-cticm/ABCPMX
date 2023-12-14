@@ -750,6 +750,8 @@ Module Mod_NoteCalcul
         If nbLignes + 12 > MAXLIGNEPPAG Then _
         SautePage()
 
+        '=== DALLE ===================================================================================================
+
         AddTitreNdC(2, BlocG("SLAB"))
 
         '--> Géométrie
@@ -791,9 +793,11 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
         AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
-        '--> Armatures longitudinales
+        '=== Armatures longitudinales ======================================================================
 
         AddTitreNdC(3, BlocG("LONGI_REINFORCEMENTS"))
+
+        '--> Géométrie
 
         AddLigneNDC(TABW2 & BlocG("NB_LAYERS") & TABAFF & GetStringInUnit(MyBeam.Dalle.NbLitsArmaActifs, Enu_TypeVariable.SansType, 4, 0, True))
         SauteLigne()
@@ -826,7 +830,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & "A\-si\= : " & TABVAR1 & BlocG("ASI_LAYERS"))
 
 
-
+        '--> Acier
 
         AddTitreNdC(3, BlocG("MATERIAL_LONGI_REINF"))
         AddLigneNDC(TABW2 & BlocG("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Dalle.AcierArmatures.Classe)
@@ -837,12 +841,12 @@ Module Mod_NoteCalcul
         AddLigneNDC("\IMG SLAB 5 80 30 NoCadre")
         nbLignes += 30
 
-        '--> Bac acier
-
-
-        If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
+        '=== Bac acier ==========================================================================
 
         If MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+
+            If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
+
             AddTitreNdC(3, BlocG("PROFILED_STEEL_SH"))
 
             If MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
@@ -853,8 +857,9 @@ Module Mod_NoteCalcul
 
             If MyBeam.Dalle.Bac.lDatabase Then
                 AddLigneNDC(TABW2 & BlocG("PSS_FROM") & TABAFF & BlocG("DATABASE"))
-                AddLigneNDC(TABW2 & BlocG("SOCIETE") & TABAFF & MyBeam.Dalle.Bac.Producteur)
+                'AddLigneNDC(TABW2 & BlocG("SOCIETE") & TABAFF & MyBeam.Dalle.Bac.Producteur)
                 AddLigneNDC(TABW2 & BlocG("NAME_PSS") & TABAFF & MyBeam.Dalle.Bac.Etiquette)
+                AddLigneNDC(TABW2 & BlocG("NAME_PSS") & TABAFF & MyBeam.Dalle.Bac.Producteur & " / " & MyBeam.Dalle.Bac.Etiquette)
             Else
                 AddLigneNDC(TABW2 & BlocG("PSS_FROM") & TABAFF & BlocG("DIMENSIONS_PSS"))
             End If
@@ -865,43 +870,56 @@ Module Mod_NoteCalcul
 
             With MyBeam.Dalle.Bac
 
-                AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\= = " & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\= = " & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("HP_PSS") & TABAFF & "h\-p\= = " & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("HPG_PSS") & TABAFF & "h\-pg\= = " & GetStringInUnit(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\= = " & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\= = " & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\= = " & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
-                AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\= = " & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\= = " & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
+                AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\= =" & TABEGAL & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\= =" & TABEGAL & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
 
-                If .Orientation = cls_Bac.Enum_Orientation.Parallele Then
-                    If .AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe Then
-                        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CUT_DECK"))
-                    Else
-                        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("UNCUT_DECK"))
-                    End If
+                If .HasRaidisseurSup Then
+                    'AddLigneNDC(TABW2 & BlocG("HP_PSS") & TABAFF & "h\-p\= =" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
+                    AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\= =" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
+                    AddLigneNDC(TABW2 & BlocG("HPG_PSS") & TABAFF & "h\-pg\= =" & TABEGAL & GetStringInUnit(.Hauteur_hpg, Enu_TypeVariable.Dimension, 4, 0, True))
                 Else
-                    Select Case .AppuiT
-                        Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
-                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINU_PSS"))
-                            If .lPreperce Then
-                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
-                            Else
-                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
-                            End If
-                        Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
-                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("PART_CONT_PSS"))
-                            If .lPreperce Then
-                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
-                            Else
-                                AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
-                            End If
-                        Case cls_Bac.EnuConfigTAppui.Discontinu
-                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("NO_CONT_PSS"))
-                    End Select
-
+                    AddLigneNDC(TABW2 & BlocG("HP_RIB") & TABAFF & "h\-p\= =" & TABEGAL & GetStringInUnit(.Hp, Enu_TypeVariable.Dimension, 4, 0, True))
                 End If
+
+                AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\= =" & TABEGAL & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\= =" & TABEGAL & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\= =" & TABEGAL & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
+                AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\= =" & TABEGAL & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\= =" & TABEGAL & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
+
+                'If .Orientation = cls_Bac.Enum_Orientation.Parallele Then
+                '    If .AppuiL = cls_Bac.EnuConfigLAppui.BacCoupe Then
+                '        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CUT_DECK"))
+                '    Else
+                '        AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("UNCUT_DECK"))
+                '    End If
+                'Else
+                If .Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
+                        Select Case .AppuiT
+                        Case cls_Bac.EnuConfigTAppui.NervureEtBacContinus
+
+                            'AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINU_PSS"))
+                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINUOUS_RIB"))
+                            AddLigneNDC(TABAFF & BlocG("CONTINUOUS_DECK"))
+                            If .lPreperce Then
+                                    AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
+                                Else
+                                    AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
+                                End If
+                            Case cls_Bac.EnuConfigTAppui.BetonSeulContinu
+                            'AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("PART_CONT_PSS"))
+                            AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("CONTINUOUS_RIB"))
+                            AddLigneNDC(TABAFF & BlocG("NONCONTINUOUS_DECK"))
+                            If .lPreperce Then
+                                    AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("PREPUNCHED_PSS"))
+                                Else
+                                    AddLigneNDC(TABW2 & BlocG("CONNECTION_OPT") & TABAFF & BlocG("THROUGH_DECK_PSS"))
+                                End If
+                            Case cls_Bac.EnuConfigTAppui.Discontinu
+                                AddLigneNDC(TABW2 & BlocG("CONFIG_SUPPORT_PSS") & TABAFF & BlocG("NO_CONT_PSS"))
+                        End Select
+
+                    End If
 
             End With
         End If
@@ -1070,6 +1088,11 @@ Module Mod_NoteCalcul
         End If
 
     End Sub
+
+    Private Sub EditionParametresConnecteursEtConnexion(MyBeam As cls_Poutre)
+
+    End Sub
+
 
     Private Sub EditionParametresEtaiement(MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
