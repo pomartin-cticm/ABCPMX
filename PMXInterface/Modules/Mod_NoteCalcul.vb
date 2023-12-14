@@ -515,7 +515,7 @@ Module Mod_NoteCalcul
 
     Private Sub EditionParametresSection(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
-        '   10/07/23 :  Création - Version 1.00 - POM
+        '   10/07/23 :  Création - Version 1.00 - POM+GUD
         '----------------------------------------------------------------------------------------------
         '   Edition des paramètres de base d'une section
         '----------------------------------------------------------------------------------------------
@@ -538,9 +538,7 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("STYPE") & TABAFF & BlocG("PRS_MONO_SYM"))
         End Select
 
-        SauteLigne()
-
-        AddTitreNdC(3, BlocG("CHAR_PROFILE"))
+        AddTitreNdC(3, BlocG("DIM_PROFILE"))
 
         AddLigneNDC(TABW2 & BlocG("HS_PROFILE") & TABAFF & "h\-s\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ha, Enu_TypeVariable.Dimension, 3, -1, True))
         If lLamine Then
@@ -568,8 +566,7 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocG("AWELD_PROFILE") & TABAFF & "a" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.aW, Enu_TypeVariable.Dimension, 2, -1, True))
         End If
 
-        SauteLigne()
-
+        AddTitreNdC(3, BlocG("CHAR_PROFILE"))
         MyBeam.Section.ProfilA.InitialiseProprietes()
 
         AddLigneNDC(TABW2 & BlocG("A_PROFILE") & TABAFF & "A" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Aire, Enu_TypeVariable.AireCM2, 4, 1, True))
@@ -585,21 +582,24 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
 
         AddLigneNDC("\IMG PROFIL_ACIER 10 80 30 NoCadre")
+        nbLignes += 15              ' Prise en compte des lignes occupées par le dessin de la section
 
         If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(3, BlocG("MATERIAL_PROFILE"))
+        AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & MyBeam.Section.Acier.Nuance & " " & MyBeam.Section.Acier.Qualite)
+        'AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & MyBeam.Section.Acier.Nuance)
+        AddLigneNDC(TABW2 & BlocG("STANDARD_PROFILE") & TABAFF & MyBeam.Section.Acier.Reduction)
+        'AddLigneNDC(TABW2 & BlocG("QUALITY_PROFILE") & TABAFF & MyBeam.Section.Acier.Qualite)
+        If lLamine Then
+            AddLigneNDC(TABW2 & BlocG("FY_PROFILE") & TABAFF & "f\-y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.FySup, Enu_TypeVariable.Contrainte, 4, 0, True))
+        Else
+            AddLigneNDC(TABW2 & BlocG("FYFS_PROFILE") & TABAFF & "f\-y,fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.FySup, Enu_TypeVariable.Contrainte, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("FYW_PROFILE") & TABAFF & "f\-y,w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.FyW, Enu_TypeVariable.Contrainte, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("FYFI_PROFILE") & TABAFF & "f\-y,fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.FyInf, Enu_TypeVariable.Contrainte, 4, 0, True))
+        End If
         AddLigneNDC(TABW2 & BlocG("E_PROFILE") & TABAFF & "E" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.EYoung, Enu_TypeVariable.Contrainte, 4, 0, True))
         AddLigneNDC(TABW2 & BlocG("RHO_PROFILE") & TABAFF & "\Sr\s" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.Rho, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+3\=")
-        AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & MyBeam.Section.Acier.Nuance)
-        AddLigneNDC(TABW2 & BlocG("STANDARD_PROFILE") & TABAFF & MyBeam.Section.Acier.Reduction)
-        AddLigneNDC(TABW2 & BlocG("QUALITY_PROFILE") & TABAFF & MyBeam.Section.Acier.Qualite)
-        If lLamine Then
-        Else
-            AddLigneNDC(TABW2 & BlocG("FYFS_PROFILE") & TABAFF & "f\-y,fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.f_y.fs, Enu_TypeVariable.Contrainte, 4, 0, True))
-            AddLigneNDC(TABW2 & BlocG("FYW_PROFILE") & TABAFF & "f\-y,w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.f_y.w, Enu_TypeVariable.Contrainte, 4, 0, True))
-            AddLigneNDC(TABW2 & BlocG("FYFI_PROFILE") & TABAFF & "f\-y,fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.f_y.fi, Enu_TypeVariable.Contrainte, 4, 0, True))
-        End If
 
     End Sub
 
