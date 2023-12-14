@@ -563,7 +563,8 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocG("RC_PROFILE") & TABAFF & "r" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Rcs, Enu_TypeVariable.Dimension, 2, -1, True))
             'AddLigneNDC(TABW2 & Bloc("RCI_PROFILE") & TABAFF & "r\-ci\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.r_ci, Enu_TypeVariable.Dimension, 4, 0, True))
         Else
-            AddLigneNDC(TABW2 & BlocG("AWELD_PROFILE") & TABAFF & "a" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.aW, Enu_TypeVariable.Dimension, 2, -1, True))
+            '== On n'affiche pas la gorge de soudure (non définie par l'utilisateur)
+            'AddLigneNDC(TABW2 & BlocG("AWELD_PROFILE") & TABAFF & "a" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.aW, Enu_TypeVariable.Dimension, 2, -1, True))
         End If
 
         AddTitreNdC(3, BlocG("CHAR_PROFILE"))
@@ -633,10 +634,10 @@ Module Mod_NoteCalcul
         End If
 
         AddLigneNDC(TABW2 & BlocG("CLASS_CONCRETE") & TABAFF & MyBeam.Section.Enrobage.Beton.Classe)
-        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & TABEGAL & GetStringInUnit(MyBeam.Section.Enrobage.Beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
         '--> Armatures
 
@@ -746,6 +747,7 @@ Module Mod_NoteCalcul
         '   Edition des paramètres de la dalle
         '----------------------------------------------------------------------------------------------
 
+        If nbLignes + 12 > MAXLIGNEPPAG Then _
         SautePage()
 
         AddTitreNdC(2, BlocG("SLAB"))
@@ -757,19 +759,20 @@ Module Mod_NoteCalcul
         Select Case MyBeam.Dalle.type
             Case cls_Dalle.Enum_TypeDalle.Pleine
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_HAUNCH") & TABAFF & "t\-h\= = " & GetStringInUnit(MyBeam.Dalle.t_h, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_HAUNCH") & TABAFF & "t\-h\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_h, Enu_TypeVariable.Dimension, 4, 0, True))
             Case cls_Dalle.Enum_TypeDalle.Prefabriquee
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB_PRECAST"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_PRECAST") & TABAFF & "t\-pc\= = " & GetStringInUnit(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_JOINT") & TABAFF & "t\-j\= = " & GetStringInUnit(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_PRECAST") & TABAFF & "t\-pc\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_JOINT") & TABAFF & "t\-j\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, True))
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("COMPOSITE_SLAB"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_ABOVE_DECK") & TABAFF & "t\-c\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.EpaisseurActive, Enu_TypeVariable.Dimension, 4, 0, True))
         End Select
 
-        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\= = " & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA.Bfs), Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA.Bfs), Enu_TypeVariable.Dimension, 4, 0, True))
 
         '--> Béton de la dalle
 
@@ -783,10 +786,10 @@ Module Mod_NoteCalcul
         End If
 
         AddLigneNDC(TABW2 & BlocG("CLASS_CONCRETE") & TABAFF & MyBeam.Dalle.beton.Classe)
-        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & GetStringInUnit(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCK_CONCRETE") & TABAFF & "f\-ck\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCM_CONCRETE") & TABAFF & "f\-cm\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fcm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FCTM_CONCRETE") & TABAFF & "f\-ctm\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Fctm, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ECM_CONCRETE") & TABAFF & "E\-cm\= = " & TABEGAL & GetStringInUnit(MyBeam.Dalle.beton.Ecm, Enu_TypeVariable.Contrainte, 4, 0, True))
 
         '--> Armatures longitudinales
 
