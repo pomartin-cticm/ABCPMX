@@ -255,6 +255,47 @@ Public Class cls_Section
 
     End Sub
 
+    Private Sub MaillageEnrobageZZ(Gammas As cls_Gamma, nEq As Decimal, ByRef MyModele As cls_ModeleP)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   15/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier pour le calcul des propriétés / axe ZZ
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEq         [E] :   Coefficient d'équivalence acier béton pour le béton d'enrobage
+        '   MyModele    [E/S]:  Modèle
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim LargeurC, EpaisseurC, FdC As Decimal
+        Dim Tw As Decimal = Me.ProfilA.Tw
+
+        '--> Initialisation
+
+        LargeurC = (Me.LargeurEnrobagePartielBc - Tw)
+        EpaisseurC = Me.ProfilA.HauteurAmeHw
+        FdC = Me.Enrobage.Beton.Fck
+
+        MyModele.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, Tw / 2 + LargeurC / 4, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
+        MyModele.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, -Tw / 2 - LargeurC / 4, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
+
+        'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
+
+        If lLamine Then
+
+            '# Congés supérieurs (c'est à dire, côté gauche)
+
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tw / 2, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
+
+            '# Congés supérieurs (c'est à dire, côté droite)
+
+            MyModele.AddMailleConges(Me.ProfilA.Rci, +Me.ProfilA.Tw / 2, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
+
+        End If
+
+    End Sub
+
     Private Sub MaillageProfileA(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
@@ -791,7 +832,8 @@ Public Class cls_Section
 
     End Sub
 
-    Public Sub ProprietesElastiquesMzz(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
+    Public Sub ProprietesElastiquesMzz(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
+                                       ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -849,6 +891,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
+            MaillageEnrobageZZ(Gammas, nEqEc, MyModele)
 
         End If
 
@@ -856,13 +899,13 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-
+            'A FAIRE
         End If
 
         '--> Dalle béton
 
         If lMixte Then
-
+            ' PAS DANS CETTE ROUTINE
         End If
 
         '--> Recherche de l'axe neutre élastique
@@ -879,7 +922,42 @@ Public Class cls_Section
 
     End Sub
 
-    Public Function InertieT()
+    Public Function InertieTorsionProfileEnrobe(Neq As Decimal) As Decimal
+        '-------------------------------------------------------------------------------------------------------------------
+        '   11/07/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en torsion de la section avec profilé partiellent enrobé
+        '   Pour un profilé acier avec enrobage, on utilise la formule du guide "Déversement des poutres en acier"
+        '   Pas de prise en compte de la dalle
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pInertieT As Decimal
+        Dim pInertieTEnrob As Decimal
+        Dim Gc, Ga As Decimal
+        Dim hW, Bc As Decimal
+
+        '--> Inertie de torsion du profilé acier seul
+
+        pInertieT = Me.ProfilA.InertieT
+
+        '--> Pour l'enrobage, on ajoute la contribution du béton d'enrobage, avec la formule du guide "Déversement des poutres en acier", page 56 formule (4.19)
+
+        hW = Me.ProfilA.HauteurAmeHw
+        Bc = Me.LargeurEnrobagePartielBc
+
+        GC = 0.3 * cls_Acier.EYACIER / Neq
+        Ga = Me.Acier.ModuleG
+
+        pInertieTEnrob = 1 / 3 * (1 - 0.63 * Bc / hW) * hW * Bc ^ 3
+
+        pInertieT += 0.1 * pInertieTEnrob * Gc / Ga
+
+        Return pInertieT
+    End Function
+
+    Public Function InertieT() As Decimal
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -891,10 +969,7 @@ Public Class cls_Section
         '--> Déclaration
 
         Dim pInertieT As Decimal
-        Dim pInertieTEnrob As Decimal
         Dim nEq As Decimal
-        Dim Gc, Ga As Decimal
-        Dim hW, Bc As Decimal
 
         '--> Inertie de torsion du profilé acier seul
 
@@ -905,15 +980,16 @@ Public Class cls_Section
         If Me.lEnrobage Then
 
             nEq = Me.Enrobage.Beton.CoefficientEquivalenceCT
-            hW = Me.ProfilA.HauteurAmeHw
-            Bc = Me.LargeurEnrobagePartielBc
+            'hW = Me.ProfilA.HauteurAmeHw
+            'Bc = Me.LargeurEnrobagePartielBc
 
-            Gc = 0.3 * cls_Acier.EYACIER / nEq
-            Ga = Me.Acier.ModuleG
+            'Gc = 0.3 * cls_Acier.EYACIER / nEq
+            'Ga = Me.Acier.ModuleG
 
-            pInertieTEnrob = 1 / 3 * (1 - 0.63 * Bc / hW) * hW * Bc ^ 3
+            'pInertieTEnrob = 1 / 3 * (1 - 0.63 * Bc / hW) * hW * Bc ^ 3
 
-            pInertieT += 0.1 * pInertieTEnrob * Gc / Ga
+            'pInertieT += 0.1 * pInertieTEnrob * Gc / Ga
+            pInertieT = InertieTorsionProfileEnrobe(nEq)
 
         End If
 

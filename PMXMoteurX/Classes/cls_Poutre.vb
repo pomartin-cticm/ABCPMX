@@ -680,6 +680,12 @@ Public Class cls_Poutre
 
 #Region " Outils divers "
 
+    Public ReadOnly Property lMultiSpan As Boolean
+        Get
+            Return (Me.NbTravees > 1)
+        End Get
+    End Property
+
     Public ReadOnly Property PorteeDalle As Decimal
         Get
             Dim portee As Decimal

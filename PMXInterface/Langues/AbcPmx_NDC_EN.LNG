@@ -265,6 +265,13 @@ SPAN_N					= Span no
 SECTIONSPROPERTIES		= Sections properties
 EPROPERTIES				= Elastic properties
 PPROPERTIES				= Plastic properties
+MPLASTIC				= Plastic moment
+ZPNA					= Location of the plastic neutral axis
+MPLASTICK				= Plastic moment (characteristic value)
+POSITIVEB				= Positive bending
+NEGATIVEB				= Negative bending
+NOTES					= Notes
+NOTE_LOCATIONZ			= z locations are about the upper fibre of the section
 
 #NDC_ANALYSE
 ANALYSIS				= Analysis - Internal forces and moments

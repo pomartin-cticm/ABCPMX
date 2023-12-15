@@ -112,7 +112,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés élastiques / axe ZZ
 
-        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, InertieZ, MelRd)
+        MySection.ProprietesElastiquesMzz(1, True, MyGamma, 1, zANE, InertieZ, MelRd)
 
         '# Position ANE
 
@@ -204,7 +204,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés élastiques / axe ZZ
 
-        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, InertieZ, MelRd)
+        MySection.ProprietesElastiquesMzz(1, True, MyGamma, 1, zANE, InertieZ, MelRd)
 
         '# Position ANE
 
@@ -1073,7 +1073,7 @@ Imports PMXMoteur2
 
         '--> Tests des propriétés élastiques / axe ZZ
 
-        MySection.ProprietesElastiquesMzz(1, True, MyGamma, zANE, InertieZ, MelRd)
+        MySection.ProprietesElastiquesMzz(1, True, MyGamma, 1, zANE, InertieZ, MelRd)
 
         '# Position ANE
 

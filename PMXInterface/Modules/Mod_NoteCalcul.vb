@@ -209,7 +209,7 @@ Module Mod_NoteCalcul
         '--|=========================================
 
         EditionAnalysePoutre(MyPrjt.Poutres(MyPrjt.IndEnCours))
-        Exit Sub
+
         '--|=========================================
         '--| VERIFICATION DES CRITERES ELU
         '--|=========================================
@@ -1725,12 +1725,15 @@ Module Mod_NoteCalcul
         '--> Déclaration
 
         Dim NeqEnrob As List(Of Decimal) = Nothing
-        Const NCOL As Integer = 6
-        Const pLC1 As Single = 8
-        Const pLC2 As Single = 10
-        Dim zANE, InertieY, MelRd As Decimal
-        Dim InertieT, InertieZ As Decimal
+        Dim NCOL As Integer = 6
+        'Const pLC1 As Single = 8
+        'Const pLC2 As Single = 10
+        'Dim zANE, InertieY, MelRd As Decimal
+        'Dim InertieT, InertieZ As Decimal
         Dim zANP, MplRd As Decimal
+        Dim zANPk, MplRk As Decimal
+        Dim strFormatNoteFin As String = "\i"
+        Dim strFormatNote As String = "\I"
 
         '--> Récupération des Coefficients d'équivalence
 
@@ -1744,19 +1747,139 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(2, BlocSP("EPROPERTIES"))
 
-        '--> Calcul des propriétés sous M>0
+        AddLigneNDC(TABW2 & strFormatNote & BlocSP("NOTES") & ":" & strFormatNoteFin)
+        AddLigneNDC(TABW2 & strFormatNote & BlocSP("NOTE_LOCATIONZ") & strFormatNoteFin)
+        AddLigneNDC(TABW2 & strFormatNote & "ZZZ Ajouter les armatures transversales dans le calcul" & strFormatNoteFin)
 
-        AddLigneNDC("\TABLEAU 20")
+        AddTitreNdC(3, BlocSP("POSITIVEB"))
+
+        '--> Calcul des propriétés sous M>0
 
         '# Entete
 
+        EnteteTableauPropElastiqueAcierEnrobe(1, NCOL)
+
+        '# Boucle sur les valeurs de q
+
+        For iTab As Integer = 0 To NeqEnrob.Count - 1
+
+            LigneTableauPropElastiqueAcierEnrobe(MyBeam.Section, MyBeam.Param.Gamma, NeqEnrob(iTab), 1, NCOL)
+
+        Next
+
+        '#
+        FinTableau()
+
+        If MyBeam.lMultiSpan Then
+            AddTitreNdC(3, BlocSP("NEGATIVEB"))
+            '--> Calcul des propriétés sous M<0
+
+            '# Entete
+
+            EnteteTableauPropElastiqueAcierEnrobe(-1, NCOL)
+
+            '# Boucle sur les valeurs de q
+
+            For iTab As Integer = 0 To NeqEnrob.Count - 1
+
+                LigneTableauPropElastiqueAcierEnrobe(MyBeam.Section, MyBeam.Param.Gamma, NeqEnrob(iTab), -1, NCOL)
+
+            Next
+
+            '#
+            FinTableau()
+
+        End If
+
+        '--> Propriétés plastiques
+
+        AddTitreNdC(2, BlocSP("PPROPERTIES"))
+        AddTitreNdC(3, BlocSP("POSITIVEB"))
+
+        MyBeam.Section.ProprietesPlastiquesMyy(1, True, MyBeam.Param.Gamma, 0, zANP, MplRd)
+        MyBeam.Section.ProprietesPlastiquesMyy(1, False, MyBeam.Param.Gamma, 0, zANPk, MplRk)
+
+        AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnit(-zANP, Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnit(MplRk, Enu_TypeVariable.Moment, 4, 0, True))
+
+        If MyBeam.lMultiSpan Then
+
+            AddTitreNdC(3, BlocSP("NEGATIVEB"))
+
+            MyBeam.Section.ProprietesPlastiquesMyy(-1, True, MyBeam.Param.Gamma, 0, zANP, MplRd)
+            MyBeam.Section.ProprietesPlastiquesMyy(-1, False, MyBeam.Param.Gamma, 0, zANPk, MplRk)
+
+            AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnit(-zANP, Enu_TypeVariable.Dimension, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnit(MplRk, Enu_TypeVariable.Moment, 4, 0, True))
+
+        End If
+
+    End Sub
+
+    Private Sub LigneTableauPropElastiqueAcierEnrobe(MySection As cls_Section, MyGammas As cls_Gamma, NEq As Decimal, SigneM As Decimal, ByRef NCOL As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Ligne du tableau des propriétés de sections pour une poutre acier avec enrobage partiel
+        '-------------------------------------------------------------------------------------------
+        '--> Déclaration
+
+        Const pLC1 As Single = 8
+        Const pLC2 As Single = 10
+        Dim zANE, InertieY, MelRd As Decimal
+        Dim InertieT, InertieZ As Decimal
+        Dim zANE2, MelRd2 As Decimal
+
+        '--> Calculs
+
+        MySection.ProprietesElastiquesMyy(SigneM, True, MyGammas, NEq, zANE, InertieY, MelRd)
+        MySection.ProprietesElastiquesMzz(1, True, MyGammas, NEq, zANE2, InertieZ, MelRd2)
+
+        InertieT = MySection.InertieTorsionProfileEnrobe(NEq)
+
+        InitialiseLigne(NCOL, HLIGNE, True)
+
+        AddCellule(pLC1, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(NEq, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieY, Enu_TypeVariable.InertieCM4, 4, 0, False))
+        AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(-zANE, Enu_TypeVariable.Dimension, 3, 2, False))
+        If SigneM > 0 Then
+            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieT, Enu_TypeVariable.InertieCM4, 4, 0, False))
+            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, False))
+        End If
+        AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MelRd, Enu_TypeVariable.Moment, 4, 0, False))
+
+    End Sub
+
+    Private Sub EnteteTableauPropElastiqueAcierEnrobe(SigneM As Decimal, ByRef NCOL As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entete du tableau des propriétés de sections pour une poutre acier avec enrobage partiel
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Const pLC1 As Single = 8
+        Const pLC2 As Single = 10
+
+        '--> Initialisaiton
+
+        If SigneM > 0 Then NCOL = 6 Else NCOL = 4
+
+        '--> Entête
+
+        AddLigneNDC("\TABLEAU 20")
         InitialiseLigne(NCOL, HLIGNEENTETE, True)
 
         AddCelluleFond(pLC1, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-el,y\=")
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "z\-el,y\=")
-        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-t\=")
-        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-z\=")
+        If SigneM > 0 Then
+            AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-t\=")
+            AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-z\=")
+        End If
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "M\-el,Rd\=")
 
         InitialiseLigne(NCOL, HLIGNEENTETE, True)
@@ -1764,36 +1887,11 @@ Module Mod_NoteCalcul
         AddCelluleFond(pLC1, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "mm")
-        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
-        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
+        If SigneM > 0 Then
+            AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
+            AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
+        End If
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment))
-
-        '# Boucle sur les valeurs de q
-
-        For iTab As Integer = 0 To NeqEnrob.Count - 1
-
-            MyBeam.Section.ProprietesElastiquesMyy(1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), zANE, InertieY, MelRd)
-
-            InitialiseLigne(NCOL, HLIGNE, True)
-
-            AddCellule(pLC1, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(NeqEnrob(iTab), Enu_TypeVariable.SansType, 3, 2, False))
-            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieY, Enu_TypeVariable.InertieCM4, 4, 0, False))
-            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(-zANE, Enu_TypeVariable.Dimension, 3, 2, False))
-            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieT, Enu_TypeVariable.InertieCM4, 4, 0, False))
-            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, False))
-            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MelRd, Enu_TypeVariable.Moment, 4, 0, False))
-
-        Next
-
-        '#
-        FinTableau()
-
-        '--> Propriétés plastiques
-
-        AddTitreNdC(2, BlocSP("PPROPERTIES"))
-
-        MyBeam.Section.ProprietesPlastiquesMyy(1, True, MyBeam.Param.Gamma, 0, zANP, MplRd)
-
 
     End Sub
 
@@ -2871,6 +2969,7 @@ Module Mod_NoteCalcul
         End If
 
         If Not MyBeam.VerificationsELUDispo(MyBeam.lMixte) Then Exit Sub
+        If (Not MyBeam.lMixte) And MyBeam.lEnrobage Then Exit Sub
 
         '--> Traitement
 
