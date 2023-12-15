@@ -25,58 +25,29 @@ Public Class cls_Enrobage_Partiel
 
 #Region " Attributs "
 
-    ''' <summary>
-    ''' Indique si armatures de construction dans le lit inf
-    ''' </summary>
-    Public lArmaConst As Boolean
+    Public lArmaConst As Boolean                    ' Indique si armatures de construction dans le lit inf
+    Public ConstPhi As Decimal                      ' Diametre des armatures de construction
 
-    ''' <summary>
-    ''' Diametre des armatures de construction
-    ''' </summary>
-    Public ConstPhi As Decimal
-
-    ''' <summary>
-    ''' Ratio largeur de béton/largeur profilé
-    ''' </summary>
-    Public Ratio_bc As Decimal
+    Public Ratio_bc As Decimal                      ' Ratio largeur de béton/largeur profilé
 
     Public Etriers_Type As EnuTypeEtriers
 
-    ''' <summary>
-    ''' Diamètre des étriers
-    ''' </summary>
-    Public Etriers_Phi As Decimal
 
-    ''' <summary>
-    ''' Enrobage des barres d'étriers // Y (horizontal)
-    ''' </summary>
-    Public Etriers_EnrobageY As Decimal
+    Public Etriers_Phi As Decimal                   ' Diamètre des étriers
+    Public Etriers_EnrobageY As Decimal             ' Enrobage des barres d'étriers // Y (horizontal)
+    Public Etriers_EnrobageZ As Decimal             ' Enrobage des barres d'étriers // Z (vertical)
 
     Private pEtriers_EnrobYinterne As Decimal
-
-    ''' <summary>
-    ''' Enrobage des barres d'étriers // Z (vertical)
-    ''' </summary>
-    Public Etriers_EnrobageZ As Decimal
 
 #End Region
 
 #Region " Elements de l'enrobage "
 
-    ''' <summary>
-    ''' Lits d'armature longitudinale (O inférieure / 1 milieu / 2 supérieure)
-    ''' </summary>
-    Public LitArma(2) As cls_ArmatureEnrobage
+    Public LitArma(2) As cls_ArmatureEnrobage       ' Lits d'armature longitudinale (O inférieure / 1 milieu / 2 supérieure)
 
-    ''' <summary>
-    ''' béton de l'enrobage
-    ''' </summary>
-    Public Beton As New cls_Beton
+    Public Beton As New cls_Beton                   ' béton de l'enrobage
 
-    ''' <summary>
-    ''' Acier des armatures
-    ''' </summary>
-    Public AcierArmatures As New cls_AcierArmature
+    Public AcierArmatures As New cls_AcierArmature  ' Acier des armatures
 
 #End Region
 

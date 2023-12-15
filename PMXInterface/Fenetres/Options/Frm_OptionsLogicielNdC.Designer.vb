@@ -28,11 +28,12 @@ Partial Class Frm_OptionsLogicielNdC
         Me.chk_ShowHivossDiagram = New System.Windows.Forms.CheckBox()
         Me.lbl_ELS = New System.Windows.Forms.Label()
         Me.pan_Sollicitations = New System.Windows.Forms.Panel()
-        Me.lbl_Sollicitations = New System.Windows.Forms.Label()
-        Me.chk_DisplayLoadCases = New System.Windows.Forms.CheckBox()
-        Me.chk_DisplayFM_ELU = New System.Windows.Forms.CheckBox()
-        Me.chk_DisplayFM_ELS = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayFM_ELF = New System.Windows.Forms.CheckBox()
+        Me.chk_DisplayFM_ELS = New System.Windows.Forms.CheckBox()
+        Me.chk_DisplayFM_ELU = New System.Windows.Forms.CheckBox()
+        Me.chk_DisplayLoadCases = New System.Windows.Forms.CheckBox()
+        Me.lbl_Sollicitations = New System.Windows.Forms.Label()
+        Me.chk_Diagrammes = New System.Windows.Forms.CheckBox()
         Me.pan_NdC.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.pan_Sollicitations.SuspendLayout()
@@ -56,7 +57,7 @@ Partial Class Frm_OptionsLogicielNdC
         Me.Panel1.Controls.Add(Me.lbl_Hivoss)
         Me.Panel1.Controls.Add(Me.chk_ShowHivossDiagram)
         Me.Panel1.Controls.Add(Me.lbl_ELS)
-        Me.Panel1.Location = New System.Drawing.Point(3, 146)
+        Me.Panel1.Location = New System.Drawing.Point(3, 191)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(733, 96)
         Me.Panel1.TabIndex = 101
@@ -98,6 +99,7 @@ Partial Class Frm_OptionsLogicielNdC
         '
         Me.pan_Sollicitations.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Sollicitations.Controls.Add(Me.chk_Diagrammes)
         Me.pan_Sollicitations.Controls.Add(Me.chk_DisplayFM_ELF)
         Me.pan_Sollicitations.Controls.Add(Me.chk_DisplayFM_ELS)
         Me.pan_Sollicitations.Controls.Add(Me.chk_DisplayFM_ELU)
@@ -105,8 +107,48 @@ Partial Class Frm_OptionsLogicielNdC
         Me.pan_Sollicitations.Controls.Add(Me.lbl_Sollicitations)
         Me.pan_Sollicitations.Location = New System.Drawing.Point(3, 3)
         Me.pan_Sollicitations.Name = "pan_Sollicitations"
-        Me.pan_Sollicitations.Size = New System.Drawing.Size(733, 137)
+        Me.pan_Sollicitations.Size = New System.Drawing.Size(733, 163)
         Me.pan_Sollicitations.TabIndex = 100
+        '
+        'chk_DisplayFM_ELF
+        '
+        Me.chk_DisplayFM_ELF.AutoSize = True
+        Me.chk_DisplayFM_ELF.Location = New System.Drawing.Point(25, 127)
+        Me.chk_DisplayFM_ELF.Name = "chk_DisplayFM_ELF"
+        Me.chk_DisplayFM_ELF.Size = New System.Drawing.Size(124, 17)
+        Me.chk_DisplayFM_ELF.TabIndex = 101
+        Me.chk_DisplayFM_ELF.Text = "chk_DisplayFM_ELF"
+        Me.chk_DisplayFM_ELF.UseVisualStyleBackColor = True
+        '
+        'chk_DisplayFM_ELS
+        '
+        Me.chk_DisplayFM_ELS.AutoSize = True
+        Me.chk_DisplayFM_ELS.Location = New System.Drawing.Point(25, 104)
+        Me.chk_DisplayFM_ELS.Name = "chk_DisplayFM_ELS"
+        Me.chk_DisplayFM_ELS.Size = New System.Drawing.Size(125, 17)
+        Me.chk_DisplayFM_ELS.TabIndex = 100
+        Me.chk_DisplayFM_ELS.Text = "chk_DisplayFM_ELS"
+        Me.chk_DisplayFM_ELS.UseVisualStyleBackColor = True
+        '
+        'chk_DisplayFM_ELU
+        '
+        Me.chk_DisplayFM_ELU.AutoSize = True
+        Me.chk_DisplayFM_ELU.Location = New System.Drawing.Point(25, 81)
+        Me.chk_DisplayFM_ELU.Name = "chk_DisplayFM_ELU"
+        Me.chk_DisplayFM_ELU.Size = New System.Drawing.Size(126, 17)
+        Me.chk_DisplayFM_ELU.TabIndex = 99
+        Me.chk_DisplayFM_ELU.Text = "chk_DisplayFM_ELU"
+        Me.chk_DisplayFM_ELU.UseVisualStyleBackColor = True
+        '
+        'chk_DisplayLoadCases
+        '
+        Me.chk_DisplayLoadCases.AutoSize = True
+        Me.chk_DisplayLoadCases.Location = New System.Drawing.Point(25, 35)
+        Me.chk_DisplayLoadCases.Name = "chk_DisplayLoadCases"
+        Me.chk_DisplayLoadCases.Size = New System.Drawing.Size(137, 17)
+        Me.chk_DisplayLoadCases.TabIndex = 98
+        Me.chk_DisplayLoadCases.Text = "chk_DisplayLoadCases"
+        Me.chk_DisplayLoadCases.UseVisualStyleBackColor = True
         '
         'lbl_Sollicitations
         '
@@ -120,45 +162,15 @@ Partial Class Frm_OptionsLogicielNdC
         Me.lbl_Sollicitations.Text = "lbl_Sollicitations"
         Me.lbl_Sollicitations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'chk_DisplayLoadCases
+        'chk_Diagrammes
         '
-        Me.chk_DisplayLoadCases.AutoSize = True
-        Me.chk_DisplayLoadCases.Location = New System.Drawing.Point(25, 35)
-        Me.chk_DisplayLoadCases.Name = "chk_DisplayLoadCases"
-        Me.chk_DisplayLoadCases.Size = New System.Drawing.Size(137, 17)
-        Me.chk_DisplayLoadCases.TabIndex = 98
-        Me.chk_DisplayLoadCases.Text = "chk_DisplayLoadCases"
-        Me.chk_DisplayLoadCases.UseVisualStyleBackColor = True
-        '
-        'chk_DisplayFM_ELU
-        '
-        Me.chk_DisplayFM_ELU.AutoSize = True
-        Me.chk_DisplayFM_ELU.Location = New System.Drawing.Point(25, 58)
-        Me.chk_DisplayFM_ELU.Name = "chk_DisplayFM_ELU"
-        Me.chk_DisplayFM_ELU.Size = New System.Drawing.Size(126, 17)
-        Me.chk_DisplayFM_ELU.TabIndex = 99
-        Me.chk_DisplayFM_ELU.Text = "chk_DisplayFM_ELU"
-        Me.chk_DisplayFM_ELU.UseVisualStyleBackColor = True
-        '
-        'chk_DisplayFM_ELS
-        '
-        Me.chk_DisplayFM_ELS.AutoSize = True
-        Me.chk_DisplayFM_ELS.Location = New System.Drawing.Point(25, 81)
-        Me.chk_DisplayFM_ELS.Name = "chk_DisplayFM_ELS"
-        Me.chk_DisplayFM_ELS.Size = New System.Drawing.Size(125, 17)
-        Me.chk_DisplayFM_ELS.TabIndex = 100
-        Me.chk_DisplayFM_ELS.Text = "chk_DisplayFM_ELS"
-        Me.chk_DisplayFM_ELS.UseVisualStyleBackColor = True
-        '
-        'chk_DisplayFM_ELF
-        '
-        Me.chk_DisplayFM_ELF.AutoSize = True
-        Me.chk_DisplayFM_ELF.Location = New System.Drawing.Point(25, 104)
-        Me.chk_DisplayFM_ELF.Name = "chk_DisplayFM_ELF"
-        Me.chk_DisplayFM_ELF.Size = New System.Drawing.Size(124, 17)
-        Me.chk_DisplayFM_ELF.TabIndex = 101
-        Me.chk_DisplayFM_ELF.Text = "chk_DisplayFM_ELF"
-        Me.chk_DisplayFM_ELF.UseVisualStyleBackColor = True
+        Me.chk_Diagrammes.AutoSize = True
+        Me.chk_Diagrammes.Location = New System.Drawing.Point(25, 58)
+        Me.chk_Diagrammes.Name = "chk_Diagrammes"
+        Me.chk_Diagrammes.Size = New System.Drawing.Size(108, 17)
+        Me.chk_Diagrammes.TabIndex = 102
+        Me.chk_Diagrammes.Text = "chk_Diagrammes"
+        Me.chk_Diagrammes.UseVisualStyleBackColor = True
         '
         'Frm_OptionsLogicielNdC
         '
@@ -190,4 +202,5 @@ Partial Class Frm_OptionsLogicielNdC
     Friend WithEvents chk_DisplayFM_ELS As CheckBox
     Friend WithEvents chk_DisplayFM_ELU As CheckBox
     Friend WithEvents chk_DisplayLoadCases As CheckBox
+    Friend WithEvents chk_Diagrammes As CheckBox
 End Class

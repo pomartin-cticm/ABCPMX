@@ -515,6 +515,7 @@ Module Mod_Declarations
     Public Structure struc_OptionsNdC
         Dim lShowHivossCurve As Boolean
         Dim lDispFMLoadCase As Boolean
+        Dim lDispFMDiagrams As Boolean
         Dim lDispFM_ULS As Boolean
         Dim lDispFM_SLS As Boolean
         Dim lDispFM_FLS As Boolean
@@ -524,6 +525,7 @@ Module Mod_Declarations
     Public Sub InitialiseOptionsNdC()
         OptionsNdC.lShowHivossCurve = True
         OptionsNdC.lDispFMLoadCase = True
+        OptionsNdC.lDispFMDiagrams = True
         OptionsNdC.lDispFM_ULS = True
         OptionsNdC.lDispFM_SLS = False
         OptionsNdC.lDispFM_FLS = False

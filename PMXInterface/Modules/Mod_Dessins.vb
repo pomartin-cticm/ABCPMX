@@ -8371,7 +8371,7 @@ Public Module Mod_Dessins
 
 
     Private Sub DessinArmaLongiEnrobageN(ByRef MyGr As Graphics, ByVal MySection As cls_Section, MyEnrob As cls_Enrobage_Partiel,
-                                        MyParAffloc As Struc_Affichage, MyBrushA() As Brush, iArma As Integer)
+                                         MyParAffloc As Struc_Affichage, MyBrushA() As Brush, iArma As Integer)
         '---------------------------------------------------------------------------------------------------------------------------
         '   18/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -8381,7 +8381,7 @@ Public Module Mod_Dessins
         '   section     [E] :   Section à représenter
         '   zRef        [E] :   Position de référence pour l'axe z (z0), comptée à partir fibre sup du profilé
         '   MyParAffloc [E] :   Paramètres d'affichage   
-        '   MyBrushA    [E] :   Pinceau pour le remplissage de la dalle
+        '   MyBrushA    [E] :   Pinceau pour le remplissage des armatures actives
         '   iArma       [E] :   indice du lit d'armature
         '---------------------------------------------------------------------------------------------------------------------------
 
@@ -8396,6 +8396,9 @@ Public Module Mod_Dessins
         Dim Uy, Uz, EtriersPhi As Decimal
         Dim kPos() As Decimal = {0, -0.5, 0.5, 0}
         Dim kPosE() As Decimal = {0, 0, 1, 0.5}
+        Dim lActif As Boolean
+        Dim MyBrush As Brush
+        Dim MyBrushNonActif As New SolidBrush(Color.LightGray)
 
         '--> Initialisation
 
@@ -8415,6 +8418,9 @@ Public Module Mod_Dessins
 
         PhiA = MyEnrob.LitArma(iArma).PhiExt
 
+        lActif = (iArma = 1) Or (MyEnrob.LitArma(iArma).NbExt > 1) Or (MyEnrob.LitArma(iArma).lActiveExt)
+        If lActif Then MyBrush = MyBrushA(0) Else MyBrush = MyBrushNonActif
+
         For jChambre As Integer = 0 To 1
 
             For i As Integer = 1 To MyEnrob.LitArma(iArma).NbExt
@@ -8422,7 +8428,7 @@ Public Module Mod_Dessins
                 xo = Signe * (Bfs * MyEnrob.Ratio_bc / 2 - Uy - EtriersPhi - PhiA / 2)
                 yo = MySection.zPosArmaEnrobage(iArma, 0, i)
 
-                AddCerclePlein(MyGr, MyBrushA(0), xo - Signe * kPosE(i) * PhiA, yo, PhiA, MyParAffloc, True)
+                AddCerclePlein(MyGr, MyBrush, xo - Signe * kPosE(i) * PhiA, yo, PhiA, MyParAffloc, True)
 
             Next
 
@@ -8433,6 +8439,8 @@ Public Module Mod_Dessins
         '--> Armatures intérieures
 
         PhiA = MyEnrob.LitArma(iArma).PhiInt
+        lActif = (iArma = 1) Or (MyEnrob.LitArma(iArma).NbInt > 1) Or (MyEnrob.LitArma(iArma).lActiveInt)
+        If lActif Then MyBrush = MyBrushA(2) Else MyBrush = MyBrushNonActif
 
         If MyEnrob.LitArma(iArma).NbInt = 1 Then kPos(1) = 0 Else kPos(1) = -0.5
 
@@ -8443,7 +8451,7 @@ Public Module Mod_Dessins
                 yo = MySection.zPosArmaEnrobage(iArma, 2, i)
                 xo = Signe * (Tw / 2 + uYInterne + EtriersPhi + PhiA / 2)
 
-                AddCerclePlein(MyGr, MyBrushA(2), xo + Signe * kPosE(i) * PhiA, yo, PhiA, MyParAffloc, True)
+                AddCerclePlein(MyGr, MyBrush, xo + Signe * kPosE(i) * PhiA, yo, PhiA, MyParAffloc, True)
 
             Next
 

@@ -70,9 +70,9 @@ Public Class Frm_OptionsLogiciel
 
     Public pLocalOptionsNdC As struc_LocalOptionsNdC
 
-
     Structure struc_LocalOptionsNdC
         Dim lShowHivossCurve As Boolean
+        Dim lDispFMDiagrams As Boolean
         Dim lDispFMLoadCase As Boolean
         Dim lDispFM_ULS As Boolean
         Dim lDispFM_SLS As Boolean
@@ -279,6 +279,7 @@ Public Class Frm_OptionsLogiciel
 
         pLocalOptionsNdC.lShowHivossCurve = OptionsNdC.lShowHivossCurve
         pLocalOptionsNdC.lDispFMLoadCase = OptionsNdC.lDispFMLoadCase
+        pLocalOptionsNdC.lDispFMDiagrams = OptionsNdC.lDispFMDiagrams
         pLocalOptionsNdC.lDispFM_SLS = OptionsNdC.lDispFM_SLS
         pLocalOptionsNdC.lDispFM_FLS = OptionsNdC.lDispFM_FLS
         pLocalOptionsNdC.lDispFM_ULS = OptionsNdC.lDispFM_ULS
@@ -487,6 +488,7 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFM_SLS, OptionsNdC.lDispFM_SLS, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFM_FLS, OptionsNdC.lDispFM_FLS, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMLoadCase, OptionsNdC.lDispFMLoadCase, lModif)
+        GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMDiagrams, OptionsNdC.lDispFMDiagrams, lModif)
 
     End Sub
 

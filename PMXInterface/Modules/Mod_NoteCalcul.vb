@@ -2145,6 +2145,8 @@ Module Mod_NoteCalcul
 
         '--> Déclaration
 
+        Const nbminCombi As Integer = 12
+
         '--> En fonction des options NDC
 
         If Not (OptionsNdC.lDispFM_FLS Or OptionsNdC.lDispFM_SLS Or OptionsNdC.lDispFM_ULS Or OptionsNdC.lDispFMLoadCase) Then
@@ -2172,10 +2174,14 @@ Module Mod_NoteCalcul
                 If MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).lRunCalcul Then
                     EditionAnalyseChargeA(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i))
 
-                    If nbLignes + 20 > MAXLIGNEPPAG Then SautePage()
-                    ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
-                    AddLigneNDC("\IMG RDM_CHARGESA " & " 10 80 30 NoCadre " & CStr(i))
-                    nbLignes += 20
+                    If OptionsNdC.lDispFMDiagrams Then
+                        Const NbLigDiag As Integer = 20
+                        If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
+                        ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
+                        AddLigneNDC("\IMG RDM_CHARGESA " & " 10 80 30 NoCadre " & CStr(i))
+                        nbLignes += NbLigDiag
+                    End If
+
                 End If
             Next
         End If
@@ -2183,6 +2189,9 @@ Module Mod_NoteCalcul
         '--> Analyses par combinaisons ELU
 
         If OptionsNdC.lDispFM_ULS Then
+
+            If nbLignes + nbminCombi > MAXLIGNEPPAG Then SautePage()
+
             AddTitreNdC(2, BlocAnalyse("ELEMNTRY_ULS"))
 
             For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi - 1
@@ -2195,6 +2204,9 @@ Module Mod_NoteCalcul
         '--> Analyses par combinaisons ELS
 
         If OptionsNdC.lDispFM_SLS Then
+
+            If nbLignes + nbminCombi > MAXLIGNEPPAG Then SautePage()
+
             AddTitreNdC(2, BlocAnalyse("ELEMNTRY_SLS"))
 
             For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS.nbCombi - 1
@@ -2207,6 +2219,9 @@ Module Mod_NoteCalcul
         '--> Analyses par combinaisons ELF
 
         If OptionsNdC.lDispFM_FLS Then
+
+            If nbLignes + nbminCombi > MAXLIGNEPPAG Then SautePage()
+
             AddTitreNdC(2, BlocAnalyse("ELEMNTRY_FLS"))
 
             For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELF.nbCombi - 1
@@ -3192,7 +3207,7 @@ Module Mod_NoteCalcul
         End If
 
         If Not MyBeam.VerificationsELUDispo(MyBeam.lMixte) Then Exit Sub
-        If (Not MyBeam.lMixte) And MyBeam.lEnrobage Then Exit Sub
+        'If (Not MyBeam.lMixte) And MyBeam.lEnrobage Then Exit Sub
 
         '--> Traitement
 

@@ -189,7 +189,7 @@ Public Class cls_VerificationsAcier
 
         '--> Déclarations
 
-        Dim i, j, k As Integer
+        Dim i, j As Integer
 
         Dim pDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
         Dim paramLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
@@ -264,9 +264,9 @@ Public Class cls_VerificationsAcier
             pDonnees.lAppuiArticule(i) = False
         Next
 
-        '.NbForcesPon = 2
-        '.NbForcesRep = 0
-        '.NbMoments = 0
+        pDonnees.NbForcesPon = 0
+        pDonnees.NbForcesRep = 0
+        pDonnees.NbMoments = 0
 
         'ReDim .ForcePon(.NbForcesPon - 1)
         'ReDim .xForcePon(.NbForcesPon - 1)

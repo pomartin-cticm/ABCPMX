@@ -120,6 +120,7 @@ Public Class Frm_Enrobage
                 Me.lbl_ArmaLongi.Text = Bloc("LONGIREBAR")
                 Me.lbl_Nombre.Text = Bloc("NUMBER")
                 Me.lbl_PositionZarma.Text = Bloc("POSITION")
+                Me.lbl_Active.Text = Bloc("ACTIVEREBARS")
 
                 TabNb(0) = Bloc("NONE")
                 TabNb(1) = Bloc("SINGLE")
@@ -415,6 +416,12 @@ Public Class Frm_Enrobage
         AfficheDiametreDansCombo(Me.cmb_DiaMil, MyEnrobage.LitArma(iArma).PhiMil)
         AfficheDiametreDansCombo(Me.cmb_DiaInt, MyEnrobage.LitArma(iArma).PhiInt)
 
+        '--> Barres Actives
+
+        AfficheBarreActive(Me.chk_ActiveExt, MyEnrobage.LitArma(iArma).NbExt, False, MyEnrobage.LitArma(iArma).lActiveExt)
+        AfficheBarreActive(Me.chk_ActiveMil, MyEnrobage.LitArma(iArma).NbMil, True, True)
+        AfficheBarreActive(Me.chk_ActiveInt, MyEnrobage.LitArma(iArma).NbInt, False, MyEnrobage.LitArma(iArma).lActiveInt)
+
         '--> Position z
 
         If iArma = 1 Then
@@ -424,6 +431,25 @@ Public Class Frm_Enrobage
         End If
 
     End Sub
+
+    Private Sub AfficheBarreActive(myChk As CheckBox, NbBarres As Integer, lMilieu As Boolean, lActive As Boolean)
+
+        If lMilieu Then
+            myChk.Checked = True
+            myChk.Enabled = False
+        Else
+            'If NbBarres > 1 Then
+            '    myChk.Checked = True
+            '    myChk.Enabled = False
+            'Else
+            '    myChk.Checked = lActive
+            '    myChk.Enabled = True
+            'End If
+            MAJI_chkActive(myChk, NbBarres, lActive)
+        End If
+
+    End Sub
+
 
     ''' <summary>
     ''' Affichage d'une diamètre dans une combo box déjà remplie
@@ -514,10 +540,12 @@ Public Class Frm_Enrobage
 
             GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiExt, MyEnrobage.LitArma(i).PhiExt, lModif)
             GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbExt, MyEnrobage.LitArma(i).NbExt, lModif)
+            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).lActiveExt, MyEnrobage.LitArma(i).lActiveExt, lModif)
             GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiMil, MyEnrobage.LitArma(i).PhiMil, lModif)
             GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbMil, MyEnrobage.LitArma(i).NbMil, lModif)
             GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiInt, MyEnrobage.LitArma(i).PhiInt, lModif)
             GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbInt, MyEnrobage.LitArma(i).NbInt, lModif)
+            GereTransfertValeur(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).lActiveInt, MyEnrobage.LitArma(i).lActiveInt, lModif)
 
         Next
 
@@ -837,7 +865,28 @@ Public Class Frm_Enrobage
 
         Me.img_Enrobage.Invalidate()
         MAJI_AireArmaLongi()
+        MAJI_ActiveArma()
+    End Sub
 
+    Private Sub MAJI_ActiveArma()
+
+        Dim iArma As Integer = IndiceLitAffiche()
+
+        If iArma = 0 Or iArma = 2 Then
+            MAJI_chkActive(Me.chk_ActiveExt, MyEnrobage.LitArma(iArma).NbExt, MyEnrobage.LitArma(iArma).lActiveExt)
+            MAJI_chkActive(Me.chk_ActiveInt, MyEnrobage.LitArma(iArma).NbInt, MyEnrobage.LitArma(iArma).lActiveInt)
+        End If
+
+    End Sub
+
+    Private Sub MAJI_chkActive(myChk As CheckBox, nbBarres As Integer, lActive As Boolean)
+        If nbBarres > 1 Then
+            myChk.Checked = True
+            myChk.Enabled = False
+        Else
+            myChk.Checked = lActive
+            myChk.Enabled = True
+        End If
     End Sub
 
     Private Sub cmb_Acier_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Acier.SelectedIndexChanged
@@ -987,6 +1036,21 @@ Public Class Frm_Enrobage
         End Select
         Return iArma
     End Function
+
+    Private Sub ActivationBarres(sender As Object, e As EventArgs) Handles chk_ActiveInt.CheckedChanged, chk_ActiveExt.CheckedChanged
+        If lBuild Then Exit Sub
+        Dim iArma As Integer = IndiceLitAffiche()
+
+        Select Case sender.name
+            Case Me.chk_ActiveExt.Name
+                MyEnrobage.LitArma(iArma).lActiveExt = Me.chk_ActiveExt.Checked
+            Case Me.chk_ActiveInt.Name
+                MyEnrobage.LitArma(iArma).lActiveInt = Me.chk_ActiveInt.Checked
+        End Select
+
+        Me.img_Enrobage.Invalidate()
+
+    End Sub
 
 
 

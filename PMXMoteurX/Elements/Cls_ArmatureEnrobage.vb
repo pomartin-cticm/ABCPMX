@@ -8,40 +8,18 @@
 
 #Region " Attributs "
 
-    ''' <summary>
-    ''' Diamètre des barres placées à l'extérieur
-    ''' </summary>
-    Public PhiExt As Decimal
+    Public PhiExt As Decimal            ' Diamètre des barres placées à l'extérieur
+    Public NbExt As Decimal             ' Nombre de barres placées à l'extérieur / chambre
+    Public lActiveExt As Boolean        ' Indique si barre active longitudinalement (construction sinon)
 
-    ''' <summary>
-    ''' Nombre de barres placées à l'extérieur / chambre
-    ''' </summary>
-    Public NbExt As Decimal
+    Public PhiMil As Decimal            ' Diamètre des barres placées au centre
+    Public NbMil As Decimal             ' Nombre de barres placées au centre / chambre
 
-    ''' <summary>
-    ''' Diamètre des barres placées au centre
-    ''' </summary>
-    Public PhiMil As Decimal
+    Public PhiInt As Decimal            ' Diamètre des barres placées à l'extérieur
+    Public NbInt As Decimal             ' Nombre de barres placées à l'extérieur / chambre
+    Public lActiveInt As Boolean        ' Indique si barre active longitudinalement (construction sinon)
 
-    ''' <summary>
-    ''' Nombre de barres placées au centre / chambre
-    ''' </summary>
-    Public NbMil As Decimal
-
-    ''' <summary>
-    ''' Diamètre des barres placées à l'extérieur
-    ''' </summary>
-    Public PhiInt As Decimal
-
-    ''' <summary>
-    ''' Nombre de barres placées à l'extérieur / chambre
-    ''' </summary>
-    Public NbInt As Decimal
-
-    ''' <summary>
-    ''' Position z du lit (utilisé pour le lit central uniquement)
-    ''' </summary>
-    Public zPosRatio As Decimal
+    Public zPosRatio As Decimal         ' Position z du lit (utilisé pour le lit central uniquement)
 
 #End Region
 
@@ -50,12 +28,14 @@
     Public Sub New()
         PhiExt = PhiDEF
         NbExt = 1
+        lActiveExt = True
 
         PhiMil = PhiDEF
         NbMil = 0
 
         PhiInt = PhiDEF
         NbInt = 1
+        lActiveInt = True
 
         Me.zPosRatio = 0.5
     End Sub
@@ -108,6 +88,28 @@
         Return NbB
     End Function
 
+    Public Function lBarreActive(iPos As Integer) As Boolean
+        '--------------------------------------------------------------------------------
+        '   12/07/23 :  Création - POM
+        '--------------------------------------------------------------------------------
+        ' Retourne si la barre est active
+        '--------------------------------------------------------------------------------
+        '   iPos    [E] :   0 pour la grappe exterieure
+        '                   1 pour la grappe intermédiaire
+        '                   2 pour la grappe interieure
+        '--------------------------------------------------------------------------------
+
+        Dim NbB As Integer = Me.NbBarres(iPos)
+        Dim lActive As Boolean
+
+        Select Case iPos
+            Case 0 : lActive = (NbB > 1) Or (NbB <= 1 And lActiveInt)
+            Case 1 : lActive = True
+            Case 2 : lActive = (NbB > 1) Or (NbB <= 1 And lActiveInt)
+        End Select
+
+        Return lActive
+    End Function
 
     Public Function PhiBarre(iPos As Integer) As Decimal
         '--------------------------------------------------------------------------------

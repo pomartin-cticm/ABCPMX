@@ -329,6 +329,7 @@ TRIPLE					= Triple
 TYPEE					= Type 
 UPPERLAYER				= Upper layer
 WIDTH					= Width
+ACTIVEREBARS			= Active rebars
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors
@@ -791,6 +792,7 @@ DISPLAYFMLOADCASES		= Display forces and moments for load cases
 DISPLAYFMULS			= Display forces and moments at ultimate LS
 DISPLAYFMSLS			= Display forces and moments at serviceability LS
 DISPLAYFMFLS			= Display forces and moments at fire LS
+DISPLAYDIAGRAMS			= Display diagrams
 
 #OPTSOFTDATABASES
 DATABASES				= Databases

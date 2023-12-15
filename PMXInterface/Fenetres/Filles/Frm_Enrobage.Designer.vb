@@ -115,6 +115,10 @@ Partial Class Frm_Enrobage
         Me.lbl_ArmaLongi = New System.Windows.Forms.Label()
         Me.MyImgList = New System.Windows.Forms.ImageList(Me.components)
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.lbl_Active = New System.Windows.Forms.Label()
+        Me.chk_ActiveExt = New System.Windows.Forms.CheckBox()
+        Me.chk_ActiveMil = New System.Windows.Forms.CheckBox()
+        Me.chk_ActiveInt = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -161,7 +165,7 @@ Partial Class Frm_Enrobage
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(1099, 490)
+        Me.pan_General.Size = New System.Drawing.Size(1099, 503)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -176,7 +180,7 @@ Partial Class Frm_Enrobage
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(1099, 490)
+        Me.TLpan_Main.Size = New System.Drawing.Size(1099, 503)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -190,7 +194,7 @@ Partial Class Frm_Enrobage
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 453)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 466)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -228,7 +232,7 @@ Partial Class Frm_Enrobage
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(1093, 444)
+        Me.pan_Main.Size = New System.Drawing.Size(1093, 457)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_Enrobage
@@ -245,7 +249,7 @@ Partial Class Frm_Enrobage
         Me.TLPan_Enrobage.Name = "TLPan_Enrobage"
         Me.TLPan_Enrobage.RowCount = 1
         Me.TLPan_Enrobage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Enrobage.Size = New System.Drawing.Size(1093, 444)
+        Me.TLPan_Enrobage.Size = New System.Drawing.Size(1093, 457)
         Me.TLPan_Enrobage.TabIndex = 0
         '
         'img_Enrobage
@@ -266,7 +270,7 @@ Partial Class Frm_Enrobage
         Me.pan_ControleG.Location = New System.Drawing.Point(0, 0)
         Me.pan_ControleG.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ControleG.Name = "pan_ControleG"
-        Me.pan_ControleG.Size = New System.Drawing.Size(501, 444)
+        Me.pan_ControleG.Size = New System.Drawing.Size(501, 457)
         Me.pan_ControleG.TabIndex = 2
         '
         'TLpan_ControlesG
@@ -282,7 +286,7 @@ Partial Class Frm_Enrobage
         Me.TLpan_ControlesG.RowCount = 2
         Me.TLpan_ControlesG.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 235.0!))
         Me.TLpan_ControlesG.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_ControlesG.Size = New System.Drawing.Size(501, 444)
+        Me.TLpan_ControlesG.Size = New System.Drawing.Size(501, 457)
         Me.TLpan_ControlesG.TabIndex = 0
         '
         'TLpan_SeparationH
@@ -820,7 +824,7 @@ Partial Class Frm_Enrobage
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(501, 208)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(501, 221)
         Me.TableLayoutPanel2.TabIndex = 1
         '
         'Pan_ArmaLongi
@@ -832,7 +836,7 @@ Partial Class Frm_Enrobage
         Me.Pan_ArmaLongi.Location = New System.Drawing.Point(0, 30)
         Me.Pan_ArmaLongi.Margin = New System.Windows.Forms.Padding(0)
         Me.Pan_ArmaLongi.Name = "Pan_ArmaLongi"
-        Me.Pan_ArmaLongi.Size = New System.Drawing.Size(501, 178)
+        Me.Pan_ArmaLongi.Size = New System.Drawing.Size(501, 191)
         Me.Pan_ArmaLongi.TabIndex = 14
         '
         'TableLayoutPanel_ArmaLongi
@@ -848,11 +852,12 @@ Partial Class Frm_Enrobage
         Me.TableLayoutPanel_ArmaLongi.RowCount = 2
         Me.TableLayoutPanel_ArmaLongi.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
         Me.TableLayoutPanel_ArmaLongi.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel_ArmaLongi.Size = New System.Drawing.Size(499, 176)
+        Me.TableLayoutPanel_ArmaLongi.Size = New System.Drawing.Size(499, 189)
         Me.TableLayoutPanel_ArmaLongi.TabIndex = 0
         '
         'Panel3
         '
+        Me.Panel3.Controls.Add(Me.lbl_Active)
         Me.Panel3.Controls.Add(Me.txt_zArma)
         Me.Panel3.Controls.Add(Me.img_zArma)
         Me.Panel3.Controls.Add(Me.etq_UnitDim6)
@@ -867,13 +872,13 @@ Partial Class Frm_Enrobage
         Me.Panel3.Location = New System.Drawing.Point(0, 50)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(499, 126)
+        Me.Panel3.Size = New System.Drawing.Size(499, 139)
         Me.Panel3.TabIndex = 1
         '
         'txt_zArma
         '
         Me.txt_zArma.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_zArma.Location = New System.Drawing.Point(153, 99)
+        Me.txt_zArma.Location = New System.Drawing.Point(153, 109)
         Me.txt_zArma.Name = "txt_zArma"
         Me.txt_zArma.Size = New System.Drawing.Size(58, 20)
         Me.txt_zArma.TabIndex = 56
@@ -881,7 +886,7 @@ Partial Class Frm_Enrobage
         'img_zArma
         '
         Me.img_zArma.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_zArma.Location = New System.Drawing.Point(99, 99)
+        Me.img_zArma.Location = New System.Drawing.Point(99, 109)
         Me.img_zArma.Name = "img_zArma"
         Me.img_zArma.Size = New System.Drawing.Size(55, 20)
         Me.img_zArma.TabIndex = 57
@@ -891,7 +896,7 @@ Partial Class Frm_Enrobage
         '
         Me.etq_UnitDim6.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDim6.AutoSize = True
-        Me.etq_UnitDim6.Location = New System.Drawing.Point(217, 102)
+        Me.etq_UnitDim6.Location = New System.Drawing.Point(217, 112)
         Me.etq_UnitDim6.Name = "etq_UnitDim6"
         Me.etq_UnitDim6.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim6.TabIndex = 55
@@ -902,7 +907,7 @@ Partial Class Frm_Enrobage
         Me.lbl_PositionZarma.AutoSize = True
         Me.lbl_PositionZarma.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_PositionZarma.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_PositionZarma.Location = New System.Drawing.Point(10, 102)
+        Me.lbl_PositionZarma.Location = New System.Drawing.Point(10, 112)
         Me.lbl_PositionZarma.Name = "lbl_PositionZarma"
         Me.lbl_PositionZarma.Size = New System.Drawing.Size(90, 13)
         Me.lbl_PositionZarma.TabIndex = 54
@@ -913,7 +918,7 @@ Partial Class Frm_Enrobage
         '
         Me.etq_UnitDim5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDim5.AutoSize = True
-        Me.etq_UnitDim5.Location = New System.Drawing.Point(388, 67)
+        Me.etq_UnitDim5.Location = New System.Drawing.Point(388, 58)
         Me.etq_UnitDim5.Name = "etq_UnitDim5"
         Me.etq_UnitDim5.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitDim5.TabIndex = 52
@@ -921,12 +926,13 @@ Partial Class Frm_Enrobage
         '
         'pan_Interieur
         '
+        Me.pan_Interieur.Controls.Add(Me.chk_ActiveInt)
         Me.pan_Interieur.Controls.Add(Me.lbl_Interieur)
         Me.pan_Interieur.Controls.Add(Me.cmb_DiaInt)
         Me.pan_Interieur.Controls.Add(Me.cmb_NombreInt)
-        Me.pan_Interieur.Location = New System.Drawing.Point(295, 13)
+        Me.pan_Interieur.Location = New System.Drawing.Point(295, 7)
         Me.pan_Interieur.Name = "pan_Interieur"
-        Me.pan_Interieur.Size = New System.Drawing.Size(87, 79)
+        Me.pan_Interieur.Size = New System.Drawing.Size(87, 93)
         Me.pan_Interieur.TabIndex = 53
         '
         'lbl_Interieur
@@ -943,7 +949,7 @@ Partial Class Frm_Enrobage
         '
         Me.cmb_DiaInt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_DiaInt.FormattingEnabled = True
-        Me.cmb_DiaInt.Location = New System.Drawing.Point(3, 51)
+        Me.cmb_DiaInt.Location = New System.Drawing.Point(3, 47)
         Me.cmb_DiaInt.Name = "cmb_DiaInt"
         Me.cmb_DiaInt.Size = New System.Drawing.Size(80, 21)
         Me.cmb_DiaInt.TabIndex = 63
@@ -952,19 +958,20 @@ Partial Class Frm_Enrobage
         '
         Me.cmb_NombreInt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NombreInt.FormattingEnabled = True
-        Me.cmb_NombreInt.Location = New System.Drawing.Point(3, 24)
+        Me.cmb_NombreInt.Location = New System.Drawing.Point(3, 22)
         Me.cmb_NombreInt.Name = "cmb_NombreInt"
         Me.cmb_NombreInt.Size = New System.Drawing.Size(80, 21)
         Me.cmb_NombreInt.TabIndex = 62
         '
         'pan_Mileu
         '
+        Me.pan_Mileu.Controls.Add(Me.chk_ActiveMil)
         Me.pan_Mileu.Controls.Add(Me.lbl_Middle)
         Me.pan_Mileu.Controls.Add(Me.cmb_DiaMil)
         Me.pan_Mileu.Controls.Add(Me.cmb_NombreMil)
-        Me.pan_Mileu.Location = New System.Drawing.Point(206, 13)
+        Me.pan_Mileu.Location = New System.Drawing.Point(206, 7)
         Me.pan_Mileu.Name = "pan_Mileu"
-        Me.pan_Mileu.Size = New System.Drawing.Size(87, 79)
+        Me.pan_Mileu.Size = New System.Drawing.Size(87, 93)
         Me.pan_Mileu.TabIndex = 52
         '
         'lbl_Middle
@@ -981,7 +988,7 @@ Partial Class Frm_Enrobage
         '
         Me.cmb_DiaMil.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_DiaMil.FormattingEnabled = True
-        Me.cmb_DiaMil.Location = New System.Drawing.Point(3, 51)
+        Me.cmb_DiaMil.Location = New System.Drawing.Point(3, 47)
         Me.cmb_DiaMil.Name = "cmb_DiaMil"
         Me.cmb_DiaMil.Size = New System.Drawing.Size(80, 21)
         Me.cmb_DiaMil.TabIndex = 61
@@ -990,19 +997,20 @@ Partial Class Frm_Enrobage
         '
         Me.cmb_NombreMil.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NombreMil.FormattingEnabled = True
-        Me.cmb_NombreMil.Location = New System.Drawing.Point(3, 24)
+        Me.cmb_NombreMil.Location = New System.Drawing.Point(3, 22)
         Me.cmb_NombreMil.Name = "cmb_NombreMil"
         Me.cmb_NombreMil.Size = New System.Drawing.Size(80, 21)
         Me.cmb_NombreMil.TabIndex = 60
         '
         'pan_Exterieur
         '
+        Me.pan_Exterieur.Controls.Add(Me.chk_ActiveExt)
         Me.pan_Exterieur.Controls.Add(Me.lbl_Exterieur)
         Me.pan_Exterieur.Controls.Add(Me.cmb_NombreExt)
         Me.pan_Exterieur.Controls.Add(Me.cmb_DiaExt)
-        Me.pan_Exterieur.Location = New System.Drawing.Point(117, 13)
+        Me.pan_Exterieur.Location = New System.Drawing.Point(117, 7)
         Me.pan_Exterieur.Name = "pan_Exterieur"
-        Me.pan_Exterieur.Size = New System.Drawing.Size(87, 79)
+        Me.pan_Exterieur.Size = New System.Drawing.Size(87, 93)
         Me.pan_Exterieur.TabIndex = 51
         '
         'lbl_Exterieur
@@ -1019,7 +1027,7 @@ Partial Class Frm_Enrobage
         '
         Me.cmb_NombreExt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_NombreExt.FormattingEnabled = True
-        Me.cmb_NombreExt.Location = New System.Drawing.Point(3, 24)
+        Me.cmb_NombreExt.Location = New System.Drawing.Point(3, 22)
         Me.cmb_NombreExt.Name = "cmb_NombreExt"
         Me.cmb_NombreExt.Size = New System.Drawing.Size(80, 21)
         Me.cmb_NombreExt.TabIndex = 57
@@ -1028,7 +1036,7 @@ Partial Class Frm_Enrobage
         '
         Me.cmb_DiaExt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_DiaExt.FormattingEnabled = True
-        Me.cmb_DiaExt.Location = New System.Drawing.Point(3, 51)
+        Me.cmb_DiaExt.Location = New System.Drawing.Point(3, 47)
         Me.cmb_DiaExt.Name = "cmb_DiaExt"
         Me.cmb_DiaExt.Size = New System.Drawing.Size(80, 21)
         Me.cmb_DiaExt.TabIndex = 59
@@ -1038,7 +1046,7 @@ Partial Class Frm_Enrobage
         Me.lbl_Nombre.AutoSize = True
         Me.lbl_Nombre.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_Nombre.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Nombre.Location = New System.Drawing.Point(10, 39)
+        Me.lbl_Nombre.Location = New System.Drawing.Point(10, 31)
         Me.lbl_Nombre.Name = "lbl_Nombre"
         Me.lbl_Nombre.Size = New System.Drawing.Size(60, 13)
         Me.lbl_Nombre.TabIndex = 50
@@ -1050,7 +1058,7 @@ Partial Class Frm_Enrobage
         Me.lbl_DiametreA.AutoSize = True
         Me.lbl_DiametreA.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lbl_DiametreA.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_DiametreA.Location = New System.Drawing.Point(10, 67)
+        Me.lbl_DiametreA.Location = New System.Drawing.Point(10, 57)
         Me.lbl_DiametreA.Name = "lbl_DiametreA"
         Me.lbl_DiametreA.Size = New System.Drawing.Size(65, 13)
         Me.lbl_DiametreA.TabIndex = 48
@@ -1195,13 +1203,52 @@ Partial Class Frm_Enrobage
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'lbl_Active
+        '
+        Me.lbl_Active.AutoSize = True
+        Me.lbl_Active.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Active.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Active.Location = New System.Drawing.Point(10, 82)
+        Me.lbl_Active.Name = "lbl_Active"
+        Me.lbl_Active.Size = New System.Drawing.Size(53, 13)
+        Me.lbl_Active.TabIndex = 58
+        Me.lbl_Active.Text = "lbl_Active"
+        Me.lbl_Active.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'chk_ActiveExt
+        '
+        Me.chk_ActiveExt.AutoSize = True
+        Me.chk_ActiveExt.Location = New System.Drawing.Point(36, 74)
+        Me.chk_ActiveExt.Name = "chk_ActiveExt"
+        Me.chk_ActiveExt.Size = New System.Drawing.Size(15, 14)
+        Me.chk_ActiveExt.TabIndex = 59
+        Me.chk_ActiveExt.UseVisualStyleBackColor = True
+        '
+        'chk_ActiveMil
+        '
+        Me.chk_ActiveMil.AutoSize = True
+        Me.chk_ActiveMil.Location = New System.Drawing.Point(37, 74)
+        Me.chk_ActiveMil.Name = "chk_ActiveMil"
+        Me.chk_ActiveMil.Size = New System.Drawing.Size(15, 14)
+        Me.chk_ActiveMil.TabIndex = 60
+        Me.chk_ActiveMil.UseVisualStyleBackColor = True
+        '
+        'chk_ActiveInt
+        '
+        Me.chk_ActiveInt.AutoSize = True
+        Me.chk_ActiveInt.Location = New System.Drawing.Point(37, 74)
+        Me.chk_ActiveInt.Name = "chk_ActiveInt"
+        Me.chk_ActiveInt.Size = New System.Drawing.Size(15, 14)
+        Me.chk_ActiveInt.TabIndex = 60
+        Me.chk_ActiveInt.UseVisualStyleBackColor = True
+        '
         'Frm_Enrobage
         '
         Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(1099, 490)
+        Me.ClientSize = New System.Drawing.Size(1099, 503)
         Me.Controls.Add(Me.pan_General)
         Me.Name = "Frm_Enrobage"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -1243,8 +1290,11 @@ Partial Class Frm_Enrobage
         Me.Panel3.PerformLayout()
         CType(Me.img_zArma, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Interieur.ResumeLayout(False)
+        Me.pan_Interieur.PerformLayout()
         Me.pan_Mileu.ResumeLayout(False)
+        Me.pan_Mileu.PerformLayout()
         Me.pan_Exterieur.ResumeLayout(False)
+        Me.pan_Exterieur.PerformLayout()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         Me.pan_InforArma.ResumeLayout(False)
@@ -1346,4 +1396,8 @@ Partial Class Frm_Enrobage
     Friend WithEvents txt_As As TextBox
     Friend WithEvents img_As As PictureBox
     Friend WithEvents etq_UnitDimCarre As Label
+    Friend WithEvents lbl_Active As Label
+    Friend WithEvents chk_ActiveInt As CheckBox
+    Friend WithEvents chk_ActiveMil As CheckBox
+    Friend WithEvents chk_ActiveExt As CheckBox
 End Class
