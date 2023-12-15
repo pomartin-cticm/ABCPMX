@@ -2179,8 +2179,9 @@ Module Mod_NoteCalcul
                         .lDessInerties = False
                         .lDessNumeros = False
                     End With
+                    If nbLignes + 20 > MAXLIGNEPPAG Then SautePage()
                     AddLigneNDC("\DIA RDM_CHARGESA " & i & " 10 80 30 NoCadre")
-                    SautePage()
+                    'SautePage()
                 End If
             Next
         End If
@@ -2322,44 +2323,44 @@ Module Mod_NoteCalcul
 
                 iTab = myPoutre.ChargesA(iCas).IndElts
 
-                    If lMixte Or lEnrob Then
-
-                        If lMixte Then
-                            If myPoutre.Elements(iTab).lMixte Then
-                                Phase = BlocAnalyse("COMPOSITE")
-                                lDalle = True
-                            Else
-                                lDalle = False
-                                If lEnrob Then
-                                    Phase = BlocAnalyse("STEELENCASED")
-                                Else
-                                    Phase = BlocAnalyse("STEELONLY")
-                                End If
-                            End If
-                        Else
-                            Phase = BlocAnalyse("STEELENCASED")
-                        End If
-
-                        AddCellule(pLC(1), pBordures, PositionTexteInCell.Gauche, Phase)
-                    End If
-
-                    '# Coefficient d'équivalence dalle
+                If lMixte Or lEnrob Then
 
                     If lMixte Then
-                        If lDalle Then
-                            AddCellule(pLC(2), pBordures, PositionTexteInCell.Gauche, GetStringInUnit(myPoutre.Elements(iTab).nEqDalle, Enu_TypeVariable.SansType, 3, 2, False))
+                        If myPoutre.Elements(iTab).lMixte Then
+                            Phase = BlocAnalyse("COMPOSITE")
+                            lDalle = True
                         Else
-                            AddCellule(pLC(2), pBordures, PositionTexteInCell.Gauche, "-")
+                            lDalle = False
+                            If lEnrob Then
+                                Phase = BlocAnalyse("STEELENCASED")
+                            Else
+                                Phase = BlocAnalyse("STEELONLY")
+                            End If
                         End If
+                    Else
+                        Phase = BlocAnalyse("STEELENCASED")
                     End If
 
-                    '# Coefficient d'équivalence enrobage
-
-                    If lEnrob Then
-                        AddCellule(pLC(3), pBordures, PositionTexteInCell.Gauche, GetStringInUnit(myPoutre.Elements(iTab).nEqEnrob, Enu_TypeVariable.SansType, 3, 2, False))
-                    End If
-
+                    AddCellule(pLC(1), pBordures, PositionTexteInCell.Gauche, Phase)
                 End If
+
+                '# Coefficient d'équivalence dalle
+
+                If lMixte Then
+                    If lDalle Then
+                        AddCellule(pLC(2), pBordures, PositionTexteInCell.Centre, GetStringInUnit(myPoutre.Elements(iTab).nEqDalle, Enu_TypeVariable.SansType, 3, 2, False))
+                    Else
+                        AddCellule(pLC(2), pBordures, PositionTexteInCell.Centre, "-")
+                    End If
+                End If
+
+                '# Coefficient d'équivalence enrobage
+
+                If lEnrob Then
+                    AddCellule(pLC(3), pBordures, PositionTexteInCell.Centre, GetStringInUnit(myPoutre.Elements(iTab).nEqEnrob, Enu_TypeVariable.SansType, 3, 2, False))
+                End If
+
+            End If
 
         Next
 
@@ -2931,8 +2932,6 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   Edition des efforts dans la poutre après analyse pour un cas de charge
         '-------------------------------------------------------------------------------------------
-
-        '--> Déclaration
 
         '--> Déclarations
 

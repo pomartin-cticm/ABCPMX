@@ -3314,18 +3314,20 @@ Public Class cls_Poutre
 
             If lNonEtaye Then
                 Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1, Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalleNonMixte))
-                InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
+                'InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
+                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("G1"), TraveesTous)
             Else
                 'Cas de l'étaiement ponctuel
                 Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1PP, Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalleNonMixte))
-                InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
+                'InitialiseChargesPP(Me.ChargesA(Me.ChargesA.Count - 1))
+                InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("G1"), TraveesTous)
 
                 Me.ChargesA.Add(New cls_CasDeCharge(strPoidsPropre, symbG1C, IndiceG1, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalleMixte))
-
+                'Il n'y a pas besoin d'initialiser G1C ici : cette partie se fait après le calcul de G1pp
             End If
 
             Me.ChargesA.Add(New cls_CasDeCharge(strAutresChargesPermanentes, symbG2, IndiceG2, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Permanente, pEtatDalleMixte))
-
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("G2"), TraveesTous)
         End If
 
         '--> Charges d'exploitation
@@ -3365,14 +3367,15 @@ Public Class cls_Poutre
             Me.indiceCasRetrait = Me.ChargesA.Count - 1
         End If
 
-        If lEnrob And Me.Param.lRetraitEnrobage Then
-            Me.ChargesA.Add(New cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Retrait, pEtatDalle))
-        End If
+        'If lEnrob And Me.Param.lRetraitEnrobage Then
+        '    Me.ChargesA.Add(New cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Retrait, pEtatDalle))
+        'End If
 
         '--> Charges de construction
 
         If lMixte And (Not lEtaitComplet) Then
             Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Construction, pEtatDalleNonMixte))
+            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("QC"), TraveesTous)
         End If
 
     End Sub
