@@ -2172,16 +2172,9 @@ Module Mod_NoteCalcul
                 If MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).lRunCalcul Then
                     EditionAnalyseChargeA(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i))
 
-                    With MyNote.DiagrammesNDC
-                        .lDessCharges = False
-                        .lDessDeformee = False
-                        .lDessEffortT = True
-                        .lDessMoment = True
-                        .lDessInerties = False
-                        .lDessNumeros = False
-                    End With
                     If nbLignes + 20 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC("\DIA RDM_CHARGESA " & CStr(i) & " 10 80 30 NoCadre")
+                    ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
+                    AddLigneNDC("\IMG RDM_CHARGESA " & " 10 80 30 NoCadre " & CStr(i))
                     nbLignes += 20
                 End If
             Next
@@ -2370,10 +2363,6 @@ Module Mod_NoteCalcul
         Next
 
         FinTableau()
-
-        'nbLignes += (2 + nbCas) * EquivalenceLigneTableau
-
-        Dim a As Decimal = nbLignes
 
         '--> Note sur les configurations
 
@@ -2950,12 +2939,10 @@ Module Mod_NoteCalcul
 
         '--> Déclarations
 
-        Dim lRetrait As Boolean = True
-        Dim lMultispan As Boolean
-        'Dim NCol, PosTab As Integer
-        'Dim iTravee, i As Integer
-        'Dim iNodeO, iNodeE As Integer
-        Dim iTravDeb, iTravFin As Integer
+        'Dim lRetrait As Boolean = True
+        'Dim lMultispan As Boolean
+
+        'Dim iTravDeb, iTravFin As Integer
         Dim iTraveeAffichee As Integer = 1
         Dim iCompteur As Integer = 0
         Dim NbLignesMax() As Integer = {25, 30}
@@ -2964,9 +2951,9 @@ Module Mod_NoteCalcul
 
         '--> Initialisation
 
-        lMultispan = (MyPoutreLoc.NbTravees > 1)
-        iTravDeb = MyPoutreLoc.IndicePremiereTravee
-        iTravFin = MyPoutreLoc.IndiceDerniereTravee
+        'lMultispan = (MyPoutreLoc.NbTravees > 1)
+        'iTravDeb = MyPoutreLoc.IndicePremiereTravee
+        'iTravFin = MyPoutreLoc.IndiceDerniereTravee
 
         If nbLignes + NbLignesReq > MAXLIGNEPPAG Then SautePage()
 
@@ -2989,29 +2976,34 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Function IndiceTravee(Node As Integer, iNodeAppui As Integer()) As Integer()
-        '-------------------------------------------------------------------------------------------
-        '   10/11/23 :  Création - GUD
-        '-------------------------------------------------------------------------------------------
-        '   Permet de renvoyer l'indice de la travée à laquelle appartient le noeud 
-        '   Dans le cas où le noeud appartient à deux travées, l'indice de la travée renvoyée est celle de gauche (sauf pour le tout premier noeud)
-        '-------------------------------------------------------------------------------------------
+    Private Sub EditionChargeAReactions()
 
-        Dim indTravee(1) As Integer
+    End Sub
 
-        For j As Integer = 0 To iNodeAppui.Count - 1 'On ne commence pas à l'indice 0 exprès car l'indice de la travée du premier noeud est 1
-            If Node <= iNodeAppui(j) Then
-                indTravee(0) = j + 1
-                If Node = iNodeAppui(j) And j <> iNodeAppui.Count - 1 Then
-                    indTravee(1) = indTravee(0) + 1
-                Else
-                    indTravee(1) = indTravee(0)
-                End If
-                Return indTravee
-            End If
-        Next
 
-    End Function
+    'Private Function IndiceTravee(Node As Integer, iNodeAppui As Integer()) As Integer()
+    '    '-------------------------------------------------------------------------------------------
+    '    '   10/11/23 :  Création - GUD
+    '    '-------------------------------------------------------------------------------------------
+    '    '   Permet de renvoyer l'indice de la travée à laquelle appartient le noeud 
+    '    '   Dans le cas où le noeud appartient à deux travées, l'indice de la travée renvoyée est celle de gauche (sauf pour le tout premier noeud)
+    '    '-------------------------------------------------------------------------------------------
+
+    '    Dim indTravee(1) As Integer
+
+    '    For j As Integer = 0 To iNodeAppui.Count - 1 'On ne commence pas à l'indice 0 exprès car l'indice de la travée du premier noeud est 1
+    '        If Node <= iNodeAppui(j) Then
+    '            indTravee(0) = j + 1
+    '            If Node = iNodeAppui(j) And j <> iNodeAppui.Count - 1 Then
+    '                indTravee(1) = indTravee(0) + 1
+    '            Else
+    '                indTravee(1) = indTravee(0)
+    '            End If
+    '            Return indTravee
+    '        End If
+    '    Next
+
+    'End Function
 
 #End Region
 

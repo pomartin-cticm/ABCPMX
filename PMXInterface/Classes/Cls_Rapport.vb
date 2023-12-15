@@ -118,7 +118,8 @@ Public Class Cls_Rapport
     Public IndTitre(2) As Integer
     Public lNumTitre() As Boolean = {True, True, False}
 
-    Public DiagrammesNDC As New Cls_DiagrammeNDC 'indice du cas de charge à afficher (utile pour le dessin RDM dans la note de calcul)
+    'Pas de modifications de la classe sauf en drawdessin
+    'Public DiagrammesNDC As New Cls_DiagrammeNDC 'indice du cas de charge à afficher (utile pour le dessin RDM dans la note de calcul)
 
 #End Region
 
@@ -1208,7 +1209,6 @@ Public Class Cls_Rapport
 
                     DessinCourbeHivoss(MyProjet.Poutres(MyProjet.IndEnCours).Hivoss, MyGr, xLeftImg, YPen, sWiImg, sHiImg, MyDamp, MyFreq, MyMass, strDamp)
 
-
                 Case "CORRECT"
 
                     'sHiImg = sWiImg * Frm_NoteCalcul.Btn_Correct.Image.Height / Frm_NoteCalcul.Btn_Correct.Image.Width
@@ -1219,9 +1219,24 @@ Public Class Cls_Rapport
                     'sHiImg = sWiImg * Frm_NoteCalcul.Btn_Error.Image.Height / Frm_NoteCalcul.Btn_Error.Image.Width
                     'MyGr.DrawImage(Frm_NoteCalcul.Btn_Error.Image, xLeftImg, YPen, sWiImg, sHiImg)
 
-                Case "RDMCHARGESA"
+                Case "RDM_CHARGESA"
 
-                    DessineRDM(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), Me.DiagrammesNDC, Me.DiagrammesNDC.indCasDeChargeNDC, xLeftImg, YPen)
+                    Dim DiagrammesNDC As New Cls_DiagrammeNDC
+                    Dim indiceCdc As Integer
+
+                    With DiagrammesNDC
+                        .lDessCharges = False
+                        .lDessDeformee = False
+                        .lDessEffortT = True
+                        .lDessMoment = True
+                        .lDessInerties = False
+                        .lDessNumeros = False
+                    End With
+
+                    indiceCdc = CInt(TraiteReal(Mots(6)))
+
+                    'DessineRDM(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), DiagrammesNDC, Me.DiagrammesNDC.indCasDeChargeNDC, xLeftImg, YPen)
+                    DessineRDM(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), DiagrammesNDC, indiceCdc, xLeftImg, YPen)
 
 
             End Select
@@ -1237,62 +1252,62 @@ Public Class Cls_Rapport
 
     End Sub
 
-    Private Sub DrawDiagramme(ByRef MyGr As Graphics, ByVal Ligne As String,
-                           ByVal sWi As Single, ByVal sHI As Single)
-        '----------------------------------------------------------------------------------
-        '
-        '   13/12/23 :  Creation GUD - Version 1.00
-        '
-        '----------------------------------------------------------------------------------
-        '
-        '   Affichage des diagrammes d'un cas de charge d'un dessin dans le rapport (balise \DIA)
-        '
-        '----------------------------------------------------------------------------------
-        '
-        '   MyGr        [E] :   Graphics dans lequel on affiche
-        '   Ligne       [E] :   Chaine de caractères contenant les instructions du dessin
-        '   sWi, sHI    [E] :   Largeur et hauteur de l'objet recevant le dessin
-        '
-        '----------------------------------------------------------------------------------
+    'Private Sub DrawDiagramme(ByRef MyGr As Graphics, ByVal Ligne As String,
+    '                       ByVal sWi As Single, ByVal sHI As Single)
+    '    '----------------------------------------------------------------------------------
+    '    '
+    '    '   13/12/23 :  Creation GUD - Version 1.00
+    '    '
+    '    '----------------------------------------------------------------------------------
+    '    '
+    '    '   Affichage des diagrammes d'un cas de charge d'un dessin dans le rapport (balise \DIA)
+    '    '
+    '    '----------------------------------------------------------------------------------
+    '    '
+    '    '   MyGr        [E] :   Graphics dans lequel on affiche
+    '    '   Ligne       [E] :   Chaine de caractères contenant les instructions du dessin
+    '    '   sWi, sHI    [E] :   Largeur et hauteur de l'objet recevant le dessin
+    '    '
+    '    '----------------------------------------------------------------------------------
 
-        '--> Déclarations
+    '    '--> Déclarations
 
-        Dim Mots() As String = New String() {}
-        Dim nMots As Integer
-        Dim xLeftImg As Single
-        Dim sWiImg, sHiImg As Single
+    '    Dim Mots() As String = New String() {}
+    '    Dim nMots As Integer
+    '    Dim xLeftImg As Single
+    '    Dim sWiImg, sHiImg As Single
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        DecomposeLine(Ligne, SEPARATEURS_NDC, Mots, nMots)
+    '    DecomposeLine(Ligne, SEPARATEURS_NDC, Mots, nMots)
 
-        '--> Traitement
+    '    '--> Traitement
 
-        If nMots < 4 Then
-            'Gestion Erreur
+    '    If nMots < 4 Then
+    '        'Gestion Erreur
 
-        Else
-            Me.DiagrammesNDC.indCasDeChargeNDC = CInt(Mots(2))
-            xLeftImg = CSng(Mots(3)) * kECH * sWi / 100
-            sWiImg = CSng(Mots(4)) * kECH * sWi / 100
-            sHiImg = CSng(Mots(5)) * kECH * sWi / 100 * RAPPORTA4
+    '    Else
+    '        Me.DiagrammesNDC.indCasDeChargeNDC = CInt(Mots(2))
+    '        xLeftImg = CSng(Mots(3)) * kECH * sWi / 100
+    '        sWiImg = CSng(Mots(4)) * kECH * sWi / 100
+    '        sHiImg = CSng(Mots(5)) * kECH * sWi / 100 * RAPPORTA4
 
-            Select Case Mots(1).ToUpper
+    '        Select Case Mots(1).ToUpper
 
-                Case "RDM_CHARGESA"
-                    DessineRDM(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), Me.DiagrammesNDC, Me.DiagrammesNDC.indCasDeChargeNDC, xLeftImg, YPen)
-            End Select
+    '            Case "RDM_CHARGESA"
+    '                DessineRDM(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), Me.DiagrammesNDC, Me.DiagrammesNDC.indCasDeChargeNDC, xLeftImg, YPen)
+    '        End Select
 
-            If nMots > 5 Then
-                If Mots(6).ToUpper.Substring(0, 4) = "CADR" Then
-                    MyGr.DrawRectangle(Pens.Black, xLeftImg, YPen, sWiImg, sHiImg)
-                End If
-            End If
-            YPen += sHiImg
+    '        If nMots > 5 Then
+    '            If Mots(6).ToUpper.Substring(0, 4) = "CADR" Then
+    '                MyGr.DrawRectangle(Pens.Black, xLeftImg, YPen, sWiImg, sHiImg)
+    '            End If
+    '        End If
+    '        YPen += sHiImg
 
-        End If
+    '    End If
 
-    End Sub
+    'End Sub
 
     Private Sub DrawTableau(ByVal ChainePos As String, ByRef MyGr As Graphics,
                             ByVal sWi As Single)
@@ -1754,9 +1769,9 @@ Public Class Cls_Rapport
                 Case "IMG"                          'Affichage d'un dessin
                     lSuite = False
                     Me.DrawDessin(MyGr, Ligne.Substring(4), sWi, sHI)
-                Case "DIA" 'Ajout GUD pour l'affichage des diagrammes 
-                    Me.DrawDiagramme(MyGr, Ligne.Substring(4), sWi, sHI)
-                    lSuite = False
+                'Case "DIA" 'Ajout GUD pour l'affichage des diagrammes 
+                '    Me.DrawDiagramme(MyGr, Ligne.Substring(4), sWi, sHI)
+                '    lSuite = False
                 Case "IMF"                          'Affichage d'un dessin à une position forcée
                     lSuite = False                  'sur la dernière balise
                     Dim YPenBack As Single = YPen

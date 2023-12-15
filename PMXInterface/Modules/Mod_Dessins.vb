@@ -6355,7 +6355,7 @@ Public Module Mod_Dessins
     '                      iCas As Integer, lDef As Boolean, lMom As Boolean, lTranchant As Boolean, lNum As Boolean, lInertie As Boolean,
     '                      lChargement As Boolean, lEchLocal As Boolean, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
     Public Sub DessineRDM(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
-                           DiagrammesNDC As Cls_DiagrammeNDC, Optional iCas As Integer = -1, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+                          DiagrammesNDC As Cls_DiagrammeNDC, Optional iCas As Integer = -1, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   11/08/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
