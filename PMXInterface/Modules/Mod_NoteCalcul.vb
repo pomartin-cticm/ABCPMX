@@ -83,6 +83,7 @@ Module Mod_NoteCalcul
     Private ReadOnly IndFigure As Integer = 0
     Private nbLignes As Decimal = 0
     Private Const MAXLIGNEPPAG As Integer = 56
+    Private Const EquivalenceLigneTableau As Decimal = 1.2
 
     Private lChapitreOutOfScope As Boolean = False
 
@@ -2180,8 +2181,8 @@ Module Mod_NoteCalcul
                         .lDessNumeros = False
                     End With
                     If nbLignes + 20 > MAXLIGNEPPAG Then SautePage()
-                    AddLigneNDC("\DIA RDM_CHARGESA " & i & " 10 80 30 NoCadre")
-                    'SautePage()
+                    AddLigneNDC("\DIA RDM_CHARGESA " & CStr(i) & " 10 80 30 NoCadre")
+                    nbLignes += 20
                 End If
             Next
         End If
@@ -2248,7 +2249,7 @@ Module Mod_NoteCalcul
         Dim lDalle As Boolean
         Dim pBordures As Integer = Bordures.Gauche + Bordures.Droite
         Dim lAffiche() As Boolean = Nothing
-        Dim iLastCase, iCas As Integer
+        Dim iLastCase, iCas, nbCas As Integer
         Dim lNoteConfig As Boolean = False
         Dim SymbolConfig() As String = {"Q1#1", "Q1#2", "Q1#3", "Q2#1", "Q2#2", "Q2#3"}
 
@@ -2261,10 +2262,14 @@ Module Mod_NoteCalcul
         Else
             NCOL = 1
         End If
+        nbCas = 0
         ReDim lAffiche(myPoutre.ChargesA.Count - 1)
         For iCas = 0 To myPoutre.ChargesA.Count - 1
             lAffiche(iCas) = myPoutre.ChargesA(iCas).EstNonNul(iDebTrav, iFinTrav)
-            If lAffiche(iCas) Then iLastCase = iCas
+            If lAffiche(iCas) Then
+                iLastCase = iCas
+                nbCas += 1
+            End If
         Next
 
         '--> Traitement
@@ -2273,11 +2278,11 @@ Module Mod_NoteCalcul
 
         '# Entête
 
-        AddLigneNDC("\TABLEAU 10")
+        AddLigneNDC("\TABLEAU 10", False)
 
         '--> Entete
 
-        InitialiseLigne(NCOL, HLIGNE)
+        InitialiseLigneTableau(NCOL, HLIGNE)
 
         AddCelluleFond(pLC(0), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocAnalyse("LOADCASES"))
         If lMixte Or lEnrob Then
@@ -2290,7 +2295,7 @@ Module Mod_NoteCalcul
             AddCelluleFond(pLC(3), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
         End If
 
-        InitialiseLigne(NCOL, HLIGNE)
+        InitialiseLigneTableau(NCOL, HLIGNE)
 
         AddCelluleFond(pLC(0), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
         If lMixte Or lEnrob Then
@@ -2308,7 +2313,7 @@ Module Mod_NoteCalcul
         For iCas = 0 To myPoutre.ChargesA.Count - 1
 
             If lAffiche(iCas) Then
-                InitialiseLigne(NCOL, HLIGNE)
+                InitialiseLigneTableau(NCOL, HLIGNE)
 
                 If iCas = iLastCase Then pBordures += Bordures.Bas
 
@@ -2365,6 +2370,10 @@ Module Mod_NoteCalcul
         Next
 
         FinTableau()
+
+        'nbLignes += (2 + nbCas) * EquivalenceLigneTableau
+
+        Dim a As Decimal = nbLignes
 
         '--> Note sur les configurations
 
@@ -2477,8 +2486,8 @@ Module Mod_NoteCalcul
         Dim iNodeO, iNodeE As Integer
         Dim iTravDeb, iTravFin As Integer
         Dim iTraveeAffichee As Integer = 1
-        Dim iCompteur As Integer = 0
-        Dim NbLignesMax() As Integer = {25, 30}
+        'Dim iCompteur As Integer = 0
+        'Dim NbLignesMax() As Integer = {25, 30}
         Dim iTab As Integer = 0
 
         '--> Initialisation
@@ -2504,25 +2513,30 @@ Module Mod_NoteCalcul
             If iTravee = iTravDeb Then
                 LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, i, iTraveeAffichee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
                                              VEd(0, 1), MEd(0, 1))
-                iCompteur += 1
+                'iCompteur += 1
+
             End If
 
             '=== Lignes intermédiaires
 
             For i = iNodeO + 1 To iNodeE - 1
 
-                iCompteur += 1
+                'iCompteur += 1
+                'nbLignes += 1 * EquivalenceLigneTableau
 
-                If iCompteur > NbLignesMax(iTab) Then
+                'If iCompteur > NbLignesMax(iTab) Then
+                If nbLignes > MAXLIGNEPPAG Then
                     FinTableau()
-                    iCompteur = 0
+                    'iCompteur = 0
                     iTab = 1
                     SautePage()
                     EnteteTableauAnalyseCombi(lMultispan, NCol, PosTab)
+
                 End If
 
                 LigneTableauMVCombi(lMultispan, NCol, PosTab, i, iTraveeAffichee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
                                         VEd(i, 0), VEd(i, 1), MEd(i, 0), MEd(i, 1))
+
             Next
 
             '=== Appui droite
@@ -2534,7 +2548,7 @@ Module Mod_NoteCalcul
                 LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTraveeAffichee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
                                          VEd(i, 0), VEd(i, 1), MEd(i, 0), MEd(i, 1))
             End If
-            iCompteur += 1
+            'iCompteur += 1
             iTraveeAffichee += 1
         Next
 
@@ -2633,7 +2647,7 @@ Module Mod_NoteCalcul
         '   MEd         [E] :   Valeur du moment fléchissant
         '-------------------------------------------------------------------------------------------
 
-        InitialiseLigne(NCol, HLIGNE, True)
+        InitialiseLigneTableau(NCol, HLIGNE)
 
         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
 
@@ -2703,7 +2717,7 @@ Module Mod_NoteCalcul
         If Not lOneM Then pNColLigne += 1
         If Not lOneV Then pNColLigne += 1
 
-        InitialiseLigne(pNColLigne, HLIGNE, True)
+        InitialiseLigneTableau(pNColLigne, HLIGNE)
 
         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
 
@@ -2768,7 +2782,7 @@ Module Mod_NoteCalcul
         If Not lOneM Then pNColLigne += 1
         If Not lOneV Then pNColLigne += 1
 
-        InitialiseLigne(pNColLigne, HLIGNE, True)
+        InitialiseLigneTableau(pNColLigne, HLIGNE)
 
         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
 
@@ -2831,9 +2845,10 @@ Module Mod_NoteCalcul
             Pos = 20
         End If
 
-        AddLigneNDC("\TABLEAU " & CStr(Pos))
+        AddLigneNDC("\TABLEAU " & CStr(Pos), False)
 
-        InitialiseLigne(NCol, HLIGNEENTETE, True)
+        InitialiseLigneTableau(NCol, HLIGNEENTETE)
+
         AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("NODE"))
         If lMultiSpan Then
             AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("SPAN"))
@@ -2937,14 +2952,15 @@ Module Mod_NoteCalcul
 
         Dim lRetrait As Boolean = True
         Dim lMultispan As Boolean
-        Dim NCol, PosTab As Integer
-        Dim iTravee, i As Integer
-        Dim iNodeO, iNodeE As Integer
+        'Dim NCol, PosTab As Integer
+        'Dim iTravee, i As Integer
+        'Dim iNodeO, iNodeE As Integer
         Dim iTravDeb, iTravFin As Integer
         Dim iTraveeAffichee As Integer = 1
         Dim iCompteur As Integer = 0
         Dim NbLignesMax() As Integer = {25, 30}
         Dim iTab As Integer = 0
+        Const NbLignesReq As Integer = 10
 
         '--> Initialisation
 
@@ -2952,7 +2968,9 @@ Module Mod_NoteCalcul
         iTravDeb = MyPoutreLoc.IndicePremiereTravee
         iTravFin = MyPoutreLoc.IndiceDerniereTravee
 
-        '--> Affichage de la combinaison
+        If nbLignes + NbLignesReq > MAXLIGNEPPAG Then SautePage()
+
+        '--> Affichage du cas de charge
 
         AddTitreNdC(3, ChargeA.Symbol & " : " & ChargeA.Nom)
 
@@ -2961,61 +2979,14 @@ Module Mod_NoteCalcul
             Exit Sub
         End If
 
-        '--> Affichage de la combinaison
+        '--> Affichage des réactions
 
-        '# Entête
 
-        EnteteTableauAnalyseCombi(lMultispan, NCol, PosTab)
 
-        '# Tableau
+        '--> Affichage du tableau des sollicitations
 
-        For iTravee = iTravDeb To iTravFin
-            iNodeO = MyPoutreLoc.Nodes.iNodeExtTrav(iTravee, 0)
-            iNodeE = MyPoutreLoc.Nodes.iNodeExtTrav(iTravee, 1)
+        EditionTableauEfforts(MyPoutreLoc, ChargeA.MYY, ChargeA.VZ)
 
-            '=== Extrémité gauche
-
-            If iTravee = iTravDeb Then
-                LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, i, iTraveeAffichee, MyPoutreLoc.Nodes.xTravee(i), MyPoutreLoc.Nodes.xGlobal(i),
-                                            ChargeA.VZ(0, 1), ChargeA.MYY(0, 1))
-                iCompteur += 1
-            End If
-
-            '=== Lignes intermédiaires
-
-            For i = iNodeO + 1 To iNodeE - 1
-
-                iCompteur += 1
-
-                If iCompteur > NbLignesMax(iTab) Then
-                    FinTableau()
-                    iCompteur = 0
-                    iTab = 1
-                    SautePage()
-                    EnteteTableauAnalyseCombi(lMultispan, NCol, PosTab)
-                End If
-
-                LigneTableauMVCombi(lMultispan, NCol, PosTab, i, iTraveeAffichee, MyPoutreLoc.Nodes.xTravee(i), MyPoutreLoc.Nodes.xGlobal(i),
-                                        ChargeA.VZ(i, 0), ChargeA.VZ(i, 1), ChargeA.MYY(i, 0), ChargeA.MYY(i, 1))
-
-            Next
-
-            '=== Appui droite
-
-            If iTravee = iTravFin Then
-                LigneTableauMVCombiExtremite(lMultispan, False, NCol, PosTab, iNodeE, iTraveeAffichee, MyPoutreLoc.Nodes.xTravee(iNodeE), MyPoutreLoc.Nodes.xGlobal(iNodeE),
-                                             ChargeA.VZ(iNodeE, 0), ChargeA.MYY(iNodeE, 0))
-            Else
-                LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTraveeAffichee, MyPoutreLoc.Nodes.xTravee(i), MyPoutreLoc.Nodes.xGlobal(i),
-                                         ChargeA.VZ(i, 0), ChargeA.VZ(i, 1), ChargeA.MYY(i, 0), ChargeA.MYY(i, 1))
-            End If
-            iCompteur += 1
-            iTraveeAffichee += 1
-        Next
-
-        '# Fin du Tableau
-
-        FinTableau()
     End Sub
 
     Private Function IndiceTravee(Node As Integer, iNodeAppui As Integer()) As Integer()
@@ -4356,6 +4327,14 @@ Module Mod_NoteCalcul
             SautePage()
             AddLigneNDC(texteTableau, False)    'début tableau de la page N+1
         End If
+
+        MyNote.AddLigneInRapport("LTAB " & NombreCellules.ToString & " " & hLigne.ToString)
+
+        nbLignes += hLigne - 0.2 'ajustement des lignes
+
+    End Sub
+
+    Private Sub InitialiseLigneTableau(ByVal NombreCellules As Integer, ByVal hLigne As Single)
 
         MyNote.AddLigneInRapport("LTAB " & NombreCellules.ToString & " " & hLigne.ToString)
 
