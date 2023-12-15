@@ -305,6 +305,10 @@ CONFIGURATION1			= Configuration 1 : Live loads applied on all spans
 CONFIGURATION2			= Configuration 2 : Live loads applied on central span
 CONFIGURATION3			= Configuration 3 : Live loads applied on cantilever spans
 NOTFOUND				= Load case not found - Contact support
+REACTIONS				= Reactions at supports
+REACTIONSPROPS			= Reactions at intermediate props
+REACTIONPROPL			= Reaction at left cantilever prop
+REACTIONPROPR			= Reaction at right cantilever prop
 
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= Ultimate Limit States

@@ -1842,7 +1842,7 @@ Module Mod_NoteCalcul
 
         InertieT = MySection.InertieTorsionProfileEnrobe(NEq)
 
-        InitialiseLigne(NCOL, HLIGNE, True)
+        InitialiseLigneTableau(NCOL, HLIGNE)
 
         AddCellule(pLC1, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(NEq, Enu_TypeVariable.SansType, 3, 2, False))
         AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieY, Enu_TypeVariable.InertieCM4, 4, 0, False))
@@ -1873,8 +1873,8 @@ Module Mod_NoteCalcul
 
         '--> Entête
 
-        AddLigneNDC("\TABLEAU 20")
-        InitialiseLigne(NCOL, HLIGNEENTETE, True)
+        AddLigneNDC("\TABLEAU 20", False)
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
 
         AddCelluleFond(pLC1, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-el,y\=")
@@ -1885,7 +1885,7 @@ Module Mod_NoteCalcul
         End If
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "M\-el,Rd\=")
 
-        InitialiseLigne(NCOL, HLIGNEENTETE, True)
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
 
         AddCelluleFond(pLC1, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
@@ -2939,10 +2939,6 @@ Module Mod_NoteCalcul
 
         '--> Déclarations
 
-        'Dim lRetrait As Boolean = True
-        'Dim lMultispan As Boolean
-
-        'Dim iTravDeb, iTravFin As Integer
         Dim iTraveeAffichee As Integer = 1
         Dim iCompteur As Integer = 0
         Dim NbLignesMax() As Integer = {25, 30}
@@ -2950,10 +2946,6 @@ Module Mod_NoteCalcul
         Const NbLignesReq As Integer = 10
 
         '--> Initialisation
-
-        'lMultispan = (MyPoutreLoc.NbTravees > 1)
-        'iTravDeb = MyPoutreLoc.IndicePremiereTravee
-        'iTravFin = MyPoutreLoc.IndiceDerniereTravee
 
         If nbLignes + NbLignesReq > MAXLIGNEPPAG Then SautePage()
 
@@ -2968,7 +2960,7 @@ Module Mod_NoteCalcul
 
         '--> Affichage des réactions
 
-
+        EditionChargeAReactions(MyPoutreLoc, ChargeA)
 
         '--> Affichage du tableau des sollicitations
 
@@ -2976,7 +2968,69 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionChargeAReactions()
+    Private Sub EditionChargeAReactions(MyBeam As cls_Poutre, ChargeA As cls_CasDeCharge)
+        '-------------------------------------------------------------------------------------------
+        '   15/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des réactions dans la poutre après analyse pour un cas de charge
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim symbAppui() As String = {"A", "B", "C"}
+        Dim iRApp() As Integer
+        Dim lEtais As Boolean = (ChargeA.Symbol = cls_Poutre.symbG1PP)
+        Dim strDebutLigne As String = ""
+
+        '--> Initialisation
+
+        ReDim iRApp(MyBeam.Nodes.NbAppuis - 1)
+
+        If lEtais Then
+            If MyBeam.lEtaisConsoleGauche Then
+                iRApp(0) = 1
+            Else
+                iRApp(0) = 0
+            End If
+            If MyBeam.lEtaisConsoleDroite Then
+                iRApp(1) = ChargeA.RZ.GetUpperBound(0) - 1
+            Else
+                iRApp(1) = ChargeA.RZ.GetUpperBound(0)
+            End If
+        Else
+            iRApp = {0, 1}
+        End If
+
+        '--> Traitement
+
+        AddLigneNDC(TABW2 & BlocAnalyse("REACTIONS") & TABAFF & "R\-" & symbAppui(0) & "\=" & TABEGAL & GetStringInUnit(ChargeA.RZ(iRApp(0)), Enu_TypeVariable.Effort, 3, 1, True))
+        For iNode As Integer = 1 To MyBeam.Nodes.NbAppuis - 1
+            AddLigneNDC(TABAFF & "R\-" & symbAppui(iNode) & "\=" & TABEGAL & GetStringInUnit(ChargeA.RZ(iRApp(iNode)), Enu_TypeVariable.Effort, 3, 1, True))
+        Next
+
+        If lEtais Then
+            If MyBeam.lEtaisConsoleGauche Then
+                AddLigneNDC(TABW2 & BlocAnalyse("REACTIONPROPL") & TABAFF & "R\-g\=" & TABEGAL & GetStringInUnit(ChargeA.RZ(0), Enu_TypeVariable.Effort, 3, 1, True))
+
+            End If
+
+            For iEtais As Integer = 0 To MyBeam.NbEtaiement - 1
+                If iEtais = 0 Then
+                    strDebutLigne = TABW2 & BlocAnalyse("REACTIONSPROPS")
+                Else
+                    strDebutLigne = ""
+                End If
+                AddLigneNDC(strDebutLigne & TABAFF & "R\-p" & CStr(iEtais + 1) & "\=" & TABEGAL & GetStringInUnit(ChargeA.RZ(iEtais + iRApp(0) + 1), Enu_TypeVariable.Effort, 3, 1, True))
+            Next
+
+            If MyBeam.lEtaisConsoleGauche Then
+                AddLigneNDC(TABW2 & BlocAnalyse("REACTIONPROPR") & TABAFF & "R\-d\=" & TABEGAL & GetStringInUnit(ChargeA.RZ(ChargeA.RZ.GetUpperBound(0)), Enu_TypeVariable.Effort, 3, 1, True))
+
+            End If
+
+        End If
+
+        SauteLigne()
 
     End Sub
 

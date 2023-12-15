@@ -1231,6 +1231,7 @@ Public Class Cls_Rapport
                         .lDessMoment = True
                         .lDessInerties = False
                         .lDessNumeros = False
+                        .lDessEchLocal = True
                     End With
 
                     indiceCdc = CInt(TraiteReal(Mots(6)))

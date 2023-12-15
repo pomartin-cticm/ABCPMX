@@ -384,7 +384,7 @@ Public Class cls_Poutre
 
     Public ChargesA As New List(Of cls_CasDeCharge)
 
-    Const symbG1PP As String = "G1pp"
+    Public Const symbG1PP As String = "G1pp"
     Const symbG1C As String = "G1c"
     Const symbG1 As String = "G1"
     Const symbG2 As String = "G2"
