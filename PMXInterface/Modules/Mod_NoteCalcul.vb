@@ -1,5 +1,6 @@
 ﻿Imports System.Collections.Specialized.BitVector32
 Imports System.Reflection
+Imports System.Reflection.Emit
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports PMXMoteur2
@@ -11,6 +12,7 @@ Module Mod_NoteCalcul
     '--> Tabulation
     Private Const TABW1 As String = "\TW1"
     Private Const TABW2 As String = "\TW2"
+    Private Const TABW3 As String = "\TW3"
 
 
     Private Const TABVAR As String = "\T10"
@@ -2154,6 +2156,10 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(1, BlocAnalyse("ANALYSIS"))
 
+        '--> Listes de cas de charges
+
+        EditionListeCdCdansAnalyse(MyBeam)
+
         '--> Analyses par cas de charge
 
         If OptionsNdC.lDispFMLoadCase Then
@@ -2217,13 +2223,214 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionListeCdCdansAnalyse(myPoutre As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition la liste des cas de charges dans l'analyse de la poutre
+        '   qui diffère des cas de charge définis par l'utilisateur
+        '-------------------------------------------------------------------------------------------
+        '   myPoutre    [E] :   Poutre
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pLC() As Single = {40, 20, 12, 12}
+        Dim NCOL As Integer
+        Dim lMixte As Boolean = myPoutre.lMixte
+        Dim lEnrob As Boolean = myPoutre.lEnrobage
+        Dim iDebTrav As Integer = myPoutre.IndicePremiereTravee
+        Dim iFinTrav As Integer = myPoutre.IndiceDerniereTravee
+        Dim Phase As String = ""
+        Dim Titre As String = ""
+        Dim iTab As Integer
+        Dim lDalle As Boolean
+        Dim pBordures As Integer = Bordures.Gauche + Bordures.Droite
+        Dim lAffiche() As Boolean = Nothing
+        Dim iLastCase, iCas As Integer
+        Dim lNoteConfig As Boolean = False
+        Dim SymbolConfig() As String = {"Q1#1", "Q1#2", "Q1#3", "Q2#1", "Q2#2", "Q2#3"}
+
+        '--> Initialisation
+
+        If lMixte And lEnrob Then
+            NCOL = 4
+        ElseIf lMixte Or lEnrob Then
+            NCOL = 3
+        Else
+            NCOL = 1
+        End If
+        ReDim lAffiche(myPoutre.ChargesA.Count - 1)
+        For iCas = 0 To myPoutre.ChargesA.Count - 1
+            lAffiche(iCas) = myPoutre.ChargesA(iCas).EstNonNul(iDebTrav, iFinTrav)
+            If lAffiche(iCas) Then iLastCase = iCas
+        Next
+
+        '--> Traitement
+
+        AddTitreNdC(2, BlocAnalyse("LOADCASELIST"))
+
+        '# Entête
+
+        AddLigneNDC("\TABLEAU 10")
+
+        '--> Entete
+
+        InitialiseLigne(NCOL, HLIGNE)
+
+        AddCelluleFond(pLC(0), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocAnalyse("LOADCASES"))
+        If lMixte Or lEnrob Then
+            AddCelluleFond(pLC(1), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocAnalyse("PHASE"))
+        End If
+        If lMixte Then
+            AddCelluleFond(pLC(2), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
+        End If
+        If lEnrob Then
+            AddCelluleFond(pLC(3), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
+        End If
+
+        InitialiseLigne(NCOL, HLIGNE)
+
+        AddCelluleFond(pLC(0), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        If lMixte Or lEnrob Then
+            AddCelluleFond(pLC(1), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+        End If
+        If lMixte Then
+            AddCelluleFond(pLC(2), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, BlocAnalyse("SLAB"))
+        End If
+        If lEnrob Then
+            AddCelluleFond(pLC(3), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, BlocAnalyse("ENCASEMENT"))
+        End If
+
+        '--> Boucles sur les cas de charges
+
+        For iCas = 0 To myPoutre.ChargesA.Count - 1
+
+            If lAffiche(iCas) Then
+                InitialiseLigne(NCOL, HLIGNE)
+
+                If iCas = iLastCase Then pBordures += Bordures.Bas
+
+                '# Titre du cas de charge
+
+                Titre = GetTitreFromSymbole(myPoutre.ChargesA(iCas).Symbol)
+                AddCellule(pLC(0), pBordures, PositionTexteInCell.Gauche, myPoutre.ChargesA(iCas).Symbol & " " & Titre)
+
+                If SymbolConfig.Contains(myPoutre.ChargesA(iCas).Symbol) Then lNoteConfig = True
+
+                '# Phase
+
+                iTab = myPoutre.ChargesA(iCas).IndElts
+
+                    If lMixte Or lEnrob Then
+
+                        If lMixte Then
+                            If myPoutre.Elements(iTab).lMixte Then
+                                Phase = BlocAnalyse("COMPOSITE")
+                                lDalle = True
+                            Else
+                                lDalle = False
+                                If lEnrob Then
+                                    Phase = BlocAnalyse("STEELENCASED")
+                                Else
+                                    Phase = BlocAnalyse("STEELONLY")
+                                End If
+                            End If
+                        Else
+                            Phase = BlocAnalyse("STEELENCASED")
+                        End If
+
+                        AddCellule(pLC(1), pBordures, PositionTexteInCell.Gauche, Phase)
+                    End If
+
+                    '# Coefficient d'équivalence dalle
+
+                    If lMixte Then
+                        If lDalle Then
+                            AddCellule(pLC(2), pBordures, PositionTexteInCell.Gauche, GetStringInUnit(myPoutre.Elements(iTab).nEqDalle, Enu_TypeVariable.SansType, 3, 2, False))
+                        Else
+                            AddCellule(pLC(2), pBordures, PositionTexteInCell.Gauche, "-")
+                        End If
+                    End If
+
+                    '# Coefficient d'équivalence enrobage
+
+                    If lEnrob Then
+                        AddCellule(pLC(3), pBordures, PositionTexteInCell.Gauche, GetStringInUnit(myPoutre.Elements(iTab).nEqEnrob, Enu_TypeVariable.SansType, 3, 2, False))
+                    End If
+
+                End If
+
+        Next
+
+        FinTableau()
+
+        '--> Note sur les configurations
+
+        Dim strFormatNoteFin As String = "\i"
+        Dim strFormatNote As String = "\I"
+        Dim strPuce As String = "- "
+
+        If lNoteConfig Then
+            AddLigneNDC(TABW2 & strFormatNote & BlocAnalyse("NOTES"))
+            AddLigneNDC(TABW3 & strPuce & BlocAnalyse("CONFIGURATION1"))
+            AddLigneNDC(TABW3 & strPuce & BlocAnalyse("CONFIGURATION2"))
+            AddLigneNDC(TABW3 & strPuce & BlocAnalyse("CONFIGURATION3") & strFormatNoteFin)
+        End If
+
+    End Sub
+
+    Private Function GetTitreFromSymbole(Symbol As String) As String
+        '-------------------------------------------------------------------------------------------
+        '   15/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Renvoie le titre du cas de charge en fonction de son abbréviation
+        '-------------------------------------------------------------------------------------------
+        '   Symbol      [E] :   Abbréviation du cas de charge
+        '-------------------------------------------------------------------------------------------
+
+        Dim pTitre As String = BlocAnalyse("NOTFOUND")
+        Dim Config As String
+
+        Select Case Symbol.ToUpper
+            Case "G"
+                pTitre = BlocAnalyse("PERMANENTL")
+            Case "G1"
+                pTitre = BlocAnalyse("SELFW")
+            Case "G2"
+                pTitre = BlocAnalyse("OTHERPERMANENTL")
+            Case "G1PP"
+                pTitre = BlocAnalyse("SELFWWITHPROPPS")
+            Case "G1C"
+                pTitre = BlocAnalyse("SELFWWITHOUTPROPPS")
+            Case "Q1", "Q2"
+                pTitre = BlocAnalyse("LIVEL") & " " & Symbol
+            Case "SHC"
+                pTitre = BlocAnalyse("SHRINKAGEL")
+            Case "QC"
+                pTitre = BlocAnalyse("CONSTRUCTIONL")
+            Case "Q1#1", "Q1#2", "Q1#3"
+                Config = Symbol.Substring(3, 1)
+                pTitre = BlocAnalyse("LIVEL") & " Q1 - " & BlocAnalyse("CONFIGURATION") & Config
+            Case "Q2#1", "Q2#2", "Q2#3"
+                Config = Symbol.Substring(3, 1)
+                pTitre = BlocAnalyse("LIVEL") & " Q2 - " & BlocAnalyse("CONFIGURATION") & Config
+
+        End Select
+
+
+        Return pTitre
+
+    End Function
+
+
     Private Sub EditionAnalyseCombiELU(myPoutre As cls_Poutre, iCombi As Integer)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Edition des efforts dans la poutre après analyse pour une combinaison
         '-------------------------------------------------------------------------------------------
-        '   myPoutre    [E] :   Indice de la poutre
+        '   myPoutre    [E] :   Poutre
         '   iCombi      [E] :   Indice de la combinaison ELU
         '-------------------------------------------------------------------------------------------
 
