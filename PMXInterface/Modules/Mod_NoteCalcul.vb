@@ -1711,7 +1711,7 @@ Module Mod_NoteCalcul
         '--> Traitement
 
         If lMixte Then
-            EditionProprietesSectionPoutreMixte(MyBeam)
+            EditionProprietesSectionPoutreMixteN(MyBeam)
         ElseIf lEnrob Then
             EditionProprietesSectionAcierEnrobee(MyBeam)
         End If
@@ -1729,10 +1729,7 @@ Module Mod_NoteCalcul
 
         Dim NeqEnrob As List(Of Decimal) = Nothing
         Dim NCOL As Integer = 6
-        'Const pLC1 As Single = 8
-        'Const pLC2 As Single = 10
-        'Dim zANE, InertieY, MelRd As Decimal
-        'Dim InertieT, InertieZ As Decimal
+
         Dim zANP, MplRd As Decimal
         Dim zANPk, MplRk As Decimal
         Dim strFormatNoteFin As String = "\i"
@@ -1752,7 +1749,6 @@ Module Mod_NoteCalcul
 
         AddLigneNDC(TABW2 & strFormatNote & BlocSP("NOTES") & ":" & strFormatNoteFin)
         AddLigneNDC(TABW2 & strFormatNote & BlocSP("NOTE_LOCATIONZ") & strFormatNoteFin)
-        AddLigneNDC(TABW2 & strFormatNote & "ZZZ Ajouter les armatures transversales dans le calcul" & strFormatNoteFin)
 
         AddTitreNdC(3, BlocSP("POSITIVEB"))
 
@@ -1897,6 +1893,330 @@ Module Mod_NoteCalcul
         AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment))
 
     End Sub
+
+    Private Sub EditionProprietesSectionPoutreMixteN(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   15/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections pour une poutre mixte
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lDalle() As Boolean = Nothing
+        Dim NeqDalle() As Decimal = Nothing
+        Dim NeqEnrob() As Decimal = Nothing
+        Dim strFormatNoteFin As String = "\i"
+        Dim strFormatNote As String = "\I"
+        Dim lMultiSpan As Boolean = MyBeam.lMultiSpan
+        Dim lEnrob As Boolean = MyBeam.lEnrobage
+        Dim bEff As Decimal
+        Dim zANP, MplRd As Decimal
+        Dim zANPk, MplRk As Decimal
+
+        '--> Récupération des coeff d'équivalence et état de la dalle
+
+        MyBeam.ExtraireListeNeqDalleEnrobage(lDalle, NeqDalle, NeqEnrob)
+
+        '--> Propriétés élastiques
+
+        AddLigneNDC(TABW1 & strFormatNote & BlocSP("NOTES") & ":" & strFormatNoteFin)
+        AddLigneNDC(TABW1 & strFormatNote & BlocSP("NOTE_LOCATIONZSLAB") & strFormatNoteFin)
+
+        '--> Propriétés à mi travée principale
+
+        If lMultiSpan Then
+            AddTitreNdC(2, BlocSP("PROPERTIESMIDSPANMAIN"))
+        Else
+            AddTitreNdC(2, BlocSP("PROPERTIESMIDSPAN"))
+        End If
+
+        '# Largeur efficace
+
+        bEff = MyBeam.BeffDalle(MyBeam.LongueurTravee(1) / 2, 1, OptionsCalcul.lLargeurEfficaceSimplifiee, False)
+        AddLigneNDC(TABW2 & BlocSP("EFFECTIVEW") & TABAFF & "b\-eff\=" & TABEGAL & GetStringInUnit(bEff, Enu_TypeVariable.Longueur, 3, 2, True))
+
+        '# Propriétés élastiques
+
+        AddTitreNdC(3, BlocSP("EPROPERTIES"))
+
+        EditionProprietesElastiquesSectionMixtePositiveB(MyBeam, bEff, lDalle.GetUpperBound(0) + 1, lDalle, NeqDalle, NeqEnrob)
+
+        '# Propriétés plastiques
+
+        AddTitreNdC(3, BlocSP("PPROPERTIES"))
+
+        MyBeam.Section.ProprietesPlastiquesMixteMyy(1, True, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANP, MplRd)
+        MyBeam.Section.ProprietesPlastiquesMixteMyy(1, False, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANPk, MplRk)
+
+        AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnit(MplRk, Enu_TypeVariable.Moment, 4, 0, True))
+
+        '--> Propriétés console gauche
+
+        If MyBeam.lTraveeConsoleGauche Then
+
+            AddTitreNdC(2, BlocSP("PROPERTIESLCANTILEVER"))
+
+            EditionProprietesElastiquesSectionConsoleMixte(MyBeam, True, lDalle.GetUpperBound(0), lDalle, NeqEnrob)
+
+        End If
+
+        '--> Propriétés console droite
+
+        If MyBeam.lTraveeConsoleDroite Then
+
+            AddTitreNdC(2, BlocSP("PROPERTIESRCANTILEVER"))
+
+            EditionProprietesElastiquesSectionConsoleMixte(MyBeam, False, lDalle.GetUpperBound(0), lDalle, NeqEnrob)
+
+        End If
+
+
+    End Sub
+
+    Private Sub EditionProprietesElastiquesSectionConsoleMixte(MyBeam As cls_Poutre, lGauche As Boolean, nbTab As Integer,
+                                                               lDalle() As Boolean, NeqEnrob() As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   15/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections pour une poutre mixte
+        '   Edition pour une console en M<0
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre
+        '   lGauche     [E] :   Indique si travée gauche ou droite
+        '   lConstruction[E] :  Indique s'il y a une phase de contruction sans dalle
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim bEff As Decimal
+        Dim iTravee As Integer
+        Dim lConstruction As Boolean = lDalle.Contains(False)
+        Dim lEnrob As Boolean = MyBeam.lEnrobage
+        Dim zANE, InertieY, MelRd As Decimal
+        Dim strDebut As String = ""
+        Dim zANP, MplRd As Decimal
+
+        '# Largeur efficace
+
+        If lGauche Then
+            iTravee = 0
+            bEff = MyBeam.BeffDalle(MyBeam.LongueurTravee(iTravee), iTravee, OptionsCalcul.lLargeurEfficaceSimplifiee, False)
+        Else
+            iTravee = MyBeam.IndiceDerniereTravee
+            bEff = MyBeam.BeffDalle(0, iTravee, OptionsCalcul.lLargeurEfficaceSimplifiee, False)
+        End If
+
+        AddLigneNDC(TABW2 & BlocSP("EFFECTIVEW") & TABAFF & "b\-eff\=" & TABEGAL & GetStringInUnit(bEff, Enu_TypeVariable.Longueur, 3, 2, True))
+
+        '# Propriétés élastiques
+
+        AddTitreNdC(3, BlocSP("EPROPERTIES"))
+
+        '--- Si section avec enrobage, on dépend encore des coefficients d'équivalence
+
+        If lEnrob Then
+            EditionProprietesElastiquesSectionConsoleMixteEnrobage(MyBeam, bEff, nbTab, lDalle, NeqEnrob)
+        Else
+            '--- En phase de construction
+
+            If lConstruction Then
+
+                MyBeam.Section.ProfilA.ProprietesElastiquesMyy(-1, True, MyBeam.Param.Gamma.GammaM0, zANE, InertieY, MelRd)
+
+                AddLigneNDC(TABW3 & "\U" & BlocSP("CONSTRUCTIONP") & "\u" &
+                            TABAFF & "I\-el,y\=" & TABEGAL & GetStringInUnit(InertieY, Enu_TypeVariable.InertieCM4, 3, 2, True))
+                AddLigneNDC(TABAFF & "z\-el,y\=" & TABEGAL & GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 3, 2, True))
+
+            End If
+
+            '--- En phase mixte
+
+            MyBeam.Section.ProprietesElastiquesMixteMyy(-1, True, MyBeam.Param.Gamma, 1, 1, bEff, MyBeam.Dalle, zANE, InertieY, MelRd)
+
+            If lConstruction Then
+                strDebut = TABW3 & "\U" & BlocSP("COMPOSITEP") & "\u"
+            Else
+                strDebut = ""
+            End If
+
+            AddLigneNDC(strDebut & TABAFF & "I\-el,y\=" & TABEGAL & GetStringInUnit(InertieY, Enu_TypeVariable.InertieCM4, 3, 2, True))
+            AddLigneNDC(TABAFF & "z\-el,y\=" & TABEGAL & GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 3, 2, True))
+
+        End If
+
+        '# Propriétés élastiques
+
+        AddTitreNdC(3, BlocSP("PPROPERTIES"))
+
+        MyBeam.Section.ProprietesPlastiquesMixteMyy(-1, True, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zanp, mplrd)
+
+        AddLigneNDC(TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 3, 2, True))
+        AddLigneNDC(TABAFF & "z\-pl,y\=" & TABEGAL & GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 3, 2, True))
+
+    End Sub
+
+    Private Sub EditionProprietesElastiquesSectionConsoleMixteEnrobage(MyBeam As cls_Poutre, bEff As Decimal, nbTab As Integer,
+                                                                       lDalle() As Boolean, NeqEnrob() As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   15/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections pour une poutre mixte avec enrobage partiel
+        '   Edition en console en M<0
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre
+        '   bEff        [E] :   Largeur efficace dalle
+        '   nbTab       [E] :   Nombre de ligne dans le tableau
+        '   lDalle      [E] :   Indique si dalle active dans la ligne
+        '   NeqEnrob    [E] :   Coefficients d'équivalence pour le béton de l'enrobage
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NCOL As Integer = 4
+        Dim zANE, InertieY, MelRd As Decimal
+        Dim LargCol() As Integer = {20, 12, 10, 10}
+        Dim iTab As Integer
+        Dim strPhase As String
+
+        '--> Entête du Tableau
+
+        AddLigneNDC("\TABLEAU 20", False)
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, BlocSP("STAGE"))
+
+        AddCelluleFond(LargCol(1), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
+        AddCelluleFond(LargCol(2), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-el,y\=")
+        AddCelluleFond(LargCol(3), Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "z\-el,y\=")
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "")
+
+        AddCelluleFond(LargCol(1), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, BlocSP("ENCASEMENT").ToLower)
+        AddCelluleFond(LargCol(2), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
+        AddCelluleFond(LargCol(3), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "mm")
+
+        '--> Ligne du tableau
+
+        For itab = 0 To nbTab - 1
+            If lDalle(iTab) Then
+                MyBeam.Section.ProprietesElastiquesMixteMyy(-1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), 1, bEff, MyBeam.Dalle, zANE, InertieY, MelRd)
+                strPhase = BlocSP("COMPOSITE")
+            Else
+                MyBeam.Section.ProprietesElastiquesMyy(-1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), zANE, InertieY, MelRd)
+                strPhase = BlocSP("STEELENCASED")
+            End If
+
+            InitialiseLigneTableau(NCOL, HLIGNE)
+
+            AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, strPhase)
+            AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(NeqEnrob(iTab), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieY, Enu_TypeVariable.Inertie, 4, 2, False))
+            AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 4, 2, False))
+
+        Next
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub EditionProprietesElastiquesSectionMixtePositiveB(MyBeam As cls_Poutre, bEff As Decimal, nbTab As Integer,
+                                                                 lDalle() As Boolean, NeqDalle() As Decimal, NeqEnrob() As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   15/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des propriétés de sections pour une poutre mixte
+        '   Edition à mi-travée en M>0
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre
+        '   bEff        [E] :   Largeur efficace dalle
+        '   nbTab       [E] :   Nombre de ligne dans le tableau
+        '   lDalle      [E] :   Indique si dalle active dans la ligne
+        '   NeqDalle    [E] :   Coefficients d'équivalence pour le béton de la dalle
+        '   NeqEnrob    [E] :   Coefficients d'équivalence pour le béton de l'enrobage
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lEnrob As Boolean = MyBeam.lEnrobage
+        Dim NCOL As Integer
+        Dim zANE, InertieY, MelRd As Decimal
+        Const pLC1 As Single = 12
+        Const pLC2 As Single = 10
+
+        '--> Entête du tableau
+
+        EnteteTableauPropElastiqueMixte(lEnrob, NCOL)
+
+        '--> Lignes du tableau
+
+        For iTab As Integer = 0 To nbTab - 1
+
+            MyBeam.Section.ProprietesElastiquesMixteMyy(1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), NeqDalle(iTab), bEff,
+                                                        MyBeam.Dalle, zANE, InertieY, MelRd, lDalle(iTab))
+
+            InitialiseLigneTableau(NCOL, HLIGNE)
+
+            If lDalle(iTab) Then
+                AddCellule(pLC1, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(NeqDalle(iTab), Enu_TypeVariable.SansType, 3, 2, False))
+            Else
+                AddCellule(pLC1, Bordures.Tous, PositionTexteInCell.Centre, "-")
+            End If
+            If lEnrob Then
+                AddCellule(pLC1, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(NeqEnrob(iTab), Enu_TypeVariable.SansType, 3, 2, False))
+            End If
+            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(InertieY, Enu_TypeVariable.InertieCM4, 4, 0, False))
+            AddCellule(pLC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(zANE, Enu_TypeVariable.Dimension, 3, 2, False))
+
+        Next
+
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub EnteteTableauPropElastiqueMixte(lEnrob As Boolean, ByRef NCOL As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entete du tableau des propriétés de sections pour une poutre mixte avec ou sans enrobage partiel
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Const pLC1 As Single = 12
+        Const pLC2 As Single = 10
+
+        '--> Initialisation
+
+        If lEnrob Then NCOL = 4 Else NCOL = 3
+
+        '--> Entête
+
+        AddLigneNDC("\TABLEAU 20", False)
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(pLC1, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
+        If lEnrob Then _
+           AddCelluleFond(pLC1, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "n")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "I\-el,y\=")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "z\-el,y\=")
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(pLC1, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, BlocSP("SLAB").ToLower)
+        If lEnrob Then _
+           AddCelluleFond(pLC1, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, BlocSP("ENCASEMENT").ToLower)
+
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "cm\+4\=")
+        AddCelluleFond(pLC2, Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, "mm")
+
+    End Sub
+
 
     Private Sub EditionProprietesSectionPoutreMixte(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
@@ -3151,7 +3471,7 @@ Module Mod_NoteCalcul
 
         If nbLignes + 2 * HLIGNE > MAXLIGNEPPAG Then SautePage()
 
-        InitialiseLigne(nbColonne, HLIGNE, True)
+        InitialiseLigneTableau(nbColonne, HLIGNE)
         AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
         AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ZONE"))
         AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "n\-r\=")
@@ -3168,7 +3488,7 @@ Module Mod_NoteCalcul
 
                 If nbLignes + HLIGNE > MAXLIGNEPPAG Then SautePage()
 
-                InitialiseLigne(nbColonne, HLIGNE, True)
+                InitialiseLigneTableau(nbColonne, HLIGNE)
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(j + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
@@ -3177,6 +3497,7 @@ Module Mod_NoteCalcul
                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.Thetaf(i, j, ind_failureArea)), Enu_TypeVariable.SansType, 4, 2, False))
                 AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Gamma_sf(i, j, ind_failureArea), Enu_TypeVariable.SansType, 4, 2, False))
                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.As_s_transv(i, j, ind_failureArea), Enu_TypeVariable.AireCM2, 4, 2, False))
+
             Next
         Next
 

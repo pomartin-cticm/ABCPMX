@@ -2187,6 +2187,75 @@ Public Class cls_Poutre
 
     End Sub
 
+    Public Sub ExtraireListeNeqDalleEnrobage(ByRef lDalle() As Boolean, ByRef NeqDalle() As Decimal, ByRef NeqEnrob() As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   14/12/23 :  Création - POM - V1.00
+        '-------------------------------------------------------------------------------------------
+        '   Récupération de la liste des coefficients equivalence et des états de la dalle pour les p mixtes
+        '-------------------------------------------------------------------------------------------
+        '   lDalle  [S] :   Indique si dalle active
+        '   NeqDalle[S] :   Table des coef d'equivalence pour la dalle
+        '   NeqEnrob[S] :   Table des coef d'equivalence pour l'enrobage (si présent)
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iTri() As Integer
+        Dim iTab, j, k As Integer
+        Dim lTrouve As Boolean
+
+        '--> Initialisation
+
+        ReDim lDalle(Me.Elements.Count - 1)
+        ReDim NeqDalle(Me.Elements.Count - 1)
+        ReDim NeqEnrob(Me.Elements.Count - 1)
+        ReDim iTri(Me.Elements.Count - 1)
+
+        '--> Tri
+
+        iTri(0) = 0
+        For iTab = 1 To Me.Elements.Count - 1
+            If Not Me.Elements(iTab).lMixte Then
+                '-- Phase non mixte : on le place en premier
+                For k = iTab To 1 Step -1
+                    iTri(k) = iTri(k - 1)
+                Next
+                iTri(0) = iTab
+            Else
+                'on positionne en fonction de la valeur de neqdalle
+                k = -1
+                lTrouve = False
+                Do While (Not lTrouve) And (k < iTab - 1)
+                    k += 1
+                    lTrouve = (Me.Elements(iTab).nEqDalle < Me.Elements(iTri(k)).nEqDalle)
+                Loop
+                If lTrouve Then
+                    For j = iTab To k + 1 Step -1
+                        iTri(j) = iTri(j - 1)
+                    Next
+                    iTri(k) = iTab
+                Else
+                    iTri(iTab) = iTab
+                End If
+            End If
+
+        Next
+
+        '--> Transfert
+
+        For iTab = 0 To Me.Elements.Count - 1
+            lDalle(iTab) = Me.Elements(iTri(iTab)).lMixte
+            NeqDalle(iTab) = Me.Elements(iTri(iTab)).nEqDalle
+            NeqEnrob(iTab) = Me.Elements(iTri(iTab)).nEqEnrob
+        Next
+
+        'For iTab = 0 To Me.Elements.Count - 1
+        '    lDalle(iTab) = Me.Elements(iTab).lMixte
+        '    NeqDalle(iTab) = Me.Elements(iTab).nEqDalle
+        '    NeqEnrob(iTab) = Me.Elements(iTab).nEqEnrob
+        'Next
+    End Sub
+
     Public Function IndiceTabElts(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal) As Integer
         '-------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM - V1.00

@@ -252,7 +252,7 @@ LISTULOADS				= List of load cases defined by the User
 QSURF					= Surface load
 FREP					= Distributed load
 FPONC					= Point load
-NOCOMBO					= No combination have been defined for this limite state
+NOCOMBO					= No combination have been defined for this limit state
 NOLOADDEFINED			= No load is defined for this load case
 QSURF_WIDTH				= Width of application
 QSURF_VALUE				= Uniform load
@@ -263,8 +263,13 @@ SPAN_N					= Span no
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties
+EFFECTIVEW				= Effective width of the slab
 EPROPERTIES				= Elastic properties
 PPROPERTIES				= Plastic properties
+PROPERTIESMIDSPAN		= Properties at mid span (M>0)
+PROPERTIESMIDSPANMAIN	= Properties at mid length of the main span (M>0)
+PROPERTIESLCANTILEVER	= Properties for the left cantilever (M<0)
+PROPERTIESRCANTILEVER	= Properties for the right cantilever (M<0)
 MPLASTIC				= Plastic moment
 ZPNA					= Location of the plastic neutral axis
 MPLASTICK				= Plastic moment (characteristic value)
@@ -272,6 +277,14 @@ POSITIVEB				= Positive bending
 NEGATIVEB				= Negative bending
 NOTES					= Notes
 NOTE_LOCATIONZ			= z locations are about the upper fibre of the section
+NOTE_LOCATIONZSLAB		= z locations are about the interface between the profile and the slab
+SLAB					= Slab
+ENCASEMENT				= Encasement
+STAGE					= Stage
+COMPOSITE				= Composite
+STEELENCASED			= Steel+encasement
+CONSTRUCTIONP			= In construction stage
+COMPOSITEP				= In final stage
 
 #NDC_ANALYSE
 ANALYSIS				= Analysis - Internal forces and moments
