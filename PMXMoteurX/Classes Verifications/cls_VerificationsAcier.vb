@@ -199,7 +199,7 @@ Public Class cls_VerificationsAcier
         Dim CodeError_LTB As Integer
         Dim TextError_LTB As String = String.Empty
         Dim pAire, pInertieY, pInertieZ, pInertieW, pInertieT As Decimal
-        Dim nEqEc, zAne, mElRd As Decimal
+        Dim nEqEc, zAne, mElRd, zAneZ As Decimal
         Dim lEnrob As Boolean = myPoutre.lEnrobage
         Dim rGirPolaire As Decimal
         Dim pzS, pBetaZ As Decimal
@@ -239,6 +239,7 @@ Public Class cls_VerificationsAcier
         pAire = myPoutre.Section.ProfilA.Aire
         If lEnrob Then nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
         myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd)
+        myPoutre.Section.ProprietesElastiquesMzz(1, True, myPoutre.Param.Gamma, nEqEc, zAnez, pInertieZ, mElRd)
         pInertieT = myPoutre.Section.InertieT
         pInertieW = myPoutre.Section.ProfilA.InertieW
         rGirPolaire = myPoutre.Section.ProfilA.RayonGirationPolaireCalcul
@@ -302,6 +303,10 @@ Public Class cls_VerificationsAcier
 
         AlphaCr = MyOutput_LTB.CoefCr
         lOK = (CodeError_LTB = 0)
+
+        If Not lOK Then
+            MsgBox(TextError_LTB, MsgBoxStyle.Critical, "cls_VerificationAcier/CalculAlphaCritique")
+        End If
 
     End Sub
 

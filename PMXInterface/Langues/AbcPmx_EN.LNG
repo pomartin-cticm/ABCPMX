@@ -267,7 +267,13 @@ FIREDPINS				= Fired pins
 DIAMETER				= Diameter
 DIASCREWS				= From 5,5 to 6,3 mm
 DIAPINS					= From 3,7 to 4,8 mm
-SLIP					
+SLIP					= Slip	
+SEAMFASTENING			= Seam fastening
+SELFSCREW				= Self-drilling screws
+RIVET					= Rivet
+DIASCREWS_SEAM			= From 4,1 to 4,8 mm
+DIAPINS_SEAM			= 4,8 mm	
+SPACING					= Spacing	
 
 
 #FRMEDITSTUDS	

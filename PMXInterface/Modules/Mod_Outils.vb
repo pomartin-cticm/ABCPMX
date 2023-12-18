@@ -513,6 +513,11 @@ Module Mod_Outils
                 kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
                 Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
+            Case Enu_TypeVariable.Rigidite
+
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
             Case Enu_TypeVariable.Effort
 
                 kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)

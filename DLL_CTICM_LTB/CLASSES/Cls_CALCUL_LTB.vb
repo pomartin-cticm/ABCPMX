@@ -246,6 +246,7 @@
         ErrorCode = RESULTATS.CODEERROR
         ErrorText = RESULTATS.TEXTERROR
 
+        If ErrorCode = 0 Then _
         UPDATE_RESULTS(Output_LTB)
     End Sub
 

@@ -356,6 +356,7 @@ Module Mod_Declarations
         ModuleCM3
         ModuleY
         Moment
+        Rigidite
         SansType
     End Enum
 
