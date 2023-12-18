@@ -383,7 +383,7 @@ Public Class Frm_PMX
         AjouterPoutre()
     End Sub
 
-    Private Sub TSbtn_NoteCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_NoteCalcul.Click
+    Private Sub TSbtn_NoteCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_NoteCalcul.Click, TSbtn_NdcPoutre.Click
         CalculsEtNdC()
     End Sub
 
@@ -495,7 +495,7 @@ Public Class Frm_PMX
         Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
                 TSbtn_Gamma.Click, TSbtn_PPLargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
-                TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click
+                TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click, TSbtn_OptionsIncendie.Click, TSbtn_Test.Click
 
         Select Case sender.name
 
@@ -550,6 +550,13 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.PPCombinaison
             Case Me.TSbtn_PPVerifications.Name
                 FilleEnCours = EnuFenetres.PPVerifications
+
+            Case Me.TSbtn_OptionsIncendie.Name
+                FilleEnCours = EnuFenetres.OptionsIncendie
+
+            Case Me.TSbtn_Test.Name
+                FilleEnCours = EnuFenetres.Test
+
         End Select
         AfficheFenetreEnCours()
 
@@ -687,6 +694,8 @@ Public Class Frm_PMX
                     Frm_About.Dispose()
                 End If
 
+            Case EnuFenetres.Test
+                Frm_MaintienBac.ShowDialog()
 
         End Select
 
@@ -1421,6 +1430,7 @@ Public Class Frm_PMX
     Private Sub MAJ_btnCotation()
         Me.TSbtn_Cotations.Checked = lCotation
     End Sub
+
 
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
         lCotation = Not lCotation

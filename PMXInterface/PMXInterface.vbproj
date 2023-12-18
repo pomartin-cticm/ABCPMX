@@ -123,6 +123,18 @@
     <Compile Include="Fenetres\EditionBases\Frm_Catalogue.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBac.Designer.vb">
+      <DependentUpon>Frm_MaintienBac.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienBac.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienN.Designer.vb">
+      <DependentUpon>Frm_MaintienN.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_MaintienN.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_OptionsCalculPoutre.Designer.vb">
       <DependentUpon>Frm_OptionsCalculPoutre.vb</DependentUpon>
     </Compile>
@@ -429,6 +441,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\EditionBases\Frm_Catalogue.resx">
       <DependentUpon>Frm_Catalogue.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienBac.resx">
+      <DependentUpon>Frm_MaintienBac.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_MaintienN.resx">
+      <DependentUpon>Frm_MaintienN.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsCalculPoutre.resx">
       <DependentUpon>Frm_OptionsCalculPoutre.vb</DependentUpon>

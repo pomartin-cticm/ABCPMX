@@ -10,7 +10,6 @@ Imports PMXMoteur2
 
 #Region " Profiles laminés "
 
-
     <TestMethod()> Public Sub TestUnit_ProprietesProfileAcierLamine()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création POM
@@ -110,6 +109,19 @@ Imports PMXMoteur2
 
         Assert.IsTrue(IsEqual(MyProfil.ModuleWelZ, ValRef, DeltaVMAx * 2))  ' (0,2%)
 
+        '# Position du centre de cisaillement
+        ValRef = 0
+        Valeur = MyProfil.PositionCentreS
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        '# Rayon de giration polaire
+
+        ValRef = 128.6 / 1000
+        Valeur = MyProfil.RayonGirationPolaireCalcul
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx * 4))       '(0,4 %)
+
     End Sub
 
 
@@ -122,7 +134,7 @@ Imports PMXMoteur2
         '----------------------------------------------------------------------------------------------------------------------------------
         '   10/07/23 :  Création POM
         '----------------------------------------------------------------------------------------------------------------------------------
-        ' Test des propriétés d'un profilé acier IPE 300
+        ' 
         '   Références : section acier de l'article RCM 3/2021
         '----------------------------------------------------------------------------------------------------------------------------------
 
@@ -132,10 +144,9 @@ Imports PMXMoteur2
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
         Dim zANE, InertieY, MelRd As Decimal
+        Dim Valeur As Decimal
 
         '--> Initialisation
-
-        '# IPE 300
 
         MyProfil.ha = 0.575
         MyProfil.Bfi = 0.35
@@ -178,6 +189,20 @@ Imports PMXMoteur2
         ValRef = 4200.1 * 10 ^ (-6)
         DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
+
+        '# Position du centre de cisaillement
+
+        ValRef = -9.615 / 100
+        Valeur = MyProfil.PositionCentreS
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        '# Rayon de giration polaire
+
+        ValRef = 263.5 / 1000
+        Valeur = MyProfil.RayonGirationPolaireCalcul
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
 
     End Sub
 

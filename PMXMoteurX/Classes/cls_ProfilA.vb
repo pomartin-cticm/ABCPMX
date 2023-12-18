@@ -5,13 +5,13 @@ Public Class cls_ProfilA
 #Region " Attributs "
 
     Public Enum Enum_TypeSectionAcier
-        Lamine          ' Profilé laminé
-        PRS_Mono_Sym    ' Section PRS bi-symétrique
-        PRS_Bi_Sym      ' Section PRS mono-symétrique
-        LamineSlimSAB   ' Section slim floor à base de profilé laminé
-        LamineSlimIFBA  ' Section slim floor à base de profilé laminé
-        LamineSlimIFBB  ' Section slim floor à base de profilé laminé
-        LamineSlimSFB   ' Section slim floor à base de profilé laminé
+        Lamine                          ' Profilé laminé
+        PRS_Mono_Sym                    ' Section PRS bi-symétrique
+        PRS_Bi_Sym                      ' Section PRS mono-symétrique
+        LamineSlimSAB                   ' Section slim floor à base de profilé laminé
+        LamineSlimIFBA                  ' Section slim floor à base de profilé laminé
+        LamineSlimIFBB                  ' Section slim floor à base de profilé laminé
+        LamineSlimSFB                   ' Section slim floor à base de profilé laminé
     End Enum
 
     ''' <summary>
@@ -32,90 +32,35 @@ Public Class cls_ProfilA
     Private pModuleWelZ As Decimal          ' Module de flexion élastique / axe faible
 
     Private pzCdG As Decimal                ' Position du CdG
+    Private pzS As Decimal                  ' Position du centre de cisaillement / cdg
 
 #End Region
 
 #Region " Géométrie de la section acier "
 
-    ''' <summary>
-    ''' hauteur totale de la section métallique (m)
-    ''' </summary>
-    Public ha As Decimal
+    Public ha As Decimal                            ' hauteur totale de la section métallique (m)
+    Public hb As Decimal                            ' hauteur du profilé de base (pour les laminés) (m)
 
-    ''' <summary>
-    ''' hauteur du profilé de base (pour les laminés) (m)
-    ''' </summary>
-    Public hb As Decimal
+    Public Bfs As Decimal                           ' largeur de la semelle supérieure (m)
+    Public Tfs As Decimal                           ' épaisseur de la semelle supérieure (m)
 
-    ''' <summary>
-    ''' largeur de la semelle supérieure (m)
-    ''' </summary>
-    Public Bfs As Decimal
+    Public Bfi As Decimal                           ' largeur de la semelle inférieure (m)
+    Public Tfi As Decimal                           ' épaisseur de la semelle inférieure (m)
 
-    ''' <summary>
-    ''' épaisseur de la semelle supérieure (m)
-    ''' </summary>
-    Public Tfs As Decimal
+    Public Rcs As Decimal                           ' rayon du congé de raccordement supérieur (m)
+    Public Rci As Decimal                           ' rayon du congé de raccordement inférieur (m)
 
-    ''' <summary>
-    ''' largeur de la semelle inférieure (m)
-    ''' </summary>
-    Public Bfi As Decimal
+    Public Tw As Decimal                            ' épaisseur de l'âme (m)
 
-    ''' <summary>
-    ''' épaisseur de la semelle inférieure (m)
-    ''' </summary>
-    Public Tfi As Decimal
+    Public aW As Decimal                            ' épaisseur de la gorge des cordons de soudure (m)
 
-    ''' <summary>
-    ''' rayon du congé de raccordement supérieur (m)
-    ''' </summary>
-    Public Rcs As Decimal
+    Public typeProfileAcier As Enum_TypeSectionAcier ' Type de la section du profilé métallique
 
-    ''' <summary>
-    ''' rayon du congé de raccordement inférieur (m)
-    ''' </summary>
-    Public Rci As Decimal
+    Public Plat_b As Decimal                        ' Largeur du plat utilisé avec les slim floor
+    Public Plat_t As Decimal                        ' Epaisseur du plat utilisé avec les slim floor
 
-    '''' <summary>
-    '''' hauteur totale de l’âme, mesurée entre le nu intérieur des semelles (m)
-    '''' </summary>
-    'Private h_w As Decimal
-
-    ''' <summary>
-    ''' épaisseur de l'âme (m)
-    ''' </summary>
-    Public Tw As Decimal
-
-    ''' <summary>
-    ''' épaisseur de la gorge des cordons de soudure (m)
-    ''' </summary>
-    Public aW As Decimal
-
-    ''' <summary>
-    ''' Type de la section du profilé métallique
-    ''' </summary>
-    Public typeProfileAcier As Enum_TypeSectionAcier
-
-    ''' <summary>
-    ''' Largeur du plat utilisé avec les slim floor
-    ''' </summary>
-    Public Plat_b As Decimal
-
-    ''' <summary>
-    ''' Epaisseur du plat utilisé avec les slim floor
-    ''' </summary>
-    Public Plat_t As Decimal
-
-    ''' <summary>
-    ''' Indices conditions de livraison
-    ''' </summary>
-    Public IndDeliv() As Short
-
-    ''' <summary>
-    ''' Indices normes acier compatibles
-    ''' </summary>
-    Public IndStandart() As Short
+    Public IndDeliv() As Short                      ' Indices conditions de livraison
+    Public IndStandart() As Short                   ' Indices normes acier compatibles
 
 #End Region
 
@@ -465,6 +410,19 @@ Public Class cls_ProfilA
         End Get
     End Property
 
+    ''' <summary>
+    ''' Rayon de giration polaire du profilé 
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property RayonGirationPolaire As Decimal
+        Get
+            Dim rayon As Decimal
+            rayon = Math.Sqrt((Me.pInertieY + Me.pInertieZ) / Me.Aire + Me.pzS ^ 2)
+
+            Return rayon
+        End Get
+    End Property
+
     Public Sub InitialiseProprietes()
         '-------------------------------------------------------------
         '   11/08/23 :  Création - POM
@@ -485,6 +443,7 @@ Public Class cls_ProfilA
         Me.pModuleWplY = ModuleFlexionPlastiqueYY()
 
         ProprietesElastiquesMyy(1, False, 1, zAN, Me.pInertieY, MRd)
+        Me.pzS = Me.PositionCentreS_MonoSym(zAN)
 
         'Me.pModuleWelY = Me.pInertieY / Math.Max(Math.Abs(zAN), Math.Abs(-Me.ha - zAN))
         Me.pzCdG = zAN
@@ -506,6 +465,121 @@ Public Class cls_ProfilA
             Return zAN
         End Get
     End Property
+
+    Public Function PositionCentreS() As Decimal
+        '-------------------------------------------------------------
+        '   18/12/23 :  Création - POM
+        '-------------------------------------------------------------
+        '   Calcul de la position du centre de cisaillement / cdg
+        '-------------------------------------------------------------
+        '-------------------------------------------------------------
+
+        Dim zS As Decimal
+
+        Select Case Me.typeProfileAcier
+            Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym
+                zS = 0
+                zS = PositionCentreS_MonoSym()
+            Case Enum_TypeSectionAcier.PRS_Mono_Sym
+                zS = PositionCentreS_MonoSym()
+            Case Else
+
+        End Select
+
+        Return zS
+    End Function
+
+    Private Function PositionCentreS_MonoSym() As Decimal
+        '-------------------------------------------------------------
+        '   18/12/23 :  Création - POM
+        '-------------------------------------------------------------
+        '   Calcul de la position du centre de cisaillement / cdg
+        '   Pour une section monosymétrique
+        '-------------------------------------------------------------
+        '-------------------------------------------------------------
+
+        Return PositionCentreS_MonoSym(Me.zCdG)
+
+    End Function
+
+    Private Function PositionCentreS_MonoSym(zPos_CdG As Decimal) As Decimal
+        '-------------------------------------------------------------
+        '   18/12/23 :  Création - POM
+        '-------------------------------------------------------------
+        '   Calcul de la position du centre de cisaillement / cdg
+        '   Pour une section monosymétrique
+        '-------------------------------------------------------------
+        '   zPos_CdG    [E] :   Position du cdg
+        '-------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim zS As Decimal
+        Dim IneZ As Decimal
+        Dim izfS, izfI As Decimal
+        Dim zfS, zfI As Decimal
+        Dim izW, zW As Decimal
+        Dim irS, irI As Decimal
+        Dim zrS, zrI As Decimal
+        Dim arS, arI As Decimal
+        Dim vrS, vrI As Decimal
+        Dim PI As Decimal
+        Dim zG As Decimal = zPos_CdG
+
+        '--> Calcul
+
+        PI = Math.PI
+
+        arS = (4 - PI) * Me.Rcs ^ 2 / 4
+        arI = (4 - PI) * Me.Rci ^ 2 / 4
+
+        vrS = (1 - 2 / (3 * (4 - PI))) * Me.Rcs
+        vrI = (1 - 2 / (3 * (4 - PI))) * Me.Rci
+
+        izfS = Me.Bfs ^ 3 * Me.Tfs / 12
+        izfI = Me.Bfi ^ 3 * Me.Tfi / 12
+        izW = Me.HauteurAmeHw * Me.Tw ^ 3 / 12
+        irS = (1 / 3 - PI / 16 - 1 / (9 * (4 - PI))) * Me.Rcs ^ 4
+        irS = (1 / 3 - PI / 16 - 1 / (9 * (4 - PI))) * Me.Rci ^ 4
+
+        zfS = -Me.Tfs / 2 - zG
+        zfI = -Me.ha + Me.Tfi / 2 - zG
+        zW = -Me.Tfs - Me.HauteurAmeHw / 2 - zG
+        zrS = -Me.Tfs - vrS - zG
+        zrI = -Me.ha + Me.Tfi + vrI - zG
+
+        IneZ = izfS + izfI + izW + 2 * irS + 2 * irI + 2 * arS * (Me.Tw / 2 + vrS) ^ 2 + 2 * arI * (Me.Tw / 2 + vrI) ^ 2
+        zS = (izfS * zfS + izfI * zfI + izW * zW + 2 * irS * zrS + 2 * irI * zrI) / IneZ
+
+        Return zS
+
+    End Function
+
+    Public Function RayonGirationPolaireCalcul() As Decimal
+        '-------------------------------------------------------------
+        '   18/12/23 :  Création - POM
+        '-------------------------------------------------------------
+        '   Calcul du rayon de giration polaire du profilé
+        '-------------------------------------------------------------
+
+        '-->  Déclaration
+
+        Dim iZero As Decimal
+        Dim vInertieY, vInertieZ As Decimal
+        Dim vAire As Decimal
+        Dim zANE, z2 As Decimal
+        Dim MRd As Decimal
+
+        '--> Calcul
+
+        Me.ProprietesElastiquesMyy(1, False, 1, zANE, vInertieY, MRd)
+        Me.ProprietesElastiquesMzz(False, 1, z2, vInertieZ, MRd)
+        vAire = Me.Aire
+
+        iZero = Math.Sqrt((vInertieY + vInertieZ) / vAire + Me.PositionCentreS_MonoSym(zane) ^ 2)
+        Return izero
+
+    End Function
 
 #End Region
 

@@ -102,11 +102,13 @@ Public Class cls_Poutre
     '# Définition des maintiens latéraux
     '#####################################################################################
 
-    Public NbMaintiens() As Integer                      ' Nombre de maintiens disposés sur la travée considérée
+    Public NbMaintiens() As Integer                     ' Nombre de maintiens disposés sur la travée considérée
     Public Maintiens() As List(Of cls_Maintiens)        ' Liste des maintiens disposés sur la poutre
     Public TypeMaintien As EnuTypeMaintiensPoutre       ' Type de maintiens considéré sur la travée considérée
 
     Public pIndiceMaintienSelectionne As Integer        ' Indice du maintien sélectionné pour le déplacer (utile pour le dessin uniquement)
+
+    Public MaintienBac As cls_MaintienBac               ' Conditions de maintien par le bac en phase de construction
 
     'Renvoi la somme de tous les maintiens disposés sur l'ensemble des travées 
     Public ReadOnly Property NombreTotalMaintiens As Integer
@@ -581,9 +583,10 @@ Public Class cls_Poutre
         Me.NouvellePoutre = True
         Me.lPoutreModifiee = False
 
-        '--> Initialisation Hivoss
+        '--> Initialisation Classes
 
         Me.Hivoss = New cls_MethodHivoss
+        Me.MaintienBac = New cls_MaintienBac
     End Sub
 
     Private Sub PoutreDefautAcier()

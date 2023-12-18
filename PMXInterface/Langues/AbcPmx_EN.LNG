@@ -238,6 +238,38 @@ WARNING_CMBTRAVEE		= All the input data must be correct to select an other the s
 ADD						= Add
 DELETE					= Delete
 
+#FRM_DECKRESTRAINT
+TITLE					= Restraint of the beam by the steel deck (construction phase only)
+OK						= Ok
+CANCEL					= Cancel
+INDIVIDUALSHEET			= Individual sheet
+NUMBERSPANS				= Number of crossed spans by sheets
+SHEETLENGTH				= Length
+SHEETWIDTH				= Width
+DIMENSIONS				= Dimensions
+FLOORDEF				= Floor parameters
+NBSHEETSTRANSVERSE		= Number of sheets in the transverse direction
+FLOORDIMENSIONS			= Floor dimensions (main span)
+FLOORLENGTH				= Span length
+FLOORWIDTH				= Width
+TRANSITION				= Type of transition between adjacent sheets
+OVERLAPPING				= Overlapping
+ADJACENTNOGAP			= Adjacent sheets without gap
+FLANGEEDGES				= Sheets interrupted at flange edges
+BEAMFASTENING			= Deck to beam fastening
+FASTENING				= One fastener
+EVERYRIB				= in every rib
+EVERY2RIBS				= in every two ribs
+TYPEFASTENER			= Type of fasteners
+SELFSCREWNORMAL			= Self-drilling screws - normal washer
+SELFSCREWNEOPRENE		= Self-drilling screws - neoprene washer
+FIREDPINS				= Fired pins
+DIAMETER				= Diameter
+DIASCREWS				= From 5,5 to 6,3 mm
+DIAPINS					= From 3,7 to 4,8 mm
+SLIP					
+
+
 #FRMEDITSTUDS	
 TITLE				= Studs data base
 OK					= OK

@@ -39,18 +39,18 @@ Partial Class Frm_Maintiens
         Me.lbl_Maintiens = New System.Windows.Forms.Label()
         Me.lbl_ControlDessin = New System.Windows.Forms.Label()
         Me.pan_Maintiens = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btn_Precedent = New System.Windows.Forms.Button()
+        Me.btn_Suivant = New System.Windows.Forms.Button()
+        Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
+        Me.cmb_Travee = New System.Windows.Forms.ComboBox()
         Me.rad_NonRestrain = New System.Windows.Forms.RadioButton()
         Me.lbl_Travee = New System.Windows.Forms.Label()
-        Me.cmb_Travee = New System.Windows.Forms.ComboBox()
         Me.rad_PointRestrain = New System.Windows.Forms.RadioButton()
         Me.rad_FullyRestrain = New System.Windows.Forms.RadioButton()
         Me.pan_Img_Maintiens = New System.Windows.Forms.Panel()
         Me.txt_Cotations = New System.Windows.Forms.TextBox()
         Me.img_Maintiens = New System.Windows.Forms.PictureBox()
-        Me.btn_Suivant = New System.Windows.Forms.Button()
-        Me.btn_Precedent = New System.Windows.Forms.Button()
-        Me.imgList_Navigation = New System.Windows.Forms.ImageList(Me.components)
-        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -60,9 +60,9 @@ Partial Class Frm_Maintiens
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_ControlDessin.SuspendLayout()
         Me.pan_Maintiens.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.pan_Img_Maintiens.SuspendLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -265,6 +265,59 @@ Partial Class Frm_Maintiens
         Me.pan_Maintiens.Size = New System.Drawing.Size(250, 179)
         Me.pan_Maintiens.TabIndex = 1
         '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.btn_Precedent)
+        Me.Panel1.Controls.Add(Me.btn_Suivant)
+        Me.Panel1.Controls.Add(Me.cmb_Travee)
+        Me.Panel1.Location = New System.Drawing.Point(8, 28)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(234, 35)
+        Me.Panel1.TabIndex = 11
+        '
+        'btn_Precedent
+        '
+        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
+        Me.btn_Precedent.Location = New System.Drawing.Point(2, 7)
+        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Precedent.Name = "btn_Precedent"
+        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Precedent.TabIndex = 10
+        Me.btn_Precedent.TabStop = False
+        Me.btn_Precedent.UseVisualStyleBackColor = True
+        '
+        'btn_Suivant
+        '
+        Me.btn_Suivant.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_Suivant.ImageList = Me.imgList_Navigation
+        Me.btn_Suivant.Location = New System.Drawing.Point(209, 7)
+        Me.btn_Suivant.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Suivant.Name = "btn_Suivant"
+        Me.btn_Suivant.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Suivant.TabIndex = 9
+        Me.btn_Suivant.TabStop = False
+        Me.btn_Suivant.UseVisualStyleBackColor = True
+        '
+        'imgList_Navigation
+        '
+        Me.imgList_Navigation.ImageStream = CType(resources.GetObject("imgList_Navigation.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imgList_Navigation.TransparentColor = System.Drawing.Color.Transparent
+        Me.imgList_Navigation.Images.SetKeyName(0, "Precedent")
+        Me.imgList_Navigation.Images.SetKeyName(1, "PrecedentNonDispo")
+        Me.imgList_Navigation.Images.SetKeyName(2, "Suivant")
+        Me.imgList_Navigation.Images.SetKeyName(3, "SuivantNonDispo")
+        '
+        'cmb_Travee
+        '
+        Me.cmb_Travee.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmb_Travee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Travee.FormattingEnabled = True
+        Me.cmb_Travee.Location = New System.Drawing.Point(25, 8)
+        Me.cmb_Travee.Name = "cmb_Travee"
+        Me.cmb_Travee.Size = New System.Drawing.Size(184, 21)
+        Me.cmb_Travee.TabIndex = 4
+        '
         'rad_NonRestrain
         '
         Me.rad_NonRestrain.AutoSize = True
@@ -284,17 +337,6 @@ Partial Class Frm_Maintiens
         Me.lbl_Travee.Size = New System.Drawing.Size(57, 13)
         Me.lbl_Travee.TabIndex = 7
         Me.lbl_Travee.Text = "lbl_Travee"
-        '
-        'cmb_Travee
-        '
-        Me.cmb_Travee.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmb_Travee.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Travee.FormattingEnabled = True
-        Me.cmb_Travee.Location = New System.Drawing.Point(25, 8)
-        Me.cmb_Travee.Name = "cmb_Travee"
-        Me.cmb_Travee.Size = New System.Drawing.Size(184, 21)
-        Me.cmb_Travee.TabIndex = 4
         '
         'rad_PointRestrain
         '
@@ -350,48 +392,6 @@ Partial Class Frm_Maintiens
         Me.img_Maintiens.TabIndex = 1
         Me.img_Maintiens.TabStop = False
         '
-        'btn_Suivant
-        '
-        Me.btn_Suivant.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btn_Suivant.ImageList = Me.imgList_Navigation
-        Me.btn_Suivant.Location = New System.Drawing.Point(209, 7)
-        Me.btn_Suivant.Margin = New System.Windows.Forms.Padding(0)
-        Me.btn_Suivant.Name = "btn_Suivant"
-        Me.btn_Suivant.Size = New System.Drawing.Size(23, 23)
-        Me.btn_Suivant.TabIndex = 9
-        Me.btn_Suivant.TabStop = False
-        Me.btn_Suivant.UseVisualStyleBackColor = True
-        '
-        'btn_Precedent
-        '
-        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
-        Me.btn_Precedent.Location = New System.Drawing.Point(2, 7)
-        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
-        Me.btn_Precedent.Name = "btn_Precedent"
-        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
-        Me.btn_Precedent.TabIndex = 10
-        Me.btn_Precedent.TabStop = False
-        Me.btn_Precedent.UseVisualStyleBackColor = True
-        '
-        'imgList_Navigation
-        '
-        Me.imgList_Navigation.ImageStream = CType(resources.GetObject("imgList_Navigation.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.imgList_Navigation.TransparentColor = System.Drawing.Color.Transparent
-        Me.imgList_Navigation.Images.SetKeyName(0, "Precedent")
-        Me.imgList_Navigation.Images.SetKeyName(1, "PrecedentNonDispo")
-        Me.imgList_Navigation.Images.SetKeyName(2, "Suivant")
-        Me.imgList_Navigation.Images.SetKeyName(3, "SuivantNonDispo")
-        '
-        'Panel1
-        '
-        Me.Panel1.Controls.Add(Me.btn_Precedent)
-        Me.Panel1.Controls.Add(Me.btn_Suivant)
-        Me.Panel1.Controls.Add(Me.cmb_Travee)
-        Me.Panel1.Location = New System.Drawing.Point(8, 28)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(234, 35)
-        Me.Panel1.TabIndex = 11
-        '
         'Frm_Maintiens
         '
         Me.AcceptButton = Me.btn_OK
@@ -414,10 +414,10 @@ Partial Class Frm_Maintiens
         Me.pan_ControlDessin.ResumeLayout(False)
         Me.pan_Maintiens.ResumeLayout(False)
         Me.pan_Maintiens.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         Me.pan_Img_Maintiens.ResumeLayout(False)
         Me.pan_Img_Maintiens.PerformLayout()
         CType(Me.img_Maintiens, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

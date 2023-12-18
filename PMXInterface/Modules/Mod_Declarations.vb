@@ -379,6 +379,7 @@ Module Mod_Declarations
         Maintiens
         Options
         OptionsCalculPoutre
+        OptionsIncendie
         Portees
         PPCasDeCharge
         PPCombinaison
@@ -387,6 +388,7 @@ Module Mod_Declarations
         PPModePropre
         PPVerifications
         Section
+        Test
     End Enum
 
     Public iFrmAppel As EnuFenetres

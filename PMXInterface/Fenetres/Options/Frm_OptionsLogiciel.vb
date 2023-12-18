@@ -283,6 +283,7 @@ Public Class Frm_OptionsLogiciel
         pLocalOptionsNdC.lDispFM_SLS = OptionsNdC.lDispFM_SLS
         pLocalOptionsNdC.lDispFM_FLS = OptionsNdC.lDispFM_FLS
         pLocalOptionsNdC.lDispFM_ULS = OptionsNdC.lDispFM_ULS
+
     End Sub
 
     Private Sub AfficherFenetreFille()
