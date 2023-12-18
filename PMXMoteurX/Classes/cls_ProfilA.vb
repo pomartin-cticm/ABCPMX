@@ -315,6 +315,67 @@ Public Class cls_ProfilA
     End Property
 
     ''' <summary>
+    ''' Moment d'inertie de la semelle supérieure / yy
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieYFs As Decimal
+        Get
+            Return Me.Bfs * Me.Tfs ^ 3 / 12
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Moment d'inertie de la semelle supérieure / zz
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieZFs As Decimal
+        Get
+            Return Me.Bfs ^ 3 * Me.Tfs / 12
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Moment d'inertie de la semelle inférieure / yy
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieYFi As Decimal
+        Get
+            Return Me.Bfi * Me.Tfi ^ 3 / 12
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Moment d'inertie de la semelle inférieure / zz
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieZFi As Decimal
+        Get
+            Return Me.Bfi ^ 3 * Me.Tfi / 12
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Moment d'inertie de l'âme / yy
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieYW As Decimal
+        Get
+            Return Me.HauteurAmeHw ^ 3 * Me.Tw / 12
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Moment d'inertie de l'âme / zz
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property InertieZW As Decimal
+        Get
+            Return Me.HauteurAmeHw * Me.Tw ^ 3 / 12
+        End Get
+    End Property
+
+
+    ''' <summary>
     ''' Aire du plat soudé dans le cas d'un profilé SFB, IFB-A et IFB-B
     ''' </summary>
     ''' <returns></returns>
@@ -466,6 +527,21 @@ Public Class cls_ProfilA
         End Get
     End Property
 
+    Private Function InertieConge(Rayon As Decimal) As Decimal
+        '-------------------------------------------------------------
+        '   18/12/23 :  Création - POM
+        '-------------------------------------------------------------
+        '   Calcul de l'inertie d'un congé de raccordement (1 SEUL)
+        '-------------------------------------------------------------
+        '   Rayon   [E] :   Rayon du congé
+        '-------------------------------------------------------------
+
+        Dim PI As Decimal = Math.PI
+
+        Return (1 / 3 - PI / 16 - 1 / (9 * (4 - PI))) * Rayon ^ 4
+
+    End Function
+
     Public Function PositionCentreS() As Decimal
         '-------------------------------------------------------------
         '   18/12/23 :  Création - POM
@@ -536,11 +612,11 @@ Public Class cls_ProfilA
         vrS = (1 - 2 / (3 * (4 - PI))) * Me.Rcs
         vrI = (1 - 2 / (3 * (4 - PI))) * Me.Rci
 
-        izfS = Me.Bfs ^ 3 * Me.Tfs / 12
-        izfI = Me.Bfi ^ 3 * Me.Tfi / 12
-        izW = Me.HauteurAmeHw * Me.Tw ^ 3 / 12
-        irS = (1 / 3 - PI / 16 - 1 / (9 * (4 - PI))) * Me.Rcs ^ 4
-        irS = (1 / 3 - PI / 16 - 1 / (9 * (4 - PI))) * Me.Rci ^ 4
+        izfS = Me.InertieZFs
+        izfI = Me.InertieZFi
+        izW = Me.InertieZW
+        irS = Me.InertieConge(Me.Rcs)
+        irI = Me.InertieConge(Me.Rci)
 
         zfS = -Me.Tfs / 2 - zG
         zfI = -Me.ha + Me.Tfi / 2 - zG
@@ -553,6 +629,89 @@ Public Class cls_ProfilA
 
         Return zS
 
+    End Function
+
+    Public Function BetaZ() As Decimal
+        '-------------------------------------------------------------
+        '   18/12/23 :  Création - POM
+        '-------------------------------------------------------------
+        '   Calcul du coefficient de Wagner pour
+        '   un profilé laminé ou une section PRS quelconque
+        '   D'après Annexe du guide déversement
+        '-------------------------------------------------------------
+
+        '-------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim zANE, vInertieY, MelRd As Decimal
+        Dim zS As Decimal
+        Dim Wagner As Decimal
+        Dim Numerateur As Decimal
+
+        Dim izfS, izfI As Decimal
+        Dim zfS, zfI As Decimal
+        Dim izW, zW, awW, iyW As Decimal
+        Dim irS, irI As Decimal
+        Dim zrS, zrI As Decimal
+        Dim arS, arI As Decimal
+        Dim vrS, vrI As Decimal
+
+        Dim AfS, AfI As Decimal
+        Dim iyfS, iyfI As Decimal
+
+        Dim PI As Decimal = Math.PI
+
+        '--> Propriétés YY
+
+        Me.ProprietesElastiquesMyy(1, False, 1, zANE, vInertieY, MelRd)
+
+        '--> Centre de cisaillement
+
+        zS = Me.PositionCentreS_MonoSym(zANE)
+
+        '--> Propriétés des semelles
+
+        AfS = Me.AireFs
+        iyfS = Me.InertieYFs
+        izfS = Me.InertieZFs
+        zfS = -Me.Tfs / 2 - zANE
+
+        AfI = Me.AireFi
+        iyfI = Me.InertieYFi
+        izfI = Me.InertieZFi
+        zfI = -Me.ha + Me.Tfi / 2 - zANE
+
+        '--> Propriétés de l'âme
+
+        awW = Me.HauteurAmeHw * Me.Tw
+        iyW = Me.InertieYW
+        izW = Me.InertieZW
+        zW = -Me.Tfs - Me.HauteurAmeHw / 2 - zANE
+
+        '--> Propriétés de congés de raccordement
+
+        vrS = (1 - 2 / (3 * (4 - PI))) * Me.Rcs
+        vrI = (1 - 2 / (3 * (4 - PI))) * Me.Rci
+
+        arS = (4 - PI) * Me.Rcs ^ 2 / 4
+        arI = (4 - PI) * Me.Rci ^ 2 / 4
+        irS = Me.InertieConge(Me.Rcs)
+        irI = Me.InertieConge(Me.Rci)
+
+        zrS = -Me.Tfs - vrS - zANE
+        zrI = -Me.ha + Me.Tfi + vrI - zANE
+
+        '--> Formule finale
+
+        Numerateur = zfS * (izfS + AfS * zfS ^ 2 + 3 * iyfS)
+        Numerateur += zfI * (izfI + AfI * zfI ^ 2 + 3 * iyfI)
+        Numerateur += zW * (izW + awW * zW ^ 2 + 3 * iyW)
+        Numerateur += 2 * zrS * (4 * irS + arS * zrS ^ 2)
+        Numerateur += 2 * zrI * (4 * irI + arI * zrI ^ 2)
+
+        Wagner = numerateur / (2 * vInertieY) - zS
+        Return Wagner
     End Function
 
     Public Function RayonGirationPolaireCalcul() As Decimal

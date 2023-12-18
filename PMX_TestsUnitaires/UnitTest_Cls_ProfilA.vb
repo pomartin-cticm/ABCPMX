@@ -122,6 +122,13 @@ Imports PMXMoteur2
 
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx * 4))       '(0,4 %)
 
+        '# Coefficient de Wagner
+
+        ValRef = 0
+        Valeur = MyProfil.BetaZ
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
     End Sub
 
 
@@ -201,6 +208,13 @@ Imports PMXMoteur2
 
         ValRef = 263.5 / 1000
         Valeur = MyProfil.RayonGirationPolaireCalcul
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        '# Coefficient de Wagner
+
+        ValRef = 154.6 / 1000
+        Valeur = MyProfil.BetaZ
 
         Assert.IsTrue(IsEqual(Valeur, ValRef))
 

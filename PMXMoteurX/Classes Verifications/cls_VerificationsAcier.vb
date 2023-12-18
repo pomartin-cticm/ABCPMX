@@ -189,7 +189,7 @@ Public Class cls_VerificationsAcier
 
         '--> Déclarations
 
-        Dim i, j As Integer
+        Dim i As Integer
 
         Dim pDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
         Dim paramLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
@@ -201,6 +201,8 @@ Public Class cls_VerificationsAcier
         Dim pAire, pInertieY, pInertieZ, pInertieW, pInertieT As Decimal
         Dim nEqEc, zAne, mElRd As Decimal
         Dim lEnrob As Boolean = myPoutre.lEnrobage
+        Dim rGirPolaire As Decimal
+        Dim pzS, pBetaZ As Decimal
 
         '--> Préparation des données pour le calcul LTBeamN
 
@@ -239,18 +241,21 @@ Public Class cls_VerificationsAcier
         myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd)
         pInertieT = myPoutre.Section.InertieT
         pInertieW = myPoutre.Section.ProfilA.InertieW
+        rGirPolaire = myPoutre.Section.ProfilA.RayonGirationPolaireCalcul
+        pzS = myPoutre.Section.ProfilA.PositionCentreS
+        pBetaZ = myPoutre.Section.ProfilA.BetaZ
 
         '---[ Remplissage des tableaux
 
         For i = 0 To pDonnees.NbNodes - 2
             pDonnees.Aire(i) = pAire
             pDonnees.InertieY(i) = pInertieY
-            '.RayGirPol(i) = 13.49 * 0.01   'm
+            pDonnees.RayGirPol(i) = rGirPolaire
             pDonnees.InertieT(i) = pInertieT
             pDonnees.InertieZ(i) = pInertieZ
             pDonnees.InertieW(i) = pInertieW
-            '.CoefBetaZ(i) = 0.0 * 0.01      'm                
-            '.PositionCG(i) = 0.0 * 0.01      'm                
+            pDonnees.CoefBetaZ(i) = pBetaZ
+            pDonnees.PositionCG(i) = pzs
         Next
 
         '# Appuis de la poutre
