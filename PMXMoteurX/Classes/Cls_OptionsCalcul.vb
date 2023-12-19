@@ -22,10 +22,10 @@ Public Class cls_OptionsCalcul
     Public RH As Decimal                            ' Humidité pour le calcul du béton
 
     Public Gamma As cls_Gamma                       ' Coefficients partiels pour le calcul
-    'Public HivossParam As cls_OptionsHivoss         ' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
+    'Public HivossParam As cls_OptionsHivoss        ' Coefficients pour le calcul dynamique définits dans la Frm_Hivoss
     Public Norme As Enu_Normes                      ' Norme de calcul
 
-    Public EtaW As Decimal                           ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
+    Public EtaW As Decimal                          ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
 
     Public lLargeurEfficaceSimplifiee As Boolean    ' Largeur efficace de la dalle béton selon modèle simplifié
     Public lCompressionArma As Boolean              ' Indique si l'on prend en compte les armatures comprimées dans le calcul des propriétés de section
@@ -97,7 +97,7 @@ Public Class cls_OptionsCalcul
 
         Me.lElasticDesign = False
 
-
+        Me.EtaW = 1.2
 
     End Sub
 

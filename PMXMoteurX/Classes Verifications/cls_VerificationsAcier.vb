@@ -170,7 +170,7 @@ Public Class cls_VerificationsAcier
 
         '--> Calcul Alpha Critique
 
-        Exit Sub
+        'Exit Sub
         CalculAlphaCritique(myPoutre, iCombi, MEd, AlphaCr, lOK)
 
     End Sub
@@ -270,9 +270,29 @@ Public Class cls_VerificationsAcier
             pDonnees.lAppuiArticule(i) = False
         Next
 
+        '# Maintiens au déversement
+
+        paramLTB.NbMaintiensPon = myPoutre.Nodes.NbAppuis
+        ReDim paramLTB.iNodeMaintienPon(paramLTB.NbMaintiensPon - 1)
+        ReDim paramLTB.MaintienPonV(paramLTB.NbMaintiensPon - 1)
+        ReDim paramLTB.MaintienPonTheta(paramLTB.NbMaintiensPon - 1)
+        ReDim paramLTB.MaintienPonVP(paramLTB.NbMaintiensPon - 1)
+        ReDim paramLTB.MaintienPonThetaP(paramLTB.NbMaintiensPon - 1)
+        ReDim paramLTB.zMaintienPonC(paramLTB.NbMaintiensPon - 1)
+
+        For i = 0 To pDonnees.NbAppuis - 1
+            paramLTB.iNodeMaintienPon(i) = myPoutre.Nodes.iNodeAppui(i)
+            paramLTB.MaintienPonV(i) = -1
+            paramLTB.MaintienPonTheta(i) = -1
+        Next
+
         pDonnees.NbForcesPon = 0
         pDonnees.NbForcesRep = 0
         pDonnees.NbMoments = 0
+
+        '# Maintiens latéraux
+
+        '**** A AJOUTER
 
         'ReDim .ForcePon(.NbForcesPon - 1)
         'ReDim .xForcePon(.NbForcesPon - 1)
