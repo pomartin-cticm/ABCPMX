@@ -59,7 +59,7 @@ Imports PMXMoteur2
 
         '# IPE 300
 
-        GenereProfileIPE300(pPoutre.Section.ProfilA)
+        pPoutre.Section.ProfilA.GenereProfileIPE300()
 
         '--> Définition d'une chargement Q, charge uniformément répartie
 
@@ -166,7 +166,7 @@ Imports PMXMoteur2
 
         '# IPE 300
 
-        GenereProfileIPE300(pPoutre.Section.ProfilA)
+        pPoutre.Section.ProfilA.GenereProfileIPE300()
 
         '--> Définition d'une chargement Q, charge uniformément répartie
 
@@ -276,7 +276,7 @@ Imports PMXMoteur2
 
         '# IPE 300
 
-        GenereProfileIPE300(pPoutre.Section.ProfilA)
+        pPoutre.Section.ProfilA.GenereProfileIPE300()
 
         '--> Définition d'une chargement Q, charge uniformément répartie
 

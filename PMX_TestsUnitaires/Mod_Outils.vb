@@ -74,24 +74,24 @@ Module Mod_Outils
 
 #Region " Outils de génération des configurations pour les tests "
 
-    Public Sub GenereProfileIPE300(ByRef MyProfil As cls_ProfilA)
-        '----------------------------------------------------------------------------------------------------------------------------------
-        '   04/11/23 :  Création POM
-        '----------------------------------------------------------------------------------------------------------------------------------
-        '   Génération d'un profilé laminé IPE 300
-        '----------------------------------------------------------------------------------------------------------------------------------
+    'Public Sub GenereProfileIPE300(ByRef MyProfil As cls_ProfilA)
+    '    '----------------------------------------------------------------------------------------------------------------------------------
+    '    '   04/11/23 :  Création POM
+    '    '----------------------------------------------------------------------------------------------------------------------------------
+    '    '   Génération d'un profilé laminé IPE 300
+    '    '----------------------------------------------------------------------------------------------------------------------------------
 
-        MyProfil.ha = 0.3
-        MyProfil.Bfi = 0.15
-        MyProfil.Bfs = 0.15
-        MyProfil.Tfi = 0.0107
-        MyProfil.Tfs = 0.0107
-        MyProfil.Tw = 0.0071
-        MyProfil.Rci = 0.015
-        MyProfil.Rcs = 0.015
-        MyProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+    '    MyProfil.ha = 0.3
+    '    MyProfil.Bfi = 0.15
+    '    MyProfil.Bfs = 0.15
+    '    MyProfil.Tfi = 0.0107
+    '    MyProfil.Tfs = 0.0107
+    '    MyProfil.Tw = 0.0071
+    '    MyProfil.Rci = 0.015
+    '    MyProfil.Rcs = 0.015
+    '    MyProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
 
-    End Sub
+    'End Sub
 
 
     Public Sub GenereChargeConcentree(iTravee As Integer, xAppui As Decimal, xPosT As Decimal, Force As Decimal,

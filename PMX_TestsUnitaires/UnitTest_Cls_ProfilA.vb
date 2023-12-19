@@ -29,7 +29,7 @@ Imports PMXMoteur2
 
         '# IPE 300
 
-        GenereProfileIPE300(MyProfil)
+        MyProfil.GenereProfileIPE300()
 
         '# Aire de cisaillement
 
