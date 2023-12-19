@@ -274,7 +274,9 @@ RIVET					= Rivet
 DIASCREWS_SEAM			= From 4,1 to 4,8 mm
 DIAPINS_SEAM			= 4,8 mm	
 SPACING					= Spacing	
-
+PARAMETERS				= Parameters
+BENDINGSTIFF			= Bending stiffness
+SHEARSTIFF				= Shear stiffness
 
 #FRMEDITSTUDS	
 TITLE				= Studs data base

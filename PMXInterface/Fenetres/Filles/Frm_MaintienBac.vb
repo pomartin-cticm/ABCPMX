@@ -169,8 +169,13 @@ Public Class Frm_MaintienBac
             strSlipCouturage(0) = GetStringInUnit(localMaitienBac.FixCoutureSlip(cls_MaintienBac.Enu_CoutureType.Vis) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
             strSlipCouturage(1) = GetStringInUnit(localMaitienBac.FixCoutureSlip(cls_MaintienBac.Enu_CoutureType.Rivet) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
 
-
             Me.lbl_EspCouturage.Text = Bloc("SPACING")
+
+            '=== CALCULS =======================================================================
+
+            Me.lbl_Calculs.Text = Bloc("PARAMETERS")
+            Me.lbl_BendingRigidity.Text = Bloc("BENDINGSTIFF")
+            Me.lbl_ShearRigidity.Text = Bloc("SHEARSTIFF")
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -195,10 +200,25 @@ Public Class Frm_MaintienBac
         Me.lbl_FixationSolive.BackColor = CouleurBackBandeaux
         Me.lbl_FixationSolive.ForeColor = CouleurForeBandeaux
 
+        Me.lbl_Calculs.BackColor = CouleurBackBandeaux
+        Me.lbl_Calculs.ForeColor = CouleurForeBandeaux
+
         PrepareTextBoxDipo(Me.txt_LargeurP, False)
         PrepareTextBoxDipo(Me.txt_LongueurP, False)
         PrepareTextBoxDipo(Me.txt_SheetLength, False)
         PrepareTextBoxDipo(Me.txt_SheetWidth, False)
+
+        PrepareTextBoxDipo(Me.txt_Alpha5, False)
+        PrepareTextBoxDipo(Me.txt_c, False)
+        PrepareTextBoxDipo(Me.txt_c11, False)
+        PrepareTextBoxDipo(Me.txt_c12, False)
+        PrepareTextBoxDipo(Me.txt_c21, False)
+        PrepareTextBoxDipo(Me.txt_c22, False)
+        PrepareTextBoxDipo(Me.txt_K, False)
+        PrepareTextBoxDipo(Me.txt_kTheta, False)
+        PrepareTextBoxDipo(Me.txt_kThetaA, False)
+        PrepareTextBoxDipo(Me.txt_kThetaC, False)
+        PrepareTextBoxDipo(Me.txt_Sact, False)
 
     End Sub
 
@@ -210,6 +230,18 @@ Public Class Frm_MaintienBac
         Me.etq_UnitL4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
         Me.etq_UnitL5.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitSact.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+        Me.etq_UnitC11.Text = "mm/kN"
+        Me.etq_Unitc12.Text = "mm/kN"
+        Me.etq_Unitc21.Text = "mm/kN"
+        Me.etq_Unitc22.Text = "mm/kN"
+
+        Me.etq_UnitK.Text = ""
+        Me.etq_UnitAlpha5.Text = ""
+
+        Me.etq_UnitkTheta.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "." & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+        Me.etq_UnitkThetaA.Text = Me.etq_UnitkTheta.Text
+        Me.etq_UnitkThetaC.Text = Me.etq_UnitkTheta.Text
 
     End Sub
 
@@ -483,7 +515,7 @@ Public Class Frm_MaintienBac
         Dim eYoung As Decimal = cls_Acier.EYACIER
         Dim Poisson As Decimal = cls_Acier.NU
         Dim c11 As Decimal = localMaitienBac.Flexibilite_C11_DistorsionBac(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, eYoung)
-        Dim c12 As Decimal = localMaitienBac.Flexibility_C12_Shear(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, eYoung, Poisson)
+        Dim c12 As Decimal = localMaitienBac.Flexibilite_C12_Shear(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, eYoung, Poisson)
         Dim c21 As Decimal = localMaitienBac.Flexibilite_C21_BeamFasteners(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Ep)
         Dim c22 As Decimal = localMaitienBac.Flexibilite_C21_BeamFasteners(PorteeL, EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Ep)
         Dim cCumul As Decimal
@@ -502,6 +534,16 @@ Public Class Frm_MaintienBac
         Me.txt_c.Text = GetStringInUnit(cCumul * kUnitFlex, Enu_TypeVariable.SansType, 4, 3, False)
         Me.txt_Sact.Text = GetStringInUnit(SAct, Enu_TypeVariable.Rigidite, 4, 3, False)
 
+        Dim kTheta, kThetaA, kThetaC As Decimal
+        Dim bFs As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Bfs
+
+        kThetaA = MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.RigiditeFlexionnelleA(localMaitienBac.FixNervuresMod = cls_MaintienBac.Enu_FixationNervures.Toutes, bFs)
+        kThetaC = MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.RigiditeFlexionnelleC(EntraxeD, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire)
+        kTheta = 1 / (1 / kThetaA + 1 / kThetaC)
+
+        Me.txt_kTheta.Text = GetStringInUnit(kTheta, Enu_TypeVariable.Effort, 3, 2, False)
+        Me.txt_kThetaA.Text = GetStringInUnit(kThetaA, Enu_TypeVariable.Effort, 3, 2, False)
+        Me.txt_kThetaC.Text = GetStringInUnit(kThetaC, Enu_TypeVariable.Effort, 3, 2, False)
 
     End Sub
 
@@ -510,7 +552,7 @@ Public Class Frm_MaintienBac
 #Region " Symboles "
 
     Private Sub PaintSymbols(sender As Object, e As PaintEventArgs) _
-        Handles img_K.Paint, img_c12.Paint, img_c11.Paint, img_Alpha5.Paint, img_c22.Paint, img_c21.Paint, img_c.Paint
+        Handles img_K.Paint, img_c12.Paint, img_c11.Paint, img_Alpha5.Paint, img_c22.Paint, img_c21.Paint, img_c.Paint, img_Sact.Paint, img_kThetaC.Paint, img_kThetaA.Paint, img_kTheta.Paint
 
         '--> Déclarations
 
@@ -563,6 +605,18 @@ Public Class Frm_MaintienBac
                 strSymbol = "c"
                 strIndice = ""
 
+            Case Me.img_Sact.Name
+                strSymbol = "S"
+                strIndice = "act"
+            Case Me.img_kTheta.Name
+                strSymbol = "k"
+                strIndice = "theta"
+            Case Me.img_kThetaA.Name
+                strSymbol = "k"
+                strIndice = "theta,A"
+            Case Me.img_kThetaC.Name
+                strSymbol = "k"
+                strIndice = "theta,C"
         End Select
 
         '--> Dessin

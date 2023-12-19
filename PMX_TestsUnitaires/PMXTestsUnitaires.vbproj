@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mod_Outils.vb" />
+    <Compile Include="UnitTest_cls_MaintienBac.vb" />
     <Compile Include="UnitTest_Connexion.vb" />
     <Compile Include="UnitTest_LTBeamN.vb" />
     <Compile Include="UnitTest_ClsPoutre_EltsFinis.vb" />

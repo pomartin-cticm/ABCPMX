@@ -225,6 +225,8 @@ Public Class cls_Bac
         Me.h_rs = 0
         Me.Hp = 0.058
         Me.Ep = 0.207
+        Me.LargeurModule = 1.035
+        Me.Ieff = 44.37 / 10 ^ 8
 
         Me.Etiquette = "Cofraplus_60 1.00"
 
@@ -414,6 +416,146 @@ Public Class cls_Bac
         End Get
     End Property
 
+    Public Function RigiditeCisaillementSimplifiee(EntraxeD As Decimal) As Decimal
+        '-------------------------------------------------------------------------------------
+        '   19/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Calcul de la rigidité en cisaillement selon la formule simplifiée
+        '   de l'EN 1993-1-310.1.1 (10)
+        '-------------------------------------------------------------------------------------
+        '   EntraxeD    [E] :   Entraxe des solives (supposée uniforme)
+        '-------------------------------------------------------------------------------------
+
+        Dim Srigid As Decimal
+        Const kUnitMM As Decimal = 1000
+
+        Srigid = 1000 * Math.Sqrt(Me.Tp * kUnitMM) * (50 + 10 * (EntraxeD * kUnitMM) ^ (1 / 3)) * EntraxeD / Me.Hp
+
+        Return Srigid
+
+    End Function
+
+    Public Function RigiditeFlexionnelleC(EntraxeD As Decimal, lIntermediaire As Boolean) As Decimal
+        '-------------------------------------------------------------------------------------
+        '   19/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Calcul de la rigidité flexionnelle du bac
+        '-------------------------------------------------------------------------------------
+        '   EntraxeD        [E] :   Entraxe des solives (supposée uniforme)
+        '   lIntermediaire  [E] :   Indique si solive intermediaire ou de rive
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim k As Decimal
+        Dim kThetaC As Decimal
+
+        '--> Calculs
+
+        If lIntermediaire Then k = 6 Else k = 3
+        kThetaC = k * cls_Acier.EYACIER * Me.Ieff / EntraxeD
+
+        Return kThetaC
+
+    End Function
+
+    Public Function RigiditeFlexionnelleA(lToutesRib As Boolean, bfS As Decimal) As Decimal
+        '-------------------------------------------------------------------------------------
+        '   19/12/23 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Calcul de la rigidité flexionnelle due aux fixation du bac
+        '-------------------------------------------------------------------------------------
+        '   lToutesRib  [E] :   Indique si toutes les nervures sont attachées, ou une seule sur deux
+        '   bfS         [E] :   Largeur de la semelle sur laquelle est posée le bac
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim k100, bbMax As Decimal
+        Dim kThetaA As Decimal
+        Dim bR As Decimal
+        Dim kBa, kT, kBr, kBb As Decimal
+        Dim kG, kG100, kG075 As Decimal
+        Dim qG As Decimal
+
+        '--> Calculs
+
+        '# k100 et bbmax
+        bR = Me.Ep - Me.Bt
+        If IsSmallerOrEqual(bR, Me.Bb) Then
+            If lToutesRib Then
+                k100 = 5200
+                bbMax = 40 / 1000
+            Else
+                k100 = 3100
+                bbMax = 40 / 1000
+            End If
+        Else
+            If lToutesRib Then
+                k100 = 3100
+                bbMax = 120 / 1000
+            Else
+                k100 = 2000
+                bbMax = 120 / 1000
+            End If
+        End If
+
+        '# kba
+
+        If IsSmaller(bfS, 0.125) Then
+            kBa = (bfS / 0.1) ^ 2
+        Else
+            kBa = 1.25 * (Math.Min(bfS, 0.2) / 0.1)
+        End If
+
+        '# kT
+
+        If IsSmaller(Me.Tp, 0.75 / 1000) Then
+            kT = (Me.Tp / 0.75) ^ 1.5
+        Else
+            If IsSmallerOrEqual(bR, Me.Bb) Then
+                kT = (Me.Tp / 0.75) ^ 1.1
+            Else
+                kT = (Me.Tp / 0.75) ^ 1.5
+            End If
+        End If
+
+        '# kBr
+
+        If IsSmallerOrEqual(Me.Ep, 185 / 1000) Then
+            kBr = 1
+        Else
+            kBr = 0.185 / Me.Ep
+        End If
+
+        '# kG
+
+        qG = 12
+        kG100 = 1 + 0.095 * (qG - 1)
+        Const UNmm As Decimal = 1 / 1000
+        If IsSmallerOrEqual(bR, Me.Bb) Then
+            kG075 = 1 + 0.08 * (qG - 1)
+        Else
+            kG075 = 1 + 0.16 * (qG - 1)
+        End If
+        If IsGreaterOrEqual(Me.Tp, UNmm) Then
+            kG = kG100
+        Else
+            kG = kG100 + (kG075 - kG100) / (0.25 / 1000) * (UNmm - Me.Tp)
+        End If
+
+
+        '# kBb 
+
+        kBb = Math.Min(1, bbMax / Me.Bb)
+
+        '--> Calcul final
+
+        kThetaA = k100 * kBa * Bt * kBr * kG * kBb
+
+        Return kThetaA
+
+    End Function
 
 #End Region
 

@@ -240,7 +240,7 @@ Public Class cls_MaintienBac
         Return K
     End Function
 
-    Public Function Flexibility_C12_Shear(Longueur As Decimal, EntraxeD As Decimal, MyBac As cls_Bac, EYoung As Decimal, Poisson As Decimal)
+    Public Function Flexibilite_C12_Shear(Longueur As Decimal, EntraxeD As Decimal, MyBac As cls_Bac, EYoung As Decimal, Poisson As Decimal)
         '--------------------------------------------------------------------------------------------
         '   18/12/23 :  Création - POM
         '--------------------------------------------------------------------------------------------
