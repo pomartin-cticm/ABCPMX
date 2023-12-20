@@ -332,7 +332,7 @@ INFO_NS					= NS = NOT Satisfactory
 M_CRITERIA				= Resistance to bending moment
 V_CRITERIA				= Resistance to shear force
 MV_CRITERIA				= Resistance to MV interaction
-LTB_CRTIERIA			= Resistance to lateral torsional buckling
+LTB_CRITERIA			= Resistance to lateral torsional buckling
 REINF_CRITERIA			= Longitudinal reinforcements 
 LOWPLATE_SLIMFLOOR_CRITERIA	= Resistance of the lower flange/plate 
 WELD_CRITERIA			= Resistance of welds 
@@ -353,6 +353,8 @@ CONNECTION				= Connection
 PLASTIC_DESIGN			= Plastic design
 ELASTIC_DESIGN			= Elastic design (Class 3)
 ELASTIC_DESIGN_IMPOSED	= Imposed elastic design
+SECTIONSR				= Resistance of sections
+BEAMR					= Resistance of the beam
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States

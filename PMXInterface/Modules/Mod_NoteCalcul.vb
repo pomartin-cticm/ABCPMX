@@ -3605,9 +3605,14 @@ Module Mod_NoteCalcul
                 '--> Calcul Plastique
 
                 AddLigneNDC(TABW2 & "Calcul plastique")
+                AddTitreNdC(3, BlocELU("SECTIONSR"))
                 'AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
                 AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA"))
                 AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+
+                AddTitreNdC(3, BlocELU("BEAMR"))
+
+                AfficheSyntheseCritereLT(MyBeam.VerifAcier(iVerif).CritereLTB, "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"))
             Else
 
             End If
@@ -3774,16 +3779,76 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
         '   Affichage de la synthèse d'un critère
         '-------------------------------------------------------------------------------------------
+        '   Critere     [E] :
+        '   Symbol      [E] :
+        '   Titre       [E] :
+        '-------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
-        Dim strGras, strFinGras As String
+        Dim strGras As String = ""
+        Dim strFinGras As String = ""
         Dim TABOK As String = "\T85"
         Dim TABInfo As String = "\T70"
-        Dim strOK As String
+        Dim strOK As String = ""
         Dim Valeur As Decimal = Critere.CritereMax
 
         '--> Initialisation
+
+        PrepareStyleCritere(Valeur, strGras, strFinGras, strOK)
+
+        '--> Affichage
+
+        AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
+                    Symbol & TABEGAL & GetStringInUnit(Valeur, Enu_TypeVariable.SansType, 3, 2, False) &
+                    strFinGras & TABInfo & "(N" & CStr(Critere.iNodeM + 1) & "/" & strRacineELU & "_" & CStr(Critere.iCombiM + 1) & ")" & strGras & TABOK & strOK & strFinGras)
+
+    End Sub
+
+
+    Private Sub AfficheSyntheseCritereLT(Critere As cls_Critere, Symbol As String, Titre As String)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage de la synthèse d'un critère de déversement
+        '-------------------------------------------------------------------------------------------
+        '   Critere     [E] :
+        '   Symbol      [E] :
+        '   Titre       [E] :
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim strGras As String = ""
+        Dim strFinGras As String = ""
+        Dim TABOK As String = "\T85"
+        Dim TABInfo As String = "\T70"
+        Dim strOK As String = ""
+        Dim Valeur As Decimal = Critere.CritereMax
+
+        '--> Initialisation
+
+        PrepareStyleCritere(Valeur, strGras, strFinGras, strOK)
+
+        '--> Affichage
+
+        AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
+                    Symbol & TABEGAL & GetStringInUnit(Valeur, Enu_TypeVariable.SansType, 3, 2, False) &
+                    strFinGras & TABInfo & "(S" & CStr(Critere.iNodeM + 1) & "/" & strRacineELU & "_" & CStr(Critere.iCombiM + 1) & ")" & strGras & TABOK & strOK & strFinGras)
+
+    End Sub
+
+    Private Sub PrepareStyleCritere(Valeur As Decimal, ByRef strGras As String, ByRef strFinGras As String, ByRef strOK As String)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage de la synthèse d'un critère
+        '-------------------------------------------------------------------------------------------
+        '   Valeur      [E] :   Valeur maximale du critere
+        '   strGras     [E] :
+        '   strFinGras  [E] :   Paramètres pour mixe en forme (en gras si non satisfait)
+        '   strOK       [E] :   Conclusion sur le critere
+        '-------------------------------------------------------------------------------------------
 
         If IsGreater(Valeur, 1) Then
             strGras = "\G"
@@ -3794,12 +3859,6 @@ Module Mod_NoteCalcul
             strFinGras = ""
             strOK = "<= 1  S"
         End If
-
-        '--> Affichage
-
-        AddLigneNDC(TABW2 & Titre & TABAFF & strGras &
-                    Symbol & TABEGAL & GetStringInUnit(Valeur, Enu_TypeVariable.SansType, 3, 2, False) &
-                    strFinGras & TABInfo & "(N" & CStr(Critere.iNodeM + 1) & "/" & strRacineELU & "_" & CStr(Critere.iCombiM + 1) & ")" & strGras & TABOK & strOK & strFinGras)
 
     End Sub
 

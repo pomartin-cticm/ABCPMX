@@ -16,6 +16,7 @@ Public Class cls_VerificationsAcier
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
+    Public CritereLTB As cls_Critere
 
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
@@ -46,6 +47,8 @@ Public Class cls_VerificationsAcier
         End If
         Me.CritereV = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Me.CritereVb = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+
+        Me.CritereLTB = New cls_Critere(IndDerniereT + 1, NbCombi, IndDerniereT)
 
     End Sub
 
@@ -142,7 +145,7 @@ Public Class cls_VerificationsAcier
 
             '# Vérification au déversement
 
-            Me.RunCritereDeversement(MyPoutre, iCombi, MEd)
+            Me.RunCritereDeversement(MyPoutre, iCombi, MEd, lSigma)
 
 
         Next
@@ -153,25 +156,85 @@ Public Class cls_VerificationsAcier
 
 #Region " Vérifications de la résistance au déversement "
 
-    Private Sub RunCritereDeversement(myPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal)
+    Private Sub RunCritereDeversement(myPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, lSigma As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   07/12/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance au déversement
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
-        '   iCombi  [E] :   Indice de la combinaison
+        '   MyPoutre    [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   MEd         [E] :   Table des moments fléchissants le long de la poutre
+        '   lSigma      [E] :   Indique si calcul élastique
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
         Dim AlphaCr As Decimal
         Dim lOK As Boolean
+        Dim iDebTrav As Integer = myPoutre.IndicePremiereTravee
+        Dim iFinTrav As Integer = myPoutre.IndiceDerniereTravee
+        Dim iTrav, iNode As Integer
+        Dim iDebNod, iFinNod As Integer
+        Dim MEdmax, Mcr, MRk As Decimal
+        Dim MbRd, KhiLT, LambdaBLT, AlphaLT As Decimal
+        Dim EN1993 As New cls_Eurocodes
+        Dim zANE, InertieY As Decimal
+        Dim nEqEc As Decimal
 
         '--> Calcul Alpha Critique
 
-        'Exit Sub
         CalculAlphaCritique(myPoutre, iCombi, MEd, AlphaCr, lOK)
+
+        '--> Résistance caractéristique
+
+        If lSigma Then
+            '=== ZZZ
+            nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
+            myPoutre.Section.ProprietesElastiquesMyy(1, False, myPoutre.Param.Gamma, nEqEc, zANE, InertieY, MRk)
+        Else
+            myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, 0, zANE, MRk)
+        End If
+
+        '--> Vérification par travée
+
+        For iTrav = iDebTrav To iFinTrav
+
+            iDebNod = myPoutre.Nodes.iNodeExtTrav(iTrav, 0)
+            iFinNod = myPoutre.Nodes.iNodeExtTrav(iTrav, 1)
+
+            '# Moment maxi dans la travée
+
+            MEdmax = Math.Max(Math.Abs(MEd(iDebNod, 1)), Math.Abs(MEd(iFinNod, 0)))
+
+            For iNode = iDebNod + 1 To iFinNod - 1
+                For k = 0 To 1
+                    MEdmax = Math.Max(MEdmax, Math.Abs(MEd(iNode, k)))
+                Next
+            Next
+
+            '# Moment critique
+
+            Mcr = AlphaCr * MEdmax
+
+            '# Elancement réduit
+
+            LambdaBLT = Math.Sqrt(MRk / Mcr)
+
+            '# Coefficient de réduction
+
+            AlphaLT = EN1993.GetAlphaLTFromProfil(myPoutre.Section.ProfilA)
+            KhiLT = EN1993.ReductionDeversement(AlphaLT, LambdaBLT)
+
+            '# Résistance
+
+            MbRd = KhiLT * MRk / myPoutre.Param.Gamma.GammaM1
+
+            '# Critere
+
+            Me.CritereLTB.EnregistreCritere(iTrav, iCombi, iTrav, MEdmax, MbRd)
+
+        Next
 
     End Sub
 
