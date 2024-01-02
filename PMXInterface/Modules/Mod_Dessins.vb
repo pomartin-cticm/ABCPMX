@@ -352,19 +352,23 @@ Public Module Mod_Dessins
 
         If MyPoutre.lMixte And lCotation Then
             'Cotation
-            If lZoomPlus Then
-                xo_cotes = -MyPoutre.Section.ProfilA.Bfs / 2 - dCar / 4
-            Else
-                xo_cotes = -MyPoutre.Section.ProfilA.Bfs / 2 - dCar / 2
-            End If
+            'If lZoomPlus Then
+            '    xo_cotes = -MyPoutre.Section.ProfilA.Bfs / 2 - dCar / 4
+            'Else
+            '    xo_cotes = -MyPoutre.Section.ProfilA.Bfs / 2 - dCar / 2
+            'End If
+            'xe_cotes = xo_cotes
+
+            'If lZoomPlus Then
+            '    yo_cotes = zREF - MyPoutre.Section.ProfilA.Tfs - dCar / 4
+            'Else
+            '    yo_cotes = zREF - MyPoutre.Section.ProfilA.Tfs - dCar / 4
+            'End If
+
+            xo_cotes = 0
             xe_cotes = xo_cotes
 
-            If lZoomPlus Then
-                yo_cotes = zREF - MyPoutre.Section.ProfilA.Tfs - dCar / 4
-            Else
-                yo_cotes = zREF - MyPoutre.Section.ProfilA.Tfs - dCar / 4
-            End If
-
+            yo_cotes = zREF + MyPoutre.Dalle.t_d + dCar / 8
             ye_cotes = yo_cotes
 
             Chaine = MyPoutre.Dalle.Connecteur.nom
