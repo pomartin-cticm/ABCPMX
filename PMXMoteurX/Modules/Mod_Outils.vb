@@ -1,4 +1,4 @@
-﻿Module Mod_Outils
+﻿Public Module Mod_Outils
 
 #Region " Outils Divers "
     Public Sub AjoutePoint(x As Single, y As Single, ByRef xPts() As Single, ByRef yPts() As Single, ByRef nbPts As Integer)
@@ -87,6 +87,78 @@
 
         Return IsEqual(a, b, EPS) OrElse (a < b)
     End Function
+
+    '--> Mise en commentaire car a priori pas utilisé, à discuter
+
+    'Public Sub EnveloppeTableauEfforts(MyTab(,) As Decimal, NbNodes As Integer, ByRef ValMax As Decimal, ByRef ValMin As Decimal)
+    '    '-----------------------------------------------------------------------------------------------------------
+    '    '   09/09/23 :  Création - POM
+    '    '-----------------------------------------------------------------------------------------------------------
+    '    '   Renvoie les valeurs enveloppes d'un tableau à 2 dimensions
+    '    '-----------------------------------------------------------------------------------------------------------
+    '    '   MyTab       [E] :   Tableau à traiter
+    '    '   NbNodes     [E] :   Dimension 1 du tableau
+    '    '   ValMax      [S] :   Valeur max du tableau
+    '    '   ValMin      [S] :   Valeur min du tableau
+    '    '-----------------------------------------------------------------------------------------------------------
+
+    '    ValMax = Math.Max(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+    '    ValMin = Math.Min(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+
+    '    For i As Integer = 1 To NbNodes - 2
+    '        For j = 0 To 1
+    '            ValMax = Math.Max(MyTab(i, j), ValMax)
+    '            ValMin = Math.Min(MyTab(i, j), ValMin)
+    '        Next
+    '    Next
+
+    'End Sub
+
+    Public Sub EnveloppeTableauEfforts(MyTab(,) As Decimal, NbNodes As Integer, ByRef ValMax As Decimal, ByRef ValMin As Decimal,
+                                 ByRef iNodeValMax As Integer, ByRef iNodeValMin As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   09/09/23 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Renvoie les valeurs enveloppes d'un tableau à 2 dimensions
+        '-----------------------------------------------------------------------------------------------------------
+        '   MyTab       [E] :   Tableau à traiter
+        '   NbNodes     [E] :   Dimension 1 du tableau
+        '   ValMax      [S] :   Valeur max du tableau
+        '   ValMin      [S] :   Valeur min du tableau
+        '   iNodeValMax [S] :   Indice du noeud pour la valeur maxi
+        '   iNodeValMin [S] :   Indice du noeud pour la valeur mini
+        '-----------------------------------------------------------------------------------------------------------
+
+        'ValMax = Math.Max(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+        'ValMin = Math.Min(MyTab(0, 1), MyTab(NbNodes - 1, 0))
+        'iNodeValMax = 0
+        'iNodeValMin = 0
+
+        If IsGreater(MyTab(0, 1), MyTab(NbNodes - 1, 0)) Then 'Ajout GUD : induit un BUG quand la val max se trouve au droit des appuis d extremités 
+            ValMax = MyTab(0, 1)
+            ValMin = MyTab(NbNodes - 1, 0)
+            iNodeValMax = 0
+            iNodeValMin = NbNodes - 1
+        Else
+            ValMax = MyTab(NbNodes - 1, 0)
+            ValMin = MyTab(0, 1)
+            iNodeValMax = NbNodes - 1
+            iNodeValMin = 0
+        End If
+        For i As Integer = 1 To NbNodes - 2
+            For j = 0 To 1
+                If IsGreater(MyTab(i, j), ValMax) Then
+                    ValMax = MyTab(i, j)
+                    iNodeValMax = i
+                End If
+                If IsSmaller(MyTab(i, j), ValMin) Then
+                    ValMin = MyTab(i, j)
+                    iNodeValMin = i
+                End If
+            Next
+        Next
+
+    End Sub
 
 #End Region
 

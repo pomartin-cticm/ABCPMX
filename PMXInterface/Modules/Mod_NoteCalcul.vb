@@ -2494,6 +2494,7 @@ Module Mod_NoteCalcul
                 If MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i).lRunCalcul Then
                     EditionAnalyseChargeA(MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(i))
 
+                    '--> On affiche le diagramme des efforts si l'option est activée 
                     If OptionsNdC.lDispFMDiagrams Then
                         Const NbLigDiag As Integer = 20
                         If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
@@ -2773,6 +2774,11 @@ Module Mod_NoteCalcul
         Dim lRetrait As Boolean = True
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
+        Dim Mmin, Mmax, Vmin, Vmax As Decimal
+        Dim iNodeMinMoment As Integer = -1
+        Dim iNodeMaxMoment As Integer = -1
+        Dim iNodeMinTranchant As Integer = -1
+        Dim iNodeMaxTranchant As Integer = -1
 
         '--> Initialisation
 
@@ -2787,13 +2793,22 @@ Module Mod_NoteCalcul
         myPoutre.CombiA_ELU.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELU.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
+        'Récupère les valeurs enveloppes
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
+
         '--> Affichage de la combinaison
 
-        EditionTableauEfforts(myPoutre, MEd, VEd)
+        EditionTableauEfforts(myPoutre, MEd, VEd,
+                              Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                              Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
 
     End Sub
 
-    Private Sub EditionTableauEfforts(myPoutre As cls_Poutre, MEd(,) As Decimal, VEd(,) As Decimal)
+    Private Sub EditionTableauEfforts(myPoutre As cls_Poutre, MEd(,) As Decimal, VEd(,) As Decimal,
+                                      Mmin As Decimal, Mmax As Decimal, iNodeMinMoment As Integer, iNodeMaxMoment As Integer,
+                                      Vmin As Decimal, Vmax As Decimal, iNodeMinTranchant As Integer, iNodeMaxTranchant As Integer)
+
         '-------------------------------------------------------------------------------------------
         '   07/12/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -2806,13 +2821,15 @@ Module Mod_NoteCalcul
 
         Dim lMultispan As Boolean
         Dim NCol, PosTab As Integer
-        Dim iTravee, i As Integer
+        Dim iTravee, iNode As Integer
         Dim iNodeO, iNodeE As Integer
         Dim iTravDeb, iTravFin As Integer
         Dim iTraveeAffichee As Integer = 1
         'Dim iCompteur As Integer = 0
         'Dim NbLignesMax() As Integer = {25, 30}
         Dim iTab As Integer = 0
+        Dim lGrasVEd As Boolean
+        Dim lGrasMEd As Boolean
 
         '--> Initialisation
 
@@ -2835,15 +2852,21 @@ Module Mod_NoteCalcul
             '=== Extrémité gauche
 
             If iTravee = iTravDeb Then
-                LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, i, iTraveeAffichee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
-                                             VEd(0, 1), MEd(0, 1))
+
+                lGrasVEd = (iNode = iNodeMinTranchant Or iNode = iNodeMaxTranchant)
+                lGrasMEd = (iNode = iNodeMinMoment Or iNode = iNodeMaxMoment)
+
+                LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, iNode, iTraveeAffichee, myPoutre.Nodes.xTravee(iNode), myPoutre.Nodes.xGlobal(iNode),
+                                             VEd(0, 1), MEd(0, 1),
+                                        Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                                        Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
                 'iCompteur += 1
 
             End If
 
             '=== Lignes intermédiaires
 
-            For i = iNodeO + 1 To iNodeE - 1
+            For iNode = iNodeO + 1 To iNodeE - 1
 
                 'iCompteur += 1
                 'nbLignes += 1 * EquivalenceLigneTableau
@@ -2858,8 +2881,10 @@ Module Mod_NoteCalcul
 
                 End If
 
-                LigneTableauMVCombi(lMultispan, NCol, PosTab, i, iTraveeAffichee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
-                                        VEd(i, 0), VEd(i, 1), MEd(i, 0), MEd(i, 1))
+                LigneTableauMVCombi(lMultispan, NCol, PosTab, iNode, iTraveeAffichee, myPoutre.Nodes.xTravee(iNode), myPoutre.Nodes.xGlobal(iNode),
+                                        VEd(iNode, 0), VEd(iNode, 1), MEd(iNode, 0), MEd(iNode, 1),
+                                        Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                                        Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
 
             Next
 
@@ -2867,10 +2892,12 @@ Module Mod_NoteCalcul
 
             If iTravee = iTravFin Then
                 LigneTableauMVCombiExtremite(lMultispan, False, NCol, PosTab, iNodeE, iTraveeAffichee, myPoutre.Nodes.xTravee(iNodeE), myPoutre.Nodes.xGlobal(iNodeE),
-                                             VEd(iNodeE, 0), MEd(iNodeE, 0))
+                                             VEd(iNodeE, 0), MEd(iNodeE, 0),
+                                        Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                                        Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
             Else
-                LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTraveeAffichee, myPoutre.Nodes.xTravee(i), myPoutre.Nodes.xGlobal(i),
-                                         VEd(i, 0), VEd(i, 1), MEd(i, 0), MEd(i, 1))
+                LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTraveeAffichee, myPoutre.Nodes.xTravee(iNode), myPoutre.Nodes.xGlobal(iNode),
+                                         VEd(iNode, 0), VEd(iNode, 1), MEd(iNode, 0), MEd(iNode, 1))
             End If
             'iCompteur += 1
             iTraveeAffichee += 1
@@ -2897,6 +2924,11 @@ Module Mod_NoteCalcul
         Dim lRetrait As Boolean = True
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
+        Dim Mmin, Mmax, Vmin, Vmax As Decimal
+        Dim iNodeMinMoment As Integer = -1
+        Dim iNodeMaxMoment As Integer = -1
+        Dim iNodeMinTranchant As Integer = -1
+        Dim iNodeMaxTranchant As Integer = -1
 
         '--> Initialisation
 
@@ -2911,9 +2943,15 @@ Module Mod_NoteCalcul
         myPoutre.CombiA_ELF.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELF.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
+        'Récupère les valeurs enveloppes
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
+
         '--> Affichage de la combinaison
 
-        EditionTableauEfforts(myPoutre, MEd, VEd)
+        EditionTableauEfforts(myPoutre, MEd, VEd,
+            Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+            Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
 
     End Sub
 
@@ -2932,6 +2970,11 @@ Module Mod_NoteCalcul
         Dim lRetrait As Boolean = True
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
+        Dim Mmin, Mmax, Vmin, Vmax As Decimal
+        Dim iNodeMinMoment As Integer = -1
+        Dim iNodeMaxMoment As Integer = -1
+        Dim iNodeMinTranchant As Integer = -1
+        Dim iNodeMaxTranchant As Integer = -1
 
         '--> Initialisation
 
@@ -2946,15 +2989,23 @@ Module Mod_NoteCalcul
         myPoutre.CombiA_ELS.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELS.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
+        'Récupère les valeurs enveloppes
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
+
         '--> Affichage de la combinaison
 
-        EditionTableauEfforts(myPoutre, MEd, VEd)
+        EditionTableauEfforts(myPoutre, MEd, VEd,
+                              Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                              Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
 
     End Sub
 
     Private Sub LigneTableauMVCombiExtremite(lMultiSpan As Boolean, lGauche As Boolean, NCol As Integer, Pos As Integer,
                                              iNode As Integer, iTravee As Integer, xPosT As Decimal, xPosG As Decimal,
-                                             VEd As Decimal, MEd As Decimal)
+                                             VEd As Decimal, MEd As Decimal,
+                                             Mmin As Decimal, Mmax As Decimal, iNodeMinMoment As Integer, iNodeMaxMoment As Integer,
+                                             Vmin As Decimal, Vmax As Decimal, iNodeMinTranchant As Integer, iNodeMaxTranchant As Integer)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -2969,7 +3020,14 @@ Module Mod_NoteCalcul
         '   xposG,xPosT [E] :   Position globale et dans la travée du noeud
         '   VEd         [E] :   Valeur de l'effort tranchant
         '   MEd         [E] :   Valeur du moment fléchissant
+        '   lGrasVEd    [E] :   Indique si on doit afficher la valeur de VEd en gras ou non
+        '   lGrasMEd    [E] :   Indique si on doit afficher la valeur de MEd en gras ou non
         '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration variables locales
+        Dim stringVEd, stringMEd As String
+
+
 
         InitialiseLigneTableau(NCol, HLIGNE)
 
@@ -2990,19 +3048,37 @@ Module Mod_NoteCalcul
 
         '# Effort tranchant
 
-        If lGauche Then
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False))
-        Else
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
+        stringVEd = GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False)
+
+        If iNode = iNodeMinTranchant Or iNode = iNodeMaxTranchant Then
+            If VEd = Vmin Or VEd = Vmax Then
+                stringVEd = "\G" & stringVEd & "\g" 'on met le texte en gras
+            End If
         End If
 
         If lGauche Then
             AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringVEd)
         Else
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringVEd)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
+        End If
+
+        '# Moment fléchissant
+
+        stringMEd = GetStringInUnit(MEd, Enu_TypeVariable.Effort, 3, 2, False)
+
+        If iNode = iNodeMinMoment Or iNode = iNodeMaxMoment Then
+            If MEd = Mmin Or MEd = Mmax Then
+                stringMEd = "\G" & stringMEd & "\g" 'on met le texte en gras
+            End If
+        End If
+
+        If lGauche Then
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringMEd)
+        Else
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringMEd)
             AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
         End If
 
@@ -3075,7 +3151,9 @@ Module Mod_NoteCalcul
 
     Private Sub LigneTableauMVCombi(lMultiSpan As Boolean, NCol As Integer, Pos As Integer,
                                     iNode As Integer, iTravee As Integer, xPosG As Decimal, xPosT As Decimal,
-                                    VEdG As Decimal, VEdd As Decimal, MEdG As Decimal, MEdD As Decimal)
+                                    VEdG As Decimal, VEdd As Decimal, MEdG As Decimal, MEdD As Decimal,
+                                    Mmin As Decimal, Mmax As Decimal, iNodeMinMoment As Integer, iNodeMaxMoment As Integer,
+                                      Vmin As Decimal, Vmax As Decimal, iNodeMinTranchant As Integer, iNodeMaxTranchant As Integer)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -3096,6 +3174,7 @@ Module Mod_NoteCalcul
         Dim pNColLigne As Integer
         Dim lOneM As Boolean
         Dim lOneV As Boolean
+        Dim stringVEdG, stringVEdD, stringMEdG, stringMEdD As String
 
         '--> Initialisation
 
@@ -3125,20 +3204,48 @@ Module Mod_NoteCalcul
 
         '# Effort tranchant
 
+        stringVEdG = GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False)
+        stringVEdD = GetStringInUnit(VEdd, Enu_TypeVariable.Effort, 3, 2, False)
+
+        If iNode = iNodeMinTranchant Or iNode = iNodeMaxTranchant Then
+            If VEdG = Vmin Or VEdG = Vmax Then
+                stringVEdG = "\G" & stringVEdG & "\g" 'on met le texte en gras
+            End If
+
+            If VEdd = Vmin Or VEdd = Vmax Then
+                stringVEdD = "\G" & stringVEdD & "\g" 'on met le texte en gras
+            End If
+
+        End If
+
         If lOneV Then
-            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, stringVEdG)
         Else
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdd, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringVEdG)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringVEdD)
         End If
 
         '# Moment fléchissant
 
+        stringMEdG = GetStringInUnit(MEdG, Enu_TypeVariable.Effort, 3, 2, False)
+        stringMEdD = GetStringInUnit(MEdD, Enu_TypeVariable.Effort, 3, 2, False)
+
+        If iNode = iNodeMinMoment Or iNode = iNodeMaxMoment Then
+            If MEdG = Mmin Or MEdG = Mmax Then
+                stringMEdG = "\G" & stringMEdG & "\g" 'on met le texte en gras
+            End If
+
+            If MEdD = Mmin Or MEdD = Mmax Then
+                stringMEdD = "\G" & stringMEdD & "\g" 'on met le texte en gras
+            End If
+
+        End If
+
         If lOneM Then
-            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdG, Enu_TypeVariable.Moment, 3, 2, False))
+            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, stringMEdG)
         Else
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdG, Enu_TypeVariable.Moment, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdD, Enu_TypeVariable.Moment, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringMEdG)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringMEdD)
         End If
 
     End Sub
@@ -3279,10 +3386,17 @@ Module Mod_NoteCalcul
         Dim NbLignesMax() As Integer = {25, 30}
         Dim iTab As Integer = 0
         Const NbLignesReq As Integer = 10
+        Dim Mmin, Mmax, Vmin, Vmax As Decimal
+        Dim iNodeMinMoment As Integer = -1
+        Dim iNodeMaxMoment As Integer = -1
+        Dim iNodeMinTranchant As Integer = -1
+        Dim iNodeMaxTranchant As Integer = -1
 
         '--> Initialisation
 
         If nbLignes + NbLignesReq > MAXLIGNEPPAG Then SautePage()
+        ChargeA.EnveloppesMoments(Mmax, iNodeMaxMoment, Mmin, iNodeMinMoment) 'obtention des valeurs et noeuds des moments enveloppes 
+        ChargeA.EnveloppesTranchants(Vmax, iNodeMaxTranchant, Vmin, iNodeMinTranchant) 'obtention des valeurs et noeuds des moments enveloppes 
 
         '--> Affichage du cas de charge
 
@@ -3299,7 +3413,9 @@ Module Mod_NoteCalcul
 
         '--> Affichage du tableau des sollicitations
 
-        EditionTableauEfforts(MyPoutreLoc, ChargeA.MYY, ChargeA.VZ)
+        EditionTableauEfforts(MyPoutreLoc, ChargeA.MYY, ChargeA.VZ,
+            Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+            Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
 
     End Sub
 
