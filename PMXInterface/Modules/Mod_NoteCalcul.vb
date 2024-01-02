@@ -2530,6 +2530,15 @@ Module Mod_NoteCalcul
 
                 EditionAnalyseCombiELU(MyProjet.Poutres(MyProjet.IndEnCours), i)
 
+                '--> On affiche le diagramme des efforts si l'option est activée 
+                If OptionsNdC.lDispFMDiagrams Then
+                    Const NbLigDiag As Integer = 20
+                    If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
+                    ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
+                    AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELU")
+                    nbLignes += NbLigDiag
+                End If
+
             Next
         End If
 

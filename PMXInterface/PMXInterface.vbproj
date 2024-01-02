@@ -79,7 +79,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\Cls_DiagrammeNDC.vb" />
     <Compile Include="Classes\Cls_Rapport.vb" />
     <Compile Include="Fenetres\EditionBases\Frm_AddGoujon.Designer.vb">
       <DependentUpon>Frm_AddGoujon.vb</DependentUpon>

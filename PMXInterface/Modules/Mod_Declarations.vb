@@ -523,15 +523,70 @@ Module Mod_Declarations
         Dim lDispFM_SLS As Boolean
         Dim lDispFM_FLS As Boolean
     End Structure
+
     Public OptionsNdC As struc_OptionsNdC
 
+    Public Structure struc_OptionsDiagrammes
+        Dim lDessNumeros As Boolean
+        Dim lDessCharges As Boolean
+        Dim lDessInerties As Boolean
+        Dim lDessEffortT As Boolean
+        Dim lDessMoment As Boolean
+        Dim lDessDeformee As Boolean
+    End Structure
+
+    Public OptionsDiagrammesCDC As struc_OptionsDiagrammes
+    Public OptionsDiagrammesELU As struc_OptionsDiagrammes
+    Public OptionsDiagrammesELF As struc_OptionsDiagrammes
+    Public OptionsDiagrammesELS As struc_OptionsDiagrammes
+
+
     Public Sub InitialiseOptionsNdC()
-        OptionsNdC.lShowHivossCurve = True
-        OptionsNdC.lDispFMLoadCase = True
-        OptionsNdC.lDispFMDiagrams = True
-        OptionsNdC.lDispFM_ULS = True
-        OptionsNdC.lDispFM_SLS = False
-        OptionsNdC.lDispFM_FLS = False
+        With OptionsNdC
+            .lShowHivossCurve = True
+            .lDispFMLoadCase = True
+            .lDispFMDiagrams = True
+            .lDispFM_ULS = True
+            .lDispFM_SLS = False
+            .lDispFM_FLS = False
+        End With
+
+        With OptionsDiagrammesCDC
+            .lDessNumeros = False
+            .lDessCharges = False
+            .lDessInerties = False
+            .lDessEffortT = True
+            .lDessMoment = True
+            .lDessDeformee = True
+        End With
+
+        With OptionsDiagrammesELU
+            .lDessNumeros = False
+            .lDessCharges = False
+            .lDessInerties = False
+            .lDessEffortT = True
+            .lDessMoment = True
+            .lDessDeformee = False
+        End With
+
+        With OptionsDiagrammesELF
+            .lDessNumeros = False
+            .lDessCharges = False
+            .lDessInerties = False
+            .lDessEffortT = True
+            .lDessMoment = True
+            .lDessDeformee = False
+        End With
+
+        With OptionsDiagrammesELS
+            .lDessNumeros = False
+            .lDessCharges = False
+            .lDessInerties = False
+            .lDessEffortT = True
+            .lDessMoment = True
+            .lDessDeformee = True
+        End With
+
     End Sub
 
     Public MyNote As Cls_Rapport
