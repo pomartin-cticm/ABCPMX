@@ -380,10 +380,11 @@ Module Mod_NoteCalcul
             AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("RIGHTSUPPORT"))
 
             Dim strTypTravee As String = ""
+            Dim iTraveeAffichee As Integer = 1
 
             For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
                 InitialiseLigne(5, HLIGNE, True)
-                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, i)
+                AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, iTraveeAffichee)
                 Select Case MyBeam.TypTravee(i)
                     Case cls_Poutre.EnuTypeTravee.ConsoleGauche
                         strTypTravee = BlocG("LEFTCANT")
@@ -405,6 +406,8 @@ Module Mod_NoteCalcul
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("PINNED"))
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("FREE"))
                 End Select
+
+                iTraveeAffichee += 1
 
             Next
 
@@ -1096,12 +1099,13 @@ Module Mod_NoteCalcul
 
                 '                    Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
 
+                Dim iTraveeAffichee As Integer = 1
 
                 For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
                     For j As Integer = 0 To .NombreZones(i) - 1
 
                         InitialiseLigne(nbColonne, HLIGNE, True)
-                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, i)
+                        AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, iTraveeAffichee)
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneLongueur(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                         If lDalleMixteEtPerp Then
@@ -1113,6 +1117,8 @@ Module Mod_NoteCalcul
                             End If
                         End If
                         AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
+
+                        iTraveeAffichee += 1
 
                     Next
 
@@ -1240,10 +1246,12 @@ Module Mod_NoteCalcul
                 iTraveeDeb = MyBeam.IndicePremiereTravee
                 iTraveeFin = MyBeam.IndiceDerniereTravee
 
+                Dim iTraveeAffichee As Integer = 1
+
                 For i As Integer = iTraveeDeb To iTraveeFin
                     For Each maintien In MyBeam.Maintiens(i)
                         InitialiseLigne(3, HLIGNE, True)
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, i)
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, iTraveeAffichee)
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(maintien.x_Loc, Enu_TypeVariable.Longueur, 4, 0, False))
                         If maintien.lMaintienSemelleInf And maintien.lMaintienSemelleSup Then
                             AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("BOTH_FLANGES"))
@@ -1254,6 +1262,9 @@ Module Mod_NoteCalcul
                                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("UPPER_FLANGE"))
                             End If
                         End If
+
+                        iTraveeAffichee += 1
+
                     Next
 
                     lDerniereTravee = True
@@ -2828,8 +2839,6 @@ Module Mod_NoteCalcul
         'Dim iCompteur As Integer = 0
         'Dim NbLignesMax() As Integer = {25, 30}
         Dim iTab As Integer = 0
-        Dim lGrasVEd As Boolean
-        Dim lGrasMEd As Boolean
 
         '--> Initialisation
 
@@ -2852,9 +2861,6 @@ Module Mod_NoteCalcul
             '=== Extrémité gauche
 
             If iTravee = iTravDeb Then
-
-                lGrasVEd = (iNode = iNodeMinTranchant Or iNode = iNodeMaxTranchant)
-                lGrasMEd = (iNode = iNodeMinMoment Or iNode = iNodeMaxMoment)
 
                 LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, iNode, iTraveeAffichee, myPoutre.Nodes.xTravee(iNode), myPoutre.Nodes.xGlobal(iNode),
                                              VEd(0, 1), MEd(0, 1),
@@ -2897,7 +2903,9 @@ Module Mod_NoteCalcul
                                         Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
             Else
                 LigneTableauMVCombiAppui(NCol, PosTab, iNodeE, iTraveeAffichee, myPoutre.Nodes.xTravee(iNode), myPoutre.Nodes.xGlobal(iNode),
-                                         VEd(iNode, 0), VEd(iNode, 1), MEd(iNode, 0), MEd(iNode, 1))
+                                         VEd(iNode, 0), VEd(iNode, 1), MEd(iNode, 0), MEd(iNode, 1),
+                                        Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                                        Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
             End If
             'iCompteur += 1
             iTraveeAffichee += 1
@@ -3028,7 +3036,6 @@ Module Mod_NoteCalcul
         Dim stringVEd, stringMEd As String
 
 
-
         InitialiseLigneTableau(NCol, HLIGNE)
 
         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, CStr(iNode + 1))
@@ -3086,7 +3093,9 @@ Module Mod_NoteCalcul
 
     Private Sub LigneTableauMVCombiAppui(NCol As Integer, Pos As Integer,
                                          iNode As Integer, iTravee As Integer, xPosT As Decimal, xPosG As Decimal,
-                                         VEdG As Decimal, VEdd As Decimal, MEdG As Decimal, MEdD As Decimal)
+                                         VEdG As Decimal, VEdd As Decimal, MEdG As Decimal, MEdD As Decimal,
+                                             Mmin As Decimal, Mmax As Decimal, iNodeMinMoment As Integer, iNodeMaxMoment As Integer,
+                                             Vmin As Decimal, Vmax As Decimal, iNodeMinTranchant As Integer, iNodeMaxTranchant As Integer)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -3107,6 +3116,8 @@ Module Mod_NoteCalcul
         Dim pNColLigne As Integer
         Dim lOneM As Boolean
         Dim lOneV As Boolean
+        Dim stringVEdG, stringVEdD, stringMEdG, stringMEdD As String
+
 
         '--> Initialisation
 
@@ -3130,20 +3141,45 @@ Module Mod_NoteCalcul
 
         '# Effort tranchant
 
+        stringVEdG = GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False)
+        stringVEdD = GetStringInUnit(VEdd, Enu_TypeVariable.Effort, 3, 2, False)
+
+        If iNode = iNodeMinTranchant Or iNode = iNodeMaxTranchant Then
+            If VEdG = Vmin Or VEdG = Vmax Then
+                stringVEdG = "\G" & stringVEdG & "\g" 'on met le texte en gras
+            End If
+
+            If VEdd = Vmin Or VEdd = Vmax Then
+                stringVEdD = "\G" & stringVEdD & "\g" 'on met le texte en gras
+            End If
+
+        End If
+
         If lOneV Then
-            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, stringVEdG)
         Else
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(VEdd, Enu_TypeVariable.Effort, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringVEdG)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringVEdD)
         End If
 
         '# Moment fléchissant
 
+        If iNode = iNodeMinMoment Or iNode = iNodeMaxMoment Then
+            If MEdG = Mmin Or MEdG = Mmax Then
+                stringMEdG = "\G" & stringMEdG & "\g" 'on met le texte en gras
+            End If
+
+            If MEdD = Mmin Or MEdD = Mmax Then
+                stringMEdD = "\G" & stringMEdD & "\g" 'on met le texte en gras
+            End If
+
+        End If
+
         If lOneM Then
-            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdG, Enu_TypeVariable.Moment, 3, 2, False))
+            AddCellule(2 * LC3, Bordures.Tous, PositionTexteInCell.Centre, stringMEdG)
         Else
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdG, Enu_TypeVariable.Moment, 3, 2, False))
-            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MEdD, Enu_TypeVariable.Moment, 3, 2, False))
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringMEdG)
+            AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, stringMEdD)
         End If
 
 
