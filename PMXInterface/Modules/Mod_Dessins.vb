@@ -6394,6 +6394,7 @@ Public Module Mod_Dessins
         Const SigneM As Decimal = -1
         Const SigneV As Decimal = -1
         Dim MyFontNum As New Font("Arial", 7)
+        Dim MyFontLegende As New Font("Arial", 10, FontStyle.Bold)
         Dim Chaine, ChaineMin, ChaineMax As String
         Dim MyPenB As New SolidBrush(Color.Gray)
         'Dim valMin, valMax As Decimal
@@ -6472,6 +6473,63 @@ Public Module Mod_Dessins
             For iApp As Integer = 0 To NbApp - 1
                 DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
             Next
+
+            '--> Affichage légende couleurs V et M
+
+            If .lDessMoment Or .lDessEffortT Then
+                Dim longueurRectangle, hauteurRectangle As Decimal
+                longueurRectangle = dCar / 6
+                hauteurRectangle = longueurRectangle / 6
+                Dim xo_legende, yo_legende, xe_legende, ye_legende As Decimal
+
+                If .lDessEffortT Then
+                    If .lDessMoment Then 'légende de V et M
+                        'Texte
+                        xo_legende = Longueur + dCar / 4
+                        yo_legende = -dCar / 8 + hauteurRectangle / 2
+
+                        AddTexte(myGr, New SolidBrush(ColorDiagV), "V", MyFontLegende, xo_legende, yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Effort tranchant
+                        AddTexte(myGr, New SolidBrush(ColorDiagM), "M", MyFontLegende, xo_legende, -yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Moment fléchissant 
+
+                        'Rectangle
+                        xo_legende = Longueur + dCar / 3
+                        xe_legende = xo_legende + longueurRectangle
+                        yo_legende = -dCar / 8
+                        ye_legende = yo_legende + hauteurRectangle
+
+                        AddRectanglePlein(myGr, ColorDiagV, xo_legende, yo_legende, xe_legende, ye_legende, MyParAff, True) 'Effort tranchant
+                        AddRectanglePlein(myGr, ColorDiagM, xo_legende, -yo_legende, xe_legende, -ye_legende, MyParAff, True) 'Moment fléchissant
+                    Else 'légende de V uniquement
+                        'Texte
+                        xo_legende = Longueur + dCar / 4
+                        yo_legende = 0
+
+                        AddTexte(myGr, New SolidBrush(ColorDiagV), "V", MyFontLegende, xo_legende, yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Effort tranchant
+
+                        'Rectangle
+                        xo_legende = Longueur + dCar / 3
+                        xe_legende = xo_legende + longueurRectangle
+                        yo_legende = 0
+                        ye_legende = yo_legende + hauteurRectangle
+
+                        AddRectanglePlein(myGr, ColorDiagV, xo_legende, yo_legende, xe_legende, ye_legende, MyParAff, True) 'Effort tranchant
+                    End If
+                Else 'légende de M uniquement 
+                    'Texte
+                    xo_legende = Longueur + dCar / 4
+                    yo_legende = 0
+
+                    AddTexte(myGr, New SolidBrush(ColorDiagM), "M", MyFontLegende, xo_legende, yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Effort tranchant
+
+                    'Rectangle
+                    xo_legende = Longueur + dCar / 3
+                    xe_legende = xo_legende + longueurRectangle
+                    yo_legende = 0
+                    ye_legende = yo_legende + hauteurRectangle
+
+                    AddRectanglePlein(myGr, ColorDiagM, xo_legende, yo_legende, xe_legende, ye_legende, MyParAff, True) 'Effort tranchant
+                End If
+            End If
 
             '--> Déformée
 
