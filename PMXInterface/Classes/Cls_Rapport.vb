@@ -1235,24 +1235,13 @@ Public Class Cls_Rapport
 
                 Case "RDM_COMBO"
 
-                    'Dim DiagrammesNDC As New Cls_DiagrammeNDC
-                    'Dim indiceCdc As Integer
-                    'Dim typeCombo As String
+                    Dim indiceCombo As Integer
+                    Dim typeCombo As String
 
-                    'With DiagrammesNDC
-                    '    .lDessCharges = False
-                    '    .lDessDeformee = False
-                    '    .lDessEffortT = True
-                    '    .lDessMoment = True
-                    '    .lDessInerties = False
-                    '    .lDessNumeros = False
-                    '    .lDessEchLocal = True
-                    'End With
+                    indiceCombo = CInt(TraiteReal(Mots(6)))
+                    typeCombo = Mots(7)
 
-                    'indiceCdc = CInt(TraiteReal(Mots(6)))
-                    'typeCombo = Mots(7)
-
-                    'DessineRDMCombo(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), DiagrammesNDC, indiceCdc, typeCombo, xLeftImg, YPen)
+                    DessineRDMCombo(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), indiceCombo, typeCombo, xLeftImg, YPen)
 
             End Select
 
