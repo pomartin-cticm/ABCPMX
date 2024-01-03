@@ -6359,7 +6359,7 @@ Public Module Mod_Dessins
     '                      iCas As Integer, lDef As Boolean, lMom As Boolean, lTranchant As Boolean, lNum As Boolean, lInertie As Boolean,
     '                      lChargement As Boolean, lEchLocal As Boolean, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
     Public Sub DessineRDM(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
-                          Optional iCas As Integer = 0, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+                           iCas As Integer, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   11/08/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
@@ -6380,222 +6380,218 @@ Public Module Mod_Dessins
 
         '--> Declarations
 
-        'Dim MyParAff As Struc_Affichage
-        'Dim xMin, yMin, xMax, yMax As Double
-        'Dim dCar As Double = 0
-        'Const kADJUST As Decimal = 0.95
-        'Dim Longueur As Decimal = MyPoutre.LongueurTotale
+        Dim MyParAff As Struc_Affichage
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Double = 0
+        Const kADJUST As Decimal = 0.95
+        Dim Longueur As Decimal = MyPoutre.LongueurTotale
 
-        'Dim EcartZ As Decimal = Longueur * pHi / pWi
-        'Dim DiaNode As Decimal = Longueur / 200
-        'Dim dApp As Decimal = Longueur / 50
-        'Dim kEch, kEchM As Decimal
-        'Dim lResult As Boolean '= MyPoutre.ChargesA(iCas).lRunCalcul
-        'Const SigneM As Decimal = -1
-        'Const SigneV As Decimal = -1
-        'Dim MyFontNum As New Font("Arial", 7)
-        'Dim MyFontLegende As New Font("Arial", 10, FontStyle.Bold)
-        'Dim Chaine, ChaineMin, ChaineMax As String
-        'Dim MyPenB As New SolidBrush(Color.Gray)
-        ''Dim valMin, valMax As Decimal
-
-        'Dim ColorDef = Color.DarkOrange
-        'Dim ColorDiagM = Color.DarkRed
-        'Dim ColorDiagV = Color.DarkBlue
-
-        'Dim iNodeMax, iNodeMin As Integer
-
-        'Dim ColorPoutre As Color = Color.DarkGray
-
-        'Dim MyPenPoutre As New Pen(ColorPoutre)
-        'Dim MyPenSelect As New Pen(ColorSelect, 2)
-        'Dim MyPen As Pen
-
-        'Dim CasDeCharge As cls_CasDeCharge = MyPoutre.ChargesA(iCas)
+        Dim EcartZ As Decimal = Longueur * pHi / pWi
+        Dim DiaNode As Decimal = Longueur / 200
+        Dim dApp As Decimal = Longueur / 50
+        Dim kEch, kEchM As Decimal
+        Dim lResult As Boolean '= MyPoutre.ChargesA(iCas).lRunCalcul
+        Const SigneM As Decimal = -1
+        Const SigneV As Decimal = -1
+        Dim MyFontNum As New Font("Arial", 7)
+        Dim MyFontLegende As New Font("Arial", 10, FontStyle.Bold)
+        Dim Chaine, ChaineMin, ChaineMax As String
+        Dim MyPenB As New SolidBrush(Color.Gray)
 
 
-        ''--> Initialisation
+        Dim ColorDef = Color.DarkOrange
+        Dim ColorDiagM = Color.DarkRed
+        Dim ColorDiagV = Color.DarkBlue
 
-        ''If iCas = -1 Then iCas = DiagrammesNDC.indCasDeChargeNDC
+        Dim ColorPoutre As Color = Color.DarkGray
 
-        'lResult = MyPoutre.ChargesA(iCas).lRunCalcul
+        Dim MyPenPoutre As New Pen(ColorPoutre)
+        Dim MyPenSelect As New Pen(ColorSelect, 2)
+        Dim MyPen As Pen
 
-        'Dim MyBrushN As New SolidBrush(Color.White)
-        'Dim MyPenDef As New Pen(ColorDef)
-        'Dim MyPenM As New Pen(Color.Blue)
+        Dim CasDeCharge As cls_CasDeCharge = MyPoutre.ChargesA(iCas)
+        Dim fMin, fMax, VMin, VMax, MMin, MMax As Decimal
+        Dim iNodeVMax, iNodeVMin, iNodeMMax, iNodeMMin As Integer
 
-        'xMin = 0 - dCar
-        'xMax = Longueur + dCar
 
-        'yMin = -EcartZ / 2
-        'yMax = +EcartZ / 2
+        '--> Initialisation
 
-        'ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+        lResult = MyPoutre.ChargesA(iCas).lRunCalcul
 
-        'dCar = 0.8 * EcartZ / 2
+        Dim MyBrushN As New SolidBrush(Color.White)
+        Dim MyPenDef As New Pen(ColorDef)
+        Dim MyPenM As New Pen(Color.Blue)
 
-        ''If SigneM = 1 Then
-        ''iNodeMax = .tab_iNodeMmax(iCas)
-        ''iNodeMin = .tab_iNodeMmin(iCas)
-        ''Else
-        ''iNodeMax = tab_iNodeMmin(iCas)
-        ''iNodeMin = tab_iNodeMmax(iCas)
-        ''End If
+        xMin = 0 - dCar
+        xMax = Longueur + dCar
 
-        ''--> Affichage de la poutre
+        yMin = -EcartZ / 2
+        yMax = +EcartZ / 2
 
-        'AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
-        ''--> Affichage des noeuds
+        dCar = 0.8 * EcartZ / 2
 
-        'For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
-        '    If iNode = iNodeMax Then
-        '        MyPen = MyPenSelect
-        '    Else
-        '        MyPen = MyPenPoutre
-        '    End If
-        '    AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True, MyPen)
-        '    If OptionsDiagrammesCDC.lDessNumeros Then
-        '        Chaine = "N" & CStr(iNode + 1)
-        '        AddTexte(myGr, MyPenB, Chaine, MyFontNum, MyPoutre.Nodes.xGlobal(iNode), 0, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
-        '    End If
-        'Next
 
-        ''--> Affichage des appuis
 
-        ''DessineAppui(myGr, MyPoutre.xPositionAppui(True, 1), dApp, MyParAff)
-        ''DessineAppui(myGr, MyPoutre.xPositionAppui(False, 1), dApp, MyParAff)
-        'Dim indAppuis() As Integer = Nothing
-        'Dim NbApp As Integer
-        'Dim lEtais As Boolean = (iCas = MyPoutre.IndiceCasG1PP)
-        'MyPoutre.ExtraireIndiceNoeudsAppuis(lEtais, indAppuis, NbApp)
 
-        'For iApp As Integer = 0 To NbApp - 1
-        '    DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
-        'Next
 
-        ''--> Affichage légende couleurs V et M
+        With MyPoutre.ChargesA(iCas)
 
-        'If OptionsDiagrammesCDC.lDessMoment Or OptionsDiagrammesCDC.lDessEffortT Then
-        '    Dim longueurRectangle, hauteurRectangle As Decimal
-        '    longueurRectangle = dCar / 6
-        '    hauteurRectangle = longueurRectangle / 6
-        '    Dim xo_legende, yo_legende, xe_legende, ye_legende As Decimal
 
-        '    If OptionsDiagrammesCDC.lDessEffortT Then
-        '        If OptionsDiagrammesCDC.lDessMoment Then 'légende de V et M
-        '            'Texte
-        '            xo_legende = Longueur + dCar / 4
-        '            yo_legende = -dCar / 8 + hauteurRectangle / 2
+            '--> Affichage de la poutre
 
-        '            AddTexte(myGr, New SolidBrush(ColorDiagV), "V", MyFontLegende, xo_legende, yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Effort tranchant
-        '            AddTexte(myGr, New SolidBrush(ColorDiagM), "M", MyFontLegende, xo_legende, -yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Moment fléchissant 
+            AddLigne(myGr, MyPenPoutre, 0, 0, Longueur, 0, MyParAff)
 
-        '            'Rectangle
-        '            xo_legende = Longueur + dCar / 3
-        '            xe_legende = xo_legende + longueurRectangle
-        '            yo_legende = -dCar / 8
-        '            ye_legende = yo_legende + hauteurRectangle
+            '--> Affichage des noeuds
 
-        '            AddRectanglePlein(myGr, ColorDiagV, xo_legende, yo_legende, xe_legende, ye_legende, MyParAff, True) 'Effort tranchant
-        '            AddRectanglePlein(myGr, ColorDiagM, xo_legende, -yo_legende, xe_legende, -ye_legende, MyParAff, True) 'Moment fléchissant
-        '        Else 'légende de V uniquement
-        '            'Texte
-        '            xo_legende = Longueur + dCar / 4
-        '            yo_legende = 0
+            For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
+                MyPen = MyPenPoutre
+                AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), 0, DiaNode, MyParAff, True, MyPen)
+                If OptionsDiagrammesCDC.lDessNumeros Then
+                    Chaine = "N" & CStr(iNode + 1)
+                    AddTexte(myGr, MyPenB, Chaine, MyFontNum, MyPoutre.Nodes.xGlobal(iNode), 0, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+                End If
+            Next
 
-        '            AddTexte(myGr, New SolidBrush(ColorDiagV), "V", MyFontLegende, xo_legende, yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Effort tranchant
+            '--> Affichage des appuis
 
-        '            'Rectangle
-        '            xo_legende = Longueur + dCar / 3
-        '            xe_legende = xo_legende + longueurRectangle
-        '            yo_legende = 0
-        '            ye_legende = yo_legende + hauteurRectangle
+            Dim indAppuis() As Integer = Nothing
+            Dim NbApp As Integer
+            Dim lEtais As Boolean = (iCas = MyPoutre.IndiceCasG1PP)
+            MyPoutre.ExtraireIndiceNoeudsAppuis(lEtais, indAppuis, NbApp)
 
-        '            AddRectanglePlein(myGr, ColorDiagV, xo_legende, yo_legende, xe_legende, ye_legende, MyParAff, True) 'Effort tranchant
-        '        End If
-        '    Else 'légende de M uniquement 
-        '        'Texte
-        '        xo_legende = Longueur + dCar / 4
-        '        yo_legende = 0
+            For iApp As Integer = 0 To NbApp - 1
+                DessineAppui(myGr, MyPoutre.Nodes.xGlobal(indAppuis(iApp)), dApp, MyParAff)
+            Next
 
-        '        AddTexte(myGr, New SolidBrush(ColorDiagM), "M", MyFontLegende, xo_legende, yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Effort tranchant
+            '--> Affichage légende couleurs V et M
 
-        '        'Rectangle
-        '        xo_legende = Longueur + dCar / 3
-        '        xe_legende = xo_legende + longueurRectangle
-        '        yo_legende = 0
-        '        ye_legende = yo_legende + hauteurRectangle
+            If OptionsDiagrammesCDC.lDessMoment Or OptionsDiagrammesCDC.lDessEffortT Then
+                Dim longueurRectangle, hauteurRectangle As Decimal
+                longueurRectangle = dCar / 6
+                hauteurRectangle = longueurRectangle / 6
+                Dim xo_legende, yo_legende, xe_legende, ye_legende As Decimal
 
-        '        AddRectanglePlein(myGr, ColorDiagM, xo_legende, yo_legende, xe_legende, ye_legende, MyParAff, True) 'Effort tranchant
-        '    End If
-        'End If
+                If OptionsDiagrammesCDC.lDessEffortT Then
+                    If OptionsDiagrammesCDC.lDessMoment Then 'légende de V et M
+                        'Texte
+                        xo_legende = Longueur + dCar / 4
+                        yo_legende = -dCar / 8 + hauteurRectangle / 2
 
-        ''--> Déformée
+                        AddTexte(myGr, New SolidBrush(ColorDiagV), "V", MyFontLegende, xo_legende, yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Effort tranchant
+                        AddTexte(myGr, New SolidBrush(ColorDiagM), "M", MyFontLegende, xo_legende, -yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Moment fléchissant 
 
-        'Dim Uz As Decimal
-        'Dim xo, xe, yo, ye As Decimal
+                        'Rectangle
+                        xo_legende = Longueur + dCar / 3
+                        xe_legende = xo_legende + longueurRectangle
+                        yo_legende = -dCar / 8
+                        ye_legende = yo_legende + hauteurRectangle
 
-        ''MyPoutre.ChargesA(iCas).EnveloppesFleche(fMin, fMax)
+                        AddRectanglePlein(myGr, ColorDiagV, xo_legende, yo_legende, xe_legende, ye_legende, MyParAff, True) 'Effort tranchant
+                        AddRectanglePlein(myGr, ColorDiagM, xo_legende, -yo_legende, xe_legende, -ye_legende, MyParAff, True) 'Moment fléchissant
+                    Else 'légende de V uniquement
+                        'Texte
+                        xo_legende = Longueur + dCar / 4
+                        yo_legende = 0
 
-        'If ((Not IsEqual(.fMinG, 0)) Or (Not (IsEqual(.fMinG, 0)))) And lResult And OptionsDiagrammesCDC.lDessDeformee Then
+                        AddTexte(myGr, New SolidBrush(ColorDiagV), "V", MyFontLegende, xo_legende, yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Effort tranchant
 
-        '    ' kEch = EcartZ / (2 * Math.Max(Math.Abs(fMinG), fMaxG))
-        '    kEch = CoefEchelleDessin(.fMaxG, .fMinG, .tab_fMax(iCas), .tab_fMin(iCas), EcartZ / 2, 10 ^ -9)
+                        'Rectangle
+                        xo_legende = Longueur + dCar / 3
+                        xe_legende = xo_legende + longueurRectangle
+                        yo_legende = 0
+                        ye_legende = yo_legende + hauteurRectangle
 
-        '    For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
-        '        xo = MyPoutre.Nodes.xGlobal(iNode)
-        '        xe = MyPoutre.Nodes.xGlobal(iNode + 1)
-        '        yo = MyPoutre.ChargesA(iCas).UZ(iNode) * kEch
-        '        ye = MyPoutre.ChargesA(iCas).UZ(iNode + 1) * kEch
-        '        AddLigne(myGr, MyPenDef, xo, yo, xe, ye, MyParAff)
-        '    Next
+                        AddRectanglePlein(myGr, ColorDiagV, xo_legende, yo_legende, xe_legende, ye_legende, MyParAff, True) 'Effort tranchant
+                    End If
+                Else 'légende de M uniquement 
+                    'Texte
+                    xo_legende = Longueur + dCar / 4
+                    yo_legende = 0
 
-        '    For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
-        '        Uz = MyPoutre.ChargesA(iCas).UZ(iNode)
-        '        AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), kEch * Uz, DiaNode, MyParAff, True, MyPenDef)
-        '    Next
+                    AddTexte(myGr, New SolidBrush(ColorDiagM), "M", MyFontLegende, xo_legende, yo_legende, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle) 'Effort tranchant
 
-        'End If
+                    'Rectangle
+                    xo_legende = Longueur + dCar / 3
+                    xe_legende = xo_legende + longueurRectangle
+                    yo_legende = 0
+                    ye_legende = yo_legende + hauteurRectangle
 
-        ''--> Représentation du chargement
+                    AddRectanglePlein(myGr, ColorDiagM, xo_legende, yo_legende, xe_legende, ye_legende, MyParAff, True) 'Effort tranchant
+                End If
+            End If
 
-        'If OptionsDiagrammesCDC.lDessCharges Then
-        '    DessineChargement(myGr, MyPoutre.ChargesA(iCas), MyPoutre.IndicePremiereTravee, MyPoutre.IndiceDerniereTravee, kEch, dCar,
-        '                          MyPoutre.Nodes.xGlobal, MyPoutre.Nodes.nbNodes, MyParAff)
-        'End If
+            '--> Déformée
 
-        ''--> Inerties
+            Dim Uz As Decimal
+            Dim xo, xe, yo, ye As Decimal
 
-        'If OptionsDiagrammesCDC.lDessInerties Then
-        '    DessineProp(myGr, MyPoutre, iCas, dCar, MyParAff)
-        'End If
+            If lResult And OptionsDiagrammesCDC.lDessDeformee Then
 
-        ''--> Diagramme de Moments de flexion
+                .EnveloppesFleche(fMax, fMin)
 
-        'If OptionsDiagrammesCDC.lDessMoment And lResult Then
+                kEch = CoefEchelleDessin(fMin, fMax, EcartZ / 2)
 
-        '    kEchM = CoefEchelleDessin(.MmaxG, .MminG, .tab_Mmax(iCas), .tab_Mmin(iCas), .lDessEchLocal, EcartZ / 2) * SigneM
+                For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 2
+                    xo = MyPoutre.Nodes.xGlobal(iNode)
+                    xe = MyPoutre.Nodes.xGlobal(iNode + 1)
+                    yo = .UZ(iNode) * kEch
+                    ye = .UZ(iNode + 1) * kEch
+                    AddLigne(myGr, MyPenDef, xo, yo, xe, ye, MyParAff)
+                Next
 
-        '    ChaineMin = GetStringInUnit(DiagrammesNDC.tab_Mmin(iCas), Enu_TypeVariable.Moment, 4, 2, True)
-        '    ChaineMax = GetStringInUnit(DiagrammesNDC.tab_Mmax(iCas), Enu_TypeVariable.Moment, 4, 2, True)
+                For iNode As Integer = 0 To MyPoutre.Nodes.nbNodes - 1
+                    Uz = .UZ(iNode)
+                    AddCerclePlein(myGr, MyBrushN, MyPoutre.Nodes.xGlobal(iNode), kEch * Uz, DiaNode, MyParAff, True, MyPenDef)
+                Next
 
-        '    DessineDiagrammeRDM(myGr, MyPoutre, MyPoutre.ChargesA(iCas).MYY, kEchM, ColorDiagM, MyParAff, DiagrammesNDC.lDessValEnv, DiagrammesNDC.tab_iNodeMmin(iCas), DiagrammesNDC.tab_iNodeMmax(iCas), ChaineMin, ChaineMax, DiagrammesNDC.tab_Mmin(iCas), DiagrammesNDC.tab_Mmax(iCas))
+            End If
 
-        'End If
+            '--> Représentation du chargement
 
-        ''--> Diagramme de efforts tranchants
+            If OptionsDiagrammesCDC.lDessCharges Then
+                DessineChargement(myGr, MyPoutre.ChargesA(iCas), MyPoutre.IndicePremiereTravee, MyPoutre.IndiceDerniereTravee, kEch, dCar,
+                                      MyPoutre.Nodes.xGlobal, MyPoutre.Nodes.nbNodes, MyParAff)
+            End If
 
-        'If OptionsDiagrammesCDC.lDessEffortT And lResult Then
+            '--> Inerties
 
-        '    ChaineMin = GetStringInUnit(DiagrammesNDC.tab_Vmin(iCas), Enu_TypeVariable.Effort, 4, 2, True)
-        '    ChaineMax = GetStringInUnit(DiagrammesNDC.tab_Vmax(iCas), Enu_TypeVariable.Effort, 4, 2, True)
+            If OptionsDiagrammesCDC.lDessInerties Then
+                DessineProp(myGr, MyPoutre, iCas, dCar, MyParAff)
+            End If
 
-        '    kEchM = CoefEchelleDessin(.VmaxG, .VminG, .tab_Vmax(iCas), .tab_Vmin(iCas), .lDessEchLocal, EcartZ / 2) * SigneV
+            '--> Diagramme de Moments de flexion
 
-        '    DessineDiagrammeRDM(myGr, MyPoutre, MyPoutre.ChargesA(iCas).VZ, kEchM, ColorDiagV, MyParAff, DiagrammesNDC.lDessValEnv, DiagrammesNDC.tab_iNodeVmin(iCas), DiagrammesNDC.tab_iNodeVmax(iCas), ChaineMin, ChaineMax, DiagrammesNDC.tab_Vmin(iCas), DiagrammesNDC.tab_Vmax(iCas))
+            If OptionsDiagrammesCDC.lDessMoment And lResult Then
 
-        'End If
+                .EnveloppesMoments(MMax, iNodeMMax, MMin, iNodeMMin)
+
+                kEchM = CoefEchelleDessin(MMin, MMax, EcartZ / 2) * SigneM
+
+                ChaineMin = GetStringInUnit(MMin, Enu_TypeVariable.Moment, 4, 2, True)
+                ChaineMax = GetStringInUnit(MMax, Enu_TypeVariable.Moment, 4, 2, True)
+
+                DessineDiagrammeRDM(myGr, MyPoutre, MyPoutre.ChargesA(iCas).MYY, kEchM, ColorDiagM, MyParAff, OptionsDiagrammesCDC.lDessValEnv, iNodeMMin, iNodeMMax, ChaineMin, ChaineMax, MMin, MMax)
+
+            End If
+
+            '--> Diagramme de efforts tranchants
+
+            If OptionsDiagrammesCDC.lDessEffortT And lResult Then
+
+                .EnveloppesTranchants(VMax, iNodeVMax, VMin, iNodeMMin)
+
+                kEchM = CoefEchelleDessin(VMin, VMax, EcartZ / 2) * SigneV
+
+                ChaineMin = GetStringInUnit(VMin, Enu_TypeVariable.Effort, 4, 2, True)
+                ChaineMax = GetStringInUnit(VMax, Enu_TypeVariable.Effort, 4, 2, True)
+
+                DessineDiagrammeRDM(myGr, MyPoutre, MyPoutre.ChargesA(iCas).VZ, kEchM, ColorDiagV, MyParAff, OptionsDiagrammesCDC.lDessValEnv, iNodeVMin, iNodeVMax, ChaineMin, ChaineMax, VMin, VMax)
+
+            End If
+
+        End With
 
     End Sub
 
@@ -6860,37 +6856,57 @@ Public Module Mod_Dessins
     '    End With
     'End Sub
 
-    Private Function CoefEchelleDessin(RmaxG As Decimal, RminG As Decimal, RmaxL As Decimal, RminL As Decimal, lDessEchLocal As Boolean, dCar As Decimal, Optional Epsilon As Decimal = 0.001) As Decimal
-        '-----------------------------------------------------------------------------------------------
-        '   18/09/23 :  Version 1.00
-        '-----------------------------------------------------------------------------------------------
-        '   Représentation d'un diagramme moment ou effort tranchant
-        '-----------------------------------------------------------------------------------------------
-        '   RmaxG, RminG    [E] :   Valeurs min et max de la variable obtenues pour tous les cas de charge
-        '   RmaxL, RminL    [E] :   Valeurs min et max de la variable obtenues pour le cas de charge traité
-        '   myParAff        [E] :   Paramètre affichage
-        '-----------------------------------------------------------------------------------------------
+    'Private Function CoefEchelleDessin(RmaxG As Decimal, RminG As Decimal, RmaxL As Decimal, RminL As Decimal, lDessEchLocal As Boolean, dCar As Decimal, Optional Epsilon As Decimal = 0.001) As Decimal
+    '    '-----------------------------------------------------------------------------------------------
+    '    '   18/09/23 :  Version 1.00
+    '    '-----------------------------------------------------------------------------------------------
+    '    '   Représentation d'un diagramme moment ou effort tranchant
+    '    '-----------------------------------------------------------------------------------------------
+    '    '   RmaxG, RminG    [E] :   Valeurs min et max de la variable obtenues pour tous les cas de charge
+    '    '   RmaxL, RminL    [E] :   Valeurs min et max de la variable obtenues pour le cas de charge traité
+    '    '   myParAff        [E] :   Paramètre affichage
+    '    '-----------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
+
+    '    Dim kEch As Decimal
+    '    Dim valMin, valMax As Decimal
+
+    '    '--> Traitement
+
+    '    If lDessEchLocal Then
+    '        valMin = RminL
+    '        valMax = RmaxL
+    '    Else
+    '        valMin = RminG
+    '        valMax = RmaxG
+    '    End If
+
+    '    If IsEqual(Math.Abs(valMin), 0, Epsilon) And (IsEqual(valMax, 0, Epsilon)) Then
+    '        kEch = 1
+    '    Else
+    '        kEch = dCar / (Math.Max(Math.Abs(valMin), valMax))
+    '    End If
+
+    '    Return kEch
+    'End Function
+
+    Private Function CoefEchelleDessin(valMin As Decimal, valMax As Decimal, dCar As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------
+        '   04/10/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Retourne le coefficient d'échelle à utiliser pour un diagramme
+        '-----------------------------------------------------------------------------------------------
+        '   valMin      [E] :   valeur mini du diagramme
+        '   valMax      [E] :   valeur maxi du diagramme
+        '   dCar        [E] :   valeur caractéristique pour l'affichage du diagramme
+        '-----------------------------------------------------------------------------------------------
 
         Dim kEch As Decimal
-        Dim valMin, valMax As Decimal
+        Dim valAbsMax As Decimal
 
-        '--> Traitement
-
-        If lDessEchLocal Then
-            valMin = RminL
-            valMax = RmaxL
-        Else
-            valMin = RminG
-            valMax = RmaxG
-        End If
-
-        If IsEqual(Math.Abs(valMin), 0, Epsilon) And (IsEqual(valMax, 0, Epsilon)) Then
-            kEch = 1
-        Else
-            kEch = dCar / (Math.Max(Math.Abs(valMin), valMax))
-        End If
+        valAbsMax = Math.Max(Math.Abs(valMin), valMax)
+        If IsEqual(valAbsMax, 0) Then kEch = 1 Else kEch = dCar / valAbsMax
 
         Return kEch
     End Function

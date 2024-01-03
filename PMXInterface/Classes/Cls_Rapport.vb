@@ -1227,23 +1227,11 @@ Public Class Cls_Rapport
 
                 Case "RDM_CHARGESA"
 
-                    'Dim DiagrammesNDC As New Cls_DiagrammeNDC
                     Dim indiceCdc As Integer
-
-                    'With DiagrammesNDC
-                    '    .lDessCharges = False
-                    '    .lDessDeformee = False
-                    '    .lDessEffortT = True
-                    '    .lDessMoment = True
-                    '    .lDessInerties = False
-                    '    .lDessNumeros = False
-                    '    .lDessEchLocal = True
-                    'End With
 
                     indiceCdc = CInt(TraiteReal(Mots(6)))
 
-                    ''DessineRDM(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), DiagrammesNDC, Me.DiagrammesNDC.indCasDeChargeNDC, xLeftImg, YPen)
-                    'DessineRDM(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), DiagrammesNDC, indiceCdc, xLeftImg, YPen)
+                    DessineRDM(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), indiceCdc, xLeftImg, YPen)
 
                 Case "RDM_COMBO"
 

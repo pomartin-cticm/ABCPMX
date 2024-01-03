@@ -533,6 +533,7 @@ Module Mod_Declarations
         Dim lDessEffortT As Boolean
         Dim lDessMoment As Boolean
         Dim lDessDeformee As Boolean
+        Dim lDessValEnv As Boolean
     End Structure
 
     Public OptionsDiagrammesCDC As struc_OptionsDiagrammes
@@ -557,7 +558,8 @@ Module Mod_Declarations
             .lDessInerties = False
             .lDessEffortT = True
             .lDessMoment = True
-            .lDessDeformee = True
+            .lDessDeformee = False
+            .lDessValEnv = True
         End With
 
         With OptionsDiagrammesELU
@@ -567,6 +569,7 @@ Module Mod_Declarations
             .lDessEffortT = True
             .lDessMoment = True
             .lDessDeformee = False
+            .lDessValEnv = True
         End With
 
         With OptionsDiagrammesELF
@@ -576,6 +579,7 @@ Module Mod_Declarations
             .lDessEffortT = True
             .lDessMoment = True
             .lDessDeformee = False
+            .lDessValEnv = True
         End With
 
         With OptionsDiagrammesELS
@@ -585,6 +589,7 @@ Module Mod_Declarations
             .lDessEffortT = True
             .lDessMoment = True
             .lDessDeformee = True
+            .lDessValEnv = True
         End With
 
     End Sub
