@@ -85,7 +85,7 @@ Imports PMXMoteur2
 
         ValRef = 557.0 * 10 ^ (-6)
 
-        Assert.IsTrue(IsEqual(MyProfil.ModuleFlexionElastiqueYY, ValRef))
+        Assert.IsTrue(IsEqual(MyProfil.ModuleFlexionYY, ValRef))
 
         '# Module de flexion plastique / yy
 
@@ -194,7 +194,7 @@ Imports PMXMoteur2
         '# module élastique flexion
 
         ValRef = 4200.1 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
+        DeltaV = (MyProfil.ModuleFlexionYY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Position du centre de cisaillement
@@ -369,12 +369,12 @@ Imports PMXMoteur2
         '# module élastique flexion élastique
 
         ValRef = 546.989 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
+        DeltaV = (MyProfil.ModuleFlexionYY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Inertie ZZ
 
-        MyProfil.ProprietesElastiquesMzz(True, 1, zANE, InertieZ, MelRd)
+        MyProfil.ProprietesMzz(True, 1, zANE, InertieZ, MelRd)
 
         ValRef = 1864.789 * 10 ^ (-8)
         DeltaV = (InertieZ - ValRef) / ValRef
@@ -453,12 +453,12 @@ Imports PMXMoteur2
         '# module élastique flexion élastique
 
         ValRef = 533.949 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
+        DeltaV = (MyProfil.ModuleFlexionYY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Inertie ZZ
 
-        MyProfil.ProprietesElastiquesMzz(True, 1, zANE, InertieZ, MelRd)
+        MyProfil.ProprietesMzz(True, 1, zANE, InertieZ, MelRd)
 
         ValRef = 390.179 * 10 ^ (-8)
         DeltaV = (InertieZ - ValRef) / ValRef
@@ -531,12 +531,12 @@ Imports PMXMoteur2
         '# module élastique flexion élastique
 
         ValRef = 364.893 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionElastiqueYY - ValRef) / ValRef
+        DeltaV = (MyProfil.ModuleFlexionYY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Inertie ZZ
 
-        MyProfil.ProprietesElastiquesMzz(True, 1, zANE, InertieZ, MelRd)
+        MyProfil.ProprietesMzz(True, 1, zANE, InertieZ, MelRd)
 
         ValRef = 340.54 * 10 ^ (-8)
         DeltaV = (InertieZ - ValRef) / ValRef

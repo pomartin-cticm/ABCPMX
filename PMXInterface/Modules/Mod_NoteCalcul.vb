@@ -578,11 +578,12 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("AV_PROFILE") & TABAFF & "A\-v\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.AireAv, Enu_TypeVariable.AireCM2, 4, 1, True))
         AddLigneNDC(TABW2 & BlocG("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieY, Enu_TypeVariable.InertieCM4, 4, 0, True))
         AddLigneNDC(TABW2 & BlocG("IZ_PROFILE") & TABAFF & "I\-z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("WEL_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
-        If lLamine Then
-            AddLigneNDC(TABW2 & BlocG("WEL_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 1, True))
-        End If
-        AddLigneNDC(TABW2 & BlocG("WPL_PROFILE") & TABAFF & "W\-pl\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("WEL_Y_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        'If lLamine Then
+        AddLigneNDC(TABW2 & BlocG("WEL_Z_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        'End If
+        AddLigneNDC(TABW2 & BlocG("WPL_Y_PROFILE") & TABAFF & "W\-pl,y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("WPL_Z_PROFILE") & TABAFF & "W\-pl,z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWplz, Enu_TypeVariable.ModuleCM3, 4, 1, True))
         AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
         AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
 
@@ -2006,9 +2007,8 @@ Module Mod_NoteCalcul
         Dim iTravee As Integer
         Dim lConstruction As Boolean = lDalle.Contains(False)
         Dim lEnrob As Boolean = MyBeam.lEnrobage
-        Dim zANE, InertieY, MelRd As Decimal
+        Dim zANE, InertieY, MelRd, zANP, MplRd As Decimal
         Dim strDebut As String = ""
-        Dim zANP, MplRd As Decimal
 
         '# Largeur efficace
 
@@ -2035,7 +2035,7 @@ Module Mod_NoteCalcul
 
             If lConstruction Then
 
-                MyBeam.Section.ProfilA.ProprietesElastiquesMyy(-1, True, MyBeam.Param.Gamma.GammaM0, zANE, InertieY, MelRd)
+                MyBeam.Section.ProfilA.ProprietesMyy(-1, True, MyBeam.Param.Gamma.GammaM0, zANE, InertieY, MelRd, zANP, MplRd)
 
                 AddLigneNDC(TABW3 & "\U" & BlocSP("CONSTRUCTIONP") & "\u" &
                             TABAFF & "I\-el,y\=" & TABEGAL & GetStringInUnit(InertieY, Enu_TypeVariable.InertieCM4, 3, 2, True))
@@ -5617,9 +5617,10 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("AV_PROFILE") & TABAFF & "A\-v\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.AireAv, Enu_TypeVariable.AireCM2, 4, 1, True))
         AddLigneNDC(TABW2 & BlocG("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieY, Enu_TypeVariable.InertieCM4, 4, 0, True))
         AddLigneNDC(TABW2 & BlocG("IZ_PROFILE") & TABAFF & "I\-z\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieZ, Enu_TypeVariable.InertieCM4, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("WEL_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
-        AddLigneNDC(TABW2 & BlocG("WEL_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 1, True))
-        AddLigneNDC(TABW2 & BlocG("WPL_PROFILE") & TABAFF & "W\-pl\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("WEL_Y_PROFILE") & TABAFF & "W\-el,y\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("WEL_Z_PROFILE") & TABAFF & "W\-el,z\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("WPL_Y_PROFILE") & TABAFF & "W\-pl\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("WPL_Z_PROFILE") & TABAFF & "W\-pl\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.ModuleWplz, Enu_TypeVariable.ModuleCM3, 4, 1, True))
         AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
         AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
 

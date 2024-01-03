@@ -2468,12 +2468,12 @@ Public Class cls_Poutre
         '--> Déclaration
 
         Dim Aire, InertieY As Decimal
-        Dim zANE, MelRd As Decimal
+        Dim zANE, MelRd, zANP, MplRd As Decimal
         Dim iElt As Integer
 
         '--> Calculs des propriétés
 
-        Me.Section.ProfilA.ProprietesElastiquesMyy(1, False, 1, zANE, InertieY, MelRd)
+        Me.Section.ProfilA.ProprietesMyy(1, False, 1, zANE, InertieY, MelRd, zANP, MplRd)
         Aire = Me.Section.ProfilA.Aire
 
         '--> Attribution à tous les éléments 

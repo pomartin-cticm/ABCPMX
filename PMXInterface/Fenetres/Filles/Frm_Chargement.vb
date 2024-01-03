@@ -573,7 +573,7 @@ Public Class Frm_Chargement
 
         '--> Déclarations
 
-        Dim zANE, InertieY, MelRd, Aire As Decimal
+        Dim zANE, InertieY, MelRd, zANP, MplRd, Aire As Decimal
 
         '--> Noeuds
 
@@ -591,7 +591,7 @@ Public Class Frm_Chargement
 
         '# Propriétés des éléments
 
-        MyPoutre.Section.ProfilA.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        MyPoutre.Section.ProfilA.ProprietesMyy(1, True, 1, zANE, InertieY, MelRd, zANP, MplRd)
         Aire = MyPoutre.Section.ProfilA.Aire
 
         MyPoutre.Analyse.AttribuerProprietesConstantes(InertieY, Aire)
