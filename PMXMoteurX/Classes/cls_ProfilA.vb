@@ -1437,7 +1437,7 @@ Public Class cls_ProfilA
         'End If
 
         '# Plat soudé dans le cas de SFB, IFB-A et IFB-B
-        If Me.Plat_t > 0 Then MyModele.AddMaille(Me.AirePlat, Me.Plat_b, 0, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AirePlat, Me.Plat_b, 0, 1, 1, 1, Fy, 1, GammaM0)
 
         '--> Recherche de l'axe neutre élastique
 
@@ -1507,7 +1507,7 @@ Public Class cls_ProfilA
 
 
         '# Plat soudé dans le cas de SFB, IFB-A et IFB-B
-        If Me.Plat_t > 0 Then MyModele.AddMaille(Me.AirePlat, Me.Plat_b, 0, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AirePlat, Me.Plat_b, 0, 1, 1, 1, Fy, 1, GammaM0)
 
         '--> Recherche de l'axe neutre élastique
 
@@ -1561,7 +1561,7 @@ Public Class cls_ProfilA
         '--> Modélisation du profilé acier
 
         '# Plat soudé dans le cas de SFB, IFB-A et IFB-B
-        If Me.Plat_t > 0 Then MyModele.AddMaille(Me.AirePlat, Me.Plat_b, 0, 1, 1, 1, Fy, 1, GammaM0)
+        MyModele.AddMaille(Me.AirePlat, Me.Plat_b, 0, 1, 1, 1, Fy, 1, GammaM0)
 
 
         '# Âme
