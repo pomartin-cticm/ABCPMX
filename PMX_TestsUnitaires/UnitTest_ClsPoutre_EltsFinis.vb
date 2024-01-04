@@ -30,7 +30,7 @@ Imports PMXMoteur2
         Dim pPoutre As New cls_Poutre(NomCharges)
         Const ChargeRep As Decimal = 10000
         Dim Longueur As Decimal = 10
-        Dim Aire, zANE, InertieY, MelRd As Decimal
+        Dim Aire, zANE, zANP, InertieY, MelRd, MplRd As Decimal
         Dim ValRef As Decimal
         Dim MomMax, VMax, fMax, Rz As Decimal
         Const kConvMPaPa As Decimal = 10 ^ 6
@@ -81,7 +81,7 @@ Imports PMXMoteur2
 
         '# Propriétés des éléments
 
-        pPoutre.Section.ProfilA.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        pPoutre.Section.ProfilA.ProprietesMyy(1, True, 1, zANE, InertieY, MelRd, zANP, MplRd)
         Aire = pPoutre.Section.ProfilA.Aire
 
         pPoutre.Analyse.AttribuerProprietesConstantes(InertieY, Aire)
@@ -137,7 +137,7 @@ Imports PMXMoteur2
         Const pForce As Decimal = 10000
 
         Dim Longueur As Decimal = 8
-        Dim Aire, zANE, InertieY, MelRd As Decimal
+        Dim Aire, zANE, zANP, InertieY, MelRd, MplRd As Decimal
         Dim ValRef As Decimal
         Dim MomMax, VMax, fMax, Rz As Decimal
         Const kConvMPaPa As Decimal = 10 ^ 6
@@ -188,7 +188,7 @@ Imports PMXMoteur2
 
         '# Propriétés des éléments
 
-        pPoutre.Section.ProfilA.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        pPoutre.Section.ProfilA.ProprietesMyy(1, True, 1, zANE, InertieY, MelRd, zANP, MplRd)
         Aire = pPoutre.Section.ProfilA.Aire
 
         pPoutre.Analyse.AttribuerProprietesConstantes(InertieY, Aire)
@@ -245,7 +245,7 @@ Imports PMXMoteur2
         Const QSurf As Decimal = 10000 / 5
         Dim ChargeRep As Decimal
         Dim Longueur As Decimal = 8
-        Dim Aire, zANE, InertieY, MelRd As Decimal
+        Dim Aire, zANE, zANP, InertieY, MelRd, MplRd As Decimal
         Dim ValRef As Decimal
         Dim MomMax, VMax, fMax, Rz As Decimal
         Const kConvMPaPa As Decimal = 10 ^ 6
@@ -298,7 +298,7 @@ Imports PMXMoteur2
 
         '# Propriétés des éléments
 
-        pPoutre.Section.ProfilA.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        pPoutre.Section.ProfilA.ProprietesMyy(1, True, 1, zANE, InertieY, MelRd, zANP, MplRd)
         Aire = pPoutre.Section.ProfilA.Aire
 
         pPoutre.Analyse.AttribuerProprietesConstantes(InertieY, Aire)

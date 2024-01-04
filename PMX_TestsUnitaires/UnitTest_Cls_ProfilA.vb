@@ -23,7 +23,7 @@ Imports PMXMoteur2
         Dim MyProfil As New cls_ProfilA
         Dim ValRef, Valeur As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
-        Dim zANE, Inertie, MelRd As Decimal
+        Dim zANE, Inertie, Wel, MelRd, zANP, MplRd, Wpl As Decimal
 
         '--> Initialisation
 
@@ -76,7 +76,7 @@ Imports PMXMoteur2
 
         '# Inertie de flexion YY
 
-        MyProfil.ProprietesElastiquesMyy(1, True, 1, zANE, Inertie, MelRd)
+        MyProfil.ProprietesMyy(1, True, 1, zANE, Inertie, MelRd, zANP, MplRd)
         ValRef = 8356 * 10 ^ (-8)
 
         Assert.IsTrue(IsEqual(Inertie, ValRef))
@@ -85,13 +85,15 @@ Imports PMXMoteur2
 
         ValRef = 557.0 * 10 ^ (-6)
 
-        Assert.IsTrue(IsEqual(MyProfil.ModuleFlexionYY, ValRef))
+        MyProfil.ModuleFlexionYY(Wel, Wpl)
+
+        Assert.IsTrue(IsEqual(Wel, ValRef))
 
         '# Module de flexion plastique / yy
 
         ValRef = 628.3 * 10 ^ (-6)
 
-        Assert.IsTrue(IsEqual(MyProfil.ModuleFlexionPlastiqueYY, ValRef))
+        Assert.IsTrue(IsEqual(Wpl, ValRef))
 
         '# Inertie de flexion zz
 
@@ -150,7 +152,7 @@ Imports PMXMoteur2
         Dim MyProfil As New cls_ProfilA
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
-        Dim zANE, InertieY, MelRd As Decimal
+        Dim zANE, zANP, InertieY, MelRd, MplRd, Wel, Wpl As Decimal
         Dim Valeur As Decimal
 
         '--> Initialisation
@@ -179,7 +181,7 @@ Imports PMXMoteur2
 
         '# Inertie YY
 
-        MyProfil.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        MyProfil.ProprietesMyy(1, True, 1, zANE, InertieY, MelRd, zANP, MplRd)
 
         ValRef = 150394 * 10 ^ (-8)
         DeltaV = (InertieY - ValRef) / ValRef
@@ -194,7 +196,9 @@ Imports PMXMoteur2
         '# module élastique flexion
 
         ValRef = 4200.1 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionYY - ValRef) / ValRef
+
+        MyProfil.ModuleFlexionYY(Wel, Wpl)
+        DeltaV = (Wel - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Position du centre de cisaillement
@@ -318,7 +322,7 @@ Imports PMXMoteur2
         Dim MyProfil As New cls_ProfilA
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 2 / 1000
-        Dim zANE, InertieY, InertieZ, MelRd As Decimal
+        Dim zANE, zANP, InertieY, InertieZ, MelRd, MplRd, WelY, WplY As Decimal
 
         '--> Initialisation
 
@@ -354,7 +358,7 @@ Imports PMXMoteur2
 
         '# Inertie YY
 
-        MyProfil.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        MyProfil.ProprietesMyy(1, True, 1, zANE, InertieY, MelRd, zANP, MplRd)
 
         ValRef = 9160.707 * 10 ^ (-8)
         DeltaV = (InertieY - ValRef) / ValRef
@@ -369,12 +373,15 @@ Imports PMXMoteur2
         '# module élastique flexion élastique
 
         ValRef = 546.989 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionYY - ValRef) / ValRef
+
+        MyProfil.ModuleFlexionYY(WelY, WplY)
+
+        DeltaV = (WelY - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Inertie ZZ
 
-        MyProfil.ProprietesMzz(True, 1, zANE, InertieZ, MelRd)
+        MyProfil.ProprietesMzz(True, 1, zANE, InertieZ, MelRd, zANP, MplRd)
 
         ValRef = 1864.789 * 10 ^ (-8)
         DeltaV = (InertieZ - ValRef) / ValRef
@@ -401,7 +408,7 @@ Imports PMXMoteur2
         Dim MyProfil As New cls_ProfilA
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 2 / 1000
-        Dim zANE, InertieY, InertieZ, MelRd As Decimal
+        Dim zANE, zANP, InertieY, InertieZ, MelRd, MplRd, Wel, Wpl As Decimal
 
         '--> Initialisation
 
@@ -438,7 +445,7 @@ Imports PMXMoteur2
 
         '# Inertie YY
 
-        MyProfil.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        MyProfil.ProprietesMyy(1, True, 1, zANE, InertieY, MelRd, zANP, MplRd)
 
         ValRef = 7891.553 * 10 ^ (-8)
         DeltaV = (InertieY - ValRef) / ValRef
@@ -453,12 +460,14 @@ Imports PMXMoteur2
         '# module élastique flexion élastique
 
         ValRef = 533.949 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionYY - ValRef) / ValRef
+
+        MyProfil.ModuleFlexionYY(Wel, Wpl)
+        DeltaV = (Wel - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Inertie ZZ
 
-        MyProfil.ProprietesMzz(True, 1, zANE, InertieZ, MelRd)
+        MyProfil.ProprietesMzz(True, 1, zANE, InertieZ, MelRd, zANP, MplRd)
 
         ValRef = 390.179 * 10 ^ (-8)
         DeltaV = (InertieZ - ValRef) / ValRef
@@ -485,7 +494,7 @@ Imports PMXMoteur2
         Dim MyProfil As New cls_ProfilA
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 4 / 1000
-        Dim zANE, InertieY, InertieZ, MelRd As Decimal
+        Dim zANE, zANP, InertieY, InertieZ, MelRd, MplRd, Wel, Wpl As Decimal
 
         '--> Initialisation
 
@@ -516,7 +525,7 @@ Imports PMXMoteur2
 
         '# Inertie YY
 
-        MyProfil.ProprietesElastiquesMyy(1, True, 1, zANE, InertieY, MelRd)
+        MyProfil.ProprietesMyy(1, True, 1, zANE, InertieY, MelRd, zANP, MplRd)
 
         ValRef = 6397 * 10 ^ (-8)
         DeltaV = (InertieY - ValRef) / ValRef
@@ -531,12 +540,14 @@ Imports PMXMoteur2
         '# module élastique flexion élastique
 
         ValRef = 364.893 * 10 ^ (-6)
-        DeltaV = (MyProfil.ModuleFlexionYY - ValRef) / ValRef
+
+        MyProfil.ModuleFlexionYY(Wel, Wpl)
+        DeltaV = (Wel - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Inertie ZZ
 
-        MyProfil.ProprietesMzz(True, 1, zANE, InertieZ, MelRd)
+        MyProfil.ProprietesMzz(True, 1, zANE, InertieZ, MelRd, zANP, MplRd)
 
         ValRef = 340.54 * 10 ^ (-8)
         DeltaV = (InertieZ - ValRef) / ValRef
