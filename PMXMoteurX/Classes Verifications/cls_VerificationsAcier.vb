@@ -97,8 +97,8 @@ Public Class cls_VerificationsAcier
 
         '# Classes de la section
 
-        ClasseP = MyPoutre.Section.ClasseSection(zANP, zANE, True, lGeneration1)
-        ClasseM = MyPoutre.Section.ClasseSection(zANP, zANE, False, lGeneration1)
+        ClasseP = MyPoutre.Section.ClasseSection(zANP, zANE, True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1)
+        ClasseM = MyPoutre.Section.ClasseSection(zANP, zANE, False, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1)
 
         '# Contraintes
 

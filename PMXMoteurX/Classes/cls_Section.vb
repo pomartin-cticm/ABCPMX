@@ -68,6 +68,50 @@ Public Class cls_Section
 
 #End Region
 
+#Region "Propriétés (Méthodes)"
+
+    ''' <summary>
+    ''' Retourne la masse linéique du profilé (/!\ valeur retournée en kg/m /!\)
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property MassLineiqueProfilA As Decimal
+        Get
+            Dim mass As Decimal
+            mass = Me.ProfilA.Aire * Me.Acier.Rho
+            Return mass
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Renvoi la classe de la section acier seule en considérant que la section est soumise à un effort de compression pure ou une flexion pure
+    ''' <param name="lCompressionPure">indique si on réalise le calcul en compression pure (True) ou en flexion pure (False)</param>
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function ClasseSectionCompressionPureFlexionPure(lCompressionPure As Boolean, lG1_EN As Boolean) As Integer
+
+        'Déclaration
+        Dim classeLoc As Integer
+        Dim zAN As Decimal
+        Dim lFlexionPositive As Boolean = True
+        Dim lBetonSlimfloor As Boolean = False
+        Dim lBetonEnrobage As Boolean = False
+
+        'Initialisation
+        If lCompressionPure Then
+            zAN = -1000 * Me.ProfilA.ha
+        Else
+            zAN = Me.ProfilA.zCdG
+        End If
+
+        classeLoc = Me.ClasseSection(zAN, zAN, lFlexionPositive, lBetonSlimfloor, lBetonEnrobage, lG1_EN)
+
+        Return classeLoc
+    End Function
+
+
+
+#End Region
+
 #Region " Maillage pour le calcul des propriétés de section "
 
     Private Sub MaillageArmaturesDalle_YY(Gammas As cls_Gamma, bEff As Decimal, MyDalle As cls_Dalle, ByRef MyModele As cls_ModeleP)
@@ -1986,7 +2030,18 @@ Public Class cls_Section
 
 #Region "Classification section acier"
 
-    Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean, lG1_EN As Boolean, Optional td As Decimal = 0) As Integer
+    ''' <summary>
+    ''' Calcul de la classe d'une section acier (usuelle, enrobée ou slimfloor)
+    ''' </summary>
+    ''' <param name="zANP">position de l'axe neutre plastique (/!\ la position est donnée par rapport à l'axe nul de référence qui dépend de si on est sur une section slimfloor ou non /!\</param>
+    ''' <param name="zANE">position de l'axe neutre élastique (/!\ la position est donnée par rapport à l'axe nul de référence qui dépend de si on est sur une section slimfloor ou non /!\</param>
+    ''' <param name="lFlexionPositive">indique si on considère le calcul en considérant une flexion positive (qui comprime la semelle supérieure) ou non</param>
+    ''' <param name="lBetonSlimfloor">indique si on réalise le calcul en considérant que c'est uen section slimfloor ou non</param>
+    ''' <param name="lBetonEnrobage">indique si on réalise le calcul en considérant que la section est enrobée ou non</param>
+    ''' <param name="lG1_EN">indique si on réalise le calcul en considérant la 1ere génération de l'eurocode ou non</param>
+    ''' <param name="td">Optionel: indique l'épaisseur totale de la dalle (si pertinent)</param>
+    ''' <returns></returns>
+    Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean, lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, lG1_EN As Boolean, Optional td As Decimal = 0) As Integer
 
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
@@ -2008,18 +2063,23 @@ Public Class cls_Section
         Dim epsilon_platSFB As Decimal = 0
         ' Dim alpha, psi As Decimal
 
+
+        '---------------------------------------------
+        '---------------------------------------------
         '### Calcul avec hypothèse répartition plastique
+        '---------------------------------------------
+        '---------------------------------------------
 
         ' --> Initialisation des variables locales 
 
-        calcul_cf_tf(cfsup, tfsup, cfinf, tfinf, cplat, tplat)
+        calcul_cf_tf(cfsup, tfsup, cfinf, tfinf, cplat, tplat) 'calcul les différentes valeurs de c et t pour la semelle sup, inf et le plat soudé (le cas échéant)
 
         ' --> Calcul classe semelle supérieure
 
-        lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANP)
-        classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, cfsup, tfsup, epsilon_fsup)
+        lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANP) 'On regarde si la semelle supérieure du profilé est comprimée ou non
+        classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfsup, tfsup, epsilon_fsup) 'calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
 
-        If lSlimFloor Then
+        If lBetonSlimfloor Then 'reduction possible dans le cas où on a une section slimfloor et où on prend en compte le béton
             If Me.typeSection = cls_Section.Enum_TypeSection.IFB_B Or Me.typeSection = cls_Section.Enum_TypeSection.IFB_Bmixte Then
                 If td - hec >= Math.Max(50 / 1000, Me.ProfilA.Plat_b / 6) Then classeSemellesSup = Math.Min(classeSemellesSup, 2)
             Else
@@ -2029,20 +2089,20 @@ Public Class cls_Section
 
 
         ' --> Calcul classe semelle inférieure
-        lSemelleInfComprimeeLoc = Not lFlexionPositive
-        classeSemellesInf = ClasseSemelle(lSemelleInfComprimeeLoc, cfinf, tfinf, epsilon_finf)
+        lSemelleInfComprimeeLoc = Not lFlexionPositive 'on regarde si la semelle inférieure du profilé est comprimée
+        classeSemellesInf = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfinf, tfinf, epsilon_finf) 'calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
 
         ' --> Calcul classe semelle plat inférieur dans le cas d'un SFB
         If Me.typeSection = cls_Section.Enum_TypeSection.SFB Or Me.typeSection = cls_Section.Enum_TypeSection.SFBmixte Then
             epsilon_platSFB = Me.Acier.epsilon_sp
-            classePlatInfSFB = ClasseSemelle(lSemelleInfComprimeeLoc, cplat, tplat, epsilon_platSFB)
+            classePlatInfSFB = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cplat, tplat, epsilon_platSFB) 'calcul la classe du plat soudé dans le cas des sections slimfloors en fonction de si elle est comprimée et du ratio c/t
         Else
             classePlatInfSFB = 0
         End If
 
 
         ' --> Calcul classe âme
-        classeAme = ClasseAmeFlechie(lFlexionPositive, zANP, lG1_EN)
+        classeAme = Me.ClasseAme(lFlexionPositive, zANP, lG1_EN)
 
         ' --> Calcul classe section totale 
         classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, Math.Max(classePlatInfSFB, classeAme)))
@@ -2050,11 +2110,16 @@ Public Class cls_Section
 
 
         If classeSectionTotale = 3 Then
-            '### Calcul avec hypothèse répartition élastique
+
+            '---------------------------------------------
+            '---------------------------------------------
+            '### Calcul avec hypothèse répartition élastique 
+            '---------------------------------------------
+            '---------------------------------------------
 
             ' --> Calcul classe semelle supérieure
             lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANE)
-            classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, cfsup, tfsup, epsilon_fsup)
+            classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfsup, tfsup, epsilon_fsup)
 
             ' --> Calcul classe semelle inférieure inchangé
 
@@ -2062,7 +2127,7 @@ Public Class cls_Section
 
             ' --> Calcul classe âme
 
-            classeAme = ClasseAmeFlechie(lFlexionPositive, zANE, lG1_EN)
+            classeAme = Me.ClasseAme(lFlexionPositive, zANE, lG1_EN)
 
             ' --> Calcul classe section totale
 
@@ -2075,27 +2140,15 @@ Public Class cls_Section
 
     End Function
 
-    Public Function lSemelleSupComprimee(lFlexionPositive As Boolean, zAN As Decimal) As Boolean
-        If lFlexionPositive Then
-            If lSlimFloor Then
-                Select Case Me.typeSection
-                    Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
-                        lSemelleSupComprimee = zAN <= Me.hec - Me.ProfilA.Plat_t
-                    Case Else
-                        lSemelleSupComprimee = zAN <= Me.hec - Me.ProfilA.Tfs
-                End Select
-            Else
-                lSemelleSupComprimee = zAN <= -Me.ProfilA.Tfs
-            End If
-        Else
-            If lSlimFloor Then
-                lSemelleSupComprimee = zAN >= Me.hec
-            Else
-                lSemelleSupComprimee = zAN >= -Me.ProfilA.Tfs
-            End If
-        End If
-    End Function
-
+    ''' <summary>
+    ''' Calcul les différentes valeurs de c et de t 
+    ''' </summary>
+    ''' <param name="cfsup">valeur c pour la semelle supérieure</param>
+    ''' <param name="tfsup">valeur t pour la semelle sup (épaisseur ici)</param>
+    ''' <param name="cfinf">valeur de c pour la semelle inférieure</param>
+    ''' <param name="tfinf">valeur de t pour la semelle inférieure (épaisseur ici)</param>
+    ''' <param name="cplat">valeur de c pour le plat soudé, le cas échéant (sinon la valeur 0 lui sera affectée)</param>
+    ''' <param name="tplat">valeur de t pour le plat soudé, le cas échéant (sinon la valeur 0 lui sera affectée)</param>
     Public Sub calcul_cf_tf(ByRef cfsup As Decimal, ByRef tfsup As Decimal, ByRef cfinf As Decimal, ByRef tfinf As Decimal, ByRef cplat As Decimal, ByRef tplat As Decimal)
         With Me.ProfilA
             Select Case Me.typeSection
@@ -2138,11 +2191,49 @@ Public Class cls_Section
         End With
     End Sub
 
-    Public Function ClasseSemelle(lComprimee As Boolean, c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
+    ''' <summary>
+    ''' Indique si la semelle supérieure du profilé est comprimé ou non 
+    ''' Utilisé dans le cas du calcul de la classe de la section
+    ''' </summary>
+    ''' <param name="lFlexionPositive">indique si la section est soumise à une flexion positive (qui comprime la semelle suoérieure) ou non </param>
+    ''' <param name="zAN">position de l'axe neutre</param>
+    ''' <returns></returns>
+    Public Function lSemelleSupComprimee(lFlexionPositive As Boolean, zAN As Decimal) As Boolean
+        If lFlexionPositive Then
+            If lSlimFloor Then
+                Select Case Me.typeSection
+                    Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
+                        lSemelleSupComprimee = zAN <= Me.hec - Me.ProfilA.Plat_t
+                    Case Else
+                        lSemelleSupComprimee = zAN <= Me.hec - Me.ProfilA.Tfs
+                End Select
+            Else
+                lSemelleSupComprimee = zAN <= -Me.ProfilA.Tfs
+            End If
+        Else
+            If lSlimFloor Then
+                lSemelleSupComprimee = zAN >= Me.hec
+            Else
+                lSemelleSupComprimee = zAN >= -Me.ProfilA.Tfs
+            End If
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Calcul de la classe d'une semelle (paroi en console)
+    ''' </summary>
+    ''' <param name="lComprimee">paramètre qui indique si la semelle est comprimée ou non</param>
+    ''' <param name="lBetonSlimfloor">paramètre si on prend en compte le béton dans le cas d'une section slimfloor</param>
+    ''' <param name="lBetonEnrobage">paramètre si on prend en compte le béton dans le cas d'une section enrobée</param>
+    ''' <param name="c">paramètre c</param>
+    ''' <param name="t">épaisseur de la plaque</param>
+    ''' <param name="epsilon_f">coefficient epsilon qui tient compte de la limite d'élasticité </param>
+    ''' <returns></returns>
+    Public Function ClasseSemelle(lComprimee As Boolean, lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
-        '   Calcul de la classe d'une ame flechie non enrobée, en considérant une répartition plastique des contraintes, selon la 1ere génération des Eurocodes
+        '   Calcul de la classe d'une semelle (paroi en console)
         '----------------------------------------------------------------------------------------------------------
         '   lComprimee       [E] :   indique si la paroi est entierement comprimee (True) ou non (False)
         '   c                [E] :   hauteur de la paroi en console
@@ -2151,12 +2242,12 @@ Public Class cls_Section
         '----------------------------------------------------------------------------------------------------------
 
         If lComprimee Then
-            If lSlimFloor Then
+            If lBetonSlimfloor Then 'on réalise le calcul en tenant compte du béton dans le cas d'une section slimfloor
                 Return ClasseSemelleSlimFloorComprimee(c, t, epsilon_f)
-            Else
-                If lEnrobage Then
+            Else 'la section n'est pas slimfloor ou alors on ne considère pas l'effet du béton
+                If lBetonEnrobage Then 'on réalise le calcul en tenant compte du béton d'enrobage
                     Return ClasseSemelleEnrobeComprimee(c, t, epsilon_f)
-                Else
+                Else 'la section n'est pas enrobée ou alors on ne tient pas compte de l'effet du béton dans le calcul 
                     Return ClasseSemelleConsoleComprimee(c, t, epsilon_f)
                 End If
             End If
@@ -2167,7 +2258,13 @@ Public Class cls_Section
 
     End Function
 
-
+    ''' <summary>
+    ''' Calcul de la classe d'une semelle comprimée (paroi en console) dans le cas usuel
+    ''' </summary>
+    ''' <param name="c">paramètre c</param>
+    ''' <param name="t">épaisseur de la plaque</param>
+    ''' <param name="epsilon_f">coefficient epsilon qui tient compte de la limite d'élasticité</param>
+    ''' <returns></returns>
     Public Function ClasseSemelleConsoleComprimee(c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
@@ -2198,6 +2295,13 @@ Public Class cls_Section
         Return classeSemelle
     End Function
 
+    ''' <summary>
+    ''' Calcul de la classe d'une semelle comprimée (paroi en console) dans le cas d'une section enrobé
+    ''' </summary>
+    ''' <param name="c">paramètre c</param>
+    ''' <param name="t">épaisseur de la plaque</param>
+    ''' <param name="epsilon_f">coefficient epsilon qui tient compte de la limite d'élasticité </param>
+    ''' <returns></returns>
     Public Function ClasseSemelleEnrobeComprimee(c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
@@ -2228,6 +2332,13 @@ Public Class cls_Section
         Return classeSemelle
     End Function
 
+    ''' <summary>
+    ''' Calcul de la classe d'une semelle comprimée (paroi en console) dans le cas d'une section slimfloor
+    ''' </summary>
+    ''' <param name="c">paramètre c</param>
+    ''' <param name="t">épaisseur de la plaque</param>
+    ''' <param name="epsilon_f">coefficient epsilon qui tient compte de la limite d'élasticité </param>
+    ''' <returns></returns>
     Public Function ClasseSemelleSlimFloorComprimee(c As Decimal, t As Decimal, epsilon_f As Decimal) As Integer
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
@@ -2257,7 +2368,14 @@ Public Class cls_Section
         Return classeSemelle
     End Function
 
-    Public Function ClasseAmeFlechie(lFlexionPositive As Boolean, zAN As Decimal, lG1_EN As Boolean) As Integer
+    ''' <summary>
+    ''' Calcul la classe d'une ame
+    ''' </summary>
+    ''' <param name="lFlexionPositive"></param>
+    ''' <param name="zAN"></param>
+    ''' <param name="lG1_EN"></param>
+    ''' <returns></returns>
+    Public Function ClasseAme(lFlexionPositive As Boolean, zAN As Decimal, lG1_EN As Boolean) As Integer
 
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
@@ -2272,7 +2390,7 @@ Public Class cls_Section
 
         Dim epsilon_w As Decimal = Me.Acier.epsilon_w
         Dim alpha, psi As Decimal
-        Dim classeAme As Integer
+        Dim classeAmeLoc As Integer
 
 
 
@@ -2281,27 +2399,32 @@ Public Class cls_Section
             '# Hypothese d'une répartition plastique
 
             If lAmeEntierementTendue(lFlexionPositive, zAN) Then
-                classeAme = 1
+                classeAmeLoc = 1
             Else 'Ame au moins en partie comprimée 
                 alpha = CalculAlpha(lFlexionPositive, zAN)
-                classeAme = ClasseAmeFlechiePlastique(.HauteurAmeDw, .Tw, epsilon_w, alpha, lG1_EN)
+                classeAmeLoc = ClasseAmeFlechiePlastique(.HauteurAmeDw, .Tw, epsilon_w, alpha, lG1_EN)
             End If
 
-            If classeAme >= 3 Then
+            If classeAmeLoc >= 3 Then
                 '# Hypothese d'une répartition élastique
 
                 psi = CalculPsi(lFlexionPositive, zAN)
-                classeAme = ClasseAmeFlechieElastique(.HauteurAmeDw, .Tw, epsilon_w, psi, lG1_EN)
+                classeAmeLoc = ClasseAmeFlechieElastique(.HauteurAmeDw, .Tw, epsilon_w, psi, lG1_EN)
 
             End If
 
         End With
 
-        Return classeAme
+        Return classeAmeLoc
 
     End Function
 
-
+    ''' <summary>
+    ''' Permet de savoir si l'ame du profile est entierement tendue ou non (nécessaire avant de faire le calcul de alpha ou de psi)
+    ''' </summary>
+    ''' <param name="lFlexionPositive">indique si on considère une flexion positive (qui comprime la semelle supérieure) ou non</param>
+    ''' <param name="zAN">position de l'axe neutre</param>
+    ''' <returns></returns>
     Public Function lAmeEntierementTendue(lFlexionPositive As Boolean, zAN As Decimal) As Boolean
 
         'Permet de savoir si l'ame flechie est entierement tendue ou non (nécessaire avant le calcul de alpha ou psi)
@@ -2340,7 +2463,6 @@ Public Class cls_Section
         'Permet de savoir si l'ame flechie est entierement comprimee ou non (nécessaire pour le calcul de alpha)
         Return lAmeEntierementTendue(Not lFlexionPositive, zAN)
     End Function
-
 
     Public Function CalculAlpha(ByVal lFlexionPositive As Boolean, ByVal zAN As Decimal) As Decimal
 
@@ -2385,8 +2507,6 @@ Public Class cls_Section
 
         End With
     End Function
-
-
 
     Public Function CalculPsi(ByVal lFlexionPositive As Boolean, ByVal zAN As Decimal) As Decimal
 
@@ -2504,7 +2624,6 @@ Public Class cls_Section
         Return classe
 
     End Function
-
 
     Public Function ClasseAmeFlechieElastique(c As Decimal, t As Decimal, epsilon As Decimal, psi As Decimal, lG1_EN As Boolean) As Integer
         '----------------------------------------------------------------------------------------------------------

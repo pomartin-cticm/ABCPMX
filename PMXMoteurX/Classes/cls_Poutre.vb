@@ -419,6 +419,36 @@ Public Class cls_Poutre
 
 #End Region
 
+#Region "Propriétés"
+
+    ''' <summary>
+    ''' Renvoi la masse totale de la poutre en cours 
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property MasseTotalePoutre As Decimal
+        Get
+            Dim mass As Decimal
+
+            mass = Me.Section.MassLineiqueProfilA * Me.LongueurTotale
+
+            Return mass
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Renvoi la masse totale de la poutre en cours 
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function SurfacePeintureTotalePoutre(lAvecFaceSup As Boolean) As Decimal
+        Dim surface As Decimal
+
+        surface = Me.Section.ProfilA.PerimetreSection(lAvecFaceSup) * Me.LongueurTotale
+
+        Return surface
+    End Function
+
+#End Region
+
 #Region " Variables pour les valeurs par défaut et le statut de la poutre "
 
     ''' <summary>

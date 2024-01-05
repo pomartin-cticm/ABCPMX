@@ -737,6 +737,153 @@ Public Class cls_ProfilA
 
     End Function
 
+    ''' <summary>
+    ''' Calcul du périmetre développé par la section (utile pour le calcul de la surface de peinture)
+    ''' </summary>
+    ''' <param name="lAvecFaceSup">indique si on prend en compte la face supérieure de la semelle sup ou non</param>
+    ''' <returns></returns>
+    Public Function PerimetreSection(lAvecFaceSup As Boolean) As Decimal
+        Dim perimetre As Decimal = 0
+
+        Select Case Me.typeProfileAcier
+            Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.LamineSlimSAB
+                perimetre = Me.PerimetreProfilsLamineUsuels(lAvecFaceSup)
+            Case Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
+                perimetre = Me.PerimetreProfilsPRS(lAvecFaceSup)
+            Case Enum_TypeSectionAcier.LamineSlimSFB
+                perimetre = Me.PerimetreProfilsSFB(lAvecFaceSup)
+            Case Enum_TypeSectionAcier.LamineSlimIFBA
+                perimetre = Me.PerimetreProfilsIFB_A(lAvecFaceSup)
+            Case Enum_TypeSectionAcier.LamineSlimIFBB
+                perimetre = Me.PerimetreProfilsIFB_B(lAvecFaceSup)
+        End Select
+
+        Return perimetre
+    End Function
+
+
+    ''' <summary>
+    ''' Calcul du périmetre développé par une section laminé usuelle ou SAB
+    ''' </summary>
+    ''' <param name="lAvecFaceSup">indique si on prend en compte la face supérieure de la semelle sup ou non</param>
+    ''' <returns></returns>
+    Private Function PerimetreProfilsLamineUsuels(lAvecFaceSup As Boolean) As Decimal
+        Dim perimetre As Decimal = 0
+
+        If lAvecFaceSup Then perimetre += Me.Bfs 'ajout de la face extérieure de la semelle supérieure
+
+        perimetre += 2 * Me.Tfs 'ajout des 2 épaisseurs de la semelle sup
+        perimetre += Me.Bfs - 2 * Me.Rcs - Me.Tw 'ajout de la face intérieure de la semelle sup
+        perimetre += 2 * Math.PI * Me.Rcs / 2 'ajout congés sup
+        perimetre += 2 * (HauteurAmeHw - Me.Rcs - Me.Rci) 'ajout de l'ame
+        perimetre += 2 * Math.PI * Me.Rci / 2 'ajout congés inf
+        perimetre += Me.Bfi - 2 * Me.Rci - Me.Tw 'ajout de la face intérieure de la semelle inf
+        perimetre += 2 * Me.Tfi 'ajout des 2 épaisseurs de la semelle inf
+        perimetre += Me.Bfi
+
+        Return perimetre
+
+    End Function
+
+    ''' <summary>
+    ''' Calcul du périmetre développé par une section PRS
+    ''' </summary>
+    ''' <param name="lAvecFaceSup">indique si on prend en compte la face supérieure de la semelle sup ou non</param>
+    ''' <returns></returns>
+    Private Function PerimetreProfilsPRS(lAvecFaceSup As Boolean) As Decimal
+        Dim perimetre As Decimal = 0
+
+        If lAvecFaceSup Then perimetre += Me.Bfs 'ajout de la face extérieure de la semelle supérieure
+
+        perimetre += 2 * Me.Tfs 'ajout des 2 épaisseurs de la semelle sup
+        perimetre += Me.Bfs - 2 * Math.Sqrt(2) * Me.aW - Me.Tw 'ajout de la face intérieure de la semelle sup
+        perimetre += 4 * Me.aW     'ajout soudure sup
+        perimetre += 2 * (HauteurAmeHw - 2 * Math.Sqrt(2) * Me.aW)  'ajout de l'ame
+        perimetre += 4 * Me.aW 'ajout soudures inf
+        perimetre += Me.Bfi - 2 * Math.Sqrt(2) * Me.aW - Me.Tw 'ajout de la face intérieure de la semelle inf
+        perimetre += 2 * Me.Tfi 'ajout des 2 épaisseurs de la semelle inf
+        perimetre += Me.Bfi 'ajout de la face inférieure
+
+        Return perimetre
+
+    End Function
+
+    ''' <summary>
+    ''' Calcul du périmetre développé par une section SFB
+    ''' </summary>
+    ''' <param name="lAvecFaceSup">indique si on prend en compte la face supérieure de la semelle sup ou non</param>
+    ''' <returns></returns>
+    Private Function PerimetreProfilsSFB(lAvecFaceSup As Boolean) As Decimal
+        Dim perimetre As Decimal = 0
+
+        If lAvecFaceSup Then perimetre += Me.Bfs 'ajout de la face extérieure de la semelle supérieure
+
+        perimetre += 2 * Me.Tfs 'ajout des 2 épaisseurs de la semelle sup
+        perimetre += Me.Bfs - 2 * Me.Rcs - Me.Tw 'ajout de la face intérieure de la semelle sup
+        perimetre += 2 * Math.PI * Me.Rcs / 2 'ajout congés sup
+        perimetre += 2 * (HauteurAmeHw - Me.Rcs - Me.Rci) 'ajout de l'ame
+        perimetre += 2 * Math.PI * Me.Rci / 2 'ajout congés inf
+        perimetre += Me.Bfi - 2 * Me.Rci - Me.Tw 'ajout de la face intérieure de la semelle inf
+        perimetre += 2 * (Me.Tfi - Math.Sqrt(2) * Me.aW)  'ajout des 2 épaisseurs de la semelle inf
+        perimetre += 4 * Me.aW 'ajout des soudures inf
+        perimetre += Me.Plat_b - Me.Bfi - 2 * Math.Sqrt(2) * Me.aW 'ajout de la face intérieure du plat soudé
+        perimetre += 2 * Me.Plat_t 'ajout des 2 épaisseurs du plat soudé
+        perimetre += Me.Plat_b 'ajout de la face extérieure du plat soudé
+
+        Return perimetre
+    End Function
+
+    ''' <summary>
+    ''' Calcul du périmetre développé par une section IFB type A
+    ''' </summary>
+    ''' <param name="lAvecFaceSup">indique si on prend en compte la face supérieure de la semelle sup ou non</param>
+    ''' <returns></returns>
+    Private Function PerimetreProfilsIFB_A(lAvecFaceSup As Boolean) As Decimal
+        Dim perimetre As Decimal = 0
+
+        If lAvecFaceSup Then perimetre += Me.Bfs 'ajout de la face extérieure de la semelle supérieure
+
+        perimetre += 2 * Me.Tfs 'ajout des 2 épaisseurs de la semelle sup
+        perimetre += Me.Bfs - 2 * Me.Rcs - Me.Tw 'ajout de la face intérieure de la semelle sup
+        perimetre += 2 * Math.PI * Me.Rcs / 2 'ajout congés sup
+        perimetre += 2 * (HauteurAmeHw - Me.Rcs - Math.Sqrt(2) * Me.aW) 'ajout de l'ame
+        perimetre += 4 * Me.aW 'ajout congés inf
+        perimetre += Me.Plat_b - 2 * Math.Sqrt(2) * Me.aW - Me.Tw 'ajout de la face intérieure du plat soudé 
+        perimetre += 2 * Me.Plat_t 'ajout des 2 épaisseurs du plat soudé
+        perimetre += Plat_b 'ajout de la face extérieure du plat soudé
+
+        Return perimetre
+    End Function
+
+    ''' <summary>
+    ''' Calcul du périmetre développé par une section IFB type B
+    ''' </summary>
+    ''' <param name="lAvecFaceSup">indique si on prend en compte la face supérieure de la semelle sup ou non</param>
+    ''' <returns></returns>
+    Private Function PerimetreProfilsIFB_B(lAvecFaceSup As Boolean) As Decimal
+        Dim perimetre As Decimal = 0
+
+        If lAvecFaceSup Then perimetre += Me.Plat_b 'ajout de la face extérieure de la semelle supérieure
+
+        perimetre += 2 * Me.Plat_t 'ajout des 2 épaisseurs du plat soudé
+        perimetre += Me.Plat_b - 2 * Math.Sqrt(2) * Me.aW - Me.Tw 'ajout de la face intérieure du plat soudé 
+        perimetre += 4 * Me.aW 'ajout des soudures sup
+        perimetre += 2 * (HauteurAmeHw - Math.Sqrt(2) * Me.aW - Me.Rci) 'ajout de l'ame
+        perimetre += 2 * Math.PI * Me.Rci / 2 'ajout congés inf
+        perimetre += Me.Bfi - 2 * Me.Rci - Me.Tw 'ajout de la face intérieure de la semelle inf
+        perimetre += Me.Bfi
+
+        Return perimetre
+    End Function
+
+    Public Function Massivete(lAvecFaceSup As Boolean) As Decimal
+        Dim massiveteLoc As Decimal
+
+        massiveteLoc = Me.PerimetreSection(lAvecFaceSup) / Me.Aire
+
+        Return massiveteLoc
+
+    End Function
 #End Region
 
 

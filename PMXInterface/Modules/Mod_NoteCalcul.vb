@@ -586,6 +586,15 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("WPL_Z_PROFILE") & TABAFF & "W\-pl,z\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.ModuleWplz, Enu_TypeVariable.ModuleCM3, 4, 1, True))
         AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
         AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
+        SauteLigne()
+        AddLigneNDC(TABW2 & BlocG("MASS_PROFILE") & TABAFF & "m" & TABEGAL & GetStringInUnit(MyBeam.MasseTotalePoutre, Enu_TypeVariable.SansType, 4, 1, False) & " kg")
+        AddLigneNDC(TABW2 & BlocG("TOT_PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnit(MyBeam.SurfacePeintureTotalePoutre(True), Enu_TypeVariable.AireCM2, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnit(MyBeam.SurfacePeintureTotalePoutre(False), Enu_TypeVariable.AireCM2, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocG("TOT_MASSIVENESS") & TABAFF & "M" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Massivete(True), Enu_TypeVariable.SansType, 4, 1, True) & " \+-1\=")
+        AddLigneNDC(TABW2 & BlocG("MASSIVENESS") & TABAFF & "M'" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Massivete(False), Enu_TypeVariable.SansType, 4, 1, True) & " \+-1\=")
+        SauteLigne()
+        AddLigneNDC(TABW2 & BlocG("BENDING_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(False, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
+        AddLigneNDC(TABW2 & BlocG("COMPRESSION_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(True, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
 
         AddLigneNDC("\IMG PROFIL_ACIER 10 80 30 NoCadre")
         nbLignes += 15              ' Prise en compte des lignes occupées par le dessin de la section
@@ -2062,7 +2071,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocSP("PPROPERTIES"))
 
-        MyBeam.Section.ProprietesPlastiquesMixteMyy(-1, True, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zanp, mplrd)
+        MyBeam.Section.ProprietesPlastiquesMixteMyy(-1, True, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANP, MplRd)
 
         AddLigneNDC(TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 3, 2, True))
         AddLigneNDC(TABAFF & "z\-pl,y\=" & TABEGAL & GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 3, 2, True))
@@ -2113,7 +2122,7 @@ Module Mod_NoteCalcul
 
         '--> Ligne du tableau
 
-        For itab = 0 To nbTab - 1
+        For iTab = 0 To nbTab - 1
             If lDalle(iTab) Then
                 MyBeam.Section.ProprietesElastiquesMixteMyy(-1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), 1, bEff, MyBeam.Dalle, zANE, InertieY, MelRd)
                 strPhase = BlocSP("COMPOSITE")
