@@ -72,7 +72,7 @@ Public Class Frm_MaintienBac
 
         MAJI_NaviLableCalculs()
 
-        Me.img_Deck.Top = Me.pan_Rigidite.Top
+        Me.img_Deck.Top = Me.pan_RigiditeShear.Top
         Me.img_Deck.Width = Me.pan_Rigidite.Width
         Me.img_Deck.Height = Me.pan_Rigidite.Height + Me.pan_RigiditeShear.Height
 
@@ -381,6 +381,8 @@ Public Class Frm_MaintienBac
             MAJI_DimensionsPlancher()
             MAJI_Transition()
             MAJI_Calculs()
+
+            If AfficheD = Enu_AffichageD.Graphique Then Me.img_Deck.Invalidate()
         End If
 
     End Sub
@@ -448,6 +450,7 @@ Public Class Frm_MaintienBac
         MAJI_DimensionsPlancher()
         MAJI_Transition()
         MAJI_Calculs()
+        If AfficheD = Enu_AffichageD.Graphique Then Me.img_Deck.Invalidate()
     End Sub
 
     Private Sub MAJI_DimensionsPanneau()
@@ -481,6 +484,7 @@ Public Class Frm_MaintienBac
         End Select
 
         MAJI_Calculs()
+        If AfficheD = Enu_AffichageD.Graphique Then Me.img_Deck.Invalidate()
 
     End Sub
 
@@ -812,7 +816,7 @@ Public Class Frm_MaintienBac
         lMouseG = (xSouris >= xMargeZone) And (xSouris <= xMargeZone + SizeZone / 2) _
               And (ySouris >= xMargeZone) And (ySouris <= sHi + xMargeZone)
 
-        lMouseD = (xSouris <= sWi - xMargeZone) And (xSouris >= sWi - xMargeZone - SizeZone / 2) _
+        lMouseD = (xSouris <= sWi - xMargeZone) And (xSouris >= sWi - xMargeZone - SizeZone) _
               And (ySouris >= xMargeZone) And (ySouris <= sHi + xMargeZone)
 
         Me.lbl_Calculs.Invalidate()
@@ -849,23 +853,23 @@ Public Class Frm_MaintienBac
         Me.pan_RigiditeShear.Visible = (AfficheD = Enu_AffichageD.Valeurs)
         Me.img_Deck.Visible = (AfficheD = Enu_AffichageD.Graphique)
 
+        If Me.img_Deck.Visible Then Me.img_Deck.Invalidate()
     End Sub
 
 
 #End Region
-
 
 #Region " Dessin du plancher "
 
     Private Sub img_Deck_Paint(sender As Object, e As PaintEventArgs) Handles img_Deck.Paint
 
         DrawPlancher(e.Graphics, Me.img_Deck.ClientRectangle.Width, Me.img_Deck.ClientRectangle.Height,
-                     localMaitienBac, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(1))
+                     localMaitienBac, MyProjet.Poutres(MyProjet.IndEnCours))
 
     End Sub
 
-    Private Sub DrawPlancher(ByVal MyGr As Graphics, ByVal sWi As Single, ByVal sHi As Single,
-                             MyDeck As cls_MaintienBac, MyBac As cls_Bac, PorteeL As Decimal)
+    Private Sub DrawPlancher(ByVal MyGr As Graphics, ByVal pWi As Single, ByVal pHi As Single,
+                             MyDeck As cls_MaintienBac, myPoutre As cls_Poutre, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------------------------------------------
         '   06/01/24:   Création - POM - ACBPMX V1
         '-----------------------------------------------------------------------------------------------------------------------------------
@@ -873,9 +877,107 @@ Public Class Frm_MaintienBac
         '-----------------------------------------------------------------------------------------------------------------------------------
         '-----------------------------------------------------------------------------------------------------------------------------------
 
+        '--> Déclarations
+
+        Dim MyParAffD As Struc_Affichage
+        Const kAdjust As Decimal = 0.9
+
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar As Decimal
+        Dim LargeurP As Decimal = MyDeck.LargeurPlancher(EntraxeD)
+        Dim NbPoutres As Integer
+        Dim PorteeL As Decimal
+        Dim MyPen As Pen
+        Dim MyPenNormal As New Pen(Color.Black, 1.0)
+        Dim MyPenSelect As New Pen(Color.DarkBlue, 1.5)
+        Dim iPoutreRef As Integer
+        Dim nbLongi As Integer
+        Dim xC, yC As Decimal
+        Dim LongBac As Decimal
+
+        '--> Initialisation
+
+        PorteeL = myPoutre.LongueurTravee(1)
+        If myPoutre.lIntermediaire Then iPoutreRef = 2 Else iPoutreRef = 1
+
+        '--> Initialisation des paramètres d'affichage
+
+        yMin = 0
+        xMin = 0
+        xMax = LargeurP
+        yMax = PorteeL
+        dCar = EntraxeD / 10
+
+        ParametresAffichage(MyParAffD, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
+
+        '--> Représentation des poutres
+
+        Dim xPoutre As Decimal
+        NbPoutres = MyDeck.m * MyDeck.nt + 1
+
+        For iPoutre As Integer = 1 To NbPoutres
+
+            xPoutre = (iPoutre - 1) * EntraxeD
+            If iPoutreRef = iPoutre Then MyPen = MyPenSelect Else MyPen = MyPenNormal
+            AddLigne(MyGr, MyPen, xPoutre, 0, xPoutre, PorteeL, MyParAffD)
+
+        Next
+
+        '--> Représentation des bacs (individuels)
+
+        nbLongi = Math.Floor(PorteeL / myPoutre.Dalle.Bac.LargeurModule)
+        Select Case MyDeck.Transition
+            Case cls_MaintienBac.Enu_Transition.Aboutage
+                LongBac = (EntraxeD * MyDeck.m)
+            Case cls_MaintienBac.Enu_Transition.Adistance
+                LongBac = (EntraxeD * MyDeck.m) - dCar
+            Case cls_MaintienBac.Enu_Transition.Emboitement
+                LongBac = (EntraxeD * MyDeck.m) + dCar
+        End Select
+        For iTrans As Integer = 1 To MyDeck.nt
+
+            For iLongi As Integer = 1 To nbLongi
+
+                xC = (iTrans - 1 / 2) * (EntraxeD * MyDeck.m)
+                yC = (iLongi - 1 / 2) * myPoutre.Dalle.Bac.LargeurModule
+
+                DrawBacInd(MyGr, MyParAffD, xC, yC, LongBac, myPoutre.Dalle.Bac, False, myPoutre.Dalle.Bac.LargeurModule)
+
+            Next
+
+        Next
+
+        If IsSmaller(nbLongi * myPoutre.Dalle.Bac.LargeurModule, PorteeL) Then
+
+            Dim DeltaL As Decimal = PorteeL - nbLongi * myPoutre.Dalle.Bac.LargeurModule
+
+            yC = PorteeL - DeltaL / 2
+            For iTrans As Integer = 1 To MyDeck.nt
+
+                xC = (iTrans - 1 / 2) * (EntraxeD * MyDeck.m)
+
+                DrawBacInd(MyGr, MyParAffD, xC, yC, LongBac, myPoutre.Dalle.Bac, False, DeltaL)
+
+            Next
+
+        End If
+
+    End Sub
 
 
+    Private Sub DrawBacInd(MyGr As Graphics, myParAff As Struc_Affichage, xC As Decimal, yC As Decimal, LongueurB As Decimal,
+                           MyBac As cls_Bac, lNervures As Boolean, LargeurBac As Decimal)
 
+        Dim xo, yo As Decimal
+        Dim xe, ye As Decimal
+
+        xo = xC - LongueurB / 2
+        yo = yC - LargeurBac / 2
+        xe = xC + LongueurB / 2
+        ye = yC + LargeurBac / 2        ' MyBac.LargeurModule / 2
+
+        AddRectanglePlein(MyGr, New SolidBrush(Color.White), New Pen(BleuCTICM), xo, yo, xe, ye, myParAff, False, True)
 
     End Sub
 
