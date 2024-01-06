@@ -1,4 +1,5 @@
-﻿Imports PMXMoteur2
+﻿Imports System.Drawing.Drawing2D
+Imports PMXMoteur2
 
 Public Class Frm_MaintienBac
 
@@ -19,6 +20,23 @@ Public Class Frm_MaintienBac
     Dim strSlipCouturage(1) As String
 
     Const kUnitSlip As Decimal = 10 ^ 6
+
+    Enum Enu_AffichageD
+        Valeurs
+        Graphique
+    End Enum
+
+    Dim AfficheD As Enu_AffichageD = Enu_AffichageD.Valeurs
+
+    Const kMarge As Single = 0.12
+    Dim xMargeZone As Single
+    Dim SizeZone As Single
+
+    Dim lMouseG As Boolean = False
+    Dim lMouseD As Boolean = False
+
+    Dim strResultats As String
+    Dim strDessin As String
 
 #End Region
 
@@ -48,6 +66,15 @@ Public Class Frm_MaintienBac
         localMaitienBac = MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.Clone
 
         EntraxeD = Me.EntraxeSolive(MyProjet.Poutres(MyProjet.IndEnCours))
+
+        xMargeZone = Me.lbl_Calculs.ClientRectangle.Height * kMarge
+        SizeZone = Me.lbl_Calculs.ClientRectangle.Height * (1 - 2 * kMarge)
+
+        MAJI_NaviLableCalculs()
+
+        Me.img_Deck.Top = Me.pan_Rigidite.Top
+        Me.img_Deck.Width = Me.pan_Rigidite.Width
+        Me.img_Deck.Height = Me.pan_Rigidite.Height + Me.pan_RigiditeShear.Height
 
     End Sub
 
@@ -109,6 +136,7 @@ Public Class Frm_MaintienBac
 
             '=== PLANCHER ===============================================================
 
+            Me.chk_PriseEnCompteBac.Text = Bloc("RESTRAINTBYTHEDECK")
             Me.lbl_Floor.Text = Bloc("FLOORDEF")
             Me.lbl_NbSheetsTransverse.Text = Bloc("NBSHEETSTRANSVERSE")
 
@@ -176,6 +204,9 @@ Public Class Frm_MaintienBac
             Me.lbl_Calculs.Text = Bloc("PARAMETERS")
             Me.lbl_BendingRigidity.Text = Bloc("BENDINGSTIFF")
             Me.lbl_ShearRigidity.Text = Bloc("SHEARSTIFF")
+
+            strResultats = Bloc("PARAMETERS")
+            strDessin = Bloc("DRAWING")
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -247,6 +278,8 @@ Public Class Frm_MaintienBac
 
     Private Sub AffichePoutreEnCours()
 
+        Me.chk_PriseEnCompteBac.Checked = localMaitienBac.lMaintienBac
+
         Me.cmb_NbSpan.SelectedIndex = localMaitienBac.m - 1
         Select Case localMaitienBac.Transition
             Case cls_MaintienBac.Enu_Transition.Emboitement : Me.cmb_Transition.SelectedIndex = 0
@@ -312,6 +345,7 @@ Public Class Frm_MaintienBac
         GereTransfertValeur(localMaitienBac.m, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.m, lModif)
         GereTransfertValeur(localMaitienBac.nt, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.nt, lModif)
         GereTransfertValeur(localMaitienBac.ec, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.ec, lModif)
+        GereTransfertValeur(localMaitienBac.lMaintienBac, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.lMaintienBac, lModif)
 
         If MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.Transition <> localMaitienBac.Transition Then lModif = True
         MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.Transition = localMaitienBac.Transition
@@ -331,6 +365,11 @@ Public Class Frm_MaintienBac
 #End Region
 
 #Region " Evènements saisie "
+
+    Private Sub chk_PriseEnCompteBac_CheckedChanged(sender As Object, e As EventArgs) Handles chk_PriseEnCompteBac.CheckedChanged
+        localMaitienBac.lMaintienBac = Me.chk_PriseEnCompteBac.Checked
+    End Sub
+
 
     Private Sub txt_NbSheetsTransverse_TextChanged(sender As Object, e As EventArgs) Handles txt_NbSheetsTransverse.TextChanged
         If lBuild Then Exit Sub
@@ -376,7 +415,7 @@ Public Class Frm_MaintienBac
 
             Case Me.txt_NbSheetsTransverse.Name
                 ValMin = 1
-                ValMax = 5
+                ValMax = 10
                 lValMax = True
                 kUnit = 1
 
@@ -627,7 +666,220 @@ Public Class Frm_MaintienBac
     End Sub
 
 
+
+
+
 #End Region
 
+#Region " Gestion Labels Navigation "
+
+    Private Sub lbl_Calculs_Paint(sender As Object, e As PaintEventArgs) Handles lbl_Calculs.Paint
+
+        DrawNaviLabel(e.Graphics, Me.lbl_Calculs.ClientRectangle.Width, Me.lbl_Calculs.ClientRectangle.Height,
+                      Me.lbl_Calculs.BackColor, AfficheD = Enu_AffichageD.Valeurs, AfficheD = Enu_AffichageD.Graphique,
+                      lMouseG, lMouseD)
+
+    End Sub
+
+    Private Sub DrawNaviLabel(ByVal MyGr As Graphics, ByVal sWi As Single, ByVal sHi As Single, ByVal MyColor As Color,
+                              lDrawG As Boolean, lDrawD As Boolean, lMouseG As Boolean, lMouseD As Boolean)
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        Dim MyRect As New Rectangle(sWi - sHi, 0, sHi - 1, sHi - 1)
+        'Dim MyBrush As New LinearGradientBrush(New PointF(sWi - sHi / 2, 0), New PointF(sWi - sHi / 2, sHi), Color.White, MyColor)
+        Dim myBrushM As New SolidBrush(Color.White)
+        Dim myBrushMSelect As New SolidBrush(OrangeAM)
+        Dim myBrushO As New SolidBrush(Color.LightGray)
+
+        MyGr.FillRectangle(New SolidBrush(MyColor), MyRect)
+
+        'MyGr.DrawRectangle(Pens.Black, MyRect)
+
+        Dim MyPts() As PointF = Nothing
+        Dim nbPts As Integer
+
+        Const DecOmbre As Single = 1
+
+        '# préparation de la flèche gauche
+
+        GenereFlecheG(MyPts, nbPts, xMargeZone, sHi / 2, SizeZone)
+
+        '# représentation flèche gauche
+
+        If lDrawG Then
+            MyGr.FillPolygon(myBrushO, MyPts)
+
+            DecalPts(MyPts, nbPts, -DecOmbre, -DecOmbre)
+
+            If lMouseG Then
+                MyGr.FillPolygon(myBrushMSelect, MyPts)
+            Else
+                MyGr.FillPolygon(myBrushM, MyPts)
+            End If
+        End If
+
+
+        '# préparation flèche droite
+
+        DecalPts(MyPts, nbPts, sWi - SizeZone - xMargeZone + DecOmbre, +DecOmbre)
+
+        MirroirX(MyPts, nbPts)
+
+        '# représentation flèche droite
+
+        If lDrawD Then
+            MyGr.FillPolygon(myBrushO, MyPts)
+
+            DecalPts(MyPts, nbPts, DecOmbre, DecOmbre)
+
+            If lMouseD Then
+                MyGr.FillPolygon(myBrushMSelect, MyPts)
+            Else
+                MyGr.FillPolygon(myBrushM, MyPts)
+            End If
+
+        End If
+
+
+    End Sub
+
+    Private Sub MirroirX(ByRef MyPts() As PointF, nbPts As Integer)
+        Dim xCentre As Single = (xMax(MyPts, nbPts) + xMin(MyPts, nbPts)) / 2
+
+        For i As Integer = 0 To nbPts - 1
+            MyPts(i).X = 2 * xCentre - MyPts(i).X
+        Next
+
+    End Sub
+
+    Private Function xMax(MyPts() As PointF, nbPts As Integer) As Single
+        Dim i As Integer
+
+        Dim valMax As Single = MyPts(0).X
+
+        For i = 1 To nbPts - 1
+            valMax = Math.Max(valMax, MyPts(i).X)
+        Next
+        Return valMax
+    End Function
+
+    Private Function xMin(MyPts() As PointF, nbPts As Integer) As Single
+        Dim i As Integer
+
+        Dim valMin As Single = MyPts(0).X
+
+        For i = 1 To nbPts - 1
+            valMin = Math.Min(valMin, MyPts(i).X)
+        Next
+        Return valMin
+    End Function
+
+    Private Sub DecalPts(ByRef MyPts() As PointF, nbPts As Integer, xDec As Single, yDec As Single)
+
+        For i As Integer = 0 To nbPts - 1
+
+            MyPts(i).X += xDec
+            MyPts(i).Y += yDec
+
+        Next
+
+    End Sub
+
+    Private Sub GenereFlecheG(ByRef MyPts() As PointF, ByRef nbPts As Integer, xPosP As Single, yPosP As Single, Size As Single)
+        nbPts = 3
+
+        ReDim MyPts(nbPts - 1)
+
+        MyPts(0).X = xPosP
+        MyPts(0).Y = yPosP
+        MyPts(1).X = xPosP + Size / 2
+        MyPts(1).Y = yPosP - Size / 2
+        MyPts(2).X = xPosP + Size / 2
+        MyPts(2).Y = yPosP + Size / 2
+
+    End Sub
+
+    Private Sub lbl_Calculs_MouseMove(sender As Object, e As MouseEventArgs) Handles lbl_Calculs.MouseMove
+
+        Dim xSouris As Single = e.X
+        Dim ySouris As Single = e.Y
+
+        Dim sWi As Single = Me.lbl_Calculs.ClientRectangle.Width
+        Dim sHi As Single = Me.lbl_Calculs.ClientRectangle.Height
+
+        lMouseG = (xSouris >= xMargeZone) And (xSouris <= xMargeZone + SizeZone / 2) _
+              And (ySouris >= xMargeZone) And (ySouris <= sHi + xMargeZone)
+
+        lMouseD = (xSouris <= sWi - xMargeZone) And (xSouris >= sWi - xMargeZone - SizeZone / 2) _
+              And (ySouris >= xMargeZone) And (ySouris <= sHi + xMargeZone)
+
+        Me.lbl_Calculs.Invalidate()
+
+    End Sub
+
+    Private Sub lbl_Calculs_MouseUp(sender As Object, e As MouseEventArgs) Handles lbl_Calculs.MouseUp
+
+        If lMouseG Then
+
+            AfficheD = Enu_AffichageD.Graphique
+
+        ElseIf lMouseD Then
+
+            AfficheD = Enu_AffichageD.Valeurs
+
+        End If
+
+        Me.lbl_Calculs.Invalidate()
+        MAJI_NaviLableCalculs()
+
+    End Sub
+
+    Private Sub MAJI_NaviLableCalculs()
+
+        Select Case AfficheD
+            Case Enu_AffichageD.Valeurs
+                Me.lbl_Calculs.Text = strResultats
+            Case Enu_AffichageD.Graphique
+                Me.lbl_Calculs.Text = strDessin
+        End Select
+
+        Me.pan_Rigidite.Visible = (AfficheD = Enu_AffichageD.Valeurs)
+        Me.pan_RigiditeShear.Visible = (AfficheD = Enu_AffichageD.Valeurs)
+        Me.img_Deck.Visible = (AfficheD = Enu_AffichageD.Graphique)
+
+    End Sub
+
+
+#End Region
+
+
+#Region " Dessin du plancher "
+
+    Private Sub img_Deck_Paint(sender As Object, e As PaintEventArgs) Handles img_Deck.Paint
+
+        DrawPlancher(e.Graphics, Me.img_Deck.ClientRectangle.Width, Me.img_Deck.ClientRectangle.Height,
+                     localMaitienBac, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac, MyProjet.Poutres(MyProjet.IndEnCours).LongueurTravee(1))
+
+    End Sub
+
+    Private Sub DrawPlancher(ByVal MyGr As Graphics, ByVal sWi As Single, ByVal sHi As Single,
+                             MyDeck As cls_MaintienBac, MyBac As cls_Bac, PorteeL As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   06/01/24:   Création - POM - ACBPMX V1
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation du plancher et de la disposition des bacs pour le maitien
+        '-----------------------------------------------------------------------------------------------------------------------------------
+        '-----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+    End Sub
+
+
+#End Region
 
 End Class

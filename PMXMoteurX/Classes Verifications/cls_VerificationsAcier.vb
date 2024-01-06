@@ -8,8 +8,6 @@ Public Class cls_VerificationsAcier
     '=========================================================================================================
 
 
-
-
 #Region " Attributs "
 
     Public CritereM As cls_Critere                  ' Resistance à la flexion

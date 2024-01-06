@@ -52,6 +52,7 @@ Public Class cls_MaintienBac
     Public ec As Decimal                            ' Espacement des vis de coutures
     Public FixCoutureType As Enu_CoutureType        ' Définit le type des vis de couture
 
+    Public lMaintienBac As Boolean                  ' Indique si on active le maintien par le bac
 
 #End Region
 
@@ -65,6 +66,7 @@ Public Class cls_MaintienBac
         FixnervuresTyp = Enu_FixNervuresType.Pistolet
         Me.ec = 0.5
         FixCoutureType = Enu_CoutureType.Vis
+        lMaintienBac = False
     End Sub
 
 #End Region

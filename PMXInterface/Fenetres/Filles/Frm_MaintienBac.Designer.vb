@@ -35,6 +35,7 @@ Partial Class Frm_MaintienBac
         Me.lbl_Panneau = New System.Windows.Forms.Label()
         Me.lbl_Floor = New System.Windows.Forms.Label()
         Me.pan_DefPlancher = New System.Windows.Forms.Panel()
+        Me.chk_PriseEnCompteBac = New System.Windows.Forms.CheckBox()
         Me.cmb_Transition = New System.Windows.Forms.ComboBox()
         Me.lbl_Transition = New System.Windows.Forms.Label()
         Me.txt_NbSheetsTransverse = New System.Windows.Forms.TextBox()
@@ -85,6 +86,8 @@ Partial Class Frm_MaintienBac
         Me.lbl_Fixation = New System.Windows.Forms.Label()
         Me.TLpan_Calculs = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel5 = New System.Windows.Forms.Panel()
+        Me.img_Deck = New System.Windows.Forms.PictureBox()
+        Me.pan_RigiditeShear = New System.Windows.Forms.Panel()
         Me.txt_Sact = New System.Windows.Forms.TextBox()
         Me.etq_UnitSact = New System.Windows.Forms.Label()
         Me.img_Sact = New System.Windows.Forms.PictureBox()
@@ -110,18 +113,19 @@ Partial Class Frm_MaintienBac
         Me.etq_UnitK = New System.Windows.Forms.Label()
         Me.img_K = New System.Windows.Forms.PictureBox()
         Me.lbl_ShearRigidity = New System.Windows.Forms.Label()
-        Me.lbl_Calculs = New System.Windows.Forms.Label()
-        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.lbl_BendingRigidity = New System.Windows.Forms.Label()
-        Me.txt_kThetaA = New System.Windows.Forms.TextBox()
-        Me.etq_UnitkThetaA = New System.Windows.Forms.Label()
-        Me.img_kThetaA = New System.Windows.Forms.PictureBox()
-        Me.txt_kThetaC = New System.Windows.Forms.TextBox()
-        Me.etq_UnitkThetaC = New System.Windows.Forms.Label()
-        Me.img_kThetaC = New System.Windows.Forms.PictureBox()
+        Me.pan_Rigidite = New System.Windows.Forms.Panel()
         Me.txt_kTheta = New System.Windows.Forms.TextBox()
         Me.etq_UnitkTheta = New System.Windows.Forms.Label()
         Me.img_kTheta = New System.Windows.Forms.PictureBox()
+        Me.txt_kThetaC = New System.Windows.Forms.TextBox()
+        Me.etq_UnitkThetaC = New System.Windows.Forms.Label()
+        Me.img_kThetaC = New System.Windows.Forms.PictureBox()
+        Me.txt_kThetaA = New System.Windows.Forms.TextBox()
+        Me.etq_UnitkThetaA = New System.Windows.Forms.Label()
+        Me.img_kThetaA = New System.Windows.Forms.PictureBox()
+        Me.lbl_BendingRigidity = New System.Windows.Forms.Label()
+        Me.lbl_Calculs = New System.Windows.Forms.Label()
+        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -141,6 +145,8 @@ Partial Class Frm_MaintienBac
         Me.Panel3.SuspendLayout()
         Me.TLpan_Calculs.SuspendLayout()
         Me.Panel5.SuspendLayout()
+        CType(Me.img_Deck, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_RigiditeShear.SuspendLayout()
         CType(Me.img_Sact, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_c, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_c22, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -149,10 +155,11 @@ Partial Class Frm_MaintienBac
         CType(Me.img_c11, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Alpha5, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_K, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_kThetaA, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_kThetaC, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Rigidite.SuspendLayout()
         CType(Me.img_kTheta, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_kThetaC, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_kThetaA, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -316,6 +323,7 @@ Partial Class Frm_MaintienBac
         '
         Me.pan_DefPlancher.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_DefPlancher.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_DefPlancher.Controls.Add(Me.chk_PriseEnCompteBac)
         Me.pan_DefPlancher.Controls.Add(Me.cmb_Transition)
         Me.pan_DefPlancher.Controls.Add(Me.lbl_Transition)
         Me.pan_DefPlancher.Controls.Add(Me.txt_NbSheetsTransverse)
@@ -327,6 +335,16 @@ Partial Class Frm_MaintienBac
         Me.pan_DefPlancher.Name = "pan_DefPlancher"
         Me.pan_DefPlancher.Size = New System.Drawing.Size(250, 179)
         Me.pan_DefPlancher.TabIndex = 1
+        '
+        'chk_PriseEnCompteBac
+        '
+        Me.chk_PriseEnCompteBac.AutoSize = True
+        Me.chk_PriseEnCompteBac.Location = New System.Drawing.Point(8, 5)
+        Me.chk_PriseEnCompteBac.Name = "chk_PriseEnCompteBac"
+        Me.chk_PriseEnCompteBac.Size = New System.Drawing.Size(141, 17)
+        Me.chk_PriseEnCompteBac.TabIndex = 7
+        Me.chk_PriseEnCompteBac.Text = "chk_PriseEnCompteBac"
+        Me.chk_PriseEnCompteBac.UseVisualStyleBackColor = True
         '
         'cmb_Transition
         '
@@ -342,7 +360,7 @@ Partial Class Frm_MaintienBac
         'lbl_Transition
         '
         Me.lbl_Transition.AutoSize = True
-        Me.lbl_Transition.Location = New System.Drawing.Point(8, 131)
+        Me.lbl_Transition.Location = New System.Drawing.Point(8, 134)
         Me.lbl_Transition.Name = "lbl_Transition"
         Me.lbl_Transition.Size = New System.Drawing.Size(69, 13)
         Me.lbl_Transition.TabIndex = 5
@@ -350,7 +368,7 @@ Partial Class Frm_MaintienBac
         '
         'txt_NbSheetsTransverse
         '
-        Me.txt_NbSheetsTransverse.Location = New System.Drawing.Point(149, 29)
+        Me.txt_NbSheetsTransverse.Location = New System.Drawing.Point(149, 45)
         Me.txt_NbSheetsTransverse.Name = "txt_NbSheetsTransverse"
         Me.txt_NbSheetsTransverse.Size = New System.Drawing.Size(58, 20)
         Me.txt_NbSheetsTransverse.TabIndex = 1
@@ -359,7 +377,7 @@ Partial Class Frm_MaintienBac
         'lbl_NbSheetsTransverse
         '
         Me.lbl_NbSheetsTransverse.AutoSize = True
-        Me.lbl_NbSheetsTransverse.Location = New System.Drawing.Point(8, 6)
+        Me.lbl_NbSheetsTransverse.Location = New System.Drawing.Point(8, 29)
         Me.lbl_NbSheetsTransverse.Name = "lbl_NbSheetsTransverse"
         Me.lbl_NbSheetsTransverse.Size = New System.Drawing.Size(123, 13)
         Me.lbl_NbSheetsTransverse.TabIndex = 0
@@ -374,15 +392,15 @@ Partial Class Frm_MaintienBac
         Me.Panel1.Controls.Add(Me.etq_UnitL2)
         Me.Panel1.Controls.Add(Me.etq_UnitL1)
         Me.Panel1.Controls.Add(Me.txt_LargeurP)
-        Me.Panel1.Location = New System.Drawing.Point(1, 53)
+        Me.Panel1.Location = New System.Drawing.Point(1, 66)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(244, 71)
+        Me.Panel1.Size = New System.Drawing.Size(244, 64)
         Me.Panel1.TabIndex = 4
         '
         'lbl_Largeur
         '
-        Me.lbl_Largeur.Location = New System.Drawing.Point(24, 52)
+        Me.lbl_Largeur.Location = New System.Drawing.Point(24, 43)
         Me.lbl_Largeur.Name = "lbl_Largeur"
         Me.lbl_Largeur.Size = New System.Drawing.Size(118, 13)
         Me.lbl_Largeur.TabIndex = 79
@@ -400,7 +418,7 @@ Partial Class Frm_MaintienBac
         '
         'lbl_Portee
         '
-        Me.lbl_Portee.Location = New System.Drawing.Point(24, 26)
+        Me.lbl_Portee.Location = New System.Drawing.Point(24, 22)
         Me.lbl_Portee.Name = "lbl_Portee"
         Me.lbl_Portee.Size = New System.Drawing.Size(118, 13)
         Me.lbl_Portee.TabIndex = 78
@@ -410,7 +428,7 @@ Partial Class Frm_MaintienBac
         'txt_LongueurP
         '
         Me.txt_LongueurP.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_LongueurP.Location = New System.Drawing.Point(148, 22)
+        Me.txt_LongueurP.Location = New System.Drawing.Point(148, 18)
         Me.txt_LongueurP.Name = "txt_LongueurP"
         Me.txt_LongueurP.Size = New System.Drawing.Size(58, 20)
         Me.txt_LongueurP.TabIndex = 73
@@ -419,7 +437,7 @@ Partial Class Frm_MaintienBac
         'etq_UnitL2
         '
         Me.etq_UnitL2.AutoSize = True
-        Me.etq_UnitL2.Location = New System.Drawing.Point(212, 52)
+        Me.etq_UnitL2.Location = New System.Drawing.Point(212, 43)
         Me.etq_UnitL2.Name = "etq_UnitL2"
         Me.etq_UnitL2.Size = New System.Drawing.Size(21, 13)
         Me.etq_UnitL2.TabIndex = 77
@@ -428,7 +446,7 @@ Partial Class Frm_MaintienBac
         'etq_UnitL1
         '
         Me.etq_UnitL1.AutoSize = True
-        Me.etq_UnitL1.Location = New System.Drawing.Point(212, 26)
+        Me.etq_UnitL1.Location = New System.Drawing.Point(212, 22)
         Me.etq_UnitL1.Name = "etq_UnitL1"
         Me.etq_UnitL1.Size = New System.Drawing.Size(21, 13)
         Me.etq_UnitL1.TabIndex = 75
@@ -437,7 +455,7 @@ Partial Class Frm_MaintienBac
         'txt_LargeurP
         '
         Me.txt_LargeurP.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_LargeurP.Location = New System.Drawing.Point(148, 48)
+        Me.txt_LargeurP.Location = New System.Drawing.Point(148, 39)
         Me.txt_LargeurP.Name = "txt_LargeurP"
         Me.txt_LargeurP.Size = New System.Drawing.Size(58, 20)
         Me.txt_LargeurP.TabIndex = 76
@@ -486,7 +504,7 @@ Partial Class Frm_MaintienBac
         Me.Panel2.Controls.Add(Me.etq_UnitL3)
         Me.Panel2.Controls.Add(Me.txt_SheetLength)
         Me.Panel2.Controls.Add(Me.lbl_IndSheetDimensions)
-        Me.Panel2.Location = New System.Drawing.Point(1, 50)
+        Me.Panel2.Location = New System.Drawing.Point(1, 54)
         Me.Panel2.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(244, 71)
@@ -494,7 +512,7 @@ Partial Class Frm_MaintienBac
         '
         'lbl_SheetWidth
         '
-        Me.lbl_SheetWidth.Location = New System.Drawing.Point(24, 52)
+        Me.lbl_SheetWidth.Location = New System.Drawing.Point(24, 48)
         Me.lbl_SheetWidth.Name = "lbl_SheetWidth"
         Me.lbl_SheetWidth.Size = New System.Drawing.Size(118, 13)
         Me.lbl_SheetWidth.TabIndex = 93
@@ -513,7 +531,7 @@ Partial Class Frm_MaintienBac
         'etq_UnitL4
         '
         Me.etq_UnitL4.AutoSize = True
-        Me.etq_UnitL4.Location = New System.Drawing.Point(212, 52)
+        Me.etq_UnitL4.Location = New System.Drawing.Point(212, 48)
         Me.etq_UnitL4.Name = "etq_UnitL4"
         Me.etq_UnitL4.Size = New System.Drawing.Size(21, 13)
         Me.etq_UnitL4.TabIndex = 91
@@ -522,7 +540,7 @@ Partial Class Frm_MaintienBac
         'txt_SheetWidth
         '
         Me.txt_SheetWidth.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_SheetWidth.Location = New System.Drawing.Point(148, 48)
+        Me.txt_SheetWidth.Location = New System.Drawing.Point(148, 44)
         Me.txt_SheetWidth.Name = "txt_SheetWidth"
         Me.txt_SheetWidth.Size = New System.Drawing.Size(58, 20)
         Me.txt_SheetWidth.TabIndex = 90
@@ -867,41 +885,9 @@ Partial Class Frm_MaintienBac
         '
         Me.Panel5.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.Panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Panel5.Controls.Add(Me.txt_kTheta)
-        Me.Panel5.Controls.Add(Me.etq_UnitkTheta)
-        Me.Panel5.Controls.Add(Me.img_kTheta)
-        Me.Panel5.Controls.Add(Me.txt_kThetaC)
-        Me.Panel5.Controls.Add(Me.etq_UnitkThetaC)
-        Me.Panel5.Controls.Add(Me.img_kThetaC)
-        Me.Panel5.Controls.Add(Me.txt_kThetaA)
-        Me.Panel5.Controls.Add(Me.etq_UnitkThetaA)
-        Me.Panel5.Controls.Add(Me.img_kThetaA)
-        Me.Panel5.Controls.Add(Me.lbl_BendingRigidity)
-        Me.Panel5.Controls.Add(Me.txt_Sact)
-        Me.Panel5.Controls.Add(Me.etq_UnitSact)
-        Me.Panel5.Controls.Add(Me.img_Sact)
-        Me.Panel5.Controls.Add(Me.txt_c)
-        Me.Panel5.Controls.Add(Me.Label1)
-        Me.Panel5.Controls.Add(Me.img_c)
-        Me.Panel5.Controls.Add(Me.txt_c22)
-        Me.Panel5.Controls.Add(Me.etq_Unitc22)
-        Me.Panel5.Controls.Add(Me.img_c22)
-        Me.Panel5.Controls.Add(Me.txt_c21)
-        Me.Panel5.Controls.Add(Me.etq_Unitc21)
-        Me.Panel5.Controls.Add(Me.img_c21)
-        Me.Panel5.Controls.Add(Me.txt_c12)
-        Me.Panel5.Controls.Add(Me.etq_Unitc12)
-        Me.Panel5.Controls.Add(Me.img_c12)
-        Me.Panel5.Controls.Add(Me.txt_c11)
-        Me.Panel5.Controls.Add(Me.etq_UnitC11)
-        Me.Panel5.Controls.Add(Me.img_c11)
-        Me.Panel5.Controls.Add(Me.txt_Alpha5)
-        Me.Panel5.Controls.Add(Me.etq_UnitAlpha5)
-        Me.Panel5.Controls.Add(Me.img_Alpha5)
-        Me.Panel5.Controls.Add(Me.txt_K)
-        Me.Panel5.Controls.Add(Me.etq_UnitK)
-        Me.Panel5.Controls.Add(Me.img_K)
-        Me.Panel5.Controls.Add(Me.lbl_ShearRigidity)
+        Me.Panel5.Controls.Add(Me.img_Deck)
+        Me.Panel5.Controls.Add(Me.pan_RigiditeShear)
+        Me.Panel5.Controls.Add(Me.pan_Rigidite)
         Me.Panel5.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel5.Location = New System.Drawing.Point(0, 30)
         Me.Panel5.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
@@ -909,10 +895,50 @@ Partial Class Frm_MaintienBac
         Me.Panel5.Size = New System.Drawing.Size(250, 350)
         Me.Panel5.TabIndex = 4
         '
+        'img_Deck
+        '
+        Me.img_Deck.Location = New System.Drawing.Point(0, 304)
+        Me.img_Deck.Name = "img_Deck"
+        Me.img_Deck.Size = New System.Drawing.Size(100, 25)
+        Me.img_Deck.TabIndex = 122
+        Me.img_Deck.TabStop = False
+        '
+        'pan_RigiditeShear
+        '
+        Me.pan_RigiditeShear.Controls.Add(Me.txt_Sact)
+        Me.pan_RigiditeShear.Controls.Add(Me.etq_UnitSact)
+        Me.pan_RigiditeShear.Controls.Add(Me.img_Sact)
+        Me.pan_RigiditeShear.Controls.Add(Me.txt_c)
+        Me.pan_RigiditeShear.Controls.Add(Me.Label1)
+        Me.pan_RigiditeShear.Controls.Add(Me.img_c)
+        Me.pan_RigiditeShear.Controls.Add(Me.txt_c22)
+        Me.pan_RigiditeShear.Controls.Add(Me.etq_Unitc22)
+        Me.pan_RigiditeShear.Controls.Add(Me.img_c22)
+        Me.pan_RigiditeShear.Controls.Add(Me.txt_c21)
+        Me.pan_RigiditeShear.Controls.Add(Me.etq_Unitc21)
+        Me.pan_RigiditeShear.Controls.Add(Me.img_c21)
+        Me.pan_RigiditeShear.Controls.Add(Me.txt_c12)
+        Me.pan_RigiditeShear.Controls.Add(Me.etq_Unitc12)
+        Me.pan_RigiditeShear.Controls.Add(Me.img_c12)
+        Me.pan_RigiditeShear.Controls.Add(Me.txt_c11)
+        Me.pan_RigiditeShear.Controls.Add(Me.etq_UnitC11)
+        Me.pan_RigiditeShear.Controls.Add(Me.img_c11)
+        Me.pan_RigiditeShear.Controls.Add(Me.txt_Alpha5)
+        Me.pan_RigiditeShear.Controls.Add(Me.etq_UnitAlpha5)
+        Me.pan_RigiditeShear.Controls.Add(Me.img_Alpha5)
+        Me.pan_RigiditeShear.Controls.Add(Me.txt_K)
+        Me.pan_RigiditeShear.Controls.Add(Me.etq_UnitK)
+        Me.pan_RigiditeShear.Controls.Add(Me.img_K)
+        Me.pan_RigiditeShear.Controls.Add(Me.lbl_ShearRigidity)
+        Me.pan_RigiditeShear.Location = New System.Drawing.Point(0, 1)
+        Me.pan_RigiditeShear.Name = "pan_RigiditeShear"
+        Me.pan_RigiditeShear.Size = New System.Drawing.Size(250, 197)
+        Me.pan_RigiditeShear.TabIndex = 121
+        '
         'txt_Sact
         '
         Me.txt_Sact.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Sact.Location = New System.Drawing.Point(133, 211)
+        Me.txt_Sact.Location = New System.Drawing.Point(136, 170)
         Me.txt_Sact.Name = "txt_Sact"
         Me.txt_Sact.Size = New System.Drawing.Size(58, 20)
         Me.txt_Sact.TabIndex = 108
@@ -922,7 +948,7 @@ Partial Class Frm_MaintienBac
         '
         Me.etq_UnitSact.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitSact.AutoSize = True
-        Me.etq_UnitSact.Location = New System.Drawing.Point(196, 214)
+        Me.etq_UnitSact.Location = New System.Drawing.Point(199, 173)
         Me.etq_UnitSact.Name = "etq_UnitSact"
         Me.etq_UnitSact.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitSact.TabIndex = 107
@@ -931,7 +957,7 @@ Partial Class Frm_MaintienBac
         'img_Sact
         '
         Me.img_Sact.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Sact.Location = New System.Drawing.Point(96, 211)
+        Me.img_Sact.Location = New System.Drawing.Point(99, 170)
         Me.img_Sact.Name = "img_Sact"
         Me.img_Sact.Size = New System.Drawing.Size(37, 20)
         Me.img_Sact.TabIndex = 109
@@ -940,7 +966,7 @@ Partial Class Frm_MaintienBac
         'txt_c
         '
         Me.txt_c.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_c.Location = New System.Drawing.Point(133, 185)
+        Me.txt_c.Location = New System.Drawing.Point(136, 149)
         Me.txt_c.Name = "txt_c"
         Me.txt_c.Size = New System.Drawing.Size(58, 20)
         Me.txt_c.TabIndex = 105
@@ -950,7 +976,7 @@ Partial Class Frm_MaintienBac
         '
         Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(196, 188)
+        Me.Label1.Location = New System.Drawing.Point(199, 152)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(23, 13)
         Me.Label1.TabIndex = 104
@@ -959,7 +985,7 @@ Partial Class Frm_MaintienBac
         'img_c
         '
         Me.img_c.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_c.Location = New System.Drawing.Point(96, 185)
+        Me.img_c.Location = New System.Drawing.Point(99, 149)
         Me.img_c.Name = "img_c"
         Me.img_c.Size = New System.Drawing.Size(37, 20)
         Me.img_c.TabIndex = 106
@@ -968,7 +994,7 @@ Partial Class Frm_MaintienBac
         'txt_c22
         '
         Me.txt_c22.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_c22.Location = New System.Drawing.Point(133, 159)
+        Me.txt_c22.Location = New System.Drawing.Point(136, 128)
         Me.txt_c22.Name = "txt_c22"
         Me.txt_c22.Size = New System.Drawing.Size(58, 20)
         Me.txt_c22.TabIndex = 102
@@ -978,7 +1004,7 @@ Partial Class Frm_MaintienBac
         '
         Me.etq_Unitc22.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_Unitc22.AutoSize = True
-        Me.etq_Unitc22.Location = New System.Drawing.Point(196, 162)
+        Me.etq_Unitc22.Location = New System.Drawing.Point(199, 131)
         Me.etq_Unitc22.Name = "etq_Unitc22"
         Me.etq_Unitc22.Size = New System.Drawing.Size(23, 13)
         Me.etq_Unitc22.TabIndex = 101
@@ -987,7 +1013,7 @@ Partial Class Frm_MaintienBac
         'img_c22
         '
         Me.img_c22.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_c22.Location = New System.Drawing.Point(96, 159)
+        Me.img_c22.Location = New System.Drawing.Point(99, 128)
         Me.img_c22.Name = "img_c22"
         Me.img_c22.Size = New System.Drawing.Size(37, 20)
         Me.img_c22.TabIndex = 103
@@ -996,7 +1022,7 @@ Partial Class Frm_MaintienBac
         'txt_c21
         '
         Me.txt_c21.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_c21.Location = New System.Drawing.Point(133, 133)
+        Me.txt_c21.Location = New System.Drawing.Point(136, 107)
         Me.txt_c21.Name = "txt_c21"
         Me.txt_c21.Size = New System.Drawing.Size(58, 20)
         Me.txt_c21.TabIndex = 99
@@ -1006,7 +1032,7 @@ Partial Class Frm_MaintienBac
         '
         Me.etq_Unitc21.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_Unitc21.AutoSize = True
-        Me.etq_Unitc21.Location = New System.Drawing.Point(196, 136)
+        Me.etq_Unitc21.Location = New System.Drawing.Point(199, 110)
         Me.etq_Unitc21.Name = "etq_Unitc21"
         Me.etq_Unitc21.Size = New System.Drawing.Size(23, 13)
         Me.etq_Unitc21.TabIndex = 98
@@ -1015,7 +1041,7 @@ Partial Class Frm_MaintienBac
         'img_c21
         '
         Me.img_c21.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_c21.Location = New System.Drawing.Point(96, 133)
+        Me.img_c21.Location = New System.Drawing.Point(99, 107)
         Me.img_c21.Name = "img_c21"
         Me.img_c21.Size = New System.Drawing.Size(37, 20)
         Me.img_c21.TabIndex = 100
@@ -1024,7 +1050,7 @@ Partial Class Frm_MaintienBac
         'txt_c12
         '
         Me.txt_c12.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_c12.Location = New System.Drawing.Point(133, 107)
+        Me.txt_c12.Location = New System.Drawing.Point(136, 86)
         Me.txt_c12.Name = "txt_c12"
         Me.txt_c12.Size = New System.Drawing.Size(58, 20)
         Me.txt_c12.TabIndex = 96
@@ -1034,7 +1060,7 @@ Partial Class Frm_MaintienBac
         '
         Me.etq_Unitc12.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_Unitc12.AutoSize = True
-        Me.etq_Unitc12.Location = New System.Drawing.Point(196, 110)
+        Me.etq_Unitc12.Location = New System.Drawing.Point(199, 89)
         Me.etq_Unitc12.Name = "etq_Unitc12"
         Me.etq_Unitc12.Size = New System.Drawing.Size(23, 13)
         Me.etq_Unitc12.TabIndex = 95
@@ -1043,7 +1069,7 @@ Partial Class Frm_MaintienBac
         'img_c12
         '
         Me.img_c12.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_c12.Location = New System.Drawing.Point(96, 107)
+        Me.img_c12.Location = New System.Drawing.Point(99, 86)
         Me.img_c12.Name = "img_c12"
         Me.img_c12.Size = New System.Drawing.Size(37, 20)
         Me.img_c12.TabIndex = 97
@@ -1052,7 +1078,7 @@ Partial Class Frm_MaintienBac
         'txt_c11
         '
         Me.txt_c11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_c11.Location = New System.Drawing.Point(133, 81)
+        Me.txt_c11.Location = New System.Drawing.Point(136, 65)
         Me.txt_c11.Name = "txt_c11"
         Me.txt_c11.Size = New System.Drawing.Size(58, 20)
         Me.txt_c11.TabIndex = 93
@@ -1062,7 +1088,7 @@ Partial Class Frm_MaintienBac
         '
         Me.etq_UnitC11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitC11.AutoSize = True
-        Me.etq_UnitC11.Location = New System.Drawing.Point(196, 84)
+        Me.etq_UnitC11.Location = New System.Drawing.Point(199, 68)
         Me.etq_UnitC11.Name = "etq_UnitC11"
         Me.etq_UnitC11.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitC11.TabIndex = 92
@@ -1071,7 +1097,7 @@ Partial Class Frm_MaintienBac
         'img_c11
         '
         Me.img_c11.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_c11.Location = New System.Drawing.Point(96, 81)
+        Me.img_c11.Location = New System.Drawing.Point(99, 65)
         Me.img_c11.Name = "img_c11"
         Me.img_c11.Size = New System.Drawing.Size(37, 20)
         Me.img_c11.TabIndex = 94
@@ -1080,7 +1106,7 @@ Partial Class Frm_MaintienBac
         'txt_Alpha5
         '
         Me.txt_Alpha5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Alpha5.Location = New System.Drawing.Point(133, 55)
+        Me.txt_Alpha5.Location = New System.Drawing.Point(136, 44)
         Me.txt_Alpha5.Name = "txt_Alpha5"
         Me.txt_Alpha5.Size = New System.Drawing.Size(58, 20)
         Me.txt_Alpha5.TabIndex = 90
@@ -1090,7 +1116,7 @@ Partial Class Frm_MaintienBac
         '
         Me.etq_UnitAlpha5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitAlpha5.AutoSize = True
-        Me.etq_UnitAlpha5.Location = New System.Drawing.Point(196, 58)
+        Me.etq_UnitAlpha5.Location = New System.Drawing.Point(199, 47)
         Me.etq_UnitAlpha5.Name = "etq_UnitAlpha5"
         Me.etq_UnitAlpha5.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitAlpha5.TabIndex = 89
@@ -1099,7 +1125,7 @@ Partial Class Frm_MaintienBac
         'img_Alpha5
         '
         Me.img_Alpha5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Alpha5.Location = New System.Drawing.Point(96, 55)
+        Me.img_Alpha5.Location = New System.Drawing.Point(99, 44)
         Me.img_Alpha5.Name = "img_Alpha5"
         Me.img_Alpha5.Size = New System.Drawing.Size(37, 20)
         Me.img_Alpha5.TabIndex = 91
@@ -1108,7 +1134,7 @@ Partial Class Frm_MaintienBac
         'txt_K
         '
         Me.txt_K.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_K.Location = New System.Drawing.Point(133, 29)
+        Me.txt_K.Location = New System.Drawing.Point(136, 23)
         Me.txt_K.Name = "txt_K"
         Me.txt_K.Size = New System.Drawing.Size(58, 20)
         Me.txt_K.TabIndex = 87
@@ -1118,7 +1144,7 @@ Partial Class Frm_MaintienBac
         '
         Me.etq_UnitK.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitK.AutoSize = True
-        Me.etq_UnitK.Location = New System.Drawing.Point(196, 32)
+        Me.etq_UnitK.Location = New System.Drawing.Point(199, 26)
         Me.etq_UnitK.Name = "etq_UnitK"
         Me.etq_UnitK.Size = New System.Drawing.Size(23, 13)
         Me.etq_UnitK.TabIndex = 86
@@ -1127,7 +1153,7 @@ Partial Class Frm_MaintienBac
         'img_K
         '
         Me.img_K.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_K.Location = New System.Drawing.Point(96, 29)
+        Me.img_K.Location = New System.Drawing.Point(99, 23)
         Me.img_K.Name = "img_K"
         Me.img_K.Size = New System.Drawing.Size(37, 20)
         Me.img_K.TabIndex = 88
@@ -1136,11 +1162,121 @@ Partial Class Frm_MaintienBac
         'lbl_ShearRigidity
         '
         Me.lbl_ShearRigidity.AutoSize = True
-        Me.lbl_ShearRigidity.Location = New System.Drawing.Point(8, 9)
+        Me.lbl_ShearRigidity.Location = New System.Drawing.Point(5, 4)
         Me.lbl_ShearRigidity.Name = "lbl_ShearRigidity"
         Me.lbl_ShearRigidity.Size = New System.Drawing.Size(85, 13)
         Me.lbl_ShearRigidity.TabIndex = 7
         Me.lbl_ShearRigidity.Text = "lbl_ShearRigidity"
+        '
+        'pan_Rigidite
+        '
+        Me.pan_Rigidite.Controls.Add(Me.txt_kTheta)
+        Me.pan_Rigidite.Controls.Add(Me.etq_UnitkTheta)
+        Me.pan_Rigidite.Controls.Add(Me.img_kTheta)
+        Me.pan_Rigidite.Controls.Add(Me.txt_kThetaC)
+        Me.pan_Rigidite.Controls.Add(Me.etq_UnitkThetaC)
+        Me.pan_Rigidite.Controls.Add(Me.img_kThetaC)
+        Me.pan_Rigidite.Controls.Add(Me.txt_kThetaA)
+        Me.pan_Rigidite.Controls.Add(Me.etq_UnitkThetaA)
+        Me.pan_Rigidite.Controls.Add(Me.img_kThetaA)
+        Me.pan_Rigidite.Controls.Add(Me.lbl_BendingRigidity)
+        Me.pan_Rigidite.Location = New System.Drawing.Point(0, 198)
+        Me.pan_Rigidite.Name = "pan_Rigidite"
+        Me.pan_Rigidite.Size = New System.Drawing.Size(249, 100)
+        Me.pan_Rigidite.TabIndex = 120
+        '
+        'txt_kTheta
+        '
+        Me.txt_kTheta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_kTheta.Location = New System.Drawing.Point(136, 74)
+        Me.txt_kTheta.Name = "txt_kTheta"
+        Me.txt_kTheta.Size = New System.Drawing.Size(58, 20)
+        Me.txt_kTheta.TabIndex = 118
+        Me.txt_kTheta.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'etq_UnitkTheta
+        '
+        Me.etq_UnitkTheta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitkTheta.AutoSize = True
+        Me.etq_UnitkTheta.Location = New System.Drawing.Point(199, 77)
+        Me.etq_UnitkTheta.Name = "etq_UnitkTheta"
+        Me.etq_UnitkTheta.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitkTheta.TabIndex = 117
+        Me.etq_UnitkTheta.Text = "mm"
+        '
+        'img_kTheta
+        '
+        Me.img_kTheta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_kTheta.Location = New System.Drawing.Point(75, 74)
+        Me.img_kTheta.Name = "img_kTheta"
+        Me.img_kTheta.Size = New System.Drawing.Size(61, 20)
+        Me.img_kTheta.TabIndex = 119
+        Me.img_kTheta.TabStop = False
+        '
+        'txt_kThetaC
+        '
+        Me.txt_kThetaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_kThetaC.Location = New System.Drawing.Point(136, 52)
+        Me.txt_kThetaC.Name = "txt_kThetaC"
+        Me.txt_kThetaC.Size = New System.Drawing.Size(58, 20)
+        Me.txt_kThetaC.TabIndex = 115
+        Me.txt_kThetaC.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'etq_UnitkThetaC
+        '
+        Me.etq_UnitkThetaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitkThetaC.AutoSize = True
+        Me.etq_UnitkThetaC.Location = New System.Drawing.Point(199, 55)
+        Me.etq_UnitkThetaC.Name = "etq_UnitkThetaC"
+        Me.etq_UnitkThetaC.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitkThetaC.TabIndex = 114
+        Me.etq_UnitkThetaC.Text = "mm"
+        '
+        'img_kThetaC
+        '
+        Me.img_kThetaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_kThetaC.Location = New System.Drawing.Point(75, 52)
+        Me.img_kThetaC.Name = "img_kThetaC"
+        Me.img_kThetaC.Size = New System.Drawing.Size(61, 20)
+        Me.img_kThetaC.TabIndex = 116
+        Me.img_kThetaC.TabStop = False
+        '
+        'txt_kThetaA
+        '
+        Me.txt_kThetaA.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_kThetaA.Location = New System.Drawing.Point(136, 30)
+        Me.txt_kThetaA.Name = "txt_kThetaA"
+        Me.txt_kThetaA.Size = New System.Drawing.Size(58, 20)
+        Me.txt_kThetaA.TabIndex = 112
+        Me.txt_kThetaA.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'etq_UnitkThetaA
+        '
+        Me.etq_UnitkThetaA.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitkThetaA.AutoSize = True
+        Me.etq_UnitkThetaA.Location = New System.Drawing.Point(199, 33)
+        Me.etq_UnitkThetaA.Name = "etq_UnitkThetaA"
+        Me.etq_UnitkThetaA.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitkThetaA.TabIndex = 111
+        Me.etq_UnitkThetaA.Text = "mm"
+        '
+        'img_kThetaA
+        '
+        Me.img_kThetaA.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_kThetaA.Location = New System.Drawing.Point(75, 30)
+        Me.img_kThetaA.Name = "img_kThetaA"
+        Me.img_kThetaA.Size = New System.Drawing.Size(61, 20)
+        Me.img_kThetaA.TabIndex = 113
+        Me.img_kThetaA.TabStop = False
+        '
+        'lbl_BendingRigidity
+        '
+        Me.lbl_BendingRigidity.AutoSize = True
+        Me.lbl_BendingRigidity.Location = New System.Drawing.Point(5, 5)
+        Me.lbl_BendingRigidity.Name = "lbl_BendingRigidity"
+        Me.lbl_BendingRigidity.Size = New System.Drawing.Size(96, 13)
+        Me.lbl_BendingRigidity.TabIndex = 110
+        Me.lbl_BendingRigidity.Text = "lbl_BendingRigidity"
         '
         'lbl_Calculs
         '
@@ -1159,99 +1295,6 @@ Partial Class Frm_MaintienBac
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
-        '
-        'lbl_BendingRigidity
-        '
-        Me.lbl_BendingRigidity.AutoSize = True
-        Me.lbl_BendingRigidity.Location = New System.Drawing.Point(8, 239)
-        Me.lbl_BendingRigidity.Name = "lbl_BendingRigidity"
-        Me.lbl_BendingRigidity.Size = New System.Drawing.Size(96, 13)
-        Me.lbl_BendingRigidity.TabIndex = 110
-        Me.lbl_BendingRigidity.Text = "lbl_BendingRigidity"
-        '
-        'txt_kThetaA
-        '
-        Me.txt_kThetaA.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_kThetaA.Location = New System.Drawing.Point(133, 264)
-        Me.txt_kThetaA.Name = "txt_kThetaA"
-        Me.txt_kThetaA.Size = New System.Drawing.Size(58, 20)
-        Me.txt_kThetaA.TabIndex = 112
-        Me.txt_kThetaA.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'etq_UnitkThetaA
-        '
-        Me.etq_UnitkThetaA.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitkThetaA.AutoSize = True
-        Me.etq_UnitkThetaA.Location = New System.Drawing.Point(196, 267)
-        Me.etq_UnitkThetaA.Name = "etq_UnitkThetaA"
-        Me.etq_UnitkThetaA.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitkThetaA.TabIndex = 111
-        Me.etq_UnitkThetaA.Text = "mm"
-        '
-        'img_kThetaA
-        '
-        Me.img_kThetaA.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_kThetaA.Location = New System.Drawing.Point(72, 264)
-        Me.img_kThetaA.Name = "img_kThetaA"
-        Me.img_kThetaA.Size = New System.Drawing.Size(61, 20)
-        Me.img_kThetaA.TabIndex = 113
-        Me.img_kThetaA.TabStop = False
-        '
-        'txt_kThetaC
-        '
-        Me.txt_kThetaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_kThetaC.Location = New System.Drawing.Point(133, 290)
-        Me.txt_kThetaC.Name = "txt_kThetaC"
-        Me.txt_kThetaC.Size = New System.Drawing.Size(58, 20)
-        Me.txt_kThetaC.TabIndex = 115
-        Me.txt_kThetaC.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'etq_UnitkThetaC
-        '
-        Me.etq_UnitkThetaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitkThetaC.AutoSize = True
-        Me.etq_UnitkThetaC.Location = New System.Drawing.Point(196, 293)
-        Me.etq_UnitkThetaC.Name = "etq_UnitkThetaC"
-        Me.etq_UnitkThetaC.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitkThetaC.TabIndex = 114
-        Me.etq_UnitkThetaC.Text = "mm"
-        '
-        'img_kThetaC
-        '
-        Me.img_kThetaC.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_kThetaC.Location = New System.Drawing.Point(72, 290)
-        Me.img_kThetaC.Name = "img_kThetaC"
-        Me.img_kThetaC.Size = New System.Drawing.Size(61, 20)
-        Me.img_kThetaC.TabIndex = 116
-        Me.img_kThetaC.TabStop = False
-        '
-        'txt_kTheta
-        '
-        Me.txt_kTheta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_kTheta.Location = New System.Drawing.Point(133, 316)
-        Me.txt_kTheta.Name = "txt_kTheta"
-        Me.txt_kTheta.Size = New System.Drawing.Size(58, 20)
-        Me.txt_kTheta.TabIndex = 118
-        Me.txt_kTheta.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'etq_UnitkTheta
-        '
-        Me.etq_UnitkTheta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitkTheta.AutoSize = True
-        Me.etq_UnitkTheta.Location = New System.Drawing.Point(196, 319)
-        Me.etq_UnitkTheta.Name = "etq_UnitkTheta"
-        Me.etq_UnitkTheta.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitkTheta.TabIndex = 117
-        Me.etq_UnitkTheta.Text = "mm"
-        '
-        'img_kTheta
-        '
-        Me.img_kTheta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_kTheta.Location = New System.Drawing.Point(72, 316)
-        Me.img_kTheta.Name = "img_kTheta"
-        Me.img_kTheta.Size = New System.Drawing.Size(61, 20)
-        Me.img_kTheta.TabIndex = 119
-        Me.img_kTheta.TabStop = False
         '
         'Frm_MaintienBac
         '
@@ -1295,7 +1338,9 @@ Partial Class Frm_MaintienBac
         Me.TLpan_Calculs.ResumeLayout(False)
         Me.TLpan_Calculs.PerformLayout()
         Me.Panel5.ResumeLayout(False)
-        Me.Panel5.PerformLayout()
+        CType(Me.img_Deck, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_RigiditeShear.ResumeLayout(False)
+        Me.pan_RigiditeShear.PerformLayout()
         CType(Me.img_Sact, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_c, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_c22, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1304,10 +1349,12 @@ Partial Class Frm_MaintienBac
         CType(Me.img_c11, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Alpha5, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_K, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_kThetaA, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_kThetaC, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Rigidite.ResumeLayout(False)
+        Me.pan_Rigidite.PerformLayout()
         CType(Me.img_kTheta, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_kThetaC, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_kThetaA, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1411,4 +1458,8 @@ Partial Class Frm_MaintienBac
     Friend WithEvents etq_UnitkThetaA As Label
     Friend WithEvents img_kThetaA As PictureBox
     Friend WithEvents lbl_BendingRigidity As Label
+    Friend WithEvents chk_PriseEnCompteBac As CheckBox
+    Friend WithEvents pan_RigiditeShear As Panel
+    Friend WithEvents pan_Rigidite As Panel
+    Friend WithEvents img_Deck As PictureBox
 End Class
