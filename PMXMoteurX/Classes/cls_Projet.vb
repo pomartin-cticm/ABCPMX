@@ -271,10 +271,12 @@ Public Class cls_Projet
                                 Lines.Add("   indLit         =  " & i)
                                 Lines.Add("   PhiExt         =  " & .PhiExt)
                                 Lines.Add("   NbExt          =  " & .NbExt)
+                                Lines.Add("   lActExt          =  " & .lActiveExt)
                                 Lines.Add("   PhiMil         =  " & .PhiMil)
                                 Lines.Add("   NbMil          =  " & .NbMil)
                                 Lines.Add("   PhiInt         =  " & .PhiInt)
                                 Lines.Add("   NbInt          =  " & .NbInt)
+                                Lines.Add("   lActInt          =  " & .lActiveInt)
                                 If i = 1 Then Lines.Add("   zPosRatio      =  " & .zPosRatio)
                                 Lines.Add("")
                             End With
@@ -1180,10 +1182,12 @@ Public Class cls_Projet
                         Select Case MotCle
                             Case "PHIEXT" : .PhiExt = TraiteReal(Mots(nbMots))
                             Case "NBEXT" : .NbExt = TraiteReal(Mots(nbMots))
+                            Case "LACTEXT" : .lActiveExt = Mots(nbMots)
                             Case "PHIMIL" : .PhiMil = TraiteReal(Mots(nbMots))
                             Case "NBMIL" : .NbMil = TraiteReal(Mots(nbMots))
                             Case "PHIINT" : .PhiInt = TraiteReal(Mots(nbMots))
                             Case "NBINT" : .NbInt = TraiteReal(Mots(nbMots))
+                            Case "LACTINT" : .lActiveInt = Mots(nbMots)
                             Case "ZPOSRATIO" : .zPosRatio = TraiteReal(Mots(nbMots))
                             Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                         End Select
