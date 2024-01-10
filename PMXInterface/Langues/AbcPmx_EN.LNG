@@ -242,6 +242,7 @@ DELETE					= Delete
 TITLE					= Restraint of the beam by the steel deck (construction phase only)
 OK						= Ok
 CANCEL					= Cancel
+RESTRAINTBYTHEDECK		= The beam is laterally restrained by the deck
 INDIVIDUALSHEET			= Individual sheet
 NUMBERSPANS				= Number of crossed spans by sheets
 SHEETLENGTH				= Length
@@ -277,6 +278,7 @@ SPACING					= Spacing
 PARAMETERS				= Parameters
 BENDINGSTIFF			= Bending stiffness
 SHEARSTIFF				= Shear stiffness
+DRAWING					= Drawing
 
 #FRMEDITSTUDS	
 TITLE				= Studs data base
@@ -693,17 +695,7 @@ SOLIDSLAB				= Solid slab
 SPACING					= Spacing
 THICKNESS				= Thickness
 THROUGHDECKW			= Through deck welding
-TYPE					= Type
-MODIFYSH				= Modify the steel sheeting
-RIBORIENT				= Rib orientation
-PARALLEL				= Parallel
-PERPENDICULAR			= Perpendicular
-HEIGHT					= Height
-RIBCONFIG				= Configuration of the rib at beam support
-REBARSTEEL				= Reinforcement steel
-CONNECTORANDSHEET		= Placement of the connectors
-THROUGHDECKW			= Through deck welding
-PREPUNCHED				= Prepunched sheeting						
+TYPE					= Type		
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam

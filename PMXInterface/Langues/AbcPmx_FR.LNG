@@ -242,6 +242,7 @@ DELETE					= Supprimer
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
 OK						= Ok
 CANCEL					= Annuler
+RESTRAINTBYTHEDECK		= La poutre est maintenue latéralement par le bac 
 INDIVIDUALSHEET			= Tôle individuelle
 NUMBERSPANS				= Nombre de travée traversée par les tôles
 SHEETLENGTH				= Longueur
@@ -277,6 +278,7 @@ SPACING					= Espacement
 PARAMETERS				= Paramètres
 BENDINGSTIFF			= Rigidité à la flexion
 SHEARSTIFF				= Rigidité au cisaillement
+DRAWING					= Dessin
 
 #FRMEDITSTUDS	
 TITLE				= Base de données des goujons
@@ -692,16 +694,6 @@ SPACING					= Entraxe
 THICKNESS				= Epaisseur
 THROUGHDECKW			= Soudure à travers le bac									 
 TYPE					= Type
-MODIFYSH				= Modifier le bac acier
-RIBORIENT				= Orientation des nervures
-PARALLEL				= Parallèle
-PERPENDICULAR			= Perpendiculaire
-HEIGHT					= Hauteur
-RIBCONFIG				= Configuration des nervures aux appuis
-REBARSTEEL				= Acier des armatures
-CONNECTORANDSHEET		= Disposition des connecteurs
-THROUGHDECKW			= Soudure à  travers le bac
-PREPUNCHED				= Bac prépercé
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre
