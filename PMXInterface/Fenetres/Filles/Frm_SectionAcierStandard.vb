@@ -229,9 +229,22 @@ Public Class Frm_SectionAcierStandard
                 AfficherProfileLamineEnCours()
             Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym
                 Me.rdb_PRS_symetrique.Checked = True
+                AfficherPRSEnCours()
             Case cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
                 Me.rdb_PRS.Checked = True
+                AfficherPRSEnCours()
         End Select
+
+        Me.txt_Bfi.ReadOnly = Not (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)
+        Me.txt_Tfi.ReadOnly = Not (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)
+
+        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym Then
+            MySectionLoc.ProfilA.Bfi = MySectionLoc.ProfilA.Bfs
+            Me.txt_Bfi.Text = Me.txt_Bfs.Text
+
+            MySectionLoc.ProfilA.Tfi = MySectionLoc.ProfilA.Tfs
+            Me.txt_Tfi.Text = Me.txt_Tfs.Text
+        End If
 
         MAJ_FonctionType()
 
@@ -288,6 +301,29 @@ Public Class Frm_SectionAcierStandard
         Else
 
         End If
+
+
+        End Sub
+
+    ''' <summary>
+    ''' Routine pour afficher le tableaux des nuances d'acier dans le cas d'un PRS
+    ''' </summary>
+    Private Sub AfficherPRSEnCours()
+        '---------------------------------------------------------------------------------------------------------
+        '   10/01/24 : Création - GUD
+        '---------------------------------------------------------------------------------------------------------
+        MAJ_Aciers("", "")
+
+        Dim iSteel As Integer = 0
+        Dim lTrouve As Boolean = False
+        lTrouve = False
+        Do While iSteel < Me.GridAciers.Rows.Count And Not lTrouve
+            iSteel += 1
+            lTrouve = (Me.GridAciers(0, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Nuance) _
+                      And (Me.GridAciers(1, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Qualite) _
+                      And (Me.GridAciers(2, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Reduction)
+        Loop
+        If lTrouve Then Me.GridAciers(0, iSteel - 1).Selected = True
 
 
     End Sub
@@ -889,6 +925,10 @@ Public Class Frm_SectionAcierStandard
                     End If
                 Case Me.txt_Tfs.Name
                     MySectionLoc.ProfilA.Tfs = Valeur
+                    If lSym Then
+                        MySectionLoc.ProfilA.Tfi = Valeur
+                        Me.txt_Tfi.Text = Me.txt_Tfs.Text
+                    End If
                 Case Me.txt_Bfi.Name
                     MySectionLoc.ProfilA.Bfi = Valeur
                 Case Me.txt_Tfi.Name
@@ -957,6 +997,8 @@ Public Class Frm_SectionAcierStandard
     Private Sub ChoixTypeProfile(sender As Object, e As EventArgs) Handles rdb_PRS_symetrique.CheckedChanged, rdb_PRS.CheckedChanged, rdb_Lamine.CheckedChanged
         If lBuild Then Exit Sub
 
+        If sender.checked = False Then Exit Sub 'Permet d'éviter une boucle infinie
+
         Select Case sender.name
             Case Me.rdb_Lamine.Name
                 MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
@@ -968,6 +1010,8 @@ Public Class Frm_SectionAcierStandard
 
         MAJ_FonctionType()
         Me.img_Section.Invalidate()
+        AfficherPoutreEnCours()
+
 
     End Sub
 
@@ -1146,7 +1190,6 @@ Public Class Frm_SectionAcierStandard
 
     End Sub
 
-
     Private Sub MAJ_Aciers(ByVal Serie As String, ByVal Profile As String)
         '------------------------------------------------------------------------------------------------
         '
@@ -1161,8 +1204,9 @@ Public Class Frm_SectionAcierStandard
         '   Serie, Profile  [E] :   Indentifion du profilé sélectionné
         '
         '------------------------------------------------------------------------------------------------
+        Dim lPRS As Boolean = (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym Or MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)
 
-        MAJ_GridAcier(Serie, Profile, OptionsDatabase.ChoiceSteel)
+        MAJ_GridAcier(Serie, Profile, OptionsDatabase.ChoiceSteel, lPRS)
 
     End Sub
 
@@ -1465,7 +1509,7 @@ Public Class Frm_SectionAcierStandard
         Return (Not lTrouve)
     End Function
 
-    Private Sub MAJ_GridAcier(ByVal Serie As String, ByVal Profile As String, ByVal ChoiceSteel As EnuChoiceAcier)
+    Private Sub MAJ_GridAcier(ByVal Serie As String, ByVal Profile As String, ByVal ChoiceSteel As EnuChoiceAcier, Optional lPRS As Boolean = False)
 
         Dim lBuildBack As Boolean = lBuild
         lBuild = True
@@ -1494,13 +1538,13 @@ Public Class Frm_SectionAcierStandard
 
                     'If lAvailable Or Not OptionsDataBase.lShowSteelAvailOnly Then
 
-                    lDisplay = SteelIsToDisplay(Serie, Profile, kvpGrade.Key, kvpQualite.Key, kvpSteel.Key, ChoiceSteel, lIsNuanceCompatibleProfile)
+                    If Not lPRS Then lDisplay = SteelIsToDisplay(Serie, Profile, kvpGrade.Key, kvpQualite.Key, kvpSteel.Key, ChoiceSteel, lIsNuanceCompatibleProfile)
 
-                    If lDisplay Then
+                    If lDisplay Or lPRS Then
                         MySteel.Nuance = kvpGrade.Key
                         MySteel.Qualite = kvpQualite.Key
                         MySteel.Reduc = kvpSteel.Key
-                        MySteel.lAvailable = lIsNuanceCompatibleProfile
+                        MySteel.lAvailable = lIsNuanceCompatibleProfile Or lPRS
                         SteelToScreen.Add(MySteel)
                     End If
 

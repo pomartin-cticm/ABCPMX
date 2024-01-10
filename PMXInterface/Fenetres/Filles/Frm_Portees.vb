@@ -136,7 +136,8 @@ Public Class Frm_Portees
             Me.rad_Intermediaire.Checked = MyPoutreLoc.lIntermediaire
             Me.rad_Rive.Checked = Not MyPoutreLoc.lIntermediaire
 
-            Me.chk_TremieGauche.Checked = .lTremieGauche
+            Me.chk_TremieGauche.Enabled = .lIntermediaire
+            Me.chk_TremieGauche.Checked = .lTremieGauche And .lIntermediaire
             'If .lTremieGauche Then
             Me.txt_TremieGauche.Text = GetStringInUnit(.DistanceDsl1, Enu_TypeVariable.Longueur, 4, 2, False)
 

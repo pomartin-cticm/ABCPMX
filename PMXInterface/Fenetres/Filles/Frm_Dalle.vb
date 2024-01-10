@@ -1062,9 +1062,9 @@ Public Class Frm_Dalle
 
         If Me.MyDalleLoc.NbLitsArmaActifs = 2 Then
             If iLitSelect = 0 Then 'permiere nappe
-                Me.zMax_Rel = Math.Min(Me.zMax_Rel, Me.MyDalleLoc.LitArma(1).z_s - Me.MyDalleLoc.LitArma(1).PhiS / 2)
+                Me.zMax_Rel = Math.Min(Me.zMax_Rel, Me.MyDalleLoc.LitArma(1).z_s - Me.MyDalleLoc.LitArma(0).PhiS / 2 - Me.MyDalleLoc.LitArma(1).PhiS / 2)
             Else 'deuxieme nappe
-                Me.zMin_Rel = Math.Max(Me.zMin_Rel, Me.MyDalleLoc.LitArma(0).z_s + Me.MyDalleLoc.LitArma(0).PhiS / 2)
+                Me.zMin_Rel = Math.Max(Me.zMin_Rel, Me.MyDalleLoc.LitArma(0).z_s + Me.MyDalleLoc.LitArma(0).PhiS / 2 + Me.MyDalleLoc.LitArma(1).PhiS / 2)
             End If
         End If
 
@@ -1104,7 +1104,6 @@ Public Class Frm_Dalle
         Me.img_Dalle.Invalidate()
 
     End Sub
-
 
     Private Sub SaisieRdBDefEpMixte(sender As Object, e As EventArgs) Handles rdb_EpTotale.CheckedChanged, rdb_EpPleine.CheckedChanged
         If lBuild Then Exit Sub

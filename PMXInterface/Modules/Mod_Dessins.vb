@@ -200,10 +200,11 @@ Public Module Mod_Dessins
 
         ' Affichage du nom du profilé
         If MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine And lCotation Then
+            xo_cotes = MyPoutre.Section.ProfilA.Bfs / 2
             If lZoomPlus Then
-                xo_cotes = dCar / 4
+                xo_cotes += dCar / 4
             Else
-                xo_cotes = dCar / 2
+                xo_cotes += dCar / 2
             End If
             xe_cotes = xo_cotes
             yo_cotes = zREF
