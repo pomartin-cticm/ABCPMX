@@ -407,6 +407,27 @@ Public Class cls_Projet
 
                     Lines.Add("BLOCK OPT_CALCULS")
                     Lines.Add("   RH            = " & .RH)
+                    Lines.Add("   Norme            = " & .Norme)
+                    Lines.Add("   EtaW            = " & .EtaW)
+                    Lines.Add("   lLarEffSimp            = " & .lLargeurEfficaceSimplifiee)
+                    Lines.Add("   lCompArma            = " & .lCompressionArma)
+                    Lines.Add("   dMaxNodes            = " & .dMaxNodes)
+                    Lines.Add("   nbMinNodesTr            = " & .nbMinNodesTravee)
+                    Lines.Add("   nbMinNodesCo            = " & .nbMinNodesConsole)
+                    Lines.Add("   epsSH            = " & .nbMinNodesConsole)
+                    Lines.Add("   lRetraitEnr            = " & .lRetraitEnrobage)
+                    Lines.Add("   ArmaYoung            = " & .ArmaYoung)
+                    Lines.Add("   Gravite            = " & .GraviteG)
+                    Lines.Add("   PsiLPerm            = " & .PsiLPermanent)
+                    Lines.Add("   PsiLRetrait            = " & .PsiLRetrait)
+                    Lines.Add("   AgeT0G1_0            = " & .AgeT0G1(0))
+                    Lines.Add("   AgeT0G1_1            = " & .AgeT0G1(1))
+                    Lines.Add("   AgeT0G2_0            = " & .AgeT0G2(0))
+                    Lines.Add("   AgeT0G2_1            = " & .AgeT0G2(1))
+                    Lines.Add("   AgeT0SH_0            = " & .AgeT0SH(0))
+                    Lines.Add("   AgeT0SH_1            = " & .AgeT0SH(1))
+                    Lines.Add("   AgeTCalc            = " & .AgeT)
+                    Lines.Add("   lElasticDesign            = " & .lElasticDesign)
 
 
                     Lines.Add("")
@@ -1542,14 +1563,34 @@ Public Class cls_Projet
             DecomposeLine(Lignes(i), Mots, nbMots)
 
             If nbMots > 0 Then
-                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+                MotCle = Mots(1).Substring(0, Math.Min(14, Mots(1).Length)).ToUpper
 
 
                 With opt_calculs_en_cours
                     Select Case MotCle
 
                         Case "RH" : .RH = TraiteReal(Mots(nbMots))
-
+                        Case "NORME" : .Norme = Mots(nbMots)
+                        Case "ETAW" : .EtaW = TraiteReal(Mots(nbMots))
+                        Case "LLAREFFSIMP" : .lLargeurEfficaceSimplifiee = Mots(nbMots)
+                        Case "LCOMPARMA" : .lCompressionArma = Mots(nbMots)
+                        Case "DMAXNODES" : .dMaxNodes = TraiteReal(Mots(nbMots))
+                        Case "NBMINNODESTR" : .nbMinNodesTravee = TraiteReal(Mots(nbMots))
+                        Case "NBMINNODESCO" : .nbMinNodesConsole = TraiteReal(Mots(nbMots))
+                        Case "EPSSH" : .EpsilonSH = TraiteReal(Mots(nbMots))
+                        Case "LRETRAITENR" : .lRetraitEnrobage = Mots(nbMots)
+                        Case "ARMAYOUNG" : .ArmaYoung = TraiteReal(Mots(nbMots))
+                        Case "GRAVITE" : .GraviteG = TraiteReal(Mots(nbMots))
+                        Case "PSILPERM" : .PsiLPermanent = TraiteReal(Mots(nbMots))
+                        Case "PSILRETRAIT" : .PsiLRetrait = TraiteReal(Mots(nbMots))
+                        Case "AGET0G1_0" : .AgeT0G1(0) = TraiteReal(Mots(nbMots))
+                        Case "AGET0G1_1" : .AgeT0G1(1) = TraiteReal(Mots(nbMots))
+                        Case "AGET0G2_0" : .AgeT0G2(0) = TraiteReal(Mots(nbMots))
+                        Case "AGET0G2_1" : .AgeT0G2(1) = TraiteReal(Mots(nbMots))
+                        Case "AGET0SH_0" : .AgeT0SH(0) = TraiteReal(Mots(nbMots))
+                        Case "AGET0SH_1" : .AgeT0SH(1) = TraiteReal(Mots(nbMots))
+                        Case "AGETCALC" : .AgeT = TraiteReal(Mots(nbMots))
+                        Case "LELASTICDESIGN" : .lElasticDesign = Mots(nbMots)
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With
