@@ -813,7 +813,7 @@ Public Class Frm_PMX
 
 #Region " Barre d'outils principale "
 
-    Private Sub TSbtn_OptionsCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_OptionsCalcul.Click
+    Private Sub TSbtn_OptionsCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_OptionsCalcul.Click, CalculOptionToolStripMenuItemN.Click
 
         Frm_OptionsCalcul.ShowDialog()
 
@@ -826,7 +826,7 @@ Public Class Frm_PMX
     End Sub
 
 
-    Private Sub TSbtn_OptionsLogiciel_Click(sender As Object, e As EventArgs) Handles TSbtn_OptionsLogiciel.Click
+    Private Sub TSbtn_OptionsLogiciel_Click(sender As Object, e As EventArgs) Handles TSbtn_OptionsLogiciel.Click, ConfigToolStripMenuItemN.Click
 
         Frm_OptionsLogiciel.ShowDialog()
         MAJI_BOBasse()
