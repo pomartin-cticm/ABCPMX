@@ -31,43 +31,25 @@ Partial Class Frm_About
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLPan_PartieHaute = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.TLPan_Information = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Information = New System.Windows.Forms.Label()
-        Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
-        Me.lbl_Support = New System.Windows.Forms.Label()
-        Me.lbl_Year = New System.Windows.Forms.Label()
-        Me.lbl_Version = New System.Windows.Forms.Label()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.TLPan_Description = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Description = New System.Windows.Forms.Label()
-        Me.pan_SaisieDescription = New System.Windows.Forms.Panel()
-        Me.lbl_DescriptionContain = New System.Windows.Forms.Label()
-        Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.TLPan_Maitre = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Maitre = New System.Windows.Forms.Label()
-        Me.pan_SaisieMaitre = New System.Windows.Forms.Panel()
-        Me.lbl_Copyrights = New System.Windows.Forms.Label()
-        Me.Pan_logo = New System.Windows.Forms.Panel()
-        Me.img_CTICM = New System.Windows.Forms.PictureBox()
-        Me.img_AM = New System.Windows.Forms.PictureBox()
         Me.ImgList_logos = New System.Windows.Forms.ImageList(Me.components)
+        Me.lbl_Verification = New System.Windows.Forms.Label()
+        Me.LinkLabel_SiteCTICM = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel_SiteAM = New System.Windows.Forms.LinkLabel()
+        Me.txt_cticm = New System.Windows.Forms.TextBox()
+        Me.txt_Arcelor = New System.Windows.Forms.TextBox()
+        Me.pic_Arcelor = New System.Windows.Forms.PictureBox()
+        Me.panel_entete = New System.Windows.Forms.Panel()
+        Me.pic_cticm = New System.Windows.Forms.PictureBox()
+        Me.LinkLabel_SupportAM = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel_SupportCTICM = New System.Windows.Forms.LinkLabel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
         Me.TLPan_PartieHaute.SuspendLayout()
         Me.Panel1.SuspendLayout()
-        Me.TLPan_Information.SuspendLayout()
-        Me.pan_SaisiePortee.SuspendLayout()
-        Me.Panel2.SuspendLayout()
-        Me.TLPan_Description.SuspendLayout()
-        Me.pan_SaisieDescription.SuspendLayout()
-        Me.Panel3.SuspendLayout()
-        Me.TLPan_Maitre.SuspendLayout()
-        Me.pan_SaisieMaitre.SuspendLayout()
-        Me.Pan_logo.SuspendLayout()
-        CType(Me.img_CTICM, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_AM, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pic_Arcelor, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.pic_cticm, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -77,7 +59,7 @@ Partial Class Frm_About
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(464, 352)
+        Me.pan_General.Size = New System.Drawing.Size(485, 468)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -92,7 +74,7 @@ Partial Class Frm_About
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(464, 352)
+        Me.TLpan_Main.Size = New System.Drawing.Size(485, 468)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -105,17 +87,17 @@ Partial Class Frm_About
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 315)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 431)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(458, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(479, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(172, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(182, 3)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
@@ -129,270 +111,42 @@ Partial Class Frm_About
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(458, 306)
+        Me.pan_Main.Size = New System.Drawing.Size(479, 422)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_PartieHaute
         '
-        Me.TLPan_PartieHaute.ColumnCount = 2
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLPan_PartieHaute.ColumnCount = 1
         Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLPan_PartieHaute.Controls.Add(Me.Panel1, 0, 0)
-        Me.TLPan_PartieHaute.Controls.Add(Me.Panel2, 1, 0)
-        Me.TLPan_PartieHaute.Controls.Add(Me.Panel3, 1, 1)
-        Me.TLPan_PartieHaute.Controls.Add(Me.Pan_logo, 0, 1)
         Me.TLPan_PartieHaute.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_PartieHaute.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_PartieHaute.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
-        Me.TLPan_PartieHaute.RowCount = 2
-        Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 130.0!))
-        Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(458, 306)
+        Me.TLPan_PartieHaute.RowCount = 1
+        Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 419.0!))
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(479, 422)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.TLPan_Information)
+        Me.Panel1.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.Panel1.Controls.Add(Me.lbl_Verification)
+        Me.Panel1.Controls.Add(Me.LinkLabel_SupportCTICM)
+        Me.Panel1.Controls.Add(Me.LinkLabel_SiteCTICM)
+        Me.Panel1.Controls.Add(Me.LinkLabel_SupportAM)
+        Me.Panel1.Controls.Add(Me.LinkLabel_SiteAM)
+        Me.Panel1.Controls.Add(Me.txt_cticm)
+        Me.Panel1.Controls.Add(Me.txt_Arcelor)
+        Me.Panel1.Controls.Add(Me.pic_Arcelor)
+        Me.Panel1.Controls.Add(Me.panel_entete)
+        Me.Panel1.Controls.Add(Me.pic_cticm)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel1.Location = New System.Drawing.Point(1, 1)
         Me.Panel1.Margin = New System.Windows.Forms.Padding(1)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(227, 128)
+        Me.Panel1.Size = New System.Drawing.Size(477, 420)
         Me.Panel1.TabIndex = 5
-        '
-        'TLPan_Information
-        '
-        Me.TLPan_Information.ColumnCount = 1
-        Me.TLPan_Information.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Information.Controls.Add(Me.lbl_Information, 0, 0)
-        Me.TLPan_Information.Controls.Add(Me.pan_SaisiePortee, 0, 1)
-        Me.TLPan_Information.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Information.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Information.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_Information.Name = "TLPan_Information"
-        Me.TLPan_Information.RowCount = 2
-        Me.TLPan_Information.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Information.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Information.Size = New System.Drawing.Size(227, 128)
-        Me.TLPan_Information.TabIndex = 0
-        '
-        'lbl_Information
-        '
-        Me.lbl_Information.AutoSize = True
-        Me.lbl_Information.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Information.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Information.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Information.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Information.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Information.Name = "lbl_Information"
-        Me.lbl_Information.Size = New System.Drawing.Size(227, 30)
-        Me.lbl_Information.TabIndex = 0
-        Me.lbl_Information.Text = "lbl_Information"
-        Me.lbl_Information.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'pan_SaisiePortee
-        '
-        Me.pan_SaisiePortee.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_SaisiePortee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisiePortee.Controls.Add(Me.lbl_Support)
-        Me.pan_SaisiePortee.Controls.Add(Me.lbl_Year)
-        Me.pan_SaisiePortee.Controls.Add(Me.lbl_Version)
-        Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
-        Me.pan_SaisiePortee.Size = New System.Drawing.Size(227, 98)
-        Me.pan_SaisiePortee.TabIndex = 1
-        '
-        'lbl_Support
-        '
-        Me.lbl_Support.AutoSize = True
-        Me.lbl_Support.Location = New System.Drawing.Point(27, 72)
-        Me.lbl_Support.Name = "lbl_Support"
-        Me.lbl_Support.Size = New System.Drawing.Size(60, 13)
-        Me.lbl_Support.TabIndex = 0
-        Me.lbl_Support.Text = "lbl_Support"
-        '
-        'lbl_Year
-        '
-        Me.lbl_Year.AutoSize = True
-        Me.lbl_Year.Location = New System.Drawing.Point(27, 42)
-        Me.lbl_Year.Name = "lbl_Year"
-        Me.lbl_Year.Size = New System.Drawing.Size(45, 13)
-        Me.lbl_Year.TabIndex = 0
-        Me.lbl_Year.Text = "lbl_Year"
-        '
-        'lbl_Version
-        '
-        Me.lbl_Version.AutoSize = True
-        Me.lbl_Version.Location = New System.Drawing.Point(27, 11)
-        Me.lbl_Version.Name = "lbl_Version"
-        Me.lbl_Version.Size = New System.Drawing.Size(58, 13)
-        Me.lbl_Version.TabIndex = 0
-        Me.lbl_Version.Text = "lbl_Version"
-        '
-        'Panel2
-        '
-        Me.Panel2.Controls.Add(Me.TLPan_Description)
-        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel2.Location = New System.Drawing.Point(229, 1)
-        Me.Panel2.Margin = New System.Windows.Forms.Padding(0, 1, 1, 1)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(228, 128)
-        Me.Panel2.TabIndex = 6
-        '
-        'TLPan_Description
-        '
-        Me.TLPan_Description.ColumnCount = 1
-        Me.TLPan_Description.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Description.Controls.Add(Me.lbl_Description, 0, 0)
-        Me.TLPan_Description.Controls.Add(Me.pan_SaisieDescription, 0, 1)
-        Me.TLPan_Description.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Description.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Description.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_Description.Name = "TLPan_Description"
-        Me.TLPan_Description.RowCount = 2
-        Me.TLPan_Description.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Description.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Description.Size = New System.Drawing.Size(228, 128)
-        Me.TLPan_Description.TabIndex = 2
-        '
-        'lbl_Description
-        '
-        Me.lbl_Description.AutoSize = True
-        Me.lbl_Description.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Description.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Description.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Description.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Description.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Description.Name = "lbl_Description"
-        Me.lbl_Description.Size = New System.Drawing.Size(228, 30)
-        Me.lbl_Description.TabIndex = 0
-        Me.lbl_Description.Text = "lbl_Description"
-        Me.lbl_Description.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'pan_SaisieDescription
-        '
-        Me.pan_SaisieDescription.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_SaisieDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieDescription.Controls.Add(Me.lbl_DescriptionContain)
-        Me.pan_SaisieDescription.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieDescription.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisieDescription.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_SaisieDescription.Name = "pan_SaisieDescription"
-        Me.pan_SaisieDescription.Size = New System.Drawing.Size(228, 98)
-        Me.pan_SaisieDescription.TabIndex = 1
-        '
-        'lbl_DescriptionContain
-        '
-        Me.lbl_DescriptionContain.Dock = System.Windows.Forms.DockStyle.Top
-        Me.lbl_DescriptionContain.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_DescriptionContain.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_DescriptionContain.Name = "lbl_DescriptionContain"
-        Me.lbl_DescriptionContain.Size = New System.Drawing.Size(226, 97)
-        Me.lbl_DescriptionContain.TabIndex = 2
-        Me.lbl_DescriptionContain.Text = "lbl_DescriptionContain"
-        '
-        'Panel3
-        '
-        Me.Panel3.Controls.Add(Me.TLPan_Maitre)
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel3.Location = New System.Drawing.Point(229, 130)
-        Me.Panel3.Margin = New System.Windows.Forms.Padding(0, 0, 1, 1)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(228, 175)
-        Me.Panel3.TabIndex = 7
-        '
-        'TLPan_Maitre
-        '
-        Me.TLPan_Maitre.ColumnCount = 1
-        Me.TLPan_Maitre.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Maitre.Controls.Add(Me.lbl_Maitre, 0, 0)
-        Me.TLPan_Maitre.Controls.Add(Me.pan_SaisieMaitre, 0, 1)
-        Me.TLPan_Maitre.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Maitre.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Maitre.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_Maitre.Name = "TLPan_Maitre"
-        Me.TLPan_Maitre.RowCount = 2
-        Me.TLPan_Maitre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Maitre.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Maitre.Size = New System.Drawing.Size(228, 175)
-        Me.TLPan_Maitre.TabIndex = 3
-        '
-        'lbl_Maitre
-        '
-        Me.lbl_Maitre.AutoSize = True
-        Me.lbl_Maitre.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Maitre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Maitre.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Maitre.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Maitre.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Maitre.Name = "lbl_Maitre"
-        Me.lbl_Maitre.Size = New System.Drawing.Size(228, 30)
-        Me.lbl_Maitre.TabIndex = 0
-        Me.lbl_Maitre.Text = "lbl_Maitre"
-        Me.lbl_Maitre.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'pan_SaisieMaitre
-        '
-        Me.pan_SaisieMaitre.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_SaisieMaitre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisieMaitre.Controls.Add(Me.lbl_Copyrights)
-        Me.pan_SaisieMaitre.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisieMaitre.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisieMaitre.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_SaisieMaitre.Name = "pan_SaisieMaitre"
-        Me.pan_SaisieMaitre.Size = New System.Drawing.Size(228, 145)
-        Me.pan_SaisieMaitre.TabIndex = 1
-        '
-        'lbl_Copyrights
-        '
-        Me.lbl_Copyrights.Dock = System.Windows.Forms.DockStyle.Top
-        Me.lbl_Copyrights.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Copyrights.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Copyrights.Name = "lbl_Copyrights"
-        Me.lbl_Copyrights.Size = New System.Drawing.Size(226, 143)
-        Me.lbl_Copyrights.TabIndex = 3
-        Me.lbl_Copyrights.Text = "lbl_Copyrights"
-        '
-        'Pan_logo
-        '
-        Me.Pan_logo.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Pan_logo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Pan_logo.Controls.Add(Me.img_CTICM)
-        Me.Pan_logo.Controls.Add(Me.img_AM)
-        Me.Pan_logo.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Pan_logo.Location = New System.Drawing.Point(1, 130)
-        Me.Pan_logo.Margin = New System.Windows.Forms.Padding(1, 0, 1, 1)
-        Me.Pan_logo.Name = "Pan_logo"
-        Me.Pan_logo.Size = New System.Drawing.Size(227, 175)
-        Me.Pan_logo.TabIndex = 4
-        '
-        'img_CTICM
-        '
-        Me.img_CTICM.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_CTICM.Image = CType(resources.GetObject("img_CTICM.Image"), System.Drawing.Image)
-        Me.img_CTICM.InitialImage = CType(resources.GetObject("img_CTICM.InitialImage"), System.Drawing.Image)
-        Me.img_CTICM.Location = New System.Drawing.Point(120, 57)
-        Me.img_CTICM.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_CTICM.Name = "img_CTICM"
-        Me.img_CTICM.Size = New System.Drawing.Size(76, 43)
-        Me.img_CTICM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.img_CTICM.TabIndex = 4
-        Me.img_CTICM.TabStop = False
-        '
-        'img_AM
-        '
-        Me.img_AM.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_AM.Image = CType(resources.GetObject("img_AM.Image"), System.Drawing.Image)
-        Me.img_AM.Location = New System.Drawing.Point(0, 0)
-        Me.img_AM.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_AM.Name = "img_AM"
-        Me.img_AM.Size = New System.Drawing.Size(76, 43)
-        Me.img_AM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.img_AM.TabIndex = 4
-        Me.img_AM.TabStop = False
         '
         'ImgList_logos
         '
@@ -401,12 +155,128 @@ Partial Class Frm_About
         Me.ImgList_logos.Images.SetKeyName(0, "CTICM_logo.jpg")
         Me.ImgList_logos.Images.SetKeyName(1, "ARCELORMITTAL_logo.png")
         '
+        'lbl_Verification
+        '
+        Me.lbl_Verification.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Verification.Font = New System.Drawing.Font("Arial Narrow", 13.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Verification.Location = New System.Drawing.Point(20, 91)
+        Me.lbl_Verification.Name = "lbl_Verification"
+        Me.lbl_Verification.Size = New System.Drawing.Size(435, 22)
+        Me.lbl_Verification.TabIndex = 18
+        Me.lbl_Verification.Text = "Verification of composite beams according to EN 1994-1-1"
+        Me.lbl_Verification.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'LinkLabel_SiteCTICM
+        '
+        Me.LinkLabel_SiteCTICM.AutoSize = True
+        Me.LinkLabel_SiteCTICM.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel_SiteCTICM.Location = New System.Drawing.Point(278, 375)
+        Me.LinkLabel_SiteCTICM.Name = "LinkLabel_SiteCTICM"
+        Me.LinkLabel_SiteCTICM.Size = New System.Drawing.Size(99, 16)
+        Me.LinkLabel_SiteCTICM.TabIndex = 16
+        Me.LinkLabel_SiteCTICM.TabStop = True
+        Me.LinkLabel_SiteCTICM.Text = "www.cticm.com"
+        '
+        'LinkLabel_SiteAM
+        '
+        Me.LinkLabel_SiteAM.AutoSize = True
+        Me.LinkLabel_SiteAM.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel_SiteAM.Location = New System.Drawing.Point(12, 375)
+        Me.LinkLabel_SiteAM.Name = "LinkLabel_SiteAM"
+        Me.LinkLabel_SiteAM.Size = New System.Drawing.Size(202, 16)
+        Me.LinkLabel_SiteAM.TabIndex = 13
+        Me.LinkLabel_SiteAM.TabStop = True
+        Me.LinkLabel_SiteAM.Text = "https://sections.arcelormittal.com"
+        '
+        'txt_cticm
+        '
+        Me.txt_cticm.BackColor = System.Drawing.SystemColors.Window
+        Me.txt_cticm.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txt_cticm.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txt_cticm.Location = New System.Drawing.Point(281, 218)
+        Me.txt_cticm.Multiline = True
+        Me.txt_cticm.Name = "txt_cticm"
+        Me.txt_cticm.ReadOnly = True
+        Me.txt_cticm.Size = New System.Drawing.Size(170, 118)
+        Me.txt_cticm.TabIndex = 14
+        Me.txt_cticm.TabStop = False
+        Me.txt_cticm.Text = "CTICM" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Espace Technologique" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "L'orme des merisiers" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Immeuble Apollo" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "91193 SAINT-A" &
+    "UBIN" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "FRANCE" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Tel. +33 1 60 13 8300" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
+        '
+        'txt_Arcelor
+        '
+        Me.txt_Arcelor.BackColor = System.Drawing.SystemColors.Window
+        Me.txt_Arcelor.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.txt_Arcelor.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txt_Arcelor.Location = New System.Drawing.Point(15, 218)
+        Me.txt_Arcelor.Multiline = True
+        Me.txt_Arcelor.Name = "txt_Arcelor"
+        Me.txt_Arcelor.ReadOnly = True
+        Me.txt_Arcelor.Size = New System.Drawing.Size(217, 85)
+        Me.txt_Arcelor.TabIndex = 12
+        Me.txt_Arcelor.TabStop = False
+        Me.txt_Arcelor.Text = "ArcelorMittal Commercial Sections" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Technical Advisory" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "66, rue du Luxembourg" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "L-4" &
+    "009 ESCH-SUR-ALZETTE" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "LUXEMBOURG"
+        '
+        'pic_Arcelor
+        '
+        Me.pic_Arcelor.BackColor = System.Drawing.SystemColors.Window
+        Me.pic_Arcelor.BackgroundImage = CType(resources.GetObject("pic_Arcelor.BackgroundImage"), System.Drawing.Image)
+        Me.pic_Arcelor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.pic_Arcelor.Location = New System.Drawing.Point(15, 129)
+        Me.pic_Arcelor.Name = "pic_Arcelor"
+        Me.pic_Arcelor.Size = New System.Drawing.Size(189, 73)
+        Me.pic_Arcelor.TabIndex = 15
+        Me.pic_Arcelor.TabStop = False
+        '
+        'panel_entete
+        '
+        Me.panel_entete.BackgroundImage = CType(resources.GetObject("panel_entete.BackgroundImage"), System.Drawing.Image)
+        Me.panel_entete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.panel_entete.Location = New System.Drawing.Point(3, -5)
+        Me.panel_entete.Name = "panel_entete"
+        Me.panel_entete.Size = New System.Drawing.Size(451, 82)
+        Me.panel_entete.TabIndex = 11
+        '
+        'pic_cticm
+        '
+        Me.pic_cticm.BackgroundImage = CType(resources.GetObject("pic_cticm.BackgroundImage"), System.Drawing.Image)
+        Me.pic_cticm.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
+        Me.pic_cticm.Location = New System.Drawing.Point(281, 152)
+        Me.pic_cticm.Name = "pic_cticm"
+        Me.pic_cticm.Size = New System.Drawing.Size(120, 50)
+        Me.pic_cticm.TabIndex = 17
+        Me.pic_cticm.TabStop = False
+        '
+        'LinkLabel_SupportAM
+        '
+        Me.LinkLabel_SupportAM.AutoSize = True
+        Me.LinkLabel_SupportAM.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel_SupportAM.Location = New System.Drawing.Point(12, 342)
+        Me.LinkLabel_SupportAM.Name = "LinkLabel_SupportAM"
+        Me.LinkLabel_SupportAM.Size = New System.Drawing.Size(254, 16)
+        Me.LinkLabel_SupportAM.TabIndex = 13
+        Me.LinkLabel_SupportAM.TabStop = True
+        Me.LinkLabel_SupportAM.Text = "steligence.engineering@arcelormittal.com "
+        '
+        'LinkLabel_SupportCTICM
+        '
+        Me.LinkLabel_SupportCTICM.AutoSize = True
+        Me.LinkLabel_SupportCTICM.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel_SupportCTICM.Location = New System.Drawing.Point(278, 342)
+        Me.LinkLabel_SupportCTICM.Name = "LinkLabel_SupportCTICM"
+        Me.LinkLabel_SupportCTICM.Size = New System.Drawing.Size(176, 16)
+        Me.LinkLabel_SupportCTICM.TabIndex = 16
+        Me.LinkLabel_SupportCTICM.TabStop = True
+        Me.LinkLabel_SupportCTICM.Text = "support.logiciels@cticm.com"
+        '
         'Frm_About
         '
         Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(464, 352)
+        Me.ClientSize = New System.Drawing.Size(485, 468)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
@@ -420,21 +290,9 @@ Partial Class Frm_About
         Me.pan_Main.ResumeLayout(False)
         Me.TLPan_PartieHaute.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
-        Me.TLPan_Information.ResumeLayout(False)
-        Me.TLPan_Information.PerformLayout()
-        Me.pan_SaisiePortee.ResumeLayout(False)
-        Me.pan_SaisiePortee.PerformLayout()
-        Me.Panel2.ResumeLayout(False)
-        Me.TLPan_Description.ResumeLayout(False)
-        Me.TLPan_Description.PerformLayout()
-        Me.pan_SaisieDescription.ResumeLayout(False)
-        Me.Panel3.ResumeLayout(False)
-        Me.TLPan_Maitre.ResumeLayout(False)
-        Me.TLPan_Maitre.PerformLayout()
-        Me.pan_SaisieMaitre.ResumeLayout(False)
-        Me.Pan_logo.ResumeLayout(False)
-        CType(Me.img_CTICM, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_AM, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel1.PerformLayout()
+        CType(Me.pic_Arcelor, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.pic_cticm, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -445,25 +303,16 @@ Partial Class Frm_About
     Friend WithEvents btn_OK As Button
     Friend WithEvents pan_Main As Panel
     Friend WithEvents TLPan_PartieHaute As TableLayoutPanel
-    Friend WithEvents TLPan_Information As TableLayoutPanel
-    Friend WithEvents lbl_Information As Label
-    Friend WithEvents pan_SaisiePortee As Panel
-    Friend WithEvents TLPan_Description As TableLayoutPanel
-    Friend WithEvents lbl_Description As Label
-    Friend WithEvents pan_SaisieDescription As Panel
-    Friend WithEvents TLPan_Maitre As TableLayoutPanel
-    Friend WithEvents lbl_Maitre As Label
-    Friend WithEvents pan_SaisieMaitre As Panel
-    Friend WithEvents img_CTICM As PictureBox
     Friend WithEvents ImgList_logos As ImageList
-    Friend WithEvents Pan_logo As Panel
-    Friend WithEvents img_AM As PictureBox
-    Friend WithEvents lbl_DescriptionContain As Label
-    Friend WithEvents lbl_Support As Label
-    Friend WithEvents lbl_Year As Label
-    Friend WithEvents lbl_Version As Label
     Friend WithEvents Panel1 As Panel
-    Friend WithEvents Panel2 As Panel
-    Friend WithEvents Panel3 As Panel
-    Friend WithEvents lbl_Copyrights As Label
+    Friend WithEvents lbl_Verification As Label
+    Friend WithEvents LinkLabel_SiteCTICM As LinkLabel
+    Friend WithEvents LinkLabel_SiteAM As LinkLabel
+    Friend WithEvents txt_cticm As TextBox
+    Friend WithEvents txt_Arcelor As TextBox
+    Friend WithEvents pic_Arcelor As PictureBox
+    Friend WithEvents panel_entete As Panel
+    Friend WithEvents pic_cticm As PictureBox
+    Friend WithEvents LinkLabel_SupportCTICM As LinkLabel
+    Friend WithEvents LinkLabel_SupportAM As LinkLabel
 End Class
