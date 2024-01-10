@@ -447,7 +447,9 @@ Public Class Frm_PMX
 
 #Region " Gestion Barre d'outils poutre "
 
-    Private Sub GestionBoutonsBarreOutilGenerale(sender As Object, e As EventArgs) Handles TSbtn_EditStuds.Click, TSbtn_EditProfiles.Click, TSbtn_EditBacs.Click, AboutToolStripMenuItemN.Click
+    Private Sub GestionBoutonsBarreOutilGenerale(sender As Object, e As EventArgs) Handles TSbtn_EditStuds.Click, TSbtn_EditProfiles.Click, TSbtn_EditBacs.Click, AboutToolStripMenuItemN.Click, SupportToolStripMenuItemN.Click
+
+        Dim lSupport As Boolean = False
 
         Select Case sender.name
             Case Me.TSbtn_EditStuds.Name
@@ -458,9 +460,12 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.EditBac
             Case Me.AboutToolStripMenuItemN.Name
                 FilleEnCours = EnuFenetres.About
+            Case Me.SupportToolStripMenuItemN.Name
+                lSupport = True
+                PrepareMailSupport()
         End Select
 
-        AfficheFenetreEnCours()
+        If Not lSupport Then AfficheFenetreEnCours()
 
     End Sub
 
