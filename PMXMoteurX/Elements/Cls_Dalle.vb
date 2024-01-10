@@ -337,6 +337,8 @@
                     End Select
                 Case Enum_TypeDalle.Pleine
                     Ep = Me.t_d
+                Case Enum_TypeDalle.Prefabriquee
+                    Ep = Me.t_d - Me.preDalle_ep + Me.preDalle_tjoint
             End Select
             Return Ep
         End Get
