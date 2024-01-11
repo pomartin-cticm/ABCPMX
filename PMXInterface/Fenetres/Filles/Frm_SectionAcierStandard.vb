@@ -235,27 +235,32 @@ Public Class Frm_SectionAcierStandard
                 AfficherPRSEnCours()
         End Select
 
+        MAJ_FonctionType()
+
         Me.txt_Bfi.ReadOnly = Not (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)
         Me.txt_Tfi.ReadOnly = Not (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)
 
         If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym Then
             MySectionLoc.ProfilA.Bfi = MySectionLoc.ProfilA.Bfs
-            Me.txt_Bfi.Text = Me.txt_Bfs.Text
-
             MySectionLoc.ProfilA.Tfi = MySectionLoc.ProfilA.Tfs
-            Me.txt_Tfi.Text = Me.txt_Tfs.Text
         End If
 
-        MAJ_FonctionType()
+        Me.txt_Ha.Text = GetStringInUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False)
+        Me.txt_Hw.Text = GetStringInUnit(MySectionLoc.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 4, 1, False)
+        Me.txt_Bfi.Text = GetStringInUnit(MySectionLoc.ProfilA.Bfi, Enu_TypeVariable.Dimension, 4, 1, False)
+        Me.txt_Bfs.Text = GetStringInUnit(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 1, False)
+        Me.txt_Tfi.Text = GetStringInUnit(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension, 4, 1, False)
+        Me.txt_Tfs.Text = GetStringInUnit(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, False)
+        Me.txt_Tw.Text = GetStringInUnit(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 1, False)
 
-        Me.txt_Ha.Text = GetStringNoUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension)
-        Me.txt_Hw.Text = GetStringNoUnit(MySectionLoc.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension)
+        'Me.txt_Ha.Text = GetStringNoUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension)
+        'Me.txt_Hw.Text = GetStringNoUnit(MySectionLoc.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension)
+        'Me.txt_Bfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.Bfi, Enu_TypeVariable.Dimension)
+        'Me.txt_Bfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension)
+        'Me.txt_Tfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension)
+        'Me.txt_Tfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension)
+        'Me.txt_Tw.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension)
 
-        Me.txt_Bfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.Bfi, Enu_TypeVariable.Dimension)
-        Me.txt_Bfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension)
-        Me.txt_Tfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension)
-        Me.txt_Tfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension)
-        Me.txt_Tw.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension)
 
     End Sub
 
@@ -303,7 +308,7 @@ Public Class Frm_SectionAcierStandard
         End If
 
 
-        End Sub
+    End Sub
 
     ''' <summary>
     ''' Routine pour afficher le tableaux des nuances d'acier dans le cas d'un PRS
@@ -549,6 +554,7 @@ Public Class Frm_SectionAcierStandard
         Dim kFact As Double
 
         Dim EpProfile, FyPro As Double
+        Dim EpPRSfs, EpPRSw, EpPRSfi, EpPRSMax, FyPRSfs, FyPRSw, FyPRSfi, FyPRSMin As Double
 
         Dim ColorPen As Color = Color.Black
         Dim ColorExclu As Color = ColorNotPossible
@@ -581,8 +587,21 @@ Public Class Frm_SectionAcierStandard
 
         '--( Epaisseur du profilé pour le calcul
 
-        EpProfile = Math.Max(MySectionLoc.ProfilA.Tw, MySectionLoc.ProfilA.Tfs)
-        FyPro = MySectionLoc.Acier.LimiteFy(EpProfile)
+        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+            EpProfile = Math.Max(MySectionLoc.ProfilA.Tw, MySectionLoc.ProfilA.Tfs)
+            FyPro = MySectionLoc.Acier.LimiteFy(EpProfile)
+        Else
+            EpPRSfs = MySectionLoc.ProfilA.Tfs
+            EpPRSw = MySectionLoc.ProfilA.Tw
+            EpPRSfi = MySectionLoc.ProfilA.Tfi
+            EpPRSMax = Math.Max(EpPRSfs, Math.Max(EpPRSfi, EpPRSw))
+
+            FyPRSfs = MySectionLoc.Acier.LimiteFy(EpPRSfs)
+            FyPRSw = MySectionLoc.Acier.LimiteFy(EpPRSw)
+            FyPRSfi = MySectionLoc.Acier.LimiteFy(EpPRSfi)
+            FyPRSMin = MySectionLoc.Acier.LimiteFy(EpPRSMax)
+        End If
+
         EpPlagesMax = MySectionLoc.Acier.EpMax
 
         '--( Initialisation
@@ -596,7 +615,11 @@ Public Class Frm_SectionAcierStandard
 
         ExtraitValeursEnveloppeAciers(Nuance, DrawProperty, EpMin, EpMax, VMax)
 
-        EpMax = Math.Max(EpMax, EpProfile)
+        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+            EpMax = Math.Max(EpMax, EpProfile)
+        Else
+            EpMax = Math.Max(EpMax, EpPRSMax)
+        End If
 
         kFact = EpMax / VMax * sHI / sWI
         xMin = 0
@@ -661,7 +684,15 @@ Public Class Frm_SectionAcierStandard
         zBoni = YUnivers(RCParAff, sHI)
         xBoni = XUnivers(RCParAff, sWI / 2)
 
-        DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpProfile, FyPro, xBoni, zBoni, MyFont, lNuanceOK)
+        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+            DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpProfile, FyPro, xBoni, zBoni, MyFont, lNuanceOK)
+        Else
+            DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPRSfs, FyPRSfs, xBoni, zBoni, MyFont, lNuanceOK, False)
+            DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPRSw, FyPRSw, xBoni, zBoni, MyFont, lNuanceOK, False)
+            DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPRSfi, FyPRSfi, xBoni, zBoni, MyFont, lNuanceOK, False)
+            DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPRSMax, FyPRSMin, xBoni, zBoni, MyFont, lNuanceOK, True, True)
+
+        End If
 
         '--( Titre
 
@@ -773,7 +804,7 @@ Public Class Frm_SectionAcierStandard
 
     Private Sub DrawEpEtFyCalcul(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, ByVal kFact As Double,
                                  ByVal EpPlagesMax As Double, ByVal EpProf As Double, ByVal FyCalcul As Double, ByVal xBoni As Double, ByVal zBoni As Double,
-                                 ByVal MyFont As Font, ByVal lNuanceOK As Boolean)
+                                 ByVal MyFont As Font, ByVal lNuanceOK As Boolean, Optional ByVal lLegende As Boolean = True, Optional ByVal lPRS As Boolean = False)
         '----------------------------------------------------------------------------------------------
         '
         '   21/09/12 :  Création - Version 3.00
@@ -819,16 +850,24 @@ Public Class Frm_SectionAcierStandard
 
         '--> Traitement
 
-        Chaine = GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, False)
-        AddTexte(MyGr, New SolidBrush(MyColor), Chaine, MyFont, EpProf, 0, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+        If lLegende Then
+            Chaine = GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, False)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, MyFont, EpProf, 0, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+        End If
 
         AddLigne(MyGr, MyPenProf, EpProf, 0, EpProf, kFact * FyCalcul, RcParAff)
         If EpProf > EpPlagesMax * (1 + EPSILONG) Then
             AddLigne(MyGr, MyPenProf, EpPlagesMax, kFact * FyCalcul, EpProf, kFact * FyCalcul, RcParAff)
         End If
 
-        Chaine = "t = " & GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, True) & "   -  fy = " & GetStringInUnit(FyCalcul, Enu_TypeVariable.SansType, 3, 0, False) & " MPa"
-        AddTexte(MyGr, New SolidBrush(MyColor), Chaine, MyFont, xBoni, zBoni, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+        If lLegende Then
+            If lPRS Then
+                Chaine = "tmax = " & GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, True) & "   -  fy,min = " & GetStringInUnit(FyCalcul, Enu_TypeVariable.SansType, 3, 0, False) & " MPa"
+            Else
+                Chaine = "t = " & GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, True) & "   -  fy = " & GetStringInUnit(FyCalcul, Enu_TypeVariable.SansType, 3, 0, False) & " MPa"
+            End If
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, MyFont, xBoni, zBoni, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+        End If
 
         MyPen.Dispose()
         MyPenProf.Dispose()
@@ -937,6 +976,7 @@ Public Class Frm_SectionAcierStandard
         End If
 
         Me.img_Section.Invalidate()
+        Me.img_ReductionCurve.Invalidate()
 
         lBuild = False
     End Sub
@@ -947,8 +987,8 @@ Public Class Frm_SectionAcierStandard
     Private Function VerificationDonneesPRS(MyTxt As TextBox, ByRef ValeurUI As Decimal) As Boolean
 
         Const HWMINI As Decimal = 0.2
-        Const TFMINI As Decimal = 0.06
-        Const TWMINI As Decimal = 0.06
+        Const TFMINI As Decimal = 0.006
+        Const TWMINI As Decimal = 0.006
         Const HWMAXI As Decimal = 2
         Const BFMINI As Decimal = 0.12
         Const BFMAXI As Decimal = 0.5
@@ -1009,8 +1049,9 @@ Public Class Frm_SectionAcierStandard
         End Select
 
         MAJ_FonctionType()
-        Me.img_Section.Invalidate()
         AfficherPoutreEnCours()
+        Me.img_Section.Invalidate()
+        Me.img_ReductionCurve.Invalidate()
 
 
     End Sub

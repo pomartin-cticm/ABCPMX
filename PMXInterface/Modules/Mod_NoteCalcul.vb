@@ -550,8 +550,8 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-f\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
         Else
             If lPRSSym Then
-                AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-fs\==b\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-fs\==t\_fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, True))
+                AddLigneNDC(TABW2 & BlocG("BF_PROFILE") & TABAFF & "b\-fs\==b\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("TF_PROFILE") & TABAFF & "t\-fs\==t\-fi\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, True))
             Else
                 AddLigneNDC(TABW2 & BlocG("BFS_PROFILE") & TABAFF & "b\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 3, -1, True))
                 AddLigneNDC(TABW2 & BlocG("TFS_PROFILE") & TABAFF & "t\-fs\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, -1, True))
