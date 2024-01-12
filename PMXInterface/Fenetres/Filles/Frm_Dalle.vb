@@ -248,6 +248,8 @@ Public Class Frm_Dalle
 
     Private Sub PreparerFenetre()
 
+        ErrorProvider.Clear()
+
         Me.img_Dalle.Dock = DockStyle.Fill
 
         Const MARGEPAN As Integer = 0

@@ -195,13 +195,13 @@ Public Class cls_Enrobage_Partiel
 
     End Sub
 
-    Public Shared Sub DeepCopie(EnrobageSource As cls_Enrobage_Partiel, ByRef EnrobageCible As cls_Enrobage_Partiel)
+    'Public Shared Sub DeepCopie(EnrobageSource As cls_Enrobage_Partiel, ByRef EnrobageCible As cls_Enrobage_Partiel)
 
-        EnrobageCible = EnrobageSource.Clone
-        'EnrobageCible.LitsArmaOLD = EnrobageSource.LitsArmaOLD.Clone
-        EnrobageCible.Beton = EnrobageSource.Beton.Clone
+    '    EnrobageCible = EnrobageSource.Clone
+    '    'EnrobageCible.LitsArmaOLD = EnrobageSource.LitsArmaOLD.Clone
+    '    EnrobageCible.Beton = EnrobageSource.Beton.Clone
 
-    End Sub
+    'End Sub
 
 #End Region
 

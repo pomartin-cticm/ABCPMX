@@ -25,7 +25,7 @@ Imports PMXMoteur2
 
             '--> Définition des caractéristiques de la poutre test 
             .Dalle.Connecteur.nom = "19-100"
-            .Dalle.Connecteur.Caracteristiques_Goujons() 'calcul de hsc, d, fy et fu une fois que le nom est renseigné
+            '.Dalle.Connecteur.Caracteristiques_Goujons() 'calcul de hsc, d, fy et fu une fois que le nom est renseigné
 
             .Param.Gamma.GammaVs = 1.25
             .Param.Gamma.GammaVc = 1.25
@@ -164,7 +164,7 @@ Imports PMXMoteur2
 
             '--> Définition des caractéristiques de la poutre test 
             .Dalle.Connecteur.nom = "19-100"
-            .Dalle.Connecteur.Caracteristiques_Goujons() 'calcul de hsc, d, fy et fu une fois que le nom est renseigné
+            '.Dalle.Connecteur.Caracteristiques_Goujons() 'calcul de hsc, d, fy et fu une fois que le nom est renseigné
 
             .Param.Gamma.GammaVs = 1.25
             .Param.Gamma.GammaVc = 1.25

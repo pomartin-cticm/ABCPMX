@@ -4190,14 +4190,14 @@ Public Module Mod_Dessins
         If Not MyPoutre.lAutomaticDesign Then
             For i As Integer = 0 To 2
                 NombreGoujonsTrans(i) = MyPoutre.NombreGoujonsTransv(indTravee, i)
-                LongueurZones(i) = MyPoutre.ZoneLongueur(indTravee, i) / MyPoutre.LongueurTravee(indTravee) * LongueurTravee
-                NombreGoujonsLongiZone(i) = 0.75 * MyPoutre.ZoneLongueur(indTravee, i) / MyPoutre.ZoneEspacement(indTravee, i)
+                LongueurZones(i) = MyPoutre.LongueurZone(indTravee, i) / MyPoutre.LongueurTravee(indTravee) * LongueurTravee
+                NombreGoujonsLongiZone(i) = 0.75 * MyPoutre.LongueurZone(indTravee, i) / MyPoutre.EspacementZone(indTravee, i)
                 NombreZones = MyPoutre.NombreZones(indTravee)
             Next
         Else
             NombreGoujonsTrans(0) = 1
             LongueurZones(0) = LongueurTravee
-            NombreGoujonsLongiZone(0) = 0.75 * MyPoutre.ZoneLongueur(indTravee, 0) / 0.2
+            NombreGoujonsLongiZone(0) = 0.75 * MyPoutre.LongueurZone(indTravee, 0) / 0.2
             NombreZones = 1
         End If
 
@@ -4270,7 +4270,7 @@ Public Module Mod_Dessins
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
                 'If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.Longueur_Zone(indTravee, i), Enu_TypeVariable.Longueur)
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(MyPoutre.ZoneLongueur(indTravee, i), Enu_TypeVariable.Longueur, 4, 2, False)
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(MyPoutre.LongueurZone(indTravee, i), Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 'On dessinne la côte supérieure qui donne le nombre de goujons disposés sur la zone étudiée 

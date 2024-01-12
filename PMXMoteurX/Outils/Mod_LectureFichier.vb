@@ -88,7 +88,7 @@
     ''' </summary>
     ''' <param name="list">tableau de decimal</param>
     ''' <returns></returns>
-    Public Function ConvertListToString(ByVal list() As Decimal) As String
+    Public Function ConvertListDecimalToString(ByVal list() As Decimal) As String
         'R 21-012 - Bed - 15/07/21
 
         Dim text As String = "{"
@@ -100,6 +100,33 @@
             Else
                 text += "}"
             End If
+        Next
+
+        Return text
+
+    End Function
+
+    ''' <summary>
+    ''' Transforme une liste d'integer en string
+    ''' </summary>
+    ''' <param name="list">tableau de decimal</param>
+    ''' <returns></returns>
+    Public Function ConvertListDecimalToString(ByVal list(,) As Decimal) As String
+        'GuD - 12/01/24
+        Dim text As String = "{"
+        Dim testin As Integer = list.GetUpperBound(1)
+        For j As Integer = 0 To list.GetUpperBound(1)
+            For i As Integer = 0 To list.GetUpperBound(0)
+                text += list(i, j).ToString
+                If i <> list.GetUpperBound(0) Then
+                    text += "/"
+                Else
+                    text += "}"
+                    If j <> list.GetUpperBound(1) Then
+                        text += "+{"
+                    End If
+                End If
+            Next
         Next
 
         Return text
@@ -123,6 +150,32 @@
             Else
                 text += "}"
             End If
+        Next
+
+        Return text
+
+    End Function
+
+    ''' <summary>
+    ''' Transforme une liste d'integer en string
+    ''' </summary>
+    ''' <param name="list">tableau de decimal</param>
+    ''' <returns></returns>
+    Public Function ConvertListIntegerToString(ByVal list(,) As Integer) As String
+        'GuD - 12/01/24
+        Dim text As String = "{"
+        For j As Integer = 0 To list.GetUpperBound(1)
+            For i As Integer = 0 To list.GetUpperBound(0)
+                text += list(i, j).ToString
+                If i <> list.GetUpperBound(0) Then
+                    text += "/"
+                Else
+                    text += "}"
+                    If j <> list.GetUpperBound(1) Then
+                        text += "+{"
+                    End If
+                End If
+            Next
         Next
 
         Return text
@@ -181,7 +234,7 @@
     ''' </summary>
     ''' <param name="text">string</param>
     ''' <returns></returns>
-    Public Function ConvertStringToList(ByVal text As String) As Decimal()
+    Public Function ConvertStringToListDecimal(ByVal text As String) As Decimal()
         'R 21-012 - Bed - 15/07/21
 
         Dim list_deci(0) As Decimal
@@ -202,6 +255,40 @@
 
         Else 'ancien fichier
             list_deci(0) = text
+        End If
+
+        Return list_deci
+
+    End Function
+
+    ''' <summary>
+    ''' Transforme un string en liste de decimal
+    ''' </summary>
+    ''' <param name="text">string</param>
+    ''' <returns></returns>
+    Public Function ConvertStringToListDecimalDim2(ByVal text As String) As Decimal(,)
+        'R 21-012 - Bed - 15/07/21
+
+        Dim list_deci(0, 0) As Decimal
+
+        If text.Contains("{") Then 'nouveau fichier
+
+            'Initialisation
+            Dim tab_text() As String
+
+            tab_text = text.Split("+")
+            ReDim list_deci(tab_text(0).Count(Function(c As Char) c = "/"), tab_text.Length - 1) 'GUD: Dans le membre de gauche de la fonction .count, c'est une expression lambda
+
+            For j As Integer = 0 To tab_text.Length - 1
+                Dim tab_decimal() As Decimal
+                tab_decimal = ConvertStringToListDecimal(tab_text(j))
+                For i As Integer = 0 To tab_decimal.Length - 1
+                    list_deci(i, j) = tab_decimal(i)
+                Next
+            Next
+
+        Else 'ancien fichier
+            list_deci(0, 0) = text
         End If
 
         Return list_deci
@@ -237,6 +324,40 @@
         End If
 
         Return list_integer
+
+    End Function
+
+    ''' <summary>
+    ''' Transforme un string en liste de integer de dimensions 2
+    ''' </summary>
+    ''' <param name="text">string</param>
+    ''' <returns></returns>
+    Public Function ConvertStringToListIntegerDim2(ByVal text As String) As Integer(,)
+        'R 21-012 - Bed - 15/07/21
+
+        Dim list_deci(0, 0) As Integer
+
+        If text.Contains("{") Then 'nouveau fichier
+
+            'Initialisation
+            Dim tab_text() As String
+
+            tab_text = text.Split("+")
+            ReDim list_deci(tab_text(0).Count(Function(c As Char) c = "/"), tab_text.Length - 1) 'GUD: Dans le membre de gauche de la fonction .count, c'est une expression lambda
+
+            For j As Integer = 0 To tab_text.Length - 1
+                Dim tab_integer() As Integer
+                tab_integer = ConvertStringToListInteger(tab_text(j))
+                For i As Integer = 0 To tab_integer.Length - 1
+                    list_deci(i, j) = tab_integer(i)
+                Next
+            Next
+
+        Else 'ancien fichier
+            list_deci(0, 0) = text
+        End If
+
+        Return list_deci
 
     End Function
 

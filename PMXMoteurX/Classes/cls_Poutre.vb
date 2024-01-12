@@ -159,7 +159,7 @@ Public Class cls_Poutre
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
     ''' </summary>
-    Public ZoneLongueur(,) As Decimal
+    Public LongueurZone(,) As Decimal
 
     ''' <summary>
     ''' Nombre de zone définie pour une travée
@@ -178,7 +178,7 @@ Public Class cls_Poutre
             For i_travee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
                 For j_zone As Integer = 0 To 2
                     For k_boucle As Integer = 0 To j_zone - 1
-                        xDebutZoneRetour(i_travee, j_zone) += ZoneLongueur(i_travee, k_boucle)
+                        xDebutZoneRetour(i_travee, j_zone) += LongueurZone(i_travee, k_boucle)
                     Next
                 Next
             Next
@@ -199,7 +199,7 @@ Public Class cls_Poutre
             For i_travee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
                 For j_zone As Integer = 0 To 2
                     For k_boucle As Integer = 0 To j_zone
-                        xFinZoneRetour(i_travee, j_zone) += ZoneLongueur(i_travee, k_boucle)
+                        xFinZoneRetour(i_travee, j_zone) += LongueurZone(i_travee, k_boucle)
                     Next
                 Next
             Next
@@ -248,14 +248,14 @@ Public Class cls_Poutre
     ''' Espacement longi entre goujons
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
     ''' </summary>
-    Public ZoneEspacement(,) As Decimal
+    Public EspacementZone(,) As Decimal
 
     ''' <summary>
     ''' Nombre d'ondes entre deux goujons consécutifs
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
     ''' </summary>
-    Public ZoneEspacement_Bac_Trans(,) As Integer
+    Public Espacement_Bac_TransZone(,) As Integer
 
     ''' <summary>
     ''' Nombre de goujons disposés transversalement
@@ -272,7 +272,7 @@ Public Class cls_Poutre
     ''' <summary>
     ''' Densité de connexion par zone de connexion (PRd / unité de longueur)
     ''' </summary>
-    Public ZoneDensiteConnexion(,) As Decimal
+    Public DensiteConnexionZone(,) As Decimal
 
     ''' <summary>
     ''' Contrainte tangentielle / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
@@ -665,10 +665,10 @@ Public Class cls_Poutre
 
         lIntermediaire = True
 
-        ReDim ZoneLongueur(IndiceTraveeConsoleDroite, 2)
+        ReDim LongueurZone(IndiceTraveeConsoleDroite, 2)
         ReDim NombreZones(IndiceTraveeConsoleDroite)
-        ReDim ZoneEspacement(IndiceTraveeConsoleDroite, 2)
-        ReDim ZoneEspacement_Bac_Trans(IndiceTraveeConsoleDroite, 2)
+        ReDim EspacementZone(IndiceTraveeConsoleDroite, 2)
+        ReDim Espacement_Bac_TransZone(IndiceTraveeConsoleDroite, 2)
         ReDim NombreGoujonsTransv(IndiceTraveeConsoleDroite, 2)
         'ReDim NombreGoujonsTot(IndiceTraveeConsoleDroite + 2)
 
@@ -679,16 +679,16 @@ Public Class cls_Poutre
         ReDim As_s_transv(IndiceTraveeConsoleDroite, 2, 2)
 
         For i As Integer = 0 To IndiceTraveeConsoleDroite
-            ZoneLongueur(i, 0) = LongueurTravee(i)
-            ZoneLongueur(i, 1) = 0
-            ZoneLongueur(i, 2) = 0
+            LongueurZone(i, 0) = LongueurTravee(i)
+            LongueurZone(i, 1) = 0
+            LongueurZone(i, 2) = 0
             NombreZones(i) = 1
-            ZoneEspacement(i, 0) = 200 / 1000
-            ZoneEspacement(i, 1) = 200 / 1000
-            ZoneEspacement(i, 2) = 200 / 1000
-            ZoneEspacement_Bac_Trans(i, 0) = 1
-            ZoneEspacement_Bac_Trans(i, 1) = 1
-            ZoneEspacement_Bac_Trans(i, 2) = 1
+            EspacementZone(i, 0) = 200 / 1000
+            EspacementZone(i, 1) = 200 / 1000
+            EspacementZone(i, 2) = 200 / 1000
+            Espacement_Bac_TransZone(i, 0) = 1
+            Espacement_Bac_TransZone(i, 1) = 1
+            Espacement_Bac_TransZone(i, 2) = 1
             NombreGoujonsTransv(i, 0) = 1
             NombreGoujonsTransv(i, 1) = 1
             NombreGoujonsTransv(i, 2) = 1
@@ -1019,24 +1019,24 @@ Public Class cls_Poutre
 
         'MAJ de la partie concernant la connection 
 
-        ReDim Preserve ZoneLongueur(IndiceTraveeConsoleDroite, 2)
+        ReDim Preserve LongueurZone(IndiceTraveeConsoleDroite, 2)
         ReDim Preserve NombreZones(IndiceTraveeConsoleDroite)
-        ReDim Preserve ZoneEspacement(IndiceTraveeConsoleDroite, 2)
-        ReDim Preserve ZoneEspacement_Bac_Trans(IndiceTraveeConsoleDroite, 2)
+        ReDim Preserve EspacementZone(IndiceTraveeConsoleDroite, 2)
+        ReDim Preserve Espacement_Bac_TransZone(IndiceTraveeConsoleDroite, 2)
         ReDim Preserve NombreGoujonsTransv(IndiceTraveeConsoleDroite, 2)
 
         For i As Integer = 0 To IndiceTraveeConsoleDroite
-            If ZoneLongueur(i, 0) = 0 Then 'Permet de savoir si la dimension i est remplie d'éléments nuls, auquel cas on initialise avec les paramètres par défaut
-                ZoneLongueur(i, 0) = LongueurTravee(i)
-                ZoneLongueur(i, 1) = 0
-                ZoneLongueur(i, 2) = 0
+            If LongueurZone(i, 0) = 0 Then 'Permet de savoir si la dimension i est remplie d'éléments nuls, auquel cas on initialise avec les paramètres par défaut
+                LongueurZone(i, 0) = LongueurTravee(i)
+                LongueurZone(i, 1) = 0
+                LongueurZone(i, 2) = 0
                 NombreZones(i) = 1
-                ZoneEspacement(i, 0) = 200 / 1000
-                ZoneEspacement(i, 1) = 200 / 1000
-                ZoneEspacement(i, 2) = 200 / 1000
-                ZoneEspacement_Bac_Trans(i, 0) = 1
-                ZoneEspacement_Bac_Trans(i, 1) = 1
-                ZoneEspacement_Bac_Trans(i, 2) = 1
+                EspacementZone(i, 0) = 200 / 1000
+                EspacementZone(i, 1) = 200 / 1000
+                EspacementZone(i, 2) = 200 / 1000
+                Espacement_Bac_TransZone(i, 0) = 1
+                Espacement_Bac_TransZone(i, 1) = 1
+                Espacement_Bac_TransZone(i, 2) = 1
                 NombreGoujonsTransv(i, 0) = 1
                 NombreGoujonsTransv(i, 1) = 1
                 NombreGoujonsTransv(i, 2) = 1
@@ -1108,7 +1108,7 @@ Public Class cls_Poutre
         'PoutreCible.TypeMaintien = PoutreSource.TypeMaintien.Clone
 
         cls_Dalle.DeepClone(PoutreSource.Dalle, PoutreCible.Dalle)
-        PoutreCible.Dalle = PoutreSource.Dalle.Clone
+        'PoutreCible.Dalle = PoutreSource.Dalle.Clone 'GUD -> J'ai enlevé cette ligne de code car déjà fait dans le DeepClone + elle annule les effets du DeepClone (introduisait un bug dans la Frm_Connection) 
 
         ReDim PoutreCible.Maintiens(PoutreSource.Maintiens.Length - 1)
 
@@ -1124,17 +1124,17 @@ Public Class cls_Poutre
         Next
 
         'Clone des attributs pour la connexion
-        ReDim PoutreCible.ZoneLongueur(PoutreSource.ZoneLongueur.GetUpperBound(0), PoutreSource.ZoneLongueur.GetUpperBound(1))
-        PoutreCible.ZoneLongueur = PoutreSource.ZoneLongueur.Clone
+        ReDim PoutreCible.LongueurZone(PoutreSource.LongueurZone.GetUpperBound(0), PoutreSource.LongueurZone.GetUpperBound(1))
+        PoutreCible.LongueurZone = PoutreSource.LongueurZone.Clone
 
         ReDim PoutreCible.NombreZones(PoutreSource.NombreZones.GetUpperBound(0))
         PoutreCible.NombreZones = PoutreSource.NombreZones.Clone
 
-        ReDim PoutreCible.ZoneEspacement(PoutreSource.ZoneEspacement.GetUpperBound(0), PoutreSource.ZoneEspacement.GetUpperBound(1))
-        PoutreCible.ZoneEspacement = PoutreSource.ZoneEspacement.Clone
+        ReDim PoutreCible.EspacementZone(PoutreSource.EspacementZone.GetUpperBound(0), PoutreSource.EspacementZone.GetUpperBound(1))
+        PoutreCible.EspacementZone = PoutreSource.EspacementZone.Clone
 
-        ReDim PoutreCible.ZoneEspacement_Bac_Trans(PoutreSource.ZoneEspacement_Bac_Trans.GetUpperBound(0), PoutreSource.ZoneEspacement_Bac_Trans.GetUpperBound(1))
-        PoutreCible.ZoneEspacement_Bac_Trans = PoutreSource.ZoneEspacement_Bac_Trans.Clone
+        ReDim PoutreCible.Espacement_Bac_TransZone(PoutreSource.Espacement_Bac_TransZone.GetUpperBound(0), PoutreSource.Espacement_Bac_TransZone.GetUpperBound(1))
+        PoutreCible.Espacement_Bac_TransZone = PoutreSource.Espacement_Bac_TransZone.Clone
 
         ReDim PoutreCible.NombreGoujonsTransv(PoutreSource.NombreGoujonsTransv.GetUpperBound(0), PoutreSource.NombreGoujonsTransv.GetUpperBound(1))
         PoutreCible.NombreGoujonsTransv = PoutreSource.NombreGoujonsTransv.Clone
@@ -1964,7 +1964,7 @@ Public Class cls_Poutre
 
                 nr = Me.NombreGoujonsTransv(i_travee, j_zone)
                 PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
-                sx = Me.ZoneEspacement(i_travee, j_zone)
+                sx = Me.EspacementZone(i_travee, j_zone)
                 v_x_Ed = nr * PRd / sx
 
                 b0 = (nr - 1) * b0min
@@ -4485,9 +4485,9 @@ Public Class cls_Poutre
         Dim iZe As Integer
         '--> Traitement
 
-        xCum = Me.ZoneLongueur(iTravee, 0)
+        xCum = Me.LongueurZone(iTravee, 0)
         For iZe = 1 To iZone
-            xCum += Me.ZoneLongueur(iTravee, iZe)
+            xCum += Me.LongueurZone(iTravee, iZe)
         Next
 
         '--> Fin
@@ -4511,7 +4511,7 @@ Public Class cls_Poutre
     Public Function NombreGoujonTotParZone(indTravee As Integer, indZone As Integer)
         Dim resultat As Integer = 0
 
-        resultat += NombreGoujonsTransv(indTravee, indZone) * ZoneLongueur(indTravee, indZone) / ZoneEspacement(indTravee, indZone)
+        resultat += NombreGoujonsTransv(indTravee, indZone) * LongueurZone(indTravee, indZone) / EspacementZone(indTravee, indZone)
 
         Return resultat
 
@@ -4745,12 +4745,12 @@ Public Class cls_Poutre
 
             If (iZone(0) = iZone(1)) Then
                 '# Cas où les deux positions sont dans la même zone de connexion
-                pDeltaRd = (pxPos(1) - pxPos(0)) * Me.ZoneDensiteConnexion(iTravee, iZone(0))
+                pDeltaRd = (pxPos(1) - pxPos(0)) * Me.DensiteConnexionZone(iTravee, iZone(0))
             Else
-                pDeltaRd = (Me.xZoneT(iTravee, iZone(0)) - pxPos(0)) * Me.ZoneDensiteConnexion(iTravee, iZone(0))
-                pDeltaRd += (pxPos(1) - Me.xZoneT(iTravee, iZone(1) - 1)) * Me.ZoneDensiteConnexion(iTravee, iZone(1))
+                pDeltaRd = (Me.xZoneT(iTravee, iZone(0)) - pxPos(0)) * Me.DensiteConnexionZone(iTravee, iZone(0))
+                pDeltaRd += (pxPos(1) - Me.xZoneT(iTravee, iZone(1) - 1)) * Me.DensiteConnexionZone(iTravee, iZone(1))
                 For iZe As Integer = iZone(0) + 1 To iZone(1) - 1
-                    pDeltaRd += Me.ZoneLongueur(iTravee, iZe) * Me.ZoneDensiteConnexion(iTravee, iZe)
+                    pDeltaRd += Me.LongueurZone(iTravee, iZe) * Me.DensiteConnexionZone(iTravee, iZe)
                 Next
             End If
         End If
@@ -4782,11 +4782,11 @@ Public Class cls_Poutre
 
         If Me.NombreZones(iTravee) > 1 Then
             iZone = 0
-            xCum = Me.ZoneLongueur(iTravee, iZone)
+            xCum = Me.LongueurZone(iTravee, iZone)
             lTrouve = IsSmallerOrEqual(xPosT, xCum)
             Do While (Not lTrouve) And (iZone < Me.NombreZones(iTravee) - 1)
                 iZone += 1
-                xCum += Me.ZoneLongueur(iTravee, iZone)
+                xCum += Me.LongueurZone(iTravee, iZone)
                 lTrouve = IsSmallerOrEqual(xPosT, xCum)
             Loop
             If lTrouve Then pIndice = iZone Else pIndice = -1
@@ -4820,7 +4820,7 @@ Public Class cls_Poutre
 
         '--> Initialisation
 
-        ReDim Me.ZoneDensiteConnexion(Me.IndiceDerniereTravee, 2)
+        ReDim Me.DensiteConnexionZone(Me.IndiceDerniereTravee, 2)
         lGeneration1 = Me.Param.lGeneration1
         lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
         lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
@@ -4836,15 +4836,15 @@ Public Class cls_Poutre
             For iZone = 0 To Me.NombreZones(iTravee) - 1
 
                 If lBacNervuresPerpContinues Then
-                    pEspace = Me.ZoneEspacement_Bac_Trans(iTravee, iZone) * Me.Dalle.Bac.Ep
+                    pEspace = Me.Espacement_Bac_TransZone(iTravee, iZone) * Me.Dalle.Bac.Ep
                 Else
-                    pEspace = Me.ZoneEspacement(iTravee, iZone)
+                    pEspace = Me.EspacementZone(iTravee, iZone)
                 End If
 
                 nR = Me.NombreGoujonsTransv(iTravee, iZone)
                 PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
 
-                Me.ZoneDensiteConnexion(iTravee, iZone) = PRd * nR / pEspace
+                Me.DensiteConnexionZone(iTravee, iZone) = PRd * nR / pEspace
 
             Next
         Next

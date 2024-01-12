@@ -167,7 +167,7 @@ Public Class Frm_SectionAcierStandard
 
         '== Transfert vers variable locale
 
-        cls_Section.CloneSection(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySectionLoc)
+        cls_Section.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySectionLoc)
 
         BClrCompatible = Me.lst_GammeS.BackColor
 

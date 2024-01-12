@@ -311,6 +311,7 @@ Public Class Frm_Etaiement
     End Sub
 
     Private Sub chk_EtaisConsole_CheckedChanged(sender As Object, e As EventArgs) Handles chk_EtaisConsoleGauche.CheckedChanged, chk_EtaisConsoleDroite.CheckedChanged
+        If lBuild Then Exit Sub
         MyPoutreLoc.lEtaisConsoleGauche = chk_EtaisConsoleGauche.Checked
         MyPoutreLoc.lEtaisConsoleDroite = chk_EtaisConsoleDroite.Checked
 

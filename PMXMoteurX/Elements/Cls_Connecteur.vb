@@ -50,14 +50,14 @@ Public Class cls_Connecteur
 
     Public lGoujonModifie As Boolean = False 'indique si le goujon a été modifié depuis la fenetre Frm_AddGoujon, permet de mettre a jour l'affichage du Frm_EditGoujon si besoin
 
-    Public ReadOnly Property IndiceDataBase As Integer
-        Get
-            'For i As Integer = 0 To goujons_database.Length - 1
-            '    If nom = goujons_database(i).Item1 Then Return i
-            'Next
-            Return 0
-        End Get
-    End Property
+    'Public ReadOnly Property IndiceDataBase As Integer
+    '    Get
+    '        'For i As Integer = 0 To goujons_database.Length - 1
+    '        '    If nom = goujons_database(i).Item1 Then Return i
+    '        'Next
+    '        Return 0
+    '    End Get
+    'End Property
 
 #End Region
 
@@ -118,15 +118,15 @@ Public Class cls_Connecteur
 
     'End Function
 
-    Public Sub Caracteristiques_Goujons()
-        Dim ind_en_cours As Integer = IndiceDataBase
+    'Public Sub Caracteristiques_Goujons()
+    'Dim ind_en_cours As Integer = IndiceDataBase
 
-        'Me.d = goujons_database(ind_en_cours).Item2
-        'Me.hsc = goujons_database(ind_en_cours).Item3
-        'Me.Fy = goujons_database(ind_en_cours).Item4
-        'Me.Fu = goujons_database(ind_en_cours).Item5
+    'Me.d = goujons_database(ind_en_cours).Item2
+    'Me.hsc = goujons_database(ind_en_cours).Item3
+    'Me.Fy = goujons_database(ind_en_cours).Item4
+    'Me.Fu = goujons_database(ind_en_cours).Item5
 
-    End Sub
+    'End Sub
 
 #End Region
 

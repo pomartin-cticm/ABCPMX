@@ -1116,17 +1116,17 @@ Module Mod_NoteCalcul
 
                         InitialiseLigne(nbColonne, HLIGNE, True)
                         AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, iTraveeAffichee)
-                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneLongueur(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
+                        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.LongueurZone(i, j), Enu_TypeVariable.Longueur, 4, 0, False))
                         AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
                         If lDalleMixteEtPerp Then
-                            If .ZoneEspacement_Bac_Trans(i, j) = 1 Then
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIB"))
+                            If .Espacement_Bac_TransZone(i, j) = 1 Then
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIB"))
                             Else
-                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement_Bac_Trans(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIBS"))
+                                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Espacement_Bac_TransZone(i, j), Enu_TypeVariable.SansType, 4, 0, False) & " " & BlocG("RIBS"))
                                 End
                             End If
                         End If
-                        AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.ZoneEspacement(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
+                        AddCellule(LC1_2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.EspacementZone(i, j), Enu_TypeVariable.Dimension, 4, 0, False))
 
                         iTraveeAffichee += 1
 

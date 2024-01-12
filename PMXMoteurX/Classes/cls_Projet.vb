@@ -143,7 +143,7 @@ Public Class cls_Projet
                 Lines.Add("   lTremieGauche  =  " & .lTremieGauche)
                 Lines.Add("   lTremieDroite  =  " & .lTremieDroite)
                 Lines.Add("   NbTravee       =  " & .NombreTraveesDeuxAppuis)
-                Lines.Add("   LongueurTravee =  " & ConvertListToString(.LongueurTravee))
+                Lines.Add("   LongueurTravee =  " & ConvertListDecimalToString(.LongueurTravee))
 
                 Dim listTypTravee(.TypTravee.Count - 1) As Integer
 
@@ -176,21 +176,36 @@ Public Class cls_Projet
                 Lines.Add("   lDefautDalle   =  " & .lDefautDalle)
                 Lines.Add("   lDonneesSauv   =  " & .lDonneesSauvees)
                 Lines.Add("   lNouvPoutre    =  " & .NouvellePoutre)
+                If .lMixte Then
+                    Lines.Add("   lAutoDesign    =  " & .lAutomaticDesign)
+                    Lines.Add("   NombreZones    =  " & ConvertListIntegerToString(.NombreZones))
+                    Lines.Add("   LongueurZone    =  " & ConvertListDecimalToString(.LongueurZone))
+                    Lines.Add("   EspaZone    =  " & ConvertListDecimalToString(.EspacementZone))
+                    Lines.Add("   EspaBacTransZone    =  " & ConvertListIntegerToString(.Espacement_Bac_TransZone))
+                    Lines.Add("   NbGoujonTrans    =  " & ConvertListIntegerToString(.NombreGoujonsTransv))
+
+                End If
+
+
                 Lines.Add("")
 
+
+
                 '==[ Classe Maintien ]=================================================================
-                For Each maint In .Maintiens
-                    For i As Integer = 0 To maint.Count - 1
+                For i As Integer = 0 To .Maintiens.Count - 1
+                    For Each maint In .Maintiens(i)
 
-                        With maint(i)
+                        ' If maint IsNot Nothing Then
+                        With maint
 
-                            Lines.Add("BLOCK MAINTIENS")
-                            Lines.Add("   indTravee      =  " & i)
-                            Lines.Add("   xloc           =  " & .x_Loc)
-                            Lines.Add("   lMaintSemSup   =  " & .lMaintienSemelleSup)
-                            Lines.Add("   lMaintSemInf   =  " & .lMaintienSemelleInf)
-                            Lines.Add("")
-                        End With
+                                Lines.Add("BLOCK MAINTIENS")
+                                Lines.Add("   indTravee      =  " & i)
+                                Lines.Add("   xloc           =  " & .x_Loc)
+                                Lines.Add("   lMaintSemSup   =  " & .lMaintienSemelleSup)
+                                Lines.Add("   lMaintSemInf   =  " & .lMaintienSemelleInf)
+                                Lines.Add("")
+                            End With
+                        ' End If
 
                     Next
                 Next
@@ -225,8 +240,8 @@ Public Class cls_Projet
                         Lines.Add("   typeProfil     =  " & .typeProfileAcier)
                         Lines.Add("   Platb          =  " & .Plat_b)
                         Lines.Add("   Platt          =  " & .Plat_t)
-                        ' Lines.Add("   IndDeliv       =  " & ConvertListShortToString(.IndDeliv))
-                        ' Lines.Add("   IndStand       =  " & ConvertListShortToString(.IndStandart))
+                        If .IndDeliv IsNot Nothing Then Lines.Add("   IndDeliv       =  " & ConvertListShortToString(.IndDeliv))
+                        Lines.Add("   IndStand       =  " & ConvertListShortToString(.IndStandart))
                         Lines.Add("")
 
                     End With
@@ -399,6 +414,7 @@ Public Class cls_Projet
                         Lines.Add("   nom            =  " & .nom)
                         Lines.Add("   hsc            =  " & .hsc)
                         Lines.Add("   d              =  " & .d)
+                        Lines.Add("   fy              =  " & .Fy)
                         Lines.Add("   fu              =  " & .Fu)
                         Lines.Add("")
                     End With
@@ -822,7 +838,7 @@ Public Class cls_Projet
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
-        Dim i, iFirst As Integer
+        Dim i, iFirst, indTravee, indZone As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
 
@@ -855,7 +871,7 @@ Public Class cls_Projet
                         Case "LTREMIEGAU" : .lTremieGauche = Mots(nbMots)
                         Case "LTREMIEDRO" : .lTremieDroite = Mots(nbMots)
                         Case "NBTRAVEE" : .NombreTraveesDeuxAppuis = TraiteReal(Mots(nbMots))
-                        Case "LONGUEURTR" : .LongueurTravee = ConvertStringToList(Mots(nbMots))
+                        Case "LONGUEURTR" : .LongueurTravee = ConvertStringToListDecimal(Mots(nbMots))
                         Case "TYPETRAVEE" : .TypTravee = ConvertStringToListInteger(Mots(nbMots))
                         Case "TYPEETAIEM" : .TypeEtaiement = TraiteReal(Mots(nbMots))
                         Case "ETAISCONSG" : .lEtaisConsoleGauche = Mots(nbMots)
@@ -874,6 +890,12 @@ Public Class cls_Projet
                         Case "LDEFAUTDAL" : .lDefautDalle = Mots(nbMots)
                         Case "LDONNEESSA" : .lDonneesSauvees = Mots(nbMots)
                         Case "LNOUVPOUTR" : .NouvellePoutre = Mots(nbMots)
+                        Case "LAUTODESIG" : .lAutomaticDesign = Mots(nbMots)
+                        Case "NOMBREZONE" : .NombreZones = ConvertStringToListInteger(Mots(nbMots))
+                        Case "LONGUEURZO" : .LongueurZone = ConvertStringToListDecimalDim2(Mots(nbMots))
+                        Case "ESPAZONE" : .EspacementZone = ConvertStringToListDecimalDim2(Mots(nbMots))
+                        Case "ESPABACTRA" : .Espacement_Bac_TransZone = ConvertStringToListIntegerDim2(Mots(nbMots))
+                        Case "NBGOUJONTR" : .NombreGoujonsTransv = ConvertStringToListIntegerDim2(Mots(nbMots))
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
@@ -1537,6 +1559,7 @@ Public Class cls_Projet
                             End If
                         Case "HSC" : .hsc = TraiteReal(Mots(nbMots))
                         Case "D" : .d = TraiteReal(Mots(nbMots))
+                        Case "FY" : .Fy = TraiteReal(Mots(nbMots))
                         Case "FU" : .Fu = TraiteReal(Mots(nbMots))
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select

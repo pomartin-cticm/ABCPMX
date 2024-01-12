@@ -1992,7 +1992,7 @@ Public Class cls_Section
         Return Me.MemberwiseClone()
     End Function
 
-    Public Sub DeepClone(ByVal SectionSource As cls_Section, ByRef SectionCible As cls_Section)
+    Public Shared Sub DeepClone(ByVal SectionSource As cls_Section, ByRef SectionCible As cls_Section)
         SectionCible = SectionSource.Clone
 
         SectionSource.ProfilA.DeepClone(SectionSource.ProfilA, SectionCible.ProfilA)

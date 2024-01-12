@@ -279,16 +279,16 @@ Public Class Frm_Portees
     ''' <param name="indTravee"></param>
     Private Sub Reinitialiser_Connection(ByVal indTravee As Integer)
         With MyProjet.Poutres(MyProjet.IndEnCours)
-            .ZoneLongueur(indTravee, 0) = .LongueurTravee(indTravee)
-            .ZoneLongueur(indTravee, 1) = 0
-            .ZoneLongueur(indTravee, 2) = 0
+            .LongueurZone(indTravee, 0) = .LongueurTravee(indTravee)
+            .LongueurZone(indTravee, 1) = 0
+            .LongueurZone(indTravee, 2) = 0
             .NombreZones(indTravee) = 1
-            .ZoneEspacement(indTravee, 0) = 200 / 1000
-            .ZoneEspacement(indTravee, 1) = 200 / 1000
-            .ZoneEspacement(indTravee, 2) = 200 / 1000
-            .ZoneEspacement_Bac_Trans(indTravee, 0) = 1
-            .ZoneEspacement_Bac_Trans(indTravee, 1) = 1
-            .ZoneEspacement_Bac_Trans(indTravee, 2) = 1
+            .EspacementZone(indTravee, 0) = 200 / 1000
+            .EspacementZone(indTravee, 1) = 200 / 1000
+            .EspacementZone(indTravee, 2) = 200 / 1000
+            .Espacement_Bac_TransZone(indTravee, 0) = 1
+            .Espacement_Bac_TransZone(indTravee, 1) = 1
+            .Espacement_Bac_TransZone(indTravee, 2) = 1
             .NombreGoujonsTransv(indTravee, 0) = 1
             .NombreGoujonsTransv(indTravee, 1) = 1
             .NombreGoujonsTransv(indTravee, 2) = 1
