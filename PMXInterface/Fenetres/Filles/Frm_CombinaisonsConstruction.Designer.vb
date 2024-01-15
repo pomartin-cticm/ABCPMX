@@ -22,40 +22,43 @@ Partial Class Frm_CombinaisonsConstruction
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.pan_Combinaisons = New System.Windows.Forms.Panel()
         Me.TLpan_Lignes = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_ELS = New System.Windows.Forms.Label()
         Me.lbl_ELU = New System.Windows.Forms.Label()
         Me.pan_Predefinies = New System.Windows.Forms.Panel()
-        Me.img_Combinaison02 = New System.Windows.Forms.PictureBox()
-        Me.chk_Combinaison02 = New System.Windows.Forms.CheckBox()
-        Me.img_Combinaison01 = New System.Windows.Forms.PictureBox()
-        Me.chk_Combinaison01 = New System.Windows.Forms.CheckBox()
-        Me.pan_Custom = New System.Windows.Forms.Panel()
-        Me.pan_CombiCustom02 = New System.Windows.Forms.Panel()
-        Me.txt_Custom02_Q1 = New System.Windows.Forms.TextBox()
-        Me.etq_Custom02_Q1 = New System.Windows.Forms.Label()
-        Me.txt_Custom02_G = New System.Windows.Forms.TextBox()
-        Me.etq_Custom02_G = New System.Windows.Forms.Label()
-        Me.img_CombiCustom02 = New System.Windows.Forms.PictureBox()
-        Me.chk_CombiCustom02 = New System.Windows.Forms.CheckBox()
         Me.chk_CombiCustom01 = New System.Windows.Forms.CheckBox()
+        Me.img_Combinaison01 = New System.Windows.Forms.PictureBox()
         Me.pan_CombiCustom01 = New System.Windows.Forms.Panel()
-        Me.txt_Custom01_Q1 = New System.Windows.Forms.TextBox()
-        Me.etq_Custom01_Q1 = New System.Windows.Forms.Label()
+        Me.txt_Custom01_Qc = New System.Windows.Forms.TextBox()
+        Me.etq_Custom01_Qc = New System.Windows.Forms.Label()
         Me.txt_Custom01_G = New System.Windows.Forms.TextBox()
         Me.etq_Custom01_G = New System.Windows.Forms.Label()
         Me.img_CombiCustom01 = New System.Windows.Forms.PictureBox()
+        Me.chk_Combinaison01 = New System.Windows.Forms.CheckBox()
+        Me.pan_Custom = New System.Windows.Forms.Panel()
+        Me.pan_CombiCustom02 = New System.Windows.Forms.Panel()
+        Me.txt_Custom02_Qc = New System.Windows.Forms.TextBox()
+        Me.etq_Custom02_Qc = New System.Windows.Forms.Label()
+        Me.txt_Custom02_G = New System.Windows.Forms.TextBox()
+        Me.etq_Custom02_G = New System.Windows.Forms.Label()
+        Me.img_CombiCustom02 = New System.Windows.Forms.PictureBox()
+        Me.img_Combinaison02 = New System.Windows.Forms.PictureBox()
+        Me.chk_Combinaison02 = New System.Windows.Forms.CheckBox()
+        Me.chk_CombiCustom02 = New System.Windows.Forms.CheckBox()
+        Me.ErrorProvider1 = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_Combinaisons.SuspendLayout()
         Me.TLpan_Lignes.SuspendLayout()
         Me.pan_Predefinies.SuspendLayout()
-        CType(Me.img_Combinaison02, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Combinaison01, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_CombiCustom01.SuspendLayout()
+        CType(Me.img_CombiCustom01, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Custom.SuspendLayout()
         Me.pan_CombiCustom02.SuspendLayout()
         CType(Me.img_CombiCustom02, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_CombiCustom01.SuspendLayout()
-        CType(Me.img_CombiCustom01, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Combinaison02, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ErrorProvider1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Combinaisons
@@ -129,124 +132,6 @@ Partial Class Frm_CombinaisonsConstruction
         Me.pan_Predefinies.Size = New System.Drawing.Size(465, 148)
         Me.pan_Predefinies.TabIndex = 3
         '
-        'img_Combinaison02
-        '
-        Me.img_Combinaison02.Location = New System.Drawing.Point(181, 7)
-        Me.img_Combinaison02.Name = "img_Combinaison02"
-        Me.img_Combinaison02.Size = New System.Drawing.Size(276, 59)
-        Me.img_Combinaison02.TabIndex = 10
-        Me.img_Combinaison02.TabStop = False
-        '
-        'chk_Combinaison02
-        '
-        Me.chk_Combinaison02.AutoSize = True
-        Me.chk_Combinaison02.Location = New System.Drawing.Point(9, 8)
-        Me.chk_Combinaison02.Name = "chk_Combinaison02"
-        Me.chk_Combinaison02.Size = New System.Drawing.Size(122, 17)
-        Me.chk_Combinaison02.TabIndex = 9
-        Me.chk_Combinaison02.Text = "chk_Combinaison02"
-        Me.chk_Combinaison02.UseVisualStyleBackColor = True
-        '
-        'img_Combinaison01
-        '
-        Me.img_Combinaison01.Location = New System.Drawing.Point(181, 4)
-        Me.img_Combinaison01.Name = "img_Combinaison01"
-        Me.img_Combinaison01.Size = New System.Drawing.Size(276, 59)
-        Me.img_Combinaison01.TabIndex = 8
-        Me.img_Combinaison01.TabStop = False
-        '
-        'chk_Combinaison01
-        '
-        Me.chk_Combinaison01.AutoSize = True
-        Me.chk_Combinaison01.Location = New System.Drawing.Point(9, 5)
-        Me.chk_Combinaison01.Name = "chk_Combinaison01"
-        Me.chk_Combinaison01.Size = New System.Drawing.Size(122, 17)
-        Me.chk_Combinaison01.TabIndex = 7
-        Me.chk_Combinaison01.Text = "chk_Combinaison01"
-        Me.chk_Combinaison01.UseVisualStyleBackColor = True
-        '
-        'pan_Custom
-        '
-        Me.pan_Custom.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Custom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Custom.Controls.Add(Me.pan_CombiCustom02)
-        Me.pan_Custom.Controls.Add(Me.img_Combinaison02)
-        Me.pan_Custom.Controls.Add(Me.chk_Combinaison02)
-        Me.pan_Custom.Controls.Add(Me.chk_CombiCustom02)
-        Me.pan_Custom.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Custom.Location = New System.Drawing.Point(0, 211)
-        Me.pan_Custom.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
-        Me.pan_Custom.Name = "pan_Custom"
-        Me.pan_Custom.Size = New System.Drawing.Size(465, 294)
-        Me.pan_Custom.TabIndex = 5
-        '
-        'pan_CombiCustom02
-        '
-        Me.pan_CombiCustom02.Controls.Add(Me.txt_Custom02_Q1)
-        Me.pan_CombiCustom02.Controls.Add(Me.etq_Custom02_Q1)
-        Me.pan_CombiCustom02.Controls.Add(Me.txt_Custom02_G)
-        Me.pan_CombiCustom02.Controls.Add(Me.etq_Custom02_G)
-        Me.pan_CombiCustom02.Controls.Add(Me.img_CombiCustom02)
-        Me.pan_CombiCustom02.Location = New System.Drawing.Point(181, 69)
-        Me.pan_CombiCustom02.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_CombiCustom02.Name = "pan_CombiCustom02"
-        Me.pan_CombiCustom02.Size = New System.Drawing.Size(276, 38)
-        Me.pan_CombiCustom02.TabIndex = 16
-        '
-        'txt_Custom02_Q1
-        '
-        Me.txt_Custom02_Q1.Location = New System.Drawing.Point(91, 9)
-        Me.txt_Custom02_Q1.Name = "txt_Custom02_Q1"
-        Me.txt_Custom02_Q1.Size = New System.Drawing.Size(45, 20)
-        Me.txt_Custom02_Q1.TabIndex = 21
-        Me.txt_Custom02_Q1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'etq_Custom02_Q1
-        '
-        Me.etq_Custom02_Q1.AutoSize = True
-        Me.etq_Custom02_Q1.Location = New System.Drawing.Point(142, 13)
-        Me.etq_Custom02_Q1.Name = "etq_Custom02_Q1"
-        Me.etq_Custom02_Q1.Size = New System.Drawing.Size(38, 13)
-        Me.etq_Custom02_Q1.TabIndex = 20
-        Me.etq_Custom02_Q1.Text = "WW +"
-        '
-        'txt_Custom02_G
-        '
-        Me.txt_Custom02_G.Location = New System.Drawing.Point(10, 9)
-        Me.txt_Custom02_G.Name = "txt_Custom02_G"
-        Me.txt_Custom02_G.Size = New System.Drawing.Size(45, 20)
-        Me.txt_Custom02_G.TabIndex = 19
-        Me.txt_Custom02_G.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
-        '
-        'etq_Custom02_G
-        '
-        Me.etq_Custom02_G.AutoSize = True
-        Me.etq_Custom02_G.Location = New System.Drawing.Point(61, 13)
-        Me.etq_Custom02_G.Name = "etq_Custom02_G"
-        Me.etq_Custom02_G.Size = New System.Drawing.Size(24, 13)
-        Me.etq_Custom02_G.TabIndex = 18
-        Me.etq_Custom02_G.Text = "G +"
-        '
-        'img_CombiCustom02
-        '
-        Me.img_CombiCustom02.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.img_CombiCustom02.Location = New System.Drawing.Point(0, 0)
-        Me.img_CombiCustom02.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_CombiCustom02.Name = "img_CombiCustom02"
-        Me.img_CombiCustom02.Size = New System.Drawing.Size(276, 38)
-        Me.img_CombiCustom02.TabIndex = 12
-        Me.img_CombiCustom02.TabStop = False
-        '
-        'chk_CombiCustom02
-        '
-        Me.chk_CombiCustom02.AutoSize = True
-        Me.chk_CombiCustom02.Location = New System.Drawing.Point(9, 78)
-        Me.chk_CombiCustom02.Name = "chk_CombiCustom02"
-        Me.chk_CombiCustom02.Size = New System.Drawing.Size(126, 17)
-        Me.chk_CombiCustom02.TabIndex = 15
-        Me.chk_CombiCustom02.Text = "chk_CombiCustom02"
-        Me.chk_CombiCustom02.UseVisualStyleBackColor = True
-        '
         'chk_CombiCustom01
         '
         Me.chk_CombiCustom01.AutoSize = True
@@ -257,10 +142,18 @@ Partial Class Frm_CombinaisonsConstruction
         Me.chk_CombiCustom01.Text = "chk_CombiCustom01"
         Me.chk_CombiCustom01.UseVisualStyleBackColor = True
         '
+        'img_Combinaison01
+        '
+        Me.img_Combinaison01.Location = New System.Drawing.Point(181, 4)
+        Me.img_Combinaison01.Name = "img_Combinaison01"
+        Me.img_Combinaison01.Size = New System.Drawing.Size(276, 59)
+        Me.img_Combinaison01.TabIndex = 8
+        Me.img_Combinaison01.TabStop = False
+        '
         'pan_CombiCustom01
         '
-        Me.pan_CombiCustom01.Controls.Add(Me.txt_Custom01_Q1)
-        Me.pan_CombiCustom01.Controls.Add(Me.etq_Custom01_Q1)
+        Me.pan_CombiCustom01.Controls.Add(Me.txt_Custom01_Qc)
+        Me.pan_CombiCustom01.Controls.Add(Me.etq_Custom01_Qc)
         Me.pan_CombiCustom01.Controls.Add(Me.txt_Custom01_G)
         Me.pan_CombiCustom01.Controls.Add(Me.etq_Custom01_G)
         Me.pan_CombiCustom01.Controls.Add(Me.img_CombiCustom01)
@@ -270,22 +163,22 @@ Partial Class Frm_CombinaisonsConstruction
         Me.pan_CombiCustom01.Size = New System.Drawing.Size(276, 38)
         Me.pan_CombiCustom01.TabIndex = 13
         '
-        'txt_Custom01_Q1
+        'txt_Custom01_Qc
         '
-        Me.txt_Custom01_Q1.Location = New System.Drawing.Point(91, 9)
-        Me.txt_Custom01_Q1.Name = "txt_Custom01_Q1"
-        Me.txt_Custom01_Q1.Size = New System.Drawing.Size(45, 20)
-        Me.txt_Custom01_Q1.TabIndex = 21
-        Me.txt_Custom01_Q1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        Me.txt_Custom01_Qc.Location = New System.Drawing.Point(91, 9)
+        Me.txt_Custom01_Qc.Name = "txt_Custom01_Qc"
+        Me.txt_Custom01_Qc.Size = New System.Drawing.Size(45, 20)
+        Me.txt_Custom01_Qc.TabIndex = 21
+        Me.txt_Custom01_Qc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
-        'etq_Custom01_Q1
+        'etq_Custom01_Qc
         '
-        Me.etq_Custom01_Q1.AutoSize = True
-        Me.etq_Custom01_Q1.Location = New System.Drawing.Point(142, 13)
-        Me.etq_Custom01_Q1.Name = "etq_Custom01_Q1"
-        Me.etq_Custom01_Q1.Size = New System.Drawing.Size(38, 13)
-        Me.etq_Custom01_Q1.TabIndex = 20
-        Me.etq_Custom01_Q1.Text = "WW +"
+        Me.etq_Custom01_Qc.AutoSize = True
+        Me.etq_Custom01_Qc.Location = New System.Drawing.Point(142, 13)
+        Me.etq_Custom01_Qc.Name = "etq_Custom01_Qc"
+        Me.etq_Custom01_Qc.Size = New System.Drawing.Size(38, 13)
+        Me.etq_Custom01_Qc.TabIndex = 20
+        Me.etq_Custom01_Qc.Text = "WW +"
         '
         'txt_Custom01_G
         '
@@ -314,6 +207,120 @@ Partial Class Frm_CombinaisonsConstruction
         Me.img_CombiCustom01.TabIndex = 12
         Me.img_CombiCustom01.TabStop = False
         '
+        'chk_Combinaison01
+        '
+        Me.chk_Combinaison01.AutoSize = True
+        Me.chk_Combinaison01.Location = New System.Drawing.Point(9, 5)
+        Me.chk_Combinaison01.Name = "chk_Combinaison01"
+        Me.chk_Combinaison01.Size = New System.Drawing.Size(122, 17)
+        Me.chk_Combinaison01.TabIndex = 7
+        Me.chk_Combinaison01.Text = "chk_Combinaison01"
+        Me.chk_Combinaison01.UseVisualStyleBackColor = True
+        '
+        'pan_Custom
+        '
+        Me.pan_Custom.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Custom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Custom.Controls.Add(Me.pan_CombiCustom02)
+        Me.pan_Custom.Controls.Add(Me.img_Combinaison02)
+        Me.pan_Custom.Controls.Add(Me.chk_Combinaison02)
+        Me.pan_Custom.Controls.Add(Me.chk_CombiCustom02)
+        Me.pan_Custom.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Custom.Location = New System.Drawing.Point(0, 211)
+        Me.pan_Custom.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.pan_Custom.Name = "pan_Custom"
+        Me.pan_Custom.Size = New System.Drawing.Size(465, 294)
+        Me.pan_Custom.TabIndex = 5
+        '
+        'pan_CombiCustom02
+        '
+        Me.pan_CombiCustom02.Controls.Add(Me.txt_Custom02_Qc)
+        Me.pan_CombiCustom02.Controls.Add(Me.etq_Custom02_Qc)
+        Me.pan_CombiCustom02.Controls.Add(Me.txt_Custom02_G)
+        Me.pan_CombiCustom02.Controls.Add(Me.etq_Custom02_G)
+        Me.pan_CombiCustom02.Controls.Add(Me.img_CombiCustom02)
+        Me.pan_CombiCustom02.Location = New System.Drawing.Point(181, 69)
+        Me.pan_CombiCustom02.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_CombiCustom02.Name = "pan_CombiCustom02"
+        Me.pan_CombiCustom02.Size = New System.Drawing.Size(276, 38)
+        Me.pan_CombiCustom02.TabIndex = 16
+        '
+        'txt_Custom02_Qc
+        '
+        Me.txt_Custom02_Qc.Location = New System.Drawing.Point(91, 9)
+        Me.txt_Custom02_Qc.Name = "txt_Custom02_Qc"
+        Me.txt_Custom02_Qc.Size = New System.Drawing.Size(45, 20)
+        Me.txt_Custom02_Qc.TabIndex = 21
+        Me.txt_Custom02_Qc.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'etq_Custom02_Qc
+        '
+        Me.etq_Custom02_Qc.AutoSize = True
+        Me.etq_Custom02_Qc.Location = New System.Drawing.Point(142, 13)
+        Me.etq_Custom02_Qc.Name = "etq_Custom02_Qc"
+        Me.etq_Custom02_Qc.Size = New System.Drawing.Size(38, 13)
+        Me.etq_Custom02_Qc.TabIndex = 20
+        Me.etq_Custom02_Qc.Text = "WW +"
+        '
+        'txt_Custom02_G
+        '
+        Me.txt_Custom02_G.Location = New System.Drawing.Point(10, 9)
+        Me.txt_Custom02_G.Name = "txt_Custom02_G"
+        Me.txt_Custom02_G.Size = New System.Drawing.Size(45, 20)
+        Me.txt_Custom02_G.TabIndex = 19
+        Me.txt_Custom02_G.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
+        '
+        'etq_Custom02_G
+        '
+        Me.etq_Custom02_G.AutoSize = True
+        Me.etq_Custom02_G.Location = New System.Drawing.Point(61, 13)
+        Me.etq_Custom02_G.Name = "etq_Custom02_G"
+        Me.etq_Custom02_G.Size = New System.Drawing.Size(24, 13)
+        Me.etq_Custom02_G.TabIndex = 18
+        Me.etq_Custom02_G.Text = "G +"
+        '
+        'img_CombiCustom02
+        '
+        Me.img_CombiCustom02.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.img_CombiCustom02.Location = New System.Drawing.Point(0, 0)
+        Me.img_CombiCustom02.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_CombiCustom02.Name = "img_CombiCustom02"
+        Me.img_CombiCustom02.Size = New System.Drawing.Size(276, 38)
+        Me.img_CombiCustom02.TabIndex = 12
+        Me.img_CombiCustom02.TabStop = False
+        '
+        'img_Combinaison02
+        '
+        Me.img_Combinaison02.Location = New System.Drawing.Point(181, 7)
+        Me.img_Combinaison02.Name = "img_Combinaison02"
+        Me.img_Combinaison02.Size = New System.Drawing.Size(276, 59)
+        Me.img_Combinaison02.TabIndex = 10
+        Me.img_Combinaison02.TabStop = False
+        '
+        'chk_Combinaison02
+        '
+        Me.chk_Combinaison02.AutoSize = True
+        Me.chk_Combinaison02.Location = New System.Drawing.Point(9, 8)
+        Me.chk_Combinaison02.Name = "chk_Combinaison02"
+        Me.chk_Combinaison02.Size = New System.Drawing.Size(122, 17)
+        Me.chk_Combinaison02.TabIndex = 9
+        Me.chk_Combinaison02.Text = "chk_Combinaison02"
+        Me.chk_Combinaison02.UseVisualStyleBackColor = True
+        '
+        'chk_CombiCustom02
+        '
+        Me.chk_CombiCustom02.AutoSize = True
+        Me.chk_CombiCustom02.Location = New System.Drawing.Point(9, 78)
+        Me.chk_CombiCustom02.Name = "chk_CombiCustom02"
+        Me.chk_CombiCustom02.Size = New System.Drawing.Size(126, 17)
+        Me.chk_CombiCustom02.TabIndex = 15
+        Me.chk_CombiCustom02.Text = "chk_CombiCustom02"
+        Me.chk_CombiCustom02.UseVisualStyleBackColor = True
+        '
+        'ErrorProvider1
+        '
+        Me.ErrorProvider1.ContainerControl = Me
+        '
         'Frm_CombinaisonsConstruction
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -328,16 +335,17 @@ Partial Class Frm_CombinaisonsConstruction
         Me.TLpan_Lignes.PerformLayout()
         Me.pan_Predefinies.ResumeLayout(False)
         Me.pan_Predefinies.PerformLayout()
-        CType(Me.img_Combinaison02, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Combinaison01, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_CombiCustom01.ResumeLayout(False)
+        Me.pan_CombiCustom01.PerformLayout()
+        CType(Me.img_CombiCustom01, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Custom.ResumeLayout(False)
         Me.pan_Custom.PerformLayout()
         Me.pan_CombiCustom02.ResumeLayout(False)
         Me.pan_CombiCustom02.PerformLayout()
         CType(Me.img_CombiCustom02, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_CombiCustom01.ResumeLayout(False)
-        Me.pan_CombiCustom01.PerformLayout()
-        CType(Me.img_CombiCustom01, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Combinaison02, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ErrorProvider1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -348,8 +356,8 @@ Partial Class Frm_CombinaisonsConstruction
     Friend WithEvents lbl_ELU As Label
     Friend WithEvents pan_Predefinies As Panel
     Friend WithEvents pan_CombiCustom02 As Panel
-    Friend WithEvents txt_Custom02_Q1 As TextBox
-    Friend WithEvents etq_Custom02_Q1 As Label
+    Friend WithEvents txt_Custom02_Qc As TextBox
+    Friend WithEvents etq_Custom02_Qc As Label
     Friend WithEvents txt_Custom02_G As TextBox
     Friend WithEvents etq_Custom02_G As Label
     Friend WithEvents img_CombiCustom02 As PictureBox
@@ -361,9 +369,10 @@ Partial Class Frm_CombinaisonsConstruction
     Friend WithEvents chk_CombiCustom01 As CheckBox
     Friend WithEvents chk_Combinaison02 As CheckBox
     Friend WithEvents pan_CombiCustom01 As Panel
-    Friend WithEvents txt_Custom01_Q1 As TextBox
-    Friend WithEvents etq_Custom01_Q1 As Label
+    Friend WithEvents txt_Custom01_Qc As TextBox
+    Friend WithEvents etq_Custom01_Qc As Label
     Friend WithEvents txt_Custom01_G As TextBox
     Friend WithEvents etq_Custom01_G As Label
     Friend WithEvents img_CombiCustom01 As PictureBox
+    Friend WithEvents ErrorProvider1 As ErrorProvider
 End Class

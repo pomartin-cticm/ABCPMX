@@ -340,7 +340,7 @@ Public Class Frm_CombinaisonsNormales
             Case Me.img_CombiCustom01.Name : lSelect = Me.chk_CombiCustom01.Checked
             Case Me.img_CombiCustom02.Name : lSelect = Me.chk_CombiCustom02.Checked
         End Select
-        lSelect = False
+        'lSelect = False
         DrawFond(e.Graphics, lSelect, pWi, pHi)
     End Sub
 
@@ -397,17 +397,16 @@ Public Class Frm_CombinaisonsNormales
         Dim lPsi0Q1, lPsi0Q2 As Boolean
         Dim sCar As Single = MyGr.MeasureString("x", FontNormal).Width / 5
 
+        If lSelect Then
+            MyGr.FillRectangle(MyBrushFond, 0, 0, sWi, sHi)
+        Else
+            MyGr.FillRectangle(MyBrushNoFond, 0, 0, sWi, sHi)
+        End If
+
+
         Dim MyGamma As cls_Gamma
 
         MyGamma = MyProjet.Poutres(MyProjet.IndEnCours).Param.Gamma.Clone
-
-        '--> Initialisations
-
-        'If lSelect Then
-        '    MyGr.FillRectangle(MyBrushFond, 0, 0, sWi, sHi)
-        'Else
-        '    MyGr.FillRectangle(MyBrushNoFond, 0, 0, sWi, sHi)
-        'End If
 
         '--> Tracé
 
@@ -823,6 +822,25 @@ Public Class Frm_CombinaisonsNormales
             MyGr.FillRectangle(MyBrushNoFond, 0, 0, sWi, sHi)
         End If
 
+        Dim colorLabel As Color
+
+        If Me.chk_CombiCustom01.Checked Then
+            colorLabel = ColorSelect
+        Else
+            colorLabel = SystemColors.ControlLightLight
+        End If
+        Me.etq_Custom01_G.BackColor = colorLabel
+        Me.etq_Custom01_Q1.BackColor = colorLabel
+        Me.etq_Custom01_Q2.BackColor = colorLabel
+
+        If Me.chk_CombiCustom02.Checked Then
+            colorLabel = ColorSelect
+        Else
+            colorLabel = SystemColors.ControlLightLight
+        End If
+        Me.etq_Custom02_G.BackColor = colorLabel
+        Me.etq_Custom02_Q1.BackColor = colorLabel
+        Me.etq_Custom02_Q2.BackColor = colorLabel
     End Sub
 
 #End Region

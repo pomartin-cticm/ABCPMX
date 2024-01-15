@@ -213,6 +213,7 @@ SLSTATES				= Etats limites de service durant la construction
 ULS						= ELU
 SLS						= ELS
 COMBINATION				= Combinaison
+NUMBER					= No
 
 #FRM_CONNECTION
 TITLE					= Définition de la connection
