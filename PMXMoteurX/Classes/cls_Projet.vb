@@ -183,9 +183,18 @@ Public Class cls_Projet
                     Lines.Add("   EspaZone    =  " & ConvertListDecimalToString(.EspacementZone))
                     Lines.Add("   EspaBacTransZone    =  " & ConvertListIntegerToString(.Espacement_Bac_TransZone))
                     Lines.Add("   NbGoujonTrans    =  " & ConvertListIntegerToString(.NombreGoujonsTransv))
-
                 End If
 
+                Lines.Add("   lCombELU    =  " & ConvertListBooleanToString(.lCombELU))
+                Lines.Add("   CoefELU    =  " & ConvertListDecimalToString(.CoefCombELU))
+                Lines.Add("   lCombELS    =  " & ConvertListBooleanToString(.lCombELS))
+                Lines.Add("   CoefELS    =  " & ConvertListDecimalToString(.CoefCombELS))
+                Lines.Add("   lCombELF    =  " & ConvertListBooleanToString(.lCombFeu))
+                Lines.Add("   CoefELF    =  " & ConvertListDecimalToString(.CoefCombFeu))
+                Lines.Add("   lCombELCU    =  " & ConvertListBooleanToString(.lCombELCURules))
+                Lines.Add("   CoefELCU    =  " & ConvertListDecimalToString(.CoefCombELCU))
+                Lines.Add("   lCombELCS    =  " & ConvertListBooleanToString(.lCombELCSRules))
+                Lines.Add("   CoefELCS    =  " & ConvertListDecimalToString(.CoefCombELCS))
 
                 Lines.Add("")
 
@@ -198,13 +207,13 @@ Public Class cls_Projet
                         ' If maint IsNot Nothing Then
                         With maint
 
-                                Lines.Add("BLOCK MAINTIENS")
-                                Lines.Add("   indTravee      =  " & i)
-                                Lines.Add("   xloc           =  " & .x_Loc)
-                                Lines.Add("   lMaintSemSup   =  " & .lMaintienSemelleSup)
-                                Lines.Add("   lMaintSemInf   =  " & .lMaintienSemelleInf)
-                                Lines.Add("")
-                            End With
+                            Lines.Add("BLOCK MAINTIENS")
+                            Lines.Add("   indTravee      =  " & i)
+                            Lines.Add("   xloc           =  " & .x_Loc)
+                            Lines.Add("   lMaintSemSup   =  " & .lMaintienSemelleSup)
+                            Lines.Add("   lMaintSemInf   =  " & .lMaintienSemelleInf)
+                            Lines.Add("")
+                        End With
                         ' End If
 
                     Next
@@ -487,8 +496,10 @@ Public Class cls_Projet
                     Lines.Add("   RatioQ        = " & .ratioQ)
                     Lines.Add("   ChoixQ        = " & .choixQ)
                     Lines.Add("   UtilPlancher  = " & .UtilisationPlancher)
+                    Lines.Add("   lFreqDalle  = " & .lFreqDalle)
                     Lines.Add("   Mobilier      = " & .Mobilier)
                     Lines.Add("   lFauxPlafond  = " & .lFauxPlafond)
+                    Lines.Add("   lChappeFlottante  = " & .lChappeFlottante)
                     Lines.Add("   AmortD1       = " & .AmortiStructure_D1)
                     Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
                     Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
@@ -896,6 +907,16 @@ Public Class cls_Projet
                         Case "ESPAZONE" : .EspacementZone = ConvertStringToListDecimalDim2(Mots(nbMots))
                         Case "ESPABACTRA" : .Espacement_Bac_TransZone = ConvertStringToListIntegerDim2(Mots(nbMots))
                         Case "NBGOUJONTR" : .NombreGoujonsTransv = ConvertStringToListIntegerDim2(Mots(nbMots))
+                        Case "LCOMBELU" : .lCombELU = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "COEFELU" : .CoefCombELU = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
+                        Case "LCOMBELS" : .lCombELS = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "COEFELS" : .CoefCombELS = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
+                        Case "LCOMBELF" : .lCombFeu = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "COEFELF" : .CoefCombFeu = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
+                        Case "LCOMBELCU" : .lCombELCURules = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "COEFELCU" : .CoefCombELCU = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
+                        Case "LCOMBELCS" : .lCombELCSRules = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "COEFELCS" : .CoefCombELCS = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
@@ -1798,8 +1819,10 @@ Public Class cls_Projet
                         Case "RATIOQ" : .ratioQ = TraiteReal(Mots(nbMots))
                         Case "CHOIXQ" : .choixQ = Mots(nbMots)
                         Case "UTILPLANCH" : .UtilisationPlancher = Mots(nbMots)
+                        Case "LFREQDALLE" : .lFreqDalle = Mots(nbMots)
                         Case "MOBILIER" : .Mobilier = Mots(nbMots)
                         Case "LFAUXPLAFO" : .lFauxPlafond = Mots(nbMots)
+                        Case "LCHAPPEFLO" : .lChappeFlottante = Mots(nbMots)
                         Case "AMORTD1" : .AmortiStructure_D1 = Mots(nbMots)
                         Case "AMORTD2" : .AmortiMobilier_D2 = Mots(nbMots)
                         Case "AMORTD3" : .AmortiFinition_D3 = Mots(nbMots)

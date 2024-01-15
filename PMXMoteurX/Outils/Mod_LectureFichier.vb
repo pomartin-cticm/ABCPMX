@@ -114,7 +114,6 @@
     Public Function ConvertListDecimalToString(ByVal list(,) As Decimal) As String
         'GuD - 12/01/24
         Dim text As String = "{"
-        Dim testin As Integer = list.GetUpperBound(1)
         For j As Integer = 0 To list.GetUpperBound(1)
             For i As Integer = 0 To list.GetUpperBound(0)
                 text += list(i, j).ToString
@@ -127,6 +126,55 @@
                     End If
                 End If
             Next
+        Next
+
+        Return text
+
+    End Function
+
+    ''' <summary>
+    ''' Transforme une liste d'integer en string
+    ''' </summary>
+    ''' <param name="list">tableau de decimal</param>
+    ''' <returns></returns>
+    Public Function ConvertListDecimalToString(ByVal list() As List(Of Decimal)) As String
+        'GuD - 15/01/24
+        Dim text As String = "{"
+        For i As Integer = 0 To list.Count - 1
+            For j As Integer = 0 To list(i).Count - 1
+                text += list(i)(j).ToString
+                If j <> list(i).Count - 1 Then
+                    text += "/"
+                Else
+                    text += "}"
+                    If i <> list.Count - 1 Then
+                        text += "+{"
+                    End If
+                End If
+            Next
+        Next
+
+        Return text
+
+    End Function
+
+    ''' <summary>
+    ''' Transforme une liste de booleans en string
+    ''' </summary>
+    ''' <param name="list">tableau de booléens</param>
+    ''' <returns></returns>
+    Public Function ConvertListBooleanToString(ByVal list() As Boolean) As String
+        'R 21-012 - Bed - 15/07/21
+
+        Dim text As String = "{"
+
+        For i As Integer = 0 To list.Count - 1
+            text += list(i).ToString
+            If i <> list.Count - 1 Then
+                text += "/"
+            Else
+                text += "}"
+            End If
         Next
 
         Return text
@@ -289,6 +337,74 @@
 
         Else 'ancien fichier
             list_deci(0, 0) = text
+        End If
+
+        Return list_deci
+
+    End Function
+
+    ''' <summary>
+    ''' Transforme un string en liste de decimal
+    ''' </summary>
+    ''' <param name="text">string</param>
+    ''' <returns></returns>
+    Public Function ConvertStringToListDecimalDim2Bis(ByVal text As String) As List(Of Decimal)()
+
+        Dim list_deci(0) As List(Of Decimal)
+        list_deci(0) = New List(Of Decimal)
+
+        If text.Contains("{") Then 'nouveau fichier
+
+            'Initialisation
+            Dim tab_text() As String
+
+            tab_text = text.Split("+")
+            ReDim list_deci(tab_text.Count - 1) 'GUD: Dans le membre de gauche de la fonction .count, c'est une expression lambda
+
+            For i As Integer = 0 To tab_text.Length - 1
+                list_deci(i) = New List(Of Decimal)
+
+                Dim tab_decimal() As Decimal
+                tab_decimal = ConvertStringToListDecimal(tab_text(i))
+
+                For j As Integer = 0 To tab_decimal.Length - 1
+                    list_deci(i).Add(tab_decimal(j))
+                Next
+            Next
+
+        Else 'ancien fichier
+            list_deci(0)(0) = text
+        End If
+
+        Return list_deci
+
+    End Function
+
+    ''' <summary>
+    ''' Transforme un string en liste de booleans
+    ''' </summary>
+    ''' <param name="text">string</param>
+    ''' <returns></returns>
+    Public Function ConvertStringToListBoolean(ByVal text As String) As Boolean()
+
+        Dim list_deci(0) As Boolean
+
+        If text.Contains("{") Then 'nouveau fichier
+
+            text = text.Replace("{", "")
+            text = text.Replace("}", "")
+
+            If Not text = "" Then
+                Dim tab_text() As String = text.Split("/")
+                ReDim list_deci(tab_text.Length - 1)
+
+                For i As Integer = 0 To tab_text.Length - 1
+                    list_deci(i) = TraiteReal(tab_text(i))
+                Next
+            End If
+
+        Else 'ancien fichier
+            list_deci(0) = text
         End If
 
         Return list_deci

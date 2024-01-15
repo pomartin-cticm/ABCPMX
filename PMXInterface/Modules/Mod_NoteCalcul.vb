@@ -1660,7 +1660,7 @@ Module Mod_NoteCalcul
                 EditionTableauCombinaison(MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
             End If
 
-            If MyBeam.GetNbCombi(MyBeam.lCombELCURules) = 0 Then
+            If MyBeam.GetNbCombi(MyBeam.lCombELCSRules) = 0 Then
                 AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
             Else
                 AddTitreNdC(3, BlocG("ELCSSTATES"))
@@ -1679,9 +1679,9 @@ Module Mod_NoteCalcul
                     If Not CoefComb(i)(j) = 0 Then
 
                         If strCombo = "" Then
-                            strCombo += GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 3, False)
+                            strCombo += GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 2, False)
                         Else
-                            strCombo += " + " & GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 3, False)
+                            strCombo += " + " & GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 2, False)
                         End If
 
                         Select Case j
@@ -2535,20 +2535,24 @@ Module Mod_NoteCalcul
 
             AddTitreNdC(2, BlocAnalyse("ELEMNTRY_ULS"))
 
-            For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi - 1
+            If MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi = 0 Then
+                AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+            Else
+                For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi - 1
 
-                EditionAnalyseCombiELU(MyProjet.Poutres(MyProjet.IndEnCours), i)
+                    EditionAnalyseCombiELU(MyProjet.Poutres(MyProjet.IndEnCours), i)
 
-                '--> On affiche le diagramme des efforts si l'option est activée 
-                If OptionsNdC.lDispFMDiagrams Then
-                    Const NbLigDiag As Integer = 20
-                    If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
-                    ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
-                    AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELU")
-                    nbLignes += NbLigDiag
-                End If
+                    '--> On affiche le diagramme des efforts si l'option est activée 
+                    If OptionsNdC.lDispFMDiagrams Then
+                        Const NbLigDiag As Integer = 20
+                        If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
+                        ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
+                        AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELU")
+                        nbLignes += NbLigDiag
+                    End If
 
-            Next
+                Next
+            End If
         End If
 
         '--> Analyses par combinaisons ELS
@@ -2559,11 +2563,16 @@ Module Mod_NoteCalcul
 
             AddTitreNdC(2, BlocAnalyse("ELEMNTRY_SLS"))
 
-            For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS.nbCombi - 1
 
-                EditionAnalyseCombiELS(MyProjet.Poutres(MyProjet.IndEnCours), i)
+            If MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS.nbCombi = 0 Then
+                AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+            Else
+                For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELS.nbCombi - 1
 
-            Next
+                    EditionAnalyseCombiELS(MyProjet.Poutres(MyProjet.IndEnCours), i)
+
+                Next
+            End If
         End If
 
         '--> Analyses par combinaisons ELF
@@ -2574,11 +2583,15 @@ Module Mod_NoteCalcul
 
             AddTitreNdC(2, BlocAnalyse("ELEMNTRY_FLS"))
 
-            For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELF.nbCombi - 1
+            If MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELF.nbCombi = 0 Then
+                AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+            Else
+                For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELF.nbCombi - 1
 
-                EditionAnalyseCombiELF(MyProjet.Poutres(MyProjet.IndEnCours), i)
+                    EditionAnalyseCombiELF(MyProjet.Poutres(MyProjet.IndEnCours), i)
 
-            Next
+                Next
+            End If
         End If
 
     End Sub
