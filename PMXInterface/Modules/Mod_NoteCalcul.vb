@@ -3018,7 +3018,7 @@ Module Mod_NoteCalcul
 
                 End If
 
-                LigneTableauMVCombi(lMultispan, NCol, PosTab, iNode, iTraveeAffichee, myPoutre.Nodes.xTravee(iNode), myPoutre.Nodes.xGlobal(iNode),
+                LigneTableauMVCombi(lMultispan, NCol, PosTab, iNode, iTraveeAffichee, myPoutre.Nodes.xGlobal(iNode), myPoutre.Nodes.xTravee(iNode),
                                         VEd(iNode, 0), VEd(iNode, 1), MEd(iNode, 0), MEd(iNode, 1),
                                         Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
                                         Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)

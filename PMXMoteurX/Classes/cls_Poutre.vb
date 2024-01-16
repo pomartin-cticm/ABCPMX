@@ -3482,11 +3482,11 @@ Public Class cls_Poutre
                 Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
             Else
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 1", LabelQ(iq) & "#1", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 2", LabelQ(iq) & "#2", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesCentrale)
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & strConfiguration & " 3", LabelQ(iq) & "#3", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 3", LabelQ(iq) & "#3", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
             End If
         Next
