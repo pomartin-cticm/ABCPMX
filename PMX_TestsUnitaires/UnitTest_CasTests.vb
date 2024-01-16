@@ -14,8 +14,16 @@ Imports PMXMoteur2
         'Initialisation
         Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
         Dim myPoutre As New cls_Poutre(NomCas)
+        Dim ValRef, Valeur As Decimal
+        Const DeltaVMAx As Decimal = 1 / 1000
 
+
+        '---------------------------------------------------
+        '---------------------------------------------------
         ' --> Renseignement des données de l'article 
+        '---------------------------------------------------
+        '---------------------------------------------------
+
 
         'GEOMETRIE
         myPoutre.lTraveeConsoleGauche = False
@@ -77,14 +85,13 @@ Imports PMXMoteur2
         myPoutre.ChargesU("G2").QSurf(myPoutre.IndicePremiereTravee) = 1.4 * 1000
         myPoutre.ChargesU("Q1").QSurf(myPoutre.IndicePremiereTravee) = 2.5 * 1000
         myPoutre.ChargesU("QC").QSurf(myPoutre.IndicePremiereTravee) = 0.5 * 1000
-        myPoutre.ChargesU("QC").FReparties(myPoutre.IndicePremiereTravee).Add(New cls_ForceRepartie(12.5, 1 * 3, 15.5, 1 * 3, 12.5))
+        myPoutre.ChargesU("QC").FReparties(myPoutre.IndicePremiereTravee).Add(New cls_ForceRepartie(12.5, 1 * 3, 15.5, 1 * 3, 12.5)) '1 kN/m2 répartie s/ 3mx3m et centré à mi-travée
 
         'COEFFICIENTS PARTIELS
-        myPoutre.lCombELU(0) = True
-        myPoutre.CoefCombELU(0)(0) = 1.35
-        myPoutre.CoefCombELU(0)(1) = 1.35
-        myPoutre.CoefCombELU(0)(2) = 1.5
-        myPoutre.CoefCombELU(0)(3) = 1.5
+        myPoutre.lCombELU(0) = True 'activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
+        myPoutre.lCombELS(0) = True 'activation de la première combinaison ELS par défaut (G + Q)
+        myPoutre.lCombELCURules(0) = True 'activation de la première combinaison ELU pendant la phase de construction activée 
+        myPoutre.lCombELCSRules(0) = True 'activation de la première combinaison ELS pendant la phase de construction activée 
 
         With myPoutre.Param.Gamma
             .GammaM0 = 1
@@ -94,6 +101,47 @@ Imports PMXMoteur2
             .GammaVc = 1.25
             .GammaVs = 1.25
         End With
+
+
+
+        '---------------------------------------------------
+        '---------------------------------------------------
+        ' --> Lancement des calculs  
+        '---------------------------------------------------
+        '---------------------------------------------------
+
+        Dim NomChargesA(), strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
+        ReDim NomChargesA(9)
+        NomChargesA(0) = "Permanent loads"
+        NomChargesA(1) = "Self-weight"
+        NomChargesA(2) = "Self weight with props"
+        NomChargesA(3) = "Self weight without props"
+        NomChargesA(4) = "Other permanent loads"
+        NomChargesA(5) = "Live loads"
+        NomChargesA(6) = "Conf. no"
+        NomChargesA(7) = "Shrinkage of the slab"
+        NomChargesA(8) = "Shrinkage of the encasement"
+        NomChargesA(9) = "Construction loads"
+
+        strRacineELU = "ULS"
+        strRacineELS = "SLS"
+        strRacineELF = "FLS"
+        strRacineELUC = "ULS_C"
+        strRacineELSC = "SLS_C"
+
+        myPoutre.AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC) 'lance les calculs et les vérifications 
+
+
+
+
+
+        '---------------------------------------------------
+        '---------------------------------------------------
+        ' --> Vérification de l'analyse de la poutre 
+        '---------------------------------------------------
+        '---------------------------------------------------
+
+        'Valeur = myPoutre.
 
     End Sub
 
