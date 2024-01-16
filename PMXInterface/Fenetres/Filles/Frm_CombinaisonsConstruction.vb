@@ -217,12 +217,12 @@ Public Class Frm_CombinaisonsConstruction
 
         '--> Coefficients pour les combinaisons utilisateurs
 
-        Me.txt_Custom01_G.Text = Format(CoefCombiELU(Ind_Custom)(3), fmtGamma)
-        Me.txt_Custom01_Qc.Text = Format(CoefCombiELU(Ind_Custom)(4), fmtGamma)
+        Me.txt_Custom01_G.Text = Format(CoefCombiELU(Ind_Custom)(4), fmtGamma)
+        Me.txt_Custom01_Qc.Text = Format(CoefCombiELU(Ind_Custom)(3), fmtGamma)
         'Me.txt_Custom01_Q2.Text = Format(CoefCombi(Ind_Custom)(2), fmtGamma)
 
-        Me.txt_Custom02_G.Text = Format(CoefCombiELS(Ind_Custom)(3), fmtGamma)
-        Me.txt_Custom02_Qc.Text = Format(CoefCombiELS(Ind_Custom)(4), fmtGamma)
+        Me.txt_Custom02_G.Text = Format(CoefCombiELS(Ind_Custom)(4), fmtGamma)
+        Me.txt_Custom02_Qc.Text = Format(CoefCombiELS(Ind_Custom)(3), fmtGamma)
         'Me.txt_Custom02_Q2.Text = Format(CoefCombi(Ind_Custom + 1)(2), fmtGamma)
 
     End Sub
@@ -273,9 +273,9 @@ Public Class Frm_CombinaisonsConstruction
             Select Case sender.name
 
                 Case Me.txt_Custom01_G.Name, Me.txt_Custom02_G.Name
-                    IndVar = 3
-                Case Me.txt_Custom01_Qc.Name, Me.txt_Custom02_Qc.Name
                     IndVar = 4
+                Case Me.txt_Custom01_Qc.Name, Me.txt_Custom02_Qc.Name
+                    IndVar = 3
 
             End Select
 

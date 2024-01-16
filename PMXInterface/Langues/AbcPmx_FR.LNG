@@ -747,6 +747,8 @@ SHRINKAGEENCASEMENT		= Retrait de l'enrobage
 ULS						= ELU
 SLS						= ELS
 FLS						= ELF
+ULS_C					= ELU_C
+SLS_C					= ELS_C
 
 #OPTCALCULMAIN
 TITLE					= Options de calcul

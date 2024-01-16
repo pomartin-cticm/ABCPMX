@@ -25,6 +25,8 @@ Public Class Frm_PMX
     Dim strRacineELU As String
     Dim strRacineELS As String
     Dim strRacineELF As String
+    Dim strRacineELUC As String
+    Dim strRacineELSC As String
 
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
@@ -151,6 +153,8 @@ Public Class Frm_PMX
                 strRacineELU = Bloc("ULS")                              ' "ULS"
                 strRacineELS = Bloc("SLS")                              ' "SLS"
                 strRacineELF = Bloc("FLS")                              ' "FLS"
+                strRacineELUC = Bloc("ULSC")                              ' "ULS_C"
+                strRacineELSC = Bloc("SLSC")                              ' "SLS_C"
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangueMessagesGeneraux")
@@ -417,7 +421,7 @@ Public Class Frm_PMX
         '--[ Analyse calcul RDM 
 
         If lOK Then
-            MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF)
+            MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
         End If
 
         '--[ Edition de la note de calcul

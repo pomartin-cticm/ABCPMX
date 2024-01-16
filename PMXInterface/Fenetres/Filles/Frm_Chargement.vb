@@ -688,6 +688,8 @@ Public Class Frm_Chargement
             MAJIAffichageButtonsPonctuels()
             MAJIAffichageTableauxPonctuel()
 
+            MAJIReactions()
+
         Else
 
             Select Case sender.name

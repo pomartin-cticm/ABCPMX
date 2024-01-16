@@ -381,6 +381,8 @@ Public Class cls_Poutre
     Public CombiA_ELU As New cls_Combinaisons                       'Combinaisons ELU pour l'analyse
     Public CombiA_ELS As New cls_Combinaisons                       'Combinaisons ELS pour l'analyse
     Public CombiA_ELF As New cls_Combinaisons                       'Combinaisons ELF pour l'analyse
+    Public CombiA_ELCU As New cls_Combinaisons                       'Combinaisons ELF pour l'analyse
+    Public CombiA_ELCS As New cls_Combinaisons                       'Combinaisons ELF pour l'analyse
 
     '--Cas de charge pour l'analyse
 
@@ -392,9 +394,10 @@ Public Class cls_Poutre
     Const symbG2 As String = "G2"
     Const symbQ1 As String = "Q1"
     Const symbQ2 As String = "Q2"
+    Const symbQC As String = "QC"
     'Const symbQ1D1 As String = "Q1#1"
 
-    Dim lMultiQ(1) As Boolean                                       ' Indique si les chargements Q1 et Q2 sont appliqués sur plusieurs travées ou non
+    Dim lMultiQ(2) As Boolean                                       ' Indique si les chargements Q1, Q2 et QC sont appliqués sur plusieurs travées ou non
     Dim indiceCasRetrait As Integer
 
     '--Points de calcul des contraintes normales
@@ -553,7 +556,7 @@ Public Class cls_Poutre
             Next
             Me.lCombELCURules(i) = False
         Next
-        lCombELCURules(0) = True
+        If Me.lMixte Then lCombELCURules(0) = True
         For i = 0 To nbCombELSConstruction - 1
             Me.CoefCombELCS(i) = New List(Of Decimal)
             For j = 1 To nbCharges
@@ -561,7 +564,7 @@ Public Class cls_Poutre
             Next
             Me.lCombELCSRules(i) = False
         Next
-
+        If Me.lMixte Then lCombELCSRules(0) = True
     End Sub
 
     Public Sub New(MsgChargements() As String)
@@ -2792,96 +2795,96 @@ Public Class cls_Poutre
 
     'End Sub
 
-    Public Sub InitialiseCombiA_ELU()
-        '---------------------------------------------------------------------------
-        '   27/09/23 :  Création - POM 
-        '---------------------------------------------------------------------------
-        '   Préparation des tables de coef de combinaisons ELU
-        '---------------------------------------------------------------------------
+    'Public Sub InitialiseCombiA_ELU()
+    '    '---------------------------------------------------------------------------
+    '    '   27/09/23 :  Création - POM 
+    '    '---------------------------------------------------------------------------
+    '    '   Préparation des tables de coef de combinaisons ELU
+    '    '---------------------------------------------------------------------------
 
-        If Me.ChargesA.Count = 0 Then Exit Sub
+    '    If Me.ChargesA.Count = 0 Then Exit Sub
 
-        '--> Déclarations
+    '    '--> Déclarations
 
-        Dim iCombi, i, j As Integer
-        Dim TabCoef() As Decimal
-        Dim NbCombQ As Integer = 1
-        Dim IndiceQ(1) As Integer
-        Dim iMatriceQ(,) = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
-        Dim SymboleQ() As String = {symbQ1, symbQ2}
-        ' Dim SymboleQDiez(1) As String
-        Dim lChargeNonNulle() As Boolean
+    '    Dim iCombi, i, j As Integer
+    '    Dim TabCoef() As Decimal
+    '    Dim NbCombQ As Integer = 1
+    '    Dim IndiceQ(1) As Integer
+    '    Dim iMatriceQ(,) = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
+    '    Dim SymboleQ() As String = {symbQ1, symbQ2}
+    '    ' Dim SymboleQDiez(1) As String
+    '    Dim lChargeNonNulle() As Boolean
 
-        Dim iTravP As Integer = IndicePremiereTravee
-        Dim iTravd As Integer = IndiceDerniereTravee
-        Dim NbCharges As Integer = Me.ChargesA.Count
-        Dim Symbole As String
-        Dim SymbolExt() As String = {"#1", "#2", "#3"}
+    '    Dim iTravP As Integer = IndicePremiereTravee
+    '    Dim iTravd As Integer = IndiceDerniereTravee
+    '    Dim NbCharges As Integer = Me.ChargesA.Count
+    '    Dim Symbole As String
+    '    Dim SymbolExt() As String = {"#1", "#2", "#3"}
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        Me.CombiA_ELU.nbCombi = 0
-        ReDim TabCoef(NbCharges - 1)
-        ReDim lChargeNonNulle(NbCharges - 1)
-        If lMultiQ(1) Or lMultiQ(0) Then NbCombQ = 3
-        For i = 0 To 1
-            If lMultiQ(i) Then
-                IndiceQ(i) = IndiceCasParSymbole(SymboleQ(i) & "#1")
-            Else
-                IndiceQ(i) = IndiceCasParSymbole(SymboleQ(i))
-            End If
-        Next
-        If Not (lMultiQ(0) Or lMultiQ(1)) Then SymbolExt(0) = ""
+    '    Me.CombiA_ELU.nbCombi = 0
+    '    ReDim TabCoef(NbCharges - 1)
+    '    ReDim lChargeNonNulle(NbCharges - 1)
+    '    If lMultiQ(1) Or lMultiQ(0) Then NbCombQ = 3
+    '    For i = 0 To 1
+    '        If lMultiQ(i) Then
+    '            IndiceQ(i) = IndiceCasParSymbole(SymboleQ(i) & "#1")
+    '        Else
+    '            IndiceQ(i) = IndiceCasParSymbole(SymboleQ(i))
+    '        End If
+    '    Next
+    '    If Not (lMultiQ(0) Or lMultiQ(1)) Then SymbolExt(0) = ""
 
-        For i = 0 To NbCharges - 1
-            If ChargesA(i).Type <> cls_CasDeCharge.EnuType.Retrait Then
-                lChargeNonNulle(i) = Me.ChargesA(i).EstNonNul(iTravP, iTravd)
-            Else
-                lChargeNonNulle(i) = True
-            End If
-        Next
+    '    For i = 0 To NbCharges - 1
+    '        If ChargesA(i).Type <> cls_CasDeCharge.EnuType.Retrait Then
+    '            lChargeNonNulle(i) = Me.ChargesA(i).EstNonNul(iTravP, iTravd)
+    '        Else
+    '            lChargeNonNulle(i) = True
+    '        End If
+    '    Next
 
-        '--> Boucle sur les combinaisons définies par l'utilisateur
+    '    '--> Boucle sur les combinaisons définies par l'utilisateur
 
-        For iCombi = 0 To cls_Poutre.nbCombELU
+    '    For iCombi = 0 To cls_Poutre.nbCombELU
 
-            If lCombELU(iCombi) And (Not lCombiELUNulle(iCombi)) Then
+    '        If lCombELU(iCombi) And (Not lCombiELUNulle(iCombi)) Then
 
-                Symbole = "ELU_0" & CStr(iCombi + 1)
+    '            Symbole = "ELU_0" & CStr(iCombi + 1)
 
-                For i = 0 To NbCharges - 1
-                    Select Case Me.ChargesA(i).Type
-                        Case cls_CasDeCharge.EnuType.Permanente
-                            TabCoef(i) = Me.CoefCombELU(iCombi)(0)
-                        Case cls_CasDeCharge.EnuType.Retrait
-                            TabCoef(i) = Me.CoefCombELU(iCombi)(0)
-                        Case cls_CasDeCharge.EnuType.Construction
-                            TabCoef(i) = 0
-                    End Select
-                Next
+    '            For i = 0 To NbCharges - 1
+    '                Select Case Me.ChargesA(i).Type
+    '                    Case cls_CasDeCharge.EnuType.Permanente
+    '                        TabCoef(i) = Me.CoefCombELU(iCombi)(0)
+    '                    Case cls_CasDeCharge.EnuType.Retrait
+    '                        TabCoef(i) = Me.CoefCombELU(iCombi)(0)
+    '                    Case cls_CasDeCharge.EnuType.Construction
+    '                        TabCoef(i) = 0
+    '                End Select
+    '            Next
 
-                For i = 0 To NbCombQ - 1
+    '            For i = 0 To NbCombQ - 1
 
-                    For j = 0 To 1
+    '                For j = 0 To 1
 
-                        If lMultiQ(j) Then
-                            For k = 0 To 2
-                                TabCoef(IndiceQ(j) + k) = Me.CoefCombELU(iCombi)(j) * iMatriceQ(i, k)
-                            Next
-                        Else
-                            TabCoef(IndiceQ(j)) = Me.CoefCombELU(iCombi)(j + 1)
-                        End If
+    '                    If lMultiQ(j) Then
+    '                        For k = 0 To 2
+    '                            TabCoef(IndiceQ(j) + k) = Me.CoefCombELU(iCombi)(j) * iMatriceQ(i, k)
+    '                        Next
+    '                    Else
+    '                        TabCoef(IndiceQ(j)) = Me.CoefCombELU(iCombi)(j + 1)
+    '                    End If
 
-                    Next
+    '                Next
 
-                    Me.CombiA_ELU.AjouteCombi(Symbole & SymbolExt(i), TabCoef, NbCharges)
+    '                Me.CombiA_ELU.AjouteCombi(Symbole & SymbolExt(i), TabCoef, NbCharges)
 
-                Next
-            End If
+    '            Next
+    '        End If
 
-        Next
+    '    Next
 
-    End Sub
+    'End Sub
 
 
     Public Sub InitialiseCombiA(nbCombi As Integer, lCombi() As Boolean, CoefCombi() As List(Of Decimal),
@@ -2905,9 +2908,10 @@ Public Class cls_Poutre
         Dim iCombi, i, j As Integer
         Dim TabCoef() As Decimal
         Dim NbCombQ As Integer = 1
-        Dim IndiceQ(1) As Integer
+        Dim NbCombQConstruct As Integer = 1
+        Dim IndiceQ(2) As Integer
         Dim iMatriceQ(,) = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}}
-        Dim SymboleQ() As String = {symbQ1, symbQ2}
+        Dim SymboleQ() As String = {symbQ1, symbQ2, symbQC}
         ' Dim SymboleQDiez(1) As String
         Dim lChargeNonNulle() As Boolean
 
@@ -2916,14 +2920,23 @@ Public Class cls_Poutre
         Dim NbCharges As Integer = Me.ChargesA.Count
         Dim Symbole As String
         Dim SymbolExt() As String = {"#1", "#2", "#3"}
+        Dim SymbolExtConstruct() As String = {"#1", "#2", "#3"}
 
         '--> Initialisation
 
         MyCombi.nbCombi = 0
         ReDim TabCoef(NbCharges - 1)
         ReDim lChargeNonNulle(NbCharges - 1)
-        If lMultiQ(1) Or lMultiQ(0) Then NbCombQ = 3
-        For i = 0 To 1
+
+        If (MyCombi.Equals(CombiA_ELCU) Or MyCombi.Equals(CombiA_ELCS)) Then
+            NbCombQ = 0
+            If lMultiQ(2) Then NbCombQConstruct = 3
+        Else
+            NbCombQConstruct = 0
+            If lMultiQ(1) Or lMultiQ(0) Then NbCombQ = 3
+        End If
+
+        For i = 0 To IndiceQ.Length - 1
             If lMultiQ(i) Then
                 IndiceQ(i) = IndiceCasParSymbole(SymboleQ(i) & "#1")
             Else
@@ -2931,6 +2944,7 @@ Public Class cls_Poutre
             End If
         Next
         If Not (lMultiQ(0) Or lMultiQ(1)) Then SymbolExt(0) = ""
+        If Not lMultiQ(2) Then SymbolExtConstruct(0) = ""
 
         For i = 0 To NbCharges - 1
             If ChargesA(i).Type <> cls_CasDeCharge.EnuType.Retrait Then
@@ -2951,11 +2965,15 @@ Public Class cls_Poutre
                 For i = 0 To NbCharges - 1
                     Select Case Me.ChargesA(i).Type
                         Case cls_CasDeCharge.EnuType.Permanente
-                            TabCoef(i) = CoefCombi(iCombi)(0)
+                            If (MyCombi.Equals(CombiA_ELCU) Or MyCombi.Equals(CombiA_ELCS)) Then
+                                If Me.ChargesA(i).Symbol = "G1" Then TabCoef(i) = CoefCombi(iCombi)(4)
+                            Else
+                                TabCoef(i) = CoefCombi(iCombi)(0)
+                            End If
                         Case cls_CasDeCharge.EnuType.Retrait
                             TabCoef(i) = CoefCombi(iCombi)(0)
-                        Case cls_CasDeCharge.EnuType.Construction
-                            TabCoef(i) = CoefCombi(iCombi)(4)
+                            'Case cls_CasDeCharge.EnuType.Construction
+                            '    TabCoef(i) = CoefCombi(iCombi)(4)
                     End Select
                 Next
 
@@ -2974,6 +2992,21 @@ Public Class cls_Poutre
                     Next
 
                     MyCombi.AjouteCombi(Symbole & SymbolExt(i), TabCoef, NbCharges)
+
+                Next
+
+                For i = 0 To NbCombQConstruct - 1
+
+                    If lMultiQ(2) Then
+                        For k = 0 To 2
+                            TabCoef(IndiceQ(2) + k) = CoefCombi(iCombi)(2) * iMatriceQ(i, k)
+                        Next
+                    Else
+                        TabCoef(IndiceQ(2)) = CoefCombi(iCombi)(3)
+                    End If
+
+
+                    MyCombi.AjouteCombi(Symbole & SymbolExtConstruct(i), TabCoef, NbCharges)
 
                 Next
             End If
@@ -3436,12 +3469,12 @@ Public Class cls_Poutre
 
         IndiceQ = Me.IndiceTabElts(lMixte, nEqDalleCT, nEqEnrobCT)
 
-        Dim LabelQ() As String = {symbQ1, symbQ2}
+        Dim LabelQ() As String = {symbQ1, symbQ2, symbQC}
         Dim lMultiT As Boolean
         Dim ChaineEx As String
-        Me.lMultiQ = {False, False}
+        Me.lMultiQ = {False, False, False}
 
-        For iq As Integer = 0 To 1
+        For iq As Integer = 0 To 2
             lMultiT = Me.ChargesU(LabelQ(iq)).EstMultiTravee(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
             Me.lMultiQ(iq) = lMultiT
             ChaineEx = strExploitation & " " & CStr(iq + 1)
@@ -4521,7 +4554,7 @@ Public Class cls_Poutre
 
 #Region " Vérifications "
 
-    Public Sub AAA_Verifications(NomCharges() As String, strRacineELU As String, strRacineELS As String, strRacineELF As String)
+    Public Sub AAA_Verifications(NomCharges() As String, strRacineELU As String, strRacineELS As String, strRacineELF As String, strRacineELUC As String, strRacineELSC As String)
         '-------------------------------------------------------------------------------------
         '   05/10/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -4556,6 +4589,8 @@ Public Class cls_Poutre
         Me.InitialiseCombiA(cls_Poutre.nbCombELU, Me.lCombELU, Me.CoefCombELU, strRacineELU, Me.CombiA_ELU)
         Me.InitialiseCombiA(cls_Poutre.nbCombELS, Me.lCombELS, Me.CoefCombELS, strRacineELS, Me.CombiA_ELS)
         Me.InitialiseCombiA(cls_Poutre.nbCombFeu, Me.lCombFeu, Me.CoefCombFeu, strRacineELF, Me.CombiA_ELF)
+        Me.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, Me.lCombELCURules, Me.CoefCombELCU, strRacineELUC, Me.CombiA_ELCU)
+        Me.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, Me.lCombELCSRules, Me.CoefCombELCS, strRacineELSC, Me.CombiA_ELCS)
 
         '--> Vérifications
 

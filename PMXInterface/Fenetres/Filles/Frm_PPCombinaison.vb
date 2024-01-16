@@ -18,6 +18,8 @@ Public Class Frm_PPCombinaison
     Dim strRacineELU As String
     Dim strRacineELS As String
     Dim strRacineELF As String
+    Dim strRacineELUC As String
+    Dim strRacineELSC As String
     Dim strNoCombiELU As String
     Dim strNoCombiELS As String
     Dim strNoCombiELF As String
@@ -89,6 +91,8 @@ Public Class Frm_PPCombinaison
         MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, MyPoutre.lCombELU, MyPoutre.CoefCombELU, strRacineELU, MyPoutre.CombiA_ELU)
         MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, MyPoutre.lCombELS, MyPoutre.CoefCombELS, strRacineELS, MyPoutre.CombiA_ELS)
         MyPoutre.InitialiseCombiA(cls_Poutre.nbCombFeu, MyPoutre.lCombFeu, MyPoutre.CoefCombFeu, strRacineELF, MyPoutre.CombiA_ELF)
+        MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, MyPoutre.lCombELCURules, MyPoutre.CoefCombELCU, strRacineELUC, MyPoutre.CombiA_ELCU)
+        MyPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, MyPoutre.lCombELCSRules, MyPoutre.CoefCombELCS, strRacineELSC, MyPoutre.CombiA_ELCS)
 
     End Sub
 
@@ -159,6 +163,8 @@ Public Class Frm_PPCombinaison
                 strRacineELU = Bloc("ULS")                              ' "ULS"
                 strRacineELS = Bloc("SLS")                              ' "SLS"
                 strRacineELF = Bloc("FLS")                              ' "FLS"
+                strRacineELUC = Bloc("ULS_C")                              ' "FLS"
+                strRacineELSC = Bloc("SLS_C")                              ' "FLS"
                 strNoCombiELU = Bloc("NOCOMBINATIONFORULS")             ' "No defined combinations for ultimate limite state"
                 strNoCombiELC = Bloc("NOCOMBINATIONFORULSC")            ' "No defined combinations for ultimate limite state in construction phase"
                 strNoCombiELF = Bloc("NOCOMBINATIONFORFLS")             ' "No defined combinations for fire limite state"

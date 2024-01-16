@@ -47,6 +47,8 @@ Public Class Frm_PPVerifications
     Dim strRacineELU As String = "ELU"
     Dim strRacineELS As String = "ELS"
     Dim strRacineELF As String = "ELF"
+    Dim strRacineELUC As String = "ELU_C"
+    Dim strRacineELSC As String = "ELS_C"
 
 
 #End Region
@@ -56,7 +58,7 @@ Public Class Frm_PPVerifications
         lBuild = True
 
         'MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesign = True
-        MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF)
+        MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
         GestionLangues()
         GestionStyle()
         PrepareFenetre()

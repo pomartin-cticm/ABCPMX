@@ -2594,6 +2594,54 @@ Module Mod_NoteCalcul
             End If
         End If
 
+        '--> Analyses par combinaisons ELU pendant la phase de construction
+
+        If OptionsNdC.lDispFM_ULS And MyBeam.lMixte Then
+
+            If nbLignes + nbminCombi > MAXLIGNEPPAG Then SautePage()
+
+            AddTitreNdC(2, BlocAnalyse("ELEMNTRY_ULSC"))
+
+            If MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELCU.nbCombi = 0 Then
+                AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+            Else
+                For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELCU.nbCombi - 1
+
+                    EditionAnalyseCombiELU_Construction(MyProjet.Poutres(MyProjet.IndEnCours), i)
+
+                    '--> On affiche le diagramme des efforts si l'option est activée 
+                    If OptionsNdC.lDispFMDiagrams Then
+                        Const NbLigDiag As Integer = 20
+                        If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
+                        ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
+                        AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELUC")
+                        nbLignes += NbLigDiag
+                    End If
+
+                Next
+            End If
+        End If
+
+        '--> Analyses par combinaisons ELS pendant la phase de construction
+
+        If OptionsNdC.lDispFM_SLS And MyBeam.lMixte Then
+
+            If nbLignes + nbminCombi > MAXLIGNEPPAG Then SautePage()
+
+            AddTitreNdC(2, BlocAnalyse("ELEMNTRY_SLSC"))
+
+
+            If MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELCS.nbCombi = 0 Then
+                AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+            Else
+                For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELCS.nbCombi - 1
+
+                    EditionAnalyseCombiELS_Construction(MyProjet.Poutres(MyProjet.IndEnCours), i)
+
+                Next
+            End If
+        End If
+
     End Sub
 
     Private Sub EditionListeCdCdansAnalyse(myPoutre As cls_Poutre)
@@ -2828,12 +2876,64 @@ Module Mod_NoteCalcul
 
         '--> Affichage de la combinaison
 
-        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELU, "ELU_0" & CStr(iCombi), iCombi, lRetrait)
+        Dim strELU As String = BlocAnalyse("ULS")
+        strELU += "_0"
+
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELU, strELU & CStr(iCombi), iCombi, lRetrait)
 
         '--> Calcul des M et V
 
         myPoutre.CombiA_ELU.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELU.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
+
+        'Récupère les valeurs enveloppes
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
+
+        '--> Affichage de la combinaison
+
+        EditionTableauEfforts(myPoutre, MEd, VEd,
+                              Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                              Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+
+    End Sub
+
+    Private Sub EditionAnalyseCombiELU_Construction(myPoutre As cls_Poutre, iCombi As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des efforts dans la poutre après analyse pour une combinaison
+        '-------------------------------------------------------------------------------------------
+        '   myPoutre    [E] :   Poutre
+        '   iCombi      [E] :   Indice de la combinaison ELU
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lRetrait As Boolean = True
+        Dim MEd(,) As Decimal = Nothing
+        Dim VEd(,) As Decimal = Nothing
+        Dim Mmin, Mmax, Vmin, Vmax As Decimal
+        Dim iNodeMinMoment As Integer = -1
+        Dim iNodeMaxMoment As Integer = -1
+        Dim iNodeMinTranchant As Integer = -1
+        Dim iNodeMaxTranchant As Integer = -1
+
+        '--> Initialisation
+
+        lRetrait = True
+
+        '--> Affichage de la combinaison
+
+        Dim strELU As String = BlocAnalyse("ULS")
+        strELU += "_C_0"
+
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELCU, strELU & CStr(iCombi), iCombi, lRetrait)
+
+        '--> Calcul des M et V
+
+        myPoutre.CombiA_ELCU.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
+        myPoutre.CombiA_ELCU.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
         'Récupère les valeurs enveloppes
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
@@ -3021,12 +3121,64 @@ Module Mod_NoteCalcul
 
         '--> Affichage de la combinaison
 
-        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELS, "ELS_0" & CStr(iCombi), iCombi, lRetrait)
+        Dim strELS As String = BlocAnalyse("SLS")
+        strELS += "_0"
+
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELS, strELS & CStr(iCombi), iCombi, lRetrait)
 
         '--> Calcul des M et V
 
         myPoutre.CombiA_ELS.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
         myPoutre.CombiA_ELS.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
+
+        'Récupère les valeurs enveloppes
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)
+        PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(MEd, MEd.GetUpperBound(0) + 1, Mmax, Mmin, iNodeMaxMoment, iNodeMinMoment)
+
+        '--> Affichage de la combinaison
+
+        EditionTableauEfforts(myPoutre, MEd, VEd,
+                              Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                              Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+
+    End Sub
+
+    Private Sub EditionAnalyseCombiELS_Construction(myPoutre As cls_Poutre, iCombi As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des efforts dans la poutre après analyse pour une combinaison ELS
+        '-------------------------------------------------------------------------------------------
+        '   myPoutre    [E] :   Indice de la poutre
+        '   iCombi      [E] :   Indice de la combinaison ELU
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lRetrait As Boolean = True
+        Dim MEd(,) As Decimal = Nothing
+        Dim VEd(,) As Decimal = Nothing
+        Dim Mmin, Mmax, Vmin, Vmax As Decimal
+        Dim iNodeMinMoment As Integer = -1
+        Dim iNodeMaxMoment As Integer = -1
+        Dim iNodeMinTranchant As Integer = -1
+        Dim iNodeMaxTranchant As Integer = -1
+
+        '--> Initialisation
+
+        lRetrait = True
+
+        '--> Affichage de la combinaison
+
+        Dim strELS As String = BlocAnalyse("SLS")
+        strELS += "_C_0"
+
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELCS, strELS & CStr(iCombi), iCombi, lRetrait)
+
+        '--> Calcul des M et V
+
+        myPoutre.CombiA_ELCS.CombineMoments(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, lRetrait)
+        myPoutre.CombiA_ELCS.CombineEffortsT(iCombi, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, lRetrait)
 
         'Récupère les valeurs enveloppes
         PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(VEd, VEd.GetUpperBound(0) + 1, Vmax, Vmin, iNodeMaxTranchant, iNodeMinTranchant)

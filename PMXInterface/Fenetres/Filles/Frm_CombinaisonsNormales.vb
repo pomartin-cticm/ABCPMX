@@ -179,8 +179,8 @@ Public Class Frm_CombinaisonsNormales
         Me.chk_Combinaison03.Text = Chaine & "3"
         Me.chk_Combinaison04.Text = Chaine & "4"
 
-        Me.chk_CombiCustom01.Text = Chaine & CStr(Ind_Custom)
-        Me.chk_CombiCustom02.Text = Chaine & CStr(Ind_Custom + 1)
+        Me.chk_CombiCustom01.Text = Chaine & CStr(Ind_Custom + 1)
+        Me.chk_CombiCustom02.Text = Chaine & CStr(Ind_Custom + 2)
 
     End Sub
 

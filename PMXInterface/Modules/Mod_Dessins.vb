@@ -6659,11 +6659,17 @@ Public Module Mod_Dessins
             Case "ELU"
                 Combinaison = MyPoutre.CombiA_ELU
                 OptionsDiagrammes = OptionsDiagrammesELU
+            Case "ELUC"
+                Combinaison = MyPoutre.CombiA_ELCU
+                OptionsDiagrammes = OptionsDiagrammesELU
             Case "ELF"
                 Combinaison = MyPoutre.CombiA_ELF
                 OptionsDiagrammes = OptionsDiagrammesELF
             Case "ELS"
                 Combinaison = MyPoutre.CombiA_ELS
+                OptionsDiagrammes = OptionsDiagrammesELS
+            Case "ELSC"
+                Combinaison = MyPoutre.CombiA_ELCS
                 OptionsDiagrammes = OptionsDiagrammesELS
         End Select
 
@@ -6780,7 +6786,7 @@ Public Module Mod_Dessins
 
         Dim xo, xe, yo, ye As Decimal
 
-        If typeCombo = "ELS" And OptionsDiagrammes.lDessDeformee Then 'And lResult  Then
+        If (typeCombo = "ELS" Or typeCombo = "ELSC") And OptionsDiagrammes.lDessDeformee Then 'And lResult  Then
 
             Combinaison.CombineFleches(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, f)
 
@@ -6805,7 +6811,7 @@ Public Module Mod_Dessins
 
         If OptionsDiagrammes.lDessMoment Then 'And lResult Then
 
-            MyPoutre.CombiA_ELU.CombineMoments(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, M)
+            Combinaison.CombineMoments(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, M)
             PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(M, M.GetUpperBound(0) + 1, MMax, MMin, iNodeMMax, iNodeMMin)
 
             kEchM = CoefEchelleDessin(MMin, MMax, EcartZ / 2) * SigneM
@@ -6821,7 +6827,7 @@ Public Module Mod_Dessins
 
         If OptionsDiagrammes.lDessEffortT Then 'And lResult Then
 
-            MyPoutre.CombiA_ELU.CombineEffortsT(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, V)
+            Combinaison.CombineEffortsT(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, V)
             PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(V, V.GetUpperBound(0) + 1, VMax, VMin, iNodeVMax, iNodeVMin)
 
             ChaineMin = GetStringInUnit(VMin, Enu_TypeVariable.Effort, 4, 2, True)
