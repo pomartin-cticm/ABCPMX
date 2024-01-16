@@ -86,7 +86,7 @@
 
     Public Sub CombineContraintes(iCombi As Integer, NbCas As Integer, NbPts As Integer, nbNodes As Integer,
                                   ChargesA As List(Of cls_CasDeCharge), SigmaCas(,,,) As Decimal,
-                                  lRetrait As Decimal, ByRef SigmaELU(,,) As Decimal)
+                                  lRetrait As Boolean, ByRef SigmaELU(,,) As Decimal)
         '-----------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@
 
     Public Sub CombineContraintes(iCombi As Integer, NbCas As Integer, NbPts As Integer, nbNodes As Integer, ChargesA As List(Of cls_CasDeCharge),
                                   Med(,) As Decimal, SigmaP(,,,) As Decimal, SigmaM(,,,) As Decimal,
-                                  lRetrait As Decimal, ByRef SigmaELU(,,) As Decimal)
+                                  lRetrait As Boolean, ByRef SigmaELU(,,) As Decimal)
         '-----------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------

@@ -2983,7 +2983,7 @@ Public Class cls_Poutre
 
                         If lMultiQ(j) Then
                             For k = 0 To 2
-                                TabCoef(IndiceQ(j) + k) = CoefCombi(iCombi)(j) * iMatriceQ(i, k)
+                                TabCoef(IndiceQ(j) + k) = CoefCombi(iCombi)(j + 1) * iMatriceQ(i, k)
                             Next
                         Else
                             TabCoef(IndiceQ(j)) = CoefCombi(iCombi)(j + 1)
@@ -2999,7 +2999,7 @@ Public Class cls_Poutre
 
                     If lMultiQ(2) Then
                         For k = 0 To 2
-                            TabCoef(IndiceQ(2) + k) = CoefCombi(iCombi)(2) * iMatriceQ(i, k)
+                            TabCoef(IndiceQ(2) + k) = CoefCombi(iCombi)(3) * iMatriceQ(i, k)
                         Next
                     Else
                         TabCoef(IndiceQ(2)) = CoefCombi(iCombi)(3)
@@ -3506,12 +3506,12 @@ Public Class cls_Poutre
         '    Me.ChargesA.Add(New cls_CasDeCharge(strRetraitEnrob, "SHE", IndiceSH, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Retrait, pEtatDalle))
         'End If
 
-        '--> Charges de construction
+        ''--> Charges de construction
 
-        If lMixte And (Not lEtaitComplet) Then
-            Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Construction, pEtatDalleNonMixte))
-            InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("QC"), TraveesTous)
-        End If
+        'If lMixte And (Not lEtaitComplet) Then
+        '    Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Construction, pEtatDalleNonMixte))
+        '    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("QC"), TraveesTous)
+        'End If
 
     End Sub
 

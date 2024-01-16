@@ -77,7 +77,7 @@ SLIMFLOORSABCOMPO		= Composite slim floor SAB
 
 
 #FRM_BEAMOPTIONS
-TITLE					= Calculation options
+TITLE					= Beam calculation options
 OK						= Ok
 CANCEL					= Cancel
 TSTANDARD				= Standard
@@ -510,7 +510,7 @@ TSBSPANS				= Spans
 TSBPROPPING				= Propping
 TSBLOADS				= Loads
 TSBCOMBINATIONS			= Combinations
-TSOPTIONS				= Calculation options
+TSOPTIONS				= Beam calculation options
 TSBGAMMA				= Partial factors and nationally determined factors
 TSBHIVOSS				= Vibratory comfort of the beam
 TSBOPTIONSINCENDIE		= Fire design options
