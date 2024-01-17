@@ -2,7 +2,7 @@
 Imports System.Runtime.CompilerServices
 Imports PMXMoteur2
 
-Module Mod_Demarrage
+Public Module Mod_Demarrage
 
 #Region " Déclarations "
 
@@ -260,7 +260,7 @@ Module Mod_Demarrage
 
         '--> Récupération des langues disponibles
 
-        InitialiseLangue(MyRep, "ABCPMX", LogicielInfo.ListeLangue, nblangues)
+        InitialiseLangue(MyRep, "ABCPMX", LogicielInfo.ListeLangue, NbLangues)
         If NbLangues = 0 Then
             MsgBox("Erreur fichiers langues non disponibles | Error language files missing", MsgBoxStyle.Critical, "Mod_Demmarage/InitialiseLangues")
             Stop

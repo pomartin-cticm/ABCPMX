@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports System.Runtime.Remoting.Lifetime
 Imports PMXMoteur2
-Module Mod_BasesDonneesBinaires
+Public Module Mod_BasesDonneesBinaires
 
 #Region "   Constantes "
 

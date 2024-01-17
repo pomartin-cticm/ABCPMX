@@ -2,7 +2,7 @@
 Imports System.Runtime.CompilerServices
 Imports PMXMoteur2
 
-Module Mod_BasesDonneesASCII
+Public Module Mod_BasesDonneesASCII
 
 #Region " Déclarations des bases "
 

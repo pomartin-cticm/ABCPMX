@@ -1,6 +1,6 @@
 ﻿Imports PMXMoteur2
 
-Module Mod_Declarations
+Public Module Mod_Declarations
 
 #Region " Variables globales environnement du logiciel "
 
