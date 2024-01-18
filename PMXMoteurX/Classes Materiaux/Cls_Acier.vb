@@ -55,36 +55,9 @@ Public Class cls_Acier
 
 #Region " Propriétés "
 
-    Public ReadOnly Property epsilon_fs
-        Get
-            Return get_epsilon(Me.f_y.fs)
-        End Get
-    End Property
-
-    Public ReadOnly Property epsilon_w
-        Get
-            Return get_epsilon(Me.f_y.w)
-        End Get
-    End Property
-
-    Public ReadOnly Property epsilon_fi
-        Get
-            Return get_epsilon(Me.f_y.fi)
-        End Get
-    End Property
-
-    Public ReadOnly Property epsilon_sp
-        Get
-            Return get_epsilon(Me.f_y.spd)
-        End Get
-    End Property
-
     Public Function get_epsilon(fy As Decimal)
         Return Math.Sqrt(235 / fy)
     End Function
-
-
-
 
     ''' <summary>
     ''' Masse volumique (en kg/m3)

@@ -32,12 +32,12 @@
     ''' <summary>
     ''' Indique si une armature inférieur est présente
     ''' </summary>
-    Public lArma_Inf As Boolean
+    'Public lArma_Inf As Boolean 'MODIF GUD: redondant avec le booleen lActive dans la cls_armatures_longi
 
     ''' <summary>
     ''' Indique si une armature supérieur est présente
     ''' </summary>
-    Public lArma_Sup As Boolean
+    'Public lArma_Sup As Boolean
 
     '''' <summary>
     '''' acier de l'armature
@@ -524,8 +524,8 @@
         Me.preDalle_tjoint = 0.05
         Me.preDalle_ep = 0.06
 
-        Me.lArma_Inf = True
-        Me.lArma_Sup = True
+        'Me.lArma_Inf = True
+        'Me.lArma_Sup = True
 
         Me.pTheta_h = THETAHDEFAULT
 
@@ -552,8 +552,8 @@
         Lines.Add("   DType         = " & type)
         Lines.Add("   DL_d          = " & Beff)
         Lines.Add("   Dt_d          = " & t_d)
-        Lines.Add("   DAInf         = " & lArma_Inf)
-        Lines.Add("   DAsup         = " & lArma_Sup)
+        'Lines.Add("   DAInf         = " & lArma_Inf)
+        'Lines.Add("   DAsup         = " & lArma_Sup)
         ' Lines.Add("   Df_y          = " & acier_armature)
 
         With beton

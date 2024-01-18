@@ -41,8 +41,6 @@ Imports PMXMoteur2
         LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Gamma
         LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.General
 
-        'InitialiseDebug()
-
         '--> Répertoires
 
         '# répertoire configuration
@@ -58,19 +56,19 @@ Imports PMXMoteur2
 
         '--> Fichiers
         LogicielFichiers.Base_Sections = LogicielRep.Config & "\" & RacProfile & ExtensionBase
-            LogicielFichiers.Base_Aciers = LogicielRep.Config & "\" & RacAcier & ExtensionBase
-            LogicielFichiers.Base_Goujons = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
-            LogicielFichiers.Base_Goujons_Perso = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacGoujons & "Custom" & ExtensionBase
-            LogicielFichiers.Base_Bacs = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
+        LogicielFichiers.Base_Aciers = LogicielRep.Config & "\" & RacAcier & ExtensionBase
+        LogicielFichiers.Base_Goujons = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+        LogicielFichiers.Base_Goujons_Perso = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacGoujons & "Custom" & ExtensionBase
+        LogicielFichiers.Base_Bacs = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
 
-            '--> Base de données
-            InitialisationBasesDonnees()
-            '--> Récupération des données de la database dans le catalogue (aciers et profilés)
-            InitialiseCatalogueProfiles(LogicielFichiers.Base_Sections, MyCatalogue)
-            InitialiseBaseAciers(LogicielFichiers.Base_Aciers, SteelBase)
+        '--> Base de données
+        InitialisationBasesDonnees()
+        '--> Récupération des données de la database dans le catalogue (aciers et profilés)
+        InitialiseCatalogueProfiles(LogicielFichiers.Base_Sections, MyCatalogue)
+        InitialiseBaseAciers(LogicielFichiers.Base_Aciers, SteelBase)
 
-            '--> Bacs acier
-            LireBaseBacs(BaseBacs)
+        '--> Bacs acier
+        LireBaseBacs(BaseBacs)
 
         '--> Connecteurs
         'LireBaseGoujons(LogicielFichiers.Base_Goujons, BaseGoujons)
@@ -86,7 +84,8 @@ Imports PMXMoteur2
         Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
         Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "", NomCas)
         Dim ValRef, Valeur As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000
+        Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
+        Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 
 
         Dim lOK, lTrouve As Boolean
         InitialisePoutreDeBases(myPoutre, lOK)
@@ -135,6 +134,10 @@ Imports PMXMoteur2
             .type = cls_Dalle.Enum_TypeDalle.Mixte
             .t_d = 120 / 1000
         End With
+
+        For i As Integer = 0 To myPoutre.Dalle.LitArma.Count - 1 'on ne prend pas en compte les armatures dans le calcul dans l'exemple traité 
+            myPoutre.Dalle.LitArma(i).lActive = False
+        Next
 
         With myPoutre.Dalle.Bac
             .Hp = 58 / 1000
@@ -373,20 +376,72 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.Section.ResistanceTractionProfile(myPoutre.Param.Gamma.GammaM0)
         ValRef = 2718 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Na,Rd
 
         Dim Beff As Decimal
         Dim lSimple As Boolean = True 'booléen qui indique qu'on va utiliser le modèle simplifié pour le calcul de beff
         Beff = myPoutre.BeffDalle(myPoutre.Nodes.xTravee(iNodeMMax), myPoutre.IndicePremiereTravee, lSimple, False)
         Valeur = myPoutre.Dalle.NResistanceCompressionDalle(Beff, myPoutre.Param.Gamma.GammaC)
         ValRef = 2635 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Nc,Rd à mi travée
 
         Valeur = myPoutre.VerifMixte(0).DegConnex(myPoutre.IndicePremiereTravee, 0)
         ValRef = 2 * (7 / 0.207) * 37.4 * 1000 / (2636 * 1000) '/!\ J'ai corrigé la valeur de l'article car la valeur de PRd n'est pas exactement la même du fait que la valeur de Ecm n'est pas identique
         '   (31 GPa dans l'article est directement calculée dans le logiciel) + la valeur du nombre de connecteurs n'est pas identique non plus (arrondi au premier entier inférieur dans 
         ' l'article et on garde la valeur décimale dans le logiciel). Au final, on a un eta = 0.93 dans l'article et 0.96 avec le logiciel
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul du degré de connection 
+
+        '---------------------------------------------------
+        '---------------------------------------------------
+        ' --> Vérification de la résistance à la flexion
+        '---------------------------------------------------
+        '---------------------------------------------------
+
+        Dim zANE, MRk As Decimal
+        myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, 0, zANE, MRk)
+
+        Valeur = MRk
+        ValRef = 468.1 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
+
+        Valeur = myPoutre.VerifMixte(0).CritereM.Resistance(iNodeMMax)
+        ValRef = 838.175 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (834.6 kN.m) du fait que le NConnexion n'est pas identique
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
+
+        Valeur = myPoutre.VerifMixte(0).CritereM.CritereMax
+        ValRef = 0.78 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
+        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
+
+        '---------------------------------------------------
+        '---------------------------------------------------RT
+        ' --> Vérification de la résistance à l'effort tranchant 
+        '---------------------------------------------------
+        '---------------------------------------------------
+
+        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0)
+        ValRef = 807 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à l'effort tranchant
+
+        Valeur = myPoutre.VerifMixte(0).CritereV.CritereMax
+        ValRef = 0.232
+        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
+
+        '---------------------------------------------------
+        '---------------------------------------------------
+        ' --> Vérification de la résistance au voilement 
+        '---------------------------------------------------
+        '---------------------------------------------------
+
+        Assert.IsTrue(myPoutre.Section.IsInteractionMV(myPoutre.Param.EtaW) = False)
+
+        '---------------------------------------------------
+        '---------------------------------------------------
+        ' --> Vérification de la résistance à l'interaction MV
+        '---------------------------------------------------
+        '---------------------------------------------------
+
+        'Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
+
     End Sub
 
 

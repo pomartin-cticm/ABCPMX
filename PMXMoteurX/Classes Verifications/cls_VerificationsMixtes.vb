@@ -169,11 +169,11 @@
 
             MyPoutre.AnalyseDiagrammeMoments(MEd, iNodeMmax, Mmax, xMZero, lTraveeMomNeg)
 
-            '# Calcul des propriétés plastiques le long de la barre
+            '# Calcul des propriétés plastiques le long de la barre sans prise en compte de la réduction induit par l'effort tranchant 
 
             MyPoutre.MaillageRConnexion(xMZero, DeltaRd)
 
-            Me.MaillageProprietesPlastiques(MyPoutre, MEd, DeltaRd, Beff, zANP, MplRd)
+            Me.MaillageProprietesPlastiques(MyPoutre, MEd, DeltaRd, Beff, zANP, MplRd, 0)
 
             '# Classes des sections
 
@@ -197,11 +197,14 @@
 
             '# Vérification au voilement par cisaillement
 
+            If MyPoutre.Section.IsInteractionMV(MyPoutre.Param.EtaW) Then Me.RunCritereVoilementCisaillement(MyPoutre, iCombi, VEd, VbRd)
+
+            '# Calcul des propriétés plastiques le long de la barre avec prise en compte de la réduction induit par l'effort tranchant 
+
 
             '# Vérification sous interaction MV
 
 
-            '# 
 
         Next
 
@@ -209,7 +212,7 @@
     End Sub
 
     Private Sub MaillageProprietesPlastiques(MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal,
-                                             ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal)
+                                             ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal, ByVal rhoV As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   02/11/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -220,6 +223,7 @@
         '   MEd             [E] :   Diagramme de moment aux ELU
         '   DeltaRd         [E] :   Cumul des résistance des PRd entre les sections et les points de moment nul
         '   bEff            [E] :   Largeur efficace de dalle
+        '   RhoV            [E] :   Coefficient pour l'interaction MV
         '   pzANP           [S] :   position ANP
         '   pMplRd          [S] :   moment plastique (en fonction du signe de MEd)
         '----------------------------------------------------------------------------------------------------------
@@ -232,7 +236,7 @@
         Dim iNode As Integer
         Dim iNodeDeb, iNodeFin As Integer
         Dim kDeb, kfin As Integer
-        Const RhoV As Decimal = 1
+        'Dim RhoV As Decimal
         Dim Signe As Decimal
 
         '--> Initialisation

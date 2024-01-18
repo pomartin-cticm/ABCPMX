@@ -64,7 +64,7 @@ Public Class cls_Section
 #Region " Autres attributs "
 
     '# A DEGAGER ?
-    Public lArmaturesConcentrees As Boolean     ' Indique si on modélise les armatures par un cercle concentré
+    'Public lArmaturesConcentrees As Boolean     ' Indique si on modélise les armatures par un cercle concentré
 
 #End Region
 
@@ -1807,13 +1807,37 @@ Public Class cls_Section
         End Get
     End Property
 
+    Public ReadOnly Property Epsilon_Sup
+        Get
+            Return Me.Acier.get_epsilon(Me.FySup)
+        End Get
+    End Property
+
+    Public ReadOnly Property Epsilon_W
+        Get
+            Return Me.Acier.get_epsilon(Me.FyW)
+        End Get
+    End Property
+
+    Public ReadOnly Property Epsilon_Inf
+        Get
+            Return Me.Acier.get_epsilon(Me.FyInf)
+        End Get
+    End Property
+
+    Public ReadOnly Property Epsilon_Spd
+        Get
+            Return Me.Acier.get_epsilon(Me.FySpd)
+        End Get
+    End Property
+
     Public Function VplRd(GammaM0 As Decimal) As Decimal
 
         Dim MyVRd As Decimal = 0
 
         Select Case Me.typeSection
             Case Enum_TypeSection.AcierSeul, Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
-                MyVRd = Me.AireAv * Me.FyW / GammaM0 * kConvMPaPa
+                MyVRd = Me.AireAv * Me.FyW / (Math.Sqrt(3) * GammaM0) * kConvMPaPa
 
         End Select
 
@@ -1837,7 +1861,7 @@ Public Class cls_Section
 
         Dim lambda_w As Decimal
         Dim k_tau As Decimal
-        Dim epsilon_w As Decimal
+        Dim epsilon_w As Decimal = Me.Epsilon_W
         Dim khi_w As Decimal
         Dim MyVbRd As Decimal
         Dim EN1993 As New cls_Eurocodes
@@ -1845,12 +1869,13 @@ Public Class cls_Section
         '--> Initialisation
 
         k_tau = 5.34
-        epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
+        'epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
+        epsilon_w = epsilon_w
         lambda_w = (Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) * (1 / (37.4 * epsilon_w * Math.Sqrt(k_tau)))
 
         khi_w = EN1993.ReductionShearBuckling(lambda_w, EtaW, lMontantRigid)
 
-        MyVbRd = khi_w * Me.ProfilA.HauteurAmeHw * Me.ProfilA.Tw * Me.Acier.f_y.w / (Math.Sqrt(3) * GammaM1)
+        MyVbRd = khi_w * Me.ProfilA.HauteurAmeHw * Me.ProfilA.Tw * Me.FyW / (Math.Sqrt(3) * GammaM1)
 
         Return MyVbRd
 
@@ -1887,6 +1912,22 @@ Public Class cls_Section
         End If
 
         Return Rho
+    End Function
+
+    ''' <summary>
+    ''' Fonction qui calcul si l'ame du profilé étudié est sensible au voilement par cisaillement (True) ou non (False)
+    ''' </summary>
+    ''' <param name="eta"> parametre eta, utile pour les profilés sans enrobage </param>
+    ''' <returns></returns>
+    Public Function IsInteractionMV(eta As Decimal) As Boolean
+        Select Case Me.typeSection
+            Case Enum_TypeSection.AcierSeul, Enum_TypeSection.Mixte
+                Return Not ((Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) <= 72 * Me.Epsilon_W / eta)
+            Case Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.MixteEnrobage
+                Return Not ((Me.ProfilA.HauteurAmeDw / Me.ProfilA.Tw) <= 124 * Me.Epsilon_W)
+            Case Else 'slimfloor -> l'ame du profilé n'est pas sensible au voilement par cisaillement 
+                Return False
+        End Select
     End Function
 
     'Public ReadOnly Property RhoVCalcul As Decimal
@@ -2058,8 +2099,8 @@ Public Class cls_Section
         Dim classeSemellesSup, classeAme, classeSemellesInf, classePlatInfSFB, classeSectionTotale As Integer
         Dim lSemelleSupComprimeeLoc, lSemelleInfComprimeeLoc As Boolean
         Dim cfsup, tfsup, cfinf, tfinf, cplat, tplat As Decimal
-        Dim epsilon_fsup As Decimal = Me.Acier.epsilon_fs
-        Dim epsilon_finf As Decimal = Me.Acier.epsilon_fi
+        Dim epsilon_fsup As Decimal = Epsilon_Sup
+        Dim epsilon_finf As Decimal = Epsilon_Inf
         Dim epsilon_platSFB As Decimal = 0
         ' Dim alpha, psi As Decimal
 
@@ -2094,7 +2135,7 @@ Public Class cls_Section
 
         ' --> Calcul classe semelle plat inférieur dans le cas d'un SFB
         If Me.typeSection = cls_Section.Enum_TypeSection.SFB Or Me.typeSection = cls_Section.Enum_TypeSection.SFBmixte Then
-            epsilon_platSFB = Me.Acier.epsilon_sp
+            epsilon_platSFB = Me.Epsilon_Spd
             classePlatInfSFB = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cplat, tplat, epsilon_platSFB) 'calcul la classe du plat soudé dans le cas des sections slimfloors en fonction de si elle est comprimée et du ratio c/t
         Else
             classePlatInfSFB = 0
@@ -2388,7 +2429,7 @@ Public Class cls_Section
         '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
         '----------------------------------------------------------------------------------------------------------
 
-        Dim epsilon_w As Decimal = Me.Acier.epsilon_w
+        Dim epsilon_w As Decimal = Me.Epsilon_W
         Dim alpha, psi As Decimal
         Dim classeAmeLoc As Integer
 

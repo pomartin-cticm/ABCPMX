@@ -837,12 +837,14 @@ Imports PMXMoteur2
 
         '# Armatures
 
-        MyDalle.lArma_Inf = False
-        MyDalle.lArma_Sup = True
+        'MyDalle.lArma_Inf = False
+        'MyDalle.lArma_Sup = True
 
         MyDalle.LitArma(0).EspBar = 0.3
         MyDalle.LitArma(0).z_s = 0.035
         MyDalle.LitArma(0).PhiS = 0.016
+        MyDalle.LitArma(0).lActive = True
+        MyDalle.LitArma(1).lActive = False
 
         MyDalle.AcierArmatures.Classe = cls_AcierArmature.tabClasseAcierArma(1)     '"B500
         MyDalle.AcierArmatures.MAJProprietes()
@@ -939,12 +941,14 @@ Imports PMXMoteur2
 
         '# Armatures
 
-        MyDalle.lArma_Inf = False
-        MyDalle.lArma_Sup = True
+        'MyDalle.lArma_Inf = False
+        'MyDalle.lArma_Sup = True
 
         MyDalle.LitArma(0).EspBar = 0.2
         MyDalle.LitArma(0).z_s = 0.03
         MyDalle.LitArma(0).PhiS = 0.02
+        MyDalle.LitArma(0).lActive = True
+        MyDalle.LitArma(1).lActive = False
 
         MyDalle.AcierArmatures.Classe = cls_AcierArmature.tabClasseAcierArma(1)     '"B500
         MyDalle.AcierArmatures.MAJProprietes()
@@ -1113,6 +1117,7 @@ Imports PMXMoteur2
             .ha = 290 / 1000
             .Tw = 7 / 1000
         End With
+
 
         section.Acier.f_y.fs = 250
         section.Acier.f_y.fi = 275
