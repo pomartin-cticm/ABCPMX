@@ -1975,11 +1975,11 @@ Public Class cls_Poutre
                 Me.BeffDalle(Me.LongueurTravee(i_travee) / 2, i_travee, False, False, EnuTypeLargeurParticipante.LargeurTotale, LargeurParticipante)
 
                 'Calcul de hf qui correspond à la longueur developpe de la surface de ruine 
-                hf_aa = Me.Dalle.t_d
+                hf_aa = Me.Dalle.EpaisseurActive
                 If nr = 1 Then
-                    hf_bb = 2 * Me.Dalle.Connecteur.hsc + b0
-                Else
                     hf_bb = 2 * Me.Dalle.Connecteur.hsc + Me.Dalle.Connecteur.d 'GUD: a confirmer avec les corrections apportées dans le MT 
+                Else
+                    hf_bb = 2 * Me.Dalle.Connecteur.hsc + b0
                 End If
                 hf_dd = b0 + 2 * (Me.Section.ProfilA.Bfs - b0 + Me.Dalle.Connecteur.hsc * Math.Tan(Me.Dalle.ThetaRd)) / Math.Sqrt(1 + Math.Tan(Me.Dalle.ThetaRd) ^ 2)
 

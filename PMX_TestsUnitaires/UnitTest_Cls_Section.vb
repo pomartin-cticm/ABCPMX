@@ -1118,7 +1118,7 @@ Imports PMXMoteur2
             .Tw = 7 / 1000
         End With
 
-
+        section.Acier.lUser = True
         section.Acier.f_y.fs = 250
         section.Acier.f_y.fi = 275
         section.Acier.f_y.w = 300

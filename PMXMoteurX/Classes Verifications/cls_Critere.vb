@@ -2,9 +2,9 @@
 
 #Region " Attributs "
 
-    Public Critere() As Decimal         ' Valeur du critere le long de la barre
-    Public Action() As Decimal          ' Valeur de l'action donnant le critère max en un point donné
-    Public Resistance() As Decimal      ' Valeur de l'action donnant le critère max en un point donné
+    Public Critere() As Decimal         ' Valeur du critere le long de la barre pour la combinaison en cours
+    Public Action() As Decimal          ' Valeur de l'action donnant le critère max en un point donné pour la combinaison en cours
+    Public Resistance() As Decimal      ' Valeur de l'action donnant le critère max en un point donné pour la combinaison en cours
     Public iCombiNodeM() As Integer     ' Indice de la combinaison donnant le critère max en un point donné
 
     Public CritereMax As Decimal        ' Valeur maximale du critere

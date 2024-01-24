@@ -130,17 +130,18 @@ Public Class cls_Section
 
         Dim Fsk As Decimal = MyDalle.AcierArmatures.FsK
         Dim ArmaNeq As Decimal = cls_Acier.EYACIER / MyDalle.AcierArmatures.Es
-        Dim Td As Decimal
+        'Dim Td As Decimal
         Dim PhiS, zArma, EspBar As Decimal
-        Dim Ztop, Th As Decimal
+        'Dim Ztop, Th As Decimal
+        Dim Ztop As Decimal
         Dim iArma As Integer
         Dim nbBar As Decimal
         Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
 
         '--> Initialisation
 
-        Td = MyDalle.t_d
-        Th = MyDalle.EpRenformis
+        'Td = MyDalle.t_d
+        'Th = MyDalle.EpRenformis
         Ztop = MyDalle.zTop
 
         '--> Boucle sur les lits d'armature
@@ -1101,12 +1102,12 @@ Public Class cls_Section
 
         Dim nEqEc As Decimal = 1            ' On Applique 1 car calcul plastique
         Const nEqD As Decimal = 1           ' Idem
-        Dim NPro As Decimal
+        'Dim NPro As Decimal
 
         '--> Initialisation
 
         Hw = Me.ProfilA.HauteurAmeHw
-        NPro = Me.ResistanceTractionProfile(Gammas.GammaM0)
+        'NPro = Me.ResistanceTractionProfile(Gammas.GammaM0)
 
         '--> Modélisation du profilé acier
 
@@ -1752,11 +1753,16 @@ Public Class cls_Section
         Get
             Dim MyFy As Decimal
 
-            If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
-                MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
+            If Me.Acier.lUser Then
+                MyFy = Me.Acier.f_y.fs
             Else
-                MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tfs)
+                If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                    MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
+                Else
+                    MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tfs)
+                End If
             End If
+
 
             Return MyFy
         End Get
@@ -1771,10 +1777,14 @@ Public Class cls_Section
             'Return Me.Acier.LimiteFy(Me.ProfilA.Tfi)
             Dim MyFy As Decimal
 
-            If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
-                MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfi, Me.ProfilA.Tw))
+            If Me.Acier.lUser Then
+                MyFy = Me.Acier.f_y.fi
             Else
-                MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tfi)
+                If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                    MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfi, Me.ProfilA.Tw))
+                Else
+                    MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tfi)
+                End If
             End If
 
             Return MyFy
@@ -1787,13 +1797,16 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property FyW As Decimal
         Get
-            'Return Me.Acier.LimiteFy(Me.ProfilA.Tw)
             Dim MyFy As Decimal
 
-            If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
-                MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
+            If Me.Acier.lUser Then
+                MyFy = Me.Acier.f_y.w
             Else
-                MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tw)
+                If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                    MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
+                Else
+                    MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tw)
+                End If
             End If
 
             Return MyFy
@@ -1802,8 +1815,15 @@ Public Class cls_Section
 
     Public ReadOnly Property FySpd As Decimal
         Get
-            'GUD: /!\ A discuter car j'ai un doute /!\
-            Return Me.Acier.LimiteFy(Me.ProfilA.Plat_t)
+            Dim MyFy As Decimal
+
+            If Me.Acier.lUser Then
+                MyFy = Me.Acier.f_y.spd
+            Else
+                MyFy = Me.Acier.LimiteFy(Me.ProfilA.Plat_t)
+            End If
+
+            Return MyFy
         End Get
     End Property
 
@@ -2853,6 +2873,7 @@ Public Class cls_Section
                                 End If
                             Next
                         Case "QUAL" : Me.Acier.Qualite = Mots(nbMots)
+                        Case "LUSE" : Me.Acier.lUser = Mots(nbMots)
                         Case "FYW" : Me.Acier.f_y.w = Mots(nbMots)
                         Case "FYFS" : Me.Acier.f_y.fs = Mots(nbMots)
                         Case "FYFI" : Me.Acier.f_y.fi = Mots(nbMots)

@@ -10,6 +10,7 @@
 
     Public CritereM As cls_Critere                  ' Resistance à la flexion
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
+    Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
     Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
 
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
@@ -17,6 +18,8 @@
     Public CritereSigmaArmaC As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures de la dalle
     Public CritereSigmaE As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton d'enrobage
     Public CritereSigmaArmaE As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures d'enrobage
+
+    Public RhoV As Decimal(,)                       ' Coefficient d'interaction : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
 
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
@@ -36,6 +39,7 @@
         Me.CritereM = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         Me.CritereV = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         Me.CritereVb = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereMV = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
 
     End Sub
 
@@ -77,10 +81,10 @@
         Dim VplRd As Decimal                            ' Effort tranchant résistant (a priori constant le long de la poutre)
         Dim VbRd As Decimal                             ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
         Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
-        Dim MplRdPlus() As Decimal = {0}                ' Moments plastiques positifs
-        Dim MplRdMoins() As Decimal = {0}               ' Moments plastiques négatifs
-        Dim zANPPlus() As Decimal = {0}                 ' Position des ANP sous moment > 0
-        Dim zANPMoins() As Decimal = {0}                ' Position des ANP sous moment < 0
+        'Dim MplRdPlus() As Decimal = {0}                ' Moments plastiques positifs
+        'Dim MplRdMoins() As Decimal = {0}               ' Moments plastiques négatifs
+        'Dim zANPPlus() As Decimal = {0}                 ' Position des ANP sous moment > 0
+        'Dim zANPMoins() As Decimal = {0}                ' Position des ANP sous moment < 0
         Dim zANE(,) As Decimal = Nothing                ' Position des ANE sous moment 
         Const lCombiRetrait = False                     '#ALERTE Pour le moment, à pondérer plus tard
         Dim lRElastiqueImpose As Boolean = False        ' Vérification élastique imposée
@@ -105,7 +109,9 @@
         Dim DeltaRd() As List(Of Decimal) = Nothing
 
         Dim zANP(,) As Decimal = Nothing                ' Position ANP, tenant compte de MEd et du degré de connexion
+        Dim zANPMV(,) As Decimal = Nothing                ' Position ANP, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
         Dim MplRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de MEd et du degré de connexion
+        Dim MVRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
 
         '--> Initialisations
 
@@ -116,6 +122,7 @@
         '# Critères
 
         Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee)
+        Me.InitialiseRhoV(cls_Poutre.nbCombELU, MyPoutre.Nodes.nbNodes)
 
         '# Largeurs participantes
 
@@ -131,10 +138,10 @@
 
         VbRd = MyPoutre.Section.VbRd(MyPoutre.Param.Gamma.GammaM1, MyPoutre.Param.EtaW, lTwoAdjacentCantilevers)
 
-        '# Moments plastiques
+        '# Moments plastiques /!\ GUD: J'ai l'impression que ces 2 lignes ne servent pas pour la suite, A DISCUTER /!\
 
-        MyPoutre.MaillagePropPlastiquesMixtes(Beff, 1, True, MplRdPlus, zANPPlus)
-        MyPoutre.MaillagePropPlastiquesMixtes(Beff, 1, True, MplRdMoins, zANPMoins)
+        'MyPoutre.MaillagePropPlastiquesMixtes(Beff, 1, True, MplRdPlus, zANPPlus)
+        'MyPoutre.MaillagePropPlastiquesMixtes(Beff, 1, True, MplRdMoins, zANPMoins)
 
         '# Propriétés élastiques
 
@@ -169,11 +176,13 @@
 
             MyPoutre.AnalyseDiagrammeMoments(MEd, iNodeMmax, Mmax, xMZero, lTraveeMomNeg)
 
-            '# Calcul des propriétés plastiques le long de la barre sans prise en compte de la réduction induit par l'effort tranchant 
+            '# Calcul des propriétés plastiques le long de la barre,
+            ' avec prise en compte de la connection,
+            ' sans prise en compte de la réduction induit par l'effort tranchant 
 
             MyPoutre.MaillageRConnexion(xMZero, DeltaRd)
 
-            Me.MaillageProprietesPlastiques(MyPoutre, MEd, DeltaRd, Beff, zANP, MplRd, 0)
+            Me.MaillageProprietesPlastiques(iCombi, MyPoutre, MEd, DeltaRd, Beff, zANP, MplRd)
 
             '# Classes des sections
 
@@ -199,20 +208,27 @@
 
             If MyPoutre.Section.IsInteractionMV(MyPoutre.Param.EtaW) Then Me.RunCritereVoilementCisaillement(MyPoutre, iCombi, VEd, VbRd)
 
-            '# Calcul des propriétés plastiques le long de la barre avec prise en compte de la réduction induit par l'effort tranchant 
+            '# Calcul du critère d'intéraction rhoV
 
+            Me.CalculRhoV(iCombi, MyPoutre)
+
+            '# Calcul des propriétés plastiques le long de la barre,
+            ' avec prise en compte de la connection,
+            ' sans prise en compte de la réduction induit par l'effort tranchant 
+
+            Me.MaillageProprietesPlastiques(iCombi, MyPoutre, MEd, DeltaRd, Beff, zANPMV, MVRd, Me.RhoV)
 
             '# Vérification sous interaction MV
 
-
+            Me.RunCriteresInteractionMV(MyPoutre, iCombi, MEd, MVRd)
 
         Next
 
 
     End Sub
 
-    Private Sub MaillageProprietesPlastiques(MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal,
-                                             ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal, ByVal rhoV As Decimal)
+    Private Sub MaillageProprietesPlastiques(iCombi As Integer, MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal,
+                                             ByRef pzANP(,) As Decimal, ByRef pMPlRd(,) As Decimal, Optional rhoV As Decimal(,) = Nothing)
         '----------------------------------------------------------------------------------------------------------
         '   02/11/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -236,7 +252,7 @@
         Dim iNode As Integer
         Dim iNodeDeb, iNodeFin As Integer
         Dim kDeb, kfin As Integer
-        'Dim RhoV As Decimal
+        Dim rhoVLoc As Decimal
         Dim Signe As Decimal
 
         '--> Initialisation
@@ -259,9 +275,16 @@
 
                 If IsEqual(MEd(iNode, kDeb), 0) Then Signe = 1 Else Signe = Math.Sign(MEd(iNode, kDeb))
 
+
+                If rhoV Is Nothing Then
+                    rhoVLoc = 0
+                Else
+                    rhoVLoc = rhoV(iCombi, iNode)
+                End If
+
                 'MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, RhoV,
                 '                                                 bEff(iNode), DeltaRd(iTravee)(iNodeDeb + iNode), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
-                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, RhoV,
+                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
                                                                  bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, pzANP(iNode, kDeb), pMPlRd(iNode, kDeb))
 
                 If kfin > kDeb Then
@@ -383,36 +406,36 @@
 
 #Region " Critères de vérification "
 
-    Private Sub RunCritereMoments(MyPoutre As cls_Poutre, iCombi As Integer, lClasse3 As Boolean,
-                                  MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   25/10/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance au moment fléchissant 
-        '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
-        '   iCombi  [E] :   Indice de la combinaison
-        '   lClasse3[E] :   Indique si présence de section de classe 3
-        '   MEd     [E] :   Table des moments fléchissants le long de la barre
-        '   SigmaELU[E] :   Contraintes normales aux ELU
-        '   MplRdP  [E] :   Table des moments plastiques > 0 le long de la barre
-        '   MplRdM  [E] :   Table des moments plastiques < 0 le long de la barre
-        '----------------------------------------------------------------------------------------------------------
+    'Private Sub RunCritereMoments(MyPoutre As cls_Poutre, iCombi As Integer, lClasse3 As Boolean,
+    '                              MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   25/10/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Vérification aux ELU de la résistance au moment fléchissant 
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   MyPoutre[E] :   Poutre traitée
+    '    '   iCombi  [E] :   Indice de la combinaison
+    '    '   lClasse3[E] :   Indique si présence de section de classe 3
+    '    '   MEd     [E] :   Table des moments fléchissants le long de la barre
+    '    '   SigmaELU[E] :   Contraintes normales aux ELU
+    '    '   MplRdP  [E] :   Table des moments plastiques > 0 le long de la barre
+    '    '   MplRdM  [E] :   Table des moments plastiques < 0 le long de la barre
+    '    '----------------------------------------------------------------------------------------------------------
 
-        '--> Critère de résistance en flexion
+    '    '--> Critère de résistance en flexion
 
-        If MyPoutre.Param.lElasticDesign Then
-            '# Résistance élastique VM imposée
-            Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee)
-            RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
-        ElseIf lClasse3 Then
-            '# Présence d'au moins une section de classe 3
-            RunCritereMomentsElastiques(MyPoutre, iCombi, MEd)
-        Else
-            '# Résistance plastique possible
-            RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdP, MplRdM)
-        End If
-    End Sub
+    '    If MyPoutre.Param.lElasticDesign Then
+    '        '# Résistance élastique VM imposée
+    '        Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee)
+    '        RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
+    '    ElseIf lClasse3 Then
+    '        '# Présence d'au moins une section de classe 3
+    '        RunCritereMomentsElastiques(MyPoutre, iCombi, MEd)
+    '    Else
+    '        '# Résistance plastique possible
+    '        RunCriteresMomentsPlastiques(MyPoutre, iCombi, MEd, MplRdP, MplRdM)
+    '    End If
+    'End Sub
 
     Private Sub RunCritereMoments(MyPoutre As cls_Poutre, iCombi As Integer, lClasse3 As Boolean,
                                   MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRd(,) As Decimal)
@@ -618,57 +641,57 @@
 
     End Sub
 
-    Private Sub RunCriteresMomentsPlastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   05/10/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance au moment fléchissant (critère de résistance plastique)
-        '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
-        '   iCombi  [E] :   Indice de la combinaison
-        '   MEd     [E] :   Table des moments fléchissants le long de la barre
-        '   MplRdP  [E] :   Table des moments plastiques > 0 le long de la barre
-        '   MplRdM  [E] :   Table des moments plastiques < 0 le long de la barre
-        '----------------------------------------------------------------------------------------------------------
+    'Private Sub RunCriteresMomentsPlastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   05/10/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Vérification aux ELU de la résistance au moment fléchissant (critère de résistance plastique)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   MyPoutre[E] :   Poutre traitée
+    '    '   iCombi  [E] :   Indice de la combinaison
+    '    '   MEd     [E] :   Table des moments fléchissants le long de la barre
+    '    '   MplRdP  [E] :   Table des moments plastiques > 0 le long de la barre
+    '    '   MplRdM  [E] :   Table des moments plastiques < 0 le long de la barre
+    '    '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim iNode, k As Integer
-        'Dim Sigma As Decimal
-        Dim iTravee, iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        Dim iDebK, iFinK As Integer
-        Const SIGNEM As Decimal = 1
-        Dim MRd As Decimal
+    '    Dim iNode, k As Integer
+    '    'Dim Sigma As Decimal
+    '    Dim iTravee, iDebT, iFinT As Integer
+    '    Dim iDebN, iFinN As Integer
+    '    Dim iDebK, iFinK As Integer
+    '    Const SIGNEM As Decimal = 1
+    '    Dim MRd As Decimal
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        iDebT = MyPoutre.IndicePremiereTravee
-        iFinT = MyPoutre.IndiceDerniereTravee
+    '    iDebT = MyPoutre.IndicePremiereTravee
+    '    iFinT = MyPoutre.IndiceDerniereTravee
 
-        '--> Traitement
+    '    '--> Traitement
 
-        For iTravee = iDebT To iFinT
-            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+    '    For iTravee = iDebT To iFinT
+    '        iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+    '        iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For iNode = iDebN To iFinN
-                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
-                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+    '        For iNode = iDebN To iFinN
+    '            If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+    '            If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
 
-                For k = iDebK To iFinK
-                    If MEd(iNode, k) * SIGNEM > 0 Then
-                        MRd = MplRdP(iNode)
-                    Else
-                        MRd = MplRdM(iNode)
-                    End If
-                    Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MRd)
-                Next
-            Next
-        Next
+    '            For k = iDebK To iFinK
+    '                If MEd(iNode, k) * SIGNEM > 0 Then
+    '                    MRd = MplRdP(iNode)
+    '                Else
+    '                    MRd = MplRdM(iNode)
+    '                End If
+    '                Me.CritereM.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MRd)
+    '            Next
+    '        Next
+    '    Next
 
 
-    End Sub
+    'End Sub
 
     Private Sub RunCritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
         '----------------------------------------------------------------------------------------------------------
@@ -752,6 +775,99 @@
             Next
         Next
 
+    End Sub
+
+    Private Sub RunCriteresInteractionMV(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MVRd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   23/01/2023 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'interaction MV (critère de résistance plastique)
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   MEd     [E] :   Table des moments fléchissants le long de la barre
+        '   MplRd   [E] :   Table des moments plastiques le long de la barre (calculés en fonction du signe de MEd)
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        'Dim Sigma As Decimal
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+                For k = iDebK To iFinK
+                    Me.CritereMV.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MVRd(iNode, k))
+                Next
+            Next
+        Next
+
+
+    End Sub
+
+#End Region
+
+#Region "Calcul coefficient d'interaction RhoV"
+
+    Private Sub InitialiseRhoV(NbCombi As Integer, NbNodes As Integer)
+        ReDim Me.RhoV(NbCombi - 1, NbNodes - 1)
+    End Sub
+
+    ''' <summary>
+    ''' Fonction qui calcul le coefficient d'interaction en fonction du critèreV = VEd/VRd
+    ''' </summary>
+    ''' <param name="iCombi">indice de la combinaison en cours</param>
+    ''' <param name="MyPoutre">poutre en cours</param>
+    Public Sub CalculRhoV(iCombi As Integer, MyPoutre As cls_Poutre)
+        '--> Déclaration
+
+        Dim rhoV As Decimal
+        Dim critereV As Decimal
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                critereV = Me.CritereV.Critere(iNode)
+
+                If critereV >= 1 Then
+                    rhoV = 1
+                ElseIf critereV <= 0.5 Then
+                    rhoV = 0
+                Else
+                    rhoV = (2 * critereV - 1) ^ 2
+                End If
+
+                Me.RhoV(iCombi, iNode) = rhoV
+            Next
+        Next
     End Sub
 
 #End Region
@@ -921,7 +1037,7 @@
 
         Const ETAMINREF As Decimal = 0.4
 
-        Return etaminref
+        Return ETAMINREF
 
     End Function
 

@@ -17,7 +17,7 @@ Public Class cls_Acier
 
 #Region " Attributs "
 
-    Private lUser As Boolean = False
+    Public lUser As Boolean = False
 
     ''' <summary>
     ''' nuance de l'acier : S235,S275,S355,S420 ou S460
@@ -47,7 +47,6 @@ Public Class cls_Acier
     ''' /!\ fysp n'est a priori utile que pour les slimfloors SFB (a discuter) /!\
     ''' </summary>
     Public f_y As (w As Decimal, fs As Decimal, fi As Decimal, spd As Decimal)
-
 
     Public Plages As List(Of strucPlage)
 
@@ -292,6 +291,7 @@ Public Class cls_Acier
 
         Lines.Add("   Nuance        = " & Nuance)
         Lines.Add("   Qualite       = " & Qualite)
+        Lines.Add("   lUser       = " & lUser)
         Lines.Add("   Fyw           = " & f_y.w)
         Lines.Add("   Fyfs          = " & f_y.fs)
         Lines.Add("   Fyfi          = " & f_y.fi)

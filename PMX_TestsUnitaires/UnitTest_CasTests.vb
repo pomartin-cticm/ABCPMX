@@ -154,7 +154,9 @@ Imports PMXMoteur2
         End With
 
         myPoutre.NombreZones(myPoutre.IndicePremiereTravee) = 1
-        myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0) = 2
+        myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0) = 1
+        myPoutre.Espacement_Bac_TransZone(myPoutre.IndicePremiereTravee, 0) = 1
+        myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
         myPoutre.lAutomaticDesign = False
 
         'MATERIAUX
@@ -339,17 +341,24 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Calcul avec 1 connecteur par onde 
-        Valeur = myPoutre.Dalle.Connecteur.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
+        Valeur = myPoutre.Dalle.Connecteur.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
                                                          myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                         1, myPoutre.Dalle.beton.Fck,
+                                                         myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
                                                          31000, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 52.5 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        Valeur = myPoutre.Dalle.Connecteur.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
+                                                         myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
+                                                         myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
+                                                         myPoutre.Dalle.beton.Ecm, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
+        ValRef = 52.897 * 1000 'VALEUR CALCULEE à la main avec le vrai Ecm = 31.476 GPa
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Calcul avec 2 connecteurs par ondes
         Valeur = myPoutre.Dalle.Connecteur.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
                                                          myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
-                                                         myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
+                                                         2, myPoutre.Dalle.beton.Fck,
                                                          31000, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 37.1 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
@@ -386,10 +395,10 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Nc,Rd à mi travée
 
         Valeur = myPoutre.VerifMixte(0).DegConnex(myPoutre.IndicePremiereTravee, 0)
-        ValRef = 2 * (7 / 0.207) * 37.4 * 1000 / (2636 * 1000) '/!\ J'ai corrigé la valeur de l'article car la valeur de PRd n'est pas exactement la même du fait que la valeur de Ecm n'est pas identique
+        ValRef = 1 * (7 / 0.207) * 52.516 * 1000 / (2636 * 1000) '/!\ J'ai corrigé la valeur de l'article car la valeur de PRd n'est pas exactement la même du fait que la valeur de Ecm n'est pas identique
         '   (31 GPa dans l'article est directement calculée dans le logiciel) + la valeur du nombre de connecteurs n'est pas identique non plus (arrondi au premier entier inférieur dans 
-        ' l'article et on garde la valeur décimale dans le logiciel). Au final, on a un eta = 0.93 dans l'article et 0.96 avec le logiciel
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul du degré de connection 
+        ' l'article et on garde la valeur décimale dans le logiciel). Au final, on a un eta = 0.658 dans l'article et 0.674 avec le logiciel
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul du degré de connection 
 
         '---------------------------------------------------
         '---------------------------------------------------
@@ -405,15 +414,15 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
 
         Valeur = myPoutre.VerifMixte(0).CritereM.Resistance(iNodeMMax)
-        ValRef = 838.175 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (834.6 kN.m) du fait que le NConnexion n'est pas identique
+        ValRef = 783.29 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (779.4 kN.m) du fait que le NConnexion n'est pas identique
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
         Valeur = myPoutre.VerifMixte(0).CritereM.CritereMax
-        ValRef = 0.78 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
+        ValRef = 0.836 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
 
         '---------------------------------------------------
-        '---------------------------------------------------RT
+        '---------------------------------------------------
         ' --> Vérification de la résistance à l'effort tranchant 
         '---------------------------------------------------
         '---------------------------------------------------
@@ -425,6 +434,15 @@ Imports PMXMoteur2
         Valeur = myPoutre.VerifMixte(0).CritereV.CritereMax
         ValRef = 0.232
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
+
+        Dim rhoV As Decimal
+        If ValRef <= 0.5 Then
+            rhoV = 0
+        ElseIf ValRef >= 1 Then
+            rhoV = 1
+        Else
+            rhoV = (2 * 0.232 - 1) ^ 2 'Valeur calculée par rapport à la valeur de référence. Sera utile pour l'interacion MV
+        End If
 
         '---------------------------------------------------
         '---------------------------------------------------
@@ -440,7 +458,42 @@ Imports PMXMoteur2
         '---------------------------------------------------
         '---------------------------------------------------
 
-        'Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
+        '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
+
+
+        myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, rhoV, zANE, MRk)
+
+        Valeur = MRk
+        ValRef = 468.1 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
+
+        Valeur = myPoutre.VerifMixte(0).CritereMV.Resistance(iNodeMMax)
+        ValRef = 783.29 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (834.6 kN.m) du fait que le NConnexion n'est pas identique
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
+
+        Valeur = myPoutre.VerifMixte(0).CritereMV.CritereMax
+        ValRef = 0.836 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
+        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
+
+        '---------------------------------------------------
+        '---------------------------------------------------
+        ' --> Vérification du dimensionnement des armatures transversales 
+        '---------------------------------------------------
+        '---------------------------------------------------
+
+        myPoutre.CalculArmaturesTransversales()
+
+        '--> TauEd
+
+        Valeur = 2.06 'Flux de cisaillement max transmis par la dalle de part et d'autre de la poutrelle (VALEUR RECALCULEE avec le vrai PRd = 52.897 kN et non 52.5 kN. Dans l'article, on a tauEd = 2.04 MPa)
+        ValRef = myPoutre.TauEd(myPoutre.IndicePremiereTravee, 0, 0)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
+
+        '--> Thetaf
+
+        Valeur = 0.5 * Math.Asin(2 * 2.06 / (0.54 * 16.7)) 'VALEUR RECALCULEE car dans l'article on considère conservativement theta = 45°
+        ValRef = myPoutre.Thetaf(myPoutre.IndicePremiereTravee, 0, 0)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
     End Sub
 
