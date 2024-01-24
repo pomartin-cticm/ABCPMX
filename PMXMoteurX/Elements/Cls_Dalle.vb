@@ -178,7 +178,7 @@
                 perimU = 2 * Me.Beff - Bfs + 2 * Me.t_h / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
 
             Case Enum_TypeDalle.Mixte 'Ne faut-il pas différencier le cas du bac perpendiculaire et // ?
-                If Me.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
+                If Me.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
                     Ac = Me.Beff * (Me.EpaisseurActive + Bac.Hp * Bac.LargeurBmoyenne / Bac.Ep)
                     perimU = Me.Beff
                 Else 'RAJOUT GUD: j'ai rajouter le IF + les formules du ELSE

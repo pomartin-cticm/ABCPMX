@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mod_Outils.vb" />
+    <Compile Include="UnitTest_Cls_Dalle.vb" />
     <Compile Include="UnitTest_CasTests.vb" />
     <Compile Include="UnitTest_cls_Eurocodes.vb" />
     <Compile Include="UnitTest_cls_MaintienBac.vb" />

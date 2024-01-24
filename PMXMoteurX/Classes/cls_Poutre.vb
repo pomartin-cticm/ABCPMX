@@ -283,7 +283,7 @@ Public Class cls_Poutre
     Public TauEd(,,) As Decimal
 
     ''' <summary>
-    ''' Angle de la bielle de compression / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
+    ''' Angle de la bielle de compression EN RADIAN / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
     ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
@@ -291,7 +291,7 @@ Public Class cls_Poutre
     Public Thetaf(,,) As Decimal
 
     ''' <summary>
-    ''' Angle min de la bielle de compression (dépend de si la zone se situe en flexion positive ou négative)
+    ''' Angle min de la bielle de compression EN RADIAN (dépend de si la zone se situe en flexion positive ou négative)
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0, 1 ou 2)
     ''' </summary>
@@ -338,16 +338,33 @@ Public Class cls_Poutre
     End Property
 
     ''' <summary>
-    ''' Propriétés renvoyant la densité d'armatures min à disposer
+    ''' Fonction renvoyant la densité d'armatures min à disposer (m2/m2)
     ''' </summary>
     ''' <returns></returns>
-    Public ReadOnly Property rho_t_min As Decimal
-        Get
-            Dim rho_loc As Decimal
-            rho_loc = 0.08 * Math.Sqrt(Me.Dalle.beton.Fck) / Me.Dalle.AcierArmatures.FsK
-            Return rho_loc
-        End Get
-    End Property
+    Public Function rho_t_min() As Decimal
+        Dim rho_loc As Decimal
+        rho_loc = 0.08 * Math.Sqrt(Me.Dalle.beton.Fck) / Me.Dalle.AcierArmatures.FsK
+        Return rho_loc
+
+    End Function
+
+    ''' <summary>
+    ''' Fonction renvoyant la quantité d'armatures min à disposer (m2/m) selon le §9.2.2 (5) de l'EC2
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function As_min_EC2() As Decimal
+        Dim Asmin As Decimal
+        Asmin = Me.rho_t_min * Me.Dalle.EpaisseurActive
+        Return Asmin
+    End Function
+
+    ''' <summary>
+    ''' Fonction renvoyant la quantité d'armatures min à disposer (m2/m) selon le §9.2.1 (4) de l'EC4
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function As_min_EC4() As Decimal
+        Return 80 * 10 ^ (-6) '80 mm2/m
+    End Function
 
 #End Region
 
@@ -1896,6 +1913,9 @@ Public Class cls_Poutre
 
 #Region "Calcul des armatures transversales"
 
+    ''' <summary>
+    ''' Calcul la contrainte tangentielle induite par les connecteurs 
+    ''' </summary>
     Sub CalculArmaturesTransversales()
         '------------------------------------------------------------------------------------------------------------------
         '    17/11/23 : Création - GUD
