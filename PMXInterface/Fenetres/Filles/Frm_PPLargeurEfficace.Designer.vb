@@ -141,7 +141,7 @@ Partial Class Frm_PPLargeurEfficace
         Me.img_Portees.TabIndex = 1
         Me.img_Portees.TabStop = False
         '
-        'Frm_LargeurEfficace
+        'Frm_PPLargeurEfficace
         '
         Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -149,7 +149,10 @@ Partial Class Frm_PPLargeurEfficace
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(868, 484)
         Me.Controls.Add(Me.pan_General)
-        Me.Name = "Frm_LargeurEfficace"
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
+        Me.Name = "Frm_PPLargeurEfficace"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_LargeurEfficace"
         Me.pan_General.ResumeLayout(False)

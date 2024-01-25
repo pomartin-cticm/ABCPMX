@@ -325,6 +325,9 @@ Partial Class Frm_OptionsLogiciel
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 453)
         Me.Controls.Add(Me.pan_Main)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_OptionsLogiciel"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_OptionsLogiciel"

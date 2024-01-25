@@ -32,8 +32,7 @@ Partial Class Frm_PPCasDeCharge
         Me.lbl_CasDeCharges = New System.Windows.Forms.Label()
         Me.Pan_Affichage = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.pan_Image = New System.Windows.Forms.Panel()
-        Me.img_Analyse = New System.Windows.Forms.PictureBox()
+        Me.pan_PanneauGauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.chk_LocalEchelle = New System.Windows.Forms.CheckBox()
         Me.chk_Chargement = New System.Windows.Forms.CheckBox()
@@ -43,6 +42,8 @@ Partial Class Frm_PPCasDeCharge
         Me.chk_Moment = New System.Windows.Forms.CheckBox()
         Me.chk_Fleches = New System.Windows.Forms.CheckBox()
         Me.btn_EditModel = New System.Windows.Forms.Button()
+        Me.pan_Image = New System.Windows.Forms.Panel()
+        Me.img_Analyse = New System.Windows.Forms.PictureBox()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_ChoixCas = New System.Windows.Forms.Panel()
         Me.cmb_Symbols = New System.Windows.Forms.ComboBox()
@@ -73,7 +74,6 @@ Partial Class Frm_PPCasDeCharge
         Me.lbl_RZ1 = New System.Windows.Forms.Label()
         Me.lbl_RCalcul = New System.Windows.Forms.Label()
         Me.lbl_RunCalcul = New System.Windows.Forms.Label()
-        Me.pan_PanneauGauche = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -81,14 +81,14 @@ Partial Class Frm_PPCasDeCharge
         Me.TLPan_CdC.SuspendLayout()
         Me.Pan_Affichage.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
+        Me.pan_PanneauGauche.SuspendLayout()
+        Me.TLpan_Gauche.SuspendLayout()
         Me.pan_Image.SuspendLayout()
         CType(Me.img_Analyse, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.TLpan_Gauche.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.pan_ChoixCas.SuspendLayout()
         Me.pan_EtatCdC.SuspendLayout()
         Me.Pan_Results.SuspendLayout()
-        Me.pan_PanneauGauche.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -226,26 +226,17 @@ Partial Class Frm_PPCasDeCharge
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(1052, 441)
         Me.TableLayoutPanel2.TabIndex = 0
         '
-        'pan_Image
+        'pan_PanneauGauche
         '
-        Me.pan_Image.Controls.Add(Me.img_Analyse)
-        Me.pan_Image.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Image.Location = New System.Drawing.Point(151, 0)
-        Me.pan_Image.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
-        Me.pan_Image.Name = "pan_Image"
-        Me.pan_Image.Size = New System.Drawing.Size(901, 441)
-        Me.pan_Image.TabIndex = 3
-        '
-        'img_Analyse
-        '
-        Me.img_Analyse.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_Analyse.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Analyse.Location = New System.Drawing.Point(149, 119)
-        Me.img_Analyse.Margin = New System.Windows.Forms.Padding(0)
-        Me.img_Analyse.Name = "img_Analyse"
-        Me.img_Analyse.Size = New System.Drawing.Size(100, 34)
-        Me.img_Analyse.TabIndex = 2
-        Me.img_Analyse.TabStop = False
+        Me.pan_PanneauGauche.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_PanneauGauche.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_PanneauGauche.Controls.Add(Me.TLpan_Gauche)
+        Me.pan_PanneauGauche.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_PanneauGauche.Location = New System.Drawing.Point(0, 0)
+        Me.pan_PanneauGauche.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_PanneauGauche.Name = "pan_PanneauGauche"
+        Me.pan_PanneauGauche.Size = New System.Drawing.Size(150, 441)
+        Me.pan_PanneauGauche.TabIndex = 3
         '
         'TLpan_Gauche
         '
@@ -385,6 +376,27 @@ Partial Class Frm_PPCasDeCharge
         Me.btn_EditModel.TabIndex = 1
         Me.btn_EditModel.Text = "btn_EditModel"
         Me.btn_EditModel.UseVisualStyleBackColor = True
+        '
+        'pan_Image
+        '
+        Me.pan_Image.Controls.Add(Me.img_Analyse)
+        Me.pan_Image.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Image.Location = New System.Drawing.Point(151, 0)
+        Me.pan_Image.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.pan_Image.Name = "pan_Image"
+        Me.pan_Image.Size = New System.Drawing.Size(901, 441)
+        Me.pan_Image.TabIndex = 3
+        '
+        'img_Analyse
+        '
+        Me.img_Analyse.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_Analyse.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Analyse.Location = New System.Drawing.Point(149, 119)
+        Me.img_Analyse.Margin = New System.Windows.Forms.Padding(0)
+        Me.img_Analyse.Name = "img_Analyse"
+        Me.img_Analyse.Size = New System.Drawing.Size(100, 34)
+        Me.img_Analyse.TabIndex = 2
+        Me.img_Analyse.TabStop = False
         '
         'TableLayoutPanel1
         '
@@ -707,18 +719,6 @@ Partial Class Frm_PPCasDeCharge
         Me.lbl_RunCalcul.TabIndex = 60
         Me.lbl_RunCalcul.Text = "lbl_RunCalcul"
         '
-        'pan_PanneauGauche
-        '
-        Me.pan_PanneauGauche.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_PanneauGauche.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_PanneauGauche.Controls.Add(Me.TLpan_Gauche)
-        Me.pan_PanneauGauche.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_PanneauGauche.Location = New System.Drawing.Point(0, 0)
-        Me.pan_PanneauGauche.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_PanneauGauche.Name = "pan_PanneauGauche"
-        Me.pan_PanneauGauche.Size = New System.Drawing.Size(150, 441)
-        Me.pan_PanneauGauche.TabIndex = 3
-        '
         'Frm_PPCasDeCharge
         '
         Me.AcceptButton = Me.btn_OK
@@ -726,6 +726,9 @@ Partial Class Frm_PPCasDeCharge
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1058, 588)
         Me.Controls.Add(Me.pan_General)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_PPCasDeCharge"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_CasDeCharge"
@@ -737,10 +740,11 @@ Partial Class Frm_PPCasDeCharge
         Me.TLPan_CdC.PerformLayout()
         Me.Pan_Affichage.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
-        Me.pan_Image.ResumeLayout(False)
-        CType(Me.img_Analyse, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_PanneauGauche.ResumeLayout(False)
         Me.TLpan_Gauche.ResumeLayout(False)
         Me.TLpan_Gauche.PerformLayout()
+        Me.pan_Image.ResumeLayout(False)
+        CType(Me.img_Analyse, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TableLayoutPanel1.ResumeLayout(False)
         Me.pan_ChoixCas.ResumeLayout(False)
         Me.pan_ChoixCas.PerformLayout()
@@ -748,7 +752,6 @@ Partial Class Frm_PPCasDeCharge
         Me.pan_EtatCdC.PerformLayout()
         Me.Pan_Results.ResumeLayout(False)
         Me.Pan_Results.PerformLayout()
-        Me.pan_PanneauGauche.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub

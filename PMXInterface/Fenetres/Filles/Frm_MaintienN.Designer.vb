@@ -27,10 +27,10 @@ Partial Class Frm_MaintienN
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.btn_Annuler = New System.Windows.Forms.Button()
+        Me.pan_Test = New System.Windows.Forms.Panel()
         Me.TLpan_ChoixEtat = New System.Windows.Forms.TableLayoutPanel()
         Me.PoMbtn_Construction = New PMXInterface.POMbutton()
         Me.PoMbtn_Normal = New PMXInterface.POMbutton()
-        Me.pan_Test = New System.Windows.Forms.Panel()
         Me.TSpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.TLpan_ChoixEtat.SuspendLayout()
@@ -113,6 +113,15 @@ Partial Class Frm_MaintienN
         Me.btn_Annuler.Text = "btn_Annuler"
         Me.btn_Annuler.UseVisualStyleBackColor = True
         '
+        'pan_Test
+        '
+        Me.pan_Test.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Test.Location = New System.Drawing.Point(3, 3)
+        Me.pan_Test.Name = "pan_Test"
+        Me.pan_Test.Size = New System.Drawing.Size(14, 14)
+        Me.pan_Test.TabIndex = 2
+        Me.pan_Test.Visible = False
+        '
         'TLpan_ChoixEtat
         '
         Me.TLpan_ChoixEtat.ColumnCount = 3
@@ -172,21 +181,15 @@ Partial Class Frm_MaintienN
         Me.PoMbtn_Normal.Size = New System.Drawing.Size(244, 34)
         Me.PoMbtn_Normal.TabIndex = 6
         '
-        'pan_Test
-        '
-        Me.pan_Test.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Test.Location = New System.Drawing.Point(3, 3)
-        Me.pan_Test.Name = "pan_Test"
-        Me.pan_Test.Size = New System.Drawing.Size(14, 14)
-        Me.pan_Test.TabIndex = 2
-        Me.pan_Test.Visible = False
-        '
         'Frm_MaintienN
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(1014, 531)
         Me.Controls.Add(Me.TSpan_Main)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_MaintienN"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_MaintienN"

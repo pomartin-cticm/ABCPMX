@@ -31,17 +31,17 @@ Partial Class Frm_About
         Me.pan_Main = New System.Windows.Forms.Panel()
         Me.TLPan_PartieHaute = New System.Windows.Forms.TableLayoutPanel()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.ImgList_logos = New System.Windows.Forms.ImageList(Me.components)
         Me.lbl_Verification = New System.Windows.Forms.Label()
+        Me.LinkLabel_SupportCTICM = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel_SiteCTICM = New System.Windows.Forms.LinkLabel()
+        Me.LinkLabel_SupportAM = New System.Windows.Forms.LinkLabel()
         Me.LinkLabel_SiteAM = New System.Windows.Forms.LinkLabel()
         Me.txt_cticm = New System.Windows.Forms.TextBox()
         Me.txt_Arcelor = New System.Windows.Forms.TextBox()
         Me.pic_Arcelor = New System.Windows.Forms.PictureBox()
         Me.panel_entete = New System.Windows.Forms.Panel()
         Me.pic_cticm = New System.Windows.Forms.PictureBox()
-        Me.LinkLabel_SupportAM = New System.Windows.Forms.LinkLabel()
-        Me.LinkLabel_SupportCTICM = New System.Windows.Forms.LinkLabel()
+        Me.ImgList_logos = New System.Windows.Forms.ImageList(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -148,13 +148,6 @@ Partial Class Frm_About
         Me.Panel1.Size = New System.Drawing.Size(477, 420)
         Me.Panel1.TabIndex = 5
         '
-        'ImgList_logos
-        '
-        Me.ImgList_logos.ImageStream = CType(resources.GetObject("ImgList_logos.ImageStream"), System.Windows.Forms.ImageListStreamer)
-        Me.ImgList_logos.TransparentColor = System.Drawing.Color.Transparent
-        Me.ImgList_logos.Images.SetKeyName(0, "CTICM_logo.jpg")
-        Me.ImgList_logos.Images.SetKeyName(1, "ARCELORMITTAL_logo.png")
-        '
         'lbl_Verification
         '
         Me.lbl_Verification.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -167,6 +160,17 @@ Partial Class Frm_About
         Me.lbl_Verification.Text = "Verification of composite beams according to EN 1994-1-1"
         Me.lbl_Verification.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'LinkLabel_SupportCTICM
+        '
+        Me.LinkLabel_SupportCTICM.AutoSize = True
+        Me.LinkLabel_SupportCTICM.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel_SupportCTICM.Location = New System.Drawing.Point(278, 342)
+        Me.LinkLabel_SupportCTICM.Name = "LinkLabel_SupportCTICM"
+        Me.LinkLabel_SupportCTICM.Size = New System.Drawing.Size(176, 16)
+        Me.LinkLabel_SupportCTICM.TabIndex = 16
+        Me.LinkLabel_SupportCTICM.TabStop = True
+        Me.LinkLabel_SupportCTICM.Text = "support.logiciels@cticm.com"
+        '
         'LinkLabel_SiteCTICM
         '
         Me.LinkLabel_SiteCTICM.AutoSize = True
@@ -177,6 +181,17 @@ Partial Class Frm_About
         Me.LinkLabel_SiteCTICM.TabIndex = 16
         Me.LinkLabel_SiteCTICM.TabStop = True
         Me.LinkLabel_SiteCTICM.Text = "www.cticm.com"
+        '
+        'LinkLabel_SupportAM
+        '
+        Me.LinkLabel_SupportAM.AutoSize = True
+        Me.LinkLabel_SupportAM.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel_SupportAM.Location = New System.Drawing.Point(12, 342)
+        Me.LinkLabel_SupportAM.Name = "LinkLabel_SupportAM"
+        Me.LinkLabel_SupportAM.Size = New System.Drawing.Size(254, 16)
+        Me.LinkLabel_SupportAM.TabIndex = 13
+        Me.LinkLabel_SupportAM.TabStop = True
+        Me.LinkLabel_SupportAM.Text = "steligence.engineering@arcelormittal.com "
         '
         'LinkLabel_SiteAM
         '
@@ -249,27 +264,12 @@ Partial Class Frm_About
         Me.pic_cticm.TabIndex = 17
         Me.pic_cticm.TabStop = False
         '
-        'LinkLabel_SupportAM
+        'ImgList_logos
         '
-        Me.LinkLabel_SupportAM.AutoSize = True
-        Me.LinkLabel_SupportAM.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel_SupportAM.Location = New System.Drawing.Point(12, 342)
-        Me.LinkLabel_SupportAM.Name = "LinkLabel_SupportAM"
-        Me.LinkLabel_SupportAM.Size = New System.Drawing.Size(254, 16)
-        Me.LinkLabel_SupportAM.TabIndex = 13
-        Me.LinkLabel_SupportAM.TabStop = True
-        Me.LinkLabel_SupportAM.Text = "steligence.engineering@arcelormittal.com "
-        '
-        'LinkLabel_SupportCTICM
-        '
-        Me.LinkLabel_SupportCTICM.AutoSize = True
-        Me.LinkLabel_SupportCTICM.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.LinkLabel_SupportCTICM.Location = New System.Drawing.Point(278, 342)
-        Me.LinkLabel_SupportCTICM.Name = "LinkLabel_SupportCTICM"
-        Me.LinkLabel_SupportCTICM.Size = New System.Drawing.Size(176, 16)
-        Me.LinkLabel_SupportCTICM.TabIndex = 16
-        Me.LinkLabel_SupportCTICM.TabStop = True
-        Me.LinkLabel_SupportCTICM.Text = "support.logiciels@cticm.com"
+        Me.ImgList_logos.ImageStream = CType(resources.GetObject("ImgList_logos.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.ImgList_logos.TransparentColor = System.Drawing.Color.Transparent
+        Me.ImgList_logos.Images.SetKeyName(0, "CTICM_logo.jpg")
+        Me.ImgList_logos.Images.SetKeyName(1, "ARCELORMITTAL_logo.png")
         '
         'Frm_About
         '
@@ -278,8 +278,9 @@ Partial Class Frm_About
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(485, 468)
         Me.Controls.Add(Me.pan_General)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_About"
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

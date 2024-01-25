@@ -248,6 +248,9 @@ Partial Class Frm_OptionsCalcul
         Me.CancelButton = Me.btn_Cancel
         Me.ClientSize = New System.Drawing.Size(800, 450)
         Me.Controls.Add(Me.pan_Main)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_OptionsCalcul"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_OptionsCalcul"

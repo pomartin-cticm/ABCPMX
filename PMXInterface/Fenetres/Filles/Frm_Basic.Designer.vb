@@ -34,10 +34,10 @@ Partial Class Frm_Basic
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Portees = New System.Windows.Forms.Label()
         Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
-        Me.img_Portees = New System.Windows.Forms.PictureBox()
-        Me.btn_Precedent = New System.Windows.Forms.Button()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.btn_Moins = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.btn_Precedent = New System.Windows.Forms.Button()
+        Me.img_Portees = New System.Windows.Forms.PictureBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -198,27 +198,16 @@ Partial Class Frm_Basic
         Me.pan_SaisiePortee.Size = New System.Drawing.Size(250, 170)
         Me.pan_SaisiePortee.TabIndex = 1
         '
-        'img_Portees
+        'btn_Moins
         '
-        Me.img_Portees.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_Portees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Portees.Location = New System.Drawing.Point(251, 0)
-        Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
-        Me.img_Portees.Name = "img_Portees"
-        Me.img_Portees.Size = New System.Drawing.Size(100, 50)
-        Me.img_Portees.TabIndex = 1
-        Me.img_Portees.TabStop = False
-        '
-        'btn_Precedent
-        '
-        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
-        Me.btn_Precedent.Location = New System.Drawing.Point(126, 73)
-        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
-        Me.btn_Precedent.Name = "btn_Precedent"
-        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
-        Me.btn_Precedent.TabIndex = 11
-        Me.btn_Precedent.TabStop = False
-        Me.btn_Precedent.UseVisualStyleBackColor = True
+        Me.btn_Moins.Image = CType(resources.GetObject("btn_Moins.Image"), System.Drawing.Image)
+        Me.btn_Moins.Location = New System.Drawing.Point(149, 84)
+        Me.btn_Moins.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Moins.Name = "btn_Moins"
+        Me.btn_Moins.Size = New System.Drawing.Size(23, 12)
+        Me.btn_Moins.TabIndex = 13
+        Me.btn_Moins.TabStop = False
+        Me.btn_Moins.UseVisualStyleBackColor = True
         '
         'Button1
         '
@@ -231,16 +220,27 @@ Partial Class Frm_Basic
         Me.Button1.TabStop = False
         Me.Button1.UseVisualStyleBackColor = True
         '
-        'btn_Moins
+        'btn_Precedent
         '
-        Me.btn_Moins.Image = CType(resources.GetObject("btn_Moins.Image"), System.Drawing.Image)
-        Me.btn_Moins.Location = New System.Drawing.Point(149, 84)
-        Me.btn_Moins.Margin = New System.Windows.Forms.Padding(0)
-        Me.btn_Moins.Name = "btn_Moins"
-        Me.btn_Moins.Size = New System.Drawing.Size(23, 12)
-        Me.btn_Moins.TabIndex = 13
-        Me.btn_Moins.TabStop = False
-        Me.btn_Moins.UseVisualStyleBackColor = True
+        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
+        Me.btn_Precedent.Location = New System.Drawing.Point(126, 73)
+        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Precedent.Name = "btn_Precedent"
+        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Precedent.TabIndex = 11
+        Me.btn_Precedent.TabStop = False
+        Me.btn_Precedent.UseVisualStyleBackColor = True
+        '
+        'img_Portees
+        '
+        Me.img_Portees.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_Portees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_Portees.Location = New System.Drawing.Point(251, 0)
+        Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.img_Portees.Name = "img_Portees"
+        Me.img_Portees.Size = New System.Drawing.Size(100, 50)
+        Me.img_Portees.TabIndex = 1
+        Me.img_Portees.TabStop = False
         '
         'Frm_Basic
         '
@@ -248,6 +248,9 @@ Partial Class Frm_Basic
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 450)
         Me.Controls.Add(Me.pan_General)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_Basic"
         Me.Text = "Frm_Basic"
         Me.pan_General.ResumeLayout(False)

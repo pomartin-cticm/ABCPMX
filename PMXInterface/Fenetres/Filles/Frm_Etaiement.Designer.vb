@@ -340,7 +340,7 @@ Partial Class Frm_Etaiement
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(822, 388)
         Me.Controls.Add(Me.pan_General)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Etaiement"

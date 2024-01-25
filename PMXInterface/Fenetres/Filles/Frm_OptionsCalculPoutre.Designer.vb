@@ -32,12 +32,19 @@ Partial Class Frm_OptionsCalculPoutre
         Me.TLPan_Portees = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.pan_Parametres = New System.Windows.Forms.Panel()
+        Me.etq_UnitG = New System.Windows.Forms.Label()
+        Me.img_G = New System.Windows.Forms.PictureBox()
+        Me.cmb_GraviteG = New System.Windows.Forms.ComboBox()
+        Me.lbl_GraviteG = New System.Windows.Forms.Label()
+        Me.lbl_CadreParametres = New System.Windows.Forms.Label()
         Me.pan_Sections = New System.Windows.Forms.Panel()
         Me.chk_ArmaComprimees = New System.Windows.Forms.CheckBox()
         Me.chk_LargeursPartipantesSimples = New System.Windows.Forms.CheckBox()
         Me.lbl_CadreSections = New System.Windows.Forms.Label()
         Me.lbl_CadreBeton = New System.Windows.Forms.Label()
         Me.pan_OptionsELS = New System.Windows.Forms.Panel()
+        Me.lbl_CombinationVibration = New System.Windows.Forms.Label()
         Me.lbl_CadreELS = New System.Windows.Forms.Label()
         Me.pan_OptionsELU = New System.Windows.Forms.Panel()
         Me.rdb_ElasticDesign = New System.Windows.Forms.RadioButton()
@@ -48,24 +55,14 @@ Partial Class Frm_OptionsCalculPoutre
         Me.cmb_Norme = New System.Windows.Forms.ComboBox()
         Me.lbl_Norme = New System.Windows.Forms.Label()
         Me.pan_Beton = New System.Windows.Forms.Panel()
-        Me.etq_UnitModuleY = New System.Windows.Forms.Label()
-        Me.txt_Es = New System.Windows.Forms.TextBox()
-        Me.img_Es = New System.Windows.Forms.PictureBox()
-        Me.lbl_ArmaYoung = New System.Windows.Forms.Label()
-        Me.chk_RetraitEnrobage = New System.Windows.Forms.CheckBox()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.etq_UnitEpsilon = New System.Windows.Forms.Label()
-        Me.txt_EpsilonSh = New System.Windows.Forms.TextBox()
-        Me.img_EpsilonSh = New System.Windows.Forms.PictureBox()
-        Me.img_RH = New System.Windows.Forms.PictureBox()
-        Me.lbl_Shrinkage = New System.Windows.Forms.Label()
-        Me.cmb_RH = New System.Windows.Forms.ComboBox()
-        Me.lbl_RH = New System.Windows.Forms.Label()
-        Me.lbl_BetonMessage = New System.Windows.Forms.Label()
-        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.lbl_CombinationVibration = New System.Windows.Forms.Label()
-        Me.lbl_CadreParametres = New System.Windows.Forms.Label()
-        Me.pan_Parametres = New System.Windows.Forms.Panel()
+        Me.img_AgeT = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitJour7 = New System.Windows.Forms.Label()
+        Me.txt_AgeT = New System.Windows.Forms.TextBox()
+        Me.lbl_AgeT = New System.Windows.Forms.Label()
+        Me.lbl_SH = New System.Windows.Forms.Label()
+        Me.lbl_G2 = New System.Windows.Forms.Label()
+        Me.lbl_G1 = New System.Windows.Forms.Label()
+        Me.lbl_TimeT0 = New System.Windows.Forms.Label()
         Me.img_T0SH = New System.Windows.Forms.PictureBox()
         Me.img_T0G2 = New System.Windows.Forms.PictureBox()
         Me.img_T0G1 = New System.Windows.Forms.PictureBox()
@@ -83,18 +80,21 @@ Partial Class Frm_OptionsCalculPoutre
         Me.txt_t0G1Enrob = New System.Windows.Forms.TextBox()
         Me.lbl_Enrobage = New System.Windows.Forms.Label()
         Me.lbl_Dalle = New System.Windows.Forms.Label()
-        Me.lbl_TimeT0 = New System.Windows.Forms.Label()
-        Me.lbl_SH = New System.Windows.Forms.Label()
-        Me.lbl_G2 = New System.Windows.Forms.Label()
-        Me.lbl_G1 = New System.Windows.Forms.Label()
-        Me.lbl_AgeT = New System.Windows.Forms.Label()
-        Me.img_AgeT = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitJour7 = New System.Windows.Forms.Label()
-        Me.txt_AgeT = New System.Windows.Forms.TextBox()
-        Me.img_G = New System.Windows.Forms.PictureBox()
-        Me.cmb_GraviteG = New System.Windows.Forms.ComboBox()
-        Me.lbl_GraviteG = New System.Windows.Forms.Label()
-        Me.etq_UnitG = New System.Windows.Forms.Label()
+        Me.etq_UnitModuleY = New System.Windows.Forms.Label()
+        Me.txt_Es = New System.Windows.Forms.TextBox()
+        Me.img_Es = New System.Windows.Forms.PictureBox()
+        Me.lbl_ArmaYoung = New System.Windows.Forms.Label()
+        Me.chk_RetraitEnrobage = New System.Windows.Forms.CheckBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.etq_UnitEpsilon = New System.Windows.Forms.Label()
+        Me.txt_EpsilonSh = New System.Windows.Forms.TextBox()
+        Me.img_EpsilonSh = New System.Windows.Forms.PictureBox()
+        Me.img_RH = New System.Windows.Forms.PictureBox()
+        Me.lbl_Shrinkage = New System.Windows.Forms.Label()
+        Me.cmb_RH = New System.Windows.Forms.ComboBox()
+        Me.lbl_RH = New System.Windows.Forms.Label()
+        Me.lbl_BetonMessage = New System.Windows.Forms.Label()
+        Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -102,21 +102,21 @@ Partial Class Frm_OptionsCalculPoutre
         Me.TLPan_Portees.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
+        Me.pan_Parametres.SuspendLayout()
+        CType(Me.img_G, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Sections.SuspendLayout()
         Me.pan_OptionsELS.SuspendLayout()
         Me.pan_OptionsELU.SuspendLayout()
         Me.pan_Norm.SuspendLayout()
         Me.pan_Beton.SuspendLayout()
+        CType(Me.img_AgeT, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_Parametres.SuspendLayout()
-        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_AgeT, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_G, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -259,6 +259,72 @@ Partial Class Frm_OptionsCalculPoutre
         Me.TLPan_Gauche.Size = New System.Drawing.Size(442, 897)
         Me.TLPan_Gauche.TabIndex = 0
         '
+        'pan_Parametres
+        '
+        Me.pan_Parametres.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_Parametres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Parametres.Controls.Add(Me.etq_UnitG)
+        Me.pan_Parametres.Controls.Add(Me.img_G)
+        Me.pan_Parametres.Controls.Add(Me.cmb_GraviteG)
+        Me.pan_Parametres.Controls.Add(Me.lbl_GraviteG)
+        Me.pan_Parametres.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Parametres.Location = New System.Drawing.Point(0, 745)
+        Me.pan_Parametres.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
+        Me.pan_Parametres.Name = "pan_Parametres"
+        Me.pan_Parametres.Size = New System.Drawing.Size(442, 119)
+        Me.pan_Parametres.TabIndex = 10
+        '
+        'etq_UnitG
+        '
+        Me.etq_UnitG.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitG.AutoSize = True
+        Me.etq_UnitG.Location = New System.Drawing.Point(338, 16)
+        Me.etq_UnitG.Name = "etq_UnitG"
+        Me.etq_UnitG.Size = New System.Drawing.Size(28, 13)
+        Me.etq_UnitG.TabIndex = 119
+        Me.etq_UnitG.Text = "GPa"
+        '
+        'img_G
+        '
+        Me.img_G.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_G.Location = New System.Drawing.Point(193, 14)
+        Me.img_G.Name = "img_G"
+        Me.img_G.Size = New System.Drawing.Size(46, 20)
+        Me.img_G.TabIndex = 112
+        Me.img_G.TabStop = False
+        '
+        'cmb_GraviteG
+        '
+        Me.cmb_GraviteG.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_GraviteG.FormattingEnabled = True
+        Me.cmb_GraviteG.Location = New System.Drawing.Point(241, 13)
+        Me.cmb_GraviteG.Name = "cmb_GraviteG"
+        Me.cmb_GraviteG.Size = New System.Drawing.Size(91, 21)
+        Me.cmb_GraviteG.TabIndex = 111
+        '
+        'lbl_GraviteG
+        '
+        Me.lbl_GraviteG.AutoSize = True
+        Me.lbl_GraviteG.Location = New System.Drawing.Point(8, 16)
+        Me.lbl_GraviteG.Name = "lbl_GraviteG"
+        Me.lbl_GraviteG.Size = New System.Drawing.Size(65, 13)
+        Me.lbl_GraviteG.TabIndex = 110
+        Me.lbl_GraviteG.Text = "lbl_GraviteG"
+        '
+        'lbl_CadreParametres
+        '
+        Me.lbl_CadreParametres.AutoSize = True
+        Me.lbl_CadreParametres.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_CadreParametres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_CadreParametres.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_CadreParametres.Location = New System.Drawing.Point(0, 715)
+        Me.lbl_CadreParametres.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_CadreParametres.Name = "lbl_CadreParametres"
+        Me.lbl_CadreParametres.Size = New System.Drawing.Size(442, 30)
+        Me.lbl_CadreParametres.TabIndex = 9
+        Me.lbl_CadreParametres.Text = "lbl_CadreParameters (10)"
+        Me.lbl_CadreParametres.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'pan_Sections
         '
         Me.pan_Sections.BackColor = System.Drawing.SystemColors.ControlLightLight
@@ -331,6 +397,15 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_OptionsELS.Name = "pan_OptionsELS"
         Me.pan_OptionsELS.Size = New System.Drawing.Size(442, 119)
         Me.pan_OptionsELS.TabIndex = 5
+        '
+        'lbl_CombinationVibration
+        '
+        Me.lbl_CombinationVibration.AutoSize = True
+        Me.lbl_CombinationVibration.Location = New System.Drawing.Point(18, 15)
+        Me.lbl_CombinationVibration.Name = "lbl_CombinationVibration"
+        Me.lbl_CombinationVibration.Size = New System.Drawing.Size(122, 13)
+        Me.lbl_CombinationVibration.TabIndex = 61
+        Me.lbl_CombinationVibration.Text = "lbl_CombinationVibration"
         '
         'lbl_CadreELS
         '
@@ -495,176 +570,78 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Beton.Size = New System.Drawing.Size(442, 239)
         Me.pan_Beton.TabIndex = 7
         '
-        'etq_UnitModuleY
+        'img_AgeT
         '
-        Me.etq_UnitModuleY.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitModuleY.AutoSize = True
-        Me.etq_UnitModuleY.Location = New System.Drawing.Point(305, 85)
-        Me.etq_UnitModuleY.Name = "etq_UnitModuleY"
-        Me.etq_UnitModuleY.Size = New System.Drawing.Size(28, 13)
-        Me.etq_UnitModuleY.TabIndex = 118
-        Me.etq_UnitModuleY.Text = "GPa"
+        Me.img_AgeT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_AgeT.Location = New System.Drawing.Point(194, 211)
+        Me.img_AgeT.Name = "img_AgeT"
+        Me.img_AgeT.Size = New System.Drawing.Size(46, 20)
+        Me.img_AgeT.TabIndex = 175
+        Me.img_AgeT.TabStop = False
         '
-        'txt_Es
+        'etq_UnitJour7
         '
-        Me.txt_Es.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Es.Location = New System.Drawing.Point(241, 81)
-        Me.txt_Es.Name = "txt_Es"
-        Me.txt_Es.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Es.TabIndex = 117
+        Me.etq_UnitJour7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitJour7.AutoSize = True
+        Me.etq_UnitJour7.Location = New System.Drawing.Point(305, 214)
+        Me.etq_UnitJour7.Name = "etq_UnitJour7"
+        Me.etq_UnitJour7.Size = New System.Drawing.Size(9, 13)
+        Me.etq_UnitJour7.TabIndex = 174
+        Me.etq_UnitJour7.Text = "j"
         '
-        'img_Es
+        'txt_AgeT
         '
-        Me.img_Es.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Es.Location = New System.Drawing.Point(193, 81)
-        Me.img_Es.Name = "img_Es"
-        Me.img_Es.Size = New System.Drawing.Size(46, 20)
-        Me.img_Es.TabIndex = 116
-        Me.img_Es.TabStop = False
+        Me.txt_AgeT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_AgeT.Location = New System.Drawing.Point(241, 211)
+        Me.txt_AgeT.Name = "txt_AgeT"
+        Me.txt_AgeT.Size = New System.Drawing.Size(58, 20)
+        Me.txt_AgeT.TabIndex = 173
+        Me.txt_AgeT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'lbl_ArmaYoung
+        'lbl_AgeT
         '
-        Me.lbl_ArmaYoung.AutoSize = True
-        Me.lbl_ArmaYoung.Location = New System.Drawing.Point(8, 85)
-        Me.lbl_ArmaYoung.Name = "lbl_ArmaYoung"
-        Me.lbl_ArmaYoung.Size = New System.Drawing.Size(78, 13)
-        Me.lbl_ArmaYoung.TabIndex = 115
-        Me.lbl_ArmaYoung.Text = "lbl_ArmaYoung"
+        Me.lbl_AgeT.AutoSize = True
+        Me.lbl_AgeT.Location = New System.Drawing.Point(8, 214)
+        Me.lbl_AgeT.Name = "lbl_AgeT"
+        Me.lbl_AgeT.Size = New System.Drawing.Size(49, 13)
+        Me.lbl_AgeT.TabIndex = 172
+        Me.lbl_AgeT.Text = "lbl_AgeT"
         '
-        'chk_RetraitEnrobage
+        'lbl_SH
         '
-        Me.chk_RetraitEnrobage.AutoSize = True
-        Me.chk_RetraitEnrobage.Location = New System.Drawing.Point(375, 57)
-        Me.chk_RetraitEnrobage.Name = "chk_RetraitEnrobage"
-        Me.chk_RetraitEnrobage.Size = New System.Drawing.Size(127, 17)
-        Me.chk_RetraitEnrobage.TabIndex = 114
-        Me.chk_RetraitEnrobage.Text = "chk_RetraitEnrobage"
-        Me.chk_RetraitEnrobage.UseVisualStyleBackColor = True
-        Me.chk_RetraitEnrobage.Visible = False
+        Me.lbl_SH.AutoSize = True
+        Me.lbl_SH.Location = New System.Drawing.Point(42, 188)
+        Me.lbl_SH.Name = "lbl_SH"
+        Me.lbl_SH.Size = New System.Drawing.Size(38, 13)
+        Me.lbl_SH.TabIndex = 171
+        Me.lbl_SH.Text = "lbl_SH"
         '
-        'Label1
+        'lbl_G2
         '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(328, 53)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(13, 13)
-        Me.Label1.TabIndex = 113
-        Me.Label1.Text = "6"
+        Me.lbl_G2.AutoSize = True
+        Me.lbl_G2.Location = New System.Drawing.Point(42, 166)
+        Me.lbl_G2.Name = "lbl_G2"
+        Me.lbl_G2.Size = New System.Drawing.Size(37, 13)
+        Me.lbl_G2.TabIndex = 170
+        Me.lbl_G2.Text = "lbl_G2"
         '
-        'etq_UnitEpsilon
+        'lbl_G1
         '
-        Me.etq_UnitEpsilon.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitEpsilon.AutoSize = True
-        Me.etq_UnitEpsilon.Location = New System.Drawing.Point(305, 58)
-        Me.etq_UnitEpsilon.Name = "etq_UnitEpsilon"
-        Me.etq_UnitEpsilon.Size = New System.Drawing.Size(27, 13)
-        Me.etq_UnitEpsilon.TabIndex = 112
-        Me.etq_UnitEpsilon.Text = "x 10"
+        Me.lbl_G1.AutoSize = True
+        Me.lbl_G1.Location = New System.Drawing.Point(42, 144)
+        Me.lbl_G1.Name = "lbl_G1"
+        Me.lbl_G1.Size = New System.Drawing.Size(37, 13)
+        Me.lbl_G1.TabIndex = 169
+        Me.lbl_G1.Text = "lbl_G1"
         '
-        'txt_EpsilonSh
+        'lbl_TimeT0
         '
-        Me.txt_EpsilonSh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EpsilonSh.Location = New System.Drawing.Point(241, 55)
-        Me.txt_EpsilonSh.Name = "txt_EpsilonSh"
-        Me.txt_EpsilonSh.Size = New System.Drawing.Size(58, 20)
-        Me.txt_EpsilonSh.TabIndex = 111
-        '
-        'img_EpsilonSh
-        '
-        Me.img_EpsilonSh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_EpsilonSh.Location = New System.Drawing.Point(193, 55)
-        Me.img_EpsilonSh.Name = "img_EpsilonSh"
-        Me.img_EpsilonSh.Size = New System.Drawing.Size(46, 20)
-        Me.img_EpsilonSh.TabIndex = 110
-        Me.img_EpsilonSh.TabStop = False
-        '
-        'img_RH
-        '
-        Me.img_RH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_RH.Location = New System.Drawing.Point(193, 30)
-        Me.img_RH.Name = "img_RH"
-        Me.img_RH.Size = New System.Drawing.Size(46, 20)
-        Me.img_RH.TabIndex = 109
-        Me.img_RH.TabStop = False
-        '
-        'lbl_Shrinkage
-        '
-        Me.lbl_Shrinkage.AutoSize = True
-        Me.lbl_Shrinkage.Location = New System.Drawing.Point(8, 59)
-        Me.lbl_Shrinkage.Name = "lbl_Shrinkage"
-        Me.lbl_Shrinkage.Size = New System.Drawing.Size(71, 13)
-        Me.lbl_Shrinkage.TabIndex = 108
-        Me.lbl_Shrinkage.Text = "lbl_Shrinkage"
-        '
-        'cmb_RH
-        '
-        Me.cmb_RH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_RH.FormattingEnabled = True
-        Me.cmb_RH.Location = New System.Drawing.Point(241, 29)
-        Me.cmb_RH.Name = "cmb_RH"
-        Me.cmb_RH.Size = New System.Drawing.Size(104, 21)
-        Me.cmb_RH.TabIndex = 107
-        '
-        'lbl_RH
-        '
-        Me.lbl_RH.AutoSize = True
-        Me.lbl_RH.Location = New System.Drawing.Point(8, 32)
-        Me.lbl_RH.Name = "lbl_RH"
-        Me.lbl_RH.Size = New System.Drawing.Size(39, 13)
-        Me.lbl_RH.TabIndex = 61
-        Me.lbl_RH.Text = "lbl_RH"
-        '
-        'lbl_BetonMessage
-        '
-        Me.lbl_BetonMessage.AutoSize = True
-        Me.lbl_BetonMessage.Location = New System.Drawing.Point(8, 9)
-        Me.lbl_BetonMessage.Name = "lbl_BetonMessage"
-        Me.lbl_BetonMessage.Size = New System.Drawing.Size(94, 13)
-        Me.lbl_BetonMessage.TabIndex = 60
-        Me.lbl_BetonMessage.Text = "lbl_BetonMessage"
-        '
-        'ErrorProvider
-        '
-        Me.ErrorProvider.ContainerControl = Me
-        '
-        'lbl_CombinationVibration
-        '
-        Me.lbl_CombinationVibration.AutoSize = True
-        Me.lbl_CombinationVibration.Location = New System.Drawing.Point(18, 15)
-        Me.lbl_CombinationVibration.Name = "lbl_CombinationVibration"
-        Me.lbl_CombinationVibration.Size = New System.Drawing.Size(122, 13)
-        Me.lbl_CombinationVibration.TabIndex = 61
-        Me.lbl_CombinationVibration.Text = "lbl_CombinationVibration"
-        '
-        'lbl_CadreParametres
-        '
-        Me.lbl_CadreParametres.AutoSize = True
-        Me.lbl_CadreParametres.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_CadreParametres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_CadreParametres.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_CadreParametres.Location = New System.Drawing.Point(0, 715)
-        Me.lbl_CadreParametres.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_CadreParametres.Name = "lbl_CadreParametres"
-        Me.lbl_CadreParametres.Size = New System.Drawing.Size(442, 30)
-        Me.lbl_CadreParametres.TabIndex = 9
-        Me.lbl_CadreParametres.Text = "lbl_CadreParameters (10)"
-        Me.lbl_CadreParametres.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'pan_Parametres
-        '
-        Me.pan_Parametres.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Parametres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_Parametres.Controls.Add(Me.etq_UnitG)
-        Me.pan_Parametres.Controls.Add(Me.img_G)
-        Me.pan_Parametres.Controls.Add(Me.cmb_GraviteG)
-        Me.pan_Parametres.Controls.Add(Me.lbl_GraviteG)
-        Me.pan_Parametres.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Parametres.Location = New System.Drawing.Point(0, 745)
-        Me.pan_Parametres.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
-        Me.pan_Parametres.Name = "pan_Parametres"
-        Me.pan_Parametres.Size = New System.Drawing.Size(442, 119)
-        Me.pan_Parametres.TabIndex = 10
+        Me.lbl_TimeT0.AutoSize = True
+        Me.lbl_TimeT0.Location = New System.Drawing.Point(8, 114)
+        Me.lbl_TimeT0.Name = "lbl_TimeT0"
+        Me.lbl_TimeT0.Size = New System.Drawing.Size(59, 13)
+        Me.lbl_TimeT0.TabIndex = 168
+        Me.lbl_TimeT0.Text = "lbl_TimeT0"
         '
         'img_T0SH
         '
@@ -827,115 +804,138 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_Dalle.TabIndex = 151
         Me.lbl_Dalle.Text = "lbl_Dalle"
         '
-        'lbl_TimeT0
+        'etq_UnitModuleY
         '
-        Me.lbl_TimeT0.AutoSize = True
-        Me.lbl_TimeT0.Location = New System.Drawing.Point(8, 114)
-        Me.lbl_TimeT0.Name = "lbl_TimeT0"
-        Me.lbl_TimeT0.Size = New System.Drawing.Size(59, 13)
-        Me.lbl_TimeT0.TabIndex = 168
-        Me.lbl_TimeT0.Text = "lbl_TimeT0"
+        Me.etq_UnitModuleY.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitModuleY.AutoSize = True
+        Me.etq_UnitModuleY.Location = New System.Drawing.Point(305, 85)
+        Me.etq_UnitModuleY.Name = "etq_UnitModuleY"
+        Me.etq_UnitModuleY.Size = New System.Drawing.Size(28, 13)
+        Me.etq_UnitModuleY.TabIndex = 118
+        Me.etq_UnitModuleY.Text = "GPa"
         '
-        'lbl_SH
+        'txt_Es
         '
-        Me.lbl_SH.AutoSize = True
-        Me.lbl_SH.Location = New System.Drawing.Point(42, 188)
-        Me.lbl_SH.Name = "lbl_SH"
-        Me.lbl_SH.Size = New System.Drawing.Size(38, 13)
-        Me.lbl_SH.TabIndex = 171
-        Me.lbl_SH.Text = "lbl_SH"
+        Me.txt_Es.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Es.Location = New System.Drawing.Point(241, 81)
+        Me.txt_Es.Name = "txt_Es"
+        Me.txt_Es.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Es.TabIndex = 117
         '
-        'lbl_G2
+        'img_Es
         '
-        Me.lbl_G2.AutoSize = True
-        Me.lbl_G2.Location = New System.Drawing.Point(42, 166)
-        Me.lbl_G2.Name = "lbl_G2"
-        Me.lbl_G2.Size = New System.Drawing.Size(37, 13)
-        Me.lbl_G2.TabIndex = 170
-        Me.lbl_G2.Text = "lbl_G2"
+        Me.img_Es.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Es.Location = New System.Drawing.Point(193, 81)
+        Me.img_Es.Name = "img_Es"
+        Me.img_Es.Size = New System.Drawing.Size(46, 20)
+        Me.img_Es.TabIndex = 116
+        Me.img_Es.TabStop = False
         '
-        'lbl_G1
+        'lbl_ArmaYoung
         '
-        Me.lbl_G1.AutoSize = True
-        Me.lbl_G1.Location = New System.Drawing.Point(42, 144)
-        Me.lbl_G1.Name = "lbl_G1"
-        Me.lbl_G1.Size = New System.Drawing.Size(37, 13)
-        Me.lbl_G1.TabIndex = 169
-        Me.lbl_G1.Text = "lbl_G1"
+        Me.lbl_ArmaYoung.AutoSize = True
+        Me.lbl_ArmaYoung.Location = New System.Drawing.Point(8, 85)
+        Me.lbl_ArmaYoung.Name = "lbl_ArmaYoung"
+        Me.lbl_ArmaYoung.Size = New System.Drawing.Size(78, 13)
+        Me.lbl_ArmaYoung.TabIndex = 115
+        Me.lbl_ArmaYoung.Text = "lbl_ArmaYoung"
         '
-        'lbl_AgeT
+        'chk_RetraitEnrobage
         '
-        Me.lbl_AgeT.AutoSize = True
-        Me.lbl_AgeT.Location = New System.Drawing.Point(8, 214)
-        Me.lbl_AgeT.Name = "lbl_AgeT"
-        Me.lbl_AgeT.Size = New System.Drawing.Size(49, 13)
-        Me.lbl_AgeT.TabIndex = 172
-        Me.lbl_AgeT.Text = "lbl_AgeT"
+        Me.chk_RetraitEnrobage.AutoSize = True
+        Me.chk_RetraitEnrobage.Location = New System.Drawing.Point(375, 57)
+        Me.chk_RetraitEnrobage.Name = "chk_RetraitEnrobage"
+        Me.chk_RetraitEnrobage.Size = New System.Drawing.Size(127, 17)
+        Me.chk_RetraitEnrobage.TabIndex = 114
+        Me.chk_RetraitEnrobage.Text = "chk_RetraitEnrobage"
+        Me.chk_RetraitEnrobage.UseVisualStyleBackColor = True
+        Me.chk_RetraitEnrobage.Visible = False
         '
-        'img_AgeT
+        'Label1
         '
-        Me.img_AgeT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_AgeT.Location = New System.Drawing.Point(194, 211)
-        Me.img_AgeT.Name = "img_AgeT"
-        Me.img_AgeT.Size = New System.Drawing.Size(46, 20)
-        Me.img_AgeT.TabIndex = 175
-        Me.img_AgeT.TabStop = False
+        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(328, 53)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(13, 13)
+        Me.Label1.TabIndex = 113
+        Me.Label1.Text = "6"
         '
-        'etq_UnitJour7
+        'etq_UnitEpsilon
         '
-        Me.etq_UnitJour7.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitJour7.AutoSize = True
-        Me.etq_UnitJour7.Location = New System.Drawing.Point(305, 214)
-        Me.etq_UnitJour7.Name = "etq_UnitJour7"
-        Me.etq_UnitJour7.Size = New System.Drawing.Size(9, 13)
-        Me.etq_UnitJour7.TabIndex = 174
-        Me.etq_UnitJour7.Text = "j"
+        Me.etq_UnitEpsilon.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitEpsilon.AutoSize = True
+        Me.etq_UnitEpsilon.Location = New System.Drawing.Point(305, 58)
+        Me.etq_UnitEpsilon.Name = "etq_UnitEpsilon"
+        Me.etq_UnitEpsilon.Size = New System.Drawing.Size(27, 13)
+        Me.etq_UnitEpsilon.TabIndex = 112
+        Me.etq_UnitEpsilon.Text = "x 10"
         '
-        'txt_AgeT
+        'txt_EpsilonSh
         '
-        Me.txt_AgeT.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_AgeT.Location = New System.Drawing.Point(241, 211)
-        Me.txt_AgeT.Name = "txt_AgeT"
-        Me.txt_AgeT.Size = New System.Drawing.Size(58, 20)
-        Me.txt_AgeT.TabIndex = 173
-        Me.txt_AgeT.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.txt_EpsilonSh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EpsilonSh.Location = New System.Drawing.Point(241, 55)
+        Me.txt_EpsilonSh.Name = "txt_EpsilonSh"
+        Me.txt_EpsilonSh.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EpsilonSh.TabIndex = 111
         '
-        'img_G
+        'img_EpsilonSh
         '
-        Me.img_G.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_G.Location = New System.Drawing.Point(193, 14)
-        Me.img_G.Name = "img_G"
-        Me.img_G.Size = New System.Drawing.Size(46, 20)
-        Me.img_G.TabIndex = 112
-        Me.img_G.TabStop = False
+        Me.img_EpsilonSh.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_EpsilonSh.Location = New System.Drawing.Point(193, 55)
+        Me.img_EpsilonSh.Name = "img_EpsilonSh"
+        Me.img_EpsilonSh.Size = New System.Drawing.Size(46, 20)
+        Me.img_EpsilonSh.TabIndex = 110
+        Me.img_EpsilonSh.TabStop = False
         '
-        'cmb_GraviteG
+        'img_RH
         '
-        Me.cmb_GraviteG.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_GraviteG.FormattingEnabled = True
-        Me.cmb_GraviteG.Location = New System.Drawing.Point(241, 13)
-        Me.cmb_GraviteG.Name = "cmb_GraviteG"
-        Me.cmb_GraviteG.Size = New System.Drawing.Size(91, 21)
-        Me.cmb_GraviteG.TabIndex = 111
+        Me.img_RH.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_RH.Location = New System.Drawing.Point(193, 30)
+        Me.img_RH.Name = "img_RH"
+        Me.img_RH.Size = New System.Drawing.Size(46, 20)
+        Me.img_RH.TabIndex = 109
+        Me.img_RH.TabStop = False
         '
-        'lbl_GraviteG
+        'lbl_Shrinkage
         '
-        Me.lbl_GraviteG.AutoSize = True
-        Me.lbl_GraviteG.Location = New System.Drawing.Point(8, 16)
-        Me.lbl_GraviteG.Name = "lbl_GraviteG"
-        Me.lbl_GraviteG.Size = New System.Drawing.Size(65, 13)
-        Me.lbl_GraviteG.TabIndex = 110
-        Me.lbl_GraviteG.Text = "lbl_GraviteG"
+        Me.lbl_Shrinkage.AutoSize = True
+        Me.lbl_Shrinkage.Location = New System.Drawing.Point(8, 59)
+        Me.lbl_Shrinkage.Name = "lbl_Shrinkage"
+        Me.lbl_Shrinkage.Size = New System.Drawing.Size(71, 13)
+        Me.lbl_Shrinkage.TabIndex = 108
+        Me.lbl_Shrinkage.Text = "lbl_Shrinkage"
         '
-        'etq_UnitG
+        'cmb_RH
         '
-        Me.etq_UnitG.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitG.AutoSize = True
-        Me.etq_UnitG.Location = New System.Drawing.Point(338, 16)
-        Me.etq_UnitG.Name = "etq_UnitG"
-        Me.etq_UnitG.Size = New System.Drawing.Size(28, 13)
-        Me.etq_UnitG.TabIndex = 119
-        Me.etq_UnitG.Text = "GPa"
+        Me.cmb_RH.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_RH.FormattingEnabled = True
+        Me.cmb_RH.Location = New System.Drawing.Point(241, 29)
+        Me.cmb_RH.Name = "cmb_RH"
+        Me.cmb_RH.Size = New System.Drawing.Size(104, 21)
+        Me.cmb_RH.TabIndex = 107
+        '
+        'lbl_RH
+        '
+        Me.lbl_RH.AutoSize = True
+        Me.lbl_RH.Location = New System.Drawing.Point(8, 32)
+        Me.lbl_RH.Name = "lbl_RH"
+        Me.lbl_RH.Size = New System.Drawing.Size(39, 13)
+        Me.lbl_RH.TabIndex = 61
+        Me.lbl_RH.Text = "lbl_RH"
+        '
+        'lbl_BetonMessage
+        '
+        Me.lbl_BetonMessage.AutoSize = True
+        Me.lbl_BetonMessage.Location = New System.Drawing.Point(8, 9)
+        Me.lbl_BetonMessage.Name = "lbl_BetonMessage"
+        Me.lbl_BetonMessage.Size = New System.Drawing.Size(94, 13)
+        Me.lbl_BetonMessage.TabIndex = 60
+        Me.lbl_BetonMessage.Text = "lbl_BetonMessage"
+        '
+        'ErrorProvider
+        '
+        Me.ErrorProvider.ContainerControl = Me
         '
         'Frm_OptionsCalculPoutre
         '
@@ -945,7 +945,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(465, 543)
         Me.Controls.Add(Me.pan_General)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_OptionsCalculPoutre"
@@ -959,6 +959,9 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
+        Me.pan_Parametres.ResumeLayout(False)
+        Me.pan_Parametres.PerformLayout()
+        CType(Me.img_G, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Sections.ResumeLayout(False)
         Me.pan_Sections.PerformLayout()
         Me.pan_OptionsELS.ResumeLayout(False)
@@ -969,17 +972,14 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Norm.PerformLayout()
         Me.pan_Beton.ResumeLayout(False)
         Me.pan_Beton.PerformLayout()
+        CType(Me.img_AgeT, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_Parametres.ResumeLayout(False)
-        Me.pan_Parametres.PerformLayout()
-        CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_T0G1, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_AgeT, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_G, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

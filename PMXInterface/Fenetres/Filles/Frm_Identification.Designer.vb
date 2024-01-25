@@ -275,6 +275,9 @@ Partial Class Frm_Identification
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(444, 247)
         Me.Controls.Add(Me.pan_General)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_Identification"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Identification"

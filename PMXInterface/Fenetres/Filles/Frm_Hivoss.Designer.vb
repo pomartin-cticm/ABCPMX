@@ -54,6 +54,7 @@ Partial Class Frm_Hivoss
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
         Me.lbl_Options = New System.Windows.Forms.Label()
         Me.pan_SaisieOptions = New System.Windows.Forms.Panel()
+        Me.chk_FrenquenceDalle = New System.Windows.Forms.CheckBox()
         Me.cmb_UtilisationPlancher = New System.Windows.Forms.ComboBox()
         Me.lbl_UtilisationPlancher = New System.Windows.Forms.Label()
         Me.cmb_choixQ = New System.Windows.Forms.ComboBox()
@@ -61,7 +62,6 @@ Partial Class Frm_Hivoss
         Me.cmb_ratioQ = New System.Windows.Forms.ComboBox()
         Me.lbl_ComboMasseFrequence = New System.Windows.Forms.Label()
         Me.chk_methodeHIVOSS = New System.Windows.Forms.CheckBox()
-        Me.chk_FrenquenceDalle = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -450,6 +450,16 @@ Partial Class Frm_Hivoss
         Me.pan_SaisieOptions.Size = New System.Drawing.Size(339, 260)
         Me.pan_SaisieOptions.TabIndex = 1
         '
+        'chk_FrenquenceDalle
+        '
+        Me.chk_FrenquenceDalle.AutoSize = True
+        Me.chk_FrenquenceDalle.Location = New System.Drawing.Point(19, 187)
+        Me.chk_FrenquenceDalle.Name = "chk_FrenquenceDalle"
+        Me.chk_FrenquenceDalle.Size = New System.Drawing.Size(131, 17)
+        Me.chk_FrenquenceDalle.TabIndex = 7
+        Me.chk_FrenquenceDalle.Text = "chk_FrenquenceDalle"
+        Me.chk_FrenquenceDalle.UseVisualStyleBackColor = True
+        '
         'cmb_UtilisationPlancher
         '
         Me.cmb_UtilisationPlancher.FormattingEnabled = True
@@ -511,16 +521,6 @@ Partial Class Frm_Hivoss
         Me.chk_methodeHIVOSS.Text = "chk_methodeHIVOSS"
         Me.chk_methodeHIVOSS.UseVisualStyleBackColor = True
         '
-        'chk_FrenquenceDalle
-        '
-        Me.chk_FrenquenceDalle.AutoSize = True
-        Me.chk_FrenquenceDalle.Location = New System.Drawing.Point(19, 187)
-        Me.chk_FrenquenceDalle.Name = "chk_FrenquenceDalle"
-        Me.chk_FrenquenceDalle.Size = New System.Drawing.Size(131, 17)
-        Me.chk_FrenquenceDalle.TabIndex = 7
-        Me.chk_FrenquenceDalle.Text = "chk_FrenquenceDalle"
-        Me.chk_FrenquenceDalle.UseVisualStyleBackColor = True
-        '
         'Frm_Hivoss
         '
         Me.AcceptButton = Me.btn_OK
@@ -529,6 +529,9 @@ Partial Class Frm_Hivoss
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(747, 336)
         Me.Controls.Add(Me.pan_General)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_Hivoss"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Hivoss"

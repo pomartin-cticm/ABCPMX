@@ -796,7 +796,9 @@ Partial Class Frm_Connection
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(789, 432)
         Me.Controls.Add(Me.pan_General)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_Connection"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Connection"

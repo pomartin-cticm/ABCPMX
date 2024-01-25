@@ -400,6 +400,9 @@ Partial Class Frm_Maintiens
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(1482, 349)
         Me.Controls.Add(Me.pan_General)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_Maintiens"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Maintiens"

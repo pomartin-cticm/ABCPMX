@@ -35,22 +35,22 @@ Partial Class Frm_PPHivoss
         Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.lbl_Hivoss = New System.Windows.Forms.Label()
         Me.TLpan_Modules = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Resultats = New System.Windows.Forms.Label()
-        Me.lbl_Frequence = New System.Windows.Forms.Label()
-        Me.txt_Frequence = New System.Windows.Forms.TextBox()
-        Me.etq_UnitFreq = New System.Windows.Forms.Label()
-        Me.lbl_Amortissement = New System.Windows.Forms.Label()
-        Me.txt_Amortissement = New System.Windows.Forms.TextBox()
-        Me.etq_UnitAmortissement = New System.Windows.Forms.Label()
-        Me.lbl_MassModal = New System.Windows.Forms.Label()
-        Me.txt_MassModal = New System.Windows.Forms.TextBox()
-        Me.etq_UnitMass2 = New System.Windows.Forms.Label()
-        Me.lbl_OSRMS = New System.Windows.Forms.Label()
-        Me.txt_OSRMS = New System.Windows.Forms.TextBox()
-        Me.etq_UnitOSRMS = New System.Windows.Forms.Label()
-        Me.lbl_Classe = New System.Windows.Forms.Label()
-        Me.txt_Classe = New System.Windows.Forms.TextBox()
         Me.Pan_Results = New System.Windows.Forms.Panel()
+        Me.txt_Classe = New System.Windows.Forms.TextBox()
+        Me.lbl_Classe = New System.Windows.Forms.Label()
+        Me.etq_UnitOSRMS = New System.Windows.Forms.Label()
+        Me.txt_OSRMS = New System.Windows.Forms.TextBox()
+        Me.lbl_OSRMS = New System.Windows.Forms.Label()
+        Me.etq_UnitMass2 = New System.Windows.Forms.Label()
+        Me.txt_MassModal = New System.Windows.Forms.TextBox()
+        Me.lbl_MassModal = New System.Windows.Forms.Label()
+        Me.etq_UnitAmortissement = New System.Windows.Forms.Label()
+        Me.txt_Amortissement = New System.Windows.Forms.TextBox()
+        Me.lbl_Amortissement = New System.Windows.Forms.Label()
+        Me.etq_UnitFreq = New System.Windows.Forms.Label()
+        Me.txt_Frequence = New System.Windows.Forms.TextBox()
+        Me.lbl_Frequence = New System.Windows.Forms.Label()
+        Me.lbl_Resultats = New System.Windows.Forms.Label()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.Pan_Affichage.SuspendLayout()
@@ -108,7 +108,7 @@ Partial Class Frm_PPHivoss
         'TLpan_AffichageCentral
         '
         Me.TLpan_AffichageCentral.ColumnCount = 1
-        Me.TLpan_AffichageCentral.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
+        Me.TLpan_AffichageCentral.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 700.0!))
         Me.TLpan_AffichageCentral.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_AffichageCentral.Controls.Add(Me.pan_Image, 0, 0)
         Me.TLpan_AffichageCentral.Dock = System.Windows.Forms.DockStyle.Fill
@@ -141,7 +141,7 @@ Partial Class Frm_PPHivoss
         Me.TLpan_HAffichage.Name = "TLpan_HAffichage"
         Me.TLpan_HAffichage.RowCount = 1
         Me.TLpan_HAffichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_HAffichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 379.0!))
+        Me.TLpan_HAffichage.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 378.0!))
         Me.TLpan_HAffichage.Size = New System.Drawing.Size(698, 378)
         Me.TLpan_HAffichage.TabIndex = 0
         '
@@ -237,142 +237,6 @@ Partial Class Frm_PPHivoss
         Me.TLpan_Modules.Size = New System.Drawing.Size(700, 70)
         Me.TLpan_Modules.TabIndex = 6
         '
-        'lbl_Resultats
-        '
-        Me.lbl_Resultats.AutoSize = True
-        Me.lbl_Resultats.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Resultats.Location = New System.Drawing.Point(18, 6)
-        Me.lbl_Resultats.Name = "lbl_Resultats"
-        Me.lbl_Resultats.Size = New System.Drawing.Size(67, 13)
-        Me.lbl_Resultats.TabIndex = 60
-        Me.lbl_Resultats.Text = "lbl_Resultats"
-        '
-        'lbl_Frequence
-        '
-        Me.lbl_Frequence.Location = New System.Drawing.Point(119, 6)
-        Me.lbl_Frequence.Name = "lbl_Frequence"
-        Me.lbl_Frequence.Size = New System.Drawing.Size(113, 13)
-        Me.lbl_Frequence.TabIndex = 68
-        Me.lbl_Frequence.Text = "lbl_Frequence"
-        Me.lbl_Frequence.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txt_Frequence
-        '
-        Me.txt_Frequence.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_Frequence.Location = New System.Drawing.Point(238, 3)
-        Me.txt_Frequence.Name = "txt_Frequence"
-        Me.txt_Frequence.Size = New System.Drawing.Size(66, 20)
-        Me.txt_Frequence.TabIndex = 69
-        Me.txt_Frequence.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'etq_UnitFreq
-        '
-        Me.etq_UnitFreq.AutoSize = True
-        Me.etq_UnitFreq.Location = New System.Drawing.Point(310, 7)
-        Me.etq_UnitFreq.Name = "etq_UnitFreq"
-        Me.etq_UnitFreq.Size = New System.Drawing.Size(20, 13)
-        Me.etq_UnitFreq.TabIndex = 70
-        Me.etq_UnitFreq.Text = "Hz"
-        '
-        'lbl_Amortissement
-        '
-        Me.lbl_Amortissement.Location = New System.Drawing.Point(119, 48)
-        Me.lbl_Amortissement.Name = "lbl_Amortissement"
-        Me.lbl_Amortissement.Size = New System.Drawing.Size(113, 13)
-        Me.lbl_Amortissement.TabIndex = 77
-        Me.lbl_Amortissement.Text = "lbl_Amortissement"
-        Me.lbl_Amortissement.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txt_Amortissement
-        '
-        Me.txt_Amortissement.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_Amortissement.Location = New System.Drawing.Point(238, 45)
-        Me.txt_Amortissement.Name = "txt_Amortissement"
-        Me.txt_Amortissement.Size = New System.Drawing.Size(66, 20)
-        Me.txt_Amortissement.TabIndex = 78
-        Me.txt_Amortissement.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'etq_UnitAmortissement
-        '
-        Me.etq_UnitAmortissement.AutoSize = True
-        Me.etq_UnitAmortissement.Location = New System.Drawing.Point(310, 49)
-        Me.etq_UnitAmortissement.Name = "etq_UnitAmortissement"
-        Me.etq_UnitAmortissement.Size = New System.Drawing.Size(15, 13)
-        Me.etq_UnitAmortissement.TabIndex = 79
-        Me.etq_UnitAmortissement.Text = "%"
-        '
-        'lbl_MassModal
-        '
-        Me.lbl_MassModal.Location = New System.Drawing.Point(119, 27)
-        Me.lbl_MassModal.Name = "lbl_MassModal"
-        Me.lbl_MassModal.Size = New System.Drawing.Size(113, 13)
-        Me.lbl_MassModal.TabIndex = 80
-        Me.lbl_MassModal.Text = "lbl_MassModal"
-        Me.lbl_MassModal.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txt_MassModal
-        '
-        Me.txt_MassModal.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_MassModal.Location = New System.Drawing.Point(238, 24)
-        Me.txt_MassModal.Name = "txt_MassModal"
-        Me.txt_MassModal.Size = New System.Drawing.Size(66, 20)
-        Me.txt_MassModal.TabIndex = 81
-        Me.txt_MassModal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'etq_UnitMass2
-        '
-        Me.etq_UnitMass2.AutoSize = True
-        Me.etq_UnitMass2.Location = New System.Drawing.Point(310, 28)
-        Me.etq_UnitMass2.Name = "etq_UnitMass2"
-        Me.etq_UnitMass2.Size = New System.Drawing.Size(19, 13)
-        Me.etq_UnitMass2.TabIndex = 82
-        Me.etq_UnitMass2.Text = "kg"
-        '
-        'lbl_OSRMS
-        '
-        Me.lbl_OSRMS.Location = New System.Drawing.Point(342, 6)
-        Me.lbl_OSRMS.Name = "lbl_OSRMS"
-        Me.lbl_OSRMS.Size = New System.Drawing.Size(113, 13)
-        Me.lbl_OSRMS.TabIndex = 83
-        Me.lbl_OSRMS.Text = "lbl_OSRMS"
-        Me.lbl_OSRMS.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txt_OSRMS
-        '
-        Me.txt_OSRMS.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_OSRMS.Location = New System.Drawing.Point(461, 3)
-        Me.txt_OSRMS.Name = "txt_OSRMS"
-        Me.txt_OSRMS.Size = New System.Drawing.Size(66, 20)
-        Me.txt_OSRMS.TabIndex = 84
-        Me.txt_OSRMS.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'etq_UnitOSRMS
-        '
-        Me.etq_UnitOSRMS.AutoSize = True
-        Me.etq_UnitOSRMS.Location = New System.Drawing.Point(533, 7)
-        Me.etq_UnitOSRMS.Name = "etq_UnitOSRMS"
-        Me.etq_UnitOSRMS.Size = New System.Drawing.Size(25, 13)
-        Me.etq_UnitOSRMS.TabIndex = 85
-        Me.etq_UnitOSRMS.Text = "m/s"
-        '
-        'lbl_Classe
-        '
-        Me.lbl_Classe.Location = New System.Drawing.Point(342, 27)
-        Me.lbl_Classe.Name = "lbl_Classe"
-        Me.lbl_Classe.Size = New System.Drawing.Size(113, 13)
-        Me.lbl_Classe.TabIndex = 86
-        Me.lbl_Classe.Text = "lbl_Classe"
-        Me.lbl_Classe.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        '
-        'txt_Classe
-        '
-        Me.txt_Classe.ForeColor = System.Drawing.Color.DarkRed
-        Me.txt_Classe.Location = New System.Drawing.Point(461, 24)
-        Me.txt_Classe.Name = "txt_Classe"
-        Me.txt_Classe.Size = New System.Drawing.Size(66, 20)
-        Me.txt_Classe.TabIndex = 87
-        Me.txt_Classe.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
         'Pan_Results
         '
         Me.Pan_Results.BackColor = System.Drawing.SystemColors.ControlLightLight
@@ -399,12 +263,151 @@ Partial Class Frm_PPHivoss
         Me.Pan_Results.Size = New System.Drawing.Size(698, 69)
         Me.Pan_Results.TabIndex = 6
         '
+        'txt_Classe
+        '
+        Me.txt_Classe.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_Classe.Location = New System.Drawing.Point(461, 24)
+        Me.txt_Classe.Name = "txt_Classe"
+        Me.txt_Classe.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Classe.TabIndex = 87
+        Me.txt_Classe.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_Classe
+        '
+        Me.lbl_Classe.Location = New System.Drawing.Point(342, 27)
+        Me.lbl_Classe.Name = "lbl_Classe"
+        Me.lbl_Classe.Size = New System.Drawing.Size(113, 13)
+        Me.lbl_Classe.TabIndex = 86
+        Me.lbl_Classe.Text = "lbl_Classe"
+        Me.lbl_Classe.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'etq_UnitOSRMS
+        '
+        Me.etq_UnitOSRMS.AutoSize = True
+        Me.etq_UnitOSRMS.Location = New System.Drawing.Point(533, 7)
+        Me.etq_UnitOSRMS.Name = "etq_UnitOSRMS"
+        Me.etq_UnitOSRMS.Size = New System.Drawing.Size(25, 13)
+        Me.etq_UnitOSRMS.TabIndex = 85
+        Me.etq_UnitOSRMS.Text = "m/s"
+        '
+        'txt_OSRMS
+        '
+        Me.txt_OSRMS.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_OSRMS.Location = New System.Drawing.Point(461, 3)
+        Me.txt_OSRMS.Name = "txt_OSRMS"
+        Me.txt_OSRMS.Size = New System.Drawing.Size(66, 20)
+        Me.txt_OSRMS.TabIndex = 84
+        Me.txt_OSRMS.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_OSRMS
+        '
+        Me.lbl_OSRMS.Location = New System.Drawing.Point(342, 6)
+        Me.lbl_OSRMS.Name = "lbl_OSRMS"
+        Me.lbl_OSRMS.Size = New System.Drawing.Size(113, 13)
+        Me.lbl_OSRMS.TabIndex = 83
+        Me.lbl_OSRMS.Text = "lbl_OSRMS"
+        Me.lbl_OSRMS.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'etq_UnitMass2
+        '
+        Me.etq_UnitMass2.AutoSize = True
+        Me.etq_UnitMass2.Location = New System.Drawing.Point(310, 28)
+        Me.etq_UnitMass2.Name = "etq_UnitMass2"
+        Me.etq_UnitMass2.Size = New System.Drawing.Size(19, 13)
+        Me.etq_UnitMass2.TabIndex = 82
+        Me.etq_UnitMass2.Text = "kg"
+        '
+        'txt_MassModal
+        '
+        Me.txt_MassModal.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_MassModal.Location = New System.Drawing.Point(238, 24)
+        Me.txt_MassModal.Name = "txt_MassModal"
+        Me.txt_MassModal.Size = New System.Drawing.Size(66, 20)
+        Me.txt_MassModal.TabIndex = 81
+        Me.txt_MassModal.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_MassModal
+        '
+        Me.lbl_MassModal.Location = New System.Drawing.Point(119, 27)
+        Me.lbl_MassModal.Name = "lbl_MassModal"
+        Me.lbl_MassModal.Size = New System.Drawing.Size(113, 13)
+        Me.lbl_MassModal.TabIndex = 80
+        Me.lbl_MassModal.Text = "lbl_MassModal"
+        Me.lbl_MassModal.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'etq_UnitAmortissement
+        '
+        Me.etq_UnitAmortissement.AutoSize = True
+        Me.etq_UnitAmortissement.Location = New System.Drawing.Point(310, 49)
+        Me.etq_UnitAmortissement.Name = "etq_UnitAmortissement"
+        Me.etq_UnitAmortissement.Size = New System.Drawing.Size(15, 13)
+        Me.etq_UnitAmortissement.TabIndex = 79
+        Me.etq_UnitAmortissement.Text = "%"
+        '
+        'txt_Amortissement
+        '
+        Me.txt_Amortissement.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_Amortissement.Location = New System.Drawing.Point(238, 45)
+        Me.txt_Amortissement.Name = "txt_Amortissement"
+        Me.txt_Amortissement.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Amortissement.TabIndex = 78
+        Me.txt_Amortissement.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_Amortissement
+        '
+        Me.lbl_Amortissement.Location = New System.Drawing.Point(119, 48)
+        Me.lbl_Amortissement.Name = "lbl_Amortissement"
+        Me.lbl_Amortissement.Size = New System.Drawing.Size(113, 13)
+        Me.lbl_Amortissement.TabIndex = 77
+        Me.lbl_Amortissement.Text = "lbl_Amortissement"
+        Me.lbl_Amortissement.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'etq_UnitFreq
+        '
+        Me.etq_UnitFreq.AutoSize = True
+        Me.etq_UnitFreq.Location = New System.Drawing.Point(310, 7)
+        Me.etq_UnitFreq.Name = "etq_UnitFreq"
+        Me.etq_UnitFreq.Size = New System.Drawing.Size(20, 13)
+        Me.etq_UnitFreq.TabIndex = 70
+        Me.etq_UnitFreq.Text = "Hz"
+        '
+        'txt_Frequence
+        '
+        Me.txt_Frequence.ForeColor = System.Drawing.Color.DarkRed
+        Me.txt_Frequence.Location = New System.Drawing.Point(238, 3)
+        Me.txt_Frequence.Name = "txt_Frequence"
+        Me.txt_Frequence.Size = New System.Drawing.Size(66, 20)
+        Me.txt_Frequence.TabIndex = 69
+        Me.txt_Frequence.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'lbl_Frequence
+        '
+        Me.lbl_Frequence.Location = New System.Drawing.Point(119, 6)
+        Me.lbl_Frequence.Name = "lbl_Frequence"
+        Me.lbl_Frequence.Size = New System.Drawing.Size(113, 13)
+        Me.lbl_Frequence.TabIndex = 68
+        Me.lbl_Frequence.Text = "lbl_Frequence"
+        Me.lbl_Frequence.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        '
+        'lbl_Resultats
+        '
+        Me.lbl_Resultats.AutoSize = True
+        Me.lbl_Resultats.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Resultats.Location = New System.Drawing.Point(18, 6)
+        Me.lbl_Resultats.Name = "lbl_Resultats"
+        Me.lbl_Resultats.Size = New System.Drawing.Size(67, 13)
+        Me.lbl_Resultats.TabIndex = 60
+        Me.lbl_Resultats.Text = "lbl_Resultats"
+        '
         'Frm_PPHivoss
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(700, 520)
         Me.Controls.Add(Me.pan_Main)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_PPHivoss"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_PPHivoss"

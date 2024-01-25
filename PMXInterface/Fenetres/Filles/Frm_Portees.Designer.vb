@@ -679,6 +679,9 @@ Partial Class Frm_Portees
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(954, 428)
         Me.Controls.Add(Me.pan_General)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_Portees"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_Portees"
