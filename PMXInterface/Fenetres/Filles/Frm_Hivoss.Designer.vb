@@ -90,7 +90,7 @@ Partial Class Frm_Hivoss
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(747, 336)
+        Me.pan_General.Size = New System.Drawing.Size(685, 336)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -105,7 +105,7 @@ Partial Class Frm_Hivoss
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(747, 336)
+        Me.TLpan_Main.Size = New System.Drawing.Size(685, 336)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -126,13 +126,13 @@ Partial Class Frm_Hivoss
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(741, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(679, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(383, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(352, 3)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
@@ -143,7 +143,7 @@ Partial Class Frm_Hivoss
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(243, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(212, 3)
         Me.btn_Annuler.Name = "btn_Annuler"
         Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
         Me.btn_Annuler.TabIndex = 0
@@ -157,14 +157,14 @@ Partial Class Frm_Hivoss
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(741, 290)
+        Me.pan_Main.Size = New System.Drawing.Size(679, 290)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_PartieHaute
         '
         Me.TLPan_PartieHaute.ColumnCount = 2
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.0!))
-        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 54.0!))
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 42.0!))
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.0!))
         Me.TLPan_PartieHaute.Controls.Add(Me.pan_Droite, 0, 0)
         Me.TLPan_PartieHaute.Controls.Add(Me.pan_Gauche, 0, 0)
         Me.TLPan_PartieHaute.Dock = System.Windows.Forms.DockStyle.Fill
@@ -173,7 +173,7 @@ Partial Class Frm_Hivoss
         Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
         Me.TLPan_PartieHaute.RowCount = 1
         Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(741, 290)
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(679, 290)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
         'pan_Droite
@@ -181,10 +181,10 @@ Partial Class Frm_Hivoss
         Me.pan_Droite.AutoScroll = True
         Me.pan_Droite.Controls.Add(Me.TLPan_Droite)
         Me.pan_Droite.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Droite.Location = New System.Drawing.Point(340, 0)
+        Me.pan_Droite.Location = New System.Drawing.Point(285, 0)
         Me.pan_Droite.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Droite.Name = "pan_Droite"
-        Me.pan_Droite.Size = New System.Drawing.Size(401, 290)
+        Me.pan_Droite.Size = New System.Drawing.Size(394, 290)
         Me.pan_Droite.TabIndex = 1
         '
         'TLPan_Droite
@@ -200,7 +200,7 @@ Partial Class Frm_Hivoss
         Me.TLPan_Droite.RowCount = 2
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Droite.Size = New System.Drawing.Size(401, 290)
+        Me.TLPan_Droite.Size = New System.Drawing.Size(394, 290)
         Me.TLPan_Droite.TabIndex = 0
         '
         'lbl_Amortissement
@@ -212,7 +212,7 @@ Partial Class Frm_Hivoss
         Me.lbl_Amortissement.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Amortissement.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Amortissement.Name = "lbl_Amortissement"
-        Me.lbl_Amortissement.Size = New System.Drawing.Size(401, 30)
+        Me.lbl_Amortissement.Size = New System.Drawing.Size(394, 30)
         Me.lbl_Amortissement.TabIndex = 0
         Me.lbl_Amortissement.Text = "lbl_Amortissement"
         Me.lbl_Amortissement.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -242,7 +242,7 @@ Partial Class Frm_Hivoss
         Me.pan_SaisieAmortissement.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieAmortissement.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieAmortissement.Name = "pan_SaisieAmortissement"
-        Me.pan_SaisieAmortissement.Size = New System.Drawing.Size(401, 260)
+        Me.pan_SaisieAmortissement.Size = New System.Drawing.Size(394, 260)
         Me.pan_SaisieAmortissement.TabIndex = 1
         '
         'cmb_D2Value
@@ -398,7 +398,7 @@ Partial Class Frm_Hivoss
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(339, 290)
+        Me.pan_Gauche.Size = New System.Drawing.Size(284, 290)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -414,7 +414,7 @@ Partial Class Frm_Hivoss
         Me.TLPan_Gauche.RowCount = 2
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(339, 290)
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(284, 290)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_Options
@@ -426,7 +426,7 @@ Partial Class Frm_Hivoss
         Me.lbl_Options.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Options.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Options.Name = "lbl_Options"
-        Me.lbl_Options.Size = New System.Drawing.Size(339, 30)
+        Me.lbl_Options.Size = New System.Drawing.Size(284, 30)
         Me.lbl_Options.TabIndex = 0
         Me.lbl_Options.Text = "lbl_Options"
         Me.lbl_Options.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -447,7 +447,7 @@ Partial Class Frm_Hivoss
         Me.pan_SaisieOptions.Location = New System.Drawing.Point(0, 30)
         Me.pan_SaisieOptions.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_SaisieOptions.Name = "pan_SaisieOptions"
-        Me.pan_SaisieOptions.Size = New System.Drawing.Size(339, 260)
+        Me.pan_SaisieOptions.Size = New System.Drawing.Size(284, 260)
         Me.pan_SaisieOptions.TabIndex = 1
         '
         'chk_FrenquenceDalle
@@ -527,7 +527,7 @@ Partial Class Frm_Hivoss
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(747, 336)
+        Me.ClientSize = New System.Drawing.Size(685, 336)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
