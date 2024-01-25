@@ -200,10 +200,13 @@ Public Class Frm_OptionsLogiciel
         'PreparePomBouton(PoMBtn)
 
         Select Case LastIndexW.OptionsLogiciel
-            Case Enu_OptionsLogiciel.General
+            Case Enu_OptionsLogiciel.General, Enu_OptionsLogiciel.Expert
+                LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.General
                 Me.PoMBtn_General.Checked = True
                 Me.PoMBtn_General.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
 
+                Me.PoMbtn_Expert.Checked = False
+                Me.PoMBtn_General.CouleurMouseOnBtn = MyCouleurs.ColorWhiteForGradient
         End Select
 
         For i As Integer = 0 To 3
@@ -496,7 +499,6 @@ Public Class Frm_OptionsLogiciel
     Private Function ValideSaisie() As Boolean
         Return True
     End Function
-
 
 #End Region
 End Class

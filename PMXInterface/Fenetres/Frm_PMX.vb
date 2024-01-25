@@ -831,6 +831,7 @@ Public Class Frm_PMX
     Private Sub MAJI_BOBasse()
 
         Me.TSbtn_ExpertMode.Visible = LogicielOptions.lExpert
+        Me.TSbtn_ExpertMode.Checked = LogicielOptions.lExpert
 
     End Sub
 
@@ -1440,6 +1441,10 @@ Public Class Frm_PMX
         Me.TSbtn_Cotations.Checked = lCotation
     End Sub
 
+    Private Sub TSbtn_ExpertMode_Click(sender As Object, e As EventArgs) Handles TSbtn_ExpertMode.Click
+        LogicielOptions.lExpert = Not LogicielOptions.lExpert
+        Me.TSbtn_ExpertMode.Checked = LogicielOptions.lExpert
+    End Sub
 
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
         lCotation = Not lCotation

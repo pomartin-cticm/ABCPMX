@@ -110,7 +110,8 @@
                 If Mots(2).ToUpper.Substring(0, n2) = "PI314" Then
                     Frm_OptionsLogiciel.pLocalLogicielOptions.lExpert = True
                 ElseIf Mots(2).ToUpper.Substring(0, n2) = "NO" Then
-                    Frm_OptionsLogiciel.pLocalLogicielOptions.lExpert = True
+                    Frm_OptionsLogiciel.pLocalLogicielOptions.lExpert = False
+                Else
                     '--> Message d'erreur
                     MsgBox(strNotValide)
                 End If
@@ -120,6 +121,8 @@
             '--> Message d'erreur
             MsgBox(strNotValide)
         End If
+
+        Me.txt_Expert.Text = ""
 
         '--> MAJ de l'interface
         MAJ_Fenetre_Expert()

@@ -28,18 +28,18 @@ Partial Class Frm_OptionsLogiciel
         Me.pan_Contenu = New System.Windows.Forms.Panel()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLpan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.TLpan_PourLesBoutons = New System.Windows.Forms.TableLayoutPanel()
+        Me.btn_Cancel = New System.Windows.Forms.Button()
+        Me.btn_Appliquer = New System.Windows.Forms.Button()
+        Me.pan_Expert = New System.Windows.Forms.Panel()
+        Me.lbl_ExpertMode = New System.Windows.Forms.Label()
+        Me.img_Expert = New System.Windows.Forms.PictureBox()
         Me.PoMbtn_NdC = New PMXInterface.POMbutton()
         Me.PoMbtn_Databases = New PMXInterface.POMbutton()
         Me.PoMbtn_Expert = New PMXInterface.POMbutton()
         Me.PoMbtn_Units = New PMXInterface.POMbutton()
         Me.PoMbtn_Directories = New PMXInterface.POMbutton()
-        Me.TLpan_PourLesBoutons = New System.Windows.Forms.TableLayoutPanel()
-        Me.btn_Cancel = New System.Windows.Forms.Button()
-        Me.btn_Appliquer = New System.Windows.Forms.Button()
         Me.PoMBtn_General = New PMXInterface.POMbutton()
-        Me.pan_Expert = New System.Windows.Forms.Panel()
-        Me.lbl_ExpertMode = New System.Windows.Forms.Label()
-        Me.img_Expert = New System.Windows.Forms.PictureBox()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
@@ -126,6 +126,72 @@ Partial Class Frm_OptionsLogiciel
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Gauche.Size = New System.Drawing.Size(249, 453)
         Me.TLpan_Gauche.TabIndex = 0
+        '
+        'TLpan_PourLesBoutons
+        '
+        Me.TLpan_PourLesBoutons.ColumnCount = 2
+        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Cancel, 1, 0)
+        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Appliquer, 0, 0)
+        Me.TLpan_PourLesBoutons.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_PourLesBoutons.Location = New System.Drawing.Point(0, 423)
+        Me.TLpan_PourLesBoutons.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_PourLesBoutons.Name = "TLpan_PourLesBoutons"
+        Me.TLpan_PourLesBoutons.RowCount = 1
+        Me.TLpan_PourLesBoutons.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.Size = New System.Drawing.Size(249, 30)
+        Me.TLpan_PourLesBoutons.TabIndex = 2
+        '
+        'btn_Cancel
+        '
+        Me.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
+        Me.btn_Cancel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_Cancel.Location = New System.Drawing.Point(127, 3)
+        Me.btn_Cancel.Name = "btn_Cancel"
+        Me.btn_Cancel.Size = New System.Drawing.Size(119, 24)
+        Me.btn_Cancel.TabIndex = 1
+        Me.btn_Cancel.Text = "btn_Cancel"
+        Me.btn_Cancel.UseVisualStyleBackColor = True
+        '
+        'btn_Appliquer
+        '
+        Me.btn_Appliquer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_Appliquer.Location = New System.Drawing.Point(3, 3)
+        Me.btn_Appliquer.Name = "btn_Appliquer"
+        Me.btn_Appliquer.Size = New System.Drawing.Size(118, 24)
+        Me.btn_Appliquer.TabIndex = 0
+        Me.btn_Appliquer.Text = "btn_Appliquer"
+        Me.btn_Appliquer.UseVisualStyleBackColor = True
+        '
+        'pan_Expert
+        '
+        Me.pan_Expert.Controls.Add(Me.lbl_ExpertMode)
+        Me.pan_Expert.Controls.Add(Me.img_Expert)
+        Me.pan_Expert.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Expert.Location = New System.Drawing.Point(0, 393)
+        Me.pan_Expert.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Expert.Name = "pan_Expert"
+        Me.pan_Expert.Size = New System.Drawing.Size(249, 30)
+        Me.pan_Expert.TabIndex = 6
+        '
+        'lbl_ExpertMode
+        '
+        Me.lbl_ExpertMode.AutoSize = True
+        Me.lbl_ExpertMode.Location = New System.Drawing.Point(35, 9)
+        Me.lbl_ExpertMode.Name = "lbl_ExpertMode"
+        Me.lbl_ExpertMode.Size = New System.Drawing.Size(80, 13)
+        Me.lbl_ExpertMode.TabIndex = 39
+        Me.lbl_ExpertMode.Text = "lbl_ExpertMode"
+        '
+        'img_Expert
+        '
+        Me.img_Expert.Image = CType(resources.GetObject("img_Expert.Image"), System.Drawing.Image)
+        Me.img_Expert.Location = New System.Drawing.Point(6, 3)
+        Me.img_Expert.Name = "img_Expert"
+        Me.img_Expert.Size = New System.Drawing.Size(23, 24)
+        Me.img_Expert.TabIndex = 38
+        Me.img_Expert.TabStop = False
         '
         'PoMbtn_NdC
         '
@@ -232,43 +298,6 @@ Partial Class Frm_OptionsLogiciel
         Me.PoMbtn_Directories.Size = New System.Drawing.Size(243, 34)
         Me.PoMbtn_Directories.TabIndex = 3
         '
-        'TLpan_PourLesBoutons
-        '
-        Me.TLpan_PourLesBoutons.ColumnCount = 2
-        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Cancel, 1, 0)
-        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Appliquer, 0, 0)
-        Me.TLpan_PourLesBoutons.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLpan_PourLesBoutons.Location = New System.Drawing.Point(0, 423)
-        Me.TLpan_PourLesBoutons.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLpan_PourLesBoutons.Name = "TLpan_PourLesBoutons"
-        Me.TLpan_PourLesBoutons.RowCount = 1
-        Me.TLpan_PourLesBoutons.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_PourLesBoutons.Size = New System.Drawing.Size(249, 30)
-        Me.TLpan_PourLesBoutons.TabIndex = 2
-        '
-        'btn_Cancel
-        '
-        Me.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
-        Me.btn_Cancel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Cancel.Location = New System.Drawing.Point(127, 3)
-        Me.btn_Cancel.Name = "btn_Cancel"
-        Me.btn_Cancel.Size = New System.Drawing.Size(119, 24)
-        Me.btn_Cancel.TabIndex = 1
-        Me.btn_Cancel.Text = "btn_Cancel"
-        Me.btn_Cancel.UseVisualStyleBackColor = True
-        '
-        'btn_Appliquer
-        '
-        Me.btn_Appliquer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Appliquer.Location = New System.Drawing.Point(3, 3)
-        Me.btn_Appliquer.Name = "btn_Appliquer"
-        Me.btn_Appliquer.Size = New System.Drawing.Size(118, 24)
-        Me.btn_Appliquer.TabIndex = 0
-        Me.btn_Appliquer.Text = "btn_Appliquer"
-        Me.btn_Appliquer.UseVisualStyleBackColor = True
-        '
         'PoMBtn_General
         '
         Me.PoMBtn_General.Caption = "PoMBtn_General"
@@ -289,35 +318,6 @@ Partial Class Frm_OptionsLogiciel
         Me.PoMBtn_General.RatioArrondi = 0!
         Me.PoMBtn_General.Size = New System.Drawing.Size(243, 34)
         Me.PoMBtn_General.TabIndex = 0
-        '
-        'pan_Expert
-        '
-        Me.pan_Expert.Controls.Add(Me.lbl_ExpertMode)
-        Me.pan_Expert.Controls.Add(Me.img_Expert)
-        Me.pan_Expert.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Expert.Location = New System.Drawing.Point(0, 393)
-        Me.pan_Expert.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_Expert.Name = "pan_Expert"
-        Me.pan_Expert.Size = New System.Drawing.Size(249, 30)
-        Me.pan_Expert.TabIndex = 6
-        '
-        'lbl_ExpertMode
-        '
-        Me.lbl_ExpertMode.AutoSize = True
-        Me.lbl_ExpertMode.Location = New System.Drawing.Point(35, 9)
-        Me.lbl_ExpertMode.Name = "lbl_ExpertMode"
-        Me.lbl_ExpertMode.Size = New System.Drawing.Size(80, 13)
-        Me.lbl_ExpertMode.TabIndex = 39
-        Me.lbl_ExpertMode.Text = "lbl_ExpertMode"
-        '
-        'img_Expert
-        '
-        Me.img_Expert.Image = CType(resources.GetObject("img_Expert.Image"), System.Drawing.Image)
-        Me.img_Expert.Location = New System.Drawing.Point(6, 3)
-        Me.img_Expert.Name = "img_Expert"
-        Me.img_Expert.Size = New System.Drawing.Size(23, 24)
-        Me.img_Expert.TabIndex = 38
-        Me.img_Expert.TabStop = False
         '
         'Frm_OptionsLogiciel
         '

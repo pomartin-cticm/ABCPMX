@@ -48,6 +48,7 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator31 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Maintiens = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Etaiement = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Test = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Chargements = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Gamma = New System.Windows.Forms.ToolStripButton()
@@ -143,7 +144,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
-        Me.TSbtn_Test = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -446,6 +446,16 @@ Partial Class Frm_PMX
         Me.TSbtn_Etaiement.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Etaiement.Text = "TSbtn_Etaiement"
         '
+        'TSbtn_Test
+        '
+        Me.TSbtn_Test.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Test.Image = CType(resources.GetObject("TSbtn_Test.Image"), System.Drawing.Image)
+        Me.TSbtn_Test.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Test.Name = "TSbtn_Test"
+        Me.TSbtn_Test.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Test.Text = "ToolStripButton1"
+        Me.TSbtn_Test.ToolTipText = "Tests"
+        '
         'ToolStripSeparator32
         '
         Me.ToolStripSeparator32.Name = "ToolStripSeparator32"
@@ -555,37 +565,37 @@ Partial Class Frm_PMX
         'TSmenuPPLargeurEfficace
         '
         Me.TSmenuPPLargeurEfficace.Name = "TSmenuPPLargeurEfficace"
-        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(180, 22)
+        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(158, 22)
         Me.TSmenuPPLargeurEfficace.Text = "Largeur efficace"
         '
         'TSmenuPPChargements
         '
         Me.TSmenuPPChargements.Name = "TSmenuPPChargements"
-        Me.TSmenuPPChargements.Size = New System.Drawing.Size(180, 22)
+        Me.TSmenuPPChargements.Size = New System.Drawing.Size(158, 22)
         Me.TSmenuPPChargements.Text = "Chargements"
         '
         'TSmenuPPCombinaisons
         '
         Me.TSmenuPPCombinaisons.Name = "TSmenuPPCombinaisons"
-        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(180, 22)
+        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(158, 22)
         Me.TSmenuPPCombinaisons.Text = "Combinaisons"
         '
         'TSmenuPPVerifications
         '
         Me.TSmenuPPVerifications.Name = "TSmenuPPVerifications"
-        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(180, 22)
+        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(158, 22)
         Me.TSmenuPPVerifications.Text = "Vérifications"
         '
         'TSmenuPPModePropre
         '
         Me.TSmenuPPModePropre.Name = "TSmenuPPModePropre"
-        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(180, 22)
+        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(158, 22)
         Me.TSmenuPPModePropre.Text = "Mode propre"
         '
         'TSMenuPP_Hivoss
         '
         Me.TSMenuPP_Hivoss.Name = "TSMenuPP_Hivoss"
-        Me.TSMenuPP_Hivoss.Size = New System.Drawing.Size(180, 22)
+        Me.TSMenuPP_Hivoss.Size = New System.Drawing.Size(158, 22)
         Me.TSMenuPP_Hivoss.Text = "Hivoss"
         '
         'TSbtn_PPVerifications
@@ -1224,16 +1234,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(0, "Enregistrer_NotOK")
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
-        '
-        'TSbtn_Test
-        '
-        Me.TSbtn_Test.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Test.Image = CType(resources.GetObject("TSbtn_Test.Image"), System.Drawing.Image)
-        Me.TSbtn_Test.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Test.Name = "TSbtn_Test"
-        Me.TSbtn_Test.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Test.Text = "ToolStripButton1"
-        Me.TSbtn_Test.ToolTipText = "Tests"
         '
         'Frm_PMX
         '
