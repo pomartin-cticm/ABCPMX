@@ -287,9 +287,11 @@ Imports PMXMoteur2
         EnveloppeTableauEfforts(MEdConstruction, myPoutre.Nodes.nbNodes, MEdMaxConstruction, MEdMinConstruction, iNodeMMaxConstruction, iNodeMMinConstruction)
         EnveloppeTableauEfforts(VEdConstruction, myPoutre.Nodes.nbNodes, VEdMaxConstruction, VEdMinConstruction, iNodeVMaxConstruction, iNodeVMinConstruction)
 
-        'VERIFICATION DE LA POUTRE
+        'VERIFICATION DE LA POUTRE 
 
-        myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre)
+        myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True) 'Poutre seul durant la phase de construction
+        myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre) 'Poutre mixte
+
 
         '---------------------------------------------------
         '---------------------------------------------------
@@ -407,6 +409,8 @@ Imports PMXMoteur2
         '---------------------------------------------------
         '---------------------------------------------------
 
+        'A L'ELU
+
         Dim zANE, MRk As Decimal
         myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, 0, zANE, MRk)
 
@@ -422,11 +426,23 @@ Imports PMXMoteur2
         ValRef = 0.836 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
 
+        'A L'ELU CONSTRUCTION
+
+        Valeur = myPoutre.VerifAcier(0).CritereM.Resistance(iNodeMMax)
+        ValRef = 468.1 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé acier seul
+
+        Valeur = myPoutre.VerifAcier(0).CritereM.CritereMax
+        ValRef = 0.721
+        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
+
         '---------------------------------------------------
         '---------------------------------------------------
         ' --> Vérification de la résistance à l'effort tranchant (ELU) 
         '---------------------------------------------------
         '---------------------------------------------------
+
+        'A L'ELU
 
         Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0)
         ValRef = 807 * 1000
@@ -436,14 +452,30 @@ Imports PMXMoteur2
         ValRef = 0.232
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
 
-        Dim rhoV As Decimal
+        Dim rhoVELU As Decimal
         If ValRef <= 0.5 Then
-            rhoV = 0
+            rhoVELU = 0
         ElseIf ValRef >= 1 Then
-            rhoV = 1
+            rhoVELU = 1
         Else
-            rhoV = (2 * 0.232 - 1) ^ 2 'Valeur calculée par rapport à la valeur de référence. Sera utile pour l'interacion MV
+            rhoVELU = (2 * 0.232 - 1) ^ 2 'Valeur calculée par rapport à la valeur de référence. Sera utile pour l'interacion MV
         End If
+
+        'A L'ELU CONSTRUCTION
+
+        Valeur = myPoutre.VerifAcier(0).CritereV.CritereMax
+        ValRef = 0.113
+        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
+
+        Dim rhoVELCU As Decimal
+        If ValRef <= 0.5 Then
+            rhoVELCU = 0
+        ElseIf ValRef >= 1 Then
+            rhoVELCU = 1
+        Else
+            rhoVELCU = (2 * 0.232 - 1) ^ 2 'Valeur calculée par rapport à la valeur de référence. Sera utile pour l'interacion MV
+        End If
+
 
         '---------------------------------------------------
         '---------------------------------------------------
@@ -451,7 +483,7 @@ Imports PMXMoteur2
         '---------------------------------------------------
         '---------------------------------------------------
 
-        Assert.IsTrue(myPoutre.Section.IsInteractionMV(myPoutre.Param.EtaW) = False)
+        Assert.IsTrue(myPoutre.Section.IsInteractionMV(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 
         '---------------------------------------------------
         '---------------------------------------------------
@@ -462,7 +494,7 @@ Imports PMXMoteur2
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
 
-        myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, rhoV, zANE, MRk)
+        myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, rhoVELU, zANE, MRk)
 
         Valeur = MRk
         ValRef = 468.1 * 1000
@@ -520,7 +552,7 @@ Imports PMXMoteur2
         '--> Vérification des calculs des coefficients d'équivalences à LT (50 ans)
         Dim ageT As Integer = 50 * 365 '50 ans, en jours
         Dim ageT0 As Integer = 28
-        Dim h0 As Decimal = 2 * myPoutre.Dalle.EpaisseurActive
+        Dim h0 As Decimal = 2 * 62 / 1000
         Dim PHIrh As Decimal = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
         Dim betaFcm As Decimal = 16.8 / Math.Sqrt(25 + 8)
         Dim betaT0 As Decimal = 1 / (0.1 + ageT0 ^ 0.2)
@@ -647,18 +679,54 @@ Imports PMXMoteur2
         '---------------------------------------------------
         '---------------------------------------------------
 
+        '--> Fleches due à G1
+
+        Valeur = myPoutre.ChargesA(0).FlecheMax
+        ValRef = 51.2 / 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> Fleches due à G2
+
+        Valeur = myPoutre.ChargesA(1).FlecheMax
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(0).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        ValRef = 5 * 4.2 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * InertieY)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        '--> Fleches due à Q
+
+        Valeur = myPoutre.ChargesA(2).FlecheMax
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        ValRef = 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * InertieY)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
         '--> Fleche due au retrait 
 
         Valeur = myPoutre.ChargesA(5).FlecheMax
         Dim NR, deltazG, Mr, deltaR As Decimal
-        NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(3).nEqDalle * Beff * myPoutre.Dalle.t_d * 10 ^ 6 'N
+        NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(3).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
 
         myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(3).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.t_d / 2 - zANE
+        deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.EpaisseurActive / 2 - zANE
         Mr = NR * deltazG
-        deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * InertieY)
+        deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * 10 ^ 6 * InertieY)
+        ValRef = deltaR
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
-        'A FINIR
+
+        '---------------------------------------------------
+        '---------------------------------------------------
+        ' --> Fréquence propre (ELS)
+        '---------------------------------------------------
+        '---------------------------------------------------
+
+        'GUD: Le test ne fonctionne pas, je ne sais pas pourquoi (valeur dans l'article:3.29 Hz, le logiciel donne 4.4 Hz ...)
+
+        myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
+        Valeur = myPoutre.Modal.Frequence
+
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        ValRef = Math.PI / 2 * Math.Sqrt(210 * InertieY * 10 ^ 8 * 9.81 / (1300 * 14 ^ 4))
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
     End Sub
 

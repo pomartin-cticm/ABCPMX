@@ -4618,9 +4618,10 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 '# Vérification des poutres mixtes en phase finale aux ELU
                 Me.VerifMixte(0).Z_VerificationELU(Me)
+                Me.VerifAcier(0).Z_VerificationELU(Me, True)
 
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
-                Me.VerifAcier(0).Z_VerificationELU(Me)
+                Me.VerifAcier(0).Z_VerificationELU(Me, False)
 
         End Select
 

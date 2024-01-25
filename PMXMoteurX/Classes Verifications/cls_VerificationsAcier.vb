@@ -54,7 +54,7 @@ Public Class cls_VerificationsAcier
 
 #Region " Outils de vérification "
 
-    Public Sub Z_VerificationELU(MyPoutre As cls_Poutre)
+    Public Sub Z_VerificationELU(MyPoutre As cls_Poutre, lConstructionPhase As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -67,6 +67,7 @@ Public Class cls_VerificationsAcier
 
         Dim VplRd As Decimal
         Dim iCombi As Integer
+        Dim combiELU As New cls_Combinaisons
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
         Dim MplRd, zANP As Decimal
@@ -109,20 +110,26 @@ Public Class cls_VerificationsAcier
 
         '--> Boucle sur les combinaisons
 
-        For iCombi = 0 To MyPoutre.CombiA_ELU.nbCombi - 1
+        If lConstructionPhase Then
+            combiELU = MyPoutre.CombiA_ELCU
+        Else
+            combiELU = MyPoutre.CombiA_ELU
+        End If
+
+        For iCombi = 0 To combiELU.nbCombi - 1
 
             '# Combinaisons des moments, efforts tranchants
 
-            MyPoutre.CombiA_ELU.CombineMoments(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, MEd, False)
+            combiELU.CombineMoments(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, MEd, False)
 
             '# Combinaison des efforts tranchants
 
-            MyPoutre.CombiA_ELU.CombineEffortsT(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, VEd, False)
+            combiELU.CombineEffortsT(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, VEd, False)
 
             '# Combinaisons des contraintes
 
             If lSigma Then
-                MyPoutre.CombiA_ELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, MyPoutre.PtsSigma.zPos.Count, MyPoutre.Nodes.nbNodes,
+                combiELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, MyPoutre.PtsSigma.zPos.Count, MyPoutre.Nodes.nbNodes,
                                                        MyPoutre.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
             End If
 
