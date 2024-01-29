@@ -442,7 +442,7 @@ Public Class cls_Projet
                     Lines.Add("   dMaxNodes            = " & .dMaxNodes)
                     Lines.Add("   nbMinNodesTr            = " & .nbMinNodesTravee)
                     Lines.Add("   nbMinNodesCo            = " & .nbMinNodesConsole)
-                    Lines.Add("   epsSH            = " & .nbMinNodesConsole)
+                    Lines.Add("   epsSH            = " & .EpsilonSH)
                     Lines.Add("   lRetraitEnr            = " & .lRetraitEnrobage)
                     Lines.Add("   ArmaYoung            = " & .ArmaYoung)
                     Lines.Add("   Gravite            = " & .GraviteG)

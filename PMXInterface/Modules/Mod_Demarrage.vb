@@ -557,9 +557,6 @@ Public Module Mod_Demarrage
 
         AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
 
-        '# Cela ne marche pas !!!!
-        'MyPoutre.Param.Gamma = LogicielOptions.Gamma.Clone
-
         MyPoutre.Dalle.ThetaRd = OptionsScope.ThetaH
 
     End Sub

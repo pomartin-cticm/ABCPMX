@@ -269,7 +269,7 @@ Public Class Frm_Chargement
                 Me.lbl_ResultingForce.Text = Bloc("RESULTINGFORCE")
 
                 Me.lbl_UnitWidthApplication.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-                Me.lbl_UnitUniformLoad.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+                Me.lbl_UnitUniformLoad.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "²"
                 Me.lbl_UnitResultingForce.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
 
                 'Me.lbl_ResultingForce.Location = New Point(257, 38)
