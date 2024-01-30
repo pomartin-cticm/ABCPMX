@@ -598,6 +598,11 @@ Module Mod_Outils
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 2
                 Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+2\="
 
+            Case Enu_TypeVariable.AireMM2
+
+                kUnitU = LogicielInfo.Transfert_Longueur(0) ^ 2
+                Unite = SEP & LogicielInfo.Unit_Longueur(0) & "\+2\="
+
             Case Enu_TypeVariable.Millimetre
 
                 kUnitU = LogicielInfo.Transfert_Longueur(0)

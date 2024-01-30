@@ -1016,7 +1016,7 @@ Public Class cls_Section
 #Region " Propriétés plastiques de la section "
 
     Public Sub ProprietesPlastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
-                                       ByRef zANP As Decimal, ByRef MplRd As Decimal)
+                                       ByRef zANP As Decimal, ByRef MplRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -1057,7 +1057,7 @@ Public Class cls_Section
 
         '# Armatures de l'enrobage
 
-        If Me.lEnrobage Then
+        If Me.lEnrobage And Not lProfileAcierUniquement Then
 
             MaillageArmaturesEnrobage_YY(Gammas, MyModele)
 
@@ -1349,7 +1349,7 @@ Public Class cls_Section
     End Sub
 
     Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
-                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal)
+                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -1383,7 +1383,7 @@ Public Class cls_Section
 
         '# Béton d'enrobage
 
-        If Me.lEnrobage Then
+        If Me.lEnrobage And Not lProfileAcierUniquement Then
 
             MaillageEnrobage_YY(Gammas, nEqEc, MyModele)
 
@@ -1391,7 +1391,7 @@ Public Class cls_Section
 
         '# Armatures de l'enrobage
 
-        If Me.lEnrobage Then
+        If Me.lEnrobage And Not lProfileAcierUniquement Then
 
             MaillageArmaturesEnrobage_YY(Gammas, MyModele)
 

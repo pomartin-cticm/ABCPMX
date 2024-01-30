@@ -13,7 +13,7 @@ Public Class Frm_Chargement
     ''' <summary>
     ''' Définition d'une poutre_loc afin d'enregistrer les actions de l'utilisateur
     ''' </summary>
-    Dim MyPoutreLoc As New cls_Poutre(NomChargements)
+    Dim MyPoutreLoc As New cls_Poutre()
 
     ''' <summary>
     ''' Définition d'une liste de string pour remplir le cmb_travee
@@ -107,7 +107,7 @@ Public Class Frm_Chargement
     End Sub
 
     Private Sub InitialiserVariables()
-        MyPoutreLoc = New cls_Poutre(NomChargements)
+        MyPoutreLoc = New cls_Poutre()
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
         'MyPoutreLoc.InitialisePoidsPropres()
         PreparerCalculEF(MyPoutreLoc)

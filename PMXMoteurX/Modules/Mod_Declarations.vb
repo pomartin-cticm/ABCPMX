@@ -1,4 +1,4 @@
-﻿Module Mod_Declarations
+﻿Public Module Mod_Declarations
 
 #Region " Paramètres généraux logiciels "
 
@@ -145,6 +145,13 @@
 
         Return sigma_S1
     End Function
+
+#End Region
+
+#Region " Gestion noms chargements "
+
+    Public NomChargements() As String           ' Nom des cas de charge utilisateur
+    Public NomChargesA() As String              ' Nom des cas de charge analyse
 
 #End Region
 

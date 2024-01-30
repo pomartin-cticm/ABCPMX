@@ -39,7 +39,7 @@
     ''' <summary>
     ''' Aire (m2)
     ''' </summary>
-    Public A_s As Decimal
+    'Public A_s As Decimal
 
     ''' <summary>
     ''' Aire d'armature par unité de largeur de dalle

@@ -157,7 +157,7 @@ Public Class Frm_Catalogue
 
         'lSmartBeam = (tabPoutres(iPoutreEnCours).Decoupe = Cls_Beam.Enu_TypeDecoupe.SmartBeam)
 
-        MyPoutreLoc = New cls_Poutre(NomChargements)
+        MyPoutreLoc = New cls_Poutre()
         MyPoutreLoc.Section.ProfilA.aW = 0
         MyPoutreLoc.Section.ProfilA.Plat_b = 0
         MyPoutreLoc.Section.ProfilA.Plat_t = 0

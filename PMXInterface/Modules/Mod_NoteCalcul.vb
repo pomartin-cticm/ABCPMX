@@ -587,6 +587,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
         AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
         SauteLigne()
+        AddLigneNDC(TABW2 & BlocG("MASS_LIN_PROFILE") & TABAFF & "m\-lin\=" & TABEGAL & GetStringInUnit(MyBeam.Section.MassLineiqueProfilA, Enu_TypeVariable.SansType, 4, 1, False) & " kg/ml")
         AddLigneNDC(TABW2 & BlocG("MASS_PROFILE") & TABAFF & "m" & TABEGAL & GetStringInUnit(MyBeam.MasseTotalePoutre, Enu_TypeVariable.SansType, 4, 1, False) & " kg")
         AddLigneNDC(TABW2 & BlocG("TOT_PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnit(MyBeam.SurfacePeintureTotalePoutre(True), Enu_TypeVariable.AireCM2, 4, 1, True))
         AddLigneNDC(TABW2 & BlocG("PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnit(MyBeam.SurfacePeintureTotalePoutre(False), Enu_TypeVariable.AireCM2, 4, 1, True))
@@ -599,10 +600,13 @@ Module Mod_NoteCalcul
         If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(3, BlocG("MATERIAL_PROFILE"))
-        AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & MyBeam.Section.Acier.Nuance & " " & MyBeam.Section.Acier.Qualite)
-        'AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & MyBeam.Section.Acier.Nuance)
-        AddLigneNDC(TABW2 & BlocG("STANDARD_PROFILE") & TABAFF & MyBeam.Section.Acier.Reduction)
-        'AddLigneNDC(TABW2 & BlocG("QUALITY_PROFILE") & TABAFF & MyBeam.Section.Acier.Qualite)
+        If MyBeam.Section.Acier.lUser Then
+            AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & BlocG("USER_DEF"))
+        Else
+            AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & MyBeam.Section.Acier.Nuance & " " & MyBeam.Section.Acier.Qualite)
+            AddLigneNDC(TABW2 & BlocG("STANDARD_PROFILE") & TABAFF & MyBeam.Section.Acier.Reduction)
+        End If
+
         If lLamine Then
             AddLigneNDC(TABW2 & BlocG("FY_PROFILE") & TABAFF & "f\-y\=" & TABEGAL & GetStringInUnit(MyBeam.Section.FySup, Enu_TypeVariable.Contrainte, 4, 0, True))
         Else
@@ -613,11 +617,16 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("E_PROFILE") & TABAFF & "E" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.EYoung, Enu_TypeVariable.Contrainte, 4, 0, True))
         AddLigneNDC(TABW2 & BlocG("RHO_PROFILE") & TABAFF & "\Sr\s" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.Rho, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+3\=")
 
+        Dim zANP, MplRd As Decimal
+        Dim zANE, InertieY, MelRd As Decimal
+        MyBeam.Section.ProprietesPlastiquesMyy(1, True, MyBeam.Param.Gamma, 0, zANP, MplRd, True)
+        MyBeam.Section.ProprietesElastiquesMyy(1, True, MyBeam.Param.Gamma, 1, zANE, InertieY, MelRd, True)
 
         AddTitreNdC(3, BlocG("RESISTANCE_PROFILE"))
+        AddLigneNDC(TABW2 & BlocG("TRAC_RES") & TABAFF & "N\-t,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.ResistanceTractionProfile(MyBeam.Param.Gamma.GammaM0), Enu_TypeVariable.Effort, 4, 0, True))
         AddLigneNDC(TABW2 & BlocG("SHEAR_RES") & TABAFF & "V\-pl,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.VplRd(MyBeam.Param.Gamma.GammaM0), Enu_TypeVariable.Effort, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("PLAS_MOM_RES") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.VplRd(MyBeam.Param.Gamma.GammaM0), Enu_TypeVariable.Effort, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("ELAS_MOM_RES") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.VplRd(MyBeam.Param.Gamma.GammaM0), Enu_TypeVariable.Effort, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("PLAS_MOM_RES") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ELAS_MOM_RES") & TABAFF & "M\-el,Rd\=" & TABEGAL & GetStringInUnit(MelRd, Enu_TypeVariable.Moment, 4, 0, True))
         SauteLigne()
         AddLigneNDC(TABW2 & BlocG("BENDING_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(False, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
         AddLigneNDC(TABW2 & BlocG("COMPRESSION_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(True, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
@@ -857,7 +866,7 @@ Module Mod_NoteCalcul
                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).EspBar, Enu_TypeVariable.Dimension, 4, 0, False))
                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).PhiS, Enu_TypeVariable.Dimension, 4, 0, False))
                 AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).z_s, Enu_TypeVariable.Dimension, 4, 0, False))
-                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).A_s, Enu_TypeVariable.Dimension, 4, 0, False))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Dalle.LitArma(i).AireParULargeur, Enu_TypeVariable.AireMM2, 4, 0, False))
             End If
         Next
 
@@ -874,8 +883,8 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("MATERIAL_LONGI_REINF"))
         AddLigneNDC(TABW2 & BlocG("CLASS_REINFORCEMENT") & TABAFF & MyBeam.Dalle.AcierArmatures.Classe)
-        AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & GetStringInUnit(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("FYS_REINFORCEMENT") & TABAFF & "f\-sk\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ES_REINFORCEMENT") & TABAFF & "E\-s\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.Contrainte, 4, 0, True))
 
         'SauteLigne()
         If nbLignes + 30 > MAXLIGNEPPAG Then SautePage()
@@ -916,7 +925,7 @@ Module Mod_NoteCalcul
 
         With MyBeam.Dalle.Bac
 
-            AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\=" & TABEGAL & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("TP_PSS") & TABAFF & "t\-p\=" & TABEGAL & GetStringInUnit(.Tp, Enu_TypeVariable.Dimension, 4, 2, True))
             AddLigneNDC(TABW2 & BlocG("EP_PSS") & TABAFF & "e\-p\=" & TABEGAL & GetStringInUnit(.Ep, Enu_TypeVariable.Dimension, 4, 0, True))
 
             If .HasRaidisseurSup Then
@@ -929,7 +938,7 @@ Module Mod_NoteCalcul
 
             AddLigneNDC(TABW2 & BlocG("BB_PSS") & TABAFF & "b\-b\=" & TABEGAL & GetStringInUnit(.Bb, Enu_TypeVariable.Dimension, 4, 0, True))
             AddLigneNDC(TABW2 & BlocG("BT_PSS") & TABAFF & "b\-t\=" & TABEGAL & GetStringInUnit(.Bt, Enu_TypeVariable.Dimension, 4, 0, True))
-            AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\=" & TABEGAL & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+2\=")
+            AddLigneNDC(TABW2 & BlocG("MUP_PSS") & TABAFF & "\Sm\s\-p\=" & TABEGAL & GetStringInUnit(.msurf, Enu_TypeVariable.SansType, 4, 0, True) & " kg/m\+2\=")
             AddLigneNDC(TABW2 & BlocG("FP_PSS") & TABAFF & "f\-p\=" & TABEGAL & GetStringInUnit(.fyp, Enu_TypeVariable.Contrainte, 4, 0, True))
             AddLigneNDC(TABW2 & BlocG("IPU_PSS") & TABAFF & "I\-pu\=" & TABEGAL & GetStringInUnit(.Ieff, Enu_TypeVariable.Dimension, 4, 0, True) & "\+4\=/m")
 
@@ -1011,7 +1020,7 @@ Module Mod_NoteCalcul
         With MyBeam.Dalle.Connecteur
             'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
             AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\=" & TABEGAL & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
-            AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d = " & TABEGAL & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
+            AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d " & TABEGAL & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
             AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\=" & TABEGAL & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
             AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\=" & TABEGAL & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
 
@@ -1040,12 +1049,12 @@ Module Mod_NoteCalcul
                     For nr_boucle As Integer = nr_min To nr_max
                         AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
                         ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
-                        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True) & " (n\-r\= = " & nr_boucle & ")")
                     Next
                 Else 'dalle parallèlle
                     AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 0, True))
                     ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
-                    AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
+                    AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True))
                 End If
             End If
 
@@ -1452,7 +1461,7 @@ Module Mod_NoteCalcul
                     If lMultiSpan Then
                         EditionParametresTableauQsurfTravee(MyBeam, elmnt.Value)
                     Else
-                        AddLigneNDC(TABW2 & "\G\I" & BlocG("QSURF") & "\i\g" & TABAFF & "Q =" & GetStringInUnit(elmnt.Value.QSurf(1), Enu_TypeVariable.ChargeSurfacique, 3, 2, False))
+                        AddLigneNDC(TABW2 & "\G\I" & BlocG("QSURF") & "\i\g" & TABAFF & "Q =" & GetStringInUnit(elmnt.Value.QSurf(1), Enu_TypeVariable.ChargeSurfacique, 3, 2, True))
                     End If
 
                 End If

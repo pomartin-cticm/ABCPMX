@@ -676,7 +676,7 @@ Public Module Mod_Demarrage
 
     End Sub
 
-    Public Sub AssocieAcierCompatible(MyPoutre As cls_Poutre, ByVal FileSteels As String, ByVal FileProfiles As String, ByRef lTrouve As Boolean)
+    Public Sub AssocieAcierCompatible(MyPoutre As cls_Poutre, ByVal FileSteels As String, ByVal FileProfiles As String, ByRef lTrouve As Boolean, Optional ByVal lRecupererPremierAcierCompatible As Boolean = False)
         '--------------------------------------------------------------------------------
         '
         '   06/12/12 :  Création - POM - V3.00
@@ -709,11 +709,18 @@ Public Module Mod_Demarrage
 
         ExtraireAciersCompatibles(EpMax, MyPoutre.Section.ProfilA.IndStandart, MySteels)
 
-        AnalyseAciersListe(MySteels, True, cls_Acier.NUANCEDEFAULT, lTrouve, iAcier)
+        If lRecupererPremierAcierCompatible Then 'On récupère l'acier exacte (utile lors de la lecture d'un fichier sauvegarde)
+            AnalyseAciersListe(MySteels, True, "", lTrouve, iAcier, True, MyPoutre)
 
-        If Not lTrouve Then
-            AnalyseAciersListe(MySteels, False, "", lTrouve, iAcier)
+            If Not lTrouve Then MsgBox("Erreur récupération nuance d'acier | Steel grade recovery error")
+        Else 'on récupère le premier acier S355 disponible (utile lors du lancement du logiciel)
+            AnalyseAciersListe(MySteels, True, cls_Acier.NUANCEDEFAULT, lTrouve, iAcier)
+
+            If Not lTrouve Then
+                AnalyseAciersListe(MySteels, False, "", lTrouve, iAcier)
+            End If
         End If
+
 
         If lTrouve Then
             MyPoutre.Section.Acier.Nuance = MySteels(iAcier).Nuance
@@ -736,7 +743,7 @@ Public Module Mod_Demarrage
     End Sub
 
     Private Sub AnalyseAciersListe(ByVal MySteels As List(Of strucAcierLocal), ByVal lImposedGrade As Boolean,
-                                   ByVal MyGrade As String, ByRef lTrouve As Boolean, ByRef iAcier As Integer)
+                                   ByVal MyGrade As String, ByRef lTrouve As Boolean, ByRef iAcier As Integer, Optional ByVal lRechercheExacte As Boolean = False, Optional ByVal MyPoutre As cls_Poutre = Nothing)
         '--------------------------------------------------------------------------------
         '
         '   21/12/12 :  Création - POM - V3.00
@@ -756,14 +763,29 @@ Public Module Mod_Demarrage
 
         lTrouve = False
 
-        Do While (Not lTrouve) And iAcier < MySteels.Count - 1
-            iAcier += 1
-            If lImposedGrade Then
-                lTrouve = (MySteels(iAcier).Nuance.Trim.ToUpper = MyGrade.ToUpper.Trim)
-            Else
-                lTrouve = True
-            End If
-        Loop
+        If lRechercheExacte And MyPoutre IsNot Nothing Then 'On récupère l'acier exacte (utile lors de la lecture d'un fichier sauvegarde)
+            Do While (Not lTrouve) And iAcier < MySteels.Count - 1
+                iAcier += 1
+                If lImposedGrade Then
+                    lTrouve = (MySteels(iAcier).Nuance.Trim = MyPoutre.Section.Acier.Nuance) _
+                       And (MySteels(iAcier).Qualite.Trim = MyPoutre.Section.Acier.Qualite) _
+                       And (MySteels(iAcier).Reduc.Trim = MyPoutre.Section.Acier.Reduction)
+                Else
+                    lTrouve = True
+                End If
+            Loop
+        Else 'on récupère le premier acier S355 disponible (utile lors du lancement du logiciel)
+            Do While (Not lTrouve) And iAcier < MySteels.Count - 1
+                iAcier += 1
+                If lImposedGrade Then
+                    lTrouve = (MySteels(iAcier).Nuance.Trim.ToUpper = MyGrade.ToUpper.Trim)
+                Else
+                    lTrouve = True
+                End If
+            Loop
+        End If
+
+
     End Sub
 
     Private Sub ExtraireAciersCompatibles(EpMax As Decimal, iStandard() As Short, ByRef MySteels As List(Of strucAcierLocal))

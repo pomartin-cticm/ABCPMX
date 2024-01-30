@@ -37,7 +37,7 @@ BLOCK POUTRE
    lDefautEnroba  =  True
    lDefautEtaiem  =  False
    lDefautDalle   =  False
-   lDonneesSauv   =  True
+   lDonneesSauv   =  False
    lNouvPoutre    =  False
    lAutoDesign    =  False
    NombreZones    =  {1/1/1}
@@ -81,14 +81,14 @@ BLOCK PROFILA
    IndStand       =  {1/1/0/1/1/1/0/1/0/0/1/0/0/1/0}
 
 BLOCK ACIER_PROFILA
-   Nuance         =  S355
-   Qualite        =  M/ML
-   Reduction      =  EN 10025-4
+   Nuance         =  S275
+   Qualite        =  EC3
+   Reduction      =  Table 3.1
    NormeProduit   =  EN 1993-1-1
    EpMax          =  0,150000005960464
    iBase          =  1
-   iTabStand      =  3
-   iStandard      =  4
+   iTabStand      =  0
+   iStandard      =  1
    lUser      =  False
    f_y_fs         =  235
    f_y_w          =  235

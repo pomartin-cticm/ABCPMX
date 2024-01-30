@@ -523,7 +523,7 @@ Public Class cls_Poutre
 
 #Region " CONSTRUCTEURS "
 
-    Private Sub InitialiseChargements(MsgChargements() As String)
+    Private Sub InitialiseChargements()
         '-------------------------------------------------------------------------------------------------------
         '   00/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------
@@ -532,11 +532,13 @@ Public Class cls_Poutre
         '   MsgChargements  [E] :   Nom des cas de charges dans la langue utilisateur
         '-------------------------------------------------------------------------------------------------------
 
-        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(MsgChargements(0), Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(MsgChargements(1), Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(MsgChargements(2) & " 1", Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(MsgChargements(2) & " 2", Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(MsgChargements(3), Me.IndiceTraveeConsoleDroite))
+
+
+        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(NomChargements(0), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(NomChargements(1), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(NomChargements(2) & " 1", Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(NomChargements(2) & " 2", Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(NomChargements(3), Me.IndiceTraveeConsoleDroite))
 
     End Sub
 
@@ -584,18 +586,18 @@ Public Class cls_Poutre
         If Me.lMixte Then lCombELCSRules(0) = True
     End Sub
 
-    Public Sub New(MsgChargements() As String)
+    Public Sub New()
 
         Me.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
         ParametresGenerauxDefaut()
         PoutreDefautAcier()
-        InitialiseChargements(MsgChargements)
+        InitialiseChargements()
         InitialiseTablesCombi()
         InitialisePoidsPropres()
 
     End Sub
 
-    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String, MsgChargements() As String)
+    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String)
 
         Me.TypeSection = MyTypeSection
         Me.BeamID = NomPoutre
@@ -618,7 +620,7 @@ Public Class cls_Poutre
                 DalleDefaut()
         End Select
 
-        InitialiseChargements(MsgChargements)
+        InitialiseChargements()
         InitialiseTablesCombi()
         InitialisePoidsPropres()
 

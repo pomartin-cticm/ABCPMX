@@ -7,25 +7,25 @@ Public Class Frm_AjoutePP
 
     Dim lBuild As Boolean = True
 
-    Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
+    'Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
 
     Dim strProjet, strPoutre As String
     Dim indProjetN, indPoutreN As Integer
 
     'MODIF GUD car Dalle n'est plus dans la Cls_Section
 
-    Dim MyPoutreAcier As New cls_Poutre(NomCas)
-    Dim MyPoutreAcierEnrobe As New cls_Poutre(NomCas)
-    Dim MyPoutreMixte As New cls_Poutre(NomCas)
-    Dim MyPoutreMixteEnrobe As New cls_Poutre(NomCas)
-    Dim MyPoutreSFB As New cls_Poutre(NomCas)
-    Dim MyPoutreIFB_A As New cls_Poutre(NomCas)
-    Dim MyPoutreIFB_B As New cls_Poutre(NomCas)
-    Dim MyPoutreSAB As New cls_Poutre(NomCas)
-    Dim MyPoutreSFBmixte As New cls_Poutre(NomCas)
-    Dim MyPoutreIFB_Amixte As New cls_Poutre(NomCas)
-    Dim MyPoutreIFB_Bmixte As New cls_Poutre(NomCas)
-    Dim MyPoutreSABmixte As New cls_Poutre(NomCas)
+    Dim MyPoutreAcier As New cls_Poutre()
+    Dim MyPoutreAcierEnrobe As New cls_Poutre()
+    Dim MyPoutreMixte As New cls_Poutre()
+    Dim MyPoutreMixteEnrobe As New cls_Poutre()
+    Dim MyPoutreSFB As New cls_Poutre()
+    Dim MyPoutreIFB_A As New cls_Poutre()
+    Dim MyPoutreIFB_B As New cls_Poutre()
+    Dim MyPoutreSAB As New cls_Poutre()
+    Dim MyPoutreSFBmixte As New cls_Poutre()
+    Dim MyPoutreIFB_Amixte As New cls_Poutre()
+    Dim MyPoutreIFB_Bmixte As New cls_Poutre()
+    Dim MyPoutreSABmixte As New cls_Poutre()
 
     'Dim MySectionAcier As cls_Section = MyPoutreAcier.Section
     'Dim MySectionAcierEnrobe As cls_Section = MyPoutreAcierEnrobe.Section
@@ -567,63 +567,63 @@ Public Class Frm_AjoutePP
 
             If Me.chk_SectionAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre))
             End If
 
             If Me.chk_SectionAcierEnrobe.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre))
             End If
 
             If Me.chk_SectionMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, NomPoutre))
             End If
 
             If Me.chk_SectionMixteEnrobe.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.MixteEnrobage, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.MixteEnrobage, NomPoutre))
             End If
 
             If Me.chk_SFBAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre))
             End If
 
             If Me.chk_SFBMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre))
             End If
 
             If Me.chk_IFB_A_Acier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre))
             End If
 
             If Me.chk_IFB_A_Mixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre))
             End If
 
             If Me.chk_IFB_B_Acier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre))
             End If
 
             If Me.chk_IFB_B_Mixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre))
             End If
 
 
             If Me.chk_SABAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre))
             End If
 
             If Me.chk_SABMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, NomChargements))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre))
             End If
 
             InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)

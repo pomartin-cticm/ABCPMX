@@ -338,6 +338,7 @@ Public Module Mod_Declarations
     ''' </summary>
     Public Enum Enu_TypeVariable
         AireCM2
+        AireMM2
         AireLongueurNDC
         Contrainte
         ContrainteGPa
@@ -656,8 +657,8 @@ Public Module Mod_Declarations
 
 #Region " Gestion des langues "
 
-    Public NomChargements() As String           ' Nom des cas de charge utilisateur
-    Public NomChargesA() As String              ' Nom des cas de charge analyse
+    'Public NomChargements() As String           ' Nom des cas de charge utilisateur
+    'Public NomChargesA() As String              ' Nom des cas de charge analyse
 
 #End Region
 

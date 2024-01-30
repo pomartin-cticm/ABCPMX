@@ -1004,7 +1004,7 @@ Public Class Frm_PMX
         Dim lTrouve As Boolean
 
         For Each MyPoutre As cls_Poutre In MyProjet.Poutres
-            AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
+            AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve, True)
         Next
 
         '--> Aucune modification par rapport au fichier ouvert
