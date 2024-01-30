@@ -107,6 +107,10 @@ RHO_PROFILE				= Masse volumique
 RESISTANCE_PROFILE		= Résistance du profilé
 TRAC_RES				= Résistance à la traction
 SHEAR_RES				= Résistance à l'effort tranchant
+SHEAR_BUC				= Voilement par cisaillement
+SHEAR_BUC_RES			= Résistance au voilement par cisaillement
+NEED_CHECK_WB			= Vérification du voilement par cisaillement nécessaire
+NO_NEED_CHECK_WB		= Vérification du voilement par cisaillement non nécessaire
 PLAS_MOM_RES			= Moment résistant plastique
 ELAS_MOM_RES			= Moment résistant élastique
 GRADE_PROFILE			= Nuance d'acier
@@ -352,6 +356,7 @@ INFO_S					= S = Satisfaisant
 INFO_NS					= NS = NON Satisfaisant
 M_CRITERIA				= Résistance à la flexion
 V_CRITERIA				= Résistance à l'effort tranchant
+VB_CRITERIA				= Résistance au voilement par cisaillement
 MV_CRITERIA				= Résistance à l'interaction MV
 LTB_CRITERIA			= Résistance au déversement
 REINF_CRITERIA			= Armatures longitudinales

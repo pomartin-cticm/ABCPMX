@@ -630,6 +630,27 @@ Module Mod_NoteCalcul
         SauteLigne()
         AddLigneNDC(TABW2 & BlocG("BENDING_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(False, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
         AddLigneNDC(TABW2 & BlocG("COMPRESSION_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(True, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
+        SauteLigne()
+        If Not MyBeam.Section.lSlimFloor Then
+            If MyBeam.Section.lEnrobage Then
+                If Not MyBeam.Section.IsInteractionMV(MyBeam.Param.EtaW) Then
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 1, 2, False) & " ≤ 124\Se\s = " & GetStringInUnit(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 1, 2, False) & " : " & BlocG("NO_NEED_CHECK_WB"))
+                Else
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 1, 2, False) & " > 124\Se\s = " & GetStringInUnit(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 1, 2, False) & " : " & BlocG("NEED_CHECK_WB"))
+                End If
+            Else
+                If Not MyBeam.Section.IsInteractionMV(MyBeam.Param.EtaW) Then
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 1, 2, False) & " ≤ 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 1, 2, False) & " : " & BlocG("NO_NEED_CHECK_WB"))
+                Else
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & TABEGAL & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 1, 2, False) & " > 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 1, 2, False) & " : " & BlocG("NEED_CHECK_WB"))
+                End If
+            End If
+
+            Dim lTwoAdjacentCantilevers As Boolean
+            lTwoAdjacentCantilevers = MyBeam.lTraveeConsoleGauche And MyBeam.lTraveeConsoleDroite
+            If Not MyBeam.Section.IsInteractionMV(MyBeam.Param.EtaW) Then AddLigneNDC(TABW2 & BlocG("SHEAR_BUC") & TABAFF & "V\-b,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.VbRd(MyBeam.Param.Gamma.GammaM1, MyBeam.Param.EtaW, lTwoAdjacentCantilevers), Enu_TypeVariable.Effort, 4, 0, True))
+
+        End If
 
 
     End Sub
@@ -4025,6 +4046,8 @@ Module Mod_NoteCalcul
                 'AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA"))
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+                If MyBeam.Section.IsInteractionMV(MyBeam.Param.EtaW) Then AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"))
 
                 SauteLigne()
 
@@ -4038,7 +4061,7 @@ Module Mod_NoteCalcul
 
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA"))
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
-
+                If MyBeam.Section.IsInteractionMV(MyBeam.Param.EtaW) Then AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"))
 
             End If
         End If
@@ -4452,10 +4475,11 @@ Module Mod_NoteCalcul
 
         Dim NCOL As Integer
         Dim iCombi As Integer
+        Dim nbMinCombi As Decimal = 5.1 + 1.3 * MyBeam.CombiA_ELU.nbCombi + 1
 
         '--> Initialisation
 
-        SautePage()
+        If nbLignes + nbminCombi > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(2, BlocELU("ULS_COMBI_CHECK"))
 

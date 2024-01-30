@@ -107,6 +107,10 @@ RHO_PROFILE				= Density
 RESISTANCE_PROFILE		= Profile resistance
 TRAC_RES				= Tensile resistance 
 SHEAR_RES				= Shear resistance
+SHEAR_BUC				= Shear buckling 
+SHEAR_BUC_RES			= Shear buckling resistance
+NEED_CHECK_WB			= Verification of web buckling necessary
+NO_NEED_CHECK_WB		= Verification of web buckling not necessary
 PLAS_MOM_RES			= Plastic moment resistant
 ELAS_MOM_RES			= Elastic moment resistant
 GRADE_PROFILE			= Steel grade
@@ -352,6 +356,7 @@ INFO_S					= S = Satisfactory
 INFO_NS					= NS = NOT Satisfactory
 M_CRITERIA				= Resistance to bending moment
 V_CRITERIA				= Resistance to shear force
+VB_CRITERIA				= Resistance to shear buckling
 MV_CRITERIA				= Resistance to MV interaction
 LTB_CRITERIA			= Resistance to lateral torsional buckling
 REINF_CRITERIA			= Longitudinal reinforcements 
