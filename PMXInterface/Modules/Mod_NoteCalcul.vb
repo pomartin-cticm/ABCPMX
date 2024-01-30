@@ -1648,7 +1648,7 @@ Module Mod_NoteCalcul
         If MyBeam.GetNbCombi(MyBeam.lCombELU) = 0 Then
             AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
         Else
-            EditionTableauCombinaison(MyBeam.lCombELU, MyBeam.CoefCombELU)
+            EditionTableauCombinaison(MyBeam, MyBeam.lCombELU, MyBeam.CoefCombELU)
         End If
 
 
@@ -1657,7 +1657,7 @@ Module Mod_NoteCalcul
         If MyBeam.GetNbCombi(MyBeam.lCombELS) = 0 Then
             AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
         Else
-            EditionTableauCombinaison(MyBeam.lCombELS, MyBeam.CoefCombELS)
+            EditionTableauCombinaison(MyBeam, MyBeam.lCombELS, MyBeam.CoefCombELS)
         End If
 
 
@@ -1665,7 +1665,7 @@ Module Mod_NoteCalcul
         If MyBeam.GetNbCombi(MyBeam.lCombFeu) = 0 Then
             AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
         Else
-            EditionTableauCombinaison(MyBeam.lCombFeu, MyBeam.CoefCombFeu)
+            EditionTableauCombinaison(MyBeam, MyBeam.lCombFeu, MyBeam.CoefCombFeu)
         End If
 
         If MyBeam.lMixte Then
@@ -1673,45 +1673,76 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
             Else
                 AddTitreNdC(3, BlocG("ELCUSTATES"))
-                EditionTableauCombinaison(MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
+                EditionTableauCombinaison(MyBeam, MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
             End If
 
             If MyBeam.GetNbCombi(MyBeam.lCombELCSRules) = 0 Then
                 AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
             Else
                 AddTitreNdC(3, BlocG("ELCSSTATES"))
-                EditionTableauCombinaison(MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
+                EditionTableauCombinaison(MyBeam, MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
             End If
         End If
 
     End Sub
 
-    Private Sub EditionTableauCombinaison(ByVal lCombo As Boolean(), CoefComb As List(Of Decimal)())
+    Private Sub EditionTableauCombinaison(ByVal MyBeam As cls_Poutre, ByVal lCombo As Boolean(), CoefComb As List(Of Decimal)())
         Dim strCombo As String = ""
+        Dim strCoeff As String = ""
+        Dim strSymbol As String = ""
+        Dim strSymbolsVariables() As String = {"Q1", "Q2", "QC"}
+        Dim lTrouve As Boolean = False
+        Dim iCdC As Integer = 0
+
+        Dim indice_g As Integer
 
         For i As Integer = 0 To lCombo.Count - 1
             If lCombo(i) Then
-                For j = 0 To CoefComb(i).Count - 1
+                indice_g = CoefComb(i).Count - 1
+                'on commence par la CP en phase de construction (le code ci-dessous est une version contractée du code qui suit après)
+
+                If Not CoefComb(i)(indice_g) = 0 Then
+                    strCoeff = GetStringInUnit(CoefComb(i)(indice_g), Enu_TypeVariable.SansType, 3, 2, False)
+                    strSymbol = " g "
+                    strCombo += strCoeff + strSymbol
+                End If
+
+                'puis on boucle sur les autres cas de charges (cela permet d'afficher 1.35g + 1.5QC et non 1.5Qc + 1.35g)
+
+                For j = 0 To CoefComb(i).Count - 2
                     If Not CoefComb(i)(j) = 0 Then
 
                         If strCombo = "" Then
-                            strCombo += GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 2, False)
+                            strCoeff = GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 2, False)
                         Else
-                            strCombo += " + " & GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 2, False)
+                            strCoeff = " + " & GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 2, False)
                         End If
 
                         Select Case j
                             Case 0
-                                strCombo += " G "
+                                strSymbol = " G "
                             Case 1
-                                strCombo += " Q1 "
+                                strSymbol = " Q1 "
                             Case 2
-                                strCombo += " Q2 "
+                                strSymbol = " Q2 "
                             Case 3
-                                strCombo += " QC "
-                            Case Else
-                                strCombo += " g "
+                                strSymbol = " QC "
+                                'Case Else
+                                '    strSymbol = " g "
                         End Select
+
+                        If strSymbolsVariables.Contains(strSymbol.Trim) Then 'permt de ne pas afficher le symbole d'un cas de charge sans charge
+                            While Not lTrouve And iCdC < MyBeam.ChargesA.Count
+                                If MyBeam.ChargesA(iCdC).Symbol = strSymbol.Trim Then
+                                    lTrouve = True
+                                    If MyBeam.ChargesA(iCdC).lRunCalcul Then strCombo += strCoeff + strSymbol
+                                End If
+                                iCdC += 1
+                            End While
+                        Else
+                            strCombo += strCoeff + strSymbol
+                        End If
+
                     End If
                 Next
 
@@ -3586,7 +3617,7 @@ Module Mod_NoteCalcul
 
             lAffiche = lRetrait Or ((Not lRetrait) And (myPoutre.ChargesA(jCdc).Type <> cls_CasDeCharge.EnuType.Retrait))
 
-            If (Not IsEqual(myCombi.CoefCombi(iCombi)(jCdc), 0)) And lAffiche Then
+            If (Not IsEqual(myCombi.CoefCombi(iCombi)(jCdc), 0)) And myPoutre.ChargesA(jCdc).lRunCalcul And lAffiche Then
 
                 Chaine += sPlus & GetStringInUnit(myCombi.CoefCombi(iCombi)(jCdc), Enu_TypeVariable.SansType, 3, 2, False) & " " & myPoutre.ChargesA(jCdc).Symbol
 
