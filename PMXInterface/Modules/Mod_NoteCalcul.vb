@@ -117,7 +117,7 @@ Module Mod_NoteCalcul
         '--[ Initialisations
 
         MyNote = New Cls_Rapport("Arial", 1.5, 3, 3)
-        MyProjet.Poutres(MyProjet.IndEnCours).InitialisePoidsPropres()
+        'MyProjet.Poutres(MyProjet.IndEnCours).InitialisePoidsPropres()
         MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()
         MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
 
@@ -592,9 +592,6 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("PAINT_SURF") & TABAFF & "S" & TABEGAL & GetStringInUnit(MyBeam.SurfacePeintureTotalePoutre(False), Enu_TypeVariable.AireCM2, 4, 1, True))
         AddLigneNDC(TABW2 & BlocG("TOT_MASSIVENESS") & TABAFF & "M" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Massivete(True), Enu_TypeVariable.Longueur, 4, 1, True) & " \+-1\=")
         AddLigneNDC(TABW2 & BlocG("MASSIVENESS") & TABAFF & "M'" & TABEGAL & GetStringInUnit(MyBeam.Section.ProfilA.Massivete(False), Enu_TypeVariable.Longueur, 4, 1, True) & " \+-1\=")
-        SauteLigne()
-        AddLigneNDC(TABW2 & BlocG("BENDING_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(False, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
-        AddLigneNDC(TABW2 & BlocG("COMPRESSION_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(True, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
 
         AddLigneNDC("\IMG PROFIL_ACIER 10 80 30 NoCadre")
         nbLignes += 15              ' Prise en compte des lignes occupées par le dessin de la section
@@ -615,6 +612,16 @@ Module Mod_NoteCalcul
         End If
         AddLigneNDC(TABW2 & BlocG("E_PROFILE") & TABAFF & "E" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.EYoung, Enu_TypeVariable.Contrainte, 4, 0, True))
         AddLigneNDC(TABW2 & BlocG("RHO_PROFILE") & TABAFF & "\Sr\s" & TABEGAL & GetStringInUnit(MyBeam.Section.Acier.Rho, Enu_TypeVariable.SansType, 4, 0, True) & "kg/m\+3\=")
+
+
+        AddTitreNdC(3, BlocG("RESISTANCE_PROFILE"))
+        AddLigneNDC(TABW2 & BlocG("SHEAR_RES") & TABAFF & "V\-pl,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.VplRd(MyBeam.Param.Gamma.GammaM0), Enu_TypeVariable.Effort, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("PLAS_MOM_RES") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.VplRd(MyBeam.Param.Gamma.GammaM0), Enu_TypeVariable.Effort, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("ELAS_MOM_RES") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.VplRd(MyBeam.Param.Gamma.GammaM0), Enu_TypeVariable.Effort, 4, 0, True))
+        SauteLigne()
+        AddLigneNDC(TABW2 & BlocG("BENDING_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(False, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
+        AddLigneNDC(TABW2 & BlocG("COMPRESSION_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(True, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
+
 
     End Sub
 
@@ -2872,7 +2879,7 @@ Module Mod_NoteCalcul
 
         '--> Initialisation
 
-        lRetrait = True
+        lRetrait = False                      '#ALERTE Pour le moment, à pondérer plus tard
 
         '--> Affichage de la combinaison
 

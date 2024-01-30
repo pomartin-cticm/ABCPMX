@@ -4602,7 +4602,7 @@ Public Class cls_Poutre
         End Select
 
         '--> Initialisation des calculs
-
+        Me.InitialisePoidsPropres()
         Me.InitialiseCalculs(NomCharges)
         Me.AAA_CalculMNVInternesN()
         'MyPoutre.InitialiseCombiA_ELU()
