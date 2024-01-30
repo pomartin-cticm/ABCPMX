@@ -1237,11 +1237,13 @@ Public Class Cls_Rapport
 
                     Dim indiceCombo As Integer
                     Dim typeCombo As String
+                    Dim lRetraitELU As Boolean
 
                     indiceCombo = CInt(TraiteReal(Mots(6)))
                     typeCombo = Mots(7)
+                    lRetraitELU = Mots(8)
 
-                    DessineRDMCombo(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), indiceCombo, typeCombo, xLeftImg, YPen)
+                    DessineRDMCombo(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), indiceCombo, typeCombo, lRetraitELU, xLeftImg, YPen)
 
             End Select
 

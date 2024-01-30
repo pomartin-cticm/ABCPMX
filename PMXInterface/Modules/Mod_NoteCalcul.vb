@@ -2533,6 +2533,7 @@ Module Mod_NoteCalcul
         '--> Déclaration
 
         Const nbminCombi As Integer = 12
+        Dim lRetraitELU As Boolean = False                      '#ALERTE Pour le moment, à pondérer plus tard
 
         '--> En fonction des options NDC
 
@@ -2594,7 +2595,7 @@ Module Mod_NoteCalcul
                         Const NbLigDiag As Integer = 20
                         If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
                         ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
-                        AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELU")
+                        AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELU " & lRetraitELU)
                         nbLignes += NbLigDiag
                     End If
 
@@ -2661,7 +2662,7 @@ Module Mod_NoteCalcul
                         Const NbLigDiag As Integer = 20
                         If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
                         ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
-                        AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELUC")
+                        AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELUC " & lRetraitELU)
                         nbLignes += NbLigDiag
                     End If
 
