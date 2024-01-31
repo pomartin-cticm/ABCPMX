@@ -53,6 +53,7 @@ Public Class cls_MaintienBac
     Public FixCoutureType As Enu_CoutureType        ' Définit le type des vis de couture
 
     Public lMaintienBac As Boolean                  ' Indique si on active le maintien par le bac
+    Public lTheta As Boolean                        ' Indique si on prend en compte la rigidité de flexion du bac pour le calcul au déversement
 
 #End Region
 
@@ -67,6 +68,7 @@ Public Class cls_MaintienBac
         Me.ec = 0.5
         FixCoutureType = Enu_CoutureType.Vis
         lMaintienBac = False
+        lTheta = False
     End Sub
 
 #End Region

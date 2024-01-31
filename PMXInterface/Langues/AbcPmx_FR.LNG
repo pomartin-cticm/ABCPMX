@@ -13,16 +13,15 @@ VERSIONLINK     		= Voulez-vous être redirigé vers le site web du CTICM ?
 WARNING					= Avertissement
 
 #FRM_ABOUT
-TITLE				= A propos d'ABCPMX-II
-OK					= Ok
-DESCRIPTION			= Description
-DESCRIPTION_CONT	= Le logiciel ABC-PMX vise le calcul de poutres mixtes selon l'EN 1994-1-1. Son développement est cofinancé par ArcelorMittal et le CTICM.
-INFORMATION			= Information
-MAITRE				= Droits
-VERSION				= Version
-SUPPORT				= Support :
-YEARVERSION			= Année :
-
+TITLE					= A propos d'ABCPMX-II
+OK						= Ok
+DESCRIPTION				= Description
+DESCRIPTION_CONT		= Le logiciel ABC-PMX vise le calcul de poutres mixtes selon l'EN 1994-1-1. Son développement est cofinancé par ArcelorMittal et le CTICM.
+INFORMATION				= Information
+MAITRE					= Droits
+VERSION					= Version
+SUPPORT					= Support :
+YEARVERSION				= Année :
 
 #FRMADDSTUD
 TITLEADD				= Ajouter un nouveau goujon
@@ -74,7 +73,6 @@ SLIMFLOORIFB_B			= Section dalle mince IFB-B non mixte
 SLIMFLOORIFB_BCOMPO		= Section dalle mince IFB-B mixte
 SLIMFLOORSAB			= Section dalle mince SAB non mixte
 SLIMFLOORSABCOMPO		= Section dalle mince SAB mixte
-
 
 #FRM_BEAMOPTIONS
 TITLE					= Options de calcul de la poutre
@@ -132,33 +130,33 @@ ZOOM					= Zoom
 SAVEAS					= Enresitrer sous
 
 #FRMCATALOGUE
-TITLE 			= Catalogue
-CLOSE			= Fermer
-PROFIL			= Profilés
-SERIE			= Séries
-DIMENSIONS	 	= Dimensions
-PROPERTIES		= Propriétés
-UNIT_DIM		= Unité Dimension :
-TOOLTIP_G 		= Masse par unité de longueur
-TOOLTIP_A		= Aire de section
-TOOLTIP_IY		= Moment d'inertie de flexion / Axe fort
-TOOLTIP_WELY	= Module de flexion élastique / Axe fort
-TOOLTIP_WPLY	= Module de flexion plastique / Axe fort
-TOOLTIP_IY2		= Rayon de giration / Axe fort
-TOOLTIP_AVZ		= Aire de cisaillement
-TOOLTIP_IZ 		= Moment d'inertie de flexion / Axe faible
-TOOLTIP_WELZ 	= Module de flexion élastique / Axe faible
-TOOLTIP_WPLZ	= Module de flexion plastique / Axe faible
-TOOLTIP_IZ2		= Rayon de giration / Axe faible
-TOOLTIP_IT		= Moment d'inertie de torsion
-TOOLTIP_HT		= Hauteur du profilé
-TOOLTIP_BF		= Largeur du profilé
-TOOLTIP_TF		= Épaisseur d'aile
-TOOLTIP_TW		= Épaisseur d'âme
-TOOLTIP_RC		= Rayon de congé
-NOTE			= Fiche Section
-CARA			= Caractéristiques
-VAL 			= Valeurs
+TITLE 					= Catalogue
+CLOSE					= Fermer
+PROFIL					= Profilés
+SERIE					= Séries
+DIMENSIONS			 	= Dimensions
+PROPERTIES				= Propriétés
+UNIT_DIM				= Unité Dimension :
+TOOLTIP_G 				= Masse par unité de longueur
+TOOLTIP_A				= Aire de section
+TOOLTIP_IY				= Moment d'inertie de flexion / Axe fort
+TOOLTIP_WELY			= Module de flexion élastique / Axe fort
+TOOLTIP_WPLY			= Module de flexion plastique / Axe fort
+TOOLTIP_IY2				= Rayon de giration / Axe fort
+TOOLTIP_AVZ				= Aire de cisaillement
+TOOLTIP_IZ		 		= Moment d'inertie de flexion / Axe faible
+TOOLTIP_WELZ 			= Module de flexion élastique / Axe faible
+TOOLTIP_WPLZ			= Module de flexion plastique / Axe faible
+TOOLTIP_IZ2				= Rayon de giration / Axe faible
+TOOLTIP_IT				= Moment d'inertie de torsion
+TOOLTIP_HT				= Hauteur du profilé
+TOOLTIP_BF				= Largeur du profilé
+TOOLTIP_TF				= Épaisseur d'aile
+TOOLTIP_TW				= Épaisseur d'âme
+TOOLTIP_RC				= Rayon de congé
+NOTE					= Fiche Section
+CARA					= Caractéristiques
+VAL 					= Valeurs
 
 #FRM_CHARGEMENT
 TITLE					= Définition des cas de charge
@@ -280,6 +278,7 @@ PARAMETERS				= Paramètres
 BENDINGSTIFF			= Rigidité à la flexion
 SHEARSTIFF				= Rigidité au cisaillement
 DRAWING					= Dessin
+THETA					= Prise en compte de la rigidité flexionnelle du bac
 
 #FRMEDITSTUDS	
 TITLE					= Base de données des goujons

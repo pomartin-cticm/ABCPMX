@@ -204,6 +204,7 @@ Public Class Frm_MaintienBac
 
             Me.lbl_Calculs.Text = Bloc("PARAMETERS")
             Me.lbl_BendingRigidity.Text = Bloc("BENDINGSTIFF")
+            Me.chk_Theta.Text = Bloc("THETA")
             Me.lbl_ShearRigidity.Text = Bloc("SHEARSTIFF")
 
             strResultats = Bloc("PARAMETERS")
@@ -280,6 +281,7 @@ Public Class Frm_MaintienBac
     Private Sub AffichePoutreEnCours()
 
         Me.chk_PriseEnCompteBac.Checked = localMaitienBac.lMaintienBac
+        Me.chk_Theta.Checked = localMaitienBac.lTheta
 
         Me.cmb_NbSpan.SelectedIndex = localMaitienBac.m - 1
         Select Case localMaitienBac.Transition
@@ -347,6 +349,7 @@ Public Class Frm_MaintienBac
         GereTransfertValeur(localMaitienBac.nt, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.nt, lModif)
         GereTransfertValeur(localMaitienBac.ec, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.ec, lModif)
         GereTransfertValeur(localMaitienBac.lMaintienBac, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.lMaintienBac, lModif)
+        GereTransfertValeur(localMaitienBac.lTheta, MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.lTheta, lModif)
 
         If MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.Transition <> localMaitienBac.Transition Then lModif = True
         MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.Transition = localMaitienBac.Transition
@@ -360,12 +363,15 @@ Public Class Frm_MaintienBac
         If MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.FixCoutureType <> localMaitienBac.FixCoutureType Then lModif = True
         MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.FixCoutureType = localMaitienBac.FixCoutureType
 
-
     End Sub
 
 #End Region
 
 #Region " Evènements saisie "
+
+    Private Sub chk_Theta_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Theta.CheckedChanged
+        localMaitienBac.lTheta = Me.chk_Theta.Checked
+    End Sub
 
     Private Sub chk_PriseEnCompteBac_CheckedChanged(sender As Object, e As EventArgs) Handles chk_PriseEnCompteBac.CheckedChanged
         localMaitienBac.lMaintienBac = Me.chk_PriseEnCompteBac.Checked
@@ -981,6 +987,7 @@ Public Class Frm_MaintienBac
         AddRectanglePlein(MyGr, New SolidBrush(Color.White), New Pen(BleuCTICM), xo, yo, xe, ye, myParAff, False, True)
 
     End Sub
+
 
 
 #End Region

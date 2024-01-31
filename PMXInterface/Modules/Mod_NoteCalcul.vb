@@ -3921,6 +3921,9 @@ Module Mod_NoteCalcul
 
         '--> Déclaration
 
+        Dim lMixte As Boolean = MyBeam.lMixte
+        Dim lEtaiement As Boolean = (MyBeam.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.FullyPropped)
+
         '--> Initialisation
 
         SautePage()
@@ -3950,13 +3953,31 @@ Module Mod_NoteCalcul
             EditionFerraillageTransversal(MyBeam)
         End If
 
+        '--> Phase de construction pour les poutres mixtes
+
+        If MyBeam.lMixte And (Not lEtaiement) Then
+
+            SautePage()
+            AddTitreNdC(1, BlocELU("ULS_CHECKS_CONSTRUCTION"))
+
+            '# Synthèse des critères
+
+            EditionVerificationsELUSummary(MyBeam, True)
+
+            '# Calcul détaillé des critères sous combinaisons ELU
+        End If
+
+
     End Sub
 
-    Private Sub EditionVerificationsELUSummary(MyBeam As cls_Poutre)
+    Private Sub EditionVerificationsELUSummary(MyBeam As cls_Poutre, Optional lConstruction As Boolean = False)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Synthèse des critères ELU
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre
+        '   lConstruction   [E] :   Indique si phase de construction pour une poutre mixte
         '-------------------------------------------------------------------------------------------
 
         '--> Titre
@@ -3970,23 +3991,14 @@ Module Mod_NoteCalcul
             Case cls_Section.Enum_TypeSection.AcierSeul
                 EditionVerificationsELUSummaryACIER(MyBeam, 0)
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
-                EditionVerificationsELUSummaryMIXTE(MyBeam, 0)
+                If lConstruction Then
+                    EditionVerificationsELUSummaryACIER(MyBeam, 0)
+                Else
+                    EditionVerificationsELUSummaryMIXTE(MyBeam, 0)
+                End If
         End Select
 
         Exit Sub
-        'AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
-        'AddLigneNDC(TABW2 & BlocELU("V_CRITERIA") & TABAFF & "\SG\s\-V\=" & TABEGAL & 0)
-        'AddLigneNDC(TABW2 & BlocELU("MV_CRITERIA") & TABAFF & "\SG\s\-MV\=" & TABEGAL & 0)
-        'AddLigneNDC(TABW2 & BlocELU("LTB_CRTIERIA") & TABAFF & "\SG\s\-LT\=" & TABEGAL & 0)
-        'AddLigneNDC(TABW2 & BlocELU("REINF_CRITERIA") & TABAFF & "\Sr\s\-s\=" & TABEGAL & 0)
-
-
-        'If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("LOWPLATE_SLIMFLOOR_CRITERIA") & TABAFF & "\SG\s\-q\=" & TABEGAL & 0)
-        'If Not MyBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-w\=" & TABEGAL & 0)
-        'If Not MyBeam.Section.lSlimFloor = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then AddLigneNDC(TABW2 & BlocELU("WELD_CRITERIA") & TABAFF & "a\-u\=" & TABEGAL & 0)
-
-
-
 
     End Sub
 

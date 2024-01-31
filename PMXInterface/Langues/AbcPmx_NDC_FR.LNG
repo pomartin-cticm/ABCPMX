@@ -349,8 +349,9 @@ REACTIONPROPL			= Réaction de l'étai de la console gauche
 REACTIONPROPR			= Réaction de l'étai de la console de droite
 
 #NDC_VERIFICATIONSULS
-ULS_CHECKS				= Etat Limite Ultime
-ULS_CHECKS_FINAL		= Etat Limite Ultime à la phase finale
+ULS_CHECKS				= Etats Limites Ultimes
+ULS_CHECKS_FINAL		= Etats Limites Ultimes en phase finale
+ULS_CHECKS_CONSTRUCTION	= Etats Limites Ultimes en phase de construction
 CRITERIA_SUM			= Résumé des critères
 INFO_S					= S = Satisfaisant
 INFO_NS					= NS = NON Satisfaisant

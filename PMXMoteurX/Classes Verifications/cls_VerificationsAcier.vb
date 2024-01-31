@@ -18,6 +18,9 @@ Public Class cls_VerificationsAcier
 
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
+    Public AlphaCrLTB As Decimal                    ' Alpha critique pour le déversement élastique
+    Public McrLTB() As Decimal                      ' Moment critique pour le déversement (en travée)
+
 #End Region
 
 #Region " Constructeurs "
@@ -189,9 +192,14 @@ Public Class cls_VerificationsAcier
         Dim zANE, InertieY As Decimal
         Dim nEqEc As Decimal
 
+        '--> Initialisation
+
+        ReDim Me.McrLTB(myPoutre.IndiceDerniereTravee)
+
         '--> Calcul Alpha Critique
 
         CalculAlphaCritique(myPoutre, iCombi, MEd, lConstructionPhase, AlphaCr, lOK)
+        Me.AlphaCrLTB = AlphaCr
 
         '--> Résistance caractéristique
 
@@ -223,6 +231,7 @@ Public Class cls_VerificationsAcier
             '# Moment critique
 
             Mcr = AlphaCr * MEdmax
+            McrLTB(iTrav) = Mcr
 
             '# Elancement réduit
 
@@ -375,9 +384,13 @@ Public Class cls_VerificationsAcier
                 Dim kTheta, kThetaA, kThetaC As Decimal
                 Dim bFs As Decimal = myPoutre.Section.ProfilA.Bfs
 
-                kThetaA = myPoutre.Dalle.Bac.RigiditeFlexionnelleA(myPoutre.MaintienBac.FixNervuresMod = cls_MaintienBac.Enu_FixationNervures.Toutes, bFs)
-                kThetaC = myPoutre.Dalle.Bac.RigiditeFlexionnelleC(EntraxeD, myPoutre.lIntermediaire)
-                kTheta = 1 / (1 / kThetaA + 1 / kThetaC)
+                If myPoutre.MaintienBac.lTheta Then
+                    kThetaA = myPoutre.Dalle.Bac.RigiditeFlexionnelleA(myPoutre.MaintienBac.FixNervuresMod = cls_MaintienBac.Enu_FixationNervures.Toutes, bFs)
+                    kThetaC = myPoutre.Dalle.Bac.RigiditeFlexionnelleC(EntraxeD, myPoutre.lIntermediaire)
+                    kTheta = 1 / (1 / kThetaA + 1 / kThetaC)
+                Else
+                    kTheta = 0
+                End If
 
                 paramLTB.NbMaintiensCon = 1
 
@@ -401,7 +414,7 @@ Public Class cls_VerificationsAcier
             End If
         End If
 
-        '# Maintiens latéraux
+        '# Chargements
 
         '**** A AJOUTER
 

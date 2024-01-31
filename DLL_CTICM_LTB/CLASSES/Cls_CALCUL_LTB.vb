@@ -85,9 +85,9 @@
                 .ZRC(iNode + 1) = LTBParam.zMaintienPonC(I)
             Next
 
-            For I = 0 To Donnees.NbMaintiensCon - 1
-                iNode1 = Donnees.iNodeMaintienCon(I, 0)
-                iNode2 = Donnees.iNodeMaintienCon(I, 1)
+            For I = 0 To LTBParam.NbMaintiensCon - 1
+                iNode1 = LTBParam.iNodeMaintienCon(I, 0)
+                iNode2 = LTBParam.iNodeMaintienCon(I, 1)
 
                 For J = iNode1 To iNode2
 
@@ -115,10 +115,10 @@
                     If Not lTrouve Then
                         'Le maintien ponctuel domine le maintien continu
                         'Le maintien continu s'applique s'il n'y a pas de maintien ponctuel
-                        .RV(J + 1) = Donnees.MaintienConV(I) * (xRight - xLeft) / 2
-                        .RVP(J + 1) = Donnees.MaintienConVP(I) * (xRight - xLeft) / 2
-                        .RT(J + 1) = Donnees.MaintienConTheta(I) * (xRight - xLeft) / 2
-                        .ZRC(J + 1) = Donnees.zMaintienConC(I)
+                        .RV(J + 1) = LTBParam.MaintienConV(I) * (xRight - xLeft) / 2
+                        .RVP(J + 1) = LTBParam.MaintienConVP(I) * (xRight - xLeft) / 2
+                        .RT(J + 1) = LTBParam.MaintienConTheta(I) * (xRight - xLeft) / 2
+                        .ZRC(J + 1) = LTBParam.zMaintienConC(I)
                     End If
                 Next
             Next

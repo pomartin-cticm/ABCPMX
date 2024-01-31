@@ -351,6 +351,7 @@ REACTIONPROPR			= Reaction at right cantilever prop
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= Ultimate Limit States
 ULS_CHECKS_FINAL		= Ultimate Limit States at final stage
+ULS_CHECKS_CONSTRUCTION = Ultimate Limit States at construction stage
 CRITERIA_SUM			= Summary of the criteria
 INFO_S					= S = Satisfactory
 INFO_NS					= NS = NOT Satisfactory

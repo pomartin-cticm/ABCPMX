@@ -714,7 +714,6 @@ Imports PMXMoteur2
         ValRef = deltaR
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
-
         '---------------------------------------------------
         '---------------------------------------------------
         ' --> Fréquence propre (ELS)
@@ -731,8 +730,6 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
     End Sub
-
-
 
 
 End Class

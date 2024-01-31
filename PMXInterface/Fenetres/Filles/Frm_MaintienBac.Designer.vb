@@ -114,6 +114,7 @@ Partial Class Frm_MaintienBac
         Me.img_K = New System.Windows.Forms.PictureBox()
         Me.lbl_ShearRigidity = New System.Windows.Forms.Label()
         Me.pan_Rigidite = New System.Windows.Forms.Panel()
+        Me.chk_Theta = New System.Windows.Forms.CheckBox()
         Me.txt_kTheta = New System.Windows.Forms.TextBox()
         Me.etq_UnitkTheta = New System.Windows.Forms.Label()
         Me.img_kTheta = New System.Windows.Forms.PictureBox()
@@ -897,7 +898,7 @@ Partial Class Frm_MaintienBac
         '
         'img_Deck
         '
-        Me.img_Deck.Location = New System.Drawing.Point(0, 304)
+        Me.img_Deck.Location = New System.Drawing.Point(3, 320)
         Me.img_Deck.Name = "img_Deck"
         Me.img_Deck.Size = New System.Drawing.Size(100, 25)
         Me.img_Deck.TabIndex = 122
@@ -1170,6 +1171,7 @@ Partial Class Frm_MaintienBac
         '
         'pan_Rigidite
         '
+        Me.pan_Rigidite.Controls.Add(Me.chk_Theta)
         Me.pan_Rigidite.Controls.Add(Me.txt_kTheta)
         Me.pan_Rigidite.Controls.Add(Me.etq_UnitkTheta)
         Me.pan_Rigidite.Controls.Add(Me.img_kTheta)
@@ -1182,8 +1184,19 @@ Partial Class Frm_MaintienBac
         Me.pan_Rigidite.Controls.Add(Me.lbl_BendingRigidity)
         Me.pan_Rigidite.Location = New System.Drawing.Point(0, 198)
         Me.pan_Rigidite.Name = "pan_Rigidite"
-        Me.pan_Rigidite.Size = New System.Drawing.Size(249, 100)
+        Me.pan_Rigidite.Size = New System.Drawing.Size(249, 137)
         Me.pan_Rigidite.TabIndex = 120
+        '
+        'chk_Theta
+        '
+        Me.chk_Theta.CheckAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.chk_Theta.Location = New System.Drawing.Point(3, 100)
+        Me.chk_Theta.Name = "chk_Theta"
+        Me.chk_Theta.Size = New System.Drawing.Size(242, 34)
+        Me.chk_Theta.TabIndex = 120
+        Me.chk_Theta.Text = "chk_Theta"
+        Me.chk_Theta.TextAlign = System.Drawing.ContentAlignment.TopLeft
+        Me.chk_Theta.UseVisualStyleBackColor = True
         '
         'txt_kTheta
         '
@@ -1464,4 +1477,5 @@ Partial Class Frm_MaintienBac
     Friend WithEvents pan_RigiditeShear As Panel
     Friend WithEvents pan_Rigidite As Panel
     Friend WithEvents img_Deck As PictureBox
+    Friend WithEvents chk_Theta As CheckBox
 End Class
