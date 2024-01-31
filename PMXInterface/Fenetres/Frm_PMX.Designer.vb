@@ -663,7 +663,7 @@ Partial Class Frm_PMX
         'TSbtn_Cotations
         '
         Me.TSbtn_Cotations.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Cotations.Image = Global.PMXInterface.My.Resources.Resources.cotations
+        Me.TSbtn_Cotations.Image = CType(resources.GetObject("TSbtn_Cotations.Image"), System.Drawing.Image)
         Me.TSbtn_Cotations.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.TSbtn_Cotations.Name = "TSbtn_Cotations"
         Me.TSbtn_Cotations.Size = New System.Drawing.Size(23, 22)
