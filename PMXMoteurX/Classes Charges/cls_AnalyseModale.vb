@@ -210,7 +210,8 @@ Public Class cls_AnalyseModale
 
         For i = 0 To NbCharges - 1
             lCalcul(i) = MyPoutre.ChargesU(labelCharges(i)).EstDefinie And (Not IsEqual(RatioC(i), 0))
-            If lCalcul(i) Then NombreForceReparties += MyPoutre.ChargesU(labelCharges(i)).NombreForceReparties(iTravP, iTravD)
+            If lCalcul(i) Then NombreForceReparties += MyPoutre.ChargesU(labelCharges(i)).NombreForceReparties(iTravP, iTravD) _
+                                                     + MyPoutre.ChargesU(labelCharges(i)).NombreChargesSurf(iTravP, iTravD)
         Next
 
         pDonneesEF.NbForcesRep = NombreForceReparties
@@ -223,7 +224,7 @@ Public Class cls_AnalyseModale
 
         For i = 0 To NbCharges - 1
             If lCalcul(i) Then
-                TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU(labelCharges(i)), pDonneesEF, CompteurRep, RatioC(i))
+                TransfertChargementU(iTravP, iTravD, MyPoutre.ChargesU(labelCharges(i)), MyPoutre.LongueurTravee, MyPoutre.LargeurInfluence, pDonneesEF, CompteurRep, RatioC(i))
             End If
         Next
 
@@ -247,7 +248,7 @@ Public Class cls_AnalyseModale
 
     End Sub
 
-    Private Sub TransfertChargementU(iTravP As Integer, iTravD As Integer, MyChargesU As cls_ChargementUtilisateur,
+    Private Sub TransfertChargementU(iTravP As Integer, iTravD As Integer, MyChargesU As cls_ChargementUtilisateur, LongueurT() As Decimal, LargeurDinf As Decimal,
                                      ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByRef pCompteurRep As Integer, Optional Ratio As Decimal = 1)
         '---------------------------------------------------------------------------------------------------
         '   03/11/23 :  Création - POM
@@ -257,6 +258,8 @@ Public Class cls_AnalyseModale
         '   iTravP      [E] :   Indice de la première travée
         '   iTravD      [E] :   Indice de la dernière travée
         '   MyChargesU  [E] :   Chargement utilisateur à transférer
+        '   LongueurT   [E] :   Longueur des travées
+        '   LargeurDinf [E] :   Largeur d'influence des charges sur la dalle
         '   pDonneesEF  [S] :   Construction du maillage EF et de son chargement
         '   pCompterRep [E/S] : Compteur des forces reparties
         '   Ratio       [E] :   Pondération du cas de charge
@@ -266,14 +269,27 @@ Public Class cls_AnalyseModale
 
         Dim iTrav As Integer
         Dim i As Integer
+        Dim xo, xe, qSurf As Decimal
+
+        '--> Initialisation
+
+        xo = 0
+        xe = 0
 
         '--> Boucle sur les travées
 
         For iTrav = iTravP To iTravD
 
+            '# Préparation
+
+            xe += LongueurT(iTrav)
+
             '# Charges surfaciques
 
-            'ZZZ A COMPLETER
+            If Not IsEqual(MyChargesU.QSurf(iTrav), 0) Then
+                qSurf = LargeurDinf * MyChargesU.QSurf(iTrav) * Ratio
+                Me.AjouteForceRep(xo, xe, qSurf, qSurf, pDonneesEF, pCompteurRep)
+            End If
 
             '# Charges linéiques
 
@@ -292,6 +308,8 @@ Public Class cls_AnalyseModale
                 Me.AjouteForce(MyChargesU.Forces(iTrav)(i).xPosG, MyChargesU.Forces(iTrav)(i).Force * Ratio, pDonneesEF)
 
             Next
+
+            xo = xe
 
         Next
 

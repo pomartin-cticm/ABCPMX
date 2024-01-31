@@ -212,8 +212,6 @@ Imports PMXMoteur2
             .GammaVs = 1.25
         End With
 
-
-
         '---------------------------------------------------
         '---------------------------------------------------
         ' --> Lancement des calculs  
@@ -720,13 +718,16 @@ Imports PMXMoteur2
         '---------------------------------------------------
         '---------------------------------------------------
 
-        'GUD: Le test ne fonctionne pas, je ne sais pas pourquoi (valeur dans l'article:3.29 Hz, le logiciel donne 4.4 Hz ...)
-
         myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
         Valeur = myPoutre.Modal.Frequence
 
         myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
         ValRef = Math.PI / 2 * Math.Sqrt(210 * InertieY * 10 ^ 8 * 9.81 / (1300 * 14 ^ 4))
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+
+        Valeur = myPoutre.Modal.MassTotal
+        ValRef = 18500
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
     End Sub
