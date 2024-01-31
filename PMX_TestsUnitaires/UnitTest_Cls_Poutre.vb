@@ -27,7 +27,9 @@ Imports PMXMoteur2
         '----------------------------------------------------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------------------------------------------------
 
-        Dim poutre As New cls_Poutre(NomCharges)
+        'Dim poutre As New cls_Poutre(NomCharges)
+        NomChargements = NomCharges
+        Dim poutre As New cls_Poutre()
 
         'Définition des caractéristiques de la poutre test
 

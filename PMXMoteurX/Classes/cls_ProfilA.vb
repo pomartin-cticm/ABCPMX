@@ -722,7 +722,7 @@ Public Class cls_ProfilA
         Dim vInertieY, vInertieZ As Decimal
         Dim vAire As Decimal
         Dim zANE_Y, zANE_Z As Decimal
-        Dim zANP_Y, zANP_Z As Decimal
+        Dim zANP_Y As Decimal
         Dim MelRd_Y, MelRd_Z As Decimal
         Dim MplRd_Y, MplRd_Z As Decimal
 

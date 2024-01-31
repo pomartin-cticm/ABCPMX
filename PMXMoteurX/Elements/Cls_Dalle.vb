@@ -30,21 +30,6 @@
     Public Beff As Decimal
 
     ''' <summary>
-    ''' Indique si une armature inférieur est présente
-    ''' </summary>
-    'Public lArma_Inf As Boolean 'MODIF GUD: redondant avec le booleen lActive dans la cls_armatures_longi
-
-    ''' <summary>
-    ''' Indique si une armature supérieur est présente
-    ''' </summary>
-    'Public lArma_Sup As Boolean
-
-    '''' <summary>
-    '''' acier de l'armature
-    '''' </summary>
-    'Public acier_armature As Decimal
-
-    ''' <summary>
     ''' angle / verticale du bord des renformis
     ''' </summary>
     Private pTheta_h As Decimal

@@ -1181,6 +1181,8 @@ Public Class cls_Bac
         Dim ltrouveHsurE As Boolean = False
         Dim ltrouveBsurE As Boolean = False
 
+        Dim CoefK As Decimal = 0
+
         'Const MYINDEXBsurE As Integer = 6
         'Const MYINDEXHsurE As Integer = 3
 
@@ -1282,7 +1284,8 @@ Public Class cls_Bac
                         '--> Cas où la valeur en dehors du tableau
                         lOK = False
                     Else
-                        Return MyTableauK(0)(iHsurE)(iBsurE)
+                        'Return MyTableauK(0)(iHsurE)(iBsurE)
+                        CoefK = MyTableauK(0)(iHsurE)(iBsurE)
                     End If
 
                 ElseIf NbBsurE = 2 Then
@@ -1290,7 +1293,8 @@ Public Class cls_Bac
                         '--> Cas où la valeur en dehors du tableau
                         lOK = False
                     Else
-                        Return Interpole(BsurE, BsurEPredefinies(iBsurE - 1), BsurEPredefinies(iBsurE), MyTableauK(0)(iHsurE)(iBsurE - 1), MyTableauK(0)(iHsurE)(iBsurE))
+                        'Return Interpole(BsurE, BsurEPredefinies(iBsurE - 1), BsurEPredefinies(iBsurE), MyTableauK(0)(iHsurE)(iBsurE - 1), MyTableauK(0)(iHsurE)(iBsurE))
+                        CoefK = Interpole(BsurE, BsurEPredefinies(iBsurE - 1), BsurEPredefinies(iBsurE), MyTableauK(0)(iHsurE)(iBsurE - 1), MyTableauK(0)(iHsurE)(iBsurE))
                     End If
 
                 End If
@@ -1302,7 +1306,8 @@ Public Class cls_Bac
                         '--> Cas où la valeur en dehors du tableau
                         lOK = False
                     Else
-                        Return Interpole(HsurE, HsurEPredefinies(iHsurE - 1), HsurEPredefinies(iHsurE), MyTableauK(0)(iHsurE - 1)(iBsurE), MyTableauK(0)(iHsurE)(iBsurE))
+                        'Return Interpole(HsurE, HsurEPredefinies(iHsurE - 1), HsurEPredefinies(iHsurE), MyTableauK(0)(iHsurE - 1)(iBsurE), MyTableauK(0)(iHsurE)(iBsurE))
+                        CoefK = Interpole(HsurE, HsurEPredefinies(iHsurE - 1), HsurEPredefinies(iHsurE), MyTableauK(0)(iHsurE - 1)(iBsurE), MyTableauK(0)(iHsurE)(iBsurE))
                     End If
                 ElseIf NbBsurE = 2 Then
 
@@ -1319,7 +1324,8 @@ Public Class cls_Bac
                         '--> Cas où la valeur en dehors du tableau
                         lOK = False
                     Else
-                        Return Interpole(HsurE, HsurEPredefinies(iHsurE - 1), HsurEPredefinies(iHsurE), Valeur1, Valeur2)
+                        'Return Interpole(HsurE, HsurEPredefinies(iHsurE - 1), HsurEPredefinies(iHsurE), Valeur1, Valeur2)
+                        CoefK = Interpole(HsurE, HsurEPredefinies(iHsurE - 1), HsurEPredefinies(iHsurE), Valeur1, Valeur2)
                     End If
 
                 End If
@@ -1338,7 +1344,8 @@ Public Class cls_Bac
                         '--> Cas où la valeur en dehors du tableau
                         lOK = False
                     Else
-                        Return Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), MyTableauK(0)(iHsurE)(iBsurE), MyTableauK(1)(iHsurE)(iBsurE))
+                        'Return Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), MyTableauK(0)(iHsurE)(iBsurE), MyTableauK(1)(iHsurE)(iBsurE))
+                        CoefK = Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), MyTableauK(0)(iHsurE)(iBsurE), MyTableauK(1)(iHsurE)(iBsurE))
                     End If
 
                 ElseIf NbBsurE = 2 Then
@@ -1355,7 +1362,8 @@ Public Class cls_Bac
                         lOK = False
                     Else
 
-                        Return Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), Valeur1, Valeur2)
+                        ' Return Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), Valeur1, Valeur2)
+                        CoefK = Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), Valeur1, Valeur2)
                     End If
 
                 End If
@@ -1377,7 +1385,8 @@ Public Class cls_Bac
                         lOK = False
                     Else
 
-                        Return Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), Valeur1, Valeur2)
+                        'Return Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), Valeur1, Valeur2)
+                        CoefK = Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), Valeur1, Valeur2)
                     End If
 
 
@@ -1403,7 +1412,8 @@ Public Class cls_Bac
                         '--> Cas où la valeur en dehors du tableau
                         lOK = False
                     Else
-                        Return Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), Valeur5, Valeur6)
+                        'Return Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), Valeur5, Valeur6)
+                        CoefK = Interpole(Theta, ThetaPredefinies(iTheta - 1), ThetaPredefinies(iTheta), Valeur5, Valeur6)
                     End If
                 End If
 
@@ -1412,9 +1422,7 @@ Public Class cls_Bac
             End If
         End If
 
-
-
-
+        Return CoefK
     End Function
 
     Private Sub ConstruireTableauK(Theta As Decimal, ByRef MyTabK As List(Of Decimal()), lK1 As Boolean)

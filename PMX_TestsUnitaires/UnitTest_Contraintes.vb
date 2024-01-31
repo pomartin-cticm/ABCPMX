@@ -28,7 +28,8 @@ Imports PMXMoteur2
 
         '--> Déclaration
 
-        Dim TU_poutre As New cls_Poutre(NomCas)
+        'Dim TU_poutre As New cls_Poutre(NomCas)
+        Dim TU_poutre As New cls_Poutre()
         Const Portee As Decimal = 8
         Const Q1 As Decimal = 1000
         Const GammaQ As Decimal = 1.5

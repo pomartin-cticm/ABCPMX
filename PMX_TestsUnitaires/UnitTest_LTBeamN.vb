@@ -1016,19 +1016,6 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             Next
 
 
-
-            'Maintien continu
-            .NbMaintiensCon = 1
-            ReDim .iNodeMaintienCon(.NbMaintiensCon - 1, 1)
-            ReDim .MaintienConV(.NbMaintiensCon - 1)
-            ReDim .MaintienConTheta(.NbMaintiensCon - 1)
-            ReDim .MaintienConVP(.NbMaintiensCon - 1)
-            ReDim .zMaintienConC(.NbMaintiensCon - 1)
-
-            .iNodeMaintienCon(0, 0) = 0
-            .iNodeMaintienCon(0, 1) = 100
-            .MaintienConV(0) = 2.0 * 1000.0        'N/m/m
-
             'Elements            
             ReDim .Aire(.NbNodes - 2)
             ReDim .InertieY(.NbNodes - 2)
@@ -1068,6 +1055,18 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .ForceRep(0, 1) = 3000        'N/m
             .xForceRep(0, 1) = L
         End With
+
+        '*Maintien continu
+        ParamLTB.NbMaintiensCon = 1
+        ReDim ParamLTB.iNodeMaintienCon(ParamLTB.NbMaintiensCon - 1, 1)
+        ReDim ParamLTB.MaintienConV(ParamLTB.NbMaintiensCon - 1)
+        ReDim ParamLTB.MaintienConTheta(ParamLTB.NbMaintiensCon - 1)
+        ReDim ParamLTB.MaintienConVP(ParamLTB.NbMaintiensCon - 1)
+        ReDim ParamLTB.zMaintienConC(ParamLTB.NbMaintiensCon - 1)
+
+        ParamLTB.iNodeMaintienCon(0, 0) = 0
+        ParamLTB.iNodeMaintienCon(0, 1) = 100
+        ParamLTB.MaintienConV(0) = 2.0 * 1000.0        'N/m/m
 
         '* Maintiens ponctuels
         ParamLTB.NbMaintiensPon = 2
@@ -1145,19 +1144,6 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-            'Maintien continu
-            .NbMaintiensCon = 1
-            ReDim .iNodeMaintienCon(.NbMaintiensCon - 1, 1)
-            ReDim .MaintienConV(.NbMaintiensCon - 1)
-            ReDim .MaintienConTheta(.NbMaintiensCon - 1)
-            ReDim .MaintienConVP(.NbMaintiensCon - 1)
-            ReDim .zMaintienConC(.NbMaintiensCon - 1)
-
-            .iNodeMaintienCon(0, 0) = 0
-            .iNodeMaintienCon(0, 1) = 100
-            .MaintienConV(0) = 0.75 * 1000.0        'N.m/m
-            .zMaintienConC(0) = 0.2405              'Semelle sup
-
             'Elements            
             ReDim .Aire(.NbNodes - 2)
             ReDim .InertieY(.NbNodes - 2)
@@ -1197,6 +1183,19 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .ForceRep(0, 1) = 3000        'N/m
             .xForceRep(0, 1) = L
         End With
+
+        'Maintien continu
+        ParamLTB.NbMaintiensCon = 1
+        ReDim ParamLTB.iNodeMaintienCon(ParamLTB.NbMaintiensCon - 1, 1)
+        ReDim ParamLTB.MaintienConV(ParamLTB.NbMaintiensCon - 1)
+        ReDim ParamLTB.MaintienConTheta(ParamLTB.NbMaintiensCon - 1)
+        ReDim ParamLTB.MaintienConVP(ParamLTB.NbMaintiensCon - 1)
+        ReDim ParamLTB.zMaintienConC(ParamLTB.NbMaintiensCon - 1)
+
+        ParamLTB.iNodeMaintienCon(0, 0) = 0
+        ParamLTB.iNodeMaintienCon(0, 1) = 100
+        ParamLTB.MaintienConV(0) = 0.75 * 1000.0        'N.m/m
+        ParamLTB.zMaintienConC(0) = 0.2405              'Semelle sup
 
         '* Maintiens ponctuels
         ParamLTB.NbMaintiensPon = 2
@@ -1274,21 +1273,6 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
                 .xNode(i) = i * L / (.NbNodes - 1)
             Next
 
-
-
-            'Maintien continu
-            .NbMaintiensCon = 1
-            ReDim .iNodeMaintienCon(.NbMaintiensCon - 1, 1)
-            ReDim .MaintienConV(.NbMaintiensCon - 1)
-            ReDim .MaintienConTheta(.NbMaintiensCon - 1)
-            ReDim .MaintienConVP(.NbMaintiensCon - 1)
-            ReDim .zMaintienConC(.NbMaintiensCon - 1)
-
-            .iNodeMaintienCon(0, 0) = 0
-            .iNodeMaintienCon(0, 1) = 100
-            .MaintienConV(0) = 0.75 * 1000.0        'N.m/m
-            .zMaintienConC(0) = 9.352649 / 100             'Semelle sup
-
             'Elements            
             ReDim .Aire(.NbNodes - 2)
             ReDim .InertieY(.NbNodes - 2)
@@ -1328,6 +1312,19 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             .ForceRep(0, 1) = 3000        'N/m
             .xForceRep(0, 1) = L
         End With
+
+        '*Maintien continu
+        ParamLTB.NbMaintiensCon = 1
+        ReDim ParamLTB.iNodeMaintienCon(ParamLTB.NbMaintiensCon - 1, 1)
+        ReDim ParamLTB.MaintienConV(ParamLTB.NbMaintiensCon - 1)
+        ReDim ParamLTB.MaintienConTheta(ParamLTB.NbMaintiensCon - 1)
+        ReDim ParamLTB.MaintienConVP(ParamLTB.NbMaintiensCon - 1)
+        ReDim ParamLTB.zMaintienConC(ParamLTB.NbMaintiensCon - 1)
+
+        ParamLTB.iNodeMaintienCon(0, 0) = 0
+        ParamLTB.iNodeMaintienCon(0, 1) = 100
+        ParamLTB.MaintienConV(0) = 0.75 * 1000.0        'N.m/m
+        ParamLTB.zMaintienConC(0) = 9.352649 / 100             'Semelle sup
 
         '* Maintiens ponctuels
         ParamLTB.NbMaintiensPon = 2

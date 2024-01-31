@@ -16,7 +16,10 @@ Imports PMXMoteur2
 
         '--> Déclaration
 
-        Dim poutre As New cls_Poutre(NomCas)
+        'Dim poutre As New cls_Poutre(NomCas)
+        NomChargements = NomCas
+
+        Dim poutre As New cls_Poutre()
 
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000
@@ -155,7 +158,8 @@ Imports PMXMoteur2
 
         '--> Déclaration
 
-        Dim poutre As New cls_Poutre(NomCas)
+        ' Dim poutre As New cls_Poutre(NomCas)
+        Dim poutre As New cls_Poutre()
 
         Dim DeltaV, ValRef As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000

@@ -192,6 +192,39 @@ Public Class cls_MaintienBac
 
 #Region " Calcul des flexibilités selon CECM n88 "
 
+    Public Function RigiditeShear(Longueur As Decimal, EntraxeD As Decimal, MyBac As cls_Bac, EYoung As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------
+        '   18/12/23 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Renvoie la rigidité en cisaillement procurée par le maintien du bac
+        '--------------------------------------------------------------------------------------------
+        '   Longueur    [E] :   Longueur de la poutre
+        '   EntraxeD    [E] :   Entraxe des poutres
+        '   MyBac       [E] :   Bac
+        '   EYoung      [E] :   Module d'Young acier
+        '--------------------------------------------------------------------------------------------
+
+        '--( Déclaration 
+
+        Dim Sact As Decimal
+        Dim Poisson As Decimal = cls_Acier.NU
+        Dim cCumul As Decimal
+
+        '--( Calculs
+
+        Dim c11 As Decimal = Me.Flexibilite_C11_DistorsionBac(Longueur, EntraxeD, MyBac, EYoung)
+        Dim c12 As Decimal = Me.Flexibilite_C12_Shear(Longueur, EntraxeD, MyBac, EYoung, Poisson)
+        Dim c21 As Decimal = Me.Flexibilite_C21_BeamFasteners(Longueur, EntraxeD, MyBac.Ep)
+        Dim c22 As Decimal = Me.Flexibilite_C21_BeamFasteners(Longueur, EntraxeD, MyBac.Ep)
+
+        cCumul = c11 + c12 + c21 + c22
+
+        Sact = Longueur / cCumul
+
+        Return Sact
+
+    End Function
+
     Public Function Flexibilite_C11_DistorsionBac(Longueur As Decimal, EntraxeD As Decimal, MyBac As cls_Bac, EYoung As Decimal) As Decimal
         '--------------------------------------------------------------------------------------------
         '   18/12/23 :  Création - POM
@@ -347,6 +380,7 @@ Public Class cls_MaintienBac
             End If
         End If
 
+        Return nF
     End Function
 
     Public Function Beta1(nf As Integer) As Decimal

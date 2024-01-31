@@ -48,7 +48,7 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator31 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Maintiens = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Etaiement = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn_Test = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_MaintienBac = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator32 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Chargements = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Gamma = New System.Windows.Forms.ToolStripButton()
@@ -341,7 +341,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Poutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Poutre.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.TSbtn_Test, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.ToolStripSeparator5, Me.TSbtn_OptionsCalculPoutre, Me.TSbtn_Hivoss, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PostT, Me.TSbtn_PPVerifications, Me.ToolStripSeparator2, Me.TSbtn_NdcPoutre})
+        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_SectionA, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.TSbtn_MaintienBac, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.ToolStripSeparator5, Me.TSbtn_OptionsCalculPoutre, Me.TSbtn_Hivoss, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PostT, Me.TSbtn_PPVerifications, Me.ToolStripSeparator2, Me.TSbtn_NdcPoutre})
         Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
         Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -446,15 +446,15 @@ Partial Class Frm_PMX
         Me.TSbtn_Etaiement.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Etaiement.Text = "TSbtn_Etaiement"
         '
-        'TSbtn_Test
+        'TSbtn_MaintienBac
         '
-        Me.TSbtn_Test.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Test.Image = CType(resources.GetObject("TSbtn_Test.Image"), System.Drawing.Image)
-        Me.TSbtn_Test.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Test.Name = "TSbtn_Test"
-        Me.TSbtn_Test.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Test.Text = "ToolStripButton1"
-        Me.TSbtn_Test.ToolTipText = "Tests"
+        Me.TSbtn_MaintienBac.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_MaintienBac.Image = CType(resources.GetObject("TSbtn_MaintienBac.Image"), System.Drawing.Image)
+        Me.TSbtn_MaintienBac.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_MaintienBac.Name = "TSbtn_MaintienBac"
+        Me.TSbtn_MaintienBac.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_MaintienBac.Text = "ToolStripButton1"
+        Me.TSbtn_MaintienBac.ToolTipText = "Tests"
         '
         'ToolStripSeparator32
         '
@@ -1400,5 +1400,5 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_OptionsCalculPoutre As ToolStripButton
     Friend WithEvents TSMenuPP_Hivoss As ToolStripMenuItem
     Friend WithEvents TSbtn_Cotations As ToolStripButton
-    Friend WithEvents TSbtn_Test As ToolStripButton
+    Friend WithEvents TSbtn_MaintienBac As ToolStripButton
 End Class

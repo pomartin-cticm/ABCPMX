@@ -850,7 +850,7 @@ Public Class cls_Projet
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
-        Dim i, iFirst, indTravee, indZone As Integer
+        Dim i, iFirst As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
 

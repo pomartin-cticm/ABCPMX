@@ -17,7 +17,9 @@ Imports PMXMoteur2
 
         Dim EtaMin, Valref As Decimal
 
-        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", NomCharges)
+        'Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", NomCharges)
+        NomChargements = NomCharges
+        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU")
 
         ReDim myPoutre.VerifMixte(0)
         myPoutre.VerifMixte(0) = New cls_VerificationsMixtes()

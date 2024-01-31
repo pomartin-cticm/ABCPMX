@@ -243,7 +243,8 @@ Public Class Frm_PMX
                 Me.TSbtn_SectionA.ToolTipText = Bloc("TSBSECTIONA")
                 Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENCASEMENT")
                 Me.TSbtn_Connexion.ToolTipText = Bloc("TSBCONNECTION")
-                Me.TSbtn_Maintiens.ToolTipText = Bloc("TSBMAINTIENS")
+                Me.TSbtn_Maintiens.ToolTipText = Bloc("TSBRESTRAINTS")
+                Me.TSbtn_MaintienBac.ToolTipText = Bloc("TSBSHEETRESTRAIN")
 
                 Me.TSbtn_Etaiement.ToolTipText = Bloc("TSBPROPPING")
 
@@ -504,7 +505,7 @@ Public Class Frm_PMX
         Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
                 TSbtn_Gamma.Click, TSbtn_PPLargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
-                TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click, TSbtn_OptionsIncendie.Click, TSbtn_Test.Click
+                TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click, TSbtn_OptionsIncendie.Click, TSbtn_MaintienBac.Click
 
         Select Case sender.name
 
@@ -563,7 +564,7 @@ Public Class Frm_PMX
             Case Me.TSbtn_OptionsIncendie.Name
                 FilleEnCours = EnuFenetres.OptionsIncendie
 
-            Case Me.TSbtn_Test.Name
+            Case Me.TSbtn_MaintienBac.Name
                 FilleEnCours = EnuFenetres.Test
 
         End Select

@@ -439,7 +439,7 @@ Public Class cls_Poutre
 
 #End Region
 
-#Region "Propriétés"
+#Region " Propriétés "
 
     ''' <summary>
     ''' Renvoi la masse totale de la poutre en cours 
@@ -531,8 +531,6 @@ Public Class cls_Poutre
         '-------------------------------------------------------------------------------------------------------
         '   MsgChargements  [E] :   Nom des cas de charges dans la langue utilisateur
         '-------------------------------------------------------------------------------------------------------
-
-
 
         Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(NomChargements(0), Me.IndiceTraveeConsoleDroite))
         Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(NomChargements(1), Me.IndiceTraveeConsoleDroite))
@@ -734,6 +732,20 @@ Public Class cls_Poutre
 #End Region
 
 #Region " Outils divers "
+
+    Public ReadOnly Property EntraxeSolive As Decimal
+        Get
+            Dim MyD As Decimal
+
+            If Me.lIntermediaire Then
+                MyD = (Me.EntraxeD1 + Me.EntraxeD2) / 2
+            Else
+                MyD = Me.EntraxeD2
+            End If
+
+            Return MyD
+        End Get
+    End Property
 
     Public ReadOnly Property lMultiSpan As Boolean
         Get

@@ -12,12 +12,12 @@
         'Dim MaintienPonThetaP() As Decimal          'Maintien ponctuel en gauchissement theta' (0 à NbMaintienPon-1)    : utile pour calcul LTB, -1: totale, 0-libre, >0 ressort
         'Dim zMaintienPonC() As Decimal              'Position verticale du maintien ponctuel j (0 à NbMaintienPon-1)
 
-        Dim NbMaintiensCon As Integer               'Nombre de maintiens ponctuels
-        Dim iNodeMaintienCon(,) As Integer          'Numero du noeud où se trouve le maintien continu j (0 à NbMaintienCon-1); à gauche (j,0) et à droite (j,1)        
-        Dim MaintienConV() As Decimal               'Maintien continu en déplacement latéral v (0 à NbMaintienCon-1) : utile pour calcul LTB, -1: totale, 0-libre, >0 ressort
-        Dim MaintienConVP() As Decimal              'Maintien continu en rotation latéral v' (0 à NbMaintienCon-1) : utile pour calcul LTB, -1: totale, 0-libre, >0 ressort
-        Dim MaintienConTheta() As Decimal           'Maintien continu en torsion theta (0 à NbMaintienCon-1) : utile pour calcul LTB, -1: totale, 0-libre, >0 ressort
-        Dim zMaintienConC() As Decimal              'Position verticale du maintien continu j (0 à NbMaintienCon-1)
+        'Dim NbMaintiensCon As Integer               'Nombre de maintiens continus
+        'Dim iNodeMaintienCon(,) As Integer          'Numero du noeud où se trouve le maintien continu j (0 à NbMaintienCon-1); à gauche (j,0) et à droite (j,1)        
+        'Dim MaintienConV() As Decimal               'Maintien continu en déplacement latéral v (0 à NbMaintienCon-1) : utile pour calcul LTB, -1: totale, 0-libre, >0 ressort
+        'Dim MaintienConVP() As Decimal              'Maintien continu en rotation latéral v' (0 à NbMaintienCon-1) : utile pour calcul LTB, -1: totale, 0-libre, >0 ressort
+        'Dim MaintienConTheta() As Decimal           'Maintien continu en torsion theta (0 à NbMaintienCon-1) : utile pour calcul LTB, -1: totale, 0-libre, >0 ressort
+        'Dim zMaintienConC() As Decimal              'Position verticale du maintien continu j (0 à NbMaintienCon-1)
 
         Dim Aire() As Decimal                       'Aire des éléments (0 à NbNodes-2)  : pas utile pour calcul LTB
         Dim InertieY() As Decimal                   'Inertie /yy des éléments (0 à NbNodes-2) : pas utile pour calcul LTB

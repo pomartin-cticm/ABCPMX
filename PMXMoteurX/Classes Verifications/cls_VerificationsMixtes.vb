@@ -92,7 +92,7 @@
         Dim ClasseSection(,) As Integer = Nothing       ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite)
         Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
         Dim lSimple As Boolean = False
-        Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
+        '   Dim ClasseP(), ClasseM() As Integer             ' Tableau des classes de section en flexion poisitive et négative
         Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
 
         Dim iNodeMmax() As Integer = Nothing
@@ -839,7 +839,7 @@
 
         Dim rhoV As Decimal
         Dim critereV As Decimal
-        Dim iNode, k As Integer
+        Dim iNode As Integer
         Dim iTravee, iDebT, iFinT As Integer
         Dim iDebN, iFinN As Integer
 

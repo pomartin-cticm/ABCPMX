@@ -65,7 +65,8 @@ Public Class Frm_MaintienBac
 
         localMaitienBac = MyProjet.Poutres(MyProjet.IndEnCours).MaintienBac.Clone
 
-        EntraxeD = Me.EntraxeSolive(MyProjet.Poutres(MyProjet.IndEnCours))
+        ' EntraxeD = Me.EntraxeSolive(MyProjet.Poutres(MyProjet.IndEnCours))
+        EntraxeD = MyProjet.Poutres(MyProjet.IndEnCours).EntraxeSolive
 
         xMargeZone = Me.lbl_Calculs.ClientRectangle.Height * kMarge
         SizeZone = Me.lbl_Calculs.ClientRectangle.Height * (1 - 2 * kMarge)
@@ -78,19 +79,19 @@ Public Class Frm_MaintienBac
 
     End Sub
 
-    Private Function EntraxeSolive(MyBeam As cls_Poutre) As Decimal
+    'Private Function EntraxeSolive(MyBeam As cls_Poutre) As Decimal
 
-        Dim MyD As Decimal
+    '    Dim MyD As Decimal
 
-        If MyBeam.lIntermediaire Then
-            MyD = (MyBeam.EntraxeD1 + MyBeam.EntraxeD2) / 2
-        Else
-            MyD = MyBeam.EntraxeD2
-        End If
+    '    If MyBeam.lIntermediaire Then
+    '        MyD = (MyBeam.EntraxeD1 + MyBeam.EntraxeD2) / 2
+    '    Else
+    '        MyD = MyBeam.EntraxeD2
+    '    End If
 
-        Return MyD
+    '    Return MyD
 
-    End Function
+    'End Function
 
     Private Sub RemplirCmbNbSpans()
         Me.cmb_NbSpan.Items.Clear()

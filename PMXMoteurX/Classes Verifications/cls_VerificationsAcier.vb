@@ -60,7 +60,8 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU d'une poutre acier sans enrobage
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre    [E] :   Poutre vérifiée
+        '   MyPoutre            [E] :   Poutre vérifiée
+        '   lConstructionPhase  [E] :   Indique si vérification d'une poutre mixte en phase de construction
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -150,8 +151,7 @@ Public Class cls_VerificationsAcier
 
             '# Vérification au déversement
 
-            Me.RunCritereDeversement(MyPoutre, iCombi, MEd, lSigma)
-
+            Me.RunCritereDeversement(MyPoutre, iCombi, MEd, lSigma, lConstructionPhase)
 
         Next
 
@@ -161,16 +161,18 @@ Public Class cls_VerificationsAcier
 
 #Region " Vérifications de la résistance au déversement "
 
-    Private Sub RunCritereDeversement(myPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, lSigma As Boolean)
+    Private Sub RunCritereDeversement(myPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, lSigma As Boolean,
+                                      lConstructionPhase As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   07/12/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance au déversement
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre    [E] :   Poutre traitée
-        '   iCombi      [E] :   Indice de la combinaison
-        '   MEd         [E] :   Table des moments fléchissants le long de la poutre
-        '   lSigma      [E] :   Indique si calcul élastique
+        '   MyPoutre            [E] :   Poutre traitée
+        '   iCombi              [E] :   Indice de la combinaison
+        '   MEd                 [E] :   Table des moments fléchissants le long de la poutre
+        '   lSigma              [E] :   Indique si calcul élastique
+        '   lConstructionPhase  [E] :   Indique si vérification d'une poutre mixte en phase de construction
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -189,7 +191,7 @@ Public Class cls_VerificationsAcier
 
         '--> Calcul Alpha Critique
 
-        CalculAlphaCritique(myPoutre, iCombi, MEd, AlphaCr, lOK)
+        CalculAlphaCritique(myPoutre, iCombi, MEd, lConstructionPhase, AlphaCr, lOK)
 
         '--> Résistance caractéristique
 
@@ -243,16 +245,19 @@ Public Class cls_VerificationsAcier
 
     End Sub
 
-    Private Sub CalculAlphaCritique(myPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, ByRef AlphaCr As Decimal, ByRef lOK As Boolean)
+    Private Sub CalculAlphaCritique(myPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, lConstructionPhase As Boolean,
+                                    ByRef AlphaCr As Decimal, ByRef lOK As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   07/12/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance au déversement
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
-        '   MEd     [E] :   Diagramme de flexion
-        '   AlphaCr [S] :   Alpha Critique
-        '   lOK     [S] :   Indique si le calcul s'est bien déroulé
+        '   MyPoutre            [E] :   Poutre traitée
+        '   iCombi              [E] :   Indice de la combinaisons traitée
+        '   MEd                 [E] :   Diagramme de flexion
+        '   lConstructionPhase  [E] :   Indique si vérification d'une poutre mixte en phase de construction
+        '   AlphaCr             [S] :   Alpha Critique
+        '   lOK                 [S] :   Indique si le calcul s'est bien déroulé
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -307,7 +312,7 @@ Public Class cls_VerificationsAcier
         pAire = myPoutre.Section.ProfilA.Aire
         If lEnrob Then nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
         myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd)
-        myPoutre.Section.ProprietesElastiquesMzz(1, True, myPoutre.Param.Gamma, nEqEc, zAnez, pInertieZ, mElRd)
+        myPoutre.Section.ProprietesElastiquesMzz(1, True, myPoutre.Param.Gamma, nEqEc, zAneZ, pInertieZ, mElRd)
         pInertieT = myPoutre.Section.InertieT
         pInertieW = myPoutre.Section.ProfilA.InertieW
         rGirPolaire = myPoutre.Section.ProfilA.RayonGirationPolaireCalcul
@@ -324,7 +329,7 @@ Public Class cls_VerificationsAcier
             pDonnees.InertieZ(i) = pInertieZ
             pDonnees.InertieW(i) = pInertieW
             pDonnees.CoefBetaZ(i) = pBetaZ
-            pDonnees.PositionCG(i) = pzs
+            pDonnees.PositionCG(i) = pzS
         Next
 
         '# Appuis de la poutre
@@ -358,6 +363,44 @@ Public Class cls_VerificationsAcier
         pDonnees.NbForcesRep = 0
         pDonnees.NbMoments = 0
 
+        '# Maintien par le bac en phase de construction
+
+        If lConstructionPhase And myPoutre.lMixte Then
+            Dim lEtaiement As Boolean = (myPoutre.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.FullyPropped)
+            If Not lEtaiement And myPoutre.MaintienBac.lMaintienBac Then
+
+                Dim EntraxeD As Decimal = myPoutre.EntraxeSolive
+                Dim Sact As Decimal = myPoutre.MaintienBac.RigiditeShear(myPoutre.LongueurTravee(1), entraxed, myPoutre.Dalle.Bac, myPoutre.Section.Acier.EYoung)
+
+                Dim kTheta, kThetaA, kThetaC As Decimal
+                Dim bFs As Decimal = myPoutre.Section.ProfilA.Bfs
+
+                kThetaA = myPoutre.Dalle.Bac.RigiditeFlexionnelleA(myPoutre.MaintienBac.FixNervuresMod = cls_MaintienBac.Enu_FixationNervures.Toutes, bFs)
+                kThetaC = myPoutre.Dalle.Bac.RigiditeFlexionnelleC(EntraxeD, myPoutre.lIntermediaire)
+                kTheta = 1 / (1 / kThetaA + 1 / kThetaC)
+
+                paramLTB.NbMaintiensCon = 1
+
+                ReDim paramLTB.iNodeMaintienCon(paramLTB.NbMaintiensCon - 1, 1)
+                ReDim paramLTB.MaintienConV(paramLTB.NbMaintiensCon - 1)
+                ReDim paramLTB.MaintienConVP(paramLTB.NbMaintiensCon - 1)
+                ReDim paramLTB.MaintienConTheta(paramLTB.NbMaintiensCon - 1)
+                ReDim paramLTB.zMaintienConC(paramLTB.NbMaintiensCon - 1)
+
+                paramLTB.iNodeMaintienCon(0, 0) = 0
+                paramLTB.iNodeMaintienCon(0, 1) = pDonnees.NbNodes - 1
+
+                paramLTB.MaintienConV(0) = 0
+                '# maintien en cisaillement par le bac (v')
+                paramLTB.MaintienConVP(0) = Sact
+                '# maintien en flexion par le bac (theta)
+                paramLTB.MaintienConTheta(0) = kTheta
+
+                paramLTB.zMaintienConC(0) = myPoutre.Section.ProfilA.hb / 2
+
+            End If
+        End If
+
         '# Maintiens latéraux
 
         '**** A AJOUTER
@@ -385,7 +428,7 @@ Public Class cls_VerificationsAcier
 
         '--> Lancement du calcul LTBeamN
 
-        Call MyDLL_LTB.CALCULER(pDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+        Call MyDLL_LTB.CALCULER(pDonnees, paramLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
 
         '--> Exploitation des résultats
 
