@@ -18,8 +18,8 @@ Public Class cls_VerificationsAcier
 
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
-    Public AlphaCrLTB As Decimal                    ' Alpha critique pour le déversement élastique
-    Public McrLTB() As Decimal                      ' Moment critique pour le déversement (en travée)
+    Public AlphaCrLTB() As Decimal                  ' Alpha critique pour le déversement élastique
+    Public McrLTB(,) As Decimal                     ' Moment critique pour le déversement (en travée)
 
 #End Region
 
@@ -50,6 +50,9 @@ Public Class cls_VerificationsAcier
         Me.CritereVb = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
 
         Me.CritereLTB = New cls_Critere(IndDerniereT + 1, NbCombi, IndDerniereT)
+
+        ReDim AlphaCrLTB(NbCombi - 1)
+        ReDim McrLTB(NbCombi - 1, IndDerniereT)
 
     End Sub
 
@@ -194,12 +197,10 @@ Public Class cls_VerificationsAcier
 
         '--> Initialisation
 
-        ReDim Me.McrLTB(myPoutre.IndiceDerniereTravee)
-
         '--> Calcul Alpha Critique
 
         CalculAlphaCritique(myPoutre, iCombi, MEd, lConstructionPhase, AlphaCr, lOK)
-        Me.AlphaCrLTB = AlphaCr
+        Me.AlphaCrLTB(iCombi) = AlphaCr
 
         '--> Résistance caractéristique
 
@@ -231,7 +232,7 @@ Public Class cls_VerificationsAcier
             '# Moment critique
 
             Mcr = AlphaCr * MEdmax
-            McrLTB(iTrav) = Mcr
+            McrLTB(iCombi, iTrav) = Mcr
 
             '# Elancement réduit
 
@@ -374,12 +375,11 @@ Public Class cls_VerificationsAcier
 
         '# Maintien par le bac en phase de construction
 
-        If lConstructionPhase And myPoutre.lMixte Then
-            Dim lEtaiement As Boolean = (myPoutre.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.FullyPropped)
-            If Not lEtaiement And myPoutre.MaintienBac.lMaintienBac Then
+        If lConstructionPhase And myPoutre.lMaintienBacPossible Then
+            If myPoutre.MaintienBac.lMaintienBac Then
 
                 Dim EntraxeD As Decimal = myPoutre.EntraxeSolive
-                Dim Sact As Decimal = myPoutre.MaintienBac.RigiditeShear(myPoutre.LongueurTravee(1), entraxed, myPoutre.Dalle.Bac, myPoutre.Section.Acier.EYoung)
+                Dim Sact As Decimal = myPoutre.MaintienBac.RigiditeShear(myPoutre.LongueurTravee(1), EntraxeD, myPoutre.Dalle.Bac, myPoutre.Section.Acier.EYoung)
 
                 Dim kTheta, kThetaA, kThetaC As Decimal
                 Dim bFs As Decimal = myPoutre.Section.ProfilA.Bfs

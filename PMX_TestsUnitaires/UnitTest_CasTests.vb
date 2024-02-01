@@ -725,7 +725,6 @@ Imports PMXMoteur2
         ValRef = Math.PI / 2 * Math.Sqrt(210 * InertieY * 10 ^ 8 * 9.81 / (1300 * 14 ^ 4))
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
-
         Valeur = myPoutre.Modal.MassTotal
         ValRef = 18500
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))

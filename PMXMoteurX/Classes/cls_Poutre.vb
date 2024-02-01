@@ -733,6 +733,27 @@ Public Class cls_Poutre
 
 #Region " Outils divers "
 
+    Public ReadOnly Property lMaintienBacPossible As Boolean
+        '---------------------------------------------------------------------------------------
+        '   01/02/24 :  Création - V1.00 - POM
+        '---------------------------------------------------------------------------------------
+        '   Indique si le maitien par le bac est possible
+        '---------------------------------------------------------------------------------------
+        Get
+            Dim lPossible As Boolean
+            Dim plMixte, plEtaiement, plDalleMixte, plBacPerp As Boolean
+
+            plMixte = Me.lMixte
+            plEtaiement = (Me.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.FullyPropped)
+            plDalleMixte = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
+            plBacPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+
+            lPossible = plMixte And (Not plEtaiement) And plDalleMixte And plBacPerp
+            Return lPossible
+        End Get
+    End Property
+
+
     Public ReadOnly Property EntraxeSolive As Decimal
         Get
             Dim MyD As Decimal
@@ -765,19 +786,6 @@ Public Class cls_Poutre
             Return portee
         End Get
     End Property
-    'Public ReadOnly Property LargeurInfluence As Decimal
-    '    Get
-    '        Dim Largeur As Decimal
-
-    '        If Me.lIntermediaire Then
-    '            Largeur = (Me.EntraxeD1 + Me.EntraxeD2) / 2
-    '        Else
-    '            portee = Me.EntraxeD2
-    '        End If
-
-    '        Return Largeur
-    '    End Get
-    'End Property
 
     Public Function GetNbCombi(lComb As Boolean()) As Integer
         Dim nbRetour As Integer
