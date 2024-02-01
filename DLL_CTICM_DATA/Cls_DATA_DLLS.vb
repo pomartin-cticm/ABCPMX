@@ -47,4 +47,48 @@
         Dim MomentFle(,) As Decimal                 'Valeur du moment flechissant de l'element j (0 à NbNodes -2), à gauche (j,0) et à droite (j,1)
     End Structure
 
+    '#Region " Attributs "
+
+    '    Public NbNodes As Integer                      'Nombre de noeuds EF
+    '    Public xNode() As Decimal                      'Position x des nœuds (0 à NbNodes-1)
+
+    '    Public Aire() As Decimal                       'Aire des éléments (0 à NbNodes-2)  : pas utile pour calcul LTB
+    '    Public InertieY() As Decimal                   'Inertie /yy des éléments (0 à NbNodes-2) : pas utile pour calcul LTB
+    '    Public InertieZ() As Decimal                   'Inertie /zz des éléments (0 à NbNodes-2) : utile pour calcul LTB
+    '    Public InertieT() As Decimal                   'Inertie /zz des éléments (0 à NbNodes-2) : utile pour calcul LTB
+    '    Public InertieW() As Decimal                   'Inertie /zz des éléments (0 à NbNodes-2) : utile pour calcul LTB
+    '    Public PositionCG() As Decimal                 'Position verticale du centre C par rapport au centre G (0 à NbNodes-2) : utile pour calcul LTB
+    '    Public RayGirPol() As Decimal                  'Rayon de giration polaire (0 à NbNodes-2) : utile pour calcul LTB
+    '    Public CoefBetaZ() As Decimal                  'Coef de Wagner (0 à NbNodes-2) : utile pour calcul LTB
+    '    Public NbAppuis As Integer                     'Nombre de nœuds appui
+    '    Public iNodeAppui() As Integer                 'Indice des nœuds appui (z bloqué) (0 à NbAppuis-1)
+    '    Public lAppuiArticule() As Boolean             'Indique si continuité (False) ou articulation (True) au droit des nœuds appui (0 à NbAppuis-1)
+    '    Public EYOUNG As Decimal                       'Module d'Young
+    '    Public GSHEAR As Decimal                       'Module de cisaillement : utile pour calcul LTB
+    '    Public NbForcesPon As Integer                  'Nombre de forces ponctuelles verticales
+    '    Public xForcePon() As Decimal                  'Position x de la force j (0 à NbForcesPon-1)
+    '    Public zForcePonC() As Decimal                 'Position z de la force j (0 à NbForcesPon-1) par rapport au centre C
+    '    Public ForcePon() As Decimal                   'Valeur de la force ponctuelle verticale (>0=gravitaire) (0 à NbForcesPon-1)
+    '    Public NbMoments As Integer                    'Nombre de moments de flexion ponctuels
+    '    Public xMoment() As Decimal                    'Position x du moment j (0 à NbMoments-1)
+    '    Public Moment() As Decimal                     'Valeur du moment (0 à NbMoments -1)
+    '    Public NbForcesRep As Integer                  'Nombre de forces réparties
+    '    Public xForceRep(,) As Decimal                 'Position x de la force répartie j (0 à NbForcesRep-1), à gauche (j,0) et à droite (j,1)
+    '    Public zForceRepC() As Decimal                 'Position z de la force répartie j (0 à NbForcesRep-1) par rapport a C
+    '    Public ForceRep(,) As Decimal                  'Valeur de la force répartie j (0 à NbForcesRep-1), à gauche (j,0) et à droite (j,1)        
+    '    Public PESANTEUR As Decimal                    'g
+    '    Public MomentFle(,) As Decimal                 'Valeur du moment flechissant de l'element j (0 à NbNodes -2), à gauche (j,0) et à droite (j,1)
+
+    '#End Region
+
+    '#Region " Constructeurs "
+
+
+    '#End Region
+
+    '#Region " Outils "
+
+
+    '#End Region
+
 End Class

@@ -286,6 +286,17 @@ Public Class cls_VerificationsAcier
         Dim lEnrob As Boolean = myPoutre.lEnrobage
         Dim rGirPolaire As Decimal
         Dim pzS, pBetaZ As Decimal
+        Dim CoefCombi As New List(Of Decimal)
+        Dim iTravP As Integer, iTravD As Integer, iTrav As Integer
+        Dim zTop As Decimal
+
+        '--> Initialisation
+
+        If lConstructionPhase Then
+            CoefCombi = myPoutre.CoefCombELCU(iCombi)
+        Else
+            CoefCombi = myPoutre.CoefCombELU(iCombi)
+        End If
 
         '--> Préparation des données pour le calcul LTBeamN
 
@@ -409,12 +420,33 @@ Public Class cls_VerificationsAcier
                 '# maintien en flexion par le bac (theta)
                 paramLTB.MaintienConTheta(0) = kTheta
 
-                paramLTB.zMaintienConC(0) = myPoutre.Section.ProfilA.hb / 2
+                paramLTB.zMaintienConC(0) = -zAne - pzS
 
             End If
         End If
 
         '# Chargements
+
+        iTravP = myPoutre.IndicePremiereTravee
+        iTravD = myPoutre.IndiceDerniereTravee
+        zTop = -zAne - pzS
+
+        For iCharge As Integer = 0 To 5
+            If Not IsEqual(CoefCombi(iCharge), 0) Then
+                For iTrav = iTravP To iTravD
+                    '# Transfert des charges surfaciques
+                    '# Transfert des charges réparties
+                    '# Transfert des charges ponctuelles
+                    '# Transfert des charges ponctuelles
+
+                    For iForce = 0 To myPoutre.ChargesA(iCharge).Forces(iTrav).Count - 1
+
+                        AjouteForce(pDonnees, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).xPosG, ztop, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force)
+
+                    Next
+                Next
+            End If
+        Next
 
         '**** A AJOUTER
 
@@ -430,13 +462,6 @@ Public Class cls_VerificationsAcier
 
         '# Moments fléchissants
 
-        'For j = 0 To pDonnees.NbNodes - 1
-
-        '    For k = 0 To 1
-        '        pDonnees.MomentFle(j, k) = MEd(j, k)
-        '    Next
-
-        'Next
         pDonnees.MomentFle = MEd
 
         '--> Lancement du calcul LTBeamN
@@ -451,6 +476,40 @@ Public Class cls_VerificationsAcier
         If Not lOK Then
             MsgBox(TextError_LTB, MsgBoxStyle.Critical, "cls_VerificationAcier/CalculAlphaCritique")
         End If
+
+    End Sub
+
+    Private Sub AjouteForce(ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, xPos As Decimal, zPos As Decimal, Force As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Ajout d'une force ponctuelle dans le chargement
+        '----------------------------------------------------------------------------------------------------------
+
+        '-------------------------------------------------------------------------------------
+        '   18/09/23 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
+        '-------------------------------------------------------------------------------------
+        '   xFor        [E] :   Position de la force
+        '   Force       [E] :   Valeur de la force
+        '   pDonneesEF  [S] :   Donnes pour le calcul EF
+        '-------------------------------------------------------------------------------------
+
+        pDonneesEF.NbForcesPon += 1
+        If pDonneesEF.NbForcesPon = 1 Then
+            ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+            ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+            ReDim pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1)
+        Else
+            ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+            ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+            ReDim Preserve pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1)
+        End If
+
+        pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
+        pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xPos
+        pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1) = zPos
 
     End Sub
 
