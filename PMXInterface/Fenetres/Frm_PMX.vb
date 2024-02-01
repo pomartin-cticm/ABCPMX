@@ -269,6 +269,8 @@ Public Class Frm_PMX
                 Me.TSmenuPPVerifications.Text = Bloc("PPVERIFICATIONS")
                 Me.TSmenuPPModePropre.Text = Bloc("PPEIGENMODE")
 
+                Me.TSbtn_PostT.Text = Bloc("PPOSTT")
+
                 '=== MESSAGES GENERAUX
 
                 ErreurCapacite_LNG = Bloc("ERRORCAPACITY")
@@ -299,6 +301,12 @@ Public Class Frm_PMX
         End Select
 
         Me.TLPan_Main.RowStyles(3).Height = 0
+
+        Me.TSbtn_PPLargeurEfficace.Visible = False
+        Me.TSbtn_PPCombi.Visible = False
+        Me.TSbtn_PPLoadCases.Visible = False
+        Me.TSbtn_PPVerifications.Visible = False
+        'Me.TSbtn_PPCombi.Visible = False
     End Sub
 
 #End Region
@@ -812,6 +820,7 @@ Public Class Frm_PMX
         Me.TSbtn_Enrobage.Visible = lFrmEnrobage
         Me.TSbtn_Etaiement.Visible = lFrmProppin
 
+        Me.TSbtn_MaintienBac.Visible = MyProjet.Poutres(MyProjet.IndEnCours).lMixte
     End Sub
 
     Private Sub MAJVoletGauche()

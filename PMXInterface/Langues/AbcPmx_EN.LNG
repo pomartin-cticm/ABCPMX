@@ -527,6 +527,7 @@ PPEFFWIDTHS				= Effective widths of slab
 PPLOADCASES				= Load cases
 PPVERIFICATIONS			= Verifications
 PPEIGENMODE				= Eigen mode
+PPOSTT					= Results
 ZOOMIN					= Zoom in
 ZOOMOUT					= Zoom out
 EDIT					= Edit
