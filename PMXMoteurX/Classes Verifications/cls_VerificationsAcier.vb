@@ -431,35 +431,71 @@ Public Class cls_VerificationsAcier
         iTravP = myPoutre.IndicePremiereTravee
         iTravD = myPoutre.IndiceDerniereTravee
         zTop = -zAne - pzS
+        Dim NbRep, iCharge As Integer
+        Dim iCompteur As Integer = -1
+        NbRep = 0
+        Dim NbCharges As Integer = CoefCombi.Count
+        Dim xo, xe As Double
+        Dim qo, qe As Double
+        Dim qSurf, Force As Decimal
+        Dim LargeurI As Decimal = myPoutre.LargeurInfluence
 
-        For iCharge As Integer = 0 To 5
+        '-- Nombre de charges réparties et surfaciques, à transférer
+
+        For iCharge = 0 To NbCharges - 1
+            If Not IsEqual(CoefCombi(iCharge), 0) Then
+
+                NbRep += myPoutre.ChargesA(iCharge).NombreChargesSurf(iTravP, iTravD) + myPoutre.ChargesA(iCharge).NombreFRep(iTravP, iTravD)
+
+            End If
+        Next
+
+        pDonnees.InitialiseForcesRep(NbRep)
+
+        For iCharge = 0 To CoefCombi.Count - 1
             If Not IsEqual(CoefCombi(iCharge), 0) Then
                 For iTrav = iTravP To iTravD
+
+                    xo = myPoutre.xPositionAppui(True, iTrav)
+                    xe = myPoutre.xPositionAppui(False, iTrav)
+
                     '# Transfert des charges surfaciques
+
+                    If Not IsEqual(myPoutre.ChargesA(iCharge).QSurf(iTrav), 0) Then
+                        iCompteur += 1
+                        qSurf = CoefCombi(iCharge) * myPoutre.ChargesA(iCharge).QSurf(iTrav) * LargeurI
+                        pDonnees.AjouteForceRep(xo, xe, qSurf, qSurf, iCompteur, zTop)
+                    End If
+
                     '# Transfert des charges réparties
+
+                    For iForce = 0 To myPoutre.ChargesA(iCharge).FReparties(iTrav).Count - 1
+                        If (Not (IsEqual(myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(0), 0) And IsEqual(myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(1), 0))) Then
+
+                            iCompteur += 1
+
+                            xo = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).xPosG(0)
+                            xe = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).xPosG(1)
+                            qo = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(0)
+                            qe = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(1)
+
+                            pDonnees.AjouteForceRep(xo, xe, qo, qe, iCompteur, zTop)
+
+                        End If
+                    Next
+
                     '# Transfert des charges ponctuelles
 
                     For iForce = 0 To myPoutre.ChargesA(iCharge).Forces(iTrav).Count - 1
 
-                        'AjouteForce(pDonnees, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).xPosG, ztop, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force)
-                        pDonnees.AjouteForceP(myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).xPosG, zTop)
+                        xo = myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).xPosG
+                        Force = myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force
+                        pDonnees.AjouteForceP(Force, xo, zTop)
 
                     Next
                 Next
             End If
         Next
-
-        '**** A AJOUTER
-
-        'ReDim .ForcePon(.NbForcesPon - 1)
-        'ReDim .xForcePon(.NbForcesPon - 1)
-        'ReDim .zForcePonC(.NbForcesPon - 1)
-        '.ForcePon(0) = 10 * 1000        'N
-        '.xForcePon(0) = 4.875
-        '.zForcePonC(0) = 0.0
-        '.ForcePon(1) = 10 * 1000        'N
-        '.xForcePon(1) = 14.75
-        '.zForcePonC(1) = 0.0
 
         '# Moments fléchissants
 
@@ -479,40 +515,6 @@ Public Class cls_VerificationsAcier
         End If
 
     End Sub
-
-    'Private Sub AjouteForce(ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, xPos As Decimal, zPos As Decimal, Force As Decimal)
-    '    '----------------------------------------------------------------------------------------------------------
-    '    '   07/12/23 :  Création - POM
-    '    '----------------------------------------------------------------------------------------------------------
-    '    '   Ajout d'une force ponctuelle dans le chargement
-    '    '----------------------------------------------------------------------------------------------------------
-
-    '    '-------------------------------------------------------------------------------------
-    '    '   18/09/23 :  Création - Version 1.00 - POM
-    '    '-------------------------------------------------------------------------------------
-    '    '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
-    '    '-------------------------------------------------------------------------------------
-    '    '   xFor        [E] :   Position de la force
-    '    '   Force       [E] :   Valeur de la force
-    '    '   pDonneesEF  [S] :   Donnes pour le calcul EF
-    '    '-------------------------------------------------------------------------------------
-
-    '    pDonneesEF.NbForcesPon += 1
-    '    If pDonneesEF.NbForcesPon = 1 Then
-    '        ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-    '        ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-    '        ReDim pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1)
-    '    Else
-    '        ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-    '        ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-    '        ReDim Preserve pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1)
-    '    End If
-
-    '    pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
-    '    pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xPos
-    '    pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1) = zPos
-
-    'End Sub
 
     Private Sub ExtraireMaintiensLateraux(myPoutre As cls_Poutre, ByRef ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB)
         '----------------------------------------------------------------------------------------------------------

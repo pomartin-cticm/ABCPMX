@@ -159,11 +159,12 @@
         If NbRep > 0 Then
             ReDim Me.ForceRep(NbRep - 1, 1)
             ReDim Me.xForceRep(NbRep - 1, 1)
+            ReDim Me.zForceRepC(NbRep - 1)
         End If
 
     End Sub
 
-    Public Sub AjouteForceRep(xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, indice As Integer)
+    Public Sub AjouteForceRep(xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, indice As Integer, Optional zPosC As Decimal = 0)
         '-------------------------------------------------------------------------------------
         '   09/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -174,6 +175,7 @@
         '   qo          [E] :   Valeur à gauche de la force répartie
         '   qe          [E] :   Valeur à droite de la force répartie
         '   indice      [E] :   Indice dans le tableau
+        '   zPosC       [E] :   Position C par rapport au centre de cisaillement
         '-------------------------------------------------------------------------------------
 
         Me.xForceRep(indice, 0) = xo
@@ -181,6 +183,7 @@
         Me.ForceRep(indice, 0) = qo
         Me.ForceRep(indice, 1) = qe
 
+        Me.zForceRepC(indice) = zPosC
     End Sub
 
 #End Region
