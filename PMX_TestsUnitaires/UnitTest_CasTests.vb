@@ -147,8 +147,8 @@ Imports PMXMoteur2
             .Tp = 0.75 / 1000
             .Bb = 62 / 1000
             .Bt = 101 / 1000
-            .Orientation = .Enum_Orientation.Perpendiculaire
-            .AppuiT = .EnuConfigTAppui.NervureEtBacContinus 'permet de prendre en compte le bac pour le calcul des armatures transversales
+            .Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
+            .AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus 'permet de prendre en compte le bac pour le calcul des armatures transversales
         End With
 
         With myPoutre.Dalle.Connecteur
@@ -245,7 +245,7 @@ Imports PMXMoteur2
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 ReDim myPoutre.VerifMixte(0)
                 myPoutre.VerifMixte(0) = New cls_VerificationsMixtes
-                If myPoutre.TypeEtaiement <> myPoutre.EnuTypeEtaiement.FullyPropped Then
+                If myPoutre.TypeEtaiement <> cls_Poutre.EnuTypeEtaiement.FullyPropped Then
                     ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
                     ReDim myPoutre.VerifAcier(0)
                     myPoutre.VerifAcier(0) = New cls_VerificationsAcier
@@ -262,10 +262,10 @@ Imports PMXMoteur2
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
 
         'COMBINAISON DES EFFORTS A L'ELU
-        Dim MEd(,) As Decimal
+        Dim MEd(,) As Decimal = Nothing
         Dim MEdMax, MEdMin, iNodeMMin, iNodeMMax As Decimal
 
-        Dim VEd(,) As Decimal
+        Dim VEd(,) As Decimal = Nothing
         Dim VEdMax, VEdMin, iNodeVMin, iNodeVMax As Decimal
 
         myPoutre.CombiA_ELU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, False) 'Combinaison des moments pour la combinaison 0
@@ -275,10 +275,10 @@ Imports PMXMoteur2
         EnveloppeTableauEfforts(VEd, myPoutre.Nodes.nbNodes, VEdMax, VEdMin, iNodeVMax, iNodeVMin)
 
         'COMBINAISON DES EFFORTS A L'ELU CONSTRUCTION
-        Dim MEdConstruction(,) As Decimal
+        Dim MEdConstruction(,) As Decimal = Nothing
         Dim MEdMaxConstruction, MEdMinConstruction, iNodeMMinConstruction, iNodeMMaxConstruction As Decimal
 
-        Dim VEdConstruction(,) As Decimal
+        Dim VEdConstruction(,) As Decimal = Nothing
         Dim VEdMaxConstruction, VEdMinConstruction, iNodeVMinConstruction, iNodeVMaxConstruction As Decimal
 
         myPoutre.CombiA_ELCU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEdConstruction, False) 'Combinaison des moments pour la combinaison 0

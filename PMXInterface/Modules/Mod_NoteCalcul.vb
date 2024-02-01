@@ -3497,7 +3497,7 @@ Module Mod_NoteCalcul
         Dim lOneM As Boolean
         Dim lOneV As Boolean
         Dim stringVEdG, stringVEdD, stringMEdG, stringMEdD As String
-
+        stringMEdG = "" : stringMEdD = ""
 
         '--> Initialisation
 

@@ -12,7 +12,7 @@
 
 #Region " MODELE E.F "
 
-    Private Sub CREATE_MODEL_LTB(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByVal LTBParam As DATA_LTB.struc_DonneesLTB)
+    Private Sub CREATE_MODEL_LTB(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS, ByVal LTBParam As DATA_LTB.struc_DonneesLTB)
         '-----------------------------------------------------
         '
         ' 06/09/2023 : TMN, v 1.0.0
@@ -127,7 +127,7 @@
 
     End Sub
 
-    Private Sub LOADING_LTB(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Private Sub LOADING_LTB(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS)
         '-----------------------------------------------------
         '
         ' 02/11/2023 : TMN, v 1.0.0
@@ -201,7 +201,7 @@
 
 #Region " LANCER LE CALCUL "
 
-    Public Sub CALCULER(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees,
+    Public Sub CALCULER(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS,
                         ByVal DonneesLTB As DATA_LTB.struc_DonneesLTB,
                         ByRef Output_LTB As DATA_LTB.Struc_Output,
                         ByRef ErrorCode As Integer,

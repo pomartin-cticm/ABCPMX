@@ -8,7 +8,7 @@ Public Class cls_AnalyseEFinis
 
 #Region " Attributs "
 
-    Dim pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees
+    Dim pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS
 
     Dim pResults_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
     Dim CodeError_RDM As Integer
@@ -20,7 +20,9 @@ Public Class cls_AnalyseEFinis
 #Region " Constructeurs "
 
     Public Sub New(EYoung As Decimal, GraviteG As Decimal, Nodes As cls_Poutre.strucBeamNodes)
+
         PrepareModele(EYoung, GraviteG, Nodes)
+
     End Sub
 
 #End Region
@@ -157,11 +159,12 @@ Public Class cls_AnalyseEFinis
 
         NbForceRep = MyChargA.NombreFRep(iTravP, iTravD) + MyChargA.NombreChargesSurf(iTravP, iTravD)
 
-        pDonneesEF.NbForcesRep = NbForceRep
-        If NbForceRep > 0 Then
-            ReDim pDonneesEF.ForceRep(NbForceRep - 1, 1)
-            ReDim pDonneesEF.xForceRep(NbForceRep - 1, 1)
-        End If
+        'pDonneesEF.NbForcesRep = NbForceRep
+        'If NbForceRep > 0 Then
+        '    ReDim pDonneesEF.ForceRep(NbForceRep - 1, 1)
+        '    ReDim pDonneesEF.xForceRep(NbForceRep - 1, 1)
+        'End If
+        pDonneesEF.InitialiseForcesRep(NbForceRep)
 
         '--> Transfert 
 
@@ -170,14 +173,16 @@ Public Class cls_AnalyseEFinis
 
             For iForce = 0 To MyChargA.Forces(iTrav).Count - 1
 
-                AjouteForce(MyChargA.Forces(iTrav)(iForce).xPosG, MyChargA.Forces(iTrav)(iForce).Force)
+                'AjouteForce(MyChargA.Forces(iTrav)(iForce).xPosG, MyChargA.Forces(iTrav)(iForce).Force)
+                pDonneesEF.AjouteForceP(MyChargA.Forces(iTrav)(iForce).Force, MyChargA.Forces(iTrav)(iForce).xPosG)
 
             Next
 
             '# Moments
 
             For iMom = 0 To MyChargA.Moments(iTrav).Count - 1
-                AjouteMoment(MyChargA.Moments(iTrav)(iMom).xPosG, MyChargA.Moments(iTrav)(iMom).Moment)
+                'AjouteMoment(MyChargA.Moments(iTrav)(iMom).xPosG, MyChargA.Moments(iTrav)(iMom).Moment)
+                pDonneesEF.AjouteMoment(MyChargA.Moments(iTrav)(iMom).xPosG, MyChargA.Moments(iTrav)(iMom).Moment)
             Next
 
             '# Transfert des charges réparties
@@ -239,11 +244,12 @@ Public Class cls_AnalyseEFinis
 
         NbForceRep = MyChargU.NombreForceReparties(iTravP, iTravD) + MyChargU.NombreChargesSurf(iTravP, iTravD)
 
-        pDonneesEF.NbForcesRep = NbForceRep
-        If NbForceRep > 0 Then
-            ReDim pDonneesEF.ForceRep(NbForceRep - 1, 1)
-            ReDim pDonneesEF.xForceRep(NbForceRep - 1, 1)
-        End If
+        'pDonneesEF.NbForcesRep = NbForceRep
+        'If NbForceRep > 0 Then
+        '    ReDim pDonneesEF.ForceRep(NbForceRep - 1, 1)
+        '    ReDim pDonneesEF.xForceRep(NbForceRep - 1, 1)
+        'End If
+        pDonneesEF.InitialiseForcesRep(NbForceRep)
 
         '--> Transfert 
 
@@ -252,7 +258,8 @@ Public Class cls_AnalyseEFinis
 
             For iForce = 0 To MyChargU.Forces(iTrav).Count - 1
 
-                AjouteForce(MyChargU.Forces(iTrav)(iForce).xPosG, MyChargU.Forces(iTrav)(iForce).Force)
+                ' AjouteForce(MyChargU.Forces(iTrav)(iForce).xPosG, MyChargU.Forces(iTrav)(iForce).Force)
+                pDonneesEF.AjouteForceP(MyChargU.Forces(iTrav)(iForce).Force, MyChargU.Forces(iTrav)(iForce).xPosG)
 
             Next
 
@@ -288,30 +295,30 @@ Public Class cls_AnalyseEFinis
 
     End Sub
 
-    Private Sub AjouteMoment(xMom As Decimal, Moment As Decimal)
-        '-------------------------------------------------------------------------------------
-        '   09/09/23 :  Création - Version 1.00 - POM
-        '-------------------------------------------------------------------------------------
-        '   Ajout d'un moment dans les paramètres préparatoires au calcul EF
-        '-------------------------------------------------------------------------------------
-        '   xMom        [E] :   Position du moment
-        '   Moment      [E] :   Valeur du moment
-        '   pDonneesEF  [S] :   Donnes pour le calcul EF
-        '-------------------------------------------------------------------------------------
+    'Private Sub AjouteMoment(xMom As Decimal, Moment As Decimal)
+    '    '-------------------------------------------------------------------------------------
+    '    '   09/09/23 :  Création - Version 1.00 - POM
+    '    '-------------------------------------------------------------------------------------
+    '    '   Ajout d'un moment dans les paramètres préparatoires au calcul EF
+    '    '-------------------------------------------------------------------------------------
+    '    '   xMom        [E] :   Position du moment
+    '    '   Moment      [E] :   Valeur du moment
+    '    '   pDonneesEF  [S] :   Donnes pour le calcul EF
+    '    '-------------------------------------------------------------------------------------
 
-        pDonneesEF.NbMoments += 1
-        If pDonneesEF.NbMoments = 1 Then
-            ReDim pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
-            ReDim pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
-        Else
-            ReDim Preserve pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
-            ReDim Preserve pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
-        End If
+    '    pDonneesEF.NbMoments += 1
+    '    If pDonneesEF.NbMoments = 1 Then
+    '        ReDim pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
+    '        ReDim pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
+    '    Else
+    '        ReDim Preserve pDonneesEF.Moment(pDonneesEF.NbMoments - 1)
+    '        ReDim Preserve pDonneesEF.xMoment(pDonneesEF.NbMoments - 1)
+    '    End If
 
-        pDonneesEF.Moment(pDonneesEF.NbMoments - 1) = Moment
-        pDonneesEF.xMoment(pDonneesEF.NbMoments - 1) = xMom
+    '    pDonneesEF.Moment(pDonneesEF.NbMoments - 1) = Moment
+    '    pDonneesEF.xMoment(pDonneesEF.NbMoments - 1) = xMom
 
-    End Sub
+    'End Sub
 
     Private Sub AjouteForceRep(xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal, ByRef pComptRep As Integer)
         '-------------------------------------------------------------------------------------
@@ -329,37 +336,39 @@ Public Class cls_AnalyseEFinis
 
         pComptRep += 1
 
-        pDonneesEF.xForceRep(pComptRep, 0) = xo
-        pDonneesEF.xForceRep(pComptRep, 1) = xe
-        pDonneesEF.ForceRep(pComptRep, 0) = qo
-        pDonneesEF.ForceRep(pComptRep, 1) = qe
+        'pDonneesEF.xForceRep(pComptRep, 0) = xo
+        'pDonneesEF.xForceRep(pComptRep, 1) = xe
+        'pDonneesEF.ForceRep(pComptRep, 0) = qo
+        'pDonneesEF.ForceRep(pComptRep, 1) = qe
+
+        pDonneesEF.AjouteForceRep(xo, xe, qo, qe, pComptRep)
 
     End Sub
 
-    Private Sub AjouteForce(xFor As Decimal, Force As Decimal)
-        '-------------------------------------------------------------------------------------
-        '   18/09/23 :  Création - Version 1.00 - POM
-        '-------------------------------------------------------------------------------------
-        '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
-        '-------------------------------------------------------------------------------------
-        '   xFor        [E] :   Position de la force
-        '   Force       [E] :   Valeur de la force
-        '   pDonneesEF  [S] :   Donnes pour le calcul EF
-        '-------------------------------------------------------------------------------------
+    'Private Sub AjouteForce(xFor As Decimal, Force As Decimal)
+    '    '-------------------------------------------------------------------------------------
+    '    '   18/09/23 :  Création - Version 1.00 - POM
+    '    '-------------------------------------------------------------------------------------
+    '    '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
+    '    '-------------------------------------------------------------------------------------
+    '    '   xFor        [E] :   Position de la force
+    '    '   Force       [E] :   Valeur de la force
+    '    '   pDonneesEF  [S] :   Donnes pour le calcul EF
+    '    '-------------------------------------------------------------------------------------
 
-        pDonneesEF.NbForcesPon += 1
-        If pDonneesEF.NbForcesPon = 1 Then
-            ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-            ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-        Else
-            ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-            ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-        End If
+    '    pDonneesEF.NbForcesPon += 1
+    '    If pDonneesEF.NbForcesPon = 1 Then
+    '        ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+    '        ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+    '    Else
+    '        ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+    '        ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+    '    End If
 
-        pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
-        pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xFor
+    '    pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
+    '    pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xFor
 
-    End Sub
+    'End Sub
 
 
 #End Region
@@ -376,6 +385,10 @@ Public Class cls_AnalyseEFinis
         '   GraviteG    [E] :   
         '   Nodes       [E] :   Maillage des noeuds de la poutre
         '-------------------------------------------------------------------------------------
+
+        '--> Initialisation
+
+        pDonneesEF = New DATA_DLLS
 
         '--> Propriétés générale
 

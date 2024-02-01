@@ -11,7 +11,7 @@
 
 #Region " MODELE E.F "
 
-    Private Sub CREATE_MODEL(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Private Sub CREATE_MODEL(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS)
         '-----------------------------------------------------
         '
         ' 06/09/2023 : TMN, v 1.0.0
@@ -89,7 +89,7 @@
         End With
     End Sub
 
-    Private Sub LOADING(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Private Sub LOADING(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS)
         '-----------------------------------------------------
         '
         ' 06/09/2023 : TMN, v 1.0.0
@@ -193,7 +193,7 @@
 
 #Region " LANCER LE CALCUL "
 
-    Public Sub CALCULER(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees,
+    Public Sub CALCULER(ByVal Donnees As CTICM_DATA_DLLS.DATA_DLLS,
                         ByVal nbModes As Integer,
                         ByRef Output_MODAL As DATA_MODAL.Struc_Output,
                         ByRef ErrorCode As Integer,

@@ -6641,7 +6641,7 @@ Public Module Mod_Dessins
         Dim ColorDiagM = Color.DarkRed
         Dim ColorDiagV = Color.DarkBlue
 
-        Dim iNodeMax, iNodeMin As Integer
+        Dim iNodeMax As Integer
 
         Dim ColorPoutre As Color = Color.DarkGray
 
@@ -6652,7 +6652,11 @@ Public Module Mod_Dessins
         Dim Combinaison As New cls_Combinaisons
         Dim OptionsDiagrammes As struc_OptionsDiagrammes
 
-        Dim f(), fMin, fMax, V(,), VMin, VMax, M(,), MMin, MMax As Decimal
+        Dim fMin, fMax, VMin, VMax, MMin, MMax As Decimal
+        Dim f() As Decimal = Nothing
+        Dim V(,) As Decimal = Nothing
+        Dim M(,) As Decimal = Nothing
+
         Dim iNodeVMax, iNodeVMin, iNodeMMax, iNodeMMin As Integer
 
         Select Case typeCombo

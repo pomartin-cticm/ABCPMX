@@ -73,7 +73,7 @@ Public Class Frm_Chargement
     Dim tableau_txtbox_ChargesLineiques(,) As TextBox
     Dim tableau_txtbox_ChargesPonctuelles(,) As TextBox
 
-    Dim DonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+    Dim DonneesEF As New CTICM_DATA_DLLS.DATA_DLLS
     Dim SigneM() As Decimal = Nothing
 
 

@@ -22,7 +22,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
         Const RHOACIER As Decimal = 7850
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
         Dim MyAire As Decimal = 53.81 / 100 ^ 2
         Dim MyInertie As Decimal = 8356.1 / 100 ^ 4
         Dim MasseTotale As Decimal
@@ -103,7 +103,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 1000     'Longueur totale de la barre en cm
         With MyDonnees
@@ -174,7 +174,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 10     'Longueur totale de la barre en m
         With MyDonnees
@@ -245,7 +245,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 1000     'Longueur totale de la barre en cm
         With MyDonnees
@@ -315,7 +315,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 1000     'Longueur totale de la barre en cm
         With MyDonnees
@@ -386,7 +386,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 1000     'Longueur totale de la barre en cm
         With MyDonnees
@@ -457,7 +457,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 1000     'Longueur totale de la barre en cm
         With MyDonnees
@@ -528,7 +528,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 2000     'Longueur totale de la barre en cm
         With MyDonnees

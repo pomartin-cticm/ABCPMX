@@ -3948,7 +3948,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub PrepareModeleEF(ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByRef lAppuisOK As Boolean)
+    Public Sub PrepareModeleEF(ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS, ByRef lAppuisOK As Boolean)
         '-------------------------------------------------------------------------------------
         '   07/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -3989,38 +3989,38 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub PrepareAppuisModeleEFOld(lEtais As Boolean, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
-        '-------------------------------------------------------------------------------------
-        '   20/09/23 :  Création - Version 1.00 - POM
-        '-------------------------------------------------------------------------------------
-        '   Préparation des appuis du modele EF avant lancement des calculs
-        '   en prenant en compte les appuis des étais, le cas échéant        
-        '-------------------------------------------------------------------------------------
+    'Private Sub PrepareAppuisModeleEFOld(lEtais As Boolean, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    '    '-------------------------------------------------------------------------------------
+    '    '   20/09/23 :  Création - Version 1.00 - POM
+    '    '-------------------------------------------------------------------------------------
+    '    '   Préparation des appuis du modele EF avant lancement des calculs
+    '    '   en prenant en compte les appuis des étais, le cas échéant        
+    '    '-------------------------------------------------------------------------------------
 
-        If lEtais Then
-            pDonneesEF.NbAppuis = Me.Nodes.NbAppuis + Me.Nodes.NbEtais
-        Else
-            pDonneesEF.NbAppuis = Me.Nodes.NbAppuis
-        End If
+    '    If lEtais Then
+    '        pDonneesEF.NbAppuis = Me.Nodes.NbAppuis + Me.Nodes.NbEtais
+    '    Else
+    '        pDonneesEF.NbAppuis = Me.Nodes.NbAppuis
+    '    End If
 
-        ReDim pDonneesEF.iNodeAppui(pDonneesEF.NbAppuis - 1)
-        ReDim pDonneesEF.lAppuiArticule(pDonneesEF.NbAppuis - 1)
+    '    ReDim pDonneesEF.iNodeAppui(pDonneesEF.NbAppuis - 1)
+    '    ReDim pDonneesEF.lAppuiArticule(pDonneesEF.NbAppuis - 1)
 
-        For i As Integer = 0 To Me.Nodes.NbAppuis - 1
-            pDonneesEF.iNodeAppui(i) = Me.Nodes.iNodeAppui(i)
-        Next
-        If lEtais Then
-            For i As Integer = 0 To Me.Nodes.NbEtais - 1
-                pDonneesEF.iNodeAppui(Me.Nodes.NbAppuis - 1 + i) = Me.Nodes.iNodeEtais(i)
-            Next
-            Array.Sort(pDonneesEF.iNodeAppui)
-        End If
-        For i As Integer = 0 To pDonneesEF.NbAppuis - 1
-            pDonneesEF.lAppuiArticule(i) = False
-        Next
-    End Sub
+    '    For i As Integer = 0 To Me.Nodes.NbAppuis - 1
+    '        pDonneesEF.iNodeAppui(i) = Me.Nodes.iNodeAppui(i)
+    '    Next
+    '    If lEtais Then
+    '        For i As Integer = 0 To Me.Nodes.NbEtais - 1
+    '            pDonneesEF.iNodeAppui(Me.Nodes.NbAppuis - 1 + i) = Me.Nodes.iNodeEtais(i)
+    '        Next
+    '        Array.Sort(pDonneesEF.iNodeAppui)
+    '    End If
+    '    For i As Integer = 0 To pDonneesEF.NbAppuis - 1
+    '        pDonneesEF.lAppuiArticule(i) = False
+    '    Next
+    'End Sub
 
-    Public Sub PrepareAppuisModeleEF(lEtais As Boolean, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Public Sub PrepareAppuisModeleEF(lEtais As Boolean, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS)
         '-------------------------------------------------------------------------------------
         '   20/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------

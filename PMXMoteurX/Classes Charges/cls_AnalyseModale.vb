@@ -93,7 +93,7 @@ Public Class cls_AnalyseModale
 
         '--> Déclaration
 
-        Dim DonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim DonneesEF As New CTICM_DATA_DLLS.DATA_DLLS
         Dim lAppuisOK As Boolean
         Dim nEqDalleCT As Decimal
         Dim nEqEnrobCT As Decimal
@@ -161,7 +161,7 @@ Public Class cls_AnalyseModale
 
     End Sub
 
-    Private Sub TransfertProprietesElts(pMyElts As cls_Poutre.strucBeamElements, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Private Sub TransfertProprietesElts(pMyElts As cls_Poutre.strucBeamElements, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS)
         '---------------------------------------------------------------------------------------------------
         '   03/11/23 :  Création - POM
         '---------------------------------------------------------------------------------------------------
@@ -175,7 +175,7 @@ Public Class cls_AnalyseModale
 
     End Sub
 
-    Private Sub PreparationCharges(MyPoutre As cls_Poutre, RatioQ As Decimal, IndiceQ As Integer, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Private Sub PreparationCharges(MyPoutre As cls_Poutre, RatioQ As Decimal, IndiceQ As Integer, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS)
         '---------------------------------------------------------------------------------------------------
         '   03/11/23 :  Création - POM
         '---------------------------------------------------------------------------------------------------
@@ -249,7 +249,7 @@ Public Class cls_AnalyseModale
     End Sub
 
     Private Sub TransfertChargementU(iTravP As Integer, iTravD As Integer, MyChargesU As cls_ChargementUtilisateur, LongueurT() As Decimal, LargeurDinf As Decimal,
-                                     ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByRef pCompteurRep As Integer, Optional Ratio As Decimal = 1)
+                                     ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS, ByRef pCompteurRep As Integer, Optional Ratio As Decimal = 1)
         '---------------------------------------------------------------------------------------------------
         '   03/11/23 :  Création - POM
         '---------------------------------------------------------------------------------------------------
@@ -321,7 +321,7 @@ Public Class cls_AnalyseModale
 #Region " Outils "
 
     Private Sub AjouteForceRep(xo As Decimal, xe As Decimal, qo As Decimal, qe As Decimal,
-                               ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, ByRef pComptRep As Integer)
+                               ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS, ByRef pComptRep As Integer)
         '-------------------------------------------------------------------------------------
         '   09/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------
@@ -344,7 +344,7 @@ Public Class cls_AnalyseModale
 
     End Sub
 
-    Private Sub AjouteForce(xFor As Decimal, Force As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees)
+    Private Sub AjouteForce(xFor As Decimal, Force As Decimal, ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS)
         '-------------------------------------------------------------------------------------
         '   18/09/23 :  Création - Version 1.00 - POM
         '-------------------------------------------------------------------------------------

@@ -387,7 +387,7 @@ Public Class Frm_PPCasDeCharge
 
         'DessineAppui(myGr, MyPoutre.xPositionAppui(True, 1), dApp, MyParAff)
         'DessineAppui(myGr, MyPoutre.xPositionAppui(False, 1), dApp, MyParAff)
-        Dim indAppuis() As Integer
+        Dim indAppuis() As Integer = Nothing
         Dim NbApp As Integer
         Dim lEtais As Boolean = (iCas = MyPoutre.IndiceCasG1PP)
         MyPoutre.ExtraireIndiceNoeudsAppuis(lEtais, indAppuis, NbApp)
@@ -398,7 +398,6 @@ Public Class Frm_PPCasDeCharge
 
         '--> Déformée
 
-        Dim fMin, fMax As Decimal
         Dim Uz As Decimal
         Dim xo, xe, yo, ye As Decimal
 

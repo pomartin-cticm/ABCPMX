@@ -274,7 +274,8 @@ Public Class cls_VerificationsAcier
 
         Dim i As Integer
 
-        Dim pDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        'Dim pDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim pDonnees As New CTICM_DATA_DLLS.DATA_DLLS
         Dim paramLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
 
         Dim MyDLL_LTB As New CTICM_LTB.CALCUL_LTB
@@ -437,11 +438,11 @@ Public Class cls_VerificationsAcier
                     '# Transfert des charges surfaciques
                     '# Transfert des charges réparties
                     '# Transfert des charges ponctuelles
-                    '# Transfert des charges ponctuelles
 
                     For iForce = 0 To myPoutre.ChargesA(iCharge).Forces(iTrav).Count - 1
 
-                        AjouteForce(pDonnees, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).xPosG, ztop, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force)
+                        'AjouteForce(pDonnees, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).xPosG, ztop, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force)
+                        pDonnees.AjouteForceP(myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force, myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).xPosG, zTop)
 
                     Next
                 Next
@@ -479,39 +480,39 @@ Public Class cls_VerificationsAcier
 
     End Sub
 
-    Private Sub AjouteForce(ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, xPos As Decimal, zPos As Decimal, Force As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   07/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Ajout d'une force ponctuelle dans le chargement
-        '----------------------------------------------------------------------------------------------------------
+    'Private Sub AjouteForce(ByRef pDonneesEF As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees, xPos As Decimal, zPos As Decimal, Force As Decimal)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   07/12/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Ajout d'une force ponctuelle dans le chargement
+    '    '----------------------------------------------------------------------------------------------------------
 
-        '-------------------------------------------------------------------------------------
-        '   18/09/23 :  Création - Version 1.00 - POM
-        '-------------------------------------------------------------------------------------
-        '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
-        '-------------------------------------------------------------------------------------
-        '   xFor        [E] :   Position de la force
-        '   Force       [E] :   Valeur de la force
-        '   pDonneesEF  [S] :   Donnes pour le calcul EF
-        '-------------------------------------------------------------------------------------
+    '    '-------------------------------------------------------------------------------------
+    '    '   18/09/23 :  Création - Version 1.00 - POM
+    '    '-------------------------------------------------------------------------------------
+    '    '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
+    '    '-------------------------------------------------------------------------------------
+    '    '   xFor        [E] :   Position de la force
+    '    '   Force       [E] :   Valeur de la force
+    '    '   pDonneesEF  [S] :   Donnes pour le calcul EF
+    '    '-------------------------------------------------------------------------------------
 
-        pDonneesEF.NbForcesPon += 1
-        If pDonneesEF.NbForcesPon = 1 Then
-            ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-            ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-            ReDim pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1)
-        Else
-            ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-            ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-            ReDim Preserve pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1)
-        End If
+    '    pDonneesEF.NbForcesPon += 1
+    '    If pDonneesEF.NbForcesPon = 1 Then
+    '        ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+    '        ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+    '        ReDim pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1)
+    '    Else
+    '        ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
+    '        ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
+    '        ReDim Preserve pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1)
+    '    End If
 
-        pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
-        pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xPos
-        pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1) = zPos
+    '    pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
+    '    pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xPos
+    '    pDonneesEF.zForcePonC(pDonneesEF.NbForcesPon - 1) = zPos
 
-    End Sub
+    'End Sub
 
     Private Sub ExtraireMaintiensLateraux(myPoutre As cls_Poutre, ByRef ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB)
         '----------------------------------------------------------------------------------------------------------

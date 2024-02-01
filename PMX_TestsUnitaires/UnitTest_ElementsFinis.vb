@@ -18,7 +18,7 @@ Imports CTICM_RDM
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 1000     'Longueur totale de la barre en cm
         With MyDonnees
@@ -110,7 +110,7 @@ Imports CTICM_RDM
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 2000     'Longueur totale de la barre en cm
         With MyDonnees
@@ -193,7 +193,7 @@ Imports CTICM_RDM
         '
         '=======================================
 
-        Dim MyDonnees As CTICM_DATA_DLLS.DATA_DLLS.Struc_Donnees = Nothing
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
 
         Dim L As Decimal = 10     'Longueur totale de la barre en m
         Dim Force As Decimal = 1000
