@@ -111,7 +111,7 @@ TITLE					= Note de calculs
 FIRST					= Première page
 PREVIOUS				= Page précédente
 NEXT					= Page suivante
-LAST					= DerniÃ¨re page
+LAST					= Dernière page
 ZOOMIN					= Zoom avant
 ZOOMOUT					= Zoom arrière
 PRINT					= Impression
@@ -528,6 +528,8 @@ PPEIGENMODE				= Modes propres
 PPOSTT					= Résultats
 ZOOMIN					= Zoom avant
 ZOOMOUT					= Zoom arrière
+COTATIONS				= Afficher les dimensions
+EXPERT					= Mode expert
 EDIT					= Editer
 EDITPROFILES			= Editer les profilés ArcelorMittal
 EDITSTUDS				= Editer les goujons
@@ -750,6 +752,7 @@ SLS						= ELS
 FLS						= ELF
 ULS_C					= ELU_C
 SLS_C					= ELS_C
+COPY					= Copie
 
 #OPTCALCULMAIN
 TITLE					= Options de calcul

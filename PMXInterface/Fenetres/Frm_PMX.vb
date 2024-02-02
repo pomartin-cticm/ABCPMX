@@ -27,6 +27,7 @@ Public Class Frm_PMX
     Dim strRacineELF As String
     Dim strRacineELUC As String
     Dim strRacineELSC As String
+    Dim strCopy As String
 
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
@@ -113,7 +114,7 @@ Public Class Frm_PMX
             Frm_Ouverture.ShowDialog()    '--> Fenetre Ouverture
 
         End If
-        'AfficheFenetreEnCours() 'GuD: A discuter j'ai un doute (31/08/2023), cela ouvrait directement 
+        'AfficheFenetreEnCours() 'GuD: A discuter j'ai un doute (31/08/2023), cela ouvrait directement
         MAJToolBarPoutre()
         MAJI_BOBasse()
 
@@ -155,6 +156,8 @@ Public Class Frm_PMX
                 strRacineELF = Bloc("FLS")                              ' "FLS"
                 strRacineELUC = Bloc("ULSC")                              ' "ULS_C"
                 strRacineELSC = Bloc("SLSC")                              ' "SLS_C"
+
+                strCopy = Bloc("COPY")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangueMessagesGeneraux")
@@ -231,6 +234,8 @@ Public Class Frm_PMX
 
                 Me.TSbtn_ZoomPlus.ToolTipText = Bloc("ZOOMIN")
                 Me.TSbtn_ZoomMoins.ToolTipText = Bloc("ZOOMOUT")
+                Me.TSbtn_Cotations.ToolTipText = Bloc("COTATIONS")
+                Me.TSbtn_ExpertMode.ToolTipText = Bloc("EXPERT")
 
                 '=== BARRE d'OUTILS POUR LES POUTRES
 
@@ -387,6 +392,49 @@ Public Class Frm_PMX
         End If
     End Sub
 
+    Private Sub SupprimerPoutre()
+
+        MyProjet.Poutres.Remove(MyProjet.Poutres(MyProjet.IndEnCours))
+
+        MyProjet.IndEnCours = Math.Max(MyProjet.IndEnCours - 1, 0)
+
+        '--> Mise à jour du TreeView
+        AffichageTViewChk()
+        MAJToolBarPoutre()
+        Me.img_Main.Invalidate()
+
+    End Sub
+
+    Private Sub DupliquerPoutre()
+        Dim NouvellePoutre As New cls_Poutre
+        cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), NouvellePoutre)
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).BeamID.Contains(strCopy) Then
+            Dim index As Integer = MyProjet.Poutres(MyProjet.IndEnCours).BeamID.LastIndexOf(strCopy)
+            index += strCopy.Length
+            Dim strRight = MyProjet.Poutres(MyProjet.IndEnCours).BeamID.Substring(index)
+            Dim strLeft = MyProjet.Poutres(MyProjet.IndEnCours).BeamID.Substring(0, index)
+            Dim intAppend As Integer
+
+            If Integer.TryParse(strRight, intAppend) Then
+                intAppend += 1
+                NouvellePoutre.BeamID = strLeft + CStr(intAppend)
+            Else
+                NouvellePoutre.BeamID += "1"
+            End If
+        Else
+            NouvellePoutre.BeamID += strCopy
+        End If
+        MyProjet.Poutres.Add(NouvellePoutre)
+
+        MyProjet.IndEnCours = Math.Max(0, MyProjet.Poutres.Count - 1)
+
+        '--> Mise à jour du TreeView
+        AffichageTViewChk()
+        MAJToolBarPoutre()
+        Me.img_Main.Invalidate()
+    End Sub
+
 
 #End Region
 
@@ -394,6 +442,14 @@ Public Class Frm_PMX
 
     Private Sub Btn_AddSection_Click(sender As Object, e As EventArgs) Handles TSbtn_AddBeamN.Click
         AjouterPoutre()
+    End Sub
+
+    Private Sub TSbtn_SupprBeam_Click(sender As Object, e As EventArgs) Handles TSbtn_SupprBeam.Click
+        SupprimerPoutre()
+    End Sub
+
+    Private Sub TSbtn_DupBeam_Click(sender As Object, e As EventArgs) Handles TSbtn_DupBeam.Click
+        DupliquerPoutre()
     End Sub
 
     Private Sub TSbtn_NoteCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_NoteCalcul.Click, TSbtn_NdcPoutre.Click
@@ -725,6 +781,7 @@ Public Class Frm_PMX
 
     Private Sub MAJMainToolBar()
 
+        If MyProjet.Poutres.Count = 0 Then Exit Sub
 
         If MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees Then
             Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_OK")
@@ -783,44 +840,75 @@ Public Class Frm_PMX
     ''' </summary>
     Private Sub MAJToolBarPoutre()
 
-        Dim lFrmConnection As Boolean = True
         Dim lFrmEnrobage As Boolean = True
+        Dim lFrmConnection As Boolean = True
         Dim lFrmProppin As Boolean = True
+        Dim lFrmMaintienBac As Boolean = True
+        Dim lNothing As Boolean = MyProjet.Poutres.Count = 0
 
-        Select Case MyProjet.Poutres(MyProjet.IndEnCours).TypeSection
-            Case cls_Section.Enum_TypeSection.AcierSeul
-                lFrmConnection = False
-                lFrmEnrobage = False
-                lFrmProppin = False
-            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
-                lFrmConnection = False
-                lFrmProppin = False
-            Case cls_Section.Enum_TypeSection.Mixte
-                lFrmEnrobage = False
-            Case cls_Section.Enum_TypeSection.MixteEnrobage
-            Case cls_Section.Enum_TypeSection.SFB
-                lFrmEnrobage = False
-                lFrmProppin = False
-            Case cls_Section.Enum_TypeSection.SFBmixte
-            Case cls_Section.Enum_TypeSection.IFB_A
-                lFrmEnrobage = False
-                lFrmProppin = False
-            Case cls_Section.Enum_TypeSection.IFB_Amixte
-            Case cls_Section.Enum_TypeSection.IFB_B
-                lFrmEnrobage = False
-                lFrmProppin = False
-            Case cls_Section.Enum_TypeSection.IFB_Bmixte
-            Case cls_Section.Enum_TypeSection.SAB
-                lFrmEnrobage = False
-                lFrmProppin = False
-            Case cls_Section.Enum_TypeSection.SABmixte
-        End Select
+        If Not lNothing Then
+            Select Case MyProjet.Poutres(MyProjet.IndEnCours).TypeSection
+                Case cls_Section.Enum_TypeSection.AcierSeul
+                    lFrmConnection = False
+                    lFrmEnrobage = False
+                    lFrmProppin = False
+                    lFrmMaintienBac = False
+                Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                    lFrmConnection = False
+                    lFrmProppin = False
+                    lFrmMaintienBac = False
+                Case cls_Section.Enum_TypeSection.Mixte
+                    lFrmEnrobage = False
+                Case cls_Section.Enum_TypeSection.MixteEnrobage
+                Case cls_Section.Enum_TypeSection.SFB
+                    lFrmEnrobage = False
+                    lFrmProppin = False
+                    lFrmMaintienBac = False
+                Case cls_Section.Enum_TypeSection.SFBmixte
+                Case cls_Section.Enum_TypeSection.IFB_A
+                    lFrmEnrobage = False
+                    lFrmProppin = False
+                    lFrmMaintienBac = False
+                Case cls_Section.Enum_TypeSection.IFB_Amixte
+                Case cls_Section.Enum_TypeSection.IFB_B
+                    lFrmEnrobage = False
+                    lFrmProppin = False
+                    lFrmMaintienBac = False
+                Case cls_Section.Enum_TypeSection.IFB_Bmixte
+                Case cls_Section.Enum_TypeSection.SAB
+                    lFrmEnrobage = False
+                    lFrmProppin = False
+                    lFrmMaintienBac = False
+                Case cls_Section.Enum_TypeSection.SABmixte
+            End Select
+        End If
 
-        Me.TSbtn_Connexion.Visible = lFrmConnection
         Me.TSbtn_Enrobage.Visible = lFrmEnrobage
+        Me.TSbtn_Connexion.Visible = lFrmConnection
         Me.TSbtn_Etaiement.Visible = lFrmProppin
+        Me.TSbtn_MaintienBac.Visible = lFrmMaintienBac
+        Me.ToolStrip_Poutre.Visible = Not lNothing
 
-        Me.TSbtn_MaintienBac.Visible = MyProjet.Poutres(MyProjet.IndEnCours).lMixte
+        Me.TSbtn_SaveN.Visible = Not lNothing
+        Me.TSbtn_SupprBeam.Visible = Not lNothing
+        Me.TSbtn_DupBeam.Visible = Not lNothing
+        Me.ToolStripSeparator24.Visible = Not lNothing
+        Me.TSbtn_Calcul.Visible = Not lNothing
+        Me.ToolStripSeparator25.Visible = Not lNothing
+        Me.TSbtn_NoteCalcul.Visible = Not lNothing
+
+        Me.SaveToolStripMenuItemN.Visible = Not lNothing
+        Me.SaveAsToolStripMenuItemN.Visible = Not lNothing
+        Me.ToolStripSeparator14.Visible = Not lNothing
+
+        Me.DeletePoutreTSMenuItemN.Visible = Not lNothing
+        Me.DuplicatePoutreTSMenuItemN.Visible = Not lNothing
+        Me.ToolStripSeparator18.Visible = Not lNothing
+        Me.CalculCoeffToolStripMenuItemN.Visible = Not lNothing
+        Me.ToolStripSeparator19.Visible = Not lNothing
+        Me.CalculationSheetToolStripMenuItemN.Visible = Not lNothing
+
+        Me.TSGestionImagePoutre.Visible = Not lNothing
     End Sub
 
     Private Sub MAJVoletGauche()
@@ -1129,6 +1217,7 @@ Public Class Frm_PMX
         '   MENU FICHIER/NOUVEAU
         '------------------------------------------------------------------------------------------
 
+        Frm_AjoutePP.ShowDialog()
     End Sub
 
     Private Sub OpenToolStripMenuItemN_Click(sender As Object, e As EventArgs) Handles OpenToolStripMenuItemN.Click
@@ -1215,7 +1304,7 @@ Public Class Frm_PMX
 
     Public Sub AffichageTViewChk()
 
-        If MyProjet.Poutres.Count = 0 Then Exit Sub
+        'If MyProjet.Poutres.Count = 0 Then Exit Sub
         InitialiseCouleurs()
 
         Me.cmb_Projet.Items.Clear()
@@ -1258,7 +1347,7 @@ Public Class Frm_PMX
         Next
         Me.TLPan_ListPoutres.Height = HCum
 
-        Me.tab_BtnPoutres(MyProjet.IndEnCours).Checked = True
+        If Not MyProjet.Poutres.Count = 0 Then Me.tab_BtnPoutres(MyProjet.IndEnCours).Checked = True
 
     End Sub
 
@@ -1426,7 +1515,7 @@ Public Class Frm_PMX
 #Region "Dessins"
 
     Private Sub img_Main_Paint(sender As Object, e As PaintEventArgs) Handles img_Main.Paint
-        DessinFrmMain_Coupe(e.Graphics, Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height, MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation)
+        If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(e.Graphics, Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height, MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation)
     End Sub
 
     Private Sub Frm_PMX_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize

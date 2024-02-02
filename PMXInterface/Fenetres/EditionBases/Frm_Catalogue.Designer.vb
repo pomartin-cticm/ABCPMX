@@ -476,7 +476,7 @@ Partial Class Frm_Catalogue
         '
         'btn_Note
         '
-        Me.btn_Note.Location = New System.Drawing.Point(253, 447)
+        Me.btn_Note.Location = New System.Drawing.Point(206, 447)
         Me.btn_Note.Name = "btn_Note"
         Me.btn_Note.Size = New System.Drawing.Size(134, 24)
         Me.btn_Note.TabIndex = 32

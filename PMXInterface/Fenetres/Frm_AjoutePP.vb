@@ -53,7 +53,7 @@ Public Class Frm_AjoutePP
     'Dim CouleurAcierNormal As Color = Color.DarkSlateBlue
     'Dim CouleurAcierSelect As Color = Color.DarkOrange
 
-    Dim TypeSection As cls_Section.Enum_TypeSection = cls_Section.Enum_TypeSection.AcierSeul
+    Dim TypeSection As cls_Section.Enum_TypeSection = cls_Section.Enum_TypeSection.Mixte
 
     Dim strType As String
     Dim tabType As New Dictionary(Of cls_Section.Enum_TypeSection, String)
@@ -202,7 +202,7 @@ Public Class Frm_AjoutePP
     Private Sub PreparationSectionsType()
         '--> Définition de la section acier
         With MyPoutreAcier.Section
-            TypeSection = cls_Section.Enum_TypeSection.AcierSeul
+            .typeSection = cls_Section.Enum_TypeSection.AcierSeul
             With .ProfilA
                 .Tw = 0.012
                 .Tfs = 0.03

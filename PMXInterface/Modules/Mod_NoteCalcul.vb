@@ -6094,7 +6094,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("IT_PROFILE") & TABAFF & "I\-t\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieT, Enu_TypeVariable.InertieCM4, 4, 2, True))
         AddLigneNDC(TABW2 & BlocG("IW_PROFILE") & TABAFF & "I\-w\=" & TABEGAL & GetStringInUnit(MyProfilA_loc.InertieW, Enu_TypeVariable.InertieWCM6, 4, 0, True))
 
-        AddLigneNDC("\IMG PROFIL_ACIER 10 80 30 NoCadre")
+        AddLigneNDC("\IMG PROFIL_ACIER_DATABASE 10 80 30 NoCadre " & MyProfilA_loc.NomProfile)
 
         '--[ Edition de la Note dans l'Editeur
 

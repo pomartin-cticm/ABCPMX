@@ -1192,6 +1192,24 @@ Public Class Cls_Rapport
 
                     DessinProfileAcier(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, sWiImg, sHiImg, FontBase, 0.9, True, False, -1, xLeftImg, YPen)
 
+                Case "PROFIL_ACIER_DATABASE"
+
+                    Dim Gamme As String = Mots(6)
+                    Dim Profile As String = String.Join(" ", From Mot In Mots Where Array.IndexOf(Mots, Mot) >= 6)
+                    Dim myProfileLoc As New PMXMoteur2.cls_Section
+
+
+                    myProfileLoc.ProfilA.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
+                    myProfileLoc.ProfilA.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
+                    myProfileLoc.ProfilA.Bfi = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
+                    myProfileLoc.ProfilA.Tfs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
+                    myProfileLoc.ProfilA.Tfi = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
+                    myProfileLoc.ProfilA.Tw = MyCatalogue.Series(Gamme).Profiles(Profile).Tw
+                    myProfileLoc.ProfilA.Rcs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
+                    myProfileLoc.ProfilA.Rci = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
+
+                    DessinProfileAcier(MyGr, myProfileLoc, sWiImg, sHiImg, FontBase, 0.9, True, False, -1, xLeftImg, YPen)
+
                 Case "PARTIAL_ENCASEMENT"
 
                     DessinFrmEnrobage(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage, sWiImg, sHiImg, 0.9, False, False, -1, xLeftImg, YPen)

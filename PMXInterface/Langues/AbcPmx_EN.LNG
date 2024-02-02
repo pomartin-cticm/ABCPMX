@@ -530,6 +530,8 @@ PPEIGENMODE				= Eigen mode
 PPOSTT					= Results
 ZOOMIN					= Zoom in
 ZOOMOUT					= Zoom out
+COTATIONS				= Display dimensions
+EXPERT					= Expert mode
 EDIT					= Edit
 EDITPROFILES			= Edit ArcelorMittal profiles
 EDITSTUDS				= Edit Studs
@@ -753,6 +755,7 @@ SLS						= SLS
 FLS						= FLS
 ULSC					= ULS_C
 SLSC					= SLS_C
+COPY                    = Copy
 
 #OPTCALCULMAIN
 TITLE					= Calculation options

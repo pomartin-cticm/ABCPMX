@@ -350,6 +350,8 @@ Public Class Frm_Catalogue
         MySection.ProfilA.Tw = MyCatalogue.Series(Gamme).Profiles(Profile).Tw
         MySection.ProfilA.Rcs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
         MySection.ProfilA.Rci = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
+        MySection.ProfilA.Gamme = Gamme
+        MySection.ProfilA.NomProfile = Profile
 
         '--> Calcul des propriétés de la section à afficher
 
