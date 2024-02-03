@@ -366,6 +366,73 @@ Public Class cls_Poutre
         Return 80 * 10 ^ (-6) '80 mm2/m
     End Function
 
+    'Private Function IndiceZoneConnexion(iTravee As Integer, xPos As Decimal) As Integer
+    '    '-----------------------------------------------------------------------------------------------------------------
+    '    '   03/02/24 :  Création - POM - V1.00
+    '    '-----------------------------------------------------------------------------------------------------------------
+    '    '   Retourne l'indice de la zone de connexion en fonctin de la position
+    '    '-----------------------------------------------------------------------------------------------------------------
+    '    '   iTravee     [E] :   Indice de la travée
+    '    '   xPos        [E] :   Position par rapport à l'appui gauche de la travée
+    '    '-----------------------------------------------------------------------------------------------------------------
+
+    '    '--( Déclaration
+
+    '    Dim iZone As Integer = 0
+    '    Dim i As Integer
+    '    Dim lTrouve As Boolean
+    '    Dim sCum As Decimal = 0
+
+    '    '--( Traitement
+
+    '    If Me.NombreZones(iTravee) > 1 Then
+    '        i = -1
+    '        lTrouve = False
+    '        Do While ((Not lTrouve) And (i < Me.NombreZones(iTravee) - 1))
+    '            i += 1
+    '            lTrouve = IsSmallerOrEqual(xPos, sCum + Me.LongueurZone(iTravee, i))
+    '            If Not lTrouve Then sCum += Me.LongueurZone(iTravee, i)
+    '        Loop
+    '        iZone = i
+    '    End If
+
+    '    Return iZone
+
+    'End Function
+
+    Private Function EntraxeLongiGoujons(iTravee As Integer, iZone As Integer) As Decimal
+        '--------------------------------------------------------------------------------------------------------
+        '   03/02/24 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------------------------------
+        '   Retourne l'entraxe longi entre rangée de connecteurs
+        '--------------------------------------------------------------------------------------------------------
+        '   iTravee     [E] :   Indice de la travée
+        '   iZone       [E] :   Indice de la zone de connexion
+        '--------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lRib As Boolean     ' Espacement multiple de l'entraxe des nervures
+        Dim Entraxe As Decimal
+
+        '--( Initialisation
+
+        lRib = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte) _
+            And (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) _
+            And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
+
+        '--( Calcul
+
+        If lRib Then
+            Entraxe = Me.Espacement_Bac_TransZone(iTravee, iZone) * Me.Dalle.Bac.Ep
+        Else
+            Entraxe = Me.EspacementZone(iTravee, iZone)
+        End If
+
+        Return Entraxe
+
+    End Function
+
 #End Region
 
 #Region " Attributs pour les chargements et les combinaisons "
@@ -517,6 +584,7 @@ Public Class cls_Poutre
         Dim zANE() As Decimal               ' Table des positions des axe neutres élastiques (pour le calcul des contraintes)
         Dim nEqDalle As Decimal             ' si mixte, coefficient d'équivalence acier-béton pour la dalle
         Dim nEqEnrob As Decimal             ' si mixte, coefficient d'équivalence acier-béton pour l'enrobage partiel
+        Dim lShadow As Boolean              ' Indique si table pour un cas de charge shadow
     End Structure
 
 #End Region
@@ -2334,7 +2402,7 @@ Public Class cls_Poutre
         'Next
     End Sub
 
-    Public Function IndiceTabElts(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal) As Integer
+    Public Function IndiceTabElts(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal, Optional lShadow As Boolean = False) As Integer
         '-------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM - V1.00
         '-------------------------------------------------------------------------------------------
@@ -2363,20 +2431,21 @@ Public Class cls_Poutre
             iTab += 1
             lTrouve = (lMixte = Me.Elements(iTab).lMixte) _
                   And (nEqDal = Me.Elements(iTab).nEqDalle) _
-                  And (nEqEc = Me.Elements(iTab).nEqEnrob)
+                  And (nEqEc = Me.Elements(iTab).nEqEnrob) _
+                  And (lShadow = Me.Elements(iTab).lShadow)
         Loop
 
         If lTrouve Then
             indexT = iTab
         Else
-            AjouteTabElements(lMixte, nEqDal, nEqEc, SigneM)
+            AjouteTabElements(lMixte, nEqDal, nEqEc, SigneM, lShadow)
             indexT = Me.Elements.Count - 1
         End If
 
         Return indexT
     End Function
 
-    Private Sub AjouteTabElements(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal, pSigneM() As Decimal)
+    Private Sub AjouteTabElements(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal, pSigneM() As Decimal, lShadow As Boolean)
         '-------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM - V1.00
         '-------------------------------------------------------------------------------------------
@@ -2386,6 +2455,7 @@ Public Class cls_Poutre
         '   nEqDal          [E] :   Si mixte, coefficient d'équivalence acier béton pour la dalle
         '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
         '   pSigneM         [E] :   Table de signes de moment le long de la poutre
+        '   lShadow         [E] :   Indique une table d'élts pour cas de charge shadow
         '-------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -2393,21 +2463,13 @@ Public Class cls_Poutre
         Dim MyElts As strucBeamElements
         Dim lEnrob As Boolean = Me.lEnrobage
         Dim lPoutreMixte As Boolean = Me.lMixte
-        'Dim iEltO, iEltE As Integer
-        'Dim Aire, InertieY As Decimal
-        'Dim zANE, MelRd As Decimal
-        'Dim iElt As Integer
-        'Dim Beff As Decimal
-        'Dim xm As Decimal
-        'Dim BeffPrec As Decimal
-        'Dim SigneMprec As Decimal
-        'Dim lCalcul As Boolean
 
         '--> Initialisation
 
         MyElts.lMixte = lMixte
         MyElts.nEqDalle = nEqDal
         MyElts.nEqEnrob = nEqEc
+        MyElts.lShadow = lShadow
 
         ReDim MyElts.Aire(Me.Nodes.nbNodes - 2)
         ReDim MyElts.InertieY(Me.Nodes.nbNodes - 2)
@@ -2415,7 +2477,7 @@ Public Class cls_Poutre
 
         '--> Cas très simple ou tout est constant
 
-        If (Not lMixte) And (Not lEnrob) Then
+        If (Not lMixte) And (Not lEnrob) And (Not lShadow) Then
 
             Me.MaillageProprietesElementsAcierNonEnrob(MyElts)
 
@@ -2423,7 +2485,11 @@ Public Class cls_Poutre
 
         '--> Boucle sur les travées, dans le cas où il faut prendre en compte le béton
 
-        Me.MaillageProprietesElementsMixteouEnrob(lMixte, nEqDal, nEqEc, pSigneM, MyElts)
+        If lShadow Then
+            Me.MaillageProprietesElementsMixteShadow(lMixte, nEqDal, nEqEc, pSigneM, MyElts)
+        Else
+            Me.MaillageProprietesElementsMixteouEnrob(lMixte, nEqDal, nEqEc, pSigneM, MyElts)
+        End If
 
         '--> Fin
 
@@ -2474,12 +2540,132 @@ Public Class cls_Poutre
 
     End Sub
 
+    Private Sub MaillageProprietesElementsMixteShadow(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal, pSigneM() As Decimal, ByRef pMyElts As strucBeamElements)
+        '---------------------------------------------------------------------------------------------
+        '   03/02/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Calcul des propriétés des barres du maillage pour une poutre mixte
+        '   en prenant en compte la rigidité de la connexion
+        '   Calcul de l'inertie selon l'équation prEN 1994-1-1 9.3.1 (5)
+        '---------------------------------------------------------------------------------------------
+        '   lMixte          [E] :   Indique si propriétés en phase mixte ou non mixte (pour la dalle)
+        '   nEqDal          [E] :   Si mixte, coefficient d'équivalence acier béton pour la dalle
+        '   nEqEc           [E] :   Coefficient d'équivalence acier béton pour l'enrobage
+        '   pSigneM         [E] :   Table de signes de moment le long de la poutre
+        '   pMyElts         [S] :   Propriétés des éléments
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim iEltO, iEltE As Integer
+        Dim Beff, xm As Decimal
+        Dim BeffPrec As Decimal
+        Dim SigneMprec As Decimal
+        Dim lCalcul As Boolean
+        Dim Aire, InertieY, zANe As Decimal
+        Dim Le() As Decimal
+        Dim cStiff, cStiffPrec As Decimal
+        Dim iTraveeDeb, iTraveeFin As Integer
+        Dim iTravee As Integer
+        Dim kLe As Decimal
+        Dim IndZoneConnex() As Integer
+        Dim indZonePrec As Integer = -1
+        Dim nR, sX As Decimal
+        Dim kSc, PRd As Decimal
+        Dim DeltaD As Decimal
+        Dim lGeneration1 As Boolean = Me.Param.lGeneration1
+        Dim lDallePleine, lPerp As Boolean
+        Dim Ecm, Fck As Decimal
+        Dim gammaVs, gammaVc As Decimal
+
+        '--( Initialisation
+
+        iTraveeDeb = Me.IndicePremiereTravee
+        iTraveeFin = Me.IndiceDerniereTravee
+        '# Longueur entre points de moments nuls dans les travees centrales
+        ReDim Le(iTraveeFin)
+        For iTravee = iTraveeDeb To iTraveeFin
+            If iTravee > 0 Then
+                If Not (iTravee = iTraveeFin And Me.lTraveeConsoleDroite) Then
+                    kLe = 1
+                    If iTravee > iTraveeDeb Then kLe -= 0.15
+                    If iTravee < iTraveeFin Then kLe -= 0.15
+
+                    Le(iTravee) = Me.LongueurTravee(iTravee) * kLe
+                End If
+            End If
+        Next
+        '# Zone de connexion
+        ReDim IndZoneConnex(Me.Nodes.iNodeExtTrav(iTraveeFin, 1) - 1)
+
+        lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
+        lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
+        Ecm = Me.Dalle.beton.Ecm
+        Fck = Me.Dalle.beton.Fck
+        gammaVs = Me.Param.Gamma.GammaVs
+        gammaVc = Me.Param.Gamma.GammaVc
+
+        '--> Boucle sur les travées, dans le cas où il faut prendre en compte le béton
+
+        For iTravee = iTraveeDeb To iTraveeFin
+            iEltO = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            iEltE = Me.Nodes.iNodeExtTrav(iTravee, 1) - 1
+
+            For iElt = iEltO To iEltE
+                '# Position moyenne de l'élément par rpt  l'appui gauche de la travée
+                xm = (Me.Nodes.xTravee(iElt) + Me.Nodes.xTravee(iElt + 1)) / 2
+                '# Largeur efficace de dalle
+                Beff = Me.BeffDalle(xm, iTravee, False, True)
+                '# Zone de connexion 
+                IndZoneConnex(iElt) = Me.IndiceZoneFromPosition(iTravee, xm)
+
+                If iElt = iEltO Then
+                    lCalcul = True
+                Else
+                    'lCalcul = Not ((SigneMprec = pSigneM(iElt)) And (BeffPrec = Beff) And IsEqual(cStiff, cStiffPrec))
+                    lCalcul = Not ((SigneMprec = pSigneM(iElt)) And (BeffPrec = Beff) And (IndZoneConnex(iElt) = indZonePrec))
+                End If
+
+                If lCalcul Then
+                    If pSigneM(iElt) < 0 Then
+                        InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, zANe)
+                    Else
+                        '# Raideur de la connexion
+                        DeltaD = Me.Param.DeltaD
+
+                        nR = Me.NombreGoujonsTransv(iTravee, IndZoneConnex(iElt))
+                        sX = Me.EntraxeLongiGoujons(iTravee, IndZoneConnex(iElt))
+                        PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
+                        kSc = PRd / DeltaD
+
+                        cStiff = nR * kSc / sX
+
+                        '# Calcul
+                        InertieY = Me.Section.InertieYYMixteSlip(1, False, Me.Param.Gamma, nEqEc, nEqDal, Beff, Me.Dalle, Le(iTravee), cls_Acier.EYACIER, cStiff, zANe)
+                    End If
+
+                    Aire = Me.Section.ProfilA.Aire      ' A changer pour aire homgonénéisée
+
+                    pMyElts.InertieY(iElt) = InertieY
+                    BeffPrec = Beff
+                    SigneMprec = pSigneM(iElt)
+                    cStiffPrec = cStiff
+                    indZonePrec = IndZoneConnex(iElt)
+                End If
+                pMyElts.InertieY(iElt) = InertieY
+                pMyElts.Aire(iElt) = Aire
+
+            Next
+
+        Next
+
+    End Sub
+
     Private Sub MaillageProprietesElementsMixteouEnrob(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal, pSigneM() As Decimal, ByRef pMyElts As strucBeamElements)
         '---------------------------------------------------------------------------------------------
         '   03/11/23 :  Création - POM
         '---------------------------------------------------------------------------------------------
-        '   Calcul des propriétés des barres du maillage pour une poutre acier sans enrobage
-        '   (Propiétés constantes le long de la barre)
+        '   Calcul des propriétés des barres du maillage pour une poutre mixte avec ou sans enrobage
         '---------------------------------------------------------------------------------------------
         '   lMixte          [E] :   Indique si propriétés en phase mixte ou non mixte (pour la dalle)
         '   nEqDal          [E] :   Si mixte, coefficient d'équivalence acier béton pour la dalle
@@ -3379,7 +3565,7 @@ Public Class cls_Poutre
         '-------------------------------------------------------------------------------------------
         '   Initialisation des cas de charges à traiter par le moteur de calcul
         '-------------------------------------------------------------------------------------------
-        '   
+        '   NomChargesA     [E] :   Nom des cas de charge (dans les langue utilisateur)
         '-------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -3554,6 +3740,65 @@ Public Class cls_Poutre
         '    Me.ChargesA.Add(New cls_CasDeCharge(strConstruction, "QC", Me.IndiceTabElts(False, 0, nEqEnrobG1), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Construction, pEtatDalleNonMixte))
         '    InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU("QC"), TraveesTous)
         'End If
+
+        '--> Préparation des cas de charges shadow pour les poutres mixtes
+
+        If lMixte And Me.Param.lFlechesETA Then Me.InitialiseCasdeChargesCalculShadow()
+
+    End Sub
+
+    Private Sub InitialiseCasdeChargesCalculShadow()
+        '-------------------------------------------------------------------------------------------
+        '   03/02/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Initialisation des cas de charges shadow à traiter par le moteur de calcul
+        '   Les cas de charges shadow sont créés temporairement pour les poutres mixtes
+        '   Chaque cas est la doublure d'un cas réel
+        '   Il permet de calculer la flèche de la poutre mixte en prenant en compte la rigidité de la connexion
+        '   Les cas de charges shadow sont supprimés après l'analyse globale
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iCas As Integer
+        Dim indiceElt, indEltShadow As Integer
+        Dim lCasMixte As Boolean
+        Dim nEqDalle, nEqEnrob As Double
+        Dim nbCas As Integer = Me.ChargesA.Count
+        Dim lDefini As Boolean
+        Dim iTrav0, iTrav1 As Decimal
+
+        '--( Initialisation
+
+        iTrav0 = Me.IndicePremiereTravee
+        iTrav1 = Me.IndiceDerniereTravee
+
+        '--( Boucle sur les cas de charges
+
+        If Me.lMixte Then
+
+            For iCas = 0 To nbCas - 1
+
+                indiceElt = Me.ChargesA(iCas).IndElts
+                lCasMixte = Me.Elements(indiceElt).lMixte
+                lDefini = Me.ChargesA(iCas).EstNonNul(iTrav0, iTrav1)
+
+                '--( On ne dédouble que les cas mixtes et défini
+
+                If lCasMixte And lDefini Then
+
+                    nEqDalle = Me.Elements(indiceElt).nEqDalle
+                    nEqEnrob = Me.Elements(indiceElt).nEqEnrob
+
+                    indEltShadow = Me.IndiceTabElts(lMixte, nEqDalle, nEqEnrob, True)
+
+                    Me.ChargesA.Add(New cls_CasDeCharge(Me.ChargesA(iCas).Nom, Me.ChargesA(iCas).Symbol, iCas, indEltShadow))
+
+                End If
+
+            Next
+
+        End If
 
     End Sub
 
@@ -3782,7 +4027,7 @@ Public Class cls_Poutre
         '--> Déclarations
 
         Dim iTravP, iTravD As Integer
-        Dim jCdc As Integer
+        Dim jCdc, jCasTransfert As Integer
         Dim lPrem As Boolean = True
         Dim lAppuisOK As Boolean = False
         Dim lOK As Boolean
@@ -3802,7 +4047,7 @@ Public Class cls_Poutre
         '--> Boucle sur les cas de charge
 
         For jCdc = 0 To Me.ChargesA.Count - 1
-            If Me.ChargesA(jCdc).EstNonNul(iTravP, iTravD) Then
+            If (Me.ChargesA(jCdc).EstNonNul(iTravP, iTravD) Or Me.ChargesA(jCdc).lShadow) Then
 
                 '# Préparation des propriétés des éléments
                 If (IndEltPrec <> Me.ChargesA(jCdc).IndElts) Then
@@ -3811,7 +4056,8 @@ Public Class cls_Poutre
                 End If
 
                 '# Transfert du chargement
-                Me.Analyse.TransfertChargementA(Me.ChargesA(jCdc), iTravP, iTravD, Me.LongueurTravee, Me.LargeurInfluence)
+                If Me.ChargesA(jCdc).lShadow Then jCasTransfert = Me.ChargesA(jCdc).iShadow Else jCasTransfert = jCdc
+                Me.Analyse.TransfertChargementA(Me.ChargesA(jCasTransfert), iTravP, iTravD, Me.LongueurTravee, Me.LargeurInfluence)
 
                 '# Préparation des appuis (dans le cas des étais ponctuels)
                 lAppuisEtais = (Me.ChargesA(jCdc).Symbol = symbG1PP)
@@ -3832,20 +4078,52 @@ Public Class cls_Poutre
 
                 '== Récupération des résultats
                 '# Récupération des réactions aux étais pour préparer le cas de charge G1C
-                If (Me.ChargesA(jCdc).Symbol = symbG1PP) Then
+                If (Me.ChargesA(jCdc).Symbol = symbG1PP) And (Not Me.ChargesA(jCdc).lShadow) Then
                     Me.InitialiseChargeEtais(Me.ChargesA(Me.IndiceCasG1C), Me.Analyse.Reactions)
                 End If
 
                 If lOK Then
-                    Me.ChargesA(jCdc).RecupereResultats(Me.Analyse.Tranchants, Me.Analyse.Moments, Me.Analyse.Fleches, Me.Analyse.Rotations, Me.Analyse.Reactions)
-
+                    If Me.ChargesA(jCdc).lShadow Then
+                        Me.ChargesA(Me.ChargesA(jCdc).iShadow).RecupereFlecheEta(Me.Analyse.Fleches)
+                    Else
+                        Me.ChargesA(jCdc).RecupereResultats(Me.Analyse.Tranchants, Me.Analyse.Moments, Me.Analyse.Fleches, Me.Analyse.Rotations, Me.Analyse.Reactions)
+                    End If
                 Else
                     MsgBox("Error calculation of " & Me.ChargesA(jCdc).Nom, MsgBoxStyle.Critical, "cls_Poutre/AAA_CalculMNVInternesN")
                 End If
 
-
             End If
         Next
+
+        '--( Nettoyage des cas de charges shadow
+
+        Me.SupprimeCasShadow()
+
+    End Sub
+
+    Private Sub SupprimeCasShadow()
+        '-------------------------------------------------------------------------------------
+        '   03/02/24 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Suppression des cas de charges shadow
+        '-------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim nbCas As Integer = Me.ChargesA.Count
+        Dim iCas As Integer
+
+        '--( Traitement des cas de charges
+
+        If Me.lMixte And Me.Param.lFlechesETA Then
+
+            For iCas = nbCas - 1 To 0 Step -1
+
+                If Me.ChargesA(iCas).lShadow Then Me.ChargesA.Remove(Me.ChargesA(iCas))
+
+            Next
+
+        End If
 
     End Sub
 
@@ -4901,7 +5179,7 @@ Public Class cls_Poutre
         ReDim Me.DensiteConnexionZone(Me.IndiceDerniereTravee, 2)
         lGeneration1 = Me.Param.lGeneration1
         lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
-        lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+        lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck
         gammaVs = Me.Param.Gamma.GammaVs
@@ -4913,11 +5191,13 @@ Public Class cls_Poutre
         For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
             For iZone = 0 To Me.NombreZones(iTravee) - 1
 
-                If lBacNervuresPerpContinues Then
-                    pEspace = Me.Espacement_Bac_TransZone(iTravee, iZone) * Me.Dalle.Bac.Ep
-                Else
-                    pEspace = Me.EspacementZone(iTravee, iZone)
-                End If
+                'If lBacNervuresPerpContinues Then
+                '    pEspace = Me.Espacement_Bac_TransZone(iTravee, iZone) * Me.Dalle.Bac.Ep
+                'Else
+                '    pEspace = Me.EspacementZone(iTravee, iZone)
+                'End If
+
+                pEspace = Me.EntraxeLongiGoujons(iTravee, iZone)
 
                 nR = Me.NombreGoujonsTransv(iTravee, iZone)
                 PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)

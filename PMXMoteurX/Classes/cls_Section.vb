@@ -1268,6 +1268,62 @@ Public Class cls_Section
 
 #Region " Propriétés élastiques de la section "
 
+    Public Function InertieYYMixteSlip(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
+                                       nEqDal As Decimal, Beff As Decimal, MyDalle As cls_Dalle,
+                                       Le As Decimal, EYoung As Decimal, cStiff As Decimal, ByRef zANE As Decimal) As Decimal
+        '-------------------------------------------------------------------------------------------------------------------
+        '   07/09/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '   Propriétés pour une poutre mixte. Inertie prenant en compte le glissement de la connexion
+        '   Selon Formule prEN 1994-1-1, 9.3.1 (5)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas      [E] :   Coefficients partiels
+        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   lDalle      [E] :   Position axe neutre élastique
+        '   nEqDal      [E] :   Coefficient d'équivalence acier béton pour la dalle
+        '   Beff        [E] :   Largeur efficace de la dalle
+        '   MyDalle     [E] :   Elément dalle
+        '   Le          [E] :   Longueur entre points de moments nuls
+        '   EYoung      [E] :   Module d'Young de l'acier
+        '   cStiff      [E] :   Raideur de la connexion
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim InertieY, MelRd As Decimal
+        Dim Iya, IycH As Decimal
+        Dim IConnex As Decimal
+        Dim AcEff, Aa, Ac, zcH As Decimal
+        Dim Tc As Decimal
+        Dim nEff As Decimal
+
+        '--( Initialisation
+
+        Tc = MyDalle.EpaisseurActive
+
+        '--( Application
+
+        Me.ProprietesElastiquesMyy(Signe, lValeurRd, Gammas, nEqEc, zANE, Iya, MelRd)
+        IycH = Beff * Tc ^ 3 / 12 / nEqDal
+        zcH = MyDalle.zTop - Tc / 2 - zANE
+        Ac = Beff * Tc
+
+        nEff = nEqDal * (1 + Math.PI ^ 2 * EYoung * kConvMPaPa * Ac / (nEqDal * Le * cStiff))
+
+        Aa = Me.ProfilA.Aire
+        AcEff = Ac / nEff
+
+        IConnex = AcEff * Aa * zcH ^ 2 / (AcEff + Aa)
+
+        InertieY = Iya + IycH + IConnex
+
+        Return InertieY
+
+    End Function
+
     Public Function InertieYY(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
                               lDalle As Boolean, nEqDal As Decimal, Beff As Decimal, MyDalle As cls_Dalle, ByRef zANE As Decimal) As Decimal
         '-------------------------------------------------------------------------------------------------------------------

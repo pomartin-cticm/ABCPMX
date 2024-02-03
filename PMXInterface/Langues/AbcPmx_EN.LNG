@@ -86,6 +86,7 @@ ENGEN2					= Second generation of Eurocodes (drafts)
 TELUOPTIONS				= Options at Ultimate Limit States
 TELSOPTIONS				= Options at Serviceability Limit States
 COMBINATIONFREQ			= Combination of loads for the eigen frequency
+ETADEFLECTIONS			= Deflections of composite beams taking into account connectors stiffness
 ELASTICDESIGN			= Elastic design of sections
 NORMALDESIGN			= Design of sections according to their class
 TCONCRETE				= Properties of concrete

@@ -95,6 +95,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_RH = New System.Windows.Forms.Label()
         Me.lbl_BetonMessage = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.chk_FlechesETA = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -390,6 +391,7 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.pan_OptionsELS.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_OptionsELS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_OptionsELS.Controls.Add(Me.chk_FlechesETA)
         Me.pan_OptionsELS.Controls.Add(Me.lbl_CombinationVibration)
         Me.pan_OptionsELS.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_OptionsELS.Location = New System.Drawing.Point(0, 225)
@@ -937,6 +939,16 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'chk_FlechesETA
+        '
+        Me.chk_FlechesETA.AutoSize = True
+        Me.chk_FlechesETA.Location = New System.Drawing.Point(21, 46)
+        Me.chk_FlechesETA.Name = "chk_FlechesETA"
+        Me.chk_FlechesETA.Size = New System.Drawing.Size(108, 17)
+        Me.chk_FlechesETA.TabIndex = 116
+        Me.chk_FlechesETA.Text = "chk_FlechesETA"
+        Me.chk_FlechesETA.UseVisualStyleBackColor = True
+        '
         'Frm_OptionsCalculPoutre
         '
         Me.AcceptButton = Me.btn_OK
@@ -1056,4 +1068,5 @@ Partial Class Frm_OptionsCalculPoutre
     Friend WithEvents img_G As PictureBox
     Friend WithEvents cmb_GraviteG As ComboBox
     Friend WithEvents lbl_GraviteG As Label
+    Friend WithEvents chk_FlechesETA As CheckBox
 End Class

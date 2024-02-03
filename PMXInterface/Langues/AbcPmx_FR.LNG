@@ -84,6 +84,7 @@ ENGEN2					= Deuxième génération des Eurocodes (versions de travail)
 TELUOPTIONS				= Options pour les Etats Limites Ultimes
 TELSOPTIONS				= Options pour les Etats Limites de Services
 COMBINATIONFREQ			= Combinaison de charges pour les fréquences propres
+ETADEFLECTIONS			= Flèche des poutres mixtes prenant en compte la raideur des goujons
 ELASTICDESIGN			= Dimensionnement élastique des sections
 NORMALDESIGN			= Dimensionnement des sections selon leur classe
 TCONCRETE				= Propriétés du béton

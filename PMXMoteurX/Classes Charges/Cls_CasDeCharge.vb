@@ -40,24 +40,55 @@
     Public MYY(,) As Decimal                            ' Moment fléchissant dans l’élément i, aux deux extrémités (0 à NbNodes-2, 0 à 1)
 
     Public UZ() As Decimal                              ' Déplacement vertical du nœud i (0 à NbNodes-1)
+    Public UZEta() As Decimal                           ' Déplacement vertical du nœud i (0 à NbNodes-1), avec prise en compte du degré de connexion
     Public ROTY() As Decimal                            ' Rotation du nœud i (0 à NbNodes-1)
 
     Public RZ() As Decimal                              ' Réactions verticales aux nœuds support (0 à NbAppuis-1)
 
     Public lRunCalcul As Boolean                        ' Indique sir le calcul a été effectué
 
-    'Public Sigma(,,) As Decimal                         ' Contraintes normales aux points de calcul
+    'Public Sigma(,,) As Decimal                        ' Contraintes normales aux points de calcul
+
+    '--> Gestion des cas de charges "Shadow", permettant le calcul de la flèche prenant en compte le degré de connexion
+
+    Public lShadow As Boolean                           ' Indique si le cas de charge est un shadow, c'est à dire le double d'un vrai cas de charge (double permettant le calcul de la flèche eta)
+    Public iShadow As Integer                           ' Pour les cas de charges shadow, indice du cas de charges réel dont il est la doublure
+    '                                                     La flèche d'un cas de charge shadow est stockée dans la table UZEta du cas réel
+
 
 #End Region
 
 #Region " Constructeurs "
+
+    Public Sub New(pNom As String, pSymbol As String, IndShadow As Integer, IndEltShadow As Integer)
+        '-----------------------------------------------------------------------------------------------------------
+        '   03/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Initialisation d'un cas de charge shadow
+        '-----------------------------------------------------------------------------------------------------------
+        '   pNom        [E] :   Nom du cas de charge (selon langue interface)
+        '   pSymbol     [E] :   Symbol du cas de charge (indépendant de la langue)
+        '   IndShadow   [E] :   Indice du cas de charge dédoublé
+        '   IndEltShadow[E] :   Indice de la table de propriétés des éléments associées au cas de charge
+        '-----------------------------------------------------------------------------------------------------------
+
+        Me.Nom = pNom
+        Me.Symbol = pSymbol
+
+        Me.lShadow = True
+        Me.IndElts = IndEltShadow
+        Me.iShadow = IndShadow
+
+        Me.UZEta = Nothing
+
+    End Sub
 
     Public Sub New(pNom As String, pSymbol As String, IndiceElts As Integer, iTrav0 As Integer, NbTrav As Integer,
                    pType As EnuType, pEtatDalle As EnuEtatDalle)
         '-----------------------------------------------------------------------------------------------------------
         '   07/09/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
-        '   Initialisation du cas de charge
+        '   Initialisation d'un cas de charge normal
         '-----------------------------------------------------------------------------------------------------------
         '   pNom        [E] :   Nom du cas de charge (selon langue interface)
         '   pSymbol     [E] :   Symbol du cas de charge (indépendant de la langue)
@@ -89,11 +120,27 @@
         Me.Type = pType
         Me.EtatDalle = pEtatDalle
 
+        Me.lShadow = False
+        Me.iShadow = -1
+
+        Me.UZEta = Nothing
     End Sub
 
 #End Region
 
 #Region " Outils "
+
+    Public ReadOnly Property lDispoFlechesEta As Boolean
+        '--------------------------------------------------------------------------------------------------------------
+        '   03/02/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------
+        '   Indique si les flèches ETA sont disponibles
+        '--------------------------------------------------------------------------------------------------------------
+        '--------------------------------------------------------------------------------------------------------------
+        Get
+            Return Not IsNothing(Me.UZEta)
+        End Get
+    End Property
 
     Public Function EstNonNul(iTravP As Integer, iTravD As Integer) As Boolean
         '-----------------------------------------------------------------------------------------------------------
@@ -110,29 +157,49 @@
         Dim lNonNul As Boolean = False
         Dim iTrav, iCharg As Integer
 
-        For iTrav = iTravP To iTravD
-            If Not IsEqual(Me.QSurf(iTrav), 0) Then lNonNul = True
-            For iCharg = 0 To Me.Forces(iTrav).Count - 1
-                If Not IsEqual(Me.Forces(iTrav)(iCharg).Force, 0) Then lNonNul = True
+        If Not Me.lShadow Then
+            For iTrav = iTravP To iTravD
+                If Not IsEqual(Me.QSurf(iTrav), 0) Then lNonNul = True
+                For iCharg = 0 To Me.Forces(iTrav).Count - 1
+                    If Not IsEqual(Me.Forces(iTrav)(iCharg).Force, 0) Then lNonNul = True
+                Next
+                For iCharg = 0 To Me.Moments(iTrav).Count - 1
+                    If Not IsEqual(Me.Moments(iTrav)(iCharg).Moment, 0) Then lNonNul = True
+                Next
+                For iCharg = 0 To Me.FReparties(iTrav).Count - 1
+                    If Not IsEqual(Me.FReparties(iTrav)(iCharg).Force(0), 0) Then lNonNul = True
+                    If Not IsEqual(Me.FReparties(iTrav)(iCharg).Force(1), 0) Then lNonNul = True
+                Next
             Next
-            For iCharg = 0 To Me.Moments(iTrav).Count - 1
-                If Not IsEqual(Me.Moments(iTrav)(iCharg).Moment, 0) Then lNonNul = True
-            Next
-            For iCharg = 0 To Me.FReparties(iTrav).Count - 1
-                If Not IsEqual(Me.FReparties(iTrav)(iCharg).Force(0), 0) Then lNonNul = True
-                If Not IsEqual(Me.FReparties(iTrav)(iCharg).Force(1), 0) Then lNonNul = True
-            Next
-        Next
-
+        End If
 
         Return lNonNul
     End Function
+
+    Public Sub RecupereFlecheEta(myUz() As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   03/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Stocke les flèches dépendant de la connexion, issues du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+        '   myUz        [E] :   Flèches de la poutre (prenant en compte la raideurs des connecteurs
+        '-----------------------------------------------------------------------------------------------------------
+
+        Me.UZEta = myUz.Clone
+
+    End Sub
 
     Public Sub RecupereResultats(myVz(,) As Decimal, myMy(,) As Decimal, myUz() As Decimal, myRotY() As Decimal, myRz() As Decimal)
         '-----------------------------------------------------------------------------------------------------------
         '   04/11/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
         '   Stocke les résultats issus du calcul EF
+        '-----------------------------------------------------------------------------------------------------------
+        '   myVz        [E] :   Efforts tranchants
+        '   myMy        [E] :   Moments fléchissants
+        '   myUz        [E] :   Flèches de la poutre
+        '   myRotY      [E] :   Rotations des noeuds
+        '   myRz        [E] :   Réactions aux appuis
         '-----------------------------------------------------------------------------------------------------------
 
         Me.VZ = myVz.Clone

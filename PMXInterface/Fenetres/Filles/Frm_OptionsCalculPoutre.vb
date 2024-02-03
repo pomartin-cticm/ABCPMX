@@ -64,6 +64,7 @@ Public Class Frm_OptionsCalculPoutre
 
                 Me.lbl_CadreELS.Text = Bloc("TELSOPTIONS")
                 Me.lbl_CombinationVibration.Text = Bloc("COMBINATIONFREQ")
+                Me.chk_FlechesETA.Text = Bloc("ETADEFLECTIONS")
 
                 Me.lbl_CadreBeton.Text = Bloc("TCONCRETE")
                 Me.lbl_BetonMessage.Text = Bloc("CONCRETEMSG")
@@ -186,6 +187,8 @@ Public Class Frm_OptionsCalculPoutre
 
         '==> Options ELS
 
+        Me.chk_FlechesETA.Checked = MyParam.lFlechesETA
+
         '==> Béton
 
         Me.cmb_RH.SelectedIndex = Array.IndexOf(cls_OptionsCalcul.tabRH, MyParam.RH)
@@ -252,6 +255,8 @@ Public Class Frm_OptionsCalculPoutre
         GereTransfertValeur(MyParam.lCompressionArma, MyProjet.Poutres(MyProjet.IndEnCours).Param.lCompressionArma, lModif)
 
         GereTransfertValeur(MyParam.GraviteG, MyProjet.Poutres(MyProjet.IndEnCours).Param.GraviteG, lModif)
+
+        GereTransfertValeur(Me.chk_FlechesETA.Checked, MyProjet.Poutres(MyProjet.IndEnCours).Param.lFlechesETA, lModif)
 
     End Sub
 

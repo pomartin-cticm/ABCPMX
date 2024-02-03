@@ -8,6 +8,8 @@ Public Class cls_OptionsCalcul
     Public Shared tabRH() As Decimal = {50, 80}
     Public Shared tabGraviteG() As Decimal = {9.81, 10}
 
+    Const DELTAD_DEF As Decimal = 0.0005
+
     'Public Shared t0Retrait As Decimal = 1
 
     Enum Enu_Normes
@@ -48,6 +50,9 @@ Public Class cls_OptionsCalcul
     Public AgeT As Decimal                          ' Age du béton au temps du calcul
 
     Public lElasticDesign As Boolean                ' Indique quand un dimensionnement élastique est imposé
+
+    Public lFlechesETA As Boolean                   ' Indique pour les poutres mixtes si on calcule la flèche en prenant en compte la raideur des connecteurs
+    Public DeltaD As Decimal                        ' Valeur du glissement du connecteur pour une charge de PRd
 
 #End Region
 
@@ -99,6 +104,8 @@ Public Class cls_OptionsCalcul
 
         Me.EtaW = 1.2
 
+        Me.lFlechesETA = True
+        Me.DeltaD = cls_OptionsCalcul.DELTAD_DEF
     End Sub
 
 #End Region
