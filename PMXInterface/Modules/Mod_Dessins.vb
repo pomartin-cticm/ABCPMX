@@ -6792,8 +6792,7 @@ Public Module Mod_Dessins
 
         If (typeCombo = "ELS" Or typeCombo = "ELSC") And OptionsDiagrammes.lDessDeformee Then 'And lResult  Then
 
-            Combinaison.CombineFleches(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, f)
-
+            Combinaison.CombineFleches(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, f, True)
 
             kEch = CoefEchelleDessin(fMin, fMax, EcartZ / 2)
 

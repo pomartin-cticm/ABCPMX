@@ -421,8 +421,8 @@ LOADCASE				= Load case
 COMBINATION				= Combination
 SPAN					= Span
 EIGENFREQUENCIES		= Eigen frequencies
-
-
+CASE_FULLINTERACTION	= Assuming full shear interaction
+CASE_PARTIALINTERACTION	= Taking in to account the slip of the connection
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

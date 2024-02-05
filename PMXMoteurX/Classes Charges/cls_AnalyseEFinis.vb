@@ -154,8 +154,7 @@ Public Class cls_AnalyseEFinis
 
         '--> Initialisations
 
-        pDonneesEF.NbForcesPon = 0
-        pDonneesEF.NbForcesRep = 0
+        InitialiseChargesZero()
 
         NbForceRep = MyChargA.NombreFRep(iTravP, iTravD) + MyChargA.NombreChargesSurf(iTravP, iTravD)
 
@@ -239,8 +238,7 @@ Public Class cls_AnalyseEFinis
 
         '--> Initialisations
 
-        pDonneesEF.NbForcesPon = 0
-        pDonneesEF.NbForcesRep = 0
+        InitialiseChargesZero()
 
         NbForceRep = MyChargU.NombreForceReparties(iTravP, iTravD) + MyChargU.NombreChargesSurf(iTravP, iTravD)
 
@@ -345,35 +343,26 @@ Public Class cls_AnalyseEFinis
 
     End Sub
 
-    'Private Sub AjouteForce(xFor As Decimal, Force As Decimal)
-    '    '-------------------------------------------------------------------------------------
-    '    '   18/09/23 :  Création - Version 1.00 - POM
-    '    '-------------------------------------------------------------------------------------
-    '    '   Ajout d'un effort vertical dans les paramètres préparatoires au calcul EF
-    '    '-------------------------------------------------------------------------------------
-    '    '   xFor        [E] :   Position de la force
-    '    '   Force       [E] :   Valeur de la force
-    '    '   pDonneesEF  [S] :   Donnes pour le calcul EF
-    '    '-------------------------------------------------------------------------------------
-
-    '    pDonneesEF.NbForcesPon += 1
-    '    If pDonneesEF.NbForcesPon = 1 Then
-    '        ReDim pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-    '        ReDim pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-    '    Else
-    '        ReDim Preserve pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1)
-    '        ReDim Preserve pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1)
-    '    End If
-
-    '    pDonneesEF.ForcePon(pDonneesEF.NbForcesPon - 1) = Force
-    '    pDonneesEF.xForcePon(pDonneesEF.NbForcesPon - 1) = xFor
-
-    'End Sub
-
-
 #End Region
 
 #Region " Initialisation du modèle "
+
+    Public Sub InitialiseChargesZero()
+        '-------------------------------------------------------------------------------------
+        '   05/02/24 :  Création - Version 1.00 - POM
+        '-------------------------------------------------------------------------------------
+        '   Remet à zero le chargement 
+        '-------------------------------------------------------------------------------------
+
+        Me.pDonneesEF.NbForcesPon = 0
+        Me.pDonneesEF.NbForcesRep = 0
+        Me.pDonneesEF.NbMoments = 0
+
+        Me.pDonneesEF.ForcePon = Nothing
+        Me.pDonneesEF.ForceRep = Nothing
+        Me.pDonneesEF.Moment = Nothing
+
+    End Sub
 
     Public Sub PrepareModele(EYoung As Decimal, GraviteG As Decimal, Nodes As cls_Poutre.strucBeamNodes)
         '-------------------------------------------------------------------------------------
@@ -543,8 +532,6 @@ Public Class cls_AnalyseEFinis
 
 
     End Sub
-
-
 
     Private Sub Poubelle()
 

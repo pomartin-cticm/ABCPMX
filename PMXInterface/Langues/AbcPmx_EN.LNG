@@ -87,6 +87,7 @@ TELUOPTIONS				= Options at Ultimate Limit States
 TELSOPTIONS				= Options at Serviceability Limit States
 COMBINATIONFREQ			= Combination of loads for the eigen frequency
 ETADEFLECTIONS			= Deflections of composite beams taking into account connectors stiffness
+STUDSE					= Slip of the connector at 0,7 PRk (prEN 1994-1-1 B.2.5 (5))
 ELASTICDESIGN			= Elastic design of sections
 NORMALDESIGN			= Design of sections according to their class
 TCONCRETE				= Properties of concrete

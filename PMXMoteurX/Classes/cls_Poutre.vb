@@ -2349,18 +2349,27 @@ Public Class cls_Poutre
         Dim iTri() As Integer
         Dim iTab, j, k As Integer
         Dim lTrouve As Boolean
+        Dim nbTab As Integer = 0
 
         '--> Initialisation
 
-        ReDim lDalle(Me.Elements.Count - 1)
-        ReDim NeqDalle(Me.Elements.Count - 1)
-        ReDim NeqEnrob(Me.Elements.Count - 1)
-        ReDim iTri(Me.Elements.Count - 1)
+        '# Nombre de tables d'éléments (hors shadow)
+
+        For iTab = 0 To Me.Elements.Count - 1
+            If Not Me.Elements(iTab).lShadow Then nbTab += 1
+        Next
+
+        '# Dimensionnement des Tableaux
+
+        ReDim lDalle(nbTab - 1)
+        ReDim NeqDalle(nbTab - 1)
+        ReDim NeqEnrob(nbTab - 1)
+        ReDim iTri(nbTab - 1)
 
         '--> Tri
 
         iTri(0) = 0
-        For iTab = 1 To Me.Elements.Count - 1
+        For iTab = 1 To nbTab - 1
             If Not Me.Elements(iTab).lMixte Then
                 '-- Phase non mixte : on le place en premier
                 For k = iTab To 1 Step -1
@@ -2389,17 +2398,13 @@ Public Class cls_Poutre
 
         '--> Transfert
 
-        For iTab = 0 To Me.Elements.Count - 1
+        For iTab = 0 To nbTab - 1
             lDalle(iTab) = Me.Elements(iTri(iTab)).lMixte
             NeqDalle(iTab) = Me.Elements(iTri(iTab)).nEqDalle
             NeqEnrob(iTab) = Me.Elements(iTri(iTab)).nEqEnrob
         Next
 
-        'For iTab = 0 To Me.Elements.Count - 1
-        '    lDalle(iTab) = Me.Elements(iTab).lMixte
-        '    NeqDalle(iTab) = Me.Elements(iTab).nEqDalle
-        '    NeqEnrob(iTab) = Me.Elements(iTab).nEqEnrob
-        'Next
+
     End Sub
 
     Public Function IndiceTabElts(lMixte As Boolean, nEqDal As Decimal, nEqEc As Decimal, Optional lShadow As Boolean = False) As Integer
@@ -2602,8 +2607,8 @@ Public Class cls_Poutre
         lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck
-        gammaVs = Me.Param.Gamma.GammaVs
-        gammaVc = Me.Param.Gamma.GammaVc
+        gammaVs = 1
+        gammaVc = 1
 
         '--> Boucle sur les travées, dans le cas où il faut prendre en compte le béton
 
@@ -2636,7 +2641,7 @@ Public Class cls_Poutre
                         nR = Me.NombreGoujonsTransv(iTravee, IndZoneConnex(iElt))
                         sX = Me.EntraxeLongiGoujons(iTravee, IndZoneConnex(iElt))
                         PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
-                        kSc = PRd / DeltaD
+                        kSc = 0.7 * PRd / DeltaD
 
                         cStiff = nR * kSc / sX
 

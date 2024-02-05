@@ -85,6 +85,7 @@ TELUOPTIONS				= Options pour les Etats Limites Ultimes
 TELSOPTIONS				= Options pour les Etats Limites de Services
 COMBINATIONFREQ			= Combinaison de charges pour les fréquences propres
 ETADEFLECTIONS			= Flèche des poutres mixtes prenant en compte la raideur des goujons
+STUDSE					= Glissement du connecteur à 0,7 PRk (prEN 1994-1-1 B.2.5 (5))
 ELASTICDESIGN			= Dimensionnement élastique des sections
 NORMALDESIGN			= Dimensionnement des sections selon leur classe
 TCONCRETE				= Propriétés du béton

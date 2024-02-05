@@ -4831,13 +4831,45 @@ Module Mod_NoteCalcul
 
         '--> Déclarations
 
-        Dim lMultispan As Boolean = (MyBeam.NbTravees > 1)
-        Dim NCOL As Integer
-        Dim LargCol() As Single = Nothing
+        Dim lMixte As Boolean = MyBeam.lMixte
+        Dim lTableEta As Boolean = lMixte And MyBeam.Param.lFlechesETA
 
         '--> Initialisation
 
         If MyBeam.CombiA_ELS.nbCombi = 0 Then Exit Sub
+
+        '--> Tableau Normal
+
+        If lMixte Then AddLigneNDC("\T10" & BlocELS("CASE_FULLINTERACTION"))
+
+        EditionSLSTaleauFlechesCombis(MyBeam, False)
+
+        '--> Tableau des flèches avec prise en compte du glissement
+
+        If lTableEta Then
+
+            AddLigneNDC("\T10" & BlocELS("CASE_PARTIALINTERACTION"))
+            EditionSLSTaleauFlechesCombis(MyBeam, True)
+
+        End If
+
+    End Sub
+
+    Private Sub EditionSLSTaleauFlechesCombis(MyBeam As cls_Poutre, lETA As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   05/02/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage du tableau des flèches par combinaison
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :
+        '   lETA        [E] :   Indique si flèche normales ou flèches ETA (prenant en compte le glissement)
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lMultispan As Boolean = (MyBeam.NbTravees > 1)
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
 
         '--> Tableau Entête
 
@@ -4854,19 +4886,27 @@ Module Mod_NoteCalcul
                 EnteteTableauFlecheCdC(lMultispan, NCOL, LargCol, True)
             End If
 
-            LigneTableauFlecheCombi(MyBeam, jCombi, lMultispan, NCOL, LargCol)
+            LigneTableauFlecheCombi(MyBeam, jCombi, lMultispan, NCOL, LargCol, lETA)
 
             'End If
         Next
 
         FinTableau()
+
     End Sub
 
-    Private Sub LigneTableauFlecheCombi(MyBeam As cls_Poutre, iCombi As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single)
+    Private Sub LigneTableauFlecheCombi(MyBeam As cls_Poutre, iCombi As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single, lETA As Boolean)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Ligne pour le tableau des flèches par cdc
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :
+        '   iCase       [E] :   Indique du cas de charge
+        '   lMultiSpan  [E] :   Indique si poutre à plusieurs travées
+        '   NCOL        [E] :   Nombre colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tableau
+        '   lETA        [E] :   Indique si flèche normales ou flcèhes ETA (prenant en compte le glissement)
         '-------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -4889,7 +4929,7 @@ Module Mod_NoteCalcul
         MyBordures(iTraveeDeb) += Bordures.Haut
         MyBordures(iTraveeFin) += Bordures.Bas
 
-        MyBeam.CombiA_ELS.CombineFleches(iCombi, MyBeam.Nodes.nbNodes, MyBeam.ChargesA, UZCombi, lCombiRetrait)
+        MyBeam.CombiA_ELS.CombineFleches(iCombi, MyBeam.Nodes.nbNodes, MyBeam.ChargesA, UZCombi, lCombiRetrait, lETA)
 
         ExtraireFlecheEnveloppes(UZCombi, iTraveeDeb, iTraveeFin, MyBeam.Nodes.iNodeExtTrav, FlechesMax)
 
@@ -4926,6 +4966,37 @@ Module Mod_NoteCalcul
         '   Edition des flèches par cas de charge
         '-------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
+        Dim lMixte As Boolean = MyBeam.lMixte
+        Dim lTableEta As Boolean = lMixte And MyBeam.Param.lFlechesETA
+
+        '--( Tableau normal
+
+        If lMixte Then AddLigneNDC("\T10" & BlocELS("CASE_FULLINTERACTION"))
+
+        EditionSLSTaleauFlechesCharges(MyBeam, False)
+
+        '--( Tableau en prenant en compte le glissement
+
+        If lTableEta Then
+            AddLigneNDC("\T10" & BlocELS("CASE_PARTIALINTERACTION"))
+            EditionSLSTaleauFlechesCharges(MyBeam, True)
+        End If
+
+
+    End Sub
+
+    Private Sub EditionSLSTaleauFlechesCharges(MyBeam As cls_Poutre, lETA As Boolean)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Affichage du tableau des flèches par cdc
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :
+        '   lETA        [E] :   Indique si flèche normales ou flèches ETA (prenant en compte le glissement)
+        '-------------------------------------------------------------------------------------------
+
         '--> Déclarations
 
         Dim lMultispan As Boolean = (MyBeam.NbTravees > 1)
@@ -4947,19 +5018,27 @@ Module Mod_NoteCalcul
                     EnteteTableauFlecheCdC(lMultispan, NCOL, LargCol, False)
                 End If
 
-                LigneTableauFlecheCdc(MyBeam, jCdc, lMultispan, NCOL, LargCol)
+                LigneTableauFlecheCdc(MyBeam, jCdc, lMultispan, NCOL, LargCol, lETA)
 
             End If
         Next
 
         FinTableau()
+
     End Sub
 
-    Private Sub LigneTableauFlecheCdc(MyBeam As cls_Poutre, iCase As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single)
+    Private Sub LigneTableauFlecheCdc(MyBeam As cls_Poutre, iCase As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single, Optional lETA As Boolean = False)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Ligne pour le tableau des flèches par cdc
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :
+        '   iCase       [E] :   Indique du cas de charge
+        '   lMultiSpan  [E] :   Indique si poutre à plusieurs travées
+        '   NCOL        [E] :   Nombre colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tableau
+        '   lETA        [E] :   Indique si flèche normales ou flcèhes ETA (prenant en compte le glissement)
         '-------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -4971,6 +5050,7 @@ Module Mod_NoteCalcul
         Dim iCell As Integer
         Dim RatioX As Decimal
         Dim ChaineRatioX As String
+        Dim plETA As Boolean = lETA And (Not IsNothing(MyBeam.ChargesA(iCase).UZEta))
 
         '--> Initialisations
 
@@ -4980,11 +5060,16 @@ Module Mod_NoteCalcul
         MyBordures(iTraveeDeb) += Bordures.Haut
         MyBordures(iTraveeFin) += Bordures.Bas
 
-        ExtraireFlecheEnveloppes(MyBeam.ChargesA(iCase).UZ, iTraveeDeb, iTraveeFin, MyBeam.Nodes.iNodeExtTrav, FlechesMax)
+        If plETA Then
+            ExtraireFlecheEnveloppes(MyBeam.ChargesA(iCase).UZEta, iTraveeDeb, iTraveeFin, MyBeam.Nodes.iNodeExtTrav, FlechesMax)
+        Else
+            ExtraireFlecheEnveloppes(MyBeam.ChargesA(iCase).UZ, iTraveeDeb, iTraveeFin, MyBeam.Nodes.iNodeExtTrav, FlechesMax)
+        End If
 
         '--> Traitement
 
         For i As Integer = iTraveeDeb To iTraveeFin
+
             iCell = 0
             InitialiseLigne(NCOL, HLIGNE)
             If i = iTraveeDeb Then

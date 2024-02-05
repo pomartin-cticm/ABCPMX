@@ -1311,7 +1311,7 @@ Public Class cls_Section
         zcH = MyDalle.zTop - Tc / 2 - zANE
         Ac = Beff * Tc
 
-        nEff = nEqDal * (1 + Math.PI ^ 2 * EYoung * kConvMPaPa * Ac / (nEqDal * Le * cStiff))
+        nEff = nEqDal * (1 + Math.PI ^ 2 * EYoung * kConvMPaPa * (Ac / nEqDal) / (Le ^ 2 * cStiff))
 
         Aa = Me.ProfilA.Aire
         AcEff = Ac / nEff

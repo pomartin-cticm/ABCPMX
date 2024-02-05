@@ -17,7 +17,6 @@ Public Class Frm_OptionsCalculPoutre
 
 #End Region
 
-
 #Region "===OUVERTURE==="
 
 
@@ -65,6 +64,7 @@ Public Class Frm_OptionsCalculPoutre
                 Me.lbl_CadreELS.Text = Bloc("TELSOPTIONS")
                 Me.lbl_CombinationVibration.Text = Bloc("COMBINATIONFREQ")
                 Me.chk_FlechesETA.Text = Bloc("ETADEFLECTIONS")
+                Me.lbl_StudDeflection.Text = Bloc("STUDSE")
 
                 Me.lbl_CadreBeton.Text = Bloc("TCONCRETE")
                 Me.lbl_BetonMessage.Text = Bloc("CONCRETEMSG")
@@ -138,6 +138,9 @@ Public Class Frm_OptionsCalculPoutre
         Me.etq_UnitJour7.Text = SymbolJour
 
         Me.etq_UnitG.Text = "m/s2"
+
+        Me.etq_UnitDimension1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+
     End Sub
 
     Private Sub GestionStyle()
@@ -188,6 +191,7 @@ Public Class Frm_OptionsCalculPoutre
         '==> Options ELS
 
         Me.chk_FlechesETA.Checked = MyParam.lFlechesETA
+        Me.txt_Se.Text = GetStringInUnit(MyParam.DeltaD, Enu_TypeVariable.Dimension, 4, 3, False)
 
         '==> Béton
 
@@ -257,6 +261,7 @@ Public Class Frm_OptionsCalculPoutre
         GereTransfertValeur(MyParam.GraviteG, MyProjet.Poutres(MyProjet.IndEnCours).Param.GraviteG, lModif)
 
         GereTransfertValeur(Me.chk_FlechesETA.Checked, MyProjet.Poutres(MyProjet.IndEnCours).Param.lFlechesETA, lModif)
+        GereTransfertValeur(MyParam.DeltaD, MyProjet.Poutres(MyProjet.IndEnCours).Param.DeltaD, lModif)
 
     End Sub
 
@@ -310,6 +315,16 @@ Public Class Frm_OptionsCalculPoutre
         End If
     End Sub
 
+    Private Sub txt_Se_TextChanged(sender As Object, e As EventArgs) Handles txt_Se.TextChanged
+        If lBuild Then Exit Sub
+
+        Dim Valeur As Decimal
+
+        If VerificationSaisie(sender, Valeur) Then
+            MyParam.DeltaD = Valeur
+        End If
+
+    End Sub
 
     Private Sub ChangeAgeT(sender As Object, e As EventArgs) Handles txt_t0G2Enrob.TextChanged, txt_t0G2Dalle.TextChanged, txt_t0G1Enrob.TextChanged, txt_t0G1Dalle.TextChanged, txt_AgeT.TextChanged
         If lBuild Then Exit Sub
@@ -365,6 +380,11 @@ Public Class Frm_OptionsCalculPoutre
                 ValMin = 28
                 ValMax = 200
                 kUnit = 1
+
+            Case Me.txt_Se.Name
+                ValMin = 0.00005 / kUnit
+                ValMax = 0.005 / kUnit
+                lValMax = True
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -385,7 +405,7 @@ Public Class Frm_OptionsCalculPoutre
 
 #Region " Dessin des symboles "
 
-    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_AgeT.Paint, img_G.Paint
+    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_AgeT.Paint, img_G.Paint, img_se.Paint
         '--> Déclarations
 
         Dim sWI As Single = sender.Width
@@ -433,6 +453,10 @@ Public Class Frm_OptionsCalculPoutre
                 strSymbol = "t"
                 strIndice = "0"
 
+            Case Me.img_se.Name
+                strSymbol = "s"
+                strIndice = "e"
+
         End Select
 
         '--> Dessin
@@ -441,6 +465,7 @@ Public Class Frm_OptionsCalculPoutre
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
 
 
 

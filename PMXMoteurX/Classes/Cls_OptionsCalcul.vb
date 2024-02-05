@@ -8,7 +8,7 @@ Public Class cls_OptionsCalcul
     Public Shared tabRH() As Decimal = {50, 80}
     Public Shared tabGraviteG() As Decimal = {9.81, 10}
 
-    Const DELTAD_DEF As Decimal = 0.0005
+    Const DELTAD_DEF As Decimal = 0.0005            ' Glissement du connecteur à 0,7 PRk (cf. prEN 1994-1-1 B.2.5 (5))
 
     'Public Shared t0Retrait As Decimal = 1
 

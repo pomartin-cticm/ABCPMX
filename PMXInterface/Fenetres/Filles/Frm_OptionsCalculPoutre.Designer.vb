@@ -44,6 +44,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreSections = New System.Windows.Forms.Label()
         Me.lbl_CadreBeton = New System.Windows.Forms.Label()
         Me.pan_OptionsELS = New System.Windows.Forms.Panel()
+        Me.chk_FlechesETA = New System.Windows.Forms.CheckBox()
         Me.lbl_CombinationVibration = New System.Windows.Forms.Label()
         Me.lbl_CadreELS = New System.Windows.Forms.Label()
         Me.pan_OptionsELU = New System.Windows.Forms.Panel()
@@ -95,7 +96,10 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_RH = New System.Windows.Forms.Label()
         Me.lbl_BetonMessage = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.chk_FlechesETA = New System.Windows.Forms.CheckBox()
+        Me.etq_UnitDimension1 = New System.Windows.Forms.Label()
+        Me.txt_Se = New System.Windows.Forms.TextBox()
+        Me.img_se = New System.Windows.Forms.PictureBox()
+        Me.lbl_StudDeflection = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -118,6 +122,7 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_se, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -391,6 +396,10 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.pan_OptionsELS.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_OptionsELS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_OptionsELS.Controls.Add(Me.lbl_StudDeflection)
+        Me.pan_OptionsELS.Controls.Add(Me.etq_UnitDimension1)
+        Me.pan_OptionsELS.Controls.Add(Me.txt_Se)
+        Me.pan_OptionsELS.Controls.Add(Me.img_se)
         Me.pan_OptionsELS.Controls.Add(Me.chk_FlechesETA)
         Me.pan_OptionsELS.Controls.Add(Me.lbl_CombinationVibration)
         Me.pan_OptionsELS.Dock = System.Windows.Forms.DockStyle.Fill
@@ -399,6 +408,16 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_OptionsELS.Name = "pan_OptionsELS"
         Me.pan_OptionsELS.Size = New System.Drawing.Size(442, 119)
         Me.pan_OptionsELS.TabIndex = 5
+        '
+        'chk_FlechesETA
+        '
+        Me.chk_FlechesETA.AutoSize = True
+        Me.chk_FlechesETA.Location = New System.Drawing.Point(21, 46)
+        Me.chk_FlechesETA.Name = "chk_FlechesETA"
+        Me.chk_FlechesETA.Size = New System.Drawing.Size(108, 17)
+        Me.chk_FlechesETA.TabIndex = 116
+        Me.chk_FlechesETA.Text = "chk_FlechesETA"
+        Me.chk_FlechesETA.UseVisualStyleBackColor = True
         '
         'lbl_CombinationVibration
         '
@@ -939,15 +958,41 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'chk_FlechesETA
+        'etq_UnitDimension1
         '
-        Me.chk_FlechesETA.AutoSize = True
-        Me.chk_FlechesETA.Location = New System.Drawing.Point(21, 46)
-        Me.chk_FlechesETA.Name = "chk_FlechesETA"
-        Me.chk_FlechesETA.Size = New System.Drawing.Size(108, 17)
-        Me.chk_FlechesETA.TabIndex = 116
-        Me.chk_FlechesETA.Text = "chk_FlechesETA"
-        Me.chk_FlechesETA.UseVisualStyleBackColor = True
+        Me.etq_UnitDimension1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDimension1.AutoSize = True
+        Me.etq_UnitDimension1.Location = New System.Drawing.Point(305, 98)
+        Me.etq_UnitDimension1.Name = "etq_UnitDimension1"
+        Me.etq_UnitDimension1.Size = New System.Drawing.Size(28, 13)
+        Me.etq_UnitDimension1.TabIndex = 121
+        Me.etq_UnitDimension1.Text = "GPa"
+        '
+        'txt_Se
+        '
+        Me.txt_Se.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Se.Location = New System.Drawing.Point(241, 94)
+        Me.txt_Se.Name = "txt_Se"
+        Me.txt_Se.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Se.TabIndex = 120
+        '
+        'img_se
+        '
+        Me.img_se.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_se.Location = New System.Drawing.Point(193, 94)
+        Me.img_se.Name = "img_se"
+        Me.img_se.Size = New System.Drawing.Size(46, 20)
+        Me.img_se.TabIndex = 119
+        Me.img_se.TabStop = False
+        '
+        'lbl_StudDeflection
+        '
+        Me.lbl_StudDeflection.AutoSize = True
+        Me.lbl_StudDeflection.Location = New System.Drawing.Point(18, 76)
+        Me.lbl_StudDeflection.Name = "lbl_StudDeflection"
+        Me.lbl_StudDeflection.Size = New System.Drawing.Size(93, 13)
+        Me.lbl_StudDeflection.TabIndex = 122
+        Me.lbl_StudDeflection.Text = "lbl_StudDeflection"
         '
         'Frm_OptionsCalculPoutre
         '
@@ -992,6 +1037,7 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_se, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1069,4 +1115,8 @@ Partial Class Frm_OptionsCalculPoutre
     Friend WithEvents cmb_GraviteG As ComboBox
     Friend WithEvents lbl_GraviteG As Label
     Friend WithEvents chk_FlechesETA As CheckBox
+    Friend WithEvents lbl_StudDeflection As Label
+    Friend WithEvents etq_UnitDimension1 As Label
+    Friend WithEvents txt_Se As TextBox
+    Friend WithEvents img_se As PictureBox
 End Class

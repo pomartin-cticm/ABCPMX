@@ -421,8 +421,8 @@ LOADCASE				= Cas de charges
 COMBINATION				= Combinaison
 SPAN					= Travée
 EIGENFREQUENCIES		= Fréquences propres
-
-
+CASE_FULLINTERACTION	= Pour une interaction complète
+CASE_PARTIALINTERACTION	= En prenant en compte le glissement de la connexion
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher

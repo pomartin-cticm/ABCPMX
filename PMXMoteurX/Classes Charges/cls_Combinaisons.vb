@@ -47,7 +47,8 @@
 
 #Region " Outils "
 
-    Public Sub CombineFleches(iCombi As Integer, nbNodes As Integer, ChargesA As List(Of cls_CasDeCharge), ByRef FlechesUZ() As Decimal, Optional lRetrait As Boolean = True)
+    Public Sub CombineFleches(iCombi As Integer, nbNodes As Integer, ChargesA As List(Of cls_CasDeCharge), ByRef FlechesUZ() As Decimal,
+                              lRetrait As Boolean, Optional lETA As Boolean = False)
         '-----------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------
@@ -58,12 +59,14 @@
         '   ChargesA    [E] :   Tableaux des cas de charges (qui doivent avoir été calculés auparavant
         '   FlechesUZ   [S] :   Table des flèches
         '   lRetrait    [E] :   Indique si on prend en compte les charges de retrait
+        '   lETA        [E] :   Indique si flèche prenant en compte le glissement
         '-----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
 
         Dim nbCharges As Integer = ChargesA.Count
         Dim iCas, jNode As Integer
+        Dim plETA As Boolean
 
         '--> Initialisation
 
@@ -74,9 +77,18 @@
         For iCas = 0 To nbCharges - 1
             If (Not IsEqual(Me.CoefCombi(iCombi)(iCas), 0)) And lCombineCas(ChargesA(iCas), lRetrait) Then
 
-                For jNode = 0 To nbNodes - 1
-                    FlechesUZ(jNode) += Me.CoefCombi(iCombi)(iCas) * ChargesA(iCas).UZ(jNode)
-                Next
+                plETA = lETA And (Not IsNothing(ChargesA(iCas).UZEta))
+
+                If plETA Then
+                    For jNode = 0 To nbNodes - 1
+                        FlechesUZ(jNode) += Me.CoefCombi(iCombi)(iCas) * ChargesA(iCas).UZEta(jNode)
+                    Next
+                Else
+                    For jNode = 0 To nbNodes - 1
+                        FlechesUZ(jNode) += Me.CoefCombi(iCombi)(iCas) * ChargesA(iCas).UZ(jNode)
+                    Next
+                End If
+
 
             End If
 
