@@ -301,6 +301,9 @@ Public Class cls_Bac
         If Me.Tp <> BacSource.Tp Then lModif = True
         Me.Tp = BacSource.Tp
 
+        If Me.Ieff <> BacSource.Ieff Then lModif = True
+        Me.Ieff = BacSource.Ieff
+
     End Sub
 
     Public Sub CopieAutresParam(BacSource As cls_Bac, ByRef lModif As Boolean)

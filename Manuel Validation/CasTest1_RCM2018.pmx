@@ -184,7 +184,7 @@ BLOCK BAC_DALLE
    msurf          =  8,53
    fyp            =  350
    LargeurModule  =  1,035
-   Ieff           =  60,08
+   Ieff           =  44,37
    lPreperce      =  True
    AppuiT         =  1
    AppuiL         =  0
