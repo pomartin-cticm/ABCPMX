@@ -652,7 +652,7 @@ Module Mod_NoteCalcul
 
             Dim lTwoAdjacentCantilevers As Boolean
             lTwoAdjacentCantilevers = MyBeam.lTraveeConsoleGauche And MyBeam.lTraveeConsoleDroite
-            If Not MyBeam.Section.IsInteractionMV(MyBeam.Param.EtaW) Then AddLigneNDC(TABW2 & BlocG("SHEAR_BUC") & TABAFF & "V\-b,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.VbRd(MyBeam.Param.Gamma.GammaM1, MyBeam.Param.EtaW, lTwoAdjacentCantilevers), Enu_TypeVariable.Effort, 4, 0, True))
+            If MyBeam.Section.IsInteractionMV(MyBeam.Param.EtaW) Then AddLigneNDC(TABW2 & BlocG("SHEAR_BUC") & TABAFF & "V\-b,Rd\=" & TABEGAL & GetStringInUnit(MyBeam.Section.VbRd(MyBeam.Param.Gamma.GammaM1, MyBeam.Param.EtaW, lTwoAdjacentCantilevers), Enu_TypeVariable.Effort, 4, 0, True))
 
         End If
 
@@ -2373,7 +2373,7 @@ Module Mod_NoteCalcul
         For iTab As Integer = 0 To nbTab - 1
 
             MyBeam.Section.ProprietesElastiquesMixteMyy(1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), NeqDalle(iTab), bEff,
-                                                        MyBeam.Dalle, zANE, InertieY, MelRd, lDalle(iTab))
+                                             MyBeam.Dalle, zANE, InertieY, MelRd, lDalle(iTab))
 
             InitialiseLigneTableau(NCOL, HLIGNE)
 

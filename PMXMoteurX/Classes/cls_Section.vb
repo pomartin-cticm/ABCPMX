@@ -1946,12 +1946,12 @@ Public Class cls_Section
 
         k_tau = 5.34
         'epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
-        epsilon_w = epsilon_w
+        'epsilon_w = epsilon_w
         lambda_w = (Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) * (1 / (37.4 * epsilon_w * Math.Sqrt(k_tau)))
 
         khi_w = EN1993.ReductionShearBuckling(lambda_w, EtaW, lMontantRigid)
 
-        MyVbRd = khi_w * Me.ProfilA.HauteurAmeHw * Me.ProfilA.Tw * Me.FyW / (Math.Sqrt(3) * GammaM1)
+        MyVbRd = khi_w * Me.ProfilA.HauteurAmeHw * Me.ProfilA.Tw * Me.FyW / (Math.Sqrt(3) * GammaM1) * kConvMPaPa
 
         Return MyVbRd
 

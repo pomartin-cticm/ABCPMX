@@ -2369,7 +2369,7 @@ Public Class cls_Poutre
         '--> Tri
 
         iTri(0) = 0
-        For iTab = 1 To nbTab - 1
+        For iTab = 0 To nbTab - 1
             If Not Me.Elements(iTab).lMixte Then
                 '-- Phase non mixte : on le place en premier
                 For k = iTab To 1 Step -1
