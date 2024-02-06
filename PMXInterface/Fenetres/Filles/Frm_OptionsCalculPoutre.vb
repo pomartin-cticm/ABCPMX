@@ -33,7 +33,7 @@ Public Class Frm_OptionsCalculPoutre
     End Sub
 
     Private Sub InitialisationsFenetre()
-        MyParam = MyProjet.Poutres(MyProjet.IndEnCours).Param.Clone
+        cls_OptionsCalcul.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Param, MyParam)
         RemplirComboStandard()
         RemplirComboRH()
         RemplirComboG()

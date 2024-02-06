@@ -360,19 +360,19 @@
         Return Me.MemberwiseClone()
     End Function
 
-    Public Shared Sub DeepClone(ByVal CombinaisonSource As cls_Combinaisons, ByRef CombinaisonCible As cls_Combinaisons)
-        CombinaisonCible = CombinaisonSource.Clone()
+    'Public Shared Sub DeepClone(ByVal CombinaisonSource As cls_Combinaisons, ByRef CombinaisonCible As cls_Combinaisons)
+    '    CombinaisonCible = CombinaisonSource.Clone()
 
-        ReDim CombinaisonCible.Symbole(CombinaisonSource.Symbole.GetUpperBound(0))
-        CombinaisonCible.Symbole = CombinaisonSource.Symbole.Clone
+    '    ReDim CombinaisonCible.Symbole(CombinaisonSource.Symbole.GetUpperBound(0))
+    '    CombinaisonCible.Symbole = CombinaisonSource.Symbole.Clone
 
-        For i As Integer = 0 To CombinaisonSource.CoefCombi.Length - 1
-            CombinaisonCible.CoefCombi(i) = New List(Of Decimal)
-            For Each elmnt In CombinaisonSource.CoefCombi(i)
-                CombinaisonCible.CoefCombi(i).Add(elmnt)
-            Next
-        Next
-    End Sub
+    '    For i As Integer = 0 To CombinaisonSource.CoefCombi.Length - 1
+    '        CombinaisonCible.CoefCombi(i) = New List(Of Decimal)
+    '        For Each elmnt In CombinaisonSource.CoefCombi(i)
+    '            CombinaisonCible.CoefCombi(i).Add(elmnt)
+    '        Next
+    '    Next
+    'End Sub
 
 #End Region
 

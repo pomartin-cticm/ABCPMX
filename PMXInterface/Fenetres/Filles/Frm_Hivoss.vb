@@ -35,6 +35,7 @@ Public Class Frm_Hivoss
 
 
     Public Sub InitialiserFenetre()
+        lBuild = True
         InitialiserVariables()
         GestionLangues()
         GestionStyle()
