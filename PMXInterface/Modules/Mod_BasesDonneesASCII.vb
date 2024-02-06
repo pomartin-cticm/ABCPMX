@@ -100,6 +100,7 @@ Public Module Mod_BasesDonneesASCII
         Dim M, fy, wModule, Ieff As Double
         Dim iField As Integer
         Dim Fabricant As String = ""
+        Dim kConvCm4ToM4 = 10 ^ (-8) 'l'inertie du bac est donnée en cm4/m dans la BDD. La convention dans le logiciel est le mètre 
 
         '--[ Initialisation
 
@@ -138,7 +139,7 @@ Public Module Mod_BasesDonneesASCII
 
                     If (nbMots > iField + 2) Then
                         wModule = CDbl(TraiteReal(Mots(iField + 3))) * kUnit
-                        Ieff = CDbl(TraiteReal(Mots(iField + 4)))
+                        Ieff = CDbl(TraiteReal(Mots(iField + 4))) * kConvCm4ToM4
                     End If
 
                     'ListeBac.Add(New Cls_Bac(Etiquette, b1, b2, h, e, M, fy, lCustom))
