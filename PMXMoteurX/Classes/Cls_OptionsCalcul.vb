@@ -172,9 +172,14 @@ Public Class cls_OptionsCalcul
 
 #Region " Fonction de copie "
 
-    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+    Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function
+
+    Public Shared Sub DeepClone(ByVal OptionsCalculsSource As cls_OptionsCalcul, ByRef OptionsCalculsCible As cls_OptionsCalcul)
+        OptionsCalculsCible = OptionsCalculsSource.Clone()
+        OptionsCalculsCible.Gamma = OptionsCalculsSource.Gamma.Clone
+    End Sub
 
 #End Region
 

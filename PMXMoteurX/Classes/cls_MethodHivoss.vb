@@ -229,7 +229,7 @@ Public Class cls_MethodHivoss
 #End Region
 
 #Region " Fonction de copie "
-    Private Function Clone() '--> Utilisé pour dupliquer une soudure
+    Public Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function
 

@@ -61,13 +61,6 @@ Public Class cls_Section
 
 #End Region
 
-#Region " Autres attributs "
-
-    '# A DEGAGER ?
-    'Public lArmaturesConcentrees As Boolean     ' Indique si on modélise les armatures par un cercle concentré
-
-#End Region
-
 #Region "Propriétés (Méthodes)"
 
     ''' <summary>

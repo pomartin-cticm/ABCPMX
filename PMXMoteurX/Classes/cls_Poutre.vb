@@ -1220,6 +1220,19 @@ Public Class cls_Poutre
         cls_Dalle.DeepClone(PoutreSource.Dalle, PoutreCible.Dalle)
         'PoutreCible.Dalle = PoutreSource.Dalle.Clone 'GUD -> J'ai enlevé cette ligne de code car déjà fait dans le DeepClone + elle annule les effets du DeepClone (introduisait un bug dans la Frm_Connection) 
 
+        'Clone Section
+        cls_Section.DeepClone(PoutreSource.Section, PoutreCible.Section)
+
+        'Clone param calcul
+        cls_OptionsCalcul.DeepClone(PoutreSource.Param, PoutreCible.Param)
+
+        'Clone HIVOSS
+        PoutreCible.Hivoss = PoutreSource.Hivoss.Clone()
+
+        'Clone Maintien par le bac
+        PoutreCible.MaintienBac = PoutreSource.MaintienBac.Clone()
+
+        'Clone maintiens
         ReDim PoutreCible.Maintiens(PoutreSource.Maintiens.Length - 1)
 
         For i As Integer = 0 To PoutreSource.Maintiens.Length - 1
@@ -1249,15 +1262,6 @@ Public Class cls_Poutre
         ReDim PoutreCible.NombreGoujonsTransv(PoutreSource.NombreGoujonsTransv.GetUpperBound(0), PoutreSource.NombreGoujonsTransv.GetUpperBound(1))
         PoutreCible.NombreGoujonsTransv = PoutreSource.NombreGoujonsTransv.Clone
 
-        'ReDim PoutreCible.NombreGoujonsTot(PoutreSource.NombreGoujonsTot.GetUpperBound(0))
-        'PoutreCible.NombreGoujonsTot = PoutreSource.NombreGoujonsTot.Clone
-
-        'Clone Section
-
-
-
-        'Clone param calcul
-
         'Clone ChargeUtilisateur
         PoutreCible.ChargesU = New Dictionary(Of String, cls_ChargementUtilisateur)
         For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In PoutreSource.ChargesU
@@ -1265,6 +1269,13 @@ Public Class cls_Poutre
             element_local.DeepClone(element.Value, element_local)
             PoutreCible.ChargesU.Add(element.Key, element_local)
         Next
+
+        'Clone combinaisons définies par l'utilisateur
+        cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELU, PoutreCible.CombiA_ELU)
+        cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELS, PoutreCible.CombiA_ELS)
+        cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELF, PoutreCible.CombiA_ELF)
+        cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELCU, PoutreCible.CombiA_ELCU)
+        cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELCS, PoutreCible.CombiA_ELCS)
 
         PoutreCible.InitialisePoidsPropres() 'relance le calcul du poids propre une fois que toutes les données ont été clonées 
 
