@@ -104,7 +104,7 @@ Public Class Frm_Hivoss
                 strChoixQ(1).Item1 = "Q2"
 
                 strChoixQ(0).Item2 = cls_MethodHivoss.Enu_Q.Q1
-                strChoixQ(0).Item2 = cls_MethodHivoss.Enu_Q.Q2
+                strChoixQ(1).Item2 = cls_MethodHivoss.Enu_Q.Q2
 
                 Me.lbl_UtilisationPlancher.Text = Bloc("FLOORUSE")
 

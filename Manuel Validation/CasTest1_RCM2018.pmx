@@ -85,10 +85,10 @@ BLOCK ACIER_PROFILA
    Qualite        =  EC3
    Reduction      =  Table 3.1
    NormeProduit   =  EN 1993-1-1
-   EpMax          =  0,150000005960464
+   EpMax          =  0,0800000056624413
    iBase          =  1
-   iTabStand      =  0
-   iStandard      =  1
+   iTabStand      =  13
+   iStandard      =  20
    lUser      =  False
    f_y_fs         =  235
    f_y_w          =  235
@@ -259,7 +259,7 @@ BLOCK OPT_CALCULS_GAMMA
 
 BLOCK OPT_CALCULS_HIVOSS
    lHivossMethod = True
-   RatioQ        = 0,1
+   RatioQ        = 0,2
    ChoixQ        = 0
    UtilPlancher  = 4
    lFreqDalle  = False
