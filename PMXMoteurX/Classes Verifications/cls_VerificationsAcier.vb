@@ -387,8 +387,8 @@ Public Class cls_VerificationsAcier
 
         pAire = myPoutre.Section.ProfilA.Aire
         If lEnrob Then nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
-        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd)
-        myPoutre.Section.ProprietesElastiquesMzz(1, True, myPoutre.Param.Gamma, nEqEc, zAneZ, pInertieZ, mElRd)
+        'myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd)
+        myPoutre.Section.ProprietesElastiquesMzz(1, True, myPoutre.Param.Gamma, nEqEc, zAneZ, pInertieZ, mElRd, True)
         pInertieT = myPoutre.Section.InertieT
         pInertieW = myPoutre.Section.ProfilA.InertieW
         rGirPolaire = myPoutre.Section.ProfilA.RayonGirationPolaireCalcul

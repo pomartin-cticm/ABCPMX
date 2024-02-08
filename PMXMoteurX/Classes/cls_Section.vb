@@ -398,7 +398,7 @@ Public Class cls_Section
 
     End Sub
 
-    Private Sub MaillageEnrobage_ZZ(Gammas As cls_Gamma, nEq As Decimal, ByRef MyModele As cls_ModeleP)
+    Private Sub MaillageEnrobage_ZZ(Gammas As cls_Gamma, nEq As Decimal, ByRef MyModele As cls_ModeleP, Optional ByVal lCalculAlphaCr As Boolean = False)
         '-------------------------------------------------------------------------------------------------------------------
         '   15/12/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -411,7 +411,7 @@ Public Class cls_Section
 
         '--> Déclaration
 
-        Dim LargeurC, EpaisseurC, FdC As Decimal
+        Dim LargeurC, EpaisseurC, FdC, DeltaT As Decimal
         Dim Tw As Decimal = Me.ProfilA.Tw
 
         '--> Initialisation
@@ -420,8 +420,14 @@ Public Class cls_Section
         EpaisseurC = Me.ProfilA.HauteurAmeHw
         FdC = Me.Enrobage.Beton.Fck
 
-        MyModele.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, Tw / 2 + LargeurC / 4, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
-        MyModele.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, -Tw / 2 - LargeurC / 4, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
+        If lCalculAlphaCr Then
+            DeltaT = 1
+        Else
+            DeltaT = 0
+        End If
+
+        MyModele.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, Tw / 2 + LargeurC / 4, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
+        MyModele.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, -Tw / 2 - LargeurC / 4, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
 
         'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
 
@@ -429,11 +435,11 @@ Public Class cls_Section
 
             '# Congés supérieurs (c'est à dire, côté gauche)
 
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tw / 2, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tw / 2, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
 
             '# Congés supérieurs (c'est à dire, côté droite)
 
-            MyModele.AddMailleConges(Me.ProfilA.Rci, +Me.ProfilA.Tw / 2, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, +Me.ProfilA.Tw / 2, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
 
         End If
 
@@ -1544,17 +1550,18 @@ Public Class cls_Section
     End Sub
 
     Public Sub ProprietesElastiquesMzz(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
-                                       ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal)
+                                       ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal, Optional ByVal lCalculAlphaCr As Boolean = False)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
         '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe faible
         '-------------------------------------------------------------------------------------------------------------------
-        '   Signe       [E] :   Signe du moment
-        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
-        '   Gammas      [E] :   Coefficients partiels
-        '   zANE        [S] :   Position axe neutre élastique
-        '   MelRd       [S] :   Moment élastique
+        '   Signe               [E] :   Signe du moment
+        '   lValeurRd           [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas              [E] :   Coefficients partiels
+        '   lCalculAlphaCr      [E] :   Indique si les propriétés élastiques selon l'axe ZZ sont utilisées pour le calcul de alpha critique (True) ou non (False)
+        '   zANE                [S] :   Position axe neutre élastique
+        '   MelRd               [S] :   Moment élastique
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -1577,13 +1584,13 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            MaillageEnrobage_ZZ(Gammas, nEqEc, MyModele)
+            MaillageEnrobage_ZZ(Gammas, nEqEc, MyModele, lCalculAlphaCr)
 
         End If
 
         '# Armatures de l'enrobage
 
-        If Me.lEnrobage Then
+        If Me.lEnrobage And Not lCalculAlphaCr Then
 
             MaillageArmaturesEnrobage_ZZ(Gammas, MyModele)
 

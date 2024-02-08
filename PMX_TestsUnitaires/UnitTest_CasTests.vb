@@ -1025,6 +1025,10 @@ Imports PMXMoteur2
 
         'A L'ELU CONSTRUCTION
 
+        Valeur = myPoutre.VerifAcier(0).CritereV.Resistance(iNodeMMaxConstruction)
+        ValRef = 1033 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx))
+
         Valeur = myPoutre.VerifAcier(0).CritereV.CritereMax
         ValRef = 109.98 / 1033 '= 0.10647 : valeur recalculée à la main
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
@@ -1045,9 +1049,13 @@ Imports PMXMoteur2
         Assert.IsTrue(myPoutre.Section.IsInteractionMV(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 #End Region
 
-#Region "Verification de la résistance à l'interaction MV"
+#Region "Verification de la résistance à l'interaction MV (ELU)"
 
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
+
+        Valeur = myPoutre.VerifAcier(0).CritereMV.Resistance(iNodeMMaxConstruction)
+        ValRef = 775.4 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé acier seul
 
         Valeur = myPoutre.VerifAcier(0).CritereMV.CritereMax
         ValRef = 0.45
@@ -1055,31 +1063,18 @@ Imports PMXMoteur2
 
 #End Region
 
-        '#Region " Vérification du dimensionnement des armatures transversales (ELU)"
+#Region "Vérification de la résistance au déversement (ELU)"
 
-        '        myPoutre.CalculArmaturesTransversales()
+        Valeur = myPoutre.VerifAcier(0).CritereLTB.Resistance(myPoutre.IndicePremiereTravee)
+        ValRef = 492.5 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé acier seul
 
-        '        '--> TauEd
+        Valeur = myPoutre.VerifAcier(0).CritereM.CritereMax
+        ValRef = 0.45
+        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
 
-        '        Valeur = 2.06 'Flux de cisaillement max transmis par la dalle de part et d'autre de la poutrelle (VALEUR RECALCULEE avec le vrai PRd = 52.897 kN et non 52.5 kN. Dans l'article, on a tauEd = 2.04 MPa)
-        '        ValRef = myPoutre.TauEd(myPoutre.IndicePremiereTravee, 0, 0)
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la contrainte tangentielle 
+#End Region
 
-        '        '--> Thetaf
-
-        '        Valeur = 0.5 * Math.Asin(2 * 2.06 / (0.54 * 16.7)) ' 13.59° -> VALEUR RECALCULEE car dans l'article on considère conservativement theta = 45°
-        '        Valeur = Math.Max(Valeur, 27 * Math.PI / 180) 'Borne inférieure
-        '        Valeur = Math.Min(Valeur, 45 * Math.PI / 180) 'Borne supérieure
-        '        ValRef = myPoutre.Thetaf(myPoutre.IndicePremiereTravee, 0, 0)
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'angle de la bielle
-
-        '        '--> As,trans
-
-        '        Valeur = 0 'le bac seul suffit à reprendre ces efforts
-        '        ValRef = myPoutre.As_s_transv(myPoutre.IndicePremiereTravee, 0, 0)
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul des armatures transversales
-
-        '#End Region
 
         '#Region "Vérification des propriétés élastiques (ELS)"
 
