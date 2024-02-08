@@ -80,7 +80,7 @@ Public Class cls_Section
     ''' <param name="lCompressionPure">indique si on réalise le calcul en compression pure (True) ou en flexion pure (False)</param>
     ''' </summary>
     ''' <returns></returns>
-    Public Function ClasseSectionCompressionPureFlexionPure(lCompressionPure As Boolean, lG1_EN As Boolean) As Integer
+    Public Function ClasseProfilAcierSeulCompressionPureFlexionPure(lCompressionPure As Boolean, lG1_EN As Boolean) As Integer
 
         'Déclaration
         Dim classeLoc As Integer
@@ -230,7 +230,7 @@ Public Class cls_Section
         Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.Enrobage.AcierArmatures.Es
         Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
         Const NBMA As Integer = 2       ' Car symétrie des deux chambres
-        Dim lLitActif() As Boolean = {False, True, False}
+        'Dim lLitActif() As Boolean = {False, True, False}
         Dim lActif As Boolean
 
         '--> Boucle sur les lits d'armature
@@ -240,7 +240,8 @@ Public Class cls_Section
             For iPos = 0 To 2
 
                 NbBarres = Me.Enrobage.LitArma(iArma).NbBarres(iPos)
-                lActif = lLitActif(iArma) Or Me.Enrobage.LitArma(iArma).lBarreActive(iPos)
+                'lActif = lLitActif(iPos) Or Me.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
+                lActif = Me.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
 
                 If lActif Then
                     For iBarre = 1 To NbBarres
@@ -1030,7 +1031,7 @@ Public Class cls_Section
         Dim MyModele As New cls_ModeleP
         Dim Hw As Decimal
         Dim lLamine As Boolean = Me.lLamine
-        Dim nEqEc As Decimal
+        Dim nEqEc As Decimal = 1 'on applique 1 car calcul plastique 
 
         '--> Initialisation
 

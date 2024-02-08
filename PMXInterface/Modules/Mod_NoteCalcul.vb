@@ -632,8 +632,8 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("PLAS_MOM_RES") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
         AddLigneNDC(TABW2 & BlocG("ELAS_MOM_RES") & TABAFF & "M\-el,Rd\=" & TABEGAL & GetStringInUnit(MelRd, Enu_TypeVariable.Moment, 4, 0, True))
         SauteLigne()
-        AddLigneNDC(TABW2 & BlocG("BENDING_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(False, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
-        AddLigneNDC(TABW2 & BlocG("COMPRESSION_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseSectionCompressionPureFlexionPure(True, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
+        AddLigneNDC(TABW2 & BlocG("BENDING_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(False, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
+        AddLigneNDC(TABW2 & BlocG("COMPRESSION_CLASS") & TABAFF & GetStringInUnit(MyBeam.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(True, MyBeam.Param.lGeneration1), Enu_TypeVariable.SansType, 1, 0, False))
         SauteLigne()
         If Not MyBeam.Section.lSlimFloor Then
             If MyBeam.Section.lEnrobage Then

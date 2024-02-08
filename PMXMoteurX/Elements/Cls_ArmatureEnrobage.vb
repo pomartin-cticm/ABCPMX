@@ -88,12 +88,15 @@
         Return NbB
     End Function
 
-    Public Function lBarreActive(iPos As Integer) As Boolean
+    Public Function lBarreActive(iArma As Integer, iPos As Integer) As Boolean
         '--------------------------------------------------------------------------------
         '   12/07/23 :  Création - POM
         '--------------------------------------------------------------------------------
         ' Retourne si la barre est active
         '--------------------------------------------------------------------------------
+        '   iArma   [E] :   0 pour le lit inférieur
+        '                   1 pour le lit intermédiaire
+        '                   2 pour le lit supérieur
         '   iPos    [E] :   0 pour la grappe exterieure
         '                   1 pour la grappe intermédiaire
         '                   2 pour la grappe interieure
@@ -103,8 +106,8 @@
         Dim lActive As Boolean
 
         Select Case iPos
-            Case 0 : lActive = (NbB > 1) Or (NbB <= 1 And lActiveInt)
-            Case 1 : lActive = True
+            Case 0 : lActive = (NbB > 1) Or (NbB <= 1 And lActiveExt)
+            Case 1 : lActive = iArma = 0
             Case 2 : lActive = (NbB > 1) Or (NbB <= 1 And lActiveInt)
         End Select
 
