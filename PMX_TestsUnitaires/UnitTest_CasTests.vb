@@ -1007,8 +1007,6 @@ Imports PMXMoteur2
 
 #End Region
 
-
-
 #Region "Vérification de la résistance à la flexion (ELU)"
 
         'A L'ELU CONSTRUCTION
@@ -1025,29 +1023,10 @@ Imports PMXMoteur2
 
 #Region "Vérification de la résistance à l'effort tranchant (ELU)"
 
-        'A L'ELU
-
-        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0)
-        ValRef = 807 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à l'effort tranchant
-
-        Valeur = myPoutre.VerifMixte(0).CritereV.CritereMax
-        ValRef = 0.232
-        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
-
-        Dim rhoVELU As Decimal
-        If ValRef <= 0.5 Then
-            rhoVELU = 0
-        ElseIf ValRef >= 1 Then
-            rhoVELU = 1
-        Else
-            rhoVELU = (2 * 0.232 - 1) ^ 2 'Valeur calculée par rapport à la valeur de référence. Sera utile pour l'interacion MV
-        End If
-
         'A L'ELU CONSTRUCTION
 
         Valeur = myPoutre.VerifAcier(0).CritereV.CritereMax
-        ValRef = 0.113
+        ValRef = 109.98 / 1033 '= 0.10647 : valeur recalculée à la main
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
 
         Dim rhoVELCU As Decimal
@@ -1056,7 +1035,7 @@ Imports PMXMoteur2
         ElseIf ValRef >= 1 Then
             rhoVELCU = 1
         Else
-            rhoVELCU = (2 * 0.232 - 1) ^ 2 'Valeur calculée par rapport à la valeur de référence. Sera utile pour l'interacion MV
+            rhoVELCU = (2 * 0.108 - 1) ^ 2 'Valeur calculée par rapport à la valeur de référence. Sera utile pour l'interacion MV
         End If
 
 #End Region
@@ -1068,22 +1047,11 @@ Imports PMXMoteur2
 
 #Region "Verification de la résistance à l'interaction MV"
 
-        ''--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
+        '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
-
-        'myPoutre.Section.ProprietesPlastiquesMyy(1, False, myPoutre.Param.Gamma, rhoVELU, zANE, MRk)
-
-        'Valeur = MRk
-        'ValRef = 468.1 * 1000
-        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
-
-        'Valeur = myPoutre.VerifMixte(0).CritereMV.Resistance(iNodeMMaxConstruction)
-        'ValRef = 783.29 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (834.6 kN.m) du fait que le NConnexion n'est pas identique
-        'Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
-
-        'Valeur = myPoutre.VerifMixte(0).CritereMV.CritereMax
-        'ValRef = 0.836 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
-        'Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
+        Valeur = myPoutre.VerifAcier(0).CritereMV.CritereMax
+        ValRef = 0.45
+        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
 
 #End Region
 

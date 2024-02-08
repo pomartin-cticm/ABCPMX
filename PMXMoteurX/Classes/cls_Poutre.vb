@@ -2991,6 +2991,63 @@ Public Class cls_Poutre
 
     End Sub
 
+    Public Sub ProprietesVerifMVAcier(iCombi As Integer, MyPoutre As cls_Poutre, lValRd As Boolean, ByRef MVRD(,) As Decimal, ByRef zANPMV(,) As Decimal, ByVal rhoV(,) As Decimal)
+        '------------------------------------------------------------------------------
+        '   08/02/2024 :  Création - GUD
+        '------------------------------------------------------------------------------
+        '   Calcul des propriétés plastique le long de la barre en fonction de 
+        '   du moment sollicitant 
+        '------------------------------------------------------------------------------
+        '   MyPoutre    [E] :   Poutre traitée
+        '   iCombi      [E] :   indice de la combi en cours 
+        '   lValRd      [E] :   Indique si valeurs de calcul
+        '   RhoV        [E] :   Coefficient pour l'interaction MV
+        '   MVRD        [S] :   Moment plastique
+        '   zANPMV      [S] :   Position des ANP
+        '------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim iTravee As Integer
+        Dim iTravDeb, iTravFin As Integer
+        Dim iNode As Integer
+        Dim iNodeDeb, iNodeFin As Integer
+        Dim kDeb, kfin As Integer
+        Dim rhoVLoc As Decimal
+
+        '--> Initialisation
+
+        iTravDeb = MyPoutre.IndicePremiereTravee
+        iTravFin = MyPoutre.IndiceDerniereTravee
+        ReDim zANPMV(NbNodes - 1, 1)
+        ReDim MVRD(NbNodes - 1, 1)
+
+        '--> Traitement
+
+        For iTravee = iTravDeb To iTravFin
+
+            iNodeDeb = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iNodeDeb To iNodeFin
+                If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
+                If iNode = iNodeFin Then kfin = 0 Else kfin = 1
+
+                rhoVLoc = rhoV(iCombi, iNode)
+
+                Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, rhoVLoc, zANPMV(iNode, kDeb), MVRD(iNode, kDeb))
+
+                If kfin > kDeb Then
+                    zANPMV(iNode, kfin) = zANPMV(iNode, kDeb)
+                    MVRD(iNode, kfin) = MVRD(iNode, kDeb)
+                End If
+            Next
+
+        Next
+
+    End Sub
+
 
 #End Region
 

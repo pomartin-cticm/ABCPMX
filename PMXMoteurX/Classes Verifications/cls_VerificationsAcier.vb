@@ -13,8 +13,13 @@ Public Class cls_VerificationsAcier
     Public CritereM As cls_Critere                  ' Resistance à la flexion
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
+    Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
+    Public CritereSigmaE As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton d'enrobage
+    Public CritereSigmaArmaE As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures d'enrobage
     Public CritereLTB As cls_Critere
+
+    Public RhoV As Decimal(,)                       ' Coefficient d'interaction : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
 
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
@@ -41,11 +46,8 @@ Public Class cls_VerificationsAcier
         '   lElastic    [E] :   Cas d'un dimensionnement élastique VM
         '----------------------------------------------------------------------------------------------------------
 
-        If lElastic Then
-            Me.CritereSigmaA = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
-        Else
-            Me.CritereM = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
-        End If
+        Me.CritereM = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+        Me.CritereMV = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Me.CritereV = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Me.CritereVb = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
 
@@ -53,6 +55,21 @@ Public Class cls_VerificationsAcier
 
         ReDim AlphaCrLTB(NbCombi - 1)
         ReDim McrLTB(NbCombi - 1, IndDerniereT)
+
+    End Sub
+
+    Private Sub InitialiseCriteresVM(NbNodes As Integer, lArma As Boolean, nbCombi As Integer, IndDerniereT As Integer)
+        '-------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '-------------------------------------------------------------------
+        '   Initialisation des critères pour les contraintes normales
+        '-------------------------------------------------------------------
+
+        Me.CritereSigmaA = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereSigmaE = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        If lArma Then
+            Me.CritereSigmaArmaE = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        End If
 
     End Sub
 
@@ -73,11 +90,16 @@ Public Class cls_VerificationsAcier
         '--> Déclarations
 
         Dim VplRd As Decimal
+        Dim VbRd As Decimal                             ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
+        Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
         Dim iCombi As Integer
         Dim combiELU As New cls_Combinaisons
+        Dim nbCombiELU As Integer
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
         Dim MplRd, zANP As Decimal
+        Dim zANPMV(,) As Decimal = Nothing                ' Position ANP, tenant compte de l'interaction avec l'effort tranchant 
+        Dim MVRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de l'interaction avec l'effort tranchant 
         Dim MelRd, zANE As Decimal
         Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
         Dim ClasseP, ClasseM As Integer 'Classes de la section en flexion positive et négative
@@ -91,11 +113,27 @@ Public Class cls_VerificationsAcier
 
         '# Critères
 
-        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee, MyPoutre.Param.lElasticDesign)
+        If lConstructionPhase Then
+            nbCombiELU = cls_Poutre.nbCombELUConstruction
+            combiELU = MyPoutre.CombiA_ELCU
+        Else
+            nbCombiELU = cls_Poutre.nbCombELU
+            combiELU = MyPoutre.CombiA_ELU
+        End If
+
+        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, nbCombiELU, MyPoutre.IndiceDerniereTravee, MyPoutre.Param.lElasticDesign)
+        Me.InitialiseRhoV(nbCombiELU, MyPoutre.Nodes.nbNodes)
+        Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, nbCombiELU, MyPoutre.IndiceDerniereTravee)
 
         '# Tranchant résistant
 
         VplRd = MyPoutre.Section.VplRd(MyPoutre.Param.Gamma.GammaM0)
+
+        '# Résistance au voilement par cisaillement
+
+        lTwoAdjacentCantilevers = MyPoutre.lTraveeConsoleGauche And MyPoutre.lTraveeConsoleDroite
+
+        VbRd = MyPoutre.Section.VbRd(MyPoutre.Param.Gamma.GammaM1, MyPoutre.Param.EtaW, lTwoAdjacentCantilevers)
 
         '# Propriétés
 
@@ -116,12 +154,6 @@ Public Class cls_VerificationsAcier
         End If
 
         '--> Boucle sur les combinaisons
-
-        If lConstructionPhase Then
-            combiELU = MyPoutre.CombiA_ELCU
-        Else
-            combiELU = MyPoutre.CombiA_ELU
-        End If
 
         For iCombi = 0 To combiELU.nbCombi - 1
 
@@ -150,9 +182,31 @@ Public Class cls_VerificationsAcier
 
             '# Vérification sous effort tranchant
 
-            If MyPoutre.Param.lElasticDesign Then
-            Else
+            If MyPoutre.Param.lElasticDesign Then 'calcul élastique imposé 
+
+                '...
+
+            Else 'calcul plastique 
+
+                '# Vérification sous effort tranchant
+
                 Me.RunCritereTranchants(MyPoutre, iCombi, VEd, VplRd)
+
+                '# Vérification au voilement par cisaillement
+
+                If MyPoutre.Section.IsInteractionMV(MyPoutre.Param.EtaW) Then Me.RunCritereVoilementCisaillement(MyPoutre, iCombi, VEd, VbRd)
+
+                '# Calcul du critère d'intéraction rhoV
+
+                Me.CalculRhoV(iCombi, MyPoutre)
+
+                '# Propriétés avec prise en compte de l'interaction MV
+
+                MyPoutre.ProprietesVerifMVAcier(iCombi, MyPoutre, True, MVRd, zANPMV, Me.RhoV)
+
+                '# Vérification sous interaction MV
+
+                Me.RunCriteresInteractionMV(MyPoutre, iCombi, MEd, MVRd)
             End If
 
             '# Vérification au déversement
@@ -866,6 +920,141 @@ Public Class cls_VerificationsAcier
             Next
         Next
 
+    End Sub
+
+    Private Sub RunCritereVoilementCisaillement(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VbRd As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   10/10/23 :  Création - GUD
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'effort tranchant 
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   VEd     [E] :   Table des efforts tranchants le long de la barre
+        '   VRd     [E] :   Table des résistances au voilement par cisaillement le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
+                For k = iDebK To iFinK
+                    Me.CritereVb.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VbRd)
+                Next
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RunCriteresInteractionMV(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, MVRd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   23/01/2023 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'interaction MV (critère de résistance plastique)
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   MEd     [E] :   Table des moments fléchissants le long de la barre
+        '   MplRd   [E] :   Table des moments plastiques le long de la barre (calculés en fonction du signe de MEd)
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        'Dim Sigma As Decimal
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+                For k = iDebK To iFinK
+                    Me.CritereMV.EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MVRd(iNode, k))
+                Next
+            Next
+        Next
+
+
+    End Sub
+
+#End Region
+
+#Region "Calcul coefficient d'interaction RhoV"
+
+    Private Sub InitialiseRhoV(NbCombi As Integer, NbNodes As Integer)
+        ReDim Me.RhoV(NbCombi - 1, NbNodes - 1)
+    End Sub
+
+    ''' <summary>
+    ''' Fonction qui calcul le coefficient d'interaction en fonction du critèreV = VEd/VRd
+    ''' </summary>
+    ''' <param name="iCombi">indice de la combinaison en cours</param>
+    ''' <param name="MyPoutre">poutre en cours</param>
+    Public Sub CalculRhoV(iCombi As Integer, MyPoutre As cls_Poutre)
+        '--> Déclaration
+
+        Dim rhoV As Decimal
+        Dim critereV As Decimal
+        Dim iNode As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                critereV = Me.CritereV.Critere(iNode)
+
+                If critereV >= 1 Then
+                    rhoV = 1
+                ElseIf critereV <= 0.5 Then
+                    rhoV = 0
+                Else
+                    rhoV = (2 * critereV - 1) ^ 2
+                End If
+
+                Me.RhoV(iCombi, iNode) = rhoV
+            Next
+        Next
     End Sub
 
 #End Region
