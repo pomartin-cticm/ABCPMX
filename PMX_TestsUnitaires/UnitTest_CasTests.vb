@@ -589,46 +589,46 @@ Imports PMXMoteur2
 
         '--> Propriétés en phase de coulage, poutre non etayée
 
-        Valeur = 33740 * 10 ^ (-8) '33 740 cm4
-        ValRef = myPoutre.Section.ProfilA.InertieY
+        Valeur = 33740 '33 740 cm4
+        ValRef = myPoutre.Section.ProfilA.InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         Dim InertieY, Mel As Decimal
 
         myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, MRk)
-        ValRef = InertieY
+        ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel)
-        ValRef = InertieY
+        ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, 3 * n0, 0, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = InertieY
+        ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         '--> Propriétés en phase mixte pour les actions court termes
 
-        Valeur = 106266 * 10 ^ (-8)
+        Valeur = 106266
 
         myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, 6.77, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = InertieY
+        ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        Valeur = (120 - 114) / 1000
-        ValRef = zANE
+        Valeur = (120 - 114)
+        ValRef = zANE * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         '--> Propriétés en phase mixte pour les actions long termes
 
-        Valeur = 80885 * 10 ^ (-8)
+        Valeur = 80885
 
         myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, 20.3, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = InertieY
+        ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        Valeur = (120 - 194) / 1000
-        ValRef = zANE
+        Valeur = (120 - 194)
+        ValRef = zANE * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
 #End Region
@@ -637,27 +637,27 @@ Imports PMXMoteur2
 
         '--> Fleches due à G1
 
-        Valeur = myPoutre.ChargesA(0).FlecheMax
-        ValRef = 51.2 / 1000
+        Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
+        ValRef = 51.2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Fleches due à G2
 
-        Valeur = myPoutre.ChargesA(1).FlecheMax
+        Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
         'myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(0).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = 5 * 4.2 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 73534 * 10 ^ (-8)) '13.6 mm
+        ValRef = 5 * 4.2 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 73534 * 10 ^ (-8)) * 1000 '13.6 mm
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
         '--> Fleches due à Q
 
-        Valeur = myPoutre.ChargesA(2).FlecheMax
+        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
         myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 106571 * 10 ^ (-8))
+        ValRef = 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 106571 * 10 ^ (-8)) * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
         '--> Fleche due au retrait 
 
-        Valeur = myPoutre.ChargesA(5).FlecheMax
+        Valeur = myPoutre.ChargesA(5).FlecheMax * 1000
         Dim NR, deltazG, Mr, deltaR As Decimal
         NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(3).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
 
@@ -665,7 +665,7 @@ Imports PMXMoteur2
         deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.EpaisseurActive / 2 - zANE
         Mr = NR * deltazG
         deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * 10 ^ 6 * InertieY)
-        ValRef = deltaR
+        ValRef = deltaR * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
 #End Region
@@ -1088,193 +1088,63 @@ Imports PMXMoteur2
 
 #End Region
 
-
-        '#Region "Vérification des propriétés élastiques (ELS)"
+#Region "Vérification des propriétés élastiques (ELS)"
 
         '        '--> Coefficient d'équivalence à court terme n0
 
-        '        Dim n0 As Decimal = 210 / 31.476 '= 6.6717
-        '        Valeur = n0 'calcul manuel car l'article n0 = 210/31
-        '        ValRef = myPoutre.Dalle.beton.CoefficientEquivalenceCT()
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
+        Dim n0 As Decimal = 210 / 31.476 '= 6.6717
+        Valeur = n0 'calcul manuel car l'article n0 = 210/31
+        ValRef = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT()
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        '        '--> Vérification des calculs des coefficients d'équivalences à LT (50 ans)
-        '        Dim ageT As Integer = 50 * 365 '50 ans, en jours
-        '        Dim ageT0 As Integer = 28
-        '        Dim h0 As Decimal = 2 * 62 / 1000
-        '        Dim PHIrh As Decimal = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
-        '        Dim betaFcm As Decimal = 16.8 / Math.Sqrt(25 + 8)
-        '        Dim betaT0 As Decimal = 1 / (0.1 + ageT0 ^ 0.2)
-        '        Dim phi0 As Decimal = PHIrh * betaFcm * betaT0
-        '        Dim betaH As Decimal = Math.Min(1.5 * (1 + (0.012 * 50 / 100) ^ 18) * (h0 * 1000) + 250, 1500)
-        '        Dim betaCTT0 As Decimal = ((ageT - ageT0) / (betaH + ageT - ageT0)) ^ 0.3
-        '        Dim phiTT0 As Decimal = phi0 * betaCTT0
+        '--> Propriétés en phase de coulage, poutre non etayée
 
-        '        '--> h0
+        Valeur = 42930  '42 930 cm4
+        ValRef = myPoutre.Section.ProfilA.InertieY * 10 ^ 8
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        '        Valeur = h0
-        '        ValRef = myPoutre.Dalle.NotionalSizeH0(myPoutre.Section.ProfilA.Bfs)
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Dim zANE, InertieY, Mel As Decimal
 
-        '        '--> Phi RH
+        myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, Mel)
+        ValRef = InertieY * 10 ^ 8
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        '        Valeur = PHIrh
-        '        ValRef = myPoutre.Dalle.beton.PhiRH(myPoutre.Param.RH, h0)
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel, True)
+        ValRef = InertieY * 10 ^ 8
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        '        '-->Beta fcm
+        '--> Propriétés en phase mixte pour les actions court termes
 
-        '        Valeur = betaFcm
-        '        ValRef = myPoutre.Dalle.beton.BetaFcm()
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Valeur = 52814  '52 814 cm4
 
-        '        '--> Beta t0
+        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 6.77, zANE, InertieY, Mel)
+        ValRef = InertieY * 10 ^ 8
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        '        Valeur = betaT0
-        '        ValRef = myPoutre.Dalle.beton.Beta_t0(ageT0)
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Valeur = -205.2
+        ValRef = zANE * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        '        '--> phi0 n'est pas évalué par une fonction à part entière
 
-        '        '--> BetaH
+#End Region
 
-        '        Valeur = betaH
-        '        ValRef = myPoutre.Dalle.beton.BetaH(myPoutre.Param.RH, h0)
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+#Region "Vérification du calcul des fleches (ELS)"
 
-        '        '--> BetaC(t,t0)
+        '--> Fleches due à G1
 
-        '        Valeur = betaCTT0
-        '        ValRef = myPoutre.Dalle.beton.BetaC_tt0(myPoutre.Param.RH, h0, ageT, ageT0)
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
+        ValRef = 30.6
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        '        '--> phi(t,t0) n'est pas évalué par une fonction à part entière
 
-        '        '--> Coefficient d'équivalence LT CP nL
+        '--> Fleches due à Q
 
-        '        Valeur = n0 * (1 + 1.1 * phiTT0) '27.5183638
-        '        ValRef = myPoutre.Elements(0).nEqDalle
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
+        ValRef = 6.5
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
-        '        '--> Coefficient d'équivalent CE nL
+#End Region
 
-        '        Valeur = n0 '6.67
-        '        ValRef = myPoutre.Elements(2).nEqDalle
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
-
-        '        '--> Coefficient d'équivalent CE SH
-
-        '        ageT0 = 1
-        '        h0 = 2 * myPoutre.Dalle.EpaisseurActive
-        '        PHIrh = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
-        '        betaFcm = 16.8 / Math.Sqrt(25 + 8)
-        '        betaT0 = 1 / (0.1 + ageT0 ^ 0.2)
-        '        phi0 = PHIrh * betaFcm * betaT0
-        '        betaH = Math.Min(1.5 * (1 + (0.012 * 50 / 100) ^ 18) * (h0 * 1000) + 250, 1500)
-        '        betaCTT0 = ((ageT - ageT0) / (betaH + ageT - ageT0)) ^ 0.3
-        '        phiTT0 = phi0 * betaCTT0
-
-        '        Valeur = n0 * (1 + 0.55 * phiTT0) '26.0715
-        '        ValRef = myPoutre.Elements(3).nEqDalle
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
-
-        '        '--> Propriétés en phase de coulage, poutre non etayée
-
-        '        Valeur = 33740 * 10 ^ (-8) '33 740 cm4
-        '        ValRef = myPoutre.Section.ProfilA.InertieY
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
-
-        '        Dim InertieY, Mel As Decimal
-
-        '        myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, MRk)
-        '        ValRef = InertieY
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
-
-        '        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel)
-        '        ValRef = InertieY
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
-
-        '        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, 3 * n0, 0, myPoutre.Dalle, zANE, InertieY, Mel)
-        '        ValRef = InertieY
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
-
-        '        '--> Propriétés en phase mixte pour les actions court termes
-
-        '        Valeur = 106266 * 10 ^ (-8)
-
-        '        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, 6.77, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        '        ValRef = InertieY
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
-
-        '        Valeur = (120 - 114) / 1000
-        '        ValRef = zANE
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
-
-        '        '--> Propriétés en phase mixte pour les actions long termes
-
-        '        Valeur = 80885 * 10 ^ (-8)
-
-        '        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, 20.3, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        '        ValRef = InertieY
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
-
-        '        Valeur = (120 - 194) / 1000
-        '        ValRef = zANE
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
-
-        '#End Region
-
-        '#Region "Vérification du calcul des fleches (ELS)"
-
-        '        '--> Fleches due à G1
-
-        '        Valeur = myPoutre.ChargesA(0).FlecheMax
-        '        ValRef = 51.2 / 1000
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
-
-        '        '--> Fleches due à G2
-
-        '        Valeur = myPoutre.ChargesA(1).FlecheMax
-        '        'myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(0).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        '        ValRef = 5 * 4.2 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 73534 * 10 ^ (-8)) '13.6 mm
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
-
-        '        '--> Fleches due à Q
-
-        '        Valeur = myPoutre.ChargesA(2).FlecheMax
-        '        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        '        ValRef = 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 106571 * 10 ^ (-8))
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
-
-        '        '--> Fleche due au retrait 
-
-        '        Valeur = myPoutre.ChargesA(5).FlecheMax
-        '        Dim NR, deltazG, Mr, deltaR As Decimal
-        '        NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(3).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
-
-        '        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(3).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        '        deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.EpaisseurActive / 2 - zANE
-        '        Mr = NR * deltazG
-        '        deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * 10 ^ 6 * InertieY)
-        '        ValRef = deltaR
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
-
-        '#End Region
-
-        '#Region "Fréquence propre (ELS)"
-
-        '        myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
-        '        Valeur = myPoutre.Modal.Frequence
-
-        '        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        '        ValRef = Math.PI / 2 * Math.Sqrt(210 * InertieY * 10 ^ 8 * 9.81 / (1300 * 14 ^ 4))
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
-
-        '        Valeur = myPoutre.Modal.MassTotal
-        '        ValRef = 18500
-        '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
-
-        '#End Region
 
     End Sub
 
@@ -1525,6 +1395,8 @@ Imports PMXMoteur2
         'MyOutput_LTB.CoefCr = 2.618488 -> augmentation du alpha cr de 0.0836 % (acceptable + le test ci-dessous est toujours valide)
 
         Assert.IsTrue(IsEqual(MuiCrRef, MyOutput_LTB.CoefCr, 0.01))     '<1%
+
+        Assert.IsTrue(False)     ' A discuter car quand je reproduis le modèle de l'article dans LTBeam ou LTBeamN, j'obtiens Mcr = 913.37 kN.m et non 900 kN.m (p18 de l'article) -> A discuter)
 
 
     End Sub

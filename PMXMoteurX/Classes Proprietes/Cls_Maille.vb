@@ -708,6 +708,7 @@ Public Class cls_Maille
                 IypT = Me.Rayon ^ 4 * (2 * p * (p ^ 2 / 3 - p + 1) - (Phi - 0.5 * Math.Sin(2 * Phi)) / 8) - AireT * zGt ^ 2
                 IypB = Me.Rayon ^ 4 * (2 / 3 * (1 - p) ^ 3 - (Math.PI - Phi + 0.5 * Math.Sin(2 * Phi)) / 8) - AireB * zGb ^ 2
                 Iy = (IypT + AireT * (Me.zPos + zGt - zAxe - Me.Rayon) ^ 2) * DeltaAp + (IypB + AireB * (Me.zPos + zGb - zAxe - Me.Rayon) ^ 2) * DeltaAm
+                Iy /= Me.n 'Rajout GUD dans le cas du retranchement des congés de raccordement en "béton"
 
             Case EnuTypeMaille.CongeInf
 
@@ -716,6 +717,7 @@ Public Class cls_Maille
                 IypT = Me.Rayon ^ 4 * (2 * p ^ 3 / 3 - (Math.PI - Phi + 0.5 * Math.Sin(2 * Phi)) / 8) - AireT * zGt ^ 2
                 IypB = Me.Rayon ^ 4 * (2 / 3 * (1 - p) * (p ^ 2 + p + 1) - (Phi - 0.5 * Math.Sin(2 * Phi)) / 8) - AireB * zGb ^ 2
                 Iy = (IypT + AireT * (Me.zPos - zGt - zAxe + Me.Rayon) ^ 2) * DeltaAp + (IypB + AireB * (Me.zPos - zGb - zAxe + Me.Rayon) ^ 2) * DeltaAm
+                Iy /= Me.n 'Rajout GUD dans le cas du retranchement des congés de raccordement en "béton"
 
         End Select
         Return Iy * Me.Nombre
