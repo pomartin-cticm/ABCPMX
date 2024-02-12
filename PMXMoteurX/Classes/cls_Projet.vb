@@ -219,6 +219,26 @@ Public Class cls_Projet
                     Next
                 Next
 
+                '==[ Classe maintien par le bac ]==================================================
+
+                With .MaintienBac
+                    Lines.Add("BLOCK MAINT_BAC")
+
+                    Lines.Add("   AP            =  " & .ap)
+                    Lines.Add("   BP            =  " & .bp)
+                    Lines.Add("   NT            =  " & .nt)
+                    Lines.Add("   M            =  " & .m)
+                    Lines.Add("   Transition            =  " & .Transition)
+                    Lines.Add("   FixNervuresMod            =  " & .FixNervuresMod)
+                    Lines.Add("   FixnervuresTyp            =  " & .FixnervuresTyp)
+                    Lines.Add("   EC            =  " & .ec)
+                    Lines.Add("   FixCoutureType            =  " & .FixCoutureType)
+                    Lines.Add("   lMaintienBac            =  " & .lMaintienBac)
+                    Lines.Add("   lTheta            =  " & .lTheta)
+                End With
+
+
+
                 '==[ Classe Section ]=================================================================
                 With .Section
                     Lines.Add("BLOCK SECTION")
@@ -597,10 +617,11 @@ Public Class cls_Projet
             MsgBox("Erreur lecture fichier | Error read file", MsgBoxStyle.Critical, "Cls_Project/RecuperationFile")
         End Try
 
-        If Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("POUTRE") And Not ListeBlocCle.Contains("MAINTIENS") And Not ListeBlocCle.Contains("SECTION") And
+        If Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("POUTRE") And Not ListeBlocCle.Contains("MAINTIENS") And Not ListeBlocCle.Contains("MAINT_BAC") And Not ListeBlocCle.Contains("SECTION") And
            Not ListeBlocCle.Contains("PROFILA") And Not ListeBlocCle.Contains("ACIER_PROFILA") And Not ListeBlocCle.Contains("ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") And
            Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE") And
-           Not ListeBlocCle.Contains("OPT_CALCULS") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE") And Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") Then
+           Not ListeBlocCle.Contains("OPT_CALCULS") And 'And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE")
+              Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then 'And Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("SECTION") 
 
             MsgBox("Fichier corrumpu | Corrupted file", MsgBoxStyle.Critical, "Cls_Projet/LectureFile")
 
@@ -629,6 +650,13 @@ Public Class cls_Projet
                     Dim ind_travee As Integer
                     ReadBlocMaintiens(maintien_en_cours, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Maintiens(ind_travee).Add(maintien_en_cours)
+
+                Case "MAINT_BAC"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim maintien_bac As New cls_MaintienBac
+                    ReadBlocMaintienParLeBac(maintien_bac, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.MaintienBac = maintien_bac
+
 
                 Case "SECTION"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -954,6 +982,49 @@ Public Class cls_Projet
                         Case "XLOC" : .x_Loc = TraiteReal(Mots(nbMots))
                         Case "LMAINTSEMS" : .lMaintienSemelleSup = Mots(nbMots)
                         Case "LMAINTSEMI" : .lMaintienSemelleInf = Mots(nbMots)
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End If
+            Next
+
+        End With
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Maintien
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocMaintienParLeBac(maintien_bac As cls_MaintienBac, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+        '--> Traitement
+        With maintien_bac
+            For i = Index0 To IndexFin
+                DecomposeLine(Lignes(i), Mots, nbMots)
+
+                If nbMots > 0 Then
+                    MotCle = Mots(1).Substring(0, Math.Min(14, Mots(1).Length)).ToUpper
+
+                    Select Case MotCle
+                        Case "AP" : .ap = TraiteReal(Mots(nbMots))
+                        Case "BP" : .bp = TraiteReal(Mots(nbMots))
+                        Case "NT" : .nt = TraiteReal(Mots(nbMots))
+                        Case "M" : .m = TraiteReal(Mots(nbMots))
+                        Case "TRANSITION" : .Transition = TraiteReal(Mots(nbMots))
+                        Case "FIXNERVURESMOD" : .FixNervuresMod = TraiteReal(Mots(nbMots))
+                        Case "FIXNERVURESTYP" : .FixnervuresTyp = TraiteReal(Mots(nbMots))
+                        Case "EC" : .ec = TraiteReal(Mots(nbMots))
+                        Case "FIXCOUTURETYPE" : .FixCoutureType = TraiteReal(Mots(nbMots))
+                        Case "LMAINTIENBAC" : .lMaintienBac = Mots(nbMots)
+                        Case "LTHETA" : .lTheta = Mots(nbMots)
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
