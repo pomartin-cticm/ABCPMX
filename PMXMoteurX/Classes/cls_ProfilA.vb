@@ -541,17 +541,15 @@ Public Class cls_ProfilA
         '-------------------------------------------------------------
         '   18/12/23 :  Création - POM
         '-------------------------------------------------------------
-        '   Calcul de la position du centre de cisaillement / cdg
+        '   Calcul de la position du centre de cisaillement par rapport cdg
         '-------------------------------------------------------------
         '-------------------------------------------------------------
 
         Dim zS As Decimal
 
         Select Case Me.typeProfileAcier
-            Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym
+            Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
                 zS = 0
-                zS = PositionCentreS_MonoSym()
-            Case Enum_TypeSectionAcier.PRS_Mono_Sym
                 zS = PositionCentreS_MonoSym()
             Case Else
 
@@ -564,7 +562,7 @@ Public Class cls_ProfilA
         '-------------------------------------------------------------
         '   18/12/23 :  Création - POM
         '-------------------------------------------------------------
-        '   Calcul de la position du centre de cisaillement / cdg
+        '   Calcul de la position du centre de cisaillement par rapport au cdg
         '   Pour une section monosymétrique
         '-------------------------------------------------------------
         '-------------------------------------------------------------
@@ -577,7 +575,7 @@ Public Class cls_ProfilA
         '-------------------------------------------------------------
         '   18/12/23 :  Création - POM
         '-------------------------------------------------------------
-        '   Calcul de la position du centre de cisaillement / cdg
+        '   Calcul de la position du centre de cisaillement par rapport cdg
         '   Pour une section monosymétrique
         '-------------------------------------------------------------
         '   zPos_CdG    [E] :   Position du cdg

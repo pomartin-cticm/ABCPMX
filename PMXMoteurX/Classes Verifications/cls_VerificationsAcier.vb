@@ -147,7 +147,7 @@ Public Class cls_VerificationsAcier
         '# Contraintes
 
         lSigma = MyPoutre.Param.lElasticDesign Or (ClasseP > 2) Or (ClasseM > 2)
-        lSigma = True       ' EN phase debug
+        'lSigma = True       ' EN phase debug
         If lSigma Then
             MyPoutre.PtsSigma.Initialise(MyPoutre)
             MyPoutre.PtsSigma.CalculContraintesCharges(MyPoutre, 1, SigmaCas)
@@ -348,9 +348,11 @@ Public Class cls_VerificationsAcier
         '--> Initialisation
 
         If lConstructionPhase Then
-            CoefCombi = myPoutre.CoefCombELCU(iCombi)
+            CoefCombi = myPoutre.CombiA_ELCU.CoefCombi(iCombi) 'RAJOUT GUD POUR DEBBUG
+            'CoefCombi = myPoutre.CoefCombELCU(iCombi)
         Else
-            CoefCombi = myPoutre.CoefCombELU(iCombi)
+            'CoefCombi = myPoutre.CoefCombELU(iCombi)
+            CoefCombi = myPoutre.CombiA_ELU.CoefCombi(iCombi)
         End If
 
         '--> Préparation des données pour le calcul LTBeamN
@@ -387,7 +389,7 @@ Public Class cls_VerificationsAcier
 
         pAire = myPoutre.Section.ProfilA.Aire
         If lEnrob Then nEqEc = myPoutre.Section.Enrobage.Beton.CoefficientEquivalenceCT
-        'myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd)
+        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, nEqEc, zAne, pInertieY, mElRd, False, True)
         myPoutre.Section.ProprietesElastiquesMzz(1, True, myPoutre.Param.Gamma, nEqEc, zAneZ, pInertieZ, mElRd, True)
         pInertieT = myPoutre.Section.InertieT
         pInertieW = myPoutre.Section.ProfilA.InertieW
@@ -406,6 +408,7 @@ Public Class cls_VerificationsAcier
             pDonnees.InertieW(i) = pInertieW
             pDonnees.CoefBetaZ(i) = pBetaZ
             pDonnees.PositionCG(i) = pzS
+
         Next
 
         '# Appuis de la poutre
@@ -484,7 +487,8 @@ Public Class cls_VerificationsAcier
 
         iTravP = myPoutre.IndicePremiereTravee
         iTravD = myPoutre.IndiceDerniereTravee
-        zTop = -zAne - pzS
+        'zTop = -zAne - pzS
+        zTop = zAne + pzS
         Dim NbRep, iCharge As Integer
         Dim iCompteur As Integer = -1
         NbRep = 0
@@ -530,8 +534,10 @@ Public Class cls_VerificationsAcier
 
                             xo = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).xPosG(0)
                             xe = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).xPosG(1)
-                            qo = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(0)
-                            qe = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(1)
+                            ' qo = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(0)
+                            ' qe = myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(1)
+                            qo = CoefCombi(iCharge) * myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(0) 'GUD: Rajout du coeff combi devant la charge linéique
+                            qe = CoefCombi(iCharge) * myPoutre.ChargesA(iCharge).FReparties(iTrav)(iForce).Force(1) 'GUD: Rajout du coeff combi devant la charge linéique
 
                             pDonnees.AjouteForceRep(xo, xe, qo, qe, iCompteur, zTop)
 
@@ -543,7 +549,8 @@ Public Class cls_VerificationsAcier
                     For iForce = 0 To myPoutre.ChargesA(iCharge).Forces(iTrav).Count - 1
 
                         xo = myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).xPosG
-                        Force = myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force
+                        'Force = myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force
+                        Force = CoefCombi(iCharge) * myPoutre.ChargesA(iCharge).Forces(iTrav)(iForce).Force 'GUD: Rajout du coeff combi devant la charge ponctuelle
                         pDonnees.AjouteForceP(Force, xo, zTop)
 
                     Next
@@ -553,7 +560,12 @@ Public Class cls_VerificationsAcier
 
         '# Moments fléchissants
 
-        pDonnees.MomentFle = MEd
+        'pDonnees.MomentFle = MEd  ' GUD: Désactivation de cette ligne : je ne sais pas pourquoi mais lcette ligne fait bugger le moteur de LTB
+
+        For i = 0 To pDonnees.NbNodes - 2 'RAJOUT GUD: J'ai repris ce qu'avais fait Minh 
+            pDonnees.MomentFle(i, 0) = MEd(i, 1)
+            pDonnees.MomentFle(i, 1) = MEd(i + 1, 0)
+        Next
 
         '--> Lancement du calcul LTBeamN
 

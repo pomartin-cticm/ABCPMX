@@ -359,7 +359,7 @@ Public Class cls_Section
         Next
     End Sub
 
-    Private Sub MaillageEnrobage_YY(Gammas As cls_Gamma, nEq As Decimal, ByRef MyModele As cls_ModeleP)
+    Private Sub MaillageEnrobage_YY(Gammas As cls_Gamma, nEq As Decimal, ByRef MyModele As cls_ModeleP, Optional ByVal lCalculAlphaCr As Boolean = False)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -372,7 +372,7 @@ Public Class cls_Section
 
         '--> Déclaration
 
-        Dim LargeurC, EpaisseurC, FdC As Decimal
+        Dim LargeurC, EpaisseurC, FdC, DeltaT As Decimal
 
         '--> Initialisation
 
@@ -380,7 +380,13 @@ Public Class cls_Section
         EpaisseurC = Me.ProfilA.HauteurAmeHw
         FdC = Me.Enrobage.Beton.Fck
 
-        MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
+        If lCalculAlphaCr Then
+            DeltaT = 1
+        Else
+            DeltaT = 0
+        End If
+
+        MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
 
         'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
 
@@ -388,11 +394,11 @@ Public Class cls_Section
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
+            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
 
             '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, 0, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
+            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
 
         End If
 
@@ -1405,20 +1411,22 @@ Public Class cls_Section
     End Sub
 
     Public Sub ProprietesElastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal,
-                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False)
+                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False, Optional ByVal lCalculAlphaCr As Boolean = False)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
         '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
         '   ON NE PREND PAS EN COMPTE LA DALLE DANS LE CAS D'UNE SECTION MIXTE
         '-------------------------------------------------------------------------------------------------------------------
-        '   Signe       [E] :   Signe du moment
-        '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
-        '   Gammas      [E] :   Coefficients partiels
-        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
-        '   zANE        [S] :   Position axe neutre élastique
-        '   InertieY    [S] :   Inertie de flexion / axe fort
-        '   MelRd       [S] :   Moment élastique
+        '   Signe                   [E] :   Signe du moment
+        '   lValeurRd               [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
+        '   Gammas                  [E] :   Coefficients partiels
+        '   nEqEc                   [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
+        '   zANE                    [S] :   Position axe neutre élastique
+        '   InertieY                [S] :   Inertie de flexion / axe fort
+        '   MelRd                   [S] :   Moment élastique
+        '   lProfileAcierUniquement [E] :   Indique si on calcul les propriétés élastiques en ne tenant compte que du profilé acier (True) ou si on prend en compte également le béton d'enrobage (False)
+        '   lCalculAlphaCr          [E] :   Indique si les propriétés élastiques selon l'axe ZZ sont utilisées pour le calcul de alpha critique (True) ou non (False)  
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -1441,13 +1449,13 @@ Public Class cls_Section
 
         If Me.lEnrobage And Not lProfileAcierUniquement Then
 
-            MaillageEnrobage_YY(Gammas, nEqEc, MyModele)
+            MaillageEnrobage_YY(Gammas, nEqEc, MyModele, lCalculAlphaCr)
 
         End If
 
         '# Armatures de l'enrobage
 
-        If Me.lEnrobage And Not lProfileAcierUniquement Then
+        If Me.lEnrobage And Not lProfileAcierUniquement And Not lCalculAlphaCr Then
 
             MaillageArmaturesEnrobage_YY(Gammas, MyModele)
 

@@ -1065,13 +1065,26 @@ Imports PMXMoteur2
 
 #Region "Vérification de la résistance au déversement (ELU)"
 
+        'Recalcul à la main du Mcr avec le logiciel LTBeam 
+
+        Dim Mcr, lambda_LT, phi_LT, khi_LT, MbRd As Decimal
+
+        Mcr = 913.77 * 1000 'cf fichier LTBeam dans le répertoire Manuel Validation
+        'Pour info, la valeur calculée à la main dans l'article donne 903 kN.m.
+        ' Par contre, l'article indique qu'avec LTBeam, on obtient une valeur de 900 kN.m, je ne comprends pas comment est obtenue cette valeur (A DISCUTER)
+
+        lambda_LT = Math.Sqrt(799 * 1000 / Mcr)
+        phi_LT = 0.5 * (1 + 0.34 * (lambda_LT - 0.2) + lambda_LT ^ 2)
+        khi_LT = 1 / (phi_LT + Math.Sqrt(phi_LT ^ 2 - lambda_LT ^ 2))
+        MbRd = khi_LT * 799 * 1000
+
         Valeur = myPoutre.VerifAcier(0).CritereLTB.Resistance(myPoutre.IndicePremiereTravee)
-        ValRef = 492.5 * 1000
+        ValRef = MbRd ' = 510 kN (dans l'article, on a 492.5 kN.m)
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé acier seul
 
-        Valeur = myPoutre.VerifAcier(0).CritereM.CritereMax
-        ValRef = 0.45
-        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
+        Valeur = myPoutre.VerifAcier(0).CritereLTB.CritereMax
+        ValRef = 349.2 * 1000 / MbRd '0.684 (dans l'article, on a 0.709)
+        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance au déversement
 
 #End Region
 
@@ -1262,6 +1275,257 @@ Imports PMXMoteur2
         '        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
         '#End Region
+
+    End Sub
+
+    <TestMethod()> Public Sub TestMethodLTB_RCM2023no3()
+
+        '=======================================
+        '
+        ' 09/02/2024 : GUD: Test méthode LTB
+        '
+        '=======================================
+        '
+        ' Cas de test RCM 2023 n°3
+        '
+        '=======================================
+
+        Dim MyDonnees As New CTICM_DATA_DLLS.DATA_DLLS
+        Dim ParamLTB As CTICM_LTB.DATA_LTB.struc_DonneesLTB = Nothing
+
+        Dim L As Decimal = 12.5     'Longueur totale de la barre
+        With MyDonnees
+            .EYOUNG = 210000 * 1000000.0
+            .GSHEAR = .EYOUNG / 2 / (1 + 0.3)
+
+            .NbNodes = 100 'Comme pour LTBeam
+
+            'Position des noeuds EF
+            ReDim .xNode(.NbNodes - 1)
+            For i = 0 To .NbNodes - 1
+                .xNode(i) = i * L / (.NbNodes - 1)
+            Next
+
+
+
+            'Elements            
+            ReDim .Aire(.NbNodes - 2)
+            ReDim .InertieY(.NbNodes - 2)
+            ReDim .RayGirPol(.NbNodes - 2)
+            ReDim .InertieT(.NbNodes - 2)
+            ReDim .InertieZ(.NbNodes - 2)
+            ReDim .InertieW(.NbNodes - 2)
+            ReDim .PositionCG(.NbNodes - 2)
+            ReDim .CoefBetaZ(.NbNodes - 2)
+            ReDim .MomentFle(.NbNodes - 2, 1)
+            For i = 0 To .NbNodes - 2
+                .Aire(i) = 101.0975 * 0.0001          'm2
+                .InertieY(i) = 65472.963207 * 0.00000001   'm4
+                .RayGirPol(i) = 21.0670264 * 0.01   'm
+                .InertieT(i) = 1130.500797 * 0.00000001   'm4
+                .InertieZ(i) = 6608.12464 * 0.00000001   'm4
+                .InertieW(i) = 1125230.20833 * 0.000000000001   'm6
+                .CoefBetaZ(i) = 0.0 * 0.01      'm                
+                .PositionCG(i) = 0.0 * 0.01      'm                    
+            Next
+
+            'Appui
+            .NbAppuis = 2
+            .iNodeAppui = {0, .NbNodes - 1}
+            .lAppuiArticule = {False, False}
+
+            .NbForcesPon = 0
+            .NbForcesRep = 2
+            .NbMoments = 0
+
+            ReDim .ForceRep(.NbForcesRep - 1, 1)
+            ReDim .xForceRep(.NbForcesRep - 1, 1)
+            ReDim .zForceRepC(.NbForcesRep - 1)
+            .ForceRep(0, 0) = (1.35 * 10.67 + 1.5 * 1.875) * 1000 ' = 17 217 N/m
+            .xForceRep(0, 0) = 0.0
+            .zForceRepC(0) = -248.5 / 1000
+            .ForceRep(0, 1) = (1.35 * 10.67 + 1.5 * 1.875) * 1000 ' = 17 217 N/m
+            .xForceRep(0, 1) = L
+
+            .ForceRep(1, 0) = 1.5 * 1.05 * 1000        ' = 1575 N/m
+            .xForceRep(1, 0) = L / 2 - 3 / 2
+            .zForceRepC(1) = -248.5 / 1000
+            .ForceRep(1, 1) = 1.5 * 1.05 * 1000           ' = 1575 N/m
+            .xForceRep(1, 1) = L / 2 + 3 / 2
+        End With
+
+        'Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 2
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = MyDonnees.NbNodes - 1
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
+
+        '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
+        Dim MyDLLRDM As New CTICM_RDM.CALCUL_RDM
+        Dim MyOutput_RDM As CTICM_RDM.DATA_RDM.Struc_Output = Nothing
+        Dim CodeError_RDM As Integer
+        Dim TextError_RDM As String = String.Empty
+
+        Call MyDLLRDM.CALCULER(MyDonnees, MyOutput_RDM, CodeError_RDM, TextError_RDM)
+
+        'Moments fléchissants
+        With MyDonnees
+            For i = 0 To .NbNodes - 2
+                .MomentFle(i, 0) = MyOutput_RDM.MYY(i, 1)
+                .MomentFle(i, 1) = MyOutput_RDM.MYY(i + 1, 0)
+            Next
+        End With
+
+        '=== LANCER LE CALCUL ===
+        Dim MyDLL_LTB As New CTICM_LTB.CALCUL_LTB
+        Dim MyOutput_LTB As CTICM_LTB.DATA_LTB.Struc_Output = Nothing
+        Dim CodeError_LTB As Integer
+        Dim TextError_LTB As String = String.Empty
+
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+
+        '=== VALEURS DE REFERENCE LTBeam ===
+        Dim MuiCrRef As Double = 2.6163
+
+        Assert.IsTrue(IsEqual(MuiCrRef, MyOutput_LTB.CoefCr, 0.01))     '<1%
+
+
+
+
+
+        '=======================================
+        '
+        ' 09/02/2024 : GUD: Test méthode LTB
+        '
+        '=======================================
+        '
+        ' On reprend le meme cas test mais avec NbNode = 27 pour voir s'il y'a une grande différence (valeur par défaut dans le moteur de calcul)
+        '
+        '=======================================
+
+        MyDonnees = New CTICM_DATA_DLLS.DATA_DLLS
+        ParamLTB = Nothing
+
+        'Dim L As Decimal = 12.5     'Longueur totale de la barre
+        With MyDonnees
+            .EYOUNG = 210000 * 1000000.0
+            .GSHEAR = .EYOUNG / 2 / (1 + 0.3)
+
+            .NbNodes = 27 '/!\ Valeur modifiée % au cas de dessus
+
+            'Position des noeuds EF
+            ReDim .xNode(.NbNodes - 1)
+            For i = 0 To .NbNodes - 1
+                .xNode(i) = i * L / (.NbNodes - 1)
+            Next
+
+
+
+            'Elements            
+            ReDim .Aire(.NbNodes - 2)
+            ReDim .InertieY(.NbNodes - 2)
+            ReDim .RayGirPol(.NbNodes - 2)
+            ReDim .InertieT(.NbNodes - 2)
+            ReDim .InertieZ(.NbNodes - 2)
+            ReDim .InertieW(.NbNodes - 2)
+            ReDim .PositionCG(.NbNodes - 2)
+            ReDim .CoefBetaZ(.NbNodes - 2)
+            ReDim .MomentFle(.NbNodes - 2, 1)
+            For i = 0 To .NbNodes - 2
+                .Aire(i) = 101.0975 * 0.0001          'm2
+                .InertieY(i) = 65472.963207 * 0.00000001   'm4
+                .RayGirPol(i) = 21.0670264 * 0.01   'm
+                .InertieT(i) = 1130.500797 * 0.00000001   'm4
+                .InertieZ(i) = 6608.12464 * 0.00000001   'm4
+                .InertieW(i) = 1125230.20833 * 0.000000000001   'm6
+                .CoefBetaZ(i) = 0.0 * 0.01      'm                
+                .PositionCG(i) = 0.0 * 0.01      'm                    
+            Next
+
+            'Appui
+            .NbAppuis = 2
+            .iNodeAppui = {0, .NbNodes - 1}
+            .lAppuiArticule = {False, False}
+
+            .NbForcesPon = 0
+            .NbForcesRep = 2
+            .NbMoments = 0
+
+            ReDim .ForceRep(.NbForcesRep - 1, 1)
+            ReDim .xForceRep(.NbForcesRep - 1, 1)
+            ReDim .zForceRepC(.NbForcesRep - 1)
+            .ForceRep(0, 0) = (1.35 * 10.67 + 1.5 * 1.875) * 1000 ' = 17 217 N/m
+            .xForceRep(0, 0) = 0.0
+            .zForceRepC(0) = -248.5 / 1000
+            .ForceRep(0, 1) = (1.35 * 10.67 + 1.5 * 1.875) * 1000 ' = 17 217 N/m
+            .xForceRep(0, 1) = L
+
+            .ForceRep(1, 0) = 1.5 * 1.05 * 1000        ' = 1575 N/m
+            .xForceRep(1, 0) = L / 2 - 3 / 2
+            .zForceRepC(1) = -248.5 / 1000
+            .ForceRep(1, 1) = 1.5 * 1.05 * 1000           ' = 1575 N/m
+            .xForceRep(1, 1) = L / 2 + 3 / 2
+        End With
+
+        'Maintiens ponctuels
+        ParamLTB.NbMaintiensPon = 2
+        ReDim ParamLTB.iNodeMaintienPon(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonV(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonTheta(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonVP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.MaintienPonThetaP(ParamLTB.NbMaintiensPon - 1)
+        ReDim ParamLTB.zMaintienPonC(ParamLTB.NbMaintiensPon - 1)
+
+        ParamLTB.iNodeMaintienPon(0) = 0
+        ParamLTB.MaintienPonV(0) = -1
+        ParamLTB.MaintienPonTheta(0) = -1
+
+        ParamLTB.iNodeMaintienPon(1) = MyDonnees.NbNodes - 1
+        ParamLTB.MaintienPonV(1) = -1
+        ParamLTB.MaintienPonTheta(1) = -1
+
+
+        '=== LANCER LE CALCUL RDM POUR AVOIR LE DIAGRAMME DE MOMENT ===
+        MyDLLRDM = New CTICM_RDM.CALCUL_RDM
+        MyOutput_RDM = Nothing
+        TextError_RDM = String.Empty
+
+        Call MyDLLRDM.CALCULER(MyDonnees, MyOutput_RDM, CodeError_RDM, TextError_RDM)
+
+        'Moments fléchissants
+        With MyDonnees
+            For i = 0 To .NbNodes - 2
+                .MomentFle(i, 0) = MyOutput_RDM.MYY(i, 1)
+                .MomentFle(i, 1) = MyOutput_RDM.MYY(i + 1, 0)
+            Next
+        End With
+
+        '=== LANCER LE CALCUL ===
+        MyDLL_LTB = New CTICM_LTB.CALCUL_LTB
+        MyOutput_LTB = Nothing
+        TextError_LTB = String.Empty
+
+        Call MyDLL_LTB.CALCULER(MyDonnees, ParamLTB, MyOutput_LTB, CodeError_LTB, TextError_LTB)
+
+        '=== VALEURS DE REFERENCE LTBeam ===
+        'Dim MuiCrRef As Double = 2.6163
+
+        'MyOutput_LTB.CoefCr = 2.618488 -> augmentation du alpha cr de 0.0836 % (acceptable + le test ci-dessous est toujours valide)
+
+        Assert.IsTrue(IsEqual(MuiCrRef, MyOutput_LTB.CoefCr, 0.01))     '<1%
+
 
     End Sub
 
