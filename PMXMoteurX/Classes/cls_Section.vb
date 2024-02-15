@@ -101,7 +101,57 @@ Public Class cls_Section
         Return classeLoc
     End Function
 
+    Public Function NResistanceArmaturesEnrobage(GammaS As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------
+        '   14/02/2024 :  Création - GUD
+        '---------------------------------------------------------------------------------------------
+        '   Calcul de la résistance à la traction des armatures du béton d'enrobage
+        '---------------------------------------------------------------------------------------------
+        '   GammaS  [E] :   Coefficient partiel pour les armatures
+        '---------------------------------------------------------------------------------------------
 
+        '--> Déclaration
+
+        Dim pNArma As Decimal = 0
+
+        '--> Calcul
+
+        For i As Integer = 0 To Enrobage.LitArma.Count - 1
+            If Enrobage.LitArma(i).lActiveExt Then pNArma += Enrobage.LitArma(i).NbExt * Math.PI * Enrobage.LitArma(i).PhiExt ^ 2 / 4 * Enrobage.AcierArmatures.FsK / GammaS
+            pNArma += Enrobage.LitArma(i).NbMil * Math.PI * Enrobage.LitArma(i).PhiMil ^ 2 / 4 * Enrobage.AcierArmatures.FsK / GammaS
+            If Enrobage.LitArma(i).lActiveInt Then pNArma += Enrobage.LitArma(i).NbInt * Math.PI * Enrobage.LitArma(i).PhiInt ^ 2 / 4 * Enrobage.AcierArmatures.FsK / GammaS
+        Next
+
+        '--> Fin
+
+        Return 2 * pNArma * kConvMPaPa 'le x2 provient du fait que l'on a 2 chambres
+
+    End Function
+
+    Public Function NResistanceCompressionEnrobage(GammaC As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------
+        '  14/02/2024 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Calcul de la résistance à la compresion de la dalle
+        ' ##ZZZ à compléter pour génération 2
+        '---------------------------------------------------------------------------------------------
+        '   Beff    [E] :   Largeur participante de la dalle
+        '   GammaC  [E] :   Coefficient partiel pour le béton
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim pNDalle As Decimal = 0
+        Dim kDalle As Decimal = 0.85
+
+        '--> Calcul
+
+        pNDalle = Enrobage.Ratio_bc * Math.Min(Me.ProfilA.Bfs, Me.ProfilA.Bfi) * Me.Enrobage.Beton.Fck * kDalle / GammaC
+
+        '--> Fin
+
+        Return pNDalle * kConvMPaPa
+    End Function
 
 #End Region
 

@@ -58,15 +58,6 @@ Public Class cls_Enrobage_Partiel
     End Function
 
     ''' <summary>
-    ''' Calcul des propriétés
-    ''' </summary>
-    Public Sub Calcul_Proprietes()
-
-
-
-    End Sub
-
-    ''' <summary>
     ''' Renvoie l'enrobage //yy des étriers par rapport à l'âme du profilé
     ''' </summary>
     ''' <returns></returns>

@@ -907,7 +907,7 @@
 
         '--> Déclaration
 
-        Dim NArma, NDalle, NProfile As Decimal
+        Dim NArmaDalle, NDalle, NProfile, NEnrobage, NArmaEnrobage As Decimal
         Dim NConnex As Decimal
         Dim iNode, iNode0 As Integer
         Dim Beff As Decimal
@@ -928,6 +928,10 @@
 
         '##ZZZ A compléter dans le cas des profilés enrobés
         NProfile = MyPoutre.Section.ResistanceTractionProfile(gammaM0)
+        If MyPoutre.Section.lEnrobage Then
+            NEnrobage = MyPoutre.Section.NResistanceCompressionEnrobage(gammaC)
+            NArmaEnrobage = MyPoutre.Section.NResistanceArmaturesEnrobage(gammaS)
+        End If
 
         AfSup = MyPoutre.Section.ProfilA.AireFs
         AfInf = MyPoutre.Section.ProfilA.AireFi
@@ -935,68 +939,68 @@
 
         '--> Boucle sur les travées
 
-        '# Travée console gauche
+        '# Travée console gauche (moment négatif)
 
         If MyPoutre.lTraveeConsoleGauche Then
             iNode = MyPoutre.Nodes.iNodeExtTrav(0, 1)
             Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(0), 0, lSimple, False)
-            NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-            NConnex = Math.Min(NArma, NProfile)
+            NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+            NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
             'DegConnex(0, 1) = DeltaRd(0)(iNode) / NConnex
             EnregistreDegreConnex(DegConnex(0, 1), DeltaRd(0)(iNode) / NConnex)
-            DegConnex(0, 0) = -1
-        End If
+                DegConnex(0, 0) = -1
+            End If
 
-        '# Travée console droite
+        '# Travée console droite (moment négatif)
 
         If MyPoutre.lTraveeConsoleDroite Then
 
-            iNode = MyPoutre.Nodes.iNodeExtTrav(iTravFin, 0)
-            Beff = MyPoutre.BeffDalle(0, iTravFin, lSimple, False)
-            NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-            NConnex = Math.Min(NArma, NProfile)
+                iNode = MyPoutre.Nodes.iNodeExtTrav(iTravFin, 0)
+                Beff = MyPoutre.BeffDalle(0, iTravFin, lSimple, False)
+                NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+            NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
             'DegConnex(iTravFin, 1) = DeltaRd(iTravFin)(0) / NConnex
             EnregistreDegreConnex(DegConnex(iTravFin, 1), DeltaRd(iTravFin)(0) / NConnex)
-            DegConnex(iTravFin, 0) = -1
-        End If
-
-        '# Boucle sur les travées intermédiaires
-
-        For iTravee = 1 To MyPoutre.NombreTraveesDeuxAppuis
-            iNode0 = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-
-            '# Appui gauche
-            If iTravee > iTravDeb Then
-                '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
-                Beff = MyPoutre.BeffDalle(0, iTravee, lSimple, False)
-                NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-                NConnex = Math.Min(NArma, NProfile)
-                'DegConnex(iTravee, 1) = DeltaRd(iTravee)(0) / NConnex
-                EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(0) / NConnex)
+                DegConnex(iTravFin, 0) = -1
             End If
 
-            '# En travée
+            '# Boucle sur les travées intermédiaires
 
-            '---| Degré de connexion en zone de moment positif
-            Beff = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(iNodeMmax(iTravee)), iTravee, lSimple, False)
-            NDalle = MyPoutre.Dalle.NResistanceCompressionDalle(Beff, gammaC)
-            NConnex = Math.Min(NDalle, NProfile)
+            For iTravee = 1 To MyPoutre.NombreTraveesDeuxAppuis
+                iNode0 = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+
+                '# Appui gauche
+                If iTravee > iTravDeb Then
+                    '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
+                    Beff = MyPoutre.BeffDalle(0, iTravee, lSimple, False)
+                    NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+                NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
+                'DegConnex(iTravee, 1) = DeltaRd(iTravee)(0) / NConnex
+                EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(0) / NConnex)
+                End If
+
+                '# En travée
+
+                '---| Degré de connexion en zone de moment positif
+                Beff = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(iNodeMmax(iTravee)), iTravee, lSimple, False)
+                NDalle = MyPoutre.Dalle.NResistanceCompressionDalle(Beff, gammaC)
+            NConnex = Math.Min(NDalle, NProfile + NArmaEnrobage)
             'DegConnex(iTravee, 0) = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex
             EnregistreDegreConnex(DegConnex(iTravee, 0), DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex)
 
-            '---| Degré de connexion mini en zone de moment positif
-            Le = MyPoutre.LongueurTravee(iTravee)
-            If iTravee > iTravDeb Then Le -= 0.15 * Le
-            If iTravee < iTravFin Then Le -= 0.15 * Le
-            DegConnexMin(iTravee) = Me.EtaMinFlanges(Fy, Le, AfSup, AfInf)
+                '---| Degré de connexion mini en zone de moment positif
+                Le = MyPoutre.LongueurTravee(iTravee)
+                If iTravee > iTravDeb Then Le -= 0.15 * Le
+                If iTravee < iTravFin Then Le -= 0.15 * Le
+                DegConnexMin(iTravee) = Me.EtaMinFlanges(Fy, Le, AfSup, AfInf)
 
-            '# Appui droite
-            If iTravee < iTravFin Then
-                '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
-                iNode = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
-                Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(iTravee), iTravee, lSimple, False)
-                NArma = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-                NConnex = Math.Min(NArma, NProfile)
+                '# Appui droite
+                If iTravee < iTravFin Then
+                    '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
+                    iNode = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+                    Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(iTravee), iTravee, lSimple, False)
+                    NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+                NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
                 'If (iTravee > iTravDeb) Then
                 '    DegConnex(iTravee, 1) = Math.Min(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
                 'Else
