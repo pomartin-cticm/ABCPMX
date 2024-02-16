@@ -3669,7 +3669,7 @@ Public Class cls_Poutre
         Dim strConstruction As String = NomChargesA(9)              ' "Construction loads"
 
         Dim IndiceG As Integer
-        Dim IndiceQ As Integer
+        Dim IndiceQ, IndiceQc As Integer
         Dim IndiceG1, IndiceG2, IndiceSH As Integer
 
         Dim NbTrav, iTrav0 As Integer
@@ -3769,8 +3769,10 @@ Public Class cls_Poutre
         '--> Charges d'exploitation
 
         IndiceQ = Me.IndiceTabElts(lMixte, nEqDalleCT, nEqEnrobCT)
+        IndiceQc = Me.IndiceTabElts(False, nEqDalleCT, nEqEnrobCT) 'On ne prend pas en compte la dalle ici
 
         Dim LabelQ() As String = {symbQ1, symbQ2, symbQC}
+        Dim IndQ() As Integer = {IndiceQ, IndiceQ, IndiceQc}
         Dim lMultiT As Boolean
         Dim ChaineEx As String
         Me.lMultiQ = {False, False, False}
@@ -3780,14 +3782,14 @@ Public Class cls_Poutre
             Me.lMultiQ(iq) = lMultiT
             ChaineEx = strExploitation & " " & CStr(iq + 1)
             If (Me.NbTravees = 1) Or (Not lMultiT) Then
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx, LabelQ(iq), IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
             Else
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 1", LabelQ(iq) & "#1", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesTous)
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 2", LabelQ(iq) & "#2", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesCentrale)
-                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 3", LabelQ(iq) & "#3", IndiceQ, iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
+                Me.ChargesA.Add(New cls_CasDeCharge(ChaineEx & " " & strConfiguration & " 3", LabelQ(iq) & "#3", IndQ(iq), iTrav0, NbTrav, cls_CasDeCharge.EnuType.Exploitation, pEtatDalle))
                 InitialiseChargeA(Me.ChargesA(Me.ChargesA.Count - 1), Me.ChargesU(LabelQ(iq)), TraveesConsoles)
             End If
         Next

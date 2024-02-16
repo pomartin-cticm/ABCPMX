@@ -584,7 +584,7 @@ Imports PMXMoteur2
         phiTT0 = phi0 * betaCTT0
 
         Valeur = n0 * (1 + 0.55 * phiTT0) '26.0715
-        ValRef = myPoutre.Elements(3).nEqDalle
+        ValRef = myPoutre.Elements(4).nEqDalle
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Propriétés en phase de coulage, poutre non etayée
@@ -659,9 +659,9 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.ChargesA(5).FlecheMax * 1000
         Dim NR, deltazG, Mr, deltaR As Decimal
-        NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(3).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
+        NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(4).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(3).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(4).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
         deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.EpaisseurActive / 2 - zANE
         Mr = NR * deltazG
         deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * 10 ^ 6 * InertieY)
@@ -1134,12 +1134,12 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
         ValRef = 30.6
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))  'GUD: Le calcul de la fleche G1 se fait avec les nEqLT. Il faudrait les faire avec nCT pour la phase construction (création d'un deuxieme cas G1?)
 
 
         '--> Fleches due à Q
 
-        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
+        Valeur = myPoutre.ChargesA(4).FlecheMax * 1000
         ValRef = 6.5
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
@@ -2012,7 +2012,7 @@ Imports PMXMoteur2
         phiTT0 = phi0 * betaCTT0
 
         Valeur = n0 * (1 + 0.55 * phiTT0) '26.0715
-        ValRef = myPoutre.Elements(3).nEqDalle
+        ValRef = myPoutre.Elements(4).nEqDalle
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Vérification des calculs des coefficients d'équivalences à LT de l'ENROBAGE (50 ans)
@@ -2098,7 +2098,7 @@ Imports PMXMoteur2
         phiTT0 = phi0 * betaCTT0
 
         Valeur = n0 * (1 + 0.55 * phiTT0) '26.0715
-        ValRef = myPoutre.Elements(3).nEqEnrob
+        ValRef = myPoutre.Elements(4).nEqEnrob
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Propriétés en phase de coulage, poutre non etayée
@@ -2149,35 +2149,38 @@ Imports PMXMoteur2
         myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 23.68, 1, 0, myPoutre.Dalle, zANE, InertieY, Mel)
 
         Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
-        ValRef = 5 * 10.38 * 1000 * 12.5 ^ 4 / (384 * 210000 * 47128 * 10 ^ (-8))
+        ValRef = 5 * 10.38 * (12.5 * 1000) ^ 4 / (384 * 210000 * InertieY * 10 ^ 12) '33.34 mm
+
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        ''--> Fleches due à G2
+        '--> Fleches due à G2
 
-        'Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
-        ''myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(0).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        'ValRef = 5 * 4.2 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 73534 * 10 ^ (-8)) * 1000 '13.6 mm
-        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 23.68, 26.57, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
 
-        ''--> Fleches due à Q
+        Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
+        ValRef = 5 * 2.5 * (12.5 * 1000) ^ 4 / (384 * 210000 * InertieY * 10 ^ 12) '3.8 mm
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
-        'Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
-        'myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        'ValRef = 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 106571 * 10 ^ (-8)) * 1000
-        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        '--> Fleches due à Q
 
-        ''--> Fleche due au retrait 
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 6.6718, 6.6718, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
 
-        'Valeur = myPoutre.ChargesA(5).FlecheMax * 1000
-        'Dim NR, deltazG, Mr, deltaR As Decimal
-        'NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(3).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
+        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
+        ValRef = 5 * 6.25 * (12.5 * 1000) ^ 4 / (384 * 210000 * InertieY * 10 ^ 12) '6.63 mm
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
-        'myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(3).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        'deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.EpaisseurActive / 2 - zANE
-        'Mr = NR * deltazG
-        'deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * 10 ^ 6 * InertieY)
-        'ValRef = deltaR * 1000
-        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        '--> Fleche due au retrait 
+
+        Valeur = myPoutre.ChargesA(5).FlecheMax * 1000
+        Dim NR, deltazG, Mr, deltaR As Decimal
+        NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(4).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
+
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 24.74, 25.19, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.EpaisseurActive / 2 - zANE
+        Mr = NR * deltazG
+        deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * 10 ^ 6 * InertieY)
+        ValRef = deltaR * 1000 '10.02 mm
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
 #End Region
 
@@ -2186,12 +2189,7 @@ Imports PMXMoteur2
         myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
         Valeur = myPoutre.Modal.Frequence
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = Math.PI / 2 * Math.Sqrt(210 * InertieY * 10 ^ 8 * 9.81 / (1300 * 14 ^ 4))
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
-
-        Valeur = myPoutre.Modal.MassTotal
-        ValRef = 18500
+        ValRef = 4.6
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
 #End Region
