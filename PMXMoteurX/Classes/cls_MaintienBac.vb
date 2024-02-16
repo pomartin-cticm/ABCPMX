@@ -39,7 +39,7 @@ Public Class cls_MaintienBac
 #Region " Attributs "
 
     Public ap As Decimal                            ' Largeur d'un panneau élémentaire de bac (normalement définie dans la base des bacs)
-    Public bp As Decimal                            ' Longueur d'un panneau élémentaire de bac
+    Public bp As Decimal                            ' Longueur d'un panneau élémentaire de bac (normalement définie dans la base des bacs)
 
     Public nt As Integer                            ' Nombre total de panneaux élémentaire dans la direction perpendiculaire 
     Public m As Integer                             ' Nombre de travées couvertes par un panneau élémentaires (=> bp = m x d)

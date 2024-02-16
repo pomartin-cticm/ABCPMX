@@ -687,6 +687,337 @@ Imports PMXMoteur2
 
     End Sub
 
+    <TestMethod()> Public Sub Test_RCM_2022_3()
+
+        'Cas test issu de la revue RCM (2022-3):
+        '
+        '
+        '"Résistance au déversement d'une solive de plancher en phase de construction"
+
+#Region "Initialisation du logiciel"
+
+        'Note GUD: Partie reprise du module de demarrage car une partie des calculs nécessite d'avoir chargé les BDD, ce qui est fait à l'initialisation du logiciel 
+
+        '--> Récupération des informations générales du logociel - Non modifiable par l'utilisateur
+
+        LogicielInfo.NomLogiciel = "ABCPMX-II"
+        LogicielInfo.Version = "1.0"
+        LogicielInfo.AnneeVersion = "2024"
+        LogicielInfo.MailSupport = "support.logiciels@cticm.com"
+        LogicielInfo.Extension = "pmx"
+        LogicielInfo.Racine = "ABCPMX"
+
+        LogicielInfo.Maitre = EnuMaitre.CTICM
+        LogicielOptions.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
+        LogicielOptions.lDebug = False
+
+        LogicielRep.Config = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CTICM\" & LogicielInfo.NomLogiciel & "\ConfigV" & LogicielInfo.Version
+
+        LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Gamma
+        LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.General
+
+        '--> Répertoires
+
+        '# répertoire configuration
+        If Not IO.Directory.Exists(LogicielRep.Config) Then 'R22-001
+            IO.Directory.CreateDirectory(LogicielRep.Config)
+        End If
+
+        '# répertoires de travail
+        LogicielRep.TravailDefaut = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+        LogicielRep.lTravailDefaut = False      'Utilisation du dernier fichier ouvert
+        LogicielRep.Travail = LogicielRep.TravailDefaut
+        'If Not Directory.Exists(RepACB.WorkData) Then Directory.CreateDirectory(RepACB.WorkData)
+
+        '--> Fichiers
+        LogicielFichiers.Base_Sections = LogicielRep.Config & "\" & RacProfile & ExtensionBase
+        LogicielFichiers.Base_Aciers = LogicielRep.Config & "\" & RacAcier & ExtensionBase
+        LogicielFichiers.Base_Goujons = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+        LogicielFichiers.Base_Goujons_Perso = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacGoujons & "Custom" & ExtensionBase
+        LogicielFichiers.Base_Bacs = LogicielRep.Config & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
+
+        '--> Base de données
+        InitialisationBasesDonnees()
+        '--> Récupération des données de la database dans le catalogue (aciers et profilés)
+        InitialiseCatalogueProfiles(LogicielFichiers.Base_Sections, MyCatalogue)
+        InitialiseBaseAciers(LogicielFichiers.Base_Aciers, SteelBase)
+
+        '--> Bacs acier
+        LireBaseBacs(BaseBacs)
+
+        '--> Connecteurs
+        'LireBaseGoujons(LogicielFichiers.Base_Goujons, BaseGoujons)
+        GetDataBaseStuds(BaseGoujons)
+
+#End Region
+
+#Region "Initialisation de la poutre"
+
+        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
+        NomChargements = NomCas
+
+        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "")
+        Dim ValRef, Valeur As Decimal
+        Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
+        Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 
+
+        Dim lOK, lTrouve As Boolean
+        InitialisePoutreDeBases(myPoutre, lOK)
+        InitialiseBacDeBase(myPoutre.Dalle.Bac, lTrouve)
+        InitialiseGoujonDeBase(myPoutre.Dalle.Connecteur, lTrouve)
+
+        InitialiseDalleDefault(myPoutre.Dalle)
+
+        myPoutre.Initialise_CoefficientsCombinaisons()
+        myPoutre.InitialisePoidsPropres()
+
+#End Region
+
+#Region "Renseignement des données de l'article"
+
+        'GEOMETRIE
+        myPoutre.lTraveeConsoleGauche = False
+        myPoutre.lTraveeConsoleDroite = False
+        myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) = 14 '14 m
+        myPoutre.lTremieGauche = False
+        myPoutre.lTremieDroite = False
+        myPoutre.lIntermediaire = True
+        myPoutre.EntraxeD1 = 3
+        myPoutre.EntraxeD2 = 3
+
+        With myPoutre.Section.ProfilA
+            .typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+            .ha = 450 / 1000
+            .Tw = 9.4 / 1000
+            .Bfs = 190 / 1000
+            .Bfi = .Bfs
+            .Tfs = 14.6 / 1000
+            .Tfi = .Tfs
+            .Rcs = 21 / 1000
+            .Rci = .Rcs
+            .InitialiseProprietes()
+        End With
+
+        With myPoutre.Dalle
+            .type = cls_Dalle.Enum_TypeDalle.Mixte
+            .t_d = 120 / 1000
+        End With
+
+        For i As Integer = 0 To myPoutre.Dalle.LitArma.Count - 1 'on ne prend pas en compte les armatures dans le calcul dans l'exemple traité 
+            myPoutre.Dalle.LitArma(i).lActive = False
+        Next
+
+        With myPoutre.Dalle.Bac
+            .Hp = 58 / 1000
+            .h_rs = 0
+            .Tp = 0.75 / 1000
+            .Bb = 62 / 1000
+            .Bt = 101 / 1000
+            .Ep = 207 / 1000
+            .Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
+            .AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus 'permet de prendre en compte le bac pour le calcul des armatures transversales
+        End With
+
+        With myPoutre.Dalle.Connecteur
+            .hsc = 100 / 1000
+            .d = 19 / 1000
+        End With
+
+        myPoutre.NombreZones(myPoutre.IndicePremiereTravee) = 1
+        myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0) = 1
+        myPoutre.Espacement_Bac_TransZone(myPoutre.IndicePremiereTravee, 0) = 1
+        myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
+        myPoutre.lAutomaticDesign = False
+
+        'MATERIAUX
+        With myPoutre.Section.Acier
+            .Nuance = "S275"
+            .Qualite = "EC3"
+            .NormeProduit = "EN 1993-1-1"
+            .Reduction = "Table 3.1"
+
+            .Plages.Clear()
+            Dim MyPlage As cls_Acier.strucPlage
+            For i As Integer = 0 To SteelBase.Grades(.Nuance).Qualites(.Qualite).ReductionCurv(.Reduction).Plages.Count - 1
+                MyPlage.Ep = SteelBase.Grades(.Nuance).Qualites(.Qualite).ReductionCurv(.Reduction).Plages(i).Ep
+                MyPlage.Fy = SteelBase.Grades(.Nuance).Qualites(.Qualite).ReductionCurv(.Reduction).Plages(i).Fy
+                MyPlage.Fu = SteelBase.Grades(.Nuance).Qualites(.Qualite).ReductionCurv(.Reduction).Plages(i).Fu
+                .Plages.Add(MyPlage)
+            Next
+        End With
+
+        With myPoutre.Dalle.beton
+            .Classe = "C25/30"
+            .Ecm = 31000
+        End With
+
+        myPoutre.Dalle.Connecteur.Fu = 450
+
+        myPoutre.Dalle.Bac.msurf = 8.53 '8.53 kg/m2
+        myPoutre.Dalle.Bac.fyp = 350
+
+        'CHARGES
+        myPoutre.InitialisePoidsPropres()
+        'myPoutre.ChargesU("G2").QSurf(myPoutre.IndicePremiereTravee) = 1.4 * 1000
+        'myPoutre.ChargesU("Q1").QSurf(myPoutre.IndicePremiereTravee) = 2.5 * 1000
+        myPoutre.ChargesU("QC").QSurf(myPoutre.IndicePremiereTravee) = 0.5 * 1000
+        myPoutre.ChargesU("QC").FReparties(myPoutre.IndicePremiereTravee).Add(New cls_ForceRepartie(14 / 2 - 3 / 2, 1 * 3 * 1000, 14 / 2 + 3 / 2, 1 * 3 * 1000, 0)) '1 kN/m2 répartie s/ 3mx3m et centré à mi-travée
+
+        'COEFFICIENTS PARTIELS
+        myPoutre.Initialise_CoefficientsCombinaisons() 'Initialise les coefficients par défaut 
+        myPoutre.lCombELU(0) = True 'activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
+        myPoutre.lCombELS(0) = True 'activation de la première combinaison ELS par défaut (G + Q)
+        myPoutre.lCombELCURules(0) = True 'activation de la première combinaison ELU pendant la phase de construction activée 
+        myPoutre.lCombELCSRules(0) = True 'activation de la première combinaison ELS pendant la phase de construction activée 
+
+        With myPoutre.Param.Gamma
+            .GammaM0 = 1
+            .GammaM1 = 1
+            .GammaC = 1.5
+            .lGammaV_unique = True
+            .GammaVc = 1.25
+            .GammaVs = 1.25
+        End With
+
+#End Region
+
+#Region "Lancement des calculs"
+
+
+        Dim NomChargesA(), strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
+        ReDim NomChargesA(9)
+        NomChargesA(0) = "Permanent loads"
+        NomChargesA(1) = "Self-weight"
+        NomChargesA(2) = "Self weight with props"
+        NomChargesA(3) = "Self weight without props"
+        NomChargesA(4) = "Other permanent loads"
+        NomChargesA(5) = "Live loads"
+        NomChargesA(6) = "Conf. no"
+        NomChargesA(7) = "Shrinkage of the slab"
+        NomChargesA(8) = "Shrinkage of the encasement"
+        NomChargesA(9) = "Construction loads"
+
+        strRacineELU = "ULS"
+        strRacineELS = "SLS"
+        strRacineELF = "FLS"
+        strRacineELUC = "ULS_C"
+        strRacineELSC = "SLS_C"
+
+        'INITIALISATION DES TABLEAUX DES VERIFICATION
+        Select Case myPoutre.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                ReDim myPoutre.VerifAcier(0)
+                myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                ReDim myPoutre.VerifMixte(0)
+                myPoutre.VerifMixte(0) = New cls_VerificationsMixtes
+                If myPoutre.TypeEtaiement <> cls_Poutre.EnuTypeEtaiement.FullyPropped Then
+                    ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
+                    ReDim myPoutre.VerifAcier(0)
+                    myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+                End If
+        End Select
+
+        'INITIALISATION DES CALCULS
+        myPoutre.InitialiseCalculs(NomChargesA)
+        myPoutre.AAA_CalculMNVInternesN()
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, myPoutre.lCombELU, myPoutre.CoefCombELU, strRacineELU, myPoutre.CombiA_ELU)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, myPoutre.lCombELS, myPoutre.CoefCombELS, strRacineELS, myPoutre.CombiA_ELS)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombFeu, myPoutre.lCombFeu, myPoutre.CoefCombFeu, strRacineELF, myPoutre.CombiA_ELF)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myPoutre.lCombELCURules, myPoutre.CoefCombELCU, strRacineELUC, myPoutre.CombiA_ELCU)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
+
+        'COMBINAISON DES EFFORTS A L'ELU
+        Dim MEd(,) As Decimal = Nothing
+        Dim MEdMax, MEdMin, iNodeMMin, iNodeMMax As Decimal
+
+        Dim VEd(,) As Decimal = Nothing
+        Dim VEdMax, VEdMin, iNodeVMin, iNodeVMax As Decimal
+
+        myPoutre.CombiA_ELU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, False) 'Combinaison des moments pour la combinaison 0
+        myPoutre.CombiA_ELU.CombineEffortsT(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, False) 'Combinaison des tranchants pour la combinaison 0
+
+        EnveloppeTableauEfforts(MEd, myPoutre.Nodes.nbNodes, MEdMax, MEdMin, iNodeMMax, iNodeMMin)
+        EnveloppeTableauEfforts(VEd, myPoutre.Nodes.nbNodes, VEdMax, VEdMin, iNodeVMax, iNodeVMin)
+
+        'COMBINAISON DES EFFORTS A L'ELU CONSTRUCTION
+        Dim MEdConstruction(,) As Decimal = Nothing
+        Dim MEdMaxConstruction, MEdMinConstruction, iNodeMMinConstruction, iNodeMMaxConstruction As Decimal
+
+        Dim VEdConstruction(,) As Decimal = Nothing
+        Dim VEdMaxConstruction, VEdMinConstruction, iNodeVMinConstruction, iNodeVMaxConstruction As Decimal
+
+        myPoutre.CombiA_ELCU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEdConstruction, False) 'Combinaison des moments pour la combinaison 0
+        myPoutre.CombiA_ELCU.CombineEffortsT(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEdConstruction, False) 'Combinaison des tranchants pour la combinaison 0
+
+        EnveloppeTableauEfforts(MEdConstruction, myPoutre.Nodes.nbNodes, MEdMaxConstruction, MEdMinConstruction, iNodeMMaxConstruction, iNodeMMinConstruction)
+        EnveloppeTableauEfforts(VEdConstruction, myPoutre.Nodes.nbNodes, VEdMaxConstruction, VEdMinConstruction, iNodeVMaxConstruction, iNodeVMinConstruction)
+
+        'VERIFICATION DE LA POUTRE 
+
+        myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True) 'Poutre seul durant la phase de construction
+        'myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre) 'Poutre mixte
+
+#End Region
+
+#Region "Verification de l'analyse de la poutre"
+
+        'VERIFICATION DES EFFORTS A L'ELU CONSTRUCTION
+
+        Valeur = MEdMaxConstruction
+        ValRef = 337 * 10 ^ 3 'A NOTER: 655 kN.m est une valeur arrondie de l'article, une valeur plus proche (mais non exacte) serait 654.395 kN.m par exemple
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+#End Region
+
+#Region "Vérification de la résistance au déversement SANS prise en compte du bac"
+
+        Dim Mcr, lambda_LT, phi_LT, khi_LT, MbRd As Decimal
+
+        Mcr = 100 * 1000
+        MbRd = 85.19 * 1000
+
+        Valeur = myPoutre.VerifAcier(0).McrLTB(0, myPoutre.IndicePremiereTravee)
+        ValRef = Mcr
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        Valeur = myPoutre.VerifAcier(0).CritereLTB.Resistance(myPoutre.IndicePremiereTravee)
+        ValRef = MbRd ' = 85.19 kN (dans l'article, on a 492.5 kN.m)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé acier seul
+
+#End Region
+
+#Region "Vérification de la résistance au déversement AVEC prise en compte du bac"
+        With myPoutre.MaintienBac
+            .lMaintienBac = True
+            .m = 2
+            .nt = 2
+            .Transition = cls_MaintienBac.Enu_Transition.Emboitement
+            .FixNervuresMod = cls_MaintienBac.Enu_FixationNervures.Toutes
+            .FixnervuresTyp = cls_MaintienBac.Enu_FixNervuresType.Pistolet
+            .FixCoutureType = cls_MaintienBac.Enu_CoutureType.Vis
+            .ec = 500 / 1000
+            .lTheta = True
+        End With
+
+        myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True) 'On relance les vérifications de la poutre acier avec les nouveaux paramètres
+
+        Mcr = 2260 * 1000
+        MbRd = 437 * 1000
+
+        Valeur = myPoutre.VerifAcier(0).McrLTB(0, myPoutre.IndicePremiereTravee)
+        ValRef = Mcr
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        Valeur = myPoutre.VerifAcier(0).CritereLTB.Resistance(myPoutre.IndicePremiereTravee)
+        ValRef = MbRd ' = 85.19 kN (dans l'article, on a 492.5 kN.m)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé acier seul
+
+#End Region
+
+
+    End Sub
+
     <TestMethod()> Public Sub Test_RCM_2023_3()
 
         'Cas test issu de la revue RCM (2023-3):

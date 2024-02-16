@@ -224,8 +224,8 @@ Public Class cls_Projet
                 With .MaintienBac
                     Lines.Add("BLOCK MAINT_BAC")
 
-                    Lines.Add("   AP            =  " & .ap)
-                    Lines.Add("   BP            =  " & .bp)
+                    'Lines.Add("   AP            =  " & .ap)
+                    'Lines.Add("   BP            =  " & .bp)
                     Lines.Add("   NT            =  " & .nt)
                     Lines.Add("   M            =  " & .m)
                     Lines.Add("   Transition            =  " & .Transition)
@@ -1014,8 +1014,8 @@ Public Class cls_Projet
                     MotCle = Mots(1).Substring(0, Math.Min(14, Mots(1).Length)).ToUpper
 
                     Select Case MotCle
-                        Case "AP" : .ap = TraiteReal(Mots(nbMots))
-                        Case "BP" : .bp = TraiteReal(Mots(nbMots))
+                        'Case "AP" : .ap = TraiteReal(Mots(nbMots))
+                        'Case "BP" : .bp = TraiteReal(Mots(nbMots))
                         Case "NT" : .nt = TraiteReal(Mots(nbMots))
                         Case "M" : .m = TraiteReal(Mots(nbMots))
                         Case "TRANSITION" : .Transition = TraiteReal(Mots(nbMots))
