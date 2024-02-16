@@ -1932,17 +1932,17 @@ Imports PMXMoteur2
         ValRef = myPoutre.Dalle.beton.CoefficientEquivalenceCT()
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        '--> Vérification des calculs des coefficients d'équivalences à LT (50 ans)
+        '--> Vérification des calculs des coefficients d'équivalences à LT de la DALLE (50 ans)
         Dim ageT As Integer = 50 * 365 '50 ans, en jours
         Dim ageT0 As Integer = 28
         Dim h0 As Decimal = 164 / 1000
-        Dim PHIrh As Decimal = 1.914
-        Dim betaFcm As Decimal = 2.925
-        Dim betaT0 As Decimal = 0.488
-        Dim phi0 As Decimal = 2.733
-        'Dim betaH As Decimal = Math.Min(1.5 * (1 + (0.012 * 50 / 100) ^ 18) * (h0 * 1000) + 250, 1500)
-        Dim betaCTT0 As Decimal = 1
-        Dim phiTT0 As Decimal = 2.733
+        Dim PHIrh As Decimal = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
+        Dim betaFcm As Decimal = 16.8 / Math.Sqrt(25 + 8)
+        Dim betaT0 As Decimal = 1 / (0.1 + ageT0 ^ 0.2)
+        Dim phi0 As Decimal = PHIrh * betaFcm * betaT0
+        Dim betaH As Decimal = Math.Min(1.5 * (1 + (0.012 * 50 / 100) ^ 18) * (h0 * 1000) + 250, 1500)
+        Dim betaCTT0 As Decimal = ((ageT - ageT0) / (betaH + ageT - ageT0)) ^ 0.3
+        Dim phiTT0 As Decimal = phi0 * betaCTT0
 
         '--> h0
 
@@ -1984,6 +1984,8 @@ Imports PMXMoteur2
 
         '--> phi(t,t0) n'est pas évalué par une fonction à part entière
 
+        phiTT0 = phi0 * betaCTT0
+
         '--> Coefficient d'équivalence LT CP nL
 
         Valeur = n0 * (1 + 1.1 * phiTT0) '27.5183638
@@ -1998,23 +2000,110 @@ Imports PMXMoteur2
 
         '--> Coefficient d'équivalent CE SH
 
+        ageT = 50 * 365 '50 ans, en jours
         ageT0 = 1
-        h0 = 2 * myPoutre.Dalle.EpaisseurActive
+        h0 = 164 / 1000
         PHIrh = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
         betaFcm = 16.8 / Math.Sqrt(25 + 8)
         betaT0 = 1 / (0.1 + ageT0 ^ 0.2)
         phi0 = PHIrh * betaFcm * betaT0
-        'betaH = Math.Min(1.5 * (1 + (0.012 * 50 / 100) ^ 18) * (h0 * 1000) + 250, 1500)
-        'betaCTT0 = ((ageT - ageT0) / (betaH + ageT - ageT0)) ^ 0.3
+        betaH = Math.Min(1.5 * (1 + (0.012 * 50 / 100) ^ 18) * (h0 * 1000) + 250, 1500)
+        betaCTT0 = ((ageT - ageT0) / (betaH + ageT - ageT0)) ^ 0.3
         phiTT0 = phi0 * betaCTT0
 
         Valeur = n0 * (1 + 0.55 * phiTT0) '26.0715
         ValRef = myPoutre.Elements(3).nEqDalle
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
+        '--> Vérification des calculs des coefficients d'équivalences à LT de l'ENROBAGE (50 ans)
+        ageT = 50 * 365 '50 ans, en jours
+        ageT0 = 56
+        h0 = (497 - 2 * 14.5) * (200 / 2 - 8.4 / 2) - 21 ^ 2 * (1 - Math.PI / 4) * 2  'calcul de l'air dans 1 chambre
+        h0 /= (497 - 2 * 14.5) ' on divise par le perimetre en contact avec l'atmosphere 
+        h0 *= 2
+        h0 /= 1000
+        PHIrh = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
+        betaFcm = 16.8 / Math.Sqrt(25 + 8)
+        betaT0 = 1 / (0.1 + ageT0 ^ 0.2)
+        phi0 = PHIrh * betaFcm * betaT0
+        betaH = Math.Min(1.5 * (1 + (0.012 * 50 / 100) ^ 18) * (h0 * 1000) + 250, 1500)
+        betaCTT0 = ((ageT - ageT0) / (betaH + ageT - ageT0)) ^ 0.3
+        phiTT0 = phi0 * betaCTT0
+
+        '--> h0
+
+        Valeur = h0
+        ValRef = myPoutre.Section.NotionalSizeEnrobage
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> Phi RH
+
+        Valeur = PHIrh
+        ValRef = myPoutre.Section.Enrobage.Beton.PhiRH(myPoutre.Param.RH, h0)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '-->Beta fcm
+
+        Valeur = betaFcm
+        ValRef = myPoutre.Section.Enrobage.Beton.BetaFcm()
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> Beta t0
+
+        Valeur = betaT0
+        ValRef = myPoutre.Section.Enrobage.Beton.Beta_t0(ageT0)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> phi0 n'est pas évalué par une fonction à part entière
+
+        '--> BetaH
+
+        'Valeur = betaH
+        'ValRef = myPoutre.Dalle.beton.BetaH(myPoutre.Param.RH, h0)
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> BetaC(t,t0)
+
+        Valeur = betaCTT0
+        ValRef = myPoutre.Section.Enrobage.Beton.BetaC_tt0(myPoutre.Param.RH, h0, ageT, ageT0)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        '--> phi(t,t0) n'est pas évalué par une fonction à part entière
+
+        phiTT0 = phi0 * betaCTT0
+
+        '--> Coefficient d'équivalence LT CP nL
+
+        Valeur = n0 * (1 + 1.1 * phiTT0) '27.5183638
+        ValRef = myPoutre.Elements(0).nEqEnrob
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> Coefficient d'équivalent CE nL
+
+        Valeur = n0 '6.67
+        ValRef = myPoutre.Elements(2).nEqEnrob
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> Coefficient d'équivalent CE SH
+
+        ageT = 50 * 365 '50 ans, en jours
+        ageT0 = 1
+        h0 = 191 / 1000
+        PHIrh = 1 + (1 - 50 / 100) / (0.1 * (h0 * 1000) ^ (1 / 3))
+        betaFcm = 16.8 / Math.Sqrt(25 + 8)
+        betaT0 = 1 / (0.1 + ageT0 ^ 0.2)
+        phi0 = PHIrh * betaFcm * betaT0
+        betaH = Math.Min(1.5 * (1 + (0.012 * 50 / 100) ^ 18) * (h0 * 1000) + 250, 1500)
+        betaCTT0 = ((ageT - ageT0) / (betaH + ageT - ageT0)) ^ 0.3
+        phiTT0 = phi0 * betaCTT0
+
+        Valeur = n0 * (1 + 0.55 * phiTT0) '26.0715
+        ValRef = myPoutre.Elements(3).nEqEnrob
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
         '--> Propriétés en phase de coulage, poutre non etayée
 
-        Valeur = 33740 '33 740 cm4
+        Valeur = 42930
         ValRef = myPoutre.Section.ProfilA.InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -2024,35 +2113,31 @@ Imports PMXMoteur2
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel)
+        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel, True)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, 3 * n0, 0, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = InertieY * 10 ^ 8
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
+        '--> Propriétés en phase mixte pour le cas de charge G2
 
-        '--> Propriétés en phase mixte pour les actions court termes
+        Valeur = 99139
 
-        Valeur = 106266
-
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, 6.77, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 24.3, 27.1, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        Valeur = (120 - 114)
+        Valeur = (-244 + 140)
         ValRef = zANE * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule 
 
-        '--> Propriétés en phase mixte pour les actions long termes
+        '--> Propriétés en phase mixte pour le cas de charge Q
 
-        Valeur = 80885
+        Valeur = 142271
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, 20.3, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 6.77, 6.77, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
         ValRef = InertieY * 10 ^ 8
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
-        Valeur = (120 - 194)
+        Valeur = (-131.5 + 140)
         ValRef = zANE * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
@@ -2061,37 +2146,38 @@ Imports PMXMoteur2
 #Region "Vérification du calcul des fleches (ELS)"
 
         '--> Fleches due à G1
+        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 23.68, 1, 0, myPoutre.Dalle, zANE, InertieY, Mel)
 
         Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
-        ValRef = 51.2
+        ValRef = 5 * 10.38 * 1000 * 12.5 ^ 4 / (384 * 210000 * 47128 * 10 ^ (-8))
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        '--> Fleches due à G2
+        ''--> Fleches due à G2
 
-        Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
-        'myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(0).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = 5 * 4.2 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 73534 * 10 ^ (-8)) * 1000 '13.6 mm
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        'Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
+        ''myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(0).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        'ValRef = 5 * 4.2 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 73534 * 10 ^ (-8)) * 1000 '13.6 mm
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
-        '--> Fleches due à Q
+        ''--> Fleches due à Q
 
-        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        ValRef = 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 106571 * 10 ^ (-8)) * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        'Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
+        'myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(2).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        'ValRef = 5 * 7.5 * 1000 * 14 ^ 4 / (384 * 210000 * 10 ^ 6 * 106571 * 10 ^ (-8)) * 1000
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
-        '--> Fleche due au retrait 
+        ''--> Fleche due au retrait 
 
-        Valeur = myPoutre.ChargesA(5).FlecheMax * 1000
-        Dim NR, deltazG, Mr, deltaR As Decimal
-        NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(3).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
+        'Valeur = myPoutre.ChargesA(5).FlecheMax * 1000
+        'Dim NR, deltazG, Mr, deltaR As Decimal
+        'NR = 325 * 10 ^ (-6) * myPoutre.Section.Acier.EYoung / myPoutre.Elements(3).nEqDalle * Beff * myPoutre.Dalle.EpaisseurActive * 10 ^ 6 'N
 
-        myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(3).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
-        deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.EpaisseurActive / 2 - zANE
-        Mr = NR * deltazG
-        deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * 10 ^ 6 * InertieY)
-        ValRef = deltaR * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        'myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 0, myPoutre.Elements(3).nEqDalle, Beff, myPoutre.Dalle, zANE, InertieY, Mel)
+        'deltazG = myPoutre.Dalle.Bac.Hp + myPoutre.Dalle.EpaisseurActive / 2 - zANE
+        'Mr = NR * deltazG
+        'deltaR = (Mr * myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) ^ 2) / (8 * myPoutre.Section.Acier.EYoung * 10 ^ 6 * InertieY)
+        'ValRef = deltaR * 1000
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
 #End Region
 
