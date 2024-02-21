@@ -384,6 +384,10 @@ ULS_CHECKS_CONSTRUCTION = Ultimate Limit States at construction stage
 CRITERIA_SUM			= Summary of the criteria
 INFO_S					= S = Satisfactory
 INFO_NS					= NS = NOT Satisfactory
+PLASTICDESIGNCLASS12	= Class 1 or 2 cross-sections: plastic design
+ELASTICDESIGNCLASS3		= Class 3 cross-sections: elastic design to bending moment
+ELASTICDESIGNIMPOSED	= Elastic design imposed
+NO_MVINTERACTION		= No MV interaction
 M_CRITERIA				= Resistance to bending moment
 V_CRITERIA				= Resistance to shear force
 VB_CRITERIA				= Resistance to shear buckling

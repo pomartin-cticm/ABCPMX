@@ -384,6 +384,10 @@ ULS_CHECKS_CONSTRUCTION	= Etats Limites Ultimes en phase de construction
 CRITERIA_SUM			= Résumé des critères
 INFO_S					= S = Satisfaisant
 INFO_NS					= NS = NON Satisfaisant
+PLASTICDESIGNCLASS12	= Sections de classe 1 ou 2 : résistance plastique
+ELASTICDESIGNCLASS3		= Sections de classe 3 : résistance élastique en flexion
+ELASTICDESIGNIMPOSED	= résistance élastique des sections imposée
+NO_MVINTERACTION		= Pas d'interaction MV
 M_CRITERIA				= Résistance à la flexion
 V_CRITERIA				= Résistance à l'effort tranchant
 VB_CRITERIA				= Résistance au voilement par cisaillement

@@ -213,7 +213,7 @@ Public Class cls_VerificationsAcier
                                                     MyPoutre.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
                 '( Contraintes de cisaillement
                 combiELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, Me.Tau.MStatic.Count, MyPoutre.Nodes.nbNodes,
-                                                    MyPoutre.ChargesA, SigmaCas, lRetraitElastique, TauELU)
+                                                    MyPoutre.ChargesA, TauCas, lRetraitElastique, TauELU)
             End If
 
             '# Vérification sous moment fléchissant
@@ -1227,11 +1227,11 @@ Public Class cls_VerificationsAcier
 
         If (nbPts > 0) Then
             '( Contrainte face interne de la semelle supérieure
-            RunCritereInteractionMVElastic(MyPoutre, iCombi, 0, SigmaELU, TauELU, FydW, Me.CritereTauA)
+            RunCritereInteractionMVElastic(MyPoutre, iCombi, 0, SigmaELU, TauELU, FydW, Me.CritereSigmaVM)
             '( Contrainte CdG de la section
-            RunCritereInteractionMVElastic(MyPoutre, iCombi, 1, SigmaELU, TauELU, FydW, Me.CritereTauA)
+            RunCritereInteractionMVElastic(MyPoutre, iCombi, 1, SigmaELU, TauELU, FydW, Me.CritereSigmaVM)
             '( Contrainte face interne de la semelle inférieure
-            RunCritereInteractionMVElastic(MyPoutre, iCombi, 2, SigmaELU, TauELU, FydW, Me.CritereTauA)
+            RunCritereInteractionMVElastic(MyPoutre, iCombi, 2, SigmaELU, TauELU, FydW, Me.CritereSigmaVM)
         End If
 
     End Sub

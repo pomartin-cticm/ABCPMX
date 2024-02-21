@@ -4141,29 +4141,60 @@ Module Mod_NoteCalcul
         '   Synthèse des critères ELU pour une poutre acier (avec ou sans enrobage)
         '-------------------------------------------------------------------------------------------
 
-        If MyBeam.Param.lElasticDesign Then
-            '--> Calcul élastique imposé
+        '==( Résistance en section
 
-            AddLigneNDC(TABW2 & "Calcul élastique imposé")
+        AddTitreNdC(3, BlocELU("SECTIONSR"))
+        If MyBeam.VerifAcier(iVerif).lCalculPlastic Then
+            '--> Calcul Plastique
+
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (*)")
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+
+            If MyBeam.VerifAcier(iVerif).CritereMV.CritereMax = 0 Then
+                AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
+            Else
+                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"))
+            End If
+
+            SauteLigne()
+            AddLigneNDC(TABW2 & "(*): " & BlocELU("PLASTICDESIGNCLASS12"))
+
+        ElseIf MyBeam.Param.lElasticDesign Then
+            '--> Calcul élastique imposé
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaA, "\SG\-s\s\=", BlocELU("M_CRITERIA") & " (*)")
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereTauA, "\SG\-t\s\=", BlocELU("V_CRITERIA") & " (*)")
+
+            If MyBeam.VerifAcier(iVerif).CritereSigmaVM.CritereMax = 0 Then
+                AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
+            Else
+                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaVM, "\SG\s\-eq,VM\=", BlocELU("MV_CRITERIA") & " (*)")
+            End If
+
+            SauteLigne()
+            AddLigneNDC(TABW2 & "(*): " & BlocELU("ELASTICDESIGNIMPOSED"))
 
         Else
+            '--> Calcul élastique en raison de la classe des sections
 
-            If MyBeam.VerifAcier(iVerif).lCalculPlastic Then
-                '--> Calcul Plastique
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaA, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (*)")
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
 
-                AddLigneNDC(TABW2 & "Calcul plastique")
-                AddTitreNdC(3, BlocELU("SECTIONSR"))
-                'AddLigneNDC(TABW2 & BlocELU("M_CRITERIA") & TABAFF & "\SG\s\-M\=" & TABEGAL & 0)
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA"))
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
-
-                AddTitreNdC(3, BlocELU("BEAMR"))
-
-                AfficheSyntheseCritereLT(MyBeam.VerifAcier(iVerif).CritereLTB, "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"))
+            If MyBeam.VerifAcier(iVerif).CritereMV.CritereMax = 0 Then
+                AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
             Else
-
+                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"))
             End If
+
+            SauteLigne()
+            AddLigneNDC(TABW2 & "(*): " & BlocELU("ELASTICDESIGNCLASS3"))
+
         End If
+
+        '==( Déversement
+
+        AddTitreNdC(3, BlocELU("BEAMR"))
+
+        AfficheSyntheseCritereLT(MyBeam.VerifAcier(iVerif).CritereLTB, "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"))
 
     End Sub
 
@@ -5391,7 +5422,7 @@ Module Mod_NoteCalcul
 
 #End Region
 
-#Region " Outils pour l'édition de la note de calcul "
+#Region "   Outils pour l'édition de la note de calcul "
 
     Private Sub AddTitreDoc(ByVal Niveau As Integer, ByVal Titre As String)
         MyNote.SauteLigne()
@@ -5551,7 +5582,7 @@ Module Mod_NoteCalcul
 
 #End Region
 
-#Region " Autres outils "
+#Region "   Autres outils "
 
     Public Function ChiffresRomains(ByVal Nombre As Integer) As String
         '------------------------------------------------------------------------------------------------------------------------
