@@ -17,7 +17,9 @@ Public Class cls_VerificationsAcier
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
     Public CritereSigmaE As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton d'enrobage
     Public CritereSigmaArmaE As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures d'enrobage
-    Public CritereLTB As cls_Critere
+    Public CritereTauA As cls_Critere               ' Critère de contrainte de cisaillement élastique
+    Public CritereSigmaVM As cls_Critere            ' Critère de contrainte élastique équivalente de Von Mises
+    Public CritereLTB As cls_Critere                ' Critère pour le déversement
 
     Public RhoV As Decimal(,)                       ' Coefficient d'interaction : 1er indice: indice de la combinaison, 2eme indice: indice du noeud
 
@@ -25,6 +27,8 @@ Public Class cls_VerificationsAcier
 
     Public AlphaCrLTB() As Decimal                  ' Alpha critique pour le déversement élastique
     Public McrLTB(,) As Decimal                     ' Moment critique pour le déversement (en travée)
+
+    Dim Tau As cls_Tau
 
 #End Region
 
@@ -34,7 +38,7 @@ Public Class cls_VerificationsAcier
         lCalculPlastic = True
     End Sub
 
-    Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer, lElastic As Boolean)
+    Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer, lElastic As Boolean, lElastiTau As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   30/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -43,7 +47,8 @@ Public Class cls_VerificationsAcier
         '   NbNodes     [E] :   Nombre de noeuds
         '   NbCombi     [E] :   Nombre de combinaisons
         '   IndDerniereT[E] :   Indice de la dernière travée
-        '   lElastic    [E] :   Cas d'un dimensionnement élastique VM
+        '   lElastic    [E] :   Cas d'un dimensionnement élastique VM en flexion
+        '   lElasticTau [E] :   Cas d'un dimensionnement élastique VM en cisaillement
         '----------------------------------------------------------------------------------------------------------
 
         Me.CritereM = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
@@ -55,6 +60,17 @@ Public Class cls_VerificationsAcier
 
         ReDim AlphaCrLTB(NbCombi - 1)
         ReDim McrLTB(NbCombi - 1, IndDerniereT)
+
+        If lElastic Then
+            Me.CritereSigmaA = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+            Me.CritereSigmaE = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+            Me.CritereSigmaArmaE = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+        End If
+
+        If lElastiTau Then
+            Me.CritereTauA = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+            Me.CritereSigmaVM = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+        End If
 
     End Sub
 
@@ -104,10 +120,13 @@ Public Class cls_VerificationsAcier
         Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
         Dim ClasseP, ClasseM As Integer 'Classes de la section en flexion positive et négative
         Dim lClasse4 As Boolean
-        Dim lSigma As Boolean
+        ' Dim lSigma As Boolean
         Dim SigmaELU(,,) As Decimal = Nothing           ' Contraintes normales sous 1 combinaison ELU
         Dim SigmaCas(,,,) As Decimal = Nothing          ' Contraintes normales pour les cas de charges
+        Dim TauELU(,,) As Decimal = Nothing             ' Contraintes de cisaillement sous 1 combinaison ELU
+        Dim TauCas(,,,) As Decimal = Nothing            ' Contraintes de cisaillement pour les cas de charges
         Dim lRetraitElastique As Boolean = True
+        Dim lVerifElastic As Boolean                    ' Indique si on doit effectuer une verification élastique des sections
 
         '--> Initialisations
 
@@ -121,7 +140,6 @@ Public Class cls_VerificationsAcier
             combiELU = MyPoutre.CombiA_ELU
         End If
 
-        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, nbCombiELU, MyPoutre.IndiceDerniereTravee, MyPoutre.Param.lElasticDesign)
         Me.InitialiseRhoV(nbCombiELU, MyPoutre.Nodes.nbNodes)
         Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, nbCombiELU, MyPoutre.IndiceDerniereTravee)
 
@@ -141,16 +159,38 @@ Public Class cls_VerificationsAcier
 
         '# Classes de la section
 
+        '    La classe des sections ne dépend pas du chargement (il n'y a pas d'effort axial) ni des contraintes.
+        '    On classe donc les sections une fois pour toute, en dehors de la boucle sur les combinaisons de calcul
+
         ClasseP = MyPoutre.Section.ClasseSection(zANP, zANE, True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1)
         ClasseM = MyPoutre.Section.ClasseSection(zANP, zANE, False, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1)
 
-        '# Contraintes
+        '# Type de vérification pour les sections
 
-        lSigma = MyPoutre.Param.lElasticDesign Or (ClasseP > 2) Or (ClasseM > 2)
-        'lSigma = True       ' EN phase debug
-        If lSigma Then
+        lVerifElastic = MyPoutre.Param.lElasticDesign Or (ClasseP > 2)
+        If MyPoutre.lMultiSpan Then
+            '# dans le cas d'une poutre à plusieurs travées, on prend aussi en compte la classe de section en flexion négative
+            lVerifElastic = lVerifElastic Or (ClasseM > 2)
+        End If
+        Me.lCalculPlastic = Not lVerifElastic
+
+        '# Initialisation des critères dépendant du type de vérification
+        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, nbCombiELU, MyPoutre.IndiceDerniereTravee, lVerifElastic, MyPoutre.Param.lElasticDesign)
+
+        '# Contraintes normales
+
+        'lSigma = MyPoutre.Param.lElasticDesign Or (ClasseP > 2) Or (ClasseM > 2)
+        ''lSigma = True       ' EN phase debug
+        If lVerifElastic Then
             MyPoutre.PtsSigma.Initialise(MyPoutre)
             MyPoutre.PtsSigma.CalculContraintesCharges(MyPoutre, 1, SigmaCas)
+        End If
+
+        '# Contraintes de cisaillement
+        If MyPoutre.Param.lElasticDesign Then
+            Me.Tau = New cls_Tau(MyPoutre.Section.typeSection)
+            Me.Tau.Initialise(MyPoutre.Section.ProfilA)
+            Me.Tau.CalculContraintesCharges(MyPoutre, TauCas)
         End If
 
         '--> Boucle sur les combinaisons
@@ -167,26 +207,32 @@ Public Class cls_VerificationsAcier
 
             '# Combinaisons des contraintes
 
-            If lSigma Then
+            If lVerifElastic Then
+                '( Contraintes normales
                 combiELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, MyPoutre.PtsSigma.zPos.Count, MyPoutre.Nodes.nbNodes,
-                                                       MyPoutre.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
+                                                    MyPoutre.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
+                '( Contraintes de cisaillement
+                combiELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, Me.Tau.MStatic.Count, MyPoutre.Nodes.nbNodes,
+                                                    MyPoutre.ChargesA, SigmaCas, lRetraitElastique, TauELU)
             End If
 
             '# Vérification sous moment fléchissant
 
-            If MyPoutre.Param.lElasticDesign Then
+            If lVerifElastic Then
                 RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
             Else
                 Me.RunCritereFlexionAcier(MyPoutre, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
             End If
 
-            '# Vérification sous effort tranchant
-
             If MyPoutre.Param.lElasticDesign Then 'calcul élastique imposé 
 
-                '...
+                '# Vérification sous effot tranchant
+                Me.RunCritereCisaillementResistanceElastiqueVM(MyPoutre, iCombi, TauELU)
 
-            Else 'calcul plastique 
+                '# Vérification sous interaction MV
+                Me.RunCritereInteractionMVElastiqueVonMises(MyPoutre, iCombi, SigmaELU, TauELU)
+
+            Else 'calcul plastique, même pour les sections de classe 3, si le calcul élastique n'est pas imposé
 
                 '# Vérification sous effort tranchant
 
@@ -211,7 +257,7 @@ Public Class cls_VerificationsAcier
 
             '# Vérification au déversement
 
-            Me.RunCritereDeversement(MyPoutre, iCombi, MEd, lSigma, lConstructionPhase)
+            Me.RunCritereDeversement(MyPoutre, iCombi, MEd, lVerifElastic, lConstructionPhase)
 
         Next
 
@@ -740,10 +786,15 @@ Public Class cls_VerificationsAcier
         '# Contraintes dans le profilé
 
         If (iPro0 > -1) Then
+            '( Contrainte face externe de la semelle supérieure
             RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+            '( Contrainte face interne de la semelle supérieure
             RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+            '( Contrainte CdG de la section
             RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+            '( Contrainte face interne de la semelle inférieure
             RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
+            '( Contrainte face externe de la semelle inférieure
             RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
         End If
 
@@ -754,7 +805,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   25/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance en flexion par les critères de VM en un point de calcul de section
+        '   Vérification aux ELU de la résistance en flexion par les critères de VonMises en un point de calcul de section
         '----------------------------------------------------------------------------------------------------------
         '   MyPoutre[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
@@ -791,25 +842,6 @@ Public Class cls_VerificationsAcier
                 Next
             Next
         Next
-
-        ''--> Déclaration
-
-        'Dim iNode As Integer
-        'Dim Sigma As Decimal
-
-        ''--> Traitement
-
-        'For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
-
-        '    If Math.Abs(SigmaELU(iPoint, iNode, 0)) > Math.Abs(SigmaELU(iPoint, iNode, 1)) Then
-        '        Sigma = SigmaELU(iPoint, iNode, 0)
-        '    Else
-        '        Sigma = SigmaELU(iPoint, iNode, 1)
-        '    End If
-
-        '    MyCritereM.EnregistreCritere(iNode, iCombi, Sigma, SigmaU)
-
-        'Next
 
     End Sub
 
@@ -1022,7 +1054,7 @@ Public Class cls_VerificationsAcier
 
 #End Region
 
-#Region "Calcul coefficient d'interaction RhoV"
+#Region " Calcul coefficient d'interaction RhoV "
 
     Private Sub InitialiseRhoV(NbCombi As Integer, NbNodes As Integer)
         ReDim Me.RhoV(NbCombi - 1, NbNodes - 1)
@@ -1071,6 +1103,189 @@ Public Class cls_VerificationsAcier
 
 #End Region
 
+#Region " Vérification des contraintes élastiques de cisaillement "
 
+    Private Sub RunCritereCisaillementResistanceElastiqueVM(MyPoutre As cls_Poutre, iCombi As Integer, TauELU(,,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en cisaillement par les critères de VM
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre[E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   TauELU  [E] :   Contraintes de cisaillement aux ELU
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim TauY, FyW As Decimal
+
+        Dim nbPts As Integer = Me.Tau.MStatic.Count
+
+        '--> Initialisation
+
+        FyW = MyPoutre.Section.FyW
+        TauY = FyW / MyPoutre.Param.Gamma.GammaM0 / Math.Sqrt(3)
+
+        '--> Calculs
+
+        '# Contraintes de cisaillement dans l'âme du profilé
+
+        If (nbPts > 0) Then
+            '( Contrainte face interne de la semelle supérieure
+            RunCritereFlexionVM(MyPoutre, iCombi, 0, TauELU, TauY, Me.CritereTauA)
+            '( Contrainte CdG de la section
+            RunCritereFlexionVM(MyPoutre, iCombi, 1, TauELU, TauY, Me.CritereTauA)
+            '( Contrainte face interne de la semelle inférieure
+            RunCritereFlexionVM(MyPoutre, iCombi, 2, TauELU, TauY, Me.CritereTauA)
+        End If
+
+    End Sub
+
+    Private Sub RunCritereTranchantElastic(MyPoutre As cls_Poutre, iCombi As Integer, iPoint As Integer, TauELU(,,) As Decimal,
+                                           TauU As Decimal, MyCritereV As cls_Critere)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en cisaillement par les critères de VonMises en un point de calcul de section
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre    [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iPoint      [E] :   Indice du point de calcul des contraintes
+        '   TauELU      [E] :   Contraintes de cisaillement aux ELU
+        '   TauU        [E] :   Valeur ultime de la contrainte de cisaillement au point iPoint
+        '   CritereM    [E] :   Critere de la contrainte de flexion
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+                For k = iDebK To iFinK
+                    MyCritereV.EnregistreCritere(iNode, iCombi, iTravee, TauELU(iPoint, iNode, k), TauU)
+                Next
+            Next
+        Next
+
+    End Sub
+
+#End Region
+
+
+#Region " Vérification des contraintes élastiques équivalentes de Von Mises "
+
+    Private Sub RunCritereInteractionMVElastiqueVonMises(MyPoutre As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal, TauELU(,,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en cisaillement par les critères de VM
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre    [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   SigmaELU    [E] :   Contraintes normales aux ELU
+        '   TauELU      [E] :   Contraintes de cisaillement aux ELU
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim FydSup, FySup As Decimal
+        Dim FydW, FyW As Decimal
+        Dim FydInf, FyInf As Decimal
+
+        Dim nbPts As Integer = Me.Tau.MStatic.Count
+
+        '--> Initialisation
+
+        FySup = MyPoutre.Section.FySup
+        FydSup = FySup / MyPoutre.Param.Gamma.GammaM0
+        FyW = MyPoutre.Section.FyW
+        FydW = FyW / MyPoutre.Param.Gamma.GammaM0
+        FyInf = MyPoutre.Section.FyInf
+        FydInf = FyInf / MyPoutre.Param.Gamma.GammaM0
+
+        '--> Calculs
+
+        '# Contraintes de cisaillement dans l'âme du profilé
+
+        If (nbPts > 0) Then
+            '( Contrainte face interne de la semelle supérieure
+            RunCritereInteractionMVElastic(MyPoutre, iCombi, 0, SigmaELU, TauELU, FydW, Me.CritereTauA)
+            '( Contrainte CdG de la section
+            RunCritereInteractionMVElastic(MyPoutre, iCombi, 1, SigmaELU, TauELU, FydW, Me.CritereTauA)
+            '( Contrainte face interne de la semelle inférieure
+            RunCritereInteractionMVElastic(MyPoutre, iCombi, 2, SigmaELU, TauELU, FydW, Me.CritereTauA)
+        End If
+
+    End Sub
+
+    Private Sub RunCritereInteractionMVElastic(MyPoutre As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal, TauELU(,,) As Decimal,
+                                               SigmaU As Decimal, MyCritereSigmaEqVM As cls_Critere)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance contrainte équivalente de VonMises en un point de calcul de section
+        '----------------------------------------------------------------------------------------------------------
+        '   MyPoutre    [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iPoint      [E] :   Indice du point de calcul des contraintes
+        '   SigmaELU    [E] :   Contraintes normales aux ELU
+        '   TauELU      [E] :   Contraintes de cisaillement aux ELU
+        '   SigmaU      [E] :   Valeur ultime de la contrainte équivalente VM au point iPoint
+        '   CritereM    [E] :   Critere de la contrainte de flexion
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+        Dim SigmaEq As Decimal
+        Const iDecal As Integer = 1
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+                For k = iDebK To iFinK
+                    SigmaEq = Math.Sqrt(SigmaELU(iPoint + iDecal, iNode, k) ^ 2 + 3 * TauELU(iPoint, iNode, k) ^ 2)
+
+                    MyCritereSigmaEqVM.EnregistreCritere(iNode, iCombi, iTravee, SigmaEq, SigmaU)
+                Next
+            Next
+        Next
+
+    End Sub
+
+#End Region
 
 End Class

@@ -2,6 +2,7 @@
 
     '=========================================================================================================
     '   CLASSE POUR LA DEFINITION DES POINTS OU SONT CALCULEES LES CONTRAINTES NORMALES
+    '   ET POUR LE  CALCUL DE CES CONTRAINTES NORMALES
     '=========================================================================================================
 
 #Region " Attributs "
@@ -160,9 +161,8 @@
         '-----------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '-----------------------------------------------------------------------------------
-        '   Calculs des contraintes normales issues d'un cas de charges
+        '   Calculs des contraintes normales issues de tous les cas de charges
         '-----------------------------------------------------------------------------------
-        '   Calcul des contraintes normales à l'issue du calcu d'un cas de charge
         '-----------------------------------------------------------------------------------
         '   MyPoutre    [E] :   Poutre traitée
         '   Signe       [E] :   Cas de charge traité (qui a été calculé par EF)
@@ -338,7 +338,6 @@
         Next
 
     End Sub
-
 
     Private Sub CalculContraintesSectionsAcierNonEnrobees(MyPoutre As cls_Poutre, iCas As Integer, ByRef Sigma(,,,) As Decimal)
         '-----------------------------------------------------------------------------------

@@ -55,7 +55,6 @@
     Public iShadow As Integer                           ' Pour les cas de charges shadow, indice du cas de charges réel dont il est la doublure
     '                                                     La flèche d'un cas de charge shadow est stockée dans la table UZEta du cas réel
 
-
 #End Region
 
 #Region " Constructeurs "

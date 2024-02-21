@@ -515,9 +515,11 @@ Public Class cls_ProfilA
 
     Public ReadOnly Property zCdG As Decimal
         Get
-            Dim zANE, zANP As Decimal
-            Dim MelRd, MplRd As Decimal
-            ProprietesMyy(1, False, 1, zANE, Me.pInertieY, MelRd, zANP, MplRd)
+            Dim zANE As Decimal
+            'Dim zANE, zANP As Decimal
+            'Dim MelRd, MplRd As Decimal
+            'ProprietesMyy(1, False, 1, zANE, Me.pInertieY, MelRd, zANP, MplRd)
+            Me.ProprietesElastiques(1, zANE, Me.pInertieY)
             Return zANE
         End Get
     End Property
@@ -735,6 +737,72 @@ Public Class cls_ProfilA
 
     End Function
 
+    Public Function MomentStatiqueFSup(zG As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------
+        '   21/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Calcul du moment statique de la semelle supérieure / cdg
+        '-----------------------------------------------------------------------------------------------------------
+        '   zG      [E] :   Position du cdg
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim mStat As Decimal
+
+        '--( Calcul
+
+        mStat = Me.Bfs * Me.Tfs * (-Me.Tfs / 2 - zG)
+
+        Return mStat
+
+    End Function
+
+    Public Function MomentStatiqueFInf(zG As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------
+        '   21/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Calcul du moment statique de la semelle inférieure / cdg
+        '-----------------------------------------------------------------------------------------------------------
+        '   zG      [E] :   Position du cdg
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim mStat As Decimal
+
+        '--( Calcul
+
+        mStat = Me.Bfi * Me.Tfi * (zG - (-Me.ha + Me.Tfi / 2))
+
+        Return mStat
+
+    End Function
+
+    Public Function MomentStatiqueTeSup(zG As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------
+        '   21/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Calcul du moment statique de la semelle inférieure / cdg
+        '-----------------------------------------------------------------------------------------------------------
+        '   zG      [E] :   Position du cdg
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim mStat As Decimal
+
+        '--( Calcul
+
+        mStat = Me.MomentStatiqueFSup(zG) + (zG - Me.Tfs) ^ 2 * Me.Tw / 2
+
+        Return mStat
+    End Function
+
+#End Region
+
+#Region " Périmètres section et massiveté "
+
     ''' <summary>
     ''' Calcul du périmetre développé par la section (utile pour le calcul de la surface de peinture)
     ''' </summary>
@@ -758,7 +826,6 @@ Public Class cls_ProfilA
 
         Return perimetre
     End Function
-
 
     ''' <summary>
     ''' Calcul du périmetre développé par une section laminé usuelle ou SAB
@@ -882,8 +949,8 @@ Public Class cls_ProfilA
         Return massiveteLoc
 
     End Function
-#End Region
 
+#End Region
 
 #Region " Propriétés flexion "
 
@@ -933,26 +1000,51 @@ Public Class cls_ProfilA
 
     End Sub
 
+    Public Sub ProprietesElastiques(Signe As Decimal, ByRef zANE As Decimal, ByRef InertieY As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   21/02/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '   Uniquement I et z
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Signe       [E] :   Signe du moment
+        '   zANE        [S] :   Position axe neutre élastique
+        '   InertieY    [S] :   Moment d'inertie
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim MelRd, MplRd As Decimal
+        Dim zANP As Decimal
+
+        '--( Calcul des propriétés
+
+        Me.ProprietesMyy(Signe, False, 1, zANE, InertieY, MelRd, zANP, MplRd, False)
+
+    End Sub
+
     Public Sub ProprietesMyy(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
-                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
-                                       ByRef zANP As Decimal, ByRef MplRd As Decimal)
+                             ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
+                             ByRef zANP As Decimal, ByRef MplRd As Decimal, Optional lPlastic As Boolean = True)
         '-------------------------------------------------------------------------------------------------------------------
         '   13/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
-        '   Calcul des propriétés élastiques en flexion simple de la section, par rapport à l'axe fort
+        '   Calcul des propriétés élastiques et plastiques en flexion simple de la section, par rapport à l'axe fort
         '-------------------------------------------------------------------------------------------------------------------
         '   Signe       [E] :   Signe du moment
         '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
-        '   Gammas      [E] :   Coefficients partiels
-        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
-        '   zRef        [E] :   Position de l'arase supérieure de la semelle supérieure du profilé 
-        '   zANE        [E] :   Position axe neutre élastique
-        '   MelRd       [E] :   Moment élastique
+        '   GammaM0     [E] :   Coefficient partiel pour l'acier
+        '   zANE        [S] :   Position axe neutre élastique
+        '   InertieY    [S] :   Moment d'inertie
+        '   MelRd       [S] :   Moment élastique
+        '   zANP        [S] :   Position de l'axe neutre plastique
+        '   MplRd       [S] :   Momemnt plastique
+        '   lPlastic    [E] :   Indique si on calcule les propriétés plastiques
         '-------------------------------------------------------------------------------------------------------------------
 
         Select Case Me.typeProfileAcier
             Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
-                ProprietesMyyProfilesUsuels(Signe, lValeurRd, GammaM0, zANE, InertieY, MelRd, zANP, MplRd)
+                ProprietesMyyProfilesUsuels(Signe, lValeurRd, GammaM0, zANE, InertieY, MelRd, zANP, MplRd, lPlastic)
             Case Enum_TypeSectionAcier.LamineSlimSFB
                 ProprietesMyySlimfloorsSFB(Signe, lValeurRd, GammaM0, zANE, InertieY, MelRd, zANP, MplRd)
             Case Enum_TypeSectionAcier.LamineSlimIFBA
@@ -966,8 +1058,8 @@ Public Class cls_ProfilA
     End Sub
 
     Private Sub ProprietesMyyProfilesUsuels(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
-                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
-                                                      ByRef zANP As Decimal, ByRef MplRd As Decimal)
+                                            ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
+                                            ByRef zANP As Decimal, ByRef MplRd As Decimal, lPlastic As Boolean)
         '-------------------------------------------------------------------------------------------------------------------
         '   13/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -975,11 +1067,13 @@ Public Class cls_ProfilA
         '-------------------------------------------------------------------------------------------------------------------
         '   Signe       [E] :   Signe du moment
         '   lValeurRd   [E] :   Vrai si valeur de calcul, faux si valeur caractéristique
-        '   Gammas      [E] :   Coefficients partiels
-        '   nEqEc       [E] :   Coefficient d'équivalence acier béton pour l'enrobage partiel
-        '   zRef        [E] :   Position de l'arase supérieure de la semelle supérieure du profilé 
-        '   zANE        [E] :   Position axe neutre élastique
-        '   MelRd       [E] :   Moment élastique
+        '   GammaM0     [E] :   Coefficient partiel pour l'acier
+        '   zANE        [S] :   Position axe neutre élastique
+        '   InertieY    [S] :   Moment d'inertie
+        '   MelRd       [S] :   Moment élastique
+        '   zANP        [S] :   Position de l'axe neutre plastique
+        '   MplRd       [S] :   Momemnt plastique
+        '   lPlastic    [E] :   Indique si on calcule les propriétés plastiques
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -1037,13 +1131,17 @@ Public Class cls_ProfilA
 
         MelRd = MyModele.MomentElastique(Signe, zANE, InertieY, lValeurRd)
 
-        '--> Recherche de l'axe neutre plastique
+        If lPlastic Then
 
-        MyModele.RechercheANP(Signe, zANP, lValeurRd)
+            '--> Recherche de l'axe neutre plastique
 
-        '--> Moment plastique
+            MyModele.RechercheANP(Signe, zANP, lValeurRd)
 
-        MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+            '--> Moment plastique
+
+            MplRd = MyModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+        End If
 
 
     End Sub

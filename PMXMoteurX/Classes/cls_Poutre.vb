@@ -484,8 +484,11 @@ Public Class cls_Poutre
     Dim lMultiQ(2) As Boolean                                       ' Indique si les chargements Q1, Q2 et QC sont appliqués sur plusieurs travées ou non
     Dim indiceCasRetrait As Integer
 
-    '--Points de calcul des contraintes normales
+    '--Classe pour le calcul des contraintes normales
     Public PtsSigma As New cls_PointsSigma
+
+    '--Classe pour le calcul des contraintes de cisaillement
+    'Public Tau As cls_tau
 
 #End Region
 
