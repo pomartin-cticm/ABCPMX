@@ -58,10 +58,13 @@
                 Me.iArmaEnrob(0) = Me.zPos.Count
 
                 '# Lit inférieur
+                Me.zPos.Add(MyPoutre.Section.zPositionLitArmaEnrobage(0))
 
                 '# Lit intermédiaire
+                Me.zPos.Add(MyPoutre.Section.zPositionLitArmaEnrobage(1))
 
                 '# Lit supérieur
+                Me.zPos.Add(MyPoutre.Section.zPositionLitArmaEnrobage(2))
 
                 Me.iArmaEnrob(1) = Me.zPos.Count - 1
         End Select

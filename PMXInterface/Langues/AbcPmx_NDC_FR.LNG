@@ -387,6 +387,12 @@ INFO_NS					= NS = NON Satisfaisant
 PLASTICDESIGNCLASS12	= Sections de classe 1 ou 2 : résistance plastique
 ELASTICDESIGNCLASS3		= Sections de classe 3 : résistance élastique en flexion
 ELASTICDESIGNIMPOSED	= résistance élastique des sections imposée
+PLASTICRESISTANCEV		= Résistance plastique à l'effort tranchant
+BUCKLINGRESISTANCEV		= Résistance au voilement par cisaillement
+NORMALS_INSTEEL			= Contraintes normales dans l'acier de construction
+SHEARS_INSTEEL			= Contraintes de cisaillement dans l'acier de construction
+NORMALS_INCONENCA		= Contraintes normales de compression dans le béton d'enrobage
+NORMALS_INREINFENCA		= Contraintes normales dans les armatures de l'enrobage
 NO_MVINTERACTION		= Pas d'interaction MV
 M_CRITERIA				= Résistance à la flexion
 V_CRITERIA				= Résistance à l'effort tranchant

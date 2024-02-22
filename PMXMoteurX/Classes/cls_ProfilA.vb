@@ -65,6 +65,19 @@ Public Class cls_ProfilA
 #End Region
 
 #Region " Propriétés "
+
+    Public ReadOnly Property ElancementAme As Decimal
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   22/02/24 :  Création POM
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   Calcule l'élancement de l'âme pour le voilement par cisaillement
+        '-------------------------------------------------------------------------------------------------------------------------------
+        Get
+            Return Me.HauteurAmeHw / Me.Tw
+        End Get
+    End Property
+
+
     ''' <summary>
     ''' Aire de la section du profilé
     ''' </summary>

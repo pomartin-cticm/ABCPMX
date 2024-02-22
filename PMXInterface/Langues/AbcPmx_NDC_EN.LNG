@@ -387,6 +387,12 @@ INFO_NS					= NS = NOT Satisfactory
 PLASTICDESIGNCLASS12	= Class 1 or 2 cross-sections: plastic design
 ELASTICDESIGNCLASS3		= Class 3 cross-sections: elastic design to bending moment
 ELASTICDESIGNIMPOSED	= Elastic design imposed
+PLASTICRESISTANCEV		= Shear plastic resistance
+BUCKLINGRESISTANCEV		= Resistance to shear buckling
+NORMALS_INSTEEL			= Normal stresses in constructional steel
+SHEARS_INSTEEL			= Shear stresses in constructional steel
+NORMALS_INCONENCA		= Normal compression stresses in the concrete encasement
+NORMALS_INREINFENCA		= Normal stresses in the encasement reinforcement
 NO_MVINTERACTION		= No MV interaction
 M_CRITERIA				= Resistance to bending moment
 V_CRITERIA				= Resistance to shear force

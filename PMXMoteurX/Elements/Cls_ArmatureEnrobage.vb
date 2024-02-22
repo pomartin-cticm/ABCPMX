@@ -136,9 +136,31 @@
         Return Phi
     End Function
 
+    Public ReadOnly Property NbTotalBarresActives() As Integer
+        '------------------------------------------------------------------------------------------------------------
+        '   22/02/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------
+        '   Calcul du nombre total de barres actives dans le lit
+        '------------------------------------------------------------------------------------------------------------
+
+        Get
+            '--( Initialisation
+            Dim Nb As Integer = 0
+
+            '--( Calcul
+
+            If Me.lActiveExt Then Nb += Me.NbExt
+            Nb += Me.NbMil
+            If Me.lActiveInt Then Nb += Me.NbInt
+
+            Return Nb
+
+        End Get
+    End Property
+
 #End Region
 
-#Region "Fonctions de copie"
+#Region " Fonctions de copie "
     Public Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function

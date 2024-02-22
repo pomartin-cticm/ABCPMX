@@ -7,6 +7,17 @@ Public Class cls_VerificationsAcier
     '=  CLASSE POUR LA VERIFICATION DES POUTRES ACIER
     '=========================================================================================================
 
+#Region " Structures "
+
+    Structure strucShearBuckling
+
+        Dim ElancementW As Decimal          ' Elancement de l'âme
+        Dim LimiteElancementW As Decimal    ' Limite d'élancement au dela de laquelle il faut vérifier le voilement par cisaillement
+        Dim lCheckRequired As Boolean       ' Indique si la vérification de la résistance est requise
+
+    End Structure
+
+#End Region
 
 #Region " Attributs "
 
@@ -27,6 +38,10 @@ Public Class cls_VerificationsAcier
 
     Public AlphaCrLTB() As Decimal                  ' Alpha critique pour le déversement élastique
     Public McrLTB(,) As Decimal                     ' Moment critique pour le déversement (en travée)
+
+    Public ShearB As strucShearBuckling             ' Paramètres du voilement par cisaillement
+
+    '==( Classe pour le calcul des contraintes de cisaillement en calcul élastique imposé
 
     Dim Tau As cls_Tau
 
@@ -105,8 +120,9 @@ Public Class cls_VerificationsAcier
 
         '--> Déclarations
 
-        Dim VplRd As Decimal
+        Dim VplRd As Decimal                            ' Résistance plastique au cisaillement
         Dim VbRd As Decimal                             ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
+        Dim VRd As Decimal                              ' Résistance à l'effort tranchant (soit plastique, soit voilement)
         Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
         Dim iCombi As Integer
         Dim combiELU As New cls_Combinaisons
@@ -127,6 +143,8 @@ Public Class cls_VerificationsAcier
         Dim TauCas(,,,) As Decimal = Nothing            ' Contraintes de cisaillement pour les cas de charges
         Dim lRetraitElastique As Boolean = True
         Dim lVerifElastic As Boolean                    ' Indique si on doit effectuer une verification élastique des sections
+        Dim EpsilonW As Decimal
+        Dim lEnrob As Boolean = MyPoutre.lEnrobage
 
         '--> Initialisations
 
@@ -152,6 +170,23 @@ Public Class cls_VerificationsAcier
         lTwoAdjacentCantilevers = MyPoutre.lTraveeConsoleGauche And MyPoutre.lTraveeConsoleDroite
 
         VbRd = MyPoutre.Section.VbRd(MyPoutre.Param.Gamma.GammaM1, MyPoutre.Param.EtaW, lTwoAdjacentCantilevers)
+
+        EpsilonW = Math.Sqrt(235 / MyPoutre.Section.FyW)
+        Me.ShearB.ElancementW = MyPoutre.Section.ProfilA.ElancementAme
+        If lenrob Then
+            Me.ShearB.LimiteElancementW = 124 * EpsilonW
+        Else
+            Me.ShearB.LimiteElancementW = 72 * EpsilonW / MyPoutre.Param.EtaW
+        End If
+        Me.ShearB.lCheckRequired = IsGreater(Me.ShearB.ElancementW, Me.ShearB.LimiteElancementW)
+
+        '# Résistance à l'effort tranchant
+
+        If Me.ShearB.lCheckRequired Then
+            VRd = Math.Min(VplRd, VbRd)
+        Else
+            VRd = VplRd
+        End If
 
         '# Propriétés
 
@@ -236,7 +271,7 @@ Public Class cls_VerificationsAcier
 
                 '# Vérification sous effort tranchant
 
-                Me.RunCritereTranchants(MyPoutre, iCombi, VEd, VplRd)
+                Me.RunCritereTranchants(MyPoutre, iCombi, VEd, VRd)
 
                 '# Vérification au voilement par cisaillement
 
@@ -769,8 +804,14 @@ Public Class cls_VerificationsAcier
         Dim FydSup, FySup As Decimal
         Dim FydW, FyW As Decimal
         Dim FydInf, FyInf As Decimal
+        Dim Fck, Fcd As Decimal
+        Dim Fsk, Fsd As Decimal
 
         Dim iPro0 As Integer = MyPoutre.PtsSigma.iProfile(0)
+        Dim iBetonE0 As Integer = MyPoutre.PtsSigma.iBetonEnrob(0)
+        Dim iArmaE0 As Integer = MyPoutre.PtsSigma.iArmaEnrob(0)
+
+        Dim lEnrob As Boolean = MyPoutre.lEnrobage
 
         '--> Initialisation
 
@@ -796,7 +837,33 @@ Public Class cls_VerificationsAcier
             RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
             '( Contrainte face externe de la semelle inférieure
             RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
+
+
         End If
+
+        If lEnrob And (iBetonE0 > -1) Then
+
+            '# Limite de contraintes
+            Fck = MyPoutre.Section.Enrobage.Beton.Fck
+            Fcd = Fck / MyPoutre.Param.Gamma.GammaC
+            Fsk = MyPoutre.Section.Enrobage.AcierArmatures.FsK
+            Fsd = Fsk / MyPoutre.Param.Gamma.GammaS
+
+            '# Contrainte dans le béton d'enrobage (face supérieure puis face inférieure)
+            RunCritereFlexionVM(MyPoutre, iCombi, iBetonE0 + 0, SigmaELU, Fcd, Me.CritereSigmaE)
+            RunCritereFlexionVM(MyPoutre, iCombi, iBetonE0 + 1, SigmaELU, Fcd, Me.CritereSigmaE)
+
+            '# Contrainte dans les lits d'armatures (3 lits)
+            For iArma As Int16 = 0 To 2
+                If MyPoutre.Section.Enrobage.LitArma(iArma).NbTotalBarresActives > 0 Then
+                    RunCritereFlexionVM(MyPoutre, iCombi, iArmaE0 + iArma, SigmaELU, Fsd, Me.CritereSigmaE)
+                End If
+            Next
+
+
+
+        End If
+
 
     End Sub
 
@@ -924,7 +991,7 @@ Public Class cls_VerificationsAcier
 
     End Sub
 
-    Private Sub RunCritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
+    Private Sub RunCritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VRd As Decimal, Optional lBuckling As Boolean = False)
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
@@ -933,7 +1000,8 @@ Public Class cls_VerificationsAcier
         '   MyPoutre[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   VEd     [E] :   Table des efforts tranchants le long de la barre
-        '   VplRd   [E] :   Table des efforts tranchants résistant plastique le long de la barre
+        '   VRd     [E] :   Effort tranchant résistant (plastique ou voilement) de la barre
+        '   lBukling[E] :   Indique si critere de résistance au voilement par cisaillement
         '----------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -959,7 +1027,11 @@ Public Class cls_VerificationsAcier
                 If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
 
                 For k = iDebK To iFinK
-                    Me.CritereV.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VplRd)
+                    If lBuckling Then
+                        Me.CritereVb.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VRd)
+                    Else
+                        Me.CritereV.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VRd)
+                    End If
                 Next
             Next
         Next

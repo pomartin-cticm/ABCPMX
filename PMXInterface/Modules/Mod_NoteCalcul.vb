@@ -4073,7 +4073,7 @@ Module Mod_NoteCalcul
 
         '# Calcul détaillé des critères sous combinaisons ELU
 
-        EditionVerificationsELUCombi(MyBeam, False)
+        EditionVerificationsELUCombi(MyBeam, 0, False)
 
         '# Poutres mixtes : ferraillage transversal
 
@@ -4094,7 +4094,7 @@ Module Mod_NoteCalcul
 
             '# Calcul détaillé des critères sous combinaisons ELU
 
-            EditionVerificationsELUCombi(MyBeam, True)
+            EditionVerificationsELUCombi(MyBeam, 0, True)
 
         End If
 
@@ -4119,7 +4119,7 @@ Module Mod_NoteCalcul
         SauteLigne()
 
         Select Case MyBeam.TypeSection
-            Case cls_Section.Enum_TypeSection.AcierSeul
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 EditionVerificationsELUSummaryACIER(MyBeam, 0)
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 If lConstruction Then
@@ -4141,14 +4141,18 @@ Module Mod_NoteCalcul
         '   Synthèse des critères ELU pour une poutre acier (avec ou sans enrobage)
         '-------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
+        Dim lEnrob As Boolean = MyBeam.lEnrobage
+
         '==( Résistance en section
 
         AddTitreNdC(3, BlocELU("SECTIONSR"))
         If MyBeam.VerifAcier(iVerif).lCalculPlastic Then
             '--> Calcul Plastique
 
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (*)")
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)")
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)")
 
             If MyBeam.VerifAcier(iVerif).CritereMV.CritereMax = 0 Then
                 AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
@@ -4157,27 +4161,41 @@ Module Mod_NoteCalcul
             End If
 
             SauteLigne()
-            AddLigneNDC(TABW2 & "(*): " & BlocELU("PLASTICDESIGNCLASS12"))
+            AddLigneNDC(TABW2 & "(1): " & BlocELU("PLASTICDESIGNCLASS12"))
+            If MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
+                AddLigneNDC(TABW2 & "(2): " & BlocELU("BUCKLINGRESISTANCEV"))
+            Else
+                AddLigneNDC(TABW2 & "(2): " & BlocELU("PLASTICRESISTANCEV"))
+            End If
 
         ElseIf MyBeam.Param.lElasticDesign Then
             '--> Calcul élastique imposé
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaA, "\SG\-s\s\=", BlocELU("M_CRITERIA") & " (*)")
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereTauA, "\SG\-t\s\=", BlocELU("V_CRITERIA") & " (*)")
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaA, "\SG\-s\s\=", BlocELU("M_CRITERIA") & " (1)(2)")
+            If lenrob Then
+                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaE, "\SG\-s\s,ce\=", BlocELU("M_CRITERIA") & " (4)")
+                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaArmaE, "\SG\-s\s,se\=", BlocELU("M_CRITERIA") & " (5)")
+            End If
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereTauA, "\SG\-t\s\=", BlocELU("V_CRITERIA") & " (1)(3)")
 
             If MyBeam.VerifAcier(iVerif).CritereSigmaVM.CritereMax = 0 Then
                 AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
             Else
-                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaVM, "\SG\s\-eq,VM\=", BlocELU("MV_CRITERIA") & " (*)")
+                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaVM, "\SG\s\-eq,VM\=", BlocELU("MV_CRITERIA") & " (1)")
             End If
 
             SauteLigne()
-            AddLigneNDC(TABW2 & "(*): " & BlocELU("ELASTICDESIGNIMPOSED"))
-
+            AddLigneNDC(TABW2 & "(1): " & BlocELU("ELASTICDESIGNIMPOSED"))
+            AddLigneNDC(TABW2 & "(2): " & BlocELU("NORMALS_INSTEEL"))
+            AddLigneNDC(TABW2 & "(3): " & BlocELU("SHEARS_INSTEEL"))
+            If lEnrob Then
+                AddLigneNDC(TABW2 & "(4): " & BlocELU("NORMALS_INCONENCA"))
+                AddLigneNDC(TABW2 & "(5): " & BlocELU("NORMALS_INREINFENCA"))
+            End If
         Else
-            '--> Calcul élastique en raison de la classe des sections
+                '--> Calcul élastique en raison de la classe des sections
 
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaA, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (*)")
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
+                AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereSigmaA, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)")
+            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA") & " (2)")
 
             If MyBeam.VerifAcier(iVerif).CritereMV.CritereMax = 0 Then
                 AddLigneNDC(TABW3 & BlocELU("NO_MVINTERACTION"))
@@ -4186,7 +4204,12 @@ Module Mod_NoteCalcul
             End If
 
             SauteLigne()
-            AddLigneNDC(TABW2 & "(*): " & BlocELU("ELASTICDESIGNCLASS3"))
+            AddLigneNDC(TABW2 & "(1): " & BlocELU("ELASTICDESIGNCLASS3"))
+            If MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
+                AddLigneNDC(TABW2 & "(2): " & BlocELU("BUCKLINGRESISTANCEV"))
+            Else
+                AddLigneNDC(TABW2 & "(2): " & BlocELU("PLASTICRESISTANCEV"))
+            End If
 
         End If
 
@@ -4385,7 +4408,6 @@ Module Mod_NoteCalcul
 
     End Sub
 
-
     Private Sub AfficheSyntheseCritereLT(Critere As cls_Critere, Symbol As String, Titre As String)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
@@ -4442,20 +4464,34 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EnteteTableauCriteresELU(MyBeam As cls_Poutre, ByRef NCOL As Integer)
+    Private Sub EnteteTableauCriteresELU(MyBeam As cls_Poutre, iVerif As Integer, ByRef NCOL As Integer)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Entête du tableau des critères ELU par combinaison
         '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre traitée
+        '   iVerif      [E] :   Indice du bloc de vérification
+        '   NCOL        [E] :   
 
         '--> Déclarations
 
         Dim PostTab As Integer = 20
         Dim lMultiSpan As Boolean = (MyBeam.NbTravees > 1)
         Dim lElastic As Boolean = (MyBeam.Param.lElasticDesign)
+        ' Dim lShearB As Boolean
+        Dim lInterMV As Boolean
+        Dim lMixte As Boolean = MyBeam.lMixte
 
         '--> Initialisation
+
+        If lMixte Then
+            ' lShearB = MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired        '==== A MODIFIER POUR LES POUTRES MIXTES
+            lInterMV = IsGreater(MyBeam.VerifMixte(iVerif).CritereMV.CritereMax, 0)
+        Else
+            'lShearB = MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired
+            lInterMV = IsGreater(MyBeam.VerifAcier(iVerif).CritereMV.CritereMax, 0)
+        End If
 
         NCOL = 3
         If lMultiSpan Then NCOL += 1
@@ -4464,6 +4500,9 @@ Module Mod_NoteCalcul
                 If lMultiSpan Then NCOL += 2 Else NCOL += 1
             End If
             If MyBeam.lEnrobage Then NCOL += 2
+            NCOL += 1
+        Else
+            If lInterMV Then NCOL += 1
         End If
 
         AddLigneNDC("\TABLEAU " & CStr(PostTab))
@@ -4480,6 +4519,8 @@ Module Mod_NoteCalcul
         If lElastic Then
             '# Contraintes acier
             AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,a\=")
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-t\s,a\=")
+            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,eq,a\=")
             If MyBeam.lMixte Then
                 '# Contraintes dalle béton
                 AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,c\=")
@@ -4496,20 +4537,28 @@ Module Mod_NoteCalcul
                 AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,se\=")
             End If
 
-            AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-t\s,a\=")
 
         Else
             AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
             AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+            If lInterMV Then
+                AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-MV\=")
+            End If
         End If
 
     End Sub
 
-    Private Sub AffichageTableauCriteresELU(MyBeam As cls_Poutre, lMultiSpan As Boolean, ByRef NCOL As Integer, iCombi As Integer)
+    Private Sub AffichageTableauCriteresELU(MyBeam As cls_Poutre, lMultiSpan As Boolean, ByRef NCOL As Integer, iCombi As Integer, iVerif As Integer)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Affichage dans le tableau des critères ELU des résultats pour une combinaison
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   Poutre traitée
+        '   lMultiSpan  [E] :   Si poutre à plusieurs travées
+        '   NCOL        [E] :   Nombre de colonnes du tableau
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iVerif      [E] :   Indice du bloc de vérification
         '-------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -4521,9 +4570,17 @@ Module Mod_NoteCalcul
         Dim lElastic As Boolean = MyBeam.Param.lElasticDesign
         Dim iNodeD, iNodeF As Integer
         Dim lMixte As Boolean = MyBeam.lMixte
-        Const iVerif As Integer = 0
+        Dim lEnrob As Boolean = MyBeam.lEnrobage
+        Dim lInterMV As Boolean
 
         '--> Initialisation
+
+        If lMixte Then
+            lInterMV = IsGreater(MyBeam.VerifMixte(iVerif).CritereMV.CritereMax, 0)
+        Else
+            lInterMV = IsGreater(MyBeam.VerifAcier(iVerif).CritereMV.CritereMax, 0)
+        End If
+
 
         For i = iTraveeDeb To iTraveeFin
             MyBordures(i) = Bordures.Gauche + Bordures.Droite
@@ -4547,8 +4604,47 @@ Module Mod_NoteCalcul
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
             End If
             If lElastic Then
+                '==( Affichage du critère de résistance élastique du profilé acier - Contraintes normales
+                If lMixte Then
+                    AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereSigmaA, i, iCombi, MyBordures(i))
+                Else
+                    AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaA, i, iCombi, MyBordures(i))
+                End If
+
+                '==( Affichage du critère de résistance élastique du profilé acier - Contraintes de cisaillement
+                If lMixte Then
+                    'AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).Critere, i, iCombi, MyBordures(i))
+                Else
+                    AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereTauA, i, iCombi, MyBordures(i))
+                End If
+
+                '==( Affichage du critère de résistance élastique du profilé acier - Contraintes équivalentes de Von Mises
+                If lMixte Then
+                    'AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).Critere, i, iCombi, MyBordures(i))
+                Else
+                    AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaVM, i, iCombi, MyBordures(i))
+                End If
+
+                If lMixte Then
+                    '# Contraintes dalle béton
+                    AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,c\=")
+                    If lMultiSpan Then
+                        '# Contraintes armatures
+                        AddCelluleFond(LC3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\-s\s,s\=")
+                    End If
+                End If
+
+                If lEnrob Then
+                    '# Contraintes béton enrobage
+                    AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaE, i, iCombi, MyBordures(i))
+
+                    '# Contraintes armatures enrobage
+                    AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereSigmaArmaE, i, iCombi, MyBordures(i))
+
+                End If
+
             Else
-                '** Affichage de GammaM
+                '==( Affichage de GammaM
                 If lMixte Then
                     'AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
                     AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereM, i, iCombi, MyBordures(i))
@@ -4556,13 +4652,21 @@ Module Mod_NoteCalcul
                     'AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereM, iNodeD, iNodeF, MyBordures(i))
                     AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereM, i, iCombi, MyBordures(i))
                 End If
-                '** Affichage de GammaV
+                '==( Affichage de GammaV
                 If lMixte Then
                     'AffichageCritereELU(MyBeam.VerifMixte(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
                     AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereV, i, iCombi, MyBordures(i))
                 Else
                     'AffichageCritereELU(MyBeam.VerifAcier(iVerif).CritereV, iNodeD, iNodeF, MyBordures(i))
                     AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereV, i, iCombi, MyBordures(i))
+                End If
+                '==( Affichage de GammaMV
+                If lInterMV Then
+                    If lMixte Then
+                        AffichageCritereELU_N(MyBeam.VerifMixte(iVerif).CritereMV, i, iCombi, MyBordures(i))
+                    Else
+                        AffichageCritereELU_N(MyBeam.VerifAcier(iVerif).CritereMV, i, iCombi, MyBordures(i))
+                    End If
                 End If
             End If
         Next
@@ -4638,7 +4742,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionVerificationsELUCombi(MyBeam As cls_Poutre, lConstructionP As Boolean)
+    Private Sub EditionVerificationsELUCombi(MyBeam As cls_Poutre, iVerif As Integer, lConstructionP As Boolean)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -4670,10 +4774,10 @@ Module Mod_NoteCalcul
 
         '--> Tableau des critères de résistance / combinaison
 
-        EnteteTableauCriteresELU(MyBeam, NCOL)
+        EnteteTableauCriteresELU(MyBeam, iVerif, NCOL)
 
         For iCombi = 0 To nbCombi - 1
-            AffichageTableauCriteresELU(MyBeam, (MyBeam.NbTravees > 1), NCOL, iCombi)
+            AffichageTableauCriteresELU(MyBeam, (MyBeam.NbTravees > 1), NCOL, iCombi, iVerif)
         Next
 
         FinTableau()
