@@ -36,6 +36,8 @@
         '   Initialisation des points de calculs des contraintes normales
         '-----------------------------------------------------------------------------------
 
+        Me.zPos.Clear()
+
         InitialisePourProfile(MyPoutre)
         InitialisePourBetonEnrob(MyPoutre)
         InitialisePourArmaEnrob(MyPoutre)

@@ -210,12 +210,11 @@ Public Class cls_VerificationsAcier
         Me.lCalculPlastic = Not lVerifElastic
 
         '# Initialisation des critères dépendant du type de vérification
+
         Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, nbCombiELU, MyPoutre.IndiceDerniereTravee, lVerifElastic, MyPoutre.Param.lElasticDesign)
 
         '# Contraintes normales
 
-        'lSigma = MyPoutre.Param.lElasticDesign Or (ClasseP > 2) Or (ClasseM > 2)
-        ''lSigma = True       ' EN phase debug
         If lVerifElastic Then
             MyPoutre.PtsSigma.Initialise(MyPoutre)
             MyPoutre.PtsSigma.CalculContraintesCharges(MyPoutre, 1, SigmaCas)
@@ -838,7 +837,6 @@ Public Class cls_VerificationsAcier
             '( Contrainte face externe de la semelle inférieure
             RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
 
-
         End If
 
         If lEnrob And (iBetonE0 > -1) Then
@@ -856,14 +854,11 @@ Public Class cls_VerificationsAcier
             '# Contrainte dans les lits d'armatures (3 lits)
             For iArma As Int16 = 0 To 2
                 If MyPoutre.Section.Enrobage.LitArma(iArma).NbTotalBarresActives > 0 Then
-                    RunCritereFlexionVM(MyPoutre, iCombi, iArmaE0 + iArma, SigmaELU, Fsd, Me.CritereSigmaE)
+                    RunCritereFlexionVM(MyPoutre, iCombi, iArmaE0 + iArma, SigmaELU, Fsd, Me.CritereSigmaArmaE)
                 End If
             Next
 
-
-
         End If
-
 
     End Sub
 
