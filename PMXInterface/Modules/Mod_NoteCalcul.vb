@@ -4075,6 +4075,10 @@ Module Mod_NoteCalcul
 
         EditionVerificationsELUCombi(MyBeam, 0, False)
 
+        '# Informations additionnelles
+
+        EditionVerifELUAdditionel(MyBeam)
+
         '# Poutres mixtes : ferraillage transversal
 
         If MyBeam.lMixte Then
@@ -4098,6 +4102,99 @@ Module Mod_NoteCalcul
 
         End If
 
+    End Sub
+
+    Private Sub EditionVerifELUAdditionel(MyBeam As cls_Poutre, Optional lConstruction As Boolean = False)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Paramètres de vérification ELU additionnels
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre
+        '   lConstruction   [E] :   Indique si phase de construction pour une poutre mixte
+        '-------------------------------------------------------------------------------------------
+
+        If MyBeam.lMixte And (Not lConstruction) Then
+        Else
+            EditionVerifELUAdditionelAcier(MyBeam)
+        End If
+    End Sub
+
+    Private Sub EditionVerifELUAdditionelAcier(MyBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Paramètres de vérification ELU additionnels pour la poutre en acier
+        '-------------------------------------------------------------------------------------------
+        '   MyBeam          [E] :   Poutre
+        '   lConstruction   [E] :   Indique si phase de construction pour une poutre mixte
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim Symbol, Symbol2 As String
+        Const iVerif As Integer = 0
+        Dim lEnrob As Boolean = MyBeam.lEnrobage
+        Dim EpsilonW As Decimal = Math.Sqrt(235 / MyBeam.Section.FyW)
+        Dim Reference As String
+
+        '--( Initialisation
+
+        AddTitreNdC(2, BlocELU("ADDPARAM"))
+
+        '--( Elancement de l'âme
+
+        Symbol = "h\-w\=/t\-w\="
+        AddLigneNDC(TABW2 & BlocELU("WSLENDERNESS") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(MyBeam.VerifAcier(iVerif).ShearB.ElancementW, Enu_TypeVariable.SansType, 3, 2, False))
+
+        '--( Limite d'élancement
+
+        If lEnrob Then
+            Symbol2 = "124 \Se\s\-w\="
+        Else
+            Symbol2 = "72 \Se\s\-w\= / \Sh\s"
+        End If
+
+        AddLigneNDC(TABW2 & BlocELU("WSLENDERNESSLIMIT") & TABAFF &
+                    Symbol2 & TABEGAL & GetStringInUnit(MyBeam.VerifAcier(iVerif).ShearB.LimiteElancementW, Enu_TypeVariable.SansType, 3, 2, False))
+
+        If lEnrob Then
+            AddLigneNDC(TABW2 & BlocELU("WHERE") & TABAFF &
+                        "\Se\s\-w\=" & TABEGAL & GetStringInUnit(EpsilonW, Enu_TypeVariable.SansType, 3, 2, False))
+        Else
+            AddLigneNDC(TABW2 & BlocELU("WHERE") & TABAFF &
+                        "\Se\s\-w\=" & TABEGAL & GetStringInUnit(EpsilonW, Enu_TypeVariable.SansType, 3, 2, False))
+            AddLigneNDC(TABAFF &
+                        "\Sh\s" & TABEGAL & GetStringInUnit(MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 2, False))
+        End If
+
+        SauteLigne()
+
+        If MyBeam.Param.lGeneration1 Then
+            If lEnrob Then
+                Reference = "EN 1994-1-1:2005, 6.3.1 (2)"
+            Else
+                Reference = "EN 1993-1-5:2006, 5.1 (2)"
+            End If
+        Else
+            If lEnrob Then
+                Reference = "prEN 1994-1-1, 8.3.1 (2)"
+            Else
+                Reference = "EN 1993-1-5:2024, 7.1 (2)"
+            End If
+        End If
+
+        Reference = "  [" & Reference & "]"
+
+        If MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
+            AddLigneNDC(TABW2 & Symbol & "<=" & Symbol2 & " : " & BlocELU("SHEARBREQUIRED") & Reference)
+        Else
+            AddLigneNDC(TABW2 & Symbol & ">" & Symbol2 & " : " & BlocELU("SHEARBNOTREQUIRED") & Reference)
+        End If
+
+
+        'AddLigneNDC(TABW2 & "[" & Reference & "]")
 
     End Sub
 

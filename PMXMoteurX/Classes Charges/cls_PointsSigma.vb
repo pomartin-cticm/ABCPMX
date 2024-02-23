@@ -287,7 +287,7 @@
 
                             DeltaZ = zCdG - Me.zPos(iPts)
 
-                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqDalle / kConvMPaPa
+                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ / nEqDalle / kConvMPaPa
 
                         Next
 
@@ -301,7 +301,7 @@
 
                             DeltaZ = zCdG - Me.zPos(iPts)
 
-                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqArma / kConvMPaPa
+                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ / nEqArma / kConvMPaPa
 
                         Next
 
@@ -315,7 +315,7 @@
 
                             DeltaZ = zCdG - Me.zPos(iPts)
 
-                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqEnrob / kConvMPaPa
+                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ / nEqEnrob / kConvMPaPa
 
                         Next
 
@@ -329,7 +329,7 @@
 
                             DeltaZ = zCdG - Me.zPos(iPts)
 
-                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ * nEqArma / kConvMPaPa
+                            Sigma(iCas, iPts, iNode, k) = MEd / InertieY(iNode, k) * DeltaZ / nEqArma / kConvMPaPa
 
                         Next
 

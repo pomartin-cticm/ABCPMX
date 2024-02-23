@@ -393,6 +393,11 @@ NORMALS_INSTEEL			= Normal stresses in constructional steel
 SHEARS_INSTEEL			= Shear stresses in constructional steel
 NORMALS_INCONENCA		= Normal compression stresses in the concrete encasement
 NORMALS_INREINFENCA		= Normal stresses in the encasement reinforcement
+WSLENDERNESS			= Web slenderness
+WSLENDERNESSLIMIT		= Limit of web slenderness
+WHERE					= Where
+SHEARBREQUIRED			= The resistance to shear buckling is checked
+SHEARBNOTREQUIRED		= The resistance to shear buckling is not required
 NO_MVINTERACTION		= No MV interaction
 M_CRITERIA				= Resistance to bending moment
 V_CRITERIA				= Resistance to shear force
@@ -421,6 +426,8 @@ ELASTIC_DESIGN			= Elastic design (Class 3)
 ELASTIC_DESIGN_IMPOSED	= Imposed elastic design
 SECTIONSR				= Resistance of sections
 BEAMR					= Resistance of the beam
+ADDPARAM				= Additional parameters
+
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States
