@@ -396,7 +396,7 @@ Public Class Frm_PMX
 
         MyProjet.Poutres.Remove(MyProjet.Poutres(MyProjet.IndEnCours))
 
-        MyProjet.IndEnCours = Math.Max(MyProjet.IndEnCours - 1, 0)
+        MyProjet.IndEnCours = Math.Max(Math.Min(MyProjet.IndEnCours, MyProjet.Poutres.Count - 1), 0)
 
         '--> Mise à jour du TreeView
         AffichageTViewChk()

@@ -1274,11 +1274,17 @@ Public Class cls_Poutre
         Next
 
         'Clone combinaisons définies par l'utilisateur
-        'cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELU, PoutreCible.CombiA_ELU)
-        'cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELS, PoutreCible.CombiA_ELS)
-        'cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELF, PoutreCible.CombiA_ELF)
-        'cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELCU, PoutreCible.CombiA_ELCU)
-        'cls_Combinaisons.DeepClone(PoutreSource.CombiA_ELCS, PoutreCible.CombiA_ELCS)
+        PoutreCible.lCombELU = PoutreSource.lCombELU.Clone
+        PoutreCible.lCombELS = PoutreSource.lCombELS.Clone
+        PoutreCible.lCombFeu = PoutreSource.lCombFeu.Clone
+        PoutreCible.lCombELCURules = PoutreSource.lCombELCURules.Clone
+        PoutreCible.lCombELCSRules = PoutreSource.lCombELCSRules.Clone
+
+        PoutreCible.CoefCombELU = PoutreSource.CoefCombELU.Clone
+        PoutreCible.CoefCombELS = PoutreSource.CoefCombELS.Clone
+        PoutreCible.CoefCombFeu = PoutreSource.CoefCombFeu.Clone
+        PoutreCible.CoefCombELCU = PoutreSource.CoefCombELCU.Clone
+        PoutreCible.CoefCombELCS = PoutreSource.CoefCombELCS.Clone
 
         PoutreCible.InitialisePoidsPropres() 'relance le calcul du poids propre une fois que toutes les données ont été clonées 
 

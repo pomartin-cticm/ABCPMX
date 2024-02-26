@@ -472,6 +472,7 @@ Public Class Frm_SectionAcierStandard
         GereTransfertValeur(MySectionLoc.ProfilA.Tw, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Tw, lModif)
 
         GereTransfertValeur(MySectionLoc.ProfilA.NomProfile, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.NomProfile, lModif)
+        GereTransfertValeur(MySectionLoc.ProfilA.Gamme, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Gamme, lModif)
 
         GereTransfertValeur(MySectionLoc.Acier.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Nuance, lModif)
         GereTransfertValeur(MySectionLoc.Acier.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Qualite, lModif)

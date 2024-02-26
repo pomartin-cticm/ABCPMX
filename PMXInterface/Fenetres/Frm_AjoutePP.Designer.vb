@@ -80,7 +80,7 @@ Partial Class Frm_AjoutePP
         Me.pan_Main.Location = New System.Drawing.Point(0, 0)
         Me.pan_Main.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(701, 485)
+        Me.pan_Main.Size = New System.Drawing.Size(753, 459)
         Me.pan_Main.TabIndex = 0
         '
         'TLpan_Main
@@ -95,7 +95,7 @@ Partial Class Frm_AjoutePP
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(701, 485)
+        Me.TLpan_Main.Size = New System.Drawing.Size(753, 459)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -109,20 +109,20 @@ Partial Class Frm_AjoutePP
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 448)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 422)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(695, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(747, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(360, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(386, 3)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
@@ -133,7 +133,7 @@ Partial Class Frm_AjoutePP
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(220, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(246, 3)
         Me.btn_Annuler.Name = "btn_Annuler"
         Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
         Me.btn_Annuler.TabIndex = 0
@@ -148,7 +148,7 @@ Partial Class Frm_AjoutePP
         Me.pan_Choix.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Choix.Location = New System.Drawing.Point(3, 3)
         Me.pan_Choix.Name = "pan_Choix"
-        Me.pan_Choix.Size = New System.Drawing.Size(695, 439)
+        Me.pan_Choix.Size = New System.Drawing.Size(747, 413)
         Me.pan_Choix.TabIndex = 1
         '
         'TLpan_SeparationHorizontale
@@ -164,7 +164,7 @@ Partial Class Frm_AjoutePP
         Me.TLpan_SeparationHorizontale.RowCount = 2
         Me.TLpan_SeparationHorizontale.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
         Me.TLpan_SeparationHorizontale.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_SeparationHorizontale.Size = New System.Drawing.Size(693, 437)
+        Me.TLpan_SeparationHorizontale.Size = New System.Drawing.Size(745, 411)
         Me.TLpan_SeparationHorizontale.TabIndex = 0
         '
         'TLpan_CadreSuperieur
@@ -182,7 +182,7 @@ Partial Class Frm_AjoutePP
         Me.TLpan_CadreSuperieur.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLpan_CadreSuperieur.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
         Me.TLpan_CadreSuperieur.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
-        Me.TLpan_CadreSuperieur.Size = New System.Drawing.Size(693, 80)
+        Me.TLpan_CadreSuperieur.Size = New System.Drawing.Size(745, 80)
         Me.TLpan_CadreSuperieur.TabIndex = 0
         '
         'pan_Poutre
@@ -193,9 +193,9 @@ Partial Class Frm_AjoutePP
         Me.pan_Poutre.Controls.Add(Me.txt_NomNouvellePoutre)
         Me.pan_Poutre.Controls.Add(Me.chk_NouvellePoutre)
         Me.pan_Poutre.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Poutre.Location = New System.Drawing.Point(349, 3)
+        Me.pan_Poutre.Location = New System.Drawing.Point(375, 3)
         Me.pan_Poutre.Name = "pan_Poutre"
-        Me.pan_Poutre.Size = New System.Drawing.Size(341, 74)
+        Me.pan_Poutre.Size = New System.Drawing.Size(367, 74)
         Me.pan_Poutre.TabIndex = 1
         '
         'lbl_NouvellePoutre
@@ -213,7 +213,7 @@ Partial Class Frm_AjoutePP
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox2.Location = New System.Drawing.Point(167, 40)
         Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(165, 20)
+        Me.TextBox2.Size = New System.Drawing.Size(191, 20)
         Me.TextBox2.TabIndex = 3
         Me.TextBox2.Visible = False
         '
@@ -234,7 +234,7 @@ Partial Class Frm_AjoutePP
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_NomNouvellePoutre.Location = New System.Drawing.Point(167, 14)
         Me.txt_NomNouvellePoutre.Name = "txt_NomNouvellePoutre"
-        Me.txt_NomNouvellePoutre.Size = New System.Drawing.Size(165, 20)
+        Me.txt_NomNouvellePoutre.Size = New System.Drawing.Size(191, 20)
         Me.txt_NomNouvellePoutre.TabIndex = 1
         '
         'chk_NouvellePoutre
@@ -258,7 +258,7 @@ Partial Class Frm_AjoutePP
         Me.pan_Projet.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Projet.Location = New System.Drawing.Point(3, 3)
         Me.pan_Projet.Name = "pan_Projet"
-        Me.pan_Projet.Size = New System.Drawing.Size(340, 74)
+        Me.pan_Projet.Size = New System.Drawing.Size(366, 74)
         Me.pan_Projet.TabIndex = 0
         '
         'lbl_NouveauProjet
@@ -276,7 +276,7 @@ Partial Class Frm_AjoutePP
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TextBox1.Location = New System.Drawing.Point(167, 40)
         Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.Size = New System.Drawing.Size(162, 20)
+        Me.TextBox1.Size = New System.Drawing.Size(188, 20)
         Me.TextBox1.TabIndex = 3
         Me.TextBox1.Visible = False
         '
@@ -297,7 +297,7 @@ Partial Class Frm_AjoutePP
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txt_NomNouveauProjet.Location = New System.Drawing.Point(167, 14)
         Me.txt_NomNouveauProjet.Name = "txt_NomNouveauProjet"
-        Me.txt_NomNouveauProjet.Size = New System.Drawing.Size(162, 20)
+        Me.txt_NomNouveauProjet.Size = New System.Drawing.Size(188, 20)
         Me.txt_NomNouveauProjet.TabIndex = 1
         '
         'chk_NouveauProjet
@@ -318,7 +318,7 @@ Partial Class Frm_AjoutePP
         Me.pan_TypeSection.Location = New System.Drawing.Point(0, 80)
         Me.pan_TypeSection.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_TypeSection.Name = "pan_TypeSection"
-        Me.pan_TypeSection.Size = New System.Drawing.Size(693, 357)
+        Me.pan_TypeSection.Size = New System.Drawing.Size(745, 331)
         Me.pan_TypeSection.TabIndex = 1
         '
         'TableLayoutPanel1
@@ -334,7 +334,7 @@ Partial Class Frm_AjoutePP
         Me.TableLayoutPanel1.RowCount = 2
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(693, 357)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(745, 331)
         Me.TableLayoutPanel1.TabIndex = 1
         '
         'TLpan_ChoixSection
@@ -364,7 +364,7 @@ Partial Class Frm_AjoutePP
         Me.TLpan_ChoixSection.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TLpan_ChoixSection.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TLpan_ChoixSection.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLpan_ChoixSection.Size = New System.Drawing.Size(687, 321)
+        Me.TLpan_ChoixSection.Size = New System.Drawing.Size(739, 295)
         Me.TLpan_ChoixSection.TabIndex = 0
         '
         'chk_SFBMixte
@@ -373,10 +373,10 @@ Partial Class Frm_AjoutePP
         Me.chk_SFBMixte.AutoSize = True
         Me.chk_SFBMixte.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_SFBMixte.Enabled = False
-        Me.chk_SFBMixte.Location = New System.Drawing.Point(1, 215)
+        Me.chk_SFBMixte.Location = New System.Drawing.Point(1, 197)
         Me.chk_SFBMixte.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SFBMixte.Name = "chk_SFBMixte"
-        Me.chk_SFBMixte.Size = New System.Drawing.Size(169, 105)
+        Me.chk_SFBMixte.Size = New System.Drawing.Size(182, 97)
         Me.chk_SFBMixte.TabIndex = 11
         Me.chk_SFBMixte.Text = "chk_SFBMixte"
         Me.chk_SFBMixte.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -388,10 +388,10 @@ Partial Class Frm_AjoutePP
         Me.chk_IFB_B_Acier.AutoSize = True
         Me.chk_IFB_B_Acier.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_IFB_B_Acier.Enabled = False
-        Me.chk_IFB_B_Acier.Location = New System.Drawing.Point(343, 108)
+        Me.chk_IFB_B_Acier.Location = New System.Drawing.Point(369, 99)
         Me.chk_IFB_B_Acier.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_IFB_B_Acier.Name = "chk_IFB_B_Acier"
-        Me.chk_IFB_B_Acier.Size = New System.Drawing.Size(169, 105)
+        Me.chk_IFB_B_Acier.Size = New System.Drawing.Size(182, 96)
         Me.chk_IFB_B_Acier.TabIndex = 10
         Me.chk_IFB_B_Acier.Text = "chk_IFB_B_Acier"
         Me.chk_IFB_B_Acier.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -403,10 +403,10 @@ Partial Class Frm_AjoutePP
         Me.chk_IFB_A_Mixte.AutoSize = True
         Me.chk_IFB_A_Mixte.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_IFB_A_Mixte.Enabled = False
-        Me.chk_IFB_A_Mixte.Location = New System.Drawing.Point(172, 215)
+        Me.chk_IFB_A_Mixte.Location = New System.Drawing.Point(185, 197)
         Me.chk_IFB_A_Mixte.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_IFB_A_Mixte.Name = "chk_IFB_A_Mixte"
-        Me.chk_IFB_A_Mixte.Size = New System.Drawing.Size(169, 105)
+        Me.chk_IFB_A_Mixte.Size = New System.Drawing.Size(182, 97)
         Me.chk_IFB_A_Mixte.TabIndex = 9
         Me.chk_IFB_A_Mixte.Text = "chk_IFB_A_Mixte"
         Me.chk_IFB_A_Mixte.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -418,10 +418,10 @@ Partial Class Frm_AjoutePP
         Me.chk_SABAcier.AutoSize = True
         Me.chk_SABAcier.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_SABAcier.Enabled = False
-        Me.chk_SABAcier.Location = New System.Drawing.Point(514, 108)
+        Me.chk_SABAcier.Location = New System.Drawing.Point(553, 99)
         Me.chk_SABAcier.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SABAcier.Name = "chk_SABAcier"
-        Me.chk_SABAcier.Size = New System.Drawing.Size(172, 105)
+        Me.chk_SABAcier.Size = New System.Drawing.Size(185, 96)
         Me.chk_SABAcier.TabIndex = 8
         Me.chk_SABAcier.Text = "chk_SABAcier"
         Me.chk_SABAcier.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -433,10 +433,10 @@ Partial Class Frm_AjoutePP
         Me.chk_IFB_B_Mixte.AutoSize = True
         Me.chk_IFB_B_Mixte.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_IFB_B_Mixte.Enabled = False
-        Me.chk_IFB_B_Mixte.Location = New System.Drawing.Point(343, 215)
+        Me.chk_IFB_B_Mixte.Location = New System.Drawing.Point(369, 197)
         Me.chk_IFB_B_Mixte.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_IFB_B_Mixte.Name = "chk_IFB_B_Mixte"
-        Me.chk_IFB_B_Mixte.Size = New System.Drawing.Size(169, 105)
+        Me.chk_IFB_B_Mixte.Size = New System.Drawing.Size(182, 97)
         Me.chk_IFB_B_Mixte.TabIndex = 7
         Me.chk_IFB_B_Mixte.Text = "chk_IFB_B_Mixte"
         Me.chk_IFB_B_Mixte.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -448,10 +448,10 @@ Partial Class Frm_AjoutePP
         Me.chk_IFB_A_Acier.AutoSize = True
         Me.chk_IFB_A_Acier.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_IFB_A_Acier.Enabled = False
-        Me.chk_IFB_A_Acier.Location = New System.Drawing.Point(172, 108)
+        Me.chk_IFB_A_Acier.Location = New System.Drawing.Point(185, 99)
         Me.chk_IFB_A_Acier.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_IFB_A_Acier.Name = "chk_IFB_A_Acier"
-        Me.chk_IFB_A_Acier.Size = New System.Drawing.Size(169, 105)
+        Me.chk_IFB_A_Acier.Size = New System.Drawing.Size(182, 96)
         Me.chk_IFB_A_Acier.TabIndex = 6
         Me.chk_IFB_A_Acier.Text = "chk_IFB_A_Acier"
         Me.chk_IFB_A_Acier.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -463,10 +463,10 @@ Partial Class Frm_AjoutePP
         Me.chk_SABMixte.AutoSize = True
         Me.chk_SABMixte.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_SABMixte.Enabled = False
-        Me.chk_SABMixte.Location = New System.Drawing.Point(514, 215)
+        Me.chk_SABMixte.Location = New System.Drawing.Point(553, 197)
         Me.chk_SABMixte.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SABMixte.Name = "chk_SABMixte"
-        Me.chk_SABMixte.Size = New System.Drawing.Size(172, 105)
+        Me.chk_SABMixte.Size = New System.Drawing.Size(185, 97)
         Me.chk_SABMixte.TabIndex = 5
         Me.chk_SABMixte.Text = "chk_SABMixte"
         Me.chk_SABMixte.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -478,10 +478,10 @@ Partial Class Frm_AjoutePP
         Me.chk_SFBAcier.AutoSize = True
         Me.chk_SFBAcier.Dock = System.Windows.Forms.DockStyle.Fill
         Me.chk_SFBAcier.Enabled = False
-        Me.chk_SFBAcier.Location = New System.Drawing.Point(1, 108)
+        Me.chk_SFBAcier.Location = New System.Drawing.Point(1, 99)
         Me.chk_SFBAcier.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SFBAcier.Name = "chk_SFBAcier"
-        Me.chk_SFBAcier.Size = New System.Drawing.Size(169, 105)
+        Me.chk_SFBAcier.Size = New System.Drawing.Size(182, 96)
         Me.chk_SFBAcier.TabIndex = 4
         Me.chk_SFBAcier.Text = "chk_SFBAcier"
         Me.chk_SFBAcier.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -492,10 +492,10 @@ Partial Class Frm_AjoutePP
         Me.chk_SectionMixte.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_SectionMixte.AutoSize = True
         Me.chk_SectionMixte.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_SectionMixte.Location = New System.Drawing.Point(343, 1)
+        Me.chk_SectionMixte.Location = New System.Drawing.Point(369, 1)
         Me.chk_SectionMixte.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SectionMixte.Name = "chk_SectionMixte"
-        Me.chk_SectionMixte.Size = New System.Drawing.Size(169, 105)
+        Me.chk_SectionMixte.Size = New System.Drawing.Size(182, 96)
         Me.chk_SectionMixte.TabIndex = 3
         Me.chk_SectionMixte.Text = "chk_SectionMixte"
         Me.chk_SectionMixte.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -506,10 +506,10 @@ Partial Class Frm_AjoutePP
         Me.chk_SectionMixteEnrobe.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_SectionMixteEnrobe.AutoSize = True
         Me.chk_SectionMixteEnrobe.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_SectionMixteEnrobe.Location = New System.Drawing.Point(514, 1)
+        Me.chk_SectionMixteEnrobe.Location = New System.Drawing.Point(553, 1)
         Me.chk_SectionMixteEnrobe.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SectionMixteEnrobe.Name = "chk_SectionMixteEnrobe"
-        Me.chk_SectionMixteEnrobe.Size = New System.Drawing.Size(172, 105)
+        Me.chk_SectionMixteEnrobe.Size = New System.Drawing.Size(185, 96)
         Me.chk_SectionMixteEnrobe.TabIndex = 2
         Me.chk_SectionMixteEnrobe.Text = "chk_SectionMixteEnrobe"
         Me.chk_SectionMixteEnrobe.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -520,10 +520,10 @@ Partial Class Frm_AjoutePP
         Me.chk_SectionAcierEnrobe.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_SectionAcierEnrobe.AutoSize = True
         Me.chk_SectionAcierEnrobe.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_SectionAcierEnrobe.Location = New System.Drawing.Point(172, 1)
+        Me.chk_SectionAcierEnrobe.Location = New System.Drawing.Point(185, 1)
         Me.chk_SectionAcierEnrobe.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SectionAcierEnrobe.Name = "chk_SectionAcierEnrobe"
-        Me.chk_SectionAcierEnrobe.Size = New System.Drawing.Size(169, 105)
+        Me.chk_SectionAcierEnrobe.Size = New System.Drawing.Size(182, 96)
         Me.chk_SectionAcierEnrobe.TabIndex = 1
         Me.chk_SectionAcierEnrobe.Text = "chk_SectionAcierEnrobe"
         Me.chk_SectionAcierEnrobe.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -537,7 +537,7 @@ Partial Class Frm_AjoutePP
         Me.chk_SectionAcier.Location = New System.Drawing.Point(1, 1)
         Me.chk_SectionAcier.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SectionAcier.Name = "chk_SectionAcier"
-        Me.chk_SectionAcier.Size = New System.Drawing.Size(169, 105)
+        Me.chk_SectionAcier.Size = New System.Drawing.Size(182, 96)
         Me.chk_SectionAcier.TabIndex = 0
         Me.chk_SectionAcier.Text = "chk_SectionAcier"
         Me.chk_SectionAcier.TextAlign = System.Drawing.ContentAlignment.BottomCenter
@@ -550,7 +550,7 @@ Partial Class Frm_AjoutePP
         Me.lbl_TypeSection.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbl_TypeSection.Location = New System.Drawing.Point(3, 0)
         Me.lbl_TypeSection.Name = "lbl_TypeSection"
-        Me.lbl_TypeSection.Size = New System.Drawing.Size(687, 30)
+        Me.lbl_TypeSection.Size = New System.Drawing.Size(739, 30)
         Me.lbl_TypeSection.TabIndex = 1
         Me.lbl_TypeSection.Text = "lbl_TypeSection"
         Me.lbl_TypeSection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -561,8 +561,9 @@ Partial Class Frm_AjoutePP
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(701, 485)
+        Me.ClientSize = New System.Drawing.Size(753, 459)
         Me.Controls.Add(Me.pan_Main)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_AjoutePP"
