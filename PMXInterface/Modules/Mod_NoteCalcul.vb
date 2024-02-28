@@ -3961,9 +3961,9 @@ Module Mod_NoteCalcul
         MyBeam.PtsSigma.Initialise(MyBeam)
         MyBeam.PtsSigma.CalculContraintesCharges(MyBeam, 1, SigmaCas)
 
-        '--> Listes de cas de charges
+        '--> Listes des points de calcul des contraintes
 
-        EditionListeCdCdansAnalyse(MyBeam)
+        EditionPointsDeContrainte(MyBeam)
 
         '--> Analyses par cas de charge
 
@@ -4015,6 +4015,129 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionPointsDeContrainte(myBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   28/02/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des points de calcul des contraintes
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NCol As Integer, Pos As Integer
+        Dim LargCol() As Integer = {0}
+        Dim lEnrob As Boolean = myBeam.lEnrobage
+        Dim lMixte As Boolean = myBeam.lMixte
+
+        '--( Initialisation
+
+        AddTitreNdC(2, BlocAnalyse("SIGMAPOINTS"))
+
+        EnteteTableauPointContrainte(NCol, Pos, LargCol)
+
+        '--( Affichage des points du profilé
+
+        BlocTableauPointContrainte(myBeam, myBeam.PtsSigma.iProfile(0), myBeam.PtsSigma.iProfile(1), BlocAnalyse("PROFILE"), NCol, Pos, LargCol)
+
+        '--( Affichage des points de la dalle
+
+        If lMixte Then _
+        BlocTableauPointContrainte(myBeam, myBeam.PtsSigma.iBetonDalle(0), myBeam.PtsSigma.iBetonDalle(1), BlocAnalyse("SLABC"), NCol, Pos, LargCol)
+
+        '--( Affichage des points des armatures de la dalle
+
+        If lMixte Then _
+        BlocTableauPointContrainte(myBeam, myBeam.PtsSigma.iArmaDalle(0), myBeam.PtsSigma.iArmaDalle(1), BlocAnalyse("SLABREINFORCEMENTS"), NCol, Pos, LargCol)
+
+        '--( Béton enrobage
+
+        If lEnrob Then _
+        BlocTableauPointContrainte(myBeam, myBeam.PtsSigma.iBetonEnrob(0), myBeam.PtsSigma.iBetonEnrob(1), BlocAnalyse("ENCASEMENTC"), NCol, Pos, LargCol)
+
+        '--( Armatures enrobage
+
+        If lEnrob Then _
+        BlocTableauPointContrainte(myBeam, myBeam.PtsSigma.iArmaEnrob(0), myBeam.PtsSigma.iArmaEnrob(1), BlocAnalyse("ENCREINFORCEMENTS"), NCol, Pos, LargCol)
+
+        FinTableau()
+    End Sub
+
+    Private Sub BlocTableauPointContrainte(myBeam As cls_Poutre, iZero As Integer, iUn As Integer, Appelation As String,
+                                           NCol As Integer, Pos As Integer, LargCol() As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   28/02/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition d'un bloc du tableau des points de calcul des contraintes
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   iZero, iUn  [E] :   Indice début et fin du bloc
+        '   Appelation  [E] :   Intitulé du bloc
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim i As Integer
+        Dim myBord As Integer
+
+
+        '--( Affichage des points du profilé
+
+        For i = iZero To iUn
+
+            myBord = Bordures.Gauche + Bordures.Droite
+            If (i = iZero) Then myBord += Bordures.Haut
+            If (i = iUn) Then myBord += Bordures.Bas
+
+            InitialiseLigneTableau(NCol, HLIGNE)
+
+            If (i = iZero) Then
+                AddCellule(LargCol(0), myBord, PositionTexteInCell.Gauche, Appelation)
+            Else
+                AddCellule(LargCol(0), myBord, PositionTexteInCell.Gauche, "")
+            End If
+
+            AddCellule(LargCol(1), myBord, PositionTexteInCell.Centre, CStr(i + 1))
+            AddCellule(LargCol(2), myBord, PositionTexteInCell.Centre, GetStringInUnit(myBeam.PtsSigma.zPos(i), Enu_TypeVariable.Dimension, 3, 1, False))
+
+        Next
+
+
+    End Sub
+
+    Private Sub EnteteTableauPointContrainte(ByRef NCol As Integer, ByRef Pos As Integer, ByRef LargCol() As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   28/02/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entête du tableau décrivant les points de calcul des contraintes
+        '-------------------------------------------------------------------------------------------
+        '   NCol        [S] :   Nombre de colonnes du tableau
+        '   Pos         [S] :   Position à gauche
+        '   LargCol     [S] :   Largeurs des colonnes
+        '-------------------------------------------------------------------------------------------
+
+        '--( Préparation
+
+        NCol = 3
+        ReDim LargCol(NCol - 1)
+        Pos = 20
+
+        LargCol(0) = 25
+        LargCol(1) = 11
+        LargCol(2) = 11
+
+        '--( Affichage de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos), False)
+
+        InitialiseLigneTableau(NCol, HLIGNEENTETE)
+
+        AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("POINTS"))
+        AddCelluleFond(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, "z [" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & "]")
+
+    End Sub
 
     Private Sub EditionSigmaChargeA(myBeam As cls_Poutre, SigmaCas(,,,) As Decimal, iCas As Integer)
         '-------------------------------------------------------------------------------------------
@@ -4046,11 +4169,11 @@ Module Mod_NoteCalcul
 
         '--> Affichage du tableau des contraintes
 
-        EditionTableauContrainte(myBeam, SigmaCas, iCas)
+        EditionTableauContraintes(myBeam, SigmaCas, iCas)
 
     End Sub
 
-    Private Sub EditionTableauContrainte(myBeam As cls_Poutre, SigmaCas(,,,) As Decimal, iCas As Integer)
+    Private Sub EditionTableauContraintes(myBeam As cls_Poutre, SigmaCas(,,,) As Decimal, iCas As Integer)
         '-------------------------------------------------------------------------------------------
         '   28/02/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -4142,19 +4265,9 @@ Module Mod_NoteCalcul
 
         ''--> Déclaration
 
-        'Dim IndGauche As String = IndiceGaucheDroite(True)
-        'Dim IndDroite As String = IndiceGaucheDroite(False)
         Dim iPoint As Integer
 
         '--> Initialisation
-
-        'If lMultiSpan Then
-        '    NCol = 8
-        '    Pos = 10
-        'Else
-        '    NCol = 6
-        '    Pos = 20
-        'End If
 
         NCol = nbPoints + 1
         Pos = 5
@@ -4171,7 +4284,7 @@ Module Mod_NoteCalcul
 
         InitialiseLigneTableau(NCol, HLIGNEENTETE)
 
-        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("NODE"))
+        AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocAnalyse("NODE"))
         For ipoint = 0 To nbPoints - 1
             AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, CStr(iPoint + 1))
         Next

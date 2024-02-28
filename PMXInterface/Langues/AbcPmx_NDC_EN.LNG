@@ -377,7 +377,13 @@ REACTIONSPROPS			= Reactions at intermediate props
 REACTIONPROPL			= Reaction at left cantilever prop
 REACTIONPROPR			= Reaction at right cantilever prop
 STRESSES				= Analysis - Elastic stresses
-POINTS					= Points
+POINTS					= Stress Points
+SIGMAPOINTS				= Stress points
+PROFILE					= Profile
+SLABC					= Concrete slab
+SLABREINFORCEMENTS		= Slab reinforcements
+ENCASEMENTC				= Concrete encasement
+ENCREINFORCEMENTS		= Encasement reinforcements	
 
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= Ultimate Limit States
