@@ -35,6 +35,7 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_LangueGUI = New System.Windows.Forms.Label()
         Me.lst_LangueGUI = New System.Windows.Forms.ListBox()
         Me.lbl_Langues = New System.Windows.Forms.Label()
+        Me.lstbox_Test = New System.Windows.Forms.ListBox()
         Me.pan_General.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.pan_Langues.SuspendLayout()
@@ -113,6 +114,7 @@ Partial Class Frm_OptionsLogicielGeneral
         '
         Me.pan_Langues.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Langues.Controls.Add(Me.lstbox_Test)
         Me.pan_Langues.Controls.Add(Me.lbl_LangueNdC)
         Me.pan_Langues.Controls.Add(Me.lst_LangueNdC)
         Me.pan_Langues.Controls.Add(Me.lbl_LangueGUI)
@@ -171,6 +173,16 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_Langues.Text = "lbl_Langues"
         Me.lbl_Langues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'lstbox_Test
+        '
+        Me.lstbox_Test.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable
+        Me.lstbox_Test.FormattingEnabled = True
+        Me.lstbox_Test.HorizontalScrollbar = True
+        Me.lstbox_Test.Location = New System.Drawing.Point(274, 45)
+        Me.lstbox_Test.Name = "lstbox_Test"
+        Me.lstbox_Test.Size = New System.Drawing.Size(128, 82)
+        Me.lstbox_Test.TabIndex = 90
+        '
         'Frm_OptionsLogicielGeneral
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -202,4 +214,5 @@ Partial Class Frm_OptionsLogicielGeneral
     Friend WithEvents lbl_LangueGUI As Label
     Friend WithEvents lst_LangueGUI As ListBox
     Friend WithEvents lbl_Langues As Label
+    Friend WithEvents lstbox_Test As ListBox
 End Class

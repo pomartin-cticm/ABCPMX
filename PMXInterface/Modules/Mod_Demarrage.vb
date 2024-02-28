@@ -132,9 +132,13 @@ Public Module Mod_Demarrage
             '--> Mode Expert
             LogicielOptions.lExpert = My.Settings.lExpertMode
 
-            '--> Langues
+            '--> Options Générales
+            '# Langues
             LogicielOptions.IndLangue = Array.IndexOf(LogicielInfo.ListeLangue, LogicielInfo.ListeLangue(My.Settings.IndLangue))
             LogicielOptions.IndLangueNDC = Array.IndexOf(LogicielInfo.ListeLangueNDC, LogicielInfo.ListeLangueNDC(My.Settings.IndLangueNDC))
+            '# Identification
+            LogicielOptions.CompanyName = My.Settings.CompanyName
+            LogicielOptions.UserName = My.Settings.UserName
 
             '--> Unités
             '# Dimensions Longueurs
@@ -148,6 +152,14 @@ Public Module Mod_Demarrage
             '# Efforts et moments
             LogicielOptions.IndUnitEffort = Array.IndexOf(LogicielInfo.Unit_Effort, LogicielInfo.Unit_Effort(My.Settings.indUnitEffort))
             LogicielOptions.IndUnitMoment = Array.IndexOf(LogicielInfo.Unit_Moment, LogicielInfo.Unit_Moment(My.Settings.indUnitMoment))
+
+            '--> Options Note de calcul
+            OptionsNdC.lShowHivossCurve = My.Settings.lNdCCourbeHivoss
+            OptionsNdC.lDispFM_FLS = My.Settings.lNdCDispFM_ELF
+            OptionsNdC.lDispFM_SLS = My.Settings.lNdCDispFM_ELS
+            OptionsNdC.lDispFM_ULS = My.Settings.lNdCDispFM_ELU
+            OptionsNdC.lDispFMLoadCase = My.Settings.lNdCDispLoadCase
+            OptionsNdC.lDispFMDiagrams = My.Settings.lNdCShowDiagram
 
             '--> Fichiers récents
             LogicielFichiers.RecentFiles = New List(Of String)

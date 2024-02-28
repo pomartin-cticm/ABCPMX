@@ -17,6 +17,7 @@
         GestionStyle()
         'GestionUnites()
         'InitialiseLangues("ACBPlus", Me.lst_LangueGUI, tabAbbrGUI, LogicielInfo.Langue)
+        remplirTest()
 
         AfficherOptionsEnCours()
         lBuild = False
@@ -82,11 +83,23 @@
 
     End Sub
 
+    Private Sub remplirTest()
+
+        Me.lstbox_Test.Items.Clear()
+
+        Me.lstbox_Test.Items.Add("Auto")
+        Me.lstbox_Test.Items.Add("Avion")
+        Me.lstbox_Test.Items.Add("Train")
+
+        Me.lstbox_Test.SelectedIndex = 0
+
+    End Sub
+
 #End Region
 
 #Region " Evènements "
 
-    Private Sub TextChangedIdentification(sender As Object, e As EventArgs) 
+    Private Sub TextChangedIdentification(sender As Object, e As EventArgs) Handles txt_UserName.TextChanged, txt_Firm.TextChanged
         If lBuild Then Exit Sub
 
         Select Case sender.name
@@ -98,7 +111,7 @@
 
     End Sub
 
-    Private Sub GestionChangeLangue(sender As Object, e As EventArgs)
+    Private Sub GestionChangeLangue(sender As Object, e As EventArgs) Handles lst_LangueNdC.SelectedIndexChanged, lst_LangueGUI.SelectedIndexChanged
 
         If lBuild Then Exit Sub
 
@@ -118,6 +131,37 @@
 
 
 
+    End Sub
+
+    Private Sub lstbox_Test_DrawItem(sender As Object, e As DrawItemEventArgs) Handles lstbox_Test.DrawItem
+
+        Dim myFontColor As Color
+        Dim myBackColor As Color
+
+        'e.DrawBackground()
+
+        If e.Index = Me.lstbox_Test.SelectedIndex Then
+            myBackColor = Color.Orange
+            myFontColor = Color.White
+        Else
+            myBackColor = Me.lstbox_Test.BackColor
+            myFontColor = Me.lstbox_Test.ForeColor
+        End If
+
+        Dim myBrush As New SolidBrush(myFontColor)
+        Dim myBrushB As New SolidBrush(myBackColor)
+
+        e.Graphics.FillRectangle(myBrushB, e.Bounds)
+
+        e.Graphics.DrawString(lstbox_Test.Items(e.Index).ToString(),
+                              e.Font, myBrush, e.Bounds, StringFormat.GenericDefault)
+
+        e.DrawFocusRectangle()
+
+    End Sub
+
+    Private Sub lstbox_Test_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lstbox_Test.SelectedIndexChanged
+        Me.lstbox_Test.Invalidate()
     End Sub
 
 

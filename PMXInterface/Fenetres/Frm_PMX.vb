@@ -968,10 +968,16 @@ Public Class Frm_PMX
 
         My.Settings.lExpertMode = LogicielOptions.lExpert
 
-        '--( Langues 
+        '--( Général
+
+        '# Langues
 
         My.Settings.IndLangue = LogicielOptions.IndLangue
         My.Settings.IndLangueNDC = LogicielOptions.IndLangueNDC
+
+        '# Identification
+        My.Settings.UserName = LogicielOptions.UserName
+        My.Settings.CompanyName = LogicielOptions.CompanyName
 
         '--( Unités
         '# Dimensions et Longueurs
@@ -986,6 +992,13 @@ Public Class Frm_PMX
         My.Settings.indUnitEffort = LogicielOptions.IndUnitEffort
         My.Settings.indUnitMoment = LogicielOptions.IndUnitMoment
 
+        '--( Note de calcul
+        My.Settings.lNdCCourbeHivoss = OptionsNdC.lShowHivossCurve
+        My.Settings.lNdCDispFM_ELF = OptionsNdC.lDispFM_FLS
+        My.Settings.lNdCDispFM_ELS = OptionsNdC.lDispFM_SLS
+        My.Settings.lNdCDispFM_ELU = OptionsNdC.lDispFM_ULS
+        My.Settings.lNdCDispLoadCase = OptionsNdC.lDispFMLoadCase
+        My.Settings.lNdCShowDiagram = OptionsNdC.lDispFMDiagrams
 
     End Sub
 
