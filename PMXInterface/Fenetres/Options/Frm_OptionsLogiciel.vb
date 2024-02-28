@@ -88,6 +88,7 @@ Public Class Frm_OptionsLogiciel
 
     Public Sub InitialiserFenetre()
         lBuild = True
+        ComWindow = enu_ComWindow.Cancel
         InitialiseParametresLocaux()
         ChargesBlocsLangues()
         GestionLangues(BlocLangues(BALISE))
@@ -461,6 +462,7 @@ Public Class Frm_OptionsLogiciel
         Else
             If ValideSaisie() Then
                 TransfereSaisie(lModif)
+                ComWindow = enu_ComWindow.OK
                 Me.Close()
             End If
         End If

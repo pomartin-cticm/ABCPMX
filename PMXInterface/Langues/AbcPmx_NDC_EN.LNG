@@ -376,6 +376,8 @@ REACTIONS				= Reactions at supports
 REACTIONSPROPS			= Reactions at intermediate props
 REACTIONPROPL			= Reaction at left cantilever prop
 REACTIONPROPR			= Reaction at right cantilever prop
+STRESSES				= Analysis - Elastic stresses
+POINTS					= Points
 
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= Ultimate Limit States

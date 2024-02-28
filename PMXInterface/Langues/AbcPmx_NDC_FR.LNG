@@ -375,7 +375,9 @@ NOTFOUND				= Cas de charge non trouvé - Contacter le support
 REACTIONS				= Réactions d'appui
 REACTIONSPROPS			= Réactions des étais intermédiaires
 REACTIONPROPL			= Réaction de l'étai de la console gauche
-REACTIONPROPR			= Réaction de l'étai de la console de droite
+REACTIONPROPR			= Réaction de l'étai de la console droite
+STRESSES				= Analyse - Contraintes élastiques
+POINTS					= Points
 
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= Etats Limites Ultimes

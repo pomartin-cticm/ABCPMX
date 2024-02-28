@@ -395,6 +395,13 @@ Public Module Mod_Declarations
 
     Public iFrmAppel As EnuFenetres
 
+    Public Enum enu_ComWindow
+        OK
+        Cancel
+    End Enum
+
+    Public ComWindow As enu_ComWindow
+
 #End Region
 
 #Region " Constantes et valeurs par défaut "

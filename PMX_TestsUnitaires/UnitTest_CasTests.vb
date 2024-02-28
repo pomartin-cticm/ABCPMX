@@ -972,7 +972,7 @@ Imports PMXMoteur2
 
 #Region "Vérification de la résistance au déversement SANS prise en compte du bac"
 
-        Dim Mcr, lambda_LT, phi_LT, khi_LT, MbRd As Decimal
+        Dim Mcr, MbRd As Decimal
 
         Mcr = 100 * 1000
         MbRd = 85.19 * 1000

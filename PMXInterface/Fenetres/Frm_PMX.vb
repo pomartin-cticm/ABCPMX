@@ -937,7 +937,11 @@ Public Class Frm_PMX
     Private Sub TSbtn_OptionsLogiciel_Click(sender As Object, e As EventArgs) Handles TSbtn_OptionsLogiciel.Click, ConfigToolStripMenuItemN.Click
 
         Frm_OptionsLogiciel.ShowDialog()
-        MAJI_BOBasse()
+
+        If ComWindow = enu_ComWindow.OK Then
+            EnregistrerOptionsLogiciel()
+            MAJI_BOBasse()
+        End If
 
     End Sub
 
@@ -957,6 +961,33 @@ Public Class Frm_PMX
 #End Region
 
 #Region " Fonctions de sauvegarde et lecture "
+
+    Private Sub EnregistrerOptionsLogiciel()
+
+        '--( Mode expert 
+
+        My.Settings.lExpertMode = LogicielOptions.lExpert
+
+        '--( Langues 
+
+        My.Settings.IndLangue = LogicielOptions.IndLangue
+        My.Settings.IndLangueNDC = LogicielOptions.IndLangueNDC
+
+        '--( Unités
+        '# Dimensions et Longueurs
+        My.Settings.indUnitDimension = LogicielOptions.IndUnitDimension
+        My.Settings.indUnitLongueur = LogicielOptions.IndUnitLongueur
+
+        '# Contraintes et module d'élasticité
+        My.Settings.indUnitContraintes = LogicielOptions.IndUnitContraintes
+        My.Settings.indUnitModuleY = LogicielOptions.IndUnitModulesY
+
+        '# Efforts et moments
+        My.Settings.indUnitEffort = LogicielOptions.IndUnitEffort
+        My.Settings.indUnitMoment = LogicielOptions.IndUnitMoment
+
+
+    End Sub
 
     Private Sub EnregistrerProjetEnCours()
         '-----------------------------------------------------------------------------------
@@ -1205,6 +1236,13 @@ Public Class Frm_PMX
 
     Private Sub FermerLogiciel()
         Me.Close()
+    End Sub
+
+    Private Sub Frm_PMX_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+
+        ' Gestion Fermeture
+
+
     End Sub
 
 #End Region
@@ -1550,6 +1588,8 @@ Public Class Frm_PMX
         LogicielOptions.lExpert = Not LogicielOptions.lExpert
         Me.TSbtn_ExpertMode.Checked = LogicielOptions.lExpert
     End Sub
+
+
 
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
         lCotation = Not lCotation
