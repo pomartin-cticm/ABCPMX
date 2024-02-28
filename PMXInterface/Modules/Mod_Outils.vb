@@ -261,12 +261,19 @@ Module Mod_Outils
     ''' Ouvre une fenêtre de la messagerie par défaut (Outlook)
     ''' avec un mail prérempli pour faire un retour de bug
     ''' </summary>
-    Public Sub PrepareMailSupport()
+    Public Sub PrepareMailSupport(Optional myDestinataire As String = "")
 
         '--> Déclaration
-        Dim destinataire As String = LogicielInfo.MailSupport
+        Dim destinataire As String '= LogicielInfo.MailSupport
         Dim objet As String '--> sujet du mail
         Dim corps As String '--> Corps du mail
+
+        '--> Initialisation
+        If myDestinataire = "" Then
+            destinataire = LogicielInfo.MailSupport
+        Else
+            destinataire = myDestinataire
+        End If
 
         '--> Remplissage du mail en fonction de la langue (que français ou anglais)
         If LogicielOptions.IndLangue = 1 Then '--> Français

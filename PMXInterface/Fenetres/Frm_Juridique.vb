@@ -3,8 +3,6 @@ Imports PMXMoteur2
 
 Public Class Frm_Juridique
 
-
-
 #Region "=== Ouverture Fenetre ==="
 
     Private Sub Frm_Juridique_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -32,6 +30,7 @@ Public Class Frm_Juridique
         'End If
 
         GestionLangue()
+        GestionStyle()
 
     End Sub
 
@@ -47,11 +46,11 @@ Public Class Frm_Juridique
 
             Try
 
-                Me.Label_Langue.Text = Bloc("LANGUAGE").ToUpper
+                Me.lbl_Langue.Text = Bloc("LANGUAGE").ToUpper
                 Me.Btn_Accepter.Text = Bloc("AGREE")
                 Me.Btn_Quitter.Text = Bloc("EXIT")
 
-                Me.Label_Juridique.Text = Bloc("WARNING").ToUpper
+                Me.lbl_Juridique.Text = Bloc("WARNING").ToUpper
 
                 '--> Texte juridique/d'avertissement
                 Me.Label_InfoJuridique.Text = Chr(13) & Bloc("TEXT1") & Chr(13)
@@ -66,6 +65,17 @@ Public Class Frm_Juridique
             End Try
 
         End If
+
+    End Sub
+
+    Private Sub GestionStyle()
+
+        Me.lbl_Langue.BackColor = CouleurBackBandeaux
+        Me.lbl_Langue.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_Juridique.BackColor = CouleurBackBandeaux
+        Me.lbl_Juridique.ForeColor = CouleurForeBandeaux
+
 
     End Sub
 

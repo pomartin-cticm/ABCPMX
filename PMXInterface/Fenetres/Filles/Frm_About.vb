@@ -17,8 +17,7 @@ Public Class Frm_About
         lCTICM = (LogicielInfo.Maitre = EnuMaitre.CTICM)
         GestionLangues()
         GestionStyle(lCTICM)
-        '  GestionUnites()
-        ' AfficherPoutreEnCours()
+        AfficherInfoEnCours()
         lBuild = False
     End Sub
 
@@ -56,8 +55,14 @@ Public Class Frm_About
     Private Sub GestionStyle(ByVal lCTICM As Boolean)
         Me.Icon = Frm_PMX.Icon
 
-        'Me.lbl_Description.BackColor = CouleurBackBandeaux
-        'Me.lbl_Description.ForeColor = CouleurForeBandeaux
+        Dim xLeft As Integer
+
+        xLeft = (Me.pan_Entete.Width - Me.pan_ImageEntete.Width) / 2
+
+        Me.pan_ImageEntete.Left = xLeft
+
+        Me.lbl_Verification.BackColor = CouleurBackBandeaux
+        Me.lbl_Verification.ForeColor = CouleurForeBandeaux
 
         'Me.lbl_Information.BackColor = CouleurBackBandeaux
         'Me.lbl_Information.ForeColor = CouleurForeBandeaux
@@ -80,19 +85,28 @@ Public Class Frm_About
 
     End Sub
 
-    'Private Sub AfficherPoutreEnCours()
-
-    'End Sub
+    Private Sub AfficherInfoEnCours()
+        Me.lbk_SupportAM.Text = EMAIL_ARCELORMITTAL
+        Me.lbk_SupportCTICM.Text = EMAIL_CTICM
+    End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
         Me.Close()
     End Sub
 
-    Private Sub LinkLabel_SupportCTICM_Click(sender As Object, e As EventArgs) Handles Panel1.Click, LinkLabel_SupportCTICM.Click, LinkLabel_SupportAM.Click
+    Private Sub LinkLabel_SupportCTICM_Click(sender As Object, e As EventArgs) Handles pan_AffichageInfo.Click, lbk_SupportCTICM.Click, lbk_SupportAM.Click
         '--> Click sur le lien - Ouverture Mail
+
+        Dim myDest As String = ""
+
+        Select Case sender.name
+            Case lbk_SupportCTICM.Name : myDest = EMAIL_CTICM
+            Case lbk_SupportAM.Name : myDest = EMAIL_ARCELORMITTAL
+        End Select
+
         Try
 
-            PrepareMailSupport()
+            PrepareMailSupport(myDest)
 
         Catch ex As Exception
             MsgBox("Erreur d'ouverture mail | Error opening mail", MsgBoxStyle.Critical, "Frm_About/LinkSupport_LinkClicked")
@@ -109,7 +123,6 @@ Public Class Frm_About
         End Try
 
     End Sub
-
 
 
 #End Region

@@ -42,16 +42,23 @@ Public Module Mod_Demarrage
 
         '--> Récupération des informations générales du logociel - Non modifiable par l'utilisateur
 
-        LogicielInfo.NomLogiciel = "ABCPMX-II"
-        LogicielInfo.Version = "1.0"
-        LogicielInfo.AnneeVersion = "2024"
-        LogicielInfo.MailSupport = "support.logiciels@cticm.com"
-        LogicielInfo.Extension = "pmx"
-        LogicielInfo.Racine = "ABCPMX"
-
         LogicielInfo.Maitre = EnuMaitre.CTICM
         LogicielOptions.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
         LogicielOptions.lDebug = False
+
+        LogicielInfo.NomLogiciel = "ABCPMX-II"
+        LogicielInfo.Version = "1.0"
+        LogicielInfo.AnneeVersion = "2024"
+
+        Select Case LogicielInfo.Maitre
+            Case EnuMaitre.ArcelorMittal : LogicielInfo.MailSupport = EMAIL_ARCELORMITTAL
+            Case EnuMaitre.CTICM : LogicielInfo.MailSupport = EMAIL_CTICM
+        End Select
+        ' LogicielInfo.MailSupport = "support.logiciels@cticm.com"
+
+        LogicielInfo.Extension = "pmx"
+        LogicielInfo.Racine = "ABCPMX"
+
 
         LogicielRep.Install = Application.StartupPath
         LogicielRep.Config = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CTICM\" & LogicielInfo.NomLogiciel & "\ConfigV" & LogicielInfo.Version

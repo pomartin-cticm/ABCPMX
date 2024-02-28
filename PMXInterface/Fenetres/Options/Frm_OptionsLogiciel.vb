@@ -77,7 +77,7 @@ Public Class Frm_OptionsLogiciel
         Dim lDispFM_ULS As Boolean
         Dim lDispFM_SLS As Boolean
         Dim lDispFM_FLS As Boolean
-
+        Dim lDispSigmaCharges As Boolean
     End Structure
 #End Region
 
@@ -286,6 +286,7 @@ Public Class Frm_OptionsLogiciel
         pLocalOptionsNdC.lDispFM_SLS = OptionsNdC.lDispFM_SLS
         pLocalOptionsNdC.lDispFM_FLS = OptionsNdC.lDispFM_FLS
         pLocalOptionsNdC.lDispFM_ULS = OptionsNdC.lDispFM_ULS
+        pLocalOptionsNdC.lDispSigmaCharges = OptionsNdC.lDispSigmaCharges
 
     End Sub
 
@@ -330,7 +331,7 @@ Public Class Frm_OptionsLogiciel
 
 #End Region
 
-#Region "    Gestion des boutons - Paint Overrides "
+#Region " Gestion des boutons - Paint Overrides "
 
     Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs) _
     Handles PoMBtn_General.Click, PoMbtn_Directories.Click, PoMbtn_Units.Click, PoMbtn_Expert.Click, PoMbtn_Databases.Click, PoMbtn_NdC.Click
@@ -493,6 +494,7 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFM_FLS, OptionsNdC.lDispFM_FLS, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMLoadCase, OptionsNdC.lDispFMLoadCase, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMDiagrams, OptionsNdC.lDispFMDiagrams, lModif)
+        GereTransfertValeur(Me.pLocalOptionsNdC.lDispSigmaCharges, OptionsNdC.lDispSigmaCharges, lModif)
 
     End Sub
 
@@ -501,4 +503,5 @@ Public Class Frm_OptionsLogiciel
     End Function
 
 #End Region
+
 End Class

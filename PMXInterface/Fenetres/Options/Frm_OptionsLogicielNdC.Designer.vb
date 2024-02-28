@@ -28,12 +28,13 @@ Partial Class Frm_OptionsLogicielNdC
         Me.chk_ShowHivossDiagram = New System.Windows.Forms.CheckBox()
         Me.lbl_ELS = New System.Windows.Forms.Label()
         Me.pan_Sollicitations = New System.Windows.Forms.Panel()
+        Me.chk_Diagrammes = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayFM_ELF = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayFM_ELS = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayFM_ELU = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayLoadCases = New System.Windows.Forms.CheckBox()
         Me.lbl_Sollicitations = New System.Windows.Forms.Label()
-        Me.chk_Diagrammes = New System.Windows.Forms.CheckBox()
+        Me.chk_SigmaCharges = New System.Windows.Forms.CheckBox()
         Me.pan_NdC.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.pan_Sollicitations.SuspendLayout()
@@ -99,6 +100,7 @@ Partial Class Frm_OptionsLogicielNdC
         '
         Me.pan_Sollicitations.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Sollicitations.Controls.Add(Me.chk_SigmaCharges)
         Me.pan_Sollicitations.Controls.Add(Me.chk_Diagrammes)
         Me.pan_Sollicitations.Controls.Add(Me.chk_DisplayFM_ELF)
         Me.pan_Sollicitations.Controls.Add(Me.chk_DisplayFM_ELS)
@@ -107,8 +109,18 @@ Partial Class Frm_OptionsLogicielNdC
         Me.pan_Sollicitations.Controls.Add(Me.lbl_Sollicitations)
         Me.pan_Sollicitations.Location = New System.Drawing.Point(3, 3)
         Me.pan_Sollicitations.Name = "pan_Sollicitations"
-        Me.pan_Sollicitations.Size = New System.Drawing.Size(733, 163)
+        Me.pan_Sollicitations.Size = New System.Drawing.Size(733, 182)
         Me.pan_Sollicitations.TabIndex = 100
+        '
+        'chk_Diagrammes
+        '
+        Me.chk_Diagrammes.AutoSize = True
+        Me.chk_Diagrammes.Location = New System.Drawing.Point(25, 58)
+        Me.chk_Diagrammes.Name = "chk_Diagrammes"
+        Me.chk_Diagrammes.Size = New System.Drawing.Size(108, 17)
+        Me.chk_Diagrammes.TabIndex = 102
+        Me.chk_Diagrammes.Text = "chk_Diagrammes"
+        Me.chk_Diagrammes.UseVisualStyleBackColor = True
         '
         'chk_DisplayFM_ELF
         '
@@ -162,15 +174,15 @@ Partial Class Frm_OptionsLogicielNdC
         Me.lbl_Sollicitations.Text = "lbl_Sollicitations"
         Me.lbl_Sollicitations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'chk_Diagrammes
+        'chk_SigmaCharges
         '
-        Me.chk_Diagrammes.AutoSize = True
-        Me.chk_Diagrammes.Location = New System.Drawing.Point(25, 58)
-        Me.chk_Diagrammes.Name = "chk_Diagrammes"
-        Me.chk_Diagrammes.Size = New System.Drawing.Size(108, 17)
-        Me.chk_Diagrammes.TabIndex = 102
-        Me.chk_Diagrammes.Text = "chk_Diagrammes"
-        Me.chk_Diagrammes.UseVisualStyleBackColor = True
+        Me.chk_SigmaCharges.AutoSize = True
+        Me.chk_SigmaCharges.Location = New System.Drawing.Point(25, 150)
+        Me.chk_SigmaCharges.Name = "chk_SigmaCharges"
+        Me.chk_SigmaCharges.Size = New System.Drawing.Size(118, 17)
+        Me.chk_SigmaCharges.TabIndex = 103
+        Me.chk_SigmaCharges.Text = "chk_SigmaCharges"
+        Me.chk_SigmaCharges.UseVisualStyleBackColor = True
         '
         'Frm_OptionsLogicielNdC
         '
@@ -203,4 +215,5 @@ Partial Class Frm_OptionsLogicielNdC
     Friend WithEvents chk_DisplayFM_ELU As CheckBox
     Friend WithEvents chk_DisplayLoadCases As CheckBox
     Friend WithEvents chk_Diagrammes As CheckBox
+    Friend WithEvents chk_SigmaCharges As CheckBox
 End Class

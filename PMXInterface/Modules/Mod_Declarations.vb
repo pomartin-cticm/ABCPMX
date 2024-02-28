@@ -440,6 +440,9 @@ Public Module Mod_Declarations
 
     Public Const EXTENSIONLANGUE As String = ".LNG"
 
+    Public Const EMAIL_CTICM As String = "support.logiciels@cticm.com"
+    Public Const EMAIL_ARCELORMITTAL As String = "Steligence.engineering@arcelormittal.com"
+
 #End Region
 
 #Region " Paramètres de STYLE (Couleurs...) "
@@ -517,12 +520,13 @@ Public Module Mod_Declarations
 #Region " Note de calcul "
 
     Public Structure struc_OptionsNdC
-        Dim lShowHivossCurve As Boolean
-        Dim lDispFMLoadCase As Boolean
-        Dim lDispFMDiagrams As Boolean
-        Dim lDispFM_ULS As Boolean
-        Dim lDispFM_SLS As Boolean
-        Dim lDispFM_FLS As Boolean
+        Dim lShowHivossCurve As Boolean         ' Indique si affichage des courbes Hivoss
+        Dim lDispFMLoadCase As Boolean          ' Indique si affichage des sollicitations par cas de charge
+        Dim lDispFMDiagrams As Boolean          ' Indique si affichage des diagrammes de sollicitations
+        Dim lDispFM_ULS As Boolean              ' Indique si affichage des sollicitations sous ELU
+        Dim lDispFM_SLS As Boolean              ' Indique si affichage des sollicitations sous ELS
+        Dim lDispFM_FLS As Boolean              ' Indique si affichage des sollicitations sous ELU fatigue
+        Dim lDispSigmaCharges As Boolean        ' Indique si affichage des contraintes par cas de charge
     End Structure
 
     Public OptionsNdC As struc_OptionsNdC
@@ -551,6 +555,7 @@ Public Module Mod_Declarations
             .lDispFM_ULS = True
             .lDispFM_SLS = False
             .lDispFM_FLS = False
+            .lDispSigmaCharges = False
         End With
 
         With OptionsDiagrammesCDC

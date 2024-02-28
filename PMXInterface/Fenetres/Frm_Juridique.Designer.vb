@@ -25,12 +25,12 @@ Partial Class Frm_Juridique
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_Juridique))
         Me.TableLayoutPanel_Contenu = New System.Windows.Forms.TableLayoutPanel()
         Me.Btn_Accepter = New System.Windows.Forms.Button()
-        Me.Label_Juridique = New System.Windows.Forms.Label()
+        Me.lbl_Juridique = New System.Windows.Forms.Label()
         Me.Panel_Langue = New System.Windows.Forms.Panel()
         Me.TableLayoutPanel_Langue = New System.Windows.Forms.TableLayoutPanel()
         Me.RadioButton_Fr = New System.Windows.Forms.RadioButton()
         Me.RadioButton_En = New System.Windows.Forms.RadioButton()
-        Me.Label_Langue = New System.Windows.Forms.Label()
+        Me.lbl_Langue = New System.Windows.Forms.Label()
         Me.Panel_Juridique = New System.Windows.Forms.Panel()
         Me.Label_InfoJuridique = New System.Windows.Forms.Label()
         Me.Btn_Quitter = New System.Windows.Forms.Button()
@@ -48,7 +48,7 @@ Partial Class Frm_Juridique
         Me.TableLayoutPanel_Contenu.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65.0!))
         Me.TableLayoutPanel_Contenu.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35.0!))
         Me.TableLayoutPanel_Contenu.Controls.Add(Me.Btn_Accepter, 1, 3)
-        Me.TableLayoutPanel_Contenu.Controls.Add(Me.Label_Juridique, 0, 1)
+        Me.TableLayoutPanel_Contenu.Controls.Add(Me.lbl_Juridique, 0, 1)
         Me.TableLayoutPanel_Contenu.Controls.Add(Me.Panel_Langue, 1, 0)
         Me.TableLayoutPanel_Contenu.Controls.Add(Me.Panel_Juridique, 0, 2)
         Me.TableLayoutPanel_Contenu.Controls.Add(Me.Btn_Quitter, 0, 3)
@@ -77,28 +77,28 @@ Partial Class Frm_Juridique
         Me.Btn_Accepter.Text = "btn_Accepter"
         Me.Btn_Accepter.UseVisualStyleBackColor = True
         '
-        'Label_Juridique
+        'lbl_Juridique
         '
-        Me.Label_Juridique.AutoEllipsis = True
-        Me.Label_Juridique.BackColor = System.Drawing.SystemColors.ControlDark
-        Me.Label_Juridique.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TableLayoutPanel_Contenu.SetColumnSpan(Me.Label_Juridique, 2)
-        Me.Label_Juridique.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label_Juridique.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label_Juridique.Location = New System.Drawing.Point(6, 164)
-        Me.Label_Juridique.Margin = New System.Windows.Forms.Padding(6, 3, 6, 0)
-        Me.Label_Juridique.Name = "Label_Juridique"
-        Me.Label_Juridique.Size = New System.Drawing.Size(472, 25)
-        Me.Label_Juridique.TabIndex = 1
-        Me.Label_Juridique.Text = "Label_Juridique"
-        Me.Label_Juridique.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_Juridique.AutoEllipsis = True
+        Me.lbl_Juridique.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.lbl_Juridique.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TableLayoutPanel_Contenu.SetColumnSpan(Me.lbl_Juridique, 2)
+        Me.lbl_Juridique.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_Juridique.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.lbl_Juridique.Location = New System.Drawing.Point(6, 164)
+        Me.lbl_Juridique.Margin = New System.Windows.Forms.Padding(6, 3, 6, 0)
+        Me.lbl_Juridique.Name = "lbl_Juridique"
+        Me.lbl_Juridique.Size = New System.Drawing.Size(472, 25)
+        Me.lbl_Juridique.TabIndex = 1
+        Me.lbl_Juridique.Text = "lbl_Juridique"
+        Me.lbl_Juridique.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel_Langue
         '
         Me.Panel_Langue.BackColor = System.Drawing.Color.White
         Me.Panel_Langue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel_Langue.Controls.Add(Me.TableLayoutPanel_Langue)
-        Me.Panel_Langue.Controls.Add(Me.Label_Langue)
+        Me.Panel_Langue.Controls.Add(Me.lbl_Langue)
         Me.Panel_Langue.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel_Langue.Location = New System.Drawing.Point(317, 6)
         Me.Panel_Langue.Margin = New System.Windows.Forms.Padding(3, 6, 6, 3)
@@ -149,19 +149,19 @@ Partial Class Frm_Juridique
         Me.RadioButton_En.Text = "RadioButton_En"
         Me.RadioButton_En.UseVisualStyleBackColor = False
         '
-        'Label_Langue
+        'lbl_Langue
         '
-        Me.Label_Langue.AutoEllipsis = True
-        Me.Label_Langue.BackColor = System.Drawing.SystemColors.ControlDark
-        Me.Label_Langue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Label_Langue.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Label_Langue.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label_Langue.Location = New System.Drawing.Point(0, 0)
-        Me.Label_Langue.Name = "Label_Langue"
-        Me.Label_Langue.Size = New System.Drawing.Size(159, 25)
-        Me.Label_Langue.TabIndex = 1
-        Me.Label_Langue.Text = "Label_Langue"
-        Me.Label_Langue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_Langue.AutoEllipsis = True
+        Me.lbl_Langue.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.lbl_Langue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Langue.Dock = System.Windows.Forms.DockStyle.Top
+        Me.lbl_Langue.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.lbl_Langue.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Langue.Name = "lbl_Langue"
+        Me.lbl_Langue.Size = New System.Drawing.Size(159, 25)
+        Me.lbl_Langue.TabIndex = 1
+        Me.lbl_Langue.Text = "lbl_Langue"
+        Me.lbl_Langue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Panel_Juridique
         '
@@ -242,12 +242,12 @@ Partial Class Frm_Juridique
 
     Friend WithEvents TableLayoutPanel_Contenu As TableLayoutPanel
     Friend WithEvents Btn_Accepter As Button
-    Friend WithEvents Label_Juridique As Label
+    Friend WithEvents lbl_Juridique As Label
     Friend WithEvents Panel_Langue As Panel
     Friend WithEvents TableLayoutPanel_Langue As TableLayoutPanel
     Friend WithEvents RadioButton_Fr As RadioButton
     Friend WithEvents RadioButton_En As RadioButton
-    Friend WithEvents Label_Langue As Label
+    Friend WithEvents lbl_Langue As Label
     Friend WithEvents Panel_Juridique As Panel
     Friend WithEvents Label_InfoJuridique As Label
     Friend WithEvents Btn_Quitter As Button

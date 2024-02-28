@@ -845,6 +845,7 @@ DISPLAYFMULS			= Display forces and moments at ultimate LS
 DISPLAYFMSLS			= Display forces and moments at serviceability LS
 DISPLAYFMFLS			= Display forces and moments at fire LS
 DISPLAYDIAGRAMS			= Display diagrams
+DISPLAYSIGMA			= Display elastic stresses
 
 #OPTSOFTDATABASES
 DATABASES				= Databases
