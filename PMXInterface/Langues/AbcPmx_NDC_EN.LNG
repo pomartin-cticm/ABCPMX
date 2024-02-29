@@ -384,6 +384,8 @@ SLABC					= Concrete slab
 SLABREINFORCEMENTS		= Slab reinforcements
 ENCASEMENTC				= Concrete encasement
 ENCREINFORCEMENTS		= Encasement reinforcements	
+ASSMPOS					= With properties for positive bending moments
+ASSMNEG					= With properties for negative bending moments
 
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= Ultimate Limit States

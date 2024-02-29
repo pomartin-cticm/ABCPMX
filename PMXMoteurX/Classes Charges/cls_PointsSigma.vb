@@ -7,13 +7,15 @@
 
 #Region " Attributs "
 
-    Public zPos As List(Of Decimal)     ' Position z des points où sont calculées les contraintes normales
+    Public zPos As List(Of Decimal)                 ' Position z des points où sont calculées les contraintes normales
 
-    Public iProfile(1) As Integer       ' Indice début et fin des points pour le profilé acier
-    Public iBetonDalle(1) As Integer    ' Indice début et fin des points pour le béton de la dalle
-    Public iBetonEnrob(1) As Integer    ' Indice début et fin des points pour le béton d'enrobage
-    Public iArmaDalle(1) As Integer     ' Indice début et fin des points pour les armatures de la dalle
-    Public iArmaEnrob(1) As Integer     ' Indice début et fin des points pour les armatures d'enrobage
+    Public iProfile(1) As Integer                   ' Indice début et fin des points pour le profilé acier
+    Public iBetonDalle(1) As Integer                ' Indice début et fin des points pour le béton de la dalle
+    Public iBetonEnrob(1) As Integer                ' Indice début et fin des points pour le béton d'enrobage
+    Public iArmaDalle(1) As Integer                 ' Indice début et fin des points pour les armatures de la dalle
+    Public iArmaEnrob(1) As Integer                 ' Indice début et fin des points pour les armatures d'enrobage
+
+    Public Const CONVSIGNETRACTION As Decimal = 1   ' Convention de signe pour les contraintes de traction
 
 #End Region
 
@@ -551,5 +553,145 @@
     End Sub
 
 #End Region
+
+
+#Region " Ajustement des contraintes combinées "
+
+    Public Sub AjusteContraintes(myBeam As cls_Poutre, ByRef SigmaELU(,,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------------
+        '   29/02/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Pour les contraintes après combinaison ELU, on ajuste les contraintes normales 
+        '   dans le béton et dans les armatures, en fonction de leur signe
+        '----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   SigmaELU    [E/S] : Tableau des contraintes aux ELU
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lMixte As Boolean = myBeam.lMixte
+        Dim lEnrob As Boolean = myBeam.lEnrobage
+
+        Dim nbNodes As Integer = myBeam.Nodes.nbNodes
+
+
+        '--( Traitement des contraintes dans le béton de la dalle
+
+        If lMixte Then
+            TraitementContraintes(SigmaELU, Me.iBetonDalle(0), Me.iBetonDalle(1), nbNodes, -CONVSIGNETRACTION)
+        End If
+
+        '--( Traitement des contraintes dans le béton d'enrobage
+
+        If lEnrob Then
+            TraitementContraintes(SigmaELU, Me.iBetonEnrob(0), Me.iBetonEnrob(1), nbNodes, -CONVSIGNETRACTION)
+        End If
+
+        '--( Traitement des contraintes dans les armatures de la dalle
+
+        If lMixte And Not (myBeam.Param.lCompressionArma) Then
+            TraitementContraintes(SigmaELU, Me.iArmaDalle(0), Me.iArmaDalle(1), nbNodes, CONVSIGNETRACTION)
+        End If
+
+        '--( Traitement des contraintes dans les armatures de l'enrobage
+
+        If lEnrob And Not (myBeam.Param.lCompressionArma) Then
+            TraitementContraintes(SigmaELU, Me.iArmaEnrob(0), Me.iArmaEnrob(1), nbNodes, CONVSIGNETRACTION)
+        End If
+
+    End Sub
+
+    'Private Sub TraitementContraintesArmatures(ByRef SigmaELU(,,) As Decimal, iPt0 As Integer, iPt1 As Integer, nbNodes As Integer)
+    '    '----------------------------------------------------------------------------------------------------------------
+    '    '   29/02/24 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------------
+    '    '   Pour les contraintes après combinaison ELU, on ajuste les contraintes normales 
+    '    '   dans les armatures , en fonction de leur signe (on ne retient dans cette routine que les armatures tendues)
+    '    '----------------------------------------------------------------------------------------------------------------
+    '    '   SigmaELU    [E/S] : Tableau des contraintes aux ELU
+    '    '   iPt0,iPt1   [E] :   Indice des points entre lesquels on ajuste la contrainte dans le béton
+    '    '----------------------------------------------------------------------------------------------------------------
+
+    '    '--( Déclaration
+
+    '    Dim iNode, iPoint, k As Integer
+
+    '    '--( Traitement
+
+    '    If (iPt0 > -1 And (iPt1 > -1)) Then
+    '        For iPoint = iPt0 To iPt1
+    '            For iNode = 0 To nbNodes - 1
+    '                For k = 0 To 1
+    '                    SigmaELU(iPoint, iNode, k) = CONVSIGNETRACTION * Math.Max(0, CONVSIGNETRACTION * SigmaELU(iPoint, iNode, k))
+    '                Next
+    '            Next
+    '        Next
+    '    End If
+
+    'End Sub
+
+    'Private Sub TraitementContraintesBeton(ByRef SigmaELU(,,) As Decimal, iPt0 As Integer, iPt1 As Integer, nbNodes As Integer)
+    '    '----------------------------------------------------------------------------------------------------------------
+    '    '   29/02/24 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------------
+    '    '   Pour les contraintes après combinaison ELU, on ajuste les contraintes normales 
+    '    '   dans le béton , en fonction de leur signe
+    '    '----------------------------------------------------------------------------------------------------------------
+    '    '   SigmaELU    [E/S] : Tableau des contraintes aux ELU
+    '    '   iPt0,iPt1   [E] :   Indice des points entre lesquels on ajuste la contrainte dans le béton
+    '    '----------------------------------------------------------------------------------------------------------------
+
+    '    '--( Déclaration
+
+    '    Dim iNode, iPoint, k As Integer
+
+    '    '--( Traitement
+
+    '    If (iPt0 > -1 And (iPt1 > -1)) Then
+    '        For iPoint = iPt0 To iPt1
+    '            For iNode = 0 To nbNodes - 1
+    '                For k = 0 To 1
+    '                    SigmaELU(iPoint, iNode, k) = -CONVSIGNETRACTION * Math.Max(0, -CONVSIGNETRACTION * SigmaELU(iPoint, iNode, k))
+    '                Next
+    '            Next
+    '        Next
+    '    End If
+
+    'End Sub
+
+    Private Sub TraitementContraintes(ByRef SigmaELU(,,) As Decimal, iPt0 As Integer, iPt1 As Integer, nbNodes As Integer, SigneS As Decimal)
+        '----------------------------------------------------------------------------------------------------------------
+        '   29/02/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Pour les contraintes après combinaison ELU, on ajuste les contraintes normales 
+        '   dans le béton ou les armatures, en fonction de leur signe
+        '----------------------------------------------------------------------------------------------------------------
+        '   SigmaELU    [E/S] : Tableau des contraintes aux ELU
+        '   iPt0,iPt1   [E] :   Indice des points entre lesquels on ajuste la contrainte dans le béton
+        '   nbNodes     [E] :   Nombre de noeuds dans le modèle
+        '   SigneS      [S] :   Signe de sélection des contraintes (si 1, on ne retient que les contraintes >0)
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iNode, iPoint, k As Integer
+
+        '--( Traitement
+
+        If (iPt0 > -1 And (iPt1 > -1)) Then
+            For iPoint = iPt0 To iPt1
+                For iNode = 0 To nbNodes - 1
+                    For k = 0 To 1
+                        SigmaELU(iPoint, iNode, k) = SigneS * Math.Max(0, SigneS * SigmaELU(iPoint, iNode, k))
+                    Next
+                Next
+            Next
+        End If
+
+    End Sub
+
+#End Region
+
 
 End Class

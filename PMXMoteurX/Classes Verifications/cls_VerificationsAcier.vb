@@ -100,13 +100,13 @@ Public Class cls_VerificationsAcier
 
 #Region " Outils de vérification "
 
-    Public Sub Z_VerificationELU(MyPoutre As cls_Poutre, lConstructionPhase As Boolean)
+    Public Sub Z_VerificationELU(myBeam As cls_Poutre, lConstructionPhase As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU d'une poutre acier sans enrobage
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre            [E] :   Poutre vérifiée
+        '   myBeam            [E] :   Poutre vérifiée
         '   lConstructionPhase  [E] :   Indique si vérification d'une poutre mixte en phase de construction
         '----------------------------------------------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ Public Class cls_VerificationsAcier
         Dim zANPMV(,) As Decimal = Nothing                ' Position ANP, tenant compte de l'interaction avec l'effort tranchant 
         Dim MVRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de l'interaction avec l'effort tranchant 
         Dim MelRd, zANE As Decimal
-        Dim lGeneration1 As Boolean = MyPoutre.Param.lGeneration1
+        Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
         Dim ClasseP, ClasseM As Integer 'Classes de la section en flexion positive et négative
         Dim lClasse4 As Boolean
         ' Dim lSigma As Boolean
@@ -136,7 +136,7 @@ Public Class cls_VerificationsAcier
         Dim lRetraitElastique As Boolean = True
         Dim lVerifElastic As Boolean                    ' Indique si on doit effectuer une verification élastique des sections
         Dim EpsilonW As Decimal
-        Dim lEnrob As Boolean = MyPoutre.lEnrobage
+        Dim lEnrob As Boolean = myBeam.lEnrobage
 
         '--> Initialisations
 
@@ -144,31 +144,31 @@ Public Class cls_VerificationsAcier
 
         If lConstructionPhase Then
             nbCombiELU = cls_Poutre.nbCombELUConstruction
-            combiELU = MyPoutre.CombiA_ELCU
+            combiELU = myBeam.CombiA_ELCU
         Else
             nbCombiELU = cls_Poutre.nbCombELU
-            combiELU = MyPoutre.CombiA_ELU
+            combiELU = myBeam.CombiA_ELU
         End If
 
-        Me.InitialiseRhoV(nbCombiELU, MyPoutre.Nodes.nbNodes)
-        Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, nbCombiELU, MyPoutre.IndiceDerniereTravee)
+        Me.InitialiseRhoV(nbCombiELU, myBeam.Nodes.nbNodes)
+        Me.InitialiseCriteresVM(myBeam.Nodes.nbNodes, myBeam.lEnrobage, nbCombiELU, myBeam.IndiceDerniereTravee)
 
         '# Tranchant résistant
 
-        VplRd = MyPoutre.Section.VplRd(MyPoutre.Param.Gamma.GammaM0)
+        VplRd = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM0)
 
         '# Résistance au voilement par cisaillement
 
-        lTwoAdjacentCantilevers = MyPoutre.lTraveeConsoleGauche And MyPoutre.lTraveeConsoleDroite
+        lTwoAdjacentCantilevers = myBeam.lTraveeConsoleGauche And myBeam.lTraveeConsoleDroite
 
-        VbRd = MyPoutre.Section.VbRd(MyPoutre.Param.Gamma.GammaM1, MyPoutre.Param.EtaW, lTwoAdjacentCantilevers)
+        VbRd = myBeam.Section.VbRd(myBeam.Param.Gamma.GammaM1, myBeam.Param.EtaW, lTwoAdjacentCantilevers)
 
-        EpsilonW = Math.Sqrt(235 / MyPoutre.Section.FyW)
-        Me.ShearB.ElancementW = MyPoutre.Section.ProfilA.ElancementAme
-        If lenrob Then
+        EpsilonW = Math.Sqrt(235 / myBeam.Section.FyW)
+        Me.ShearB.ElancementW = myBeam.Section.ProfilA.ElancementAme
+        If lEnrob Then
             Me.ShearB.LimiteElancementW = 124 * EpsilonW
         Else
-            Me.ShearB.LimiteElancementW = 72 * EpsilonW / MyPoutre.Param.EtaW
+            Me.ShearB.LimiteElancementW = 72 * EpsilonW / myBeam.Param.EtaW
         End If
         Me.ShearB.lCheckRequired = IsGreater(Me.ShearB.ElancementW, Me.ShearB.LimiteElancementW)
 
@@ -182,20 +182,20 @@ Public Class cls_VerificationsAcier
 
         '# Propriétés
 
-        MyPoutre.ProprietesVerifAcier(True, MplRd, zANP, MelRd, zANE)
+        myBeam.ProprietesVerifAcier(True, MplRd, zANP, MelRd, zANE)
 
         '# Classes de la section
 
         '    La classe des sections ne dépend pas du chargement (il n'y a pas d'effort axial) ni des contraintes.
         '    On classe donc les sections une fois pour toute, en dehors de la boucle sur les combinaisons de calcul
 
-        ClasseP = MyPoutre.Section.ClasseSection(zANP, zANE, True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1)
-        ClasseM = MyPoutre.Section.ClasseSection(zANP, zANE, False, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1)
+        ClasseP = myBeam.Section.ClasseSection(zANP, zANE, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1)
+        ClasseM = myBeam.Section.ClasseSection(zANP, zANE, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1)
 
         '# Type de vérification pour les sections
 
-        lVerifElastic = MyPoutre.Param.lElasticDesignVM Or (ClasseP > 2)
-        If MyPoutre.lMultiSpan Then
+        lVerifElastic = myBeam.Param.lElasticDesignVM Or (ClasseP > 2)
+        If myBeam.lMultiSpan Then
             '# dans le cas d'une poutre à plusieurs travées, on prend aussi en compte la classe de section en flexion négative
             lVerifElastic = lVerifElastic Or (ClasseM > 2)
         End If
@@ -203,20 +203,20 @@ Public Class cls_VerificationsAcier
 
         '# Initialisation des critères dépendant du type de vérification
 
-        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, nbCombiELU, MyPoutre.IndiceDerniereTravee, lVerifElastic, MyPoutre.Param.lElasticDesignVM)
+        Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee, lVerifElastic, myBeam.Param.lElasticDesignVM)
 
         '# Contraintes normales
 
         If lVerifElastic Then
-            MyPoutre.PtsSigma.Initialise(MyPoutre)
-            MyPoutre.PtsSigma.CalculContraintesCharges(MyPoutre, 1, SigmaCas)
+            myBeam.PtsSigma.Initialise(myBeam)
+            myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCas)
         End If
 
         '# Contraintes de cisaillement
-        If MyPoutre.Param.lElasticDesignVM Then
-            Me.Tau = New cls_Tau(MyPoutre.Section.typeSection)
-            Me.Tau.Initialise(MyPoutre.Section.ProfilA)
-            Me.Tau.CalculContraintesCharges(MyPoutre, TauCas)
+        If myBeam.Param.lElasticDesignVM Then
+            Me.Tau = New cls_Tau(myBeam.Section.typeSection)
+            Me.Tau.Initialise(myBeam.Section.ProfilA)
+            Me.Tau.CalculContraintesCharges(myBeam, TauCas)
         End If
 
         '--> Boucle sur les combinaisons
@@ -225,65 +225,67 @@ Public Class cls_VerificationsAcier
 
             '# Combinaisons des moments, efforts tranchants
 
-            combiELU.CombineMoments(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, MEd, False)
+            combiELU.CombineMoments(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd, False)
 
             '# Combinaison des efforts tranchants
 
-            combiELU.CombineEffortsT(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, VEd, False)
+            combiELU.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, False)
 
             '# Combinaisons des contraintes
 
             If lVerifElastic Then
                 '( Contraintes normales
-                combiELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, MyPoutre.PtsSigma.zPos.Count, MyPoutre.Nodes.nbNodes,
-                                                    MyPoutre.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
+                combiELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, myBeam.PtsSigma.zPos.Count, myBeam.Nodes.nbNodes,
+                                                    myBeam.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
+                myBeam.PtsSigma.AjusteContraintes(myBeam, SigmaELU)
+
                 '( Contraintes de cisaillement
-                combiELU.CombineContraintes(iCombi, MyPoutre.ChargesA.Count, Me.Tau.MStatic.Count, MyPoutre.Nodes.nbNodes,
-                                                    MyPoutre.ChargesA, TauCas, lRetraitElastique, TauELU)
+                combiELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, Me.Tau.MStatic.Count, myBeam.Nodes.nbNodes,
+                                                    myBeam.ChargesA, TauCas, lRetraitElastique, TauELU)
             End If
 
             '# Vérification sous moment fléchissant
 
             If lVerifElastic Then
-                RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
+                RunCritereFlexionResistanceElastiqueVM(myBeam, iCombi, SigmaELU)
             Else
-                Me.RunCritereFlexionAcier(MyPoutre, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
+                Me.RunCritereFlexionAcier(myBeam, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
             End If
 
-            If MyPoutre.Param.lElasticDesignVM Then 'calcul élastique imposé 
+            If myBeam.Param.lElasticDesignVM Then 'calcul élastique imposé 
 
                 '# Vérification sous effot tranchant
-                Me.RunCritereCisaillementResistanceElastiqueVM(MyPoutre, iCombi, TauELU)
+                Me.RunCritereCisaillementResistanceElastiqueVM(myBeam, iCombi, TauELU)
 
                 '# Vérification sous interaction MV
-                Me.RunCritereInteractionMVElastiqueVonMises(MyPoutre, iCombi, SigmaELU, TauELU)
+                Me.RunCritereInteractionMVElastiqueVonMises(myBeam, iCombi, SigmaELU, TauELU)
 
             Else 'calcul plastique, même pour les sections de classe 3, si le calcul élastique n'est pas imposé
 
                 '# Vérification sous effort tranchant
 
-                Me.RunCritereTranchants(MyPoutre, iCombi, VEd, VRd)
+                Me.RunCritereTranchants(myBeam, iCombi, VEd, VRd)
 
                 '# Vérification au voilement par cisaillement
 
-                If MyPoutre.Section.IsVoilementParCisaillement(MyPoutre.Param.EtaW) Then Me.RunCritereVoilementCisaillement(MyPoutre, iCombi, VEd, VbRd)
+                If myBeam.Section.IsVoilementParCisaillement(myBeam.Param.EtaW) Then Me.RunCritereVoilementCisaillement(myBeam, iCombi, VEd, VbRd)
 
                 '# Calcul du critère d'intéraction rhoV
 
-                Me.CalculRhoV(iCombi, MyPoutre)
+                Me.CalculRhoV(iCombi, myBeam)
 
                 '# Propriétés avec prise en compte de l'interaction MV
 
-                MyPoutre.ProprietesVerifMVAcier(iCombi, MyPoutre, True, MVRd, zANPMV, Me.RhoV)
+                myBeam.ProprietesVerifMVAcier(iCombi, myBeam, True, MVRd, zANPMV, Me.RhoV)
 
                 '# Vérification sous interaction MV
 
-                Me.RunCriteresInteractionMV(MyPoutre, iCombi, MEd, MVRd)
+                Me.RunCriteresInteractionMV(myBeam, iCombi, MEd, MVRd)
             End If
 
             '# Vérification au déversement
 
-            Me.RunCritereDeversement(MyPoutre, iCombi, MEd, lVerifElastic, lConstructionPhase)
+            Me.RunCritereDeversement(myBeam, iCombi, MEd, lVerifElastic, lConstructionPhase)
 
         Next
 
@@ -300,7 +302,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance au déversement
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre            [E] :   Poutre traitée
+        '   myBeam            [E] :   Poutre traitée
         '   iCombi              [E] :   Indice de la combinaison
         '   MEd                 [E] :   Table des moments fléchissants le long de la poutre
         '   lSigma              [E] :   Indique si calcul élastique
@@ -388,7 +390,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance au déversement
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre            [E] :   Poutre traitée
+        '   myBeam            [E] :   Poutre traitée
         '   iCombi              [E] :   Indice de la combinaisons traitée
         '   MEd                 [E] :   Diagramme de flexion
         '   lConstructionPhase  [E] :   Indique si vérification d'une poutre mixte en phase de construction
@@ -660,7 +662,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Préparation des paramètres de calcul relatifs aux maintiens latéraux
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre    [E] :   Poutre traitée
+        '   myBeam    [E] :   Poutre traitée
         '   paramLTB    [S] :   Paramètres pour le calcul LTB
         '----------------------------------------------------------------------------------------------------------
 
@@ -785,7 +787,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance en flexion par les critères de VM
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
+        '   myBeam[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   SigmaELU[E] :   Contraintes normales aux ELU
         '----------------------------------------------------------------------------------------------------------
@@ -861,7 +863,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance en flexion par les critères de VonMises en un point de calcul de section
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
+        '   myBeam[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   iPoint  [E] :   Indice du point de calcul des contraintes
         '   SigmaELU[E] :   Contraintes normales aux ELU
@@ -906,7 +908,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance au moment fléchissant d'une poutre acier sans enrobage
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
+        '   myBeam[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   MEd     [E] :   Table des moments fléchissants le long de la barre
         '   MplRd   [E] :   Moment résitant plastique
@@ -984,7 +986,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance à l'effort tranchant 
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
+        '   myBeam[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   VEd     [E] :   Table des efforts tranchants le long de la barre
         '   VRd     [E] :   Effort tranchant résistant (plastique ou voilement) de la barre
@@ -1031,7 +1033,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance à l'effort tranchant 
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
+        '   myBeam[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   VEd     [E] :   Table des efforts tranchants le long de la barre
         '   VRd     [E] :   Table des résistances au voilement par cisaillement le long de la barre
@@ -1073,7 +1075,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance à l'interaction MV (critère de résistance plastique)
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
+        '   myBeam[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   MEd     [E] :   Table des moments fléchissants le long de la barre
         '   MplRd   [E] :   Table des moments plastiques le long de la barre (calculés en fonction du signe de MEd)
@@ -1170,7 +1172,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance en cisaillement par les critères de VM
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre[E] :   Poutre traitée
+        '   myBeam[E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   TauELU  [E] :   Contraintes de cisaillement aux ELU
         '----------------------------------------------------------------------------------------------------------
@@ -1208,7 +1210,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance en cisaillement par les critères de VonMises en un point de calcul de section
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre    [E] :   Poutre traitée
+        '   myBeam    [E] :   Poutre traitée
         '   iCombi      [E] :   Indice de la combinaison
         '   iPoint      [E] :   Indice du point de calcul des contraintes
         '   TauELU      [E] :   Contraintes de cisaillement aux ELU
@@ -1257,7 +1259,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance en cisaillement par les critères de VM
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre    [E] :   Poutre traitée
+        '   myBeam    [E] :   Poutre traitée
         '   iCombi      [E] :   Indice de la combinaison
         '   SigmaELU    [E] :   Contraintes normales aux ELU
         '   TauELU      [E] :   Contraintes de cisaillement aux ELU
@@ -1302,7 +1304,7 @@ Public Class cls_VerificationsAcier
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance contrainte équivalente de VonMises en un point de calcul de section
         '----------------------------------------------------------------------------------------------------------
-        '   MyPoutre    [E] :   Poutre traitée
+        '   myBeam    [E] :   Poutre traitée
         '   iCombi      [E] :   Indice de la combinaison
         '   iPoint      [E] :   Indice du point de calcul des contraintes
         '   SigmaELU    [E] :   Contraintes normales aux ELU

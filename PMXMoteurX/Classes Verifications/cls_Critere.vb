@@ -14,7 +14,7 @@
     Public lDefini As Boolean           ' Indique si le critère a été utilisé
 
     Public CritereCombiT(,) As Decimal  ' Table donnant la valeur maxi du critère par combinaison et par travée
-    Public CritereCombiN(,) As Decimal  ' Table donnant l'indice du noeud ou le critere maxi par combinaison et par travée est obtenu
+    Public CritereCombiN(,) As Decimal  ' Table donnant l'indice du noeud où le critere maxi par combinaison et par travée est obtenu
 
 #End Region
 

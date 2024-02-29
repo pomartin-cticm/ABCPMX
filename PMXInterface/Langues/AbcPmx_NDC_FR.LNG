@@ -378,6 +378,14 @@ REACTIONPROPL			= Réaction de l'étai de la console gauche
 REACTIONPROPR			= Réaction de l'étai de la console droite
 STRESSES				= Analyse - Contraintes élastiques
 POINTS					= Points
+SIGMAPOINTS				= Points de contraintes
+PROFILE					= Profilé
+SLABC					= Dalle béton
+SLABREINFORCEMENTS		= Armatures dalle
+ENCASEMENTC				= Enrobage béton
+ENCREINFORCEMENTS		= Armatures enrobage
+ASSMPOS					= Avec les propriétés sous moment positif
+ASSMNEG					= Avec les propriétés sous moment négatif
 
 #NDC_VERIFICATIONSULS
 ULS_CHECKS				= Etats Limites Ultimes

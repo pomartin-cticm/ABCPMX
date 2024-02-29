@@ -3946,8 +3946,11 @@ Module Mod_NoteCalcul
 
         'Const nbminCombi As Integer = 12
         Dim lRetraitELU As Boolean = False                      '#ALERTE Pour le moment, à pondérer plus tard
-        Dim SigmaCas(,,,) As Decimal = Nothing
+        Dim SigmaCasP(,,,) As Decimal = Nothing
+        Dim SigmaCasM(,,,) As Decimal = Nothing
         Dim SigmaELU(,,) As Decimal = Nothing
+        Dim lMultiSpan As Boolean = MyBeam.lMultiSpan
+        Dim MEd(,) As Decimal = Nothing
 
         '--> En fonction des options NDC
 
@@ -3960,7 +3963,8 @@ Module Mod_NoteCalcul
         AddTitreNdC(1, BlocAnalyse("STRESSES"))
 
         MyBeam.PtsSigma.Initialise(MyBeam)
-        MyBeam.PtsSigma.CalculContraintesCharges(MyBeam, 1, SigmaCas)
+        MyBeam.PtsSigma.CalculContraintesCharges(MyBeam, 1, SigmaCasP)
+        MyBeam.PtsSigma.CalculContraintesCharges(MyBeam, -1, SigmaCasM)
 
         '--> Listes des points de calcul des contraintes
 
@@ -3968,16 +3972,15 @@ Module Mod_NoteCalcul
 
         '--> Analyses par cas de charge
 
-
         AddTitreNdC(2, BlocAnalyse("ELEMNTRY_LC"))
 
         For iCas As Integer = 0 To MyBeam.ChargesA.Count - 1
 
             '--> On affiche le cas de charge uniquement si le cas de charge est disponible
             If MyBeam.ChargesA(iCas).lRunCalcul Then
-                EditionSigmaChargeA(MyBeam, SigmaCas, iCas)
-
+                EditionSigmaChargeA(MyBeam, SigmaCasP, SigmaCasM, iCas)
             End If
+
         Next
 
         '--> Analyses par combinaisons ELU
@@ -3994,8 +3997,11 @@ Module Mod_NoteCalcul
         Else
             For iCombi As Integer = 0 To MyBeam.CombiA_ELU.nbCombi - 1
 
+                MyBeam.CombiA_ELU.CombineMoments(iCombi, MyBeam.Nodes.nbNodes, MyBeam.ChargesA, MEd, lRetraitElastique)
+
                 MyBeam.CombiA_ELU.CombineContraintes(iCombi, MyBeam.ChargesA.Count, MyBeam.PtsSigma.zPos.Count, MyBeam.Nodes.nbNodes,
-                                                     MyBeam.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
+                                                     MyBeam.ChargesA, MEd, SigmaCasP, SigmaCasM, lRetraitElastique, SigmaELU)
+                MyBeam.PtsSigma.AjusteContraintes(MyBeam, SigmaELU)
 
                 EditionSigmaCombi(MyBeam, SigmaELU, iCombi)
 
@@ -4162,20 +4168,22 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionSigmaChargeA(myBeam As cls_Poutre, SigmaCas(,,,) As Decimal, iCas As Integer)
+    Private Sub EditionSigmaChargeA(myBeam As cls_Poutre, SigmaCasP(,,,) As Decimal, SigmaCasM(,,,) As Decimal, iCas As Integer)
         '-------------------------------------------------------------------------------------------
         '   28/02/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Edition des contraintes pour un cas de charge
         '-------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
-        '   SigmaCas    [E] :   Contraintes élastiques normales dans les sections
+        '   SigmaCasP   [E] :   Contraintes élastiques normales dans les sections (sous moments positifs)
+        '   SigmaCasM   [E] :   Contraintes élastiques normales dans les sections (sous moments négatifs)
         '   iCas        [E] :   Indice du cas affiché
         '-------------------------------------------------------------------------------------------
 
         '--( Déclarations
 
         Const NbLignesReq As Integer = 10
+        Dim lAfficheSigmaM As Boolean = myBeam.lMultiSpan And (myBeam.lMixte Or myBeam.lEnrobage)
 
         '--> Initialisation
 
@@ -4190,9 +4198,17 @@ Module Mod_NoteCalcul
             Exit Sub
         End If
 
-        '--> Affichage du tableau des contraintes
+        '--> Affichage du tableau des contraintes sous moment positifs
 
-        EditionTableauContraintes(myBeam, SigmaCas, iCas)
+        If lAfficheSigmaM Then AddLigneNDC(TABW3 & BlocAnalyse("ASSMPOS"))
+        EditionTableauContraintes(myBeam, SigmaCasP, iCas)
+
+        '--> Affichage du tableau des contraintes sous moment positifs
+
+        If lAfficheSigmaM Then
+            AddLigneNDC(TABW3 & BlocAnalyse("ASSMNEG"))
+            EditionTableauContraintes(myBeam, SigmaCasM, iCas)
+        End If
 
     End Sub
 
@@ -4583,10 +4599,12 @@ Module Mod_NoteCalcul
         '   Détail du calcul des armatures transversales
         '-------------------------------------------------------------------------------------------
 
+        If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
+
         AddTitreNdC(2, BlocELU("CRITERIA_TRANSREBAR"))
 
         AddLigneNDC(TABW2 & BlocELU("NBTRANSVERSELAYER") & TABAFF & MyBeam.NbTransverseLayer)
-        AddLigneNDC(TABW2 & BlocELU("MINTRANSVERSEREINF") & TABAFF & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnit(MyBeam.rho_t_min, Enu_TypeVariable.SansType, 3, -1, True) & " (UNITE ???)")
+        AddLigneNDC(TABW2 & BlocELU("MINTRANSVERSEREINF") & TABAFF & "\Sr\s\-t,min\=" & TABEGAL & GetStringInUnit(MyBeam.rho_t_min * 100, Enu_TypeVariable.SansType, 3, -1, True) & " %")
 
         Dim strFailureMode As String = ""
         Dim str_aa, str_bb, str_dd As String
@@ -4641,24 +4659,16 @@ Module Mod_NoteCalcul
         '   ind_failureArea     [E] :   indice du mode de ruine associé :0a-a = 0, b-b = 1, d-d = 2
         '-------------------------------------------------------------------------------------------
 
+        Dim NCOL As Integer
+
+        If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
+
         AddTitreNdC(3, BlocELU("SHEARFAILUREAREA") & " : " & str_failureArea)
 
-        AddLigneNDC("\TABLEAU 10")
-
-        Dim nbColonne = 8
 
         If nbLignes + 2 * HLIGNE > MAXLIGNEPPAG Then SautePage()
 
-        InitialiseLigneTableau(nbColonne, HLIGNE)
-        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
-        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ZONE"))
-        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "n\-r\=")
-        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\St\s\-Ed," & str_failureArea & "\= " & "(" & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes) & ")")
-        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-f,min," & str_failureArea & "\= (°)")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-f," & str_failureArea & "\= (°)")
-        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-sf," & str_failureArea & "\=")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "(A\-sf\=/s\-f\=)\-" & str_failureArea & "\= (cm\+2\=/m)")
-
+        EnteteTableauELUArmaturesTransv(NCOL, str_failureArea)
         'SauteLigne()
 
         For i As Integer = MyBeam.IndicePremiereTravee To MyBeam.IndiceDerniereTravee
@@ -4666,7 +4676,7 @@ Module Mod_NoteCalcul
 
                 If nbLignes + HLIGNE > MAXLIGNEPPAG Then SautePage()
 
-                InitialiseLigneTableau(nbColonne, HLIGNE)
+                InitialiseLigneTableau(NCOL, HLIGNE)
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(j + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
@@ -4680,6 +4690,24 @@ Module Mod_NoteCalcul
         Next
 
         FinTableau()
+    End Sub
+
+    Private Sub EnteteTableauELUArmaturesTransv(ByRef nbCol As Integer, str_failureArea As String)
+
+        AddLigneNDC("\TABLEAU 10")
+
+        nbCol = 8
+
+        InitialiseLigneTableau(nbCol, HLIGNE)
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ZONE"))
+        AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "n\-r\=")
+        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\St\s\-Ed," & str_failureArea & "\= " & "(" & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes) & ")")
+        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-f,min," & str_failureArea & "\= (°)")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-f," & str_failureArea & "\= (°)")
+        AddCelluleFond(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-sf," & str_failureArea & "\=")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "(A\-sf\=/s\-f\=)\-" & str_failureArea & "\= (cm\+2\=/m)")
+
     End Sub
 
 #End Region
@@ -5340,7 +5368,7 @@ Module Mod_NoteCalcul
 
         '--> Déclarations
 
-        Dim PostTab As Integer = 20
+        Dim PostTab As Integer = 10
         Dim lMultiSpan As Boolean = (MyBeam.NbTravees > 1)
         Dim lElastic As Boolean = (MyBeam.Param.lElasticDesignVM)
         ' Dim lShearB As Boolean
@@ -6494,7 +6522,7 @@ Module Mod_NoteCalcul
 
         MyNote.AddLigneInRapport("LTAB " & NombreCellules.ToString & " " & hLigne.ToString)
 
-        nbLignes += hLigne - 0.2 'ajustement des lignes
+        nbLignes += hLigne - 0.1 'ajustement des lignes
 
     End Sub
 
@@ -7192,6 +7220,20 @@ Module Mod_NoteCalcul
 
 
     End Sub
+
+#End Region
+
+
+#Region " Calcul des moments résistance élastiques dans les poutres mixtes "
+
+    Private Sub EditionMelRdPoutreMixte(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+
+
+
+    End Sub
+
+
 
 
 
