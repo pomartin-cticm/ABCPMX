@@ -3947,10 +3947,11 @@ Module Mod_NoteCalcul
         'Const nbminCombi As Integer = 12
         Dim lRetraitELU As Boolean = False                      '#ALERTE Pour le moment, à pondérer plus tard
         Dim SigmaCas(,,,) As Decimal = Nothing
+        Dim SigmaELU(,,) As Decimal = Nothing
 
         '--> En fonction des options NDC
 
-        If Not (OptionsNdC.lDispSigmaCharges) Then Exit Sub
+        If Not (OptionsNdC.lDispSigmaCharges And LogicielOptions.lExpert) Then Exit Sub
 
         '--> Initialisation
 
@@ -3967,51 +3968,41 @@ Module Mod_NoteCalcul
 
         '--> Analyses par cas de charge
 
-        If OptionsNdC.lDispFMLoadCase Then
-            AddTitreNdC(2, BlocAnalyse("ELEMNTRY_LC"))
 
-            For iCas As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).ChargesA.Count - 1
+        AddTitreNdC(2, BlocAnalyse("ELEMNTRY_LC"))
 
-                '--> On affiche le cas de charge uniquement si le cas de charge est disponible
-                If MyProjet.Poutres(MyProjet.IndEnCours).ChargesA(iCas).lRunCalcul Then
-                    EditionSigmaChargeA(MyProjet.Poutres(MyProjet.IndEnCours), SigmaCas, iCas)
+        For iCas As Integer = 0 To MyBeam.ChargesA.Count - 1
 
-                End If
+            '--> On affiche le cas de charge uniquement si le cas de charge est disponible
+            If MyBeam.ChargesA(iCas).lRunCalcul Then
+                EditionSigmaChargeA(MyBeam, SigmaCas, iCas)
+
+            End If
+        Next
+
+        '--> Analyses par combinaisons ELU
+
+        Const nbminCombi As Integer = 10
+        Const lRetraitElastique As Boolean = True
+
+        If nbLignes + nbminCombi > MAXLIGNEPPAG Then SautePage()
+
+        AddTitreNdC(2, BlocAnalyse("ELEMNTRY_ULS"))
+
+        If MyBeam.CombiA_ELU.nbCombi = 0 Then
+            AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+        Else
+            For iCombi As Integer = 0 To MyBeam.CombiA_ELU.nbCombi - 1
+
+                MyBeam.CombiA_ELU.CombineContraintes(iCombi, MyBeam.ChargesA.Count, MyBeam.PtsSigma.zPos.Count, MyBeam.Nodes.nbNodes,
+                                                     MyBeam.ChargesA, SigmaCas, lRetraitElastique, SigmaELU)
+
+                EditionSigmaCombi(MyBeam, SigmaELU, iCombi)
+
+                ' EditionAnalyseCombiELU(MyProjet.Poutres(MyProjet.IndEnCours), i)
+
             Next
         End If
-
-
-        Exit Sub
-
-        ''--> Analyses par combinaisons ELU
-
-        'If OptionsNdC.lDispFM_ULS Then
-
-        '    If nbLignes + nbminCombi > MAXLIGNEPPAG Then SautePage()
-
-        '    AddTitreNdC(2, BlocAnalyse("ELEMNTRY_ULS"))
-
-        '    If MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi = 0 Then
-        '        AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
-        '    Else
-        '        For i As Integer = 0 To MyProjet.Poutres(MyProjet.IndEnCours).CombiA_ELU.nbCombi - 1
-
-        '            EditionAnalyseCombiELU(MyProjet.Poutres(MyProjet.IndEnCours), i)
-
-        '            '--> On affiche le diagramme des efforts si l'option est activée 
-        '            If OptionsNdC.lDispFMDiagrams Then
-        '                Const NbLigDiag As Integer = 20
-        '                If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
-        '                ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
-        '                AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELU " & lRetraitELU)
-        '                nbLignes += NbLigDiag
-        '            End If
-
-        '        Next
-        '    End If
-        'End If
-
-
 
     End Sub
 
@@ -4139,6 +4130,38 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionSigmaCombi(myBeam As cls_Poutre, SigmaCombi(,,) As Decimal, iCombi As Integer)
+        '-------------------------------------------------------------------------------------------
+        '   28/02/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des contraintes pour un cas de charge
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   SigmaCombi  [E] :   Contraintes élastiques normales dans les sections pour la combinaison
+        '   iCombi      [E] :   Indice de la combinaison
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Const NbLignesReq As Integer = 10
+
+        '--> Initialisation
+
+        If nbLignes + NbLignesReq > MAXLIGNEPPAG Then SautePage()
+
+        '--> Affichage de la combinaison
+
+        Dim strELU As String = BlocAnalyse("ULS")
+        strELU += "_0"
+
+        AffichageCombinaisonCharge(myBeam, myBeam.CombiA_ELU, strELU & CStr(iCombi), iCombi, True)
+
+        '--> Affichage du tableau des contraintes
+
+        EditionTableauContraintesCombi(myBeam, SigmaCombi)
+
+    End Sub
+
     Private Sub EditionSigmaChargeA(myBeam As cls_Poutre, SigmaCas(,,,) As Decimal, iCas As Integer)
         '-------------------------------------------------------------------------------------------
         '   28/02/24 :  Création - POM
@@ -4228,7 +4251,7 @@ Module Mod_NoteCalcul
                     FinTableau()
                     iTab = 1
                     SautePage()
-                    EnteteTableauAnalyseCombi(lMultispan, NCol, PosTab)
+                    EnteteTableauAnalyseSigma(lMultispan, NbPoints, NCol, PosTab, LargCol)
 
                 End If
 
@@ -4239,6 +4262,83 @@ Module Mod_NoteCalcul
             '=== Appui droite
 
             LigneTableauSigma(SigmaCas, iCas, iNodeE, lMultispan, iTravee, NbPoints, LargCol, PosTab, 0)
+
+            iTraveeAffichee += 1
+        Next
+
+        '# Fin du Tableau
+
+        FinTableau()
+
+
+    End Sub
+
+    Private Sub EditionTableauContraintesCombi(myBeam As cls_Poutre, SigmaCombi(,,) As Decimal)
+        '-------------------------------------------------------------------------------------------
+        '   28/02/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des contraintes pour un cas de charge
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   SigmaCas    [E] :   Contraintes élastiques normales dans les sections
+        '   iCas        [E] :   Indice du cas affiché
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim lMultispan As Boolean
+        Dim NCol, PosTab As Integer
+        Dim iTravee, iNode As Integer
+        Dim iNodeO, iNodeE As Integer
+        Dim iTravDeb, iTravFin As Integer
+        Dim iTraveeAffichee As Integer = 1
+        'Dim iCompteur As Integer = 0
+        'Dim NbLignesMax() As Integer = {25, 30}
+        Dim iTab As Integer = 0
+        Dim LargCol() As Integer = {0}
+        Dim NbPoints As Integer = myBeam.PtsSigma.zPos.Count
+
+        '--> Initialisation
+
+        lMultispan = (myBeam.NbTravees > 1)
+        iTravDeb = myBeam.IndicePremiereTravee
+        iTravFin = myBeam.IndiceDerniereTravee
+
+        '--> Affichage
+
+        '# Entête
+
+        EnteteTableauAnalyseSigma(lMultispan, NbPoints, NCol, PosTab, LargCol)
+
+        '# Tableau
+
+        For iTravee = iTravDeb To iTravFin
+            iNodeO = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeE = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            '=== Extrémité gauche
+
+            LigneTableauSigmaCombi(SigmaCombi, iNodeO, lMultispan, iTravee, NbPoints, LargCol, PosTab, 1)
+
+            '=== Lignes intermédiaires
+
+            For iNode = iNodeO + 1 To iNodeE - 1
+
+                If nbLignes > MAXLIGNEPPAG Then
+                    FinTableau()
+                    iTab = 1
+                    SautePage()
+                    EnteteTableauAnalyseSigma(lMultispan, NbPoints, NCol, PosTab, LargCol)
+
+                End If
+
+                LigneTableauSigmaCombi(SigmaCombi, iNode, lMultispan, iTravee, NbPoints, LargCol, PosTab)
+
+            Next
+
+            '=== Appui droite
+
+            LigneTableauSigmaCombi(SigmaCombi, iNodeE, lMultispan, iTravee, NbPoints, LargCol, PosTab, 0)
 
             iTraveeAffichee += 1
         Next
@@ -4375,6 +4475,97 @@ Module Mod_NoteCalcul
             For iPt = 0 To nbPts - 1
 
                 AddCellule(LargCol(1), myBords(k), PositionTexteInCell.Centre, GetStringInUnit(Sigma(iCas, iPt, iNode, k), Enu_TypeVariable.Contrainte, 4, 1, False))
+
+            Next
+
+        Next
+
+    End Sub
+
+    Private Sub LigneTableauSigmaCombi(Sigma(,,) As Decimal, iNode As Integer, lMultiSpan As Boolean, iSpan As Integer, nbPts As Integer,
+                                       LargCol() As Integer, Pos As Integer, Optional kG As Integer = -1)
+        '-------------------------------------------------------------------------------------------
+        '   18/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Entete du tableau pour l'affichage des contraintes 
+        '-------------------------------------------------------------------------------------------
+        '   lMultiSpan  [E] :   Indique si plusieurs travées
+        '   Sigma       [E] :   Tableau des contraintes normales pas cdc
+        '   iCas        [E] :   Indice du cas traité
+        '   iNode       [E] :   Indice du noeuds sur la barre
+        '   iSpan       [E] :   Indice de la travée
+        '   LargCol     [E] :   Largeur de colonnes
+        '   kG          [E] :   
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lDouble As Boolean
+        Dim lMemesVal As Boolean = True
+        Dim iPt As Integer
+        Dim lCont As Boolean
+        Dim kDeb, kFin As Integer
+        Dim NCOL As Integer = nbPts + 1
+        Dim myBords(1) As Integer
+        Dim lAff As Boolean
+
+        '--( Initialisation
+
+        If kG <> -1 Then
+            lDouble = False
+            kDeb = kG
+            kFin = kG
+        Else
+            lCont = True
+            iPt = -1
+            Do While lCont
+                iPt += 1
+                If Not IsEqual(Sigma(iPt, iNode, 0), Sigma(iPt, iNode, 1)) Then lMemesVal = False
+
+                lCont = (iPt < nbPts - 1) And (Not lMemesVal)
+            Loop
+            lDouble = (Not lMemesVal)
+            kDeb = 0
+            If lDouble Then
+                kFin = 1
+            Else
+                kFin = 0
+            End If
+        End If
+
+        If lDouble Then
+            myBords(0) = Bordures.Tous - Bordures.Bas
+            myBords(1) = Bordures.Tous - Bordures.Haut
+        Else
+            myBords(0) = Bordures.Tous
+            myBords(1) = Bordures.Tous
+        End If
+
+        '--( Affichage de la ligne
+
+
+        For k As Integer = kDeb To kFin
+
+            InitialiseLigneTableau(NCOL, HLIGNE)
+
+            If lDouble Then
+                lAff = (k = kDeb)
+            Else
+                lAff = True
+            End If
+            If lAff Then
+                If lMultiSpan Then
+                    AddCellule(LargCol(0), myBords(k), PositionTexteInCell.Centre, CStr(iNode) & " (" & CStr(iSpan) & ")")
+                Else
+                    AddCellule(LargCol(0), myBords(k), PositionTexteInCell.Centre, CStr(iNode))
+                End If
+            Else
+                AddCellule(LargCol(0), myBords(k), PositionTexteInCell.Centre, "")
+            End If
+
+            For iPt = 0 To nbPts - 1
+
+                AddCellule(LargCol(1), myBords(k), PositionTexteInCell.Centre, GetStringInUnit(Sigma(iPt, iNode, k), Enu_TypeVariable.Contrainte, 4, 1, False))
 
             Next
 

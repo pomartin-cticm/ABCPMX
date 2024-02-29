@@ -999,6 +999,7 @@ Public Class Frm_PMX
         My.Settings.lNdCDispFM_ELU = OptionsNdC.lDispFM_ULS
         My.Settings.lNdCDispLoadCase = OptionsNdC.lDispFMLoadCase
         My.Settings.lNdCShowDiagram = OptionsNdC.lDispFMDiagrams
+        My.Settings.lNdCDispSigmaCharges = OptionsNdC.lDispSigmaCharges
 
     End Sub
 
