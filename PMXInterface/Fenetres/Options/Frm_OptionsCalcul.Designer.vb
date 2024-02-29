@@ -93,14 +93,13 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Gauche.Margin = New System.Windows.Forms.Padding(1)
         Me.TLpan_Gauche.Name = "TLpan_Gauche"
         Me.TLpan_Gauche.RowCount = 7
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLpan_Gauche.Size = New System.Drawing.Size(242, 442)
         Me.TLpan_Gauche.TabIndex = 0
         '
@@ -119,11 +118,11 @@ Partial Class Frm_OptionsCalcul
         Me.PoMbtn_Fire.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PoMbtn_Fire.Enable = True
         Me.PoMbtn_Fire.LContourFond = True
-        Me.PoMbtn_Fire.Location = New System.Drawing.Point(5, 140)
+        Me.PoMbtn_Fire.Location = New System.Drawing.Point(5, 125)
         Me.PoMbtn_Fire.Margin = New System.Windows.Forms.Padding(5)
         Me.PoMbtn_Fire.Name = "PoMbtn_Fire"
         Me.PoMbtn_Fire.RatioArrondi = 0!
-        Me.PoMbtn_Fire.Size = New System.Drawing.Size(232, 35)
+        Me.PoMbtn_Fire.Size = New System.Drawing.Size(232, 30)
         Me.PoMbtn_Fire.TabIndex = 4
         '
         'PoMbtn_Calcul
@@ -141,11 +140,11 @@ Partial Class Frm_OptionsCalcul
         Me.PoMbtn_Calcul.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PoMbtn_Calcul.Enable = True
         Me.PoMbtn_Calcul.LContourFond = True
-        Me.PoMbtn_Calcul.Location = New System.Drawing.Point(5, 95)
+        Me.PoMbtn_Calcul.Location = New System.Drawing.Point(5, 85)
         Me.PoMbtn_Calcul.Margin = New System.Windows.Forms.Padding(5)
         Me.PoMbtn_Calcul.Name = "PoMbtn_Calcul"
         Me.PoMbtn_Calcul.RatioArrondi = 0!
-        Me.PoMbtn_Calcul.Size = New System.Drawing.Size(232, 35)
+        Me.PoMbtn_Calcul.Size = New System.Drawing.Size(232, 30)
         Me.PoMbtn_Calcul.TabIndex = 3
         '
         'PoMbtn_Scope
@@ -163,11 +162,11 @@ Partial Class Frm_OptionsCalcul
         Me.PoMbtn_Scope.Dock = System.Windows.Forms.DockStyle.Fill
         Me.PoMbtn_Scope.Enable = True
         Me.PoMbtn_Scope.LContourFond = True
-        Me.PoMbtn_Scope.Location = New System.Drawing.Point(5, 50)
+        Me.PoMbtn_Scope.Location = New System.Drawing.Point(5, 45)
         Me.PoMbtn_Scope.Margin = New System.Windows.Forms.Padding(5)
         Me.PoMbtn_Scope.Name = "PoMbtn_Scope"
         Me.PoMbtn_Scope.RatioArrondi = 0!
-        Me.PoMbtn_Scope.Size = New System.Drawing.Size(232, 35)
+        Me.PoMbtn_Scope.Size = New System.Drawing.Size(232, 30)
         Me.PoMbtn_Scope.TabIndex = 2
         '
         'PoMBtn_Gamma
@@ -189,7 +188,7 @@ Partial Class Frm_OptionsCalcul
         Me.PoMBtn_Gamma.Margin = New System.Windows.Forms.Padding(5)
         Me.PoMBtn_Gamma.Name = "PoMBtn_Gamma"
         Me.PoMBtn_Gamma.RatioArrondi = 0!
-        Me.PoMBtn_Gamma.Size = New System.Drawing.Size(232, 35)
+        Me.PoMBtn_Gamma.Size = New System.Drawing.Size(232, 30)
         Me.PoMBtn_Gamma.TabIndex = 0
         '
         'TLpan_PourLesBoutons

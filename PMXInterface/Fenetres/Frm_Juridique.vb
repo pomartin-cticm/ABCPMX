@@ -91,7 +91,11 @@ Public Class Frm_Juridique
         '--> Mise à jour des couleurs
         RadioButton_En.BackColor = Color.Empty
         RadioButton_Fr.BackColor = Color.Empty
-        sender.backColor = Color.Gold
+        RadioButton_En.ForeColor = Color.Black
+        RadioButton_Fr.ForeColor = Color.Black
+        'sender.backColor = Color.Gold
+        sender.backColor = MyOrange
+        sender.forecolor = Color.White
 
         '--> Mise à jour de la langue et des textes
         If RadioButton_En.Checked And sender.name = RadioButton_En.Name Then

@@ -505,6 +505,9 @@ Public Module Mod_Declarations
     Public CouleurAppui As Color = GreenAM
     Public CouleurProfile As Color = Color.LightGray
     Public CouleurDalle As Color = Color.DarkGray
+
+
+    Public MyOrange As Color = Color.FromArgb(231, 62, 1)
 #End Region
 
 #Region " Variables globales "

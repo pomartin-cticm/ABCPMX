@@ -30,12 +30,12 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.txt_Firm = New System.Windows.Forms.TextBox()
         Me.lbl_Identification = New System.Windows.Forms.Label()
         Me.pan_Langues = New System.Windows.Forms.Panel()
+        Me.lstbox_Test = New System.Windows.Forms.ListBox()
         Me.lbl_LangueNdC = New System.Windows.Forms.Label()
         Me.lst_LangueNdC = New System.Windows.Forms.ListBox()
         Me.lbl_LangueGUI = New System.Windows.Forms.Label()
         Me.lst_LangueGUI = New System.Windows.Forms.ListBox()
         Me.lbl_Langues = New System.Windows.Forms.Label()
-        Me.lstbox_Test = New System.Windows.Forms.ListBox()
         Me.pan_General.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.pan_Langues.SuspendLayout()
@@ -61,9 +61,9 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.Panel1.Controls.Add(Me.lbl_Firm)
         Me.Panel1.Controls.Add(Me.txt_Firm)
         Me.Panel1.Controls.Add(Me.lbl_Identification)
-        Me.Panel1.Location = New System.Drawing.Point(3, 144)
+        Me.Panel1.Location = New System.Drawing.Point(1, 144)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(733, 96)
+        Me.Panel1.Size = New System.Drawing.Size(737, 96)
         Me.Panel1.TabIndex = 101
         '
         'lbl_UserName
@@ -105,7 +105,7 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_Identification.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Identification.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Identification.Name = "lbl_Identification"
-        Me.lbl_Identification.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_Identification.Size = New System.Drawing.Size(737, 23)
         Me.lbl_Identification.TabIndex = 96
         Me.lbl_Identification.Text = "lbl_Identification"
         Me.lbl_Identification.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -120,10 +120,21 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.pan_Langues.Controls.Add(Me.lbl_LangueGUI)
         Me.pan_Langues.Controls.Add(Me.lst_LangueGUI)
         Me.pan_Langues.Controls.Add(Me.lbl_Langues)
-        Me.pan_Langues.Location = New System.Drawing.Point(3, 1)
+        Me.pan_Langues.Location = New System.Drawing.Point(1, 1)
         Me.pan_Langues.Name = "pan_Langues"
-        Me.pan_Langues.Size = New System.Drawing.Size(733, 137)
+        Me.pan_Langues.Size = New System.Drawing.Size(737, 137)
         Me.pan_Langues.TabIndex = 100
+        '
+        'lstbox_Test
+        '
+        Me.lstbox_Test.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable
+        Me.lstbox_Test.FormattingEnabled = True
+        Me.lstbox_Test.HorizontalScrollbar = True
+        Me.lstbox_Test.Location = New System.Drawing.Point(274, 45)
+        Me.lstbox_Test.Name = "lstbox_Test"
+        Me.lstbox_Test.Size = New System.Drawing.Size(128, 82)
+        Me.lstbox_Test.TabIndex = 90
+        Me.lstbox_Test.Visible = False
         '
         'lbl_LangueNdC
         '
@@ -168,20 +179,10 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_Langues.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Langues.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Langues.Name = "lbl_Langues"
-        Me.lbl_Langues.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_Langues.Size = New System.Drawing.Size(737, 23)
         Me.lbl_Langues.TabIndex = 85
         Me.lbl_Langues.Text = "lbl_Langues"
         Me.lbl_Langues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'lstbox_Test
-        '
-        Me.lstbox_Test.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable
-        Me.lstbox_Test.FormattingEnabled = True
-        Me.lstbox_Test.HorizontalScrollbar = True
-        Me.lstbox_Test.Location = New System.Drawing.Point(274, 45)
-        Me.lstbox_Test.Name = "lstbox_Test"
-        Me.lstbox_Test.Size = New System.Drawing.Size(128, 82)
-        Me.lstbox_Test.TabIndex = 90
         '
         'Frm_OptionsLogicielGeneral
         '

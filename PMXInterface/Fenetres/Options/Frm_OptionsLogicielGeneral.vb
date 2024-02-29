@@ -56,8 +56,8 @@
 
     Private Sub AfficherOptionsEnCours()
 
-        InitialiseLangues(Me.lst_LangueGUI, LogicielInfo.ListeLangue, LogicielOptions.IndLangue)
-        InitialiseLangues(Me.lst_LangueNdC, LogicielInfo.ListeLangueNDC, LogicielOptions.IndLangueNDC)
+        InitialiseLangues(Me.lst_LangueGUI, LogicielInfo.ListeLangue, Frm_OptionsLogiciel.pLocalLogicielOptions.IndLangue)
+        InitialiseLangues(Me.lst_LangueNdC, LogicielInfo.ListeLangueNDC, Frm_OptionsLogiciel.pLocalLogicielOptions.IndLangueNDC)
 
         Me.txt_Firm.Text = Frm_OptionsLogiciel.pLocalLogicielOptions.CompanyName
         Me.txt_UserName.Text = Frm_OptionsLogiciel.pLocalLogicielOptions.UserName
@@ -123,48 +123,82 @@
                 Frm_OptionsLogiciel.ReinitLangues()
                 GestionLangue(Frm_OptionsLogiciel.BlocLangues(BALISE))
 
+                Me.lst_LangueGUI.Invalidate()
             Case Me.lst_LangueNdC.Name
 
                 Frm_OptionsLogiciel.pLocalLogicielOptions.IndLangueNDC = Me.lst_LangueNdC.SelectedIndex
-
+                Me.lst_LangueNdC.Invalidate()
         End Select
 
-
-
     End Sub
 
-    Private Sub lstbox_Test_DrawItem(sender As Object, e As DrawItemEventArgs) Handles lstbox_Test.DrawItem
+#End Region
 
-        Dim myFontColor As Color
-        Dim myBackColor As Color
+#Region " Test affichage "
 
-        'e.DrawBackground()
+    'Private Sub lstbox_Test_DrawItem(sender As Object, e As DrawItemEventArgs) Handles lstbox_Test.DrawItem
 
-        If e.Index = Me.lstbox_Test.SelectedIndex Then
-            myBackColor = Color.Orange
-            myFontColor = Color.White
-        Else
-            myBackColor = Me.lstbox_Test.BackColor
-            myFontColor = Me.lstbox_Test.ForeColor
-        End If
+    '    Dim myFontColor As Color
+    '    Dim myBackColor As Color
 
-        Dim myBrush As New SolidBrush(myFontColor)
-        Dim myBrushB As New SolidBrush(myBackColor)
+    '    'e.DrawBackground()
 
-        e.Graphics.FillRectangle(myBrushB, e.Bounds)
+    '    If e.Index = Me.lstbox_Test.SelectedIndex Then
+    '        myBackColor = Color.FromArgb(231, 62, 1)
+    '        myFontColor = Color.White
+    '    Else
+    '        myBackColor = Me.lstbox_Test.BackColor
+    '        myFontColor = Me.lstbox_Test.ForeColor
+    '    End If
 
-        e.Graphics.DrawString(lstbox_Test.Items(e.Index).ToString(),
-                              e.Font, myBrush, e.Bounds, StringFormat.GenericDefault)
+    '    Dim myBrush As New SolidBrush(myFontColor)
+    '    Dim myBrushB As New SolidBrush(myBackColor)
 
-        e.DrawFocusRectangle()
+    '    e.Graphics.FillRectangle(myBrushB, e.Bounds)
 
-    End Sub
+    '    e.Graphics.DrawString(lstbox_Test.Items(e.Index).ToString(),
+    '                          e.Font, myBrush, e.Bounds, StringFormat.GenericDefault)
 
-    Private Sub lstbox_Test_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lstbox_Test.SelectedIndexChanged
-        Me.lstbox_Test.Invalidate()
-    End Sub
+    '    e.DrawFocusRectangle()
 
+    'End Sub
 
+    'Private Sub lstbox_Test_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lstbox_Test.SelectedIndexChanged
+    '    Me.lstbox_Test.Invalidate()
+    'End Sub
+
+    'Private Sub GestionDrawItem(myLstBox As ListBox, e As DrawItemEventArgs)
+    '    Dim myFontColor As Color
+    '    Dim myBackColor As Color
+
+    '    'e.DrawBackground()
+
+    '    If e.Index = myLstBox.SelectedIndex Then
+    '        myBackColor = Color.FromArgb(231, 62, 1)
+    '        myFontColor = Color.White
+    '    Else
+    '        myBackColor = myLstBox.BackColor
+    '        myFontColor = myLstBox.ForeColor
+    '    End If
+
+    '    Dim myBrush As New SolidBrush(myFontColor)
+    '    Dim myBrushB As New SolidBrush(myBackColor)
+
+    '    e.Graphics.FillRectangle(myBrushB, e.Bounds)
+
+    '    e.Graphics.DrawString(myLstBox.Items(e.Index).ToString(),
+    '                          e.Font, myBrush, e.Bounds, StringFormat.GenericDefault)
+
+    '    e.DrawFocusRectangle()
+    'End Sub
+
+    'Private Sub lst_LangueNdC_DrawItem(sender As Object, e As DrawItemEventArgs) Handles lst_LangueNdC.DrawItem
+    '    GestionDrawItem(Me.lst_LangueNdC, e)
+    'End Sub
+
+    'Private Sub lst_LangueGUI_DrawItem(sender As Object, e As DrawItemEventArgs) Handles lst_LangueGUI.DrawItem
+    '    GestionDrawItem(Me.lst_LangueGUI, e)
+    'End Sub
 #End Region
 
 #Region " Tests "
@@ -199,5 +233,7 @@
 
 
 #End Region
+
+
 
 End Class

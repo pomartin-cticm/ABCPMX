@@ -111,4 +111,52 @@
 
 #End Region
 
+#Region " Gestion DrawItems"
+
+
+    'Private Sub cmb_Dimensions_DrawItem(sender As Object, e As DrawItemEventArgs) Handles cmb_Dimensions.DrawItem
+    '    GestionDrawItem(Me.cmb_Dimensions, e)
+    'End Sub
+
+    'Private Sub GestionDrawItem(myCmbBox As ComboBox, e As DrawItemEventArgs)
+    '    Dim myFontColor As Color
+    '    Dim myBackColor As Color
+
+    '    e.DrawBackground()
+
+    '    'If e.Index = myCmbBox.SelectedIndex Then
+    '    '    myBackColor = MyOrange
+    '    '    myFontColor = Color.White
+    '    'Else
+    '    '    myBackColor = myCmbBox.BackColor
+    '    '    myFontColor = myCmbBox.ForeColor
+    '    'End If
+
+    '    Dim myBrush As New SolidBrush(myFontColor)
+    '    Dim myBrushB As New SolidBrush(myBackColor)
+
+
+    '    If e.Index > -1 Then
+    '        If e.State = 769 Or e.State = 785 Or e.State = 4881 Then
+    '            myBackColor = MyOrange
+    '            myFontColor = Color.White
+    '        Else
+    '            myBackColor = myCmbBox.BackColor
+    '            myFontColor = myCmbBox.ForeColor
+    '        End If
+
+    '        e.Graphics.FillRectangle(myBrushB, e.Bounds)
+    '        e.Graphics.DrawString(myCmbBox.Items(e.Index).ToString(),
+    '                              e.Font, myBrush, e.Bounds, StringFormat.GenericDefault)
+
+    '    End If
+
+    '    e.DrawFocusRectangle()
+    'End Sub
+
+    'Private Sub cmb_Dimensions_MouseMove(sender As Object, e As MouseEventArgs) Handles cmb_Dimensions.MouseMove
+    '    Me.cmb_Dimensions.Invalidate()
+    'End Sub
+#End Region
+
 End Class

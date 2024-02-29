@@ -23,8 +23,13 @@ Partial Class Frm_OptionsLogicielUnits
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.pan_Units = New System.Windows.Forms.Panel()
-        Me.lbl_Units = New System.Windows.Forms.Label()
         Me.pan_Loads = New System.Windows.Forms.Panel()
+        Me.lbl_Units = New System.Windows.Forms.Label()
+        Me.cmb_Contraintes = New System.Windows.Forms.ComboBox()
+        Me.cmb_Moments = New System.Windows.Forms.ComboBox()
+        Me.cmb_Forces = New System.Windows.Forms.ComboBox()
+        Me.cmb_Inertie = New System.Windows.Forms.ComboBox()
+        Me.cmb_ModuleW = New System.Windows.Forms.ComboBox()
         Me.cmb_Longueur = New System.Windows.Forms.ComboBox()
         Me.cmb_Dimensions = New System.Windows.Forms.ComboBox()
         Me.lbl_Contraintes = New System.Windows.Forms.Label()
@@ -34,11 +39,6 @@ Partial Class Frm_OptionsLogicielUnits
         Me.lbl_ModuleW = New System.Windows.Forms.Label()
         Me.lbl_Longueur = New System.Windows.Forms.Label()
         Me.lbl_Dimensions = New System.Windows.Forms.Label()
-        Me.cmb_ModuleW = New System.Windows.Forms.ComboBox()
-        Me.cmb_Inertie = New System.Windows.Forms.ComboBox()
-        Me.cmb_Forces = New System.Windows.Forms.ComboBox()
-        Me.cmb_Moments = New System.Windows.Forms.ComboBox()
-        Me.cmb_Contraintes = New System.Windows.Forms.ComboBox()
         Me.pan_Units.SuspendLayout()
         Me.pan_Loads.SuspendLayout()
         Me.SuspendLayout()
@@ -46,7 +46,6 @@ Partial Class Frm_OptionsLogicielUnits
         'pan_Units
         '
         Me.pan_Units.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Units.Controls.Add(Me.lbl_Units)
         Me.pan_Units.Controls.Add(Me.pan_Loads)
         Me.pan_Units.Location = New System.Drawing.Point(21, 20)
         Me.pan_Units.Margin = New System.Windows.Forms.Padding(0)
@@ -54,22 +53,11 @@ Partial Class Frm_OptionsLogicielUnits
         Me.pan_Units.Size = New System.Drawing.Size(739, 401)
         Me.pan_Units.TabIndex = 2
         '
-        'lbl_Units
-        '
-        Me.lbl_Units.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_Units.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Units.Location = New System.Drawing.Point(11, 7)
-        Me.lbl_Units.Name = "lbl_Units"
-        Me.lbl_Units.Size = New System.Drawing.Size(714, 23)
-        Me.lbl_Units.TabIndex = 85
-        Me.lbl_Units.Text = "lbl_Units"
-        Me.lbl_Units.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'pan_Loads
         '
         Me.pan_Loads.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Loads.Controls.Add(Me.lbl_Units)
         Me.pan_Loads.Controls.Add(Me.cmb_Contraintes)
         Me.pan_Loads.Controls.Add(Me.cmb_Moments)
         Me.pan_Loads.Controls.Add(Me.cmb_Forces)
@@ -84,10 +72,67 @@ Partial Class Frm_OptionsLogicielUnits
         Me.pan_Loads.Controls.Add(Me.lbl_ModuleW)
         Me.pan_Loads.Controls.Add(Me.lbl_Longueur)
         Me.pan_Loads.Controls.Add(Me.lbl_Dimensions)
-        Me.pan_Loads.Location = New System.Drawing.Point(11, 7)
+        Me.pan_Loads.Location = New System.Drawing.Point(1, 1)
         Me.pan_Loads.Name = "pan_Loads"
-        Me.pan_Loads.Size = New System.Drawing.Size(714, 288)
+        Me.pan_Loads.Size = New System.Drawing.Size(737, 288)
         Me.pan_Loads.TabIndex = 98
+        '
+        'lbl_Units
+        '
+        Me.lbl_Units.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Units.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Units.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Units.Name = "lbl_Units"
+        Me.lbl_Units.Size = New System.Drawing.Size(737, 23)
+        Me.lbl_Units.TabIndex = 85
+        Me.lbl_Units.Text = "lbl_Units"
+        Me.lbl_Units.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'cmb_Contraintes
+        '
+        Me.cmb_Contraintes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Contraintes.FormattingEnabled = True
+        Me.cmb_Contraintes.Location = New System.Drawing.Point(134, 177)
+        Me.cmb_Contraintes.Name = "cmb_Contraintes"
+        Me.cmb_Contraintes.Size = New System.Drawing.Size(106, 21)
+        Me.cmb_Contraintes.TabIndex = 64
+        '
+        'cmb_Moments
+        '
+        Me.cmb_Moments.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Moments.FormattingEnabled = True
+        Me.cmb_Moments.Location = New System.Drawing.Point(134, 153)
+        Me.cmb_Moments.Name = "cmb_Moments"
+        Me.cmb_Moments.Size = New System.Drawing.Size(106, 21)
+        Me.cmb_Moments.TabIndex = 63
+        '
+        'cmb_Forces
+        '
+        Me.cmb_Forces.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Forces.FormattingEnabled = True
+        Me.cmb_Forces.Location = New System.Drawing.Point(134, 129)
+        Me.cmb_Forces.Name = "cmb_Forces"
+        Me.cmb_Forces.Size = New System.Drawing.Size(106, 21)
+        Me.cmb_Forces.TabIndex = 62
+        '
+        'cmb_Inertie
+        '
+        Me.cmb_Inertie.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Inertie.FormattingEnabled = True
+        Me.cmb_Inertie.Location = New System.Drawing.Point(134, 105)
+        Me.cmb_Inertie.Name = "cmb_Inertie"
+        Me.cmb_Inertie.Size = New System.Drawing.Size(106, 21)
+        Me.cmb_Inertie.TabIndex = 61
+        '
+        'cmb_ModuleW
+        '
+        Me.cmb_ModuleW.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_ModuleW.FormattingEnabled = True
+        Me.cmb_ModuleW.Location = New System.Drawing.Point(134, 81)
+        Me.cmb_ModuleW.Name = "cmb_ModuleW"
+        Me.cmb_ModuleW.Size = New System.Drawing.Size(106, 21)
+        Me.cmb_ModuleW.TabIndex = 60
         '
         'cmb_Longueur
         '
@@ -169,51 +214,6 @@ Partial Class Frm_OptionsLogicielUnits
         Me.lbl_Dimensions.Size = New System.Drawing.Size(77, 13)
         Me.lbl_Dimensions.TabIndex = 4
         Me.lbl_Dimensions.Text = "lbl_Dimensions"
-        '
-        'cmb_ModuleW
-        '
-        Me.cmb_ModuleW.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_ModuleW.FormattingEnabled = True
-        Me.cmb_ModuleW.Location = New System.Drawing.Point(134, 81)
-        Me.cmb_ModuleW.Name = "cmb_ModuleW"
-        Me.cmb_ModuleW.Size = New System.Drawing.Size(106, 21)
-        Me.cmb_ModuleW.TabIndex = 60
-        '
-        'cmb_Inertie
-        '
-        Me.cmb_Inertie.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Inertie.FormattingEnabled = True
-        Me.cmb_Inertie.Location = New System.Drawing.Point(134, 105)
-        Me.cmb_Inertie.Name = "cmb_Inertie"
-        Me.cmb_Inertie.Size = New System.Drawing.Size(106, 21)
-        Me.cmb_Inertie.TabIndex = 61
-        '
-        'cmb_Forces
-        '
-        Me.cmb_Forces.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Forces.FormattingEnabled = True
-        Me.cmb_Forces.Location = New System.Drawing.Point(134, 129)
-        Me.cmb_Forces.Name = "cmb_Forces"
-        Me.cmb_Forces.Size = New System.Drawing.Size(106, 21)
-        Me.cmb_Forces.TabIndex = 62
-        '
-        'cmb_Moments
-        '
-        Me.cmb_Moments.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Moments.FormattingEnabled = True
-        Me.cmb_Moments.Location = New System.Drawing.Point(134, 153)
-        Me.cmb_Moments.Name = "cmb_Moments"
-        Me.cmb_Moments.Size = New System.Drawing.Size(106, 21)
-        Me.cmb_Moments.TabIndex = 63
-        '
-        'cmb_Contraintes
-        '
-        Me.cmb_Contraintes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_Contraintes.FormattingEnabled = True
-        Me.cmb_Contraintes.Location = New System.Drawing.Point(134, 177)
-        Me.cmb_Contraintes.Name = "cmb_Contraintes"
-        Me.cmb_Contraintes.Size = New System.Drawing.Size(106, 21)
-        Me.cmb_Contraintes.TabIndex = 64
         '
         'Frm_OptionsLogicielUnits
         '
