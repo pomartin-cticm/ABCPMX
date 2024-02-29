@@ -9,14 +9,6 @@ Public Class cls_VerificationsAcier
 
 #Region " Structures "
 
-    Structure strucShearBuckling
-
-        Dim ElancementW As Decimal          ' Elancement de l'âme
-        Dim LimiteElancementW As Decimal    ' Limite d'élancement au dela de laquelle il faut vérifier le voilement par cisaillement
-        Dim lCheckRequired As Boolean       ' Indique si la vérification de la résistance est requise
-
-    End Structure
-
 #End Region
 
 #Region " Attributs "

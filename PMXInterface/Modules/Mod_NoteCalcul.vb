@@ -4761,13 +4761,18 @@ Module Mod_NoteCalcul
         '   lConstruction   [E] :   Indique si phase de construction pour une poutre mixte
         '-------------------------------------------------------------------------------------------
 
+        '--( Initialisation
+
+        AddTitreNdC(2, BlocELU("ADDPARAM"))
+
         If MyBeam.lMixte And (Not lConstruction) Then
+            EditionVerifELUAdditionelShearB(MyBeam, MyBeam.VerifMixte(0).ShearB)
         Else
-            EditionVerifELUAdditionelAcier(MyBeam)
+            EditionVerifELUAdditionelShearB(MyBeam, MyBeam.VerifAcier(0).ShearB)
         End If
     End Sub
 
-    Private Sub EditionVerifELUAdditionelAcier(MyBeam As cls_Poutre)
+    Private Sub EditionVerifELUAdditionelShearB(MyBeam As cls_Poutre, myShearB As strucShearBuckling)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -4780,20 +4785,15 @@ Module Mod_NoteCalcul
         '--( Déclaration
 
         Dim Symbol, Symbol2 As String
-        Const iVerif As Integer = 0
         Dim lEnrob As Boolean = MyBeam.lEnrobage
         Dim EpsilonW As Decimal = Math.Sqrt(235 / MyBeam.Section.FyW)
         Dim Reference As String
-
-        '--( Initialisation
-
-        AddTitreNdC(2, BlocELU("ADDPARAM"))
 
         '--( Elancement de l'âme
 
         Symbol = "h\-w\=/t\-w\="
         AddLigneNDC(TABW2 & BlocELU("WSLENDERNESS") & TABAFF &
-                    Symbol & TABEGAL & GetStringInUnit(MyBeam.VerifAcier(iVerif).ShearB.ElancementW, Enu_TypeVariable.SansType, 3, 2, False))
+                    Symbol & TABEGAL & GetStringInUnit(myShearB.ElancementW, Enu_TypeVariable.SansType, 3, 2, False))
 
         '--( Limite d'élancement
 
@@ -4804,7 +4804,7 @@ Module Mod_NoteCalcul
         End If
 
         AddLigneNDC(TABW2 & BlocELU("WSLENDERNESSLIMIT") & TABAFF &
-                    Symbol2 & TABEGAL & GetStringInUnit(MyBeam.VerifAcier(iVerif).ShearB.LimiteElancementW, Enu_TypeVariable.SansType, 3, 2, False))
+                    Symbol2 & TABEGAL & GetStringInUnit(myShearB.LimiteElancementW, Enu_TypeVariable.SansType, 3, 2, False))
 
         If lEnrob Then
             AddLigneNDC(TABW2 & BlocELU("WHERE") & TABAFF &
@@ -4834,7 +4834,7 @@ Module Mod_NoteCalcul
 
         Reference = "  [" & Reference & "]"
 
-        If MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
+        If myShearB.lCheckRequired Then
             AddLigneNDC(TABW2 & Symbol & "<=" & Symbol2 & " : " & BlocELU("SHEARBREQUIRED") & Reference)
         Else
             AddLigneNDC(TABW2 & Symbol & ">" & Symbol2 & " : " & BlocELU("SHEARBNOTREQUIRED") & Reference)

@@ -10,6 +10,19 @@
 
     Public Const kConvMPaPa As Decimal = 1000 ^ 2
 
+
+#Region " Structures "
+
+    Structure strucShearBuckling
+
+        Dim ElancementW As Decimal          ' Elancement de l'âme
+        Dim LimiteElancementW As Decimal    ' Limite d'élancement au dela de laquelle il faut vérifier le voilement par cisaillement
+        Dim lCheckRequired As Boolean       ' Indique si la vérification de la résistance est requise
+
+    End Structure
+
+#End Region
+
 #End Region
 
 #Region " Tableau 7 EN 1994-1-1 "
