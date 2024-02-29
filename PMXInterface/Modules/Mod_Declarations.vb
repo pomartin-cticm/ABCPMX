@@ -537,6 +537,7 @@ Public Module Mod_Declarations
         Dim lDispFM_SLS As Boolean              ' Indique si affichage des sollicitations sous ELS
         Dim lDispFM_FLS As Boolean              ' Indique si affichage des sollicitations sous ELU fatigue
         Dim lDispSigmaCharges As Boolean        ' Indique si affichage des contraintes par cas de charge
+        Dim lDispMelPoutreMixte As Boolean      ' Indique si affichage des moments élastiques pour les poutres mixtes
     End Structure
 
     Public OptionsNdC As struc_OptionsNdC

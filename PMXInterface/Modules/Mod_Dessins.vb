@@ -1153,7 +1153,6 @@ Public Module Mod_Dessins
 
 #Region " Dessins pour la définiton de la dalle (FRM_DALLEN) "
 
-
     Public Sub DessineBacTout(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyBac As cls_Bac,
                               ByVal lTitre As Boolean, kAdjust As Decimal,
                               ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
@@ -1308,19 +1307,6 @@ Public Module Mod_Dessins
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
 
         '--> Préparation des Pinceaux utilisés dans le dessin
-
-        '' Profilé
-        'Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurAcier)
-        '' Béton
-        'Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
-        '' Béton prefabriqué
-        'Dim myBrushPref As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.LightGray, CouleurBeton)
-        '' Etriers
-        'Dim myBrushE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorLocalEtriers, ColorLocalEtriers)
-        '' Armatures de l'enrobage
-        'Dim myBrushArmaE As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurArmaNormal)
-        '' Etriers
-        'Dim myBrushA(1) As Brush
 
         ' Profilé
         Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurAcier, CouleurAcier)
@@ -6364,7 +6350,7 @@ Public Module Mod_Dessins
         '-----------------------------------------------------------------------------------------------
         '   11/08/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
-        '   Représentation des largeurs efficaces
+        '   Représentation des diagrammes de sollicitations par cas de charge
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
@@ -6596,12 +6582,12 @@ Public Module Mod_Dessins
 
     End Sub
 
-    Public Sub DessineRDMCombo(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
-                            iCombo As Integer, typeCombo As String, ByVal lRetraitELU As Boolean, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+    Public Sub DessineRDMCombi(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
+                               iCombi As Integer, typeCombo As String, ByVal lRetraitELU As Boolean, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   11/08/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
-        '   Représentation des largeurs efficaces
+        '   Représentation des diagrammes pour une combinaisons ELU
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
@@ -6792,7 +6778,7 @@ Public Module Mod_Dessins
 
         If (typeCombo = "ELS" Or typeCombo = "ELSC") And OptionsDiagrammes.lDessDeformee Then 'And lResult  Then
 
-            Combinaison.CombineFleches(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, f, True)
+            Combinaison.CombineFleches(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, f, True)
 
             kEch = CoefEchelleDessin(fMin, fMax, EcartZ / 2)
 
@@ -6814,7 +6800,7 @@ Public Module Mod_Dessins
 
         If OptionsDiagrammes.lDessMoment Then 'And lResult Then
 
-            Combinaison.CombineMoments(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, M, lRetraitELU)
+            Combinaison.CombineMoments(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, M, lRetraitELU)
             PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(M, M.GetUpperBound(0) + 1, MMax, MMin, iNodeMMax, iNodeMMin)
 
             kEchM = CoefEchelleDessin(MMin, MMax, EcartZ / 2) * SigneM
@@ -6830,7 +6816,7 @@ Public Module Mod_Dessins
 
         If OptionsDiagrammes.lDessEffortT Then 'And lResult Then
 
-            Combinaison.CombineEffortsT(iCombo, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, V, lRetraitELU)
+            Combinaison.CombineEffortsT(iCombi, MyPoutre.Nodes.nbNodes, MyPoutre.ChargesA, V, lRetraitELU)
             PMXMoteur2.Mod_Outils.EnveloppeTableauEfforts(V, V.GetUpperBound(0) + 1, VMax, VMin, iNodeVMax, iNodeVMin)
 
             ChaineMin = GetStringInUnit(VMin, Enu_TypeVariable.Effort, 4, 2, True)

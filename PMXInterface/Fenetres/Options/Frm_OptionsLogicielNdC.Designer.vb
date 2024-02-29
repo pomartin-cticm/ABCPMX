@@ -23,27 +23,32 @@ Partial Class Frm_OptionsLogicielNdC
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.pan_NdC = New System.Windows.Forms.Panel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.pan_ELS = New System.Windows.Forms.Panel()
         Me.lbl_Hivoss = New System.Windows.Forms.Label()
         Me.chk_ShowHivossDiagram = New System.Windows.Forms.CheckBox()
         Me.lbl_ELS = New System.Windows.Forms.Label()
         Me.pan_Sollicitations = New System.Windows.Forms.Panel()
+        Me.chk_SigmaCharges = New System.Windows.Forms.CheckBox()
         Me.chk_Diagrammes = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayFM_ELF = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayFM_ELS = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayFM_ELU = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayLoadCases = New System.Windows.Forms.CheckBox()
         Me.lbl_Sollicitations = New System.Windows.Forms.Label()
-        Me.chk_SigmaCharges = New System.Windows.Forms.CheckBox()
+        Me.pan_ELU = New System.Windows.Forms.Panel()
+        Me.chk_DisplayMelPoutreMixte = New System.Windows.Forms.CheckBox()
+        Me.lbl_ELU = New System.Windows.Forms.Label()
         Me.pan_NdC.SuspendLayout()
-        Me.Panel1.SuspendLayout()
+        Me.pan_ELS.SuspendLayout()
         Me.pan_Sollicitations.SuspendLayout()
+        Me.pan_ELU.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_NdC
         '
         Me.pan_NdC.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_NdC.Controls.Add(Me.Panel1)
+        Me.pan_NdC.Controls.Add(Me.pan_ELU)
+        Me.pan_NdC.Controls.Add(Me.pan_ELS)
         Me.pan_NdC.Controls.Add(Me.pan_Sollicitations)
         Me.pan_NdC.Location = New System.Drawing.Point(31, 44)
         Me.pan_NdC.Margin = New System.Windows.Forms.Padding(0)
@@ -51,17 +56,17 @@ Partial Class Frm_OptionsLogicielNdC
         Me.pan_NdC.Size = New System.Drawing.Size(739, 472)
         Me.pan_NdC.TabIndex = 2
         '
-        'Panel1
+        'pan_ELS
         '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.pan_ELS.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Controls.Add(Me.lbl_Hivoss)
-        Me.Panel1.Controls.Add(Me.chk_ShowHivossDiagram)
-        Me.Panel1.Controls.Add(Me.lbl_ELS)
-        Me.Panel1.Location = New System.Drawing.Point(3, 191)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(733, 96)
-        Me.Panel1.TabIndex = 101
+        Me.pan_ELS.Controls.Add(Me.lbl_Hivoss)
+        Me.pan_ELS.Controls.Add(Me.chk_ShowHivossDiagram)
+        Me.pan_ELS.Controls.Add(Me.lbl_ELS)
+        Me.pan_ELS.Location = New System.Drawing.Point(3, 264)
+        Me.pan_ELS.Name = "pan_ELS"
+        Me.pan_ELS.Size = New System.Drawing.Size(733, 96)
+        Me.pan_ELS.TabIndex = 101
         '
         'lbl_Hivoss
         '
@@ -111,6 +116,16 @@ Partial Class Frm_OptionsLogicielNdC
         Me.pan_Sollicitations.Name = "pan_Sollicitations"
         Me.pan_Sollicitations.Size = New System.Drawing.Size(733, 182)
         Me.pan_Sollicitations.TabIndex = 100
+        '
+        'chk_SigmaCharges
+        '
+        Me.chk_SigmaCharges.AutoSize = True
+        Me.chk_SigmaCharges.Location = New System.Drawing.Point(25, 150)
+        Me.chk_SigmaCharges.Name = "chk_SigmaCharges"
+        Me.chk_SigmaCharges.Size = New System.Drawing.Size(118, 17)
+        Me.chk_SigmaCharges.TabIndex = 103
+        Me.chk_SigmaCharges.Text = "chk_SigmaCharges"
+        Me.chk_SigmaCharges.UseVisualStyleBackColor = True
         '
         'chk_Diagrammes
         '
@@ -174,15 +189,38 @@ Partial Class Frm_OptionsLogicielNdC
         Me.lbl_Sollicitations.Text = "lbl_Sollicitations"
         Me.lbl_Sollicitations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'chk_SigmaCharges
+        'pan_ELU
         '
-        Me.chk_SigmaCharges.AutoSize = True
-        Me.chk_SigmaCharges.Location = New System.Drawing.Point(25, 150)
-        Me.chk_SigmaCharges.Name = "chk_SigmaCharges"
-        Me.chk_SigmaCharges.Size = New System.Drawing.Size(118, 17)
-        Me.chk_SigmaCharges.TabIndex = 103
-        Me.chk_SigmaCharges.Text = "chk_SigmaCharges"
-        Me.chk_SigmaCharges.UseVisualStyleBackColor = True
+        Me.pan_ELU.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_ELU.Controls.Add(Me.chk_DisplayMelPoutreMixte)
+        Me.pan_ELU.Controls.Add(Me.lbl_ELU)
+        Me.pan_ELU.Location = New System.Drawing.Point(3, 188)
+        Me.pan_ELU.Name = "pan_ELU"
+        Me.pan_ELU.Size = New System.Drawing.Size(733, 69)
+        Me.pan_ELU.TabIndex = 102
+        '
+        'chk_DisplayMelPoutreMixte
+        '
+        Me.chk_DisplayMelPoutreMixte.AutoSize = True
+        Me.chk_DisplayMelPoutreMixte.Location = New System.Drawing.Point(25, 37)
+        Me.chk_DisplayMelPoutreMixte.Name = "chk_DisplayMelPoutreMixte"
+        Me.chk_DisplayMelPoutreMixte.Size = New System.Drawing.Size(157, 17)
+        Me.chk_DisplayMelPoutreMixte.TabIndex = 97
+        Me.chk_DisplayMelPoutreMixte.Text = "chk_DisplayMelPoutreMixte"
+        Me.chk_DisplayMelPoutreMixte.UseVisualStyleBackColor = True
+        '
+        'lbl_ELU
+        '
+        Me.lbl_ELU.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_ELU.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_ELU.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_ELU.Name = "lbl_ELU"
+        Me.lbl_ELU.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_ELU.TabIndex = 96
+        Me.lbl_ELU.Text = "lbl_ELU"
+        Me.lbl_ELU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Frm_OptionsLogicielNdC
         '
@@ -195,16 +233,18 @@ Partial Class Frm_OptionsLogicielNdC
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "Frm_OptionsLogicielNdC"
         Me.pan_NdC.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
+        Me.pan_ELS.ResumeLayout(False)
+        Me.pan_ELS.PerformLayout()
         Me.pan_Sollicitations.ResumeLayout(False)
         Me.pan_Sollicitations.PerformLayout()
+        Me.pan_ELU.ResumeLayout(False)
+        Me.pan_ELU.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents pan_NdC As Panel
-    Friend WithEvents Panel1 As Panel
+    Friend WithEvents pan_ELS As Panel
     Friend WithEvents lbl_ELS As Label
     Friend WithEvents pan_Sollicitations As Panel
     Friend WithEvents lbl_Sollicitations As Label
@@ -216,4 +256,7 @@ Partial Class Frm_OptionsLogicielNdC
     Friend WithEvents chk_DisplayLoadCases As CheckBox
     Friend WithEvents chk_Diagrammes As CheckBox
     Friend WithEvents chk_SigmaCharges As CheckBox
+    Friend WithEvents pan_ELU As Panel
+    Friend WithEvents chk_DisplayMelPoutreMixte As CheckBox
+    Friend WithEvents lbl_ELU As Label
 End Class

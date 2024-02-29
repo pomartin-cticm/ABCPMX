@@ -275,7 +275,7 @@ Partial Class Frm_Identification
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(444, 247)
         Me.Controls.Add(Me.pan_General)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_Identification"

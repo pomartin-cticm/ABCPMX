@@ -194,7 +194,7 @@ Public Class cls_VerificationsAcier
 
         '# Type de vérification pour les sections
 
-        lVerifElastic = MyPoutre.Param.lElasticDesign Or (ClasseP > 2)
+        lVerifElastic = MyPoutre.Param.lElasticDesignVM Or (ClasseP > 2)
         If MyPoutre.lMultiSpan Then
             '# dans le cas d'une poutre à plusieurs travées, on prend aussi en compte la classe de section en flexion négative
             lVerifElastic = lVerifElastic Or (ClasseM > 2)
@@ -203,7 +203,7 @@ Public Class cls_VerificationsAcier
 
         '# Initialisation des critères dépendant du type de vérification
 
-        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, nbCombiELU, MyPoutre.IndiceDerniereTravee, lVerifElastic, MyPoutre.Param.lElasticDesign)
+        Me.InitialiseCriteres(MyPoutre.Nodes.nbNodes, nbCombiELU, MyPoutre.IndiceDerniereTravee, lVerifElastic, MyPoutre.Param.lElasticDesignVM)
 
         '# Contraintes normales
 
@@ -213,7 +213,7 @@ Public Class cls_VerificationsAcier
         End If
 
         '# Contraintes de cisaillement
-        If MyPoutre.Param.lElasticDesign Then
+        If MyPoutre.Param.lElasticDesignVM Then
             Me.Tau = New cls_Tau(MyPoutre.Section.typeSection)
             Me.Tau.Initialise(MyPoutre.Section.ProfilA)
             Me.Tau.CalculContraintesCharges(MyPoutre, TauCas)
@@ -250,7 +250,7 @@ Public Class cls_VerificationsAcier
                 Me.RunCritereFlexionAcier(MyPoutre, iCombi, MEd, MplRd, MelRd, ClasseP, ClasseM, lClasse4)
             End If
 
-            If MyPoutre.Param.lElasticDesign Then 'calcul élastique imposé 
+            If MyPoutre.Param.lElasticDesignVM Then 'calcul élastique imposé 
 
                 '# Vérification sous effot tranchant
                 Me.RunCritereCisaillementResistanceElastiqueVM(MyPoutre, iCombi, TauELU)
@@ -266,7 +266,7 @@ Public Class cls_VerificationsAcier
 
                 '# Vérification au voilement par cisaillement
 
-                If MyPoutre.Section.IsInteractionMV(MyPoutre.Param.EtaW) Then Me.RunCritereVoilementCisaillement(MyPoutre, iCombi, VEd, VbRd)
+                If MyPoutre.Section.IsVoilementParCisaillement(MyPoutre.Param.EtaW) Then Me.RunCritereVoilementCisaillement(MyPoutre, iCombi, VEd, VbRd)
 
                 '# Calcul du critère d'intéraction rhoV
 

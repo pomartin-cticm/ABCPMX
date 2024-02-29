@@ -14,6 +14,8 @@ Imports PMXMoteur2
 
 #End Region
 
+#Region " Poutre acier "
+
     <TestMethod()> Public Sub TestContraintesSectionAcier()
 
         '=======================================
@@ -27,6 +29,8 @@ Imports PMXMoteur2
         '=======================================
 
         '--> Déclaration
+
+        NomChargements = NomCas
 
         'Dim TU_poutre As New cls_Poutre(NomCas)
         Dim TU_poutre As New cls_Poutre()
@@ -113,6 +117,11 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(SigmaInf, SigmaRef))
 
     End Sub
+
+#End Region
+
+
+
 
 
 End Class

@@ -2054,7 +2054,7 @@ Public Class cls_Section
     ''' </summary>
     ''' <param name="eta"> parametre eta, utile pour les profilés sans enrobage </param>
     ''' <returns></returns>
-    Public Function IsInteractionMV(eta As Decimal) As Boolean
+    Public Function IsVoilementParCisaillement(eta As Decimal) As Boolean
         Select Case Me.typeSection
             Case Enum_TypeSection.AcierSeul, Enum_TypeSection.Mixte
                 Return Not ((Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) <= 72 * Me.Epsilon_W / eta)

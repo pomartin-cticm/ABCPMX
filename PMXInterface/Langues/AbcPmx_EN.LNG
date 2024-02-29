@@ -13,43 +13,43 @@ VERSIONLINK				= Do you want to be redirected to the CTICM website?
 WARNING					= Warning
 
 #FRM_ABOUT
-TITLE				= About ABCPMX-II
-OK					= Ok
-DESCRIPTION			= Description
-DESCRIPTION_CONT	= ABC-PMX software aims at the calculation of composite beams according to EN 1994-1-1. Its development is co-funded by ArcelorMittal and CTICM. 
-INFORMATION			= Information
-MAITRE				= Copyrights
-VERSION				= Version
-SUPPORT				= Support :
-YEARVERSION			= Year :
+TITLE					= About ABCPMX-II
+OK						= Ok
+DESCRIPTION				= Description
+DESCRIPTION_CONT		= ABC-PMX software aims at the calculation of composite beams according to EN 1994-1-1. Its development is co-funded by ArcelorMittal and CTICM. 
+INFORMATION				= Information
+MAITRE					= Copyrights
+VERSION					= Version
+SUPPORT					= Support :
+YEARVERSION				= Year :
 
 
 #FRMADDSTUD
-TITLEADD			= Add a new stud
-TITLEMODIFY			= Modify the stud
-TITLEEDIT			= Edit the stud
-OK					= OK
-CANCEL				= Cancel
-CLOSE				= Close
-LABEL				= Label of the stud
-PHIROD				= Rod diameter
-PHIHEAD				= Head diameter
-DEPTHHEAD			= Head depth
-HTOTAL				= Total depth
-FY					= Yielding strength
-FU					= Ultimate strength
-ERRLABEL			= Define a label
-ERRLABELBASE		= Label not valid - already used for an other stud
-ERRVALEUR			= Enter a value
-ERRVALNUM			= Enter a numerical value
-ERRVALHLIM			= Value out of limits 
-ERRFULTFY			= The ultimate strength should be greater than the yielding strength
-ERRDHLTDT			= The head diameter should be greater than 1.5 times the rod diameter (i.e. $)
-ERRHHGTHT			= The head depth should be less than the total depth
-ERRHH04D			= The head depth should be greater than 0.4 x the rod diameter (i.e. $)
-ERRHT3D				= The stud height should be greater than 3 x the rod diameter (i.e. $)
-ERROR				= Check the parameters for the following criteria:
-ERRORFRM			= Parameters errors
+TITLEADD				= Add a new stud
+TITLEMODIFY				= Modify the stud
+TITLEEDIT				= Edit the stud
+OK						= OK
+CANCEL					= Cancel
+CLOSE					= Close
+LABEL					= Label of the stud
+PHIROD					= Rod diameter
+PHIHEAD					= Head diameter
+DEPTHHEAD				= Head depth
+HTOTAL					= Total depth
+FY						= Yielding strength
+FU						= Ultimate strength
+ERRLABEL				= Define a label
+ERRLABELBASE			= Label not valid - already used for an other stud
+ERRVALEUR				= Enter a value
+ERRVALNUM				= Enter a numerical value
+ERRVALHLIM				= Value out of limits 
+ERRFULTFY				= The ultimate strength should be greater than the yielding strength
+ERRDHLTDT				= The head diameter should be greater than 1.5 times the rod diameter (i.e. $)
+ERRHHGTHT				= The head depth should be less than the total depth
+ERRHH04D				= The head depth should be greater than 0.4 x the rod diameter (i.e. $)
+ERRHT3D					= The stud height should be greater than 3 x the rod diameter (i.e. $)
+ERROR					= Check the parameters for the following criteria:
+ERRORFRM				= Parameters errors
 
 #FRM_AJOUTEPP
 TITLE					= New project
@@ -75,7 +75,6 @@ SLIMFLOORIFB_BCOMPO		= Composite slim floor IFB-B
 SLIMFLOORSAB			= Non composite slim floor SAB
 SLIMFLOORSABCOMPO		= Composite slim floor SAB
 
-
 #FRM_BEAMOPTIONS
 TITLE					= Beam calculation options
 OK						= Ok
@@ -88,7 +87,8 @@ TELSOPTIONS				= Options at Serviceability Limit States
 COMBINATIONFREQ			= Combination of loads for the eigen frequency
 ETADEFLECTIONS			= Deflections of composite beams taking into account connectors stiffness
 STUDSE					= Slip of the connector at 0,7 PRk (prEN 1994-1-1 B.2.5 (5))
-ELASTICDESIGN			= Elastic design of sections
+ELASTICDESIGNVM			= Elastic design of sections - Von Mises criteria
+ELASTICDESIGNCL3		= Elastic design of sections - Class 3 sections criteria
 NORMALDESIGN			= Design of sections according to their class
 TCONCRETE				= Properties of concrete
 CONCRETEMSG				= Properties used for composite section (slab or encasement)
@@ -134,33 +134,33 @@ ZOOM					= Zoom
 SAVEAS					= Save As
 
 #FRMCATALOGUE
-TITLE 			= Catalogue
-CLOSE			= Close
-PROFIL			= Profiles
-SERIE			= Series
-DIMENSIONS	 	= Dimensions
-PROPERTIES		= Properties
-UNIT_DIM		= Unit Dimension :
-TOOLTIP_G 		= Mass per unit of length
-TOOLTIP_A		= Section area
-TOOLTIP_IY		= Bending moment of inertia / Strong axis
-TOOLTIP_WELY	= Elastic flexion modulus / Strong axis
-TOOLTIP_WPLY	= Plastic flexural modulus / Strong axis
-TOOLTIP_IY2		= Radius of gyration / Strong axis
-TOOLTIP_AVZ		= Shear area
-TOOLTIP_IZ 		= Bending moment of inertia / Weak axis
-TOOLTIP_WELZ 	= Elastic flexion modulus / Weak axis
-TOOLTIP_WPLZ	= Plastic flexural modulus / Weak axis
-TOOLTIP_IZ2		= Radius of gyration / Weak axis
-TOOLTIP_IT		= Torsional moment of inertie
-TOOLTIP_HT		= Height of the profile
-TOOLTIP_BF		= Width of the profile
-TOOLTIP_TF		= Flange thickness
-TOOLTIP_TW		= Web thickness
-TOOLTIP_RC		= Root radius
-NOTE			= Section note
-CARA			= Characteristics
-VAL 			= Values
+TITLE 					= Catalogue
+CLOSE					= Close
+PROFIL					= Profiles
+SERIE					= Series
+DIMENSIONS	 			= Dimensions
+PROPERTIES				= Properties
+UNIT_DIM				= Unit Dimension :
+TOOLTIP_G 				= Mass per unit of length
+TOOLTIP_A				= Section area
+TOOLTIP_IY				= Bending moment of inertia / Strong axis
+TOOLTIP_WELY			= Elastic flexion modulus / Strong axis
+TOOLTIP_WPLY			= Plastic flexural modulus / Strong axis
+TOOLTIP_IY2				= Radius of gyration / Strong axis
+TOOLTIP_AVZ				= Shear area
+TOOLTIP_IZ 				= Bending moment of inertia / Weak axis
+TOOLTIP_WELZ 			= Elastic flexion modulus / Weak axis
+TOOLTIP_WPLZ			= Plastic flexural modulus / Weak axis
+TOOLTIP_IZ2				= Radius of gyration / Weak axis
+TOOLTIP_IT				= Torsional moment of inertie
+TOOLTIP_HT				= Height of the profile
+TOOLTIP_BF				= Width of the profile
+TOOLTIP_TF				= Flange thickness
+TOOLTIP_TW				= Web thickness
+TOOLTIP_RC				= Root radius
+NOTE					= Section note
+CARA					= Characteristics
+VAL 					= Values
 
 #FRM_CHARGEMENT
 TITLE					= Definition of the load cases
@@ -846,6 +846,8 @@ DISPLAYFMSLS			= Display forces and moments at serviceability LS
 DISPLAYFMFLS			= Display forces and moments at fire LS
 DISPLAYDIAGRAMS			= Display diagrams
 DISPLAYSIGMA			= Display elastic stresses
+ULS						= Ultimate Limit States
+DISPMELCOMPOSITEBEAMS	= Display elastic moments of composite beams
 
 #OPTSOFTDATABASES
 DATABASES				= Databases

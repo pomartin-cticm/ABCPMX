@@ -49,7 +49,8 @@ Public Class cls_OptionsCalcul
 
     Public AgeT As Decimal                          ' Age du béton au temps du calcul
 
-    Public lElasticDesign As Boolean                ' Indique quand un dimensionnement élastique est imposé
+    Public lElasticDesignVM As Boolean              ' Indique quand un dimensionnement élastique est imposé avec le critère de Von Mises
+    Public lElasticDesignCl3 As Boolean             ' Indique quand un dimensionnement élastique est imposé avec les critères des sections de classe 3
 
     Public lFlechesETA As Boolean                   ' Indique pour les poutres mixtes si on calcule la flèche en prenant en compte la raideur des connecteurs
     Public DeltaD As Decimal                        ' Valeur du glissement du connecteur pour une charge de PRd
@@ -100,7 +101,8 @@ Public Class cls_OptionsCalcul
 
         Me.AgeT = 50 * 365
 
-        Me.lElasticDesign = False
+        Me.lElasticDesignVM = False
+        Me.lElasticDesignCl3 = False
 
         Me.EtaW = 1.2
 

@@ -520,6 +520,18 @@ Namespace My
                 Me("lNdCDispSigmaCharges") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lNdCDispMelMixte() As Boolean
+            Get
+                Return CType(Me("lNdCDispMelMixte"),Boolean)
+            End Get
+            Set
+                Me("lNdCDispMelMixte") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

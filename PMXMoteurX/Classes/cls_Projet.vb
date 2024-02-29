@@ -475,7 +475,7 @@ Public Class cls_Projet
                     Lines.Add("   AgeT0SH_0            = " & .AgeT0SH(0))
                     Lines.Add("   AgeT0SH_1            = " & .AgeT0SH(1))
                     Lines.Add("   AgeTCalc            = " & .AgeT)
-                    Lines.Add("   lElasticDesign            = " & .lElasticDesign)
+                    Lines.Add("   lElasticDesign            = " & .lElasticDesignVM)
 
 
                     Lines.Add("")
@@ -1711,7 +1711,7 @@ Public Class cls_Projet
                         Case "AGET0SH_0" : .AgeT0SH(0) = TraiteReal(Mots(nbMots))
                         Case "AGET0SH_1" : .AgeT0SH(1) = TraiteReal(Mots(nbMots))
                         Case "AGETCALC" : .AgeT = TraiteReal(Mots(nbMots))
-                        Case "LELASTICDESIGN" : .lElasticDesign = Mots(nbMots)
+                        Case "LELASTICDESIGN" : .lElasticDesignVM = Mots(nbMots)
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With

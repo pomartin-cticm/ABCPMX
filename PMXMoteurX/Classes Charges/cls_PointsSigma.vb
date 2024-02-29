@@ -42,6 +42,41 @@
         InitialisePourBetonEnrob(MyPoutre)
         InitialisePourArmaEnrob(MyPoutre)
         InitialisePourBetonDalle(MyPoutre)
+        InitialisePourArmaDalle(MyPoutre)
+
+    End Sub
+
+    Private Sub InitialisePourArmaDalle(MyPoutre As cls_Poutre)
+        '-----------------------------------------------------------------------------------
+        '   20/10/23 :  Création - POM
+        '-----------------------------------------------------------------------------------
+        '   Initialisation des points de calculs des contraintes normales dans les armatures d'enrobage
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim zTop As Decimal = MyPoutre.Dalle.zTop
+
+        '--( Initialisation
+
+        Me.iArmaDalle(0) = -1
+        Me.iArmaDalle(1) = -1
+
+        '--( Traitement
+
+        Select Case MyPoutre.Section.typeSection
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                Me.iArmaDalle(0) = Me.zPos.Count
+
+                For iArma As Integer = 0 To 1
+                    If MyPoutre.Dalle.LitArma(iArma).lActive Then
+                        Me.zPos.Add(zTop - MyPoutre.Dalle.LitArma(iArma).z_s)
+                    End If
+                Next
+
+                Me.iArmaDalle(1) = Me.zPos.Count - 1
+
+        End Select
 
     End Sub
 

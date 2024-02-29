@@ -161,6 +161,7 @@ Public Module Mod_Demarrage
             OptionsNdC.lDispFMLoadCase = My.Settings.lNdCDispLoadCase
             OptionsNdC.lDispFMDiagrams = My.Settings.lNdCShowDiagram
             OptionsNdC.lDispSigmaCharges = My.Settings.lNdCDispSigmaCharges
+            OptionsNdC.lDispMelPoutreMixte = My.Settings.lNdCDispMelMixte
 
             '--> Fichiers récents
             LogicielFichiers.RecentFiles = New List(Of String)

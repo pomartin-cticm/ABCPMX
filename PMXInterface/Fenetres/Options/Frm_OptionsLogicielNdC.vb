@@ -34,6 +34,9 @@
             Me.chk_DisplayFM_ELF.Text = MyBloc("DISPLAYFMFLS")
             Me.chk_SigmaCharges.Text = MyBloc("DISPLAYSIGMA")
 
+            Me.lbl_ELU.Text = MyBloc("ULS")
+            Me.chk_DisplayMelPoutreMixte.Text = MyBloc("DISPMELCOMPOSITEBEAMS")
+
             Me.lbl_ELS.Text = MyBloc("SLS")
             Me.lbl_Hivoss.Text = MyBloc("HIVOSS")
             Me.chk_ShowHivossDiagram.Text = MyBloc("SHOWHIVOSSCURVE")
@@ -55,6 +58,10 @@
 
         Me.lbl_ELS.BackColor = CouleurBackBandeaux
         Me.lbl_ELS.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_ELU.BackColor = CouleurBackBandeaux
+        Me.lbl_ELU.ForeColor = CouleurForeBandeaux
+
     End Sub
 
     Private Sub PrepareFenetre()

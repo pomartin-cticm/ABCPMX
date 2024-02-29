@@ -59,7 +59,8 @@ Public Class Frm_OptionsCalculPoutre
 
                 Me.lbl_CadreELU.Text = Bloc("TELUOPTIONS")
                 Me.rdb_NormalDesign.Text = Bloc("NORMALDESIGN")
-                Me.rdb_ElasticDesign.Text = Bloc("ELASTICDESIGN")
+                Me.rdb_ElasticDesignVM.Text = Bloc("ELASTICDESIGNVM")
+                Me.rdb_ElasticDesignClasse3.Text = Bloc("ELASTICDESIGNCL3")
 
                 Me.lbl_CadreELS.Text = Bloc("TELSOPTIONS")
                 Me.lbl_CombinationVibration.Text = Bloc("COMBINATIONFREQ")
@@ -182,8 +183,10 @@ Public Class Frm_OptionsCalculPoutre
 
         '==> Options ELU
 
-        If MyParam.lElasticDesign Then
-            Me.rdb_ElasticDesign.Checked = True
+        If MyParam.lElasticDesignVM Then
+            Me.rdb_ElasticDesignVM.Checked = True
+        ElseIf MyParam.lElasticDesignCl3 Then
+            Me.rdb_ElasticDesignClasse3.Checked = True
         Else
             Me.rdb_NormalDesign.Checked = True
         End If
@@ -243,7 +246,8 @@ Public Class Frm_OptionsCalculPoutre
 
     Private Sub TransfertSaisie(ByRef lModif As Boolean)
 
-        GereTransfertValeur(MyParam.lElasticDesign, MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesign, lModif)
+        GereTransfertValeur(MyParam.lElasticDesignVM, MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesignVM, lModif)
+        GereTransfertValeur(MyParam.lElasticDesignCl3, MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesignCl3, lModif)
 
         GereTransfertValeur(MyParam.RH, MyProjet.Poutres(MyProjet.IndEnCours).Param.RH, lModif)
         GereTransfertValeur(MyParam.EpsilonSH, MyProjet.Poutres(MyProjet.IndEnCours).Param.EpsilonSH, lModif)
@@ -273,9 +277,10 @@ Public Class Frm_OptionsCalculPoutre
 
 #Region " Evènements "
 
-    Private Sub ULSSectionDesign_CheckedChanged_1(sender As Object, e As EventArgs) Handles rdb_NormalDesign.CheckedChanged, rdb_ElasticDesign.CheckedChanged
+    Private Sub ULSSectionDesign_CheckedChanged_1(sender As Object, e As EventArgs) Handles rdb_NormalDesign.CheckedChanged, rdb_ElasticDesignVM.CheckedChanged, rdb_ElasticDesignClasse3.CheckedChanged
 
-        MyParam.lElasticDesign = Me.rdb_ElasticDesign.Checked
+        MyParam.lElasticDesignVM = Me.rdb_ElasticDesignVM.Checked
+        MyParam.lElasticDesignCl3 = Me.rdb_ElasticDesignClasse3.Checked
 
     End Sub
 

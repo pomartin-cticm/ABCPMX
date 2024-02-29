@@ -448,7 +448,7 @@ Imports PMXMoteur2
 
 #Region "Vérification de la résistance au voilement (ELU)"
 
-        Assert.IsTrue(myPoutre.Section.IsInteractionMV(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
+        Assert.IsTrue(myPoutre.Section.IsVoilementParCisaillement(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 #End Region
 
 #Region "Verification de la résistance à l'interaction MV"
@@ -1377,7 +1377,7 @@ Imports PMXMoteur2
 
 #Region "Vérification de la résistance au voilement (ELU)"
 
-        Assert.IsTrue(myPoutre.Section.IsInteractionMV(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
+        Assert.IsTrue(myPoutre.Section.IsVoilementParCisaillement(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 #End Region
 
 #Region "Verification de la résistance à l'interaction MV (ELU)"
@@ -2204,7 +2204,7 @@ Imports PMXMoteur2
 
 #Region "Vérification de la résistance au voilement (ELU)"
 
-        Assert.IsTrue(myPoutre.Section.IsInteractionMV(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
+        Assert.IsTrue(myPoutre.Section.IsVoilementParCisaillement(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 #End Region
 
 #Region "Verification de la résistance à l'interaction MV"

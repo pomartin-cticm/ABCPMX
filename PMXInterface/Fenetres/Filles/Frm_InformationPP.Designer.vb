@@ -799,7 +799,7 @@ Partial Class Frm_InformationPP
         Me.CancelButton = Me.btn_OK
         Me.ClientSize = New System.Drawing.Size(380, 544)
         Me.Controls.Add(Me.pan_General)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_InformationPP"

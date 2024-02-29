@@ -86,7 +86,8 @@ TELSOPTIONS				= Options pour les Etats Limites de Services
 COMBINATIONFREQ			= Combinaison de charges pour les fréquences propres
 ETADEFLECTIONS			= Flèche des poutres mixtes prenant en compte la raideur des goujons
 STUDSE					= Glissement du connecteur à 0,7 PRk (prEN 1994-1-1 B.2.5 (5))
-ELASTICDESIGN			= Dimensionnement élastique des sections
+ELASTICDESIGNVM			= Calcul élastique des sections (Critères de Von Mises)
+ELASTICDESIGNCL3		= Calcul élastique des sections (Critères sections de classe 3)
 NORMALDESIGN			= Dimensionnement des sections selon leur classe
 TCONCRETE				= Propriétés du béton
 CONCRETEMSG				= Propriétés utilisées pour les sections mixtes (dalle ou enrobage)
@@ -169,7 +170,7 @@ LEFTCANT				= Console gauche
 MAINSPAN				= Travée principale
 RIGHTCANT				= Console droite
 SPAN					= Travée
-WARNING_CMBTRAVEE			= L'ensemble des données doivent être correctes pour pouvoir sélectionner une autre travée 
+WARNING_CMBTRAVEE		= L'ensemble des données doivent être correctes pour pouvoir sélectionner une autre travée 
 SURFACELOAD				= Charge surfacique
 WIDTHAPPLICATION		= Largeur d'application
 UNIFORMLOAD				= Charge uniforme
@@ -833,16 +834,18 @@ EXPERT					= Mode Expert
 EXPERTMODEACTIVE		= Mode Expert activé
 
 #OPTSOFTCALCULSHEET
-FORCESANDMOMENTS		= Forces et moments
+FORCESANDMOMENTS		= Sollicitations (Forces et moments)
 SLS						= Etats Limites de Service
 HIVOSS					= Méthode Hivoss pour le confort vibratoire
 SHOWHIVOSSCURVE			= Afficher le diagramme Hivoss
-DISPLAYFMLOADCASES		= Display forces and moments for load cases
-DISPLAYFMULS			= Display forces and moments at ultimate LS
-DISPLAYFMSLS			= Display forces and moments at serviceability LS
-DISPLAYFMFLS			= Display forces and moments at fire LS
-DISPLAYDIAGRAMS			= Display diagrams
-DISPLAYSIGMA			= Display elastic stresses
+DISPLAYFMLOADCASES		= Afficher les sollicitations par cas de charge
+DISPLAYFMULS			= Afficher les sollicitations par combinaison ELU
+DISPLAYFMSLS			= Afficher les sollicitations par combinaison ELS
+DISPLAYFMFLS			= Afficher les sollicitations par combinaison Feu
+DISPLAYDIAGRAMS			= Afficher les diagrammes de sollicitations
+DISPLAYSIGMA			= Afficher les contraintes élastiques
+ULS						= Etats Limites Ultimes
+DISPMELCOMPOSITEBEAMS	= Afficher les moments élastiques des poutres mixtes
 
 #OPTSOFTDATABASES
 DATABASES				= Databases

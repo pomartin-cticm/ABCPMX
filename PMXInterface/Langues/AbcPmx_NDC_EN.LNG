@@ -394,13 +394,18 @@ INFO_S					= S = Satisfactory
 INFO_NS					= NS = NOT Satisfactory
 PLASTICDESIGNCLASS12	= Class 1 or 2 cross-sections: plastic design
 ELASTICDESIGNCLASS3		= Class 3 cross-sections: elastic design to bending moment
-ELASTICDESIGNIMPOSED	= Elastic design imposed
+ELASTICDESIGNIMPOSEDVM	= Elastic design imposed (Von Mises criteria)
+ELASTICDESIGNIMPOSEDCL3	= Elastic design imposed (Criteria for Class 3 sections)
 PLASTICRESISTANCEV		= Shear plastic resistance
 BUCKLINGRESISTANCEV		= Resistance to shear buckling
 NORMALS_INSTEEL			= Normal stresses in constructional steel
 SHEARS_INSTEEL			= Shear stresses in constructional steel
 NORMALS_INCONENCA		= Normal compression stresses in the concrete encasement
 NORMALS_INREINFENCA		= Normal stresses in the encasement reinforcement
+NORMALS_INCONCRETE		= Normal compression stresses in the concrete slab
+NORMALS_INREINF			= Normal stresses in the slab reinforcements
+TENSIONONLY				= Tension only
+TENSIONORCOMPRESSION	= Tension and/or compression
 WSLENDERNESS			= Web slenderness
 WSLENDERNESSLIMIT		= Limit of web slenderness
 WHERE					= Where
@@ -435,7 +440,7 @@ ELASTIC_DESIGN_IMPOSED	= Imposed elastic design
 SECTIONSR				= Resistance of sections
 BEAMR					= Resistance of the beam
 ADDPARAM				= Additional parameters
-
+ADDP_SHEARB				= Shear buckling
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States

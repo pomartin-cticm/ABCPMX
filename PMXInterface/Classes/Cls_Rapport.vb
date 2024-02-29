@@ -1261,7 +1261,7 @@ Public Class Cls_Rapport
                     typeCombo = Mots(7)
                     lRetraitELU = Mots(8)
 
-                    DessineRDMCombo(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), indiceCombo, typeCombo, lRetraitELU, xLeftImg, YPen)
+                    DessineRDMCombi(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), indiceCombo, typeCombo, lRetraitELU, xLeftImg, YPen)
 
             End Select
 

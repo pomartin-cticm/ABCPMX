@@ -388,7 +388,7 @@ INFO_S					= S = Satisfaisant
 INFO_NS					= NS = NON Satisfaisant
 PLASTICDESIGNCLASS12	= Sections de classe 1 ou 2 : résistance plastique
 ELASTICDESIGNCLASS3		= Sections de classe 3 : résistance élastique en flexion
-ELASTICDESIGNIMPOSED	= résistance élastique des sections imposée
+ELASTICDESIGNIMPOSEDVM	= résistance élastique des sections imposée (critère de Von Mises)
 PLASTICRESISTANCEV		= Résistance plastique à l'effort tranchant
 BUCKLINGRESISTANCEV		= Résistance au voilement par cisaillement
 NORMALS_INSTEEL			= Contraintes normales dans l'acier de construction
@@ -422,12 +422,13 @@ AND						= et
 SHEARFAILUREAREA		= Surface de ruine par cisaillement
 DEGREEOFSHEARCONNEC		= Degré de connexion
 MINDEGREE				= Degré minimal de connexion
-CONNECTION				= Connextion
+CONNECTION				= Connexion
 PLASTIC_DESIGN			= Dimensionnement plastique
 ELASTIC_DESIGN			= Dimensionnement élastique (Classe 3)
 ELASTIC_DESIGN_IMPOSED	= Dimensionnement élastique imposé
 SECTIONSR				= Résistance des sections
 BEAMR					= Résistance de la poutre
+ADDP_SHEARB				= Voilement par cisaillement
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Etat limite de service
