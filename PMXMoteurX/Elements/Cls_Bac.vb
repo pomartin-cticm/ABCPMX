@@ -456,7 +456,7 @@ Public Class cls_Bac
         '--> Calculs
 
         If lIntermediaire Then k = 6 Else k = 3
-        kThetaC = k * cls_Acier.EYACIER * Me.Ieff / EntraxeD
+        kThetaC = k * cls_Acier.EYACIER * kConvMPaPa * Me.Ieff / EntraxeD 'résultat en N.m/m
 
         Return kThetaC
 
@@ -511,15 +511,15 @@ Public Class cls_Bac
             kBa = 1.25 * (Math.Min(bfS, 0.2) / 0.1)
         End If
 
-        '# kT
+        '# kT --> MODIF GUD: 0.75/1000 dans les formules de kt
 
-        If IsSmaller(Me.Tp, 0.75 / 1000) Then
-            kT = (Me.Tp / 0.75) ^ 1.5
+        If IsSmaller(Me.Tp * 1000, 0.75) Then 'Modif (1000*tp -> sinon la fonction ne fonctionne pas très bien quand une des 2 variables < 10^-3)
+            kT = (Me.Tp / (0.75 / 1000)) ^ 1.5
         Else
             If IsSmallerOrEqual(bR, Me.Bb) Then
-                kT = (Me.Tp / 0.75) ^ 1.1
+                kT = (Me.Tp / (0.75 / 1000)) ^ 1.1
             Else
-                kT = (Me.Tp / 0.75) ^ 1.5
+                kT = (Me.Tp / (0.75 / 1000)) ^ 1.5
             End If
         End If
 
@@ -541,7 +541,7 @@ Public Class cls_Bac
         Else
             kG075 = 1 + 0.16 * (qG - 1)
         End If
-        If IsGreaterOrEqual(Me.Tp, UNmm) Then
+        If IsGreaterOrEqual(Me.Tp * 1000, UNmm * 1000) Then
             kG = kG100
         Else
             kG = kG100 + (kG075 - kG100) / (0.25 / 1000) * (UNmm - Me.Tp)
@@ -554,7 +554,7 @@ Public Class cls_Bac
 
         '--> Calcul final
 
-        kThetaA = k100 * kBa * Bt * kBr * kG * kBb
+        kThetaA = k100 * kBa * kT * kBr * kG * kBb
 
         Return kThetaA
 
