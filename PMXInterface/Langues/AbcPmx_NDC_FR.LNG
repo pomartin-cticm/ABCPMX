@@ -437,6 +437,7 @@ ELASTIC_DESIGN_IMPOSED	= Dimensionnement élastique imposé
 SECTIONSR				= Résistance des sections
 BEAMR					= Résistance de la poutre
 ADDP_SHEARB				= Voilement par cisaillement
+ADDMELRDPMX				= Moments résistants élastiques
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Etat limite de service

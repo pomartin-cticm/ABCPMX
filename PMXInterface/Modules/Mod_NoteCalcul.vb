@@ -7228,14 +7228,211 @@ Module Mod_NoteCalcul
 
     Private Sub EditionMelRdPoutreMixte(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
+        '   29/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition des moments résistants élastiques pour les poutres mixtes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
+        Dim SigmaCasP(,,,) As Decimal = Nothing
+        Dim SigmaCasM(,,,) As Decimal = Nothing
+        Dim SigmaELU(,,) As Decimal = Nothing
+        Dim MEd(,) As Decimal = Nothing
+        Dim lRetraitElastique As Boolean = True
+        Dim MelRd(,,) As Decimal
+
+        '--( Initialisation
+
+        AddTitreNdC(2, BlocELU("ADDMELRDPMX"))
+        ReDim MelRd(myBeam.CombiA_ELU.nbCombi - 1, myBeam.Nodes.nbNodes - 1, 1)
+
+        '--( Calcul des contraintes élastiques
+
+        myBeam.PtsSigma.Initialise(myBeam)
+        myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCasP)
+        myBeam.PtsSigma.CalculContraintesCharges(myBeam, -1, SigmaCasM)
+
+        '--( Traitement des combinaisons
+
+        For iCombi As Integer = 0 To myBeam.CombiA_ELU.nbCombi - 1
+
+            myBeam.CombiA_ELU.CombineMoments(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd, lRetraitElastique)
+
+            myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, myBeam.PtsSigma.zPos.Count, myBeam.Nodes.nbNodes,
+                                                 myBeam.ChargesA, MEd, SigmaCasP, SigmaCasM, lRetraitElastique, SigmaELU)
+            myBeam.PtsSigma.AjusteContraintes(myBeam, SigmaELU)
+
+
+
+        Next
+
+    End Sub
+
+    Private Sub CalculMelRdCombi(myBeam As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal, MEd(,) As Decimal, ByRef MelRd(,,) As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   29/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Calcul des moments résistants élastiques pour les poutres mixtes pour une combinaison particulière
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iNode, nbNodes As Integer
+        Dim k, kDeb, kFin As Integer
+        Dim MaEd As Decimal
+        Dim kiEl As Decimal
+        Dim lEtaye As Boolean
+        Dim iCasP As Integer
+
+        '--( Initialisation
+
+        nbNodes = myBeam.Nodes.nbNodes
+
+        Select Case myBeam.TypeEtaiement
+            Case cls_Poutre.EnuTypeEtaiement.FullyPropped
+                lEtaye = True
+                iCasP = -1
+            Case cls_Poutre.EnuTypeEtaiement.PointPropped
+                lEtaye = False
+                iCasP = myBeam.IndiceCasG1PP
+            Case cls_Poutre.EnuTypeEtaiement.UnPropped
+                lEtaye = False
+                iCasP = myBeam.IndiceCasG1
+        End Select
+
+        '--( Traitement
+
+        For iNode = 0 To nbNodes - 1
+            If (iNode = 0) Then kDeb = 1 Else kDeb = 0
+            If (iNode = nbNodes - 1) Then kFin = 0 Else kFin = 1
+
+            For k = kDeb To kFin
+
+                If lEtaye Then
+                    MaEd = 0
+                Else
+                    MaEd = myBeam.ChargesA(iCasP).MYY(iNode, k) * myBeam.CombiA_ELU.CoefCombi(iCombi)(iCasP)
+                End If
+
+                MelRd(iCombi, iNode, k) = MaEd + kiEl * (MEd(iNode, k) - MaEd)
+
+            Next
+        Next
+
+    End Sub
+
+    Private Sub CoefficientKiEl(myBeam As cls_Poutre, myKiel As Decimal, SigmaELU(,,) As Decimal, MEd(,) As Decimal, SigmaCasP(,,,) As Decimal, SigmaCasM(,,,) As Decimal,
+                                iNode As Integer, k As Integer, iCasP As Integer)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   29/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient kiEl selon prEN 1994-1-1
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   myKiel      [S] :   Coefficient par lequel il faut majorer la partie des moments mixtes pour obtenir le moment élastique
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim KielA, KielC As Decimal
+        Dim iProf() As Integer = myBeam.PtsSigma.iProfile
+        Dim iDalle() As Integer = myBeam.PtsSigma.iBetonDalle
+        Dim FySupd, FyWd, FyInfd As Decimal
+        Dim Fcd As Decimal
+
+        '--( Préparation
+
+        FySupd = myBeam.Section.FySup / myBeam.Param.Gamma.GammaM0
+        FyInfd = myBeam.Section.FyInf / myBeam.Param.Gamma.GammaM0
+        FyWd = myBeam.Section.FyW / myBeam.Param.Gamma.GammaM0
+        Fcd = myBeam.Dalle.beton.Fck / myBeam.Param.Gamma.GammaC
+
+        '--( Traitement des contraintes dans le profilé
+
+        TraitementBlocPoints(myBeam, KielA, SigmaELU, MEd, SigmaCasP, SigmaCasM, iNode, k, iCasP, iProf(0), iProf(0), FySupd) : myKiel = KielA
+        TraitementBlocPoints(myBeam, KielA, SigmaELU, MEd, SigmaCasP, SigmaCasM, iNode, k, iCasP, iProf(0) + 1, iProf(0) + 1, Math.Min(FySupd, FyWd)) : myKiel = Math.Min(KielA, myKiel)
+        TraitementBlocPoints(myBeam, KielA, SigmaELU, MEd, SigmaCasP, SigmaCasM, iNode, k, iCasP, iProf(0) + 2, iProf(0) + 2, FyWd) : myKiel = Math.Min(KielA, myKiel)
+        TraitementBlocPoints(myBeam, KielA, SigmaELU, MEd, SigmaCasP, SigmaCasM, iNode, k, iCasP, iProf(0) + 3, iProf(0) + 3, Math.Min(FyInfd, FyWd)) : myKiel = Math.Min(KielA, myKiel)
+        TraitementBlocPoints(myBeam, KielA, SigmaELU, MEd, SigmaCasP, SigmaCasM, iNode, k, iCasP, iProf(1), iProf(1), FyInfd) : myKiel = Math.Min(KielA, myKiel)
+
+        '--( Traitement des contraintes dans la dalle
+
+        TraitementBlocPoints(myBeam, KielC, SigmaELU, MEd, SigmaCasP, SigmaCasM, iNode, k, iCasP, iDalle(0), iDalle(1), Fcd)
+        myKiel = Math.Min(myKiel, KielC)
 
 
     End Sub
 
+    Private Sub TraitementBlocPoints(myBeam As cls_Poutre, myKiel As Decimal, SigmaELU(,,) As Decimal, MEd(,) As Decimal, SigmaCasP(,,,) As Decimal, SigmaCasM(,,,) As Decimal,
+                                     iNode As Integer, k As Integer, iCasP As Integer, iPt0 As Integer, iPt1 As Integer, Fel As Decimal)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   29/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient kiEl selon prEN 1994-1-1
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Fel         [E] :   Limite d'élasticité
+        '-----------------------------------------------------------------------------------------------------------------
 
+        '--( Déclarations
 
+        Dim iPt As Integer
+        Dim ptSigmaA, ptSigmaELU As Decimal
 
+        '--( Traitement 
+
+        For iPt = iPt0 To iPt1
+
+            ptSigmaELU = SigmaELU(iPt, iNode, k)
+            If iCasP = -1 Then
+                ptSigmaA = 0
+            Else
+                If MEd(iNode, k) > 0 Then
+                    ptSigmaA = SigmaCasP(iCasP, iPt, iNode, k)
+                Else
+                    ptSigmaA = SigmaCasM(iCasP, iPt, iNode, k)
+                End If
+
+            End If
+
+            If iPt = iPt0 Then
+                myKiel = CoefKiEl(ptSigmaA, ptSigmaELU, Fel)
+            Else
+                myKiel = Math.Min(myKiel, CoefKiEl(ptSigmaA, ptSigmaELU, Fel))
+            End If
+
+        Next
+
+    End Sub
+
+    Private Function CoefKiEl(SigmaA As Decimal, SigmaELU As Decimal, Fel As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------
+        '   29/02/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient kiEl selon prEN 1994-1-1
+        '-----------------------------------------------------------------------------------------------------------------
+        '   SigmaA      [E] :   Contrainte dans la fibre soutenue par l'acier seul
+        '   SigmaELU    [E] :   Contrainte dans la fibre sous la combinaison ELU
+        '   Fel         [E] :   Limite d'élasticité
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myKiel As Decimal
+
+        If IsEqual(SigmaELU, SigmaA) Then
+            myKiel = 0
+        Else
+            myKiel = (Fel - SigmaA) / (SigmaELU - SigmaA)
+        End If
+
+        Return myKiel
+
+    End Function
 
 #End Region
 

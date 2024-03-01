@@ -443,6 +443,7 @@ SECTIONSR				= Resistance of sections
 BEAMR					= Resistance of the beam
 ADDPARAM				= Additional parameters
 ADDP_SHEARB				= Shear buckling
+ADDMELRDPMX				= Elastic resistant moments
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States
