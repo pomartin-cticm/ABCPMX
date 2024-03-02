@@ -217,7 +217,7 @@ Public Class cls_MaintienBac
         Dim c11 As Decimal = Me.Flexibilite_C11_DistorsionBac(Longueur, EntraxeD, MyBac, EYoung)
         Dim c12 As Decimal = Me.Flexibilite_C12_Shear(Longueur, EntraxeD, MyBac, EYoung, Poisson)
         Dim c21 As Decimal = Me.Flexibilite_C21_BeamFasteners(Longueur, EntraxeD, MyBac.Ep)
-        Dim c22 As Decimal = Me.Flexibilite_C21_BeamFasteners(Longueur, EntraxeD, MyBac.Ep)
+        Dim c22 As Decimal = Me.Flexibilite_C22_SeamFastener(Longueur, EntraxeD, MyBac)
 
         cCumul = c11 + c12 + c21 + c22
 
@@ -352,7 +352,7 @@ Public Class cls_MaintienBac
         Dim sS As Decimal = Me.FixCoutureSlip
         Dim sP As Decimal = Me.FixNervuresSlip
         Dim nL As Decimal = PorteeL / MyBac.LargeurModule
-        Dim nC As Decimal = (EntraxeD / Me.ec) + 1
+        Dim nC As Decimal = (EntraxeD / Me.ec) - 1 'GuD: Correction selon la formule de l'article (avant +1)
         Dim nF As Integer = NbFixationNf(MyBac)
 
         c22 = sS * sP * (nL - 1) / (nC * sP + Me.Beta1(nF) * sS)

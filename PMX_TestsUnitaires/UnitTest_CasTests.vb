@@ -816,6 +816,7 @@ Imports PMXMoteur2
             .Ep = 207 / 1000
             .Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
             .AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus 'permet de prendre en compte le bac pour le calcul des armatures transversales
+            .Ieff = 44.37 * 10 ^ (-8)
         End With
 
         With myPoutre.Dalle.Connecteur
@@ -1002,7 +1003,7 @@ Imports PMXMoteur2
 
         myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True) 'On relance les vérifications de la poutre acier avec les nouveaux paramètres
 
-        Mcr = 2260 * 1000
+        Mcr = 3237 * 1000
         MbRd = 437 * 1000
 
         Valeur = myPoutre.VerifAcier(0).McrLTB(0, myPoutre.IndicePremiereTravee)

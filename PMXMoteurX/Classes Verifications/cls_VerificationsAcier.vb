@@ -547,12 +547,17 @@ Public Class cls_VerificationsAcier
                 paramLTB.iNodeMaintienCon(0, 1) = pDonnees.NbNodes - 1
 
                 paramLTB.MaintienConV(0) = 0
+
                 '# maintien en cisaillement par le bac (v')
                 paramLTB.MaintienConVP(0) = Sact
+                'paramLTB.MaintienConVP(0) = 9422 * 1000
+
                 '# maintien en flexion par le bac (theta)
                 paramLTB.MaintienConTheta(0) = kTheta
+                'paramLTB.MaintienConTheta(0) = 16.6 * 1000
 
                 paramLTB.zMaintienConC(0) = -zAne - pzS
+                'paramLTB.zMaintienConC(0) = zAne + pzS
 
             End If
         End If
