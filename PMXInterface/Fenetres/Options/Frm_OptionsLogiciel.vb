@@ -78,6 +78,7 @@ Public Class Frm_OptionsLogiciel
         Dim lDispFM_SLS As Boolean
         Dim lDispFM_FLS As Boolean
         Dim lDispSigmaCharges As Boolean
+        Dim lDispMelRdMixte As Boolean
     End Structure
 #End Region
 
@@ -288,6 +289,7 @@ Public Class Frm_OptionsLogiciel
         pLocalOptionsNdC.lDispFM_FLS = OptionsNdC.lDispFM_FLS
         pLocalOptionsNdC.lDispFM_ULS = OptionsNdC.lDispFM_ULS
         pLocalOptionsNdC.lDispSigmaCharges = OptionsNdC.lDispSigmaCharges
+        pLocalOptionsNdC.lDispMelRdMixte = OptionsNdC.lDispMelPoutreMixte
 
     End Sub
 
@@ -497,6 +499,7 @@ Public Class Frm_OptionsLogiciel
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMLoadCase, OptionsNdC.lDispFMLoadCase, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispFMDiagrams, OptionsNdC.lDispFMDiagrams, lModif)
         GereTransfertValeur(Me.pLocalOptionsNdC.lDispSigmaCharges, OptionsNdC.lDispSigmaCharges, lModif)
+        GereTransfertValeur(Me.pLocalOptionsNdC.lDispMelRdMixte, OptionsNdC.lDispMelPoutreMixte, lModif)
 
     End Sub
 

@@ -1251,7 +1251,7 @@ Public Class Cls_Rapport
 
                     DessineRDM(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), indiceCdc, xLeftImg, YPen)
 
-                Case "RDM_COMBO"
+                Case "RDM_COMBI"
 
                     Dim indiceCombo As Integer
                     Dim typeCombo As String

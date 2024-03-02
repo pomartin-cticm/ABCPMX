@@ -78,6 +78,7 @@
         Me.chk_DisplayFM_ELS.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFM_SLS
         Me.chk_DisplayFM_ELF.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispFM_FLS
         Me.chk_SigmaCharges.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispSigmaCharges
+        Me.chk_DisplayMelPoutreMixte.Checked = Frm_OptionsLogiciel.pLocalOptionsNdC.lDispMelRdMixte
 
     End Sub
 
@@ -111,6 +112,10 @@
 
     Private Sub chk_SigmaCharges_CheckedChanged(sender As Object, e As EventArgs) Handles chk_SigmaCharges.CheckedChanged
         Frm_OptionsLogiciel.pLocalOptionsNdC.lDispSigmaCharges = Me.chk_SigmaCharges.Checked
+    End Sub
+
+    Private Sub chk_DisplayMelPoutreMixte_CheckedChanged(sender As Object, e As EventArgs) Handles chk_DisplayMelPoutreMixte.CheckedChanged
+        Frm_OptionsLogiciel.pLocalOptionsNdC.lDispMelRdMixte = Me.chk_DisplayMelPoutreMixte.Checked
     End Sub
 
 #End Region

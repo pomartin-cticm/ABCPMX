@@ -23,6 +23,9 @@ Partial Class Frm_OptionsLogicielNdC
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.pan_NdC = New System.Windows.Forms.Panel()
+        Me.pan_ELU = New System.Windows.Forms.Panel()
+        Me.chk_DisplayMelPoutreMixte = New System.Windows.Forms.CheckBox()
+        Me.lbl_ELU = New System.Windows.Forms.Label()
         Me.pan_ELS = New System.Windows.Forms.Panel()
         Me.lbl_Hivoss = New System.Windows.Forms.Label()
         Me.chk_ShowHivossDiagram = New System.Windows.Forms.CheckBox()
@@ -35,13 +38,10 @@ Partial Class Frm_OptionsLogicielNdC
         Me.chk_DisplayFM_ELU = New System.Windows.Forms.CheckBox()
         Me.chk_DisplayLoadCases = New System.Windows.Forms.CheckBox()
         Me.lbl_Sollicitations = New System.Windows.Forms.Label()
-        Me.pan_ELU = New System.Windows.Forms.Panel()
-        Me.chk_DisplayMelPoutreMixte = New System.Windows.Forms.CheckBox()
-        Me.lbl_ELU = New System.Windows.Forms.Label()
         Me.pan_NdC.SuspendLayout()
+        Me.pan_ELU.SuspendLayout()
         Me.pan_ELS.SuspendLayout()
         Me.pan_Sollicitations.SuspendLayout()
-        Me.pan_ELU.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_NdC
@@ -55,6 +55,39 @@ Partial Class Frm_OptionsLogicielNdC
         Me.pan_NdC.Name = "pan_NdC"
         Me.pan_NdC.Size = New System.Drawing.Size(739, 472)
         Me.pan_NdC.TabIndex = 2
+        '
+        'pan_ELU
+        '
+        Me.pan_ELU.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_ELU.Controls.Add(Me.chk_DisplayMelPoutreMixte)
+        Me.pan_ELU.Controls.Add(Me.lbl_ELU)
+        Me.pan_ELU.Location = New System.Drawing.Point(3, 188)
+        Me.pan_ELU.Name = "pan_ELU"
+        Me.pan_ELU.Size = New System.Drawing.Size(733, 69)
+        Me.pan_ELU.TabIndex = 102
+        '
+        'chk_DisplayMelPoutreMixte
+        '
+        Me.chk_DisplayMelPoutreMixte.AutoSize = True
+        Me.chk_DisplayMelPoutreMixte.Location = New System.Drawing.Point(25, 37)
+        Me.chk_DisplayMelPoutreMixte.Name = "chk_DisplayMelPoutreMixte"
+        Me.chk_DisplayMelPoutreMixte.Size = New System.Drawing.Size(157, 17)
+        Me.chk_DisplayMelPoutreMixte.TabIndex = 97
+        Me.chk_DisplayMelPoutreMixte.Text = "chk_DisplayMelPoutreMixte"
+        Me.chk_DisplayMelPoutreMixte.UseVisualStyleBackColor = True
+        '
+        'lbl_ELU
+        '
+        Me.lbl_ELU.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_ELU.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_ELU.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_ELU.Name = "lbl_ELU"
+        Me.lbl_ELU.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_ELU.TabIndex = 96
+        Me.lbl_ELU.Text = "lbl_ELU"
+        Me.lbl_ELU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'pan_ELS
         '
@@ -189,39 +222,6 @@ Partial Class Frm_OptionsLogicielNdC
         Me.lbl_Sollicitations.Text = "lbl_Sollicitations"
         Me.lbl_Sollicitations.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'pan_ELU
-        '
-        Me.pan_ELU.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.pan_ELU.Controls.Add(Me.chk_DisplayMelPoutreMixte)
-        Me.pan_ELU.Controls.Add(Me.lbl_ELU)
-        Me.pan_ELU.Location = New System.Drawing.Point(3, 188)
-        Me.pan_ELU.Name = "pan_ELU"
-        Me.pan_ELU.Size = New System.Drawing.Size(733, 69)
-        Me.pan_ELU.TabIndex = 102
-        '
-        'chk_DisplayMelPoutreMixte
-        '
-        Me.chk_DisplayMelPoutreMixte.AutoSize = True
-        Me.chk_DisplayMelPoutreMixte.Location = New System.Drawing.Point(25, 37)
-        Me.chk_DisplayMelPoutreMixte.Name = "chk_DisplayMelPoutreMixte"
-        Me.chk_DisplayMelPoutreMixte.Size = New System.Drawing.Size(157, 17)
-        Me.chk_DisplayMelPoutreMixte.TabIndex = 97
-        Me.chk_DisplayMelPoutreMixte.Text = "chk_DisplayMelPoutreMixte"
-        Me.chk_DisplayMelPoutreMixte.UseVisualStyleBackColor = True
-        '
-        'lbl_ELU
-        '
-        Me.lbl_ELU.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_ELU.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_ELU.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_ELU.Name = "lbl_ELU"
-        Me.lbl_ELU.Size = New System.Drawing.Size(733, 23)
-        Me.lbl_ELU.TabIndex = 96
-        Me.lbl_ELU.Text = "lbl_ELU"
-        Me.lbl_ELU.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'Frm_OptionsLogicielNdC
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -233,12 +233,12 @@ Partial Class Frm_OptionsLogicielNdC
         Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
         Me.Text = "Frm_OptionsLogicielNdC"
         Me.pan_NdC.ResumeLayout(False)
+        Me.pan_ELU.ResumeLayout(False)
+        Me.pan_ELU.PerformLayout()
         Me.pan_ELS.ResumeLayout(False)
         Me.pan_ELS.PerformLayout()
         Me.pan_Sollicitations.ResumeLayout(False)
         Me.pan_Sollicitations.PerformLayout()
-        Me.pan_ELU.ResumeLayout(False)
-        Me.pan_ELU.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

@@ -2749,7 +2749,7 @@ Module Mod_NoteCalcul
                         Const NbLigDiag As Integer = 20
                         If nbLignes + NbLigDiag > MAXLIGNEPPAG Then SautePage()
                         ' Les options 10, 80 30 et cadre doivent toujous commencer en 3 eme place
-                        AddLigneNDC("\IMG RDM_COMBO " & " 10 80 30 NoCadre " & CStr(i) & " ELU " & lRetraitELU)
+                        AddLigneNDC("\IMG RDM_COMBI " & " 10 80 30 NoCadre " & CStr(i) & " ELU " & lRetraitELU)
                         nbLignes += NbLigDiag
                     End If
 
@@ -4807,6 +4807,8 @@ Module Mod_NoteCalcul
         '--( Moment élastique des poutres mixtes
 
         If lMixte And OptionsNdC.lDispMelPoutreMixte Then
+
+            EditionMelRdPoutreMixte(MyBeam)
 
         End If
     End Sub
@@ -7244,9 +7246,15 @@ Module Mod_NoteCalcul
         Dim lRetraitElastique As Boolean = True
         Dim MelRd(,,) As Decimal
 
+        Dim NCol, Pos As Integer
+        Dim LargCol() As Integer = Nothing
+
+        Const nbREQ As Integer = 10
+
         '--( Initialisation
 
-        AddTitreNdC(2, BlocELU("ADDMELRDPMX"))
+        If nbLignes + nbREQ > MAXLIGNEPPAG Then SautePage()
+        AddTitreNdC(3, BlocELU("ADDMELRDPMX"))
         ReDim MelRd(myBeam.CombiA_ELU.nbCombi - 1, myBeam.Nodes.nbNodes - 1, 1)
 
         '--( Calcul des contraintes élastiques
@@ -7255,7 +7263,7 @@ Module Mod_NoteCalcul
         myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaCasP)
         myBeam.PtsSigma.CalculContraintesCharges(myBeam, -1, SigmaCasM)
 
-        '--( Traitement des combinaisons
+        '--( Traitement des combinaisons et calcul des moments MElRd
 
         For iCombi As Integer = 0 To myBeam.CombiA_ELU.nbCombi - 1
 
@@ -7265,19 +7273,156 @@ Module Mod_NoteCalcul
                                                  myBeam.ChargesA, MEd, SigmaCasP, SigmaCasM, lRetraitElastique, SigmaELU)
             myBeam.PtsSigma.AjusteContraintes(myBeam, SigmaELU)
 
+            CalculMelRdCombi(myBeam, iCombi, SigmaELU, SigmaCasP, SigmaCasM, MEd, MelRd)
+
+        Next
+
+        '--( Affichage des Moments
+
+        EnteteTableauMelRdMixte(myBeam, NCol, Pos, LargCol)
+
+        For iNode As Integer = 0 To myBeam.Nodes.nbNodes - 1
+
+            If nbLignes + 1 > MAXLIGNEPPAG Then
+                FinTableau()
+                SautePage()
+                EnteteTableauMelRdMixte(myBeam, NCol, Pos, LargCol)
+            End If
+
+            LigneTableauMelRed(MelRd, iNode, myBeam.CombiA_ELU.nbCombi, NCol, LargCol)
+
+        Next
+
+        FinTableau()
+    End Sub
+
+    Private Sub LigneTableauMelRed(MelRd(,,) As Decimal, iNode As Integer, nbCombi As Integer, NCOL As Integer, LargCol() As Integer)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   02/03/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition d'une ligne du tableau des moments résistants élastiques pour les poutres mixtes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   MelRd       [E] :   Moments résistants élastiques
+        '   iNode       [E] :   Indice du noeud traité
+        '   nbCombi     [E] :   Nombre de combinaisons ELU
+        '   NCol        [E] :   Nombre de colonnes du tableau
+        '   LargCol     [E] :   Largeurs des colonnes
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lTousPareil As Boolean = True
+        Dim iCombi As Integer = -1
+        Dim myBord(1) As Integer
+        Const kDeb As Integer = 0
+        Dim kFin As Integer
+
+        '--( Initialisation
+
+        Do While lTousPareil And iCombi < nbCombi - 1
+            iCombi += 1
+            If Not IsEqual(MelRd(iCombi, iNode, 0), MelRd(iCombi, iNode, 1)) Then
+                lTousPareil = False
+            End If
+        Loop
+
+        If lTousPareil Then
+            myBord(0) = Bordures.Tous
+            kFin = 0
+        Else
+            myBord(0) = Bordures.Tous - Bordures.Bas
+            myBord(1) = Bordures.Tous - Bordures.Haut
+            kFin = 1
+        End If
+
+        '--( Affichage
+
+        For k = kDeb To kFin
+            InitialiseLigneTableau(NCOL, HLIGNE)
+
+            If k = kDeb Then
+                AddCellule(LargCol(0), myBord(k), PositionTexteInCell.Centre, CStr(iNode + 1))
+            Else
+                AddCellule(LargCol(0), myBord(k), PositionTexteInCell.Centre, "")
+            End If
+
+            For iCombi = 0 To nbCombi - 1
+
+                AddCellule(LargCol(iCombi + 1), myBord(k), PositionTexteInCell.Centre, GetStringInUnit(MelRd(iCombi, iNode, k), Enu_TypeVariable.Moment, 4, 3, False))
+
+            Next
+        Next
 
 
+        '### A DEDOUBLER SI BESOIN
+    End Sub
+
+    Private Sub EnteteTableauMelRdMixte(myBeam As cls_Poutre, ByRef NCol As Integer, ByRef Pos As Integer, ByRef LargCol() As Integer)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   02/03/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de l'entete du tableau des moments résistants élastiques pour les poutres mixtes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :
+        '   NCol        [S] :   Nombre de colonnes du tableau
+        '   Pos         [S] :   Position à gauche
+        '   LargCol     [S] :   Largeurs des colonnes
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Préparation
+
+        Dim LCCOMB As Integer = 9
+        NCol = 1 + myBeam.CombiA_ELU.nbCombi
+        ReDim LargCol(NCol - 1)
+        Pos = 15
+        Dim i As Integer
+
+        LargCol(0) = 9
+
+        If NCol = 2 Then LCCOMB = 15
+        For i = 1 To NCol - 1
+            LargCol(i) = LCCOMB
+        Next
+
+        Dim strELU As String = BlocAnalyse("ULS")
+        strELU += "_0"
+
+        '--( Affichage de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos), False)
+
+        InitialiseLigneTableau(2, HLIGNEENTETE)
+
+        AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LCCOMB * myBeam.CombiA_ELU.nbCombi, Bordures.Tous, PositionTexteInCell.Centre, "M\-el,Rd\= [kN.m]")
+
+        InitialiseLigneTableau(2, HLIGNEENTETE)
+
+        AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LCCOMB * myBeam.CombiA_ELU.nbCombi, Bordures.Tous - Bordures.Bas, PositionTexteInCell.Centre, "Combi")
+
+        InitialiseLigneTableau(NCol, HLIGNEENTETE)
+        AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "i")
+        For i = 1 To NCol - 1
+            AddCelluleFond(LargCol(i), Bordures.Tous - Bordures.Haut, PositionTexteInCell.Centre, strELU & CStr(i))
         Next
 
     End Sub
 
-    Private Sub CalculMelRdCombi(myBeam As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal, MEd(,) As Decimal, ByRef MelRd(,,) As Decimal)
+    Private Sub CalculMelRdCombi(myBeam As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal, SigmaCasP(,,,) As Decimal, SigmaCasM(,,,) As Decimal,
+                                 MEd(,) As Decimal, ByRef MelRd(,,) As Decimal)
         '-----------------------------------------------------------------------------------------------------------------
         '   29/02/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
         '   Calcul des moments résistants élastiques pour les poutres mixtes pour une combinaison particulière
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
+        '   iCombi      [E] :   Indice de la combinaison
+        '   SigmaELU    [E] :   Contraintes normales ELU pour la combinaison traitée
+        '   SigmaCasP   [E] :   Contraintes normales pourles cas de charges, hyp M > 0
+        '   SigmaCasM   [E] :   Contraintes normales pourles cas de charges, hyp M < 0
+        '   MEd         [E] :   Moments sous la combinaison ELU traitée
+        '   MElRd       [S] :   Table des moments ElRd des sections
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -7318,6 +7463,8 @@ Module Mod_NoteCalcul
                 Else
                     MaEd = myBeam.ChargesA(iCasP).MYY(iNode, k) * myBeam.CombiA_ELU.CoefCombi(iCombi)(iCasP)
                 End If
+
+                CoefficientKiEl(myBeam, kiEl, SigmaELU, MEd, SigmaCasP, SigmaCasM, iNode, k, iCasP)
 
                 MelRd(iCombi, iNode, k) = MaEd + kiEl * (MEd(iNode, k) - MaEd)
 
