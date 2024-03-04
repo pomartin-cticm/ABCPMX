@@ -3,7 +3,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports PMXInterface
 Imports PMXMoteur2
 
-<TestClass()> Public Class UnitTest_CasTests
+<TestClass()> Public Class UnitTest_CasTestsPoutreMixte
 
     <TestMethod()> Public Sub Test_RCM_2018_2()
 
