@@ -65,7 +65,7 @@ Public Class cls_Connecteur
 
     Public Sub New()
 
-        Me.nom = "Diametre 19-100"
+        Me.nom = "19-100"
         Me.kcc = 1
         'Caracteristiques_Goujons()
         Me.d = 0.019
