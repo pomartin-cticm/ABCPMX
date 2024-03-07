@@ -936,7 +936,7 @@ Public Class Frm_Chargement
             MAJIAffichageTableauxLineique()
             MAJIAffichageButtonsPonctuels()
             MAJIAffichageTableauxPonctuel()
-
+            MAJIAffichageChargeSurfacique()
 
 
             img_Chargement.Invalidate()
