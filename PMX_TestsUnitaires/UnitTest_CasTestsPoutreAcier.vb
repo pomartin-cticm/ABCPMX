@@ -92,13 +92,13 @@ Imports PMXMoteur2
 #Region "Renseignement des données de l'article"
 
         'GEOMETRIE
-        myPoutre.lTraveeConsoleGauche = False
-        myPoutre.lTraveeConsoleDroite = False
+        myPoutre.lTraveeConsoleGauche = True
+        myPoutre.lTraveeConsoleDroite = True
         myPoutre.LongueurTravee(0) = 3 'console gauche
         myPoutre.LongueurTravee(1) = 12 'travée centrale
         myPoutre.LongueurTravee(2) = 3 'console droite
-        myPoutre.lTremieGauche = True
-        myPoutre.lTremieDroite = True
+        myPoutre.lTremieGauche = False
+        myPoutre.lTremieDroite = False
         myPoutre.lIntermediaire = True
         myPoutre.EntraxeD1 = 3
         myPoutre.EntraxeD2 = 3
@@ -119,6 +119,7 @@ Imports PMXMoteur2
         With myPoutre.Dalle
             .type = cls_Dalle.Enum_TypeDalle.Pleine
             .t_d = 120 / 1000
+            .t_h = 0
         End With
 
         'For i As Integer = 0 To myPoutre.Dalle.LitArma.Count - 1 'on ne prend pas en compte les armatures dans le calcul dans l'exemple traité 
@@ -175,12 +176,12 @@ Imports PMXMoteur2
         'myPoutre.Dalle.Bac.fyp = 350
 
         'CHARGES
-        myPoutre.InitialisePoidsPropres()
+        myPoutre.InitialisePoidsPropres() 'Valeur calculée à la main: qPP = 9.72 kN/ml
         For i As Integer = 0 To 2
-            For Each elmnt In myPoutre.ChargesU("G1").FReparties(i)
-                elmnt.Force(0) = 0
-                elmnt.Force(1) = 0
-            Next
+            'For Each elmnt In myPoutre.ChargesU("G1").FReparties(i)
+            '    elmnt.Force(0) = 0
+            '    elmnt.Force(1) = 0
+            'Next
             myPoutre.ChargesU("G1").QSurf(i) = 2 * 1000
             myPoutre.ChargesU("Q1").QSurf(i) = 3 * 1000
         Next
@@ -274,8 +275,12 @@ Imports PMXMoteur2
 
         'VERIFICATION DES EFFORTS A L'ELU
 
+        'qG1 = 9.72 + 2*3 = 15.72 kN/ml
+        'qQ = 3*3 = 9 kN/ml
+        'qELU = 1.35*15.72 + 1.5*9 = 34.722
+
         Valeur = MEdMax
-        ValRef = 388.8 * 10 ^ 3
+        ValRef = 625 * 10 ^ 3
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         Valeur = VEdMax
