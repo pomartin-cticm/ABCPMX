@@ -44,6 +44,10 @@
 
 #Region " Fonctions "
 
+    ''' <summary>
+    ''' Aire des armatures pour un lit donné et pour UNE seule chambre
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property Aire
         Get
             Dim pAire As Decimal

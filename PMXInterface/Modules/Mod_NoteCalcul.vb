@@ -753,7 +753,7 @@ Module Mod_NoteCalcul
                 If .NbExt = 0 And .NbMil = 0 And .NbInt = 0 Then
                     AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, "")
                 Else
-                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(.Aire, Enu_TypeVariable.AireCM2, 4, 2, True))
+                    AddCellule(LC3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(2 * .Aire, Enu_TypeVariable.AireCM2, 4, 2, True))
                 End If
             End With
         Next
