@@ -89,7 +89,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Renseignement des données de l'article"
+#Region "Renseignement des données"
 
         'GEOMETRIE
         myPoutre.lTraveeConsoleGauche = True
@@ -252,17 +252,39 @@ Imports PMXMoteur2
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
 
         'COMBINAISON DES EFFORTS A L'ELU
-        Dim MEd(,) As Decimal = Nothing
-        Dim MEdMax, MEdMin, iNodeMMin, iNodeMMax As Decimal
+        Dim MEd1(,) As Decimal = Nothing
+        Dim MEd2(,) As Decimal = Nothing
+        Dim MEd3(,) As Decimal = Nothing
+        Dim MEdMax1, MEdMin1, iNodeMMin1, iNodeMMax1 As Decimal
+        Dim MEdMax2, MEdMin2, iNodeMMin2, iNodeMMax2 As Decimal
+        Dim MEdMax3, MEdMin3, iNodeMMin3, iNodeMMax3 As Decimal
+        Dim MEdAppuiMax, MEdMiTravee As Decimal
 
-        Dim VEd(,) As Decimal = Nothing
-        Dim VEdMax, VEdMin, iNodeVMin, iNodeVMax As Decimal
+        Dim VEd1(,) As Decimal = Nothing
+        Dim VEd2(,) As Decimal = Nothing
+        Dim VEd3(,) As Decimal = Nothing
+        Dim VEdMax1, VEdMin1, iNodeVMin1, iNodeVMax1 As Decimal
+        Dim VEdMax2, VEdMin2, iNodeVMin2, iNodeVMax2 As Decimal
+        Dim VEdMax3, VEdMin3, iNodeVMin3, iNodeVMax3 As Decimal
+        Dim VEdAppui As Decimal
 
-        myPoutre.CombiA_ELU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd, False) 'Combinaison des moments pour la combinaison 0
-        myPoutre.CombiA_ELU.CombineEffortsT(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd, False) 'Combinaison des tranchants pour la combinaison 0
+        myPoutre.CombiA_ELU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd1, False) 'Combinaison des moments pour la combinaison 0
+        myPoutre.CombiA_ELU.CombineMoments(1, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd2, False) 'Combinaison des moments pour la combinaison 1
+        myPoutre.CombiA_ELU.CombineMoments(2, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd3, False) 'Combinaison des moments pour la combinaison 2
+        myPoutre.CombiA_ELU.CombineEffortsT(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd1, False) 'Combinaison des tranchants pour la combinaison 0
+        myPoutre.CombiA_ELU.CombineEffortsT(1, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd2, False) 'Combinaison des tranchants pour la combinaison 0
+        myPoutre.CombiA_ELU.CombineEffortsT(2, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd3, False) 'Combinaison des tranchants pour la combinaison 0
 
-        EnveloppeTableauEfforts(MEd, myPoutre.Nodes.nbNodes, MEdMax, MEdMin, iNodeMMax, iNodeMMin)
-        EnveloppeTableauEfforts(VEd, myPoutre.Nodes.nbNodes, VEdMax, VEdMin, iNodeVMax, iNodeVMin)
+        EnveloppeTableauEfforts(MEd1, myPoutre.Nodes.nbNodes, MEdMax1, MEdMin1, iNodeMMax1, iNodeMMin1)
+        EnveloppeTableauEfforts(MEd2, myPoutre.Nodes.nbNodes, MEdMax2, MEdMin2, iNodeMMax2, iNodeMMin2)
+        EnveloppeTableauEfforts(MEd3, myPoutre.Nodes.nbNodes, MEdMax3, MEdMin3, iNodeMMax3, iNodeMMin3)
+        EnveloppeTableauEfforts(VEd1, myPoutre.Nodes.nbNodes, VEdMax1, VEdMin1, iNodeVMax1, iNodeVMin1)
+        EnveloppeTableauEfforts(VEd2, myPoutre.Nodes.nbNodes, VEdMax2, VEdMin2, iNodeVMax2, iNodeVMin2)
+        EnveloppeTableauEfforts(VEd3, myPoutre.Nodes.nbNodes, VEdMax3, VEdMin3, iNodeVMax3, iNodeVMin3)
+
+        MEdAppuiMax = Math.Max(MEdMax1, Math.Max(MEdMax2, MEdMax3))
+        MEdMiTravee = Math.Min(MEdMin1, Math.Min(MEdMin2, MEdMin3))
+        VEdAppui = Math.Max(VEdMax1, Math.Max(VEdMax2, VEdMax3))
 
         'VERIFICATION DE LA POUTRE 
 
@@ -279,12 +301,21 @@ Imports PMXMoteur2
         'qQ = 3*3 = 9 kN/ml
         'qELU = 1.35*15.72 + 1.5*9 = 34.722
 
-        Valeur = MEdMax
-        ValRef = 625 * 10 ^ 3
+        'M appui max = -qELU*Lconsole^2/2 = -34.722*3^2/2 = -156.249 kN.m
+        'M mi travée = -1.35*qG1*Lconsole^2/2 + qELU*Lportée^2/8 = -1.35*15.72*3^2/2 + 34.722*12^2/8 = 529.497 kN.m
+
+        'VEd appui  = max(qELU*Lconsole, qELU*Lportée/2) = 15.72*max(3;12/2) = 208.332
+
+        Valeur = MEdAppuiMax
+        ValRef = 529.497 * 10 ^ 3
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        Valeur = VEdMax
-        ValRef = 129.6 * 10 ^ 3
+        Valeur = MEdMiTravee
+        ValRef = -156.249 * 10 ^ 3
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        Valeur = VEdAppui
+        ValRef = 208.332 * 10 ^ 3
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
 #End Region
@@ -301,6 +332,8 @@ Imports PMXMoteur2
 
         'A L'ELU
 
+        'Propsection: Wpl = 2 197.652 cm3 
+
         Dim zANE, MRk As Decimal
         myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRk)
 
@@ -308,14 +341,31 @@ Imports PMXMoteur2
         ValRef = 604.3543 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
 
-        Valeur = myPoutre.VerifAcier(0).CritereM.Resistance(iNodeMMax)
-        ValRef = 604.3543 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (779.4 kN.m) du fait que le NConnexion n'est pas identique
+        Valeur = myPoutre.VerifAcier(0).CritereM.Resistance(iNodeMMax1)
+        ValRef = 604.3543 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
-        Valeur = myPoutre.VerifMixte(0).CritereM.CritereMax
-        ValRef = 0.6433 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
+        Valeur = myPoutre.VerifAcier(0).CritereM.CritereMax
+        ValRef = 0.876 '529.497 / 604.354 = 0.876
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
 
+
+#End Region
+
+#Region "Vérification de la résistance au déversement"
+
+        Dim Mcr, MbRd As Decimal
+
+        Mcr = 65.312 * 1000
+        MbRd = 85.19 * 1000
+
+        Valeur = myPoutre.VerifAcier(0).McrLTB(0, myPoutre.IndicePremiereTravee)
+        ValRef = Mcr
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        Valeur = myPoutre.VerifAcier(0).CritereLTB.Resistance(myPoutre.IndicePremiereTravee)
+        ValRef = MbRd ' = 85.19 kN (dans l'article, on a 492.5 kN.m)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé acier seul
 
 #End Region
 
@@ -324,11 +374,11 @@ Imports PMXMoteur2
         'A L'ELU
 
         Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0)
-        ValRef = 818.015 * 1000
+        ValRef = 950.564 * 1000 'Av  = 5 987 cm2 VplRd = 950.564 kN
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à l'effort tranchant
 
         Valeur = myPoutre.VerifAcier(0).CritereV.CritereMax
-        ValRef = 0.1584
+        ValRef = 0.2191667 '208.332/950.564 = 0.219.7
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
 
         Dim rhoVELU As Decimal
@@ -337,7 +387,7 @@ Imports PMXMoteur2
         ElseIf ValRef >= 1 Then
             rhoVELU = 1
         Else
-            rhoVELU = (2 * 0.1584 - 1) ^ 2 'Valeur calculée par rapport à la valeur de référence. Sera utile pour l'interacion MV
+            rhoVELU = (2 * 0.2191667 - 1) ^ 2 'Valeur calculée par rapport à la valeur de référence. Sera utile pour l'interacion MV
         End If
 
 #End Region
@@ -356,17 +406,80 @@ Imports PMXMoteur2
 
         Valeur = MRk
         ValRef = 604.3543 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
 
-        Valeur = myPoutre.VerifMixte(0).CritereMV.Resistance(iNodeMMax)
+        Valeur = myPoutre.VerifAcier(0).CritereMV.Resistance(iNodeMMax1)
         ValRef = 604.3543 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (834.6 kN.m) du fait que le NConnexion n'est pas identique
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
-        Valeur = myPoutre.VerifMixte(0).CritereMV.CritereMax
-        ValRef = 0.6433 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
+        Valeur = myPoutre.VerifAcier(0).CritereMV.CritereMax
+        ValRef = 0.876 'GUD: valeur recalculée pour les mêmes raisons que ci-dessu. Dans l'article, le critère est égal à 0.84 
         Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
 
 #End Region
+
+#Region "Vérification des propriétés élastiques (ELS)"
+
+        '--> Propriétés en phase de coulage, poutre non etayée
+
+        Valeur = 48279 ' IY = 48 279.445 cm4
+        ValRef = myPoutre.Section.ProfilA.InertieY * 10 ^ 8
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
+
+        Dim InertieY, Mel As Decimal
+
+        myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, MRk)
+        ValRef = InertieY * 10 ^ 8
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
+
+        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel)
+        ValRef = InertieY * 10 ^ 8
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
+
+#End Region
+
+#Region "Vérification du calcul des fleches (ELS)"
+
+        '--> Fleches due à G1
+
+        Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
+        ValRef = 29.35
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> Fleches due à Q1 #1
+
+        Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
+        ValRef = 16.8
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        '--> Fleches due à Q1 #2
+
+        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
+        ValRef = 24.01
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        '--> Fleches due à Q1 #3
+
+        Valeur = myPoutre.ChargesA(3).FlecheMax * 1000
+        ValRef = 8.103
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+#End Region
+
+#Region "Fréquence propre (ELS)"
+
+        myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
+        Valeur = myPoutre.Modal.Frequence
+
+        ValRef = 2.332 'Calcul réalisé avec RDM7 (/!\ le logiciel prend automatiquement en compte la masse du profilé, il faut le retirer, ce qui nous donne (15.72 - 0.769 + 0.2*9)*1000/9.81 = 1 707,5 kG/m /!\)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        Valeur = myPoutre.Modal.MassTotal
+        ValRef = 32146.8 '(15.72 + 0.2*9)*1000/9.81 * (3 + 12 + 3) = 32 146.8 kg
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+#End Region
+
     End Sub
 
 End Class
