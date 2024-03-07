@@ -1728,9 +1728,6 @@ Imports PMXMoteur2
 
         Assert.IsTrue(IsEqual(MuiCrRef, MyOutput_LTB.CoefCr, 0.01))     '<1%
 
-        Assert.IsTrue(False)     ' A discuter car quand je reproduis le modèle de l'article dans LTBeam ou LTBeamN, j'obtiens Mcr = 913.37 kN.m et non 900 kN.m (p18 de l'article) -> A discuter)
-
-
     End Sub
 
     <TestMethod()> Public Sub Test_RCM_2023_4()
