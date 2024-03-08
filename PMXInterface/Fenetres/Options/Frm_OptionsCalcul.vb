@@ -326,6 +326,8 @@ Public Class Frm_OptionsCalcul
         GereTransfertValeur(LocalOptionsCalcul.TimeT0G2(0), OptionsCalcul.TimeT0G2(0), lModif)
         GereTransfertValeur(LocalOptionsCalcul.TimeT0G2(1), OptionsCalcul.TimeT0G2(1), lModif)
 
+        GereTransfertValeur(LocalOptionsCalcul.EtaW, OptionsCalcul.EtaW, lModif)
+
         AppliquerReglagesProjetEnCours()
 
     End Sub

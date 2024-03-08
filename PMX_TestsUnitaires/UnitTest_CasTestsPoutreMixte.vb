@@ -1464,16 +1464,18 @@ Imports PMXMoteur2
 
         '--> Fleches due à G1
 
-        Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
-        ValRef = 30.6
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))  'GUD: Le calcul de la fleche G1 se fait avec les nEqLT. Il faudrait les faire avec nCT pour la phase construction (création d'un deuxieme cas G1?)
-
+        'Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
+        'ValRef = 30.6
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))  'GUD: Le calcul de la fleche G1 se fait avec les nEqLT. Il faudrait les faire avec nCT pour la phase construction (création d'un deuxieme cas G1?)
 
         '--> Fleches due à Q
 
-        Valeur = myPoutre.ChargesA(4).FlecheMax * 1000
-        ValRef = 6.5
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        'Valeur = myPoutre.ChargesA(4).FlecheMax * 1000
+        'ValRef = 6.5
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+
+        'Discuté avec POM: Pas pertinent de donner les fleches à l'ELS Construction
 
 #End Region
 
@@ -1545,13 +1547,13 @@ Imports PMXMoteur2
             ReDim .zForceRepC(.NbForcesRep - 1)
             .ForceRep(0, 0) = (1.35 * 10.67 + 1.5 * 1.875) * 1000 ' = 17 217 N/m
             .xForceRep(0, 0) = 0.0
-            .zForceRepC(0) = -248.5 / 1000
+            .zForceRepC(0) = 248.5 / 1000
             .ForceRep(0, 1) = (1.35 * 10.67 + 1.5 * 1.875) * 1000 ' = 17 217 N/m
             .xForceRep(0, 1) = L
 
             .ForceRep(1, 0) = 1.5 * 1.05 * 1000        ' = 1575 N/m
             .xForceRep(1, 0) = L / 2 - 3 / 2
-            .zForceRepC(1) = -248.5 / 1000
+            .zForceRepC(1) = 248.5 / 1000
             .ForceRep(1, 1) = 1.5 * 1.05 * 1000           ' = 1575 N/m
             .xForceRep(1, 1) = L / 2 + 3 / 2
         End With
@@ -1670,13 +1672,13 @@ Imports PMXMoteur2
             ReDim .zForceRepC(.NbForcesRep - 1)
             .ForceRep(0, 0) = (1.35 * 10.67 + 1.5 * 1.875) * 1000 ' = 17 217 N/m
             .xForceRep(0, 0) = 0.0
-            .zForceRepC(0) = -248.5 / 1000
+            .zForceRepC(0) = 248.5 / 1000
             .ForceRep(0, 1) = (1.35 * 10.67 + 1.5 * 1.875) * 1000 ' = 17 217 N/m
             .xForceRep(0, 1) = L
 
             .ForceRep(1, 0) = 1.5 * 1.05 * 1000        ' = 1575 N/m
             .xForceRep(1, 0) = L / 2 - 3 / 2
-            .zForceRepC(1) = -248.5 / 1000
+            .zForceRepC(1) = 248.5 / 1000
             .ForceRep(1, 1) = 1.5 * 1.05 * 1000           ' = 1575 N/m
             .xForceRep(1, 1) = L / 2 + 3 / 2
         End With

@@ -546,7 +546,7 @@ Public Class cls_VerificationsAcier
                 paramLTB.iNodeMaintienCon(0, 0) = 0
                 paramLTB.iNodeMaintienCon(0, 1) = pDonnees.NbNodes - 1
 
-                paramLTB.MaintienConV(0) = 0
+                ' paramLTB.MaintienConV(0) = 0
 
                 '# maintien en cisaillement par le bac (v')
                 paramLTB.MaintienConVP(0) = Sact
@@ -554,7 +554,7 @@ Public Class cls_VerificationsAcier
 
                 '# maintien en flexion par le bac (theta)
                 paramLTB.MaintienConTheta(0) = kTheta
-                'paramLTB.MaintienConTheta(0) = 16.6 * 1000
+                ' paramLTB.MaintienConTheta(0) = 16.6 * 1000
 
                 paramLTB.zMaintienConC(0) = -zAne - pzS
                 'paramLTB.zMaintienConC(0) = zAne + pzS
@@ -566,8 +566,8 @@ Public Class cls_VerificationsAcier
 
         iTravP = myPoutre.IndicePremiereTravee
         iTravD = myPoutre.IndiceDerniereTravee
-        'zTop = -zAne - pzS
-        zTop = zAne + pzS
+        zTop = -zAne - pzS
+        'zTop = zAne + pzS
         Dim NbRep, iCharge As Integer
         Dim iCompteur As Integer = -1
         NbRep = 0

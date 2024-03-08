@@ -63,6 +63,7 @@ Public Class Frm_OptionsCalculCalcul
             Me.lbl_SH.Text = "SH"   ' MyBloc("SHRINKAGE")
             strSymbolJour = MyBloc("SYMBOLFORDAY")
 
+            Me.lbl_ShearBuckling.Text = MyBloc("ETAW")
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -131,6 +132,10 @@ Public Class Frm_OptionsCalculCalcul
         Me.txt_t0SHDalle.Text = GetStringInUnit(LocalOptionsCalcul.TimeT0SH(0), Enu_TypeVariable.SansType, 4, 2, False)
         Me.txt_t0SHEnrob.Text = GetStringInUnit(LocalOptionsCalcul.TimeT0SH(1), Enu_TypeVariable.SansType, 4, 2, False)
 
+        '--> Voilement par cisaillement 
+
+        Me.txt_eta.Text = GetStringInUnit(LocalOptionsCalcul.EtaW, Enu_TypeVariable.SansType, 4, 1, False)
+
     End Sub
 
     Private Sub RemplirCombos()
@@ -171,7 +176,7 @@ Public Class Frm_OptionsCalculCalcul
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_NbNodes2.Paint, img_NbNodes1.Paint, img_Es.Paint, img_dNodes.Paint, img_PsiLSH.Paint, img_PsiLG.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_NbNodes2.Paint, img_NbNodes1.Paint, img_Es.Paint, img_dNodes.Paint, img_PsiLSH.Paint, img_PsiLG.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_Eta.Paint
 
         '--> Déclarations
 
@@ -192,7 +197,7 @@ Public Class Frm_OptionsCalculCalcul
 
         Select Case sender.name
             Case Me.img_Es.Name
-                strSymbol = "e"
+                strSymbol = "E"
                 strIndice = "s"
                 lEgal = True
                 'AlignH = Enu_AlignementH.Droite
@@ -216,6 +221,11 @@ Public Class Frm_OptionsCalculCalcul
                 strSymbol = "t"
                 strIndice = "0"
                 lEgal = True
+            Case Me.img_Eta.Name
+                strSymbol = "h"
+                strIndice = ""
+                lGrec = True
+                lEgal = True
         End Select
 
         '--> Dessin
@@ -231,7 +241,7 @@ Public Class Frm_OptionsCalculCalcul
 
 
     Private Sub SaisieTxtBox_TextChanged(sender As Object, e As EventArgs) Handles txt_EspNoeuds.TextChanged, txt_Es.TextChanged,
-        txt_NbMiniNTravee.TextChanged, txt_NbMiniNConsole.TextChanged, txt_PsiLSH.TextChanged, txt_PsiLG.TextChanged, txt_t0SHDalle.TextChanged, txt_t0SHEnrob.TextChanged, txt_t0G2Dalle.TextChanged, txt_t0G2Enrob.TextChanged, txt_t0G1Dalle.TextChanged, txt_t0G1Enrob.TextChanged
+        txt_NbMiniNTravee.TextChanged, txt_NbMiniNConsole.TextChanged, txt_PsiLSH.TextChanged, txt_PsiLG.TextChanged, txt_t0SHDalle.TextChanged, txt_t0SHEnrob.TextChanged, txt_t0G2Dalle.TextChanged, txt_t0G2Enrob.TextChanged, txt_t0G1Dalle.TextChanged, txt_t0G1Enrob.TextChanged, txt_eta.TextChanged
 
         If lBuild Then Exit Sub
 
@@ -265,6 +275,8 @@ Public Class Frm_OptionsCalculCalcul
                     LocalOptionsCalcul.TimeT0SH(0) = ValeurUI
                 Case Me.txt_t0SHEnrob.Name
                     LocalOptionsCalcul.TimeT0SH(1) = ValeurUI
+                Case Me.txt_eta.Name
+                    LocalOptionsCalcul.EtaW = ValeurUI
 
             End Select
 
@@ -317,6 +329,11 @@ Public Class Frm_OptionsCalculCalcul
                 kUnit = 1
                 ValMin = 1
                 ValMax = 100
+
+            Case Me.txt_eta.Name
+                ValMin = 1
+                ValMax = 1.2
+                kUnit = 1
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)

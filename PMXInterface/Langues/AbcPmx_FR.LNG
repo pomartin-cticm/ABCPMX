@@ -108,6 +108,7 @@ OTHERPERM				= Autre charges permanentes
 SHRINKAGE				= Retrait
 TPARAMETERS				= Paramètres
 GFORCE					= Accélération de pesanteurs
+ETAW					= Voilement par cisaillement
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs
@@ -791,6 +792,7 @@ ENCASEMENT				= Enrobage
 SELFWEIGHT				= Poids propre
 OTHERPERMANENT			= Autres charges permanentes
 SHRINKAGE				= Retrait
+ETAW					= Voilement par cisaillement
 
 #OPTCALGAMMA
 TITLE					= Coefficients nationaux

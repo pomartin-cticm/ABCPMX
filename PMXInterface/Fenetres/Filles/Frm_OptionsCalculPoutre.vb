@@ -61,6 +61,7 @@ Public Class Frm_OptionsCalculPoutre
                 Me.rdb_NormalDesign.Text = Bloc("NORMALDESIGN")
                 Me.rdb_ElasticDesignVM.Text = Bloc("ELASTICDESIGNVM")
                 Me.rdb_ElasticDesignClasse3.Text = Bloc("ELASTICDESIGNCL3")
+                Me.lbl_eta.Text = Bloc("ETAW")
 
                 Me.lbl_CadreELS.Text = Bloc("TELSOPTIONS")
                 Me.lbl_CombinationVibration.Text = Bloc("COMBINATIONFREQ")
@@ -191,6 +192,8 @@ Public Class Frm_OptionsCalculPoutre
             Me.rdb_NormalDesign.Checked = True
         End If
 
+        Me.txt_eta.Text = GetStringInUnit(MyParam.EtaW, Enu_TypeVariable.SansType, 2, 1, False)
+
         '==> Options ELS
 
         Me.chk_FlechesETA.Checked = MyParam.lFlechesETA
@@ -248,6 +251,7 @@ Public Class Frm_OptionsCalculPoutre
 
         GereTransfertValeur(MyParam.lElasticDesignVM, MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesignVM, lModif)
         GereTransfertValeur(MyParam.lElasticDesignCl3, MyProjet.Poutres(MyProjet.IndEnCours).Param.lElasticDesignCl3, lModif)
+        GereTransfertValeur(MyParam.EtaW, MyProjet.Poutres(MyProjet.IndEnCours).Param.EtaW, lModif)
 
         GereTransfertValeur(MyParam.RH, MyProjet.Poutres(MyProjet.IndEnCours).Param.RH, lModif)
         GereTransfertValeur(MyParam.EpsilonSH, MyProjet.Poutres(MyProjet.IndEnCours).Param.EpsilonSH, lModif)
@@ -304,7 +308,7 @@ Public Class Frm_OptionsCalculPoutre
         MyParam.lCompressionArma = Me.chk_ArmaComprimees.Checked
     End Sub
 
-    Private Sub txt_EpsilonSh_TextChanged(sender As Object, e As EventArgs) Handles txt_EpsilonSh.TextChanged, txt_Es.TextChanged
+    Private Sub txt_EpsilonSh_TextChanged(sender As Object, e As EventArgs) Handles txt_EpsilonSh.TextChanged, txt_Es.TextChanged, txt_eta.TextChanged
         If lBuild Then Exit Sub
 
         Dim Valeur As Decimal
@@ -316,6 +320,8 @@ Public Class Frm_OptionsCalculPoutre
                     MyParam.EpsilonSH = Valeur
                 Case Me.txt_Es.Name
                     MyParam.ArmaYoung = Valeur
+                Case Me.txt_eta.Name
+                    MyParam.EtaW = Valeur
             End Select
         End If
     End Sub
@@ -390,6 +396,12 @@ Public Class Frm_OptionsCalculPoutre
                 ValMin = 0.00005 / kUnit
                 ValMax = 0.005 / kUnit
                 lValMax = True
+
+            Case Me.txt_eta.Name
+                ValMin = 1
+                ValMax = 1.2
+                lValMax = True
+                kUnit = 1
         End Select
 
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
@@ -410,7 +422,7 @@ Public Class Frm_OptionsCalculPoutre
 
 #Region " Dessin des symboles "
 
-    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_AgeT.Paint, img_G.Paint, img_se.Paint
+    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_AgeT.Paint, img_G.Paint, img_se.Paint, img_eta.Paint
         '--> Déclarations
 
         Dim sWI As Single = sender.Width
@@ -461,6 +473,11 @@ Public Class Frm_OptionsCalculPoutre
             Case Me.img_se.Name
                 strSymbol = "s"
                 strIndice = "e"
+
+            Case Me.img_eta.Name
+                strSymbol = "h"
+                strIndice = ""
+                lGrec = True
 
         End Select
 

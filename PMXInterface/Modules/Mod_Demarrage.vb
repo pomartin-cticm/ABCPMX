@@ -225,7 +225,7 @@ Public Module Mod_Demarrage
 
             '--> Coefficient pour le voilement par cisaillement de la poutre acier
 
-            LogicielOptions.EtaW = My.Settings.EtaW
+            'LogicielOptions.EtaW = My.Settings.EtaW
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Mod_Demarrage/InitialiseLogiciel")

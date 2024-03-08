@@ -144,7 +144,7 @@ Public Module Mod_Declarations
 
         Public Gamma As cls_Gamma
 
-        Public EtaW As Decimal                      ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
+        'Public EtaW As Decimal                      ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
 
     End Structure
 
@@ -270,6 +270,7 @@ Public Module Mod_Declarations
         Public TimeT0G1() As Decimal                    ' Temps au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
         Public TimeT0G2() As Decimal                    ' Temps au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
         Public TimeT0SH() As Decimal                    ' Temps au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
+        Public EtaW As Decimal                      ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
     End Structure
 
     Public Sub InitialiseOptionsScope()
@@ -317,6 +318,8 @@ Public Module Mod_Declarations
         OptionsCalcul.TimeT0G1 = {28, 56}
         OptionsCalcul.TimeT0G2 = {28, 56}
         OptionsCalcul.TimeT0SH = {1, 1}
+
+        OptionsCalcul.EtaW = 1.2
 
     End Sub
 

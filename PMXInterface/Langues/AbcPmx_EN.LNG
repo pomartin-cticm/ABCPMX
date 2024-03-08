@@ -109,6 +109,7 @@ OTHERPERM				= Other permanent loads
 SHRINKAGE				= Shrinkage
 TPARAMETERS				= Parameters
 GFORCE					= G-force
+ETAW					= Shear buckling
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
@@ -793,6 +794,7 @@ ENCASEMENT				= Encasement
 SELFWEIGHT				= Self weight
 OTHERPERMANENT			= Other permanent loads
 SHRINKAGE				= Shrinkage
+ETAW					= Shear buckling
 
 #OPTCALGAMMA
 TITLE					= Default national factors

@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Frm_OptionsCalculCalcul
     Inherits System.Windows.Forms.Form
 
     'Form remplace la méthode Dispose pour nettoyer la liste des composants.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class Frm_OptionsCalculCalcul
     'REMARQUE : la procédure suivante est requise par le Concepteur Windows Form
     'Elle peut être modifiée à l'aide du Concepteur Windows Form.  
     'Ne la modifiez pas à l'aide de l'éditeur de code.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Me.pan_Calcul = New System.Windows.Forms.Panel()
@@ -84,6 +84,10 @@ Partial Class Frm_OptionsCalculCalcul
         Me.lbl_Norme = New System.Windows.Forms.Label()
         Me.lbl_Calcul = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.lbl_ShearBuckling = New System.Windows.Forms.Label()
+        Me.img_Eta = New System.Windows.Forms.PictureBox()
+        Me.txt_eta = New System.Windows.Forms.TextBox()
         Me.pan_Calcul.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
@@ -100,6 +104,8 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel1.SuspendLayout()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.Panel4.SuspendLayout()
+        CType(Me.img_Eta, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Calcul
@@ -129,6 +135,7 @@ Partial Class Frm_OptionsCalculCalcul
         '
         'pan_Conteneur
         '
+        Me.pan_Conteneur.Controls.Add(Me.Panel4)
         Me.pan_Conteneur.Controls.Add(Me.Panel3)
         Me.pan_Conteneur.Controls.Add(Me.Panel2)
         Me.pan_Conteneur.Controls.Add(Me.Panel1)
@@ -177,7 +184,7 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel3.Controls.Add(Me.lbl_LoadCases)
         Me.Panel3.Location = New System.Drawing.Point(3, 359)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(732, 254)
+        Me.Panel3.Size = New System.Drawing.Size(732, 181)
         Me.Panel3.TabIndex = 107
         '
         'img_T0SH
@@ -748,6 +755,48 @@ Partial Class Frm_OptionsCalculCalcul
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'Panel4
+        '
+        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel4.Controls.Add(Me.lbl_ShearBuckling)
+        Me.Panel4.Controls.Add(Me.txt_eta)
+        Me.Panel4.Controls.Add(Me.img_Eta)
+        Me.Panel4.Location = New System.Drawing.Point(4, 543)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(732, 91)
+        Me.Panel4.TabIndex = 107
+        '
+        'lbl_ShearBuckling
+        '
+        Me.lbl_ShearBuckling.AutoSize = True
+        Me.lbl_ShearBuckling.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_ShearBuckling.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_ShearBuckling.Location = New System.Drawing.Point(5, 5)
+        Me.lbl_ShearBuckling.Name = "lbl_ShearBuckling"
+        Me.lbl_ShearBuckling.Size = New System.Drawing.Size(92, 13)
+        Me.lbl_ShearBuckling.TabIndex = 105
+        Me.lbl_ShearBuckling.Text = "lbl_ShearBuckling"
+        Me.lbl_ShearBuckling.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'img_Eta
+        '
+        Me.img_Eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Eta.Location = New System.Drawing.Point(564, 30)
+        Me.img_Eta.Name = "img_Eta"
+        Me.img_Eta.Size = New System.Drawing.Size(46, 20)
+        Me.img_Eta.TabIndex = 100
+        Me.img_Eta.TabStop = False
+        '
+        'txt_eta
+        '
+        Me.txt_eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_eta.Location = New System.Drawing.Point(610, 30)
+        Me.txt_eta.Name = "txt_eta"
+        Me.txt_eta.Size = New System.Drawing.Size(58, 20)
+        Me.txt_eta.TabIndex = 99
+        Me.txt_eta.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
         'Frm_OptionsCalculCalcul
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -777,6 +826,9 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel1.PerformLayout()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
+        CType(Me.img_Eta, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -842,4 +894,8 @@ Partial Class Frm_OptionsCalculCalcul
     Friend WithEvents img_T0SH As PictureBox
     Friend WithEvents img_T0G2 As PictureBox
     Friend WithEvents img_T0G1 As PictureBox
+    Friend WithEvents Panel4 As Panel
+    Friend WithEvents lbl_ShearBuckling As Label
+    Friend WithEvents txt_eta As TextBox
+    Friend WithEvents img_Eta As PictureBox
 End Class

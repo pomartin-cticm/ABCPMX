@@ -380,14 +380,14 @@ Module ModNET_LTBN
             Dim XXFN As Double
 
             For nfe = 1 To NF
-                Fe(nfe) = -F(I, nfe)
+                Fe(nfe) = F(I, nfe)
                 XFe(nfe) = XF(I, nfe)
                 ZFe(nfe) = ZF(I, nfe)
             Next nfe
             For nqe = 1 To NQ
-                q1e(nqe) = -q1(I, nqe)
+                q1e(nqe) = q1(I, nqe)
                 Xq1e(nqe) = Xq1(I, nqe)
-                q2e(nqe) = -q2(I, nqe)
+                q2e(nqe) = q2(I, nqe)
                 Xq2e(nqe) = Xq2(I, nqe)
                 Zqe(nqe) = Zq(I, nqe)
             Next nqe

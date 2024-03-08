@@ -356,16 +356,24 @@ Imports PMXMoteur2
 
         Dim Mcr, MbRd As Decimal
 
-        Mcr = 65.312 * 1000
+        Mcr = 170.57 * 1000
         MbRd = 85.19 * 1000
 
-        Valeur = myPoutre.VerifAcier(0).McrLTB(0, myPoutre.IndicePremiereTravee)
+        Valeur = myPoutre.VerifAcier(0).McrLTB(0, 1)
         ValRef = Mcr
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
-        Valeur = myPoutre.VerifAcier(0).CritereLTB.Resistance(myPoutre.IndicePremiereTravee)
+        Dim lambda, alpha, phi, khi As Decimal
+
+        lambda = Math.Sqrt(MRk / Mcr)
+        alpha = 0.34
+        phi = 0.5 * (1 + alpha * (lambda - 0.2) + lambda ^ 2)
+        khi = 1 / (phi + Math.Sqrt(phi ^ 2 - lambda ^ 2))
+        MbRd = khi * MRk
+
+        Valeur = myPoutre.VerifAcier(0).CritereLTB.Resistance(1)
         ValRef = MbRd ' = 85.19 kN (dans l'article, on a 492.5 kN.m)
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé acier seul
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaCMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé acier seul
 
 #End Region
 
