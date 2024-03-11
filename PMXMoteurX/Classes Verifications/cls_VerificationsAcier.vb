@@ -240,8 +240,10 @@ Public Class cls_VerificationsAcier
                 myBeam.PtsSigma.AjusteContraintes(myBeam, SigmaELU)
 
                 '( Contraintes de cisaillement
-                combiELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, Me.Tau.MStatic.Count, myBeam.Nodes.nbNodes,
-                                                    myBeam.ChargesA, TauCas, lRetraitElastique, TauELU)
+                If myBeam.Param.lElasticDesignVM Then
+                    combiELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, Me.Tau.MStatic.Count, myBeam.Nodes.nbNodes,
+                                                        myBeam.ChargesA, TauCas, lRetraitElastique, TauELU)
+                End If
             End If
 
             '# Vérification sous moment fléchissant

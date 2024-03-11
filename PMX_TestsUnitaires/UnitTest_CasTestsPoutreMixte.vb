@@ -283,7 +283,7 @@ Imports PMXMoteur2
         'VERIFICATION DES EFFORTS A L'ELU
 
         Valeur = MEdMax
-        ValRef = 655 * 10 ^ 3 'A NOTER: 655 kN.m est une valeur arrondie de l'article, une valeur plus proche (mais non exacte) serait 654.395 kN.m par exemple
+        ValRef = 654.395 * 10 ^ 3 'A NOTER: 655 kN.m est une valeur arrondie de l'article, une valeur plus proche (mais non exacte) serait 654.395 kN.m par exemple
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         Valeur = VEdMax
@@ -389,7 +389,7 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
 
         Valeur = myPoutre.VerifMixte(0).CritereM.Resistance(iNodeMMax)
-        ValRef = 783.29 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (779.4 kN.m) du fait que le NConnexion n'est pas identique
+        ValRef = 779.4 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (779.4 kN.m) du fait que le NConnexion n'est pas identique
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
         Valeur = myPoutre.VerifMixte(0).CritereM.CritereMax
@@ -463,7 +463,7 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple du profilé 
 
         Valeur = myPoutre.VerifMixte(0).CritereMV.Resistance(iNodeMMaxConstruction)
-        ValRef = 783.29 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (834.6 kN.m) du fait que le NConnexion n'est pas identique
+        ValRef = 779.4 * 1000 'GUD: valeur recalculée car celle de l'article ne correspond pas tout a fait (834.6 kN.m) du fait que le NConnexion n'est pas identique
         Assert.IsTrue(IsEqual(Valeur, ValRef, 2 * DeltaVMAx)) 'Vérification du calcul de la résistance à la flexion simple de la section mixte 
 
         Valeur = myPoutre.VerifMixte(0).CritereMV.CritereMax
@@ -1003,7 +1003,7 @@ Imports PMXMoteur2
 
         myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True) 'On relance les vérifications de la poutre acier avec les nouveaux paramètres
 
-        Mcr = 3237 * 1000
+        Mcr = 3331 * 1000 'valeur recalculée avec LTBeamN et avec prise en compte de la charge locale à mi-travée
         MbRd = 437 * 1000
 
         Valeur = myPoutre.VerifAcier(0).McrLTB(0, myPoutre.IndicePremiereTravee)

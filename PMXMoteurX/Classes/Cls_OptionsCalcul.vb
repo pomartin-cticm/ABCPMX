@@ -79,9 +79,9 @@ Public Class cls_OptionsCalcul
 
         '--> Paramètres de discrétisation
 
-        Me.dMaxNodes = 0.5
-        Me.nbMinNodesTravee = 10
-        Me.nbMinNodesConsole = 5
+        Me.dMaxNodes = 0.1
+        Me.nbMinNodesTravee = 100
+        Me.nbMinNodesConsole = 50
 
         Me.lLargeurEfficaceSimplifiee = False
         Me.lCompressionArma = False
