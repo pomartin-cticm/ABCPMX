@@ -78,6 +78,8 @@ Public Class Frm_Chargement
 
 
     Dim MyParAff As Struc_Affichage
+
+    Const FORCECDEF As Decimal = 1000           ' Force concentrée par défaut
 #End Region
 
 #Region "===OUVERTURE==="
@@ -804,13 +806,26 @@ Public Class Frm_Chargement
     Private Sub btn_AjouterSupprimerPonctuel_Click(sender As Object, e As EventArgs) Handles btn_AjouterPonctuelle.Click, btn_SupprimerPonctuelle.Click
         If lBuild Then Exit Sub
 
+        Dim nbF As Integer = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Count
+        Dim xPos, xPrec As Decimal
+        Const kPOS As Decimal = 1 / 10
+
         Select Case sender.name
             Case btn_AjouterPonctuelle.Name
-                MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Add(New cls_Force(MyPoutreLoc.LongueurTravee(traveeEnCours) / 2, 10 ^ 3, MyPoutreLoc.xPositionAppui(True, traveeEnCours))) '1kN
+                If nbF = 0 Then
+                    xPos = MyPoutreLoc.LongueurTravee(traveeEnCours) * kPOS
+                Else
+                    xPrec = MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours)(nbF - 1).xPosT
+                    xPos = xPrec + (MyPoutreLoc.LongueurTravee(traveeEnCours) - xPrec) / (1 / kPOS - CDec(nbF))
+                End If
+                'MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Add(New cls_Force(MyPoutreLoc.LongueurTravee(traveeEnCours) / 2, 10 ^ 3, MyPoutreLoc.xPositionAppui(True, traveeEnCours))) '1kN
+                MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).Add(New cls_Force(xPos, FORCECDEF, MyPoutreLoc.xPositionAppui(True, traveeEnCours))) '1kN
                 NbChargePonctuelle = Math.Min(NbChargePonctuelle + 1, NbChargePonctuelleMAX)
+                iChargePonctuelleSelect = nbF
             Case btn_SupprimerPonctuelle.Name
                 MyPoutreLoc.ChargesU(chargeEnCours).Forces(traveeEnCours).RemoveAt(NbChargePonctuelle - 1)
                 NbChargePonctuelle = Math.Max(NbChargePonctuelle - 1, 0)
+                iChargePonctuelleSelect = -1
         End Select
 
         MAJIAffichageButtonsPonctuels()

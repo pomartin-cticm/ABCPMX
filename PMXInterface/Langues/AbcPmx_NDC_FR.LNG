@@ -413,9 +413,10 @@ M_CRITERIA				= Résistance à la flexion
 V_CRITERIA				= Résistance à l'effort tranchant
 VB_CRITERIA				= Résistance au voilement par cisaillement
 MV_CRITERIA				= Résistance à l'interaction MV
+MVB_CRITERIA			= Résistance à l'interaction MVb
 LTB_CRITERIA			= Résistance au déversement
 REINF_CRITERIA			= Armatures longitudinales
-LOWPLATE_SLIMFLOOR_CRITERIA	= Résistance de la semelle/plaque inférieure
+LOWPLATE_SLIMFLOOR_CRIT	= Résistance de la semelle/plaque inférieure
 WELD_CRITERIA			= Résistance des soudures
 ULS_COMBI_CHECK			= Combinaisons ELU vérifiées
 ULS_COMBIS				= Combinaisons ELU
@@ -438,6 +439,7 @@ SECTIONSR				= Résistance des sections
 BEAMR					= Résistance de la poutre
 ADDP_SHEARB				= Voilement par cisaillement
 ADDMELRDPMX				= Moments résistants élastiques
+MVBINTERACTION			= Interaction MV d'après l'EN 1993-1-5 § 7.1
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Etat limite de service

@@ -110,26 +110,27 @@
         Dim xMZero(,) As Decimal = Nothing
         Dim lTraveeMomNeg() As Boolean = Nothing
 
-        Dim SigmaP(,,,) As Decimal = Nothing        ' Contraintes normales dans l'hypothèse d'un moment positif
-        Dim SigmaM(,,,) As Decimal = Nothing        ' Contraintes normales dans l'hypothèse d'un moment négatif
-        Dim SigmaELU(,,) As Decimal = Nothing       ' Contraintes normales sous 1 combinaison ELU
+        Dim SigmaP(,,,) As Decimal = Nothing            ' Contraintes normales dans l'hypothèse d'un moment positif
+        Dim SigmaM(,,,) As Decimal = Nothing            ' Contraintes normales dans l'hypothèse d'un moment négatif
+        Dim SigmaELU(,,) As Decimal = Nothing           ' Contraintes normales sous 1 combinaison ELU
         Dim TauELU(,,) As Decimal = Nothing             ' Contraintes de cisaillement sous 1 combinaison ELU
         Dim TauCas(,,,) As Decimal = Nothing            ' Contraintes de cisaillement pour les cas de charges
         Dim lRetraitElastique As Boolean = True
 
-        Dim lClasse3, lClasse4 As Boolean           ' Indique si présence d'au moins une section de classe 3 ou de classe 4
+        Dim lClasse3, lClasse4 As Boolean               ' Indique si présence d'au moins une section de classe 3 ou de classe 4
         Dim DeltaRd() As List(Of Decimal) = Nothing
 
         Dim zANP(,) As Decimal = Nothing                ' Position ANP, tenant compte de MEd et du degré de connexion
-        Dim zANPMV(,) As Decimal = Nothing                ' Position ANP, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
-        Dim MplRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de MEd et du degré de connexion
-        Dim MVRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
+        Dim zANPMV(,) As Decimal = Nothing              ' Position ANP, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
+        Dim MplRd(,) As Decimal = Nothing               ' Moments plastiques, tenant compte de MEd et du degré de connexion
+        Dim MVRd(,) As Decimal = Nothing                ' Moments plastiques, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
+        Dim MfRd(,) As Decimal = Nothing                ' Moments plastiques, des semelles seules
 
         Dim EpsilonW As Decimal
         Dim lEnrob As Boolean
         Dim lCont As Boolean
-        Dim lCombiClass3 As Boolean                 ' Indique s'il existe au moins une combinaison avec classe 3
-        Dim lCombiClass4 As Boolean                 ' Indique s'il existe au moins une combinaison avec classe 4
+        Dim lCombiClass3 As Boolean                     ' Indique s'il existe au moins une combinaison avec classe 3
+        Dim lCombiClass4 As Boolean                     ' Indique s'il existe au moins une combinaison avec classe 4
         Dim lFirst As Boolean = True
 
         '--> Initialisations
@@ -258,24 +259,37 @@
 
                 Me.RunCritereTranchants(myBeam, iCombi, VEd, VplRd)
 
-                '# Vérification au voilement par cisaillement
+                '# Vérification du voilement par cisaillement
 
-                'If myBeam.Section.IsVoilementParCisaillement(myBeam.Param.EtaW) Then Me.RunCritereVoilementCisaillement(myBeam, iCombi, VEd, VbRd)
-                If Me.ShearB.lCheckRequired Then Me.RunCritereVoilementCisaillement(myBeam, iCombi, VEd, VbRd)
+                If Me.ShearB.lCheckRequired Then _
+                    Me.RunCritereVoilementCisaillement(myBeam, iCombi, VEd, VbRd)
 
-                '# Calcul du critère d'intéraction rhoV
+                '# En fonction de l'élancement de l'âme (à voir ce que l'on fait pour le cas du calcul élastique VM)
 
-                Me.CalculRhoV(iCombi, myBeam)
+                If Me.ShearB.lCheckRequired Or Not (lCalculPlastic) Then
 
-                '# Calcul des propriétés plastiques le long de la barre,
-                ' avec prise en compte de la connection,
-                ' sans prise en compte de la réduction induit par l'effort tranchant 
+                    '# Calcul des moments plastiques  MfRd
+                    Me.MaillageProprietesMfRd(myBeam, MEd, DeltaRd, Beff, MfRd)
 
-                Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANPMV, MVRd, Me.RhoV)
+                    '# Interaction MV pour le voilement par cisaillement
+                    Me.RunCritereInteractionMVoilementCisaillement(myBeam, iCombi, MEd, VEd, VbRd, MplRd, MfRd)
 
-                '# Vérification sous interaction MV
+                Else
 
-                Me.RunCriteresInteractionMV(myBeam, iCombi, MEd, MVRd)
+                    '# Calcul du critère d'interaction rhoV
+
+                    Me.CalculRhoV(iCombi, myBeam)
+
+                    '# Calcul des propriétés plastiques le long de la barre,
+                    ' avec prise en compte de la connection,
+                    ' sans prise en compte de la réduction induit par l'effort tranchant 
+
+                    Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANPMV, MVRd, Me.RhoV)
+
+                    '# Vérification sous interaction MV
+
+                    Me.RunCriteresInteractionMV(myBeam, iCombi, MEd, MVRd)
+                End If
 
             Next
 
@@ -301,10 +315,10 @@
         '----------------------------------------------------------------------------------------------------------
         '   02/11/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
-        '   Calcul des propriétés plastique le long de la barre en fonction de 
+        '   Calcul des propriétés plastiques le long de la barre en fonction de 
         '   du moment sollicitant et du degré de connection
         '----------------------------------------------------------------------------------------------------------
-        '   myBeam        [E] :   Poutre traitée
+        '   myBeam          [E] :   Poutre traitée
         '   MEd             [E] :   Diagramme de moment aux ELU
         '   DeltaRd         [E] :   Cumul des résistance des PRd entre les sections et les points de moment nul
         '   bEff            [E] :   Largeur efficace de dalle
@@ -344,7 +358,6 @@
 
                 If IsEqual(MEd(iNode, kDeb), 0) Then Signe = 1 Else Signe = Math.Sign(MEd(iNode, kDeb))
 
-
                 If rhoV Is Nothing Then
                     rhoVLoc = 0
                 Else
@@ -359,6 +372,70 @@
                 If kfin > kDeb Then
                     pzANP(iNode, kfin) = pzANP(iNode, kDeb)
                     pMPlRd(iNode, kfin) = pMPlRd(iNode, kDeb)
+                End If
+            Next
+
+        Next
+
+    End Sub
+
+    Private Sub MaillageProprietesMfRd(MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal, ByRef pMfRd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   02/11/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul des propriétés plastiques MfRd le long de la barre en fonction de 
+        '   du moment sollicitant et du degré de connection
+        '   MfRd : Section ne comprennant que les semelles, ce qui revient à calculer avec RhoV=1
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam          [E] :   Poutre traitée
+        '   MEd             [E] :   Diagramme de moment aux ELU
+        '   DeltaRd         [E] :   Cumul des résistance des PRd entre les sections et les points de moment nul
+        '   bEff            [E] :   Largeur efficace de dalle
+        '   pMfRd           [S] :   moments plastiques des semelles seules (en fonction du signe de MEd)
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim iTravee As Integer
+        Dim iTravDeb, iTravFin As Integer
+        Dim iNode As Integer
+        Dim iNodeDeb, iNodeFin As Integer
+        Dim kDeb, kfin As Integer
+        Dim rhoVLoc As Decimal
+        Dim Signe As Decimal
+
+        Dim zANP As Decimal
+
+        '--> Initialisation
+
+        iTravDeb = MyPoutre.IndicePremiereTravee
+        iTravFin = MyPoutre.IndiceDerniereTravee
+
+        ReDim pMfRd(NbNodes - 1, 1)
+
+        '--> Traitement
+
+        For iTravee = iTravDeb To iTravFin
+
+            iNodeDeb = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iNodeDeb To iNodeFin
+                If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
+                If iNode = iNodeFin Then kfin = 0 Else kfin = 1
+
+                If IsEqual(MEd(iNode, kDeb), 0) Then Signe = 1 Else Signe = Math.Sign(MEd(iNode, kDeb))
+
+                '== On supprime la résistance de l'âme
+                rhoVLoc = 1
+                '==
+
+                MyPoutre.Section.ProprietesPlastiquesMixteMyyEta(Signe, True, MyPoutre.Param.Gamma, rhoVLoc,
+                                                                 bEff(iNode), DeltaRd(iTravee)(iNode - iNodeDeb), MyPoutre.Dalle, zANP, pMfRd(iNode, kDeb))
+
+                If kfin > kDeb Then
+                    pMfRd(iNode, kfin) = pMfRd(iNode, kDeb)
                 End If
             Next
 
@@ -567,6 +644,7 @@
         Dim iPro0 As Integer = myBeam.PtsSigma.iProfile(0)
         Dim iDal0 As Integer = myBeam.PtsSigma.iBetonDalle(0)
         Dim iEnrob0 As Integer = myBeam.PtsSigma.iBetonEnrob(0)
+        Dim iArmaE0 As Integer = myBeam.PtsSigma.iArmaEnrob(0)
         Dim iArma0 As Integer = myBeam.PtsSigma.iArmaDalle(0)
 
         Dim lEnrob As Boolean = myBeam.lEnrobage
@@ -605,14 +683,14 @@
         '# Contraintes dans le béton d'enrobage
 
         If lEnrob And (iEnrob0 > -1) Then
-            RunCritereFlexionVonM(myBeam, iCombi, iDal0 + 0, SigmaELU, Fecd, Me.CritereSigmaC, -Me.ConvSigneT)
-            RunCritereFlexionVonM(myBeam, iCombi, iDal0 + 1, SigmaELU, Fecd, Me.CritereSigmaC, -Me.ConvSigneT)
+            RunCritereFlexionVonM(myBeam, iCombi, iDal0 + 0, SigmaELU, Fecd, Me.CritereSigmaE, -Me.ConvSigneT)
+            RunCritereFlexionVonM(myBeam, iCombi, iDal0 + 1, SigmaELU, Fecd, Me.CritereSigmaE, -Me.ConvSigneT)
         End If
 
         '# Contraintes dans les armatures d'enrobage
 
-        If lEnrob Then
-
+        If lEnrob And (iArmaE0 > -1) Then
+            MsgBox("Ajouter contraintes enrobage / RunCritereFlexionResistanceElastiqueVM")
         End If
 
         '# Contraintes dans le béton de la dalle
@@ -632,6 +710,84 @@
             Next
 
         End If
+
+        '# Enveloppe de résistance en flexion
+
+        EnveloppeResistanceFlexionElastique(myBeam, iCombi)
+
+    End Sub
+
+    Private Sub EnveloppeResistanceFlexionElastique(myBeam As cls_Poutre, iCombi As Integer)
+        '----------------------------------------------------------------------------------------------------------
+        '   13/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Récupère le critère VM dimensionnant en flexion
+        '----------------------------------------------------------------------------------------------------------
+        '----------------------------------------------------------------------------------------------------------
+
+        '--< Déclarations
+
+        Dim iTravDeb As Integer, iTravFin As Integer
+
+        '--< Initialisations
+
+        iTravDeb = myBeam.IndicePremiereTravee
+        iTravFin = myBeam.IndiceDerniereTravee
+
+        '--< Contraintes dans le profilé acier
+
+        Me.CritereM.CritereMax = Me.CritereSigmaA.CritereMax
+        Me.CritereM.iCombiM = Me.CritereSigmaA.iCombiM
+        Me.CritereM.iNodeM = Me.CritereSigmaA.iNodeM
+
+        For i As Integer = iTravDeb To iTravFin
+            Me.CritereM.CritereCombiT(iCombi, i) = Me.CritereSigmaA.CritereCombiT(iCombi, i)
+            Me.CritereM.CritereCombiN(iCombi, i) = Me.CritereSigmaA.CritereCombiN(iCombi, i)
+        Next
+
+        '--< Contraintes dans le béton
+
+        EnveloppeCriterFlexionVM(Me.CritereSigmaC, iCombi, iTravDeb, iTravFin)
+
+        '--< Contraintes dans les armatures de la dalle
+
+        If myBeam.lMultiSpan And (myBeam.PtsSigma.iArmaDalle(1) > -1) Then
+            EnveloppeCriterFlexionVM(Me.CritereSigmaArmaC, iCombi, iTravDeb, iTravFin)
+        End If
+
+        '--< Contraintes béton et armatures d'enrobage
+
+        If myBeam.lEnrobage Then
+            If (myBeam.PtsSigma.iBetonEnrob(0) > -1) Then
+                EnveloppeCriterFlexionVM(Me.CritereSigmaE, iCombi, iTravDeb, iTravFin)
+            End If
+            If (myBeam.PtsSigma.iArmaEnrob(0) > -1) Then
+                EnveloppeCriterFlexionVM(Me.CritereSigmaArmaE, iCombi, iTravDeb, iTravFin)
+            End If
+        End If
+    End Sub
+
+    Private Sub EnveloppeCriterFlexionVM(myCritere As cls_Critere, iCombi As Integer, iTravDeb As Integer, iTravFin As Integer)
+        '----------------------------------------------------------------------------------------------------------
+        '   13/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Compare un critere de contrainte élastique avec l'enveloppe de résistance en flexion
+        '----------------------------------------------------------------------------------------------------------
+        '   myCritere   [E] :   Critère à comparer
+        '----------------------------------------------------------------------------------------------------------
+
+        If IsGreater(myCritere.CritereMax, Me.CritereM.CritereMax) Then
+            Me.CritereM.CritereMax = myCritere.CritereMax
+            Me.CritereM.iCombiM = myCritere.iCombiM
+            Me.CritereM.iNodeM = myCritere.iNodeM
+        End If
+
+        For i As Integer = iTravDeb To iTravFin
+            If IsGreater(myCritere.CritereCombiT(iCombi, i), Me.CritereM.CritereCombiT(iCombi, i)) Then
+                Me.CritereM.CritereCombiT(iCombi, i) = myCritere.CritereCombiT(iCombi, i)
+                Me.CritereM.CritereCombiN(iCombi, i) = myCritere.CritereCombiN(iCombi, i)
+            End If
+        Next
 
     End Sub
 
@@ -786,7 +942,6 @@
             Next
         Next
 
-
     End Sub
 
     Private Sub RunCritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
@@ -835,9 +990,9 @@
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance à l'effort tranchant 
+        '   Vérification aux ELU de la résistance à au voilement par cisaillement
         '----------------------------------------------------------------------------------------------------------
-        '   myBeam[E] :   Poutre traitée
+        '   myBeam  [E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   VEd     [E] :   Table des efforts tranchants le long de la barre
         '   VRd     [E] :   Table des résistances au voilement par cisaillement le long de la barre
@@ -867,6 +1022,66 @@
 
                 For k = iDebK To iFinK
                     Me.CritereVb.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VbRd)
+                Next
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RunCritereInteractionMVoilementCisaillement(myBeam As cls_Poutre, iCombi As Integer, MEd(,) As Decimal, VEd(,) As Decimal,
+                                                            VbRd As Decimal, MplRd(,) As Decimal, MfRd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   13/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'effort tranchant 
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   MEd         [E] :   Table des efforts tranchants le long de la barre
+        '   VEd         [E] :   Table des moments fléchissants le long de la barre
+        '   VRd         [E] :   Table des résistances au voilement par cisaillement le long de la barre
+        '   MplRd       [E] :   Table des moments résistants plastiques le long de la barre
+        '   MfRd        [E] :   Table des moments résistants plastiques des semelles seules le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+        Dim GammaMVb As Decimal
+
+        '--> Déclaration
+
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
+                For k = iDebK To iFinK
+
+                    If IsGreater(Math.Abs(MEd(iNode, k)), MfRd(iNode, k)) Then
+                        If IsGreater(Math.Abs(VEd(iNode, k)), VbRd) Then
+                            GammaMVb = (Math.Abs(MEd(iNode, k)) / MplRd(iNode, k)) _
+                                     + (1 - MfRd(iNode, k) / MplRd(iNode, k)) * (2 * Math.Abs(VEd(iNode, k)) / VbRd - 1) ^ 2
+                        Else
+                            GammaMVb = Math.Abs(MEd(iNode, k)) / MplRd(iNode, k)
+                        End If
+                    Else
+                        GammaMVb = Math.Abs(MEd(iNode, k)) / MplRd(iNode, k)
+                    End If
+                    Me.CritereMV.EnregistreCritere(iNode, iCombi, iTravee, GammaMVb, 1)
+
+
                 Next
             Next
         Next
@@ -978,7 +1193,6 @@
         '----------------------------------------------------------------------------------------------------------
         '   iTravFin    [E] :   Indice de la dernière travée
         '----------------------------------------------------------------------------------------------------------
-
 
         ReDim DegConnex(iTravFin, 1)
         ReDim DegConnexMin(iTravFin)

@@ -17,6 +17,7 @@ Public Class cls_VerificationsAcier
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
     Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
+    Public CritereMVb As cls_Critere                ' Résistance à l'interacion M+voilement par cisaillement
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
     Public CritereSigmaE As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton d'enrobage
     Public CritereSigmaArmaE As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures d'enrobage
@@ -60,6 +61,7 @@ Public Class cls_VerificationsAcier
 
         Me.CritereM = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Me.CritereMV = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+        Me.CritereMVb = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Me.CritereV = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Me.CritereVb = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
 
@@ -121,7 +123,7 @@ Public Class cls_VerificationsAcier
         Dim nbCombiELU As Integer
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
-        Dim MplRd, zANP As Decimal
+        Dim MplRd, zANP, MfRd As Decimal
         Dim zANPMV(,) As Decimal = Nothing                ' Position ANP, tenant compte de l'interaction avec l'effort tranchant 
         Dim MVRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de l'interaction avec l'effort tranchant 
         Dim MelRd, zANE As Decimal
@@ -176,9 +178,13 @@ Public Class cls_VerificationsAcier
 
         If Me.ShearB.lCheckRequired Then
             VRd = Math.Min(VplRd, VbRd)
+            '# Calcul de MfRd 
+
+            myBeam.ProprieteVerifAcierMfRd(True, MfRd)
         Else
             VRd = VplRd
         End If
+
 
         '# Propriétés
 
@@ -266,23 +272,36 @@ Public Class cls_VerificationsAcier
 
                 '# Vérification sous effort tranchant
 
-                Me.RunCritereTranchants(myBeam, iCombi, VEd, VRd)
+                Me.RunCritereTranchants(myBeam, iCombi, VEd, VplRd)
 
                 '# Vérification au voilement par cisaillement
 
-                If myBeam.Section.IsVoilementParCisaillement(myBeam.Param.EtaW) Then Me.RunCritereVoilementCisaillement(myBeam, iCombi, VEd, VbRd)
+                If Me.ShearB.lCheckRequired Then Me.RunCritereVoilementCisaillement(myBeam, iCombi, VEd, VbRd)
 
-                '# Calcul du critère d'intéraction rhoV
+                '# Traitement de l'interaction MV en fonction de la sensibilité au voilement par cisaillement
 
-                Me.CalculRhoV(iCombi, myBeam)
+                If Me.ShearB.lCheckRequired Then
 
-                '# Propriétés avec prise en compte de l'interaction MV
+                    '# Vérification sous interaction MVb
 
-                myBeam.ProprietesVerifMVAcier(iCombi, myBeam, True, MVRd, zANPMV, Me.RhoV)
+                    Me.RunCriteresInteractionMVb(myBeam, iCombi, VbRd, MEd, VEd, mfrd, MplRd)
 
-                '# Vérification sous interaction MV
+                Else
+                    '# Calcul du critère d'intéraction rhoV
 
-                Me.RunCriteresInteractionMV(myBeam, iCombi, MEd, MVRd)
+                    Me.CalculRhoV(iCombi, myBeam)
+
+                    '# Propriétés avec prise en compte de l'interaction MV
+
+                    myBeam.ProprietesVerifMVAcier(iCombi, myBeam, True, MVRd, zANPMV, Me.RhoV)
+
+                    '# Vérification sous interaction MV
+
+                    Me.RunCriteresInteractionMV(myBeam, iCombi, MEd, MVRd)
+
+                End If
+
+
             End If
 
             '# Vérification au déversement
@@ -1119,6 +1138,71 @@ Public Class cls_VerificationsAcier
 
 
     End Sub
+
+    Private Sub RunCriteresInteractionMVb(MyPoutre As cls_Poutre, iCombi As Integer, VbRd As Decimal,
+                                          MEd(,) As Decimal, VEd(,) As Decimal, MfRd As Decimal, MplRd As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   23/01/2023 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'interaction MVb
+        '   selon EN 1993-1-5 § 7.1
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   MEd         [E] :   Table des moments fléchissants le long de la barre
+        '   VEd         [E] :   Table des efforts tranchants le long de la barre
+        '   VbRd        [E] :   Effort tranchant résistant - voilement par cisaillement 
+        '   MfRd        [E] :   Moments résistant plastique, en ignorant l'âme
+        '   MplRd       [E] :   Moments plastique 
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+        Dim GammaMVb As Decimal
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+                For k = iDebK To iFinK
+
+
+                    If IsGreater(Math.Abs(VEd(iNode, k)), 0.5 * VbRd) _
+                    And IsGreater(Math.Abs(MEd(iNode, k)), MfRd) Then
+
+                        GammaMVb = (Math.Abs(MEd(iNode, k)) / MplRd) _
+                                 + (1 - MfRd / MplRd) * (2 * Math.Abs(VEd(iNode, k)) / VbRd - 1) ^ 2
+
+                    Else
+                        GammaMVb = 0
+                    End If
+
+                    Me.CritereMVb.EnregistreCritere(iNode, iCombi, iTravee, GammaMVb, 1)
+
+
+                Next
+            Next
+        Next
+
+
+    End Sub
+
 
 #End Region
 

@@ -1015,6 +1015,8 @@ Public Class Frm_PMX
                 If i = 9 Then Exit For '--> on se limite au 10 derniers fichiers
             Next
         End If
+
+        My.Settings.Save()
     End Sub
 
     Private Sub EnregistrerProjetEnCours()

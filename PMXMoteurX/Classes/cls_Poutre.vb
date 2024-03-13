@@ -2970,11 +2970,33 @@ Public Class cls_Poutre
 
     End Sub
 
+    Public Sub ProprieteVerifAcierMfRd(lValRd As Boolean, ByRef MfRd As Decimal)
+        '------------------------------------------------------------------------------
+        '   20/10/23 :  Création - POM
+        '------------------------------------------------------------------------------
+        '   Calcul de la propriété plastiques MfRd de la section d'une poutre acier
+        '   Pour les vérifications
+        '   MfRd : on néglige la contribution de l'âme
+        '------------------------------------------------------------------------------
+        '   lValRd      [E] :   Indique si valeurs de calcul
+        '   MfRd        [S] :   Moment plastique MfRd
+        '------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim zANP As Decimal
+
+        '--( Calcul
+
+        Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, 1, zANP, MfRd)
+
+    End Sub
+
     Public Sub ProprietesVerifAcier(lValRd As Boolean, ByRef MplRd As Decimal, ByRef zANP As Decimal, ByRef MelRd As Decimal, ByRef zANE As Decimal)
         '------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '------------------------------------------------------------------------------
-        '   Calcul des propriétés élastiques et élastiques des sections le long d'une poutre acier,
+        '   Calcul des propriétés élastiques et plastiques des sections le long d'une poutre acier,
         '   Pour les vérifications
         '   Pour une poutre acier, les propriétés de section sont constantes le long d'une poutre
         '------------------------------------------------------------------------------

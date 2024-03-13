@@ -436,7 +436,7 @@ Partial Class Frm_Chargement
         '
         'btn_SupprimerPonctuelle
         '
-        Me.btn_SupprimerPonctuelle.Location = New System.Drawing.Point(134, 211)
+        Me.btn_SupprimerPonctuelle.Location = New System.Drawing.Point(48, 211)
         Me.btn_SupprimerPonctuelle.Name = "btn_SupprimerPonctuelle"
         Me.btn_SupprimerPonctuelle.Size = New System.Drawing.Size(75, 23)
         Me.btn_SupprimerPonctuelle.TabIndex = 85
@@ -445,7 +445,7 @@ Partial Class Frm_Chargement
         '
         'btn_AjouterPonctuelle
         '
-        Me.btn_AjouterPonctuelle.Location = New System.Drawing.Point(48, 211)
+        Me.btn_AjouterPonctuelle.Location = New System.Drawing.Point(134, 211)
         Me.btn_AjouterPonctuelle.Name = "btn_AjouterPonctuelle"
         Me.btn_AjouterPonctuelle.Size = New System.Drawing.Size(75, 23)
         Me.btn_AjouterPonctuelle.TabIndex = 84
@@ -455,7 +455,7 @@ Partial Class Frm_Chargement
         'txt_F_Ponctuelle_8
         '
         Me.txt_F_Ponctuelle_8.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_F_Ponctuelle_8.Location = New System.Drawing.Point(143, 182)
+        Me.txt_F_Ponctuelle_8.Location = New System.Drawing.Point(143, 178)
         Me.txt_F_Ponctuelle_8.Name = "txt_F_Ponctuelle_8"
         Me.txt_F_Ponctuelle_8.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_8.TabIndex = 81
@@ -465,7 +465,7 @@ Partial Class Frm_Chargement
         'txt_F_Ponctuelle_4
         '
         Me.txt_F_Ponctuelle_4.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_F_Ponctuelle_4.Location = New System.Drawing.Point(143, 95)
+        Me.txt_F_Ponctuelle_4.Location = New System.Drawing.Point(143, 94)
         Me.txt_F_Ponctuelle_4.Name = "txt_F_Ponctuelle_4"
         Me.txt_F_Ponctuelle_4.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_4.TabIndex = 81
@@ -475,7 +475,7 @@ Partial Class Frm_Chargement
         'txt_F_Ponctuelle_7
         '
         Me.txt_F_Ponctuelle_7.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_F_Ponctuelle_7.Location = New System.Drawing.Point(143, 160)
+        Me.txt_F_Ponctuelle_7.Location = New System.Drawing.Point(143, 157)
         Me.txt_F_Ponctuelle_7.Name = "txt_F_Ponctuelle_7"
         Me.txt_F_Ponctuelle_7.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_7.TabIndex = 81
@@ -495,7 +495,7 @@ Partial Class Frm_Chargement
         'txt_F_Ponctuelle_6
         '
         Me.txt_F_Ponctuelle_6.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_F_Ponctuelle_6.Location = New System.Drawing.Point(143, 139)
+        Me.txt_F_Ponctuelle_6.Location = New System.Drawing.Point(143, 136)
         Me.txt_F_Ponctuelle_6.Name = "txt_F_Ponctuelle_6"
         Me.txt_F_Ponctuelle_6.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_6.TabIndex = 81
@@ -515,7 +515,7 @@ Partial Class Frm_Chargement
         'txt_x_Ponctuelle_8
         '
         Me.txt_x_Ponctuelle_8.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_x_Ponctuelle_8.Location = New System.Drawing.Point(76, 182)
+        Me.txt_x_Ponctuelle_8.Location = New System.Drawing.Point(76, 178)
         Me.txt_x_Ponctuelle_8.Name = "txt_x_Ponctuelle_8"
         Me.txt_x_Ponctuelle_8.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_8.TabIndex = 80
@@ -525,7 +525,7 @@ Partial Class Frm_Chargement
         'txt_x_Ponctuelle_4
         '
         Me.txt_x_Ponctuelle_4.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_x_Ponctuelle_4.Location = New System.Drawing.Point(76, 95)
+        Me.txt_x_Ponctuelle_4.Location = New System.Drawing.Point(76, 94)
         Me.txt_x_Ponctuelle_4.Name = "txt_x_Ponctuelle_4"
         Me.txt_x_Ponctuelle_4.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_4.TabIndex = 80
@@ -535,7 +535,7 @@ Partial Class Frm_Chargement
         'txt_x_Ponctuelle_7
         '
         Me.txt_x_Ponctuelle_7.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_x_Ponctuelle_7.Location = New System.Drawing.Point(76, 160)
+        Me.txt_x_Ponctuelle_7.Location = New System.Drawing.Point(76, 157)
         Me.txt_x_Ponctuelle_7.Name = "txt_x_Ponctuelle_7"
         Me.txt_x_Ponctuelle_7.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_7.TabIndex = 80
@@ -555,7 +555,7 @@ Partial Class Frm_Chargement
         'txt_x_Ponctuelle_6
         '
         Me.txt_x_Ponctuelle_6.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_x_Ponctuelle_6.Location = New System.Drawing.Point(76, 139)
+        Me.txt_x_Ponctuelle_6.Location = New System.Drawing.Point(76, 136)
         Me.txt_x_Ponctuelle_6.Name = "txt_x_Ponctuelle_6"
         Me.txt_x_Ponctuelle_6.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_6.TabIndex = 80
@@ -575,7 +575,7 @@ Partial Class Frm_Chargement
         'txt_Indice_Ponctuelle_8
         '
         Me.txt_Indice_Ponctuelle_8.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_Indice_Ponctuelle_8.Location = New System.Drawing.Point(48, 182)
+        Me.txt_Indice_Ponctuelle_8.Location = New System.Drawing.Point(48, 178)
         Me.txt_Indice_Ponctuelle_8.Name = "txt_Indice_Ponctuelle_8"
         Me.txt_Indice_Ponctuelle_8.ReadOnly = True
         Me.txt_Indice_Ponctuelle_8.Size = New System.Drawing.Size(27, 20)
@@ -586,7 +586,7 @@ Partial Class Frm_Chargement
         'txt_Indice_Ponctuelle_4
         '
         Me.txt_Indice_Ponctuelle_4.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_Indice_Ponctuelle_4.Location = New System.Drawing.Point(48, 95)
+        Me.txt_Indice_Ponctuelle_4.Location = New System.Drawing.Point(48, 94)
         Me.txt_Indice_Ponctuelle_4.Name = "txt_Indice_Ponctuelle_4"
         Me.txt_Indice_Ponctuelle_4.ReadOnly = True
         Me.txt_Indice_Ponctuelle_4.Size = New System.Drawing.Size(27, 20)
@@ -597,7 +597,7 @@ Partial Class Frm_Chargement
         'txt_F_Ponctuelle_5
         '
         Me.txt_F_Ponctuelle_5.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_F_Ponctuelle_5.Location = New System.Drawing.Point(143, 118)
+        Me.txt_F_Ponctuelle_5.Location = New System.Drawing.Point(143, 115)
         Me.txt_F_Ponctuelle_5.Name = "txt_F_Ponctuelle_5"
         Me.txt_F_Ponctuelle_5.Size = New System.Drawing.Size(66, 20)
         Me.txt_F_Ponctuelle_5.TabIndex = 81
@@ -617,7 +617,7 @@ Partial Class Frm_Chargement
         'txt_Indice_Ponctuelle_7
         '
         Me.txt_Indice_Ponctuelle_7.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_Indice_Ponctuelle_7.Location = New System.Drawing.Point(48, 160)
+        Me.txt_Indice_Ponctuelle_7.Location = New System.Drawing.Point(48, 157)
         Me.txt_Indice_Ponctuelle_7.Name = "txt_Indice_Ponctuelle_7"
         Me.txt_Indice_Ponctuelle_7.ReadOnly = True
         Me.txt_Indice_Ponctuelle_7.Size = New System.Drawing.Size(27, 20)
@@ -639,7 +639,7 @@ Partial Class Frm_Chargement
         'txt_x_Ponctuelle_5
         '
         Me.txt_x_Ponctuelle_5.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_x_Ponctuelle_5.Location = New System.Drawing.Point(76, 118)
+        Me.txt_x_Ponctuelle_5.Location = New System.Drawing.Point(76, 115)
         Me.txt_x_Ponctuelle_5.Name = "txt_x_Ponctuelle_5"
         Me.txt_x_Ponctuelle_5.Size = New System.Drawing.Size(66, 20)
         Me.txt_x_Ponctuelle_5.TabIndex = 80
@@ -649,7 +649,7 @@ Partial Class Frm_Chargement
         'txt_Indice_Ponctuelle_6
         '
         Me.txt_Indice_Ponctuelle_6.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_Indice_Ponctuelle_6.Location = New System.Drawing.Point(48, 139)
+        Me.txt_Indice_Ponctuelle_6.Location = New System.Drawing.Point(48, 136)
         Me.txt_Indice_Ponctuelle_6.Name = "txt_Indice_Ponctuelle_6"
         Me.txt_Indice_Ponctuelle_6.ReadOnly = True
         Me.txt_Indice_Ponctuelle_6.Size = New System.Drawing.Size(27, 20)
@@ -681,7 +681,7 @@ Partial Class Frm_Chargement
         'txt_Indice_Ponctuelle_5
         '
         Me.txt_Indice_Ponctuelle_5.BackColor = System.Drawing.SystemColors.Window
-        Me.txt_Indice_Ponctuelle_5.Location = New System.Drawing.Point(48, 118)
+        Me.txt_Indice_Ponctuelle_5.Location = New System.Drawing.Point(48, 115)
         Me.txt_Indice_Ponctuelle_5.Name = "txt_Indice_Ponctuelle_5"
         Me.txt_Indice_Ponctuelle_5.ReadOnly = True
         Me.txt_Indice_Ponctuelle_5.Size = New System.Drawing.Size(27, 20)

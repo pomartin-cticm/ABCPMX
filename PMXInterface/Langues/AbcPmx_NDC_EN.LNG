@@ -418,9 +418,10 @@ M_CRITERIA				= Resistance to bending moment
 V_CRITERIA				= Resistance to shear force
 VB_CRITERIA				= Resistance to shear buckling
 MV_CRITERIA				= Resistance to MV interaction
+MVB_CRITERIA			= Resistance to MVb interaction
 LTB_CRITERIA			= Resistance to lateral torsional buckling
 REINF_CRITERIA			= Longitudinal reinforcements 
-LOWPLATE_SLIMFLOOR_CRITERIA	= Resistance of the lower flange/plate 
+LOWPLATE_SLIMFLOOR_CRIT = Resistance of the lower flange/plate 
 WELD_CRITERIA			= Resistance of welds 
 ULS_COMBI_CHECK			= ULS Combinations checkings
 ULS_COMBIS				= ULS Combination 
@@ -444,6 +445,7 @@ BEAMR					= Resistance of the beam
 ADDPARAM				= Additional parameters
 ADDP_SHEARB				= Shear buckling
 ADDMELRDPMX				= Elastic resistant moments
+MVBINTERACTION			= MV interaction according to EN 1993-1-5 § 7.1
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States

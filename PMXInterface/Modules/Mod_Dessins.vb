@@ -5709,8 +5709,9 @@ Public Module Mod_Dessins
         HauteurPoutre = MyPoutre.Section.ProfilA.ha + MyPoutre.Dalle.zTop 'LongueurTravee / 70
         DeltaT = HauteurPoutre / 10
 
-        dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 25
-        dCarApp = HauteurPoutre / 2 ' Math.Min(HauteurPoutre, LongueurTravee / 30)
+        dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 12                                       ' Pour la représentation des efforts
+        dCarApp = Math.Min(Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 25, HauteurPoutre / 2)       ' Pour la représentation des appuis
+
         zDalle = MyPoutre.Dalle.zTop
         zSem = -MyPoutre.Section.ProfilA.ha
 
@@ -5864,10 +5865,10 @@ Public Module Mod_Dessins
 
         Dim HauteurExt, HauteurInt, LargeurInt, LargeurExt As Decimal
 
-        HauteurExt = 2.7 * dCar
-        HauteurInt = 0.8 * dCar
-        LargeurInt = 0.4 * dCar
-        LargeurExt = 1.1 * dCar
+        HauteurExt = 2.7 * dCar / 2.7
+        HauteurInt = 0.8 * dCar / 2.7
+        LargeurInt = 0.4 * dCar / 2.7
+        LargeurExt = 1.1 * dCar / 2.7
 
         '--> Initialisations
 
@@ -5876,7 +5877,6 @@ Public Module Mod_Dessins
         '--> Dessin
 
         RemplirZone(MyGr, MyBrushAp, xPts, yPts, nbPts, MyParAff, True, True)
-
 
     End Sub
 
@@ -5907,14 +5907,10 @@ Public Module Mod_Dessins
             MyPen = New Pen(Color.DarkRed)
         End If
 
-
-
-
         Dim HauteurExtMax, HauteurExtMin, HauteurExtGauche, HauteurExtDroite, HauteurInt, LargeurInt, LargeurExt As Decimal
 
-        HauteurExtMax = 5.0 * dCar
-        HauteurExtMin = 1 * dCar
-
+        HauteurExtMax = 5.0 * dCar / 5
+        HauteurExtMin = 1 * dCar / 5
 
         If ChargeLinGauche = 0 And ChargeLinDroite = 0 Then
             HauteurExtGauche = 0
@@ -5926,9 +5922,9 @@ Public Module Mod_Dessins
             HauteurExtGauche = HauteurExtMax
             HauteurExtDroite = Math.Max(ChargeLinDroite / ChargeLinGauche * HauteurExtMax, HauteurExtMin)
         End If
-        HauteurInt = 0.8 * dCar
-        LargeurInt = 0.4 * dCar
-        LargeurExt = 1.1 * dCar
+        HauteurInt = 0.8 * dCar / 3
+        LargeurInt = 0.4 * dCar / 3
+        LargeurExt = 1.1 * dCar / 3
 
         '--> Initialisations
 
