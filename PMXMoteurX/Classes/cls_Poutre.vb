@@ -1837,8 +1837,9 @@ Public Class cls_Poutre
 
             Nodes.NbEtais += Me.NbEtaiement
 
-            If Me.NbEtaiement > 0 Then
-                ReDim Nodes.iNodeEtais(Me.NbEtaiement - 1)
+            'If Me.NbEtaiement > 0 Then
+            If Nodes.NbEtais > 0 Then
+                ReDim Nodes.iNodeEtais(Nodes.NbEtais - 1)
                 i0 = 0
                 If Me.lEtaisConsoleGauche Then
                     Nodes.iNodeEtais(0) = 0
@@ -1850,7 +1851,7 @@ Public Class cls_Poutre
                     Nodes.iNodeEtais(i0 + i - 1) = IndiceNodeFromXpos(x0 + i * DeltaX)
                 Next
                 If Me.lEtaisConsoleDroite Then
-                    Nodes.iNodeEtais(Me.NbEtaiement - 1) = Me.Nodes.nbNodes - 1
+                    Nodes.iNodeEtais(Nodes.NbEtais - 1) = Me.Nodes.nbNodes - 1
                 End If
             End If
         End If
