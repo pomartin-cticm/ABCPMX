@@ -95,6 +95,8 @@ Public Class Frm_PMX
         MAJ_btnZoomPlus()
         MAJ_btnCotation()
 
+        AffichageRecentFiles()
+
         '--> Affichage
 
         'Si le chemin d'un fichier est passé en argument
@@ -947,6 +949,7 @@ Public Class Frm_PMX
 
 
     Private Sub TSbtn_OpenN_Click(sender As Object, e As EventArgs) Handles TSbtn_OpenN.Click
+
         OuvrirFichier()
 
     End Sub
@@ -962,7 +965,7 @@ Public Class Frm_PMX
 
 #Region " Fonctions de sauvegarde et lecture "
 
-    Private Sub EnregistrerOptionsLogiciel()
+    Private Sub EnregistrerOptionsLogiciel(Optional lRecentFile As Boolean = False)
 
         '--( Mode expert 
 
@@ -1002,6 +1005,16 @@ Public Class Frm_PMX
         My.Settings.lNdCDispSigmaCharges = OptionsNdC.lDispSigmaCharges
         My.Settings.lNdCDispMelMixte = OptionsNdC.lDispMelPoutreMixte
 
+        '--( Fichiers récents
+        If lRecentFile Then
+            '--> Fichiers récemment ouverts
+            My.Settings.RecentFiles = New Specialized.StringCollection
+
+            For i = 0 To LogicielFichiers.RecentFiles.Count - 1
+                My.Settings.RecentFiles.Add(LogicielFichiers.RecentFiles(i))
+                If i = 9 Then Exit For '--> on se limite au 10 derniers fichiers
+            Next
+        End If
     End Sub
 
     Private Sub EnregistrerProjetEnCours()
@@ -1059,8 +1072,9 @@ Public Class Frm_PMX
             '# AJout dans FichierRecents
             '   si déjà dans la liste, on le supprime pour le rajouter à la première position
 
-            If LogicielFichiers.RecentFiles.Contains(MyProjet.FileName) Then LogicielFichiers.RecentFiles.Remove(MyProjet.FileName)
-            LogicielFichiers.RecentFiles.Insert(0, MyProjet.FileName)
+            'If LogicielFichiers.RecentFiles.Contains(MyProjet.FileName) Then LogicielFichiers.RecentFiles.Remove(MyProjet.FileName)
+            'LogicielFichiers.RecentFiles.Insert(0, MyProjet.FileName)
+            EnregistreDansFichiersRecents(MyProjet.FileName)
 
             '# Enregistrer
 
@@ -1079,6 +1093,20 @@ Public Class Frm_PMX
 
         End If
 
+
+    End Sub
+
+    Private Sub EnregistreDansFichiersRecents(FileName As String)
+        '-----------------------------------------------------------------------------------
+        '   13/03/24 :  Création - Version 1.00
+        '-----------------------------------------------------------------------------------
+        '   Ajoute un fichier ouverts ou enrgistrés dans la liste des fichiers récents
+        '-----------------------------------------------------------------------------------
+        '   FileNmae    [E] :   Nom du fichier à enregistrer comme fichier récent
+        '-----------------------------------------------------------------------------------
+
+        If LogicielFichiers.RecentFiles.Contains(FileName) Then LogicielFichiers.RecentFiles.Remove(FileName)
+        LogicielFichiers.RecentFiles.Insert(0, FileName)
 
     End Sub
 
@@ -1115,6 +1143,13 @@ Public Class Frm_PMX
             ReadInFile(FileName)
             MAJToolBarPoutre()
             Me.img_Main.Invalidate()
+
+            '--> Gestion Recent Files
+
+            EnregistreDansFichiersRecents(FileName)
+
+            '--> MAJ fichier recent
+            Me.AffichageRecentFiles()
 
         End If
 
@@ -1255,8 +1290,19 @@ Public Class Frm_PMX
 
     Private Sub Frm_PMX_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
 
-        ' Gestion Fermeture
+        '--( Gestion Fermeture de la fenêtre
 
+        '--( Enregistrement du projet en cours
+
+        For i As Integer = 0 To MyProjet.Poutres.Count - 1
+
+
+
+        Next
+
+        '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
+
+        EnregistrerOptionsLogiciel(True)
 
     End Sub
 

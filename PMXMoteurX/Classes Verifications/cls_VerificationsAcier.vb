@@ -643,7 +643,7 @@ Public Class cls_VerificationsAcier
 
         'pDonnees.MomentFle = MEd  ' GUD: Désactivation de cette ligne : je ne sais pas pourquoi mais lcette ligne fait bugger le moteur de LTB
 
-        For i = 0 To pDonnees.NbNodes - 2 'RAJOUT GUD: J'ai repris ce qu'avais fait Minh 
+        For i = 0 To pDonnees.NbNodes - 2 'RAJOUT GUD: J'ai repris ce qu'avait fait Minh 
             pDonnees.MomentFle(i, 0) = MEd(i, 1)
             pDonnees.MomentFle(i, 1) = MEd(i + 1, 0)
         Next
