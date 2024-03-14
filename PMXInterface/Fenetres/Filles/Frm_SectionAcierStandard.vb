@@ -27,6 +27,7 @@ Public Class Frm_SectionAcierStandard
     Dim lBuild As Boolean = True
 
     Dim MySectionLoc As New cls_Section
+    Dim myHauteurHw As Decimal
 
     Enum Enu_DefinitionH
         HauteurTotale
@@ -168,6 +169,7 @@ Public Class Frm_SectionAcierStandard
         '== Transfert vers variable locale
 
         cls_Section.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySectionLoc)
+        myHauteurHw = MySectionLoc.ProfilA.HauteurAmeHw
 
         BClrCompatible = Me.lst_GammeS.BackColor
 
@@ -944,17 +946,22 @@ Public Class Frm_SectionAcierStandard
         Dim Valeur As Decimal
         Dim Hcomp As Decimal
         Dim lSym As Boolean = (MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym)
+        Dim lMAJHauteur As Boolean = False
 
         If VerificationDonneesPRS(sender, Valeur) Then
             Select Case sender.name
                 Case Me.txt_Ha.Name
+                    lMAJHauteur = True
                     MySectionLoc.ProfilA.ha = Valeur
-                    Hcomp = Valeur - MySectionLoc.ProfilA.Tfi - MySectionLoc.ProfilA.Tfs
-                    Me.txt_Hw.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
+                    'Hcomp = Valeur - MySectionLoc.ProfilA.Tfi - MySectionLoc.ProfilA.Tfs
+                    'Me.txt_Hw.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
                 Case Me.txt_Hw.Name
-                    Hcomp = Valeur + MySectionLoc.ProfilA.Tfi + MySectionLoc.ProfilA.Tfs
-                    Me.txt_Ha.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
-                    MySectionLoc.ProfilA.ha = Hcomp
+                    lMAJHauteur = True
+                    myHauteurHw = Valeur
+                    'Hcomp = Valeur + MySectionLoc.ProfilA.Tfi + MySectionLoc.ProfilA.Tfs
+                    'Me.txt_Ha.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
+                    'MySectionLoc.ProfilA.ha = Hcomp
+                    lMAJHauteur = True
                 Case Me.txt_Tw.Name
                     MySectionLoc.ProfilA.Tw = Valeur
                 Case Me.txt_Bfs.Name
@@ -969,10 +976,24 @@ Public Class Frm_SectionAcierStandard
                         MySectionLoc.ProfilA.Tfi = Valeur
                         Me.txt_Tfi.Text = Me.txt_Tfs.Text
                     End If
+                    lMAJHauteur = True
                 Case Me.txt_Bfi.Name
                     MySectionLoc.ProfilA.Bfi = Valeur
                 Case Me.txt_Tfi.Name
                     MySectionLoc.ProfilA.Tfi = Valeur
+                    lMAJHauteur = True
+            End Select
+        End If
+
+        If lMAJHauteur Then
+            Select Case DefinitionHauteur
+                Case Enu_DefinitionH.HauteurAme
+                    Hcomp = myHauteurHw + MySectionLoc.ProfilA.Tfi + MySectionLoc.ProfilA.Tfs
+                    Me.txt_Ha.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
+                    MySectionLoc.ProfilA.ha = Hcomp
+                Case Enu_DefinitionH.HauteurTotale
+                    Hcomp = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfi - MySectionLoc.ProfilA.Tfs
+                    Me.txt_Hw.Text = GetStringNoUnit(Hcomp, Enu_TypeVariable.Dimension)
             End Select
         End If
 
@@ -989,7 +1010,7 @@ Public Class Frm_SectionAcierStandard
 
         Const HWMINI As Decimal = 0.2
         Const TFMINI As Decimal = 0.006
-        Const TWMINI As Decimal = 0.006
+        Const TWMINI As Decimal = 0.003
         Const HWMAXI As Decimal = 2
         Const BFMINI As Decimal = 0.12
         Const BFMAXI As Decimal = 0.5
