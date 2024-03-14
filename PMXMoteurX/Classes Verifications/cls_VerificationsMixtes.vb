@@ -261,8 +261,12 @@
                 '# Vérification sous effort tranchant
 
                 If myBeam.Param.lElasticDesignVM Then
+                    '# Critère de cisaillement élastique
                     Me.RunCritereCisaillementElastic(myBeam, iCombi, TauELU)
+                    '# Contrainte equivalente de VM
+                    Me.RunCritereInteractionMVElastiqueVonMises(myBeam, iCombi, SigmaELU, TauELU)
                 Else
+                    '# Critère de résistance plastique
                     Me.RunCritereTranchants(myBeam, iCombi, VEd, VplRd)
                 End If
 
@@ -936,6 +940,101 @@
         End If
 
     End Sub
+
+    Private Sub RunCritereInteractionMVElastiqueVonMises(MyPoutre As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal, TauELU(,,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance en cisaillement par les critères de VM
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam    [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   SigmaELU    [E] :   Contraintes normales aux ELU
+        '   TauELU      [E] :   Contraintes de cisaillement aux ELU
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim FydSup, FySup As Decimal
+        Dim FydW, FyW As Decimal
+        Dim FydInf, FyInf As Decimal
+
+        Dim nbPts As Integer = Me.Tau.MStatic.Count
+
+        '--> Initialisation
+
+        FySup = MyPoutre.Section.FySup
+        FydSup = FySup / MyPoutre.Param.Gamma.GammaM0
+        FyW = MyPoutre.Section.FyW
+        FydW = FyW / MyPoutre.Param.Gamma.GammaM0
+        FyInf = MyPoutre.Section.FyInf
+        FydInf = FyInf / MyPoutre.Param.Gamma.GammaM0
+
+        '--> Calculs
+
+        '# Contraintes de cisaillement dans l'âme du profilé
+
+        If (nbPts > 0) Then
+            '( Contrainte face interne de la semelle supérieure
+            RunCritereInteractionMVElastic(MyPoutre, iCombi, 0, SigmaELU, TauELU, FydW, Me.CritereSigmaVM)
+            '( Contrainte CdG de la section
+            RunCritereInteractionMVElastic(MyPoutre, iCombi, 1, SigmaELU, TauELU, FydW, Me.CritereSigmaVM)
+            '( Contrainte face interne de la semelle inférieure
+            RunCritereInteractionMVElastic(MyPoutre, iCombi, 2, SigmaELU, TauELU, FydW, Me.CritereSigmaVM)
+        End If
+
+    End Sub
+
+    Private Sub RunCritereInteractionMVElastic(MyPoutre As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal, TauELU(,,) As Decimal,
+                                               SigmaU As Decimal, MyCritereSigmaEqVM As cls_Critere)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/10/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance contrainte équivalente de VonMises en un point de calcul de section
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam    [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iPoint      [E] :   Indice du point de calcul des contraintes
+        '   SigmaELU    [E] :   Contraintes normales aux ELU
+        '   TauELU      [E] :   Contraintes de cisaillement aux ELU
+        '   SigmaU      [E] :   Valeur ultime de la contrainte équivalente VM au point iPoint
+        '   CritereM    [E] :   Critere de la contrainte de flexion
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+        Dim SigmaEq As Decimal
+        Const iDecal As Integer = 1
+
+        '--> Déclaration
+
+        iDebT = MyPoutre.IndicePremiereTravee
+        iFinT = MyPoutre.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+
+            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+                For k = iDebK To iFinK
+                    SigmaEq = Math.Sqrt(SigmaELU(iPoint + iDecal, iNode, k) ^ 2 + 3 * TauELU(iPoint, iNode, k) ^ 2)
+
+                    MyCritereSigmaEqVM.EnregistreCritere(iNode, iCombi, iTravee, SigmaEq, SigmaU)
+                Next
+            Next
+        Next
+
+    End Sub
+
 
     Private Sub RunCritereTranchants(myBeam As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
         '----------------------------------------------------------------------------------------------------------
