@@ -5857,7 +5857,9 @@ Module Mod_NoteCalcul
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereSigmaArmaE, "\SG\-s\s,se\=", BlocELU("M_CRITERIA") & " (7)")
             End If
             '# Contraintes de cisaillement
-            AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereTauA, "\SG\-t\s\=", BlocELU("V_CRITERIA") & " (4)")
+            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereTauA, "\SG\-t\s\=", BlocELU("V_CRITERIA") & " (4)")
+            '# Contraintes de Von Mises
+            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereSigmaVM, "\SG\s\-eq,VM\=", BlocELU("MV_CRITERIA") & " (1)")
 
             '# Notes
             SauteLigne()

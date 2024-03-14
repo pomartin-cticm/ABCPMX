@@ -190,8 +190,7 @@
         '# Calcul des contraintes de cisaillement pour un calcul élastique
         If myBeam.Param.lElasticDesignVM Then
             Me.Tau = New cls_Tau(myBeam.Section.typeSection)
-            Me.Tau.Initialise(myBeam.Section.ProfilA)
-            Me.Tau.CalculContraintesCharges(myBeam, TauCas)
+            Me.Tau.CalculContraintesChargesMIXTE(myBeam, TauCas)
         End If
 
         '--> Boucle sur les combinaisons
@@ -222,7 +221,7 @@
                 '# Combinaison des contraintes de cisaillement élastiques
 
                 If myBeam.Param.lElasticDesignVM Then
-                    myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, Me.Tau.MStatic.Count, myBeam.Nodes.nbNodes,
+                    myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, Me.Tau.NbPts, myBeam.Nodes.nbNodes,
                                                          myBeam.ChargesA, TauCas, lRetraitElastique, TauELU)
                 End If
 
@@ -261,7 +260,11 @@
 
                 '# Vérification sous effort tranchant
 
-                Me.RunCritereTranchants(myBeam, iCombi, VEd, VplRd)
+                If myBeam.Param.lElasticDesignVM Then
+                    Me.RunCritereCisaillementElastic(myBeam, iCombi, TauELU)
+                Else
+                    Me.RunCritereTranchants(myBeam, iCombi, VEd, VplRd)
+                End If
 
                 '# Vérification du voilement par cisaillement
 
@@ -556,37 +559,6 @@
 
 #Region " Critères de vérification "
 
-    'Private Sub RunCritereMoments(myBeam As cls_Poutre, iCombi As Integer, lClasse3 As Boolean,
-    '                              MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRdP() As Decimal, MplRdM() As Decimal)
-    '    '----------------------------------------------------------------------------------------------------------
-    '    '   25/10/23 :  Création - POM
-    '    '----------------------------------------------------------------------------------------------------------
-    '    '   Vérification aux ELU de la résistance au moment fléchissant 
-    '    '----------------------------------------------------------------------------------------------------------
-    '    '   myBeam[E] :   Poutre traitée
-    '    '   iCombi  [E] :   Indice de la combinaison
-    '    '   lClasse3[E] :   Indique si présence de section de classe 3
-    '    '   MEd     [E] :   Table des moments fléchissants le long de la barre
-    '    '   SigmaELU[E] :   Contraintes normales aux ELU
-    '    '   MplRdP  [E] :   Table des moments plastiques > 0 le long de la barre
-    '    '   MplRdM  [E] :   Table des moments plastiques < 0 le long de la barre
-    '    '----------------------------------------------------------------------------------------------------------
-
-    '    '--> Critère de résistance en flexion
-
-    '    If myBeam.Param.lElasticDesignVM Then
-    '        '# Résistance élastique VM imposée
-    '        Me.InitialiseCriteresVM(myBeam.Nodes.nbNodes, myBeam.lEnrobage, cls_Poutre.nbCombELU, myBeam.IndiceDerniereTravee)
-    '        RunCritereFlexionResistanceElastiqueVM(myBeam, iCombi, SigmaELU)
-    '    ElseIf lClasse3 Then
-    '        '# Présence d'au moins une section de classe 3
-    '        RunCritereMomentsElastiques(myBeam, iCombi, MEd)
-    '    Else
-    '        '# Résistance plastique possible
-    '        RunCriteresMomentsPlastiques(myBeam, iCombi, MEd, MplRdP, MplRdM)
-    '    End If
-    'End Sub
-
     Private Sub RunCritereMoments(MyPoutre As cls_Poutre, ByRef lFirst As Boolean, iCombi As Integer, lPlastique As Boolean, lClasse3 As Boolean,
                                   MEd(,) As Decimal, SigmaELU(,,) As Decimal, MplRd(,) As Decimal)
         '----------------------------------------------------------------------------------------------------------
@@ -775,7 +747,6 @@
         End If
     End Sub
 
-
     Private Sub RunCritereFlexionVonM(myBeam As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,
                                       SigmaU As Decimal, MyCritereM As cls_Critere, Optional signeS As Decimal = 0)
         '----------------------------------------------------------------------------------------------------------
@@ -929,13 +900,50 @@
 
     End Sub
 
-    Private Sub RunCritereTranchants(MyPoutre As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
+    Private Sub RunCritereCisaillementElastic(myBeam As cls_Poutre, iCombi As Integer, TauELU(,,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   14/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance aux contraintes de cisaillement 
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam  [E] :   Poutre traitée
+        '   iCombi  [E] :   Indice de la combinaison
+        '   TauELU  [E] :   Table des contraintes de cisallement le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim TauY, FyW As Decimal
+
+        Dim nbPts As Integer = Me.Tau.MStatic.Count
+
+        '--> Initialisation
+
+        FyW = myBeam.Section.FyW
+        TauY = FyW / myBeam.Param.Gamma.GammaM0 / Math.Sqrt(3)
+
+        '--> Calculs
+
+        '# Contraintes de cisaillement dans l'âme du profilé
+
+        If (nbPts > 0) Then
+            '( Contrainte face interne de la semelle supérieure
+            RunCritereFlexionVonM(myBeam, iCombi, 0, TauELU, TauY, Me.CritereTauA)
+            '( Contrainte CdG de la section
+            RunCritereFlexionVonM(myBeam, iCombi, 1, TauELU, TauY, Me.CritereTauA)
+            '( Contrainte face interne de la semelle inférieure
+            RunCritereFlexionVonM(myBeam, iCombi, 2, TauELU, TauY, Me.CritereTauA)
+        End If
+
+    End Sub
+
+    Private Sub RunCritereTranchants(myBeam As cls_Poutre, iCombi As Integer, VEd(,) As Decimal, VplRd As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance à l'effort tranchant 
         '----------------------------------------------------------------------------------------------------------
-        '   myBeam[E] :   Poutre traitée
+        '   myBeam  [E] :   Poutre traitée
         '   iCombi  [E] :   Indice de la combinaison
         '   VEd     [E] :   Table des efforts tranchants le long de la barre
         '   VplRd   [E] :   Table des efforts tranchants résistant plastique le long de la barre
@@ -950,14 +958,14 @@
 
         '--> Déclaration
 
-        iDebT = MyPoutre.IndicePremiereTravee
-        iFinT = MyPoutre.IndiceDerniereTravee
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
 
         '--> Traitement
 
         For iTravee = iDebT To iFinT
-            iDebN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
 
             For iNode = iDebN To iFinN
                 If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
