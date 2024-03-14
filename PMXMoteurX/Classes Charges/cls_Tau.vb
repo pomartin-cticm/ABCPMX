@@ -1,8 +1,7 @@
 ﻿Public Class cls_Tau
 
     '=========================================================================================================
-    '   CLASSE POUR LA DEFINITION DES POINTS OU SONT CALCULEES LES CONTRAINTES NORMALES
-    '   ET POUR LE  CALCUL DE CES CONTRAINTES NORMALES
+    '   CLASSE POUR LE CALCUL DES CONTRAINTES DE CISAILLEMENT
     '=========================================================================================================
 
 #Region " Attributs "

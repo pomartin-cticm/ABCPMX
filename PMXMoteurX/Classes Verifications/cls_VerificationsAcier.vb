@@ -38,6 +38,12 @@ Public Class cls_VerificationsAcier
 
     Dim Tau As cls_Tau
 
+    '==( Classe pour le caclul des flux de cisaillement dans les soudures des PRS
+
+    Dim FluxF As cls_Flux
+
+    Public GorgesSoudures(1) As Decimal             ' Gorge des soudures ame semelles pour les sections PRS
+
 #End Region
 
 #Region " Constructeurs "
@@ -135,10 +141,13 @@ Public Class cls_VerificationsAcier
         Dim SigmaCas(,,,) As Decimal = Nothing          ' Contraintes normales pour les cas de charges
         Dim TauELU(,,) As Decimal = Nothing             ' Contraintes de cisaillement sous 1 combinaison ELU
         Dim TauCas(,,,) As Decimal = Nothing            ' Contraintes de cisaillement pour les cas de charges
+        Dim FluxCas(,,,) As Decimal = Nothing           ' Flux de cisaillement dans les soudures de PRS par cas de charges
+        Dim FluxELU(,,) As Decimal = Nothing            ' Flux de cisaillement dans les soudures de PRS aux ELU
         Dim lRetraitElastique As Boolean = True
         Dim lVerifElastic As Boolean                    ' Indique si on doit effectuer une verification élastique des sections
         Dim EpsilonW As Decimal
         Dim lEnrob As Boolean = myBeam.lEnrobage
+        Dim lproPRS As Boolean = Not myBeam.Section.lLamine
 
         '--> Initialisations
 
@@ -225,6 +234,13 @@ Public Class cls_VerificationsAcier
             Me.Tau.CalculContraintesCharges(myBeam, TauCas)
         End If
 
+        '# Flux de cisaillement des PRS
+        If lproPRS Then
+            Me.FluxF = New cls_Flux
+            Me.FluxF.InitialiseCalculAcier(myBeam)
+            Me.FluxF.CalculFluxChargesACIER(myBeam, FluxCas)
+        End If
+
         '--> Boucle sur les combinaisons
 
         For iCombi = 0 To combiELU.nbCombi - 1
@@ -250,6 +266,10 @@ Public Class cls_VerificationsAcier
                     combiELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, Me.Tau.MStatic.Count, myBeam.Nodes.nbNodes,
                                                         myBeam.ChargesA, TauCas, lRetraitElastique, TauELU)
                 End If
+            End If
+            If lproPRS Then
+                combiELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, cls_Flux.NbPTS, myBeam.Nodes.nbNodes,
+                                                    myBeam.ChargesA, FluxCas, lRetraitElastique, FluxELU)
             End If
 
             '# Vérification sous moment fléchissant
@@ -307,9 +327,95 @@ Public Class cls_VerificationsAcier
 
             Me.RunCritereDeversement(myBeam, iCombi, MEd, lVerifElastic, lConstructionPhase)
 
+            '# Dimensionnement des soudures de PRS
+
+            If lproPRS Then
+                Me.RunDimensionSouduresAmeSemelle(myBeam, iCombi, FluxELU, Me.GorgesSoudures)
+            End If
         Next
 
     End Sub
+
+#End Region
+
+#Region " Calcul des soudures âme semelle "
+
+    Private Sub RunDimensionSouduresAmeSemelle(myBeam As cls_Poutre, iCombi As Integer, FluxELU(,,) As Decimal, ByRef Gorges() As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul des gorges de soudure pour les flux de cisaillement ELU
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam              [E] :   Poutre traitée
+        '   iCombi              [E] :   Indice de la combinaison
+        '   FluxELU             [E] :   Table des flux de cisaillement longi le long de la poutre
+        '   Gorges              [S] :   Gorge des soudures
+        '----------------------------------------------------------------------------------------------------------
+
+        '(NbPts - 1, NbNodes - 1, 1)
+
+        '--( Déclaration
+
+        Const iDEB As Integer = 1       ' Semelle sup
+        Const iFIN As Integer = 2       ' Semelle inf
+
+        Dim iSoud, iTrav As Integer
+        Dim iDebTrav As Integer = myBeam.IndicePremiereTravee
+        Dim iFinTrav As Integer = myBeam.IndiceDerniereTravee
+        Dim iDebNod, iFinNod, iNode As Integer
+        Dim kDeb, kFin, k As Integer
+        Dim GammaM2 As Decimal = myBeam.Param.Gamma.GammaM2
+        Dim BetaW As Decimal = 1      '== APROGRaMMER
+        Dim Fu() As Decimal = {myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfs, myBeam.Section.ProfilA.Tw)),
+                               myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfi, myBeam.Section.ProfilA.Tw))}
+
+        '--( Calcul
+
+        For iTrav = iDebTrav To iFinTrav
+
+            iDebNod = myBeam.Nodes.iNodeExtTrav(iTrav, 0)
+            iFinNod = myBeam.Nodes.iNodeExtTrav(iTrav, 1)
+
+            For iNode = iDebNod To iFinNod
+                If iNode = iDebNod Then kDeb = 1 Else kDeb = 0
+                If iNode = iFinNod Then kFin = 0 Else kFin = 1
+
+                For k = kDeb To kFin
+
+                    For iSoud = iDEB To iFIN
+
+                        Gorges(iSoud - 1) = Math.Max(Gorges(iSoud - 1), CalculSoudure(FluxELU(iSoud, iNode, k), GammaM2, BetaW, Fu(iSoud - 1)))
+
+                    Next
+
+                Next
+
+            Next
+
+
+        Next
+
+    End Sub
+
+    Private Function CalculSoudure(myFlux As Decimal, GammaM2 As Decimal, BetaW As Decimal, Fu As Decimal) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul des gorges de soudure pour les flux de cisaillement ELU
+        '----------------------------------------------------------------------------------------------------------
+        '   myFlux              [E] :   Flux de cisaillement
+        '   GammaM2             [E] :   Coefficient partiel
+        '   BetaW               [E] :   Coefficient BetaW selon EN 1993-1-8 pour le calcul des soudures
+        '   Fu                  [E] :   Résistance ultime à la traction
+        '----------------------------------------------------------------------------------------------------------
+
+        Dim Aw As Decimal
+
+        Aw = Math.Sqrt(3) / 2 * Math.Abs(myFlux) / (Fu * kConvMPaPa) * BetaW * GammaM2
+
+        Return Aw
+    End Function
+
 
 #End Region
 

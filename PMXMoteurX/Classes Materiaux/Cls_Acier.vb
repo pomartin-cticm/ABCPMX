@@ -112,7 +112,7 @@ Public Class cls_Acier
 
         '--> Déclaration
 
-        Dim MyFy As Decimal
+        Dim MyFy As Decimal = 0
 
         Dim NbPl As Integer = Me.Plages.Count
         If NbPl = 0 Then Exit Function
@@ -122,7 +122,7 @@ Public Class cls_Acier
 
         If Me.lUser Then
             '--[ Acier défini directement par l'utilisateur
-            'MyFy = FyImpose
+            MyFy = 0
         Else
             '--[ Acier de la base de donnée : Recherche dans les plages
             If Plages.Count < 1 Then
@@ -162,6 +162,66 @@ Public Class cls_Acier
         End If
 
         Return MyFy
+
+    End Function
+
+
+    Public Function LimiteFu(ByVal Epaisseur As Double) As Double
+        '--------------------------------------------------------------------------------
+        '
+        '   04/07/12 :  Création - v3.00 - POM
+        '
+        '--------------------------------------------------------------------------------
+        '
+        '   Retourne la limite à la rupture en fonction de l'épaisseur
+        '
+        '--------------------------------------------------------------------------------
+        '--------------------------------------------------------------------------------
+
+        Dim MyFu As Double = 0
+
+        If Me.lUser Then
+            '--[ Acier défini directement par l'utilisateur
+            '    MyFu = FuImpose
+        Else
+            '--[ Acier de la base de donnée : Recherche dans les plages
+            If Plages.Count < 1 Then
+                MyFu = -1
+            Else
+                '--> On commence en dehors des plages
+                If Epaisseur < Plages(0).Ep Then
+                    MyFu = Me.Plages(0).Fu
+                ElseIf Epaisseur > EpMax Then
+                    MyFu = Me.Plages(Plages.Count - 1).Fu
+                    '--> Puis dans les plages
+                ElseIf Plages.Count = 1 Then
+                    MyFu = Plages(0).Fu
+                Else
+
+                    Dim lTrouve As Boolean
+                    Dim i As Integer = 1
+                    lTrouve = (Me.Plages(i).Ep >= Epaisseur)
+
+                    Do While i < Plages.Count - 1 And Not lTrouve
+                        i += 1
+                        lTrouve = (Me.Plages(i).Ep >= Epaisseur)
+                    Loop
+
+                    If lTrouve Then
+                        MyFu = Plages(i - 1).Fu
+                    Else
+                        lTrouve = (Epaisseur <= EpMax)
+                        If lTrouve Then
+                            MyFu = Plages(Plages.Count - 1).Fu
+                        Else
+                            'GestionErreursACB("Cls_SteelNew", "LimiteFu", "Search failure for thickness " & CStr(Epaisseur))
+                        End If
+                    End If
+                End If
+            End If
+        End If
+
+        Return MyFu
 
     End Function
 

@@ -6272,6 +6272,22 @@ Module Mod_NoteCalcul
 
         AfficheSyntheseCritereLT(MyBeam.VerifAcier(iVerif).CritereLTB, "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"))
 
+        '==( Calcul des soudures pour les PRS
+
+        If Not MyBeam.Section.lLamine Then
+
+            Dim Symbol As String = "aws"
+            AddTitreNdC(3, "Soudures âme-semelles")
+
+            AddLigneNDC(TABW3 & "Semelle sup" & TABAFF &
+                        Symbol & TABEGAL & GetStringInUnit(MyBeam.VerifAcier(iVerif).GorgesSoudures(0), Enu_TypeVariable.Dimension, 3, 2, True))
+
+            Symbol = "awi"
+            AddLigneNDC(TABW3 & "Semelle inf" & TABAFF &
+                        Symbol & TABEGAL & GetStringInUnit(MyBeam.VerifAcier(iVerif).GorgesSoudures(1), Enu_TypeVariable.Dimension, 3, 2, True))
+
+        End If
+
     End Sub
 
     Private Sub EditionVerificationsELUCombiACIER(MyBeam As cls_Poutre, iVerif As Integer, lConstructionP As Boolean)
