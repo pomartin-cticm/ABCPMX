@@ -409,6 +409,7 @@ WHERE					= Avec
 SHEARBREQUIRED			= La résistance au voilement par cisaillement est effectuée
 SHEARBNOTREQUIRED		= La résistance au voilement par cisaillement n'est pas nécessaire
 NO_MVINTERACTION		= Pas d'interaction MV
+NO_MVBINTERACTION		= Pas d'interaction entre le moment de flexion et le voilement par cisaillement
 M_CRITERIA				= Résistance à la flexion
 V_CRITERIA				= Résistance à l'effort tranchant
 VB_CRITERIA				= Résistance au voilement par cisaillement

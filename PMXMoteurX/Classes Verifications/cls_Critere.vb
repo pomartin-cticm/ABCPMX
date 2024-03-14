@@ -121,4 +121,39 @@
 
 #End Region
 
+#Region " Outils "
+
+    Public Sub EnveloppeCritereCombi(myCritere As cls_Critere, iCombi As Integer, iTravDeb As Integer, iTravFin As Integer)
+        '----------------------------------------------------------------------------------------------------------
+        '   13/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Comparaison avec un autre critère
+        '   On établit l'enveloppe des valeurs pour les critères par travée et combi
+        '   ainsi que pour la valeur maxi
+        '----------------------------------------------------------------------------------------------------------
+        '   myCritere   [E] :   Critère à comparer
+        '   iCombi      [E] :   Indique de la combi traitée
+        '   iTravDeb    [E] :   Indice de la première travée
+        '   iTravFin    [E] :   Indice de la dernière travée
+        '----------------------------------------------------------------------------------------------------------
+
+        If IsGreater(myCritere.CritereMax, Me.CritereMax) Then
+            Me.CritereMax = myCritere.CritereMax
+            Me.iCombiM = myCritere.iCombiM
+            Me.iNodeM = myCritere.iNodeM
+        End If
+
+        For i As Integer = iTravDeb To iTravFin
+            If IsGreater(myCritere.CritereCombiT(iCombi, i), Me.CritereCombiT(iCombi, i)) Then
+                Me.CritereCombiT(iCombi, i) = myCritere.CritereCombiT(iCombi, i)
+                Me.CritereCombiN(iCombi, i) = myCritere.CritereCombiN(iCombi, i)
+            End If
+        Next
+
+    End Sub
+
+
+
+#End Region
+
 End Class

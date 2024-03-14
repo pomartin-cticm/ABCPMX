@@ -747,49 +747,26 @@
 
         '--< Contraintes dans le béton
 
-        EnveloppeCriterFlexionVM(Me.CritereSigmaC, iCombi, iTravDeb, iTravFin)
+        Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaC, iCombi, iTravDeb, iTravFin)
 
         '--< Contraintes dans les armatures de la dalle
 
         If myBeam.lMultiSpan And (myBeam.PtsSigma.iArmaDalle(1) > -1) Then
-            EnveloppeCriterFlexionVM(Me.CritereSigmaArmaC, iCombi, iTravDeb, iTravFin)
+            Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaArmaC, iCombi, iTravDeb, iTravFin)
         End If
 
         '--< Contraintes béton et armatures d'enrobage
 
         If myBeam.lEnrobage Then
             If (myBeam.PtsSigma.iBetonEnrob(0) > -1) Then
-                EnveloppeCriterFlexionVM(Me.CritereSigmaE, iCombi, iTravDeb, iTravFin)
+                Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaE, iCombi, iTravDeb, iTravFin)
             End If
             If (myBeam.PtsSigma.iArmaEnrob(0) > -1) Then
-                EnveloppeCriterFlexionVM(Me.CritereSigmaArmaE, iCombi, iTravDeb, iTravFin)
+                Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaArmaE, iCombi, iTravDeb, iTravFin)
             End If
         End If
     End Sub
 
-    Private Sub EnveloppeCriterFlexionVM(myCritere As cls_Critere, iCombi As Integer, iTravDeb As Integer, iTravFin As Integer)
-        '----------------------------------------------------------------------------------------------------------
-        '   13/03/24 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Compare un critere de contrainte élastique avec l'enveloppe de résistance en flexion
-        '----------------------------------------------------------------------------------------------------------
-        '   myCritere   [E] :   Critère à comparer
-        '----------------------------------------------------------------------------------------------------------
-
-        If IsGreater(myCritere.CritereMax, Me.CritereM.CritereMax) Then
-            Me.CritereM.CritereMax = myCritere.CritereMax
-            Me.CritereM.iCombiM = myCritere.iCombiM
-            Me.CritereM.iNodeM = myCritere.iNodeM
-        End If
-
-        For i As Integer = iTravDeb To iTravFin
-            If IsGreater(myCritere.CritereCombiT(iCombi, i), Me.CritereM.CritereCombiT(iCombi, i)) Then
-                Me.CritereM.CritereCombiT(iCombi, i) = myCritere.CritereCombiT(iCombi, i)
-                Me.CritereM.CritereCombiN(iCombi, i) = myCritere.CritereCombiN(iCombi, i)
-            End If
-        Next
-
-    End Sub
 
     Private Sub RunCritereFlexionVonM(myBeam As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,
                                       SigmaU As Decimal, MyCritereM As cls_Critere, Optional signeS As Decimal = 0)

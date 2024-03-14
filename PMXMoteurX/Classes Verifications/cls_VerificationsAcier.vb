@@ -145,10 +145,10 @@ Public Class cls_VerificationsAcier
         '# Critères
 
         If lConstructionPhase Then
-            nbCombiELU = cls_Poutre.nbCombELUConstruction
+            nbCombiELU = myBeam.CombiA_ELCU.nbCombi     ' cls_Poutre.nbCombELUConstruction
             combiELU = myBeam.CombiA_ELCU
         Else
-            nbCombiELU = cls_Poutre.nbCombELU
+            nbCombiELU = myBeam.CombiA_ELU.nbCombi      'cls_Poutre.nbCombELU
             combiELU = myBeam.CombiA_ELU
         End If
 
@@ -300,7 +300,6 @@ Public Class cls_VerificationsAcier
                     Me.RunCriteresInteractionMV(myBeam, iCombi, MEd, MVRd)
 
                 End If
-
 
             End If
 
@@ -807,7 +806,7 @@ Public Class cls_VerificationsAcier
 
 #Region " Vérifications d'une poutre acier sans enrobage "
 
-    Private Sub RunCritereFlexionResistanceElastiqueVM(MyPoutre As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal)
+    Private Sub RunCritereFlexionResistanceElastiqueVM(myBeam As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   25/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -826,20 +825,20 @@ Public Class cls_VerificationsAcier
         Dim Fck, Fcd As Decimal
         Dim Fsk, Fsd As Decimal
 
-        Dim iPro0 As Integer = MyPoutre.PtsSigma.iProfile(0)
-        Dim iBetonE0 As Integer = MyPoutre.PtsSigma.iBetonEnrob(0)
-        Dim iArmaE0 As Integer = MyPoutre.PtsSigma.iArmaEnrob(0)
+        Dim iPro0 As Integer = myBeam.PtsSigma.iProfile(0)
+        Dim iBetonE0 As Integer = myBeam.PtsSigma.iBetonEnrob(0)
+        Dim iArmaE0 As Integer = myBeam.PtsSigma.iArmaEnrob(0)
 
-        Dim lEnrob As Boolean = MyPoutre.lEnrobage
+        Dim lEnrob As Boolean = myBeam.lEnrobage
 
         '--> Initialisation
 
-        FySup = MyPoutre.Section.FySup
-        FydSup = FySup / MyPoutre.Param.Gamma.GammaM0
-        FyW = MyPoutre.Section.FyW
-        FydW = FyW / MyPoutre.Param.Gamma.GammaM0
-        FyInf = MyPoutre.Section.FyInf
-        FydInf = FyInf / MyPoutre.Param.Gamma.GammaM0
+        FySup = myBeam.Section.FySup
+        FydSup = FySup / myBeam.Param.Gamma.GammaM0
+        FyW = myBeam.Section.FyW
+        FydW = FyW / myBeam.Param.Gamma.GammaM0
+        FyInf = myBeam.Section.FyInf
+        FydInf = FyInf / myBeam.Param.Gamma.GammaM0
 
         '--> Calculs
 
@@ -847,39 +846,86 @@ Public Class cls_VerificationsAcier
 
         If (iPro0 > -1) Then
             '( Contrainte face externe de la semelle supérieure
-            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
+            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 0, SigmaELU, FydSup, Me.CritereSigmaA)
             '( Contrainte face interne de la semelle supérieure
-            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
+            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 1, SigmaELU, Math.Min(FydSup, FydW), Me.CritereSigmaA)
             '( Contrainte CdG de la section
-            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
+            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 2, SigmaELU, FydW, Me.CritereSigmaA)
             '( Contrainte face interne de la semelle inférieure
-            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
+            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 3, SigmaELU, Math.Min(FydInf, FydW), Me.CritereSigmaA)
             '( Contrainte face externe de la semelle inférieure
-            RunCritereFlexionVM(MyPoutre, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
+            RunCritereFlexionVM(myBeam, iCombi, iPro0 + 4, SigmaELU, FydInf, Me.CritereSigmaA)
 
         End If
+
+        '# Contraintes dans l'enrobage
 
         If lEnrob And (iBetonE0 > -1) Then
 
             '# Limite de contraintes
-            Fck = MyPoutre.Section.Enrobage.Beton.Fck
-            Fcd = Fck / MyPoutre.Param.Gamma.GammaC
-            Fsk = MyPoutre.Section.Enrobage.AcierArmatures.FsK
-            Fsd = Fsk / MyPoutre.Param.Gamma.GammaS
+            Fck = myBeam.Section.Enrobage.Beton.Fck
+            Fcd = Fck / myBeam.Param.Gamma.GammaC
+            Fsk = myBeam.Section.Enrobage.AcierArmatures.FsK
+            Fsd = Fsk / myBeam.Param.Gamma.GammaS
 
             '# Contrainte dans le béton d'enrobage (face supérieure puis face inférieure)
-            RunCritereFlexionVM(MyPoutre, iCombi, iBetonE0 + 0, SigmaELU, Fcd, Me.CritereSigmaE)
-            RunCritereFlexionVM(MyPoutre, iCombi, iBetonE0 + 1, SigmaELU, Fcd, Me.CritereSigmaE)
+            RunCritereFlexionVM(myBeam, iCombi, iBetonE0 + 0, SigmaELU, Fcd, Me.CritereSigmaE)
+            RunCritereFlexionVM(myBeam, iCombi, iBetonE0 + 1, SigmaELU, Fcd, Me.CritereSigmaE)
 
             '# Contrainte dans les lits d'armatures (3 lits)
             For iArma As Int16 = 0 To 2
-                If MyPoutre.Section.Enrobage.LitArma(iArma).NbTotalBarresActives > 0 Then
-                    RunCritereFlexionVM(MyPoutre, iCombi, iArmaE0 + iArma, SigmaELU, Fsd, Me.CritereSigmaArmaE)
+                If myBeam.Section.Enrobage.LitArma(iArma).NbTotalBarresActives > 0 Then
+                    RunCritereFlexionVM(myBeam, iCombi, iArmaE0 + iArma, SigmaELU, Fsd, Me.CritereSigmaArmaE)
                 End If
             Next
 
         End If
 
+
+        '# Enveloppe de résistance en flexion
+
+        EnveloppeResistanceFlexionElastique(myBeam, iCombi)
+
+    End Sub
+
+    Private Sub EnveloppeResistanceFlexionElastique(myBeam As cls_Poutre, iCombi As Integer)
+        '----------------------------------------------------------------------------------------------------------
+        '   13/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Récupère le critère VM dimensionnant en flexion
+        '----------------------------------------------------------------------------------------------------------
+        '----------------------------------------------------------------------------------------------------------
+
+        '--< Déclarations
+
+        Dim iTravDeb As Integer, iTravFin As Integer
+
+        '--< Initialisations
+
+        iTravDeb = myBeam.IndicePremiereTravee
+        iTravFin = myBeam.IndiceDerniereTravee
+
+        '--< Contraintes dans le profilé acier
+
+        Me.CritereM.CritereMax = Me.CritereSigmaA.CritereMax
+        Me.CritereM.iCombiM = Me.CritereSigmaA.iCombiM
+        Me.CritereM.iNodeM = Me.CritereSigmaA.iNodeM
+
+        For i As Integer = iTravDeb To iTravFin
+            Me.CritereM.CritereCombiT(iCombi, i) = Me.CritereSigmaA.CritereCombiT(iCombi, i)
+            Me.CritereM.CritereCombiN(iCombi, i) = Me.CritereSigmaA.CritereCombiN(iCombi, i)
+        Next
+
+        '--< Contraintes béton et armatures d'enrobage
+
+        If myBeam.lEnrobage Then
+            If (myBeam.PtsSigma.iBetonEnrob(0) > -1) Then
+                Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaE, iCombi, iTravDeb, iTravFin)
+            End If
+            If (myBeam.PtsSigma.iArmaEnrob(0) > -1) Then
+                Me.CritereM.EnveloppeCritereCombi(Me.CritereSigmaArmaE, iCombi, iTravDeb, iTravFin)
+            End If
+        End If
     End Sub
 
     Private Sub RunCritereFlexionVM(MyPoutre As cls_Poutre, iCombi As Integer, iPoint As Integer, SigmaELU(,,) As Decimal,

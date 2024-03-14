@@ -414,6 +414,7 @@ WHERE					= Where
 SHEARBREQUIRED			= The resistance to shear buckling is checked
 SHEARBNOTREQUIRED		= The resistance to shear buckling is not required
 NO_MVINTERACTION		= No MV interaction
+NO_MVBINTERACTION		= No interaction between bending moment and shear buckling
 M_CRITERIA				= Resistance to bending moment
 V_CRITERIA				= Resistance to shear force
 VB_CRITERIA				= Resistance to shear buckling
