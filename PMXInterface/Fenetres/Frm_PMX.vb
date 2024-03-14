@@ -1141,20 +1141,32 @@ Public Class Frm_PMX
         '--> Gestion du résultat de la boite de dialogue
         If FileName <> "" Then
 
-            '--> Lecture du fichier
-            ReadInFile(FileName)
-            MAJToolBarPoutre()
-            Me.img_Main.Invalidate()
-
-            '--> Gestion Recent Files
-
-            EnregistreDansFichiersRecents(FileName)
-
-            '--> MAJ fichier recent
-            Me.AffichageRecentFiles()
+            OuvrirFichier(FileName)
 
         End If
 
+    End Sub
+
+    Private Sub OuvrirFichier(FileName As String)
+        '----------------------------------------------------------------------------------------------------
+        '   14/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------
+        '   Ouverture d'un fichier dont on connait le nom
+        '----------------------------------------------------------------------------------------------------
+        '   FileName    [E] :   
+        '----------------------------------------------------------------------------------------------------
+
+        '--> Lecture du fichier
+        ReadInFile(FileName)
+        MAJToolBarPoutre()
+        Me.img_Main.Invalidate()
+
+        '--> Gestion Recent Files
+
+        EnregistreDansFichiersRecents(FileName)
+
+        '--> MAJ fichier recent
+        Me.AffichageRecentFiles()
     End Sub
 
     Public Sub ReadInFile(ByVal FileName As String)
@@ -1273,10 +1285,10 @@ Public Class Frm_PMX
 
             '    End If
 
-            'Else '--> Projet en cours déjà sauvegardé et pas modifié --> pas d'avertissement
+        Else '--> Projet en cours déjà sauvegardé et pas modifié --> pas d'avertissement
 
-            '    '--> Lecture du fichier
-            '    ReadInFile(FileName)
+            '--> Lecture du fichier
+            OuvrirFichier(FileName)
 
         End If
 
