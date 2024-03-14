@@ -12,6 +12,7 @@
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
     Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
     Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
+    Public CritereMVb As cls_Critere                ' Resistance voilement par cisaillement
 
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
     Public CritereSigmaC As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton de la dalle
@@ -49,6 +50,7 @@
         Me.CritereV = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         Me.CritereVb = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         Me.CritereMV = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+        Me.CritereMVb = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
 
     End Sub
 
@@ -132,6 +134,7 @@
         Dim lCombiClass3 As Boolean                     ' Indique s'il existe au moins une combinaison avec classe 3
         Dim lCombiClass4 As Boolean                     ' Indique s'il existe au moins une combinaison avec classe 4
         Dim lFirst As Boolean = True
+        Dim nbCombi As Integer
 
         '--> Initialisations
 
@@ -144,8 +147,9 @@
 
         '# Critères
 
-        Me.InitialiseCriteres(myBeam.Nodes.nbNodes, cls_Poutre.nbCombELU, myBeam.IndiceDerniereTravee)
-        Me.InitialiseRhoV(cls_Poutre.nbCombELU, myBeam.Nodes.nbNodes)
+        nbCombi = myBeam.CombiA_ELU.nbCombi
+        Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombi, myBeam.IndiceDerniereTravee)
+        Me.InitialiseRhoV(nbCombi, myBeam.Nodes.nbNodes)
 
         '# Largeurs participantes
 
@@ -601,17 +605,21 @@
         '   MplRdM      [E] :   Table des moments plastiques < 0 le long de la barre
         '----------------------------------------------------------------------------------------------------------
 
+        '--> Déclarations
+
+        Dim nbCombi As Integer = MyPoutre.CombiA_ELU.nbCombi
+
         '--> Critère de résistance en flexion
 
         If MyPoutre.Param.lElasticDesignVM Then
             '# Résistance élastique VM imposée
-            If lFirst Then Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee)
+            If lFirst Then Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, nbCombi, MyPoutre.IndiceDerniereTravee)
             RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
         ElseIf (lClasse3 Or Not lCalculPlastic) Then
             '# Présence d'au moins une section de classe 3,
             '# ou cas d'un calcul élastique imposée par la présence de section de classe 3
             'RunCritereMomentsElastiques(myBeam, iCombi, MEd)
-            If lFirst Then Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, cls_Poutre.nbCombELU, MyPoutre.IndiceDerniereTravee)
+            If lFirst Then Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, nbCombi, MyPoutre.IndiceDerniereTravee)
             RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
         Else
             '# Résistance plastique possible
