@@ -43,6 +43,7 @@ Public Class cls_VerificationsAcier
     Dim FluxF As cls_Flux
 
     Public GorgesSoudures(1) As Decimal             ' Gorge des soudures ame semelles pour les sections PRS
+    Public GorgesSouduresMini(1) As Decimal         ' Gorge mini des soudures ame semelles pour les sections PRS
 
 #End Region
 
@@ -236,6 +237,7 @@ Public Class cls_VerificationsAcier
 
         '# Flux de cisaillement des PRS
         If lproPRS Then
+            myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
             Me.FluxF = New cls_Flux
             Me.FluxF.InitialiseCalculAcier(myBeam)
             Me.FluxF.CalculFluxChargesACIER(myBeam, FluxCas)
@@ -342,7 +344,7 @@ Public Class cls_VerificationsAcier
 
     Private Sub RunDimensionSouduresAmeSemelle(myBeam As cls_Poutre, iCombi As Integer, FluxELU(,,) As Decimal, ByRef Gorges() As Decimal)
         '----------------------------------------------------------------------------------------------------------
-        '   07/12/23 :  Création - POM
+        '   14/03/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Calcul des gorges de soudure pour les flux de cisaillement ELU
         '----------------------------------------------------------------------------------------------------------
@@ -368,6 +370,7 @@ Public Class cls_VerificationsAcier
         Dim BetaW As Decimal = 1      '== APROGRaMMER
         Dim Fu() As Decimal = {myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfs, myBeam.Section.ProfilA.Tw)),
                                myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfi, myBeam.Section.ProfilA.Tw))}
+        Dim myEN1993 As New cls_Eurocodes
 
         '--( Calcul
 
@@ -384,7 +387,7 @@ Public Class cls_VerificationsAcier
 
                     For iSoud = iDEB To iFIN
 
-                        Gorges(iSoud - 1) = Math.Max(Gorges(iSoud - 1), CalculSoudure(FluxELU(iSoud, iNode, k), GammaM2, BetaW, Fu(iSoud - 1)))
+                        Gorges(iSoud - 1) = Math.Max(Gorges(iSoud - 1), myEN1993.CalculSoudure(FluxELU(iSoud, iNode, k), GammaM2, BetaW, Fu(iSoud - 1)))
 
                     Next
 
@@ -396,26 +399,6 @@ Public Class cls_VerificationsAcier
         Next
 
     End Sub
-
-    Private Function CalculSoudure(myFlux As Decimal, GammaM2 As Decimal, BetaW As Decimal, Fu As Decimal) As Decimal
-        '----------------------------------------------------------------------------------------------------------
-        '   07/12/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Calcul des gorges de soudure pour les flux de cisaillement ELU
-        '----------------------------------------------------------------------------------------------------------
-        '   myFlux              [E] :   Flux de cisaillement
-        '   GammaM2             [E] :   Coefficient partiel
-        '   BetaW               [E] :   Coefficient BetaW selon EN 1993-1-8 pour le calcul des soudures
-        '   Fu                  [E] :   Résistance ultime à la traction
-        '----------------------------------------------------------------------------------------------------------
-
-        Dim Aw As Decimal
-
-        Aw = Math.Sqrt(3) / 2 * Math.Abs(myFlux) / (Fu * kConvMPaPa) * BetaW * GammaM2
-
-        Return Aw
-    End Function
-
 
 #End Region
 

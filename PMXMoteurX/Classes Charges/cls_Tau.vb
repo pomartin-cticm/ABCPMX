@@ -160,6 +160,8 @@
 
             For k = kDeb To kFin
 
+                iElt = iNode - 1 + k
+
                 For iPts = 0 To NbPts - 1
 
                     InertieY = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).InertieY(iElt)
@@ -309,6 +311,8 @@
             If iNode = NbNodes - 1 Then kFin = 0 Else kFin = 1
 
             For k = kDeb To kFin
+
+                iElt = iNode - 1 + k
 
                 For iPts = 0 To NbPts - 1
 

@@ -66,6 +66,51 @@ Public Class cls_ProfilA
 
 #Region " Propriétés "
 
+    Public Sub InitialiseSoudureMini(ByRef Gorges() As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   14/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul des gorges de soudure mini d'après les recommandations CNC2M/BNCM 0175
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam              [E] :   Poutre traitée
+        '   Gorges              [S] :   Gorge mini des soudures
+        '----------------------------------------------------------------------------------------------------------
+
+        Gorges(0) = Me.EpaisseurMinSoudureAmeSemelle(True)
+        Gorges(1) = Me.EpaisseurMinSoudureAmeSemelle(True)
+
+
+    End Sub
+
+    Public Function EpaisseurMinSoudureAmeSemelle(lSup) As Decimal
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   22/02/24 :  Création POM
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   Calcule de l'épaisseur mini des cordons âme/semelle d'après BNCM N 0175
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   lSup    [E] :   Indique si semelle sup ou inf
+        '-------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Const EPMINIGORGE As Decimal = 0.003            ' 3 mm mini
+        Dim tMax As Decimal
+        Const kUnit As Decimal = 1000                   ' Pour les calculs en mm
+
+        '--( Initialisation
+
+        If lSup Then
+            tMax = Math.Max(Me.Tfs, Me.Tw)
+        Else
+            tMax = Math.Max(Me.Tfi, Me.Tw)
+        End If
+
+        '--( Calcul
+
+        Return Math.Max(EPMINIGORGE, (Math.Sqrt(tMax * kUnit) - 0.5) / kUnit)
+
+    End Function
+
     Public ReadOnly Property ElancementAme As Decimal
         '-------------------------------------------------------------------------------------------------------------------------------
         '   22/02/24 :  Création POM

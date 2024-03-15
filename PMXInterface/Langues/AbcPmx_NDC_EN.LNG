@@ -415,6 +415,7 @@ SHEARBREQUIRED			= The resistance to shear buckling is checked
 SHEARBNOTREQUIRED		= The resistance to shear buckling is not required
 NO_MVINTERACTION		= No MV interaction
 NO_MVBINTERACTION		= No interaction between bending moment and shear buckling
+CON_CRITERIA			= Resistance of connection
 M_CRITERIA				= Resistance to bending moment
 V_CRITERIA				= Resistance to shear force
 VB_CRITERIA				= Resistance to shear buckling
@@ -447,6 +448,12 @@ ADDPARAM				= Additional parameters
 ADDP_SHEARB				= Shear buckling
 ADDMELRDPMX				= Elastic resistant moments
 MVBINTERACTION			= MV interaction according to EN 1993-1-5 § 7.1
+WTOFWEBS				= Web to flanges welds 
+UPPERF					= Upper flange
+LOWERF					= Lower flange
+DESIGNVALUE				= Design value
+MINVALUE				= Minimum value
+MINIACCTOREF			= Minimum values according to the French Recommendations BNCM / CNC2M N0175
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Serviceability Limit States

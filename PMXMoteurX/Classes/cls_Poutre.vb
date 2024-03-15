@@ -167,6 +167,201 @@ Public Class cls_Poutre
     Public NombreZones() As Integer
 
     ''' <summary>
+    ''' Espacement longi entre goujons
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' </summary>
+    Public EspacementZone(,) As Decimal
+
+    ''' <summary>
+    ''' Nombre d'ondes entre deux goujons consécutifs
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' </summary>
+    Public Espacement_Bac_TransZone(,) As Integer
+
+    ''' <summary>
+    ''' Nombre de goujons disposés transversalement
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' </summary>
+    Public NombreGoujonsTransv(,) As Integer
+
+    '''' <summary>
+    '''' Nombre total de goujons disposés sur la travée considérée   
+    '''' </summary>
+    'Public NombreGoujonsTot() As Integer
+
+    ''' <summary>
+    ''' Densité de connexion par zone de connexion (PRd / unité de longueur)
+    ''' </summary>
+    Public DensiteConnexionZone(,) As Decimal
+
+    ''' <summary>
+    ''' Contrainte tangentielle / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
+    ''' </summary>
+    Public TauEd(,,) As Decimal
+
+    ''' <summary>
+    ''' Angle de la bielle de compression EN RADIAN / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
+    ''' </summary>
+    Public Thetaf(,,) As Decimal
+
+    ''' <summary>
+    ''' Angle min de la bielle de compression EN RADIAN (dépend de si la zone se situe en flexion positive ou négative)
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' </summary>
+    Public Thetaf_min(,) As Decimal
+
+    ''' <summary>
+    ''' Vérification de la bielle de compression 
+    ''' (GUD: pour l'instant je mets ici l'attribut car le critère est constant le long d'une zone de connexion. A voir s'il faut le déplacer dans la classe vérification)
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
+    ''' </summary>
+    Public Gamma_sf(,,) As Decimal
+
+    ''' <summary>
+    ''' Aire par unité de longueur des armatures transversales / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0, 1 ou 2)
+    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
+    ''' </summary>
+    Public As_s_transv(,,) As Decimal
+
+
+#End Region
+
+#Region " Propriétés pour la connexion "
+
+    Public Function FluxRdZone(iTravee As Integer, iZone As Integer) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   15/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Renvoie la résistance élastique de la connexion, par unité de longueur, dans une zone 
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam          [E] :   Poutre traitée
+        '   FluxRd          [S] :   Résistance de la connexion / u longueur le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Nr As Integer
+        Dim PRd As Decimal
+        Dim lGeneration1 As Boolean = Me.Param.lGeneration1
+        Dim lDallePleine As Boolean = Not (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
+        Dim lPerp As Boolean = Me.Dalle.Bac.lPerpendiculaire
+        Dim FcK, Ecm As Decimal
+        Dim GammaVs, GammaVc As Decimal
+        Dim sX As Decimal
+        Dim myFluxRd As Decimal
+        GammaVs = Me.Param.Gamma.GammaVs
+        GammaVc = Me.Param.Gamma.GammaVc
+        FcK = Me.Dalle.beton.Fck
+        Ecm = Me.Dalle.beton.Ecm
+
+        '--( Calcul
+
+        Nr = Me.NombreGoujonsTransv(iTravee, iZone)
+        PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, Nr, FcK, Ecm, GammaVs, GammaVc)
+        sX = Me.EntraxeLongiGoujons(iTravee, iZone)
+        myFluxRd = Nr * PRd / sX
+
+        Return myFluxRd
+
+    End Function
+    Private Function EntraxeLongiGoujons(iTravee As Integer, iZone As Integer) As Decimal
+        '--------------------------------------------------------------------------------------------------------
+        '   03/02/24 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------------------------------
+        '   Retourne l'entraxe longi entre rangée de connecteurs
+        '--------------------------------------------------------------------------------------------------------
+        '   iTravee     [E] :   Indice de la travée
+        '   iZone       [E] :   Indice de la zone de connexion
+        '--------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lRib As Boolean     ' Espacement multiple de l'entraxe des nervures
+        Dim Entraxe As Decimal
+
+        '--( Initialisation
+
+        lRib = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte) _
+            And (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) _
+            And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
+
+        '--( Calcul
+
+        If lRib Then
+            Entraxe = Me.Espacement_Bac_TransZone(iTravee, iZone) * Me.Dalle.Bac.Ep
+        Else
+            Entraxe = Me.EspacementZone(iTravee, iZone)
+        End If
+
+        Return Entraxe
+
+    End Function
+    ''' <summary>
+    ''' Propriétés renvoyant le nombre de lits d'armatures transversales disposées 
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property NbTransverseLayer As Integer
+        Get
+            Dim NbLayer As Integer
+
+            If Me.Dalle.lMixte Then
+                NbLayer = 1
+            Else
+                If Me.Dalle.Connecteur.hsc - 70 / 1000 <= Me.Dalle.t_h Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
+                    NbLayer = 3
+                Else
+                    NbLayer = 2
+                End If
+
+            End If
+
+            Return NbLayer
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Fonction renvoyant la densité d'armatures min à disposer (m2/m2)
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function rho_t_min() As Decimal
+        Dim rho_loc As Decimal
+        rho_loc = 0.08 * Math.Sqrt(Me.Dalle.beton.Fck) / Me.Dalle.AcierArmatures.FsK
+        Return rho_loc
+
+    End Function
+
+    ''' <summary>
+    ''' Fonction renvoyant la quantité d'armatures min à disposer (m2/m) selon le §9.2.2 (5) de l'EC2
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function As_min_EC2() As Decimal
+        Dim Asmin As Decimal
+        Asmin = Me.rho_t_min * Me.Dalle.EpaisseurActive
+        Return Asmin
+    End Function
+
+    ''' <summary>
+    ''' Fonction renvoyant la quantité d'armatures min à disposer (m2/m) selon le §9.2.1 (4) de l'EC4
+    ''' </summary>
+    ''' <returns></returns>
+    Public Function As_min_EC4() As Decimal
+        Return 80 * 10 ^ (-6) '80 mm2/m
+    End Function
+
+    ''' <summary>
     ''' Abscisse du début d'une zone définie
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0,1,2)
@@ -243,195 +438,6 @@ Public Class cls_Poutre
             Return nr_retour
         End Get
     End Property
-
-    ''' <summary>
-    ''' Espacement longi entre goujons
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' </summary>
-    Public EspacementZone(,) As Decimal
-
-    ''' <summary>
-    ''' Nombre d'ondes entre deux goujons consécutifs
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' </summary>
-    Public Espacement_Bac_TransZone(,) As Integer
-
-    ''' <summary>
-    ''' Nombre de goujons disposés transversalement
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' </summary>
-    Public NombreGoujonsTransv(,) As Integer
-
-    '''' <summary>
-    '''' Nombre total de goujons disposés sur la travée considérée   
-    '''' </summary>
-    'Public NombreGoujonsTot() As Integer
-
-    ''' <summary>
-    ''' Densité de connexion par zone de connexion (PRd / unité de longueur)
-    ''' </summary>
-    Public DensiteConnexionZone(,) As Decimal
-
-    ''' <summary>
-    ''' Contrainte tangentielle / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
-    ''' </summary>
-    Public TauEd(,,) As Decimal
-
-    ''' <summary>
-    ''' Angle de la bielle de compression EN RADIAN / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
-    ''' </summary>
-    Public Thetaf(,,) As Decimal
-
-    ''' <summary>
-    ''' Angle min de la bielle de compression EN RADIAN (dépend de si la zone se situe en flexion positive ou négative)
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' </summary>
-    Public Thetaf_min(,) As Decimal
-
-    ''' <summary>
-    ''' Vérification de la bielle de compression 
-    ''' (GUD: pour l'instant je mets ici l'attribut car le critère est constant le long d'une zone de connexion. A voir s'il faut le déplacer dans la classe vérification)
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
-    ''' </summary>
-    Public Gamma_sf(,,) As Decimal
-
-    ''' <summary>
-    ''' Aire par unité de longueur des armatures transversales / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
-    ''' </summary>
-    Public As_s_transv(,,) As Decimal
-
-    ''' <summary>
-    ''' Propriétés renvoyant le nombre de lits d'armatures transversales disposées 
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property NbTransverseLayer As Integer
-        Get
-            Dim NbLayer As Integer
-
-            If Me.Dalle.lMixte Then
-                NbLayer = 1
-            Else
-                If Me.Dalle.Connecteur.hsc - 70 / 1000 <= Me.Dalle.t_h Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
-                    NbLayer = 3
-                Else
-                    NbLayer = 2
-                End If
-
-            End If
-
-            Return NbLayer
-        End Get
-    End Property
-
-    ''' <summary>
-    ''' Fonction renvoyant la densité d'armatures min à disposer (m2/m2)
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function rho_t_min() As Decimal
-        Dim rho_loc As Decimal
-        rho_loc = 0.08 * Math.Sqrt(Me.Dalle.beton.Fck) / Me.Dalle.AcierArmatures.FsK
-        Return rho_loc
-
-    End Function
-
-    ''' <summary>
-    ''' Fonction renvoyant la quantité d'armatures min à disposer (m2/m) selon le §9.2.2 (5) de l'EC2
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function As_min_EC2() As Decimal
-        Dim Asmin As Decimal
-        Asmin = Me.rho_t_min * Me.Dalle.EpaisseurActive
-        Return Asmin
-    End Function
-
-    ''' <summary>
-    ''' Fonction renvoyant la quantité d'armatures min à disposer (m2/m) selon le §9.2.1 (4) de l'EC4
-    ''' </summary>
-    ''' <returns></returns>
-    Public Function As_min_EC4() As Decimal
-        Return 80 * 10 ^ (-6) '80 mm2/m
-    End Function
-
-    'Private Function IndiceZoneConnexion(iTravee As Integer, xPos As Decimal) As Integer
-    '    '-----------------------------------------------------------------------------------------------------------------
-    '    '   03/02/24 :  Création - POM - V1.00
-    '    '-----------------------------------------------------------------------------------------------------------------
-    '    '   Retourne l'indice de la zone de connexion en fonctin de la position
-    '    '-----------------------------------------------------------------------------------------------------------------
-    '    '   iTravee     [E] :   Indice de la travée
-    '    '   xPos        [E] :   Position par rapport à l'appui gauche de la travée
-    '    '-----------------------------------------------------------------------------------------------------------------
-
-    '    '--( Déclaration
-
-    '    Dim iZone As Integer = 0
-    '    Dim i As Integer
-    '    Dim lTrouve As Boolean
-    '    Dim sCum As Decimal = 0
-
-    '    '--( Traitement
-
-    '    If Me.NombreZones(iTravee) > 1 Then
-    '        i = -1
-    '        lTrouve = False
-    '        Do While ((Not lTrouve) And (i < Me.NombreZones(iTravee) - 1))
-    '            i += 1
-    '            lTrouve = IsSmallerOrEqual(xPos, sCum + Me.LongueurZone(iTravee, i))
-    '            If Not lTrouve Then sCum += Me.LongueurZone(iTravee, i)
-    '        Loop
-    '        iZone = i
-    '    End If
-
-    '    Return iZone
-
-    'End Function
-
-    Private Function EntraxeLongiGoujons(iTravee As Integer, iZone As Integer) As Decimal
-        '--------------------------------------------------------------------------------------------------------
-        '   03/02/24 :  Création - POM - V1.00
-        '--------------------------------------------------------------------------------------------------------
-        '   Retourne l'entraxe longi entre rangée de connecteurs
-        '--------------------------------------------------------------------------------------------------------
-        '   iTravee     [E] :   Indice de la travée
-        '   iZone       [E] :   Indice de la zone de connexion
-        '--------------------------------------------------------------------------------------------------------
-
-        '--( Déclaration
-
-        Dim lRib As Boolean     ' Espacement multiple de l'entraxe des nervures
-        Dim Entraxe As Decimal
-
-        '--( Initialisation
-
-        lRib = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte) _
-            And (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) _
-            And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
-
-        '--( Calcul
-
-        If lRib Then
-            Entraxe = Me.Espacement_Bac_TransZone(iTravee, iZone) * Me.Dalle.Bac.Ep
-        Else
-            Entraxe = Me.EspacementZone(iTravee, iZone)
-        End If
-
-        Return Entraxe
-
-    End Function
 
 #End Region
 
@@ -2052,9 +2058,9 @@ Public Class cls_Poutre
         Dim b0, b0min As Decimal
         Dim LargeurParticipante(0, 0) As Decimal
         Dim be1, be2, beta1, beta2, bem, bes As Decimal
-        Dim k_bacPE1 As Decimal 'coefficient qui indique la présence du bac acier (=1) ou non (=0)
+        Dim k_bacPE1 As Decimal                             'coefficient qui indique la présence du bac acier (=1) ou non (=0)
         Dim xDebutZoneLoc, xFinZoneLoc As Decimal(,)
-        Dim lSupportA, lSupportB, lMiTravee As Boolean 'sera utile pour + tard, permet de savoir si la zone de connection etudiee empiete sur la zone de support A, B ou mi-travee (selon la Figure 5.1 de l'EC4)
+        Dim lSupportA, lSupportB, lMiTravee As Boolean      'sera utile pour + tard, permet de savoir si la zone de connection etudiee empiete sur la zone de support A, B ou mi-travee (selon la Figure 5.1 de l'EC4)
         Dim thetaf_min_pos, thetaf_min_neg, thetaf_max As Decimal 'angle min de la bielle de compression en fonction de si on se trouve en zone de flexion positive ou négative 
 
         '--> Initialisation
@@ -2096,10 +2102,11 @@ Public Class cls_Poutre
                 'CALCUL DE LA CONTRAINTE TANGENTIELLE
                 '---
 
-                nr = Me.NombreGoujonsTransv(i_travee, j_zone)
-                PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
-                sx = Me.EspacementZone(i_travee, j_zone)
-                v_x_Ed = nr * PRd / sx
+                'nr = Me.NombreGoujonsTransv(i_travee, j_zone)
+                'PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
+                'sx = Me.EspacementZone(i_travee, j_zone)
+                'v_x_Ed = nr * PRd / sx
+                v_x_Ed = Me.FluxRdZone(i_travee, j_zone)
 
                 b0 = (nr - 1) * b0min
 

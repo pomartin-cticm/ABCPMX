@@ -110,4 +110,27 @@
 
 #End Region
 
+#Region " Calcul des soudures "
+
+    Public Function CalculSoudure(myFlux As Decimal, GammaM2 As Decimal, BetaW As Decimal, Fu As Decimal) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   07/12/23 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul des gorges de soudure pour les flux de cisaillement ELU
+        '----------------------------------------------------------------------------------------------------------
+        '   myFlux              [E] :   Flux de cisaillement
+        '   GammaM2             [E] :   Coefficient partiel
+        '   BetaW               [E] :   Coefficient BetaW selon EN 1993-1-8 pour le calcul des soudures
+        '   Fu                  [E] :   Résistance ultime à la traction
+        '----------------------------------------------------------------------------------------------------------
+
+        Dim Aw As Decimal
+
+        Aw = Math.Sqrt(3) / 2 * Math.Abs(myFlux) / (Fu * kConvMPaPa) * BetaW * GammaM2
+
+        Return Aw
+    End Function
+
+#End Region
+
 End Class

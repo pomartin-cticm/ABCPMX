@@ -14,6 +14,8 @@
     Public CritereVb As cls_Critere                 ' Resistance voilement par cisaillement
     Public CritereMVb As cls_Critere                ' Resistance voilement par cisaillement
 
+    Public CritereConnex As cls_Critere             ' Resistance de la connexion en calcul élastique
+
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
     Public CritereSigmaC As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le béton de la dalle
     Public CritereSigmaArmaC As cls_Critere         ' Critère de résistance en flexion  / Contrainte normale dans les armatures de la dalle
@@ -34,6 +36,13 @@
     '==( Classe pour le calcul des contraintes de cisaillement en calcul élastique imposé
 
     Dim Tau As cls_Tau
+
+    '==( Classe pour le caclul des flux de cisaillement dans les soudures des PRS et dans la connection
+
+    Dim FluxF As cls_Flux
+
+    Public GorgesSoudures(1) As Decimal             ' Gorge des soudures ame semelles pour les sections PRS
+    Public GorgesSouduresMini(1) As Decimal         ' Gorge mini des soudures ame semelles pour les sections PRS
 
 #End Region
 
@@ -71,7 +80,10 @@
             Me.CritereSigmaArmaE = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
         End If
 
+        Me.CritereConnex = New cls_Critere(NbNodes, nbCombi, IndDerniereT)
+
     End Sub
+
 
 #End Region
 
@@ -135,6 +147,11 @@
         Dim lCombiClass4 As Boolean                     ' Indique s'il existe au moins une combinaison avec classe 4
         Dim lFirst As Boolean = True
         Dim nbCombi As Integer
+        Dim lproPRS As Boolean = Not myBeam.Section.lLamine
+
+        Dim FluxCas(,,,) As Decimal = Nothing           ' Flux de cisaillement dans les soudures de PRS et dans la connection par cas de charges
+        Dim FluxELU(,,) As Decimal = Nothing            ' Flux de cisaillement dans les soudures de PRS et dans la connection aux ELU
+        Dim FluxRd(,) As Decimal = Nothing              ' Résistance de la connexion / u longueur le long de la barre
 
         '--> Initialisations
 
@@ -192,6 +209,20 @@
             Me.Tau = New cls_Tau(myBeam.Section.typeSection)
             Me.Tau.CalculContraintesChargesMIXTE(myBeam, TauCas)
         End If
+        '# Flux de cisaillement des PRS
+        If lproPRS Then
+            myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
+        End If
+        If lproPRS Or myBeam.Param.lElasticDesignVM Then
+            Me.FluxF = New cls_Flux
+            Me.FluxF.InitialiseCalculMixte(myBeam)
+            Me.FluxF.CalculFluxChargesMIXTE(myBeam, Beff, FluxCas)
+        End If
+        '# Résistance élastique de la connexion / u longueur
+        If myBeam.Param.lElasticDesignVM Then
+            Me.InitialiseCriteresVM(myBeam.Nodes.nbNodes, myBeam.lEnrobage, nbCombi, myBeam.IndiceDerniereTravee)
+            Me.InitialiseResistanceElastiqueConnexion(myBeam, FluxRd)
+        End If
 
         '--> Boucle sur les combinaisons
 
@@ -225,6 +256,13 @@
                                                          myBeam.ChargesA, TauCas, lRetraitElastique, TauELU)
                 End If
 
+                '# Combinaison des flux de cisaillement
+
+                If lproPRS Or myBeam.Param.lElasticDesignVM Then
+                    myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, cls_Flux.NbPTS, myBeam.Nodes.nbNodes,
+                                                         myBeam.ChargesA, FluxCas, lRetraitElastique, FluxELU)
+                End If
+
                 '# Position de l'ANE en fonction des contraintes dans le profilé
 
                 myBeam.RechercheANEFromSigma(SigmaELU, MEd, myBeam.Nodes.nbNodes, zANE)
@@ -252,6 +290,12 @@
 
                 If Me.lCalculPlastic And (Not (lClasse3 Or lClasse4)) Then
                     Me.CheckDegreConnexion(myBeam, DeltaRd, iNodeMmax)
+                End If
+
+                '# Vérification de la connexion en calcul élastique
+
+                If myBeam.Param.lElasticDesignVM Then
+                    Me.RunCalculElastiqueConnexion(myBeam, iCombi, FluxELU, FluxRd)
                 End If
 
                 '# Vérification sous moment fléchissant
@@ -300,6 +344,12 @@
                     '# Vérification sous interaction MV
 
                     Me.RunCriteresInteractionMV(myBeam, iCombi, MEd, MVRd)
+                End If
+
+                '# Calcul des soudures des PRS
+
+                If lproPRS Then
+                    Me.RunDimensionSouduresAmeSemelle(myBeam, iCombi, FluxELU, Me.GorgesSoudures)
                 End If
 
             Next
@@ -505,7 +555,6 @@
 
     End Sub
 
-
     Private Sub CalculeClasseSectionsMaillage(MyPoutre As cls_Poutre, MEd(,) As Decimal, zANE(,) As Decimal,
                                               zANP(,) As Decimal, ByRef ClasseSection(,) As Integer,
                                               ByRef lClasse3 As Boolean, ByRef lClasse4 As Boolean)
@@ -561,6 +610,181 @@
 
 #End Region
 
+#Region " Calcul élastique de la connexion "
+
+    Private Sub InitialiseResistanceElastiqueConnexion(myBeam As cls_Poutre, ByRef FluxRd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   15/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Initialisation de la résistance de la connexion 
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam          [E] :   Poutre traitée
+        '   FluxRd          [S] :   Résistance de la connexion / u longueur le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iNode, k As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+        Dim iZone As Integer
+        Dim sCum, xNode As Decimal
+        Dim xFinZone(,) As Decimal = myBeam.xFinZone
+        Dim myFluxRd As Decimal
+
+        '--( Initialisation
+
+        ReDim FluxRd(myBeam.Nodes.nbNodes - 1, 1)
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        '--( Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+            iZone = 0
+            sCum = xFinZone(iTravee, iZone)
+            myFluxRd = myBeam.FluxRdZone(iTravee, iZone)
+
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
+                xNode = myBeam.Nodes.xGlobal(iNode)
+
+                If IsGreater(xNode, sCum) Then
+                    iZone += 1
+                    sCum = xFinZone(iTravee, iZone)
+
+                    myFluxRd = myBeam.FluxRdZone(iTravee, iZone)
+
+                End If
+
+                For k = iDebK To iFinK
+                    FluxRd(iNode, k) = myFluxRd
+                Next
+            Next
+        Next
+
+    End Sub
+
+    Private Sub RunCalculElastiqueConnexion(myBeam As cls_Poutre, iCombi As Integer, FluxELU(,,) As Decimal, FluxRd(,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   15/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance de la connexion 
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam          [E] :   Poutre traitée
+        '   iCombi          [E] :   Indice de la combinaison
+        '   FluxELU         [E] :   Flux de cisaillement dans la connexion le long de la barre
+        '   FluxRd          [E] :   Résistance de la connexion / u longueur le long de la barre
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+        Const iPTZERO As Integer = 0
+        Dim myfluxELU, myFluxRd As Decimal
+
+        '--> Initialisation
+
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
+                For k = iDebK To iFinK
+
+                    myfluxELU = FluxELU(iPTZERO, iNode, k)
+                    myFluxRd = FluxRd(iNode, k)
+
+                    Me.CritereConnex.EnregistreCritere(iNode, iCombi, iTravee, myfluxELU, myFluxRd)
+
+                Next
+            Next
+        Next
+
+    End Sub
+
+#End Region
+
+#Region " Calcul des soudures âme semelle "
+
+    Private Sub RunDimensionSouduresAmeSemelle(myBeam As cls_Poutre, iCombi As Integer, FluxELU(,,) As Decimal, ByRef Gorges() As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   14/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcul des gorges de soudure pour les flux de cisaillement ELU
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam              [E] :   Poutre traitée
+        '   iCombi              [E] :   Indice de la combinaison
+        '   FluxELU             [E] :   Table des flux de cisaillement longi le long de la poutre
+        '   Gorges              [S] :   Gorge des soudures
+        '----------------------------------------------------------------------------------------------------------
+
+        '(NbPts - 1, NbNodes - 1, 1)
+
+        '--( Déclaration
+
+        Const iDEB As Integer = 1       ' Semelle sup
+        Const iFIN As Integer = 2       ' Semelle inf
+
+        Dim iSoud, iTrav As Integer
+        Dim iDebTrav As Integer = myBeam.IndicePremiereTravee
+        Dim iFinTrav As Integer = myBeam.IndiceDerniereTravee
+        Dim iDebNod, iFinNod, iNode As Integer
+        Dim kDeb, kFin, k As Integer
+        Dim GammaM2 As Decimal = myBeam.Param.Gamma.GammaM2
+        Dim BetaW As Decimal = 1      '== APROGRaMMER
+        Dim Fu() As Decimal = {myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfs, myBeam.Section.ProfilA.Tw)),
+                               myBeam.Section.Acier.LimiteFu(Math.Max(myBeam.Section.ProfilA.Tfi, myBeam.Section.ProfilA.Tw))}
+        Dim myEN1993 As New cls_Eurocodes
+
+        '--( Calcul
+
+        For iTrav = iDebTrav To iFinTrav
+
+            iDebNod = myBeam.Nodes.iNodeExtTrav(iTrav, 0)
+            iFinNod = myBeam.Nodes.iNodeExtTrav(iTrav, 1)
+
+            For iNode = iDebNod To iFinNod
+                If iNode = iDebNod Then kDeb = 1 Else kDeb = 0
+                If iNode = iFinNod Then kFin = 0 Else kFin = 1
+
+                For k = kDeb To kFin
+
+                    For iSoud = iDEB To iFIN
+
+                        Gorges(iSoud - 1) = Math.Max(Gorges(iSoud - 1), myEN1993.CalculSoudure(FluxELU(iSoud, iNode, k), GammaM2, BetaW, Fu(iSoud - 1)))
+
+                    Next
+
+                Next
+
+            Next
+
+
+        Next
+
+    End Sub
+
+
+#End Region
+
 #Region " Critères de vérification "
 
     Private Sub RunCritereMoments(MyPoutre As cls_Poutre, ByRef lFirst As Boolean, iCombi As Integer, lPlastique As Boolean, lClasse3 As Boolean,
@@ -589,13 +813,11 @@
 
         If MyPoutre.Param.lElasticDesignVM Then
             '# Résistance élastique VM imposée
-            If lFirst Then Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, nbCombi, MyPoutre.IndiceDerniereTravee)
             RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
         ElseIf (lClasse3 Or Not lCalculPlastic) Then
             '# Présence d'au moins une section de classe 3,
             '# ou cas d'un calcul élastique imposée par la présence de section de classe 3
             'RunCritereMomentsElastiques(myBeam, iCombi, MEd)
-            If lFirst Then Me.InitialiseCriteresVM(MyPoutre.Nodes.nbNodes, MyPoutre.lEnrobage, nbCombi, MyPoutre.IndiceDerniereTravee)
             RunCritereFlexionResistanceElastiqueVM(MyPoutre, iCombi, SigmaELU)
         Else
             '# Résistance plastique possible

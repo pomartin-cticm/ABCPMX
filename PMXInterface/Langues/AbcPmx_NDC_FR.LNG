@@ -410,6 +410,7 @@ SHEARBREQUIRED			= La résistance au voilement par cisaillement est effectuée
 SHEARBNOTREQUIRED		= La résistance au voilement par cisaillement n'est pas nécessaire
 NO_MVINTERACTION		= Pas d'interaction MV
 NO_MVBINTERACTION		= Pas d'interaction entre le moment de flexion et le voilement par cisaillement
+CON_CRITERIA			= Résistance de la connexion
 M_CRITERIA				= Résistance à la flexion
 V_CRITERIA				= Résistance à l'effort tranchant
 VB_CRITERIA				= Résistance au voilement par cisaillement
@@ -441,6 +442,12 @@ BEAMR					= Résistance de la poutre
 ADDP_SHEARB				= Voilement par cisaillement
 ADDMELRDPMX				= Moments résistants élastiques
 MVBINTERACTION			= Interaction MV d'après l'EN 1993-1-5 § 7.1
+WTOFWEBS				= Soudures âme-semelles
+UPPERF					= Semelle supérieure
+LOWERF					= Semelle inférieure
+DESIGNVALUE				= Valeur de calcul
+MINVALUE				= Valeur minimum
+MINIACCTOREF			= Valeurs minimum d'après les Recommendations BNCM / CNC2M N0175
 
 #NDC_VERIFICATIONSSLS
 SLS_CHECKS				= Etat limite de service

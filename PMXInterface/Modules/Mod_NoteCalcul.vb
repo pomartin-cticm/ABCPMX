@@ -120,8 +120,6 @@ Module Mod_NoteCalcul
 
         MyNote = New Cls_Rapport("Arial", 1.5, 3, 3)
         'MyProjet.Poutres(MyProjet.IndEnCours).InitialisePoidsPropres()
-        MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()
-        MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
 
         strRacineELU = BlocG("ULS")
         strRacineELS = BlocG("SLS")
@@ -5881,6 +5879,10 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & "(7): " & BlocELU("NORMALS_INREINFENCA"))
             End If
 
+            '# Connexion 
+            AddTitreNdC(3, BlocELU("CONNECTION"))
+            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereConnex, "\SG\s\-connex\=", BlocELU("CON_CRITERIA"))
+
         Else
 
             '--> Calcul élastique classe 3
@@ -5897,15 +5899,23 @@ Module Mod_NoteCalcul
 
             SauteLigne()
 
-                If MyBeam.Param.lElasticDesignCl3 Then
-                    AddLigneNDC(TABW2 & "(1): " & BlocELU("ELASTICDESIGNIMPOSEDCL3"))
-                Else
-                    AddLigneNDC(TABW2 & "(1): " & BlocELU("ELASTICDESIGNCLASS3"))
-                End If
-
-                AddLigneNDC(TABW2 & "(2): " & BlocELU("MVBINTERACTION"))
-
+            If MyBeam.Param.lElasticDesignCl3 Then
+                AddLigneNDC(TABW2 & "(1): " & BlocELU("ELASTICDESIGNIMPOSEDCL3"))
+            Else
+                AddLigneNDC(TABW2 & "(1): " & BlocELU("ELASTICDESIGNCLASS3"))
             End If
+
+            AddLigneNDC(TABW2 & "(2): " & BlocELU("MVBINTERACTION"))
+
+        End If
+
+        '==( Calcul des soudures pour les PRS
+
+        If Not MyBeam.Section.lLamine Then
+
+            EditionGorgesSoudures(MyBeam.VerifMixte(iVerif).GorgesSoudures, MyBeam.VerifMixte(iVerif).GorgesSouduresMini)
+
+        End If
 
     End Sub
 
@@ -6276,17 +6286,47 @@ Module Mod_NoteCalcul
 
         If Not MyBeam.Section.lLamine Then
 
-            Dim Symbol As String = "aws"
-            AddTitreNdC(3, "Soudures âme-semelles")
-
-            AddLigneNDC(TABW3 & "Semelle sup" & TABAFF &
-                        Symbol & TABEGAL & GetStringInUnit(MyBeam.VerifAcier(iVerif).GorgesSoudures(0), Enu_TypeVariable.Dimension, 3, 2, True))
-
-            Symbol = "awi"
-            AddLigneNDC(TABW3 & "Semelle inf" & TABAFF &
-                        Symbol & TABEGAL & GetStringInUnit(MyBeam.VerifAcier(iVerif).GorgesSoudures(1), Enu_TypeVariable.Dimension, 3, 2, True))
+            EditionGorgesSoudures(MyBeam.VerifAcier(iVerif).GorgesSoudures, MyBeam.VerifAcier(iVerif).GorgesSouduresMini)
 
         End If
+
+    End Sub
+
+    Private Sub EditionGorgesSoudures(GorgesSoudures() As Decimal, GorgesSouduresMini() As Decimal)
+        '---------------------------------------------------------------------------------------------------------------------
+        '   15/03/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------
+        '   Edition des gorges de soudures pour les profilés PRS
+        '---------------------------------------------------------------------------------------------------------------------
+        '   GorgesSoudure       [E] :   Valeurs obtenues par le calcul
+        '   GorgesSouduresMini  [E] :   Valeurs minimale
+        '---------------------------------------------------------------------------------------------------------------------
+
+
+        Dim Symbol As String = "aws"
+        Const TabVALEUR As String = "\T20"
+
+        AddTitreNdC(3, BlocELU("WTOFWEBS"))
+
+        AddLigneNDC(TABW3 & BlocELU("UPPERF"))
+
+        AddLigneNDC(TabVALEUR & BlocELU("DESIGNVALUE") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(GorgesSoudures(0), Enu_TypeVariable.Dimension, 3, 2, True))
+        AddLigneNDC(TabVALEUR & BlocELU("MINVALUE") & " (1)" & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(GorgesSouduresMini(0), Enu_TypeVariable.Dimension, 3, 2, True))
+
+        SauteLigne()
+
+        AddLigneNDC(TABW3 & BlocELU("LOWERF"))
+
+        Symbol = "awi"
+        AddLigneNDC(TabVALEUR & BlocELU("DESIGNVALUE") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(GorgesSoudures(1), Enu_TypeVariable.Dimension, 3, 2, True))
+        AddLigneNDC(TabVALEUR & BlocELU("MINVALUE") & " (1)" & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(GorgesSouduresMini(1), Enu_TypeVariable.Dimension, 3, 2, True))
+
+        SauteLigne()
+        AddLigneNDC(TABW3 & "(1) : " & BlocELU("MINIACCTOREF"))
 
     End Sub
 

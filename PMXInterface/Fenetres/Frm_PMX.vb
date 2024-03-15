@@ -489,6 +489,8 @@ Public Class Frm_PMX
 
         If lOK Then
             MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+            MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()         ' ???
+            MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
         End If
 
         '--[ Edition de la note de calcul
