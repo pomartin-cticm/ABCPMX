@@ -77,7 +77,7 @@ Public Class Frm_PMX
         '--> Fenetre Juridique
         If My.Settings.lJuridique Then
 
-            If Frm_Juridique.ShowDialog() = DialogResult.No Then
+            If Not Frm_Juridique.ShowDialog() = DialogResult.Yes Then
                 Me.Close()
                 Exit Sub
             End If

@@ -385,12 +385,13 @@ LBL_Q1					= Q1: Live loads 1
 LBL_Q2					= Q2: Live loads 2
 LOADING					= Loading
 OK						= OK
-REINI					= Reset
+REINI					= Reset all values
 RESISTANCE				= Resistance
 TAB_STEEL				= Steel
 TAB_SLAB				= Slab
 TAB_FIRE				= Fire
 TITLE					= Definition of national factors
+RESET					= Reset
 
 #FRM_HIVOSS
 CANCEL					= Cancel

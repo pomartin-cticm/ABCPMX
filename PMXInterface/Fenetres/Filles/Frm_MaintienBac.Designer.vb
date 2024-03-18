@@ -353,9 +353,9 @@ Partial Class Frm_MaintienBac
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_Transition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_Transition.FormattingEnabled = True
-        Me.cmb_Transition.Location = New System.Drawing.Point(28, 152)
+        Me.cmb_Transition.Location = New System.Drawing.Point(6, 149)
         Me.cmb_Transition.Name = "cmb_Transition"
-        Me.cmb_Transition.Size = New System.Drawing.Size(196, 21)
+        Me.cmb_Transition.Size = New System.Drawing.Size(237, 21)
         Me.cmb_Transition.TabIndex = 6
         '
         'lbl_Transition
@@ -841,9 +841,9 @@ Partial Class Frm_MaintienBac
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_TypeFixation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_TypeFixation.FormattingEnabled = True
-        Me.cmb_TypeFixation.Location = New System.Drawing.Point(37, 24)
+        Me.cmb_TypeFixation.Location = New System.Drawing.Point(24, 24)
         Me.cmb_TypeFixation.Name = "cmb_TypeFixation"
-        Me.cmb_TypeFixation.Size = New System.Drawing.Size(196, 21)
+        Me.cmb_TypeFixation.Size = New System.Drawing.Size(209, 21)
         Me.cmb_TypeFixation.TabIndex = 9
         '
         'cmb_FixationPoutre
@@ -852,9 +852,9 @@ Partial Class Frm_MaintienBac
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_FixationPoutre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_FixationPoutre.FormattingEnabled = True
-        Me.cmb_FixationPoutre.Location = New System.Drawing.Point(119, 6)
+        Me.cmb_FixationPoutre.Location = New System.Drawing.Point(103, 6)
         Me.cmb_FixationPoutre.Name = "cmb_FixationPoutre"
-        Me.cmb_FixationPoutre.Size = New System.Drawing.Size(116, 21)
+        Me.cmb_FixationPoutre.Size = New System.Drawing.Size(132, 21)
         Me.cmb_FixationPoutre.TabIndex = 7
         '
         'lbl_Fixation
