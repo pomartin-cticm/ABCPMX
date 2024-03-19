@@ -98,25 +98,25 @@
 
 #Region " Dessins Symboles "
 
-    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_GammaGsup.Paint, img_GammaGinf.Paint, img_GammaQ.Paint, img_Psi2.Paint, img_Psi1.Paint, img_Psi0.Paint, img_GammaVs.Paint, img_GammaV_fi.Paint, img_GammaV.Paint, img_GammaS.Paint, img_GammaP.Paint, img_GammaM2.Paint, img_GammaM1.Paint, img_GammaM0.Paint, img_GammaM_fi.Paint, img_GammaC_fi.Paint, img_GammaC.Paint
+    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_GammaGsup.Paint, img_GammaGinf.Paint, img_GammaQ.Paint, img_Psi2.Paint, img_Psi1.Paint, img_Psi0.Paint, img_GammaVs.Paint, img_GammaV_fi.Paint, img_GammaVc.Paint, img_GammaS.Paint, img_GammaP.Paint, img_GammaM2.Paint, img_GammaM1.Paint, img_GammaM0.Paint, img_GammaM_fi.Paint, img_GammaC_fi.Paint, img_GammaC.Paint
 
         '--> Déclarations
 
         Dim sWI As Single = sender.Width
         Dim sHI As Single = sender.Height
-        Dim xStart As Single = sWI * 0.95
+        'Dim xStart As Single = sWI * 0.95
 
         Dim strIndice As String = Nothing
         Dim strSymbol As String = Nothing
         Dim lGrec, lIndice, lEgal As Boolean
-        Dim xPen As Single = xStart
-        Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
-        Dim hIndice As Single = hCar / 2
-        Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+        'Dim xPen As Single = xStart
+        'Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
+        'Dim hIndice As Single = hCar / 2
+        'Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
 
         '--> Initialisation
 
-        lIndice = True
+        lIndice = False
         lGrec = True
         lEgal = True
 
@@ -172,7 +172,7 @@
                 strSymbol = "g"
                 strIndice = "C"
 
-            Case Me.img_GammaV.Name
+            Case Me.img_GammaVc.Name
 
                 strSymbol = "g"
                 strIndice = "V"
@@ -216,7 +216,7 @@
 
         '--> Dessin
 
-        DrawSymbol(e.Graphics, Brushes.Black, strSymbol, strIndice, xPen, yPen, lGrec, lIndice, Enu_AlignementH.Gauche,
+        DrawSymbolN(e.Graphics, Brushes.Black, strSymbol, strIndice, sWI, sHI, lGrec, lIndice, Enu_AlignementH.Gauche,
                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
@@ -224,7 +224,7 @@
 #End Region
 
 #Region " Evènements saisie "
-    Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_GammaGsup.TextChanged, txt_GammaGinf.TextChanged, txt_GammaQ.TextChanged, txt_Psi0.TextChanged, txt_Psi1.TextChanged, txt_Psi2.TextChanged, txt_GammaM0.TextChanged, txt_GammaM1.TextChanged, txt_GammaM2.TextChanged, txt_GammaC.TextChanged, txt_GammaV.TextChanged, txt_GammaVs.TextChanged, txt_GammaS.TextChanged, txt_GammaP.TextChanged, txt_GammaM_fi.TextChanged, txt_GammaC_fi.TextChanged, txt_GammaV_fi.TextAlignChanged
+    Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_GammaGsup.TextChanged, txt_GammaGinf.TextChanged, txt_GammaQ.TextChanged, txt_Psi0.TextChanged, txt_Psi1.TextChanged, txt_Psi2.TextChanged, txt_GammaM0.TextChanged, txt_GammaM1.TextChanged, txt_GammaM2.TextChanged, txt_GammaC.TextChanged, txt_GammaVc.TextChanged, txt_GammaVs.TextChanged, txt_GammaS.TextChanged, txt_GammaP.TextChanged, txt_GammaM_fi.TextChanged, txt_GammaC_fi.TextChanged, txt_GammaV_fi.TextAlignChanged
         If lBuild Then Exit Sub
 
         Dim ValeurUI As Decimal
@@ -293,7 +293,7 @@
                 ValMin = PSI_COMBINAISON_MIN
                 ValMax = PSI_COMBINAISON_MAX
 
-            Case Me.txt_GammaM0.Name, Me.txt_GammaM1.Name, Me.txt_GammaM2.Name, Me.txt_GammaC.Name, Me.txt_GammaV.Name, Me.txt_GammaVs.Name, Me.txt_GammaS.Name, Me.txt_GammaP.Name, Me.txt_GammaM_fi.Name, Me.txt_GammaC_fi.Name, Me.txt_GammaV_fi.Name
+            Case Me.txt_GammaM0.Name, Me.txt_GammaM1.Name, Me.txt_GammaM2.Name, Me.txt_GammaC.Name, Me.txt_GammaVc.Name, Me.txt_GammaVs.Name, Me.txt_GammaS.Name, Me.txt_GammaP.Name, Me.txt_GammaM_fi.Name, Me.txt_GammaC_fi.Name, Me.txt_GammaV_fi.Name
                 ValMin = GAMMA_RESISTANCE_MIN
                 ValMax = GAMMA_RESISTANCE_MAX
         End Select
