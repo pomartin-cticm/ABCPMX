@@ -62,7 +62,7 @@ Public Class Frm_OptionsCalcul
 
         '--> Déclaration
 
-        Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
+        Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, True)
         Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA", "OPTCALSCOPE", "OPTCALCALCUL", "OPTCALFIRE"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing

@@ -389,6 +389,7 @@ Public Class Frm_PMX
             '--> Mise à jour du TreeView
             AffichageTViewChk()
             MAJToolBarPoutre()
+            MAJMainToolBar()
             Me.img_Main.Invalidate()
 
         End If
@@ -400,9 +401,12 @@ Public Class Frm_PMX
 
         MyProjet.IndEnCours = Math.Max(Math.Min(MyProjet.IndEnCours, MyProjet.Poutres.Count - 1), 0)
 
+        MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
+
         '--> Mise à jour du TreeView
         AffichageTViewChk()
         MAJToolBarPoutre()
+        MAJMainToolBar()
         Me.img_Main.Invalidate()
 
     End Sub
@@ -431,9 +435,12 @@ Public Class Frm_PMX
 
         MyProjet.IndEnCours = Math.Max(0, MyProjet.Poutres.Count - 1)
 
+        MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
+
         '--> Mise à jour du TreeView
         AffichageTViewChk()
         MAJToolBarPoutre()
+        MAJMainToolBar()
         Me.img_Main.Invalidate()
     End Sub
 

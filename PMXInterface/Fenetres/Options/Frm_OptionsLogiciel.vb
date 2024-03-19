@@ -118,7 +118,7 @@ Public Class Frm_OptionsLogiciel
         '--> Initialisation
 
         InitialiseLNGFileName(pLocalLogicielOptions.IndLangue, pFichierLangue)
-        Lines = New Cls_LinesOfFile(pFichierLangue, False)
+        Lines = New Cls_LinesOfFile(pFichierLangue, True)
 
         BlocLangues = New Dictionary(Of String, Dictionary(Of String, String))
 
@@ -464,6 +464,8 @@ Public Class Frm_OptionsLogiciel
         Else
             If ValideSaisie() Then
                 TransfereSaisie(lModif)
+                InitialiseLNGFileName(LogicielOptions.IndLangue, LogicielFichiers.Langue)
+                InitialiseLNGFileName_NDC()
                 ComWindow = enu_ComWindow.OK
                 Me.Close()
             End If

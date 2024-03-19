@@ -58,7 +58,7 @@ Public Class Frm_Combinaisons
 
         '--> Déclaration
 
-        Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
+        Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, True)
         Dim BlocALire() As String = {"FRM_COMBINATIONS", "FRM_COMBINATIONS1", "FRM_COMBINATIONS2"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
@@ -310,7 +310,7 @@ Public Class Frm_Combinaisons
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
 
             Me.Close()
