@@ -117,7 +117,8 @@ Public Class Frm_PMX
             Frm_Ouverture.ShowDialog()    '--> Fenetre Ouverture
 
         End If
-        'AfficheFenetreEnCours() 'GuD: A discuter j'ai un doute (31/08/2023), cela ouvrait directement
+
+        Me.AffichageRecentFiles()
         MAJToolBarPoutre()
         MAJI_BOBasse()
 
@@ -800,7 +801,7 @@ Public Class Frm_PMX
         If MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees Then
             Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_OK")
         Else
-            If MyProjet.Poutres(MyProjet.IndEnCours).NouvellePoutre Then
+            If MyProjet.Poutres(MyProjet.IndEnCours).lNouvellePoutre Then
                 Me.TSbtn_SaveN.Image = ImgList_Menu.Images("EnregistrerVierge")
             Else
 
@@ -1043,7 +1044,8 @@ Public Class Frm_PMX
         If My.Computer.FileSystem.FileExists(MyProjet.FileName) Then
 
             EcrireProjetInFile(MyProjet.FileName)
-            MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            'MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            MyProjet.lSaved = True
             MAJMainToolBar()
 
             'MemoriserNouveauFichier(MyProjet.FileName)
@@ -1102,7 +1104,8 @@ Public Class Frm_PMX
             '--> MAJ fichier recent
             Me.AffichageRecentFiles()
 
-            MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            'MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            MyProjet.lSaved = True
             MAJMainToolBar()
 
         End If
@@ -1110,7 +1113,7 @@ Public Class Frm_PMX
 
     End Sub
 
-    Private Sub EnregistreDansFichiersRecents(FileName As String)
+    Public Sub EnregistreDansFichiersRecents(FileName As String)
         '-----------------------------------------------------------------------------------
         '   13/03/24 :  Création - Version 1.00
         '-----------------------------------------------------------------------------------
@@ -1153,6 +1156,7 @@ Public Class Frm_PMX
         '--> Gestion du résultat de la boite de dialogue
         If FileName <> "" Then
 
+            If Not MyProjet.lSaved Then EnregistrerAvantFermeture()
             OuvrirFichier(FileName)
 
         End If
@@ -1170,7 +1174,10 @@ Public Class Frm_PMX
 
         '--> Lecture du fichier
         ReadInFile(FileName)
+        AffichageTViewChk()
         MAJToolBarPoutre()
+        MAJMainToolBar()
+        Me.img_Main.Invalidate()
         Me.img_Main.Invalidate()
 
         '--> Gestion Recent Files
@@ -1213,7 +1220,8 @@ Public Class Frm_PMX
         Next
 
         '--> Aucune modification par rapport au fichier ouvert
-        MyProjet.lModif = False
+        MyProjet.lNouvellePoutre = True
+        MyProjet.lSaved = True
 
         '--> Initialisation de l'interface avec le projet ouvert
         'AfficheFenetreEnCours()
@@ -1272,37 +1280,10 @@ Public Class Frm_PMX
             Exit Sub
         End If
 
-        If MyProjet.lModif Then '--> Projet  modifié
+        If Not MyProjet.lSaved Then EnregistrerAvantFermeture()
+        OuvrirFichier(FileName)
 
-            '    '--> Affichage Fenetre Avertissement
-            '    Dim dg As DialogResult = Dlg_VerifSave.ShowDialog
 
-            '    If dg = Windows.Forms.DialogResult.OK Then
-
-            '        Me.SaveFileDialog_Project.Title = Me.SaveToolStripMenuItemN.Text
-            '        Me.SaveFileDialog_Project.FileName = MyProjet.Nom
-
-            '        If Save_Project() Then
-
-            '            '--> Lecture du fichier
-            '            ReadInFile(FileName)
-
-            '        End If
-
-            '    ElseIf dg = Windows.Forms.DialogResult.Ignore Then
-            '        '--> Utilisateur ne veut pas sauvegarder l'assemblage en cours
-
-            '        '--> Lecture du fichier
-            '        ReadInFile(FileName)
-
-            '    End If
-
-        Else '--> Projet en cours déjà sauvegardé et pas modifié --> pas d'avertissement
-
-            '--> Lecture du fichier
-            OuvrirFichier(FileName)
-
-        End If
 
     End Sub
 
@@ -1315,26 +1296,23 @@ Public Class Frm_PMX
     End Sub
 
     Private Sub Frm_PMX_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If Not MyProjet.lSaved Then e.Cancel = EnregistrerAvantFermeture()
+    End Sub
 
-        '--( Gestion Fermeture de la fenêtre
+    Private Function EnregistrerAvantFermeture() As Boolean
+        Dim lCancel As Boolean
 
-        Dim lDonnesNonSaved As Boolean = True
-
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1 'on bérifie si au moins une des poutres n'a pas été enregistrée
-            lDonnesNonSaved = lDonnesNonSaved And (MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees Or MyProjet.Poutres(MyProjet.IndEnCours).NouvellePoutre)
-        Next
-
-        If Not lDonnesNonSaved Then 'si au moins une des poutres n'est pas enregistrée, on demande si on enregistre ou pas à la fermeture de la fenetre principale
-            Dim lAvertissementFermeture As DialogResult = MessageBox.Show(strMsgFermetureFrm, LogicielInfo.NomLogiciel, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
-            e.Cancel = Not (lAvertissementFermeture = DialogResult.Yes Or lAvertissementFermeture = DialogResult.No)
-            If lAvertissementFermeture = DialogResult.Yes Then EnregistrerProjetEnCours() 'enregistrement du projet en cours
-        End If
+        Dim lAvertissementFermeture As DialogResult = MessageBox.Show(strMsgFermetureFrm, LogicielInfo.NomLogiciel, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+        lCancel = Not (lAvertissementFermeture = DialogResult.Yes Or lAvertissementFermeture = DialogResult.No)
+        If lAvertissementFermeture = DialogResult.Yes Then EnregistrerProjetEnCours() 'enregistrement du projet en cours
 
         '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
 
         EnregistrerOptionsLogiciel(True)
 
-    End Sub
+        Return lCancel
+
+    End Function
 
 #End Region
 
@@ -1591,53 +1569,53 @@ Public Class Frm_PMX
 
     End Sub
 
-    Public Sub AffichageTViewChkOLD()
+    'Public Sub AffichageTViewChkOLD()
 
-        If MyProjet.Poutres.Count = 0 Then Exit Sub
+    '    If MyProjet.Poutres.Count = 0 Then Exit Sub
 
-        Me.cmb_Projet.Items.Clear()
-        Me.cmb_Projet.Items.Add(MyProjet.Nom)
-        Me.cmb_Projet.SelectedIndex = 0
+    '    Me.cmb_Projet.Items.Clear()
+    '    Me.cmb_Projet.Items.Add(MyProjet.Nom)
+    '    Me.cmb_Projet.SelectedIndex = 0
 
-        Me.tab_ChkSections = New List(Of CheckBox)
+    '    Me.tab_ChkSections = New List(Of CheckBox)
 
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1
+    '    For i As Integer = 0 To MyProjet.Poutres.Count - 1
 
-            Me.tab_ChkSections.Add(New CheckBox)
-            Me.tab_ChkSections(i).Appearance = Appearance.Button
-            Me.tab_ChkSections(i).Dock = DockStyle.Fill
-            'Me.tab_ChkSections(i).BackColor = SystemColors.ControlLight 'Me.ToolStrip_Menu_Section.BackColor
-            Me.tab_ChkSections(i).BackColor = CouleurBtnNormal
-            Me.tab_ChkSections(i).ForeColor = SystemColors.WindowText 'Color.White
+    '        Me.tab_ChkSections.Add(New CheckBox)
+    '        Me.tab_ChkSections(i).Appearance = Appearance.Button
+    '        Me.tab_ChkSections(i).Dock = DockStyle.Fill
+    '        'Me.tab_ChkSections(i).BackColor = SystemColors.ControlLight 'Me.ToolStrip_Menu_Section.BackColor
+    '        Me.tab_ChkSections(i).BackColor = CouleurBtnNormal
+    '        Me.tab_ChkSections(i).ForeColor = SystemColors.WindowText 'Color.White
 
-            Me.tab_ChkSections(i).Text = MyProjet.Poutres(i).BeamID
-            Me.tab_ChkSections(i).Name = "MyX" & CStr(i)
-            Me.tab_ChkSections(i).Tag = CStr(i)
-            AddHandler Me.tab_ChkSections(i).CheckedChanged, AddressOf ChoixSection_CheckedChanged
-            'AddHandler Me.tab_ChkSections(i).Paint, AddressOf chkBox_Section_Paint
-        Next
+    '        Me.tab_ChkSections(i).Text = MyProjet.Poutres(i).BeamID
+    '        Me.tab_ChkSections(i).Name = "MyX" & CStr(i)
+    '        Me.tab_ChkSections(i).Tag = CStr(i)
+    '        AddHandler Me.tab_ChkSections(i).CheckedChanged, AddressOf ChoixSection_CheckedChanged
+    '        'AddHandler Me.tab_ChkSections(i).Paint, AddressOf chkBox_Section_Paint
+    '    Next
 
-        Me.TLPan_ListPoutres.RowCount = MyProjet.Poutres.Count + 1
-        Me.TLPan_ListPoutres.Controls.Clear()
-        Me.TLPan_ListPoutres.RowStyles.Clear()
+    '    Me.TLPan_ListPoutres.RowCount = MyProjet.Poutres.Count + 1
+    '    Me.TLPan_ListPoutres.Controls.Clear()
+    '    Me.TLPan_ListPoutres.RowStyles.Clear()
 
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1
+    '    For i As Integer = 0 To MyProjet.Poutres.Count - 1
 
-            Me.TLPan_ListPoutres.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-            'Me.TableLayoutPanel_TreeChk.RowStyles(i).SizeType = SizeType.Absolute
-            'Me.TableLayoutPanel_TreeChk.RowStyles(i).Height = 40.0!
-        Next
+    '        Me.TLPan_ListPoutres.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+    '        'Me.TableLayoutPanel_TreeChk.RowStyles(i).SizeType = SizeType.Absolute
+    '        'Me.TableLayoutPanel_TreeChk.RowStyles(i).Height = 40.0!
+    '    Next
 
-        Dim HCum = 0
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1
-            Me.TLPan_ListPoutres.Controls.Add(Me.tab_ChkSections(i), 0, i)
-            HCum += Me.TLPan_ListPoutres.RowStyles(i).Height
-        Next
-        Me.TLPan_ListPoutres.Height = HCum
+    '    Dim HCum = 0
+    '    For i As Integer = 0 To MyProjet.Poutres.Count - 1
+    '        Me.TLPan_ListPoutres.Controls.Add(Me.tab_ChkSections(i), 0, i)
+    '        HCum += Me.TLPan_ListPoutres.RowStyles(i).Height
+    '    Next
+    '    Me.TLPan_ListPoutres.Height = HCum
 
-        Me.tab_ChkSections(MyProjet.IndEnCours).Checked = True
+    '    Me.tab_ChkSections(MyProjet.IndEnCours).Checked = True
 
-    End Sub
+    'End Sub
 
 #End Region
 

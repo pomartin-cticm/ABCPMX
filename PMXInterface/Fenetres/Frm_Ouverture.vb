@@ -3,6 +3,12 @@ Imports PMXMoteur2
 
 Public Class Frm_Ouverture
 
+#Region "Variables locales"
+
+    Dim strFiltresExtension As String
+
+#End Region
+
 #Region "=== Ouverture Fenetre ==="
 
     ''' <summary>
@@ -29,6 +35,8 @@ Public Class Frm_Ouverture
             BlocLine.CreationBloc(Bloc)
 
             Try
+
+                strFiltresExtension = Bloc("FILE")
 
                 Me.Text = LogicielInfo.NomLogiciel
 
@@ -92,22 +100,30 @@ Public Class Frm_Ouverture
     Private Sub Button_OpenProject_Click(sender As Object, e As EventArgs) Handles Button_OpenProject.Click
 
         '--> Déclaration
-        Dim FileName As String = ""
+        Dim FileName As String
+
+        '# Contrôle sauvegarde du projet en cours
+
+        '# Demande nom fichier
 
         '--> Préparation de la boite de dialogue OpenFile
-        ' Frm_MAIN.OpenFileDialog_Project.InitialDirectory = OptionsLogiciel.RepertoireTravail
-        ' Frm_MAIN.OpenFileDialog_Project.ShowDialog()
-        ' FileName = Frm_MAIN.OpenFileDialog_Project.FileName
+
+        Me.OpenFileDialog_Project.InitialDirectory = LogicielOptions.RepertoireTravail
+        'Me.OpenFileDialog_Project.DefaultExt = LogicielInfo.Extension
+        Me.OpenFileDialog_Project.Filter = strFiltresExtension & " (*." & LogicielInfo.Extension & ")|*." & LogicielInfo.Extension
+        Me.OpenFileDialog_Project.FileName = ""
+        Me.OpenFileDialog_Project.ShowDialog()
+
+        FileName = Me.OpenFileDialog_Project.FileName
+
+        '# Ouverture
 
         '--> Gestion du résultat de la boite de dialogue
         If FileName <> "" Then
 
-            ' Frm_AjoutSection.Close()
+            Frm_PMX.ReadInFile(FileName)
+            Frm_PMX.EnregistreDansFichiersRecents(FileName)
             Me.Close()
-
-            '--> Lecture du fichier
-            '  ReadInFile(FileName)
-
         End If
 
     End Sub

@@ -571,6 +571,7 @@ NEWPROJECT				= Nouveau projet
 OK						= Ok
 OPENPROJECT				= Ouvrir un projet
 RECENTFILES				= Fichiers récents
+FILE					= Fichier
 
 #FRM_PPLOADCASE
 TITLE					= Cas de charge

@@ -33,6 +33,7 @@ Partial Class Frm_Ouverture
         Me.Button_OpenProject = New System.Windows.Forms.Button()
         Me.TableLayoutPanel_NewProject = New System.Windows.Forms.TableLayoutPanel()
         Me.Button_Valider = New System.Windows.Forms.Button()
+        Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl_MenuProject.SuspendLayout()
         Me.TabPage_OpenProject.SuspendLayout()
         Me.TableLayoutPanel_OpenProject.SuspendLayout()
@@ -71,7 +72,7 @@ Partial Class Frm_Ouverture
         Me.TabPage_OpenProject.Location = New System.Drawing.Point(4, 24)
         Me.TabPage_OpenProject.Name = "TabPage_OpenProject"
         Me.TabPage_OpenProject.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage_OpenProject.Size = New System.Drawing.Size(570, 344)
+        Me.TabPage_OpenProject.Size = New System.Drawing.Size(739, 392)
         Me.TabPage_OpenProject.TabIndex = 1
         Me.TabPage_OpenProject.Text = "TabPage_OpenProject"
         Me.TabPage_OpenProject.UseVisualStyleBackColor = True
@@ -101,7 +102,7 @@ Partial Class Frm_Ouverture
         Me.TableLayoutPanel_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 9.090907!))
         Me.TableLayoutPanel_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 160.0!))
         Me.TableLayoutPanel_OpenProject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 27.27273!))
-        Me.TableLayoutPanel_OpenProject.Size = New System.Drawing.Size(564, 338)
+        Me.TableLayoutPanel_OpenProject.Size = New System.Drawing.Size(733, 386)
         Me.TableLayoutPanel_OpenProject.TabIndex = 1
         '
         'Label_OpenFile
@@ -111,10 +112,10 @@ Partial Class Frm_Ouverture
         Me.Label_OpenFile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TableLayoutPanel_OpenProject.SetColumnSpan(Me.Label_OpenFile, 3)
         Me.Label_OpenFile.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label_OpenFile.Location = New System.Drawing.Point(15, 24)
+        Me.Label_OpenFile.Location = New System.Drawing.Point(15, 37)
         Me.Label_OpenFile.Margin = New System.Windows.Forms.Padding(0)
         Me.Label_OpenFile.Name = "Label_OpenFile"
-        Me.Label_OpenFile.Size = New System.Drawing.Size(534, 26)
+        Me.Label_OpenFile.Size = New System.Drawing.Size(702, 26)
         Me.Label_OpenFile.TabIndex = 4
         Me.Label_OpenFile.Text = "Label_OpenFile"
         Me.Label_OpenFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -126,10 +127,10 @@ Partial Class Frm_Ouverture
         Me.Label_RecentFiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.TableLayoutPanel_OpenProject.SetColumnSpan(Me.Label_RecentFiles, 3)
         Me.Label_RecentFiles.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label_RecentFiles.Location = New System.Drawing.Point(15, 118)
+        Me.Label_RecentFiles.Location = New System.Drawing.Point(15, 148)
         Me.Label_RecentFiles.Margin = New System.Windows.Forms.Padding(0)
         Me.Label_RecentFiles.Name = "Label_RecentFiles"
-        Me.Label_RecentFiles.Size = New System.Drawing.Size(534, 26)
+        Me.Label_RecentFiles.Size = New System.Drawing.Size(702, 26)
         Me.Label_RecentFiles.TabIndex = 2
         Me.Label_RecentFiles.Text = "Label_RecentFiles"
         Me.Label_RecentFiles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -140,10 +141,10 @@ Partial Class Frm_Ouverture
         Me.ListBox_RecentFiles.Dock = System.Windows.Forms.DockStyle.Fill
         Me.ListBox_RecentFiles.FormattingEnabled = True
         Me.ListBox_RecentFiles.HorizontalScrollbar = True
-        Me.ListBox_RecentFiles.Location = New System.Drawing.Point(15, 152)
+        Me.ListBox_RecentFiles.Location = New System.Drawing.Point(15, 186)
         Me.ListBox_RecentFiles.Margin = New System.Windows.Forms.Padding(0)
         Me.ListBox_RecentFiles.Name = "ListBox_RecentFiles"
-        Me.ListBox_RecentFiles.Size = New System.Drawing.Size(534, 160)
+        Me.ListBox_RecentFiles.Size = New System.Drawing.Size(702, 160)
         Me.ListBox_RecentFiles.TabIndex = 0
         '
         'Button_OpenProject
@@ -151,7 +152,7 @@ Partial Class Frm_Ouverture
         Me.Button_OpenProject.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button_OpenProject.Image = CType(resources.GetObject("Button_OpenProject.Image"), System.Drawing.Image)
         Me.Button_OpenProject.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.Button_OpenProject.Location = New System.Drawing.Point(212, 61)
+        Me.Button_OpenProject.Location = New System.Drawing.Point(296, 78)
         Me.Button_OpenProject.Name = "Button_OpenProject"
         Me.Button_OpenProject.Size = New System.Drawing.Size(140, 30)
         Me.Button_OpenProject.TabIndex = 3
@@ -185,6 +186,10 @@ Partial Class Frm_Ouverture
         Me.Button_Valider.Text = "Button_Valider"
         Me.Button_Valider.UseVisualStyleBackColor = True
         '
+        'OpenFileDialog_Project
+        '
+        Me.OpenFileDialog_Project.FileName = "OpenFileDialog1"
+        '
         'Frm_Ouverture
         '
         Me.AcceptButton = Me.Button_Valider
@@ -217,4 +222,5 @@ Partial Class Frm_Ouverture
     Friend WithEvents Label_RecentFiles As Label
     Friend WithEvents ListBox_RecentFiles As ListBox
     Friend WithEvents Button_OpenProject As Button
+    Friend WithEvents OpenFileDialog_Project As OpenFileDialog
 End Class

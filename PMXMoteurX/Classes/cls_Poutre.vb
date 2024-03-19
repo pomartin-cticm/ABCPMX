@@ -563,9 +563,9 @@ Public Class cls_Poutre
     ''' <summary>
     ''' Indique si nouvelle poutre, jamais encore modifiée
     ''' </summary>
-    Public NouvellePoutre As Boolean
+    Public lNouvellePoutre As Boolean
 
-    Public lPoutreModifiee As Boolean
+    'Public lPoutreModifiee As Boolean
 
 #End Region
 
@@ -707,8 +707,8 @@ Public Class cls_Poutre
         Me.lDefautEnrobage = True
         Me.lDefautDalle = True
         Me.lDonneesSauvees = False
-        Me.NouvellePoutre = True
-        Me.lPoutreModifiee = False
+        Me.lNouvellePoutre = True
+        'Me.lPoutreModifiee = False
 
         '--> Initialisation Classes
 
@@ -946,9 +946,9 @@ Public Class cls_Poutre
     Public Sub EstModifiee()
         '--------------------------------------------------------------------------
 
-        Me.NouvellePoutre = False
+        Me.lNouvellePoutre = False
         Me.lDonneesSauvees = False
-        Me.lPoutreModifiee = True
+        'Me.lPoutreModifiee = True
 
         Me.InitialisePoidsPropres()
 
