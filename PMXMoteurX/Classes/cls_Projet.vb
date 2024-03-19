@@ -66,9 +66,9 @@ Public Class cls_Projet
             Next
         End Set
         Get
-            Dim retour As Boolean = False
+            Dim retour As Boolean = True
             For i As Integer = 0 To Me.Poutres.Count - 1
-                retour = retour Or Me.Poutres(i).lDonneesSauvees
+                retour = retour And Me.Poutres(i).lDonneesSauvees
             Next
             Return retour
         End Get
@@ -84,9 +84,9 @@ Public Class cls_Projet
             Next
         End Set
         Get
-            Dim retour As Boolean = False
+            Dim retour As Boolean = True
             For i As Integer = 0 To Me.Poutres.Count - 1
-                retour = retour Or Me.Poutres(i).lNouvellePoutre
+                retour = retour And Me.Poutres(i).lNouvellePoutre
             Next
             Return retour
         End Get

@@ -192,10 +192,9 @@ Public Class Frm_Ouverture
 
         Else
 
+            Frm_PMX.ReadInFile(FileName)
+            Frm_PMX.EnregistreDansFichiersRecents(FileName)
             Me.Close()
-
-            '--> Lecture du fichier
-            'ReadInFile(FileName)
 
         End If
 

@@ -798,10 +798,10 @@ Public Class Frm_PMX
 
         If MyProjet.Poutres.Count = 0 Then Exit Sub
 
-        If MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees Then
+        If MyProjet.lSaved Then
             Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_OK")
         Else
-            If MyProjet.Poutres(MyProjet.IndEnCours).lNouvellePoutre Then
+            If MyProjet.lNouvellePoutre Then
                 Me.TSbtn_SaveN.Image = ImgList_Menu.Images("EnregistrerVierge")
             Else
 
@@ -1046,6 +1046,7 @@ Public Class Frm_PMX
             EcrireProjetInFile(MyProjet.FileName)
             'MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
             MyProjet.lSaved = True
+            MyProjet.lNouvellePoutre = False
             MAJMainToolBar()
 
             'MemoriserNouveauFichier(MyProjet.FileName)
@@ -1106,6 +1107,7 @@ Public Class Frm_PMX
 
             'MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
             MyProjet.lSaved = True
+            MyProjet.lNouvellePoutre = False
             MAJMainToolBar()
 
         End If
@@ -1156,8 +1158,11 @@ Public Class Frm_PMX
         '--> Gestion du résultat de la boite de dialogue
         If FileName <> "" Then
 
-            If Not MyProjet.lSaved Then EnregistrerAvantFermeture()
-            OuvrirFichier(FileName)
+            If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then
+                If Not EnregistrerAvantFermeture() Then OuvrirFichier(FileName)
+            Else
+                    OuvrirFichier(FileName)
+            End If
 
         End If
 
@@ -1220,8 +1225,8 @@ Public Class Frm_PMX
         Next
 
         '--> Aucune modification par rapport au fichier ouvert
+        MyProjet.lSaved = False
         MyProjet.lNouvellePoutre = True
-        MyProjet.lSaved = True
 
         '--> Initialisation de l'interface avec le projet ouvert
         'AfficheFenetreEnCours()
@@ -1280,8 +1285,11 @@ Public Class Frm_PMX
             Exit Sub
         End If
 
-        If Not MyProjet.lSaved Then EnregistrerAvantFermeture()
-        OuvrirFichier(FileName)
+        If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then
+            If Not EnregistrerAvantFermeture() Then OuvrirFichier(FileName)
+        Else
+            OuvrirFichier(FileName)
+        End If
 
 
 
@@ -1296,7 +1304,7 @@ Public Class Frm_PMX
     End Sub
 
     Private Sub Frm_PMX_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        If Not MyProjet.lSaved Then e.Cancel = EnregistrerAvantFermeture()
+        If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then e.Cancel = EnregistrerAvantFermeture()
     End Sub
 
     Private Function EnregistrerAvantFermeture() As Boolean
@@ -1305,10 +1313,6 @@ Public Class Frm_PMX
         Dim lAvertissementFermeture As DialogResult = MessageBox.Show(strMsgFermetureFrm, LogicielInfo.NomLogiciel, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
         lCancel = Not (lAvertissementFermeture = DialogResult.Yes Or lAvertissementFermeture = DialogResult.No)
         If lAvertissementFermeture = DialogResult.Yes Then EnregistrerProjetEnCours() 'enregistrement du projet en cours
-
-        '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
-
-        EnregistrerOptionsLogiciel(True)
 
         Return lCancel
 
@@ -1656,6 +1660,12 @@ Public Class Frm_PMX
     Private Sub TSbtn_ExpertMode_Click(sender As Object, e As EventArgs) Handles TSbtn_ExpertMode.Click
         LogicielOptions.lExpert = Not LogicielOptions.lExpert
         Me.TSbtn_ExpertMode.Checked = LogicielOptions.lExpert
+    End Sub
+
+    Private Sub Frm_PMX_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
+
+        EnregistrerOptionsLogiciel(True)
     End Sub
 
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
