@@ -499,6 +499,7 @@ PROJECTNAVIGATION		= Navigation projet
 RECENTFILES				= Fichiers récents
 SAVE					= Enregistrer
 SAVEAS					= Enregister sous
+SAVEBEFORECLOSE			= Voulez-vous enresitrer les modifications du projet ?
 SECTION					= Section
 SECTIONSLIST			= Liste des sections
 SUPPORT					= Support

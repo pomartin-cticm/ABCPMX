@@ -28,6 +28,7 @@ Public Class Frm_PMX
     Dim strRacineELUC As String
     Dim strRacineELSC As String
     Dim strCopy As String
+    Dim strMsgFermetureFrm As String
 
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
@@ -287,6 +288,8 @@ Public Class Frm_PMX
 
                 Str_WarningFile = "Probleme lecture fichier"
 
+                strMsgFermetureFrm = Bloc("SAVEBEFORECLOSE")
+
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangue")
             Finally
@@ -401,7 +404,7 @@ Public Class Frm_PMX
 
         MyProjet.IndEnCours = Math.Max(Math.Min(MyProjet.IndEnCours, MyProjet.Poutres.Count - 1), 0)
 
-        MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
+        If Not MyProjet.Poutres.Count = 0 Then MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
 
         '--> Mise à jour du TreeView
         AffichageTViewChk()
@@ -1315,13 +1318,17 @@ Public Class Frm_PMX
 
         '--( Gestion Fermeture de la fenêtre
 
-        '--( Enregistrement du projet en cours
+        Dim lDonnesNonSaved As Boolean = True
 
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1
-
-
-
+        For i As Integer = 0 To MyProjet.Poutres.Count - 1 'on bérifie si au moins une des poutres n'a pas été enregistrée
+            lDonnesNonSaved = lDonnesNonSaved And (MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees Or MyProjet.Poutres(MyProjet.IndEnCours).NouvellePoutre)
         Next
+
+        If Not lDonnesNonSaved Then 'si au moins une des poutres n'est pas enregistrée, on demande si on enregistre ou pas à la fermeture de la fenetre principale
+            Dim lAvertissementFermeture As DialogResult = MessageBox.Show(strMsgFermetureFrm, LogicielInfo.NomLogiciel, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+            e.Cancel = Not (lAvertissementFermeture = DialogResult.Yes Or lAvertissementFermeture = DialogResult.No)
+            If lAvertissementFermeture = DialogResult.Yes Then EnregistrerProjetEnCours() 'enregistrement du projet en cours
+        End If
 
         '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
 
@@ -1672,8 +1679,6 @@ Public Class Frm_PMX
         LogicielOptions.lExpert = Not LogicielOptions.lExpert
         Me.TSbtn_ExpertMode.Checked = LogicielOptions.lExpert
     End Sub
-
-
 
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
         lCotation = Not lCotation
