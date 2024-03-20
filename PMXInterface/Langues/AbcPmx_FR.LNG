@@ -809,6 +809,7 @@ MATERIALS				= Matériaux
 STEEL					= Acier
 CONCRETE				= Béton
 FIRE					= Incendie
+GAMMAV					= valeur unique pour γv
 
 #OPTCALFIRE
 TITLE					= Calcul incendie

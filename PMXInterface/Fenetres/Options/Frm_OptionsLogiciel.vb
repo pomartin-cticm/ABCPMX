@@ -35,6 +35,7 @@ Public Class Frm_OptionsLogiciel
         Public IndUnitDimension As Integer          'Indice de l'unité de longueur utilisée
         Public IndUnitEffort As Integer             'Indice de l'unité d'effort utilisée
         Public IndUnitMoment As Integer             'Indice de l'unité de moment utilisée
+        Public IndUnitModuleW As Integer           'Indice de l'unité des module de flexion
         Public IndUnitInerties As Integer           'Indice de l'unité des inerties
         Public IndUnitContraintes As Integer        'Indice de l'unité des contraintes
         Public IndUnitModulesY As Integer           'Indice de l'unité des modules d'élasticité

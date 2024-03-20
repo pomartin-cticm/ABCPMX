@@ -369,6 +369,10 @@
 
         Loop
 
+        '# Calcul armatures transversales
+
+        Me.CalculArmaturesTransversales(myBeam)
+
     End Sub
 
     Private Sub MaillageProprietesPlastiques(iCombi As Integer, MyPoutre As cls_Poutre, MEd(,) As Decimal, DeltaRd() As List(Of Decimal), bEff() As Decimal,
@@ -630,7 +634,7 @@
         Dim iDebK, iFinK As Integer
         Dim iZone As Integer
         Dim sCum, xNode As Decimal
-        Dim xFinZone(,) As Decimal = myBeam.xFinZone
+        Dim xFinZone(,) As Decimal = myBeam.xFinZoneTravee
         Dim myFluxRd As Decimal
 
         '--( Initialisation
@@ -657,7 +661,7 @@
 
                 If IsGreater(xNode, sCum) Then
                     iZone += 1
-                    sCum = xFinZone(iTravee, iZone)
+                    sCum = xFinZone(iTravee, iZone) 'GUD: Je viens de trouver ce bug, à corriger + tard (je pense que ca vient du fait que xFinZoneTravee ne donne pas l abscisses globale)
 
                     myFluxRd = myBeam.FluxRdZone(iTravee, iZone)
 
@@ -782,6 +786,320 @@
 
     End Sub
 
+
+#End Region
+
+#Region "Calcul des armatures transversales"
+
+    ''' <summary>
+    ''' Calcul la contrainte tangentielle induite par les connecteurs 
+    ''' </summary>
+    Sub CalculArmaturesTransversales(myPoutre As cls_Poutre)
+        '------------------------------------------------------------------------------------------------------------------
+        '    17/11/23 : Création - GUD
+        '------------------------------------------------------------------------------------------------------------------
+        '   Calcul la contrainte tangentielle induite par les connecteurs
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+        Dim nr As Integer
+        Dim PRd As Decimal
+        Dim sx As Decimal
+        Dim lGeneration1 As Boolean
+        Dim lDallePleine As Boolean
+        Dim lPerp As Boolean
+        Dim Ecm, Fck, Fcd, nu As Decimal
+        Dim fypd, fsd As Decimal
+        Dim gammaVs, gammaVc As Decimal
+        Dim v_x_Ed As Decimal
+        Dim k_sf_aa_sA, k_sf_bb_sA, k_sf_dd_sA As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui A (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+        Dim k_sf_aa_m, k_sf_bb_m, k_sf_dd_m As Decimal      'Definition des coefficients lorsque l'on se trouve à mi-travee (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+        Dim k_sf_aa_sB, k_sf_bb_sB, k_sf_dd_sB As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui B (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+        Dim hf_aa, hf_bb, hf_dd As Decimal
+        Dim b0, b0min As Decimal
+        Dim LargeurParticipante(0, 0) As Decimal
+        Dim be1, be2, beta1, beta2, bem, bes As Decimal
+        Dim k_bacPE1 As Decimal                             'coefficient qui indique la présence du bac acier (=1) ou non (=0)
+        Dim xDebutZoneLoc, xFinZoneLoc As Decimal(,)
+        Dim lSupportA, lSupportB, lMiTravee As Boolean      'sera utile pour + tard, permet de savoir si la zone de connection etudiee empiete sur la zone de support A, B ou mi-travee (selon la Figure 5.1 de l'EC4)
+        Dim thetaf_min_pos, thetaf_min_neg, thetaf_max As Decimal 'angle min de la bielle de compression en fonction de si on se trouve en zone de flexion positive ou négative 
+
+        '--> Initialisation
+        lGeneration1 = myPoutre.Param.lGeneration1
+        lDallePleine = (myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
+        lPerp = (myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+        Ecm = myPoutre.Dalle.beton.Ecm
+        Fck = myPoutre.Dalle.beton.Fck
+        Fcd = myPoutre.Dalle.beton.Fck / myPoutre.Param.Gamma.GammaC
+        fypd = myPoutre.Dalle.Bac.fyp / myPoutre.Param.Gamma.GammaP
+        fsd = myPoutre.Dalle.AcierArmatures.FsK / myPoutre.Param.Gamma.GammaS
+        If myPoutre.Param.lGeneration1 Then
+            nu = 0.6 * (1 - Fck / 250)
+        Else
+            nu = 0.5
+        End If
+        gammaVs = myPoutre.Param.Gamma.GammaVs
+        gammaVc = myPoutre.Param.Gamma.GammaVc
+        LargeurParticipante(0, 0) = 0 'initialisation avec une valeur quelconque pour pas que le tableau soit considéré commyPoutre Nothing dans la fonction BeffDalle
+
+        thetaf_min_pos = 27 / 180 * Math.PI 'angle min de la bielle en zone de flexion positive
+        thetaf_min_neg = 36 / 180 * Math.PI 'angle min  de la bielle en zone de flexion négative
+        thetaf_max = Math.PI / 4
+
+        If myPoutre.Dalle.lMixte Then
+            b0min = 4 * myPoutre.Dalle.Connecteur.d
+        Else
+            b0min = 2.5 * myPoutre.Dalle.Connecteur.d
+        End If
+
+        'Stockage local des abscisses afin de ne pas faire tourner plusieurs fois les calculs des proprietes myPoutre.xDebutZone et myPoutre.xFinZone
+        xDebutZoneLoc = myPoutre.xDebutZoneTravee
+        xFinZoneLoc = myPoutre.xFinZoneTravee
+
+        For i_travee As Integer = myPoutre.IndicePremiereTravee To myPoutre.IndiceDerniereTravee
+            For j_zone As Integer = 0 To myPoutre.NombreZones(i_travee) - 1
+
+                '---
+                'CALCUL DE LA CONTRAINTE TANGENTIELLE
+                '---
+
+                'nr = myPoutre.NombreGoujonsTransv(i_travee, j_zone)
+                'PRd = myPoutre.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, myPoutre.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
+                'sx = myPoutre.EspacemyPoutrentZone(i_travee, j_zone)
+                'v_x_Ed = nr * PRd / sx
+                v_x_Ed = myPoutre.FluxRdZone(i_travee, j_zone)
+
+                b0 = (nr - 1) * b0min
+
+                myPoutre.BeffDalle(myPoutre.LongueurTravee(i_travee) / 2, i_travee, False, False, myPoutre.EnuTypeLargeurParticipante.LargeurTotale, LargeurParticipante)
+
+                'Calcul de hf qui correspond à la longueur developpe de la surface de ruine 
+                hf_aa = myPoutre.Dalle.EpaisseurActive
+                If nr = 1 Then
+                    hf_bb = 2 * myPoutre.Dalle.Connecteur.hsc + myPoutre.Dalle.Connecteur.d 'GUD: a confirmyPoutrer avec les corrections apportées dans le MT 
+                Else
+                    hf_bb = 2 * myPoutre.Dalle.Connecteur.hsc + b0
+                End If
+                hf_dd = b0 + 2 * (myPoutre.Section.ProfilA.Bfs - b0 + myPoutre.Dalle.Connecteur.hsc * Math.Tan(myPoutre.Dalle.ThetaRd)) / Math.Sqrt(1 + Math.Tan(myPoutre.Dalle.ThetaRd) ^ 2)
+
+                Select Case i_travee
+                    Case 0 'on est dans le cas de la console gauche
+
+                        'Les consoles sont forcemyPoutrent en flexion négative, on calcul uniquemyPoutrent le coefficient au droit de l'appui A
+                        be1 = LargeurParticipante(0, 0)
+                        be2 = LargeurParticipante(1, 0)
+                        beta1 = LargeurParticipante(2, 0)
+                        beta2 = LargeurParticipante(3, 0)
+                        bes = LargeurParticipante(5, 0)
+
+                        k_sf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+                        k_sf_bb_sA = 1
+                        k_sf_dd_sA = 1
+
+                        myPoutre.TauEd(i_travee, j_zone, 0) = k_sf_aa_sA * v_x_Ed / hf_aa
+                        myPoutre.TauEd(i_travee, j_zone, 1) = k_sf_bb_sA * v_x_Ed / hf_bb
+                        myPoutre.TauEd(i_travee, j_zone, 2) = k_sf_dd_sA * v_x_Ed / hf_dd
+
+                        myPoutre.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+
+                    Case myPoutre.IndiceTraveeConsoleDroite 'on est dans le cas de la console droite 
+
+                        'Les consoles sont forcemyPoutrent en flexion négative, on calcul uniquemyPoutrent le coefficient au droit de l'appui B
+                        be1 = LargeurParticipante(0, 2)
+                        be2 = LargeurParticipante(1, 2)
+                        beta1 = LargeurParticipante(2, 2)
+                        beta2 = LargeurParticipante(3, 2)
+                        bes = LargeurParticipante(5, 2)
+
+                        k_sf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+                        k_sf_bb_sB = 1
+                        k_sf_dd_sB = 1
+
+                        myPoutre.TauEd(i_travee, j_zone, 0) = k_sf_aa_sB * v_x_Ed / hf_aa
+                        myPoutre.TauEd(i_travee, j_zone, 1) = k_sf_bb_sB * v_x_Ed / hf_bb
+                        myPoutre.TauEd(i_travee, j_zone, 2) = k_sf_dd_sB * v_x_Ed / hf_dd
+
+                        myPoutre.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+
+                    Case Else 'on est dans le cas d'une travée centrale
+
+                        'Calcul des coefficients k_sf au droit de l'appui A
+                        be1 = LargeurParticipante(0, 0)
+                        be2 = LargeurParticipante(1, 0)
+                        beta1 = LargeurParticipante(2, 0)
+                        beta2 = LargeurParticipante(3, 0)
+                        bes = LargeurParticipante(5, 0)
+
+                        k_sf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+                        k_sf_bb_sA = 1
+                        k_sf_dd_sA = 1
+
+                        'Calcul des coefficients k_sf a mi travee
+                        be1 = LargeurParticipante(0, 1)
+                        be2 = LargeurParticipante(1, 1)
+                        bem = LargeurParticipante(5, 1)
+
+                        k_sf_aa_m = Math.Max((be1 - b0 / 2) / bem, (be2 - b0 / 2) / bem)
+                        k_sf_bb_m = 1
+                        k_sf_dd_m = 1
+
+                        'Calcul des coefficients k_sf au droit de l'appui B
+                        be1 = LargeurParticipante(0, 2)
+                        be2 = LargeurParticipante(1, 2)
+                        beta1 = LargeurParticipante(2, 2)
+                        beta2 = LargeurParticipante(3, 2)
+                        bes = LargeurParticipante(5, 2)
+
+                        k_sf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+                        k_sf_bb_sB = 1
+                        k_sf_dd_sB = 1
+
+                        If myPoutre.lTraveeConsoleGauche Then
+                            If myPoutre.lTraveeConsoleDroite Then 'Presence de console a gauche ET a droite
+                                Select Case myPoutre.xDebutZoneTravee(i_travee, j_zone)
+                                    Case <= myPoutre.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant L/4
+                                        Select Case myPoutre.xFinZoneTravee(i_travee, j_zone)
+                                            Case <= myPoutre.LongueurTravee(i_travee) / 4 'la zone etudiée commyPoutrence et finie avant L/4
+                                                lSupportA = True
+                                                lMiTravee = False
+                                                lSupportB = False
+                                            Case <= 3 * myPoutre.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant L/4 et finie entre L/4 et 3L/4
+                                                lSupportA = True
+                                                lMiTravee = True
+                                                lSupportB = False
+                                            Case >= 3 * myPoutre.LongueurTravee(i_travee) / 4 'la eone étudiée commyPoutrence avant L/4 et finie après 3L/4
+                                                lSupportA = True
+                                                lMiTravee = True
+                                                lSupportB = True
+                                        End Select
+                                    Case <= 3 * myPoutre.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence après L/4 et avant 3L/4
+                                        Select Case myPoutre.xFinZoneTravee(i_travee, j_zone) 'le cas ou la zone finie avant L/4 n a pas de sens et n est pas étudiée 
+                                            Case <= 3 * myPoutre.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence et finie entre L/4 et 3L/4 
+                                                lSupportA = False
+                                                lMiTravee = True
+                                                lSupportB = False
+                                            Case >= 3 * myPoutre.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence entre L/4 et 3L/4 et finie après 3L/4
+                                                lSupportA = False
+                                                lMiTravee = True
+                                                lSupportB = True
+                                        End Select
+                                    Case >= 3 * myPoutre.LongueurTravee(i_travee) / 4 'la zone finie nécessairemyPoutrent après 3L/4 donc pas besoin de boucle 
+                                        lSupportA = False
+                                        lMiTravee = False
+                                        lSupportB = True
+                                End Select
+
+                            Else 'Presence de console a gauche uniquemyPoutrent
+                                lSupportB = False 'il n'y a pas de console a droite, ce qui fait qu'il ne peut pas y avoir de zone de momyPoutrent négatif proche de l appui de droite 
+
+                                Select Case myPoutre.xDebutZoneTravee(i_travee, j_zone)
+                                    Case <= myPoutre.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant L/4
+                                        Select Case myPoutre.xFinZoneTravee(i_travee, j_zone)
+                                            Case <= myPoutre.LongueurTravee(i_travee) / 4 'la zone etudiée commyPoutrence et finie avant L/4
+                                                lSupportA = True
+                                                lMiTravee = False
+                                            Case >= myPoutre.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant L/4 et finie après L/4
+                                                lSupportA = True
+                                                lMiTravee = True
+                                        End Select
+                                    Case >= myPoutre.LongueurTravee(i_travee) / 4 'la zone  commyPoutrence et finie nécessairemyPoutrent après L/4 donc pas besoin de boucle 
+                                        lSupportA = False
+                                        lMiTravee = True
+                                End Select
+                            End If
+                        Else
+                            If myPoutre.lTraveeConsoleDroite Then 'Presence de console a droite uniquemyPoutrent
+                                lSupportA = False 'il n'y a pas de console a gauche, ce qui fait qu'il ne peut pas y avoir de zone de momyPoutrent négatif proche de l appui de droite 
+
+                                Select Case myPoutre.xDebutZoneTravee(i_travee, j_zone)
+                                    Case <= 3 * myPoutre.LongueurTravee(i_travee) / 4
+                                        Select Case myPoutre.xFinZoneTravee(i_travee, j_zone)
+                                            Case <= 3 * myPoutre.LongueurTravee(i_travee) / 4 'la zone etudiée commyPoutrence et finie avant 3L/4
+                                                lMiTravee = True
+                                                lSupportB = False
+                                            Case >= 3 * myPoutre.LongueurTravee(i_travee) / 4 'la zone étudiée commyPoutrence avant 3L/4 et finie après 3L/4
+                                                lMiTravee = True
+                                                lSupportB = True
+                                        End Select
+                                    Case >= 3 * myPoutre.LongueurTravee(i_travee) / 4 'la zone  commyPoutrence et finie nécessairemyPoutrent après 3L/4 donc pas besoin de boucle 
+                                        lMiTravee = False
+                                        lSupportB = True
+                                End Select
+                            Else 'Aucune console, la zone étudiée se trouve nécessairemyPoutrent en zone de flexion positive 
+                                lSupportA = False
+                                lMiTravee = True
+                                lSupportB = False
+                            End If
+                        End If
+
+
+                        If lSupportA Then
+                            myPoutre.TauEd(i_travee, j_zone, 0) = k_sf_aa_sA * v_x_Ed / hf_aa
+                            myPoutre.TauEd(i_travee, j_zone, 1) = k_sf_bb_sA * v_x_Ed / hf_bb
+                            myPoutre.TauEd(i_travee, j_zone, 2) = k_sf_dd_sA * v_x_Ed / hf_dd
+                        End If
+
+                        If lMiTravee Then
+                            myPoutre.TauEd(i_travee, j_zone, 0) = Math.Max(myPoutre.TauEd(i_travee, j_zone, 0), k_sf_aa_m * v_x_Ed / hf_aa)
+                            myPoutre.TauEd(i_travee, j_zone, 1) = Math.Max(myPoutre.TauEd(i_travee, j_zone, 1), k_sf_bb_m * v_x_Ed / hf_bb)
+                            myPoutre.TauEd(i_travee, j_zone, 2) = Math.Max(myPoutre.TauEd(i_travee, j_zone, 2), k_sf_dd_m * v_x_Ed / hf_dd)
+                        End If
+
+                        If lSupportB Then
+                            myPoutre.TauEd(i_travee, j_zone, 0) = Math.Max(myPoutre.TauEd(i_travee, j_zone, 0), k_sf_aa_sB * v_x_Ed / hf_aa)
+                            myPoutre.TauEd(i_travee, j_zone, 1) = Math.Max(myPoutre.TauEd(i_travee, j_zone, 1), k_sf_bb_sB * v_x_Ed / hf_bb)
+                            myPoutre.TauEd(i_travee, j_zone, 2) = Math.Max(myPoutre.TauEd(i_travee, j_zone, 2), k_sf_dd_sB * v_x_Ed / hf_dd)
+                        End If
+
+                        If lSupportA Or lSupportB Then 'la zone de connection étudiée traverse au moins une zone de flexion négative
+                            myPoutre.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+                        Else 'la zone de connection étudiée est entièremyPoutrent en zone de flexion comprimée 
+                            myPoutre.Thetaf_min(i_travee, j_zone) = thetaf_min_pos
+                        End If
+
+                End Select
+
+                '---
+                'CALCUL DE L'ANGLE DE LA BIELLE DE COMPRESSION ET DE LA QUANTITE D'ARMATURE PAR UNITE DE LONGUEUR NECESSAIRE
+                '---
+
+                Dim TauEd_max As Decimal = nu * Fcd / 2
+
+                For k_ruine As Integer = 0 To 2
+                    'Conversion de Pa a MPa des contraintes tangentielles
+                    myPoutre.TauEd(i_travee, j_zone, k_ruine) /= kConvMPaPa
+
+                    If myPoutre.TauEd(i_travee, j_zone, k_ruine) <= TauEd_max Then
+                        myPoutre.Thetaf(i_travee, j_zone, k_ruine) = 0.5 * Math.Asin(2 * myPoutre.TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd))
+                    Else 'la contrainte tangentielle est trop importante, la bielle de compression n'est pas vérifiée. On considère alors l'angle de la bielle max pour la suite du calcul 
+                        myPoutre.Thetaf(i_travee, j_zone, k_ruine) = thetaf_max
+                    End If
+
+                    myPoutre.Thetaf(i_travee, j_zone, k_ruine) = Math.Min(myPoutre.Thetaf(i_travee, j_zone, k_ruine), thetaf_max)
+                    myPoutre.Thetaf(i_travee, j_zone, k_ruine) = Math.Max(myPoutre.Thetaf(i_travee, j_zone, k_ruine), myPoutre.Thetaf_min(i_travee, j_zone))
+
+                    'Calcul du critère de vérification de la bielle de compression
+                    myPoutre.Gamma_sf(i_travee, j_zone, k_ruine) = myPoutre.TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd * Math.Sin(myPoutre.Thetaf(i_travee, j_zone, k_ruine)) * Math.Cos(myPoutre.Thetaf(i_travee, j_zone, k_ruine)))
+
+                Next
+
+                If myPoutre.Dalle.lMixte And myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire And myPoutre.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Then
+                    k_bacPE1 = 1
+                Else
+                    k_bacPE1 = 0
+                End If
+
+                myPoutre.As_s_transv(i_travee, j_zone, 0) = Math.Max((myPoutre.TauEd(i_travee, j_zone, 0) * hf_aa * Math.Tan(myPoutre.Thetaf(i_travee, j_zone, 0)) - k_bacPE1 * myPoutre.Dalle.Bac.Ape * fypd) / fsd, 0)
+                myPoutre.As_s_transv(i_travee, j_zone, 1) = Math.Max((myPoutre.TauEd(i_travee, j_zone, 1) * hf_bb * Math.Tan(myPoutre.Thetaf(i_travee, j_zone, 1)) - k_bacPE1 * myPoutre.Dalle.Bac.Ape * fypd) / fsd, 0)
+                myPoutre.As_s_transv(i_travee, j_zone, 2) = Math.Max((myPoutre.TauEd(i_travee, j_zone, 2) * hf_dd * Math.Tan(myPoutre.Thetaf(i_travee, j_zone, 2)) - k_bacPE1 * myPoutre.Dalle.Bac.Ape * fypd) / fsd, 0)
+
+
+            Next
+        Next
+
+
+
+    End Sub
 
 #End Region
 

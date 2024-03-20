@@ -810,6 +810,7 @@ MATERIALS				= Material
 STEEL					= Steel
 CONCRETE				= Concrete
 FIRE					= Fire
+GAMMAV					= single value for γv
 
 #OPTCALFIRE
 TITLE					= Fire design

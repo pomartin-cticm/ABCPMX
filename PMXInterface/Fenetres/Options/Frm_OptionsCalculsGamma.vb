@@ -44,6 +44,7 @@
             Me.lbl_Acier.Text = MyBloc("STEEL")
             Me.lbl_Beton.Text = MyBloc("CONCRETE")
             Me.lbl_Fire.Text = MyBloc("FIRE")
+            Me.chk_GammaV_Unique.Text = MyBloc("GAMMAV")
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
