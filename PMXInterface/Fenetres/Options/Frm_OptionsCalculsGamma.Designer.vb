@@ -34,6 +34,7 @@ Partial Class Frm_OptionsCalculsGamma
         Me.img_GammaM_fi = New System.Windows.Forms.PictureBox()
         Me.lbl_Fire = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.chk_GammaV_Unique = New System.Windows.Forms.CheckBox()
         Me.txt_GammaVs = New System.Windows.Forms.TextBox()
         Me.img_GammaVs = New System.Windows.Forms.PictureBox()
         Me.lbl_Beton = New System.Windows.Forms.Label()
@@ -54,12 +55,17 @@ Partial Class Frm_OptionsCalculsGamma
         Me.txt_GammaM0 = New System.Windows.Forms.TextBox()
         Me.img_GammaM0 = New System.Windows.Forms.PictureBox()
         Me.pan_Combination = New System.Windows.Forms.Panel()
+        Me.img_Q2 = New System.Windows.Forms.PictureBox()
+        Me.img_Q1 = New System.Windows.Forms.PictureBox()
         Me.lbl_Combination = New System.Windows.Forms.Label()
         Me.img_Psi0 = New System.Windows.Forms.PictureBox()
         Me.img_Psi1 = New System.Windows.Forms.PictureBox()
-        Me.txt_Psi0 = New System.Windows.Forms.TextBox()
-        Me.txt_Psi2 = New System.Windows.Forms.TextBox()
-        Me.txt_Psi1 = New System.Windows.Forms.TextBox()
+        Me.txt_Psi0_Q2 = New System.Windows.Forms.TextBox()
+        Me.txt_Psi0_Q1 = New System.Windows.Forms.TextBox()
+        Me.txt_Psi2_Q2 = New System.Windows.Forms.TextBox()
+        Me.txt_Psi1_Q2 = New System.Windows.Forms.TextBox()
+        Me.txt_Psi2_Q1 = New System.Windows.Forms.TextBox()
+        Me.txt_Psi1_Q1 = New System.Windows.Forms.TextBox()
         Me.img_Psi2 = New System.Windows.Forms.PictureBox()
         Me.pan_Loads = New System.Windows.Forms.Panel()
         Me.img_GammaGinf = New System.Windows.Forms.PictureBox()
@@ -70,7 +76,6 @@ Partial Class Frm_OptionsCalculsGamma
         Me.txt_GammaQ = New System.Windows.Forms.TextBox()
         Me.lbl_Materials = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.chk_GammaV_Unique = New System.Windows.Forms.CheckBox()
         Me.pan_Gamma.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.img_GammaV_fi, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -87,6 +92,8 @@ Partial Class Frm_OptionsCalculsGamma
         CType(Me.img_GammaM1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_GammaM0, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Combination.SuspendLayout()
+        CType(Me.img_Q2, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Q1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -132,7 +139,7 @@ Partial Class Frm_OptionsCalculsGamma
         Me.Panel2.Controls.Add(Me.txt_GammaM_fi)
         Me.Panel2.Controls.Add(Me.img_GammaM_fi)
         Me.Panel2.Controls.Add(Me.lbl_Fire)
-        Me.Panel2.Location = New System.Drawing.Point(285, 161)
+        Me.Panel2.Location = New System.Drawing.Point(285, 186)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(139, 147)
         Me.Panel2.TabIndex = 102
@@ -214,10 +221,20 @@ Partial Class Frm_OptionsCalculsGamma
         Me.Panel1.Controls.Add(Me.txt_GammaS)
         Me.Panel1.Controls.Add(Me.txt_GammaVc)
         Me.Panel1.Controls.Add(Me.img_GammaS)
-        Me.Panel1.Location = New System.Drawing.Point(146, 161)
+        Me.Panel1.Location = New System.Drawing.Point(146, 186)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(139, 210)
         Me.Panel1.TabIndex = 101
+        '
+        'chk_GammaV_Unique
+        '
+        Me.chk_GammaV_Unique.AutoSize = True
+        Me.chk_GammaV_Unique.Location = New System.Drawing.Point(2, 60)
+        Me.chk_GammaV_Unique.Name = "chk_GammaV_Unique"
+        Me.chk_GammaV_Unique.Size = New System.Drawing.Size(133, 17)
+        Me.chk_GammaV_Unique.TabIndex = 112
+        Me.chk_GammaV_Unique.Text = "chk_GammaV_Unique"
+        Me.chk_GammaV_Unique.UseVisualStyleBackColor = True
         '
         'txt_GammaVs
         '
@@ -325,7 +342,7 @@ Partial Class Frm_OptionsCalculsGamma
         Me.pan_Steel.Controls.Add(Me.img_GammaM1)
         Me.pan_Steel.Controls.Add(Me.txt_GammaM0)
         Me.pan_Steel.Controls.Add(Me.img_GammaM0)
-        Me.pan_Steel.Location = New System.Drawing.Point(11, 161)
+        Me.pan_Steel.Location = New System.Drawing.Point(11, 186)
         Me.pan_Steel.Name = "pan_Steel"
         Me.pan_Steel.Size = New System.Drawing.Size(135, 117)
         Me.pan_Steel.TabIndex = 100
@@ -389,31 +406,54 @@ Partial Class Frm_OptionsCalculsGamma
         '
         'pan_Combination
         '
+        Me.pan_Combination.Controls.Add(Me.img_Q2)
+        Me.pan_Combination.Controls.Add(Me.img_Q1)
         Me.pan_Combination.Controls.Add(Me.lbl_Combination)
         Me.pan_Combination.Controls.Add(Me.img_Psi0)
         Me.pan_Combination.Controls.Add(Me.img_Psi1)
-        Me.pan_Combination.Controls.Add(Me.txt_Psi0)
-        Me.pan_Combination.Controls.Add(Me.txt_Psi2)
-        Me.pan_Combination.Controls.Add(Me.txt_Psi1)
+        Me.pan_Combination.Controls.Add(Me.txt_Psi0_Q2)
+        Me.pan_Combination.Controls.Add(Me.txt_Psi0_Q1)
+        Me.pan_Combination.Controls.Add(Me.txt_Psi2_Q2)
+        Me.pan_Combination.Controls.Add(Me.txt_Psi1_Q2)
+        Me.pan_Combination.Controls.Add(Me.txt_Psi2_Q1)
+        Me.pan_Combination.Controls.Add(Me.txt_Psi1_Q1)
         Me.pan_Combination.Controls.Add(Me.img_Psi2)
         Me.pan_Combination.Location = New System.Drawing.Point(197, 7)
         Me.pan_Combination.Name = "pan_Combination"
-        Me.pan_Combination.Size = New System.Drawing.Size(155, 117)
+        Me.pan_Combination.Size = New System.Drawing.Size(208, 137)
         Me.pan_Combination.TabIndex = 99
+        '
+        'img_Q2
+        '
+        Me.img_Q2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Q2.Location = New System.Drawing.Point(112, 29)
+        Me.img_Q2.Name = "img_Q2"
+        Me.img_Q2.Size = New System.Drawing.Size(58, 20)
+        Me.img_Q2.TabIndex = 98
+        Me.img_Q2.TabStop = False
+        '
+        'img_Q1
+        '
+        Me.img_Q1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Q1.Location = New System.Drawing.Point(48, 29)
+        Me.img_Q1.Name = "img_Q1"
+        Me.img_Q1.Size = New System.Drawing.Size(58, 20)
+        Me.img_Q1.TabIndex = 97
+        Me.img_Q1.TabStop = False
         '
         'lbl_Combination
         '
         Me.lbl_Combination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_Combination.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Combination.Name = "lbl_Combination"
-        Me.lbl_Combination.Size = New System.Drawing.Size(152, 23)
+        Me.lbl_Combination.Size = New System.Drawing.Size(208, 23)
         Me.lbl_Combination.TabIndex = 96
         Me.lbl_Combination.Text = "lbl_Combination"
         Me.lbl_Combination.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'img_Psi0
         '
-        Me.img_Psi0.Location = New System.Drawing.Point(2, 29)
+        Me.img_Psi0.Location = New System.Drawing.Point(2, 54)
         Me.img_Psi0.Name = "img_Psi0"
         Me.img_Psi0.Size = New System.Drawing.Size(46, 20)
         Me.img_Psi0.TabIndex = 90
@@ -421,36 +461,57 @@ Partial Class Frm_OptionsCalculsGamma
         '
         'img_Psi1
         '
-        Me.img_Psi1.Location = New System.Drawing.Point(2, 55)
+        Me.img_Psi1.Location = New System.Drawing.Point(2, 80)
         Me.img_Psi1.Name = "img_Psi1"
         Me.img_Psi1.Size = New System.Drawing.Size(46, 20)
         Me.img_Psi1.TabIndex = 91
         Me.img_Psi1.TabStop = False
         '
-        'txt_Psi0
+        'txt_Psi0_Q2
         '
-        Me.txt_Psi0.Location = New System.Drawing.Point(48, 29)
-        Me.txt_Psi0.Name = "txt_Psi0"
-        Me.txt_Psi0.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Psi0.TabIndex = 92
+        Me.txt_Psi0_Q2.Location = New System.Drawing.Point(112, 54)
+        Me.txt_Psi0_Q2.Name = "txt_Psi0_Q2"
+        Me.txt_Psi0_Q2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi0_Q2.TabIndex = 92
         '
-        'txt_Psi2
+        'txt_Psi0_Q1
         '
-        Me.txt_Psi2.Location = New System.Drawing.Point(48, 81)
-        Me.txt_Psi2.Name = "txt_Psi2"
-        Me.txt_Psi2.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Psi2.TabIndex = 95
+        Me.txt_Psi0_Q1.Location = New System.Drawing.Point(48, 54)
+        Me.txt_Psi0_Q1.Name = "txt_Psi0_Q1"
+        Me.txt_Psi0_Q1.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi0_Q1.TabIndex = 92
         '
-        'txt_Psi1
+        'txt_Psi2_Q2
         '
-        Me.txt_Psi1.Location = New System.Drawing.Point(48, 55)
-        Me.txt_Psi1.Name = "txt_Psi1"
-        Me.txt_Psi1.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Psi1.TabIndex = 93
+        Me.txt_Psi2_Q2.Location = New System.Drawing.Point(112, 106)
+        Me.txt_Psi2_Q2.Name = "txt_Psi2_Q2"
+        Me.txt_Psi2_Q2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi2_Q2.TabIndex = 95
+        '
+        'txt_Psi1_Q2
+        '
+        Me.txt_Psi1_Q2.Location = New System.Drawing.Point(112, 80)
+        Me.txt_Psi1_Q2.Name = "txt_Psi1_Q2"
+        Me.txt_Psi1_Q2.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi1_Q2.TabIndex = 93
+        '
+        'txt_Psi2_Q1
+        '
+        Me.txt_Psi2_Q1.Location = New System.Drawing.Point(48, 106)
+        Me.txt_Psi2_Q1.Name = "txt_Psi2_Q1"
+        Me.txt_Psi2_Q1.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi2_Q1.TabIndex = 95
+        '
+        'txt_Psi1_Q1
+        '
+        Me.txt_Psi1_Q1.Location = New System.Drawing.Point(48, 80)
+        Me.txt_Psi1_Q1.Name = "txt_Psi1_Q1"
+        Me.txt_Psi1_Q1.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Psi1_Q1.TabIndex = 93
         '
         'img_Psi2
         '
-        Me.img_Psi2.Location = New System.Drawing.Point(2, 81)
+        Me.img_Psi2.Location = New System.Drawing.Point(2, 106)
         Me.img_Psi2.Name = "img_Psi2"
         Me.img_Psi2.Size = New System.Drawing.Size(46, 20)
         Me.img_Psi2.TabIndex = 94
@@ -517,7 +578,7 @@ Partial Class Frm_OptionsCalculsGamma
         'lbl_Materials
         '
         Me.lbl_Materials.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Materials.Location = New System.Drawing.Point(11, 135)
+        Me.lbl_Materials.Location = New System.Drawing.Point(11, 160)
         Me.lbl_Materials.Name = "lbl_Materials"
         Me.lbl_Materials.Size = New System.Drawing.Size(413, 23)
         Me.lbl_Materials.TabIndex = 97
@@ -527,16 +588,6 @@ Partial Class Frm_OptionsCalculsGamma
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
-        '
-        'chk_GammaV_Unique
-        '
-        Me.chk_GammaV_Unique.AutoSize = True
-        Me.chk_GammaV_Unique.Location = New System.Drawing.Point(2, 60)
-        Me.chk_GammaV_Unique.Name = "chk_GammaV_Unique"
-        Me.chk_GammaV_Unique.Size = New System.Drawing.Size(133, 17)
-        Me.chk_GammaV_Unique.TabIndex = 112
-        Me.chk_GammaV_Unique.Text = "chk_GammaV_Unique"
-        Me.chk_GammaV_Unique.UseVisualStyleBackColor = True
         '
         'Frm_OptionsCalculsGamma
         '
@@ -567,6 +618,8 @@ Partial Class Frm_OptionsCalculsGamma
         CType(Me.img_GammaM0, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Combination.ResumeLayout(False)
         Me.pan_Combination.PerformLayout()
+        CType(Me.img_Q2, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Q1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Psi0, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Psi1, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Psi2, System.ComponentModel.ISupportInitialize).EndInit()
@@ -589,10 +642,10 @@ Partial Class Frm_OptionsCalculsGamma
     Friend WithEvents img_GammaGinf As PictureBox
     Friend WithEvents lbl_Loads As Label
     Friend WithEvents lbl_Combination As Label
-    Friend WithEvents txt_Psi2 As TextBox
+    Friend WithEvents txt_Psi2_Q1 As TextBox
     Friend WithEvents img_Psi2 As PictureBox
-    Friend WithEvents txt_Psi1 As TextBox
-    Friend WithEvents txt_Psi0 As TextBox
+    Friend WithEvents txt_Psi1_Q1 As TextBox
+    Friend WithEvents txt_Psi0_Q1 As TextBox
     Friend WithEvents img_Psi1 As PictureBox
     Friend WithEvents img_Psi0 As PictureBox
     Friend WithEvents lbl_Materials As Label
@@ -628,4 +681,9 @@ Partial Class Frm_OptionsCalculsGamma
     Friend WithEvents img_GammaM_fi As PictureBox
     Friend WithEvents ErrorProvider As ErrorProvider
     Friend WithEvents chk_GammaV_Unique As CheckBox
+    Friend WithEvents txt_Psi0_Q2 As TextBox
+    Friend WithEvents txt_Psi2_Q2 As TextBox
+    Friend WithEvents txt_Psi1_Q2 As TextBox
+    Friend WithEvents img_Q2 As PictureBox
+    Friend WithEvents img_Q1 As PictureBox
 End Class
