@@ -4665,6 +4665,7 @@ Module Mod_NoteCalcul
         '-------------------------------------------------------------------------------------------
 
         Dim NCOL As Integer
+        Const iVerif As Integer = 0
 
         If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
 
@@ -4685,11 +4686,11 @@ Module Mod_NoteCalcul
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(i + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, CStr(j + 1))
                 AddCellule(LC4, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.NombreGoujonsTransv(i, j), Enu_TypeVariable.SansType, 4, 0, False))
-                AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.TauEd(i, j, ind_failureArea), Enu_TypeVariable.Contrainte, 4, 2, False))
-                AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.Thetaf_min(i, j)), Enu_TypeVariable.SansType, 4, 2, False))
-                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.Thetaf(i, j, ind_failureArea)), Enu_TypeVariable.SansType, 4, 2, False))
-                AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.Gamma_sf(i, j, ind_failureArea), Enu_TypeVariable.SansType, 4, 2, False))
-                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.As_s_transv(i, j, ind_failureArea), Enu_TypeVariable.AireCM2, 4, 2, False))
+                AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.VerifMixte(iVerif).TauEd(i, j, ind_failureArea), Enu_TypeVariable.Contrainte, 4, 2, False))
+                AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.VerifMixte(iVerif).Thetaf_min(i, j)), Enu_TypeVariable.SansType, 4, 2, False))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(GetAngleInDegree(MyBeam.VerifMixte(iVerif).Thetaf(i, j, ind_failureArea)), Enu_TypeVariable.SansType, 4, 2, False))
+                AddCellule(LC2_3, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.VerifMixte(iVerif).Gamma_sf(i, j, ind_failureArea), Enu_TypeVariable.SansType, 4, 2, False))
+                AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.VerifMixte(iVerif).As_s_transv(i, j, ind_failureArea), Enu_TypeVariable.AireCM2, 4, 2, False))
 
             Next
         Next
@@ -4698,6 +4699,14 @@ Module Mod_NoteCalcul
     End Sub
 
     Private Sub EnteteTableauELUArmaturesTransv(ByRef nbCol As Integer, str_failureArea As String)
+        '-------------------------------------------------------------------------------------------
+        '   20/11/23 :  Création - GUD
+        '-------------------------------------------------------------------------------------------
+        '   Entête du Tableau des armatures transversales
+        '-------------------------------------------------------------------------------------------
+        '   nbCol               [S] :   nombre de colonnes du tableau 
+        '   str_failureArea     [E] :   nom du mode de ruine à afficher
+        '-------------------------------------------------------------------------------------------
 
         AddLigneNDC("\TABLEAU 10")
 
@@ -5814,9 +5823,9 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocELU("SECTIONSR"))
         If MyBeam.VerifMixte(iVerif).lCalculPlastic Then
+            '------------------------------------------------------------------------------------------------------------
             '--> Calcul Plastique
-
-
+            '------------------------------------------------------------------------------------------------------------
 
             AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)")
             AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
@@ -5847,7 +5856,9 @@ Module Mod_NoteCalcul
             EditionVerificationsELUSummaryMIXTEDegConnexion(MyBeam, iVerif)
 
         ElseIf MyBeam.Param.lElasticDesignVM Then
+            '------------------------------------------------------------------------------------------------------------
             '--> Calcul élastique imposé avec critère de Von Mises
+            '------------------------------------------------------------------------------------------------------------
 
             '# Contraintes normales
             AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereSigmaA, "\SG\-s\s,a\=", BlocELU("M_CRITERIA") & " (1)(2)")
@@ -5890,7 +5901,9 @@ Module Mod_NoteCalcul
 
         Else
 
+            '------------------------------------------------------------------------------------------------------------
             '--> Calcul élastique classe 3
+            '------------------------------------------------------------------------------------------------------------
 
             'AddLigneNDC(TABW2 & BlocELU("ELASTIC_DESIGN"))
 
@@ -5911,6 +5924,10 @@ Module Mod_NoteCalcul
             End If
 
             AddLigneNDC(TABW2 & "(2): " & BlocELU("MVBINTERACTION"))
+
+            '# Connexion 
+            AddTitreNdC(3, BlocELU("CONNECTION"))
+            AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereConnex, "\SG\s\-connex\=", BlocELU("CON_CRITERIA"))
 
         End If
 
@@ -7701,7 +7718,7 @@ Module Mod_NoteCalcul
 
     '###############################################################################################################################################
 
-#Region " Edition du modèle de calcul "
+#Region "   Edition du modèle de calcul "
 
     Public Sub ABB_EditeModeleCalcul(MyPoutre As cls_Poutre, indTabElt As Integer)
         '---------------------------------------------------------------------------------------------------
@@ -8227,7 +8244,7 @@ Module Mod_NoteCalcul
 #End Region
 
 
-#Region " Calcul des moments résistance élastiques dans les poutres mixtes "
+#Region "   Calcul des moments résistance élastiques dans les poutres mixtes "
 
     Private Sub EditionMelRdPoutreMixte(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------

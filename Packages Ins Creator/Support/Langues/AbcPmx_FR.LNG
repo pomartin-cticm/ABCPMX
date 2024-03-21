@@ -1,0 +1,930 @@
+#FRM_JURIDIQUE
+AGREE					= Accepter
+EXIT					= Quitter
+LANGUAGE				= Langues
+LASTVERSION				= Vous travaillez sur la dernière version du logiciel
+NEWVERSION				= Nouvelle version du logiciel disponible.
+NOINTERNET				= Connectez-vous à internet pour vérifier que vous travaillez sur la dernière version du logiciel.
+TEXT1					= Le présent logiciel facilite les travaux d'études préliminaires dans le cadre de la conception de constructions métalliques. Sur base de méthodes de calcul selon les principes des normes appliquées, il permet d'effectuer un certain nombre de vérifications dans le but de pouvoir évaluer une solution dans le cadre d'un pré dimensionnement. Le logiciel ne permet pas d'analyser toutes les situations et d'effectuer de façon exhaustive tous les calculs justificatifs requis pour une étude d'exécution qui nécessite dans tous les cas le recours au conseil d'un Bureau d'Etudes.
+TEXT2					= En raison de la complexité des méthodes de calcul, ce logiciel s'adresse exclusivement à des utilisateurs professionnels du domaine de la Construction Métallique (qui sont à même de se faire une idée précise de ses possibilités, de ses limites  et de son adéquation aux différents cas d'applications pratiques). L'utilisateur l'utilisera donc sous sa propre responsabilité et à ses risques et périls.
+TEXT3					= Ce logiciel est mis à disposition à titre gratuit. Aucun droit n'est conféré à l'utilisateur du présent logiciel dont la propriété et tous les droits intellectuels continuent d'appartenir exclusivement au CTICM. Le CTICM ne peut être tenu responsable d'aucune perte ou dégât directement et/ou indirectement lié au résultat de l'utilisation du logiciel. L'utilisation de ce logiciel ne fait naître aucune obligation de garantie au bénéfice de l'utilisateur, qui s'engage à  tenir le CTICM quitte et indemne de tout recours et de tous préjudices directs et/ou indirects découlant notamment d'une utilisation incorrecte ou inappropriée ou d'une utilisation à des fins inadéquates ou inappropriées du logiciel.
+TEXT4					= EN APPUYANT SUR LA TOUCHE ''ACCEPTER'' CI-DESSOUS, L'UTILISATEUR DECLARE EXPRESSEMENT AVOIR LU ATTENTIVEMENT LE TEXTE FIGURANT CI-DESSUS ET EN ACCEPTER TOUS LES EFFETS JURIDIQUES ET OBLIGATIONS QUI EN DECOULENT POUR LUI.
+VERSIONLINK     		= Voulez-vous être redirigé vers le site web du CTICM ?
+WARNING					= Avertissement
+
+#FRM_ABOUT
+TITLE					= A propos d'ABCPMX-II
+OK						= Ok
+DESCRIPTION				= Description
+DESCRIPTION_CONT		= Le logiciel ABC-PMX vise le calcul de poutres mixtes selon l'EN 1994-1-1. Son développement est cofinancé par ArcelorMittal et le CTICM.
+INFORMATION				= Information
+MAITRE					= Droits
+VERSION					= Version
+SUPPORT					= Support :
+YEARVERSION				= Année :
+
+#FRMADDSTUD
+TITLEADD				= Ajouter un nouveau goujon
+TITLEMODIFY				= Modifier le goujon
+TITLEEDIT				= Editer le goujon
+OK						= OK
+CANCEL					= Annuler
+CLOSE					= Fermer
+LABEL					= Nom du goujon
+PHIROD					= Diamètre de la tige
+PHIHEAD					= Diamètre de la tête
+DEPTHHEAD				= Hauteur de la tête
+HTOTAL					= Hauteur totale
+FY						= Limite d'élasticité
+FU						= Résistance ultime à la traction
+ERRLABEL				= Définissez une étiquette
+ERRLABELBASE			= Etiquette non valide - déjà utilisée pour un autre goujon
+ERRVALEUR				= Entrez une valeur
+ERRVALNUM				= Entrez une valeur numérique
+ERRVALHLIM				= Valeur hors limites
+ERRFULTFY				= La résistance ultime à la traction doit être supérieure à la limite d'élasticité
+ERRDHLTDT				= Le diamètre de la tête doit être supérieur ou égal à 1.5 fois le diamètre de la tige (i.e. $)
+ERRHHGTHT				= La hauteur de la tête doit être inférieure ou égale à la hauteur totale
+ERRHH04D				= La hauteur de la tête doit être supérieure à 0.4 x le diamètre de la tige (i.e. $)
+ERRHT3D					= La hauteur du goujon doit être supérieure à 3 x le diamètre de la tige (i.e. $)
+ERROR					= Vérifier les paramètres pour les critères suivants:
+ERRORFRM				= Erreurs de paramètres
+
+#FRM_AJOUTEPP
+TITLE					= Nouveau projet
+OK						= Ok
+CANCEL					= Annuler
+PROJECT					= Projet
+PROJECTNAME				= Nom du projet :
+CURRENTPROJECT			= Projet en cours :
+BEAM					= Poutre
+NEWBEAM					= Ajouter la poutre :
+MODIFYBEAM				= Modifier la poutre :
+SECTIONTYPE				= Type de section
+STEELSECTION			= Section non mixte
+STEELSECTIONPARTENC		= Section acier avec enrobage partiel
+COMPOSITESECTION		= Section mixte
+COMPOSITESECTIONPARTENC	= Section mixte avec enrobage partiel
+SLIMFLOORSFB			= Section dalle mince SFB non mixte
+SLIMFLOORSFBCOMPO		= Section dalle mince SFB mixte
+SLIMFLOORIFB_A			= Section dalle mince IFB-A non mixte
+SLIMFLOORIFB_ACOMPO		= Section dalle mince IFB-A mixte
+SLIMFLOORIFB_B			= Section dalle mince IFB-B non mixte
+SLIMFLOORIFB_BCOMPO		= Section dalle mince IFB-B mixte
+SLIMFLOORSAB			= Section dalle mince SAB non mixte
+SLIMFLOORSABCOMPO		= Section dalle mince SAB mixte
+
+#FRM_BEAMOPTIONS
+TITLE					= Options de calcul de la poutre
+OK						= Ok
+CANCEL					= Annuler
+TSTANDARD				= Norme
+ENGEN1					= Première génération des Eurocodes
+ENGEN2					= Deuxième génération des Eurocodes (versions de travail)
+TELUOPTIONS				= Options pour les Etats Limites Ultimes
+TELSOPTIONS				= Options pour les Etats Limites de Services
+COMBINATIONFREQ			= Combinaison de charges pour les fréquences propres
+ETADEFLECTIONS			= Flèche des poutres mixtes prenant en compte la raideur des goujons
+STUDSE					= Glissement du connecteur à 0,7 PRk (prEN 1994-1-1 B.2.5 (5))
+ELASTICDESIGNVM			= Calcul élastique des sections (Critères de Von Mises)
+ELASTICDESIGNCL3		= Calcul élastique des sections (Critères sections de classe 3)
+NORMALDESIGN			= Dimensionnement des sections selon leur classe
+TCONCRETE				= Propriétés du béton
+CONCRETEMSG				= Propriétés utilisées pour les sections mixtes (dalle ou enrobage)
+RELATIVEHUMIDITY		= Humidité relative
+SHRINKAGEDEFORMATION	= Déformation due au retrait
+SHRINKAGETOENCASEMENT	= Retrait pris en compte pour le béton d'enrobage partiel
+YOUNGSMODULUSREBAR		= Module d'Young des armatures
+SECTIONSPROP			= Propriétés des sections transversales
+SIMPLIFIEDBEFF			= Distribution simplifiée pour les largeurs efficaces de la dalle béton
+REBARSINCOMPRESSION		= Armatures en compression prises en compte
+AGET					= Age du béton
+AGET0					= Age du béton au moment du chargement
+SYMBOLFORDAY			= d
+SLAB					= Dalle
+ENCASEMENT				= Enrobage
+SELFWEIGHT				= Poids propre
+OTHERPERM				= Autre charges permanentes
+SHRINKAGE				= Retrait
+TPARAMETERS				= Paramètres
+GFORCE					= Accélération de pesanteurs
+ETAW					= Voilement par cisaillement
+
+#FRM_CALCULATIONSHEET
+TITLE					= Note de calculs
+FIRST					= Première page
+PREVIOUS				= Page précédente
+NEXT					= Page suivante
+LAST					= Dernière page
+ZOOMIN					= Zoom avant
+ZOOMOUT					= Zoom arrière
+PRINT					= Impression
+EXPORTPDF				= Exporter en PDF
+LANGUAGE				= Langue
+SUMMARY					= Sommaire
+BTNOPTIONS				= Options
+BTNSYNTHESE				= Synthèse
+BTNCOMPLET				= Note complète
+BTNDETAILED				= Note détaillée
+BTNULTRA				= Synthèse des résultats
+BTNDRAWING				= Dessin de la poutre
+NAVPAN					= Volet de navigation
+NAVIGATION				= Navigation
+ZOOM					= Zoom
+SAVEAS					= Enresitrer sous
+
+#FRMCATALOGUE
+TITLE 					= Catalogue
+CLOSE					= Fermer
+PROFIL					= Profilés
+SERIE					= Séries
+DIMENSIONS			 	= Dimensions
+PROPERTIES				= Propriétés
+UNIT_DIM				= Unité Dimension :
+TOOLTIP_G 				= Masse par unité de longueur
+TOOLTIP_A				= Aire de section
+TOOLTIP_IY				= Moment d'inertie de flexion / Axe fort
+TOOLTIP_WELY			= Module de flexion élastique / Axe fort
+TOOLTIP_WPLY			= Module de flexion plastique / Axe fort
+TOOLTIP_IY2				= Rayon de giration / Axe fort
+TOOLTIP_AVZ				= Aire de cisaillement
+TOOLTIP_IZ		 		= Moment d'inertie de flexion / Axe faible
+TOOLTIP_WELZ 			= Module de flexion élastique / Axe faible
+TOOLTIP_WPLZ			= Module de flexion plastique / Axe faible
+TOOLTIP_IZ2				= Rayon de giration / Axe faible
+TOOLTIP_IT				= Moment d'inertie de torsion
+TOOLTIP_HT				= Hauteur du profilé
+TOOLTIP_BF				= Largeur du profilé
+TOOLTIP_TF				= Épaisseur d'aile
+TOOLTIP_TW				= Épaisseur d'âme
+TOOLTIP_RC				= Rayon de congé
+NOTE					= Fiche Section
+CARA					= Caractéristiques
+VAL 					= Valeurs
+
+#FRM_CHARGEMENT
+TITLE					= Définition des cas de charge
+OK						= Ok
+CANCEL					= Annuler
+LOADCASE				= Cas de charge 
+LEFTCANT				= Console gauche
+MAINSPAN				= Travée principale
+RIGHTCANT				= Console droite
+SPAN					= Travée
+WARNING_CMBTRAVEE		= L'ensemble des données doivent être correctes pour pouvoir sélectionner une autre travée 
+SURFACELOAD				= Charge surfacique
+WIDTHAPPLICATION		= Largeur d'application
+UNIFORMLOAD				= Charge uniforme
+RESULTINGFORCE			= Force verticale résultante
+DISTRIBUTEDLOAD			= Charge linéique
+CONCENTRATEDLOAD		= Charge ponctuelle
+FORCEENDSUPPORT			= Réactions d'appuis
+LEFTSUPPORT				= Appui gauche
+RIGHTSUPPORT			= Appui droit
+ADD						= Ajouter
+DELETE					= Supprimer
+INFORMATION				= Information
+INFO_G					= Charge permanente
+INFO_G1					= Charge permanente (avant coulage du béton)
+INFO_G2					= Charge permanente additionnelle (après coulage du béton)
+INFO_Q1					= Charge d'exploitation 1
+INFO_Q2					= Charge d'exploitation 2
+INFO_QC					= Charge de construction
+
+#FRM_COMBINATIONS
+TITLE					= Combinaisons
+OK						= Ok
+CANCEL					= Annuler
+ULSTATES		 		= Etats limites ultimes
+SLSTATES				= Etats limites de service
+FLSTATES				= Etats limites incendie
+CONSTRUCTIONSTAGE		= Phase de construction
+
+#FRM_COMBINATIONS1
+PREDEFINED				= Combinaisons prédéfinies selon l'EN 1990
+CUSTOM					= Combinaison personnalisée
+COMBINATION				= Combinaison
+ULS						= ELU
+SLS						= ELS
+FLS						= ELF
+NUMBER					= No
+
+#FRM_COMBINATIONS2
+ULSTATES		 		= Etats limites ultimes durant la construction
+SLSTATES				= Etats limites de service durant la construction
+ULS						= ELU
+SLS						= ELS
+COMBINATION				= Combinaison
+NUMBER					= No
+
+#FRM_CONNECTION
+TITLE					= Définition de la connection
+OK						= Ok
+CANCEL					= Annuler
+CONNECTION				= Connection
+CONNECTORS				= Connecteurs
+DIAMETER				= Diamètre
+AUTOMATICDESIGN			= Dimensionnement automatique de la connection
+DISPOSITION_LON_BAC_TR	= Disposition toutes les 
+DISPOSITION_LON_NO_BAC	= Espacement longitudinal
+LEFTCANT				= Console gauche
+MAINSPAN				= Travée principale
+RECMAXVALUE				= Les valeurs renseignées sont en dehors des valeurs recommandées : 
+RIGHTCANT				= Console droite
+RIB						= Onde
+RIBS					= Ondes
+ROW_NUMBER				= Nombre de files
+SPAN					= Travée
+STUDS					= Goujons
+WIDTH					= Largeur
+WARNING_CMBTRAVEE		= L'ensemble des informations renseignées doit être correct pour sélectionner une autre travée
+ADD						= Ajouter
+DELETE					= Supprimer
+
+#FRM_DECKRESTRAINT
+TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
+OK						= Ok
+CANCEL					= Annuler
+RESTRAINTBYTHEDECK		= Poutre est maintenue latéralement par le bac 
+INDIVIDUALSHEET			= Tôle individuelle
+NUMBERSPANS				= Nombre de travée traversée par les tôles
+SHEETLENGTH				= Longueur
+SHEETWIDTH				= Largeur
+DIMENSIONS				= Dimensions
+FLOORDEF				= Paramètres du sol
+NBSHEETSTRANSVERSE		= Nombre de tôles dans la direction transversale
+FLOORDIMENSIONS			= Dimensions du sol (travée principale)
+FLOORLENGTH				= Longueur de travée
+FLOORWIDTH				= Largeur
+TRANSITION				= Type de transition entre deux tôles adjacentes
+OVERLAPPING				= Chevauchement
+ADJACENTNOGAP			= Tôles adjacentes sans jeu
+FLANGEEDGES				= Tôles interrompues aux bords des semelles
+BEAMFASTENING			= Fixation du bac à la poutre
+FASTENING				= Une attache
+EVERYRIB				= à chaque onde
+EVERY2RIBS				= toutes les deux ondes
+TYPEFASTENER			= Type d'attaches
+SELFSCREWNORMAL			= Vis autoforeuses - rondelles normales
+SELFSCREWNEOPRENE		= Vis autoforeuses - rondelles néoprènes
+FIREDPINS				= Fixations par pistolet à cartouches
+DIAMETER				= Diamètre
+DIASCREWS				= De 5,5 à 6,3 mm
+DIAPINS					= De 3,7 à 4,8 mm
+SLIP					= Glissement	
+SEAMFASTENING			= Couturage
+SELFSCREW				= Vis autoforeusess
+RIVET					= Rivet
+DIASCREWS_SEAM			= De 4,1 à 4,8 mm
+DIAPINS_SEAM			= 4,8 mm	
+SPACING					= Espacement	
+PARAMETERS				= Paramètres
+BENDINGSTIFF			= Rigidité à la flexion
+SHEARSTIFF				= Rigidité au cisaillement
+DRAWING					= Dessin
+THETA					= Prise en compte de la rigidité flexionnelle du bac
+
+#FRMEDITSTUDS	
+TITLE					= Base de données des goujons
+OK						= OK
+CANCEL					= Annuler
+CLOSE					= Fermer
+SUPPRESS				= Supprimer
+ADD						= Ajouter
+LABEL					= Nom du goujon
+PHIROD					= Diamètre de la tige
+PHIHEAD					= Diamètre de la tête
+DEPTHHEAD				= Hauteur de la tête
+HTOTAL					= Hauteur totale
+FY						= Limite d'élasticité
+FU						= Résistance ultime à la traction
+INDICE					= Indice
+DELETEALL				= Supprimer tous les goujons ?
+CONFIRM					= Confirmez la suppression des goujons suivants
+SAVEBASE				= $ goujons enregistrer dans la base de données
+SAVEMODIF				= Voulez vous enregistrer les modifications de la base de données des goujons ?
+TTMNUNEW				= Ajouter un nouveau goujon
+TTMNUMODIFY				= Modifier le goujon
+TTMNUDELETE				= Supprimer les goujons sélectionnés
+TTMNUSAVE				= Enregister la base de données des goujons
+ERRLABEL				= Définir une étiquette
+ERRLABELBASE			= Etiquette non valide - déja attribuée
+ERRVALEUR				= Entrez une valeur
+ERRVALNUM				= Entrez une valeur numérique
+ERRVALHLIM				= Valeur hors limites
+ERRFULTFY				= La limite ultime à la traction doit être supérieure à la limite d'élasticité
+ERRDHLTDT				= Le diamètre de la tête doit être supérieur au diamètre de la tige
+ERRHHGTHT				= La hauteur de la tête doit être inférieure à la hauteur totale
+
+#FRM_EDITSTEELSHEETINGS
+TITLE				= Base de données des goujons
+OK					= OK
+CANCEL				= Annuler
+CLOSE				= Fermer
+SUPPRESS			= Supprimer
+ADD					= Ajouter
+LABEL				= Etiquette du goujon
+PHIROD				= Diamètre de la tigeRod diameter
+PHIHEAD				= Diamètre de la tête
+DEPTHHEAD			= Hauteur de la tête
+HTOTAL				= Hauteur totale
+FY					= Limite d'élasticité
+FU					= Résistance ultime à la traction
+INDICE				= Indice
+DELETEALL			= Supprimer tous les goujons ?
+CONFIRM				= Confirmez la suppression des goujons suivants:
+SAVEBASE			= $ goujons enregistrés dans la base de données
+SAVEMODIF			= Voulez vous enregistrer les modifications de la base de données des goujons ?
+TTMNUNEW			= Ajouter un goujon
+TTMNUMODIFY			= Modifier le goujon
+TTMNUDELETE			= Supprimer les goujons selectionnés
+TTMNUSAVE			= Enregistrer la base de données des goujons
+ERRLABEL			= Définir une étiquette
+ERRLABELBASE		= Etiquette non valide - déja attribuée
+ERRVALEUR			= Entrer une valeur 
+ERRVALNUM			= Entrer une valeur numérique
+ERRVALHLIM			= Valeur hors limites 
+ERRFULTFY			= La résistance ultime doit être supérieure à la limite d'élasticité
+ERRDHLTDT			= Le diamètre de la tête doit être supérieur au diamètre de la tige
+ERRHHGTHT			= La hauteur de la tête doit être inférieure à la hauteur totale
+
+#FRM_ENCASEMENT
+CANCEL					= Annuler 
+CLASS					= Classe
+CONCRETE				= Béton
+COVERAGE				= Enrobage
+DIAMETER				= Diamètre
+DIMENSIONS				= Dimensions
+DOUBLE					= Deux
+EXTERNAL				= Extérieur
+INTERNAL				= Intérieur
+LONGIREBAR				= Armatures longitudinales
+LOWERLAYER				= Nappe inférieure
+MIDDLE					= Centre
+MIDDLELAYER				= Nappe intermédiaire
+NONE					= Aucun
+NUMBER					= Nombre
+OK						= OK
+POSITION				= Position
+SINGLE					= Un
+STEEL 					= Acier des armatures
+STIRRUPS				= Etrier
+CLOSEDSTIRRUPS			= Cadre
+OPENSTIRRUPS			= Etrier soudé
+THROUGHWEBSTIRRUPS		= Cadre traversant
+TITLE					= Definition de l'enrobage partiel
+TRIPLE					= Trois
+TYPEE					= Type 
+UPPERLAYER				= Nappe supérieure
+WIDTH					= Largeur
+ACTIVEREBARS			= Armatures actives							  
+
+#FRM_GAMMA
+ACCOMPAGNEMENT			= Coefficients d'accompagnement
+CANCEL					= Annuler
+GAMMAV					= valeur unique pour γv
+LBL_Q1					= Q1: Charge d'exploitation 1
+LBL_Q2					= Q2: Charge d'exploitation 2
+LOADING					= Chargement
+OK						= OK
+REINI					= Réinitialiser toutes les valeurs
+RESISTANCE				= Résistance
+TAB_STEEL				= Acier
+TAB_SLAB				= Dalle
+TAB_FIRE				= Incendie
+TITLE					= Définition des coefficients nationaux
+RESET					= Réinitialiser
+
+#FRM_HIVOSS
+CANCEL					= Annuler
+CEILINGFLOOR			= Faux plafonds
+COMBOMASSFREQUENCY		= Combination de masses pour la fréquence
+DAMPING					= Amortissement
+DAMPINGFURN_TRADOFFICE	= Bureaux avec cloisons
+DAMPINGFURN_PAPEROFFICE	= Bureaux sans armoire ni étagère
+DAMPINGFURN_OPENOFFICE	= Bureaux paysagers
+DAMPINGFURN_LIBRARY		= Bibliothèque
+DAMPINGFURN_HOUSE		= Résidentiel
+DAMPINGFURN_SCHOOLS		= Ecoles
+DAMPINGFURN_GYM			= Salles de sport
+DAMPINGFURN_CUSTOM		= Amortissement personnalisé
+FINISHINGDAMPING		= Amortissement des finitions
+FLOORUSE				= Utilisation du plancher		
+FLOORUSE_CRITAREA		= Zones sensibles
+FLOORUSE_HOSP			= Santé
+FLOORUSE_SCHOOL			= Education
+FLOORUSE_RESIDENTIAL	= Résidentiel
+FLOORUSE_OFFICE			= Bureaux
+FLOORUSE_MEETING		= Réunion
+FLOORUSE_SENIOR			= Maison de retraite
+FLOORUSE_HOTELS			= Hôtels
+FLOORUSE_INDUSTRIAL		= Industriel
+FLOORUSE_SPORTS			= Sports
+FURNITUREDAMPING		= Amortissement du mobilier
+HIVOSSMETHOD			= Application de la méthode Hivoss  
+OPTIONS					= Options
+OK						= OK
+STEELBEAM				= Poutre acier
+STRUCTURALDAMPING		= Amortissement de la structure
+SWIMMINGSCREED			= Chappe flottante
+TITLE					= Confort vibratoire des planchers
+TOTALDAMPING			= Amortissement total
+WITH					= Avec
+FREQUENCYSLAB			= Fréquence incluant l'effet de la dalle													
+
+#FRM_IDENTIFICATION
+CANCEL					= Annuler
+OK						= OK
+TITLE					= Identification 
+USER					= Utilisateur
+COMPANY					= Entreprise
+PROJECT					= Projet
+BEAMID					= Poutre N°
+COMMENT					= Commentaire
+
+#FRM_INFORMATIONPP
+OK						= Ok
+TITLE					= Détail du poids propre
+MAINPARAMETERS			= Paramètres principaux
+PROJECT					= Projet
+BEAMID					= Poutre N°
+GRAVITY					= Gravité
+DEADLOAD_PROFILE		= Poids propre du profilé
+DEADLOAD_SLAB			= Poids propre de la dalle
+STEELPROFILE			= Profilé acier
+PARTIALENCASEMENT		= Enrobage partiel
+CONCRETESLAB			= Dalle béton
+PSHEETING				= Bac acier
+
+#FRM_LATERALRESTRAINTS
+ADD						= Ajouter
+CANCEL					= Annuler
+OK						= OK
+DELETE					= Supprimer
+DRAWCONTROL				= Maintiens ponctuels
+FULLYRESTRAINED			= Maintien continu
+LEFTCANT				= Console gauche
+MAINSPAN				= Travée principale
+NORESTRAINT				= Pas de maintien intermédiaire
+POINTRESTRAINTS			= Maintiens ponctuels
+RESTRAINTS				= Type de maintien
+RIGHTCANT				= Console droite
+SPAN					= Travée
+TITLE 					= Definition des maintiens latéraux de la poutre
+
+#FRM_MAIN
+ABOUT					= A propos
+ADDBEAM					= Ajouter une poutre
+CALCULATION				= Calcul
+CALCULOPTIONS			= Options de calcul
+CALCULATIONREPORT		= Note de calculs
+SOFTOPT					= Options du logiciel					  
+COPYPICTURE				= Copier l'image
+DELBEAM					= Supprimer la poutre
+DUPBEAM					= Dupliquer la poutre
+ERRORCAPACITY			= La capacité maximale de la liste a été atteinte, aucun nouvel ajout n'est possible 
+ERROREMPTYCELL			= Cellule vide
+ERRORNONNUMERIC			= Valeur non numérique
+ERROROUTBOUNDS			= Valeur hors limites
+EXIT					= Quitter
+FILE					= Fichier
+NEW						= Nouveau
+NPROJET					= Nouveau projet
+OPEN					= Ouvrir
+OPTIONS					= Options
+OTHER					= Autre			 
+PROJECT					= Projet
+PROJECTNAME				= Nom du projet
+PROJECTNAVIGATION		= Navigation projet
+RECENTFILES				= Fichiers récents
+SAVE					= Enregistrer
+SAVEAS					= Enregister sous
+SAVEBEFORECLOSE			= Voulez-vous enresitrer les modifications du projet ?
+SECTION					= Section
+SECTIONSLIST			= Liste des sections
+SUPPORT					= Support
+TECHNICALMANUEL			= Manuel technique
+VALIDATIONMANUEL		= Manuel de validation									 
+TSBCONNECTION			= Connection
+TSBRESTRAINTS			= Maintiens latéraux
+TSBSHEETRESTRAIN		= Maintien par le bac en phase de construction
+TSBENCASEMENT			= Enrobage partiel
+TSBHOME					= Début
+TSBIDENTIFICATION		= Identification
+TSBSECTIONA				= Profilé acier
+TSBSLAB					= Dalle
+TSBSPACINGS				= Configuration transversale
+TSBSPANS				= Portées
+TSBPROPPING				= Etaiement
+TSBLOADS				= Chargement
+TSBCOMBINATIONS			= Combinaisons de charges
+TSOPTIONS				= Options de calcul de la  poutre
+TSBGAMMA				= Coefficients nationaux
+TSBHIVOSS				= Vibration de plancher
+TSBOPTIONSINCENDIE		= Options de calcul incendie
+TSBNDCPOUTRE			= Note de calcul de la poutre en cours
+WARNINGFILE				= Attention vous ouvrez un fichier avec des données d'une ancienne version du logiciel. Veuillez vérifier l'ensemble des données et réenregister le fichier.
+TSPPCOMBINATIONS		= Post-traitement : Combinaison de charges
+TSPPEFFWIDTHS			= Post-traitement : Largeur efficace de la dalle
+TSPPLOADCASES			= Post-traitement : Cas de charge
+TSPPVERIFICATIONS		= Post-traitement : Vérifications
+TSPPGENERAL				= Post-traitement
+PPCOMBINATIONS			= Combinaisons de charges
+PPEFFWIDTHS				= Largeur efficace de la dalle
+PPLOADCASES				= Cas de charges
+PPVERIFICATIONS			= Vérifications
+PPEIGENMODE				= Modes propres
+PPOSTT					= Résultats
+ZOOMIN					= Zoom avant
+ZOOMOUT					= Zoom arrière
+COTATIONS				= Afficher les dimensions
+EXPERT					= Mode expert
+EDIT					= Editer
+EDITPROFILES			= Editer les profilés ArcelorMittal
+EDITSTUDS				= Editer les goujons
+EDITDECKS				= Editer les bacs acier
+
+#FRM_MODULARRATIOTOOL
+TITLE					= Options coefficient d'équivalence 
+CLOSE					= Fermer
+CANCEL					= Annuler
+PARAMETERS				= Paramètres
+RELATIVEHUMIDITY		= Humidité ralative
+PSIL					= Multiplicateur de fluage
+CONCRETEPROP			= Propriétés du béton
+RESULTS					= Résultats
+AGET					= Age du béton
+AGET0					= Age du béton lors du chargement
+CONCRETE				= Classe du béton
+NOTIONALSIZE			= Rayon moyen de l'élément béton
+COEFANNEXB				= Coefficients / Annexe B EN 1992-1-1
+LONGTERM_N				= Coefficient d'équivalence pour les charges permanentes
+SHORTTERM_N				= Coefficient d'équivalence pour les charges d'exploitation
+RCOMPRESSION			= Résistance à la compression
+RTENSION				= Résistance à la traction							   
+
+
+#FRM_OUVERTURE
+BROWSEFILES				= Parcourir
+CREATEASSEMBLY			= Créer une nouvelle section
+NEWPROJECT				= Nouveau projet
+OK						= Ok
+OPENPROJECT				= Ouvrir un projet
+RECENTFILES				= Fichiers récents
+FILE					= Fichier
+
+#FRM_PPLOADCASE
+TITLE					= Cas de charge
+LOADCASE 				= Cas de charge
+CLOSE 					= Fermer
+CASE 					= Cas
+STATE 					= Etat
+CALCULATIONOK 			= Calcul effectué ?
+MAXDEFLECTION 			= Flèche maximale
+LOADS					= Charge
+CURVEV					= Diagramme V
+CURVEM					= Diagramme M
+NUMBERING				= Numérotage
+DEFLECTION				= Déformée 
+INERTIA					= Moment d'inertie des éléments
+EDITMODEL				= Editer le modèle EF
+
+#FRM_PPCOMBINATIONS
+TITLE					= Combinaisons
+COMBINATIONS			= Combinaisons
+LIMITSTATE				= Etats Limites
+COMBI					= Combi.
+CLOSE					= Fermer
+CURVEV					= Diagramme V
+CURVEM					= Diagramme M
+NUMBERING				= Numéros des noeuds
+DEFLECTION				= Déformée
+WITHSHRNKAGE			= Retrait inclus
+NOCOMBINATION			= Combinaison no
+ULTIMATE				= Ultime
+FIRE					= Feu
+CONSTRUCTION			= Construction
+SERVICEABILITY 			= Service
+ULS						= ELU
+SLS						= ELS
+FLS						= ELF
+NOCOMBINATIONFORULS		= Aucune combinaison n'a été définie à l'état limite ultime
+NOCOMBINATIONFORULSC	= Aucune combinaison n'a été définie à l'état limite ultime durant la phase de construction
+NOCOMBINATIONFORFLS		= Aucune combinaison à l'état limite feu
+NOCOMBINATIONFORSLS 	= Aucune combinaison n'a été définie à l'état limite de service 
+
+#FRM_PPVERIFICATIONS
+TITLE					= Vérifications
+VERIFICATIONS			= Vérifications
+LIMITSTATE				= Etat Limite
+CRITERIA				= Critères
+ACTIONS					= Actions
+RESISTANCES				= Résistances
+NUMBERING				= Numéros des noeuds 
+CRITERION				= Critère
+RESULTS					= Résultats
+MAXVALUE				= Valeur maximale
+NODE					= Au noeud
+COMBINATION				= Combinaison
+CLOSE					= Fermer
+ULTIMATE				= Ultime
+FIRE					= Feu
+CONSTRUCTION			= Construction
+SERVICEABILITY 			= Service
+CRITERIONM				= Résistance à la flexion
+CRITERIONV				= Résistance à l'effort tranchant
+CRITERIONMV				= Résistance à l'interaction MV
+CRITERIONSIGMAA			= Contrainte élastique dans le profilé métallique
+CRITERIONSIGMAC			= Contrainte élastique de la dalle béton
+NOCRITERIA				= Aucun critère
+
+#FRM_PROPPING
+TITLE					= Etaiement de la poutre
+OK						= Ok
+CANCEL					= Cancel
+FULLYPROPPED			= Entièrement étayé
+LEFTCANTPROPP			= Extrémité de la console gauche
+NUMBPROPPING			= Nombre d'étais ponctuels
+POINTPROPPED			= Etaiement ponctuel
+PROPPINGTYPE			= Type d'étaiement
+RIGHTCANTPROPP			= Extrémité de la console droite
+UNPROPPED				= Non étayé
+PROPPINGLOC				= Position de l'étaiement
+UNDERSTEELBEAM			= Sous la poutre acier
+UNDERSLAB				= Sous la dalle béton
+
+
+#FRM_PSHEETING
+TITLE					= Definition du bac acier
+OK						= OK
+ALL						= Toutes
+CANCEL					= Annuler
+COMPANY					= Entreprise
+DATABASE				= Base de données
+FROMDATABASE			= Depuis la base de données
+FROMDIM					= Depuis les dimensions
+NAME					= Nom
+PROPERTIES				= Dimensions et propriétés
+
+
+#FRM_SLAB
+TITLE					= Définition de la dalle
+OK						= OK
+CANCEL					= Annuler
+ADDLAYER				= Ajouter une nappe d'armatures
+ALL						= Tous
+CLASS					= Classe
+COMPOSITESLAB			= Dalle mixte
+CONCRETE				= Béton
+CONNECTORANDSHEET		= Placement des connecteurs 
+DIAMETER				= Diamètre
+FIRSTLAYER				= Première nappe d'armature
+GENERAL					= Général
+HAUNCH					= Renformis
+HEIGHT					= Hauteur				   
+JOINT					= Joint béton
+LIGHTCONCRETE			= Béton léger								
+LOCATION				= Position
+MODIFYSH				= Modifier le bac acier
+NAME					= Nom
+PARALLEL				= Parallèle
+PERPENDICULAR			= Perpendicular							   
+PRECASTSLAB				= Dalle partiellement préabriquée											 
+PREPUNCHED				= Bac prépercé								   
+PRESLAB					= Parti préfa.
+REBARS					= Armatures longitudinales
+REBARSTEEL				= Acier des armatures								   
+REINFLAYER1				= Première nappe
+REINFLAYER2				= Deuxième nappe
+REMOVELAYER				= Supprimer la deuxième nappe d'armatures
+RIBCONFIG				= Configuration of the rib at beam support
+RIBORIENT				= Orientation du bac
+SECONDLAYER				= Deuxième nappe d'armature
+SHEETBASE				= Depuis la base de donnée
+SHEETCOMPANY			= Fabricant
+SHEETCUSTOM				= Définition personnalisée
+SHEETING				= Bac acier
+SOLIDSLAB				= Dalle pleine
+SPACING					= Entraxe
+THICKNESS				= Epaisseur
+THROUGHDECKW			= Soudure à travers le bac									 
+TYPE					= Type
+
+#FRM_SPANLENGHTS
+TITLE					= Definition de la poutre
+CANCEL					= Annuler
+OK						= OK
+EDGEBEAM				= Poutre d'extrémité
+INTERMEDIATEBEAM		= Poutre intermédiaire
+LEFTCANT				= Console gauche
+LEFTOPENING				= Ouverture gauche
+MAINSPAN				= Travée principale
+OPENINGS				= Ouvertures
+RIGHTCANT				= Console droite
+RIGHTOPENING			= Ouverture droite
+SPACINGS				= Entraxes
+SPANS					= Portées
+
+#FRM_STANDARDSTEELSECTIONS
+AUTOMATICHA				= Hauteur totale automatiquement calculée
+AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
+CANCEL					= Annuler
+DELIVERYCOND			= Conditions de livraison pour $
+HEIGHT					= Hauteur 
+HOTROLLED				= Profilé laminé
+LOWERF					= Semelle inférieure
+OK						= OK
+PROFILE					= Profilé
+PROFILES				= Profilés 
+QUALITY					= Qualité 
+REDUCTIONCURVE			= Courbe de réduction
+SERIAL					= Série
+STEEL					= Acier
+STEELGRADE				= Nuance d'acier
+TITLE					= Définition de la poutre acier
+UPPERF					= Semelle supérieure
+WEB						= Âme 
+WELDEDSYM				= PRS bisymétrique
+WELDEDP					= PRS mono-symétrique
+
+#GENERAL
+SELFWEIGHT				= Poids propre
+OTHERG					= Autre charges permanentes
+QLOADS					= Charges d'exploitation
+CLOADS					= Charges de construction
+PERMANENTLOADS			= Charges permanentes
+SELFWEIGHTPROPPED		= Poids propre avec étais
+SELFWEIGHTNOPROPS		= Poids propre sans étais
+CONFIGURATION			= Conf. no
+SHRINKAGESLAB			= Retrait de la dalle
+SHRINKAGEENCASEMENT		= Retrait de l'enrobage
+ULS						= ELU
+SLS						= ELS
+FLS						= ELF
+ULSC					= ELU_C
+SLSC					= ELS_C
+COPY					= Copie
+
+#OPTCALCULMAIN
+TITLE					= Options de calcul
+APPLY					= Appliquer
+CANCEL					= Annuler
+GAMMA					= Coefficients nationaux par défaut
+SCOPE					= Domaine d'application
+CALCUL					= Options de calcul
+FIRE					= Calcul à l'incendie
+
+#OPTCALCALCUL
+TITLE					= Options de calcul
+STANDARD				= Normes
+ENGEN1					= Première génération Eurocodes
+ENGEN2					= Seconde génération Eurocodes (projets)
+SECTIONPROP				= Propriétés des sections
+COMPRESSIONREBARS		= Armatures comprimées prises en compte
+SIMPLIFIEDEFFW			= Répartition simplifiée de la largeur efficace de dalle
+YOUNGSREBAR				= Module d'Young des armatures
+MODEL					= Paramètres pour la modélisation numérique
+NODESPACING				= Distance entre noeuds
+NBNODES					= Nombre de noeuds
+PERCANTILEVERSPAN		= par travée en console
+PERINTSPAN				= par travée intermédiaire
+LOADCASES				= Cas de charges
+PERMANENTLC				= Charges permaentes
+SHRINKAGELC				= Charges de retrait
+CREEPMULT				= Multiplicateur de fluage
+TIMETZERO				= Age du béton durant le chargement
+SYMBOLFORDAY			= d
+SLAB					= Dalle
+ENCASEMENT				= Enrobage
+SELFWEIGHT				= Poids propre
+OTHERPERMANENT			= Autres charges permanentes
+SHRINKAGE				= Retrait
+ETAW					= Voilement par cisaillement
+
+#OPTCALGAMMA
+TITLE					= Coefficients nationaux
+LOADS					= Coefficients partiels
+COMBINATION				= Coefficients d'accompagnement
+MATERIALS				= Matériaux
+STEEL					= Acier
+CONCRETE				= Béton
+FIRE					= Incendie
+GAMMAV					= valeur unique pour γv
+
+#OPTCALFIRE
+TITLE					= Calcul incendie
+CONSTANTS				= Constantes
+PARAMETERS				= Paramètres
+BOLTZMAN				= Constante de Boltzman
+
+#OPTCALSCOPE
+TITLE					= Domaine d'application
+BEAMDEF					= Définition de la poutre
+MINIMALV				= Valeur minimale
+MAXIMALV				= Valeur maximale
+SPANLENGTH				= Longueur de la travée
+CANTILEVERSPAN			= Longueur de la travée en console
+SLAB					= Dalle béton
+THETAHAUNCH				= Angle d'inclinaison des renformis 
+HAUNCHTH				= Epaisseur des renformis
+SOLIDSLABTH				= Epaisseur de la dalle béton
+COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus hickness of composite slab (au-dessus du bac)
+RHOLWC					= Masse volumique du béton léger
+
+#OPTSOFTMAIN
+TITLE					= Options logiciel
+APPLY					= Appliquer
+CANCEL					= Annuler
+GENERAL					= Paramètres généraux
+DIRECTORIES				= Répertoires
+UNITS					= Unités
+DATABASES				= Bases de données
+CALCULSHEET				= Note de calculs								  
+EXPERT					= Mode Expert
+EXPERTMODEACTIVE		= Mode Expert activé
+
+#OPTSOFTCALCULSHEET
+FORCESANDMOMENTS		= Sollicitations (Forces et moments)
+SLS						= Etats Limites de Service
+HIVOSS					= Méthode Hivoss pour le confort vibratoire
+SHOWHIVOSSCURVE			= Afficher le diagramme Hivoss
+DISPLAYFMLOADCASES		= Afficher les sollicitations par cas de charge
+DISPLAYFMULS			= Afficher les sollicitations par combinaison ELU
+DISPLAYFMSLS			= Afficher les sollicitations par combinaison ELS
+DISPLAYFMFLS			= Afficher les sollicitations par combinaison Feu
+DISPLAYDIAGRAMS			= Afficher les diagrammes de sollicitations
+DISPLAYSIGMA			= Afficher les contraintes élastiques
+ULS						= Etats Limites Ultimes
+DISPMELCOMPOSITEBEAMS	= Afficher les moments élastiques des poutres mixtes
+
+#OPTSOFTDATABASES
+DATABASES				= Databases
+PROFILES				= ArcelorMittal profiles
+SHEETINGS				= Steel profiled sheetings
+STUDS					= Welded studs
+STEELS					= Structural steels
+CLICKTOEDIT				= Click on databases in blue to edit them
+FILTRESOFT				= Software filter
+HIDEFILTER				= Hide unauthorized profiles
+
+#RESERVE
+EPROFILS		= Base de données des profilés d'ArcelorMittal
+EACIER			= Base de données des aciers
+
+STEELAVAIL		= Afficher uniquement les aciers disponibles
+CHOIXSTEEL		= Options pour la sélection des aciers
+BASEONLY		= Uniquement les aciers de base
+STANDARDONLY	= Uniquement les aciers sous normes pour le profil sélectionné
+BASEANDSTANDARD = Aciers de base et acier sous normes disponibles pour le profil sélectionné
+BASEIFNOSTD		= Acier de base si aucun acier disponible pour le profil sélectionné
+ALLSTEEL		= Tous les aciers de la base de données
+HIDESTEELTHICK	= Masquer les aciers non compatibles avec l'épaisseur du profil
+GRPWEBFILES		= Mise à jour des bases de données depuis Internet
+NBWEBFILES		= Nombre de fichers web
+DELETEWEBF		= Supprimer tous les fichers web
+TTIPEDITBAC		= Cliquez pour modifier la base de données des bacs acier
+TTIPEDITHILTI	= Cliquez pour modifier la base de données des connecteurs Hilti
+TTIPEDITSTUDS	= Cliquer pour modifier la base de données des goujons
+UNIVERSALDTB	= Utiliser des bases de données généralisées
+SAVEOPTIONS		= Enregistrez ces options pour la prochaine session Expert
+EXPERTOPT		= Options d'expert
+SHOWEC3C		= Afficher les courbes de réductions de l'EC3	
+
+#OPTSOFTDIRECTORIES
+DIRECTORIES				= Répertoire
+INSTALL					= Répertoire d'installation
+CONFIG					= Répertoire de configuration
+WORK					= Répertoire de travail actuel
+DEFAULTWORK				= Répertoire de travail par défaut
+DIROPTIONS				= Options du répertoire de travail
+LAST					= Dernier répertoire utilisé
+DEFAULT					= Répertoire de travail par défaut
+
+#OPTSOFTEXPERT
+EXPERTMODE				= Mode Expert
+ACTIVATEEXP				= Activer le mode Expert
+ACTIVATE				= Activer
+DESACTIVATE				= Désactiver le mode Expert
+KEY						= Clé
+UNVALIDKEY				= La clé n'est pas valide
+
+#OPTSOFTGENERAL
+TITLE					= Paramètres généraux
+LANGUAGES				= Langues
+USERGI					= Interface
+CALCULREPORT			= Rapport de calcul
+IDENTIFICATION			= Identification
+USERNAME				= Nom de l'utilisateur
+FIRM					= Entreprise
+INTERNETCHECKS			= Contrôles internet
+
+#OPTSOFTUNITS
+TITLE					= Unités
+UNITS					= Unités
+LENGTHS					= Longueurs
+DIMENSIONS				= Dimensions
+FORCES					= Forces
+MOMENTS					= Moments
+BENDINGW				= Modules de flexion
+STRESSES				= Contraintes
+SMAREA					= Moment d'inertie

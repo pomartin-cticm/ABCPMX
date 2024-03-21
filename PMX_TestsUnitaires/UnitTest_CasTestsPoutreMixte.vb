@@ -474,26 +474,26 @@ Imports PMXMoteur2
 
 #Region " Vérification du dimensionnement des armatures transversales (ELU)"
 
-        myPoutre.CalculArmaturesTransversales()
+        ' myPoutre.VerifMixte(0).CalculArmaturesTransversales()
 
-        '--> TauEd
+        ''--> TauEd
 
         Valeur = 2.06 'Flux de cisaillement max transmis par la dalle de part et d'autre de la poutrelle (VALEUR RECALCULEE avec le vrai PRd = 52.897 kN et non 52.5 kN. Dans l'article, on a tauEd = 2.04 MPa)
-        ValRef = myPoutre.TauEd(myPoutre.IndicePremiereTravee, 0, 0)
+        ValRef = myPoutre.VerifMixte(0).TauEd(myPoutre.IndicePremiereTravee, 0, 0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la contrainte tangentielle 
 
-        '--> Thetaf
+        ''--> Thetaf
 
         Valeur = 0.5 * Math.Asin(2 * 2.06 / (0.54 * 16.7)) ' 13.59° -> VALEUR RECALCULEE car dans l'article on considère conservativement theta = 45°
         Valeur = Math.Max(Valeur, 27 * Math.PI / 180) 'Borne inférieure
         Valeur = Math.Min(Valeur, 45 * Math.PI / 180) 'Borne supérieure
-        ValRef = myPoutre.Thetaf(myPoutre.IndicePremiereTravee, 0, 0)
+        ValRef = myPoutre.VerifMixte(0).Thetaf(myPoutre.IndicePremiereTravee, 0, 0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'angle de la bielle
 
-        '--> As,trans
+        ''--> As,trans
 
         Valeur = 0 'le bac seul suffit à reprendre ces efforts
-        ValRef = myPoutre.As_s_transv(myPoutre.IndicePremiereTravee, 0, 0)
+        ValRef = myPoutre.VerifMixte(0).As_s_transv(myPoutre.IndicePremiereTravee, 0, 0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul des armatures transversales
 
 #End Region
@@ -2226,7 +2226,7 @@ Imports PMXMoteur2
 
 #Region " Vérification du dimensionnement des armatures transversales (ELU)"
 
-        myPoutre.CalculArmaturesTransversales()
+        'myPoutre.CalculArmaturesTransversales()
 
         '--> TauEd
 
@@ -2235,7 +2235,7 @@ Imports PMXMoteur2
         ksf = (1.25 - b0 / 2) / 2.5
 
         Valeur = ksf * 2 * 37.44 / (0.207 * 82) 'Valeur recalculée avec la valeur correcte de PRd
-        ValRef = myPoutre.TauEd(myPoutre.IndicePremiereTravee, 0, 0)
+        ValRef = myPoutre.VerifMixte(0).TauEd(myPoutre.IndicePremiereTravee, 0, 0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la contrainte tangentielle 
 
         '--> Thetaf
@@ -2243,13 +2243,13 @@ Imports PMXMoteur2
         Valeur = 0.5 * Math.Asin(2 * 2.06 / (0.54 * 16.7)) ' 13.59° -> VALEUR RECALCULEE car dans l'article on considère conservativement theta = 45°
         Valeur = Math.Max(Valeur, 27 * Math.PI / 180) 'Borne inférieure
         Valeur = Math.Min(Valeur, 45 * Math.PI / 180) 'Borne supérieure
-        ValRef = myPoutre.Thetaf(myPoutre.IndicePremiereTravee, 0, 0)
+        ValRef = myPoutre.VerifMixte(0).Thetaf(myPoutre.IndicePremiereTravee, 0, 0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de l'angle de la bielle
 
         '--> As,trans
 
         Valeur = 2.055 * 10 ^ (-4) 'valeur recalculée à la main
-        ValRef = myPoutre.As_s_transv(myPoutre.IndicePremiereTravee, 0, 0)
+        ValRef = myPoutre.VerifMixte(0).As_s_transv(myPoutre.IndicePremiereTravee, 0, 0)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul des armatures transversales
 
 #End Region

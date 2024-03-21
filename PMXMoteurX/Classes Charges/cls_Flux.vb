@@ -29,16 +29,15 @@
         '   14/03/24 :  Création - POM
         '-----------------------------------------------------------------------------------
         '   Initialisation du calcul des flux de cisaillement longi dans les soudures
-        '   des poutres PRS acier
+        '   des poutres PRS mixtes
+        '   et à l'interface dalle/semelle
         '-----------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
         '-----------------------------------------------------------------------------------
 
-        If myBeam.Param.lElasticDesignVM Then
-            iDeb = 0
-        Else
-            iDeb = 1
-        End If
+
+        iDeb = 0
+
         If myBeam.Section.lLamine Then
             iFin = 0
         Else

@@ -282,19 +282,25 @@ Public Module Mod_Demarrage
         LogicielInfo.ListeLangue = {"English", "Français"}
         LogicielInfo.ListeLangueNDC = {"English", "Français"}
 
-        If lDebug Then MyRep = MyRep & "\..\..\Langues"
+        If lDebug Then
+            MyRep = MyRep & "\..\..\Langues"
+        Else
+            MyRep = MyRep & "\Langues"
+        End If
 
         '--> Récupération des langues disponibles
 
+        'MsgBox("Mod_Demarrage/InitialiseLangues : " & MyRep)
+
         InitialiseLangue(MyRep, "ABCPMX", LogicielInfo.ListeLangue, NbLangues)
         If NbLangues = 0 Then
-            MsgBox("Erreur fichiers langues non disponibles | Error language files missing", MsgBoxStyle.Critical, "Mod_Demmarage/InitialiseLangues")
+            MsgBox("Erreur fichiers langues non disponibles | Error language files missing", MsgBoxStyle.Critical, "Mod_Demarrage/InitialiseLangues")
             Stop
         End If
 
         InitialiseLangue(MyRep, "ABCPMX_NdC", LogicielInfo.ListeLangueNDC, NbLangues)
         If NbLangues = 0 Then
-            MsgBox("Erreur fichiers langues NdC non disponibles | Error NdC language files missing", MsgBoxStyle.Critical, "Mod_Demmarage/InitialiseLangues")
+            MsgBox("Erreur fichiers langues NdC non disponibles | Error NdC language files missing", MsgBoxStyle.Critical, "Mod_Demarrage/InitialiseLangues")
             Stop
         End If
 
@@ -942,28 +948,5 @@ Public Module Mod_Demarrage
     End Sub
 
 #End Region
-
-    '#Region " Gestion Icones "
-
-    '    ''' <summary>
-    '    ''' Mise à jour du nom du fichier icones (à discuter)
-    '    ''' </summary>
-    '    Public Sub UpdateIconesFileName()
-
-
-    '====================
-    'Inutile et faux :: ce n'est pas un fichier mais un répertoire
-    '                   il y a déjà un repertoire pour cela 'images'
-    '====================
-
-    '        If lDebug Then
-    '            LogicielFichiers.Icone = LogicielRep.Install & "\..\..\Icones\"
-    '        Else
-    '            LogicielFichiers.Icone = LogicielRep.Install & "\Icones\"
-    '        End If
-
-    '    End Sub
-
-    '#End Region
 
 End Module

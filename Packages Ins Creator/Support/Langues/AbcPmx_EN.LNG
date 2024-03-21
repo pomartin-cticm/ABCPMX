@@ -1,0 +1,934 @@
+#FRM_JURIDIQUE
+AGREE					= Accept
+EXIT					= Exit
+LANGUAGE				= Languages
+LASTVERSION				= You work on the last version of the software
+NEWVERSION				= New version of the software is available.
+NOINTERNET				= Connect to the Internet to verify that you are working on the latest version of the software.
+TEXT1					= This software facilitates the preliminary engineering studies with respect to steel constructions. Based on calculation methods complying with the principles of the applied standards, this software enables to make a certain number of verifications in view of evaluating a solution for a pre-design. It does not enable to analyse all situations and to make in an exhaustive way all relevant calculations needed for a study of execution which requires in every case the advice of an external Engineering Office.
+TEXT2					= Given the complexity of the calculation methods, this software is only intended for professional users active in the sector of steel constructions (who are fully aware of the possibilities, limits and its adequacy thereof for specific practical cases). The users shall use the software under his own responsibility and at his own risks.
+TEXT3					= This software may be used free of charge. No right is granted to the user of the software, the property and intellectual rights of which continue to belong exclusively to CTICM. No warranty is granted to the user. CTICM cannot be held liable for any loss or damage directly and/or indirectly sustained as a result of the use of the software. The user undertakes to hold CTICM free and harmless from any claim and any direct, indirect and/or consequential damages, in particular those resulting from an incorrect or inappropriate use or a use made for an inadequate or inappropriate purpose of the software.
+TEXT4					= BY PRESSING THE BUTTON REFERRED TO BELOW AS ''ACCEPT'', THE USER EXPRESSLY DECLARES THAT HE HAS CAREFULLY READ THE ABOVE TEXT AND THAT HE THEREBY ACCEPTS ALL LEGAL CONSEQUENCES AND OBLIGATIONS RESULTING FOR HIM THEREFORE.
+VERSIONLINK				= Do you want to be redirected to the CTICM website?
+WARNING					= Warning
+
+#FRM_ABOUT
+TITLE					= About ABCPMX-II
+OK						= Ok
+DESCRIPTION				= Description
+DESCRIPTION_CONT		= ABC-PMX software aims at the calculation of composite beams according to EN 1994-1-1. Its development is co-funded by ArcelorMittal and CTICM. 
+INFORMATION				= Information
+MAITRE					= Copyrights
+VERSION					= Version
+SUPPORT					= Support :
+YEARVERSION				= Year :
+
+
+#FRMADDSTUD
+TITLEADD				= Add a new stud
+TITLEMODIFY				= Modify the stud
+TITLEEDIT				= Edit the stud
+OK						= OK
+CANCEL					= Cancel
+CLOSE					= Close
+LABEL					= Label of the stud
+PHIROD					= Rod diameter
+PHIHEAD					= Head diameter
+DEPTHHEAD				= Head depth
+HTOTAL					= Total depth
+FY						= Yielding strength
+FU						= Ultimate strength
+ERRLABEL				= Define a label
+ERRLABELBASE			= Label not valid - already used for an other stud
+ERRVALEUR				= Enter a value
+ERRVALNUM				= Enter a numerical value
+ERRVALHLIM				= Value out of limits 
+ERRFULTFY				= The ultimate strength should be greater than the yielding strength
+ERRDHLTDT				= The head diameter should be greater than 1.5 times the rod diameter (i.e. $)
+ERRHHGTHT				= The head depth should be less than the total depth
+ERRHH04D				= The head depth should be greater than 0.4 x the rod diameter (i.e. $)
+ERRHT3D					= The stud height should be greater than 3 x the rod diameter (i.e. $)
+ERROR					= Check the parameters for the following criteria:
+ERRORFRM				= Parameters errors
+
+#FRM_AJOUTEPP
+TITLE					= New project
+OK						= Ok
+CANCEL					= Cancel
+PROJECT					= Project
+PROJECTNAME				= Name of the project :
+CURRENTPROJECT			= Current project :
+BEAM					= Beam
+NEWBEAM					= Add the beam
+MODIFYBEAM				= Modify the beam :
+SECTIONTYPE				= Section type
+STEELSECTION			= Non composite section
+STEELSECTIONPARTENC		= Steel section with partial encasement
+COMPOSITESECTION		= Composite section
+COMPOSITESECTIONPARTENC	= Composite section with partial encasement
+SLIMFLOORSFB			= Non composite slim floor SFB
+SLIMFLOORSFBCOMPO		= Composite slim floor SFB
+SLIMFLOORIFB_A			= Non composite slim floor IFB-A
+SLIMFLOORIFB_ACOMPO		= Composite slim floor IFB-A
+SLIMFLOORIFB_B			= Non composite slim floor IFB-B
+SLIMFLOORIFB_BCOMPO		= Composite slim floor IFB-B
+SLIMFLOORSAB			= Non composite slim floor SAB
+SLIMFLOORSABCOMPO		= Composite slim floor SAB
+
+#FRM_BEAMOPTIONS
+TITLE					= Beam calculation options
+OK						= Ok
+CANCEL					= Cancel
+TSTANDARD				= Standard
+ENGEN1					= First generation of Eurocodes
+ENGEN2					= Second generation of Eurocodes (drafts)
+TELUOPTIONS				= Options at Ultimate Limit States
+TELSOPTIONS				= Options at Serviceability Limit States
+COMBINATIONFREQ			= Combination of loads for the eigen frequency
+ETADEFLECTIONS			= Deflections of composite beams taking into account connectors stiffness
+STUDSE					= Slip of the connector at 0,7 PRk (prEN 1994-1-1 B.2.5 (5))
+ELASTICDESIGNVM			= Elastic design of sections - Von Mises criteria
+ELASTICDESIGNCL3		= Elastic design of sections - Class 3 sections criteria
+NORMALDESIGN			= Design of sections according to their class
+TCONCRETE				= Properties of concrete
+CONCRETEMSG				= Properties used for composite section (slab or encasement)
+RELATIVEHUMIDITY		= Relative humidity
+SHRINKAGEDEFORMATION	= Deformation of concrete shrinkage
+SHRINKAGETOENCASEMENT	= Shrinkage applied to the concrete of partial encasements
+YOUNGSMODULUSREBAR		= Young's modulus of rebars
+SECTIONSPROP			= Properties of cross-sections
+SIMPLIFIEDBEFF			= Simplified distribution of slab effective width
+REBARSINCOMPRESSION		= Rebars in compression taken into account
+AGET					= Age of concrete
+AGET0					= Age of concrete at loading
+SYMBOLFORDAY			= d
+SLAB					= Slab
+ENCASEMENT				= Encasement
+SELFWEIGHT				= Self-weight
+OTHERPERM				= Other permanent loads
+SHRINKAGE				= Shrinkage
+TPARAMETERS				= Parameters
+GFORCE					= G-force
+ETAW					= Shear buckling
+
+#FRM_CALCULATIONSHEET
+TITLE					= Calculation report
+FIRST					= First page
+PREVIOUS				= Previous page
+NEXT					= Next page
+LAST					= Last page
+ZOOMIN					= Zoom in
+ZOOMOUT					= Zoom out
+PRINT					= Print
+EXPORTPDF				= Export in PDF
+LANGUAGE				= Language
+SUMMARY					= Contents
+BTNOPTIONS				= Options
+BTNSYNTHESE				= Synthesis
+BTNCOMPLET				= Intermediate sheet
+BTNDETAILED				= Detailed sheet
+BTNULTRA				= Synthesis of results
+BTNDRAWING				= Drawings of the beam
+NAVPAN					= Navigation pane
+NAVIGATION				= Navigation
+ZOOM					= Zoom
+SAVEAS					= Save As
+
+#FRMCATALOGUE
+TITLE 					= Catalogue
+CLOSE					= Close
+PROFIL					= Profiles
+SERIE					= Series
+DIMENSIONS	 			= Dimensions
+PROPERTIES				= Properties
+UNIT_DIM				= Unit Dimension :
+TOOLTIP_G 				= Mass per unit of length
+TOOLTIP_A				= Section area
+TOOLTIP_IY				= Bending moment of inertia / Strong axis
+TOOLTIP_WELY			= Elastic flexion modulus / Strong axis
+TOOLTIP_WPLY			= Plastic flexural modulus / Strong axis
+TOOLTIP_IY2				= Radius of gyration / Strong axis
+TOOLTIP_AVZ				= Shear area
+TOOLTIP_IZ 				= Bending moment of inertia / Weak axis
+TOOLTIP_WELZ 			= Elastic flexion modulus / Weak axis
+TOOLTIP_WPLZ			= Plastic flexural modulus / Weak axis
+TOOLTIP_IZ2				= Radius of gyration / Weak axis
+TOOLTIP_IT				= Torsional moment of inertie
+TOOLTIP_HT				= Height of the profile
+TOOLTIP_BF				= Width of the profile
+TOOLTIP_TF				= Flange thickness
+TOOLTIP_TW				= Web thickness
+TOOLTIP_RC				= Root radius
+NOTE					= Section note
+CARA					= Characteristics
+VAL 					= Values
+
+#FRM_CHARGEMENT
+TITLE					= Definition of the load cases
+OK						= Ok
+CANCEL					= Cancel
+LOADCASE				= Load case
+LEFTCANT				= Left cantilever span
+MAINSPAN				= Main span
+RIGHTCANT				= Right cantilever span
+SPAN					= Span
+WARNING_CMBTRAVEE			= All the input data must be correct to select an other the span
+SURFACELOAD				= Surface load
+WIDTHAPPLICATION		= Width of application
+UNIFORMLOAD				= Uniform load
+RESULTINGFORCE			= Resulting vertical force
+DISTRIBUTEDLOAD			= Distributed loads 
+CONCENTRATEDLOAD		= Concentrated load
+FORCEENDSUPPORT			= Vertical forces at end supports
+LEFTSUPPORT				= Left support
+RIGHTSUPPORT			= Right support
+ADD						= Add
+DELETE					= Delete
+INFORMATION				= Information
+INFO_G					= Permanent loads
+INFO_G1					= Permanent loads (before concrete pouring)
+INFO_G2					= Additional permanent loads (after concrete pouring)
+INFO_Q1					= Live load 1
+INFO_Q2					= Live load 2
+INFO_QC					= Construction phase live load
+
+#FRM_COMBINATIONS
+TITLE					= Combinations
+OK						= Ok
+CANCEL					= Cancel
+ULSTATES		 		= Ultimate limit states
+SLSTATES				= Serviceability limit states
+FLSTATES				= Fire limit states
+CONSTRUCTIONSTAGE		= Construction stage
+
+#FRM_COMBINATIONS1
+PREDEFINED				= Predefined combinations according to EN 1990
+CUSTOM					= Custom combinations
+COMBINATION				= Combination
+ULS						= ULS
+SLS						= SLS
+FLS						= FLS
+NUMBER					= No
+
+#FRM_COMBINATIONS2
+ULSTATES		 		= Ultimate limit states at construction stage
+SLSTATES				= Serviceability limit states at construction stage
+ULS						= ULS
+SLS						= SLS
+COMBINATION				= Combination
+NUMBER					= No
+
+#FRM_CONNECTION
+TITLE					= Definition of the connection
+OK						= Ok
+CANCEL					= Cancel
+CONNECTION				= Connection
+CONNECTORS				= Connectors
+DIAMETER				= Diameter
+AUTOMATICDESIGN			= Automatic design of the connection
+DISPOSITION_LON_BAC_TR	= Disposition every
+DISPOSITION_LON_NO_BAC	= Longitudinal spacing
+LEFTCANT				= Left cantilever span
+MAINSPAN				= Main span
+RECMAXVALUE				= The values entered are outside the recommended values : 
+RIGHTCANT				= Right cantilever span
+RIB						= Rib
+RIBS					= Ribs
+ROW_NUMBER				= Number of rows
+SPAN					= Span
+STUDS					= Studs
+WIDTH					= Width
+WARNING_CMBTRAVEE		= All the input data must be correct to select an other the span
+ADD						= Add
+DELETE					= Delete
+
+#FRM_DECKRESTRAINT
+TITLE					= Restraint of the beam by the steel deck (construction phase only)
+OK						= Ok
+CANCEL					= Cancel
+RESTRAINTBYTHEDECK		= The beam is laterally restrained by the deck
+INDIVIDUALSHEET			= Individual sheet
+NUMBERSPANS				= Number of crossed spans by sheets
+SHEETLENGTH				= Length
+SHEETWIDTH				= Width
+DIMENSIONS				= Dimensions
+FLOORDEF				= Floor parameters
+NBSHEETSTRANSVERSE		= Number of sheets in the transverse direction
+FLOORDIMENSIONS			= Floor dimensions (main span)
+FLOORLENGTH				= Span length
+FLOORWIDTH				= Width
+TRANSITION				= Type of transition between adjacent sheets
+OVERLAPPING				= Overlapping
+ADJACENTNOGAP			= Adjacent sheets without gap
+FLANGEEDGES				= Sheets interrupted at flange edges
+BEAMFASTENING			= Deck to beam fastening
+FASTENING				= One fastener
+EVERYRIB				= in every rib
+EVERY2RIBS				= in every two ribs
+TYPEFASTENER			= Type of fasteners
+SELFSCREWNORMAL			= Self-drilling screws - normal washer
+SELFSCREWNEOPRENE		= Self-drilling screws - neoprene washer
+FIREDPINS				= Fired pins
+DIAMETER				= Diameter
+DIASCREWS				= From 5,5 to 6,3 mm
+DIAPINS					= From 3,7 to 4,8 mm
+SLIP					= Slip	
+SEAMFASTENING			= Seam fastening
+SELFSCREW				= Self-drilling screws
+RIVET					= Rivet
+DIASCREWS_SEAM			= From 4,1 to 4,8 mm
+DIAPINS_SEAM			= 4,8 mm	
+SPACING					= Spacing	
+PARAMETERS				= Parameters
+BENDINGSTIFF			= Bending stiffness
+SHEARSTIFF				= Shear stiffness
+DRAWING					= Drawing
+THETA					= Flexural bending of deck accounted for in the calculation
+
+#FRMEDITSTUDS	
+TITLE					= Studs data base
+OK						= OK
+CANCEL					= Cancel
+CLOSE					= Close
+SUPPRESS				= Suppress
+ADD						= Add
+LABEL					= Label of the stud
+PHIROD					= Rod diameter
+PHIHEAD					= Head diameter
+DEPTHHEAD				= Head depth
+HTOTAL					= Total depth
+FY						= Yielding strength
+FU						= Ultimate strength
+INDICE					= Index
+DELETEALL				= Delete all studs?
+CONFIRM					= Confirm the removing of following studs
+SAVEBASE				= $ studs saved in the data base
+SAVEMODIF				= Do you want to save the modifications of the Studs database?
+TTMNUNEW				= Add a new stud
+TTMNUMODIFY				= Modify the stud
+TTMNUDELETE				= Remove selected studs
+TTMNUSAVE				= Save studs data base
+ERRLABEL				= Define a label
+ERRLABELBASE			= Label not valid - already defined
+ERRVALEUR				= Enter a value
+ERRVALNUM				= Enter a numerical value
+ERRVALHLIM				= Value out of limits 
+ERRFULTFY				= The ultimate strength should be greater than the yielding strength
+ERRDHLTDT				= The head diameter should be greater than the rod diameter
+ERRHHGTHT				= The head depth should be less than the total depth
+
+#FRM_EDITSTEELSHEETINGS
+TITLE					= Studs data base
+OK						= OK
+CANCEL					= Cancel
+CLOSE					= Close
+SUPPRESS				= Suppress
+ADD						= Add
+LABEL					= Label of the stud
+PHIROD					= Rod diameter
+PHIHEAD					= Head diameter
+DEPTHHEAD				= Head depth
+HTOTAL					= Total depth
+FY						= Yielding strength
+FU						= Ultimate strength
+INDICE					= Index
+DELETEALL				= Delete all studs?
+CONFIRM					= Confirm the removing of following studs
+SAVEBASE				= $ studs saved in the data base
+SAVEMODIF				= Do you want to save the modifications of the Studs database?
+TTMNUNEW				= Add a new stud
+TTMNUMODIFY				= Modify the stud
+TTMNUDELETE				= Remove selected studs
+TTMNUSAVE				= Save studs data base
+ERRLABEL				= Define a label
+ERRLABELBASE			= Label not valid - already defined
+ERRVALEUR				= Enter a value
+ERRVALNUM				= Enter a numerical value
+ERRVALHLIM				= Value out of limits 
+ERRFULTFY				= The ultimate strength should be greater than the yielding strength
+ERRDHLTDT				= The head diameter should be greater than the rod diameter
+ERRHHGTHT				= The head depth should be less than the total depth
+
+#FRM_ENCASEMENT
+CANCEL					= Cancel 
+CLASS					= Class
+CONCRETE				= Concrete
+COVERAGE				= Coverage
+DIAMETER				= Diameter
+DIMENSIONS				= Dimensions
+DOUBLE					= Double
+EXTERNAL				= External
+INTERNAL				= Internal
+LONGIREBAR				= Longitudinal reinforcement
+LOWERLAYER				= Lower layer
+MIDDLE					= Middle
+MIDDLELAYER				= Central layer
+NONE					= None
+NUMBER					= Number
+OK						= OK
+POSITION				= Position
+SINGLE					= Single
+STEEL 					= Steel of the reinforcement
+STIRRUPS				= Stirrups
+CLOSEDSTIRRUPS			= Closed stirrups
+OPENSTIRRUPS			= Open stirrups welded to the web
+THROUGHWEBSTIRRUPS		= Stirrups through the web
+TITLE					= Definition of partial encasement
+TRIPLE					= Triple
+TYPEE					= Type 
+UPPERLAYER				= Upper layer
+WIDTH					= Width
+ACTIVEREBARS			= Active rebars
+
+#FRM_GAMMA
+ACCOMPAGNEMENT			= Combination factors
+CANCEL					= Cancel
+GAMMAV					= single value for γv
+LBL_Q1					= Q1: Live loads 1
+LBL_Q2					= Q2: Live loads 2
+LOADING					= Loading
+OK						= OK
+REINI					= Reset all values
+RESISTANCE				= Resistance
+TAB_STEEL				= Steel
+TAB_SLAB				= Slab
+TAB_FIRE				= Fire
+TITLE					= Definition of national factors
+RESET					= Reset
+
+#FRM_HIVOSS
+CANCEL					= Cancel
+CEILINGFLOOR			= Ceiling under the floor
+COMBOMASSFREQUENCY		= Combination of masses for the calculation of eigenfrequency
+DAMPING					= Damping
+DAMPINGFURN_TRADOFFICE	= Traditional office with separation walls
+DAMPINGFURN_PAPEROFFICE	= Paperless office
+DAMPINGFURN_OPENOFFICE	= Open plan office
+DAMPINGFURN_LIBRARY		= Library
+DAMPINGFURN_HOUSE		= Houses
+DAMPINGFURN_SCHOOLS		= Schools
+DAMPINGFURN_GYM			= Gymnasium
+DAMPINGFURN_CUSTOM		= Custom damping for furniture
+FINISHINGDAMPING		= Finishing damping
+FLOORUSE				= Usage of floor		
+FLOORUSE_CRITAREA		= Critical areas
+FLOORUSE_HOSP			= Hospital, surgeries
+FLOORUSE_SCHOOL			= Schools, training centers
+FLOORUSE_RESIDENTIAL	= Residential buildings
+FLOORUSE_OFFICE			= Office buildings
+FLOORUSE_MEETING		= Meeting rooms
+FLOORUSE_SENIOR			= Senior citizen residential buildings
+FLOORUSE_HOTELS			= Hotels
+FLOORUSE_INDUSTRIAL		= Industrial workshops
+FLOORUSE_SPORTS			= Sports facilities
+FURNITUREDAMPING		= Furniture damping
+HIVOSSMETHOD			= Apply Hivoss method for the assessment of floor vibrations  
+OPTIONS					= Options
+OK						= OK
+STEELBEAM				= Steel beam
+STRUCTURALDAMPING		= Structural damping
+SWIMMINGSCREED			= Swimming screed
+TITLE					= Floor vibration parameters
+TOTALDAMPING			= Total damping
+WITH					= With
+FREQUENCYSLAB			= Frequency including the effect of the slab
+
+#FRM_IDENTIFICATION
+CANCEL					= Cancel
+OK						= OK
+TITLE					= Identification 
+USER					= User
+COMPANY					= Company
+PROJECT					= Project
+BEAMID					= Beam ident
+COMMENT					= Comment
+
+#FRM_INFORMATIONPP
+OK						= Ok
+TITLE					= Self weight detail
+MAINPARAMETERS			= Main parameters
+PROJECT					= Project
+BEAMID					= Beam ID
+GRAVITY					= Gravity
+DEADLOAD_PROFILE		= Profile self weight 
+DEADLOAD_SLAB			= Slab self weight
+STEELPROFILE			= Steel profile
+PARTIALENCASEMENT		= Partial encasement
+CONCRETESLAB			= Concrete slab
+PSHEETING				= Steel sheeting
+
+#FRM_LATERALRESTRAINTS
+ADD						= Add
+CANCEL					= Cancel
+OK						= OK
+DELETE					= Delete
+DRAWCONTROL				= Point restraints
+FULLYRESTRAINED			= Fully restrained
+LEFTCANT				= Left cantilever span
+MAINSPAN				= Main span
+NORESTRAINT				= No intermediate restraint
+POINTRESTRAINTS			= Point restraints
+RESTRAINTS				= Type of restraint
+RIGHTCANT				= Right cantilever span
+SPAN					= Span
+TITLE 					= Definition of the lateral restraints
+
+#FRM_MAIN
+ABOUT					= About
+ADDBEAM					= Add beam
+CALCULATION				= Calculation
+CALCULOPTIONS			= Calculation options
+CALCULATIONREPORT		= Calculation report
+SOFTOPT					= Software options
+COPYPICTURE				= Copy picture
+DELBEAM					= Delete beam
+DUPBEAM					= Duplicate beam
+ERRORCAPACITY			= The maximum capacity of the list has been reached, no new additions are possible
+ERROREMPTYCELL			= Empty cell
+ERRORNONNUMERIC			= Non-numeric value
+ERROROUTBOUNDS			= Value out of bounds
+EXIT					= Close
+FILE					= File
+NEW						= New
+NPROJET					= New project
+OPEN					= Open
+OPTIONS					= Options
+OTHER					= Other
+PROJECT					= Project
+PROJECTNAME				= Project name
+PROJECTNAVIGATION		= Project navigation
+RECENTFILES				= Recent Files
+SAVE					= Save
+SAVEAS					= Save As
+SAVEBEFORECLOSE			= Do you want to save the modifications of the project?
+SECTION					= Section
+SECTIONSLIST			= Sections list
+SUPPORT					= Support
+TECHNICALMANUEL			= Technical manual
+VALIDATIONMANUEL		= Validation manual
+TSBCONNECTION			= Connection
+TSBRESTRAINTS			= Lateral restraints
+TSBSHEETRESTRAIN		= Restraint by the profiled steel sheeting in the construction phase
+TSBENCASEMENT			= Partial encasement
+TSBHOME					= Home
+TSBIDENTIFICATION		= Identification
+TSBSECTIONA				= Steel section
+TSBSLAB					= Slab
+TSBSPACINGS				= Transverse configuration
+TSBSPANS				= Spans
+TSBPROPPING				= Propping
+TSBLOADS				= Loads
+TSBCOMBINATIONS			= Combinations
+TSOPTIONS				= Beam calculation options
+TSBGAMMA				= Partial factors and nationally determined factors
+TSBHIVOSS				= Vibratory comfort of the beam
+TSBOPTIONSINCENDIE		= Fire design options
+TSBNDCPOUTRE			= Calculation report of the current beam
+WARNINGFILE				= Please note that you are opening a file with data from an old version of the software. Please check all data and re-register the file.
+TSPPCOMBINATIONS		= Post-processing : Combinations of loads
+TSPPEFFWIDTHS			= Post-processing : Effective widths of slab
+TSPPLOADCASES			= Post-processing : Load cases
+TSPPVERIFICATIONS		= Post-processing : Verifications
+TSPPGENERAL				= Post-processing
+PPCOMBINATIONS			= Combinations of loads
+PPEFFWIDTHS				= Effective widths of slab
+PPLOADCASES				= Load cases
+PPVERIFICATIONS			= Verifications
+PPEIGENMODE				= Eigen mode
+PPOSTT					= Results
+ZOOMIN					= Zoom in
+ZOOMOUT					= Zoom out
+COTATIONS				= Display dimensions
+EXPERT					= Expert mode
+EDIT					= Edit
+EDITPROFILES			= Edit ArcelorMittal profiles
+EDITSTUDS				= Edit Studs
+EDITDECKS				= Edit Steel profiled sheetings
+
+#FRM_MODULARRATIOTOOL
+TITLE					= Modular ratio tool
+CLOSE					= Close
+CANCEL					= Cancel
+PARAMETERS				= Parameters
+RELATIVEHUMIDITY		= Relative humidity
+PSIL					= Creep multiplier
+CONCRETEPROP			= Properties of concrete
+RESULTS					= Results
+AGET					= Age of concrete
+AGET0					= Age of concrete at loading
+CONCRETE				= Concrete class
+NOTIONALSIZE			= Notional size of the concrete element
+COEFANNEXB				= Coefficients / Annex B EN 1992-1-1
+LONGTERM_N				= Modular ratio for permanent loads
+SHORTTERM_N				= Modular ratio for live loads
+RCOMPRESSION			= Resistances to compression
+RTENSION				= Resistance to tension
+
+
+#FRM_OUVERTURE
+BROWSEFILES				= Browse
+CREATEBEAM				= Create a new beam
+NEWPROJECT				= New project
+OK						= Ok
+OPENPROJECT				= Open a project
+RECENTFILES				= Recent Files
+FILE					= Fichier
+
+#FRM_PPLOADCASE
+TITLE					= Load cases
+LOADCASE 				= Load cases
+CLOSE 					= Close
+CASE 					= Case
+STATE 					= State
+CALCULATIONOK 			= Calculation carried out?
+MAXDEFLECTION 			= Max. deflection
+LOADS					= Load
+CURVEV					= V Diagram
+CURVEM					= M Diagram
+NUMBERING				= Numbering
+DEFLECTION				= Deflection
+INERTIA					= Second moment of area of elements
+EDITMODEL				= Edit FEM model
+
+#FRM_PPCOMBINATIONS
+TITLE					= Combinations
+COMBINATIONS			= Combinations
+LIMITSTATE				= Limit States
+COMBI					= Combi.
+CLOSE					= Close
+CURVEV					= V Diagram
+CURVEM					= M Diagram
+NUMBERING				= Nodes numbers
+DEFLECTION				= Deflection
+WITHSHRNKAGE			= Including shrinkage
+NOCOMBINATION			= No combination
+ULTIMATE				= Ultimate
+FIRE					= Fire
+CONSTRUCTION			= Construction
+SERVICEABILITY 			= Serviceability
+ULS						= ULS
+SLS						= SLS
+FLS						= FLS
+NOCOMBINATIONFORULS		= No defined combinations for ultimate limit state
+NOCOMBINATIONFORULSC	= No defined combinations for ultimate limit state in construction phase
+NOCOMBINATIONFORFLS		= No defined combinations for fire limit state
+NOCOMBINATIONFORSLS 	= No defined combinations for serviceability limit state
+
+#FRM_PPVERIFICATIONS
+TITLE					= Verifications
+VERIFICATIONS			= Verifications
+LIMITSTATE				= Limit States
+CRITERIA				= Criteria
+ACTIONS					= Actions
+RESISTANCES				= Resistances
+NUMBERING				= Nodes numbers
+CRITERION				= Criterion
+RESULTS					= Results
+MAXVALUE				= Maximal value
+NODE					= At Node
+COMBINATION				= Combination
+CLOSE					= Close
+ULTIMATE				= Ultimate
+FIRE					= Fire
+CONSTRUCTION			= Construction
+SERVICEABILITY 			= Serviceability
+CRITERIONM				= Resistance to bending moments
+CRITERIONV				= Resistance to shear force
+CRITERIONMV				= Resistance to MV interaction
+CRITERIONSIGMAA			= Elastic stress in the steel profile
+CRITERIONSIGMAC			= Elastic stress in the concrete slab
+NOCRITERIA				= No criteria
+
+#FRM_PROPPING
+TITLE					= Propping of the beam
+OK						= Ok
+CANCEL					= Cancel
+FULLYPROPPED			= Fully propped
+LEFTCANTPROPP			= End propping of the left cantilever .
+NUMBPROPPING			= Number of point propping
+POINTPROPPED			= Point propped
+PROPPINGTYPE			= Type of propping
+RIGHTCANTPROPP			= End propping of the right cantilever 
+UNPROPPED				= Unpropped
+PROPPINGLOC				= Propping location
+UNDERSTEELBEAM			= Under the steel beam
+UNDERSLAB				= Under the concrete slab
+
+
+#FRM_PSHEETING
+TITLE					= Definition of the steel profiled sheeting
+OK						= OK
+ALL						= All
+CANCEL					= Cancel
+COMPANY					= Company
+DATABASE				= DataBase
+FROMDATABASE			= From the database
+FROMDIM					= From dimensions
+NAME					= Name
+PROPERTIES				= Dimensions and properties
+
+
+#FRM_SLAB
+TITLE					= Definition of the slab
+OK						= OK
+CANCEL					= Cancel
+ADDLAYER				= Add a layer of reinforcement
+ALL						= All
+CLASS					= Class
+COMPOSITESLAB			= Composite slab
+CONCRETE				= Concrete
+CONNECTORANDSHEET		= Placement of the connectors
+DIAMETER				= Diameter
+FIRSTLAYER				= First layer of reinforcement
+GENERAL					= General
+HAUNCH					= Haunch
+HEIGHT					= Height
+JOINT					= Concrete joint
+LIGHTCONCRETE			= Light concrete
+LOCATION				= Location
+MODIFYSH				= Modify the steel sheeting
+NAME					= Name
+PARALLEL				= Parallel
+PERPENDICULAR			= Perpendicular
+PRECASTSLAB				= Partially prefabricated slab
+PREPUNCHED				= Prepunched sheeting
+PRESLAB					= Prefab. part
+REBARS					= Longitudinal reinforcement
+REBARSTEEL				= Reinforcement steel
+REINFLAYER1				= First layer
+REINFLAYER2				= Second layer
+REMOVELAYER				= Remove the second layer of reinforcement
+RIBCONFIG				= Configuration of the rib at beam support
+RIBORIENT				= Rib orientation
+SECONDLAYER				= Second layer of reinforcement
+SHEETBASE				= From database
+SHEETCOMPANY			= Manufacturer
+SHEETCUSTOM				= Custom definition
+SHEETING				= Profiled steel sheeting
+SOLIDSLAB				= Solid slab
+SPACING					= Spacing
+THICKNESS				= Thickness
+THROUGHDECKW			= Through deck welding
+TYPE					= Type		
+
+#FRM_SPANLENGHTS
+TITLE					= Definition of the beam
+CANCEL					= Cancel
+OK						= OK
+EDGEBEAM				= Edge beam
+INTERMEDIATEBEAM		= Intermediate beam
+LEFTCANT				= Left cantilever span
+LEFTOPENING				= Left opening
+MAINSPAN				= Main span
+OPENINGS				= Slab openings
+RIGHTCANT				= Right cantilever span
+RIGHTOPENING			= Right opening
+SPACINGS				= Spacings
+SPANS					= Span lengths
+
+#FRM_STANDARDSTEELSECTIONS
+AUTOMATICHA				= Total height automatically assessed
+AUTOMATICHW				= Height of the web automatically assessed
+CANCEL					= Cancel
+DELIVERYCOND			= Delivery conditions for $
+HEIGHT					= Height 
+HOTROLLED				= Hot rolled profile
+LOWERF					= Lower flange
+OK						= OK
+PROFILE					= Profile
+PROFILES				= Profiles 
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+UPPERF					= Upper flange
+WEB						= Web 
+WELDEDSYM				= Bi-symmetrical welded section
+WELDEDP					= Mono-symmetrical welded section
+
+#GENERAL
+SELFWEIGHT				= Self-weight
+OTHERG					= Other permanent loads
+QLOADS					= Live loads
+CLOADS					= Construction loads
+PERMANENTLOADS			= Permanent loads
+SELFWEIGHTPROPPED		= Self weight with props
+SELFWEIGHTNOPROPS		= Self weight without props
+CONFIGURATION			= Conf. no
+SHRINKAGESLAB			= Shrinkage of the slab
+SHRINKAGEENCASEMENT		= Shrinkage of the encasement
+ULS						= ULS
+SLS						= SLS
+FLS						= FLS
+ULSC					= ULS_C
+SLSC					= SLS_C
+COPY                    = Copy
+
+#OPTCALCULMAIN
+TITLE					= Calculation options
+APPLY					= Apply
+CANCEL					= Cancel
+GAMMA					= Default national factors
+SCOPE					= Scope of application
+CALCUL					= Calculation options
+FIRE					= Fire design
+
+#OPTCALCALCUL
+TITLE					= Calculation options
+STANDARD				= Standard
+ENGEN1					= First generation of Eurocodes
+ENGEN2					= Second generation of Eurocodes (drafts)
+SECTIONPROP				= Properties of cross-sections
+COMPRESSIONREBARS		= Rebars in compression taken into account
+SIMPLIFIEDEFFW			= Simplified distribution of the effective of the concrete flange
+YOUNGSREBAR				= Young's modulus of reinforcements
+MODEL					= Numerical model parameters
+NODESPACING				= Distance between nodes
+NBNODES					= Number of nodes
+PERCANTILEVERSPAN		= per cantilever span
+PERINTSPAN				= per usual span
+LOADCASES				= Load cases
+PERMANENTLC				= Permanent loads
+SHRINKAGELC				= Shrinkage loads
+CREEPMULT				= Creep multiplier
+TIMETZERO				= Age of concrete at loading
+SYMBOLFORDAY			= d
+SLAB					= Slab
+ENCASEMENT				= Encasement
+SELFWEIGHT				= Self weight
+OTHERPERMANENT			= Other permanent loads
+SHRINKAGE				= Shrinkage
+ETAW					= Shear buckling
+
+#OPTCALGAMMA
+TITLE					= Default national factors
+LOADS					= Loads partial factors
+COMBINATION				= Combination factors
+MATERIALS				= Material
+STEEL					= Steel
+CONCRETE				= Concrete
+FIRE					= Fire
+GAMMAV					= single value for γv
+
+#OPTCALFIRE
+TITLE					= Fire design
+CONSTANTS				= Constants
+PARAMETERS				= Parameters
+BOLTZMAN				= Boltzman constant
+
+#OPTCALSCOPE
+TITLE					= Scope of application
+BEAMDEF					= Definition of the beam
+MINIMALV				= Minimal value
+MAXIMALV				= Maximal value
+SPANLENGTH				= Span length
+CANTILEVERSPAN			= Cantilever span length
+SLAB					= Concrete slab
+THETAHAUNCH				= Inclination angle of concrete haunches
+HAUNCHTH				= Thickness of slab haunch
+SOLIDSLABTH				= Thickness of solid slab
+COMPOSITESLABTH			= Thickness of composite slab (above ribs)
+RHOLWC					= Density of light weight concrete
+
+#OPTSOFTMAIN
+TITLE					= Software options
+APPLY					= Apply
+CANCEL					= Cancel
+GENERAL					= General parameters
+DIRECTORIES				= Directories
+UNITS					= Units
+DATABASES				= Databases
+CALCULSHEET				= Calculation sheet
+EXPERT					= Expert Mode
+EXPERTMODEACTIVE		= Expert Mode active
+
+#OPTSOFTCALCULSHEET
+FORCESANDMOMENTS		= Forces and moments
+SLS						= Serviceability Limit States
+HIVOSS					= Hivoss method for vibratory comfort
+SHOWHIVOSSCURVE			= Display Hivoss diagram
+DISPLAYFMLOADCASES		= Display forces and moments for load cases
+DISPLAYFMULS			= Display forces and moments at ultimate LS
+DISPLAYFMSLS			= Display forces and moments at serviceability LS
+DISPLAYFMFLS			= Display forces and moments at fire LS
+DISPLAYDIAGRAMS			= Display diagrams
+DISPLAYSIGMA			= Display elastic stresses
+ULS						= Ultimate Limit States
+DISPMELCOMPOSITEBEAMS	= Display elastic moments of composite beams
+
+#OPTSOFTDATABASES
+DATABASES				= Databases
+PROFILES				= ArcelorMittal profiles
+SHEETINGS				= Steel profiled sheetings
+STUDS					= Welded studs
+STEELS					= Structural steels
+CLICKTOEDIT				= Click on databases in blue to edit them
+FILTRESOFT				= Software filter
+HIDEFILTER				= Hide unauthorized profiles
+
+#RESERVE
+EPROFILS		= ArcelorMittal Profiles database
+EACIER			= Steels database
+
+STEELAVAIL		= Show only available steels
+CHOIXSTEEL		= Options for the selection of steel
+BASEONLY		= Only base steels
+STANDARDONLY	= Only steel under norms available for the selected profile
+BASEANDSTANDARD = Base steel and steel under norms available for the selected profile
+BASEIFNOSTD		= Base steel if no steel available for the selected profile
+ALLSTEEL		= All steels of the database
+HIDESTEELTHICK	= Hide steels not compatible with profile thickness
+GRPWEBFILES		= Databases from internet update
+NBWEBFILES		= Number of web files
+DELETEWEBF		= Delete all web files
+TTIPEDITBAC		= Click to edit steel sheets database
+TTIPEDITHILTI	= Click to edit Hilti connectors database
+TTIPEDITSTUDS	= Click to edit studs database
+UNIVERSALDTB	= Use generalised databases
+SAVEOPTIONS		= Save these options for the next Expert session
+EXPERTOPT		= Expert options
+SHOWEC3C		= Show EC3 reduction curves	
+
+
+#OPTSOFTDIRECTORIES
+DIRECTORIES				= Directories
+INSTALL					= Installation directory
+CONFIG					= Configuration directory
+WORK					= Current working directory
+DEFAULTWORK				= Default working directory
+DIROPTIONS				= Options for the working directory
+LAST					= Last used directory
+DEFAULT					= Default working directory
+
+#OPTSOFTEXPERT
+EXPERTMODE				= Expert mode
+ACTIVATEEXP				= Activate the expert mode
+ACTIVATE				= Activate
+DESACTIVATE				= Desactivate the expert mode
+KEY						= Key
+UNVALIDKEY				= Key is not valid
+
+#OPTSOFTGENERAL
+TITLE					= General settings
+LANGUAGES				= Languages
+USERGI					= User interface
+CALCULREPORT			= Calculation report
+IDENTIFICATION			= Identification
+USERNAME				= User name
+FIRM					= Firm
+INTERNETCHECKS			= Internet checks
+
+#OPTSOFTUNITS
+TITLE					= Units
+UNITS					= Units
+LENGTHS					= Lengths
+DIMENSIONS				= Dimensions
+FORCES					= Forces
+MOMENTS					= Moments
+BENDINGW				= Bending modulus
+STRESSES				= Stresses
+SMAREA					= Second moment of area
+
+

@@ -196,45 +196,7 @@ Public Class cls_Poutre
     ''' </summary>
     Public DensiteConnexionZone(,) As Decimal
 
-    ''' <summary>
-    ''' Contrainte tangentielle / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
-    ''' </summary>
-    Public TauEd(,,) As Decimal
 
-    ''' <summary>
-    ''' Angle de la bielle de compression EN RADIAN / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
-    ''' </summary>
-    Public Thetaf(,,) As Decimal
-
-    ''' <summary>
-    ''' Angle min de la bielle de compression EN RADIAN (dépend de si la zone se situe en flexion positive ou négative)
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' </summary>
-    Public Thetaf_min(,) As Decimal
-
-    ''' <summary>
-    ''' Vérification de la bielle de compression 
-    ''' (GUD: pour l'instant je mets ici l'attribut car le critère est constant le long d'une zone de connexion. A voir s'il faut le déplacer dans la classe vérification)
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
-    ''' </summary>
-    Public Gamma_sf(,,) As Decimal
-
-    ''' <summary>
-    ''' Aire par unité de longueur des armatures transversales / zone de flexion positive (True) ou négative (False) / Type de surface de ruine 
-    ''' 1er indice: indice de la travée
-    ''' 2eme indice: indice de la zone (0, 1 ou 2)
-    ''' 3eme indice: indice de la zone de ruine: a-a (0), b-b (1) ou d-d (2)
-    ''' </summary>
-    Public As_s_transv(,,) As Decimal
 
 
 #End Region
@@ -791,12 +753,6 @@ Public Class cls_Poutre
         ReDim Espacement_Bac_TransZone(IndiceTraveeConsoleDroite, 2)
         ReDim NombreGoujonsTransv(IndiceTraveeConsoleDroite, 2)
         'ReDim NombreGoujonsTot(IndiceTraveeConsoleDroite + 2)
-
-        ReDim TauEd(IndiceTraveeConsoleDroite, 2, 2)
-        ReDim Thetaf(IndiceTraveeConsoleDroite, 2, 2)
-        ReDim Thetaf_min(IndiceTraveeConsoleDroite, 2)
-        ReDim Gamma_sf(IndiceTraveeConsoleDroite, 2, 2)
-        ReDim As_s_transv(IndiceTraveeConsoleDroite, 2, 2)
 
         For i As Integer = 0 To IndiceTraveeConsoleDroite
             LongueurZone(i, 0) = LongueurTravee(i)
