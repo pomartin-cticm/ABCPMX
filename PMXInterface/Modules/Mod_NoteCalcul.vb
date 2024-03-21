@@ -316,6 +316,22 @@ Module Mod_NoteCalcul
 
         EditionParametresCombinaisons(MyBeam)
 
+        '--[ Options de calcul
+
+        EditionParametresCalcul(MyBeam)
+
+    End Sub
+
+    Private Sub EditionParametresCalcul(ByVal MyBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   21/03/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des options de calcul
+        '----------------------------------------------------------------------------------------------
+
+        If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
+
+        AddTitreNdC(2, BlocG("CALCULATIONOPTIONS"))
     End Sub
 
     Private Sub EditionParametresBase(ByVal MyBeam As cls_Poutre)
@@ -804,6 +820,12 @@ Module Mod_NoteCalcul
         '   Edition des paramètres de la dalle
         '----------------------------------------------------------------------------------------------
 
+        '--( Déclaration
+
+        Dim lMixte As Boolean = MyBeam.lMixte
+
+        '--( Intro
+
         If nbLignes + 12 > MAXLIGNEPPAG Then _
         SautePage()
 
@@ -832,6 +854,25 @@ Module Mod_NoteCalcul
         End Select
 
         AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA.Bfs), Enu_TypeVariable.Dimension, 4, 0, True))
+
+        If lMixte Then
+            If (Not MyBeam.lTraveeConsoleGauche) Then
+                If MyBeam.lDalleContinueGauche Then
+                    AddLigneNDC(TABW2 & BlocG("LEFTCONTINUOUSSLAB"))
+                Else
+                    AddLigneNDC(TABW2 & BlocG("LEFTNOTCONTINUOUSSLAB"))
+                End If
+
+            End If
+            If (Not MyBeam.lTraveeConsoleDroite) Then
+                If MyBeam.lDalleContinueDroite Then
+                    AddLigneNDC(TABW2 & BlocG("RIGHTCONTINUOUSSLAB"))
+                Else
+                    AddLigneNDC(TABW2 & BlocG("RIGHTNOTCONTINUOUSSLAB"))
+                End If
+
+            End If
+        End If
 
         '--> Béton de la dalle
 
@@ -4670,7 +4711,6 @@ Module Mod_NoteCalcul
         If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(3, BlocELU("SHEARFAILUREAREA") & " : " & str_failureArea)
-
 
         If nbLignes + 2 * HLIGNE > MAXLIGNEPPAG Then SautePage()
 

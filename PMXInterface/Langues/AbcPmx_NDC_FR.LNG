@@ -309,6 +309,11 @@ LEFTCANTILEVER			= Console gauche
 RIGHTCANTILEVER			= Console droite
 SPAN_MAIN				= Travée centrale
 SPAN_N					= Travée no
+LEFTCONTINUOUSSLAB		= La dalle est continue sur l'appui gauche
+LEFTNOTCONTINUOUSSLAB	= La dalle n'est pas continue sur l'appui gauche
+RIGHTCONTINUOUSSLAB		= La dalle est continue sur l'appui droite
+RIGHTNOTCONTINUOUSSLAB	= La dalle n'est pas continue sur l'appui droite
+CALCULATIONOPTIONS		= Paramètres du calcul
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Propriétés de la section

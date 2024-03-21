@@ -19,7 +19,6 @@ Public Class Frm_OptionsCalculPoutre
 
 #Region "===OUVERTURE==="
 
-
     Private Sub Frm_OptionsCalculPoutre_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         lBuild = True
 
@@ -37,6 +36,7 @@ Public Class Frm_OptionsCalculPoutre
         RemplirComboStandard()
         RemplirComboRH()
         RemplirComboG()
+        RemplirComboWk()
     End Sub
 
     Private Sub GestionLangues()
@@ -67,6 +67,8 @@ Public Class Frm_OptionsCalculPoutre
                 Me.lbl_CombinationVibration.Text = Bloc("COMBINATIONFREQ")
                 Me.chk_FlechesETA.Text = Bloc("ETADEFLECTIONS")
                 Me.lbl_StudDeflection.Text = Bloc("STUDSE")
+                Me.chk_MaitriseFissuration.Text = Bloc("CONTROLCRACKW")
+                Me.lbl_LargeurFissure.Text = Bloc("CRACKWIDTH")
 
                 Me.lbl_CadreBeton.Text = Bloc("TCONCRETE")
                 Me.lbl_BetonMessage.Text = Bloc("CONCRETEMSG")
@@ -130,6 +132,15 @@ Public Class Frm_OptionsCalculPoutre
 
     End Sub
 
+    Private Sub RemplirComboWk()
+
+        Me.cmb_Wk.Items.Clear()
+        For i = 0 To cls_OptionsCalcul.tabWk.GetUpperBound(0)
+            Me.cmb_Wk.Items.Add(GetStringInUnit(cls_OptionsCalcul.tabWk(i), Enu_TypeVariable.SansType, 2, 1, False))
+        Next
+
+    End Sub
+
     Private Sub GestionUnites()
         Me.etq_UnitJour1.Text = SymbolJour
         Me.etq_UnitJour2.Text = SymbolJour
@@ -143,6 +154,7 @@ Public Class Frm_OptionsCalculPoutre
 
         Me.etq_UnitDimension1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
+        Me.etq_UnitLargeurF.Text = "mm"
     End Sub
 
     Private Sub GestionStyle()
@@ -199,6 +211,10 @@ Public Class Frm_OptionsCalculPoutre
         Me.chk_FlechesETA.Checked = MyParam.lFlechesETA
         Me.txt_Se.Text = GetStringInUnit(MyParam.DeltaD, Enu_TypeVariable.Dimension, 4, 3, False)
 
+        '# maitrise de la fissuration
+        Me.chk_MaitriseFissuration.Checked = MyParam.lMaitriseFissuration
+        Me.cmb_Wk.SelectedIndex = Array.IndexOf(cls_OptionsCalcul.tabWk, MyParam.FissureWk)
+
         '==> Béton
 
         Me.cmb_RH.SelectedIndex = Array.IndexOf(cls_OptionsCalcul.tabRH, MyParam.RH)
@@ -222,6 +238,7 @@ Public Class Frm_OptionsCalculPoutre
         '==> Paramètres
 
         Me.cmb_GraviteG.SelectedIndex = Array.IndexOf(cls_OptionsCalcul.tabGraviteG, MyParam.GraviteG)
+
 
     End Sub
 
@@ -271,6 +288,9 @@ Public Class Frm_OptionsCalculPoutre
 
         GereTransfertValeur(Me.chk_FlechesETA.Checked, MyProjet.Poutres(MyProjet.IndEnCours).Param.lFlechesETA, lModif)
         GereTransfertValeur(MyParam.DeltaD, MyProjet.Poutres(MyProjet.IndEnCours).Param.DeltaD, lModif)
+
+        GereTransfertValeur(Me.chk_MaitriseFissuration.Checked, MyProjet.Poutres(MyProjet.IndEnCours).Param.lMaitriseFissuration, lModif)
+        GereTransfertValeur(cls_OptionsCalcul.tabWk(Me.cmb_Wk.SelectedIndex), MyProjet.Poutres(MyProjet.IndEnCours).Param.FissureWk, lModif)
 
     End Sub
 
@@ -423,7 +443,7 @@ Public Class Frm_OptionsCalculPoutre
 
 #Region " Dessin des symboles "
 
-    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_AgeT.Paint, img_G.Paint, img_se.Paint, img_eta.Paint
+    Private Sub DrawSymbols(sender As Object, e As PaintEventArgs) Handles img_RH.Paint, img_EpsilonSh.Paint, img_Es.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_AgeT.Paint, img_G.Paint, img_se.Paint, img_eta.Paint, img_Wk.Paint
         '--> Déclarations
 
         Dim sWI As Single = sender.Width
@@ -445,6 +465,10 @@ Public Class Frm_OptionsCalculPoutre
         lGrec = False
         lEgal = True
         Select Case sender.name
+
+            Case Me.cmb_Wk.Name
+                strSymbol = "w"
+                strIndice = "k"
 
             Case Me.img_RH.Name
                 strSymbol = "RH"
@@ -488,9 +512,6 @@ Public Class Frm_OptionsCalculPoutre
                     FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
-
-
-
 
 
 #End Region

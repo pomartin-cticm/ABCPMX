@@ -309,6 +309,11 @@ LEFTCANTILEVER			= Left cantilever span
 RIGHTCANTILEVER			= Right cantilever span
 SPAN_MAIN				= Main span
 SPAN_N					= Span no
+LEFTCONTINUOUSSLAB		= The slab is continuous at the left support
+LEFTNOTCONTINUOUSSLAB	= The slab is not continuous at the left support
+RIGHTCONTINUOUSSLAB		= The slab is continuous at the right support
+RIGHTNOTCONTINUOUSSLAB	= The slab is not continuous at the right support
+CALCULATIONOPTIONS		= Calculation parameters
 
 #NDC_SECTIONPROP
 SECTIONSPROPERTIES		= Sections properties

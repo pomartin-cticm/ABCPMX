@@ -109,6 +109,8 @@ SHRINKAGE				= Retrait
 TPARAMETERS				= Paramètres
 GFORCE					= Accélération de pesanteurs
 ETAW					= Voilement par cisaillement
+CONTROLCRACKW			= Maîtrise de la fissuration
+CRACKWIDTH				= Limite d'ouverture des fissures
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs

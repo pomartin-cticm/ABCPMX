@@ -44,6 +44,11 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreSections = New System.Windows.Forms.Label()
         Me.lbl_CadreBeton = New System.Windows.Forms.Label()
         Me.pan_OptionsELS = New System.Windows.Forms.Panel()
+        Me.etq_UnitLargeurF = New System.Windows.Forms.Label()
+        Me.cmb_Wk = New System.Windows.Forms.ComboBox()
+        Me.img_Wk = New System.Windows.Forms.PictureBox()
+        Me.lbl_LargeurFissure = New System.Windows.Forms.Label()
+        Me.chk_MaitriseFissuration = New System.Windows.Forms.CheckBox()
         Me.lbl_StudDeflection = New System.Windows.Forms.Label()
         Me.etq_UnitDimension1 = New System.Windows.Forms.Label()
         Me.txt_Se = New System.Windows.Forms.TextBox()
@@ -55,6 +60,9 @@ Partial Class Frm_OptionsCalculPoutre
         Me.rdb_ElasticDesignClasse3 = New System.Windows.Forms.RadioButton()
         Me.rdb_ElasticDesignVM = New System.Windows.Forms.RadioButton()
         Me.rdb_NormalDesign = New System.Windows.Forms.RadioButton()
+        Me.txt_eta = New System.Windows.Forms.TextBox()
+        Me.lbl_eta = New System.Windows.Forms.Label()
+        Me.img_eta = New System.Windows.Forms.PictureBox()
         Me.lbl_CadreELU = New System.Windows.Forms.Label()
         Me.lbl_CadreNorm = New System.Windows.Forms.Label()
         Me.pan_Norm = New System.Windows.Forms.Panel()
@@ -101,9 +109,6 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_RH = New System.Windows.Forms.Label()
         Me.lbl_BetonMessage = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.lbl_eta = New System.Windows.Forms.Label()
-        Me.img_eta = New System.Windows.Forms.PictureBox()
-        Me.txt_eta = New System.Windows.Forms.TextBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -115,8 +120,10 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_G, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Sections.SuspendLayout()
         Me.pan_OptionsELS.SuspendLayout()
+        CType(Me.img_Wk, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_se, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_OptionsELU.SuspendLayout()
+        CType(Me.img_eta, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Norm.SuspendLayout()
         Me.pan_Beton.SuspendLayout()
         CType(Me.img_AgeT, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -127,7 +134,6 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_eta, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -259,7 +265,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 120.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 150.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 240.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
@@ -279,7 +285,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Parametres.Controls.Add(Me.cmb_GraviteG)
         Me.pan_Parametres.Controls.Add(Me.lbl_GraviteG)
         Me.pan_Parametres.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Parametres.Location = New System.Drawing.Point(0, 785)
+        Me.pan_Parametres.Location = New System.Drawing.Point(0, 815)
         Me.pan_Parametres.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Parametres.Name = "pan_Parametres"
         Me.pan_Parametres.Size = New System.Drawing.Size(442, 119)
@@ -328,7 +334,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreParametres.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_CadreParametres.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_CadreParametres.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_CadreParametres.Location = New System.Drawing.Point(0, 755)
+        Me.lbl_CadreParametres.Location = New System.Drawing.Point(0, 785)
         Me.lbl_CadreParametres.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_CadreParametres.Name = "lbl_CadreParametres"
         Me.lbl_CadreParametres.Size = New System.Drawing.Size(442, 30)
@@ -343,7 +349,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Sections.Controls.Add(Me.chk_ArmaComprimees)
         Me.pan_Sections.Controls.Add(Me.chk_LargeursPartipantesSimples)
         Me.pan_Sections.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Sections.Location = New System.Drawing.Point(0, 685)
+        Me.pan_Sections.Location = New System.Drawing.Point(0, 715)
         Me.pan_Sections.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Sections.Name = "pan_Sections"
         Me.pan_Sections.Size = New System.Drawing.Size(442, 69)
@@ -375,7 +381,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreSections.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_CadreSections.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_CadreSections.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_CadreSections.Location = New System.Drawing.Point(0, 655)
+        Me.lbl_CadreSections.Location = New System.Drawing.Point(0, 685)
         Me.lbl_CadreSections.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_CadreSections.Name = "lbl_CadreSections"
         Me.lbl_CadreSections.Size = New System.Drawing.Size(442, 30)
@@ -389,7 +395,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.lbl_CadreBeton.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_CadreBeton.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_CadreBeton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_CadreBeton.Location = New System.Drawing.Point(0, 385)
+        Me.lbl_CadreBeton.Location = New System.Drawing.Point(0, 415)
         Me.lbl_CadreBeton.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_CadreBeton.Name = "lbl_CadreBeton"
         Me.lbl_CadreBeton.Size = New System.Drawing.Size(442, 30)
@@ -401,6 +407,11 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.pan_OptionsELS.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_OptionsELS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_OptionsELS.Controls.Add(Me.etq_UnitLargeurF)
+        Me.pan_OptionsELS.Controls.Add(Me.cmb_Wk)
+        Me.pan_OptionsELS.Controls.Add(Me.img_Wk)
+        Me.pan_OptionsELS.Controls.Add(Me.lbl_LargeurFissure)
+        Me.pan_OptionsELS.Controls.Add(Me.chk_MaitriseFissuration)
         Me.pan_OptionsELS.Controls.Add(Me.lbl_StudDeflection)
         Me.pan_OptionsELS.Controls.Add(Me.etq_UnitDimension1)
         Me.pan_OptionsELS.Controls.Add(Me.txt_Se)
@@ -411,13 +422,60 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_OptionsELS.Location = New System.Drawing.Point(0, 265)
         Me.pan_OptionsELS.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_OptionsELS.Name = "pan_OptionsELS"
-        Me.pan_OptionsELS.Size = New System.Drawing.Size(442, 119)
+        Me.pan_OptionsELS.Size = New System.Drawing.Size(442, 149)
         Me.pan_OptionsELS.TabIndex = 5
+        '
+        'etq_UnitLargeurF
+        '
+        Me.etq_UnitLargeurF.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitLargeurF.AutoSize = True
+        Me.etq_UnitLargeurF.Location = New System.Drawing.Point(304, 106)
+        Me.etq_UnitLargeurF.Name = "etq_UnitLargeurF"
+        Me.etq_UnitLargeurF.Size = New System.Drawing.Size(28, 13)
+        Me.etq_UnitLargeurF.TabIndex = 127
+        Me.etq_UnitLargeurF.Text = "GPa"
+        '
+        'cmb_Wk
+        '
+        Me.cmb_Wk.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Wk.FormattingEnabled = True
+        Me.cmb_Wk.Location = New System.Drawing.Point(240, 102)
+        Me.cmb_Wk.Name = "cmb_Wk"
+        Me.cmb_Wk.Size = New System.Drawing.Size(59, 21)
+        Me.cmb_Wk.TabIndex = 126
+        '
+        'img_Wk
+        '
+        Me.img_Wk.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Wk.Location = New System.Drawing.Point(193, 103)
+        Me.img_Wk.Name = "img_Wk"
+        Me.img_Wk.Size = New System.Drawing.Size(46, 20)
+        Me.img_Wk.TabIndex = 125
+        Me.img_Wk.TabStop = False
+        '
+        'lbl_LargeurFissure
+        '
+        Me.lbl_LargeurFissure.AutoSize = True
+        Me.lbl_LargeurFissure.Location = New System.Drawing.Point(20, 108)
+        Me.lbl_LargeurFissure.Name = "lbl_LargeurFissure"
+        Me.lbl_LargeurFissure.Size = New System.Drawing.Size(92, 13)
+        Me.lbl_LargeurFissure.TabIndex = 124
+        Me.lbl_LargeurFissure.Text = "lbl_LargeurFissure"
+        '
+        'chk_MaitriseFissuration
+        '
+        Me.chk_MaitriseFissuration.AutoSize = True
+        Me.chk_MaitriseFissuration.Location = New System.Drawing.Point(21, 88)
+        Me.chk_MaitriseFissuration.Name = "chk_MaitriseFissuration"
+        Me.chk_MaitriseFissuration.Size = New System.Drawing.Size(136, 17)
+        Me.chk_MaitriseFissuration.TabIndex = 123
+        Me.chk_MaitriseFissuration.Text = "chk_MaitriseFissuration"
+        Me.chk_MaitriseFissuration.UseVisualStyleBackColor = True
         '
         'lbl_StudDeflection
         '
         Me.lbl_StudDeflection.AutoSize = True
-        Me.lbl_StudDeflection.Location = New System.Drawing.Point(18, 76)
+        Me.lbl_StudDeflection.Location = New System.Drawing.Point(18, 40)
         Me.lbl_StudDeflection.Name = "lbl_StudDeflection"
         Me.lbl_StudDeflection.Size = New System.Drawing.Size(93, 13)
         Me.lbl_StudDeflection.TabIndex = 122
@@ -427,7 +485,7 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.etq_UnitDimension1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.etq_UnitDimension1.AutoSize = True
-        Me.etq_UnitDimension1.Location = New System.Drawing.Point(305, 98)
+        Me.etq_UnitDimension1.Location = New System.Drawing.Point(305, 62)
         Me.etq_UnitDimension1.Name = "etq_UnitDimension1"
         Me.etq_UnitDimension1.Size = New System.Drawing.Size(28, 13)
         Me.etq_UnitDimension1.TabIndex = 121
@@ -436,7 +494,7 @@ Partial Class Frm_OptionsCalculPoutre
         'txt_Se
         '
         Me.txt_Se.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Se.Location = New System.Drawing.Point(241, 94)
+        Me.txt_Se.Location = New System.Drawing.Point(241, 58)
         Me.txt_Se.Name = "txt_Se"
         Me.txt_Se.Size = New System.Drawing.Size(58, 20)
         Me.txt_Se.TabIndex = 120
@@ -444,7 +502,7 @@ Partial Class Frm_OptionsCalculPoutre
         'img_se
         '
         Me.img_se.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_se.Location = New System.Drawing.Point(193, 94)
+        Me.img_se.Location = New System.Drawing.Point(193, 58)
         Me.img_se.Name = "img_se"
         Me.img_se.Size = New System.Drawing.Size(46, 20)
         Me.img_se.TabIndex = 119
@@ -453,7 +511,7 @@ Partial Class Frm_OptionsCalculPoutre
         'chk_FlechesETA
         '
         Me.chk_FlechesETA.AutoSize = True
-        Me.chk_FlechesETA.Location = New System.Drawing.Point(21, 46)
+        Me.chk_FlechesETA.Location = New System.Drawing.Point(21, 10)
         Me.chk_FlechesETA.Name = "chk_FlechesETA"
         Me.chk_FlechesETA.Size = New System.Drawing.Size(108, 17)
         Me.chk_FlechesETA.TabIndex = 116
@@ -463,11 +521,12 @@ Partial Class Frm_OptionsCalculPoutre
         'lbl_CombinationVibration
         '
         Me.lbl_CombinationVibration.AutoSize = True
-        Me.lbl_CombinationVibration.Location = New System.Drawing.Point(18, 15)
+        Me.lbl_CombinationVibration.Location = New System.Drawing.Point(409, 17)
         Me.lbl_CombinationVibration.Name = "lbl_CombinationVibration"
         Me.lbl_CombinationVibration.Size = New System.Drawing.Size(122, 13)
         Me.lbl_CombinationVibration.TabIndex = 61
         Me.lbl_CombinationVibration.Text = "lbl_CombinationVibration"
+        Me.lbl_CombinationVibration.Visible = False
         '
         'lbl_CadreELS
         '
@@ -532,6 +591,32 @@ Partial Class Frm_OptionsCalculPoutre
         Me.rdb_NormalDesign.TabStop = True
         Me.rdb_NormalDesign.Text = "rbd_NormalDesign"
         Me.rdb_NormalDesign.UseVisualStyleBackColor = True
+        '
+        'txt_eta
+        '
+        Me.txt_eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_eta.Location = New System.Drawing.Point(237, 89)
+        Me.txt_eta.Name = "txt_eta"
+        Me.txt_eta.Size = New System.Drawing.Size(58, 20)
+        Me.txt_eta.TabIndex = 117
+        '
+        'lbl_eta
+        '
+        Me.lbl_eta.AutoSize = True
+        Me.lbl_eta.Location = New System.Drawing.Point(21, 93)
+        Me.lbl_eta.Name = "lbl_eta"
+        Me.lbl_eta.Size = New System.Drawing.Size(38, 13)
+        Me.lbl_eta.TabIndex = 115
+        Me.lbl_eta.Text = "lbl_eta"
+        '
+        'img_eta
+        '
+        Me.img_eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_eta.Location = New System.Drawing.Point(189, 89)
+        Me.img_eta.Name = "img_eta"
+        Me.img_eta.Size = New System.Drawing.Size(46, 20)
+        Me.img_eta.TabIndex = 116
+        Me.img_eta.TabStop = False
         '
         'lbl_CadreELU
         '
@@ -641,7 +726,7 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Beton.Controls.Add(Me.lbl_RH)
         Me.pan_Beton.Controls.Add(Me.lbl_BetonMessage)
         Me.pan_Beton.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Beton.Location = New System.Drawing.Point(0, 415)
+        Me.pan_Beton.Location = New System.Drawing.Point(0, 445)
         Me.pan_Beton.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_Beton.Name = "pan_Beton"
         Me.pan_Beton.Size = New System.Drawing.Size(442, 239)
@@ -1014,32 +1099,6 @@ Partial Class Frm_OptionsCalculPoutre
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'lbl_eta
-        '
-        Me.lbl_eta.AutoSize = True
-        Me.lbl_eta.Location = New System.Drawing.Point(21, 93)
-        Me.lbl_eta.Name = "lbl_eta"
-        Me.lbl_eta.Size = New System.Drawing.Size(38, 13)
-        Me.lbl_eta.TabIndex = 115
-        Me.lbl_eta.Text = "lbl_eta"
-        '
-        'img_eta
-        '
-        Me.img_eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_eta.Location = New System.Drawing.Point(189, 89)
-        Me.img_eta.Name = "img_eta"
-        Me.img_eta.Size = New System.Drawing.Size(46, 20)
-        Me.img_eta.TabIndex = 116
-        Me.img_eta.TabStop = False
-        '
-        'txt_eta
-        '
-        Me.txt_eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_eta.Location = New System.Drawing.Point(237, 89)
-        Me.txt_eta.Name = "txt_eta"
-        Me.txt_eta.Size = New System.Drawing.Size(58, 20)
-        Me.txt_eta.TabIndex = 117
-        '
         'Frm_OptionsCalculPoutre
         '
         Me.AcceptButton = Me.btn_OK
@@ -1069,9 +1128,11 @@ Partial Class Frm_OptionsCalculPoutre
         Me.pan_Sections.PerformLayout()
         Me.pan_OptionsELS.ResumeLayout(False)
         Me.pan_OptionsELS.PerformLayout()
+        CType(Me.img_Wk, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_se, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_OptionsELU.ResumeLayout(False)
         Me.pan_OptionsELU.PerformLayout()
+        CType(Me.img_eta, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Norm.ResumeLayout(False)
         Me.pan_Norm.PerformLayout()
         Me.pan_Beton.ResumeLayout(False)
@@ -1084,7 +1145,6 @@ Partial Class Frm_OptionsCalculPoutre
         CType(Me.img_EpsilonSh, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_RH, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_eta, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1170,4 +1230,9 @@ Partial Class Frm_OptionsCalculPoutre
     Friend WithEvents txt_eta As TextBox
     Friend WithEvents lbl_eta As Label
     Friend WithEvents img_eta As PictureBox
+    Friend WithEvents chk_MaitriseFissuration As CheckBox
+    Friend WithEvents etq_UnitLargeurF As Label
+    Friend WithEvents cmb_Wk As ComboBox
+    Friend WithEvents img_Wk As PictureBox
+    Friend WithEvents lbl_LargeurFissure As Label
 End Class

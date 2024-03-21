@@ -6,6 +6,7 @@ Public Class cls_OptionsCalcul
 #Region " Enumérations et constantes "
 
     Public Shared tabRH() As Decimal = {50, 80}
+    Public Shared tabWk() As Decimal = {0.4, 0.3, 0.2}
     Public Shared tabGraviteG() As Decimal = {9.81, 10}
 
     Const DELTAD_DEF As Decimal = 0.0005            ' Glissement du connecteur à 0,7 PRk (cf. prEN 1994-1-1 B.2.5 (5))
@@ -54,6 +55,9 @@ Public Class cls_OptionsCalcul
 
     Public lFlechesETA As Boolean                   ' Indique pour les poutres mixtes si on calcule la flèche en prenant en compte la raideur des connecteurs
     Public DeltaD As Decimal                        ' Valeur du glissement du connecteur pour une charge de PRd
+
+    Public lMaitriseFissuration As Boolean          ' Indique si on effectue le calcul de maitrise de la fissuration
+    Public FissureWk As Decimal                     ' Valeur maxi d'ouverture des fissures, en cas de maitrise de la fissuration
 
 #End Region
 
@@ -108,6 +112,11 @@ Public Class cls_OptionsCalcul
 
         Me.lFlechesETA = True
         Me.DeltaD = cls_OptionsCalcul.DELTAD_DEF
+
+        '-- Maitrise de la fissuration
+        Me.lMaitriseFissuration = False
+        Me.FissureWk = cls_OptionsCalcul.tabWk(0)
+
     End Sub
 
 #End Region

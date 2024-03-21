@@ -110,6 +110,8 @@ SHRINKAGE				= Shrinkage
 TPARAMETERS				= Parameters
 GFORCE					= G-force
 ETAW					= Shear buckling
+CONTROLCRACKW			= Control of concrete cracking
+CRACKWIDTH				= Limit of crack width
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
