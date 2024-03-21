@@ -471,6 +471,14 @@ SPAN					= Travée
 EIGENFREQUENCIES		= Fréquences propres
 CASE_FULLINTERACTION	= Pour une interaction complète
 CASE_PARTIALINTERACTION	= En prenant en compte le glissement de la connexion
+CONTROLCRACKING			= Maîtrise de la fissuration
+CONTROLCRACKINGSIMPLES	= Fissuration sur appuis
+LEFTSIMPLES				= La poutre est calculée comme simplement appuyée sur l'appui gauche, alors que la dalle est continue.
+RIGHTSIMPLES			= La poutre est calculée comme simplement appuyée sur l'appui droite, alors que la dalle est continue.
+BOTHSIMPLES				= La poutre est calculée comme simplement appuyée sur les deux appuis, alors que la dalle est continue.
+REFSIMPLES				= D'après la NF EN 1994-1-1: 2005, 7.4.1 (4), il convient de disposer des armatures longitudinales aux appuis pour limiter la fissuration. 
+REQUIREMENTUNPROPPED	= Pour une poutre non étayée, un taux minimal d'armatures de 0,4 % est requis
+REQUIREMENTPROPPED		= Pour une poutre non étayée, un taux minimal d'armatures de 0,2 % est requis
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher

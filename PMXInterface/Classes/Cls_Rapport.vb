@@ -1235,13 +1235,13 @@ Public Class Cls_Rapport
 
                 Case "CORRECT"
 
-                    'sHiImg = sWiImg * Frm_NoteCalcul.Btn_Correct.Image.Height / Frm_NoteCalcul.Btn_Correct.Image.Width
-                    'MyGr.DrawImage(Frm_NoteCalcul.Btn_Correct.Image, xLeftImg, YPen, sWiImg, sHiImg)
+                    sHiImg = sWiImg * Frm_NoteCalcul.Btn_Correct.Image.Height / Frm_NoteCalcul.Btn_Correct.Image.Width
+                    MyGr.DrawImage(Frm_NoteCalcul.Btn_Correct.Image, xLeftImg, YPen, sWiImg, sHiImg)
 
                 Case "ERROR"
 
-                    'sHiImg = sWiImg * Frm_NoteCalcul.Btn_Error.Image.Height / Frm_NoteCalcul.Btn_Error.Image.Width
-                    'MyGr.DrawImage(Frm_NoteCalcul.Btn_Error.Image, xLeftImg, YPen, sWiImg, sHiImg)
+                    sHiImg = sWiImg * Frm_NoteCalcul.Btn_Error.Image.Height / Frm_NoteCalcul.Btn_Error.Image.Width
+                    MyGr.DrawImage(Frm_NoteCalcul.Btn_Error.Image, xLeftImg, YPen, sWiImg, sHiImg)
 
                 Case "RDM_CHARGESA"
 

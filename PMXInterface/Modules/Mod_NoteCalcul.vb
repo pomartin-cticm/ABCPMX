@@ -113,18 +113,10 @@ Module Mod_NoteCalcul
         '
         '----------------------------------------------------------------------------------------------
 
-        '--[ Chargement des blocs langues (GUD: Je le déplace ici car je vais avoir besoin d'un string pour les fonctions de calcul de RDM)
-
-        InitialiseBlocNDC()
-
         '--[ Initialisations
 
         MyNote = New Cls_Rapport("Arial", 1.5, 3, 3)
         'MyProjet.Poutres(MyProjet.IndEnCours).InitialisePoidsPropres()
-
-        strRacineELU = BlocG("ULS")
-        strRacineELS = BlocG("SLS")
-        strRacineELF = BlocG("FLS")
 
         '--[ Création de la Note
 
@@ -161,6 +153,14 @@ Module Mod_NoteCalcul
         'Dim lControleOK As Boolean
 
         lChapitreOutOfScope = False
+
+        '--[ Chargement des blocs langues (GUD: Je le déplace ici car je vais avoir besoin d'un string pour les fonctions de calcul de RDM)
+        '--[ Il faut le laisser ici pour pouvoir changer la langue
+
+        InitialiseBlocNDC()
+        strRacineELU = BlocG("ULS")
+        strRacineELS = BlocG("SLS")
+        strRacineELF = BlocG("FLS")
 
         '--[ Initialisation
 
@@ -5032,16 +5032,19 @@ Module Mod_NoteCalcul
         Dim TABOK As String = "\T85"
         Dim TABInfo As String = "\T70"
         Dim strOK As String = ""
+        Dim lOK As Boolean
 
         '--> Initialisation
 
-        PrepareStyleCritere(CritereMax, strGras, strFinGras, strOK)
+        PrepareStyleCritere(CritereMax, strGras, strFinGras, strOK, lok)
 
         '--> Affichage
 
         AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
                     Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 3, 2, False) &
-                    strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & strRacineELU & "_" & CStr(iCombiM + 1) & ")" & strGras & TABOK & strOK & strFinGras)
+                    strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & strRacineELU & "_" & CStr(iCombiM + 1) & ")" & strGras & TABOK & strFinGras & "\BAL")
+
+        AfficheBalise(lOK)
 
     End Sub
 
@@ -5064,20 +5067,23 @@ Module Mod_NoteCalcul
         Dim TABInfo As String = "\T70"
         Dim strOK As String = ""
         Dim Valeur As Decimal = Critere.CritereMax
+        Dim lOK As Boolean
 
         '--> Initialisation
 
-        PrepareStyleCritere(Valeur, strGras, strFinGras, strOK)
+        PrepareStyleCritere(Valeur, strGras, strFinGras, strOK, lOK)
 
         '--> Affichage
 
         AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
                     Symbol & TABEGAL & GetStringInUnit(Valeur, Enu_TypeVariable.SansType, 3, 2, False) &
-                    strFinGras & TABInfo & "(S" & CStr(Critere.iNodeM + 1) & "/" & strRacineELU & "_" & CStr(Critere.iCombiM + 1) & ")" & strGras & TABOK & strOK & strFinGras)
+                    strFinGras & TABInfo & "(S" & CStr(Critere.iNodeM + 1) & "/" & strRacineELU & "_" & CStr(Critere.iCombiM + 1) & ")" & strGras & TABOK & strFinGras & "\BAL")
+
+        AfficheBalise(lOK)
 
     End Sub
 
-    Private Sub PrepareStyleCritere(Valeur As Decimal, ByRef strGras As String, ByRef strFinGras As String, ByRef strOK As String)
+    Private Sub PrepareStyleCritere(Valeur As Decimal, ByRef strGras As String, ByRef strFinGras As String, ByRef strOK As String, ByRef lOK As Boolean)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -5087,16 +5093,19 @@ Module Mod_NoteCalcul
         '   strGras     [E] :
         '   strFinGras  [E] :   Paramètres pour mixe en forme (en gras si non satisfait)
         '   strOK       [E] :   Conclusion sur le critere
+        '   
         '-------------------------------------------------------------------------------------------
 
         If IsGreater(Valeur, 1) Then
             strGras = "\G"
             strFinGras = "\g"
             strOK = ">1   NS"
+            lOK = False
         Else
             strGras = ""
             strFinGras = ""
             strOK = "<= 1  S"
+            lOK = True
         End If
 
     End Sub
@@ -6204,6 +6213,7 @@ Module Mod_NoteCalcul
         Dim TABInfo As String = "\T70"
         Dim strOK As String
         Dim infoM As String
+        Dim lOK As Boolean = False
 
         '--> Initialisation
 
@@ -6217,11 +6227,13 @@ Module Mod_NoteCalcul
             strGras = ""
             strFinGras = ""
             strOK = "S"
+            lOK = True
         End If
 
         AddLigneNDC(TABW2 & BlocELU("DEGREEOFSHEARCONNEC") & infoM & TABAFF & strGras &
                     Symbol & TABEGAL & GetStringInUnit(Eta, Enu_TypeVariable.SansType, 3, 2, False) &
-                    TABOK & strOK & strFinGras)
+                    TABOK & strFinGras & "\BAL")
+        AfficheBalise(lOK)
         AddLigneNDC(TABW2 & BlocELU("MINDEGREE") & TABAFF & strGras &
                     SymbolMin & TABEGAL & GetStringInUnit(EtaMin, Enu_TypeVariable.SansType, 3, 2, False) &
                     strFinGras)
@@ -6867,7 +6879,97 @@ Module Mod_NoteCalcul
         If MyBeam.Hivoss.lHivossMethod Then
             EditionMethodeHivoss(MyBeam)
         End If
+
+        '# Maîtrise de la fissuration
+
+        EditionMaitriseFissuration(MyBeam)
+
     End Sub
+
+    Private Sub EditionMaitriseFissuration(myBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des résultats pour la maîtrise de la fissuration
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lEdit As Boolean
+        Dim lMixte As Boolean = myBeam.lMixte
+        Dim lCond(2) As Boolean
+
+        '--( Initialisation
+
+        lCond(0) = (Not myBeam.lTraveeConsoleGauche) And myBeam.lDalleContinueGauche
+        lCond(1) = (Not myBeam.lTraveeConsoleDroite) And myBeam.lDalleContinueDroite
+
+        lCond(2) = myBeam.Param.lMaitriseFissuration
+
+        lEdit = lMixte And (lCond(0) Or lCond(1) Or lCond(2))
+
+        '--( Titre
+
+        If lEdit Then
+            SautePage()
+            AddTitreNdC(2, BlocELS("CONTROLCRACKING"))
+        End If
+
+        '--( Maitrise de la fissuration des dalles continues des poutres calculées isostatiques
+
+        If lCond(0) Or lCond(1) Then
+            EditionFissurationAppuiDalleContinue(myBeam)
+        End If
+
+        '--( Maitrise de la fissuration sur les appuis simples
+
+        If myBeam.Param.lMaitriseFissuration And ((Not myBeam.lTraveeConsoleGauche) Or (Not myBeam.lTraveeConsoleDroite)) Then
+
+        End If
+
+        '--( Maitrise de la fissuration sur les appuis continus
+
+        If myBeam.Param.lMaitriseFissuration And ((myBeam.lTraveeConsoleGauche) Or (myBeam.lTraveeConsoleDroite)) Then
+
+        End If
+    End Sub
+
+    Private Sub EditionFissurationAppuiDalleContinue(myBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des mesures de maitrise de la fissuration
+        '   pour les poutres sur appuis avec dalle continues
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lCond(1) As Boolean
+
+        '--( Initialisation
+
+        lCond(0) = (Not myBeam.lTraveeConsoleGauche) And myBeam.lDalleContinueGauche
+        lCond(1) = (Not myBeam.lTraveeConsoleDroite) And myBeam.lDalleContinueDroite
+
+        AddTitreNdC(3, BlocELS("CONTROLCRACKINGSIMPLES"))
+
+        If lCond(0) And lCond(1) Then
+            AddLigneNDC(TABW3 & BlocELS("BOTHSIMPLES"))
+        ElseIf lCond(0) Then
+            AddLigneNDC(TABW3 & BlocELS("LEFTSIMPLES"))
+        ElseIf lCond(1) Then
+            AddLigneNDC(TABW3 & BlocELS("RIGHTSIMPLES"))
+        End If
+        AddLigneNDC(TABW3 & BlocELS("REFSIMPLES"))
+
+        If (myBeam.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.UnPropped) Then
+            AddLigneNDC(TABW3 & BlocELS("REQUIREMENTUNPROPPED"))
+        Else
+            AddLigneNDC(TABW3 & BlocELS("REQUIREMENTPROPPED"))
+        End If
+
+    End Sub
+
 
     Private Sub EditionELSFleches(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
@@ -8641,5 +8743,23 @@ Module Mod_NoteCalcul
 
 #End Region
 
+
+#Region "   Gestion des balises pour les résultats "
+
+    Private Sub AfficheBalise(ByVal result As Boolean)
+
+        Const POS_BALISE As Integer = 90
+
+        '--> Image correct ou erreur par rapport à la condition
+        If result Then
+            MyNote.AddLigneInRapport("\IMF CORRECT " & CStr(POS_BALISE) & " 2 0 NoCadre") '--> Tic correct vert
+        Else
+            MyNote.AddLigneInRapport("\IMF ERROR " & CStr(POS_BALISE) & " 2 0 NoCadre")   '--> Erreur rouge
+        End If
+
+    End Sub
+
+
+#End Region
 
 End Module

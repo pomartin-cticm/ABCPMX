@@ -471,6 +471,14 @@ SPAN					= Span
 EIGENFREQUENCIES		= Eigen frequencies
 CASE_FULLINTERACTION	= Assuming full shear interaction
 CASE_PARTIALINTERACTION	= Taking in to account the slip of the connection
+CONTROLCRACKING			= Limitation of concrete cracking
+CONTROLCRACKINGSIMPLES	= Limitation of cracking at simple support
+LEFTSIMPLES				= The beam is designed as simply supported at the left end, although the slab is continuous.
+RIGHTSIMPLES			= The beam is designed as simply supported at the right end, although the slab is continuous.
+BOTHSIMPLES				= The beam is designed as simply supported at both ends, although the slab is continuous.
+REFSIMPLES				= According to EN 1994-1-1: 2005, 7.4.1 (4), longitudinal reinforcement should be provided to control the crack width
+REQUIREMENTUNPROPPED	= For unpropped beams, a minimal reinforcement ratio of 0.4 % is required
+REQUIREMENTPROPPED		= For propped beams, a minimal reinforcement ratio of 0.2 % is required
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

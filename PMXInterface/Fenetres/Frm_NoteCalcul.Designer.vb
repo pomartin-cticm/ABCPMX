@@ -74,6 +74,7 @@ Partial Class Frm_NoteCalcul
         Me.ToolStrip_Menu.SuspendLayout()
         Me.StatusStrip_InfoZoom.SuspendLayout()
         Me.Panel_NDC.SuspendLayout()
+        CType(Me.SplitContainer_NDC, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer_NDC.Panel1.SuspendLayout()
         Me.SplitContainer_NDC.Panel2.SuspendLayout()
         Me.SplitContainer_NDC.SuspendLayout()
@@ -91,8 +92,8 @@ Partial Class Frm_NoteCalcul
         Me.ToolStrip_Menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Btn_PageDeb, Me.Btn_PagePrec, Me.Btn_PageSuiv, Me.Btn_PageFin, Me.ToolStripSeparator2, Me.Btn_Dezoomer, Me.Btn_Zoomer, Me.ToolStripSeparator1, Me.Btn_Navigation, Me.ToolStripSeparator6, Me.Btn_Imprimer, Me.Btn_ToPDF, Me.ToolStripSeparator3, Me.Btn_Langue, Me.ToolStripSeparator4, Me.Btn_Sommaire, Me.ToolStripSeparator5, Me.Btn_Options, Me.Btn_Logo, Me.Btn_Correct, Me.Btn_Error})
         Me.ToolStrip_Menu.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Menu.Name = "ToolStrip_Menu"
-        Me.ToolStrip_Menu.Padding = New System.Windows.Forms.Padding(4, 0, 1, 0)
-        Me.ToolStrip_Menu.Size = New System.Drawing.Size(979, 31)
+        Me.ToolStrip_Menu.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
+        Me.ToolStrip_Menu.Size = New System.Drawing.Size(734, 31)
         Me.ToolStrip_Menu.TabIndex = 2
         Me.ToolStrip_Menu.Text = "ToolStrip_Menu"
         '
@@ -102,7 +103,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_PageDeb.Image = CType(resources.GetObject("Btn_PageDeb.Image"), System.Drawing.Image)
         Me.Btn_PageDeb.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_PageDeb.Name = "Btn_PageDeb"
-        Me.Btn_PageDeb.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_PageDeb.Size = New System.Drawing.Size(28, 28)
         Me.Btn_PageDeb.Text = "ToolStripButton1"
         '
         'Btn_PagePrec
@@ -111,7 +112,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_PagePrec.Image = CType(resources.GetObject("Btn_PagePrec.Image"), System.Drawing.Image)
         Me.Btn_PagePrec.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_PagePrec.Name = "Btn_PagePrec"
-        Me.Btn_PagePrec.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_PagePrec.Size = New System.Drawing.Size(28, 28)
         Me.Btn_PagePrec.Text = "ToolStripButton1"
         '
         'Btn_PageSuiv
@@ -120,7 +121,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_PageSuiv.Image = CType(resources.GetObject("Btn_PageSuiv.Image"), System.Drawing.Image)
         Me.Btn_PageSuiv.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_PageSuiv.Name = "Btn_PageSuiv"
-        Me.Btn_PageSuiv.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_PageSuiv.Size = New System.Drawing.Size(28, 28)
         Me.Btn_PageSuiv.Text = "ToolStripButton1"
         '
         'Btn_PageFin
@@ -129,7 +130,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_PageFin.Image = CType(resources.GetObject("Btn_PageFin.Image"), System.Drawing.Image)
         Me.Btn_PageFin.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_PageFin.Name = "Btn_PageFin"
-        Me.Btn_PageFin.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_PageFin.Size = New System.Drawing.Size(28, 28)
         Me.Btn_PageFin.Text = "ToolStripButton1"
         '
         'ToolStripSeparator2
@@ -143,7 +144,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Dezoomer.Image = CType(resources.GetObject("Btn_Dezoomer.Image"), System.Drawing.Image)
         Me.Btn_Dezoomer.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_Dezoomer.Name = "Btn_Dezoomer"
-        Me.Btn_Dezoomer.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_Dezoomer.Size = New System.Drawing.Size(28, 28)
         Me.Btn_Dezoomer.Text = "ToolStripButton2"
         '
         'Btn_Zoomer
@@ -152,7 +153,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Zoomer.Image = CType(resources.GetObject("Btn_Zoomer.Image"), System.Drawing.Image)
         Me.Btn_Zoomer.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_Zoomer.Name = "Btn_Zoomer"
-        Me.Btn_Zoomer.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_Zoomer.Size = New System.Drawing.Size(28, 28)
         Me.Btn_Zoomer.Text = "ToolStripButton1"
         '
         'ToolStripSeparator1
@@ -166,7 +167,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Navigation.Image = CType(resources.GetObject("Btn_Navigation.Image"), System.Drawing.Image)
         Me.Btn_Navigation.ImageTransparentColor = System.Drawing.Color.White
         Me.Btn_Navigation.Name = "Btn_Navigation"
-        Me.Btn_Navigation.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_Navigation.Size = New System.Drawing.Size(28, 28)
         Me.Btn_Navigation.Text = "ToolStripButton1"
         '
         'ToolStripSeparator6
@@ -180,7 +181,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Imprimer.Image = CType(resources.GetObject("Btn_Imprimer.Image"), System.Drawing.Image)
         Me.Btn_Imprimer.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_Imprimer.Name = "Btn_Imprimer"
-        Me.Btn_Imprimer.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_Imprimer.Size = New System.Drawing.Size(28, 28)
         Me.Btn_Imprimer.Text = "ToolStripButton1"
         '
         'Btn_ToPDF
@@ -189,7 +190,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_ToPDF.Image = CType(resources.GetObject("Btn_ToPDF.Image"), System.Drawing.Image)
         Me.Btn_ToPDF.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_ToPDF.Name = "Btn_ToPDF"
-        Me.Btn_ToPDF.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_ToPDF.Size = New System.Drawing.Size(28, 28)
         Me.Btn_ToPDF.Text = "Btn_ToPDF"
         '
         'ToolStripSeparator3
@@ -203,7 +204,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Langue.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me.Btn_Langue.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_Langue.Name = "Btn_Langue"
-        Me.Btn_Langue.Size = New System.Drawing.Size(99, 28)
+        Me.Btn_Langue.Size = New System.Drawing.Size(82, 28)
         Me.Btn_Langue.Text = "Btn_Langue"
         '
         'ToolStripSeparator4
@@ -217,7 +218,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Sommaire.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me.Btn_Sommaire.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_Sommaire.Name = "Btn_Sommaire"
-        Me.Btn_Sommaire.Size = New System.Drawing.Size(119, 28)
+        Me.Btn_Sommaire.Size = New System.Drawing.Size(97, 28)
         Me.Btn_Sommaire.Text = "Btn_Sommaire"
         '
         'ToolStripSeparator5
@@ -233,39 +234,39 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Options.Image = CType(resources.GetObject("Btn_Options.Image"), System.Drawing.Image)
         Me.Btn_Options.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_Options.Name = "Btn_Options"
-        Me.Btn_Options.Size = New System.Drawing.Size(103, 28)
+        Me.Btn_Options.Size = New System.Drawing.Size(85, 28)
         Me.Btn_Options.Text = "Btn_Options"
         '
         'Btn_UltraSynthese
         '
         Me.Btn_UltraSynthese.Name = "Btn_UltraSynthese"
-        Me.Btn_UltraSynthese.Size = New System.Drawing.Size(210, 26)
+        Me.Btn_UltraSynthese.Size = New System.Drawing.Size(169, 22)
         Me.Btn_UltraSynthese.Text = "Btn_UltraSynthese"
         Me.Btn_UltraSynthese.Visible = False
         '
         'Btn_Synthese
         '
         Me.Btn_Synthese.Name = "Btn_Synthese"
-        Me.Btn_Synthese.Size = New System.Drawing.Size(210, 26)
+        Me.Btn_Synthese.Size = New System.Drawing.Size(169, 22)
         Me.Btn_Synthese.Text = "Btn_Synthese"
         '
         'Btn_Complet
         '
         Me.Btn_Complet.Name = "Btn_Complet"
-        Me.Btn_Complet.Size = New System.Drawing.Size(210, 26)
+        Me.Btn_Complet.Size = New System.Drawing.Size(169, 22)
         Me.Btn_Complet.Text = "Btn_Complet"
         '
         'Btn_Detail
         '
         Me.Btn_Detail.Name = "Btn_Detail"
-        Me.Btn_Detail.Size = New System.Drawing.Size(210, 26)
+        Me.Btn_Detail.Size = New System.Drawing.Size(169, 22)
         Me.Btn_Detail.Text = "Btn_Detail"
         Me.Btn_Detail.Visible = False
         '
         'Btn_DessinPoutre
         '
         Me.Btn_DessinPoutre.Name = "Btn_DessinPoutre"
-        Me.Btn_DessinPoutre.Size = New System.Drawing.Size(210, 26)
+        Me.Btn_DessinPoutre.Size = New System.Drawing.Size(169, 22)
         Me.Btn_DessinPoutre.Text = "Btn_DessinPoutre"
         Me.Btn_DessinPoutre.Visible = False
         '
@@ -275,7 +276,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Logo.Image = CType(resources.GetObject("Btn_Logo.Image"), System.Drawing.Image)
         Me.Btn_Logo.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_Logo.Name = "Btn_Logo"
-        Me.Btn_Logo.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_Logo.Size = New System.Drawing.Size(28, 28)
         Me.Btn_Logo.Text = "ToolStripButton1"
         '
         'Btn_Correct
@@ -284,7 +285,7 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Correct.Image = CType(resources.GetObject("Btn_Correct.Image"), System.Drawing.Image)
         Me.Btn_Correct.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_Correct.Name = "Btn_Correct"
-        Me.Btn_Correct.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_Correct.Size = New System.Drawing.Size(28, 28)
         Me.Btn_Correct.Text = "ToolStripButton1"
         '
         'Btn_Error
@@ -293,17 +294,16 @@ Partial Class Frm_NoteCalcul
         Me.Btn_Error.Image = CType(resources.GetObject("Btn_Error.Image"), System.Drawing.Image)
         Me.Btn_Error.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.Btn_Error.Name = "Btn_Error"
-        Me.Btn_Error.Size = New System.Drawing.Size(29, 28)
+        Me.Btn_Error.Size = New System.Drawing.Size(28, 28)
         Me.Btn_Error.Text = "ToolStripButton2"
         '
         'StatusStrip_InfoZoom
         '
         Me.StatusStrip_InfoZoom.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.StatusStrip_InfoZoom.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusPage, Me.StatusBeam, Me.StatusLangue, Me.StatusDetail})
-        Me.StatusStrip_InfoZoom.Location = New System.Drawing.Point(0, 907)
+        Me.StatusStrip_InfoZoom.Location = New System.Drawing.Point(0, 737)
         Me.StatusStrip_InfoZoom.Name = "StatusStrip_InfoZoom"
-        Me.StatusStrip_InfoZoom.Padding = New System.Windows.Forms.Padding(1, 0, 19, 0)
-        Me.StatusStrip_InfoZoom.Size = New System.Drawing.Size(979, 30)
+        Me.StatusStrip_InfoZoom.Size = New System.Drawing.Size(734, 24)
         Me.StatusStrip_InfoZoom.SizingGrip = False
         Me.StatusStrip_InfoZoom.TabIndex = 8
         '
@@ -314,7 +314,7 @@ Partial Class Frm_NoteCalcul
             Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me.StatusPage.Name = "StatusPage"
         Me.StatusPage.Padding = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.StatusPage.Size = New System.Drawing.Size(89, 24)
+        Me.StatusPage.Size = New System.Drawing.Size(73, 19)
         Me.StatusPage.Text = "StatusPage"
         '
         'StatusBeam
@@ -324,7 +324,7 @@ Partial Class Frm_NoteCalcul
             Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me.StatusBeam.Name = "StatusBeam"
         Me.StatusBeam.Padding = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.StatusBeam.Size = New System.Drawing.Size(95, 24)
+        Me.StatusBeam.Size = New System.Drawing.Size(77, 19)
         Me.StatusBeam.Text = "StatusBeam"
         '
         'StatusLangue
@@ -334,7 +334,7 @@ Partial Class Frm_NoteCalcul
             Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me.StatusLangue.Name = "StatusLangue"
         Me.StatusLangue.Padding = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.StatusLangue.Size = New System.Drawing.Size(105, 24)
+        Me.StatusLangue.Size = New System.Drawing.Size(86, 19)
         Me.StatusLangue.Text = "StatusLangue"
         '
         'StatusDetail
@@ -344,7 +344,7 @@ Partial Class Frm_NoteCalcul
             Or System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom), System.Windows.Forms.ToolStripStatusLabelBorderSides)
         Me.StatusDetail.Name = "StatusDetail"
         Me.StatusDetail.Padding = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.StatusDetail.Size = New System.Drawing.Size(97, 24)
+        Me.StatusDetail.Size = New System.Drawing.Size(77, 19)
         Me.StatusDetail.Text = "StatusDetail"
         Me.StatusDetail.Visible = False
         '
@@ -357,7 +357,7 @@ Partial Class Frm_NoteCalcul
         Me.Panel_NDC.Location = New System.Drawing.Point(0, 31)
         Me.Panel_NDC.Margin = New System.Windows.Forms.Padding(0)
         Me.Panel_NDC.Name = "Panel_NDC"
-        Me.Panel_NDC.Size = New System.Drawing.Size(979, 876)
+        Me.Panel_NDC.Size = New System.Drawing.Size(734, 706)
         Me.Panel_NDC.TabIndex = 9
         '
         'SplitContainer_NDC
@@ -365,14 +365,13 @@ Partial Class Frm_NoteCalcul
         Me.SplitContainer_NDC.Dock = System.Windows.Forms.DockStyle.Fill
         Me.SplitContainer_NDC.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
         Me.SplitContainer_NDC.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer_NDC.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.SplitContainer_NDC.Name = "SplitContainer_NDC"
         '
         'SplitContainer_NDC.Panel1
         '
         Me.SplitContainer_NDC.Panel1.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer_NDC.Panel1.Controls.Add(Me.Panel_Nav)
-        Me.SplitContainer_NDC.Panel1.Padding = New System.Windows.Forms.Padding(7, 6, 7, 6)
+        Me.SplitContainer_NDC.Panel1.Padding = New System.Windows.Forms.Padding(5, 5, 5, 5)
         Me.SplitContainer_NDC.Panel1MinSize = 50
         '
         'SplitContainer_NDC.Panel2
@@ -380,9 +379,10 @@ Partial Class Frm_NoteCalcul
         Me.SplitContainer_NDC.Panel2.Controls.Add(Me.TableLayoutPanel_NDC)
         Me.SplitContainer_NDC.Panel2.Controls.Add(Me.VScrollBar_NDC)
         Me.SplitContainer_NDC.Panel2MinSize = 0
-        Me.SplitContainer_NDC.Size = New System.Drawing.Size(977, 874)
+        Me.SplitContainer_NDC.Size = New System.Drawing.Size(732, 704)
         Me.SplitContainer_NDC.SplitterDistance = 200
         Me.SplitContainer_NDC.SplitterIncrement = 5
+        Me.SplitContainer_NDC.SplitterWidth = 3
         Me.SplitContainer_NDC.TabIndex = 6
         Me.SplitContainer_NDC.TabStop = False
         '
@@ -392,10 +392,9 @@ Partial Class Frm_NoteCalcul
         Me.Panel_Nav.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Panel_Nav.Controls.Add(Me.TableLayoutPanel_Navigation)
         Me.Panel_Nav.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Panel_Nav.Location = New System.Drawing.Point(7, 6)
-        Me.Panel_Nav.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Panel_Nav.Location = New System.Drawing.Point(5, 5)
         Me.Panel_Nav.Name = "Panel_Nav"
-        Me.Panel_Nav.Size = New System.Drawing.Size(186, 862)
+        Me.Panel_Nav.Size = New System.Drawing.Size(190, 694)
         Me.Panel_Nav.TabIndex = 5
         '
         'TableLayoutPanel_Navigation
@@ -403,18 +402,17 @@ Partial Class Frm_NoteCalcul
         Me.TableLayoutPanel_Navigation.BackColor = System.Drawing.Color.Transparent
         Me.TableLayoutPanel_Navigation.ColumnCount = 2
         Me.TableLayoutPanel_Navigation.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel_Navigation.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35.0!))
+        Me.TableLayoutPanel_Navigation.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
         Me.TableLayoutPanel_Navigation.Controls.Add(Me.TreeView_NDC, 0, 1)
         Me.TableLayoutPanel_Navigation.Controls.Add(Me.Button_FermerNav, 1, 0)
         Me.TableLayoutPanel_Navigation.Controls.Add(Me.Label_Navigation, 0, 0)
         Me.TableLayoutPanel_Navigation.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel_Navigation.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel_Navigation.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TableLayoutPanel_Navigation.Name = "TableLayoutPanel_Navigation"
         Me.TableLayoutPanel_Navigation.RowCount = 2
-        Me.TableLayoutPanel_Navigation.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32.0!))
+        Me.TableLayoutPanel_Navigation.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 26.0!))
         Me.TableLayoutPanel_Navigation.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel_Navigation.Size = New System.Drawing.Size(184, 860)
+        Me.TableLayoutPanel_Navigation.Size = New System.Drawing.Size(188, 692)
         Me.TableLayoutPanel_Navigation.TabIndex = 4
         '
         'TreeView_NDC
@@ -423,10 +421,10 @@ Partial Class Frm_NoteCalcul
         Me.TreeView_NDC.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.TableLayoutPanel_Navigation.SetColumnSpan(Me.TreeView_NDC, 2)
         Me.TreeView_NDC.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TreeView_NDC.Location = New System.Drawing.Point(0, 32)
+        Me.TreeView_NDC.Location = New System.Drawing.Point(0, 26)
         Me.TreeView_NDC.Margin = New System.Windows.Forms.Padding(0)
         Me.TreeView_NDC.Name = "TreeView_NDC"
-        Me.TreeView_NDC.Size = New System.Drawing.Size(184, 828)
+        Me.TreeView_NDC.Size = New System.Drawing.Size(188, 666)
         Me.TreeView_NDC.TabIndex = 2
         Me.TreeView_NDC.TabStop = False
         '
@@ -434,10 +432,10 @@ Partial Class Frm_NoteCalcul
         '
         Me.Button_FermerNav.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button_FermerNav.Image = CType(resources.GetObject("Button_FermerNav.Image"), System.Drawing.Image)
-        Me.Button_FermerNav.Location = New System.Drawing.Point(152, 2)
-        Me.Button_FermerNav.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.Button_FermerNav.Location = New System.Drawing.Point(164, 2)
+        Me.Button_FermerNav.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Button_FermerNav.Name = "Button_FermerNav"
-        Me.Button_FermerNav.Size = New System.Drawing.Size(29, 28)
+        Me.Button_FermerNav.Size = New System.Drawing.Size(22, 22)
         Me.Button_FermerNav.TabIndex = 1
         Me.Button_FermerNav.UseVisualStyleBackColor = True
         '
@@ -447,10 +445,10 @@ Partial Class Frm_NoteCalcul
         Me.Label_Navigation.BackColor = System.Drawing.SystemColors.ControlDark
         Me.Label_Navigation.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.Label_Navigation.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label_Navigation.Location = New System.Drawing.Point(4, 4)
-        Me.Label_Navigation.Margin = New System.Windows.Forms.Padding(4, 4, 1, 4)
+        Me.Label_Navigation.Location = New System.Drawing.Point(3, 3)
+        Me.Label_Navigation.Margin = New System.Windows.Forms.Padding(3, 3, 1, 3)
         Me.Label_Navigation.Name = "Label_Navigation"
-        Me.Label_Navigation.Size = New System.Drawing.Size(144, 24)
+        Me.Label_Navigation.Size = New System.Drawing.Size(158, 20)
         Me.Label_Navigation.TabIndex = 5
         Me.Label_Navigation.Text = "Label_Navigation"
         Me.Label_Navigation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -465,13 +463,12 @@ Partial Class Frm_NoteCalcul
         Me.TableLayoutPanel_NDC.Controls.Add(Me.img_Note, 1, 0)
         Me.TableLayoutPanel_NDC.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel_NDC.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel_NDC.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TableLayoutPanel_NDC.Name = "TableLayoutPanel_NDC"
         Me.TableLayoutPanel_NDC.RowCount = 2
-        Me.TableLayoutPanel_NDC.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
+        Me.TableLayoutPanel_NDC.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23.0!))
         Me.TableLayoutPanel_NDC.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel_NDC.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-        Me.TableLayoutPanel_NDC.Size = New System.Drawing.Size(759, 874)
+        Me.TableLayoutPanel_NDC.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TableLayoutPanel_NDC.Size = New System.Drawing.Size(515, 704)
         Me.TableLayoutPanel_NDC.TabIndex = 5
         '
         'Button_OuvrirNav
@@ -479,10 +476,10 @@ Partial Class Frm_NoteCalcul
         Me.Button_OuvrirNav.BackColor = System.Drawing.Color.White
         Me.Button_OuvrirNav.Dock = System.Windows.Forms.DockStyle.Left
         Me.Button_OuvrirNav.Image = CType(resources.GetObject("Button_OuvrirNav.Image"), System.Drawing.Image)
-        Me.Button_OuvrirNav.Location = New System.Drawing.Point(3, 2)
-        Me.Button_OuvrirNav.Margin = New System.Windows.Forms.Padding(3, 2, 3, 2)
+        Me.Button_OuvrirNav.Location = New System.Drawing.Point(2, 2)
+        Me.Button_OuvrirNav.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
         Me.Button_OuvrirNav.Name = "Button_OuvrirNav"
-        Me.Button_OuvrirNav.Size = New System.Drawing.Size(29, 24)
+        Me.Button_OuvrirNav.Size = New System.Drawing.Size(22, 19)
         Me.Button_OuvrirNav.TabIndex = 1
         Me.Button_OuvrirNav.UseVisualStyleBackColor = False
         '
@@ -491,11 +488,11 @@ Partial Class Frm_NoteCalcul
         Me.img_Note.BackColor = System.Drawing.Color.White
         Me.img_Note.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.img_Note.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.img_Note.Location = New System.Drawing.Point(151, 0)
+        Me.img_Note.Location = New System.Drawing.Point(103, 0)
         Me.img_Note.Margin = New System.Windows.Forms.Padding(0)
         Me.img_Note.Name = "img_Note"
         Me.TableLayoutPanel_NDC.SetRowSpan(Me.img_Note, 2)
-        Me.img_Note.Size = New System.Drawing.Size(455, 874)
+        Me.img_Note.Size = New System.Drawing.Size(309, 704)
         Me.img_Note.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.img_Note.TabIndex = 1
         Me.img_Note.TabStop = False
@@ -503,9 +500,9 @@ Partial Class Frm_NoteCalcul
         'VScrollBar_NDC
         '
         Me.VScrollBar_NDC.Dock = System.Windows.Forms.DockStyle.Right
-        Me.VScrollBar_NDC.Location = New System.Drawing.Point(759, 0)
+        Me.VScrollBar_NDC.Location = New System.Drawing.Point(515, 0)
         Me.VScrollBar_NDC.Name = "VScrollBar_NDC"
-        Me.VScrollBar_NDC.Size = New System.Drawing.Size(14, 874)
+        Me.VScrollBar_NDC.Size = New System.Drawing.Size(14, 704)
         Me.VScrollBar_NDC.TabIndex = 2
         Me.VScrollBar_NDC.TabStop = True
         '
@@ -514,14 +511,14 @@ Partial Class Frm_NoteCalcul
         Me.TrackBar_Zoom.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.TrackBar_Zoom.BackColor = System.Drawing.SystemColors.Control
         Me.TrackBar_Zoom.LargeChange = 20
-        Me.TrackBar_Zoom.Location = New System.Drawing.Point(869, 910)
+        Me.TrackBar_Zoom.Location = New System.Drawing.Point(652, 739)
         Me.TrackBar_Zoom.Margin = New System.Windows.Forms.Padding(0)
         Me.TrackBar_Zoom.Maximum = 100
-        Me.TrackBar_Zoom.MaximumSize = New System.Drawing.Size(107, 25)
-        Me.TrackBar_Zoom.MinimumSize = New System.Drawing.Size(107, 25)
+        Me.TrackBar_Zoom.MaximumSize = New System.Drawing.Size(80, 20)
+        Me.TrackBar_Zoom.MinimumSize = New System.Drawing.Size(80, 20)
         Me.TrackBar_Zoom.Name = "TrackBar_Zoom"
         Me.TrackBar_Zoom.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.TrackBar_Zoom.Size = New System.Drawing.Size(107, 56)
+        Me.TrackBar_Zoom.Size = New System.Drawing.Size(80, 45)
         Me.TrackBar_Zoom.SmallChange = 10
         Me.TrackBar_Zoom.TabIndex = 11
         Me.TrackBar_Zoom.TickFrequency = 20
@@ -532,10 +529,10 @@ Partial Class Frm_NoteCalcul
         '
         Me.lbl_Zoom.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_Zoom.AutoEllipsis = True
-        Me.lbl_Zoom.Location = New System.Drawing.Point(793, 914)
+        Me.lbl_Zoom.Location = New System.Drawing.Point(595, 743)
         Me.lbl_Zoom.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Zoom.Name = "lbl_Zoom"
-        Me.lbl_Zoom.Size = New System.Drawing.Size(76, 16)
+        Me.lbl_Zoom.Size = New System.Drawing.Size(57, 13)
         Me.lbl_Zoom.TabIndex = 10
         Me.lbl_Zoom.Text = "lbl_Zoom"
         Me.lbl_Zoom.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -549,9 +546,9 @@ Partial Class Frm_NoteCalcul
         '
         'Frm_NoteCalcul
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(979, 937)
+        Me.ClientSize = New System.Drawing.Size(734, 761)
         Me.Controls.Add(Me.TrackBar_Zoom)
         Me.Controls.Add(Me.lbl_Zoom)
         Me.Controls.Add(Me.Panel_NDC)
@@ -559,9 +556,8 @@ Partial Class Frm_NoteCalcul
         Me.Controls.Add(Me.ToolStrip_Menu)
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.KeyPreview = True
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MinimizeBox = False
-        Me.MinimumSize = New System.Drawing.Size(594, 666)
+        Me.MinimumSize = New System.Drawing.Size(450, 548)
         Me.Name = "Frm_NoteCalcul"
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
@@ -573,6 +569,7 @@ Partial Class Frm_NoteCalcul
         Me.Panel_NDC.ResumeLayout(False)
         Me.SplitContainer_NDC.Panel1.ResumeLayout(False)
         Me.SplitContainer_NDC.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer_NDC, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer_NDC.ResumeLayout(False)
         Me.Panel_Nav.ResumeLayout(False)
         Me.TableLayoutPanel_Navigation.ResumeLayout(False)
