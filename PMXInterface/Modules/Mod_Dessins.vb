@@ -354,16 +354,16 @@ Public Module Mod_Dessins
         If MyPoutre.lMixte And lCotation Then
             'Cotation
             'If lZoomPlus Then
-            '    xo_cotes = -MyPoutre.Section.ProfilA.Bfs / 2 - dCar / 4
+            '    xo_cotes = -myBeam.Section.ProfilA.Bfs / 2 - dCar / 4
             'Else
-            '    xo_cotes = -MyPoutre.Section.ProfilA.Bfs / 2 - dCar / 2
+            '    xo_cotes = -myBeam.Section.ProfilA.Bfs / 2 - dCar / 2
             'End If
             'xe_cotes = xo_cotes
 
             'If lZoomPlus Then
-            '    yo_cotes = zREF - MyPoutre.Section.ProfilA.Tfs - dCar / 4
+            '    yo_cotes = zREF - myBeam.Section.ProfilA.Tfs - dCar / 4
             'Else
-            '    yo_cotes = zREF - MyPoutre.Section.ProfilA.Tfs - dCar / 4
+            '    yo_cotes = zREF - myBeam.Section.ProfilA.Tfs - dCar / 4
             'End If
 
             xo_cotes = 0
@@ -3442,7 +3442,7 @@ Public Module Mod_Dessins
 
         '--> Initialisation des paramètres d'affichage
 
-        'If MyPoutre.lIntermediaire Then
+        'If myBeam.lIntermediaire Then
         xMin = -MyPoutre.EntraxeD1 - LargeurBord
         xMax = MyPoutre.EntraxeD2 + LargeurBord
         'End If
@@ -3450,7 +3450,7 @@ Public Module Mod_Dessins
         yMin = -dCar - hMaxProfile
         yMax = MyPoutre.Dalle.zTop + dCar
 
-        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        'If myBeam.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
         '--> Préparation des Pinceaux utilisés dans le dessin
@@ -3507,6 +3507,21 @@ Public Module Mod_Dessins
         Dim lEnrob As Boolean = MyPoutre.Section.lEnrobage
         Const ZREF As Decimal = 0
 
+        '--> Affichage de la dalle béton
+
+        If MyPoutre.lIntermediaire Then
+            xo = -1.5 * MyPoutre.EntraxeD1
+            xe = 1.5 * MyPoutre.EntraxeD2
+        Else
+            xo = -MyPoutre.EntraxeD1
+            xe = 1.5 * MyPoutre.EntraxeD2
+        End If
+
+        yo = 0
+        ye = MyPoutre.Dalle.t_d
+
+        AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
+
         '--> Affichage de la section principale
 
         '# Dessin de béton d'enrobage
@@ -3517,7 +3532,6 @@ Public Module Mod_Dessins
         '# Dessin de la section acier
 
         DessinProfileMetal(MyGr, MyPoutre.Section.ProfilA, myBrushPSel, MyParaff1, ZREF)
-
 
         '--> Affichage de la voisine à gauche
 
@@ -3545,20 +3559,20 @@ Public Module Mod_Dessins
 
         DessinProfileMetal(MyGr, MyPoutre.Section.ProfilA, myBrushP, MyParaff1, ZREF, MyPoutre.EntraxeD2)
 
-        '--> Affichage de la dalle béton
+        ''--> Affichage de la dalle béton
 
-        If MyPoutre.lIntermediaire Then
-            xo = -1.5 * MyPoutre.EntraxeD1
-            xe = 1.5 * MyPoutre.EntraxeD2
-        Else
-            xo = -MyPoutre.EntraxeD1
-            xe = 1.5 * MyPoutre.EntraxeD2
-        End If
+        'If myBeam.lIntermediaire Then
+        '    xo = -1.5 * myBeam.EntraxeD1
+        '    xe = 1.5 * myBeam.EntraxeD2
+        'Else
+        '    xo = -myBeam.EntraxeD1
+        '    xe = 1.5 * myBeam.EntraxeD2
+        'End If
 
-        yo = 0
-        ye = MyPoutre.Dalle.t_d
+        'yo = 0
+        'ye = myBeam.Dalle.t_d
 
-        AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
+        'AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
 
 
         '--> Représentation des trémies
@@ -3705,17 +3719,17 @@ Public Module Mod_Dessins
 
 #Region " Dessins pour la portée (FRM_PORTEE) "
 
-    Public Sub DessinFrmPortee(MyGr As Graphics, MyPoutre As cls_Poutre,
-                                ByVal pWi As Decimal, ByVal pHi As Decimal,
-                                kAdjust As Double, iSelect As Integer, lCote As Boolean,
-                                ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+    Public Sub DessinFrmPortee(MyGr As Graphics, myBeam As cls_Poutre,
+                               ByVal pWi As Decimal, ByVal pHi As Decimal,
+                               kAdjust As Double, iSelect As Integer, lCote As Boolean,
+                               ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '------------------------------------------------------------------------------------------------------------------
         '   02/06/23 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
         '   Affichage des travées dans la fenêtre portées
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   MyPoutre    [E] :   Poutre à dessiner
+        '   myBeam      [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   iSelect     [E] :   Indique quel est la travée sélectionnée
@@ -3739,13 +3753,13 @@ Public Module Mod_Dessins
         ' Dim MyBrushA As New SolidBrush(Color.LightGray)
         Dim MyBrushA As New SolidBrush(CouleurProfile)
         Dim MyPen As New Pen(Color.Black, 1)
+        Dim MyPenC As New Pen(Color.DarkGray, 1)
         Dim MyColor As Color
         Dim CouleurBeton As Color = CouleurBetonNormal
         Dim myBrushB As Brush
         If xLeft <> 0 Or yTop <> 0 Then
             myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.Gray, Color.Gray)
         Else
-            'myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, Color.Gray)
             myBrushB = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurDalle, Color.Gray)
         End If
         Const lAffSymbol As Boolean = False
@@ -3753,13 +3767,14 @@ Public Module Mod_Dessins
         Dim MyFontNormal As Font = FontBase
         Dim lTotal As Boolean = False
         Dim lContour As Boolean = lCONTOURCOTE
+        Dim lMixte As Boolean = myBeam.lMixte
 
         '--> Initialisations
 
-        LongueurPoutre = MyPoutre.LongueurTotale
-        HauteurPoutre = MyPoutre.HauteurTotale
-        LongueurDalle = MyPoutre.LongueurTotale
-        HauteurDalle = MyPoutre.Dalle.t_d
+        LongueurPoutre = myBeam.LongueurTotale
+        HauteurPoutre = myBeam.HauteurTotale
+        LongueurDalle = myBeam.LongueurTotale
+        HauteurDalle = myBeam.Dalle.t_d
         dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = HauteurPoutre / 2
 
@@ -3770,7 +3785,7 @@ Public Module Mod_Dessins
         yMin = -dCar - dCarApp
         yMax = HauteurPoutre + dCar
 
-        If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        If myBeam.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
         '--> Représentation de la poutre 
@@ -3779,24 +3794,24 @@ Public Module Mod_Dessins
         yo = 0
         ye = HauteurPoutre
 
-        For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
+        For i As Integer = myBeam.IndicePremiereTravee To myBeam.IndiceDerniereTravee
 
             xo = xe
-            xe = xo + MyPoutre.LongueurTravee(i)
+            xe = xo + myBeam.LongueurTravee(i)
 
             AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
         Next
 
         '--> Représentation des appuis
 
-        For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
+        For i As Integer = 1 To myBeam.NombreTraveesDeuxAppuis
 
-            xo = MyPoutre.xPositionAppui(True, i)
+            xo = myBeam.xPositionAppui(True, i)
             DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
         Next
 
-        xo = MyPoutre.xPositionAppui(False, MyPoutre.NombreTraveesDeuxAppuis)
+        xo = myBeam.xPositionAppui(False, myBeam.NombreTraveesDeuxAppuis)
         DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
         '--> Représentation de la dalle
@@ -3809,6 +3824,31 @@ Public Module Mod_Dessins
 
         AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
 
+        '--> Représentation de la continuité de dalle
+
+        If lMixte Then
+            If (Not myBeam.lTraveeConsoleGauche) And myBeam.lDalleContinueGauche Then
+
+                xo = 0
+                xe = -dCarApp / 2
+
+                AddLigne(MyGr, MyPenC, xo, yo, xe, yo, MyParAff)
+                AddLigne(MyGr, MyPenC, xo, ye, xe, ye, MyParAff)
+
+            End If
+
+            If (Not myBeam.lTraveeConsoleDroite) And myBeam.lDalleContinueDroite Then
+
+                xo = LongueurDalle
+                xe = LongueurDalle + dCarApp / 2
+
+                AddLigne(MyGr, MyPenC, xo, yo, xe, yo, MyParAff)
+                AddLigne(MyGr, MyPenC, xo, ye, xe, ye, MyParAff)
+
+            End If
+
+        End If
+
         '=== COTES =======================================================
 
         If lCote Then
@@ -3820,17 +3860,17 @@ Public Module Mod_Dessins
 
             ' Travée console gauche
 
-            If MyPoutre.lTraveeConsoleGauche Then
+            If myBeam.lTraveeConsoleGauche Then
 
                 MyColor = StyleCouleur(iSelect, 0)
                 MyPen.Color = MyColor
 
                 xo = 0
-                xe = MyPoutre.LongueurTravee(0)
+                xe = myBeam.LongueurTravee(0)
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "Lg" Else Chaine = GetStringInUnit(MyPoutre.LongueurTravee(0), Enu_TypeVariable.Longueur, 4, 2, False)
+                If lAffSymbol Then Chaine = "Lg" Else Chaine = GetStringInUnit(myBeam.LongueurTravee(0), Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 lTotal = True
@@ -3838,34 +3878,34 @@ Public Module Mod_Dessins
 
             ' Travées principales
 
-            For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
+            For i As Integer = 1 To myBeam.NombreTraveesDeuxAppuis
 
                 MyColor = StyleCouleur(iSelect, i)
                 MyPen.Color = MyColor
 
                 xo = xe
-                xe += MyPoutre.LongueurTravee(i)
+                xe += myBeam.LongueurTravee(i)
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(MyPoutre.LongueurTravee(i), Enu_TypeVariable.Longueur, 4, 2, False)
+                If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(myBeam.LongueurTravee(i), Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             Next
 
             ' Travée console droite
 
-            If MyPoutre.lTraveeConsoleDroite Then
+            If myBeam.lTraveeConsoleDroite Then
 
                 MyColor = StyleCouleur(iSelect, 99)
                 MyPen.Color = MyColor
 
                 xo = xe
-                xe += MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite)
+                xe += myBeam.LongueurTravee(myBeam.IndiceTraveeConsoleDroite)
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "Ld" Else Chaine = GetStringInUnit(MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur, 4, 2, False)
+                If lAffSymbol Then Chaine = "Ld" Else Chaine = GetStringInUnit(myBeam.LongueurTravee(myBeam.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 lTotal = True
@@ -3888,6 +3928,8 @@ Public Module Mod_Dessins
 
         End If
 
+        MyPen.Dispose()
+        MyPenC.Dispose()
     End Sub
 
     Public Sub DessineAppui(MyGr As Graphics, xPos As Decimal, dCar As Decimal, MyParAff As Struc_Affichage, Optional yPos As Decimal = 0)
@@ -4132,7 +4174,7 @@ Public Module Mod_Dessins
         '   Affichage des travées dans la fenêtre portées
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   MyPoutre    [E] :   Poutre à dessiner
+        '   myBeam    [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   indTravee   [E] :   Indique quel est la travée sélectionnée
@@ -4255,7 +4297,7 @@ Public Module Mod_Dessins
                 Dim yCote As Decimal = -LargeurSemelle / 2 - dCar
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
-                'If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(MyPoutre.Longueur_Zone(indTravee, i), Enu_TypeVariable.Longueur)
+                'If lAffSymbol Then Chaine = "L" Else Chaine = GetStringNoUnit(myBeam.Longueur_Zone(indTravee, i), Enu_TypeVariable.Longueur)
                 If lAffSymbol Then Chaine = "L" Else Chaine = GetStringInUnit(MyPoutre.LongueurZone(indTravee, i), Enu_TypeVariable.Longueur, 4, 2, False)
                 AddTexteFond(MyGr, New SolidBrush(Color.Black), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
@@ -4263,7 +4305,7 @@ Public Module Mod_Dessins
                 yCote = LargeurSemelle / 2 + dCar
 
                 AddFleche(MyGr, New Pen(Color.Red), xo, yCote, xe, yCote, MyParAff, True, True)
-                'Chaine = GetStringNoUnit(Math.Floor(MyPoutre.ZoneLongueur(indTravee, i) / MyPoutre.ZoneEspacement(indTravee, i)), Enu_TypeVariable.SansType) & " " & strStuds
+                'Chaine = GetStringNoUnit(Math.Floor(myBeam.ZoneLongueur(indTravee, i) / myBeam.ZoneEspacement(indTravee, i)), Enu_TypeVariable.SansType) & " " & strStuds
                 Chaine = GetStringNoUnit(MyPoutre.NombreGoujonTotParZone(indTravee, i), Enu_TypeVariable.SansType) & " " & strStuds
                 AddTexteFond(MyGr, New SolidBrush(Color.Red), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
             Next
@@ -4287,7 +4329,7 @@ Public Module Mod_Dessins
         '   Affichage des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   MyPoutre    [E] :   Poutre à dessiner
+        '   myBeam    [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   xSouris     [E] :   Abscisse de la souris dans l'image
@@ -4339,8 +4381,8 @@ Public Module Mod_Dessins
         HauteurPoutre = MyPoutre.HauteurTotale
         EpaisseurSemelle = HauteurPoutre / 10
         RayonConge = EpaisseurSemelle / 2
-        'LongueurDalle = MyPoutre.LongueurTotale
-        'HauteurDalle = MyPoutre.Dalle.t_d
+        'LongueurDalle = myBeam.LongueurTotale
+        'HauteurDalle = myBeam.Dalle.t_d
         dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = HauteurPoutre / 4
 
@@ -4370,7 +4412,7 @@ Public Module Mod_Dessins
         yMin = -dCar - dCarApp
         yMax = HauteurPoutre + dCar
 
-        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        'If myBeam.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
         EpaisseurSemelleDessin = Math.Abs(YEcran(MyParAff, EpaisseurSemelle) - YEcran(MyParAff, 0)) 'Pas utile pour la suite du module, c'est uniquement pour enregistrer cette donnée pour être réutilisée dans le Frm_Maintien
@@ -4460,23 +4502,23 @@ Public Module Mod_Dessins
             DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
             'If i = 1 Then
-            '    If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+            '    If myBeam.TypeMaintien(i) = myBeam.EnuTypeMaintiensPoutre.FullyRestrained Then
             '        xo += EpaisseurSemelle / 2
             '    End If
 
-            '    If MyPoutre.lTraveeConsoleGauche Then
-            '        If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+            '    If myBeam.lTraveeConsoleGauche Then
+            '        If myBeam.TypeMaintien(i - 1) = myBeam.EnuTypeMaintiensPoutre.FullyRestrained Then
             '            xo -= EpaisseurSemelle / 2
             '        End If
             '    End If
 
-            'ElseIf i = MyPoutre.IndiceTraveeConsoleDroite Then
-            '    If MyPoutre.TypeMaintien(i - 1) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+            'ElseIf i = myBeam.IndiceTraveeConsoleDroite Then
+            '    If myBeam.TypeMaintien(i - 1) = myBeam.EnuTypeMaintiensPoutre.FullyRestrained Then
             '        xo -= EpaisseurSemelle / 2
             '    End If
 
-            '    If MyPoutre.lTraveeConsoleDroite Then
-            '        If MyPoutre.TypeMaintien(i) = MyPoutre.EnuTypeMaintiensPoutre.FullyRestrained Then
+            '    If myBeam.lTraveeConsoleDroite Then
+            '        If myBeam.TypeMaintien(i) = myBeam.EnuTypeMaintiensPoutre.FullyRestrained Then
             '            xo += EpaisseurSemelle / 2
             '        End If
             '    End If
@@ -4823,7 +4865,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   Gere le click down de la souris dans le dessin
         '------------------------------------------------------------------------------------------------------------------
-        '   MyPoutre    [E] :   Poutre à dessiner
+        '   myBeam    [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   xSouris     [E] :   Abscisse de la souris dans l'image
@@ -4854,8 +4896,8 @@ Public Module Mod_Dessins
         HauteurPoutre = MyPoutre.HauteurTotale
         EpaisseurSemelle = HauteurPoutre / 10
         RayonConge = EpaisseurSemelle / 2
-        'LongueurDalle = MyPoutre.LongueurTotale
-        'HauteurDalle = MyPoutre.Dalle.t_d
+        'LongueurDalle = myBeam.LongueurTotale
+        'HauteurDalle = myBeam.Dalle.t_d
         dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = HauteurPoutre / 2
 
@@ -4885,7 +4927,7 @@ Public Module Mod_Dessins
         yMin = -dCar - dCarApp
         yMax = HauteurPoutre + dCar
 
-        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        'If myBeam.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
 
@@ -4948,7 +4990,7 @@ Public Module Mod_Dessins
         '------------------------------------------------------------------------------------------------------------------
         '   Affichage des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
-        '   MyPoutre    [E] :   Poutre à dessiner
+        '   myBeam    [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   xSouris     [E] :   Abscisse de la souris dans l'image
@@ -4981,8 +5023,8 @@ Public Module Mod_Dessins
             HauteurPoutre = MyPoutre.HauteurTotale
             EpaisseurSemelle = HauteurPoutre / 10
             RayonConge = EpaisseurSemelle / 2
-            'LongueurDalle = MyPoutre.LongueurTotale
-            'HauteurDalle = MyPoutre.Dalle.t_d
+            'LongueurDalle = myBeam.LongueurTotale
+            'HauteurDalle = myBeam.Dalle.t_d
             dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
             dCarApp = HauteurPoutre / 2
 
@@ -5012,7 +5054,7 @@ Public Module Mod_Dessins
             yMin = -dCar - dCarApp
             yMax = HauteurPoutre + dCar
 
-            'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+            'If myBeam.NbTravees > 1 Then yMin -= dCar
             ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
 
@@ -5351,7 +5393,7 @@ Public Module Mod_Dessins
         '   Affichage des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   MyPoutre    [E] :   Poutre à dessiner
+        '   myBeam    [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   xSouris     [E] :   Abscisse de la souris dans l'image
@@ -5419,7 +5461,7 @@ Public Module Mod_Dessins
 
         '    Case 99
         '        xMin = LongueurConsoleGauche
-        '        For i As Integer = 1 To MyPoutre.IndiceDerniereTravee - 1
+        '        For i As Integer = 1 To myBeam.IndiceDerniereTravee - 1
         '            xMin += LongueurTravee
         '        Next
         '        xMax = xMin + LongueurConsoleDroite
@@ -5447,7 +5489,7 @@ Public Module Mod_Dessins
         yMin = dCarApp + 0.6 * dCar
         yMax = HauteurPoutre + dCar
 
-        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        'If myBeam.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
         '--> Représentation de la poutre 
@@ -5504,7 +5546,7 @@ Public Module Mod_Dessins
             AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
         End If
 
-        'If traveeEnCours = MyPoutre.IndiceTraveeConsoleDroite Then
+        'If traveeEnCours = myBeam.IndiceTraveeConsoleDroite Then
         '    AddRectanglePlein(MyGr, MyBrushSelectTravee, MyPenContour, xo - dCar, yo - dCar, xe + dCar, ye + dCar, MyParAff, True, True)
         'End If
 
@@ -5648,7 +5690,7 @@ Public Module Mod_Dessins
         '   Affichage des travées dans la fenêtre maintiens latéraux
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   MyPoutre    [E] :   Poutre à dessiner
+        '   myBeam    [E] :   Poutre à dessiner
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   xSouris     [E] :   Abscisse de la souris dans l'image
@@ -5724,7 +5766,7 @@ Public Module Mod_Dessins
         yMin = -MyPoutre.Section.ProfilA.ha - dCarApp '- 0.6 * dCar
         yMax = MyPoutre.Dalle.zTop + dCar
 
-        'If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        'If myBeam.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(vParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
         '--> Représentation de la poutre 
@@ -6338,7 +6380,7 @@ Public Module Mod_Dessins
 
 #Region "Dessin pour les cas de charges (FRM_PPCasDeCharge)"
 
-    'Public Sub DessineRDM(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
+    'Public Sub DessineRDM(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, myBeam As cls_Poutre,
     '                      iCas As Integer, lDef As Boolean, lMom As Boolean, lTranchant As Boolean, lNum As Boolean, lInertie As Boolean,
     '                      lChargement As Boolean, lEchLocal As Boolean, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
     Public Sub DessineRDM(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
@@ -6350,7 +6392,7 @@ Public Module Mod_Dessins
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
-        '   MyPoutre    [E] :   Poutre à dessiner
+        '   myBeam    [E] :   Poutre à dessiner
         '   iCas        [E] :   Cas de charge à afficher
         '   lDef        [E] :   Indique si affichage des déformées
         '   lMom        [E] :   Indique si affichage du diagramme de moment
@@ -6373,7 +6415,7 @@ Public Module Mod_Dessins
         Dim DiaNode As Decimal = Longueur / 200
         Dim dApp As Decimal = Longueur / 50
         Dim kEch, kEchM As Decimal
-        Dim lResult As Boolean '= MyPoutre.ChargesA(iCas).lRunCalcul
+        Dim lResult As Boolean '= myBeam.ChargesA(iCas).lRunCalcul
         Const SigneM As Decimal = -1
         Const SigneV As Decimal = -1
         Dim MyFontNum As New Font("Arial", 7)
@@ -6587,7 +6629,7 @@ Public Module Mod_Dessins
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
-        '   MyPoutre    [E] :   Poutre à dessiner
+        '   myBeam    [E] :   Poutre à dessiner
         '   iCas        [E] :   Cas de charge à afficher
         '   lDef        [E] :   Indique si affichage des déformées
         '   lMom        [E] :   Indique si affichage du diagramme de moment
@@ -6610,7 +6652,7 @@ Public Module Mod_Dessins
         Dim DiaNode As Decimal = Longueur / 200
         Dim dApp As Decimal = Longueur / 50
         Dim kEch, kEchM As Decimal
-        ' Dim lResult As Boolean '= MyPoutre.ChargesA(iCas).lRunCalcul
+        ' Dim lResult As Boolean '= myBeam.ChargesA(iCas).lRunCalcul
         Const SigneM As Decimal = -1
         Const SigneV As Decimal = -1
         Dim MyFontNum As New Font("Arial", 7)

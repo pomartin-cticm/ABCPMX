@@ -70,6 +70,8 @@ Public Class Frm_Portees
                 Me.chk_TremieGauche.Text = Bloc("LEFTOPENING")
                 Me.chk_TremieDroite.Text = Bloc("RIGHTOPENING")
 
+                Me.chk_ContinuiteDalleAppGauche.Text = Bloc("LEFTSLABCONTINUITY")
+                Me.chk_ContinuiteDalleAppDroit.Text = Bloc("RIGHTSLABCONTINUITY")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -144,6 +146,9 @@ Public Class Frm_Portees
             Me.chk_TremieDroite.Checked = .lTremieDroite
             'If .lTremieDroite Then
             Me.txt_TremieDroite.Text = GetStringInUnit(.DistanceDsl2, Enu_TypeVariable.Longueur, 4, 2, False)
+
+            Me.chk_ContinuiteDalleAppGauche.Checked = .lDalleContinueGauche
+            Me.chk_ContinuiteDalleAppDroit.Checked = .lDalleContinueDroite
 
         End With
 
@@ -223,52 +228,24 @@ Public Class Frm_Portees
                 End If
             Next
 
-            If .lTraveeConsoleGauche <> MyPoutreLoc.lTraveeConsoleGauche Then
-                lModif = True
-                .lTraveeConsoleGauche = MyPoutreLoc.lTraveeConsoleGauche
-            End If
+            GereTransfertValeur(MyPoutreLoc.lDalleContinueGauche, .lDalleContinueGauche, lModif)
+            GereTransfertValeur(MyPoutreLoc.lDalleContinueDroite, .lDalleContinueDroite, lModif)
 
-            If .lTraveeConsoleDroite <> MyPoutreLoc.lTraveeConsoleDroite Then
-                lModif = True
-                .lTraveeConsoleDroite = MyPoutreLoc.lTraveeConsoleDroite
-            End If
+            GereTransfertValeur(MyPoutreLoc.lTraveeConsoleGauche, .lTraveeConsoleGauche, lModif)
+            GereTransfertValeur(MyPoutreLoc.lTraveeConsoleDroite, .lTraveeConsoleDroite, lModif)
 
-            If .lIntermediaire <> MyPoutreLoc.lIntermediaire Then
-                lModif = True
-                .lIntermediaire = MyPoutreLoc.lIntermediaire
-            End If
+            GereTransfertValeur(MyPoutreLoc.lIntermediaire, .lIntermediaire, lModif)
 
-            If .EntraxeD1 <> MyPoutreLoc.EntraxeD1 Then
-                lModif = True
-                .EntraxeD1 = MyPoutreLoc.EntraxeD1
-            End If
+            GereTransfertValeur(MyPoutreLoc.EntraxeD1, .EntraxeD1, lModif)
+            GereTransfertValeur(MyPoutreLoc.EntraxeD2, .EntraxeD2, lModif)
 
-            If .EntraxeD2 <> MyPoutreLoc.EntraxeD2 Then
-                lModif = True
-                .EntraxeD2 = MyPoutreLoc.EntraxeD2
-            End If
+            GereTransfertValeur(MyPoutreLoc.lTremieGauche, .lTremieGauche, lModif)
+            If .lTremieGauche Then _
+                GereTransfertValeur(MyPoutreLoc.DistanceDsl1, .DistanceDsl1, lModif)
 
-            If .lTremieGauche <> MyPoutreLoc.lTremieGauche Then
-                lModif = True
-                .lTremieGauche = MyPoutreLoc.lTremieGauche
-
-            End If
-
-            If .lTremieGauche And (.DistanceDsl1 <> MyPoutreLoc.DistanceDsl1) Then
-                lModif = True
-                .DistanceDsl1 = MyPoutreLoc.DistanceDsl1
-            End If
-
-            If .lTremieDroite <> MyPoutreLoc.lTremieDroite Then
-                lModif = True
-                .lTremieDroite = MyPoutreLoc.lTremieDroite
-            End If
-
-            If .lTremieDroite And (.DistanceDsl2 <> MyPoutreLoc.DistanceDsl2) Then
-                lModif = True
-                .DistanceDsl2 = MyPoutreLoc.DistanceDsl2
-            End If
-
+            GereTransfertValeur(MyPoutreLoc.lTremieDroite, .lTremieDroite, lModif)
+            If .lTremieDroite Then _
+                GereTransfertValeur(MyPoutreLoc.DistanceDsl2, .DistanceDsl2, lModif)
 
         End With
     End Sub
@@ -550,6 +527,19 @@ Public Class Frm_Portees
         Return lOk
     End Function
 
+    Private Sub ContinuiteDalle_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ContinuiteDalleAppGauche.CheckedChanged, chk_ContinuiteDalleAppDroit.CheckedChanged
+        If lBuild Then Exit Sub
+
+        Select Case sender.name
+            Case Me.chk_ContinuiteDalleAppGauche.Name
+                MyPoutreLoc.lDalleContinueGauche = Me.chk_ContinuiteDalleAppGauche.Checked
+            Case Me.chk_ContinuiteDalleAppDroit.Name
+                MyPoutreLoc.lDalleContinueDroite = Me.chk_ContinuiteDalleAppDroit.Checked
+        End Select
+        Me.img_Portees.Invalidate()
+
+    End Sub
+
     Private Sub ChoixConsoles(sender As Object, e As EventArgs) Handles chk_ConsoleGauche.CheckedChanged, chk_ConsoleDroite.CheckedChanged
         If lBuild Then Exit Sub
 
@@ -571,10 +561,12 @@ Public Class Frm_Portees
         Me.txt_PorteeConsoleG.Visible = MyPoutreLoc.lTraveeConsoleGauche
         Me.etq_UnitL2.Visible = MyPoutreLoc.lTraveeConsoleGauche
         Me.img_L2.Visible = MyPoutreLoc.lTraveeConsoleGauche
+        Me.chk_ContinuiteDalleAppGauche.Visible = (Not MyPoutreLoc.lTraveeConsoleGauche) And (MyPoutreLoc.lMixte)
 
         Me.txt_PorteeConsoleD.Visible = MyPoutreLoc.lTraveeConsoleDroite
         Me.etq_UnitL3.Visible = MyPoutreLoc.lTraveeConsoleDroite
         Me.img_L3.Visible = MyPoutreLoc.lTraveeConsoleDroite
+        Me.chk_ContinuiteDalleAppDroit.Visible = (Not MyPoutreLoc.lTraveeConsoleDroite) And (MyPoutreLoc.lMixte)
 
     End Sub
 
@@ -620,6 +612,8 @@ Public Class Frm_Portees
         Me.img_TremieDroite.Visible = MyPoutreLoc.lTremieDroite
 
     End Sub
+
+
 
 #End Region
 

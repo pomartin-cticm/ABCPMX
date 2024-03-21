@@ -499,7 +499,7 @@ PROJECTNAVIGATION		= Navigation projet
 RECENTFILES				= Fichiers récents
 SAVE					= Enregistrer
 SAVEAS					= Enregister sous
-SAVEBEFORECLOSE			= Voulez-vous enresitrer les modifications du projet ?
+SAVEBEFORECLOSE			= Voulez-vous enregistrer les modifications du projet ?
 SECTION					= Section
 SECTIONSLIST			= Liste des sections
 SUPPORT					= Support
@@ -724,6 +724,8 @@ RIGHTCANT				= Console droite
 RIGHTOPENING			= Ouverture droite
 SPACINGS				= Entraxes
 SPANS					= Portées
+LEFTSLABCONTINUITY		= La dalle est continue sur l'appui gauche
+RIGHTSLABCONTINUITY		= La dalle est continue sur l'appui droit
 
 #FRM_STANDARDSTEELSECTIONS
 AUTOMATICHA				= Hauteur totale automatiquement calculée

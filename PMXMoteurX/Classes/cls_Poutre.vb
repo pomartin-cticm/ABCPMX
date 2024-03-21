@@ -64,6 +64,9 @@ Public Class cls_Poutre
     Public lTraveeConsoleGauche As Boolean              ' Indique si présence d'une travée en console à gauche
     Public lTraveeConsoleDroite As Boolean              ' Indique si présence d'une travée en console à droite
 
+    Public lDalleContinueGauche As Boolean              ' Indique si la dalle est continue au droit de l'appui simple à gauche
+    Public lDalleContinueDroite As Boolean              ' Indique si la dalle est continue au droit de l'appui simple à droite
+
     ''' <summary>
     ''' Distance entre la poutre et le bord des trémies
     ''' </summary>
@@ -699,6 +702,11 @@ Public Class cls_Poutre
 
         Me.Hivoss = New cls_MethodHivoss
         Me.MaintienBac = New cls_MaintienBac
+
+        Me.lTraveeConsoleGauche = False
+        Me.lTraveeConsoleDroite = False
+        Me.lDalleContinueGauche = False
+        Me.lDalleContinueDroite = False
     End Sub
 
     Private Sub PoutreDefautAcier()

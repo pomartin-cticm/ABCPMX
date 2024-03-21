@@ -74,6 +74,8 @@ Partial Class Frm_Portees
         Me.img_TremieGauche = New System.Windows.Forms.PictureBox()
         Me.chk_TremieGauche = New System.Windows.Forms.CheckBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.chk_ContinuiteDalleAppGauche = New System.Windows.Forms.CheckBox()
+        Me.chk_ContinuiteDalleAppDroit = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -257,6 +259,8 @@ Partial Class Frm_Portees
         'pan_SaisiePortee
         '
         Me.pan_SaisiePortee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_SaisiePortee.Controls.Add(Me.chk_ContinuiteDalleAppDroit)
+        Me.pan_SaisiePortee.Controls.Add(Me.chk_ContinuiteDalleAppGauche)
         Me.pan_SaisiePortee.Controls.Add(Me.etq_UnitL3)
         Me.pan_SaisiePortee.Controls.Add(Me.txt_PorteeConsoleD)
         Me.pan_SaisiePortee.Controls.Add(Me.img_L3)
@@ -671,6 +675,26 @@ Partial Class Frm_Portees
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'chk_ContinuiteDalleAppGauche
+        '
+        Me.chk_ContinuiteDalleAppGauche.AutoSize = True
+        Me.chk_ContinuiteDalleAppGauche.Location = New System.Drawing.Point(7, 77)
+        Me.chk_ContinuiteDalleAppGauche.Name = "chk_ContinuiteDalleAppGauche"
+        Me.chk_ContinuiteDalleAppGauche.Size = New System.Drawing.Size(178, 17)
+        Me.chk_ContinuiteDalleAppGauche.TabIndex = 81
+        Me.chk_ContinuiteDalleAppGauche.Text = "chk_ContinuiteDalleAppGauche"
+        Me.chk_ContinuiteDalleAppGauche.UseVisualStyleBackColor = True
+        '
+        'chk_ContinuiteDalleAppDroit
+        '
+        Me.chk_ContinuiteDalleAppDroit.AutoSize = True
+        Me.chk_ContinuiteDalleAppDroit.Location = New System.Drawing.Point(7, 133)
+        Me.chk_ContinuiteDalleAppDroit.Name = "chk_ContinuiteDalleAppDroit"
+        Me.chk_ContinuiteDalleAppDroit.Size = New System.Drawing.Size(162, 17)
+        Me.chk_ContinuiteDalleAppDroit.TabIndex = 82
+        Me.chk_ContinuiteDalleAppDroit.Text = "chk_ContinuiteDalleAppDroit"
+        Me.chk_ContinuiteDalleAppDroit.UseVisualStyleBackColor = True
+        '
         'Frm_Portees
         '
         Me.AcceptButton = Me.btn_OK
@@ -769,4 +793,6 @@ Partial Class Frm_Portees
     Friend WithEvents txt_TremieDroite As TextBox
     Friend WithEvents img_TremieDroite As PictureBox
     Friend WithEvents chk_TremieDroite As CheckBox
+    Friend WithEvents chk_ContinuiteDalleAppDroit As CheckBox
+    Friend WithEvents chk_ContinuiteDalleAppGauche As CheckBox
 End Class

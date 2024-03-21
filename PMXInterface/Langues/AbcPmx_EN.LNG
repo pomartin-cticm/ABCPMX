@@ -725,6 +725,8 @@ RIGHTCANT				= Right cantilever span
 RIGHTOPENING			= Right opening
 SPACINGS				= Spacings
 SPANS					= Span lengths
+LEFTSLABCONTINUITY		= The slab is continuous at the left support
+RIGHTSLABCONTINUITY		= The slab is continuous at the right support
 
 #FRM_STANDARDSTEELSECTIONS
 AUTOMATICHA				= Total height automatically assessed
