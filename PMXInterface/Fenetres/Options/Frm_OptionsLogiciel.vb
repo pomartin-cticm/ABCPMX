@@ -118,7 +118,7 @@ Public Class Frm_OptionsLogiciel
         '--> Initialisation
 
         InitialiseLNGFileName(pLocalLogicielOptions.IndLangue, pFichierLangue)
-        Lines = New Cls_LinesOfFile(pFichierLangue, False)
+        Lines = New Cls_LinesOfFile(pFichierLangue, True)
 
         BlocLangues = New Dictionary(Of String, Dictionary(Of String, String))
 
