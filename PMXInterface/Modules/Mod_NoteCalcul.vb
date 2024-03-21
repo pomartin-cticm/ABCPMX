@@ -19,6 +19,7 @@ Module Mod_NoteCalcul
     Private Const TABVAR1 As String = "\T15"
     Private Const TABVAR2 As String = "\T20"
     Private Const TABVAR3 As String = "\T25"
+    Private Const TABVAR4 As String = "\T50"
 
     Private Const TABAFF As String = " :\T50"
     Private Const TABEGAL As String = "\T55 = "
@@ -380,7 +381,7 @@ Module Mod_NoteCalcul
             InitialiseLigne(5, HLIGNE, True)
             AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "i")
             AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("TYPE_BEAM"))
-            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LENGHT") & "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+            AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LENGHT") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
             AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LEFTSUPPORT"))
             AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("RIGHTSUPPORT"))
 
@@ -639,15 +640,19 @@ Module Mod_NoteCalcul
         If Not MyBeam.Section.lSlimFloor Then
             If MyBeam.Section.lEnrobage Then
                 If Not MyBeam.Section.IsVoilementParCisaillement(MyBeam.Param.EtaW) Then
-                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " ≤ 124\Se\s = " & GetStringInUnit(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, False) & " : " & BlocG("NO_NEED_CHECK_WB"))
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " ≤ 124\Se\s = " & GetStringInUnit(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, False))
+                    AddLigneNDC(TABW2 & TABVAR4 & BlocG("NO_NEED_CHECK_WB"))
                 Else
-                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " > 124\Se\s = " & GetStringInUnit(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, False) & " : " & BlocG("NEED_CHECK_WB"))
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " > 124\Se\s = " & GetStringInUnit(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, False))
+                    AddLigneNDC(TABW2 & TABVAR4 & BlocG("NEED_CHECK_WB"))
                 End If
             Else
                 If Not MyBeam.Section.IsVoilementParCisaillement(MyBeam.Param.EtaW) Then
-                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " ≤ 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False) & " : " & BlocG("NO_NEED_CHECK_WB"))
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " ≤ 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False))
+                    AddLigneNDC(TABW2 & TABVAR4 & BlocG("NO_NEED_CHECK_WB"))
                 Else
-                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & TABEGAL & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " > 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False) & " : " & BlocG("NEED_CHECK_WB"))
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & TABEGAL & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " > 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False))
+                    AddLigneNDC(TABW2 & TABVAR4 & BlocG("NEED_CHECK_WB"))
                 End If
             End If
 
@@ -880,10 +885,10 @@ Module Mod_NoteCalcul
         AddLigneNDC("\TABLEAU 18")
         InitialiseLigne(5, HLIGNEENTETE, True)
         AddCelluleFond(LC4, Bordures.Tous, PositionTexteInCell.Centre, "i")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "e\-si\=" & "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "d\-si\=" & "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "z\-si\=" & "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
-        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "A\-si\=" & "(" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & "\+2\=/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "e\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "d\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "z\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")")
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, "A\-si\=" & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & "\+2\=/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")")
 
         For i As Integer = 0 To MyBeam.Dalle.NbLitsArmaActifs - 1
             If MyBeam.Dalle.LitArma(i).lActive Then
@@ -1830,7 +1835,7 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
             Else
                 AddTitreNdC(3, BlocG("ELCSSTATES"))
-                EditionTableauCombinaison(MyBeam, MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
+                EditionTableauCombinaison(MyBeam, MyBeam.lCombELCSRules, MyBeam.CoefCombELCS)
             End If
         End If
 
@@ -7075,6 +7080,7 @@ Module Mod_NoteCalcul
         Dim RatioX As Decimal
         Dim ChaineRatioX As String
         Dim plETA As Boolean = lETA And (Not IsNothing(MyBeam.ChargesA(iCase).UZEta))
+        Const ValFlecheMin As Decimal = 10 ^ (-4) '0.1 mm: lorsque la fleche est inférieure à cette valeur, on ne calcul pas le rapport L/f
 
         '--> Initialisations
 
@@ -7106,7 +7112,7 @@ Module Mod_NoteCalcul
                 iCell = 1
             End If
             AddCellule(LargCol(iCell + 1), MyBordures(i) - Bordures.Droite, PositionTexteInCell.Gauche, GetStringInUnit(-FlechesMax(i), Enu_TypeVariable.Dimension, 3, 3, True))
-            If Math.Abs(FlechesMax(i)) > 0 Then
+            If Math.Abs(FlechesMax(i)) > ValFlecheMin Then
                 RatioX = Math.Abs(MyBeam.LongueurTravee(i) / FlechesMax(i))
                 ChaineRatioX = "(L/" & GetStringInUnit(RatioX, Enu_TypeVariable.SansType, 3, 0, False) & ")"
             Else

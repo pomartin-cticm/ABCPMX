@@ -28,6 +28,7 @@ Public Class Frm_PMX
     Dim strRacineELUC As String
     Dim strRacineELSC As String
     Dim strCopy As String
+    Dim strMsgFermetureFrm As String
 
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
@@ -116,7 +117,8 @@ Public Class Frm_PMX
             Frm_Ouverture.ShowDialog()    '--> Fenetre Ouverture
 
         End If
-        'AfficheFenetreEnCours() 'GuD: A discuter j'ai un doute (31/08/2023), cela ouvrait directement
+
+        Me.AffichageRecentFiles()
         MAJToolBarPoutre()
         MAJI_BOBasse()
 
@@ -287,6 +289,8 @@ Public Class Frm_PMX
 
                 Str_WarningFile = "Probleme lecture fichier"
 
+                strMsgFermetureFrm = Bloc("SAVEBEFORECLOSE")
+
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangue")
             Finally
@@ -389,6 +393,7 @@ Public Class Frm_PMX
             '--> Mise à jour du TreeView
             AffichageTViewChk()
             MAJToolBarPoutre()
+            MAJMainToolBar()
             Me.img_Main.Invalidate()
 
         End If
@@ -400,9 +405,12 @@ Public Class Frm_PMX
 
         MyProjet.IndEnCours = Math.Max(Math.Min(MyProjet.IndEnCours, MyProjet.Poutres.Count - 1), 0)
 
+        If Not MyProjet.Poutres.Count = 0 Then MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
+
         '--> Mise à jour du TreeView
         AffichageTViewChk()
         MAJToolBarPoutre()
+        MAJMainToolBar()
         Me.img_Main.Invalidate()
 
     End Sub
@@ -431,9 +439,12 @@ Public Class Frm_PMX
 
         MyProjet.IndEnCours = Math.Max(0, MyProjet.Poutres.Count - 1)
 
+        MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
+
         '--> Mise à jour du TreeView
         AffichageTViewChk()
         MAJToolBarPoutre()
+        MAJMainToolBar()
         Me.img_Main.Invalidate()
     End Sub
 
@@ -490,7 +501,7 @@ Public Class Frm_PMX
         If lOK Then
             MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
             MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()         ' ???
-            MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
+            'MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
         End If
 
         '--[ Edition de la note de calcul
@@ -787,10 +798,10 @@ Public Class Frm_PMX
 
         If MyProjet.Poutres.Count = 0 Then Exit Sub
 
-        If MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees Then
+        If MyProjet.lSaved Then
             Me.TSbtn_SaveN.Image = ImgList_Menu.Images("Enregistrer_OK")
         Else
-            If MyProjet.Poutres(MyProjet.IndEnCours).NouvellePoutre Then
+            If MyProjet.lNouvellePoutre Then
                 Me.TSbtn_SaveN.Image = ImgList_Menu.Images("EnregistrerVierge")
             Else
 
@@ -1033,7 +1044,9 @@ Public Class Frm_PMX
         If My.Computer.FileSystem.FileExists(MyProjet.FileName) Then
 
             EcrireProjetInFile(MyProjet.FileName)
-            MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            'MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            MyProjet.lSaved = True
+            MyProjet.lNouvellePoutre = False
             MAJMainToolBar()
 
             'MemoriserNouveauFichier(MyProjet.FileName)
@@ -1092,7 +1105,9 @@ Public Class Frm_PMX
             '--> MAJ fichier recent
             Me.AffichageRecentFiles()
 
-            MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            'MyProjet.Poutres(MyProjet.IndEnCours).lDonneesSauvees = True
+            MyProjet.lSaved = True
+            MyProjet.lNouvellePoutre = False
             MAJMainToolBar()
 
         End If
@@ -1100,7 +1115,7 @@ Public Class Frm_PMX
 
     End Sub
 
-    Private Sub EnregistreDansFichiersRecents(FileName As String)
+    Public Sub EnregistreDansFichiersRecents(FileName As String)
         '-----------------------------------------------------------------------------------
         '   13/03/24 :  Création - Version 1.00
         '-----------------------------------------------------------------------------------
@@ -1143,7 +1158,11 @@ Public Class Frm_PMX
         '--> Gestion du résultat de la boite de dialogue
         If FileName <> "" Then
 
-            OuvrirFichier(FileName)
+            If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then
+                If Not EnregistrerAvantFermeture() Then OuvrirFichier(FileName)
+            Else
+                    OuvrirFichier(FileName)
+            End If
 
         End If
 
@@ -1160,7 +1179,10 @@ Public Class Frm_PMX
 
         '--> Lecture du fichier
         ReadInFile(FileName)
+        AffichageTViewChk()
         MAJToolBarPoutre()
+        MAJMainToolBar()
+        Me.img_Main.Invalidate()
         Me.img_Main.Invalidate()
 
         '--> Gestion Recent Files
@@ -1203,7 +1225,8 @@ Public Class Frm_PMX
         Next
 
         '--> Aucune modification par rapport au fichier ouvert
-        MyProjet.lModif = False
+        MyProjet.lSaved = False
+        MyProjet.lNouvellePoutre = True
 
         '--> Initialisation de l'interface avec le projet ouvert
         'AfficheFenetreEnCours()
@@ -1262,37 +1285,13 @@ Public Class Frm_PMX
             Exit Sub
         End If
 
-        If MyProjet.lModif Then '--> Projet  modifié
-
-            '    '--> Affichage Fenetre Avertissement
-            '    Dim dg As DialogResult = Dlg_VerifSave.ShowDialog
-
-            '    If dg = Windows.Forms.DialogResult.OK Then
-
-            '        Me.SaveFileDialog_Project.Title = Me.SaveToolStripMenuItemN.Text
-            '        Me.SaveFileDialog_Project.FileName = MyProjet.Nom
-
-            '        If Save_Project() Then
-
-            '            '--> Lecture du fichier
-            '            ReadInFile(FileName)
-
-            '        End If
-
-            '    ElseIf dg = Windows.Forms.DialogResult.Ignore Then
-            '        '--> Utilisateur ne veut pas sauvegarder l'assemblage en cours
-
-            '        '--> Lecture du fichier
-            '        ReadInFile(FileName)
-
-            '    End If
-
-        Else '--> Projet en cours déjà sauvegardé et pas modifié --> pas d'avertissement
-
-            '--> Lecture du fichier
+        If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then
+            If Not EnregistrerAvantFermeture() Then OuvrirFichier(FileName)
+        Else
             OuvrirFichier(FileName)
-
         End If
+
+
 
     End Sub
 
@@ -1305,22 +1304,19 @@ Public Class Frm_PMX
     End Sub
 
     Private Sub Frm_PMX_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-
-        '--( Gestion Fermeture de la fenêtre
-
-        '--( Enregistrement du projet en cours
-
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1
-
-
-
-        Next
-
-        '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
-
-        EnregistrerOptionsLogiciel(True)
-
+        If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then e.Cancel = EnregistrerAvantFermeture()
     End Sub
+
+    Private Function EnregistrerAvantFermeture() As Boolean
+        Dim lCancel As Boolean
+
+        Dim lAvertissementFermeture As DialogResult = MessageBox.Show(strMsgFermetureFrm, LogicielInfo.NomLogiciel, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question)
+        lCancel = Not (lAvertissementFermeture = DialogResult.Yes Or lAvertissementFermeture = DialogResult.No)
+        If lAvertissementFermeture = DialogResult.Yes Then EnregistrerProjetEnCours() 'enregistrement du projet en cours
+
+        Return lCancel
+
+    End Function
 
 #End Region
 
@@ -1577,53 +1573,53 @@ Public Class Frm_PMX
 
     End Sub
 
-    Public Sub AffichageTViewChkOLD()
+    'Public Sub AffichageTViewChkOLD()
 
-        If MyProjet.Poutres.Count = 0 Then Exit Sub
+    '    If MyProjet.Poutres.Count = 0 Then Exit Sub
 
-        Me.cmb_Projet.Items.Clear()
-        Me.cmb_Projet.Items.Add(MyProjet.Nom)
-        Me.cmb_Projet.SelectedIndex = 0
+    '    Me.cmb_Projet.Items.Clear()
+    '    Me.cmb_Projet.Items.Add(MyProjet.Nom)
+    '    Me.cmb_Projet.SelectedIndex = 0
 
-        Me.tab_ChkSections = New List(Of CheckBox)
+    '    Me.tab_ChkSections = New List(Of CheckBox)
 
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1
+    '    For i As Integer = 0 To MyProjet.Poutres.Count - 1
 
-            Me.tab_ChkSections.Add(New CheckBox)
-            Me.tab_ChkSections(i).Appearance = Appearance.Button
-            Me.tab_ChkSections(i).Dock = DockStyle.Fill
-            'Me.tab_ChkSections(i).BackColor = SystemColors.ControlLight 'Me.ToolStrip_Menu_Section.BackColor
-            Me.tab_ChkSections(i).BackColor = CouleurBtnNormal
-            Me.tab_ChkSections(i).ForeColor = SystemColors.WindowText 'Color.White
+    '        Me.tab_ChkSections.Add(New CheckBox)
+    '        Me.tab_ChkSections(i).Appearance = Appearance.Button
+    '        Me.tab_ChkSections(i).Dock = DockStyle.Fill
+    '        'Me.tab_ChkSections(i).BackColor = SystemColors.ControlLight 'Me.ToolStrip_Menu_Section.BackColor
+    '        Me.tab_ChkSections(i).BackColor = CouleurBtnNormal
+    '        Me.tab_ChkSections(i).ForeColor = SystemColors.WindowText 'Color.White
 
-            Me.tab_ChkSections(i).Text = MyProjet.Poutres(i).BeamID
-            Me.tab_ChkSections(i).Name = "MyX" & CStr(i)
-            Me.tab_ChkSections(i).Tag = CStr(i)
-            AddHandler Me.tab_ChkSections(i).CheckedChanged, AddressOf ChoixSection_CheckedChanged
-            'AddHandler Me.tab_ChkSections(i).Paint, AddressOf chkBox_Section_Paint
-        Next
+    '        Me.tab_ChkSections(i).Text = MyProjet.Poutres(i).BeamID
+    '        Me.tab_ChkSections(i).Name = "MyX" & CStr(i)
+    '        Me.tab_ChkSections(i).Tag = CStr(i)
+    '        AddHandler Me.tab_ChkSections(i).CheckedChanged, AddressOf ChoixSection_CheckedChanged
+    '        'AddHandler Me.tab_ChkSections(i).Paint, AddressOf chkBox_Section_Paint
+    '    Next
 
-        Me.TLPan_ListPoutres.RowCount = MyProjet.Poutres.Count + 1
-        Me.TLPan_ListPoutres.Controls.Clear()
-        Me.TLPan_ListPoutres.RowStyles.Clear()
+    '    Me.TLPan_ListPoutres.RowCount = MyProjet.Poutres.Count + 1
+    '    Me.TLPan_ListPoutres.Controls.Clear()
+    '    Me.TLPan_ListPoutres.RowStyles.Clear()
 
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1
+    '    For i As Integer = 0 To MyProjet.Poutres.Count - 1
 
-            Me.TLPan_ListPoutres.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-            'Me.TableLayoutPanel_TreeChk.RowStyles(i).SizeType = SizeType.Absolute
-            'Me.TableLayoutPanel_TreeChk.RowStyles(i).Height = 40.0!
-        Next
+    '        Me.TLPan_ListPoutres.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+    '        'Me.TableLayoutPanel_TreeChk.RowStyles(i).SizeType = SizeType.Absolute
+    '        'Me.TableLayoutPanel_TreeChk.RowStyles(i).Height = 40.0!
+    '    Next
 
-        Dim HCum = 0
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1
-            Me.TLPan_ListPoutres.Controls.Add(Me.tab_ChkSections(i), 0, i)
-            HCum += Me.TLPan_ListPoutres.RowStyles(i).Height
-        Next
-        Me.TLPan_ListPoutres.Height = HCum
+    '    Dim HCum = 0
+    '    For i As Integer = 0 To MyProjet.Poutres.Count - 1
+    '        Me.TLPan_ListPoutres.Controls.Add(Me.tab_ChkSections(i), 0, i)
+    '        HCum += Me.TLPan_ListPoutres.RowStyles(i).Height
+    '    Next
+    '    Me.TLPan_ListPoutres.Height = HCum
 
-        Me.tab_ChkSections(MyProjet.IndEnCours).Checked = True
+    '    Me.tab_ChkSections(MyProjet.IndEnCours).Checked = True
 
-    End Sub
+    'End Sub
 
 #End Region
 
@@ -1666,7 +1662,11 @@ Public Class Frm_PMX
         Me.TSbtn_ExpertMode.Checked = LogicielOptions.lExpert
     End Sub
 
+    Private Sub Frm_PMX_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
 
+        EnregistrerOptionsLogiciel(True)
+    End Sub
 
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
         lCotation = Not lCotation

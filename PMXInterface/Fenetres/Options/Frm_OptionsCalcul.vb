@@ -62,7 +62,7 @@ Public Class Frm_OptionsCalcul
 
         '--> Déclaration
 
-        Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, False)
+        Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, True)
         Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA", "OPTCALSCOPE", "OPTCALCALCUL", "OPTCALFIRE"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
@@ -279,6 +279,10 @@ Public Class Frm_OptionsCalcul
         GereTransfertValeur(GammaLoc.GammaM1, LogicielOptions.Gamma.GammaM1, lModif)
         GereTransfertValeur(GammaLoc.GammaM2, LogicielOptions.Gamma.GammaM2, lModif)
         GereTransfertValeur(GammaLoc.GammaM_fi, LogicielOptions.Gamma.GammaM_fi, lModif)
+        GereTransfertValeur(GammaLoc.GammaVs, LogicielOptions.Gamma.GammaVs, lModif)
+        GereTransfertValeur(GammaLoc.GammaVc, LogicielOptions.Gamma.GammaVc, lModif)
+        GereTransfertValeur(GammaLoc.lGammaV_unique, LogicielOptions.Gamma.lGammaV_unique, lModif)
+        GereTransfertValeur(GammaLoc.GammaV_fi, LogicielOptions.Gamma.GammaV_fi, lModif)
         GereTransfertValeur(GammaLoc.GammaP, LogicielOptions.Gamma.GammaP, lModif)
         GereTransfertValeur(GammaLoc.GammaQ, LogicielOptions.Gamma.GammaQ, lModif)
         GereTransfertValeur(GammaLoc.GammaS, LogicielOptions.Gamma.GammaS, lModif)
@@ -287,9 +291,13 @@ Public Class Frm_OptionsCalcul
         GereTransfertValeur(GammaLoc.Psi1_Q1, LogicielOptions.Gamma.Psi1_Q1, lModif)
         GereTransfertValeur(GammaLoc.Psi2_Q1, LogicielOptions.Gamma.Psi2_Q1, lModif)
 
-        LogicielOptions.Gamma.Psi0_Q2 = LogicielOptions.Gamma.Psi0_Q1
-        LogicielOptions.Gamma.Psi1_Q2 = LogicielOptions.Gamma.Psi1_Q1
-        LogicielOptions.Gamma.Psi2_Q2 = LogicielOptions.Gamma.Psi2_Q1
+        GereTransfertValeur(GammaLoc.Psi0_Q2, LogicielOptions.Gamma.Psi0_Q2, lModif)
+        GereTransfertValeur(GammaLoc.Psi1_Q2, LogicielOptions.Gamma.Psi1_Q2, lModif)
+        GereTransfertValeur(GammaLoc.Psi2_Q2, LogicielOptions.Gamma.Psi2_Q2, lModif)
+
+        'LogicielOptions.Gamma.Psi0_Q2 = LogicielOptions.Gamma.Psi0_Q1
+        'LogicielOptions.Gamma.Psi1_Q2 = LogicielOptions.Gamma.Psi1_Q1
+        'LogicielOptions.Gamma.Psi2_Q2 = LogicielOptions.Gamma.Psi2_Q1
 
         '# Fenêtre Scope
         If lExpert Then

@@ -236,8 +236,9 @@ Public Class Frm_OptionsCalculPoutre
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
+
             Me.Close()
         End If
     End Sub

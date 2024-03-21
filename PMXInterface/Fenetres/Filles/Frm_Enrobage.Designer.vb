@@ -365,9 +365,9 @@ Partial Class Frm_Enrobage
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cmb_TypeEtriers.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cmb_TypeEtriers.FormattingEnabled = True
-        Me.cmb_TypeEtriers.Location = New System.Drawing.Point(63, 8)
+        Me.cmb_TypeEtriers.Location = New System.Drawing.Point(53, 8)
         Me.cmb_TypeEtriers.Name = "cmb_TypeEtriers"
-        Me.cmb_TypeEtriers.Size = New System.Drawing.Size(168, 21)
+        Me.cmb_TypeEtriers.Size = New System.Drawing.Size(187, 21)
         Me.cmb_TypeEtriers.TabIndex = 50
         '
         'lbl_Type

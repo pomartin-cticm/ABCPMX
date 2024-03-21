@@ -369,6 +369,9 @@ POSITION				= Position
 SINGLE					= Un
 STEEL 					= Acier des armatures
 STIRRUPS				= Etrier
+CLOSEDSTIRRUPS			= Cadre
+OPENSTIRRUPS			= Etrier soudé
+THROUGHWEBSTIRRUPS		= Cadre traversant
 TITLE					= Definition de l'enrobage partiel
 TRIPLE					= Trois
 TYPEE					= Type 
@@ -496,6 +499,7 @@ PROJECTNAVIGATION		= Navigation projet
 RECENTFILES				= Fichiers récents
 SAVE					= Enregistrer
 SAVEAS					= Enregister sous
+SAVEBEFORECLOSE			= Voulez-vous enresitrer les modifications du projet ?
 SECTION					= Section
 SECTIONSLIST			= Liste des sections
 SUPPORT					= Support
@@ -567,6 +571,7 @@ NEWPROJECT				= Nouveau projet
 OK						= Ok
 OPENPROJECT				= Ouvrir un projet
 RECENTFILES				= Fichiers récents
+FILE					= Fichier
 
 #FRM_PPLOADCASE
 TITLE					= Cas de charge
@@ -804,6 +809,7 @@ MATERIALS				= Matériaux
 STEEL					= Acier
 CONCRETE				= Béton
 FIRE					= Incendie
+GAMMAV					= valeur unique pour γv
 
 #OPTCALFIRE
 TITLE					= Calcul incendie

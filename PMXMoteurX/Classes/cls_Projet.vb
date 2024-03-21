@@ -34,19 +34,65 @@ Public Class cls_Projet
     Public IndEnCours As Integer
 
     ''' <summary>
+    ''' Chemin du fichier du projet déjà enregistré
+    ''' </summary>
+    Public FileName As String
+
+    ''' <summary>
     ''' Indique si le projet est modifié après sauvegarde  
     ''' </summary>
-    Public lModif As Boolean
+    'Public Property lModif As Boolean
+    '    Set(value As Boolean)
+    '        For i As Integer = 0 To Me.Poutres.Count - 1
+    '            Me.Poutres(i).lPoutreModifiee = value
+    '        Next
+    '    End Set
+    '    Get
+    '        Dim retour As Boolean = False
+    '        For i As Integer = 0 To Me.Poutres.Count - 1
+    '            retour = retour Or Me.Poutres(i).lPoutreModifiee
+    '        Next
+    '        Return retour
+    '    End Get
+    'End Property
 
     ''' <summary>
     ''' Indique si le projet est déjà enregistré
     ''' </summary>
-    Public lSave As Boolean
+    Public Property lSaved As Boolean
+        Set(value As Boolean)
+            For i As Integer = 0 To Me.Poutres.Count - 1
+                Me.Poutres(i).lDonneesSauvees = value
+            Next
+        End Set
+        Get
+            Dim retour As Boolean = True
+            For i As Integer = 0 To Me.Poutres.Count - 1
+                retour = retour And Me.Poutres(i).lDonneesSauvees
+            Next
+            Return retour
+        End Get
+    End Property
 
     ''' <summary>
-    ''' Chemin du fichier du projet déjà enregistré
+    ''' Indique si le projet est déjà enregistré
     ''' </summary>
-    Public FileName As String
+    Public Property lNouvellePoutre As Boolean
+        Set(value As Boolean)
+            For i As Integer = 0 To Me.Poutres.Count - 1
+                Me.Poutres(i).lNouvellePoutre = value
+            Next
+        End Set
+        Get
+            Dim retour As Boolean = True
+            For i As Integer = 0 To Me.Poutres.Count - 1
+                retour = retour And Me.Poutres(i).lNouvellePoutre
+            Next
+            Return retour
+        End Get
+    End Property
+
+
 
 #End Region
 
@@ -174,8 +220,8 @@ Public Class cls_Projet
                 Lines.Add("   lDefautEnroba  =  " & .lDefautEnrobage)
                 Lines.Add("   lDefautEtaiem  =  " & .lDefautEtaiement)
                 Lines.Add("   lDefautDalle   =  " & .lDefautDalle)
-                Lines.Add("   lDonneesSauv   =  " & .lDonneesSauvees)
-                Lines.Add("   lNouvPoutre    =  " & .NouvellePoutre)
+                'Lines.Add("   lDonneesSauv   =  " & .lDonneesSauvees)
+                'Lines.Add("   lNouvPoutre    =  " & .NouvellePoutre)
                 If .lMixte Then
                     Lines.Add("   lAutoDesign    =  " & .lAutomaticDesign)
                     Lines.Add("   NombreZones    =  " & ConvertListIntegerToString(.NombreZones))
@@ -590,7 +636,7 @@ Public Class cls_Projet
         '--> Initialisation
         If File.Exists(FileName) Then
             Lines = New Cls_LinesOfFile(FileName)
-            Me.lSave = True
+            Me.lSaved = True
             Me.FileName = FileName
         Else
             MsgBox("Fichier n'existe pas | File not exist : " & FileName, MsgBoxStyle.Critical, "Cls_Projet/RecuperationFile")
@@ -928,8 +974,8 @@ Public Class cls_Projet
                         Case "LDEFAUTENR" : .lDefautEnrobage = Mots(nbMots)
                         Case "LDEFAUTETA" : .lDefautEtaiement = Mots(nbMots)
                         Case "LDEFAUTDAL" : .lDefautDalle = Mots(nbMots)
-                        Case "LDONNEESSA" : .lDonneesSauvees = Mots(nbMots)
-                        Case "LNOUVPOUTR" : .NouvellePoutre = Mots(nbMots)
+                        'Case "LDONNEESSA" : .lDonneesSauvees = Mots(nbMots)
+                        'Case "LNOUVPOUTR" : .NouvellePoutre = Mots(nbMots)
                         Case "LAUTODESIG" : .lAutomaticDesign = Mots(nbMots)
                         Case "NOMBREZONE" : .NombreZones = ConvertStringToListInteger(Mots(nbMots))
                         Case "LONGUEURZO" : .LongueurZone = ConvertStringToListDecimalDim2(Mots(nbMots))

@@ -366,7 +366,7 @@ Public Class cls_Poutre
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0,1,2)
     ''' </summary>
-    Public ReadOnly Property xDebutZone As Decimal(,)
+    Public ReadOnly Property xDebutZoneTravee As Decimal(,)
         Get
             Dim xDebutZoneRetour As Decimal(,)
             ReDim xDebutZoneRetour(Me.IndiceDerniereTravee, 2)
@@ -387,7 +387,7 @@ Public Class cls_Poutre
     ''' 1er indice: indice de la travée
     ''' 2eme indice: indice de la zone (0,1,2)
     ''' </summary>
-    Public ReadOnly Property xFinZone As Decimal(,)
+    Public ReadOnly Property xFinZoneTravee As Decimal(,)
         Get
             Dim xFinZoneRetour As Decimal(,)
             ReDim xFinZoneRetour(Me.IndiceDerniereTravee, 2)
@@ -395,6 +395,29 @@ Public Class cls_Poutre
                 For j_zone As Integer = 0 To 2
                     For k_boucle As Integer = 0 To j_zone
                         xFinZoneRetour(i_travee, j_zone) += LongueurZone(i_travee, k_boucle)
+                    Next
+                Next
+            Next
+
+            Return xFinZoneRetour
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Abscisse de la fin début d'une zone définie
+    ''' 1er indice: indice de la travée
+    ''' 2eme indice: indice de la zone (0,1,2)
+    ''' </summary>
+    Public ReadOnly Property xFinZoneGlobale As Decimal(,)
+        Get
+            Dim xFinZoneRetourLoc As Decimal(,) = Me.xFinZoneTravee
+
+            Dim xFinZoneRetour As Decimal(,)
+            ReDim xFinZoneRetour(Me.IndiceDerniereTravee, 2)
+            For i_travee As Integer = Me.IndicePremiereTravee + 1 To Me.IndiceDerniereTravee
+                For j_zone As Integer = 0 To 2
+                    For k_boucle As Integer = 0 To j_zone
+                        xFinZoneRetour(i_travee, j_zone) += LongueurTravee(i_travee)
                     Next
                 Next
             Next
@@ -563,9 +586,9 @@ Public Class cls_Poutre
     ''' <summary>
     ''' Indique si nouvelle poutre, jamais encore modifiée
     ''' </summary>
-    Public NouvellePoutre As Boolean
+    Public lNouvellePoutre As Boolean
 
-    Public lPoutreModifiee As Boolean
+    'Public lPoutreModifiee As Boolean
 
 #End Region
 
@@ -707,8 +730,8 @@ Public Class cls_Poutre
         Me.lDefautEnrobage = True
         Me.lDefautDalle = True
         Me.lDonneesSauvees = False
-        Me.NouvellePoutre = True
-        Me.lPoutreModifiee = False
+        Me.lNouvellePoutre = True
+        'Me.lPoutreModifiee = False
 
         '--> Initialisation Classes
 
@@ -946,9 +969,9 @@ Public Class cls_Poutre
     Public Sub EstModifiee()
         '--------------------------------------------------------------------------
 
-        Me.NouvellePoutre = False
+        Me.lNouvellePoutre = False
         Me.lDonneesSauvees = False
-        Me.lPoutreModifiee = True
+        'Me.lPoutreModifiee = True
 
         Me.InitialisePoidsPropres()
 
@@ -2033,312 +2056,312 @@ Public Class cls_Poutre
     ''' <summary>
     ''' Calcul la contrainte tangentielle induite par les connecteurs 
     ''' </summary>
-    Sub CalculArmaturesTransversales()
-        '------------------------------------------------------------------------------------------------------------------
-        '    17/11/23 : Création - GUD
-        '------------------------------------------------------------------------------------------------------------------
-        '   Calcul la contrainte tangentielle induite par les connecteurs
-        '------------------------------------------------------------------------------------------------------------------
+    'Sub CalculArmaturesTransversales()
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '    17/11/23 : Création - GUD
+    '    '------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul la contrainte tangentielle induite par les connecteurs
+    '    '------------------------------------------------------------------------------------------------------------------
 
-        '--> Déclaration
-        Dim nr As Integer
-        Dim PRd As Decimal
-        Dim sx As Decimal
-        Dim lGeneration1 As Boolean
-        Dim lDallePleine As Boolean
-        Dim lPerp As Boolean
-        Dim Ecm, Fck, Fcd, nu As Decimal
-        Dim fypd, fsd As Decimal
-        Dim gammaVs, gammaVc As Decimal
-        Dim v_x_Ed As Decimal
-        Dim k_sf_aa_sA, k_sf_bb_sA, k_sf_dd_sA As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui A (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
-        Dim k_sf_aa_m, k_sf_bb_m, k_sf_dd_m As Decimal      'Definition des coefficients lorsque l'on se trouve à mi-travee (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
-        Dim k_sf_aa_sB, k_sf_bb_sB, k_sf_dd_sB As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui B (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
-        Dim hf_aa, hf_bb, hf_dd As Decimal
-        Dim b0, b0min As Decimal
-        Dim LargeurParticipante(0, 0) As Decimal
-        Dim be1, be2, beta1, beta2, bem, bes As Decimal
-        Dim k_bacPE1 As Decimal                             'coefficient qui indique la présence du bac acier (=1) ou non (=0)
-        Dim xDebutZoneLoc, xFinZoneLoc As Decimal(,)
-        Dim lSupportA, lSupportB, lMiTravee As Boolean      'sera utile pour + tard, permet de savoir si la zone de connection etudiee empiete sur la zone de support A, B ou mi-travee (selon la Figure 5.1 de l'EC4)
-        Dim thetaf_min_pos, thetaf_min_neg, thetaf_max As Decimal 'angle min de la bielle de compression en fonction de si on se trouve en zone de flexion positive ou négative 
+    '    '--> Déclaration
+    '    Dim nr As Integer
+    '    Dim PRd As Decimal
+    '    Dim sx As Decimal
+    '    Dim lGeneration1 As Boolean
+    '    Dim lDallePleine As Boolean
+    '    Dim lPerp As Boolean
+    '    Dim Ecm, Fck, Fcd, nu As Decimal
+    '    Dim fypd, fsd As Decimal
+    '    Dim gammaVs, gammaVc As Decimal
+    '    Dim v_x_Ed As Decimal
+    '    Dim k_sf_aa_sA, k_sf_bb_sA, k_sf_dd_sA As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui A (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+    '    Dim k_sf_aa_m, k_sf_bb_m, k_sf_dd_m As Decimal      'Definition des coefficients lorsque l'on se trouve à mi-travee (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+    '    Dim k_sf_aa_sB, k_sf_bb_sB, k_sf_dd_sB As Decimal   'Definition des coefficients lorsque l'on se trouve au droit de l'appui B (voir Figure 5.1 de l'EC4 et §5.1 des specifications techniques)
+    '    Dim hf_aa, hf_bb, hf_dd As Decimal
+    '    Dim b0, b0min As Decimal
+    '    Dim LargeurParticipante(0, 0) As Decimal
+    '    Dim be1, be2, beta1, beta2, bem, bes As Decimal
+    '    Dim k_bacPE1 As Decimal                             'coefficient qui indique la présence du bac acier (=1) ou non (=0)
+    '    Dim xDebutZoneLoc, xFinZoneLoc As Decimal(,)
+    '    Dim lSupportA, lSupportB, lMiTravee As Boolean      'sera utile pour + tard, permet de savoir si la zone de connection etudiee empiete sur la zone de support A, B ou mi-travee (selon la Figure 5.1 de l'EC4)
+    '    Dim thetaf_min_pos, thetaf_min_neg, thetaf_max As Decimal 'angle min de la bielle de compression en fonction de si on se trouve en zone de flexion positive ou négative 
 
-        '--> Initialisation
-        lGeneration1 = Me.Param.lGeneration1
-        lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
-        lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
-        Ecm = Me.Dalle.beton.Ecm
-        Fck = Me.Dalle.beton.Fck
-        Fcd = Me.Dalle.beton.Fck / Me.Param.Gamma.GammaC
-        fypd = Me.Dalle.Bac.fyp / Me.Param.Gamma.GammaP
-        fsd = Me.Dalle.AcierArmatures.FsK / Me.Param.Gamma.GammaS
-        If Me.Param.lGeneration1 Then
-            nu = 0.6 * (1 - Fck / 250)
-        Else
-            nu = 0.5
-        End If
-        gammaVs = Me.Param.Gamma.GammaVs
-        gammaVc = Me.Param.Gamma.GammaVc
-        LargeurParticipante(0, 0) = 0 'initialisation avec une valeur quelconque pour pas que le tableau soit considéré comme Nothing dans la fonction BeffDalle
+    '    '--> Initialisation
+    '    lGeneration1 = Me.Param.lGeneration1
+    '    lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
+    '    lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+    '    Ecm = Me.Dalle.beton.Ecm
+    '    Fck = Me.Dalle.beton.Fck
+    '    Fcd = Me.Dalle.beton.Fck / Me.Param.Gamma.GammaC
+    '    fypd = Me.Dalle.Bac.fyp / Me.Param.Gamma.GammaP
+    '    fsd = Me.Dalle.AcierArmatures.FsK / Me.Param.Gamma.GammaS
+    '    If Me.Param.lGeneration1 Then
+    '        nu = 0.6 * (1 - Fck / 250)
+    '    Else
+    '        nu = 0.5
+    '    End If
+    '    gammaVs = Me.Param.Gamma.GammaVs
+    '    gammaVc = Me.Param.Gamma.GammaVc
+    '    LargeurParticipante(0, 0) = 0 'initialisation avec une valeur quelconque pour pas que le tableau soit considéré comme Nothing dans la fonction BeffDalle
 
-        thetaf_min_pos = 27 / 180 * Math.PI 'angle min de la bielle en zone de flexion positive
-        thetaf_min_neg = 36 / 180 * Math.PI 'angle min  de la bielle en zone de flexion négative
-        thetaf_max = Math.PI / 4
+    '    thetaf_min_pos = 27 / 180 * Math.PI 'angle min de la bielle en zone de flexion positive
+    '    thetaf_min_neg = 36 / 180 * Math.PI 'angle min  de la bielle en zone de flexion négative
+    '    thetaf_max = Math.PI / 4
 
-        If Me.Dalle.lMixte Then
-            b0min = 4 * Me.Dalle.Connecteur.d
-        Else
-            b0min = 2.5 * Me.Dalle.Connecteur.d
-        End If
+    '    If Me.Dalle.lMixte Then
+    '        b0min = 4 * Me.Dalle.Connecteur.d
+    '    Else
+    '        b0min = 2.5 * Me.Dalle.Connecteur.d
+    '    End If
 
-        'Stockage local des abscisses afin de ne pas faire tourner plusieurs fois les calculs des proprietes Me.xDebutZone et Me.xFinZone
-        xDebutZoneLoc = Me.xDebutZone
-        xFinZoneLoc = Me.xFinZone
+    '    'Stockage local des abscisses afin de ne pas faire tourner plusieurs fois les calculs des proprietes Me.xDebutZone et Me.xFinZone
+    '    xDebutZoneLoc = Me.xDebutZone
+    '    xFinZoneLoc = Me.xFinZone
 
-        For i_travee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
-            For j_zone As Integer = 0 To Me.NombreZones(i_travee) - 1
+    '    For i_travee As Integer = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+    '        For j_zone As Integer = 0 To Me.NombreZones(i_travee) - 1
 
-                '---
-                'CALCUL DE LA CONTRAINTE TANGENTIELLE
-                '---
+    '            '---
+    '            'CALCUL DE LA CONTRAINTE TANGENTIELLE
+    '            '---
 
-                'nr = Me.NombreGoujonsTransv(i_travee, j_zone)
-                'PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
-                'sx = Me.EspacementZone(i_travee, j_zone)
-                'v_x_Ed = nr * PRd / sx
-                v_x_Ed = Me.FluxRdZone(i_travee, j_zone)
+    '            'nr = Me.NombreGoujonsTransv(i_travee, j_zone)
+    '            'PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
+    '            'sx = Me.EspacementZone(i_travee, j_zone)
+    '            'v_x_Ed = nr * PRd / sx
+    '            v_x_Ed = Me.FluxRdZone(i_travee, j_zone)
 
-                b0 = (nr - 1) * b0min
+    '            b0 = (nr - 1) * b0min
 
-                Me.BeffDalle(Me.LongueurTravee(i_travee) / 2, i_travee, False, False, EnuTypeLargeurParticipante.LargeurTotale, LargeurParticipante)
+    '            Me.BeffDalle(Me.LongueurTravee(i_travee) / 2, i_travee, False, False, EnuTypeLargeurParticipante.LargeurTotale, LargeurParticipante)
 
-                'Calcul de hf qui correspond à la longueur developpe de la surface de ruine 
-                hf_aa = Me.Dalle.EpaisseurActive
-                If nr = 1 Then
-                    hf_bb = 2 * Me.Dalle.Connecteur.hsc + Me.Dalle.Connecteur.d 'GUD: a confirmer avec les corrections apportées dans le MT 
-                Else
-                    hf_bb = 2 * Me.Dalle.Connecteur.hsc + b0
-                End If
-                hf_dd = b0 + 2 * (Me.Section.ProfilA.Bfs - b0 + Me.Dalle.Connecteur.hsc * Math.Tan(Me.Dalle.ThetaRd)) / Math.Sqrt(1 + Math.Tan(Me.Dalle.ThetaRd) ^ 2)
+    '            'Calcul de hf qui correspond à la longueur developpe de la surface de ruine 
+    '            hf_aa = Me.Dalle.EpaisseurActive
+    '            If nr = 1 Then
+    '                hf_bb = 2 * Me.Dalle.Connecteur.hsc + Me.Dalle.Connecteur.d 'GUD: a confirmer avec les corrections apportées dans le MT 
+    '            Else
+    '                hf_bb = 2 * Me.Dalle.Connecteur.hsc + b0
+    '            End If
+    '            hf_dd = b0 + 2 * (Me.Section.ProfilA.Bfs - b0 + Me.Dalle.Connecteur.hsc * Math.Tan(Me.Dalle.ThetaRd)) / Math.Sqrt(1 + Math.Tan(Me.Dalle.ThetaRd) ^ 2)
 
-                Select Case i_travee
-                    Case 0 'on est dans le cas de la console gauche
+    '            Select Case i_travee
+    '                Case 0 'on est dans le cas de la console gauche
 
-                        'Les consoles sont forcement en flexion négative, on calcul uniquement le coefficient au droit de l'appui A
-                        be1 = LargeurParticipante(0, 0)
-                        be2 = LargeurParticipante(1, 0)
-                        beta1 = LargeurParticipante(2, 0)
-                        beta2 = LargeurParticipante(3, 0)
-                        bes = LargeurParticipante(5, 0)
+    '                    'Les consoles sont forcement en flexion négative, on calcul uniquement le coefficient au droit de l'appui A
+    '                    be1 = LargeurParticipante(0, 0)
+    '                    be2 = LargeurParticipante(1, 0)
+    '                    beta1 = LargeurParticipante(2, 0)
+    '                    beta2 = LargeurParticipante(3, 0)
+    '                    bes = LargeurParticipante(5, 0)
 
-                        k_sf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
-                        k_sf_bb_sA = 1
-                        k_sf_dd_sA = 1
+    '                    k_sf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+    '                    k_sf_bb_sA = 1
+    '                    k_sf_dd_sA = 1
 
-                        Me.TauEd(i_travee, j_zone, 0) = k_sf_aa_sA * v_x_Ed / hf_aa
-                        Me.TauEd(i_travee, j_zone, 1) = k_sf_bb_sA * v_x_Ed / hf_bb
-                        Me.TauEd(i_travee, j_zone, 2) = k_sf_dd_sA * v_x_Ed / hf_dd
+    '                    Me.TauEd(i_travee, j_zone, 0) = k_sf_aa_sA * v_x_Ed / hf_aa
+    '                    Me.TauEd(i_travee, j_zone, 1) = k_sf_bb_sA * v_x_Ed / hf_bb
+    '                    Me.TauEd(i_travee, j_zone, 2) = k_sf_dd_sA * v_x_Ed / hf_dd
 
-                        Me.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+    '                    Me.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
 
-                    Case Me.IndiceTraveeConsoleDroite 'on est dans le cas de la console droite 
+    '                Case Me.IndiceTraveeConsoleDroite 'on est dans le cas de la console droite 
 
-                        'Les consoles sont forcement en flexion négative, on calcul uniquement le coefficient au droit de l'appui B
-                        be1 = LargeurParticipante(0, 2)
-                        be2 = LargeurParticipante(1, 2)
-                        beta1 = LargeurParticipante(2, 2)
-                        beta2 = LargeurParticipante(3, 2)
-                        bes = LargeurParticipante(5, 2)
+    '                    'Les consoles sont forcement en flexion négative, on calcul uniquement le coefficient au droit de l'appui B
+    '                    be1 = LargeurParticipante(0, 2)
+    '                    be2 = LargeurParticipante(1, 2)
+    '                    beta1 = LargeurParticipante(2, 2)
+    '                    beta2 = LargeurParticipante(3, 2)
+    '                    bes = LargeurParticipante(5, 2)
 
-                        k_sf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
-                        k_sf_bb_sB = 1
-                        k_sf_dd_sB = 1
+    '                    k_sf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+    '                    k_sf_bb_sB = 1
+    '                    k_sf_dd_sB = 1
 
-                        Me.TauEd(i_travee, j_zone, 0) = k_sf_aa_sB * v_x_Ed / hf_aa
-                        Me.TauEd(i_travee, j_zone, 1) = k_sf_bb_sB * v_x_Ed / hf_bb
-                        Me.TauEd(i_travee, j_zone, 2) = k_sf_dd_sB * v_x_Ed / hf_dd
+    '                    Me.TauEd(i_travee, j_zone, 0) = k_sf_aa_sB * v_x_Ed / hf_aa
+    '                    Me.TauEd(i_travee, j_zone, 1) = k_sf_bb_sB * v_x_Ed / hf_bb
+    '                    Me.TauEd(i_travee, j_zone, 2) = k_sf_dd_sB * v_x_Ed / hf_dd
 
-                        Me.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+    '                    Me.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
 
-                    Case Else 'on est dans le cas d'une travée centrale
+    '                Case Else 'on est dans le cas d'une travée centrale
 
-                        'Calcul des coefficients k_sf au droit de l'appui A
-                        be1 = LargeurParticipante(0, 0)
-                        be2 = LargeurParticipante(1, 0)
-                        beta1 = LargeurParticipante(2, 0)
-                        beta2 = LargeurParticipante(3, 0)
-                        bes = LargeurParticipante(5, 0)
+    '                    'Calcul des coefficients k_sf au droit de l'appui A
+    '                    be1 = LargeurParticipante(0, 0)
+    '                    be2 = LargeurParticipante(1, 0)
+    '                    beta1 = LargeurParticipante(2, 0)
+    '                    beta2 = LargeurParticipante(3, 0)
+    '                    bes = LargeurParticipante(5, 0)
 
-                        k_sf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
-                        k_sf_bb_sA = 1
-                        k_sf_dd_sA = 1
+    '                    k_sf_aa_sA = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+    '                    k_sf_bb_sA = 1
+    '                    k_sf_dd_sA = 1
 
-                        'Calcul des coefficients k_sf a mi travee
-                        be1 = LargeurParticipante(0, 1)
-                        be2 = LargeurParticipante(1, 1)
-                        bem = LargeurParticipante(5, 1)
+    '                    'Calcul des coefficients k_sf a mi travee
+    '                    be1 = LargeurParticipante(0, 1)
+    '                    be2 = LargeurParticipante(1, 1)
+    '                    bem = LargeurParticipante(5, 1)
 
-                        k_sf_aa_m = Math.Max((be1 - b0 / 2) / bem, (be2 - b0 / 2) / bem)
-                        k_sf_bb_m = 1
-                        k_sf_dd_m = 1
+    '                    k_sf_aa_m = Math.Max((be1 - b0 / 2) / bem, (be2 - b0 / 2) / bem)
+    '                    k_sf_bb_m = 1
+    '                    k_sf_dd_m = 1
 
-                        'Calcul des coefficients k_sf au droit de l'appui B
-                        be1 = LargeurParticipante(0, 2)
-                        be2 = LargeurParticipante(1, 2)
-                        beta1 = LargeurParticipante(2, 2)
-                        beta2 = LargeurParticipante(3, 2)
-                        bes = LargeurParticipante(5, 2)
+    '                    'Calcul des coefficients k_sf au droit de l'appui B
+    '                    be1 = LargeurParticipante(0, 2)
+    '                    be2 = LargeurParticipante(1, 2)
+    '                    beta1 = LargeurParticipante(2, 2)
+    '                    beta2 = LargeurParticipante(3, 2)
+    '                    bes = LargeurParticipante(5, 2)
 
-                        k_sf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
-                        k_sf_bb_sB = 1
-                        k_sf_dd_sB = 1
+    '                    k_sf_aa_sB = Math.Max((beta1 * be1 - b0 / 2) / bes, (beta2 * be2 - b0 / 2) / bes)
+    '                    k_sf_bb_sB = 1
+    '                    k_sf_dd_sB = 1
 
-                        If Me.lTraveeConsoleGauche Then
-                            If Me.lTraveeConsoleDroite Then 'Presence de console a gauche ET a droite
-                                Select Case Me.xDebutZone(i_travee, j_zone)
-                                    Case <= Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant L/4
-                                        Select Case Me.xFinZone(i_travee, j_zone)
-                                            Case <= Me.LongueurTravee(i_travee) / 4 'la zone etudiée commence et finie avant L/4
-                                                lSupportA = True
-                                                lMiTravee = False
-                                                lSupportB = False
-                                            Case <= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant L/4 et finie entre L/4 et 3L/4
-                                                lSupportA = True
-                                                lMiTravee = True
-                                                lSupportB = False
-                                            Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la eone étudiée commence avant L/4 et finie après 3L/4
-                                                lSupportA = True
-                                                lMiTravee = True
-                                                lSupportB = True
-                                        End Select
-                                    Case <= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence après L/4 et avant 3L/4
-                                        Select Case Me.xFinZone(i_travee, j_zone) 'le cas ou la zone finie avant L/4 n a pas de sens et n est pas étudiée 
-                                            Case <= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence et finie entre L/4 et 3L/4 
-                                                lSupportA = False
-                                                lMiTravee = True
-                                                lSupportB = False
-                                            Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence entre L/4 et 3L/4 et finie après 3L/4
-                                                lSupportA = False
-                                                lMiTravee = True
-                                                lSupportB = True
-                                        End Select
-                                    Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la zone finie nécessairement après 3L/4 donc pas besoin de boucle 
-                                        lSupportA = False
-                                        lMiTravee = False
-                                        lSupportB = True
-                                End Select
+    '                    If Me.lTraveeConsoleGauche Then
+    '                        If Me.lTraveeConsoleDroite Then 'Presence de console a gauche ET a droite
+    '                            Select Case Me.xDebutZone(i_travee, j_zone)
+    '                                Case <= Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant L/4
+    '                                    Select Case Me.xFinZone(i_travee, j_zone)
+    '                                        Case <= Me.LongueurTravee(i_travee) / 4 'la zone etudiée commence et finie avant L/4
+    '                                            lSupportA = True
+    '                                            lMiTravee = False
+    '                                            lSupportB = False
+    '                                        Case <= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant L/4 et finie entre L/4 et 3L/4
+    '                                            lSupportA = True
+    '                                            lMiTravee = True
+    '                                            lSupportB = False
+    '                                        Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la eone étudiée commence avant L/4 et finie après 3L/4
+    '                                            lSupportA = True
+    '                                            lMiTravee = True
+    '                                            lSupportB = True
+    '                                    End Select
+    '                                Case <= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence après L/4 et avant 3L/4
+    '                                    Select Case Me.xFinZone(i_travee, j_zone) 'le cas ou la zone finie avant L/4 n a pas de sens et n est pas étudiée 
+    '                                        Case <= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence et finie entre L/4 et 3L/4 
+    '                                            lSupportA = False
+    '                                            lMiTravee = True
+    '                                            lSupportB = False
+    '                                        Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence entre L/4 et 3L/4 et finie après 3L/4
+    '                                            lSupportA = False
+    '                                            lMiTravee = True
+    '                                            lSupportB = True
+    '                                    End Select
+    '                                Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la zone finie nécessairement après 3L/4 donc pas besoin de boucle 
+    '                                    lSupportA = False
+    '                                    lMiTravee = False
+    '                                    lSupportB = True
+    '                            End Select
 
-                            Else 'Presence de console a gauche uniquement
-                                lSupportB = False 'il n'y a pas de console a droite, ce qui fait qu'il ne peut pas y avoir de zone de moment négatif proche de l appui de droite 
+    '                        Else 'Presence de console a gauche uniquement
+    '                            lSupportB = False 'il n'y a pas de console a droite, ce qui fait qu'il ne peut pas y avoir de zone de moment négatif proche de l appui de droite 
 
-                                Select Case Me.xDebutZone(i_travee, j_zone)
-                                    Case <= Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant L/4
-                                        Select Case Me.xFinZone(i_travee, j_zone)
-                                            Case <= Me.LongueurTravee(i_travee) / 4 'la zone etudiée commence et finie avant L/4
-                                                lSupportA = True
-                                                lMiTravee = False
-                                            Case >= Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant L/4 et finie après L/4
-                                                lSupportA = True
-                                                lMiTravee = True
-                                        End Select
-                                    Case >= Me.LongueurTravee(i_travee) / 4 'la zone  commence et finie nécessairement après L/4 donc pas besoin de boucle 
-                                        lSupportA = False
-                                        lMiTravee = True
-                                End Select
-                            End If
-                        Else
-                            If Me.lTraveeConsoleDroite Then 'Presence de console a droite uniquement
-                                lSupportA = False 'il n'y a pas de console a gauche, ce qui fait qu'il ne peut pas y avoir de zone de moment négatif proche de l appui de droite 
+    '                            Select Case Me.xDebutZone(i_travee, j_zone)
+    '                                Case <= Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant L/4
+    '                                    Select Case Me.xFinZone(i_travee, j_zone)
+    '                                        Case <= Me.LongueurTravee(i_travee) / 4 'la zone etudiée commence et finie avant L/4
+    '                                            lSupportA = True
+    '                                            lMiTravee = False
+    '                                        Case >= Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant L/4 et finie après L/4
+    '                                            lSupportA = True
+    '                                            lMiTravee = True
+    '                                    End Select
+    '                                Case >= Me.LongueurTravee(i_travee) / 4 'la zone  commence et finie nécessairement après L/4 donc pas besoin de boucle 
+    '                                    lSupportA = False
+    '                                    lMiTravee = True
+    '                            End Select
+    '                        End If
+    '                    Else
+    '                        If Me.lTraveeConsoleDroite Then 'Presence de console a droite uniquement
+    '                            lSupportA = False 'il n'y a pas de console a gauche, ce qui fait qu'il ne peut pas y avoir de zone de moment négatif proche de l appui de droite 
 
-                                Select Case Me.xDebutZone(i_travee, j_zone)
-                                    Case <= 3 * Me.LongueurTravee(i_travee) / 4
-                                        Select Case Me.xFinZone(i_travee, j_zone)
-                                            Case <= 3 * Me.LongueurTravee(i_travee) / 4 'la zone etudiée commence et finie avant 3L/4
-                                                lMiTravee = True
-                                                lSupportB = False
-                                            Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant 3L/4 et finie après 3L/4
-                                                lMiTravee = True
-                                                lSupportB = True
-                                        End Select
-                                    Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la zone  commence et finie nécessairement après 3L/4 donc pas besoin de boucle 
-                                        lMiTravee = False
-                                        lSupportB = True
-                                End Select
-                            Else 'Aucune console, la zone étudiée se trouve nécessairement en zone de flexion positive 
-                                lSupportA = False
-                                lMiTravee = True
-                                lSupportB = False
-                            End If
-                        End If
-
-
-                        If lSupportA Then
-                            Me.TauEd(i_travee, j_zone, 0) = k_sf_aa_sA * v_x_Ed / hf_aa
-                            Me.TauEd(i_travee, j_zone, 1) = k_sf_bb_sA * v_x_Ed / hf_bb
-                            Me.TauEd(i_travee, j_zone, 2) = k_sf_dd_sA * v_x_Ed / hf_dd
-                        End If
-
-                        If lMiTravee Then
-                            Me.TauEd(i_travee, j_zone, 0) = Math.Max(Me.TauEd(i_travee, j_zone, 0), k_sf_aa_m * v_x_Ed / hf_aa)
-                            Me.TauEd(i_travee, j_zone, 1) = Math.Max(Me.TauEd(i_travee, j_zone, 1), k_sf_bb_m * v_x_Ed / hf_bb)
-                            Me.TauEd(i_travee, j_zone, 2) = Math.Max(Me.TauEd(i_travee, j_zone, 2), k_sf_dd_m * v_x_Ed / hf_dd)
-                        End If
-
-                        If lSupportB Then
-                            Me.TauEd(i_travee, j_zone, 0) = Math.Max(Me.TauEd(i_travee, j_zone, 0), k_sf_aa_sB * v_x_Ed / hf_aa)
-                            Me.TauEd(i_travee, j_zone, 1) = Math.Max(Me.TauEd(i_travee, j_zone, 1), k_sf_bb_sB * v_x_Ed / hf_bb)
-                            Me.TauEd(i_travee, j_zone, 2) = Math.Max(Me.TauEd(i_travee, j_zone, 2), k_sf_dd_sB * v_x_Ed / hf_dd)
-                        End If
-
-                        If lSupportA Or lSupportB Then 'la zone de connection étudiée traverse au moins une zone de flexion négative
-                            Me.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
-                        Else 'la zone de connection étudiée est entièrement en zone de flexion comprimée 
-                            Me.Thetaf_min(i_travee, j_zone) = thetaf_min_pos
-                        End If
-
-                End Select
-
-                '---
-                'CALCUL DE L'ANGLE DE LA BIELLE DE COMPRESSION ET DE LA QUANTITE D'ARMATURE PAR UNITE DE LONGUEUR NECESSAIRE
-                '---
-
-                Dim TauEd_max As Decimal = nu * Fcd / 2
-
-                For k_ruine As Integer = 0 To 2
-                    'Conversion de Pa a MPa des contraintes tangentielles
-                    Me.TauEd(i_travee, j_zone, k_ruine) /= kConvMPaPa
-
-                    If TauEd(i_travee, j_zone, k_ruine) <= TauEd_max Then
-                        Me.Thetaf(i_travee, j_zone, k_ruine) = 0.5 * Math.Asin(2 * TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd))
-                    Else 'la contrainte tangentielle est trop importante, la bielle de compression n'est pas vérifiée. On considère alors l'angle de la bielle max pour la suite du calcul 
-                        Me.Thetaf(i_travee, j_zone, k_ruine) = thetaf_max
-                    End If
-
-                    Me.Thetaf(i_travee, j_zone, k_ruine) = Math.Min(Me.Thetaf(i_travee, j_zone, k_ruine), thetaf_max)
-                    Me.Thetaf(i_travee, j_zone, k_ruine) = Math.Max(Me.Thetaf(i_travee, j_zone, k_ruine), Me.Thetaf_min(i_travee, j_zone))
-
-                    'Calcul du critère de vérification de la bielle de compression
-                    Me.Gamma_sf(i_travee, j_zone, k_ruine) = Me.TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd * Math.Sin(Me.Thetaf(i_travee, j_zone, k_ruine)) * Math.Cos(Me.Thetaf(i_travee, j_zone, k_ruine)))
-
-                Next
-
-                If Me.Dalle.lMixte And Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire And Me.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Then
-                    k_bacPE1 = 1
-                Else
-                    k_bacPE1 = 0
-                End If
-
-                Me.As_s_transv(i_travee, j_zone, 0) = Math.Max((TauEd(i_travee, j_zone, 0) * hf_aa * Math.Tan(Me.Thetaf(i_travee, j_zone, 0)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / fsd, 0)
-                Me.As_s_transv(i_travee, j_zone, 1) = Math.Max((TauEd(i_travee, j_zone, 1) * hf_bb * Math.Tan(Me.Thetaf(i_travee, j_zone, 1)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / fsd, 0)
-                Me.As_s_transv(i_travee, j_zone, 2) = Math.Max((TauEd(i_travee, j_zone, 2) * hf_dd * Math.Tan(Me.Thetaf(i_travee, j_zone, 2)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / fsd, 0)
+    '                            Select Case Me.xDebutZone(i_travee, j_zone)
+    '                                Case <= 3 * Me.LongueurTravee(i_travee) / 4
+    '                                    Select Case Me.xFinZone(i_travee, j_zone)
+    '                                        Case <= 3 * Me.LongueurTravee(i_travee) / 4 'la zone etudiée commence et finie avant 3L/4
+    '                                            lMiTravee = True
+    '                                            lSupportB = False
+    '                                        Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la zone étudiée commence avant 3L/4 et finie après 3L/4
+    '                                            lMiTravee = True
+    '                                            lSupportB = True
+    '                                    End Select
+    '                                Case >= 3 * Me.LongueurTravee(i_travee) / 4 'la zone  commence et finie nécessairement après 3L/4 donc pas besoin de boucle 
+    '                                    lMiTravee = False
+    '                                    lSupportB = True
+    '                            End Select
+    '                        Else 'Aucune console, la zone étudiée se trouve nécessairement en zone de flexion positive 
+    '                            lSupportA = False
+    '                            lMiTravee = True
+    '                            lSupportB = False
+    '                        End If
+    '                    End If
 
 
-            Next
-        Next
+    '                    If lSupportA Then
+    '                        Me.TauEd(i_travee, j_zone, 0) = k_sf_aa_sA * v_x_Ed / hf_aa
+    '                        Me.TauEd(i_travee, j_zone, 1) = k_sf_bb_sA * v_x_Ed / hf_bb
+    '                        Me.TauEd(i_travee, j_zone, 2) = k_sf_dd_sA * v_x_Ed / hf_dd
+    '                    End If
+
+    '                    If lMiTravee Then
+    '                        Me.TauEd(i_travee, j_zone, 0) = Math.Max(Me.TauEd(i_travee, j_zone, 0), k_sf_aa_m * v_x_Ed / hf_aa)
+    '                        Me.TauEd(i_travee, j_zone, 1) = Math.Max(Me.TauEd(i_travee, j_zone, 1), k_sf_bb_m * v_x_Ed / hf_bb)
+    '                        Me.TauEd(i_travee, j_zone, 2) = Math.Max(Me.TauEd(i_travee, j_zone, 2), k_sf_dd_m * v_x_Ed / hf_dd)
+    '                    End If
+
+    '                    If lSupportB Then
+    '                        Me.TauEd(i_travee, j_zone, 0) = Math.Max(Me.TauEd(i_travee, j_zone, 0), k_sf_aa_sB * v_x_Ed / hf_aa)
+    '                        Me.TauEd(i_travee, j_zone, 1) = Math.Max(Me.TauEd(i_travee, j_zone, 1), k_sf_bb_sB * v_x_Ed / hf_bb)
+    '                        Me.TauEd(i_travee, j_zone, 2) = Math.Max(Me.TauEd(i_travee, j_zone, 2), k_sf_dd_sB * v_x_Ed / hf_dd)
+    '                    End If
+
+    '                    If lSupportA Or lSupportB Then 'la zone de connection étudiée traverse au moins une zone de flexion négative
+    '                        Me.Thetaf_min(i_travee, j_zone) = thetaf_min_neg
+    '                    Else 'la zone de connection étudiée est entièrement en zone de flexion comprimée 
+    '                        Me.Thetaf_min(i_travee, j_zone) = thetaf_min_pos
+    '                    End If
+
+    '            End Select
+
+    '            '---
+    '            'CALCUL DE L'ANGLE DE LA BIELLE DE COMPRESSION ET DE LA QUANTITE D'ARMATURE PAR UNITE DE LONGUEUR NECESSAIRE
+    '            '---
+
+    '            Dim TauEd_max As Decimal = nu * Fcd / 2
+
+    '            For k_ruine As Integer = 0 To 2
+    '                'Conversion de Pa a MPa des contraintes tangentielles
+    '                Me.TauEd(i_travee, j_zone, k_ruine) /= kConvMPaPa
+
+    '                If TauEd(i_travee, j_zone, k_ruine) <= TauEd_max Then
+    '                    Me.Thetaf(i_travee, j_zone, k_ruine) = 0.5 * Math.Asin(2 * TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd))
+    '                Else 'la contrainte tangentielle est trop importante, la bielle de compression n'est pas vérifiée. On considère alors l'angle de la bielle max pour la suite du calcul 
+    '                    Me.Thetaf(i_travee, j_zone, k_ruine) = thetaf_max
+    '                End If
+
+    '                Me.Thetaf(i_travee, j_zone, k_ruine) = Math.Min(Me.Thetaf(i_travee, j_zone, k_ruine), thetaf_max)
+    '                Me.Thetaf(i_travee, j_zone, k_ruine) = Math.Max(Me.Thetaf(i_travee, j_zone, k_ruine), Me.Thetaf_min(i_travee, j_zone))
+
+    '                'Calcul du critère de vérification de la bielle de compression
+    '                Me.Gamma_sf(i_travee, j_zone, k_ruine) = Me.TauEd(i_travee, j_zone, k_ruine) / (nu * Fcd * Math.Sin(Me.Thetaf(i_travee, j_zone, k_ruine)) * Math.Cos(Me.Thetaf(i_travee, j_zone, k_ruine)))
+
+    '            Next
+
+    '            If Me.Dalle.lMixte And Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire And Me.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Then
+    '                k_bacPE1 = 1
+    '            Else
+    '                k_bacPE1 = 0
+    '            End If
+
+    '            Me.As_s_transv(i_travee, j_zone, 0) = Math.Max((TauEd(i_travee, j_zone, 0) * hf_aa * Math.Tan(Me.Thetaf(i_travee, j_zone, 0)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / fsd, 0)
+    '            Me.As_s_transv(i_travee, j_zone, 1) = Math.Max((TauEd(i_travee, j_zone, 1) * hf_bb * Math.Tan(Me.Thetaf(i_travee, j_zone, 1)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / fsd, 0)
+    '            Me.As_s_transv(i_travee, j_zone, 2) = Math.Max((TauEd(i_travee, j_zone, 2) * hf_dd * Math.Tan(Me.Thetaf(i_travee, j_zone, 2)) - k_bacPE1 * Me.Dalle.Bac.Ape * fypd) / fsd, 0)
+
+
+    '        Next
+    '    Next
 
 
 
-    End Sub
+    'End Sub
 
 #End Region
 

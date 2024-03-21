@@ -25,25 +25,10 @@ Partial Class Frm_OptionsCalculIncendie
         Me.pan_Incendie = New System.Windows.Forms.Panel()
         Me.TLpan_Conteneur = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Conteneur = New System.Windows.Forms.Panel()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.etq_UnitL1 = New System.Windows.Forms.Label()
-        Me.txt_EspNoeuds = New System.Windows.Forms.TextBox()
-        Me.img_dNodes = New System.Windows.Forms.PictureBox()
-        Me.lbl_DistanceMaxNoeuds = New System.Windows.Forms.Label()
-        Me.lbl_Parametres = New System.Windows.Forms.Label()
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.lbl_Constantes = New System.Windows.Forms.Label()
-        Me.etq_UnitBoltzman = New System.Windows.Forms.Label()
-        Me.lbl_Boltzman = New System.Windows.Forms.Label()
-        Me.txt_Sigma = New System.Windows.Forms.TextBox()
-        Me.img_Sigma = New System.Windows.Forms.PictureBox()
-        Me.lbl_Incendie = New System.Windows.Forms.Label()
-        Me.lbl_EmissiviteFeu = New System.Windows.Forms.Label()
-        Me.txt_EmissiviteFeu = New System.Windows.Forms.TextBox()
-        Me.lbl_EmissiviteAcier = New System.Windows.Forms.Label()
-        Me.txt_EmissiviteAcier = New System.Windows.Forms.TextBox()
+        Me.img_UnitBoltzmann = New System.Windows.Forms.PictureBox()
+        Me.img_Deltat = New System.Windows.Forms.PictureBox()
+        Me.img_T0 = New System.Windows.Forms.PictureBox()
         Me.img_UnitThermConvection = New System.Windows.Forms.PictureBox()
         Me.lbl_ThermConvection = New System.Windows.Forms.Label()
         Me.txt_ThermConvection = New System.Windows.Forms.TextBox()
@@ -52,25 +37,40 @@ Partial Class Frm_OptionsCalculIncendie
         Me.etq_UnitIncrementTemps = New System.Windows.Forms.Label()
         Me.lbl_TempReference = New System.Windows.Forms.Label()
         Me.txt_TempReference = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.etq_UnitTempReference = New System.Windows.Forms.Label()
-        Me.img_EpsilonA = New System.Windows.Forms.PictureBox()
+        Me.etq_UnitL1 = New System.Windows.Forms.Label()
+        Me.txt_EspNoeuds = New System.Windows.Forms.TextBox()
+        Me.img_dNodes = New System.Windows.Forms.PictureBox()
+        Me.lbl_DistanceMaxNoeuds = New System.Windows.Forms.Label()
+        Me.lbl_Parametres = New System.Windows.Forms.Label()
+        Me.Panel1 = New System.Windows.Forms.Panel()
         Me.img_EpsilonF = New System.Windows.Forms.PictureBox()
-        Me.img_T0 = New System.Windows.Forms.PictureBox()
-        Me.img_Deltat = New System.Windows.Forms.PictureBox()
-        Me.img_UnitBoltzmann = New System.Windows.Forms.PictureBox()
+        Me.img_EpsilonA = New System.Windows.Forms.PictureBox()
+        Me.lbl_EmissiviteFeu = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.txt_EmissiviteFeu = New System.Windows.Forms.TextBox()
+        Me.lbl_Constantes = New System.Windows.Forms.Label()
+        Me.lbl_EmissiviteAcier = New System.Windows.Forms.Label()
+        Me.txt_EmissiviteAcier = New System.Windows.Forms.TextBox()
+        Me.etq_UnitBoltzman = New System.Windows.Forms.Label()
+        Me.lbl_Boltzman = New System.Windows.Forms.Label()
+        Me.txt_Sigma = New System.Windows.Forms.TextBox()
+        Me.img_Sigma = New System.Windows.Forms.PictureBox()
+        Me.lbl_Incendie = New System.Windows.Forms.Label()
         Me.pan_Incendie.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        CType(Me.img_UnitBoltzmann, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Deltat, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_T0, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UnitThermConvection, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_dNodes, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
-        CType(Me.img_Sigma, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_UnitThermConvection, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_EpsilonA, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_EpsilonF, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_T0, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Deltat, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_UnitBoltzmann, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_EpsilonA, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Sigma, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Incendie
@@ -110,30 +110,6 @@ Partial Class Frm_OptionsCalculIncendie
         Me.pan_Conteneur.Size = New System.Drawing.Size(739, 436)
         Me.pan_Conteneur.TabIndex = 0
         '
-        'Label1
-        '
-        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(268, 118)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(13, 13)
-        Me.Label1.TabIndex = 133
-        Me.Label1.Text = "≥"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'Label5
-        '
-        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label5.AutoSize = True
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(597, 30)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(13, 13)
-        Me.Label5.TabIndex = 124
-        Me.Label5.Text = "≤"
-        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
         'Panel2
         '
         Me.Panel2.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
@@ -156,175 +132,37 @@ Partial Class Frm_OptionsCalculIncendie
         Me.Panel2.Controls.Add(Me.img_dNodes)
         Me.Panel2.Controls.Add(Me.lbl_DistanceMaxNoeuds)
         Me.Panel2.Controls.Add(Me.lbl_Parametres)
-        Me.Panel2.Location = New System.Drawing.Point(3, 192)
+        Me.Panel2.Location = New System.Drawing.Point(3, 193)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(732, 210)
         Me.Panel2.TabIndex = 106
         '
-        'etq_UnitL1
+        'img_UnitBoltzmann
         '
-        Me.etq_UnitL1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitL1.AutoSize = True
-        Me.etq_UnitL1.Location = New System.Drawing.Point(674, 30)
-        Me.etq_UnitL1.Name = "etq_UnitL1"
-        Me.etq_UnitL1.Size = New System.Drawing.Size(39, 13)
-        Me.etq_UnitL1.TabIndex = 109
-        Me.etq_UnitL1.Text = "Label1"
+        Me.img_UnitBoltzmann.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_UnitBoltzmann.Location = New System.Drawing.Point(321, 148)
+        Me.img_UnitBoltzmann.Name = "img_UnitBoltzmann"
+        Me.img_UnitBoltzmann.Size = New System.Drawing.Size(95, 20)
+        Me.img_UnitBoltzmann.TabIndex = 138
+        Me.img_UnitBoltzmann.TabStop = False
         '
-        'txt_EspNoeuds
+        'img_Deltat
         '
-        Me.txt_EspNoeuds.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EspNoeuds.Location = New System.Drawing.Point(610, 27)
-        Me.txt_EspNoeuds.Name = "txt_EspNoeuds"
-        Me.txt_EspNoeuds.Size = New System.Drawing.Size(55, 20)
-        Me.txt_EspNoeuds.TabIndex = 107
+        Me.img_Deltat.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Deltat.Location = New System.Drawing.Point(564, 80)
+        Me.img_Deltat.Name = "img_Deltat"
+        Me.img_Deltat.Size = New System.Drawing.Size(46, 20)
+        Me.img_Deltat.TabIndex = 137
+        Me.img_Deltat.TabStop = False
         '
-        'img_dNodes
+        'img_T0
         '
-        Me.img_dNodes.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_dNodes.Location = New System.Drawing.Point(551, 27)
-        Me.img_dNodes.Name = "img_dNodes"
-        Me.img_dNodes.Size = New System.Drawing.Size(46, 20)
-        Me.img_dNodes.TabIndex = 108
-        Me.img_dNodes.TabStop = False
-        '
-        'lbl_DistanceMaxNoeuds
-        '
-        Me.lbl_DistanceMaxNoeuds.AutoSize = True
-        Me.lbl_DistanceMaxNoeuds.Location = New System.Drawing.Point(39, 30)
-        Me.lbl_DistanceMaxNoeuds.Name = "lbl_DistanceMaxNoeuds"
-        Me.lbl_DistanceMaxNoeuds.Size = New System.Drawing.Size(122, 13)
-        Me.lbl_DistanceMaxNoeuds.TabIndex = 106
-        Me.lbl_DistanceMaxNoeuds.Text = "lbl_DistanceMaxNoeuds"
-        '
-        'lbl_Parametres
-        '
-        Me.lbl_Parametres.AutoSize = True
-        Me.lbl_Parametres.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Parametres.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Parametres.Location = New System.Drawing.Point(5, 5)
-        Me.lbl_Parametres.Name = "lbl_Parametres"
-        Me.lbl_Parametres.Size = New System.Drawing.Size(76, 13)
-        Me.lbl_Parametres.TabIndex = 105
-        Me.lbl_Parametres.Text = "lbl_Parametres"
-        Me.lbl_Parametres.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'Panel1
-        '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Controls.Add(Me.img_EpsilonF)
-        Me.Panel1.Controls.Add(Me.img_EpsilonA)
-        Me.Panel1.Controls.Add(Me.lbl_EmissiviteFeu)
-        Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Controls.Add(Me.txt_EmissiviteFeu)
-        Me.Panel1.Controls.Add(Me.lbl_Constantes)
-        Me.Panel1.Controls.Add(Me.lbl_EmissiviteAcier)
-        Me.Panel1.Controls.Add(Me.txt_EmissiviteAcier)
-        Me.Panel1.Controls.Add(Me.etq_UnitBoltzman)
-        Me.Panel1.Controls.Add(Me.lbl_Boltzman)
-        Me.Panel1.Controls.Add(Me.txt_Sigma)
-        Me.Panel1.Controls.Add(Me.img_Sigma)
-        Me.Panel1.Location = New System.Drawing.Point(3, 30)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(732, 158)
-        Me.Panel1.TabIndex = 105
-        '
-        'lbl_Constantes
-        '
-        Me.lbl_Constantes.AutoSize = True
-        Me.lbl_Constantes.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Constantes.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Constantes.Location = New System.Drawing.Point(5, 5)
-        Me.lbl_Constantes.Name = "lbl_Constantes"
-        Me.lbl_Constantes.Size = New System.Drawing.Size(76, 13)
-        Me.lbl_Constantes.TabIndex = 104
-        Me.lbl_Constantes.Text = "lbl_Constantes"
-        Me.lbl_Constantes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'etq_UnitBoltzman
-        '
-        Me.etq_UnitBoltzman.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitBoltzman.AutoSize = True
-        Me.etq_UnitBoltzman.Location = New System.Drawing.Point(674, 26)
-        Me.etq_UnitBoltzman.Name = "etq_UnitBoltzman"
-        Me.etq_UnitBoltzman.Size = New System.Drawing.Size(39, 13)
-        Me.etq_UnitBoltzman.TabIndex = 101
-        Me.etq_UnitBoltzman.Text = "Label1"
-        '
-        'lbl_Boltzman
-        '
-        Me.lbl_Boltzman.AutoSize = True
-        Me.lbl_Boltzman.Location = New System.Drawing.Point(39, 30)
-        Me.lbl_Boltzman.Name = "lbl_Boltzman"
-        Me.lbl_Boltzman.Size = New System.Drawing.Size(66, 13)
-        Me.lbl_Boltzman.TabIndex = 102
-        Me.lbl_Boltzman.Text = "lbl_Boltzman"
-        '
-        'txt_Sigma
-        '
-        Me.txt_Sigma.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_Sigma.Location = New System.Drawing.Point(610, 23)
-        Me.txt_Sigma.Name = "txt_Sigma"
-        Me.txt_Sigma.Size = New System.Drawing.Size(55, 20)
-        Me.txt_Sigma.TabIndex = 99
-        '
-        'img_Sigma
-        '
-        Me.img_Sigma.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Sigma.Location = New System.Drawing.Point(564, 23)
-        Me.img_Sigma.Name = "img_Sigma"
-        Me.img_Sigma.Size = New System.Drawing.Size(46, 20)
-        Me.img_Sigma.TabIndex = 100
-        Me.img_Sigma.TabStop = False
-        '
-        'lbl_Incendie
-        '
-        Me.lbl_Incendie.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_Incendie.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Incendie.Location = New System.Drawing.Point(3, 2)
-        Me.lbl_Incendie.Name = "lbl_Incendie"
-        Me.lbl_Incendie.Size = New System.Drawing.Size(733, 23)
-        Me.lbl_Incendie.TabIndex = 98
-        Me.lbl_Incendie.Text = "lbl_Incendie"
-        Me.lbl_Incendie.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'lbl_EmissiviteFeu
-        '
-        Me.lbl_EmissiviteFeu.AutoSize = True
-        Me.lbl_EmissiviteFeu.Location = New System.Drawing.Point(39, 78)
-        Me.lbl_EmissiviteFeu.Name = "lbl_EmissiviteFeu"
-        Me.lbl_EmissiviteFeu.Size = New System.Drawing.Size(87, 13)
-        Me.lbl_EmissiviteFeu.TabIndex = 131
-        Me.lbl_EmissiviteFeu.Text = "lbl_EmissiviteFeu"
-        Me.lbl_EmissiviteFeu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'txt_EmissiviteFeu
-        '
-        Me.txt_EmissiviteFeu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EmissiviteFeu.Location = New System.Drawing.Point(610, 75)
-        Me.txt_EmissiviteFeu.Name = "txt_EmissiviteFeu"
-        Me.txt_EmissiviteFeu.Size = New System.Drawing.Size(55, 20)
-        Me.txt_EmissiviteFeu.TabIndex = 123
-        '
-        'lbl_EmissiviteAcier
-        '
-        Me.lbl_EmissiviteAcier.AutoSize = True
-        Me.lbl_EmissiviteAcier.Location = New System.Drawing.Point(39, 52)
-        Me.lbl_EmissiviteAcier.Name = "lbl_EmissiviteAcier"
-        Me.lbl_EmissiviteAcier.Size = New System.Drawing.Size(93, 13)
-        Me.lbl_EmissiviteAcier.TabIndex = 130
-        Me.lbl_EmissiviteAcier.Text = "lbl_EmissiviteAcier"
-        Me.lbl_EmissiviteAcier.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'txt_EmissiviteAcier
-        '
-        Me.txt_EmissiviteAcier.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EmissiviteAcier.Location = New System.Drawing.Point(610, 49)
-        Me.txt_EmissiviteAcier.Name = "txt_EmissiviteAcier"
-        Me.txt_EmissiviteAcier.Size = New System.Drawing.Size(55, 20)
-        Me.txt_EmissiviteAcier.TabIndex = 122
+        Me.img_T0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_T0.Location = New System.Drawing.Point(564, 54)
+        Me.img_T0.Name = "img_T0"
+        Me.img_T0.Size = New System.Drawing.Size(46, 20)
+        Me.img_T0.TabIndex = 136
+        Me.img_T0.TabStop = False
         '
         'img_UnitThermConvection
         '
@@ -400,6 +238,18 @@ Partial Class Frm_OptionsCalculIncendie
         Me.txt_TempReference.Size = New System.Drawing.Size(55, 20)
         Me.txt_TempReference.TabIndex = 119
         '
+        'Label5
+        '
+        Me.Label5.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(597, 30)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(13, 13)
+        Me.Label5.TabIndex = 124
+        Me.Label5.Text = "≤"
+        Me.Label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'etq_UnitTempReference
         '
         Me.etq_UnitTempReference.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -411,14 +261,74 @@ Partial Class Frm_OptionsCalculIncendie
         Me.etq_UnitTempReference.Text = "Label1"
         Me.etq_UnitTempReference.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'img_EpsilonA
+        'etq_UnitL1
         '
-        Me.img_EpsilonA.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_EpsilonA.Location = New System.Drawing.Point(564, 49)
-        Me.img_EpsilonA.Name = "img_EpsilonA"
-        Me.img_EpsilonA.Size = New System.Drawing.Size(46, 20)
-        Me.img_EpsilonA.TabIndex = 134
-        Me.img_EpsilonA.TabStop = False
+        Me.etq_UnitL1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitL1.AutoSize = True
+        Me.etq_UnitL1.Location = New System.Drawing.Point(674, 30)
+        Me.etq_UnitL1.Name = "etq_UnitL1"
+        Me.etq_UnitL1.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitL1.TabIndex = 109
+        Me.etq_UnitL1.Text = "Label1"
+        '
+        'txt_EspNoeuds
+        '
+        Me.txt_EspNoeuds.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EspNoeuds.Location = New System.Drawing.Point(610, 27)
+        Me.txt_EspNoeuds.Name = "txt_EspNoeuds"
+        Me.txt_EspNoeuds.Size = New System.Drawing.Size(55, 20)
+        Me.txt_EspNoeuds.TabIndex = 107
+        '
+        'img_dNodes
+        '
+        Me.img_dNodes.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_dNodes.Location = New System.Drawing.Point(551, 27)
+        Me.img_dNodes.Name = "img_dNodes"
+        Me.img_dNodes.Size = New System.Drawing.Size(46, 20)
+        Me.img_dNodes.TabIndex = 108
+        Me.img_dNodes.TabStop = False
+        '
+        'lbl_DistanceMaxNoeuds
+        '
+        Me.lbl_DistanceMaxNoeuds.AutoSize = True
+        Me.lbl_DistanceMaxNoeuds.Location = New System.Drawing.Point(39, 30)
+        Me.lbl_DistanceMaxNoeuds.Name = "lbl_DistanceMaxNoeuds"
+        Me.lbl_DistanceMaxNoeuds.Size = New System.Drawing.Size(122, 13)
+        Me.lbl_DistanceMaxNoeuds.TabIndex = 106
+        Me.lbl_DistanceMaxNoeuds.Text = "lbl_DistanceMaxNoeuds"
+        '
+        'lbl_Parametres
+        '
+        Me.lbl_Parametres.AutoSize = True
+        Me.lbl_Parametres.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Parametres.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Parametres.Location = New System.Drawing.Point(5, 5)
+        Me.lbl_Parametres.Name = "lbl_Parametres"
+        Me.lbl_Parametres.Size = New System.Drawing.Size(76, 13)
+        Me.lbl_Parametres.TabIndex = 105
+        Me.lbl_Parametres.Text = "lbl_Parametres"
+        Me.lbl_Parametres.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'Panel1
+        '
+        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel1.Controls.Add(Me.img_EpsilonF)
+        Me.Panel1.Controls.Add(Me.img_EpsilonA)
+        Me.Panel1.Controls.Add(Me.lbl_EmissiviteFeu)
+        Me.Panel1.Controls.Add(Me.Label1)
+        Me.Panel1.Controls.Add(Me.txt_EmissiviteFeu)
+        Me.Panel1.Controls.Add(Me.lbl_Constantes)
+        Me.Panel1.Controls.Add(Me.lbl_EmissiviteAcier)
+        Me.Panel1.Controls.Add(Me.txt_EmissiviteAcier)
+        Me.Panel1.Controls.Add(Me.etq_UnitBoltzman)
+        Me.Panel1.Controls.Add(Me.lbl_Boltzman)
+        Me.Panel1.Controls.Add(Me.txt_Sigma)
+        Me.Panel1.Controls.Add(Me.img_Sigma)
+        Me.Panel1.Location = New System.Drawing.Point(3, 31)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(732, 158)
+        Me.Panel1.TabIndex = 105
         '
         'img_EpsilonF
         '
@@ -429,32 +339,122 @@ Partial Class Frm_OptionsCalculIncendie
         Me.img_EpsilonF.TabIndex = 135
         Me.img_EpsilonF.TabStop = False
         '
-        'img_T0
+        'img_EpsilonA
         '
-        Me.img_T0.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_T0.Location = New System.Drawing.Point(564, 54)
-        Me.img_T0.Name = "img_T0"
-        Me.img_T0.Size = New System.Drawing.Size(46, 20)
-        Me.img_T0.TabIndex = 136
-        Me.img_T0.TabStop = False
+        Me.img_EpsilonA.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_EpsilonA.Location = New System.Drawing.Point(564, 49)
+        Me.img_EpsilonA.Name = "img_EpsilonA"
+        Me.img_EpsilonA.Size = New System.Drawing.Size(46, 20)
+        Me.img_EpsilonA.TabIndex = 134
+        Me.img_EpsilonA.TabStop = False
         '
-        'img_Deltat
+        'lbl_EmissiviteFeu
         '
-        Me.img_Deltat.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Deltat.Location = New System.Drawing.Point(564, 80)
-        Me.img_Deltat.Name = "img_Deltat"
-        Me.img_Deltat.Size = New System.Drawing.Size(46, 20)
-        Me.img_Deltat.TabIndex = 137
-        Me.img_Deltat.TabStop = False
+        Me.lbl_EmissiviteFeu.AutoSize = True
+        Me.lbl_EmissiviteFeu.Location = New System.Drawing.Point(39, 78)
+        Me.lbl_EmissiviteFeu.Name = "lbl_EmissiviteFeu"
+        Me.lbl_EmissiviteFeu.Size = New System.Drawing.Size(87, 13)
+        Me.lbl_EmissiviteFeu.TabIndex = 131
+        Me.lbl_EmissiviteFeu.Text = "lbl_EmissiviteFeu"
+        Me.lbl_EmissiviteFeu.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'img_UnitBoltzmann
+        'Label1
         '
-        Me.img_UnitBoltzmann.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_UnitBoltzmann.Location = New System.Drawing.Point(321, 148)
-        Me.img_UnitBoltzmann.Name = "img_UnitBoltzmann"
-        Me.img_UnitBoltzmann.Size = New System.Drawing.Size(95, 20)
-        Me.img_UnitBoltzmann.TabIndex = 138
-        Me.img_UnitBoltzmann.TabStop = False
+        Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(268, 118)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(13, 13)
+        Me.Label1.TabIndex = 133
+        Me.Label1.Text = "≥"
+        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'txt_EmissiviteFeu
+        '
+        Me.txt_EmissiviteFeu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EmissiviteFeu.Location = New System.Drawing.Point(610, 75)
+        Me.txt_EmissiviteFeu.Name = "txt_EmissiviteFeu"
+        Me.txt_EmissiviteFeu.Size = New System.Drawing.Size(55, 20)
+        Me.txt_EmissiviteFeu.TabIndex = 123
+        '
+        'lbl_Constantes
+        '
+        Me.lbl_Constantes.AutoSize = True
+        Me.lbl_Constantes.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_Constantes.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_Constantes.Location = New System.Drawing.Point(5, 5)
+        Me.lbl_Constantes.Name = "lbl_Constantes"
+        Me.lbl_Constantes.Size = New System.Drawing.Size(76, 13)
+        Me.lbl_Constantes.TabIndex = 104
+        Me.lbl_Constantes.Text = "lbl_Constantes"
+        Me.lbl_Constantes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lbl_EmissiviteAcier
+        '
+        Me.lbl_EmissiviteAcier.AutoSize = True
+        Me.lbl_EmissiviteAcier.Location = New System.Drawing.Point(39, 52)
+        Me.lbl_EmissiviteAcier.Name = "lbl_EmissiviteAcier"
+        Me.lbl_EmissiviteAcier.Size = New System.Drawing.Size(93, 13)
+        Me.lbl_EmissiviteAcier.TabIndex = 130
+        Me.lbl_EmissiviteAcier.Text = "lbl_EmissiviteAcier"
+        Me.lbl_EmissiviteAcier.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txt_EmissiviteAcier
+        '
+        Me.txt_EmissiviteAcier.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EmissiviteAcier.Location = New System.Drawing.Point(610, 49)
+        Me.txt_EmissiviteAcier.Name = "txt_EmissiviteAcier"
+        Me.txt_EmissiviteAcier.Size = New System.Drawing.Size(55, 20)
+        Me.txt_EmissiviteAcier.TabIndex = 122
+        '
+        'etq_UnitBoltzman
+        '
+        Me.etq_UnitBoltzman.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitBoltzman.AutoSize = True
+        Me.etq_UnitBoltzman.Location = New System.Drawing.Point(674, 26)
+        Me.etq_UnitBoltzman.Name = "etq_UnitBoltzman"
+        Me.etq_UnitBoltzman.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitBoltzman.TabIndex = 101
+        Me.etq_UnitBoltzman.Text = "Label1"
+        '
+        'lbl_Boltzman
+        '
+        Me.lbl_Boltzman.AutoSize = True
+        Me.lbl_Boltzman.Location = New System.Drawing.Point(39, 30)
+        Me.lbl_Boltzman.Name = "lbl_Boltzman"
+        Me.lbl_Boltzman.Size = New System.Drawing.Size(66, 13)
+        Me.lbl_Boltzman.TabIndex = 102
+        Me.lbl_Boltzman.Text = "lbl_Boltzman"
+        '
+        'txt_Sigma
+        '
+        Me.txt_Sigma.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Sigma.Location = New System.Drawing.Point(610, 23)
+        Me.txt_Sigma.Name = "txt_Sigma"
+        Me.txt_Sigma.Size = New System.Drawing.Size(55, 20)
+        Me.txt_Sigma.TabIndex = 99
+        '
+        'img_Sigma
+        '
+        Me.img_Sigma.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Sigma.Location = New System.Drawing.Point(564, 23)
+        Me.img_Sigma.Name = "img_Sigma"
+        Me.img_Sigma.Size = New System.Drawing.Size(46, 20)
+        Me.img_Sigma.TabIndex = 100
+        Me.img_Sigma.TabStop = False
+        '
+        'lbl_Incendie
+        '
+        Me.lbl_Incendie.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Incendie.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Incendie.Location = New System.Drawing.Point(3, 2)
+        Me.lbl_Incendie.Name = "lbl_Incendie"
+        Me.lbl_Incendie.Size = New System.Drawing.Size(733, 23)
+        Me.lbl_Incendie.TabIndex = 98
+        Me.lbl_Incendie.Text = "lbl_Incendie"
+        Me.lbl_Incendie.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'Frm_OptionsCalculIncendie
         '
@@ -470,16 +470,16 @@ Partial Class Frm_OptionsCalculIncendie
         Me.pan_Conteneur.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         Me.Panel2.PerformLayout()
+        CType(Me.img_UnitBoltzmann, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Deltat, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_T0, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UnitThermConvection, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_dNodes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
-        CType(Me.img_Sigma, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_UnitThermConvection, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_EpsilonA, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_EpsilonF, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_T0, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Deltat, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_UnitBoltzmann, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_EpsilonA, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Sigma, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub

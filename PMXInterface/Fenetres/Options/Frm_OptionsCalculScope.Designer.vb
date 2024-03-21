@@ -27,6 +27,7 @@ Partial Class Frm_OptionsCalculScope
         Me.TLpan_Conteneur = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Conteneur = New System.Windows.Forms.Panel()
         Me.pan_Materiau = New System.Windows.Forms.Panel()
+        Me.etq_UnitMassV2 = New System.Windows.Forms.Label()
         Me.img_RhoC = New System.Windows.Forms.PictureBox()
         Me.txt_RhoC_LWC_Min = New System.Windows.Forms.TextBox()
         Me.etq_UnitMassV1 = New System.Windows.Forms.Label()
@@ -76,7 +77,6 @@ Partial Class Frm_OptionsCalculScope
         Me.img_PorteeL2 = New System.Windows.Forms.PictureBox()
         Me.lbl_Scope = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.etq_UnitMassV2 = New System.Windows.Forms.Label()
         Me.pan_Scope.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
@@ -146,10 +146,20 @@ Partial Class Frm_OptionsCalculScope
         Me.pan_Materiau.Controls.Add(Me.Label10)
         Me.pan_Materiau.Controls.Add(Me.txt_RhoC_LWC_Max)
         Me.pan_Materiau.Controls.Add(Me.lbl_Materiau)
-        Me.pan_Materiau.Location = New System.Drawing.Point(5, 280)
+        Me.pan_Materiau.Location = New System.Drawing.Point(5, 260)
         Me.pan_Materiau.Name = "pan_Materiau"
         Me.pan_Materiau.Size = New System.Drawing.Size(731, 100)
         Me.pan_Materiau.TabIndex = 147
+        '
+        'etq_UnitMassV2
+        '
+        Me.etq_UnitMassV2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitMassV2.AutoSize = True
+        Me.etq_UnitMassV2.Location = New System.Drawing.Point(682, 34)
+        Me.etq_UnitMassV2.Name = "etq_UnitMassV2"
+        Me.etq_UnitMassV2.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitMassV2.TabIndex = 135
+        Me.etq_UnitMassV2.Text = "mm"
         '
         'img_RhoC
         '
@@ -257,7 +267,7 @@ Partial Class Frm_OptionsCalculScope
         Me.Panel2.Controls.Add(Me.Label1)
         Me.Panel2.Controls.Add(Me.lbl_Renformis)
         Me.Panel2.Controls.Add(Me.img_Th)
-        Me.Panel2.Location = New System.Drawing.Point(5, 141)
+        Me.Panel2.Location = New System.Drawing.Point(5, 121)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(731, 133)
         Me.Panel2.TabIndex = 146
@@ -480,7 +490,7 @@ Partial Class Frm_OptionsCalculScope
         Me.Panel1.Controls.Add(Me.Label5)
         Me.Panel1.Controls.Add(Me.txt_RatioConsoleMax)
         Me.Panel1.Controls.Add(Me.img_PorteeL2)
-        Me.Panel1.Location = New System.Drawing.Point(4, 52)
+        Me.Panel1.Location = New System.Drawing.Point(4, 32)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(732, 83)
         Me.Panel1.TabIndex = 145
@@ -671,16 +681,6 @@ Partial Class Frm_OptionsCalculScope
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
-        '
-        'etq_UnitMassV2
-        '
-        Me.etq_UnitMassV2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitMassV2.AutoSize = True
-        Me.etq_UnitMassV2.Location = New System.Drawing.Point(682, 34)
-        Me.etq_UnitMassV2.Name = "etq_UnitMassV2"
-        Me.etq_UnitMassV2.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitMassV2.TabIndex = 135
-        Me.etq_UnitMassV2.Text = "mm"
         '
         'Frm_OptionsCalculScope
         '

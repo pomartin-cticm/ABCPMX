@@ -212,6 +212,12 @@ Public Module Mod_Declarations
         Public Format_Moment() As String            'pour l'affichage - précision
         Public NbDigitMax_Moment() As Integer       'nombre maxi de decimale pour l'affichage    
 
+        '--> Unités pour les modules de flexion
+        Public Unit_ModuleW() As String            'pour les textes
+        Public Transfert_ModuleW() As Decimal      'pour les conversions
+        Public Format_ModuleW() As String          'pour l'affichage - précision
+        Public NbDigitMax_ModuleW() As Integer     'nombre maxi de decimale pour l'affichage   
+
         '--> Unités pour les inerties
         Public Unit_Inerties() As String            'pour les textes
         Public Transfert_Inerties() As Decimal      'pour les conversions

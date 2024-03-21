@@ -110,6 +110,11 @@ Public Module Mod_Demarrage
         LogicielInfo.Format_Moment = {"0.0", "0.00", "0.0"}
         LogicielInfo.NbDigitMax_Longueur = {0, 1, 3}
 
+        LogicielInfo.Unit_ModuleW = {"mm3", "cm3", "m3"}           'Unités des modules de flexion - cm3 par défaut    (interne m3)
+        LogicielInfo.Transfert_ModuleW = {0.001 ^ 3, 0.01 ^ 3, 1 ^ 3}
+        LogicielInfo.Format_ModuleW = {"0.0", "0.00", "0.0000"}
+        LogicielInfo.NbDigitMax_ModuleW = {0, 0, 6}
+
         LogicielInfo.Unit_Inerties = {"mm4", "cm4", "m4"}           'Unités des inerties - cm4 par défaut    (interne m4)
         LogicielInfo.Transfert_Inerties = {0.001 ^ 4, 0.01 ^ 4, 1 ^ 4}
         LogicielInfo.Format_Inerties = {"0.0", "0.00", "0.0000"}
