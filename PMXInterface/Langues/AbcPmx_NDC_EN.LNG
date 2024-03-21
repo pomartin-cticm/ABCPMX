@@ -479,6 +479,8 @@ BOTHSIMPLES				= The beam is designed as simply supported at both ends, although
 REFSIMPLES				= According to EN 1994-1-1: 2005, 7.4.1 (4), longitudinal reinforcement should be provided to control the crack width
 REQUIREMENTUNPROPPED	= For unpropped beams, a minimal reinforcement ratio of 0.4 % is required
 REQUIREMENTPROPPED		= For propped beams, a minimal reinforcement ratio of 0.2 % is required
+MINIREINFORCEMENT		= Minimum reinforcement area
+EFFECTREINFORCEMENT		= Actual reinforcement area
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

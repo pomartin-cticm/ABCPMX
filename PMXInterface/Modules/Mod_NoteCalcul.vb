@@ -23,6 +23,7 @@ Module Mod_NoteCalcul
 
     Private Const TABAFF As String = " :\T50"
     Private Const TABEGAL As String = "\T55 = "
+    Private Const TABSUPEGAL As String = "\T55 >= "
     Private Const TABAFF2 As String = " :\T35"
     Private Const TABAFF3 As String = " :\T20"
 
@@ -6945,6 +6946,11 @@ Module Mod_NoteCalcul
         '--( Déclarations
 
         Dim lCond(1) As Boolean
+        Dim Symbol As String
+        Dim AsReq, RhoS, AsEff As Decimal
+        Const UnitAsSurS As String = " cm\+2\=/m"
+        Const kUnitAsSurS As Decimal = 100 ^ 2
+        Dim lOK As Boolean
 
         '--( Initialisation
 
@@ -6964,10 +6970,26 @@ Module Mod_NoteCalcul
 
         If (myBeam.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.UnPropped) Then
             AddLigneNDC(TABW3 & BlocELS("REQUIREMENTUNPROPPED"))
+            RhoS = 0.02
         Else
             AddLigneNDC(TABW3 & BlocELS("REQUIREMENTPROPPED"))
+            RhoS = 0.04
         End If
 
+        '--( Armatures minimales
+
+        SauteLigne()
+
+        Symbol = "A\-s\=/s"
+        AsReq = RhoS * myBeam.Dalle.EpaisseurActive
+        AddLigneNDC(TABW3 & BlocELS("MINIREINFORCEMENT") & TABAFF &
+                    Symbol & TABSUPEGAL & GetStringInUnit(AsReq * kUnitAsSurS, Enu_TypeVariable.SansType, 3, 2, False) & UnitAsSurS)
+
+        AsEff = myBeam.Dalle.AireUnitArmaturesLongi
+        lOK = IsGreaterOrEqual(AsEff, AsReq)
+        AddLigneNDC(TABW3 & BlocELS("EFFECTREINFORCEMENT") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(AsEff * kUnitAsSurS, Enu_TypeVariable.SansType, 3, 2, False) & UnitAsSurS & "\BAL")
+        AfficheBalise(lok)
     End Sub
 
 

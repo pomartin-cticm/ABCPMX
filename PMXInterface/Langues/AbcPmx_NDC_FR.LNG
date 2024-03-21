@@ -479,6 +479,8 @@ BOTHSIMPLES				= La poutre est calculée comme simplement appuyée sur les deux 
 REFSIMPLES				= D'après la NF EN 1994-1-1: 2005, 7.4.1 (4), il convient de disposer des armatures longitudinales aux appuis pour limiter la fissuration. 
 REQUIREMENTUNPROPPED	= Pour une poutre non étayée, un taux minimal d'armatures de 0,4 % est requis
 REQUIREMENTPROPPED		= Pour une poutre non étayée, un taux minimal d'armatures de 0,2 % est requis
+MINIREINFORCEMENT		= Section d'armature minimale
+EFFECTREINFORCEMENT		= Section d'armature effective
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher

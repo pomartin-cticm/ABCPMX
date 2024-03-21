@@ -70,8 +70,6 @@
 
     End Function
 
-
-
 #End Region
 
 #Region " Elements de la dalle "
@@ -206,6 +204,32 @@
         '--> Fin
 
         Return pNArma * kConvMPaPa
+
+    End Function
+
+    Public Function AireUnitArmaturesLongi() As Decimal
+        '---------------------------------------------------------------------------------------------
+        '   21/03/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------
+        '   Calcul de l'aire par unité de longueur des armatures de la dalle
+        '---------------------------------------------------------------------------------------------
+        '---------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim AireAs As Decimal = 0
+
+        '--> Calcul
+
+        For i As Integer = 0 To Me.LitArma.Count - 1
+            If Me.LitArma(i).lActive Then
+                AireAs += Me.LitArma(i).AireParULargeur
+            End If
+        Next
+
+        '--> Fin
+
+        Return AireAs
 
     End Function
 
