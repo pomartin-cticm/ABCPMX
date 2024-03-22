@@ -3,6 +3,7 @@ Imports System.Reflection
 Imports System.Reflection.Emit
 Imports System.Runtime.InteropServices
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
+Imports Microsoft.VisualBasic.Logging
 Imports PMXMoteur2
 
 Module Mod_NoteCalcul
@@ -23,7 +24,8 @@ Module Mod_NoteCalcul
 
     Private Const TABAFF As String = " :\T50"
     Private Const TABEGAL As String = "\T55 = "
-    Private Const TABSUPEGAL As String = "\T55 >= "
+    Private Const SUPEGAL As String = ChrW(8805)
+    Private Const TABSUPEGAL As String = "\T55 " & SUPEGAL & " "
     Private Const TABAFF2 As String = " :\T35"
     Private Const TABAFF3 As String = " :\T20"
 
@@ -4850,7 +4852,7 @@ Module Mod_NoteCalcul
 
         '--( Initialisation
 
-        If nbLignes + nbreq > MAXLIGNEPPAG Then SautePage()
+        If nbLignes + NbREQ > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(2, BlocELU("ADDPARAM"))
 
@@ -6925,7 +6927,7 @@ Module Mod_NoteCalcul
         '--( Maitrise de la fissuration sur les appuis simples
 
         If myBeam.Param.lMaitriseFissuration And ((Not myBeam.lTraveeConsoleGauche) Or (Not myBeam.lTraveeConsoleDroite)) Then
-
+            EditionMaitriseFissurationSansContrainteDirect(myBeam)
         End If
 
         '--( Maitrise de la fissuration sur les appuis continus
@@ -6933,6 +6935,42 @@ Module Mod_NoteCalcul
         If myBeam.Param.lMaitriseFissuration And ((myBeam.lTraveeConsoleGauche) Or (myBeam.lTraveeConsoleDroite)) Then
 
         End If
+    End Sub
+
+    Private Sub EditionMaitriseFissurationSansContrainteDirect(myBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   22/11/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des mesures de maitrise de la fissuration
+        '   pour les poutres sans contraintes directes
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Symbol As String
+        Dim AsReq, RhoS, AsEff As Decimal
+        Const UnitAsSurS As String = " cm\+2\=/m"
+        Const kUnitAsSurS As Decimal = 100 ^ 2
+        Dim lOK As Boolean
+
+        '--( Traitement
+
+        AddTitreNdC(3, BlocELS("CONTROLCRACKINGNODIRECT"))
+
+        AddLigneNDC(TABW3 & BlocELS("REF1CONTROLCRACKING"))
+
+        Symbol = "A\-s\=/s"
+        AsReq = myBeam.VerifMixte(0).AsSurSRetrait
+        AddLigneNDC(TABW3 & BlocELS("MINIREINFORCEMENT") & TABAFF &
+                    Symbol & TABSUPEGAL & GetStringInUnit(AsReq * kUnitAsSurS, Enu_TypeVariable.SansType, 3, 2, False) & UnitAsSurS)
+
+        AsEff = myBeam.Dalle.AireUnitArmaturesLongi
+        lOK = IsGreaterOrEqual(AsEff, AsReq)
+        AddLigneNDC(TABW3 & BlocELS("EFFECTREINFORCEMENT") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(AsEff * kUnitAsSurS, Enu_TypeVariable.SansType, 3, 2, False) & UnitAsSurS & "\BAL")
+        AfficheBalise(lOK)
+
+
     End Sub
 
     Private Sub EditionFissurationAppuiDalleContinue(myBeam As cls_Poutre)
@@ -6989,7 +7027,14 @@ Module Mod_NoteCalcul
         lOK = IsGreaterOrEqual(AsEff, AsReq)
         AddLigneNDC(TABW3 & BlocELS("EFFECTREINFORCEMENT") & TABAFF &
                     Symbol & TABEGAL & GetStringInUnit(AsEff * kUnitAsSurS, Enu_TypeVariable.SansType, 3, 2, False) & UnitAsSurS & "\BAL")
-        AfficheBalise(lok)
+        AfficheBalise(lOK)
+
+        SauteLigne()
+        If Not lOK Then
+            AddLigneNDC(TABW3 & BlocELS("ADDREINFSUPP"))
+        End If
+        AddLigneNDC(TABW3 & BlocELS("REINFSUPPDETAIL"))
+
     End Sub
 
 

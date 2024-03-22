@@ -481,6 +481,10 @@ REQUIREMENTUNPROPPED	= For unpropped beams, a minimal reinforcement ratio of 0.4
 REQUIREMENTPROPPED		= For propped beams, a minimal reinforcement ratio of 0.2 % is required
 MINIREINFORCEMENT		= Minimum reinforcement area
 EFFECTREINFORCEMENT		= Actual reinforcement area
+CONTROLCRACKINGNODIRECT	= Control of cracking without direct loading
+REF1CONTROLCRACKING		= According to 7.4.2 of EN 1994-1-1:2005
+ADDREINFSUPP			= Additional longitudinal reinforcement are required at support
+REINFSUPPDETAIL			= For detailing, see EN 1994-1-1: 2005, 7.4.1 (4) 
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

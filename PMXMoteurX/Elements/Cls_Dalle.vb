@@ -25,7 +25,7 @@
     Public t_h As Decimal
 
     ''' <summary>
-    ''' lageur efficace de la dalle
+    ''' lageur efficace de la dalle ??
     ''' </summary>
     Public Beff As Decimal
 
@@ -121,26 +121,25 @@
 
 #Region " Propriétés "
 
-    ''' <summary>
-    ''' Calcul des propriétés
-    ''' </summary>
-    Public Sub Calcul_Proprietes()
+    Public Function DiametreMaxiArma() As Decimal
+        '---------------------------------------------------------------------------------------
+        '   17/05/2023 :    Création - POM
+        '---------------------------------------------------------------------------------------
+        '   Renvoie le diamètre maxi des armatures dans la dalle
+        '---------------------------------------------------------------------------------------
 
-        'If lArma_Sup Then
-        '    With arma_longi_sup
-        '        .n_s = Beff / .EspBar
-        '        .A_s = .n_s * Math.PI * .PhiS ^ 2 / 4
-        '    End With
-        'End If
+        Dim myDia As Decimal
 
-        'If lArma_Inf Then
-        '    With arma_longi_inf
-        '        .n_s = Beff / .EspBar
-        '        .A_s = .n_s * Math.PI * .PhiS ^ 2 / 4
-        '    End With
-        'End If
+        For i As Integer = 0 To Me.LitArma.Count - 1
+            If Me.LitArma(i).lActive Then
+                myDia = Math.Max(myDia, Me.LitArma(i).PhiS)
+            End If
+        Next
 
-    End Sub
+        Return myDia
+
+    End Function
+
 
     Public Function NotionalSizeH0(Bfs As Decimal) As Decimal
         '---------------------------------------------------------------------------------------

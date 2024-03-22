@@ -481,6 +481,10 @@ REQUIREMENTUNPROPPED	= Pour une poutre non étayée, un taux minimal d'armatures
 REQUIREMENTPROPPED		= Pour une poutre non étayée, un taux minimal d'armatures de 0,2 % est requis
 MINIREINFORCEMENT		= Section d'armature minimale
 EFFECTREINFORCEMENT		= Section d'armature effective
+CONTROLCRACKINGNODIRECT	= Maîtrise de la fissuration en l'absence de contraintes directes
+REF1CONTROLCRACKING		= D'après l'article 7.4.2 de la NF EN 1994-1-1:2005
+ADDREINFSUPP			= Des armatures longitudinales complémentaires sont nécessaires sur les appuis
+REINFSUPPDETAIL			= Pour les détails constructifs, voir EN 1994-1-1: 2005, 7.4.1 (4) 
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher
