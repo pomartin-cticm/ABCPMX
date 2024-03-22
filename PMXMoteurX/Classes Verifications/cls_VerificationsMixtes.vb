@@ -430,7 +430,7 @@
 
         '# Calcul des armatures anti fissuration
 
-        Me.ArmaturesAntiFissuration(myBeam)
+        Me.ArmaturesAntiFissuration(myBeam, SigmaM)
 
     End Sub
 
@@ -2169,14 +2169,27 @@
 
 #Region " Calcul des armatures anti fissuration "
 
-    Private Sub ArmaturesAntiFissuration(myBeam As cls_Poutre)
+    Private Sub MaitriseFissurationDirecte(myBeam As cls_Poutre, SigmaM(,,,) As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   22/03/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Gestion du calcul des armatures anti fissuration, selon § 7.4 de l'EN 1994-1:2005
         '----------------------------------------------------------------------------------------------------------
         '   myBeam      [E]
-        '   lAppGauche  [E] :   Indique si calcul sur l'appui gauche
+        '   SigmaM      [E] :   Table des contraintes normales sous hypothèse M<0, par cas de charge
+        '----------------------------------------------------------------------------------------------------------
+
+
+    End Sub
+
+    Private Sub ArmaturesAntiFissuration(myBeam As cls_Poutre, SigmaM(,,,) As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   22/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Gestion du calcul des armatures anti fissuration, selon § 7.4 de l'EN 1994-1:2005
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E]
+        '   SigmaM      [E] :   Table des contraintes normales sous hypothèse M<0, par cas de charge
         '----------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -2187,6 +2200,8 @@
 
         If myBeam.Param.lMaitriseFissuration Then
 
+            '# Anti fissuration en l'absence de contraintes directes
+
             Me.AsSurSRetrait = 0
 
             If Not myBeam.lTraveeConsoleGauche Then
@@ -2196,6 +2211,12 @@
             If Not myBeam.lTraveeConsoleDroite Then
                 Me.MinimumReinforcement742(myBeam, False, myAs)
                 Me.AsSurSRetrait = Math.Max(Me.AsSurSRetrait, myAs)
+            End If
+
+            '# Anti fissuration sous contraintes directes
+
+            If myBeam.NbTravees > 1 Then
+                MaitriseFissurationDirecte(myBeam, SigmaM)
             End If
 
         End If
@@ -2232,15 +2253,13 @@
 
         myDia = myBeam.Dalle.DiametreMaxiArma
 
-        SigmaS = myEN1994.ExContrainteFromTableau71(myBeam.Param.FissureWk, myDia, lOK)
+        SigmaS = Math.Min(myBeam.Dalle.AcierArmatures.FsK, myEN1994.ExContrainteFromTableau71(myBeam.Param.FissureWk, myDia, lOK))
 
         '--( Calculs
 
         myAssurS = ks * kc * k * FctEff * myBeam.Dalle.EpaisseurActive / SigmaS
 
     End Sub
-
-
 
 #End Region
 
