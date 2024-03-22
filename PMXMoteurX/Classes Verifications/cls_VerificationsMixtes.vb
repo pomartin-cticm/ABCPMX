@@ -97,6 +97,7 @@
 #Region " Constructeurs "
 
     Public Sub New()
+
         lCalculPlastic = False
         Me.ConvSigneT = cls_PointsSigma.CONVSIGNETRACTION
 
@@ -694,6 +695,7 @@
         Dim sCum, xNode As Decimal
         Dim xFinZone(,) As Decimal = myBeam.xFinZoneTravee
         Dim myFluxRd As Decimal
+        Dim xAppui As Decimal
 
         '--( Initialisation
 
@@ -709,7 +711,7 @@
             iZone = 0
             sCum = xFinZone(iTravee, iZone)
             myFluxRd = myBeam.FluxRdZone(iTravee, iZone)
-
+            xAppui = myBeam.xPositionAppui(True, iTravee)
 
             For iNode = iDebN To iFinN
                 If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
@@ -719,7 +721,7 @@
 
                 If IsGreater(xNode, sCum) Then
                     iZone += 1
-                    sCum = xFinZone(iTravee, iZone) 'GUD: Je viens de trouver ce bug, à corriger + tard (je pense que ca vient du fait que xFinZoneTravee ne donne pas l abscisses globale)
+                    sCum = xFinZone(iTravee, iZone) + xAppui
 
                     myFluxRd = myBeam.FluxRdZone(iTravee, iZone)
 
