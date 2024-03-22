@@ -2257,7 +2257,11 @@
 
         '--( Calculs
 
-        myAssurS = ks * kc * k * FctEff * myBeam.Dalle.EpaisseurActive / SigmaS
+        If IsGreater(SigmaS, 0) Then
+            myAssurS = ks * kc * k * FctEff * myBeam.Dalle.EpaisseurActive / SigmaS
+        Else
+            myAssurS = -1
+        End If
 
     End Sub
 
