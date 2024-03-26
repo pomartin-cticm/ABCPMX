@@ -34,6 +34,8 @@ Public Class Frm_OptionsCalcul
 
     Public GammaLoc As New cls_Gamma
 
+    Private strAvertissementModif() As String
+
 
 #End Region
 
@@ -132,6 +134,7 @@ Public Class Frm_OptionsCalcul
 
             Me.btn_Appliquer.Text = MyBloc("APPLY")
             Me.btn_Cancel.Text = MyBloc("CANCEL")
+            Me.strAvertissementModif = {MyBloc("MODIF"), MyBloc("MODIF2")}
 
         Catch ex As Exception
             MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -256,7 +259,7 @@ Public Class Frm_OptionsCalcul
             TransfertSaisie(lModif)
 
             If lModif Then
-
+                MsgBox(strAvertissementModif(0) & Chr(13) & Chr(10) & strAvertissementModif(1))
             End If
 
             Me.Close()
@@ -332,7 +335,7 @@ Public Class Frm_OptionsCalcul
 
         GereTransfertValeur(LocalOptionsCalcul.EtaW, OptionsCalcul.EtaW, lModif)
 
-        AppliquerReglagesProjetEnCours()
+        'AppliquerReglagesProjetEnCours() '--> GUD: Désactivation de cette ligne car elle modifie l'ensemble des poutres du projet, ce qui n'est pas souhaitable
 
     End Sub
 

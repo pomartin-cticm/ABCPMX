@@ -15,7 +15,7 @@ Option Explicit On
 Namespace My
     
     <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.8.0.0"),  _
+     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.9.0.0"),  _
      Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
     Partial Friend NotInheritable Class MySettings
         Inherits Global.System.Configuration.ApplicationSettingsBase
@@ -332,36 +332,36 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0.7")>  _
-        Public Property Psi0() As Decimal
+        Public Property Psi0_Q1() As Decimal
             Get
-                Return CType(Me("Psi0"),Decimal)
+                Return CType(Me("Psi0_Q1"),Decimal)
             End Get
             Set
-                Me("Psi0") = value
+                Me("Psi0_Q1") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0.5")>  _
-        Public Property Psi1() As Decimal
+        Public Property Psi1_Q1() As Decimal
             Get
-                Return CType(Me("Psi1"),Decimal)
+                Return CType(Me("Psi1_Q1"),Decimal)
             End Get
             Set
-                Me("Psi1") = value
+                Me("Psi1_Q1") = value
             End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("0.3")>  _
-        Public Property Psi2() As Decimal
+        Public Property Psi2_Q1() As Decimal
             Get
-                Return CType(Me("Psi2"),Decimal)
+                Return CType(Me("Psi2_Q1"),Decimal)
             End Get
             Set
-                Me("Psi2") = value
+                Me("Psi2_Q1") = value
             End Set
         End Property
         
@@ -530,6 +530,702 @@ Namespace My
             End Get
             Set
                 Me("lNdCDispMelMixte") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.7")>  _
+        Public Property Psi0_Q2() As Decimal
+            Get
+                Return CType(Me("Psi0_Q2"),Decimal)
+            End Get
+            Set
+                Me("Psi0_Q2") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.5")>  _
+        Public Property Psi1_Q2() As Decimal
+            Get
+                Return CType(Me("Psi1_Q2"),Decimal)
+            End Get
+            Set
+                Me("Psi1_Q2") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.3")>  _
+        Public Property Psi2_Q2() As Decimal
+            Get
+                Return CType(Me("Psi2_Q2"),Decimal)
+            End Get
+            Set
+                Me("Psi2_Q2") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("5")>  _
+        Public Property PorteeMin() As Decimal
+            Get
+                Return CType(Me("PorteeMin"),Decimal)
+            End Get
+            Set
+                Me("PorteeMin") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("25")>  _
+        Public Property PorteeMax() As Decimal
+            Get
+                Return CType(Me("PorteeMax"),Decimal)
+            End Get
+            Set
+                Me("PorteeMax") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.5")>  _
+        Public Property PorteeConsoleMin() As Decimal
+            Get
+                Return CType(Me("PorteeConsoleMin"),Decimal)
+            End Get
+            Set
+                Me("PorteeConsoleMin") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.3")>  _
+        Public Property RatioPorteeConsoleMax() As Decimal
+            Get
+                Return CType(Me("RatioPorteeConsoleMax"),Decimal)
+            End Get
+            Set
+                Me("RatioPorteeConsoleMax") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("30")>  _
+        Public Property ThetaH() As Decimal
+            Get
+                Return CType(Me("ThetaH"),Decimal)
+            End Get
+            Set
+                Me("ThetaH") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.1")>  _
+        Public Property EpDallePleineMin() As Decimal
+            Get
+                Return CType(Me("EpDallePleineMin"),Decimal)
+            End Get
+            Set
+                Me("EpDallePleineMin") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.4")>  _
+        Public Property RatioEpRenformisMax() As Decimal
+            Get
+                Return CType(Me("RatioEpRenformisMax"),Decimal)
+            End Get
+            Set
+                Me("RatioEpRenformisMax") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.05")>  _
+        Public Property EpDalleMixteMin() As Decimal
+            Get
+                Return CType(Me("EpDalleMixteMin"),Decimal)
+            End Get
+            Set
+                Me("EpDalleMixteMin") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("80")>  _
+        Public Property RhoCBetonLegerMin() As Decimal
+            Get
+                Return CType(Me("RhoCBetonLegerMin"),Decimal)
+            End Get
+            Set
+                Me("RhoCBetonLegerMin") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("2200")>  _
+        Public Property RhoCBetonLegerMax() As String
+            Get
+                Return CType(Me("RhoCBetonLegerMax"),String)
+            End Get
+            Set
+                Me("RhoCBetonLegerMax") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
+        Public Property Norme() As Integer
+            Get
+                Return CType(Me("Norme"),Integer)
+            End Get
+            Set
+                Me("Norme") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lLargeurEfficaceSimplifiee() As Boolean
+            Get
+                Return CType(Me("lLargeurEfficaceSimplifiee"),Boolean)
+            End Get
+            Set
+                Me("lLargeurEfficaceSimplifiee") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lCompressionArma() As Boolean
+            Get
+                Return CType(Me("lCompressionArma"),Boolean)
+            End Get
+            Set
+                Me("lCompressionArma") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("210000")>  _
+        Public Property EsArmatures() As Decimal
+            Get
+                Return CType(Me("EsArmatures"),Decimal)
+            End Get
+            Set
+                Me("EsArmatures") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
+        Public Property dMaxNodes() As Decimal
+            Get
+                Return CType(Me("dMaxNodes"),Decimal)
+            End Get
+            Set
+                Me("dMaxNodes") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("50")>  _
+        Public Property nbMinNodesConsole() As Integer
+            Get
+                Return CType(Me("nbMinNodesConsole"),Integer)
+            End Get
+            Set
+                Me("nbMinNodesConsole") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("100")>  _
+        Public Property nbMinNodesTravee() As Integer
+            Get
+                Return CType(Me("nbMinNodesTravee"),Integer)
+            End Get
+            Set
+                Me("nbMinNodesTravee") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.10")>  _
+        Public Property PsiLPermanent() As Decimal
+            Get
+                Return CType(Me("PsiLPermanent"),Decimal)
+            End Get
+            Set
+                Me("PsiLPermanent") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.55")>  _
+        Public Property PsiLRetrait() As Decimal
+            Get
+                Return CType(Me("PsiLRetrait"),Decimal)
+            End Get
+            Set
+                Me("PsiLRetrait") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+        Public Property AgeT0SH_Dalle() As Integer
+            Get
+                Return CType(Me("AgeT0SH_Dalle"),Integer)
+            End Get
+            Set
+                Me("AgeT0SH_Dalle") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1")>  _
+        Public Property AgeT0SH_Enrobage() As Integer
+            Get
+                Return CType(Me("AgeT0SH_Enrobage"),Integer)
+            End Get
+            Set
+                Me("AgeT0SH_Enrobage") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("28")>  _
+        Public Property AgeT0G1_Dalle() As Integer
+            Get
+                Return CType(Me("AgeT0G1_Dalle"),Integer)
+            End Get
+            Set
+                Me("AgeT0G1_Dalle") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("56")>  _
+        Public Property AgeT0G1_Enrobage() As Integer
+            Get
+                Return CType(Me("AgeT0G1_Enrobage"),Integer)
+            End Get
+            Set
+                Me("AgeT0G1_Enrobage") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("28")>  _
+        Public Property AgeT0G2_Dalle() As Integer
+            Get
+                Return CType(Me("AgeT0G2_Dalle"),Integer)
+            End Get
+            Set
+                Me("AgeT0G2_Dalle") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("56")>  _
+        Public Property AgeT0G2_Enrobage() As Integer
+            Get
+                Return CType(Me("AgeT0G2_Enrobage"),Integer)
+            End Get
+            Set
+                Me("AgeT0G2_Enrobage") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessNumeros_CDC() As Boolean
+            Get
+                Return CType(Me("lDessNumeros_CDC"),Boolean)
+            End Get
+            Set
+                Me("lDessNumeros_CDC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessCharges_CDC() As Boolean
+            Get
+                Return CType(Me("lDessCharges_CDC"),Boolean)
+            End Get
+            Set
+                Me("lDessCharges_CDC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessInerties_CDC() As Boolean
+            Get
+                Return CType(Me("lDessInerties_CDC"),Boolean)
+            End Get
+            Set
+                Me("lDessInerties_CDC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessEffortT_CDC() As Boolean
+            Get
+                Return CType(Me("lDessEffortT_CDC"),Boolean)
+            End Get
+            Set
+                Me("lDessEffortT_CDC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessMoment_CDC() As Boolean
+            Get
+                Return CType(Me("lDessMoment_CDC"),Boolean)
+            End Get
+            Set
+                Me("lDessMoment_CDC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessDeformee_CDC() As Boolean
+            Get
+                Return CType(Me("lDessDeformee_CDC"),Boolean)
+            End Get
+            Set
+                Me("lDessDeformee_CDC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessValEnv_CDC() As Boolean
+            Get
+                Return CType(Me("lDessValEnv_CDC"),Boolean)
+            End Get
+            Set
+                Me("lDessValEnv_CDC") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessNumeros_ELU() As Boolean
+            Get
+                Return CType(Me("lDessNumeros_ELU"),Boolean)
+            End Get
+            Set
+                Me("lDessNumeros_ELU") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessCharges_ELU() As Boolean
+            Get
+                Return CType(Me("lDessCharges_ELU"),Boolean)
+            End Get
+            Set
+                Me("lDessCharges_ELU") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessInerties_ELU() As Boolean
+            Get
+                Return CType(Me("lDessInerties_ELU"),Boolean)
+            End Get
+            Set
+                Me("lDessInerties_ELU") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessEffortT_ELU() As Boolean
+            Get
+                Return CType(Me("lDessEffortT_ELU"),Boolean)
+            End Get
+            Set
+                Me("lDessEffortT_ELU") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessMoment_ELU() As Boolean
+            Get
+                Return CType(Me("lDessMoment_ELU"),Boolean)
+            End Get
+            Set
+                Me("lDessMoment_ELU") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessDeformee_ELU() As Boolean
+            Get
+                Return CType(Me("lDessDeformee_ELU"),Boolean)
+            End Get
+            Set
+                Me("lDessDeformee_ELU") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessValEnv_ELU() As Boolean
+            Get
+                Return CType(Me("lDessValEnv_ELU"),Boolean)
+            End Get
+            Set
+                Me("lDessValEnv_ELU") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessNumeros_ELF() As Boolean
+            Get
+                Return CType(Me("lDessNumeros_ELF"),Boolean)
+            End Get
+            Set
+                Me("lDessNumeros_ELF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessCharges_ELF() As Boolean
+            Get
+                Return CType(Me("lDessCharges_ELF"),Boolean)
+            End Get
+            Set
+                Me("lDessCharges_ELF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessInerties_ELF() As Boolean
+            Get
+                Return CType(Me("lDessInerties_ELF"),Boolean)
+            End Get
+            Set
+                Me("lDessInerties_ELF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessEffortT_ELF() As Boolean
+            Get
+                Return CType(Me("lDessEffortT_ELF"),Boolean)
+            End Get
+            Set
+                Me("lDessEffortT_ELF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessMoment_ELF() As Boolean
+            Get
+                Return CType(Me("lDessMoment_ELF"),Boolean)
+            End Get
+            Set
+                Me("lDessMoment_ELF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessDeformee_ELF() As Boolean
+            Get
+                Return CType(Me("lDessDeformee_ELF"),Boolean)
+            End Get
+            Set
+                Me("lDessDeformee_ELF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessValEnv_ELF() As Boolean
+            Get
+                Return CType(Me("lDessValEnv_ELF"),Boolean)
+            End Get
+            Set
+                Me("lDessValEnv_ELF") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessNumeros_ELS() As Boolean
+            Get
+                Return CType(Me("lDessNumeros_ELS"),Boolean)
+            End Get
+            Set
+                Me("lDessNumeros_ELS") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessCharges_ELS() As Boolean
+            Get
+                Return CType(Me("lDessCharges_ELS"),Boolean)
+            End Get
+            Set
+                Me("lDessCharges_ELS") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property lDessInerties_ELS() As Boolean
+            Get
+                Return CType(Me("lDessInerties_ELS"),Boolean)
+            End Get
+            Set
+                Me("lDessInerties_ELS") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessEffortT_ELS() As Boolean
+            Get
+                Return CType(Me("lDessEffortT_ELS"),Boolean)
+            End Get
+            Set
+                Me("lDessEffortT_ELS") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessMoment_ELS() As Boolean
+            Get
+                Return CType(Me("lDessMoment_ELS"),Boolean)
+            End Get
+            Set
+                Me("lDessMoment_ELS") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessDeformee_ELS() As Boolean
+            Get
+                Return CType(Me("lDessDeformee_ELS"),Boolean)
+            End Get
+            Set
+                Me("lDessDeformee_ELS") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property lDessValEnv_ELS() As Boolean
+            Get
+                Return CType(Me("lDessValEnv_ELS"),Boolean)
+            End Get
+            Set
+                Me("lDessValEnv_ELS") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.5")>  _
+        Public Property RatioEpPredalleMax() As Decimal
+            Get
+                Return CType(Me("RatioEpPredalleMax"),Decimal)
+            End Get
+            Set
+                Me("RatioEpPredalleMax") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("5")>  _
+        Public Property NbMaxiEtaisP() As Integer
+            Get
+                Return CType(Me("NbMaxiEtaisP"),Integer)
+            End Get
+            Set
+                Me("NbMaxiEtaisP") = value
             End Set
         End Property
     End Class

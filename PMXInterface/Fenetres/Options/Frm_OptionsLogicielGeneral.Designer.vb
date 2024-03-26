@@ -70,14 +70,14 @@ Partial Class Frm_OptionsLogicielGeneral
         '
         Me.lbl_UserName.Location = New System.Drawing.Point(6, 58)
         Me.lbl_UserName.Name = "lbl_UserName"
-        Me.lbl_UserName.Size = New System.Drawing.Size(78, 20)
+        Me.lbl_UserName.Size = New System.Drawing.Size(101, 20)
         Me.lbl_UserName.TabIndex = 100
         Me.lbl_UserName.Text = "lbl_Us.."
-        Me.lbl_UserName.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_UserName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'txt_UserName
         '
-        Me.txt_UserName.Location = New System.Drawing.Point(90, 59)
+        Me.txt_UserName.Location = New System.Drawing.Point(117, 59)
         Me.txt_UserName.Name = "txt_UserName"
         Me.txt_UserName.Size = New System.Drawing.Size(189, 20)
         Me.txt_UserName.TabIndex = 99
@@ -86,14 +86,14 @@ Partial Class Frm_OptionsLogicielGeneral
         '
         Me.lbl_Firm.Location = New System.Drawing.Point(6, 32)
         Me.lbl_Firm.Name = "lbl_Firm"
-        Me.lbl_Firm.Size = New System.Drawing.Size(78, 20)
+        Me.lbl_Firm.Size = New System.Drawing.Size(117, 20)
         Me.lbl_Firm.TabIndex = 98
         Me.lbl_Firm.Text = "lbl_Firm"
-        Me.lbl_Firm.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.lbl_Firm.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'txt_Firm
         '
-        Me.txt_Firm.Location = New System.Drawing.Point(90, 33)
+        Me.txt_Firm.Location = New System.Drawing.Point(117, 33)
         Me.txt_Firm.Name = "txt_Firm"
         Me.txt_Firm.Size = New System.Drawing.Size(189, 20)
         Me.txt_Firm.TabIndex = 97

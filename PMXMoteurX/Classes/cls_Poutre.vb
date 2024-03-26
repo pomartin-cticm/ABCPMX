@@ -660,7 +660,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String, GammaOptionsLogiciels As cls_Gamma, OptionsCalcul As Struc_OptionsCalcul)
+    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String, OptionsLogiciels As Struc_OptionsLogiciel, OptionsCalcul As Struc_OptionsCalcul)
 
         Me.TypeSection = MyTypeSection
         Me.BeamID = NomPoutre
@@ -688,7 +688,7 @@ Public Class cls_Poutre
         InitialisePoidsPropres()
 
         'Copie des options de calculs
-        Me.Param.Gamma = GammaOptionsLogiciels.Clone()
+        Me.Param.Gamma = OptionsLogiciels.Gamma.Clone()
         Me.TransfertOptionsCalculs(OptionsCalcul)
 
 
@@ -802,11 +802,29 @@ Public Class cls_Poutre
         With OptionsCalculs
 
             Me.Param.Norme = .Norme
+
             Me.Param.lLargeurEfficaceSimplifiee = .lLargeurEfficaceSimplifiee
             Me.Param.lCompressionArma = .lCompressionArma
             Me.Dalle.AcierArmatures.Es = .EsArmatures
             Me.Section.Enrobage.AcierArmatures.Es = .EsArmatures
-            Me.Nodes.nbNodes = 0
+
+            Me.Param.dMaxNodes = .dMaxNodes
+            Me.Param.nbMinNodesTravee = .nbMinNodesTravee
+            Me.Param.nbMinNodesConsole = .nbMinNodesConsole
+
+            Me.Param.PsiLPermanent = .PsiLPermanent
+            Me.Param.PsiLRetrait = .PsiLRetrait
+
+            Me.Param.AgeT0SH(0) = .TimeT0SH(0)
+            Me.Param.AgeT0SH(1) = .TimeT0SH(1)
+
+            Me.Param.AgeT0G1(0) = .TimeT0G1(0)
+            Me.Param.AgeT0G1(1) = .TimeT0G1(1)
+
+            Me.Param.AgeT0G2(0) = .TimeT0G2(0)
+            Me.Param.AgeT0G2(1) = .TimeT0G2(1)
+
+            Me.Param.EtaW = .EtaW
 
         End With
     End Sub

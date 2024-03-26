@@ -238,46 +238,53 @@ Public Module Mod_Declarations
         '   Initialisation des paramètres définissant le domaine d'appication du logiciel
         '-----------------------------------------------------------------------------
 
-        OptionsScope.PorteeMin = PORTEEMIN
-        OptionsScope.PorteeMax = PORTEEMAX
-        OptionsScope.PorteeConsoleMin = CONSOLEMIN
-        OptionsScope.RatioPorteeConsoleMax = RATIOCONSOLEMAX
+        OptionsScope.PorteeMin = My.Settings.PorteeMin
+        OptionsScope.PorteeMax = My.Settings.PorteeMax
+        OptionsScope.PorteeConsoleMin = My.Settings.PorteeConsoleMin
+        OptionsScope.RatioPorteeConsoleMax = My.Settings.RatioPorteeConsoleMax
 
-        OptionsScope.NbMaxiEtaisP = NBPROPPINGMAX
+        OptionsScope.NbMaxiEtaisP = My.Settings.NbMaxiEtaisP
 
         'OptionsScope.EpDalleMin = 0.05
-        OptionsScope.ThetaH = THETAHDEFAULT
-        OptionsScope.EpDallePleineMin = EPDALLEMINIDEFAUT
-        OptionsScope.RatioEpRenformisMax = RATIOEPRENFORMISMAXDEFAUT
-        OptionsScope.EpDalleMixteMin = EPDALLEMIXTEMINIDEFAUT
+        OptionsScope.ThetaH = My.Settings.ThetaH
+        OptionsScope.EpDallePleineMin = My.Settings.EpDallePleineMin
+        OptionsScope.RatioEpRenformisMax = My.Settings.RatioEpRenformisMax
+        OptionsScope.EpDalleMixteMin = My.Settings.EpDalleMixteMin
 
-        OptionsScope.RhoCBetonLegerMax = 2200
-        OptionsScope.RhoCBetonLegerMin = 800
+        OptionsScope.RhoCBetonLegerMax = My.Settings.RhoCBetonLegerMax
+        OptionsScope.RhoCBetonLegerMin = My.Settings.RhoCBetonLegerMin
 
-        OptionsScope.RatioEpPredalleMax = 0.5
+        OptionsScope.RatioEpPredalleMax = My.Settings.RatioEpPredalleMax
 
     End Sub
 
     Public Sub InitialiseOptionsCalcul()
 
-        OptionsCalcul.Norme = Enu_Normes.Eurocodes_G1
-        OptionsCalcul.lCompressionArma = False
-        OptionsCalcul.lLargeurEfficaceSimplifiee = False
+        OptionsCalcul.Norme = My.Settings.Norme
+        OptionsCalcul.lCompressionArma = My.Settings.lCompressionArma
+        OptionsCalcul.lLargeurEfficaceSimplifiee = My.Settings.lLargeurEfficaceSimplifiee
 
-        OptionsCalcul.dMaxNodes = 1
-        OptionsCalcul.nbMinNodesTravee = 9
-        OptionsCalcul.nbMinNodesConsole = 1
+        OptionsCalcul.dMaxNodes = My.Settings.dMaxNodes
+        OptionsCalcul.nbMinNodesTravee = My.Settings.nbMinNodesTravee
+        OptionsCalcul.nbMinNodesConsole = My.Settings.nbMinNodesConsole
 
-        OptionsCalcul.EsArmatures = 210 * 10 ^ 3
+        OptionsCalcul.EsArmatures = My.Settings.EsArmatures
 
-        OptionsCalcul.PsiLPermanent = 1.1
-        OptionsCalcul.PsiLRetrait = 0.55
+        OptionsCalcul.PsiLPermanent = My.Settings.PsiLPermanent
+        OptionsCalcul.PsiLRetrait = My.Settings.PsiLRetrait
 
-        OptionsCalcul.TimeT0G1 = {28, 56}
-        OptionsCalcul.TimeT0G2 = {28, 56}
-        OptionsCalcul.TimeT0SH = {1, 1}
+        ReDim OptionsCalcul.TimeT0G1(1)
+        ReDim OptionsCalcul.TimeT0G2(1)
+        ReDim OptionsCalcul.TimeT0SH(1)
 
-        OptionsCalcul.EtaW = 1.2
+        OptionsCalcul.TimeT0G1(0) = My.Settings.AgeT0G1_Dalle
+        OptionsCalcul.TimeT0G1(1) = My.Settings.AgeT0G1_Enrobage
+        OptionsCalcul.TimeT0G2(0) = My.Settings.AgeT0G2_Dalle
+        OptionsCalcul.TimeT0G2(1) = My.Settings.AgeT0G2_Enrobage
+        OptionsCalcul.TimeT0SH(0) = My.Settings.AgeT0SH_Dalle
+        OptionsCalcul.TimeT0SH(1) = My.Settings.AgeT0SH_Enrobage
+
+        OptionsCalcul.EtaW = My.Settings.EtaW
 
     End Sub
 
@@ -367,20 +374,20 @@ Public Module Mod_Declarations
 
 #Region " Constantes et valeurs par défaut "
 
-    Private Const EPDALLEMINIDEFAUT As Decimal = 0.1       ' Epaisseur mini de dalle pleine =10 cm
-    Private Const RATIOEPRENFORMISMAXDEFAUT As Decimal = 0.4
-    Private Const EPDALLEMIXTEMINIDEFAUT As Decimal = 0.05 ' Epaisseur de dalle mixte mini 5 cm au dessus du bac
+    'Private Const EPDALLEMINIDEFAUT As Decimal = 0.1       ' Epaisseur mini de dalle pleine =10 cm
+    'Private Const RATIOEPRENFORMISMAXDEFAUT As Decimal = 0.4
+    'Private Const EPDALLEMIXTEMINIDEFAUT As Decimal = 0.05 ' Epaisseur de dalle mixte mini 5 cm au dessus du bac
 
-    Private Const THETAHDEFAULT As Decimal = 30             ' Angle inclinaison renformis
+    'Private Const THETAHDEFAULT As Decimal = 30             ' Angle inclinaison renformis
 
-    Private Const PORTEEMIN As Decimal = 5
-    Private Const PORTEEMAX As Decimal = 25
+    'Private Const PORTEEMIN As Decimal = 5
+    'Private Const PORTEEMAX As Decimal = 25
 
     Public Const ENTRAXEMIN As Decimal = 0.5
     Public Const ENTRAXEMAX As Decimal = 10
 
-    Private Const CONSOLEMIN As Decimal = 0.5
-    Private Const RATIOCONSOLEMAX As Decimal = 0.3
+    'Private Const CONSOLEMIN As Decimal = 0.5
+    'Private Const RATIOCONSOLEMAX As Decimal = 0.3
 
     Public Const NBPROPPINGMIN As Integer = 0
     Private Const NBPROPPINGMAX As Integer = 5
@@ -521,53 +528,53 @@ Public Module Mod_Declarations
 
     Public Sub InitialiseOptionsNdC()
         With OptionsNdC
-            .lShowHivossCurve = True
-            .lDispFMLoadCase = True
-            .lDispFMDiagrams = True
-            .lDispFM_ULS = True
-            .lDispFM_SLS = False
-            .lDispFM_FLS = False
-            .lDispSigmaCharges = False
+            .lShowHivossCurve = My.Settings.lNdCCourbeHivoss
+            .lDispFMLoadCase = My.Settings.lNdCDispLoadCase
+            .lDispFMDiagrams = My.Settings.lNdCShowDiagram
+            .lDispFM_ULS = My.Settings.lNdCDispFM_ELU
+            .lDispFM_SLS = My.Settings.lNdCDispFM_ELS
+            .lDispFM_FLS = My.Settings.lNdCDispFM_ELF
+            .lDispSigmaCharges = My.Settings.lNdCDispSigmaCharges
         End With
 
         With OptionsDiagrammesCDC
-            .lDessNumeros = False
-            .lDessCharges = False
-            .lDessInerties = False
-            .lDessEffortT = True
-            .lDessMoment = True
-            .lDessDeformee = False
-            .lDessValEnv = True
+            .lDessNumeros = My.Settings.lDessNumeros_CDC
+            .lDessCharges = My.Settings.lDessCharges_CDC
+            .lDessInerties = My.Settings.lDessInerties_CDC
+            .lDessEffortT = My.Settings.lDessEffortT_CDC
+            .lDessMoment = My.Settings.lDessMoment_CDC
+            .lDessDeformee = My.Settings.lDessDeformee_CDC
+            .lDessValEnv = My.Settings.lDessValEnv_CDC
         End With
 
         With OptionsDiagrammesELU
-            .lDessNumeros = False
-            .lDessCharges = False
-            .lDessInerties = False
-            .lDessEffortT = True
-            .lDessMoment = True
-            .lDessDeformee = False
-            .lDessValEnv = True
+            .lDessNumeros = My.Settings.lDessNumeros_ELU
+            .lDessCharges = My.Settings.lDessCharges_ELU
+            .lDessInerties = My.Settings.lDessInerties_ELU
+            .lDessEffortT = My.Settings.lDessEffortT_ELU
+            .lDessMoment = My.Settings.lDessMoment_ELU
+            .lDessDeformee = My.Settings.lDessDeformee_ELU
+            .lDessValEnv = My.Settings.lDessValEnv_ELU
         End With
 
         With OptionsDiagrammesELF
-            .lDessNumeros = False
-            .lDessCharges = False
-            .lDessInerties = False
-            .lDessEffortT = True
-            .lDessMoment = True
-            .lDessDeformee = False
-            .lDessValEnv = True
+            .lDessNumeros = My.Settings.lDessNumeros_ELF
+            .lDessCharges = My.Settings.lDessCharges_ELF
+            .lDessInerties = My.Settings.lDessInerties_ELF
+            .lDessEffortT = My.Settings.lDessEffortT_ELF
+            .lDessMoment = My.Settings.lDessMoment_ELF
+            .lDessDeformee = My.Settings.lDessDeformee_ELF
+            .lDessValEnv = My.Settings.lDessValEnv_ELF
         End With
 
         With OptionsDiagrammesELS
-            .lDessNumeros = False
-            .lDessCharges = False
-            .lDessInerties = False
-            .lDessEffortT = True
-            .lDessMoment = True
-            .lDessDeformee = True
-            .lDessValEnv = True
+            .lDessNumeros = My.Settings.lDessNumeros_ELS
+            .lDessCharges = My.Settings.lDessCharges_ELS
+            .lDessInerties = My.Settings.lDessInerties_ELS
+            .lDessEffortT = My.Settings.lDessEffortT_ELS
+            .lDessMoment = My.Settings.lDessMoment_ELS
+            .lDessDeformee = My.Settings.lDessDeformee_ELS
+            .lDessValEnv = My.Settings.lDessValEnv_ELS
         End With
 
     End Sub

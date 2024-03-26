@@ -19,7 +19,7 @@ Imports PMXMoteur2
 
         'Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", NomCharges)
         NomChargements = NomCharges
-        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", New cls_Gamma, New Struc_OptionsCalcul)
+        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", New Struc_OptionsLogiciel, New Struc_OptionsCalcul)
 
         ReDim myPoutre.VerifMixte(0)
         myPoutre.VerifMixte(0) = New cls_VerificationsMixtes()

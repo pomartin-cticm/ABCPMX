@@ -777,6 +777,8 @@ GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
 FIRE					= Calcul à l'incendie
+MODIF					= Attention : la modification des paramètres sera prise en compte lors de l'ajout de nouvelles poutres uniquement. 
+MODIF2					= Les valeurs des paramètres des poutres déjà créées resteront inchangées.  
 
 #OPTCALCALCUL
 TITLE					= Options de calcul
@@ -793,7 +795,7 @@ NBNODES					= Nombre de noeuds
 PERCANTILEVERSPAN		= par travée en console
 PERINTSPAN				= par travée intermédiaire
 LOADCASES				= Cas de charges
-PERMANENTLC				= Charges permaentes
+PERMANENTLC				= Charges permanentes
 SHRINKAGELC				= Charges de retrait
 CREEPMULT				= Multiplicateur de fluage
 TIMETZERO				= Age du béton durant le chargement

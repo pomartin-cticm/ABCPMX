@@ -72,7 +72,7 @@ Imports PMXMoteur2
         Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
         NomChargements = NomCas
 
-        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, "", New cls_Gamma, New Struc_OptionsCalcul)
+        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, "", New Struc_OptionsLogiciel, New Struc_OptionsCalcul)
         Dim ValRef, Valeur As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
         Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 
@@ -560,7 +560,7 @@ Imports PMXMoteur2
         Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
         NomChargements = NomCas
 
-        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, "", New cls_Gamma, New Struc_OptionsCalcul)
+        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, "", New Struc_OptionsLogiciel, New Struc_OptionsCalcul)
         Dim ValRef, Valeur As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
         Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 

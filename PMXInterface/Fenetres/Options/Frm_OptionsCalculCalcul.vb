@@ -134,7 +134,7 @@ Public Class Frm_OptionsCalculCalcul
 
         '--> Voilement par cisaillement 
 
-        Me.txt_eta.Text = GetStringInUnit(LocalOptionsCalcul.EtaW, Enu_TypeVariable.SansType, 4, 1, False)
+        Me.txt_eta.Text = GetStringInUnit(LocalOptionsCalcul.EtaW, Enu_TypeVariable.SansType, 4, 2, False)
 
     End Sub
 

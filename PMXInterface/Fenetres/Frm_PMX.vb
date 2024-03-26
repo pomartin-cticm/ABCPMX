@@ -1008,6 +1008,62 @@ Public Class Frm_PMX
         My.Settings.indUnitEffort = LogicielOptions.IndUnitEffort
         My.Settings.indUnitMoment = LogicielOptions.IndUnitMoment
 
+        '# Coefficients partiels
+        My.Settings.GammaMZero = LogicielOptions.Gamma.GammaM0
+        My.Settings.GammaM1 = LogicielOptions.Gamma.GammaM1
+        My.Settings.GammaM2 = LogicielOptions.Gamma.GammaM2
+        My.Settings.GammaC = LogicielOptions.Gamma.GammaC
+        My.Settings.GammaS = LogicielOptions.Gamma.GammaS
+        My.Settings.GammaP = LogicielOptions.Gamma.GammaP
+        My.Settings.GammaVs = LogicielOptions.Gamma.GammaVs
+        My.Settings.GammaVc = LogicielOptions.Gamma.GammaVc
+        My.Settings.GammaM_fi = LogicielOptions.Gamma.GammaM_fi
+        My.Settings.GammaC_fi = LogicielOptions.Gamma.GammaC_fi
+        My.Settings.GammaV_fi = LogicielOptions.Gamma.GammaV_fi
+        My.Settings.GammaG_sup = LogicielOptions.Gamma.GammaG_sup
+        My.Settings.GammaG_inf = LogicielOptions.Gamma.GammaG_inf
+        My.Settings.GammaQ = LogicielOptions.Gamma.GammaQ
+        My.Settings.Psi0_Q1 = LogicielOptions.Gamma.Psi0_Q1
+        My.Settings.Psi1_Q1 = LogicielOptions.Gamma.Psi1_Q1
+        My.Settings.Psi2_Q1 = LogicielOptions.Gamma.Psi2_Q1
+        My.Settings.Psi0_Q2 = LogicielOptions.Gamma.Psi0_Q2
+        My.Settings.Psi1_Q2 = LogicielOptions.Gamma.Psi1_Q2
+        My.Settings.Psi2_Q2 = LogicielOptions.Gamma.Psi2_Q2
+        My.Settings.lGammaV_unique = LogicielOptions.Gamma.lGammaV_unique
+
+        '# Options de calcul
+        My.Settings.EtaW = OptionsCalcul.EtaW
+        My.Settings.Norme = OptionsCalcul.Norme
+        My.Settings.lLargeurEfficaceSimplifiee = OptionsCalcul.lLargeurEfficaceSimplifiee
+        My.Settings.lCompressionArma = OptionsCalcul.lCompressionArma
+        My.Settings.EsArmatures = OptionsCalcul.EsArmatures
+        My.Settings.dMaxNodes = OptionsCalcul.dMaxNodes
+        My.Settings.nbMinNodesConsole = OptionsCalcul.nbMinNodesConsole
+        My.Settings.nbMinNodesTravee = OptionsCalcul.nbMinNodesTravee
+        My.Settings.PsiLPermanent = OptionsCalcul.PsiLPermanent
+        My.Settings.PsiLRetrait = OptionsCalcul.PsiLRetrait
+        My.Settings.AgeT0SH_Dalle = OptionsCalcul.TimeT0SH(0)
+        My.Settings.AgeT0SH_Enrobage = OptionsCalcul.TimeT0SH(1)
+        My.Settings.AgeT0G1_Dalle = OptionsCalcul.TimeT0G1(0)
+        My.Settings.AgeT0G1_Enrobage = OptionsCalcul.TimeT0G1(1)
+        My.Settings.AgeT0G2_Dalle = OptionsCalcul.TimeT0G2(0)
+        My.Settings.AgeT0G2_Enrobage = OptionsCalcul.TimeT0G2(1)
+
+        '# Scope du logiciel
+        My.Settings.PorteeMin = OptionsScope.PorteeMin
+        My.Settings.PorteeMax = OptionsScope.PorteeMax
+        My.Settings.PorteeConsoleMin = OptionsScope.PorteeConsoleMin
+        My.Settings.RatioPorteeConsoleMax = OptionsScope.RatioPorteeConsoleMax
+        My.Settings.NbMaxiEtaisP = OptionsScope.NbMaxiEtaisP
+        My.Settings.ThetaH = OptionsScope.ThetaH
+        My.Settings.EpDallePleineMin = OptionsScope.EpDallePleineMin
+        My.Settings.RatioEpRenformisMax = OptionsScope.RatioEpRenformisMax
+        My.Settings.RatioEpPredalleMax = OptionsScope.RatioEpPredalleMax
+        My.Settings.EpDalleMixteMin = OptionsScope.EpDalleMixteMin
+        My.Settings.RhoCBetonLegerMin = OptionsScope.RhoCBetonLegerMin
+        My.Settings.RhoCBetonLegerMax = OptionsScope.RhoCBetonLegerMax
+
+
         '--( Note de calcul
         My.Settings.lNdCCourbeHivoss = OptionsNdC.lShowHivossCurve
         My.Settings.lNdCDispFM_ELF = OptionsNdC.lDispFM_FLS

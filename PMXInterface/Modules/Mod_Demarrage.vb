@@ -207,7 +207,6 @@ Public Module Mod_Demarrage
             LogicielOptions.Gamma.GammaC = My.Settings.GammaC
             LogicielOptions.Gamma.GammaVs = My.Settings.GammaVs
             LogicielOptions.Gamma.GammaVc = My.Settings.GammaVc
-            'LogicielOptions.Gamma.GammaVp = My.Settings.GammaVp
             LogicielOptions.Gamma.lGammaV_unique = My.Settings.lGammaV_unique
             LogicielOptions.Gamma.GammaS = My.Settings.GammaS
             LogicielOptions.Gamma.GammaP = My.Settings.GammaP
@@ -220,13 +219,14 @@ Public Module Mod_Demarrage
             LogicielOptions.Gamma.GammaG_inf = My.Settings.GammaG_inf
             LogicielOptions.Gamma.GammaQ = My.Settings.GammaQ
 
-            LogicielOptions.Gamma.Psi0_Q1 = My.Settings.Psi0
-            LogicielOptions.Gamma.Psi1_Q1 = My.Settings.Psi1
-            LogicielOptions.Gamma.Psi2_Q1 = My.Settings.Psi2
+            LogicielOptions.Gamma.Psi0_Q1 = My.Settings.Psi0_Q1
+            LogicielOptions.Gamma.Psi1_Q1 = My.Settings.Psi1_Q1
+            LogicielOptions.Gamma.Psi2_Q1 = My.Settings.Psi2_Q1
 
-            LogicielOptions.Gamma.Psi0_Q2 = My.Settings.Psi0
-            LogicielOptions.Gamma.Psi1_Q2 = My.Settings.Psi1
-            LogicielOptions.Gamma.Psi2_Q2 = My.Settings.Psi2
+            LogicielOptions.Gamma.Psi0_Q2 = My.Settings.Psi0_Q2
+            LogicielOptions.Gamma.Psi1_Q2 = My.Settings.Psi1_Q2
+            LogicielOptions.Gamma.Psi2_Q2 = My.Settings.Psi2_Q2
+
 
             '--> Coefficient pour le voilement par cisaillement de la poutre acier
 
