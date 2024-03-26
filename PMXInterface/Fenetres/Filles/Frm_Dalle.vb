@@ -632,6 +632,7 @@ Public Class Frm_Dalle
 
             End Select
 
+            MAJ_ValeursLimites()
             Me.img_Dalle.Invalidate()
         End If
 
@@ -645,6 +646,8 @@ Public Class Frm_Dalle
                 '# Cas où on ajoute un lit = on sélectionne le second (créé)
                 MyDalleLoc.LitArma(1).lActive = True
                 iLitSelect = 1 : iSelect = 200
+                Me.MyDalleLoc.LitArma(1).z_s = Math.Max(Me.MyDalleLoc.LitArma(0).z_s, Me.MyDalleLoc.LitArma(1).z_s)
+                Me.MyDalleLoc.LitArma(1).z_s = Math.Min(MyDalleLoc.EpaisseurActive - ZMIN, Me.MyDalleLoc.LitArma(1).z_s)
             Case 1
                 '# Cas où on supprime le second lit : on sélectionne le premier
                 MyDalleLoc.LitArma(1).lActive = False
@@ -1064,9 +1067,11 @@ Public Class Frm_Dalle
 
         If Me.MyDalleLoc.NbLitsArmaActifs = 2 Then
             If iLitSelect = 0 Then 'permiere nappe
-                Me.zMax_Rel = Math.Min(Me.zMax_Rel, Me.MyDalleLoc.LitArma(1).z_s - Me.MyDalleLoc.LitArma(0).PhiS / 2 - Me.MyDalleLoc.LitArma(1).PhiS / 2)
+                ' Me.zMax_Rel = Math.Min(Me.zMax_Rel, Me.MyDalleLoc.LitArma(1).z_s - Me.MyDalleLoc.LitArma(0).PhiS / 2 - Me.MyDalleLoc.LitArma(1).PhiS / 2)
+                Me.zMax_Rel = Math.Min(Me.zMax_Rel, Me.MyDalleLoc.LitArma(1).z_s)
             Else 'deuxieme nappe
-                Me.zMin_Rel = Math.Max(Me.zMin_Rel, Me.MyDalleLoc.LitArma(0).z_s + Me.MyDalleLoc.LitArma(0).PhiS / 2 + Me.MyDalleLoc.LitArma(1).PhiS / 2)
+                ' Me.zMin_Rel = Math.Max(Me.zMin_Rel, Me.MyDalleLoc.LitArma(0).z_s + Me.MyDalleLoc.LitArma(0).PhiS / 2 + Me.MyDalleLoc.LitArma(1).PhiS / 2)
+                Me.zMin_Rel = Math.Max(Me.zMin_Rel, Me.MyDalleLoc.LitArma(0).z_s)
             End If
         End If
 

@@ -36,6 +36,8 @@ Public Class Frm_OptionsCalcul
 
     Private strAvertissementModif() As String
 
+    Private lSettingsReset As Boolean
+
 
 #End Region
 
@@ -118,6 +120,8 @@ Public Class Frm_OptionsCalcul
         ' Me.GammaLoc.TransfertFrom(LogicielOptions.Gamma)
         LocalOptionsScope = OptionsScope
         LocalOptionsCalcul = OptionsCalcul
+
+        Me.lSettingsReset = False
 
     End Sub
 
@@ -435,6 +439,11 @@ Public Class Frm_OptionsCalcul
         If SenderName <> Me.PoMbtn_Calcul.Name Then Me.PoMbtn_Calcul.Checked = False
         If SenderName <> Me.PoMbtn_Fire.Name Then Me.PoMbtn_Fire.Checked = False
 
+    End Sub
+
+    Private Sub btn_Reset_Click(sender As Object, e As EventArgs) Handles btn_Reset.Click
+        My.Settings.Reset()
+        Me.lSettingsReset = True
     End Sub
 
 

@@ -6961,7 +6961,7 @@ Module Mod_NoteCalcul
 
         '# Edtion des fréquences propres
 
-        EditionELSFrequencesPropres(MyBeam)
+        'EditionELSFrequencesPropres(MyBeam) GUD: à voir + tard si c'est pertinent
 
         '# Edition de la méthode Hivoss
 

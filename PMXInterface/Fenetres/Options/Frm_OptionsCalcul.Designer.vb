@@ -34,6 +34,7 @@ Partial Class Frm_OptionsCalcul
         Me.btn_Cancel = New System.Windows.Forms.Button()
         Me.btn_Appliquer = New System.Windows.Forms.Button()
         Me.pan_Contenu = New System.Windows.Forms.Panel()
+        Me.btn_Reset = New System.Windows.Forms.Button()
         Me.pan_Main.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.pan_Gauche.SuspendLayout()
@@ -99,7 +100,7 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60.0!))
         Me.TLpan_Gauche.Size = New System.Drawing.Size(242, 442)
         Me.TLpan_Gauche.TabIndex = 0
         '
@@ -196,22 +197,25 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_PourLesBoutons.ColumnCount = 2
         Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TLpan_PourLesBoutons.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Cancel, 1, 0)
-        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Appliquer, 0, 0)
+        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Reset, 0, 0)
+        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Cancel, 1, 1)
+        Me.TLpan_PourLesBoutons.Controls.Add(Me.btn_Appliquer, 0, 1)
         Me.TLpan_PourLesBoutons.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLpan_PourLesBoutons.Location = New System.Drawing.Point(0, 412)
+        Me.TLpan_PourLesBoutons.Location = New System.Drawing.Point(0, 382)
         Me.TLpan_PourLesBoutons.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_PourLesBoutons.Name = "TLpan_PourLesBoutons"
-        Me.TLpan_PourLesBoutons.RowCount = 1
+        Me.TLpan_PourLesBoutons.RowCount = 2
         Me.TLpan_PourLesBoutons.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TLpan_PourLesBoutons.Size = New System.Drawing.Size(242, 30)
+        Me.TLpan_PourLesBoutons.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TLpan_PourLesBoutons.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLpan_PourLesBoutons.Size = New System.Drawing.Size(242, 60)
         Me.TLpan_PourLesBoutons.TabIndex = 1
         '
         'btn_Cancel
         '
         Me.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Cancel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Cancel.Location = New System.Drawing.Point(124, 3)
+        Me.btn_Cancel.Location = New System.Drawing.Point(124, 33)
         Me.btn_Cancel.Name = "btn_Cancel"
         Me.btn_Cancel.Size = New System.Drawing.Size(115, 24)
         Me.btn_Cancel.TabIndex = 1
@@ -221,7 +225,7 @@ Partial Class Frm_OptionsCalcul
         'btn_Appliquer
         '
         Me.btn_Appliquer.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Appliquer.Location = New System.Drawing.Point(3, 3)
+        Me.btn_Appliquer.Location = New System.Drawing.Point(3, 33)
         Me.btn_Appliquer.Name = "btn_Appliquer"
         Me.btn_Appliquer.Size = New System.Drawing.Size(115, 24)
         Me.btn_Appliquer.TabIndex = 0
@@ -238,6 +242,18 @@ Partial Class Frm_OptionsCalcul
         Me.pan_Contenu.Name = "pan_Contenu"
         Me.pan_Contenu.Size = New System.Drawing.Size(581, 444)
         Me.pan_Contenu.TabIndex = 2
+        '
+        'btn_Reset
+        '
+        Me.TLpan_PourLesBoutons.SetColumnSpan(Me.btn_Reset, 2)
+        Me.btn_Reset.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.btn_Reset.Location = New System.Drawing.Point(3, 3)
+        Me.btn_Reset.Name = "btn_Reset"
+        Me.btn_Reset.Size = New System.Drawing.Size(236, 24)
+        Me.btn_Reset.TabIndex = 2
+        Me.btn_Reset.Text = "btn_Reset"
+        Me.btn_Reset.UseVisualStyleBackColor = True
+        Me.btn_Reset.Visible = False
         '
         'Frm_OptionsCalcul
         '
@@ -274,4 +290,5 @@ Partial Class Frm_OptionsCalcul
     Friend WithEvents PoMbtn_Calcul As POMbutton
     Friend WithEvents PoMbtn_Scope As POMbutton
     Friend WithEvents PoMbtn_Fire As POMbutton
+    Friend WithEvents btn_Reset As Button
 End Class
