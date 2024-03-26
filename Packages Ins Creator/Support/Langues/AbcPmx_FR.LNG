@@ -100,7 +100,7 @@ SIMPLIFIEDBEFF			= Distribution simplifiée pour les largeurs efficaces de la da
 REBARSINCOMPRESSION		= Armatures en compression prises en compte
 AGET					= Age du béton
 AGET0					= Age du béton au moment du chargement
-SYMBOLFORDAY			= d
+SYMBOLFORDAY			= j
 SLAB					= Dalle
 ENCASEMENT				= Enrobage
 SELFWEIGHT				= Poids propre
@@ -109,6 +109,8 @@ SHRINKAGE				= Retrait
 TPARAMETERS				= Paramètres
 GFORCE					= Accélération de pesanteurs
 ETAW					= Voilement par cisaillement
+CONTROLCRACKW			= Maîtrise de la fissuration
+CRACKWIDTH				= Limite d'ouverture des fissures
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs
@@ -499,7 +501,7 @@ PROJECTNAVIGATION		= Navigation projet
 RECENTFILES				= Fichiers récents
 SAVE					= Enregistrer
 SAVEAS					= Enregister sous
-SAVEBEFORECLOSE			= Voulez-vous enresitrer les modifications du projet ?
+SAVEBEFORECLOSE			= Voulez-vous enregistrer les modifications du projet ?
 SECTION					= Section
 SECTIONSLIST			= Liste des sections
 SUPPORT					= Support
@@ -724,6 +726,8 @@ RIGHTCANT				= Console droite
 RIGHTOPENING			= Ouverture droite
 SPACINGS				= Entraxes
 SPANS					= Portées
+LEFTSLABCONTINUITY		= La dalle est continue sur l'appui gauche
+RIGHTSLABCONTINUITY		= La dalle est continue sur l'appui droit
 
 #FRM_STANDARDSTEELSECTIONS
 AUTOMATICHA				= Hauteur totale automatiquement calculée
@@ -773,6 +777,8 @@ GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
 FIRE					= Calcul à l'incendie
+MODIF					= Attention : la modification des paramètres sera prise en compte lors de l'ajout de nouvelles poutres uniquement. 
+MODIF2					= Les valeurs des paramètres des poutres déjà créées resteront inchangées.  
 
 #OPTCALCALCUL
 TITLE					= Options de calcul
@@ -789,7 +795,7 @@ NBNODES					= Nombre de noeuds
 PERCANTILEVERSPAN		= par travée en console
 PERINTSPAN				= par travée intermédiaire
 LOADCASES				= Cas de charges
-PERMANENTLC				= Charges permaentes
+PERMANENTLC				= Charges permanentes
 SHRINKAGELC				= Charges de retrait
 CREEPMULT				= Multiplicateur de fluage
 TIMETZERO				= Age du béton durant le chargement
@@ -828,7 +834,7 @@ SLAB					= Dalle béton
 THETAHAUNCH				= Angle d'inclinaison des renformis 
 HAUNCHTH				= Epaisseur des renformis
 SOLIDSLABTH				= Epaisseur de la dalle béton
-COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus hickness of composite slab (au-dessus du bac)
+COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus du bac)
 RHOLWC					= Masse volumique du béton léger
 
 #OPTSOFTMAIN

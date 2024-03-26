@@ -110,6 +110,8 @@ SHRINKAGE				= Shrinkage
 TPARAMETERS				= Parameters
 GFORCE					= G-force
 ETAW					= Shear buckling
+CONTROLCRACKW			= Control of concrete cracking
+CRACKWIDTH				= Limit of crack width
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
@@ -725,6 +727,8 @@ RIGHTCANT				= Right cantilever span
 RIGHTOPENING			= Right opening
 SPACINGS				= Spacings
 SPANS					= Span lengths
+LEFTSLABCONTINUITY		= The slab is continuous at the left support
+RIGHTSLABCONTINUITY		= The slab is continuous at the right support
 
 #FRM_STANDARDSTEELSECTIONS
 AUTOMATICHA				= Total height automatically assessed
@@ -774,6 +778,8 @@ GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
 FIRE					= Fire design
+MODIF					= Warning : parameter modifications will be taken into account when adding new beams only. 
+MODIF2					= The parameter values of existing beams will remain unchanged.
 
 #OPTCALCALCUL
 TITLE					= Calculation options
