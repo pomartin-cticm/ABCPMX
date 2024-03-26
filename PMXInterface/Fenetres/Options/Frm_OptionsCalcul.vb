@@ -295,10 +295,6 @@ Public Class Frm_OptionsCalcul
         GereTransfertValeur(GammaLoc.Psi1_Q2, LogicielOptions.Gamma.Psi1_Q2, lModif)
         GereTransfertValeur(GammaLoc.Psi2_Q2, LogicielOptions.Gamma.Psi2_Q2, lModif)
 
-        'LogicielOptions.Gamma.Psi0_Q2 = LogicielOptions.Gamma.Psi0_Q1
-        'LogicielOptions.Gamma.Psi1_Q2 = LogicielOptions.Gamma.Psi1_Q1
-        'LogicielOptions.Gamma.Psi2_Q2 = LogicielOptions.Gamma.Psi2_Q1
-
         '# Fenêtre Scope
         If lExpert Then
             GereTransfertValeur(LocalOptionsScope.PorteeMin, OptionsScope.PorteeMin, lModif)
@@ -313,7 +309,7 @@ Public Class Frm_OptionsCalcul
         End If
         GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
 
-        '# Fenêtre Calcul
+        '# Fenêtre Options Calculs
         If OptionsCalcul.Norme <> LocalOptionsCalcul.Norme Then lModif = True
         OptionsCalcul.Norme = LocalOptionsCalcul.Norme
         GereTransfertValeur(LocalOptionsCalcul.lLargeurEfficaceSimplifiee, OptionsCalcul.lLargeurEfficaceSimplifiee, lModif)

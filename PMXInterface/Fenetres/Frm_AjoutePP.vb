@@ -567,63 +567,63 @@ Public Class Frm_AjoutePP
 
             If Me.chk_SectionAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_SectionAcierEnrobe.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_SectionMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_SectionMixteEnrobe.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.MixteEnrobage, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.MixteEnrobage, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_SFBAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_SFBMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_IFB_A_Acier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_IFB_A_Mixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_IFB_B_Acier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_IFB_B_Mixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
 
             If Me.chk_SABAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             If Me.chk_SABMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, LogicielOptions.Gamma, OptionsCalcul))
             End If
 
             InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)

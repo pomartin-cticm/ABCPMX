@@ -186,6 +186,8 @@ Public Class cls_Projet
                 Lines.Add("   TypeSection   =  " & .TypeSection)
                 Lines.Add("   ConsoleGauche  =  " & .lTraveeConsoleGauche)
                 Lines.Add("   ConsoleDroite  =  " & .lTraveeConsoleDroite)
+                Lines.Add("   DalleContGauche  =  " & .lDalleContinueGauche)
+                Lines.Add("   DalleContDroite  =  " & .lDalleContinueDroite)
                 Lines.Add("   lTremieGauche  =  " & .lTremieGauche)
                 Lines.Add("   lTremieDroite  =  " & .lTremieDroite)
                 Lines.Add("   NbTravee       =  " & .NombreTraveesDeuxAppuis)
@@ -522,6 +524,7 @@ Public Class cls_Projet
                     Lines.Add("   AgeT0SH_1            = " & .AgeT0SH(1))
                     Lines.Add("   AgeTCalc            = " & .AgeT)
                     Lines.Add("   lElasticDesign            = " & .lElasticDesignVM)
+                    Lines.Add("   lMaitFissure            = " & .lMaitriseFissuration)
 
 
                     Lines.Add("")
@@ -954,6 +957,8 @@ Public Class cls_Projet
                         Case "TYPESECTIO" : .TypeSection = Mots(nbMots)
                         Case "CONSOLEGAU" : .lTraveeConsoleGauche = Mots(nbMots)
                         Case "CONSOLEDRO" : .lTraveeConsoleDroite = Mots(nbMots)
+                        Case "DALLECONTG" : .lDalleContinueGauche = Mots(nbMots)
+                        Case "DALLECONTD" : .lDalleContinueDroite = Mots(nbMots)
                         Case "LTREMIEGAU" : .lTremieGauche = Mots(nbMots)
                         Case "LTREMIEDRO" : .lTremieDroite = Mots(nbMots)
                         Case "NBTRAVEE" : .NombreTraveesDeuxAppuis = TraiteReal(Mots(nbMots))
@@ -1758,6 +1763,7 @@ Public Class cls_Projet
                         Case "AGET0SH_1" : .AgeT0SH(1) = TraiteReal(Mots(nbMots))
                         Case "AGETCALC" : .AgeT = TraiteReal(Mots(nbMots))
                         Case "LELASTICDESIGN" : .lElasticDesignVM = Mots(nbMots)
+                        Case "LMAITFISSURE" : .lMaitriseFissuration = Mots(nbMots)
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With

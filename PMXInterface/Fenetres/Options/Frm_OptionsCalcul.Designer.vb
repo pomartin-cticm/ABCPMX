@@ -49,7 +49,7 @@ Partial Class Frm_OptionsCalcul
         Me.pan_Main.Location = New System.Drawing.Point(0, 0)
         Me.pan_Main.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(800, 450)
+        Me.pan_Main.Size = New System.Drawing.Size(834, 450)
         Me.pan_Main.TabIndex = 1
         '
         'TLpan_Main
@@ -65,7 +65,7 @@ Partial Class Frm_OptionsCalcul
         Me.TLpan_Main.Name = "TLpan_Main"
         Me.TLpan_Main.RowCount = 1
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(800, 450)
+        Me.TLpan_Main.Size = New System.Drawing.Size(834, 450)
         Me.TLpan_Main.TabIndex = 0
         '
         'pan_Gauche
@@ -236,7 +236,7 @@ Partial Class Frm_OptionsCalcul
         Me.pan_Contenu.Location = New System.Drawing.Point(250, 3)
         Me.pan_Contenu.Margin = New System.Windows.Forms.Padding(0, 3, 3, 3)
         Me.pan_Contenu.Name = "pan_Contenu"
-        Me.pan_Contenu.Size = New System.Drawing.Size(547, 444)
+        Me.pan_Contenu.Size = New System.Drawing.Size(581, 444)
         Me.pan_Contenu.TabIndex = 2
         '
         'Frm_OptionsCalcul
@@ -245,7 +245,7 @@ Partial Class Frm_OptionsCalcul
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Cancel
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(834, 450)
         Me.Controls.Add(Me.pan_Main)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False

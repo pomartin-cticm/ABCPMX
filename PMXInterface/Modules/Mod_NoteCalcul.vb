@@ -20,7 +20,8 @@ Module Mod_NoteCalcul
     Private Const TABVAR1 As String = "\T15"
     Private Const TABVAR2 As String = "\T20"
     Private Const TABVAR3 As String = "\T25"
-    Private Const TABVAR4 As String = "\T50"
+    Private Const TABVAR4 As String = "\T35"
+    Private Const TABVAR5 As String = "\T50"
 
     Private Const TABAFF As String = " :\T50"
     Private Const TABEGAL As String = "\T55 = "
@@ -335,6 +336,88 @@ Module Mod_NoteCalcul
         If nbLignes + 10 > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(2, BlocG("CALCULATIONOPTIONS"))
+
+        '--> 'Norme
+        AddTitreNdC(3, BlocG("TSTANDARD"))
+        If MyBeam.Param.Norme = cls_OptionsCalcul.Enu_Normes.EurocodesG1 Then
+            AddLigneNDC(TABW2 & BlocG("TSTANDARD") & TABAFF & BlocG("ENGEN1"))
+        Else
+            AddLigneNDC(TABW2 & BlocG("TSTANDARD") & TABAFF & BlocG("ENGEN2"))
+        End If
+
+        '--> Options à l'ELU
+        AddTitreNdC(3, BlocG("TELUOPTIONS"))
+        Select Case True
+            Case MyBeam.Param.lElasticDesignVM
+                AddLigneNDC(TABW2 & BlocG("CALCULATIONTYPE") & TABAFF & BlocG("ELASTICDESIGNVM"))
+            Case MyBeam.Param.lElasticDesignCl3
+                AddLigneNDC(TABW2 & BlocG("CALCULATIONTYPE") & TABAFF & BlocG("ELASTICDESIGNCL3"))
+            Case Else
+                AddLigneNDC(TABW2 & BlocG("CALCULATIONTYPE") & TABAFF & BlocG("NORMALDESIGN"))
+        End Select
+        AddLigneNDC(TABW2 & BlocG("ETAW") & TABAFF & "\Sh\s = " & GetStringInUnit(MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 4, 2, False))
+
+        '--> Option à l'ELS
+        AddTitreNdC(3, BlocG("TELSOPTIONS"))
+        If MyBeam.Param.lFlechesETA Then
+            AddLigneNDC(TABW2 & BlocG("ETADEFLECTIONS"))
+        Else
+            AddLigneNDC(TABW2 & BlocG("NOETADEFLECTIONS"))
+        End If
+        AddLigneNDC(TABW2 & BlocG("STUDSE") & " : ")
+        AddLigneNDC(TABW2 & TABVAR5 & "s\-e\= = " & GetStringInUnit(MyBeam.Param.DeltaD, Enu_TypeVariable.Millimetre, 4, 2, True))
+        If MyBeam.Param.lMaitriseFissuration Then
+            AddLigneNDC(TABW2 & BlocG("CONTROLCRACKW") & TABAFF & BlocG("YES"))
+        Else
+            AddLigneNDC(TABW2 & BlocG("CONTROLCRACKW") & TABAFF & BlocG("NO"))
+        End If
+        AddLigneNDC(TABW2 & BlocG("CRACKWIDTH") & TABAFF & "w\-max\= = " & GetStringInUnit(MyBeam.Param.FissureWk, Enu_TypeVariable.SansType, 4, 2, True) & " mm")
+
+        '--> Propriétés du béton
+        AddTitreNdC(3, BlocG("TCONCRETE"))
+        AddLigneNDC(TABW2 & BlocG("RELATIVEHUMIDITY") & TABAFF & "RH = " & GetStringInUnit(MyBeam.Param.RH, Enu_TypeVariable.SansType, 4, 2, True) & " %")
+        AddLigneNDC(TABW2 & BlocG("SHRINKAGEDEFORMATION") & TABAFF & "\Se\s\-sh\= = " & GetStringInUnit(MyBeam.Param.EpsilonSH * 10 ^ 6, Enu_TypeVariable.SansType, 4, 2, True) & " x 10\+-6\=")
+        AddLigneNDC(TABW2 & BlocG("YOUNGSMODULUSREBAR") & TABAFF & "E\-s\= = " & GetStringInUnit(MyBeam.Param.ArmaYoung, Enu_TypeVariable.ContrainteMPa, 4, 2, True))
+
+        '--> Propriétés des sections transversales 
+        AddTitreNdC(3, BlocG("SECTIONSPROP"))
+        If MyBeam.Param.lLargeurEfficaceSimplifiee Then
+            AddLigneNDC(TABW2 & BlocG("SIMPLIFIEDBEFF") & TABAFF & BlocG("YES"))
+        Else
+            AddLigneNDC(TABW2 & BlocG("SIMPLIFIEDBEFF") & TABAFF & BlocG("NO"))
+        End If
+        If MyBeam.Param.lCompressionArma Then
+            AddLigneNDC(TABW2 & BlocG("REBARSINCOMPRESSION") & TABAFF & BlocG("YES"))
+        Else
+            AddLigneNDC(TABW2 & BlocG("REBARSINCOMPRESSION") & TABAFF & BlocG("NO"))
+        End If
+
+        SauteLigne()
+
+        AddLigneNDC("\TABLEAU 18")
+        InitialiseLigne(3, HLIGNEENTETE, True)
+        AddCelluleFond(LC1, Bordures.Tous, PositionTexteInCell.Centre, BlocG("AGET0"))
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SLAB"))
+        AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("ENCASEMENT"))
+        InitialiseLigne(3, HLIGNEENTETE, True)
+        AddCellule(LC1, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SELFWEIGHT"))
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G1(0) & " " & BlocG("SYMBOLFORDAY"))
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G1(1) & " " & BlocG("SYMBOLFORDAY"))
+        InitialiseLigne(3, HLIGNEENTETE, True)
+        AddCellule(LC1, Bordures.Tous, PositionTexteInCell.Centre, BlocG("OTHERPERM"))
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G2(0) & " " & BlocG("SYMBOLFORDAY"))
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0G2(1) & " " & BlocG("SYMBOLFORDAY"))
+        InitialiseLigne(3, HLIGNEENTETE, True)
+        AddCellule(LC1, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SHRINKAGE"))
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0SH(0) & " " & BlocG("SYMBOLFORDAY"))
+        AddCellule(LC2, Bordures.Tous, PositionTexteInCell.Centre, MyBeam.Param.AgeT0SH(1) & " " & BlocG("SYMBOLFORDAY"))
+        FinTableau()
+
+        AddLigneNDC(TABW2 & BlocG("AGET") & TABAFF & "t = " & GetStringInUnit(MyBeam.Param.AgeT, Enu_TypeVariable.SansType, 4, 2, False) & BlocG("SYMBOLFORDAY"))
+
+        '--> Paramètres
+        AddTitreNdC(3, BlocG("TPARAMETERS"))
+        AddLigneNDC(TABW2 & BlocG("GFORCE") & TABAFF & "g = " & GetStringInUnit(MyBeam.Param.GraviteG, Enu_TypeVariable.SansType, 4, 2, False) & " m/s\+2\=")
     End Sub
 
     Private Sub EditionParametresBase(ByVal MyBeam As cls_Poutre)
@@ -660,18 +743,18 @@ Module Mod_NoteCalcul
             If MyBeam.Section.lEnrobage Then
                 If Not MyBeam.Section.IsVoilementParCisaillement(MyBeam.Param.EtaW) Then
                     AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " ≤ 124\Se\s = " & GetStringInUnit(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, False))
-                    AddLigneNDC(TABW2 & TABVAR4 & BlocG("NO_NEED_CHECK_WB"))
+                    AddLigneNDC(TABW2 & TABVAR5 & BlocG("NO_NEED_CHECK_WB"))
                 Else
                     AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "d\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " > 124\Se\s = " & GetStringInUnit(124 * MyBeam.Section.Epsilon_W, Enu_TypeVariable.SansType, 3, 1, False))
-                    AddLigneNDC(TABW2 & TABVAR4 & BlocG("NEED_CHECK_WB"))
+                    AddLigneNDC(TABW2 & TABVAR5 & BlocG("NEED_CHECK_WB"))
                 End If
             Else
                 If Not MyBeam.Section.IsVoilementParCisaillement(MyBeam.Param.EtaW) Then
                     AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " ≤ 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False))
-                    AddLigneNDC(TABW2 & TABVAR4 & BlocG("NO_NEED_CHECK_WB"))
+                    AddLigneNDC(TABW2 & TABVAR5 & BlocG("NO_NEED_CHECK_WB"))
                 Else
                     AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & TABEGAL & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " > 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False))
-                    AddLigneNDC(TABW2 & TABVAR4 & BlocG("NEED_CHECK_WB"))
+                    AddLigneNDC(TABW2 & TABVAR5 & BlocG("NEED_CHECK_WB"))
                 End If
             End If
 
@@ -1843,40 +1926,43 @@ Module Mod_NoteCalcul
         AddTitreNdC(2, BlocG("COMBINATIONS"))
 
 
-        AddTitreNdC(3, BlocG("ULSTATES"))
+
         If MyBeam.GetNbCombi(MyBeam.lCombELU) = 0 Then
-            AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+            'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
         Else
+            AddTitreNdC(3, BlocG("ULSTATES"))
             EditionTableauCombinaison(MyBeam, MyBeam.lCombELU, MyBeam.CoefCombELU)
         End If
 
 
 
-        AddTitreNdC(3, BlocG("SLSTATES"))
+
         If MyBeam.GetNbCombi(MyBeam.lCombELS) = 0 Then
-            AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+            'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
         Else
+            AddTitreNdC(3, BlocG("SLSTATES"))
             EditionTableauCombinaison(MyBeam, MyBeam.lCombELS, MyBeam.CoefCombELS)
         End If
 
 
-        AddTitreNdC(3, BlocG("FLSTATES"))
+
         If MyBeam.GetNbCombi(MyBeam.lCombFeu) = 0 Then
-            AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+            'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
         Else
+            AddTitreNdC(3, BlocG("FLSTATES"))
             EditionTableauCombinaison(MyBeam, MyBeam.lCombFeu, MyBeam.CoefCombFeu)
         End If
 
         If MyBeam.lMixte Then
             If MyBeam.GetNbCombi(MyBeam.lCombELCURules) = 0 Then
-                AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+                'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
             Else
                 AddTitreNdC(3, BlocG("ELCUSTATES"))
                 EditionTableauCombinaison(MyBeam, MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
             End If
 
             If MyBeam.GetNbCombi(MyBeam.lCombELCSRules) = 0 Then
-                AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+                'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
             Else
                 AddTitreNdC(3, BlocG("ELCSSTATES"))
                 EditionTableauCombinaison(MyBeam, MyBeam.lCombELCSRules, MyBeam.CoefCombELCS)

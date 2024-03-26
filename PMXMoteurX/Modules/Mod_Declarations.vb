@@ -21,6 +21,53 @@
 
     End Structure
 
+    Public Structure Struc_OptionsLogiciel
+
+        Public lExpert As Boolean                   'Activation Mode Expert
+        Public lDebug As Boolean                    'Fonctionnement en mode debug
+        Public IndLangue As Integer                 'Indice de la langue de l'interface
+        Public IndLangueNDC As Integer              'Indice de la langue de la note de calcul
+
+        Public IndUnitLongueur As Integer           'Indice de l'unité de longueur utilisée
+        Public IndUnitDimension As Integer          'Indice de l'unité de longueur utilisée
+        Public IndUnitEffort As Integer             'Indice de l'unité d'effort utilisée
+        Public IndUnitMoment As Integer             'Indice de l'unité de moment utilisée
+        Public IndUnitInerties As Integer           'Indice de l'unité des inerties
+        Public IndUnitContraintes As Integer        'Indice de l'unité des contraintes
+        Public IndUnitModulesY As Integer           'Indice de l'unité des modules d'élasticité
+
+        Public UserName As String                   'Nom de l'utilisateur
+        Public CompanyName As String                'Nom de l'entreprise
+
+        Public RepertoireTravail As String          'Répertoire de l'espace de travail
+        Public lRepTravailDefault As Boolean        'Répertoire de travail par défaut ou le dernier utilisé
+
+        Public lUpdateStart As Boolean              'Vérification des mises à jour au démarrage du logiciel
+
+        Public lFenetres As Boolean                 'Fenêtres indépendantes
+        Public lNoS235 As Boolean                   'Indique si on applique le filtre empechant la sélection de nuance S235/S275 en mode normal 
+
+        Public Gamma As cls_Gamma
+
+        'Public EtaW As Decimal                      ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
+
+    End Structure
+
+    Public Structure Struc_OptionsCalcul                ' Options de calcul --------------------------------
+        Public Norme As cls_OptionsCalcul.Enu_Normes    ' Norme de calcul
+        Public lLargeurEfficaceSimplifiee As Boolean    ' Largeur efficace de la dalle béton selon modèle simplifié
+        Public lCompressionArma As Boolean              ' Indique si l'on prend en compte les armatures comprimées dans le calcul des propriétés de section
+        Public dMaxNodes As Decimal                     ' Distance maximale entre deux noeuds
+        Public nbMinNodesTravee As Integer              ' Nombre mini de noeuds par travée normale
+        Public nbMinNodesConsole As Integer             ' Nombre mini de noeuds par travée console
+        Public EsArmatures As Decimal                   ' Module d'Young des barres d'armature
+        Public PsiLPermanent As Decimal                 ' Coefficient de fluage pour les charges permanentes
+        Public PsiLRetrait As Decimal                   ' Coefficient de fluage pour les charges de retrait
+        Public TimeT0G1() As Decimal                    ' Temps au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
+        Public TimeT0G2() As Decimal                    ' Temps au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
+        Public TimeT0SH() As Decimal                    ' Temps au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
+        Public EtaW As Decimal                      ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
+    End Structure
 #End Region
 
 #End Region

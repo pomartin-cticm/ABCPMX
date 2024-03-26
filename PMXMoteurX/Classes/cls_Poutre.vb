@@ -660,7 +660,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String)
+    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String, GammaOptionsLogiciels As cls_Gamma, OptionsCalcul As Struc_OptionsCalcul)
 
         Me.TypeSection = MyTypeSection
         Me.BeamID = NomPoutre
@@ -686,6 +686,11 @@ Public Class cls_Poutre
         InitialiseChargements()
         InitialiseTablesCombi()
         InitialisePoidsPropres()
+
+        'Copie des options de calculs
+        Me.Param.Gamma = GammaOptionsLogiciels.Clone()
+        Me.TransfertOptionsCalculs(OptionsCalcul)
+
 
     End Sub
 
@@ -791,6 +796,19 @@ Public Class cls_Poutre
 
     Private Sub DalleDefaut()
 
+    End Sub
+
+    Private Sub TransfertOptionsCalculs(OptionsCalculs As Struc_OptionsCalcul)
+        With OptionsCalculs
+
+            Me.Param.Norme = .Norme
+            Me.Param.lLargeurEfficaceSimplifiee = .lLargeurEfficaceSimplifiee
+            Me.Param.lCompressionArma = .lCompressionArma
+            Me.Dalle.AcierArmatures.Es = .EsArmatures
+            Me.Section.Enrobage.AcierArmatures.Es = .EsArmatures
+            Me.Nodes.nbNodes = 0
+
+        End With
     End Sub
 
 #End Region

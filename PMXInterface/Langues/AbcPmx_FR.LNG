@@ -100,7 +100,7 @@ SIMPLIFIEDBEFF			= Distribution simplifiée pour les largeurs efficaces de la da
 REBARSINCOMPRESSION		= Armatures en compression prises en compte
 AGET					= Age du béton
 AGET0					= Age du béton au moment du chargement
-SYMBOLFORDAY			= d
+SYMBOLFORDAY			= j
 SLAB					= Dalle
 ENCASEMENT				= Enrobage
 SELFWEIGHT				= Poids propre
@@ -832,7 +832,7 @@ SLAB					= Dalle béton
 THETAHAUNCH				= Angle d'inclinaison des renformis 
 HAUNCHTH				= Epaisseur des renformis
 SOLIDSLABTH				= Epaisseur de la dalle béton
-COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus hickness of composite slab (au-dessus du bac)
+COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus du bac)
 RHOLWC					= Masse volumique du béton léger
 
 #OPTSOFTMAIN
