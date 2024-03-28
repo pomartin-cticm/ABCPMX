@@ -278,7 +278,9 @@
     <Compile Include="Fenetres\PP\Frm_PPVerifications.Designer.vb">
       <DependentUpon>Frm_PPVerifications.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPVerifications.vb" />
+    <Compile Include="Fenetres\PP\Frm_PPVerifications.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_SectionAcierStandard.Designer.vb">
       <DependentUpon>Frm_SectionAcierStandard.vb</DependentUpon>
     </Compile>

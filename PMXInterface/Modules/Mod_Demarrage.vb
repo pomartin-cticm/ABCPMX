@@ -364,7 +364,8 @@ Public Module Mod_Demarrage
             If LogicielOptions.lDebug Then
                 FichierSource = LogicielRep.Install & "\..\..\" & RepBase & "\" & RacProfile & ExtensionBase
             Else
-                FichierSource = LogicielRep.Install & "\" & RepBase & "\" & RacProfile & ExtensionBase
+                'FichierSource = LogicielRep.Install & "\" & RepBase & "\" & RacProfile & ExtensionBase
+                FichierSource = LogicielRep.Install & "\" & RacProfile & ExtensionBase
             End If
             ' File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacProfile & ExtensionBase, LogicielFichiers.Database_Section)
             File.Copy(FichierSource, LogicielFichiers.Base_Sections)
@@ -377,7 +378,8 @@ Public Module Mod_Demarrage
             If LogicielOptions.lDebug Then
                 FichierSource = LogicielRep.Install & "\..\..\" & RepBase & "\" & RacAcier & ExtensionBase
             Else
-                FichierSource = LogicielRep.Install & "\" & RepBase & "\" & RacAcier & ExtensionBase
+                'FichierSource = LogicielRep.Install & "\" & RepBase & "\" & RacAcier & ExtensionBase
+                FichierSource = LogicielRep.Install & "\" & RacAcier & ExtensionBase
             End If
             'File.Copy(LogicielRep.RepertoireInstall & "\" & RepBase & "\" & RacAcier & ExtensionBase, LogicielFichiers.Database_Aciers)
             File.Copy(FichierSource, LogicielFichiers.Base_Aciers)
@@ -389,7 +391,8 @@ Public Module Mod_Demarrage
             If LogicielOptions.lDebug Then
                 FichierSource = LogicielRep.Install & "\..\..\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
             Else
-                FichierSource = LogicielRep.Install & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
+                'FichierSource = LogicielRep.Install & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
+                FichierSource = LogicielRep.Install & "\" & LogicielInfo.Racine & "_" & RacBacs & ExtensionBase
             End If
             File.Copy(FichierSource, LogicielFichiers.Base_Bacs)
         End If
@@ -400,7 +403,8 @@ Public Module Mod_Demarrage
             If LogicielOptions.lDebug Then
                 FichierSource = LogicielRep.Install & "\..\..\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
             Else
-                FichierSource = LogicielRep.Install & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+                'FichierSource = LogicielRep.Install & "\" & RepBase & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
+                FichierSource = LogicielRep.Install & "\" & LogicielInfo.Racine & "_" & RacGoujons & ExtensionBase
             End If
             File.Copy(FichierSource, LogicielFichiers.Base_Goujons)
 
@@ -915,9 +919,10 @@ Public Module Mod_Demarrage
                                 LogicielInfo.ListeLangue(IndLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
 
             Else
+                'FichierLangue = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_" &
+                '                LogicielInfo.ListeLangue(IndLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
                 FichierLangue = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_" &
-                                LogicielInfo.ListeLangue(IndLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
-
+                               LogicielInfo.ListeLangue(IndLangue).Substring(0, 2).ToUpper & EXTENSIONLANGUE
             End If
 
         Else
@@ -937,8 +942,10 @@ Public Module Mod_Demarrage
                 LogicielFichiers.LangueNDC = LogicielRep.Install & "\..\..\Langues\" & LogicielInfo.Racine & "_NDC_" _
                                            & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & EXTENSIONLANGUE
             Else
+                'LogicielFichiers.LangueNDC = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_NDC_" _
+                '                           & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & EXTENSIONLANGUE
                 LogicielFichiers.LangueNDC = LogicielRep.Install & "\Langues\" & LogicielInfo.Racine & "_NDC_" _
-                                           & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & EXTENSIONLANGUE
+                                         & LogicielInfo.ListeLangueNDC(LogicielOptions.IndLangueNDC).Substring(0, 2).ToUpper & EXTENSIONLANGUE
             End If
 
         Else
