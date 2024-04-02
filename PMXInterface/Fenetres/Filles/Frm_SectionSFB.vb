@@ -926,7 +926,7 @@ Public Class Frm_SectionSFB
 
             lAvailPro = (NbProG > 0)
 
-            MAJ_AvailablePro(False)
+            'MAJ_AvailablePro(False)
 
             If lAvailPro Then
 
@@ -1098,25 +1098,25 @@ Public Class Frm_SectionSFB
 
 #Region "   Mise à jour des données "
 
-    Private Sub MAJ_AvailablePro(ByVal lCustom As Boolean)
+    'Private Sub MAJ_AvailablePro(ByVal lCustom As Boolean)
 
-        'Me.etq_NoAvailablePro.Visible = Not lAvailPro
+    '    'Me.etq_NoAvailablePro.Visible = Not lAvailPro
 
-        'If Not lCustom Then
-        '    Me.Grid_ProfilesSup.Visible = lAvailPro
+    '    'If Not lCustom Then
+    '    '    Me.Grid_ProfilesSup.Visible = lAvailPro
 
-        '    Me.grp_DonneesFinales.Visible = lAvailPro
-        '    Me.GridDelivery.Visible = lAvailPro
-        '    Me.etq_Delivery.Visible = lAvailPro
+    '    '    Me.grp_DonneesFinales.Visible = lAvailPro
+    '    '    Me.GridDelivery.Visible = lAvailPro
+    '    '    Me.etq_Delivery.Visible = lAvailPro
 
-        '    Me.etq_Grade.Visible = lAvailPro
-        '    Me.etq_Qualite.Visible = lAvailPro
-        '    Me.etq_ReductionCurve.Visible = lAvailPro
-        '    Me.GridAciers.Visible = lAvailPro
-        '    Me.img_ReductionCurve.Visible = lAvailPro
-        'End If
+    '    '    Me.etq_Grade.Visible = lAvailPro
+    '    '    Me.etq_Qualite.Visible = lAvailPro
+    '    '    Me.etq_ReductionCurve.Visible = lAvailPro
+    '    '    Me.GridAciers.Visible = lAvailPro
+    '    '    Me.img_ReductionCurve.Visible = lAvailPro
+    '    'End If
 
-    End Sub
+    'End Sub
 
 #End Region
 
@@ -1126,6 +1126,7 @@ Public Class Frm_SectionSFB
         '-----------------------------------------------------------------------------------
         '
         '   Remplissage d'une grille avec tous les profilés d'une gamme
+        '   Note GUD: ici, on filtre les profilés dont la hauteur est supérieure à 650 mm
         '
         '-----------------------------------------------------------------------------------
         '   R16-007 : on retourne le nombre de profilés affichés dans la grille
@@ -1155,7 +1156,7 @@ Public Class Frm_SectionSFB
 
             lSoftProfile = kVs.Value.lSoft
 
-            lAffiche = (lSoftProfile Or Not OptionsDatabase.lSoftLimited) And EstCompatibleACB(kVs.Value)
+            lAffiche = (lSoftProfile Or Not OptionsDatabase.lSoftLimited) And EstCompatibleABCPMX(kVs.Value)
 
             If lAffiche Then
                 MyGrille.Rows.Add()
@@ -1191,14 +1192,14 @@ Public Class Frm_SectionSFB
 
     End Sub
 
-    Private Function EstCompatibleACB(ByVal Profile As Cls_SectionNew) As Boolean
+    Private Function EstCompatibleABCPMX(ByVal Profile As Cls_SectionNew) As Boolean
         '---------------------------------------------------------------------------------------------------------
         '
-        '   10/12/12 :  Création - POM - V3.00
+        '   02/04/24 :  Création - GUD - V1.00
         '
         '---------------------------------------------------------------------------------------------------------
         '
-        '   Indique si un profile vérifie les conditions minimales pour qu'il puisse exister une solution
+        '   Indique si un profile vérifie les conditions pour être affiché
         '
         '---------------------------------------------------------------------------------------------------------
         '---------------------------------------------------------------------------------------------------------
@@ -1208,7 +1209,7 @@ Public Class Frm_SectionSFB
 
         Dim lCompatible As Boolean = True
 
-
+        If Profile.Ht > HSLIMMAX Then lCompatible = False
 
         Return lCompatible
 

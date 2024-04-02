@@ -3446,7 +3446,13 @@ Public Module Mod_Dessins
 
         '--> Initialisation des paramètres d'affichage
 
-        xMin = -section.ProfilA.Plat_b / 2
+        If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+            xMin = -section.ProfilA.Plat_b / 2
+        Else
+            xMin = -section.ProfilA.Plat_b
+        End If
+
+
         yMin = -section.ProfilA.ha
         xMax = -xMin
         yMax = 0
@@ -3506,7 +3512,13 @@ Public Module Mod_Dessins
             Select Case section.ProfilA.typeProfileAcier
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA 'cas où on a un plat soudé dont la largeur est supérieure aux largeur des semelles
                     yo = -section.ProfilA.ha - dCar
-                    xo = section.ProfilA.Plat_b / 2
+
+                    If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                        xo = section.ProfilA.Plat_b / 2
+                    Else
+                        xo = section.ProfilA.Bfi / 2
+                    End If
+
                 Case Else
                     yo = -section.ProfilA.ha - dCar
                     xo = section.ProfilA.Bfi / 2
@@ -8850,8 +8862,13 @@ Public Module Mod_Dessins
 
                 'Dessin du plat soudé inf
 
-                xe = xPos + MyProfil.Plat_b / 2
-                xo = xPos - MyProfil.Plat_b / 2
+                If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                    xo = xPos - MyProfil.Plat_b / 2
+                Else
+                    xo = xPos - MyProfil.Bfi / 2
+                End If
+
+                xe = xo + MyProfil.Plat_b
                 ye = -MyProfil.hb - zRef
                 yo = -MyProfil.hb - zRef - MyProfil.Plat_t
 
