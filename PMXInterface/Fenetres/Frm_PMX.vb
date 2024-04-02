@@ -250,6 +250,7 @@ Public Class Frm_PMX
 
                 Me.TSbtn_Dalle.ToolTipText = Bloc("TSBSLAB")
                 Me.TSbtn_SectionA.ToolTipText = Bloc("TSBSECTIONA")
+                Me.TSbtn_SectionSFB.ToolTipText = Bloc("TSBSECTIONSFB")
                 Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENCASEMENT")
                 Me.TSbtn_Connexion.ToolTipText = Bloc("TSBCONNECTION")
                 Me.TSbtn_Maintiens.ToolTipText = Bloc("TSBRESTRAINTS")
@@ -581,7 +582,7 @@ Public Class Frm_PMX
 
 
     Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) _
-        Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click,
+        Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_SectionSFB.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
                 TSbtn_Gamma.Click, TSbtn_PPLargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
                 TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click, TSbtn_OptionsIncendie.Click, TSbtn_MaintienBac.Click
@@ -600,7 +601,9 @@ Public Class Frm_PMX
             Case Me.TSbtn_DalleN.Name
                 FilleEnCours = EnuFenetres.DalleN
             Case Me.TSbtn_SectionA.Name
-                FilleEnCours = EnuFenetres.Section
+                FilleEnCours = EnuFenetres.SectionAcier
+            Case Me.TSbtn_SectionSFB.Name
+                FilleEnCours = EnuFenetres.SectionSFB
             Case Me.TSbtn_Enrobage.Name
                 FilleEnCours = EnuFenetres.Enrobage
 
@@ -674,9 +677,16 @@ Public Class Frm_PMX
             Case EnuFenetres.DalleN
 
 
-            Case EnuFenetres.Section
+            Case EnuFenetres.SectionAcier
                 If LogicielOptions.lFenetres Then
                     Frm_SectionAcierStandard.ShowDialog()
+                Else
+
+                End If
+
+            Case EnuFenetres.SectionSFB
+                If LogicielOptions.lFenetres Then
+                    Frm_SectionSFB.ShowDialog()
                 Else
 
                 End If
@@ -855,6 +865,12 @@ Public Class Frm_PMX
     ''' </summary>
     Private Sub MAJToolBarPoutre()
 
+        Dim lFrmProfilA As Boolean = False
+        Dim lFrmProfilSFB As Boolean = False
+        Dim lFrmProfilIFB_A As Boolean = False
+        Dim lFrmProfilIFB_B As Boolean = False
+        Dim lFrmProfilSAB As Boolean = False
+
         Dim lFrmEnrobage As Boolean = True
         Dim lFrmConnection As Boolean = True
         Dim lFrmProppin As Boolean = True
@@ -862,41 +878,59 @@ Public Class Frm_PMX
         Dim lNothing As Boolean = MyProjet.Poutres.Count = 0
 
         If Not lNothing Then
-            Select Case MyProjet.Poutres(MyProjet.IndEnCours).TypeSection
+            Select Case MyProjet.Poutres(MyProjet.IndEnCours).Section.TypeSection
                 Case cls_Section.Enum_TypeSection.AcierSeul
+                    lFrmProfilA = True
                     lFrmConnection = False
                     lFrmEnrobage = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
                 Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                    lFrmProfilA = True
                     lFrmConnection = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
                 Case cls_Section.Enum_TypeSection.Mixte
+                    lFrmProfilA = True
                     lFrmEnrobage = False
                 Case cls_Section.Enum_TypeSection.MixteEnrobage
+                    lFrmProfilA = True
                 Case cls_Section.Enum_TypeSection.SFB
+                    lFrmProfilSFB = True
                     lFrmEnrobage = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
                 Case cls_Section.Enum_TypeSection.SFBmixte
+                    lFrmProfilSFB = True
                 Case cls_Section.Enum_TypeSection.IFB_A
+                    lFrmProfilIFB_A = True
                     lFrmEnrobage = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
                 Case cls_Section.Enum_TypeSection.IFB_Amixte
+                    lFrmProfilIFB_A = True
                 Case cls_Section.Enum_TypeSection.IFB_B
+                    lFrmProfilIFB_B = True
                     lFrmEnrobage = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
                 Case cls_Section.Enum_TypeSection.IFB_Bmixte
+                    lFrmProfilIFB_B = True
                 Case cls_Section.Enum_TypeSection.SAB
+                    lFrmProfilSAB = True
                     lFrmEnrobage = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
                 Case cls_Section.Enum_TypeSection.SABmixte
+                    lFrmProfilSAB = True
             End Select
         End If
+
+        Me.TSbtn_SectionA.Visible = lFrmProfilA
+        Me.TSbtn_SectionSFB.Visible = lFrmProfilSFB
+        'Me.TSbtn_SectionIFB_A.Visible = lFrmProfilIFB_A
+        'Me.TSbtn_SectionIFB_B.Visible = lFrmProfilIFB_B
+        'Me.TSbtn_SectionSAB.Visible = lFrmProfilSAB
 
         Me.TSbtn_Enrobage.Visible = lFrmEnrobage
         Me.TSbtn_Connexion.Visible = lFrmConnection

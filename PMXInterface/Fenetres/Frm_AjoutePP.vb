@@ -615,7 +615,6 @@ Public Class Frm_AjoutePP
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre, LogicielOptions, OptionsCalcul))
             End If
 
-
             If Me.chk_SABAcier.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre, LogicielOptions, OptionsCalcul))

@@ -515,6 +515,7 @@ TSBENCASEMENT			= Partial encasement
 TSBHOME					= Home
 TSBIDENTIFICATION		= Identification
 TSBSECTIONA				= Steel section
+TSBSECTIONSFB			= SFB slimfloor section
 TSBSLAB					= Slab
 TSBSPACINGS				= Transverse configuration
 TSBSPANS				= Spans
@@ -751,6 +752,26 @@ UPPERF					= Upper flange
 WEB						= Web 
 WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
+
+#FRM_SFBSECTIONS
+AUTOMATICHA				= Total height automatically assessed
+AUTOMATICHW				= Height of the web automatically assessed
+CANCEL					= Cancel
+DELIVERYCOND			= Delivery conditions for $
+HEIGHT					= Height 
+HOTROLLED				= Hot rolled profile
+LOWERF					= Lower flange
+OK						= OK
+PROFILE					= Profile
+PROFILES				= Profiles 
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+UPPERF					= Upper flange
+WEB						= Web 
 
 #GENERAL
 SELFWEIGHT				= Self-weight

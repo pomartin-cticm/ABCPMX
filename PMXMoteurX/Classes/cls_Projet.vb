@@ -183,7 +183,7 @@ Public Class cls_Projet
                 Lines.Add("BLOCK POUTRE")
                 Lines.Add("   BeaIden           =  " & .BeamID)
                 Lines.Add("   Commentaire       =  " & .Commentaire)
-                Lines.Add("   TypeSection   =  " & .TypeSection)
+                'Lines.Add("   TypeSection   =  " & .TypeSection)
                 Lines.Add("   ConsoleGauche  =  " & .lTraveeConsoleGauche)
                 Lines.Add("   ConsoleDroite  =  " & .lTraveeConsoleDroite)
                 Lines.Add("   DalleContGauche  =  " & .lDalleContinueGauche)
@@ -954,7 +954,7 @@ Public Class cls_Projet
                             Else
                                 .Commentaire = ""
                             End If
-                        Case "TYPESECTIO" : .TypeSection = Mots(nbMots)
+                        'Case "TYPESECTIO" : .TypeSection = Mots(nbMots)
                         Case "CONSOLEGAU" : .lTraveeConsoleGauche = Mots(nbMots)
                         Case "CONSOLEDRO" : .lTraveeConsoleDroite = Mots(nbMots)
                         Case "DALLECONTG" : .lDalleContinueGauche = Mots(nbMots)

@@ -47,7 +47,20 @@ Public Class cls_Section
     Public lDalleBeton As Boolean               ' Indique si l'utilisateur a défini une dalle de béton
     Public lDatabase As Boolean                 ' Indique si la section est définie par une base de données
 
-    Public typeSection As Enum_TypeSection      ' Type de section
+    Private m_typeSection As Enum_TypeSection      ' Type de section
+
+    ''' <summary>
+    ''' Type de section de la poutre
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property TypeSection As Enum_TypeSection
+        Get
+            Return Me.m_typeSection
+        End Get
+        Set(value As Enum_TypeSection)
+            Me.m_typeSection = value
+        End Set
+    End Property
 
 #End Region
 
@@ -2856,20 +2869,20 @@ Public Class cls_Section
     Sub New()
     End Sub
 
-    Sub New(ByVal nom As String, ByVal typeSection As Enum_TypeSection)
+    'Sub New(ByVal nom As String, ByVal typeSection As Enum_TypeSection)
 
-        Me.Nom = nom
-        Me.typeSection = typeSection
+    '    Me.Nom = nom
+    '    Me.typeSection = typeSection
 
-        Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+    '    Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
 
-        '--> Par défaut définition utilisateur de la section
-        Me.lDatabase = True
+    '    '--> Par défaut définition utilisateur de la section
+    '    Me.lDatabase = True
 
-        '--> Section par défaut peu importe le type
+    '    '--> Section par défaut peu importe le type
 
 
-    End Sub
+    'End Sub
 
     Sub New(ByVal nom As String, ByVal typeSection As Enum_TypeSection, Nuance As String, Qualite As String, Reduction As String, MyPlages As List(Of cls_Acier.strucPlage))
 

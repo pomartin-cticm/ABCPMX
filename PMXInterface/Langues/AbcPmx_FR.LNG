@@ -514,6 +514,7 @@ TSBENCASEMENT			= Enrobage partiel
 TSBHOME					= Début
 TSBIDENTIFICATION		= Identification
 TSBSECTIONA				= Profilé acier
+TSBSECTIONSFB			= Section slimfloor SFB
 TSBSLAB					= Dalle
 TSBSPACINGS				= Configuration transversale
 TSBSPANS				= Portées
@@ -750,6 +751,26 @@ UPPERF					= Semelle supérieure
 WEB						= Âme 
 WELDEDSYM				= PRS bisymétrique
 WELDEDP					= PRS mono-symétrique
+
+#FRM_SFBSECTIONS
+AUTOMATICHA				= Hauteur totale automatiquement calculée
+AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
+CANCEL					= Annuler
+DELIVERYCOND			= Conditions de livraison pour $
+HEIGHT					= Hauteur 
+HOTROLLED				= Profilé laminé
+LOWERF					= Semelle inférieure
+OK						= OK
+PROFILE					= Profilé
+PROFILES				= Profilés 
+QUALITY					= Qualité 
+REDUCTIONCURVE			= Courbe de réduction
+SERIAL					= Série
+STEEL					= Acier
+STEELGRADE				= Nuance d'acier
+TITLE					= Définition de la poutre acier
+UPPERF					= Semelle supérieure
+WEB						= Âme 
 
 #GENERAL
 SELFWEIGHT				= Poids propre

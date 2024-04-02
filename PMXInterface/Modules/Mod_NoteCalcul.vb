@@ -444,7 +444,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("LONGIPARAMETERS"))
 
-        Select Case MyBeam.TypeSection
+        Select Case MyBeam.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul
                 AddLigneNDC(TABW2 & BlocG("CSTYPE") & TABAFF2 & "\G" & BlocG("NONCOMPOBEAM") & "\g")
             Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
@@ -1145,7 +1145,7 @@ Module Mod_NoteCalcul
 
         Dim lConnection As Boolean = False
 
-        Select Case MyBeam.TypeSection
+        Select Case MyBeam.Section.TypeSection
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 lConnection = True
             Case cls_Section.Enum_TypeSection.SFBmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte
@@ -5053,7 +5053,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocELU("INFO_S") & "   " & BlocELU("INFO_NS"))
         'SauteLigne()
 
-        Select Case MyBeam.TypeSection
+        Select Case MyBeam.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 EditionVerificationsELUSummaryACIER(MyBeam, 0)
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage

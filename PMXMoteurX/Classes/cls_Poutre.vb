@@ -651,7 +651,7 @@ Public Class cls_Poutre
 
     Public Sub New()
 
-        Me.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
+        Me.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
         ParametresGenerauxDefaut()
         PoutreDefautAcier()
         InitialiseChargements()
@@ -662,7 +662,22 @@ Public Class cls_Poutre
 
     Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String, OptionsLogiciels As Struc_OptionsLogiciel, OptionsCalcul As Struc_OptionsCalcul)
 
-        Me.TypeSection = MyTypeSection
+        Me.Section.TypeSection = MyTypeSection
+
+        Select Case MyTypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage,
+                         cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+            Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
+                Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+            Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
+                Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+            Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
+                Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+            Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
+                Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+        End Select
+
         Me.BeamID = NomPoutre
         ParametresGenerauxDefaut()
 
@@ -673,14 +688,18 @@ Public Class cls_Poutre
                 PoutreDefautAcier()
             Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 PoutreDefautAcier()
-                EnrobageDefaut()
+                'EnrobageDefaut()
             Case cls_Section.Enum_TypeSection.Mixte
                 PoutreDefautAcier()
-                DalleDefaut()
+                'DalleDefaut()
             Case cls_Section.Enum_TypeSection.MixteEnrobage
                 PoutreDefautAcier()
-                EnrobageDefaut()
-                DalleDefaut()
+                ' EnrobageDefaut()
+               ' DalleDefaut()
+            Case cls_Section.Enum_TypeSection.SFB
+                PoutreDefautAcier()
+            Case cls_Section.Enum_TypeSection.SFBmixte
+                PoutreDefautAcier()
         End Select
 
         InitialiseChargements()
@@ -790,13 +809,13 @@ Public Class cls_Poutre
 
     End Sub
 
-    Private Sub EnrobageDefaut()
+    'Private Sub EnrobageDefaut()
 
-    End Sub
+    'End Sub
 
-    Private Sub DalleDefaut()
+    'Private Sub DalleDefaut()
 
-    End Sub
+    'End Sub
 
     Private Sub TransfertOptionsCalculs(OptionsCalculs As Struc_OptionsCalcul)
         With OptionsCalculs
@@ -928,19 +947,6 @@ Public Class cls_Poutre
 
             Return Largeur
         End Get
-    End Property
-
-    ''' <summary>
-    ''' Type de section de la poutre
-    ''' </summary>
-    ''' <returns></returns>
-    Public Property TypeSection As cls_Section.Enum_TypeSection
-        Get
-            Return Me.Section.typeSection
-        End Get
-        Set(value As cls_Section.Enum_TypeSection)
-            Me.Section.typeSection = value
-        End Set
     End Property
 
     ''' <summary>
@@ -5036,7 +5042,7 @@ Public Class cls_Poutre
 
         '--> Initialisation des tableaux de verification
 
-        Select Case Me.TypeSection
+        Select Case Me.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 ReDim Me.VerifAcier(0)
                 Me.VerifAcier(0) = New cls_VerificationsAcier
@@ -5063,7 +5069,7 @@ Public Class cls_Poutre
 
         '--> Vérifications
 
-        Select Case Me.TypeSection
+        Select Case Me.Section.TypeSection
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 '# Vérification des poutres mixtes en phase finale aux ELU
                 Me.VerifMixte(0).Z_VerificationELU(Me)

@@ -357,7 +357,8 @@ Public Module Mod_Declarations
         PPLargeurEfficace
         PPModePropre
         PPVerifications
-        Section
+        SectionAcier
+        SectionSFB
         Test
     End Enum
 

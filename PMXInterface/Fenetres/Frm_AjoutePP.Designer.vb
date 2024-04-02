@@ -372,7 +372,6 @@ Partial Class Frm_AjoutePP
         Me.chk_SFBMixte.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_SFBMixte.AutoSize = True
         Me.chk_SFBMixte.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_SFBMixte.Enabled = False
         Me.chk_SFBMixte.Location = New System.Drawing.Point(1, 197)
         Me.chk_SFBMixte.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SFBMixte.Name = "chk_SFBMixte"
@@ -477,7 +476,6 @@ Partial Class Frm_AjoutePP
         Me.chk_SFBAcier.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_SFBAcier.AutoSize = True
         Me.chk_SFBAcier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_SFBAcier.Enabled = False
         Me.chk_SFBAcier.Location = New System.Drawing.Point(1, 99)
         Me.chk_SFBAcier.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SFBAcier.Name = "chk_SFBAcier"
