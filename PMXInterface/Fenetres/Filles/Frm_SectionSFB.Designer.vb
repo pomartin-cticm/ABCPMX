@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Frm_SectionSFB
     Inherits System.Windows.Forms.Form
 
     'Form remplace la méthode Dispose pour nettoyer la liste des composants.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,20 +20,9 @@ Partial Class Frm_SectionSFB
     'REMARQUE : la procédure suivante est requise par le Concepteur Windows Form
     'Elle peut être modifiée à l'aide du Concepteur Windows Form.  
     'Ne la modifiez pas à l'aide de l'éditeur de code.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.lbl_Info = New System.Windows.Forms.Label()
-        Me.chk_Hw = New System.Windows.Forms.CheckBox()
-        Me.chk_Ht = New System.Windows.Forms.CheckBox()
-        Me.txt_Tfi = New System.Windows.Forms.TextBox()
-        Me.img_Tfi = New System.Windows.Forms.PictureBox()
-        Me.Etq_UnitDim7 = New System.Windows.Forms.Label()
-        Me.txt_Bfi = New System.Windows.Forms.TextBox()
-        Me.img_Bfi = New System.Windows.Forms.PictureBox()
-        Me.txt_Tw = New System.Windows.Forms.TextBox()
-        Me.img_Tw = New System.Windows.Forms.PictureBox()
-        Me.Etq_UnitDim5 = New System.Windows.Forms.Label()
         Me.img_Section = New System.Windows.Forms.PictureBox()
         Me.pan_Lamine = New System.Windows.Forms.Panel()
         Me.lbl_Delivery = New System.Windows.Forms.Label()
@@ -48,25 +37,16 @@ Partial Class Frm_SectionSFB
         Me.lst_GammeS = New System.Windows.Forms.ListBox()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.img_ReductionCurve = New System.Windows.Forms.PictureBox()
-        Me.Etq_UnitDim6 = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.txt_Hw = New System.Windows.Forms.TextBox()
         Me.Pan_DimPRS = New System.Windows.Forms.Panel()
-        Me.img_Hw = New System.Windows.Forms.PictureBox()
-        Me.Etq_UnitDim4 = New System.Windows.Forms.Label()
-        Me.txt_Tfs = New System.Windows.Forms.TextBox()
-        Me.img_Tfs = New System.Windows.Forms.PictureBox()
-        Me.Etq_UnitDim3 = New System.Windows.Forms.Label()
-        Me.txt_Bfs = New System.Windows.Forms.TextBox()
-        Me.img_Bfs = New System.Windows.Forms.PictureBox()
-        Me.Etq_UnitDim2 = New System.Windows.Forms.Label()
-        Me.txt_Ha = New System.Windows.Forms.TextBox()
-        Me.img_Ht = New System.Windows.Forms.PictureBox()
-        Me.etq_UnitDim1 = New System.Windows.Forms.Label()
-        Me.lbl_SemelleInf = New System.Windows.Forms.Label()
-        Me.lbl_Ame = New System.Windows.Forms.Label()
-        Me.lbl_SemelleSup = New System.Windows.Forms.Label()
-        Me.lbl_Height = New System.Windows.Forms.Label()
+        Me.etq_UnitDim2SFB = New System.Windows.Forms.Label()
+        Me.etq_UnitDim1SFB = New System.Windows.Forms.Label()
+        Me.txt_tpSFB = New System.Windows.Forms.TextBox()
+        Me.txt_bpSFB = New System.Windows.Forms.TextBox()
+        Me.img_tpSFB = New System.Windows.Forms.PictureBox()
+        Me.img_bpSFB = New System.Windows.Forms.PictureBox()
+        Me.lbl_ThicknessSFB = New System.Windows.Forms.Label()
+        Me.lbl_WidthSFB = New System.Windows.Forms.Label()
         Me.lbl_ReductionCurve = New System.Windows.Forms.Label()
         Me.lbl_Qualite = New System.Windows.Forms.Label()
         Me.lbl_Grade = New System.Windows.Forms.Label()
@@ -90,9 +70,6 @@ Partial Class Frm_SectionSFB
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_General = New System.Windows.Forms.Panel()
-        CType(Me.img_Tfi, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Bfi, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Tw, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Lamine.SuspendLayout()
         CType(Me.GridDelivery, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -101,10 +78,8 @@ Partial Class Frm_SectionSFB
         CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Pan_DimPRS.SuspendLayout()
-        CType(Me.img_Hw, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Tfs, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Bfs, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_Ht, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_tpSFB, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_bpSFB, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.GridAciers, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_DefinitionAcier.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -117,98 +92,6 @@ Partial Class Frm_SectionSFB
         Me.TLpan_Main.SuspendLayout()
         Me.pan_General.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'lbl_Info
-        '
-        Me.lbl_Info.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_Info.Location = New System.Drawing.Point(3, 181)
-        Me.lbl_Info.Name = "lbl_Info"
-        Me.lbl_Info.Size = New System.Drawing.Size(344, 13)
-        Me.lbl_Info.TabIndex = 1
-        Me.lbl_Info.Text = "lbl_Info"
-        Me.lbl_Info.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'chk_Hw
-        '
-        Me.chk_Hw.AutoSize = True
-        Me.chk_Hw.Location = New System.Drawing.Point(160, 91)
-        Me.chk_Hw.Name = "chk_Hw"
-        Me.chk_Hw.Size = New System.Drawing.Size(15, 14)
-        Me.chk_Hw.TabIndex = 32
-        Me.chk_Hw.UseVisualStyleBackColor = True
-        '
-        'chk_Ht
-        '
-        Me.chk_Ht.AutoSize = True
-        Me.chk_Ht.Location = New System.Drawing.Point(160, 12)
-        Me.chk_Ht.Name = "chk_Ht"
-        Me.chk_Ht.Size = New System.Drawing.Size(15, 14)
-        Me.chk_Ht.TabIndex = 31
-        Me.chk_Ht.UseVisualStyleBackColor = True
-        '
-        'txt_Tfi
-        '
-        Me.txt_Tfi.Location = New System.Drawing.Point(226, 158)
-        Me.txt_Tfi.Name = "txt_Tfi"
-        Me.txt_Tfi.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Tfi.TabIndex = 29
-        '
-        'img_Tfi
-        '
-        Me.img_Tfi.Location = New System.Drawing.Point(190, 158)
-        Me.img_Tfi.Name = "img_Tfi"
-        Me.img_Tfi.Size = New System.Drawing.Size(37, 20)
-        Me.img_Tfi.TabIndex = 30
-        Me.img_Tfi.TabStop = False
-        '
-        'Etq_UnitDim7
-        '
-        Me.Etq_UnitDim7.AutoSize = True
-        Me.Etq_UnitDim7.Location = New System.Drawing.Point(290, 161)
-        Me.Etq_UnitDim7.Name = "Etq_UnitDim7"
-        Me.Etq_UnitDim7.Size = New System.Drawing.Size(23, 13)
-        Me.Etq_UnitDim7.TabIndex = 28
-        Me.Etq_UnitDim7.Text = "mm"
-        '
-        'txt_Bfi
-        '
-        Me.txt_Bfi.Location = New System.Drawing.Point(226, 139)
-        Me.txt_Bfi.Name = "txt_Bfi"
-        Me.txt_Bfi.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Bfi.TabIndex = 26
-        '
-        'img_Bfi
-        '
-        Me.img_Bfi.Location = New System.Drawing.Point(190, 139)
-        Me.img_Bfi.Name = "img_Bfi"
-        Me.img_Bfi.Size = New System.Drawing.Size(37, 20)
-        Me.img_Bfi.TabIndex = 27
-        Me.img_Bfi.TabStop = False
-        '
-        'txt_Tw
-        '
-        Me.txt_Tw.Location = New System.Drawing.Point(226, 107)
-        Me.txt_Tw.Name = "txt_Tw"
-        Me.txt_Tw.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Tw.TabIndex = 23
-        '
-        'img_Tw
-        '
-        Me.img_Tw.Location = New System.Drawing.Point(190, 107)
-        Me.img_Tw.Name = "img_Tw"
-        Me.img_Tw.Size = New System.Drawing.Size(37, 20)
-        Me.img_Tw.TabIndex = 24
-        Me.img_Tw.TabStop = False
-        '
-        'Etq_UnitDim5
-        '
-        Me.Etq_UnitDim5.AutoSize = True
-        Me.Etq_UnitDim5.Location = New System.Drawing.Point(290, 110)
-        Me.Etq_UnitDim5.Name = "Etq_UnitDim5"
-        Me.Etq_UnitDim5.Size = New System.Drawing.Size(23, 13)
-        Me.Etq_UnitDim5.TabIndex = 22
-        Me.Etq_UnitDim5.Text = "mm"
         '
         'img_Section
         '
@@ -350,215 +233,114 @@ Partial Class Frm_SectionSFB
         Me.TableLayoutPanel2.RowCount = 2
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Size = New System.Drawing.Size(300, 585)
+        Me.TableLayoutPanel2.Size = New System.Drawing.Size(300, 436)
         Me.TableLayoutPanel2.TabIndex = 2
         '
         'img_ReductionCurve
         '
         Me.img_ReductionCurve.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_ReductionCurve.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_ReductionCurve.Location = New System.Drawing.Point(1, 292)
+        Me.img_ReductionCurve.Location = New System.Drawing.Point(1, 218)
         Me.img_ReductionCurve.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
         Me.img_ReductionCurve.Name = "img_ReductionCurve"
         Me.img_ReductionCurve.Size = New System.Drawing.Size(100, 50)
         Me.img_ReductionCurve.TabIndex = 1
         Me.img_ReductionCurve.TabStop = False
         '
-        'Etq_UnitDim6
-        '
-        Me.Etq_UnitDim6.AutoSize = True
-        Me.Etq_UnitDim6.Location = New System.Drawing.Point(290, 142)
-        Me.Etq_UnitDim6.Name = "Etq_UnitDim6"
-        Me.Etq_UnitDim6.Size = New System.Drawing.Size(23, 13)
-        Me.Etq_UnitDim6.TabIndex = 25
-        Me.Etq_UnitDim6.Text = "mm"
-        '
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
-        '
-        'txt_Hw
-        '
-        Me.txt_Hw.Location = New System.Drawing.Point(226, 88)
-        Me.txt_Hw.Name = "txt_Hw"
-        Me.txt_Hw.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Hw.TabIndex = 20
         '
         'Pan_DimPRS
         '
         Me.Pan_DimPRS.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.Pan_DimPRS.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.Pan_DimPRS.Controls.Add(Me.lbl_Info)
-        Me.Pan_DimPRS.Controls.Add(Me.chk_Hw)
-        Me.Pan_DimPRS.Controls.Add(Me.chk_Ht)
-        Me.Pan_DimPRS.Controls.Add(Me.txt_Tfi)
-        Me.Pan_DimPRS.Controls.Add(Me.img_Tfi)
-        Me.Pan_DimPRS.Controls.Add(Me.Etq_UnitDim7)
-        Me.Pan_DimPRS.Controls.Add(Me.txt_Bfi)
-        Me.Pan_DimPRS.Controls.Add(Me.img_Bfi)
-        Me.Pan_DimPRS.Controls.Add(Me.Etq_UnitDim6)
-        Me.Pan_DimPRS.Controls.Add(Me.txt_Tw)
-        Me.Pan_DimPRS.Controls.Add(Me.img_Tw)
-        Me.Pan_DimPRS.Controls.Add(Me.Etq_UnitDim5)
-        Me.Pan_DimPRS.Controls.Add(Me.txt_Hw)
-        Me.Pan_DimPRS.Controls.Add(Me.img_Hw)
-        Me.Pan_DimPRS.Controls.Add(Me.Etq_UnitDim4)
-        Me.Pan_DimPRS.Controls.Add(Me.txt_Tfs)
-        Me.Pan_DimPRS.Controls.Add(Me.img_Tfs)
-        Me.Pan_DimPRS.Controls.Add(Me.Etq_UnitDim3)
-        Me.Pan_DimPRS.Controls.Add(Me.txt_Bfs)
-        Me.Pan_DimPRS.Controls.Add(Me.img_Bfs)
-        Me.Pan_DimPRS.Controls.Add(Me.Etq_UnitDim2)
-        Me.Pan_DimPRS.Controls.Add(Me.txt_Ha)
-        Me.Pan_DimPRS.Controls.Add(Me.img_Ht)
-        Me.Pan_DimPRS.Controls.Add(Me.etq_UnitDim1)
-        Me.Pan_DimPRS.Controls.Add(Me.lbl_SemelleInf)
-        Me.Pan_DimPRS.Controls.Add(Me.lbl_Ame)
-        Me.Pan_DimPRS.Controls.Add(Me.lbl_SemelleSup)
-        Me.Pan_DimPRS.Controls.Add(Me.lbl_Height)
+        Me.Pan_DimPRS.Controls.Add(Me.etq_UnitDim2SFB)
+        Me.Pan_DimPRS.Controls.Add(Me.etq_UnitDim1SFB)
+        Me.Pan_DimPRS.Controls.Add(Me.txt_tpSFB)
+        Me.Pan_DimPRS.Controls.Add(Me.txt_bpSFB)
+        Me.Pan_DimPRS.Controls.Add(Me.img_tpSFB)
+        Me.Pan_DimPRS.Controls.Add(Me.img_bpSFB)
+        Me.Pan_DimPRS.Controls.Add(Me.lbl_ThicknessSFB)
+        Me.Pan_DimPRS.Controls.Add(Me.lbl_WidthSFB)
         Me.Pan_DimPRS.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Pan_DimPRS.Location = New System.Drawing.Point(0, 350)
         Me.Pan_DimPRS.Margin = New System.Windows.Forms.Padding(0)
         Me.Pan_DimPRS.Name = "Pan_DimPRS"
-        Me.Pan_DimPRS.Size = New System.Drawing.Size(353, 234)
+        Me.Pan_DimPRS.Size = New System.Drawing.Size(353, 86)
         Me.Pan_DimPRS.TabIndex = 4
         '
-        'img_Hw
+        'etq_UnitDim2SFB
         '
-        Me.img_Hw.Location = New System.Drawing.Point(190, 88)
-        Me.img_Hw.Name = "img_Hw"
-        Me.img_Hw.Size = New System.Drawing.Size(37, 20)
-        Me.img_Hw.TabIndex = 21
-        Me.img_Hw.TabStop = False
+        Me.etq_UnitDim2SFB.AutoSize = True
+        Me.etq_UnitDim2SFB.Location = New System.Drawing.Point(289, 51)
+        Me.etq_UnitDim2SFB.Name = "etq_UnitDim2SFB"
+        Me.etq_UnitDim2SFB.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim2SFB.TabIndex = 3
+        Me.etq_UnitDim2SFB.Text = "mm"
         '
-        'Etq_UnitDim4
+        'etq_UnitDim1SFB
         '
-        Me.Etq_UnitDim4.AutoSize = True
-        Me.Etq_UnitDim4.Location = New System.Drawing.Point(290, 91)
-        Me.Etq_UnitDim4.Name = "Etq_UnitDim4"
-        Me.Etq_UnitDim4.Size = New System.Drawing.Size(23, 13)
-        Me.Etq_UnitDim4.TabIndex = 19
-        Me.Etq_UnitDim4.Text = "mm"
+        Me.etq_UnitDim1SFB.AutoSize = True
+        Me.etq_UnitDim1SFB.Location = New System.Drawing.Point(289, 22)
+        Me.etq_UnitDim1SFB.Name = "etq_UnitDim1SFB"
+        Me.etq_UnitDim1SFB.Size = New System.Drawing.Size(23, 13)
+        Me.etq_UnitDim1SFB.TabIndex = 3
+        Me.etq_UnitDim1SFB.Text = "mm"
         '
-        'txt_Tfs
+        'txt_tpSFB
         '
-        Me.txt_Tfs.Location = New System.Drawing.Point(226, 57)
-        Me.txt_Tfs.Name = "txt_Tfs"
-        Me.txt_Tfs.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Tfs.TabIndex = 17
+        Me.txt_tpSFB.Location = New System.Drawing.Point(225, 48)
+        Me.txt_tpSFB.Name = "txt_tpSFB"
+        Me.txt_tpSFB.Size = New System.Drawing.Size(58, 20)
+        Me.txt_tpSFB.TabIndex = 2
         '
-        'img_Tfs
+        'txt_bpSFB
         '
-        Me.img_Tfs.Location = New System.Drawing.Point(190, 57)
-        Me.img_Tfs.Name = "img_Tfs"
-        Me.img_Tfs.Size = New System.Drawing.Size(37, 20)
-        Me.img_Tfs.TabIndex = 18
-        Me.img_Tfs.TabStop = False
+        Me.txt_bpSFB.Location = New System.Drawing.Point(225, 19)
+        Me.txt_bpSFB.Name = "txt_bpSFB"
+        Me.txt_bpSFB.Size = New System.Drawing.Size(58, 20)
+        Me.txt_bpSFB.TabIndex = 2
         '
-        'Etq_UnitDim3
+        'img_tpSFB
         '
-        Me.Etq_UnitDim3.AutoSize = True
-        Me.Etq_UnitDim3.Location = New System.Drawing.Point(290, 60)
-        Me.Etq_UnitDim3.Name = "Etq_UnitDim3"
-        Me.Etq_UnitDim3.Size = New System.Drawing.Size(23, 13)
-        Me.Etq_UnitDim3.TabIndex = 16
-        Me.Etq_UnitDim3.Text = "mm"
+        Me.img_tpSFB.Location = New System.Drawing.Point(189, 48)
+        Me.img_tpSFB.Name = "img_tpSFB"
+        Me.img_tpSFB.Size = New System.Drawing.Size(37, 20)
+        Me.img_tpSFB.TabIndex = 1
+        Me.img_tpSFB.TabStop = False
         '
-        'txt_Bfs
+        'img_bpSFB
         '
-        Me.txt_Bfs.Location = New System.Drawing.Point(226, 38)
-        Me.txt_Bfs.Name = "txt_Bfs"
-        Me.txt_Bfs.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Bfs.TabIndex = 14
+        Me.img_bpSFB.Location = New System.Drawing.Point(189, 19)
+        Me.img_bpSFB.Name = "img_bpSFB"
+        Me.img_bpSFB.Size = New System.Drawing.Size(37, 20)
+        Me.img_bpSFB.TabIndex = 1
+        Me.img_bpSFB.TabStop = False
         '
-        'img_Bfs
+        'lbl_ThicknessSFB
         '
-        Me.img_Bfs.Location = New System.Drawing.Point(190, 38)
-        Me.img_Bfs.Name = "img_Bfs"
-        Me.img_Bfs.Size = New System.Drawing.Size(37, 20)
-        Me.img_Bfs.TabIndex = 15
-        Me.img_Bfs.TabStop = False
+        Me.lbl_ThicknessSFB.AutoSize = True
+        Me.lbl_ThicknessSFB.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline)
+        Me.lbl_ThicknessSFB.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_ThicknessSFB.Location = New System.Drawing.Point(11, 48)
+        Me.lbl_ThicknessSFB.Name = "lbl_ThicknessSFB"
+        Me.lbl_ThicknessSFB.Size = New System.Drawing.Size(72, 13)
+        Me.lbl_ThicknessSFB.TabIndex = 0
+        Me.lbl_ThicknessSFB.Text = "lbl_Thickness"
+        Me.lbl_ThicknessSFB.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
-        'Etq_UnitDim2
+        'lbl_WidthSFB
         '
-        Me.Etq_UnitDim2.AutoSize = True
-        Me.Etq_UnitDim2.Location = New System.Drawing.Point(290, 41)
-        Me.Etq_UnitDim2.Name = "Etq_UnitDim2"
-        Me.Etq_UnitDim2.Size = New System.Drawing.Size(23, 13)
-        Me.Etq_UnitDim2.TabIndex = 13
-        Me.Etq_UnitDim2.Text = "mm"
-        '
-        'txt_Ha
-        '
-        Me.txt_Ha.Location = New System.Drawing.Point(226, 9)
-        Me.txt_Ha.Name = "txt_Ha"
-        Me.txt_Ha.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Ha.TabIndex = 10
-        '
-        'img_Ht
-        '
-        Me.img_Ht.Location = New System.Drawing.Point(190, 9)
-        Me.img_Ht.Name = "img_Ht"
-        Me.img_Ht.Size = New System.Drawing.Size(37, 20)
-        Me.img_Ht.TabIndex = 12
-        Me.img_Ht.TabStop = False
-        '
-        'etq_UnitDim1
-        '
-        Me.etq_UnitDim1.AutoSize = True
-        Me.etq_UnitDim1.Location = New System.Drawing.Point(290, 12)
-        Me.etq_UnitDim1.Name = "etq_UnitDim1"
-        Me.etq_UnitDim1.Size = New System.Drawing.Size(23, 13)
-        Me.etq_UnitDim1.TabIndex = 9
-        Me.etq_UnitDim1.Text = "mm"
-        '
-        'lbl_SemelleInf
-        '
-        Me.lbl_SemelleInf.AutoSize = True
-        Me.lbl_SemelleInf.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_SemelleInf.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_SemelleInf.Location = New System.Drawing.Point(12, 139)
-        Me.lbl_SemelleInf.Name = "lbl_SemelleInf"
-        Me.lbl_SemelleInf.Size = New System.Drawing.Size(72, 13)
-        Me.lbl_SemelleInf.TabIndex = 8
-        Me.lbl_SemelleInf.Text = "lbl_SemelleInf"
-        Me.lbl_SemelleInf.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'lbl_Ame
-        '
-        Me.lbl_Ame.AutoSize = True
-        Me.lbl_Ame.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Ame.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Ame.Location = New System.Drawing.Point(12, 88)
-        Me.lbl_Ame.Name = "lbl_Ame"
-        Me.lbl_Ame.Size = New System.Drawing.Size(44, 13)
-        Me.lbl_Ame.TabIndex = 7
-        Me.lbl_Ame.Text = "lbl_Ame"
-        Me.lbl_Ame.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'lbl_SemelleSup
-        '
-        Me.lbl_SemelleSup.AutoSize = True
-        Me.lbl_SemelleSup.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_SemelleSup.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_SemelleSup.Location = New System.Drawing.Point(12, 38)
-        Me.lbl_SemelleSup.Name = "lbl_SemelleSup"
-        Me.lbl_SemelleSup.Size = New System.Drawing.Size(79, 13)
-        Me.lbl_SemelleSup.TabIndex = 6
-        Me.lbl_SemelleSup.Text = "lbl_SemelleSup"
-        Me.lbl_SemelleSup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
-        '
-        'lbl_Height
-        '
-        Me.lbl_Height.AutoSize = True
-        Me.lbl_Height.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_Height.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_Height.Location = New System.Drawing.Point(12, 9)
-        Me.lbl_Height.Name = "lbl_Height"
-        Me.lbl_Height.Size = New System.Drawing.Size(54, 13)
-        Me.lbl_Height.TabIndex = 5
-        Me.lbl_Height.Text = "lbl_Height"
-        Me.lbl_Height.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.lbl_WidthSFB.AutoSize = True
+        Me.lbl_WidthSFB.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline)
+        Me.lbl_WidthSFB.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_WidthSFB.Location = New System.Drawing.Point(11, 19)
+        Me.lbl_WidthSFB.Name = "lbl_WidthSFB"
+        Me.lbl_WidthSFB.Size = New System.Drawing.Size(51, 13)
+        Me.lbl_WidthSFB.TabIndex = 0
+        Me.lbl_WidthSFB.Text = "lbl_Width"
+        Me.lbl_WidthSFB.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
         'lbl_ReductionCurve
         '
@@ -567,7 +349,7 @@ Partial Class Frm_SectionSFB
         Me.lbl_ReductionCurve.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_ReductionCurve.Location = New System.Drawing.Point(169, 11)
         Me.lbl_ReductionCurve.Name = "lbl_ReductionCurve"
-        Me.lbl_ReductionCurve.Size = New System.Drawing.Size(176, 17)
+        Me.lbl_ReductionCurve.Size = New System.Drawing.Size(159, 17)
         Me.lbl_ReductionCurve.TabIndex = 24
         Me.lbl_ReductionCurve.Text = "lbl_ReductionCurve"
         Me.lbl_ReductionCurve.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -611,7 +393,7 @@ Partial Class Frm_SectionSFB
         Me.GridAciers.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.GridAciers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.GridAciers.ShowCellToolTips = False
-        Me.GridAciers.Size = New System.Drawing.Size(335, 389)
+        Me.GridAciers.Size = New System.Drawing.Size(318, 389)
         Me.GridAciers.TabIndex = 21
         '
         'Col_Grade
@@ -641,7 +423,7 @@ Partial Class Frm_SectionSFB
         Me.lbl_Acier.Location = New System.Drawing.Point(0, 0)
         Me.lbl_Acier.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_Acier.Name = "lbl_Acier"
-        Me.lbl_Acier.Size = New System.Drawing.Size(354, 30)
+        Me.lbl_Acier.Size = New System.Drawing.Size(337, 30)
         Me.lbl_Acier.TabIndex = 1
         Me.lbl_Acier.Text = "lbl_Acier"
         Me.lbl_Acier.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -658,7 +440,7 @@ Partial Class Frm_SectionSFB
         Me.pan_DefinitionAcier.Location = New System.Drawing.Point(0, 31)
         Me.pan_DefinitionAcier.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.pan_DefinitionAcier.Name = "pan_DefinitionAcier"
-        Me.pan_DefinitionAcier.Size = New System.Drawing.Size(354, 439)
+        Me.pan_DefinitionAcier.Size = New System.Drawing.Size(337, 439)
         Me.pan_DefinitionAcier.TabIndex = 2
         '
         'TableLayoutPanel1
@@ -677,7 +459,7 @@ Partial Class Frm_SectionSFB
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(354, 470)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(337, 470)
         Me.TableLayoutPanel1.TabIndex = 0
         '
         'pan_Droite
@@ -688,7 +470,7 @@ Partial Class Frm_SectionSFB
         Me.pan_Droite.Location = New System.Drawing.Point(653, 0)
         Me.pan_Droite.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Droite.Name = "pan_Droite"
-        Me.pan_Droite.Size = New System.Drawing.Size(354, 585)
+        Me.pan_Droite.Size = New System.Drawing.Size(354, 436)
         Me.pan_Droite.TabIndex = 1
         '
         'TLpan_Saisie
@@ -706,7 +488,7 @@ Partial Class Frm_SectionSFB
         Me.TLpan_Saisie.Name = "TLpan_Saisie"
         Me.TLpan_Saisie.RowCount = 1
         Me.TLpan_Saisie.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Saisie.Size = New System.Drawing.Size(1007, 585)
+        Me.TLpan_Saisie.Size = New System.Drawing.Size(1007, 436)
         Me.TLpan_Saisie.TabIndex = 0
         '
         'pan_Gauche
@@ -717,7 +499,7 @@ Partial Class Frm_SectionSFB
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(353, 585)
+        Me.pan_Gauche.Size = New System.Drawing.Size(353, 436)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLpan_Gauche
@@ -736,8 +518,8 @@ Partial Class Frm_SectionSFB
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 290.0!))
         Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle())
-        Me.TLpan_Gauche.Size = New System.Drawing.Size(353, 584)
+        Me.TLpan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
+        Me.TLpan_Gauche.Size = New System.Drawing.Size(353, 436)
         Me.TLpan_Gauche.TabIndex = 0
         '
         'lbl_WeldedPlate
@@ -775,7 +557,7 @@ Partial Class Frm_SectionSFB
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(1007, 585)
+        Me.pan_Main.Size = New System.Drawing.Size(1007, 436)
         Me.pan_Main.TabIndex = 1
         '
         'btn_OK
@@ -818,7 +600,7 @@ Partial Class Frm_SectionSFB
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.pan_Provi, 4, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 594)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 445)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -840,7 +622,7 @@ Partial Class Frm_SectionSFB
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(1013, 631)
+        Me.TLpan_Main.Size = New System.Drawing.Size(1013, 482)
         Me.TLpan_Main.TabIndex = 0
         '
         'pan_General
@@ -850,20 +632,22 @@ Partial Class Frm_SectionSFB
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(1013, 631)
+        Me.pan_General.Size = New System.Drawing.Size(1013, 482)
         Me.pan_General.TabIndex = 4
         '
         'Frm_SectionSFB
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1013, 631)
+        Me.CancelButton = Me.btn_Annuler
+        Me.ClientSize = New System.Drawing.Size(1013, 482)
         Me.Controls.Add(Me.pan_General)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_SectionSFB"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_SectionSFB"
-        CType(Me.img_Tfi, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Bfi, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Tw, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Lamine.ResumeLayout(False)
         Me.pan_Lamine.PerformLayout()
@@ -874,10 +658,8 @@ Partial Class Frm_SectionSFB
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Pan_DimPRS.ResumeLayout(False)
         Me.Pan_DimPRS.PerformLayout()
-        CType(Me.img_Hw, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Tfs, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Bfs, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_Ht, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_tpSFB, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_bpSFB, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.GridAciers, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_DefinitionAcier.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -894,18 +676,6 @@ Partial Class Frm_SectionSFB
         Me.ResumeLayout(False)
 
     End Sub
-
-    Friend WithEvents lbl_Info As Label
-    Friend WithEvents chk_Hw As CheckBox
-    Friend WithEvents chk_Ht As CheckBox
-    Friend WithEvents txt_Tfi As TextBox
-    Friend WithEvents img_Tfi As PictureBox
-    Friend WithEvents Etq_UnitDim7 As Label
-    Friend WithEvents txt_Bfi As TextBox
-    Friend WithEvents img_Bfi As PictureBox
-    Friend WithEvents txt_Tw As TextBox
-    Friend WithEvents img_Tw As PictureBox
-    Friend WithEvents Etq_UnitDim5 As Label
     Friend WithEvents img_Section As PictureBox
     Friend WithEvents pan_Lamine As Panel
     Friend WithEvents lbl_Delivery As Label
@@ -920,7 +690,6 @@ Partial Class Frm_SectionSFB
     Friend WithEvents lst_GammeS As ListBox
     Friend WithEvents TableLayoutPanel2 As TableLayoutPanel
     Friend WithEvents img_ReductionCurve As PictureBox
-    Friend WithEvents Etq_UnitDim6 As Label
     Friend WithEvents ErrorProvider As ErrorProvider
     Friend WithEvents pan_General As Panel
     Friend WithEvents TLpan_Main As TableLayoutPanel
@@ -944,22 +713,14 @@ Partial Class Frm_SectionSFB
     Friend WithEvents pan_Gauche As Panel
     Friend WithEvents TLpan_Gauche As TableLayoutPanel
     Friend WithEvents Pan_DimPRS As Panel
-    Friend WithEvents txt_Hw As TextBox
-    Friend WithEvents img_Hw As PictureBox
-    Friend WithEvents Etq_UnitDim4 As Label
-    Friend WithEvents txt_Tfs As TextBox
-    Friend WithEvents img_Tfs As PictureBox
-    Friend WithEvents Etq_UnitDim3 As Label
-    Friend WithEvents txt_Bfs As TextBox
-    Friend WithEvents img_Bfs As PictureBox
-    Friend WithEvents Etq_UnitDim2 As Label
-    Friend WithEvents txt_Ha As TextBox
-    Friend WithEvents img_Ht As PictureBox
-    Friend WithEvents etq_UnitDim1 As Label
-    Friend WithEvents lbl_SemelleInf As Label
-    Friend WithEvents lbl_Ame As Label
-    Friend WithEvents lbl_SemelleSup As Label
-    Friend WithEvents lbl_Height As Label
     Friend WithEvents lbl_ParentProfile As Label
     Friend WithEvents lbl_WeldedPlate As Label
+    Friend WithEvents lbl_WidthSFB As Label
+    Friend WithEvents img_bpSFB As PictureBox
+    Friend WithEvents txt_bpSFB As TextBox
+    Friend WithEvents etq_UnitDim1SFB As Label
+    Friend WithEvents etq_UnitDim2SFB As Label
+    Friend WithEvents txt_tpSFB As TextBox
+    Friend WithEvents img_tpSFB As PictureBox
+    Friend WithEvents lbl_ThicknessSFB As Label
 End Class

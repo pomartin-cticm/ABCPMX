@@ -757,9 +757,7 @@ AUTOMATICHA				= Hauteur totale automatiquement calculée
 AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
 CANCEL					= Annuler
 DELIVERYCOND			= Conditions de livraison pour $
-HEIGHT					= Hauteur 
 HOTROLLED				= Profilé laminé
-LOWERF					= Semelle inférieure
 OK						= OK
 PROFILE					= Profilé
 PROFILES				= Profilés 
@@ -769,8 +767,10 @@ SERIAL					= Série
 STEEL					= Acier
 STEELGRADE				= Nuance d'acier
 TITLE					= Définition de la poutre acier
-UPPERF					= Semelle supérieure
-WEB						= Âme 
+WELDPLATE				= Plat soudé
+WIDTH					= Largeur
+THICKNESS				= Epaisseur
+
 
 #GENERAL
 SELFWEIGHT				= Poids propre

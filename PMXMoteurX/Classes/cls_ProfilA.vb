@@ -1998,7 +1998,6 @@ Public Class cls_ProfilA
         Me.typeProfileAcier = Enum_TypeSectionAcier.Lamine
 
         '--> Section par défaut peu importe le type
-        Me.ha = 0.3
         Me.hb = 0.3
         'Me.h_w = 0.27
         Me.Tw = 0.01
@@ -2015,6 +2014,8 @@ Public Class cls_ProfilA
 
         Me.Plat_b = 0.35
         Me.Plat_t = 0.01
+
+        Me.ha = Me.hb + Me.Plat_t
     End Sub
 
     Public Sub GenereProfileIPE300()

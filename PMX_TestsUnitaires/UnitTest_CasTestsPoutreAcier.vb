@@ -228,7 +228,7 @@ Imports PMXMoteur2
         strRacineELSC = "SLS_C"
 
         'INITIALISATION DES TABLEAUX DES VERIFICATION
-        Select Case myPoutre.TypeSection
+        Select Case myPoutre.Section.typeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 ReDim myPoutre.VerifAcier(0)
                 myPoutre.VerifAcier(0) = New cls_VerificationsAcier
@@ -674,7 +674,7 @@ Imports PMXMoteur2
         strRacineELSC = "SLS_C"
 
         'INITIALISATION DES TABLEAUX DES VERIFICATION
-        Select Case myPoutre.TypeSection
+        Select Case myPoutre.Section.typeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 ReDim myPoutre.VerifAcier(0)
                 myPoutre.VerifAcier(0) = New cls_VerificationsAcier

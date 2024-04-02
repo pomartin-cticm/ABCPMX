@@ -23,7 +23,6 @@ VERSION					= Version
 SUPPORT					= Support :
 YEARVERSION				= Year :
 
-
 #FRMADDSTUD
 TITLEADD				= Add a new stud
 TITLEMODIFY				= Modify the stud
@@ -758,9 +757,7 @@ AUTOMATICHA				= Total height automatically assessed
 AUTOMATICHW				= Height of the web automatically assessed
 CANCEL					= Cancel
 DELIVERYCOND			= Delivery conditions for $
-HEIGHT					= Height 
 HOTROLLED				= Hot rolled profile
-LOWERF					= Lower flange
 OK						= OK
 PROFILE					= Profile
 PROFILES				= Profiles 
@@ -770,8 +767,9 @@ SERIAL					= Serial
 STEEL					= Steel
 STEELGRADE				= Steel grade
 TITLE					= Definition of the steel profile
-UPPERF					= Upper flange
-WEB						= Web 
+WELDPLATE				= Welded plate
+WIDTH					= Width
+THICKNESS				= Thickness
 
 #GENERAL
 SELFWEIGHT				= Self-weight

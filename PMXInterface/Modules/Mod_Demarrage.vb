@@ -547,7 +547,7 @@ Public Module Mod_Demarrage
                     .Plat_b = 0
                     .Plat_t = 0
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                    .ha = ha_loc
+                    .ha = hb_loc + tfi_loc
                     .hb = hb_loc
                     .Bfs = bfs_loc
                     .Tfs = tfs_loc
