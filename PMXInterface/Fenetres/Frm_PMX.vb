@@ -251,6 +251,9 @@ Public Class Frm_PMX
                 Me.TSbtn_Dalle.ToolTipText = Bloc("TSBSLAB")
                 Me.TSbtn_SectionA.ToolTipText = Bloc("TSBSECTIONA")
                 Me.TSbtn_SectionSFB.ToolTipText = Bloc("TSBSECTIONSFB")
+                Me.TSbtn_SectionIFB_A.ToolTipText = Bloc("TSBSECTIONIFBA")
+                Me.TSbtn_SectionIFB_B.ToolTipText = Bloc("TSBSECTIONIFBB")
+                Me.TSbtn_SectionSAB.ToolTipText = Bloc("TSBSECTIONSAB")
                 Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENCASEMENT")
                 Me.TSbtn_Connexion.ToolTipText = Bloc("TSBCONNECTION")
                 Me.TSbtn_Maintiens.ToolTipText = Bloc("TSBRESTRAINTS")
@@ -582,7 +585,7 @@ Public Class Frm_PMX
 
 
     Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) _
-        Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_SectionSFB.Click,
+        Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_SectionSFB.Click, TSbtn_SectionIFB_A.Click, TSbtn_SectionIFB_B.Click, TSbtn_SectionSAB.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
                 TSbtn_Gamma.Click, TSbtn_PPLargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
                 TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click, TSbtn_OptionsIncendie.Click, TSbtn_MaintienBac.Click
@@ -604,6 +607,12 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.SectionAcier
             Case Me.TSbtn_SectionSFB.Name
                 FilleEnCours = EnuFenetres.SectionSFB
+            Case Me.TSbtn_SectionIFB_A.Name
+                FilleEnCours = EnuFenetres.SectionIFB_A
+            Case Me.TSbtn_SectionIFB_B.Name
+                FilleEnCours = EnuFenetres.SectionIFB_B
+            Case Me.TSbtn_SectionSAB.Name
+                FilleEnCours = EnuFenetres.SectionSAB
             Case Me.TSbtn_Enrobage.Name
                 FilleEnCours = EnuFenetres.Enrobage
 
@@ -687,6 +696,27 @@ Public Class Frm_PMX
             Case EnuFenetres.SectionSFB
                 If LogicielOptions.lFenetres Then
                     Frm_SectionSFB.ShowDialog()
+                Else
+
+                End If
+
+            Case EnuFenetres.SectionIFB_A
+                If LogicielOptions.lFenetres Then
+                    Frm_SectionIFB_A.ShowDialog()
+                Else
+
+                End If
+
+            Case EnuFenetres.SectionIFB_B
+                If LogicielOptions.lFenetres Then
+                    'Frm_SectionIFB_B.ShowDialog()
+                Else
+
+                End If
+
+            Case EnuFenetres.SectionSAB
+                If LogicielOptions.lFenetres Then
+                    'Frm_SectionSAB.ShowDialog()
                 Else
 
                 End If
@@ -928,9 +958,9 @@ Public Class Frm_PMX
 
         Me.TSbtn_SectionA.Visible = lFrmProfilA
         Me.TSbtn_SectionSFB.Visible = lFrmProfilSFB
-        'Me.TSbtn_SectionIFB_A.Visible = lFrmProfilIFB_A
-        'Me.TSbtn_SectionIFB_B.Visible = lFrmProfilIFB_B
-        'Me.TSbtn_SectionSAB.Visible = lFrmProfilSAB
+        Me.TSbtn_SectionIFB_A.Visible = lFrmProfilIFB_A
+        Me.TSbtn_SectionIFB_B.Visible = lFrmProfilIFB_B
+        Me.TSbtn_SectionSAB.Visible = lFrmProfilSAB
 
         Me.TSbtn_Enrobage.Visible = lFrmEnrobage
         Me.TSbtn_Connexion.Visible = lFrmConnection

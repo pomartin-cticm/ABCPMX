@@ -1,7 +1,8 @@
 ﻿Imports System.IO
+Imports PMXInterface.Frm_SectionAcierStandard
 Imports PMXMoteur2
 
-Public Class Frm_SectionSFB
+Public Class Frm_SectionIFB_A
 
 #Region " Constantes et structures "
     Const STARCHAR As String = "*"
@@ -15,6 +16,8 @@ Public Class Frm_SectionSFB
     Const EPMAXI As Decimal = 0.5
     Const BAPPMIN As Decimal = 50 / 1000
     Const TPINFMIN As Decimal = 10 / 1000
+    Const HWMINI As Decimal = 50 / 1000
+    Const HWMAXI As Decimal = 2
     Structure strucAcierLocal
         Dim Nuance As String
         Dim Qualite As String
@@ -33,7 +36,13 @@ Public Class Frm_SectionSFB
     Dim lBuild As Boolean = True
 
     Dim MySectionLoc As New cls_Section
-    'Dim myHauteurHw As Decimal
+    Dim myHauteurHw As Decimal
+
+    Enum Enu_DefinitionH
+        HauteurTotale
+        HauteurAme
+    End Enum
+    Dim DefinitionHauteur As Enu_DefinitionH = Enu_DefinitionH.HauteurTotale
 
     Dim DrawProperty As EnuDrawProperty = EnuDrawProperty.Fy
 
@@ -53,7 +62,7 @@ Public Class Frm_SectionSFB
     '--> Textes
     Dim ILangueDelivery As Integer = 0
     Dim strDeliveryConditions As String
-    'Dim str_InfoH(1) As String
+    Dim str_InfoH(1) As String
 
     '---- Gestion du cas où aucun profilé n'est disponible pour une série
     Dim lAvailPro As Boolean = True
@@ -83,7 +92,7 @@ Public Class Frm_SectionSFB
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_SFBSECTIONS")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_IFBSECTIONS")
             BlocLine.CreationBloc(Bloc)
 
             Try
@@ -101,9 +110,11 @@ Public Class Frm_SectionSFB
                 Me.lbl_Profiles.Text = Bloc("PROFILE")
 
 
-                Me.lbl_WeldedPlate.Text = Bloc("WELDPLATE")
-                Me.lbl_WidthSFB.Text = Bloc("WIDTH")
-                Me.lbl_ThicknessSFB.Text = Bloc("THICKNESS")
+                Me.lbl_IFBSection.Text = Bloc("IFBSECTION")
+                Me.lbl_Height.Text = Bloc("HEIGHT")
+                Me.lbl_Width.Text = Bloc("WIDTH")
+                Me.lbl_Web.Text = Bloc("WEBHEIGHT")
+                Me.lbl_Thickness.Text = Bloc("THICKNESS")
 
 
                 '=== STEEL ===============================================================
@@ -117,6 +128,8 @@ Public Class Frm_SectionSFB
                 '=== CHAINES =============================================================
 
                 strDeliveryConditions = Bloc("DELIVERYCOND")
+                str_InfoH(0) = Bloc("AUTOMATICHW")
+                str_InfoH(1) = Bloc("AUTOMATICHA")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -161,6 +174,7 @@ Public Class Frm_SectionSFB
         '== Transfert vers variable locale
 
         cls_Section.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySectionLoc)
+        myHauteurHw = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Plat_t
 
         BClrCompatible = Me.lst_GammeS.BackColor
 
@@ -177,12 +191,22 @@ Public Class Frm_SectionSFB
         PrepareLookGrille(Me.GridDelivery, Me.Col_Index, Me.Col_Message, Me.lst_GammeS.BackColor, 0.1)
         PrepareGridDelivery()
 
+        '== Gestion définition des hauteurs 
+
+        Select Case DefinitionHauteur
+            Case Enu_DefinitionH.HauteurAme : Me.chk_Hw.Checked = True
+            Case Enu_DefinitionH.HauteurTotale : Me.chk_Ht.Checked = True
+        End Select
+        MAJ_DefinitionHauteur()
+
     End Sub
 
     Private Sub GestionUnites()
 
-        Me.etq_UnitDim1SFB.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-        Me.etq_UnitDim2SFB.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
     End Sub
 
@@ -193,8 +217,8 @@ Public Class Frm_SectionSFB
         Me.lbl_ParentProfile.BackColor = CouleurBackBandeaux
         Me.lbl_ParentProfile.ForeColor = CouleurForeBandeaux
 
-        Me.lbl_WeldedPlate.BackColor = CouleurBackBandeaux
-        Me.lbl_WeldedPlate.ForeColor = CouleurForeBandeaux
+        Me.lbl_IFBSection.BackColor = CouleurBackBandeaux
+        Me.lbl_IFBSection.ForeColor = CouleurForeBandeaux
 
         Me.lbl_Acier.BackColor = CouleurBackBandeaux
         Me.lbl_Acier.ForeColor = CouleurForeBandeaux
@@ -204,7 +228,7 @@ Public Class Frm_SectionSFB
     Private Sub AfficherPoutreEnCours()
 
         AfficherProfileLamineEnCours()
-        AfficherPlatSoudeEnCours()
+        AfficherSectionIFBEnCours()
     End Sub
 
     Private Sub AfficherProfileLamineEnCours()
@@ -253,9 +277,11 @@ Public Class Frm_SectionSFB
 
     End Sub
 
-    Private Sub AfficherPlatSoudeEnCours()
-        Me.txt_bpSFB.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, False)
-        Me.txt_tpSFB.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
+    Private Sub AfficherSectionIFBEnCours()
+        Me.txt_ha.Text = GetStringInUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False)
+        Me.txt_hw.Text = GetStringInUnit(MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
+        Me.txt_bp.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, False)
+        Me.txt_tp.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
     End Sub
 
     Private Sub RemplirSeries()
@@ -443,7 +469,7 @@ Public Class Frm_SectionSFB
 
     Private Sub img_Section_Paint(sender As Object, e As PaintEventArgs) Handles img_Section.Paint
 
-        DessinProfileSFBAcier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+        DessinProfileIFB_A_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
                            FontBase, kAdjust, True, False, iSelect)
 
     End Sub
@@ -516,8 +542,8 @@ Public Class Frm_SectionSFB
 
         EpProfile = Math.Max(MySectionLoc.ProfilA.Tw, MySectionLoc.ProfilA.Tfs)
         EpPlatSoude = MySectionLoc.ProfilA.Plat_t
-            FyPro = MySectionLoc.Acier.LimiteFy(EpProfile)
-            FyPlatSoude = MySectionLoc.Acier.LimiteFy(EpPlatSoude)
+        FyPro = MySectionLoc.Acier.LimiteFy(EpProfile)
+        FyPlatSoude = MySectionLoc.Acier.LimiteFy(EpPlatSoude)
 
         EpPlagesMax = MySectionLoc.Acier.EpMax
 
@@ -786,7 +812,7 @@ Public Class Frm_SectionSFB
 
 #Region " Dessin symboles "
 
-    Private Sub img_Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_bpSFB.Paint, img_tpSFB.Paint
+    Private Sub img_Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_bp.Paint, img_tp.Paint, img_hw.Paint, img_ha.Paint
 
         '--> Déclarations
 
@@ -809,10 +835,16 @@ Public Class Frm_SectionSFB
 
         Select Case sender.name
 
-            Case Me.img_bpSFB.Name
+            Case Me.img_ha.Name
+                strSymbol = "h"
+                strIndice = "a"
+            Case Me.img_hw.Name
+                strSymbol = "h"
+                strIndice = "w"
+            Case Me.img_bp.Name
                 strSymbol = "b"
                 strIndice = "p"
-            Case Me.img_tpSFB.Name
+            Case Me.img_tp.Name
                 strSymbol = "t"
                 strIndice = "p"
         End Select
@@ -828,7 +860,7 @@ Public Class Frm_SectionSFB
 
 #Region " Evènements "
 
-    Private Sub SaisieDimensions(sender As Object, e As EventArgs) Handles txt_bpSFB.TextChanged, txt_tpSFB.TextChanged
+    Private Sub SaisieDimensions(sender As Object, e As EventArgs) Handles txt_bp.TextChanged, txt_tp.TextChanged, txt_hw.TextChanged, txt_ha.TextChanged, txt_ha.TextChanged, txt_hw.TextChanged
         If lBuild Then Exit Sub
         lBuild = True
 
@@ -837,12 +869,30 @@ Public Class Frm_SectionSFB
 
         If VerificationDonnees(sender, Valeur) Then
             Select Case sender.name
-                Case Me.txt_bpSFB.Name
+                Case Me.txt_bp.Name
                     MySectionLoc.ProfilA.Plat_b = Valeur
-                Case Me.txt_tpSFB.Name
+                Case Me.txt_tp.Name
                     MySectionLoc.ProfilA.Plat_t = Valeur
-                    MySectionLoc.ProfilA.ha = MySectionLoc.ProfilA.hb + MySectionLoc.ProfilA.Plat_t
+
+                    If chk_Ht.Checked Then
+                        myHauteurHw = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Plat_t
+                        Me.txt_hw.Text = GetStringInUnit(myHauteurHw, Enu_TypeVariable.Dimension, 4, 1, False)
+                    Else
+                        MySectionLoc.ProfilA.ha = myHauteurHw + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t
+                        Me.txt_ha.Text = GetStringInUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False)
+                    End If
+
+                Case Me.txt_hw.Name
+                    myHauteurHw = Valeur
+                    MySectionLoc.ProfilA.ha = myHauteurHw + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t
+                    Me.txt_ha.Text = GetStringInUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False)
+                Case Me.txt_ha.Name
+                    MySectionLoc.ProfilA.ha = Valeur
+                    myHauteurHw = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Plat_t
+                    Me.txt_hw.Text = GetStringInUnit(myHauteurHw, Enu_TypeVariable.Dimension, 4, 1, False)
             End Select
+
+
         End If
 
         Me.img_Section.Invalidate()
@@ -864,7 +914,7 @@ Public Class Frm_SectionSFB
         Dim ValMin, ValMax As Decimal
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
-        Dim BPMINI As Decimal
+        Dim BPMINI, HWMAXI_IFB, HAMINI_IFB, HAMAXI_IFB As Decimal
 
         '--> Initialisation
         If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
@@ -872,15 +922,26 @@ Public Class Frm_SectionSFB
         Else
             BPMINI = MySectionLoc.ProfilA.Bfi + BAPPMIN
         End If
+
         BPMINI = Math.Min(BPMINI, BFMAXI)
+        'hwmin -> voir const globale
+        HWMAXI_IFB = Math.Min(HWMAXI, MySectionLoc.ProfilA.hb - 2 * MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Rcs)
+        HAMINI_IFB = HWMINI + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t
+        HAMAXI_IFB = HWMAXI_IFB + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t
 
         Select Case MyTxt.Name
-            Case Me.txt_bpSFB.Name
+            Case Me.txt_bp.Name
                 ValMin = BPMINI
                 ValMax = BFMAXI
-            Case Me.txt_tpSFB.Name
+            Case Me.txt_tp.Name
                 ValMin = TPINFMIN
                 ValMax = EPMAXI
+            Case Me.txt_ha.Name
+                ValMin = HAMINI_IFB
+                ValMax = HAMAXI_IFB
+            Case Me.txt_hw.Name
+                ValMin = HWMINI
+                ValMax = HWMAXI_IFB
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)
 
@@ -1001,7 +1062,7 @@ Public Class Frm_SectionSFB
             MySectionLoc.ProfilA.Plat_b = MySectionLoc.ProfilA.Bfi + 2 * BAPPMIN
         End If
 
-        AfficherPlatSoudeEnCours()
+        AfficherSectionIFBEnCours()
         MAJ_Aciers(Gamme, Etiquette)
         'SelectDefaultSteel(False)
         'GetAcierFromGrid()
@@ -1019,15 +1080,15 @@ Public Class Frm_SectionSFB
         MySectionLoc.ProfilA.NomProfile = Profile
 
         MySectionLoc.ProfilA.hb = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
-        MySectionLoc.ProfilA.ha = MySectionLoc.ProfilA.hb + MySectionLoc.ProfilA.Plat_t
+        'MySectionLoc.ProfilA.ha = MySectionLoc.ProfilA.hb + MySectionLoc.ProfilA.Plat_t
         MySectionLoc.ProfilA.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
         MySectionLoc.ProfilA.Tfs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
         MySectionLoc.ProfilA.Tw = MyCatalogue.Series(Gamme).Profiles(Profile).Tw
         MySectionLoc.ProfilA.Rcs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
 
-        MySectionLoc.ProfilA.Bfi = MySectionLoc.ProfilA.Bfs
-        MySectionLoc.ProfilA.Rci = MySectionLoc.ProfilA.Rcs
-        MySectionLoc.ProfilA.Tfi = MySectionLoc.ProfilA.Tfs
+        'MySectionLoc.ProfilA.Bfi = MySectionLoc.ProfilA.Bfs
+        'MySectionLoc.ProfilA.Rci = MySectionLoc.ProfilA.Rcs
+        'MySectionLoc.ProfilA.Tfi = MySectionLoc.ProfilA.Tfs
 
         ReDim MySectionLoc.ProfilA.IndStandart(MyCatalogue.nbStandard)
         For i As Integer = 0 To MyCatalogue.nbStandard - 1
@@ -1212,11 +1273,6 @@ Public Class Frm_SectionSFB
         Return lCompatible
 
     End Function
-
-
-
-
-
 
 #End Region
 
@@ -1561,6 +1617,43 @@ Public Class Frm_SectionSFB
         For i As Integer = 0 To 2
             Me.GridAciers(i, iRank - 1).Style.BackColor = ColorBack
         Next
+
+    End Sub
+
+    Private Sub chk_DefinitionH_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Hw.CheckedChanged, chk_Ht.CheckedChanged
+
+        If lBuild Then Exit Sub
+
+        lBuild = True
+        Select Case sender.name
+            Case Me.chk_Ht.Name
+                Me.chk_Hw.Checked = False
+                DefinitionHauteur = Enu_DefinitionH.HauteurTotale
+            Case Me.chk_Hw.Name
+                Me.chk_Ht.Checked = False
+                DefinitionHauteur = Enu_DefinitionH.HauteurAme
+        End Select
+        lBuild = False
+
+        MAJ_DefinitionHauteur()
+
+    End Sub
+
+    Private Sub MAJ_DefinitionHauteur()
+
+        Select Case DefinitionHauteur
+            Case Enu_DefinitionH.HauteurTotale
+                Me.txt_ha.BackColor = SystemColors.Window
+                Me.txt_hw.BackColor = SystemColors.ControlDark
+                Me.lbl_Info.Text = str_InfoH(0)
+            Case Enu_DefinitionH.HauteurAme
+                Me.txt_hw.BackColor = SystemColors.Window
+                Me.txt_ha.BackColor = SystemColors.ControlDark
+                Me.lbl_Info.Text = str_InfoH(1)
+        End Select
+
+        Me.txt_ha.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurAme)
+        Me.txt_hw.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurTotale)
 
     End Sub
 

@@ -683,24 +683,7 @@ Public Class cls_Poutre
 
         '--> Poutre par défaut
 
-        Select Case MyTypeSection
-            Case cls_Section.Enum_TypeSection.AcierSeul
-                PoutreDefautAcier()
-            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
-                PoutreDefautAcier()
-                'EnrobageDefaut()
-            Case cls_Section.Enum_TypeSection.Mixte
-                PoutreDefautAcier()
-                'DalleDefaut()
-            Case cls_Section.Enum_TypeSection.MixteEnrobage
-                PoutreDefautAcier()
-                ' EnrobageDefaut()
-               ' DalleDefaut()
-            Case cls_Section.Enum_TypeSection.SFB
-                PoutreDefautAcier()
-            Case cls_Section.Enum_TypeSection.SFBmixte
-                PoutreDefautAcier()
-        End Select
+        PoutreDefautAcier()
 
         InitialiseChargements()
         InitialiseTablesCombi()

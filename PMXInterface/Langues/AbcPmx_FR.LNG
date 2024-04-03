@@ -515,6 +515,9 @@ TSBHOME					= Début
 TSBIDENTIFICATION		= Identification
 TSBSECTIONA				= Profilé acier
 TSBSECTIONSFB			= Section slimfloor SFB
+TSBSECTIONIFBA			= Section slimfloor IFB type A
+TSBSECTIONIFBB			= Section slimfloor IFB type B
+TSBSECTIONISAB			= Section slimfloor SAB
 TSBSLAB					= Dalle
 TSBSPACINGS				= Configuration transversale
 TSBSPANS				= Portées
@@ -753,8 +756,6 @@ WELDEDSYM				= PRS bisymétrique
 WELDEDP					= PRS mono-symétrique
 
 #FRM_SFBSECTIONS
-AUTOMATICHA				= Hauteur totale automatiquement calculée
-AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
 CANCEL					= Annuler
 DELIVERYCOND			= Conditions de livraison pour $
 HOTROLLED				= Profilé laminé
@@ -771,6 +772,26 @@ WELDPLATE				= Plat soudé
 WIDTH					= Largeur
 THICKNESS				= Epaisseur
 
+#FRM_IFBSECTIONS
+AUTOMATICHA				= Hauteur totale automatiquement calculée
+AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
+CANCEL					= Annuler
+DELIVERYCOND			= Conditions de livraison pour $
+HOTROLLED				= Profilé laminé parent
+OK						= OK
+PROFILE					= Profilé
+PROFILES				= Profilés 
+QUALITY					= Qualité 
+REDUCTIONCURVE			= Courbe de réduction
+SERIAL					= Série
+STEEL					= Acier
+STEELGRADE				= Nuance d'acier
+TITLE					= Définition de la poutre acier
+HEIGHT					= Height
+WEBHEIGHT				= Hauteur de l'âme
+WIDTH					= Largeur
+THICKNESS				= Epaisseur
+IFBSECTION				= Section IFB
 
 #GENERAL
 SELFWEIGHT				= Poids propre

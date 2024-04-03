@@ -515,6 +515,9 @@ TSBHOME					= Home
 TSBIDENTIFICATION		= Identification
 TSBSECTIONA				= Steel section
 TSBSECTIONSFB			= SFB slimfloor section
+TSBSECTIONIFBA			= IFB type A slimfloor section
+TSBSECTIONIFBB			= IFB type B slimfloor section
+TSBSECTIONSAB			= SAB slimfloor section
 TSBSLAB					= Slab
 TSBSPACINGS				= Transverse configuration
 TSBSPANS				= Spans
@@ -753,8 +756,6 @@ WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
 
 #FRM_SFBSECTIONS
-AUTOMATICHA				= Total height automatically assessed
-AUTOMATICHW				= Height of the web automatically assessed
 CANCEL					= Cancel
 DELIVERYCOND			= Delivery conditions for $
 HOTROLLED				= Hot rolled profile
@@ -770,6 +771,27 @@ TITLE					= Definition of the steel profile
 WELDPLATE				= Welded plate
 WIDTH					= Width
 THICKNESS				= Thickness
+
+#FRM_IFBSECTIONS
+AUTOMATICHA				= Total height automatically assessed
+AUTOMATICHW				= Height of the web automatically assessed
+CANCEL					= Cancel
+DELIVERYCOND			= Delivery conditions for $
+HOTROLLED				= Hot rolled profile
+OK						= OK
+PROFILE					= Parent profile
+PROFILES				= Profiles 
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+HEIGHT					= Hauteur
+WIDTH					= Width
+WEBHEIGHT				= Web height
+THICKNESS				= Thickness
+IFBSECTION				= IFB section
 
 #GENERAL
 SELFWEIGHT				= Self-weight

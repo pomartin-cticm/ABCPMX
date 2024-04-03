@@ -359,6 +359,9 @@ Public Module Mod_Declarations
         PPVerifications
         SectionAcier
         SectionSFB
+        SectionIFB_A
+        SectionIFB_B
+        SectionSAB
         Test
     End Enum
 

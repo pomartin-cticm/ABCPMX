@@ -386,7 +386,6 @@ Partial Class Frm_AjoutePP
         Me.chk_IFB_B_Acier.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_IFB_B_Acier.AutoSize = True
         Me.chk_IFB_B_Acier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_IFB_B_Acier.Enabled = False
         Me.chk_IFB_B_Acier.Location = New System.Drawing.Point(369, 99)
         Me.chk_IFB_B_Acier.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_IFB_B_Acier.Name = "chk_IFB_B_Acier"
@@ -401,7 +400,6 @@ Partial Class Frm_AjoutePP
         Me.chk_IFB_A_Mixte.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_IFB_A_Mixte.AutoSize = True
         Me.chk_IFB_A_Mixte.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_IFB_A_Mixte.Enabled = False
         Me.chk_IFB_A_Mixte.Location = New System.Drawing.Point(185, 197)
         Me.chk_IFB_A_Mixte.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_IFB_A_Mixte.Name = "chk_IFB_A_Mixte"
@@ -416,7 +414,6 @@ Partial Class Frm_AjoutePP
         Me.chk_SABAcier.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_SABAcier.AutoSize = True
         Me.chk_SABAcier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_SABAcier.Enabled = False
         Me.chk_SABAcier.Location = New System.Drawing.Point(553, 99)
         Me.chk_SABAcier.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SABAcier.Name = "chk_SABAcier"
@@ -431,7 +428,6 @@ Partial Class Frm_AjoutePP
         Me.chk_IFB_B_Mixte.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_IFB_B_Mixte.AutoSize = True
         Me.chk_IFB_B_Mixte.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_IFB_B_Mixte.Enabled = False
         Me.chk_IFB_B_Mixte.Location = New System.Drawing.Point(369, 197)
         Me.chk_IFB_B_Mixte.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_IFB_B_Mixte.Name = "chk_IFB_B_Mixte"
@@ -446,7 +442,6 @@ Partial Class Frm_AjoutePP
         Me.chk_IFB_A_Acier.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_IFB_A_Acier.AutoSize = True
         Me.chk_IFB_A_Acier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_IFB_A_Acier.Enabled = False
         Me.chk_IFB_A_Acier.Location = New System.Drawing.Point(185, 99)
         Me.chk_IFB_A_Acier.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_IFB_A_Acier.Name = "chk_IFB_A_Acier"
@@ -461,7 +456,6 @@ Partial Class Frm_AjoutePP
         Me.chk_SABMixte.Appearance = System.Windows.Forms.Appearance.Button
         Me.chk_SABMixte.AutoSize = True
         Me.chk_SABMixte.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.chk_SABMixte.Enabled = False
         Me.chk_SABMixte.Location = New System.Drawing.Point(553, 197)
         Me.chk_SABMixte.Margin = New System.Windows.Forms.Padding(1)
         Me.chk_SABMixte.Name = "chk_SABMixte"

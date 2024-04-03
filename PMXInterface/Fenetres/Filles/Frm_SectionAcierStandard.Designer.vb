@@ -278,10 +278,10 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_DefinitionAcier.Controls.Add(Me.lbl_Grade)
         Me.pan_DefinitionAcier.Controls.Add(Me.GridAciers)
         Me.pan_DefinitionAcier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_DefinitionAcier.Location = New System.Drawing.Point(0, 31)
-        Me.pan_DefinitionAcier.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.pan_DefinitionAcier.Location = New System.Drawing.Point(0, 30)
+        Me.pan_DefinitionAcier.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_DefinitionAcier.Name = "pan_DefinitionAcier"
-        Me.pan_DefinitionAcier.Size = New System.Drawing.Size(354, 439)
+        Me.pan_DefinitionAcier.Size = New System.Drawing.Size(354, 440)
         Me.pan_DefinitionAcier.TabIndex = 2
         '
         'lbl_ReductionCurve
@@ -335,7 +335,7 @@ Partial Class Frm_SectionAcierStandard
         Me.GridAciers.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.GridAciers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.GridAciers.ShowCellToolTips = False
-        Me.GridAciers.Size = New System.Drawing.Size(335, 389)
+        Me.GridAciers.Size = New System.Drawing.Size(335, 390)
         Me.GridAciers.TabIndex = 21
         '
         'Col_Grade

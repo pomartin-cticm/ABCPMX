@@ -393,7 +393,7 @@ Partial Class Frm_SectionSFB
         Me.GridAciers.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
         Me.GridAciers.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.GridAciers.ShowCellToolTips = False
-        Me.GridAciers.Size = New System.Drawing.Size(318, 389)
+        Me.GridAciers.Size = New System.Drawing.Size(318, 371)
         Me.GridAciers.TabIndex = 21
         '
         'Col_Grade
@@ -437,10 +437,10 @@ Partial Class Frm_SectionSFB
         Me.pan_DefinitionAcier.Controls.Add(Me.lbl_Grade)
         Me.pan_DefinitionAcier.Controls.Add(Me.GridAciers)
         Me.pan_DefinitionAcier.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_DefinitionAcier.Location = New System.Drawing.Point(0, 31)
-        Me.pan_DefinitionAcier.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
+        Me.pan_DefinitionAcier.Location = New System.Drawing.Point(0, 30)
+        Me.pan_DefinitionAcier.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_DefinitionAcier.Name = "pan_DefinitionAcier"
-        Me.pan_DefinitionAcier.Size = New System.Drawing.Size(337, 439)
+        Me.pan_DefinitionAcier.Size = New System.Drawing.Size(337, 440)
         Me.pan_DefinitionAcier.TabIndex = 2
         '
         'TableLayoutPanel1
@@ -528,10 +528,10 @@ Partial Class Frm_SectionSFB
         Me.lbl_WeldedPlate.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_WeldedPlate.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_WeldedPlate.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_WeldedPlate.Location = New System.Drawing.Point(0, 320)
-        Me.lbl_WeldedPlate.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_WeldedPlate.Location = New System.Drawing.Point(0, 321)
+        Me.lbl_WeldedPlate.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.lbl_WeldedPlate.Name = "lbl_WeldedPlate"
-        Me.lbl_WeldedPlate.Size = New System.Drawing.Size(353, 30)
+        Me.lbl_WeldedPlate.Size = New System.Drawing.Size(353, 29)
         Me.lbl_WeldedPlate.TabIndex = 5
         Me.lbl_WeldedPlate.Text = "lbl_WeldedPlate"
         Me.lbl_WeldedPlate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
