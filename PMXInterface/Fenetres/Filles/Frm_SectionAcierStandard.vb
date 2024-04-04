@@ -71,6 +71,7 @@ Public Class Frm_SectionAcierStandard
     End Sub
 
     Public Sub InitialiserFenetre()
+        lBuild = True
         GestionLangues()
         GestionStyle()
         GestionUnites()
@@ -219,7 +220,7 @@ Public Class Frm_SectionAcierStandard
         Me.lbl_Acier.ForeColor = CouleurForeBandeaux
 
         'Me.pan_Gauche.AutoScroll = False
-        Me.TLpan_Gauche.Height = 470
+        Me.TLpan_Gauche.Height = 410
 
     End Sub
 

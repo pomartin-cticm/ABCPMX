@@ -155,10 +155,10 @@
     <Compile Include="Fenetres\Filles\Frm_OptionsCalculPoutre.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fenetres\Filles\Frm_SectionIFB_A.Designer.vb">
-      <DependentUpon>Frm_SectionIFB_A.vb</DependentUpon>
+    <Compile Include="Fenetres\Filles\Frm_SectionIFB.Designer.vb">
+      <DependentUpon>Frm_SectionIFB.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\Filles\Frm_SectionIFB_A.vb">
+    <Compile Include="Fenetres\Filles\Frm_SectionIFB.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_SectionSFB.Designer.vb">
@@ -478,8 +478,8 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsCalculPoutre.resx">
       <DependentUpon>Frm_OptionsCalculPoutre.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fenetres\Filles\Frm_SectionIFB_A.resx">
-      <DependentUpon>Frm_SectionIFB_A.vb</DependentUpon>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_SectionIFB.resx">
+      <DependentUpon>Frm_SectionIFB.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_SectionSFB.resx">
       <DependentUpon>Frm_SectionSFB.vb</DependentUpon>

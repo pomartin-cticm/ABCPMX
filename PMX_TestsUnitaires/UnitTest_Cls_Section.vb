@@ -1118,10 +1118,10 @@ Imports PMXMoteur2
             .Tw = 7 / 1000
         End With
 
-        section.Acier.lUser = True
-        section.Acier.f_y.fs = 250
-        section.Acier.f_y.fi = 275
-        section.Acier.f_y.w = 300
+        section.lUser = True
+        section.f_y.fs = 250
+        section.f_y.fi = 275
+        section.f_y.w = 300
 
         section.typeSection = cls_Section.Enum_TypeSection.AcierSeul
 
@@ -1165,7 +1165,7 @@ Imports PMXMoteur2
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         'Cas identique précédent mais avec semelle sup de classe 3
-        section.Acier.f_y.fs = 275
+        section.f_y.fs = 275
         epsilon_sem_sup = 0.9244
         'psi = -7.466
         classeSection = section.ClasseSection(z_ANE, z_ANE, lFlexionPositive, section.lSlimFloor, section.lEnrobage, lGEN_1_EC, td)

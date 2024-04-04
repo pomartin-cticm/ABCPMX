@@ -2,7 +2,7 @@
 Imports PMXInterface.Frm_SectionAcierStandard
 Imports PMXMoteur2
 
-Public Class Frm_SectionIFB_A
+Public Class Frm_SectionIFB
 
 #Region " Constantes et structures "
     Const STARCHAR As String = "*"
@@ -52,6 +52,11 @@ Public Class Frm_SectionIFB_A
     Dim ColorGrade As Color = Color.Crimson
     Dim ColorNotPossible As Color = Color.LightGray
 
+    '---- Messages
+    Dim strNuanceWP As String()
+    Dim strReductionCurveWP As String()
+
+
     '---- Memoriser les lignes tableaux sélectionnées
     Dim iLignePro, iLigneAcier As Integer
 
@@ -80,9 +85,11 @@ Public Class Frm_SectionIFB_A
     End Sub
 
     Public Sub InitialiserFenetre()
+        lBuild = True
         GestionLangues()
         GestionStyle()
         GestionUnites()
+        RemplirComboBox()
         PreparerFenetre()
         AfficherPoutreEnCours()
         lBuild = False
@@ -123,6 +130,22 @@ Public Class Frm_SectionIFB_A
                 Me.lbl_Grade.Text = Bloc("STEELGRADE")
                 Me.lbl_Qualite.Text = Bloc("QUALITY")
                 Me.lbl_ReductionCurve.Text = Bloc("REDUCTIONCURVE")
+
+                ReDim strNuanceWP(4)
+
+                Me.strNuanceWP(0) = "S235"
+                Me.strNuanceWP(1) = "S275"
+                Me.strNuanceWP(2) = "S355"
+                Me.strNuanceWP(3) = "S420"
+                Me.strNuanceWP(4) = "S460"
+
+                ReDim strReductionCurveWP(1)
+
+                Me.strReductionCurveWP(0) = "EC3"
+                Me.strReductionCurveWP(1) = "EN 10025"
+
+                Me.lbl_WPSteel.Text = Bloc("STEEL")
+
 
 
                 '=== CHAINES =============================================================
@@ -210,6 +233,20 @@ Public Class Frm_SectionIFB_A
 
     End Sub
 
+    Private Sub RemplirComboBox()
+        Me.cmb_GradeWP.Items.Clear()
+        For i As Integer = 0 To strNuanceWP.Count - 1
+            Me.cmb_GradeWP.Items.Add(strNuanceWP(i))
+        Next
+        Me.cmb_GradeWP.SelectedIndex = 0
+
+        Me.cmb_ReductionCurveWP.Items.Clear()
+        For i As Integer = 0 To strReductionCurveWP.Count - 1
+            Me.cmb_ReductionCurveWP.Items.Add(strReductionCurveWP(i))
+        Next
+        Me.cmb_ReductionCurveWP.SelectedIndex = 0
+    End Sub
+
     Private Sub GestionStyle()
 
         Me.Icon = Frm_PMX.Icon
@@ -282,6 +319,16 @@ Public Class Frm_SectionIFB_A
         Me.txt_hw.Text = GetStringInUnit(MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
         Me.txt_bp.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, False)
         Me.txt_tp.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
+
+        Me.cmb_GradeWP.SelectedItem = MySectionLoc.AcierSPD.Nuance
+
+        If MySectionLoc.AcierSPD.Qualite = "EC3" Then
+            Me.cmb_ReductionCurveWP.SelectedItem = "EC3"
+        Else
+            Me.cmb_ReductionCurveWP.SelectedItem = "EN 10025"
+        End If
+
+        MAJ_InfoWP()
     End Sub
 
     Private Sub RemplirSeries()
@@ -431,6 +478,12 @@ Public Class Frm_SectionIFB_A
         GereTransfertValeur(MySectionLoc.Acier.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.NormeProduit, lModif)
         GereTransfertValeur(MySectionLoc.Acier.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Reduction, lModif)
 
+        GereTransfertValeur(MySectionLoc.AcierSPD.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Nuance, lModif)
+        GereTransfertValeur(MySectionLoc.AcierSPD.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Qualite, lModif)
+        GereTransfertValeur(MySectionLoc.AcierSPD.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.NormeProduit, lModif)
+        GereTransfertValeur(MySectionLoc.AcierSPD.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Reduction, lModif)
+
+
         With MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA ' --> Sécurité supplémentaire pour s'assurer que les valeurs qui n'ont pas de sens restent égales à 0
             Select Case .typeProfileAcier
                 Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
@@ -468,10 +521,13 @@ Public Class Frm_SectionIFB_A
 #Region " DESSINS "
 
     Private Sub img_Section_Paint(sender As Object, e As PaintEventArgs) Handles img_Section.Paint
-
-        DessinProfileIFB_A_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
+            DessinProfileIFB_A_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
                            FontBase, kAdjust, True, False, iSelect)
-
+        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
+            DessinProfileIFB_B_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+                          FontBase, kAdjust, True, False, iSelect)
+        End If
     End Sub
 
     Private Sub img_ReductionCurve_Paint(sender As Object, e As PaintEventArgs) Handles img_ReductionCurve.Paint
@@ -507,7 +563,7 @@ Public Class Frm_SectionIFB_A
         Dim kFact As Double
 
         Dim EpProfile, FyPro As Double
-        Dim EpPlatSoude, FyPlatSoude As Double
+        'Dim EpPlatSoude, FyPlatSoude As Double
 
         Dim ColorPen As Color = Color.Black
         Dim ColorExclu As Color = ColorNotPossible
@@ -541,9 +597,9 @@ Public Class Frm_SectionIFB_A
         '--( Epaisseur du profilé pour le calcul
 
         EpProfile = Math.Max(MySectionLoc.ProfilA.Tw, MySectionLoc.ProfilA.Tfs)
-        EpPlatSoude = MySectionLoc.ProfilA.Plat_t
+        ' EpPlatSoude = MySectionLoc.ProfilA.Plat_t
         FyPro = MySectionLoc.Acier.LimiteFy(EpProfile)
-        FyPlatSoude = MySectionLoc.Acier.LimiteFy(EpPlatSoude)
+        'FyPlatSoude = MySectionLoc.Acier.LimiteFy(EpPlatSoude)
 
         EpPlagesMax = MySectionLoc.Acier.EpMax
 
@@ -558,7 +614,8 @@ Public Class Frm_SectionIFB_A
 
         ExtraitValeursEnveloppeAciers(Nuance, DrawProperty, EpMin, EpMax, VMax)
 
-        EpMax = Math.Max(EpMax, Math.Max(EpProfile, EpPlatSoude))
+        ' EpMax = Math.Max(EpMax, Math.Max(EpProfile, EpPlatSoude))
+        EpMax = Math.Max(EpMax, EpProfile)
 
         kFact = EpMax / VMax * sHI / sWI
         xMin = 0
@@ -623,9 +680,9 @@ Public Class Frm_SectionIFB_A
         zBoni = YUnivers(RCParAff, sHI)
         xBoni = XUnivers(RCParAff, sWI / 2)
 
-        DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpProfile, FyPro, xBoni, zBoni, MyFont, lNuanceOK, False)
-        DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPlatSoude, FyPlatSoude, xBoni, zBoni, MyFont, lNuanceOK, False)
-        DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, Math.Max(EpProfile, EpPlatSoude), Math.Min(FyPro, FyPlatSoude), xBoni, zBoni, MyFont, lNuanceOK, True, True)
+        DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpProfile, FyPro, xBoni, zBoni, MyFont, lNuanceOK)
+        ' DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPlatSoude, FyPlatSoude, xBoni, zBoni, MyFont, lNuanceOK, False)
+        ' DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, Math.Max(EpProfile, EpPlatSoude), Math.Min(FyPro, FyPlatSoude), xBoni, zBoni, MyFont, lNuanceOK, True, True)
 
         '--( Titre
 
@@ -898,6 +955,9 @@ Public Class Frm_SectionIFB_A
         Me.img_Section.Invalidate()
         Me.img_ReductionCurve.Invalidate()
 
+        MAJ_InfoWP()
+
+
         lBuild = False
     End Sub
 
@@ -918,16 +978,16 @@ Public Class Frm_SectionIFB_A
 
         '--> Initialisation
         If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
-            BPMINI = MySectionLoc.ProfilA.Bfi + 2 * BAPPMIN
+            BPMINI = MySectionLoc.ProfilA.Bfs + 2 * BAPPMIN
         Else
-            BPMINI = MySectionLoc.ProfilA.Bfi + BAPPMIN
+            BPMINI = MySectionLoc.ProfilA.Bfs + BAPPMIN
         End If
 
         BPMINI = Math.Min(BPMINI, BFMAXI)
         'hwmin -> voir const globale
         HWMAXI_IFB = Math.Min(HWMAXI, MySectionLoc.ProfilA.hb - 2 * MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Rcs)
         HAMINI_IFB = HWMINI + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t
-        HAMAXI_IFB = HWMAXI_IFB + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t
+        HAMAXI_IFB = Math.Min(HSLIMMAX, HWMAXI_IFB + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t)
 
         Select Case MyTxt.Name
             Case Me.txt_bp.Name
@@ -1268,7 +1328,7 @@ Public Class Frm_SectionIFB_A
 
         Dim lCompatible As Boolean = True
 
-        If Profile.Ht > HSLIMMAX Then lCompatible = False
+        'If Profile.Ht > HSLIMMAX Then lCompatible = False
 
         Return lCompatible
 
@@ -1283,9 +1343,9 @@ Public Class Frm_SectionIFB_A
         If lBuild Then Exit Sub
         If Me.GridAciers.Rows.Count = 0 Then Exit Sub
 
-        GetAcierFromGrid()
+        GetAcierFromGrid(MySectionLoc.Acier)
 
-        MAJNuancesPossibles()
+        MAJNuancesPossibles(MySectionLoc.Acier)
 
         ' MAJ_DonneesFinales()
 
@@ -1294,7 +1354,7 @@ Public Class Frm_SectionIFB_A
 
     End Sub
 
-    Private Sub GetAcierFromGrid()
+    Private Sub GetAcierFromGrid(ByVal AcierLoc As cls_Acier)
         '-------------------------------------------------------------------------------------------------------------------------
         '
         '   Récupération des données acier sélectionnées par l'utilisateur dans la grille
@@ -1314,40 +1374,40 @@ Public Class Frm_SectionIFB_A
         Qualite = GridAciers(1, indRow).Value.ToString.Trim
         Norme = GridAciers(2, indRow).Value.ToString.Trim
 
-        TransfertGridAcier(Nuance, Qualite, Norme, MySectionLoc)
+        TransfertGridAcier(Nuance, Qualite, Norme, AcierLoc)
 
     End Sub
 
-    Private Sub TransfertGridAcier(ByVal Nuance As String, ByVal Qualite As String, ByVal Reduction As String, ByVal MySection As cls_Section)
+    Private Sub TransfertGridAcier(ByVal Nuance As String, ByVal Qualite As String, ByVal Reduction As String, ByVal AcierLoc As cls_Acier)
 
-        MySectionLoc.Acier.Nuance = Nuance
-        MySectionLoc.Acier.Qualite = Qualite
-        MySectionLoc.Acier.Reduction = Reduction
+        AcierLoc.Nuance = Nuance
+        AcierLoc.Qualite = Qualite
+        AcierLoc.Reduction = Reduction
 
-        MySectionLoc.Acier.EpMax = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).EpMax
+        AcierLoc.EpMax = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).EpMax
 
-        MySectionLoc.Acier.iBase = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).iBase
-        MySectionLoc.Acier.iStandart = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex
+        AcierLoc.iBase = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).iBase
+        AcierLoc.iStandart = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex
 
-        MySectionLoc.Acier.Plages.Clear()
+        AcierLoc.Plages.Clear()
         Dim MyPlage As cls_Acier.strucPlage
         For i As Integer = 0 To SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages.Count - 1
             MyPlage.Ep = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Ep
             MyPlage.Fy = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fy
             MyPlage.Fu = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fu
-            MySectionLoc.Acier.Plages.Add(MyPlage)
+            AcierLoc.Plages.Add(MyPlage)
         Next
 
         Dim iStd As Integer
 
         iStd = SteelBase.IndexStd.IndexOf(SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex)
         If iStd > -1 Then
-            MySectionLoc.Acier.NormeProduit = SteelBase.NormeStd(iStd)
-            MySectionLoc.Acier.iTabStandart = iStd
+            AcierLoc.NormeProduit = SteelBase.NormeStd(iStd)
+            AcierLoc.iTabStandart = iStd
         End If
     End Sub
 
-    Private Sub MAJNuancesPossibles()
+    Private Sub MAJNuancesPossibles(ByVal AcierLoc As cls_Acier)
         '-----------------------------------------------------------------------------------------------------
         '
         '   12/11/15 :  Création - V3.09 - POM
@@ -1366,7 +1426,7 @@ Public Class Frm_SectionIFB_A
 
         '--> Traitement
 
-        MyNuance = MySectionLoc.Acier.Nuance
+        MyNuance = AcierLoc.Nuance
 
         '--> La Nuance est elle autorisée
 
@@ -1655,6 +1715,49 @@ Public Class Frm_SectionIFB_A
         Me.txt_ha.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurAme)
         Me.txt_hw.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurTotale)
 
+    End Sub
+
+    Private Sub cmb_GradeWP_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_GradeWP.SelectedValueChanged, cmb_ReductionCurveWP.SelectedValueChanged
+        If lBuild Then Exit Sub
+
+        Dim Nuance, Qualite, Norme As String
+
+        Nuance = cmb_GradeWP.SelectedItem
+
+        If Me.cmb_ReductionCurveWP.SelectedItem = "EC3" Then
+            Qualite = "EC3"
+            Norme = "Table 3.1"
+        Else 'EN 10025
+            Select Case cmb_GradeWP.SelectedItem
+                Case "S235", "S275"
+                    Qualite = "JR/J0/J2"
+                    Norme = "EN 10025-2"
+                Case "S355", "S460"
+                    Qualite = "JR/J0/J2/K2"
+                    Norme = "EN 10025-2"
+                Case "S420"
+                    Qualite = "M/ML"
+                    Norme = "EN 10025-4"
+            End Select
+
+        End If
+
+        TransfertGridAcier(Nuance, Qualite, Norme, MySectionLoc.AcierSPD)
+        MAJNuancesPossibles(MySectionLoc.AcierSPD)
+        MAJ_InfoWP()
+    End Sub
+
+    Private Sub MAJ_InfoWP()
+        Dim msg As String
+        msg = "fy = " & MySectionLoc.FySpd & " MPa ("
+
+        If MySectionLoc.AcierSPD.Qualite = "EC3" Then
+            msg += MySectionLoc.AcierSPD.Nuance & " - " & MySectionLoc.AcierSPD.Reduction & ")" 'EC3 - Table 3.1
+        Else
+            msg += MySectionLoc.AcierSPD.Reduction & ")" '10025-2 ou 10025-4
+        End If
+
+        Me.lbl_InfoFyWP.Text = msg
     End Sub
 
     Private Sub ExtraitValeursEnveloppeAciers(ByVal Nuance As String, ByVal Variable As EnuDrawProperty,

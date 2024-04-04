@@ -17,8 +17,6 @@ Public Class cls_Acier
 
 #Region " Attributs "
 
-    Public lUser As Boolean = False
-
     ''' <summary>
     ''' nuance de l'acier : S235,S275,S355,S420 ou S460
     ''' </summary>
@@ -41,12 +39,6 @@ Public Class cls_Acier
     ' iStandart : no de norme dans la base acier, entre 1 et 20
     ' iTabStandart : no de norme dans la table interne, entre 1 et nStandart
     '-------------------------------------------------------------------------
-
-    ''' <summary>
-    ''' valeur nominale de la limite d'élasticité de la poutre (Pa = N/m²)
-    ''' /!\ fysp n'est a priori utile que pour les slimfloors SFB (a discuter) /!\
-    ''' </summary>
-    Public f_y As (w As Decimal, fs As Decimal, fi As Decimal, spd As Decimal)
 
     Public Plages As List(Of strucPlage)
 
@@ -120,12 +112,12 @@ Public Class cls_Acier
 
         '--> Traitement
 
-        If Me.lUser Then
-            '--[ Acier défini directement par l'utilisateur
-            MyFy = 0
-        Else
-            '--[ Acier de la base de donnée : Recherche dans les plages
-            If Plages.Count < 1 Then
+        'If Me.lUser Then
+        '    '--[ Acier défini directement par l'utilisateur
+        '    MyFy = 0
+        'Else
+        '--[ Acier de la base de donnée : Recherche dans les plages
+        If Plages.Count < 1 Then
                 MyFy = -1
             Else
                 '--> On commence en dehors des plages
@@ -159,7 +151,7 @@ Public Class cls_Acier
                     End If
                 End If
             End If
-        End If
+        'End If
 
         Return MyFy
 
@@ -180,12 +172,12 @@ Public Class cls_Acier
 
         Dim MyFu As Double = 0
 
-        If Me.lUser Then
-            '--[ Acier défini directement par l'utilisateur
-            '    MyFu = FuImpose
-        Else
-            '--[ Acier de la base de donnée : Recherche dans les plages
-            If Plages.Count < 1 Then
+        'If Me.lUser Then
+        '--[ Acier défini directement par l'utilisateur
+        '    MyFu = FuImpose
+        'Else
+        '--[ Acier de la base de donnée : Recherche dans les plages
+        If Plages.Count < 1 Then
                 MyFu = -1
             Else
                 '--> On commence en dehors des plages
@@ -219,7 +211,7 @@ Public Class cls_Acier
                     End If
                 End If
             End If
-        End If
+        'End If
 
         Return MyFu
 
@@ -233,11 +225,7 @@ Public Class cls_Acier
 
         Me.Nuance = "S235"
         Me.Qualite = "EC3"
-
-        Me.f_y.w = 235
-        Me.f_y.fs = 235
-        Me.f_y.fi = 235
-        Me.f_y.spd = 235
+        Me.Reduction = "Table 3.1"
 
         Me.Plages = New List(Of strucPlage)
 
@@ -256,6 +244,8 @@ Public Class cls_Acier
         Dim MyPlage As strucPlage
 
         '--> Initialisations
+
+        Me.Plages.Clear()
 
         Me.Nuance = "S355"
         Me.Qualite = "M/ML"
@@ -303,6 +293,8 @@ Public Class cls_Acier
 
         '--> Initialisations
 
+        Me.Plages.Clear()
+
         Me.Nuance = "S275"
         Me.Qualite = "JR/J0/J2"
         Me.EpMax = 0.15
@@ -347,24 +339,51 @@ Public Class cls_Acier
     ''' Ecriture des attributs pour enregistrement dans un fichier 
     ''' </summary>
     ''' <param name="Lines">Lignes d'écriture</param>
-    Public Sub EcrireFile(ByRef Lines As List(Of String))
+    'Public Sub EcrireFile(ByRef Lines As List(Of String))
 
-        Lines.Add("   Nuance        = " & Nuance)
-        Lines.Add("   Qualite       = " & Qualite)
-        Lines.Add("   lUser       = " & lUser)
-        Lines.Add("   Fyw           = " & f_y.w)
-        Lines.Add("   Fyfs          = " & f_y.fs)
-        Lines.Add("   Fyfi          = " & f_y.fi)
+    '    Lines.Add("   Nuance        = " & Nuance)
+    '    Lines.Add("   Qualite       = " & Qualite)
+    '    Lines.Add("   lUser       = " & lUser)
+    '    Lines.Add("   Fyw           = " & f_y.w)
+    '    Lines.Add("   Fyfs          = " & f_y.fs)
+    '    Lines.Add("   Fyfi          = " & f_y.fi)
 
-    End Sub
+    'End Sub
 
 #End Region
 
 #Region " Fonction de copie "
 
-    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+    Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function
+
+    Public Sub Deepclone(ByVal AcierSource As cls_Acier, ByRef AcierCible As cls_Acier)
+
+        'Dim pouet As Double = 0
+
+        AcierCible = AcierSource.Clone()
+
+        'AcierCible.Plages.Clear()
+
+        AcierCible.Plages = New List(Of strucPlage)
+        For Each plage As strucPlage In AcierSource.Plages
+            Dim plage_loc As strucPlage
+
+            'pouet += 100
+
+            plage_loc.Ep = plage.Ep
+            'plage_loc.Ep = pouet
+            plage_loc.Fy = plage.Fy
+            plage_loc.Fu = plage.Fu
+
+            AcierCible.Plages.Add(plage_loc)
+        Next
+
+
+
+
+    End Sub
 
 #End Region
 

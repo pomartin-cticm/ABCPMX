@@ -69,6 +69,18 @@ Public Class cls_Section
     Public ProfilA As New cls_ProfilA           ' Profilé métallique
 
     Public Acier As New cls_Acier               ' Acier du profilé
+    Public AcierSPD As New cls_Acier            ' Acier de la plaque soudée
+
+    ''' <summary>
+    ''' Indique si les valeurs de fy sont renseignées directement par l'utilisateur (True) ou via les plages (False)
+    ''' </summary>
+    Public lUser As Boolean = False
+
+    ''' <summary>
+    ''' valeur nominale de la limite d'élasticité de la poutre (Pa = N/m²)
+    ''' /!\ fysp n'est a priori utile que pour les slimfloors SFB (a discuter) /!\
+    ''' </summary>
+    Public f_y As (w As Decimal, fs As Decimal, fi As Decimal, spd As Decimal)
 
     Public Enrobage As New cls_Enrobage_Partiel ' Enrobage (pour les profilé enrobés)
 
@@ -1881,9 +1893,10 @@ Public Class cls_Section
         Get
             Dim MyFy As Decimal
 
-            If Me.Acier.lUser Then
-                MyFy = Me.Acier.f_y.fs
-            Else
+            If Me.lUser Then '--[ Acier défini directement par l'utilisateur
+                MyFy = Me.f_y.fs
+
+            Else '--[ Acier de la base de donnée : Recherche dans les plages
                 If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
                     MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
                 Else
@@ -1905,9 +1918,10 @@ Public Class cls_Section
             'Return Me.Acier.LimiteFy(Me.ProfilA.Tfi)
             Dim MyFy As Decimal
 
-            If Me.Acier.lUser Then
-                MyFy = Me.Acier.f_y.fi
-            Else
+            If Me.lUser Then '--[ Acier défini directement par l'utilisateur
+                MyFy = Me.f_y.fi
+
+            Else '--[ Acier de la base de donnée : Recherche dans les plages
                 If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
                     MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfi, Me.ProfilA.Tw))
                 Else
@@ -1927,12 +1941,13 @@ Public Class cls_Section
         Get
             Dim MyFy As Decimal
 
-            If Me.Acier.lUser Then
-                MyFy = Me.Acier.f_y.w
-            Else
+            If Me.lUser Then '--[ Acier défini directement par l'utilisateur
+                MyFy = Me.f_y.w
+
+            Else '--[ Acier de la base de donnée : Recherche dans les plages
                 If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
                     MyFy = Me.Acier.LimiteFy(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
-                Else
+                Else '--[ Acier de la base de donnée : Recherche dans les plages
                     MyFy = Me.Acier.LimiteFy(Me.ProfilA.Tw)
                 End If
             End If
@@ -1945,10 +1960,11 @@ Public Class cls_Section
         Get
             Dim MyFy As Decimal
 
-            If Me.Acier.lUser Then
-                MyFy = Me.Acier.f_y.spd
-            Else
-                MyFy = Me.Acier.LimiteFy(Me.ProfilA.Plat_t)
+            If Me.lUser Then '--[ Acier défini directement par l'utilisateur
+                MyFy = Me.f_y.spd
+
+            Else '--[ Acier de la base de donnée : Recherche dans les plages
+                MyFy = Me.AcierSPD.LimiteFy(Me.ProfilA.Plat_t)
             End If
 
             Return MyFy
@@ -2186,8 +2202,8 @@ Public Class cls_Section
 
         SectionSource.ProfilA.DeepClone(SectionSource.ProfilA, SectionCible.ProfilA)
         SectionSource.Enrobage.DeepClone(SectionSource.Enrobage, SectionCible.Enrobage)
-
-        SectionCible.Acier = SectionSource.Acier.Clone
+        SectionSource.Acier.Deepclone(SectionSource.Acier, SectionCible.Acier)
+        SectionSource.AcierSPD.Deepclone(SectionSource.AcierSPD, SectionCible.AcierSPD)
 
     End Sub
 
@@ -2196,24 +2212,24 @@ Public Class cls_Section
     ''' </summary>
     ''' <param name="s_origine"></param>
     ''' <param name="s_destination"></param>
-    Public Shared Sub CloneSection(ByVal s_origine As cls_Section, ByRef s_destination As cls_Section)
-        s_destination = s_origine.Clone()
-        s_destination.Acier = s_origine.Acier.Clone()
+    'Public Shared Sub CloneSection(ByVal s_origine As cls_Section, ByRef s_destination As cls_Section)
+    '    s_destination = s_origine.Clone()
+    '    s_destination.Acier = s_origine.Acier.Clone()
 
-        s_destination.Enrobage = s_origine.Enrobage.Clone()
-        s_destination.Enrobage.Beton = s_origine.Enrobage.Beton.Clone()
+    '    s_destination.Enrobage = s_origine.Enrobage.Clone()
+    '    s_destination.Enrobage.Beton = s_origine.Enrobage.Beton.Clone()
 
-        's_destination.dalle = s_origine.dalle.Clone()
-        's_destination.dalle.beton = s_origine.dalle.beton.Clone()
-        's_destination.dalle.arma_longi_inf = s_origine.dalle.arma_longi_inf.Clone()
-        's_destination.dalle.arma_longi_sup = s_origine.dalle.arma_longi_sup.Clone()
-        's_destination.dalle.bac_acier = s_origine.dalle.bac_acier.Clone()
+    '    's_destination.dalle = s_origine.dalle.Clone()
+    '    's_destination.dalle.beton = s_origine.dalle.beton.Clone()
+    '    's_destination.dalle.arma_longi_inf = s_origine.dalle.arma_longi_inf.Clone()
+    '    's_destination.dalle.arma_longi_sup = s_origine.dalle.arma_longi_sup.Clone()
+    '    's_destination.dalle.bac_acier = s_origine.dalle.bac_acier.Clone()
 
-        's_destination.Param = s_origine.Param.Clone()
-        's_destination.Param.Prop_Elastique_Enrobage = s_origine.Param.Prop_Elastique_Enrobage.Clone()
-        's_destination.Param.Prop_Elastique_Dalle = s_origine.Param.Prop_Elastique_Dalle.Clone()
+    '    's_destination.Param = s_origine.Param.Clone()
+    '    's_destination.Param.Prop_Elastique_Enrobage = s_origine.Param.Prop_Elastique_Enrobage.Clone()
+    '    's_destination.Param.Prop_Elastique_Dalle = s_origine.Param.Prop_Elastique_Dalle.Clone()
 
-    End Sub
+    'End Sub
 
 #End Region
 
@@ -2867,6 +2883,10 @@ Public Class cls_Section
 #Region " Constructeurs "
 
     Sub New()
+        Me.f_y.w = 235
+        Me.f_y.fs = 235
+        Me.f_y.fi = 235
+        Me.f_y.spd = 235
     End Sub
 
     'Sub New(ByVal nom As String, ByVal typeSection As Enum_TypeSection)
@@ -2885,6 +2905,11 @@ Public Class cls_Section
     'End Sub
 
     Sub New(ByVal nom As String, ByVal typeSection As Enum_TypeSection, Nuance As String, Qualite As String, Reduction As String, MyPlages As List(Of cls_Acier.strucPlage))
+
+        Me.f_y.w = 235
+        Me.f_y.fs = 235
+        Me.f_y.fi = 235
+        Me.f_y.spd = 235
 
         Me.Nom = nom
         Me.typeSection = typeSection
@@ -2905,47 +2930,47 @@ Public Class cls_Section
 
 #Region " Ecriture/Lecture  - Fichier "
 
-    Public Sub EcrireFile(ByRef Lines As List(Of String))
-        '-------------------------------------------------------------------------------------
-        '   Ecriture des attributs pour enregistrement dans un fichier 
-        '   --> 20/02/20 v.1 
-        '-------------------------------------------------------------------------------------
+    'Public Sub EcrireFile(ByRef Lines As List(Of String))
+    '    '-------------------------------------------------------------------------------------
+    '    '   Ecriture des attributs pour enregistrement dans un fichier 
+    '    '   --> 20/02/20 v.1 
+    '    '-------------------------------------------------------------------------------------
 
-        Lines.Add("BLOCK SECTION")
-        '--> Attributs pour l'interface
-        Lines.Add("   Nom           = " & Me.Nom)
-        Lines.Add("   lEnrobage     = " & Me.lEnrobage)
-        Lines.Add("   lDalle        = " & Me.lDalleBeton)
-        Lines.Add("   lDatabase     = " & Me.lDatabase)
-        'Lines.Add("   DB_Gamme      = " & Me.Gamme)
-        'Lines.Add("   DB_Profile    = " & Me.NomProfile)
-        ''--> Géométrie
-        'Lines.Add("   Type          = " & Me.typeSection)
-        'Lines.Add("   H             = " & Me.ha)
-        ''Lines.Add("   H_W           = " & Me.h_w)
-        'Lines.Add("   T_W           = " & Me.t_w)
-        'Lines.Add("   B_FS          = " & Me.b_fs)
-        'Lines.Add("   T_FS          = " & Me.t_fs)
-        'Lines.Add("   B_FI          = " & Me.b_fi)
-        'Lines.Add("   T_FI          = " & Me.t_fi)
-        'Lines.Add("   A             = " & Me.a)
-        'Lines.Add("   R             = " & Me.r_cs)
+    '    Lines.Add("BLOCK SECTION")
+    '    '--> Attributs pour l'interface
+    '    Lines.Add("   Nom           = " & Me.Nom)
+    '    Lines.Add("   lEnrobage     = " & Me.lEnrobage)
+    '    Lines.Add("   lDalle        = " & Me.lDalleBeton)
+    '    Lines.Add("   lDatabase     = " & Me.lDatabase)
+    '    'Lines.Add("   DB_Gamme      = " & Me.Gamme)
+    '    'Lines.Add("   DB_Profile    = " & Me.NomProfile)
+    '    ''--> Géométrie
+    '    'Lines.Add("   Type          = " & Me.typeSection)
+    '    'Lines.Add("   H             = " & Me.ha)
+    '    ''Lines.Add("   H_W           = " & Me.h_w)
+    '    'Lines.Add("   T_W           = " & Me.t_w)
+    '    'Lines.Add("   B_FS          = " & Me.b_fs)
+    '    'Lines.Add("   T_FS          = " & Me.t_fs)
+    '    'Lines.Add("   B_FI          = " & Me.b_fi)
+    '    'Lines.Add("   T_FI          = " & Me.t_fi)
+    '    'Lines.Add("   A             = " & Me.a)
+    '    'Lines.Add("   R             = " & Me.r_cs)
 
-        '--> Acier
-        Me.Acier.EcrireFile(Lines)
+    '    '--> Acier
+    '    Me.Acier.EcrireFile(Lines)
 
-        '--> Enrobage
-        Me.Enrobage.EcrireFile(Lines)
+    '    '--> Enrobage
+    '    Me.Enrobage.EcrireFile(Lines)
 
-        ''--> Dalle de béton
-        'Me.dalle.EcrireFile(Lines)
+    '    ''--> Dalle de béton
+    '    'Me.dalle.EcrireFile(Lines)
 
-        ''--> Options de calcul
-        'Me.Param.EcrireFile(Lines)
+    '    ''--> Options de calcul
+    '    'Me.Param.EcrireFile(Lines)
 
-        Lines.Add("")
+    '    Lines.Add("")
 
-    End Sub
+    'End Sub
 
     Public Sub LectureFile(ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
@@ -3001,10 +3026,10 @@ Public Class cls_Section
                                 End If
                             Next
                         Case "QUAL" : Me.Acier.Qualite = Mots(nbMots)
-                        Case "LUSE" : Me.Acier.lUser = Mots(nbMots)
-                        Case "FYW" : Me.Acier.f_y.w = Mots(nbMots)
-                        Case "FYFS" : Me.Acier.f_y.fs = Mots(nbMots)
-                        Case "FYFI" : Me.Acier.f_y.fi = Mots(nbMots)
+                        Case "LUSE" : Me.lUser = Mots(nbMots)
+                        Case "FYW" : Me.f_y.w = Mots(nbMots)
+                        Case "FYFS" : Me.f_y.fs = Mots(nbMots)
+                        Case "FYFI" : Me.f_y.fi = Mots(nbMots)
                             '--> Enrobage
                         'Case "EB_C" : Me.enrobage_partiel.b_c = Mots(nbMots)
                        ' Case "EF_Y" : Me.enrobage_partiel.acier_armature = Mots(nbMots)

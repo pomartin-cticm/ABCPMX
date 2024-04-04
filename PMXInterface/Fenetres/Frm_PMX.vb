@@ -29,6 +29,8 @@ Public Class Frm_PMX
     Dim strRacineELSC As String
     Dim strCopy As String
     Dim strMsgFermetureFrm As String
+    Dim strTSbtn_IFB_A As String
+    Dim strTSbtn_IFB_B As String
 
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
@@ -251,8 +253,8 @@ Public Class Frm_PMX
                 Me.TSbtn_Dalle.ToolTipText = Bloc("TSBSLAB")
                 Me.TSbtn_SectionA.ToolTipText = Bloc("TSBSECTIONA")
                 Me.TSbtn_SectionSFB.ToolTipText = Bloc("TSBSECTIONSFB")
-                Me.TSbtn_SectionIFB_A.ToolTipText = Bloc("TSBSECTIONIFBA")
-                Me.TSbtn_SectionIFB_B.ToolTipText = Bloc("TSBSECTIONIFBB")
+                Me.strTSbtn_IFB_A = Bloc("TSBSECTIONIFBA")
+                Me.strTSbtn_IFB_B = Bloc("TSBSECTIONIFBB")
                 Me.TSbtn_SectionSAB.ToolTipText = Bloc("TSBSECTIONSAB")
                 Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENCASEMENT")
                 Me.TSbtn_Connexion.ToolTipText = Bloc("TSBCONNECTION")
@@ -585,7 +587,7 @@ Public Class Frm_PMX
 
 
     Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) _
-        Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_SectionSFB.Click, TSbtn_SectionIFB_A.Click, TSbtn_SectionIFB_B.Click, TSbtn_SectionSAB.Click,
+        Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_SectionSFB.Click, TSbtn_SectionIFB.Click, TSbtn_SectionSAB.Click,
                 TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click,
                 TSbtn_Gamma.Click, TSbtn_PPLargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
                 TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click, TSbtn_OptionsIncendie.Click, TSbtn_MaintienBac.Click
@@ -607,10 +609,8 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.SectionAcier
             Case Me.TSbtn_SectionSFB.Name
                 FilleEnCours = EnuFenetres.SectionSFB
-            Case Me.TSbtn_SectionIFB_A.Name
-                FilleEnCours = EnuFenetres.SectionIFB_A
-            Case Me.TSbtn_SectionIFB_B.Name
-                FilleEnCours = EnuFenetres.SectionIFB_B
+            Case Me.TSbtn_SectionIFB.Name
+                FilleEnCours = EnuFenetres.SectionIFB
             Case Me.TSbtn_SectionSAB.Name
                 FilleEnCours = EnuFenetres.SectionSAB
             Case Me.TSbtn_Enrobage.Name
@@ -700,16 +700,9 @@ Public Class Frm_PMX
 
                 End If
 
-            Case EnuFenetres.SectionIFB_A
+            Case EnuFenetres.SectionIFB
                 If LogicielOptions.lFenetres Then
-                    Frm_SectionIFB_A.ShowDialog()
-                Else
-
-                End If
-
-            Case EnuFenetres.SectionIFB_B
-                If LogicielOptions.lFenetres Then
-                    'Frm_SectionIFB_B.ShowDialog()
+                    Frm_SectionIFB.ShowDialog()
                 Else
 
                 End If
@@ -897,8 +890,7 @@ Public Class Frm_PMX
 
         Dim lFrmProfilA As Boolean = False
         Dim lFrmProfilSFB As Boolean = False
-        Dim lFrmProfilIFB_A As Boolean = False
-        Dim lFrmProfilIFB_B As Boolean = False
+        Dim lFrmProfilIFB As Boolean = False
         Dim lFrmProfilSAB As Boolean = False
 
         Dim lFrmEnrobage As Boolean = True
@@ -932,20 +924,13 @@ Public Class Frm_PMX
                     lFrmMaintienBac = False
                 Case cls_Section.Enum_TypeSection.SFBmixte
                     lFrmProfilSFB = True
-                Case cls_Section.Enum_TypeSection.IFB_A
-                    lFrmProfilIFB_A = True
+                Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B
+                    lFrmProfilIFB = True
                     lFrmEnrobage = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
-                Case cls_Section.Enum_TypeSection.IFB_Amixte
-                    lFrmProfilIFB_A = True
-                Case cls_Section.Enum_TypeSection.IFB_B
-                    lFrmProfilIFB_B = True
-                    lFrmEnrobage = False
-                    lFrmProppin = False
-                    lFrmMaintienBac = False
-                Case cls_Section.Enum_TypeSection.IFB_Bmixte
-                    lFrmProfilIFB_B = True
+                Case cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte
+                    lFrmProfilIFB = True
                 Case cls_Section.Enum_TypeSection.SAB
                     lFrmProfilSAB = True
                     lFrmEnrobage = False
@@ -958,8 +943,7 @@ Public Class Frm_PMX
 
         Me.TSbtn_SectionA.Visible = lFrmProfilA
         Me.TSbtn_SectionSFB.Visible = lFrmProfilSFB
-        Me.TSbtn_SectionIFB_A.Visible = lFrmProfilIFB_A
-        Me.TSbtn_SectionIFB_B.Visible = lFrmProfilIFB_B
+        Me.TSbtn_SectionIFB.Visible = lFrmProfilIFB
         Me.TSbtn_SectionSAB.Visible = lFrmProfilSAB
 
         Me.TSbtn_Enrobage.Visible = lFrmEnrobage
@@ -988,6 +972,15 @@ Public Class Frm_PMX
         Me.CalculationSheetToolStripMenuItemN.Visible = Not lNothing
 
         Me.TSGestionImagePoutre.Visible = Not lNothing
+
+        'Gere le Tooltip de la fenetre IFB
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
+            Me.TSbtn_SectionIFB.ToolTipText = strTSbtn_IFB_A
+        ElseIf MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
+            Me.TSbtn_SectionIFB.ToolTipText = strTSbtn_IFB_B
+        End If
+
     End Sub
 
     Private Sub MAJVoletGauche()
@@ -1535,7 +1528,6 @@ Public Class Frm_PMX
 
     Public Sub AffichageTViewChk()
 
-        'If MyProjet.Poutres.Count = 0 Then Exit Sub
         InitialiseCouleurs()
 
         Me.cmb_Projet.Items.Clear()

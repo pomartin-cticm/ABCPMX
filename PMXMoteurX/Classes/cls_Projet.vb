@@ -294,7 +294,11 @@ Public Class cls_Projet
                     Lines.Add("   Nom            =  " & .Nom)
                     Lines.Add("   lDalleBeton    =  " & .lDalleBeton)
                     Lines.Add("   lDatabase      =  " & .lDatabase)
-                    Lines.Add("   typeSection    =  " & .typeSection)
+                    Lines.Add("   typeSection    =  " & .TypeSection)
+                    Lines.Add("   lUser      =  " & .lUser)
+                    Lines.Add("   f_y_fs         =  " & .f_y.fs)
+                    Lines.Add("   f_y_w          =  " & .f_y.w)
+                    Lines.Add("   f_y_fi         =  " & .f_y.fi)
                     Lines.Add("")
 
                     '==[ Classe ProfilA ]=================================================================
@@ -335,10 +339,10 @@ Public Class cls_Projet
                         Lines.Add("   iBase          =  " & .iBase)
                         Lines.Add("   iTabStand      =  " & .iTabStandart)
                         Lines.Add("   iStandard      =  " & .iStandart)
-                        Lines.Add("   lUser      =  " & .lUser)
-                        Lines.Add("   f_y_fs         =  " & .f_y.fs)
-                        Lines.Add("   f_y_w          =  " & .f_y.w)
-                        Lines.Add("   f_y_fi         =  " & .f_y.fi)
+                        'Lines.Add("   lUser      =  " & .lUser)
+                        'Lines.Add("   f_y_fs         =  " & .f_y.fs)
+                        'Lines.Add("   f_y_w          =  " & .f_y.w)
+                        'Lines.Add("   f_y_fi         =  " & .f_y.fi)
                         Lines.Add("")
                     End With
 
@@ -1111,7 +1115,11 @@ Public Class cls_Projet
                         Case "NOM" : .Nom = Mots(nbMots)
                         Case "LDALLEBETO" : .lDalleBeton = Mots(nbMots)
                         Case "LDATABASE" : .lDatabase = Mots(nbMots)
-                        Case "TYPESECTIO" : .typeSection = Mots(nbMots)
+                        Case "TYPESECTIO" : .TypeSection = Mots(nbMots)
+                        Case "LUSER" : .lUser = Mots(nbMots)
+                        Case "F_Y_FS" : .f_y.fs = TraiteReal(Mots(nbMots))
+                        Case "F_Y_W" : .f_y.w = TraiteReal(Mots(nbMots))
+                        Case "F_Y_FI" : .f_y.fi = TraiteReal(Mots(nbMots))
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
@@ -1218,10 +1226,10 @@ Public Class cls_Projet
                         Case "IBASE" : .iBase = TraiteReal(Mots(nbMots))
                         Case "ITABSTAND" : .iTabStandart = TraiteReal(Mots(nbMots))
                         Case "ISTANDARD" : .iStandart = TraiteReal(Mots(nbMots))
-                        Case "LUSER" : .lUser = Mots(nbMots)
-                        Case "F_Y_FS" : .f_y.fs = TraiteReal(Mots(nbMots))
-                        Case "F_Y_W" : .f_y.w = TraiteReal(Mots(nbMots))
-                        Case "F_Y_FI" : .f_y.fi = TraiteReal(Mots(nbMots))
+                            'Case "LUSER" : .lUser = Mots(nbMots)
+                            'Case "F_Y_FS" : .f_y.fs = TraiteReal(Mots(nbMots))
+                            'Case "F_Y_W" : .f_y.w = TraiteReal(Mots(nbMots))
+                            'Case "F_Y_FI" : .f_y.fi = TraiteReal(Mots(nbMots))
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If

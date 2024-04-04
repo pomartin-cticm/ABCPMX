@@ -776,6 +776,41 @@ Public Module Mod_Demarrage
                 MyPoutre.Section.Acier.Plages.Add(SteelBase.Grades(MySteels(iAcier).Nuance).Qualites(MySteels(iAcier).Qualite).ReductionCurv(MySteels(iAcier).Reduc).Plages(i))
             Next
         End If
+
+
+        'Renseignement des nuances pour les plats soudés (utile pour les slimfloors)
+
+        Dim Nuance, Qualite, Reduction As String
+        Nuance = "S235"
+        Qualite = "EC3"
+        Reduction = "Table 3.1"
+
+        MyPoutre.Section.AcierSPD.Nuance = Nuance
+        MyPoutre.Section.AcierSPD.Qualite = Qualite
+        MyPoutre.Section.AcierSPD.Reduction = Reduction
+
+        MyPoutre.Section.AcierSPD.EpMax = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).EpMax
+
+        MyPoutre.Section.AcierSPD.iBase = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).iBase
+        MyPoutre.Section.AcierSPD.iStandart = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex
+
+        MyPoutre.Section.AcierSPD.Plages.Clear()
+        Dim MyPlage As cls_Acier.strucPlage
+        For i As Integer = 0 To SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages.Count - 1
+            MyPlage.Ep = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Ep
+            MyPlage.Fy = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fy
+            MyPlage.Fu = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fu
+            MyPoutre.Section.AcierSPD.Plages.Add(MyPlage)
+        Next
+
+
+
+        iStd = SteelBase.IndexStd.IndexOf(SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex)
+        If iStd > -1 Then
+            MyPoutre.Section.AcierSPD.NormeProduit = SteelBase.NormeStd(iStd)
+            MyPoutre.Section.AcierSPD.iTabStandart = iStd
+        End If
+
     End Sub
 
     Private Sub AnalyseAciersListe(ByVal MySteels As List(Of strucAcierLocal), ByVal lImposedGrade As Boolean,

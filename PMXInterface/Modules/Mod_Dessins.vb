@@ -3448,13 +3448,14 @@ Public Module Mod_Dessins
 
         If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
             xMin = -section.ProfilA.Plat_b / 2
+            xMax = -xMin
         Else
-            xMin = -section.ProfilA.Plat_b
+            xMin = -section.ProfilA.Bfs / 2
+            xMax = xMin + section.ProfilA.Plat_b
         End If
 
 
         yMin = -section.ProfilA.ha
-        xMax = -xMin
         yMax = 0
 
         dCar = Math.Sqrt((section.ProfilA.ha ^ 2 + (section.ProfilA.Plat_b) ^ 2)) / 20
@@ -3489,8 +3490,17 @@ Public Module Mod_Dessins
             yo = -section.ProfilA.ha
             ye = 0
 
-            xo = -section.ProfilA.Plat_b / 2 - dCar
-            xe = xo
+
+            If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                xo = -section.ProfilA.Plat_b / 2 - dCar
+                xe = xo
+            Else
+                xo = -section.ProfilA.Bfs / 2 - dCar
+                xe = xo
+            End If
+
+
+
 
             MyColor = StyleCouleur(iSelect, 0)
             MyPen.Color = MyColor
@@ -3590,7 +3600,7 @@ Public Module Mod_Dessins
             xe = xo
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
 
-            yo = -section.ProfilA.ha + section.ProfilA.Tfi
+            yo = -section.ProfilA.ha + section.ProfilA.Plat_t
             ye = yo + dCar
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
             If lAffSymbol Then
@@ -3714,13 +3724,14 @@ Public Module Mod_Dessins
 
         If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
             xMin = -section.ProfilA.Plat_b / 2
+            xMax = -xMin
         Else
-            xMin = -section.ProfilA.Plat_b
+            xMin = -section.ProfilA.Bfs / 2
+            xMax = xMin + section.ProfilA.Plat_b
         End If
 
 
         yMin = -section.ProfilA.ha
-        xMax = -xMin
         yMax = 0
 
         dCar = Math.Sqrt((section.ProfilA.ha ^ 2 + (section.ProfilA.Plat_b) ^ 2)) / 20
@@ -3755,8 +3766,14 @@ Public Module Mod_Dessins
             yo = -section.ProfilA.ha
             ye = 0
 
-            xo = -section.ProfilA.Plat_b / 2 - dCar
-            xe = xo
+            If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                xo = -section.ProfilA.Plat_b / 2 - dCar
+                xe = xo
+            Else
+                xo = -section.ProfilA.Bfs / 2 - dCar
+                xe = xo
+            End If
+
 
             MyColor = StyleCouleur(iSelect, 0)
             MyPen.Color = MyColor
@@ -3831,17 +3848,293 @@ Public Module Mod_Dessins
 
             'If Not lLam Then
 
-                MyColor = StyleCouleur(iSelect, 7)
-                MyPen.Color = MyColor
+            MyColor = StyleCouleur(iSelect, 7)
+            MyPen.Color = MyColor
 
-                yo = 0 - section.ProfilA.Tfs
+            yo = 0 - section.ProfilA.Tfs
             ye = -section.ProfilA.ha + section.ProfilA.Plat_t
             xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Plat_b) / 2 + dCar
             xe = xo
 
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
+            If lAffSymbol Then Chaine = "hw" Else Chaine = GetStringNoUnit(section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, (yo + ye) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            'End If
+
+            '-- Tp --
+
+            Select Case section.ProfilA.typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym : iRef = 2
+                Case Else : iRef = 4
+            End Select
+            MyColor = StyleCouleur(iSelect, iRef)
+            MyPen.Color = MyColor
+
+            yo = -section.ProfilA.ha - dCar / 2
+            ye = -section.ProfilA.ha
+            xo = section.ProfilA.Bfi / 2 + (section.ProfilA.Plat_b - section.ProfilA.Bfi) / 4
+            xe = xo
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
+
+            yo = -section.ProfilA.ha + section.ProfilA.Plat_t
+            ye = yo + dCar
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+            If lAffSymbol Then
+                If lLam Then Chaine = "tf" Else Chaine = "tfi"
+            Else
+                Chaine = GetStringInUnit(section.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 3, 1, False)
+            End If
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            '-- Tfs --
+
+            If Not lLam Then
+
+                MyColor = StyleCouleur(iSelect, 2)
+                MyPen.Color = MyColor
+
+                yo = 0 + dCar / 2
+                ye = 0
+                xo = section.ProfilA.Bfs / 2 - dCar
+                xe = xo
+                AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
+
+                yo = 0 - section.ProfilA.Tfs
+                ye = yo - dCar
+                AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+                If lAffSymbol Then Chaine = "tfs" Else Chaine = GetStringInUnit(section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, 1, False)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            End If
+
+            '-- R --
+
+            If lLam Then
+
+                MyColor = StyleCouleur(iSelect, 6)
+                MyPen.Color = MyColor
+
+                Dim kProj As Decimal = Math.Sqrt(2) / 2
+
+                yo = 0 - section.ProfilA.Tfs - section.ProfilA.Rcs * (1 - kProj)
+                ye = yo - dCar * kProj
+
+                xo = section.ProfilA.Tw / 2 + section.ProfilA.Rcs * (1 - kProj)
+                xe = xo + dCar * kProj
+
+                AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+                If lAffSymbol Then Chaine = "r" Else Chaine = GetStringNoUnit(section.ProfilA.Rcs, Enu_TypeVariable.Dimension)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            End If
+
+            '-- tw --
+
+            MyColor = StyleCouleur(iSelect, 5)
+            MyPen.Color = MyColor
+
+            xo = -section.ProfilA.Tw / 2
+            xe = xo - dCar / 2
+            yo = -(section.ProfilA.ha / 2 - section.ProfilA.Tfs - section.ProfilA.Rcs) * 0.8
+            ye = yo
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+
+            xo = section.ProfilA.Tw / 2
+            xe = xo + dCar
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+            If lAffSymbol Then Chaine = "tw" Else Chaine = GetStringInUnit(section.ProfilA.Tw, Enu_TypeVariable.Dimension, 3, 1, False)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xe, ye, MyParAff, HorizontalAlignment.Left, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
+
+    End Sub
+
+    Public Sub DessinProfileIFB_B_Acier(ByRef MyGr As Graphics, ByVal section As cls_Section,
+                                  ByVal Width As Decimal, ByVal Height As Decimal, ByVal MyFont As Font,
+                                  kAdjust As Double, lCote As Boolean, lAffSymbol As Boolean, iSelect As Integer,
+                                  ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   17/04/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Utilisé pour la fenêtre définition de la section acier
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Valeurs de iSelect: 
+        '       0 pour ha
+        '       1 pour bfs ou b
+        '       2 pour tfs ou tf
+        '       3 pour bfi (PRS non sym)
+        '       4 pour tfi (PRS non sym)
+        '       5 pour tw
+        '       6 pour r
+        '       7 pour hw
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim xMin, xMax As Decimal
+        Dim yMin, yMax As Decimal
+        Dim dCar As Decimal
+        Dim lLam As Boolean = (section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
+
+        Dim zRef As Decimal = 0
+
+        Dim MyParAff As Struc_Affichage
+        Dim lContour As Boolean = lCONTOURCOTE
+
+        '--> Préparation Pinceau dégradé
+
+        Dim myBrushG As Brush
+
+        If xLeft <> 0 Or yTop <> 0 Then
+            myBrushG = New LinearGradientBrush(New PointF(0, 0), New PointF(Height, Width), Color.DarkGray, Color.DarkGray)
+        Else
+            myBrushG = New LinearGradientBrush(New PointF(0, 0), New PointF(Height, Width), Color.DarkGray, CouleurAcierNormal)
+        End If
+
+
+
+
+        '--> Initialisation des paramètres d'affichage
+
+        If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+            xMin = -section.ProfilA.Plat_b / 2
+            xMax = -xMin
+        Else
+            xMin = -section.ProfilA.Bfs / 2
+            xMax = xMin + section.ProfilA.Plat_b
+        End If
+
+
+        yMin = -section.ProfilA.ha
+        yMax = 0
+
+        dCar = Math.Sqrt((section.ProfilA.ha ^ 2 + (section.ProfilA.Plat_b) ^ 2)) / 20
+
+        yMin -= dCar
+        yMax += dCar
+        xMax += dCar
+        xMin -= dCar
+        'End If
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, Width, Height, xLeft, yTop, kAdjust)
+
+        '--> Dessin de la section acier
+
+        DessinProfileMetal(MyGr, section.ProfilA, myBrushG, MyParAff, zRef)
+
+        '--> Cotation
+
+        If lCote Then
+
+            Dim MyPen As New Pen(Color.Black, 1)
+            Dim xo, yo As Double
+            Dim xe, ye As Double
+            Dim MyPenNormal As New Pen(ColorNonSelect, 1)
+            Dim MyPenSelect As New Pen(ColorSelect, 1)
+            Dim MyFontNormal As Font = FontBase
+            Dim MyColor As Color
+            Dim Chaine As String
+
+            '-- H --
+
+            yo = -section.ProfilA.ha
+            ye = 0
+
+            If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                xo = -section.ProfilA.Plat_b / 2 - dCar
+                xe = xo
+            Else
+                xo = -section.ProfilA.Bfs / 2 - dCar
+                xe = xo
+            End If
+
+
+            MyColor = StyleCouleur(iSelect, 0)
+            MyPen.Color = MyColor
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
+            If lAffSymbol Then Chaine = "ha" Else Chaine = GetStringNoUnit(section.ProfilA.ha, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, (yo + ye) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            '-- Bp --
+
+            Dim iRef As Int16
+            Select Case section.ProfilA.typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym : iRef = 1
+                Case Else : iRef = 3
+            End Select
+            MyColor = StyleCouleur(iSelect, iRef)
+            MyPen.Color = MyColor
+
+            Select Case section.ProfilA.typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA 'cas où on a un plat soudé dont la largeur est supérieure aux largeur des semelles
+                    yo = -section.ProfilA.ha - dCar
+
+                    If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                        xo = -section.ProfilA.Plat_b / 2
+                    Else
+                        xo = -section.ProfilA.Bfs / 2
+                    End If
+
+                    xe = xo + section.ProfilA.Plat_b
+
+                Case Else
+                    yo = -section.ProfilA.ha - dCar
+                    xo = -section.ProfilA.Bfi / 2
+                    xe = xo + section.ProfilA.Bfi
+            End Select
+
+            ye = yo
+
+
+            If lAffSymbol Then
+                If lLam Then
+                    Chaine = "b"
+
+                Else
+                    Chaine = "bfi"
+                End If
+            Else
+                Chaine = GetStringNoUnit(section.ProfilA.Plat_b, Enu_TypeVariable.Dimension)
+            End If
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            '-- Bfs --
+
+            If Not lLam Then
+
+                MyColor = StyleCouleur(iSelect, 1)
+                MyPen.Color = MyColor
+
+                yo = 0 + dCar
+                ye = yo
+                xo = section.ProfilA.Bfs / 2
+                xe = -xo
+                If lAffSymbol Then Chaine = "bfs" Else Chaine = GetStringNoUnit(section.ProfilA.Bfs, Enu_TypeVariable.Dimension)
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
-                If lAffSymbol Then Chaine = "hw" Else Chaine = GetStringNoUnit(section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension)
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, (yo + ye) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+            End If
+
+            '-- Hw --
+
+            'If Not lLam Then
+
+            MyColor = StyleCouleur(iSelect, 7)
+            MyPen.Color = MyColor
+
+            yo = 0 - section.ProfilA.Tfs
+            ye = -section.ProfilA.ha + section.ProfilA.Plat_t
+            xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Plat_b) / 2 + dCar
+            xe = xo
+
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
+            If lAffSymbol Then Chaine = "hw" Else Chaine = GetStringNoUnit(section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, (yo + ye) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
             'End If
 
             '-- Tp --

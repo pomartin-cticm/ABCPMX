@@ -708,7 +708,7 @@ Module Mod_NoteCalcul
         If nbLignes + 15 > MAXLIGNEPPAG Then SautePage()
 
         AddTitreNdC(3, BlocG("MATERIAL_PROFILE"))
-        If MyBeam.Section.Acier.lUser Then
+        If MyBeam.Section.lUser Then
             AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & BlocG("USER_DEF"))
         Else
             AddLigneNDC(TABW2 & BlocG("GRADE_PROFILE") & TABAFF & MyBeam.Section.Acier.Nuance & " " & MyBeam.Section.Acier.Qualite)
