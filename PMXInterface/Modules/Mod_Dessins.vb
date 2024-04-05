@@ -4148,7 +4148,7 @@ Public Module Mod_Dessins
 
             yo = -section.ProfilA.ha - dCar / 2
             ye = -section.ProfilA.ha
-            xo = section.ProfilA.Bfi / 2 + (section.ProfilA.Plat_b - section.ProfilA.Bfi) / 4
+            xo = section.ProfilA.Plat_b / 2 + (section.ProfilA.Plat_b - section.ProfilA.Bfi) / 4
             xe = xo
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
 
