@@ -268,7 +268,7 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section IFB_A non mixte
         With MyPoutreIFB_A.Section
-            .typeSection = cls_Section.Enum_TypeSection.IFB_A
+            .TypeSection = cls_Section.Enum_TypeSection.IFB_A
             With .ProfilA
                 .Tw = 0.012
                 .Tfs = 0.03
@@ -282,7 +282,7 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section IFB_B non mixte
         With MyPoutreIFB_B.Section
-            .typeSection = cls_Section.Enum_TypeSection.IFB_B
+            .TypeSection = cls_Section.Enum_TypeSection.IFB_B
             With .ProfilA
                 .Tw = 0.012
                 .Bfs = 0
@@ -297,7 +297,7 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section SAB non mixte
         With MyPoutreSAB.Section
-            .typeSection = cls_Section.Enum_TypeSection.SAB
+            .TypeSection = cls_Section.Enum_TypeSection.SAB
             With .ProfilA
                 .Tw = 0.012
                 .Bfs = .Bfi * 5 / 8
@@ -312,7 +312,7 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section SFB mixte
         With MyPoutreSFBmixte.Section
-            .typeSection = cls_Section.Enum_TypeSection.SFBmixte
+            .TypeSection = cls_Section.Enum_TypeSection.SFBmixte
             With .ProfilA
                 .Tw = 0.012
                 .Tfs = 0.03
@@ -329,7 +329,7 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section IFB_A mixte
         With MyPoutreIFB_Amixte.Section
-            .typeSection = cls_Section.Enum_TypeSection.IFB_Amixte
+            .TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte
             With .ProfilA
                 .Tw = 0.012
                 .Tfs = 0.03
@@ -346,7 +346,7 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section IFB_B mixte
         With MyPoutreIFB_Bmixte.Section
-            .typeSection = cls_Section.Enum_TypeSection.IFB_Bmixte
+            .TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte
             With .ProfilA
                 .Tw = 0.012
                 .Bfs = 0
@@ -364,7 +364,7 @@ Public Class Frm_AjoutePP
 
         '--> Définition de la section SAB mixte
         With MyPoutreSABmixte.Section
-            .typeSection = cls_Section.Enum_TypeSection.SABmixte
+            .TypeSection = cls_Section.Enum_TypeSection.SABmixte
             With .ProfilA
                 .Tw = 0.012
                 .Bfs = .Bfi * 5 / 8

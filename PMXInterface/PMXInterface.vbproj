@@ -161,6 +161,12 @@
     <Compile Include="Fenetres\Filles\Frm_SectionIFB.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_SectionSAB.Designer.vb">
+      <DependentUpon>Frm_SectionSAB.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_SectionSAB.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_SectionSFB.Designer.vb">
       <DependentUpon>Frm_SectionSFB.vb</DependentUpon>
     </Compile>
@@ -480,6 +486,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_SectionIFB.resx">
       <DependentUpon>Frm_SectionIFB.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_SectionSAB.resx">
+      <DependentUpon>Frm_SectionSAB.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_SectionSFB.resx">
       <DependentUpon>Frm_SectionSFB.vb</DependentUpon>

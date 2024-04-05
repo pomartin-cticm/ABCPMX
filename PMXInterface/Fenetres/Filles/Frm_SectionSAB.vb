@@ -1,9 +1,7 @@
 ﻿Imports System.IO
-Imports PMXInterface.Frm_SectionAcierStandard
 Imports PMXMoteur2
 
-Public Class Frm_SectionIFB
-
+Public Class Frm_SectionSAB
 #Region " Constantes et structures "
     Const STARCHAR As String = "*"
     Const RATIOHIGAMME As Double = 0.45
@@ -16,8 +14,6 @@ Public Class Frm_SectionIFB
     Const EPMAXI As Decimal = 0.5
     Const BAPPMIN As Decimal = 50 / 1000
     Const TPINFMIN As Decimal = 10 / 1000
-    Const HWMINI As Decimal = 50 / 1000
-    Const HWMAXI As Decimal = 2
     Structure strucAcierLocal
         Dim Nuance As String
         Dim Qualite As String
@@ -36,13 +32,7 @@ Public Class Frm_SectionIFB
     Dim lBuild As Boolean = True
 
     Dim MySectionLoc As New cls_Section
-    Dim myHauteurHw As Decimal
-
-    Enum Enu_DefinitionH
-        HauteurTotale
-        HauteurAme
-    End Enum
-    Dim DefinitionHauteur As Enu_DefinitionH = Enu_DefinitionH.HauteurTotale
+    'Dim myHauteurHw As Decimal
 
     Dim DrawProperty As EnuDrawProperty = EnuDrawProperty.Fy
 
@@ -51,11 +41,6 @@ Public Class Frm_SectionIFB
     Dim BClrNotC As Color = Color.LightGray
     Dim ColorGrade As Color = Color.Crimson
     Dim ColorNotPossible As Color = Color.LightGray
-
-    '---- Messages
-    Dim strNuanceWP As String()
-    Dim strReductionCurveWP As String()
-
 
     '---- Memoriser les lignes tableaux sélectionnées
     Dim iLignePro, iLigneAcier As Integer
@@ -67,7 +52,7 @@ Public Class Frm_SectionIFB
     '--> Textes
     Dim ILangueDelivery As Integer = 0
     Dim strDeliveryConditions As String
-    Dim str_InfoH(1) As String
+    'Dim str_InfoH(1) As String
 
     '---- Gestion du cas où aucun profilé n'est disponible pour une série
     Dim lAvailPro As Boolean = True
@@ -89,7 +74,6 @@ Public Class Frm_SectionIFB
         GestionLangues()
         GestionStyle()
         GestionUnites()
-        RemplirComboBox()
         PreparerFenetre()
         AfficherPoutreEnCours()
         lBuild = False
@@ -99,7 +83,7 @@ Public Class Frm_SectionIFB
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_IFBSECTIONS")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_SABSECTIONS")
             BlocLine.CreationBloc(Bloc)
 
             Try
@@ -117,11 +101,8 @@ Public Class Frm_SectionIFB
                 Me.lbl_Profiles.Text = Bloc("PROFILE")
 
 
-                Me.lbl_IFBSection.Text = Bloc("IFBSECTION")
-                Me.lbl_Height.Text = Bloc("HEIGHT")
+                Me.lbl_SABSection.Text = Bloc("SABSECTION")
                 Me.lbl_Width.Text = Bloc("WIDTH")
-                Me.lbl_Web.Text = Bloc("WEBHEIGHT")
-                Me.lbl_Thickness.Text = Bloc("THICKNESS")
 
 
                 '=== STEEL ===============================================================
@@ -131,28 +112,8 @@ Public Class Frm_SectionIFB
                 Me.lbl_Qualite.Text = Bloc("QUALITY")
                 Me.lbl_ReductionCurve.Text = Bloc("REDUCTIONCURVE")
 
-                ReDim strNuanceWP(4)
-
-                Me.strNuanceWP(0) = "S235"
-                Me.strNuanceWP(1) = "S275"
-                Me.strNuanceWP(2) = "S355"
-                Me.strNuanceWP(3) = "S420"
-                Me.strNuanceWP(4) = "S460"
-
-                ReDim strReductionCurveWP(1)
-
-                Me.strReductionCurveWP(0) = "EC3"
-                Me.strReductionCurveWP(1) = "EN 10025"
-
-                Me.lbl_WPSteel.Text = Bloc("STEEL")
-
-
-
                 '=== CHAINES =============================================================
-
                 strDeliveryConditions = Bloc("DELIVERYCOND")
-                str_InfoH(0) = Bloc("AUTOMATICHW")
-                str_InfoH(1) = Bloc("AUTOMATICHA")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -198,13 +159,6 @@ Public Class Frm_SectionIFB
 
         cls_Section.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySectionLoc)
 
-        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-            myHauteurHw = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Plat_t
-        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-            myHauteurHw = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfi - MySectionLoc.ProfilA.Plat_t
-        End If
-
-
         BClrCompatible = Me.lst_GammeS.BackColor
 
         '== Préparation des listes
@@ -220,37 +174,12 @@ Public Class Frm_SectionIFB
         PrepareLookGrille(Me.GridDelivery, Me.Col_Index, Me.Col_Message, Me.lst_GammeS.BackColor, 0.1)
         PrepareGridDelivery()
 
-        '== Gestion définition des hauteurs 
-
-        Select Case DefinitionHauteur
-            Case Enu_DefinitionH.HauteurAme : Me.chk_Hw.Checked = True
-            Case Enu_DefinitionH.HauteurTotale : Me.chk_Ht.Checked = True
-        End Select
-        MAJ_DefinitionHauteur()
-
     End Sub
 
     Private Sub GestionUnites()
 
-        Me.etq_UnitDim1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-        Me.etq_UnitDim2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-        Me.etq_UnitDim3.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-        Me.etq_UnitDim4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim1SAB.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
-    End Sub
-
-    Private Sub RemplirComboBox()
-        Me.cmb_GradeWP.Items.Clear()
-        For i As Integer = 0 To strNuanceWP.Count - 1
-            Me.cmb_GradeWP.Items.Add(strNuanceWP(i))
-        Next
-        Me.cmb_GradeWP.SelectedIndex = 0
-
-        Me.cmb_ReductionCurveWP.Items.Clear()
-        For i As Integer = 0 To strReductionCurveWP.Count - 1
-            Me.cmb_ReductionCurveWP.Items.Add(strReductionCurveWP(i))
-        Next
-        Me.cmb_ReductionCurveWP.SelectedIndex = 0
     End Sub
 
     Private Sub GestionStyle()
@@ -260,8 +189,8 @@ Public Class Frm_SectionIFB
         Me.lbl_ParentProfile.BackColor = CouleurBackBandeaux
         Me.lbl_ParentProfile.ForeColor = CouleurForeBandeaux
 
-        Me.lbl_IFBSection.BackColor = CouleurBackBandeaux
-        Me.lbl_IFBSection.ForeColor = CouleurForeBandeaux
+        Me.lbl_SABSection.BackColor = CouleurBackBandeaux
+        Me.lbl_SABSection.ForeColor = CouleurForeBandeaux
 
         Me.lbl_Acier.BackColor = CouleurBackBandeaux
         Me.lbl_Acier.ForeColor = CouleurForeBandeaux
@@ -271,7 +200,7 @@ Public Class Frm_SectionIFB
     Private Sub AfficherPoutreEnCours()
 
         AfficherProfileLamineEnCours()
-        AfficherSectionIFBEnCours()
+        AfficherSemelleSuperieureEnCours()
     End Sub
 
     Private Sub AfficherProfileLamineEnCours()
@@ -320,27 +249,8 @@ Public Class Frm_SectionIFB
 
     End Sub
 
-    Private Sub AfficherSectionIFBEnCours()
-        Me.txt_ha.Text = GetStringInUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False)
-
-        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-            Me.txt_hw.Text = GetStringInUnit(MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
-        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-            Me.txt_hw.Text = GetStringInUnit(MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfi - MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
-        End If
-
-        Me.txt_bp.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_b, Enu_TypeVariable.Dimension, 4, 1, False)
-        Me.txt_tp.Text = GetStringInUnit(MySectionLoc.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 4, 1, False)
-
-        Me.cmb_GradeWP.SelectedItem = MySectionLoc.AcierSPD.Nuance
-
-        If MySectionLoc.AcierSPD.Qualite = "EC3" Then
-            Me.cmb_ReductionCurveWP.SelectedItem = "EC3"
-        Else
-            Me.cmb_ReductionCurveWP.SelectedItem = "EN 10025"
-        End If
-
-        MAJ_InfoWP()
+    Private Sub AfficherSemelleSuperieureEnCours()
+        Me.txt_bfs.Text = GetStringInUnit(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 1, False)
     End Sub
 
     Private Sub RemplirSeries()
@@ -479,8 +389,6 @@ Public Class Frm_SectionIFB
         GereTransfertValeur(MySectionLoc.ProfilA.Rcs, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Rcs, lModif)
         GereTransfertValeur(MySectionLoc.ProfilA.Rci, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Rci, lModif)
         GereTransfertValeur(MySectionLoc.ProfilA.Tw, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Tw, lModif)
-        GereTransfertValeur(MySectionLoc.ProfilA.Plat_b, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Plat_b, lModif)
-        GereTransfertValeur(MySectionLoc.ProfilA.Plat_t, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Plat_t, lModif)
 
         GereTransfertValeur(MySectionLoc.ProfilA.NomProfile, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.NomProfile, lModif)
         GereTransfertValeur(MySectionLoc.ProfilA.Gamme, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Gamme, lModif)
@@ -494,7 +402,6 @@ Public Class Frm_SectionIFB
         GereTransfertValeur(MySectionLoc.AcierSPD.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Qualite, lModif)
         GereTransfertValeur(MySectionLoc.AcierSPD.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.NormeProduit, lModif)
         GereTransfertValeur(MySectionLoc.AcierSPD.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Reduction, lModif)
-
 
         With MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA ' --> Sécurité supplémentaire pour s'assurer que les valeurs qui n'ont pas de sens restent égales à 0
             Select Case .typeProfileAcier
@@ -533,13 +440,10 @@ Public Class Frm_SectionIFB
 #Region " DESSINS "
 
     Private Sub img_Section_Paint(sender As Object, e As PaintEventArgs) Handles img_Section.Paint
-        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-            DessinProfileIFB_A_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+
+        DessinProfileAcier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
                            FontBase, kAdjust, True, False, iSelect)
-        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-            DessinProfileIFB_B_Acier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                          FontBase, kAdjust, True, False, iSelect)
-        End If
+
     End Sub
 
     Private Sub img_ReductionCurve_Paint(sender As Object, e As PaintEventArgs) Handles img_ReductionCurve.Paint
@@ -608,15 +512,8 @@ Public Class Frm_SectionIFB
 
         '--( Epaisseur du profilé pour le calcul
 
-        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-            EpProfile = Math.Max(MySectionLoc.ProfilA.Tw, MySectionLoc.ProfilA.Tfs)
-        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-            EpProfile = Math.Max(MySectionLoc.ProfilA.Tw, MySectionLoc.ProfilA.Tfi)
-        End If
-
-        ' EpPlatSoude = MySectionLoc.ProfilA.Plat_t
+        EpProfile = Math.Max(MySectionLoc.ProfilA.Tw, MySectionLoc.ProfilA.Tfs)
         FyPro = MySectionLoc.Acier.LimiteFy(EpProfile)
-        'FyPlatSoude = MySectionLoc.Acier.LimiteFy(EpPlatSoude)
 
         EpPlagesMax = MySectionLoc.Acier.EpMax
 
@@ -631,7 +528,6 @@ Public Class Frm_SectionIFB
 
         ExtraitValeursEnveloppeAciers(Nuance, DrawProperty, EpMin, EpMax, VMax)
 
-        ' EpMax = Math.Max(EpMax, Math.Max(EpProfile, EpPlatSoude))
         EpMax = Math.Max(EpMax, EpProfile)
 
         kFact = EpMax / VMax * sHI / sWI
@@ -698,8 +594,6 @@ Public Class Frm_SectionIFB
         xBoni = XUnivers(RCParAff, sWI / 2)
 
         DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpProfile, FyPro, xBoni, zBoni, MyFont, lNuanceOK)
-        ' DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPlatSoude, FyPlatSoude, xBoni, zBoni, MyFont, lNuanceOK, False)
-        ' DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, Math.Max(EpProfile, EpPlatSoude), Math.Min(FyPro, FyPlatSoude), xBoni, zBoni, MyFont, lNuanceOK, True, True)
 
         '--( Titre
 
@@ -886,7 +780,7 @@ Public Class Frm_SectionIFB
 
 #Region " Dessin symboles "
 
-    Private Sub img_Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_bp.Paint, img_tp.Paint, img_hw.Paint, img_ha.Paint
+    Private Sub img_Symbol_Paint(sender As Object, e As PaintEventArgs) Handles img_bfs.Paint
 
         '--> Déclarations
 
@@ -909,18 +803,9 @@ Public Class Frm_SectionIFB
 
         Select Case sender.name
 
-            Case Me.img_ha.Name
-                strSymbol = "h"
-                strIndice = "a"
-            Case Me.img_hw.Name
-                strSymbol = "h"
-                strIndice = "w"
-            Case Me.img_bp.Name
+            Case Me.img_bfs.Name
                 strSymbol = "b"
-                strIndice = "p"
-            Case Me.img_tp.Name
-                strSymbol = "t"
-                strIndice = "p"
+                strIndice = "fs"
         End Select
 
         '--> Dessin
@@ -934,7 +819,7 @@ Public Class Frm_SectionIFB
 
 #Region " Evènements "
 
-    Private Sub SaisieDimensions(sender As Object, e As EventArgs) Handles txt_bp.TextChanged, txt_tp.TextChanged, txt_hw.TextChanged, txt_ha.TextChanged, txt_ha.TextChanged, txt_hw.TextChanged
+    Private Sub SaisieDimensions(sender As Object, e As EventArgs) Handles txt_bfs.TextChanged
         If lBuild Then Exit Sub
         lBuild = True
 
@@ -943,61 +828,13 @@ Public Class Frm_SectionIFB
 
         If VerificationDonnees(sender, Valeur) Then
             Select Case sender.name
-                Case Me.txt_bp.Name
-                    MySectionLoc.ProfilA.Plat_b = Valeur
-                Case Me.txt_tp.Name
-                    MySectionLoc.ProfilA.Plat_t = Valeur
-
-                    If chk_Ht.Checked Then
-
-                        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-                            myHauteurHw = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Plat_t
-                        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-                            myHauteurHw = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfi - MySectionLoc.ProfilA.Plat_t
-                        End If
-
-                        Me.txt_hw.Text = GetStringInUnit(myHauteurHw, Enu_TypeVariable.Dimension, 4, 1, False)
-                    Else
-
-                        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-                            MySectionLoc.ProfilA.ha = myHauteurHw + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t
-                        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-                            MySectionLoc.ProfilA.ha = myHauteurHw + MySectionLoc.ProfilA.Tfi + MySectionLoc.ProfilA.Plat_t
-                        End If
-
-                        Me.txt_ha.Text = GetStringInUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False)
-                    End If
-
-                Case Me.txt_hw.Name
-                    myHauteurHw = Valeur
-
-                    If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-                        MySectionLoc.ProfilA.ha = myHauteurHw + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t
-                    ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-                        MySectionLoc.ProfilA.ha = myHauteurHw + MySectionLoc.ProfilA.Tfi + MySectionLoc.ProfilA.Plat_t
-                    End If
-
-                    Me.txt_ha.Text = GetStringInUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False)
-                Case Me.txt_ha.Name
-                    MySectionLoc.ProfilA.ha = Valeur
-
-                    If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-                        myHauteurHw = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Plat_t
-                    ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-                        myHauteurHw = MySectionLoc.ProfilA.ha - MySectionLoc.ProfilA.Tfi - MySectionLoc.ProfilA.Plat_t
-                    End If
-
-                    Me.txt_hw.Text = GetStringInUnit(myHauteurHw, Enu_TypeVariable.Dimension, 4, 1, False)
+                Case Me.txt_bfs.Name
+                    MySectionLoc.ProfilA.Bfs = Valeur
             End Select
-
-
         End If
 
         Me.img_Section.Invalidate()
         Me.img_ReductionCurve.Invalidate()
-
-        MAJ_InfoWP()
-
 
         lBuild = False
     End Sub
@@ -1015,57 +852,22 @@ Public Class Frm_SectionIFB
         Dim ValMin, ValMax As Decimal
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
-        Dim BPmin, BPMax, TPmin, HWmax_IFB, HAmin_IFB, HAmax_IFB As Decimal
+        Dim BFmin, BFmax As Decimal
 
         '--> Initialisation
+        BFmin = 10 * MySectionLoc.ProfilA.Tfs
 
-
-        'hwmin -> voir const globale
-
-        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-
-            If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
-                BPmin = MySectionLoc.ProfilA.Bfs + 2 * BAPPMIN
-            Else
-                BPmin = MySectionLoc.ProfilA.Bfs + BAPPMIN
-            End If
-
-            BPMax = BFMAXI
-
-            TPmin = Math.Max(TPINFMIN, MySectionLoc.ProfilA.Tw)
-
-            HWmax_IFB = Math.Min(HWMAXI, MySectionLoc.ProfilA.hb - 2 * MySectionLoc.ProfilA.Tfs - MySectionLoc.ProfilA.Rcs)
-
-            HAmin_IFB = HWMINI + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t
-            HAmax_IFB = Math.Min(HSLIMMAX - MySectionLoc.ProfilA.Plat_t, HWmax_IFB + MySectionLoc.ProfilA.Tfs + MySectionLoc.ProfilA.Plat_t)
-
-        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-
-            BPmin = 10 * MySectionLoc.ProfilA.Plat_t
-            BPMax = MySectionLoc.ProfilA.Bfi - 2 * BAPPMIN
-
-            TPmin = Math.Max(TPINFMIN, MySectionLoc.ProfilA.Tw)
-
-            HWmax_IFB = Math.Min(HWMAXI, MySectionLoc.ProfilA.hb - 2 * MySectionLoc.ProfilA.Tfi - MySectionLoc.ProfilA.Rci)
-
-            HAmin_IFB = HWMINI + MySectionLoc.ProfilA.Tfi + MySectionLoc.ProfilA.Plat_t
-            HAmax_IFB = Math.Min(HSLIMMAX - MySectionLoc.ProfilA.Plat_t, HWmax_IFB + MySectionLoc.ProfilA.Tfi + MySectionLoc.ProfilA.Plat_t)
-
+        If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+            BFmax = MySectionLoc.ProfilA.Bfi - 2 * BAPPMIN
+        Else
+            BFmax = MySectionLoc.ProfilA.Bfi - BAPPMIN
         End If
+        BFmax = Math.Min(BFmax, BFMAXI)
 
         Select Case MyTxt.Name
-            Case Me.txt_bp.Name
-                ValMin = BPmin
-                ValMax = BPMax
-            Case Me.txt_tp.Name
-                ValMin = TPmin
-                ValMax = EPMAXI
-            Case Me.txt_hw.Name
-                ValMin = HWMINI
-                ValMax = HWmax_IFB
-            Case Me.txt_ha.Name
-                ValMin = HAmin_IFB
-                ValMax = HAmax_IFB
+            Case Me.txt_bfs.Name
+                ValMin = BFmin
+                ValMax = BFmax
         End Select
         iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)
 
@@ -1181,20 +983,7 @@ Public Class Frm_SectionIFB
 
         TransfertSaisieGridProfile(Gamme, Etiquette, MySectionLoc)
 
-        'MAJ largeur plat soudé si nécessaire
-        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-            If MySectionLoc.ProfilA.Plat_b < MySectionLoc.ProfilA.Bfs + 2 * BAPPMIN Then
-                MySectionLoc.ProfilA.Plat_b = MySectionLoc.ProfilA.Bfs + 2 * BAPPMIN
-            End If
-        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-            If MySectionLoc.ProfilA.Plat_b > MySectionLoc.ProfilA.Bfi - 2 * BAPPMIN Then
-                MySectionLoc.ProfilA.Plat_b = MySectionLoc.ProfilA.Bfi - 2 * BAPPMIN
-            End If
-        End If
-
-
-
-        AfficherSectionIFBEnCours()
+        AfficherSemelleSuperieureEnCours()
         MAJ_Aciers(Gamme, Etiquette)
         'SelectDefaultSteel(False)
         'GetAcierFromGrid()
@@ -1212,19 +1001,15 @@ Public Class Frm_SectionIFB
         MySectionLoc.ProfilA.NomProfile = Profile
 
         MySectionLoc.ProfilA.hb = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
-        'MySectionLoc.ProfilA.ha = MySectionLoc.ProfilA.hb + MySectionLoc.ProfilA.Plat_t
-
-        If MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-            MySectionLoc.ProfilA.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
-            MySectionLoc.ProfilA.Tfs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
-            MySectionLoc.ProfilA.Rcs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
-        ElseIf MySectionLoc.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-            MySectionLoc.ProfilA.Bfi = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
-            MySectionLoc.ProfilA.Tfi = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
-            MySectionLoc.ProfilA.Rci = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
-        End If
-
+        MySectionLoc.ProfilA.ha = MySectionLoc.ProfilA.hb
+        MySectionLoc.ProfilA.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
+        MySectionLoc.ProfilA.Tfs = MyCatalogue.Series(Gamme).Profiles(Profile).Tf
         MySectionLoc.ProfilA.Tw = MyCatalogue.Series(Gamme).Profiles(Profile).Tw
+        MySectionLoc.ProfilA.Rcs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
+
+        MySectionLoc.ProfilA.Bfi = MySectionLoc.ProfilA.Bfs
+        MySectionLoc.ProfilA.Rci = MySectionLoc.ProfilA.Rcs
+        MySectionLoc.ProfilA.Tfi = MySectionLoc.ProfilA.Tfs
 
         ReDim MySectionLoc.ProfilA.IndStandart(MyCatalogue.nbStandard)
         For i As Integer = 0 To MyCatalogue.nbStandard - 1
@@ -1756,86 +1541,6 @@ Public Class Frm_SectionIFB
 
     End Sub
 
-    Private Sub chk_DefinitionH_CheckedChanged(sender As Object, e As EventArgs) Handles chk_Hw.CheckedChanged, chk_Ht.CheckedChanged
-
-        If lBuild Then Exit Sub
-
-        lBuild = True
-        Select Case sender.name
-            Case Me.chk_Ht.Name
-                Me.chk_Hw.Checked = False
-                DefinitionHauteur = Enu_DefinitionH.HauteurTotale
-            Case Me.chk_Hw.Name
-                Me.chk_Ht.Checked = False
-                DefinitionHauteur = Enu_DefinitionH.HauteurAme
-        End Select
-        lBuild = False
-
-        MAJ_DefinitionHauteur()
-
-    End Sub
-
-    Private Sub MAJ_DefinitionHauteur()
-
-        Select Case DefinitionHauteur
-            Case Enu_DefinitionH.HauteurTotale
-                Me.txt_ha.BackColor = SystemColors.Window
-                Me.txt_hw.BackColor = SystemColors.ControlDark
-                Me.lbl_Info.Text = str_InfoH(0)
-            Case Enu_DefinitionH.HauteurAme
-                Me.txt_hw.BackColor = SystemColors.Window
-                Me.txt_ha.BackColor = SystemColors.ControlDark
-                Me.lbl_Info.Text = str_InfoH(1)
-        End Select
-
-        Me.txt_ha.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurAme)
-        Me.txt_hw.ReadOnly = (DefinitionHauteur = Enu_DefinitionH.HauteurTotale)
-
-    End Sub
-
-    Private Sub cmb_GradeWP_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_GradeWP.SelectedValueChanged, cmb_ReductionCurveWP.SelectedValueChanged
-        If lBuild Then Exit Sub
-
-        Dim Nuance, Qualite, Norme As String
-
-        Nuance = cmb_GradeWP.SelectedItem
-
-        If Me.cmb_ReductionCurveWP.SelectedItem = "EC3" Then
-            Qualite = "EC3"
-            Norme = "Table 3.1"
-        Else 'EN 10025
-            Select Case cmb_GradeWP.SelectedItem
-                Case "S235", "S275"
-                    Qualite = "JR/J0/J2"
-                    Norme = "EN 10025-2"
-                Case "S355", "S460"
-                    Qualite = "JR/J0/J2/K2"
-                    Norme = "EN 10025-2"
-                Case "S420"
-                    Qualite = "M/ML"
-                    Norme = "EN 10025-4"
-            End Select
-
-        End If
-
-        TransfertGridAcier(Nuance, Qualite, Norme, MySectionLoc.AcierSPD)
-        MAJNuancesPossibles(MySectionLoc.AcierSPD)
-        MAJ_InfoWP()
-    End Sub
-
-    Private Sub MAJ_InfoWP()
-        Dim msg As String
-        msg = "fy = " & MySectionLoc.FySpd & " MPa ("
-
-        If MySectionLoc.AcierSPD.Qualite = "EC3" Then
-            msg += MySectionLoc.AcierSPD.Nuance & " - " & MySectionLoc.AcierSPD.Reduction & ")" 'EC3 - Table 3.1
-        Else
-            msg += MySectionLoc.AcierSPD.Reduction & ")" '10025-2 ou 10025-4
-        End If
-
-        Me.lbl_InfoFyWP.Text = msg
-    End Sub
-
     Private Sub ExtraitValeursEnveloppeAciers(ByVal Nuance As String, ByVal Variable As EnuDrawProperty,
                                               ByRef EpMin As Double, ByRef EpMax As Double, ByRef VMax As Double)
         '------------------------------------------------------------------------------------------------------------------
@@ -1882,5 +1587,4 @@ Public Class Frm_SectionIFB
     End Sub
 
 #End Region
-
 End Class

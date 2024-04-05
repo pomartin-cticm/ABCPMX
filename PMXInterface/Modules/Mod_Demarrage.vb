@@ -507,7 +507,7 @@ Public Module Mod_Demarrage
 
         With MyPoutre.Section.ProfilA
             Select Case .typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
                     .ha = ha_loc
                     .hb = hb_loc
                     .Bfs = bfs_loc
@@ -557,8 +557,8 @@ Public Module Mod_Demarrage
                     .Rci = rci_loc
                     .Tw = tw_loc
                     .aW = 0
-                    .Plat_b = bfi_loc * 1.5
-                    .Plat_t = tfi_loc
+                    .Plat_b = bfi_loc + 2 * 50 / 1000
+                    .Plat_t = 0.012
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
                     .ha = 0.7 * ha_loc
                     .hb = hb_loc
@@ -570,8 +570,8 @@ Public Module Mod_Demarrage
                     .Rci = 0
                     .Tw = tw_loc
                     .aW = Math.Floor(tw_loc / 2)
-                    .Plat_b = bfi_loc * 1.5
-                    .Plat_t = tfi_loc
+                    .Plat_b = bfi_loc + 2 * 50 / 1000
+                    .Plat_t = 0.012
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
                     .ha = 0.7 * ha_loc
                     .hb = hb_loc
@@ -583,8 +583,21 @@ Public Module Mod_Demarrage
                     .Rci = rci_loc
                     .Tw = tw_loc
                     .aW = Math.Floor(tw_loc / 2)
-                    .Plat_b = bfs_loc * 0.75
-                    .Plat_t = tfs_loc
+                    .Plat_b = bfs_loc - 2 * 50 / 1000
+                    .Plat_t = 0.015
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB 'HEB300 pour celui-ci
+                    .ha = ha_loc
+                    .hb = hb_loc
+                    .Bfs = 0.2
+                    .Tfs = tfs_loc
+                    .Rcs = rcs_loc
+                    .Bfi = bfi_loc
+                    .Tfi = tfi_loc
+                    .Rci = rci_loc
+                    .Tw = tw_loc
+                    .aW = 0
+                    .Plat_b = 0
+                    .Plat_t = 0
             End Select
 
         End With

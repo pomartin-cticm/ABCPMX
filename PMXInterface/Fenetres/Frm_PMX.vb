@@ -709,7 +709,7 @@ Public Class Frm_PMX
 
             Case EnuFenetres.SectionSAB
                 If LogicielOptions.lFenetres Then
-                    'Frm_SectionSAB.ShowDialog()
+                    Frm_SectionSAB.ShowDialog()
                 Else
 
                 End If
@@ -975,12 +975,13 @@ Public Class Frm_PMX
 
         'Gere le Tooltip de la fenetre IFB
 
-        If MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
-            Me.TSbtn_SectionIFB.ToolTipText = strTSbtn_IFB_A
-        ElseIf MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
-            Me.TSbtn_SectionIFB.ToolTipText = strTSbtn_IFB_B
+        If Not MyProjet.Poutres.Count = 0 Then
+            If MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
+                Me.TSbtn_SectionIFB.ToolTipText = strTSbtn_IFB_A
+            ElseIf MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
+                Me.TSbtn_SectionIFB.ToolTipText = strTSbtn_IFB_B
+            End If
         End If
-
     End Sub
 
     Private Sub MAJVoletGauche()
@@ -1013,6 +1014,7 @@ Public Class Frm_PMX
         If ComWindow = enu_ComWindow.OK Then
             EnregistrerOptionsLogiciel()
             MAJI_BOBasse()
+            GestionLangue() 'Permet de MAJ la langue de la fenetre principale 
         End If
 
     End Sub

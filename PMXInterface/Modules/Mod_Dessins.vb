@@ -3343,7 +3343,7 @@ Public Module Mod_Dessins
 
                 yo = 0 + dCar / 2
                 ye = 0
-                xo = section.ProfilA.Bfs / 2 - dCar
+                xo = Math.Max(section.ProfilA.Bfs - section.ProfilA.Bfi / 2 - dCar / 2, section.ProfilA.Tw / 2 + section.ProfilA.Rcs + dCar / 2)
                 xe = xo
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
 
@@ -3872,7 +3872,7 @@ Public Module Mod_Dessins
 
             yo = -section.ProfilA.ha - dCar / 2
             ye = -section.ProfilA.ha
-            xo = section.ProfilA.Bfi / 2 + (section.ProfilA.Plat_b - section.ProfilA.Bfi) / 4
+            xo = section.ProfilA.Bfs / 2 + (section.ProfilA.Plat_b - section.ProfilA.Bfs) / 4
             xe = xo
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
 
@@ -3998,19 +3998,14 @@ Public Module Mod_Dessins
 
         '--> Initialisation des paramètres d'affichage
 
-        If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
-            xMin = -section.ProfilA.Plat_b / 2
-            xMax = -xMin
-        Else
-            xMin = -section.ProfilA.Bfs / 2
-            xMax = xMin + section.ProfilA.Plat_b
-        End If
+        xMin = -section.ProfilA.Bfi / 2
+        xMax = -xMin
 
 
         yMin = -section.ProfilA.ha
         yMax = 0
 
-        dCar = Math.Sqrt((section.ProfilA.ha ^ 2 + (section.ProfilA.Plat_b) ^ 2)) / 20
+        dCar = Math.Sqrt((section.ProfilA.ha ^ 2 + (section.ProfilA.Bfi) ^ 2)) / 20
 
         yMin -= dCar
         yMax += dCar
@@ -4042,13 +4037,8 @@ Public Module Mod_Dessins
             yo = -section.ProfilA.ha
             ye = 0
 
-            If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
-                xo = -section.ProfilA.Plat_b / 2 - dCar
-                xe = xo
-            Else
-                xo = -section.ProfilA.Bfs / 2 - dCar
-                xe = xo
-            End If
+            xo = -section.ProfilA.Bfi / 2 - dCar
+            xe = xo
 
 
             MyColor = StyleCouleur(iSelect, 0)
@@ -4068,25 +4058,11 @@ Public Module Mod_Dessins
             MyColor = StyleCouleur(iSelect, iRef)
             MyPen.Color = MyColor
 
-            Select Case section.ProfilA.typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA 'cas où on a un plat soudé dont la largeur est supérieure aux largeur des semelles
-                    yo = -section.ProfilA.ha - dCar
-
-                    If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
-                        xo = -section.ProfilA.Plat_b / 2
-                    Else
-                        xo = -section.ProfilA.Bfs / 2
-                    End If
-
-                    xe = xo + section.ProfilA.Plat_b
-
-                Case Else
-                    yo = -section.ProfilA.ha - dCar
-                    xo = -section.ProfilA.Bfi / 2
-                    xe = xo + section.ProfilA.Bfi
-            End Select
-
+            yo = dCar
             ye = yo
+
+            xo = -section.ProfilA.Plat_b / 2
+            xe = xo + section.ProfilA.Plat_b
 
 
             If lAffSymbol Then
@@ -4103,18 +4079,18 @@ Public Module Mod_Dessins
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
-            '-- Bfs --
+            '-- Bfi --
 
             If Not lLam Then
 
                 MyColor = StyleCouleur(iSelect, 1)
                 MyPen.Color = MyColor
 
-                yo = 0 + dCar
+                yo = -section.ProfilA.ha - dCar
                 ye = yo
-                xo = section.ProfilA.Bfs / 2
+                xo = section.ProfilA.Bfi / 2
                 xe = -xo
-                If lAffSymbol Then Chaine = "bfs" Else Chaine = GetStringNoUnit(section.ProfilA.Bfs, Enu_TypeVariable.Dimension)
+                If lAffSymbol Then Chaine = "bfi" Else Chaine = GetStringNoUnit(section.ProfilA.Bfi, Enu_TypeVariable.Dimension)
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
@@ -4127,9 +4103,9 @@ Public Module Mod_Dessins
             MyColor = StyleCouleur(iSelect, 7)
             MyPen.Color = MyColor
 
-            yo = 0 - section.ProfilA.Tfs
-            ye = -section.ProfilA.ha + section.ProfilA.Plat_t
-            xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Plat_b) / 2 + dCar
+            yo = 0 - section.ProfilA.Plat_t
+            ye = -section.ProfilA.ha + section.ProfilA.Tfi
+            xo = -Math.Max(section.ProfilA.Bfi, section.ProfilA.Plat_b) / 2 + dCar
             xe = xo
 
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
@@ -4146,15 +4122,20 @@ Public Module Mod_Dessins
             MyColor = StyleCouleur(iSelect, iRef)
             MyPen.Color = MyColor
 
-            yo = -section.ProfilA.ha - dCar / 2
-            ye = -section.ProfilA.ha
-            xo = section.ProfilA.Plat_b / 2 + (section.ProfilA.Plat_b - section.ProfilA.Bfi) / 4
+            xo = 3 * section.ProfilA.Plat_b / 8
             xe = xo
+            yo = 0
+            ye = yo + dCar / 2
+            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+
+            yo = -section.ProfilA.Plat_t - dCar / 2
+            ye = -section.ProfilA.Plat_t
+
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
 
-            yo = -section.ProfilA.ha + section.ProfilA.Plat_t
-            ye = yo + dCar
-            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+            yo -= dCar
+            ye = yo
+
             If lAffSymbol Then
                 If lLam Then Chaine = "tf" Else Chaine = "tfi"
             Else
@@ -4162,23 +4143,30 @@ Public Module Mod_Dessins
             End If
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
-            '-- Tfs --
+            '-- Tfi --
 
             If Not lLam Then
 
                 MyColor = StyleCouleur(iSelect, 2)
                 MyPen.Color = MyColor
 
-                yo = 0 + dCar / 2
-                ye = 0
-                xo = section.ProfilA.Bfs / 2 - dCar
+                xo = section.ProfilA.Bfi / 2 - dCar
                 xe = xo
-                AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
 
-                yo = 0 - section.ProfilA.Tfs
+
+
+                yo = -section.ProfilA.ha
                 ye = yo - dCar
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
-                If lAffSymbol Then Chaine = "tfs" Else Chaine = GetStringInUnit(section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, 1, False)
+
+                yo = -section.ProfilA.ha + section.ProfilA.Tfi + dCar / 2
+                ye = -section.ProfilA.ha + section.ProfilA.Tfi
+                AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
+
+                yo += dCar
+                ye = yo
+
+                If lAffSymbol Then Chaine = "tfi" Else Chaine = GetStringInUnit(section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, 1, False)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             End If
@@ -9424,10 +9412,14 @@ Public Module Mod_Dessins
 
                 'Dessin du plat soudé inf
 
-                If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                If MyProjet.Poutres.Count = 0 Then
                     xo = xPos - MyProfil.Plat_b / 2
                 Else
-                    xo = xPos - MyProfil.Bfi / 2
+                    If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                        xo = xPos - MyProfil.Plat_b / 2
+                    Else
+                        xo = xPos - MyProfil.Bfi / 2
+                    End If
                 End If
 
                 xe = xo + MyProfil.Plat_b
@@ -9446,10 +9438,14 @@ Public Module Mod_Dessins
 
                 'Dessin du plat soudé inf
 
-                If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                If MyProjet.Poutres.Count = 0 Then
                     xo = xPos - MyProfil.Plat_b / 2
                 Else
-                    xo = xPos - MyProfil.Bfs / 2
+                    If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                        xo = xPos - MyProfil.Plat_b / 2
+                    Else
+                        xo = xPos - MyProfil.Bfs / 2
+                    End If
                 End If
 
                 xe = xo + MyProfil.Plat_b
@@ -9458,6 +9454,31 @@ Public Module Mod_Dessins
 
                 AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
 
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                PrepareContourIFB_B(MyProfil, xPts, yPts, nbPts)
+                DecalePts(yPts, nbPts, zRef)
+                If Math.Abs(xPos) > 0 Then
+                    DecalePts(xPts, nbPts, xPos)
+                End If
+                RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
+
+                'Dessin du plat soudé sup
+
+                xo = xPos - MyProfil.Plat_b / 2
+
+                xe = xo + MyProfil.Plat_b
+                ye = -zRef
+                yo = -zRef - MyProfil.Plat_t
+
+                AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
+
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                PrepareContourLamine(MyProfil, xPts, yPts, nbPts)
+                DecalePts(yPts, nbPts, zRef)
+                If Math.Abs(xPos) > 0 Then
+                    DecalePts(xPts, nbPts, xPos)
+                End If
+                RemplirZone(MyGr, MyBrush, xPts, yPts, nbPts, MyParAffloc, True)
 
         End Select
     End Sub
@@ -9481,51 +9502,107 @@ Public Module Mod_Dessins
         ReDim yPts(35)
         nbPts = 36
 
+        Dim lDessinPoutreIntermediaire As Boolean
+
+        If MyProjet.Poutres.Count = 0 Then
+            lDessinPoutreIntermediaire = True
+        Else
+            If myProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB And Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                lDessinPoutreIntermediaire = False
+            Else
+                lDessinPoutreIntermediaire = True
+            End If
+        End If
+
         '--> Contour
 
         With myProfil
 
-            xPts(0) = .Tw / 2
-            yPts(0) = - .ha / 2
+            If lDessinPoutreIntermediaire Then
 
-            Dim DeltaA As Double = Math.PI / 10
+                xPts(0) = .Tw / 2
+                yPts(0) = - .ha / 2
 
-            For i = 1 To 6
-                xPts(i) = .Tw / 2 + .Rcs * (1 + CSng(Math.Cos(Math.PI - (i - 1) * DeltaA)))
-                yPts(i) = - .Tfs - .Rcs + .Rcs * CSng(Math.Sin(Math.PI - (i - 1) * DeltaA))
-            Next
+                Dim DeltaA As Double = Math.PI / 10
 
-            xPts(7) = .Bfs / 2
-            yPts(7) = - .Tfs
+                For i = 1 To 6
+                    xPts(i) = .Tw / 2 + .Rcs * (1 + CSng(Math.Cos(Math.PI - (i - 1) * DeltaA)))
+                    yPts(i) = - .Tfs - .Rcs + .Rcs * CSng(Math.Sin(Math.PI - (i - 1) * DeltaA))
+                Next
 
-            xPts(8) = .Bfs / 2
-            yPts(8) = 0
+                xPts(7) = .Bfs / 2
+                yPts(7) = - .Tfs
 
-            For i = 9 To 17
-                xPts(i) = -xPts(17 - i)
-                yPts(i) = yPts(17 - i)
-            Next
+                xPts(8) = .Bfs / 2
+                yPts(8) = 0
 
-            For i = 18 To 23
-                xPts(i) = - .Tw / 2 - .Rci * (1 + CSng(Math.Cos(Math.PI - (i - 18) * DeltaA)))
-                yPts(i) = - .ha + .Tfi + .Rci - .Rci * CSng(Math.Sin(Math.PI - (i - 18) * DeltaA))
-            Next
+                For i = 9 To 17
+                    xPts(i) = -xPts(17 - i)
+                    yPts(i) = yPts(17 - i)
+                Next
 
-            xPts(24) = - .Bfi / 2
-            yPts(24) = - .ha + .Tfi
+                For i = 18 To 23
+                    xPts(i) = - .Tw / 2 - .Rci * (1 + CSng(Math.Cos(Math.PI - (i - 18) * DeltaA)))
+                    yPts(i) = - .ha + .Tfi + .Rci - .Rci * CSng(Math.Sin(Math.PI - (i - 18) * DeltaA))
+                Next
 
-            xPts(25) = - .Bfi / 2
-            yPts(25) = - .ha
+                xPts(24) = - .Bfi / 2
+                yPts(24) = - .ha + .Tfi
 
-            For i = 26 To 35
-                xPts(i) = -xPts(51 - i)
-                yPts(i) = yPts(51 - i)
-            Next
+                xPts(25) = - .Bfi / 2
+                yPts(25) = - .ha
 
-            'For i = 18 To 35
-            '    xPts(i) = xPts(35 - i)
-            '    yPts(i) = - .ha - yPts(35 - i)
-            'Next
+                For i = 26 To 35
+                    xPts(i) = -xPts(51 - i)
+                    yPts(i) = yPts(51 - i)
+                Next
+
+            Else
+
+                xPts(0) = .Tw / 2
+                yPts(0) = - .ha / 2
+
+                Dim DeltaA As Double = Math.PI / 10
+
+                For i = 1 To 6
+                    xPts(i) = .Tw / 2 + .Rcs * (1 + CSng(Math.Cos(Math.PI - (i - 1) * DeltaA)))
+                    yPts(i) = - .Tfs - .Rcs + .Rcs * CSng(Math.Sin(Math.PI - (i - 1) * DeltaA))
+                Next
+
+                xPts(7) = .Bfs - .Bfi / 2
+                yPts(7) = - .Tfs
+
+                xPts(8) = .Bfs - .Bfi / 2
+                yPts(8) = 0
+
+                xPts(9) = xPts(8) - .Bfs
+                yPts(9) = 0
+
+                xPts(10) = xPts(9)
+                yPts(10) = - .Tfs
+
+                For i = 11 To 17
+                    xPts(i) = -xPts(17 - i)
+                    yPts(i) = yPts(17 - i)
+                Next
+
+                For i = 18 To 23
+                    xPts(i) = - .Tw / 2 - .Rci * (1 + CSng(Math.Cos(Math.PI - (i - 18) * DeltaA)))
+                    yPts(i) = - .ha + .Tfi + .Rci - .Rci * CSng(Math.Sin(Math.PI - (i - 18) * DeltaA))
+                Next
+
+                xPts(24) = - .Bfi / 2
+                yPts(24) = - .ha + .Tfi
+
+                xPts(25) = - .Bfi / 2
+                yPts(25) = - .ha
+
+                For i = 26 To 35
+                    xPts(i) = -xPts(51 - i)
+                    yPts(i) = yPts(51 - i)
+                Next
+
+            End If
 
         End With
 
@@ -9639,6 +9716,55 @@ Public Module Mod_Dessins
 
             xPts(8) = .Bfs / 2
             yPts(8) = 0
+
+            For i = 9 To 17
+                xPts(i) = -xPts(17 - i)
+                yPts(i) = yPts(17 - i)
+            Next
+
+        End With
+
+    End Sub
+
+    Private Sub PrepareContourIFB_B(myProfil As cls_ProfilA, ByRef xPts() As Single, ByRef yPts() As Single,
+                                     ByRef nbPts As Integer)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   01/04/23    :   Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Prépare le contour d'un profilé laminé
+        '   Coordonnées y : par rapport à la fibre supérieure
+        '---------------------------------------------------------------------------------------------------------------------------        
+        '   myProfil    [E] :   Profilé affiché
+        '   xPts, yPts  [S] :   Coordonnées du contour
+        '   nbPts       [S] :   Nombre de points du contour
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--> Initialisation
+
+        ReDim xPts(17)
+        ReDim yPts(17)
+        nbPts = 18
+
+
+        '--> Contour
+
+        With myProfil
+
+            xPts(0) = .Tw / 2
+            yPts(0) = - .Plat_t
+
+            Dim DeltaA As Double = Math.PI / 10
+
+            For i = 1 To 6
+                xPts(i) = .Tw / 2 + .Rci * (1 + CSng(Math.Cos(Math.PI - (i - 1) * DeltaA)))
+                yPts(i) = - .ha + .Tfi + .Rci - .Rci * CSng(Math.Sin(Math.PI - (i - 1) * DeltaA))
+            Next
+
+            xPts(7) = .Bfi / 2
+            yPts(7) = - .ha + .Tfi
+
+            xPts(8) = .Bfi / 2
+            yPts(8) = - .ha
 
             For i = 9 To 17
                 xPts(i) = -xPts(17 - i)

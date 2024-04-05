@@ -674,8 +674,10 @@ Public Class cls_Poutre
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
             Case cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.IFB_Bmixte
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                Me.Section.ProfilA.GenererProfileHEB300()
             Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.SABmixte
                 Me.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                Me.Section.ProfilA.GenererProfileHEB300()
         End Select
 
         Me.BeamID = NomPoutre

@@ -361,6 +361,7 @@ Partial Class Frm_Connection
         Me.chk_AutomaticDesign.TabIndex = 77
         Me.chk_AutomaticDesign.Text = "chk_AutomaticDesign"
         Me.chk_AutomaticDesign.UseVisualStyleBackColor = True
+        Me.chk_AutomaticDesign.Visible = False
         '
         'txt_Portee
         '

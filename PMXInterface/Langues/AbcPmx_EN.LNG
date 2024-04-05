@@ -477,7 +477,7 @@ TITLE 					= Definition of the lateral restraints
 #FRM_MAIN
 ABOUT					= About
 ADDBEAM					= Add beam
-CALCULATION				= Calculation
+CALCULATION				= Modular ratio tool
 CALCULOPTIONS			= Calculation options
 CALCULATIONREPORT		= Calculation report
 SOFTOPT					= Software options
@@ -792,6 +792,22 @@ WIDTH					= Width
 WEBHEIGHT				= Web height
 THICKNESS				= Thickness
 IFBSECTION				= IFB section
+
+#FRM_SFBSECTIONS
+CANCEL					= Cancel
+DELIVERYCOND			= Delivery conditions for $
+HOTROLLED				= Hot rolled profile
+OK						= OK
+PROFILE					= Profile
+PROFILES				= Profiles 
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+SABSECTION				= SAB Section
+WIDTH					= Width
 
 #GENERAL
 SELFWEIGHT				= Self-weight

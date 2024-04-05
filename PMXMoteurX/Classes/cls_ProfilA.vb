@@ -2018,6 +2018,27 @@ Public Class cls_ProfilA
         Me.ha = Me.hb + Me.Plat_t
     End Sub
 
+    Public Sub GenererProfileHEB300()
+        Me.hb = 0.3
+        'Me.h_w = 0.27
+        Me.Tw = 0.011
+        Me.Bfi = 0.3
+        Me.Bfs = 0.3
+        Me.Tfi = 0.019
+        Me.Tfs = 0.019
+        Me.Rcs = 0.027
+        Me.Rci = 0.027
+        Me.aW = 0.01
+
+        Me.Gamme = "HE"
+        Me.NomProfile = "HE 300 B"
+
+        Me.Plat_b = 0
+        Me.Plat_t = 0
+
+        Me.ha = Me.hb + Me.Plat_t
+    End Sub
+
     Public Sub GenereProfileIPE300()
         '----------------------------------------------------------------------------------------------------------------------------------
         '   04/11/23 :  Création POM
