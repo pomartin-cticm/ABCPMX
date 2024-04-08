@@ -10,11 +10,11 @@ Public Class Frm_SectionSFB
     Const EPSILONG As Double = 0.0001
     Const iFRMSECTION As Integer = 4
 
-    Const HSLIMMAX As Decimal = 0.65 'limite le choix des profilés à ceux dont la hauteur et inférieure ou égale à 650 mm
+    Dim HSLIMMAX As Decimal = OptionsSlimFloor.hslimmax 'limite le choix des profilés à ceux dont la hauteur et inférieure ou égale à 650 mm
     Const BFMAXI As Decimal = 0.5
     Const EPMAXI As Decimal = 0.5
-    Const BAPPMIN As Decimal = 50 / 1000
-    Const TPINFMIN As Decimal = 10 / 1000
+    Dim BAPPMIN As Decimal = OptionsSlimFloor.bappmin
+    Dim TPINFMIN As Decimal = OptionsSlimFloor.tpinfmin
     Structure strucAcierLocal
         Dim Nuance As String
         Dim Qualite As String
@@ -916,6 +916,7 @@ Public Class Frm_SectionSFB
 
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
         Dim BPMINI As Decimal
@@ -936,7 +937,7 @@ Public Class Frm_SectionSFB
                 ValMin = TPINFMIN
                 ValMax = EPMAXI
         End Select
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin / kUnit, lValMax, ValMax / kUnit)
 
         If iErreur <> 0 Then
             NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin / kUnit, ValMax / kUnit)

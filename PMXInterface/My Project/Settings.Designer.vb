@@ -1228,6 +1228,42 @@ Namespace My
                 Me("NbMaxiEtaisP") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.650")>  _
+        Public Property hslimmax() As Decimal
+            Get
+                Return CType(Me("hslimmax"),Decimal)
+            End Get
+            Set
+                Me("hslimmax") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.05")>  _
+        Public Property bappmin() As Decimal
+            Get
+                Return CType(Me("bappmin"),Decimal)
+            End Get
+            Set
+                Me("bappmin") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("0.01")>  _
+        Public Property tpinfmin() As Decimal
+            Get
+                Return CType(Me("tpinfmin"),Decimal)
+            End Get
+            Set
+                Me("tpinfmin") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

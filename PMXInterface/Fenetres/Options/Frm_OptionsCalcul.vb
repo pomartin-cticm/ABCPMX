@@ -67,7 +67,7 @@ Public Class Frm_OptionsCalcul
         '--> Déclaration
 
         Dim Lines As New Cls_LinesOfFile(LogicielFichiers.Langue, True)
-        Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA", "OPTCALSCOPE", "OPTCALCALCUL", "OPTCALFIRE"}
+        Dim BlocALire() As String = {"OPTCALCULMAIN", "OPTCALGAMMA", "OPTCALSCOPE", "OPTCALCALCUL", "OPTCALSLIMFLOOR", "OPTCALFIRE"}
         Dim lBlocEnCours As Boolean = False
         Dim BlocEnCours As String = Nothing
         Dim MotCle, Argument As String
@@ -120,6 +120,7 @@ Public Class Frm_OptionsCalcul
         ' Me.GammaLoc.TransfertFrom(LogicielOptions.Gamma)
         LocalOptionsScope = OptionsScope
         LocalOptionsCalcul = OptionsCalcul
+        LocalOptionsSlimFloor = OptionsSlimFloor
 
         Me.lSettingsReset = False
 
@@ -134,6 +135,7 @@ Public Class Frm_OptionsCalcul
             Me.PoMBtn_Gamma.Caption = MyBloc("GAMMA")
             Me.PoMbtn_Scope.Caption = MyBloc("SCOPE")
             Me.PoMbtn_Calcul.Caption = MyBloc("CALCUL")
+            Me.PoMbtn_SlimFloor.Caption = MyBloc("SLIMFLOOR")
             Me.PoMbtn_Fire.Caption = MyBloc("FIRE")
 
             Me.btn_Appliquer.Text = MyBloc("APPLY")
@@ -157,6 +159,7 @@ Public Class Frm_OptionsCalcul
         InitialiseCouleurs()
         PreparePomBouton(PoMBtn_Gamma)
         PreparePomBouton(PoMbtn_Scope)
+        PreparePomBouton(PoMbtn_SlimFloor)
         PreparePomBouton(PoMbtn_Calcul)
         PreparePomBouton(PoMbtn_Fire)
 
@@ -170,6 +173,9 @@ Public Class Frm_OptionsCalcul
             Case Enu_OptionsCalcul.Calcul
                 Me.PoMbtn_Calcul.Checked = True
                 Me.PoMbtn_Calcul.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
+            Case Enu_OptionsCalcul.Slimfloor
+                Me.PoMbtn_SlimFloor.Checked = True
+                Me.PoMbtn_SlimFloor.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
             Case Enu_OptionsCalcul.Incendie
                 Me.PoMbtn_Fire.Checked = True
                 Me.PoMbtn_Fire.CouleurMouseOnBtn = MyCouleurs.ColorSelectedBtn
@@ -241,6 +247,11 @@ Public Class Frm_OptionsCalcul
 
                 Me.pan_Contenu.Controls.Add(Frm_OptionsCalculCalcul.pan_Calcul)
                 Frm_OptionsCalculCalcul.InitialiseFrm()
+
+            Case Enu_OptionsCalcul.Slimfloor
+
+                Me.pan_Contenu.Controls.Add(Frm_OptionsCalculSlimFloor.pan_Slimfloor)
+                Frm_OptionsCalculSlimFloor.InitialiseFrm()
 
             Case Enu_OptionsCalcul.Incendie
 
@@ -316,6 +327,13 @@ Public Class Frm_OptionsCalcul
         End If
         GereTransfertValeur(LocalOptionsScope.ThetaH, OptionsScope.ThetaH, lModif)
 
+        '# Fenêtre Slimfloor
+        If lExpert Then
+            GereTransfertValeur(LocalOptionsSlimFloor.hslimmax, OptionsSlimFloor.hslimmax, lModif)
+            GereTransfertValeur(LocalOptionsSlimFloor.bappmin, OptionsSlimFloor.bappmin, lModif)
+            GereTransfertValeur(LocalOptionsSlimFloor.tpinfmin, OptionsSlimFloor.tpinfmin, lModif)
+        End If
+
         '# Fenêtre Options Calculs
         If OptionsCalcul.Norme <> LocalOptionsCalcul.Norme Then lModif = True
         OptionsCalcul.Norme = LocalOptionsCalcul.Norme
@@ -343,25 +361,25 @@ Public Class Frm_OptionsCalcul
 
     End Sub
 
-    Private Sub AppliquerReglagesProjetEnCours()
+    'Private Sub AppliquerReglagesProjetEnCours()
 
-        For i As Integer = 0 To MyProjet.Poutres.Count - 1
-            MyProjet.Poutres(i).Dalle.ThetaRd = OptionsScope.ThetaH
-            MyProjet.Poutres(i).Param.Norme = OptionsCalcul.Norme
-            MyProjet.Poutres(i).Param.lCompressionArma = OptionsCalcul.lCompressionArma
+    '    For i As Integer = 0 To MyProjet.Poutres.Count - 1
+    '        MyProjet.Poutres(i).Dalle.ThetaRd = OptionsScope.ThetaH
+    '        MyProjet.Poutres(i).Param.Norme = OptionsCalcul.Norme
+    '        MyProjet.Poutres(i).Param.lCompressionArma = OptionsCalcul.lCompressionArma
 
-            MyProjet.Poutres(i).Param.PsiLPermanent = OptionsCalcul.PsiLPermanent
-            MyProjet.Poutres(i).Param.PsiLRetrait = OptionsCalcul.PsiLRetrait
+    '        MyProjet.Poutres(i).Param.PsiLPermanent = OptionsCalcul.PsiLPermanent
+    '        MyProjet.Poutres(i).Param.PsiLRetrait = OptionsCalcul.PsiLRetrait
 
-            For j As Integer = 0 To 1
-                MyProjet.Poutres(i).Param.AgeT0G1(j) = OptionsCalcul.TimeT0G1(j)
-                MyProjet.Poutres(i).Param.AgeT0G2(j) = OptionsCalcul.TimeT0G2(j)
-                MyProjet.Poutres(i).Param.AgeT0SH(j) = OptionsCalcul.TimeT0SH(j)
-            Next
+    '        For j As Integer = 0 To 1
+    '            MyProjet.Poutres(i).Param.AgeT0G1(j) = OptionsCalcul.TimeT0G1(j)
+    '            MyProjet.Poutres(i).Param.AgeT0G2(j) = OptionsCalcul.TimeT0G2(j)
+    '            MyProjet.Poutres(i).Param.AgeT0SH(j) = OptionsCalcul.TimeT0SH(j)
+    '        Next
 
-        Next
-        'IL faut faire la même chose à l'oouverture des fhciers et la création d'une poutre
-    End Sub
+    '    Next
+    '    'IL faut faire la même chose à l'oouverture des fhciers et la création d'une poutre
+    'End Sub
 
     Private Function ValideSaisie() As Boolean
 
@@ -376,7 +394,7 @@ Public Class Frm_OptionsCalcul
 #Region "    Gestion des boutons - Paint Overrides "
 
     Private Sub PomBoutonsClick(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-    Handles PoMBtn_Gamma.Click, PoMbtn_Scope.Click, PoMbtn_Calcul.Click, PoMbtn_Fire.Click
+    Handles PoMBtn_Gamma.Click, PoMbtn_Scope.Click, PoMbtn_Calcul.Click, PoMbtn_Fire.Click, PoMbtn_SlimFloor.Click
 
         If Not sender.checked Then  '-> Si bouton déjà séléctionné :
             sender.checked = True       'on le garde checké
@@ -393,6 +411,10 @@ Public Class Frm_OptionsCalcul
 
             Case Me.PoMbtn_Scope.Name
                 LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Scope
+                AfficherFenetreFille()
+
+            Case Me.PoMbtn_SlimFloor.Name
+                LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Slimfloor
                 AfficherFenetreFille()
 
             Case Me.PoMbtn_Calcul.Name
@@ -437,6 +459,7 @@ Public Class Frm_OptionsCalcul
         If SenderName <> Me.PoMBtn_Gamma.Name Then Me.PoMBtn_Gamma.Checked = False
         If SenderName <> Me.PoMbtn_Scope.Name Then Me.PoMbtn_Scope.Checked = False
         If SenderName <> Me.PoMbtn_Calcul.Name Then Me.PoMbtn_Calcul.Checked = False
+        If SenderName <> Me.PoMbtn_SlimFloor.Name Then Me.PoMbtn_SlimFloor.Checked = False
         If SenderName <> Me.PoMbtn_Fire.Name Then Me.PoMbtn_Fire.Checked = False
 
     End Sub

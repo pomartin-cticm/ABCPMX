@@ -466,6 +466,8 @@ Public Class Frm_Maintiens
                     lClickCote = True
                     indiceCoteSelectionnee = i
 
+                    Me.AcceptButton = Nothing
+
                 End If
 
             Next
@@ -496,6 +498,9 @@ Public Class Frm_Maintiens
     Private Sub LeaveTxtCotation(sender As Object, e As EventArgs) Handles txt_Cotations.Leave
 
         txt_Cotations.Visible = False
+
+        Me.AcceptButton = Me.btn_OK
+        Me.btn_OK.Select()
 
     End Sub
 
@@ -753,7 +758,6 @@ Public Class Frm_Maintiens
         Me.pan_ControlDessin.Enabled = lEnable
         Me.lbl_ControlDessin.Enabled = lEnable
     End Sub
-
 
 #End Region
 

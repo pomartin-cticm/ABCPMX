@@ -68,6 +68,7 @@
         Public TimeT0SH() As Decimal                    ' Temps au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
         Public EtaW As Decimal                      ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
     End Structure
+
 #End Region
 
 #End Region

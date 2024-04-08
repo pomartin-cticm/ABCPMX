@@ -834,6 +834,7 @@ CANCEL					= Annuler
 GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
+SLIMFLOOR				= Slimfloor 
 FIRE					= Calcul à l'incendie
 MODIF					= Attention : la modification des paramètres sera prise en compte lors de l'ajout de nouvelles poutres uniquement. 
 MODIF2					= Les valeurs des paramètres des poutres déjà créées resteront inchangées.  
@@ -894,6 +895,13 @@ HAUNCHTH				= Epaisseur des renformis
 SOLIDSLABTH				= Epaisseur de la dalle béton
 COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus du bac)
 RHOLWC					= Masse volumique du béton léger
+
+#OPTCALSLIMFLOOR
+TITLE					= Slimfloor
+SLIMFLOORDIM			= Slimfloor dimensions
+DEPTHMAX				= Hauteur maximale d'un profil laminé à chaud pour slimfloors
+SLABSUPPORTMIN			= Largeur minimale du support de plancher
+THICKNESSMIN			= Epaisseur minimale du plat pour les slimfloors
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel

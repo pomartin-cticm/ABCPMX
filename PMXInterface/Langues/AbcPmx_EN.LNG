@@ -834,6 +834,7 @@ CANCEL					= Cancel
 GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
+SLIMFLOOR				= Slimfloor
 FIRE					= Fire design
 MODIF					= Warning : parameter modifications will be taken into account when adding new beams only. 
 MODIF2					= The parameter values of existing beams will remain unchanged.
@@ -894,6 +895,13 @@ HAUNCHTH				= Thickness of slab haunch
 SOLIDSLABTH				= Thickness of solid slab
 COMPOSITESLABTH			= Thickness of composite slab (above ribs)
 RHOLWC					= Density of light weight concrete
+
+#OPTCALSLIMFLOOR
+TITLE					= Slimfloor
+SLIMFLOORDIM			= Dimensions des slimfloors
+DEPTHMAX				= Maximal depth of a slim floor hot rolled profile
+SLABSUPPORTMIN			= Minimum width of the slab support
+THICKNESSMIN			= Minimum thickness of the plate for slim floors
 
 #OPTSOFTMAIN
 TITLE					= Software options
