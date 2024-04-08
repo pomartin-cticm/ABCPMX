@@ -348,6 +348,7 @@ Public Module Mod_Declarations
         Connexion
         Dalle
         DalleN
+        DalleSlimFloor
         EditBac
         EditGoujons
         EditSection
