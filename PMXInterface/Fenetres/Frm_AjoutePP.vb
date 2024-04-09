@@ -562,74 +562,87 @@ Public Class Frm_AjoutePP
         Dim lTrouve As Boolean
 
         Dim NomPoutre As String = Me.txt_NomNouvellePoutre.Text
+        Dim typeProfilA As cls_ProfilA.Enum_TypeSectionAcier
 
         If Me.chk_NouvellePoutre.Checked Then
 
             If Me.chk_SectionAcier.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
             End If
 
             If Me.chk_SectionAcierEnrobe.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
             End If
 
             If Me.chk_SectionMixte.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
             End If
 
             If Me.chk_SectionMixteEnrobe.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.MixteEnrobage, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
             End If
 
             If Me.chk_SFBAcier.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
             End If
 
             If Me.chk_SFBMixte.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
             End If
 
             If Me.chk_IFB_A_Acier.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
             End If
 
             If Me.chk_IFB_A_Mixte.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
             End If
 
             If Me.chk_IFB_B_Acier.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
             End If
 
             If Me.chk_IFB_B_Mixte.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
             End If
 
             If Me.chk_SABAcier.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
             End If
 
             If Me.chk_SABMixte.Checked Then
                 lAjout = True
                 MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
             End If
 
             InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
             InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)
             InitialiseGoujonDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Connecteur, lTrouve)
 
-            InitialiseDalleDefault(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle)
+            InitialiseDalleDefault(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle, typeProfilA)
 
             MyProjet.Poutres(MyProjet.Poutres.Count - 1).Initialise_CoefficientsCombinaisons()
             MyProjet.Poutres(MyProjet.Poutres.Count - 1).InitialisePoidsPropres()

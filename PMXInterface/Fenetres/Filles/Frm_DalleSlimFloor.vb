@@ -614,7 +614,7 @@ Public Class Frm_DalleSlimFloor
                 Me.pan_Epaisseur.Visible = True
 
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
-                Me.TLPan_Dalle.ColumnStyles(0).Width = 255
+                Me.TLPan_Dalle.ColumnStyles(0).Width = 280
 
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 Me.pan_Bac.Enabled = True

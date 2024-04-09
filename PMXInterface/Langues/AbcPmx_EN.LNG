@@ -898,7 +898,7 @@ RHOLWC					= Density of light weight concrete
 
 #OPTCALSLIMFLOOR
 TITLE					= Slimfloor
-SLIMFLOORDIM			= Dimensions des slimfloors
+SLIMFLOORDIM			= Slimfloor dimensions
 DEPTHMAX				= Maximal depth of a slim floor hot rolled profile
 SLABSUPPORTMIN			= Minimum width of the slab support
 THICKNESSMIN			= Minimum thickness of the plate for slim floors

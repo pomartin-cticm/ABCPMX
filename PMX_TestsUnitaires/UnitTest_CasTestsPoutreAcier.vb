@@ -82,7 +82,7 @@ Imports PMXMoteur2
         InitialiseBacDeBase(myPoutre.Dalle.Bac, lTrouve)
         InitialiseGoujonDeBase(myPoutre.Dalle.Connecteur, lTrouve)
 
-        InitialiseDalleDefault(myPoutre.Dalle)
+        InitialiseDalleDefault(myPoutre.Dalle, cls_ProfilA.Enum_TypeSectionAcier.Lamine)
 
         myPoutre.Initialise_CoefficientsCombinaisons()
         myPoutre.InitialisePoidsPropres()
@@ -570,7 +570,7 @@ Imports PMXMoteur2
         InitialiseBacDeBase(myPoutre.Dalle.Bac, lTrouve)
         InitialiseGoujonDeBase(myPoutre.Dalle.Connecteur, lTrouve)
 
-        InitialiseDalleDefault(myPoutre.Dalle)
+        InitialiseDalleDefault(myPoutre.Dalle, cls_ProfilA.Enum_TypeSectionAcier.Lamine)
 
         myPoutre.Initialise_CoefficientsCombinaisons()
         myPoutre.InitialisePoidsPropres()

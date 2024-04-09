@@ -898,7 +898,7 @@ RHOLWC					= Masse volumique du béton léger
 
 #OPTCALSLIMFLOOR
 TITLE					= Slimfloor
-SLIMFLOORDIM			= Slimfloor dimensions
+SLIMFLOORDIM			= Dimensions des slimfloors
 DEPTHMAX				= Hauteur maximale d'un profil laminé à chaud pour slimfloors
 SLABSUPPORTMIN			= Largeur minimale du support de plancher
 THICKNESSMIN			= Epaisseur minimale du plat pour les slimfloors

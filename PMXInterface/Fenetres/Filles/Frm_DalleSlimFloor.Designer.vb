@@ -914,6 +914,8 @@ Partial Class Frm_DalleSlimFloor
         Me.ClientSize = New System.Drawing.Size(1015, 379)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
         Me.Name = "Frm_DalleSlimFloor"
         Me.Text = "Frm_DalleSlimFloor"
         Me.pan_EpaisseurMixte.ResumeLayout(False)

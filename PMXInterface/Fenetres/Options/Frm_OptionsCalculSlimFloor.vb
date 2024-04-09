@@ -29,6 +29,7 @@
 
             '#-------------------- GEOMETRIE POUTRE
 
+            Me.lbl_SlimFloor.Text = MyBloc("SLIMFLOORDIM")
             Me.lbl_hslimmax.Text = MyBloc("DEPTHMAX")
             Me.lbl_bappmin.Text = MyBloc("SLABSUPPORTMIN")
             Me.lbl_tpinfmin.Text = MyBloc("THICKNESSMIN")
