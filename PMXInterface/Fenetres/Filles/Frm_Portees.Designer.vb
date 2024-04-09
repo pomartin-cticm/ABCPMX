@@ -35,6 +35,8 @@ Partial Class Frm_Portees
         Me.lbl_Entraxe = New System.Windows.Forms.Label()
         Me.lbl_Portees = New System.Windows.Forms.Label()
         Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
+        Me.chk_ContinuiteDalleAppDroit = New System.Windows.Forms.CheckBox()
+        Me.chk_ContinuiteDalleAppGauche = New System.Windows.Forms.CheckBox()
         Me.etq_UnitL3 = New System.Windows.Forms.Label()
         Me.txt_PorteeConsoleD = New System.Windows.Forms.TextBox()
         Me.img_L3 = New System.Windows.Forms.PictureBox()
@@ -74,8 +76,6 @@ Partial Class Frm_Portees
         Me.img_TremieGauche = New System.Windows.Forms.PictureBox()
         Me.chk_TremieGauche = New System.Windows.Forms.CheckBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.chk_ContinuiteDalleAppGauche = New System.Windows.Forms.CheckBox()
-        Me.chk_ContinuiteDalleAppDroit = New System.Windows.Forms.CheckBox()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -279,6 +279,26 @@ Partial Class Frm_Portees
         Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
         Me.pan_SaisiePortee.Size = New System.Drawing.Size(250, 169)
         Me.pan_SaisiePortee.TabIndex = 1
+        '
+        'chk_ContinuiteDalleAppDroit
+        '
+        Me.chk_ContinuiteDalleAppDroit.AutoSize = True
+        Me.chk_ContinuiteDalleAppDroit.Location = New System.Drawing.Point(7, 133)
+        Me.chk_ContinuiteDalleAppDroit.Name = "chk_ContinuiteDalleAppDroit"
+        Me.chk_ContinuiteDalleAppDroit.Size = New System.Drawing.Size(162, 17)
+        Me.chk_ContinuiteDalleAppDroit.TabIndex = 82
+        Me.chk_ContinuiteDalleAppDroit.Text = "chk_ContinuiteDalleAppDroit"
+        Me.chk_ContinuiteDalleAppDroit.UseVisualStyleBackColor = True
+        '
+        'chk_ContinuiteDalleAppGauche
+        '
+        Me.chk_ContinuiteDalleAppGauche.AutoSize = True
+        Me.chk_ContinuiteDalleAppGauche.Location = New System.Drawing.Point(7, 77)
+        Me.chk_ContinuiteDalleAppGauche.Name = "chk_ContinuiteDalleAppGauche"
+        Me.chk_ContinuiteDalleAppGauche.Size = New System.Drawing.Size(178, 17)
+        Me.chk_ContinuiteDalleAppGauche.TabIndex = 81
+        Me.chk_ContinuiteDalleAppGauche.Text = "chk_ContinuiteDalleAppGauche"
+        Me.chk_ContinuiteDalleAppGauche.UseVisualStyleBackColor = True
         '
         'etq_UnitL3
         '
@@ -674,26 +694,6 @@ Partial Class Frm_Portees
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
-        '
-        'chk_ContinuiteDalleAppGauche
-        '
-        Me.chk_ContinuiteDalleAppGauche.AutoSize = True
-        Me.chk_ContinuiteDalleAppGauche.Location = New System.Drawing.Point(7, 77)
-        Me.chk_ContinuiteDalleAppGauche.Name = "chk_ContinuiteDalleAppGauche"
-        Me.chk_ContinuiteDalleAppGauche.Size = New System.Drawing.Size(178, 17)
-        Me.chk_ContinuiteDalleAppGauche.TabIndex = 81
-        Me.chk_ContinuiteDalleAppGauche.Text = "chk_ContinuiteDalleAppGauche"
-        Me.chk_ContinuiteDalleAppGauche.UseVisualStyleBackColor = True
-        '
-        'chk_ContinuiteDalleAppDroit
-        '
-        Me.chk_ContinuiteDalleAppDroit.AutoSize = True
-        Me.chk_ContinuiteDalleAppDroit.Location = New System.Drawing.Point(7, 133)
-        Me.chk_ContinuiteDalleAppDroit.Name = "chk_ContinuiteDalleAppDroit"
-        Me.chk_ContinuiteDalleAppDroit.Size = New System.Drawing.Size(162, 17)
-        Me.chk_ContinuiteDalleAppDroit.TabIndex = 82
-        Me.chk_ContinuiteDalleAppDroit.Text = "chk_ContinuiteDalleAppDroit"
-        Me.chk_ContinuiteDalleAppDroit.UseVisualStyleBackColor = True
         '
         'Frm_Portees
         '

@@ -209,7 +209,7 @@ Public Module Mod_Dessins
         End If
 
         ' Dessin de la section acier
-        DessinProfileMetal(myGr, MySection.ProfilA, myBrushP, MyParAff, zREF, 0)
+        DessinProfileMetal(myGr, MySection.ProfilA, myBrushP, MyParAff, zREF, 0, Not MyPoutre.lIntermediaire)
 
         '--> Dessin de la poutre droite 
         If lEnrob Then
@@ -231,7 +231,11 @@ Public Module Mod_Dessins
                 'cotation à gauche 
                 xo_cotes = -EntraxeD1
                 xe_cotes = 0
-                yo_cotes = zREF - dCar
+                If lSlimfloor Then
+                    yo_cotes = -dCar / 2
+                Else
+                    yo_cotes = -dCar
+                End If
                 ye_cotes = yo_cotes
 
                 AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
@@ -243,7 +247,12 @@ Public Module Mod_Dessins
             'cotation à droite
             xo_cotes = EntraxeD2
             xe_cotes = 0
-            yo_cotes = zREF - dCar
+
+            If lSlimfloor Then
+                yo_cotes = -dCar / 2
+            Else
+                yo_cotes = -dCar
+            End If
             ye_cotes = yo_cotes
 
             AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
@@ -4388,7 +4397,11 @@ Public Module Mod_Dessins
         xMax = MyPoutre.EntraxeD2 + LargeurBord
         'End If
 
-        yMin = -dCar - hMaxProfile
+        If MyPoutre.Section.lSlimFloor Then
+            yMin = -dCar
+        Else
+            yMin = -dCar - hMaxProfile
+        End If
         yMax = MyPoutre.Dalle.zTop + dCar
 
         'If myBeam.NbTravees > 1 Then yMin -= dCar
@@ -4446,7 +4459,20 @@ Public Module Mod_Dessins
         Dim xe, ye As Decimal
         ' Dim IndS As Integer = 1         ' Indice de travée pour représentation des sections
         Dim lEnrob As Boolean = MyPoutre.Section.lEnrobage
-        Const ZREF As Decimal = 0
+        Dim ZREF As Decimal
+
+        Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                ZREF = MyPoutre.Section.ProfilA.hb
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                ZREF = MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Plat_t
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                ZREF = MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Tfi
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                ZREF = MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Tfi
+            Case Else
+                ZREF = 0
+        End Select
 
         '--> Affichage de la dalle béton
 
@@ -4454,7 +4480,19 @@ Public Module Mod_Dessins
             xo = -1.5 * MyPoutre.EntraxeD1
             xe = 1.5 * MyPoutre.EntraxeD2
         Else
-            xo = -MyPoutre.EntraxeD1
+            Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                    xo = -MyPoutre.Section.ProfilA.Bfi / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                    xo = -MyPoutre.Section.ProfilA.Bfs / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                    xo = -MyPoutre.Section.ProfilA.Bfi / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                    xo = -MyPoutre.Section.ProfilA.Bfi / 2
+                Case Else
+                    xo = -MyPoutre.EntraxeD1
+            End Select
+
             xe = 1.5 * MyPoutre.EntraxeD2
         End If
 
@@ -4472,7 +4510,14 @@ Public Module Mod_Dessins
 
         '# Dessin de la section acier
 
-        DessinProfileMetal(MyGr, MyPoutre.Section.ProfilA, myBrushPSel, MyParaff1, ZREF)
+        Dim lRepresentationPoutreExtremite As Boolean
+        If Not MyPoutre.lIntermediaire And MyPoutre.Section.lSlimFloor Then
+            lRepresentationPoutreExtremite = True
+        Else
+            lRepresentationPoutreExtremite = False
+        End If
+
+        DessinProfileMetal(MyGr, MyPoutre.Section.ProfilA, myBrushPSel, MyParaff1, ZREF, 0, lRepresentationPoutreExtremite)
 
         '--> Affichage de la voisine à gauche
 
@@ -4589,19 +4634,30 @@ Public Module Mod_Dessins
         Dim MyFontNormal As Font = FontBase
         Dim lContour As Boolean = lCONTOURCOTE
 
+        If MyPoutre.Section.lSlimFloor Then
+            yCote = -dCar
+            yCoteS = MyPoutre.Dalle.zTop + dCar
+        Else
+            yCote = -hMaxProfile - dCar
+            yCoteS = MyPoutre.Dalle.zTop + dCar
+        End If
+
         '--> Entraxe à gauche
 
-        MyColor = StyleCouleur(iSelect, 101)
-        MyPen.Color = MyColor
+        If MyPoutre.lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
 
-        xo = -MyPoutre.EntraxeD1
-        xe = 0
+            MyColor = StyleCouleur(iSelect, 101)
+            MyPen.Color = MyColor
 
-        AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParaff1, True, True)
+            xo = -MyPoutre.EntraxeD1
+            xe = 0
 
-        If lAffSymbol Then Chaine = "D1" Else Chaine = GetStringInUnit(MyPoutre.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, False)
-        AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+            AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParaff1, True, True)
 
+            If lAffSymbol Then Chaine = "D1" Else Chaine = GetStringInUnit(MyPoutre.EntraxeD1, Enu_TypeVariable.Longueur, 4, 2, False)
+            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParaff1, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+        End If
         '--> Entraxe à droite
 
         MyColor = StyleCouleur(iSelect, 102)
@@ -4757,13 +4813,15 @@ Public Module Mod_Dessins
 
         '--> Représentation de la dalle
 
-        xo = 0
-        yo = HauteurPoutre
+        If Not myBeam.Section.lSlimFloor Then
+            xo = 0
+            yo = HauteurPoutre
 
-        xe = LongueurDalle
-        ye = HauteurPoutre + HauteurDalle
+            xe = LongueurDalle
+            ye = HauteurPoutre + HauteurDalle
 
-        AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+            AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
+        End If
 
         '--> Représentation de la continuité de dalle
 
@@ -9455,7 +9513,7 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub DessinProfileMetal(MyGr As Graphics, MyProfil As cls_ProfilA, MyBrush As Brush, MyParAffloc As Struc_Affichage,
-                                   zRef As Decimal, Optional xPos As Decimal = 0)
+                                   zRef As Decimal, Optional xPos As Decimal = 0, Optional lRepresentationPoutreExtremite As Boolean = False)
         '---------------------------------------------------------------------------------------------------------------------------
         '   01/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -9484,7 +9542,7 @@ Public Module Mod_Dessins
 
         Select Case MyProfil.typeProfileAcier
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
-                PrepareContourLamine(MyProfil, xPts, yPts, nbPts)
+                PrepareContourLamine(MyProfil, xPts, yPts, nbPts, False)
                 DecalePts(yPts, nbPts, zRef)
                 If Math.Abs(xPos) > 0 Then
                     DecalePts(xPts, nbPts, xPos)
@@ -9533,7 +9591,7 @@ Public Module Mod_Dessins
                 If MyProjet.Poutres.Count = 0 Then
                     xo = xPos - MyProfil.Plat_b / 2
                 Else
-                    If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                    If Not lRepresentationPoutreExtremite Then
                         xo = xPos - MyProfil.Plat_b / 2
                     Else
                         xo = xPos - MyProfil.Bfi / 2
@@ -9559,7 +9617,7 @@ Public Module Mod_Dessins
                 If MyProjet.Poutres.Count = 0 Then
                     xo = xPos - MyProfil.Plat_b / 2
                 Else
-                    If MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+                    If Not lRepresentationPoutreExtremite Then
                         xo = xPos - MyProfil.Plat_b / 2
                     Else
                         xo = xPos - MyProfil.Bfs / 2
@@ -9591,7 +9649,7 @@ Public Module Mod_Dessins
                 AddRectanglePlein(MyGr, MyBrush, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                PrepareContourLamine(MyProfil, xPts, yPts, nbPts)
+                PrepareContourLamine(MyProfil, xPts, yPts, nbPts, lRepresentationPoutreExtremite)
                 DecalePts(yPts, nbPts, zRef)
                 If Math.Abs(xPos) > 0 Then
                     DecalePts(xPts, nbPts, xPos)
@@ -9602,7 +9660,7 @@ Public Module Mod_Dessins
     End Sub
 
     Private Sub PrepareContourLamine(myProfil As cls_ProfilA, ByRef xPts() As Single, ByRef yPts() As Single,
-                                     ByRef nbPts As Integer)
+                                     ByRef nbPts As Integer, lRepresentationPoutreExtremite As Boolean)
         '---------------------------------------------------------------------------------------------------------------------------
         '   01/04/23    :   Création - POM
         '---------------------------------------------------------------------------------------------------------------------------
@@ -9625,7 +9683,7 @@ Public Module Mod_Dessins
         If MyProjet.Poutres.Count = 0 Then
             lDessinPoutreIntermediaire = True
         Else
-            If myProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB And Not MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire Then
+            If myProfil.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB And lRepresentationPoutreExtremite Then
                 lDessinPoutreIntermediaire = False
             Else
                 lDessinPoutreIntermediaire = True

@@ -138,6 +138,12 @@ Public Class Frm_Portees
             Me.rad_Intermediaire.Checked = MyPoutreLoc.lIntermediaire
             Me.rad_Rive.Checked = Not MyPoutreLoc.lIntermediaire
 
+            If Not MyPoutreLoc.lIntermediaire And MyPoutreLoc.Section.lSlimFloor Then
+                Me.txt_D1.Enabled = False
+            Else
+                Me.txt_D1.Enabled = True
+            End If
+
             Me.chk_TremieGauche.Enabled = .lIntermediaire
             Me.chk_TremieGauche.Checked = .lTremieGauche And .lIntermediaire
             'If .lTremieGauche Then
@@ -481,6 +487,7 @@ Public Class Frm_Portees
 
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
 
@@ -500,7 +507,17 @@ Public Class Frm_Portees
                 'ValMin = Format(CONSOLEMIN / kUnit, formatLONGUEUR)
                 'ValMax = Format(RATIOCONSOLEMAX * MyPoutreLoc.LongueurTravee(1) / kUnit, formatLONGUEUR)
 
-            Case Me.txt_D1.Name, Me.txt_D2.Name
+            Case Me.txt_D1.Name
+
+                ValMin = ENTRAXEMIN / kUnit
+                ValMax = ENTRAXEMAX / kUnit
+
+                If Not MyPoutreLoc.lIntermediaire And MyPoutreLoc.Section.lSlimFloor Then
+                    lValMin = False
+                    lValMax = False
+                End If
+
+            Case Me.txt_D2.Name
 
                 ValMin = ENTRAXEMIN / kUnit
                 ValMax = ENTRAXEMAX / kUnit
@@ -514,7 +531,7 @@ Public Class Frm_Portees
                 ValMax = MyPoutreLoc.EntraxeD2 / 2
 
         End Select
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
             NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
@@ -579,6 +596,14 @@ Public Class Frm_Portees
 
         Me.chk_TremieGauche.Enabled = MyPoutreLoc.lIntermediaire
 
+        If Not MyPoutreLoc.lIntermediaire And MyPoutreLoc.Section.lSlimFloor Then
+            Me.txt_D1.Text = 0
+            Me.txt_D1.Enabled = False
+        Else
+            Me.txt_D1.Text = Me.txt_D2.Text
+            Me.txt_D1.Enabled = True
+        End If
+
         Me.img_Coupe.Invalidate()
 
     End Sub
@@ -612,7 +637,6 @@ Public Class Frm_Portees
         Me.img_TremieDroite.Visible = MyPoutreLoc.lTremieDroite
 
     End Sub
-
 
 
 #End Region
