@@ -8,7 +8,7 @@ Public Class Frm_DalleSlimFloor
 
     Dim lBuild As Boolean = True
 
-    Dim strType(2) As String
+    Dim strType(3) As String
 
     Dim ClasseBeton() As String = cls_Beton.TabClasseBeton
     Dim ClasseBetonLeger() As String = cls_Beton.TabClasseBetonLeger
@@ -92,6 +92,7 @@ Public Class Frm_DalleSlimFloor
                 strType(0) = Bloc("SOLIDSLAB")
                 strType(1) = Bloc("COMPOSITESLAB")
                 strType(2) = Bloc("PRECASTSLAB")
+                strType(3) = Bloc("FULLPRECAST")
 
                 Me.lbl_TypeDalle.Text = Bloc("TYPE")
                 Me.lbl_Epaisseur.Text = Bloc("THICKNESS")
@@ -235,6 +236,7 @@ Public Class Frm_DalleSlimFloor
 
         Me.pan_Type.Controls.Add(Me.pan_Predalle)
         Me.pan_Predalle.Left = 5
+        Me.pan_Predalle.Top = 55
 
         RemplirComboAvecTableau(Me.cmb_TypeDalle, strType)
         RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
@@ -271,8 +273,10 @@ Public Class Frm_DalleSlimFloor
                 Me.cmb_TypeDalle.SelectedIndex = 0
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 Me.cmb_TypeDalle.SelectedIndex = 1
-            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 Me.cmb_TypeDalle.SelectedIndex = 2
+            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+                Me.cmb_TypeDalle.SelectedIndex = 3
         End Select
         MAJI_TypeDalle()
 
@@ -405,7 +409,7 @@ Public Class Frm_DalleSlimFloor
         If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Pleine Then _
         GereTransfertValeur(MyDalleLoc.t_h, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_h, lModif)
 
-        If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Prefabriquee Then
+        If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee Then
             GereTransfertValeur(MyDalleLoc.preDalle_ep, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.preDalle_ep, lModif)
             GereTransfertValeur(MyDalleLoc.preDalle_tjoint, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.preDalle_tjoint, lModif)
         End If
@@ -578,7 +582,8 @@ Public Class Frm_DalleSlimFloor
         Select Case Me.cmb_TypeDalle.SelectedIndex
             Case 0 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Pleine
             Case 1 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Mixte
-            Case 2 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case 2 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
+            Case 3 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
         End Select
 
         MAJI_TypeDalle()
@@ -607,7 +612,7 @@ Public Class Frm_DalleSlimFloor
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 255
 
-            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 Me.pan_Bac.Enabled = False
                 Me.pan_Predalle.Visible = True
                 Me.pan_EpaisseurMixte.Visible = False
@@ -624,6 +629,17 @@ Public Class Frm_DalleSlimFloor
 
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 501
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 250
+
+            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+                Me.pan_Bac.Enabled = False
+                Me.pan_Predalle.Visible = False
+                Me.pan_EpaisseurMixte.Visible = False
+                Me.pan_Epaisseur.Visible = False
+
+                Me.TLpan_PartageV.ColumnStyles(1).Width = 0
+                Me.TLPan_Dalle.ColumnStyles(0).Width = 255
+                Me.TLPan_Dalle.ColumnStyles(1).Width = 255
+
         End Select
 
     End Sub
@@ -694,7 +710,7 @@ Public Class Frm_DalleSlimFloor
             Case Me.txt_Hd.Name, Me.txt_Td2.Name
 
                 Select Case MyDalleLoc.type
-                    Case cls_Dalle.Enum_TypeDalle.Pleine, cls_Dalle.Enum_TypeDalle.Prefabriquee
+                    Case cls_Dalle.Enum_TypeDalle.Pleine, cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                         ValMin = OptionsScope.EpDallePleineMin / kUnit
                     Case cls_Dalle.Enum_TypeDalle.Mixte
                         ValMin = (OptionsScope.EpDalleMixteMin + HPMINI) / kUnit

@@ -307,7 +307,7 @@ Public Class Frm_Dalle
                 Me.cmb_TypeDalle.SelectedIndex = 0
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 Me.cmb_TypeDalle.SelectedIndex = 1
-            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 Me.cmb_TypeDalle.SelectedIndex = 2
         End Select
         MAJI_TypeDalle()
@@ -523,7 +523,7 @@ Public Class Frm_Dalle
         If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Pleine Then _
         GereTransfertValeur(MyDalleLoc.t_h, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_h, lModif)
 
-        If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Prefabriquee Then
+        If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee Then
             GereTransfertValeur(MyDalleLoc.preDalle_ep, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.preDalle_ep, lModif)
             GereTransfertValeur(MyDalleLoc.preDalle_tjoint, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.preDalle_tjoint, lModif)
         End If
@@ -869,7 +869,7 @@ Public Class Frm_Dalle
         Select Case Me.cmb_TypeDalle.SelectedIndex
             Case 0 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Pleine
             Case 1 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Mixte
-            Case 2 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case 2 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
         End Select
 
         MAJI_TypeDalle()
@@ -901,7 +901,7 @@ Public Class Frm_Dalle
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 255
 
-            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 Me.pan_Bac.Enabled = False
                 Me.pan_Predalle.Visible = True
                 Me.pan_Renformis.Visible = False
@@ -998,7 +998,7 @@ Public Class Frm_Dalle
             Case Me.txt_Hd.Name, Me.txt_Td2.Name
 
                 Select Case MyDalleLoc.type
-                    Case cls_Dalle.Enum_TypeDalle.Pleine, cls_Dalle.Enum_TypeDalle.Prefabriquee
+                    Case cls_Dalle.Enum_TypeDalle.Pleine, cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                         ValMin = OptionsScope.EpDallePleineMin / kUnit
                     Case cls_Dalle.Enum_TypeDalle.Mixte
                         ValMin = (OptionsScope.EpDalleMixteMin + HPMINI) / kUnit

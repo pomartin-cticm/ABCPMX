@@ -889,7 +889,7 @@
 
         '--> Initialisation
         lGeneration1 = myBeam.Param.lGeneration1
-        lDallePleine = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
+        lDallePleine = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
         lPerp = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
         Ecm = myBeam.Dalle.beton.Ecm
         Fck = myBeam.Dalle.beton.Fck

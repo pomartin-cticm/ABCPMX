@@ -2645,7 +2645,7 @@ Public Class cls_Poutre
         '# Zone de connexion
         ReDim IndZoneConnex(Me.Nodes.iNodeExtTrav(iTraveeFin, 1) - 1)
 
-        lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
+        lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
         lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck
@@ -5318,7 +5318,7 @@ Public Class cls_Poutre
 
         ReDim Me.DensiteConnexionZone(Me.IndiceDerniereTravee, 2)
         lGeneration1 = Me.Param.lGeneration1
-        lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee)
+        lDallePleine = (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (Me.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
         lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire) And (Me.Dalle.Bac.AppuiT <> cls_Bac.EnuConfigTAppui.Discontinu)
         Ecm = Me.Dalle.beton.Ecm
         Fck = Me.Dalle.beton.Fck

@@ -685,6 +685,7 @@ CONCRETE				= Béton
 CONNECTORANDSHEET		= Placement des connecteurs 
 DIAMETER				= Diamètre
 FIRSTLAYER				= Première nappe d'armature
+FULLPRECAST				= Dalle préfabriquée
 GENERAL					= Général
 HAUNCH					= Renformis
 HEIGHT					= Hauteur				   

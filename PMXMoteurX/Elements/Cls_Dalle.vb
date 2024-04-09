@@ -114,7 +114,8 @@
     Public Enum Enum_TypeDalle
         Pleine
         Mixte
-        Prefabriquee
+        PartiellementPrefabriquee
+        CompletementPrefabriquee
     End Enum
 
 #End Region
@@ -167,7 +168,7 @@
                     Ac = Me.Beff * Me.EpaisseurActive
                     perimU = Me.Beff
                 End If
-            Case Enum_TypeDalle.Prefabriquee 'Rajout GUD: il manquait ce cas (à mon avis il vaut mieux différencier ce cas de la dalle pleine, au cas où la valeur de theta n'aurait pas été initialisée à 0 pour le cas de la dalle préfa)
+            Case Enum_TypeDalle.PartiellementPrefabriquee 'Rajout GUD: il manquait ce cas (à mon avis il vaut mieux différencier ce cas de la dalle pleine, au cas où la valeur de theta n'aurait pas été initialisée à 0 pour le cas de la dalle préfa)
                 Ac = Me.Beff * Me.t_d
                 perimU = 2 * Me.Beff - Bfs
 
@@ -345,7 +346,7 @@
                     End Select
                 Case Enum_TypeDalle.Pleine
                     Ep = Me.t_d
-                Case Enum_TypeDalle.Prefabriquee
+                Case Enum_TypeDalle.PartiellementPrefabriquee
                     Ep = Me.t_d - Me.preDalle_ep + Me.preDalle_tjoint
             End Select
             Return Ep
@@ -436,7 +437,7 @@
         '--> Calcul
 
         Select Case Me.type
-            Case Enum_TypeDalle.Pleine, Enum_TypeDalle.Prefabriquee
+            Case Enum_TypeDalle.Pleine, Enum_TypeDalle.PartiellementPrefabriquee
                 pInertieH = Me.t_d ^ 3 / 12
             Case Enum_TypeDalle.Mixte
                 Select Case Me.Bac.Orientation

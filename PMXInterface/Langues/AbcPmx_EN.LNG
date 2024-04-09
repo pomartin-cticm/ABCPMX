@@ -685,6 +685,7 @@ CONCRETE				= Concrete
 CONNECTORANDSHEET		= Placement of the connectors
 DIAMETER				= Diameter
 FIRSTLAYER				= First layer of reinforcement
+FULLPRECAST				= Prefabricated floor 
 GENERAL					= General
 HAUNCH					= Haunch
 HEIGHT					= Height

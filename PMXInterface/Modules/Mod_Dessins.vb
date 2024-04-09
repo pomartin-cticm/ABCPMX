@@ -176,7 +176,7 @@ Public Module Mod_Dessins
                         End If
                 End Select
 
-            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 DessinDallePreFab_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, EntraxeD2, MyPoutre.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
         End Select
 
@@ -1501,7 +1501,7 @@ Public Module Mod_Dessins
 
                 End Select
 
-            Case cls_Dalle.Enum_TypeDalle.Prefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 DessinDallePreFab(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
         End Select
 
@@ -1603,7 +1603,7 @@ Public Module Mod_Dessins
 
         '# Prédalle
 
-        If (MyDalle.type = cls_Dalle.Enum_TypeDalle.Prefabriquee) And (MyDalle.preDalle_ep > 0) Then
+        If (MyDalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee) And (MyDalle.preDalle_ep > 0) Then
 
             MyColor = StyleCouleur(iSelect, 10)
             MyPen.Color = MyColor
