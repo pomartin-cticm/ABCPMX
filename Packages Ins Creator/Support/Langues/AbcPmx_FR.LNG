@@ -477,7 +477,7 @@ TITLE 					= Definition des maintiens latéraux de la poutre
 #FRM_MAIN
 ABOUT					= A propos
 ADDBEAM					= Ajouter une poutre
-CALCULATION				= Calcul
+CALCULATION				= Options coefficient d'équivalence 
 CALCULOPTIONS			= Options de calcul
 CALCULATIONREPORT		= Note de calculs
 SOFTOPT					= Options du logiciel					  
@@ -514,6 +514,10 @@ TSBENCASEMENT			= Enrobage partiel
 TSBHOME					= Début
 TSBIDENTIFICATION		= Identification
 TSBSECTIONA				= Profilé acier
+TSBSECTIONSFB			= Section slimfloor SFB
+TSBSECTIONIFBA			= Section slimfloor IFB type A
+TSBSECTIONIFBB			= Section slimfloor IFB type B
+TSBSECTIONSAB			= Section slimfloor SAB
 TSBSLAB					= Dalle
 TSBSPACINGS				= Configuration transversale
 TSBSPANS				= Portées
@@ -681,6 +685,7 @@ CONCRETE				= Béton
 CONNECTORANDSHEET		= Placement des connecteurs 
 DIAMETER				= Diamètre
 FIRSTLAYER				= Première nappe d'armature
+FULLPRECAST				= Dalle préfabriquée
 GENERAL					= Général
 HAUNCH					= Renformis
 HEIGHT					= Hauteur				   
@@ -751,6 +756,60 @@ WEB						= Âme
 WELDEDSYM				= PRS bisymétrique
 WELDEDP					= PRS mono-symétrique
 
+#FRM_SFBSECTIONS
+CANCEL					= Annuler
+DELIVERYCOND			= Conditions de livraison pour $
+HOTROLLED				= Profilé laminé
+OK						= OK
+PROFILE					= Profilé
+PROFILES				= Profilés 
+QUALITY					= Qualité 
+REDUCTIONCURVE			= Courbe de réduction
+SERIAL					= Série
+STEEL					= Acier
+STEELGRADE				= Nuance d'acier
+TITLE					= Définition de la poutre acier
+WELDPLATE				= Plat soudé
+WIDTH					= Largeur
+THICKNESS				= Epaisseur
+
+#FRM_IFBSECTIONS
+AUTOMATICHA				= Hauteur totale automatiquement calculée
+AUTOMATICHW				= Hauteur de l'âme automatiquement calculée
+CANCEL					= Annuler
+DELIVERYCOND			= Conditions de livraison pour $
+HOTROLLED				= Profilé laminé parent
+OK						= OK
+PROFILE					= Profilé
+PROFILES				= Profilés 
+QUALITY					= Qualité 
+REDUCTIONCURVE			= Courbe de réduction
+SERIAL					= Série
+STEEL					= Acier
+STEELGRADE				= Nuance d'acier
+TITLE					= Définition de la poutre acier
+HEIGHT					= Hauteur
+WEBHEIGHT				= Hauteur de l'âme
+WIDTH					= Largeur
+THICKNESS				= Epaisseur
+IFBSECTION				= Section IFB
+
+#FRM_SABSECTIONS
+CANCEL					= Annuler
+DELIVERYCOND			= Conditions de livraison pour $
+HOTROLLED				= Profilé laminé
+OK						= OK
+PROFILE					= Profilé
+PROFILES				= Profilés 
+QUALITY					= Qualité 
+REDUCTIONCURVE			= Courbe de réduction
+SERIAL					= Série
+STEEL					= Acier
+STEELGRADE				= Nuance d'acier
+TITLE					= Définition de la poutre acier
+SABSECTION				= Section SAB
+WIDTH					= Largeur
+
 #GENERAL
 SELFWEIGHT				= Poids propre
 OTHERG					= Autre charges permanentes
@@ -776,6 +835,7 @@ CANCEL					= Annuler
 GAMMA					= Coefficients nationaux par défaut
 SCOPE					= Domaine d'application
 CALCUL					= Options de calcul
+SLIMFLOOR				= Slimfloor 
 FIRE					= Calcul à l'incendie
 MODIF					= Attention : la modification des paramètres sera prise en compte lors de l'ajout de nouvelles poutres uniquement. 
 MODIF2					= Les valeurs des paramètres des poutres déjà créées resteront inchangées.  
@@ -836,6 +896,13 @@ HAUNCHTH				= Epaisseur des renformis
 SOLIDSLABTH				= Epaisseur de la dalle béton
 COMPOSITESLABTH			= Epaisseur de la dalle mixte (au-dessus du bac)
 RHOLWC					= Masse volumique du béton léger
+
+#OPTCALSLIMFLOOR
+TITLE					= Slimfloor
+SLIMFLOORDIM			= Dimensions des slimfloors
+DEPTHMAX				= Hauteur maximale d'un profil laminé à chaud pour slimfloors
+SLABSUPPORTMIN			= Largeur minimale du support de plancher
+THICKNESSMIN			= Epaisseur minimale du plat pour les slimfloors
 
 #OPTSOFTMAIN
 TITLE					= Options logiciel

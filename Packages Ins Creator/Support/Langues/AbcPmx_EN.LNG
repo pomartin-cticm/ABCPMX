@@ -23,7 +23,6 @@ VERSION					= Version
 SUPPORT					= Support :
 YEARVERSION				= Year :
 
-
 #FRMADDSTUD
 TITLEADD				= Add a new stud
 TITLEMODIFY				= Modify the stud
@@ -478,7 +477,7 @@ TITLE 					= Definition of the lateral restraints
 #FRM_MAIN
 ABOUT					= About
 ADDBEAM					= Add beam
-CALCULATION				= Calculation
+CALCULATION				= Modular ratio tool
 CALCULOPTIONS			= Calculation options
 CALCULATIONREPORT		= Calculation report
 SOFTOPT					= Software options
@@ -515,6 +514,10 @@ TSBENCASEMENT			= Partial encasement
 TSBHOME					= Home
 TSBIDENTIFICATION		= Identification
 TSBSECTIONA				= Steel section
+TSBSECTIONSFB			= SFB slimfloor section
+TSBSECTIONIFBA			= IFB type A slimfloor section
+TSBSECTIONIFBB			= IFB type B slimfloor section
+TSBSECTIONSAB			= SAB slimfloor section
 TSBSLAB					= Slab
 TSBSPACINGS				= Transverse configuration
 TSBSPANS				= Spans
@@ -682,6 +685,7 @@ CONCRETE				= Concrete
 CONNECTORANDSHEET		= Placement of the connectors
 DIAMETER				= Diameter
 FIRSTLAYER				= First layer of reinforcement
+FULLPRECAST				= Prefabricated floor 
 GENERAL					= General
 HAUNCH					= Haunch
 HEIGHT					= Height
@@ -752,6 +756,60 @@ WEB						= Web
 WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
 
+#FRM_SFBSECTIONS
+CANCEL					= Cancel
+DELIVERYCOND			= Delivery conditions for $
+HOTROLLED				= Hot rolled profile
+OK						= OK
+PROFILE					= Profile
+PROFILES				= Profiles 
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+WELDPLATE				= Welded plate
+WIDTH					= Width
+THICKNESS				= Thickness
+
+#FRM_IFBSECTIONS
+AUTOMATICHA				= Total height automatically assessed
+AUTOMATICHW				= Height of the web automatically assessed
+CANCEL					= Cancel
+DELIVERYCOND			= Delivery conditions for $
+HOTROLLED				= Hot rolled profile
+OK						= OK
+PROFILE					= Parent profile
+PROFILES				= Profiles 
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+HEIGHT					= Hauteur
+WIDTH					= Width
+WEBHEIGHT				= Web height
+THICKNESS				= Thickness
+IFBSECTION				= IFB section
+
+#FRM_SFBSECTIONS
+CANCEL					= Cancel
+DELIVERYCOND			= Delivery conditions for $
+HOTROLLED				= Hot rolled profile
+OK						= OK
+PROFILE					= Profile
+PROFILES				= Profiles 
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+SABSECTION				= SAB Section
+WIDTH					= Width
+
 #GENERAL
 SELFWEIGHT				= Self-weight
 OTHERG					= Other permanent loads
@@ -777,6 +835,7 @@ CANCEL					= Cancel
 GAMMA					= Default national factors
 SCOPE					= Scope of application
 CALCUL					= Calculation options
+SLIMFLOOR				= Slimfloor
 FIRE					= Fire design
 MODIF					= Warning : parameter modifications will be taken into account when adding new beams only. 
 MODIF2					= The parameter values of existing beams will remain unchanged.
@@ -837,6 +896,13 @@ HAUNCHTH				= Thickness of slab haunch
 SOLIDSLABTH				= Thickness of solid slab
 COMPOSITESLABTH			= Thickness of composite slab (above ribs)
 RHOLWC					= Density of light weight concrete
+
+#OPTCALSLIMFLOOR
+TITLE					= Slimfloor
+SLIMFLOORDIM			= Slimfloor dimensions
+DEPTHMAX				= Maximal depth of a slim floor hot rolled profile
+SLABSUPPORTMIN			= Minimum width of the slab support
+THICKNESSMIN			= Minimum thickness of the plate for slim floors
 
 #OPTSOFTMAIN
 TITLE					= Software options
