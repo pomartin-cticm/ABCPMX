@@ -85,6 +85,11 @@
     ''' </summary>
     Public Bac As New cls_Bac
 
+    ''' <summary>
+    ''' Cofradal (utile pour les slimfloors)
+    ''' </summary>
+    Public Cofradal As New cls_Cofradal
+
     '''' <summary>
     '''' Armatures longitudinales supérieur
     '''' </summary>

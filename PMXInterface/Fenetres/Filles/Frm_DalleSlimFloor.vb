@@ -238,6 +238,10 @@ Public Class Frm_DalleSlimFloor
         Me.pan_Predalle.Left = 5
         Me.pan_Predalle.Top = 55
 
+        Me.pan_Type.Controls.Add(Me.pan_Cofradal)
+        Me.pan_Cofradal.Left = 5
+        Me.pan_Cofradal.Top = 60
+
         RemplirComboAvecTableau(Me.cmb_TypeDalle, strType)
         RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
         RemplirComboClasseBeton()
@@ -548,13 +552,13 @@ Public Class Frm_DalleSlimFloor
     End Sub
 
 
-    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_RhoC.Leave, txt_Td2.Leave, txt_Tc.Leave, txt_Hd.Leave, txt_EpPredalle.Leave, txt_EpJoint.Leave
+    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_RhoC.Leave, txt_Td2.Leave, txt_Tc.Leave, txt_Hd.Leave, txt_EpPredalle.Leave, txt_EpJoint.Leave, txt_dp.Leave, txt_mupf.Leave
         If lBuild Then Exit Sub
         iSelect = -1
         Me.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_RhoC.Enter, txt_Td2.Enter, txt_Tc.Enter, txt_Hd.Enter, txt_EpPredalle.Enter, txt_EpJoint.Enter
+    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_RhoC.Enter, txt_Td2.Enter, txt_Tc.Enter, txt_Hd.Enter, txt_EpPredalle.Enter, txt_EpJoint.Enter, txt_dp.Enter, txt_mupf.Enter
         If lBuild Then Exit Sub
         Select Case sender.name
             Case Me.txt_Hd.Name, Me.txt_Td2.Name
@@ -608,43 +612,63 @@ Public Class Frm_DalleSlimFloor
                 Me.pan_Predalle.Visible = False
                 Me.pan_EpaisseurMixte.Visible = False
                 Me.pan_Epaisseur.Visible = True
+                Me.pan_Cofradal.Visible = False
 
-                Me.TLpan_PartageV.ColumnStyles(1).Width = 0
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 255
-
-            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
-                Me.pan_Bac.Enabled = False
-                Me.pan_Predalle.Visible = True
-                Me.pan_EpaisseurMixte.Visible = False
-                Me.pan_Epaisseur.Visible = True
-
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
-                Me.TLPan_Dalle.ColumnStyles(0).Width = 280
+
+                Me.Height = 410
+                Me.TLpan_PartageV.Height = 325 'Ajustement du TL
+                Me.TLpan_Gauche.RowStyles(1).Height = 75 'Ajustement du pan_Type
 
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 Me.pan_Bac.Enabled = True
+
                 Me.pan_Predalle.Visible = False
                 Me.pan_EpaisseurMixte.Visible = True
                 Me.pan_Epaisseur.Visible = False
+                Me.pan_Cofradal.Visible = False
 
                 Me.TLPan_Dalle.ColumnStyles(0).Width = 501
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 250
 
-            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+                Me.Height = 430
+                Me.TLpan_PartageV.Height = 345 'Ajustement du TL
+                Me.TLpan_Gauche.RowStyles(1).Height = 95 'Ajustement du pan_Type
+
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 Me.pan_Bac.Enabled = False
-                Me.pan_Predalle.Visible = False
+
+                Me.pan_Predalle.Visible = True
                 Me.pan_EpaisseurMixte.Visible = False
-                Me.pan_Epaisseur.Visible = False
+                Me.pan_Epaisseur.Visible = True
+                Me.pan_Cofradal.Visible = False
 
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
-                Me.TLPan_Dalle.ColumnStyles(0).Width = 255
-                Me.TLPan_Dalle.ColumnStyles(1).Width = 255
+                Me.TLPan_Dalle.ColumnStyles(0).Width = 280
+
+                Me.Height = 450
+                Me.TLpan_PartageV.Height = 365 'Ajustement du TL
+                Me.TLpan_Gauche.RowStyles(1).Height = 115 'Ajustement du pan_Type
+
+            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+                Me.pan_Bac.Enabled = False
+
+                Me.pan_Predalle.Visible = False
+                Me.pan_EpaisseurMixte.Visible = False
+                Me.pan_Epaisseur.Visible = True
+                Me.pan_Cofradal.Visible = True
+
+                Me.Height = 480
+                Me.TLpan_PartageV.Height = 395 'Ajustement du TL
+                Me.TLpan_Gauche.RowStyles(1).Height = 145 'Ajustement du pan_Type
 
         End Select
 
+
     End Sub
 
-    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_RhoC.TextChanged, txt_Td2.TextChanged, txt_Tc.TextChanged, txt_Hd.TextChanged, txt_EpPredalle.TextChanged, txt_EpJoint.TextChanged
+    Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_RhoC.TextChanged, txt_Td2.TextChanged, txt_Tc.TextChanged, txt_Hd.TextChanged, txt_EpPredalle.TextChanged, txt_EpJoint.TextChanged, txt_dp.TextChanged, txt_mupf.TextChanged
 
         If lBuild Then Exit Sub
         lBuild = True
@@ -811,7 +835,7 @@ Public Class Frm_DalleSlimFloor
 #Region " Dessins symboles "
 
     Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_Fy.Paint, img_RhoC.Paint, img_Hp.Paint,
-        img_EpPredalle.Paint, img_EpJoint.Paint, img_Td2.Paint, img_Tc.Paint, Img_Hd.Paint
+        img_EpPredalle.Paint, img_EpJoint.Paint, img_Td2.Paint, img_Tc.Paint, Img_Hd.Paint, img_dp.Paint, img_mupf.Paint
 
         '--> Déclarations
 

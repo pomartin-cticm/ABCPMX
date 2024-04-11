@@ -209,6 +209,60 @@
 
 #End Region
 
+#Region "Tableau Cofradal"
+
+    ''' <summary>
+    ''' Fonction qui renvoi la hauteur (item1) et la masse surfacique (item2) du cofradal dont le nom est passé en argument
+    ''' Item1: Hauteur du cofradal
+    ''' Item2: Masse surfacique du cofradal
+    ''' Item3 indique si le nom a été trouvé dans la BDD (True) ou non (False)
+    ''' </summary>
+    ''' <param name="nom"></param>
+    ''' <returns></returns>
+    Public Function Get_Cofradal(ByVal nom As String) As (Decimal, Decimal, Boolean)
+
+        '--> Déclaration 
+
+        Dim retour As (Decimal, Decimal, Boolean) = (0, 0, False)
+        Dim i As Integer = 0
+
+        '--> Recherche du nom dans la BDD
+
+        While i < table_CofraDal.Length And Not retour.Item3
+
+            retour.Item3 = nom = table_CofraDal(i).Item1 'indique si le nom correspond
+
+            If retour.Item3 Then 'récupère les données le cas échéant
+                retour.Item1 = table_CofraDal(i).Item2 'on récupère la hauteur du cofradal
+                retour.Item2 = table_CofraDal(i).Item3 'on récupère la masse surfacique du cofradal
+            End If
+
+        End While
+
+        '--> Retour
+
+        Return retour
+    End Function
+
+
+    ''' <summary>
+    ''' Tableau des cofradals
+    ''' item1: nom du cofradal
+    ''' item2: hauteur
+    ''' item3: masse surfacique 
+    ''' </summary>
+    Private table_CofraDal As (String, Decimal, Decimal)() =
+        {
+        ("Cofradal 200 PAC", 0.125, 0.525),
+        ("Cofradal 230 PAC", 0.125, 0.475),
+        ("Cofradal 260 PAC", 0.185, 0.925),
+        ("Cofradal 200 Prefab", 0.2, 2.4),
+        ("Cofradal 230 Prefab", 0.23, 3.1),
+        ("Cofradal 260 Prefab", 0.26, 2.8)
+        }
+
+#End Region
+
 #Region " Gestion noms chargements "
 
     Public NomChargements() As String           ' Nom des cas de charge utilisateur
