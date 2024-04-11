@@ -353,6 +353,8 @@
                     Ep = Me.t_d
                 Case Enum_TypeDalle.PartiellementPrefabriquee
                     Ep = Me.t_d - Me.preDalle_ep + Me.preDalle_tjoint
+                Case Enum_TypeDalle.CompletementPrefabriquee
+                    Ep = Me.t_d - Me.Cofradal.dp
             End Select
             Return Ep
         End Get
@@ -611,6 +613,7 @@
 
         DalleCible.beton = DalleSource.beton.Clone()
         DalleCible.Bac = DalleSource.Bac.Clone()
+        DalleCible.Cofradal = DalleSource.Cofradal.Clone()
 
         DalleCible.LitArma = New List(Of Cls_Armatures_Longi)
 

@@ -237,6 +237,8 @@
                 retour.Item2 = table_CofraDal(i).Item3 'on récupère la masse surfacique du cofradal
             End If
 
+            i += 1
+
         End While
 
         '--> Retour
@@ -244,21 +246,37 @@
         Return retour
     End Function
 
+    Public Function Get_LenghtCofradalTable() As Integer
+        Return table_CofraDal.Length
+    End Function
 
+
+    Public Function Get_ListName_Cofradal() As String()
+        '--> Déclaration
+        Dim retour As String()
+        ReDim retour(table_CofraDal.Length - 1)
+
+        '--> Copie des noms des cofradals
+        For i As Integer = 0 To table_CofraDal.Length - 1
+            retour(i) = table_CofraDal(i).Item1
+        Next
+
+        Return retour
+    End Function
     ''' <summary>
     ''' Tableau des cofradals
     ''' item1: nom du cofradal
-    ''' item2: hauteur
-    ''' item3: masse surfacique 
+    ''' item2: hauteur (en m)
+    ''' item3: masse surfacique (N/m2) 
     ''' </summary>
     Private table_CofraDal As (String, Decimal, Decimal)() =
         {
-        ("Cofradal 200 PAC", 0.125, 0.525),
-        ("Cofradal 230 PAC", 0.125, 0.475),
-        ("Cofradal 260 PAC", 0.185, 0.925),
-        ("Cofradal 200 Prefab", 0.2, 2.4),
-        ("Cofradal 230 Prefab", 0.23, 3.1),
-        ("Cofradal 260 Prefab", 0.26, 2.8)
+        ("Cofradal 200 PAC", 0.125, 525),
+        ("Cofradal 230 PAC", 0.125, 475),
+        ("Cofradal 260 PAC", 0.185, 925),
+        ("Cofradal 200 Prefab", 0.2, 2400),
+        ("Cofradal 230 Prefab", 0.23, 3100),
+        ("Cofradal 260 Prefab", 0.26, 2800)
         }
 
 #End Region

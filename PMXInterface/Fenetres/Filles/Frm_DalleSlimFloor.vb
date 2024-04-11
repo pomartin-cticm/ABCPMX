@@ -9,6 +9,8 @@ Public Class Frm_DalleSlimFloor
     Dim lBuild As Boolean = True
 
     Dim strType(3) As String
+    Dim strCofradal() As String 'contient les noms des cofradals à afficher dans le combobox
+    Dim strCofradalNotFound As String 'message d'erreur dans la cas où le cofradal n'aurait pas été trouvé dans la BDD
 
     Dim ClasseBeton() As String = cls_Beton.TabClasseBeton
     Dim ClasseBetonLeger() As String = cls_Beton.TabClasseBetonLeger
@@ -94,11 +96,26 @@ Public Class Frm_DalleSlimFloor
                 strType(2) = Bloc("PRECASTSLAB")
                 strType(3) = Bloc("FULLPRECAST")
 
+                ReDim strCofradal(Get_LenghtCofradalTable)
+                strCofradal(0) = Bloc("USER")
+
+                Dim str_TableCofra() As String = Get_ListName_Cofradal()
+
+                For i As Integer = 0 To str_TableCofra.Length - 1
+                    strCofradal(i + 1) = str_TableCofra(i)
+                Next
+
                 Me.lbl_TypeDalle.Text = Bloc("TYPE")
                 Me.lbl_Epaisseur.Text = Bloc("THICKNESS")
                 Me.lbl_EpaisseurM.Text = Bloc("THICKNESS")
                 Me.lbl_EpPreDalle.Text = Bloc("PRESLAB")
                 Me.lbl_EpJoint.Text = Bloc("JOINT")
+                Me.lbl_Cofradal.Text = Bloc("COFRADAL")
+                Me.lbl_Name.Text = Bloc("NAME")
+                Me.lbl_dp.Text = Bloc("PRESLAB")
+                Me.lbl_mupf.Text = Bloc("MSURF")
+
+                strCofradalNotFound = Bloc("COFRANOTFOUND")
 
                 '=== BETON ========================================================================
 
@@ -158,6 +175,8 @@ Public Class Frm_DalleSlimFloor
         Me.etq_UnitDim4.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim8.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitDim9.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim12.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitDim13.Text = LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "2"
 
         Me.etq_UnitRhoC.Text = "kg/m3"
         Me.etq_UnitSigma2.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
@@ -243,6 +262,7 @@ Public Class Frm_DalleSlimFloor
         Me.pan_Cofradal.Top = 60
 
         RemplirComboAvecTableau(Me.cmb_TypeDalle, strType)
+        RemplirComboAvecTableau(Me.cmb_Cofradal, strCofradal)
         RemplirComboAvecTableau(Me.cmb_Acier, ClasseAcierArma)
         RemplirComboClasseBeton()
 
@@ -282,7 +302,6 @@ Public Class Frm_DalleSlimFloor
             Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
                 Me.cmb_TypeDalle.SelectedIndex = 3
         End Select
-        MAJI_TypeDalle()
 
         '--> Epaisseur
 
@@ -334,8 +353,25 @@ Public Class Frm_DalleSlimFloor
         Else
             iLitSelect = 0
             iSelect = 100
-
         End If
+
+        '--> Cofradal
+
+        If MyDalleLoc.Cofradal.lCustom Then
+            Me.cmb_Cofradal.SelectedIndex = 0
+        Else
+            Me.cmb_Cofradal.SelectedItem = MyDalleLoc.Cofradal.nom
+        End If
+
+        Me.txt_dp.Enabled = MyDalleLoc.Cofradal.lCustom
+        Me.txt_mupf.Enabled = MyDalleLoc.Cofradal.lCustom
+
+        AfficherCofradalEnCours()
+
+        '--> MAJ GUI
+
+        MAJI_TypeDalle()
+
     End Sub
 
     Private Sub MAJI_SaisieEpMixte()
@@ -363,9 +399,6 @@ Public Class Frm_DalleSlimFloor
 
         MyDalleLoc.beton.Calcul_Proprietes()
 
-        'Me.txt_Fck.Text = GetStringNoUnit(MyDalleLoc.beton.Fck, Enu_TypeVariable.Contrainte)
-        'Me.txt_RhoC.Text = GetStringNoUnit(MyDalleLoc.beton.Ecm, Enu_TypeVariable.ModuleY)
-
     End Sub
 
 #End Region
@@ -385,8 +418,6 @@ Public Class Frm_DalleSlimFloor
             If lModif Then
                 MyProjet.Poutres(MyProjet.IndEnCours).EstModifiee()
             End If
-
-            'MyProjet.Poutres(MyProjet.IndEnCours).EstValidee(iFRMslab)
 
             Me.Close()
         End If
@@ -434,19 +465,16 @@ Public Class Frm_DalleSlimFloor
         MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.Copie(MyDalleLoc.Bac, lModif)
         MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Bac.CopieAutresParam(MyDalleLoc.Bac, lModif)
 
-        '--> Armatures
+        '--> Cofradal
 
-        ' GereTransfertValeur(MyDalleLoc.NbLitsArmaActifs, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.NbLitsArmaActifs, lModif)
+        If cmb_Cofradal.SelectedIndex = 0 And Me.txt_NameCustomCofra.Text = "" Then
+            MyDalleLoc.Cofradal.nom = Me.cmb_Cofradal.Items(0) 'on ajoute un nom par défaut = User ou Utilisateur
+        End If
 
-        For i As Integer = 0 To 1
-
-            GereTransfertValeur(MyDalleLoc.LitArma(i).PhiS, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).PhiS, lModif)
-            GereTransfertValeur(MyDalleLoc.LitArma(i).lActive, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).lActive, lModif)
-            GereTransfertValeur(MyDalleLoc.LitArma(i).EspBar, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).EspBar, lModif)
-            GereTransfertValeur(MyDalleLoc.LitArma(i).z_s, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).z_s, lModif)
-            GereTransfertValeur(MyDalleLoc.LitArma(i).lActive, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.LitArma(i).lActive, lModif)
-
-        Next
+        GereTransfertValeur(MyDalleLoc.Cofradal.nom, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Cofradal.nom, lModif)
+        GereTransfertValeur(MyDalleLoc.Cofradal.dp, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Cofradal.dp, lModif)
+        GereTransfertValeur(MyDalleLoc.Cofradal.msurf, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Cofradal.msurf, lModif)
+        GereTransfertValeur(MyDalleLoc.Cofradal.lCustom, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Cofradal.lCustom, lModif)
 
     End Sub
 
@@ -552,13 +580,13 @@ Public Class Frm_DalleSlimFloor
     End Sub
 
 
-    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_RhoC.Leave, txt_Td2.Leave, txt_Tc.Leave, txt_Hd.Leave, txt_EpPredalle.Leave, txt_EpJoint.Leave, txt_dp.Leave, txt_mupf.Leave
+    Private Sub LeaveTxtBoxes(sender As Object, e As EventArgs) Handles txt_RhoC.Leave, txt_Td2.Leave, txt_Tc.Leave, txt_Hd.Leave, txt_EpPredalle.Leave, txt_EpJoint.Leave, txt_dp.Leave, txt_mupf.Leave, txt_NameCustomCofra.Leave
         If lBuild Then Exit Sub
         iSelect = -1
         Me.img_Dalle.Invalidate()
     End Sub
 
-    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_RhoC.Enter, txt_Td2.Enter, txt_Tc.Enter, txt_Hd.Enter, txt_EpPredalle.Enter, txt_EpJoint.Enter, txt_dp.Enter, txt_mupf.Enter
+    Private Sub EnterTxtBoxes(sender As Object, e As EventArgs) Handles txt_RhoC.Enter, txt_Td2.Enter, txt_Tc.Enter, txt_Hd.Enter, txt_EpPredalle.Enter, txt_EpJoint.Enter, txt_dp.Enter, txt_mupf.Enter, txt_NameCustomCofra.Enter
         If lBuild Then Exit Sub
         Select Case sender.name
             Case Me.txt_Hd.Name, Me.txt_Td2.Name
@@ -614,12 +642,15 @@ Public Class Frm_DalleSlimFloor
                 Me.pan_Epaisseur.Visible = True
                 Me.pan_Cofradal.Visible = False
 
-                Me.TLPan_Dalle.ColumnStyles(0).Width = 255
+                Me.TLPan_Dalle.ColumnStyles(0).Width = 280
                 Me.TLpan_PartageV.ColumnStyles(1).Width = 0
 
                 Me.Height = 410
+
                 Me.TLpan_PartageV.Height = 325 'Ajustement du TL
                 Me.TLpan_Gauche.RowStyles(1).Height = 75 'Ajustement du pan_Type
+
+                Me.Width = 930
 
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 Me.pan_Bac.Enabled = True
@@ -629,12 +660,14 @@ Public Class Frm_DalleSlimFloor
                 Me.pan_Epaisseur.Visible = False
                 Me.pan_Cofradal.Visible = False
 
-                Me.TLPan_Dalle.ColumnStyles(0).Width = 501
-                Me.TLpan_PartageV.ColumnStyles(1).Width = 250
+                Me.TLPan_Dalle.ColumnStyles(0).Width = 560
+                Me.TLpan_PartageV.ColumnStyles(1).Width = 280
 
                 Me.Height = 430
                 Me.TLpan_PartageV.Height = 345 'Ajustement du TL
                 Me.TLpan_Gauche.RowStyles(1).Height = 95 'Ajustement du pan_Type
+
+                Me.Width = 1210
 
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 Me.pan_Bac.Enabled = False
@@ -651,6 +684,8 @@ Public Class Frm_DalleSlimFloor
                 Me.TLpan_PartageV.Height = 365 'Ajustement du TL
                 Me.TLpan_Gauche.RowStyles(1).Height = 115 'Ajustement du pan_Type
 
+                Me.Width = 930
+
             Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
                 Me.pan_Bac.Enabled = False
 
@@ -659,13 +694,67 @@ Public Class Frm_DalleSlimFloor
                 Me.pan_Epaisseur.Visible = True
                 Me.pan_Cofradal.Visible = True
 
-                Me.Height = 480
-                Me.TLpan_PartageV.Height = 395 'Ajustement du TL
-                Me.TLpan_Gauche.RowStyles(1).Height = 145 'Ajustement du pan_Type
+                'Me.Height -> voir MAJI_Cofradal
 
+                Me.TLpan_PartageV.ColumnStyles(1).Width = 0
+                Me.TLPan_Dalle.ColumnStyles(0).Width = 280
+
+                MAJI_Cofradal()
+
+                Me.Width = 930
         End Select
 
 
+    End Sub
+
+    Private Sub MAJI_Cofradal()
+
+        If cmb_Cofradal.SelectedIndex = 0 Then 'Cofradal Utilisateur
+            Me.txt_NameCustomCofra.Visible = True
+            Me.lbl_Name.Visible = True
+
+            Me.lbl_dp.Location = New Point(Me.lbl_dp.Location.X, Me.lbl_Name.Location.Y + 25)
+            Me.img_dp.Location = New Point(Me.img_dp.Location.X, Me.lbl_dp.Location.Y)
+            Me.txt_dp.Location = New Point(Me.txt_dp.Location.X, Me.lbl_dp.Location.Y)
+            Me.etq_UnitDim12.Location = New Point(Me.etq_UnitDim12.Location.X, Me.lbl_dp.Location.Y + 2.5)
+
+            Me.lbl_mupf.Location = New Point(Me.lbl_mupf.Location.X, Me.lbl_dp.Location.Y + 20)
+            Me.img_mupf.Location = New Point(Me.img_mupf.Location.X, Me.lbl_mupf.Location.Y)
+            Me.txt_mupf.Location = New Point(Me.txt_mupf.Location.X, Me.lbl_mupf.Location.Y)
+            Me.etq_UnitDim13.Location = New Point(Me.etq_UnitDim13.Location.X, Me.lbl_mupf.Location.Y + 2.5)
+
+
+            Me.Height = 510
+            Me.TLpan_PartageV.Height = 425 'Ajustement du TL
+            Me.TLpan_Gauche.RowStyles(1).Height = 175 'Ajustement du pan_Type
+        Else
+            Me.txt_NameCustomCofra.Visible = False
+            Me.lbl_Name.Visible = False
+
+            Me.lbl_dp.Location = New Point(Me.lbl_dp.Location.X, Me.lbl_Name.Location.Y)
+            Me.img_dp.Location = New Point(Me.img_dp.Location.X, Me.lbl_dp.Location.Y)
+            Me.txt_dp.Location = New Point(Me.txt_dp.Location.X, Me.lbl_dp.Location.Y)
+            Me.etq_UnitDim12.Location = New Point(Me.etq_UnitDim12.Location.X, Me.lbl_dp.Location.Y + 2.5)
+
+            Me.lbl_mupf.Location = New Point(Me.lbl_mupf.Location.X, Me.lbl_dp.Location.Y + 20)
+            Me.img_mupf.Location = New Point(Me.img_mupf.Location.X, Me.lbl_mupf.Location.Y)
+            Me.txt_mupf.Location = New Point(Me.txt_mupf.Location.X, Me.lbl_mupf.Location.Y)
+            Me.etq_UnitDim13.Location = New Point(Me.etq_UnitDim13.Location.X, Me.lbl_mupf.Location.Y + 2.5)
+
+            Me.Height = 480
+            Me.TLpan_PartageV.Height = 395 'Ajustement du TL
+            Me.TLpan_Gauche.RowStyles(1).Height = 145 'Ajustement du pan_Type
+        End If
+
+
+
+    End Sub
+
+    Private Sub AfficherCofradalEnCours()
+
+        Me.txt_NameCustomCofra.Text = MyDalleLoc.Cofradal.nom
+        Me.txt_dp.Text = GetStringInUnit(MyDalleLoc.Cofradal.dp, Enu_TypeVariable.Dimension, 4, 3, False)
+        Me.txt_mupf.Text = GetStringInUnit(MyDalleLoc.Cofradal.msurf, Enu_TypeVariable.ChargeSurfacique, 4, 3, False)
     End Sub
 
     Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_RhoC.TextChanged, txt_Td2.TextChanged, txt_Tc.TextChanged, txt_Hd.TextChanged, txt_EpPredalle.TextChanged, txt_EpJoint.TextChanged, txt_dp.TextChanged, txt_mupf.TextChanged
@@ -703,6 +792,12 @@ Public Class Frm_DalleSlimFloor
                     Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
                     lBuild = False
 
+                Case Me.txt_dp.Name
+                    If cmb_Cofradal.SelectedIndex = 0 Then MyDalleLoc.Cofradal.dp = Valeur
+
+                Case Me.txt_mupf.Name
+                    If cmb_Cofradal.SelectedIndex = 0 Then MyDalleLoc.Cofradal.msurf = Valeur
+
             End Select
 
             Me.img_Dalle.Invalidate()
@@ -726,6 +821,7 @@ Public Class Frm_DalleSlimFloor
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
         Dim lValMax As Boolean = True
+        Dim lValMin As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
 
 
@@ -761,8 +857,17 @@ Public Class Frm_DalleSlimFloor
                 ValMax = 0
                 lValMax = False
 
+            Case Me.txt_dp.Name
+                ValMin = 0.05 / kUnit '50 mm
+                ValMax = 0.5 / kUnit '500 mm
+
+            Case Me.txt_mupf.Name 'kN/m2
+                kUnit = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
+                ValMin = 100 / kUnit '0.1 kN/m2
+                ValMax = 5000 / kUnit '5 kN/m2
+
         End Select
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
             NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
@@ -783,6 +888,30 @@ Public Class Frm_DalleSlimFloor
         MAJI_ProprietesAcier()
 
         Me.img_Dalle.Invalidate()
+    End Sub
+
+    Private Sub cmb_Name_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Cofradal.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        Me.txt_dp.Enabled = cmb_Cofradal.SelectedIndex = 0
+        Me.txt_mupf.Enabled = cmb_Cofradal.SelectedIndex = 0
+
+        If Not cmb_Cofradal.SelectedIndex = 0 Then
+            If Not MyDalleLoc.Cofradal.AjouteCofradalBDD(cmb_Cofradal.Text) Then
+                MsgBox(strCofradalNotFound)
+            End If
+        End If
+
+        MAJI_Cofradal()
+        AfficherCofradalEnCours()
+
+
+    End Sub
+
+    Private Sub txt_NameCustomCofra_TextChanged(sender As Object, e As EventArgs) Handles txt_NameCustomCofra.TextChanged
+        If cmb_Cofradal.SelectedIndex = 0 Then
+            MyDalleLoc.Cofradal.nom = Me.txt_NameCustomCofra.Text
+        End If
     End Sub
 
     Private Sub MAJI_ProprietesAcier()
@@ -881,6 +1010,13 @@ Public Class Frm_DalleSlimFloor
             Case Me.img_EpJoint.Name
                 strSymbol = "t"
                 strIndice = "j"
+            Case Me.img_dp.Name
+                strSymbol = "d"
+                strIndice = "p"
+            Case img_mupf.Name
+                strSymbol = "m"
+                strIndice = "pf"
+                lGrec = True
 
         End Select
 

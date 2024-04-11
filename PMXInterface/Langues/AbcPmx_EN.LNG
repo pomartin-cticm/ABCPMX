@@ -680,6 +680,8 @@ CANCEL					= Cancel
 ADDLAYER				= Add a layer of reinforcement
 ALL						= All
 CLASS					= Class
+COFRADAL				= Cofradal
+COFRANOTFOUND			= Warning: the specified cofradal has not been find in the database. Please contact the support.
 COMPOSITESLAB			= Composite slab
 CONCRETE				= Concrete
 CONNECTORANDSHEET		= Placement of the connectors
@@ -693,6 +695,7 @@ JOINT					= Concrete joint
 LIGHTCONCRETE			= Light concrete
 LOCATION				= Location
 MODIFYSH				= Modify the steel sheeting
+MSURF					= Weight
 NAME					= Name
 PARALLEL				= Parallel
 PERPENDICULAR			= Perpendicular
@@ -716,6 +719,7 @@ SPACING					= Spacing
 THICKNESS				= Thickness
 THROUGHDECKW			= Through deck welding
 TYPE					= Type		
+USER					= User
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam

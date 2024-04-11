@@ -680,6 +680,8 @@ CANCEL					= Annuler
 ADDLAYER				= Ajouter une nappe d'armatures
 ALL						= Tous
 CLASS					= Classe
+COFRADAL				= Cofradal
+COFRANOTFOUND			= Attention: le cofradal spécifié n'a pas été trouvé dans la base de données. Veuillez contacter le support.
 COMPOSITESLAB			= Dalle mixte
 CONCRETE				= Béton
 CONNECTORANDSHEET		= Placement des connecteurs 
@@ -693,6 +695,7 @@ JOINT					= Joint béton
 LIGHTCONCRETE			= Béton léger								
 LOCATION				= Position
 MODIFYSH				= Modifier le bac acier
+MSURF					= Poids surfacique 
 NAME					= Nom
 PARALLEL				= Parallèle
 PERPENDICULAR			= Perpendicular							   
@@ -716,6 +719,7 @@ SPACING					= Entraxe
 THICKNESS				= Epaisseur
 THROUGHDECKW			= Soudure à travers le bac									 
 TYPE					= Type
+USER					= Utilisateur
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre
