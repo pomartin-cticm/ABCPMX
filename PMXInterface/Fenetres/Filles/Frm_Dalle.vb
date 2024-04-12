@@ -570,7 +570,7 @@ Public Class Frm_Dalle
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, iSelect, msgDessin, lCote)
+                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================

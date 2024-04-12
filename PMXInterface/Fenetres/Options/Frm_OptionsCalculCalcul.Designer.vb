@@ -26,6 +26,10 @@ Partial Class Frm_OptionsCalculCalcul
         Me.pan_Calcul = New System.Windows.Forms.Panel()
         Me.TLpan_Conteneur = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_Conteneur = New System.Windows.Forms.Panel()
+        Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.lbl_ShearBuckling = New System.Windows.Forms.Label()
+        Me.txt_eta = New System.Windows.Forms.TextBox()
+        Me.img_Eta = New System.Windows.Forms.PictureBox()
         Me.Panel3 = New System.Windows.Forms.Panel()
         Me.img_T0SH = New System.Windows.Forms.PictureBox()
         Me.img_T0G2 = New System.Windows.Forms.PictureBox()
@@ -84,13 +88,15 @@ Partial Class Frm_OptionsCalculCalcul
         Me.lbl_Norme = New System.Windows.Forms.Label()
         Me.lbl_Calcul = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.Panel4 = New System.Windows.Forms.Panel()
-        Me.lbl_ShearBuckling = New System.Windows.Forms.Label()
-        Me.img_Eta = New System.Windows.Forms.PictureBox()
-        Me.txt_eta = New System.Windows.Forms.TextBox()
+        Me.img_DeltaCDev = New System.Windows.Forms.PictureBox()
+        Me.txt_DeltaCDev = New System.Windows.Forms.TextBox()
+        Me.lbl_DeltaCDev = New System.Windows.Forms.Label()
+        Me.etq_UnitDeltaCDev = New System.Windows.Forms.Label()
         Me.pan_Calcul.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
+        Me.Panel4.SuspendLayout()
+        CType(Me.img_Eta, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel3.SuspendLayout()
         CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_T0G2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -104,8 +110,7 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel1.SuspendLayout()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.Panel4.SuspendLayout()
-        CType(Me.img_Eta, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_DeltaCDev, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Calcul
@@ -148,6 +153,48 @@ Partial Class Frm_OptionsCalculCalcul
         Me.pan_Conteneur.Name = "pan_Conteneur"
         Me.pan_Conteneur.Size = New System.Drawing.Size(739, 637)
         Me.pan_Conteneur.TabIndex = 0
+        '
+        'Panel4
+        '
+        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Panel4.Controls.Add(Me.lbl_ShearBuckling)
+        Me.Panel4.Controls.Add(Me.txt_eta)
+        Me.Panel4.Controls.Add(Me.img_Eta)
+        Me.Panel4.Location = New System.Drawing.Point(4, 543)
+        Me.Panel4.Name = "Panel4"
+        Me.Panel4.Size = New System.Drawing.Size(732, 91)
+        Me.Panel4.TabIndex = 107
+        '
+        'lbl_ShearBuckling
+        '
+        Me.lbl_ShearBuckling.AutoSize = True
+        Me.lbl_ShearBuckling.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_ShearBuckling.ForeColor = System.Drawing.Color.DarkRed
+        Me.lbl_ShearBuckling.Location = New System.Drawing.Point(5, 5)
+        Me.lbl_ShearBuckling.Name = "lbl_ShearBuckling"
+        Me.lbl_ShearBuckling.Size = New System.Drawing.Size(92, 13)
+        Me.lbl_ShearBuckling.TabIndex = 105
+        Me.lbl_ShearBuckling.Text = "lbl_ShearBuckling"
+        Me.lbl_ShearBuckling.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'txt_eta
+        '
+        Me.txt_eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_eta.Location = New System.Drawing.Point(610, 30)
+        Me.txt_eta.Name = "txt_eta"
+        Me.txt_eta.Size = New System.Drawing.Size(58, 20)
+        Me.txt_eta.TabIndex = 99
+        Me.txt_eta.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
+        'img_Eta
+        '
+        Me.img_Eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Eta.Location = New System.Drawing.Point(564, 30)
+        Me.img_Eta.Name = "img_Eta"
+        Me.img_Eta.Size = New System.Drawing.Size(46, 20)
+        Me.img_Eta.TabIndex = 100
+        Me.img_Eta.TabStop = False
         '
         'Panel3
         '
@@ -638,8 +685,12 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel1.Controls.Add(Me.chk_RebarsInCompression)
         Me.Panel1.Controls.Add(Me.chk_SimplifiedEffectiveW)
         Me.Panel1.Controls.Add(Me.lbl_CrossSectionProperties)
+        Me.Panel1.Controls.Add(Me.etq_UnitDeltaCDev)
         Me.Panel1.Controls.Add(Me.etq_UnitEs)
+        Me.Panel1.Controls.Add(Me.lbl_DeltaCDev)
+        Me.Panel1.Controls.Add(Me.txt_DeltaCDev)
         Me.Panel1.Controls.Add(Me.lbl_YoungRebars)
+        Me.Panel1.Controls.Add(Me.img_DeltaCDev)
         Me.Panel1.Controls.Add(Me.txt_Es)
         Me.Panel1.Controls.Add(Me.img_Es)
         Me.Panel1.Location = New System.Drawing.Point(3, 61)
@@ -755,47 +806,42 @@ Partial Class Frm_OptionsCalculCalcul
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'Panel4
+        'img_DeltaCDev
         '
-        Me.Panel4.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel4.Controls.Add(Me.lbl_ShearBuckling)
-        Me.Panel4.Controls.Add(Me.txt_eta)
-        Me.Panel4.Controls.Add(Me.img_Eta)
-        Me.Panel4.Location = New System.Drawing.Point(4, 543)
-        Me.Panel4.Name = "Panel4"
-        Me.Panel4.Size = New System.Drawing.Size(732, 91)
-        Me.Panel4.TabIndex = 107
+        Me.img_DeltaCDev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_DeltaCDev.Location = New System.Drawing.Point(564, 94)
+        Me.img_DeltaCDev.Name = "img_DeltaCDev"
+        Me.img_DeltaCDev.Size = New System.Drawing.Size(46, 20)
+        Me.img_DeltaCDev.TabIndex = 100
+        Me.img_DeltaCDev.TabStop = False
         '
-        'lbl_ShearBuckling
+        'txt_DeltaCDev
         '
-        Me.lbl_ShearBuckling.AutoSize = True
-        Me.lbl_ShearBuckling.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lbl_ShearBuckling.ForeColor = System.Drawing.Color.DarkRed
-        Me.lbl_ShearBuckling.Location = New System.Drawing.Point(5, 5)
-        Me.lbl_ShearBuckling.Name = "lbl_ShearBuckling"
-        Me.lbl_ShearBuckling.Size = New System.Drawing.Size(92, 13)
-        Me.lbl_ShearBuckling.TabIndex = 105
-        Me.lbl_ShearBuckling.Text = "lbl_ShearBuckling"
-        Me.lbl_ShearBuckling.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.txt_DeltaCDev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_DeltaCDev.Location = New System.Drawing.Point(610, 94)
+        Me.txt_DeltaCDev.Name = "txt_DeltaCDev"
+        Me.txt_DeltaCDev.Size = New System.Drawing.Size(58, 20)
+        Me.txt_DeltaCDev.TabIndex = 99
+        Me.txt_DeltaCDev.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         '
-        'img_Eta
+        'lbl_DeltaCDev
         '
-        Me.img_Eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Eta.Location = New System.Drawing.Point(564, 30)
-        Me.img_Eta.Name = "img_Eta"
-        Me.img_Eta.Size = New System.Drawing.Size(46, 20)
-        Me.img_Eta.TabIndex = 100
-        Me.img_Eta.TabStop = False
+        Me.lbl_DeltaCDev.AutoSize = True
+        Me.lbl_DeltaCDev.Location = New System.Drawing.Point(39, 101)
+        Me.lbl_DeltaCDev.Name = "lbl_DeltaCDev"
+        Me.lbl_DeltaCDev.Size = New System.Drawing.Size(75, 13)
+        Me.lbl_DeltaCDev.TabIndex = 102
+        Me.lbl_DeltaCDev.Text = "lbl_DeltaCDev"
         '
-        'txt_eta
+        'etq_UnitDeltaCDev
         '
-        Me.txt_eta.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_eta.Location = New System.Drawing.Point(610, 30)
-        Me.txt_eta.Name = "txt_eta"
-        Me.txt_eta.Size = New System.Drawing.Size(58, 20)
-        Me.txt_eta.TabIndex = 99
-        Me.txt_eta.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.etq_UnitDeltaCDev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDeltaCDev.AutoSize = True
+        Me.etq_UnitDeltaCDev.Location = New System.Drawing.Point(674, 97)
+        Me.etq_UnitDeltaCDev.Name = "etq_UnitDeltaCDev"
+        Me.etq_UnitDeltaCDev.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitDeltaCDev.TabIndex = 101
+        Me.etq_UnitDeltaCDev.Text = "Label1"
         '
         'Frm_OptionsCalculCalcul
         '
@@ -810,6 +856,9 @@ Partial Class Frm_OptionsCalculCalcul
         Me.TLpan_Conteneur.ResumeLayout(False)
         Me.pan_Conteneur.ResumeLayout(False)
         Me.pan_Conteneur.PerformLayout()
+        Me.Panel4.ResumeLayout(False)
+        Me.Panel4.PerformLayout()
+        CType(Me.img_Eta, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel3.ResumeLayout(False)
         Me.Panel3.PerformLayout()
         CType(Me.img_T0SH, System.ComponentModel.ISupportInitialize).EndInit()
@@ -826,9 +875,7 @@ Partial Class Frm_OptionsCalculCalcul
         Me.Panel1.PerformLayout()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.Panel4.ResumeLayout(False)
-        Me.Panel4.PerformLayout()
-        CType(Me.img_Eta, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_DeltaCDev, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -898,4 +945,8 @@ Partial Class Frm_OptionsCalculCalcul
     Friend WithEvents lbl_ShearBuckling As Label
     Friend WithEvents txt_eta As TextBox
     Friend WithEvents img_Eta As PictureBox
+    Friend WithEvents etq_UnitDeltaCDev As Label
+    Friend WithEvents lbl_DeltaCDev As Label
+    Friend WithEvents txt_DeltaCDev As TextBox
+    Friend WithEvents img_DeltaCDev As PictureBox
 End Class

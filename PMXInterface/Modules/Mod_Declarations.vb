@@ -277,6 +277,7 @@ Public Module Mod_Declarations
         OptionsCalcul.nbMinNodesConsole = My.Settings.nbMinNodesConsole
 
         OptionsCalcul.EsArmatures = My.Settings.EsArmatures
+        OptionsCalcul.DeltaCDev = My.Settings.deltaCDev
 
         OptionsCalcul.PsiLPermanent = My.Settings.PsiLPermanent
         OptionsCalcul.PsiLRetrait = My.Settings.PsiLRetrait

@@ -461,6 +461,18 @@ Public Class cls_Projet
                         Lines.Add("")
                     End With
 
+                    '==[ Classe Cofradal Dalle ]=================================================================
+                    With .Cofradal
+
+                        Lines.Add("BLOCK COFRADAL")
+
+                        Lines.Add("   Nom      =  " & .nom)
+                        Lines.Add("   Dp      =  " & .dp)
+                        Lines.Add("   Msurf      =  " & .msurf)
+                        Lines.Add("   lCustom      =  " & .lCustom)
+
+                    End With
+
                     '==[ Classe Armature Dalle ]=================================================================
                     For Each arma_longi As Cls_Armatures_Longi In .LitArma
                         With arma_longi
@@ -471,7 +483,7 @@ Public Class cls_Projet
                                 Lines.Add("   PhiS           =  " & .PhiS)
                                 Lines.Add("   z_s            =  " & .z_s)
                                 Lines.Add("   n_s            =  " & .n_s)
-                                Lines.Add("   c_s            =  " & .c_s)
+                                'Lines.Add("   c_s            =  " & .c_s)
                                 Lines.Add("   lActive        =  " & .lActive)
                                 Lines.Add("")
                             End If
@@ -672,7 +684,7 @@ Public Class cls_Projet
 
         If Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("POUTRE") And Not ListeBlocCle.Contains("MAINTIENS") And Not ListeBlocCle.Contains("MAINT_BAC") And Not ListeBlocCle.Contains("SECTION") And
            Not ListeBlocCle.Contains("PROFILA") And Not ListeBlocCle.Contains("ACIER_PROFILA") And Not ListeBlocCle.Contains("ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") And
-           Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE") And
+           Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("COFRADAL") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE") And
            Not ListeBlocCle.Contains("OPT_CALCULS") And 'And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE")
               Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then 'And Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("SECTION") 
 
@@ -775,6 +787,12 @@ Public Class cls_Projet
                     Dim bac_en_cours As New cls_Bac
                     ReadBlocBacDalle(bac_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.Bac = bac_en_cours
+
+                Case "COFRADAL"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim cofradal_en_cours As New cls_Cofradal
+                    ReadBlocCofradal(cofradal_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Dalle.Cofradal = cofradal_en_cours
 
                 Case "ARMATURE_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1600,6 +1618,51 @@ Public Class cls_Projet
     End Sub
 
     ''' <summary>
+    ''' Lecture du bloc COFRADAL
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocCofradal(cofradal As cls_Cofradal, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i, iFirst As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With cofradal
+                    Select Case MotCle
+                        Case "NOM"
+                            If nbMots >= 2 Then
+                                iFirst = InStr(Lignes(i), Mots(2))
+                                .nom = Lignes(i).Substring(iFirst - 1)
+                            Else
+                                .nom = ""
+                            End If
+                        Case "DP" : .dp = Mots(nbMots)
+                        Case "MSURF" : .msurf = TraiteReal(Mots(nbMots))
+                        Case "LCUSTOM" : .lCustom = TraiteReal(Mots(nbMots))
+
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
     ''' Lecture du bloc Armature_Dalle
     ''' </summary>
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
@@ -1629,7 +1692,7 @@ Public Class cls_Projet
                         Case "PHIS" : .PhiS = TraiteReal(Mots(nbMots))
                         Case "Z_S" : .z_s = TraiteReal(Mots(nbMots))
                         Case "N_S" : .n_s = TraiteReal(Mots(nbMots))
-                        Case "C_S" : .c_s = TraiteReal(Mots(nbMots))
+                        'Case "C_S" : .c_s = TraiteReal(Mots(nbMots))
                         Case "LACTIVE" : .lActive = Mots(nbMots)
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select

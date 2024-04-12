@@ -853,6 +853,7 @@ SECTIONPROP				= Propriétés des sections
 COMPRESSIONREBARS		= Armatures comprimées prises en compte
 SIMPLIFIEDEFFW			= Répartition simplifiée de la largeur efficace de dalle
 YOUNGSREBAR				= Module d'Young des armatures
+DELTACDEV				= Marge de calcul pour les tolérances d'exécution
 MODEL					= Paramètres pour la modélisation numérique
 NODESPACING				= Distance entre noeuds
 NBNODES					= Nombre de noeuds

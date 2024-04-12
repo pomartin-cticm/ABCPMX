@@ -305,5 +305,8 @@
     <Setting Name="tpinfmin" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0.01</Value>
     </Setting>
+    <Setting Name="deltaCDev" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">0.01</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

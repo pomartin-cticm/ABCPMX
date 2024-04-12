@@ -340,6 +340,7 @@ Public Class Frm_OptionsCalcul
         GereTransfertValeur(LocalOptionsCalcul.lLargeurEfficaceSimplifiee, OptionsCalcul.lLargeurEfficaceSimplifiee, lModif)
         GereTransfertValeur(LocalOptionsCalcul.lCompressionArma, OptionsCalcul.lCompressionArma, lModif)
         GereTransfertValeur(LocalOptionsCalcul.EsArmatures, OptionsCalcul.EsArmatures, lModif)
+        GereTransfertValeur(LocalOptionsCalcul.DeltaCDev, OptionsCalcul.DeltaCDev, lModif)
         GereTransfertValeur(LocalOptionsCalcul.dMaxNodes, OptionsCalcul.dMaxNodes, lModif)
         GereTransfertValeur(LocalOptionsCalcul.nbMinNodesConsole, OptionsCalcul.nbMinNodesConsole, lModif)
         GereTransfertValeur(LocalOptionsCalcul.nbMinNodesTravee, OptionsCalcul.nbMinNodesTravee, lModif)

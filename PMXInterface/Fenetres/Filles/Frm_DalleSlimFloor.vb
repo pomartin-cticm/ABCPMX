@@ -17,6 +17,7 @@ Public Class Frm_DalleSlimFloor
     Dim ClasseAcierArma() As String = cls_AcierArmature.tabClasseAcierArma
 
     Public MyDalleLoc As New cls_Dalle
+    Public MySectionLoc As New cls_Section
     'Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
     Const kADJUST As Decimal = 0.95
 
@@ -47,6 +48,10 @@ Public Class Frm_DalleSlimFloor
     Private Const ESPMIN As Decimal = 0.05
     Private Const ESPMAX As Decimal = 0.5
     Private Const ZMIN As Decimal = 0.02
+    Private Const DPMIN As Decimal = 0.05
+    Private Const DPMAX As Decimal = 0.5
+    Private Const MUPFMIN As Decimal = 100
+    Private Const MUPFMAX As Decimal = 5000
 
     Private Enum Enu_DefEpMixte
         Totale                  ' Définition d'une dalle mixte par son épaisseur totale
@@ -186,6 +191,7 @@ Public Class Frm_DalleSlimFloor
     Private Sub InitialisationVariablesLocales()
 
         cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
+        cls_Section.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySectionLoc)
 
         lCofraPlus220 = MyDalleLoc.Bac.lCofraplus220
 
@@ -488,7 +494,7 @@ Public Class Frm_DalleSlimFloor
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, iSelect, msgDessin, lCote)
+                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================
@@ -619,6 +625,7 @@ Public Class Frm_DalleSlimFloor
         End Select
 
         MAJI_TypeDalle()
+        AfficherDalleEnCours()
 
         'Dim ValeurUI As Decimal
         'VerificationSaisie(Me.txt_zs, ValeurUI)
@@ -760,7 +767,7 @@ Public Class Frm_DalleSlimFloor
     Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_RhoC.TextChanged, txt_Td2.TextChanged, txt_Tc.TextChanged, txt_Hd.TextChanged, txt_EpPredalle.TextChanged, txt_EpJoint.TextChanged, txt_dp.TextChanged, txt_mupf.TextChanged
 
         If lBuild Then Exit Sub
-        lBuild = True
+        'lBuild = True
         Dim Valeur As Decimal
 
         If VerificationSaisie(sender, Valeur) Then
@@ -774,7 +781,7 @@ Public Class Frm_DalleSlimFloor
 
                 Case Me.txt_Hd.Name
                     MyDalleLoc.t_d = Valeur
-                    lBuild = True
+                    'lBuild = True
                     'Me.txt_Td2.Text = Me.txt_Hd.Text
 
                 Case Me.txt_RhoC.Name
@@ -782,15 +789,15 @@ Public Class Frm_DalleSlimFloor
 
                 Case Me.txt_Td2.Name
                     MyDalleLoc.t_d = Valeur
-                    lBuild = True
+                    'lBuild = True
                     Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.t_d - MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension)
-                    lBuild = False
+                    'lBuild = False
 
                 Case Me.txt_Tc.Name
                     MyDalleLoc.t_d = Valeur + MyDalleLoc.Bac.Hp
-                    lBuild = True
+                    'lBuild = True
                     Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
-                    lBuild = False
+                    'lBuild = False
 
                 Case Me.txt_dp.Name
                     If cmb_Cofradal.SelectedIndex = 0 Then MyDalleLoc.Cofradal.dp = Valeur
@@ -803,7 +810,7 @@ Public Class Frm_DalleSlimFloor
             Me.img_Dalle.Invalidate()
         End If
 
-        lBuild = False
+        'lBuild = False
 
     End Sub
 
@@ -816,15 +823,13 @@ Public Class Frm_DalleSlimFloor
         '-- Déclaration - Initialisation
 
         Dim lOk As Boolean = True
-        ErrorProvider.Clear()
+        ErrorProvider.SetError(MyTxt, String.Empty)
 
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
         Dim lValMax As Boolean = True
         Dim lValMin As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
-
-
 
         Select Case MyTxt.Name
             Case Me.txt_Hd.Name, Me.txt_Td2.Name
@@ -834,13 +839,17 @@ Public Class Frm_DalleSlimFloor
                         ValMin = OptionsScope.EpDallePleineMin / kUnit
                     Case cls_Dalle.Enum_TypeDalle.Mixte
                         ValMin = (OptionsScope.EpDalleMixteMin + HPMINI) / kUnit
+                    Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+                        ValMin = OptionsScope.EpDallePleineMin / kUnit
                 End Select
+
+                ValMin = Math.Max(ValMin, (MySectionLoc.hec + OptionsCalcul.DeltaCDev) / kUnit)
 
                 ValMax = TDMAXI / kUnit
 
             Case txt_EpPredalle.Name
                 ValMin = 0 / kUnit
-                ValMax = OptionsScope.RatioEpPredalleMax * MyDalleLoc.t_d / kUnit
+                ValMax = Math.Min(MySectionLoc.hec, OptionsScope.RatioEpPredalleMax * MyDalleLoc.t_d) / kUnit
 
             Case Me.txt_EpJoint.Name
                 ValMin = 0
@@ -852,28 +861,29 @@ Public Class Frm_DalleSlimFloor
                 lValMax = False
                 kUnit = 1
 
-            Case Me.txt_Tc.Name
-                ValMin = (OptionsScope.EpDalleMixteMin) / kUnit
+            Case Me.txt_Tc.Name 'dans le cas d'une dalle mixte
+                ValMin = Math.Max(OptionsScope.EpDalleMixteMin, MySectionLoc.hec + OptionsCalcul.DeltaCDev - MyDalleLoc.Bac.Hp) / kUnit
                 ValMax = 0
                 lValMax = False
 
             Case Me.txt_dp.Name
-                ValMin = 0.05 / kUnit '50 mm
-                ValMax = 0.5 / kUnit '500 mm
+                ValMin = DPMIN / kUnit '50 mm
+                ValMax = Math.Min(MySectionLoc.hec, DPMAX) / kUnit '500 mm
 
             Case Me.txt_mupf.Name 'kN/m2
                 kUnit = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
-                ValMin = 100 / kUnit '0.1 kN/m2
-                ValMax = 5000 / kUnit '5 kN/m2
+                ValMin = MUPFMIN / kUnit '0.1 kN/m2
+                ValMax = MUPFMAX / kUnit '5 kN/m2
 
         End Select
+
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
             NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
-            ErrorProvider.Clear()
+            'ErrorProvider.Clear()
         End If
 
         lOk = (iErreur = 0)

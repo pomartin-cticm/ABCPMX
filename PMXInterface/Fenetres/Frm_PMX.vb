@@ -932,6 +932,7 @@ Public Class Frm_PMX
                 Case cls_Section.Enum_TypeSection.SFB
                     lFrmProfilSFB = True
                     lFrmEnrobage = False
+                    lFrmConnection = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
                     lFrmDalleSlimFloor = True
@@ -941,6 +942,7 @@ Public Class Frm_PMX
                 Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B
                     lFrmProfilIFB = True
                     lFrmEnrobage = False
+                    lFrmConnection = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
                     lFrmDalleSlimFloor = True
@@ -950,6 +952,7 @@ Public Class Frm_PMX
                 Case cls_Section.Enum_TypeSection.SAB
                     lFrmProfilSAB = True
                     lFrmEnrobage = False
+                    lFrmConnection = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
                     lFrmDalleSlimFloor = True
@@ -1117,6 +1120,7 @@ Public Class Frm_PMX
         My.Settings.lLargeurEfficaceSimplifiee = OptionsCalcul.lLargeurEfficaceSimplifiee
         My.Settings.lCompressionArma = OptionsCalcul.lCompressionArma
         My.Settings.EsArmatures = OptionsCalcul.EsArmatures
+        My.Settings.deltaCDev = OptionsCalcul.DeltaCDev
         My.Settings.dMaxNodes = OptionsCalcul.dMaxNodes
         My.Settings.nbMinNodesConsole = OptionsCalcul.nbMinNodesConsole
         My.Settings.nbMinNodesTravee = OptionsCalcul.nbMinNodesTravee

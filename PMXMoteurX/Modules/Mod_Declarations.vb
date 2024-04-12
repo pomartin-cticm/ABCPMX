@@ -61,6 +61,7 @@
         Public nbMinNodesTravee As Integer              ' Nombre mini de noeuds par travée normale
         Public nbMinNodesConsole As Integer             ' Nombre mini de noeuds par travée console
         Public EsArmatures As Decimal                   ' Module d'Young des barres d'armature
+        Public DeltaCDev As Decimal                     ' Marge de calcul pour les tolérances d'exécution
         Public PsiLPermanent As Decimal                 ' Coefficient de fluage pour les charges permanentes
         Public PsiLRetrait As Decimal                   ' Coefficient de fluage pour les charges de retrait
         Public TimeT0G1() As Decimal                    ' Temps au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage

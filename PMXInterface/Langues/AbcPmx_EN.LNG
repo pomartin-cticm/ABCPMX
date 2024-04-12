@@ -798,6 +798,22 @@ WEBHEIGHT				= Web height
 THICKNESS				= Thickness
 IFBSECTION				= IFB section
 
+#FRM_SABSECTIONS
+CANCEL					= Cancel
+DELIVERYCOND			= Delivery conditions for $
+HOTROLLED				= Hot rolled profile
+OK						= OK
+PROFILE					= Profile
+PROFILES				= Profiles 
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+SABSECTION				= SAB section
+WIDTH					= Width
+
 #FRM_SFBSECTIONS
 CANCEL					= Cancel
 DELIVERYCOND			= Delivery conditions for $
@@ -853,6 +869,7 @@ SECTIONPROP				= Properties of cross-sections
 COMPRESSIONREBARS		= Rebars in compression taken into account
 SIMPLIFIEDEFFW			= Simplified distribution of the effective of the concrete flange
 YOUNGSREBAR				= Young's modulus of reinforcements
+DELTACDEV				= Allowance for the deviation of rebars
 MODEL					= Numerical model parameters
 NODESPACING				= Distance between nodes
 NBNODES					= Number of nodes

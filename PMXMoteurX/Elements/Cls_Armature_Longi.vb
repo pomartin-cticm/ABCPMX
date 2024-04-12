@@ -25,7 +25,7 @@
     ''' <summary>
     ''' Espace entre la barre et le bord de l'élément - Valeur pour l'interface
     ''' </summary>
-    Public c_s As Decimal
+    'Public c_s As Decimal
 
     ''' <summary>
     ''' Indique si le lit d'armatures est activé
@@ -50,6 +50,16 @@
 
 #End Region
 
+    Public ReadOnly Property c_min As Decimal
+        Get
+            If Me.lActive Then
+                Return Math.Min(10 / 1000, Me.PhiS)
+            Else
+                Return 10 / 1000
+            End If
+        End Get
+    End Property
+
 #Region " Constructeur "
 
     Sub New()
@@ -57,7 +67,7 @@
         'Me.n_s = 0
         Me.PhiS = 0.012
         Me.z_s = 0.032
-        Me.c_s = 0.015
+        'Me.c_s = 0.015
         Me.EspBar = 0.2
         Me.lActive = True
 

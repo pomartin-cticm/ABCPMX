@@ -43,6 +43,7 @@ Public Class Frm_OptionsCalculCalcul
             Me.chk_SimplifiedEffectiveW.Text = MyBloc("SIMPLIFIEDEFFW")
 
             Me.lbl_YoungRebars.Text = MyBloc("YOUNGSREBAR")
+            Me.lbl_DeltaCDev.Text = MyBloc("DELTACDEV")
 
             Me.lbl_Discretisation.Text = MyBloc("MODEL")
             Me.lbl_DistanceMaxNoeuds.Text = MyBloc("NODESPACING")
@@ -88,6 +89,7 @@ Public Class Frm_OptionsCalculCalcul
     Private Sub GestionUnites()
 
         Me.etq_UnitEs.Text = LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
+        Me.etq_UnitDeltaCDev.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitL1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
 
         Me.etq_UnitJour1.Text = strSymbolJour
@@ -119,6 +121,7 @@ Public Class Frm_OptionsCalculCalcul
         Me.chk_RebarsInCompression.Checked = LocalOptionsCalcul.lCompressionArma
         Me.chk_SimplifiedEffectiveW.Checked = LocalOptionsCalcul.lLargeurEfficaceSimplifiee
         Me.txt_Es.Text = GetStringInUnit(LocalOptionsCalcul.EsArmatures, Enu_TypeVariable.ModuleY, 4, 2, False)
+        Me.txt_DeltaCDev.Text = GetStringInUnit(LocalOptionsCalcul.DeltaCDev, Enu_TypeVariable.Dimension, 4, 2, False)
 
         '--> Cas de charge
 
@@ -176,7 +179,7 @@ Public Class Frm_OptionsCalculCalcul
 
 #Region " Dessins symboles "
 
-    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_NbNodes2.Paint, img_NbNodes1.Paint, img_Es.Paint, img_dNodes.Paint, img_PsiLSH.Paint, img_PsiLG.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_Eta.Paint
+    Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_NbNodes2.Paint, img_NbNodes1.Paint, img_Es.Paint, img_dNodes.Paint, img_PsiLSH.Paint, img_PsiLG.Paint, img_T0SH.Paint, img_T0G2.Paint, img_T0G1.Paint, img_Eta.Paint, img_DeltaCDev.Paint
 
         '--> Déclarations
 
@@ -201,6 +204,10 @@ Public Class Frm_OptionsCalculCalcul
                 strIndice = "s"
                 lEgal = True
                 'AlignH = Enu_AlignementH.Droite
+            Case Me.img_DeltaCDev.Name
+                strSymbol = "Δc"
+                strIndice = "dev"
+                lEgal = True
             Case Me.img_dNodes.Name
                 strSymbol = "d"
                 strIndice = ""
@@ -241,7 +248,7 @@ Public Class Frm_OptionsCalculCalcul
 
 
     Private Sub SaisieTxtBox_TextChanged(sender As Object, e As EventArgs) Handles txt_EspNoeuds.TextChanged, txt_Es.TextChanged,
-        txt_NbMiniNTravee.TextChanged, txt_NbMiniNConsole.TextChanged, txt_PsiLSH.TextChanged, txt_PsiLG.TextChanged, txt_t0SHDalle.TextChanged, txt_t0SHEnrob.TextChanged, txt_t0G2Dalle.TextChanged, txt_t0G2Enrob.TextChanged, txt_t0G1Dalle.TextChanged, txt_t0G1Enrob.TextChanged, txt_eta.TextChanged
+        txt_NbMiniNTravee.TextChanged, txt_NbMiniNConsole.TextChanged, txt_PsiLSH.TextChanged, txt_PsiLG.TextChanged, txt_t0SHDalle.TextChanged, txt_t0SHEnrob.TextChanged, txt_t0G2Dalle.TextChanged, txt_t0G2Enrob.TextChanged, txt_t0G1Dalle.TextChanged, txt_t0G1Enrob.TextChanged, txt_eta.TextChanged, txt_DeltaCDev.TextChanged
 
         If lBuild Then Exit Sub
 
@@ -252,6 +259,8 @@ Public Class Frm_OptionsCalculCalcul
             Select Case sender.name
                 Case Me.txt_Es.Name
                     LocalOptionsCalcul.EsArmatures = ValeurUI
+                Case Me.txt_DeltaCDev.Name
+                    LocalOptionsCalcul.DeltaCDev = ValeurUI
                 Case Me.txt_EspNoeuds.Name
                     LocalOptionsCalcul.dMaxNodes = ValeurUI
                 Case Me.txt_NbMiniNConsole.Name
@@ -306,6 +315,13 @@ Public Class Frm_OptionsCalculCalcul
                 kUnit = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
                 ValMin = 100000
                 ValMax = 500000
+
+            Case Me.txt_DeltaCDev.Name
+
+                lValMax = False
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+                ValMin = 0
+                'ValMax = 500000
 
             Case Me.txt_EspNoeuds.Name
                 ValMin = 0.1
