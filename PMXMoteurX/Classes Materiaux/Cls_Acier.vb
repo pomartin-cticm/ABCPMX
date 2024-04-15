@@ -18,7 +18,7 @@ Public Class cls_Acier
 #Region " Attributs "
 
     ''' <summary>
-    ''' nuance de l'acier : S235,S275,S355,S420 ou S460
+    ''' nuance de l'acier : S235, S275, S355, S420 ou S460
     ''' </summary>
     Public Nuance As String
 

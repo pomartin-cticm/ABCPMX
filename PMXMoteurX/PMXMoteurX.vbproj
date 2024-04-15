@@ -47,9 +47,11 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\portable-net40+sl4+win8+wp8\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -78,6 +80,10 @@
     <Compile Include="Classes Charges\cls_ForceRepartie.vb" />
     <Compile Include="Classes Charges\cls_Moment.vb" />
     <Compile Include="Classes Charges\cls_PointsSigma.vb" />
+    <Compile Include="Classes Incendie\cls_EurocodesFeu.vb" />
+    <Compile Include="Classes Incendie\cls_VerifFeuAcier.vb" />
+    <Compile Include="Classes Incendie\cls_VerifFeuEnrobe.vb" />
+    <Compile Include="Classes Incendie\cls_VerifFeuMixte.vb" />
     <Compile Include="Classes Materiaux\cls_Acier.vb" />
     <Compile Include="Classes Materiaux\cls_AcierArmature.vb" />
     <Compile Include="Classes Materiaux\cls_Beton.vb" />
@@ -148,7 +154,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{94E38DFF-614B-4CBD-B67C-F211BB35CE8B}" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DLL_CTICM_DATA\DLL_CTICM_DATA.vbproj">
       <Project>{53876d64-8fee-4e62-b907-0f707563c53e}</Project>
