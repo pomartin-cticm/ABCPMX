@@ -6936,8 +6936,6 @@ Module Mod_NoteCalcul
 
 #End Region
 
-
-
 #Region "***Edition des calculs aux ELS***"
 
     Private Sub EditionVerificationsELS(MyBeam As cls_Poutre)
@@ -7034,7 +7032,7 @@ Module Mod_NoteCalcul
         '--( Déclarations
 
         Dim Symbol As String
-        Dim AsReq, RhoS, AsEff As Decimal
+        Dim AsReq, AsEff As Decimal
         Const UnitAsSurS As String = " cm\+2\=/m"
         Const kUnitAsSurS As Decimal = 100 ^ 2
         Dim lOK As Boolean
@@ -7046,7 +7044,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW3 & BlocELS("REF1CONTROLCRACKING"))
 
         Symbol = "A\-s\=/s"
-        AsReq = myBeam.VerifMixte(0).AsSurSRetrait
+        AsReq = myBeam.VerifELS.AsSurSRetrait
         AddLigneNDC(TABW3 & BlocELS("MINIREINFORCEMENT") & TABAFF &
                     Symbol & TABSUPEGAL & GetStringInUnit(AsReq * kUnitAsSurS, Enu_TypeVariable.SansType, 3, 2, False) & UnitAsSurS)
 
@@ -7227,7 +7225,8 @@ Module Mod_NoteCalcul
                 EnteteTableauFlecheCdC(lMultispan, NCOL, LargCol, True)
             End If
 
-            LigneTableauFlecheCombi(MyBeam, jCombi, lMultispan, NCOL, LargCol, lETA)
+            'LigneTableauFlecheCombi(MyBeam, jCombi, lMultispan, NCOL, LargCol, lETA)
+            LigneTableauFlecheCombiNov(MyBeam, jCombi, lMultispan, NCOL, LargCol, lETA)
 
             'End If
         Next
@@ -7236,7 +7235,71 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub LigneTableauFlecheCombi(MyBeam As cls_Poutre, iCombi As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single, lETA As Boolean)
+    'Private Sub LigneTableauFlecheCombi(MyBeam As cls_Poutre, iCombi As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single, lETA As Boolean)
+    '    '-------------------------------------------------------------------------------------------
+    '    '   22/11/23 :  Création - POM
+    '    '-------------------------------------------------------------------------------------------
+    '    '   Ligne pour le tableau des flèches par cdc
+    '    '-------------------------------------------------------------------------------------------
+    '    '   MyBeam      [E] :
+    '    '   iCase       [E] :   Indique du cas de charge
+    '    '   lMultiSpan  [E] :   Indique si poutre à plusieurs travées
+    '    '   NCOL        [E] :   Nombre colonnes dans le tableau
+    '    '   LargCol     [E] :   Largeur des colonnes du tableau
+    '    '   lETA        [E] :   Indique si flèche normales ou flcèhes ETA (prenant en compte le glissement)
+    '    '-------------------------------------------------------------------------------------------
+
+    '    '--> Déclarations
+
+    '    Dim MyBordures(MyBeam.IndiceDerniereTravee) As Integer
+    '    Dim iTraveeDeb As Integer = MyBeam.IndicePremiereTravee
+    '    Dim iTraveeFin As Integer = MyBeam.IndiceDerniereTravee
+    '    Dim FlechesMax() As Decimal = Nothing
+    '    Dim iCell As Integer
+    '    Dim RatioX As Decimal
+    '    Dim ChaineRatioX As String
+    '    Dim UZCombi() As Decimal = Nothing
+    '    Const lCombiRetrait As Boolean = True
+
+    '    '--> Initialisations
+
+    '    For i As Integer = iTraveeDeb To iTraveeFin
+    '        MyBordures(i) = Bordures.Gauche + Bordures.Droite
+    '    Next
+    '    MyBordures(iTraveeDeb) += Bordures.Haut
+    '    MyBordures(iTraveeFin) += Bordures.Bas
+
+    '    MyBeam.CombiA_ELS.CombineFleches(iCombi, MyBeam.Nodes.nbNodes, MyBeam.ChargesA, UZCombi, lCombiRetrait, lETA)
+
+    '    ExtraireFlecheEnveloppes(UZCombi, iTraveeDeb, iTraveeFin, MyBeam.Nodes.iNodeExtTrav, FlechesMax)
+
+    '    '--> Traitement
+
+    '    For i As Integer = iTraveeDeb To iTraveeFin
+    '        iCell = 0
+    '        InitialiseLigne(NCOL, HLIGNE)
+    '        If i = iTraveeDeb Then
+    '            AddCellule(LargCol(0), MyBordures(i), PositionTexteInCell.Gauche, MyBeam.CombiA_ELS.Symbole(iCombi))
+    '        Else
+    '            AddCellule(LargCol(0), MyBordures(i), PositionTexteInCell.Centre, "")
+    '        End If
+    '        If lMultiSpan Then
+    '            AddCellule(LargCol(1), MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
+    '            iCell = 1
+    '        End If
+    '        AddCellule(LargCol(iCell + 1), MyBordures(i) - Bordures.Droite, PositionTexteInCell.Gauche, GetStringInUnit(-FlechesMax(i), Enu_TypeVariable.Dimension, 3, 3, True))
+    '        If Math.Abs(FlechesMax(i)) > 0 Then
+    '            RatioX = Math.Abs(MyBeam.LongueurTravee(i) / FlechesMax(i))
+    '            ChaineRatioX = "(L/" & GetStringInUnit(RatioX, Enu_TypeVariable.SansType, 3, 0, False) & ")"
+    '        Else
+    '            ChaineRatioX = ""
+    '        End If
+    '        AddCellule(LargCol(iCell + 2), MyBordures(i) - Bordures.Gauche, PositionTexteInCell.Gauche, ChaineRatioX)
+
+    '    Next
+    'End Sub
+
+    Private Sub LigneTableauFlecheCombiNov(MyBeam As cls_Poutre, iCombi As Integer, lMultiSpan As Boolean, NCOL As Integer, LargCol() As Single, lETA As Boolean)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -7255,12 +7318,13 @@ Module Mod_NoteCalcul
         Dim MyBordures(MyBeam.IndiceDerniereTravee) As Integer
         Dim iTraveeDeb As Integer = MyBeam.IndicePremiereTravee
         Dim iTraveeFin As Integer = MyBeam.IndiceDerniereTravee
-        Dim FlechesMax() As Decimal = Nothing
+        'Dim FlechesMax() As Decimal = Nothing
         Dim iCell As Integer
         Dim RatioX As Decimal
-        Dim ChaineRatioX As String
+        Dim ChaineRatioX As String = ""
         Dim UZCombi() As Decimal = Nothing
-        Const lCombiRetrait As Boolean = True
+        'Const lCombiRetrait As Boolean = True
+        Dim myFleche As Decimal
 
         '--> Initialisations
 
@@ -7269,10 +7333,6 @@ Module Mod_NoteCalcul
         Next
         MyBordures(iTraveeDeb) += Bordures.Haut
         MyBordures(iTraveeFin) += Bordures.Bas
-
-        MyBeam.CombiA_ELS.CombineFleches(iCombi, MyBeam.Nodes.nbNodes, MyBeam.ChargesA, UZCombi, lCombiRetrait, lETA)
-
-        ExtraireFlecheEnveloppes(UZCombi, iTraveeDeb, iTraveeFin, MyBeam.Nodes.iNodeExtTrav, FlechesMax)
 
         '--> Traitement
 
@@ -7288,9 +7348,12 @@ Module Mod_NoteCalcul
                 AddCellule(LargCol(1), MyBordures(i), PositionTexteInCell.Centre, CStr(i + 1))
                 iCell = 1
             End If
-            AddCellule(LargCol(iCell + 1), MyBordures(i) - Bordures.Droite, PositionTexteInCell.Gauche, GetStringInUnit(-FlechesMax(i), Enu_TypeVariable.Dimension, 3, 3, True))
-            If Math.Abs(FlechesMax(i)) > 0 Then
-                RatioX = Math.Abs(MyBeam.LongueurTravee(i) / FlechesMax(i))
+
+            If lETA Then myFleche = MyBeam.VerifELS.FlechesMaxCombiETA(iCombi, i) Else myFleche = MyBeam.VerifELS.FlechesMaxCombi(iCombi, i)
+
+            AddCellule(LargCol(iCell + 1), MyBordures(i) - Bordures.Droite, PositionTexteInCell.Gauche, GetStringInUnit(-myFleche, Enu_TypeVariable.Dimension, 3, 3, True))
+            If Math.Abs(myFleche) > 0 Then
+                RatioX = Math.Abs(MyBeam.LongueurTravee(i) / myFleche)
                 ChaineRatioX = "(L/" & GetStringInUnit(RatioX, Enu_TypeVariable.SansType, 3, 0, False) & ")"
             Else
                 ChaineRatioX = ""
@@ -7298,6 +7361,7 @@ Module Mod_NoteCalcul
             AddCellule(LargCol(iCell + 2), MyBordures(i) - Bordures.Gauche, PositionTexteInCell.Gauche, ChaineRatioX)
 
         Next
+
     End Sub
 
     Private Sub EditionSLSFlechesParCdC(MyBeam As cls_Poutre)

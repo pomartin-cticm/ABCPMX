@@ -33,9 +33,6 @@ Public Class cls_Section
 
 #Region " Déclarations "
 
-    Structure strucResultats
-
-    End Structure
 
 #End Region
 
@@ -86,7 +83,7 @@ Public Class cls_Section
 
 #End Region
 
-#Region "Propriétés (Méthodes)"
+#Region " Propriétés (Méthodes) "
 
     ''' <summary>
     ''' Retourne la masse linéique du profilé (/!\ valeur retournée en kg/m /!\)
@@ -1870,20 +1867,117 @@ Public Class cls_Section
         End Get
     End Property
 
-    Public Sub ProprietesElastiquesEtPlastiques(Signe As Decimal, nEqEc As Decimal, nEqDal As Decimal, lValeurCalcul As Boolean)
 
-        ' Dim zANP, zANE, InertieY, MplRd As Decimal
+    Public Function VplRd(GammaM0 As Decimal) As Decimal
 
-        'CalProprietes(Me, Signe, nEqEc, nEqDal, lValeurCalcul, zANE, InertieY, zANP, MplRd)
+        Dim MyVRd As Decimal = 0
 
-        'Me.Resultats.InertieY = InertieY
-        'Me.Resultats.zANE = zANE
-        'Me.Resultats.zANP = zANP
-        'Me.Resultats.MplRd = MplRd
+        Select Case Me.typeSection
+            Case Enum_TypeSection.AcierSeul, Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
+                MyVRd = Me.AireAv * Me.FyW / (Math.Sqrt(3) * GammaM0) * kConvMPaPa
 
-    End Sub
+        End Select
 
-    Public Resultats As strucResultats
+        Return MyVRd
+    End Function
+
+    Public Function VbRd(GammaM1 As Decimal, EtaW As Decimal, lMontantRigid As Boolean) As Decimal
+        '---------------------------------------------------------------------------------------------------------
+        '   xx/xx/23 :  Création - GuD
+        '---------------------------------------------------------------------------------------------------------
+        '   Calcul de la résitance au voilement par cisaillement selon EN 1993-1-5
+        '---------------------------------------------------------------------------------------------------------
+        '   GammaM1         [E] :   GammaM1
+        '   EtaW            [E] :   Eta
+        '   lMontantRigid   [E] :   Indique si on peut utiliser la colonne montant rigide dans le Tablea 5.3 de l'EN 1993-1-5
+        '---------------------------------------------------------------------------------------------------------
+        '
+        'lTwoAdjacentCantilevers: indique la présence de deux travées adjacentes en consoles (True) ou non
+
+        '--> Déclaration
+
+        Dim lambda_w As Decimal
+        Dim k_tau As Decimal
+        Dim epsilon_w As Decimal = Me.Epsilon_W
+        Dim khi_w As Decimal
+        Dim MyVbRd As Decimal
+        Dim EN1993 As New cls_Eurocodes
+
+        '--> Initialisation
+
+        k_tau = 5.34
+        'epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
+        'epsilon_w = epsilon_w
+        lambda_w = (Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) * (1 / (37.4 * epsilon_w * Math.Sqrt(k_tau)))
+
+        khi_w = EN1993.ReductionShearBuckling(lambda_w, EtaW, lMontantRigid)
+
+        MyVbRd = khi_w * Me.ProfilA.HauteurAmeHw * Me.ProfilA.Tw * Me.FyW / (Math.Sqrt(3) * GammaM1) * kConvMPaPa
+
+        Return MyVbRd
+
+        'If lambda_w <= 0.83 / EtaW Then
+        '    khi_w = EtaW
+        'ElseIf lambda_w <= 1.08 Then
+        '    khi_w = 0.83 / lambda_w
+        'Else 'lambda_w>1.08
+        '    If lTwoAdjacentCantilevers Then
+        '        khi_w = 1.37 / (0.7 + lambda_w)
+        '    Else
+        '        khi_w = 0.83 / lambda_w
+        '    End If
+        'End If
+    End Function
+
+    Public ReadOnly Property AireAv As Decimal
+        Get
+            Return Me.ProfilA.AireAv
+        End Get
+    End Property
+
+    Public Function RhoInteractionMV(VEd As Decimal, GammaM0 As Decimal) As Decimal
+
+        Dim Rho As Decimal
+        Dim VRd As Decimal = Me.VplRd(GammaM0)
+
+        Dim VEdAbs As Decimal = Math.Abs(VEd)
+
+        If VEdAbs > 0.5 * VRd Then
+            Rho = Math.Min(1, (2 * VEd / VRd - 1) ^ 2)
+        Else
+            Rho = 0
+        End If
+
+        Return Rho
+    End Function
+
+    ''' <summary>
+    ''' Fonction qui calcul si l'ame du profilé étudié est sensible au voilement par cisaillement (True) ou non (False)
+    ''' </summary>
+    ''' <param name="eta"> parametre eta, utile pour les profilés sans enrobage </param>
+    ''' <returns></returns>
+    Public Function IsVoilementParCisaillement(eta As Decimal) As Boolean
+        Select Case Me.typeSection
+            Case Enum_TypeSection.AcierSeul, Enum_TypeSection.Mixte
+                Return Not ((Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) <= 72 * Me.Epsilon_W / eta)
+            Case Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.MixteEnrobage
+                Return Not ((Me.ProfilA.HauteurAmeDw / Me.ProfilA.Tw) <= 124 * Me.Epsilon_W)
+            Case Else 'slimfloor -> l'ame du profilé n'est pas sensible au voilement par cisaillement 
+                Return False
+        End Select
+    End Function
+
+    'Public ReadOnly Property RhoVCalcul As Decimal
+    '    Get
+    '        Dim Rho As Decimal = 0
+    '        If Me.Param.lInterActionMV Then Rho = Me.RhoInteractionMV(Me.Param.VEd)
+    '        Return Rho
+    '    End Get
+    'End Property
+
+#End Region
+
+#Region " Propriétés matériaux "
 
     ''' <summary>
     ''' Limite d'élasticité de la semelle supérieure
@@ -1995,112 +2089,80 @@ Public Class cls_Section
         End Get
     End Property
 
-    Public Function VplRd(GammaM0 As Decimal) As Decimal
+#End Region
 
-        Dim MyVRd As Decimal = 0
+#Region " Effet du béton tendu dans le calcul des contraintes "
 
-        Select Case Me.typeSection
-            Case Enum_TypeSection.AcierSeul, Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
-                MyVRd = Me.AireAv * Me.FyW / (Math.Sqrt(3) * GammaM0) * kConvMPaPa
-
-        End Select
-
-        Return MyVRd
-    End Function
-
-    Public Function VbRd(GammaM1 As Decimal, EtaW As Decimal, lMontantRigid As Boolean) As Decimal
-        '---------------------------------------------------------------------------------------------------------
-        '   xx/xx/23 :  Création - GuD
-        '---------------------------------------------------------------------------------------------------------
-        '   Calcul de la résitance au voilement par cisaillement selon EN 1993-1-5
-        '---------------------------------------------------------------------------------------------------------
-        '   GammaM1         [E] :   GammaM1
-        '   EtaW            [E] :   Eta
-        '   lMontantRigid   [E] :   Indique si on peut utiliser la colonne montant rigide dans le Tablea 5.3 de l'EN 1993-1-5
-        '---------------------------------------------------------------------------------------------------------
-        '
-        'lTwoAdjacentCantilevers: indique la présence de deux travées adjacentes en consoles (True) ou non
+    Public Function DeltaSigma(myDalle As cls_Dalle, bEff As Decimal) As Decimal
+        '----------------------------------------------------------------------------------------------------------------
+        '   16/04/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Calcul le supplément de contraintes dans les aramtures de la dalle dues à l'effet de rigidité du béton tendu
+        '----------------------------------------------------------------------------------------------------------------
+        '   bEff        [E] :   Largeur efficace de dalle
+        '   myDalle     [E] :   Dalle traitée
+        '----------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
-        Dim lambda_w As Decimal
-        Dim k_tau As Decimal
-        Dim epsilon_w As Decimal = Me.Epsilon_W
-        Dim khi_w As Decimal
-        Dim MyVbRd As Decimal
-        Dim EN1993 As New cls_Eurocodes
+        Dim DeltaS As Decimal
+        Dim Fctm As Decimal
+        Dim RauS As Decimal
 
         '--> Initialisation
 
-        k_tau = 5.34
-        'epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
-        'epsilon_w = epsilon_w
-        lambda_w = (Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) * (1 / (37.4 * epsilon_w * Math.Sqrt(k_tau)))
+        Fctm = myDalle.beton.Fctm
+        RauS = myDalle.AireUnitArmaturesLongi / myDalle.EpaisseurActive
 
-        khi_w = EN1993.ReductionShearBuckling(lambda_w, EtaW, lMontantRigid)
+        '--> Calcul
 
-        MyVbRd = khi_w * Me.ProfilA.HauteurAmeHw * Me.ProfilA.Tw * Me.FyW / (Math.Sqrt(3) * GammaM1) * kConvMPaPa
+        DeltaS = 0.4 * Fctm / (Me.AlphaSt(bEff, myDalle) * RauS)
 
-        Return MyVbRd
+        Return DeltaS
 
-        'If lambda_w <= 0.83 / EtaW Then
-        '    khi_w = EtaW
-        'ElseIf lambda_w <= 1.08 Then
-        '    khi_w = 0.83 / lambda_w
-        'Else 'lambda_w>1.08
-        '    If lTwoAdjacentCantilevers Then
-        '        khi_w = 1.37 / (0.7 + lambda_w)
-        '    Else
-        '        khi_w = 0.83 / lambda_w
-        '    End If
-        'End If
     End Function
 
-    Public ReadOnly Property AireAv As Decimal
-        Get
-            Return Me.ProfilA.AireAv
-        End Get
-    End Property
+    Public Function AlphaSt(bEff As Decimal, myDalle As cls_Dalle) As Decimal
+        '----------------------------------------------------------------------------------------------------------------
+        '   16/04/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Calcul du ratio AlphaSt utilisé pour le supplément de contraintes
+        '   dans les armatures de la dalle dues à l'effet de rigidité du béton tendu
+        '----------------------------------------------------------------------------------------------------------------
+        '   bEff        [E] :   Largeur efficace de dalle
+        '   myDalle     [E] :   Dalle traitée
+        '----------------------------------------------------------------------------------------------------------------
 
-    Public Function RhoInteractionMV(VEd As Decimal, GammaM0 As Decimal) As Decimal
+        '--( Déclaration
 
-        Dim Rho As Decimal
-        Dim VRd As Decimal = Me.VplRd(GammaM0)
+        Dim pdtAI, pdtAaIa As Decimal
+        Dim Aire, InertieY As Decimal
+        Dim myG As New cls_Gamma
+        Dim nEqEc, nEqDalle As Decimal
+        Dim zANE As Decimal, MelRd As Decimal
 
-        Dim VEdAbs As Decimal = Math.Abs(VEd)
+        '--( Initialisation
 
-        If VEdAbs > 0.5 * VRd Then
-            Rho = Math.Min(1, (2 * VEd / VRd - 1) ^ 2)
-        Else
-            Rho = 0
-        End If
+        nEqEc = Me.Enrobage.Beton.CoefficientEquivalenceCT
+        nEqDalle = myDalle.beton.CoefficientEquivalenceCT
 
-        Return Rho
+        '--( Calcul
+
+        '# propriétés de la section en acier
+
+        pdtAaIa = Me.ProfilA.Aire * Me.ProfilA.InertieY
+
+        '# propriétés de la section mixte
+
+        Me.ProprietesElastiquesMixteMyy(-1, False, myG, nEqEc, nEqDalle, bEff, myDalle, zane, InertieY, melrd)
+
+        Aire = Me.ProfilA.Aire + myDalle.AireUnitArmaturesLongi * bEff * cls_Acier.EYACIER / myDalle.AcierArmatures.Es
+        pdtAI = Aire * InertieY
+
+        Return pdtAI / pdtAaIa
+
     End Function
 
-    ''' <summary>
-    ''' Fonction qui calcul si l'ame du profilé étudié est sensible au voilement par cisaillement (True) ou non (False)
-    ''' </summary>
-    ''' <param name="eta"> parametre eta, utile pour les profilés sans enrobage </param>
-    ''' <returns></returns>
-    Public Function IsVoilementParCisaillement(eta As Decimal) As Boolean
-        Select Case Me.typeSection
-            Case Enum_TypeSection.AcierSeul, Enum_TypeSection.Mixte
-                Return Not ((Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) <= 72 * Me.Epsilon_W / eta)
-            Case Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.MixteEnrobage
-                Return Not ((Me.ProfilA.HauteurAmeDw / Me.ProfilA.Tw) <= 124 * Me.Epsilon_W)
-            Case Else 'slimfloor -> l'ame du profilé n'est pas sensible au voilement par cisaillement 
-                Return False
-        End Select
-    End Function
-
-    'Public ReadOnly Property RhoVCalcul As Decimal
-    '    Get
-    '        Dim Rho As Decimal = 0
-    '        If Me.Param.lInterActionMV Then Rho = Me.RhoInteractionMV(Me.Param.VEd)
-    '        Return Rho
-    '    End Get
-    'End Property
 
 #End Region
 
@@ -2233,7 +2295,7 @@ Public Class cls_Section
 
 #End Region
 
-#Region "Classification section acier"
+#Region " Classification section acier "
 
     ''' <summary>
     ''' Calcul de la classe d'une section acier (usuelle, enrobée ou slimfloor)

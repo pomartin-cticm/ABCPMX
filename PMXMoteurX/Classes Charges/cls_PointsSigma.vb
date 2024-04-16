@@ -464,8 +464,6 @@
         End If
     End Sub
 
-
-
     Private Sub CalculContraintesSectionsAcierNonEnrobees(MyPoutre As cls_Poutre, MyCas As cls_CasDeCharge, ByRef Sigma(,,) As Decimal)
         '-----------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
@@ -554,7 +552,6 @@
 
 #End Region
 
-
 #Region " Ajustement des contraintes combinées "
 
     Public Sub AjusteContraintes(myBeam As cls_Poutre, ByRef SigmaELU(,,) As Decimal)
@@ -602,64 +599,6 @@
 
     End Sub
 
-    'Private Sub TraitementContraintesArmatures(ByRef SigmaELU(,,) As Decimal, iPt0 As Integer, iPt1 As Integer, nbNodes As Integer)
-    '    '----------------------------------------------------------------------------------------------------------------
-    '    '   29/02/24 :  Création - POM
-    '    '----------------------------------------------------------------------------------------------------------------
-    '    '   Pour les contraintes après combinaison ELU, on ajuste les contraintes normales 
-    '    '   dans les armatures , en fonction de leur signe (on ne retient dans cette routine que les armatures tendues)
-    '    '----------------------------------------------------------------------------------------------------------------
-    '    '   SigmaELU    [E/S] : Tableau des contraintes aux ELU
-    '    '   iPt0,iPt1   [E] :   Indice des points entre lesquels on ajuste la contrainte dans le béton
-    '    '----------------------------------------------------------------------------------------------------------------
-
-    '    '--( Déclaration
-
-    '    Dim iNode, iPoint, k As Integer
-
-    '    '--( Traitement
-
-    '    If (iPt0 > -1 And (iPt1 > -1)) Then
-    '        For iPoint = iPt0 To iPt1
-    '            For iNode = 0 To nbNodes - 1
-    '                For k = 0 To 1
-    '                    SigmaELU(iPoint, iNode, k) = CONVSIGNETRACTION * Math.Max(0, CONVSIGNETRACTION * SigmaELU(iPoint, iNode, k))
-    '                Next
-    '            Next
-    '        Next
-    '    End If
-
-    'End Sub
-
-    'Private Sub TraitementContraintesBeton(ByRef SigmaELU(,,) As Decimal, iPt0 As Integer, iPt1 As Integer, nbNodes As Integer)
-    '    '----------------------------------------------------------------------------------------------------------------
-    '    '   29/02/24 :  Création - POM
-    '    '----------------------------------------------------------------------------------------------------------------
-    '    '   Pour les contraintes après combinaison ELU, on ajuste les contraintes normales 
-    '    '   dans le béton , en fonction de leur signe
-    '    '----------------------------------------------------------------------------------------------------------------
-    '    '   SigmaELU    [E/S] : Tableau des contraintes aux ELU
-    '    '   iPt0,iPt1   [E] :   Indice des points entre lesquels on ajuste la contrainte dans le béton
-    '    '----------------------------------------------------------------------------------------------------------------
-
-    '    '--( Déclaration
-
-    '    Dim iNode, iPoint, k As Integer
-
-    '    '--( Traitement
-
-    '    If (iPt0 > -1 And (iPt1 > -1)) Then
-    '        For iPoint = iPt0 To iPt1
-    '            For iNode = 0 To nbNodes - 1
-    '                For k = 0 To 1
-    '                    SigmaELU(iPoint, iNode, k) = -CONVSIGNETRACTION * Math.Max(0, -CONVSIGNETRACTION * SigmaELU(iPoint, iNode, k))
-    '                Next
-    '            Next
-    '        Next
-    '    End If
-
-    'End Sub
-
     Private Sub TraitementContraintes(ByRef SigmaELU(,,) As Decimal, iPt0 As Integer, iPt1 As Integer, nbNodes As Integer, SigneS As Decimal)
         '----------------------------------------------------------------------------------------------------------------
         '   29/02/24 :  Création - POM
@@ -693,5 +632,81 @@
 
 #End Region
 
+#Region " Effet du béton tendu dans les armatures "
+
+    Public Sub AjusteDeltaS(DeltaS As Decimal, ByRef SigmaC(,,) As Decimal, iNodeD As Integer, iNodeF As Integer)
+        '--------------------------------------------------------------------------------------------
+        '   16/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Ajoute l'effet du béton tendu dans le calcul des contraintes dans les armatures tendues
+        '--------------------------------------------------------------------------------------------
+        '   DeltaS      [E] :   Effet de rigidité du béton tendu
+        '   SigmaC      [E/S] : Contraintes dans la section, après combinaison
+        '   iNodeD et F [E] :   Indices des noeuds sur lesquels on réalise le traitement
+        '--------------------------------------------------------------------------------------------
+
+        Const lDalle As Boolean = True
+        Dim iNode, k, kDeb, kFin As Integer
+
+        If lDalle And Me.iArmaDalle(0) > -1 Then
+
+            For iPts = Me.iArmaDalle(0) To Me.iArmaDalle(1)
+
+                For inode = iNodeD To iNodeF
+
+                    If iNode = iNodeD Then kDeb = 1 Else kDeb = 0
+                    If iNode = iNodeF Then kFin = 0 Else kFin = 1
+
+                    For k = kDeb To kFin
+                        If IsGreater(CONVSIGNETRACTION * SigmaC(iPts, iNode, k), 0) Then
+
+                            SigmaC(iPts, iNode, k) += DeltaS
+
+                        End If
+
+                    Next
+
+                Next
+
+            Next
+
+        End If
+
+    End Sub
+
+    Public Function ContrainteMaxArmature(ByRef SigmaC(,,) As Decimal, iNodeApp As Integer) As Decimal
+        '--------------------------------------------------------------------------------------------
+        '   16/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Ajoute l'effet du béton tendu dans le calcul des contraintes dans les armatures tendues
+        '--------------------------------------------------------------------------------------------
+        '   SigmaC      [E] :   Contraintes dans la section, après combinaison
+        '   iNodeApp    [E] :   Indice du noeud sur appui
+        '--------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim SigmaArma As Decimal
+
+        '--( Traitement
+
+        If Me.iArmaDalle(0) > -1 Then
+
+            SigmaArma = Math.Max(SigmaC(Me.iArmaDalle(0), iNodeApp, 0), SigmaC(Me.iArmaDalle(0), iNodeApp, 1))
+
+            For iPts As Integer = Me.iArmaDalle(0) + 1 To Me.iArmaDalle(1)
+
+                For k = 0 To 1
+                    SigmaArma = Math.Max(SigmaArma, SigmaC(Me.iArmaDalle(0), iNodeApp, k))
+                Next
+
+            Next
+
+        End If
+
+
+    End Function
+
+#End Region
 
 End Class

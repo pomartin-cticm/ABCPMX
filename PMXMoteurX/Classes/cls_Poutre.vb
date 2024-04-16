@@ -501,6 +501,12 @@ Public Class cls_Poutre
     Public VerifAcier() As cls_VerificationsAcier                   ' Classe pour la vérification des poutres acier (ou phase de construction)
     Public VerifMixte() As cls_VerificationsMixtes                  ' Classe pour la vérification des poutres mixtes (phase finale)
 
+    Public VerifELS As cls_VerificationsELS                         ' Classe pour la vérification aux ELS (quel que soit le type de poutre)
+
+    Public VerifFeuAcier As cls_VerifFeuAcier                       ' Classe pour la vérification au feu des poutres acier seul
+    Public VerifFeuMixte As cls_VerifFeuMixte                       ' Classe pour la vérification au feu des poutres mixtes
+    Public VerifFeuEnrob As cls_VerifFeuEnrobe                      ' Classe pour la vérification au feu des poutres acier ou mixtes avec enrobage partiel
+
 #End Region
 
 #Region " Propriétés "
@@ -1313,7 +1319,11 @@ Public Class cls_Poutre
 
 #End Region
 
-#Region " Calculs largeur participante "
+#Region " Calculs largeur efficace de la dalle "
+
+    'Public Function TableauBeff() As Decimal()
+
+    'End Function
 
     Public Function BeffDalle(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean, Optional TypeLargeur As EnuTypeLargeurParticipante = EnuTypeLargeurParticipante.LargeurTotale, Optional ByRef LargeursParticipantes(,) As Decimal = Nothing) As Decimal
 
@@ -2042,7 +2052,7 @@ Public Class cls_Poutre
     End Function
 #End Region
 
-#Region "Calcul des armatures transversales"
+#Region " Calcul des armatures transversales "
 
     ''' <summary>
     ''' Calcul la contrainte tangentielle induite par les connecteurs 
@@ -5027,6 +5037,8 @@ Public Class cls_Poutre
 
         '--> Initialisation des tableaux de verification
 
+        '# ELU
+
         Select Case Me.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 ReDim Me.VerifAcier(0)
@@ -5041,7 +5053,24 @@ Public Class cls_Poutre
                 End If
         End Select
 
+        '# ELS
+
+        Me.VerifELS = New cls_VerificationsELS
+
+        '# ELU en situation d'incendie
+
+        'if calculincendie then
+        Select Case Me.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul
+                Me.VerifFeuAcier = New cls_VerifFeuAcier
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
+                Me.VerifFeuEnrob = New cls_VerifFeuEnrobe
+            Case cls_Section.Enum_TypeSection.Mixte
+                Me.VerifFeuMixte = New cls_VerifFeuMixte
+        End Select
+
         '--> Initialisation des calculs
+
         Me.InitialisePoidsPropres()
         Me.InitialiseCalculs(NomCharges)
         Me.AAA_CalculMNVInternesN()
@@ -5052,7 +5081,7 @@ Public Class cls_Poutre
         Me.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, Me.lCombELCURules, Me.CoefCombELCU, strRacineELUC, Me.CombiA_ELCU)
         Me.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, Me.lCombELCSRules, Me.CoefCombELCS, strRacineELSC, Me.CombiA_ELCS)
 
-        '--> Vérifications
+        '--> Vérifications aux ELU
 
         Select Case Me.Section.TypeSection
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
@@ -5064,6 +5093,13 @@ Public Class cls_Poutre
                 Me.VerifAcier(0).Z_VerificationELU(Me, False)
 
         End Select
+
+        '--> Vérifications aux ELS
+
+        Me.VerifELS.Z_VerificationsELS(Me)
+
+        '--> Vérification aux ELU en situation d'incendie
+
 
 
     End Sub

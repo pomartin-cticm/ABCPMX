@@ -44,10 +44,6 @@
     Public GorgesSoudures(1) As Decimal             ' Gorge des soudures ame semelles pour les sections PRS
     Public GorgesSouduresMini(1) As Decimal         ' Gorge mini des soudures ame semelles pour les sections PRS
 
-    '==( Armatures transversales anti-fissuration
-
-    Public AsSurSRetrait As Decimal                 ' Armatures longi anti fissuration (§ 7.4.2 de l'EN 1994-1-1:2005)
-
 #End Region
 
 #Region " Attributs pour le calcul des armatures transversales"
@@ -428,9 +424,6 @@
 
         Me.CalculArmaturesTransversales(myBeam, 0)
 
-        '# Calcul des armatures anti fissuration
-
-        Me.ArmaturesAntiFissuration(myBeam, SigmaM)
 
     End Sub
 
@@ -1400,7 +1393,6 @@
                     Or ((signeS = 1) And IsGreater(SigmaELU(iPoint, iNode, k), 0)) _
                     Or ((signeS = -1) And IsSmaller(SigmaELU(iPoint, iNode, k), 0)) Then
                         MyCritereM.EnregistreCritere(iNode, iCombi, iTravee, SigmaELU(iPoint, iNode, k), SigmaU)
-
                     End If
                 Next
             Next
@@ -2167,104 +2159,5 @@
 
 #End Region
 
-#Region " Calcul des armatures anti fissuration "
-
-    Private Sub MaitriseFissurationDirecte(myBeam As cls_Poutre, SigmaM(,,,) As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   22/03/24 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Gestion du calcul des armatures anti fissuration, selon § 7.4 de l'EN 1994-1:2005
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E]
-        '   SigmaM      [E] :   Table des contraintes normales sous hypothèse M<0, par cas de charge
-        '----------------------------------------------------------------------------------------------------------
-
-
-    End Sub
-
-    Private Sub ArmaturesAntiFissuration(myBeam As cls_Poutre, SigmaM(,,,) As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   22/03/24 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Gestion du calcul des armatures anti fissuration, selon § 7.4 de l'EN 1994-1:2005
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E]
-        '   SigmaM      [E] :   Table des contraintes normales sous hypothèse M<0, par cas de charge
-        '----------------------------------------------------------------------------------------------------------
-
-        '--( Déclaration
-
-        Dim myAs As Decimal
-
-        '--( Traitement
-
-        If myBeam.Param.lMaitriseFissuration Then
-
-            '# Anti fissuration en l'absence de contraintes directes
-
-            Me.AsSurSRetrait = 0
-
-            If Not myBeam.lTraveeConsoleGauche Then
-                Me.MinimumReinforcement742(myBeam, True, Me.AsSurSRetrait)
-            End If
-
-            If Not myBeam.lTraveeConsoleDroite Then
-                Me.MinimumReinforcement742(myBeam, False, myAs)
-                Me.AsSurSRetrait = Math.Max(Me.AsSurSRetrait, myAs)
-            End If
-
-            '# Anti fissuration sous contraintes directes
-
-            If myBeam.NbTravees > 1 Then
-                MaitriseFissurationDirecte(myBeam, SigmaM)
-            End If
-
-        End If
-
-    End Sub
-
-    Private Sub MinimumReinforcement742(myBeam As cls_Poutre, lAppGauche As Boolean, ByRef myAssurS As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   22/03/24 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Calcul de l'armature minimale anti fissuration, selon § 7.4.2 de l'EN 1994-1:2005
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E]
-        '   lAppGauche  [E] :   Indique si calcul sur l'appui gauche
-        '   myAssurS    [S] :   Section minimale d'armature
-        '----------------------------------------------------------------------------------------------------------
-
-        '--( Déclarations
-
-        Dim ks, kc, k As Decimal
-        Dim FctEff As Decimal
-        Dim SigmaS As Decimal
-        Dim myEN1994 As New cls_Eurocodes
-        Dim myDia As Decimal
-        Dim lOK As Boolean
-
-        '--( Initialisation
-
-        k = 0.8
-        ks = 0.9
-        kc = myEN1994.CoefficientKc(myBeam, lAppGauche)
-
-        FctEff = 3
-
-        myDia = myBeam.Dalle.DiametreMaxiArma
-
-        SigmaS = Math.Min(myBeam.Dalle.AcierArmatures.FsK, myEN1994.ExContrainteFromTableau71(myBeam.Param.FissureWk, myDia, lOK))
-
-        '--( Calculs
-
-        If IsGreater(SigmaS, 0) Then
-            myAssurS = ks * kc * k * FctEff * myBeam.Dalle.EpaisseurActive / SigmaS
-        Else
-            myAssurS = -1
-        End If
-
-    End Sub
-
-#End Region
 
 End Class

@@ -175,6 +175,36 @@
 
     End Function
 
+    Public Function ExDiametreMaxFromTableau71(Wk As Decimal, mySigma As Decimal, ByRef lOK As Boolean) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   16/04/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcule le diamètre maxi à partir de la contraintee en utilisant le tableau 7.1 de l'EN 1994-1-1:2005
+        '----------------------------------------------------------------------------------------------------------
+        '   Wk          [E] :   Ouverture de fissure
+        '   mySigma     [E] :   Contrainte de traction dans les armatures
+        '   lOK         [S] :   Indique si le diamètre est dans le domaine d'application du tableau
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim DiaM As Decimal = 0
+        Dim tabSigma() As Decimal = Nothing
+        Dim tabDiam() As Decimal = Nothing
+        Dim nbVal As Integer
+
+        '--( Initialisation du tableau
+
+        Me.InitialiseTableau71(Wk, tabSigma, tabDiam, nbVal)
+
+        '--( Calcul
+
+        ExtraireDiaMTableau71(tabSigma, tabDiam, nbVal, mySigma, DiaM, lOK)
+
+        Return DiaM
+
+    End Function
+
     Public Function ExContrainteFromTableau71(Wk As Decimal, myDia As Decimal, ByRef lOK As Boolean) As Decimal
         '----------------------------------------------------------------------------------------------------------
         '   22/03/24 :  Création - POM
@@ -193,15 +223,57 @@
         Dim tabDiam() As Decimal = Nothing
         Dim nbVal As Integer
 
-        '--( Calcul
+        '--( Initialisation du tableau
 
         Me.InitialiseTableau71(Wk, tabSigma, tabDiam, nbVal)
+
+        '--( Calcul
 
         Me.ExtraireSigmaTableau71(tabSigma, tabDiam, nbVal, myDia, SigmaS, lOK)
 
         Return SigmaS
 
     End Function
+
+    Private Sub ExtraireDiaMTableau71(tabSigma() As Decimal, tabDia() As Decimal, nbVal As Integer, mySigma As Decimal, ByRef DiaM As Decimal, ByRef lOK As Boolean)
+        '----------------------------------------------------------------------------------------------------------
+        '   16/04/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcule le diamètre maxi à partir de la contrainte en utilisant le tableau 7.1 de l'EN 1994-1-1:2005
+        '----------------------------------------------------------------------------------------------------------
+        '   tabSigma    [E] :   Colonne des diamètres du tableau 7.1
+        '   tabDia      [E] :   Colonne des diamètres du tableau 7.1
+        '   nbVal       [E] :   nombre de valeurs dans le tableau
+        '   DiaM        [S] :   Diamètre des armatures dans la dalle (à partir duquel on extrait la contrainte)
+        '   mySigma     [E] :   Contrainte à considérer
+        '   lOK         [S] :   Indique si le diamètre est dans le domaine d'application du tableau
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lCont As Boolean
+        Dim i As Integer
+
+        '--( Initialisations
+
+        lOK = False
+        i = -1
+        lCont = True
+
+        Do While lCont
+
+            i += 1
+            If IsSmallerOrEqual(mySigma, tabSigma(i)) Then
+                lOK = True
+                DiaM = tabDia(i)
+            End If
+
+            lCont = (i < nbVal - 1)
+        Loop
+
+        If lCont Then DiaM = -1
+
+    End Sub
 
     Private Sub ExtraireSigmaTableau71(tabSigma() As Decimal, tabDia() As Decimal, nbVal As Integer, myDia As Decimal, ByRef SigmaS As Decimal, ByRef lOK As Boolean)
         '----------------------------------------------------------------------------------------------------------
