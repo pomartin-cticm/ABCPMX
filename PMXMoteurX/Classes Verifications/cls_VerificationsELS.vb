@@ -18,6 +18,9 @@ Public Class cls_VerificationsELS
     Public AsSurSRetrait As Decimal                 ' Armatures longi anti fissuration (§ 7.4.2 de l'EN 1994-1-1:2005)
     Public DiaMaxi As Decimal                       ' Diamètre maximal des armatures, pour la maitrise de la fissuration
     Public EspMaxi As Decimal                       ' Espacement maximal des armatures, idem
+    Public SigmaBar As Decimal                      ' Contrainte directe maxi
+    Public DeltaSig As Decimal                      ' Effet de rigidité du béton tendu
+    Public iCombiArma As Integer                    ' Indice de la combi ELS pour laquelle a on a la contrainte maxi
 
 #End Region
 
@@ -122,12 +125,11 @@ Public Class cls_VerificationsELS
 
                 '# Diamètre et espacement maxi
 
-                Me.MaitriseFissurationDirecte(myBeam, Math.Max(SigmaAD, SigmaAG))
+                Me.MaitriseFissurationDirecte(myBeam, SigmaAG, DeltaSG, SigmaAD, DeltaSD, iCombi)
 
             Next
 
         End If
-
 
         '# Calcul des armatures anti fissuration hors contraintes directes
 
@@ -148,6 +150,13 @@ Public Class cls_VerificationsELS
         Dim nbCombi = myBeam.CombiA_ELS.nbCombi
 
         ReDim Me.FlechesMaxCombi(nbCombi - 1, iTraveeFin)
+        If (myBeam.lMixte And myBeam.Param.lFlechesETA) Then _
+            ReDim Me.FlechesMaxCombiETA(nbCombi - 1, iTraveeFin)
+
+        Me.iCombiArma = -1
+        Me.SigmaBar = 0
+        Me.EspMaxi = -1
+        Me.DiaMaxi = -1
 
     End Sub
 #End Region
@@ -197,26 +206,52 @@ Public Class cls_VerificationsELS
 
 #Region " Calcul des armatures anti fissuration "
 
-    Private Sub MaitriseFissurationDirecte(myBeam As cls_Poutre, SigmaArma As Decimal)
+    Private Sub MaitriseFissurationDirecte(myBeam As cls_Poutre, SigmaAG As Decimal, DeltaSG As Decimal, SigmaAD As Decimal, DeltaSD As Decimal, iCombi As Integer)
         '----------------------------------------------------------------------------------------------------------
         '   22/03/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Gestion du calcul des armatures anti fissuration, selon § 7.4 de l'EN 1994-1:2005
         '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E]
-        '   SigmaM      [E] :   Table des contraintes normales sous hypothèse M<0, pour la combinaison étudiée
+        '   myBeam      [E] :   Poutre traitée
+        '   SigmaAG     [E] :   Contrainte dans l'armature sur appui gauche
+        '   DeltaSG     [E] :   Partie de la contrainte appui gauche due à la rigidité du béton tendu
+        '   SigmaAD     [E] :   Contrainte dans l'armature sur appui droite
+        '   DeltaSD     [E] :   Partie de la contrainte appui droite due à la rigidité du béton tendu
+        '   iCombi      [E] :   Indice de la combinaison
         '----------------------------------------------------------------------------------------------------------
 
         '--( Déclarations
 
         Dim EN1994 As New cls_Eurocodes
         Dim lOK As Boolean
+        Dim SigmaArma As Decimal
+        Dim lGauche As Boolean
 
-        '--( Diamètre maxi
+        '--( Sauvegarde des paramètres
 
-        Me.DiaMaxi = EN1994.ExDiametreMaxFromTableau71(myBeam.Param.FissureWk, SigmaArma, lOK)
+        If IsGreater(SigmaAG, SigmaAD) Then
+            lGauche = True
+            SigmaArma = SigmaAG
+        Else
+            lGauche = False
+            SigmaArma = SigmaAD
+        End If
 
-        '--( Espacement maxi
+        If IsGreater(SigmaArma, SigmaBar) Then
+
+            Me.SigmaBar = SigmaArma
+            If lGauche Then Me.DeltaSig = DeltaSG Else Me.DeltaSig = DeltaSD
+            Me.iCombiArma = iCombi
+
+            '--( Diamètre maxi
+
+            Me.DiaMaxi = EN1994.ExDiametreMaxFromTableau71(myBeam.Param.FissureWk, SigmaArma, lOK)
+
+            '--( Espacement maxi
+
+            Me.EspMaxi = EN1994.ExEspacementMaxFromTableau72(myBeam.Param.FissureWk, SigmaArma, lOK)
+
+        End If
 
     End Sub
 

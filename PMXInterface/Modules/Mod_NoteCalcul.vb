@@ -318,7 +318,7 @@ Module Mod_NoteCalcul
 
         '--[ Coefficients Combinaisons
 
-        EditionParametresCombinaisons(MyBeam)
+        EditionParametresCombinaisonsN(MyBeam)
 
         '--[ Options de calcul
 
@@ -1906,6 +1906,88 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionParametresCombinaisonsN(ByVal myBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   17/04/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des combinaisons de calcul
+        '----------------------------------------------------------------------------------------------
+        '   myBeam      [E] 
+        '----------------------------------------------------------------------------------------------
+
+        Dim NbBesoinLignes As Integer = 5     ' A ajuster
+
+        '--> Initialisation
+
+        If NbBesoinLignes + nbLignes > MAXLIGNEPPAG Then
+            SautePage()
+        End If
+        AddTitreNdC(2, BlocG("COMBINATIONS"))
+
+        '--( Combinaison ELU
+
+        If Not myBeam.GetNbCombi(myBeam.lCombELU) = 0 Then
+
+            AddTitreNdC(3, BlocG("ULSTATES"))
+            EditionListeCombinaisons(myBeam, myBeam.CombiA_ELU, False)
+
+        End If
+
+        '--( Combinaison ELS
+
+        If Not myBeam.GetNbCombi(myBeam.lCombELS) = 0 Then
+
+            AddTitreNdC(3, BlocG("SLSTATES"))
+            EditionListeCombinaisons(myBeam, myBeam.CombiA_ELS, True)
+
+        End If
+
+        '--( Combinaison EL Feu
+
+        If Not myBeam.GetNbCombi(myBeam.lCombFeu) = 0 Then
+
+            AddTitreNdC(3, BlocG("FLSTATES"))
+            EditionListeCombinaisons(myBeam, myBeam.CombiA_ELF, False)
+
+        End If
+
+        '--( Phase de construction
+
+        If myBeam.lMixte Then
+            '--( Combinaison ELU  construction
+            If Not myBeam.GetNbCombi(myBeam.lCombELCURules) = 0 Then
+
+                AddTitreNdC(3, BlocG("ELCUSTATES"))
+                EditionListeCombinaisons(myBeam, myBeam.CombiA_ELCU, False)
+
+            End If
+            '--( Combinaison ELS  construction
+            If Not myBeam.GetNbCombi(myBeam.lCombELCSRules) = 0 Then
+
+                AddTitreNdC(3, BlocG("ELCSSTATES"))
+                EditionListeCombinaisons(myBeam, myBeam.CombiA_ELCS, False)
+
+            End If
+        End If
+    End Sub
+
+    Private Sub EditionListeCombinaisons(myBeam As cls_Poutre, myCombiA As cls_Combinaisons, lRetrait As Boolean)
+        '----------------------------------------------------------------------------------------------
+        '   17/04/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des combinaisons de calcul pour un état limite
+        '----------------------------------------------------------------------------------------------
+        '   myBeam      [E] 
+        '   myCombiA    [E] :   Combinaisons de l'EL
+        '   lRetrait    [E] :   Indique si on prend en compte le retrait on non
+        '----------------------------------------------------------------------------------------------
+
+        For iCombi As Integer = 0 To myCombiA.nbCombi - 1
+
+            AddLigneNDC(TABW2 & ChaineCombinaison(myBeam, myCombiA, iCombi, lRetrait))
+
+        Next
+    End Sub
 
     Private Sub EditionParametresCombinaisons(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
@@ -1925,71 +2007,86 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(2, BlocG("COMBINATIONS"))
 
-
+        '--( Combinaison ELU
 
         If MyBeam.GetNbCombi(MyBeam.lCombELU) = 0 Then
-            'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+
         Else
             AddTitreNdC(3, BlocG("ULSTATES"))
-            EditionTableauCombinaison(MyBeam, MyBeam.lCombELU, MyBeam.CoefCombELU)
+            EditionTableauCombinaison(MyBeam, strRacineELU, MyBeam.lCombELU, MyBeam.CoefCombELU)
         End If
 
-
-
+        '--( Combinaisons ELS
 
         If MyBeam.GetNbCombi(MyBeam.lCombELS) = 0 Then
-            'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+
         Else
             AddTitreNdC(3, BlocG("SLSTATES"))
-            EditionTableauCombinaison(MyBeam, MyBeam.lCombELS, MyBeam.CoefCombELS)
+            EditionTableauCombinaison(MyBeam, strRacineELS, MyBeam.lCombELS, MyBeam.CoefCombELS)
         End If
 
-
+        '--( Combinaisons Feu
 
         If MyBeam.GetNbCombi(MyBeam.lCombFeu) = 0 Then
-            'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+
         Else
             AddTitreNdC(3, BlocG("FLSTATES"))
-            EditionTableauCombinaison(MyBeam, MyBeam.lCombFeu, MyBeam.CoefCombFeu)
+            EditionTableauCombinaison(MyBeam, strRacineELF, MyBeam.lCombFeu, MyBeam.CoefCombFeu)
         End If
+
+        '--( Combinaisons en phase de construction
 
         If MyBeam.lMixte Then
             If MyBeam.GetNbCombi(MyBeam.lCombELCURules) = 0 Then
-                'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
+
             Else
                 AddTitreNdC(3, BlocG("ELCUSTATES"))
-                EditionTableauCombinaison(MyBeam, MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
+                EditionTableauCombinaison(MyBeam, strRacineELU & "-C", MyBeam.lCombELCURules, MyBeam.CoefCombELCU)
             End If
 
             If MyBeam.GetNbCombi(MyBeam.lCombELCSRules) = 0 Then
                 'AddLigneNDC(TABW2 & BlocG("NOCOMBO"))
             Else
                 AddTitreNdC(3, BlocG("ELCSSTATES"))
-                EditionTableauCombinaison(MyBeam, MyBeam.lCombELCSRules, MyBeam.CoefCombELCS)
+                EditionTableauCombinaison(MyBeam, strRacineELS & "-C", MyBeam.lCombELCSRules, MyBeam.CoefCombELCS)
             End If
         End If
 
     End Sub
 
-    Private Sub EditionTableauCombinaison(ByVal MyBeam As cls_Poutre, ByVal lCombo As Boolean(), CoefComb As List(Of Decimal)())
-        Dim strCombo As String = ""
+    Private Sub EditionTableauCombinaison(ByVal MyBeam As cls_Poutre, AbbrLS As String, ByVal lCombi As Boolean(), CoefComb As List(Of Decimal)())
+        '----------------------------------------------------------------------------------------------
+        '   10/07/23 :  Création - Version 1.00 - xx?
+        '----------------------------------------------------------------------------------------------
+        '   Edition des combinaisons
+        '----------------------------------------------------------------------------------------------
+        '   MyBeam      [E] :   
+        '   lCombi      [E] :   Table indiquant si les combinaisons sont sélectionnées
+        '   CoefCombi   [E] :   Table des coefficients de combinaison
+        '   AbbrLS      [E] :   Abbréviation pour l'état limite (ULS, SLS etc)
+        '----------------------------------------------------------------------------------------------
+
+
+        Dim strCombi As String = ""
         Dim strCoeff As String = ""
         Dim strSymbol As String = ""
         Dim strSymbolsVariables() As String = {"Q1", "Q2", "QC"}
         Dim lTrouve As Boolean = False
         Dim iCdC As Integer = 0
-
+        Dim lFirst As Boolean
         Dim indice_g As Integer
 
-        For i As Integer = 0 To lCombo.Count - 1
-            If lCombo(i) Then
+        For i As Integer = 0 To lCombi.Count - 1
+            If lCombi(i) Then
+                strCombi = AbbrLS & "-" & CStr(i + 1) & " = "
+                lFirst = True
                 indice_g = CoefComb(i).Count - 1
                 'on commence par la CP en phase de construction (le code ci-dessous est une version contractée du code qui suit après)
 
                 If Not CoefComb(i)(indice_g) = 0 Then
                     strCoeff = GetStringInUnit(CoefComb(i)(indice_g), Enu_TypeVariable.SansType, 3, 2, False)
                     strSymbol = " g "
-                    strCombo += strCoeff + strSymbol
+                    strCombi += strCoeff + strSymbol
                 End If
 
                 'puis on boucle sur les autres cas de charges (cela permet d'afficher 1.35g + 1.5QC et non 1.5Qc + 1.35g)
@@ -1997,8 +2094,9 @@ Module Mod_NoteCalcul
                 For j = 0 To CoefComb(i).Count - 2
                     If Not CoefComb(i)(j) = 0 Then
 
-                        If strCombo = "" Then
+                        If strCombi = "" Or lFirst Then
                             strCoeff = GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 2, False)
+                            lFirst = False
                         Else
                             strCoeff = " + " & GetStringInUnit(CoefComb(i)(j), Enu_TypeVariable.SansType, 3, 2, False)
                         End If
@@ -2020,18 +2118,18 @@ Module Mod_NoteCalcul
                             While Not lTrouve And iCdC < MyBeam.ChargesA.Count
                                 If MyBeam.ChargesA(iCdC).Symbol = strSymbol.Trim Then
                                     lTrouve = True
-                                    If MyBeam.ChargesA(iCdC).lRunCalcul Then strCombo += strCoeff + strSymbol
+                                    If MyBeam.ChargesA(iCdC).lRunCalcul Then strCombi += strCoeff + strSymbol
                                 End If
                                 iCdC += 1
                             End While
                         Else
-                            strCombo += strCoeff + strSymbol
+                            strCombi += strCoeff + strSymbol
                         End If
 
                     End If
                 Next
 
-                AddLigneNDC(TABW2 & strCombo)
+                AddLigneNDC(TABW2 & strCombi)
 
             End If
         Next
@@ -3213,10 +3311,10 @@ Module Mod_NoteCalcul
 
         '--> Affichage de la combinaison
 
-        Dim strELU As String = BlocAnalyse("ULS")
+        Dim strELU As String = strRacineELU
         strELU += "_0"
 
-        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELU, strELU & CStr(iCombi), iCombi, lRetrait)
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELU, iCombi, lRetrait)
 
         '--> Calcul des M et V
 
@@ -3265,7 +3363,7 @@ Module Mod_NoteCalcul
         Dim strELU As String = BlocAnalyse("ULS")
         strELU += "_C_0"
 
-        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELCU, strELU & CStr(iCombi), iCombi, lRetrait)
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELCU, iCombi, lRetrait)
 
         '--> Calcul des M et V
 
@@ -3412,7 +3510,7 @@ Module Mod_NoteCalcul
 
         '--> Affichage de la combinaison
 
-        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELF, "ELF_0" & CStr(iCombi), iCombi, lRetrait)
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELF, iCombi, lRetrait)
 
         '--> Calcul des M et V
 
@@ -3458,10 +3556,7 @@ Module Mod_NoteCalcul
 
         '--> Affichage de la combinaison
 
-        Dim strELS As String = BlocAnalyse("SLS")
-        strELS += "_0"
-
-        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELS, strELS & CStr(iCombi), iCombi, lRetrait)
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELS, iCombi, lRetrait)
 
         '--> Calcul des M et V
 
@@ -3507,10 +3602,7 @@ Module Mod_NoteCalcul
 
         '--> Affichage de la combinaison
 
-        Dim strELS As String = BlocAnalyse("SLS")
-        strELS += "_C_0"
-
-        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELCS, strELS & CStr(iCombi), iCombi, lRetrait)
+        AffichageCombinaisonCharge(myPoutre, myPoutre.CombiA_ELCS, iCombi, lRetrait)
 
         '--> Calcul des M et V
 
@@ -3877,7 +3969,7 @@ Module Mod_NoteCalcul
         Return myIndiceGD
     End Function
 
-    Private Sub AffichageCombinaisonCharge(myPoutre As cls_Poutre, myCombi As cls_Combinaisons, TitreCombi As String, iCombi As Integer, lRetrait As Boolean)
+    Private Sub AffichageCombinaisonCharge(myPoutre As cls_Poutre, myCombi As cls_Combinaisons, iCombi As Integer, lRetrait As Boolean)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -3893,6 +3985,34 @@ Module Mod_NoteCalcul
         '--> Déclaration
 
         Dim Chaine As String
+
+        '--> Initialisation
+
+        Chaine = ChaineCombinaison(myPoutre, myCombi, iCombi, lRetrait)
+
+        '--> Affichage
+
+        AddTitreNdC(3, myCombi.Symbole(iCombi))
+        AddLigneNDC(TABW2 & Chaine)
+        SauteLigne()
+
+    End Sub
+
+    Private Function ChaineCombinaison(myPoutre As cls_Poutre, myCombi As cls_Combinaisons, iCombi As Integer, lRetrait As Boolean) As String
+        '-------------------------------------------------------------------------------------------
+        '   17/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Renvoie la chaine décrivant une combinaison d'action
+        '-------------------------------------------------------------------------------------------
+        '   myPoutre    [E] :   Poutre traitée
+        '   myCombi     [E] :   Combinaison à afficher
+        '   iCombi      [E] :   Indice de la combinaison
+        '   lRetrait    [E] :   Prise en compte ou non du retrait
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Chaine As String
         Dim jCdc As Integer
         Dim sPlus As String = ""
         Dim lFirst As Boolean = True
@@ -3900,7 +4020,6 @@ Module Mod_NoteCalcul
 
         '--> Initialisation
 
-        'Chaine = TitreCombi & " = "
         Chaine = myCombi.Symbole(iCombi) & " = "
 
         For jCdc = 0 To myPoutre.ChargesA.Count - 1
@@ -3920,13 +4039,9 @@ Module Mod_NoteCalcul
 
         Next
 
-        '--> Affichage
+        Return Chaine
 
-        AddTitreNdC(3, myCombi.Symbole(iCombi))
-        AddLigneNDC(TABW2 & Chaine)
-        SauteLigne()
-
-    End Sub
+    End Function
 
     Private Sub EditionAnalyseChargeA(MyPoutreLoc As cls_Poutre, ChargeA As cls_CasDeCharge)
         '-------------------------------------------------------------------------------------------
@@ -4292,10 +4407,7 @@ Module Mod_NoteCalcul
 
         '--> Affichage de la combinaison
 
-        Dim strELU As String = BlocAnalyse("ULS")
-        strELU += "_0"
-
-        AffichageCombinaisonCharge(myBeam, myBeam.CombiA_ELU, strELU & CStr(iCombi), iCombi, True)
+        AffichageCombinaisonCharge(myBeam, myBeam.CombiA_ELU, iCombi, True)
 
         '--> Affichage du tableau des contraintes
 
@@ -7017,8 +7129,69 @@ Module Mod_NoteCalcul
         '--( Maitrise de la fissuration sur les appuis continus
 
         If myBeam.Param.lMaitriseFissuration And ((myBeam.lTraveeConsoleGauche) Or (myBeam.lTraveeConsoleDroite)) Then
-
+            EditionMaitriseFissurationSousContrainteDirecte(myBeam)
         End If
+    End Sub
+
+    Private Sub EditionMaitriseFissurationSousContrainteDirecte(myBeam As cls_Poutre)
+        '-------------------------------------------------------------------------------------------
+        '   17/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition des mesures de maitrise de la fissuration
+        '   pour les poutres sous contraintes directes
+        '-------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Symbol As String
+        Dim Dia, Esp As Decimal
+        Dim lOK As Boolean
+
+        '--( Traitement
+
+        AddTitreNdC(3, BlocELS("CONTROLCRACKDIRECTSIGMA"))
+
+        If myBeam.Param.lGeneration1 Then
+            AddLigneNDC(TABW3 & BlocELS("REF2CONTROLCRACKING"))
+        Else
+            AddLigneNDC(TABW3 & BlocELS("REF2CONTROLCRACKINGG2"))
+        End If
+
+        '# Contraintes dans les armatures
+        Symbol = "\Ss\s\-s,max\="
+        AddLigneNDC(TABW3 & BlocELS("SIGMAMAX") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(myBeam.VerifELS.SigmaBar, Enu_TypeVariable.ContrainteMPa, 3, 2, True))
+        Symbol = "\SDs\s"
+        AddLigneNDC(TABW3 & BlocELS("DELTASIGMA") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(myBeam.VerifELS.DeltaSig, Enu_TypeVariable.ContrainteMPa, 3, 2, True))
+        AddLigneNDC(TABW3 & BlocELS("COMBIREBAR") & TABAFF & myBeam.SymboleCombi(strRacineELS, myBeam.VerifELS.iCombiArma + 1))
+
+        SauteLigne()
+
+        '# Diamètre maxi des barres
+        Symbol = "\Sf\s\-max\="
+        AddLigneNDC(TABW3 & BlocELS("DIAMAXI") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(myBeam.VerifELS.DiaMaxi, Enu_TypeVariable.Dimension, 3, 2, True))
+
+        Dia = myBeam.Dalle.LitArma(0).PhiS
+        Symbol = "\Sf\s"
+        AddLigneNDC(TABW3 & BlocELS("DIAMAXI") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(Dia, Enu_TypeVariable.Dimension, 3, 2, True) & "\BAL")
+        lOK = IsGreaterOrEqual(myBeam.VerifELS.DiaMaxi, Dia)
+        AfficheBalise(lOK)
+
+        '# Espacement maxi des barres
+        Symbol = "e\-max\="
+        AddLigneNDC(TABW3 & BlocELS("ESPMAXI") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(myBeam.VerifELS.EspMaxi, Enu_TypeVariable.Dimension, 3, 2, True))
+
+        Esp = myBeam.Dalle.LitArma(0).EspBar
+        Symbol = "e"
+        AddLigneNDC(TABW3 & BlocELS("DIAMAXI") & TABAFF &
+                    Symbol & TABEGAL & GetStringInUnit(Esp, Enu_TypeVariable.Dimension, 3, 2, True) & "\BAL")
+        lOK = IsGreaterOrEqual(myBeam.VerifELS.EspMaxi, Esp)
+        AfficheBalise(lOK)
+
     End Sub
 
     Private Sub EditionMaitriseFissurationSansContrainteDirect(myBeam As cls_Poutre)
@@ -7041,7 +7214,11 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocELS("CONTROLCRACKINGNODIRECT"))
 
-        AddLigneNDC(TABW3 & BlocELS("REF1CONTROLCRACKING"))
+        If myBeam.Param.lGeneration1 Then
+            AddLigneNDC(TABW3 & BlocELS("REF1CONTROLCRACKING"))
+        Else
+            AddLigneNDC(TABW3 & BlocELS("REF1CONTROLCRACKINGG2"))
+        End If
 
         Symbol = "A\-s\=/s"
         AsReq = myBeam.VerifELS.AsSurSRetrait

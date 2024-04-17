@@ -514,8 +514,14 @@ MINIREINFORCEMENT		= Section d'armature minimale
 EFFECTREINFORCEMENT		= Section d'armature effective
 CONTROLCRACKINGNODIRECT	= Maîtrise de la fissuration en l'absence de contraintes directes
 REF1CONTROLCRACKING		= D'après l'article 7.4.2 de la NF EN 1994-1-1:2005
+REF2CONTROLCRACKING		= D'après l'article 7.4.3 de la NF EN 1994-1-1:2005
+REF1CONTROLCRACKINGG2	= D'après l'article 9.4.2 de la prEN 1994-1-1:2024
+REF2CONTROLCRACKINGG2	= D'après l'article 9.4.3 de la prEN 1994-1-1:2024
 ADDREINFSUPP			= Des armatures longitudinales complémentaires sont nécessaires sur les appuis
 REINFSUPPDETAIL			= Pour les détails constructifs, voir EN 1994-1-1: 2005, 7.4.1 (4) 
+CONTROLCRACKDIRECTSIGMA	= Control of cracking due to direct loading	
+DIAMAXI					= Diamètre maxi des barres
+ESPMAXI					= Espacement maxi des barres
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher

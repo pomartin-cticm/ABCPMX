@@ -844,8 +844,8 @@ SHRINKAGEENCASEMENT		= Shrinkage of the encasement
 ULS						= ULS
 SLS						= SLS
 FLS						= FLS
-ULSC					= ULS_C
-SLSC					= SLS_C
+ULSC					= ULS-C
+SLSC					= SLS-C
 COPY                    = Copy
 
 #OPTCALCULMAIN

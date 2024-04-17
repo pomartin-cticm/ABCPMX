@@ -157,11 +157,11 @@ Public Class Frm_PMX
                 NomChargesA(8) = Bloc("SHRINKAGEENCASEMENT")
                 NomChargesA(9) = Bloc("CLOADS")
 
-                strRacineELU = Bloc("ULS")                              ' "ULS"
-                strRacineELS = Bloc("SLS")                              ' "SLS"
-                strRacineELF = Bloc("FLS")                              ' "FLS"
-                strRacineELUC = Bloc("ULSC")                              ' "ULS_C"
-                strRacineELSC = Bloc("SLSC")                              ' "SLS_C"
+                strRacineELU = Bloc("ULS")                                  ' "ULS"
+                strRacineELS = Bloc("SLS")                                  ' "SLS"
+                strRacineELF = Bloc("FLS")                                  ' "FLS"
+                strRacineELUC = Bloc("ULSC")                                ' "ULS_C"
+                strRacineELSC = Bloc("SLSC")                                ' "SLS_C"
 
                 strCopy = Bloc("COPY")
 

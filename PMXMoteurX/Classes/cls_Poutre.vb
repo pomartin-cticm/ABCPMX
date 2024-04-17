@@ -3324,7 +3324,8 @@ Public Class cls_Poutre
 
             If lCombi(iCombi) And (Not lCombinaisonNulle(iCombi, CoefCombi)) Then
 
-                Symbole = RacSymbolEL & "_0" & CStr(iCombi + 1)
+                'Symbole = RacSymbolEL & "_0" & CStr(iCombi + 1)
+                Symbole = Me.SymboleCombi(RacSymbolEL, iCombi)
 
                 For i = 0 To NbCharges - 1
                     Select Case Me.ChargesA(i).Type
@@ -3378,6 +3379,23 @@ Public Class cls_Poutre
         Next
 
     End Sub
+
+    Public Function SymboleCombi(RacSymbolEL As String, iCombi As Integer) As String
+        '---------------------------------------------------------------------------
+        '   17/04/24 :  Création - POM 
+        '---------------------------------------------------------------------------
+        '   Renvoie le symbole d'une combinaison, pour affichage
+        '---------------------------------------------------------------------------
+        '   RacSymbolEL [E] :   Racine pour l'état limite considéré
+        '   iCombi      [E] :   Indice de la combinaison
+        '---------------------------------------------------------------------------
+
+        Dim strNum As String
+
+        If iCombi < 9 Then strNum = "0" & CStr(iCombi + 1) Else strNum = CStr(iCombi + 1)
+
+        Return RacSymbolEL & "-" & strNum
+    End Function
 
     Private Function lCombinaisonNulle(iCombi As Integer, CoefCombi() As List(Of Decimal)) As Boolean
         '---------------------------------------------------------------------------

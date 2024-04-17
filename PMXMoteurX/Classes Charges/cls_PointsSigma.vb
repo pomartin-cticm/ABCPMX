@@ -704,6 +704,7 @@
 
         End If
 
+        Return SigmaArma
 
     End Function
 

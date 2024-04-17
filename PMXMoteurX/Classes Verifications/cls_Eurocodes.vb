@@ -175,6 +175,35 @@
 
     End Function
 
+    Public Function ExEspacementMaxFromTableau72(Wk As Decimal, mySigma As Decimal, ByRef lOK As Boolean) As Decimal
+        '----------------------------------------------------------------------------------------------------------
+        '   16/04/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Calcule l'espacement maxi à partir de la contrainte en utilisant le tableau 7.2 de l'EN 1994-1-1:2005
+        '----------------------------------------------------------------------------------------------------------
+        '   Wk          [E] :   Ouverture de fissure
+        '   mySigma     [E] :   Contrainte de traction dans les armatures
+        '   lOK         [S] :   Indique si le diamètre est dans le domaine d'application du tableau
+        '----------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim EspM As Decimal = 0
+        Dim tabSigma() As Decimal = Nothing
+        Dim tabEsp() As Decimal = Nothing
+        Dim nbVal As Integer
+
+        '--( Initialisation du tableau
+
+        Me.InitialiseTableau72(Wk, tabSigma, tabesp, nbVal)
+
+        '--( Calcul
+
+        ExtraireValMaxTableau71or72(tabSigma, tabEsp, nbVal, mySigma, EspM, lOK)
+
+        Return EspM
+    End Function
+
     Public Function ExDiametreMaxFromTableau71(Wk As Decimal, mySigma As Decimal, ByRef lOK As Boolean) As Decimal
         '----------------------------------------------------------------------------------------------------------
         '   16/04/24 :  Création - POM
@@ -199,7 +228,7 @@
 
         '--( Calcul
 
-        ExtraireDiaMTableau71(tabSigma, tabDiam, nbVal, mySigma, DiaM, lOK)
+        ExtraireValMaxTableau71or72(tabSigma, tabDiam, nbVal, mySigma, DiaM, lOK)
 
         Return DiaM
 
@@ -235,16 +264,16 @@
 
     End Function
 
-    Private Sub ExtraireDiaMTableau71(tabSigma() As Decimal, tabDia() As Decimal, nbVal As Integer, mySigma As Decimal, ByRef DiaM As Decimal, ByRef lOK As Boolean)
+    Private Sub ExtraireValMaxTableau71or72(tabSigma() As Decimal, tabVal() As Decimal, nbVal As Integer, mySigma As Decimal, ByRef ValM As Decimal, ByRef lOK As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   16/04/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Calcule le diamètre maxi à partir de la contrainte en utilisant le tableau 7.1 de l'EN 1994-1-1:2005
         '----------------------------------------------------------------------------------------------------------
-        '   tabSigma    [E] :   Colonne des diamètres du tableau 7.1
-        '   tabDia      [E] :   Colonne des diamètres du tableau 7.1
+        '   tabSigma    [E] :   Colonne des contraintes du tableau 7.1 ou 7.2
+        '   tabVal      [E] :   Colonne des diamètres du tableau 7.1 ou espacement du tableau 7.2
         '   nbVal       [E] :   nombre de valeurs dans le tableau
-        '   DiaM        [S] :   Diamètre des armatures dans la dalle (à partir duquel on extrait la contrainte)
+        '   ValM        [S] :   Diamètre ou espacement max des armatures dans la dalle (obtenu à partir de la contrainte)
         '   mySigma     [E] :   Contrainte à considérer
         '   lOK         [S] :   Indique si le diamètre est dans le domaine d'application du tableau
         '----------------------------------------------------------------------------------------------------------
@@ -265,13 +294,13 @@
             i += 1
             If IsSmallerOrEqual(mySigma, tabSigma(i)) Then
                 lOK = True
-                DiaM = tabDia(i)
+                ValM = tabVal(i)
             End If
 
-            lCont = (i < nbVal - 1)
+            lCont = (i < nbVal - 1) And Not lOK
         Loop
 
-        If lCont Then DiaM = -1
+        If lCont Then ValM = -1
 
     End Sub
 
@@ -326,7 +355,7 @@
         '----------------------------------------------------------------------------------------------------------
         '   Wk          [E] :   Ouverture de fissure
         '   Sigma       [S] :   Colonne des contraintes
-        '   myDia    [S] :   Colonne des diamètres
+        '   Diametre    [S] :   Colonne des diamètres
         '   nbVal       [S] :   nombre de valeurs dans le tableau
         '----------------------------------------------------------------------------------------------------------
 
@@ -344,6 +373,36 @@
         nbVal = Diametre.GetUpperBound(0) + 1
         For i As Integer = 0 To nbVal - 1
             Diametre(i) = Diametre(i) / 1000
+        Next
+
+    End Sub
+
+    Private Sub InitialiseTableau72(Wk As Decimal, ByRef Sigma() As Decimal, ByRef Esp() As Decimal, ByRef nbVal As Integer)
+        '----------------------------------------------------------------------------------------------------------
+        '   22/03/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Initialise le tableau 7.2 de l'EN 1994-1-1:2005 
+        '----------------------------------------------------------------------------------------------------------
+        '   Wk          [E] :   Ouverture de fissure
+        '   Sigma       [S] :   Colonne des contraintes
+        '   Esp         [S] :   Colonne des espacements de barres
+        '   nbVal       [S] :   nombre de valeurs dans le tableau
+        '----------------------------------------------------------------------------------------------------------
+
+        If IsEqual(Wk, cls_OptionsCalcul.tabWk(0)) Then
+            Sigma = {160, 200, 240, 280, 320, 360}
+            Esp = {300, 300, 250, 200, 150, 100}
+        ElseIf IsEqual(Wk, cls_OptionsCalcul.tabWk(1)) Then
+            Sigma = {160, 200, 240, 280, 320, 360}
+            Esp = {300, 250, 200, 150, 100, 50}
+        ElseIf IsEqual(Wk, cls_OptionsCalcul.tabWk(2)) Then
+            Sigma = {160, 200, 240, 280}
+            Esp = {200, 150, 100, 50}
+        End If
+
+        nbVal = Esp.GetUpperBound(0) + 1
+        For i As Integer = 0 To nbVal - 1
+            Esp(i) = Esp(i) / 1000
         Next
 
     End Sub
