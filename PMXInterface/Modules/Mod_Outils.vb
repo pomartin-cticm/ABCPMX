@@ -540,7 +540,7 @@ Module Mod_Outils
 
             Case Enu_TypeVariable.Frequence
                 kUnitU = 1
-                Unite = "Hz"
+                Unite = SEP & "Hz"
 
             Case Enu_TypeVariable.Moment
 

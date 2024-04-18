@@ -7074,7 +7074,7 @@ Module Mod_NoteCalcul
 
         '# Edtion des fréquences propres
 
-        'EditionELSFrequencesPropres(MyBeam) GUD: à voir + tard si c'est pertinent
+        EditionELSFrequencesPropres(MyBeam)
 
         '# Edition de la méthode Hivoss
 
@@ -7327,14 +7327,143 @@ Module Mod_NoteCalcul
 
     '=== EDITION DES FREQUENCES PROPRES ==========================================================================================
 
-    Private Sub EditionELSFrequencesPropres(MyBeam As cls_Poutre)
+    Private Sub EditionELSFrequencesPropres(myBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
-        '   22/11/23 :  Création - POM
+        '   18/04/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
-        '   Edition des flèches 
+        '   Edition des fréquences propres 
         '-------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
+        Dim NbReq As Integer
+        Dim lDefQ(2) As Boolean
+        Dim i, iCombi As Integer
+        Dim lDefG2 As Boolean
+        Dim CombiG As String
+        Dim Symbol As String = "f"
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+
+        '--( Initialisation
+
+        For i = 1 To 2
+            lDefQ(i) = myBeam.ChargesU("Q" & CStr(i)).EstDefinie
+        Next
+        lDefQ(0) = lDefQ(1) Or lDefQ(2)
+        If lDefQ(0) Then NbReq = 20 Else NbReq = 5
+        lDefG2 = myBeam.ChargesU("G2").EstDefinie
+
+        CombiG = "G1"
+        If lDefG2 Then CombiG = CombiG & " + G2"
+
+        '--( SdP et titre
+
+        If MAXLIGNEPPAG < nbLignes + NbReq Then SautePage()
+
         AddTitreNdC(2, BlocELS("EIGENFREQUENCIES"))
+
+        '--( Affichage
+
+        If lDefQ(0) Then
+            '# Si au moins une charge Q est définie, on affiche la fréquence sous les combi G+iQ
+
+            EnteteTableauFrequencesP(lDefQ, NCOL, largcol)
+
+            For iCombi = 0 To 10
+                LigneTableauFrequencesP(myBeam, lDefQ, NCOL, LargCol, iCombi, CombiG)
+            Next
+
+            FinTableau()
+        Else
+            '# Si aucune charge Q n'est définie, on affiche simplement la fréquence qous charge G
+
+            AddLigneNDC(TABW2 & "Frequence sous " & CombiG & TABAFF &
+                        Symbol & TABEGAL & GetStringInUnit(myBeam.VerifELS.FrequencesP(0, 0), Enu_TypeVariable.Frequence, 3, 2, True))
+
+        End If
+
+    End Sub
+
+    Private Sub LigneTableauFrequencesP(myBeam As cls_Poutre, lDefQ() As Boolean, ByRef NCOL As Integer, ByRef LargCol() As Single,
+                                        iCombi As Integer, strCombiG As String)
+        '-------------------------------------------------------------------------------------------
+        '   18/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition d'une ligne du tableau des fréquences propres par combi G+iQ
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   lDefQ       [E] :   Indique les charges Q définies
+        '   NCOL        [E] :   Indique si tableau pour les cas de charge ou pour les combinaisons
+        '   LargCol     [E] :   Largeurs des colonnes du tableau
+        '-------------------------------------------------------------------------------------------
+
+        Dim ChaineCombi As String
+
+        ChaineCombi = strCombiG
+
+        If iCombi > 0 Then
+            ChaineCombi = strCombiG & " + " & GetStringInUnit(iCombi / 10, Enu_TypeVariable.SansType, 2, 1, False) & " Q"
+        End If
+
+        InitialiseLigne(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Gauche, chainecombi)
+
+        For i = 1 To 2
+            If lDefQ(i) Then
+                AddCellule(LargCol(i), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myBeam.VerifELS.FrequencesP(iCombi, i - 1), Enu_TypeVariable.Frequence, 4, 2, True))
+            End If
+        Next
+
+    End Sub
+
+    Private Sub EnteteTableauFrequencesP(lDefQ() As Boolean, ByRef NCOL As Integer, ByRef LargCol() As Single)
+        '-------------------------------------------------------------------------------------------
+        '   18/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------
+        '   Edition de l'entete pour le tableau des fréquences propres par combi G+iQ
+        '-------------------------------------------------------------------------------------------
+        '   lDefQ       [E] :   Indique les charges Q définies
+        '   NCOL        [S] :   Indique si tableau pour les cas de charge ou pour les combinaisons
+        '   LargCol     [S] :   Largeurs des colonnes du tableau
+        '-------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Pos As Integer
+        Dim iCell As Integer = 0
+        Dim i As Integer
+
+        '--> Initialisation
+
+        NCOL = 1
+        For i = 1 To 2
+            If lDefQ(i) Then NCOL += 1
+        Next
+
+        Pos = 10
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos))
+
+        ReDim LargCol(NCOL - 1)
+        LargCol(0) = CSng(35)
+
+        For i = 1 To NCOL - 1
+            LargCol(i) = 10
+        Next
+
+        '--> Entete
+
+        InitialiseLigne(NCOL, HLIGNEENTETE)
+
+        AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Gauche, "")
+
+        For i = 1 To 2
+            If lDefQ(i) Then
+                AddCelluleFond(LargCol(i), Bordures.Tous, PositionTexteInCell.Centre, "Q" & CStr(i))
+            End If
+        Next
 
     End Sub
 
@@ -7890,11 +8019,11 @@ Module Mod_NoteCalcul
 
         SauteLigne()
         If MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert Then
-            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFB") & pTABVAR & GetStringInUnit(FreqBeam, Enu_TypeVariable.Frequence, 3, 1, True))
-            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFS") & pTABVAR & GetStringInUnit(FreqDalle, Enu_TypeVariable.Frequence, 3, 1, True))
-            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFC") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 1, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFB") & pTABVAR & GetStringInUnit(FreqBeam, Enu_TypeVariable.Frequence, 3, 2, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFS") & pTABVAR & GetStringInUnit(FreqDalle, Enu_TypeVariable.Frequence, 3, 2, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFC") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 2, True))
         Else
-            AddLigneNDC(TABW2 & BlocHiVoss("EIGENF") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 1, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENF") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 2, True))
         End If
         SauteLigne()
         AddLigneNDC(TABW2 & BlocHiVoss("MODALMASS") & pTABVAR & GetStringInUnit(ModalMass, Enu_TypeVariable.SansType, 3, 0, False) & " kg")

@@ -22,6 +22,10 @@ Public Class cls_VerificationsELS
     Public DeltaSig As Decimal                      ' Effet de rigidité du béton tendu
     Public iCombiArma As Integer                    ' Indice de la combi ELS pour laquelle a on a la contrainte maxi
 
+    '==( Frequences propres 
+
+    Public FrequencesP(,) As Decimal                ' Frequences propres G+iQ
+
 #End Region
 
 #Region " Gestion globale "
@@ -55,6 +59,7 @@ Public Class cls_VerificationsELS
         Dim MEd(,) As Decimal = Nothing
         Dim lRetrait As Boolean = True
         Dim lMixte As Boolean = myBeam.lMixte
+        Dim lDefQ(2) As Boolean
 
         '--> Initialisation de la classe
 
@@ -137,6 +142,26 @@ Public Class cls_VerificationsELS
             Me.ArmaturesAntiFissuration(myBeam)
         End If
 
+        '# Calcul des fréquences propres
+
+        myBeam.Modal.Analyse(myBeam, 0, -1)
+        Me.FrequencesP(0, 0) = myBeam.Modal.Frequence
+        Me.FrequencesP(0, 1) = myBeam.Modal.Frequence
+
+        lDefQ(1) = myBeam.ChargesU("Q1").EstDefinie
+        lDefQ(2) = myBeam.ChargesU("Q2").EstDefinie
+
+        If lDefQ(1) Or lDefQ(2) Then
+            For iCombi = 1 To 10
+                For iQ As Integer = 1 To 2
+                    If lDefQ(iQ) Then
+                        myBeam.Modal.Analyse(myBeam, CDbl(iCombi / 10), iQ)
+                        Me.FrequencesP(iCombi, iQ - 1) = myBeam.Modal.Frequence
+                    End If
+                Next
+            Next
+        End If
+
     End Sub
 
     Private Sub InitialiseELS(myBeam As cls_Poutre)
@@ -157,6 +182,8 @@ Public Class cls_VerificationsELS
         Me.SigmaBar = 0
         Me.EspMaxi = -1
         Me.DiaMaxi = -1
+
+        ReDim Me.FrequencesP(10, 1)
 
     End Sub
 #End Region

@@ -1139,7 +1139,6 @@ Public Class cls_MethodHivoss
 
 #End Region
 
-
 #Region " Outils pour les routines dessins "
 
     Public Sub RecupereDonnees(ByVal MyDamp As Integer, ByVal nbPoints As Integer, ByRef DonneeX As List(Of Decimal()), ByRef DonneeY() As Decimal)
