@@ -525,6 +525,7 @@ ESPMAXI					= Maximum spacing of rebars
 SIGMAMAX				= Maximum tension stress in rebars
 DELTASIGMA				= Including effect of concrete tension stiffening
 COMBIREBAR				= For combination 
+FREQG					= Eigen frequency for the combination 
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

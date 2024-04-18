@@ -7378,7 +7378,7 @@ Module Mod_NoteCalcul
         Else
             '# Si aucune charge Q n'est définie, on affiche simplement la fréquence qous charge G
 
-            AddLigneNDC(TABW2 & "Frequence sous " & CombiG & TABAFF &
+            AddLigneNDC(TABW2 & BlocELS("FREQG") & " " & CombiG & TABAFF &
                         Symbol & TABEGAL & GetStringInUnit(myBeam.VerifELS.FrequencesP(0, 0), Enu_TypeVariable.Frequence, 3, 2, True))
 
         End If
@@ -7398,7 +7398,12 @@ Module Mod_NoteCalcul
         '   LargCol     [E] :   Largeurs des colonnes du tableau
         '-------------------------------------------------------------------------------------------
 
+        '--( Déclarations
+
         Dim ChaineCombi As String
+        Dim iCol As Integer
+
+        '--( Initialisation
 
         ChaineCombi = strCombiG
 
@@ -7406,13 +7411,17 @@ Module Mod_NoteCalcul
             ChaineCombi = strCombiG & " + " & GetStringInUnit(iCombi / 10, Enu_TypeVariable.SansType, 2, 1, False) & " Q"
         End If
 
+        '--( Traitement
+
         InitialiseLigne(NCOL, HLIGNE)
 
         AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Gauche, chainecombi)
+        iCol = 0
 
         For i = 1 To 2
             If lDefQ(i) Then
-                AddCellule(LargCol(i), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myBeam.VerifELS.FrequencesP(iCombi, i - 1), Enu_TypeVariable.Frequence, 4, 2, True))
+                iCol += 1
+                AddCellule(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myBeam.VerifELS.FrequencesP(iCombi, i - 1), Enu_TypeVariable.Frequence, 4, 2, True))
             End If
         Next
 
@@ -7433,7 +7442,7 @@ Module Mod_NoteCalcul
 
         Dim Pos As Integer
         Dim iCell As Integer = 0
-        Dim i As Integer
+        Dim i, iCol As Integer
 
         '--> Initialisation
 
@@ -7458,10 +7467,12 @@ Module Mod_NoteCalcul
         InitialiseLigne(NCOL, HLIGNEENTETE)
 
         AddCellule(LargCol(0), Bordures.Aucun, PositionTexteInCell.Gauche, "")
+        iCol = 0
 
         For i = 1 To 2
             If lDefQ(i) Then
-                AddCelluleFond(LargCol(i), Bordures.Tous, PositionTexteInCell.Centre, "Q" & CStr(i))
+                iCol = +1
+                AddCelluleFond(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, "Q" & CStr(i))
             End If
         Next
 

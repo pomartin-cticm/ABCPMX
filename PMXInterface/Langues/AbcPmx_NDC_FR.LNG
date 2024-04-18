@@ -519,9 +519,12 @@ REF1CONTROLCRACKINGG2	= D'après l'article 9.4.2 de la prEN 1994-1-1:2024
 REF2CONTROLCRACKINGG2	= D'après l'article 9.4.3 de la prEN 1994-1-1:2024
 ADDREINFSUPP			= Des armatures longitudinales complémentaires sont nécessaires sur les appuis
 REINFSUPPDETAIL			= Pour les détails constructifs, voir EN 1994-1-1: 2005, 7.4.1 (4) 
-CONTROLCRACKDIRECTSIGMA	= Control of cracking due to direct loading	
+CONTROLCRACKDIRECTSIGMA	= Maîtrise de la fissuration sous contraite directe
 DIAMAXI					= Diamètre maxi des barres
 ESPMAXI					= Espacement maxi des barres
+DELTASIGMA				= y compris l'effet de rigidité du béton
+COMBIREBAR				= Pour la combinaison
+FREQG					= Fréquence propre pour la combinaison 
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher
