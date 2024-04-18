@@ -167,7 +167,7 @@
 '    '        Largeur = MySection.dalle.Beff
 '    '        Epaisseur = MySection.dalle.EpaisseurActive
 '    '        Fd = MySection.dalle.beton.Fck
-'    '        zPos = MySection.dalle.EpRenformis + MySection.dalle.t_d - Epaisseur / 2
+'    '        zPos = MySection.dalle.EpRenformis + MySection.dalle.Ep_td - Epaisseur / 2
 
 '    '        MyModele.AddMaille(Largeur * Epaisseur, Epaisseur, zPos, 0, 1, nEqDalle, Fd, 0.85, GammaC, Cls_Maille.EnuTypeMaille.Rectangulaire)
 
@@ -176,7 +176,7 @@
 '    '        If lModeleRenformis And (MySection.dalle.type = Cls_Dalle.Enum_TypeDalle.Pleine) Then
 
 '    '            Largeur = MySection.ProfilA.b_fs
-'    '            Epaisseur = MySection.dalle.t_h
+'    '            Epaisseur = MySection.dalle.Ep_th
 
 '    '            If (Epaisseur > 0) Then
 

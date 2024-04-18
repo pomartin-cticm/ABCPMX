@@ -591,9 +591,9 @@
         For iNode = 0 To MyPoutre.Nodes.nbNodes - 1
             For k = 0 To 1
                 If MEd(iNode, k) > 0 Then
-                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.t_d)
+                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPPlus(iNode), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.Ep_td)
                 Else
-                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANE(iNode, k), False, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.t_d)
+                    ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANPMoins(iNode), zANE(iNode, k), False, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.Ep_td)
                 End If
             Next
         Next
@@ -646,7 +646,7 @@
 
             For k = kDeb To kFin
 
-                ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANP(iNode, k), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.t_d)
+                ClasseSection(iNode, k) = MyPoutre.Section.ClasseSection(zANP(iNode, k), zANE(iNode, k), True, MyPoutre.Section.lSlimFloor, MyPoutre.Section.lEnrobage, lGeneration1, MyPoutre.Dalle.Ep_td)
 
             Next
         Next

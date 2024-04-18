@@ -277,7 +277,7 @@ Public Module Mod_Dessins
                 End If
                 xe_cotes = xo_cotes
                 yo_cotes = MyDalle.preDalle_ep
-                ye_cotes = MyDalle.t_d
+                ye_cotes = MyDalle.Ep_td
 
                 Chaine = MySection.ProfilA.NomProfile
             Else
@@ -321,29 +321,29 @@ Public Module Mod_Dessins
         If MyPoutre.lTremieGauche Or MyPoutre.lTremieDroite Then
             If lCofraplus220 Then
                 yInfTremieG = zREF - MyDalle.Bac.Hp - MySection.ProfilA.Tfs
-                ySupTremieG = zREF + MyPoutre.Dalle.t_d + MySection.ProfilA.Tfs
+                ySupTremieG = zREF + MyPoutre.Dalle.Ep_td + MySection.ProfilA.Tfs
 
                 yInfTremieD = yInfTremieG
                 ySupTremieD = ySupTremieG
             ElseIf MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine Then
-                If MyPoutre.DistanceDsl1 <= MyPoutre.Section.ProfilA.Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd) Then
+                If MyPoutre.DistanceDsl1 <= MyPoutre.Section.ProfilA.Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd) Then
                     yInfTremieG = zREF
-                    ySupTremieG = zREF + MyPoutre.Dalle.t_d + MyPoutre.Dalle.t_h + MySection.ProfilA.Tfs
+                    ySupTremieG = zREF + MyPoutre.Dalle.Ep_td + MyPoutre.Dalle.Ep_th + MySection.ProfilA.Tfs
                 Else
-                    yInfTremieG = zREF + MyPoutre.Dalle.t_h - MySection.ProfilA.Tfs
-                    ySupTremieG = zREF + MyPoutre.Dalle.t_d + MyPoutre.Dalle.t_h + MySection.ProfilA.Tfs
+                    yInfTremieG = zREF + MyPoutre.Dalle.Ep_th - MySection.ProfilA.Tfs
+                    ySupTremieG = zREF + MyPoutre.Dalle.Ep_td + MyPoutre.Dalle.Ep_th + MySection.ProfilA.Tfs
                 End If
 
-                If MyPoutre.DistanceDsl2 <= MyPoutre.Section.ProfilA.Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd) Then
+                If MyPoutre.DistanceDsl2 <= MyPoutre.Section.ProfilA.Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd) Then
                     yInfTremieD = zREF
-                    ySupTremieD = zREF + MyPoutre.Dalle.t_d + MyPoutre.Dalle.t_h + MySection.ProfilA.Tfs
+                    ySupTremieD = zREF + MyPoutre.Dalle.Ep_td + MyPoutre.Dalle.Ep_th + MySection.ProfilA.Tfs
                 Else
-                    yInfTremieD = zREF + MyPoutre.Dalle.t_h - MySection.ProfilA.Tfs
-                    ySupTremieD = zREF + MyPoutre.Dalle.t_d + MyPoutre.Dalle.t_h + MySection.ProfilA.Tfs
+                    yInfTremieD = zREF + MyPoutre.Dalle.Ep_th - MySection.ProfilA.Tfs
+                    ySupTremieD = zREF + MyPoutre.Dalle.Ep_td + MyPoutre.Dalle.Ep_th + MySection.ProfilA.Tfs
                 End If
             Else
                 yInfTremieG = zREF - MySection.ProfilA.Tfs
-                ySupTremieG = zREF + MyPoutre.Dalle.t_d + MySection.ProfilA.Tfs
+                ySupTremieG = zREF + MyPoutre.Dalle.Ep_td + MySection.ProfilA.Tfs
 
                 yInfTremieD = yInfTremieG
                 ySupTremieD = ySupTremieG
@@ -432,7 +432,7 @@ Public Module Mod_Dessins
             xo_cotes = 0
             xe_cotes = xo_cotes
 
-            yo_cotes = zREF + MyPoutre.Dalle.t_d + dCar / 8
+            yo_cotes = zREF + MyPoutre.Dalle.Ep_td + dCar / 8
             ye_cotes = yo_cotes
 
             Chaine = MyPoutre.Dalle.Connecteur.nom
@@ -467,7 +467,7 @@ Public Module Mod_Dessins
         Dim xPts() As Single = Nothing
         Dim yPts() As Single = Nothing
         Dim nbPts As Integer
-        'Dim dCar As Decimal = (MyDalle.t_h + MyDalle.t_d) / 5
+        'Dim dCar As Decimal = (MyDalle.Ep_th + MyDalle.Ep_td) / 5
         Dim BeffDes As Decimal = MyDalle.Beff
         Dim MyPenDot As New Pen(Color.Black, 0.75)
 
@@ -542,18 +542,18 @@ Public Module Mod_Dessins
 
         End If
 
-        yo = MyDalle.t_h + MyDalle.t_d
+        yo = MyDalle.Ep_th + MyDalle.Ep_td
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-        yo = MyDalle.t_h
+        yo = MyDalle.Ep_th
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
         If lIntermediaire Then
 
-            xo = CSng(-Bfs / 2 - MyDalle.t_h * Math.Tan(MyDalle.ThetaRd)) - EntraxeD1
-            yo = MyDalle.t_h
+            xo = CSng(-Bfs / 2 - MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd)) - EntraxeD1
+            yo = MyDalle.Ep_th
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -567,14 +567,14 @@ Public Module Mod_Dessins
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-            xo = CSng(Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd)) - EntraxeD1
-            yo = MyDalle.t_h
+            xo = CSng(Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd)) - EntraxeD1
+            yo = MyDalle.Ep_th
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
         End If
 
-        xo = CSng(-Bfs / 2 - MyDalle.t_h * Math.Tan(MyDalle.ThetaRd))
+        xo = CSng(-Bfs / 2 - MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd))
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -587,12 +587,12 @@ Public Module Mod_Dessins
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-        xo = CSng(Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd))
-        yo = MyDalle.t_h
+        xo = CSng(Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd))
+        yo = MyDalle.Ep_th
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-        xo = -CSng(Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd)) + EntraxeD2
+        xo = -CSng(Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd)) + EntraxeD2
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -605,8 +605,8 @@ Public Module Mod_Dessins
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-        xo = CSng(Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd)) + EntraxeD2
-        yo = MyDalle.t_h
+        xo = CSng(Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd)) + EntraxeD2
+        yo = MyDalle.Ep_th
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -614,7 +614,7 @@ Public Module Mod_Dessins
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-        yo = MyDalle.t_d + MyDalle.t_h
+        yo = MyDalle.Ep_td + MyDalle.Ep_th
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -644,7 +644,7 @@ Public Module Mod_Dessins
 
         '--> Déclaration
 
-        Dim Td As Decimal = MyDalle.t_d
+        Dim Td As Decimal = MyDalle.Ep_td
         Dim Tj As Decimal = MyDalle.preDalle_ep - MyDalle.preDalle_tjoint
 
         Dim MyPen As New Pen(Color.Black, 1)
@@ -797,7 +797,7 @@ Public Module Mod_Dessins
 
         '--> Déclaration
 
-        Dim Td As Decimal = MyDalle.t_d
+        Dim Td As Decimal = MyDalle.Ep_td
         Dim Dp As Decimal = MyDalle.Cofradal.dp
 
         Dim MyPen As New Pen(Color.Black, 1)
@@ -958,7 +958,7 @@ Public Module Mod_Dessins
 
         '--> Initialisation
 
-        Td = MyDalle.t_d
+        Td = MyDalle.Ep_td
         PhiS = MyDalle.LitArma(iArma).PhiS
         Zs = MyDalle.LitArma(iArma).z_s
         EspBar = MyDalle.LitArma(iArma).EspBar
@@ -1085,7 +1085,7 @@ Public Module Mod_Dessins
         '--> Partie supérieure de la dalle
 
         xo = BeffD
-        yo = MyDalle.t_d
+        yo = MyDalle.Ep_td
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
         xo = -BeffG
@@ -1132,7 +1132,7 @@ Public Module Mod_Dessins
         '--> Déclarations
 
         Dim MyPenContour As New Pen(Color.Black, 1)
-        Dim Td As Decimal = MyDalle.t_d
+        Dim Td As Decimal = MyDalle.Ep_td
         Dim Hp As Decimal = MyDalle.Bac.Hp
         Dim xo, yo As Decimal
         Dim xe, ye As Decimal
@@ -1819,7 +1819,7 @@ Public Module Mod_Dessins
 
         '# Hauteur du renformis
 
-        If (MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine) And (MyDalle.t_h > 0) Then
+        If (MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine) And (MyDalle.Ep_th > 0) Then
 
             MyColor = StyleCouleur(iSelect, 1)
             MyPen.Color = MyColor
@@ -2061,7 +2061,7 @@ Public Module Mod_Dessins
         '--> Initialisation
 
         Beff = BeffRed   ' MyDalle.Beff
-        Td = MyDalle.t_d
+        Td = MyDalle.Ep_td
         PhiS = MyDalle.LitArma(iArma).PhiS
         Zs = MyDalle.LitArma(iArma).z_s
         EspBar = MyDalle.LitArma(iArma).EspBar
@@ -4770,7 +4770,7 @@ Public Module Mod_Dessins
         End If
 
         yo = 0
-        ye = MyPoutre.Dalle.t_d
+        ye = MyPoutre.Dalle.Ep_td
 
         AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
 
@@ -4829,7 +4829,7 @@ Public Module Mod_Dessins
         'End If
 
         'yo = 0
-        'ye = myBeam.Dalle.t_d
+        'ye = myBeam.Dalle.Ep_td
 
         'AddRectanglePlein(MyGr, myBrushB, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
 
@@ -4841,7 +4841,7 @@ Public Module Mod_Dessins
                 xo = -MyPoutre.EntraxeD1 + MyPoutre.DistanceDsl1
                 xe = -MyPoutre.DistanceDsl1
                 yo = 0
-                ye = MyPoutre.Dalle.t_d
+                ye = MyPoutre.Dalle.Ep_td
 
                 AddRectanglePlein(MyGr, myBrushT, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
             End If
@@ -4850,7 +4850,7 @@ Public Module Mod_Dessins
                 xo = MyPoutre.DistanceDsl2
                 xe = MyPoutre.EntraxeD2 - MyPoutre.DistanceDsl2
                 yo = 0
-                ye = MyPoutre.Dalle.t_d
+                ye = MyPoutre.Dalle.Ep_td
 
                 AddRectanglePlein(MyGr, myBrushT, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
             End If
@@ -4859,7 +4859,7 @@ Public Module Mod_Dessins
                 xo = MyPoutre.DistanceDsl2
                 xe = MyPoutre.EntraxeD2 - MyPoutre.DistanceDsl2
                 yo = 0
-                ye = MyPoutre.Dalle.t_d
+                ye = MyPoutre.Dalle.Ep_td
 
                 AddRectanglePlein(MyGr, myBrushT, MyPenContour, xo, yo, xe, ye, MyParaff1, True, True)
 
@@ -5044,7 +5044,7 @@ Public Module Mod_Dessins
         LongueurPoutre = myBeam.LongueurTotale
         HauteurPoutre = myBeam.HauteurTotale
         LongueurDalle = myBeam.LongueurTotale
-        HauteurDalle = myBeam.Dalle.t_d
+        HauteurDalle = myBeam.Dalle.Ep_td
         dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = HauteurPoutre / 2
 
@@ -5319,7 +5319,7 @@ Public Module Mod_Dessins
         Dim nbPts As Integer
 
         '--> Initialisation
-        dCar = MyPoutreLoc.Dalle.t_d
+        dCar = MyPoutreLoc.Dalle.Ep_td
 
         '--> Dessin des éléments
 
@@ -5334,7 +5334,7 @@ Public Module Mod_Dessins
                 xMax = .Ep / 2
 
                 yMin = -MyPoutreLoc.Section.ProfilA.Tfs
-                yMax = Math.Max(MyPoutreLoc.Dalle.t_d, MyPoutreLoc.Dalle.Connecteur.hsc)
+                yMax = Math.Max(MyPoutreLoc.Dalle.Ep_td, MyPoutreLoc.Dalle.Connecteur.hsc)
 
                 ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
@@ -5359,8 +5359,8 @@ Public Module Mod_Dessins
             xPts_Dalle(xPts.Length / 2) = xPts(xPts.Length / 2 - 1)
             xPts_Dalle(xPts.Length / 2 + 1) = xPts(0)
 
-            yPts_Dalle(xPts.Length / 2) = MyPoutreLoc.Dalle.t_d
-            yPts_Dalle(xPts.Length / 2 + 1) = MyPoutreLoc.Dalle.t_d
+            yPts_Dalle(xPts.Length / 2) = MyPoutreLoc.Dalle.Ep_td
+            yPts_Dalle(xPts.Length / 2 + 1) = MyPoutreLoc.Dalle.Ep_td
 
             nbPts = xPts_Dalle.Length
 
@@ -5397,7 +5397,7 @@ Public Module Mod_Dessins
                 xMax = .Bfs
 
                 yMin = -MyPoutreLoc.Section.ProfilA.Tfs
-                yMax = Math.Max(MyPoutreLoc.Dalle.t_d, MyPoutreLoc.Dalle.Connecteur.hsc)
+                yMax = Math.Max(MyPoutreLoc.Dalle.Ep_td, MyPoutreLoc.Dalle.Connecteur.hsc)
 
                 ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
@@ -5407,7 +5407,7 @@ Public Module Mod_Dessins
             Dim xBeton As Decimal = 0
             Dim yBeton As Decimal = 0
 
-            AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - MyPoutreLoc.Section.ProfilA.Bfs, yBeton, xBeton + MyPoutreLoc.Section.ProfilA.Bfs, yBeton + MyPoutreLoc.Dalle.t_d, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushBeton, MyPenContour, xBeton - MyPoutreLoc.Section.ProfilA.Bfs, yBeton, xBeton + MyPoutreLoc.Section.ProfilA.Bfs, yBeton + MyPoutreLoc.Dalle.Ep_td, MyParAff, True, True)
 
             '--> Dessin du goujon
 
@@ -5654,7 +5654,7 @@ Public Module Mod_Dessins
         EpaisseurSemelle = HauteurPoutre / 10
         RayonConge = EpaisseurSemelle / 2
         'LongueurDalle = myBeam.LongueurTotale
-        'HauteurDalle = myBeam.Dalle.t_d
+        'HauteurDalle = myBeam.Dalle.Ep_td
         dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = HauteurPoutre / 4
 
@@ -6169,7 +6169,7 @@ Public Module Mod_Dessins
         EpaisseurSemelle = HauteurPoutre / 10
         RayonConge = EpaisseurSemelle / 2
         'LongueurDalle = myBeam.LongueurTotale
-        'HauteurDalle = myBeam.Dalle.t_d
+        'HauteurDalle = myBeam.Dalle.Ep_td
         dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = HauteurPoutre / 2
 
@@ -6296,7 +6296,7 @@ Public Module Mod_Dessins
             EpaisseurSemelle = HauteurPoutre / 10
             RayonConge = EpaisseurSemelle / 2
             'LongueurDalle = myBeam.LongueurTotale
-            'HauteurDalle = myBeam.Dalle.t_d
+            'HauteurDalle = myBeam.Dalle.Ep_td
             dCar = Math.Sqrt(LongueurTravee ^ 2 + HauteurPoutre ^ 2) / 20
             dCarApp = HauteurPoutre / 2
 
@@ -6422,7 +6422,7 @@ Public Module Mod_Dessins
         LongueurPoutre = MyPoutre.LongueurTotale
         HauteurPoutre = MyPoutre.HauteurTotale
         LongueurDalle = MyPoutre.LongueurTotale
-        HauteurDalle = MyPoutre.Dalle.t_d
+        HauteurDalle = MyPoutre.Dalle.Ep_td
         dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = HauteurPoutre / 2
 
@@ -8873,8 +8873,8 @@ Public Module Mod_Dessins
 
         Dim MyPenContour As New Pen(Color.Black, 1)
         Dim MyPenDot As New Pen(Color.Black, 0.75)
-        Dim dCar As Decimal = (MyDalle.t_h + MyDalle.t_d) / 5
-        Dim Td As Decimal = MyDalle.t_d
+        Dim dCar As Decimal = (MyDalle.Ep_th + MyDalle.Ep_td) / 5
+        Dim Td As Decimal = MyDalle.Ep_td
         Dim Hp As Decimal = MyDalle.Bac.Hp
         Dim xo, yo As Decimal
         Dim xe, ye As Decimal
@@ -9001,7 +9001,7 @@ Public Module Mod_Dessins
 
         xe = -MyDalle.Beff / 2
         xo = -xe
-        ye = Ha + MyDalle.t_d
+        ye = Ha + MyDalle.Ep_td
         yo = ZREF
 
         AddRectanglePlein(MyGr, MyBrushB, MyPenContour, xo, yo, xe, ye, MyParAffloc, True, True)
@@ -9200,7 +9200,7 @@ Public Module Mod_Dessins
         '--> Partie sup de la dalle
 
         xo = bEff / 2
-        yo = MyDalle.t_d
+        yo = MyDalle.Ep_td
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -9249,7 +9249,7 @@ Public Module Mod_Dessins
         '--> Partie supérieure de la dalle
 
         xo = BeffD
-        yo = MyDalle.t_d
+        yo = MyDalle.Ep_td
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
         xo = -BeffG
@@ -9538,9 +9538,9 @@ Public Module Mod_Dessins
 
         '--> Déclaration
 
-        Dim Td As Decimal = MyDalle.t_d
+        Dim Td As Decimal = MyDalle.Ep_td
         Dim Tj As Decimal = MyDalle.preDalle_ep - MyDalle.preDalle_tjoint
-        Dim dCar As Decimal = (MyDalle.t_d) / 5
+        Dim dCar As Decimal = (MyDalle.Ep_td) / 5
         Dim lDalleRed As Boolean
         Dim BeffDes As Decimal = MyDalle.Beff
         Dim MyPen As New Pen(Color.Black, 1)
@@ -9685,9 +9685,9 @@ Public Module Mod_Dessins
 
         '--> Déclaration
 
-        Dim Td As Decimal = MyDalle.t_d
+        Dim Td As Decimal = MyDalle.Ep_td
         'Dim Tj As Decimal = MyDalle.preDalle_ep - MyDalle.preDalle_tjoint
-        Dim dCar As Decimal = (MyDalle.t_d) / 5
+        Dim dCar As Decimal = (MyDalle.Ep_td) / 5
         Dim lDalleRed As Boolean
         Dim BeffDes As Decimal = MyDalle.Beff
         Dim MyPen As New Pen(Color.Black, 1)
@@ -9814,7 +9814,7 @@ Public Module Mod_Dessins
         Dim yPts() As Single = Nothing
         Dim nbPts As Integer
         Dim lDalleRed As Boolean
-        Dim dCar As Decimal = (MyDalle.t_h + MyDalle.t_d) / 5
+        Dim dCar As Decimal = (MyDalle.Ep_th + MyDalle.Ep_td) / 5
         Dim BeffDes As Decimal = MyDalle.Beff
         Dim MyPenDot As New Pen(Color.Black, 0.75)
 
@@ -9935,8 +9935,8 @@ Public Module Mod_Dessins
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-            xo = CSng(Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd))
-            yo = MyDalle.t_h
+            xo = CSng(Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd))
+            yo = MyDalle.Ep_th
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -9944,7 +9944,7 @@ Public Module Mod_Dessins
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-            yo = MyDalle.t_d + MyDalle.t_h
+            yo = MyDalle.Ep_td + MyDalle.Ep_th
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -9952,12 +9952,12 @@ Public Module Mod_Dessins
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-            yo = MyDalle.t_h
+            yo = MyDalle.Ep_th
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-            xo = CSng(-Bfs / 2 - MyDalle.t_h * Math.Tan(MyDalle.ThetaRd))
-            yo = MyDalle.t_h
+            xo = CSng(-Bfs / 2 - MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd))
+            yo = MyDalle.Ep_th
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -9971,7 +9971,7 @@ Public Module Mod_Dessins
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-            yo = MyDalle.t_d
+            yo = MyDalle.Ep_td
 
             AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -10012,12 +10012,12 @@ Public Module Mod_Dessins
         '--> Ligne polygonale
 
         xo = -BeffDes / 2
-        yo = MyDalle.t_h
+        yo = MyDalle.Ep_th
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-        xo = CSng(-Bfs / 2 - MyDalle.t_h * Math.Tan(MyDalle.ThetaRd))
-        yo = MyDalle.t_h
+        xo = CSng(-Bfs / 2 - MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd))
+        yo = MyDalle.Ep_th
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -10031,8 +10031,8 @@ Public Module Mod_Dessins
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
-        xo = CSng(Bfs / 2 + MyDalle.t_h * Math.Tan(MyDalle.ThetaRd))
-        yo = MyDalle.t_h
+        xo = CSng(Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd))
+        yo = MyDalle.Ep_th
 
         AjoutePoint(xo, yo, xPts, yPts, nbPts)
 
@@ -10923,7 +10923,7 @@ Public Module Mod_Dessins
 
                 If MySection.lMixte Then
                     If lDalleReduite Then BeffRed = Math.Min(MyDalle.Beff, 1.5 * Diagonale) Else BeffRed = MyDalle.Beff
-                    yMax += MyDalle.t_d + MyDalle.EpRenformis
+                    yMax += MyDalle.Ep_td + MyDalle.EpRenformis
                     xMin = -Math.Max(BeffRed / 2, BfMax)
                     xMax = -xMin
                     dCar = Math.Max(Math.Sqrt(((MySection.ProfilA.ha + MyDalle.zTop) ^ 2 + (MySection.ProfilA.Bfs + MySection.ProfilA.Bfi) ^ 2)), BeffRed) / 20
@@ -10940,7 +10940,7 @@ Public Module Mod_Dessins
                 yMin = -MySection.ProfilA.Plat_t
                 xMin = -MyDalle.Beff / 2
                 xMax = -xMin
-                yMax = MySection.ProfilA.ha + MyDalle.t_d
+                yMax = MySection.ProfilA.ha + MyDalle.Ep_td
 
             Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B
                 yMin = -MySection.ProfilA.Plat_t
@@ -10952,7 +10952,7 @@ Public Module Mod_Dessins
                 yMin = -MySection.ProfilA.Plat_t
                 xMin = -MyDalle.Beff / 2
                 xMax = -xMin
-                yMax = MySection.ProfilA.ha + MyDalle.t_d
+                yMax = MySection.ProfilA.ha + MyDalle.Ep_td
 
             Case cls_Section.Enum_TypeSection.SAB
                 yMin = 0
@@ -10964,7 +10964,7 @@ Public Module Mod_Dessins
                 yMin = 0
                 xMin = -MyDalle.Beff / 2
                 xMax = -xMin
-                yMax = MySection.ProfilA.ha + MyDalle.t_d
+                yMax = MySection.ProfilA.ha + MyDalle.Ep_td
 
         End Select
 

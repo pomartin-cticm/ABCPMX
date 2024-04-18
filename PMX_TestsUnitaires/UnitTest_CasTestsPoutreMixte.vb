@@ -118,7 +118,7 @@ Imports PMXMoteur2
 
         With myPoutre.Dalle
             .type = cls_Dalle.Enum_TypeDalle.Mixte
-            .t_d = 120 / 1000
+            .Ep_td = 120 / 1000
         End With
 
         For i As Integer = 0 To myPoutre.Dalle.LitArma.Count - 1 'on ne prend pas en compte les armatures dans le calcul dans l'exemple traité 
@@ -800,7 +800,7 @@ Imports PMXMoteur2
 
         With myPoutre.Dalle
             .type = cls_Dalle.Enum_TypeDalle.Mixte
-            .t_d = 120 / 1000
+            .Ep_td = 120 / 1000
         End With
 
         For i As Integer = 0 To myPoutre.Dalle.LitArma.Count - 1 'on ne prend pas en compte les armatures dans le calcul dans l'exemple traité 
@@ -1169,7 +1169,7 @@ Imports PMXMoteur2
 
         With myPoutre.Dalle
             .type = cls_Dalle.Enum_TypeDalle.Mixte
-            .t_d = 140 / 1000
+            .Ep_td = 140 / 1000
 
             .beton.RhoC = 26 / (9.81 * 10 ^ (-3)) 'Modification de la masse volumique du béton pour arrivée à une charge volumique de 26 kN/m3 (permet de retrouver les valeurs de l'article)
         End With
@@ -1886,7 +1886,7 @@ Imports PMXMoteur2
 
         With myPoutre.Dalle
             .type = cls_Dalle.Enum_TypeDalle.Mixte
-            .t_d = 140 / 1000
+            .Ep_td = 140 / 1000
 
             .beton.RhoC = 25 / (9.81 * 10 ^ (-3)) 'Modification de la masse volumique du béton pour arrivée à une charge volumique de 25 kN/m3 (permet de retrouver les valeurs de l'article)
         End With

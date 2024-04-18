@@ -311,10 +311,10 @@ Public Class Frm_DalleSlimFloor
 
         '--> Epaisseur
 
-        Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
-        Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.t_d - MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension)
+        Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension)
+        Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.Ep_td - MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension)
 
-        Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
+        Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension)
 
         Me.txt_EpPredalle.Text = GetStringNoUnit(MyDalleLoc.preDalle_ep, Enu_TypeVariable.Dimension)
         Me.txt_EpJoint.Text = GetStringNoUnit(MyDalleLoc.preDalle_tjoint, Enu_TypeVariable.Dimension)
@@ -445,10 +445,10 @@ Public Class Frm_DalleSlimFloor
             MyProjet.Poutres(MyProjet.IndEnCours).Dalle.type = MyDalleLoc.type
         End If
 
-        GereTransfertValeur(MyDalleLoc.t_d, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_d, lModif)
+        GereTransfertValeur(MyDalleLoc.Ep_td, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Ep_td, lModif)
 
         If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Pleine Then _
-        GereTransfertValeur(MyDalleLoc.t_h, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.t_h, lModif)
+        GereTransfertValeur(MyDalleLoc.Ep_th, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Ep_th, lModif)
 
         If MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee Then
             GereTransfertValeur(MyDalleLoc.preDalle_ep, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.preDalle_ep, lModif)
@@ -526,8 +526,8 @@ Public Class Frm_DalleSlimFloor
 
         If lCofraPlus220 <> lOldCfp220 Then
             Dim Td As Decimal = Tc + MyDalleLoc.Bac.Hp
-            MyDalleLoc.t_d = Td
-            Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
+            MyDalleLoc.Ep_td = Td
+            Me.txt_Hd.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension)
         End If
 
         AfficheNomBacEnCours()
@@ -780,7 +780,7 @@ Public Class Frm_DalleSlimFloor
                     MyDalleLoc.preDalle_ep = Valeur
 
                 Case Me.txt_Hd.Name
-                    MyDalleLoc.t_d = Valeur
+                    MyDalleLoc.Ep_td = Valeur
                     'lBuild = True
                     'Me.txt_Td2.Text = Me.txt_Hd.Text
 
@@ -788,15 +788,15 @@ Public Class Frm_DalleSlimFloor
                     MyDalleLoc.beton.RhoC = Valeur
 
                 Case Me.txt_Td2.Name
-                    MyDalleLoc.t_d = Valeur
+                    MyDalleLoc.Ep_td = Valeur
                     'lBuild = True
-                    Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.t_d - MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension)
+                    Me.txt_Tc.Text = GetStringNoUnit(MyDalleLoc.Ep_td - MyDalleLoc.Bac.Hp, Enu_TypeVariable.Dimension)
                     'lBuild = False
 
                 Case Me.txt_Tc.Name
-                    MyDalleLoc.t_d = Valeur + MyDalleLoc.Bac.Hp
+                    MyDalleLoc.Ep_td = Valeur + MyDalleLoc.Bac.Hp
                     'lBuild = True
-                    Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.t_d, Enu_TypeVariable.Dimension)
+                    Me.txt_Td2.Text = GetStringNoUnit(MyDalleLoc.Ep_td, Enu_TypeVariable.Dimension)
                     'lBuild = False
 
                 Case Me.txt_dp.Name
@@ -849,7 +849,7 @@ Public Class Frm_DalleSlimFloor
 
             Case txt_EpPredalle.Name
                 ValMin = 0 / kUnit
-                ValMax = Math.Min(MySectionLoc.hec, OptionsScope.RatioEpPredalleMax * MyDalleLoc.t_d) / kUnit
+                ValMax = Math.Min(MySectionLoc.hec, OptionsScope.RatioEpPredalleMax * MyDalleLoc.Ep_td) / kUnit
 
             Case Me.txt_EpJoint.Name
                 ValMin = 0

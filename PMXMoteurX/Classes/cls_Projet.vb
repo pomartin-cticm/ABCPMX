@@ -410,8 +410,8 @@ Public Class cls_Projet
                     Lines.Add("BLOCK DALLE")
 
                     Lines.Add("   Type           =  " & .type)
-                    Lines.Add("   td             =  " & .t_d)
-                    Lines.Add("   th             =  " & .t_h)
+                    Lines.Add("   td             =  " & .Ep_td)
+                    Lines.Add("   th             =  " & .Ep_th)
                     Lines.Add("   Beff           =  " & .Beff)
                     'Lines.Add("   lArmInf        =  " & .lArma_Inf)
                     'Lines.Add("   lArmSup        =  " & .lArma_Sup)
@@ -1497,8 +1497,8 @@ Public Class cls_Projet
                 With dalle_en_cours
                     Select Case MotCle
                         Case "TYPE" : .type = Mots(nbMots)
-                        Case "TD" : .t_d = TraiteReal(Mots(nbMots))
-                        Case "TH" : .t_h = TraiteReal(Mots(nbMots))
+                        Case "TD" : .Ep_td = TraiteReal(Mots(nbMots))
+                        Case "TH" : .Ep_th = TraiteReal(Mots(nbMots))
                         Case "BEFF" : .Beff = TraiteReal(Mots(nbMots))
                         'Case "LARMINF" : .lArma_Inf = Mots(nbMots)
                         'Case "LARMSUP" : .lArma_Sup = Mots(nbMots)

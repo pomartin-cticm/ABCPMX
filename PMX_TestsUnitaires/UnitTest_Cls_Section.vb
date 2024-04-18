@@ -713,7 +713,7 @@ Imports PMXMoteur2
         MyDalle.beton.Classe = "C25/30"
         MyDalle.beton.Calcul_Proprietes()
         MyDalle.type = cls_Dalle.Enum_TypeDalle.Mixte
-        MyDalle.t_d = 0.12
+        MyDalle.Ep_td = 0.12
         MyDalle.Bac.InitialiseCofraPlus60()
         MyDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
 
@@ -749,7 +749,7 @@ Imports PMXMoteur2
 
         '# Position ANE
 
-        ValRef = MyDalle.t_d - 0.114
+        ValRef = MyDalle.Ep_td - 0.114
         DeltaV = (zANE - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 20)   ' 2%
 
@@ -766,7 +766,7 @@ Imports PMXMoteur2
 
         '# Position ANE
 
-        ValRef = MyDalle.t_d - 0.194
+        ValRef = MyDalle.Ep_td - 0.194
         DeltaV = (zANE - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx * 20)   ' 2%
 
@@ -831,7 +831,7 @@ Imports PMXMoteur2
         MyDalle.beton.Classe = "C25/30"
         MyDalle.beton.Calcul_Proprietes()
         MyDalle.type = cls_Dalle.Enum_TypeDalle.Mixte
-        MyDalle.t_d = 0.12
+        MyDalle.Ep_td = 0.12
         MyDalle.Bac.InitialiseCofraPlus60()
         MyDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
 
@@ -936,8 +936,8 @@ Imports PMXMoteur2
         MyDalle.beton.Classe = "C30/37"
         MyDalle.beton.Calcul_Proprietes()
         MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine
-        MyDalle.t_d = 0.25
-        MyDalle.t_h = 0
+        MyDalle.Ep_td = 0.25
+        MyDalle.Ep_th = 0
 
         '# Armatures
 
@@ -1023,8 +1023,8 @@ Imports PMXMoteur2
         MyDalle.beton.Classe = "C30/37"
         MyDalle.beton.Calcul_Proprietes()
         MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine
-        MyDalle.t_d = 0.2
-        MyDalle.t_h = 0
+        MyDalle.Ep_td = 0.2
+        MyDalle.Ep_th = 0
 
         '--> Tests des propriétés plastiques
 

@@ -118,8 +118,8 @@ Imports PMXMoteur2
 
         With myPoutre.Dalle
             .type = cls_Dalle.Enum_TypeDalle.Pleine
-            .t_d = 120 / 1000
-            .t_h = 0
+            .Ep_td = 120 / 1000
+            .Ep_th = 0
         End With
 
         'For i As Integer = 0 To myPoutre.Dalle.LitArma.Count - 1 'on ne prend pas en compte les armatures dans le calcul dans l'exemple traité 
@@ -606,8 +606,8 @@ Imports PMXMoteur2
 
         With myPoutre.Dalle
             .type = cls_Dalle.Enum_TypeDalle.Pleine
-            .t_d = 120 / 1000
-            .t_h = 0
+            .Ep_td = 120 / 1000
+            .Ep_th = 0
         End With
 
 

@@ -285,7 +285,7 @@ Public Class cls_Poutre
             If Me.Dalle.lMixte Then
                 NbLayer = 1
             Else
-                If Me.Dalle.Connecteur.hsc - 70 / 1000 <= Me.Dalle.t_h Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
+                If Me.Dalle.Connecteur.hsc - 70 / 1000 <= Me.Dalle.Ep_th Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
                     NbLayer = 3
                 Else
                     NbLayer = 2

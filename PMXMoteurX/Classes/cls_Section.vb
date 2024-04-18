@@ -205,7 +205,7 @@ Public Class cls_Section
 
         '--> Initialisation
 
-        'Td = MyDalle.t_d
+        'Td = MyDalle.Ep_td
         'Th = MyDalle.EpRenformis
         Ztop = MyDalle.zTop
 
@@ -1780,7 +1780,7 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property hec As Decimal
         Get
-            Select Case Me.typeSection
+            Select Case Me.TypeSection
                 Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.SFBmixte
                     Return Me.ProfilA.hb
                 Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_Amixte
@@ -1801,10 +1801,10 @@ Public Class cls_Section
     ''' <returns></returns>
     Public ReadOnly Property lSlimFloor As Boolean
         Get
-            Return Not (Me.typeSection = cls_Section.Enum_TypeSection.AcierSeul _
-                     Or Me.typeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage _
-                     Or Me.typeSection = cls_Section.Enum_TypeSection.Mixte _
-                     Or Me.typeSection = cls_Section.Enum_TypeSection.MixteEnrobage)
+            Return Not (Me.TypeSection = cls_Section.Enum_TypeSection.AcierSeul _
+                     Or Me.TypeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage _
+                     Or Me.TypeSection = cls_Section.Enum_TypeSection.Mixte _
+                     Or Me.TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage)
         End Get
     End Property
 
@@ -1813,7 +1813,7 @@ Public Class cls_Section
     ''' </summary>
     Public ReadOnly Property lEnrobage As Boolean
         Get
-            Return (Me.typeSection = Enum_TypeSection.AcierSeulEnrobage) Or (Me.typeSection = Enum_TypeSection.MixteEnrobage)
+            Return (Me.TypeSection = Enum_TypeSection.AcierSeulEnrobage) Or (Me.TypeSection = Enum_TypeSection.MixteEnrobage)
         End Get
     End Property
 
@@ -1822,7 +1822,7 @@ Public Class cls_Section
     ''' </summary>
     Public ReadOnly Property lMixte As Boolean
         Get
-            Return (Me.typeSection = Enum_TypeSection.Mixte) Or (Me.typeSection = Enum_TypeSection.MixteEnrobage) Or (Me.typeSection = Enum_TypeSection.IFB_Amixte) Or (Me.typeSection = Enum_TypeSection.IFB_Bmixte)
+            Return (Me.TypeSection = Enum_TypeSection.Mixte) Or (Me.TypeSection = Enum_TypeSection.MixteEnrobage) Or (Me.TypeSection = Enum_TypeSection.IFB_Amixte) Or (Me.TypeSection = Enum_TypeSection.IFB_Bmixte)
         End Get
     End Property
 
@@ -1872,7 +1872,7 @@ Public Class cls_Section
 
         Dim MyVRd As Decimal = 0
 
-        Select Case Me.typeSection
+        Select Case Me.TypeSection
             Case Enum_TypeSection.AcierSeul, Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
                 MyVRd = Me.AireAv * Me.FyW / (Math.Sqrt(3) * GammaM0) * kConvMPaPa
 
@@ -1957,7 +1957,7 @@ Public Class cls_Section
     ''' <param name="eta"> parametre eta, utile pour les profilés sans enrobage </param>
     ''' <returns></returns>
     Public Function IsVoilementParCisaillement(eta As Decimal) As Boolean
-        Select Case Me.typeSection
+        Select Case Me.TypeSection
             Case Enum_TypeSection.AcierSeul, Enum_TypeSection.Mixte
                 Return Not ((Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) <= 72 * Me.Epsilon_W / eta)
             Case Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.MixteEnrobage
@@ -2154,7 +2154,7 @@ Public Class cls_Section
 
         '# propriétés de la section mixte
 
-        Me.ProprietesElastiquesMixteMyy(-1, False, myG, nEqEc, nEqDalle, bEff, myDalle, zane, InertieY, melrd)
+        Me.ProprietesElastiquesMixteMyy(-1, False, myG, nEqEc, nEqDalle, bEff, myDalle, zANE, InertieY, MelRd)
 
         Aire = Me.ProfilA.Aire + myDalle.AireUnitArmaturesLongi * bEff * cls_Acier.EYACIER / myDalle.AcierArmatures.Es
         pdtAI = Aire * InertieY
@@ -2241,9 +2241,9 @@ Public Class cls_Section
     '        dalle.beton.Calcul_Proprietes()
 
     '        If dalle.type = Cls_Dalle.Enum_TypeDalle.Mixte Then
-    '            Param.Prop_Elastique_Dalle.h_0 = 2 * (dalle.t_d - dalle.Bac.Hp)
+    '            Param.Prop_Elastique_Dalle.h_0 = 2 * (dalle.Ep_td - dalle.Bac.Hp)
     '        Else ' dalle pleine
-    '            Param.Prop_Elastique_Dalle.h_0 = dalle.t_d
+    '            Param.Prop_Elastique_Dalle.h_0 = dalle.Ep_td
     '        End If
     '        Param.Prop_Elastique_Dalle.Calcul_Coeff(E, dalle.beton.Fcm, dalle.beton.Ecm)
 

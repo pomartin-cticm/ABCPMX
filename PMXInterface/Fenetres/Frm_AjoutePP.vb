@@ -324,7 +324,7 @@ Public Class Frm_AjoutePP
             End With
         End With
 
-        MyPoutreSFBmixte.Dalle.t_d = 0.05
+        MyPoutreSFBmixte.Dalle.Ep_td = 0.05
         MyPoutreSFBmixte.Dalle.Beff = 0.75
 
         '--> Définition de la section IFB_A mixte
@@ -341,7 +341,7 @@ Public Class Frm_AjoutePP
             End With
         End With
 
-        MyPoutreIFB_Amixte.Dalle.t_d = 0.05
+        MyPoutreIFB_Amixte.Dalle.Ep_td = 0.05
         MyPoutreIFB_Amixte.Dalle.Beff = 0.75
 
         '--> Définition de la section IFB_B mixte
@@ -359,7 +359,7 @@ Public Class Frm_AjoutePP
             End With
         End With
 
-        MyPoutreIFB_Bmixte.Dalle.t_d = 0.05
+        MyPoutreIFB_Bmixte.Dalle.Ep_td = 0.05
         MyPoutreIFB_Bmixte.Dalle.Beff = 0.75
 
         '--> Définition de la section SAB mixte
@@ -375,7 +375,7 @@ Public Class Frm_AjoutePP
             End With
         End With
 
-        MyPoutreSABmixte.Dalle.t_d = 0.05
+        MyPoutreSABmixte.Dalle.Ep_td = 0.05
         MyPoutreSABmixte.Dalle.Beff = 0.75
     End Sub
 

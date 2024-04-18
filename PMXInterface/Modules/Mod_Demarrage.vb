@@ -445,8 +445,8 @@ Public Module Mod_Demarrage
 
         Select Case typeProfileA
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                myDalle.t_d = 350 / 1000
-                myDalle.t_h = 0 ' sécurité supplémentaire 
+                myDalle.Ep_td = 350 / 1000
+                myDalle.Ep_th = 0 ' sécurité supplémentaire 
                 myDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
                 myDalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
                 For Each armaLongi In myDalle.LitArma
@@ -454,8 +454,8 @@ Public Module Mod_Demarrage
                 Next
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                myDalle.t_d = 250 / 1000
-                myDalle.t_h = 0 ' sécurité supplémentaire 
+                myDalle.Ep_td = 250 / 1000
+                myDalle.Ep_th = 0 ' sécurité supplémentaire 
                 myDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
                 myDalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
                 For Each armaLongi In myDalle.LitArma
@@ -463,8 +463,8 @@ Public Module Mod_Demarrage
                 Next
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                myDalle.t_d = 250 / 1000
-                myDalle.t_h = 0 ' sécurité supplémentaire 
+                myDalle.Ep_td = 250 / 1000
+                myDalle.Ep_th = 0 ' sécurité supplémentaire 
                 myDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
                 myDalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
                 For Each armaLongi In myDalle.LitArma
@@ -472,8 +472,8 @@ Public Module Mod_Demarrage
                 Next
 
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                myDalle.t_d = 350 / 1000
-                myDalle.t_h = 0 ' sécurité supplémentaire 
+                myDalle.Ep_td = 350 / 1000
+                myDalle.Ep_th = 0 ' sécurité supplémentaire 
                 myDalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
                 myDalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu
                 For Each armaLongi In myDalle.LitArma

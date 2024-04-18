@@ -107,7 +107,7 @@ Public Class cls_VerificationsAcier
 
 #End Region
 
-#Region " Outils de vérification "
+#Region "===Outils de vérification==="
 
     Public Sub Z_VerificationELU(myBeam As cls_Poutre, lConstructionPhase As Boolean)
         '----------------------------------------------------------------------------------------------------------
@@ -247,7 +247,7 @@ Public Class cls_VerificationsAcier
 
         For iCombi = 0 To combiELU.nbCombi - 1
 
-            '# Combinaisons des moments, efforts tranchants
+            '# Combinaisons des moments
 
             combiELU.CombineMoments(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd, False)
 

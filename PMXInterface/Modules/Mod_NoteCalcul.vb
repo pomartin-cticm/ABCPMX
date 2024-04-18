@@ -926,16 +926,16 @@ Module Mod_NoteCalcul
         Select Case MyBeam.Dalle.type
             Case cls_Dalle.Enum_TypeDalle.Pleine
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_HAUNCH") & TABAFF & "t\-h\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_h, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_HAUNCH") & TABAFF & "t\-h\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.Ep_th, Enu_TypeVariable.Dimension, 4, 0, True))
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("SOLID_SLAB_PRECAST"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & BlocG("THICKNESS_PRECAST") & TABAFF & "t\-pc\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.preDalle_ep, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & BlocG("THICKNESS_JOINT") & TABAFF & "t\-j\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.preDalle_tjoint, Enu_TypeVariable.Dimension, 4, 0, True))
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 AddLigneNDC(TABW2 & BlocG("TYPE_SLAB") & TABAFF & BlocG("COMPOSITE_SLAB"))
-                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.t_d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("THICKNESS_SLAB") & TABAFF & "t\-d\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & BlocG("THICKNESS_ABOVE_DECK") & TABAFF & "t\-c\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.EpaisseurActive, Enu_TypeVariable.Dimension, 4, 0, True))
         End Select
 

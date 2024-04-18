@@ -777,8 +777,8 @@ Public Class Frm_Connection
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             Hauteur_Goujon_MIN = Math.Max(Hauteur_Goujon_MIN, MyPoutreLoc.Dalle.Bac.Hp + 2 * MyPoutreLoc.Dalle.Connecteur.d)
         End If
-        Hauteur_Goujon_MAX_CONSEILLEE = MyPoutreLoc.Dalle.t_d - 20 / 1000
-        Hauteur_Goujon_MAX = MyPoutreLoc.Dalle.t_d
+        Hauteur_Goujon_MAX_CONSEILLEE = MyPoutreLoc.Dalle.Ep_td - 20 / 1000
+        Hauteur_Goujon_MAX = MyPoutreLoc.Dalle.Ep_td
 
         Diametre_Goujon_MIN = 16 / 1000 'Valeur arbitraire (16 mm), je me suis basé sur la clause 6.6.1.2(1) de l'EC4 actuel
         Diametre_Goujon_MAX = 0
@@ -810,7 +810,7 @@ Public Class Frm_Connection
         End If
 
         Espacement_Longi_MIN = 5 * MyPoutreLoc.Dalle.Connecteur.d
-        Espacement_Longi_MAX = Math.Min(800 / 1000, 6 * MyPoutreLoc.Dalle.t_d)
+        Espacement_Longi_MAX = Math.Min(800 / 1000, 6 * MyPoutreLoc.Dalle.Ep_td)
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
             Nb_Ondes_MIN = 1
             Nb_Ondes_MAX = Math.Floor(Espacement_Longi_MAX / MyPoutreLoc.Dalle.Bac.Ep)

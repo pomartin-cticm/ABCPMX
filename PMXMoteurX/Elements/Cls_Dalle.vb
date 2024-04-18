@@ -17,12 +17,12 @@
     ''' <summary>
     ''' épaisseur totale de la dalle (hors renformis)
     ''' </summary>
-    Public t_d As Decimal
+    Public Ep_td As Decimal
 
     ''' <summary>
     ''' épaisseur du renformis
     ''' </summary>
-    Public t_h As Decimal
+    Public Ep_th As Decimal
 
     ''' <summary>
     ''' lageur efficace de la dalle ??
@@ -58,11 +58,11 @@
 
         If Me.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             Dim tc As Decimal
-            tc = Me.t_d - Me.Bac.Hp
+            tc = Me.Ep_td - Me.Bac.Hp
             Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
 
         Else 'dalle pleine, avec ou sans dalle préfa
-            Ac = dc * t_d + t_h * (bfs + t_h * Math.Tan(ThetaRd) / 2)
+            Ac = dc * Ep_td + Ep_th * (bfs + Ep_th * Math.Tan(ThetaRd) / 2)
 
         End If
 
@@ -120,7 +120,7 @@
         Pleine
         Mixte
         PartiellementPrefabriquee
-        CompletementPrefabriquee
+        CompletementPrefabriquee            ' Plancher Cofradalle pour le slim floor uniquement ??
     End Enum
 
 #End Region
@@ -161,9 +161,9 @@
 
         Select Case Me.type
             Case Enum_TypeDalle.Pleine
-                Ac = Me.Beff * Me.t_d + Me.t_h * (Bfs + Me.t_h * Math.Tan(Me.ThetaRd))
-                'perimU = 2 * Me.Beff - Bfs +  Me.t_h / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 
-                perimU = 2 * Me.Beff - Bfs + 2 * Me.t_h / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
+                Ac = Me.Beff * Me.Ep_td + Me.Ep_th * (Bfs + Me.Ep_th * Math.Tan(Me.ThetaRd))
+                'perimU = 2 * Me.Beff - Bfs +  Me.Ep_th / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 
+                perimU = 2 * Me.Beff - Bfs + 2 * Me.Ep_th / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
 
             Case Enum_TypeDalle.Mixte 'Ne faut-il pas différencier le cas du bac perpendiculaire et // ?
                 If Me.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
@@ -174,7 +174,7 @@
                     perimU = Me.Beff
                 End If
             Case Enum_TypeDalle.PartiellementPrefabriquee 'Rajout GUD: il manquait ce cas (à mon avis il vaut mieux différencier ce cas de la dalle pleine, au cas où la valeur de theta n'aurait pas été initialisée à 0 pour le cas de la dalle préfa)
-                Ac = Me.Beff * Me.t_d
+                Ac = Me.Beff * Me.Ep_td
                 perimU = 2 * Me.Beff - Bfs
 
         End Select
@@ -310,7 +310,7 @@
             Dim EpR As Decimal
             Select Case Me.type
                 Case Enum_TypeDalle.Mixte : EpR = 0
-                Case Enum_TypeDalle.Pleine : EpR = Me.t_h
+                Case Enum_TypeDalle.Pleine : EpR = Me.Ep_th
             End Select
             Return EpR
         End Get
@@ -324,7 +324,7 @@
         Get
             Dim MyzTop As Decimal
 
-            MyzTop = Me.EpRenformis + Me.t_d
+            MyzTop = Me.EpRenformis + Me.Ep_td
 
             If (Me.type = Enum_TypeDalle.Mixte) Then
                 If (Me.Bac.lCofraplus220) Then MyzTop -= Me.Bac.Hp
@@ -345,16 +345,16 @@
                 Case Enum_TypeDalle.Mixte
                     Select Case Me.Bac.Orientation
                         Case cls_Bac.Enum_Orientation.Parallele
-                            Ep = Me.t_d - Me.Bac.Hp
+                            Ep = Me.Ep_td - Me.Bac.Hp
                         Case cls_Bac.Enum_Orientation.Perpendiculaire
-                            Ep = Me.t_d - Me.Bac.Hauteur_hpg
+                            Ep = Me.Ep_td - Me.Bac.Hauteur_hpg
                     End Select
                 Case Enum_TypeDalle.Pleine
-                    Ep = Me.t_d
+                    Ep = Me.Ep_td
                 Case Enum_TypeDalle.PartiellementPrefabriquee
-                    Ep = Me.t_d - Me.preDalle_ep + Me.preDalle_tjoint
+                    Ep = Me.Ep_td - Me.preDalle_ep + Me.preDalle_tjoint
                 Case Enum_TypeDalle.CompletementPrefabriquee
-                    Ep = Me.t_d - Me.Cofradal.dp
+                    Ep = Me.Ep_td - Me.Cofradal.dp
             End Select
             Return Ep
         End Get
@@ -445,7 +445,7 @@
 
         Select Case Me.type
             Case Enum_TypeDalle.Pleine, Enum_TypeDalle.PartiellementPrefabriquee
-                pInertieH = Me.t_d ^ 3 / 12
+                pInertieH = Me.Ep_td ^ 3 / 12
             Case Enum_TypeDalle.Mixte
                 Select Case Me.Bac.Orientation
                     Case cls_Bac.Enum_Orientation.Parallele
@@ -506,7 +506,7 @@
         If (Me.Bac.Bb > Me.Bac.Bt) Then
             Zz(2) = pTc + Me.Bac.Hp / 3
         Else
-            Zz(2) = Me.t_d - Me.Bac.Hp / 3
+            Zz(2) = Me.Ep_td - Me.Bac.Hp / 3
         End If
 
         '--> Calcul
@@ -535,8 +535,8 @@
         Me.type = Enum_TypeDalle.Pleine
 
         Me.Beff = 1
-        Me.t_d = 0.12
-        Me.t_h = 0.04
+        Me.Ep_td = 0.12
+        Me.Ep_th = 0.04
         Me.preDalle_tjoint = 0.05
         Me.preDalle_ep = 0.06
 
@@ -567,7 +567,7 @@
 
         Lines.Add("   DType         = " & type)
         Lines.Add("   DL_d          = " & Beff)
-        Lines.Add("   Dt_d          = " & t_d)
+        Lines.Add("   Dt_d          = " & Ep_td)
         'Lines.Add("   DAInf         = " & lArma_Inf)
         'Lines.Add("   DAsup         = " & lArma_Sup)
         ' Lines.Add("   Df_y          = " & acier_armature)
