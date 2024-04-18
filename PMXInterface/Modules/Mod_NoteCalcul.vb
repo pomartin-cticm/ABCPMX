@@ -5241,9 +5241,12 @@ Module Mod_NoteCalcul
 
         '--> Affichage
 
+        'AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
+        '            Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 3, 2, False) &
+        '            strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & strRacineELU & "_" & CStr(iCombiM + 1) & ")" & strGras & TABOK & strFinGras & "\BAL")
         AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
                     Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 3, 2, False) &
-                    strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & strRacineELU & "_" & CStr(iCombiM + 1) & ")" & strGras & TABOK & strFinGras & "\BAL")
+                    strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & cls_Poutre.SymboleCombi(strRacineELU, iCombiM) & ")" & strGras & TABOK & strFinGras & "\BAL")
 
         AfficheBalise(lOK)
 
@@ -7164,7 +7167,7 @@ Module Mod_NoteCalcul
         Symbol = "\SDs\s"
         AddLigneNDC(TABW3 & BlocELS("DELTASIGMA") & TABAFF &
                     Symbol & TABEGAL & GetStringInUnit(myBeam.VerifELS.DeltaSig, Enu_TypeVariable.ContrainteMPa, 3, 2, True))
-        AddLigneNDC(TABW3 & BlocELS("COMBIREBAR") & TABAFF & myBeam.SymboleCombi(strRacineELS, myBeam.VerifELS.iCombiArma + 1))
+        AddLigneNDC(TABW3 & BlocELS("COMBIREBAR") & TABAFF & cls_Poutre.SymboleCombi(strRacineELS, myBeam.VerifELS.iCombiArma + 1))
 
         SauteLigne()
 

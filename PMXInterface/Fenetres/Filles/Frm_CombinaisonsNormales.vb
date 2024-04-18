@@ -111,6 +111,7 @@ Public Class Frm_CombinaisonsNormales
     End Sub
 
     Private Sub GestionStyle()
+
         Me.Icon = Frm_PMX.Icon
         Me.lbl_Predefinies.BackColor = CouleurBackBandeaux
         Me.lbl_Predefinies.ForeColor = CouleurForeBandeaux
@@ -129,6 +130,7 @@ Public Class Frm_CombinaisonsNormales
         FontSymbol = New Font("Symbol", 9)
 
         Me.pan_Combinaisons.Dock = DockStyle.Fill
+
     End Sub
 
     Private Sub MAJI_Equations()
@@ -163,7 +165,7 @@ Public Class Frm_CombinaisonsNormales
     End Sub
 
     Private Sub MAJI_TypeEL()
-        Dim Chaine As String = str_Combinaison
+        'Dim Chaine As String = str_Combinaison
         Dim ChaineEL As String = ""
 
         Select Case AffichageEL
@@ -172,15 +174,15 @@ Public Class Frm_CombinaisonsNormales
             Case Enu_AffichageEL.ELU : ChaineEL = strELU
         End Select
 
-        Chaine = str_Combinaison & " " & ChaineEL & " " & strNb & " "
+        'Chaine = str_Combinaison & " " & ChaineEL & " " & strNb & " "
 
-        Me.chk_Combinaison01.Text = Chaine & "1"
-        Me.chk_Combinaison02.Text = Chaine & "2"
-        Me.chk_Combinaison03.Text = Chaine & "3"
-        Me.chk_Combinaison04.Text = Chaine & "4"
+        Me.chk_Combinaison01.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(ChaineEL, 0)                'Chaine & "1"
+        Me.chk_Combinaison02.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(ChaineEL, 1)                'Chaine & "2"
+        Me.chk_Combinaison03.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(ChaineEL, 2)                'Chaine & "3"
+        Me.chk_Combinaison04.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(ChaineEL, 3)                'Chaine & "4"
 
-        Me.chk_CombiCustom01.Text = Chaine & CStr(Ind_Custom + 1)
-        Me.chk_CombiCustom02.Text = Chaine & CStr(Ind_Custom + 2)
+        Me.chk_CombiCustom01.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(ChaineEL, Ind_Custom + 0)   ' Chaine & CStr(Ind_Custom + 1)
+        Me.chk_CombiCustom02.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(ChaineEL, Ind_Custom + 1)   ' Chaine & CStr(Ind_Custom + 2)
 
     End Sub
 

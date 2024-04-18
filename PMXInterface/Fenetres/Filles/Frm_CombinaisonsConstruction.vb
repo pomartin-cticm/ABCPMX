@@ -73,8 +73,8 @@ Public Class Frm_CombinaisonsConstruction
             '=== Textes
 
             str_Combinaison = MyBloc("COMBINATION")
-            strELU = MyBloc("ULS")
-            strELS = MyBloc("SLS")
+            strELU = MyBloc("ULS") & "-C"
+            strELS = MyBloc("SLS") & "-C"
             strNb = MyBloc("NUMBER")
 
 
@@ -101,11 +101,13 @@ Public Class Frm_CombinaisonsConstruction
 
         Ind_Custom = 1
 
-        Me.chk_Combinaison01.Text = Chaine & strELU & " " & strNb & "1"
-        Me.chk_Combinaison02.Text = Chaine & strELS & " " & strNb & "1"
+        Me.chk_Combinaison01.Text = Chaine & cls_Poutre.SymboleCombi(strELU, 0)             ' & strELU & " " & strNb & "1"
+        Me.chk_Combinaison02.Text = Chaine & cls_Poutre.SymboleCombi(strELS, 0)             ' & strELS & " " & strNb & "1"
 
-        Me.chk_CombiCustom01.Text = Chaine & strELU & " " & strNb & "2"
-        Me.chk_CombiCustom02.Text = Chaine & strELS & " " & strNb & "2"
+        Me.chk_CombiCustom01.Text = Chaine & cls_Poutre.SymboleCombi(strELU, 1)             ' & strELU & " " & strNb & "2"
+        Me.chk_CombiCustom02.Text = Chaine & cls_Poutre.SymboleCombi(strELU, 1)             ' & strELS & " " & strNb & "2"
+
+
     End Sub
 
     Private Sub GestionStyle()
@@ -162,26 +164,12 @@ Public Class Frm_CombinaisonsConstruction
     End Sub
 
     Private Sub MAJI_TypeEL()
-        Dim Chaine As String = str_Combinaison
-        Dim ChaineEL As String = ""
 
-        'Select Case AffichageEL
-        '    Case Enu_AffichageEL.ELF : ChaineEL = strELF
-        '    Case Enu_AffichageEL.ELS : ChaineEL = strELS
-        '    Case Enu_AffichageEL.ELU : ChaineEL = strELU
-        'End Select
+        Me.chk_Combinaison01.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(strELU, 0) ' Chaine & "1"
+        Me.chk_CombiCustom01.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(strELU, 1) ' Chaine & "2"
 
-        Chaine = str_Combinaison & " " & strELU & " " & strNb & " "
-
-        Me.chk_Combinaison01.Text = Chaine & "1"
-        Me.chk_CombiCustom01.Text = Chaine & "2"
-        'Me.chk_Combinaison03.Text = Chaine & "3"
-        'Me.chk_Combinaison04.Text = Chaine & "4"
-
-        Chaine = str_Combinaison & " " & strELS & " " & strNb & " "
-
-        Me.chk_Combinaison02.Text = Chaine & "1"
-        Me.chk_CombiCustom02.Text = Chaine & "2"
+        Me.chk_Combinaison02.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(strELS, 0) ' Chaine & "1"
+        Me.chk_CombiCustom02.Text = str_Combinaison & " " & cls_Poutre.SymboleCombi(strELS, 1) ' Chaine & "2"
 
     End Sub
 

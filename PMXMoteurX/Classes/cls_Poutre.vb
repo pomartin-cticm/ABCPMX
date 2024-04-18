@@ -3325,7 +3325,7 @@ Public Class cls_Poutre
             If lCombi(iCombi) And (Not lCombinaisonNulle(iCombi, CoefCombi)) Then
 
                 'Symbole = RacSymbolEL & "_0" & CStr(iCombi + 1)
-                Symbole = Me.SymboleCombi(RacSymbolEL, iCombi)
+                Symbole = cls_Poutre.SymboleCombi(RacSymbolEL, iCombi)
 
                 For i = 0 To NbCharges - 1
                     Select Case Me.ChargesA(i).Type
@@ -3380,7 +3380,7 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Function SymboleCombi(RacSymbolEL As String, iCombi As Integer) As String
+    Public Shared Function SymboleCombi(RacSymbolEL As String, iCombi As Integer) As String
         '---------------------------------------------------------------------------
         '   17/04/24 :  Création - POM 
         '---------------------------------------------------------------------------
@@ -3395,6 +3395,7 @@ Public Class cls_Poutre
         If iCombi < 9 Then strNum = "0" & CStr(iCombi + 1) Else strNum = CStr(iCombi + 1)
 
         Return RacSymbolEL & "-" & strNum
+
     End Function
 
     Private Function lCombinaisonNulle(iCombi As Integer, CoefCombi() As List(Of Decimal)) As Boolean
