@@ -34,14 +34,15 @@ Module Mod_NoteCalcul
 
     '--> Taille tableau
     '#POM : Il n'y a jamais 2 tableaux pareils => A mettre au niveau de la routine
-    Private Const LC1 As Decimal = 30        'taille colonne 1
-    Private Const LC1_2 As Decimal = 20        'taille colonne 1
-    Private Const LC2 As Decimal = 15        'taille colonne 2
-    Private Const LC2_3 As Decimal = 12        'taille colonne entre 2 et 3
-    Private Const LC3 As Decimal = 10        'taille colonne 3
-    Private Const LC4 As Decimal = 5         'taille colonne 4
-    Private Const HLIGNE As Decimal = 1.5  'taille ligne
-    Private Const HLIGNE2 As Decimal = 1.7  'taille ligne
+    Private Const LC1 As Decimal = 30           'taille colonne 1
+    Private Const LC1_2 As Decimal = 20         'taille colonne 1
+    Private Const LC2 As Decimal = 15           'taille colonne 2
+    Private Const LC2_3 As Decimal = 12         'taille colonne entre 2 et 3
+    Private Const LC3 As Decimal = 10           'taille colonne 3
+    Private Const LC4 As Decimal = 5            'taille colonne 4
+
+    Private Const HLIGNE As Decimal = 1.5       'taille ligne
+    Private Const HLIGNE2 As Decimal = 1.7      'taille ligne
     Const HLIGNEENTETE As Single = 1.8
 
     'Nom de l'imprimante virtuelle pour créer un PDF
@@ -75,6 +76,7 @@ Module Mod_NoteCalcul
 #End Region
 
 #Region "   Variables "
+
     Private strRacineELU As String
     Private strRacineELS As String
     Private strRacineELF As String
@@ -83,6 +85,7 @@ Module Mod_NoteCalcul
     Private BlocSP As New Dictionary(Of String, String)
     Private BlocAnalyse As New Dictionary(Of String, String)
     Private BlocELU As New Dictionary(Of String, String)
+    Private BlocFEU As New Dictionary(Of String, String)
     Private BlocELS As New Dictionary(Of String, String)
     Private BlocHiVoss As New Dictionary(Of String, String)
 
@@ -223,13 +226,19 @@ Module Mod_NoteCalcul
         '--| VERIFICATION DES CRITERES ELU
         '--|=========================================
 
-        EditionVerificationsELU(MyPrjt.Poutres(MyPrjt.IndEnCours))
+        ACC_EditionVerificationsELU(MyPrjt.Poutres(MyPrjt.IndEnCours))
 
         '--|=========================================
         '--| VERIFICATION DES CRITERES ELS
         '--|=========================================
 
-        EditionVerificationsELS(MyPrjt.Poutres(MyPrjt.IndEnCours))
+        ACC_EditionVerificationsELS(MyPrjt.Poutres(MyPrjt.IndEnCours))
+
+        '--|=========================================
+        '--| VERIFICATION DES CRITERES AU FEU
+        '--|=========================================
+
+        ACC_EditionVerificationsFeu(MyPrjt.Poutres(MyPrjt.IndEnCours))
 
     End Sub
 
@@ -254,6 +263,9 @@ Module Mod_NoteCalcul
 
         BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSSLS")
         BlocLine.CreationBloc(BlocELS)
+
+        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSFIRE")
+        BlocLine.CreationBloc(BlocFEU)
 
         BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_HIVOSS")
         BlocLine.CreationBloc(BlocHiVoss)
@@ -4969,7 +4981,7 @@ Module Mod_NoteCalcul
 
 #Region "***Edition vérifications ELU***"
 
-    Private Sub EditionVerificationsELU(MyBeam As cls_Poutre)
+    Private Sub ACC_EditionVerificationsELU(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
         '   12/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -4998,7 +5010,7 @@ Module Mod_NoteCalcul
 
         '# Synthèse des critères
 
-        EditionVerificationsELUSummary(MyBeam)
+        EditionVerificationsELUSynthese(MyBeam)
 
         '# Calcul détaillé des critères sous combinaisons ELU
 
@@ -5023,7 +5035,7 @@ Module Mod_NoteCalcul
 
             '# Synthèse des critères
 
-            EditionVerificationsELUSummary(MyBeam, True)
+            EditionVerificationsELUSynthese(MyBeam, True)
 
             '# Calcul détaillé des critères sous combinaisons ELU
 
@@ -5148,7 +5160,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionVerificationsELUSummary(MyBeam As cls_Poutre, Optional lConstruction As Boolean = False)
+    Private Sub EditionVerificationsELUSynthese(MyBeam As cls_Poutre, Optional lConstruction As Boolean = False)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -5200,7 +5212,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub AfficheSyntheseCritere(Critere As cls_Critere, Symbol As String, Titre As String)
+    Private Sub AfficheSyntheseCritere(Critere As cls_Critere, Symbol As String, Titre As String, Optional lFeu As Boolean = False)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -5211,19 +5223,22 @@ Module Mod_NoteCalcul
         '   Titre       [E] :
         '-------------------------------------------------------------------------------------------
 
-        AfficheSyntheseCritere(Critere.CritereMax, Symbol, Titre, Critere.iNodeM, Critere.iCombiM)
+        AfficheSyntheseCritere(Critere.CritereMax, Symbol, Titre, Critere.iNodeM, Critere.iCombiM, lFeu)
 
     End Sub
 
-    Private Sub AfficheSyntheseCritere(CritereMax As Decimal, Symbol As String, Titre As String, iNodeM As Integer, iCombiM As Integer)
+    Private Sub AfficheSyntheseCritere(CritereMax As Decimal, Symbol As String, Titre As String, iNodeM As Integer, iCombiM As Integer, lFeu As Boolean)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Affichage de la synthèse d'un critère
         '-------------------------------------------------------------------------------------------
-        '   Critere     [E] :
-        '   Symbol      [E] :
-        '   Titre       [E] :
+        '   CritereMax      [E] :   Valeur maix du critère
+        '   Symbol          [E] :   Symbole pour le critère
+        '   Titre           [E] :   Titre du critère
+        '   iNodeM          [E] :   Indice du noeud ou le critère maxi est obtenu
+        '   iCombiM         [E] :   Indice de la combi pour laquelle le critère maxi est obtenu
+        '   lFeu            [E] :   Indique si situation d'incendie ou non
         '-------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -5234,10 +5249,12 @@ Module Mod_NoteCalcul
         Dim TABInfo As String = "\T70"
         Dim strOK As String = ""
         Dim lOK As Boolean
+        Dim RacineEL As String
 
         '--> Initialisation
 
-        PrepareStyleCritere(CritereMax, strGras, strFinGras, strOK, lok)
+        PrepareStyleCritere(CritereMax, strGras, strFinGras, strOK, lOK)
+        If lFeu Then RacineEL = strRacineELF Else RacineEL = strRacineELU
 
         '--> Affichage
 
@@ -5246,7 +5263,7 @@ Module Mod_NoteCalcul
         '            strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & strRacineELU & "_" & CStr(iCombiM + 1) & ")" & strGras & TABOK & strFinGras & "\BAL")
         AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
                     Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 3, 2, False) &
-                    strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & cls_Poutre.SymboleCombi(strRacineELU, iCombiM) & ")" & strGras & TABOK & strFinGras & "\BAL")
+                    strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & cls_Poutre.SymboleCombi(RacineEL, iCombiM) & ")" & strGras & TABOK & strFinGras & "\BAL")
 
         AfficheBalise(lOK)
 
@@ -7053,7 +7070,7 @@ Module Mod_NoteCalcul
 
 #Region "***Edition des calculs aux ELS***"
 
-    Private Sub EditionVerificationsELS(MyBeam As cls_Poutre)
+    Private Sub ACC_EditionVerificationsELS(MyBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -8922,7 +8939,6 @@ Module Mod_NoteCalcul
 
 #End Region
 
-
 #Region "   Calcul des moments résistance élastiques dans les poutres mixtes "
 
     Private Sub EditionMelRdPoutreMixte(myBeam As cls_Poutre)
@@ -9280,7 +9296,6 @@ Module Mod_NoteCalcul
 
 #End Region
 
-
 #Region "   Gestion des balises pour les résultats "
 
     Private Sub AfficheBalise(ByVal result As Boolean)
@@ -9293,6 +9308,227 @@ Module Mod_NoteCalcul
         Else
             MyNote.AddLigneInRapport("\IMF ERROR " & CStr(POS_BALISE) & " 2 0 NoCadre")   '--> Erreur rouge
         End If
+
+    End Sub
+
+
+#End Region
+
+#Region "***Edition des vérifications au feu***"
+
+    Private Sub ACC_EditionVerificationsFEU(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition des calculs au feu
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Calcul au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        If (myBeam.CombiA_ELF.nbCombi = 0) Or (Not myBeam.ParamFeu.lCalcuFeu) Then Exit Sub
+
+        '--( Initialisation
+
+        SautePage()
+
+        AddTitreNdC(1, BlocFEU("FIRE_CHECKS"))
+
+        '--( Synthèse
+
+        EditionVerificationsFEUSynthese(myBeam)
+
+        '--( Détail pour chaque durée au feu
+
+        EditionVerificationsFEUDetail(myBeam)
+
+    End Sub
+
+    Private Sub EditionVerificationsFEUDetail(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la synthèse des calculs au feu
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Calcul au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        Select Case myBeam.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul
+                'EditionVerificationsFEUSyntheseAcier(myBeam)
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
+                EditionVerificationsFEUDetailEnrobe(myBeam)
+            Case cls_Section.Enum_TypeSection.Mixte
+                'EditionVerificationsFEUSyntheseMixte(myBeam)
+        End Select
+
+    End Sub
+
+    Private Sub EditionVerificationsFEUDetailEnrobe(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres partiellement enrobée de béton (acier ou mixte)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim iStep As Integer
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_DETAIL"))
+
+        '--( Entete du tableau
+
+        EnteteTableauVerifFeuEnrob(NCOL, LargCol)
+
+        '--( Remplissage tableau
+
+        For iStep = 0 To cls_VerifFeuEnrobe.TimeSteps.GetUpperBound(0)
+            LigneTableauVerifFeuEnrob(iStep, myBeam.VerifFeuEnrob, NCOL, LargCol)
+        Next
+
+        '--( Fin
+
+        FinTableau()
+    End Sub
+
+    Private Sub LigneTableauVerifFeuEnrob(iStep As Integer, myVerifFeu As cls_VerifFeuEnrobe, NCOL As Integer, LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres partiellement enrobée de béton (acier ou mixte)
+        '   Ligne du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '-----------------------------------------------------------------------------------------------------------------
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(iStep)))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+
+    End Sub
+
+    Private Sub EnteteTableauVerifFeuEnrob(ByRef NCOL As Integer, ByRef LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres partiellement enrobée de béton (acier ou mixte)
+        '   Entête du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Initialisation
+
+        NCOL = 3
+
+        ReDim LargCol(NCOL - 1)
+
+        LargCol(0) = 15
+        For i As Integer = 1 To NCOL - 1
+            LargCol(i) = 8
+        Next
+
+        Const POS As Integer = 10
+
+        '--( Affichage de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(Pos), False)
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+
+    End Sub
+
+    Private Sub EditionVerificationsFEUSynthese(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la synthèse des calculs au feu
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre Calculée au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        Select Case myBeam.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul
+                EditionVerificationsFEUSyntheseAcier(myBeam)
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
+                EditionVerificationsFEUSyntheseEnrobe(myBeam)
+            Case cls_Section.Enum_TypeSection.Mixte
+                EditionVerificationsFEUSyntheseMixte(myBeam)
+        End Select
+
+    End Sub
+
+    Private Sub EditionVerificationsFEUSyntheseEnrobe(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la synthèse des calculs au feu pour une poutre à section partielnt enrobée
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Calcul au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myStep As Integer
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_SYMMARY"))
+
+        '--( Durée de résistance au feu
+
+        If myBeam.VerifFeuEnrob.RStep = -1 Then
+            myStep = 0
+        Else
+            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(myBeam.VerifFeuEnrob.RStep)))
+            myStep = myBeam.VerifFeuEnrob.RStep
+        End If
+
+        '--( Synthèse des critères
+
+        AfficheSyntheseCritere(myBeam.VerifFeuEnrob.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
+
+
+    End Sub
+
+    Private Sub EditionVerificationsFEUSyntheseAcier(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la synthèse des calculs au feu pour une poutre à section acier non enrobée
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Calcul au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+    End Sub
+
+    Private Sub EditionVerificationsFEUSyntheseMixte(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la synthèse des calculs au feu pour une poutre à section mixte non enrobée
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Calcul au feu
+        '-----------------------------------------------------------------------------------------------------------------
 
     End Sub
 

@@ -134,6 +134,7 @@ Public Class cls_Poutre
     ''' Options de calcul pour la poutre
     ''' </summary>
     Public Param As New cls_OptionsCalcul
+    Public ParamFeu As New cls_OptionsFeu
 
 #End Region
 
@@ -1736,6 +1737,68 @@ Public Class cls_Poutre
         Next
 
     End Sub
+
+    Public Sub MaillageBeff(lSimple As Boolean, lAnalyse As Boolean, ByRef Beff(,) As Decimal)
+        '--------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------
+        '   Calcul des largeurs participantes de dalle le long de la poutre, au droit des noeuds
+        '   Attention : il faut avoir initialisé les noeuds auparavant
+        '   Beff à deux dimensions
+        '--------------------------------------------------------------------------------------------
+        '   lSimple     [E] :   Indique si modèle simplifié
+        '   lAnalyse    [E] :   Indique si modèle pour analyse ou pour vérifications
+        '   Beff        [S] :   Largeurs participantes de dalle (0 to NbNodes-1)
+        '--------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode As Integer
+        Dim iTravee As Integer
+        Dim iTravD, iTravF As Integer
+        Dim iNodD, iNodF As Integer
+        Dim xPos, xExtG As Decimal
+        Dim k, kDeb, kFin As Integer
+
+        '--> Initialisation
+
+        ReDim Beff(Me.Nodes.nbNodes, 1)
+
+        iTravD = Me.IndicePremiereTravee
+        iTravF = Me.IndiceDerniereTravee
+
+        '--> Calculs en travée
+
+        For iTravee = iTravD To iTravF
+
+            iNodD = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodF = Me.Nodes.iNodeExtTrav(iTravee, 1)
+            xExtG = Me.xPositionAppui(True, iTravee)
+
+            For iNode = iNodD + 1 To iNodF - 1
+                xPos = Me.Nodes.xGlobal(iNode) - xExtG
+
+                Beff(iNode, 0) = Me.BeffDalle(xPos, iTravee, lSimple, lAnalyse)
+                Beff(iNode, 1) = Beff(iNode, 0)
+            Next
+
+        Next
+
+        '--> Calcul aux extrémités
+
+        Beff(0, 1) = Me.BeffDalle(0, iTravD, lSimple, lAnalyse)
+        Beff(Me.Nodes.nbNodes - 1, 0) = Me.BeffDalle(LongueurTravee(iTravF), iTravF, lSimple, lAnalyse)
+
+        '--> Calcul sur les appuis intermédiaires
+
+        For iTravee = iTravD To iTravF - 1
+            iNode = Me.Nodes.iNodeExtTrav(iTravee, 1)
+            Beff(iNode, 0) = Me.BeffDalle(LongueurTravee(iTravee), iTravee, lSimple, lAnalyse)
+            Beff(iNode, 1) = Me.BeffDalle(0, iTravee + 1, lSimple, lAnalyse)
+        Next
+
+    End Sub
+
 
 #End Region
 
@@ -5096,6 +5159,7 @@ Public Class cls_Poutre
         'MyPoutre.InitialiseCombiA_ELU()
         Me.InitialiseCombiA(cls_Poutre.nbCombELU, Me.lCombELU, Me.CoefCombELU, strRacineELU, Me.CombiA_ELU)
         Me.InitialiseCombiA(cls_Poutre.nbCombELS, Me.lCombELS, Me.CoefCombELS, strRacineELS, Me.CombiA_ELS)
+        If Me.ParamFeu.lCalcuFeu Then _
         Me.InitialiseCombiA(cls_Poutre.nbCombFeu, Me.lCombFeu, Me.CoefCombFeu, strRacineELF, Me.CombiA_ELF)
         Me.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, Me.lCombELCURules, Me.CoefCombELCU, strRacineELUC, Me.CombiA_ELCU)
         Me.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, Me.lCombELCSRules, Me.CoefCombELCS, strRacineELSC, Me.CombiA_ELCS)
@@ -5119,7 +5183,15 @@ Public Class cls_Poutre
 
         '--> Vérification aux ELU en situation d'incendie
 
+        If Me.ParamFeu.lCalcuFeu And (Me.CombiA_ELF.nbCombi > 0) Then
+            Select Case Me.Section.TypeSection
+                Case cls_Section.Enum_TypeSection.AcierSeul
+                Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
+                    Me.VerifFeuEnrob.Z_VerifFeu(Me)
+                Case cls_Section.Enum_TypeSection.Mixte
 
+            End Select
+        End If
 
     End Sub
 

@@ -139,7 +139,7 @@
 
 #End Region
 
-#Region " Gestion globale de la vérification "
+#Region "===Gestion globale de la vérification==="
 
     Public Sub Z_VerificationELU(myBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------------------

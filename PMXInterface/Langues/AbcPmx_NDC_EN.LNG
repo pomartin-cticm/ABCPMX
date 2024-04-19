@@ -527,6 +527,13 @@ DELTASIGMA				= Including effect of concrete tension stiffening
 COMBIREBAR				= For combination 
 FREQG					= Eigen frequency for the combination 
 
+#NDC_VERIFICATIONSFIRE
+FIRE_CHECKS				= Ultimate limit states in fire situation
+FIRE_CHECKS_SYMMARY		= Summary of results
+FIRE_CHECKS_DETAIL		= Detailed results
+TIMERESISTANCE			= Fire Resistance
+TIMESTEP				= Fire duration
+
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations
 DSTRUC					= Structural damping

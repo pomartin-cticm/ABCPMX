@@ -492,7 +492,7 @@ MINVALUE				= Valeur minimum
 MINIACCTOREF			= Valeurs minimum d'après les Recommendations BNCM / CNC2M N0175
 
 #NDC_VERIFICATIONSSLS
-SLS_CHECKS				= Etat limite de service
+SLS_CHECKS				= Etats limites de service
 DEFLECTIONS				= Flèche
 DEFLECTIONS_LOADCASES	= Sous cas de charges élémentaires
 DEFLECTIONS_COMBI		= Sous combinaisons ELS$
@@ -525,6 +525,13 @@ ESPMAXI					= Espacement maxi des barres
 DELTASIGMA				= y compris l'effet de rigidité du béton
 COMBIREBAR				= Pour la combinaison
 FREQG					= Fréquence propre pour la combinaison 
+
+#NDC_VERIFICATIONSFIRE
+FIRE_CHECKS				= Etats limites ultime en situation d'incendie
+FIRE_CHECKS_SYMMARY		= Synthèse des résultats
+FIRE_CHECKS_DETAIL		= Résultats détaillés
+TIMERESISTANCE			= Résistance au feu
+TIMESTEP				= Durée d'exposition
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher

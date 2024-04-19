@@ -19,6 +19,9 @@
     Public tDalleEFmax As Decimal                           ' Epaisseur maximale d'un elt dalle pour le calcul numérique de l'échauffement de la dalle
 
     Public AlphaSlab As Decimal                             ' Coefficient de pondération pour la résistance plastique en compression de la dalle
+    Public lArmaCompression As Boolean                      ' Indique si on prend en compte les armatures comprimées (dans l'enrobage partiel)
+
+    Public lCalcuFeu As Boolean                             ' Indique si on effectue le calcul au feu
 
 #End Region
 
@@ -42,6 +45,9 @@
         Me.tDalleEFmax = 0.01               ' 10 mm
 
         Me.AlphaSlab = 1
+
+        Me.lCalcuFeu = True
+        Me.lArmaCompression = True
 
     End Sub
 
