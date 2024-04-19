@@ -352,6 +352,7 @@
                     If Signe > 0 Then
                         Me.MomentPlastiquePlus(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma, lMixte, Beff(iNode, k), Time, MplRd(iNode, k), zANP(iNode, k))
                     Else
+
                     End If
                     BeffPrec = Beff(iNode, k)
                 End If
@@ -409,7 +410,7 @@
 
         '# Armatures de l'enrobage
 
-        '    MaillageArmaturesEnrobage_YY(Gammas, MyModele)
+        MaillageArmaEnrobMPlus(mySection, myOptions, Gammas, Time, myModele)
 
         ''--> Dalle béton
 
@@ -428,6 +429,86 @@
         '--> Moment plastique
 
         MplRd = myModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    End Sub
+
+    Private Sub MaillageArmaEnrobMPlus(mySection As cls_Section, myOptions As cls_OptionsFeu, Gammas As cls_Gamma, Time As Decimal, ByRef myModele As cls_ModeleP)
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Maillage des armatures de l'enrobage en vue 
+        '   du calcul du moment plastique positif sous incendie d'une section avec enrobage partiel
+        '   suivant Annexe F de l'EN 1994-1-2
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myProfile   [E] :   Profilé
+        '   Gammas      [E] :   Coefficients partiels
+        '   Time        [E] :   Temps du calcul
+        '   RatioBc     [E] :   Ratio largeur Bc / largeur Bf
+        '   myModele    [S] :   Modelisation du profilé
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim zArma, PhiA As Decimal
+        Dim iPos, iBarre As Integer
+        Dim NbBarres As Integer
+        Dim Fsk As Decimal = mySection.Enrobage.AcierArmatures.FsK
+        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / mySection.Enrobage.AcierArmatures.Es
+        Dim DeltaCArma As Decimal = 0
+        Const NBMA As Integer = 2       ' Car symétrie des deux chambres
+
+        Dim lActif As Boolean
+
+        Dim EN1994_1_2 As New cls_EurocodesFeu
+        Dim kReducKr As Decimal
+
+        Dim iStep As Integer
+        Dim Ha, Bc, Tw As Decimal
+        Dim uBord, uSemel As Decimal
+
+        '--( Initialisation
+
+        iStep = Array.IndexOf(cls_VerifFeuEnrobe.TimeSteps, Time)
+
+        '# Prise en compte des armatures comprimées
+
+        If myOptions.lArmaCompression Then DeltaCArma = 1
+
+        '--( Boucle sur les lits d'armature
+
+        For iArma As Integer = 0 To 2
+
+            For iPos = 0 To 2
+
+                NbBarres = mySection.Enrobage.LitArma(iArma).NbBarres(iPos)
+
+                lActif = mySection.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
+
+                If lActif Then
+
+                    Ha = mySection.ProfilA.ha
+                    Bc = mySection.ProfilA.Bfs * mySection.Enrobage.Ratio_bc
+                    Tw = mySection.ProfilA.Tw
+
+                    uBord = mySection.Enrobage.DistanceArmaBord(iArma, iPos, mySection.ProfilA.Bfs, mySection.ProfilA.Tw)
+
+                    For iBarre = 1 To NbBarres
+
+                        zArma = mySection.zPosArmaEnrobage(iArma, iPos, iBarre)
+                        PhiA = mySection.Enrobage.LitArma(iArma).PhiBarre(iPos)
+
+                        uSemel = zArma - (-Ha + mySection.ProfilA.Tfi)
+
+                        kReducKr = EN1994_1_2.AnnexF_ReductionKrArmaEnrob(iStep, Ha, Bc, Tw, uBord, uSemel)
+
+                        myModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DeltaCArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
+
+                    Next
+                End If
+
+            Next
+
+        Next
 
     End Sub
 

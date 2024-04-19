@@ -282,6 +282,69 @@
 
     End Function
 
+    Public Function AnnexF_ReductionKrArmaEnrob(iStep As Integer, Ha As Decimal, Bc As Decimal, Tw As Decimal, uBord As Decimal, uSemel As Decimal) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la réduction de limite d'élasticité
+        '   Suivant Tableau F.5 de la NF EN 1994-1-2:2005
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du temps de calcul
+        '   Ha, Bc, Tw  [E] :   Hauteur du profilé, largeur de l'enrobage, épaisseur de l'âme
+        '   uBord       [E] :   Distance de l'axe de l'armature au bord du béton
+        '   uSemel      [E] :   Distance de l'axe de l'armature à la face interne de la semelle inférieure
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim kReducKr As Decimal
+        Dim uDistMM As Decimal
+        Dim CoefA3, CoefA4, CoefA5 As Decimal
+        Dim Am, Vol As Decimal
+        Const KrMin As Decimal = 0.1
+        Const KrMax As Decimal = 1
+
+        '--( Calcul
+
+        Am = 2 * Ha + Bc
+        Vol = Ha * Bc
+
+        uDistMM = kUnitMM * (uBord ^ (-1) + uSemel ^ (-1) + (Bc - Tw - uBord) ^ (-1)) ^ (-1)
+
+        CoefA3 = TableauF5_CoefficientA(3, iStep)
+        CoefA4 = TableauF5_CoefficientA(4, iStep)
+        CoefA5 = TableauF5_CoefficientA(5, iStep)
+
+        kReducKr = (uDistMM * CoefA3 + CoefA4) * CoefA5 / Math.Sqrt(Am / Vol / kUnitMM)
+
+        Return Math.Max(KrMin, Math.Min(KrMax, kReducKr))
+
+    End Function
+
+    Private Function TableauF5_CoefficientA(iCoefA As Integer, iStep As Integer) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Extraction des coefs Ai Suivant Tableau F.5 de la NF EN 1994-1-2:2005
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   iCoefA      [E] :   Indice du coefficient A
+        '   iStep       [E] :   Indice du temps de calcul
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        Dim myCoefA As Decimal
+
+        Dim tabA3() As Decimal = {0.062, 0.034, 0.026, 0.026, 0.024}
+        Dim tabA4() As Decimal = {0.16, -0.04, -0.154, -0.284, -0.562}
+        Dim tabA5() As Decimal = {0.126, 0.101, 0.09, 0.082, 0.076}
+
+        Select Case iCoefA
+            Case 3 : myCoefA = tabA3(iStep)
+            Case 4 : myCoefA = tabA4(iStep)
+            Case 5 : myCoefA = tabA5(iStep)
+        End Select
+        Return myCoefA
+    End Function
+
 
 #End Region
 

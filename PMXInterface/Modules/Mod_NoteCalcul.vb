@@ -5250,6 +5250,7 @@ Module Mod_NoteCalcul
         Dim strOK As String = ""
         Dim lOK As Boolean
         Dim RacineEL As String
+        Dim myTabul As String
 
         '--> Initialisation
 
@@ -5261,7 +5262,10 @@ Module Mod_NoteCalcul
         'AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
         '            Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 3, 2, False) &
         '            strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & strRacineELU & "_" & CStr(iCombiM + 1) & ")" & strGras & TABOK & strFinGras & "\BAL")
-        AddLigneNDC(TABW3 & Titre & TABAFF & strGras &
+
+        If lFeu Then myTabul = TABW2 Else myTabul = TABW3
+
+        AddLigneNDC(myTabul & Titre & TABAFF & strGras &
                     Symbol & TABEGAL & GetStringInUnit(CritereMax, Enu_TypeVariable.SansType, 3, 2, False) &
                     strFinGras & TABInfo & "(N" & CStr(iNodeM + 1) & "/" & cls_Poutre.SymboleCombi(RacineEL, iCombiM) & ")" & strGras & TABOK & strFinGras & "\BAL")
 
@@ -9506,6 +9510,7 @@ Module Mod_NoteCalcul
         '--( Synthèse des critères
 
         AfficheSyntheseCritere(myBeam.VerifFeuEnrob.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
+        AfficheSyntheseCritere(myBeam.VerifFeuEnrob.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
 
 
     End Sub

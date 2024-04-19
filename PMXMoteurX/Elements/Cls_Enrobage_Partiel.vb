@@ -79,6 +79,68 @@ Public Class cls_Enrobage_Partiel
 
     End Function
 
+    Public Function DistanceArmaBord(iArma As Integer, iPos As Integer, Bfs As Decimal, Tw As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------------------
+        '   Renvoie la distance au bord du béton de l'axe d'une armature
+        '---------------------------------------------------------------------------------------------------------------------------------------
+        '   iArma       [E] :   Indice du lit d'armature
+        '   iPos        [E] :   0 pour la grappe exterieure
+        '                       1 pour la grappe intermédiaire
+        '                       2 pour la grappe interieure
+        '   Tw          [E] :   Epaisseur de l'âme                           
+        '   Bfs         [E] :   Largeur de la semelle sup
+        '---------------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim uBord As Decimal
+        Dim PhiA As Decimal
+        Dim pYInterne, zMil As Decimal
+        Dim Bc As Decimal = Ratio_bc * Bfs
+
+        '--( Traitement
+
+        Select Case iPos
+            Case 0
+                PhiA = Me.LitArma(iArma).NbExt
+                uBord = Me.Etriers_EnrobageY + Me.Etriers_Phi + PhiA / 2
+            Case 1
+                PhiA = Me.LitArma(iArma).NbMil
+                zMil = 0.5 * ((Bc / 2 - (Me.Etriers_EnrobageY + Me.Etriers_Phi + PhiA / 2)) + (Tw / 2 + pYInterne + Me.Etriers_Phi + PhiA / 2))
+                uBord = (Bc / 2 - zMil)
+            Case 2
+                PhiA = Me.LitArma(iArma).NbMil
+                pYInterne = Me.uYInterne
+                uBord = (Bc / 2 - (Tw / 2 + pYInterne + Me.Etriers_Phi + PhiA / 2))
+        End Select
+
+        '--( Fin
+
+        Return uBord
+
+    End Function
+
+    Private Function uYInterne() As Decimal
+        '---------------------------------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------------------------
+        '   
+        '---------------------------------------------------------------------------------------------------------------------------------------
+        '---------------------------------------------------------------------------------------------------------------------------------------
+
+        Dim pYInterne As Decimal
+
+        Select Case Me.Etriers_Type
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre : pYInterne = Me.Etriers_EnrobageYinterne
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant : pYInterne = 0
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude : pYInterne = 0
+        End Select
+
+        Return pYInterne
+    End Function
+
 #End Region
 
 #Region " Constructeur "
