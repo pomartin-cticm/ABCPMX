@@ -8,21 +8,201 @@
 
 #Region " Coefficients de réduction des propriétés mécaniques en fonction de la température "
 
+    Public Function ReducFyAcier(TempA As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Coefficient de réduction de la limite d'élasticité de l'acier en fonction de la température
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myReduc As Decimal
+
+        '--( Traitement
+
+        Return myReduc
+    End Function
 
 
+    Public Function ReducEyAcier(TempA As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Coefficient de réduction du module d'Young de l'acier en fonction de la température
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+    End Function
+
+
+    Public Function ReducFuAcier(TempA As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Coefficient de réduction de la résistance ultime à la traction de l'acier en fonction de la température
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+    End Function
 
 #End Region
 
 
 #Region " Courbe feu iso "
 
+    Public Function TemperatureGazISO(TimeT As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Courbe ISO des gaz chauds (selon EN 1991-1-2 3.2.1 (1))
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TimeT       [E] :   Temps auquel on calcule la température en secondes
+        '--------------------------------------------------------------------------------------------------------------------------------
 
+        Dim myTemp As Decimal
+
+        myTemp = 20 + 345 * Math.Log10(8 * TimeT / kConvMinSec + 1)
+
+        Return myTemp
+
+    End Function
 
 #End Region
 
 #Region " Echauffement tabulé de la dalle "
 
 
+
+#End Region
+
+#Region " Echauffement des parties en acier "
+
+    Public Function DeltaTempAcierNonProtege(TempA As Decimal, TempG As Decimal, Massivete As Decimal, ksh As Decimal,
+                                             DeltaT As Decimal, myParamFeu As cls_OptionsFeu) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Echauffement d'une partie en acier non protégée sur un pas de temps DeltaT (selon EN 1993-1-2 § 4.2.5.1)
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier au début du pas de temps
+        '   TempG       [E] :   Température des gaz au début du pas de temps
+        '   Massivete   [E] :   Massiveté de la partie en acier
+        '   ksh         [E] :   Shadow factor
+        '   DeltaT      [E] :   Pas de temps en secondes
+        '   myParamFeu  [E] :   Options de calcul au feu
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim DeltaTempA As Decimal
+        Dim cA, RhoA As Decimal         ' Chaleur massique et masse volumique acier
+        Dim FluxTherm, FluxConv As Decimal
+        Dim EpsilonA As Decimal         ' Emissivité acier
+
+        '--( Traitement
+
+        cA = Me.ChaleurSpecifiqueAcier(TempA)
+        RhoA = cls_Acier.RHOACIER
+        FluxConv = myParamFeu.ConvectionCoef * (TempG - TempA)
+        FluxTherm = Me.FluxRadiatif(TempA, TempG, EpsilonA, myParamFeu) + FluxConv
+        EpsilonA = EmissiviteAcier(TempA, myParamFeu.TypeSurface)
+
+        DeltaTempA = (ksh * Massivete) / (cA * RhoA) * DeltaT * FluxTherm
+
+        '--( 
+
+        Return DeltaTempA
+    End Function
+
+    Public Function ChaleurSpecifiqueAcier(TempA As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Echauffement d'une partie en acier non protégée sur un pas de temps DeltaT (selon EN 1993-1-2 § 3.4.1.2)
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier au début du pas de temps
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim myCa As Decimal
+
+        '--( Traitement
+        If IsSmaller(TempA, 600) Then
+            myCa = 425 + 0.773 * TempA - 1.69 / 10 ^ 3 * TempA ^ 2 + 2.22 / 10 ^ 6 * TempA ^ 3
+        ElseIf IsSmaller(TempA, 735) Then
+            myCa = 665.999 + 13002 / (738 - TempA)
+        ElseIf IsSmaller(TempA, 900) Then
+            myCa = 545 + 17820 / (TempA - 731)
+        Else
+            myCa = 650
+        End If
+        Return myCa
+    End Function
+
+    Public Function EmissiviteAcier(TempA As Decimal, typeSurf As cls_OptionsFeu.enu_TypeSurface) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Emissivité de l'acier en fonction de la température et de l'état de surface
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier
+        '   typeSurf    [E] :   Type de surface, acier nu ou galvanisé
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        Dim myEpsilonA As Decimal
+
+        Select Case typeSurf
+            Case cls_OptionsFeu.enu_TypeSurface.AcierNu
+                myEpsilonA = 0.7
+            Case cls_OptionsFeu.enu_TypeSurface.Galvanise
+                If IsSmaller(TempA, 500) Then
+                    myEpsilonA = 0.35
+                Else
+                    myEpsilonA = 0.7
+                End If
+        End Select
+
+        Return myEpsilonA
+    End Function
+
+    Public Function FluxRadiatif(TempA As Decimal, TempG As Decimal, EpsilonA As Decimal, myParamFeu As cls_OptionsFeu) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul du flux radiatif sur une partie en acier non protégée 
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier au début du pas de temps
+        '   TempG       [E] :   Température des gaz au début du pas de temps
+        '   EpsilonA    [E] :   Emissivité de l'acier
+        '   myParamFeu  [E] :   Options de calcul au feu
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim myFlux As Decimal
+        Dim EpsilonF, Phi As Decimal
+        Dim SigmaB As Decimal
+        Const TREFK As Decimal = 273
+
+        '--( Initialisation 
+
+        EpsilonF = myParamFeu.EmissivityFire
+        SigmaB = myParamFeu.BOLTZMANN
+        Phi = myParamFeu.PhiViewFactor
+
+        '--( Traitement
+
+        myFlux = Phi * EpsilonF * EpsilonA * SigmaB * ((TempG + TREFK) ^ 4 - (TempA + TREFK) ^ 4)
+
+        Return myFlux
+
+    End Function
 
 #End Region
 
@@ -345,6 +525,66 @@
         Return myCoefA
     End Function
 
+
+#End Region
+
+#Region " Massiveté des sections "
+
+    Public Function MassiveteSectionAcier(myProfil As cls_ProfilA, lSemSupExposee As Boolean) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la massiveté d'une section acier seule
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myProfil        [E] :   Profilé
+        '   lSemSupExposee  [E] :   Indique si on considère la semelle sup comme exposée ou non
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Aire, Peri As Decimal
+
+        '--( Calculs
+
+        Aire = myProfil.Aire
+        Peri = myProfil.Bfs + 2 * (myProfil.ha + myProfil.Bfi - myProfil.Tw) + (Math.PI - 3) * (myProfil.Rci + myProfil.Rcs)
+
+        If lSemSupExposee Then
+            Peri += myProfil.Bfs
+        End If
+
+        Return (Peri / Aire)
+
+    End Function
+
+    Public Function MassiveteSectionAcierBox(myProfil As cls_ProfilA, lSemSupExposee As Boolean) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la massiveté d'une section acier seule boxée
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myProfil        [E] :   Profilé
+        '   lSemSupExposee  [E] :   Indique si on considère la semelle sup comme exposée ou non
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Aire, Peri As Decimal
+        Dim BfMax As Decimal
+
+        '--( Calculs
+
+        Aire = myProfil.Aire
+        BfMax = Math.Max(+myProfil.Bfi, myProfil.Bfs)
+        Peri = BfMax + 2 * myProfil.ha
+
+        If lSemSupExposee Then
+            Peri += BfMax
+        End If
+
+        Return (Peri / Aire)
+
+    End Function
 
 #End Region
 

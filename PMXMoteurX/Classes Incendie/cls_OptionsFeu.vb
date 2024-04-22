@@ -23,6 +23,16 @@
 
     Public lCalcuFeu As Boolean                             ' Indique si on effectue le calcul au feu
 
+    Public BOLTZMANN As Decimal                             ' Constante de Boltzmann
+
+    Public TypeSurface As enu_TypeSurface                   ' Type de surface (protégée ou non, galvanisée ou non)
+
+    Public Enum enu_TypeSurface
+        Protege
+        AcierNu
+        Galvanise
+    End Enum
+
 #End Region
 
 #Region " Constructeur "
@@ -49,7 +59,32 @@
         Me.lCalcuFeu = True
         Me.lArmaCompression = True
 
+        Me.TypeSurface = enu_TypeSurface.AcierNu
+
+        Me.BOLTZMANN = 5.67 * 10 ^ (-8)
     End Sub
+
+#End Region
+
+#Region " Fonctions "
+
+    Public ReadOnly Property DeltaTCalcul As Decimal
+        '------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------
+        '   Renvoie le pas de temps du calcul d'échauffement en fct du type de surface
+        '------------------------------------------------------------------------------------------------------------
+        Get
+            Dim myDeltaT As Decimal
+            Select Case Me.TypeSurface
+                Case enu_TypeSurface.AcierNu, enu_TypeSurface.Galvanise
+                    myDeltaT = Me.DeltaTsimple
+                Case enu_TypeSurface.Protege
+                    myDeltaT = Me.DeltaTprotege
+            End Select
+            Return myDeltaT
+        End Get
+    End Property
 
 #End Region
 

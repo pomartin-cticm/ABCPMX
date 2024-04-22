@@ -9,7 +9,7 @@
 #Region " Enumérations,constantes et structures "
 
     Public Const kConvMPaPa As Decimal = 1000 ^ 2
-
+    Public Const kConvMinSec As Decimal = 60
 
 #Region " Structures "
 

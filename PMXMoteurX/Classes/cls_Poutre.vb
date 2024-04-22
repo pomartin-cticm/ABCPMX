@@ -5186,6 +5186,7 @@ Public Class cls_Poutre
         If Me.ParamFeu.lCalcuFeu And (Me.CombiA_ELF.nbCombi > 0) Then
             Select Case Me.Section.TypeSection
                 Case cls_Section.Enum_TypeSection.AcierSeul
+                    Me.VerifFeuAcier.Z_VerifFeu(Me)
                 Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
                     Me.VerifFeuEnrob.Z_VerifFeu(Me)
                 Case cls_Section.Enum_TypeSection.Mixte
