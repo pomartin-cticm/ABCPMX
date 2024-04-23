@@ -76,11 +76,146 @@
 
 #Region " Echauffement tabulé de la dalle "
 
+    Public Sub PrepareMaillageDalleTabulee(EpDalle As Decimal, lGeneratUN As Decimal, ByRef nbTranches As Integer, ByRef EpTranches() As Decimal, ByRef zTranches() As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Discrétisation de la dalle en tranches pour le calcul tabulé des températures
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   EpDalle     [E] :   Epaisseur de la dalle (considérée comme dalle pleine d'épaisseur constante)
+        '   lGeneratUN  [E] :   Indique si première génération de l'Eurocode ou non
+        '   nbTranches  [S] :   Nombre de tranches discrétisant la dalle
+        '   EpTranches  [S] :   Epaisseur de chaque tranche
+        '   zTranches   [S] :   Position z de la mi-epaisseur de chaque tranche
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+    End Sub
+
+    Public Sub TemperatureDalleTabuleeGeneration1(TimeStep As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul des température de la dalle par la méthode tabulée
+        '   Selon EN 1994-1-2:2005 Tableau D.5
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   TimeStep    [E] :   Temps de calcul
+        '   nbTranches  [E] :   Nombre de tranches dans la dalle
+        '   TempDalle   [S] :   Température dans chaque couche de la dalle
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Initialisation - Déclaration
+
+        Dim TabTempR30() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
+        Dim TabTempR60() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
+        Dim TabTempR90() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
+        Dim TabTempR120() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
+        Dim TabTempR180() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
+        Dim TabTempR240() As Decimal = {1200, 1200, 1200, 1200, 1200, 740, 700, 670, 645, 550, 520, 495, 395, 305}
+
+        Dim TabTempC() As Decimal = Nothing
+
+        '--( Sélection de la table
+
+        Select Case TimeStep
+            Case 30 : TabTempC = TabTempR30
+            Case 60 : TabTempC = TabTempR60
+            Case 90 : TabTempC = TabTempR90
+            Case 120 : TabTempC = TabTempR120
+            Case 180 : TabTempC = TabTempR180
+            Case 240 : TabTempC = TabTempR240
+        End Select
+
+        '--( Transfert des valeurs
+
+        ReDim TempDalle(nbTranches - 1)
+
+        For iTn As Integer = 0 To nbTranches - 1
+
+            TempDalle(iTn) = TabTempC(iTn)
+
+        Next
+
+    End Sub
+
+    Public Sub TemperatureDalleTabuleeGeneration2(TimeStep As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul des température de la dalle par la méthode tabulée
+        '   Selon EN 1994-1-2:2024 Tableau B.6
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   TimeStep    [E] :   Temps de calcul
+        '   nbTranches  [E] :   Nombre de tranches dans la dalle
+        '   TempDalle   [S] :   Température dans chaque couche de la dalle
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+
+    End Sub
+
+    Public Sub TemperatureDalleTabulee(TimeStep As Decimal, lGeneratUN As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul des température de la dalle par la méthode tabulée
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+        '   TimeStep    [E] :   Temps de calcul
+        '   lGeneratUN  [E] :   Indique si première génération de l'Eurocode ou non
+        '   nbTranches  [E] :   Nombre de tranches dans la dalle
+        '   TempDalle   [S] :   Température dans chaque couche de la dalle
+        '-------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+    End Sub
 
 #End Region
 
 #Region " Echauffement des parties en acier "
+
+    Public Function DeltaTempAcierProtege(TempA As Decimal, TempG As Decimal, Massivete As Decimal, ksh As Decimal,
+                                          TimeT As Decimal, DeltaT As Decimal, myParamFeu As cls_OptionsFeu) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Echauffement d'une partie en acier protégée sur un pas de temps DeltaT (selon EN 1993-1-2 § 4.2.5.2)
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier au début du pas de temps
+        '   TempG       [E] :   Température des gaz au début du pas de temps
+        '   Massivete   [E] :   Massiveté de la partie en acier protégée
+        '   ksh         [E] :   Shadow factor
+        '   TimeT       [E] :   Temps en secondes
+        '   DeltaT      [E] :   Pas de temps en secondes
+        '   myParamFeu  [E] :   Options de calcul au feu
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim DeltaTempA As Decimal
+        Dim cA, RhoA As Decimal             ' Chaleur massique et masse volumique acier
+        Dim LambdaP, RhoP, cP As Decimal    ' Conductivité thermique, chaleur massique et masse volumique matériau de protection   
+        Dim Phi As Decimal
+        Dim DeltaG As Decimal
+
+        '--( Traitement
+
+        cA = Me.ChaleurSpecifiqueAcier(TempA)
+        RhoA = cls_Acier.RHOACIER
+
+        LambdaP = myParamFeu.Protection_Conductivite
+        cP = myParamFeu.Protection_ChaleurMassique
+        RhoP = myParamFeu.Protection_MasseVol
+
+        DeltaG = Me.TemperatureGazISO(TimeT + DeltaT) - TempG
+        Phi = cP * RhoP / (cA * RhoA) * myParamFeu.EpProtection * Massivete
+
+        DeltaTempA = LambdaP * Massivete / (cA * RhoA) / (1 + Phi / 3) * (TempG - TempA) * DeltaT - (Math.Exp(Phi / 10) - 1) * deltag
+
+        '--( 
+
+        Return DeltaTempA
+
+    End Function
+
 
     Public Function DeltaTempAcierNonProtege(TempA As Decimal, TempG As Decimal, Massivete As Decimal, ksh As Decimal,
                                              DeltaT As Decimal, myParamFeu As cls_OptionsFeu) As Decimal
@@ -530,6 +665,75 @@
 
 #Region " Massiveté des sections "
 
+    Public Function MassiveteSemelleInf(myProfil As cls_ProfilA) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la massiveté d'une semelle inférieure
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myProfil        [E] :   Profilé
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Aire, Peri As Decimal
+
+        '--( Calculs
+
+        Aire = myProfil.AireFi
+        Peri = 2 * (myProfil.Bfi + myProfil.Tfi)
+
+        Return (Peri / Aire)
+
+    End Function
+
+    Public Function MassiveteSemelleSup(myProfil As cls_ProfilA, lSemSupExposee As Boolean) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la massiveté d'une semelle supérieure
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myProfil        [E] :   Profilé
+        '   lSemSupExposee  [E] :   Indique si on considère la semelle sup comme exposée ou non
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Aire, Peri As Decimal
+
+        '--( Calculs
+
+        Aire = myProfil.AireFs
+        Peri = myProfil.Bfs + 2 * myProfil.Tfs
+
+        If lSemSupExposee Then Peri += myProfil.Bfs
+
+        Return (Peri / Aire)
+
+    End Function
+
+    Public Function MassiveteAme(myProfil As cls_ProfilA) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la massiveté de l'âme
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myProfil        [E] :   Profilé
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Aire, Peri As Decimal
+
+        '--( Calculs
+
+        Aire = myProfil.Aire - myProfil.AireFi - myProfil.AireFs
+        Peri = 2 * (myProfil.HauteurAmeDw) + Math.PI * (myProfil.Rci + myProfil.Rcs)
+
+        Return (Peri / Aire)
+
+    End Function
+
     Public Function MassiveteSectionAcier(myProfil As cls_ProfilA, lSemSupExposee As Boolean) As Decimal
         '------------------------------------------------------------------------------------------------------------------------------
         '   22/04/24 :  Création - POM
@@ -588,5 +792,36 @@
 
 #End Region
 
+#Region " Facteur de vue "
+
+    Public Function kShMixte(myProfil As cls_ProfilA) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   23/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la massiveté d'une section acier seule boxée
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myProfil        [E] :   Profilé
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim mykSh As Decimal
+        Dim NumK, DenomK As Decimal
+        Dim Hw As Decimal = myProfil.HauteurAmeHw
+
+        '--(  Calcul
+
+        NumK = myProfil.Tfi + myProfil.Tfs + myProfil.Bfi / 2 + Math.Sqrt(Hw ^ 2 + 0.25 * (myProfil.Bfs - myProfil.Bfi) ^ 2)
+        DenomK = Hw + myProfil.Bfi + myProfil.Bfs / 2 + myProfil.Tfi + myProfil.Tfs - myProfil.Tw
+
+        mykSh = 0.9 * numk / denomk
+
+        Return mykSh
+
+
+    End Function
+
+
+#End Region
 
 End Class

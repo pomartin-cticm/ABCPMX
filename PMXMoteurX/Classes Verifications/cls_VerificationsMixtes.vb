@@ -1398,7 +1398,6 @@
             Next
         Next
 
-
     End Sub
 
     Private Sub RunCritereMomentsElastiques(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal)

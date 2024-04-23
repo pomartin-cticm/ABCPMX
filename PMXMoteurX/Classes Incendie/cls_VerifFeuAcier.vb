@@ -16,7 +16,7 @@
 
     Public RStep As Integer                             ' Indice du dernier pas de calcul de la table TimeStep pour laquelle tous les critères sont OK
 
-    Public TempAStep As Decimal                         ' Température de l'acier pour les Steps
+    Public TempAStep() As Decimal                       ' Température de l'acier pour les Steps
 
 #End Region
 
@@ -28,7 +28,7 @@
         Me.RStep = -1
     End Sub
 
-    Private Sub InitialiseCriteres(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer)
+    Private Sub InitialiseClassPourCalcul(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer)
         '----------------------------------------------------------------------------------------------------------
         '   30/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -49,6 +49,8 @@
             Me.CritereMV(i) = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Next
 
+        ReDim TempAStep(Me.NbStep - 1)
+
     End Sub
 
 #End Region
@@ -60,7 +62,7 @@
         '--------------------------------------------------------------------------------------------------------------------------
         '   18/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------
-        '   Gestion des calculs au feu pour les poutres à sections partielement enrobées de béton (acier ou mixte)
+        '   Gestion des calculs au feu pour les poutres acier non enrobées
         '--------------------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre traitée
         '--------------------------------------------------------------------------------------------------------------------------
@@ -77,7 +79,6 @@
 
         Dim TempG As Decimal                    ' Température des gaz chauds
         Dim TempA As Decimal                    ' Température de la section en acier
-        Dim TempAStep() As Decimal              ' Température de l'acier pour les Steps
 
         Dim kReducY As Decimal                  ' Coefficient réduction limite d'élasticité en fct température de la section en acier
 
@@ -112,7 +113,6 @@
             kSh = 0.9 * Massivete / EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee)
         End If
 
-        ReDim TempAStep(Me.NbStep - 1)
         ReDim MplRdFeu(Me.NbStep - 1)
         ReDim MelRdFeu(Me.NbStep - 1)
         ReDim VplRdFeu(Me.NbStep - 1)
@@ -137,7 +137,7 @@
                 '# Calcul de l'échauffement de la section sur le pas de temps
 
                 If lProtege Then
-
+                    TempA += EN_Feu.DeltaTempAcierProtege(TempA, TempG, Massivete, kSh, TimeT, DeltaT, myBeam.ParamFeu)
                 Else
                     TempA += EN_Feu.DeltaTempAcierNonProtege(TempA, TempG, Massivete, kSh, DeltaT, myBeam.ParamFeu)
                 End If

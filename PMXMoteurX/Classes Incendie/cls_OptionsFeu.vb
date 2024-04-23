@@ -23,6 +23,8 @@
 
     Public lCalcuFeu As Boolean                             ' Indique si on effectue le calcul au feu
 
+    Public lDalleFEM As Boolean                             ' Indique pour les poutres mixtes si on calcule l'échauffement par une analyse EF
+
     Public BOLTZMANN As Decimal                             ' Constante de Boltzmann
 
     Public TypeSurface As enu_TypeSurface                   ' Type de surface (protégée ou non, galvanisée ou non)
@@ -31,6 +33,22 @@
         Protege
         AcierNu
         Galvanise
+    End Enum
+
+    Public Protection As enu_TypeProtection                 ' Type de protection thermique
+    Public EpProtection As Decimal                          ' Epaisseur de protection thermique
+    Public CustomLambdaP As Decimal                         ' Conductivité thermique définie par l'utilisateur (dans le cas de la peinture intumescente)
+
+    Public Enum enu_TypeProtection
+        LowDensitySpray_Mineral
+        LowDensitySpray_Vermiculite
+        HighDensitySpray_PerliteCement
+        HighDensitySpray_PerlitePlaster
+        IntumescentPaint
+        BoardsVermiculite
+        BoardsSilicate
+        BoardsFibroCement
+        BoardsPlaster
     End Enum
 
 #End Region
@@ -88,5 +106,59 @@
 
 #End Region
 
+#Region " Propriétés de la protection thermique "
+
+    Public Function Protection_Conductivite() As Decimal
+        '------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------
+        '   Renvoie la conductivité thermique de la protection thermique
+        '------------------------------------------------------------------------------------------------------------
+
+        Dim myLambdaP As Decimal = 0.2
+
+        Select Case Me.Protection
+            Case enu_TypeProtection.BoardsFibroCement
+        End Select
+
+        Return myLambdaP
+
+    End Function
+
+    Public Function Protection_MasseVol() As Decimal
+        '------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------
+        '   Renvoie la masse volumique de la protection thermique
+        '------------------------------------------------------------------------------------------------------------
+
+        Dim myRhoP As Decimal = 500
+
+        Select Case Me.Protection
+            Case enu_TypeProtection.BoardsFibroCement
+        End Select
+
+        Return myRhoP
+
+    End Function
+
+    Public Function Protection_ChaleurMassique() As Decimal
+        '------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------
+        '   Renvoie la chaleur massique de la protection thermique
+        '------------------------------------------------------------------------------------------------------------
+
+        Dim mycP As Decimal = 1000
+
+        Select Case Me.Protection
+            Case enu_TypeProtection.BoardsFibroCement
+        End Select
+
+        Return mycP
+
+    End Function
+
+#End Region
 
 End Class
