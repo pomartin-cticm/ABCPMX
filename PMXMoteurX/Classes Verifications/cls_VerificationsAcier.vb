@@ -1063,7 +1063,7 @@ Public Class cls_VerificationsAcier
     End Sub
 
     Private Sub RunCritereFlexionAcier(MyPoutre As cls_Poutre, iCombi As Integer, MEd(,) As Decimal,
-                                    MplRd As Decimal, MelRd As Decimal, ClasseP As Integer, ClasseM As Integer, ByRef lClasse4 As Boolean)
+                                       MplRd As Decimal, MelRd As Decimal, ClasseP As Integer, ClasseM As Integer, ByRef lClasse4 As Boolean)
         '----------------------------------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------

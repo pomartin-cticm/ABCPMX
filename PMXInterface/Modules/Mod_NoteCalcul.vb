@@ -9358,12 +9358,109 @@ Module Mod_NoteCalcul
 
         Select Case myBeam.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul
-                'EditionVerificationsFEUSyntheseAcier(myBeam)
+                EditionVerificationsFEUDetailAcier(myBeam)
             Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
                 EditionVerificationsFEUDetailEnrobe(myBeam)
             Case cls_Section.Enum_TypeSection.Mixte
                 'EditionVerificationsFEUSyntheseMixte(myBeam)
         End Select
+
+    End Sub
+
+    Private Sub EditionVerificationsFEUDetailAcier(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres partiellement enrobée de béton (acier ou mixte)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim iStep As Integer
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_DETAIL"))
+
+        '--( Entete du tableau
+
+        EnteteTableauVerifFeuAcier(NCOL, LargCol)
+
+        '--( Remplissage tableau
+
+        For iStep = 0 To cls_VerifFeuAcier.TimeSteps.GetUpperBound(0)
+            LigneTableauVerifFeuAcier(iStep, myBeam.VerifFeuAcier, NCOL, LargCol)
+        Next
+
+        '--( Fin
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub EnteteTableauVerifFeuAcier(ByRef NCOL As Integer, ByRef LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres partiellement enrobée de béton (acier ou mixte)
+        '   Entête du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Initialisation
+
+        NCOL = 4
+
+        ReDim LargCol(NCOL - 1)
+
+        LargCol(0) = 15
+        For i As Integer = 1 To NCOL - 1
+            LargCol(i) = 8
+        Next
+
+        Const POS As Integer = 10
+
+        '--( Affichage de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-a\=")
+        AddCelluleFond(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+
+    End Sub
+
+    Private Sub LigneTableauVerifFeuAcier(iStep As Integer, myVerifFeu As cls_VerifFeuAcier, NCOL As Integer, LargCol() As Single)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres partiellement enrobée de béton (acier ou mixte)
+        '   Ligne du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '-----------------------------------------------------------------------------------------------------------------
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(iStep)))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.TempAStep(iStep), Enu_TypeVariable.SansType, 3, 2, False) & " °C")
+        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
 
     End Sub
 
@@ -9523,6 +9620,29 @@ Module Mod_NoteCalcul
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Calcul au feu
         '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myStep As Integer
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_SYMMARY"))
+
+        '--( Durée de résistance au feu
+
+        If myBeam.VerifFeuAcier.RStep = -1 Then
+            myStep = 0
+        Else
+            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(myBeam.VerifFeuAcier.RStep)))
+            myStep = myBeam.VerifFeuAcier.RStep
+        End If
+
+        '--( Synthèse des critères
+
+        AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
+        AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
+
 
     End Sub
 

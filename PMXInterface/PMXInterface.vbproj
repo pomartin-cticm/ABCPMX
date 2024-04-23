@@ -161,6 +161,12 @@
     <Compile Include="Fenetres\Filles\Frm_OptionsCalculPoutre.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeu.Designer.vb">
+      <DependentUpon>Frm_OptionsFeu.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Filles\Frm_OptionsFeu.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Filles\Frm_SectionIFB.Designer.vb">
       <DependentUpon>Frm_SectionIFB.vb</DependentUpon>
     </Compile>
@@ -498,6 +504,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsCalculPoutre.resx">
       <DependentUpon>Frm_OptionsCalculPoutre.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Filles\Frm_OptionsFeu.resx">
+      <DependentUpon>Frm_OptionsFeu.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_SectionIFB.resx">
       <DependentUpon>Frm_SectionIFB.vb</DependentUpon>

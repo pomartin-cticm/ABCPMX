@@ -23,6 +23,8 @@
 
         '--( Traitement
 
+        myReduc = 1 - TempA / 1200
+
         Return myReduc
     End Function
 

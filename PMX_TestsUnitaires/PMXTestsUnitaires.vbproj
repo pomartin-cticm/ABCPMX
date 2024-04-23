@@ -79,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mod_Outils.vb" />
+    <Compile Include="UnitTest_Cls_EurocodesFeu.vb" />
     <Compile Include="UnitTest_CasTestsPoutreAcier.vb" />
     <Compile Include="UnitTest_Cls_Dalle.vb" />
     <Compile Include="UnitTest_CasTestsPoutreMixte.vb" />

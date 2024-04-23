@@ -645,6 +645,9 @@ Public Class Frm_PMX
             Case Me.TSbtn_Hivoss.Name
                 FilleEnCours = EnuFenetres.Hivoss
 
+            Case Me.TSbtn_OptionsIncendie.Name
+                FilleEnCours = EnuFenetres.Incendie
+
             Case Me.TSbtn_PPLargeurEfficace.Name
                 FilleEnCours = EnuFenetres.PPLargeurEfficace
 
@@ -776,6 +779,9 @@ Public Class Frm_PMX
                 Else
 
                 End If
+
+            Case EnuFenetres.Incendie
+                Frm_OptionsFeu.ShowDialog()
 
             Case EnuFenetres.OptionsCalculPoutre
                 Frm_OptionsCalculPoutre.ShowDialog()

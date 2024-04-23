@@ -547,6 +547,7 @@ Public Class cls_Section
                 MaillageProfileASlimfloorsIFB_B_YY(Gammas, RhoV, MyModele)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
                 MaillageProfileASlimfloorsSAB_YY(Gammas, RhoV, MyModele)
+
         End Select
 
 

@@ -359,6 +359,7 @@ Public Module Mod_Declarations
         Gamma
         Hivoss
         Identification
+        Incendie
         Main
         Maintiens
         Options
