@@ -8,24 +8,96 @@
 
 #Region " Coefficients de réduction des propriétés mécaniques en fonction de la température "
 
-    Public Function ReducFyAcier(TempA As Decimal) As Decimal
+    Private TableReductionFacteurAcier(,) As Decimal = '{temperature ; reduc fy ; reduc E ; reduc fu}
+        {
+        {20, 1.0, 1.0, 1.25},
+        {100, 1.0, 1.0, 1.25},
+        {200, 1.0, 0.9, 1.25},
+        {300, 1.0, 0.8, 1.25},
+        {400, 1.0, 0.7, 1.0},
+        {500, 0.78, 0.6, 0.78},
+        {600, 0.47, 0.31, 0.47},
+        {700, 0.23, 0.13, 0.23},
+        {800, 0.11, 0.09, 0.11},
+        {900, 0.06, 0.0675, 0.06},
+        {1000, 0.04, 0.045, 0.04},
+        {1100, 0.02, 0.0225, 0.02},
+        {1200, 0.00, 0.000, 0.00}
+        }
+
+    Private TableReductionFacteurBeton(,) As Decimal = '{temperature ; reduc fck pour béton normal ; reduc fck pour béton léger}
+        {
+        {20, 1.0, 1.0},
+        {100, 1.0, 1.0},
+        {200, 0.95, 1.0},
+        {300, 0.85, 1.0},
+        {400, 0.75, 0.88},
+        {500, 0.6, 0.76},
+        {600, 0.45, 0.64},
+        {700, 0.3, 0.52},
+        {800, 0.15, 0.4},
+        {900, 0.08, 0.28},
+        {1000, 0.04, 0.16},
+        {1100, 0.01, 0.04},
+        {1200, 0, 0}
+        }
+
+    Private TableReductionFacteurArmatures(,) As Decimal = '{temperature ; reduc fsk pour acier formé à froid ; reduc fsk pour acier laminé à chaud}
+        {
+        {20, 1.0, 1.0},
+        {100, 1.0, 1.0},
+        {200, 1.0, 1.0},
+        {300, 1.0, 1.0},
+        {400, 0.94, 1.0},
+        {500, 0.67, 0.78},
+        {600, 0.4, 0.47},
+        {700, 0.12, 0.23},
+        {800, 0.11, 0.11},
+        {900, 0.08, 0.06},
+        {1000, 0.05, 0.04},
+        {1100, 0.03, 0.02},
+        {1200, 0, 0}
+        }
+
+    Private Function Recherche_TableReductionFacteur(ByVal TableReductionFacteur As Decimal(,), ByVal TempA As Decimal, indColonne As Integer) As Decimal
+        Dim myReduc As Decimal = 0
+        Dim indLigne As Integer = 0
+        Dim lTrouve As Boolean = False
+
+        TempA = Math.Max(TempA, TableReductionFacteur(0, 0))
+        TempA = Math.Min(TempA, TableReductionFacteur(TableReductionFacteur.GetUpperBound(0), 0))
+
+        Dim test As Integer = TableReductionFacteur.GetUpperBound(0)
+        Dim testbus As Decimal = TableReductionFacteur(TableReductionFacteur.GetUpperBound(0), 0)
+
+        '--( Traitement
+
+        Do
+            lTrouve = TempA <= TableReductionFacteur(indLigne, 0)
+            If Not lTrouve Then indLigne += 1
+        Loop While Not lTrouve And indLigne <= TableReductionFacteur.GetUpperBound(0)
+
+        If indLigne = 0 Then
+            myReduc = TableReductionFacteur(indLigne, indColonne)
+        Else
+            myReduc = TableReductionFacteur(indLigne - 1, indColonne) + (TempA - TableReductionFacteur(indLigne - 1, 0)) / (TableReductionFacteur(indLigne, 0) - TableReductionFacteur(indLigne - 1, 0)) * (TableReductionFacteur(indLigne, indColonne) - TableReductionFacteur(indLigne - 1, indColonne))
+        End If
+
+        Return myReduc
+    End Function
+
+    Public Function ReducFyAcier(ByVal TempA As Decimal) As Decimal
         '--------------------------------------------------------------------------------------------------------------------------------
         '   22/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------------
-        '   Coefficient de réduction de la limite d'élasticité de l'acier en fonction de la température
+        '   Coefficient de réduction de la limite d'élasticité de l'acier en fonction de la température ky,theta
         '--------------------------------------------------------------------------------------------------------------------------------
         '   TempA       [E] :   Température de l'acier
         '--------------------------------------------------------------------------------------------------------------------------------
 
-        '--( Déclaration
+        Dim indColonneReducFy As Integer = 1
 
-        Dim myReduc As Decimal
-
-        '--( Traitement
-
-        myReduc = 1 - TempA / 1200
-
-        Return myReduc
+        Return Recherche_TableReductionFacteur(TableReductionFacteurAcier, TempA, indColonneReducFy)
     End Function
 
 
@@ -37,6 +109,10 @@
         '--------------------------------------------------------------------------------------------------------------------------------
         '   TempA       [E] :   Température de l'acier
         '--------------------------------------------------------------------------------------------------------------------------------
+
+        Dim indColonneReducEy As Integer = 2
+
+        Return Recherche_TableReductionFacteur(TableReductionFacteurAcier, TempA, indColonneReducEy)
 
     End Function
 
@@ -50,10 +126,57 @@
         '   TempA       [E] :   Température de l'acier
         '--------------------------------------------------------------------------------------------------------------------------------
 
+        Dim indColonneReducFu As Integer = 3
+
+        Return Recherche_TableReductionFacteur(TableReductionFacteurAcier, TempA, indColonneReducFu)
+
+    End Function
+
+    Public Function ReducFckBeton(TempA As Decimal, lBetonLeger As Boolean) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Coefficient de réduction de la résistance ultime à la traction de l'acier en fonction de la température
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier
+        '   lBetonLeger [E] :   Indique si on est en présence d'un béton léger (True) ou non (False)
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        Dim indColonneReducFck As Integer
+
+        If Not lBetonLeger Then
+            indColonneReducFck = 1
+        Else
+            indColonneReducFck = 2
+        End If
+
+        Return Recherche_TableReductionFacteur(TableReductionFacteurBeton, TempA, indColonneReducFck)
+
+    End Function
+
+    Public Function ReducFskArmatures(TempA As Decimal, lArmatureFormeeAFroid As Boolean) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   22/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Coefficient de réduction de la résistance ultime à la traction de l'acier en fonction de la température
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   TempA       [E] :   Température de l'acier
+        '   lBetonLeger [E] :   Indique si on est en présence d'un béton léger (True) ou non (False)
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        Dim indColonneReducFsk As Integer
+
+        If lArmatureFormeeAFroid Then
+            indColonneReducFsk = 1
+        Else
+            indColonneReducFsk = 2
+        End If
+
+        Return Recherche_TableReductionFacteur(TableReductionFacteurArmatures, TempA, indColonneReducFsk)
+
     End Function
 
 #End Region
-
 
 #Region " Courbe feu iso "
 
@@ -91,7 +214,96 @@
         '   zTranches   [S] :   Position z de la mi-epaisseur de chaque tranche
         '-------------------------------------------------------------------------------------------------------------------------------------------------
 
+        If lGeneratUN Then
+            If EpDalle <= 60 / 1000 Then 'épaisseur des tranches constante sur les 60 premiers mm
 
+                If Math.Floor(EpDalle * 1000 / 5) = EpDalle * 1000 / 5 Then
+                    nbTranches = Math.Floor(EpDalle * 1000 / 5)  'division euclidienne 
+                Else
+                    nbTranches = Math.Floor(EpDalle * 1000 / 5) + 1 'division euclidienne 
+                End If
+
+                ReDim EpTranches(nbTranches - 1)
+
+                For i As Integer = 0 To nbTranches - 2
+                    EpTranches(i) = 5 / 1000
+                Next
+                EpTranches(nbTranches - 1) = EpDalle - (nbTranches - 1) * 5 / 1000
+
+            ElseIf EpDalle <= 80 / 1000 Then
+                nbTranches = 13
+
+                ReDim EpTranches(nbTranches - 1)
+
+                For i As Integer = 0 To nbTranches - 2
+                    EpTranches(i) = 5 / 1000
+                Next
+                EpTranches(nbTranches - 1) = EpDalle - (nbTranches - 1) * 5 / 1000
+
+            Else
+                nbTranches = 14
+
+                ReDim EpTranches(nbTranches - 1)
+
+                For i As Integer = 0 To nbTranches - 3
+                    EpTranches(i) = 5 / 1000
+                Next
+
+                EpTranches(nbTranches - 2) = 20 / 1000
+
+                EpTranches(nbTranches - 1) = EpDalle - (nbTranches - 2) * 5 / 1000 - 20 / 1000
+            End If
+
+        Else
+
+            If EpDalle <= 2.5 / 1000 Then
+
+                nbTranches = 1
+
+                ReDim EpTranches(nbTranches - 1)
+
+                EpTranches(0) = EpDalle
+
+            ElseIf EpDalle <= 10 / 1000 Then
+
+                nbTranches = 2
+
+                ReDim EpTranches(nbTranches - 1)
+
+                EpTranches(0) = 2.5 / 1000
+                EpTranches(1) = EpDalle - 2.5 / 1000
+
+            Else
+
+                If Math.Floor(EpDalle * 1000 / 10) = EpDalle * 1000 / 10 Then
+                    nbTranches = Math.Floor(EpDalle * 1000 / 10) + 1  'division euclidienne 
+                Else
+                    nbTranches = Math.Floor(EpDalle * 1000 / 10) + 2 'division euclidienne 
+                End If
+
+                nbTranches = Math.Min(nbTranches, 16) '16 tranches max
+
+                ReDim EpTranches(nbTranches - 1)
+
+                EpTranches(0) = 2.5 / 1000
+                EpTranches(1) = 7.5 / 1000
+
+                For i As Integer = 2 To nbTranches - 2
+                    EpTranches(i) = 10 / 1000
+                Next
+
+                EpTranches(nbTranches - 1) = EpDalle - (nbTranches - 2) * 10 / 1000
+
+            End If
+        End If
+
+        ReDim zTranches(nbTranches - 1)
+
+        zTranches(0) = EpTranches(0)
+
+        For i As Integer = 1 To nbTranches - 1
+            zTranches(i) = zTranches(i - 1) + EpTranches(i)
+        Next
 
     End Sub
 
@@ -110,11 +322,11 @@
         '--( Initialisation - Déclaration
 
         Dim TabTempR30() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
-        Dim TabTempR60() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
-        Dim TabTempR90() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
-        Dim TabTempR120() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
-        Dim TabTempR180() As Decimal = {535, 470, 415, 350, 300, 250, 210, 180, 160, 140, 125, 110, 80, 60}
-        Dim TabTempR240() As Decimal = {1200, 1200, 1200, 1200, 1200, 740, 700, 670, 645, 550, 520, 495, 395, 305}
+        Dim TabTempR60() As Decimal = {705, 642, 581, 525, 469, 421, 374, 327, 289, 250, 200, 175, 140, 100}
+        Dim TabTempR90() As Decimal = {1200, 738, 681, 627, 571, 519, 473, 428, 387, 345, 294, 271, 220, 160}
+        Dim TabTempR120() As Decimal = {1200, 1200, 754, 697, 642, 591, 542, 493, 454, 415, 369, 342, 270, 210}
+        Dim TabTempR180() As Decimal = {1200, 1200, 1200, 1200, 738, 689, 635, 590, 549, 508, 469, 430, 330, 260}
+        Dim TabTempR240() As Decimal = {1200, 1200, 1200, 1200, 1200, 740, 700, 670, 645, 550, 520, 495, 395, 305} '1200 correspond à la valeur max quand le tableau n'indique pas de valeur dans l EC
 
         Dim TabTempC() As Decimal = Nothing
 
@@ -153,6 +365,38 @@
         '   TempDalle   [S] :   Température dans chaque couche de la dalle
         '-------------------------------------------------------------------------------------------------------------------------------------------------
 
+        '--( Initialisation - Déclaration
+
+        Dim TabTempR30() As Decimal = {675, 513, 363, 260, 187, 135, 101, 76, 59, 46, 37, 31, 27, 24, 23, 22}
+        Dim TabTempR60() As Decimal = {831, 684, 531, 418, 331, 263, 209, 166, 133, 108, 89, 73, 61, 51, 44, 38}
+        Dim TabTempR90() As Decimal = {912, 777, 629, 514, 423, 349, 290, 241, 200, 166, 138, 117, 100, 86, 74, 65}
+        Dim TabTempR120() As Decimal = {967, 842, 698, 583, 491, 415, 352, 300, 256, 218, 186, 159, 137, 119, 105, 94}
+        Dim TabTempR180() As Decimal = {1042, 932, 797, 685, 591, 514, 448, 392, 344, 303, 267, 236, 209, 186, 166, 149}
+        Dim TabTempR240() As Decimal = {1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200, 1200} ' Le calcul de R240 n'est pas applicable pour cette génération
+
+        Dim TabTempC() As Decimal = Nothing
+
+        '--( Sélection de la table
+
+        Select Case TimeStep
+            Case 30 : TabTempC = TabTempR30
+            Case 60 : TabTempC = TabTempR60
+            Case 90 : TabTempC = TabTempR90
+            Case 120 : TabTempC = TabTempR120
+            Case 180 : TabTempC = TabTempR180
+            Case 240 : TabTempC = TabTempR240
+        End Select
+
+        '--( Transfert des valeurs
+
+        ReDim TempDalle(nbTranches - 1)
+
+        For iTn As Integer = 0 To nbTranches - 1
+
+            TempDalle(iTn) = TabTempC(iTn)
+
+        Next
+
     End Sub
 
     Public Sub TemperatureDalleTabulee(TimeStep As Decimal, lGeneratUN As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
@@ -162,11 +406,16 @@
         '   Calcul des température de la dalle par la méthode tabulée
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   TimeStep    [E] :   Temps de calcul
-        '   lGeneratUN  [E] :   Indique si première génération de l'Eurocode ou non
+        '   lGeneratUN  [E] :   Indique si première génération de l'Eurocode (True) ou non (False)
         '   nbTranches  [E] :   Nombre de tranches dans la dalle
         '   TempDalle   [S] :   Température dans chaque couche de la dalle
         '-------------------------------------------------------------------------------------------------------------------------------------------------
 
+        If lGeneratUN Then
+            TemperatureDalleTabuleeGeneration1(TimeStep, nbTranches, TempDalle)
+        Else
+            TemperatureDalleTabuleeGeneration2(TimeStep, nbTranches, TempDalle)
+        End If
 
     End Sub
 

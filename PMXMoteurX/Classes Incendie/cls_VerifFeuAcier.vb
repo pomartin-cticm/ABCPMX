@@ -137,8 +137,8 @@
         '    La classe des sections ne dépend pas du chargement (il n'y a pas d'effort axial) ni des contraintes.
         '    On classe donc les sections une fois pour toute, en dehors de la boucle sur les combinaisons de calcul
 
-        ClasseP = myBeam.Section.ClasseSection(zANP0, zANE0, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1)
-        ClasseM = myBeam.Section.ClasseSection(zANP0, zANE0, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1)
+        ClasseP = myBeam.Section.ClasseSection(zANP0, zANE0, True, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, 0, True)
+        ClasseM = myBeam.Section.ClasseSection(zANP0, zANE0, False, myBeam.Section.lSlimFloor, myBeam.Section.lEnrobage, lGeneration1, 0, True)
 
         '--( Boucle sur TimeSteps
 

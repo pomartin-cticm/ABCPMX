@@ -9457,7 +9457,7 @@ Module Mod_NoteCalcul
 
         InitialiseLigneTableau(NCOL, HLIGNE)
 
-        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(iStep)))
+        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
         AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.TempAStep(iStep), Enu_TypeVariable.SansType, 3, 2, False) & " °C")
         AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
         AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))

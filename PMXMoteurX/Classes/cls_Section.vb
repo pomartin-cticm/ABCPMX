@@ -2309,7 +2309,7 @@ Public Class cls_Section
     ''' <param name="lG1_EN">indique si on réalise le calcul en considérant la 1ere génération de l'eurocode ou non</param>
     ''' <param name="td">Optionel: indique l'épaisseur totale de la dalle (si pertinent)</param>
     ''' <returns></returns>
-    Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean, lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, lG1_EN As Boolean, Optional td As Decimal = 0) As Integer
+    Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean, lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, lG1_EN As Boolean, Optional td As Decimal = 0, Optional lCalculFeu As Boolean = False) As Integer
 
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
@@ -2348,7 +2348,7 @@ Public Class cls_Section
         classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfsup, tfsup, epsilon_fsup) 'calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
 
         If lBetonSlimfloor Then 'reduction possible dans le cas où on a une section slimfloor et où on prend en compte le béton
-            If Me.typeSection = cls_Section.Enum_TypeSection.IFB_B Or Me.typeSection = cls_Section.Enum_TypeSection.IFB_Bmixte Then
+            If Me.TypeSection = cls_Section.Enum_TypeSection.IFB_B Or Me.TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte Then
                 If td - hec >= Math.Max(50 / 1000, Me.ProfilA.Plat_b / 6) Then classeSemellesSup = Math.Min(classeSemellesSup, 2)
             Else
                 If td - hec >= Math.Max(50 / 1000, Me.ProfilA.Bfs / 6) Then classeSemellesSup = Math.Min(classeSemellesSup, 2)
@@ -2361,7 +2361,7 @@ Public Class cls_Section
         classeSemellesInf = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfinf, tfinf, epsilon_finf) 'calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
 
         ' --> Calcul classe semelle plat inférieur dans le cas d'un SFB
-        If Me.typeSection = cls_Section.Enum_TypeSection.SFB Or Me.typeSection = cls_Section.Enum_TypeSection.SFBmixte Then
+        If Me.TypeSection = cls_Section.Enum_TypeSection.SFB Or Me.TypeSection = cls_Section.Enum_TypeSection.SFBmixte Then
             epsilon_platSFB = Me.Epsilon_Spd
             classePlatInfSFB = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cplat, tplat, epsilon_platSFB) 'calcul la classe du plat soudé dans le cas des sections slimfloors en fonction de si elle est comprimée et du ratio c/t
         Else

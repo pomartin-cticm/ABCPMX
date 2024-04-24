@@ -144,6 +144,8 @@
 
         '--( Préparation du maillage de la dalle
 
+        EN_Feu.PrepareMaillageDalleTabulee(EpDalle, myBeam.Param.lGeneration1, NbTranches, EpTranche, zTranche)
+
         '--( Boucle sur TimeSteps
 
         For iSTep = 0 To Me.NbStep - 1
