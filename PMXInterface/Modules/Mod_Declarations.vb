@@ -340,6 +340,7 @@ Public Module Mod_Declarations
         Moment
         Rigidite
         SansType
+        Temperature
     End Enum
 
     Public Enum EnuFenetres
@@ -511,6 +512,7 @@ Public Module Mod_Declarations
     '--> Séparateur dans les fichiers
     Public SEPARATEURS() As String = {" ", "=", ";"}
 
+    Public SEPDECIMAL As String = Mid(Format(1.1, "0.0"), 2, 1)
 #End Region
 
 #Region " Note de calcul "

@@ -490,7 +490,8 @@ Module Mod_Outils
     ''' <param name="lAbsolu">Indique si la valeur doit être affiché comme une valeur absolue</param>
     ''' <returns></returns>
     Public Function GetStringInUnit(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
-                                    ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal lUnite As Boolean, Optional ByVal lAbsolu As Boolean = False) As String
+                                    ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal lUnite As Boolean,
+                                    Optional ByVal lAbsolu As Boolean = False) As String
 
         '--[ Déclarations
 
@@ -640,6 +641,233 @@ Module Mod_Outils
         End If
 
     End Function
+
+    Public Function GetStringInUnitN(ByVal Valeur As Decimal, ByVal Type As Enu_TypeVariable,
+                                     ByVal nbSign As Integer, ByVal nbDigitMax As Integer, ByVal lUnite As Boolean,
+                                     Optional ByVal lSupZero As Boolean = False) As String
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   24/04/24 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Gestion de l'affichage des chaines numériques sous forme de chaine de caractères
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Valeur          [E] :   Valeur numérique à afficher
+        '   Type            [E] :   Type de la valeur (pour les unités)
+        '   nbSign          [E] :   Nombre de chiffres caractéristiques
+        '   nbDigitMax      [E] :   Nombre maxi de chiffres après la virgule
+        '   lUnite          [E] :   Indique si on affiche l'unité
+        '   lSupZero        [E] :   Indique si on supprime les zéros non significatifs après la virgule
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        '--[ Déclarations
+
+        Dim ValeurU As Double
+        Dim kUnitU As Double
+        'Dim lUniteReconnue As Boolean = true
+        Dim MyFormat As String
+        Dim Unite As String = ""
+
+        '--[ Traitement
+
+        PrepareAffichageUnite(Type, kUnitU, Unite)
+
+        Dim Chaine As String
+
+        ValeurU = Valeur / kUnitU
+        MyFormat = GetFormatSignificatifN(ValeurU, nbSign, nbDigitMax)
+
+        If lUnite Then
+            Chaine = Format(ValeurU, MyFormat) & Unite
+        Else
+            Chaine = Format(ValeurU, MyFormat)
+        End If
+
+        If lSupZero Then SupprimeZero(Chaine)
+
+        Return Chaine
+
+    End Function
+
+    Private Sub PrepareAffichageUnite(ByVal Type As Enu_TypeVariable, ByRef kUnitU As Double, ByRef Unite As String)
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   24/04/24 :  Création - POM - V1.00
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Gestion de l'affichage des chaines numériques sous forme de chaine de caractères
+        '--------------------------------------------------------------------------------------------------------------------------------
+        '   Type            [E] :   Type de la valeur (pour les unités)
+        '   kUnit           [S] :   Coefficient pour l'affichage de la valeur dans la bonne unité
+        '   Unite           [S] :   Symbole de l'unité
+        '--------------------------------------------------------------------------------------------------------------------------------
+
+        Const SEP As String = " "
+
+        Select Case Type
+
+            Case Enu_TypeVariable.Longueur
+
+                kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+            Case Enu_TypeVariable.LongueurCM
+
+                kUnitU = LogicielInfo.Transfert_Longueur(1)
+                Unite = SEP & LogicielInfo.Unit_Longueur(1)
+
+            Case Enu_TypeVariable.Dimension
+
+                kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+                Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+
+            Case Enu_TypeVariable.Rigidite
+
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+            Case Enu_TypeVariable.Effort
+
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+
+            Case Enu_TypeVariable.ChargeSurfacique
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\="
+
+            Case Enu_TypeVariable.ForceRepartie
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+            Case Enu_TypeVariable.Frequence
+                kUnitU = 1
+                Unite = SEP & "Hz"
+
+            Case Enu_TypeVariable.Moment
+
+                kUnitU = LogicielInfo.Transfert_Moment(LogicielOptions.IndUnitMoment)
+                Unite = SEP & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment)
+
+            Case Enu_TypeVariable.ModuleY
+                kUnitU = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
+                Unite = SEP & LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
+
+            Case Enu_TypeVariable.Contrainte
+                kUnitU = LogicielInfo.Transfert_Contraintes(LogicielOptions.IndUnitContraintes)
+                Unite = SEP & LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
+
+            Case Enu_TypeVariable.ContrainteMPa
+
+                kUnitU = 1
+                Unite = SEP & "MPa"
+
+            Case Enu_TypeVariable.ContrainteGPa
+
+                kUnitU = 1000
+                Unite = SEP & "GPa"
+
+            'Case Enu_TypeVariable.Degre
+
+            '    kUnitU = 1
+            '    Unite = "°"
+
+            'Case Enu_TypeVariable.RadianToDegre
+
+            '    kUnitU = Math.PI / 180
+            '    Unite = "°"
+
+            Case Enu_TypeVariable.SansType
+
+                kUnitU = 1
+                Unite = ""
+
+            Case Enu_TypeVariable.InertieCM4
+
+                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 4
+                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+4\="
+
+            Case Enu_TypeVariable.InertieWCM6
+
+                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 6
+                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+6\="
+
+            Case Enu_TypeVariable.Inertie
+
+                kUnitU = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
+                Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
+
+            Case Enu_TypeVariable.ModuleCM3
+
+                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 3
+                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+3\="
+
+            Case Enu_TypeVariable.AireCM2
+
+                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 2
+                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+2\="
+
+            Case Enu_TypeVariable.AireMM2
+
+                kUnitU = LogicielInfo.Transfert_Longueur(0) ^ 2
+                Unite = SEP & LogicielInfo.Unit_Longueur(0) & "\+2\="
+
+            Case Enu_TypeVariable.Millimetre
+
+                kUnitU = LogicielInfo.Transfert_Longueur(0)
+                Unite = SEP & LogicielInfo.Unit_Longueur(0)
+
+            Case Enu_TypeVariable.Temperature
+
+                kUnitU = 1
+                Unite = SEP & "°C"
+
+        End Select
+
+    End Sub
+
+    Private Sub SupprimeZero(ByRef Chaine As String)
+        '------------------------------------------------------------------------------------------------
+        '   08/03/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------
+        '   Supprime les zéros terminant les valeurs décimales
+        '------------------------------------------------------------------------------------------------
+        '   Chaine      [E] :   Chaine de caractères à traiter
+        '------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim jSep As Integer
+        Dim NbCar As Integer
+        Dim lCont As Boolean
+        Dim Car As String
+        Dim iSup As Integer
+        Const sZERO As String = "0"
+
+        '--( Initialisation
+
+        NbCar = Chaine.Length
+        iSup = NbCar
+
+        '--( Recherche du séparateur decimal
+
+        'jSep = InStr(Chaine, MyConst.SEPDECIMAL)
+        ' jSep = Chaine.IndexOf(MyConst.SEPDECIMAL)
+        jSep = Chaine.IndexOf(SEPDECIMAL)
+
+        '--( Traitement
+
+        If jSep > 0 And NbCar > 0 Then
+            Car = Chaine.Substring(iSup - 1, 1)
+            lCont = (Car = sZERO)
+            Do While lCont And iSup > jSep + 1
+                iSup -= 1
+                Car = Chaine.Substring(iSup - 1, 1)
+                lCont = (Car = sZERO)
+            Loop
+
+            If iSup < NbCar Then
+                If iSup = jSep + 1 Then iSup = jSep
+                Chaine = Chaine.Remove(iSup)
+            End If
+        End If
+
+    End Sub
 
     ''' <summary>
     ''' Renvoie la chaine à afficher en fonction du type de variable (sans les unités)

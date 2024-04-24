@@ -9417,7 +9417,7 @@ Module Mod_NoteCalcul
 
         '--( Initialisation
 
-        NCOL = 4
+        NCOL = 7
 
         ReDim LargCol(NCOL - 1)
 
@@ -9436,8 +9436,11 @@ Module Mod_NoteCalcul
 
         AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
         AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-a\=")
-        AddCelluleFond(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
-        AddCelluleFond(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        AddCelluleFond(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+        AddCelluleFond(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
+        AddCelluleFond(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        AddCelluleFond(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LT\=")
 
     End Sub
 
@@ -9455,12 +9458,28 @@ Module Mod_NoteCalcul
         '   LargCol     [E] :   Largeur des colonnes du tab
         '-----------------------------------------------------------------------------------------------------------------
 
+        '--( Déclaration
+
+        Dim kY, kE As Decimal
+        Dim EN_Feu As New cls_EurocodesFeu
+
+        '--( Initialisation
+
+        kY = EN_Feu.ReducFyAcier(myVerifFeu.TempAStep(iStep))
+        kE = EN_Feu.ReducEyAcier(myVerifFeu.TempAStep(iStep))
+
+        '--( Affichage
+
         InitialiseLigneTableau(NCOL, HLIGNE)
 
         AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
-        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.TempAStep(iStep), Enu_TypeVariable.SansType, 3, 2, False) & " °C")
-        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
-        AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnit(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempAStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kY, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kE, Enu_TypeVariable.SansType, 3, 2, False))
+
+        AddCellule(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
 
     End Sub
 
@@ -9642,7 +9661,7 @@ Module Mod_NoteCalcul
 
         AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
         AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
-
+        AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereLTB(myStep), "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"), True)
 
     End Sub
 

@@ -2309,7 +2309,9 @@ Public Class cls_Section
     ''' <param name="lG1_EN">indique si on réalise le calcul en considérant la 1ere génération de l'eurocode ou non</param>
     ''' <param name="td">Optionel: indique l'épaisseur totale de la dalle (si pertinent)</param>
     ''' <returns></returns>
-    Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean, lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, lG1_EN As Boolean, Optional td As Decimal = 0, Optional lCalculFeu As Boolean = False) As Integer
+    Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean,
+                                  lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, lG1_EN As Boolean, Optional td As Decimal = 0,
+                                  Optional lCalculFeu As Boolean = False) As Integer
 
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
@@ -2320,7 +2322,8 @@ Public Class cls_Section
         '   zANE                [E] :   Position de l'ANE (compté algébriquement depuis la face inférieure de la dalle béton)
         '   lFlexionPositive    [E] :   Indique si le calcul se fait en considérant une flexion positive (True) ou non (False)
         '   lG1_EN              [E] :   Indique si le calcul de la classe se fait selon les Eurocodes actuels (True) ou selon la deuxieme génération d'Eurocodes (False)
-        '   td                  [E] :  Epaisseur totale de la dalle (hors renformis)
+        '   td                  [E] :   Epaisseur totale de la dalle (hors renformis)
+        '   lCalculFeu          [E] :   Indique si calcul au feu
         '----------------------------------------------------------------------------------------------------------
 
         Dim classeSemellesSup, classeAme, classeSemellesInf, classePlatInfSFB, classeSectionTotale As Integer
@@ -2330,7 +2333,6 @@ Public Class cls_Section
         Dim epsilon_finf As Decimal = Epsilon_Inf
         Dim epsilon_platSFB As Decimal = 0
         ' Dim alpha, psi As Decimal
-
 
         '---------------------------------------------
         '---------------------------------------------
@@ -2355,8 +2357,8 @@ Public Class cls_Section
             End If
         End If
 
-
         ' --> Calcul classe semelle inférieure
+
         lSemelleInfComprimeeLoc = Not lFlexionPositive 'on regarde si la semelle inférieure du profilé est comprimée
         classeSemellesInf = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfinf, tfinf, epsilon_finf) 'calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
 
@@ -2368,14 +2370,11 @@ Public Class cls_Section
             classePlatInfSFB = 0
         End If
 
-
         ' --> Calcul classe âme
         classeAme = Me.ClasseAme(lFlexionPositive, zANP, lG1_EN)
 
         ' --> Calcul classe section totale 
         classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, Math.Max(classePlatInfSFB, classeAme)))
-
-
 
         If classeSectionTotale = 3 Then
 

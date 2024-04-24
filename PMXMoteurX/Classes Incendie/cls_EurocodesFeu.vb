@@ -98,6 +98,7 @@
         Dim indColonneReducFy As Integer = 1
 
         Return Recherche_TableReductionFacteur(TableReductionFacteurAcier, TempA, indColonneReducFy)
+
     End Function
 
 
@@ -115,7 +116,6 @@
         Return Recherche_TableReductionFacteur(TableReductionFacteurAcier, TempA, indColonneReducEy)
 
     End Function
-
 
     Public Function ReducFuAcier(TempA As Decimal) As Decimal
         '--------------------------------------------------------------------------------------------------------------------------------
