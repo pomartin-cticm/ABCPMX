@@ -306,7 +306,7 @@
 
             x0 = myBeam.xPositionAppui(True, iTravee)
 
-            For jM = 0 To myBeam.NbMaintiens(iTravee) - 1
+            For jM = 0 To myBeam.Maintiens(iTravee).Count - 1
 
                 lMaintien = True
 

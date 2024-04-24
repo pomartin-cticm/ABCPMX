@@ -324,7 +324,6 @@ Public Class Frm_Maintiens
 
             For i_travee As Integer = 0 To MyPoutreLoc.IndiceTraveeConsoleDroite
 
-
                 If MyPoutreLoc.Maintiens(i_travee).Count <> .Maintiens(i_travee).Count Then
                     lModif = True
                     .Maintiens(i_travee) = MyPoutreLoc.Maintiens(i_travee)
