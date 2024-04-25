@@ -201,9 +201,52 @@
 
 #Region " Echauffement tabulé de la dalle "
 
+    Public Function EpaisseurEfficaceDalleMixte(td As Decimal, myBac As cls_Bac) As Decimal
+        '----------------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Renvoie l'épaisseur efficace d'une dalle mixte selon EN 1994-1-2:2005; D.4(1)
+        '----------------------------------------------------------------------------------------------------------------
+        '   td      [E] :   Epaisseur totale de la dalle
+        '   myBac   [E] :   Bac
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim hEff As Decimal
+
+        Dim h1, h2 As Decimal
+        Dim L1, L2, L3 As Decimal
+
+        '--( Initialisation
+
+        h2 = myBac.Hp
+        h1 = td - h2
+        L1 = myBac.Bt
+        L2 = myBac.Bb
+        L3 = myBac.Ep - L1
+
+        '--( Calcul
+
+        If IsGreater(h1, 0.04) Then
+            '# Cas épaisseur de dalle au dessus bac > 40 mm (cela doit etre le cas général)
+            If IsSmallerOrEqual(h2 / h1, 1.5) Then
+                hEff = h1 + 0.5 * h2 * (L1 + L2) / (L1 + L3)
+            Else
+                hEff = h1 * (1 + 0.75 * (L1 + L2) / (L1 + L3))
+            End If
+        Else
+            '# Pas possible en dessous de 40 mm
+            MsgBox("stiffness of the slab above the deck is less than 40 mm [cls_EurocodeFeu/EpaisseurEfficaceDalleMixte]")
+        End If
+
+        Return hEff
+
+    End Function
+
     Public Sub PrepareMaillageDalleTabulee(EpDalle As Decimal, lGeneratUN As Decimal, ByRef nbTranches As Integer, ByRef EpTranches() As Decimal, ByRef zTranches() As Decimal)
         '-------------------------------------------------------------------------------------------------------------------------------------------------
-        '   23/04/24 :  Création
+        '   23/04/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   Discrétisation de la dalle en tranches pour le calcul tabulé des températures
         '-------------------------------------------------------------------------------------------------------------------------------------------------
@@ -309,7 +352,7 @@
 
     Public Sub TemperatureDalleTabuleeGeneration1(TimeStep As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
         '-------------------------------------------------------------------------------------------------------------------------------------------------
-        '   23/04/24 :  Création
+        '   23/04/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   Calcul des température de la dalle par la méthode tabulée
         '   Selon EN 1994-1-2:2005 Tableau D.5
@@ -355,7 +398,7 @@
 
     Public Sub TemperatureDalleTabuleeGeneration2(TimeStep As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
         '-------------------------------------------------------------------------------------------------------------------------------------------------
-        '   23/04/24 :  Création
+        '   23/04/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   Calcul des température de la dalle par la méthode tabulée
         '   Selon EN 1994-1-2:2024 Tableau B.6
@@ -401,7 +444,7 @@
 
     Public Sub TemperatureDalleTabulee(TimeStep As Decimal, lGeneratUN As Decimal, nbTranches As Integer, ByRef TempDalle() As Decimal)
         '-------------------------------------------------------------------------------------------------------------------------------------------------
-        '   23/04/24 :  Création
+        '   23/04/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------------------------------------
         '   Calcul des température de la dalle par la méthode tabulée
         '-------------------------------------------------------------------------------------------------------------------------------------------------
