@@ -1,4 +1,6 @@
-﻿Public Class cls_VerifFeuAcier
+﻿Imports Microsoft.VisualBasic.Logging
+
+Public Class cls_VerifFeuAcier
 
 #Region " Declaration "
 
@@ -10,6 +12,7 @@
 
     Public CritereM() As cls_Critere                    ' Resistance à la flexion
     Public CritereV() As cls_Critere                    ' Resistance effort tranchant
+    Public CritereVb() As cls_Critere                   ' Resistance effort tranchant
     Public CritereMV() As cls_Critere                   ' Résistance à l'interacion MV
     Public CritereLTB() As cls_Critere                  ' Résistance au déversement
 
@@ -20,6 +23,9 @@
     Public RStep As Integer                             ' Indice du dernier pas de calcul de la table TimeStep pour laquelle tous les critères sont OK
 
     Public TempAStep() As Decimal                       ' Température de l'acier pour les Steps
+
+    Public ElancementW As Decimal                       ' Elancement de l'âme 
+    Public ElancementWMax As Decimal                    ' Limite d'elancement de l'âme pour le voilement par cisaillement
 
 #End Region
 
@@ -43,6 +49,7 @@
 
         ReDim CritereM(Me.NbStep - 1)
         ReDim CritereV(Me.NbStep - 1)
+        ReDim CritereVb(Me.NbStep - 1)
         ReDim CritereMV(Me.NbStep - 1)
         ReDim CritereLTB(Me.NbStep - 1)
         ReDim AlphaCrLTB(Me.NbStep - 1, NbCombi)
@@ -50,6 +57,7 @@
         For i As Integer = 0 To Me.NbStep - 1
             Me.CritereM(i) = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
             Me.CritereV(i) = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
+            Me.CritereVb(i) = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
             Me.CritereMV(i) = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
             Me.CritereLTB(i) = New cls_Critere(NbNodes, NbCombi, IndDerniereT)
         Next
@@ -104,10 +112,16 @@
         Dim MplRdFeu() As Decimal               ' Moments résistants plastiques aux Time Steps
         Dim MelRdFeu() As Decimal               ' Moments résistants élastiques aux Time Steps
         Dim VplRdFeu() As Decimal               ' Efforts tranchant résistants plastiques aux Time Steps
+        Dim VbRdFeu() As Decimal                ' Efforts tranchant résistants pour le voilement aux Time Steps
 
         Dim ClasseP, ClasseM As Integer         ' Classe des sections sous moment >0 et <0
 
         Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
+
+        Dim AlphaCr As Decimal
+        Dim lOK As Boolean
+
+        Dim lMontantR As Boolean = myBeam.lTraveeConsoleGauche And myBeam.lTraveeConsoleDroite
 
         '--( Initialisation
 
@@ -128,6 +142,7 @@
         ReDim MplRdFeu(Me.NbStep - 1)
         ReDim MelRdFeu(Me.NbStep - 1)
         ReDim VplRdFeu(Me.NbStep - 1)
+        ReDim VbRdFeu(Me.NbStep - 1)
         Me.InitialiseClassPourCalcul(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee)
 
         '# Propriétés à froid
@@ -179,12 +194,14 @@
             '# Réduction des propriétés de l'acier en fct de la température
 
             kReducY = EN_Feu.ReducFyAcier(TempA)
+            kReducE = EN_Feu.ReducEyAcier(TempAStep(iSTep))
 
             '# Résistance de la section 
 
             VplRdFeu(iSTep) = kReducY * VRd0
             MplRdFeu(iSTep) = kReducY * MplRd0
             MelRdFeu(iSTep) = kReducY * MelRd0
+            VbRdFeu(iSTep) = myBeam.Section.VbRdFeu(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW, lMontantR, kReducY, kReducE)
 
         Next
 
@@ -200,6 +217,10 @@
 
             myBeam.CombiA_ELF.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, False)
 
+            '## Alpha critique
+
+            CalculAlphaCritiqueN(myBeam, iCombi, MEd, AlphaCr, lOK)
+
             For iSTep = 0 To Me.NbStep - 1
                 '## Vérification en flexion
 
@@ -209,16 +230,18 @@
 
                 RunCritereEffortTranchant(myBeam, iCombi, iSTep, VEd, VplRdFeu(iSTep))
 
-                '## Vérification interaction MV
-
                 '## Vérification résistance au déversement
+
+                RunCritereEffortTranchantVoilement(myBeam, iCombi, iSTep, VEd, VbRdFeu(iSTep))
+
+                '## Vérification interaction MV
 
                 '## Vérification au voilement par cisaillement
 
                 kReducY = EN_Feu.ReducFyAcier(TempAStep(iSTep))
                 kReducE = EN_Feu.ReducEyAcier(TempAStep(iSTep))
 
-                RunCritereDeversement(myBeam, iCombi, iSTep, MEd, kReducY, kReducE, MplRdFeu(iSTep))
+                RunCritereDeversement(myBeam, iCombi, iSTep, MEd, AlphaCr, kReducY, kReducE, MplRdFeu(iSTep))
 
             Next
 
@@ -322,9 +345,9 @@
         End Select
         Select Case ClasseM
             Case 1, 2
-                MRdm = MplRd
+                MRdM = MplRd
             Case 3
-                MRdm = MelRd
+                MRdM = MelRd
         End Select
 
         '--> Traitement
@@ -356,7 +379,7 @@
 
     Private Sub RunCritereEffortTranchant(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer, VEd(,) As Decimal, VRd As Decimal, Optional lBuckling As Boolean = False)
         '----------------------------------------------------------------------------------------------------------
-        '   10/10/23 :  Création - GUD
+        '   25/04/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU de la résistance à l'effort tranchant 
         '----------------------------------------------------------------------------------------------------------
@@ -402,12 +425,61 @@
 
     End Sub
 
+    Private Sub RunCritereEffortTranchantVoilement(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer, VEd(,) As Decimal, VbRd As Decimal)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'effort tranchant pour le voilement
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iStep       [E] :   Indice du pas de calcul
+        '   VEd         [E] :   Table des efforts tranchants le long de la barre
+        '   VRd         [E] :   Effort tranchant résistant (plastique ou voilement) de la barre
+        '   lBukling    [E] :   Indique si critere de résistance au voilement par cisaillement
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Initialisation
+
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        Me.ElancementW = myBeam.Section.ProfilA.ElancementAme
+        Me.ElancementWMax = 72 * myBeam.Section.Epsilon_W * 0.85 / myBeam.Param.EtaW
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
+                For k = iDebK To iFinK
+
+                    Me.CritereVb(iStep).EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VbRd)
+
+                Next
+            Next
+        Next
+
+    End Sub
+
 #End Region
 
 #Region " Vérifications de la résistance au déversement "
 
     Private Sub RunCritereDeversement(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer, MEd(,) As Decimal,
-                                      kReducY As Decimal, kReducE As Decimal, MRd As Decimal)
+                                      AlphaCr As Decimal, kReducY As Decimal, kReducE As Decimal, MRd As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   07/12/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -417,6 +489,7 @@
         '   iCombi          [E] :   Indice de la combinaison
         '   iStep           [E] :   Indice du pas de calcul
         '   MEd             [E] :   Table des moments fléchissants le long de la poutre
+        '   AlphaCr         [E] :   Coefficient d'amplification critique (ne dépend pas du time step)
         '   kReducY         [E] :   Coefficient de réduction de fy / température    
         '   kReducE         [E] :   Coefficient de réduction de E / température    
         '   MRd             [E] :   Moment résistant de la section à froid
@@ -424,8 +497,7 @@
 
         '--> Déclaration
 
-        Dim AlphaCr As Decimal
-        Dim lOK As Boolean
+        '        Dim lOK As Boolean
         Dim iDebTrav As Integer = myBeam.IndicePremiereTravee
         Dim iFinTrav As Integer = myBeam.IndiceDerniereTravee
         Dim iTrav, iNode As Integer
@@ -444,7 +516,6 @@
 
         '--> Calcul Alpha Critique
 
-        CalculAlphaCritiqueN(myBeam, iCombi, MEd, AlphaCr, lOK)
         Me.AlphaCrLTB(iStep, iCombi) = AlphaCr
 
         '--> Vérification par travée
@@ -469,14 +540,19 @@
             Mcr = AlphaCr * MEdmax
             'McrLTB(iCombi, iTrav) = Mcr
 
-            '# Elancement réduit
+            If IsGreater(kReducE, 0) Then
+                '# Elancement réduit
 
-            LambdaBLT = Math.Sqrt(kReducY * MRk / (kReducE * Mcr))
+                LambdaBLT = Math.Sqrt(kReducY * MRk / (kReducE * Mcr))
 
-            '# Coefficient de réduction
+                '# Coefficient de réduction
 
-            AlphaLT = EN1993.GetAlphaLTFromProfil(myBeam.Section.ProfilA)
-            KhiLT = EN1993.ReductionDeversement(AlphaLT, LambdaBLT)
+                AlphaLT = EN1993.GetAlphaLTFromProfil(myBeam.Section.ProfilA)
+                KhiLT = EN1993.ReductionDeversement(AlphaLT, LambdaBLT)
+
+            Else
+                KhiLT = 0
+            End If
 
             '# Résistance
 

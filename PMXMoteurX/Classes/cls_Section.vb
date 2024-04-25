@@ -1884,7 +1884,7 @@ Public Class cls_Section
 
     Public Function VbRd(GammaM1 As Decimal, EtaW As Decimal, lMontantRigid As Boolean) As Decimal
         '---------------------------------------------------------------------------------------------------------
-        '   xx/xx/23 :  Création - GuD
+        '   01/12/23 :  Création - GuD
         '---------------------------------------------------------------------------------------------------------
         '   Calcul de la résitance au voilement par cisaillement selon EN 1993-1-5
         '---------------------------------------------------------------------------------------------------------
@@ -1907,8 +1907,6 @@ Public Class cls_Section
         '--> Initialisation
 
         k_tau = 5.34
-        'epsilon_w = Math.Sqrt(235 / Me.Acier.f_y.w)
-        'epsilon_w = epsilon_w
         lambda_w = (Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) * (1 / (37.4 * epsilon_w * Math.Sqrt(k_tau)))
 
         khi_w = EN1993.ReductionShearBuckling(lambda_w, EtaW, lMontantRigid)
@@ -1917,17 +1915,43 @@ Public Class cls_Section
 
         Return MyVbRd
 
-        'If lambda_w <= 0.83 / EtaW Then
-        '    khi_w = EtaW
-        'ElseIf lambda_w <= 1.08 Then
-        '    khi_w = 0.83 / lambda_w
-        'Else 'lambda_w>1.08
-        '    If lTwoAdjacentCantilevers Then
-        '        khi_w = 1.37 / (0.7 + lambda_w)
-        '    Else
-        '        khi_w = 0.83 / lambda_w
-        '    End If
-        'End If
+    End Function
+
+    Public Function VbRdFeu(GammaMFeu As Decimal, EtaW As Decimal, lMontantRigid As Boolean, kReducY As Decimal, kReducE As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Calcul de la résitance au voilement par cisaillement selon EN 1993-1-5 en situation d'incendie
+        '---------------------------------------------------------------------------------------------------------
+        '   GammaM1         [E] :   GammaM1
+        '   EtaW            [E] :   Eta
+        '   lMontantRigid   [E] :   Indique si on peut utiliser la colonne montant rigide dans le Tablea 5.3 de l'EN 1993-1-5
+        '   kReducY, kReducE[E] :   Coefficients de réduction de fy et de E respectivement en fct de la température
+        '---------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim lambda_w As Decimal
+        Dim k_tau As Decimal
+        Dim epsilon_w As Decimal = Me.Epsilon_W * 0.85
+        Dim khi_w As Decimal
+        Dim MyVbRd As Decimal
+        Dim EN1993 As New cls_Eurocodes
+
+        '--> Initialisation
+
+        k_tau = 5.34
+        If IsGreater(kReducE, 0) Then
+            lambda_w = (Me.ProfilA.HauteurAmeHw / Me.ProfilA.Tw) * (1 / (37.4 * epsilon_w * Math.Sqrt(k_tau))) * Math.Sqrt(kReducY / kReducE)
+
+            khi_w = EN1993.ReductionShearBuckling(lambda_w, EtaW, lMontantRigid)
+        Else
+            khi_w = 0
+        End If
+
+        MyVbRd = khi_w * Me.ProfilA.HauteurAmeHw * Me.ProfilA.Tw * Me.FyW * kReducY / (Math.Sqrt(3) * GammaMFeu) * kConvMPaPa
+
+        Return MyVbRd
     End Function
 
     Public ReadOnly Property AireAv As Decimal

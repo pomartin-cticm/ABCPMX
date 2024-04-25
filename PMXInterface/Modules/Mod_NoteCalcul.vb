@@ -9382,6 +9382,7 @@ Module Mod_NoteCalcul
         Dim NCOL As Integer
         Dim LargCol() As Single = Nothing
         Dim iStep As Integer
+        Dim lBuckling As Boolean = IsGreater(myBeam.VerifFeuAcier.ElancementW, myBeam.VerifFeuAcier.ElancementWMax)
 
         '--( Titre
 
@@ -9389,12 +9390,12 @@ Module Mod_NoteCalcul
 
         '--( Entete du tableau
 
-        EnteteTableauVerifFeuAcier(NCOL, LargCol)
+        EnteteTableauVerifFeuAcier(NCOL, LargCol, lBuckling)
 
         '--( Remplissage tableau
 
         For iStep = 0 To cls_VerifFeuAcier.TimeSteps.GetUpperBound(0)
-            LigneTableauVerifFeuAcier(iStep, myBeam.VerifFeuAcier, NCOL, LargCol)
+            LigneTableauVerifFeuAcier(iStep, myBeam.VerifFeuAcier, NCOL, LargCol, lBuckling)
         Next
 
         '--( Fin
@@ -9403,7 +9404,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EnteteTableauVerifFeuAcier(ByRef NCOL As Integer, ByRef LargCol() As Single)
+    Private Sub EnteteTableauVerifFeuAcier(ByRef NCOL As Integer, ByRef LargCol() As Single, lBuckling As Boolean)
         '-----------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -9413,11 +9414,13 @@ Module Mod_NoteCalcul
         '-----------------------------------------------------------------------------------------------------------------
         '   NCOL        [S] :   Nombre de colonnes dans le tableau
         '   LargCol     [S] :   Largeur des colonnes du tab
+        '   lbuckling   [E] :   Indique si voilement par cisaillement
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Initialisation
 
         NCOL = 7
+        If lBuckling Then NCOL += 1
 
         ReDim LargCol(NCOL - 1)
 
@@ -9440,11 +9443,16 @@ Module Mod_NoteCalcul
         AddCelluleFond(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
         AddCelluleFond(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
         AddCelluleFond(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
-        AddCelluleFond(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LT\=")
+        If lBuckling Then
+            AddCelluleFond(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-Vb\=")
+            AddCelluleFond(LargCol(7), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LT\=")
+        Else
+            AddCelluleFond(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LT\=")
+        End If
 
     End Sub
 
-    Private Sub LigneTableauVerifFeuAcier(iStep As Integer, myVerifFeu As cls_VerifFeuAcier, NCOL As Integer, LargCol() As Single)
+    Private Sub LigneTableauVerifFeuAcier(iStep As Integer, myVerifFeu As cls_VerifFeuAcier, NCOL As Integer, LargCol() As Single, lBuckling As Boolean)
         '-----------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -9456,12 +9464,15 @@ Module Mod_NoteCalcul
         '   myVerifFeu  [E] :   Critères
         '   NCOL        [E] :   Nombre de colonnes dans le tableau
         '   LargCol     [E] :   Largeur des colonnes du tab
+        '   lbuckling   [E] :   Indique si voilement par cisaillement
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
 
         Dim kY, kE As Decimal
         Dim EN_Feu As New cls_EurocodesFeu
+
+        Dim iCol As Integer = 6
 
         '--( Initialisation
 
@@ -9479,7 +9490,11 @@ Module Mod_NoteCalcul
 
         AddCellule(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
         AddCellule(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
-        AddCellule(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        If lBuckling Then
+            AddCellule(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+            iCol = 7
+        End If
+        AddCellule(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
 
     End Sub
 
@@ -9628,7 +9643,6 @@ Module Mod_NoteCalcul
         AfficheSyntheseCritere(myBeam.VerifFeuEnrob.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
         AfficheSyntheseCritere(myBeam.VerifFeuEnrob.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
 
-
     End Sub
 
     Private Sub EditionVerificationsFEUSyntheseAcier(myBeam As cls_Poutre)
@@ -9661,6 +9675,9 @@ Module Mod_NoteCalcul
 
         AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
         AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
+        If IsGreater(myBeam.VerifFeuAcier.ElancementW, myBeam.VerifFeuAcier.ElancementWMax) Then
+            AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereV(myStep), "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"), True)
+        End If
         AfficheSyntheseCritere(myBeam.VerifFeuAcier.CritereLTB(myStep), "\SG\s\-LT\=", BlocELU("LTB_CRITERIA"), True)
 
     End Sub

@@ -1193,9 +1193,6 @@ Public Class cls_Poutre
             End If
         Next
 
-
-
-
         'MAJ de la partie concernant le chargement 
 
         For Each element As KeyValuePair(Of String, cls_ChargementUtilisateur) In Me.ChargesU
@@ -1758,7 +1755,7 @@ Public Class cls_Poutre
         Dim iTravD, iTravF As Integer
         Dim iNodD, iNodF As Integer
         Dim xPos, xExtG As Decimal
-        Dim k, kDeb, kFin As Integer
+        ' Dim k, kDeb, kFin As Integer
 
         '--> Initialisation
 
@@ -1999,7 +1996,7 @@ Public Class cls_Poutre
 
         For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
             x0 = Me.xPositionAppui(True, iTravee)
-            For jm = 0 To Me.NbMaintiens(iTravee) - 1
+            For jm = 0 To Me.Maintiens(iTravee).Count - 1
 
                 If Me.Maintiens(iTravee)(jm).EstEfficace Then
                     AjouteNoeudImpose(x0 + Me.Maintiens(iTravee)(jm).x_Loc, xImp)
