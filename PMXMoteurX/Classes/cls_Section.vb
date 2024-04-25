@@ -179,52 +179,6 @@ Public Class cls_Section
 
 #Region " Maillage pour le calcul des propriétés de section "
 
-    Private Sub MaillageArmaturesDalle_YY(Gammas As cls_Gamma, bEff As Decimal, MyDalle As cls_Dalle, ByRef MyModele As cls_ModeleP)
-        '-------------------------------------------------------------------------------------------------------------------
-        '   04/10/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage des armatures de la dalle pour le calcul des propriétés / axe YY
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   bEff        [E] :   Largeur participante
-        '   MyDalle     [E] :   Dalle à mailler
-        '   MyModele    [E/S]:  Modèle
-        '-------------------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim Fsk As Decimal = MyDalle.AcierArmatures.FsK
-        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / MyDalle.AcierArmatures.Es
-        'Dim Td As Decimal
-        Dim PhiS, zArma, EspBar As Decimal
-        'Dim Ztop, Th As Decimal
-        Dim Ztop As Decimal
-        Dim iArma As Integer
-        Dim nbBar As Decimal
-        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
-
-        '--> Initialisation
-
-        'Td = MyDalle.Ep_td
-        'Th = MyDalle.EpRenformis
-        Ztop = MyDalle.zTop
-
-        '--> Boucle sur les lits d'armature
-
-        For iArma = 0 To 1
-            If MyDalle.LitArma(iArma).lActive Then
-                PhiS = MyDalle.LitArma(iArma).PhiS
-                zArma = Ztop - MyDalle.LitArma(iArma).z_s
-                EspBar = MyDalle.LitArma(iArma).EspBar
-                nbBar = bEff / EspBar
-
-                MyModele.AddMailleCirculaire(PhiS / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, nbBar, cls_Maille.EnuTypeMaille.Circulaire)
-
-            End If
-        Next
-
-    End Sub
-
     Private Sub MaillageProfileA_YY(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
@@ -235,7 +189,6 @@ Public Class cls_Section
         '   RhoV        [E] :   Coefficient pour l'interaction MV
         '   MyModele    [E/S]:  Modèle
         '-------------------------------------------------------------------------------------------------------------------
-
 
         Select Case Me.ProfilA.typeProfileAcier
 
@@ -863,7 +816,7 @@ Public Class cls_Section
 
             '# Armatures
 
-            MaillageArmaturesDalle_YY(Gammas, bEff, MyDalle, MyModele)
+            MyModele.MaillageArmaturesDalle_YY(Gammas.GammaS, bEff, MyDalle)
 
         End If
 
@@ -940,7 +893,7 @@ Public Class cls_Section
 
             '# Armatures
 
-            MaillageArmaturesDalle_YY(Gammas, bEff, MyDalle, MyModele)
+            MyModele.MaillageArmaturesDalle_YY(Gammas.GammaS, bEff, MyDalle)
 
         End If
 
@@ -1256,7 +1209,7 @@ Public Class cls_Section
 
             '# Armatures
 
-            MaillageArmaturesDalle_YY(Gammas, bEff, myDalle, MyModele)
+            MyModele.MaillageArmaturesDalle_YY(Gammas.GammaS, bEff, myDalle)
 
         End If
 

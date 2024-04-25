@@ -621,7 +621,48 @@ Public Class cls_ModeleP
 
         Tc = Math.Min(NArma, DeltaPRd) / (bEff * kPlDalle * myDalle.beton.Fck * kConvMPaPa / GammaC)
         Aire = bEff * Tc
-        MyModele.AddMaille(Aire, Tc, myDalle.zTop - Tc / 2, 0, 1, nEqDalle, myDalle.beton.Fck, 0.85, GammaC)
+        Me.AddMaille(Aire, Tc, myDalle.zTop - Tc / 2, 0, 1, nEqDalle, myDalle.beton.Fck, 0.85, GammaC)
+
+    End Sub
+
+    Public Sub MaillageArmaturesDalle_YY(GammaS As Decimal, bEff As Decimal, myDalle As cls_Dalle)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage des armatures de la dalle pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaS      [E] :   Coefficient partiel pour les armatures
+        '   bEff        [E] :   Largeur participante
+        '   myDalle     [E] :   Dalle à mailler
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Fsk As Decimal = myDalle.AcierArmatures.FsK
+        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / myDalle.AcierArmatures.Es
+        Dim PhiS, zArma, EspBar As Decimal
+        Dim Ztop As Decimal
+        Dim iArma As Integer
+        Dim nbBar As Decimal
+        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+
+        '--> Initialisation
+
+        Ztop = myDalle.zTop
+
+        '--> Boucle sur les lits d'armature
+
+        For iArma = 0 To 1
+            If myDalle.LitArma(iArma).lActive Then
+                PhiS = myDalle.LitArma(iArma).PhiS
+                zArma = Ztop - myDalle.LitArma(iArma).z_s
+                EspBar = myDalle.LitArma(iArma).EspBar
+                nbBar = bEff / EspBar
+
+                Me.AddMailleCirculaire(PhiS / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, nbBar, cls_Maille.EnuTypeMaille.Circulaire)
+
+            End If
+        Next
 
     End Sub
 
