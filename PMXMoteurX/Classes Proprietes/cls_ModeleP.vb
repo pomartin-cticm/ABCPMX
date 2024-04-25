@@ -566,6 +566,67 @@ Public Class cls_ModeleP
 
 #End Region
 
+#Region " Outils de modélisation - Dalle "
+
+    Public Sub MaillageDalle_YY(GammaC As Decimal, bEff As Decimal, nEqDalle As Decimal, myDalle As cls_Dalle)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage de la dalle béton pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaC      [E] :   Coefficient partiel pour le béton
+        '   bEff        [E] :   Largeur participante
+        '   nEqDalle    [E] :   Coefficient d'équivalence pour le béton
+        '   myDalle     [E] :   Dalle à mailler
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Tc As Decimal = myDalle.EpaisseurActive
+        Dim Aire As Decimal
+
+        '--> Maillage
+
+        Aire = bEff * Tc
+        Me.AddMaille(Aire, Tc, myDalle.zTop - Tc / 2, 0, 1, nEqDalle, myDalle.beton.Fck, 0.85, GammaC)
+
+    End Sub
+
+    Public Sub MaillageDalle_YYETA(GammaC As Decimal, bEff As Decimal, nEqDalle As Decimal, DeltaPRd As Decimal, myDalle As cls_Dalle)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage de la dalle béton pour le calcul des propriétés / axe YY
+        '   prenant en compte le degré de connexion
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaC      [E] :   Coefficient partiel pour le béton
+        '   bEff        [E] :   Largeur participante
+        '   nEqDalle    [E] :   Coefficient d'équivalence pour le béton
+        '   DeltaPRd    [E] :   Cumul de résistance des connecteurs jusqu'au point de moment nul
+        '   MyDalle     [E] :   Dalle à mailler
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NArma As Decimal
+        Dim Tc As Decimal = myDalle.EpaisseurActive
+        Dim Aire As Decimal
+        Dim kPlDalle As Decimal = 0.85
+
+        '--> Initialisation
+
+        NArma = myDalle.NResistanceCompressionDalle(bEff, GammaC)
+
+        '--> Maillage
+
+        Tc = Math.Min(NArma, DeltaPRd) / (bEff * kPlDalle * myDalle.beton.Fck * kConvMPaPa / GammaC)
+        Aire = bEff * Tc
+        MyModele.AddMaille(Aire, Tc, myDalle.zTop - Tc / 2, 0, 1, nEqDalle, myDalle.beton.Fck, 0.85, GammaC)
+
+    End Sub
+
+#End Region
+
 #Region " Outils de modélisation - Enrobage partiel béton "
 
     Public Sub MaillageEnrobage_YY(GammaC As Decimal, nEq As Decimal, mySection As cls_Section, Optional ByVal lBetonTendu As Boolean = False)

@@ -225,64 +225,6 @@ Public Class cls_Section
 
     End Sub
 
-    Private Sub MaillageDalle_YY(Gammas As cls_Gamma, bEff As Decimal, nEqDalle As Decimal, DeltaPRd As Decimal, MyDalle As cls_Dalle, ByRef MyModele As cls_ModeleP)
-        '-------------------------------------------------------------------------------------------------------------------
-        '   02/11/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage de la dalle béton pour le calcul des propriétés / axe YY
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   bEff        [E] :   Largeur participante
-        '   nEqDalle    [E] :   Coefficient d'équivalence pour le béton
-        '   DeltaPRd    [E] :   Cumul de résistance des connecteurs jusqu'au point de moment nul
-        '   MyDalle     [E] :   Dalle à mailler
-        '   MyModele    [E/S]:  Modèle
-        '-------------------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim NArma As Decimal
-        Dim Tc As Decimal = MyDalle.EpaisseurActive
-        Dim Aire As Decimal
-        Dim kPlDalle As Decimal = 0.85
-
-        '--> Initialisation
-
-        NArma = MyDalle.NResistanceCompressionDalle(bEff, Gammas.GammaC)
-
-        '--> Maillage
-
-        Tc = Math.Min(NArma, DeltaPRd) / (bEff * kPlDalle * MyDalle.beton.Fck * kConvMPaPa / Gammas.GammaC)
-        Aire = bEff * Tc
-        MyModele.AddMaille(Aire, Tc, MyDalle.zTop - Tc / 2, 0, 1, nEqDalle, MyDalle.beton.Fck, 0.85, Gammas.GammaC)
-
-    End Sub
-
-    Private Sub MaillageDalle_YY(Gammas As cls_Gamma, bEff As Decimal, nEqDalle As Decimal, MyDalle As cls_Dalle, ByRef MyModele As cls_ModeleP)
-        '-------------------------------------------------------------------------------------------------------------------
-        '   04/10/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage de la dalle béton pour le calcul des propriétés / axe YY
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   bEff        [E] :   Largeur participante
-        '   nEqDalle    [E] :   Coefficient d'équivalence pour le béton
-        '   MyDalle     [E] :   Dalle à mailler
-        '   MyModele    [E/S]:  Modèle
-        '-------------------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim Tc As Decimal = MyDalle.EpaisseurActive
-        Dim Aire As Decimal
-
-        '--> Maillage
-
-        Aire = bEff * Tc
-        MyModele.AddMaille(Aire, Tc, MyDalle.zTop - Tc / 2, 0, 1, nEqDalle, MyDalle.beton.Fck, 0.85, Gammas.GammaC)
-
-    End Sub
-
     Private Sub MaillageProfileA_YY(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
@@ -917,8 +859,7 @@ Public Class cls_Section
 
             '# Dalle 
 
-            'MaillageDalle(Gammas, bEff, nEqD, Math.Min(DeltaRd, NPro), MyDalle, MyModele)
-            MaillageDalle_YY(Gammas, bEff, nEqD, DeltaRd, MyDalle, MyModele)
+            MyModele.MaillageDalle_YYETA(Gammas.GammaC, bEff, nEqD, DeltaRd, MyDalle)
 
             '# Armatures
 
@@ -995,7 +936,7 @@ Public Class cls_Section
 
             '# Dalle 
 
-            MaillageDalle_YY(Gammas, bEff, nEqD, MyDalle, MyModele)
+            MyModele.MaillageDalle_YY(Gammas.GammaC, bEff, nEqD, MyDalle)
 
             '# Armatures
 
@@ -1252,7 +1193,7 @@ Public Class cls_Section
     End Sub
 
     Public Sub ProprietesElastiquesMixteMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, nEqEc As Decimal, nEqDalle As Decimal,
-                                            bEff As Decimal, MyDalle As cls_Dalle,
+                                            bEff As Decimal, myDalle As cls_Dalle,
                                             ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
                                             Optional lPriseEnCompteDalle As Boolean = True)
         '-------------------------------------------------------------------------------------------------------------------
@@ -1311,11 +1252,11 @@ Public Class cls_Section
 
             '# Dalle
 
-            MaillageDalle_YY(Gammas, bEff, nEqDalle, MyDalle, MyModele)
+            MyModele.MaillageDalle_YY(Gammas.GammaC, bEff, nEqDalle, myDalle)
 
             '# Armatures
 
-            MaillageArmaturesDalle_YY(Gammas, bEff, MyDalle, MyModele)
+            MaillageArmaturesDalle_YY(Gammas, bEff, myDalle, MyModele)
 
         End If
 
