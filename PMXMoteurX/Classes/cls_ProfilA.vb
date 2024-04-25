@@ -1143,39 +1143,41 @@ Public Class cls_ProfilA
         Const RhoV As Decimal = 0
         Const Fy As Decimal = 235
 
-        '--> Initialisation
+        ''--> Initialisation
 
-        Hw = Me.HauteurAmeHw
+        'Hw = Me.HauteurAmeHw
 
-        '--> Modélisation du profilé acier
+        ''--> Modélisation du profilé acier
 
-        '# Semelle supérieure
+        ''# Semelle supérieure
 
-        MyModele.AddMaille(Me.AireFs, Me.Tfs, zRef - Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
+        'MyModele.AddMaille(Me.AireFs, Me.Tfs, zRef - Me.Tfs / 2, 1, 1, 1, Fy, 1, GammaM0)
 
-        '# Âme
+        ''# Âme
 
-        MyModele.AddMaille(Hw * Me.Tw, Hw, zRef - Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
+        'MyModele.AddMaille(Hw * Me.Tw, Hw, zRef - Me.Tfs - Hw / 2, 1, 1, 1, Fy, (1 - RhoV), GammaM0)
 
-        '# Semelle inférieure
+        ''# Semelle inférieure
 
-        MyModele.AddMaille(Me.AireFi, Me.Tfi, zRef - Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
+        'MyModele.AddMaille(Me.AireFi, Me.Tfi, zRef - Me.ha + Me.Tfi / 2, 1, 1, 1, Fy, 1, GammaM0)
 
-        If Me.Rcs > 0 Then
+        'If Me.Rcs > 0 Then
 
-            '# Congés supérieurs
+        '    '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.Rcs, zRef - Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
+        '    MyModele.AddMailleConges(Me.Rcs, zRef - Me.Tfs, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
-        End If
+        'End If
 
-        If Me.Rci > 0 Then
+        'If Me.Rci > 0 Then
 
-            '# Congés inférieurs
+        '    '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.Rci, zRef - Me.ha + Me.Tfi, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+        '    MyModele.AddMailleConges(Me.Rci, zRef - Me.ha + Me.Tfi, 1, 1, 1, Fy, (1 - RhoV), GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
-        End If
+        'End If
+
+        MyModele.MaillageProfileUsuels_YY(GammaM0, RhoV, Me, Fy, Fy, Fy)
 
         '--> Recherche de l'axe neutre élastique
 
@@ -1292,8 +1294,8 @@ Public Class cls_ProfilA
     End Sub
 
     Private Sub ProprietesMyySlimfloorsIFB_A(Signe As Decimal, lValeurRd As Boolean, GammaM0 As Decimal,
-                                       ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
-                                                      ByRef zANP As Decimal, ByRef MplRd As Decimal)
+                                             ByRef zANE As Decimal, ByRef InertieY As Decimal, ByRef MelRd As Decimal,
+                                             ByRef zANP As Decimal, ByRef MplRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   13/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -1598,8 +1600,8 @@ Public Class cls_ProfilA
     End Sub
 
     Private Sub ProprietesMzzProfilesUsuels(lValeurRd As Boolean, GammaM0 As Decimal,
-                                                      ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal,
-                                                        ByRef zANP As Decimal, ByRef MplRd As Decimal)
+                                            ByRef zANE As Decimal, ByRef InertieZ As Decimal, ByRef MelRd As Decimal,
+                                            ByRef zANP As Decimal, ByRef MplRd As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/08/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -1615,46 +1617,13 @@ Public Class cls_ProfilA
         '--> Déclarations
 
         Dim MyModele As New cls_ModeleP
-        Dim Hw As Decimal
         Const Fy As Decimal = 235
         Const Signe As Decimal = 1
-        'Dim lLamine As Boolean = (Me.typeProfileAcier = Enum_TypeSectionAcier.Lamine)
+        Const RhoV As Decimal = 0
 
         '--> Initialisation
 
-        Hw = Me.HauteurAmeHw
-
-        '--> Modélisation du profilé acier
-
-        '# Semelle supérieure
-
-        MyModele.AddMaille(Me.AireFs, Me.Bfs, 0, 1, 1, 1, Fy, 1, GammaM0)
-
-        '# Âme
-
-        MyModele.AddMaille(Hw * Me.Tw, Me.Tw, 0, 1, 1, 1, Fy, 1, GammaM0)
-
-        '# Semelle inférieure
-
-        MyModele.AddMaille(Me.AireFi, Me.Bfi, 0, 1, 1, 1, Fy, 1, GammaM0)
-
-        'If lLamine Then
-
-        '# Congés supérieurs
-
-        If Me.Rcs > 0 Then
-            MyModele.AddMailleConges(Me.Rcs, -Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, cls_Maille.EnuTypeMaille.CongeSup, 0.5)
-            MyModele.AddMailleConges(Me.Rcs, +Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, cls_Maille.EnuTypeMaille.CongeInf, 0.5)
-        End If
-
-        '# Congés inférieurs
-
-        If Me.Rci > 0 Then
-            MyModele.AddMailleConges(Me.Rci, +Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, cls_Maille.EnuTypeMaille.CongeInf, 0.5)
-            MyModele.AddMailleConges(Me.Rci, -Me.Tw / 2, 1, 1, 1, Fy, 1, GammaM0, cls_Maille.EnuTypeMaille.CongeSup, 0.5)
-        End If
-
-        'End If
+        MyModele.MaillageProfileUsuels_ZZ(GammaM0, RhoV, Me, Fy, Fy, Fy)
 
         '--> Recherche de l'axe neutre élastique
 

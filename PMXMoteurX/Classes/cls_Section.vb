@@ -431,98 +431,6 @@ Public Class cls_Section
         Next
     End Sub
 
-    Private Sub MaillageEnrobage_YY(Gammas As cls_Gamma, nEq As Decimal, ByRef MyModele As cls_ModeleP, Optional ByVal lCalculAlphaCr As Boolean = False)
-        '-------------------------------------------------------------------------------------------------------------------
-        '   04/10/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage du profilé acier pour le calcul des propriétés / axe YY
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   nEq         [E] :   Coefficient d'équivalence acier béton pour le béton d'enrobage
-        '   MyModele    [E/S]:  Modèle
-        '-------------------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim LargeurC, EpaisseurC, FdC, DeltaT As Decimal
-
-        '--> Initialisation
-
-        LargeurC = (Me.LargeurEnrobagePartielBc - Me.ProfilA.Tw)
-        EpaisseurC = Me.ProfilA.HauteurAmeHw
-        FdC = Me.Enrobage.Beton.Fck
-
-        If lCalculAlphaCr Then
-            DeltaT = 1
-        Else
-            DeltaT = 0
-        End If
-
-        MyModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -Me.ProfilA.ha / 2, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
-
-        'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
-
-        If lLamine Then
-
-            '# Congés supérieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tfs, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
-
-            '# Congés supérieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.ha + Me.ProfilA.Tfs, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
-
-        End If
-
-    End Sub
-
-    Private Sub MaillageEnrobage_ZZ(Gammas As cls_Gamma, nEq As Decimal, ByRef MyModele As cls_ModeleP, Optional ByVal lCalculAlphaCr As Boolean = False)
-        '-------------------------------------------------------------------------------------------------------------------
-        '   15/12/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage du profilé acier pour le calcul des propriétés / axe ZZ
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   nEq         [E] :   Coefficient d'équivalence acier béton pour le béton d'enrobage
-        '   MyModele    [E/S]:  Modèle
-        '-------------------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim LargeurC, EpaisseurC, FdC, DeltaT As Decimal
-        Dim Tw As Decimal = Me.ProfilA.Tw
-
-        '--> Initialisation
-
-        LargeurC = (Me.LargeurEnrobagePartielBc - Tw)
-        EpaisseurC = Me.ProfilA.HauteurAmeHw
-        FdC = Me.Enrobage.Beton.Fck
-
-        If lCalculAlphaCr Then
-            DeltaT = 1
-        Else
-            DeltaT = 0
-        End If
-
-        MyModele.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, Tw / 2 + LargeurC / 4, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
-        MyModele.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, -Tw / 2 - LargeurC / 4, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
-
-        'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
-
-        If lLamine Then
-
-            '# Congés supérieurs (c'est à dire, côté gauche)
-
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tw / 2, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
-
-            '# Congés supérieurs (c'est à dire, côté droite)
-
-            MyModele.AddMailleConges(Me.ProfilA.Rci, +Me.ProfilA.Tw / 2, DeltaT, 1, nEq, FdC, 0.85, Gammas.GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
-
-        End If
-
-    End Sub
-
     Private Sub MaillageProfileA_YY(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
@@ -538,7 +446,8 @@ Public Class cls_Section
         Select Case Me.ProfilA.typeProfileAcier
 
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                MaillageProfileAUsuels_YY(Gammas, RhoV, MyModele)
+                'MaillageProfileAUsuels_YY(Gammas, RhoV, MyModele)
+                MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, Me.ProfilA, Me.FySup, Me.FyInf, Me.FyW)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
                 MaillageProfileASlimfloorsSFB_YY(Gammas, RhoV, MyModele)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
@@ -550,61 +459,59 @@ Public Class cls_Section
 
         End Select
 
-
-
     End Sub
 
-    Private Sub MaillageProfileAUsuels_YY(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
-        '-------------------------------------------------------------------------------------------------------------------
-        '   03/01/24 :  Création - GUD
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   MyModele    [E/S]:  Modèle
-        '-------------------------------------------------------------------------------------------------------------------
+    'Private Sub MaillageProfileAUsuels_YY(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
+    '    '-------------------------------------------------------------------------------------------------------------------
+    '    '   03/01/24 :  Création - GUD
+    '    '-------------------------------------------------------------------------------------------------------------------
+    '    '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
+    '    '-------------------------------------------------------------------------------------------------------------------
+    '    '   Gammas      [E] :   Coefficients partiels
+    '    '   RhoV        [E] :   Coefficient pour l'interaction MV
+    '    '   MyModele    [E/S]:  Modèle
+    '    '-------------------------------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim Hw As Decimal
-        Dim zRef As Decimal = Me.ProfilA.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
+    '    Dim Hw As Decimal
+    '    Dim zRef As Decimal = Me.ProfilA.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        Hw = Me.ProfilA.HauteurAmeHw
+    '    Hw = Me.ProfilA.HauteurAmeHw
 
-        '--> Modélisation du profilé acier
+    '    '--> Modélisation du profilé acier
 
-        '# Semelle supérieure
+    '    '# Semelle supérieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, zRef - Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
+    '    MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, zRef - Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
 
-        '# Âme
+    '    '# Âme
 
-        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, zRef - Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
+    '    MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, zRef - Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
 
-        '# Semelle inférieure
+    '    '# Semelle inférieure
 
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, zRef - Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
+    '    MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, zRef - Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
 
-        If Me.ProfilA.Rcs > 0 Then
+    '    If Me.ProfilA.Rcs > 0 Then
 
-            '# Congés supérieurs
+    '        '# Congés supérieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, zRef - Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
+    '        MyModele.AddMailleConges(Me.ProfilA.Rcs, zRef - Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
 
-        End If
+    '    End If
 
-        If Me.ProfilA.Rci > 0 Then
+    '    If Me.ProfilA.Rci > 0 Then
 
-            '# Congés inférieurs
+    '        '# Congés inférieurs
 
-            MyModele.AddMailleConges(Me.ProfilA.Rci, zRef - Me.ProfilA.ha + Me.ProfilA.Tfi, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
+    '        MyModele.AddMailleConges(Me.ProfilA.Rci, zRef - Me.ProfilA.ha + Me.ProfilA.Tfi, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
 
-        End If
+    '    End If
 
-    End Sub
+    'End Sub
 
     Private Sub MaillageProfileASlimfloorsSFB_YY(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
         '-------------------------------------------------------------------------------------------------------------------
@@ -818,7 +725,7 @@ Public Class cls_Section
         Select Case Me.ProfilA.typeProfileAcier
 
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                MaillageProfileAUsuels_ZZ(Gammas, RhoV, MyModele)
+                MyModele.MaillageProfileUsuels_ZZ(Gammas.GammaM0, RhoV, Me.ProfilA, Me.FySup, Me.FyInf, Me.FyW)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
                 MaillageProfileASlimfloorsSFB_ZZ(Gammas, RhoV, MyModele)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
@@ -828,62 +735,6 @@ Public Class cls_Section
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
                 MaillageProfileASlimfloorsSAB_ZZ(Gammas, RhoV, MyModele)
         End Select
-
-
-
-    End Sub
-
-    Private Sub MaillageProfileAUsuels_ZZ(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
-        '-------------------------------------------------------------------------------------------------------------------
-        '   03/01/24 :  Création - GUD
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   RhoV        [E] :   Coefficient pour l'interaction MV
-        '   MyModele    [E/S]:  Modèle
-        '-------------------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim Hw As Decimal
-        Dim zRef As Decimal = Me.ProfilA.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
-
-        '--> Initialisation
-
-        Hw = Me.ProfilA.HauteurAmeHw
-
-        '--> Modélisation du profilé acier
-
-        '# Semelle supérieure
-
-        MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Bfs, 0, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
-
-        '# Âme
-
-        MyModele.AddMaille(Hw * Me.ProfilA.Tw, Me.ProfilA.Tw, 0, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
-
-        '# Semelle inférieure
-
-        MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Bfi, 0, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
-
-        If Me.ProfilA.Rcs > 0 Then
-
-            '# Congés supérieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, -Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup, 0.5)
-            MyModele.AddMailleConges(Me.ProfilA.Rcs, Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf, 0.5)
-
-        End If
-
-        If Me.ProfilA.Rci > 0 Then
-
-            '# Congés inférieurs
-
-            MyModele.AddMailleConges(Me.ProfilA.Rci, -Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup, 0.5)
-            MyModele.AddMailleConges(Me.ProfilA.Rci, Me.ProfilA.Tw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf, 0.5)
-
-        End If
 
     End Sub
 
@@ -1130,7 +981,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            MaillageEnrobage_YY(Gammas, nEqEc, MyModele)
+            MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me)
 
         End If
 
@@ -1196,7 +1047,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            MaillageEnrobage_YY(Gammas, nEqEc, MyModele)
+            MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me)
 
         End If
 
@@ -1274,7 +1125,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            MaillageEnrobage_YY(Gammas, nEqEc, MyModele)
+            MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me)
 
         End If
 
@@ -1522,7 +1373,7 @@ Public Class cls_Section
 
         If Me.lEnrobage And Not lProfileAcierUniquement Then
 
-            MaillageEnrobage_YY(Gammas, nEqEc, MyModele, lCalculAlphaCr)
+            MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me, lCalculAlphaCr)
 
         End If
 
@@ -1590,7 +1441,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            MaillageEnrobage_YY(Gammas, nEqEc, MyModele)
+            MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me)
 
         End If
 
@@ -1665,7 +1516,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            MaillageEnrobage_ZZ(Gammas, nEqEc, MyModele, lCalculAlphaCr)
+            MyModele.MaillageEnrobage_ZZ(Gammas.GammaC, nEqEc, Me, lCalculAlphaCr)
 
         End If
 

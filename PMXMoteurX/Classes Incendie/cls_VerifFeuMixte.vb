@@ -24,7 +24,6 @@
 
 #End Region
 
-
 #Region " Constructeurs "
 
     Public Sub New()
@@ -62,7 +61,6 @@
     End Sub
 
 #End Region
-
 
 #Region "===Gestion de la classe==="
 
@@ -141,6 +139,12 @@
         ReDim MplRdFeu(Me.NbStep - 1)
         ReDim MelRdFeu(Me.NbStep - 1)
         ReDim VplRdFeu(Me.NbStep - 1)
+
+        If myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+            EpDalle = EN_Feu.EpaisseurEfficaceDalleMixte(myBeam.Dalle.Ep_td, myBeam.Dalle.Bac)
+        Else
+            EpDalle = myBeam.Dalle.EpaisseurActive
+        End If
 
         '--( Préparation du maillage de la dalle
 
@@ -237,9 +241,7 @@
 
     End Sub
 
-
 #End Region
-
 
 #Region " Propriétés des sections mixtes en fonction de la température "
 
@@ -284,7 +286,7 @@
 
         '--> Modélisation du profilé acier
 
-        MaillageProfileAMPlus(mySection.ProfilA, Gammas.GammaM_fi, RhoV, mySection.Enrobage.Ratio_bc, reducKyFs * FySup, FyInf, FyW, myModele)
+        myModele.MaillageProfileUsuels_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW)
 
         ''--> Dalle béton
 
@@ -305,66 +307,6 @@
         MplRd = myModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
 
     End Sub
-
-    Private Sub MaillageProfileAMPlus(myProfile As cls_ProfilA, GammaM_fi As Decimal, RhoV As Decimal, Ratio_Bc As Decimal,
-                                      FySup As Decimal, FyInf As Decimal, FyW As Decimal, ByRef myModele As cls_ModeleP)
-        '--------------------------------------------------------------------------------------------------------------------------
-        '   18/04/24 :  Création - POM
-        '--------------------------------------------------------------------------------------------------------------------------
-        '   Maillage du profilé acier en vue 
-        '   du calcul du moment plastique positif sous incendie d'une section mixte sans enrobage partiel
-        '--------------------------------------------------------------------------------------------------------------------------
-        '   myProfile   [E] :   Profilé
-        '   GammaM_fi   [E] :   Coefficient partiel pour l'acier en situation d'incendie
-        '   Time        [E] :   Temps du calcul
-        '   RatioBc     [E] :   Ratio largeur Bc / largeur Bf
-        '   FySup       [E] :   Limite d'élasticité de la semelle sup   (tenant compte de la réduction due à la température)
-        '   FyInf       [E] :   Limite d'élasticité de la semelle inf   (tenant compte de la réduction due à la température)
-        '   FyW         [E] :   Limite d'élasticité de l'âme            (tenant compte de la réduction due à la température)
-        '   myModele    [S] :   Modelisation du profilé
-        '--------------------------------------------------------------------------------------------------------------------------
-
-        '--( Déclarations
-
-        Dim Hw As Decimal
-        Dim zRef As Decimal = myProfile.zRefAraseSup        'Cote de l'arase supérieure de la semelle supérieure du profilé 
-
-        '--> Initialisation
-
-        Hw = myProfile.HauteurAmeHw
-
-        '--> Modélisation du profilé acier
-
-        '# Semelle supérieure
-
-        myModele.AddMaille(myProfile.AireFs, myProfile.Tfs, zRef - myProfile.Tfs / 2, 1, 1, 1, FySup, 1, GammaM_fi)
-
-        '# Âme
-
-        myModele.AddMaille(Hw * myProfile.Tw, Hw, zRef - myProfile.Tfs - Hw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM_fi)
-
-        '# Semelle inférieure
-
-        myModele.AddMaille(myProfile.AireFi, myProfile.Tfi, zRef - myProfile.ha + myProfile.Tfi / 2, 1, 1, 1, FyInf, 1, GammaM_fi)
-
-        If myProfile.Rcs > 0 Then
-
-            '# Congés supérieurs
-
-            myModele.AddMailleConges(myProfile.Rcs, zRef - myProfile.Tfs, 1, 1, 1, FyW, (1 - RhoV), GammaM_fi, cls_Maille.EnuTypeMaille.CongeSup)
-
-        End If
-
-        If myProfile.Rci > 0 Then
-
-            '# Congés inférieurs
-
-            myModele.AddMailleConges(myProfile.Rci, zRef - myProfile.ha + myProfile.Tfi, 1, 1, 1, FyW, (1 - RhoV), GammaM_fi, cls_Maille.EnuTypeMaille.CongeInf)
-
-        End If
-
-    End Sub
-
 
 
 #End Region

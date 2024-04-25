@@ -448,5 +448,221 @@ Public Class cls_ModeleP
 
 #End Region
 
+#Region " Outils de modélisation - Profilés "
+
+    Public Sub MaillageProfileUsuels_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaM      [E] :   Coefficient partiel
+        '   RhoV        [E] :   Coefficient pour l'interaction MV
+        '   MyProfil    [E]:    Profilé à modéliser
+        '   FySup       [E] :   Limite d'élasticité semelle sup
+        '   FyInf       [E] :   Limite d'élasticité semelle inf
+        '   FyW         [E] :   Limite d'élasticité âme
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Hw As Decimal
+        Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
+
+        '--> Initialisation
+
+        Hw = MyProfil.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        Me.AddMaille(MyProfil.AireFs, MyProfil.Tfs, zRef - MyProfil.Tfs / 2, 1, 1, 1, FySup, 1, GammaM)
+
+        '# Âme
+
+        Me.AddMaille(Hw * MyProfil.Tw, Hw, zRef - MyProfil.Tfs - Hw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM)
+
+        '# Semelle inférieure
+
+        Me.AddMaille(MyProfil.AireFi, MyProfil.Tfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, FyInf, 1, GammaM)
+
+        If IsGreater(MyProfil.Rcs, 0) Then
+
+            '# Congés supérieurs
+
+            Me.AddMailleConges(MyProfil.Rcs, zRef - MyProfil.Tfs, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeSup)
+
+        End If
+
+        If IsGreater(MyProfil.Rci, 0) Then
+
+            '# Congés inférieurs
+
+            Me.AddMailleConges(MyProfil.Rci, zRef - MyProfil.ha + MyProfil.Tfi, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeInf)
+
+        End If
+
+    End Sub
+
+    Public Sub MaillageProfileUsuels_ZZ(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaM      [E] :   Coefficient partiel
+        '   RhoV        [E] :   Coefficient pour l'interaction MV
+        '   MyProfil    [E]:    Profilé à modéliser
+        '   FySup       [E] :   Limite d'élasticité semelle sup
+        '   FyInf       [E] :   Limite d'élasticité semelle inf
+        '   FyW         [E] :   Limite d'élasticité âme
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim Hw As Decimal
+        Dim zRef As Decimal = MyProfil.zRefAraseSup             'Cote de l'arase supérieure de la semelle supérieure du profilé 
+
+        '--> Initialisation
+
+        Hw = MyProfil.HauteurAmeHw
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        Me.AddMaille(MyProfil.AireFs, MyProfil.Bfs, 0, 1, 1, 1, FySup, 1, GammaM)
+
+        '# Âme
+
+        Me.AddMaille(Hw * MyProfil.Tw, MyProfil.Tw, 0, 1, 1, 1, FyW, (1 - RhoV), GammaM)
+
+        '# Semelle inférieure
+
+        Me.AddMaille(MyProfil.AireFi, MyProfil.Bfi, 0, 1, 1, 1, FyInf, 1, GammaM)
+
+        If IsGreater(MyProfil.Rcs, 0) Then
+
+            '# Congés supérieurs
+
+            Me.AddMailleConges(MyProfil.Rcs, -MyProfil.Tw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeSup, 0.5)
+            Me.AddMailleConges(MyProfil.Rcs, MyProfil.Tw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeInf, 0.5)
+
+        End If
+
+        If IsGreater(MyProfil.Rci, 0) Then
+
+            '# Congés inférieurs
+
+            Me.AddMailleConges(MyProfil.Rci, -MyProfil.Tw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeSup, 0.5)
+            Me.AddMailleConges(MyProfil.Rci, MyProfil.Tw / 2, 1, 1, 1, FyW, (1 - RhoV), GammaM, cls_Maille.EnuTypeMaille.CongeInf, 0.5)
+
+        End If
+
+    End Sub
+
+#End Region
+
+#Region " Outils de modélisation - Enrobage partiel béton "
+
+    Public Sub MaillageEnrobage_YY(GammaC As Decimal, nEq As Decimal, mySection As cls_Section, Optional ByVal lBetonTendu As Boolean = False)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaC      [E] :   Coefficient partiel béton
+        '   nEq         [E] :   Coefficient d'équivalence acier béton pour le béton d'enrobage
+        '   mySection   [E] :   Section calculée
+        '   lBetonTendu [E] :   Indique si on prend en compte le béton tendu (dans le cas d'un calcul de AlphaCri par exemple)
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim LargeurC, EpaisseurC, FdC, DeltaT As Decimal
+
+        '--> Initialisation
+
+        LargeurC = (mySection.LargeurEnrobagePartielBc - mySection.ProfilA.Tw)
+        EpaisseurC = mySection.ProfilA.HauteurAmeHw
+        FdC = mySection.Enrobage.Beton.Fck
+
+        If lBetonTendu Then
+            DeltaT = 1
+        Else
+            DeltaT = 0
+        End If
+
+        Me.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -mySection.ProfilA.ha / 2, DeltaT, 1, nEq, FdC, 0.85, GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
+
+        'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
+
+        If mySection.lLamine Then
+
+            '# Congés supérieurs
+
+            Me.AddMailleConges(mySection.ProfilA.Rcs, -mySection.ProfilA.Tfs, DeltaT, 1, nEq, FdC, 0.85, GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
+
+            '# Congés supérieurs
+
+            Me.AddMailleConges(mySection.ProfilA.Rci, -mySection.ProfilA.ha + mySection.ProfilA.Tfs, DeltaT, 1, nEq, FdC, 0.85, GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
+
+        End If
+
+    End Sub
+
+    Public Sub MaillageEnrobage_ZZ(GammaC As Decimal, nEq As Decimal, mySection As cls_Section, Optional ByVal lBetonTendu As Boolean = False)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier pour le calcul des propriétés / axe ZZ
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaC      [E] :   Coefficient partiel béton
+        '   nEq         [E] :   Coefficient d'équivalence acier béton pour le béton d'enrobage
+        '   mySection   [E] :   Section calculée
+        '   lBetonTendu [E] :   Indique si on prend en compte le béton tendu (dans le cas d'un calcul de AlphaCri par exemple)
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim LargeurC, EpaisseurC, FdC, DeltaT As Decimal
+        Dim Tw As Decimal = mySection.ProfilA.Tw
+
+        '--> Initialisation
+
+        LargeurC = (mySection.LargeurEnrobagePartielBc - Tw)
+        EpaisseurC = mySection.ProfilA.HauteurAmeHw
+        FdC = mySection.Enrobage.Beton.Fck
+
+        If lBetonTendu Then
+            DeltaT = 1
+        Else
+            DeltaT = 0
+        End If
+
+        Me.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, Tw / 2 + LargeurC / 4, DeltaT, 1, nEq, FdC, 0.85, GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
+        Me.AddMaille(LargeurC * EpaisseurC / 2, LargeurC / 2, -Tw / 2 - LargeurC / 4, DeltaT, 1, nEq, FdC, 0.85, GammaC, cls_Maille.EnuTypeMaille.Rectangulaire)
+
+        'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
+
+        If mySection.lLamine Then
+
+            '# Congés supérieurs (c'est à dire, côté gauche)
+
+            Me.AddMailleConges(mySection.ProfilA.Rcs, -mySection.ProfilA.Tw / 2, DeltaT, 1, nEq, FdC, 0.85, GammaC, cls_Maille.EnuTypeMaille.CongeSup, -1)
+
+            '# Congés supérieurs (c'est à dire, côté droite)
+
+            Me.AddMailleConges(mySection.ProfilA.Rci, +mySection.ProfilA.Tw / 2, DeltaT, 1, nEq, FdC, 0.85, GammaC, cls_Maille.EnuTypeMaille.CongeInf, -1)
+
+        End If
+
+    End Sub
+
+
+#End Region
 
 End Class
