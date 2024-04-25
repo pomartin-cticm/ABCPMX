@@ -283,154 +283,6 @@ Public Class cls_Section
 
     End Sub
 
-    Private Sub MaillageArmaturesEnrobage_YY(Gammas As cls_Gamma, ByRef MyModele As cls_ModeleP)
-        '-------------------------------------------------------------------------------------------------------------------
-        '   04/10/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage du des armatures de l'enrobage pour le calcul des propriétés / axe YY
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   MyModele    [E/S]:  Modèle
-        '-------------------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim zArma, PhiA As Decimal
-        Dim iPos, iBarre As Integer
-        Dim NbBarres As Integer
-        Dim Fsk As Decimal = Me.Enrobage.AcierArmatures.FsK
-        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.Enrobage.AcierArmatures.Es
-        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
-        Const NBMA As Integer = 2       ' Car symétrie des deux chambres
-        'Dim lLitActif() As Boolean = {False, True, False}
-        Dim lActif As Boolean
-
-        '--> Boucle sur les lits d'armature
-
-        For iArma As Integer = 0 To 2
-
-            For iPos = 0 To 2
-
-                NbBarres = Me.Enrobage.LitArma(iArma).NbBarres(iPos)
-                'lActif = lLitActif(iPos) Or Me.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
-                lActif = Me.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
-
-                If lActif Then
-                    For iBarre = 1 To NbBarres
-                        zArma = Me.zPosArmaEnrobage(iArma, iPos, iBarre)
-                        PhiA = Me.Enrobage.LitArma(iArma).PhiBarre(iPos)
-
-                        MyModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
-
-                    Next
-                End If
-
-            Next
-
-        Next
-
-    End Sub
-
-    Private Sub MaillageArmaturesEnrobage_ZZ(Gammas As cls_Gamma, ByRef MyModele As cls_ModeleP)
-        '-------------------------------------------------------------------------------------------------------------------
-        '   15/12/23 :  Création - POM
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Maillage du des armatures de l'enrobage pour le calcul des propriétés / axe ZZ
-        '-------------------------------------------------------------------------------------------------------------------
-        '   Gammas      [E] :   Coefficients partiels
-        '   MyModele    [E/S]:  Modèle
-        '-------------------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim PhiA As Decimal
-        Dim iBarre As Integer
-        Dim NbBarres As Integer
-        Dim Fsk As Decimal = Me.Enrobage.AcierArmatures.FsK
-        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / Me.Enrobage.AcierArmatures.Es
-        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
-
-        Dim lLitActif() As Boolean = {False, True, False}
-        Dim lActif As Boolean
-
-        Dim yArmaExt As Decimal              'Position de la face interieure de la partie externe du cadre
-        Dim yArmaInt As Decimal              'Position de la face interieure des armatures intérieures
-        Dim yArmaMil As Decimal              'Position moyenne des armatures du milieu
-
-        Dim yDecalArmaBord() As Decimal = {0.5, 1.5, 1}
-        Dim yDecalArmaMil() As Decimal = {-0.5, +0.5}
-        Dim kAdjustArmaMil() As Decimal = {0, 1}
-        Dim Bf As Decimal = Me.ProfilA.Bfs
-        Dim Tw As Decimal = Me.ProfilA.Tw
-        Dim yBarre As Decimal
-
-        '--> Initialisation
-
-        yArmaExt = Bf * Me.Enrobage.Ratio_bc / 2 - Me.Enrobage.Etriers_EnrobageY - Me.Enrobage.Etriers_Phi
-        Select Case Me.Enrobage.Etriers_Type
-            Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
-                yArmaInt = Tw / 2 + Me.Enrobage.Etriers_EnrobageY + Me.Enrobage.Etriers_Phi
-            Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
-                yArmaInt = Tw / 2
-            Case cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
-                yArmaInt = Tw / 2 + Me.Enrobage.Etriers_Phi
-        End Select
-
-        yArmaMil = (yArmaExt + yArmaInt) / 2
-
-        '--> Boucle sur les lits d'armature
-
-        For iArma As Integer = 0 To 2
-
-            '# Armatures extérieures
-
-            NbBarres = Me.Enrobage.LitArma(iArma).NbExt
-            lActif = lLitActif(iArma) Or Me.Enrobage.LitArma(iArma).lActiveExt
-            PhiA = Me.Enrobage.LitArma(iArma).PhiExt
-
-            If lActif And NbBarres > 0 Then
-
-                For iBarre = 0 To NbBarres - 1
-                    yBarre = yArmaExt - yDecalArmaBord(iBarre) * PhiA
-                    MyModele.AddMailleCirculaire(PhiA / 2, yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
-                    MyModele.AddMailleCirculaire(PhiA / 2, -yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
-                Next
-
-            End If
-
-            '# Armatures du milieu
-
-            If (iArma <> 1) Then
-                NbBarres = Me.Enrobage.LitArma(iArma).NbMil
-                PhiA = Me.Enrobage.LitArma(iArma).PhiMil
-
-                For iBarre = 0 To NbBarres - 1
-                    yBarre = yArmaMil + kAdjustArmaMil(NbBarres) * yDecalArmaMil(iBarre) * PhiA
-                    MyModele.AddMailleCirculaire(PhiA / 2, yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
-                    MyModele.AddMailleCirculaire(PhiA / 2, -yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
-                Next
-            End If
-
-
-            '# Armatures internes
-
-            NbBarres = Me.Enrobage.LitArma(iArma).NbInt
-            lActif = lLitActif(iArma) Or Me.Enrobage.LitArma(iArma).lActiveInt
-            PhiA = Me.Enrobage.LitArma(iArma).PhiInt
-
-            If lActif And NbBarres > 0 Then
-
-                For iBarre = 0 To NbBarres - 1
-                    yBarre = yArmaInt + yDecalArmaBord(iBarre) * PhiA
-                    MyModele.AddMailleCirculaire(PhiA / 2, yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
-                    MyModele.AddMailleCirculaire(PhiA / 2, -yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, Gammas.GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
-                Next
-
-            End If
-
-        Next
-    End Sub
-
     Private Sub MaillageProfileA_YY(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
@@ -989,7 +841,7 @@ Public Class cls_Section
 
         If Me.lEnrobage And Not lProfileAcierUniquement Then
 
-            MaillageArmaturesEnrobage_YY(Gammas, MyModele)
+            MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
 
         End If
 
@@ -1055,7 +907,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            MaillageArmaturesEnrobage_YY(Gammas, MyModele)
+            MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
 
         End If
 
@@ -1133,7 +985,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            MaillageArmaturesEnrobage_YY(Gammas, MyModele)
+            MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
 
         End If
 
@@ -1381,7 +1233,7 @@ Public Class cls_Section
 
         If Me.lEnrobage And Not lProfileAcierUniquement And Not lCalculAlphaCr Then
 
-            MaillageArmaturesEnrobage_YY(Gammas, MyModele)
+            MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
 
         End If
 
@@ -1449,7 +1301,7 @@ Public Class cls_Section
 
         If Me.lEnrobage Then
 
-            MaillageArmaturesEnrobage_YY(Gammas, MyModele)
+            MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
 
         End If
 
@@ -1524,14 +1376,13 @@ Public Class cls_Section
 
         If Me.lEnrobage And Not lCalculAlphaCr Then
 
-            MaillageArmaturesEnrobage_ZZ(Gammas, MyModele)
+            MyModele.MaillageArmaturesEnrobage_ZZ(Gammas.GammaS, Me)
 
         End If
 
         '--> Dalle béton
 
         ' PAS DANS CETTE ROUTINE
-
 
         '--> Recherche de l'axe neutre élastique
 

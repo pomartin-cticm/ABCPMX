@@ -662,6 +662,153 @@ Public Class cls_ModeleP
 
     End Sub
 
+    Public Sub MaillageArmaturesEnrobage_YY(GammaS As Decimal, mySection As cls_Section)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   24/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du des armatures de l'enrobage pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaS      [E] :   Coefficient partiel pour les armatures
+        '   mySection   [E] :   Section à traiter
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim zArma, PhiA As Decimal
+        Dim iPos, iBarre As Integer
+        Dim NbBarres As Integer
+        Dim Fsk As Decimal = mySection.Enrobage.AcierArmatures.FsK
+        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / mySection.Enrobage.AcierArmatures.Es
+        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+        Const NBMA As Integer = 2       ' Car symétrie des deux chambres
+        'Dim lLitActif() As Boolean = {False, True, False}
+        Dim lActif As Boolean
+
+        '--> Boucle sur les lits d'armature
+
+        For iArma As Integer = 0 To 2
+
+            For iPos = 0 To 2
+
+                NbBarres = mySection.Enrobage.LitArma(iArma).NbBarres(iPos)
+                'lActif = lLitActif(iPos) Or Me.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
+                lActif = mySection.Enrobage.LitArma(iArma).lBarreActive(iArma, iPos)
+
+                If lActif Then
+                    For iBarre = 1 To NbBarres
+                        zArma = mySection.zPosArmaEnrobage(iArma, iPos, iBarre)
+                        PhiA = mySection.Enrobage.LitArma(iArma).PhiBarre(iPos)
+
+                        Me.AddMailleCirculaire(PhiA / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
+
+                    Next
+                End If
+
+            Next
+
+        Next
+
+    End Sub
+
+    Public Sub MaillageArmaturesEnrobage_ZZ(GammaS As Decimal, mySection As cls_Section)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   24/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage du des armatures de l'enrobage pour le calcul des propriétés / axe ZZ
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaS      [E] :   Coefficient partiel pour les armatures
+        '   mySection   [E] :   Section à traiter
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim PhiA As Decimal
+        Dim iBarre As Integer
+        Dim NbBarres As Integer
+        Dim Fsk As Decimal = mySection.Enrobage.AcierArmatures.FsK
+        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / mySection.Enrobage.AcierArmatures.Es
+        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+
+        Dim lLitActif() As Boolean = {False, True, False}
+        Dim lActif As Boolean
+
+        Dim yArmaExt As Decimal              'Position de la face interieure de la partie externe du cadre
+        Dim yArmaInt As Decimal              'Position de la face interieure des armatures intérieures
+        Dim yArmaMil As Decimal              'Position moyenne des armatures du milieu
+
+        Dim yDecalArmaBord() As Decimal = {0.5, 1.5, 1}
+        Dim yDecalArmaMil() As Decimal = {-0.5, +0.5}
+        Dim kAdjustArmaMil() As Decimal = {0, 1}
+        Dim Bf As Decimal = mySection.ProfilA.Bfs
+        Dim Tw As Decimal = mySection.ProfilA.Tw
+        Dim yBarre As Decimal
+
+        '--> Initialisation
+
+        yArmaExt = Bf * mySection.Enrobage.Ratio_bc / 2 - mySection.Enrobage.Etriers_EnrobageY - mySection.Enrobage.Etriers_Phi
+        Select Case mySection.Enrobage.Etriers_Type
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
+                yArmaInt = Tw / 2 + mySection.Enrobage.Etriers_EnrobageY + mySection.Enrobage.Etriers_Phi
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
+                yArmaInt = Tw / 2
+            Case cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
+                yArmaInt = Tw / 2 + mySection.Enrobage.Etriers_Phi
+        End Select
+
+        yArmaMil = (yArmaExt + yArmaInt) / 2
+
+        '--> Boucle sur les lits d'armature
+
+        For iArma As Integer = 0 To 2
+
+            '# Armatures extérieures
+
+            NbBarres = mySection.Enrobage.LitArma(iArma).NbExt
+            lActif = lLitActif(iArma) Or mySection.Enrobage.LitArma(iArma).lActiveExt
+            PhiA = mySection.Enrobage.LitArma(iArma).PhiExt
+
+            If lActif And NbBarres > 0 Then
+
+                For iBarre = 0 To NbBarres - 1
+                    yBarre = yArmaExt - yDecalArmaBord(iBarre) * PhiA
+                    Me.AddMailleCirculaire(PhiA / 2, yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
+                    Me.AddMailleCirculaire(PhiA / 2, -yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
+                Next
+
+            End If
+
+            '# Armatures du milieu
+
+            If (iArma <> 1) Then
+                NbBarres = mySection.Enrobage.LitArma(iArma).NbMil
+                PhiA = mySection.Enrobage.LitArma(iArma).PhiMil
+
+                For iBarre = 0 To NbBarres - 1
+                    yBarre = yArmaMil + kAdjustArmaMil(NbBarres) * yDecalArmaMil(iBarre) * PhiA
+                    Me.AddMailleCirculaire(PhiA / 2, yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
+                    Me.AddMailleCirculaire(PhiA / 2, -yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
+                Next
+            End If
+
+
+            '# Armatures internes
+
+            NbBarres = mySection.Enrobage.LitArma(iArma).NbInt
+            lActif = lLitActif(iArma) Or mySection.Enrobage.LitArma(iArma).lActiveInt
+            PhiA = mySection.Enrobage.LitArma(iArma).PhiInt
+
+            If lActif And NbBarres > 0 Then
+
+                For iBarre = 0 To NbBarres - 1
+                    yBarre = yArmaInt + yDecalArmaBord(iBarre) * PhiA
+                    Me.AddMailleCirculaire(PhiA / 2, yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
+                    Me.AddMailleCirculaire(PhiA / 2, -yBarre, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, 1, cls_Maille.EnuTypeMaille.Circulaire)
+                Next
+
+            End If
+
+        Next
+    End Sub
 
 #End Region
 
