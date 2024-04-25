@@ -208,58 +208,6 @@ Public Class cls_Section
 
     End Sub
 
-    'Private Sub MaillageProfileAUsuels_YY(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
-    '    '-------------------------------------------------------------------------------------------------------------------
-    '    '   03/01/24 :  Création - GUD
-    '    '-------------------------------------------------------------------------------------------------------------------
-    '    '   Maillage du profilé acier usuels pour le calcul des propriétés / axe YY
-    '    '-------------------------------------------------------------------------------------------------------------------
-    '    '   Gammas      [E] :   Coefficients partiels
-    '    '   RhoV        [E] :   Coefficient pour l'interaction MV
-    '    '   MyModele    [E/S]:  Modèle
-    '    '-------------------------------------------------------------------------------------------------------------------
-
-    '    '--> Déclaration
-
-    '    Dim Hw As Decimal
-    '    Dim zRef As Decimal = Me.ProfilA.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
-
-    '    '--> Initialisation
-
-    '    Hw = Me.ProfilA.HauteurAmeHw
-
-    '    '--> Modélisation du profilé acier
-
-    '    '# Semelle supérieure
-
-    '    MyModele.AddMaille(Me.ProfilA.AireFs, Me.ProfilA.Tfs, zRef - Me.ProfilA.Tfs / 2, 1, 1, 1, Me.FySup, 1, Gammas.GammaM0)
-
-    '    '# Âme
-
-    '    MyModele.AddMaille(Hw * Me.ProfilA.Tw, Hw, zRef - Me.ProfilA.Tfs - Hw / 2, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0)
-
-    '    '# Semelle inférieure
-
-    '    MyModele.AddMaille(Me.ProfilA.AireFi, Me.ProfilA.Tfi, zRef - Me.ProfilA.ha + Me.ProfilA.Tfi / 2, 1, 1, 1, Me.FyInf, 1, Gammas.GammaM0)
-
-    '    If Me.ProfilA.Rcs > 0 Then
-
-    '        '# Congés supérieurs
-
-    '        MyModele.AddMailleConges(Me.ProfilA.Rcs, zRef - Me.ProfilA.Tfs, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeSup)
-
-    '    End If
-
-    '    If Me.ProfilA.Rci > 0 Then
-
-    '        '# Congés inférieurs
-
-    '        MyModele.AddMailleConges(Me.ProfilA.Rci, zRef - Me.ProfilA.ha + Me.ProfilA.Tfi, 1, 1, 1, Me.FyW, (1 - RhoV), Gammas.GammaM0, cls_Maille.EnuTypeMaille.CongeInf)
-
-    '    End If
-
-    'End Sub
-
     Private Sub MaillageProfileASlimfloorsSFB_YY(Gammas As cls_Gamma, RhoV As Decimal, ByRef MyModele As cls_ModeleP)
         '-------------------------------------------------------------------------------------------------------------------
         '   03/01/24 :  Création - GUD

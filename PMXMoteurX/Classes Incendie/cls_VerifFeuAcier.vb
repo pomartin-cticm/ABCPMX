@@ -29,7 +29,7 @@ Public Class cls_VerifFeuAcier
 
 #End Region
 
-#Region " Constructeurs et Initialisaiton "
+#Region " Constructeurs et Initialisation "
 
     Public Sub New()
         Me.NbStep = cls_VerifFeuAcier.TimeSteps.GetUpperBound(0) + 1

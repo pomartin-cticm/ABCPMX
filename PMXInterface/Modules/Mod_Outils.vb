@@ -675,13 +675,9 @@ Module Mod_Outils
         ValeurU = Valeur / kUnitU
         MyFormat = GetFormatSignificatifN(ValeurU, nbSign, nbDigitMax)
 
-        If lUnite Then
-            Chaine = Format(ValeurU, MyFormat) & Unite
-        Else
-            Chaine = Format(ValeurU, MyFormat)
-        End If
-
+        Chaine = Format(ValeurU, MyFormat)
         If lSupZero Then SupprimeZero(Chaine)
+        If lUnite Then Chaine = Chaine & Unite
 
         Return Chaine
 
@@ -1224,7 +1220,7 @@ Module Mod_Outils
                            ByVal sWI As Single, ByVal sHI As Single,
                            ByVal lGrec As Boolean, lItalic As Boolean, ByVal Alignement As Enu_AlignementH,
                            ByVal FontNormal As Font, ByVal FontSymbol As Font,
-                           ByVal FontIndice As Font, ByVal kAdjust As Single, ByVal DrawEgal As Boolean)
+                           ByVal FontIndice As Font, ByVal kAdjust As Single, ByVal DrawEgal As Boolean, Optional lExposant As Boolean = False)
         '----------------------------------------------------------------------------------------
         '
         '   21/02/08 :  Création - Version 1.00
@@ -1293,7 +1289,12 @@ Module Mod_Outils
 
         Dim DecalIndice As Single = HauteurString / 3
 
-        MyGr.DrawString(Indice, FontIndice, BrushE, xStar, yPen + DecalIndice)
+        'MyGr.DrawString(Indice, FontIndice, BrushE, xStar, yPen + DecalIndice)
+        If lExposant Then
+            MyGr.DrawString(Indice, FontIndice, BrushE, xStar, yPen - DecalIndice)
+        Else
+            MyGr.DrawString(Indice, FontIndice, BrushE, xStar, yPen + DecalIndice)
+        End If
 
         If DrawEgal Then
             xStar += MyGr.MeasureString(Indice, FontIndice).Width ' - kAdjust * MyGr.MeasureString(" ", FontNormal).Width

@@ -164,6 +164,11 @@ Public Class Frm_Catalogue
         MyPoutreLoc.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
         PoidsPropreLoc = MyPoutreLoc.ChargeRepartiePP()
 
+        '--( Unités rayon de giration
+
+        Me.etq_UniteRy.Text = "mm"
+        Me.etq_UniteRz.Text = "mm"
+
         '--> Préparation catalogues
         'InitialiseCatalogue(FileACB.SectionsNew, MyCatalogue)
 
@@ -308,7 +313,7 @@ Public Class Frm_Catalogue
 
 #End Region
 
-#Region "   Affichage Statistique Section "
+#Region "   Affichage Propriétés Section "
 
     Private Sub SelectionDuProfile(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Grid_ProfilesSup.SelectionChanged
 
@@ -335,11 +340,11 @@ Public Class Frm_Catalogue
 
     Private Sub TransfertSaisieGridProfile(ByVal Gamme As String, ByVal Profile As String, ByRef MySection As Cls_Section)
         '--> Affichage des stats de la section séléctionée
-        lbl_val_Ht.Text = GetStringInUnit(MyCatalogue.Series(Gamme).Profiles(Profile).Ht, Enu_TypeVariable.Dimension, 4, 3, True)
-        lbl_val_Bf.Text = GetStringInUnit(MyCatalogue.Series(Gamme).Profiles(Profile).Bf, Enu_TypeVariable.Dimension, 4, 3, True)
-        lbl_val_Tf.Text = GetStringInUnit(MyCatalogue.Series(Gamme).Profiles(Profile).Tf, Enu_TypeVariable.Dimension, 4, 3, True)
-        lbl_val_Tw.Text = GetStringInUnit(MyCatalogue.Series(Gamme).Profiles(Profile).Tw, Enu_TypeVariable.Dimension, 4, 3, True)
-        lbl_val_Rc.Text = GetStringInUnit(MyCatalogue.Series(Gamme).Profiles(Profile).Rc, Enu_TypeVariable.Dimension, 4, 3, True)
+        lbl_val_Ht.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Ht, Enu_TypeVariable.Dimension, 4, 3, True, True)
+        lbl_val_Bf.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Bf, Enu_TypeVariable.Dimension, 4, 3, True, True)
+        lbl_val_Tf.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Tf, Enu_TypeVariable.Dimension, 4, 3, True, True)
+        lbl_val_Tw.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Tw, Enu_TypeVariable.Dimension, 4, 3, True, True)
+        lbl_val_Rc.Text = GetStringInUnitN(MyCatalogue.Series(Gamme).Profiles(Profile).Rc, Enu_TypeVariable.Dimension, 4, 3, True, True)
 
         '--> Mise à jour des paramètres des sections affichées
         MySection.ProfilA.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
@@ -386,87 +391,7 @@ Public Class Frm_Catalogue
         DessinProfileAcier(e.Graphics, MyPoutreLoc.Section, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
                            FontBase, kAdjust, True, False, iSelect)
 
-        'DrawSectionCatalogue(e.Graphics, sHI, sWI, type)
     End Sub
-
-    'Sub DrawSectionCatalogue(ByVal MyGr As Graphics, ByVal sHI As Single, ByVal sWI As Single, ByVal type As String)
-    '    '----------------------------------------------------------------------------------------------
-    '    '
-    '    '   23/02/08 :  Création - Version 1.00
-    '    '
-    '    '----------------------------------------------------------------------------------------------
-    '    '
-    '    '   Affichage graphique de la section dans la fenêtre
-    '    '
-    '    '----------------------------------------------------------------------------------------------
-    '    '
-    '    '   MyGr        [E] :   Graphics dans lequel on dessine
-    '    '   sHI, sWI    [E] :   Dimensions du PictureBox
-    '    '
-    '    '----------------------------------------------------------------------------------------------
-
-    '    Dim sDecalF, hT As Double
-    '    Const hWMINI As Double = 0.005
-
-    '    '--[ Initialisations
-    '    hT = Math.Max(MySection.ProfilA.ha / 2 - MySection.ProfilA.Tw, MySection.profilA.Tf + MySection.Rc + hWMINI)
-
-
-    '    '--[ Initialisation des paramètres d'affichage
-    '    InitialisationParAff(lSmartBeam, sDecalF)
-
-    '    '--[ Affichage
-    '    MySection.DrawSectionCatalogue(MyGr, sHI, sWI, MyParAff, CSng(sDecalF), strHISTAR, type, 0, 0)
-
-    'End Sub
-
-    'Sub InitialisationParAff(ByVal lSmartBeam As Boolean, ByRef sDecalF As Double)
-    '    '-----------------------------------------------------------------------------------
-    '    '
-    '    '   Initialisation des paramètres d'affichage
-    '    '
-    '    '-----------------------------------------------------------------------------------
-    '    '
-    '    '   lSmartBeam  [E] :   Indicateur pour Smart Beam
-    '    '   sDecalF     [S] :   Decalage de la cotation de semelle supérieure
-    '    '   sRef        [E] :   Largeur de référence (dans le repère image)
-    '    '
-    '    '-----------------------------------------------------------------------------------
-
-    '    '--> Declarations
-    '    Dim xMin, yMin, xMax, yMax As Single
-    '    Dim Dec As Single
-
-    '    If lSmartBeam Then
-
-    '        sDecalF = 3.0! * CSng(MySection.Tf)
-
-    '        xMax = CSng(MySection.Bf / 2)
-    '        'Dec = 2 * xMax * DecalLabel / sWI
-    '        Dec = DecalLabel
-
-    '        xMax += Dec
-    '        xMin = -xMax
-    '        yMin = CSng(-MySection.Ht / 2 - sDecalF)
-    '        yMax = CSng(MySection.Ht / 2 + sDecalF)
-
-    '    Else
-
-    '        sDecalF = 2.0! * CSng(Math.Max(MySection.Tf, MySection.Tf))
-
-    '        xMax = CSng(Math.Max(MySection.Bf, MySection.Bf) / 2)
-    '        'Dec = 2 * xMax * DecalLabel / sWI
-    '        Dec = sDecalF
-    '        xMax += Dec
-    '        xMin = -xMax
-    '        yMin = CSng(-MySection.Ht / 2 - sDecalF)
-    '        yMax = CSng(MySection.Ht / 2 + sDecalF)
-
-    '    End If
-
-    '    ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, sWI, sHI)
-
-    'End Sub
 
 #End Region
 
@@ -533,173 +458,208 @@ Public Class Frm_Catalogue
 
 #Region "   Dessin Unité Propriétés "
 
-    Private Sub img_CM_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) _
-        Handles img_AireProfile.Paint, img_AireCisaillementProfile.Paint,
-        img_InertieYYProfiles.Paint, img_InertieZZProfile.Paint, img_InertieTorsionProfile.Paint,
-        img_ModuleElastiqueYYProfile.Paint, img_ModulePlastiqueYYProfile.Paint, img_ModuleElastiqueZZProfile.Paint, img_ModulePlastiqueZZProfile.Paint
-        '----------------------------------------------------------------------------------------
-        '   10/09/18 :  Création - Version 1.00
-        '----------------------------------------------------------------------------------------
-        '   Associe l'image à la chaine puis lance la méthode pour dessiner
-        '----------------------------------------------------------------------------------------
-        Dim nb As String
 
-        If sender.Equals(img_AireProfile) Or sender.Equals(img_AireCisaillementProfile) Then
-            nb = "2"
-            DrawCM(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, nb)
-        ElseIf sender.Equals(img_InertieYYProfiles) Or sender.Equals(img_InertieZZProfile) Or sender.Equals(img_InertieTorsionProfile) Then
-            nb = "4"
-            DrawCM(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, nb)
-        ElseIf sender.Equals(img_ModuleElastiqueYYProfile) Or sender.Equals(img_ModulePlastiqueYYProfile) _
-        Or sender.Equals(img_ModuleElastiqueZZProfile) Or sender.Equals(img_ModulePlastiqueZZProfile) Then
-            nb = "3"
-            DrawCM(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, nb)
-        End If
+    Private Sub PaintUnites(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) _
+        Handles img_UniteAire.Paint, img_UniteAireV.Paint,
+                img_UniteInertieYY.Paint, img_UniteInertieZZ.Paint, img_UniteInertieT.Paint,
+                img_UniteWelYY.Paint, img_UniteWplYY.Paint,
+                img_UniteWelZZ.Paint, img_UniteWplZZ.Paint ', img_UniteGirationZ.Paint, img_UniteGirationY.Paint
+        '----------------------------------------------------------------------------------------
+        '   24/04/24 :  Création - POM
+        '----------------------------------------------------------------------------------------
+        '   Affiche des unités des propriétés
+        '----------------------------------------------------------------------------------------
+        '----------------------------------------------------------------------------------------
+        '--> Déclarations
+
+        Dim sWI As Single = sender.Width
+        Dim sHI As Single = sender.Height
+        Dim xStart As Single = sWI * 0.95
+
+        Dim strIndice As String = Nothing
+        Dim strSymbol As String = Nothing
+        Dim lGrec, lIndice, lEgal As Boolean
+        Dim xPen As Single = xStart
+        Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
+        Dim hIndice As Single = hCar / 2
+        Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+        Dim AlignH As Enu_AlignementH = Enu_AlignementH.Centre
+        Const kADJ As Single = 0.9
+
+        '--> Initialisation
+
+        lIndice = False
+        lGrec = False
+        lEgal = False
+        Select Case sender.name
+
+            Case Me.img_UniteAire.Name, Me.img_UniteAireV.Name
+                strSymbol = "cm"
+                strIndice = ""
+            'Case Me.img_UniteGirationY.Name, img_UniteGirationZ.Name
+            '    strSymbol = "mm"
+            '    strIndice = ""
+            Case Me.img_UniteInertieT.Name, Me.img_UniteInertieYY.Name, Me.img_UniteInertieZZ.Name
+                strSymbol = "cm"
+                strIndice = "4"
+            Case Me.img_UniteWelYY.Name, Me.img_UniteWplYY.Name, Me.img_UniteWelZZ.Name, Me.img_UniteWplZZ.Name
+                strSymbol = "cm"
+                strIndice = "3"
+
+        End Select
+
+        '--> Dessin
+
+        DrawSymbolN(e.Graphics, Brushes.Black, strSymbol, strIndice, sWI, sHI, lGrec, lIndice, AlignH,
+                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, kADJ, lEgal, True)
+
     End Sub
 
-    Private Sub DrawCM(ByVal MyGr As Graphics, ByVal sWI As Single, ByVal sHI As Single, ByVal nb As String)
-        '----------------------------------------------------------------------------------------
-        '   07/09/18 :  Création - Version 1.00
-        '----------------------------------------------------------------------------------------
-        '   Dessine cm^2 ou cm^3 ou cm^4
-        '----------------------------------------------------------------------------------------
-        Dim Chaine As String
-        Dim xPen, yPen As Single
-        Dim sCar, xDec, hDec, xDepart As Single
-        Dim FontNormal As New Font(Me.lbl_A.Font.Name, 8.25)
-        Dim FontExp As New Font(Me.lbl_A.Font.Name, 6.25)
-        Const kMatch As Single = 0.97
 
-        Chaine = "cm"
-        sCar = MyGr.MeasureString(Chaine, FontNormal).Height
-        xDepart = MyGr.MeasureString(Chaine + nb, FontNormal).Width '-->largeur de chaine + exp
-        xDec = MyGr.MeasureString(Chaine, FontNormal).Width
-
-        yPen = (sHI - sCar) / 2
-        xPen = (sWI - xDepart) / 2 '-->Centrer horizontalement
-        MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
-
-        xPen += kMatch * xDec
-        hDec = sCar / 4
-
-        MyGr.DrawString(nb, FontExp, Brushes.Black, xPen, yPen - hDec)
-
-        FontNormal.Dispose()
-        FontExp.Dispose()
-    End Sub
 
 #End Region
 
 #Region "   Dessin Indice Propriétés et Dimensions"
 
-    Private Sub img_Indice_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_Iy.Paint, img_Wely.Paint,
-        img_Wply.Paint, img_iy2.Paint, img_Avz.Paint, img_Iz.Paint, img_Welz.Paint,
-        img_Wplz.Paint, img_iz2.Paint, img_It.Paint, img_Ht.Paint, img_Bf.Paint,
-        img_Tf.Paint, img_Tw.Paint, img_Rc.Paint
+
+    Private Sub PaintSymbols(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_Tf.Paint, img_Ht.Paint, img_Bf.Paint,
+                             img_Tw.Paint, img_Rc.Paint
         '----------------------------------------------------------------------------------------
-        '   10/09/18 :  Création - Version 1.00
+        '   24/04/24 :  Création - POM
         '----------------------------------------------------------------------------------------
-        '   Associe l'image à la chaine puis lance la méthode pour dessiner
+        '   Affiche les symboles de dimensions
+        '----------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------
 
-        Dim chaine As String
-        Dim exp As String
+        '--> Déclarations
 
-        '--> Propriétés 
-        If sender.Equals(img_Iy) Then
-            chaine = "I"
-            exp = "y"
-            DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Wely) Then
-            chaine = "W"
-            exp = "el.y"
-            DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Wply) Then
-            chaine = "W"
-            exp = "pl.y"
-            DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_iy2) Then
-            chaine = "i"
-            exp = "y"
-            DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Avz) Then
-            chaine = "A"
-            exp = "vz"
-            DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Iz) Then
-            chaine = "I"
-            exp = "z"
-            DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Welz) Then
-            chaine = "W"
-            exp = "el.z"
-            DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Wplz) Then
-            chaine = "W"
-            exp = "pl.z"
-            DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_iz2) Then
-            chaine = "i"
-            exp = "z"
-            DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_It) Then
-            chaine = "I"
-            exp = "t"
-            DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
+        Dim sWI As Single = sender.Width
+        Dim sHI As Single = sender.Height
+        Dim xStart As Single = sWI * 0.95
 
-            '--> Dimensions
-        ElseIf sender.Equals(img_Ht) Then
-            chaine = "h"
-            exp = "t"
-            DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Bf) Then
-            chaine = "b"
-            exp = "f"
-            DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Tf) Then
-            chaine = "t"
-            exp = "f"
-            DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Tw) Then
-            chaine = "t"
-            exp = "w"
-            DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
-        ElseIf sender.Equals(img_Rc) Then
-            chaine = "r"
-            exp = "c"
-            DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
-        End If
+        Dim strIndice As String = Nothing
+        Dim strSymbol As String = Nothing
+        Dim lGrec, lIndice, lEgal As Boolean
+        Dim xPen As Single = xStart
+        Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
+        Dim hIndice As Single = hCar / 2
+        Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+        Dim AlignH As Enu_AlignementH = Enu_AlignementH.Centre
+        Const kADJ As Single = 0.9
+
+        '--> Initialisation
+
+        lIndice = False
+        lGrec = False
+        lEgal = False
+        Select Case sender.name
+
+            Case Me.img_Ht.Name
+                strSymbol = "h"
+                strIndice = "t"
+            Case Me.img_Bf.Name
+                strSymbol = "b"
+                strIndice = "f"
+            Case Me.img_Tf.Name
+                strSymbol = "t"
+                strIndice = "f"
+            Case Me.img_Tw.Name
+                strSymbol = "t"
+                strIndice = "w"
+            Case Me.img_Rc.Name
+                strSymbol = "r"
+                strIndice = ""
+
+        End Select
+
+        '--> Dessin
+
+        DrawSymbolN(e.Graphics, Brushes.Black, strSymbol, strIndice, sWI, sHI, lGrec, lIndice, AlignH,
+                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, kADJ, lEgal)
+
     End Sub
 
-    Private Sub DrawIndice(ByVal MyGr As Graphics, ByVal sWI As Single, ByVal sHI As Single, ByVal Chaine As String, ByVal exp As String)
+    Private Sub PaintSymbolProps(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_Iy.Paint, img_Wely.Paint,
+    img_Wply.Paint, img_iy2.Paint, img_Avz.Paint, img_Iz.Paint, img_Welz.Paint,
+    img_Wplz.Paint, img_iz2.Paint, img_It.Paint
         '----------------------------------------------------------------------------------------
-        '   10/09/18 :  Création - Version 1.00
+        '   24/04/24 :  Création - POM
         '----------------------------------------------------------------------------------------
-        '   Dessine la chaine avec l'indice donné
+        '   Affiche les symboles de propriétés
+        '----------------------------------------------------------------------------------------
         '----------------------------------------------------------------------------------------
 
-        Dim xPen, yPen As Single
-        Dim sCar, xDec, hDec, xDepart As Single
-        Dim FontNormal As New Font(Me.lbl_A.Font.Name, 8.25) '--> taille d'écriture de la chaine
-        Dim FontExp As New Font(Me.lbl_A.Font.Name, 7.25) '--> taille d'écriture de l'exposant
-        Const kMatch As Single = 0.97
+        '--> Déclarations
 
-        sCar = MyGr.MeasureString(Chaine, FontNormal).Height '-->hauteur de l'écriture
-        xDepart = MyGr.MeasureString(Chaine + exp, FontNormal).Width '-->largeur de chaine + exp
-        xDec = MyGr.MeasureString(Chaine, FontNormal).Width '-->largeur de chaine
+        Dim sWI As Single = sender.Width
+        Dim sHI As Single = sender.Height
+        Dim xStart As Single = sWI * 0.95
 
-        yPen = (sHI - sCar) / 2 '-->Centrer verticalement
-        xPen = (sWI - xDepart) / 2 '-->Centrer horizontalement
-        MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
+        Dim strIndice As String = Nothing
+        Dim strSymbol As String = Nothing
+        Dim lGrec, lIndice, lEgal As Boolean
+        Dim xPen As Single = xStart
+        Dim hCar As Single = e.Graphics.MeasureString("X", FontSymbolNormal).Height
+        Dim hIndice As Single = hCar / 2
+        Dim yPen As Single = (sHI / 2 - hCar) / 2 + sHI * 0.15
+        Dim AlignH As Enu_AlignementH = Enu_AlignementH.Centre
+        Const kADJ As Single = 0.9
 
-        '--> Décalage pour écrire l'indice en bas à droite
-        xPen += kMatch * xDec
-        hDec = sCar / 4
-        MyGr.DrawString(exp, FontExp, Brushes.Black, xPen, yPen + hDec)
+        '--> Initialisation
 
-        FontNormal.Dispose()
-        FontExp.Dispose()
+        lIndice = False
+        lGrec = False
+        lEgal = False
+        Select Case sender.name
+
+            'Case Me.img_A.Name          ' Aire
+            '    strSymbol = "A"
+            '    strIndice = "g"
+
+            Case Me.img_Iy.Name         ' Inertie / axe fort
+                strSymbol = "I"
+                strIndice = "y"
+            Case Me.img_Wely.Name       ' Module élastique / axe fort
+                strSymbol = "W"
+                strIndice = "el,y"
+            Case Me.img_Wply.Name       ' Module plastique / axe fort
+                strSymbol = "W"
+                strIndice = "pl,y"
+            Case Me.img_iy2.Name        ' rayon de giration / axe fort
+                strSymbol = "i"
+                strIndice = "y"
+
+            Case Me.img_Avz.Name        ' Aire de cisaillement
+                strSymbol = "A"
+                strIndice = "v"
+
+            Case Me.img_Iz.Name         ' Inertie / axe faible
+                strSymbol = "I"
+                strIndice = "z"
+            Case Me.img_Welz.Name       ' Module élastique / axe faible
+                strSymbol = "W"
+                strIndice = "el,z"
+            Case Me.img_Wplz.Name       ' Module plastique / axe faible
+                strSymbol = "W"
+                strIndice = "pl,z"
+            Case Me.img_iz2.Name        ' rayon de giration / axe faible
+                strSymbol = "i"
+                strIndice = "z"
+
+            Case Me.img_It.Name         ' Inertie de torsion
+                strSymbol = "I"
+                strIndice = "t"
+
+        End Select
+
+        '--> Dessin
+
+        DrawSymbolN(e.Graphics, Brushes.Black, strSymbol, strIndice, sWI, sHI, lGrec, lIndice, AlignH,
+                FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, kADJ, lEgal)
+
     End Sub
+
+
 
 #End Region
 
@@ -747,6 +707,174 @@ Public Class Frm_Catalogue
 
 
     End Sub
+
+#End Region
+
+#Region " POUBELLE "
+
+    'Private Sub img_CM_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) _
+    '    Handles img_AireProfile.Paint, img_AireCisaillementProfile.Paint,
+    '    img_InertieYYProfiles.Paint, img_InertieZZProfile.Paint, img_InertieTorsionProfile.Paint,
+    '    img_ModuleElastiqueYYProfile.Paint, img_ModulePlastiqueYYProfile.Paint, img_ModuleElastiqueZZProfile.Paint, img_ModulePlastiqueZZProfile.Paint
+    '    '----------------------------------------------------------------------------------------
+    '    '   10/09/18 :  Création - Version 1.00
+    '    '----------------------------------------------------------------------------------------
+    '    '   Associe l'image à la chaine puis lance la méthode pour dessiner
+    '    '----------------------------------------------------------------------------------------
+    '    Dim nb As String
+
+    '    If sender.Equals(img_AireProfile) Or sender.Equals(img_AireCisaillementProfile) Then
+    '        nb = "2"
+    '        DrawCM(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, nb)
+    '    ElseIf sender.Equals(img_InertieYYProfiles) Or sender.Equals(img_InertieZZProfile) Or sender.Equals(img_InertieTorsionProfile) Then
+    '        nb = "4"
+    '        DrawCM(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, nb)
+    '    ElseIf sender.Equals(img_ModuleElastiqueYYProfile) Or sender.Equals(img_ModulePlastiqueYYProfile) _
+    '    Or sender.Equals(img_ModuleElastiqueZZProfile) Or sender.Equals(img_ModulePlastiqueZZProfile) Then
+    '        nb = "3"
+    '        DrawCM(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, nb)
+    '    End If
+    'End Sub
+
+    'Private Sub DrawCM(ByVal MyGr As Graphics, ByVal sWI As Single, ByVal sHI As Single, ByVal nb As String)
+    '    '----------------------------------------------------------------------------------------
+    '    '   07/09/18 :  Création - Version 1.00
+    '    '----------------------------------------------------------------------------------------
+    '    '   Dessine cm^2 ou cm^3 ou cm^4
+    '    '----------------------------------------------------------------------------------------
+    '    Dim Chaine As String
+    '    Dim xPen, yPen As Single
+    '    Dim sCar, xDec, hDec, xDepart As Single
+    '    Dim FontNormal As New Font(Me.lbl_A.Font.Name, 8.25)
+    '    Dim FontExp As New Font(Me.lbl_A.Font.Name, 6.25)
+    '    Const kMatch As Single = 0.97
+
+    '    Chaine = "cm"
+    '    sCar = MyGr.MeasureString(Chaine, FontNormal).Height
+    '    xDepart = MyGr.MeasureString(Chaine + nb, FontNormal).Width '-->largeur de chaine + exp
+    '    xDec = MyGr.MeasureString(Chaine, FontNormal).Width
+
+    '    yPen = (sHI - sCar) / 2
+    '    xPen = (sWI - xDepart) / 2 '-->Centrer horizontalement
+    '    MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
+
+    '    xPen += kMatch * xDec
+    '    hDec = sCar / 4
+
+    '    MyGr.DrawString(nb, FontExp, Brushes.Black, xPen, yPen - hDec)
+
+    '    FontNormal.Dispose()
+    '    FontExp.Dispose()
+    'End Sub
+
+    'Private Sub img_Indice_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_Iy.Paint, img_Wely.Paint,
+    '    img_Wply.Paint, img_iy2.Paint, img_Avz.Paint, img_Iz.Paint, img_Welz.Paint,
+    '    img_Wplz.Paint, img_iz2.Paint, img_It.Paint, img_Ht.Paint, img_Bf.Paint,
+    '    img_Tf.Paint, img_Tw.Paint, img_Rc.Paint
+    '    '----------------------------------------------------------------------------------------
+    '    '   10/09/18 :  Création - Version 1.00
+    '    '----------------------------------------------------------------------------------------
+    '    '   Associe l'image à la chaine puis lance la méthode pour dessiner
+    '    '----------------------------------------------------------------------------------------
+
+    '    Dim chaine As String
+    '    Dim exp As String
+
+    '    '--> Propriétés 
+    '    If sender.Equals(img_Iy) Then
+    '        chaine = "I"
+    '        exp = "y"
+    '        DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Wely) Then
+    '        chaine = "W"
+    '        exp = "el.y"
+    '        DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Wply) Then
+    '        chaine = "W"
+    '        exp = "pl.y"
+    '        DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_iy2) Then
+    '        chaine = "i"
+    '        exp = "y"
+    '        DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Avz) Then
+    '        chaine = "A"
+    '        exp = "vz"
+    '        DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Iz) Then
+    '        chaine = "I"
+    '        exp = "z"
+    '        DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Welz) Then
+    '        chaine = "W"
+    '        exp = "el.z"
+    '        DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Wplz) Then
+    '        chaine = "W"
+    '        exp = "pl.z"
+    '        DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_iz2) Then
+    '        chaine = "i"
+    '        exp = "z"
+    '        DrawIndice(e.Graphics, Me.img_AireProfile.ClientRectangle.Width, Me.img_AireProfile.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_It) Then
+    '        chaine = "I"
+    '        exp = "t"
+    '        DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
+
+    '        '--> Dimensions
+    '    ElseIf sender.Equals(img_Ht) Then
+    '        chaine = "h"
+    '        exp = "t"
+    '        DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Bf) Then
+    '        chaine = "b"
+    '        exp = "f"
+    '        DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Tf) Then
+    '        chaine = "t"
+    '        exp = "f"
+    '        DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Tw) Then
+    '        chaine = "t"
+    '        exp = "w"
+    '        DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
+    '    ElseIf sender.Equals(img_Rc) Then
+    '        chaine = "r"
+    '        exp = "c"
+    '        DrawIndice(e.Graphics, Me.img_Ht.ClientRectangle.Width, Me.img_Ht.ClientRectangle.Height, chaine, exp)
+    '    End If
+    'End Sub
+
+    'Private Sub DrawIndice(ByVal MyGr As Graphics, ByVal sWI As Single, ByVal sHI As Single, ByVal Chaine As String, ByVal exp As String)
+    '    '----------------------------------------------------------------------------------------
+    '    '   10/09/18 :  Création - Version 1.00
+    '    '----------------------------------------------------------------------------------------
+    '    '   Dessine la chaine avec l'indice donné
+    '    '----------------------------------------------------------------------------------------
+
+    '    Dim xPen, yPen As Single
+    '    Dim sCar, xDec, hDec, xDepart As Single
+    '    Dim FontNormal As New Font(Me.lbl_A.Font.Name, 8.25) '--> taille d'écriture de la chaine
+    '    Dim FontExp As New Font(Me.lbl_A.Font.Name, 7.25) '--> taille d'écriture de l'exposant
+    '    Const kMatch As Single = 0.97
+
+    '    sCar = MyGr.MeasureString(Chaine, FontNormal).Height '-->hauteur de l'écriture
+    '    xDepart = MyGr.MeasureString(Chaine + exp, FontNormal).Width '-->largeur de chaine + exp
+    '    xDec = MyGr.MeasureString(Chaine, FontNormal).Width '-->largeur de chaine
+
+    '    yPen = (sHI - sCar) / 2 '-->Centrer verticalement
+    '    xPen = (sWI - xDepart) / 2 '-->Centrer horizontalement
+    '    MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
+
+    '    '--> Décalage pour écrire l'indice en bas à droite
+    '    xPen += kMatch * xDec
+    '    hDec = sCar / 4
+    '    MyGr.DrawString(exp, FontExp, Brushes.Black, xPen, yPen + hDec)
+
+    '    FontNormal.Dispose()
+    '    FontExp.Dispose()
+    'End Sub
 
 #End Region
 

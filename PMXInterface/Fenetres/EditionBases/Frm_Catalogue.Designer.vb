@@ -32,7 +32,7 @@ Partial Class Frm_Catalogue
         Me.img_Wply = New System.Windows.Forms.PictureBox()
         Me.img_Wely = New System.Windows.Forms.PictureBox()
         Me.img_Iy = New System.Windows.Forms.PictureBox()
-        Me.img_InertieTorsionProfile = New System.Windows.Forms.PictureBox()
+        Me.img_UniteInertieT = New System.Windows.Forms.PictureBox()
         Me.lbl_val_It = New System.Windows.Forms.Label()
         Me.etq_Profils = New System.Windows.Forms.GroupBox()
         Me.Grid_ProfilesSup = New System.Windows.Forms.DataGridView()
@@ -51,35 +51,35 @@ Partial Class Frm_Catalogue
         Me.lbl_val_Rc = New System.Windows.Forms.Label()
         Me.lbl_val_Ht = New System.Windows.Forms.Label()
         Me.img_Section = New System.Windows.Forms.PictureBox()
-        Me.Label1 = New System.Windows.Forms.Label()
+        Me.etq_UniteRz = New System.Windows.Forms.Label()
         Me.btn_Note = New System.Windows.Forms.Button()
-        Me.img_ModulePlastiqueZZProfile = New System.Windows.Forms.PictureBox()
-        Me.img_ModuleElastiqueZZProfile = New System.Windows.Forms.PictureBox()
+        Me.img_UniteWplZZ = New System.Windows.Forms.PictureBox()
+        Me.img_UniteWelZZ = New System.Windows.Forms.PictureBox()
         Me.lbl_val_iz2 = New System.Windows.Forms.Label()
         Me.lbl_val_Wplz = New System.Windows.Forms.Label()
         Me.lbl_val_Welz = New System.Windows.Forms.Label()
-        Me.img_InertieZZProfile = New System.Windows.Forms.PictureBox()
+        Me.img_UniteInertieZZ = New System.Windows.Forms.PictureBox()
         Me.lbl_val_Iz = New System.Windows.Forms.Label()
         Me.lbl_kgm = New System.Windows.Forms.Label()
         Me.lbl_val_G = New System.Windows.Forms.Label()
         Me.lbl_G = New System.Windows.Forms.Label()
         Me.lbl_val_Avz = New System.Windows.Forms.Label()
-        Me.img_AireCisaillementProfile = New System.Windows.Forms.PictureBox()
+        Me.img_UniteAireV = New System.Windows.Forms.PictureBox()
         Me.lst_Gamme = New System.Windows.Forms.ListBox()
         Me.etq_Gamme = New System.Windows.Forms.GroupBox()
         Me.lbl_val_iy2 = New System.Windows.Forms.Label()
         Me.etq_Proprietes = New System.Windows.Forms.GroupBox()
         Me.img_InertieYYProfile = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_cm = New System.Windows.Forms.Label()
+        Me.etq_UniteRy = New System.Windows.Forms.Label()
         Me.lbl_val_Wply = New System.Windows.Forms.Label()
-        Me.img_ModulePlastiqueYYProfile = New System.Windows.Forms.PictureBox()
+        Me.img_UniteWplYY = New System.Windows.Forms.PictureBox()
         Me.lbl_val_Wely = New System.Windows.Forms.Label()
-        Me.img_ModuleElastiqueYYProfile = New System.Windows.Forms.PictureBox()
-        Me.img_InertieYYProfiles = New System.Windows.Forms.PictureBox()
+        Me.img_UniteWelYY = New System.Windows.Forms.PictureBox()
+        Me.img_UniteInertieYY = New System.Windows.Forms.PictureBox()
         Me.lbl_val_Iy = New System.Windows.Forms.Label()
         Me.lbl_A = New System.Windows.Forms.Label()
         Me.lbl_val_A = New System.Windows.Forms.Label()
-        Me.img_AireProfile = New System.Windows.Forms.PictureBox()
+        Me.img_UniteAire = New System.Windows.Forms.PictureBox()
         Me.cmd_fermer = New System.Windows.Forms.Button()
         CType(Me.img_It, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_iz2, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -91,7 +91,7 @@ Partial Class Frm_Catalogue
         CType(Me.img_Wply, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Wely, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Iy, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_InertieTorsionProfile, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UniteInertieT, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.etq_Profils.SuspendLayout()
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.etq_Dims.SuspendLayout()
@@ -102,17 +102,17 @@ Partial Class Frm_Catalogue
         CType(Me.img_Bf, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Ht, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_ModulePlastiqueZZProfile, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_ModuleElastiqueZZProfile, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_InertieZZProfile, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_AireCisaillementProfile, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UniteWplZZ, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UniteWelZZ, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UniteInertieZZ, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UniteAireV, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.etq_Gamme.SuspendLayout()
         Me.etq_Proprietes.SuspendLayout()
         Me.img_InertieYYProfile.SuspendLayout()
-        CType(Me.img_ModulePlastiqueYYProfile, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_ModuleElastiqueYYProfile, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_InertieYYProfiles, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_AireProfile, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UniteWplYY, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UniteWelYY, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UniteInertieYY, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_UniteAire, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'img_It
@@ -225,16 +225,16 @@ Partial Class Frm_Catalogue
         Me.img_Iy.TabIndex = 84
         Me.img_Iy.TabStop = False
         '
-        'img_InertieTorsionProfile
+        'img_UniteInertieT
         '
-        Me.img_InertieTorsionProfile.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.img_UniteInertieT.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_InertieTorsionProfile.Location = New System.Drawing.Point(110, 370)
-        Me.img_InertieTorsionProfile.Name = "img_InertieTorsionProfile"
-        Me.img_InertieTorsionProfile.Size = New System.Drawing.Size(48, 33)
-        Me.img_InertieTorsionProfile.TabIndex = 83
-        Me.img_InertieTorsionProfile.TabStop = False
+        Me.img_UniteInertieT.Location = New System.Drawing.Point(112, 370)
+        Me.img_UniteInertieT.Name = "img_UniteInertieT"
+        Me.img_UniteInertieT.Size = New System.Drawing.Size(46, 33)
+        Me.img_UniteInertieT.TabIndex = 83
+        Me.img_UniteInertieT.TabStop = False
         '
         'lbl_val_It
         '
@@ -244,7 +244,7 @@ Partial Class Frm_Catalogue
         Me.lbl_val_It.AutoSize = True
         Me.lbl_val_It.Location = New System.Drawing.Point(57, 367)
         Me.lbl_val_It.Name = "lbl_val_It"
-        Me.lbl_val_It.Size = New System.Drawing.Size(46, 39)
+        Me.lbl_val_It.Size = New System.Drawing.Size(48, 39)
         Me.lbl_val_It.TabIndex = 24
         Me.lbl_val_It.Text = "lbl_val_It"
         Me.lbl_val_It.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -461,18 +461,18 @@ Partial Class Frm_Catalogue
         Me.img_Section.TabIndex = 1
         Me.img_Section.TabStop = False
         '
-        'Label1
+        'etq_UniteRz
         '
-        Me.Label1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.etq_UniteRz.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(110, 331)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(48, 35)
-        Me.Label1.TabIndex = 24
-        Me.Label1.Text = "cm"
-        Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.etq_UniteRz.AutoSize = True
+        Me.etq_UniteRz.Location = New System.Drawing.Point(112, 331)
+        Me.etq_UniteRz.Name = "etq_UniteRz"
+        Me.etq_UniteRz.Size = New System.Drawing.Size(46, 35)
+        Me.etq_UniteRz.TabIndex = 24
+        Me.etq_UniteRz.Text = "cm"
+        Me.etq_UniteRz.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'btn_Note
         '
@@ -483,27 +483,27 @@ Partial Class Frm_Catalogue
         Me.btn_Note.Text = "btn_Note"
         Me.btn_Note.UseVisualStyleBackColor = True
         '
-        'img_ModulePlastiqueZZProfile
+        'img_UniteWplZZ
         '
-        Me.img_ModulePlastiqueZZProfile.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.img_UniteWplZZ.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ModulePlastiqueZZProfile.Location = New System.Drawing.Point(110, 301)
-        Me.img_ModulePlastiqueZZProfile.Name = "img_ModulePlastiqueZZProfile"
-        Me.img_ModulePlastiqueZZProfile.Size = New System.Drawing.Size(48, 26)
-        Me.img_ModulePlastiqueZZProfile.TabIndex = 82
-        Me.img_ModulePlastiqueZZProfile.TabStop = False
+        Me.img_UniteWplZZ.Location = New System.Drawing.Point(112, 301)
+        Me.img_UniteWplZZ.Name = "img_UniteWplZZ"
+        Me.img_UniteWplZZ.Size = New System.Drawing.Size(46, 26)
+        Me.img_UniteWplZZ.TabIndex = 82
+        Me.img_UniteWplZZ.TabStop = False
         '
-        'img_ModuleElastiqueZZProfile
+        'img_UniteWelZZ
         '
-        Me.img_ModuleElastiqueZZProfile.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.img_UniteWelZZ.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ModuleElastiqueZZProfile.Location = New System.Drawing.Point(110, 268)
-        Me.img_ModuleElastiqueZZProfile.Name = "img_ModuleElastiqueZZProfile"
-        Me.img_ModuleElastiqueZZProfile.Size = New System.Drawing.Size(48, 26)
-        Me.img_ModuleElastiqueZZProfile.TabIndex = 82
-        Me.img_ModuleElastiqueZZProfile.TabStop = False
+        Me.img_UniteWelZZ.Location = New System.Drawing.Point(112, 268)
+        Me.img_UniteWelZZ.Name = "img_UniteWelZZ"
+        Me.img_UniteWelZZ.Size = New System.Drawing.Size(46, 26)
+        Me.img_UniteWelZZ.TabIndex = 82
+        Me.img_UniteWelZZ.TabStop = False
         '
         'lbl_val_iz2
         '
@@ -513,7 +513,7 @@ Partial Class Frm_Catalogue
         Me.lbl_val_iz2.AutoSize = True
         Me.lbl_val_iz2.Location = New System.Drawing.Point(57, 331)
         Me.lbl_val_iz2.Name = "lbl_val_iz2"
-        Me.lbl_val_iz2.Size = New System.Drawing.Size(46, 35)
+        Me.lbl_val_iz2.Size = New System.Drawing.Size(48, 35)
         Me.lbl_val_iz2.TabIndex = 23
         Me.lbl_val_iz2.Text = "lbl_val_iz"
         Me.lbl_val_iz2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -526,7 +526,7 @@ Partial Class Frm_Catalogue
         Me.lbl_val_Wplz.AutoSize = True
         Me.lbl_val_Wplz.Location = New System.Drawing.Point(57, 298)
         Me.lbl_val_Wplz.Name = "lbl_val_Wplz"
-        Me.lbl_val_Wplz.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_Wplz.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_Wplz.TabIndex = 23
         Me.lbl_val_Wplz.Text = "lbl_val_Wplz"
         Me.lbl_val_Wplz.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -539,21 +539,21 @@ Partial Class Frm_Catalogue
         Me.lbl_val_Welz.AutoSize = True
         Me.lbl_val_Welz.Location = New System.Drawing.Point(57, 265)
         Me.lbl_val_Welz.Name = "lbl_val_Welz"
-        Me.lbl_val_Welz.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_Welz.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_Welz.TabIndex = 23
         Me.lbl_val_Welz.Text = "lbl_val_Welz"
         Me.lbl_val_Welz.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'img_InertieZZProfile
+        'img_UniteInertieZZ
         '
-        Me.img_InertieZZProfile.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.img_UniteInertieZZ.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_InertieZZProfile.Location = New System.Drawing.Point(110, 235)
-        Me.img_InertieZZProfile.Name = "img_InertieZZProfile"
-        Me.img_InertieZZProfile.Size = New System.Drawing.Size(48, 26)
-        Me.img_InertieZZProfile.TabIndex = 82
-        Me.img_InertieZZProfile.TabStop = False
+        Me.img_UniteInertieZZ.Location = New System.Drawing.Point(112, 235)
+        Me.img_UniteInertieZZ.Name = "img_UniteInertieZZ"
+        Me.img_UniteInertieZZ.Size = New System.Drawing.Size(46, 26)
+        Me.img_UniteInertieZZ.TabIndex = 82
+        Me.img_UniteInertieZZ.TabStop = False
         '
         'lbl_val_Iz
         '
@@ -563,7 +563,7 @@ Partial Class Frm_Catalogue
         Me.lbl_val_Iz.AutoSize = True
         Me.lbl_val_Iz.Location = New System.Drawing.Point(57, 232)
         Me.lbl_val_Iz.Name = "lbl_val_Iz"
-        Me.lbl_val_Iz.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_Iz.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_Iz.TabIndex = 22
         Me.lbl_val_Iz.Text = "lbl_val_Iz"
         Me.lbl_val_Iz.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -574,9 +574,9 @@ Partial Class Frm_Catalogue
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_kgm.AutoSize = True
-        Me.lbl_kgm.Location = New System.Drawing.Point(110, 1)
+        Me.lbl_kgm.Location = New System.Drawing.Point(112, 1)
         Me.lbl_kgm.Name = "lbl_kgm"
-        Me.lbl_kgm.Size = New System.Drawing.Size(48, 32)
+        Me.lbl_kgm.Size = New System.Drawing.Size(46, 32)
         Me.lbl_kgm.TabIndex = 24
         Me.lbl_kgm.Text = "kg/m"
         Me.lbl_kgm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -589,7 +589,7 @@ Partial Class Frm_Catalogue
         Me.lbl_val_G.AutoSize = True
         Me.lbl_val_G.Location = New System.Drawing.Point(57, 1)
         Me.lbl_val_G.Name = "lbl_val_G"
-        Me.lbl_val_G.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_G.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_G.TabIndex = 22
         Me.lbl_val_G.Text = "lbl_val_G"
         Me.lbl_val_G.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -616,21 +616,21 @@ Partial Class Frm_Catalogue
         Me.lbl_val_Avz.AutoSize = True
         Me.lbl_val_Avz.Location = New System.Drawing.Point(57, 199)
         Me.lbl_val_Avz.Name = "lbl_val_Avz"
-        Me.lbl_val_Avz.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_Avz.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_Avz.TabIndex = 3
         Me.lbl_val_Avz.Text = "lbl_val_Avz"
         Me.lbl_val_Avz.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'img_AireCisaillementProfile
+        'img_UniteAireV
         '
-        Me.img_AireCisaillementProfile.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.img_UniteAireV.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_AireCisaillementProfile.Location = New System.Drawing.Point(110, 202)
-        Me.img_AireCisaillementProfile.Name = "img_AireCisaillementProfile"
-        Me.img_AireCisaillementProfile.Size = New System.Drawing.Size(48, 26)
-        Me.img_AireCisaillementProfile.TabIndex = 81
-        Me.img_AireCisaillementProfile.TabStop = False
+        Me.img_UniteAireV.Location = New System.Drawing.Point(112, 202)
+        Me.img_UniteAireV.Name = "img_UniteAireV"
+        Me.img_UniteAireV.Size = New System.Drawing.Size(46, 26)
+        Me.img_UniteAireV.TabIndex = 81
+        Me.img_UniteAireV.TabStop = False
         '
         'lst_Gamme
         '
@@ -658,7 +658,7 @@ Partial Class Frm_Catalogue
         Me.lbl_val_iy2.AutoSize = True
         Me.lbl_val_iy2.Location = New System.Drawing.Point(57, 166)
         Me.lbl_val_iy2.Name = "lbl_val_iy2"
-        Me.lbl_val_iy2.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_iy2.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_iy2.TabIndex = 21
         Me.lbl_val_iy2.Text = "lbl_val_iy"
         Me.lbl_val_iy2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -685,8 +685,8 @@ Partial Class Frm_Catalogue
         Me.img_InertieYYProfile.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.[Single]
         Me.img_InertieYYProfile.ColumnCount = 3
         Me.img_InertieYYProfile.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.img_InertieYYProfile.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
-        Me.img_InertieYYProfile.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.img_InertieYYProfile.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.78261!))
+        Me.img_InertieYYProfile.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 32.29814!))
         Me.img_InertieYYProfile.Controls.Add(Me.img_It, 0, 11)
         Me.img_InertieYYProfile.Controls.Add(Me.img_iz2, 0, 10)
         Me.img_InertieYYProfile.Controls.Add(Me.img_Wplz, 0, 9)
@@ -697,32 +697,32 @@ Partial Class Frm_Catalogue
         Me.img_InertieYYProfile.Controls.Add(Me.img_Wply, 0, 4)
         Me.img_InertieYYProfile.Controls.Add(Me.img_Wely, 0, 3)
         Me.img_InertieYYProfile.Controls.Add(Me.img_Iy, 0, 2)
-        Me.img_InertieYYProfile.Controls.Add(Me.img_InertieTorsionProfile, 2, 11)
+        Me.img_InertieYYProfile.Controls.Add(Me.img_UniteInertieT, 2, 11)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_It, 1, 11)
-        Me.img_InertieYYProfile.Controls.Add(Me.Label1, 2, 10)
-        Me.img_InertieYYProfile.Controls.Add(Me.img_ModulePlastiqueZZProfile, 2, 9)
-        Me.img_InertieYYProfile.Controls.Add(Me.img_ModuleElastiqueZZProfile, 2, 8)
+        Me.img_InertieYYProfile.Controls.Add(Me.etq_UniteRz, 2, 10)
+        Me.img_InertieYYProfile.Controls.Add(Me.img_UniteWplZZ, 2, 9)
+        Me.img_InertieYYProfile.Controls.Add(Me.img_UniteWelZZ, 2, 8)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_iz2, 1, 10)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_Wplz, 1, 9)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_Welz, 1, 8)
-        Me.img_InertieYYProfile.Controls.Add(Me.img_InertieZZProfile, 2, 7)
+        Me.img_InertieYYProfile.Controls.Add(Me.img_UniteInertieZZ, 2, 7)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_Iz, 1, 7)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_kgm, 2, 0)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_G, 1, 0)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_G, 0, 0)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_Avz, 1, 6)
-        Me.img_InertieYYProfile.Controls.Add(Me.img_AireCisaillementProfile, 2, 6)
+        Me.img_InertieYYProfile.Controls.Add(Me.img_UniteAireV, 2, 6)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_iy2, 1, 5)
-        Me.img_InertieYYProfile.Controls.Add(Me.lbl_cm, 2, 5)
+        Me.img_InertieYYProfile.Controls.Add(Me.etq_UniteRy, 2, 5)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_Wply, 1, 4)
-        Me.img_InertieYYProfile.Controls.Add(Me.img_ModulePlastiqueYYProfile, 2, 4)
+        Me.img_InertieYYProfile.Controls.Add(Me.img_UniteWplYY, 2, 4)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_Wely, 1, 3)
-        Me.img_InertieYYProfile.Controls.Add(Me.img_ModuleElastiqueYYProfile, 2, 3)
-        Me.img_InertieYYProfile.Controls.Add(Me.img_InertieYYProfiles, 2, 2)
+        Me.img_InertieYYProfile.Controls.Add(Me.img_UniteWelYY, 2, 3)
+        Me.img_InertieYYProfile.Controls.Add(Me.img_UniteInertieYY, 2, 2)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_Iy, 1, 2)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_A, 0, 1)
         Me.img_InertieYYProfile.Controls.Add(Me.lbl_val_A, 1, 1)
-        Me.img_InertieYYProfile.Controls.Add(Me.img_AireProfile, 2, 1)
+        Me.img_InertieYYProfile.Controls.Add(Me.img_UniteAire, 2, 1)
         Me.img_InertieYYProfile.Location = New System.Drawing.Point(6, 18)
         Me.img_InertieYYProfile.Name = "img_InertieYYProfile"
         Me.img_InertieYYProfile.RowCount = 12
@@ -741,18 +741,18 @@ Partial Class Frm_Catalogue
         Me.img_InertieYYProfile.Size = New System.Drawing.Size(162, 407)
         Me.img_InertieYYProfile.TabIndex = 18
         '
-        'lbl_cm
+        'etq_UniteRy
         '
-        Me.lbl_cm.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.etq_UniteRy.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_cm.AutoSize = True
-        Me.lbl_cm.Location = New System.Drawing.Point(110, 166)
-        Me.lbl_cm.Name = "lbl_cm"
-        Me.lbl_cm.Size = New System.Drawing.Size(48, 32)
-        Me.lbl_cm.TabIndex = 23
-        Me.lbl_cm.Text = "cm"
-        Me.lbl_cm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.etq_UniteRy.AutoSize = True
+        Me.etq_UniteRy.Location = New System.Drawing.Point(112, 166)
+        Me.etq_UniteRy.Name = "etq_UniteRy"
+        Me.etq_UniteRy.Size = New System.Drawing.Size(46, 32)
+        Me.etq_UniteRy.TabIndex = 23
+        Me.etq_UniteRy.Text = "cm"
+        Me.etq_UniteRy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'lbl_val_Wply
         '
@@ -762,21 +762,21 @@ Partial Class Frm_Catalogue
         Me.lbl_val_Wply.AutoSize = True
         Me.lbl_val_Wply.Location = New System.Drawing.Point(57, 133)
         Me.lbl_val_Wply.Name = "lbl_val_Wply"
-        Me.lbl_val_Wply.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_Wply.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_Wply.TabIndex = 22
         Me.lbl_val_Wply.Text = "lbl_val_Wpl,y"
         Me.lbl_val_Wply.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'img_ModulePlastiqueYYProfile
+        'img_UniteWplYY
         '
-        Me.img_ModulePlastiqueYYProfile.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.img_UniteWplYY.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ModulePlastiqueYYProfile.Location = New System.Drawing.Point(110, 136)
-        Me.img_ModulePlastiqueYYProfile.Name = "img_ModulePlastiqueYYProfile"
-        Me.img_ModulePlastiqueYYProfile.Size = New System.Drawing.Size(48, 26)
-        Me.img_ModulePlastiqueYYProfile.TabIndex = 83
-        Me.img_ModulePlastiqueYYProfile.TabStop = False
+        Me.img_UniteWplYY.Location = New System.Drawing.Point(112, 136)
+        Me.img_UniteWplYY.Name = "img_UniteWplYY"
+        Me.img_UniteWplYY.Size = New System.Drawing.Size(46, 26)
+        Me.img_UniteWplYY.TabIndex = 83
+        Me.img_UniteWplYY.TabStop = False
         '
         'lbl_val_Wely
         '
@@ -786,32 +786,32 @@ Partial Class Frm_Catalogue
         Me.lbl_val_Wely.AutoSize = True
         Me.lbl_val_Wely.Location = New System.Drawing.Point(57, 100)
         Me.lbl_val_Wely.Name = "lbl_val_Wely"
-        Me.lbl_val_Wely.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_Wely.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_Wely.TabIndex = 2
         Me.lbl_val_Wely.Text = "lbl_val_Wel,y"
         Me.lbl_val_Wely.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'img_ModuleElastiqueYYProfile
+        'img_UniteWelYY
         '
-        Me.img_ModuleElastiqueYYProfile.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.img_UniteWelYY.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ModuleElastiqueYYProfile.Location = New System.Drawing.Point(110, 103)
-        Me.img_ModuleElastiqueYYProfile.Name = "img_ModuleElastiqueYYProfile"
-        Me.img_ModuleElastiqueYYProfile.Size = New System.Drawing.Size(48, 26)
-        Me.img_ModuleElastiqueYYProfile.TabIndex = 82
-        Me.img_ModuleElastiqueYYProfile.TabStop = False
+        Me.img_UniteWelYY.Location = New System.Drawing.Point(112, 103)
+        Me.img_UniteWelYY.Name = "img_UniteWelYY"
+        Me.img_UniteWelYY.Size = New System.Drawing.Size(46, 26)
+        Me.img_UniteWelYY.TabIndex = 82
+        Me.img_UniteWelYY.TabStop = False
         '
-        'img_InertieYYProfiles
+        'img_UniteInertieYY
         '
-        Me.img_InertieYYProfiles.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.img_UniteInertieYY.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_InertieYYProfiles.Location = New System.Drawing.Point(110, 70)
-        Me.img_InertieYYProfiles.Name = "img_InertieYYProfiles"
-        Me.img_InertieYYProfiles.Size = New System.Drawing.Size(48, 26)
-        Me.img_InertieYYProfiles.TabIndex = 81
-        Me.img_InertieYYProfiles.TabStop = False
+        Me.img_UniteInertieYY.Location = New System.Drawing.Point(112, 70)
+        Me.img_UniteInertieYY.Name = "img_UniteInertieYY"
+        Me.img_UniteInertieYY.Size = New System.Drawing.Size(46, 26)
+        Me.img_UniteInertieYY.TabIndex = 81
+        Me.img_UniteInertieYY.TabStop = False
         '
         'lbl_val_Iy
         '
@@ -821,7 +821,7 @@ Partial Class Frm_Catalogue
         Me.lbl_val_Iy.AutoSize = True
         Me.lbl_val_Iy.Location = New System.Drawing.Point(57, 67)
         Me.lbl_val_Iy.Name = "lbl_val_Iy"
-        Me.lbl_val_Iy.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_Iy.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_Iy.TabIndex = 1
         Me.lbl_val_Iy.Text = "lbl_val_Iy"
         Me.lbl_val_Iy.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
@@ -847,21 +847,21 @@ Partial Class Frm_Catalogue
         Me.lbl_val_A.AutoSize = True
         Me.lbl_val_A.Location = New System.Drawing.Point(57, 34)
         Me.lbl_val_A.Name = "lbl_val_A"
-        Me.lbl_val_A.Size = New System.Drawing.Size(46, 32)
+        Me.lbl_val_A.Size = New System.Drawing.Size(48, 32)
         Me.lbl_val_A.TabIndex = 0
         Me.lbl_val_A.Text = "lbl_val_A"
         Me.lbl_val_A.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'img_AireProfile
+        'img_UniteAire
         '
-        Me.img_AireProfile.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+        Me.img_UniteAire.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_AireProfile.Location = New System.Drawing.Point(110, 37)
-        Me.img_AireProfile.Name = "img_AireProfile"
-        Me.img_AireProfile.Size = New System.Drawing.Size(48, 26)
-        Me.img_AireProfile.TabIndex = 80
-        Me.img_AireProfile.TabStop = False
+        Me.img_UniteAire.Location = New System.Drawing.Point(112, 37)
+        Me.img_UniteAire.Name = "img_UniteAire"
+        Me.img_UniteAire.Size = New System.Drawing.Size(46, 26)
+        Me.img_UniteAire.TabIndex = 80
+        Me.img_UniteAire.TabStop = False
         '
         'cmd_fermer
         '
@@ -901,7 +901,7 @@ Partial Class Frm_Catalogue
         CType(Me.img_Wply, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Wely, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Iy, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_InertieTorsionProfile, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UniteInertieT, System.ComponentModel.ISupportInitialize).EndInit()
         Me.etq_Profils.ResumeLayout(False)
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).EndInit()
         Me.etq_Dims.ResumeLayout(False)
@@ -913,18 +913,18 @@ Partial Class Frm_Catalogue
         CType(Me.img_Bf, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Ht, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_ModulePlastiqueZZProfile, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_ModuleElastiqueZZProfile, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_InertieZZProfile, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_AireCisaillementProfile, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UniteWplZZ, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UniteWelZZ, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UniteInertieZZ, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UniteAireV, System.ComponentModel.ISupportInitialize).EndInit()
         Me.etq_Gamme.ResumeLayout(False)
         Me.etq_Proprietes.ResumeLayout(False)
         Me.img_InertieYYProfile.ResumeLayout(False)
         Me.img_InertieYYProfile.PerformLayout()
-        CType(Me.img_ModulePlastiqueYYProfile, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_ModuleElastiqueYYProfile, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_InertieYYProfiles, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_AireProfile, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UniteWplYY, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UniteWelYY, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UniteInertieYY, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_UniteAire, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -939,7 +939,7 @@ Partial Class Frm_Catalogue
     Friend WithEvents img_Wply As PictureBox
     Friend WithEvents img_Wely As PictureBox
     Friend WithEvents img_Iy As PictureBox
-    Friend WithEvents img_InertieTorsionProfile As PictureBox
+    Friend WithEvents img_UniteInertieT As PictureBox
     Friend WithEvents lbl_val_It As Label
     Friend WithEvents etq_Profils As GroupBox
     Friend WithEvents Grid_ProfilesSup As DataGridView
@@ -958,34 +958,34 @@ Partial Class Frm_Catalogue
     Friend WithEvents lbl_val_Rc As Label
     Friend WithEvents lbl_val_Ht As Label
     Friend WithEvents img_Section As PictureBox
-    Friend WithEvents Label1 As Label
+    Friend WithEvents etq_UniteRz As Label
     Friend WithEvents btn_Note As Button
-    Friend WithEvents img_ModulePlastiqueZZProfile As PictureBox
-    Friend WithEvents img_ModuleElastiqueZZProfile As PictureBox
+    Friend WithEvents img_UniteWplZZ As PictureBox
+    Friend WithEvents img_UniteWelZZ As PictureBox
     Friend WithEvents lbl_val_iz2 As Label
     Friend WithEvents lbl_val_Wplz As Label
     Friend WithEvents lbl_val_Welz As Label
-    Friend WithEvents img_InertieZZProfile As PictureBox
+    Friend WithEvents img_UniteInertieZZ As PictureBox
     Friend WithEvents lbl_val_Iz As Label
     Friend WithEvents lbl_kgm As Label
     Friend WithEvents lbl_val_G As Label
     Friend WithEvents lbl_G As Label
     Friend WithEvents lbl_val_Avz As Label
-    Friend WithEvents img_AireCisaillementProfile As PictureBox
+    Friend WithEvents img_UniteAireV As PictureBox
     Friend WithEvents lst_Gamme As ListBox
     Friend WithEvents etq_Gamme As GroupBox
     Friend WithEvents lbl_val_iy2 As Label
     Friend WithEvents etq_Proprietes As GroupBox
     Friend WithEvents img_InertieYYProfile As TableLayoutPanel
-    Friend WithEvents lbl_cm As Label
+    Friend WithEvents etq_UniteRy As Label
     Friend WithEvents lbl_val_Wply As Label
-    Friend WithEvents img_ModulePlastiqueYYProfile As PictureBox
+    Friend WithEvents img_UniteWplYY As PictureBox
     Friend WithEvents lbl_val_Wely As Label
-    Friend WithEvents img_ModuleElastiqueYYProfile As PictureBox
-    Friend WithEvents img_InertieYYProfiles As PictureBox
+    Friend WithEvents img_UniteWelYY As PictureBox
+    Friend WithEvents img_UniteInertieYY As PictureBox
     Friend WithEvents lbl_val_Iy As Label
     Friend WithEvents lbl_A As Label
     Friend WithEvents lbl_val_A As Label
-    Friend WithEvents img_AireProfile As PictureBox
+    Friend WithEvents img_UniteAire As PictureBox
     Friend WithEvents cmd_fermer As Button
 End Class

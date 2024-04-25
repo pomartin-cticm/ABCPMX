@@ -3587,9 +3587,6 @@ Public Module Mod_Dessins
             myBrushG = New LinearGradientBrush(New PointF(0, 0), New PointF(Height, Width), Color.DarkGray, CouleurAcierNormal)
         End If
 
-
-
-
         '--> Initialisation des paramètres d'affichage
         yMin = -section.ProfilA.ha
         xMin = -Math.Max(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2
