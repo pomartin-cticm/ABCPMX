@@ -65,6 +65,42 @@ Imports PMXMoteur2
         'LireBaseGoujons(LogicielFichiers.Base_Goujons, BaseGoujons)
         GetDataBaseStuds(BaseGoujons)
 
+        '--> Gamma coefficients partiels
+
+        LogicielOptions.Gamma = New cls_Gamma
+
+        LogicielOptions.Gamma.GammaM0 = 1
+        LogicielOptions.Gamma.GammaM1 = 1
+        LogicielOptions.Gamma.GammaM2 = 1.25
+
+        LogicielOptions.Gamma.GammaC = 1.5
+        LogicielOptions.Gamma.GammaVs = 1.25
+        LogicielOptions.Gamma.GammaVc = 1.25
+        LogicielOptions.Gamma.lGammaV_unique = True
+        LogicielOptions.Gamma.GammaS = 1.15
+        LogicielOptions.Gamma.GammaP = 1
+
+        LogicielOptions.Gamma.GammaM_fi = 1
+        LogicielOptions.Gamma.GammaC_fi = 1
+        LogicielOptions.Gamma.GammaV_fi = 1
+
+        LogicielOptions.Gamma.GammaG_sup = 1.35
+        LogicielOptions.Gamma.GammaG_inf = 1
+        LogicielOptions.Gamma.GammaQ = 1.5
+
+        LogicielOptions.Gamma.Psi0_Q1 = 0.7
+        LogicielOptions.Gamma.Psi1_Q1 = 0.5
+        LogicielOptions.Gamma.Psi2_Q1 = 0.3
+
+        LogicielOptions.Gamma.Psi0_Q2 = 0.7
+        LogicielOptions.Gamma.Psi1_Q2 = 0.5
+        LogicielOptions.Gamma.Psi2_Q2 = 0.3
+
+        '--> Options du domaine d'application et options de calcul
+
+        InitialiseOptionsScope()
+        InitialiseOptionsCalcul()
+
 #End Region
 
 #Region "Initialisation de la poutre"
@@ -72,7 +108,7 @@ Imports PMXMoteur2
         Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
         NomChargements = NomCas
 
-        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, "", New Struc_OptionsLogiciel, New Struc_OptionsCalcul)
+        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, "", LogicielOptions, OptionsCalcul)
         Dim ValRef, Valeur As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
         Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 
@@ -553,6 +589,43 @@ Imports PMXMoteur2
         'LireBaseGoujons(LogicielFichiers.Base_Goujons, BaseGoujons)
         GetDataBaseStuds(BaseGoujons)
 
+        '--> Gamma coefficients partiels
+
+        LogicielOptions.Gamma = New cls_Gamma
+
+        LogicielOptions.Gamma.GammaM0 = 1
+        LogicielOptions.Gamma.GammaM1 = 1
+        LogicielOptions.Gamma.GammaM2 = 1.25
+
+        LogicielOptions.Gamma.GammaC = 1.5
+        LogicielOptions.Gamma.GammaVs = 1.25
+        LogicielOptions.Gamma.GammaVc = 1.25
+        LogicielOptions.Gamma.lGammaV_unique = True
+        LogicielOptions.Gamma.GammaS = 1.15
+        LogicielOptions.Gamma.GammaP = 1
+
+        LogicielOptions.Gamma.GammaM_fi = 1
+        LogicielOptions.Gamma.GammaC_fi = 1
+        LogicielOptions.Gamma.GammaV_fi = 1
+
+        LogicielOptions.Gamma.GammaG_sup = 1.35
+        LogicielOptions.Gamma.GammaG_inf = 1
+        LogicielOptions.Gamma.GammaQ = 1.5
+
+        LogicielOptions.Gamma.Psi0_Q1 = 0.7
+        LogicielOptions.Gamma.Psi1_Q1 = 0.5
+        LogicielOptions.Gamma.Psi2_Q1 = 0.3
+
+        LogicielOptions.Gamma.Psi0_Q2 = 0.7
+        LogicielOptions.Gamma.Psi1_Q2 = 0.5
+        LogicielOptions.Gamma.Psi2_Q2 = 0.3
+
+        '--> Options du domaine d'application et options de calcul
+
+        InitialiseOptionsScope()
+        InitialiseOptionsCalcul()
+
+
 #End Region
 
 #Region "Initialisation de la poutre"
@@ -560,7 +633,7 @@ Imports PMXMoteur2
         Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
         NomChargements = NomCas
 
-        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, "", New Struc_OptionsLogiciel, New Struc_OptionsCalcul)
+        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, "", LogicielOptions, OptionsCalcul)
         Dim ValRef, Valeur As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
         Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 
@@ -774,7 +847,7 @@ Imports PMXMoteur2
         Mcr = 9556.1 * 1000
         Valeur = myPoutre.VerifAcier(0).McrLTB(0, 1)
         ValRef = Mcr
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'GUD: arret du test ici, le calcul de Mcr est OK
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'GUD: arret du test ici, A COMPLETER + TARD
 
 #End Region
 

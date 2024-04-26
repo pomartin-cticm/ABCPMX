@@ -919,7 +919,7 @@
                 'CALCUL DE LA CONTRAINTE TANGENTIELLE
                 '---
 
-                'nr = myBeam.NombreGoujonsTransv(i_travee, j_zone)
+                nr = myBeam.NombreGoujonsTransv(i_travee, j_zone)
                 'PRd = myBeam.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, myBeam.Dalle.Bac, nr, Fck, Ecm, gammaVs, gammaVc)
                 'sx = myBeam.EspacemyPoutrentZone(i_travee, j_zone)
                 'v_x_Ed = nr * PRd / sx

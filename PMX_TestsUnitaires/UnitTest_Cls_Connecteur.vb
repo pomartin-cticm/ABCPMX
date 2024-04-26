@@ -159,6 +159,9 @@ Imports PMXMoteur2
         '--> Déclaration
 
         ' Dim poutre As New cls_Poutre(NomCas)
+
+        NomChargements = NomCas
+
         Dim poutre As New cls_Poutre()
 
         Dim DeltaV, ValRef As Decimal
