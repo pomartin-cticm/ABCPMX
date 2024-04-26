@@ -1438,8 +1438,14 @@ Public Class cls_Section
         Dim cfsup, tfsup, cfinf, tfinf, cplat, tplat As Decimal
         Dim epsilon_fsup As Decimal = Epsilon_Sup
         Dim epsilon_finf As Decimal = Epsilon_Inf
-        Dim epsilon_platSFB As Decimal = 0
+        Dim epsilon_platSFB As Decimal = Me.Epsilon_Spd
         ' Dim alpha, psi As Decimal
+
+        If lCalculFeu Then
+            epsilon_fsup *= 0.85
+            epsilon_finf *= 0.85
+            epsilon_platSFB *= 0.85
+        End If
 
         '---------------------------------------------
         '---------------------------------------------
@@ -1471,14 +1477,13 @@ Public Class cls_Section
 
         ' --> Calcul classe semelle plat inférieur dans le cas d'un SFB
         If Me.TypeSection = cls_Section.Enum_TypeSection.SFB Or Me.TypeSection = cls_Section.Enum_TypeSection.SFBmixte Then
-            epsilon_platSFB = Me.Epsilon_Spd
             classePlatInfSFB = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cplat, tplat, epsilon_platSFB) 'calcul la classe du plat soudé dans le cas des sections slimfloors en fonction de si elle est comprimée et du ratio c/t
         Else
             classePlatInfSFB = 0
         End If
 
         ' --> Calcul classe âme
-        classeAme = Me.ClasseAme(lFlexionPositive, zANP, lG1_EN)
+        classeAme = Me.ClasseAme(lFlexionPositive, zANP, lG1_EN, lCalculFeu)
 
         ' --> Calcul classe section totale 
         classeSectionTotale = Math.Max(classeSemellesSup, Math.Max(classeSemellesInf, Math.Max(classePlatInfSFB, classeAme)))
@@ -1501,7 +1506,7 @@ Public Class cls_Section
 
             ' --> Calcul classe âme
 
-            classeAme = Me.ClasseAme(lFlexionPositive, zANE, lG1_EN)
+            classeAme = Me.ClasseAme(lFlexionPositive, zANE, lG1_EN, lCalculFeu)
 
             ' --> Calcul classe section totale
 
@@ -1749,7 +1754,7 @@ Public Class cls_Section
     ''' <param name="zAN"></param>
     ''' <param name="lG1_EN"></param>
     ''' <returns></returns>
-    Public Function ClasseAme(lFlexionPositive As Boolean, zAN As Decimal, lG1_EN As Boolean) As Integer
+    Public Function ClasseAme(lFlexionPositive As Boolean, zAN As Decimal, lG1_EN As Boolean, Optional lCalculFeu As Boolean = False) As Integer
 
         '----------------------------------------------------------------------------------------------------------
         '   11/10/23 :  Création - GUD
@@ -1766,7 +1771,9 @@ Public Class cls_Section
         Dim alpha, psi As Decimal
         Dim classeAmeLoc As Integer
 
-
+        If lCalculFeu Then
+            epsilon_w *= 0.85
+        End If
 
         With Me.ProfilA
 
