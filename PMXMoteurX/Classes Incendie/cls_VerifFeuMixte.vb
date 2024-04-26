@@ -286,7 +286,7 @@
 
         '--> Modélisation du profilé acier
 
-        myModele.MaillageProfileUsuels_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW)
+        myModele.MaillageProfileA_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
 
         ''--> Dalle béton
 
