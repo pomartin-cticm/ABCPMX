@@ -80,6 +80,7 @@ Public Class cls_Poutre
     ''' Nombre de travées sur 2 appuis
     ''' </summary>
     Private pNbTravees As Integer
+
     '========================================================
     '   en indice O = travée en console gauche, si définie
     '   en indice 1 = 1ere travée centrale
@@ -105,7 +106,16 @@ Public Class cls_Poutre
     '# Définition des maintiens latéraux
     '#####################################################################################
 
-    Public NbMaintiens() As Integer                     ' Nombre de maintiens disposés sur la travée considérée
+    Public ReadOnly Property NbMaintiens As Integer()                     ' Nombre de maintiens disposés sur la travée considérée
+        Get
+            Dim _nbMaintiens(IndiceTraveeConsoleDroite) As Integer
+            For i As Integer = 0 To _nbMaintiens.Count - 1
+                _nbMaintiens(i) = Maintiens(i).Count
+            Next
+            Return _nbMaintiens
+        End Get
+    End Property
+
     Public Maintiens() As List(Of cls_Maintiens)        ' Liste des maintiens disposés sur la poutre
     Public TypeMaintien As EnuTypeMaintiensPoutre       ' Type de maintiens considéré sur la travée considérée
 
@@ -730,7 +740,7 @@ Public Class cls_Poutre
         ReDim LongueurTravee(IndiceTraveeConsoleDroite)
         ReDim TypTravee(IndiceTraveeConsoleDroite)
         ReDim Maintiens(IndiceTraveeConsoleDroite)
-        ReDim NbMaintiens(IndiceTraveeConsoleDroite)
+        'ReDim NbMaintiens(IndiceTraveeConsoleDroite)
         'ReDim TypeMaintien(IndiceTraveeConsoleDroite + 2)
 
 
@@ -1184,7 +1194,7 @@ Public Class cls_Poutre
         Next
 
         'MAJ de la partie concernant les maintiens latéraux
-        ReDim Preserve Me.NbMaintiens(IndiceTraveeConsoleDroite)
+        'ReDim Preserve Me.NbMaintiens(IndiceTraveeConsoleDroite)
         ReDim Preserve Me.Maintiens(IndiceTraveeConsoleDroite)
 
         For i As Integer = 0 To IndiceTraveeConsoleDroite
@@ -1238,8 +1248,8 @@ Public Class cls_Poutre
         ReDim PoutreCible.TypTravee(PoutreSource.TypTravee.GetUpperBound(0))
         PoutreCible.TypTravee = PoutreSource.TypTravee.Clone
 
-        ReDim PoutreCible.NbMaintiens(PoutreSource.NbMaintiens.GetUpperBound(0))
-        PoutreCible.NbMaintiens = PoutreSource.NbMaintiens.Clone
+        'ReDim PoutreCible.NbMaintiens(PoutreSource.NbMaintiens.GetUpperBound(0))
+        'PoutreCible.NbMaintiens = PoutreSource.NbMaintiens.Clone
 
         'ReDim PoutreCible.TypeMaintien(PoutreSource.TypeMaintien.GetUpperBound(0))
         'PoutreCible.TypeMaintien = PoutreSource.TypeMaintien.Clone
