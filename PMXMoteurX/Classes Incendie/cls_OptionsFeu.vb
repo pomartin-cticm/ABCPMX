@@ -113,13 +113,30 @@
         '------------------------------------------------------------------------------------------------------------
         '   22/04/24 :  Création - POM
         '------------------------------------------------------------------------------------------------------------
-        '   Renvoie la conductivité thermique de la protection thermique
+        '   Renvoie la conductivité thermique de la protection thermique (W/m.K)
         '------------------------------------------------------------------------------------------------------------
 
-        Dim myLambdaP As Decimal = 0.2
+        Dim myLambdaP As Decimal
 
         Select Case Me.Protection
+            Case enu_TypeProtection.LowDensitySpray_Mineral
+                myLambdaP = 0.12
+            Case enu_TypeProtection.LowDensitySpray_Vermiculite
+                myLambdaP = 0.12
+            Case enu_TypeProtection.HighDensitySpray_PerliteCement
+                myLambdaP = 0.12
+            Case enu_TypeProtection.HighDensitySpray_PerlitePlaster
+                myLambdaP = 0.12
+            Case enu_TypeProtection.IntumescentPaint
+                myLambdaP = CustomLambdaP
+            Case enu_TypeProtection.BoardsVermiculite
+                myLambdaP = 0.2
+            Case enu_TypeProtection.BoardsSilicate
+                myLambdaP = 0.15
             Case enu_TypeProtection.BoardsFibroCement
+                myLambdaP = 0.15
+            Case enu_TypeProtection.BoardsPlaster
+                myLambdaP = 0.2
         End Select
 
         Return myLambdaP
@@ -130,13 +147,30 @@
         '------------------------------------------------------------------------------------------------------------
         '   22/04/24 :  Création - POM
         '------------------------------------------------------------------------------------------------------------
-        '   Renvoie la masse volumique de la protection thermique
+        '   Renvoie la masse volumique de la protection thermique (kg/m3)
         '------------------------------------------------------------------------------------------------------------
 
         Dim myRhoP As Decimal = 500
 
         Select Case Me.Protection
+            Case enu_TypeProtection.LowDensitySpray_Mineral
+                myRhoP = 300
+            Case enu_TypeProtection.LowDensitySpray_Vermiculite
+                myRhoP = 350
+            Case enu_TypeProtection.HighDensitySpray_PerliteCement
+                myRhoP = 550
+            Case enu_TypeProtection.HighDensitySpray_PerlitePlaster
+                myRhoP = 650
+            Case enu_TypeProtection.IntumescentPaint
+                myRhoP = 0
+            Case enu_TypeProtection.BoardsVermiculite
+                myRhoP = 800
+            Case enu_TypeProtection.BoardsSilicate
+                myRhoP = 600
             Case enu_TypeProtection.BoardsFibroCement
+                myRhoP = 800
+            Case enu_TypeProtection.BoardsPlaster
+                myRhoP = 800
         End Select
 
         Return myRhoP
@@ -147,13 +181,30 @@
         '------------------------------------------------------------------------------------------------------------
         '   22/04/24 :  Création - POM
         '------------------------------------------------------------------------------------------------------------
-        '   Renvoie la chaleur massique de la protection thermique
+        '   Renvoie la chaleur massique de la protection thermique (J/kg.K)
         '------------------------------------------------------------------------------------------------------------
 
         Dim mycP As Decimal = 1000
 
         Select Case Me.Protection
+            Case enu_TypeProtection.LowDensitySpray_Mineral
+                mycP = 1200
+            Case enu_TypeProtection.LowDensitySpray_Vermiculite
+                mycP = 1200
+            Case enu_TypeProtection.HighDensitySpray_PerliteCement
+                mycP = 1100
+            Case enu_TypeProtection.HighDensitySpray_PerlitePlaster
+                mycP = 1100
+            Case enu_TypeProtection.IntumescentPaint
+                mycP = 0
+            Case enu_TypeProtection.BoardsVermiculite
+                mycP = 1200
+            Case enu_TypeProtection.BoardsSilicate
+                mycP = 1200
             Case enu_TypeProtection.BoardsFibroCement
+                mycP = 1200
+            Case enu_TypeProtection.BoardsPlaster
+                mycP = 1700
         End Select
 
         Return mycP
