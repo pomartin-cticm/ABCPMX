@@ -302,6 +302,7 @@ Public Class Frm_OptionsCalculCalcul
 
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal
 
@@ -352,10 +353,10 @@ Public Class Frm_OptionsCalculCalcul
                 kUnit = 1
         End Select
 
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin / kUnit, lValMax, ValMax / kUnit)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, lValMin, ValMax, lValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
             ErrorProvider.Clear()

@@ -940,7 +940,7 @@ Public Class Frm_SectionSFB
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin / kUnit, lValMax, ValMax / kUnit)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin / kUnit, ValMax / kUnit)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin / kUnit, lValMin, ValMax / kUnit, lValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
             ErrorProvider.Clear()

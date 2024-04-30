@@ -303,6 +303,7 @@ Public Class Frm_CombinaisonsNormales
 
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = 1
 
@@ -313,10 +314,10 @@ Public Class Frm_CombinaisonsNormales
         ValMax = GammaMAXI
         lValMax = True
 
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, lValMin, ValMax, lValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
             ErrorProvider.Clear()

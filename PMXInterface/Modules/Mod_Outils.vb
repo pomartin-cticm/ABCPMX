@@ -111,7 +111,7 @@ Module Mod_Outils
     ''' <param name="ValMin"></param>
     ''' <param name="ValMax"></param>
     ''' <param name="TextError"></param>
-    Public Sub NotifieErreurSaisie(ByVal iSaisie As Integer, ByVal Control As Control, ByVal MyErr As ErrorProvider, ByVal ValMin As Double, ByVal ValMax As Double, Optional ByVal TextError As String = "")
+    Public Sub NotifieErreurSaisie(ByVal iSaisie As Integer, ByVal Control As Control, ByVal MyErr As ErrorProvider, ByVal ValMin As Double, ByVal lValMin As Boolean, ByVal ValMax As Double, ByVal lValMax As Boolean, Optional ByVal TextError As String = "")
 
         Select Case iSaisie
             Case -1
@@ -122,7 +122,12 @@ Module Mod_Outils
                 MyErr.SetError(Control, ErreurNonNum_LNG)
             Case -3
                 'Erreur saisie : valeur hors limite------------------------------
-                Dim Chaine As String = ErreurHorsBornes_LNG + " : " & ValMin & " ≤ x ≤ " & ValMax
+                Dim Chaine As String = ErreurHorsBornes_LNG + " : "
+
+                If lValMin Then Chaine += ValMin & " ≤ "
+                Chaine += "x"
+                If lValMax Then Chaine += " ≤ " & ValMax
+
                 MyErr.SetError(Control, Chaine)
             Case -4
                 'Erreur : Divers ------------------------------------------------
@@ -616,7 +621,10 @@ Module Mod_Outils
                 kUnitU = LogicielInfo.Transfert_Longueur(0)
                 Unite = SEP & LogicielInfo.Unit_Longueur(0)
 
+            Case Enu_TypeVariable.Temperature
 
+                kUnitU = 1
+                Unite = SEP & "°C"
 
         End Select
 

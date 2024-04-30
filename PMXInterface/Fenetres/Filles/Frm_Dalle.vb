@@ -989,6 +989,7 @@ Public Class Frm_Dalle
 
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
 
@@ -1046,10 +1047,10 @@ Public Class Frm_Dalle
                 lValMax = False
 
         End Select
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, lValMin, ValMax, lValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
             ErrorProvider.Clear()

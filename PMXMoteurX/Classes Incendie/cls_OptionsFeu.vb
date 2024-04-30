@@ -4,11 +4,13 @@
 
 #Region " Attributs "
 
-    Public DeltaTsimple As Decimal                          ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier non protégées
-    Public DeltaTprotege As Decimal                         ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier protégées
+    Private DeltaTsimple As Decimal                          ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier non protégées
+    Private DeltaTprotege As Decimal                         ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier protégées
     Public TempRef As Decimal                               ' Température de référence (à t = 0)
+    Public Const TempMax As Decimal = 1200                         ' Température max (°)
 
     Public EmissivityFire As Decimal                        ' Emissivité du feu
+    Public EmissivitySteel As Decimal                        ' Emissivité de l'acier
 
     Public ConvectionCoef As Decimal                        ' Coefficient de convection sur les faces exposées au feu
     Public ConvectionCoefDalle As Decimal                   ' Coefficient de convection sur la face supérieure de la dalle, non exposée au feu (uniquement si calcul EF Dalle)
@@ -17,6 +19,8 @@
 
     Public lHeatingSlabEF As Boolean                        ' Indique si on calcul l'échauffement de la dalle par calcul numérique
     Public tDalleEFmax As Decimal                           ' Epaisseur maximale d'un elt dalle pour le calcul numérique de l'échauffement de la dalle
+
+    Public ksh As Decimal                                   ' coefficient correcteur pour l'effet masque
 
     Public AlphaSlab As Decimal                             ' Coefficient de pondération pour la résistance plastique en compression de la dalle
     Public lArmaCompression As Boolean                      ' Indique si on prend en compte les armatures comprimées (dans l'enrobage partiel)
@@ -27,6 +31,8 @@
     Public lDalleFEM As Boolean                             ' Indique pour les poutres mixtes si on calcule l'échauffement par une analyse EF
 
     Public BOLTZMANN As Decimal                             ' Constante de Boltzmann
+
+    Public lReductionConcreteStrenght As Boolean            ' Indique si on réduit la résistance du béton armé pour T<250° (True) ou non (False)
 
     Public TypeSurface As enu_TypeSurface                   ' Type de surface (protégée ou non, galvanisée ou non)
 
@@ -63,6 +69,7 @@
         Me.DeltaTprotege = 10               ' [secondes]
 
         Me.EmissivityFire = 1.0
+        Me.EmissivitySteel = 0.7
 
         Me.ConvectionCoef = 25              ' [W/m2K]
         Me.ConvectionCoefDalle = 4          ' [W/m2K]
@@ -73,6 +80,8 @@
 
         Me.tDalleEFmax = 0.01               ' 10 mm
 
+        Me.ksh = 1
+
         Me.AlphaSlab = 1
 
         Me.lCalcuFeu = True
@@ -81,13 +90,15 @@
         Me.TypeSurface = enu_TypeSurface.AcierNu
 
         Me.BOLTZMANN = 5.67 * 10 ^ (-8)
+
+        Me.lReductionConcreteStrenght = False
     End Sub
 
 #End Region
 
 #Region " Fonctions "
 
-    Public ReadOnly Property DeltaTCalcul As Decimal
+    Public Property DeltaTCalcul As Decimal
         '------------------------------------------------------------------------------------------------------------
         '   22/04/24 :  Création - POM
         '------------------------------------------------------------------------------------------------------------
@@ -103,6 +114,16 @@
             End Select
             Return myDeltaT
         End Get
+
+        Set(value As Decimal)
+            Select Case Me.TypeSurface
+                Case enu_TypeSurface.AcierNu, enu_TypeSurface.Galvanise
+                    Me.DeltaTsimple = value
+                Case enu_TypeSurface.Protege
+                    Me.DeltaTprotege = value
+            End Select
+        End Set
+
     End Property
 
 #End Region
@@ -211,6 +232,12 @@
 
     End Function
 
+#End Region
+
+#Region " Fonction de copie "
+    Public Function Clone() '--> Utilisé pour dupliquer une soudure
+        Return Me.MemberwiseClone()
+    End Function
 #End Region
 
 End Class

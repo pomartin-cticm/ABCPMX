@@ -379,7 +379,46 @@ TRIPLE					= Trois
 TYPEE					= Type 
 UPPERLAYER				= Nappe supérieure
 WIDTH					= Largeur
-ACTIVEREBARS			= Armatures actives							  
+ACTIVEREBARS			= Armatures actives		
+
+#FRM_FIREOPTIONS
+TITLE					= Options calcul incendie
+CANCEL					= Annuler
+OK						= Ok
+BEAMPARAM				= Paramètres de la poutre
+CALCULPARAM				= Paramètres de calcul
+SURFACETYPE				= Type de surface
+PROTECTED				= Protégé
+UNPROTECTED				= Non protégé
+GALVANISED				= Galvanisé
+PROTECTIONTYPE			= Type de protection
+SPRAY					= Flocage
+INTUMESCENTPAINT		= Peinture intumescente
+BOARDS					= Caisson
+INSULATIONTYPE			= Type d'isolation
+MINERALFIBRES			= Fibres minérales
+VERMICULITE				= Vermiculite
+PERLITECEMENT			= Perlite avec du ciment
+PERLITEPLASTER			= Perlite avec du plâtre
+VERMICULITEPERLITE		= Vermiculite ou perlite avec du ciment
+SILICATE				= Fibre de silicate
+FIBROCEMENT				= Fibro-ciment
+PLASTER					= Plâtre
+DENSITY					= Densité
+THERMALCONDUC			= Conductivité thermique
+SPECIFICHEAT			= Chaleur spécifique 
+CONCRETEREDUC250		= Résistance du béton réduire pour une température inférieure à 250°
+BOLTZMANN				= Constante de Boltzmann 
+TIMEINCREMENT			= Incrément de temps
+REFERENCETEMP			= Température de référence 
+MAXTEMP					= Température maximale 
+FORMFACTOR				= Facteur de forme
+EMISSIVITYSTEELSURF		= Emissivité des surfaces acier
+EMISSIVITYFIRE			= Emissivité du feu
+CONVECTIONFACTOR		= Facteur de transfert thermique par convection
+SHADOWEFFECT			= Coefficient correcteur pour l'effet d'ombre
+CONVECTIONSLAB			= Coefficient de transfert thermique par convection sur la face supérieure de la dalle
+CONCRETEFACTOR			= Facteur de résistance plastique à la compression axiale de la dalle en béton 					  
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement

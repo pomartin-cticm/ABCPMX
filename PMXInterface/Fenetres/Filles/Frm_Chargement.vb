@@ -1171,6 +1171,9 @@ Public Class Frm_Chargement
         Dim ValMin, ValMax As Decimal
         Dim kUnit As Decimal
 
+        Dim lValMin As Boolean = True
+        Dim lValMax As Boolean = True
+
         Select Case MyTxt.Name
             Case txt_WidthApplication.Name
 
@@ -1235,10 +1238,10 @@ Public Class Frm_Chargement
         Next
 
 
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, True, ValMax)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider_Frm_Chargement, ValMin, ValMax)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider_Frm_Chargement, ValMin, lValMin, ValMax, lValMax)
         Else
 
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit

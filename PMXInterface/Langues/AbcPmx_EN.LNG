@@ -381,6 +381,45 @@ UPPERLAYER				= Upper layer
 WIDTH					= Width
 ACTIVEREBARS			= Active rebars
 
+#FRM_FIREOPTIONS
+TITLE					= Fire calculation options
+CANCEL					= Cancel
+OK						= Ok
+BEAMPARAM				= Beam parameters
+CALCULPARAM				= Calculation parameters
+SURFACETYPE				= Surface type
+PROTECTED				= Protected
+UNPROTECTED				= Unprotected
+GALVANISED				= Hot-dip galvanised steel
+PROTECTIONTYPE			= Protection type
+SPRAY					= Spray
+INTUMESCENTPAINT		= Intumescent paint
+BOARDS					= Boards
+INSULATIONTYPE			= Insulation type
+MINERALFIBRES			= Mineral fibres
+VERMICULITE				= Vermiculite
+PERLITECEMENT			= Perlite with cement
+PERLITEPLASTER			= Perlite with plaster
+VERMICULITEPERLITE		= Vermiculite or perlite with cement
+SILICATE				= Silicate fibre
+FIBROCEMENT				= Fibro-cement
+PLASTER					= Plaster
+DENSITY					= Density
+THERMALCONDUC			= Thermal conductivity
+SPECIFICHEAT			= Specific heat
+CONCRETEREDUC250		= Concrete strenght reduced for temperature below 250°
+BOLTZMANN				= Boltzmann constant
+TIMEINCREMENT			= Time increment
+REFERENCETEMP			= Reference temperature 
+MAXTEMP					= Maximal temperature
+FORMFACTOR				= Form factor
+EMISSIVITYSTEELSURF		= Emissivity of steel surfaces
+EMISSIVITYFIRE			= Emissivity of fire
+CONVECTIONFACTOR		= Factor of thermal transfer by convection
+SHADOWEFFECT			= Correction factor for the shadow effect
+CONVECTIONSLAB			= Coefficient of heat transfer by convection on the upper side of a slab
+CONCRETEFACTOR			= Factor for the plastic resistance to axial compression of the concrete slab
+
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors
 CANCEL					= Cancel

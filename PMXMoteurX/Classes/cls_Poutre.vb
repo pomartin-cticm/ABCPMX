@@ -1263,6 +1263,9 @@ Public Class cls_Poutre
         'Clone param calcul
         cls_OptionsCalcul.DeepClone(PoutreSource.Param, PoutreCible.Param)
 
+        'Clone param FEU
+        PoutreCible.ParamFeu = PoutreSource.ParamFeu.Clone
+
         'Clone HIVOSS
         PoutreCible.Hivoss = PoutreSource.Hivoss.Clone()
 

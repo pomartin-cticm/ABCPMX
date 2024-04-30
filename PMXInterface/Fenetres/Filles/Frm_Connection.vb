@@ -1299,6 +1299,7 @@ Public Class Frm_Connection
 
         Dim iErreur As Integer
         Dim ValMin, ValMax, ValMaxConseillee As Decimal
+        Dim lValMin As Boolean = True
         Dim lValMax As Boolean = True
         Dim lValMaxConseillee As Boolean = False
         Dim kUnit As Decimal
@@ -1331,10 +1332,10 @@ Public Class Frm_Connection
                 ValMax = Espacement_Longi_MAX / kUnit
 
         End Select
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider_Frm_Connection, ValMin, ValMax)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider_Frm_Connection, ValMin, lValMin, ValMax, lValMax)
         Else
 
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit

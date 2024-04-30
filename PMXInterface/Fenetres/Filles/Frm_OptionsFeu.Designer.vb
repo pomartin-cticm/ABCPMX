@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class Frm_OptionsFeu
     Inherits System.Windows.Forms.Form
 
     'Form remplace la méthode Dispose pour nettoyer la liste des composants.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,28 +20,114 @@ Partial Class Frm_OptionsFeu
     'REMARQUE : la procédure suivante est requise par le Concepteur Windows Form
     'Elle peut être modifiée à l'aide du Concepteur Windows Form.  
     'Ne la modifiez pas à l'aide de l'éditeur de code.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
         Me.btn_OK = New System.Windows.Forms.Button()
         Me.btn_Annuler = New System.Windows.Forms.Button()
         Me.pan_Main = New System.Windows.Forms.Panel()
-        Me.TLPan_Portees = New System.Windows.Forms.TableLayoutPanel()
+        Me.TLPan_PartieHaute = New System.Windows.Forms.TableLayoutPanel()
+        Me.pan_Droite = New System.Windows.Forms.Panel()
+        Me.TLPan_Droite = New System.Windows.Forms.TableLayoutPanel()
+        Me.lbl_ParamCalcul = New System.Windows.Forms.Label()
+        Me.pan_ParamCalcul = New System.Windows.Forms.Panel()
+        Me.lbl_UnitConcreteResistance = New System.Windows.Forms.Label()
+        Me.lbl_UnitConvectionSlab = New System.Windows.Forms.Label()
+        Me.lbl_ConcreteResistance = New System.Windows.Forms.Label()
+        Me.lbl_UnitShadowEffect = New System.Windows.Forms.Label()
+        Me.lbl_ConvectionSlab = New System.Windows.Forms.Label()
+        Me.lbl_UnitConvectionFactor = New System.Windows.Forms.Label()
+        Me.lbl_ShadowEffect = New System.Windows.Forms.Label()
+        Me.lbl_UnitEmissivityFire = New System.Windows.Forms.Label()
+        Me.lbl_ConvectionFactor = New System.Windows.Forms.Label()
+        Me.lbl_UnitEmissivitySteel = New System.Windows.Forms.Label()
+        Me.lbl_EmissivityFire = New System.Windows.Forms.Label()
+        Me.lbl_UnitFormFactor = New System.Windows.Forms.Label()
+        Me.lbl_EmissivitySteel = New System.Windows.Forms.Label()
+        Me.lbl_UnitMaxTemp = New System.Windows.Forms.Label()
+        Me.lbl_FormFactor = New System.Windows.Forms.Label()
+        Me.lbl_UnitReferenceTemp = New System.Windows.Forms.Label()
+        Me.lbl_MaxTemp = New System.Windows.Forms.Label()
+        Me.lbl_UnitTimeIncrement = New System.Windows.Forms.Label()
+        Me.lbl_ReferenceTemp = New System.Windows.Forms.Label()
+        Me.lbl_TimeIncrement = New System.Windows.Forms.Label()
+        Me.txt_ConcreteResistance = New System.Windows.Forms.TextBox()
+        Me.txt_ConvectionSlab = New System.Windows.Forms.TextBox()
+        Me.img_ConcreteResistance = New System.Windows.Forms.PictureBox()
+        Me.txt_ShadowEffect = New System.Windows.Forms.TextBox()
+        Me.img_ConvectionSlab = New System.Windows.Forms.PictureBox()
+        Me.txt_ConvectionFactor = New System.Windows.Forms.TextBox()
+        Me.img_ShadowEffect = New System.Windows.Forms.PictureBox()
+        Me.txt_EmissivityFire = New System.Windows.Forms.TextBox()
+        Me.img_ConvectionFactor = New System.Windows.Forms.PictureBox()
+        Me.txt_EmissivitySteel = New System.Windows.Forms.TextBox()
+        Me.img_EmissivityFire = New System.Windows.Forms.PictureBox()
+        Me.txt_FormFactor = New System.Windows.Forms.TextBox()
+        Me.img_EmissivitySteel = New System.Windows.Forms.PictureBox()
+        Me.txt_MaxTemp = New System.Windows.Forms.TextBox()
+        Me.img_FormFactor = New System.Windows.Forms.PictureBox()
+        Me.txt_ReferenceTemp = New System.Windows.Forms.TextBox()
+        Me.img_MaxTemp = New System.Windows.Forms.PictureBox()
+        Me.txt_TimeIncrement = New System.Windows.Forms.TextBox()
+        Me.lbl_UnitBoltzmann = New System.Windows.Forms.Label()
+        Me.img_ReferenceTemp = New System.Windows.Forms.PictureBox()
+        Me.lbl_Boltzmann = New System.Windows.Forms.Label()
+        Me.img_TimeIncrement = New System.Windows.Forms.PictureBox()
+        Me.txt_Boltzmann = New System.Windows.Forms.TextBox()
+        Me.img_Boltzmann = New System.Windows.Forms.PictureBox()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
-        Me.lbl_Portees = New System.Windows.Forms.Label()
-        Me.pan_SaisiePortee = New System.Windows.Forms.Panel()
-        Me.img_Portees = New System.Windows.Forms.PictureBox()
+        Me.lbl_ParamPoutre = New System.Windows.Forms.Label()
+        Me.pan_ParamPoutre = New System.Windows.Forms.Panel()
+        Me.lbl_UnitSpecificHeat = New System.Windows.Forms.Label()
+        Me.lbl_UnitThermalConduc = New System.Windows.Forms.Label()
+        Me.lbl_SpecificHeat = New System.Windows.Forms.Label()
+        Me.lbl_UnitDensity = New System.Windows.Forms.Label()
+        Me.lbl_ThermalConductivity = New System.Windows.Forms.Label()
+        Me.lbl_Density = New System.Windows.Forms.Label()
+        Me.chk_ReductionConcreteStrenght = New System.Windows.Forms.CheckBox()
+        Me.txt_SpecificHeat = New System.Windows.Forms.TextBox()
+        Me.img_SpecificHeat = New System.Windows.Forms.PictureBox()
+        Me.txt_LambdaP = New System.Windows.Forms.TextBox()
+        Me.img_LambdaP = New System.Windows.Forms.PictureBox()
+        Me.txt_rhoP = New System.Windows.Forms.TextBox()
+        Me.img_rhoP = New System.Windows.Forms.PictureBox()
+        Me.cmb_InsulationType = New System.Windows.Forms.ComboBox()
+        Me.lbl_InsulationType = New System.Windows.Forms.Label()
+        Me.cmb_ProtectionType = New System.Windows.Forms.ComboBox()
+        Me.lbl_ProtectionType = New System.Windows.Forms.Label()
+        Me.cmb_SurfaceType = New System.Windows.Forms.ComboBox()
+        Me.lbl_SurfaceType = New System.Windows.Forms.Label()
+        Me.ErrorProvider_Frm_OptionsFeu = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
         Me.pan_Main.SuspendLayout()
-        Me.TLPan_Portees.SuspendLayout()
+        Me.TLPan_PartieHaute.SuspendLayout()
+        Me.pan_Droite.SuspendLayout()
+        Me.TLPan_Droite.SuspendLayout()
+        Me.pan_ParamCalcul.SuspendLayout()
+        CType(Me.img_ConcreteResistance, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_ConvectionSlab, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_ShadowEffect, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_ConvectionFactor, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_EmissivityFire, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_EmissivitySteel, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_FormFactor, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_MaxTemp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_ReferenceTemp, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_TimeIncrement, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_Boltzmann, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
-        CType(Me.img_Portees, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_ParamPoutre.SuspendLayout()
+        CType(Me.img_SpecificHeat, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_LambdaP, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_rhoP, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_General
@@ -51,7 +137,7 @@ Partial Class Frm_OptionsFeu
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(800, 450)
+        Me.pan_General.Size = New System.Drawing.Size(779, 479)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -66,7 +152,7 @@ Partial Class Frm_OptionsFeu
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(800, 450)
+        Me.TLpan_Main.Size = New System.Drawing.Size(779, 479)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -80,20 +166,20 @@ Partial Class Frm_OptionsFeu
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 413)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 442)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34.0!))
-        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(794, 34)
+        Me.TLPan_PartieBasse.Size = New System.Drawing.Size(773, 34)
         Me.TLPan_PartieBasse.TabIndex = 0
         '
         'btn_OK
         '
         Me.btn_OK.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_OK.Location = New System.Drawing.Point(410, 3)
+        Me.btn_OK.Location = New System.Drawing.Point(399, 3)
         Me.btn_OK.Name = "btn_OK"
         Me.btn_OK.Size = New System.Drawing.Size(114, 28)
         Me.btn_OK.TabIndex = 1
@@ -104,7 +190,7 @@ Partial Class Frm_OptionsFeu
         '
         Me.btn_Annuler.DialogResult = System.Windows.Forms.DialogResult.Cancel
         Me.btn_Annuler.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.btn_Annuler.Location = New System.Drawing.Point(270, 3)
+        Me.btn_Annuler.Location = New System.Drawing.Point(259, 3)
         Me.btn_Annuler.Name = "btn_Annuler"
         Me.btn_Annuler.Size = New System.Drawing.Size(114, 28)
         Me.btn_Annuler.TabIndex = 0
@@ -114,28 +200,521 @@ Partial Class Frm_OptionsFeu
         'pan_Main
         '
         Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
-        Me.pan_Main.Controls.Add(Me.TLPan_Portees)
+        Me.pan_Main.Controls.Add(Me.TLPan_PartieHaute)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(794, 404)
+        Me.pan_Main.Size = New System.Drawing.Size(773, 433)
         Me.pan_Main.TabIndex = 1
         '
-        'TLPan_Portees
+        'TLPan_PartieHaute
         '
-        Me.TLPan_Portees.ColumnCount = 2
-        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250.0!))
-        Me.TLPan_Portees.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Portees.Controls.Add(Me.pan_Gauche, 0, 0)
-        Me.TLPan_Portees.Controls.Add(Me.img_Portees, 1, 0)
-        Me.TLPan_Portees.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_Portees.Location = New System.Drawing.Point(0, 0)
-        Me.TLPan_Portees.Margin = New System.Windows.Forms.Padding(0)
-        Me.TLPan_Portees.Name = "TLPan_Portees"
-        Me.TLPan_Portees.RowCount = 1
-        Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Portees.Size = New System.Drawing.Size(794, 404)
-        Me.TLPan_Portees.TabIndex = 0
+        Me.TLPan_PartieHaute.ColumnCount = 2
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 365.0!))
+        Me.TLPan_PartieHaute.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_PartieHaute.Controls.Add(Me.pan_Droite, 0, 0)
+        Me.TLPan_PartieHaute.Controls.Add(Me.pan_Gauche, 0, 0)
+        Me.TLPan_PartieHaute.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLPan_PartieHaute.Location = New System.Drawing.Point(0, 0)
+        Me.TLPan_PartieHaute.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
+        Me.TLPan_PartieHaute.RowCount = 1
+        Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(773, 433)
+        Me.TLPan_PartieHaute.TabIndex = 0
+        '
+        'pan_Droite
+        '
+        Me.pan_Droite.AutoScroll = True
+        Me.pan_Droite.Controls.Add(Me.TLPan_Droite)
+        Me.pan_Droite.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_Droite.Location = New System.Drawing.Point(365, 0)
+        Me.pan_Droite.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Droite.Name = "pan_Droite"
+        Me.pan_Droite.Size = New System.Drawing.Size(408, 433)
+        Me.pan_Droite.TabIndex = 1
+        '
+        'TLPan_Droite
+        '
+        Me.TLPan_Droite.ColumnCount = 1
+        Me.TLPan_Droite.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Droite.Controls.Add(Me.lbl_ParamCalcul, 0, 0)
+        Me.TLPan_Droite.Controls.Add(Me.pan_ParamCalcul, 0, 1)
+        Me.TLPan_Droite.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLPan_Droite.Location = New System.Drawing.Point(0, 0)
+        Me.TLPan_Droite.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLPan_Droite.Name = "TLPan_Droite"
+        Me.TLPan_Droite.RowCount = 2
+        Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
+        Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
+        Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_Droite.Size = New System.Drawing.Size(408, 433)
+        Me.TLPan_Droite.TabIndex = 0
+        '
+        'lbl_ParamCalcul
+        '
+        Me.lbl_ParamCalcul.AutoSize = True
+        Me.lbl_ParamCalcul.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_ParamCalcul.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_ParamCalcul.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_ParamCalcul.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_ParamCalcul.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_ParamCalcul.Name = "lbl_ParamCalcul"
+        Me.lbl_ParamCalcul.Size = New System.Drawing.Size(408, 30)
+        Me.lbl_ParamCalcul.TabIndex = 0
+        Me.lbl_ParamCalcul.Text = "lbl_ParamCalcul"
+        Me.lbl_ParamCalcul.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_ParamCalcul
+        '
+        Me.pan_ParamCalcul.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_ParamCalcul.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitConcreteResistance)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitConvectionSlab)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_ConcreteResistance)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitShadowEffect)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_ConvectionSlab)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitConvectionFactor)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_ShadowEffect)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitEmissivityFire)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_ConvectionFactor)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitEmissivitySteel)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_EmissivityFire)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitFormFactor)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_EmissivitySteel)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitMaxTemp)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_FormFactor)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitReferenceTemp)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_MaxTemp)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitTimeIncrement)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_ReferenceTemp)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_TimeIncrement)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_ConcreteResistance)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_ConvectionSlab)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_ConcreteResistance)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_ShadowEffect)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_ConvectionSlab)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_ConvectionFactor)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_ShadowEffect)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_EmissivityFire)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_ConvectionFactor)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_EmissivitySteel)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_EmissivityFire)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_FormFactor)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_EmissivitySteel)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_MaxTemp)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_FormFactor)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_ReferenceTemp)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_MaxTemp)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_TimeIncrement)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitBoltzmann)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_ReferenceTemp)
+        Me.pan_ParamCalcul.Controls.Add(Me.lbl_Boltzmann)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_TimeIncrement)
+        Me.pan_ParamCalcul.Controls.Add(Me.txt_Boltzmann)
+        Me.pan_ParamCalcul.Controls.Add(Me.img_Boltzmann)
+        Me.pan_ParamCalcul.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_ParamCalcul.Location = New System.Drawing.Point(0, 30)
+        Me.pan_ParamCalcul.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_ParamCalcul.Name = "pan_ParamCalcul"
+        Me.pan_ParamCalcul.Size = New System.Drawing.Size(408, 403)
+        Me.pan_ParamCalcul.TabIndex = 1
+        '
+        'lbl_UnitConcreteResistance
+        '
+        Me.lbl_UnitConcreteResistance.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitConcreteResistance.AutoSize = True
+        Me.lbl_UnitConcreteResistance.Location = New System.Drawing.Point(291, 367)
+        Me.lbl_UnitConcreteResistance.Name = "lbl_UnitConcreteResistance"
+        Me.lbl_UnitConcreteResistance.Size = New System.Drawing.Size(138, 13)
+        Me.lbl_UnitConcreteResistance.TabIndex = 79
+        Me.lbl_UnitConcreteResistance.Text = "lbl_UnitConcreteResistance"
+        '
+        'lbl_UnitConvectionSlab
+        '
+        Me.lbl_UnitConvectionSlab.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitConvectionSlab.AutoSize = True
+        Me.lbl_UnitConvectionSlab.Location = New System.Drawing.Point(291, 317)
+        Me.lbl_UnitConvectionSlab.Name = "lbl_UnitConvectionSlab"
+        Me.lbl_UnitConvectionSlab.Size = New System.Drawing.Size(117, 13)
+        Me.lbl_UnitConvectionSlab.TabIndex = 79
+        Me.lbl_UnitConvectionSlab.Text = "lbl_UnitConvectionSlab"
+        '
+        'lbl_ConcreteResistance
+        '
+        Me.lbl_ConcreteResistance.AutoSize = True
+        Me.lbl_ConcreteResistance.Location = New System.Drawing.Point(10, 343)
+        Me.lbl_ConcreteResistance.Name = "lbl_ConcreteResistance"
+        Me.lbl_ConcreteResistance.Size = New System.Drawing.Size(119, 13)
+        Me.lbl_ConcreteResistance.TabIndex = 79
+        Me.lbl_ConcreteResistance.Text = "lbl_ConcreteResistance"
+        '
+        'lbl_UnitShadowEffect
+        '
+        Me.lbl_UnitShadowEffect.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitShadowEffect.AutoSize = True
+        Me.lbl_UnitShadowEffect.Location = New System.Drawing.Point(291, 269)
+        Me.lbl_UnitShadowEffect.Name = "lbl_UnitShadowEffect"
+        Me.lbl_UnitShadowEffect.Size = New System.Drawing.Size(109, 13)
+        Me.lbl_UnitShadowEffect.TabIndex = 79
+        Me.lbl_UnitShadowEffect.Text = "lbl_UnitShadowEffect"
+        '
+        'lbl_ConvectionSlab
+        '
+        Me.lbl_ConvectionSlab.AutoSize = True
+        Me.lbl_ConvectionSlab.Location = New System.Drawing.Point(10, 295)
+        Me.lbl_ConvectionSlab.Name = "lbl_ConvectionSlab"
+        Me.lbl_ConvectionSlab.Size = New System.Drawing.Size(98, 13)
+        Me.lbl_ConvectionSlab.TabIndex = 79
+        Me.lbl_ConvectionSlab.Text = "lbl_ConvectionSlab"
+        '
+        'lbl_UnitConvectionFactor
+        '
+        Me.lbl_UnitConvectionFactor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitConvectionFactor.AutoSize = True
+        Me.lbl_UnitConvectionFactor.Location = New System.Drawing.Point(291, 223)
+        Me.lbl_UnitConvectionFactor.Name = "lbl_UnitConvectionFactor"
+        Me.lbl_UnitConvectionFactor.Size = New System.Drawing.Size(126, 13)
+        Me.lbl_UnitConvectionFactor.TabIndex = 79
+        Me.lbl_UnitConvectionFactor.Text = "lbl_UnitConvectionFactor"
+        '
+        'lbl_ShadowEffect
+        '
+        Me.lbl_ShadowEffect.AutoSize = True
+        Me.lbl_ShadowEffect.Location = New System.Drawing.Point(10, 247)
+        Me.lbl_ShadowEffect.Name = "lbl_ShadowEffect"
+        Me.lbl_ShadowEffect.Size = New System.Drawing.Size(90, 13)
+        Me.lbl_ShadowEffect.TabIndex = 79
+        Me.lbl_ShadowEffect.Text = "lbl_ShadowEffect"
+        '
+        'lbl_UnitEmissivityFire
+        '
+        Me.lbl_UnitEmissivityFire.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitEmissivityFire.AutoSize = True
+        Me.lbl_UnitEmissivityFire.Location = New System.Drawing.Point(291, 176)
+        Me.lbl_UnitEmissivityFire.Name = "lbl_UnitEmissivityFire"
+        Me.lbl_UnitEmissivityFire.Size = New System.Drawing.Size(104, 13)
+        Me.lbl_UnitEmissivityFire.TabIndex = 79
+        Me.lbl_UnitEmissivityFire.Text = "lbl_UnitEmissivityFire"
+        '
+        'lbl_ConvectionFactor
+        '
+        Me.lbl_ConvectionFactor.AutoSize = True
+        Me.lbl_ConvectionFactor.Location = New System.Drawing.Point(10, 202)
+        Me.lbl_ConvectionFactor.Name = "lbl_ConvectionFactor"
+        Me.lbl_ConvectionFactor.Size = New System.Drawing.Size(107, 13)
+        Me.lbl_ConvectionFactor.TabIndex = 79
+        Me.lbl_ConvectionFactor.Text = "lbl_ConvectionFactor"
+        '
+        'lbl_UnitEmissivitySteel
+        '
+        Me.lbl_UnitEmissivitySteel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitEmissivitySteel.AutoSize = True
+        Me.lbl_UnitEmissivitySteel.Location = New System.Drawing.Point(291, 150)
+        Me.lbl_UnitEmissivitySteel.Name = "lbl_UnitEmissivitySteel"
+        Me.lbl_UnitEmissivitySteel.Size = New System.Drawing.Size(111, 13)
+        Me.lbl_UnitEmissivitySteel.TabIndex = 79
+        Me.lbl_UnitEmissivitySteel.Text = "lbl_UnitEmissivitySteel"
+        '
+        'lbl_EmissivityFire
+        '
+        Me.lbl_EmissivityFire.AutoSize = True
+        Me.lbl_EmissivityFire.Location = New System.Drawing.Point(10, 176)
+        Me.lbl_EmissivityFire.Name = "lbl_EmissivityFire"
+        Me.lbl_EmissivityFire.Size = New System.Drawing.Size(85, 13)
+        Me.lbl_EmissivityFire.TabIndex = 79
+        Me.lbl_EmissivityFire.Text = "lbl_EmissivityFire"
+        '
+        'lbl_UnitFormFactor
+        '
+        Me.lbl_UnitFormFactor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitFormFactor.AutoSize = True
+        Me.lbl_UnitFormFactor.Location = New System.Drawing.Point(291, 124)
+        Me.lbl_UnitFormFactor.Name = "lbl_UnitFormFactor"
+        Me.lbl_UnitFormFactor.Size = New System.Drawing.Size(95, 13)
+        Me.lbl_UnitFormFactor.TabIndex = 79
+        Me.lbl_UnitFormFactor.Text = "lbl_UnitFormFactor"
+        '
+        'lbl_EmissivitySteel
+        '
+        Me.lbl_EmissivitySteel.AutoSize = True
+        Me.lbl_EmissivitySteel.Location = New System.Drawing.Point(10, 150)
+        Me.lbl_EmissivitySteel.Name = "lbl_EmissivitySteel"
+        Me.lbl_EmissivitySteel.Size = New System.Drawing.Size(92, 13)
+        Me.lbl_EmissivitySteel.TabIndex = 79
+        Me.lbl_EmissivitySteel.Text = "lbl_EmissivitySteel"
+        '
+        'lbl_UnitMaxTemp
+        '
+        Me.lbl_UnitMaxTemp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitMaxTemp.AutoSize = True
+        Me.lbl_UnitMaxTemp.Location = New System.Drawing.Point(291, 98)
+        Me.lbl_UnitMaxTemp.Name = "lbl_UnitMaxTemp"
+        Me.lbl_UnitMaxTemp.Size = New System.Drawing.Size(89, 13)
+        Me.lbl_UnitMaxTemp.TabIndex = 79
+        Me.lbl_UnitMaxTemp.Text = "lbl_UnitMaxTemp"
+        '
+        'lbl_FormFactor
+        '
+        Me.lbl_FormFactor.AutoSize = True
+        Me.lbl_FormFactor.Location = New System.Drawing.Point(10, 124)
+        Me.lbl_FormFactor.Name = "lbl_FormFactor"
+        Me.lbl_FormFactor.Size = New System.Drawing.Size(76, 13)
+        Me.lbl_FormFactor.TabIndex = 79
+        Me.lbl_FormFactor.Text = "lbl_FormFactor"
+        '
+        'lbl_UnitReferenceTemp
+        '
+        Me.lbl_UnitReferenceTemp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitReferenceTemp.AutoSize = True
+        Me.lbl_UnitReferenceTemp.Location = New System.Drawing.Point(291, 72)
+        Me.lbl_UnitReferenceTemp.Name = "lbl_UnitReferenceTemp"
+        Me.lbl_UnitReferenceTemp.Size = New System.Drawing.Size(119, 13)
+        Me.lbl_UnitReferenceTemp.TabIndex = 79
+        Me.lbl_UnitReferenceTemp.Text = "lbl_UnitReferenceTemp"
+        '
+        'lbl_MaxTemp
+        '
+        Me.lbl_MaxTemp.AutoSize = True
+        Me.lbl_MaxTemp.Location = New System.Drawing.Point(10, 98)
+        Me.lbl_MaxTemp.Name = "lbl_MaxTemp"
+        Me.lbl_MaxTemp.Size = New System.Drawing.Size(70, 13)
+        Me.lbl_MaxTemp.TabIndex = 79
+        Me.lbl_MaxTemp.Text = "lbl_MaxTemp"
+        '
+        'lbl_UnitTimeIncrement
+        '
+        Me.lbl_UnitTimeIncrement.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitTimeIncrement.AutoSize = True
+        Me.lbl_UnitTimeIncrement.Location = New System.Drawing.Point(291, 46)
+        Me.lbl_UnitTimeIncrement.Name = "lbl_UnitTimeIncrement"
+        Me.lbl_UnitTimeIncrement.Size = New System.Drawing.Size(112, 13)
+        Me.lbl_UnitTimeIncrement.TabIndex = 79
+        Me.lbl_UnitTimeIncrement.Text = "lbl_UnitTimeIncrement"
+        '
+        'lbl_ReferenceTemp
+        '
+        Me.lbl_ReferenceTemp.AutoSize = True
+        Me.lbl_ReferenceTemp.Location = New System.Drawing.Point(10, 72)
+        Me.lbl_ReferenceTemp.Name = "lbl_ReferenceTemp"
+        Me.lbl_ReferenceTemp.Size = New System.Drawing.Size(100, 13)
+        Me.lbl_ReferenceTemp.TabIndex = 79
+        Me.lbl_ReferenceTemp.Text = "lbl_ReferenceTemp"
+        '
+        'lbl_TimeIncrement
+        '
+        Me.lbl_TimeIncrement.AutoSize = True
+        Me.lbl_TimeIncrement.Location = New System.Drawing.Point(10, 46)
+        Me.lbl_TimeIncrement.Name = "lbl_TimeIncrement"
+        Me.lbl_TimeIncrement.Size = New System.Drawing.Size(93, 13)
+        Me.lbl_TimeIncrement.TabIndex = 79
+        Me.lbl_TimeIncrement.Text = "lbl_TimeIncrement"
+        '
+        'txt_ConcreteResistance
+        '
+        Me.txt_ConcreteResistance.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_ConcreteResistance.Location = New System.Drawing.Point(228, 364)
+        Me.txt_ConcreteResistance.Name = "txt_ConcreteResistance"
+        Me.txt_ConcreteResistance.Size = New System.Drawing.Size(58, 20)
+        Me.txt_ConcreteResistance.TabIndex = 77
+        '
+        'txt_ConvectionSlab
+        '
+        Me.txt_ConvectionSlab.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_ConvectionSlab.Location = New System.Drawing.Point(228, 314)
+        Me.txt_ConvectionSlab.Name = "txt_ConvectionSlab"
+        Me.txt_ConvectionSlab.Size = New System.Drawing.Size(58, 20)
+        Me.txt_ConvectionSlab.TabIndex = 77
+        '
+        'img_ConcreteResistance
+        '
+        Me.img_ConcreteResistance.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_ConcreteResistance.Location = New System.Drawing.Point(183, 364)
+        Me.img_ConcreteResistance.Name = "img_ConcreteResistance"
+        Me.img_ConcreteResistance.Size = New System.Drawing.Size(46, 20)
+        Me.img_ConcreteResistance.TabIndex = 78
+        Me.img_ConcreteResistance.TabStop = False
+        '
+        'txt_ShadowEffect
+        '
+        Me.txt_ShadowEffect.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_ShadowEffect.Location = New System.Drawing.Point(228, 266)
+        Me.txt_ShadowEffect.Name = "txt_ShadowEffect"
+        Me.txt_ShadowEffect.Size = New System.Drawing.Size(58, 20)
+        Me.txt_ShadowEffect.TabIndex = 77
+        '
+        'img_ConvectionSlab
+        '
+        Me.img_ConvectionSlab.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_ConvectionSlab.Location = New System.Drawing.Point(183, 314)
+        Me.img_ConvectionSlab.Name = "img_ConvectionSlab"
+        Me.img_ConvectionSlab.Size = New System.Drawing.Size(46, 20)
+        Me.img_ConvectionSlab.TabIndex = 78
+        Me.img_ConvectionSlab.TabStop = False
+        '
+        'txt_ConvectionFactor
+        '
+        Me.txt_ConvectionFactor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_ConvectionFactor.Location = New System.Drawing.Point(228, 220)
+        Me.txt_ConvectionFactor.Name = "txt_ConvectionFactor"
+        Me.txt_ConvectionFactor.Size = New System.Drawing.Size(58, 20)
+        Me.txt_ConvectionFactor.TabIndex = 77
+        '
+        'img_ShadowEffect
+        '
+        Me.img_ShadowEffect.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_ShadowEffect.Location = New System.Drawing.Point(183, 266)
+        Me.img_ShadowEffect.Name = "img_ShadowEffect"
+        Me.img_ShadowEffect.Size = New System.Drawing.Size(46, 20)
+        Me.img_ShadowEffect.TabIndex = 78
+        Me.img_ShadowEffect.TabStop = False
+        '
+        'txt_EmissivityFire
+        '
+        Me.txt_EmissivityFire.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EmissivityFire.Location = New System.Drawing.Point(228, 173)
+        Me.txt_EmissivityFire.Name = "txt_EmissivityFire"
+        Me.txt_EmissivityFire.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EmissivityFire.TabIndex = 77
+        '
+        'img_ConvectionFactor
+        '
+        Me.img_ConvectionFactor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_ConvectionFactor.Location = New System.Drawing.Point(183, 220)
+        Me.img_ConvectionFactor.Name = "img_ConvectionFactor"
+        Me.img_ConvectionFactor.Size = New System.Drawing.Size(46, 20)
+        Me.img_ConvectionFactor.TabIndex = 78
+        Me.img_ConvectionFactor.TabStop = False
+        '
+        'txt_EmissivitySteel
+        '
+        Me.txt_EmissivitySteel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_EmissivitySteel.Location = New System.Drawing.Point(228, 147)
+        Me.txt_EmissivitySteel.Name = "txt_EmissivitySteel"
+        Me.txt_EmissivitySteel.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EmissivitySteel.TabIndex = 77
+        '
+        'img_EmissivityFire
+        '
+        Me.img_EmissivityFire.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_EmissivityFire.Location = New System.Drawing.Point(183, 173)
+        Me.img_EmissivityFire.Name = "img_EmissivityFire"
+        Me.img_EmissivityFire.Size = New System.Drawing.Size(46, 20)
+        Me.img_EmissivityFire.TabIndex = 78
+        Me.img_EmissivityFire.TabStop = False
+        '
+        'txt_FormFactor
+        '
+        Me.txt_FormFactor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_FormFactor.Location = New System.Drawing.Point(228, 121)
+        Me.txt_FormFactor.Name = "txt_FormFactor"
+        Me.txt_FormFactor.Size = New System.Drawing.Size(58, 20)
+        Me.txt_FormFactor.TabIndex = 77
+        '
+        'img_EmissivitySteel
+        '
+        Me.img_EmissivitySteel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_EmissivitySteel.Location = New System.Drawing.Point(183, 147)
+        Me.img_EmissivitySteel.Name = "img_EmissivitySteel"
+        Me.img_EmissivitySteel.Size = New System.Drawing.Size(46, 20)
+        Me.img_EmissivitySteel.TabIndex = 78
+        Me.img_EmissivitySteel.TabStop = False
+        '
+        'txt_MaxTemp
+        '
+        Me.txt_MaxTemp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_MaxTemp.Location = New System.Drawing.Point(228, 95)
+        Me.txt_MaxTemp.Name = "txt_MaxTemp"
+        Me.txt_MaxTemp.Size = New System.Drawing.Size(58, 20)
+        Me.txt_MaxTemp.TabIndex = 77
+        '
+        'img_FormFactor
+        '
+        Me.img_FormFactor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_FormFactor.Location = New System.Drawing.Point(183, 121)
+        Me.img_FormFactor.Name = "img_FormFactor"
+        Me.img_FormFactor.Size = New System.Drawing.Size(46, 20)
+        Me.img_FormFactor.TabIndex = 78
+        Me.img_FormFactor.TabStop = False
+        '
+        'txt_ReferenceTemp
+        '
+        Me.txt_ReferenceTemp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_ReferenceTemp.Location = New System.Drawing.Point(228, 69)
+        Me.txt_ReferenceTemp.Name = "txt_ReferenceTemp"
+        Me.txt_ReferenceTemp.Size = New System.Drawing.Size(58, 20)
+        Me.txt_ReferenceTemp.TabIndex = 77
+        '
+        'img_MaxTemp
+        '
+        Me.img_MaxTemp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_MaxTemp.Location = New System.Drawing.Point(183, 95)
+        Me.img_MaxTemp.Name = "img_MaxTemp"
+        Me.img_MaxTemp.Size = New System.Drawing.Size(46, 20)
+        Me.img_MaxTemp.TabIndex = 78
+        Me.img_MaxTemp.TabStop = False
+        '
+        'txt_TimeIncrement
+        '
+        Me.txt_TimeIncrement.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_TimeIncrement.Location = New System.Drawing.Point(228, 43)
+        Me.txt_TimeIncrement.Name = "txt_TimeIncrement"
+        Me.txt_TimeIncrement.Size = New System.Drawing.Size(58, 20)
+        Me.txt_TimeIncrement.TabIndex = 77
+        '
+        'lbl_UnitBoltzmann
+        '
+        Me.lbl_UnitBoltzmann.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_UnitBoltzmann.AutoSize = True
+        Me.lbl_UnitBoltzmann.Location = New System.Drawing.Point(291, 21)
+        Me.lbl_UnitBoltzmann.Name = "lbl_UnitBoltzmann"
+        Me.lbl_UnitBoltzmann.Size = New System.Drawing.Size(91, 13)
+        Me.lbl_UnitBoltzmann.TabIndex = 79
+        Me.lbl_UnitBoltzmann.Text = "lbl_UnitBoltzmann"
+        '
+        'img_ReferenceTemp
+        '
+        Me.img_ReferenceTemp.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_ReferenceTemp.Location = New System.Drawing.Point(183, 69)
+        Me.img_ReferenceTemp.Name = "img_ReferenceTemp"
+        Me.img_ReferenceTemp.Size = New System.Drawing.Size(46, 20)
+        Me.img_ReferenceTemp.TabIndex = 78
+        Me.img_ReferenceTemp.TabStop = False
+        '
+        'lbl_Boltzmann
+        '
+        Me.lbl_Boltzmann.AutoSize = True
+        Me.lbl_Boltzmann.Location = New System.Drawing.Point(10, 21)
+        Me.lbl_Boltzmann.Name = "lbl_Boltzmann"
+        Me.lbl_Boltzmann.Size = New System.Drawing.Size(72, 13)
+        Me.lbl_Boltzmann.TabIndex = 79
+        Me.lbl_Boltzmann.Text = "lbl_Boltzmann"
+        '
+        'img_TimeIncrement
+        '
+        Me.img_TimeIncrement.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_TimeIncrement.Location = New System.Drawing.Point(183, 43)
+        Me.img_TimeIncrement.Name = "img_TimeIncrement"
+        Me.img_TimeIncrement.Size = New System.Drawing.Size(46, 20)
+        Me.img_TimeIncrement.TabIndex = 78
+        Me.img_TimeIncrement.TabStop = False
+        '
+        'txt_Boltzmann
+        '
+        Me.txt_Boltzmann.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_Boltzmann.Location = New System.Drawing.Point(228, 18)
+        Me.txt_Boltzmann.Name = "txt_Boltzmann"
+        Me.txt_Boltzmann.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Boltzmann.TabIndex = 77
+        '
+        'img_Boltzmann
+        '
+        Me.img_Boltzmann.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_Boltzmann.Location = New System.Drawing.Point(183, 18)
+        Me.img_Boltzmann.Name = "img_Boltzmann"
+        Me.img_Boltzmann.Size = New System.Drawing.Size(46, 20)
+        Me.img_Boltzmann.TabIndex = 78
+        Me.img_Boltzmann.TabStop = False
         '
         'pan_Gauche
         '
@@ -143,70 +722,245 @@ Partial Class Frm_OptionsFeu
         Me.pan_Gauche.Controls.Add(Me.TLPan_Gauche)
         Me.pan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
-        Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(250, 404)
+        Me.pan_Gauche.Size = New System.Drawing.Size(364, 433)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
         '
         Me.TLPan_Gauche.ColumnCount = 1
         Me.TLPan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Controls.Add(Me.lbl_Portees, 0, 0)
-        Me.TLPan_Gauche.Controls.Add(Me.pan_SaisiePortee, 0, 1)
-        Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TLPan_Gauche.Controls.Add(Me.lbl_ParamPoutre, 0, 0)
+        Me.TLPan_Gauche.Controls.Add(Me.pan_ParamPoutre, 0, 1)
+        Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
-        Me.TLPan_Gauche.RowCount = 3
+        Me.TLPan_Gauche.RowCount = 2
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(250, 203)
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(364, 433)
         Me.TLPan_Gauche.TabIndex = 0
         '
-        'lbl_Portees
+        'lbl_ParamPoutre
         '
-        Me.lbl_Portees.AutoSize = True
-        Me.lbl_Portees.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_Portees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_Portees.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_Portees.Location = New System.Drawing.Point(0, 0)
-        Me.lbl_Portees.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_Portees.Name = "lbl_Portees"
-        Me.lbl_Portees.Size = New System.Drawing.Size(250, 30)
-        Me.lbl_Portees.TabIndex = 0
-        Me.lbl_Portees.Text = "lbl_Portee"
-        Me.lbl_Portees.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_ParamPoutre.AutoSize = True
+        Me.lbl_ParamPoutre.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_ParamPoutre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_ParamPoutre.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_ParamPoutre.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_ParamPoutre.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_ParamPoutre.Name = "lbl_ParamPoutre"
+        Me.lbl_ParamPoutre.Size = New System.Drawing.Size(364, 30)
+        Me.lbl_ParamPoutre.TabIndex = 0
+        Me.lbl_ParamPoutre.Text = "lbl_ParamPoutre"
+        Me.lbl_ParamPoutre.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'pan_SaisiePortee
+        'pan_ParamPoutre
         '
-        Me.pan_SaisiePortee.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_SaisiePortee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_SaisiePortee.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_SaisiePortee.Location = New System.Drawing.Point(0, 30)
-        Me.pan_SaisiePortee.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_SaisiePortee.Name = "pan_SaisiePortee"
-        Me.pan_SaisiePortee.Size = New System.Drawing.Size(250, 170)
-        Me.pan_SaisiePortee.TabIndex = 1
+        Me.pan_ParamPoutre.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_ParamPoutre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnitSpecificHeat)
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnitThermalConduc)
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_SpecificHeat)
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnitDensity)
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_ThermalConductivity)
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_Density)
+        Me.pan_ParamPoutre.Controls.Add(Me.chk_ReductionConcreteStrenght)
+        Me.pan_ParamPoutre.Controls.Add(Me.txt_SpecificHeat)
+        Me.pan_ParamPoutre.Controls.Add(Me.img_SpecificHeat)
+        Me.pan_ParamPoutre.Controls.Add(Me.txt_LambdaP)
+        Me.pan_ParamPoutre.Controls.Add(Me.img_LambdaP)
+        Me.pan_ParamPoutre.Controls.Add(Me.txt_rhoP)
+        Me.pan_ParamPoutre.Controls.Add(Me.img_rhoP)
+        Me.pan_ParamPoutre.Controls.Add(Me.cmb_InsulationType)
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_InsulationType)
+        Me.pan_ParamPoutre.Controls.Add(Me.cmb_ProtectionType)
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_ProtectionType)
+        Me.pan_ParamPoutre.Controls.Add(Me.cmb_SurfaceType)
+        Me.pan_ParamPoutre.Controls.Add(Me.lbl_SurfaceType)
+        Me.pan_ParamPoutre.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_ParamPoutre.Location = New System.Drawing.Point(0, 30)
+        Me.pan_ParamPoutre.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_ParamPoutre.Name = "pan_ParamPoutre"
+        Me.pan_ParamPoutre.Size = New System.Drawing.Size(364, 403)
+        Me.pan_ParamPoutre.TabIndex = 1
         '
-        'img_Portees
+        'lbl_UnitSpecificHeat
         '
-        Me.img_Portees.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_Portees.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_Portees.Location = New System.Drawing.Point(251, 0)
-        Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
-        Me.img_Portees.Name = "img_Portees"
-        Me.img_Portees.Size = New System.Drawing.Size(100, 50)
-        Me.img_Portees.TabIndex = 1
-        Me.img_Portees.TabStop = False
+        Me.lbl_UnitSpecificHeat.AutoSize = True
+        Me.lbl_UnitSpecificHeat.Location = New System.Drawing.Point(242, 195)
+        Me.lbl_UnitSpecificHeat.Name = "lbl_UnitSpecificHeat"
+        Me.lbl_UnitSpecificHeat.Size = New System.Drawing.Size(103, 13)
+        Me.lbl_UnitSpecificHeat.TabIndex = 80
+        Me.lbl_UnitSpecificHeat.Text = "lbl_UnitSpecificHeat"
+        '
+        'lbl_UnitThermalConduc
+        '
+        Me.lbl_UnitThermalConduc.AutoSize = True
+        Me.lbl_UnitThermalConduc.Location = New System.Drawing.Point(242, 172)
+        Me.lbl_UnitThermalConduc.Name = "lbl_UnitThermalConduc"
+        Me.lbl_UnitThermalConduc.Size = New System.Drawing.Size(117, 13)
+        Me.lbl_UnitThermalConduc.TabIndex = 80
+        Me.lbl_UnitThermalConduc.Text = "lbl_UnitThermalConduc"
+        '
+        'lbl_SpecificHeat
+        '
+        Me.lbl_SpecificHeat.AutoSize = True
+        Me.lbl_SpecificHeat.Location = New System.Drawing.Point(10, 195)
+        Me.lbl_SpecificHeat.Name = "lbl_SpecificHeat"
+        Me.lbl_SpecificHeat.Size = New System.Drawing.Size(84, 13)
+        Me.lbl_SpecificHeat.TabIndex = 80
+        Me.lbl_SpecificHeat.Text = "lbl_SpecificHeat"
+        '
+        'lbl_UnitDensity
+        '
+        Me.lbl_UnitDensity.AutoSize = True
+        Me.lbl_UnitDensity.Location = New System.Drawing.Point(242, 146)
+        Me.lbl_UnitDensity.Name = "lbl_UnitDensity"
+        Me.lbl_UnitDensity.Size = New System.Drawing.Size(77, 13)
+        Me.lbl_UnitDensity.TabIndex = 80
+        Me.lbl_UnitDensity.Text = "lbl_UnitDensity"
+        '
+        'lbl_ThermalConductivity
+        '
+        Me.lbl_ThermalConductivity.AutoSize = True
+        Me.lbl_ThermalConductivity.Location = New System.Drawing.Point(10, 172)
+        Me.lbl_ThermalConductivity.Name = "lbl_ThermalConductivity"
+        Me.lbl_ThermalConductivity.Size = New System.Drawing.Size(119, 13)
+        Me.lbl_ThermalConductivity.TabIndex = 80
+        Me.lbl_ThermalConductivity.Text = "lbl_ThermalConductivity"
+        '
+        'lbl_Density
+        '
+        Me.lbl_Density.AutoSize = True
+        Me.lbl_Density.Location = New System.Drawing.Point(10, 146)
+        Me.lbl_Density.Name = "lbl_Density"
+        Me.lbl_Density.Size = New System.Drawing.Size(58, 13)
+        Me.lbl_Density.TabIndex = 80
+        Me.lbl_Density.Text = "lbl_Density"
+        '
+        'chk_ReductionConcreteStrenght
+        '
+        Me.chk_ReductionConcreteStrenght.AutoSize = True
+        Me.chk_ReductionConcreteStrenght.Location = New System.Drawing.Point(13, 237)
+        Me.chk_ReductionConcreteStrenght.Name = "chk_ReductionConcreteStrenght"
+        Me.chk_ReductionConcreteStrenght.Size = New System.Drawing.Size(182, 17)
+        Me.chk_ReductionConcreteStrenght.TabIndex = 77
+        Me.chk_ReductionConcreteStrenght.Text = "chk_ReductionConcreteStrenght"
+        Me.chk_ReductionConcreteStrenght.UseVisualStyleBackColor = True
+        '
+        'txt_SpecificHeat
+        '
+        Me.txt_SpecificHeat.Location = New System.Drawing.Point(178, 195)
+        Me.txt_SpecificHeat.Name = "txt_SpecificHeat"
+        Me.txt_SpecificHeat.Size = New System.Drawing.Size(58, 20)
+        Me.txt_SpecificHeat.TabIndex = 75
+        '
+        'img_SpecificHeat
+        '
+        Me.img_SpecificHeat.Location = New System.Drawing.Point(133, 195)
+        Me.img_SpecificHeat.Name = "img_SpecificHeat"
+        Me.img_SpecificHeat.Size = New System.Drawing.Size(46, 20)
+        Me.img_SpecificHeat.TabIndex = 76
+        Me.img_SpecificHeat.TabStop = False
+        '
+        'txt_LambdaP
+        '
+        Me.txt_LambdaP.Location = New System.Drawing.Point(178, 169)
+        Me.txt_LambdaP.Name = "txt_LambdaP"
+        Me.txt_LambdaP.Size = New System.Drawing.Size(58, 20)
+        Me.txt_LambdaP.TabIndex = 75
+        '
+        'img_LambdaP
+        '
+        Me.img_LambdaP.Location = New System.Drawing.Point(133, 169)
+        Me.img_LambdaP.Name = "img_LambdaP"
+        Me.img_LambdaP.Size = New System.Drawing.Size(46, 20)
+        Me.img_LambdaP.TabIndex = 76
+        Me.img_LambdaP.TabStop = False
+        '
+        'txt_rhoP
+        '
+        Me.txt_rhoP.Location = New System.Drawing.Point(178, 143)
+        Me.txt_rhoP.Name = "txt_rhoP"
+        Me.txt_rhoP.Size = New System.Drawing.Size(58, 20)
+        Me.txt_rhoP.TabIndex = 75
+        '
+        'img_rhoP
+        '
+        Me.img_rhoP.Location = New System.Drawing.Point(133, 143)
+        Me.img_rhoP.Name = "img_rhoP"
+        Me.img_rhoP.Size = New System.Drawing.Size(46, 20)
+        Me.img_rhoP.TabIndex = 76
+        Me.img_rhoP.TabStop = False
+        '
+        'cmb_InsulationType
+        '
+        Me.cmb_InsulationType.FormattingEnabled = True
+        Me.cmb_InsulationType.Location = New System.Drawing.Point(115, 105)
+        Me.cmb_InsulationType.Name = "cmb_InsulationType"
+        Me.cmb_InsulationType.Size = New System.Drawing.Size(186, 21)
+        Me.cmb_InsulationType.TabIndex = 1
+        '
+        'lbl_InsulationType
+        '
+        Me.lbl_InsulationType.AutoSize = True
+        Me.lbl_InsulationType.Location = New System.Drawing.Point(10, 108)
+        Me.lbl_InsulationType.Name = "lbl_InsulationType"
+        Me.lbl_InsulationType.Size = New System.Drawing.Size(92, 13)
+        Me.lbl_InsulationType.TabIndex = 0
+        Me.lbl_InsulationType.Text = "lbl_InsulationType"
+        '
+        'cmb_ProtectionType
+        '
+        Me.cmb_ProtectionType.FormattingEnabled = True
+        Me.cmb_ProtectionType.Location = New System.Drawing.Point(115, 60)
+        Me.cmb_ProtectionType.Name = "cmb_ProtectionType"
+        Me.cmb_ProtectionType.Size = New System.Drawing.Size(186, 21)
+        Me.cmb_ProtectionType.TabIndex = 1
+        '
+        'lbl_ProtectionType
+        '
+        Me.lbl_ProtectionType.AutoSize = True
+        Me.lbl_ProtectionType.Location = New System.Drawing.Point(10, 63)
+        Me.lbl_ProtectionType.Name = "lbl_ProtectionType"
+        Me.lbl_ProtectionType.Size = New System.Drawing.Size(95, 13)
+        Me.lbl_ProtectionType.TabIndex = 0
+        Me.lbl_ProtectionType.Text = "lbl_ProtectionType"
+        '
+        'cmb_SurfaceType
+        '
+        Me.cmb_SurfaceType.FormattingEnabled = True
+        Me.cmb_SurfaceType.Location = New System.Drawing.Point(115, 18)
+        Me.cmb_SurfaceType.Name = "cmb_SurfaceType"
+        Me.cmb_SurfaceType.Size = New System.Drawing.Size(186, 21)
+        Me.cmb_SurfaceType.TabIndex = 1
+        '
+        'lbl_SurfaceType
+        '
+        Me.lbl_SurfaceType.AutoSize = True
+        Me.lbl_SurfaceType.Location = New System.Drawing.Point(10, 21)
+        Me.lbl_SurfaceType.Name = "lbl_SurfaceType"
+        Me.lbl_SurfaceType.Size = New System.Drawing.Size(84, 13)
+        Me.lbl_SurfaceType.TabIndex = 0
+        Me.lbl_SurfaceType.Text = "lbl_SurfaceType"
+        '
+        'ErrorProvider_Frm_OptionsFeu
+        '
+        Me.ErrorProvider_Frm_OptionsFeu.ContainerControl = Me
         '
         'Frm_OptionsFeu
         '
+        Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.CancelButton = Me.btn_Annuler
+        Me.ClientSize = New System.Drawing.Size(779, 479)
         Me.Controls.Add(Me.pan_General)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "Frm_OptionsFeu"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Frm_OptionsFeu"
@@ -214,11 +968,32 @@ Partial Class Frm_OptionsFeu
         Me.TLpan_Main.ResumeLayout(False)
         Me.TLPan_PartieBasse.ResumeLayout(False)
         Me.pan_Main.ResumeLayout(False)
-        Me.TLPan_Portees.ResumeLayout(False)
+        Me.TLPan_PartieHaute.ResumeLayout(False)
+        Me.pan_Droite.ResumeLayout(False)
+        Me.TLPan_Droite.ResumeLayout(False)
+        Me.TLPan_Droite.PerformLayout()
+        Me.pan_ParamCalcul.ResumeLayout(False)
+        Me.pan_ParamCalcul.PerformLayout()
+        CType(Me.img_ConcreteResistance, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_ConvectionSlab, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_ShadowEffect, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_ConvectionFactor, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_EmissivityFire, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_EmissivitySteel, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_FormFactor, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_MaxTemp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_ReferenceTemp, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_TimeIncrement, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_Boltzmann, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
-        CType(Me.img_Portees, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_ParamPoutre.ResumeLayout(False)
+        Me.pan_ParamPoutre.PerformLayout()
+        CType(Me.img_SpecificHeat, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_LambdaP, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_rhoP, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -229,10 +1004,77 @@ Partial Class Frm_OptionsFeu
     Friend WithEvents btn_OK As Button
     Friend WithEvents btn_Annuler As Button
     Friend WithEvents pan_Main As Panel
-    Friend WithEvents TLPan_Portees As TableLayoutPanel
+    Friend WithEvents TLPan_PartieHaute As TableLayoutPanel
     Friend WithEvents pan_Gauche As Panel
     Friend WithEvents TLPan_Gauche As TableLayoutPanel
-    Friend WithEvents lbl_Portees As Label
-    Friend WithEvents pan_SaisiePortee As Panel
-    Friend WithEvents img_Portees As PictureBox
+    Friend WithEvents lbl_ParamPoutre As Label
+    Friend WithEvents pan_ParamPoutre As Panel
+    Friend WithEvents pan_Droite As Panel
+    Friend WithEvents TLPan_Droite As TableLayoutPanel
+    Friend WithEvents lbl_ParamCalcul As Label
+    Friend WithEvents pan_ParamCalcul As Panel
+    Friend WithEvents cmb_InsulationType As ComboBox
+    Friend WithEvents lbl_InsulationType As Label
+    Friend WithEvents cmb_ProtectionType As ComboBox
+    Friend WithEvents lbl_ProtectionType As Label
+    Friend WithEvents cmb_SurfaceType As ComboBox
+    Friend WithEvents lbl_SurfaceType As Label
+    Friend WithEvents txt_rhoP As TextBox
+    Friend WithEvents img_rhoP As PictureBox
+    Friend WithEvents chk_ReductionConcreteStrenght As CheckBox
+    Friend WithEvents txt_SpecificHeat As TextBox
+    Friend WithEvents img_SpecificHeat As PictureBox
+    Friend WithEvents txt_LambdaP As TextBox
+    Friend WithEvents img_LambdaP As PictureBox
+    Friend WithEvents lbl_TimeIncrement As Label
+    Friend WithEvents txt_TimeIncrement As TextBox
+    Friend WithEvents lbl_Boltzmann As Label
+    Friend WithEvents img_TimeIncrement As PictureBox
+    Friend WithEvents txt_Boltzmann As TextBox
+    Friend WithEvents img_Boltzmann As PictureBox
+    Friend WithEvents lbl_FormFactor As Label
+    Friend WithEvents lbl_MaxTemp As Label
+    Friend WithEvents lbl_ReferenceTemp As Label
+    Friend WithEvents txt_FormFactor As TextBox
+    Friend WithEvents txt_MaxTemp As TextBox
+    Friend WithEvents img_FormFactor As PictureBox
+    Friend WithEvents txt_ReferenceTemp As TextBox
+    Friend WithEvents img_MaxTemp As PictureBox
+    Friend WithEvents img_ReferenceTemp As PictureBox
+    Friend WithEvents lbl_ConvectionFactor As Label
+    Friend WithEvents lbl_EmissivityFire As Label
+    Friend WithEvents lbl_EmissivitySteel As Label
+    Friend WithEvents txt_ConvectionFactor As TextBox
+    Friend WithEvents txt_EmissivityFire As TextBox
+    Friend WithEvents img_ConvectionFactor As PictureBox
+    Friend WithEvents txt_EmissivitySteel As TextBox
+    Friend WithEvents img_EmissivityFire As PictureBox
+    Friend WithEvents img_EmissivitySteel As PictureBox
+    Friend WithEvents lbl_ConcreteResistance As Label
+    Friend WithEvents lbl_ConvectionSlab As Label
+    Friend WithEvents lbl_ShadowEffect As Label
+    Friend WithEvents txt_ConcreteResistance As TextBox
+    Friend WithEvents txt_ConvectionSlab As TextBox
+    Friend WithEvents img_ConcreteResistance As PictureBox
+    Friend WithEvents txt_ShadowEffect As TextBox
+    Friend WithEvents img_ConvectionSlab As PictureBox
+    Friend WithEvents img_ShadowEffect As PictureBox
+    Friend WithEvents lbl_Density As Label
+    Friend WithEvents lbl_SpecificHeat As Label
+    Friend WithEvents lbl_ThermalConductivity As Label
+    Friend WithEvents lbl_UnitConcreteResistance As Label
+    Friend WithEvents lbl_UnitConvectionSlab As Label
+    Friend WithEvents lbl_UnitShadowEffect As Label
+    Friend WithEvents lbl_UnitConvectionFactor As Label
+    Friend WithEvents lbl_UnitEmissivityFire As Label
+    Friend WithEvents lbl_UnitEmissivitySteel As Label
+    Friend WithEvents lbl_UnitFormFactor As Label
+    Friend WithEvents lbl_UnitMaxTemp As Label
+    Friend WithEvents lbl_UnitReferenceTemp As Label
+    Friend WithEvents lbl_UnitTimeIncrement As Label
+    Friend WithEvents lbl_UnitBoltzmann As Label
+    Friend WithEvents lbl_UnitSpecificHeat As Label
+    Friend WithEvents lbl_UnitThermalConduc As Label
+    Friend WithEvents lbl_UnitDensity As Label
+    Friend WithEvents ErrorProvider_Frm_OptionsFeu As ErrorProvider
 End Class

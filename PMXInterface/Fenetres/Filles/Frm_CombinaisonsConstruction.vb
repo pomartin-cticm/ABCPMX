@@ -288,6 +288,7 @@ Public Class Frm_CombinaisonsConstruction
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
         Dim lValMax As Boolean = True
+        Dim lValMin As Boolean = True
         Dim kUnit As Decimal = 1
 
         Const GammaMAXI As Decimal = 10
@@ -297,10 +298,10 @@ Public Class Frm_CombinaisonsConstruction
         ValMax = GammaMAXI
         lValMax = True
 
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin, lValMax, ValMax)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider1, ValMin, ValMax)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider1, ValMin, lValMin, ValMax, lValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
             ErrorProvider1.Clear()

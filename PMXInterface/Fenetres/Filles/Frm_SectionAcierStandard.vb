@@ -1023,6 +1023,7 @@ Public Class Frm_SectionAcierStandard
 
         Dim iErreur As Integer
         Dim ValMin, ValMax As Decimal
+        Dim lValMin As Boolean = True
         Dim lValMax As Boolean = True
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
 
@@ -1043,10 +1044,10 @@ Public Class Frm_SectionAcierStandard
                 ValMin = TWMINI
                 ValMax = EPMAXI
         End Select
-        iErreur = ValideSaisieNombre(MyTxt.Text, True, ValMin / kUnit, lValMax, ValMax / kUnit)
+        iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin / kUnit, lValMax, ValMax / kUnit)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin / kUnit, ValMax / kUnit)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin / kUnit, lValMin, ValMax / kUnit, lValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
             ErrorProvider.Clear()

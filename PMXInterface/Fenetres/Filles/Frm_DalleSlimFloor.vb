@@ -880,7 +880,7 @@ Public Class Frm_DalleSlimFloor
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
-            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, ValMax)
+            NotifieErreurSaisie(iErreur, MyTxt, ErrorProvider, ValMin, lValMin, ValMax, lValMax)
         Else
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
             'ErrorProvider.Clear()
