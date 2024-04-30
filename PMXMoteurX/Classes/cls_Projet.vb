@@ -574,61 +574,90 @@ Public Class cls_Projet
                     End With
 
                 End With
-                '==[ Classe Hivoss ]=================================================================
-                With .Hivoss
-                    Lines.Add("BLOCK OPT_CALCULS_HIVOSS")
 
-                    Lines.Add("   lHivossMethod = " & .lHivossMethod)
-                    Lines.Add("   RatioQ        = " & .ratioQ)
-                    Lines.Add("   ChoixQ        = " & .choixQ)
-                    Lines.Add("   UtilPlancher  = " & .UtilisationPlancher)
-                    Lines.Add("   lFreqDalle  = " & .lFreqDalle)
-                    Lines.Add("   Mobilier      = " & .Mobilier)
-                    Lines.Add("   lFauxPlafond  = " & .lFauxPlafond)
-                    Lines.Add("   lChappeFlottante  = " & .lChappeFlottante)
-                    Lines.Add("   AmortD1       = " & .AmortiStructure_D1)
-                    Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
-                    Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
-                    Lines.Add("   AmortDtot     = " & .AmortiTotal_Dtot)
+                '==[ Classe Options Calculs Feu ]=================================================================
+                With .ParamFeu
+
+                    Lines.Add("BLOCK OPT_FEU")
+                    Lines.Add("   TempRef            = " & .TempRef)
+                    Lines.Add("   EmissFire            = " & .EmissivityFire)
+                    Lines.Add("   EmissSteel            = " & .EmissivitySteel)
+                    Lines.Add("   ConvCoef            = " & .ConvectionCoef)
+                    Lines.Add("   ConvCoefDalle            = " & .ConvectionCoefDalle)
+                    Lines.Add("   PhiViewFactor            = " & .PhiViewFactor)
+                    Lines.Add("   lHeatingSlabEF            = " & .lHeatingSlabEF)
+                    Lines.Add("   tDalleEFmax            = " & .tDalleEFmax)
+                    Lines.Add("   ksh            = " & .ksh)
+                    Lines.Add("   AlphaSlab            = " & .AlphaSlab)
+                    Lines.Add("   lArmaCompression            = " & .lArmaCompression)
+                    Lines.Add("   lArmaFormeeAFroid            = " & .lArmaFormeeAFroid)
+                    Lines.Add("   lCalculFeu            = " & .lCalcuFeu)
+                    Lines.Add("   lDalleFEM            = " & .lDalleFEM)
+                    Lines.Add("   lReducConcrStr            = " & .lReductionConcreteStrenght)
+                    Lines.Add("   TypeSurface            = " & .TypeSurface)
+                    Lines.Add("   Protection            = " & .Protection)
+                    Lines.Add("   EpProtection            = " & .EpProtection)
+                    Lines.Add("   CustomLambdaP            = " & .CustomLambdaP)
+                    Lines.Add("   DeltaCalcul            = " & .DeltaTCalcul)
                     Lines.Add("")
+
                 End With
 
-                '==[ Classe ChargementU ]=================================================================
-                For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In .ChargesU
-                    For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
-                        Lines.Add("BLOCK CHGTU_QSURF")
-                        Lines.Add("   CleDic      =  " & elemnts.Key)
-                        Lines.Add("   indTravee      =  " & i)
-                        Lines.Add("   QSurf      =  " & elemnts.Value.QSurf(i))
-                        Lines.Add("")
+                '==[ Classe Hivoss ]=================================================================
+                With .Hivoss
+                        Lines.Add("BLOCK OPT_CALCULS_HIVOSS")
 
-                        For Each force As cls_Force In elemnts.Value.Forces(i)
-                            Lines.Add("BLOCK CHGTU_FORCE")
+                        Lines.Add("   lHivossMethod = " & .lHivossMethod)
+                        Lines.Add("   RatioQ        = " & .ratioQ)
+                        Lines.Add("   ChoixQ        = " & .choixQ)
+                        Lines.Add("   UtilPlancher  = " & .UtilisationPlancher)
+                        Lines.Add("   lFreqDalle  = " & .lFreqDalle)
+                        Lines.Add("   Mobilier      = " & .Mobilier)
+                        Lines.Add("   lFauxPlafond  = " & .lFauxPlafond)
+                        Lines.Add("   lChappeFlottante  = " & .lChappeFlottante)
+                        Lines.Add("   AmortD1       = " & .AmortiStructure_D1)
+                        Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
+                        Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
+                        Lines.Add("   AmortDtot     = " & .AmortiTotal_Dtot)
+                        Lines.Add("")
+                    End With
+
+                    '==[ Classe ChargementU ]=================================================================
+                    For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In .ChargesU
+                        For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
+                            Lines.Add("BLOCK CHGTU_QSURF")
                             Lines.Add("   CleDic      =  " & elemnts.Key)
                             Lines.Add("   indTravee      =  " & i)
-                            Lines.Add("   Force      =  " & force.Force)
-                            Lines.Add("   xPosT      =  " & force.xPosT)
-                            Lines.Add("   xGaucheT   =  " & force.xGaucheT)
+                            Lines.Add("   QSurf      =  " & elemnts.Value.QSurf(i))
                             Lines.Add("")
-                        Next
 
-                        For Each frepart As cls_ForceRepartie In elemnts.Value.FReparties(i)
-                            If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = cls_Poutre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
-                                Lines.Add("BLOCK CHGTU_FREPAR")
+                            For Each force As cls_Force In elemnts.Value.Forces(i)
+                                Lines.Add("BLOCK CHGTU_FORCE")
                                 Lines.Add("   CleDic      =  " & elemnts.Key)
                                 Lines.Add("   indTravee      =  " & i)
-                                Lines.Add("   F0      =  " & frepart.Force(0))
-                                Lines.Add("   F1      =  " & frepart.Force(1))
-                                Lines.Add("   xPosT0      =  " & frepart.xPosT(0))
-                                Lines.Add("   xPosT1      =  " & frepart.xPosT(1))
-                                Lines.Add("   xGaucheT      =  " & frepart.xGaucheT)
+                                Lines.Add("   Force      =  " & force.Force)
+                                Lines.Add("   xPosT      =  " & force.xPosT)
+                                Lines.Add("   xGaucheT   =  " & force.xGaucheT)
                                 Lines.Add("")
-                            End If
+                            Next
+
+                            For Each frepart As cls_ForceRepartie In elemnts.Value.FReparties(i)
+                                If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = cls_Poutre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
+                                    Lines.Add("BLOCK CHGTU_FREPAR")
+                                    Lines.Add("   CleDic      =  " & elemnts.Key)
+                                    Lines.Add("   indTravee      =  " & i)
+                                    Lines.Add("   F0      =  " & frepart.Force(0))
+                                    Lines.Add("   F1      =  " & frepart.Force(1))
+                                    Lines.Add("   xPosT0      =  " & frepart.xPosT(0))
+                                    Lines.Add("   xPosT1      =  " & frepart.xPosT(1))
+                                    Lines.Add("   xGaucheT      =  " & frepart.xGaucheT)
+                                    Lines.Add("")
+                                End If
+                            Next
                         Next
                     Next
-                Next
 
-            End With
+                End With
         Next
 
 
@@ -683,10 +712,11 @@ Public Class cls_Projet
         End Try
 
         If Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("POUTRE") And Not ListeBlocCle.Contains("MAINTIENS") And Not ListeBlocCle.Contains("MAINT_BAC") And Not ListeBlocCle.Contains("SECTION") And
-           Not ListeBlocCle.Contains("PROFILA") And Not ListeBlocCle.Contains("ACIER_PROFILA") And Not ListeBlocCle.Contains("ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") And
-           Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("COFRADAL") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE") And
-           Not ListeBlocCle.Contains("OPT_CALCULS") And 'And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE")
-              Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then 'And Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("SECTION") 
+           Not ListeBlocCle.Contains("PROFILA") And Not ListeBlocCle.Contains("ACIER_PROFILA") And Not ListeBlocCle.Contains("ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") And
+           Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And
+           Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("COFRADAL") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And
+           Not ListeBlocCle.Contains("CONNECTEUR_DALLE") And Not ListeBlocCle.Contains("OPT_CALCULS") And Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_FEU") And
+           Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then '
 
             MsgBox("Fichier corrumpu | Corrupted file", MsgBoxStyle.Critical, "Cls_Projet/LectureFile")
 
@@ -837,6 +867,12 @@ Public Class cls_Projet
                     Dim gamma_opt_calculs As New cls_Gamma
                     ReadBlocGammaOptionsCalculs(gamma_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param.Gamma = gamma_opt_calculs
+
+                Case "OPT_FEU"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim opt_calculs_en_cours As New cls_OptionsFeu
+                    ReadBlocOptionsFeu(opt_calculs_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.ParamFeu = opt_calculs_en_cours
 
                 Case "OPT_CALCULS_HIVOSS"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1983,6 +2019,63 @@ Public Class cls_Projet
 
             End If
         Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Opt_Calculs
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocOptionsFeu(opt_calculs_en_cours As cls_OptionsFeu, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(17, Mots(1).Length)).ToUpper
+
+
+                With opt_calculs_en_cours
+                    Select Case MotCle
+
+                        Case "TEMPREF" : .TempRef = TraiteReal(Mots(nbMots))
+                        Case "EMISSFIRE" : .EmissivityFire = TraiteReal(Mots(nbMots))
+                        Case "EMISSSTEEL" : .EmissivitySteel = TraiteReal(Mots(nbMots))
+                        Case "CONVCOEF" : .ConvectionCoef = TraiteReal(Mots(nbMots))
+                        Case "CONVCOEFDALLE" : .ConvectionCoefDalle = TraiteReal(Mots(nbMots))
+                        Case "PHIVIEWFACTOR" : .PhiViewFactor = TraiteReal(Mots(nbMots))
+                        Case "LHEATINGSLABEF" : .lHeatingSlabEF = Mots(nbMots)
+                        Case "TDALLEEFMAX" : .tDalleEFmax = TraiteReal(Mots(nbMots))
+                        Case "KSH" : .ksh = TraiteReal(Mots(nbMots))
+                        Case "ALPHASLAB" : .AlphaSlab = TraiteReal(Mots(nbMots))
+                        Case "LARMACOMPRESSION" : .lArmaCompression = Mots(nbMots)
+                        Case "LARMAFORMEEAFROID" : .lArmaFormeeAFroid = Mots(nbMots)
+                        Case "LCALCULFEU" : .lCalcuFeu = Mots(nbMots)
+                        Case "LDALLEFEM" : .lDalleFEM = Mots(nbMots)
+                        Case "LREDUCCONCRSTR" : .lReductionConcreteStrenght = Mots(nbMots)
+                        Case "TYPESURFACE" : .TypeSurface = Mots(nbMots)
+                        Case "PROTECTION" : .Protection = Mots(nbMots)
+                        Case "EPPROTECTION" : .EpProtection = TraiteReal(Mots(nbMots))
+                        Case "CUSTOMLAMBDAP" : .CustomLambdaP = TraiteReal(Mots(nbMots))
+                        Case "DELTACALCUL" : .DeltaTCalcul = TraiteReal(Mots(nbMots))
+
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
 
     End Sub
 

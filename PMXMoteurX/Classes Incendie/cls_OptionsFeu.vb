@@ -30,7 +30,7 @@
 
     Public lDalleFEM As Boolean                             ' Indique pour les poutres mixtes si on calcule l'échauffement par une analyse EF
 
-    Public BOLTZMANN As Decimal                             ' Constante de Boltzmann
+    Public Const BOLTZMANN As Decimal = 5.67 * 10 ^ (-8)                          ' Constante de Boltzmann
 
     Public lReductionConcreteStrenght As Boolean            ' Indique si on réduit la résistance du béton armé pour T<250° (True) ou non (False)
 
@@ -89,7 +89,7 @@
 
         Me.TypeSurface = enu_TypeSurface.AcierNu
 
-        Me.BOLTZMANN = 5.67 * 10 ^ (-8)
+        'Me.BOLTZMANN = 5.67 * 10 ^ (-8)
 
         Me.lReductionConcreteStrenght = False
     End Sub

@@ -256,6 +256,7 @@ Public Class Frm_OptionsFeu
 
             Else
                 cmb_ProtectionType.Enabled = False
+                cmb_ProtectionType.SelectedIndex = -1
             End If
 
         End With
@@ -278,6 +279,9 @@ Public Class Frm_OptionsFeu
                              cls_OptionsFeu.enu_TypeProtection.HighDensitySpray_PerliteCement,
                                 cls_OptionsFeu.enu_TypeProtection.HighDensitySpray_PerlitePlaster
                         RemplirComboAvecTableau(Me.cmb_InsulationType, strInsulationTypeSpray)
+
+                    Case cls_OptionsFeu.enu_TypeProtection.IntumescentPaint
+                        Me.cmb_InsulationType.SelectedIndex = -1
 
                     Case cls_OptionsFeu.enu_TypeProtection.BoardsVermiculite,
                              cls_OptionsFeu.enu_TypeProtection.BoardsSilicate,
@@ -327,13 +331,15 @@ Public Class Frm_OptionsFeu
                 If .Protection = cls_OptionsFeu.enu_TypeProtection.IntumescentPaint Then
                     Me.txt_LambdaP.ReadOnly = False
                 Else
-                    Me.txt_LambdaP.Text = GetStringInUnit(.Protection_Conductivite, Enu_TypeVariable.SansType, 3, 2, False)
                     Me.txt_LambdaP.ReadOnly = True
                 End If
+
+                Me.txt_LambdaP.Text = GetStringInUnit(.Protection_Conductivite, Enu_TypeVariable.SansType, 3, 3, False)
 
             Else
 
                 Me.cmb_InsulationType.Enabled = False
+                Me.cmb_InsulationType.SelectedIndex = -1
 
                 Me.txt_rhoP.Enabled = False
                 Me.txt_LambdaP.Enabled = False
@@ -424,6 +430,8 @@ Public Class Frm_OptionsFeu
                             .Protection = cls_OptionsFeu.enu_TypeProtection.HighDensitySpray_PerliteCement
                         Case 3
                             .Protection = cls_OptionsFeu.enu_TypeProtection.HighDensitySpray_PerlitePlaster
+                        Case Else
+                            .Protection = cls_OptionsFeu.enu_TypeProtection.LowDensitySpray_Mineral
                     End Select
                 Case 1 'Peinture intumescente
                     .Protection = cls_OptionsFeu.enu_TypeProtection.IntumescentPaint
@@ -437,6 +445,8 @@ Public Class Frm_OptionsFeu
                             .Protection = cls_OptionsFeu.enu_TypeProtection.BoardsFibroCement
                         Case 3
                             .Protection = cls_OptionsFeu.enu_TypeProtection.BoardsPlaster
+                        Case Else
+                            .Protection = cls_OptionsFeu.enu_TypeProtection.BoardsVermiculite
                     End Select
             End Select
 
