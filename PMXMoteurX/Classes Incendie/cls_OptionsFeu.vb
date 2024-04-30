@@ -10,7 +10,7 @@
     Public Const TempMax As Decimal = 1200                         ' Température max (°)
 
     Public EmissivityFire As Decimal                        ' Emissivité du feu
-    Public EmissivitySteel As Decimal                        ' Emissivité de l'acier
+    'Public EmissivitySteel As Decimal                        ' Emissivité de l'acier
 
     Public ConvectionCoef As Decimal                        ' Coefficient de convection sur les faces exposées au feu
     Public ConvectionCoefDalle As Decimal                   ' Coefficient de convection sur la face supérieure de la dalle, non exposée au feu (uniquement si calcul EF Dalle)
@@ -32,7 +32,7 @@
 
     Public Const BOLTZMANN As Decimal = 5.67 * 10 ^ (-8)                          ' Constante de Boltzmann
 
-    Public lReductionConcreteStrenght As Boolean            ' Indique si on réduit la résistance du béton armé pour T<250° (True) ou non (False)
+    Public lReductionConcreteStrength As Boolean            ' Indique si on réduit la résistance du béton armé pour T<250° (True) ou non (False)
 
     Public TypeSurface As enu_TypeSurface                   ' Type de surface (protégée ou non, galvanisée ou non)
 
@@ -69,7 +69,7 @@
         Me.DeltaTprotege = 10               ' [secondes]
 
         Me.EmissivityFire = 1.0
-        Me.EmissivitySteel = 0.7
+        'Me.EmissivitySteel = 0.7
 
         Me.ConvectionCoef = 25              ' [W/m2K]
         Me.ConvectionCoefDalle = 4          ' [W/m2K]
@@ -91,7 +91,7 @@
 
         'Me.BOLTZMANN = 5.67 * 10 ^ (-8)
 
-        Me.lReductionConcreteStrenght = False
+        Me.lReductionConcreteStrength = False
     End Sub
 
 #End Region

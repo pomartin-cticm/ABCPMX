@@ -38,7 +38,7 @@ Public Class Frm_OptionsFeu
         list_txtbox.Add(txt_TimeIncrement)
         list_txtbox.Add(txt_ReferenceTemp)
         list_txtbox.Add(txt_FormFactor)
-        list_txtbox.Add(txt_EmissivitySteel)
+        'list_txtbox.Add(txt_EmissivitySteel)
         list_txtbox.Add(txt_EmissivityFire)
         list_txtbox.Add(txt_ConvectionFactor)
         list_txtbox.Add(txt_ShadowEffect)
@@ -124,7 +124,7 @@ Public Class Frm_OptionsFeu
                 lbl_ReferenceTemp.Text = Bloc("REFERENCETEMP")
                 lbl_MaxTemp.Text = Bloc("MAXTEMP")
                 lbl_FormFactor.Text = Bloc("FORMFACTOR")
-                lbl_EmissivitySteel.Text = Bloc("EMISSIVITYSTEELSURF")
+                'lbl_EmissivitySteel.Text = Bloc("EMISSIVITYSTEELSURF")
                 lbl_EmissivityFire.Text = Bloc("EMISSIVITYFIRE")
                 lbl_ConvectionFactor.Text = Bloc("CONVECTIONFACTOR")
                 lbl_ShadowEffect.Text = Bloc("SHADOWEFFECT")
@@ -136,7 +136,7 @@ Public Class Frm_OptionsFeu
                 lbl_UnitReferenceTemp.Text = "°C"
                 lbl_UnitMaxTemp.Text = "°C"
                 lbl_UnitFormFactor.Text = ""
-                lbl_UnitEmissivitySteel.Text = ""
+                'lbl_UnitEmissivitySteel.Text = ""
                 lbl_UnitEmissivityFire.Text = ""
                 lbl_UnitConvectionFactor.Text = "W.m-2.K-1"
                 lbl_UnitShadowEffect.Text = ""
@@ -177,7 +177,7 @@ Public Class Frm_OptionsFeu
         Me.txt_ReferenceTemp.ReadOnly = Not LogicielOptions.lExpert
         Me.txt_MaxTemp.ReadOnly = True
         Me.txt_FormFactor.ReadOnly = Not LogicielOptions.lExpert
-        Me.txt_EmissivitySteel.ReadOnly = Not LogicielOptions.lExpert
+        'Me.txt_EmissivitySteel.ReadOnly = Not LogicielOptions.lExpert
         Me.txt_EmissivityFire.ReadOnly = Not LogicielOptions.lExpert
         Me.txt_ConvectionFactor.ReadOnly = Not LogicielOptions.lExpert
         Me.txt_ShadowEffect.ReadOnly = Not LogicielOptions.lExpert
@@ -358,7 +358,7 @@ Public Class Frm_OptionsFeu
     ''' Gère l'état du chk_ReductionConcreteStrenght
     ''' </summary>
     Private Sub MAJ_ReductionConcreteStrenght()
-        Me.chk_ReductionConcreteStrenght.Checked = MyPoutreLoc.ParamFeu.lReductionConcreteStrenght
+        Me.chk_ReductionConcreteStrenght.Checked = MyPoutreLoc.ParamFeu.lReductionConcreteStrength
     End Sub
 
 
@@ -372,7 +372,7 @@ Public Class Frm_OptionsFeu
             Me.txt_ReferenceTemp.Text = GetStringInUnit(.TempRef, Enu_TypeVariable.Temperature, 3, 2, False)
             Me.txt_MaxTemp.Text = GetStringInUnit(.TempMax, Enu_TypeVariable.Temperature, 3, 2, False)
             Me.txt_FormFactor.Text = GetStringInUnit(.PhiViewFactor, Enu_TypeVariable.SansType, 3, 2, False)
-            Me.txt_EmissivitySteel.Text = GetStringInUnit(.EmissivitySteel, Enu_TypeVariable.SansType, 3, 2, False)
+            'Me.txt_EmissivitySteel.Text = GetStringInUnit(.EmissivitySteel, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_EmissivityFire.Text = GetStringInUnit(.EmissivityFire, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_ConvectionFactor.Text = GetStringInUnit(.ConvectionCoef, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_ShadowEffect.Text = GetStringInUnit(.ksh, Enu_TypeVariable.SansType, 3, 2, False)
@@ -465,7 +465,7 @@ Public Class Frm_OptionsFeu
 
         lBuild = True
 
-        MyPoutreLoc.ParamFeu.lReductionConcreteStrenght = chk_ReductionConcreteStrenght.Checked
+        MyPoutreLoc.ParamFeu.lReductionConcreteStrength = chk_ReductionConcreteStrenght.Checked
 
         ErrorProvider_Frm_OptionsFeu.SetError(txt_LambdaP, String.Empty)
 
@@ -481,7 +481,7 @@ Public Class Frm_OptionsFeu
 #Region " Evenements de saisie "
 
     Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_LambdaP.TextChanged, txt_TimeIncrement.TextChanged, txt_ReferenceTemp.TextChanged,
-        txt_FormFactor.TextChanged, txt_EmissivitySteel.TextChanged, txt_EmissivityFire.TextChanged, txt_ConvectionFactor.TextChanged, txt_ShadowEffect.TextChanged
+        txt_FormFactor.TextChanged, txt_EmissivityFire.TextChanged, txt_ConvectionFactor.TextChanged, txt_ShadowEffect.TextChanged
 
         If lBuild Then Exit Sub
 
@@ -499,8 +499,8 @@ Public Class Frm_OptionsFeu
                         .TempRef = ValeurUI
                     Case txt_FormFactor.Name
                         .PhiViewFactor = ValeurUI
-                    Case txt_EmissivitySteel.Name
-                        .EmissivitySteel = ValeurUI
+                        'Case txt_EmissivitySteel.Name
+                        '.EmissivitySteel = ValeurUI
                     Case txt_EmissivityFire.Name
                         .EmissivityFire = ValeurUI
                     Case txt_ConvectionFactor.Name
@@ -545,7 +545,7 @@ Public Class Frm_OptionsFeu
                 lValMin = False
                 lValMax = False
 
-            Case txt_FormFactor.Name, txt_EmissivitySteel.Name, txt_EmissivityFire.Name, txt_ShadowEffect.Name
+            Case txt_FormFactor.Name, txt_EmissivityFire.Name, txt_ShadowEffect.Name ',txt_EmissivitySteel.Name
                 ValMin = 0
                 ValMax = 1
 
@@ -596,7 +596,7 @@ Public Class Frm_OptionsFeu
                 Continue For
             End If
             VerificationSaisie(txtbox_loc, ValeurUI)
-                If Not ErrorProvider_Frm_OptionsFeu.GetError(txtbox_loc) = String.Empty Then
+            If Not ErrorProvider_Frm_OptionsFeu.GetError(txtbox_loc) = String.Empty Then
                 lFrm_Valide = False
                 Exit For
             End If
@@ -625,14 +625,14 @@ Public Class Frm_OptionsFeu
                 GereTransfertValeur(MyPoutreLoc.ParamFeu.CustomLambdaP, .CustomLambdaP, lModif)
             End If
 
-            GereTransfertValeur(MyPoutreLoc.ParamFeu.lReductionConcreteStrenght, .lReductionConcreteStrenght, lModif)
+            GereTransfertValeur(MyPoutreLoc.ParamFeu.lReductionConcreteStrength, .lReductionConcreteStrength, lModif)
 
             '--> Partie paramètres de calcul
 
             GereTransfertValeur(MyPoutreLoc.ParamFeu.DeltaTCalcul, .DeltaTCalcul, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.TempRef, .TempRef, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.PhiViewFactor, .PhiViewFactor, lModif)
-            GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivitySteel, .EmissivitySteel, lModif)
+            'GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivitySteel, .EmissivitySteel, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivityFire, .EmissivityFire, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.ConvectionCoef, .ConvectionCoef, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.ksh, .ksh, lModif)
@@ -650,7 +650,7 @@ Public Class Frm_OptionsFeu
 #Region " Dessins "
 
     Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_rhoP.Paint, img_LambdaP.Paint, img_SpecificHeat.Paint,
-     img_Boltzmann.Paint, img_TimeIncrement.Paint, img_ReferenceTemp.Paint, img_MaxTemp.Paint, img_FormFactor.Paint, img_EmissivitySteel.Paint,
+     img_Boltzmann.Paint, img_TimeIncrement.Paint, img_ReferenceTemp.Paint, img_MaxTemp.Paint, img_FormFactor.Paint,
      img_EmissivityFire.Paint, img_ConvectionFactor.Paint, img_ShadowEffect.Paint, img_ConvectionSlab.Paint, img_ConcreteResistance.Paint
 
         '--> Déclarations
@@ -717,10 +717,10 @@ Public Class Frm_OptionsFeu
                 strSymbol = "F"
                 strIndice = ""
 
-            Case Me.img_EmissivitySteel.Name
+            'Case Me.img_EmissivitySteel.Name
 
-                strSymbol = "e"
-                strIndice = "m"
+            '    strSymbol = "e"
+            '    strIndice = "m"
 
             Case Me.img_EmissivityFire.Name
 

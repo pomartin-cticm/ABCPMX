@@ -43,10 +43,8 @@ Partial Class Frm_OptionsFeu
         Me.lbl_ShadowEffect = New System.Windows.Forms.Label()
         Me.lbl_UnitEmissivityFire = New System.Windows.Forms.Label()
         Me.lbl_ConvectionFactor = New System.Windows.Forms.Label()
-        Me.lbl_UnitEmissivitySteel = New System.Windows.Forms.Label()
         Me.lbl_EmissivityFire = New System.Windows.Forms.Label()
         Me.lbl_UnitFormFactor = New System.Windows.Forms.Label()
-        Me.lbl_EmissivitySteel = New System.Windows.Forms.Label()
         Me.lbl_UnitMaxTemp = New System.Windows.Forms.Label()
         Me.lbl_FormFactor = New System.Windows.Forms.Label()
         Me.lbl_UnitReferenceTemp = New System.Windows.Forms.Label()
@@ -63,10 +61,8 @@ Partial Class Frm_OptionsFeu
         Me.img_ShadowEffect = New System.Windows.Forms.PictureBox()
         Me.txt_EmissivityFire = New System.Windows.Forms.TextBox()
         Me.img_ConvectionFactor = New System.Windows.Forms.PictureBox()
-        Me.txt_EmissivitySteel = New System.Windows.Forms.TextBox()
         Me.img_EmissivityFire = New System.Windows.Forms.PictureBox()
         Me.txt_FormFactor = New System.Windows.Forms.TextBox()
-        Me.img_EmissivitySteel = New System.Windows.Forms.PictureBox()
         Me.txt_MaxTemp = New System.Windows.Forms.TextBox()
         Me.img_FormFactor = New System.Windows.Forms.PictureBox()
         Me.txt_ReferenceTemp = New System.Windows.Forms.TextBox()
@@ -115,7 +111,6 @@ Partial Class Frm_OptionsFeu
         CType(Me.img_ShadowEffect, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_ConvectionFactor, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_EmissivityFire, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_EmissivitySteel, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_FormFactor, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_MaxTemp, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_ReferenceTemp, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -278,10 +273,8 @@ Partial Class Frm_OptionsFeu
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_ShadowEffect)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitEmissivityFire)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_ConvectionFactor)
-        Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitEmissivitySteel)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_EmissivityFire)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitFormFactor)
-        Me.pan_ParamCalcul.Controls.Add(Me.lbl_EmissivitySteel)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitMaxTemp)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_FormFactor)
         Me.pan_ParamCalcul.Controls.Add(Me.lbl_UnitReferenceTemp)
@@ -298,10 +291,8 @@ Partial Class Frm_OptionsFeu
         Me.pan_ParamCalcul.Controls.Add(Me.img_ShadowEffect)
         Me.pan_ParamCalcul.Controls.Add(Me.txt_EmissivityFire)
         Me.pan_ParamCalcul.Controls.Add(Me.img_ConvectionFactor)
-        Me.pan_ParamCalcul.Controls.Add(Me.txt_EmissivitySteel)
         Me.pan_ParamCalcul.Controls.Add(Me.img_EmissivityFire)
         Me.pan_ParamCalcul.Controls.Add(Me.txt_FormFactor)
-        Me.pan_ParamCalcul.Controls.Add(Me.img_EmissivitySteel)
         Me.pan_ParamCalcul.Controls.Add(Me.txt_MaxTemp)
         Me.pan_ParamCalcul.Controls.Add(Me.img_FormFactor)
         Me.pan_ParamCalcul.Controls.Add(Me.txt_ReferenceTemp)
@@ -324,7 +315,7 @@ Partial Class Frm_OptionsFeu
         '
         Me.lbl_UnitConcreteResistance.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_UnitConcreteResistance.AutoSize = True
-        Me.lbl_UnitConcreteResistance.Location = New System.Drawing.Point(291, 367)
+        Me.lbl_UnitConcreteResistance.Location = New System.Drawing.Point(291, 341)
         Me.lbl_UnitConcreteResistance.Name = "lbl_UnitConcreteResistance"
         Me.lbl_UnitConcreteResistance.Size = New System.Drawing.Size(138, 13)
         Me.lbl_UnitConcreteResistance.TabIndex = 79
@@ -334,7 +325,7 @@ Partial Class Frm_OptionsFeu
         '
         Me.lbl_UnitConvectionSlab.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_UnitConvectionSlab.AutoSize = True
-        Me.lbl_UnitConvectionSlab.Location = New System.Drawing.Point(291, 317)
+        Me.lbl_UnitConvectionSlab.Location = New System.Drawing.Point(291, 291)
         Me.lbl_UnitConvectionSlab.Name = "lbl_UnitConvectionSlab"
         Me.lbl_UnitConvectionSlab.Size = New System.Drawing.Size(117, 13)
         Me.lbl_UnitConvectionSlab.TabIndex = 79
@@ -343,7 +334,7 @@ Partial Class Frm_OptionsFeu
         'lbl_ConcreteResistance
         '
         Me.lbl_ConcreteResistance.AutoSize = True
-        Me.lbl_ConcreteResistance.Location = New System.Drawing.Point(10, 343)
+        Me.lbl_ConcreteResistance.Location = New System.Drawing.Point(10, 317)
         Me.lbl_ConcreteResistance.Name = "lbl_ConcreteResistance"
         Me.lbl_ConcreteResistance.Size = New System.Drawing.Size(119, 13)
         Me.lbl_ConcreteResistance.TabIndex = 79
@@ -353,7 +344,7 @@ Partial Class Frm_OptionsFeu
         '
         Me.lbl_UnitShadowEffect.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_UnitShadowEffect.AutoSize = True
-        Me.lbl_UnitShadowEffect.Location = New System.Drawing.Point(291, 269)
+        Me.lbl_UnitShadowEffect.Location = New System.Drawing.Point(291, 243)
         Me.lbl_UnitShadowEffect.Name = "lbl_UnitShadowEffect"
         Me.lbl_UnitShadowEffect.Size = New System.Drawing.Size(109, 13)
         Me.lbl_UnitShadowEffect.TabIndex = 79
@@ -362,7 +353,7 @@ Partial Class Frm_OptionsFeu
         'lbl_ConvectionSlab
         '
         Me.lbl_ConvectionSlab.AutoSize = True
-        Me.lbl_ConvectionSlab.Location = New System.Drawing.Point(10, 295)
+        Me.lbl_ConvectionSlab.Location = New System.Drawing.Point(10, 269)
         Me.lbl_ConvectionSlab.Name = "lbl_ConvectionSlab"
         Me.lbl_ConvectionSlab.Size = New System.Drawing.Size(98, 13)
         Me.lbl_ConvectionSlab.TabIndex = 79
@@ -372,7 +363,7 @@ Partial Class Frm_OptionsFeu
         '
         Me.lbl_UnitConvectionFactor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_UnitConvectionFactor.AutoSize = True
-        Me.lbl_UnitConvectionFactor.Location = New System.Drawing.Point(291, 223)
+        Me.lbl_UnitConvectionFactor.Location = New System.Drawing.Point(291, 197)
         Me.lbl_UnitConvectionFactor.Name = "lbl_UnitConvectionFactor"
         Me.lbl_UnitConvectionFactor.Size = New System.Drawing.Size(126, 13)
         Me.lbl_UnitConvectionFactor.TabIndex = 79
@@ -381,7 +372,7 @@ Partial Class Frm_OptionsFeu
         'lbl_ShadowEffect
         '
         Me.lbl_ShadowEffect.AutoSize = True
-        Me.lbl_ShadowEffect.Location = New System.Drawing.Point(10, 247)
+        Me.lbl_ShadowEffect.Location = New System.Drawing.Point(10, 221)
         Me.lbl_ShadowEffect.Name = "lbl_ShadowEffect"
         Me.lbl_ShadowEffect.Size = New System.Drawing.Size(90, 13)
         Me.lbl_ShadowEffect.TabIndex = 79
@@ -391,7 +382,7 @@ Partial Class Frm_OptionsFeu
         '
         Me.lbl_UnitEmissivityFire.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lbl_UnitEmissivityFire.AutoSize = True
-        Me.lbl_UnitEmissivityFire.Location = New System.Drawing.Point(291, 176)
+        Me.lbl_UnitEmissivityFire.Location = New System.Drawing.Point(291, 150)
         Me.lbl_UnitEmissivityFire.Name = "lbl_UnitEmissivityFire"
         Me.lbl_UnitEmissivityFire.Size = New System.Drawing.Size(104, 13)
         Me.lbl_UnitEmissivityFire.TabIndex = 79
@@ -400,26 +391,16 @@ Partial Class Frm_OptionsFeu
         'lbl_ConvectionFactor
         '
         Me.lbl_ConvectionFactor.AutoSize = True
-        Me.lbl_ConvectionFactor.Location = New System.Drawing.Point(10, 202)
+        Me.lbl_ConvectionFactor.Location = New System.Drawing.Point(10, 176)
         Me.lbl_ConvectionFactor.Name = "lbl_ConvectionFactor"
         Me.lbl_ConvectionFactor.Size = New System.Drawing.Size(107, 13)
         Me.lbl_ConvectionFactor.TabIndex = 79
         Me.lbl_ConvectionFactor.Text = "lbl_ConvectionFactor"
         '
-        'lbl_UnitEmissivitySteel
-        '
-        Me.lbl_UnitEmissivitySteel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lbl_UnitEmissivitySteel.AutoSize = True
-        Me.lbl_UnitEmissivitySteel.Location = New System.Drawing.Point(291, 150)
-        Me.lbl_UnitEmissivitySteel.Name = "lbl_UnitEmissivitySteel"
-        Me.lbl_UnitEmissivitySteel.Size = New System.Drawing.Size(111, 13)
-        Me.lbl_UnitEmissivitySteel.TabIndex = 79
-        Me.lbl_UnitEmissivitySteel.Text = "lbl_UnitEmissivitySteel"
-        '
         'lbl_EmissivityFire
         '
         Me.lbl_EmissivityFire.AutoSize = True
-        Me.lbl_EmissivityFire.Location = New System.Drawing.Point(10, 176)
+        Me.lbl_EmissivityFire.Location = New System.Drawing.Point(10, 150)
         Me.lbl_EmissivityFire.Name = "lbl_EmissivityFire"
         Me.lbl_EmissivityFire.Size = New System.Drawing.Size(85, 13)
         Me.lbl_EmissivityFire.TabIndex = 79
@@ -434,15 +415,6 @@ Partial Class Frm_OptionsFeu
         Me.lbl_UnitFormFactor.Size = New System.Drawing.Size(95, 13)
         Me.lbl_UnitFormFactor.TabIndex = 79
         Me.lbl_UnitFormFactor.Text = "lbl_UnitFormFactor"
-        '
-        'lbl_EmissivitySteel
-        '
-        Me.lbl_EmissivitySteel.AutoSize = True
-        Me.lbl_EmissivitySteel.Location = New System.Drawing.Point(10, 150)
-        Me.lbl_EmissivitySteel.Name = "lbl_EmissivitySteel"
-        Me.lbl_EmissivitySteel.Size = New System.Drawing.Size(92, 13)
-        Me.lbl_EmissivitySteel.TabIndex = 79
-        Me.lbl_EmissivitySteel.Text = "lbl_EmissivitySteel"
         '
         'lbl_UnitMaxTemp
         '
@@ -513,7 +485,7 @@ Partial Class Frm_OptionsFeu
         'txt_ConcreteResistance
         '
         Me.txt_ConcreteResistance.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_ConcreteResistance.Location = New System.Drawing.Point(228, 364)
+        Me.txt_ConcreteResistance.Location = New System.Drawing.Point(228, 338)
         Me.txt_ConcreteResistance.Name = "txt_ConcreteResistance"
         Me.txt_ConcreteResistance.Size = New System.Drawing.Size(58, 20)
         Me.txt_ConcreteResistance.TabIndex = 77
@@ -521,7 +493,7 @@ Partial Class Frm_OptionsFeu
         'txt_ConvectionSlab
         '
         Me.txt_ConvectionSlab.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_ConvectionSlab.Location = New System.Drawing.Point(228, 314)
+        Me.txt_ConvectionSlab.Location = New System.Drawing.Point(228, 288)
         Me.txt_ConvectionSlab.Name = "txt_ConvectionSlab"
         Me.txt_ConvectionSlab.Size = New System.Drawing.Size(58, 20)
         Me.txt_ConvectionSlab.TabIndex = 77
@@ -529,7 +501,7 @@ Partial Class Frm_OptionsFeu
         'img_ConcreteResistance
         '
         Me.img_ConcreteResistance.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ConcreteResistance.Location = New System.Drawing.Point(183, 364)
+        Me.img_ConcreteResistance.Location = New System.Drawing.Point(183, 338)
         Me.img_ConcreteResistance.Name = "img_ConcreteResistance"
         Me.img_ConcreteResistance.Size = New System.Drawing.Size(46, 20)
         Me.img_ConcreteResistance.TabIndex = 78
@@ -538,7 +510,7 @@ Partial Class Frm_OptionsFeu
         'txt_ShadowEffect
         '
         Me.txt_ShadowEffect.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_ShadowEffect.Location = New System.Drawing.Point(228, 266)
+        Me.txt_ShadowEffect.Location = New System.Drawing.Point(228, 240)
         Me.txt_ShadowEffect.Name = "txt_ShadowEffect"
         Me.txt_ShadowEffect.Size = New System.Drawing.Size(58, 20)
         Me.txt_ShadowEffect.TabIndex = 77
@@ -546,7 +518,7 @@ Partial Class Frm_OptionsFeu
         'img_ConvectionSlab
         '
         Me.img_ConvectionSlab.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ConvectionSlab.Location = New System.Drawing.Point(183, 314)
+        Me.img_ConvectionSlab.Location = New System.Drawing.Point(183, 288)
         Me.img_ConvectionSlab.Name = "img_ConvectionSlab"
         Me.img_ConvectionSlab.Size = New System.Drawing.Size(46, 20)
         Me.img_ConvectionSlab.TabIndex = 78
@@ -555,7 +527,7 @@ Partial Class Frm_OptionsFeu
         'txt_ConvectionFactor
         '
         Me.txt_ConvectionFactor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_ConvectionFactor.Location = New System.Drawing.Point(228, 220)
+        Me.txt_ConvectionFactor.Location = New System.Drawing.Point(228, 194)
         Me.txt_ConvectionFactor.Name = "txt_ConvectionFactor"
         Me.txt_ConvectionFactor.Size = New System.Drawing.Size(58, 20)
         Me.txt_ConvectionFactor.TabIndex = 77
@@ -563,7 +535,7 @@ Partial Class Frm_OptionsFeu
         'img_ShadowEffect
         '
         Me.img_ShadowEffect.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ShadowEffect.Location = New System.Drawing.Point(183, 266)
+        Me.img_ShadowEffect.Location = New System.Drawing.Point(183, 240)
         Me.img_ShadowEffect.Name = "img_ShadowEffect"
         Me.img_ShadowEffect.Size = New System.Drawing.Size(46, 20)
         Me.img_ShadowEffect.TabIndex = 78
@@ -572,7 +544,7 @@ Partial Class Frm_OptionsFeu
         'txt_EmissivityFire
         '
         Me.txt_EmissivityFire.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EmissivityFire.Location = New System.Drawing.Point(228, 173)
+        Me.txt_EmissivityFire.Location = New System.Drawing.Point(228, 147)
         Me.txt_EmissivityFire.Name = "txt_EmissivityFire"
         Me.txt_EmissivityFire.Size = New System.Drawing.Size(58, 20)
         Me.txt_EmissivityFire.TabIndex = 77
@@ -580,24 +552,16 @@ Partial Class Frm_OptionsFeu
         'img_ConvectionFactor
         '
         Me.img_ConvectionFactor.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_ConvectionFactor.Location = New System.Drawing.Point(183, 220)
+        Me.img_ConvectionFactor.Location = New System.Drawing.Point(183, 194)
         Me.img_ConvectionFactor.Name = "img_ConvectionFactor"
         Me.img_ConvectionFactor.Size = New System.Drawing.Size(46, 20)
         Me.img_ConvectionFactor.TabIndex = 78
         Me.img_ConvectionFactor.TabStop = False
         '
-        'txt_EmissivitySteel
-        '
-        Me.txt_EmissivitySteel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_EmissivitySteel.Location = New System.Drawing.Point(228, 147)
-        Me.txt_EmissivitySteel.Name = "txt_EmissivitySteel"
-        Me.txt_EmissivitySteel.Size = New System.Drawing.Size(58, 20)
-        Me.txt_EmissivitySteel.TabIndex = 77
-        '
         'img_EmissivityFire
         '
         Me.img_EmissivityFire.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_EmissivityFire.Location = New System.Drawing.Point(183, 173)
+        Me.img_EmissivityFire.Location = New System.Drawing.Point(183, 147)
         Me.img_EmissivityFire.Name = "img_EmissivityFire"
         Me.img_EmissivityFire.Size = New System.Drawing.Size(46, 20)
         Me.img_EmissivityFire.TabIndex = 78
@@ -610,15 +574,6 @@ Partial Class Frm_OptionsFeu
         Me.txt_FormFactor.Name = "txt_FormFactor"
         Me.txt_FormFactor.Size = New System.Drawing.Size(58, 20)
         Me.txt_FormFactor.TabIndex = 77
-        '
-        'img_EmissivitySteel
-        '
-        Me.img_EmissivitySteel.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_EmissivitySteel.Location = New System.Drawing.Point(183, 147)
-        Me.img_EmissivitySteel.Name = "img_EmissivitySteel"
-        Me.img_EmissivitySteel.Size = New System.Drawing.Size(46, 20)
-        Me.img_EmissivitySteel.TabIndex = 78
-        Me.img_EmissivitySteel.TabStop = False
         '
         'txt_MaxTemp
         '
@@ -979,7 +934,6 @@ Partial Class Frm_OptionsFeu
         CType(Me.img_ShadowEffect, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_ConvectionFactor, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_EmissivityFire, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_EmissivitySteel, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_FormFactor, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_MaxTemp, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_ReferenceTemp, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1043,13 +997,10 @@ Partial Class Frm_OptionsFeu
     Friend WithEvents img_ReferenceTemp As PictureBox
     Friend WithEvents lbl_ConvectionFactor As Label
     Friend WithEvents lbl_EmissivityFire As Label
-    Friend WithEvents lbl_EmissivitySteel As Label
     Friend WithEvents txt_ConvectionFactor As TextBox
     Friend WithEvents txt_EmissivityFire As TextBox
     Friend WithEvents img_ConvectionFactor As PictureBox
-    Friend WithEvents txt_EmissivitySteel As TextBox
     Friend WithEvents img_EmissivityFire As PictureBox
-    Friend WithEvents img_EmissivitySteel As PictureBox
     Friend WithEvents lbl_ConcreteResistance As Label
     Friend WithEvents lbl_ConvectionSlab As Label
     Friend WithEvents lbl_ShadowEffect As Label
@@ -1067,7 +1018,6 @@ Partial Class Frm_OptionsFeu
     Friend WithEvents lbl_UnitShadowEffect As Label
     Friend WithEvents lbl_UnitConvectionFactor As Label
     Friend WithEvents lbl_UnitEmissivityFire As Label
-    Friend WithEvents lbl_UnitEmissivitySteel As Label
     Friend WithEvents lbl_UnitFormFactor As Label
     Friend WithEvents lbl_UnitMaxTemp As Label
     Friend WithEvents lbl_UnitReferenceTemp As Label
