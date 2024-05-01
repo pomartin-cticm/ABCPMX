@@ -204,6 +204,7 @@
         Dim FluxCas(,,,) As Decimal = Nothing           ' Flux de cisaillement dans les soudures de PRS et dans la connection par cas de charges
         Dim FluxELU(,,) As Decimal = Nothing            ' Flux de cisaillement dans les soudures de PRS et dans la connection aux ELU
         Dim FluxRd(,) As Decimal = Nothing              ' Résistance de la connexion / u longueur le long de la barre
+        Dim lPlastOK() As Boolean = {True, True}
 
         '--> Initialisations
 
@@ -245,10 +246,8 @@
 
         '# Moments plastiques 
 
-        myBeam.MaillagePropPlastiquesMixtes(Beff, 1, True, MplRdPlus, zANPPlus)
-        myBeam.MaillagePropPlastiquesMixtes(Beff, -1, True, MplRdMoins, zANPMoins)
-
-        '# Propriétés élastiques
+        myBeam.MaillagePropPlastiquesMixtes(Beff, 1, True, lGeneration1, True, MplRdPlus, zANPPlus, lPlastOK(0))
+        myBeam.MaillagePropPlastiquesMixtes(Beff, -1, True, lGeneration1, False, MplRdMoins, zANPMoins, lPlastOK(1))
 
         '# Calcul des contraintes normales élastiques pour les cas de charges
 
@@ -261,6 +260,7 @@
             Me.Tau = New cls_Tau(myBeam.Section.typeSection)
             Me.Tau.CalculContraintesChargesMIXTE(myBeam, TauCas)
         End If
+
         '# Flux de cisaillement des PRS
         If lproPRS Then
             myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)

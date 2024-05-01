@@ -961,6 +961,12 @@ Public Class cls_Poutre
         End Get
     End Property
 
+    Public ReadOnly Property lSlimFloor As Boolean
+        Get
+            Return Me.Section.lSlimFloor
+        End Get
+    End Property
+
     ''' <summary>
     ''' Indique si poutre avec enrobage partiel
     ''' </summary>
@@ -1101,6 +1107,29 @@ Public Class cls_Poutre
         Get
             Dim pHauteur As Decimal = 0.5
 
+            '# 01/05/24 : Correction POM
+
+            If Me.lSlimFloor Then
+                '# A COMPLETER
+            Else
+                pHauteur = Me.Section.ProfilA.ha + Me.Dalle.zTop
+            End If
+
+            Return pHauteur
+        End Get
+    End Property
+
+    Public ReadOnly Property HauteurTotaleSectionMixte As Decimal
+        Get
+            Dim pHauteur As Decimal = 0.5
+
+            '# 01/05/24 : Correction POM
+
+            If Me.lSlimFloor Then
+                '# A COMPLETER
+            Else
+                pHauteur = Me.Section.ProfilA.ha + Me.Dalle.zTop
+            End If
 
             Return pHauteur
         End Get
@@ -3034,31 +3063,43 @@ Public Class cls_Poutre
         Next
     End Sub
 
-    Public Sub MaillagePropPlastiquesMixtes(Beff() As Decimal, Signe As Decimal, lValRd As Boolean, ByRef MplRd() As Decimal, ByRef zANP() As Decimal)
-        '------------------------------------------------------------------------------
+    Public Sub MaillagePropPlastiquesMixtes(Beff() As Decimal, Signe As Decimal, lValRd As Boolean, lGen1 As Boolean, lApplyBeta As Boolean,
+                                            ByRef MplRd() As Decimal, ByRef zANP() As Decimal, ByRef lPlastiqueOK As Boolean)
+        '---------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
-        '------------------------------------------------------------------------------
+        '---------------------------------------------------------------------------------------------
         '   Calcul des moments plastiques le long de la poutre (sur les noeuds du modèle)
-        '------------------------------------------------------------------------------
+        '---------------------------------------------------------------------------------------------
         '   Beff        [E] :   Largeur participante de dalle
         '   Signe       [E] :   Signe du moment à considérer
         '   lValRd      [E] :   Indique si valeurs de calcul
+        '   lGen1       [E] :   Indique si génération 1 des eurocodes
+        '   lApplyBeta  [E] :   Indique si on applique la réduction beta en moment >0
         '   MplRd       [S] :   Table des moments plastiques au droit des noeuds du modèle
         '   zANP        [S] :   Table des position des ANP
-        '------------------------------------------------------------------------------
+        '   lPlastiqueOK[S] :   Indique que toutes les sections sont OK pour le calcul plastique
+        '---------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
         Dim BeffPrec As Decimal = -1
         Dim iNode As Integer
         Dim Eta As Decimal = 1      '#ALERTE : à adapter sur chaque section
+        Dim Beta As Decimal
+        Dim myEN1994 As New cls_Eurocodes
+        Dim zTop As Decimal
+        Dim lGene1 As Boolean = Me.Param.lGeneration1
+        Dim Nuance As String = Me.Section.Acier.Nuance
+        Dim lOKPl As Boolean
 
         '--> Initialisation
 
         ReDim MplRd(Me.Nodes.nbNodes - 1)
         ReDim zANP(Me.Nodes.nbNodes - 1)
+        zTop = Me.Dalle.zTop
+        lPlastiqueOK = True
 
-        '--> Boucle sur les noeuds
+        '--> Boucle sur les noeuds pour récupérer le moment plastique 
 
         For iNode = 0 To Me.Nodes.nbNodes - 1
 
@@ -3068,6 +3109,18 @@ Public Class cls_Poutre
             Else
                 Me.Section.ProprietesPlastiquesMixteMyy(Signe, lValRd, Me.Param.Gamma, 0, Beff(iNode), Me.Dalle, zANP(iNode), MplRd(iNode))
                 BeffPrec = Beff(iNode)
+
+                '--> Application du coefficient de réduction Beta, le cas échéant
+
+                If (Signe > 0) And lApplyBeta Then
+                    Beta = myEN1994.ReductionFactorBeta(zTop - zANP(iNode), Me.HauteurTotaleSectionMixte, Nuance, lGene1, lOKPl)
+                    If lOKPl Then
+                        MplRd(iNode) *= Beta
+                    Else
+                        lPlastiqueOK = False
+                    End If
+                End If
+
             End If
 
         Next

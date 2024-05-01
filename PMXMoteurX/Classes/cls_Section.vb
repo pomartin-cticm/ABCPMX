@@ -317,7 +317,6 @@ Public Class cls_Section
 
     End Sub
 
-
     Public Sub ProprietesPlastiquesMixteMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
                                             bEff As Decimal, MyDalle As cls_Dalle,
                                             ByRef zANP As Decimal, ByRef MplRd As Decimal)

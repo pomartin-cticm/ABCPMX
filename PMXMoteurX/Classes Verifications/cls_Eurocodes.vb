@@ -409,4 +409,129 @@
 
 #End Region
 
+#Region " Coefficient Beta pour moment plastique positif "
+
+    Public Function BetaFactor1(zpl As Decimal, Ht As Decimal, ByRef lOKPl As Boolean) As Decimal
+        '----------------------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction Beta pour le moment plastique d'une section mixte
+        '   selon EN 1994-1-1:2005, 6.2.1.2 (2) 
+        '----------------------------------------------------------------------------------------------------------------------
+        '   zpl     [E] :   Position z de l'axe neutre
+        '   Ht      [E] :   Hauteur totale de la section
+        '   lOKPl   [S] :   Indique si on peut faire du calcul plastique
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myBeta As Decimal
+        Dim RatioZsurH As Decimal
+
+        '--( Initialisation
+
+        lOKPl = True
+        RatioZsurH = zpl / Ht
+
+        '--( Calcul
+
+
+        If IsSmallerOrEqual(RatioZsurH, 0.15) Then
+            myBeta = 1
+        ElseIf IsSmallerOrEqual(RatioZsurH, 0.4) Then
+            myBeta = 1 - (0.15 / 0.25) * (RatioZsurH - 0.15)
+        Else
+            myBeta = -1
+            lOKPl = False
+        End If
+
+        Return myBeta
+    End Function
+
+    Public Function BetaFactor2(zpl As Decimal, Ht As Decimal, Nuance As Decimal, ByRef lOKPl As Boolean) As Decimal
+        '----------------------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction Beta pour le moment plastique d'une section mixte
+        '   selon EN 1994-1-1:2024, Figure 8.3 
+        '----------------------------------------------------------------------------------------------------------------------
+        '   zpl     [E] :   Position z de l'axe neutre
+        '   Ht      [E] :   Hauteur totale de la section
+        '   Nuance  [E] :   Nuance de l'acier
+        '   lOKPl   [S] :   Indique si on peut faire du calcul plastique
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myBeta As Decimal
+        Dim RatioZsurH As Decimal
+        Dim Beta() As Decimal = Nothing
+        Dim Alpha() As Decimal = Nothing
+
+        '--( Initialisation
+
+        lOKPl = True
+        RatioZsurH = zpl / Ht
+
+        Select Case Nuance
+            Case "S235"
+                Alpha = {0.2, 0.6}
+                Beta = {1, 0.95}
+            Case "S275"
+                Alpha = {0.2, 0.5}
+                Beta = {1, 0.95}
+            Case "S355"
+                Alpha = {0.2, 0.45}
+                Beta = {1, 0.93}
+            Case "S420", "S460"
+                Alpha = {0.15, 0.4}
+                Beta = {1, 0.9}
+        End Select
+
+        '--( Calcul
+
+        If IsSmallerOrEqual(RatioZsurH, Alpha(0)) Then
+            myBeta = 1
+        ElseIf IsSmallerOrEqual(RatioZsurH, Alpha(1)) Then
+            myBeta = Beta(0) - (Beta(1) - Beta(0)) / (Alpha(1) - Alpha(0)) * (RatioZsurH - Alpha(0))
+        Else
+            myBeta = -1
+            lOKPl = False
+        End If
+
+        Return myBeta
+    End Function
+
+    Public Function ReductionFactorBeta(zpl As Decimal, Ht As Decimal, Nuance As Decimal, lGen1 As Boolean, ByRef lOKPl As Boolean) As Decimal
+        '----------------------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Calcul du coefficient de réduction Beta pour le moment plastique d'une section mixte
+        '   selon EN 1994-1-1:2024, Figure 8.3 
+        '----------------------------------------------------------------------------------------------------------------------
+        '   zpl     [E] :   Position z de l'axe neutre
+        '   Ht      [E] :   Hauteur totale de la section
+        '   Nuance  [E] :   Nuance de l'acier
+        '   lGen1   [E] :   Indique si génération 1 des EN
+        '   lOKPl   [S] :   Indique si on peut faire du calcul plastique
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myBeta As Decimal
+
+        '--( Traitement
+
+        If lGen1 Then
+            myBeta = BetaFactor1(zpl, Ht, lOKPl)
+        Else
+            myBeta = BetaFactor2(zpl, Ht, Nuance, lOKPl)
+        End If
+
+        Return myBeta
+
+    End Function
+
+#End Region
+
 End Class
