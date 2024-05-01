@@ -335,20 +335,6 @@ Public Class cls_Acier
 
 #Region " Ecriture Fichier "
 
-    ''' <summary>
-    ''' Ecriture des attributs pour enregistrement dans un fichier 
-    ''' </summary>
-    ''' <param name="Lines">Lignes d'écriture</param>
-    'Public Sub EcrireFile(ByRef Lines As List(Of String))
-
-    '    Lines.Add("   Nuance        = " & Nuance)
-    '    Lines.Add("   Qualite       = " & Qualite)
-    '    Lines.Add("   lUser       = " & lUser)
-    '    Lines.Add("   Fyw           = " & f_y.w)
-    '    Lines.Add("   Fyfs          = " & f_y.fs)
-    '    Lines.Add("   Fyfi          = " & f_y.fi)
-
-    'End Sub
 
 #End Region
 

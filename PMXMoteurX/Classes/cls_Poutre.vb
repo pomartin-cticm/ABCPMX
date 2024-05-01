@@ -5253,7 +5253,7 @@ Public Class cls_Poutre
                 Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
                     Me.VerifFeuEnrob.Z_VerifFeu(Me)
                 Case cls_Section.Enum_TypeSection.Mixte
-
+                    Me.VerifFeuMixte.Z_VerifFeu(Me)
             End Select
         End If
 

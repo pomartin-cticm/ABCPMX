@@ -622,7 +622,7 @@
         '--( Initialisation 
 
         EpsilonF = myParamFeu.EmissivityFire
-        SigmaB = myParamFeu.BOLTZMANN
+        SigmaB = cls_OptionsFeu.BOLTZMANN
         Phi = myParamFeu.PhiViewFactor
 
         '--( Traitement
@@ -1050,6 +1050,28 @@
         If lSemSupExposee Then
             Peri += myProfil.Bfs
         End If
+
+        Return (Peri / Aire)
+
+    End Function
+
+    Public Function MassiveteSectionAcierBoardP(myProfil As cls_ProfilA) As Decimal
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la massiveté d'une section acier seule avec protection par panneaux
+        '------------------------------------------------------------------------------------------------------------------------------
+        '   myProfil        [E] :   Profilé
+        '------------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Aire, Peri As Decimal
+
+        '--( Calculs
+
+        Aire = myProfil.Aire
+        Peri = Math.Max(myProfil.Bfi, myProfil.Bfs) + 2 * myProfil.ha
 
         Return (Peri / Aire)
 

@@ -367,10 +367,10 @@ Public Class Frm_OptionsFeu
     ''' </summary>
     Private Sub MAJ_ParamCalcul()
         With MyPoutreLoc.ParamFeu
-            Me.txt_Boltzmann.Text = GetStringInUnit(.BOLTZMANN * 10 ^ 8, Enu_TypeVariable.SansType, 3, 2, False)
+            Me.txt_Boltzmann.Text = GetStringInUnit(cls_OptionsFeu.BOLTZMANN * 10 ^ 8, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_TimeIncrement.Text = GetStringInUnit(.DeltaTCalcul, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_ReferenceTemp.Text = GetStringInUnit(.TempRef, Enu_TypeVariable.Temperature, 3, 2, False)
-            Me.txt_MaxTemp.Text = GetStringInUnit(.TempMax, Enu_TypeVariable.Temperature, 3, 2, False)
+            Me.txt_MaxTemp.Text = GetStringInUnit(cls_OptionsFeu.TempMax, Enu_TypeVariable.Temperature, 3, 2, False)
             Me.txt_FormFactor.Text = GetStringInUnit(.PhiViewFactor, Enu_TypeVariable.SansType, 3, 2, False)
             'Me.txt_EmissivitySteel.Text = GetStringInUnit(.EmissivitySteel, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_EmissivityFire.Text = GetStringInUnit(.EmissivityFire, Enu_TypeVariable.SansType, 3, 2, False)

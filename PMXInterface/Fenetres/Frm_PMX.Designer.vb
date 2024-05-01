@@ -42,6 +42,7 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator30 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Dalle = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_DalleN = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_DalleSlimFloor = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_SectionA = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_SectionSFB = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_SectionIFB = New System.Windows.Forms.ToolStripButton()
@@ -83,6 +84,7 @@ Partial Class Frm_PMX
         Me.TSbtn_Cotations = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_ExpertMode = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn3D = New System.Windows.Forms.ToolStripButton()
         Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
         Me.TLPan_Menus = New System.Windows.Forms.TableLayoutPanel()
@@ -149,7 +151,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
-        Me.TSbtn_DalleSlimFloor = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -401,6 +402,15 @@ Partial Class Frm_PMX
         Me.TSbtn_DalleN.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_DalleN.Text = "TSbtn_DalleN"
         Me.TSbtn_DalleN.Visible = False
+        '
+        'TSbtn_DalleSlimFloor
+        '
+        Me.TSbtn_DalleSlimFloor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_DalleSlimFloor.Image = CType(resources.GetObject("TSbtn_DalleSlimFloor.Image"), System.Drawing.Image)
+        Me.TSbtn_DalleSlimFloor.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_DalleSlimFloor.Name = "TSbtn_DalleSlimFloor"
+        Me.TSbtn_DalleSlimFloor.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_DalleSlimFloor.Text = "TSbtn_DalleSlimFloor"
         '
         'TSbtn_SectionA
         '
@@ -675,7 +685,7 @@ Partial Class Frm_PMX
         'TSGestionImagePoutre
         '
         Me.TSGestionImagePoutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.TSGestionImagePoutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator7, Me.TSbtn_ZoomPlus, Me.TSbtn_ZoomMoins, Me.ToolStripSeparator6, Me.TSbtn_Cotations, Me.ToolStripSeparator4, Me.TSbtn_ExpertMode})
+        Me.TSGestionImagePoutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator7, Me.TSbtn_ZoomPlus, Me.TSbtn_ZoomMoins, Me.ToolStripSeparator6, Me.TSbtn_Cotations, Me.ToolStripSeparator4, Me.TSbtn_ExpertMode, Me.TSbtn3D})
         Me.TSGestionImagePoutre.Location = New System.Drawing.Point(0, 441)
         Me.TSGestionImagePoutre.Name = "TSGestionImagePoutre"
         Me.TSGestionImagePoutre.Size = New System.Drawing.Size(975, 25)
@@ -732,6 +742,15 @@ Partial Class Frm_PMX
         Me.TSbtn_ExpertMode.Name = "TSbtn_ExpertMode"
         Me.TSbtn_ExpertMode.Size = New System.Drawing.Size(23, 22)
         Me.TSbtn_ExpertMode.Text = "ToolStripButton1"
+        '
+        'TSbtn3D
+        '
+        Me.TSbtn3D.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn3D.Image = CType(resources.GetObject("TSbtn3D.Image"), System.Drawing.Image)
+        Me.TSbtn3D.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn3D.Name = "TSbtn3D"
+        Me.TSbtn3D.Size = New System.Drawing.Size(23, 22)
+        Me.TSbtn3D.Text = "ToolStripButton1"
         '
         'TableLayoutPanel1
         '
@@ -1285,15 +1304,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
         '
-        'TSbtn_DalleSlimFloor
-        '
-        Me.TSbtn_DalleSlimFloor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_DalleSlimFloor.Image = CType(resources.GetObject("TSbtn_DalleSlimFloor.Image"), System.Drawing.Image)
-        Me.TSbtn_DalleSlimFloor.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_DalleSlimFloor.Name = "TSbtn_DalleSlimFloor"
-        Me.TSbtn_DalleSlimFloor.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_DalleSlimFloor.Text = "TSbtn_DalleSlimFloor"
-        '
         'Frm_PMX
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1466,4 +1476,5 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_SectionSAB As ToolStripButton
     Friend WithEvents TSbtn_SectionIFB As ToolStripButton
     Friend WithEvents TSbtn_DalleSlimFloor As ToolStripButton
+    Friend WithEvents TSbtn3D As ToolStripButton
 End Class

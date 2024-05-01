@@ -4,10 +4,10 @@
 
 #Region " Attributs "
 
-    Private DeltaTsimple As Decimal                          ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier non protégées
-    Private DeltaTprotege As Decimal                         ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier protégées
+    Private DeltaTsimple As Decimal                         ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier non protégées
+    Private DeltaTprotege As Decimal                        ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier protégées
     Public TempRef As Decimal                               ' Température de référence (à t = 0)
-    Public Const TempMax As Decimal = 1200                         ' Température max (°)
+    Public Const TempMax As Decimal = 1200                  ' Température max (°)
 
     Public EmissivityFire As Decimal                        ' Emissivité du feu
     'Public EmissivitySteel As Decimal                        ' Emissivité de l'acier
@@ -30,7 +30,7 @@
 
     Public lDalleFEM As Boolean                             ' Indique pour les poutres mixtes si on calcule l'échauffement par une analyse EF
 
-    Public Const BOLTZMANN As Decimal = 5.67 * 10 ^ (-8)                          ' Constante de Boltzmann
+    Public Const BOLTZMANN As Decimal = 5.67 * 10 ^ (-8)    ' Constante de Boltzmann
 
     Public lReductionConcreteStrength As Boolean            ' Indique si on réduit la résistance du béton armé pour T<250° (True) ou non (False)
 
@@ -125,6 +125,28 @@
         End Set
 
     End Property
+
+    Public Function lProtectionBoard() As Boolean
+        '-------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------
+        '   Indique si la protection est de type par panneaux
+        '-------------------------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------------------------
+
+        Dim lBoard As Boolean
+
+        lBoard = (Me.Protection = enu_TypeProtection.BoardsFibroCement) _
+              Or (Me.Protection = enu_TypeProtection.BoardsPlaster) _
+              Or (Me.Protection = enu_TypeProtection.BoardsVermiculite) _
+              Or (Me.Protection = enu_TypeProtection.BoardsSilicate)
+
+
+
+        Return lBoard
+    End Function
+
+
 
 #End Region
 

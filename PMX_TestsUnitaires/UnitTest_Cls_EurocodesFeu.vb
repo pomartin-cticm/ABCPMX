@@ -694,6 +694,10 @@ Imports PMXMoteur2
         Dim lGenerationDEUX As Boolean = False
 
         TauRef = 1 / 10000
+        EpTranches = Nothing
+        zTranches = Nothing
+        zTranchesRef = Nothing
+        EpTranchesRef = Nothing
 
         '-------------------------------
         '-------------------------------

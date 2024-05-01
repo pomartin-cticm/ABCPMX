@@ -131,7 +131,11 @@ Public Class cls_VerifFeuAcier
         DeltaT = myBeam.ParamFeu.DeltaTCalcul
         nbCombiELU = myBeam.CombiA_ELF.nbCombi
         lProtege = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
-        Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
+        If lProtege And myBeam.ParamFeu.lProtectionBoard Then
+            Massivete = EN_Feu.MassiveteSectionAcierBoardP(myBeam.Section.ProfilA)
+        Else
+            Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
+        End If
 
         If Not lProtege Then
             kSh = 0.9 * Massivete / EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee)

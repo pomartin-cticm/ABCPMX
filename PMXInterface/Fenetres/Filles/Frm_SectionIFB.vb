@@ -1800,6 +1800,8 @@ Public Class Frm_SectionIFB
         Dim Nuance, Qualite, Norme As String
 
         Nuance = cmb_GradeWP.SelectedItem
+        Qualite = ""
+        Norme = ""
 
         If Me.cmb_ReductionCurveWP.SelectedItem = "EC3" Then
             Qualite = "EC3"

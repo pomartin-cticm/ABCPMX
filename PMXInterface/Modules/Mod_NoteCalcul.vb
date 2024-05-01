@@ -9699,7 +9699,7 @@ Module Mod_NoteCalcul
         If myBeam.VerifFeuAcier.RStep = -1 Then
             myStep = 0
         Else
-            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(myBeam.VerifFeuAcier.RStep)))
+            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuAcier.TimeSteps(myBeam.VerifFeuAcier.RStep)))
             myStep = myBeam.VerifFeuAcier.RStep
         End If
 
@@ -9722,6 +9722,27 @@ Module Mod_NoteCalcul
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Calcul au feu
         '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myStep As Integer
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_SYMMARY"))
+
+        '--( Durée de résistance au feu
+
+        If myBeam.VerifFeuMixte.RStep = -1 Then
+            myStep = 0
+        Else
+            myStep = myBeam.VerifFeuMixte.RStep
+            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(myStep)))
+        End If
+
+        '--( Synthèse des critères
+
+        AfficheSyntheseCritere(myBeam.VerifFeuMixte.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
 
     End Sub
 

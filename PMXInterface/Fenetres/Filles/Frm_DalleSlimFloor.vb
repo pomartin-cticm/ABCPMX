@@ -249,7 +249,7 @@ Public Class Frm_DalleSlimFloor
 
         Me.img_Dalle.Dock = DockStyle.Fill
 
-        Const MARGEPAN As Integer = 0
+        ' Const MARGEPAN As Integer = 0
 
         Me.pan_Type.Controls.Add(Me.pan_Epaisseur)
         Me.pan_Epaisseur.Left = 5

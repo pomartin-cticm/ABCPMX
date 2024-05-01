@@ -1817,6 +1817,10 @@ Public Class Frm_PMX
         EnregistrerOptionsLogiciel(True)
     End Sub
 
+    Private Sub TSbtn3D_Click(sender As Object, e As EventArgs) Handles TSbtn3D.Click
+        'frm_3D.ShowDialog()
+    End Sub
+
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click
         lCotation = Not lCotation
         MAJ_btnCotation()

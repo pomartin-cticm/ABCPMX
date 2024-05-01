@@ -1877,12 +1877,6 @@ Public Class cls_Bac
                 End Select
         End Select
 
-
-
-
-
-
-
     End Function
 
     Private Function Interpole(x0 As Decimal, x1 As Decimal, x2 As Decimal, Val1 As Decimal, Val2 As Decimal) As Decimal

@@ -4,7 +4,7 @@ Imports System.Collections.Specialized.BitVector32
 Imports System.Drawing.Drawing2D
 Imports System.Windows
 Imports PMXInterface.Cls_Rapport
-Imports PMXInterface.Mod_MethodeHivoss
+'Imports PMXInterface.Mod_MethodeHivoss
 Imports PMXMoteur2
 
 Public Module Mod_Dessins

@@ -162,7 +162,7 @@
 
         Dim MomStat As Decimal
         Dim zI, zII As Decimal
-        Dim hW As Decimal
+        'Dim hW As Decimal
         Dim Tc As Decimal
 
         '--( Traitement

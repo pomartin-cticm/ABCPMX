@@ -1132,6 +1132,51 @@ Public Class cls_ModeleP
 
     End Sub
 
+    Public Sub MaillageDalleTranches(GammaC As Decimal, AlphaC As Decimal, bEff As Decimal, nEqDalle As Decimal, myDalle As cls_Dalle,
+                                     NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, kRedCTr() As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage de la dalle béton pour le calcul des propriétés / axe YY
+        '   Prenant en compte une discrétisation par tranches (pour le calcul incendie)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaC      [E] :   Coefficient partiel pour le béton
+        '   AlphaC      [E] :   Coefficient sur la résistance plastique du béton à l'incendie
+        '   bEff        [E] :   Largeur participante
+        '   nEqDalle    [E] :   Coefficient d'équivalence pour le béton
+        '   myDalle     [E] :   Dalle à mailler
+        '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
+        '   zTran       [E] :   Position de chaque tranche
+        '   eTran       [E] :   Epaisseur de chaque tranche
+        '   kRedCTr     [E] :   Réduction de Fc dans chaque tranche
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iTr As Integer
+        Dim Aire, epaC As Decimal
+        Dim zTop As Decimal = myDalle.zTop
+        Dim EpDalle As Decimal = 0
+
+        '--( Initialisation
+
+        For iTr = 0 To NbTranches - 1
+            EpDalle += eTran(iTr)
+        Next
+
+        '--( Traitement
+
+        For iTr = 0 To NbTranches - 1
+
+            epaC = eTran(iTr)
+            Aire = bEff * epaC
+
+            Me.AddMaille(Aire, epaC, zTop - EpDalle + zTran(iTr), 0, 1, nEqDalle, kRedCTr(iTr) * myDalle.beton.Fck, AlphaC, GammaC)
+
+        Next
+
+    End Sub
+
 #End Region
 
 #Region " Outils de modélisation - Enrobage partiel béton "
