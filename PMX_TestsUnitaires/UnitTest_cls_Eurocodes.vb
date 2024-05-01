@@ -50,4 +50,56 @@ Imports PMXMoteur2
 
 #End Region
 
+#Region " Beta pour moment plastique "
+
+    <TestMethod()> Public Sub TU_BetaFactor_Generation1()
+
+        Dim EN1994 As New cls_Eurocodes
+        Dim Valeur, ValRef As Decimal
+        Dim lOK As Boolean
+
+        Valeur = EN1994.BetaFactor1(0.1, 1, "S420", lOK)
+        ValRef = 1
+
+        Assert.IsTrue(Valeur, ValRef)
+
+        Valeur = EN1994.BetaFactor1(0.4, 1, "S355", lOK)
+        ValRef = 1
+
+        Assert.IsTrue(Valeur, ValRef)
+
+        Valeur = EN1994.BetaFactor1(0.4, 1, "S460", lOK)
+        ValRef = 0.85
+
+        Assert.IsTrue(Valeur, ValRef)
+
+    End Sub
+
+    <TestMethod()> Public Sub TU_BetaFactor_Generation2()
+
+        Dim EN1994 As New cls_Eurocodes
+
+        Dim Valeur, ValRef As Decimal
+        Dim lOK As Boolean
+
+        Valeur = EN1994.BetaFactor2(0.2, 1, "S235", lOK)
+        ValRef = 1
+
+        Assert.IsTrue(Valeur, ValRef)
+
+        Valeur = EN1994.BetaFactor2(0.6, 1, "S235", lOK)
+        ValRef = 0.95
+
+        Assert.IsTrue(Valeur, ValRef)
+
+        Valeur = EN1994.BetaFactor2(0.4, 1, "S460", lOK)
+        ValRef = 0.9
+
+        Assert.IsTrue(Valeur, ValRef)
+
+
+    End Sub
+
+#End Region
+
 End Class

@@ -55,23 +55,23 @@ Module Mod_NoteCalcul
     '--> permet de garder la même interface entre deux ouvertures de la NDC
     '--------------------------------------------------------------------------
 
-    'Largeur de la fenêtre NDC
-    Public WidthForm As Integer = 750
-    'Hauteur de la fenêtre NDC
-    Public HeightForm As Integer = SystemInformation.WorkingArea.Height - 10
+
+    Public WidthForm As Integer = 750                                               'Largeur de la fenêtre NDC
+    Public HeightForm As Integer = SystemInformation.WorkingArea.Height - 10        'Hauteur de la fenêtre NDC
     'Position de la fenêtre NDC
     Public LocationForm As Point = New Point(SystemInformation.WorkingArea.Width / 2 - WidthForm / 2, SystemInformation.WorkingArea.Height / 2 - HeightForm / 2)
-    'Vrai si volet de navigation activé
-    Public lNavPane As Boolean = True
-    'Largeur du volet de navigation
-    Public WidthNavPane As Integer = 200
-    'Vrai si fenêre maximisé
-    Public lMaximised As Boolean = False
-    'Valeur du zoom
-    Public ZoomValue As Integer = 100
+    Public lNavPane As Boolean = True                                               'Vrai si volet de navigation activé
+    Public WidthNavPane As Integer = 200                                            'Largeur du volet de navigation
+    Public lMaximised As Boolean = False                                            'Vrai si fenêre maximisé
+    Public ZoomValue As Integer = 100                                               'Valeur du zoom
 
     'Paramètre de gestion d'affichage des valeurs pour la partie Analyse
     Const formatEFFORTS As String = "0.00"
+
+    '# Reference EN 1994
+
+    Private Const REF_EN1994_G1 As String = "EN 1994-1-1:2005"
+    Private Const REF_EN1994_G2 As String = "prEN 1994-1-1:2024"
 
 #End Region
 
@@ -2376,6 +2376,12 @@ Module Mod_NoteCalcul
         Dim bEff As Decimal
         Dim zANP, MplRd As Decimal
         Dim zANPk, MplRk As Decimal
+        Dim EN1994 As New cls_Eurocodes
+        Dim BetaM As Decimal
+        Dim lOK, lAppBeta As Boolean
+        Dim Reference As String
+        Dim zSurH As Decimal
+        Dim zSurHLim As Decimal
 
         '--> Récupération des coeff d'équivalence et état de la dalle
 
@@ -2412,9 +2418,35 @@ Module Mod_NoteCalcul
         MyBeam.Section.ProprietesPlastiquesMixteMyy(1, True, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANP, MplRd)
         MyBeam.Section.ProprietesPlastiquesMixteMyy(1, False, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANPk, MplRk)
 
-        AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
-        AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 1, True))
-        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnit(MplRk, Enu_TypeVariable.Moment, 4, 0, True))
+        BetaM = EN1994.ReductionFactorBeta(MyBeam.Dalle.zTop - zANP, MyBeam.HauteurTotaleSectionMixte, MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1, lOK)
+        lAppBeta = EN1994.IsBetaApplicable(MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1)
+
+        AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitN(Math.Abs(BetaM) * MplRd, Enu_TypeVariable.Moment, 4, 3, True, True))
+        If lAppBeta Then
+            '--| Affichage de la valeur de beta, le cas échéant
+            zSurH = (MyBeam.Dalle.zTop - zANP) / MyBeam.HauteurTotaleSectionMixte
+            If lOK Then
+                '--| Cas du ratio z/h dans les limites du calcul plastique
+                AddLigneNDC(TABW2 & BlocSP("BETAMPLASTIC") & TABAFF & "\Sb\s" & TABEGAL & GetStringInUnitN(BetaM, Enu_TypeVariable.SansType, 4, 3, True, True))
+                AddLigneNDC(TABW2 & BlocSP("FORZSURH") & TABAFF & "z/H" & TABEGAL & GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, True, True))
+
+            Else
+
+                zSurHLim = EN1994.LimiteZsurHplastic(MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1)
+                '--| Cas du ratio z/h en dehors des limites du calcul plastique
+                AddLigneNDC(TABW2 & RemplaceDollar(BlocSP("RATIOZHABOVELIMIT"), GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, True, True)))
+                AddLigneNDC(TABW2 & BlocSP("RATIOZHLIM") & TABAFF & "z/H <" & TABEGAL & GetStringInUnitN(zSurHLim, Enu_TypeVariable.SansType, 4, 3, True, True))
+            End If
+            '--| Références
+            If MyBeam.Param.lGeneration1 Then
+                Reference = BlocSP("REFEN1994G1")
+            Else
+                Reference = BlocSP("REFEN1994G2")
+            End If
+            AddLigneNDC(TABW2 & BlocSP("ACCORDINGTO") & TABAFF & Reference)
+        End If
+        AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 3, True, True))
+        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitN(Math.Abs(BetaM) * MplRk, Enu_TypeVariable.Moment, 4, 3, True, True))
 
         '--> Propriétés console gauche
 

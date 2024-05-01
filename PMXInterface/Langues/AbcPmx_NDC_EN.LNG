@@ -370,6 +370,13 @@ COMPOSITE				= Composite
 STEELENCASED			= Steel+encasement
 CONSTRUCTIONP			= In construction stage
 COMPOSITEP				= In final stage
+BETAMPLASTIC			= Including a reduction factor
+ACCORDINGTO				= according to
+REFEN1994G1				= EN 1994-1-1:2005, 6.2.1.2 (2) and Figure 6.3
+REFEN1994G2				= prEN 1994-1-1:2024, Figure 8.3
+FORZSURH				= For
+RATIOZHABOVELIMIT		= The ratio z / H (= $) is above the limit for plastic calculation
+RATIOZHLIM				= Limit value
 
 #NDC_ANALYSE
 ANALYSIS				= Analysis - Internal forces and moments

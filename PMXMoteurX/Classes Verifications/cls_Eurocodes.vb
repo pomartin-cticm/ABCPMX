@@ -411,7 +411,7 @@
 
 #Region " Coefficient Beta pour moment plastique positif "
 
-    Public Function BetaFactor1(zpl As Decimal, Ht As Decimal, ByRef lOKPl As Boolean) As Decimal
+    Public Function BetaFactor1(zpl As Decimal, Ht As Decimal, Nuance As String, ByRef lOKPl As Boolean) As Decimal
         '----------------------------------------------------------------------------------------------------------------------
         '   01/05/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------------------
@@ -420,6 +420,7 @@
         '----------------------------------------------------------------------------------------------------------------------
         '   zpl     [E] :   Position z de l'axe neutre
         '   Ht      [E] :   Hauteur totale de la section
+        '   Nuance  [E] :   Nuance de l'acier
         '   lOKPl   [S] :   Indique si on peut faire du calcul plastique
         '----------------------------------------------------------------------------------------------------------------------
 
@@ -427,28 +428,35 @@
 
         Dim myBeta As Decimal
         Dim RatioZsurH As Decimal
+        Dim pNuanceFy As String
 
         '--( Initialisation
 
         lOKPl = True
         RatioZsurH = zpl / Ht
+        pNuanceFy = Me.NuanceFY(Nuance)
 
         '--( Calcul
 
+        Select Case pNuanceFy
+            Case "420", "460"
+                If IsSmallerOrEqual(RatioZsurH, 0.15) Then
+                    myBeta = 1
+                ElseIf IsSmallerOrEqual(RatioZsurH, 0.4) Then
+                    myBeta = 1 - (0.15 / 0.25) * (RatioZsurH - 0.15)
+                Else
+                    myBeta = -1
+                    lOKPl = False
+                End If
+            Case Else
+                myBeta = 1
+        End Select
 
-        If IsSmallerOrEqual(RatioZsurH, 0.15) Then
-            myBeta = 1
-        ElseIf IsSmallerOrEqual(RatioZsurH, 0.4) Then
-            myBeta = 1 - (0.15 / 0.25) * (RatioZsurH - 0.15)
-        Else
-            myBeta = -1
-            lOKPl = False
-        End If
 
         Return myBeta
     End Function
 
-    Public Function BetaFactor2(zpl As Decimal, Ht As Decimal, Nuance As Decimal, ByRef lOKPl As Boolean) As Decimal
+    Public Function BetaFactor2(zpl As Decimal, Ht As Decimal, Nuance As String, ByRef lOKPl As Boolean) As Decimal
         '----------------------------------------------------------------------------------------------------------------------
         '   01/05/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------------------
@@ -467,26 +475,26 @@
         Dim RatioZsurH As Decimal
         Dim Beta() As Decimal = Nothing
         Dim Alpha() As Decimal = Nothing
+        Dim pNuanceFy As String
 
         '--( Initialisation
 
         lOKPl = True
         RatioZsurH = zpl / Ht
+        pNuanceFy = Me.NuanceFY(Nuance)
 
-        Select Case Nuance
-            Case "S235"
-                Alpha = {0.2, 0.6}
+        Select Case pNuanceFy
+            Case "235"
                 Beta = {1, 0.95}
-            Case "S275"
-                Alpha = {0.2, 0.5}
+            Case "275"
                 Beta = {1, 0.95}
-            Case "S355"
-                Alpha = {0.2, 0.45}
+            Case "355"
                 Beta = {1, 0.93}
-            Case "S420", "S460"
-                Alpha = {0.15, 0.4}
+            Case "420", "460"
                 Beta = {1, 0.9}
         End Select
+
+        Alpha = Me.InitialiseAlphaFactors(Nuance)
 
         '--( Calcul
 
@@ -502,12 +510,12 @@
         Return myBeta
     End Function
 
-    Public Function ReductionFactorBeta(zpl As Decimal, Ht As Decimal, Nuance As Decimal, lGen1 As Boolean, ByRef lOKPl As Boolean) As Decimal
+    Public Function ReductionFactorBeta(zpl As Decimal, Ht As Decimal, Nuance As String, lGen1 As Boolean, ByRef lOKPl As Boolean) As Decimal
         '----------------------------------------------------------------------------------------------------------------------
         '   01/05/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------------------
         '   Calcul du coefficient de réduction Beta pour le moment plastique d'une section mixte
-        '   selon EN 1994-1-1:2024, Figure 8.3 
+        '   selon EN 1994-1-1:2024 (génération 2) ou EN 1994-1-1:2005 (génération 1)
         '----------------------------------------------------------------------------------------------------------------------
         '   zpl     [E] :   Position z de l'axe neutre
         '   Ht      [E] :   Hauteur totale de la section
@@ -523,13 +531,134 @@
         '--( Traitement
 
         If lGen1 Then
-            myBeta = BetaFactor1(zpl, Ht, lOKPl)
+            myBeta = BetaFactor1(zpl, Ht, Nuance, lOKPl)
         Else
             myBeta = BetaFactor2(zpl, Ht, Nuance, lOKPl)
         End If
 
         Return myBeta
 
+    End Function
+
+    Public Function IsBetaApplicable(Nuance As String, lGen1 As Boolean) As Boolean
+        '----------------------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Indique les cas où le cofficient Beta pour le moment plastique d'une section mixte est applicable
+        '   selon EN 1994-1-1:2024 (génération 2) ou EN 1994-1-1:2005 (génération 1)
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Nuance  [E] :   Nuance de l'acier
+        '   lGen1   [E] :   Indique si génération 1 des EN
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lApp As Boolean = True
+
+        '--( Traitement
+
+        If lGen1 Then
+            Select Case Me.NuanceFY(Nuance)
+                Case "235", "275", "355" : lApp = False
+            End Select
+        End If
+
+        Return lApp
+
+    End Function
+
+    Public Function LimiteZsurHplastic(Nuance As String, lGen1 As Boolean) As Decimal
+        '----------------------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Renvoie la limite de z / H pour pouvoir effectuer un calcul plastique
+        '   selon EN 1994-1-1:2024 (génération 2) ou EN 1994-1-1:2005 (génération 1)
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Nuance  [E] :   Nuance de l'acier
+        '   lGen1   [E] :   Indique si génération 1 des EN
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim myLim As Decimal
+        Dim Alpha() As Decimal = Nothing
+
+        '--( Traitement
+
+        If lGen1 Then
+            myLim = 0.4
+        Else
+            Alpha = Me.InitialiseAlphaFactors(Me.NuanceFY(Nuance))
+
+            myLim = Alpha(1)
+        End If
+
+        Return myLim
+    End Function
+
+    Private Function InitialiseAlphaFactors(NuanceLoc As String) As Decimal()
+        '----------------------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Initialisation du tableau des alpha permettant de décrire les morceaux de la courbe Beta
+        '   Alpha(0) donne la valeur de z sur H maxi pour Beta = 1
+        '   Alpha(1) donne la valeur de z sur H maxi pour le calcul plastique
+        '   selon EN 1994-1-1:2024 (génération 2) 
+        '----------------------------------------------------------------------------------------------------------------------
+        '   NuanceLoc   [E] :   Nuance de l'acier
+        '----------------------------------------------------------------------------------------------------------------------
+
+        Dim Alpha() As Decimal = Nothing
+
+        Select Case NuanceLoc
+            Case "235"
+                Alpha = {0.2, 0.6}
+            Case "275"
+                Alpha = {0.2, 0.5}
+            Case "355"
+                Alpha = {0.2, 0.45}
+            Case "420", "460"
+                Alpha = {0.15, 0.4}
+        End Select
+
+        Return Alpha
+    End Function
+
+    Private Function NuanceFY(Nuance As String) As String
+        '----------------------------------------------------------------------------------------------------------------------
+        '   01/05/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Retourne la nuance constituée uniquement des caractères indiquant la limite d'élasticité
+        '   Permet d'identifier les nuances HISTAR
+        '----------------------------------------------------------------------------------------------------------------------
+        '   Nuance  [E] :   Nuance de l'acier
+        '----------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim TabNuanceFY() As String = {"235", "275", "355", "420", "460"}
+        Dim lCont As Boolean
+        Dim iGrade As Integer
+        Dim nbN As Integer = TabNuanceFY.GetUpperBound(0) + 1
+        Dim myNuance As String = ""
+
+        '--( Traitement
+
+        iGrade = 0
+        lCont = (Not Nuance.Contains(TabNuanceFY(iGrade))) And (iGrade + 1 < nbN)
+
+        Do While lCont
+            iGrade += 1
+            lCont = (Not Nuance.Contains(TabNuanceFY(iGrade))) And (iGrade + 1 < nbN)
+        Loop
+
+        If lCont Then
+            GestionErreur("cls_Eurocodes", "NuanceFY", "Cannot find grade " & Nuance)
+        Else
+            myNuance = TabNuanceFY(iGrade)
+        End If
+
+        Return myNuance
     End Function
 
 #End Region
