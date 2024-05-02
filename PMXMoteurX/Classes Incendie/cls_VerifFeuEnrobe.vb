@@ -1,4 +1,6 @@
-﻿Public Class cls_VerifFeuEnrobe
+﻿Imports System.Collections.Specialized.BitVector32
+
+Public Class cls_VerifFeuEnrobe
 
 #Region " Declaration "
 
@@ -307,7 +309,7 @@
 
 #End Region
 
-#Region " Calcul des propriétés en flexion "
+#Region " Calcul des propriétés en flexion selon l'annexe F "
 
     Private Sub MaillagePropPlastiquesMixtes(myBeam As cls_Poutre, Beff(,) As Decimal, Signe As Decimal, Time As Decimal, ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal)
         '------------------------------------------------------------------------------
@@ -352,7 +354,7 @@
                     If Signe > 0 Then
                         Me.MomentPlastiquePlus(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma, lMixte, Beff(iNode, k), Time, MplRd(iNode, k), zANP(iNode, k))
                     Else
-
+                        Me.MomentPlastiqueMoins(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma, Beff(iNode, k), Time, MplRd(iNode, k), zANP(iNode, k))
                     End If
                     BeffPrec = Beff(iNode, k)
                 End If
@@ -369,7 +371,7 @@
         '--------------------------------------------------------------------------------------------------------------------------
         '   18/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------
-        '   Calcul du moment plastique positif sous incendie d'une section avec enrobage partiel
+        '   Calcul du moment plastique positif sous incendie d'une section avec enrobage partiel (selon l'annexe F)
         '--------------------------------------------------------------------------------------------------------------------------
         '   mySection   [E] :   Section
         '   myDalle     [E] :   Dalle
@@ -410,7 +412,7 @@
 
         '# Armatures de l'enrobage
 
-        MaillageArmaEnrobMPlus(mySection, myOptions, Gammas, Time, myModele)
+        MaillageArmaEnrobMPlusMoins(mySection, myOptions, Gammas, Time, myModele)
 
         ''--> Dalle béton
 
@@ -432,12 +434,12 @@
 
     End Sub
 
-    Private Sub MaillageArmaEnrobMPlus(mySection As cls_Section, myOptions As cls_OptionsFeu, Gammas As cls_Gamma, Time As Decimal, ByRef myModele As cls_ModeleP)
+    Private Sub MaillageArmaEnrobMPlusMoins(mySection As cls_Section, myOptions As cls_OptionsFeu, Gammas As cls_Gamma, Time As Decimal, ByRef myModele As cls_ModeleP)
         '--------------------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------
         '   Maillage des armatures de l'enrobage en vue 
-        '   du calcul du moment plastique positif sous incendie d'une section avec enrobage partiel
+        '   du calcul du moment plastique positif ou négatif sous incendie d'une section avec enrobage partiel
         '   suivant Annexe F de l'EN 1994-1-2
         '--------------------------------------------------------------------------------------------------------------------------
         '   myProfile   [E] :   Profilé
@@ -501,7 +503,7 @@
 
                         kReducKr = EN1994_1_2.AnnexF_ReductionKrArmaEnrob(iStep, Ha, Bc, Tw, uBord, uSemel)
 
-                        myModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DeltaCArma, ArmaNeq, Fsk, 1, Gammas.GammaS, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
+                        myModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DeltaCArma, ArmaNeq, kReducKr * Fsk, 1, Gammas.GammaM_fi_s, NBMA, cls_Maille.EnuTypeMaille.Circulaire)
 
                     Next
                 End If
@@ -617,11 +619,12 @@
         Const RatioHwi As Decimal = 1
         Dim NbHwi, iHwi As Integer
         Dim kcG, zcG As Decimal
+        Dim gammaM_fi As Decimal
 
         '--> Initialisation
 
         Hw = myProfile.HauteurAmeHw
-        myBc = Ratio_Bc * myProfile.Bfs
+        myBc = Ratio_Bc * Math.Min(myProfile.Bfs, myProfile.Bfi)
         ReducKa = EN1994_1_2.AnnexF_ReducFyInf(Time, myProfile.Tfs, myProfile.ha, myBc)
         kcG = (10 - 3 * Math.PI) / (12 - 3 * Math.PI)
 
@@ -689,6 +692,224 @@
             myModele.AddMailleConges(myProfile.Rci, zRef - myProfile.ha + myProfile.Tfi, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
+
+    End Sub
+
+    Private Sub MomentPlastiqueMoins(mySection As cls_Section, myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
+                                     Beff As Decimal, Time As Decimal, ByRef MplRd As Decimal, ByRef zANP As Decimal)
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   18/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Calcul du moment plastique négatif sous incendie d'une section avec enrobage partiel (selon l'annexe F)
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   mySection   [E] :   Section
+        '   myDalle     [E] :   Dalle
+        '   myOptions   [E] :   Options de calcul à l'incendie
+        '   Gammas      [E] :   Coefficients partiels
+        '   Beff        [E] :   Largeur efficace de la dalle dans la cas d'une poutre mixte
+        '   Time        [E] :   Temps du calcul
+        '   MplRd       [S] :   Moment plastique de calcul
+        '   zANP        [S] :   Position de l'ANP
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim myModele As New cls_ModeleP
+        Dim Hw As Decimal
+        Dim lLamine As Boolean = mySection.lLamine
+
+        Const RhoV As Decimal = 0
+        Dim FySup, FyInf, FyW As Decimal
+        Const Signe As Decimal = 1
+        Const lValeurRd As Boolean = True
+
+        '--> Initialisation
+
+        Hw = mySection.ProfilA.HauteurAmeHw
+        FySup = mySection.FySup
+        FyInf = mySection.FyInf
+        FyW = mySection.FyW
+
+        '--> Modélisation du profilé acier
+
+        MaillageProfileAMMoins(mySection.ProfilA, Gammas, Time, mySection.Enrobage.Ratio_bc, FySup, myModele)
+
+        '# Béton d'enrobage
+
+        MaillageEnrobageMMoins(mySection, myOptions, Gammas, Time, myModele)
+
+        '# Armatures de l'enrobage
+
+        MaillageArmaEnrobMPlusMoins(mySection, myOptions, Gammas, Time, myModele)
+
+        '# Dalle béton
+
+        '--> Sans objet car on considère que la dalle est tendue donc inactive
+
+        '# Armatures dalle béton 
+
+        MaillageArmaturesDalleMMoins(myDalle, myOptions, Gammas, mySection.ProfilA.Bfs, mySection.ProfilA.Bfi, Beff, Time, myModele)
+
+        '--> Recherche de l'axe neutre plastique
+
+        myModele.RechercheANP(Signe, zANP, lValeurRd)
+
+        '--> Moment plastique
+
+        MplRd = myModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    End Sub
+
+    Private Sub MaillageEnrobageMMoins(mySection As cls_Section, myOptions As cls_OptionsFeu, Gammas As cls_Gamma, Time As Decimal, ByRef myModele As cls_ModeleP)
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Maillage du béton d'enrobage en vue 
+        '   du calcul du moment plastique positif sous incendie d'une section avec enrobage partiel
+        '   suivant Annexe F de l'EN 1994-1-2
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myProfile   [E] :   Profilé
+        '   Gammas      [E] :   Coefficients partiels
+        '   Time        [E] :   Temps du calcul
+        '   RatioBc     [E] :   Ratio largeur Bc / largeur Bf
+        '   myModele    [S] :   Modelisation du profilé
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        Dim LargeurC, bc, EpaisseurC, FdC, DeltaT, neq As Decimal
+        Dim EN1994_1_2 As New cls_EurocodesFeu
+
+        '--> Initialisation
+
+        bc = mySection.LargeurEnrobagePartielBc
+        LargeurC = Math.Max(EN1994_1_2.AnnexF_bcr(Time, bc) - mySection.ProfilA.Tw, 0)
+        EpaisseurC = Math.Max(mySection.ProfilA.HauteurAmeHw - EN1994_1_2.AnnexF_hcfi(Time, mySection.ProfilA.ha, bc), 0)
+        FdC = mySection.Enrobage.Beton.Fck
+        DeltaT = 0
+        neq = 1 '-> calcul plastique ici
+
+        myModele.AddMaille(LargeurC * EpaisseurC, EpaisseurC, -mySection.ProfilA.Tfs - EpaisseurC / 2, DeltaT, 1, neq, FdC, 1, Gammas.GammaC_fi, cls_Maille.EnuTypeMaille.Rectangulaire)
+
+        'Pour les profilés laminés, on doit retirer du béton la parties correspondant aux congés
+
+        If mySection.lLamine Then
+
+            '# Congés supérieurs
+
+            myModele.AddMailleConges(mySection.ProfilA.Rcs, -mySection.ProfilA.Tfs, DeltaT, 1, neq, FdC, 1, Gammas.GammaC_fi, cls_Maille.EnuTypeMaille.CongeSup, -1)
+
+            '# Congés supérieurs
+
+            '--> sans objet
+
+        End If
+    End Sub
+
+    Private Sub MaillageArmaturesDalleMMoins(myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma, Bfs As Decimal, Bfi As Decimal, Beff As Decimal, Time As Decimal, ByRef myModele As cls_ModeleP)
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   18/04/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Maillage de la dalle béton en vue 
+        '   du calcul du moment plastique négatif sous incendie d'une section avec enrobage partiel
+        '   suivant Annexe F de l'EN 1994-1-2
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myDalle     [E] :   Dalle
+        '   myOptions   [E] :   Options de calcul à l'incendie
+        '   Gammas      [E] :   Coefficients partiels
+        '   Bfs         [E] :   Largeur de la semelle supérieure
+        '   Bfi         [E] :   Largeur de la semelle inférieure
+        '   Time        [E] :   Temps du calcul
+        '   myModele    [S] :   Modelisation du profilé
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim Fsk As Decimal = myDalle.AcierArmatures.FsK
+        Dim ksd, u As Decimal
+        Dim b As Decimal = Math.Min(Bfs, Bfi)
+        Dim zArma, PhiA As Decimal
+        Dim Ztop As Decimal
+        Dim NbBarres As Integer
+        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / myDalle.AcierArmatures.Es
+        Dim DeltaCArma As Decimal = 0 'Pour le moment on néglige les armatures comprimées
+
+        Dim EN1994_1_2 As New cls_EurocodesFeu
+
+        Dim iStep As Integer
+
+        '--( Initialisation
+
+        iStep = Array.IndexOf(cls_VerifFeuEnrobe.TimeSteps, Time)
+
+        Ztop = myDalle.zTop
+
+        '# Prise en compte des armatures comprimées
+
+        If myOptions.lArmaCompression Then DeltaCArma = 1
+
+        '--( Boucle sur les lits d'armature
+
+        For iLit As Integer = 0 To myDalle.LitArma.Count - 1
+            If myDalle.LitArma(iLit).lActive Then 'on modélise le lit uniquement s'il est actif 
+
+                If myDalle.LitArma(iLit).EspBar <> 0 Then 'sécurité pour éviter les divisions par 0
+                    NbBarres = Math.Min(Beff, 3 * b) / myDalle.LitArma(iLit).EspBar
+                Else
+                    NbBarres = 0
+                End If
+
+                PhiA = myDalle.LitArma(iLit).PhiS
+
+                zArma = Ztop - myDalle.LitArma(iLit).z_s
+
+                u = Math.Min(zArma, myDalle.Ep_td - zArma)
+
+                ksd = EN1994_1_2.AnnexF_ksd(Time, u)
+
+                myModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DeltaCArma, ArmaNeq, ksd * Fsk, 1, Gammas.GammaM_fi_s, NbBarres, cls_Maille.EnuTypeMaille.Circulaire)
+            End If
+
+        Next
+
+    End Sub
+
+    Private Sub MaillageProfileAMMoins(myProfile As cls_ProfilA, Gammas As cls_Gamma, Time As Decimal, Ratio_Bc As Decimal,
+                                      FySup As Decimal, ByRef myModele As cls_ModeleP)
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   02/05/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Maillage du profilé acier en vue 
+        '   du calcul du moment plastique négatif sous incendie d'une section avec enrobage partiel
+        '   suivant Annexe F de l'EN 1994-1-2
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myProfile   [E] :   Profilé
+        '   Gammas      [E] :   Coefficients partiels
+        '   Time        [E] :   Temps du calcul
+        '   RatioBc     [E] :   Ratio largeur Bc / largeur Bf
+        '   FySup       [E] :   Limite d'élasticité de la semelle sup
+        '   myModele    [S] :   Modelisation du profilé
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim zRef As Decimal = myProfile.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
+        Dim LargBfs As Decimal
+        Dim EN1994_1_2 As New cls_EurocodesFeu
+        Dim myBc As Decimal
+
+        '--> Initialisation
+
+        myBc = Ratio_Bc * Math.Min(myProfile.Bfs, myProfile.Bfi)
+
+        '--> Modélisation du profilé acier
+
+        '# Semelle supérieure
+
+        LargBfs = myProfile.Bfs - 2 * EN1994_1_2.AnnexF_ReductionLargeurBfs(Time, myProfile.Tfs, myProfile.Bfs, myBc)
+        myModele.AddMaille(LargBfs * myProfile.Tfs, myProfile.Tfs, zRef - myProfile.Tfs / 2, 1, 1, 1, FySup, 1, Gammas.GammaM_fi)
+
+        '# Âme + Semelle inférieure
+
+        '--> non prise en compte en cas de flexion négative
 
     End Sub
 

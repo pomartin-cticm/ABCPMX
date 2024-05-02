@@ -954,7 +954,78 @@
         Return myCoefA
     End Function
 
+    Public Function AnnexF_bcr(Time As Integer, bc As Decimal) As Decimal
+        Dim bcfi, bcr As Decimal
 
+        bcfi = Me.AnnexF_bcfi(Time, bc)
+
+        bcr = Math.Max(bc - 2 * bcfi, 0)
+
+        Return bcr
+
+    End Function
+
+    Private Function AnnexF_bcfi(Time As Integer, bc As Decimal) As Decimal
+        '--( Déclaration
+
+        Dim bcfi As Decimal
+
+        '--( Traitement
+
+        Select Case Time
+            Case 30 : bcfi = 25 / kUnitMM
+            Case 60 : bcfi = Math.Max((60 - 0.15 * bc * kUnitMM), 30) / kUnitMM
+            Case 90 : bcfi = Math.Max((70 - 0.1 * bc * kUnitMM), 35) / kUnitMM
+            Case 120 : bcfi = Math.Max((75 - 0.1 * bc * kUnitMM), 45) / kUnitMM
+            Case 180 : bcfi = Math.Max((85 - 0.1 * bc * kUnitMM), 55) / kUnitMM
+        End Select
+
+        Return bcfi
+    End Function
+
+    Public Function AnnexF_hcfi(Time As Integer, ha As Integer, bc As Decimal) As Decimal
+        '--( Déclaration
+
+        Dim hcfi As Decimal
+
+        '--( Traitement
+
+        Select Case Time
+            Case 30 : hcfi = 25 / kUnitMM
+            Case 60 : hcfi = Math.Max((165 - 0.4 * bc * kUnitMM - 8 * ha / bc), 30) / kUnitMM
+            Case 90 : hcfi = Math.Max((220 - 0.5 * bc * kUnitMM - 8 * ha / bc), 45) / kUnitMM
+            Case 120 : hcfi = Math.Max((290 - 0.6 * bc * kUnitMM - 10 * ha / bc), 55) / kUnitMM
+            Case 180 : hcfi = Math.Max((360 - 0.7 * bc * kUnitMM - 10 * ha / bc), 65) / kUnitMM
+        End Select
+
+        Return hcfi
+    End Function
+
+    ''' <summary>
+    ''' Fonction qui renvoi le coefficient minorateur appliqué aux armatures de la dalle béton dans le cas de l'annexe F avec M<0
+    ''' </summary>
+    ''' <param name="Time">Durée du feu en minutes</param>
+    ''' <param name="u">Distance du lit d'armatures à la face la plus proche de la dalle béton</param>
+    ''' <returns></returns>
+    Public Function AnnexF_ksd(Time As Integer, u As Decimal)
+        '--( Déclaration
+        Dim ksd As Decimal
+
+        '--( Traitement
+
+        Select Case Time
+            Case 30 : ksd = 1
+            Case 60 : ksd = 0.022 * u * kUnitMM + 0.34
+            Case 90 : ksd = 0.0275 * u * kUnitMM - 0.1
+            Case 120 : ksd = 0.022 * u * kUnitMM - 0.2
+            Case 180 : ksd = 0.018 * u * kUnitMM - 0.26
+        End Select
+
+        ksd = Math.Max(ksd, 0) 'on minore par 0
+        ksd = Math.Min(ksd, 1) 'on majore par 1
+
+        Return ksd
+    End Function
 #End Region
 
 #Region " Massiveté des sections "

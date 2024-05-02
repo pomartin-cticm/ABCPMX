@@ -53,10 +53,6 @@ Public Class cls_Enrobage_Partiel
 
 #Region " Fonctions et outils "
 
-    Public Function Get_b_c(bf As Decimal) As Decimal
-        Return Ratio_bc * bf
-    End Function
-
     ''' <summary>
     ''' Renvoie l'enrobage //yy des étriers par rapport à l'âme du profilé
     ''' </summary>

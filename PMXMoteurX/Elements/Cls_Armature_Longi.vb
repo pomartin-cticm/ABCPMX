@@ -13,7 +13,8 @@
     Public PhiS As Decimal
 
     ''' <summary>
-    ''' position du lit d'aramature, par rapport à la fibre supérieure de la dalle
+    ''' DISTANCE du lit d'aramature, par rapport à la fibre supérieure de la dalle
+    ''' /!\ Valeur >0 /!\
     ''' </summary>
     Public z_s As Decimal
 

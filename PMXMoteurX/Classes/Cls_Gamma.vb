@@ -14,9 +14,11 @@
     Public GammaS As Decimal
     Public GammaP As Decimal
 
-    Public GammaM_fi As Decimal
-    Public GammaC_fi As Decimal
-    Public GammaV_fi As Decimal
+    Public GammaM_fi As Decimal 'for the resistance of structural steel (steel beams)
+    Public GammaM_fi_a As Decimal 'for the resistance of structural steel (composite beams)
+    Public GammaC_fi As Decimal ' for the resistance of the compressed concrete
+    Public GammaV_fi As Decimal ' for the resistance of shear connectors
+    Public GammaM_fi_s As Decimal ' for the resistance of reinforcement steel bars
 
     Public GammaG_sup As Decimal
     Public GammaG_inf As Decimal

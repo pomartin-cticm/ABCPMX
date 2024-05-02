@@ -921,7 +921,7 @@ Public Class cls_Section
 
     Public ReadOnly Property LargeurEnrobagePartielBc As Decimal
         Get
-            Return Me.ProfilA.Bfs * Me.Enrobage.Ratio_bc
+            Return Math.Min(Me.ProfilA.Bfs, Me.ProfilA.Bfi) * Me.Enrobage.Ratio_bc
         End Get
     End Property
 
