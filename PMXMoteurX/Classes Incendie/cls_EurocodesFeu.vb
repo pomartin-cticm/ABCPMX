@@ -342,10 +342,10 @@
 
         ReDim zTranches(nbTranches - 1)
 
-        zTranches(0) = EpTranches(0)
+        zTranches(0) = EpTranches(0) / 2
 
         For i As Integer = 1 To nbTranches - 1
-            zTranches(i) = zTranches(i - 1) + EpTranches(i)
+            zTranches(i) = zTranches(i - 1) + (EpTranches(i - 1) + EpTranches(i)) / 2
         Next
 
     End Sub

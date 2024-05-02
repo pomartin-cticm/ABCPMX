@@ -712,7 +712,7 @@ Imports PMXMoteur2
         EpDalle = 1.3 / 1000
         nbTranchesRef = 1
         EpTranchesRef = {1.3 / 1000}
-        zTranchesRef = {1.3 / 1000}
+        zTranchesRef = {1.3 / 2 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -721,7 +721,7 @@ Imports PMXMoteur2
         Assert.IsTrue(EpTranches.Length = EpTranchesRef.Length)
         For i As Integer = 0 To EpTranches.Length - 1
             Tau = Math.Abs((EpTranches(i) - EpTranchesRef(i)) / EpTranches(i))
-            Assert.IsTrue(Tau<TauRef)
+            Assert.IsTrue(Tau < TauRef)
         Next
 
         Assert.IsTrue(zTranches.Length = zTranchesRef.Length)
@@ -735,7 +735,7 @@ Imports PMXMoteur2
         EpDalle = 4.9 / 1000
         nbTranchesRef = 1
         EpTranchesRef = {4.9 / 1000}
-        zTranchesRef = {4.9 / 1000}
+        zTranchesRef = {4.9 / 2 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -758,7 +758,7 @@ Imports PMXMoteur2
         EpDalle = 5 / 1000
         nbTranchesRef = 1
         EpTranchesRef = {5 / 1000}
-        zTranchesRef = {5 / 1000}
+        zTranchesRef = {5 / 2 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -781,7 +781,7 @@ Imports PMXMoteur2
         EpDalle = 5.1 / 1000
         nbTranchesRef = 2
         EpTranchesRef = {5.0 / 1000, 0.1 / 1000}
-        zTranchesRef = {5.0 / 1000, 5.1 / 1000}
+        zTranchesRef = {2.5 / 1000, 5.05 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -804,7 +804,7 @@ Imports PMXMoteur2
         EpDalle = 38 / 1000
         nbTranchesRef = 8
         EpTranchesRef = {5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 3 / 1000}
-        zTranchesRef = {5.0 / 1000, 10 / 1000, 15 / 1000, 20 / 1000, 25 / 1000, 30 / 1000, 35 / 1000, 38 / 1000}
+        zTranchesRef = {5.0 / 2 / 1000, 7.5 / 1000, 12.5 / 1000, 17.5 / 1000, 22.5 / 1000, 27.5 / 1000, 32.5 / 1000, 36.5 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -827,7 +827,7 @@ Imports PMXMoteur2
         EpDalle = 40 / 1000
         nbTranchesRef = 8
         EpTranchesRef = {5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000}
-        zTranchesRef = {5.0 / 1000, 10 / 1000, 15 / 1000, 20 / 1000, 25 / 1000, 30 / 1000, 35 / 1000, 40 / 1000}
+        zTranchesRef = {2.5 / 1000, 7.5 / 1000, 12.5 / 1000, 17.5 / 1000, 22.5 / 1000, 27.5 / 1000, 32.5 / 1000, 37.5 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -850,7 +850,7 @@ Imports PMXMoteur2
         EpDalle = 63 / 1000
         nbTranchesRef = 13
         EpTranchesRef = {5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 3 / 1000}
-        zTranchesRef = {5.0 / 1000, 10 / 1000, 15 / 1000, 20 / 1000, 25 / 1000, 30 / 1000, 35 / 1000, 40 / 1000, 45 / 1000, 50 / 1000, 55 / 1000, 60 / 1000, 63 / 1000}
+        zTranchesRef = {2.5 / 1000, 7.5 / 1000, 12.5 / 1000, 17.5 / 1000, 22.5 / 1000, 27.5 / 1000, 32.5 / 1000, 37.5 / 1000, 42.5 / 1000, 47.5 / 1000, 52.5 / 1000, 57.5 / 1000, 61.5 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -873,7 +873,7 @@ Imports PMXMoteur2
         EpDalle = 79 / 1000
         nbTranchesRef = 13
         EpTranchesRef = {5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 19 / 1000}
-        zTranchesRef = {5.0 / 1000, 10 / 1000, 15 / 1000, 20 / 1000, 25 / 1000, 30 / 1000, 35 / 1000, 40 / 1000, 45 / 1000, 50 / 1000, 55 / 1000, 60 / 1000, 79 / 1000}
+        zTranchesRef = {2.5 / 1000, 7.5 / 1000, 12.5 / 1000, 17.5 / 1000, 22.5 / 1000, 27.5 / 1000, 32.5 / 1000, 37.5 / 1000, 42.5 / 1000, 47.5 / 1000, 52.5 / 1000, 57.5 / 1000, 69.5 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -896,7 +896,7 @@ Imports PMXMoteur2
         EpDalle = 80 / 1000
         nbTranchesRef = 13
         EpTranchesRef = {5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 20 / 1000}
-        zTranchesRef = {5.0 / 1000, 10 / 1000, 15 / 1000, 20 / 1000, 25 / 1000, 30 / 1000, 35 / 1000, 40 / 1000, 45 / 1000, 50 / 1000, 55 / 1000, 60 / 1000, 80 / 1000}
+        zTranchesRef = {2.5 / 1000, 7.5 / 1000, 12.5 / 1000, 17.5 / 1000, 22.5 / 1000, 27.5 / 1000, 32.5 / 1000, 37.5 / 1000, 42.5 / 1000, 47.5 / 1000, 52.5 / 1000, 57.5 / 1000, 70 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -919,7 +919,7 @@ Imports PMXMoteur2
         EpDalle = 81 / 1000
         nbTranchesRef = 14
         EpTranchesRef = {5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 20 / 1000, 1 / 1000}
-        zTranchesRef = {5.0 / 1000, 10 / 1000, 15 / 1000, 20 / 1000, 25 / 1000, 30 / 1000, 35 / 1000, 40 / 1000, 45 / 1000, 50 / 1000, 55 / 1000, 60 / 1000, 80 / 1000, 81 / 1000}
+        zTranchesRef = {2.5 / 1000, 7.5 / 1000, 12.5 / 1000, 17.5 / 1000, 22.5 / 1000, 27.5 / 1000, 32.5 / 1000, 37.5 / 1000, 42.5 / 1000, 47.5 / 1000, 52.5 / 1000, 57.5 / 1000, 70 / 1000, 80.5 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -942,7 +942,7 @@ Imports PMXMoteur2
         EpDalle = 163 / 1000
         nbTranchesRef = 14
         EpTranchesRef = {5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 5.0 / 1000, 20 / 1000, 83 / 1000}
-        zTranchesRef = {5.0 / 1000, 10 / 1000, 15 / 1000, 20 / 1000, 25 / 1000, 30 / 1000, 35 / 1000, 40 / 1000, 45 / 1000, 50 / 1000, 55 / 1000, 60 / 1000, 80 / 1000, 163 / 1000}
+        zTranchesRef = {2.5 / 1000, 7.5 / 1000, 12.5 / 1000, 17.5 / 1000, 22.5 / 1000, 27.5 / 1000, 32.5 / 1000, 37.5 / 1000, 42.5 / 1000, 47.5 / 1000, 52.5 / 1000, 57.5 / 1000, 70 / 1000, 121.5 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationUN, nbTranches, EpTranches, zTranches)
 
@@ -979,7 +979,7 @@ Imports PMXMoteur2
         EpDalle = 1.1 / 1000
         nbTranchesRef = 1
         EpTranchesRef = {1.1 / 1000}
-        zTranchesRef = {1.1 / 1000}
+        zTranchesRef = {1.1 / 2 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1003,7 +1003,7 @@ Imports PMXMoteur2
         EpDalle = 2.4 / 1000
         nbTranchesRef = 1
         EpTranchesRef = {2.4 / 1000}
-        zTranchesRef = {2.4 / 1000}
+        zTranchesRef = {1.2 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1026,7 +1026,7 @@ Imports PMXMoteur2
         EpDalle = 2.5 / 1000
         nbTranchesRef = 1
         EpTranchesRef = {2.5 / 1000}
-        zTranchesRef = {2.5 / 1000}
+        zTranchesRef = {1.25 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1049,7 +1049,7 @@ Imports PMXMoteur2
         EpDalle = 2.7 / 1000
         nbTranchesRef = 2
         EpTranchesRef = {2.5 / 1000, 0.2 / 1000}
-        zTranchesRef = {2.5 / 1000, 2.7 / 1000}
+        zTranchesRef = {1.25 / 1000, 2.6 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1072,7 +1072,7 @@ Imports PMXMoteur2
         EpDalle = 9.9 / 1000
         nbTranchesRef = 2
         EpTranchesRef = {2.5 / 1000, 7.4 / 1000}
-        zTranchesRef = {2.5 / 1000, 9.9 / 1000}
+        zTranchesRef = {1.25 / 1000, 6.2 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1095,7 +1095,7 @@ Imports PMXMoteur2
         EpDalle = 10 / 1000
         nbTranchesRef = 2
         EpTranchesRef = {2.5 / 1000, 7.5 / 1000}
-        zTranchesRef = {2.5 / 1000, 10 / 1000}
+        zTranchesRef = {1.25 / 1000, 6.25 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1118,7 +1118,7 @@ Imports PMXMoteur2
         EpDalle = 12 / 1000
         nbTranchesRef = 3
         EpTranchesRef = {2.5 / 1000, 7.5 / 1000, 2 / 1000}
-        zTranchesRef = {2.5 / 1000, 10 / 1000, 12 / 1000}
+        zTranchesRef = {1.25 / 1000, 6.25 / 1000, 11 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1141,7 +1141,7 @@ Imports PMXMoteur2
         EpDalle = 94 / 1000
         nbTranchesRef = 11
         EpTranchesRef = {2.5 / 1000, 7.5 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 4 / 1000}
-        zTranchesRef = {2.5 / 1000, 10 / 1000, 20 / 1000, 30 / 1000, 40 / 1000, 50 / 1000, 60 / 1000, 70 / 1000, 80 / 1000, 90 / 1000, 94 / 1000}
+        zTranchesRef = {1.25 / 1000, 6.25 / 1000, 15 / 1000, 25 / 1000, 35 / 1000, 45 / 1000, 55 / 1000, 65 / 1000, 75 / 1000, 85 / 1000, 92 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1164,7 +1164,7 @@ Imports PMXMoteur2
         EpDalle = 147 / 1000
         nbTranchesRef = 16
         EpTranchesRef = {2.5 / 1000, 7.5 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 7 / 1000}
-        zTranchesRef = {2.5 / 1000, 10 / 1000, 20 / 1000, 30 / 1000, 40 / 1000, 50 / 1000, 60 / 1000, 70 / 1000, 80 / 1000, 90 / 1000, 100 / 1000, 110 / 1000, 120 / 1000, 130 / 1000, 140 / 1000, 147 / 1000}
+        zTranchesRef = {1.25 / 1000, 6.25 / 1000, 15 / 1000, 25 / 1000, 35 / 1000, 45 / 1000, 55 / 1000, 65 / 1000, 75 / 1000, 85 / 1000, 95 / 1000, 105 / 1000, 115 / 1000, 125 / 1000, 135 / 1000, 143.5 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1187,7 +1187,7 @@ Imports PMXMoteur2
         EpDalle = 150 / 1000
         nbTranchesRef = 16
         EpTranchesRef = {2.5 / 1000, 7.5 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000}
-        zTranchesRef = {2.5 / 1000, 10 / 1000, 20 / 1000, 30 / 1000, 40 / 1000, 50 / 1000, 60 / 1000, 70 / 1000, 80 / 1000, 90 / 1000, 100 / 1000, 110 / 1000, 120 / 1000, 130 / 1000, 140 / 1000, 150 / 1000}
+        zTranchesRef = {1.25 / 1000, 6.25 / 1000, 15 / 1000, 25 / 1000, 35 / 1000, 45 / 1000, 55 / 1000, 65 / 1000, 75 / 1000, 85 / 1000, 95 / 1000, 105 / 1000, 115 / 1000, 125 / 1000, 135 / 1000, 145 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
@@ -1210,7 +1210,7 @@ Imports PMXMoteur2
         EpDalle = 230 / 1000
         nbTranchesRef = 16
         EpTranchesRef = {2.5 / 1000, 7.5 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 10 / 1000, 90 / 1000}
-        zTranchesRef = {2.5 / 1000, 10 / 1000, 20 / 1000, 30 / 1000, 40 / 1000, 50 / 1000, 60 / 1000, 70 / 1000, 80 / 1000, 90 / 1000, 100 / 1000, 110 / 1000, 120 / 1000, 130 / 1000, 140 / 1000, 230 / 1000}
+        zTranchesRef = {1.25 / 1000, 6.25 / 1000, 15 / 1000, 25 / 1000, 35 / 1000, 45 / 1000, 55 / 1000, 65 / 1000, 75 / 1000, 85 / 1000, 95 / 1000, 105 / 1000, 115 / 1000, 125 / 1000, 135 / 1000, 185 / 1000}
 
         EurocodeFeu.PrepareMaillageDalleTabulee(EpDalle, lGenerationDEUX, nbTranches, EpTranches, zTranches)
 
