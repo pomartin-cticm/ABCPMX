@@ -17,8 +17,7 @@
 
     Public PhiViewFactor As Decimal                         ' Facteur de vue
 
-    Public lHeatingSlabEF As Boolean                        ' Indique si on calcul l'échauffement de la dalle par calcul numérique
-    Public tDalleEFmax As Decimal                           ' Epaisseur maximale d'un elt dalle pour le calcul numérique de l'échauffement de la dalle
+    'Public lHeatingSlabEF As Boolean                        ' Indique si on calcul l'échauffement de la dalle par calcul numérique
 
     Public ksh As Decimal                                   ' coefficient correcteur pour l'effet masque
 
@@ -29,6 +28,7 @@
     Public lCalcuFeu As Boolean                             ' Indique si on effectue le calcul au feu
 
     Public lDalleFEM As Boolean                             ' Indique pour les poutres mixtes si on calcule l'échauffement par une analyse EF
+    Public tDalleEFmax As Decimal                           ' Epaisseur maximale d'un elt dalle pour le calcul numérique de l'échauffement de la dalle
 
     Public Const BOLTZMANN As Decimal = 5.67 * 10 ^ (-8)    ' Constante de Boltzmann
 
@@ -74,7 +74,7 @@
         Me.ConvectionCoef = 25              ' [W/m2K]
         Me.ConvectionCoefDalle = 4          ' [W/m2K]
 
-        Me.lHeatingSlabEF = False
+        'Me.lHeatingSlabEF = False
 
         Me.PhiViewFactor = 1.0
 
@@ -86,6 +86,10 @@
 
         Me.lCalcuFeu = True
         Me.lArmaCompression = True
+        Me.lArmaFormeeAFroid = True
+
+        Me.lDalleFEM = False
+        Me.tDalleEFmax = 1 / 1000 ' 1 mm
 
         Me.TypeSurface = enu_TypeSurface.AcierNu
 
