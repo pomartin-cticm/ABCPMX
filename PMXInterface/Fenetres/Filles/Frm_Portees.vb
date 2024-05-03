@@ -118,6 +118,11 @@ Public Class Frm_Portees
 
         End If
 
+        chk_ConsoleGauche.Visible = Not MyPoutreLoc.lSlimFloor
+        chk_ContinuiteDalleAppGauche.Visible = Not MyPoutreLoc.lSlimFloor
+        chk_ConsoleDroite.Visible = Not MyPoutreLoc.lSlimFloor
+        chk_ContinuiteDalleAppDroit.Visible = Not MyPoutreLoc.lSlimFloor
+
     End Sub
 
     Private Sub AfficherPoutreEnCours()

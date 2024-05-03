@@ -955,11 +955,7 @@ Public Class cls_Section
 
         Dim MyVRd As Decimal = 0
 
-        Select Case Me.TypeSection
-            Case Enum_TypeSection.AcierSeul, Enum_TypeSection.AcierSeulEnrobage, Enum_TypeSection.Mixte, Enum_TypeSection.MixteEnrobage
-                MyVRd = Me.AireAv * Me.FyW / (Math.Sqrt(3) * GammaM0) * kConvMPaPa
-
-        End Select
+        MyVRd = Me.AireAv * Me.FyW / (Math.Sqrt(3) * GammaM0) * kConvMPaPa
 
         Return MyVRd
     End Function
