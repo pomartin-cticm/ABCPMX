@@ -260,12 +260,12 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
-        Public Property GammaM_fi() As Decimal
+        Public Property GammaM_fi_a() As Decimal
             Get
-                Return CType(Me("GammaM_fi"),Decimal)
+                Return CType(Me("GammaM_fi_a"),Decimal)
             End Get
             Set
-                Me("GammaM_fi") = value
+                Me("GammaM_fi_a") = value
             End Set
         End Property
         
@@ -1274,6 +1274,18 @@ Namespace My
             End Get
             Set
                 Me("deltaCDev") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
+        Public Property GammaM_fi_s() As Decimal
+            Get
+                Return CType(Me("GammaM_fi_s"),Decimal)
+            End Get
+            Set
+                Me("GammaM_fi_s") = value
             End Set
         End Property
     End Class

@@ -467,11 +467,11 @@ Public Module Mod_Declarations
     Public ColorSelect As Color = Color.DarkRed
     Public ColorNonSelect As Color = Color.DarkSlateGray
 
-    Public FontSymbolNormal As New Font("Arial", 8.25)
-    Public FontSymbolIndice As New Font("Arial", 6.25)
-    Public FontSymbolGrec As New Font("Symbol", 8.25)
+    Public FontSymbolNormal As New Font("Arial", 10) 'GUD: modif, avant 8.25
+    Public FontSymbolIndice As New Font("Arial", 8) 'GUD: modif avant 6.25
+    Public FontSymbolGrec As New Font("Symbol", 10) 'GUD: modif, avant 8.25
 
-    Public FontBase As New Font("Arial", 8.25)
+    Public FontBase As New Font("Arial", 10) 'GUD: modif, avant 8.25
 
     Public CouleurAcierNormal As Color = Color.DarkSlateGray
     Public CouleurAcierSelect As Color = BleuCTICM

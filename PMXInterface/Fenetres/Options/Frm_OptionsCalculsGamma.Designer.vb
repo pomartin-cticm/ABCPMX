@@ -30,8 +30,8 @@ Partial Class Frm_OptionsCalculsGamma
         Me.img_GammaV_fi = New System.Windows.Forms.PictureBox()
         Me.txt_GammaC_fi = New System.Windows.Forms.TextBox()
         Me.img_GammaC_fi = New System.Windows.Forms.PictureBox()
-        Me.txt_GammaM_fi = New System.Windows.Forms.TextBox()
-        Me.img_GammaM_fi = New System.Windows.Forms.PictureBox()
+        Me.txt_GammaM_fi_a = New System.Windows.Forms.TextBox()
+        Me.img_GammaM_fi_a = New System.Windows.Forms.PictureBox()
         Me.lbl_Fire = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.chk_GammaV_Unique = New System.Windows.Forms.CheckBox()
@@ -76,11 +76,13 @@ Partial Class Frm_OptionsCalculsGamma
         Me.txt_GammaQ = New System.Windows.Forms.TextBox()
         Me.lbl_Materials = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.img_GammaM_fi_s = New System.Windows.Forms.PictureBox()
+        Me.txt_GammaM_fi_s = New System.Windows.Forms.TextBox()
         Me.pan_Gamma.SuspendLayout()
         Me.Panel2.SuspendLayout()
         CType(Me.img_GammaV_fi, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_GammaC_fi, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_GammaM_fi, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_GammaM_fi_a, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         CType(Me.img_GammaVs, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_GammaC, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -102,6 +104,7 @@ Partial Class Frm_OptionsCalculsGamma
         CType(Me.img_GammaGsup, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_GammaQ, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_GammaM_fi_s, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Gamma
@@ -134,10 +137,12 @@ Partial Class Frm_OptionsCalculsGamma
         '
         Me.Panel2.Controls.Add(Me.txt_GammaV_fi)
         Me.Panel2.Controls.Add(Me.img_GammaV_fi)
+        Me.Panel2.Controls.Add(Me.txt_GammaM_fi_s)
+        Me.Panel2.Controls.Add(Me.img_GammaM_fi_s)
         Me.Panel2.Controls.Add(Me.txt_GammaC_fi)
         Me.Panel2.Controls.Add(Me.img_GammaC_fi)
-        Me.Panel2.Controls.Add(Me.txt_GammaM_fi)
-        Me.Panel2.Controls.Add(Me.img_GammaM_fi)
+        Me.Panel2.Controls.Add(Me.txt_GammaM_fi_a)
+        Me.Panel2.Controls.Add(Me.img_GammaM_fi_a)
         Me.Panel2.Controls.Add(Me.lbl_Fire)
         Me.Panel2.Location = New System.Drawing.Point(285, 186)
         Me.Panel2.Name = "Panel2"
@@ -147,7 +152,7 @@ Partial Class Frm_OptionsCalculsGamma
         'txt_GammaV_fi
         '
         Me.txt_GammaV_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaV_fi.Location = New System.Drawing.Point(48, 86)
+        Me.txt_GammaV_fi.Location = New System.Drawing.Point(48, 111)
         Me.txt_GammaV_fi.Name = "txt_GammaV_fi"
         Me.txt_GammaV_fi.Size = New System.Drawing.Size(58, 20)
         Me.txt_GammaV_fi.TabIndex = 98
@@ -155,7 +160,7 @@ Partial Class Frm_OptionsCalculsGamma
         'img_GammaV_fi
         '
         Me.img_GammaV_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaV_fi.Location = New System.Drawing.Point(3, 86)
+        Me.img_GammaV_fi.Location = New System.Drawing.Point(3, 111)
         Me.img_GammaV_fi.Name = "img_GammaV_fi"
         Me.img_GammaV_fi.Size = New System.Drawing.Size(46, 20)
         Me.img_GammaV_fi.TabIndex = 99
@@ -178,22 +183,22 @@ Partial Class Frm_OptionsCalculsGamma
         Me.img_GammaC_fi.TabIndex = 97
         Me.img_GammaC_fi.TabStop = False
         '
-        'txt_GammaM_fi
+        'txt_GammaM_fi_a
         '
-        Me.txt_GammaM_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_GammaM_fi.Location = New System.Drawing.Point(48, 34)
-        Me.txt_GammaM_fi.Name = "txt_GammaM_fi"
-        Me.txt_GammaM_fi.Size = New System.Drawing.Size(58, 20)
-        Me.txt_GammaM_fi.TabIndex = 94
+        Me.txt_GammaM_fi_a.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_GammaM_fi_a.Location = New System.Drawing.Point(48, 34)
+        Me.txt_GammaM_fi_a.Name = "txt_GammaM_fi_a"
+        Me.txt_GammaM_fi_a.Size = New System.Drawing.Size(58, 20)
+        Me.txt_GammaM_fi_a.TabIndex = 94
         '
-        'img_GammaM_fi
+        'img_GammaM_fi_a
         '
-        Me.img_GammaM_fi.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_GammaM_fi.Location = New System.Drawing.Point(3, 34)
-        Me.img_GammaM_fi.Name = "img_GammaM_fi"
-        Me.img_GammaM_fi.Size = New System.Drawing.Size(46, 20)
-        Me.img_GammaM_fi.TabIndex = 95
-        Me.img_GammaM_fi.TabStop = False
+        Me.img_GammaM_fi_a.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_GammaM_fi_a.Location = New System.Drawing.Point(3, 34)
+        Me.img_GammaM_fi_a.Name = "img_GammaM_fi_a"
+        Me.img_GammaM_fi_a.Size = New System.Drawing.Size(46, 20)
+        Me.img_GammaM_fi_a.TabIndex = 95
+        Me.img_GammaM_fi_a.TabStop = False
         '
         'lbl_Fire
         '
@@ -589,6 +594,23 @@ Partial Class Frm_OptionsCalculsGamma
         '
         Me.ErrorProvider.ContainerControl = Me
         '
+        'img_GammaM_fi_s
+        '
+        Me.img_GammaM_fi_s.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_GammaM_fi_s.Location = New System.Drawing.Point(3, 85)
+        Me.img_GammaM_fi_s.Name = "img_GammaM_fi_s"
+        Me.img_GammaM_fi_s.Size = New System.Drawing.Size(46, 20)
+        Me.img_GammaM_fi_s.TabIndex = 97
+        Me.img_GammaM_fi_s.TabStop = False
+        '
+        'txt_GammaM_fi_s
+        '
+        Me.txt_GammaM_fi_s.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_GammaM_fi_s.Location = New System.Drawing.Point(48, 85)
+        Me.txt_GammaM_fi_s.Name = "txt_GammaM_fi_s"
+        Me.txt_GammaM_fi_s.Size = New System.Drawing.Size(58, 20)
+        Me.txt_GammaM_fi_s.TabIndex = 96
+        '
         'Frm_OptionsCalculsGamma
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -603,7 +625,7 @@ Partial Class Frm_OptionsCalculsGamma
         Me.Panel2.PerformLayout()
         CType(Me.img_GammaV_fi, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_GammaC_fi, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_GammaM_fi, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_GammaM_fi_a, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         CType(Me.img_GammaVs, System.ComponentModel.ISupportInitialize).EndInit()
@@ -629,6 +651,7 @@ Partial Class Frm_OptionsCalculsGamma
         CType(Me.img_GammaGsup, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_GammaQ, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_GammaM_fi_s, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -677,8 +700,8 @@ Partial Class Frm_OptionsCalculsGamma
     Friend WithEvents img_GammaV_fi As PictureBox
     Friend WithEvents txt_GammaC_fi As TextBox
     Friend WithEvents img_GammaC_fi As PictureBox
-    Friend WithEvents txt_GammaM_fi As TextBox
-    Friend WithEvents img_GammaM_fi As PictureBox
+    Friend WithEvents txt_GammaM_fi_a As TextBox
+    Friend WithEvents img_GammaM_fi_a As PictureBox
     Friend WithEvents ErrorProvider As ErrorProvider
     Friend WithEvents chk_GammaV_Unique As CheckBox
     Friend WithEvents txt_Psi0_Q2 As TextBox
@@ -686,4 +709,6 @@ Partial Class Frm_OptionsCalculsGamma
     Friend WithEvents txt_Psi1_Q2 As TextBox
     Friend WithEvents img_Q2 As PictureBox
     Friend WithEvents img_Q1 As PictureBox
+    Friend WithEvents txt_GammaM_fi_s As TextBox
+    Friend WithEvents img_GammaM_fi_s As PictureBox
 End Class

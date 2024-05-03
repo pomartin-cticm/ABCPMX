@@ -1106,8 +1106,9 @@ Public Class Frm_PMX
         My.Settings.GammaP = LogicielOptions.Gamma.GammaP
         My.Settings.GammaVs = LogicielOptions.Gamma.GammaVs
         My.Settings.GammaVc = LogicielOptions.Gamma.GammaVc
-        My.Settings.GammaM_fi = LogicielOptions.Gamma.GammaM_fi
+        My.Settings.GammaM_fi_a = LogicielOptions.Gamma.GammaM_fi_a
         My.Settings.GammaC_fi = LogicielOptions.Gamma.GammaC_fi
+        My.Settings.GammaM_fi_s = LogicielOptions.Gamma.GammaM_fi_s
         My.Settings.GammaV_fi = LogicielOptions.Gamma.GammaV_fi
         My.Settings.GammaG_sup = LogicielOptions.Gamma.GammaG_sup
         My.Settings.GammaG_inf = LogicielOptions.Gamma.GammaG_inf
@@ -1815,10 +1816,6 @@ Public Class Frm_PMX
         '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
 
         EnregistrerOptionsLogiciel(True)
-    End Sub
-
-    Private Sub TSbtn3D_Click(sender As Object, e As EventArgs) Handles TSbtn3D.Click
-        'frm_3D.ShowDialog()
     End Sub
 
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click

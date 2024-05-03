@@ -82,8 +82,9 @@ Public Class Frm_Gamma
         'list_txtbox.Add((txt_GammaVp, Not MyPoutreLoc.Param.Gamma.lGammaV_unique))
         list_txtbox.Add(txt_GammaS)
         list_txtbox.Add(txt_GammaP)
-        list_txtbox.Add(txt_GammaM_fi)
+        list_txtbox.Add(txt_GammaM_fi_a)
         list_txtbox.Add(txt_GammaC_fi)
+        list_txtbox.Add(txt_GammaM_fi_s)
         list_txtbox.Add(txt_GammaV_fi)
 
     End Sub
@@ -181,8 +182,9 @@ Public Class Frm_Gamma
             Me.txt_GammaS.Text = Format(.GammaS, formatGAMMA)
             Me.txt_GammaP.Text = Format(.GammaP, formatGAMMA)
 
-            Me.txt_GammaM_fi.Text = Format(.GammaM_fi, formatGAMMA)
+            Me.txt_GammaM_fi_a.Text = Format(.GammaM_fi_a, formatGAMMA)
             Me.txt_GammaC_fi.Text = Format(.GammaC_fi, formatGAMMA)
+            Me.txt_GammaM_fi_s.Text = Format(.GammaM_fi_s, formatGAMMA)
             Me.txt_GammaV_fi.Text = Format(.GammaV_fi, formatGAMMA)
 
         End With
@@ -263,8 +265,9 @@ Public Class Frm_Gamma
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaS, .GammaS, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaP, .GammaP, lModif)
 
-            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi, .GammaM_fi, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi_a, .GammaM_fi_a, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaC_fi, .GammaC_fi, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi_s, .GammaM_fi_s, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaV_fi, .GammaV_fi, lModif)
 
         End With
@@ -278,7 +281,7 @@ Public Class Frm_Gamma
 
 #Region " Dessins "
 
-    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_GammaGsup.Paint, img_GammaGinf.Paint, img_GammaQ.Paint, img_Psi0.Paint, img_Q1.Paint, img_Q2.Paint, img_Psi1.Paint, img_Psi2.Paint, img_GammaM0.Paint, img_GammaM1.Paint, img_GammaM2.Paint, img_GammaC.Paint, img_GammaVs.Paint, img_GammaVc.Paint, img_GammaS.Paint, img_GammaP.Paint, img_GammaM_fi.Paint, img_GammaC_fi.Paint, img_GammaV_fi.Paint
+    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_GammaGsup.Paint, img_GammaGinf.Paint, img_GammaQ.Paint, img_Psi0.Paint, img_Q1.Paint, img_Q2.Paint, img_Psi1.Paint, img_Psi2.Paint, img_GammaM0.Paint, img_GammaM1.Paint, img_GammaM2.Paint, img_GammaC.Paint, img_GammaVs.Paint, img_GammaVc.Paint, img_GammaS.Paint, img_GammaP.Paint, img_GammaM_fi_a.Paint, img_GammaC_fi.Paint, img_GammaV_fi.Paint, img_GammaM_fi_s.Paint
 
         '--> Déclarations
 
@@ -399,15 +402,20 @@ Public Class Frm_Gamma
                 strSymbol = "g"
                 strIndice = "P"
 
-            Case Me.img_GammaM_fi.Name
+            Case Me.img_GammaM_fi_a.Name
 
                 strSymbol = "g"
-                strIndice = "M,fi"
+                strIndice = "M,fi,a"
 
             Case Me.img_GammaC_fi.Name
 
                 strSymbol = "g"
                 strIndice = "C,fi"
+
+            Case Me.img_GammaM_fi_s.Name
+
+                strSymbol = "g"
+                strIndice = "M,fi,s"
 
             Case Me.img_GammaV_fi.Name
 
@@ -492,7 +500,7 @@ Public Class Frm_Gamma
 #End Region
 
 #Region " Evènements saisie "
-    Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_GammaGsup.TextChanged, txt_GammaGinf.TextChanged, txt_GammaQ.TextChanged, txt_Psi0_Q1.TextChanged, txt_Psi1_Q1.TextChanged, txt_Psi2_Q1.TextChanged, txt_Psi0_Q2.TextChanged, txt_Psi1_Q2.TextChanged, txt_Psi2_Q2.TextChanged, txt_GammaM0.TextChanged, txt_GammaM1.TextChanged, txt_GammaM2.TextChanged, txt_GammaC.TextChanged, txt_GammaVs.TextChanged, txt_GammaVc.TextChanged, txt_GammaS.TextChanged, txt_GammaP.TextChanged, txt_GammaM_fi.TextChanged, txt_GammaC_fi.TextChanged, txt_GammaV_fi.TextAlignChanged
+    Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_GammaGsup.TextChanged, txt_GammaGinf.TextChanged, txt_GammaQ.TextChanged, txt_Psi0_Q1.TextChanged, txt_Psi1_Q1.TextChanged, txt_Psi2_Q1.TextChanged, txt_Psi0_Q2.TextChanged, txt_Psi1_Q2.TextChanged, txt_Psi2_Q2.TextChanged, txt_GammaM0.TextChanged, txt_GammaM1.TextChanged, txt_GammaM2.TextChanged, txt_GammaC.TextChanged, txt_GammaVs.TextChanged, txt_GammaVc.TextChanged, txt_GammaS.TextChanged, txt_GammaP.TextChanged, txt_GammaM_fi_a.TextChanged, txt_GammaC_fi.TextChanged, txt_GammaV_fi.TextAlignChanged, txt_GammaM_fi_s.TextChanged
         If lBuild Then Exit Sub
 
         Dim ValeurUI As Decimal
@@ -542,10 +550,12 @@ Public Class Frm_Gamma
                         .GammaS = ValeurUI
                     Case txt_GammaP.Name
                         .GammaP = ValeurUI
-                    Case txt_GammaM_fi.Name
-                        .GammaM_fi = ValeurUI
+                    Case txt_GammaM_fi_a.Name
+                        .GammaM_fi_a = ValeurUI
                     Case txt_GammaC_fi.Name
                         .GammaC_fi = ValeurUI
+                    Case txt_GammaM_fi_s.Name
+                        .GammaM_fi_s = ValeurUI
                     Case txt_GammaV_fi.Name
                         .GammaV_fi = ValeurUI
                 End Select
@@ -576,7 +586,7 @@ Public Class Frm_Gamma
                 ValMin = PSI_COMBINAISON_MIN
                 ValMax = PSI_COMBINAISON_MAX
 
-            Case Me.txt_GammaM0.Name, Me.txt_GammaM1.Name, Me.txt_GammaM2.Name, Me.txt_GammaC.Name, Me.txt_GammaVs.Name, Me.txt_GammaVc.Name, Me.txt_GammaS.Name, Me.txt_GammaP.Name, Me.txt_GammaM_fi.Name, Me.txt_GammaC_fi.Name, Me.txt_GammaV_fi.Name 'Me.txt_GammaVp.Name,
+            Case Me.txt_GammaM0.Name, Me.txt_GammaM1.Name, Me.txt_GammaM2.Name, Me.txt_GammaC.Name, Me.txt_GammaVs.Name, Me.txt_GammaVc.Name, Me.txt_GammaS.Name, Me.txt_GammaP.Name, Me.txt_GammaM_fi_a.Name, Me.txt_GammaC_fi.Name, Me.txt_GammaM_fi_s.Name, Me.txt_GammaV_fi.Name 'Me.txt_GammaVp.Name,
                 ValMin = GAMMA_RESISTANCE_MIN
                 ValMax = GAMMA_RESISTANCE_MAX
         End Select
@@ -619,8 +629,9 @@ Public Class Frm_Gamma
         Me.txt_GammaS.Text = Format(LogicielOptions.Gamma.GammaS, formatGAMMA)
         Me.txt_GammaP.Text = Format(LogicielOptions.Gamma.GammaP, formatGAMMA)
 
-        Me.txt_GammaM_fi.Text = Format(LogicielOptions.Gamma.GammaM_fi, formatGAMMA)
+        Me.txt_GammaM_fi_a.Text = Format(LogicielOptions.Gamma.GammaM_fi_a, formatGAMMA)
         Me.txt_GammaC_fi.Text = Format(LogicielOptions.Gamma.GammaC_fi, formatGAMMA)
+        Me.txt_GammaM_fi_s.Text = Format(LogicielOptions.Gamma.GammaM_fi_s, formatGAMMA)
         Me.txt_GammaV_fi.Text = Format(LogicielOptions.Gamma.GammaV_fi, formatGAMMA)
 
     End Sub

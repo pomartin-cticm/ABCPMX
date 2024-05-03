@@ -55,23 +55,23 @@ Module Mod_NoteCalcul
     '--> permet de garder la même interface entre deux ouvertures de la NDC
     '--------------------------------------------------------------------------
 
-
-    Public WidthForm As Integer = 750                                               'Largeur de la fenêtre NDC
-    Public HeightForm As Integer = SystemInformation.WorkingArea.Height - 10        'Hauteur de la fenêtre NDC
+    'Largeur de la fenêtre NDC
+    Public WidthForm As Integer = 750
+    'Hauteur de la fenêtre NDC
+    Public HeightForm As Integer = SystemInformation.WorkingArea.Height - 10
     'Position de la fenêtre NDC
     Public LocationForm As Point = New Point(SystemInformation.WorkingArea.Width / 2 - WidthForm / 2, SystemInformation.WorkingArea.Height / 2 - HeightForm / 2)
-    Public lNavPane As Boolean = True                                               'Vrai si volet de navigation activé
-    Public WidthNavPane As Integer = 200                                            'Largeur du volet de navigation
-    Public lMaximised As Boolean = False                                            'Vrai si fenêre maximisé
-    Public ZoomValue As Integer = 100                                               'Valeur du zoom
+    'Vrai si volet de navigation activé
+    Public lNavPane As Boolean = True
+    'Largeur du volet de navigation
+    Public WidthNavPane As Integer = 200
+    'Vrai si fenêre maximisé
+    Public lMaximised As Boolean = False
+    'Valeur du zoom
+    Public ZoomValue As Integer = 100
 
     'Paramètre de gestion d'affichage des valeurs pour la partie Analyse
     Const formatEFFORTS As String = "0.00"
-
-    '# Reference EN 1994
-
-    Private Const REF_EN1994_G1 As String = "EN 1994-1-1:2005"
-    Private Const REF_EN1994_G2 As String = "prEN 1994-1-1:2024"
 
 #End Region
 
@@ -1686,7 +1686,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABVAR2 & BlocG("STEEL_RES_FACTORS") & TABVARL3 & BlocG("SLAB_RES_FACTORS") & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-M,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-M,fi,a\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi_a, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         AddLigneNDC(TABVAR2 & "\Sg\s\-M0\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM0, Enu_TypeVariable.SansType, 3, 2, False) _
                   & TABVARL3 & "\Sg\s\-C\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaC, Enu_TypeVariable.SansType, 3, 2, False) _
@@ -1696,11 +1696,11 @@ Module Mod_NoteCalcul
             ChaineFire = TABVARL4 & "\Sg\s\-C,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaC_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         AddLigneNDC(TABVAR2 & "\Sg\s\-M1\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM1, Enu_TypeVariable.SansType, 3, 2, False) _
-                  & TABVARL3 & "\Sg\s\-C\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaS, Enu_TypeVariable.SansType, 3, 2, False) _
+                  & TABVARL3 & "\Sg\s\-S\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaS, Enu_TypeVariable.SansType, 3, 2, False) _
                   & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-v,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaV_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-M,fi,s\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi_s, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         If MyGamma.lGammaV_unique Then
             ChaineSlab = "\Sg\s\-V\="
@@ -1711,11 +1711,22 @@ Module Mod_NoteCalcul
                   & TABVARL3 & ChaineSlab & TABEGAL2 & GetStringInUnit(MyGamma.GammaVs, Enu_TypeVariable.SansType, 3, 2, False) _
                   & ChaineFire)
 
-        If Not MyGamma.lGammaV_unique Then
-            AddLigneNDC(TABVARL3 & "\Sg\s\-Vc\=" & TABEGAL2 & GetStringInUnit(MyGamma.GammaVc, Enu_TypeVariable.SansType, 3, 2, False))
+        If lFire Then
+            ChaineFire = TABVARL4 & "\Sg\s\-V,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaV_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
 
-        AddLigneNDC(TABVARL3 & "\Sg\s\-P\=" & TABEGAL2 & GetStringInUnit(MyGamma.GammaP, Enu_TypeVariable.SansType, 3, 2, False))
+        If Not MyGamma.lGammaV_unique Then
+            AddLigneNDC(TABVARL3 & "\Sg\s\-Vc\=" & TABEGAL2 & GetStringInUnit(MyGamma.GammaVc, Enu_TypeVariable.SansType, 3, 2, False) _
+                   & ChaineFire)
+            AddLigneNDC(TABVARL3 & "\Sg\s\-P\=" & TABEGAL2 & GetStringInUnit(MyGamma.GammaP, Enu_TypeVariable.SansType, 3, 2, False))
+        Else
+            AddLigneNDC(TABVARL3 & "\Sg\s\-P\=" & TABEGAL2 & GetStringInUnit(MyGamma.GammaP, Enu_TypeVariable.SansType, 3, 2, False) _
+                   & ChaineFire)
+        End If
+
+
+
+
 
     End Sub
 
@@ -2376,12 +2387,6 @@ Module Mod_NoteCalcul
         Dim bEff As Decimal
         Dim zANP, MplRd As Decimal
         Dim zANPk, MplRk As Decimal
-        Dim EN1994 As New cls_Eurocodes
-        Dim BetaM As Decimal
-        Dim lOK, lAppBeta As Boolean
-        Dim Reference As String
-        Dim zSurH As Decimal
-        Dim zSurHLim As Decimal
 
         '--> Récupération des coeff d'équivalence et état de la dalle
 
@@ -2418,35 +2423,9 @@ Module Mod_NoteCalcul
         MyBeam.Section.ProprietesPlastiquesMixteMyy(1, True, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANP, MplRd)
         MyBeam.Section.ProprietesPlastiquesMixteMyy(1, False, MyBeam.Param.Gamma, 0, bEff, MyBeam.Dalle, zANPk, MplRk)
 
-        BetaM = EN1994.ReductionFactorBeta(MyBeam.Dalle.zTop - zANP, MyBeam.HauteurTotaleSectionMixte, MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1, lOK)
-        lAppBeta = EN1994.IsBetaApplicable(MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1)
-
-        AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnitN(Math.Abs(BetaM) * MplRd, Enu_TypeVariable.Moment, 4, 3, True, True))
-        If lAppBeta Then
-            '--| Affichage de la valeur de beta, le cas échéant
-            zSurH = (MyBeam.Dalle.zTop - zANP) / MyBeam.HauteurTotaleSectionMixte
-            If lOK Then
-                '--| Cas du ratio z/h dans les limites du calcul plastique
-                AddLigneNDC(TABW2 & BlocSP("BETAMPLASTIC") & TABAFF & "\Sb\s" & TABEGAL & GetStringInUnitN(BetaM, Enu_TypeVariable.SansType, 4, 3, True, True))
-                AddLigneNDC(TABW2 & BlocSP("FORZSURH") & TABAFF & "z/H" & TABEGAL & GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, True, True))
-
-            Else
-
-                zSurHLim = EN1994.LimiteZsurHplastic(MyBeam.Section.Acier.Nuance, MyBeam.Param.lGeneration1)
-                '--| Cas du ratio z/h en dehors des limites du calcul plastique
-                AddLigneNDC(TABW2 & RemplaceDollar(BlocSP("RATIOZHABOVELIMIT"), GetStringInUnitN(zSurH, Enu_TypeVariable.SansType, 4, 3, True, True)))
-                AddLigneNDC(TABW2 & BlocSP("RATIOZHLIM") & TABAFF & "z/H <" & TABEGAL & GetStringInUnitN(zSurHLim, Enu_TypeVariable.SansType, 4, 3, True, True))
-            End If
-            '--| Références
-            If MyBeam.Param.lGeneration1 Then
-                Reference = BlocSP("REFEN1994G1")
-            Else
-                Reference = BlocSP("REFEN1994G2")
-            End If
-            AddLigneNDC(TABW2 & BlocSP("ACCORDINGTO") & TABAFF & Reference)
-        End If
-        AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnitN(zANP, Enu_TypeVariable.Dimension, 4, 3, True, True))
-        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnitN(Math.Abs(BetaM) * MplRk, Enu_TypeVariable.Moment, 4, 3, True, True))
+        AddLigneNDC(TABW2 & BlocSP("MPLASTIC") & TABAFF & "M\-pl,Rd\=" & TABEGAL & GetStringInUnit(MplRd, Enu_TypeVariable.Moment, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocSP("ZPNA") & TABAFF & "z\-pl\=" & TABEGAL & GetStringInUnit(zANP, Enu_TypeVariable.Dimension, 4, 1, True))
+        AddLigneNDC(TABW2 & BlocSP("MPLASTICK") & TABAFF & "M\-pl,Rk\=" & TABEGAL & GetStringInUnit(MplRk, Enu_TypeVariable.Moment, 4, 0, True))
 
         '--> Propriétés console gauche
 
@@ -9699,7 +9678,7 @@ Module Mod_NoteCalcul
         If myBeam.VerifFeuAcier.RStep = -1 Then
             myStep = 0
         Else
-            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuAcier.TimeSteps(myBeam.VerifFeuAcier.RStep)))
+            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(myBeam.VerifFeuAcier.RStep)))
             myStep = myBeam.VerifFeuAcier.RStep
         End If
 
@@ -9722,27 +9701,6 @@ Module Mod_NoteCalcul
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Calcul au feu
         '-----------------------------------------------------------------------------------------------------------------
-
-        '--( Déclaration
-
-        Dim myStep As Integer
-
-        '--( Titre
-
-        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_SYMMARY"))
-
-        '--( Durée de résistance au feu
-
-        If myBeam.VerifFeuMixte.RStep = -1 Then
-            myStep = 0
-        Else
-            myStep = myBeam.VerifFeuMixte.RStep
-            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(myStep)))
-        End If
-
-        '--( Synthèse des critères
-
-        AfficheSyntheseCritere(myBeam.VerifFeuMixte.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
 
     End Sub
 

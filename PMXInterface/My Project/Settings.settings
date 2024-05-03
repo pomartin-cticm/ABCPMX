@@ -53,7 +53,7 @@
     <Setting Name="GammaVc" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1.25</Value>
     </Setting>
-    <Setting Name="GammaM_fi" Type="System.Decimal" Scope="User">
+    <Setting Name="GammaM_fi_a" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">1.0</Value>
     </Setting>
     <Setting Name="GammaC_fi" Type="System.Decimal" Scope="User">
@@ -307,6 +307,9 @@
     </Setting>
     <Setting Name="deltaCDev" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)">0.01</Value>
+    </Setting>
+    <Setting Name="GammaM_fi_s" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">1.0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -82,8 +82,9 @@ Imports PMXMoteur2
         LogicielOptions.Gamma.GammaS = 1.15
         LogicielOptions.Gamma.GammaP = 1
 
-        LogicielOptions.Gamma.GammaM_fi = 1
+        LogicielOptions.Gamma.GammaM_fi_a = 1
         LogicielOptions.Gamma.GammaC_fi = 1
+        LogicielOptions.Gamma.GammaM_fi_s = 1
         LogicielOptions.Gamma.GammaV_fi = 1
 
         LogicielOptions.Gamma.GammaG_sup = 1.35
@@ -801,8 +802,9 @@ Imports PMXMoteur2
         LogicielOptions.Gamma.GammaS = 1.15
         LogicielOptions.Gamma.GammaP = 1
 
-        LogicielOptions.Gamma.GammaM_fi = 1
+        LogicielOptions.Gamma.GammaM_fi_a = 1
         LogicielOptions.Gamma.GammaC_fi = 1
+        LogicielOptions.Gamma.GammaM_fi_s = 1
         LogicielOptions.Gamma.GammaV_fi = 1
 
         LogicielOptions.Gamma.GammaG_sup = 1.35
@@ -1169,8 +1171,9 @@ Imports PMXMoteur2
         LogicielOptions.Gamma.GammaS = 1.15
         LogicielOptions.Gamma.GammaP = 1
 
-        LogicielOptions.Gamma.GammaM_fi = 1
+        LogicielOptions.Gamma.GammaM_fi_a = 1
         LogicielOptions.Gamma.GammaC_fi = 1
+        LogicielOptions.Gamma.GammaM_fi_s = 1
         LogicielOptions.Gamma.GammaV_fi = 1
 
         LogicielOptions.Gamma.GammaG_sup = 1.35
@@ -1918,8 +1921,9 @@ Imports PMXMoteur2
         LogicielOptions.Gamma.GammaS = 1.15
         LogicielOptions.Gamma.GammaP = 1
 
-        LogicielOptions.Gamma.GammaM_fi = 1
+        LogicielOptions.Gamma.GammaM_fi_a = 1
         LogicielOptions.Gamma.GammaC_fi = 1
+        LogicielOptions.Gamma.GammaM_fi_s = 1
         LogicielOptions.Gamma.GammaV_fi = 1
 
         LogicielOptions.Gamma.GammaG_sup = 1.35

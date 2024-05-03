@@ -131,11 +131,7 @@ Public Class cls_VerifFeuAcier
         DeltaT = myBeam.ParamFeu.DeltaTCalcul
         nbCombiELU = myBeam.CombiA_ELF.nbCombi
         lProtege = (myBeam.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
-        If lProtege And myBeam.ParamFeu.lProtectionBoard Then
-            Massivete = EN_Feu.MassiveteSectionAcierBoardP(myBeam.Section.ProfilA)
-        Else
-            Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
-        End If
+        Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
 
         If Not lProtege Then
             kSh = 0.9 * Massivete / EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee)
@@ -152,7 +148,7 @@ Public Class cls_VerifFeuAcier
         '# Propriétés à froid
 
         myBeam.ProprietesVerifAcier(True, MplRd0, zANP0, MelRd0, zANE0)
-        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi)
+        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi_a)
 
         '# Classes de la section
 
@@ -205,7 +201,7 @@ Public Class cls_VerifFeuAcier
             VplRdFeu(iSTep) = kReducY * VRd0
             MplRdFeu(iSTep) = kReducY * MplRd0
             MelRdFeu(iSTep) = kReducY * MelRd0
-            VbRdFeu(iSTep) = myBeam.Section.VbRdFeu(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW, lMontantR, kReducY, kReducE)
+            VbRdFeu(iSTep) = myBeam.Section.VbRdFeu(myBeam.Param.Gamma.GammaM_fi_a, myBeam.Param.EtaW, lMontantR, kReducY, kReducE)
 
         Next
 
@@ -515,7 +511,7 @@ Public Class cls_VerifFeuAcier
 
         '--> Initialisation
 
-        GammaMFi = myBeam.Param.Gamma.GammaM_fi
+        GammaMFi = myBeam.Param.Gamma.GammaM_fi_a
         MRk = MRd * GammaMFi
 
         '--> Calcul Alpha Critique

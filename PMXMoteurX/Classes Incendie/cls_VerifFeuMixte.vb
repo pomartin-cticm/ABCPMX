@@ -95,7 +95,6 @@
         Dim MassivFs As Decimal                 ' Massiveté de la semelle sup
         Dim MassivFi As Decimal                 ' Massiveté de la semelle inf
         Dim MassivW As Decimal                  ' Massiveté de l'âme
-        Dim MassivS As Decimal                  ' Massivete de la section globale
         Dim kSh As Decimal                      ' Facteur d'ombre de la section
 
         Dim iCombi As Integer
@@ -111,25 +110,13 @@
         Dim MelRdFeu() As Decimal               ' Moments résistants élastiques aux Time Steps
         Dim VplRdFeu() As Decimal               ' Efforts tranchant résistants plastiques aux Time Steps
 
-        Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
-        Dim lSimple As Boolean = myBeam.Param.lLargeurEfficaceSimplifiee
-        Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
-
-        Dim MplRdP() As Decimal = Nothing       ' Moments résistants plastiques le long de la barre
-        Dim zANPP() As Decimal = Nothing        ' Positions ANP le long de la barre
-        Dim MplRdM() As Decimal = Nothing       ' Moments résistants plastiques le long de la barre
-        Dim zANPM() As Decimal = Nothing        ' Positions ANP le long de la barre
-        Dim bEff() As Decimal = Nothing         ' Largeur efficace de la dalle
-
         '--( Paramètres pour la discrétisation de la dalle
 
         Dim NbTranches As Integer               ' Nombre de tranches discrétisant la dalle
         Dim EpTranche() As Decimal = Nothing    ' Epaisseur de chaque tranche (indice 0 pour la tranche inférieure)
         Dim zTranche() As Decimal = Nothing     ' Position z de la fibre moyenne de chaque tranche
-        Dim TempCTranche() As Decimal = Nothing ' Température de chaque tranche à un moment donné
+        Dim TempCTranche() As Decimal = Nothing ' Température de chaque tranche
         Dim EpDalle As Decimal                  ' Epaisseur de dalle constante utilisée pour le calcul
-
-        Dim TempCStep As New List(Of Decimal()) ' Temperature pour une time step dans chaque couche
 
         '--( Initialisation
 
@@ -144,7 +131,6 @@
         MassivFs = EN_Feu.MassiveteSemelleSup(myBeam.Section.ProfilA, lSsExposee)
         MassivFi = EN_Feu.MassiveteSemelleInf(myBeam.Section.ProfilA)
         MassivW = EN_Feu.MassiveteAme(myBeam.Section.ProfilA)
-        MassivS = EN_Feu.MassiveteSectionAcierBoardP(myBeam.Section.ProfilA)
 
         If Not lProtege Then
             kSh = EN_Feu.kShMixte(myBeam.Section.ProfilA)
@@ -154,15 +140,11 @@
         ReDim MelRdFeu(Me.NbStep - 1)
         ReDim VplRdFeu(Me.NbStep - 1)
 
-        Me.InitialiseClassePourCalcul(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee)
-
         If myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             EpDalle = EN_Feu.EpaisseurEfficaceDalleMixte(myBeam.Dalle.Ep_td, myBeam.Dalle.Bac)
         Else
             EpDalle = myBeam.Dalle.EpaisseurActive
         End If
-
-        myBeam.MaillageBeff(lSimple, False, bEff)
 
         '--( Préparation du maillage de la dalle
 
@@ -188,15 +170,7 @@
                 '# Calcul de l'échauffement de la section acier sur le pas de temps
 
                 If lProtege Then
-                    If lBoard Then
-                        TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivS, kSh, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempFi = TempFs
-                        TempW = TempFs
-                    Else
-                        TempFs += EN_Feu.DeltaTempAcierProtege(TempFs, TempG, MassivFs, kSh, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempFi += EN_Feu.DeltaTempAcierProtege(TempFi, TempG, MassivFs, kSh, TimeT, DeltaT, myBeam.ParamFeu)
-                        TempW += EN_Feu.DeltaTempAcierProtege(TempW, TempG, MassivFs, kSh, TimeT, DeltaT, myBeam.ParamFeu)
-                    End If
+
                 Else
                     TempFs += EN_Feu.DeltaTempAcierNonProtege(TempFs, TempG, MassivFs, kSh, DeltaT, myBeam.ParamFeu)
                     TempFi += EN_Feu.DeltaTempAcierNonProtege(TempFi, TempG, MassivFi, kSh, DeltaT, myBeam.ParamFeu)
@@ -227,13 +201,6 @@
                 EN_Feu.TemperatureDalleTabulee(TimeSteps(iSTep), myBeam.Param.lGeneration1, NbTranches, TempCTranche)
             End If
 
-            '# Récupération de la température dans la dalle
-
-            'For iTr As Integer = 0 To NbTranches - 1
-            '    TempCStep(iSTep, iTr) = TempCTranche(iTr)
-            'Next
-            TempCStep.Add(TempCTranche)
-
             '# Réduction des propriétés de l'acier en fct de la température
 
             kReducYFs = EN_Feu.ReducFyAcier(TempFs)
@@ -260,169 +227,26 @@
 
             '## Classification
 
-            For iSTep = 0 To Me.NbStep - 1
-                '## Calculs des moments plastiques en fct de la température
-
-                MaillagePropPlastiquesMixtes(myBeam, bEff, 1, True, lGeneration1, False,
-                                             TempFsStep(iSTep), TempFiStep(iSTep), TempWStep(iSTep),
-                                             NbTranches, zTranche, EpTranche, TempCStep(iSTep), MplRdP, zANPP)
-
-                '## Vérification en flexion
-
-                RunCritereFlexionMixte(myBeam, iCombi, iSTep, MEd, MplRdP, MplRdM)
-
-                '## Vérification à l'effort tranchant
-
-                'RunCriteresEffortTranchant(myBeam, iCombi, iSTep, VEd, VRd)
 
 
-            Next
+            '## Vérification en flexion
+
+            'RunCriteresMomentsPlastiques(myBeam, iCombi, iSTep, MEd, MRdPos, MRdNeg)
+
+            '## Vérification à l'effort tranchant
+
+            'RunCriteresEffortTranchant(myBeam, iCombi, iSTep, VEd, VRd)
+
         Next
 
-        '--( Recherche de la durée de résistance au feu
-
-        DureeResistanceAuFeu()
-
     End Sub
-
-    Private Sub DureeResistanceAuFeu()
-        '--------------------------------------------------------------------------------------------------------------------------
-        '   18/04/24 :  Création - POM
-        '--------------------------------------------------------------------------------------------------------------------------
-        '   Recherche du pas de calcul pour lequel tous les critères sont OK
-        '--------------------------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '--------------------------------------------------------------------------------------------------------------------------
-
-        '--( Déclaration
-
-        Dim lResist As Boolean
-
-        '--( Traitement
-
-        RStep = NbStep - 1
-        lResist = IsResistanceAuFeuOK(RStep)
-
-        Do While (Not lResist) And (Me.RStep >= 0)
-            Me.RStep -= 1
-            If Me.RStep >= 0 Then lResist = IsResistanceAuFeuOK(RStep)
-        Loop
-
-    End Sub
-
-    Private Function IsResistanceAuFeuOK(iStep As Integer) As Boolean
-        '--------------------------------------------------------------------------------------------------------------------------
-        '   18/04/24 :  Création - POM
-        '--------------------------------------------------------------------------------------------------------------------------
-        '   Recherche du pas de calcul pour lequel tous les critères sont OK
-        '--------------------------------------------------------------------------------------------------------------------------
-        '   iStep      [E] :   Indice du pas de temps de calcul
-        '--------------------------------------------------------------------------------------------------------------------------
-
-        '--( Déclarations
-
-        Dim lOK As Boolean = True
-
-        '--( Vérifications
-
-        If IsGreater(Me.CritereM(iStep).CritereMax, 1) Then lOK = False
-        If IsGreater(Me.CritereV(iStep).CritereMax, 1) Then lOK = False
-
-        Return lOK
-
-    End Function
 
 #End Region
 
 #Region " Propriétés des sections mixtes en fonction de la température "
 
-    Private Sub MaillagePropPlastiquesMixtes(myBeam As cls_Poutre, Beff() As Decimal, Signe As Decimal, lValRd As Boolean,
-                                             lGen1 As Boolean, lApplyBeta As Boolean, TempFs As Decimal, TempW As Decimal, TempFi As Decimal,
-                                             NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, TempC() As Decimal,
-                                             ByRef MplRd() As Decimal, ByRef zANP() As Decimal)
-        '---------------------------------------------------------------------------------------------
-        '   05/10/23 :  Création - POM
-        '---------------------------------------------------------------------------------------------
-        '   Calcul des moments plastiques le long de la poutre (sur les noeuds du modèle)
-        '---------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   Beff        [E] :   Largeur participante de dalle
-        '   Signe       [E] :   Signe du moment à considérer
-        '   lValRd      [E] :   Indique si valeurs de calcul
-        '   lGen1       [E] :   Indique si génération 1 des eurocodes
-        '   lApplyBeta  [E] :   Indique si on applique la réduction beta en moment >0
-        '   TempFs      [E] :   Température dans la semelle supérieure
-        '   TempFi      [E] :   Température dans la semelle inférieure
-        '   TempW       [E] :   Température de l'âme
-        '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
-        '   zTran       [E] :   Position de chaque tranche
-        '   eTran       [E] :   Epaisseur de chaque tranche
-        '   TempC       [E] :   Température de chaque tranche
-        '   MplRd       [S] :   Table des moments plastiques au droit des noeuds du modèle
-        '   zANP        [S] :   Table des position des ANP
-        '---------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim BeffPrec As Decimal = -1
-        Dim iNode As Integer
-        Dim Eta As Decimal = 1      '#ALERTE : à adapter sur chaque section
-        'Dim Beta As Decimal
-        Dim myEN1994 As New cls_Eurocodes
-        Dim zTop As Decimal
-        Dim lGene1 As Boolean = myBeam.Param.lGeneration1
-        Dim Nuance As String = myBeam.Section.Acier.Nuance
-        ' Dim lOKPl As Boolean
-        Dim kReducYFs As Decimal                ' Coefficient réduction limite d'élasticité en fct température de la semelle sup
-        Dim kReducYFi As Decimal                ' Coefficient réduction limite d'élasticité en fct température de la semelle inf
-        Dim kReducYW As Decimal                 ' Coefficient réduction limite d'élasticité en fct température de l'âme
-        Dim kReducC() As Decimal                ' Coefficient de réduction de Fc dans chaque tranche
-        Dim EN_Feu As New cls_EurocodesFeu
-        Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
-
-        '--> Initialisation
-
-        ReDim MplRd(myBeam.Nodes.nbNodes - 1)
-        ReDim zANP(myBeam.Nodes.nbNodes - 1)
-        zTop = myBeam.Dalle.zTop
-
-        kReducYFs = EN_Feu.ReducFyAcier(TempFs)
-        kReducYFi = EN_Feu.ReducFyAcier(TempFi)
-        kReducYW = EN_Feu.ReducFyAcier(TempW)
-
-        ReDim kReducC(NbTranches - 1)
-
-        For iTr As Integer = 0 To NbTranches - 1
-            kReducC(iTr) = EN_Feu.ReducFckBeton(TempC(iTr), lbetonl)
-        Next
-
-        '--> Boucle sur les noeuds pour récupérer le moment plastique 
-
-        For iNode = 0 To myBeam.Nodes.nbNodes - 1
-
-            If IsEqual(Beff(iNode), BeffPrec) Then
-                MplRd(iNode) = MplRd(iNode - 1)
-                zANP(iNode) = zANP(iNode - 1)
-            Else
-                If Signe > 0 Then
-                    Me.MomentPlastiquePlus(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma,
-                                           Beff(iNode), kReducYFs, kReducYFi, kReducYW,
-                                           NbTranches, zTran, eTran, kReducC, MplRd(iNode), zANP(iNode))
-                Else
-                End If
-
-                BeffPrec = Beff(iNode)
-
-            End If
-
-        Next
-
-    End Sub
-
     Private Sub MomentPlastiquePlus(mySection As cls_Section, myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
-                                    Beff As Decimal, reducKyFs As Decimal, reducKyFi As Decimal, reducKyW As Decimal,
-                                    NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, kRedCTr() As Decimal,
-                                    ByRef MplRd As Decimal, ByRef zANP As Decimal)
+                                    Beff As Decimal, reducKyFs As Decimal, reducKyFi As Decimal, reducKyW As Decimal, ByRef MplRd As Decimal, ByRef zANP As Decimal)
         '--------------------------------------------------------------------------------------------------------------------------
         '   18/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------
@@ -437,10 +261,6 @@
         '   reducKyFs   [E] :   Réduction de la limite d'élasticité de la semelle sup
         '   reducKyFi   [E] :   Réduction de la limite d'élasticité de la semelle inf
         '   reducKyW    [E] :   Réduction de la limite d'élasticité de l'âme
-        '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
-        '   zTran       [E] :   Position de chaque tranche
-        '   eTran       [E] :   Epaisseur de chaque tranche
-        '   kRedCTr     [E] :   Réduction de Fc dans chaque tranche
         '   MplRd       [S] :   Moment plastique de calcul
         '   zANP        [S] :   Position de l'ANP
         '--------------------------------------------------------------------------------------------------------------------------
@@ -456,7 +276,6 @@
         Const Signe As Decimal = 1
         Const lValeurRd As Boolean = True
         Const lMixte As Boolean = True
-        Dim nEqDalle As Decimal = 1
 
         '--> Initialisation
 
@@ -467,7 +286,7 @@
 
         '--> Modélisation du profilé acier
 
-        myModele.MaillageProfileA_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
+        myModele.MaillageProfileA_YY(Gammas.GammaM_fi_a, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
 
         ''--> Dalle béton
 
@@ -475,7 +294,7 @@
 
             '# Dalle 
 
-            myModele.MaillageDalleTranches(Gammas.GammaC_fi, myOptions.AlphaSlab, Beff, nEqDalle, myDalle, NbTranches, zTran, eTran, kRedCTr)
+            '    MaillageDalleMPlus(myDalle, myOptions, Gammas, mySection.ProfilA.Bfs, Beff, Time, myModele)
 
         End If
 
@@ -493,64 +312,5 @@
 #End Region
 
 
-#Region " Vérification de la résistance en section "
-
-    Private Sub RunCritereFlexionMixte(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer, MEd(,) As Decimal,
-                                       MplRdP() As Decimal, MplRdM() As Decimal)
-        '----------------------------------------------------------------------------------------------------------
-        '   20/10/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU de la résistance au moment fléchissant d'une poutre acier sans enrobage
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre traitée
-        '   iCombi      [E] :   Indice de la combinaison
-        '   iStep       [E] :   Indice du pas de calcul
-        '   MEd         [E] :   Table des moments fléchissants le long de la barre
-        '   MplRdP      [E] :   Moments résitants plastiques sous M>0
-        '   MPlRdM      [E] :   Moments résitants plastiques sous M<0
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclaration
-
-        Dim iNode, k As Integer
-        Dim iTravee, iDebT, iFinT As Integer
-        Dim iDebN, iFinN As Integer
-        Dim iDebK, iFinK As Integer
-        Dim MRd As Decimal
-        Const SIGNEM As Decimal = 1
-
-        '--> Initialisation
-
-        iDebT = myBeam.IndicePremiereTravee
-        iFinT = myBeam.IndiceDerniereTravee
-
-        '--> Traitement
-
-        For iTravee = iDebT To iFinT
-
-            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
-            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
-
-            For iNode = iDebN To iFinN
-                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
-                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
-
-                For k = iDebK To iFinK
-
-                    If MEd(iNode, k) * SIGNEM > 0 Then
-                        MRd = MplRdP(iNode)
-                    Else
-                        MRd = MplRdM(iNode)
-                    End If
-
-                    Me.CritereM(iStep).EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MRd)
-
-                Next
-            Next
-        Next
-
-    End Sub
-
-#End Region
 
 End Class

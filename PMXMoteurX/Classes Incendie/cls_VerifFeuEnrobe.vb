@@ -92,7 +92,7 @@ Public Class cls_VerifFeuEnrobe
             MaillagePropPlastiquesMixtes(myBeam, Beff, -1, cls_VerifFeuEnrobe.TimeSteps(iStep), MRdNeg, zNeg)
 
             VRd = ResistanceEffortTranchant(myBeam.Section.ProfilA, myBeam.Section.FyW, myBeam.Section.Enrobage.Ratio_bc,
-                                            myBeam.Param.Gamma.GammaM_fi, cls_VerifFeuEnrobe.TimeSteps(iStep))
+                                            myBeam.Param.Gamma.GammaM_fi_a, cls_VerifFeuEnrobe.TimeSteps(iStep))
 
             '# Boucle sur les combinaisons de calcul
 
@@ -633,7 +633,7 @@ Public Class cls_VerifFeuEnrobe
         '# Semelle supérieure
 
         LargBfs = myProfile.Bfs - 2 * EN1994_1_2.AnnexF_ReductionLargeurBfs(Time, myProfile.Tfs, myProfile.Bfs, myBc)
-        myModele.AddMaille(LargBfs * myProfile.Tfs, myProfile.Tfs, zRef - myProfile.Tfs / 2, 1, 1, 1, FySup, 1, Gammas.GammaM_fi)
+        myModele.AddMaille(LargBfs * myProfile.Tfs, myProfile.Tfs, zRef - myProfile.Tfs / 2, 1, 1, 1, FySup, 1, Gammas.GammaM_fi_a)
 
         '# Âme
 
@@ -642,7 +642,7 @@ Public Class cls_VerifFeuEnrobe
 
         '### Partie supérieure
         If IsGreater(Hwh, 0) Then
-            myModele.AddMaille(Hwh * myProfile.Tw, Hwh, zRef - myProfile.Tfs - Hwh / 2, 1, 1, 1, FyW, (1 - RhoV), Gammas.GammaM_fi)
+            myModele.AddMaille(Hwh * myProfile.Tw, Hwh, zRef - myProfile.Tfs - Hwh / 2, 1, 1, 1, FyW, (1 - RhoV), Gammas.GammaM_fi_a)
         End If
 
         '### Partie inférieure ' On discretise car la limite d'élasticité varie avec la position
@@ -652,12 +652,12 @@ Public Class cls_VerifFeuEnrobe
         For iHwi = 1 To NbHwi
             zHwi = (iHwi - 0.5) * Hwi
             Fywi = FyW * (1 - zHwi / Hwl * (1 - ReducKa))
-            myModele.AddMaille(Hwi * myProfile.Tw, Hwi, zRef - myProfile.Tfs - Hwh - Hwi / 2, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi)
+            myModele.AddMaille(Hwi * myProfile.Tw, Hwi, zRef - myProfile.Tfs - Hwh - Hwi / 2, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi_a)
         Next
 
         '# Semelle inférieure
 
-        myModele.AddMaille(myProfile.AireFi, myProfile.Tfi, zRef - myProfile.ha + myProfile.Tfi / 2, 1, 1, 1, ReducKa * FyInf, 1, Gammas.GammaM_fi)
+        myModele.AddMaille(myProfile.AireFi, myProfile.Tfi, zRef - myProfile.ha + myProfile.Tfi / 2, 1, 1, 1, ReducKa * FyInf, 1, Gammas.GammaM_fi_a)
 
         If myProfile.Rcs > 0 Then
 
@@ -672,7 +672,7 @@ Public Class cls_VerifFeuEnrobe
                 Fywi = FyW * (1 - zcG * (1 - ReducKa))
             End If
 
-            myModele.AddMailleConges(myProfile.Rcs, zRef - myProfile.Tfs, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi, cls_Maille.EnuTypeMaille.CongeSup)
+            myModele.AddMailleConges(myProfile.Rcs, zRef - myProfile.Tfs, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi_a, cls_Maille.EnuTypeMaille.CongeSup)
 
         End If
 
@@ -689,7 +689,7 @@ Public Class cls_VerifFeuEnrobe
                 Fywi = FyW
             End If
 
-            myModele.AddMailleConges(myProfile.Rci, zRef - myProfile.ha + myProfile.Tfi, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi, cls_Maille.EnuTypeMaille.CongeInf)
+            myModele.AddMailleConges(myProfile.Rci, zRef - myProfile.ha + myProfile.Tfi, 1, 1, 1, Fywi, (1 - RhoV), Gammas.GammaM_fi_a, cls_Maille.EnuTypeMaille.CongeInf)
 
         End If
 
@@ -905,7 +905,7 @@ Public Class cls_VerifFeuEnrobe
         '# Semelle supérieure
 
         LargBfs = myProfile.Bfs - 2 * EN1994_1_2.AnnexF_ReductionLargeurBfs(Time, myProfile.Tfs, myProfile.Bfs, myBc)
-        myModele.AddMaille(LargBfs * myProfile.Tfs, myProfile.Tfs, zRef - myProfile.Tfs / 2, 1, 1, 1, FySup, 1, Gammas.GammaM_fi)
+        myModele.AddMaille(LargBfs * myProfile.Tfs, myProfile.Tfs, zRef - myProfile.Tfs / 2, 1, 1, 1, FySup, 1, Gammas.GammaM_fi_a)
 
         '# Âme + Semelle inférieure
 
