@@ -125,7 +125,6 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Rz, ValRef))
     End Sub
 
-
     <TestMethod()> Public Sub TU_Poutre2AppuisAcierChargeConcentree()
         '---------------------------------------------------------------------------------------
         '   04/11/23 :  Création - POM 
