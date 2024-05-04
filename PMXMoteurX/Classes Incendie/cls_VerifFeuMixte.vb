@@ -121,6 +121,8 @@
         Dim zANPM() As Decimal = Nothing        ' Positions ANP le long de la barre
         Dim bEff() As Decimal = Nothing         ' Largeur efficace de la dalle
 
+        Dim VRd0 As Decimal
+
         '--( Paramètres pour la discrétisation de la dalle
 
         Dim NbTranches As Integer               ' Nombre de tranches discrétisant la dalle
@@ -158,8 +160,8 @@
             kSh = EN_Feu.kShMixte(myBeam.Section.ProfilA)
         End If
 
-        ReDim MplRdFeu(Me.NbStep - 1)
-        ReDim MelRdFeu(Me.NbStep - 1)
+        ' ReDim MplRdFeu(Me.NbStep - 1)
+        ' ReDim MelRdFeu(Me.NbStep - 1)
         ReDim VplRdFeu(Me.NbStep - 1)
 
         Me.InitialiseClassePourCalcul(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee)
@@ -171,6 +173,8 @@
         End If
 
         myBeam.MaillageBeff(lSimple, False, bEff)
+
+        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi)
 
         '--( Préparation du maillage de la dalle
 
@@ -247,7 +251,7 @@
 
             '# Résistance de la section 
 
-
+            VplRdFeu(iSTep) = kReducYW * VRd0
 
         Next
 
@@ -288,7 +292,7 @@
 
                 '## Vérification à l'effort tranchant
 
-                'RunCriteresEffortTranchant(myBeam, iCombi, iSTep, VEd, VRd)
+                RunCritereEffortTranchant(myBeam, iCombi, iSTep, VEd, VplRdFeu(iSTep))
 
 
             Next
@@ -624,6 +628,55 @@
 
                     Me.CritereM(iStep).EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MRd)
 
+                Next
+            Next
+        Next
+
+    End Sub
+
+
+    Private Sub RunCritereEffortTranchant(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer, VEd(,) As Decimal, VRd As Decimal, Optional lBuckling As Boolean = False)
+        '----------------------------------------------------------------------------------------------------------
+        '   25/04/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------
+        '   Vérification aux ELU de la résistance à l'effort tranchant 
+        '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   iCombi      [E] :   Indice de la combinaison
+        '   iStep       [E] :   Indice du pas de calcul
+        '   VEd         [E] :   Table des efforts tranchants le long de la barre
+        '   VRd         [E] :   Effort tranchant résistant (plastique ou voilement) de la barre
+        '   lBukling    [E] :   Indique si critere de résistance au voilement par cisaillement
+        '----------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim iNode, k As Integer
+        Dim iTravee, iDebT, iFinT As Integer
+        Dim iDebN, iFinN As Integer
+        Dim iDebK, iFinK As Integer
+
+        '--> Déclaration
+
+        iDebT = myBeam.IndicePremiereTravee
+        iFinT = myBeam.IndiceDerniereTravee
+
+        '--> Traitement
+
+        For iTravee = iDebT To iFinT
+            iDebN = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iFinN = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iDebN To iFinN
+                If (iNode = iDebN) Then iDebK = 1 Else iDebK = 0
+                If (iNode = iFinN) Then iFinK = 0 Else iFinK = 1
+
+                For k = iDebK To iFinK
+                    If lBuckling Then
+                        'Me.CritereVb.EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VRd)
+                    Else
+                        Me.CritereV(iStep).EnregistreCritere(iNode, iCombi, iTravee, VEd(iNode, k), VRd)
+                    End If
                 Next
             Next
         Next

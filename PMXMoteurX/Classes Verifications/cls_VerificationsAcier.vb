@@ -195,7 +195,6 @@ Public Class cls_VerificationsAcier
             VRd = VplRd
         End If
 
-
         '# Propriétés
 
         myBeam.ProprietesVerifAcier(True, MplRd, zANP, MelRd, zANE)

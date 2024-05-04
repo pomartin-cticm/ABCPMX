@@ -9754,6 +9754,7 @@ Module Mod_NoteCalcul
         '--( Synthèse des critères
 
         AfficheSyntheseCritere(myBeam.VerifFeuMixte.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
+        AfficheSyntheseCritere(myBeam.VerifFeuMixte.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
 
 
     End Sub
