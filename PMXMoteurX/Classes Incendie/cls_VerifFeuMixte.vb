@@ -131,6 +131,14 @@
 
         Dim TempCStep As New List(Of Decimal()) ' Temperature pour une time step dans chaque couche
 
+        '--( Paramètres analyse diagramme moments
+
+        Dim iNodeMmax() As Integer = Nothing
+        Dim Mmax() As Decimal = Nothing
+        Dim xMZero(,) As Decimal = Nothing
+        Dim lTraveeMomNeg() As Boolean = Nothing
+        Dim DeltaRd() As List(Of Decimal) = Nothing
+
         '--( Initialisation
 
         TempG = myBeam.ParamFeu.TempRef
@@ -154,11 +162,15 @@
         ReDim MelRdFeu(Me.NbStep - 1)
         ReDim VplRdFeu(Me.NbStep - 1)
 
+        Me.InitialiseClassePourCalcul(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee)
+
         If myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             EpDalle = EN_Feu.EpaisseurEfficaceDalleMixte(myBeam.Dalle.Ep_td, myBeam.Dalle.Bac)
         Else
             EpDalle = myBeam.Dalle.EpaisseurActive
         End If
+
+        myBeam.MaillageBeff(lSimple, False, bEff)
 
         '--( Préparation du maillage de la dalle
 
@@ -205,7 +217,6 @@
 
                 End If
 
-
                 '# 
 
                 lCont = IsSmaller(TimeT, TimeTarget)
@@ -251,6 +262,16 @@
             '## Combinaison des efforts tranchants
 
             myBeam.CombiA_ELF.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, False)
+
+            '# Analyse du diagramme de moment
+
+            myBeam.AnalyseDiagrammeMoments(MEd, iNodeMmax, Mmax, xMZero, lTraveeMomNeg)
+
+            '# Calcul des propriétés plastiques le long de la barre,
+            ' avec prise en compte de la connection,
+            ' sans prise en compte de la réduction induit par l'effort tranchant 
+
+            myBeam.MaillageRConnexion(xMZero, DeltaRd)
 
             '## Classification
 
