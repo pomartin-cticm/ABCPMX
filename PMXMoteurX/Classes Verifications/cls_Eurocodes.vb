@@ -452,7 +452,6 @@
                 myBeta = 1
         End Select
 
-
         Return myBeta
     End Function
 
