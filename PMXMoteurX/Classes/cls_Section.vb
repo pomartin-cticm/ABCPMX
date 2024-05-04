@@ -1433,9 +1433,10 @@ Public Class cls_Section
         Dim cfsup, tfsup, cfinf, tfinf, cplat, tplat As Decimal
         Dim epsilon_fsup As Decimal = Epsilon_Sup
         Dim epsilon_finf As Decimal = Epsilon_Inf
-        Dim epsilon_platSFB As Decimal = Me.Epsilon_Spd
+        Dim epsilon_platSFB As Decimal '= Me.Epsilon_Spd
         ' Dim alpha, psi As Decimal
 
+        If Me.lSlimFloor Then epsilon_platSFB = Me.Epsilon_Spd
         If lCalculFeu Then
             epsilon_fsup *= 0.85
             epsilon_finf *= 0.85

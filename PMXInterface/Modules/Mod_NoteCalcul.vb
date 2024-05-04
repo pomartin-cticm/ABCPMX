@@ -1686,7 +1686,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABVAR2 & BlocG("STEEL_RES_FACTORS") & TABVARL3 & BlocG("SLAB_RES_FACTORS") & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-M,fi,a\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi_a, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-M,fi,a\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         AddLigneNDC(TABVAR2 & "\Sg\s\-M0\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM0, Enu_TypeVariable.SansType, 3, 2, False) _
                   & TABVARL3 & "\Sg\s\-C\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaC, Enu_TypeVariable.SansType, 3, 2, False) _
@@ -1700,7 +1700,7 @@ Module Mod_NoteCalcul
                   & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-M,fi,s\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi_s, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-M,fi,s\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaS_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         If MyGamma.lGammaV_unique Then
             ChaineSlab = "\Sg\s\-V\="

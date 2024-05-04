@@ -211,9 +211,9 @@ Public Module Mod_Demarrage
             LogicielOptions.Gamma.GammaS = My.Settings.GammaS
             LogicielOptions.Gamma.GammaP = My.Settings.GammaP
 
-            LogicielOptions.Gamma.GammaM_fi_a = My.Settings.GammaM_fi_a
+            LogicielOptions.Gamma.GammaM_fi = My.Settings.GammaM_fi
             LogicielOptions.Gamma.GammaC_fi = My.Settings.GammaC_fi
-            LogicielOptions.Gamma.GammaM_fi_s = My.Settings.GammaM_fi_s
+            LogicielOptions.Gamma.GammaS_fi = My.Settings.GammaS_fi
             LogicielOptions.Gamma.GammaV_fi = My.Settings.GammaV_fi
 
             LogicielOptions.Gamma.GammaG_sup = My.Settings.GammaG_sup
@@ -527,7 +527,6 @@ Public Module Mod_Demarrage
         '--> Traitement
 
         TransfertProfileDeBase(MyPoutre.Section.ProfilA, MyPoutre.Section.ProfilA.Gamme, MyPoutre.Section.ProfilA.NomProfile, lOK)
-
 
         'AJOUT GUD
         ' --> Sécurité supplémentaire pour s'assurer que les valeurs qui n'ont pas de sens restent égales à 0

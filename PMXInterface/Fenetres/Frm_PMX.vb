@@ -1106,9 +1106,9 @@ Public Class Frm_PMX
         My.Settings.GammaP = LogicielOptions.Gamma.GammaP
         My.Settings.GammaVs = LogicielOptions.Gamma.GammaVs
         My.Settings.GammaVc = LogicielOptions.Gamma.GammaVc
-        My.Settings.GammaM_fi_a = LogicielOptions.Gamma.GammaM_fi_a
+        My.Settings.GammaM_fi = LogicielOptions.Gamma.GammaM_fi
         My.Settings.GammaC_fi = LogicielOptions.Gamma.GammaC_fi
-        My.Settings.GammaM_fi_s = LogicielOptions.Gamma.GammaM_fi_s
+        My.Settings.GammaS_fi = LogicielOptions.Gamma.GammaS_fi
         My.Settings.GammaV_fi = LogicielOptions.Gamma.GammaV_fi
         My.Settings.GammaG_sup = LogicielOptions.Gamma.GammaG_sup
         My.Settings.GammaG_inf = LogicielOptions.Gamma.GammaG_inf

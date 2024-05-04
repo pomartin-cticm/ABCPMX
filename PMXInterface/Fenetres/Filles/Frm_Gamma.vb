@@ -182,15 +182,14 @@ Public Class Frm_Gamma
             Me.txt_GammaS.Text = Format(.GammaS, formatGAMMA)
             Me.txt_GammaP.Text = Format(.GammaP, formatGAMMA)
 
-            Me.txt_GammaM_fi_a.Text = Format(.GammaM_fi_a, formatGAMMA)
+            Me.txt_GammaM_fi_a.Text = Format(.GammaM_fi, formatGAMMA)
             Me.txt_GammaC_fi.Text = Format(.GammaC_fi, formatGAMMA)
-            Me.txt_GammaM_fi_s.Text = Format(.GammaM_fi_s, formatGAMMA)
+            Me.txt_GammaM_fi_s.Text = Format(.GammaS_fi, formatGAMMA)
             Me.txt_GammaV_fi.Text = Format(.GammaV_fi, formatGAMMA)
 
         End With
 
         MAJI_GammaV_Unique()
-
 
     End Sub
 
@@ -265,9 +264,9 @@ Public Class Frm_Gamma
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaS, .GammaS, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaP, .GammaP, lModif)
 
-            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi_a, .GammaM_fi_a, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi, .GammaM_fi, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaC_fi, .GammaC_fi, lModif)
-            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi_s, .GammaM_fi_s, lModif)
+            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaS_fi, .GammaS_fi, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaV_fi, .GammaV_fi, lModif)
 
         End With
@@ -551,11 +550,11 @@ Public Class Frm_Gamma
                     Case txt_GammaP.Name
                         .GammaP = ValeurUI
                     Case txt_GammaM_fi_a.Name
-                        .GammaM_fi_a = ValeurUI
+                        .GammaM_fi = ValeurUI
                     Case txt_GammaC_fi.Name
                         .GammaC_fi = ValeurUI
                     Case txt_GammaM_fi_s.Name
-                        .GammaM_fi_s = ValeurUI
+                        .GammaS_fi = ValeurUI
                     Case txt_GammaV_fi.Name
                         .GammaV_fi = ValeurUI
                 End Select
@@ -629,9 +628,9 @@ Public Class Frm_Gamma
         Me.txt_GammaS.Text = Format(LogicielOptions.Gamma.GammaS, formatGAMMA)
         Me.txt_GammaP.Text = Format(LogicielOptions.Gamma.GammaP, formatGAMMA)
 
-        Me.txt_GammaM_fi_a.Text = Format(LogicielOptions.Gamma.GammaM_fi_a, formatGAMMA)
+        Me.txt_GammaM_fi_a.Text = Format(LogicielOptions.Gamma.GammaM_fi, formatGAMMA)
         Me.txt_GammaC_fi.Text = Format(LogicielOptions.Gamma.GammaC_fi, formatGAMMA)
-        Me.txt_GammaM_fi_s.Text = Format(LogicielOptions.Gamma.GammaM_fi_s, formatGAMMA)
+        Me.txt_GammaM_fi_s.Text = Format(LogicielOptions.Gamma.GammaS_fi, formatGAMMA)
         Me.txt_GammaV_fi.Text = Format(LogicielOptions.Gamma.GammaV_fi, formatGAMMA)
 
     End Sub

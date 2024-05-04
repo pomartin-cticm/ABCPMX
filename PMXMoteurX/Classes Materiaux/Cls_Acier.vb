@@ -331,6 +331,82 @@ Public Class cls_Acier
 
     End Sub
 
+
+    Public Sub InitialiseAcierS275EC3()
+        '------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '------------------------------------------------------------------------------------------
+        '   Initialisation d'un acier S275 EC3 pour les tests unitaires (pas d'accès à la base de données)
+        '------------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyPlage As strucPlage
+
+        '--> Initialisations
+
+        Me.Plages.Clear()
+
+        Me.Nuance = "S275"
+
+        Me.Qualite = "EC3"
+        Me.NormeProduit = "EN 1993-1-1"
+        Me.Reduction = "Table 3.1"
+
+
+        Me.EpMax = 0.08
+
+        MyPlage.Ep = 0.003
+        MyPlage.Fu = 370
+        MyPlage.Fy = 275
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.04
+        MyPlage.Fu = 360
+        MyPlage.Fy = 255
+        Me.Plages.Add(MyPlage)
+
+    End Sub
+
+
+    Public Sub InitialiseAcierS235EC3()
+        '------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '------------------------------------------------------------------------------------------
+        '   Initialisation d'un acier S275 EC3 pour les tests unitaires (pas d'accès à la base de données)
+        '------------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyPlage As strucPlage
+
+        '--> Initialisations
+
+        Me.Plages.Clear()
+
+        Me.Nuance = "S235"
+
+        Me.Qualite = "EC3"
+        Me.NormeProduit = "EN 1993-1-1"
+        Me.Reduction = "Table 3.1"
+
+
+        Me.EpMax = 0.08
+
+        MyPlage.Ep = 0.003
+        MyPlage.Fu = 360
+        MyPlage.Fy = 235
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.04
+        MyPlage.Fu = 360
+        MyPlage.Fy = 215
+        Me.Plages.Add(MyPlage)
+
+    End Sub
+
 #End Region
 
 #Region " Ecriture Fichier "

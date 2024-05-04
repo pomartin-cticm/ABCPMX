@@ -110,9 +110,9 @@
         Me.txt_GammaP.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaP, formatGAMMA)
 
         '--> Incendie
-        Me.txt_GammaM_fi_a.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaM_fi_a, formatGAMMA)
+        Me.txt_GammaM_fi_a.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaM_fi, formatGAMMA)
         Me.txt_GammaC_fi.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaC_fi, formatGAMMA)
-        Me.txt_GammaM_fi_s.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaM_fi_s, formatGAMMA)
+        Me.txt_GammaM_fi_s.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaS_fi, formatGAMMA)
         Me.txt_GammaV_fi.Text = Format(Frm_OptionsCalcul.GammaLoc.GammaV_fi, formatGAMMA)
 
     End Sub
@@ -306,11 +306,11 @@
                 Case txt_GammaP.Name
                     Frm_OptionsCalcul.GammaLoc.GammaP = ValeurUI
                 Case txt_GammaM_fi_a.Name
-                    Frm_OptionsCalcul.GammaLoc.GammaM_fi_a = ValeurUI
+                    Frm_OptionsCalcul.GammaLoc.GammaM_fi = ValeurUI
                 Case txt_GammaC_fi.Name
                     Frm_OptionsCalcul.GammaLoc.GammaC_fi = ValeurUI
                 Case txt_GammaM_fi_s.Name
-                    Frm_OptionsCalcul.GammaLoc.GammaM_fi_s = ValeurUI
+                    Frm_OptionsCalcul.GammaLoc.GammaS_fi = ValeurUI
                 Case txt_GammaV_fi.Name
                     Frm_OptionsCalcul.GammaLoc.GammaV_fi = ValeurUI
             End Select
