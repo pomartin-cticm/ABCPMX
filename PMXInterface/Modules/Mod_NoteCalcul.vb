@@ -9757,7 +9757,7 @@ Module Mod_NoteCalcul
             myStep = 0
         Else
             myStep = myBeam.VerifFeuMixte.RStep
-            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuEnrobe.TimeSteps(myStep)))
+            AddLigneNDC(TABW2 & BlocFEU("TIMERESISTANCE") & TABAFF & "R" & CStr(cls_VerifFeuMixte.TimeSteps(myStep)))
         End If
 
         '--( Synthèse des critères
@@ -9785,6 +9785,7 @@ Module Mod_NoteCalcul
         Dim iStep As Integer
         Dim lBuckling As Boolean = IsGreater(myBeam.VerifFeuMixte.ElancementW, myBeam.VerifFeuMixte.ElancementWMax)
         Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
+        Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
 
         '--( Titre
 
@@ -9793,8 +9794,8 @@ Module Mod_NoteCalcul
         '## Tableau des températures
 
         EnteteTableauTempVerifFeuMixte(NCOL, LargCol, lBoard)
-        For iStep = 0 To cls_VerifFeuAcier.TimeSteps.GetUpperBound(0)
-            'LigneTableauVerifFeuAcier(iStep, myBeam.VerifFeuAcier, NCOL, LargCol, lBuckling)
+        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
+            LigneTableauTempVerifFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBoard, lBetonL)
         Next
         FinTableau()
 
@@ -9807,7 +9808,7 @@ Module Mod_NoteCalcul
 
         '--( Remplissage tableau
 
-        For iStep = 0 To cls_VerifFeuAcier.TimeSteps.GetUpperBound(0)
+        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
             'LigneTableauVerifFeuAcier(iStep, myBeam.VerifFeuAcier, NCOL, LargCol, lBuckling)
         Next
 
@@ -9843,6 +9844,7 @@ Module Mod_NoteCalcul
         '--( Initialisation
 
         NCOL = 11
+        If lUni Then NCOL -= 4
 
         ReDim LargCol(1)
 
@@ -9862,16 +9864,21 @@ Module Mod_NoteCalcul
 
         AddCelluleFond(LargCol(0), BordSup, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
 
-        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-fs\=")
-        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+        If lUni Then
+            AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-a\=")
+            AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+        Else
+            AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-fs\=")
+            AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
 
-        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-fi\=")
-        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+            AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-fi\=")
+            AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
 
-        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-w\=")
-        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+            AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-w\=")
+            AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+        End If
 
-        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-cs\=")
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-ci\=")
         AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "\Sq\s\-cs\=")
 
         AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-v\=")
@@ -9881,24 +9888,30 @@ Module Mod_NoteCalcul
 
         AddCelluleFond(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
 
-        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
-        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
+        If lUni Then
+            AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+            AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
+        Else
+            AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+            AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
 
-        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
-        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
+            AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+            AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
 
-        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
-        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
+            AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+            AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
+        End If
 
-        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "k\-cs,\Sq\s\=")
-        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-ci,\Sq\s\=")
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "k\-ci,\Sq\s\=")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-cs,\Sq\s\=")
 
-        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "\Sq\s\-c\=")
         AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-c,\Sq\s\=")
 
     End Sub
 
-    Private Sub LigneTableauTempVerifFeuMixte(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single, lUni As Boolean)
+    Private Sub LigneTableauTempVerifFeuMixte(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single,
+                                              lUni As Boolean, lBetonL As Boolean)
         '-----------------------------------------------------------------------------------------------------------------
         '   04/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -9911,6 +9924,7 @@ Module Mod_NoteCalcul
         '   NCOL        [E] :   Nombre de colonnes dans le tableau
         '   LargCol     [E] :   Largeur des colonnes du tab
         '   lUni        [E] :   Indique si température uniforme du profilé
+        '   lBetonL     [E] :   Indique si béton léger
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -9931,20 +9945,49 @@ Module Mod_NoteCalcul
 
         AddCellule(LargCol(0), BordSup, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+        If lUni Then
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+        Else
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFiStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFiStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFiStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFiStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempWStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempWStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+        End If
 
         AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, True))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, True))
 
         AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
         AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
+
+        If lUni Then
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+        Else
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
+
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
+
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+        End If
+
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
 
     End Sub
 

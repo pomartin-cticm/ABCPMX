@@ -502,11 +502,11 @@
         DeltaG = Me.TemperatureGazISO(TimeT + DeltaT) - TempG
         Phi = cP * RhoP / (cA * RhoA) * myParamFeu.EpProtection * Massivete
 
-        DeltaTempA = LambdaP * Massivete / (cA * RhoA) / (1 + Phi / 3) * (TempG - TempA) * DeltaT - (Math.Exp(Phi / 10) - 1) * deltag
+        DeltaTempA = LambdaP * Massivete / (cA * RhoA) / (1 + Phi / 3) * (TempG - TempA) * DeltaT - (Math.Exp(Phi / 10) - 1) * DeltaG
 
         '--( 
 
-        Return DeltaTempA
+        Return Math.Max(0, DeltaTempA)
 
     End Function
 

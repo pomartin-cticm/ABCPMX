@@ -19,7 +19,8 @@
     Public TempFsStep() As Decimal                      ' Température de la semelle supérieure pour les Steps
     Public TempFiStep() As Decimal                      ' Température de la semelle inférieure pour les Steps
     Public TempWStep() As Decimal                       ' Température de l'âme pour les Steps
-    Public TempVStep() As Decimal                       ' Température des connecteurs pour les Steps
+    Public TempVStep() As Decimal                       ' Température des connecteurs pour les Steps (partie acier)
+    Public TempVcStep() As Decimal                      ' Température des connecteurs pour les Steps (partie béton)
 
     Public TempDalleStep(,) As Decimal                  ' Température des deux faces de la dalle pour les Steps
 
@@ -31,7 +32,7 @@
 #Region " Constructeurs "
 
     Public Sub New()
-        Me.NbStep = cls_VerifFeuEnrobe.TimeSteps.GetUpperBound(0) + 1
+        Me.NbStep = cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1
         Me.RStep = -1
     End Sub
 
@@ -60,6 +61,7 @@
         ReDim TempFiStep(Me.NbStep - 1)
         ReDim TempWStep(Me.NbStep - 1)
         ReDim TempVStep(Me.NbStep - 1)
+        ReDim TempVcStep(Me.NbStep - 1)
 
         ReDim TempDalleStep(Me.NbStep - 1, 1)
 
@@ -237,6 +239,8 @@
             TempFsStep(iSTep) = TempFs
             TempFiStep(iSTep) = TempFi
             TempWStep(iSTep) = TempW
+            TempVStep(iSTep) = Math.Max(0.8 * TempFs, myBeam.ParamFeu.TempRef)
+            TempVcStep(iSTep) = Math.Max(0.4 * TempFs, myBeam.ParamFeu.TempRef)
 
             '# Calcul des températures dans le béton dans le cas de la méthode tabulée
 
@@ -246,6 +250,8 @@
 
             '# Récupération de la température dans la dalle
 
+            TempDalleStep(iSTep, 0) = TempCTranche(0)
+            TempDalleStep(iSTep, 1) = TempCTranche(NbTranches - 1)
             TempCStep.Add(TempCTranche)
 
             '# Réduction des propriétés de l'acier en fct de la température
