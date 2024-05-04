@@ -9363,6 +9363,8 @@ Module Mod_NoteCalcul
 
 #Region "***Edition des vérifications au feu***"
 
+    '######### GENERAL ###################################################################################################
+
     Private Sub ACC_EditionVerificationsFEU(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
@@ -9390,6 +9392,26 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub EditionVerificationsFEUSynthese(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   19/04/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la synthèse des calculs au feu
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre Calculée au feu
+        '-----------------------------------------------------------------------------------------------------------------
+
+        Select Case myBeam.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul
+                EditionVerificationsFEUSyntheseAcier(myBeam)
+            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
+                EditionVerificationsFEUSyntheseEnrobe(myBeam)
+            Case cls_Section.Enum_TypeSection.Mixte
+                EditionVerificationsFEUSyntheseMixte(myBeam)
+        End Select
+
+    End Sub
+
     Private Sub EditionVerificationsFEUDetail(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
@@ -9405,17 +9427,19 @@ Module Mod_NoteCalcul
             Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
                 EditionVerificationsFEUDetailEnrobe(myBeam)
             Case cls_Section.Enum_TypeSection.Mixte
-                'EditionVerificationsFEUSyntheseMixte(myBeam)
+                EditionVerificationsFEUDetailMixte(myBeam)
         End Select
 
     End Sub
+
+    '######### ACIER #####################################################################################################
 
     Private Sub EditionVerificationsFEUDetailAcier(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
         '   Edition de la vérification détaillée des calculs au feu
-        '   Pour les poutres partiellement enrobée de béton (acier ou mixte)
+        '   Pour les poutres acier
         '-----------------------------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre
         '-----------------------------------------------------------------------------------------------------------------
@@ -9500,7 +9524,7 @@ Module Mod_NoteCalcul
         '   19/04/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
         '   Edition de la vérification détaillée des calculs au feu
-        '   Pour les poutres partiellement enrobée de béton (acier ou mixte)
+        '   Pour les poutres en acier 
         '   Ligne du tableau
         '-----------------------------------------------------------------------------------------------------------------
         '   iStep       [E] :   Indice du pas de temps
@@ -9540,6 +9564,8 @@ Module Mod_NoteCalcul
         AddCellule(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
 
     End Sub
+
+    '######### ENROBE ####################################################################################################
 
     Private Sub EditionVerificationsFEUDetailEnrobe(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
@@ -9635,25 +9661,6 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EditionVerificationsFEUSynthese(myBeam As cls_Poutre)
-        '-----------------------------------------------------------------------------------------------------------------
-        '   19/04/24 :  Création - POM
-        '-----------------------------------------------------------------------------------------------------------------
-        '   Edition de la synthèse des calculs au feu
-        '-----------------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre Calculée au feu
-        '-----------------------------------------------------------------------------------------------------------------
-
-        Select Case myBeam.Section.TypeSection
-            Case cls_Section.Enum_TypeSection.AcierSeul
-                EditionVerificationsFEUSyntheseAcier(myBeam)
-            Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
-                EditionVerificationsFEUSyntheseEnrobe(myBeam)
-            Case cls_Section.Enum_TypeSection.Mixte
-                EditionVerificationsFEUSyntheseMixte(myBeam)
-        End Select
-
-    End Sub
 
     Private Sub EditionVerificationsFEUSyntheseEnrobe(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
@@ -9725,6 +9732,8 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    '######### MIXTE #####################################################################################################
+
     Private Sub EditionVerificationsFEUSyntheseMixte(myBeam As cls_Poutre)
         '-----------------------------------------------------------------------------------------------------------------
         '   19/04/24 :  Création - POM
@@ -9756,9 +9765,282 @@ Module Mod_NoteCalcul
         AfficheSyntheseCritere(myBeam.VerifFeuMixte.CritereM(myStep), "\SG\s\-M\=", BlocELU("M_CRITERIA"), True)
         AfficheSyntheseCritere(myBeam.VerifFeuMixte.CritereV(myStep), "\SG\s\-V\=", BlocELU("V_CRITERIA"), True)
 
+    End Sub
+
+
+    Private Sub EditionVerificationsFEUDetailMixte(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim iStep As Integer
+        Dim lBuckling As Boolean = IsGreater(myBeam.VerifFeuMixte.ElancementW, myBeam.VerifFeuMixte.ElancementWMax)
+        Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
+
+        '--( Titre
+
+        AddTitreNdC(2, BlocFEU("FIRE_CHECKS_DETAIL"))
+
+        '## Tableau des températures
+
+        EnteteTableauTempVerifFeuMixte(NCOL, LargCol, lBoard)
+        For iStep = 0 To cls_VerifFeuAcier.TimeSteps.GetUpperBound(0)
+            'LigneTableauVerifFeuAcier(iStep, myBeam.VerifFeuAcier, NCOL, LargCol, lBuckling)
+        Next
+        FinTableau()
+
+        Exit Sub
+        '## Tableau des critères de résistance
+
+        '--( Entete du tableau
+
+        EnteteTableauVerifFeuMixte(NCOL, LargCol, lBuckling)
+
+        '--( Remplissage tableau
+
+        For iStep = 0 To cls_VerifFeuAcier.TimeSteps.GetUpperBound(0)
+            'LigneTableauVerifFeuAcier(iStep, myBeam.VerifFeuAcier, NCOL, LargCol, lBuckling)
+        Next
+
+        '--( Fin
+
+        FinTableau()
 
     End Sub
 
+    Private Sub EnteteTableauTempVerifFeuMixte(ByRef NCOL As Integer, ByRef LargCol() As Single, lUni As Boolean)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Entête du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '   lUni        [E] :   Indique si température uniforme du profilé
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim BordSup As Integer = Bordures.Tous - Bordures.Bas
+        Dim BordSupG As Integer = Bordures.Tous - Bordures.Bas - Bordures.Droite
+        Dim BordSupD As Integer = Bordures.Tous - Bordures.Bas - Bordures.Gauche
+
+        Dim Bordinf As Integer = Bordures.Tous - Bordures.Haut
+        Dim BordinfG As Integer = Bordures.Tous - Bordures.Haut - Bordures.Droite
+        Dim BordinfD As Integer = Bordures.Tous - Bordures.Haut - Bordures.Gauche
+
+        '--( Initialisation
+
+        NCOL = 11
+
+        ReDim LargCol(1)
+
+        LargCol(0) = 10
+        LargCol(1) = 7
+        'For i As Integer = 1 To NCOL - 1
+        '    LargCol(i) = 7
+        'Next
+
+        Const POS As Integer = 10
+
+        '--( Affichage de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), BordSup, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-fs\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-fi\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-w\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-cs\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "\Sq\s\-cs\=")
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-v\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-u,\Sq\s\=")
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "k\-cs,\Sq\s\=")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-ci,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-c,\Sq\s\=")
+
+    End Sub
+
+    Private Sub LigneTableauTempVerifFeuMixte(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single, lUni As Boolean)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Ligne du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '   lUni        [E] :   Indique si température uniforme du profilé
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim BordSup As Integer = Bordures.Tous - Bordures.Bas
+        Dim BordSupG As Integer = Bordures.Tous - Bordures.Bas - Bordures.Droite
+        Dim BordSupD As Integer = Bordures.Tous - Bordures.Bas - Bordures.Gauche
+
+        Dim Bordinf As Integer = Bordures.Tous - Bordures.Haut
+        Dim BordinfG As Integer = Bordures.Tous - Bordures.Haut - Bordures.Droite
+        Dim BordinfD As Integer = Bordures.Tous - Bordures.Haut - Bordures.Gauche
+
+        Dim EN_Feu As New cls_EurocodesFeu
+
+        '--( Ligne
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), BordSup, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFiStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFiStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempWStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, True))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+
+    End Sub
+
+    Private Sub EnteteTableauVerifFeuMixte(ByRef NCOL As Integer, ByRef LargCol() As Single, lBuckling As Boolean)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Entête du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '   lbuckling   [E] :   Indique si voilement par cisaillement
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Initialisation
+
+        NCOL = 7
+        If lBuckling Then NCOL += 1
+
+        ReDim LargCol(NCOL - 1)
+
+        LargCol(0) = 15
+        For i As Integer = 1 To NCOL - 1
+            LargCol(i) = 8
+        Next
+
+        Const POS As Integer = 10
+
+        '--( Affichage de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-a\=")
+        AddCelluleFond(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+        AddCelluleFond(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
+        AddCelluleFond(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+        If lBuckling Then
+            AddCelluleFond(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-Vb\=")
+            AddCelluleFond(LargCol(7), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LT\=")
+        Else
+            AddCelluleFond(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LT\=")
+        End If
+
+    End Sub
+
+    Private Sub LigneTableauVerifFeuMixte(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single, lBuckling As Boolean)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Ligne du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '   lbuckling   [E] :   Indique si voilement par cisaillement
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim kY, kE As Decimal
+        Dim EN_Feu As New cls_EurocodesFeu
+
+        Dim iCol As Integer = 6
+
+        '--( Initialisation
+
+        'kY = EN_Feu.ReducFyAcier(myVerifFeu.TempAStep(iStep))
+        'kE = EN_Feu.ReducEyAcier(myVerifFeu.TempAStep(iStep))
+
+        '--( Affichage
+
+        '   InitialiseLigneTableau(NCOL, HLIGNE)
+
+        'AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
+        'AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempAStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        'AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kY, Enu_TypeVariable.SansType, 3, 2, False))
+        'AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kE, Enu_TypeVariable.SansType, 3, 2, False))
+
+        'AddCellule(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        'AddCellule(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        'If lBuckling Then
+        '    AddCellule(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        '    iCol = 7
+        'End If
+        'AddCellule(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+
+    End Sub
 
 #End Region
 

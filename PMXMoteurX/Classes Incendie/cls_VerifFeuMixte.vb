@@ -16,11 +16,15 @@
 
     Public RStep As Integer                             ' Indice du dernier pas de calcul de la table TimeStep pour laquelle tous les critères sont OK
 
-    Dim TempFsStep() As Decimal                         ' Température de la semelle supérieure pour les Steps
-    Dim TempFiStep() As Decimal                         ' Température de la semelle inférieure pour les Steps
-    Dim TempWStep() As Decimal                          ' Température de l'âme pour les Steps
+    Public TempFsStep() As Decimal                      ' Température de la semelle supérieure pour les Steps
+    Public TempFiStep() As Decimal                      ' Température de la semelle inférieure pour les Steps
+    Public TempWStep() As Decimal                       ' Température de l'âme pour les Steps
+    Public TempVStep() As Decimal                       ' Température des connecteurs pour les Steps
 
-    Dim TempDalleStep(,) As Decimal                     ' Température des deux faces de la dalle pour les Steps
+    Public TempDalleStep(,) As Decimal                  ' Température des deux faces de la dalle pour les Steps
+
+    Public ElancementW As Decimal                       ' Elancement de l'âme 
+    Public ElancementWMax As Decimal                    ' Limite d'elancement de l'âme pour le voilement par cisaillement
 
 #End Region
 
@@ -55,6 +59,7 @@
         ReDim TempFsStep(Me.NbStep - 1)
         ReDim TempFiStep(Me.NbStep - 1)
         ReDim TempWStep(Me.NbStep - 1)
+        ReDim TempVStep(Me.NbStep - 1)
 
         ReDim TempDalleStep(Me.NbStep - 1, 1)
 
@@ -107,8 +112,8 @@
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
 
-        Dim MplRdFeu() As Decimal               ' Moments résistants plastiques aux Time Steps
-        Dim MelRdFeu() As Decimal               ' Moments résistants élastiques aux Time Steps
+        ' Dim MplRdFeu() As Decimal               ' Moments résistants plastiques aux Time Steps
+        ' Dim MelRdFeu() As Decimal               ' Moments résistants élastiques aux Time Steps
         Dim VplRdFeu() As Decimal               ' Efforts tranchant résistants plastiques aux Time Steps
 
         Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
