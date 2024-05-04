@@ -194,6 +194,23 @@ Public Class cls_Bac
 
 
     Public Sub InitialiseCofraPlus60()
+
+        Me.Bb = 0.062
+        Me.Bt = 0.101
+        Me.h_rs = 0
+        Me.Hp = 0.058
+        Me.Ep = 0.207
+        Me.LargeurModule = 1.035
+        Me.Ieff = 60.08 / 10 ^ 8
+        Me.msurf = 11.37
+        Me.fyp = 350
+
+        Me.Etiquette = "Cofraplus_60 1.00"
+
+    End Sub
+
+    Public Sub InitialiseCofraPlus60_075()
+
         Me.Bb = 0.062
         Me.Bt = 0.101
         Me.h_rs = 0
@@ -201,10 +218,13 @@ Public Class cls_Bac
         Me.Ep = 0.207
         Me.LargeurModule = 1.035
         Me.Ieff = 44.37 / 10 ^ 8
+        Me.msurf = 8.53                 ' 8.53 kg/m2
+        Me.fyp = 350
 
-        Me.Etiquette = "Cofraplus_60 1.00"
+        Me.Etiquette = "Cofraplus_60 0.75"
 
     End Sub
+
 
 #End Region
 
