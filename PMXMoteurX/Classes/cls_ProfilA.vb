@@ -1345,6 +1345,26 @@ Public Class cls_ProfilA
         Me.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
 
     End Sub
+
+    Public Sub GenereProfileIPE500A()
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   Génération d'un profilé laminé IPE 500A
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        Me.ha = 0.497
+        Me.Bfi = 0.2
+        Me.Bfs = 0.2
+        Me.Tfi = 0.0145
+        Me.Tfs = 0.0145
+        Me.Tw = 0.0084
+        Me.Rci = 0.021
+        Me.Rcs = 0.021
+        Me.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+
+    End Sub
+
 #End Region
 
 #Region " Fonctions de copie "

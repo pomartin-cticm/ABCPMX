@@ -210,6 +210,7 @@
 
         lCombiClass3 = False
         lCombiClass4 = False
+        lEnrob = myBeam.lEnrobage
 
         '# Degré de connexion
 
