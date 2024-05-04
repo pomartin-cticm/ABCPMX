@@ -9799,7 +9799,6 @@ Module Mod_NoteCalcul
         Next
         FinTableau()
 
-        Exit Sub
         '## Tableau des critères de résistance
 
         '--( Entete du tableau
@@ -9809,7 +9808,7 @@ Module Mod_NoteCalcul
         '--( Remplissage tableau
 
         For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
-            'LigneTableauVerifFeuAcier(iStep, myBeam.VerifFeuAcier, NCOL, LargCol, lBuckling)
+            LigneTableauVerifFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBuckling)
         Next
 
         '--( Fin
@@ -10006,15 +10005,13 @@ Module Mod_NoteCalcul
 
         '--( Initialisation
 
-        NCOL = 7
+        NCOL = 3
         If lBuckling Then NCOL += 1
 
-        ReDim LargCol(NCOL - 1)
+        ReDim LargCol(2)
 
         LargCol(0) = 15
-        For i As Integer = 1 To NCOL - 1
-            LargCol(i) = 8
-        Next
+        LargCol(1) = 8
 
         Const POS As Integer = 10
 
@@ -10025,16 +10022,11 @@ Module Mod_NoteCalcul
         InitialiseLigneTableau(NCOL, HLIGNEENTETE)
 
         AddCelluleFond(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
-        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\Sq\s\-a\=")
-        AddCelluleFond(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
-        AddCelluleFond(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
-        AddCelluleFond(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
-        AddCelluleFond(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
+
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-M\=")
+        AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-V\=")
         If lBuckling Then
-            AddCelluleFond(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-Vb\=")
-            AddCelluleFond(LargCol(7), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LT\=")
-        Else
-            AddCelluleFond(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-LT\=")
+            AddCelluleFond(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, "\SG\s\-Vb\=")
         End If
 
     End Sub
@@ -10056,32 +10048,18 @@ Module Mod_NoteCalcul
 
         '--( Déclaration
 
-        Dim kY, kE As Decimal
-        Dim EN_Feu As New cls_EurocodesFeu
-
-        Dim iCol As Integer = 6
-
-        '--( Initialisation
-
-        'kY = EN_Feu.ReducFyAcier(myVerifFeu.TempAStep(iStep))
-        'kE = EN_Feu.ReducEyAcier(myVerifFeu.TempAStep(iStep))
 
         '--( Affichage
 
-        '   InitialiseLigneTableau(NCOL, HLIGNE)
+        InitialiseLigneTableau(NCOL, HLIGNE)
 
-        'AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
-        'AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempAStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-        'AddCellule(LargCol(2), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kY, Enu_TypeVariable.SansType, 3, 2, False))
-        'AddCellule(LargCol(3), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(kE, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(0), Bordures.Tous, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
 
-        'AddCellule(LargCol(4), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
-        'AddCellule(LargCol(5), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
-        'If lBuckling Then
-        '    AddCellule(LargCol(6), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
-        '    iCol = 7
-        'End If
-        'AddCellule(LargCol(iCol), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereLTB(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereM(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereV(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        If lBuckling Then
+            AddCellule(LargCol(1), Bordures.Tous, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.CritereVb(iStep).CritereMax, Enu_TypeVariable.SansType, 3, 2, False))
+        End If
 
     End Sub
 

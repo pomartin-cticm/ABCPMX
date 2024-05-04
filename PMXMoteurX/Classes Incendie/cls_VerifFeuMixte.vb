@@ -10,6 +10,7 @@
 
     Public CritereM() As cls_Critere                    ' Resistance à la flexion
     Public CritereV() As cls_Critere                    ' Resistance effort tranchant
+    Public CritereVb() As cls_Critere                   ' Resistance effort tranchant voilement cisaillement
     Public CritereMV() As cls_Critere                   ' Résistance à l'interacion MV
 
     Private NbStep As Integer                           ' Nombre d'items dans le tableau TimeSteps
@@ -49,6 +50,7 @@
 
         ReDim CritereM(Me.NbStep - 1)
         ReDim CritereV(Me.NbStep - 1)
+        ReDim CritereVb(Me.NbStep - 1)
         ReDim CritereMV(Me.NbStep - 1)
 
         For i As Integer = 0 To Me.NbStep - 1
