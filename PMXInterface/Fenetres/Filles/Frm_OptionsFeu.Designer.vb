@@ -76,28 +76,30 @@ Partial Class Frm_OptionsFeu
         Me.img_Boltzmann = New System.Windows.Forms.PictureBox()
         Me.pan_Gauche = New System.Windows.Forms.Panel()
         Me.TLPan_Gauche = New System.Windows.Forms.TableLayoutPanel()
+        Me.pan_CalculOptions = New System.Windows.Forms.Panel()
+        Me.chk_DalleFEM = New System.Windows.Forms.CheckBox()
+        Me.chk_ArmaComp = New System.Windows.Forms.CheckBox()
+        Me.img_tDalleFEMmax = New System.Windows.Forms.PictureBox()
+        Me.lbl_UnittDalleFEMmax = New System.Windows.Forms.Label()
+        Me.txt_tDalleFEMmax = New System.Windows.Forms.TextBox()
+        Me.lbl_CalculOptions = New System.Windows.Forms.Label()
         Me.lbl_ParamPoutre = New System.Windows.Forms.Label()
         Me.pan_ParamPoutre = New System.Windows.Forms.Panel()
         Me.lbl_UnitSpecificHeat = New System.Windows.Forms.Label()
         Me.lbl_UnitThermalConductivity = New System.Windows.Forms.Label()
         Me.lbl_SpecificHeat = New System.Windows.Forms.Label()
-        Me.lbl_UnittDalleFEMmax = New System.Windows.Forms.Label()
         Me.lbl_UnitDensity = New System.Windows.Forms.Label()
         Me.lbl_tDalleFEMmax = New System.Windows.Forms.Label()
         Me.lbl_ThermalConductivity = New System.Windows.Forms.Label()
         Me.lbl_Density = New System.Windows.Forms.Label()
         Me.chk_CalculFeu = New System.Windows.Forms.CheckBox()
-        Me.chk_DalleFEM = New System.Windows.Forms.CheckBox()
-        Me.chk_ArmaComp = New System.Windows.Forms.CheckBox()
         Me.chk_ArmaFroid = New System.Windows.Forms.CheckBox()
         Me.chk_AcierGalva = New System.Windows.Forms.CheckBox()
         Me.chk_ReductionConcreteStrenght = New System.Windows.Forms.CheckBox()
         Me.txt_SpecificHeat = New System.Windows.Forms.TextBox()
         Me.img_SpecificHeat = New System.Windows.Forms.PictureBox()
         Me.txt_ThermalConductivity = New System.Windows.Forms.TextBox()
-        Me.txt_tDalleFEMmax = New System.Windows.Forms.TextBox()
         Me.img_ThermalConductivity = New System.Windows.Forms.PictureBox()
-        Me.img_tDalleFEMmax = New System.Windows.Forms.PictureBox()
         Me.txt_Density = New System.Windows.Forms.TextBox()
         Me.img_Density = New System.Windows.Forms.PictureBox()
         Me.cmb_InsulationType = New System.Windows.Forms.ComboBox()
@@ -107,8 +109,6 @@ Partial Class Frm_OptionsFeu
         Me.cmb_SurfaceType = New System.Windows.Forms.ComboBox()
         Me.lbl_SurfaceType = New System.Windows.Forms.Label()
         Me.ErrorProvider_Frm_OptionsFeu = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.lbl_CalculOptions = New System.Windows.Forms.Label()
-        Me.pan_CalculOptions = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -129,13 +129,13 @@ Partial Class Frm_OptionsFeu
         CType(Me.img_Boltzmann, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_Gauche.SuspendLayout()
         Me.TLPan_Gauche.SuspendLayout()
+        Me.pan_CalculOptions.SuspendLayout()
+        CType(Me.img_tDalleFEMmax, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_ParamPoutre.SuspendLayout()
         CType(Me.img_SpecificHeat, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_ThermalConductivity, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_tDalleFEMmax, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Density, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.pan_CalculOptions.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -715,6 +715,80 @@ Partial Class Frm_OptionsFeu
         Me.TLPan_Gauche.Size = New System.Drawing.Size(364, 505)
         Me.TLPan_Gauche.TabIndex = 0
         '
+        'pan_CalculOptions
+        '
+        Me.pan_CalculOptions.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_CalculOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_CalculOptions.Controls.Add(Me.chk_DalleFEM)
+        Me.pan_CalculOptions.Controls.Add(Me.chk_ArmaComp)
+        Me.pan_CalculOptions.Controls.Add(Me.img_tDalleFEMmax)
+        Me.pan_CalculOptions.Controls.Add(Me.lbl_UnittDalleFEMmax)
+        Me.pan_CalculOptions.Controls.Add(Me.txt_tDalleFEMmax)
+        Me.pan_CalculOptions.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_CalculOptions.Location = New System.Drawing.Point(0, 400)
+        Me.pan_CalculOptions.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_CalculOptions.Name = "pan_CalculOptions"
+        Me.pan_CalculOptions.Size = New System.Drawing.Size(364, 105)
+        Me.pan_CalculOptions.TabIndex = 3
+        '
+        'chk_DalleFEM
+        '
+        Me.chk_DalleFEM.AutoSize = True
+        Me.chk_DalleFEM.Location = New System.Drawing.Point(11, 44)
+        Me.chk_DalleFEM.Name = "chk_DalleFEM"
+        Me.chk_DalleFEM.Size = New System.Drawing.Size(96, 17)
+        Me.chk_DalleFEM.TabIndex = 21
+        Me.chk_DalleFEM.Text = "chk_DalleFEM"
+        Me.chk_DalleFEM.UseVisualStyleBackColor = True
+        '
+        'chk_ArmaComp
+        '
+        Me.chk_ArmaComp.AutoSize = True
+        Me.chk_ArmaComp.Location = New System.Drawing.Point(11, 18)
+        Me.chk_ArmaComp.Name = "chk_ArmaComp"
+        Me.chk_ArmaComp.Size = New System.Drawing.Size(101, 17)
+        Me.chk_ArmaComp.TabIndex = 20
+        Me.chk_ArmaComp.Text = "chk_ArmaComp"
+        Me.chk_ArmaComp.UseVisualStyleBackColor = True
+        '
+        'img_tDalleFEMmax
+        '
+        Me.img_tDalleFEMmax.Location = New System.Drawing.Point(133, 65)
+        Me.img_tDalleFEMmax.Name = "img_tDalleFEMmax"
+        Me.img_tDalleFEMmax.Size = New System.Drawing.Size(46, 20)
+        Me.img_tDalleFEMmax.TabIndex = 76
+        Me.img_tDalleFEMmax.TabStop = False
+        '
+        'lbl_UnittDalleFEMmax
+        '
+        Me.lbl_UnittDalleFEMmax.AutoSize = True
+        Me.lbl_UnittDalleFEMmax.Location = New System.Drawing.Point(242, 68)
+        Me.lbl_UnittDalleFEMmax.Name = "lbl_UnittDalleFEMmax"
+        Me.lbl_UnittDalleFEMmax.Size = New System.Drawing.Size(110, 13)
+        Me.lbl_UnittDalleFEMmax.TabIndex = 24
+        Me.lbl_UnittDalleFEMmax.Text = "lbl_UnittDalleFEMmax"
+        '
+        'txt_tDalleFEMmax
+        '
+        Me.txt_tDalleFEMmax.Location = New System.Drawing.Point(178, 65)
+        Me.txt_tDalleFEMmax.Name = "txt_tDalleFEMmax"
+        Me.txt_tDalleFEMmax.Size = New System.Drawing.Size(58, 20)
+        Me.txt_tDalleFEMmax.TabIndex = 23
+        '
+        'lbl_CalculOptions
+        '
+        Me.lbl_CalculOptions.AutoSize = True
+        Me.lbl_CalculOptions.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_CalculOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_CalculOptions.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_CalculOptions.Location = New System.Drawing.Point(0, 370)
+        Me.lbl_CalculOptions.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_CalculOptions.Name = "lbl_CalculOptions"
+        Me.lbl_CalculOptions.Size = New System.Drawing.Size(364, 30)
+        Me.lbl_CalculOptions.TabIndex = 2
+        Me.lbl_CalculOptions.Text = "lbl_CalculOptions"
+        Me.lbl_CalculOptions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'lbl_ParamPoutre
         '
         Me.lbl_ParamPoutre.AutoSize = True
@@ -758,9 +832,9 @@ Partial Class Frm_OptionsFeu
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_SurfaceType)
         Me.pan_ParamPoutre.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_ParamPoutre.Location = New System.Drawing.Point(0, 30)
-        Me.pan_ParamPoutre.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_ParamPoutre.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_ParamPoutre.Name = "pan_ParamPoutre"
-        Me.pan_ParamPoutre.Size = New System.Drawing.Size(364, 340)
+        Me.pan_ParamPoutre.Size = New System.Drawing.Size(364, 339)
         Me.pan_ParamPoutre.TabIndex = 1
         '
         'lbl_UnitSpecificHeat
@@ -789,15 +863,6 @@ Partial Class Frm_OptionsFeu
         Me.lbl_SpecificHeat.Size = New System.Drawing.Size(84, 13)
         Me.lbl_SpecificHeat.TabIndex = 15
         Me.lbl_SpecificHeat.Text = "lbl_SpecificHeat"
-        '
-        'lbl_UnittDalleFEMmax
-        '
-        Me.lbl_UnittDalleFEMmax.AutoSize = True
-        Me.lbl_UnittDalleFEMmax.Location = New System.Drawing.Point(242, 68)
-        Me.lbl_UnittDalleFEMmax.Name = "lbl_UnittDalleFEMmax"
-        Me.lbl_UnittDalleFEMmax.Size = New System.Drawing.Size(110, 13)
-        Me.lbl_UnittDalleFEMmax.TabIndex = 24
-        Me.lbl_UnittDalleFEMmax.Text = "lbl_UnittDalleFEMmax"
         '
         'lbl_UnitDensity
         '
@@ -844,26 +909,6 @@ Partial Class Frm_OptionsFeu
         Me.chk_CalculFeu.TabIndex = 1
         Me.chk_CalculFeu.Text = "chk_CalculFeu"
         Me.chk_CalculFeu.UseVisualStyleBackColor = True
-        '
-        'chk_DalleFEM
-        '
-        Me.chk_DalleFEM.AutoSize = True
-        Me.chk_DalleFEM.Location = New System.Drawing.Point(11, 44)
-        Me.chk_DalleFEM.Name = "chk_DalleFEM"
-        Me.chk_DalleFEM.Size = New System.Drawing.Size(96, 17)
-        Me.chk_DalleFEM.TabIndex = 21
-        Me.chk_DalleFEM.Text = "chk_DalleFEM"
-        Me.chk_DalleFEM.UseVisualStyleBackColor = True
-        '
-        'chk_ArmaComp
-        '
-        Me.chk_ArmaComp.AutoSize = True
-        Me.chk_ArmaComp.Location = New System.Drawing.Point(11, 18)
-        Me.chk_ArmaComp.Name = "chk_ArmaComp"
-        Me.chk_ArmaComp.Size = New System.Drawing.Size(101, 17)
-        Me.chk_ArmaComp.TabIndex = 20
-        Me.chk_ArmaComp.Text = "chk_ArmaComp"
-        Me.chk_ArmaComp.UseVisualStyleBackColor = True
         '
         'chk_ArmaFroid
         '
@@ -917,13 +962,6 @@ Partial Class Frm_OptionsFeu
         Me.txt_ThermalConductivity.Size = New System.Drawing.Size(58, 20)
         Me.txt_ThermalConductivity.TabIndex = 13
         '
-        'txt_tDalleFEMmax
-        '
-        Me.txt_tDalleFEMmax.Location = New System.Drawing.Point(178, 65)
-        Me.txt_tDalleFEMmax.Name = "txt_tDalleFEMmax"
-        Me.txt_tDalleFEMmax.Size = New System.Drawing.Size(58, 20)
-        Me.txt_tDalleFEMmax.TabIndex = 23
-        '
         'img_ThermalConductivity
         '
         Me.img_ThermalConductivity.Location = New System.Drawing.Point(133, 200)
@@ -931,14 +969,6 @@ Partial Class Frm_OptionsFeu
         Me.img_ThermalConductivity.Size = New System.Drawing.Size(46, 20)
         Me.img_ThermalConductivity.TabIndex = 76
         Me.img_ThermalConductivity.TabStop = False
-        '
-        'img_tDalleFEMmax
-        '
-        Me.img_tDalleFEMmax.Location = New System.Drawing.Point(133, 65)
-        Me.img_tDalleFEMmax.Name = "img_tDalleFEMmax"
-        Me.img_tDalleFEMmax.Size = New System.Drawing.Size(46, 20)
-        Me.img_tDalleFEMmax.TabIndex = 76
-        Me.img_tDalleFEMmax.TabStop = False
         '
         'txt_Density
         '
@@ -1010,36 +1040,6 @@ Partial Class Frm_OptionsFeu
         '
         Me.ErrorProvider_Frm_OptionsFeu.ContainerControl = Me
         '
-        'lbl_CalculOptions
-        '
-        Me.lbl_CalculOptions.AutoSize = True
-        Me.lbl_CalculOptions.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.lbl_CalculOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.lbl_CalculOptions.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_CalculOptions.Location = New System.Drawing.Point(0, 370)
-        Me.lbl_CalculOptions.Margin = New System.Windows.Forms.Padding(0)
-        Me.lbl_CalculOptions.Name = "lbl_CalculOptions"
-        Me.lbl_CalculOptions.Size = New System.Drawing.Size(364, 30)
-        Me.lbl_CalculOptions.TabIndex = 2
-        Me.lbl_CalculOptions.Text = "lbl_CalculOptions"
-        Me.lbl_CalculOptions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
-        '
-        'pan_CalculOptions
-        '
-        Me.pan_CalculOptions.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_CalculOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_CalculOptions.Controls.Add(Me.chk_DalleFEM)
-        Me.pan_CalculOptions.Controls.Add(Me.chk_ArmaComp)
-        Me.pan_CalculOptions.Controls.Add(Me.img_tDalleFEMmax)
-        Me.pan_CalculOptions.Controls.Add(Me.lbl_UnittDalleFEMmax)
-        Me.pan_CalculOptions.Controls.Add(Me.txt_tDalleFEMmax)
-        Me.pan_CalculOptions.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_CalculOptions.Location = New System.Drawing.Point(0, 400)
-        Me.pan_CalculOptions.Margin = New System.Windows.Forms.Padding(0)
-        Me.pan_CalculOptions.Name = "pan_CalculOptions"
-        Me.pan_CalculOptions.Size = New System.Drawing.Size(364, 105)
-        Me.pan_CalculOptions.TabIndex = 3
-        '
         'Frm_OptionsFeu
         '
         Me.AcceptButton = Me.btn_OK
@@ -1075,15 +1075,15 @@ Partial Class Frm_OptionsFeu
         Me.pan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.ResumeLayout(False)
         Me.TLPan_Gauche.PerformLayout()
+        Me.pan_CalculOptions.ResumeLayout(False)
+        Me.pan_CalculOptions.PerformLayout()
+        CType(Me.img_tDalleFEMmax, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_ParamPoutre.ResumeLayout(False)
         Me.pan_ParamPoutre.PerformLayout()
         CType(Me.img_SpecificHeat, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_ThermalConductivity, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_tDalleFEMmax, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Density, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.pan_CalculOptions.ResumeLayout(False)
-        Me.pan_CalculOptions.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub

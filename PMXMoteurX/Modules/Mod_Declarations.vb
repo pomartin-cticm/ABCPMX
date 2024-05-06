@@ -6,6 +6,13 @@
 
 #End Region
 
+#Region " Variables globales "
+
+    Public OptionsSlimFloor As Struc_OptionsSlimFloor
+    Public LocalOptionsSlimFloor As Struc_OptionsSlimFloor  ' Pour la saisie des paramètres dans la fenetre des options de calcul 
+
+#End Region
+
 #Region " Enumérations,constantes et structures "
 
     Public Const kConvMPaPa As Decimal = 1000 ^ 2
@@ -68,6 +75,12 @@
         Public TimeT0G2() As Decimal                    ' Temps au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
         Public TimeT0SH() As Decimal                    ' Temps au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
         Public EtaW As Decimal                      ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
+    End Structure
+
+    Public Structure Struc_OptionsSlimFloor
+        Public hslimmax As Decimal 'hauteur maximale des sections slimfloors
+        Public bappmin As Decimal 'Largeur d'appui min à respecter
+        Public tpinfmin As Decimal 'Epaisseur min des plats soudés
     End Structure
 
 #End Region

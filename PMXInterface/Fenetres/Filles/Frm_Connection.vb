@@ -824,7 +824,7 @@ Public Class Frm_Connection
         Else 'dalle pleine ou préfa
             Espacement_Trans_MIN = 2.5 * MyPoutreLoc.Dalle.Connecteur.d
         End If
-        b_app_min = 50 / 1000
+        b_app_min = OptionsSlimFloor.bappmin
         Nb_TransV_Row_MIN = 1
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
             If MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu Then

@@ -286,6 +286,44 @@
 
     End Sub
 
+    Public Sub RecupererEffortsNodauxPonderees(nbNodes As Integer, Vz(,) As Decimal, ByRef Q() As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   06/05/24 :  Création - GUD
+        '-----------------------------------------------------------------------------------------------------------
+        '   Calcul les efforts nodaux d'un model EF a partir des tranchants
+        '-----------------------------------------------------------------------------------------------------------
+        '   EffVz       [S] :   Table des efforts tranchants
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim Q_lin_gauche, Q_lin_droite, Q_ponctuel As Decimal
+
+        '--> Initialisation
+
+        ReDim Q(nbNodes - 1)
+
+        '--> Calcul 
+
+        For jNode = 0 To nbNodes - 1
+            If jNode = 0 Then
+                Q_lin_gauche = 0
+            Else
+                Q_lin_gauche = (Vz(jNode, 0) - Vz(jNode - 1, 1)) / 2
+            End If
+
+            Q_ponctuel = Vz(jNode, 1) - Vz(jNode, 0)
+
+            If jNode = nbNodes - 1 Then
+                Q_lin_droite = 0
+            Else
+                Q_lin_droite = (Vz(jNode + 1, 0) - Vz(jNode, 1)) / 2
+            End If
+
+            Q(jNode) = Q_lin_gauche + Q_ponctuel + Q_lin_droite
+        Next
+
+    End Sub
     Public Sub CombineReactions(iCombi As Integer, nbAppuis As Integer, ChargesA As List(Of cls_CasDeCharge), ByRef ReacRz() As Decimal, Optional lRetrait As Boolean = True)
         '-----------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM

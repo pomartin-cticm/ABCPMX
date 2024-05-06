@@ -1,4 +1,6 @@
-﻿Public Class Frm_OptionsCalculSlimFloor
+﻿Imports PMXMoteur2
+
+Public Class Frm_OptionsCalculSlimFloor
 
 #Region " Variables locales "
 

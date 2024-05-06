@@ -3176,7 +3176,7 @@ Public Class cls_Poutre
 
         '# Plastiques
 
-        Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, 0, zANP, MplRd)
+        Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, 0, zANP, MplRd, False)
 
     End Sub
 
@@ -3235,6 +3235,70 @@ Public Class cls_Poutre
 
         Next
 
+    End Sub
+
+    Public Sub ProprietesVerifSlimFloorAcier(iCombi As Integer, MyPoutre As cls_Poutre, lValRd As Boolean, ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal, ByRef MelRd(,) As Decimal, ByRef zANE(,) As Decimal,
+                                                Psi_fi(,) As Decimal, rho_t_fi(,) As Decimal, Psi_y_fi(,) As Decimal, Psi_spd(,) As Decimal, rho_t_spd(,) As Decimal, Psi_y_spd(,) As Decimal)
+        '------------------------------------------------------------------------------
+        '   06/05/2024 :  Création - GUD
+        '------------------------------------------------------------------------------
+        '   Calcul des propriétés plastiques et élastiques le long de la barre en fonction de 
+        '   du chargement
+        '------------------------------------------------------------------------------
+        '   MyPoutre    [E] :   Poutre traitée
+        '   iCombi      [E] :   indice de la combi en cours 
+        '   lValRd      [E] :   indique si valeur de calcul (True) ou non (False)
+        '   MplRd       [E] :   Moment plastique résistant
+        '   zANP        [E] :   Axe neutre plastique
+        '   MelRd       [E] :   Moment élastique résistant
+        '   zANE        [E] :   Axe neutre élastique
+        '------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
+        Dim iTravee As Integer
+        Dim iTravDeb, iTravFin As Integer 'je le laisse au cas où mais théoriquement, on s'étais dis qu'il n'y a qu'une travée iso pour les slimfloors
+        Dim iNode As Integer
+        Dim iNodeDeb, iNodeFin As Integer
+        Dim kDeb, kfin As Integer
+        'Dim rhoVLoc As Decimal
+
+        '--> Initialisation
+
+        iTravDeb = MyPoutre.IndicePremiereTravee
+        iTravFin = MyPoutre.IndiceDerniereTravee
+        ReDim zANE(NbNodes - 1, 1)
+        ReDim zANP(NbNodes - 1, 1)
+        ReDim MelRd(NbNodes - 1, 1)
+        ReDim MplRd(NbNodes - 1, 1)
+
+        '--> Traitement
+
+        For iTravee = iTravDeb To iTravFin
+
+            iNodeDeb = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iNodeDeb To iNodeFin
+                If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
+                If iNode = iNodeFin Then kfin = 0 Else kfin = 1
+
+
+
+                Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, 1, zANP(iNode, kDeb), MplRd(iNode, kDeb), False,
+                                                   Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
+                                                    Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
+
+                If kfin > kDeb Then
+                    zANE(iNode, kfin) = zANE(iNode, kDeb)
+                    zANP(iNode, kfin) = zANP(iNode, kDeb)
+                    MelRd(iNode, kfin) = MelRd(iNode, kDeb)
+                    MplRd(iNode, kfin) = MplRd(iNode, kDeb)
+                End If
+            Next
+
+        Next
     End Sub
 
 

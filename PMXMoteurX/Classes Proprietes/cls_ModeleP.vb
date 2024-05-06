@@ -451,7 +451,9 @@ Public Class cls_ModeleP
 #Region " Outils de modélisation - Profilés "
 
     Public Sub MaillageProfileA_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                    FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal)
+                                    FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                     Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
+                                        Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -460,6 +462,8 @@ Public Class cls_ModeleP
         '   Gammas      [E] :   Coefficients partiels
         '   RhoV        [E] :   Coefficient pour l'interaction MV
         '   MyModele    [E/S]:  Modèle
+        '   coefReduc1  [E] :   Coefficient de réduction qui s'applique au plat le plus bas
+        '   coefReduc2  [E] :   Coefficient de réduction qui s'applique au 2eme plat le plus bas, le cas échéant (sert pour SFB -> correspond à la semelle inférieure du profilé)
         '-------------------------------------------------------------------------------------------------------------------
 
         Select Case MyProfil.typeProfileAcier
@@ -467,13 +471,13 @@ Public Class cls_ModeleP
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
                 MaillageProfileUsuels_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                MaillageProfileASlimfloorsSFB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd)
+                MaillageProfileASlimfloorsSFB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                MaillageProfileASlimfloorsIFB_A_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd)
+                MaillageProfileASlimfloorsIFB_A_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_spd, rho_t_spd, Psi_y_spd)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                MaillageProfileASlimfloorsIFB_B_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd)
+                MaillageProfileASlimfloorsIFB_B_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                MaillageProfileASlimfloorsSAB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd)
+                MaillageProfileASlimfloorsSAB_YY(GammaM, RhoV, MyProfil, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi)
 
         End Select
 
@@ -536,7 +540,9 @@ Public Class cls_ModeleP
     End Sub
 
     Private Sub MaillageProfileASlimfloorsSFB_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal)
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                      Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
+                                        Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
         '   03/01/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------
@@ -552,9 +558,21 @@ Public Class cls_ModeleP
         Dim Hw As Decimal
         Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
 
+        Dim Afi, tfi, fy_fi As Decimal
+        Dim Aspd, tspd, fy_spd As Decimal
+
         '--> Initialisation
 
         Hw = MyProfil.HauteurAmeHw
+
+        Afi = Psi_fi * MyProfil.AireFi
+        tfi = rho_t_fi * MyProfil.Tfi
+        fy_fi = Psi_y_spd * FyInf
+
+        'plat soudé
+        Aspd = Psi_spd * MyProfil.AirePlat
+        tspd = rho_t_spd * MyProfil.Plat_t
+        fy_spd = Psi_y_spd * FySpd
 
         '--> Modélisation du profilé acier
 
@@ -568,7 +586,7 @@ Public Class cls_ModeleP
 
         '# Semelle inférieure
 
-        Me.AddMaille(MyProfil.AireFi, MyProfil.Tfi, zRef - MyProfil.hb + MyProfil.Tfi / 2, 1, 1, 1, FyInf, 1, GammaM)
+        Me.AddMaille(Afi, tfi, zRef - MyProfil.hb + MyProfil.Tfi / 2, 1, 1, 1, fy_fi, 1, GammaM)
 
         '# Congés supérieurs
 
@@ -588,12 +606,14 @@ Public Class cls_ModeleP
 
         '# Plat soudé inférieur dans le cas d'une section SFB
 
-        Me.AddMaille(MyProfil.AirePlat, MyProfil.Plat_t, zRef - MyProfil.ha + MyProfil.Plat_t / 2, 1, 1, 1, FySpd, 1, GammaM)
+
+        Me.AddMaille(Aspd, tspd, zRef - MyProfil.ha + MyProfil.Plat_t / 2, 1, 1, 1, fy_spd, 1, GammaM)
 
     End Sub
 
     Private Sub MaillageProfileASlimfloorsIFB_A_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal)
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                     Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
         '   03/01/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------
@@ -609,9 +629,15 @@ Public Class cls_ModeleP
         Dim Hw As Decimal
         Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
 
+        Dim Aspd, tspd, fy_spd As Decimal
+
         '--> Initialisation
 
         Hw = MyProfil.HauteurAmeHw
+
+        Aspd = Psi_spd * MyProfil.AirePlat
+        tspd = rho_t_spd * MyProfil.Plat_t
+        fy_spd = Psi_y_spd * FySpd
 
         '--> Modélisation du profilé acier
 
@@ -633,12 +659,13 @@ Public Class cls_ModeleP
 
         '# Plat soudé inférieur dans le cas d'une section IFB-A
 
-        Me.AddMaille(MyProfil.AirePlat, MyProfil.Plat_t, zRef - MyProfil.ha + MyProfil.Plat_t / 2, 1, 1, 1, FySpd, 1, GammaM)
+        Me.AddMaille(Aspd, tspd, zRef - MyProfil.ha + MyProfil.Plat_t / 2, 1, 1, 1, fy_spd, 1, GammaM)
 
     End Sub
 
     Private Sub MaillageProfileASlimfloorsIFB_B_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal)
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                     Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
         '   03/01/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------
@@ -654,9 +681,15 @@ Public Class cls_ModeleP
         Dim Hw As Decimal
         Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
 
+        Dim Afi, tfi, fy_fi As Decimal
+
         '--> Initialisation
 
         Hw = MyProfil.HauteurAmeHw
+
+        Afi = Psi_fi * MyProfil.AireFi
+        tfi = rho_t_fi * MyProfil.Tfi
+        fy_fi = Psi_y_fi * FyInf
 
         '--> Modélisation du profilé acier
 
@@ -670,7 +703,7 @@ Public Class cls_ModeleP
 
         '# Semelle inférieure
 
-        Me.AddMaille(MyProfil.AireFi, MyProfil.Tfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, FyInf, 1, GammaM)
+        Me.AddMaille(Afi, tfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, fy_fi, 1, GammaM)
 
         '# Congés inférieurs
 
@@ -680,11 +713,11 @@ Public Class cls_ModeleP
 
         End If
 
-
     End Sub
 
     Private Sub MaillageProfileASlimfloorsSAB_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal)
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal, FySpd As Decimal,
+                                    Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
         '   03/01/24 :  Création - GUD
         '-------------------------------------------------------------------------------------------------------------------
@@ -700,9 +733,15 @@ Public Class cls_ModeleP
         Dim Hw As Decimal
         Dim zRef As Decimal = MyProfil.zRefAraseSup 'Cote de l'arase supérieure de la semelle supérieure du profilé 
 
+        Dim Afi, tfi, fy_fi As Decimal
+
         '--> Initialisation
 
         Hw = MyProfil.HauteurAmeHw
+
+        Afi = Psi_fi * MyProfil.AireFi
+        tfi = rho_t_fi * MyProfil.Tfi
+        fy_fi = Psi_y_fi * FyInf
 
         '--> Modélisation du profilé acier
 
@@ -716,7 +755,7 @@ Public Class cls_ModeleP
 
         '# Semelle inférieure
 
-        Me.AddMaille(MyProfil.AireFi, MyProfil.Tfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, FyInf, 1, GammaM)
+        Me.AddMaille(Afi, tfi, zRef - MyProfil.ha + MyProfil.Tfi / 2, 1, 1, 1, fy_fi, 1, GammaM)
 
         '# Congés supérieurs
 

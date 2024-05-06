@@ -1111,7 +1111,6 @@ Public Class cls_VerificationsAcier
 
 #End Region
 
-
 #Region " Vérification des contraintes élastiques équivalentes de Von Mises "
 
     Private Sub RunCritereInteractionMVElastiqueVonMises(MyPoutre As cls_Poutre, iCombi As Integer, SigmaELU(,,) As Decimal, TauELU(,,) As Decimal)

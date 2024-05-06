@@ -12,8 +12,6 @@ Public Module Mod_Declarations
     Public LocalOptionsScope As Struc_OptionsScope          ' Pour la saisie des paramètres dans la fenêtre des options de calcul
     Public OptionsCalcul As Struc_OptionsCalcul
     Public LocalOptionsCalcul As Struc_OptionsCalcul        ' Pour la saisie des paramètres dans la fenêtre des options de calcul
-    Public OptionsSlimFloor As Struc_OptionsSlimFloor
-    Public LocalOptionsSlimFloor As Struc_OptionsSlimFloor  ' Pour la saisie des paramètres dans la fenetre des options de calcul 
 
 #End Region
 
@@ -226,12 +224,6 @@ Public Module Mod_Declarations
         Public EpDalleMixteMin As Decimal       ' Epaisseur de dalle mixte mini (au dessus du bac)
         Public RhoCBetonLegerMax As Decimal     ' Masse volumique maximale d'un béton léger
         Public RhoCBetonLegerMin As Decimal     ' Masse volumique minimale d'un béton léger
-    End Structure
-
-    Public Structure Struc_OptionsSlimFloor
-        Public hslimmax As Decimal 'hauteur maximale des sections slimfloors
-        Public bappmin As Decimal 'Largeur d'appui min à respecter
-        Public tpinfmin As Decimal 'Epaisseur min des plats soudés
     End Structure
 
     Public Enum Enu_Normes
