@@ -107,6 +107,8 @@ Partial Class Frm_OptionsFeu
         Me.cmb_SurfaceType = New System.Windows.Forms.ComboBox()
         Me.lbl_SurfaceType = New System.Windows.Forms.Label()
         Me.ErrorProvider_Frm_OptionsFeu = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.lbl_CalculOptions = New System.Windows.Forms.Label()
+        Me.pan_CalculOptions = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -133,6 +135,7 @@ Partial Class Frm_OptionsFeu
         CType(Me.img_tDalleFEMmax, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Density, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_CalculOptions.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -142,7 +145,7 @@ Partial Class Frm_OptionsFeu
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(779, 535)
+        Me.pan_General.Size = New System.Drawing.Size(779, 551)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -157,7 +160,7 @@ Partial Class Frm_OptionsFeu
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(779, 535)
+        Me.TLpan_Main.Size = New System.Drawing.Size(779, 551)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -171,7 +174,7 @@ Partial Class Frm_OptionsFeu
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 3, 0)
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_Annuler, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 498)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 514)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -209,7 +212,7 @@ Partial Class Frm_OptionsFeu
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(773, 489)
+        Me.pan_Main.Size = New System.Drawing.Size(773, 505)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_PartieHaute
@@ -225,7 +228,7 @@ Partial Class Frm_OptionsFeu
         Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
         Me.TLPan_PartieHaute.RowCount = 1
         Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(773, 489)
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(773, 505)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
         'pan_Droite
@@ -236,7 +239,7 @@ Partial Class Frm_OptionsFeu
         Me.pan_Droite.Location = New System.Drawing.Point(365, 0)
         Me.pan_Droite.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Droite.Name = "pan_Droite"
-        Me.pan_Droite.Size = New System.Drawing.Size(408, 489)
+        Me.pan_Droite.Size = New System.Drawing.Size(408, 505)
         Me.pan_Droite.TabIndex = 1
         '
         'TLPan_Droite
@@ -253,7 +256,7 @@ Partial Class Frm_OptionsFeu
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
         Me.TLPan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Droite.Size = New System.Drawing.Size(408, 489)
+        Me.TLPan_Droite.Size = New System.Drawing.Size(408, 505)
         Me.TLPan_Droite.TabIndex = 0
         '
         'lbl_ParamCalcul
@@ -318,7 +321,7 @@ Partial Class Frm_OptionsFeu
         Me.pan_ParamCalcul.Location = New System.Drawing.Point(0, 30)
         Me.pan_ParamCalcul.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ParamCalcul.Name = "pan_ParamCalcul"
-        Me.pan_ParamCalcul.Size = New System.Drawing.Size(408, 459)
+        Me.pan_ParamCalcul.Size = New System.Drawing.Size(408, 475)
         Me.pan_ParamCalcul.TabIndex = 1
         '
         'lbl_UnitConcreteResistance
@@ -689,24 +692,27 @@ Partial Class Frm_OptionsFeu
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0, 0, 1, 0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(364, 489)
+        Me.pan_Gauche.Size = New System.Drawing.Size(364, 505)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
         '
         Me.TLPan_Gauche.ColumnCount = 1
         Me.TLPan_Gauche.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLPan_Gauche.Controls.Add(Me.pan_CalculOptions, 0, 3)
+        Me.TLPan_Gauche.Controls.Add(Me.lbl_CalculOptions, 0, 2)
         Me.TLPan_Gauche.Controls.Add(Me.lbl_ParamPoutre, 0, 0)
         Me.TLPan_Gauche.Controls.Add(Me.pan_ParamPoutre, 0, 1)
         Me.TLPan_Gauche.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.TLPan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
-        Me.TLPan_Gauche.RowCount = 2
+        Me.TLPan_Gauche.RowCount = 4
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 340.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-        Me.TLPan_Gauche.Size = New System.Drawing.Size(364, 489)
+        Me.TLPan_Gauche.Size = New System.Drawing.Size(364, 505)
         Me.TLPan_Gauche.TabIndex = 0
         '
         'lbl_ParamPoutre
@@ -730,23 +736,18 @@ Partial Class Frm_OptionsFeu
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnitSpecificHeat)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnitThermalConductivity)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_SpecificHeat)
-        Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnittDalleFEMmax)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnitDensity)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_tDalleFEMmax)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_ThermalConductivity)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_Density)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_CalculFeu)
-        Me.pan_ParamPoutre.Controls.Add(Me.chk_DalleFEM)
-        Me.pan_ParamPoutre.Controls.Add(Me.chk_ArmaComp)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_ArmaFroid)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_AcierGalva)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_ReductionConcreteStrenght)
         Me.pan_ParamPoutre.Controls.Add(Me.txt_SpecificHeat)
         Me.pan_ParamPoutre.Controls.Add(Me.img_SpecificHeat)
         Me.pan_ParamPoutre.Controls.Add(Me.txt_ThermalConductivity)
-        Me.pan_ParamPoutre.Controls.Add(Me.txt_tDalleFEMmax)
         Me.pan_ParamPoutre.Controls.Add(Me.img_ThermalConductivity)
-        Me.pan_ParamPoutre.Controls.Add(Me.img_tDalleFEMmax)
         Me.pan_ParamPoutre.Controls.Add(Me.txt_Density)
         Me.pan_ParamPoutre.Controls.Add(Me.img_Density)
         Me.pan_ParamPoutre.Controls.Add(Me.cmb_InsulationType)
@@ -759,7 +760,7 @@ Partial Class Frm_OptionsFeu
         Me.pan_ParamPoutre.Location = New System.Drawing.Point(0, 30)
         Me.pan_ParamPoutre.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_ParamPoutre.Name = "pan_ParamPoutre"
-        Me.pan_ParamPoutre.Size = New System.Drawing.Size(364, 459)
+        Me.pan_ParamPoutre.Size = New System.Drawing.Size(364, 340)
         Me.pan_ParamPoutre.TabIndex = 1
         '
         'lbl_UnitSpecificHeat
@@ -792,7 +793,7 @@ Partial Class Frm_OptionsFeu
         'lbl_UnittDalleFEMmax
         '
         Me.lbl_UnittDalleFEMmax.AutoSize = True
-        Me.lbl_UnittDalleFEMmax.Location = New System.Drawing.Point(242, 420)
+        Me.lbl_UnittDalleFEMmax.Location = New System.Drawing.Point(242, 68)
         Me.lbl_UnittDalleFEMmax.Name = "lbl_UnittDalleFEMmax"
         Me.lbl_UnittDalleFEMmax.Size = New System.Drawing.Size(110, 13)
         Me.lbl_UnittDalleFEMmax.TabIndex = 24
@@ -847,7 +848,7 @@ Partial Class Frm_OptionsFeu
         'chk_DalleFEM
         '
         Me.chk_DalleFEM.AutoSize = True
-        Me.chk_DalleFEM.Location = New System.Drawing.Point(13, 366)
+        Me.chk_DalleFEM.Location = New System.Drawing.Point(11, 44)
         Me.chk_DalleFEM.Name = "chk_DalleFEM"
         Me.chk_DalleFEM.Size = New System.Drawing.Size(96, 17)
         Me.chk_DalleFEM.TabIndex = 21
@@ -857,7 +858,7 @@ Partial Class Frm_OptionsFeu
         'chk_ArmaComp
         '
         Me.chk_ArmaComp.AutoSize = True
-        Me.chk_ArmaComp.Location = New System.Drawing.Point(13, 340)
+        Me.chk_ArmaComp.Location = New System.Drawing.Point(11, 18)
         Me.chk_ArmaComp.Name = "chk_ArmaComp"
         Me.chk_ArmaComp.Size = New System.Drawing.Size(101, 17)
         Me.chk_ArmaComp.TabIndex = 20
@@ -918,7 +919,7 @@ Partial Class Frm_OptionsFeu
         '
         'txt_tDalleFEMmax
         '
-        Me.txt_tDalleFEMmax.Location = New System.Drawing.Point(178, 420)
+        Me.txt_tDalleFEMmax.Location = New System.Drawing.Point(178, 65)
         Me.txt_tDalleFEMmax.Name = "txt_tDalleFEMmax"
         Me.txt_tDalleFEMmax.Size = New System.Drawing.Size(58, 20)
         Me.txt_tDalleFEMmax.TabIndex = 23
@@ -933,7 +934,7 @@ Partial Class Frm_OptionsFeu
         '
         'img_tDalleFEMmax
         '
-        Me.img_tDalleFEMmax.Location = New System.Drawing.Point(133, 420)
+        Me.img_tDalleFEMmax.Location = New System.Drawing.Point(133, 65)
         Me.img_tDalleFEMmax.Name = "img_tDalleFEMmax"
         Me.img_tDalleFEMmax.Size = New System.Drawing.Size(46, 20)
         Me.img_tDalleFEMmax.TabIndex = 76
@@ -1009,13 +1010,43 @@ Partial Class Frm_OptionsFeu
         '
         Me.ErrorProvider_Frm_OptionsFeu.ContainerControl = Me
         '
+        'lbl_CalculOptions
+        '
+        Me.lbl_CalculOptions.AutoSize = True
+        Me.lbl_CalculOptions.BackColor = System.Drawing.SystemColors.AppWorkspace
+        Me.lbl_CalculOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_CalculOptions.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_CalculOptions.Location = New System.Drawing.Point(0, 370)
+        Me.lbl_CalculOptions.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_CalculOptions.Name = "lbl_CalculOptions"
+        Me.lbl_CalculOptions.Size = New System.Drawing.Size(364, 30)
+        Me.lbl_CalculOptions.TabIndex = 2
+        Me.lbl_CalculOptions.Text = "lbl_CalculOptions"
+        Me.lbl_CalculOptions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'pan_CalculOptions
+        '
+        Me.pan_CalculOptions.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.pan_CalculOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_CalculOptions.Controls.Add(Me.chk_DalleFEM)
+        Me.pan_CalculOptions.Controls.Add(Me.chk_ArmaComp)
+        Me.pan_CalculOptions.Controls.Add(Me.img_tDalleFEMmax)
+        Me.pan_CalculOptions.Controls.Add(Me.lbl_UnittDalleFEMmax)
+        Me.pan_CalculOptions.Controls.Add(Me.txt_tDalleFEMmax)
+        Me.pan_CalculOptions.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.pan_CalculOptions.Location = New System.Drawing.Point(0, 400)
+        Me.pan_CalculOptions.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_CalculOptions.Name = "pan_CalculOptions"
+        Me.pan_CalculOptions.Size = New System.Drawing.Size(364, 105)
+        Me.pan_CalculOptions.TabIndex = 3
+        '
         'Frm_OptionsFeu
         '
         Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.CancelButton = Me.btn_Annuler
-        Me.ClientSize = New System.Drawing.Size(779, 535)
+        Me.ClientSize = New System.Drawing.Size(779, 551)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.Name = "Frm_OptionsFeu"
@@ -1051,6 +1082,8 @@ Partial Class Frm_OptionsFeu
         CType(Me.img_tDalleFEMmax, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Density, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_CalculOptions.ResumeLayout(False)
+        Me.pan_CalculOptions.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1139,4 +1172,6 @@ Partial Class Frm_OptionsFeu
     Friend WithEvents lbl_tDalleFEMmax As Label
     Friend WithEvents txt_tDalleFEMmax As TextBox
     Friend WithEvents img_tDalleFEMmax As PictureBox
+    Friend WithEvents pan_CalculOptions As Panel
+    Friend WithEvents lbl_CalculOptions As Label
 End Class

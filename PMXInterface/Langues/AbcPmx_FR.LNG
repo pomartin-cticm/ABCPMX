@@ -387,6 +387,7 @@ CANCEL					= Annuler
 OK						= Ok
 BEAMPARAM				= Paramètres de la poutre
 CALCULPARAM				= Paramètres de calcul
+CALCULOPTIONS			= Options de calcul
 FIRECALCULATION			= Calcul au feu
 SURFACETYPE				= Type de surface
 PROTECTED				= Protégé

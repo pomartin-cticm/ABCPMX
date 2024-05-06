@@ -127,6 +127,10 @@ Public Class Frm_OptionsFeu
 
                 chk_ArmaFroid.Text = Bloc("ARMAFROID")
 
+                '=== OPTIONS DE CALCUL ==============================================================='
+
+                Me.lbl_CalculOptions.Text = Bloc("CALCULOPTIONS")
+
                 '--> chk_ArmaComp
 
                 chk_ArmaComp.Text = Bloc("ARMACOMP")
@@ -188,6 +192,9 @@ Public Class Frm_OptionsFeu
 
         Me.lbl_ParamPoutre.BackColor = CouleurBackBandeaux
         Me.lbl_ParamPoutre.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_CalculOptions.BackColor = CouleurBackBandeaux
+        Me.lbl_CalculOptions.ForeColor = CouleurForeBandeaux
 
         Me.lbl_ParamCalcul.BackColor = CouleurBackBandeaux
         Me.lbl_ParamCalcul.ForeColor = CouleurForeBandeaux
@@ -469,12 +476,12 @@ Public Class Frm_OptionsFeu
         End If
 
         chk_ArmaFroid.Top = chk_ReductionConcreteStrenght.Location.Y + offsetY
-        chk_ArmaComp.Top = chk_ArmaFroid.Location.Y + offsetY
-        chk_DalleFEM.Top = chk_ArmaComp.Location.Y + offsetY
-        lbl_tDalleFEMmax.Top = chk_DalleFEM.Location.Y + offsetY
-        img_tDalleFEMmax.Top = lbl_tDalleFEMmax.Location.Y + offsetY
-        txt_tDalleFEMmax.Top = img_tDalleFEMmax.Location.Y
-        lbl_UnittDalleFEMmax.Top = img_tDalleFEMmax.Location.Y
+        'chk_ArmaComp.Top = chk_ArmaFroid.Location.Y + offsetY
+        'chk_DalleFEM.Top = chk_ArmaComp.Location.Y + offsetY
+        'lbl_tDalleFEMmax.Top = chk_DalleFEM.Location.Y + offsetY
+        'img_tDalleFEMmax.Top = lbl_tDalleFEMmax.Location.Y + offsetY
+        'txt_tDalleFEMmax.Top = img_tDalleFEMmax.Location.Y
+        'lbl_UnittDalleFEMmax.Top = img_tDalleFEMmax.Location.Y
 
         'Gestion de l'affichage en fonction de si la dalle est analysée aux EF ou non
 

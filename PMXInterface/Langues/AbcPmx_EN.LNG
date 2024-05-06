@@ -387,6 +387,7 @@ CANCEL					= Cancel
 OK						= Ok
 BEAMPARAM				= Beam parameters
 CALCULPARAM				= Calculation parameters
+CALCULOPTIONS			= Calculation options
 FIRECALCULATION			= Fire calculation
 SURFACETYPE				= Surface type
 PROTECTED				= Protected
