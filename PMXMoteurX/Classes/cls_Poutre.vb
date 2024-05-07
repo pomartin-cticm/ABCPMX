@@ -3029,7 +3029,8 @@ Public Class cls_Poutre
         ReDim InertieY(Me.Nodes.nbNodes - 1, 1)
         ReDim zANE(Me.Nodes.nbNodes - 1, 1)
         If lNonMixte Then
-            Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, p_zANE, pInertieY, pMelRd)
+            'Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, p_zANE, pInertieY, pMelRd)
+            Me.Section.ProprietesElastiquesMyy(1, lValRd, Me.Param.Gamma, 0, p_zANE, pInertieY, pMelRd, True)
         End If
 
         '--> Boucle sur les noeuds
@@ -3172,7 +3173,8 @@ Public Class cls_Poutre
 
         '# Elastiques
 
-        Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, zANE, InertieY, MelRd)
+        'Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, zANE, InertieY, MelRd)
+        Me.Section.ProprietesElastiquesMyy(1, lValRd, Me.Param.Gamma, 0, zANE, InertieY, MelRd, True)
 
         '# Plastiques
 
@@ -3262,6 +3264,7 @@ Public Class cls_Poutre
         Dim iNode As Integer
         Dim iNodeDeb, iNodeFin As Integer
         Dim kDeb, kfin As Integer
+        Dim InertieY As Decimal
         'Dim rhoVLoc As Decimal
 
         '--> Initialisation
@@ -3284,7 +3287,9 @@ Public Class cls_Poutre
                 If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
                 If iNode = iNodeFin Then kfin = 0 Else kfin = 1
 
-
+                Me.Section.ProprietesElastiquesMyy(1, lValRd, Me.Param.Gamma, 0, zANE(iNode, kDeb), InertieY, MelRd(iNode, iCombi), True, False,
+                                                   Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),
+                                                    Psi_spd(iCombi, iNode), rho_t_spd(iCombi, iNode), Psi_y_spd(iCombi, iNode))
 
                 Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, 1, zANP(iNode, kDeb), MplRd(iNode, kDeb), False,
                                                    Psi_fi(iCombi, iNode), rho_t_fi(iCombi, iNode), Psi_y_fi(iCombi, iNode),

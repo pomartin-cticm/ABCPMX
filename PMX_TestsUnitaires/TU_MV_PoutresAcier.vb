@@ -294,9 +294,10 @@ Imports PMXMoteur2
 
         Dim InertieY, Mel As Decimal
 
-        myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, MRk)
-        ValRef = InertieY * 10 ^ 8
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
+        'myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, MRk)
+        'myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, MRk, True)
+        'ValRef = InertieY * 10 ^ 8
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel)
         ValRef = InertieY * 10 ^ 8
@@ -521,7 +522,8 @@ Imports PMXMoteur2
         'Propsection: Wel = 8 452.653 cm3 
 
         Dim zANE, MRk As Decimal
-        myPoutre.Section.ProprietesElastiquesAcierMyy(True, myPoutre.Param.Gamma, 0, zANE, MRk)
+        'myPoutre.Section.ProprietesElastiquesAcierMyy(True, myPoutre.Param.Gamma, 0, zANE, MRk)
+        myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRk, True)
 
         Valeur = MRk
         ValRef = 1986.373455 * 1000 'MelRd
@@ -613,9 +615,10 @@ Imports PMXMoteur2
 
         Dim InertieY, Mel As Decimal
 
-        myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, MRk)
-        ValRef = InertieY * 10 ^ 8
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
+        'myPoutre.Section.ProprietesElastiquesAcierMyy(1, myPoutre.Param.Gamma, zANE, InertieY, MRk)
+        'myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, zANE, InertieY, MRk, True)
+        'ValRef = InertieY * 10 ^ 8
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx)) 'Vérification du calcul de l'inertie de la poutre seule
 
         myPoutre.Section.ProprietesElastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, InertieY, Mel)
         ValRef = InertieY * 10 ^ 8

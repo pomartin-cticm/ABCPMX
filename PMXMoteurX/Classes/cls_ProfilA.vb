@@ -76,8 +76,9 @@ Public Class cls_ProfilA
         '   Gorges              [S] :   Gorge mini des soudures
         '----------------------------------------------------------------------------------------------------------
 
-        Gorges(0) = Me.EpaisseurMinSoudureAmeSemelle(True)
-        Gorges(1) = Me.EpaisseurMinSoudureAmeSemelle(True)
+        For i As Integer = 0 To Gorges.Count - 1
+            Gorges(i) = Me.EpaisseurMinSoudureAmeSemelle(True)
+        Next
 
 
     End Sub

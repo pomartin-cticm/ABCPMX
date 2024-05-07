@@ -229,7 +229,7 @@ Public Class cls_VerificationsAcier
 
         '# Contraintes de cisaillement
         If myBeam.Param.lElasticDesignVM Then
-            Me.Tau = New cls_Tau(myBeam.Section.typeSection)
+            Me.Tau = New cls_Tau(myBeam.Section.TypeSection)
             Me.Tau.Initialise(myBeam.Section.ProfilA)
             Me.Tau.CalculContraintesCharges(myBeam, TauCas)
         End If
@@ -305,7 +305,7 @@ Public Class cls_VerificationsAcier
 
                     '# Vérification sous interaction MVb
 
-                    Me.RunCriteresInteractionMVb(myBeam, iCombi, VbRd, MEd, VEd, mfrd, MplRd)
+                    Me.RunCriteresInteractionMVb(myBeam, iCombi, VbRd, MEd, VEd, MfRd, MplRd)
 
                 Else
                     '# Calcul du critère d'intéraction rhoV
