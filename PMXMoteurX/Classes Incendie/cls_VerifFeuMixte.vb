@@ -4,6 +4,12 @@
 
     Public Shared TimeSteps() As Decimal = {30, 60, 90, 120, 180, 240}              ' En minutes
 
+    Private Enum enuTypeInterpoleTempArma
+        Maximale
+        Moyenne
+        Axe
+    End Enum
+
 #End Region
 
 #Region " Attributs "
@@ -24,9 +30,15 @@
     Public TempVcStep() As Decimal                      ' Température des connecteurs pour les Steps (partie béton)
 
     Public TempDalleStep(,) As Decimal                  ' Température des deux faces de la dalle pour les Steps
+    Public TempArmaStep()() As Decimal                  ' Température des lits d'armature
 
     Public ElancementW As Decimal                       ' Elancement de l'âme 
     Public ElancementWMax As Decimal                    ' Limite d'elancement de l'âme pour le voilement par cisaillement
+
+    Dim MethodTempArma As enuTypeInterpoleTempArma      ' Type de méthode pour le calcul de la température des armatures
+
+    Dim iTraArmaAxe() As Integer                        ' Donne la tranche de la dalle dans laquelle se trouve chaque axe des armatures
+    Dim kTempArma(,) As Decimal                         ' Proportion de la température de la tranche à considérer pour le calcul de la température moyenne de l'armature
 
 #End Region
 
@@ -35,17 +47,21 @@
     Public Sub New()
         Me.NbStep = cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1
         Me.RStep = -1
+        MethodTempArma = enuTypeInterpoleTempArma.Moyenne
     End Sub
 
-    Private Sub InitialiseClassePourCalcul(NbNodes As Integer, NbCombi As Integer, IndDerniereT As Integer)
+    Private Sub InitialiseClassePourCalcul(lMulti As Boolean, NbNodes As Integer, NbCombi As Integer,
+                                           IndDerniereT As Integer, nbArma As Integer)
         '----------------------------------------------------------------------------------------------------------
         '   30/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Initialisation des critères pour une poutre acier sans enrobage
         '----------------------------------------------------------------------------------------------------------
+        '   lMulti      [E] :   Indique si poutre à multiple travée
         '   NbNodes     [E] :   Nombre de noeuds
         '   NbCombi     [E] :   Nombre de combinaisons
         '   IndDerniereT[E] :   Indice de la dernière travée
+        '   NbArma      [E] :   Nombre de lits d'armatures
         '----------------------------------------------------------------------------------------------------------
 
         ReDim CritereM(Me.NbStep - 1)
@@ -66,6 +82,10 @@
         ReDim TempVcStep(Me.NbStep - 1)
 
         ReDim TempDalleStep(Me.NbStep - 1, 1)
+
+        If lMulti Then
+            ReDim TempArmaStep(Me.NbStep - 1)(nbArma - 1)
+        End If
 
     End Sub
 
@@ -132,6 +152,10 @@
 
         Dim VRd0 As Decimal
 
+        Dim lMulti As Boolean = myBeam.lMultiSpan
+        Dim nbArma As Integer = myBeam.Dalle.LitArma.Count
+        Dim iArma As Integer
+
         '--( Paramètres pour la discrétisation de la dalle
 
         Dim NbTranches As Integer               ' Nombre de tranches discrétisant la dalle
@@ -173,7 +197,7 @@
         ' ReDim MelRdFeu(Me.NbStep - 1)
         ReDim VplRdFeu(Me.NbStep - 1)
 
-        Me.InitialiseClassePourCalcul(myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee)
+        Me.InitialiseClassePourCalcul(lMulti, myBeam.Nodes.nbNodes, nbCombiELU, myBeam.IndiceDerniereTravee, nbArma)
 
         If myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
             EpDalle = EN_Feu.EpaisseurEfficaceDalleMixte(myBeam.Dalle.Ep_td, myBeam.Dalle.Bac)
@@ -184,6 +208,8 @@
         myBeam.MaillageBeff(lSimple, False, bEff)
 
         VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi)
+
+        If lMulti Then InitialiseCalculTempArma(myBeam.Dalle, NbTranches, EpTranche)
 
         '--( Préparation du maillage de la dalle
 
@@ -256,6 +282,12 @@
             TempDalleStep(iSTep, 1) = TempCTranche(NbTranches - 1)
             TempCStep.Add(TempCTranche)
 
+            '# Récupération de la température des armatures
+
+            For iArma = 0 To nbArma - 1
+                TempArmaStep(iSTep)(iArma) = TemperatureLitArma(myBeam, iArma, NbTranches, EpTranche, TempCTranche)
+            Next
+
             '# Réduction des propriétés de l'acier en fct de la température
 
             kReducYFs = EN_Feu.ReducFyAcier(TempFs)
@@ -295,9 +327,9 @@
             For iSTep = 0 To Me.NbStep - 1
                 '## Calculs des moments plastiques en fct de la température
 
-                MaillagePropPlastiquesMixtes(myBeam, bEff, DeltaRd, 1, True, lGeneration1, False,
+                MaillagePropPlastiquesMixtes(myBeam, bEff, DeltaRd, 1, lGeneration1, False,
                                              TempFsStep(iSTep), TempFiStep(iSTep), TempWStep(iSTep),
-                                             NbTranches, zTranche, EpTranche, TempCStep(iSTep), MplRdP, zANPP)
+                                             NbTranches, zTranche, EpTranche, TempCStep(iSTep), TempArmaStep(iSTep), MplRdP, zANPP)
 
                 '## Vérification en flexion
 
@@ -369,73 +401,9 @@
 
 #Region " Propriétés des sections mixtes en fonction de la température "
 
-    'Private Sub MomentPlastiquePlus(mySection As cls_Section, myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
-    '                                Beff As Decimal, reducKyFs As Decimal, reducKyFi As Decimal, reducKyW As Decimal,
-    '                                ByRef MplRd As Decimal, ByRef zANP As Decimal)
-    '    '--------------------------------------------------------------------------------------------------------------------------
-    '    '   18/04/24 :  Création - POM
-    '    '--------------------------------------------------------------------------------------------------------------------------
-    '    '   Calcul du moment plastique positif sous incendie d'une section avec enrobage partiel
-    '    '--------------------------------------------------------------------------------------------------------------------------
-    '    '   mySection   [E] :   Section
-    '    '   myDalle     [E] :   Dalle
-    '    '   myOptions   [E] :   Options de calcul à l'incendie
-    '    '   Gammas      [E] :   Coefficients partiels
-    '    '   lMixte      [E] :   Indique si mixité avec la dalle
-    '    '   Beff        [E] :   Largeur efficace de la dalle dans la cas d'une poutre mixte
-    '    '   reducKyFs   [E] :   Réduction de la limite d'élasticité de la semelle sup
-    '    '   reducKyFi   [E] :   Réduction de la limite d'élasticité de la semelle inf
-    '    '   reducKyW    [E] :   Réduction de la limite d'élasticité de l'âme
-    '    '   MplRd       [S] :   Moment plastique de calcul
-    '    '   zANP        [S] :   Position de l'ANP
-    '    '--------------------------------------------------------------------------------------------------------------------------
-
-    '    '--> Déclarations
-
-    '    Dim myModele As New cls_ModeleP
-    '    Dim Hw As Decimal
-    '    Dim lLamine As Boolean = mySection.lLamine
-
-    '    Const RhoV As Decimal = 0
-    '    Dim FySup, FyInf, FyW As Decimal
-    '    Const Signe As Decimal = 1
-    '    Const lValeurRd As Boolean = True
-    '    Const lMixte As Boolean = True
-
-    '    '--> Initialisation
-
-    '    Hw = mySection.ProfilA.HauteurAmeHw
-    '    FySup = mySection.FySup
-    '    FyInf = mySection.FyInf
-    '    FyW = mySection.FyW
-
-    '    '--> Modélisation du profilé acier
-
-    '    myModele.MaillageProfileA_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
-
-    '    ''--> Dalle béton
-
-    '    If lMixte And (Beff > 0) Then
-
-    '        '# Dalle 
-
-    '        '    MaillageDalleMPlus(myDalle, myOptions, Gammas, mySection.ProfilA.Bfs, Beff, Time, myModele)
-
-    '    End If
-
-    '    '--> Recherche de l'axe neutre plastique
-
-    '    myModele.RechercheANP(Signe, zANP, lValeurRd)
-
-    '    '--> Moment plastique
-
-    '    MplRd = myModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
-
-    'End Sub
-
     Private Sub MaillagePropPlastiquesMixtes(myBeam As cls_Poutre, Beff(,) As Decimal, DeltaRd() As List(Of Decimal), Signe As Decimal, lValRd As Boolean,
-                                             lGen1 As Boolean, lApplyBeta As Boolean, TempFs As Decimal, TempW As Decimal, TempFi As Decimal,
-                                             NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, TempC() As Decimal,
+                                             lGen1 As Boolean, TempFs As Decimal, TempW As Decimal, TempFi As Decimal,
+                                             NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, TempC() As Decimal, TempS() As Decimal,
                                              ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal)
         '---------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
@@ -456,6 +424,7 @@
         '   zTran       [E] :   Position de chaque tranche
         '   eTran       [E] :   Epaisseur de chaque tranche
         '   TempC       [E] :   Température de chaque tranche
+        '   TempS       [E] :   Températures dans les lits d'armature
         '   MplRd       [S] :   Table des moments plastiques au droit des noeuds du modèle
         '   zANP        [S] :   Table des position des ANP
         '---------------------------------------------------------------------------------------------
@@ -475,6 +444,7 @@
         Dim kReducYFi As Decimal                ' Coefficient réduction limite d'élasticité en fct température de la semelle inf
         Dim kReducYW As Decimal                 ' Coefficient réduction limite d'élasticité en fct température de l'âme
         Dim kReducC() As Decimal                ' Coefficient de réduction de Fc dans chaque tranche
+        Dim kReducS() As Decimal                ' Coefficient de réduction pour l'acier des armatures de la dalle
         Dim EN_Feu As New cls_EurocodesFeu
         Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
         Dim myDeltaPRd As Decimal
@@ -483,6 +453,10 @@
         Dim iTravD, iTravF As Integer
         Dim iNodeDeb, iNodeFin As Integer
         Dim kDeb, kFin As Integer
+        Dim iArma As Integer
+
+        Dim nbLits As Integer = myBeam.Dalle.LitArma.Count
+        'Dim ThetaS As Decimal'
 
         '--> Initialisation
 
@@ -490,14 +464,23 @@
         ReDim zANP(myBeam.Nodes.nbNodes - 1, 1)
         zTop = myBeam.Dalle.zTop
 
+        '# Coeff de réduction pour le profilé
         kReducYFs = EN_Feu.ReducFyAcier(TempFs)
         kReducYFi = EN_Feu.ReducFyAcier(TempFi)
         kReducYW = EN_Feu.ReducFyAcier(TempW)
 
+        '# Coeff de réduction pour le béton de la dalle
         ReDim kReducC(NbTranches - 1)
 
         For iTr As Integer = 0 To NbTranches - 1
             kReducC(iTr) = EN_Feu.ReducFckBeton(TempC(iTr), lBetonL)
+        Next
+
+        '# Coeff de réduction pour les armatures
+        ReDim kReducS(nbLits - 1)
+        For iArma = 0 To nbLits - 1
+            '            ThetaS = Me.TemperatureLitArma(myBeam, iArma, NbTranches, eTran, TempC)
+            kReducS(iArma) = EN_Feu.ReducFskArmatures(TempS(iArma), myBeam.ParamFeu.lArmaFormeeAFroid)
         Next
 
         '--> Boucle sur les noeuds pour récupérer le moment plastique 
@@ -521,12 +504,83 @@
                         Me.MomentPlastiquePlus(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma,
                                                Beff(iNode, k), myDeltaPRd, kReducYFs, kReducYFi, kReducYW,
                                                NbTranches, zTran, eTran, kReducC, MplRd(iNode, k), zANP(iNode, k))
+                    Else
+
+                        Me.MomentPlastiqueMoins(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma,
+                                                Beff(iNode, k), kReducYFs, kReducYFi, kReducYW, kReducS, MplRd(iNode, k), zANP(iNode, k))
+
                     End If
 
                 Next
             Next
 
         Next
+
+    End Sub
+
+    Private Sub MomentPlastiqueMoins(mySection As cls_Section, myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
+                                     Beff As Decimal, reducKyFs As Decimal, reducKyFi As Decimal, reducKyW As Decimal,
+                                     kReducS() As Decimal, ByRef MplRd As Decimal, ByRef zANP As Decimal)
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   08/05/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Calcul du moment plastique négatif sous incendie d'une section sans enrobage partiel
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   mySection   [E] :   Section
+        '   myDalle     [E] :   Dalle
+        '   myOptions   [E] :   Options de calcul à l'incendie
+        '   Gammas      [E] :   Coefficients partiels
+        '   lMixte      [E] :   Indique si mixité avec la dalle
+        '   Beff        [E] :   Largeur efficace de la dalle dans la cas d'une poutre mixte
+        '   reducKyFs   [E] :   Réduction de la limite d'élasticité de la semelle sup
+        '   reducKyFi   [E] :   Réduction de la limite d'élasticité de la semelle inf
+        '   reducKyW    [E] :   Réduction de la limite d'élasticité de l'âme
+        '   kReducS     [E] :   Réduction de la limite d'élasticité dans les armatures
+        '   MplRd       [S] :   Moment plastique de calcul
+        '   zANP        [S] :   Position de l'ANP
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim myModele As New cls_ModeleP
+
+        Const RhoV As Decimal = 0
+        Dim FySup, FyInf, FyW As Decimal
+        Dim Hw As Decimal
+        Const lMixte As Boolean = True
+        Dim zArma, Ztop As Decimal
+
+        '--> Initialisation
+
+        Hw = mySection.ProfilA.HauteurAmeHw
+        FySup = mySection.FySup
+        FyInf = mySection.FyInf
+        FyW = mySection.FyW
+        Ztop = myDalle.zTop
+
+        '--> Modélisation du profilé acier
+
+        myModele.MaillageProfileA_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
+
+        '--> Dalle béton
+
+        If lMixte And (Beff > 0) Then
+
+            'En moments négatifs, on ne prend pas en compte la dalle
+
+        End If
+
+        '--> Armatures
+
+        If lMixte And (Beff > 0) Then
+
+            For iArma = 0 To myDalle.LitArma.Count - 1
+
+                zArma = Ztop - myDalle.LitArma(iArma).z_s
+                myModele.MaillageLitArmaDalle_YY(Gammas.GammaS_fi, Beff, myDalle, iArma, zArma, kReducS(iArma) * myDalle.AcierArmatures.FsK)
+            Next
+
+        End If
 
     End Sub
 
@@ -537,7 +591,7 @@
         '--------------------------------------------------------------------------------------------------------------------------
         '   18/04/24 :  Création - POM
         '--------------------------------------------------------------------------------------------------------------------------
-        '   Calcul du moment plastique positif sous incendie d'une section avec enrobage partiel
+        '   Calcul du moment plastique positif sous incendie d'une section sans enrobage partiel
         '--------------------------------------------------------------------------------------------------------------------------
         '   mySection   [E] :   Section
         '   myDalle     [E] :   Dalle
@@ -581,7 +635,7 @@
 
         myModele.MaillageProfileA_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
 
-        ''--> Dalle béton
+        '--> Dalle béton
 
         If lMixte And (Beff > 0) Then
 
@@ -598,6 +652,280 @@
         '--> Moment plastique
 
         MplRd = myModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    End Sub
+
+    Private Function TemperatureLitArma(myBeam As cls_Poutre, iArma As Integer,
+                                        NbTranches As Integer, eTran() As Decimal, TempC() As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   08/05/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la température d'un lit d'armature dans la dalle
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   iArma       [E] :   Inidice du lit d'armature
+        '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
+        '   eTran       [E] :   Epaisseur de chaque tranche
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iMethod As Integer = 1
+        Dim ThetaS As Decimal
+
+        '--( Initialisation
+
+        Select Case iMethod
+            Case 0 : ThetaS = Me.TemperatureLitArmaAlAxe(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
+            Case 1 : ThetaS = Me.TemperatureLitArmaMoyenne(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
+            Case 2 : ThetaS = Me.TemperatureLitArmaAlAxe(myBeam.Dalle, iArma, NbTranches, eTran, TempC)
+        End Select
+
+        Return ThetaS
+
+    End Function
+
+    Private Function TemperatureLitArmaMoyenne(myDalle As cls_Dalle, iArma As Integer,
+                                               NbTranches As Integer, eTran() As Decimal, TempC() As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   08/05/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la température d'un lit d'armature dans la dalle
+        '   Valeur moyenne
+        '   Cette routine doit impérativement avoir été précédée par l'initialisation  InitialiseCalculTempArmaMoyenne
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   iArma       [E] :   Inidice du lit d'armature
+        '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
+        '   zTran       [E] :   Position de chaque tranche
+        '   eTran       [E] :   Epaisseur de chaque tranche
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iTr As Integer
+
+        Dim ThetaS As Decimal
+
+        '--( Température moyenne
+
+        ThetaS = 0
+        For iTr = 0 To NbTranches - 1
+            ThetaS += TempC(iTr) * Me.kTempArma(iArma, iTr)
+        Next
+
+        '--( Fin
+
+        Return ThetaS
+
+    End Function
+
+    Private Function TemperatureLitArmaAlAxe(myDalle As cls_Dalle, iArma As Integer,
+                                             NbTranches As Integer, eTran() As Decimal, TempC() As Decimal) As Decimal
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   08/05/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la température d'un lit d'armature dans la dalle
+        '   Mesurée à l'axe de l'armature ou à la fibre inf de l'armature (pour température maxi)
+        '   Cette routine doit impérativement avoir été précédée par l'initialisation  InitialiseCalculTempArmaAxe
+        '--------------------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   iArma       [E] :   Inidice du lit d'armature
+        '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
+        '   zTran       [E] :   Position de chaque tranche
+        '   eTran       [E] :   Epaisseur de chaque tranche
+        '--------------------------------------------------------------------------------------------------------------------------
+
+        Dim ThetaS As Decimal
+
+        '--( Déclaration
+
+        ThetaS = TempC(Me.iTraArmaAxe(iArma))
+
+        Return ThetaS
+
+    End Function
+
+    Private Sub InitialiseCalculTempArma(myDalle As cls_Dalle, nbTranches As Integer, eTran() As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   08/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Préparation du calcul des températures dans les armatures
+        '-----------------------------------------------------------------------------------------------------------
+        '   myDalle     [E] :   Dalle
+        '   nbTranches  [E] :   Nombre de tranches discrétisant la dalle
+        '   eTran       [E] :   Epaisseur des tranches
+        '-----------------------------------------------------------------------------------------------------------
+
+        Select Case MethodTempArma
+            Case enuTypeInterpoleTempArma.Axe : Me.InitialiseCalculTempArmaAxe(myDalle, nbTranches, eTran)
+            Case enuTypeInterpoleTempArma.Maximale : Me.InitialiseCalculTempArmaAxe(myDalle, nbTranches, eTran, True)
+            Case enuTypeInterpoleTempArma.Moyenne : Me.InitialiseCalculTempArmaMoyenne(myDalle, nbTranches, eTran)
+        End Select
+
+    End Sub
+
+    Private Sub InitialiseCalculTempArmaMoyenne(myDalle As cls_Dalle, NbTranches As Integer, eTran() As Decimal)
+        '-----------------------------------------------------------------------------------------------------------
+        '   08/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Préparation du calcul des températures dans les armatures
+        '   Dans le cas d'un calcul de la température moyenne de la barre (en fct des tranches recoupées)
+        '-----------------------------------------------------------------------------------------------------------
+        '   myDalle     [E] :   Dalle
+        '   nbTranches  [E] :   Nombre de tranches discrétisant la dalle
+        '   eTran       [E] :   Epaisseur des tranches
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iArma, nbArma As Integer
+
+        Dim iTr As Integer
+        Dim AireS As Decimal            ' Aire d'un barre d'armature
+        Dim AsTranche() As Decimal      ' Aire d'une barre comprise dans chacune des tranches
+        Dim AsTopTranche() As Decimal   ' Aire d'une barre comprise au dessus de la frontière inférieure de la tranche
+
+        Dim zBord As Decimal
+        Dim PhiS As Decimal
+        Dim zSmin, zSmax As Decimal
+        Dim zTop As Decimal
+        Dim zArma, DeltaZ As Decimal
+        Dim AnglePhi As Decimal
+
+        Dim Acum As Decimal
+
+        '--( Initialisation
+
+        nbArma = myDalle.LitArma.Count
+
+        zTop = myDalle.zTop
+        zBord = zTop
+        ReDim AsTranche(NbTranches - 1)
+        ReDim AsTopTranche(NbTranches - 1)
+        zSmin = zArma - PhiS / 2
+        zSmax = zSmin + PhiS
+        AireS = Math.PI * PhiS ^ 2 / 4
+        ReDim Me.kTempArma(nbArma - 1, NbTranches - 1)
+
+        '--( Boucle sur les lit d'armature
+
+        For iArma = 0 To nbArma - 1
+            PhiS = myDalle.LitArma(iArma).PhiS
+            zArma = zTop - myDalle.LitArma(iArma).z_s
+
+            '##( Recherche des aires d'armatures situées au dessus des frontières de tranches
+
+            For iTr = NbTranches - 1 To 0 Step -1
+                zBord -= eTran(iTr)
+
+                If IsSmaller(zBord, zSmax) Then
+                    '# La frontière de la tranche est sous la partie sup de l'armature
+
+                    If IsSmallerOrEqual(zBord, zSmin) Then
+                        '# La frontière est entièrement sous l'armature
+                        AsTopTranche(iTr) = AireS
+                    Else
+                        '# La tranche comprend seulement une partie de la barre
+
+                        DeltaZ = zBord - zArma
+                        AnglePhi = 2 * Math.Acos(DeltaZ / (PhiS / 2))
+
+                        AsTopTranche(iTr) = PhiS ^ 2 * (AnglePhi - Math.Sin(AnglePhi)) / 8
+
+                    End If
+
+                Else
+                    '# Aucune partie de l'armature n'est située au dessus de la frontière inf de la tranche
+                    AsTopTranche(iTr) = 0
+                End If
+
+            Next
+
+            '##( Recherche des aires d'armatures dans chaque tranches
+
+            AsTranche(NbTranches - 1) = AsTopTranche(NbTranches - 1)
+            For i As Integer = NbTranches - 2 To 0 Step -1
+                AsTranche(i) = AsTopTranche(i)
+                For j As Integer = NbTranches - 1 To i + 1 Step -1
+                    AsTranche(i) -= AsTranche(j)
+                Next
+            Next
+
+            '##( Pour contrôle, cumul des aire
+
+            Acum = AsTranche(0)
+            For i As Integer = 1 To NbTranches - 1
+                Acum += AsTranche(i)
+            Next
+
+            '##( Coefficient moyen
+
+            For iTr = 0 To NbTranches - 1
+
+                Me.kTempArma(iArma, iTr) = AsTranche(iTr) / AireS
+
+            Next
+
+        Next
+
+    End Sub
+
+    Private Sub InitialiseCalculTempArmaAxe(myDalle As cls_Dalle, NbTranches As Integer, eTran() As Decimal, Optional lMax As Boolean = False)
+        '-----------------------------------------------------------------------------------------------------------
+        '   08/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------
+        '   Préparation du calcul des températures dans les armatures
+        '   Dans le cas d'un calcul de la température à l'axe des barres
+        '-----------------------------------------------------------------------------------------------------------
+        '   myDalle     [E] :   Dalle
+        '   nbTranches  [E] :   Nombre de tranches discrétisant la dalle
+        '   eTran       [E] :   Epaisseur des tranches
+        '   lMax        [E] :   Indique si calcul de la température maxi, auquel cas on cherche le zmini
+        '-----------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iArma, nbArma As Integer
+        Dim lCont, lTrouve As Boolean
+        Dim zBord, zTop As Decimal
+        Dim iTr, iTrArma As Integer
+        Dim zArma As Decimal
+
+        '---( Initialisation
+
+        nbArma = myDalle.LitArma.Count
+        ReDim Me.iTraArmaAxe(nbArma - 1)
+        zTop = myDalle.zTop
+
+        '--( Traitement
+
+        For iArma = 0 To nbArma - 1
+            zArma = zTop - myDalle.LitArma(iArma).z_s
+            If lMax Then zArma -= myDalle.LitArma(iArma).PhiS / 2
+            zBord = zTop
+            iTr = NbTranches - 1
+            lCont = True
+            lTrouve = False
+            Do While lCont
+                zBord -= eTran(iTr)
+                If IsEqual(zBord, zArma) Then
+                    iTrArma = iTr - 1
+                    lTrouve = True
+                ElseIf IsSmaller(zBord, zArma) Then
+                    iTrArma = iTr
+                    lTrouve = True
+                End If
+                If Not lTrouve Then
+                    iTr -= 1
+                    lCont = (iTr >= 0)
+                Else
+                    lCont = False
+                End If
+            Loop
+
+            If lTrouve Then Me.iTraArmaAxe(iArma) = iTrArma
+        Next
 
     End Sub
 
@@ -710,6 +1038,240 @@
         Next
 
     End Sub
+
+#End Region
+
+#Region " Poubelle "
+
+    'Private Function TemperatureLitArmaMoyenne(myDalle As cls_Dalle, iArma As Integer,
+    '                                           NbTranches As Integer, eTran() As Decimal, TempC() As Decimal) As Decimal
+    '    '--------------------------------------------------------------------------------------------------------------------------
+    '    '   08/05/24 :  Création - POM
+    '    '--------------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul de la température d'un lit d'armature dans la dalle
+    '    '   Valeur moyenne
+    '    '--------------------------------------------------------------------------------------------------------------------------
+    '    '   myBeam      [E] :   Poutre
+    '    '   iArma       [E] :   Inidice du lit d'armature
+    '    '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
+    '    '   zTran       [E] :   Position de chaque tranche
+    '    '   eTran       [E] :   Epaisseur de chaque tranche
+    '    '--------------------------------------------------------------------------------------------------------------------------
+
+    '    '--( Déclaration
+
+    '    Dim iTr As Integer
+    '    Dim AireS As Decimal            ' Aire d'un barre d'armature
+    '    Dim AsTranche() As Decimal      ' Aire d'une barre comprise dans chacune des tranches
+    '    Dim AsTopTranche() As Decimal   ' Aire d'une barre comprise au dessus de la frontière inférieure de la tranche
+
+    '    Dim zBord As Decimal
+    '    Dim PhiS As Decimal
+    '    Dim zSmin, zSmax As Decimal
+    '    Dim zTop As Decimal
+    '    Dim zArma, DeltaZ As Decimal
+    '    Dim AnglePhi As Decimal
+
+    '    Dim ThetaS As Decimal
+    '    Dim Acum As Decimal
+
+    '    '--( Initialisation
+
+    '    zTop = myDalle.zTop
+    '    zBord = zTop
+    '    ReDim AsTranche(NbTranches - 1)
+    '    ReDim AsTopTranche(NbTranches - 1)
+    '    PhiS = myDalle.LitArma(iArma).PhiS
+    '    zArma = zTop - myDalle.LitArma(iArma).z_s
+    '    zSmin = zArma - PhiS / 2
+    '    zSmax = zSmin + PhiS
+    '    AireS = Math.PI * PhiS ^ 2 / 4
+
+    '    '--( Recherche des aires d'armatures situées au dessus des frontières de tranches
+
+    '    For iTr = NbTranches - 1 To 0 Step -1
+    '        zBord -= eTran(iTr)
+
+    '        If IsSmaller(zBord, zSmax) Then
+    '            '# La frontière de la tranche est sous la partie sup de l'armature
+
+    '            If IsSmallerOrEqual(zBord, zSmin) Then
+    '                '# La frontière est entièrement sous l'armature
+    '                AsTopTranche(iTr) = AireS
+    '            Else
+    '                '# La tranche comprend seulement une partie de la barre
+
+    '                DeltaZ = zBord - zArma
+    '                AnglePhi = 2 * Math.Acos(DeltaZ / (PhiS / 2))
+
+    '                AsTopTranche(iTr) = PhiS ^ 2 * (AnglePhi - Math.Sin(AnglePhi)) / 8
+
+    '            End If
+
+    '        Else
+    '            '# Aucune partie de l'armature n'est située au dessus de la frontière inf de la tranche
+    '            AsTopTranche(iTr) = 0
+    '        End If
+
+    '    Next
+
+    '    '--( Recherche des aires d'armatures dans chaque tranches
+
+    '    AsTranche(NbTranches - 1) = AsTopTranche(NbTranches - 1)
+    '    For i As Integer = NbTranches - 2 To 0 Step -1
+    '        AsTranche(i) = AsTopTranche(i)
+    '        For j As Integer = NbTranches - 1 To i + 1 Step -1
+    '            AsTranche(i) -= AsTranche(j)
+    '        Next
+    '    Next
+
+    '    '--( Pour contrôle, cumul des aire
+
+    '    Acum = AsTranche(0)
+    '    For i As Integer = 1 To NbTranches - 1
+    '        Acum += AsTranche(i)
+    '    Next
+
+    '    '--( Température moyenne
+
+    '    ThetaS = 0
+    '    For iTr = 0 To NbTranches - 1
+    '        ThetaS += TempC(iTr) * AsTranche(iTr)
+    '    Next
+    '    ThetaS = ThetaS / AireS
+
+    '    '--( Fin
+
+    '    Return ThetaS
+
+    'End Function
+
+    'Private Function TemperatureLitArmaAlAxe(myDalle As cls_Dalle, iArma As Integer,
+    '                                        NbTranches As Integer, eTran() As Decimal, TempC() As Decimal) As Decimal
+    '    '--------------------------------------------------------------------------------------------------------------------------
+    '    '   08/05/24 :  Création - POM
+    '    '--------------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul de la température d'un lit d'armature dans la dalle
+    '    '   Mesurée à l'axe de l'armature
+    '    '--------------------------------------------------------------------------------------------------------------------------
+    '    '   myBeam      [E] :   Poutre
+    '    '   iArma       [E] :   Inidice du lit d'armature
+    '    '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
+    '    '   zTran       [E] :   Position de chaque tranche
+    '    '   eTran       [E] :   Epaisseur de chaque tranche
+    '    '--------------------------------------------------------------------------------------------------------------------------
+
+    '    '--( Déclaration
+
+    '    Dim zTop As Decimal
+    '    Dim zArma As Decimal
+    '    Dim PhiS As Decimal
+
+    '    Dim lCont, lTrouve As Boolean
+    '    Dim iTr As Integer
+    '    Dim zBord As Decimal
+    '    Dim iTrArma As Integer
+    '    Dim ThetaS As Decimal
+
+    '    '--( Initialisation
+
+    '    zTop = myDalle.zTop
+    '    zArma = myDalle.LitArma(iArma).z_s
+    '    PhiS = myDalle.LitArma(iArma).PhiS
+
+    '    '--( Température à l'axe 
+
+    '    zBord = zTop
+    '    iTr = NbTranches - 1
+    '    lCont = True
+    '    lTrouve = False
+    '    Do While lCont
+    '        zBord -= eTran(iTr)
+    '        If IsEqual(zBord, zArma) Then
+    '            iTrArma = iTr - 1
+    '            lTrouve = True
+    '        ElseIf IsSmaller(zBord, zArma) Then
+    '            iTrArma = iTr
+    '            lTrouve = True
+    '        End If
+    '        If Not lTrouve Then
+    '            iTr -= 1
+    '            lCont = (iTr >= 0)
+    '        Else
+    '            lCont = False
+    '        End If
+    '    Loop
+    '    If lTrouve Then
+    '        ThetaS = TempC(iTrArma)
+    '    End If
+
+    '    Return ThetaS
+
+    'End Function
+
+    'Private Sub MomentPlastiquePlus(mySection As cls_Section, myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
+    '                                Beff As Decimal, reducKyFs As Decimal, reducKyFi As Decimal, reducKyW As Decimal,
+    '                                ByRef MplRd As Decimal, ByRef zANP As Decimal)
+    '    '--------------------------------------------------------------------------------------------------------------------------
+    '    '   18/04/24 :  Création - POM
+    '    '--------------------------------------------------------------------------------------------------------------------------
+    '    '   Calcul du moment plastique positif sous incendie d'une section avec enrobage partiel
+    '    '--------------------------------------------------------------------------------------------------------------------------
+    '    '   mySection   [E] :   Section
+    '    '   myDalle     [E] :   Dalle
+    '    '   myOptions   [E] :   Options de calcul à l'incendie
+    '    '   Gammas      [E] :   Coefficients partiels
+    '    '   lMixte      [E] :   Indique si mixité avec la dalle
+    '    '   Beff        [E] :   Largeur efficace de la dalle dans la cas d'une poutre mixte
+    '    '   reducKyFs   [E] :   Réduction de la limite d'élasticité de la semelle sup
+    '    '   reducKyFi   [E] :   Réduction de la limite d'élasticité de la semelle inf
+    '    '   reducKyW    [E] :   Réduction de la limite d'élasticité de l'âme
+    '    '   MplRd       [S] :   Moment plastique de calcul
+    '    '   zANP        [S] :   Position de l'ANP
+    '    '--------------------------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclarations
+
+    '    Dim myModele As New cls_ModeleP
+    '    Dim Hw As Decimal
+    '    Dim lLamine As Boolean = mySection.lLamine
+
+    '    Const RhoV As Decimal = 0
+    '    Dim FySup, FyInf, FyW As Decimal
+    '    Const Signe As Decimal = 1
+    '    Const lValeurRd As Boolean = True
+    '    Const lMixte As Boolean = True
+
+    '    '--> Initialisation
+
+    '    Hw = mySection.ProfilA.HauteurAmeHw
+    '    FySup = mySection.FySup
+    '    FyInf = mySection.FyInf
+    '    FyW = mySection.FyW
+
+    '    '--> Modélisation du profilé acier
+
+    '    myModele.MaillageProfileA_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
+
+    '    ''--> Dalle béton
+
+    '    If lMixte And (Beff > 0) Then
+
+    '        '# Dalle 
+
+    '        '    MaillageDalleMPlus(myDalle, myOptions, Gammas, mySection.ProfilA.Bfs, Beff, Time, myModele)
+
+    '    End If
+
+    '    '--> Recherche de l'axe neutre plastique
+
+    '    myModele.RechercheANP(Signe, zANP, lValeurRd)
+
+    '    '--> Moment plastique
+
+    '    MplRd = myModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
+
+    'End Sub
 
 #End Region
 

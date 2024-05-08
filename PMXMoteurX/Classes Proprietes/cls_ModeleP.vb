@@ -484,7 +484,7 @@ Public Class cls_ModeleP
     End Sub
 
     Public Sub MaillageProfileUsuels_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                         FySup As Decimal, FyInf As Decimal, FyW As Decimal)
+                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   25/04/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -1130,7 +1130,7 @@ Public Class cls_ModeleP
 
     End Sub
 
-    Public Sub MaillageArmaturesDalle_YY(GammaS As Decimal, bEff As Decimal, myDalle As cls_Dalle)
+    Public Sub MaillageArmaturesDalle_YY(GammaS As Decimal, bEff As Decimal, myDalle As cls_Dalle, Fsk As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   04/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -1139,17 +1139,18 @@ Public Class cls_ModeleP
         '   GammaS      [E] :   Coefficient partiel pour les armatures
         '   bEff        [E] :   Largeur participante
         '   myDalle     [E] :   Dalle à mailler
+        '   Fsk         [E] :   Limite d'élasticité des barres
         '-------------------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
 
-        Dim Fsk As Decimal = myDalle.AcierArmatures.FsK
-        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / myDalle.AcierArmatures.Es
-        Dim PhiS, zArma, EspBar As Decimal
+        ' Dim ArmaNeq As Decimal = cls_Acier.EYACIER / myDalle.AcierArmatures.Es
+        'Dim PhiS, zArma, EspBar As Decimal
+        Dim zArma As Decimal
         Dim Ztop As Decimal
         Dim iArma As Integer
-        Dim nbBar As Decimal
-        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+        'Dim nbBar As Decimal
+        'Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
 
         '--> Initialisation
 
@@ -1157,17 +1158,52 @@ Public Class cls_ModeleP
 
         '--> Boucle sur les lits d'armature
 
-        For iArma = 0 To 1
-            If myDalle.LitArma(iArma).lActive Then
-                PhiS = myDalle.LitArma(iArma).PhiS
-                zArma = Ztop - myDalle.LitArma(iArma).z_s
-                EspBar = myDalle.LitArma(iArma).EspBar
-                nbBar = bEff / EspBar
+        For iArma = 0 To myDalle.LitArma.Count - 1
+            'If myDalle.LitArma(iArma).lActive Then
+            '    PhiS = myDalle.LitArma(iArma).PhiS
+            '    EspBar = myDalle.LitArma(iArma).EspBar
+            '    nbBar = bEff / EspBar
 
-                Me.AddMailleCirculaire(PhiS / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, nbBar, cls_Maille.EnuTypeMaille.Circulaire)
+            '    Me.AddMailleCirculaire(PhiS / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, nbBar, cls_Maille.EnuTypeMaille.Circulaire)
 
-            End If
+            'End If
+            zArma = Ztop - myDalle.LitArma(iArma).z_s
+            Me.MaillageLitArmaDalle_YY(GammaS, bEff, myDalle, iArma, zArma, Fsk)
         Next
+
+    End Sub
+
+    Public Sub MaillageLitArmaDalle_YY(GammaS As Decimal, bEff As Decimal, myDalle As cls_Dalle,
+                                       iArma As Integer, zArma As Decimal, Fsk As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   04/10/23 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage d'un lit d'armatures de la dalle pour le calcul des propriétés / axe YY
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaS      [E] :   Coefficient partiel pour les armatures
+        '   bEff        [E] :   Largeur participante
+        '   myDalle     [E] :   Dalle à mailler
+        '   iArma       [E] :   Indice du lit d'armature
+        '   Fsk         [E] :   Limite d'élasticité des barres
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim ArmaNeq As Decimal = cls_Acier.EYACIER / myDalle.AcierArmatures.Es
+        Dim PhiS, EspBar As Decimal
+        Dim nbBar As Decimal
+        Const DELTACArma As Decimal = 0 ' pour le le moment on néglige les armatures comprimées
+
+        '--( Traitement
+
+        If myDalle.LitArma(iArma).lActive Then
+            PhiS = myDalle.LitArma(iArma).PhiS
+            EspBar = myDalle.LitArma(iArma).EspBar
+            nbBar = bEff / EspBar
+
+            Me.AddMailleCirculaire(PhiS / 2, zArma, 1, DELTACArma, ArmaNeq, Fsk, 1, GammaS, nbBar, cls_Maille.EnuTypeMaille.Circulaire)
+
+        End If
 
     End Sub
 

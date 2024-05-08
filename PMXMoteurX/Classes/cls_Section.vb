@@ -267,6 +267,7 @@ Public Class cls_Section
         Dim nEqEc As Decimal = 1            ' On Applique 1 car calcul plastique
         Const nEqD As Decimal = 1           ' Idem
         'Dim NPro As Decimal
+        Dim Fsk As Decimal = MyDalle.AcierArmatures.FsK
 
         '--> Initialisation
 
@@ -303,9 +304,10 @@ Public Class cls_Section
 
             '# Armatures
 
-            MyModele.MaillageArmaturesDalle_YY(Gammas.GammaS, bEff, MyDalle)
+            MyModele.MaillageArmaturesDalle_YY(Gammas.GammaS, bEff, MyDalle, Fsk)
 
         End If
+
 
         '--> Recherche de l'axe neutre plastique
 
@@ -344,6 +346,7 @@ Public Class cls_Section
 
         Dim nEqEc As Decimal = 1            ' On Applique 1 car calcul plastique
         Const nEqD As Decimal = 1           ' Idem
+        Dim FsK As Decimal = MyDalle.AcierArmatures.FsK
 
         '--> Initialisation
 
@@ -379,7 +382,7 @@ Public Class cls_Section
 
             '# Armatures
 
-            MyModele.MaillageArmaturesDalle_YY(Gammas.GammaS, bEff, MyDalle)
+            MyModele.MaillageArmaturesDalle_YY(Gammas.GammaS, bEff, MyDalle, FsK)
 
         End If
 
@@ -701,7 +704,7 @@ Public Class cls_Section
 
             '# Armatures
 
-            MyModele.MaillageArmaturesDalle_YY(Gammas.GammaS, bEff, myDalle)
+            MyModele.MaillageArmaturesDalle_YY(Gammas.GammaS, bEff, myDalle, myDalle.AcierArmatures.FsK)
 
         End If
 

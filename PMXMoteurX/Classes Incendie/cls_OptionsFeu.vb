@@ -96,6 +96,9 @@
         'Me.BOLTZMANN = 5.67 * 10 ^ (-8)
 
         Me.lReductionConcreteStrength = False
+
+        Me.EpProtection = 0.1
+
     End Sub
 
 #End Region
