@@ -239,8 +239,6 @@ Public Class cls_Section
 
     End Sub
 
-
-
     Public Sub ProprietesPlastiquesMixteMyyEta(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
                                                bEff As Decimal, DeltaRd As Decimal, MyDalle As cls_Dalle,
                                                ByRef zANP As Decimal, ByRef MplRd As Decimal)
@@ -277,7 +275,7 @@ Public Class cls_Section
 
         '--> Modélisation du profilé acier
 
-        MyModele.MaillageProfileA_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd)
+        MyModele.MaillageProfileUsuels_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW)
 
         '# Béton d'enrobage
 

@@ -485,8 +485,8 @@
         '--( Déclarations
 
         Dim DeltaTempA As Decimal
-        Dim cA, RhoA As Decimal             ' Chaleur massique et masse volumique acier
-        Dim LambdaP, RhoP, cP As Decimal    ' Conductivité thermique, chaleur massique et masse volumique matériau de protection   
+        Dim cA, RhoA As Decimal                 ' Chaleur massique et masse volumique acier
+        Dim LambdaP, RhoP, cP As Decimal        ' Conductivité thermique, chaleur massique et masse volumique matériau de protection   
         Dim Phi As Decimal
         Dim DeltaG As Decimal
 
@@ -530,16 +530,17 @@
 
         Dim DeltaTempA As Decimal
         Dim cA, RhoA As Decimal         ' Chaleur massique et masse volumique acier
-        Dim FluxTherm, FluxConv As Decimal
+        Dim FluxTherm, FluxConv, FluxRad As Decimal
         Dim EpsilonA As Decimal         ' Emissivité acier
 
         '--( Traitement
 
         cA = Me.ChaleurSpecifiqueAcier(TempA)
         RhoA = cls_Acier.RHOACIER
-        FluxConv = myParamFeu.ConvectionCoef * (TempG - TempA)
-        FluxTherm = Me.FluxRadiatif(TempA, TempG, EpsilonA, myParamFeu) + FluxConv
         EpsilonA = EmissiviteAcier(TempA, myParamFeu.TypeSurface)
+        FluxConv = myParamFeu.ConvectionCoef * (TempG - TempA)
+        FluxRad = Me.FluxRadiatif(TempA, TempG, EpsilonA, myParamFeu)
+        FluxTherm = FluxRad + FluxConv
 
         DeltaTempA = (ksh * Massivete) / (cA * RhoA) * DeltaT * FluxTherm
 

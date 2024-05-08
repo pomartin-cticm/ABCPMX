@@ -3239,8 +3239,10 @@ Public Class cls_Poutre
 
     End Sub
 
-    Public Sub ProprietesVerifSlimFloorAcier(iCombi As Integer, MyPoutre As cls_Poutre, lValRd As Boolean, ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal, ByRef MelRd(,) As Decimal, ByRef zANE(,) As Decimal,
-                                                Psi_fi(,) As Decimal, rho_t_fi(,) As Decimal, Psi_y_fi(,) As Decimal, Psi_spd(,) As Decimal, rho_t_spd(,) As Decimal, Psi_y_spd(,) As Decimal)
+    Public Sub ProprietesVerifSlimFloorAcier(iCombi As Integer, MyPoutre As cls_Poutre, lValRd As Boolean,
+                                             ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal, ByRef MelRd(,) As Decimal, ByRef zANE(,) As Decimal,
+                                             Psi_fi(,) As Decimal, rho_t_fi(,) As Decimal, Psi_y_fi(,) As Decimal,
+                                             Psi_spd(,) As Decimal, rho_t_spd(,) As Decimal, Psi_y_spd(,) As Decimal)
         '------------------------------------------------------------------------------
         '   06/05/2024 :  Création - GUD
         '------------------------------------------------------------------------------
@@ -3254,6 +3256,7 @@ Public Class cls_Poutre
         '   zANP        [E] :   Axe neutre plastique
         '   MelRd       [E] :   Moment élastique résistant
         '   zANE        [E] :   Axe neutre élastique
+        '   Psi_fi      COMPLETER
         '------------------------------------------------------------------------------
 
         '--> Déclaration

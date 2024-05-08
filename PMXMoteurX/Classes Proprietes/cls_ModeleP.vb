@@ -483,8 +483,8 @@ Public Class cls_ModeleP
 
     End Sub
 
-    Private Sub MaillageProfileUsuels_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
-                                        FySup As Decimal, FyInf As Decimal, FyW As Decimal)
+    Public Sub MaillageProfileUsuels_YY(GammaM As Decimal, RhoV As Decimal, MyProfil As cls_ProfilA,
+                                         FySup As Decimal, FyInf As Decimal, FyW As Decimal)
         '-------------------------------------------------------------------------------------------------------------------
         '   25/04/24 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------
@@ -1213,6 +1213,67 @@ Public Class cls_ModeleP
             Me.AddMaille(Aire, epaC, zTop - EpDalle + zTran(iTr), 0, 1, nEqDalle, kRedCTr(iTr) * myDalle.beton.Fck, AlphaC, GammaC)
 
         Next
+
+    End Sub
+
+    Public Sub MaillageDalleTranches_ETA(GammaC As Decimal, AlphaC As Decimal, bEff As Decimal, nEqDalle As Decimal, myDalle As cls_Dalle,
+                                         DeltaPRd As Decimal, NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, kRedCTr() As Decimal)
+        '-------------------------------------------------------------------------------------------------------------------
+        '   08/05/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------
+        '   Maillage de la dalle béton pour le calcul des propriétés / axe YY
+        '   Prenant en compte une discrétisation par tranches (pour le calcul incendie)
+        '   Prenant en compte le degré de connexion
+        '-------------------------------------------------------------------------------------------------------------------
+        '   GammaC      [E] :   Coefficient partiel pour le béton
+        '   AlphaC      [E] :   Coefficient sur la résistance plastique du béton à l'incendie
+        '   bEff        [E] :   Largeur participante
+        '   nEqDalle    [E] :   Coefficient d'équivalence pour le béton
+        '   myDalle     [E] :   Dalle à mailler
+        '   DeltaPRd    [E] :   Résistance cumulée de la connexion
+        '   NbTranches  [E] :   Nombre de tranches discrétisant la dalle
+        '   zTran       [E] :   Position de chaque tranche
+        '   eTran       [E] :   Epaisseur de chaque tranche
+        '   kRedCTr     [E] :   Réduction de Fc dans chaque tranche
+        '-------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iTr As Integer
+        Dim Aire, epaC As Decimal
+        Dim zTop As Decimal = myDalle.zTop
+        Dim EpDalle As Decimal = 0
+        Dim lCont As Boolean
+        Dim NDalle As Decimal
+        Dim NcTr As Decimal
+        Dim zCum As Decimal
+
+        '--( Initialisation
+
+        For iTr = 0 To NbTranches - 1
+            EpDalle += eTran(iTr)
+        Next
+        zCum = 0
+
+        '--( Traitement
+
+        iTr = NbTranches - 1
+        lCont = True
+        NDalle = 0
+        Do While lCont
+            NcTr = AlphaC * eTran(iTr) * bEff * kRedCTr(iTr) * myDalle.beton.Fck / GammaC
+            If IsGreater(NDalle + NcTr, DeltaPRd) Then
+                epaC = (DeltaPRd - NDalle) / (AlphaC * bEff * kRedCTr(iTr) * myDalle.beton.Fck / GammaC)
+            Else
+                epaC = eTran(iTr)
+            End If
+            Aire = bEff * epaC
+            Me.AddMaille(Aire, epaC, zTop - zCum - epaC / 2, 0, 1, nEqDalle, kRedCTr(iTr) * myDalle.beton.Fck, AlphaC, GammaC)
+            zCum += eTran(iTr)
+            NDalle += NcTr
+            iTr -= 1
+            lCont = (iTr >= 0) And (IsSmaller(NDalle, DeltaPRd))
+        Loop
 
     End Sub
 

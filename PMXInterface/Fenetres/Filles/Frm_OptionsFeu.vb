@@ -18,7 +18,7 @@ Public Class Frm_OptionsFeu
 
 #End Region
 
-#Region " Ouverture "
+#Region "===Ouverture==="
 
     Private Sub Frm_OptionsFeu_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitialiserFenetre()
@@ -29,11 +29,13 @@ Public Class Frm_OptionsFeu
         InitialiserVariables()
         GestionLangues()
         GestionStyle()
+        GestionUnites()
         AfficherPoutreEnCours()
         lBuild = False
     End Sub
 
     Private Sub InitialiserVariables()
+
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
 
         list_txtbox.Add(txt_ThermalConductivity)
@@ -44,6 +46,15 @@ Public Class Frm_OptionsFeu
         list_txtbox.Add(txt_EmissivityFire)
         list_txtbox.Add(txt_ConvectionFactor)
         list_txtbox.Add(txt_ShadowEffect)
+
+    End Sub
+
+    Private Sub GestionUnites()
+
+        lbl_UnitDensity.Text = "kg/m3"
+        lbl_UnitThermalCond.Text = "W.m-1.K-1"
+        lbl_UnitSpecificHeat.Text = "J.kg-1.K-1"
+        etq_UnitD.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
     End Sub
 
@@ -114,9 +125,8 @@ Public Class Frm_OptionsFeu
                 lbl_ThermalConductivity.Text = Bloc("THERMALCONDUC")
                 lbl_SpecificHeat.Text = Bloc("SPECIFICHEAT")
 
-                lbl_UnitDensity.Text = "kg/m3"
-                lbl_UnitThermalConductivity.Text = "W.m-1.K-1"
-                lbl_UnitSpecificHeat.Text = "J.kg-1.K-1"
+                lbl_EpProtec.Text = Bloc("PROTECTIONTH")
+
                 lbl_UnittDalleFEMmax.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
                 '--> chk_ReductionConcreteStrenght
@@ -220,22 +230,26 @@ Public Class Frm_OptionsFeu
 
         With MyPoutreLoc.ParamFeu
 
-
             '--> Partie qui concerne les paramètres de la poutre
 
             chk_CalculFeu.Checked = .lCalcuFeu
-            MAJ_SurfaceType()
-            chk_AcierGalva.Checked = .lCalcuFeu
-            MAJ_AcierGalva()
+            Affiche_SurfaceType()
+
+            Me.chk_AcierGalva.Checked = (MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise)
+
             MAJ_ProtectionType()
             MAJ_InsulationType()
+
+
             Me.chk_ReductionConcreteStrenght.Checked = MyPoutreLoc.ParamFeu.lReductionConcreteStrength
             Me.chk_ArmaFroid.Checked = MyPoutreLoc.ParamFeu.lArmaFormeeAFroid
             Me.chk_ArmaComp.Checked = MyPoutreLoc.ParamFeu.lArmaCompression
             Me.chk_DalleFEM.Checked = MyPoutreLoc.ParamFeu.lDalleFEM
             Me.txt_tDalleFEMmax.Text = GetStringInUnit(.tDalleEFmax, Enu_TypeVariable.Dimension, 3, 2, False)
+            Me.txt_EpProtec.Text = GetStringInUnitN(.EpProtection, Enu_TypeVariable.Dimension, 3, 2, False, True)
 
             GestionPositionElements() 'Gère les positions des éléments dans la partie de droite
+            MAJI_TypeProtection()
 
             '--> Partie qui concerne les paramètres de calcul
 
@@ -248,7 +262,7 @@ Public Class Frm_OptionsFeu
     ''' <summary>
     ''' Gère l'affichage du cmb_SurfaceType
     ''' </summary>
-    Private Sub MAJ_SurfaceType()
+    Private Sub Affiche_SurfaceType()
 
         With MyPoutreLoc.ParamFeu
 
@@ -262,9 +276,6 @@ Public Class Frm_OptionsFeu
         End With
     End Sub
 
-    Private Sub MAJ_AcierGalva()
-        Me.chk_AcierGalva.Checked = MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise
-    End Sub
 
     ''' <summary>
     ''' Gère l'affichage du cmb_ProtectionType
@@ -414,6 +425,27 @@ Public Class Frm_OptionsFeu
         End With
     End Sub
 
+
+    Private Sub MAJI_TypeProtection()
+        'Gestion de l'affichage en fonction de si l'acier est protégé au feu ou non
+
+        Dim lProtege As Boolean = MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege
+
+        Me.pan_Protection.Visible = lProtege
+
+        Dim offsetY As Integer = 26
+
+        If lProtege Then
+            'chk_ReductionConcreteStrenght.Top = lbl_SpecificHeat.Location.Y + 1.5 * offsetY
+            chk_ArmaFroid.Top = Me.pan_Protection.Top + Me.pan_Protection.Height + offsetY - chk_ArmaFroid.Height
+        Else
+            chk_AcierGalva.Top = lbl_SurfaceType.Location.Y + 1.5 * offsetY
+            'chk_ReductionConcreteStrenght.Top = chk_AcierGalva.Location.Y + offsetY
+            chk_ArmaFroid.Top = chk_AcierGalva.Location.Y + offsetY
+        End If
+
+    End Sub
+
     ''' <summary>
     ''' Gère la position des éléments dans le panneau de droite en fonction du type de surface de la poutre locale 
     ''' </summary>
@@ -438,52 +470,6 @@ Public Class Frm_OptionsFeu
         chk_DalleFEM.Enabled = lCalculFeu
         txt_tDalleFEMmax.Enabled = lCalculFeu
 
-
-        'Gestion de l'affichage en fonction de si l'acier est protégé au feu ou non
-
-        Dim lProtege As Boolean = MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege
-
-        chk_AcierGalva.Visible = Not lProtege
-
-        lbl_ProtectionType.Visible = lProtege
-        cmb_ProtectionType.Visible = lProtege
-
-        lbl_InsulationType.Visible = lProtege
-        cmb_InsulationType.Visible = lProtege
-
-        lbl_Density.Visible = lProtege
-        img_Density.Visible = lProtege
-        txt_Density.Visible = lProtege
-        lbl_UnitDensity.Visible = lProtege
-
-        lbl_ThermalConductivity.Visible = lProtege
-        img_ThermalConductivity.Visible = lProtege
-        txt_ThermalConductivity.Visible = lProtege
-        lbl_UnitThermalConductivity.Visible = lProtege
-
-        lbl_SpecificHeat.Visible = lProtege
-        img_SpecificHeat.Visible = lProtege
-        txt_SpecificHeat.Visible = lProtege
-        lbl_UnitSpecificHeat.Visible = lProtege
-
-        Dim offsetY As Integer = 26
-
-        If lProtege Then
-            chk_ReductionConcreteStrenght.Top = lbl_SpecificHeat.Location.Y + 1.5 * offsetY
-        Else
-            chk_AcierGalva.Top = lbl_SurfaceType.Location.Y + 1.5 * offsetY
-            chk_ReductionConcreteStrenght.Top = chk_AcierGalva.Location.Y + offsetY
-        End If
-
-        chk_ArmaFroid.Top = chk_ReductionConcreteStrenght.Location.Y + offsetY
-        'chk_ArmaComp.Top = chk_ArmaFroid.Location.Y + offsetY
-        'chk_DalleFEM.Top = chk_ArmaComp.Location.Y + offsetY
-        'lbl_tDalleFEMmax.Top = chk_DalleFEM.Location.Y + offsetY
-        'img_tDalleFEMmax.Top = lbl_tDalleFEMmax.Location.Y + offsetY
-        'txt_tDalleFEMmax.Top = img_tDalleFEMmax.Location.Y
-        'lbl_UnittDalleFEMmax.Top = img_tDalleFEMmax.Location.Y
-
-        'Gestion de l'affichage en fonction de si la dalle est analysée aux EF ou non
 
         Dim lDalleFEM As Boolean = MyPoutreLoc.ParamFeu.lDalleFEM
 
@@ -622,7 +608,6 @@ Public Class Frm_OptionsFeu
         lBuild = False
     End Sub
 
-
     Private Sub chk_DalleFEM_CheckedChanged(sender As Object, e As EventArgs) Handles chk_DalleFEM.CheckedChanged
         If lBuild Then Exit Sub
 
@@ -635,15 +620,12 @@ Public Class Frm_OptionsFeu
         lBuild = False
     End Sub
 
-
-
-
 #End Region
 
 #Region " Evenements de saisie "
 
     Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_ThermalConductivity.TextChanged, txt_tDalleFEMmax.TextChanged, txt_TimeIncrement.TextChanged, txt_ReferenceTemp.TextChanged,
-        txt_FormFactor.TextChanged, txt_EmissivityFire.TextChanged, txt_ConvectionFactor.TextChanged, txt_ShadowEffect.TextChanged
+        txt_FormFactor.TextChanged, txt_EmissivityFire.TextChanged, txt_ConvectionFactor.TextChanged, txt_ShadowEffect.TextChanged, txt_EpProtec.TextChanged
 
         If lBuild Then Exit Sub
 
@@ -671,6 +653,8 @@ Public Class Frm_OptionsFeu
                         .ConvectionCoef = ValeurUI
                     Case txt_ShadowEffect.Name
                         .ksh = ValeurUI
+                    Case txt_EpProtec.Name
+                        .EpProtection = ValeurUI
                 End Select
 
             End With
@@ -693,6 +677,11 @@ Public Class Frm_OptionsFeu
         lValMax = True
 
         Select Case MyTxt.Name
+            Case Me.txt_EpProtec.Name
+                ValMin = 0
+                ValMax = 2
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+
             Case txt_ThermalConductivity.Name
 
                 ValMin = 0.005
@@ -797,6 +786,7 @@ Public Class Frm_OptionsFeu
             If MyPoutreLoc.ParamFeu.Protection = cls_OptionsFeu.enu_TypeProtection.IntumescentPaint Then
                 GereTransfertValeur(MyPoutreLoc.ParamFeu.CustomLambdaP, .CustomLambdaP, lModif)
             End If
+            GereTransfertValeur(MyPoutreLoc.ParamFeu.EpProtection, .EpProtection, lModif)
 
             GereTransfertValeur(MyPoutreLoc.ParamFeu.lReductionConcreteStrength, .lReductionConcreteStrength, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.lArmaFormeeAFroid, .lArmaFormeeAFroid, lModif)
@@ -817,6 +807,7 @@ Public Class Frm_OptionsFeu
             GereTransfertValeur(MyPoutreLoc.ParamFeu.ConvectionCoef, .ConvectionCoef, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.ksh, .ksh, lModif)
 
+
         End With
 
     End Sub
@@ -831,7 +822,7 @@ Public Class Frm_OptionsFeu
 
     Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_Density.Paint, img_ThermalConductivity.Paint, img_SpecificHeat.Paint, img_tDalleFEMmax.Paint,
      img_Boltzmann.Paint, img_TimeIncrement.Paint, img_ReferenceTemp.Paint, img_MaxTemp.Paint, img_FormFactor.Paint,
-     img_EmissivityFire.Paint, img_ConvectionFactor.Paint, img_ShadowEffect.Paint, img_ConvectionSlab.Paint, img_ConcreteResistance.Paint
+     img_EmissivityFire.Paint, img_ConvectionFactor.Paint, img_ShadowEffect.Paint, img_ConvectionSlab.Paint, img_ConcreteResistance.Paint, img_EpProtec.Paint
 
         '--> Déclarations
 
@@ -868,6 +859,13 @@ Public Class Frm_OptionsFeu
             Case Me.img_SpecificHeat.Name
 
                 strSymbol = "c"
+                strIndice = "p"
+
+                lGrec = False
+
+            Case Me.img_EpProtec.Name
+
+                strSymbol = "d"
                 strIndice = "p"
 
                 lGrec = False

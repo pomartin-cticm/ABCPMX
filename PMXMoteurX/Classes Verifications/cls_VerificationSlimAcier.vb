@@ -27,6 +27,7 @@
         methode2_ReducEpaisseur
         methode3_ReducLimiteElasticite
     End Enum
+
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
     'Public AlphaCrLTB() As Decimal                  ' Alpha critique pour le déversement élastique
@@ -119,10 +120,13 @@
         Dim MEd(,) As Decimal = Nothing
         Dim VEd(,) As Decimal = Nothing
         Dim QEd() As Decimal = Nothing                  ' tableau des forces nodales
-        Dim MplRd(,), zANP(,) As Decimal
+        Dim MplRd(,) As Decimal = Nothing
+        Dim zANP(,) As Decimal = Nothing
+        Dim MelRd(,) As Decimal = Nothing
+        Dim zANE(,) As Decimal = Nothing
+        'Dim MelRd(,), zANE(,) As Decimal
         Dim zANPMV(,) As Decimal = Nothing                ' Position ANP, tenant compte de l'interaction avec l'effort tranchant 
         Dim MVRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de l'interaction avec l'effort tranchant 
-        Dim MelRd(,), zANE(,) As Decimal
         Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
         Dim ClasseP, ClasseM As Integer 'Classes de la section en flexion positive et négative
         Dim lClasse4 As Boolean
@@ -212,7 +216,8 @@
 
             '# Propriétés réduites
 
-            myBeam.ProprietesVerifSlimFloorAcier(iCombi, myBeam, True, MplRd, zANP, MelRd, zANE, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
+            myBeam.ProprietesVerifSlimFloorAcier(iCombi, myBeam, True, MplRd, zANP, MelRd, zANE,
+                                                 Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
 
             '# Initialisation des critères dépendant du type de vérification
 
@@ -390,6 +395,16 @@
             For iNode = iDebN To iFinN
 
                 With MyPoutre.Section.ProfilA
+
+                    '== Suggestion pour DeltaX (POM)
+                    If iNode = 0 Then
+                        deltaX = (MyPoutre.Nodes.xGlobal(iNode + 1) - MyPoutre.Nodes.xGlobal(iNode)) / 2
+                    ElseIf iNode = MyPoutre.Nodes.nbNodes - 1 Then
+                        deltaX = (MyPoutre.Nodes.xGlobal(iNode) - MyPoutre.Nodes.xGlobal(iNode - 1)) / 2
+                    Else
+                        deltaX = (MyPoutre.Nodes.xGlobal(iNode + 1) - MyPoutre.Nodes.xGlobal(iNode - 1)) / 2
+                    End If
+                    '====
 
                     q = QEd(iNode) / deltaX 'sauf erreur de ma part il s'agit d'une force répartie dans les formules de calcul des coefficients de réduction 
 

@@ -292,7 +292,7 @@
         '-----------------------------------------------------------------------------------------------------------
         '   Calcul les efforts nodaux d'un model EF a partir des tranchants
         '-----------------------------------------------------------------------------------------------------------
-        '   EffVz       [S] :   Table des efforts tranchants
+        '   EffVz       [S] :   Table des efforts tranchants   CE N4EST PAS CORRECT
         '-----------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -392,7 +392,7 @@
 
 #End Region
 
-#Region "Fonctions de copie"
+#Region " Fonctions de copie "
 
     Private Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()

@@ -124,11 +124,11 @@
         Dim lSimple As Boolean = myBeam.Param.lLargeurEfficaceSimplifiee
         Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
 
-        Dim MplRdP() As Decimal = Nothing       ' Moments résistants plastiques le long de la barre
-        Dim zANPP() As Decimal = Nothing        ' Positions ANP le long de la barre
+        Dim MplRdP(,) As Decimal = Nothing      ' Moments résistants plastiques le long de la barre
+        Dim zANPP(,) As Decimal = Nothing       ' Positions ANP le long de la barre
         Dim MplRdM() As Decimal = Nothing       ' Moments résistants plastiques le long de la barre
         Dim zANPM() As Decimal = Nothing        ' Positions ANP le long de la barre
-        Dim bEff() As Decimal = Nothing         ' Largeur efficace de la dalle
+        Dim bEff(,) As Decimal = Nothing        ' Largeur efficace de la dalle
 
         Dim VRd0 As Decimal
 
@@ -295,7 +295,7 @@
             For iSTep = 0 To Me.NbStep - 1
                 '## Calculs des moments plastiques en fct de la température
 
-                MaillagePropPlastiquesMixtes(myBeam, bEff, 1, True, lGeneration1, False,
+                MaillagePropPlastiquesMixtes(myBeam, bEff, DeltaRd, 1, True, lGeneration1, False,
                                              TempFsStep(iSTep), TempFiStep(iSTep), TempWStep(iSTep),
                                              NbTranches, zTranche, EpTranche, TempCStep(iSTep), MplRdP, zANPP)
 
@@ -433,10 +433,10 @@
 
     'End Sub
 
-    Private Sub MaillagePropPlastiquesMixtes(myBeam As cls_Poutre, Beff() As Decimal, Signe As Decimal, lValRd As Boolean,
+    Private Sub MaillagePropPlastiquesMixtes(myBeam As cls_Poutre, Beff(,) As Decimal, DeltaRd() As List(Of Decimal), Signe As Decimal, lValRd As Boolean,
                                              lGen1 As Boolean, lApplyBeta As Boolean, TempFs As Decimal, TempW As Decimal, TempFi As Decimal,
                                              NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, TempC() As Decimal,
-                                             ByRef MplRd() As Decimal, ByRef zANP() As Decimal)
+                                             ByRef MplRd(,) As Decimal, ByRef zANP(,) As Decimal)
         '---------------------------------------------------------------------------------------------
         '   05/10/23 :  Création - POM
         '---------------------------------------------------------------------------------------------
@@ -444,6 +444,7 @@
         '---------------------------------------------------------------------------------------------
         '   myBeam      [E] :   Poutre traitée
         '   Beff        [E] :   Largeur participante de dalle
+        '   DeltaRd     [E] :   Table des valeurs cumulées de la résistance de la connexion le long de la poutre
         '   Signe       [E] :   Signe du moment à considérer
         '   lValRd      [E] :   Indique si valeurs de calcul
         '   lGen1       [E] :   Indique si génération 1 des eurocodes
@@ -476,11 +477,17 @@
         Dim kReducC() As Decimal                ' Coefficient de réduction de Fc dans chaque tranche
         Dim EN_Feu As New cls_EurocodesFeu
         Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
+        Dim myDeltaPRd As Decimal
+
+        Dim iTravee As Integer
+        Dim iTravD, iTravF As Integer
+        Dim iNodeDeb, iNodeFin As Integer
+        Dim kDeb, kFin As Integer
 
         '--> Initialisation
 
-        ReDim MplRd(myBeam.Nodes.nbNodes - 1)
-        ReDim zANP(myBeam.Nodes.nbNodes - 1)
+        ReDim MplRd(myBeam.Nodes.nbNodes - 1, 1)
+        ReDim zANP(myBeam.Nodes.nbNodes - 1, 1)
         zTop = myBeam.Dalle.zTop
 
         kReducYFs = EN_Feu.ReducFyAcier(TempFs)
@@ -495,29 +502,36 @@
 
         '--> Boucle sur les noeuds pour récupérer le moment plastique 
 
-        For iNode = 0 To myBeam.Nodes.nbNodes - 1
+        iTravD = myBeam.IndicePremiereTravee
+        iTravF = myBeam.IndiceDerniereTravee
 
-            If IsEqual(Beff(iNode), BeffPrec) Then
-                MplRd(iNode) = MplRd(iNode - 1)
-                zANP(iNode) = zANP(iNode - 1)
-            Else
-                If Signe > 0 Then
-                    Me.MomentPlastiquePlus(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma,
-                                           Beff(iNode), kReducYFs, kReducYFi, kReducYW,
-                                           NbTranches, zTran, eTran, kReducC, MplRd(iNode), zANP(iNode))
-                Else
-                End If
+        For iTravee = iTravD To iTravF
+            iNodeDeb = myBeam.Nodes.iNodeExtTrav(iTravee, 0)
+            iNodeFin = myBeam.Nodes.iNodeExtTrav(iTravee, 1)
 
-                BeffPrec = Beff(iNode)
+            For iNode = iNodeDeb To iNodeFin
+                If iNode = iNodeDeb Then kDeb = 1 Else kDeb = 0
+                If iNode = iNodeFin Then kFin = 0 Else kFin = 1
 
-            End If
+                myDeltaPRd = DeltaRd(iTravee)(iNode - iNodeDeb)
+
+                For k = kDeb To kFin
+
+                    If Signe > 0 Then
+                        Me.MomentPlastiquePlus(myBeam.Section, myBeam.Dalle, myBeam.ParamFeu, myBeam.Param.Gamma,
+                                               Beff(iNode, k), myDeltaPRd, kReducYFs, kReducYFi, kReducYW,
+                                               NbTranches, zTran, eTran, kReducC, MplRd(iNode, k), zANP(iNode, k))
+                    End If
+
+                Next
+            Next
 
         Next
 
     End Sub
 
     Private Sub MomentPlastiquePlus(mySection As cls_Section, myDalle As cls_Dalle, myOptions As cls_OptionsFeu, Gammas As cls_Gamma,
-                                    Beff As Decimal, reducKyFs As Decimal, reducKyFi As Decimal, reducKyW As Decimal,
+                                    Beff As Decimal, DeltaPRd As Decimal, reducKyFs As Decimal, reducKyFi As Decimal, reducKyW As Decimal,
                                     NbTranches As Integer, zTran() As Decimal, eTran() As Decimal, kRedCTr() As Decimal,
                                     ByRef MplRd As Decimal, ByRef zANP As Decimal)
         '--------------------------------------------------------------------------------------------------------------------------
@@ -531,6 +545,7 @@
         '   Gammas      [E] :   Coefficients partiels
         '   lMixte      [E] :   Indique si mixité avec la dalle
         '   Beff        [E] :   Largeur efficace de la dalle dans la cas d'une poutre mixte
+        '   DeltaPRd    [E] :   Résistance cumulée de la connexion
         '   reducKyFs   [E] :   Réduction de la limite d'élasticité de la semelle sup
         '   reducKyFi   [E] :   Réduction de la limite d'élasticité de la semelle inf
         '   reducKyW    [E] :   Réduction de la limite d'élasticité de l'âme
@@ -572,7 +587,7 @@
 
             '# Dalle 
 
-            myModele.MaillageDalleTranches(Gammas.GammaC_fi, myOptions.AlphaSlab, Beff, nEqDalle, myDalle, NbTranches, zTran, eTran, kRedCTr)
+            myModele.MaillageDalleTranches_ETA(Gammas.GammaC_fi, myOptions.AlphaSlab, Beff, nEqDalle, myDalle, DeltaPRd, NbTranches, zTran, eTran, kRedCTr)
 
         End If
 
@@ -592,7 +607,7 @@
 #Region " Vérification de la résistance en section "
 
     Private Sub RunCritereFlexionMixte(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer, MEd(,) As Decimal,
-                                       MplRdP() As Decimal, MplRdM() As Decimal)
+                                       MplRdP(,) As Decimal, MplRdM() As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -634,7 +649,7 @@
                 For k = iDebK To iFinK
 
                     If MEd(iNode, k) * SIGNEM > 0 Then
-                        MRd = MplRdP(iNode)
+                        MRd = MplRdP(iNode, k)
                     Else
                         MRd = MplRdM(iNode)
                     End If

@@ -424,7 +424,8 @@ EMISSIVITYFIRE			= Emissivité du feu
 CONVECTIONFACTOR		= Facteur de transfert thermique par convection
 SHADOWEFFECT			= Coefficient correcteur pour l'effet d'ombre
 CONVECTIONSLAB			= Coefficient de transfert thermique par convection sur la face supérieure de la dalle
-CONCRETEFACTOR			= Facteur de résistance plastique à la compression axiale de la dalle en béton 					  
+CONCRETEFACTOR			= Facteur de résistance plastique à la compression axiale de la dalle en béton 	
+PROTECTIONTH			= Epaisseur				  
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement

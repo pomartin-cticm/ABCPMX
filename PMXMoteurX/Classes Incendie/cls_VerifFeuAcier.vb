@@ -134,7 +134,8 @@ Public Class cls_VerifFeuAcier
         Massivete = EN_Feu.MassiveteSectionAcier(myBeam.Section.ProfilA, lSsExposee)
 
         If Not lProtege Then
-            kSh = 0.9 * Massivete / EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee)
+            'kSh = 0.9 * Massivete / EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee)
+            kSh = 0.9 * EN_Feu.MassiveteSectionAcierBox(myBeam.Section.ProfilA, lSsExposee) / Massivete
         End If
 
         '# Initialisation des Tableaux

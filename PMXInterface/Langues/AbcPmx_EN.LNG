@@ -425,6 +425,7 @@ CONVECTIONFACTOR		= Factor of thermal transfer by convection
 SHADOWEFFECT			= Correction factor for the shadow effect
 CONVECTIONSLAB			= Coefficient of heat transfer by convection on the upper side of a slab
 CONCRETEFACTOR			= Factor for the plastic resistance to axial compression of the concrete slab
+PROTECTIONTH			= Thickness
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors
@@ -703,7 +704,6 @@ UNPROPPED				= Unpropped
 PROPPINGLOC				= Propping location
 UNDERSTEELBEAM			= Under the steel beam
 UNDERSLAB				= Under the concrete slab
-
 
 #FRM_PSHEETING
 TITLE					= Definition of the steel profiled sheeting

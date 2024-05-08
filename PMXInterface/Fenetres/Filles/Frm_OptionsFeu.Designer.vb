@@ -82,30 +82,35 @@ Partial Class Frm_OptionsFeu
         Me.img_tDalleFEMmax = New System.Windows.Forms.PictureBox()
         Me.lbl_UnittDalleFEMmax = New System.Windows.Forms.Label()
         Me.txt_tDalleFEMmax = New System.Windows.Forms.TextBox()
+        Me.chk_ReductionConcreteStrenght = New System.Windows.Forms.CheckBox()
         Me.lbl_CalculOptions = New System.Windows.Forms.Label()
         Me.lbl_ParamPoutre = New System.Windows.Forms.Label()
         Me.pan_ParamPoutre = New System.Windows.Forms.Panel()
+        Me.pan_Protection = New System.Windows.Forms.Panel()
+        Me.etq_UnitD = New System.Windows.Forms.Label()
+        Me.lbl_EpProtec = New System.Windows.Forms.Label()
+        Me.txt_EpProtec = New System.Windows.Forms.TextBox()
+        Me.img_EpProtec = New System.Windows.Forms.PictureBox()
+        Me.cmb_ProtectionType = New System.Windows.Forms.ComboBox()
         Me.lbl_UnitSpecificHeat = New System.Windows.Forms.Label()
-        Me.lbl_UnitThermalConductivity = New System.Windows.Forms.Label()
+        Me.lbl_ProtectionType = New System.Windows.Forms.Label()
         Me.lbl_SpecificHeat = New System.Windows.Forms.Label()
+        Me.lbl_UnitThermalCond = New System.Windows.Forms.Label()
+        Me.lbl_InsulationType = New System.Windows.Forms.Label()
+        Me.cmb_InsulationType = New System.Windows.Forms.ComboBox()
         Me.lbl_UnitDensity = New System.Windows.Forms.Label()
-        Me.lbl_tDalleFEMmax = New System.Windows.Forms.Label()
         Me.lbl_ThermalConductivity = New System.Windows.Forms.Label()
         Me.lbl_Density = New System.Windows.Forms.Label()
+        Me.txt_SpecificHeat = New System.Windows.Forms.TextBox()
+        Me.img_SpecificHeat = New System.Windows.Forms.PictureBox()
+        Me.txt_Density = New System.Windows.Forms.TextBox()
+        Me.img_Density = New System.Windows.Forms.PictureBox()
+        Me.txt_ThermalConductivity = New System.Windows.Forms.TextBox()
+        Me.img_ThermalConductivity = New System.Windows.Forms.PictureBox()
+        Me.lbl_tDalleFEMmax = New System.Windows.Forms.Label()
         Me.chk_CalculFeu = New System.Windows.Forms.CheckBox()
         Me.chk_ArmaFroid = New System.Windows.Forms.CheckBox()
         Me.chk_AcierGalva = New System.Windows.Forms.CheckBox()
-        Me.chk_ReductionConcreteStrenght = New System.Windows.Forms.CheckBox()
-        Me.txt_SpecificHeat = New System.Windows.Forms.TextBox()
-        Me.img_SpecificHeat = New System.Windows.Forms.PictureBox()
-        Me.txt_ThermalConductivity = New System.Windows.Forms.TextBox()
-        Me.img_ThermalConductivity = New System.Windows.Forms.PictureBox()
-        Me.txt_Density = New System.Windows.Forms.TextBox()
-        Me.img_Density = New System.Windows.Forms.PictureBox()
-        Me.cmb_InsulationType = New System.Windows.Forms.ComboBox()
-        Me.lbl_InsulationType = New System.Windows.Forms.Label()
-        Me.cmb_ProtectionType = New System.Windows.Forms.ComboBox()
-        Me.lbl_ProtectionType = New System.Windows.Forms.Label()
         Me.cmb_SurfaceType = New System.Windows.Forms.ComboBox()
         Me.lbl_SurfaceType = New System.Windows.Forms.Label()
         Me.ErrorProvider_Frm_OptionsFeu = New System.Windows.Forms.ErrorProvider(Me.components)
@@ -132,9 +137,11 @@ Partial Class Frm_OptionsFeu
         Me.pan_CalculOptions.SuspendLayout()
         CType(Me.img_tDalleFEMmax, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_ParamPoutre.SuspendLayout()
+        Me.pan_Protection.SuspendLayout()
+        CType(Me.img_EpProtec, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_SpecificHeat, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_ThermalConductivity, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Density, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_ThermalConductivity, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -709,7 +716,7 @@ Partial Class Frm_OptionsFeu
         Me.TLPan_Gauche.Name = "TLPan_Gauche"
         Me.TLPan_Gauche.RowCount = 4
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 340.0!))
+        Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 300.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
         Me.TLPan_Gauche.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_Gauche.Size = New System.Drawing.Size(364, 505)
@@ -724,17 +731,18 @@ Partial Class Frm_OptionsFeu
         Me.pan_CalculOptions.Controls.Add(Me.img_tDalleFEMmax)
         Me.pan_CalculOptions.Controls.Add(Me.lbl_UnittDalleFEMmax)
         Me.pan_CalculOptions.Controls.Add(Me.txt_tDalleFEMmax)
+        Me.pan_CalculOptions.Controls.Add(Me.chk_ReductionConcreteStrenght)
         Me.pan_CalculOptions.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_CalculOptions.Location = New System.Drawing.Point(0, 400)
+        Me.pan_CalculOptions.Location = New System.Drawing.Point(0, 360)
         Me.pan_CalculOptions.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_CalculOptions.Name = "pan_CalculOptions"
-        Me.pan_CalculOptions.Size = New System.Drawing.Size(364, 105)
+        Me.pan_CalculOptions.Size = New System.Drawing.Size(364, 145)
         Me.pan_CalculOptions.TabIndex = 3
         '
         'chk_DalleFEM
         '
         Me.chk_DalleFEM.AutoSize = True
-        Me.chk_DalleFEM.Location = New System.Drawing.Point(11, 44)
+        Me.chk_DalleFEM.Location = New System.Drawing.Point(7, 44)
         Me.chk_DalleFEM.Name = "chk_DalleFEM"
         Me.chk_DalleFEM.Size = New System.Drawing.Size(96, 17)
         Me.chk_DalleFEM.TabIndex = 21
@@ -744,7 +752,7 @@ Partial Class Frm_OptionsFeu
         'chk_ArmaComp
         '
         Me.chk_ArmaComp.AutoSize = True
-        Me.chk_ArmaComp.Location = New System.Drawing.Point(11, 18)
+        Me.chk_ArmaComp.Location = New System.Drawing.Point(7, 18)
         Me.chk_ArmaComp.Name = "chk_ArmaComp"
         Me.chk_ArmaComp.Size = New System.Drawing.Size(101, 17)
         Me.chk_ArmaComp.TabIndex = 20
@@ -775,13 +783,23 @@ Partial Class Frm_OptionsFeu
         Me.txt_tDalleFEMmax.Size = New System.Drawing.Size(58, 20)
         Me.txt_tDalleFEMmax.TabIndex = 23
         '
+        'chk_ReductionConcreteStrenght
+        '
+        Me.chk_ReductionConcreteStrenght.AutoSize = True
+        Me.chk_ReductionConcreteStrenght.Location = New System.Drawing.Point(7, 101)
+        Me.chk_ReductionConcreteStrenght.Name = "chk_ReductionConcreteStrenght"
+        Me.chk_ReductionConcreteStrenght.Size = New System.Drawing.Size(182, 17)
+        Me.chk_ReductionConcreteStrenght.TabIndex = 18
+        Me.chk_ReductionConcreteStrenght.Text = "chk_ReductionConcreteStrenght"
+        Me.chk_ReductionConcreteStrenght.UseVisualStyleBackColor = True
+        '
         'lbl_CalculOptions
         '
         Me.lbl_CalculOptions.AutoSize = True
         Me.lbl_CalculOptions.BackColor = System.Drawing.SystemColors.AppWorkspace
         Me.lbl_CalculOptions.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lbl_CalculOptions.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbl_CalculOptions.Location = New System.Drawing.Point(0, 370)
+        Me.lbl_CalculOptions.Location = New System.Drawing.Point(0, 330)
         Me.lbl_CalculOptions.Margin = New System.Windows.Forms.Padding(0)
         Me.lbl_CalculOptions.Name = "lbl_CalculOptions"
         Me.lbl_CalculOptions.Size = New System.Drawing.Size(364, 30)
@@ -807,71 +825,212 @@ Partial Class Frm_OptionsFeu
         '
         Me.pan_ParamPoutre.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_ParamPoutre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnitSpecificHeat)
-        Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnitThermalConductivity)
-        Me.pan_ParamPoutre.Controls.Add(Me.lbl_SpecificHeat)
-        Me.pan_ParamPoutre.Controls.Add(Me.lbl_UnitDensity)
+        Me.pan_ParamPoutre.Controls.Add(Me.pan_Protection)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_tDalleFEMmax)
-        Me.pan_ParamPoutre.Controls.Add(Me.lbl_ThermalConductivity)
-        Me.pan_ParamPoutre.Controls.Add(Me.lbl_Density)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_CalculFeu)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_ArmaFroid)
         Me.pan_ParamPoutre.Controls.Add(Me.chk_AcierGalva)
-        Me.pan_ParamPoutre.Controls.Add(Me.chk_ReductionConcreteStrenght)
-        Me.pan_ParamPoutre.Controls.Add(Me.txt_SpecificHeat)
-        Me.pan_ParamPoutre.Controls.Add(Me.img_SpecificHeat)
-        Me.pan_ParamPoutre.Controls.Add(Me.txt_ThermalConductivity)
-        Me.pan_ParamPoutre.Controls.Add(Me.img_ThermalConductivity)
-        Me.pan_ParamPoutre.Controls.Add(Me.txt_Density)
-        Me.pan_ParamPoutre.Controls.Add(Me.img_Density)
-        Me.pan_ParamPoutre.Controls.Add(Me.cmb_InsulationType)
-        Me.pan_ParamPoutre.Controls.Add(Me.lbl_InsulationType)
-        Me.pan_ParamPoutre.Controls.Add(Me.cmb_ProtectionType)
-        Me.pan_ParamPoutre.Controls.Add(Me.lbl_ProtectionType)
         Me.pan_ParamPoutre.Controls.Add(Me.cmb_SurfaceType)
         Me.pan_ParamPoutre.Controls.Add(Me.lbl_SurfaceType)
         Me.pan_ParamPoutre.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_ParamPoutre.Location = New System.Drawing.Point(0, 30)
         Me.pan_ParamPoutre.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_ParamPoutre.Name = "pan_ParamPoutre"
-        Me.pan_ParamPoutre.Size = New System.Drawing.Size(364, 339)
+        Me.pan_ParamPoutre.Size = New System.Drawing.Size(364, 299)
         Me.pan_ParamPoutre.TabIndex = 1
+        '
+        'pan_Protection
+        '
+        Me.pan_Protection.Controls.Add(Me.etq_UnitD)
+        Me.pan_Protection.Controls.Add(Me.lbl_EpProtec)
+        Me.pan_Protection.Controls.Add(Me.txt_EpProtec)
+        Me.pan_Protection.Controls.Add(Me.img_EpProtec)
+        Me.pan_Protection.Controls.Add(Me.cmb_ProtectionType)
+        Me.pan_Protection.Controls.Add(Me.lbl_UnitSpecificHeat)
+        Me.pan_Protection.Controls.Add(Me.lbl_ProtectionType)
+        Me.pan_Protection.Controls.Add(Me.lbl_SpecificHeat)
+        Me.pan_Protection.Controls.Add(Me.lbl_UnitThermalCond)
+        Me.pan_Protection.Controls.Add(Me.lbl_InsulationType)
+        Me.pan_Protection.Controls.Add(Me.cmb_InsulationType)
+        Me.pan_Protection.Controls.Add(Me.lbl_UnitDensity)
+        Me.pan_Protection.Controls.Add(Me.lbl_ThermalConductivity)
+        Me.pan_Protection.Controls.Add(Me.lbl_Density)
+        Me.pan_Protection.Controls.Add(Me.txt_SpecificHeat)
+        Me.pan_Protection.Controls.Add(Me.img_SpecificHeat)
+        Me.pan_Protection.Controls.Add(Me.txt_Density)
+        Me.pan_Protection.Controls.Add(Me.img_Density)
+        Me.pan_Protection.Controls.Add(Me.txt_ThermalConductivity)
+        Me.pan_Protection.Controls.Add(Me.img_ThermalConductivity)
+        Me.pan_Protection.Location = New System.Drawing.Point(3, 88)
+        Me.pan_Protection.Name = "pan_Protection"
+        Me.pan_Protection.Size = New System.Drawing.Size(357, 168)
+        Me.pan_Protection.TabIndex = 79
+        '
+        'etq_UnitD
+        '
+        Me.etq_UnitD.AutoSize = True
+        Me.etq_UnitD.Location = New System.Drawing.Point(239, 136)
+        Me.etq_UnitD.Name = "etq_UnitD"
+        Me.etq_UnitD.Size = New System.Drawing.Size(55, 13)
+        Me.etq_UnitD.TabIndex = 79
+        Me.etq_UnitD.Text = "etq_UnitD"
+        '
+        'lbl_EpProtec
+        '
+        Me.lbl_EpProtec.AutoSize = True
+        Me.lbl_EpProtec.Location = New System.Drawing.Point(10, 135)
+        Me.lbl_EpProtec.Name = "lbl_EpProtec"
+        Me.lbl_EpProtec.Size = New System.Drawing.Size(67, 13)
+        Me.lbl_EpProtec.TabIndex = 77
+        Me.lbl_EpProtec.Text = "lbl_EpProtec"
+        '
+        'txt_EpProtec
+        '
+        Me.txt_EpProtec.Location = New System.Drawing.Point(175, 132)
+        Me.txt_EpProtec.Name = "txt_EpProtec"
+        Me.txt_EpProtec.Size = New System.Drawing.Size(58, 20)
+        Me.txt_EpProtec.TabIndex = 78
+        '
+        'img_EpProtec
+        '
+        Me.img_EpProtec.Location = New System.Drawing.Point(130, 132)
+        Me.img_EpProtec.Name = "img_EpProtec"
+        Me.img_EpProtec.Size = New System.Drawing.Size(46, 20)
+        Me.img_EpProtec.TabIndex = 80
+        Me.img_EpProtec.TabStop = False
+        '
+        'cmb_ProtectionType
+        '
+        Me.cmb_ProtectionType.FormattingEnabled = True
+        Me.cmb_ProtectionType.Location = New System.Drawing.Point(112, 3)
+        Me.cmb_ProtectionType.Name = "cmb_ProtectionType"
+        Me.cmb_ProtectionType.Size = New System.Drawing.Size(186, 21)
+        Me.cmb_ProtectionType.TabIndex = 6
         '
         'lbl_UnitSpecificHeat
         '
         Me.lbl_UnitSpecificHeat.AutoSize = True
-        Me.lbl_UnitSpecificHeat.Location = New System.Drawing.Point(242, 226)
+        Me.lbl_UnitSpecificHeat.Location = New System.Drawing.Point(239, 110)
         Me.lbl_UnitSpecificHeat.Name = "lbl_UnitSpecificHeat"
         Me.lbl_UnitSpecificHeat.Size = New System.Drawing.Size(103, 13)
         Me.lbl_UnitSpecificHeat.TabIndex = 17
         Me.lbl_UnitSpecificHeat.Text = "lbl_UnitSpecificHeat"
         '
-        'lbl_UnitThermalConductivity
+        'lbl_ProtectionType
         '
-        Me.lbl_UnitThermalConductivity.AutoSize = True
-        Me.lbl_UnitThermalConductivity.Location = New System.Drawing.Point(242, 203)
-        Me.lbl_UnitThermalConductivity.Name = "lbl_UnitThermalConductivity"
-        Me.lbl_UnitThermalConductivity.Size = New System.Drawing.Size(138, 13)
-        Me.lbl_UnitThermalConductivity.TabIndex = 14
-        Me.lbl_UnitThermalConductivity.Text = "lbl_UnitThermalConductivity"
+        Me.lbl_ProtectionType.AutoSize = True
+        Me.lbl_ProtectionType.Location = New System.Drawing.Point(7, 6)
+        Me.lbl_ProtectionType.Name = "lbl_ProtectionType"
+        Me.lbl_ProtectionType.Size = New System.Drawing.Size(95, 13)
+        Me.lbl_ProtectionType.TabIndex = 5
+        Me.lbl_ProtectionType.Text = "lbl_ProtectionType"
         '
         'lbl_SpecificHeat
         '
         Me.lbl_SpecificHeat.AutoSize = True
-        Me.lbl_SpecificHeat.Location = New System.Drawing.Point(10, 229)
+        Me.lbl_SpecificHeat.Location = New System.Drawing.Point(10, 109)
         Me.lbl_SpecificHeat.Name = "lbl_SpecificHeat"
         Me.lbl_SpecificHeat.Size = New System.Drawing.Size(84, 13)
         Me.lbl_SpecificHeat.TabIndex = 15
         Me.lbl_SpecificHeat.Text = "lbl_SpecificHeat"
         '
+        'lbl_UnitThermalCond
+        '
+        Me.lbl_UnitThermalCond.AutoSize = True
+        Me.lbl_UnitThermalCond.Location = New System.Drawing.Point(239, 85)
+        Me.lbl_UnitThermalCond.Name = "lbl_UnitThermalCond"
+        Me.lbl_UnitThermalCond.Size = New System.Drawing.Size(105, 13)
+        Me.lbl_UnitThermalCond.TabIndex = 14
+        Me.lbl_UnitThermalCond.Text = "lbl_UnitThermalCond"
+        '
+        'lbl_InsulationType
+        '
+        Me.lbl_InsulationType.AutoSize = True
+        Me.lbl_InsulationType.Location = New System.Drawing.Point(7, 33)
+        Me.lbl_InsulationType.Name = "lbl_InsulationType"
+        Me.lbl_InsulationType.Size = New System.Drawing.Size(92, 13)
+        Me.lbl_InsulationType.TabIndex = 7
+        Me.lbl_InsulationType.Text = "lbl_InsulationType"
+        '
+        'cmb_InsulationType
+        '
+        Me.cmb_InsulationType.FormattingEnabled = True
+        Me.cmb_InsulationType.Location = New System.Drawing.Point(112, 30)
+        Me.cmb_InsulationType.Name = "cmb_InsulationType"
+        Me.cmb_InsulationType.Size = New System.Drawing.Size(186, 21)
+        Me.cmb_InsulationType.TabIndex = 8
+        '
         'lbl_UnitDensity
         '
         Me.lbl_UnitDensity.AutoSize = True
-        Me.lbl_UnitDensity.Location = New System.Drawing.Point(242, 177)
+        Me.lbl_UnitDensity.Location = New System.Drawing.Point(239, 61)
         Me.lbl_UnitDensity.Name = "lbl_UnitDensity"
         Me.lbl_UnitDensity.Size = New System.Drawing.Size(77, 13)
         Me.lbl_UnitDensity.TabIndex = 11
         Me.lbl_UnitDensity.Text = "lbl_UnitDensity"
+        '
+        'lbl_ThermalConductivity
+        '
+        Me.lbl_ThermalConductivity.AutoSize = True
+        Me.lbl_ThermalConductivity.Location = New System.Drawing.Point(10, 84)
+        Me.lbl_ThermalConductivity.Name = "lbl_ThermalConductivity"
+        Me.lbl_ThermalConductivity.Size = New System.Drawing.Size(119, 13)
+        Me.lbl_ThermalConductivity.TabIndex = 12
+        Me.lbl_ThermalConductivity.Text = "lbl_ThermalConductivity"
+        '
+        'lbl_Density
+        '
+        Me.lbl_Density.AutoSize = True
+        Me.lbl_Density.Location = New System.Drawing.Point(10, 59)
+        Me.lbl_Density.Name = "lbl_Density"
+        Me.lbl_Density.Size = New System.Drawing.Size(58, 13)
+        Me.lbl_Density.TabIndex = 9
+        Me.lbl_Density.Text = "lbl_Density"
+        '
+        'txt_SpecificHeat
+        '
+        Me.txt_SpecificHeat.Location = New System.Drawing.Point(175, 106)
+        Me.txt_SpecificHeat.Name = "txt_SpecificHeat"
+        Me.txt_SpecificHeat.Size = New System.Drawing.Size(58, 20)
+        Me.txt_SpecificHeat.TabIndex = 16
+        '
+        'img_SpecificHeat
+        '
+        Me.img_SpecificHeat.Location = New System.Drawing.Point(130, 106)
+        Me.img_SpecificHeat.Name = "img_SpecificHeat"
+        Me.img_SpecificHeat.Size = New System.Drawing.Size(46, 20)
+        Me.img_SpecificHeat.TabIndex = 76
+        Me.img_SpecificHeat.TabStop = False
+        '
+        'txt_Density
+        '
+        Me.txt_Density.Location = New System.Drawing.Point(175, 57)
+        Me.txt_Density.Name = "txt_Density"
+        Me.txt_Density.Size = New System.Drawing.Size(58, 20)
+        Me.txt_Density.TabIndex = 10
+        '
+        'img_Density
+        '
+        Me.img_Density.Location = New System.Drawing.Point(130, 57)
+        Me.img_Density.Name = "img_Density"
+        Me.img_Density.Size = New System.Drawing.Size(46, 20)
+        Me.img_Density.TabIndex = 76
+        Me.img_Density.TabStop = False
+        '
+        'txt_ThermalConductivity
+        '
+        Me.txt_ThermalConductivity.Location = New System.Drawing.Point(175, 81)
+        Me.txt_ThermalConductivity.Name = "txt_ThermalConductivity"
+        Me.txt_ThermalConductivity.Size = New System.Drawing.Size(58, 20)
+        Me.txt_ThermalConductivity.TabIndex = 13
+        '
+        'img_ThermalConductivity
+        '
+        Me.img_ThermalConductivity.Location = New System.Drawing.Point(130, 81)
+        Me.img_ThermalConductivity.Name = "img_ThermalConductivity"
+        Me.img_ThermalConductivity.Size = New System.Drawing.Size(46, 20)
+        Me.img_ThermalConductivity.TabIndex = 76
+        Me.img_ThermalConductivity.TabStop = False
         '
         'lbl_tDalleFEMmax
         '
@@ -882,28 +1041,10 @@ Partial Class Frm_OptionsFeu
         Me.lbl_tDalleFEMmax.TabIndex = 22
         Me.lbl_tDalleFEMmax.Text = "lbl_tDalleFEMmax"
         '
-        'lbl_ThermalConductivity
-        '
-        Me.lbl_ThermalConductivity.AutoSize = True
-        Me.lbl_ThermalConductivity.Location = New System.Drawing.Point(10, 203)
-        Me.lbl_ThermalConductivity.Name = "lbl_ThermalConductivity"
-        Me.lbl_ThermalConductivity.Size = New System.Drawing.Size(119, 13)
-        Me.lbl_ThermalConductivity.TabIndex = 12
-        Me.lbl_ThermalConductivity.Text = "lbl_ThermalConductivity"
-        '
-        'lbl_Density
-        '
-        Me.lbl_Density.AutoSize = True
-        Me.lbl_Density.Location = New System.Drawing.Point(8, 181)
-        Me.lbl_Density.Name = "lbl_Density"
-        Me.lbl_Density.Size = New System.Drawing.Size(58, 13)
-        Me.lbl_Density.TabIndex = 9
-        Me.lbl_Density.Text = "lbl_Density"
-        '
         'chk_CalculFeu
         '
         Me.chk_CalculFeu.AutoSize = True
-        Me.chk_CalculFeu.Location = New System.Drawing.Point(8, 21)
+        Me.chk_CalculFeu.Location = New System.Drawing.Point(7, 21)
         Me.chk_CalculFeu.Name = "chk_CalculFeu"
         Me.chk_CalculFeu.Size = New System.Drawing.Size(97, 17)
         Me.chk_CalculFeu.TabIndex = 1
@@ -913,7 +1054,7 @@ Partial Class Frm_OptionsFeu
         'chk_ArmaFroid
         '
         Me.chk_ArmaFroid.AutoSize = True
-        Me.chk_ArmaFroid.Location = New System.Drawing.Point(13, 314)
+        Me.chk_ArmaFroid.Location = New System.Drawing.Point(7, 268)
         Me.chk_ArmaFroid.Name = "chk_ArmaFroid"
         Me.chk_ArmaFroid.Size = New System.Drawing.Size(97, 17)
         Me.chk_ArmaFroid.TabIndex = 19
@@ -923,101 +1064,12 @@ Partial Class Frm_OptionsFeu
         'chk_AcierGalva
         '
         Me.chk_AcierGalva.AutoSize = True
-        Me.chk_AcierGalva.Location = New System.Drawing.Point(12, 68)
+        Me.chk_AcierGalva.Location = New System.Drawing.Point(7, 68)
         Me.chk_AcierGalva.Name = "chk_AcierGalva"
         Me.chk_AcierGalva.Size = New System.Drawing.Size(102, 17)
         Me.chk_AcierGalva.TabIndex = 4
         Me.chk_AcierGalva.Text = "chk_AcierGalva"
         Me.chk_AcierGalva.UseVisualStyleBackColor = True
-        '
-        'chk_ReductionConcreteStrenght
-        '
-        Me.chk_ReductionConcreteStrenght.AutoSize = True
-        Me.chk_ReductionConcreteStrenght.Location = New System.Drawing.Point(13, 288)
-        Me.chk_ReductionConcreteStrenght.Name = "chk_ReductionConcreteStrenght"
-        Me.chk_ReductionConcreteStrenght.Size = New System.Drawing.Size(182, 17)
-        Me.chk_ReductionConcreteStrenght.TabIndex = 18
-        Me.chk_ReductionConcreteStrenght.Text = "chk_ReductionConcreteStrenght"
-        Me.chk_ReductionConcreteStrenght.UseVisualStyleBackColor = True
-        '
-        'txt_SpecificHeat
-        '
-        Me.txt_SpecificHeat.Location = New System.Drawing.Point(178, 226)
-        Me.txt_SpecificHeat.Name = "txt_SpecificHeat"
-        Me.txt_SpecificHeat.Size = New System.Drawing.Size(58, 20)
-        Me.txt_SpecificHeat.TabIndex = 16
-        '
-        'img_SpecificHeat
-        '
-        Me.img_SpecificHeat.Location = New System.Drawing.Point(133, 226)
-        Me.img_SpecificHeat.Name = "img_SpecificHeat"
-        Me.img_SpecificHeat.Size = New System.Drawing.Size(46, 20)
-        Me.img_SpecificHeat.TabIndex = 76
-        Me.img_SpecificHeat.TabStop = False
-        '
-        'txt_ThermalConductivity
-        '
-        Me.txt_ThermalConductivity.Location = New System.Drawing.Point(178, 200)
-        Me.txt_ThermalConductivity.Name = "txt_ThermalConductivity"
-        Me.txt_ThermalConductivity.Size = New System.Drawing.Size(58, 20)
-        Me.txt_ThermalConductivity.TabIndex = 13
-        '
-        'img_ThermalConductivity
-        '
-        Me.img_ThermalConductivity.Location = New System.Drawing.Point(133, 200)
-        Me.img_ThermalConductivity.Name = "img_ThermalConductivity"
-        Me.img_ThermalConductivity.Size = New System.Drawing.Size(46, 20)
-        Me.img_ThermalConductivity.TabIndex = 76
-        Me.img_ThermalConductivity.TabStop = False
-        '
-        'txt_Density
-        '
-        Me.txt_Density.Location = New System.Drawing.Point(178, 174)
-        Me.txt_Density.Name = "txt_Density"
-        Me.txt_Density.Size = New System.Drawing.Size(58, 20)
-        Me.txt_Density.TabIndex = 10
-        '
-        'img_Density
-        '
-        Me.img_Density.Location = New System.Drawing.Point(133, 174)
-        Me.img_Density.Name = "img_Density"
-        Me.img_Density.Size = New System.Drawing.Size(46, 20)
-        Me.img_Density.TabIndex = 76
-        Me.img_Density.TabStop = False
-        '
-        'cmb_InsulationType
-        '
-        Me.cmb_InsulationType.FormattingEnabled = True
-        Me.cmb_InsulationType.Location = New System.Drawing.Point(115, 136)
-        Me.cmb_InsulationType.Name = "cmb_InsulationType"
-        Me.cmb_InsulationType.Size = New System.Drawing.Size(186, 21)
-        Me.cmb_InsulationType.TabIndex = 8
-        '
-        'lbl_InsulationType
-        '
-        Me.lbl_InsulationType.AutoSize = True
-        Me.lbl_InsulationType.Location = New System.Drawing.Point(10, 139)
-        Me.lbl_InsulationType.Name = "lbl_InsulationType"
-        Me.lbl_InsulationType.Size = New System.Drawing.Size(92, 13)
-        Me.lbl_InsulationType.TabIndex = 7
-        Me.lbl_InsulationType.Text = "lbl_InsulationType"
-        '
-        'cmb_ProtectionType
-        '
-        Me.cmb_ProtectionType.FormattingEnabled = True
-        Me.cmb_ProtectionType.Location = New System.Drawing.Point(115, 91)
-        Me.cmb_ProtectionType.Name = "cmb_ProtectionType"
-        Me.cmb_ProtectionType.Size = New System.Drawing.Size(186, 21)
-        Me.cmb_ProtectionType.TabIndex = 6
-        '
-        'lbl_ProtectionType
-        '
-        Me.lbl_ProtectionType.AutoSize = True
-        Me.lbl_ProtectionType.Location = New System.Drawing.Point(10, 94)
-        Me.lbl_ProtectionType.Name = "lbl_ProtectionType"
-        Me.lbl_ProtectionType.Size = New System.Drawing.Size(95, 13)
-        Me.lbl_ProtectionType.TabIndex = 5
-        Me.lbl_ProtectionType.Text = "lbl_ProtectionType"
         '
         'cmb_SurfaceType
         '
@@ -1080,9 +1132,12 @@ Partial Class Frm_OptionsFeu
         CType(Me.img_tDalleFEMmax, System.ComponentModel.ISupportInitialize).EndInit()
         Me.pan_ParamPoutre.ResumeLayout(False)
         Me.pan_ParamPoutre.PerformLayout()
+        Me.pan_Protection.ResumeLayout(False)
+        Me.pan_Protection.PerformLayout()
+        CType(Me.img_EpProtec, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_SpecificHeat, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_ThermalConductivity, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Density, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_ThermalConductivity, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider_Frm_OptionsFeu, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -1160,7 +1215,7 @@ Partial Class Frm_OptionsFeu
     Friend WithEvents lbl_UnitTimeIncrement As Label
     Friend WithEvents lbl_UnitBoltzmann As Label
     Friend WithEvents lbl_UnitSpecificHeat As Label
-    Friend WithEvents lbl_UnitThermalConductivity As Label
+    Friend WithEvents lbl_UnitThermalCond As Label
     Friend WithEvents lbl_UnitDensity As Label
     Friend WithEvents ErrorProvider_Frm_OptionsFeu As ErrorProvider
     Friend WithEvents chk_CalculFeu As CheckBox
@@ -1174,4 +1229,9 @@ Partial Class Frm_OptionsFeu
     Friend WithEvents img_tDalleFEMmax As PictureBox
     Friend WithEvents pan_CalculOptions As Panel
     Friend WithEvents lbl_CalculOptions As Label
+    Friend WithEvents pan_Protection As Panel
+    Friend WithEvents etq_UnitD As Label
+    Friend WithEvents lbl_EpProtec As Label
+    Friend WithEvents txt_EpProtec As TextBox
+    Friend WithEvents img_EpProtec As PictureBox
 End Class
