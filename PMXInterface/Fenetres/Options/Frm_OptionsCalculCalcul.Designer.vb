@@ -80,18 +80,18 @@ Partial Class Frm_OptionsCalculCalcul
         Me.chk_RebarsInCompression = New System.Windows.Forms.CheckBox()
         Me.chk_SimplifiedEffectiveW = New System.Windows.Forms.CheckBox()
         Me.lbl_CrossSectionProperties = New System.Windows.Forms.Label()
+        Me.etq_UnitDeltaCDev = New System.Windows.Forms.Label()
         Me.etq_UnitEs = New System.Windows.Forms.Label()
+        Me.lbl_DeltaCDev = New System.Windows.Forms.Label()
+        Me.txt_DeltaCDev = New System.Windows.Forms.TextBox()
         Me.lbl_YoungRebars = New System.Windows.Forms.Label()
+        Me.img_DeltaCDev = New System.Windows.Forms.PictureBox()
         Me.txt_Es = New System.Windows.Forms.TextBox()
         Me.img_Es = New System.Windows.Forms.PictureBox()
         Me.cmb_Norme = New System.Windows.Forms.ComboBox()
         Me.lbl_Norme = New System.Windows.Forms.Label()
         Me.lbl_Calcul = New System.Windows.Forms.Label()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
-        Me.img_DeltaCDev = New System.Windows.Forms.PictureBox()
-        Me.txt_DeltaCDev = New System.Windows.Forms.TextBox()
-        Me.lbl_DeltaCDev = New System.Windows.Forms.Label()
-        Me.etq_UnitDeltaCDev = New System.Windows.Forms.Label()
         Me.pan_Calcul.SuspendLayout()
         Me.TLpan_Conteneur.SuspendLayout()
         Me.pan_Conteneur.SuspendLayout()
@@ -108,9 +108,9 @@ Partial Class Frm_OptionsCalculCalcul
         CType(Me.img_NbNodes1, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_dNodes, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
+        CType(Me.img_DeltaCDev, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
-        CType(Me.img_DeltaCDev, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'pan_Calcul
@@ -730,6 +730,16 @@ Partial Class Frm_OptionsCalculCalcul
         Me.lbl_CrossSectionProperties.Text = "lbl_CrossSectionProperties"
         Me.lbl_CrossSectionProperties.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
         '
+        'etq_UnitDeltaCDev
+        '
+        Me.etq_UnitDeltaCDev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.etq_UnitDeltaCDev.AutoSize = True
+        Me.etq_UnitDeltaCDev.Location = New System.Drawing.Point(674, 97)
+        Me.etq_UnitDeltaCDev.Name = "etq_UnitDeltaCDev"
+        Me.etq_UnitDeltaCDev.Size = New System.Drawing.Size(39, 13)
+        Me.etq_UnitDeltaCDev.TabIndex = 101
+        Me.etq_UnitDeltaCDev.Text = "Label1"
+        '
         'etq_UnitEs
         '
         Me.etq_UnitEs.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -740,6 +750,24 @@ Partial Class Frm_OptionsCalculCalcul
         Me.etq_UnitEs.TabIndex = 101
         Me.etq_UnitEs.Text = "Label1"
         '
+        'lbl_DeltaCDev
+        '
+        Me.lbl_DeltaCDev.AutoSize = True
+        Me.lbl_DeltaCDev.Location = New System.Drawing.Point(39, 101)
+        Me.lbl_DeltaCDev.Name = "lbl_DeltaCDev"
+        Me.lbl_DeltaCDev.Size = New System.Drawing.Size(75, 13)
+        Me.lbl_DeltaCDev.TabIndex = 102
+        Me.lbl_DeltaCDev.Text = "lbl_DeltaCDev"
+        '
+        'txt_DeltaCDev
+        '
+        Me.txt_DeltaCDev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txt_DeltaCDev.Location = New System.Drawing.Point(610, 94)
+        Me.txt_DeltaCDev.Name = "txt_DeltaCDev"
+        Me.txt_DeltaCDev.Size = New System.Drawing.Size(58, 20)
+        Me.txt_DeltaCDev.TabIndex = 99
+        Me.txt_DeltaCDev.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        '
         'lbl_YoungRebars
         '
         Me.lbl_YoungRebars.AutoSize = True
@@ -748,6 +776,15 @@ Partial Class Frm_OptionsCalculCalcul
         Me.lbl_YoungRebars.Size = New System.Drawing.Size(88, 13)
         Me.lbl_YoungRebars.TabIndex = 102
         Me.lbl_YoungRebars.Text = "lbl_YoungRebars"
+        '
+        'img_DeltaCDev
+        '
+        Me.img_DeltaCDev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.img_DeltaCDev.Location = New System.Drawing.Point(551, 94)
+        Me.img_DeltaCDev.Name = "img_DeltaCDev"
+        Me.img_DeltaCDev.Size = New System.Drawing.Size(59, 20)
+        Me.img_DeltaCDev.TabIndex = 100
+        Me.img_DeltaCDev.TabStop = False
         '
         'txt_Es
         '
@@ -761,9 +798,9 @@ Partial Class Frm_OptionsCalculCalcul
         'img_Es
         '
         Me.img_Es.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_Es.Location = New System.Drawing.Point(564, 71)
+        Me.img_Es.Location = New System.Drawing.Point(551, 71)
         Me.img_Es.Name = "img_Es"
-        Me.img_Es.Size = New System.Drawing.Size(46, 20)
+        Me.img_Es.Size = New System.Drawing.Size(59, 20)
         Me.img_Es.TabIndex = 100
         Me.img_Es.TabStop = False
         '
@@ -806,43 +843,6 @@ Partial Class Frm_OptionsCalculCalcul
         '
         Me.ErrorProvider.ContainerControl = Me
         '
-        'img_DeltaCDev
-        '
-        Me.img_DeltaCDev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_DeltaCDev.Location = New System.Drawing.Point(564, 94)
-        Me.img_DeltaCDev.Name = "img_DeltaCDev"
-        Me.img_DeltaCDev.Size = New System.Drawing.Size(46, 20)
-        Me.img_DeltaCDev.TabIndex = 100
-        Me.img_DeltaCDev.TabStop = False
-        '
-        'txt_DeltaCDev
-        '
-        Me.txt_DeltaCDev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.txt_DeltaCDev.Location = New System.Drawing.Point(610, 94)
-        Me.txt_DeltaCDev.Name = "txt_DeltaCDev"
-        Me.txt_DeltaCDev.Size = New System.Drawing.Size(58, 20)
-        Me.txt_DeltaCDev.TabIndex = 99
-        Me.txt_DeltaCDev.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
-        '
-        'lbl_DeltaCDev
-        '
-        Me.lbl_DeltaCDev.AutoSize = True
-        Me.lbl_DeltaCDev.Location = New System.Drawing.Point(39, 101)
-        Me.lbl_DeltaCDev.Name = "lbl_DeltaCDev"
-        Me.lbl_DeltaCDev.Size = New System.Drawing.Size(75, 13)
-        Me.lbl_DeltaCDev.TabIndex = 102
-        Me.lbl_DeltaCDev.Text = "lbl_DeltaCDev"
-        '
-        'etq_UnitDeltaCDev
-        '
-        Me.etq_UnitDeltaCDev.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.etq_UnitDeltaCDev.AutoSize = True
-        Me.etq_UnitDeltaCDev.Location = New System.Drawing.Point(674, 97)
-        Me.etq_UnitDeltaCDev.Name = "etq_UnitDeltaCDev"
-        Me.etq_UnitDeltaCDev.Size = New System.Drawing.Size(39, 13)
-        Me.etq_UnitDeltaCDev.TabIndex = 101
-        Me.etq_UnitDeltaCDev.Text = "Label1"
-        '
         'Frm_OptionsCalculCalcul
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -873,9 +873,9 @@ Partial Class Frm_OptionsCalculCalcul
         CType(Me.img_dNodes, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
+        CType(Me.img_DeltaCDev, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Es, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
-        CType(Me.img_DeltaCDev, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
