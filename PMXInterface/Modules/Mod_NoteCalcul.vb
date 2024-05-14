@@ -5071,7 +5071,7 @@ Module Mod_NoteCalcul
 
         '--> Phase de construction pour les poutres mixtes
 
-        If MyBeam.lMixte And (Not lEtaiement) Then
+        If MyBeam.lMixte And (Not lEtaiement) And Not (MyBeam.CombiA_ELCU.nbCombi = 0) Then
 
             SautePage()
             AddTitreNdC(1, BlocELU("ULS_CHECKS_CONSTRUCTION"))
