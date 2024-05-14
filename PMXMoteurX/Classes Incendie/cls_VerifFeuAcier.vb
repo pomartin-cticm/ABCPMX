@@ -149,7 +149,7 @@ Public Class cls_VerifFeuAcier
         '# Propriétés à froid
 
         myBeam.ProprietesVerifAcier(True, MplRd0, zANP0, MelRd0, zANE0)
-        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi)
+        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi_a)
 
         '# Classes de la section
 
@@ -202,7 +202,7 @@ Public Class cls_VerifFeuAcier
             VplRdFeu(iSTep) = kReducY * VRd0
             MplRdFeu(iSTep) = kReducY * MplRd0
             MelRdFeu(iSTep) = kReducY * MelRd0
-            VbRdFeu(iSTep) = myBeam.Section.VbRdFeu(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW, lMontantR, kReducY, kReducE)
+            VbRdFeu(iSTep) = myBeam.Section.VbRdFeu(myBeam.Param.Gamma.GammaM_fi_a, myBeam.Param.EtaW, lMontantR, kReducY, kReducE)
 
         Next
 
@@ -512,7 +512,7 @@ Public Class cls_VerifFeuAcier
 
         '--> Initialisation
 
-        GammaMFi = myBeam.Param.Gamma.GammaM_fi
+        GammaMFi = myBeam.Param.Gamma.GammaM_fi_a
         MRk = MRd * GammaMFi
 
         '--> Calcul Alpha Critique

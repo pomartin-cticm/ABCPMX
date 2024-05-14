@@ -207,7 +207,7 @@
 
         myBeam.MaillageBeff(lSimple, False, bEff)
 
-        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi)
+        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi_a)
 
         If lMulti Then InitialiseCalculTempArma(myBeam.Dalle, NbTranches, EpTranche)
 
@@ -560,7 +560,7 @@
 
         '--> Modélisation du profilé acier
 
-        myModele.MaillageProfileA_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
+        myModele.MaillageProfileA_YY(Gammas.GammaM_fi_a, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
 
         '--> Dalle béton
 
@@ -577,7 +577,7 @@
             For iArma = 0 To myDalle.LitArma.Count - 1
 
                 zArma = Ztop - myDalle.LitArma(iArma).z_s
-                myModele.MaillageLitArmaDalle_YY(Gammas.GammaS_fi, Beff, myDalle, iArma, zArma, kReducS(iArma) * myDalle.AcierArmatures.FsK)
+                myModele.MaillageLitArmaDalle_YY(Gammas.GammaM_fi_s, Beff, myDalle, iArma, zArma, kReducS(iArma) * myDalle.AcierArmatures.FsK)
             Next
 
         End If
@@ -633,7 +633,7 @@
 
         '--> Modélisation du profilé acier
 
-        myModele.MaillageProfileA_YY(Gammas.GammaM_fi, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
+        myModele.MaillageProfileA_YY(Gammas.GammaM_fi_a, RhoV, mySection.ProfilA, reducKyFs * FySup, reducKyFi * FyInf, reducKyW * FyW, 0)
 
         '--> Dalle béton
 

@@ -14,7 +14,8 @@
     Public GammaS As Decimal
     Public GammaP As Decimal
 
-    Public GammaM_fi As Decimal         ' for the resistance of structural steel 
+    Public GammaM_fi_a As Decimal         ' for the resistance of structural steel 
+    Public GammaM_fi_s As Decimal         ' for the resistance of structural steel 
     Public GammaC_fi As Decimal         ' for the resistance of the compressed concrete
     Public GammaV_fi As Decimal         ' for the resistance of shear connectors
     Public GammaS_fi As Decimal         ' for the resistance of reinforcement steel bars
@@ -49,7 +50,8 @@
         'Me.GammaVp = 1.25
         Me.lGammaV_unique = True
 
-        Me.GammaM_fi = 1.0
+        Me.GammaM_fi_a = 1.0
+        Me.GammaM_fi_s = 1.0
         Me.GammaC_fi = 1.0
         Me.GammaS_fi = 1.0
         Me.GammaV_fi = 1.0
@@ -89,7 +91,8 @@
         'Me.GammaVp = 1.25
         Me.lGammaV_unique = MyGamma.lGammaV_unique
 
-        Me.GammaM_fi = MyGamma.GammaM_fi
+        Me.GammaM_fi_a = MyGamma.GammaM_fi_a
+        Me.GammaM_fi_s = MyGamma.GammaM_fi_s
         Me.GammaC_fi = MyGamma.GammaC_fi
         Me.GammaS_fi = MyGamma.GammaS_fi
         Me.GammaV_fi = MyGamma.GammaV_fi
