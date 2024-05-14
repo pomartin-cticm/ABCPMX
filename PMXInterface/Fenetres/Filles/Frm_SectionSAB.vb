@@ -393,15 +393,57 @@ Public Class Frm_SectionSAB
         GereTransfertValeur(MySectionLoc.ProfilA.NomProfile, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.NomProfile, lModif)
         GereTransfertValeur(MySectionLoc.ProfilA.Gamme, MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Gamme, lModif)
 
-        GereTransfertValeur(MySectionLoc.Acier.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Nuance, lModif)
-        GereTransfertValeur(MySectionLoc.Acier.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Qualite, lModif)
-        GereTransfertValeur(MySectionLoc.Acier.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.NormeProduit, lModif)
-        GereTransfertValeur(MySectionLoc.Acier.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Reduction, lModif)
+        Dim lAcierModifie As Boolean = False
 
-        GereTransfertValeur(MySectionLoc.AcierSPD.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Nuance, lModif)
-        GereTransfertValeur(MySectionLoc.AcierSPD.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Qualite, lModif)
-        GereTransfertValeur(MySectionLoc.AcierSPD.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.NormeProduit, lModif)
-        GereTransfertValeur(MySectionLoc.AcierSPD.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Reduction, lModif)
+        GereTransfertValeur(MySectionLoc.Acier.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Nuance, lAcierModifie)
+        GereTransfertValeur(MySectionLoc.Acier.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Qualite, lAcierModifie)
+        GereTransfertValeur(MySectionLoc.Acier.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.NormeProduit, lAcierModifie)
+        GereTransfertValeur(MySectionLoc.Acier.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Reduction, lAcierModifie)
+
+        If lAcierModifie Then
+            lModif = True
+
+            MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Plages.Clear()
+            Dim MyPlage As cls_Acier.strucPlage
+            Dim Nuance, Qualite, Reduction As String
+
+            Nuance = MySectionLoc.Acier.Nuance
+            Qualite = MySectionLoc.Acier.Qualite
+            Reduction = MySectionLoc.Acier.Reduction
+
+            For i As Integer = 0 To SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages.Count - 1
+                MyPlage.Ep = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Ep
+                MyPlage.Fy = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fy
+                MyPlage.Fu = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fu
+                MyProjet.Poutres(MyProjet.IndEnCours).Section.Acier.Plages.Add(MyPlage)
+            Next
+        End If
+
+        Dim lAcierModifieSPD As Boolean = False
+
+        GereTransfertValeur(MySectionLoc.AcierSPD.Nuance, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Nuance, lAcierModifieSPD)
+        GereTransfertValeur(MySectionLoc.AcierSPD.Qualite, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Qualite, lAcierModifieSPD)
+        GereTransfertValeur(MySectionLoc.AcierSPD.NormeProduit, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.NormeProduit, lAcierModifieSPD)
+        GereTransfertValeur(MySectionLoc.AcierSPD.Reduction, MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Reduction, lAcierModifieSPD)
+
+        If lAcierModifieSPD Then
+            lModif = True
+
+            MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Plages.Clear()
+            Dim MyPlageSPD As cls_Acier.strucPlage
+            Dim NuanceSPD, QualiteSPD, ReductionSPD As String
+
+            NuanceSPD = MySectionLoc.AcierSPD.Nuance
+            QualiteSPD = MySectionLoc.AcierSPD.Qualite
+            ReductionSPD = MySectionLoc.AcierSPD.Reduction
+
+            For i As Integer = 0 To SteelBase.Grades(NuanceSPD).Qualites(QualiteSPD).ReductionCurv(ReductionSPD).Plages.Count - 1
+                MyPlageSPD.Ep = SteelBase.Grades(NuanceSPD).Qualites(QualiteSPD).ReductionCurv(ReductionSPD).Plages(i).Ep
+                MyPlageSPD.Fy = SteelBase.Grades(NuanceSPD).Qualites(QualiteSPD).ReductionCurv(ReductionSPD).Plages(i).Fy
+                MyPlageSPD.Fu = SteelBase.Grades(NuanceSPD).Qualites(QualiteSPD).ReductionCurv(ReductionSPD).Plages(i).Fu
+                MyProjet.Poutres(MyProjet.IndEnCours).Section.AcierSPD.Plages.Add(MyPlageSPD)
+            Next
+        End If
 
         With MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA ' --> Sécurité supplémentaire pour s'assurer que les valeurs qui n'ont pas de sens restent égales à 0
             Select Case .typeProfileAcier
