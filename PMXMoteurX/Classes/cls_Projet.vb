@@ -1952,7 +1952,7 @@ Public Class cls_Projet
             DecomposeLine(Lignes(i), Mots, nbMots)
 
             If nbMots > 0 Then
-                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+                MotCle = Mots(1).Substring(0, Math.Min(11, Mots(1).Length)).ToUpper
 
 
                 With gamma_opt_calculs

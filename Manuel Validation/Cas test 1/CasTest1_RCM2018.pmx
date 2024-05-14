@@ -14,9 +14,10 @@ BLOCK IDENTIFICATION
 BLOCK POUTRE
    BeaIden           =  Beam B#1
    Commentaire       =  
-   TypeSection   =  2
    ConsoleGauche  =  False
    ConsoleDroite  =  False
+   DalleContGauche  =  False
+   DalleContDroite  =  False
    lTremieGauche  =  False
    lTremieDroite  =  False
    NbTravee       =  1
@@ -26,7 +27,6 @@ BLOCK POUTRE
    EtaisConsG     =  False
    EtaisConsD  =  False
    NbPropping     =  0
-   NbRestrain     =  {0/0/0}
    TypeMaintien   =  0
    D1             =  3
    D2             =  3
@@ -35,18 +35,16 @@ BLOCK POUTRE
    lIntermediaire =  True
    lDefautPortee  =  True
    lDefautEnroba  =  True
-   lDefautEtaiem  =  False
+   lDefautEtaiem  =  True
    lDefautDalle   =  False
-   lDonneesSauv   =  False
-   lNouvPoutre    =  False
    lAutoDesign    =  False
    NombreZones    =  {1/1/1}
    LongueurZone    =  {3/14/3}+{0/0/0}+{0/0/0}
-   EspaZone    =  {0,2/0,207/0,2}+{0,2/0,2/0,2}+{0,2/0,2/0,2}
+   EspaZone    =  {0,2/0,2/0,2}+{0,2/0,2/0,2}+{0,2/0,2/0,2}
    EspaBacTransZone    =  {1/1/1}+{1/1/1}+{1/1/1}
    NbGoujonTrans    =  {1/1/1}+{1/1/1}+{1/1/1}
    lCombELU    =  {True/False/False/False/False/False}
-   CoefELU    =  {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1/1,5/1,05/0/0}+{1/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   CoefELU    =  {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1,0/1,5/1,05/0/0}+{1,0/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    lCombELS    =  {True/False/False/False/False/False}
    CoefELS    =  {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    lCombELF    =  {False/False/False/False/False}
@@ -56,11 +54,25 @@ BLOCK POUTRE
    lCombELCS    =  {True/False}
    CoefELCS    =  {0/0/0/1/1}+{0/0/0/0/0}
 
+BLOCK MAINT_BAC
+   NT            =  2
+   M            =  2
+   Transition            =  1
+   FixNervuresMod            =  0
+   FixnervuresTyp            =  2
+   EC            =  0,5
+   FixCoutureType            =  0
+   lMaintienBac            =  False
+   lTheta            =  False
 BLOCK SECTION
    Nom            =  Nom
    lDalleBeton    =  False
    lDatabase      =  False
    typeSection    =  2
+   lUser      =  False
+   f_y_fs         =  235
+   f_y_w          =  235
+   f_y_fi         =  235
 
 BLOCK PROFILA
    Gamme          =  IPE
@@ -85,14 +97,10 @@ BLOCK ACIER_PROFILA
    Qualite        =  EC3
    Reduction      =  Table 3.1
    NormeProduit   =  EN 1993-1-1
-   EpMax          =  0,0800000056624413
+   EpMax          =  0,150000005960464
    iBase          =  1
-   iTabStand      =  13
-   iStandard      =  20
-   lUser      =  False
-   f_y_fs         =  235
-   f_y_w          =  235
-   f_y_fi         =  235
+   iTabStand      =  3
+   iStandard      =  4
 
 BLOCK ENROBAGE_PROFILA
    lArmaConst     =  False
@@ -163,10 +171,10 @@ BLOCK BETON_DALLE
    Leger           =  False
    Classe         =  C25/30
    RhoC         =  2500
-   Fck            =  25
-   Fcm            =  25
-   Fctm           =  2,56496392001504
-   Ecm            =  31475,8062100193
+   Fck            =  20
+   Fcm            =  20
+   Fctm           =  2,21041889918423
+   Ecm            =  29961,9510546403
    lCrackLimit    =  True
    wk_max         =  0,0004
 
@@ -189,13 +197,17 @@ BLOCK BAC_DALLE
    AppuiT         =  1
    AppuiL         =  0
 
+BLOCK COFRADAL
+   Nom      =  Cofradal 200 PAC
+   Dp      =  0,125
+   Msurf      =  525
+   lCustom      =  False
 BLOCK ARMATURE_DALLE
    indLit         =  0
    EspBar         =  0,2
    PhiS           =  0,012
-   z_s            =  0,02
+   z_s            =  0,032
    n_s            =  0
-   c_s            =  0,015
    lActive        =  True
 
 BLOCK ACIER_ARMATURE_DALLE
@@ -204,7 +216,7 @@ BLOCK ACIER_ARMATURE_DALLE
    Es             =  210000
 
 BLOCK CONNECTEUR_DALLE
-   nom            =  Diametre 19-100
+   nom            =  19-100
    hsc            =  0,100000001490116
    d              =  0,0190000012516975
    fy              =  350
@@ -213,17 +225,17 @@ BLOCK CONNECTEUR_DALLE
 BLOCK OPT_CALCULS
    RH            = 50
    Norme            = 0
-   EtaW            = 1,2
+   EtaW            = 1,00
    lLarEffSimp            = False
    lCompArma            = False
-   dMaxNodes            = 0,5
-   nbMinNodesTr            = 10
-   nbMinNodesCo            = 5
+   dMaxNodes            = 1,0
+   nbMinNodesTr            = 100
+   nbMinNodesCo            = 50
    epsSH            = 0,000325
    lRetraitEnr            = False
    ArmaYoung            = 210000
    Gravite            = 9,81
-   PsiLPerm            = 1,1
+   PsiLPerm            = 1,10
    PsiLRetrait            = 0,55
    AgeT0G1_0            = 28
    AgeT0G1_1            = 56
@@ -233,22 +245,24 @@ BLOCK OPT_CALCULS
    AgeT0SH_1            = 1
    AgeTCalc            = 18250
    lElasticDesign            = False
+   lMaitFissure            = False
 
 BLOCK OPT_CALCULS_GAMMA
-   GammaM0       = 1
-   GammaM1       = 1
+   GammaM0       = 1,00
+   GammaM1       = 1,0
    GammaM2       = 1,25
    GammaC        = 1,5
    GammaVs       = 1,25
    GammaVc       = 1,25
    lGammaVuni    = True
    GammaS        = 1,15
-   GammaP        = 1
-   GammaM_fi     = 1
-   GammaC_fi     = 1
-   GammaV_fi     = 1
+   GammaP        = 1,0
+   GammaM_fi_a     = 1,0
+   GammaC_fi     = 1,0
+   GammaM_fi_s   = 1,0
+   GammaV_fi     = 1,0
    GammaG_sup    = 1,35
-   GammaG_inf    = 1
+   GammaG_inf    = 1,0
    GammaQ        = 1,5
    Psi0_Q1       = 0,7
    Psi1_Q1       = 0,5
@@ -259,7 +273,7 @@ BLOCK OPT_CALCULS_GAMMA
 
 BLOCK OPT_CALCULS_HIVOSS
    lHivossMethod = True
-   RatioQ        = 0,2
+   RatioQ        = 0
    ChoixQ        = 0
    UtilPlancher  = 4
    lFreqDalle  = False

@@ -2653,6 +2653,8 @@ Module Mod_NoteCalcul
         Const pLC1 As Single = 12
         Const pLC2 As Single = 10
 
+        Dim listeInertieAffichee As New List(Of Decimal)
+
         '--> Entête du tableau
 
         EnteteTableauPropElastiqueMixte(lEnrob, NCOL)
@@ -2662,7 +2664,13 @@ Module Mod_NoteCalcul
         For iTab As Integer = 0 To nbTab - 1
 
             MyBeam.Section.ProprietesElastiquesMixteMyy(1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), NeqDalle(iTab), bEff,
-                                             MyBeam.Dalle, zANE, InertieY, MelRd, lDalle(iTab))
+                                   MyBeam.Dalle, zANE, InertieY, MelRd, lDalle(iTab))
+
+            If listeInertieAffichee.Contains(InertieY) Then
+                Continue For 'Ajout GUD: permet de ne pas afficher plusieurs fois la même ligne 
+            Else
+                listeInertieAffichee.Add(InertieY)
+            End If
 
             InitialiseLigneTableau(NCOL, HLIGNE)
 
