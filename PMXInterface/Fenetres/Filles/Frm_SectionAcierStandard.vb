@@ -305,7 +305,12 @@ Public Class Frm_SectionAcierStandard
                       And (Me.GridAciers(1, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Qualite) _
                       And (Me.GridAciers(2, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Reduction)
             Loop
-            If lTrouve Then Me.GridAciers(0, iSteel - 1).Selected = True
+            If lTrouve Then
+                Me.GridAciers(0, iSteel - 1).Selected = True
+            Else 'on selectionne la derniere ligne par défaut 
+                Me.GridAciers(0, Me.GridAciers.Rows.Count - 1).Selected = True
+            End If
+            GetAcierFromGrid()
         Else
 
         End If
@@ -331,7 +336,13 @@ Public Class Frm_SectionAcierStandard
                       And (Me.GridAciers(1, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Qualite) _
                       And (Me.GridAciers(2, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Reduction)
         Loop
-        If lTrouve Then Me.GridAciers(0, iSteel - 1).Selected = True
+
+        If lTrouve Then
+            Me.GridAciers(0, iSteel - 1).Selected = True
+        Else 'on selectionne la derniere ligne par défaut 
+            Me.GridAciers(0, Me.GridAciers.Rows.Count - 1).Selected = True
+        End If
+        GetAcierFromGrid()
 
 
     End Sub
@@ -1141,12 +1152,15 @@ Public Class Frm_SectionAcierStandard
                 Profile = NettoieNomProfil(Me.Grid_ProfilesSup(0, 0).Value.ToString)        '==R16-007
                 TransfertSaisieGridProfile(Gamme, Profile, MySectionLoc)
 
-                MAJ_Aciers(Gamme, Profile)
+                lBuild = True
+                AfficherPoutreEnCours()
+                lBuild = False
+                'MAJ_Aciers(Gamme, Profile)
                 'SelectDefaultSteel(True)
                 'GetAcierFromGrid()
                 'MAJNuancesPossibles()
                 '==R16-012
-                RemplirDelivery(Gamme, Profile)
+                'RemplirDelivery(Gamme, Profile)
 
             End If
 
@@ -1242,7 +1256,11 @@ Public Class Frm_SectionAcierStandard
 
         TransfertSaisieGridProfile(Gamme, Etiquette, MySectionLoc)
 
-        MAJ_Aciers(Gamme, Etiquette)
+        lBuild = True
+        AfficherPoutreEnCours()
+        lBuild = False
+
+        'MAJ_Aciers(Gamme, Etiquette)
         'SelectDefaultSteel(False)
         'GetAcierFromGrid()
 

@@ -280,7 +280,12 @@ Public Class Frm_SectionSFB
                       And (Me.GridAciers(1, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Qualite) _
                       And (Me.GridAciers(2, iSteel - 1).Value.ToString.Trim = MySectionLoc.Acier.Reduction)
             Loop
-            If lTrouve Then Me.GridAciers(0, iSteel - 1).Selected = True
+            If lTrouve Then
+                Me.GridAciers(0, iSteel - 1).Selected = True
+            Else 'on selectionne la dernière ligne par défaut 
+                Me.GridAciers(0, Me.GridAciers.Rows.Count - 1).Selected = True
+            End If
+            GetAcierFromGrid()
         Else
 
         End If
@@ -1029,12 +1034,16 @@ Public Class Frm_SectionSFB
                 Profile = NettoieNomProfil(Me.Grid_ProfilesSup(0, 0).Value.ToString)        '==R16-007
                 TransfertSaisieGridProfile(Gamme, Profile, MySectionLoc)
 
-                MAJ_Aciers(Gamme, Profile)
+                lBuild = True
+                AfficherPoutreEnCours()
+                lBuild = False
+
+                'MAJ_Aciers(Gamme, Profile)
                 'SelectDefaultSteel(True)
                 'GetAcierFromGrid()
                 'MAJNuancesPossibles()
                 '==R16-012
-                RemplirDelivery(Gamme, Profile)
+                'RemplirDelivery(Gamme, Profile)
 
             End If
 
@@ -1098,12 +1107,16 @@ Public Class Frm_SectionSFB
             MySectionLoc.ProfilA.Plat_b = MySectionLoc.ProfilA.Bfi + 2 * BAPPMIN
         End If
 
-        AfficherPlatSoudeEnCours()
-        MAJ_Aciers(Gamme, Etiquette)
+        lBuild = True
+        AfficherPoutreEnCours()
+        lBuild = False
+
+        'AfficherPlatSoudeEnCours()
+        'MAJ_Aciers(Gamme, Etiquette)
         'SelectDefaultSteel(False)
         'GetAcierFromGrid()
 
-        RemplirDelivery(Gamme, Etiquette)
+        'RemplirDelivery(Gamme, Etiquette)
 
         'MAJ_DonneesFinales()
         Me.img_Section.Invalidate()
@@ -1324,7 +1337,7 @@ Public Class Frm_SectionSFB
         If lBuild Then Exit Sub
         If Me.GridAciers.Rows.Count = 0 Then Exit Sub
 
-        GetAcierFromGrid(MySectionLoc.Acier)
+        GetAcierFromGrid()
 
         MAJNuancesPossibles(MySectionLoc.Acier)
 
@@ -1335,7 +1348,7 @@ Public Class Frm_SectionSFB
 
     End Sub
 
-    Private Sub GetAcierFromGrid(ByVal AcierLoc As cls_Acier)
+    Private Sub GetAcierFromGrid()
         '-------------------------------------------------------------------------------------------------------------------------
         '
         '   Récupération des données acier sélectionnées par l'utilisateur dans la grille
@@ -1355,11 +1368,11 @@ Public Class Frm_SectionSFB
         Qualite = GridAciers(1, indRow).Value.ToString.Trim
         Norme = GridAciers(2, indRow).Value.ToString.Trim
 
-        TransfertGridAcier(Nuance, Qualite, Norme, AcierLoc)
+        TransfertGridAcier(Nuance, Qualite, Norme, MySectionLoc.Acier)
 
     End Sub
 
-    Private Sub TransfertGridAcier(ByVal Nuance As String, ByVal Qualite As String, ByVal Reduction As String, ByVal AcierLoc As cls_Acier)
+    Private Sub TransfertGridAcier(ByVal Nuance As String, ByVal Qualite As String, ByVal Reduction As String, ByRef AcierLoc As cls_Acier)
 
         AcierLoc.Nuance = Nuance
         AcierLoc.Qualite = Qualite
