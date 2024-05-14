@@ -11,7 +11,8 @@ Public Class Frm_Enrobage
 
     Const iFRMENROBAGE As Integer = 3
     Const kAdjust As Decimal = 0.95
-    Dim MyEnrobage As New cls_Enrobage_Partiel
+    'Dim MyEnrobage As cls_Enrobage_Partiel
+    Dim MySection As New cls_Section
 
     Dim MyBf As Decimal
 
@@ -171,9 +172,11 @@ Public Class Frm_Enrobage
     End Sub
 
     Private Sub InitialiseVariable()
-        MyBf = MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Bfs
+        'MyBf = MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.Bfs
 
-        MyEnrobage.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage, MyEnrobage)
+        cls_Section.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySection)
+
+        MyBf = MySection.ProfilA.Bfs
 
     End Sub
 
@@ -214,11 +217,11 @@ Public Class Frm_Enrobage
     Private Sub AfficherEnrobageEnCours()
         Dim Chaine As String
 
-        With MyEnrobage
+        With MySection.Enrobage
 
             '--> Largeur
 
-            Me.cmb_RatioBc.SelectedIndex = Array.IndexOf(Me.RatiosLargeur, MyEnrobage.Ratio_bc)
+            Me.cmb_RatioBc.SelectedIndex = Array.IndexOf(Me.RatiosLargeur, MySection.Enrobage.Ratio_bc)
             Me.txt_Bc.Text = GetStringNoUnit(.Ratio_bc * MyBf, Enu_TypeVariable.Dimension)
 
             '--> Etriers
@@ -308,14 +311,15 @@ Public Class Frm_Enrobage
 
     Private Sub MAJI_zPosArmaLongi()
         Dim iArma As Integer = IndiceLitAffiche()
-        Dim zPos As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Section.zPositionLitArmaEnrobage(iArma)
+        'Dim zPos As Decimal = MyProjet.Poutres(MyProjet.IndEnCours).Section.zPositionLitArmaEnrobage(iArma)
+        Dim zPos As Decimal = MySection.zPositionLitArmaEnrobage(iArma)
         Me.txt_zArma.Text = GetStringNoUnit(Math.Abs(zPos), Enu_TypeVariable.Dimension)
     End Sub
 
     Private Sub MAJI_AireArmaLongi()
         Dim iArma As Integer = IndiceLitAffiche()
 
-        Dim AireAs As Decimal = MyEnrobage.LitArma(iArma).Aire
+        Dim AireAs As Decimal = MySection.Enrobage.LitArma(iArma).Aire
         Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension) ^ 2
 
         Me.txt_As.Text = GetStringNoUnit(AireAs / kUnit, Enu_TypeVariable.SansType)
@@ -326,7 +330,7 @@ Public Class Frm_Enrobage
         Select Case LitArmaEnCours
             Case Enu_LitArmaEnCours.Inferieur
                 iArma = 0
-                Select Case MyEnrobage.Etriers_Type
+                Select Case MySection.Enrobage.Etriers_Type
                     Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
                         iStart(0) = 1 : iEnd(0) = 3
                         iStart(1) = 0 : iEnd(1) = 3
@@ -345,7 +349,7 @@ Public Class Frm_Enrobage
 
             Case Enu_LitArmaEnCours.Superieur
                 iArma = 2
-                Select Case MyEnrobage.Etriers_Type
+                Select Case MySection.Enrobage.Etriers_Type
                     Case cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
                         iStart(0) = 1 : iEnd(0) = 1
                         iStart(1) = 0 : iEnd(1) = 0
@@ -406,26 +410,27 @@ Public Class Frm_Enrobage
         '        RemplirComboNombre(Me.cmb_NombreInt, TabNbAutre)
         'End Select
 
-        Me.cmb_NombreExt.SelectedIndex = MyEnrobage.LitArma(iArma).NbExt - iStart(0)
-        Me.cmb_NombreMil.SelectedIndex = MyEnrobage.LitArma(iArma).NbMil - iStart(1)
-        Me.cmb_NombreInt.SelectedIndex = MyEnrobage.LitArma(iArma).NbInt - iStart(2)
+        Me.cmb_NombreExt.SelectedIndex = MySection.Enrobage.LitArma(iArma).NbExt - iStart(0)
+        Me.cmb_NombreMil.SelectedIndex = MySection.Enrobage.LitArma(iArma).NbMil - iStart(1)
+        Me.cmb_NombreInt.SelectedIndex = MySection.Enrobage.LitArma(iArma).NbInt - iStart(2)
 
         '--> Diametre
 
-        AfficheDiametreDansCombo(Me.cmb_DiaExt, MyEnrobage.LitArma(iArma).PhiExt)
-        AfficheDiametreDansCombo(Me.cmb_DiaMil, MyEnrobage.LitArma(iArma).PhiMil)
-        AfficheDiametreDansCombo(Me.cmb_DiaInt, MyEnrobage.LitArma(iArma).PhiInt)
+        AfficheDiametreDansCombo(Me.cmb_DiaExt, MySection.Enrobage.LitArma(iArma).PhiExt)
+        AfficheDiametreDansCombo(Me.cmb_DiaMil, MySection.Enrobage.LitArma(iArma).PhiMil)
+        AfficheDiametreDansCombo(Me.cmb_DiaInt, MySection.Enrobage.LitArma(iArma).PhiInt)
 
         '--> Barres Actives
 
-        AfficheBarreActive(Me.chk_ActiveExt, MyEnrobage.LitArma(iArma).NbExt, False, MyEnrobage.LitArma(iArma).lActiveExt)
-        AfficheBarreActive(Me.chk_ActiveMil, MyEnrobage.LitArma(iArma).NbMil, True, True)
-        AfficheBarreActive(Me.chk_ActiveInt, MyEnrobage.LitArma(iArma).NbInt, False, MyEnrobage.LitArma(iArma).lActiveInt)
+        AfficheBarreActive(Me.chk_ActiveExt, MySection.Enrobage.LitArma(iArma).NbExt, False, MySection.Enrobage.LitArma(iArma).lActiveExt)
+        AfficheBarreActive(Me.chk_ActiveMil, MySection.Enrobage.LitArma(iArma).NbMil, True, True)
+        AfficheBarreActive(Me.chk_ActiveInt, MySection.Enrobage.LitArma(iArma).NbInt, False, MySection.Enrobage.LitArma(iArma).lActiveInt)
 
         '--> Position z
 
         If iArma = 1 Then
-            Me.txt_zArma.Text = GetStringNoUnit(-MyProjet.Poutres(MyProjet.IndEnCours).Section.zPositionLitArmaEnrobage(iArma), Enu_TypeVariable.Dimension)
+            'Me.txt_zArma.Text = GetStringNoUnit(-MyProjet.Poutres(MyProjet.IndEnCours).Section.zPositionLitArmaEnrobage(iArma), Enu_TypeVariable.Dimension)
+            Me.txt_zArma.Text = GetStringNoUnit(-MySection.zPositionLitArmaEnrobage(iArma), Enu_TypeVariable.Dimension)
         Else
             MAJI_zPosArmaLongi()
         End If
@@ -511,45 +516,45 @@ Public Class Frm_Enrobage
 
         '-- Dimensions ----------------------------------------------------------------------------------------------------
 
-        GereTransfertValeur(MyEnrobage.Ratio_bc, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Ratio_bc, lModif)
+        GereTransfertValeur(MySection.Enrobage.Ratio_bc, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Ratio_bc, lModif)
 
         '-- Etriers -------------------------------------------------------------------------------------------------------
 
-        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_Type <> MyEnrobage.Etriers_Type) Then
-            MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_Type = MyEnrobage.Etriers_Type
+        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_Type <> MySection.Enrobage.Etriers_Type) Then
+            MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_Type = MySection.Enrobage.Etriers_Type
             lModif = True
         End If
 
-        GereTransfertValeur(MyEnrobage.Etriers_Phi, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_Phi, lModif)
-        GereTransfertValeur(MyEnrobage.Etriers_EnrobageY, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_EnrobageY, lModif)
-        GereTransfertValeur(MyEnrobage.Etriers_EnrobageZ, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_EnrobageZ, lModif)
+        GereTransfertValeur(MySection.Enrobage.Etriers_Phi, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_Phi, lModif)
+        GereTransfertValeur(MySection.Enrobage.Etriers_EnrobageY, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_EnrobageY, lModif)
+        GereTransfertValeur(MySection.Enrobage.Etriers_EnrobageZ, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Etriers_EnrobageZ, lModif)
 
         '-- Beton ----------------------------------------------------------------------------------------------------------------------
 
-        GereTransfertValeur(MyEnrobage.Beton.Classe, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Classe, lModif)
+        GereTransfertValeur(MySection.Enrobage.Beton.Classe, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Classe, lModif)
         MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.Beton.Calcul_Proprietes()
 
         '-- Acier ---------------------------------------------------------------------------------------------------------------------
 
-        GereTransfertValeur(MyEnrobage.AcierArmatures.Classe, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.AcierArmatures.Classe, lModif)
+        GereTransfertValeur(MySection.Enrobage.AcierArmatures.Classe, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.AcierArmatures.Classe, lModif)
         MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.AcierArmatures.MAJProprietes()
 
         '-- Lits d'armatures ---------------------------------------------------------------------------------------------------------
 
         For i As Integer = 0 To 2
 
-            GereTransfertValeur(MyEnrobage.LitArma(i).PhiExt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiExt, lModif)
-            GereTransfertValeur(MyEnrobage.LitArma(i).NbExt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbExt, lModif)
-            GereTransfertValeur(MyEnrobage.LitArma(i).lActiveExt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).lActiveExt, lModif)
-            GereTransfertValeur(MyEnrobage.LitArma(i).PhiMil, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiMil, lModif)
-            GereTransfertValeur(MyEnrobage.LitArma(i).NbMil, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbMil, lModif)
-            GereTransfertValeur(MyEnrobage.LitArma(i).PhiInt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiInt, lModif)
-            GereTransfertValeur(MyEnrobage.LitArma(i).NbInt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbInt, lModif)
-            GereTransfertValeur(MyEnrobage.LitArma(i).lActiveInt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).lActiveInt, lModif)
+            GereTransfertValeur(MySection.Enrobage.LitArma(i).PhiExt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiExt, lModif)
+            GereTransfertValeur(MySection.Enrobage.LitArma(i).NbExt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbExt, lModif)
+            GereTransfertValeur(MySection.Enrobage.LitArma(i).lActiveExt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).lActiveExt, lModif)
+            GereTransfertValeur(MySection.Enrobage.LitArma(i).PhiMil, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiMil, lModif)
+            GereTransfertValeur(MySection.Enrobage.LitArma(i).NbMil, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbMil, lModif)
+            GereTransfertValeur(MySection.Enrobage.LitArma(i).PhiInt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).PhiInt, lModif)
+            GereTransfertValeur(MySection.Enrobage.LitArma(i).NbInt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).NbInt, lModif)
+            GereTransfertValeur(MySection.Enrobage.LitArma(i).lActiveInt, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(i).lActiveInt, lModif)
 
         Next
 
-        GereTransfertValeur(MyEnrobage.LitArma(1).zPosRatio, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(1).zPosRatio, lModif)
+        GereTransfertValeur(MySection.Enrobage.LitArma(1).zPosRatio, MyProjet.Poutres(MyProjet.IndEnCours).Section.Enrobage.LitArma(1).zPosRatio, lModif)
 
     End Sub
 
@@ -560,45 +565,45 @@ Public Class Frm_Enrobage
 
     '    '-- Dimensions ----------------------------------------------------------------------------------------------------
 
-    '    If (MyEnrobage.Ratio_bc <> MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Ratio_bc) Then
+    '    If (MySection.Enrobage.Ratio_bc <> MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Ratio_bc) Then
     '        lModif = True
-    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Ratio_bc = MyEnrobage.Ratio_bc
+    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Ratio_bc = MySection.Enrobage.Ratio_bc
     '    End If
 
     '    '-- Etriers -------------------------------------------------------------------------------------------------------
 
-    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Type <> MyEnrobage.Etriers_Type) Then
-    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Type = MyEnrobage.Etriers_Type
+    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Type <> MySection.Enrobage.Etriers_Type) Then
+    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Type = MySection.Enrobage.Etriers_Type
     '        lModif = True
     '    End If
 
-    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Phi <> MyEnrobage.Etriers_Phi) Then
-    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Phi = MyEnrobage.Etriers_Phi
+    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Phi <> MySection.Enrobage.Etriers_Phi) Then
+    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_Phi = MySection.Enrobage.Etriers_Phi
     '        lModif = True
     '    End If
 
-    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageY <> MyEnrobage.Etriers_EnrobageY) Then
-    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageY = MyEnrobage.Etriers_EnrobageY
+    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageY <> MySection.Enrobage.Etriers_EnrobageY) Then
+    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageY = MySection.Enrobage.Etriers_EnrobageY
     '        lModif = True
     '    End If
 
-    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageZ <> MyEnrobage.Etriers_EnrobageZ) Then
-    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageZ = MyEnrobage.Etriers_EnrobageZ
+    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageZ <> MySection.Enrobage.Etriers_EnrobageZ) Then
+    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Etriers_EnrobageZ = MySection.Enrobage.Etriers_EnrobageZ
     '        lModif = True
     '    End If
 
     '    '-- Beton ----------------------------------------------------------------------------------------------------------------------
 
-    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Beton.Classe <> MyEnrobage.Beton.Classe) Then
-    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Beton.Classe = MyEnrobage.Beton.Classe
+    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Beton.Classe <> MySection.Enrobage.Beton.Classe) Then
+    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Beton.Classe = MySection.Enrobage.Beton.Classe
     '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.Beton.Calcul_Proprietes()
     '        lModif = True
     '    End If
 
     '    '-- Acier ---------------------------------------------------------------------------------------------------------------------
 
-    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.AcierArmatures.Classe <> MyEnrobage.AcierArmatures.Classe) Then
-    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.AcierArmatures.Classe = MyEnrobage.AcierArmatures.Classe
+    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.AcierArmatures.Classe <> MySection.Enrobage.AcierArmatures.Classe) Then
+    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.AcierArmatures.Classe = MySection.Enrobage.AcierArmatures.Classe
     '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.AcierArmatures.MAJProprietes()
     '        lModif = True
     '    End If
@@ -607,40 +612,40 @@ Public Class Frm_Enrobage
 
     '    For i As Integer = 0 To 2
 
-    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiExt <> MyEnrobage.LitArma(i).PhiExt) Then
-    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiExt = MyEnrobage.LitArma(i).PhiExt
+    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiExt <> MySection.Enrobage.LitArma(i).PhiExt) Then
+    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiExt = MySection.Enrobage.LitArma(i).PhiExt
     '            lModif = True
     '        End If
 
-    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbExt <> MyEnrobage.LitArma(i).NbExt) Then
-    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbExt = MyEnrobage.LitArma(i).NbExt
+    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbExt <> MySection.Enrobage.LitArma(i).NbExt) Then
+    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbExt = MySection.Enrobage.LitArma(i).NbExt
     '            lModif = True
     '        End If
 
-    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiMil <> MyEnrobage.LitArma(i).PhiMil) Then
-    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiMil = MyEnrobage.LitArma(i).PhiMil
+    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiMil <> MySection.Enrobage.LitArma(i).PhiMil) Then
+    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiMil = MySection.Enrobage.LitArma(i).PhiMil
     '            lModif = True
     '        End If
 
-    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbMil <> MyEnrobage.LitArma(i).NbMil) Then
-    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbMil = MyEnrobage.LitArma(i).NbMil
+    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbMil <> MySection.Enrobage.LitArma(i).NbMil) Then
+    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbMil = MySection.Enrobage.LitArma(i).NbMil
     '            lModif = True
     '        End If
 
-    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiInt <> MyEnrobage.LitArma(i).PhiInt) Then
-    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiInt = MyEnrobage.LitArma(i).PhiInt
+    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiInt <> MySection.Enrobage.LitArma(i).PhiInt) Then
+    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).PhiInt = MySection.Enrobage.LitArma(i).PhiInt
     '            lModif = True
     '        End If
 
-    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbInt <> MyEnrobage.LitArma(i).NbInt) Then
-    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbInt = MyEnrobage.LitArma(i).NbInt
+    '        If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbInt <> MySection.Enrobage.LitArma(i).NbInt) Then
+    '            MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(i).NbInt = MySection.Enrobage.LitArma(i).NbInt
     '            lModif = True
     '        End If
 
     '    Next
 
-    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(1).zPosRatio <> MyEnrobage.LitArma(1).zPosRatio) Then
-    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(1).zPosRatio = MyEnrobage.LitArma(1).zPosRatio
+    '    If (MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(1).zPosRatio <> MySection.Enrobage.LitArma(1).zPosRatio) Then
+    '        MyProjet.Poutres(MyProjet.IndEnCours).Section.enrobage_partiel.LitArma(1).zPosRatio = MySection.Enrobage.LitArma(1).zPosRatio
     '        lModif = True
     '    End If
 
@@ -653,7 +658,7 @@ Public Class Frm_Enrobage
 
     Private Sub img_Enrobage_Paint(sender As Object, e As PaintEventArgs) Handles img_Enrobage.Paint
 
-        DessinFrmEnrobage(e.Graphics, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyEnrobage,
+        DessinFrmEnrobage(e.Graphics, MySection, MySection.Enrobage,
                           Me.img_Enrobage.ClientRectangle.Width, Me.img_Enrobage.ClientRectangle.Height, kAdjust, True, False, iSelect)
 
     End Sub
@@ -830,7 +835,8 @@ Public Class Frm_Enrobage
 
         Dim Valeur As Decimal
         If VerificationSaisie(sender, Valeur) Then
-            MyEnrobage.LitArma(1).zPosRatio = Valeur / MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.ha
+            'MySection.Enrobage.LitArma(1).zPosRatio = Valeur / MyProjet.Poutres(MyProjet.IndEnCours).Section.ProfilA.ha
+            MySection.Enrobage.LitArma(1).zPosRatio = Valeur / MySection.ProfilA.ha
 
             Me.img_Enrobage.Invalidate()
         End If
@@ -850,17 +856,17 @@ Public Class Frm_Enrobage
 
         Select Case sender.name
             Case Me.cmb_DiaExt.Name
-                MyEnrobage.LitArma(iArma).PhiExt = Diametre(Me.cmb_DiaExt.SelectedIndex)
+                MySection.Enrobage.LitArma(iArma).PhiExt = Diametre(Me.cmb_DiaExt.SelectedIndex)
             Case Me.cmb_DiaMil.Name
-                MyEnrobage.LitArma(iArma).PhiMil = Diametre(Me.cmb_DiaMil.SelectedIndex)
+                MySection.Enrobage.LitArma(iArma).PhiMil = Diametre(Me.cmb_DiaMil.SelectedIndex)
             Case Me.cmb_DiaInt.Name
-                MyEnrobage.LitArma(iArma).PhiInt = Diametre(Me.cmb_DiaInt.SelectedIndex)
+                MySection.Enrobage.LitArma(iArma).PhiInt = Diametre(Me.cmb_DiaInt.SelectedIndex)
             Case Me.cmb_NombreExt.Name
-                MyEnrobage.LitArma(iArma).NbExt = Me.cmb_NombreExt.SelectedIndex + iStart(0)
+                MySection.Enrobage.LitArma(iArma).NbExt = Me.cmb_NombreExt.SelectedIndex + iStart(0)
             Case Me.cmb_NombreMil.Name
-                MyEnrobage.LitArma(iArma).NbMil = Me.cmb_NombreMil.SelectedIndex + iStart(1)
+                MySection.Enrobage.LitArma(iArma).NbMil = Me.cmb_NombreMil.SelectedIndex + iStart(1)
             Case Me.cmb_NombreInt.Name
-                MyEnrobage.LitArma(iArma).NbInt = Me.cmb_NombreInt.SelectedIndex + iStart(2)
+                MySection.Enrobage.LitArma(iArma).NbInt = Me.cmb_NombreInt.SelectedIndex + iStart(2)
         End Select
 
         Me.img_Enrobage.Invalidate()
@@ -873,8 +879,8 @@ Public Class Frm_Enrobage
         Dim iArma As Integer = IndiceLitAffiche()
 
         If iArma = 0 Or iArma = 2 Then
-            MAJI_chkActive(Me.chk_ActiveExt, MyEnrobage.LitArma(iArma).NbExt, MyEnrobage.LitArma(iArma).lActiveExt)
-            MAJI_chkActive(Me.chk_ActiveInt, MyEnrobage.LitArma(iArma).NbInt, MyEnrobage.LitArma(iArma).lActiveInt)
+            MAJI_chkActive(Me.chk_ActiveExt, MySection.Enrobage.LitArma(iArma).NbExt, MySection.Enrobage.LitArma(iArma).lActiveExt)
+            MAJI_chkActive(Me.chk_ActiveInt, MySection.Enrobage.LitArma(iArma).NbInt, MySection.Enrobage.LitArma(iArma).lActiveInt)
         End If
 
     End Sub
@@ -891,21 +897,21 @@ Public Class Frm_Enrobage
 
     Private Sub cmb_Acier_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Acier.SelectedIndexChanged
         If lBuild Then Exit Sub
-        MyEnrobage.AcierArmatures.Classe = Me.ClasseAcierArma(Me.cmb_Acier.SelectedIndex)
+        MySection.Enrobage.AcierArmatures.Classe = Me.ClasseAcierArma(Me.cmb_Acier.SelectedIndex)
         MAJI_ProprietesAcier()
 
         Me.img_Enrobage.Invalidate()
     End Sub
 
     Private Sub MAJI_ProprietesAcier()
-        MyEnrobage.AcierArmatures.MAJProprietes()
-        Me.txt_Fsk.Text = GetStringNoUnit(MyEnrobage.AcierArmatures.FsK, Enu_TypeVariable.Contrainte)
+        MySection.Enrobage.AcierArmatures.MAJProprietes()
+        Me.txt_Fsk.Text = GetStringNoUnit(MySection.Enrobage.AcierArmatures.FsK, Enu_TypeVariable.Contrainte)
     End Sub
 
     Private Sub cmb_ClasseBetonEnrobage_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ClasseBetonEnrobage.SelectedIndexChanged
         If lBuild Then Exit Sub
 
-        MyEnrobage.Beton.Classe = Me.ClasseBeton(Me.cmb_ClasseBetonEnrobage.SelectedIndex)
+        MySection.Enrobage.Beton.Classe = Me.ClasseBeton(Me.cmb_ClasseBetonEnrobage.SelectedIndex)
 
         MAJI_ProprietesBeton()
         Me.img_Enrobage.Invalidate()
@@ -913,10 +919,10 @@ Public Class Frm_Enrobage
 
     Private Sub MAJI_ProprietesBeton()
 
-        MyEnrobage.Beton.Calcul_Proprietes()
+        MySection.Enrobage.Beton.Calcul_Proprietes()
 
-        Me.txt_Fck.Text = GetStringNoUnit(MyEnrobage.Beton.Fck, Enu_TypeVariable.Contrainte)
-        Me.txt_Ecm.Text = GetStringNoUnit(MyEnrobage.Beton.Ecm, Enu_TypeVariable.ModuleY)
+        Me.txt_Fck.Text = GetStringNoUnit(MySection.Enrobage.Beton.Fck, Enu_TypeVariable.Contrainte)
+        Me.txt_Ecm.Text = GetStringNoUnit(MySection.Enrobage.Beton.Ecm, Enu_TypeVariable.ModuleY)
 
     End Sub
 
@@ -924,8 +930,8 @@ Public Class Frm_Enrobage
 
         If lBuild Then Exit Sub
 
-        MyEnrobage.Ratio_bc = Me.RatiosLargeur(Me.cmb_RatioBc.SelectedIndex)
-        Me.txt_Bc.Text = GetStringNoUnit(MyEnrobage.Ratio_bc * MyBf, Enu_TypeVariable.Dimension)
+        MySection.Enrobage.Ratio_bc = Me.RatiosLargeur(Me.cmb_RatioBc.SelectedIndex)
+        Me.txt_Bc.Text = GetStringNoUnit(MySection.Enrobage.Ratio_bc * MyBf, Enu_TypeVariable.Dimension)
 
         Me.img_Enrobage.Invalidate()
 
@@ -942,9 +948,14 @@ Public Class Frm_Enrobage
             Select Case sender.name
 
                 Case Me.txt_EtrierUy.Name
-                    MyEnrobage.Etriers_EnrobageY = Valeur
+                    MySection.Enrobage.Etriers_EnrobageY = Valeur
                 Case Me.txt_EtrierUz.Name
-                    MyEnrobage.Etriers_EnrobageZ = Valeur
+                    MySection.Enrobage.Etriers_EnrobageZ = Valeur
+
+                    If Not (LitArmaEnCours = Enu_LitArmaEnCours.Intermediaire) Then
+
+                        MAJI_zPosArmaLongi()
+                    End If
 
             End Select
 
@@ -986,9 +997,13 @@ Public Class Frm_Enrobage
 
             Case Me.txt_zArma.Name
 
-                ValMin = -MyProjet.Poutres(MyProjet.IndEnCours).Section.zPositionLitArmaEnrobage(2) _
+                'ValMin = -MyProjet.Poutres(MyProjet.IndEnCours).Section.zPositionLitArmaEnrobage(2) _
+                '       + 2 * Me.DiametreArmaInf(Me.DiametreArmaInf.GetUpperBound(0))
+                'ValMax = -MyProjet.Poutres(MyProjet.IndEnCours).Section.zPositionLitArmaEnrobage(0) _
+                '       - 2 * Me.DiametreArmaInf(Me.DiametreArmaInf.GetUpperBound(0))
+                ValMin = -MySection.zPositionLitArmaEnrobage(2) _
                        + 2 * Me.DiametreArmaInf(Me.DiametreArmaInf.GetUpperBound(0))
-                ValMax = -MyProjet.Poutres(MyProjet.IndEnCours).Section.zPositionLitArmaEnrobage(0) _
+                ValMax = -MySection.zPositionLitArmaEnrobage(0) _
                        - 2 * Me.DiametreArmaInf(Me.DiametreArmaInf.GetUpperBound(0))
                 ValMin = ValMin / kUnit
                 ValMax = ValMax / kUnit
@@ -1015,12 +1030,12 @@ Public Class Frm_Enrobage
         Select Case sender.name
             Case Me.cmb_DiametreEtriers.Name
                 Indice = Me.cmb_DiametreEtriers.SelectedIndex
-                MyEnrobage.Etriers_Phi = DiametreEtriers(Indice)
+                MySection.Enrobage.Etriers_Phi = DiametreEtriers(Indice)
             Case Me.cmb_TypeEtriers.Name
                 Select Case Me.cmb_TypeEtriers.SelectedIndex
-                    Case 0 : MyEnrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
-                    Case 1 : MyEnrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
-                    Case 2 : MyEnrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
+                    Case 0 : MySection.Enrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.Cadre
+                    Case 1 : MySection.Enrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.EtrierSoude
+                    Case 2 : MySection.Enrobage.Etriers_Type = cls_Enrobage_Partiel.EnuTypeEtriers.CadreTraversant
                 End Select
 
         End Select
@@ -1044,9 +1059,9 @@ Public Class Frm_Enrobage
 
         Select Case sender.name
             Case Me.chk_ActiveExt.Name
-                MyEnrobage.LitArma(iArma).lActiveExt = Me.chk_ActiveExt.Checked
+                MySection.Enrobage.LitArma(iArma).lActiveExt = Me.chk_ActiveExt.Checked
             Case Me.chk_ActiveInt.Name
-                MyEnrobage.LitArma(iArma).lActiveInt = Me.chk_ActiveInt.Checked
+                MySection.Enrobage.LitArma(iArma).lActiveInt = Me.chk_ActiveInt.Checked
         End Select
 
         Me.img_Enrobage.Invalidate()
