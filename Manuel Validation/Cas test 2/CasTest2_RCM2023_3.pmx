@@ -219,7 +219,7 @@ BLOCK CONNECTEUR_DALLE
 BLOCK OPT_CALCULS
    RH            = 50
    Norme            = 0
-   EtaW            = 1,00
+   EtaW            = 1,2
    lLarEffSimp            = False
    lCompArma            = False
    dMaxNodes            = 1,0
