@@ -257,9 +257,9 @@ BLOCK OPT_CALCULS_GAMMA
    lGammaVuni    = True
    GammaS        = 1,15
    GammaP        = 1,0
-   GammaM_fi_a     = 1,0
+   GammaM_fi     = 1,0
    GammaC_fi     = 1,0
-   GammaM_fi_s   = 1,0
+   GammaS_fi   = 1,0
    GammaV_fi     = 1,0
    GammaG_sup    = 1,35
    GammaG_inf    = 1,0
