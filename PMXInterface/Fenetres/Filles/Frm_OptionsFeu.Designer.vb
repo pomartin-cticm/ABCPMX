@@ -761,7 +761,7 @@ Partial Class Frm_OptionsFeu
         '
         'img_tDalleFEMmax
         '
-        Me.img_tDalleFEMmax.Location = New System.Drawing.Point(133, 65)
+        Me.img_tDalleFEMmax.Location = New System.Drawing.Point(131, 65)
         Me.img_tDalleFEMmax.Name = "img_tDalleFEMmax"
         Me.img_tDalleFEMmax.Size = New System.Drawing.Size(46, 20)
         Me.img_tDalleFEMmax.TabIndex = 76

@@ -83,9 +83,10 @@
 
         ReDim TempDalleStep(Me.NbStep - 1, 1)
 
-        If lMulti Then
-            ReDim TempArmaStep(Me.NbStep - 1)(nbArma - 1)
-        End If
+        ReDim TempArmaStep(Me.NbStep - 1)
+        For i As Integer = 0 To Me.NbStep - 1
+            ReDim TempArmaStep(i)(nbArma - 1)
+        Next
 
     End Sub
 
@@ -166,6 +167,16 @@
 
         Dim TempCStep As New List(Of Decimal()) ' Temperature pour une time step dans chaque couche
 
+        Dim FEMDalle As New cls_EchauffementDalleFEM    ' Moteur de calcul de l'échauffement de la dalle
+        Dim ConvC, ConvCC As Decimal
+        Dim TempRef As Decimal                  ' Température de référence, à t=0s
+        Dim TeneurU As Decimal                  ' Teneur en eau
+        Dim EpsilonF, EpsilonC As Decimal       ' Emissivités feu et béton
+        Dim lNormal As Boolean                  ' Indice si béton normal
+        Dim lRhoCVar As Boolean                 ' Indique si Rhoc varie avec la température
+        Dim RhoC As Decimal                     ' Masse volumique du béton à froid
+        Dim lANFrance As Boolean                ' Indique si prise en compte AN française de l'EN 1994-1-2:2005
+
         '--( Paramètres analyse diagramme moments
 
         Dim iNodeMmax() As Integer = Nothing
@@ -180,6 +191,7 @@
         TempFs = myBeam.ParamFeu.TempRef
         TempFi = myBeam.ParamFeu.TempRef
         TempW = myBeam.ParamFeu.TempRef
+        TempRef = myBeam.ParamFeu.TempRef
 
         DeltaT = myBeam.ParamFeu.DeltaTCalcul
         nbCombiELU = myBeam.CombiA_ELF.nbCombi
@@ -214,6 +226,21 @@
         '--( Préparation du maillage de la dalle
 
         EN_Feu.PrepareMaillageDalleTabulee(EpDalle, myBeam.Param.lGeneration1, NbTranches, EpTranche, zTranche)
+
+        If myBeam.ParamFeu.lDalleFEM Then
+            ReDim TempCTranche(NbTranches - 1)
+            For i = 0 To NbTranches - 1
+                TempCTranche(i) = TempRef
+            Next
+            ConvC = myBeam.ParamFeu.ConvectionCoef
+            ConvCC = myBeam.ParamFeu.ConvectionCoefDalle
+            EpsilonF = myBeam.ParamFeu.EmissivityFire
+            EpsilonC = myBeam.ParamFeu.EmissivityC
+            lRhoCVar = myBeam.ParamFeu.lRhoCvar
+            RhoC = myBeam.Dalle.beton.RhoC
+            lANFrance = myBeam.ParamFeu.lANFrance
+        End If
+        lNormal = Not myBeam.Dalle.beton.lLeger
 
         '--( Boucle sur TimeSteps
 
@@ -253,7 +280,10 @@
                 '# Calcul de l'échauffement de la dalle sur le pas de temps (cas de la méthode numérique)
 
                 If myBeam.ParamFeu.lDalleFEM Then
-
+                    FEMDalle.Calcul_thermique_Dalle_beton(EpDalle, NbTranches, EpTranche, DeltaT, TempCTranche,
+                                                          TempG, TempRef, ConvC, ConvCC, TeneurU, EpsilonF,
+                                                          cls_OptionsFeu.BOLTZMANN, EpsilonC, lNormal,
+                                                          rhoc, lRhoCVar, lANFrance, lGeneration1)
                 End If
 
                 '# 
@@ -284,9 +314,11 @@
 
             '# Récupération de la température des armatures
 
-            For iArma = 0 To nbArma - 1
-                TempArmaStep(iSTep)(iArma) = TemperatureLitArma(myBeam, iArma, NbTranches, EpTranche, TempCTranche)
-            Next
+            If lMulti Then
+                For iArma = 0 To nbArma - 1
+                    TempArmaStep(iSTep)(iArma) = TemperatureLitArma(myBeam, iArma, NbTranches, EpTranche, TempCTranche)
+                Next
+            End If
 
             '# Réduction des propriétés de l'acier en fct de la température
 

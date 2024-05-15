@@ -10,10 +10,15 @@
     Public Const TempMax As Decimal = 1200                  ' Température max (°)
 
     Public EmissivityFire As Decimal                        ' Emissivité du feu
+    Public EmissivityC As Decimal                           ' Emissivité du béton
     'Public EmissivitySteel As Decimal                        ' Emissivité de l'acier
 
     Public ConvectionCoef As Decimal                        ' Coefficient de convection sur les faces exposées au feu
     Public ConvectionCoefDalle As Decimal                   ' Coefficient de convection sur la face supérieure de la dalle, non exposée au feu (uniquement si calcul EF Dalle)
+
+    Public TeneurU As Decimal                               ' Teneur en eau
+    Public lRhoCvar As Boolean                              ' Indique si RhoC varie en fonction de la température
+    Public lANFrance As Boolean                             ' Indique si calcul selon l'AN française de l'EN 1994-1-2
 
     Public PhiViewFactor As Decimal                         ' Facteur de vue
 
@@ -58,6 +63,7 @@
         BoardsPlaster
     End Enum
 
+
 #End Region
 
 #Region " Constructeur "
@@ -70,6 +76,7 @@
 
         Me.EmissivityFire = 1.0
         'Me.EmissivitySteel = 0.7
+        Me.EmissivityC = 1
 
         Me.ConvectionCoef = 25              ' [W/m2K]
         Me.ConvectionCoefDalle = 4          ' [W/m2K]
@@ -77,8 +84,6 @@
         'Me.lHeatingSlabEF = False
 
         Me.PhiViewFactor = 1.0
-
-        Me.tDalleEFmax = 0.01               ' 10 mm
 
         Me.ksh = 1
 
@@ -89,7 +94,7 @@
         Me.lArmaFormeeAFroid = True
 
         Me.lDalleFEM = False
-        Me.tDalleEFmax = 1 / 1000 ' 1 mm
+        Me.tDalleEFmax = 10 / 1000          ' 10 mm
 
         Me.TypeSurface = enu_TypeSurface.AcierNu
 
@@ -98,6 +103,10 @@
         Me.lReductionConcreteStrength = False
 
         Me.EpProtection = 0.1
+
+        Me.TeneurU = 0
+        Me.lANFrance = True
+        Me.lRhoCvar = True
 
     End Sub
 

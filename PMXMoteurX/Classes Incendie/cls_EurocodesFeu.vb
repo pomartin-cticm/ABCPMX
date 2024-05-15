@@ -690,16 +690,16 @@
 
         '--( Initialisation
 
-        aZero = 0.018 * (Tf * kUnitmm) + 0.7
+        aZero = 0.018 * (Tf * kUnitMM) + 0.7
 
         '--( Tableau F.4
 
         Select Case Time
-            Case 30 : ReducKa = aZero * (1.12 - 84 / (Bc * kUnitmm) + Ha / Bc / 22) : KaMin = 0.5 : KaMax = 0.8
-            Case 60 : ReducKa = aZero * (0.21 - 26 / (Bc * kUnitmm) + Ha / Bc / 24) : KaMin = 0.12 : KaMax = 0.4
-            Case 90 : ReducKa = aZero * (0.12 - 17 / (Bc * kUnitmm) + Ha / Bc / 38) : KaMin = 0.06 : KaMax = 0.12
-            Case 120 : ReducKa = aZero * (0.1 - 15 / (Bc * kUnitmm) + Ha / Bc / 40) : KaMin = 0.05 : KaMax = 0.1
-            Case 180 : ReducKa = aZero * (0.03 - 3 / (Bc * kUnitmm) + Ha / Bc / 50) : KaMin = 0.03 : KaMax = 0.06
+            Case 30 : ReducKa = aZero * (1.12 - 84 / (Bc * kUnitMM) + Ha / Bc / 22) : KaMin = 0.5 : KaMax = 0.8
+            Case 60 : ReducKa = aZero * (0.21 - 26 / (Bc * kUnitMM) + Ha / Bc / 24) : KaMin = 0.12 : KaMax = 0.4
+            Case 90 : ReducKa = aZero * (0.12 - 17 / (Bc * kUnitMM) + Ha / Bc / 38) : KaMin = 0.06 : KaMax = 0.12
+            Case 120 : ReducKa = aZero * (0.1 - 15 / (Bc * kUnitMM) + Ha / Bc / 40) : KaMin = 0.05 : KaMax = 0.1
+            Case 180 : ReducKa = aZero * (0.03 - 3 / (Bc * kUnitMM) + Ha / Bc / 50) : KaMin = 0.03 : KaMax = 0.06
         End Select
 
         Return Math.Max(KaMin, Math.Min(ReducKa, KaMax))
@@ -1202,13 +1202,205 @@
         NumK = myProfil.Tfi + myProfil.Tfs + myProfil.Bfi / 2 + Math.Sqrt(Hw ^ 2 + 0.25 * (myProfil.Bfs - myProfil.Bfi) ^ 2)
         DenomK = Hw + myProfil.Bfi + myProfil.Bfs / 2 + myProfil.Tfi + myProfil.Tfs - myProfil.Tw
 
-        mykSh = 0.9 * numk / denomk
+        mykSh = 0.9 * NumK / DenomK
 
         Return mykSh
 
 
     End Function
 
+
+#End Region
+
+#Region " Propriétés fonction de la température "
+
+    Public Function Masse_volumique_beton(ByVal lNormal As Boolean, ByVal lVariable As Boolean,
+                                          ByVal lGeneration1 As Boolean, ByVal Rho0 As Decimal, ByVal Theta As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   15/05/24 :  Création - GiB
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Masse volumique du béton selon EN 1994-1-2:2005 3.4 (2)
+        '                               ou prEN 1994-1-2:2024
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   lNormal         [E] :   type de beton : true (NC) ou false (LC)
+        '   lVariable       [E] :   variation en fonction de la temperature : true (variable) ou false (valeur constante) 
+        '   lGeneration1    [E] :   génération 1 (true) ou 2 (false) de l'EN 1994-1-2 
+        '   Rho0            [E] :   masse volumique du béton à 20°C
+        '   Theta           [E] :   temperature du béton  (°C)
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim Rho_c As Decimal
+
+        '--( Traitement 
+
+        If (Not lNormal) Or (Not lVariable) Then
+            '## beton léger ou valeur constante de rho
+            Rho_c = Rho0
+        ElseIf lGeneration1 Then
+            '## beton normal avec variation selon la 1re génération des Eurocodes (EN 1994-1-2:2005 3.4 (2))
+            Rho_c = 2354.0 - 23.47 * Theta / 100.0
+        ElseIf Theta >= 20.0 Then
+            '## béton NC : 2e génération des Eurocodes (prEN 1994-1-2:2024 )
+            If Theta <= 115.0# Then
+                Rho_c = Rho0
+            ElseIf Theta <= 200.0 Then
+                Rho_c = Rho0 * (1 - 0.02 * (Theta - 115.0) / 85.0#)
+            ElseIf Theta <= 400.0 Then
+                Rho_c = Rho0 * (0.98 - 0.03 * (Theta - 200.0) / 200.0)
+            ElseIf Theta <= 1200.0 Then
+                Rho_c = Rho0 * (0.95 - 0.07 * (Theta - 400.0) / 800.0)
+            End If
+
+        End If
+
+        Return Rho_c
+
+    End Function
+
+
+    Public Function Conductivite_thermique_beton(ByVal lNormal As Boolean, lANF As Boolean, ByVal lGene1 As Boolean, ByVal ThetaC As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   15/05/24 :  Création - GiB
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Conductivite thermique du beton selon NF EN 1994-1-2
+        '   Génération 1 : EN 1994-1-2:2005 3.3.2 (8) et 3.3.3 (3)
+        '   Génération 2 : prEN 1994-1-2:2024 xxx
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   lNormal     [E] :   type de beton : true (NC) ou false (LC)
+        '   lANF        [E] :   courbe du beton : true (ANF) ou false (limite superieure)
+        '   lGene1      [E] :   génération 1 (true) ou 2 (false) de l'EN 1994-1-2 
+        '   ThetaC      [E] :   temperature (°C)
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim LambdaC As Decimal
+        Dim ValSup As Decimal
+        Dim ValInf As Decimal
+        Dim Pente As Decimal
+        Dim Ordo As Decimal
+
+        '--( Traitement
+
+        If lNormal Then
+            '## beton Normal
+
+            ValSup = 2.0 - 0.2451 * ThetaC / 100.0 + 0.0107 * (ThetaC / 100.0) ^ 2
+            ValInf = 1.36 - 0.136 * ThetaC / 100.0 + 0.0057 * (ThetaC / 100.0) ^ 2
+            If (lGene1 AndAlso Not lANF) Or ThetaC <= 140.0 Then    'limite superieure
+                LambdaC = ValSup
+            ElseIf ThetaC >= 160.0 AndAlso ThetaC <= 1200.0 AndAlso (lANF Or Not lGene1) Then       'ANF
+                LambdaC = ValInf
+            Else  'Annexe Nationale Francaise
+                Pente = (ValInf - ValSup) / (160.0 - 140.0)
+                Ordo = ValSup - Pente * 140.0
+                LambdaC = Pente * ThetaC + Ordo
+            End If
+
+        Else
+            '## beton léger 1re et 2e générations des Eurocodes
+
+            If ThetaC >= 20.0 AndAlso ThetaC <= 800.0 Then
+                LambdaC = 1 - ThetaC / 1600.0
+            ElseIf ThetaC > 800.0 AndAlso ThetaC <= 1200.0 Then
+                LambdaC = 0.5
+            End If
+        End If
+
+        Return LambdaC
+
+    End Function
+
+    Public Function Chaleur_specifique_beton(ByVal lNormal As Boolean, ByVal val_u As Decimal,
+                                             ByVal lGene1 As Boolean, ByVal ThetaC As Decimal) As Decimal
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   15/05/24 :  Création - GiB
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   Chaleur specifique du beton selon NF EN 1994-1-2
+        '   génération 1 : EN 1994-1-2:2005 3.3.2 (4) ou 3.3.3 (2)
+        '   génération 2 : prEN 1994-1-2:2024 
+        '-----------------------------------------------------------------------------------------------------------------------------
+        '   lNormal     [E] :   type de beton : true (NC) ou false (LC)
+        '   lGene1      [E] :   génération 1 (true) ou 2 (false) de l'EN 1994-1-2 
+        '   ThetaC      [E] :   temperature (°C)
+        '   val_u       [E] :   taux d'humidite (%)
+        '-----------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim cp_c As Decimal
+        Dim val_cc As Decimal
+        Dim Pente As Decimal
+        Dim Ordo As Decimal
+
+        '   Valeurs du pic
+        '   1re generation :    3 valeurs de teneur en eau pour lesquelles le pic est precise : 0%, 3% et 10%
+        '   2e generation :     4 valeurs de teneur en eau pour lesquelles le pic est precise : 0%, 1.5%, 3% et 10%
+
+        '--( Traitement
+
+        If (Not lNormal) AndAlso lGene1 Then
+            '## beton léger 1re generation des Eurocodes
+
+            cp_c = 840.0
+
+        Else
+            '## beton normal 1re generation ou beton NC ou LC 2e generation
+
+            If Math.Abs(val_u) <= 0.0001 Then
+                val_cc = 900.0
+            ElseIf (Not lGene1) AndAlso Math.Abs(val_u - 1.5) <= 0.0001 Then '2e génération des Eurocodes : 1.5%
+                val_cc = 1470.0
+            ElseIf Math.Abs(val_u - 3.0) <= 0.0001 Then
+                val_cc = 2020.0
+            ElseIf Math.Abs(val_u - 10.0) <= 0.0001 Then
+                val_cc = 5600.0
+            ElseIf val_u > 0.0 AndAlso val_u < 3.0 Then   'teneur en eau inferieure à 3%
+                If lGene1 Then    '1re generation
+                    val_cc = 900.0 + (2020.0 - 900.0) * val_u / 3.0
+                ElseIf val_u < 1.5 Then '2e generation : teneur en eau inferieure a 1.5%
+                    val_cc = 900.0 + (1470.0 - 900.0) * val_u / 1.5
+                Else '2e generation : teneur en eau superieure comprise entre 1.5% et 3%
+                    val_cc = 1470.0 + (2020.0 - 1470.0) * (val_u - 1.5) / (3.0 - 1.5)
+                End If
+            ElseIf val_u > 3.0 AndAlso val_u < 10.0 Then      'teneur en eau comprise entre 3% et 10%
+                val_cc = 2020.0 + (5600.0 - 2020.0) * (val_u - 3.0) / (10.0 - 3.0)
+            End If
+
+            '### Variation en fonction du pic et de la temperature
+            If ThetaC <= 100.0 Then
+                cp_c = 900.0
+            ElseIf ThetaC <= 200.0 Then
+                If ThetaC <= 115.0 Then
+                    If lGene1 OrElse ThetaC <= 100.001 Then
+                        If lGene1 Then
+                            Pente = (900.0 - val_cc) / (100.0 - 115.0)
+                        Else
+                            Pente = (900.0 - val_cc) / (100.001 - 100.0)
+                        End If
+                        Ordo = 900.0 - Pente * 100.0
+                        cp_c = Pente * ThetaC + Ordo
+                    Else
+                        cp_c = val_cc
+                    End If
+                Else
+                    Pente = (1000.0 - val_cc) / (200.0 - 115.0)
+                    Ordo = 1000.0 - Pente * 200.0
+                    cp_c = Pente * ThetaC + Ordo
+                End If
+            ElseIf ThetaC <= 400.0 Then
+                cp_c = 1000.0 + (ThetaC - 200.0) / 2.0
+            ElseIf ThetaC <= 1200.0 Then
+                cp_c = 1100.0
+            End If
+
+        End If
+
+        Return cp_c
+
+    End Function
 
 #End Region
 
