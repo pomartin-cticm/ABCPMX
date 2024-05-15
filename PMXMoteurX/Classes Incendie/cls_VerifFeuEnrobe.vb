@@ -865,7 +865,7 @@ Public Class cls_VerifFeuEnrobe
 
                 ksd = EN1994_1_2.AnnexF_ksd(Time, u)
 
-                myModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DeltaCArma, ArmaNeq, ksd * Fsk, 1, Gammas.GammaM_fi_a, NbBarres, cls_Maille.EnuTypeMaille.Circulaire)
+                myModele.AddMailleCirculaire(PhiA / 2, zArma, 1, DeltaCArma, ArmaNeq, ksd * Fsk, 1, Gammas.GammaM_fi_s, NbBarres, cls_Maille.EnuTypeMaille.Circulaire)
             End If
 
         Next

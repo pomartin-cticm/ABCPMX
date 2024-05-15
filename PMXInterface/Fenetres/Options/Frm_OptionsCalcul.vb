@@ -291,7 +291,7 @@ Public Class Frm_OptionsCalcul
         '# Fenêtre Gamma
         GereTransfertValeur(GammaLoc.GammaC, LogicielOptions.Gamma.GammaC, lModif)
         GereTransfertValeur(GammaLoc.GammaC_fi, LogicielOptions.Gamma.GammaC_fi, lModif)
-        GereTransfertValeur(GammaLoc.GammaS_fi, LogicielOptions.Gamma.GammaS_fi, lModif)
+        'GereTransfertValeur(GammaLoc.GammaS_fi, LogicielOptions.Gamma.GammaS_fi, lModif)
         GereTransfertValeur(GammaLoc.GammaG_inf, LogicielOptions.Gamma.GammaG_inf, lModif)
         GereTransfertValeur(GammaLoc.GammaG_sup, LogicielOptions.Gamma.GammaG_sup, lModif)
         GereTransfertValeur(GammaLoc.GammaM0, LogicielOptions.Gamma.GammaM0, lModif)

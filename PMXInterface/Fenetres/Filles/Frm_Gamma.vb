@@ -267,7 +267,7 @@ Public Class Frm_Gamma
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi_a, .GammaM_fi_a, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaM_fi_s, .GammaM_fi_s, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaC_fi, .GammaC_fi, lModif)
-            GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaS_fi, .GammaS_fi, lModif)
+            'GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaS_fi, .GammaS_fi, lModif)
             GereTransfertValeur(MyPoutreLoc.Param.Gamma.GammaV_fi, .GammaV_fi, lModif)
 
         End With

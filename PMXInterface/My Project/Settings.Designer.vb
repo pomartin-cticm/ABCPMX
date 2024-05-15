@@ -1280,18 +1280,6 @@ Namespace My
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
-        Public Property GammaS_fi() As Decimal
-            Get
-                Return CType(Me("GammaS_fi"),Decimal)
-            End Get
-            Set
-                Me("GammaS_fi") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("1.0")>  _
         Public Property GammaM_fi_s() As Decimal
             Get
                 Return CType(Me("GammaM_fi_s"),Decimal)

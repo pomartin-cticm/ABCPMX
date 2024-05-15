@@ -18,7 +18,7 @@
     Public GammaM_fi_s As Decimal         ' for the resistance of structural steel 
     Public GammaC_fi As Decimal         ' for the resistance of the compressed concrete
     Public GammaV_fi As Decimal         ' for the resistance of shear connectors
-    Public GammaS_fi As Decimal         ' for the resistance of reinforcement steel bars
+    'Public GammaS_fi As Decimal         ' for the resistance of reinforcement steel bars
 
     Public GammaG_sup As Decimal
     Public GammaG_inf As Decimal
@@ -53,7 +53,7 @@
         Me.GammaM_fi_a = 1.0
         Me.GammaM_fi_s = 1.0
         Me.GammaC_fi = 1.0
-        Me.GammaS_fi = 1.0
+        'Me.GammaS_fi = 1.0
         Me.GammaV_fi = 1.0
 
         Me.GammaG_sup = 1.35
@@ -94,7 +94,7 @@
         Me.GammaM_fi_a = MyGamma.GammaM_fi_a
         Me.GammaM_fi_s = MyGamma.GammaM_fi_s
         Me.GammaC_fi = MyGamma.GammaC_fi
-        Me.GammaS_fi = MyGamma.GammaS_fi
+        'Me.GammaS_fi = MyGamma.GammaS_fi
         Me.GammaV_fi = MyGamma.GammaV_fi
 
         Me.GammaG_sup = MyGamma.GammaG_sup
