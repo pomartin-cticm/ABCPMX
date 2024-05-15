@@ -37,8 +37,9 @@ Imports PMXInterface
         LogicielOptions.Gamma.GammaP = 1
 
         LogicielOptions.Gamma.GammaM_fi = 1
-        LogicielOptions.Gamma.GammaC_fi = 1
         LogicielOptions.Gamma.GammaS_fi = 1
+        LogicielOptions.Gamma.GammaC_fi = 1
+        'LogicielOptions.Gamma.GammaS_fi = 1
         LogicielOptions.Gamma.GammaV_fi = 1
 
         LogicielOptions.Gamma.GammaG_sup = 1.35

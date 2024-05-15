@@ -751,6 +751,7 @@ Partial Class Frm_PMX
         Me.TSbtn3D.Name = "TSbtn3D"
         Me.TSbtn3D.Size = New System.Drawing.Size(23, 22)
         Me.TSbtn3D.Text = "ToolStripButton1"
+        Me.TSbtn3D.Visible = False
         '
         'TableLayoutPanel1
         '

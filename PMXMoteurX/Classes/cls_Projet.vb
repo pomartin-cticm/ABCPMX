@@ -558,9 +558,9 @@ Public Class cls_Projet
                         Lines.Add("   lGammaVuni    = " & .lGammaV_unique)
                         Lines.Add("   GammaS        = " & .GammaS)
                         Lines.Add("   GammaP        = " & .GammaP)
-                        Lines.Add("   GammaM_fi_a     = " & .GammaM_fi)
+                        Lines.Add("   GammaM_fi     = " & .GammaM_fi)
                         Lines.Add("   GammaC_fi     = " & .GammaC_fi)
-                        Lines.Add("   GammaM_fi_s   = " & .GammaS_fi)
+                        Lines.Add("   GammaS_fi   = " & .GammaS_fi)
                         Lines.Add("   GammaV_fi     = " & .GammaV_fi)
                         Lines.Add("   GammaG_sup    = " & .GammaG_sup)
                         Lines.Add("   GammaG_inf    = " & .GammaG_inf)
@@ -1952,7 +1952,7 @@ Public Class cls_Projet
             DecomposeLine(Lignes(i), Mots, nbMots)
 
             If nbMots > 0 Then
-                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+                MotCle = Mots(1).Substring(0, Math.Min(11, Mots(1).Length)).ToUpper
 
 
                 With gamma_opt_calculs
@@ -1966,9 +1966,9 @@ Public Class cls_Projet
                         Case "LGAMMAVUNI" : .lGammaV_unique = Mots(nbMots)
                         Case "GAMMAS" : .GammaS = TraiteReal(Mots(nbMots))
                         Case "GAMMAP" : .GammaP = TraiteReal(Mots(nbMots))
-                        Case "GAMMAM_FI_A" : .GammaM_fi = TraiteReal(Mots(nbMots))
+                        Case "GAMMAM_FI" : .GammaM_fi = TraiteReal(Mots(nbMots))
                         Case "GAMMAC_FI" : .GammaC_fi = TraiteReal(Mots(nbMots))
-                        Case "GAMMAM_FI_S" : .GammaS_fi = TraiteReal(Mots(nbMots))
+                        Case "GAMMAS_FI" : .GammaS_fi = TraiteReal(Mots(nbMots))
                         Case "GAMMAV_FI" : .GammaV_fi = TraiteReal(Mots(nbMots))
                         Case "GAMMAG_SUP" : .GammaG_sup = TraiteReal(Mots(nbMots))
                         Case "GAMMAG_INF" : .GammaG_inf = TraiteReal(Mots(nbMots))

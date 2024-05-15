@@ -1686,7 +1686,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABVAR2 & BlocG("STEEL_RES_FACTORS") & TABVARL3 & BlocG("SLAB_RES_FACTORS") & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-M,fi,a\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-M,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaM_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         AddLigneNDC(TABVAR2 & "\Sg\s\-M0\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM0, Enu_TypeVariable.SansType, 3, 2, False) _
                   & TABVARL3 & "\Sg\s\-C\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaC, Enu_TypeVariable.SansType, 3, 2, False) _
@@ -1696,11 +1696,11 @@ Module Mod_NoteCalcul
             ChaineFire = TABVARL4 & "\Sg\s\-C,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaC_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         AddLigneNDC(TABVAR2 & "\Sg\s\-M1\=" & TABEGAL1 & GetStringInUnit(MyGamma.GammaM1, Enu_TypeVariable.SansType, 3, 2, False) _
-                  & TABVARL3 & "\Sg\s\-S\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaS, Enu_TypeVariable.SansType, 3, 2, False) _
+                  & TABVARL3 & "\Sg\s\-s\= " & TABEGAL2 & GetStringInUnit(MyGamma.GammaS, Enu_TypeVariable.SansType, 3, 2, False) _
                   & ChaineFire)
 
         If lFire Then
-            ChaineFire = TABVARL4 & "\Sg\s\-M,fi,s\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaS_fi, Enu_TypeVariable.SansType, 3, 2, False)
+            ChaineFire = TABVARL4 & "\Sg\s\-s,fi\=" & TABEGAL3 & GetStringInUnit(MyGamma.GammaS_fi, Enu_TypeVariable.SansType, 3, 2, False)
         End If
         If MyGamma.lGammaV_unique Then
             ChaineSlab = "\Sg\s\-V\="
@@ -2653,6 +2653,8 @@ Module Mod_NoteCalcul
         Const pLC1 As Single = 12
         Const pLC2 As Single = 10
 
+        Dim listeInertieAffichee As New List(Of Decimal)
+
         '--> Entête du tableau
 
         EnteteTableauPropElastiqueMixte(lEnrob, NCOL)
@@ -2662,7 +2664,13 @@ Module Mod_NoteCalcul
         For iTab As Integer = 0 To nbTab - 1
 
             MyBeam.Section.ProprietesElastiquesMixteMyy(1, True, MyBeam.Param.Gamma, NeqEnrob(iTab), NeqDalle(iTab), bEff,
-                                             MyBeam.Dalle, zANE, InertieY, MelRd, lDalle(iTab))
+                                   MyBeam.Dalle, zANE, InertieY, MelRd, lDalle(iTab))
+
+            If listeInertieAffichee.Contains(InertieY) Then
+                Continue For 'Ajout GUD: permet de ne pas afficher plusieurs fois la même ligne 
+            Else
+                listeInertieAffichee.Add(InertieY)
+            End If
 
             InitialiseLigneTableau(NCOL, HLIGNE)
 
@@ -5071,7 +5079,7 @@ Module Mod_NoteCalcul
 
         '--> Phase de construction pour les poutres mixtes
 
-        If MyBeam.lMixte And (Not lEtaiement) Then
+        If MyBeam.lMixte And (Not lEtaiement) And Not (MyBeam.CombiA_ELCU.nbCombi = 0) Then
 
             SautePage()
             AddTitreNdC(1, BlocELU("ULS_CHECKS_CONSTRUCTION"))

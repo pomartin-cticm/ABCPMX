@@ -1266,7 +1266,15 @@ Module Mod_OutilsGraph
         '
         '   Retourne les coordonnées réelle d'une coordonnée à l'écran
         '
-        Return ParAff.XpMin + (xSouris - ParAff.uOri) / ParAff.CRed
+
+        Dim CRed As Decimal 'GUD: Rajout pour éviter les divisions par 0
+        If ParAff.CRed <> 0 Then
+            CRed = ParAff.CRed
+        Else
+            CRed = 1
+        End If
+
+        Return ParAff.XpMin + (xSouris - ParAff.uOri) / CRed
 
     End Function
 
@@ -1274,7 +1282,14 @@ Module Mod_OutilsGraph
         '
         '   Retourne les coordonnées réelle d'une coordonnée à l'écran
         '
-        Return ParAff.YpMin - (ySouris - ParAff.vOri) / ParAff.CRed
+        Dim CRed As Decimal 'GUD: Rajout pour éviter les divisions par 0
+        If ParAff.CRed <> 0 Then
+            CRed = ParAff.CRed
+        Else
+            CRed = 1
+        End If
+
+        Return ParAff.YpMin - (ySouris - ParAff.vOri) / CRed
 
     End Function
 

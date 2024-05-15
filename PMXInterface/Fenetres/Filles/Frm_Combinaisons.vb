@@ -147,6 +147,8 @@ Public Class Frm_Combinaisons
 
     Private Sub InitialiseVariables()
 
+        AffichageEL = Enu_AffichageEL.ELU 'permet d'éviter une ouverture de la partie construction 
+
         nbCombELU_Loc = cls_Poutre.nbCombELU
         ReDim plCombELU_Loc(nbCombELU_Loc)
         ReDim pCoefCombELU_Loc(nbCombELU_Loc)

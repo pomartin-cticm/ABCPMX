@@ -212,8 +212,9 @@ Public Module Mod_Demarrage
             LogicielOptions.Gamma.GammaP = My.Settings.GammaP
 
             LogicielOptions.Gamma.GammaM_fi = My.Settings.GammaM_fi
-            LogicielOptions.Gamma.GammaC_fi = My.Settings.GammaC_fi
             LogicielOptions.Gamma.GammaS_fi = My.Settings.GammaS_fi
+            LogicielOptions.Gamma.GammaC_fi = My.Settings.GammaC_fi
+            'LogicielOptions.Gamma.GammaS_fi = My.Settings.GammaS_fi
             LogicielOptions.Gamma.GammaV_fi = My.Settings.GammaV_fi
 
             LogicielOptions.Gamma.GammaG_sup = My.Settings.GammaG_sup

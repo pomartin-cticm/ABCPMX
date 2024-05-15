@@ -14,9 +14,10 @@ BLOCK IDENTIFICATION
 BLOCK POUTRE
    BeaIden           =  Beam B#1
    Commentaire       =  
-   TypeSection   =  1
    ConsoleGauche  =  False
    ConsoleDroite  =  False
+   DalleContGauche  =  False
+   DalleContDroite  =  False
    lTremieGauche  =  False
    lTremieDroite  =  False
    NbTravee       =  1
@@ -26,7 +27,6 @@ BLOCK POUTRE
    EtaisConsG     =  False
    EtaisConsD  =  False
    NbPropping     =  0
-   NbRestrain     =  {0/0/0}
    TypeMaintien   =  0
    D1             =  2,5
    D2             =  2,5
@@ -34,13 +34,11 @@ BLOCK POUTRE
    Dsl2           =  1
    lIntermediaire =  True
    lDefautPortee  =  True
-   lDefautEnroba  =  False
+   lDefautEnroba  =  True
    lDefautEtaiem  =  True
    lDefautDalle   =  False
-   lDonneesSauv   =  False
-   lNouvPoutre    =  False
    lCombELU    =  {True/False/False/False/False/False}
-   CoefELU    =  {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1/1,5/1,05/0/0}+{1/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   CoefELU    =  {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1,0/1,5/1,05/0/0}+{1,0/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    lCombELS    =  {True/False/False/False/False/False}
    CoefELS    =  {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    lCombELF    =  {False/False/False/False/False}
@@ -50,11 +48,25 @@ BLOCK POUTRE
    lCombELCS    =  {False/False}
    CoefELCS    =  {0/0/0/1/1}+{0/0/0/0/0}
 
+BLOCK MAINT_BAC
+   NT            =  2
+   M            =  2
+   Transition            =  1
+   FixNervuresMod            =  0
+   FixnervuresTyp            =  2
+   EC            =  0,5
+   FixCoutureType            =  0
+   lMaintienBac            =  False
+   lTheta            =  False
 BLOCK SECTION
    Nom            =  Nom
    lDalleBeton    =  False
    lDatabase      =  False
    typeSection    =  1
+   lUser      =  False
+   f_y_fs         =  235
+   f_y_w          =  235
+   f_y_fi         =  235
 
 BLOCK PROFILA
    Gamme          =  IPE
@@ -78,15 +90,11 @@ BLOCK ACIER_PROFILA
    Nuance         =  S355
    Qualite        =  M/ML
    Reduction      =  EN 10025-4
-   NormeProduit   =  
+   NormeProduit   =  EN 10025-4 : 2019
    EpMax          =  0,150000005960464
    iBase          =  1
    iTabStand      =  3
    iStandard      =  4
-   lUser      =  False
-   f_y_fs         =  235
-   f_y_w          =  235
-   f_y_fi         =  235
 
 BLOCK ENROBAGE_PROFILA
    lArmaConst     =  False
@@ -104,19 +112,19 @@ BLOCK ARMATURE_ENROBAGE_PROFILA
    lActExt          =  True
    PhiMil         =  0,008
    NbMil          =  0
-   PhiInt         =  0,012
+   PhiInt         =  0,008
    NbInt          =  1
    lActInt          =  True
 
    indLit         =  1
    PhiExt         =  0,008
-   NbExt          =  0
-   lActExt          =  False
+   NbExt          =  1
+   lActExt          =  True
    PhiMil         =  0,008
    NbMil          =  0
    PhiInt         =  0,008
-   NbInt          =  0
-   lActInt          =  False
+   NbInt          =  1
+   lActInt          =  True
    zPosRatio      =  0,5
 
    indLit         =  2
@@ -136,12 +144,12 @@ BLOCK ACIER_ARMATURE_ENROBAGE_PROFILA
 
 BLOCK BETON_ENROBAGE_PROFILA
    Leger          =  False
-   Classe         =  C25/30
+   Classe         =  C20/25
    RhoC         =  2500
-   Fck            =  25
-   Fcm            =  33
-   Fctm           =  2,56496392001504
-   Ecm            =  31475,8062100193
+   Fck            =  20
+   Fcm            =  28
+   Fctm           =  2,21041889918423
+   Ecm            =  29961,9510546403
    lCrackLimit    =  True
    wk_max         =  0,0004
 
@@ -157,10 +165,10 @@ BLOCK BETON_DALLE
    Leger           =  False
    Classe         =  C25/30
    RhoC         =  2500
-   Fck            =  25
-   Fcm            =  25
-   Fctm           =  2,56496392001504
-   Ecm            =  31475,8062100193
+   Fck            =  20
+   Fcm            =  20
+   Fctm           =  2,21041889918423
+   Ecm            =  29961,9510546403
    lCrackLimit    =  True
    wk_max         =  0,0004
 
@@ -183,13 +191,17 @@ BLOCK BAC_DALLE
    AppuiT         =  2
    AppuiL         =  0
 
+BLOCK COFRADAL
+   Nom      =  Cofradal 200 PAC
+   Dp      =  0,125
+   Msurf      =  525
+   lCustom      =  False
 BLOCK ARMATURE_DALLE
    indLit         =  0
    EspBar         =  0,2
    PhiS           =  0,012
-   z_s            =  0,02
+   z_s            =  0,032
    n_s            =  0
-   c_s            =  0,015
    lActive        =  True
 
 BLOCK ACIER_ARMATURE_DALLE
@@ -198,9 +210,9 @@ BLOCK ACIER_ARMATURE_DALLE
    Es             =  210000
 
 BLOCK CONNECTEUR_DALLE
-   nom            =  Diametre 16-35
-   hsc            =  0,0350000001490116
-   d              =  0,0160000007599592
+   nom            =  19-100
+   hsc            =  0,100000001490116
+   d              =  0,0190000012516975
    fy              =  350
    fu              =  450
 
@@ -210,14 +222,14 @@ BLOCK OPT_CALCULS
    EtaW            = 1,2
    lLarEffSimp            = False
    lCompArma            = False
-   dMaxNodes            = 0,5
-   nbMinNodesTr            = 10
-   nbMinNodesCo            = 5
+   dMaxNodes            = 1,0
+   nbMinNodesTr            = 100
+   nbMinNodesCo            = 50
    epsSH            = 0,000325
    lRetraitEnr            = False
    ArmaYoung            = 210000
    Gravite            = 9,81
-   PsiLPerm            = 1,1
+   PsiLPerm            = 1,10
    PsiLRetrait            = 0,55
    AgeT0G1_0            = 28
    AgeT0G1_1            = 56
@@ -227,22 +239,24 @@ BLOCK OPT_CALCULS
    AgeT0SH_1            = 1
    AgeTCalc            = 18250
    lElasticDesign            = False
+   lMaitFissure            = False
 
 BLOCK OPT_CALCULS_GAMMA
-   GammaM0       = 1
-   GammaM1       = 1
+   GammaM0       = 1,00
+   GammaM1       = 1,0
    GammaM2       = 1,25
    GammaC        = 1,5
    GammaVs       = 1,25
    GammaVc       = 1,25
    lGammaVuni    = True
    GammaS        = 1,15
-   GammaP        = 1
-   GammaM_fi     = 1
-   GammaC_fi     = 1
-   GammaV_fi     = 1
+   GammaP        = 1,0
+   GammaM_fi     = 1,0
+   GammaC_fi     = 1,0
+   GammaS_fi   = 1,0
+   GammaV_fi     = 1,0
    GammaG_sup    = 1,35
-   GammaG_inf    = 1
+   GammaG_inf    = 1,0
    GammaQ        = 1,5
    Psi0_Q1       = 0,7
    Psi1_Q1       = 0,5
@@ -293,7 +307,7 @@ BLOCK CHGTU_FREPAR
    CleDic      =  Q1
    indTravee      =  1
    F0      =  1860
-   F1      =  1880
+   F1      =  1860
    xPosT0      =  0
    xPosT1      =  12,5
    xGaucheT      =  0

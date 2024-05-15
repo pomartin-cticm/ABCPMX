@@ -5,19 +5,21 @@
     Public GammaM0 As Decimal
     Public GammaM1 As Decimal
     Public GammaM2 As Decimal
+    Public GammaM_fi As Decimal         ' for the resistance of structural steel 
 
     Public GammaC As Decimal
+    Public GammaC_fi As Decimal         ' for the resistance of the compressed concrete
+
     Public GammaVs As Decimal           ' GammaV des connecteurs pour la résistance de l'acier
     Public GammaVc As Decimal           ' GammaV des connecteurs pour la résistance du béton
-    'Public GammaVp As Decimal
+    Public GammaV_fi As Decimal         ' for the resistance of shear connectors
+
     Public lGammaV_unique As Boolean    ' indique si on considère un seul gammaV (=True) ou alors est ce qu'on fait la différence avec GammaVs et GammaVp (=False)
     Public GammaS As Decimal
-    Public GammaP As Decimal
-
-    Public GammaM_fi As Decimal         ' for the resistance of structural steel 
-    Public GammaC_fi As Decimal         ' for the resistance of the compressed concrete
-    Public GammaV_fi As Decimal         ' for the resistance of shear connectors
     Public GammaS_fi As Decimal         ' for the resistance of reinforcement steel bars
+
+    Public GammaP As Decimal            ' coefficient partiel pour les bacs aciers
+
 
     Public GammaG_sup As Decimal
     Public GammaG_inf As Decimal
@@ -50,8 +52,9 @@
         Me.lGammaV_unique = True
 
         Me.GammaM_fi = 1.0
-        Me.GammaC_fi = 1.0
         Me.GammaS_fi = 1.0
+        Me.GammaC_fi = 1.0
+        'Me.GammaS_fi = 1.0
         Me.GammaV_fi = 1.0
 
         Me.GammaG_sup = 1.35
@@ -90,8 +93,9 @@
         Me.lGammaV_unique = MyGamma.lGammaV_unique
 
         Me.GammaM_fi = MyGamma.GammaM_fi
-        Me.GammaC_fi = MyGamma.GammaC_fi
         Me.GammaS_fi = MyGamma.GammaS_fi
+        Me.GammaC_fi = MyGamma.GammaC_fi
+        'Me.GammaS_fi = MyGamma.GammaS_fi
         Me.GammaV_fi = MyGamma.GammaV_fi
 
         Me.GammaG_sup = MyGamma.GammaG_sup

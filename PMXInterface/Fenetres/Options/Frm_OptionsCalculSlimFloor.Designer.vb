@@ -129,27 +129,27 @@ Partial Class Frm_OptionsCalculSlimFloor
         'img_hslimmax
         '
         Me.img_hslimmax.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_hslimmax.Location = New System.Drawing.Point(573, 27)
+        Me.img_hslimmax.Location = New System.Drawing.Point(556, 27)
         Me.img_hslimmax.Name = "img_hslimmax"
-        Me.img_hslimmax.Size = New System.Drawing.Size(46, 20)
+        Me.img_hslimmax.Size = New System.Drawing.Size(63, 20)
         Me.img_hslimmax.TabIndex = 105
         Me.img_hslimmax.TabStop = False
         '
         'img_tpinfmin
         '
         Me.img_tpinfmin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_tpinfmin.Location = New System.Drawing.Point(573, 85)
+        Me.img_tpinfmin.Location = New System.Drawing.Point(556, 85)
         Me.img_tpinfmin.Name = "img_tpinfmin"
-        Me.img_tpinfmin.Size = New System.Drawing.Size(46, 20)
+        Me.img_tpinfmin.Size = New System.Drawing.Size(63, 20)
         Me.img_tpinfmin.TabIndex = 105
         Me.img_tpinfmin.TabStop = False
         '
         'img_bappmin
         '
         Me.img_bappmin.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.img_bappmin.Location = New System.Drawing.Point(573, 56)
+        Me.img_bappmin.Location = New System.Drawing.Point(556, 56)
         Me.img_bappmin.Name = "img_bappmin"
-        Me.img_bappmin.Size = New System.Drawing.Size(46, 20)
+        Me.img_bappmin.Size = New System.Drawing.Size(63, 20)
         Me.img_bappmin.TabIndex = 105
         Me.img_bappmin.TabStop = False
         '
