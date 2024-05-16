@@ -70,16 +70,16 @@ BLOCK SECTION
 
 BLOCK PROFILA
    Gamme          =  IPE
-   NomProfile     =  IPE 500
-   ha             =  0,500
-   hb             =  0,500
+   NomProfile     =  IPE A 500
+   ha             =  0,497
+   hb             =  0,497
    bfs            =  0,200
-   tfs            =  0,016
+   tfs            =  0,0145
    bfi            =  0,200
-   tfi            =  0,016
+   tfi            =  0,0145
    rcs            =  0,021
    rci            =  0,021
-   tw             =  0,0102
+   tw             =  0,0084
    soudure_a      =  0
    typeProfil     =  0
    Platb          =  0
@@ -165,10 +165,10 @@ BLOCK BETON_DALLE
    Leger           =  False
    Classe         =  C25/30
    RhoC         =  2500
-   Fck            =  20
-   Fcm            =  20
-   Fctm           =  2,21041889918423
-   Ecm            =  29961,9510546403
+   Fck            =  25
+   Fcm            =  25
+   Fctm           =  2,56496392001504
+   Ecm            =  31475,8062100193
    lCrackLimit    =  True
    wk_max         =  0,0004
 
