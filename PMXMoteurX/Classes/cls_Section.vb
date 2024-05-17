@@ -213,17 +213,13 @@ Public Class cls_Section
 
         MyModele.MaillageProfileA_YY(Gammas.GammaM0, RhoV, ProfilA, FySup, FyInf, FyW, FySpd, Psi_fi, rho_t_fi, Psi_y_fi, Psi_spd, rho_t_spd, Psi_y_spd)
 
-        '# Béton d'enrobage
+        If Me.lEnrobage And Not lProfileAcierUniquement Then
 
-        If Me.lEnrobage Then
+            '# Béton d'enrobage
 
             MyModele.MaillageEnrobage_YY(Gammas.GammaC, nEqEc, Me)
 
-        End If
-
-        '# Armatures de l'enrobage
-
-        If Me.lEnrobage And Not lProfileAcierUniquement Then
+            '# Armatures de l'enrobage
 
             MyModele.MaillageArmaturesEnrobage_YY(Gammas.GammaS, Me)
 
