@@ -9801,11 +9801,7 @@ Module Mod_NoteCalcul
 
         '## Tableau des températures
 
-        EnteteTableauTempVerifFeuMixte(NCOL, LargCol, lBoard)
-        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
-            LigneTableauTempVerifFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBoard, lBetonL)
-        Next
-        FinTableau()
+        EditionTemperatureFeuMixte(myBeam)
 
         '## Tableau des critères de résistance
 
@@ -9825,17 +9821,152 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub EnteteTableauTempVerifFeuMixte(ByRef NCOL As Integer, ByRef LargCol() As Single, lUni As Boolean)
+    Private Sub EditionTemperatureFeuMixte(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Tableau des températures dans les différentes parties
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lMultiSpan As Boolean = myBeam.lMultiSpan
+        Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
+
+        If lMultiSpan Then
+
+            If lBoard Then
+
+            Else
+                EditionTemperatureFeuMixteStandard(myBeam, lBoard, True)
+                EditionTemperatureFeuMixteDalle(myBeam)
+            End If
+
+        Else
+
+            EditionTemperatureFeuMixteStandard(myBeam, lBoard)
+
+        End If
+
+
+    End Sub
+
+    Private Sub EditionTemperatureFeuMixteDalle(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Tableau des températures dans les différentes parties
+        '   Tableau avec les températures de la dalle, y compris les lits d'armatures
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
+        Dim lArmaFroid As Boolean = myBeam.ParamFeu.lArmaFormeeAFroid
+        Dim nbArma As Integer
+
+        '--( Initialisation
+
+        nbArma = myBeam.Dalle.LitArma.Count
+
+        '--( Traitement
+
+        AddLigneNDC("Températures dans la dalle")
+
+        EnteteTableauTempDalleFeuMixte(NCOL, LargCol, nbArma)
+        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
+            LigneTableauTempDalleFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBetonL, nbArma, lArmaFroid)
+        Next
+        FinTableau()
+
+    End Sub
+
+    Private Sub LigneTableauTempDalleFeuMixte(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single,
+                                              lBetonL As Boolean, nbArma As Integer, lArmaFroid As Boolean)
         '-----------------------------------------------------------------------------------------------------------------
         '   04/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
         '   Edition de la vérification détaillée des calculs au feu
         '   Pour les poutres mixtes
-        '   Entête du tableau
+        '   Ligne du tableau des température dans la dalle
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '   lBetonL     [E] :   Indique si béton léger
+        '   nbArma      [E] :   nombre d'armatures dans la dalle
+        '   lArmaFroid  [E] :   indique si armatures formées à froid
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim BordSup As Integer = Bordures.Tous - Bordures.Bas
+        Dim BordSupG As Integer = Bordures.Tous - Bordures.Bas - Bordures.Droite
+        Dim BordSupD As Integer = Bordures.Tous - Bordures.Bas - Bordures.Gauche
+
+        Dim Bordinf As Integer = Bordures.Tous - Bordures.Haut
+        Dim BordinfG As Integer = Bordures.Tous - Bordures.Haut - Bordures.Droite
+        Dim BordinfD As Integer = Bordures.Tous - Bordures.Haut - Bordures.Gauche
+
+        Dim EN_Feu As New cls_EurocodesFeu
+
+        '--( Lignes
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        '## Ligne 1
+
+        AddCellule(LargCol(0), BordSup, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, True))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+
+        For k As Integer = 0 To nbArma - 1
+            AddCellule(LargCol(1), BordSup, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempArmaStep(iStep)(k), Enu_TypeVariable.Temperature, 3, 2, True))
+        Next
+
+        '## Ligne 2
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
+
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+
+        For k As Integer = 0 To nbArma - 1
+            AddCellule(LargCol(1), Bordinf, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFskArmatures(myVerifFeu.TempArmaStep(iStep)(k), lArmaFroid), Enu_TypeVariable.SansType, 3, 2, False))
+        Next
+    End Sub
+
+    Private Sub EnteteTableauTempDalleFeuMixte(ByRef NCOL As Integer, ByRef LargCol() As Single, nbArma As Integer)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Entête du tableau pour les trempératures dans la dalle, y compris les armatures
         '-----------------------------------------------------------------------------------------------------------------
         '   NCOL        [S] :   Nombre de colonnes dans le tableau
         '   LargCol     [S] :   Largeur des colonnes du tab
-        '   lUni        [E] :   Indique si température uniforme du profilé
+        '   nbArma      [E] :   Nombre de lits d'armatures
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -9850,8 +9981,112 @@ Module Mod_NoteCalcul
 
         '--( Initialisation
 
-        NCOL = 11
-        If lUni Then NCOL -= 4
+
+        NCOL = 5 + nbArma
+
+        ReDim LargCol(1)
+
+        LargCol(0) = 10
+        LargCol(1) = 7
+
+        Const POS As Integer = 10
+
+        '--( Affichage de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        '### Ligne 1
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), BordSup, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-ci\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "\Sq\s\-cs\=")
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-v\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-u,\Sq\s\=")
+
+        For k As Integer = 1 To nbArma
+            AddCelluleFond(LargCol(1), BordSup, PositionTexteInCell.Centre, "\Sq\s\-s," & k.ToString & "\=")
+        Next
+
+        '### Ligne 2
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "k\-ci,\Sq\s\=")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-cs,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "\Sq\s\-c\=")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-c,\Sq\s\=")
+
+        For k As Integer = 1 To nbArma
+            AddCelluleFond(LargCol(1), Bordinf, PositionTexteInCell.Centre, "k\-y,\Sq\s," & k.ToString & "\=")
+        Next
+
+    End Sub
+
+    Private Sub EditionTemperatureFeuMixteStandard(myBeam As cls_Poutre, lBoard As Boolean, Optional lAcierSeul As Boolean = False)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Tableau des températures dans les différentes parties
+        '   1 seul tableau avec toutes les températures
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   lBoard      [E] :   Indique si protection par panneaux
+        '   lAcierSeul  [E] :   Indique si le tableau ne concerne que les parties en acier
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
+
+        '--( Traitement
+
+        EnteteTableauTempVerifFeuMixte(NCOL, LargCol, lBoard, lAcierSeul)
+        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
+            LigneTableauTempVerifFeuMixte(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBoard, lBetonL, lAcierSeul)
+        Next
+        FinTableau()
+
+    End Sub
+
+    Private Sub EnteteTableauTempVerifFeuMixte(ByRef NCOL As Integer, ByRef LargCol() As Single, lUni As Boolean, Optional lAcierSeul As Boolean = False)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Entête du tableau
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '   lUni        [E] :   Indique si température uniforme du profilé
+        '   lAcierSeul  [E] :   Indique si le tableau ne traite que de la partie acier
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim BordSup As Integer = Bordures.Tous - Bordures.Bas
+        Dim BordSupG As Integer = Bordures.Tous - Bordures.Bas - Bordures.Droite
+        Dim BordSupD As Integer = Bordures.Tous - Bordures.Bas - Bordures.Gauche
+
+        Dim Bordinf As Integer = Bordures.Tous - Bordures.Haut
+        Dim BordinfG As Integer = Bordures.Tous - Bordures.Haut - Bordures.Droite
+        Dim BordinfD As Integer = Bordures.Tous - Bordures.Haut - Bordures.Gauche
+
+        '--( Initialisation
+
+        If lAcierSeul Then NCOL = 7 Else NCOL = 11
+        If lUni And (Not lAcierSeul) Then NCOL -= 4
 
         ReDim LargCol(1)
 
@@ -9885,11 +10120,15 @@ Module Mod_NoteCalcul
             AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
         End If
 
-        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-ci\=")
-        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "\Sq\s\-cs\=")
+        If Not lAcierSeul Then
 
-        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-v\=")
-        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-u,\Sq\s\=")
+            AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-ci\=")
+            AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "\Sq\s\-cs\=")
+
+            AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-v\=")
+            AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-u,\Sq\s\=")
+
+        End If
 
         InitialiseLigneTableau(NCOL, HLIGNEENTETE)
 
@@ -9909,16 +10148,17 @@ Module Mod_NoteCalcul
             AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
         End If
 
-        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "k\-ci,\Sq\s\=")
-        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-cs,\Sq\s\=")
+        If Not lAcierSeul Then
+            AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "k\-ci,\Sq\s\=")
+            AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-cs,\Sq\s\=")
 
-        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "\Sq\s\-c\=")
-        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-c,\Sq\s\=")
-
+            AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "\Sq\s\-c\=")
+            AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-c,\Sq\s\=")
+        End If
     End Sub
 
     Private Sub LigneTableauTempVerifFeuMixte(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single,
-                                              lUni As Boolean, lBetonL As Boolean)
+                                              lUni As Boolean, lBetonL As Boolean, Optional lAcierSeul As Boolean = False)
         '-----------------------------------------------------------------------------------------------------------------
         '   04/05/24 :  Création - POM
         '-----------------------------------------------------------------------------------------------------------------
@@ -9932,6 +10172,7 @@ Module Mod_NoteCalcul
         '   LargCol     [E] :   Largeur des colonnes du tab
         '   lUni        [E] :   Indique si température uniforme du profilé
         '   lBetonL     [E] :   Indique si béton léger
+        '   lAcierSeul  [E] :   Indique si tableau pour acier seul
         '-----------------------------------------------------------------------------------------------------------------
 
         '--( Déclaration
@@ -9966,11 +10207,13 @@ Module Mod_NoteCalcul
             AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
         End If
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, True))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, True))
+        If Not lAcierSeul Then
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, True))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, True))
 
-        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+            AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+        End If
 
         InitialiseLigneTableau(NCOL, HLIGNE)
 
@@ -9990,12 +10233,13 @@ Module Mod_NoteCalcul
             AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
         End If
 
-        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+        If Not lAcierSeul Then
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
 
-        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
-        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
-
+            AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+            AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+        End If
     End Sub
 
     Private Sub EnteteTableauVerifFeuMixte(ByRef NCOL As Integer, ByRef LargCol() As Single, lBuckling As Boolean)

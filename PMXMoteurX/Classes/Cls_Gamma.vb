@@ -12,11 +12,11 @@
 
     Public GammaVs As Decimal           ' GammaV des connecteurs pour la résistance de l'acier
     Public GammaVc As Decimal           ' GammaV des connecteurs pour la résistance du béton
-    Public GammaV_fi As Decimal         ' for the resistance of shear connectors
+    Public GammaV_fi As Decimal         ' GammaV connecteurs en situation d'incendie
 
     Public lGammaV_unique As Boolean    ' indique si on considère un seul gammaV (=True) ou alors est ce qu'on fait la différence avec GammaVs et GammaVp (=False)
     Public GammaS As Decimal
-    Public GammaS_fi As Decimal         ' for the resistance of reinforcement steel bars
+    Public GammaS_fi As Decimal         ' GammaS armatures en situation d'incendie
 
     Public GammaP As Decimal            ' coefficient partiel pour les bacs aciers
 
