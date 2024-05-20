@@ -5,7 +5,7 @@
 #Region " Attributs "
 
     Private DeltaTsimple As Decimal                         ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier non protégées
-    Private DeltaTprotege As Decimal                        ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier protégées
+    'Private DeltaTprotege As Decimal                        ' Incrément de temps utilisé pour le calcul d'échauffement des structures acier protégées
     Public TempRef As Decimal                               ' Température de référence (à t = 0)
     Public Const TempMax As Decimal = 1200                  ' Température max (°)
 
@@ -63,7 +63,13 @@
         BoardsPlaster
     End Enum
 
+    Public Enum enuTypeInterpoleTempArma
+        Maximale
+        Moyenne
+        Axe
+    End Enum
 
+    Public MethodTempArma As enuTypeInterpoleTempArma       ' Type de méthode pour le calcul de la température des armatures
 #End Region
 
 #Region " Constructeur "
@@ -72,7 +78,7 @@
 
         Me.TempRef = 20                     ' [°C]
         Me.DeltaTsimple = 5                 ' [secondes]
-        Me.DeltaTprotege = 10               ' [secondes]
+        'Me.DeltaTprotege = 10               ' [secondes]
 
         Me.EmissivityFire = 1.0
         'Me.EmissivitySteel = 0.7
@@ -102,12 +108,13 @@
 
         Me.lReductionConcreteStrength = False
 
-        Me.EpProtection = 0.1
+        Me.EpProtection = 0.02
 
         Me.TeneurU = 0
         Me.lANFrance = True
         Me.lRhoCvar = True
 
+        Me.MethodTempArma = enuTypeInterpoleTempArma.Moyenne
     End Sub
 
 #End Region
@@ -126,7 +133,7 @@
                 Case enu_TypeSurface.AcierNu, enu_TypeSurface.Galvanise
                     myDeltaT = Me.DeltaTsimple
                 Case enu_TypeSurface.Protege
-                    myDeltaT = Me.DeltaTprotege
+                    myDeltaT = Me.DeltaTsimple
             End Select
             Return myDeltaT
         End Get
@@ -136,7 +143,7 @@
                 Case enu_TypeSurface.AcierNu, enu_TypeSurface.Galvanise
                     Me.DeltaTsimple = value
                 Case enu_TypeSurface.Protege
-                    Me.DeltaTprotege = value
+                    Me.DeltaTsimple = value
             End Select
         End Set
 

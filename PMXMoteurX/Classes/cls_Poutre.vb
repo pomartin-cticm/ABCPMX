@@ -5283,7 +5283,7 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.AcierSeulEnrobage, cls_Section.Enum_TypeSection.MixteEnrobage
                 Me.VerifFeuEnrob = New cls_VerifFeuEnrobe
             Case cls_Section.Enum_TypeSection.Mixte
-                Me.VerifFeuMixte = New cls_VerifFeuMixte
+                Me.VerifFeuMixte = New cls_VerifFeuMixte(Me.ParamFeu.MethodTempArma)
         End Select
 
         '--> Initialisation des calculs

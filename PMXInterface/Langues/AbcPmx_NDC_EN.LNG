@@ -540,6 +540,10 @@ FIRE_CHECKS_SYMMARY		= Summary of results
 FIRE_CHECKS_DETAIL		= Detailed results
 TIMERESISTANCE			= Fire Resistance
 TIMESTEP				= Fire duration
+TEMPSTEEL				= Temperatures in the steel profile
+TEMPSLAB				= Temperatures in the slab
+TEMPPARTS				= Temperatures in the parts of the beam
+CRITERIA				= Criteria
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Assessment of floor vibrations

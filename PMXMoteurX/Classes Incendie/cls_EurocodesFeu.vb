@@ -489,6 +489,8 @@
         Dim LambdaP, RhoP, cP As Decimal        ' Conductivité thermique, chaleur massique et masse volumique matériau de protection   
         Dim Phi As Decimal
         Dim DeltaG As Decimal
+        Dim TempGdT As Decimal
+        Dim dP As Decimal
 
         '--( Traitement
 
@@ -498,11 +500,14 @@
         LambdaP = myParamFeu.Protection_Conductivite
         cP = myParamFeu.Protection_ChaleurMassique
         RhoP = myParamFeu.Protection_MasseVol
+        dP = myParamFeu.EpProtection
 
-        DeltaG = Me.TemperatureGazISO(TimeT + DeltaT) - TempG
+        TempGdT = Me.TemperatureGazISO(TimeT - DeltaT)
+
+        DeltaG = TempG - TempGdT
         Phi = cP * RhoP / (cA * RhoA) * myParamFeu.EpProtection * Massivete
 
-        DeltaTempA = LambdaP * Massivete / (cA * RhoA) / (1 + Phi / 3) * (TempG - TempA) * DeltaT - (Math.Exp(Phi / 10) - 1) * DeltaG
+        DeltaTempA = LambdaP * Massivete / (cA * RhoA * dP) / (1 + Phi / 3) * (TempG - TempA) * DeltaT - (Math.Exp(Phi / 10) - 1) * DeltaG
 
         '--( 
 

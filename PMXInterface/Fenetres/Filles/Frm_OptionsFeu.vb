@@ -4,9 +4,12 @@ Imports System.IO
 Public Class Frm_OptionsFeu
 
 #Region " Variables locales "
+
     Dim lBuild As Boolean
 
     Dim strSurfaceType, strProtectionType, strInsulationTypeSpray, strInsulationTypeBoards As String() 'cmb_SurfaceType
+
+    Dim strTempRebars(2)
 
     Dim MyPoutreLoc As New cls_Poutre
 
@@ -14,7 +17,7 @@ Public Class Frm_OptionsFeu
 
     Dim lFrm_Valide As Boolean
 
-    Dim y_AcierGalva, y_ReductionConcreteStrenght, y_ArmaFroid, y_ArmaComp, y_DalleFEM, y_tDalleFEMmax As Decimal
+    'Dim y_AcierGalva, y_ReductionConcreteStrenght, y_ArmaFroid, y_ArmaComp, y_DalleFEM, y_tDalleFEMmax As Decimal
 
 #End Region
 
@@ -30,8 +33,13 @@ Public Class Frm_OptionsFeu
         GestionLangues()
         GestionStyle()
         GestionUnites()
+        PrepareFenetre()
         AfficherPoutreEnCours()
         lBuild = False
+    End Sub
+
+    Private Sub PrepareFenetre()
+        RemplirComboTempRebar()
     End Sub
 
     Private Sub InitialiserVariables()
@@ -52,9 +60,20 @@ Public Class Frm_OptionsFeu
     Private Sub GestionUnites()
 
         lbl_UnitDensity.Text = "kg/m3"
-        lbl_UnitThermalCond.Text = "W.m-1.K-1"
-        lbl_UnitSpecificHeat.Text = "J.kg-1.K-1"
-        etq_UnitD.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+
+        lbl_UnitThermalCond.Text = "W/m.K"
+        lbl_UnitSpecificHeat.Text = "J/kg.K"
+
+        lbl_UnitD1.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        etq_UnitD2.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+
+        etq_UnitTime.Text = "s"
+        etq_UnitTemp1.Text = "°C"
+        etq_UnitTemp2.Text = "°C"
+
+        'lbl_UnitBoltzmann.Text = "x 10E-8 W.m-2.K-4"
+        'lbl_UnitConvectionFactor.Text = "W.m-2.K-1"
+        ' lbl_UnitConvectionSlab.Text = "W.m-2.K-1"
 
     End Sub
 
@@ -106,6 +125,7 @@ Public Class Frm_OptionsFeu
                 '--> cmb_InsulationType
 
                 Me.lbl_InsulationType.Text = Bloc("INSULATIONTYPE")
+                Me.chk_ProtectionThermique.Text = Bloc("PROTECTEDSTEEL")
 
                 ReDim strInsulationTypeSpray(3)
 
@@ -126,8 +146,6 @@ Public Class Frm_OptionsFeu
                 lbl_SpecificHeat.Text = Bloc("SPECIFICHEAT")
 
                 lbl_EpProtec.Text = Bloc("PROTECTIONTH")
-
-                lbl_UnittDalleFEMmax.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
                 '--> chk_ReductionConcreteStrenght
 
@@ -150,7 +168,6 @@ Public Class Frm_OptionsFeu
                 chk_DalleFEM.Text = Bloc("DALLEFEM")
                 lbl_tDalleFEMmax.Text = Bloc("TDALLEFEM")
 
-
                 '=== PARAMETRES CALCUL ==============================================================='
 
                 Me.lbl_ParamCalcul.Text = Bloc("CALCULPARAM")
@@ -163,22 +180,18 @@ Public Class Frm_OptionsFeu
                 lbl_FormFactor.Text = Bloc("FORMFACTOR")
                 'lbl_EmissivitySteel.Text = Bloc("EMISSIVITYSTEELSURF")
                 lbl_EmissivityFire.Text = Bloc("EMISSIVITYFIRE")
+                lbl_EmissiviteBeton.Text = Bloc("EMISSIVITYCONCRETE")
                 lbl_ConvectionFactor.Text = Bloc("CONVECTIONFACTOR")
                 lbl_ShadowEffect.Text = Bloc("SHADOWEFFECT")
-                lbl_ConvectionSlab.Text = Bloc("CONVECTIONSLAB")
                 lbl_ConcreteResistance.Text = Bloc("CONCRETEFACTOR")
 
-                lbl_UnitBoltzmann.Text = "x 10E-8 W.m-2.K-4"
-                lbl_UnitTimeIncrement.Text = "s"
-                lbl_UnitReferenceTemp.Text = "°C"
-                lbl_UnitMaxTemp.Text = "°C"
-                lbl_UnitFormFactor.Text = ""
-                'lbl_UnitEmissivitySteel.Text = ""
-                lbl_UnitEmissivityFire.Text = ""
-                lbl_UnitConvectionFactor.Text = "W.m-2.K-1"
-                lbl_UnitShadowEffect.Text = ""
-                lbl_UnitConvectionSlab.Text = "W.m-2.K-1"
-                lbl_UnitConcreteResistance.Text = ""
+                Me.lbl_SousDalle.Text = Bloc("BELOWSLAB")
+                Me.lbl_SurDalle.Text = Bloc("ABOVESLAB")
+
+                Me.lbl_TempRebars.Text = Bloc("TEMPREBARS")
+                strTempRebars(0) = Bloc("AVERAGETEMP")
+                strTempRebars(1) = Bloc("MAXTEMP2")
+                strTempRebars(2) = Bloc("AXISTEMP")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -235,25 +248,34 @@ Public Class Frm_OptionsFeu
             chk_CalculFeu.Checked = .lCalcuFeu
             Affiche_SurfaceType()
 
+            Me.chk_ProtectionThermique.Checked = (MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
             Me.chk_AcierGalva.Checked = (MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise)
 
             MAJ_ProtectionType()
             MAJ_InsulationType()
 
-
-            Me.chk_ReductionConcreteStrenght.Checked = MyPoutreLoc.ParamFeu.lReductionConcreteStrength
             Me.chk_ArmaFroid.Checked = MyPoutreLoc.ParamFeu.lArmaFormeeAFroid
-            Me.chk_ArmaComp.Checked = MyPoutreLoc.ParamFeu.lArmaCompression
             Me.chk_DalleFEM.Checked = MyPoutreLoc.ParamFeu.lDalleFEM
-            Me.txt_tDalleFEMmax.Text = GetStringInUnit(.tDalleEFmax, Enu_TypeVariable.Dimension, 3, 2, False)
             Me.txt_EpProtec.Text = GetStringInUnitN(.EpProtection, Enu_TypeVariable.Dimension, 3, 2, False, True)
 
             GestionPositionElements() 'Gère les positions des éléments dans la partie de droite
             MAJI_TypeProtection()
 
+            '--> Options de calcul
+
+            MAJI_FEM()
+            Me.txt_tDalleFEMmax.Text = GetStringInUnitN(.tDalleEFmax, Enu_TypeVariable.Dimension, 3, 2, False, True)
+            Me.chk_ArmaComp.Checked = MyPoutreLoc.ParamFeu.lArmaCompression
+            Me.chk_ReductionConcreteStrenght.Checked = MyPoutreLoc.ParamFeu.lReductionConcreteStrength
+            Select Case MyPoutreLoc.ParamFeu.MethodTempArma
+                Case cls_OptionsFeu.enuTypeInterpoleTempArma.Axe : Me.cmb_TempRebars.SelectedIndex = 2
+                Case cls_OptionsFeu.enuTypeInterpoleTempArma.Maximale : Me.cmb_TempRebars.SelectedIndex = 1
+                Case cls_OptionsFeu.enuTypeInterpoleTempArma.Moyenne : Me.cmb_TempRebars.SelectedIndex = 0
+            End Select
+
             '--> Partie qui concerne les paramètres de calcul
 
-            MAJ_ParamCalcul()
+            Affichage_ParamCalcul()
 
         End With
 
@@ -378,7 +400,7 @@ Public Class Frm_OptionsFeu
                 Me.txt_SpecificHeat.Enabled = True
 
                 Me.txt_Density.Text = GetStringInUnit(.Protection_MasseVol, Enu_TypeVariable.SansType, 3, 2, False)
-                Me.txt_SpecificHeat.Text = GetStringInUnit(.Protection_Conductivite, Enu_TypeVariable.SansType, 3, 2, False)
+                Me.txt_SpecificHeat.Text = GetStringInUnit(.Protection_ChaleurMassique, Enu_TypeVariable.SansType, 3, 2, False)
 
                 If .Protection = cls_OptionsFeu.enu_TypeProtection.IntumescentPaint Then
                     Me.txt_ThermalConductivity.ReadOnly = False
@@ -409,7 +431,7 @@ Public Class Frm_OptionsFeu
     ''' <summary>
     ''' Gère les valeurs dans les textbox dans la partie ParamCalcul
     ''' </summary>
-    Private Sub MAJ_ParamCalcul()
+    Private Sub Affichage_ParamCalcul()
         With MyPoutreLoc.ParamFeu
             Me.txt_Boltzmann.Text = GetStringInUnit(cls_OptionsFeu.BOLTZMANN * 10 ^ 8, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_TimeIncrement.Text = GetStringInUnit(.DeltaTCalcul, Enu_TypeVariable.SansType, 3, 2, False)
@@ -418,6 +440,7 @@ Public Class Frm_OptionsFeu
             Me.txt_FormFactor.Text = GetStringInUnit(.PhiViewFactor, Enu_TypeVariable.SansType, 3, 2, False)
             'Me.txt_EmissivitySteel.Text = GetStringInUnit(.EmissivitySteel, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_EmissivityFire.Text = GetStringInUnit(.EmissivityFire, Enu_TypeVariable.SansType, 3, 2, False)
+            Me.txt_EmissiviteBeton.Text = GetStringInUnit(.EmissivityC, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_ConvectionFactor.Text = GetStringInUnit(.ConvectionCoef, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_ShadowEffect.Text = GetStringInUnit(.ksh, Enu_TypeVariable.SansType, 3, 2, False)
             Me.txt_ConvectionSlab.Text = GetStringInUnit(.ConvectionCoefDalle, Enu_TypeVariable.SansType, 3, 2, False)
@@ -425,24 +448,14 @@ Public Class Frm_OptionsFeu
         End With
     End Sub
 
-
     Private Sub MAJI_TypeProtection()
         'Gestion de l'affichage en fonction de si l'acier est protégé au feu ou non
 
-        Dim lProtege As Boolean = MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege
+        Dim lProtege As Boolean = (MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege)
 
         Me.pan_Protection.Visible = lProtege
 
-        Dim offsetY As Integer = 26
-
-        If lProtege Then
-            'chk_ReductionConcreteStrenght.Top = lbl_SpecificHeat.Location.Y + 1.5 * offsetY
-            chk_ArmaFroid.Top = Me.pan_Protection.Top + Me.pan_Protection.Height + offsetY - chk_ArmaFroid.Height
-        Else
-            chk_AcierGalva.Top = lbl_SurfaceType.Location.Y + 1.5 * offsetY
-            'chk_ReductionConcreteStrenght.Top = chk_AcierGalva.Location.Y + offsetY
-            chk_ArmaFroid.Top = chk_AcierGalva.Location.Y + offsetY
-        End If
+        Me.pan_Protection.Top = Me.chk_AcierGalva.Top
 
     End Sub
 
@@ -470,13 +483,22 @@ Public Class Frm_OptionsFeu
         chk_DalleFEM.Enabled = lCalculFeu
         txt_tDalleFEMmax.Enabled = lCalculFeu
 
+    End Sub
 
+    Private Sub MAJI_FEM()
         Dim lDalleFEM As Boolean = MyPoutreLoc.ParamFeu.lDalleFEM
 
-        lbl_tDalleFEMmax.Visible = lDalleFEM
-        img_tDalleFEMmax.Visible = lDalleFEM
-        txt_tDalleFEMmax.Visible = lDalleFEM
-        lbl_UnittDalleFEMmax.Visible = lDalleFEM
+        lbl_tDalleFEMmax.Enabled = lDalleFEM
+        img_tDalleFEMmax.Enabled = lDalleFEM
+        txt_tDalleFEMmax.Enabled = lDalleFEM
+        lbl_UnitD1.Enabled = lDalleFEM
+    End Sub
+
+    Private Sub RemplirComboTempRebar()
+
+        Me.cmb_TempRebars.Items.Clear()
+        Me.cmb_TempRebars.Items.AddRange(strTempRebars)
+        Me.cmb_TempRebars.SelectedIndex = 0
 
     End Sub
 
@@ -484,26 +506,59 @@ Public Class Frm_OptionsFeu
 
 #Region " Evenements "
 
-    Private Sub cmb_SurfaceType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_SurfaceType.SelectedIndexChanged, chk_AcierGalva.CheckedChanged
+    'Private Sub cmb_SurfaceType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_SurfaceType.SelectedIndexChanged, chk_AcierGalva.CheckedChanged
 
+    '    If lBuild Then Exit Sub
+
+    '    lBuild = True
+
+    '    With MyPoutreLoc.ParamFeu
+
+    '        Select Case cmb_SurfaceType.SelectedIndex
+    '            Case 0
+    '                .TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege
+    '            Case 1
+    '                If Not chk_AcierGalva.Checked Then
+    '                    .TypeSurface = cls_OptionsFeu.enu_TypeSurface.AcierNu
+    '                Else
+    '                    .TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise
+    '                End If
+    '        End Select
+
+    '    End With
+
+    '    ErrorProvider_Frm_OptionsFeu.SetError(txt_ThermalConductivity, String.Empty)
+
+    '    AfficherPoutreEnCours()
+
+    '    lBuild = False
+    'End Sub
+
+    Private Sub chk_AcierGalva_CheckedChanged(sender As Object, e As EventArgs) Handles chk_AcierGalva.CheckedChanged
+        If lBuild Then Exit Sub
+
+        If Not Me.chk_AcierGalva.Checked Then
+            MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.AcierNu
+        Else
+            MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise
+        End If
+
+    End Sub
+
+    Private Sub chk_ProtectionThermique_CheckedChanged(sender As Object, e As EventArgs) Handles chk_ProtectionThermique.CheckedChanged
         If lBuild Then Exit Sub
 
         lBuild = True
 
-        With MyPoutreLoc.ParamFeu
-
-            Select Case cmb_SurfaceType.SelectedIndex
-                Case 0
-                    .TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege
-                Case 1
-                    If Not chk_AcierGalva.Checked Then
-                        .TypeSurface = cls_OptionsFeu.enu_TypeSurface.AcierNu
-                    Else
-                        .TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise
-                    End If
-            End Select
-
-        End With
+        If Me.chk_ProtectionThermique.Checked Then
+            MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Protege
+        Else
+            If Not Me.chk_AcierGalva.Checked Then
+                MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.AcierNu
+            Else
+                MyPoutreLoc.ParamFeu.TypeSurface = cls_OptionsFeu.enu_TypeSurface.Galvanise
+            End If
+        End If
 
         ErrorProvider_Frm_OptionsFeu.SetError(txt_ThermalConductivity, String.Empty)
 
@@ -511,7 +566,6 @@ Public Class Frm_OptionsFeu
 
         lBuild = False
     End Sub
-
 
     Private Sub cmb_ProtectionType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_ProtectionType.SelectedIndexChanged, cmb_InsulationType.SelectedIndexChanged
         If lBuild Then Exit Sub
@@ -620,12 +674,24 @@ Public Class Frm_OptionsFeu
         lBuild = False
     End Sub
 
+    Private Sub cmb_TempRebars_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_TempRebars.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        Select Case Me.cmb_TempRebars.SelectedIndex
+            Case 0 : MyPoutreLoc.ParamFeu.MethodTempArma = cls_OptionsFeu.enuTypeInterpoleTempArma.Moyenne
+            Case 1 : MyPoutreLoc.ParamFeu.MethodTempArma = cls_OptionsFeu.enuTypeInterpoleTempArma.Maximale
+            Case 2 : MyPoutreLoc.ParamFeu.MethodTempArma = cls_OptionsFeu.enuTypeInterpoleTempArma.Axe
+        End Select
+
+    End Sub
+
 #End Region
 
 #Region " Evenements de saisie "
 
     Private Sub TextBox_TextChanged(sender As Object, e As EventArgs) Handles txt_ThermalConductivity.TextChanged, txt_tDalleFEMmax.TextChanged, txt_TimeIncrement.TextChanged, txt_ReferenceTemp.TextChanged,
-        txt_FormFactor.TextChanged, txt_EmissivityFire.TextChanged, txt_ConvectionFactor.TextChanged, txt_ShadowEffect.TextChanged, txt_EpProtec.TextChanged
+        txt_FormFactor.TextChanged, txt_EmissivityFire.TextChanged, txt_ConvectionFactor.TextChanged,
+        txt_ShadowEffect.TextChanged, txt_EpProtec.TextChanged, txt_EmissiviteBeton.TextChanged
 
         If lBuild Then Exit Sub
 
@@ -649,6 +715,8 @@ Public Class Frm_OptionsFeu
                         '.EmissivitySteel = ValeurUI
                     Case txt_EmissivityFire.Name
                         .EmissivityFire = ValeurUI
+                    Case txt_EmissiviteBeton.Name
+                        .EmissivityC = ValeurUI
                     Case txt_ConvectionFactor.Name
                         .ConvectionCoef = ValeurUI
                     Case txt_ShadowEffect.Name
@@ -705,7 +773,7 @@ Public Class Frm_OptionsFeu
                 lValMin = False
                 lValMax = False
 
-            Case txt_FormFactor.Name, txt_EmissivityFire.Name, txt_ShadowEffect.Name ',txt_EmissivitySteel.Name
+            Case txt_FormFactor.Name, txt_EmissivityFire.Name, txt_ShadowEffect.Name, txt_EmissiviteBeton.Name
                 ValMin = 0
                 ValMax = 1
 
@@ -787,14 +855,19 @@ Public Class Frm_OptionsFeu
                 GereTransfertValeur(MyPoutreLoc.ParamFeu.CustomLambdaP, .CustomLambdaP, lModif)
             End If
             GereTransfertValeur(MyPoutreLoc.ParamFeu.EpProtection, .EpProtection, lModif)
-
-            GereTransfertValeur(MyPoutreLoc.ParamFeu.lReductionConcreteStrength, .lReductionConcreteStrength, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.lArmaFormeeAFroid, .lArmaFormeeAFroid, lModif)
+
+            '--> Options de calcul
+
             GereTransfertValeur(MyPoutreLoc.ParamFeu.lArmaCompression, .lArmaCompression, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.lDalleFEM, .lDalleFEM, lModif)
-
             If .lDalleFEM Then
                 GereTransfertValeur(MyPoutreLoc.ParamFeu.tDalleEFmax, .tDalleEFmax, lModif)
+            End If
+            GereTransfertValeur(MyPoutreLoc.ParamFeu.lReductionConcreteStrength, .lReductionConcreteStrength, lModif)
+            If MyPoutreLoc.ParamFeu.MethodTempArma <> .MethodTempArma Then
+                lModif = True
+                .MethodTempArma = MyPoutreLoc.ParamFeu.MethodTempArma
             End If
 
             '--> Partie paramètres de calcul
@@ -804,9 +877,9 @@ Public Class Frm_OptionsFeu
             GereTransfertValeur(MyPoutreLoc.ParamFeu.PhiViewFactor, .PhiViewFactor, lModif)
             'GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivitySteel, .EmissivitySteel, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivityFire, .EmissivityFire, lModif)
+            GereTransfertValeur(MyPoutreLoc.ParamFeu.EmissivityC, .EmissivityC, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.ConvectionCoef, .ConvectionCoef, lModif)
             GereTransfertValeur(MyPoutreLoc.ParamFeu.ksh, .ksh, lModif)
-
 
         End With
 
@@ -818,11 +891,11 @@ Public Class Frm_OptionsFeu
 
 #End Region
 
-#Region " Dessins "
+#Region " Dessins des symboles "
 
     Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_Density.Paint, img_ThermalConductivity.Paint, img_SpecificHeat.Paint, img_tDalleFEMmax.Paint,
      img_Boltzmann.Paint, img_TimeIncrement.Paint, img_ReferenceTemp.Paint, img_MaxTemp.Paint, img_FormFactor.Paint,
-     img_EmissivityFire.Paint, img_ConvectionFactor.Paint, img_ShadowEffect.Paint, img_ConvectionSlab.Paint, img_ConcreteResistance.Paint, img_EpProtec.Paint
+     img_EmissivityFire.Paint, img_ConvectionFactor.Paint, img_ShadowEffect.Paint, img_ConvectionSlab.Paint, img_ConcreteResistance.Paint, img_EpProtec.Paint, img_EmissiviteBeton.Paint
 
         '--> Déclarations
 
@@ -912,6 +985,11 @@ Public Class Frm_OptionsFeu
                 strSymbol = "e"
                 strIndice = "f"
 
+            Case Me.img_EmissiviteBeton.Name
+
+                strSymbol = "e"
+                strIndice = "c"
+
             Case Me.img_ConvectionFactor.Name
 
                 strSymbol = "a"
@@ -942,6 +1020,135 @@ Public Class Frm_OptionsFeu
                    FontSymbolNormal, FontSymbolGrec, FontSymbolIndice, 1.0!, lEgal)
 
     End Sub
+
+#End Region
+
+#Region " Dessin des unités spéciales "
+
+    Private Sub img_UnitBoltzmann_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_UnitBoltzmann.Paint
+        DrawUnitBoltzmann(e.Graphics, Me.img_UnitBoltzmann.ClientRectangle.Width, Me.img_UnitBoltzmann.ClientRectangle.Height)
+    End Sub
+
+    Private Sub DrawUnitBoltzmann(ByVal MyGr As Graphics, ByVal sWI As Single, ByVal sHI As Single)
+        '----------------------------------------------------------------------------------------
+        '   30/09/09 :  Création - Version 2.00
+        '----------------------------------------------------------------------------------------
+        '   Affiche unités cte de Boltzman
+        '----------------------------------------------------------------------------------------
+
+        Dim Chaine As String
+        Dim xPen, yPen As Single
+        Dim sCar, xDec, hDec As Single
+        Dim FontNormal As New Font(Me.txt_Boltzmann.Font.Name, 8.25)
+        Dim FontExp As New Font(Me.txt_Boltzmann.Font.Name, 6.25)
+        Const kMatch As Single = 0.93
+
+        Chaine = "x10"
+        sCar = MyGr.MeasureString(Chaine, FontNormal).Height
+        xDec = MyGr.MeasureString(Chaine, FontNormal).Width
+
+        yPen = (sHI / 2 - sCar) / 2
+        yPen = sHI / 2 - sCar / 2
+        xPen = 1
+
+        MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
+
+        xPen += kMatch * xDec
+        hDec = sCar / 4
+
+        Chaine = "-8"
+        xDec = MyGr.MeasureString(Chaine, FontExp).Width
+
+        MyGr.DrawString(Chaine, FontExp, Brushes.Black, xPen, yPen - hDec)
+
+
+        xPen += kMatch * xDec
+        Chaine = " W/m"
+
+        xDec = MyGr.MeasureString(Chaine, FontNormal).Width
+
+        MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
+
+        xPen += kMatch * xDec
+
+        Chaine = "2"
+        xDec = MyGr.MeasureString(Chaine, FontExp).Width
+
+        MyGr.DrawString(Chaine, FontExp, Brushes.Black, xPen, yPen - hDec)
+
+        xPen += kMatch * xDec
+        Chaine = "K"
+
+        xDec = MyGr.MeasureString(Chaine, FontNormal).Width
+
+        MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
+
+        xPen += kMatch * xDec
+
+        Chaine = "4"
+
+        MyGr.DrawString(Chaine, FontExp, Brushes.Black, xPen, yPen - hDec)
+
+        FontNormal.Dispose()
+        FontExp.Dispose()
+    End Sub
+
+
+    Private Sub img_UnitThermConvection_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_UnitThermConvection.Paint, img_UnitThermConvection2.Paint
+        DrawUnitConvection(e.Graphics, Me.img_UnitThermConvection.ClientRectangle.Width, Me.img_UnitThermConvection.ClientRectangle.Height)
+    End Sub
+
+    Private Sub DrawUnitConvection(ByVal MyGr As Graphics, ByVal sWI As Single, ByVal sHI As Single)
+        '----------------------------------------------------------------------------------------
+        '   30/09/09 :  Création - Version 2.00
+        '----------------------------------------------------------------------------------------
+        '   Affiche unités cte de Boltzman
+        '----------------------------------------------------------------------------------------
+
+        Dim Chaine As String
+        Dim xPen, yPen As Single
+        Dim sCar, xDec, hDec As Single
+        Dim FontNormal As New Font(Me.txt_Boltzmann.Font.Name, 8.25)
+        Dim FontExp As New Font(Me.txt_Boltzmann.Font.Name, 6.25)
+        Const kMatch As Single = 0.85
+
+        '*********************************************
+
+        Chaine = "W/m"
+        sCar = MyGr.MeasureString(Chaine, FontNormal).Height
+        xDec = MyGr.MeasureString(Chaine, FontNormal).Width
+
+        yPen = (sHI - sCar) / 2
+        xPen = 1
+
+        MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
+
+        xPen += kMatch * xDec
+        hDec = sCar / 4
+
+        '*********************************************
+
+        Chaine = "2"
+        xDec = MyGr.MeasureString(Chaine, FontExp).Width
+
+        MyGr.DrawString(Chaine, FontExp, Brushes.Black, xPen, yPen - hDec)
+
+        xPen += kMatch * xDec
+
+        '*********************************************
+
+        Chaine = "K"
+
+        xDec = MyGr.MeasureString(Chaine, FontNormal).Width
+
+        MyGr.DrawString(Chaine, FontNormal, Brushes.Black, xPen, yPen)
+
+        FontNormal.Dispose()
+        FontExp.Dispose()
+
+    End Sub
+
+
 
 #End Region
 

@@ -532,6 +532,10 @@ FIRE_CHECKS_SYMMARY		= Synthèse des résultats
 FIRE_CHECKS_DETAIL		= Résultats détaillés
 TIMERESISTANCE			= Résistance au feu
 TIMESTEP				= Durée d'exposition
+TEMPSTEEL				= Températures dans le profilé métallique
+TEMPSLAB				= Températures dans la dalle
+TEMPPARTS				= Températures dans les éléments de la poutre
+CRITERIA				= Critères
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher

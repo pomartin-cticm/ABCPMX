@@ -9788,12 +9788,9 @@ Module Mod_NoteCalcul
 
         '--( Déclarations
 
-        Dim NCOL As Integer
-        Dim LargCol() As Single = Nothing
-        Dim iStep As Integer
-        Dim lBuckling As Boolean = IsGreater(myBeam.VerifFeuMixte.ElancementW, myBeam.VerifFeuMixte.ElancementWMax)
-        Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
-        Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
+        ' Dim lBuckling As Boolean = IsGreater(myBeam.VerifFeuMixte.ElancementW, myBeam.VerifFeuMixte.ElancementWMax)
+        'Dim lBoard As Boolean = myBeam.ParamFeu.lProtectionBoard
+        'Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
 
         '--( Titre
 
@@ -9805,8 +9802,34 @@ Module Mod_NoteCalcul
 
         '## Tableau des critères de résistance
 
+        EditionCritereFeuMixteTemp(myBeam)
+
+    End Sub
+
+    Private Sub EditionCritereFeuMixteTemp(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition du tableau des critères en fonction de la température
+        '   Pour les poutres mixtes
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim iStep As Integer
+        Dim lBuckling As Boolean = IsGreater(myBeam.VerifFeuMixte.ElancementW, myBeam.VerifFeuMixte.ElancementWMax)
+        Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 1 + 2
+
         '--( Entete du tableau
 
+        If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
+
+        AddLigneNDC("\T10\U" & BlocFEU("CRITERIA") & "\u")
+        SauteLigne()
         EnteteTableauVerifFeuMixte(NCOL, LargCol, lBuckling)
 
         '--( Remplissage tableau
@@ -9840,7 +9863,7 @@ Module Mod_NoteCalcul
         If lMultiSpan Then
 
             If lBoard Then
-
+                EditionTemperatureFeuMixteBoardMulti(myBeam)
             Else
                 EditionTemperatureFeuMixteStandard(myBeam, lBoard, True)
                 EditionTemperatureFeuMixteDalle(myBeam)
@@ -9852,6 +9875,200 @@ Module Mod_NoteCalcul
 
         End If
 
+    End Sub
+
+    Private Sub EditionTemperatureFeuMixteBoardMulti(myBeam As cls_Poutre)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   18/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Tableau des températures dans les différentes parties pour une profilé protégé par panneaux,
+        '   avec les températures de la dalle, y compris les lits d'armatures
+        '-----------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim NCOL As Integer
+        Dim LargCol() As Single = Nothing
+        Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
+        Dim lArmaFroid As Boolean = myBeam.ParamFeu.lArmaFormeeAFroid
+        Dim nbArma As Integer
+        Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 2
+        Dim iStep As Integer
+
+        '--( Entête
+
+        nbArma = myBeam.Dalle.LitArma.Count
+
+        AddLigneNDC("\T10\U" & BlocFEU("TEMPSLAB") & "\u")
+        SauteLigne()
+        NbReq += 2
+
+        If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
+
+        EnteteTableauTempFeuMixteBoardMulti(NCOL, LargCol, nbArma)
+
+        '--( Tableau
+
+        For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
+            LigneTableauTempDalleFeuBoardMulti(iStep, myBeam.VerifFeuMixte, NCOL, LargCol, lBetonL, nbArma, lArmaFroid)
+        Next
+
+        '--( Fin
+
+        FinTableau()
+
+    End Sub
+
+    Private Sub LigneTableauTempDalleFeuBoardMulti(iStep As Integer, myVerifFeu As cls_VerifFeuMixte, NCOL As Integer, LargCol() As Single,
+                                                   lBetonL As Boolean, nbArma As Integer, lArmaFroid As Boolean)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Ligne du tableau des température dans la dalle
+        '-----------------------------------------------------------------------------------------------------------------
+        '   iStep       [E] :   Indice du pas de temps
+        '   myVerifFeu  [E] :   Critères
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   LargCol     [E] :   Largeur des colonnes du tab
+        '   lBetonL     [E] :   Indique si béton léger
+        '   nbArma      [E] :   nombre d'armatures dans la dalle
+        '   lArmaFroid  [E] :   indique si armatures formées à froid
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim BordSup As Integer = Bordures.Tous - Bordures.Bas
+        Dim BordSupG As Integer = Bordures.Tous - Bordures.Bas - Bordures.Droite
+        Dim BordSupD As Integer = Bordures.Tous - Bordures.Bas - Bordures.Gauche
+
+        Dim Bordinf As Integer = Bordures.Tous - Bordures.Haut
+        Dim BordinfG As Integer = Bordures.Tous - Bordures.Haut - Bordures.Droite
+        Dim BordinfD As Integer = Bordures.Tous - Bordures.Haut - Bordures.Gauche
+
+        Dim EN_Feu As New cls_EurocodesFeu
+
+        '--( Lignes
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        '## Ligne 1
+
+        AddCellule(LargCol(0), BordSup, PositionTexteInCell.Centre, "R" & CStr(cls_VerifFeuAcier.TimeSteps(iStep)))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempFsStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFyAcier(myVerifFeu.TempFsStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 0), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempDalleStep(iStep, 1), Enu_TypeVariable.Temperature, 3, 2, True))
+
+        AddCellule(LargCol(1), BordSupG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordSupD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFuAcier(myVerifFeu.TempVStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+
+        For k As Integer = 0 To nbArma - 1
+            AddCellule(LargCol(1), BordSup, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempArmaStep(iStep)(k), Enu_TypeVariable.Temperature, 3, 2, True))
+        Next
+
+        '## Ligne 2
+
+        InitialiseLigneTableau(NCOL, HLIGNE)
+
+        AddCellule(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
+
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, "")
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducEyAcier(myVerifFeu.TempWStep(iStep)), Enu_TypeVariable.SansType, 3, 2, False))
+
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 0), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempDalleStep(iStep, 1), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+
+        AddCellule(LargCol(1), BordinfG, PositionTexteInCell.Centre, GetStringInUnitN(myVerifFeu.TempVcStep(iStep), Enu_TypeVariable.Temperature, 3, 2, True))
+        AddCellule(LargCol(1), BordinfD, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFckBeton(myVerifFeu.TempVcStep(iStep), lBetonL), Enu_TypeVariable.SansType, 3, 2, False))
+
+        For k As Integer = 0 To nbArma - 1
+            AddCellule(LargCol(1), Bordinf, PositionTexteInCell.Centre, GetStringInUnitN(EN_Feu.ReducFskArmatures(myVerifFeu.TempArmaStep(iStep)(k), lArmaFroid), Enu_TypeVariable.SansType, 3, 2, False))
+        Next
+    End Sub
+
+    Private Sub EnteteTableauTempFeuMixteBoardMulti(ByRef NCOL As Integer, ByRef LargCol() As Single, nbArma As Integer)
+        '-----------------------------------------------------------------------------------------------------------------
+        '   04/05/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------------------------------
+        '   Edition de la vérification détaillée des calculs au feu
+        '   Pour les poutres mixtes
+        '   Entête du tableau pour les trempératures dans la dalle, y compris les armatures
+        '-----------------------------------------------------------------------------------------------------------------
+        '   NCOL        [S] :   Nombre de colonnes dans le tableau
+        '   LargCol     [S] :   Largeur des colonnes du tab
+        '   nbArma      [E] :   Nombre de lits d'armatures
+        '-----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim BordSup As Integer = Bordures.Tous - Bordures.Bas
+        Dim BordSupG As Integer = Bordures.Tous - Bordures.Bas - Bordures.Droite
+        Dim BordSupD As Integer = Bordures.Tous - Bordures.Bas - Bordures.Gauche
+
+        Dim Bordinf As Integer = Bordures.Tous - Bordures.Haut
+        Dim BordinfG As Integer = Bordures.Tous - Bordures.Haut - Bordures.Droite
+        Dim BordinfD As Integer = Bordures.Tous - Bordures.Haut - Bordures.Gauche
+
+        '--( Initialisation
+
+        NCOL = 7 + nbArma
+
+        ReDim LargCol(1)
+
+        LargCol(0) = 10
+        LargCol(1) = 7
+
+        Const POS As Integer = 10
+
+        '--( Affichage de l'entête
+
+        AddLigneNDC("\TABLEAU " & CStr(POS), False)
+
+        '### Ligne 1
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), BordSup, PositionTexteInCell.Centre, BlocFEU("TIMESTEP"))
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-a\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-y,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-ci\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "\Sq\s\-cs\=")
+
+        AddCelluleFond(LargCol(1), BordSupG, PositionTexteInCell.Centre, "\Sq\s\-v\=")
+        AddCelluleFond(LargCol(1), BordSupD, PositionTexteInCell.Centre, "k\-u,\Sq\s\=")
+
+        For k As Integer = 1 To nbArma
+            AddCelluleFond(LargCol(1), BordSup, PositionTexteInCell.Centre, "\Sq\s\-s," & k.ToString & "\=")
+        Next
+
+        '### Ligne 2
+
+        InitialiseLigneTableau(NCOL, HLIGNEENTETE)
+
+        AddCelluleFond(LargCol(0), Bordinf, PositionTexteInCell.Centre, "")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, " ")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-E,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "k\-ci,\Sq\s\=")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-cs,\Sq\s\=")
+
+        AddCelluleFond(LargCol(1), BordinfG, PositionTexteInCell.Centre, "\Sq\s\-c\=")
+        AddCelluleFond(LargCol(1), BordinfD, PositionTexteInCell.Centre, "k\-c,\Sq\s\=")
+
+        For k As Integer = 1 To nbArma
+            AddCelluleFond(LargCol(1), Bordinf, PositionTexteInCell.Centre, "k\-y,\Sq\s," & k.ToString & "\=")
+        Next
 
     End Sub
 
@@ -9874,14 +10091,21 @@ Module Mod_NoteCalcul
         Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
         Dim lArmaFroid As Boolean = myBeam.ParamFeu.lArmaFormeeAFroid
         Dim nbArma As Integer
+        Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 2
 
         '--( Initialisation
 
         nbArma = myBeam.Dalle.LitArma.Count
 
-        '--( Traitement
+        '--( Gestion titre et saut de page
 
-        AddLigneNDC("Températures dans la dalle")
+        AddLigneNDC("\T10\U" & BlocFEU("TEMPSLAB") & "\u")
+        SauteLigne()
+            NbReq += 2
+
+        If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
+
+        '--( Affichage tableau
 
         EnteteTableauTempDalleFeuMixte(NCOL, LargCol, nbArma)
         For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)
@@ -10048,8 +10272,21 @@ Module Mod_NoteCalcul
         Dim NCOL As Integer
         Dim LargCol() As Single = Nothing
         Dim lBetonL As Boolean = myBeam.Dalle.beton.lLeger
+        Dim NbReq As Integer = (cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1) * 2
 
-        '--( Traitement
+        '--( Gestion titre et saut de page
+
+        If lAcierSeul Then
+            AddLigneNDC("\T10\U" & BlocFEU("TEMPSTEEL") & "\u")
+        Else
+            AddLigneNDC("\T10\U" & BlocFEU("TEMPPARTS") & "\u")
+        End If
+        SauteLigne()
+        NbReq += 2
+
+        If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
+
+        '--( Affichage tableau
 
         EnteteTableauTempVerifFeuMixte(NCOL, LargCol, lBoard, lAcierSeul)
         For iStep = 0 To cls_VerifFeuMixte.TimeSteps.GetUpperBound(0)

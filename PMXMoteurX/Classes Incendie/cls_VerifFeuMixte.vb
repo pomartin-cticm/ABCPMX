@@ -4,12 +4,6 @@
 
     Public Shared TimeSteps() As Decimal = {30, 60, 90, 120, 180, 240}              ' En minutes
 
-    Private Enum enuTypeInterpoleTempArma
-        Maximale
-        Moyenne
-        Axe
-    End Enum
-
 #End Region
 
 #Region " Attributs "
@@ -35,19 +29,19 @@
     Public ElancementW As Decimal                       ' Elancement de l'âme 
     Public ElancementWMax As Decimal                    ' Limite d'elancement de l'âme pour le voilement par cisaillement
 
-    Dim MethodTempArma As enuTypeInterpoleTempArma      ' Type de méthode pour le calcul de la température des armatures
-
     Dim iTraArmaAxe() As Integer                        ' Donne la tranche de la dalle dans laquelle se trouve chaque axe des armatures
     Dim kTempArma(,) As Decimal                         ' Proportion de la température de la tranche à considérer pour le calcul de la température moyenne de l'armature
+
+    Dim MethodTempArma As cls_OptionsFeu.enuTypeInterpoleTempArma
 
 #End Region
 
 #Region " Constructeurs "
 
-    Public Sub New()
+    Public Sub New(pMethodTempArma As cls_OptionsFeu.enuTypeInterpoleTempArma)
         Me.NbStep = cls_VerifFeuMixte.TimeSteps.GetUpperBound(0) + 1
         Me.RStep = -1
-        MethodTempArma = enuTypeInterpoleTempArma.Moyenne
+        MethodTempArma = pMethodTempArma
     End Sub
 
     Private Sub InitialiseClassePourCalcul(lMulti As Boolean, NbNodes As Integer, NbCombi As Integer,
@@ -147,8 +141,8 @@
 
         Dim MplRdP(,) As Decimal = Nothing      ' Moments résistants plastiques le long de la barre
         Dim zANPP(,) As Decimal = Nothing       ' Positions ANP le long de la barre
-        Dim MplRdM() As Decimal = Nothing       ' Moments résistants plastiques le long de la barre
-        Dim zANPM() As Decimal = Nothing        ' Positions ANP le long de la barre
+        Dim MplRdM(,) As Decimal = Nothing      ' Moments résistants plastiques le long de la barre
+        Dim zANPM(,) As Decimal = Nothing       ' Positions ANP le long de la barre
         Dim bEff(,) As Decimal = Nothing        ' Largeur efficace de la dalle
 
         Dim VRd0 As Decimal
@@ -221,11 +215,11 @@
 
         VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi)
 
-        If lMulti Then InitialiseCalculTempArma(myBeam.Dalle, NbTranches, EpTranche)
 
         '--( Préparation du maillage de la dalle
 
         EN_Feu.PrepareMaillageDalleTabulee(EpDalle, myBeam.Param.lGeneration1, NbTranches, EpTranche, zTranche)
+        If lMulti Then InitialiseCalculTempArma(myBeam.Dalle, NbTranches, EpTranche)
 
         If myBeam.ParamFeu.lDalleFEM Then
             ReDim TempCTranche(NbTranches - 1)
@@ -362,6 +356,9 @@
                 MaillagePropPlastiquesMixtes(myBeam, bEff, DeltaRd, 1, lGeneration1, False,
                                              TempFsStep(iSTep), TempFiStep(iSTep), TempWStep(iSTep),
                                              NbTranches, zTranche, EpTranche, TempCStep(iSTep), TempArmaStep(iSTep), MplRdP, zANPP)
+                MaillagePropPlastiquesMixtes(myBeam, bEff, DeltaRd, -1, lGeneration1, False,
+                                             TempFsStep(iSTep), TempFiStep(iSTep), TempWStep(iSTep),
+                                             NbTranches, zTranche, EpTranche, TempCStep(iSTep), TempArmaStep(iSTep), MplRdM, zANPM)
 
                 '## Vérification en flexion
 
@@ -581,6 +578,8 @@
         Dim Hw As Decimal
         Const lMixte As Boolean = True
         Dim zArma, Ztop As Decimal
+        Const Signe As Decimal = -1
+        Const lValeurRd As Boolean = True
 
         '--> Initialisation
 
@@ -613,6 +612,14 @@
             Next
 
         End If
+
+        '--> Recherche de l'axe neutre plastique
+
+        myModele.RechercheANP(Signe, zANP, lValeurRd)
+
+        '--> Moment plastique
+
+        MplRd = myModele.CalculMomentPlastique(Signe, zANP, lValeurRd)
 
     End Sub
 
@@ -790,9 +797,12 @@
         '-----------------------------------------------------------------------------------------------------------
 
         Select Case MethodTempArma
-            Case enuTypeInterpoleTempArma.Axe : Me.InitialiseCalculTempArmaAxe(myDalle, nbTranches, eTran)
-            Case enuTypeInterpoleTempArma.Maximale : Me.InitialiseCalculTempArmaAxe(myDalle, nbTranches, eTran, True)
-            Case enuTypeInterpoleTempArma.Moyenne : Me.InitialiseCalculTempArmaMoyenne(myDalle, nbTranches, eTran)
+            Case cls_OptionsFeu.enuTypeInterpoleTempArma.Axe
+                Me.InitialiseCalculTempArmaAxe(myDalle, nbTranches, eTran)
+            Case cls_OptionsFeu.enuTypeInterpoleTempArma.Maximale
+                Me.InitialiseCalculTempArmaAxe(myDalle, nbTranches, eTran, True)
+            Case cls_OptionsFeu.enuTypeInterpoleTempArma.Moyenne
+                Me.InitialiseCalculTempArmaMoyenne(myDalle, nbTranches, eTran)
         End Select
 
     End Sub
@@ -835,16 +845,17 @@
         zBord = zTop
         ReDim AsTranche(NbTranches - 1)
         ReDim AsTopTranche(NbTranches - 1)
-        zSmin = zArma - PhiS / 2
-        zSmax = zSmin + PhiS
-        AireS = Math.PI * PhiS ^ 2 / 4
         ReDim Me.kTempArma(nbArma - 1, NbTranches - 1)
 
         '--( Boucle sur les lit d'armature
 
         For iArma = 0 To nbArma - 1
             PhiS = myDalle.LitArma(iArma).PhiS
+            AireS = Math.PI * PhiS ^ 2 / 4
             zArma = zTop - myDalle.LitArma(iArma).z_s
+            zSmin = zArma - PhiS / 2
+            zSmax = zSmin + PhiS
+            zBord = zTop
 
             '##( Recherche des aires d'armatures situées au dessus des frontières de tranches
 
@@ -890,6 +901,7 @@
             For i As Integer = 1 To NbTranches - 1
                 Acum += AsTranche(i)
             Next
+            If Not IsEqual(Acum, AireS) Then GestionErreur("cls_VerifFeuMixte", "InitialiseCalculTempArmaMoyenne", "Acum<>AireS")
 
             '##( Coefficient moyen
 
@@ -967,7 +979,7 @@
 #Region " Vérification de la résistance en section "
 
     Private Sub RunCritereFlexionMixte(myBeam As cls_Poutre, iCombi As Integer, iStep As Integer, MEd(,) As Decimal,
-                                       MplRdP(,) As Decimal, MplRdM() As Decimal)
+                                       MplRdP(,) As Decimal, MplRdM(,) As Decimal)
         '----------------------------------------------------------------------------------------------------------
         '   20/10/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -1011,7 +1023,7 @@
                     If MEd(iNode, k) * SIGNEM > 0 Then
                         MRd = MplRdP(iNode, k)
                     Else
-                        MRd = MplRdM(iNode)
+                        MRd = MplRdM(iNode, k)
                     End If
 
                     Me.CritereM(iStep).EnregistreCritere(iNode, iCombi, iTravee, MEd(iNode, k), MRd)
