@@ -284,15 +284,6 @@ BLOCK CHGTU_QSURF
    indTravee      =  1
    QSurf      =  0
 
-BLOCK CHGTU_FREPAR
-   CleDic      =  G1
-   indTravee      =  1
-   F0      =  2580
-   F1      =  2580
-   xPosT0      =  0
-   xPosT1      =  12,5
-   xGaucheT      =  0
-
 BLOCK CHGTU_QSURF
    CleDic      =  G2
    indTravee      =  1
@@ -306,8 +297,8 @@ BLOCK CHGTU_QSURF
 BLOCK CHGTU_FREPAR
    CleDic      =  Q1
    indTravee      =  1
-   F0      =  1860
-   F1      =  1860
+   F0      =  1880
+   F1      =  1880
    xPosT0      =  0
    xPosT1      =  12,5
    xGaucheT      =  0
