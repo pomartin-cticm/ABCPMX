@@ -10101,7 +10101,7 @@ Module Mod_NoteCalcul
 
         AddLigneNDC("\T10\U" & BlocFEU("TEMPSLAB") & "\u")
         SauteLigne()
-            NbReq += 2
+        NbReq += 2
 
         If NbReq + nbLignes > MAXLIGNEPPAG Then SautePage()
 

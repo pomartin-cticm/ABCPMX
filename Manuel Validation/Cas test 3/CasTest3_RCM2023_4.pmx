@@ -65,7 +65,7 @@ BLOCK MAINT_BAC
    lMaintienBac            =  False
    lTheta            =  False
 BLOCK SECTION
-   Nom            =  
+   Nom            =  Nom
    lDalleBeton    =  False
    lDatabase      =  False
    typeSection    =  3
@@ -97,10 +97,10 @@ BLOCK ACIER_PROFILA
    Qualite        =  EC3
    Reduction      =  Table 3.1
    NormeProduit   =  EN 1993-1-1
-   EpMax          =  0,150000005960464
-   iBase          =  1
-   iTabStand      =  3
-   iStandard      =  4
+   EpMax          =  0,0800000056624413
+   iBase          =  0
+   iTabStand      =  13
+   iStandard      =  20
 
 BLOCK ENROBAGE_PROFILA
    lArmaConst     =  False
@@ -295,15 +295,6 @@ BLOCK CHGTU_QSURF
    indTravee      =  1
    QSurf      =  1000
 
-BLOCK CHGTU_FREPAR
-   CleDic      =  G2
-   indTravee      =  1
-   F0      =  1000
-   F1      =  1000
-   xPosT0      =  0
-   xPosT1      =  12,5
-   xGaucheT      =  0
-
 BLOCK CHGTU_QSURF
    CleDic      =  Q1
    indTravee      =  1
@@ -318,4 +309,22 @@ BLOCK CHGTU_QSURF
    CleDic      =  QC
    indTravee      =  1
    QSurf      =  0
+
+BLOCK CHGTU_FREPAR
+   CleDic      =  QC
+   indTravee      =  1
+   F0      =  1880
+   F1      =  1880
+   xPosT0      =  0
+   xPosT1      =  12,5
+   xGaucheT      =  0
+
+BLOCK CHGTU_FREPAR
+   CleDic      =  QC
+   indTravee      =  1
+   F0      =  1050
+   F1      =  1050
+   xPosT0      =  4,75
+   xPosT1      =  7,75
+   xGaucheT      =  0
 
