@@ -125,23 +125,23 @@ BLOCK ARMATURE_ENROBAGE_PROFILA
    indLit         =  1
    PhiExt         =  0,008
    NbExt          =  1
-   lActExt          =  True
+   lActExt          =  False
    PhiMil         =  0,008
    NbMil          =  0
    PhiInt         =  0,008
    NbInt          =  1
-   lActInt          =  True
+   lActInt          =  False
    zPosRatio      =  0,5
 
    indLit         =  2
    PhiExt         =  0,008
    NbExt          =  1
-   lActExt          =  True
+   lActExt          =  False
    PhiMil         =  0,008
    NbMil          =  0
    PhiInt         =  0,008
    NbInt          =  1
-   lActInt          =  True
+   lActInt          =  False
 
 BLOCK ACIER_ARMATURE_ENROBAGE_PROFILA
    Classe         =  B500
@@ -171,10 +171,10 @@ BLOCK BETON_DALLE
    Leger           =  False
    Classe         =  C25/30
    RhoC         =  2500
-   Fck            =  20
-   Fcm            =  20
-   Fctm           =  2,21041889918423
-   Ecm            =  29961,9510546403
+   Fck            =  25
+   Fcm            =  25
+   Fctm           =  2,56496392001504
+   Ecm            =  31475,8062100193
    lCrackLimit    =  True
    wk_max         =  0,0004
 
