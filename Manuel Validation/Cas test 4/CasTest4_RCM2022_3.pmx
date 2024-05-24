@@ -21,29 +21,35 @@ BLOCK POUTRE
    lTremieGauche  =  False
    lTremieDroite  =  False
    NbTravee       =  1
-   LongueurTravee =  {3/10/3}
+   LongueurTravee =  {3/14/3}
    TypeTravee     =  {0/2/1}
    TypeEtaiement  =  0
    EtaisConsG     =  False
    EtaisConsD  =  False
    NbPropping     =  0
    TypeMaintien   =  0
-   D1             =  2
-   D2             =  2
+   D1             =  3
+   D2             =  3
    Dsl1           =  1
    Dsl2           =  1
    lIntermediaire =  True
    lDefautPortee  =  True
    lDefautEnroba  =  True
    lDefautEtaiem  =  True
-   lDefautDalle   =  True
-   lCombELU    =  {True/False/False/False/False/False}
+   lDefautDalle   =  False
+   lAutoDesign    =  False
+   NombreZones    =  {1/1/1}
+   LongueurZone    =  {3/14/3}+{0/0/0}+{0/0/0}
+   EspaZone    =  {0,2/0,207/0,2}+{0,2/0,2/0,2}+{0,2/0,2/0,2}
+   EspaBacTransZone    =  {1/1/1}+{1/1/1}+{1/1/1}
+   NbGoujonTrans    =  {1/1/1}+{1/1/1}+{1/1/1}
+   lCombELU    =  {False/False/False/False/False/False}
    CoefELU    =  {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1,0/1,5/1,05/0/0}+{1,0/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
-   lCombELS    =  {True/False/False/False/False/False}
+   lCombELS    =  {False/False/False/False/False/False}
    CoefELS    =  {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    lCombELF    =  {False/False/False/False/False}
    CoefELF    =  {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
-   lCombELCU    =  {False/False}
+   lCombELCU    =  {True/False}
    CoefELCU    =  {0/0/0/1,5/1,35}+{0/0/0/0/0}
    lCombELCS    =  {False/False}
    CoefELCS    =  {0/0/0/1/1}+{0/0/0/0/0}
@@ -56,13 +62,13 @@ BLOCK MAINT_BAC
    FixnervuresTyp            =  2
    EC            =  0,5
    FixCoutureType            =  0
-   lMaintienBac            =  False
-   lTheta            =  False
+   lMaintienBac            =  True
+   lTheta            =  True
 BLOCK SECTION
    Nom            =  
    lDalleBeton    =  False
    lDatabase      =  False
-   typeSection    =  0
+   typeSection    =  2
    lUser      =  False
    f_y_fs         =  235
    f_y_w          =  235
@@ -70,16 +76,16 @@ BLOCK SECTION
 
 BLOCK PROFILA
    Gamme          =  IPE
-   NomProfile     =  IPE 300
-   ha             =  0,300
-   hb             =  0,300
-   bfs            =  0,150
-   tfs            =  0,0107
-   bfi            =  0,150
-   tfi            =  0,0107
-   rcs            =  0,015
-   rci            =  0,015
-   tw             =  0,0071
+   NomProfile     =  IPE 450
+   ha             =  0,450
+   hb             =  0,450
+   bfs            =  0,190
+   tfs            =  0,0146
+   bfi            =  0,190
+   tfi            =  0,0146
+   rcs            =  0,021
+   rci            =  0,021
+   tw             =  0,0094
    soudure_a      =  0
    typeProfil     =  0
    Platb          =  0
@@ -87,10 +93,10 @@ BLOCK PROFILA
    IndStand       =  {1/1/0/1/1/1/0/1/0/0/1/0/0/1/0}
 
 BLOCK ACIER_PROFILA
-   Nuance         =  S355
-   Qualite        =  M/ML
-   Reduction      =  EN 10025-4
-   NormeProduit   =  
+   Nuance         =  S275
+   Qualite        =  EC3
+   Reduction      =  Table 3.1
+   NormeProduit   =  EN 1993-1-1
    EpMax          =  0,150000005960464
    iBase          =  1
    iTabStand      =  3
@@ -163,17 +169,17 @@ BLOCK DALLE
 
 BLOCK BETON_DALLE
    Leger           =  False
-   Classe         =  C20/25
+   Classe         =  C25/30
    RhoC         =  2500
-   Fck            =  20
-   Fcm            =  20
-   Fctm           =  2,21041889918423
-   Ecm            =  29961,9510546403
+   Fck            =  25
+   Fcm            =  25
+   Fctm           =  2,56496392001504
+   Ecm            =  31475,8062100193
    lCrackLimit    =  True
    wk_max         =  0,0004
 
 BLOCK BAC_DALLE
-   Etiquette      =  Cofraplus_60 1.00
+   Etiquette      =  Cofraplus_60 0.75
    Producteur     =  ArcelorMittal
    lDatabase      =  True
    h_rs           =  0
@@ -181,12 +187,12 @@ BLOCK BAC_DALLE
    b_b            =  0,062
    b_t            =  0,101
    e_p            =  0,207
-   tp             =  0,001
+   tp             =  0,00075
    orientation    =  1
-   msurf          =  11,37
+   msurf          =  8,53
    fyp            =  350
    LargeurModule  =  1,035
-   Ieff           =  0,0000006008
+   Ieff           =  0,0000004437
    lPreperce      =  True
    AppuiT         =  2
    AppuiL         =  0
@@ -219,7 +225,7 @@ BLOCK CONNECTEUR_DALLE
 BLOCK OPT_CALCULS
    RH            = 50
    Norme            = 0
-   EtaW            = 1,00
+   EtaW            = 1,2
    lLarEffSimp            = False
    lCompArma            = False
    dMaxNodes            = 1,0
@@ -302,5 +308,14 @@ BLOCK CHGTU_QSURF
 BLOCK CHGTU_QSURF
    CleDic      =  QC
    indTravee      =  1
-   QSurf      =  0
+   QSurf      =  500
+
+BLOCK CHGTU_FREPAR
+   CleDic      =  QC
+   indTravee      =  1
+   F0      =  3000
+   F1      =  3000
+   xPosT0      =  5,5
+   xPosT1      =  8,5
+   xGaucheT      =  0
 
