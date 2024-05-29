@@ -300,8 +300,10 @@ Public Class cls_ProfilA
         Get
             Dim MyHw As Decimal = 0
             Select Case Me.typeProfileAcier
-                Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.LamineSlimSAB, Enum_TypeSectionAcier.LamineSlimSFB
+                Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.LamineSlimSAB
                     MyHw = Me.ha - Me.Tfs - Me.Tfi
+                Case Enum_TypeSectionAcier.LamineSlimSFB
+                    MyHw = Me.ha - Me.Tfs - Me.Tfi - Me.Plat_t
                 Case Enum_TypeSectionAcier.LamineSlimIFBA
                     MyHw = Me.ha - Me.Tfs - Me.Plat_t
                 Case Enum_TypeSectionAcier.LamineSlimIFBB
@@ -1264,7 +1266,7 @@ Public Class cls_ProfilA
         Me.NomProfile = "IPE 300"
 
         Me.Plat_b = 0.35
-        Me.Plat_t = 0.01
+        Me.Plat_t = 0.012
 
         Me.ha = Me.hb + Me.Plat_t
     End Sub

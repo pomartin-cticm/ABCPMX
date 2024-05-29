@@ -59,7 +59,7 @@ BLOCK MAINT_BAC
    lMaintienBac            =  False
    lTheta            =  False
 BLOCK SECTION
-   Nom            =  
+   Nom            =  Nom
    lDalleBeton    =  False
    lDatabase      =  False
    typeSection    =  6
@@ -91,10 +91,10 @@ BLOCK ACIER_PROFILA
    Qualite        =  EC3
    Reduction      =  Table 3.1
    NormeProduit   =  EN 1993-1-1
-   EpMax          =  0,150000005960464
-   iBase          =  1
-   iTabStand      =  3
-   iStandard      =  4
+   EpMax          =  0,0800000056624413
+   iBase          =  0
+   iTabStand      =  13
+   iStandard      =  20
 
 BLOCK ENROBAGE_PROFILA
    lArmaConst     =  False
@@ -163,7 +163,7 @@ BLOCK DALLE
 
 BLOCK BETON_DALLE
    Leger           =  False
-   Classe         =  C20/25
+   Classe         =  C25/30
    RhoC         =  2500
    Fck            =  20
    Fcm            =  20
@@ -192,10 +192,10 @@ BLOCK BAC_DALLE
    AppuiL         =  0
 
 BLOCK COFRADAL
-   Nom      =  Cofradal 200 Prefab
-   Dp      =  0,2
-   Msurf      =  2400
-   lCustom      =  False
+   Nom      =  Cofradal 200 PAC
+   Dp      =  0,138
+   Msurf      =  525
+   lCustom      =  True
 BLOCK ARMATURE_DALLE
    indLit         =  0
    EspBar         =  0,2
@@ -282,7 +282,7 @@ BLOCK OPT_CALCULS_HIVOSS
 BLOCK CHGTU_QSURF
    CleDic      =  G1
    indTravee      =  1
-   QSurf      =  0
+   QSurf      =  1000
 
 BLOCK CHGTU_QSURF
    CleDic      =  G2
@@ -292,7 +292,7 @@ BLOCK CHGTU_QSURF
 BLOCK CHGTU_QSURF
    CleDic      =  Q1
    indTravee      =  1
-   QSurf      =  0
+   QSurf      =  2500
 
 BLOCK CHGTU_QSURF
    CleDic      =  Q2

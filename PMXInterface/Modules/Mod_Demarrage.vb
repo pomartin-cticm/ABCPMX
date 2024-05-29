@@ -591,7 +591,7 @@ Public Module Mod_Demarrage
                     .Plat_b = 0
                     .Plat_t = 0
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                    .ha = hb_loc + tfi_loc
+                    .ha = hb_loc + plat_t_loc
                     .hb = hb_loc
                     .Bfs = bfs_loc
                     .Tfs = tfs_loc
@@ -602,7 +602,7 @@ Public Module Mod_Demarrage
                     .Tw = tw_loc
                     .aW = 0
                     .Plat_b = bfi_loc + 2 * 50 / 1000
-                    .Plat_t = 0.012
+                    .Plat_t = plat_t_loc
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
                     .ha = 0.7 * ha_loc
                     .hb = hb_loc
@@ -615,7 +615,7 @@ Public Module Mod_Demarrage
                     .Tw = tw_loc
                     .aW = Math.Floor(tw_loc / 2)
                     .Plat_b = bfi_loc + 2 * 50 / 1000
-                    .Plat_t = 0.012
+                    .Plat_t = plat_t_loc
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
                     .ha = 0.7 * ha_loc
                     .hb = hb_loc

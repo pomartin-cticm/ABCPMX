@@ -3589,12 +3589,26 @@ Public Module Mod_Dessins
 
         '--> Initialisation des paramètres d'affichage
         yMin = -section.ProfilA.ha
-        xMin = -Math.Max(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2
+
+        If section.lSlimFloor Then
+            Select Case section.ProfilA.typeProfileAcier
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                    xMin = -Math.Max(section.ProfilA.Bfs, Math.Max(section.ProfilA.Bfi, section.ProfilA.Plat_b)) / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                    xMin = -Math.Max(section.ProfilA.Bfs, section.ProfilA.Plat_b) / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                    xMin = -Math.Max(section.ProfilA.Bfi, section.ProfilA.Plat_b) / 2
+                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                    xMin = -Math.Max(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2
+            End Select
+        Else
+            xMin = -Math.Max(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2
+        End If
 
         xMax = -xMin
         yMax = 0
 
-        dCar = Math.Sqrt((section.ProfilA.ha ^ 2 + (section.ProfilA.Bfs + section.ProfilA.Bfi) ^ 2)) / 20
+        dCar = Math.Sqrt((section.ProfilA.ha ^ 2 + (2 * xMin) ^ 2)) / 20
 
         yMin -= dCar
         yMax += dCar
@@ -3638,55 +3652,97 @@ Public Module Mod_Dessins
             '-- Bfi --
 
             Dim iRef As Int16
-            Select Case section.ProfilA.typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym : iRef = 1
-                Case Else : iRef = 3
-            End Select
-            MyColor = StyleCouleur(iSelect, iRef)
-            MyPen.Color = MyColor
 
-            Select Case section.ProfilA.typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA 'cas où on a un plat soudé dont la largeur est supérieure aux largeur des semelles
-                    yo = -section.ProfilA.ha - dCar
-                    xo = section.ProfilA.Plat_b / 2
-                Case Else
-                    yo = -section.ProfilA.ha - dCar
-                    xo = section.ProfilA.Bfi / 2
-            End Select
+            If Not section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
 
-            ye = yo
-            xe = -xo
-
-            If lAffSymbol Then
-                If lLam Then
-                    Chaine = "b"
-
-                Else
-                    Chaine = "bfi"
-                End If
-            Else
-                Chaine = GetStringNoUnit(section.ProfilA.Bfi, Enu_TypeVariable.Dimension)
-            End If
-
-            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
-            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
-            '-- Bfs --
-
-            If Not lLam Then
-
-                MyColor = StyleCouleur(iSelect, 1)
+                Select Case section.ProfilA.typeProfileAcier
+                    Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym : iRef = 1
+                    Case Else : iRef = 3
+                End Select
+                MyColor = StyleCouleur(iSelect, iRef)
                 MyPen.Color = MyColor
 
-                yo = 0 + dCar
+                yo = -section.ProfilA.ha - dCar
+                xo = section.ProfilA.Bfi / 2
+
                 ye = yo
-                xo = section.ProfilA.Bfs / 2
                 xe = -xo
-                If lAffSymbol Then Chaine = "bfs" Else Chaine = GetStringNoUnit(section.ProfilA.Bfs, Enu_TypeVariable.Dimension)
+
+                If lAffSymbol Then
+                    If lLam Then
+                        Chaine = "b"
+
+                    Else
+                        Chaine = "bfi"
+                    End If
+                Else
+                    Chaine = GetStringNoUnit(section.ProfilA.Bfi, Enu_TypeVariable.Dimension)
+                End If
+
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             End If
+
+            '-- Bfs --
+
+            If Not section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
+                If Not lLam Then
+
+                    MyColor = StyleCouleur(iSelect, 1)
+                    MyPen.Color = MyColor
+
+                    yo = 0 + dCar
+                    ye = yo
+                    xo = section.ProfilA.Bfs / 2
+                    xe = -xo
+                    If lAffSymbol Then Chaine = "bfs" Else Chaine = GetStringNoUnit(section.ProfilA.Bfs, Enu_TypeVariable.Dimension)
+                    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
+                    AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                End If
+            End If
+
+            '--Bp--
+
+            If section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Or section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Or section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
+                'présence d'un plat soudé 
+
+                If section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Or section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then 'plat soudé en partie inférieure
+                    yo = -section.ProfilA.ha - 2 * dCar
+                    xo = section.ProfilA.Plat_b / 2
+
+                    ye = yo
+                    xe = -xo
+
+                    If lAffSymbol Then
+                        Chaine = "bp"
+                    Else
+                        Chaine = GetStringNoUnit(section.ProfilA.Plat_b, Enu_TypeVariable.Dimension)
+                    End If
+
+                    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
+                    AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                Else
+                    yo = dCar
+                    xo = section.ProfilA.Plat_b / 2
+
+                    ye = yo
+                    xe = -xo
+
+                    If lAffSymbol Then
+                        Chaine = "bp"
+                    Else
+                        Chaine = GetStringNoUnit(section.ProfilA.Plat_b, Enu_TypeVariable.Dimension)
+                    End If
+
+                    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
+                    AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, yo, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                End If
+            End If
+
 
             '-- Hw --
 
@@ -3695,9 +3751,34 @@ Public Module Mod_Dessins
                 MyColor = StyleCouleur(iSelect, 7)
                 MyPen.Color = MyColor
 
-                yo = 0 - section.ProfilA.Tfs
-                ye = -section.ProfilA.ha + section.ProfilA.Tfi
-                xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2 + dCar
+                If section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
+                    yo = 0 - section.ProfilA.Plat_t
+                Else
+                    yo = 0 - section.ProfilA.Tfs
+                End If
+
+                If section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Then
+                    ye = -section.ProfilA.ha + section.ProfilA.Tfi + section.ProfilA.Plat_t
+                ElseIf section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
+                    ye = -section.ProfilA.ha + section.ProfilA.Plat_t
+                Else
+                    ye = -section.ProfilA.ha + section.ProfilA.Tfi
+                End If
+
+                Select Case section.ProfilA.typeProfileAcier
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                        xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2 + dCar
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                        xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Plat_b) / 2 + dCar
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                        xo = -Math.Min(section.ProfilA.Plat_b, section.ProfilA.Bfi) / 2 + dCar
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                        xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2 + dCar
+                    Case Else 'PRS
+                        xo = -Math.Min(section.ProfilA.Bfs, section.ProfilA.Bfi) / 2 + dCar
+                End Select
+
+
                 xe = xo
 
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, True)
@@ -3707,53 +3788,127 @@ Public Module Mod_Dessins
 
             '-- Tfi --
 
-            Select Case section.ProfilA.typeProfileAcier
-                Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym : iRef = 2
-                Case Else : iRef = 4
-            End Select
-            MyColor = StyleCouleur(iSelect, iRef)
-            MyPen.Color = MyColor
+            If Not section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then
 
-            yo = -section.ProfilA.ha - dCar / 2
-            ye = -section.ProfilA.ha
-            xo = section.ProfilA.Bfi / 2 - dCar
-            xe = xo
-            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
-
-            yo = -section.ProfilA.ha + section.ProfilA.Tfi
-            ye = yo + dCar
-            AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
-            If lAffSymbol Then
-                If lLam Then Chaine = "tf" Else Chaine = "tfi"
-            Else
-                Chaine = GetStringInUnit(section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, 1, False)
-            End If
-            AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
-
-            '-- Tfs --
-
-            If Not lLam Then
-
-                MyColor = StyleCouleur(iSelect, 2)
+                Select Case section.ProfilA.typeProfileAcier
+                    Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym : iRef = 2
+                    Case Else : iRef = 4
+                End Select
+                MyColor = StyleCouleur(iSelect, iRef)
                 MyPen.Color = MyColor
 
-                yo = 0 + dCar / 2
-                ye = 0
-                xo = Math.Max(section.ProfilA.Bfs - section.ProfilA.Bfi / 2 - dCar / 2, section.ProfilA.Tw / 2 + section.ProfilA.Rcs + dCar / 2)
+                If section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Then
+                    yo = -section.ProfilA.ha + section.ProfilA.Plat_t - dCar / 2
+                    ye = -section.ProfilA.ha + section.ProfilA.Plat_t
+                Else
+                    yo = -section.ProfilA.ha - dCar / 2
+                    ye = -section.ProfilA.ha
+                End If
+
+                xo = section.ProfilA.Bfi / 2 - dCar
                 xe = xo
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
 
-                yo = 0 - section.ProfilA.Tfs
-                ye = yo - dCar
+                If section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Then
+                    yo = -section.ProfilA.ha + section.ProfilA.Plat_t + section.ProfilA.Tfi
+                    ye = yo + dCar
+                Else
+                    yo = -section.ProfilA.ha + section.ProfilA.Tfi
+                    ye = yo + dCar
+                End If
+
                 AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
-                If lAffSymbol Then Chaine = "tfs" Else Chaine = GetStringInUnit(section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, 1, False)
-                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+                If lAffSymbol Then
+                    If lLam Then Chaine = "tf" Else Chaine = "tfi"
+                Else
+                    Chaine = GetStringInUnit(section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 3, 1, False)
+                End If
+                AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
             End If
 
-            '-- R --
+            '-- Tfs --
 
-            If lLam Then
+            If Not section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
+
+                If Not lLam Then
+
+                    MyColor = StyleCouleur(iSelect, 2)
+                    MyPen.Color = MyColor
+
+                    yo = 0 + dCar / 2
+                    ye = 0
+                    xo = section.ProfilA.Bfs / 4 + dCar / 2
+                    xe = xo
+                    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
+
+                    yo = 0 - section.ProfilA.Tfs
+                    ye = yo - dCar
+                    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+                    If lAffSymbol Then Chaine = "tfs" Else Chaine = GetStringInUnit(section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 3, 1, False)
+                    AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                End If
+
+            End If
+
+            '--tp--
+
+            If section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Or section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Or section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB Then
+                'présence d'un plat soudé 
+
+                If section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB Or section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA Then 'plat soudé en partie inférieure
+                    yo = -section.ProfilA.ha - dCar / 2
+                    ye = -section.ProfilA.ha
+
+                    xo = section.ProfilA.Plat_b / 2 - dCar
+                    xe = xo
+
+                    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
+
+                    yo = -section.ProfilA.ha + section.ProfilA.Plat_t
+                    ye = yo + dCar
+
+                    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+                    If lAffSymbol Then
+                        If lLam Then Chaine = "tp" Else Chaine = "tp"
+                    Else
+                        Chaine = GetStringInUnit(section.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 3, 1, False)
+                    End If
+                    AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                Else
+                    yo = dCar / 2
+                    ye = 0
+
+                    xo = section.ProfilA.Plat_b / 2 - dCar
+                    xe = xo
+
+                    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, False, True)
+
+                    yo = -section.ProfilA.Plat_t
+                    ye = yo - dCar
+
+                    AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)
+
+                    ye -= dCar
+
+                    If lAffSymbol Then
+                        If lLam Then Chaine = "tp" Else Chaine = "tp"
+                    Else
+                        Chaine = GetStringInUnit(section.ProfilA.Plat_t, Enu_TypeVariable.Dimension, 3, 1, False)
+                    End If
+                    AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xo, ye, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
+
+                End If
+
+            End If
+
+
+
+                '-- R --
+
+                If lLam Then
 
                 MyColor = StyleCouleur(iSelect, 6)
                 MyPen.Color = MyColor
@@ -3779,7 +3934,7 @@ Public Module Mod_Dessins
 
             xo = -section.ProfilA.Tw / 2
             xe = xo - dCar / 2
-            yo = -(section.ProfilA.ha / 2 - section.ProfilA.Tfs - section.ProfilA.Rcs) * 0.8
+            yo = -section.ProfilA.Tfs - section.ProfilA.Rcs - 2 * dCar
             ye = yo
 
             AddFleche(MyGr, MyPen, xo, yo, xe, ye, MyParAff, True, False)

@@ -3993,7 +3993,7 @@ Public Class cls_Poutre
 
         Dim RH As Decimal = Me.Param.RH
         Dim TimeT As Decimal = Me.Param.AgeT
-        Dim H0Dalle As Decimal = Me.Dalle.NotionalSizeH0(Me.Section.ProfilA.Bfs)
+        Dim H0Dalle As Decimal = Me.Dalle.NotionalSizeH0(Me.Section.ProfilA)
         Dim H0Enrob As Decimal = Me.Section.NotionalSizeEnrobage
 
         If lMixte Then

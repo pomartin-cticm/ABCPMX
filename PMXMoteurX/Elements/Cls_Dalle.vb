@@ -147,35 +147,51 @@
     End Function
 
 
-    Public Function NotionalSizeH0(Bfs As Decimal) As Decimal
+    Public Function NotionalSizeH0(MyProfilA As cls_ProfilA) As Decimal
         '---------------------------------------------------------------------------------------
         '   17/05/2023 :    Création - POM
         '---------------------------------------------------------------------------------------
         '   Renvoie la dimension h0 d'une dalle
         '---------------------------------------------------------------------------------------
-        '   Bfs     [E] :   Largeur de semelle supérieure
+        '  MyProfil      [E] :   Profil Acier portant la dalle
         '---------------------------------------------------------------------------------------
 
         Dim MyH0 As Decimal
         Dim Ac, perimU As Decimal
+        Dim b As Decimal 'Largeur de la plaque à l'interface de la dalle béton
+
+        perimU = 1 'Rajout GUD: au cas où pour éviter de diviser par 0
+
+        Select Case MyProfilA.typeProfileAcier
+            Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
+                b = MyProfilA.Bfs
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                b = MyProfilA.Plat_b
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                b = MyProfilA.Bfi
+        End Select
 
         Select Case Me.type
-            Case Enum_TypeDalle.Pleine
-                Ac = Me.Beff * Me.Ep_td + Me.Ep_th * (Bfs + Me.Ep_th * Math.Tan(Me.ThetaRd))
-                'perimU = 2 * Me.Beff - Bfs +  Me.Ep_th / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 
-                perimU = 2 * Me.Beff - Bfs + 2 * Me.Ep_th / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
+            Case Enum_TypeDalle.Pleine 'dans le cas d'une slimfloor, th = 0
+                Ac = Me.Beff * Me.Ep_td + Me.Ep_th * (b + Me.Ep_th * Math.Tan(Me.ThetaRd))
+                perimU = 2 * Me.Beff - b + 2 * Me.Ep_th / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
 
-            Case Enum_TypeDalle.Mixte 'Ne faut-il pas différencier le cas du bac perpendiculaire et // ?
+            Case Enum_TypeDalle.Mixte
                 If Me.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
                     Ac = Me.Beff * (Me.EpaisseurActive + Bac.Hp * Bac.LargeurBmoyenne / Bac.Ep)
                     perimU = Me.Beff
-                Else 'RAJOUT GUD: j'ai rajouter le IF + les formules du ELSE
+                Else
                     Ac = Me.Beff * Me.EpaisseurActive
                     perimU = Me.Beff
                 End If
-            Case Enum_TypeDalle.PartiellementPrefabriquee 'Rajout GUD: il manquait ce cas (à mon avis il vaut mieux différencier ce cas de la dalle pleine, au cas où la valeur de theta n'aurait pas été initialisée à 0 pour le cas de la dalle préfa)
+
+            Case Enum_TypeDalle.PartiellementPrefabriquee
                 Ac = Me.Beff * Me.Ep_td
-                perimU = 2 * Me.Beff - Bfs
+                perimU = 2 * Me.Beff - b
+
+            Case Enum_TypeDalle.CompletementPrefabriquee 'dans ce cas, la section est nécessairement une slimfloor
+                Ac = Me.Beff * Me.EpaisseurActive + b * Me.Cofradal.dp
+                perimU = 2 * Me.Beff - b
 
         End Select
 

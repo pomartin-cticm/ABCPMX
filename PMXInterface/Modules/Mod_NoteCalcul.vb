@@ -951,7 +951,7 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("THICKNESS_ABOVE_DECK") & TABAFF & "t\-c\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.EpaisseurActive, Enu_TypeVariable.Dimension, 4, 0, True))
         End Select
 
-        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA.Bfs), Enu_TypeVariable.Dimension, 4, 0, True))
+        AddLigneNDC(TABW2 & BlocG("NOTIONALSIZE") & TABAFF & "h\-0\=" & TABEGAL & GetStringInUnit(MyBeam.Dalle.NotionalSizeH0(MyBeam.Section.ProfilA), Enu_TypeVariable.Dimension, 4, 0, True))
 
         If lMixte Then
             If (Not MyBeam.lTraveeConsoleGauche) Then
