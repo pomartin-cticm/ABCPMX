@@ -3839,6 +3839,9 @@ Module Mod_NoteCalcul
 
         '# Moment fléchissant
 
+        stringMEdG = GetStringInUnit(MEdG, Enu_TypeVariable.Effort, 3, 2, False)
+        stringMEdD = GetStringInUnit(MEdD, Enu_TypeVariable.Effort, 3, 2, False)
+
         If iNode = iNodeMinMoment Or iNode = iNodeMaxMoment Then
             If MEdG = Mmin Or MEdG = Mmax Then
                 stringMEdG = "\G" & stringMEdG & "\g" 'on met le texte en gras
