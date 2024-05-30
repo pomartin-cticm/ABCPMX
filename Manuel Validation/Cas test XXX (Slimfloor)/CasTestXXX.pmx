@@ -14,22 +14,22 @@ BLOCK IDENTIFICATION
 BLOCK POUTRE
    BeaIden           =  Beam B#1
    Commentaire       =  
-   ConsoleGauche  =  True
-   ConsoleDroite  =  True
+   ConsoleGauche  =  False
+   ConsoleDroite  =  False
    DalleContGauche  =  False
    DalleContDroite  =  False
    lTremieGauche  =  False
    lTremieDroite  =  False
    NbTravee       =  1
-   LongueurTravee =  {3/10/3}
+   LongueurTravee =  {3/6/3}
    TypeTravee     =  {0/2/1}
    TypeEtaiement  =  0
    EtaisConsG     =  False
    EtaisConsD  =  False
    NbPropping     =  0
-   TypeMaintien   =  2
-   D1             =  2
-   D2             =  2
+   TypeMaintien   =  0
+   D1             =  6
+   D2             =  6
    Dsl1           =  1
    Dsl2           =  1
    lIntermediaire =  True
@@ -48,12 +48,6 @@ BLOCK POUTRE
    lCombELCS    =  {False/False}
    CoefELCS    =  {0/0/0/1/1}+{0/0/0/0/0}
 
-BLOCK MAINTIENS
-   indTravee      =  1
-   xloc           =  5
-   lMaintSemSup   =  True
-   lMaintSemInf   =  True
-
 BLOCK MAINT_BAC
    NT            =  2
    M            =  2
@@ -68,39 +62,39 @@ BLOCK SECTION
    Nom            =  Nom
    lDalleBeton    =  False
    lDatabase      =  False
-   typeSection    =  0
+   typeSection    =  6
    lUser      =  False
    f_y_fs         =  235
    f_y_w          =  235
    f_y_fi         =  235
 
 BLOCK PROFILA
-   Gamme          =  IPE
-   NomProfile     =  IPE 450
-   ha             =  0,450
-   hb             =  0,450
-   bfs            =  0,190
-   tfs            =  0,0146
-   bfi            =  0,190
-   tfi            =  0,0146
-   rcs            =  0,021
-   rci            =  0,021
-   tw             =  0,0094
+   Gamme          =  HE
+   NomProfile     =  HE 300 B
+   ha             =  0,15
+   hb             =  0,300
+   bfs            =  0,300
+   tfs            =  0,019
+   bfi            =  0
+   tfi            =  0
+   rcs            =  0,027
+   rci            =  0
+   tw             =  0,011
    soudure_a      =  0
-   typeProfil     =  0
-   Platb          =  0
-   Platt          =  0
+   typeProfil     =  4
+   Platb          =  0,5
+   Platt          =  0,012
    IndStand       =  {1/1/0/1/1/1/0/1/0/0/1/0/0/1/0}
 
 BLOCK ACIER_PROFILA
    Nuance         =  S355
-   Qualite        =  M/ML
-   Reduction      =  EN 10025-4
-   NormeProduit   =  EN 10025-4 : 2019
-   EpMax          =  0,150000005960464
-   iBase          =  1
-   iTabStand      =  3
-   iStandard      =  4
+   Qualite        =  EC3
+   Reduction      =  Table 3.1
+   NormeProduit   =  EN 1993-1-1
+   EpMax          =  0,0800000056624413
+   iBase          =  0
+   iTabStand      =  13
+   iStandard      =  20
 
 BLOCK ENROBAGE_PROFILA
    lArmaConst     =  False
@@ -160,16 +154,16 @@ BLOCK BETON_ENROBAGE_PROFILA
    wk_max         =  0,0004
 
 BLOCK DALLE
-   Type           =  0
-   td             =  0,12
-   th             =  0,04
+   Type           =  3
+   td             =  0,25
+   th             =  0
    Beff           =  1
    preDalle_ep    =  0,06
    preDalle_tjoi  =  0,05
 
 BLOCK BETON_DALLE
    Leger           =  False
-   Classe         =  C20/25
+   Classe         =  C25/30
    RhoC         =  2500
    Fck            =  20
    Fcm            =  20
@@ -194,21 +188,21 @@ BLOCK BAC_DALLE
    LargeurModule  =  1,035
    Ieff           =  0,0000006008
    lPreperce      =  True
-   AppuiT         =  2
+   AppuiT         =  0
    AppuiL         =  0
 
 BLOCK COFRADAL
    Nom      =  Cofradal 200 PAC
-   Dp      =  0,125
+   Dp      =  0,138
    Msurf      =  525
-   lCustom      =  False
+   lCustom      =  True
 BLOCK ARMATURE_DALLE
    indLit         =  0
    EspBar         =  0,2
    PhiS           =  0,012
    z_s            =  0,032
    n_s            =  0
-   lActive        =  True
+   lActive        =  False
 
 BLOCK ACIER_ARMATURE_DALLE
    Classe         =  B500
@@ -225,7 +219,7 @@ BLOCK CONNECTEUR_DALLE
 BLOCK OPT_CALCULS
    RH            = 50
    Norme            = 0
-   EtaW            = 1,2
+   EtaW            = 1,00
    lLarEffSimp            = False
    lCompArma            = False
    dMaxNodes            = 1,0
@@ -272,7 +266,7 @@ BLOCK OPT_CALCULS_GAMMA
    Psi2_Q2       = 0,3
 
 BLOCK OPT_CALCULS_HIVOSS
-   lHivossMethod = False
+   lHivossMethod = True
    RatioQ        = 0,1
    ChoixQ        = 0
    UtilPlancher  = 4
@@ -287,23 +281,8 @@ BLOCK OPT_CALCULS_HIVOSS
 
 BLOCK CHGTU_QSURF
    CleDic      =  G1
-   indTravee      =  0
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G1
    indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G1
-   indTravee      =  2
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G2
-   indTravee      =  0
-   QSurf      =  0
+   QSurf      =  1000
 
 BLOCK CHGTU_QSURF
    CleDic      =  G2
@@ -311,56 +290,9 @@ BLOCK CHGTU_QSURF
    QSurf      =  0
 
 BLOCK CHGTU_QSURF
-   CleDic      =  G2
-   indTravee      =  2
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q1
-   indTravee      =  0
-   QSurf      =  0
-
-BLOCK CHGTU_FREPAR
-   CleDic      =  Q1
-   indTravee      =  0
-   F0      =  0
-   F1      =  1000
-   xPosT0      =  0
-   xPosT1      =  3
-   xGaucheT      =  0
-
-BLOCK CHGTU_QSURF
    CleDic      =  Q1
    indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_FREPAR
-   CleDic      =  Q1
-   indTravee      =  1
-   F0      =  1000
-   F1      =  3000
-   xPosT0      =  0
-   xPosT1      =  10
-   xGaucheT      =  3
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q1
-   indTravee      =  2
-   QSurf      =  0
-
-BLOCK CHGTU_FREPAR
-   CleDic      =  Q1
-   indTravee      =  2
-   F0      =  3000
-   F1      =  5000
-   xPosT0      =  0
-   xPosT1      =  3
-   xGaucheT      =  13
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q2
-   indTravee      =  0
-   QSurf      =  0
+   QSurf      =  2500
 
 BLOCK CHGTU_QSURF
    CleDic      =  Q2
@@ -368,22 +300,7 @@ BLOCK CHGTU_QSURF
    QSurf      =  0
 
 BLOCK CHGTU_QSURF
-   CleDic      =  Q2
-   indTravee      =  2
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  QC
-   indTravee      =  0
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
    CleDic      =  QC
    indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  QC
-   indTravee      =  2
    QSurf      =  0
 
