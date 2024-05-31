@@ -94,9 +94,9 @@ BLOCK PROFILA
 
 BLOCK ACIER_PROFILA
    Nuance         =  S355
-   Qualite        =  M/ML
-   Reduction      =  EN 10025-4
-   NormeProduit   =  EN 10025-4 : 2019
+   Qualite        =  EC3
+   Reduction      =  Table 3.1
+   NormeProduit   =  EN 1993-1-1
    EpMax          =  0,150000005960464
    iBase          =  1
    iTabStand      =  3
