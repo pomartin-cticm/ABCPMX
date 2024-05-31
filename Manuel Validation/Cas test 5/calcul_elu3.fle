@@ -1,0 +1,50 @@
+
+   RDM - Flexion
+   Calcul des Structures par la Méthode des Éléments Finis
+
+   Version  - 7.04 - 5 mars 2020
+
+   Utilisateur : Guillaume
+
+$debut du fichier
+$version
+7.04
+$SI unites
+$nom du fichier
+calcul_elu3.fle
+$date
+31/5/2024
+$materiau
+nom Acier
+mod 2.10000E+011
+mas 8.00000E+003
+lim 2.50000E+008
+///
+$noeuds
+4
+1  0.00000000000E+000
+2  3.00000000000E+000
+3  1.30000000000E+001
+4  1.60000000000E+001
+$sections
+1
+noe 1 4
+nom IPN
+des 80
+air  7.57285500000E-004
+izz  7.76696160000E-007
+vys  4.00000000000E-002
+vyi  4.00000000000E-002
+///
+$liaisons
+2
+sup 2 2
+sup 2 3
+$gpesanteur
+10.000
+$charges
+trapeze 3 4 -4.50000000000E+003 -7.50000000000E+003
+trapeze 1 2  0.00000000000E+000 -1.50000000000E+003
+trapeze 1 4 -9.29000000000E+003 -9.29000000000E+003
+////
+$fin du fichier
