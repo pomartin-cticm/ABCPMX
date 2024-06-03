@@ -1555,6 +1555,18 @@ Module Mod_NoteCalcul
                 AddLigneNDC(TABW2 & BlocG("TYPE_RES") & TABAFF & BlocG("POINT_RES"))
 
                 SauteLigne()
+
+                Dim nbMaintiensTot As Integer
+
+                iTraveeDeb = MyBeam.IndicePremiereTravee
+                iTraveeFin = MyBeam.IndiceDerniereTravee
+
+                For i As Integer = iTraveeDeb To iTraveeFin
+                    nbMaintiensTot += MyBeam.Maintiens(i).Count
+                Next
+
+                If nbLignes + 2.3 + nbMaintiensTot * 1.3 > MAXLIGNEPPAG Then SautePage()
+
                 AddLigneNDC("\TABLEAU 29")
                 InitialiseLigne(3, HLIGNE, True)
                 AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("SPAN"))
@@ -1562,9 +1574,6 @@ Module Mod_NoteCalcul
                 AddCelluleFond(LC2, Bordures.Tous, PositionTexteInCell.Centre, BlocG("LATERALR"))
 
                 Dim lDerniereTravee As Boolean 'Permet de gérer la séparation par une ligne grise entre deux travées comportant des maintiens latéraux consévutives
-
-                iTraveeDeb = MyBeam.IndicePremiereTravee
-                iTraveeFin = MyBeam.IndiceDerniereTravee
 
                 Dim iTraveeAffichee As Integer = 1
 

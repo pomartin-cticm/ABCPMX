@@ -174,6 +174,14 @@ Public Class cls_ProfilA
                     pInertieW = Tf * Bf ^ 3 / 24 * (ha - Tf) ^ 2
 
                 Case Enum_TypeSectionAcier.PRS_Bi_Sym, Enum_TypeSectionAcier.PRS_Mono_Sym
+                    Dim Ifz_s, Ifz_i As Decimal
+
+                    Ifz_s = Me.Bfs ^ 3 * Me.Tfs / 12
+                    Ifz_i = Me.Bfi ^ 3 * Me.Tfi / 12
+
+                    pInertieW = Ifz_s * Ifz_i / (Ifz_s + Ifz_i) * (Me.ha - Me.Tfs / 2 - Me.Tfi / 2) ^ 2
+
+                    '--> Formule issue de l'article Métal&Tech "Caractéristiques de sections en I mono-symétriques", M. Lebastard
 
             End Select
 

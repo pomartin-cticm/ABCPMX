@@ -13,7 +13,7 @@ $SI unites
 $nom du fichier
 calcul_q#2.fle
 $date
-31/5/2024
+3/6/2024
 $materiau
 nom Acier
 mod 2.10000E+011
@@ -29,12 +29,12 @@ $noeuds
 $sections
 1
 noe 1 4
-nom IPN
-des 80
-air  7.57285500000E-004
-izz  7.76696160000E-007
-vys  4.00000000000E-002
-vyi  4.00000000000E-002
+nom IPE
+des 450
+air  9.88207760000E-003
+izz  3.37429418090E-004
+vys  2.25000000000E-001
+vyi  2.25000000000E-001
 ///
 $liaisons
 2
