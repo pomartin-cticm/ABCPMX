@@ -106,19 +106,21 @@ Public Class cls_Section
 
         'Déclaration
         Dim classeLoc As Integer
-        Dim zAN As Decimal
+        Dim zANE, zANP As Decimal
         Dim lFlexionPositive As Boolean = True
         Dim lBetonSlimfloor As Boolean = False
         Dim lBetonEnrobage As Boolean = False
 
         'Initialisation
         If lCompressionPure Then
-            zAN = -1000 * Me.ProfilA.ha
+            zANE = -1000 * Me.ProfilA.ha
+            zANP = -Me.ProfilA.ha
         Else
-            zAN = Me.ProfilA.zCdG
+            zANE = Me.ProfilA.zCdG
+            zANP = Me.ProfilA.zANP
         End If
 
-        classeLoc = Me.ClasseSection(zAN, zAN, lFlexionPositive, lBetonSlimfloor, lBetonEnrobage, lG1_EN)
+        classeLoc = Me.ClasseSection(zANP, zANE, lFlexionPositive, lBetonSlimfloor, lBetonEnrobage, lG1_EN)
 
         Return classeLoc
     End Function

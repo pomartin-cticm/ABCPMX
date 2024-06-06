@@ -5172,7 +5172,12 @@ Public Class cls_Poutre
 
                     Else
 
-                        m_zANE(iNode, k) = zTop + (zBot - zTop) / (SigmaBot - SigmaTop) * (0 - SigmaBot)
+                        'm_zANE(iNode, k) = zTop + (zBot - zTop) / (SigmaBot - SigmaTop) * (0 - SigmaBot)
+
+                        ' /!\ GUD: FORMULE A VERIFIER, J'AI CHANGE CAR DONNAIT VALEURS FAUSSES /!\
+
+                        m_zANE(iNode, k) = (SigmaBot * zTop - SigmaTop * zBot) / (SigmaBot - SigmaTop)
+
                     End If
 
                 Next

@@ -582,6 +582,10 @@ Public Class cls_ProfilA
 
     End Sub
 
+    ''' <summary>
+    ''' Renvoi le CdG du profil acier seul
+    ''' </summary>
+    ''' <returns></returns>
     Public ReadOnly Property zCdG As Decimal
         Get
             Dim zANE As Decimal
@@ -590,6 +594,19 @@ Public Class cls_ProfilA
             'ProprietesMyy(1, False, 1, zANE, Me.pInertieY, MelRd, zANP, MplRd)
             Me.ProprietesElastiques(1, zANE, Me.pInertieY)
             Return zANE
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Renvoi la positino de l'axe neutre plastique du profil acier seul
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property zANP As Decimal
+        Get
+            Dim m_zANE, m_InertieY, MelRd_Y, MplRd_Y, m_zANP As Decimal
+            Me.ProprietesMyy(1, False, 1, m_zANE, m_InertieY, MelRd_Y, m_zANP, MplRd_Y)
+
+            Return m_zANP
         End Get
     End Property
 
