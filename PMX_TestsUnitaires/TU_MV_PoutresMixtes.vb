@@ -429,7 +429,7 @@ Imports PMXMoteur2
         '--> h0
 
         Valeur = h0
-        ValRef = myPoutre.Dalle.NotionalSizeH0(myPoutre.Section.ProfilA.Bfs)
+        ValRef = myPoutre.Dalle.NotionalSizeH0(myPoutre)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Phi RH
@@ -1886,7 +1886,7 @@ Imports PMXMoteur2
         '--> h0
 
         Valeur = h0
-        ValRef = myPoutre.Dalle.NotionalSizeH0(myPoutre.Section.ProfilA.Bfs)
+        ValRef = myPoutre.Dalle.NotionalSizeH0(myPoutre)
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Phi RH

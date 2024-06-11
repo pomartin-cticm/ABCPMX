@@ -1361,9 +1361,42 @@ Public Class cls_Poutre
 
 #Region " Calculs largeur efficace de la dalle "
 
-    'Public Function TableauBeff() As Decimal()
+    ''' <summary>
+    ''' Renvoi la largeur de dalle disponible
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property LargeurDalleDispo As Decimal
+        Get
+            Dim b1, b2 As Decimal
+            If lIntermediaire Then 'poutre intermédiaire
+                If lTremieGauche Then
+                    b1 = Math.Min(DistanceDsl1, EntraxeD1 / 2)
+                Else
+                    b1 = EntraxeD1 / 2
+                End If
 
-    'End Function
+                If lTremieDroite Then
+                    b2 = Math.Min(DistanceDsl2, EntraxeD2 / 2)
+                Else
+                    b2 = EntraxeD2 / 2
+                End If
+
+            Else 'poutre de rive
+
+                b1 = EntraxeD1 'pas de trémie gauche pour les poutres de rive
+
+                If lTremieDroite Then
+                    b2 = Math.Min(DistanceDsl2, EntraxeD2 / 2)
+                Else
+                    b2 = EntraxeD2 / 2
+                End If
+
+            End If
+
+            Return b1 + b2
+
+        End Get
+    End Property
 
     Public Function BeffDalle(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean, Optional TypeLargeur As EnuTypeLargeurParticipante = EnuTypeLargeurParticipante.LargeurTotale, Optional ByRef LargeursParticipantes(,) As Decimal = Nothing) As Decimal
 
@@ -3993,7 +4026,7 @@ Public Class cls_Poutre
 
         Dim RH As Decimal = Me.Param.RH
         Dim TimeT As Decimal = Me.Param.AgeT
-        Dim H0Dalle As Decimal = Me.Dalle.NotionalSizeH0(Me.Section.ProfilA)
+        Dim H0Dalle As Decimal = Me.Dalle.NotionalSizeH0(Me)
         Dim H0Enrob As Decimal = Me.Section.NotionalSizeEnrobage
 
         If lMixte Then

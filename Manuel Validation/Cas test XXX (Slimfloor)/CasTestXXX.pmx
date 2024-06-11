@@ -157,7 +157,6 @@ BLOCK DALLE
    Type           =  3
    td             =  0,25
    th             =  0
-   Beff           =  1
    preDalle_ep    =  0,06
    preDalle_tjoi  =  0,05
 

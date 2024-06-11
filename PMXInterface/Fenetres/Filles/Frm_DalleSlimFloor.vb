@@ -16,6 +16,7 @@ Public Class Frm_DalleSlimFloor
     Dim ClasseBetonLeger() As String = cls_Beton.TabClasseBetonLeger
     Dim ClasseAcierArma() As String = cls_AcierArmature.tabClasseAcierArma
 
+    Public MyPoutreLoc As New cls_Poutre
     Public MyDalleLoc As New cls_Dalle
     Public MySectionLoc As New cls_Section
     'Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
@@ -190,8 +191,13 @@ Public Class Frm_DalleSlimFloor
 
     Private Sub InitialisationVariablesLocales()
 
-        cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
-        cls_Section.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySectionLoc)
+        'cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
+        'cls_Section.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Section, MySectionLoc)
+
+        cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
+
+        MyDalleLoc = MyPoutreLoc.Dalle
+        MySectionLoc = MyPoutreLoc.Section
 
         lCofraPlus220 = MyDalleLoc.Bac.lCofraplus220
 
@@ -494,7 +500,7 @@ Public Class Frm_DalleSlimFloor
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
+                     MyPoutreLoc, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================

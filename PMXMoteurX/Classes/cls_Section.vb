@@ -120,7 +120,7 @@ Public Class cls_Section
             zANP = Me.ProfilA.zANP
         End If
 
-        classeLoc = Me.ClasseSection(zANP, zANE, lFlexionPositive, lBetonSlimfloor, lBetonEnrobage, lG1_EN)
+        classeLoc = Me.ClasseSection(zANP, zANE, lFlexionPositive, lBetonSlimfloor, lBetonEnrobage, lG1_EN, 0, False, lCompressionPure)
 
         Return classeLoc
     End Function
@@ -1420,7 +1420,7 @@ Public Class cls_Section
     ''' <returns></returns>
     Public Function ClasseSection(zANP As Decimal, zANE As Decimal, lFlexionPositive As Boolean,
                                   lBetonSlimfloor As Boolean, lBetonEnrobage As Boolean, lG1_EN As Boolean, Optional td As Decimal = 0,
-                                  Optional lCalculFeu As Boolean = False) As Integer
+                                  Optional lCalculFeu As Boolean = False, Optional lCompressionPure As Boolean = False) As Integer
 
         '----------------------------------------------------------------------------------------------------------
         '   10/10/23 :  Création - GUD
@@ -1462,7 +1462,7 @@ Public Class cls_Section
 
         ' --> Calcul classe semelle supérieure
 
-        lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANP) 'On regarde si la semelle supérieure du profilé est comprimée ou non
+        lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANP) Or lCompressionPure 'On regarde si la semelle supérieure du profilé est comprimée ou non
         classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfsup, tfsup, epsilon_fsup) 'calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
 
         If lBetonSlimfloor Then 'reduction possible dans le cas où on a une section slimfloor et où on prend en compte le béton
@@ -1475,7 +1475,7 @@ Public Class cls_Section
 
         ' --> Calcul classe semelle inférieure
 
-        lSemelleInfComprimeeLoc = Not lFlexionPositive 'on regarde si la semelle inférieure du profilé est comprimée
+        lSemelleInfComprimeeLoc = Not lFlexionPositive Or lCompressionPure 'on regarde si la semelle inférieure du profilé est comprimée
         classeSemellesInf = ClasseSemelle(lSemelleInfComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfinf, tfinf, epsilon_finf) 'calcul la classe de la semelle sup en fonction de si elle est comprimée et du ratio c/t
 
         ' --> Calcul classe semelle plat inférieur dans le cas d'un SFB
@@ -1500,7 +1500,7 @@ Public Class cls_Section
             '---------------------------------------------
 
             ' --> Calcul classe semelle supérieure
-            lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANE)
+            lSemelleSupComprimeeLoc = lSemelleSupComprimee(lFlexionPositive, zANE) Or lCompressionPure
             classeSemellesSup = ClasseSemelle(lSemelleSupComprimeeLoc, lBetonSlimfloor, lBetonEnrobage, cfsup, tfsup, epsilon_fsup)
 
             ' --> Calcul classe semelle inférieure inchangé

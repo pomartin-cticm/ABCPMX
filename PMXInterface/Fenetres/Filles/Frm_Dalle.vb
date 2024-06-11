@@ -15,6 +15,7 @@ Public Class Frm_Dalle
     Dim ClasseBetonLeger() As String = cls_Beton.TabClasseBetonLeger
     Dim ClasseAcierArma() As String = cls_AcierArmature.tabClasseAcierArma
 
+    Public MyPoutreLoc As New cls_Poutre
     Public MyDalleLoc As New cls_Dalle
     'Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
     Const kADJUST As Decimal = 0.95
@@ -187,7 +188,10 @@ Public Class Frm_Dalle
 
     Private Sub InitialisationVariablesLocales()
 
-        cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
+        'cls_Dalle.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours).Dalle, MyDalleLoc)
+        cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
+
+        MyDalleLoc = MyPoutreLoc.Dalle
 
         lCofraPlus220 = MyDalleLoc.Bac.lCofraplus220
 
@@ -570,7 +574,7 @@ Public Class Frm_Dalle
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                     MyDalleLoc, MyProjet.Poutres(MyProjet.IndEnCours).Section, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
+                    MyPoutreLoc, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================

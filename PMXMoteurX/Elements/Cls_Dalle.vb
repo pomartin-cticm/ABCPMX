@@ -27,7 +27,7 @@
     ''' <summary>
     ''' lageur efficace de la dalle ??
     ''' </summary>
-    Public Beff As Decimal
+    'Public Beff As Decimal
 
     ''' <summary>
     ''' angle / verticale du bord des renformis
@@ -61,7 +61,10 @@
             tc = Me.Ep_td - Me.Bac.Hp
             Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
 
-        Else 'dalle pleine, avec ou sans dalle préfa
+        ElseIf Me.type = Enum_TypeDalle.PartiellementPrefabriquee Or Me.type = Enum_TypeDalle.CompletementPrefabriquee Then
+            Ac = dc * Ep_td
+        Else
+            'dalle pleine, avec ou sans dalle préfa
             Ac = dc * Ep_td + Ep_th * (bfs + Ep_th * Math.Tan(ThetaRd) / 2)
 
         End If
@@ -147,7 +150,7 @@
     End Function
 
 
-    Public Function NotionalSizeH0(MyProfilA As cls_ProfilA) As Decimal
+    Public Function NotionalSizeH0(MyPoutre As cls_Poutre) As Decimal
         '---------------------------------------------------------------------------------------
         '   17/05/2023 :    Création - POM
         '---------------------------------------------------------------------------------------
@@ -159,39 +162,67 @@
         Dim MyH0 As Decimal
         Dim Ac, perimU As Decimal
         Dim b As Decimal 'Largeur de la plaque à l'interface de la dalle béton
+        Dim b_dispo, b1, b2 As Decimal
+
+        If MyPoutre.lIntermediaire Then 'poutre intermédiaire
+            If MyPoutre.lTremieGauche Then
+                b1 = Math.Min(MyPoutre.DistanceDsl1, MyPoutre.EntraxeD1 / 2)
+            Else
+                b1 = MyPoutre.EntraxeD1 / 2
+            End If
+
+            If MyPoutre.lTremieDroite Then
+                b2 = Math.Min(MyPoutre.DistanceDsl2, MyPoutre.EntraxeD2 / 2)
+            Else
+                b2 = MyPoutre.EntraxeD2 / 2
+            End If
+
+        Else 'poutre de rive
+
+            b1 = MyPoutre.EntraxeD1 'pas de trémie gauche pour les poutres de rive
+
+            If MyPoutre.lTremieDroite Then
+                b2 = Math.Min(MyPoutre.DistanceDsl2, MyPoutre.EntraxeD2 / 2)
+            Else
+                b2 = MyPoutre.EntraxeD2 / 2
+            End If
+
+        End If
+
+        b_dispo = b1 + b2
 
         perimU = 1 'Rajout GUD: au cas où pour éviter de diviser par 0
 
-        Select Case MyProfilA.typeProfileAcier
+        Select Case MyPoutre.Section.ProfilA.typeProfileAcier
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                b = MyProfilA.Bfs
+                b = MyPoutre.Section.ProfilA.Bfs
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                b = MyProfilA.Plat_b
+                b = MyPoutre.Section.ProfilA.Plat_b
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                b = MyProfilA.Bfi
+                b = MyPoutre.Section.ProfilA.Bfi
         End Select
 
         Select Case Me.type
             Case Enum_TypeDalle.Pleine 'dans le cas d'une slimfloor, th = 0
-                Ac = Me.Beff * Me.Ep_td + Me.Ep_th * (b + Me.Ep_th * Math.Tan(Me.ThetaRd))
-                perimU = 2 * Me.Beff - b + 2 * Me.Ep_th / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
+                Ac = b_dispo * Me.Ep_td + Me.Ep_th * (b + Me.Ep_th * Math.Tan(Me.ThetaRd))
+                perimU = 2 * b_dispo - b + 2 * Me.Ep_th / Math.Cos(ThetaRd) * (1 - Math.Sin(ThetaRd)) 'GUD: Rajout du *2 devant le Me.th/math.cos ... -> A vérifier car je me suis basé sur la formule (65) du MT
 
             Case Enum_TypeDalle.Mixte
                 If Me.Bac.Orientation = cls_Bac.Enum_Orientation.Parallele Then
-                    Ac = Me.Beff * (Me.EpaisseurActive + Bac.Hp * Bac.LargeurBmoyenne / Bac.Ep)
-                    perimU = Me.Beff
+                    Ac = b_dispo * (Me.EpaisseurActive + Bac.Hp * Bac.LargeurBmoyenne / Bac.Ep)
+                    perimU = b_dispo
                 Else
-                    Ac = Me.Beff * Me.EpaisseurActive
-                    perimU = Me.Beff
+                    Ac = b_dispo * Me.EpaisseurActive
+                    perimU = b_dispo
                 End If
 
             Case Enum_TypeDalle.PartiellementPrefabriquee
-                Ac = Me.Beff * Me.Ep_td
-                perimU = 2 * Me.Beff - b
+                Ac = b_dispo * Me.Ep_td
+                perimU = 2 * b_dispo - b
 
             Case Enum_TypeDalle.CompletementPrefabriquee 'dans ce cas, la section est nécessairement une slimfloor
-                Ac = Me.Beff * Me.EpaisseurActive + b * Me.Cofradal.dp
-                perimU = 2 * Me.Beff - b
+                Ac = b_dispo * Me.EpaisseurActive + b * Me.Cofradal.dp
+                perimU = 2 * b_dispo - b
 
         End Select
 
@@ -550,7 +581,7 @@
 
         Me.type = Enum_TypeDalle.Pleine
 
-        Me.Beff = 1
+        'Me.Beff = 1
         Me.Ep_td = 0.12
         Me.Ep_th = 0.04
         Me.preDalle_tjoint = 0.05
@@ -582,7 +613,7 @@
     Public Sub EcrireFile(ByRef Lines As List(Of String))
 
         Lines.Add("   DType         = " & type)
-        Lines.Add("   DL_d          = " & Beff)
+        'Lines.Add("   DL_d          = " & Beff)
         Lines.Add("   Dt_d          = " & Ep_td)
         'Lines.Add("   DAInf         = " & lArma_Inf)
         'Lines.Add("   DAsup         = " & lArma_Sup)
