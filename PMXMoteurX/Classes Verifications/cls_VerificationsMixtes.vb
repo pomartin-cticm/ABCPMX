@@ -336,8 +336,12 @@
 
                 'Me.CalculeClasseSectionsMaillage(myBeam, MEd, zANE, zANPPlus, zANPMoins, ClasseSection, lClasse3, lClasse4)
                 Me.CalculeClasseSectionsMaillage(myBeam, MEd, zANE, zANP, ClasseSection, lClasse3, lClasse4)
-                lCombiClass3 = lCombiClass3 And lClasse3
-                lCombiClass4 = lCombiClass4 And lClasse4
+                'lCombiClass3 = lCombiClass3 And lClasse3
+                'lCombiClass4 = lCombiClass4 And lClasse4
+
+                '/!\ MODIF GUD: A VERIFIER
+                lCombiClass3 = lCombiClass3 Or lClasse3
+                lCombiClass4 = lCombiClass4 Or lClasse4
 
                 '# Degré de connexion
 
