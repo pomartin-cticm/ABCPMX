@@ -502,7 +502,7 @@ Public Class cls_Projet
 
 
                     '==[ Classe Connecteur Dalle ]=================================================================
-                    With .Connecteur
+                    With .ConnecteurGoujonSoude
                         Lines.Add("BLOCK CONNECTEUR_DALLE")
 
                         Lines.Add("   nom            =  " & .nom)
@@ -810,9 +810,9 @@ Public Class cls_Projet
 
                 Case "CONNECTEUR_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim connecteur_dalle As New cls_Connecteur
+                    Dim connecteur_dalle As New cls_ConnecteurGoujonSoude
                     ReadBlocConnecteurDalle(connecteur_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Dalle.Connecteur = connecteur_dalle
+                    ptre_en_cours.Dalle.ConnecteurGoujonSoude = connecteur_dalle
 
                 Case "OPT_CALCULS"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1748,7 +1748,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocConnecteurDalle(connecteur_dalle As cls_Connecteur, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocConnecteurDalle(connecteur_dalle As cls_ConnecteurGoujonSoude, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration

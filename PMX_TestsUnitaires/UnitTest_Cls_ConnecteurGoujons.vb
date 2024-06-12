@@ -2,7 +2,7 @@
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports PMXMoteur2
 
-<TestClass()> Public Class UnitTest_Cls_Connecteur
+<TestClass()> Public Class UnitTest_Cls_ConnecteurGoujons
 
     Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
 
@@ -27,7 +27,7 @@ Imports PMXMoteur2
         With poutre
 
             '--> Définition des caractéristiques de la poutre test 
-            .Dalle.Connecteur.nom = "19-100"
+            .Dalle.ConnecteurGoujonSoude.nom = "19-100"
             '.Dalle.Connecteur.Caracteristiques_Goujons() 'calcul de hsc, d, fy et fu une fois que le nom est renseigné
 
             .Param.Gamma.GammaVs = 1.25
@@ -60,7 +60,7 @@ Imports PMXMoteur2
         '# Résistance acier
 
         ValRef = 81660
-        Dim PRd_s As Decimal = poutre.Dalle.Connecteur.PRdDallePleineG1G2Acier(poutre.Param.Gamma.GammaVs)
+        Dim PRd_s As Decimal = poutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1G2Acier(poutre.Param.Gamma.GammaVs)
         'Dim tau_PRd_s As Decimal = (PRd_s - PRd_s_ref) / PRd_s_ref * 100
 
         DeltaV = (PRd_s - ValRef) / ValRef
@@ -70,14 +70,14 @@ Imports PMXMoteur2
         '# Résistance béton
 
         ValRef = 74290
-        Dim PRd_c As Decimal = poutre.Dalle.Connecteur.PRdDallePleineG1Beton(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVc)
+        Dim PRd_c As Decimal = poutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1Beton(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVc)
         DeltaV = (PRd_c - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Résistance finale dalle pleine
 
-        Dim PRd As Decimal = poutre.Dalle.Connecteur.PRdDallePleineG1(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc)
+        Dim PRd As Decimal = poutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc)
 
         DeltaV = (PRd - ValRef) / ValRef
 
@@ -90,7 +90,7 @@ Imports PMXMoteur2
         Dim kl As Decimal
 
         ValRef = 0.6105
-        kl = poutre.Dalle.Connecteur.CoefkL(poutre.Dalle.Bac)
+        kl = poutre.Dalle.ConnecteurGoujonSoude.CoefkL(poutre.Dalle.Bac)
         DeltaV = (kl - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -98,7 +98,7 @@ Imports PMXMoteur2
         '# PRd
 
         ValRef = 45360
-        PRd = poutre.Dalle.Connecteur.PRdBacParrallelleG1(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, poutre.Dalle.Bac)
+        PRd = poutre.Dalle.ConnecteurGoujonSoude.PRdBacParrallelleG1(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, poutre.Dalle.Bac)
 
         DeltaV = (PRd - ValRef) / ValRef
 
@@ -112,7 +112,7 @@ Imports PMXMoteur2
         '# kt
 
         ValRef = 0.7123
-        Dim kt As Decimal = poutre.Dalle.Connecteur.CoefkT(nr, poutre.Dalle.Bac)
+        Dim kt As Decimal = poutre.Dalle.ConnecteurGoujonSoude.CoefkT(nr, poutre.Dalle.Bac)
         DeltaV = (kt - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -120,7 +120,7 @@ Imports PMXMoteur2
         '# PRd
 
         ValRef = 52920
-        PRd = poutre.Dalle.Connecteur.PRdBacPerpendiculaireG1(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, nr, poutre.Dalle.Bac)
+        PRd = poutre.Dalle.ConnecteurGoujonSoude.PRdBacPerpendiculaireG1(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, nr, poutre.Dalle.Bac)
         DeltaV = (PRd - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -133,7 +133,7 @@ Imports PMXMoteur2
         '# kt
 
         ValRef = 0.5037
-        kt = poutre.Dalle.Connecteur.CoefkT(nr, poutre.Dalle.Bac)
+        kt = poutre.Dalle.ConnecteurGoujonSoude.CoefkT(nr, poutre.Dalle.Bac)
         DeltaV = (kt - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -141,7 +141,7 @@ Imports PMXMoteur2
         '# PRd
 
         ValRef = 37420
-        PRd = poutre.Dalle.Connecteur.PRdBacPerpendiculaireG1(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, nr, poutre.Dalle.Bac)
+        PRd = poutre.Dalle.ConnecteurGoujonSoude.PRdBacPerpendiculaireG1(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, nr, poutre.Dalle.Bac)
         DeltaV = (PRd - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -170,7 +170,7 @@ Imports PMXMoteur2
         With poutre
 
             '--> Définition des caractéristiques de la poutre test 
-            .Dalle.Connecteur.nom = "19-100"
+            .Dalle.ConnecteurGoujonSoude.nom = "19-100"
             '.Dalle.Connecteur.Caracteristiques_Goujons() 'calcul de hsc, d, fy et fu une fois que le nom est renseigné
 
             .Param.Gamma.GammaVs = 1.25
@@ -208,23 +208,23 @@ Imports PMXMoteur2
         '# Valeur acier
 
         ValRef = 81660
-        PRd_s = poutre.Dalle.Connecteur.PRdDallePleineG1G2Acier(poutre.Param.Gamma.GammaVs)
+        PRd_s = poutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1G2Acier(poutre.Param.Gamma.GammaVs)
         DeltaV = (PRd_s - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Valeur béton
 
-        poutre.Dalle.Connecteur.kcc = 0.8
+        poutre.Dalle.ConnecteurGoujonSoude.kcc = 0.8
 
         ValRef = 59440
-        PRd_c = poutre.Dalle.Connecteur.PRdDallePleineG2Beton(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVc)
+        PRd_c = poutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG2Beton(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVc)
         DeltaV = (PRd_c - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         ValRef = 59440
-        PRd = poutre.Dalle.Connecteur.PRdDallePleineG2(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc)
+        PRd = poutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG2(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc)
 
         DeltaV = (PRd - ValRef) / ValRef
 
@@ -234,7 +234,7 @@ Imports PMXMoteur2
 
         ValRef = 36290
 
-        PRd = poutre.Dalle.Connecteur.PRdBacParrallelleG2(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, poutre.Dalle.Bac)
+        PRd = poutre.Dalle.ConnecteurGoujonSoude.PRdBacParrallelleG2(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, poutre.Dalle.Bac)
         DeltaV = (PRd - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -242,7 +242,7 @@ Imports PMXMoteur2
         '--> Calcul dans le cas de la présence d'un bac acier perpendiculaire (CALCUL CLASSIQUE)
 
         PRd_t = PRd * kt
-        PRd_t_ref = poutre.Dalle.Connecteur.PRdBacPerpendiculaireG2(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, nr, poutre.Dalle.Bac)
+        PRd_t_ref = poutre.Dalle.ConnecteurGoujonSoude.PRdBacPerpendiculaireG2(poutre.Dalle.beton.Fck, poutre.Dalle.beton.Ecm, poutre.Param.Gamma.GammaVs, poutre.Param.Gamma.GammaVc, nr, poutre.Dalle.Bac)
         tau_PRd_t = (PRd_t - PRd_t_ref) / PRd_t_ref * 100
 
         'Assert.IsTrue(Math.Abs(tau_PRd_t) <= PCLim)
@@ -253,7 +253,7 @@ Imports PMXMoteur2
 
         '# équation acier
         ValRef = 59200
-        PRd_s = poutre.Dalle.Connecteur.PRdBacPerpendiculaireG2_AnnexeG_Acier(poutre.Param.Gamma.GammaVs)
+        PRd_s = poutre.Dalle.ConnecteurGoujonSoude.PRdBacPerpendiculaireG2_AnnexeG_Acier(poutre.Param.Gamma.GammaVs)
         DeltaV = (PRd_s - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
@@ -261,14 +261,14 @@ Imports PMXMoteur2
         '# équation béton
 
         ValRef = 28860
-        PRd_c = poutre.Dalle.Connecteur.PRdBacPerpendiculaireG2_AnnexeG_Beton(poutre, nr, poutre.Param.Gamma.GammaVc)
+        PRd_c = poutre.Dalle.ConnecteurGoujonSoude.PRdBacPerpendiculaireG2_AnnexeG_Beton(poutre, nr, poutre.Param.Gamma.GammaVc)
         DeltaV = (PRd_c - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# PRd final
 
-        PRd = poutre.Dalle.Connecteur.PRdBacPerpendiculaireG2_AnnexeG(poutre, nr, poutre.Param.Gamma.GammaVc, poutre.Param.Gamma.GammaVs)
+        PRd = poutre.Dalle.ConnecteurGoujonSoude.PRdBacPerpendiculaireG2_AnnexeG(poutre, nr, poutre.Param.Gamma.GammaVc, poutre.Param.Gamma.GammaVs)
         DeltaV = (PRd - ValRef) / ValRef
 
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)

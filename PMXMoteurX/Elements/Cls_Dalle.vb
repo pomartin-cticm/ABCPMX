@@ -111,9 +111,14 @@
     Public AcierArmatures As New cls_AcierArmature
 
     ''' <summary>
-    ''' Connecteur acier-béton entre dalle et profilé
+    ''' Connecteur acier-béton entre dalle et profilé avec des goujons soudés
     ''' </summary>
-    Public Connecteur As New cls_Connecteur
+    Public ConnecteurGoujonSoude As New cls_ConnecteurGoujonSoude
+
+    ''' <summary>
+    ''' Connecteur acier-béton entre dalle et profilé avec des armatures (utile pour les slimfloor)
+    ''' </summary>
+    Public ConnecteurArmature As New Cls_ConnecteurArmature
 
 #End Region
 
@@ -671,7 +676,9 @@
         Next
 
         DalleCible.AcierArmatures = DalleSource.AcierArmatures.Clone()
-        DalleCible.Connecteur = DalleSource.Connecteur.Clone()
+        DalleCible.ConnecteurGoujonSoude = DalleSource.ConnecteurGoujonSoude.Clone()
+
+        DalleCible.ConnecteurArmature.DeepClone(DalleSource.ConnecteurArmature, DalleCible.ConnecteurArmature)
     End Sub
 
 #End Region

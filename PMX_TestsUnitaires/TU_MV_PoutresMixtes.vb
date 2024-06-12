@@ -60,7 +60,7 @@ Imports PMXMoteur2
             .AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus      'permet de prendre en compte le bac pour le calcul des armatures transversales
         End With
 
-        With myPoutre.Dalle.Connecteur
+        With myPoutre.Dalle.ConnecteurGoujonSoude
             .hsc = 100 / 1000
             .d = 19 / 1000
         End With
@@ -80,7 +80,7 @@ Imports PMXMoteur2
             .Ecm = 31000
         End With
 
-        myPoutre.Dalle.Connecteur.Fu = 450
+        myPoutre.Dalle.ConnecteurGoujonSoude.Fu = 450
 
         'CHARGES
         myPoutre.InitialisePoidsPropres()
@@ -219,23 +219,23 @@ Imports PMXMoteur2
 
 #Region "Vérification de la résistance des connecteurs (ELU)"
 
-        Valeur = myPoutre.Dalle.Connecteur.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
+        Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
         ValRef = 81.7 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        Valeur = myPoutre.Dalle.Connecteur.PRdDallePleineG1Beton(myPoutre.Dalle.beton.Fck, 31000, myPoutre.Param.Gamma.GammaVc)
+        Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1Beton(myPoutre.Dalle.beton.Fck, 31000, myPoutre.Param.Gamma.GammaVc)
         ValRef = 73.7 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Calcul avec 1 connecteur par onde 
-        Valeur = myPoutre.Dalle.Connecteur.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
+        Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
                                                          myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
                                                          myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
                                                          31000, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 52.5 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        Valeur = myPoutre.Dalle.Connecteur.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
+        Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine, 'VALEUR CORRIGEE avec Ecm = 31 GPA
                                                          myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
                                                          myPoutre.NombreGoujonsTransv(myPoutre.IndicePremiereTravee, 0), myPoutre.Dalle.beton.Fck,
                                                          myPoutre.Dalle.beton.Ecm, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
@@ -243,7 +243,7 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Calcul avec 2 connecteurs par ondes
-        Valeur = myPoutre.Dalle.Connecteur.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
+        Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
                                                          myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
                                                          2, myPoutre.Dalle.beton.Fck,
                                                          31000, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
@@ -646,7 +646,7 @@ Imports PMXMoteur2
         myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
         myPoutre.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus 'permet de prendre en compte le bac pour le calcul des armatures transversales
 
-        With myPoutre.Dalle.Connecteur
+        With myPoutre.Dalle.ConnecteurGoujonSoude
             .hsc = 100 / 1000
             .d = 19 / 1000
         End With
@@ -666,7 +666,7 @@ Imports PMXMoteur2
             .Ecm = 31000
         End With
 
-        myPoutre.Dalle.Connecteur.Fu = 450
+        myPoutre.Dalle.ConnecteurGoujonSoude.Fu = 450
 
         'CHARGES
         myPoutre.InitialisePoidsPropres()
@@ -1530,7 +1530,7 @@ Imports PMXMoteur2
         myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
         myPoutre.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.BetonSeulContinu 'permet de prendre en compte le bac pour le calcul des armatures transversales
 
-        With myPoutre.Dalle.Connecteur
+        With myPoutre.Dalle.ConnecteurGoujonSoude
             .hsc = 100 / 1000
             .d = 19 / 1000
         End With
@@ -1550,7 +1550,7 @@ Imports PMXMoteur2
             .Ecm = 31000
         End With
 
-        myPoutre.Dalle.Connecteur.Fu = 450
+        myPoutre.Dalle.ConnecteurGoujonSoude.Fu = 450
 
         myPoutre.Dalle.Bac.msurf = 8.53 '8.53 kg/m2
         myPoutre.Dalle.Bac.fyp = 350
@@ -1713,23 +1713,23 @@ Imports PMXMoteur2
 
 #Region " Vérification de la résistance des connecteurs (ELU) "
 
-        Valeur = myPoutre.Dalle.Connecteur.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
+        Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
         ValRef = 81.7 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        Valeur = myPoutre.Dalle.Connecteur.PRdDallePleineG1Beton(myPoutre.Dalle.beton.Fck, 31000, myPoutre.Param.Gamma.GammaVc)
+        Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1Beton(myPoutre.Dalle.beton.Fck, 31000, myPoutre.Param.Gamma.GammaVc)
         ValRef = 73.7 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
         '--> Calcul avec 2 connecteurs par ondes
-        Valeur = myPoutre.Dalle.Connecteur.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
+        Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
                                                          myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
                                                          2, myPoutre.Dalle.beton.Fck,
                                                          31000, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)
         ValRef = 37.1 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        Valeur = myPoutre.Dalle.Connecteur.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
+        Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.ResistancePRd(myPoutre.Param.lGeneration1, myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine,
                                                          myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire, myPoutre.Dalle.Bac,
                                                          2, myPoutre.Dalle.beton.Fck,
                                                          myPoutre.Dalle.beton.Ecm, myPoutre.Param.Gamma.GammaVs, myPoutre.Param.Gamma.GammaVc)

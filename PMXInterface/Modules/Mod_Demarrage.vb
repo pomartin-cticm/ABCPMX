@@ -654,7 +654,7 @@ Public Module Mod_Demarrage
 
     End Sub
 
-    Public Sub InitialiseGoujonDeBase(ByRef MyG As cls_Connecteur, ByRef lTrouve As Boolean)
+    Public Sub InitialiseGoujonDeBase(ByRef MyG As cls_ConnecteurGoujonSoude, ByRef lTrouve As Boolean)
         '--------------------------------------------------------------------------------
         '   09/08/23 :  Création - POM - V1.00
         '--------------------------------------------------------------------------------

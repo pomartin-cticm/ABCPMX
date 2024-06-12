@@ -652,7 +652,7 @@ Public Class Frm_AjoutePP
 
             InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
             InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)
-            InitialiseGoujonDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Connecteur, lTrouve)
+            InitialiseGoujonDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.ConnecteurGoujonSoude, lTrouve)
 
             InitialiseDalleDefault(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle, typeProfilA)
 

@@ -246,7 +246,7 @@ Public Class cls_Poutre
         '--( Calcul
 
         Nr = Me.NombreGoujonsTransv(iTravee, iZone)
-        PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, Nr, FcK, Ecm, GammaVs, GammaVc)
+        PRd = Me.Dalle.ConnecteurGoujonSoude.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, Nr, FcK, Ecm, GammaVs, GammaVc)
         sX = Me.EntraxeLongiGoujons(iTravee, iZone)
         myFluxRd = Nr * PRd / sX
 
@@ -296,7 +296,7 @@ Public Class cls_Poutre
             If Me.Dalle.lMixte Then
                 NbLayer = 1
             Else
-                If Me.Dalle.Connecteur.hsc - 70 / 1000 <= Me.Dalle.Ep_th Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
+                If Me.Dalle.ConnecteurGoujonSoude.hsc - 70 / 1000 <= Me.Dalle.Ep_th Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
                     NbLayer = 3
                 Else
                     NbLayer = 2
@@ -2827,7 +2827,7 @@ Public Class cls_Poutre
 
                         nR = Me.NombreGoujonsTransv(iTravee, IndZoneConnex(iElt))
                         sX = Me.EntraxeLongiGoujons(iTravee, IndZoneConnex(iElt))
-                        PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
+                        PRd = Me.Dalle.ConnecteurGoujonSoude.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
                         kSc = 0.7 * PRd / DeltaD
 
                         cStiff = nR * kSc / sX
@@ -3055,7 +3055,7 @@ Public Class cls_Poutre
         Dim BeffPrec As Decimal = -1
         Dim pInertieY, p_zANE As Decimal
         Dim pMelRd As Decimal
-        Dim lNonMixte As Boolean = (Me.Section.typeSection = cls_Section.Enum_TypeSection.AcierSeul) Or (Not lDalle)
+        Dim lNonMixte As Boolean = (Me.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul) Or (Not lDalle)
 
         '--> Initialisation
 
@@ -5641,7 +5641,7 @@ Public Class cls_Poutre
                 pEspace = Me.EntraxeLongiGoujons(iTravee, iZone)
 
                 nR = Me.NombreGoujonsTransv(iTravee, iZone)
-                PRd = Me.Dalle.Connecteur.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
+                PRd = Me.Dalle.ConnecteurGoujonSoude.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
 
                 Me.DensiteConnexionZone(iTravee, iZone) = PRd * nR / pEspace
 

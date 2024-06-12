@@ -106,7 +106,8 @@
     <Compile Include="Classes\cls_Maintiens.vb" />
     <Compile Include="Elements\cls_ArmatureEnrobage.vb" />
     <Compile Include="Elements\cls_Cofradal.vb" />
-    <Compile Include="Elements\cls_Connecteur.vb" />
+    <Compile Include="Elements\Cls_ConnecteurArmature.vb" />
+    <Compile Include="Elements\cls_ConnecteurGoujonSoude.vb" />
     <Compile Include="Classes\cls_OptionsCalcul.vb" />
     <Compile Include="Elements\cls_Prop_Elastique.vb" />
     <Compile Include="Modules\Mod_CalculProprietes.vb" />

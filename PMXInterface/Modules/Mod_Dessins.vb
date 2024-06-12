@@ -435,7 +435,7 @@ Public Module Mod_Dessins
             yo_cotes = zREF + MyPoutre.Dalle.Ep_td + dCar / 8
             ye_cotes = yo_cotes
 
-            Chaine = MyPoutre.Dalle.Connecteur.nom
+            Chaine = MyPoutre.Dalle.ConnecteurGoujonSoude.nom
             AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
         End If
 
@@ -1389,12 +1389,12 @@ Public Module Mod_Dessins
             xGoujon = -EntraxeD1
 
             'Dessin du corps du goujon
-            AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAffA, True, True)
+            AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAffA, True, True)
 
             'Dessin de la tete du goujon
 
-            MyPoutreLoc.Dalle.Connecteur.DimensionsTete(dTete, hTete)
-            AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAffA, True, True)
+            MyPoutreLoc.Dalle.ConnecteurGoujonSoude.DimensionsTete(dTete, hTete)
+            AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAffA, True, True)
         End If
 
         '--
@@ -1402,22 +1402,22 @@ Public Module Mod_Dessins
         xGoujon = 0
 
         'Dessin du corps du goujon
-        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAffA, True, True)
+        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAffA, True, True)
 
         'Dessin de la tete du goujon
-        MyPoutreLoc.Dalle.Connecteur.DimensionsTete(dTete, hTete)
-        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAffA, True, True)
+        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.DimensionsTete(dTete, hTete)
+        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAffA, True, True)
 
         '--
 
         xGoujon = EntraxeD2
 
         'Dessin du corps du goujon
-        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAffA, True, True)
+        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAffA, True, True)
 
         'Dessin de la tete du goujon
-        MyPoutreLoc.Dalle.Connecteur.DimensionsTete(dTete, hTete)
-        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAffA, True, True)
+        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.DimensionsTete(dTete, hTete)
+        AddRectanglePlein(MyGr, MyBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAffA, True, True)
 
 
     End Sub
@@ -5486,7 +5486,7 @@ Public Module Mod_Dessins
                 xMax = .Ep / 2
 
                 yMin = -MyPoutreLoc.Section.ProfilA.Tfs
-                yMax = Math.Max(MyPoutreLoc.Dalle.Ep_td, MyPoutreLoc.Dalle.Connecteur.hsc)
+                yMax = Math.Max(MyPoutreLoc.Dalle.Ep_td, MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc)
 
                 ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
@@ -5525,11 +5525,11 @@ Public Module Mod_Dessins
             Dim yGoujon As Decimal = yPts(yPts.Length / 4)
 
             'Dessin du corps du goujon
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAff, True, True)
             'Dessin de la tete du goujon
             Dim dTete, hTete As Decimal
-            MyPoutreLoc.Dalle.Connecteur.DimensionsTete(dTete, hTete)
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - hTete, xGoujon + dTete, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+            MyPoutreLoc.Dalle.ConnecteurGoujonSoude.DimensionsTete(dTete, hTete)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc - hTete, xGoujon + dTete, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAff, True, True)
 
             'Dessin de la semelle supérieure et de l'âme de la poutre
             Dim xSemelleSup As Decimal = 0
@@ -5549,7 +5549,7 @@ Public Module Mod_Dessins
                 xMax = .Bfs
 
                 yMin = -MyPoutreLoc.Section.ProfilA.Tfs
-                yMax = Math.Max(MyPoutreLoc.Dalle.Ep_td, MyPoutreLoc.Dalle.Connecteur.hsc)
+                yMax = Math.Max(MyPoutreLoc.Dalle.Ep_td, MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc)
 
                 ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
@@ -5567,12 +5567,12 @@ Public Module Mod_Dessins
             Dim yGoujon As Decimal = 0
 
             'Dessin du corps du goujon
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.Connecteur.d / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon, xGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAff, True, True)
             'Dessin de la tete du goujon
             Dim dTete, hTete As Decimal
-            MyPoutreLoc.Dalle.Connecteur.DimensionsTete(dTete, hTete)
+            MyPoutreLoc.Dalle.ConnecteurGoujonSoude.DimensionsTete(dTete, hTete)
 
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.Connecteur.hsc, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAff, True, True)
 
             '--> Dessin de la semelle supérieure et de l'âme de la poutre
 

@@ -1,5 +1,5 @@
 ﻿
-Public Class cls_Connecteur
+Public Class cls_ConnecteurGoujonSoude
 
 #Region " Attributs "
 

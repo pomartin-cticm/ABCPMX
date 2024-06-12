@@ -1187,7 +1187,7 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("CONNECTORS"))
 
-        With MyBeam.Dalle.Connecteur
+        With MyBeam.Dalle.ConnecteurGoujonSoude
             'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
             AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\=" & TABEGAL & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
             AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d " & TABEGAL & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
