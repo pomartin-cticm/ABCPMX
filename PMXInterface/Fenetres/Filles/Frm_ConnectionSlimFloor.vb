@@ -1,8 +1,7 @@
 ﻿Imports PMXMoteur2
 Imports System.IO
 
-
-Public Class Frm_Connection
+Public Class Frm_ConnectionSlimFloor
 
 #Region " Variables locales "
 
@@ -1308,7 +1307,7 @@ Public Class Frm_Connection
             Case Me.txt_hsc.Name
                 kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
 
-                ValMin = Math.Round(Hauteur_Goujon_MIN, 3) / kUnit
+                ValMin = Hauteur_Goujon_MIN / kUnit
                 ValMaxConseillee = Hauteur_Goujon_MAX_CONSEILLEE / kUnit
                 lValMaxConseillee = True
                 ValMax = Hauteur_Goujon_MAX / kUnit
