@@ -340,6 +340,7 @@ Public Module Mod_Declarations
         Chargements
         Combinaisons
         Connexion
+        ConnexionSlimfloor
         Dalle
         DalleN
         DalleSlimFloor

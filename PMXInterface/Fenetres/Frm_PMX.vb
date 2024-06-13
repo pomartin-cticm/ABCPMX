@@ -259,6 +259,7 @@ Public Class Frm_PMX
                 Me.TSbtn_SectionSAB.ToolTipText = Bloc("TSBSECTIONSAB")
                 Me.TSbtn_Enrobage.ToolTipText = Bloc("TSBENCASEMENT")
                 Me.TSbtn_Connexion.ToolTipText = Bloc("TSBCONNECTION")
+                Me.TSbtn_ConnexionSlimfloor.ToolTipText = Bloc("TSBCONNECTION")
                 Me.TSbtn_Maintiens.ToolTipText = Bloc("TSBRESTRAINTS")
                 Me.TSbtn_MaintienBac.ToolTipText = Bloc("TSBSHEETRESTRAIN")
 
@@ -589,7 +590,7 @@ Public Class Frm_PMX
 
     Private Sub GestionBoutonsMenuPoutre(sender As Object, e As EventArgs) _
         Handles TSbtn_Portees.Click, TSbtn_Identification.Click, TSbtn_Maintiens.Click, TSbtn_Etaiement.Click, TSbtn_SectionA.Click, TSbtn_SectionSFB.Click, TSbtn_SectionIFB.Click, TSbtn_SectionSAB.Click,
-                TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click, TSbtn_DalleSlimFloor.Click,
+                TSbtn_Enrobage.Click, TSbtn_Dalle.Click, TSbtn_Connexion.Click, TSbtn_ConnexionSlimfloor.Click, TSbtn_Hivoss.Click, TSbtn_DalleN.Click, TSbtn_DalleSlimFloor.Click,
                 TSbtn_Gamma.Click, TSbtn_PPLargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
                 TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click, TSbtn_OptionsIncendie.Click, TSbtn_MaintienBac.Click
 
@@ -621,7 +622,8 @@ Public Class Frm_PMX
 
             Case Me.TSbtn_Connexion.Name
                 FilleEnCours = EnuFenetres.Connexion
-
+            Case Me.TSbtn_ConnexionSlimfloor.Name
+                FilleEnCours = EnuFenetres.ConnexionSlimfloor
 
             Case Me.TSbtn_Maintiens.Name
                 FilleEnCours = EnuFenetres.Maintiens
@@ -737,6 +739,13 @@ Public Class Frm_PMX
             Case EnuFenetres.Connexion
                 If LogicielOptions.lFenetres Then
                     Frm_Connection.ShowDialog()
+                Else
+
+                End If
+
+            Case EnuFenetres.ConnexionSlimfloor
+                If LogicielOptions.lFenetres Then
+                    Frm_ConnectionSlimFloor.ShowDialog()
                 Else
 
                 End If
@@ -909,7 +918,7 @@ Public Class Frm_PMX
         Dim lFrmProfilIFB As Boolean = False
         Dim lFrmProfilSAB As Boolean = False
 
-        Dim lFrmDalleSlimFloor As Boolean = False
+        Dim lSlimFloor As Boolean = False
 
         Dim lFrmEnrobage As Boolean = True
         Dim lFrmConnection As Boolean = True
@@ -941,30 +950,30 @@ Public Class Frm_PMX
                     lFrmConnection = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
-                    lFrmDalleSlimFloor = True
+                    lSlimFloor = True
                 Case cls_Section.Enum_TypeSection.SFBmixte
                     lFrmProfilSFB = True
-                    lFrmDalleSlimFloor = True
+                    lSlimFloor = True
                 Case cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B
                     lFrmProfilIFB = True
                     lFrmEnrobage = False
                     lFrmConnection = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
-                    lFrmDalleSlimFloor = True
+                    lSlimFloor = True
                 Case cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte
                     lFrmProfilIFB = True
-                    lFrmDalleSlimFloor = True
+                    lSlimFloor = True
                 Case cls_Section.Enum_TypeSection.SAB
                     lFrmProfilSAB = True
                     lFrmEnrobage = False
                     lFrmConnection = False
                     lFrmProppin = False
                     lFrmMaintienBac = False
-                    lFrmDalleSlimFloor = True
+                    lSlimFloor = True
                 Case cls_Section.Enum_TypeSection.SABmixte
                     lFrmProfilSAB = True
-                    lFrmDalleSlimFloor = True
+                    lSlimFloor = True
             End Select
         End If
 
@@ -973,11 +982,12 @@ Public Class Frm_PMX
         Me.TSbtn_SectionIFB.Visible = lFrmProfilIFB
         Me.TSbtn_SectionSAB.Visible = lFrmProfilSAB
 
-        Me.TSbtn_Dalle.Visible = Not lFrmDalleSlimFloor
-        Me.TSbtn_DalleSlimFloor.Visible = lFrmDalleSlimFloor
+        Me.TSbtn_Dalle.Visible = Not lSlimFloor
+        Me.TSbtn_DalleSlimFloor.Visible = lSlimFloor
 
         Me.TSbtn_Enrobage.Visible = lFrmEnrobage
-        Me.TSbtn_Connexion.Visible = lFrmConnection
+        Me.TSbtn_Connexion.Visible = lFrmConnection And Not lSlimFloor
+        Me.TSbtn_ConnexionSlimfloor.Visible = lFrmConnection And lSlimFloor
         Me.TSbtn_Etaiement.Visible = lFrmProppin
         Me.TSbtn_MaintienBac.Visible = lFrmMaintienBac
         Me.ToolStrip_Poutre.Visible = Not lNothing

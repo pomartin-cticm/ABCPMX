@@ -7,27 +7,29 @@
     ''' </summary>
     Public ds As Decimal
 
-    ''' <summary>
-    ''' Diametre du trou pratiqué dans l'ame de la poutre
-    ''' </summary>
-    Public dhs As Decimal
+    '''' <summary>
+    '''' Diametre du trou pratiqué dans l'ame de la poutre
+    '''' </summary>
+    'Public dhs As Decimal
 
-    ''' <summary>
-    ''' Distance entre le centre des trous et la semelle supérieure (arase inférieure)
-    ''' </summary>
-    Public ahv As Decimal
+    '''' <summary>
+    '''' Distance entre le centre des trous et la semelle supérieure (arase inférieure)
+    '''' </summary>
+    'Public ahv As Decimal
 
-    ''' <summary>
-    ''' Longueur des armatures 
-    ''' </summary>
-    Public Ls As Decimal
+    '''' <summary>
+    '''' Longueur des armatures 
+    '''' </summary>
+    'Public Ls As Decimal
 
     Public Acier As New cls_AcierArmature
 
 #End Region
 
 #Region " Constructeurs "
-
+    Sub New()
+        Me.ds = 20 / 1000
+    End Sub
 #End Region
 
 #Region " Fonction de copie "

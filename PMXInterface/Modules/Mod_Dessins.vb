@@ -5529,7 +5529,7 @@ Public Module Mod_Dessins
             'Dessin de la tete du goujon
             Dim dTete, hTete As Decimal
             MyPoutreLoc.Dalle.ConnecteurGoujonSoude.DimensionsTete(dTete, hTete)
-            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc - hTete, xGoujon + dTete, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAff, True, True)
+            AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, MyParAff, True, True)
 
             'Dessin de la semelle supérieure et de l'âme de la poutre
             Dim xSemelleSup As Decimal = 0
@@ -5741,6 +5741,229 @@ Public Module Mod_Dessins
 
 #End Region
 
+#Region "Dessins pour la connection (FRM_CONNECTIONSLIMFLOOR)"
+    Public Sub DessineDalleConnectionSlimfloor(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
+                             lIntermediaire As Boolean, ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
+        '-----------------------------------------------------------------------------------------------
+        '   26/06/23 :  Version 1.00
+        '-----------------------------------------------------------------------------------------------
+        '   Dessin du Bac Acier
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics dans lequel on dessine
+        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   MyDalle     [E] :   Dalle à dessiner
+        '   MySection   [E] :   Section à laquelle la dalle est rattachée
+        '   iSelect     [E] :   Indice de la cote selectionnée
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '-----------------------------------------------------------------------------------------------
+        '   iSelect:    0 épaisseur de la dalle
+        '               1 épaisseur renformis
+        '-----------------------------------------------------------------------------------------------
+
+        '--> Declarations
+
+        Dim MyParAff As Struc_Affichage
+        Dim xMin, yMin, xMax, yMax As Double
+        Dim dCar As Double
+        Dim lMixte, lEnrob, lLamine As Boolean
+        Dim Beff As Decimal
+
+        Dim CouleurBeton As Color = CouleurBetonNormal
+        Dim CouleurCofradal As Color = Color.Linen
+        Dim CouleurAcier As Color = CouleurAcierNormal
+        Dim CouleurConnect As Color = CouleurConnecteurNormal
+        Dim ColorArmatures As Color = Color.Red
+        Const kADJUST As Decimal = 0.95
+        Dim zREF As Decimal = 0
+        Dim Ha, Bfs As Decimal
+        'Dim lCote As Boolean = True
+        Dim lCofraplus220 As Boolean
+        Dim LargeurProfil As Decimal
+
+        '--> Initialisation
+
+        lMixte = MyPoutre.Section.lMixte
+        lEnrob = MyPoutre.Section.lEnrobage
+        lLamine = MyPoutre.Section.lLamine
+        lCofraplus220 = MyPoutre.Dalle.Bac.lCofraplus220
+
+        Beff = 2 * LargeurDalleDessin(MyPoutre.Section.ProfilA)
+
+        Ha = MyPoutre.Section.ProfilA.ha
+
+        Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+            Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
+                Bfs = MyPoutre.Section.ProfilA.Bfs
+                LargeurProfil = Bfs
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                Bfs = MyPoutre.Section.ProfilA.Bfs
+                LargeurProfil = MyPoutre.Section.ProfilA.Plat_b - Bfs / 2
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                Bfs = MyPoutre.Section.ProfilA.Bfs
+                LargeurProfil = MyPoutre.Section.ProfilA.Plat_b - Bfs / 2
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                Bfs = MyPoutre.Section.ProfilA.Bfi
+                LargeurProfil = Bfs / 2
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                Bfs = MyPoutre.Section.ProfilA.Bfi
+                LargeurProfil = Bfs / 2
+        End Select
+
+        Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+                zREF = MyPoutre.Section.ProfilA.hb
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+                zREF = MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Plat_t
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                zREF = MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Tfi
+            Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                zREF = MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Tfi
+            Case Else
+                zREF = 0
+        End Select
+
+        '--> Preparation de la zone d'affichage - Calcul de ParAff
+        dCar = Math.Sqrt(Beff ^ 2 + (Ha + MyPoutre.Dalle.zTop) ^ 2) / 10
+
+        If lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
+            xMin = -Beff / 4
+            xMax = -xMin
+        Else
+            xMin = -Bfs / 4
+            xMax = Beff / 4
+        End If
+
+
+        If lIntermediaire Then
+            yMin = -MyPoutre.Section.ProfilA.Plat_t
+            yMax = MyPoutre.Dalle.zTop
+        Else
+            yMin = -MyPoutre.Section.ProfilA.Plat_t
+            yMax = MyPoutre.Dalle.zTop
+        End If
+
+        ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
+
+        '--> Préparation des Pinceaux utilisés dans le dessin
+
+        ' Profilé
+        Dim myBrushP As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurAcier, CouleurAcier)
+        ' Béton
+        Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurBeton, CouleurBeton)
+        ' Béton prefabriqué
+        Dim myBrushPref As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurBeton, CouleurBeton)
+        ' Cofradal
+        Dim myBrushCofra As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurCofradal, CouleurCofradal)
+        'Connecteurs
+        Dim myBrushConnecteur As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), CouleurConnect, CouleurConnect)
+        'Armatures
+        Dim myBrushArmatures As New LinearGradientBrush(New PointF(xLeft, yTop), New PointF(xLeft + pWi, yTop + pWi), ColorArmatures, ColorArmatures)
+
+
+        '--> Dessin de la dalle
+
+        Select Case MyPoutre.Dalle.type
+            Case cls_Dalle.Enum_TypeDalle.Pleine
+                DessinDallePleine(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
+            Case cls_Dalle.Enum_TypeDalle.Mixte
+                Select Case MyPoutre.Dalle.Bac.Orientation
+                    Case cls_Bac.Enum_Orientation.Parallele
+                        DessineDalleMixteParallele(myGr, MyPoutre.Dalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+                    Case cls_Bac.Enum_Orientation.Perpendiculaire
+                        If lCofraplus220 Then
+                            DessineDalleMixtePerpendiculaireCfp220(myGr, MyPoutre, MyParAff, myBrushB, Beff)
+                        Else
+                            DessineDalleMixtePerpendiculaire(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
+                        End If
+                End Select
+
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
+                DessinDallePreFab(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
+
+            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+                DessinDalleCompletementPrefa(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushCofra, Beff)
+
+        End Select
+
+        '--> Dessin de la section acier
+
+        DessinProfileMetal(myGr, MyPoutre.Section.ProfilA, myBrushP, MyParAff, zREF, 0, Not lIntermediaire)
+
+        '--> Dessin du goujon
+
+        'Initialisation
+        Dim Espacement_Trans_MIN As Decimal
+        Dim NbGoujonsTrans As Integer = MyPoutre.NombreGoujonsTransv(1, 0)
+
+        If MyPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+            Espacement_Trans_MIN = 4 * MyPoutre.Dalle.ConnecteurGoujonSoude.d
+        Else 'dalle pleine ou préfa
+            Espacement_Trans_MIN = 2.5 * MyPoutre.Dalle.ConnecteurGoujonSoude.d
+        End If
+
+        Dim xGoujon As Decimal = 0
+        Dim yGoujon As Decimal = 0
+
+        Dim dTete, hTete As Decimal
+        MyPoutre.Dalle.ConnecteurGoujonSoude.DimensionsTete(dTete, hTete)
+
+        'Dessin
+
+        Select Case MyPoutre.Dalle.typeConnecteur
+            Case cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
+                xGoujon = -(NbGoujonsTrans - 1) / 2 * Espacement_Trans_MIN
+                yGoujon = zREF
+
+                For i As Integer = 1 To NbGoujonsTrans
+                    'Dessin du corps du goujon
+                    AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - MyPoutre.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon, xGoujon + MyPoutre.Dalle.ConnecteurGoujonSoude.d / 2, yGoujon + MyPoutre.Dalle.ConnecteurGoujonSoude.hsc, MyParAff, True, True)
+
+                    'Dessin de la tete du goujon
+                    AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, xGoujon - dTete / 2, yGoujon + MyPoutre.Dalle.ConnecteurGoujonSoude.hsc - hTete, xGoujon + dTete / 2, yGoujon + MyPoutre.Dalle.ConnecteurGoujonSoude.hsc, MyParAff, True, True)
+
+                    xGoujon += Espacement_Trans_MIN
+                Next
+
+            Case cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
+                xGoujon = MyPoutre.Section.ProfilA.Tw / 2
+
+                Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                        yGoujon = zREF - MyPoutre.Section.ProfilA.Tfs - MyPoutre.Section.ProfilA.Rcs - MyPoutre.Section.ProfilA.HauteurAmeDw / 4
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                        yGoujon = zREF - MyPoutre.Section.ProfilA.Plat_t - MyPoutre.Section.ProfilA.HauteurAmeDw / 4
+                End Select
+
+                For iSigne As Integer = -1 To 1 Step 2
+                    'Dessin du corps du goujon
+                    AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, iSigne * xGoujon, yGoujon - MyPoutre.Dalle.ConnecteurGoujonSoude.d / 2, iSigne * (xGoujon + MyPoutre.Dalle.ConnecteurGoujonSoude.hsc), yGoujon + MyPoutre.Dalle.ConnecteurGoujonSoude.d / 2, MyParAff, True, True)
+
+                    'Dessin de la tete du goujon
+                    AddRectanglePlein(myGr, myBrushConnecteur, MyPenContour, iSigne * (xGoujon + MyPoutre.Dalle.ConnecteurGoujonSoude.hsc), yGoujon - dTete / 2, iSigne * (xGoujon + MyPoutre.Dalle.ConnecteurGoujonSoude.hsc + hTete), yGoujon + dTete / 2, MyParAff, True, True)
+
+                Next
+
+            Case cls_Dalle.Enum_TypeConnecteur.ArmatureAme
+                xGoujon = MyPoutre.Section.ProfilA.Tw / 2
+
+                Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA, cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+                        yGoujon = zREF - MyPoutre.Section.ProfilA.Tfs - MyPoutre.Section.ProfilA.Rcs - MyPoutre.Section.ProfilA.HauteurAmeDw / 4
+                    Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+                        yGoujon = zREF - MyPoutre.Section.ProfilA.Plat_t - MyPoutre.Section.ProfilA.HauteurAmeDw / 4
+                End Select
+
+                For iSigne As Integer = -1 To 1 Step 2
+                    'Dessin du corps du goujon
+                    AddRectanglePlein(myGr, myBrushArmatures, MyPenContour, iSigne * xGoujon, yGoujon - MyPoutre.Dalle.ConnecteurArmature.ds / 2, iSigne * (xGoujon + 1.5 * LargeurProfil), yGoujon + MyPoutre.Dalle.ConnecteurArmature.ds / 2, MyParAff, True, True)
+                Next
+
+        End Select
+
+
+    End Sub
+
+#End Region
 #Region "Dessin pour les maintiens (FRM_MAINTIENS)"
 
     Public Sub DessinFrmMaintiens(MyGr As Graphics, MyPoutre As cls_Poutre,

@@ -519,9 +519,9 @@ Public Class cls_Projet
                         Lines.Add("BLOCK CONNECTEUR_DALLE_ARMATURE")
 
                         Lines.Add("   ds            =  " & .ds)
-                        Lines.Add("   dhs            =  " & .dhs)
-                        Lines.Add("   ahv              =  " & .ahv)
-                        Lines.Add("   Ls              =  " & .Ls)
+                        'Lines.Add("   dhs            =  " & .dhs)
+                        'Lines.Add("   ahv              =  " & .ahv)
+                        'Lines.Add("   Ls              =  " & .Ls)
                         Lines.Add("")
                     End With
 
@@ -1842,9 +1842,9 @@ Public Class cls_Projet
                 With connecteur_dalle
                     Select Case MotCle
                         Case "DS" : .ds = TraiteReal(Mots(nbMots))
-                        Case "DHS" : .dhs = TraiteReal(Mots(nbMots))
-                        Case "AHV" : .ahv = TraiteReal(Mots(nbMots))
-                        Case "LS" : .Ls = TraiteReal(Mots(nbMots))
+                            'Case "DHS" : .dhs = TraiteReal(Mots(nbMots))
+                            'Case "AHV" : .ahv = TraiteReal(Mots(nbMots))
+                            'Case "LS" : .Ls = TraiteReal(Mots(nbMots))
 
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select

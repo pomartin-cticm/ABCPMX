@@ -1,5 +1,7 @@
 ﻿Imports PMXMoteur2
 Imports System.IO
+Imports System.Reflection
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip
 
 Public Class Frm_ConnectionSlimFloor
 
@@ -15,13 +17,14 @@ Public Class Frm_ConnectionSlimFloor
     Dim MyPoutreLoc As New cls_Poutre()
 
     ''' <summary>
-    ''' Définition d'une liste de string pour remplir le cmb_travee
+    ''' Définition d'une liste de string pour remplir le cmb_
     ''' </summary>
-    Dim strTypeTravee() As String
-    Dim strTypeTravee_ConsoleGauche As String
-    Dim strTypeTravee_TraveeCentrale As String
-    Dim strTypeTravee_ConsoleDroite As String
-    Dim strSpan As String
+    Dim strTypeConnection As String()
+
+    ''' <summary>
+    ''' Stockage des strings qui seront dans le combobox strTypeConnection
+    ''' </summary>
+    Dim strGoujonSemelle, strGoujonAme, strArmatureAme As String
 
     ''' <summary>
     ''' Indice de la base de donnée du goujon affiché
@@ -45,8 +48,14 @@ Public Class Frm_ConnectionSlimFloor
     ''' </summary>
     Dim traveeEnCours As Integer = 1
 
-    Dim y_txt_cmb_esp_longi_actif As Decimal = 141
-    Dim y_txt_cmb_esp_longi_passif As Decimal = 165
+    Dim x_lbl_esp_longi_dalle_mixte As Decimal = -20
+    Dim x_lbl_esp_longi_dalle_pleine As Decimal = 13
+
+    Dim x_txt_cmb_esp_longi_dalle_mixte As Decimal = 135
+    Dim x_txt_cmb_longi_dalle_pleine As Decimal = 168
+
+    Dim y_txt_cmb_esp_longi_actif As Decimal = 40
+    Dim y_txt_cmb_esp_longi_passif As Decimal = 61
 
     ''' <summary>
     ''' Indique la présence d'un bac disposé transversalement (=True) ou non (=False)
@@ -73,8 +82,6 @@ Public Class Frm_ConnectionSlimFloor
     ''' Permet de savoir si on est au sein d'un des txtbox_largeur
     ''' </summary>
     Dim ltxt_Largeur_I1Enter As Boolean
-    Dim ltxt_Largeur_I2Enter As Boolean
-    Dim ltxt_Largeur_I3Enter As Boolean
 
     ''' <summary>
     ''' Permet de bloquer les évènements quand on mets à jour les valeurs dans les txtbox
@@ -82,24 +89,10 @@ Public Class Frm_ConnectionSlimFloor
     Dim lMAJAffichage As Boolean
 
     ''' <summary>
-    ''' Indique que l'on vient de cliquer sur le bouton ajouter ou supprimer
-    ''' </summary>
-    Dim lBtnAjouterSupprimer As Boolean
-
-    ''' <summary>
     ''' Donne le nombre de goujons max
     ''' </summary>
     Dim nb_goujons_trans_max As Integer
 
-    ''' <summary>
-    ''' Permet de garder en mémoire l'ancien indice du combobox travee
-    ''' </summary>
-    Dim Old_SelectedIndex_cmbTravee As Integer
-
-    ''' <summary>
-    ''' Message d'avertissement à afficher en cas de changement du cmb_travee alors qu'il y'a des erreurs à corriger
-    ''' </summary>
-    Dim WarningMessage_CmbTravee As String
 
     'Définition des valeurs limites pour les caractéristiques des goujons
     Dim Hauteur_Goujon_MIN As Decimal
@@ -109,10 +102,6 @@ Public Class Frm_ConnectionSlimFloor
     Dim Diametre_Goujon_MAX As Decimal
 
     'Définition des valeurs limites pour les caractéristiques longitudinales
-    Dim Nb_Zones_MIN As Integer
-    Dim Nb_Zones_MAX As Integer
-    Dim Longueur_Zone_MIN As Decimal
-    Dim Longueur_Zone_MAX As Decimal
     Dim Espacement_Longi_MIN As Decimal 'sxi,min dans les ST
     Dim Espacement_Longi_MAX As Decimal 'sxi,max dans les ST
     Dim Nb_Ondes_MIN As Integer
@@ -126,7 +115,6 @@ Public Class Frm_ConnectionSlimFloor
     Dim Nb_TransV_Row_MAX As Integer
 
     Dim NbTravees As Integer
-
 
 
     '== POM
@@ -148,14 +136,10 @@ Public Class Frm_ConnectionSlimFloor
         GestionStyle()
         GestionUnites()
         RemplirComboBox()
-        PrepareFlechesNavigation()
-        MAJI_BtnNavigation()
         AfficherPoutreEnCours()
-        MAJ_Nb_Zone()
         MAJ_SommeGoujons()
         MAJ_affichage_txt_connecteurs()
         MAJ_affichage_txt_cmb_connection()
-        MAJ_AutomaticDesign()
         lBuild = False
     End Sub
 
@@ -181,10 +165,6 @@ Public Class Frm_ConnectionSlimFloor
 
         'Corrige les valeurs de certaines variables si nécessaire (utile en cas d'un changement de certaines valeurs dans les fenêtres précédentes)
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
-            If Not (MyPoutreLoc.NombreZones(i) >= Nb_Zones_MIN And MyPoutreLoc.NombreZones(i) <= Nb_Zones_MAX) Then
-                MyPoutreLoc.NombreZones(i) = Nb_Zones_MIN
-            End If
-
             For j As Integer = 0 To 2
                 If Not (MyPoutreLoc.NombreGoujonsTransv(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NombreGoujonsTransv(i, j) <= Nb_TransV_Row_MAX) Then
                     MyPoutreLoc.NombreGoujonsTransv(i, j) = Nb_TransV_Row_MIN
@@ -199,20 +179,12 @@ Public Class Frm_ConnectionSlimFloor
         Next
 
         'Il y'a toujours au moins 1 zone 
-        Me.txt_Largeur_I1.Visible = True
         Me.cmb_NbRow_I1.Visible = True
         Me.cmb_EspLongi_I1.Visible = lBacTransv
         Me.txt_EspLongi_I1.Visible = Not lBacTransv
 
         ltxt_Largeur_I1Enter = False
-        ltxt_Largeur_I2Enter = False
-        ltxt_Largeur_I3Enter = False
-
         lMAJAffichage = False
-        lBtnAjouterSupprimer = False
-
-        Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MAX
-        Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MIN
 
         '--> Initialisation table des variables goujons
 
@@ -245,6 +217,14 @@ Public Class Frm_ConnectionSlimFloor
 
                 Me.lbl_Connecteurs.Text = Bloc("CONNECTORS")
 
+                strGoujonSemelle = Bloc("FLANGE_STUD")
+                strGoujonAme = Bloc("WEB_STUD")
+                strArmatureAme = Bloc("WEB_REINF")
+
+                ReDim strTypeConnection(2)
+                strTypeConnection(0) = strGoujonSemelle
+                strTypeConnection(1) = strGoujonAme
+                strTypeConnection(2) = strArmatureAme
 
                 strValMaxConseillee = Bloc("RECMAXVALUE")
 
@@ -253,50 +233,16 @@ Public Class Frm_ConnectionSlimFloor
 
                 Me.lbl_Connection.Text = Bloc("CONNECTION")
 
-                Me.chk_AutomaticDesign.Text = Bloc("AUTOMATICDESIGN")
-                Me.txt_Portee.Text = Bloc("SPAN")
-                strTypeTravee_ConsoleGauche = Bloc("LEFTCANT")
-                strTypeTravee_TraveeCentrale = Bloc("MAINSPAN")
-                strTypeTravee_ConsoleDroite = Bloc("RIGHTCANT")
-                strSpan = Bloc("SPAN")
-
-                'If MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleDroite Then
-                '    If MyPoutreLoc.lTraveeConsoleGauche And MyPoutreLoc.lTraveeConsoleDroite Then
-                '        ReDim strTypeTravee(2)
-                '    Else
-                '        ReDim strTypeTravee(1)
-                '    End If
-                'Else
-                '    ReDim strTypeTravee(0)
-                'End If
-
-                'strTypeTravee(0) = strTypeTravee_TraveeCentrale
-                'If MyPoutreLoc.lTraveeConsoleGauche Then strTypeTravee(1) = strTypeTravee_ConsoleGauche
-                'If MyPoutreLoc.lTraveeConsoleDroite Then
-                '    If MyPoutreLoc.lTraveeConsoleGauche Then
-                '        strTypeTravee(2) = strTypeTravee_ConsoleDroite
-                '    Else
-                '        strTypeTravee(1) = strTypeTravee_ConsoleDroite
-                '    End If
-                'End If
-
-                Me.txt_Largeur.Text = Bloc("WIDTH") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
-                Me.txt_NbRows.Text = Bloc("ROW_NUMBER") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+                Me.lbl_NbRows.Text = Bloc("ROW_NUMBER")
                 If lBacTransv Then
-                    Me.txt_EspacementLongi.Text = Bloc("DISPOSITION_LON_BAC_TR")
+                    Me.lbl_EspacementLongi.Text = Bloc("DISPOSITION_LON_BAC_TR")
                 Else
-                    Me.txt_EspacementLongi.Text = Bloc("DISPOSITION_LON_NO_BAC") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")"
+                    Me.lbl_EspacementLongi.Text = Bloc("DISPOSITION_LON_NO_BAC") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")"
                 End If
-
-                Me.btn_Ajouter.Text = Bloc("ADD")
-                Me.btn_Supprimer.Text = Bloc("DELETE")
 
                 strStud = Bloc("STUDS")
                 strRib = Bloc("RIB")
                 strRibs = Bloc("RIBS")
-
-                WarningMessage_CmbTravee = Bloc("WARNING_CMBTRAVEE")
-
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -321,95 +267,39 @@ Public Class Frm_ConnectionSlimFloor
         Dim index As Integer = 0
 
         NbTravees = MyPoutreLoc.NbTravees
-        ReDim strTypeTravee(NbTravees - 1)
         Dim lCentral As Boolean = (MyPoutreLoc.NombreTraveesDeuxAppuis = 1)
-        If MyPoutreLoc.lTraveeConsoleGauche Then
-            strTypeTravee(index) = strTypeTravee_ConsoleGauche
-            index += 1
-        End If
+
         For i As Integer = 1 To MyPoutreLoc.NombreTraveesDeuxAppuis
-            If lCentral Then
-                strTypeTravee(index) = strTypeTravee_TraveeCentrale
-            Else
-                strTypeTravee(index) = strSpan & " no " & CStr(i)
-            End If
             index += 1
         Next
-        If MyPoutreLoc.lTraveeConsoleDroite Then strTypeTravee(index) = strTypeTravee_ConsoleDroite
 
-        Me.cmb_Travee.Items.Clear()
-        Me.cmb_Travee.Items.AddRange(strTypeTravee)
-        If MyPoutreLoc.lTraveeConsoleGauche Then
-            Me.cmb_Travee.SelectedIndex = 1
-        Else
-            Me.cmb_Travee.SelectedIndex = 0
-        End If
-
-        Old_SelectedIndex_cmbTravee = Me.cmb_Travee.SelectedIndex
+        Me.cmb_TypeConnection.Items.Clear()
+        Me.cmb_TypeConnection.Items.AddRange(strTypeConnection)
+        Me.cmb_TypeConnection.SelectedIndex = 0
 
         Me.cmb_goujons.Items.Clear()
         Me.cmb_goujons.Items.AddRange(tabLabelGoujonsAff)
         Me.cmb_goujons.SelectedIndex = 0
 
         Me.cmb_NbRow_I1.Items.Clear()
-        Me.cmb_NbRow_I2.Items.Clear()
-        Me.cmb_NbRow_I3.Items.Clear()
 
         For i As Integer = Nb_TransV_Row_MIN To Nb_TransV_Row_MAX
             Me.cmb_NbRow_I1.Items.Add(i)
-            Me.cmb_NbRow_I2.Items.Add(i)
-            Me.cmb_NbRow_I3.Items.Add(i)
         Next
 
         Me.cmb_NbRow_I1.SelectedIndex = 0
-        Me.cmb_NbRow_I2.SelectedIndex = 0
-        Me.cmb_NbRow_I3.SelectedIndex = 0
 
 
         If lBacTransv Then
             Me.cmb_EspLongi_I1.Items.Clear()
-            Me.cmb_EspLongi_I2.Items.Clear()
-            Me.cmb_EspLongi_I3.Items.Clear()
 
             For i As Integer = Nb_Ondes_MIN To Nb_Ondes_MAX
                 Me.cmb_EspLongi_I1.Items.Add(i & " " & strRib)
-                Me.cmb_EspLongi_I2.Items.Add(i & " " & strRib)
-                Me.cmb_EspLongi_I3.Items.Add(i & " " & strRib)
             Next
 
             Me.cmb_EspLongi_I1.SelectedIndex = 0
-            Me.cmb_EspLongi_I2.SelectedIndex = 0
-            Me.cmb_EspLongi_I3.SelectedIndex = 0
         End If
 
-    End Sub
-
-    Private Sub PrepareFlechesNavigation()
-
-        Me.btn_Suivant.Visible = (NbTravees > 1)
-        Me.btn_Precedent.Visible = (NbTravees > 1)
-
-        If NbTravees = 1 Then
-            Me.cmb_Travee.Location = New Point(0, Me.cmb_Travee.Location.Y)
-        Else
-            Me.cmb_Travee.Location = New Point(27, Me.cmb_Travee.Location.Y)
-        End If
-
-    End Sub
-
-    Private Sub MAJI_BtnNavigation()
-        If (NbTravees > 1) Then
-            If Me.cmb_Travee.SelectedIndex = 0 Then
-                Me.btn_Precedent.Image = imgList_Navigation.Images("PrecedentNonDispo")
-            Else
-                Me.btn_Precedent.Image = imgList_Navigation.Images("Precedent")
-            End If
-            If Me.cmb_Travee.SelectedIndex = NbTravees - 1 Then
-                Me.btn_Suivant.Image = imgList_Navigation.Images("SuivantNonDispo")
-            Else
-                Me.btn_Suivant.Image = imgList_Navigation.Images("Suivant")
-            End If
-        End If
     End Sub
 
     Private Sub GestionStyle()
@@ -420,10 +310,6 @@ Public Class Frm_ConnectionSlimFloor
 
         Me.lbl_Connection.BackColor = CouleurBackBandeaux
         Me.lbl_Connection.ForeColor = CouleurForeBandeaux
-
-        Me.img_Connection.Dock = DockStyle.Fill
-        '
-        'Me.img_Connection.BorderStyle = BorderStyle.FixedSingle
 
         Me.txt_hsc.ReadOnly = True
         Me.txt_d.ReadOnly = True
@@ -444,84 +330,42 @@ Public Class Frm_ConnectionSlimFloor
         'Gestion de l'affichage en fonction de la présence ou non d'un bac transversal
         If lBacTransv Then
             cmb_EspLongi_I1.Location = New Point(cmb_EspLongi_I1.Location.X, y_txt_cmb_esp_longi_actif)
-            cmb_EspLongi_I2.Location = New Point(cmb_EspLongi_I2.Location.X, y_txt_cmb_esp_longi_actif)
-            cmb_EspLongi_I3.Location = New Point(cmb_EspLongi_I3.Location.X, y_txt_cmb_esp_longi_actif)
-
             txt_EspLongi_I1.Location = New Point(txt_EspLongi_I1.Location.X, y_txt_cmb_esp_longi_passif)
-            txt_EspLongi_I2.Location = New Point(txt_EspLongi_I2.Location.X, y_txt_cmb_esp_longi_passif)
-            txt_EspLongi_I3.Location = New Point(txt_EspLongi_I3.Location.X, y_txt_cmb_esp_longi_passif)
         Else
             cmb_EspLongi_I1.Location = New Point(cmb_EspLongi_I1.Location.X, y_txt_cmb_esp_longi_passif)
-            cmb_EspLongi_I2.Location = New Point(cmb_EspLongi_I2.Location.X, y_txt_cmb_esp_longi_passif)
-            cmb_EspLongi_I3.Location = New Point(cmb_EspLongi_I3.Location.X, y_txt_cmb_esp_longi_passif)
-
             txt_EspLongi_I1.Location = New Point(txt_EspLongi_I1.Location.X, y_txt_cmb_esp_longi_actif)
-            txt_EspLongi_I2.Location = New Point(txt_EspLongi_I2.Location.X, y_txt_cmb_esp_longi_actif)
-            txt_EspLongi_I3.Location = New Point(txt_EspLongi_I3.Location.X, y_txt_cmb_esp_longi_actif)
         End If
 
         cmb_EspLongi_I1.Visible = lBacTransv
-        cmb_EspLongi_I2.Visible = lBacTransv
-        cmb_EspLongi_I3.Visible = lBacTransv
-
         txt_EspLongi_I1.Visible = Not lBacTransv
-        txt_EspLongi_I2.Visible = Not lBacTransv
-        txt_EspLongi_I3.Visible = Not lBacTransv
+
+        'Gestion de l'affichage en fonction de la présence d'une dalle mixte ou non
+        If MyPoutreLoc.Dalle.lMixte Then
+            Me.lbl_NbRows.Location = New Point(x_lbl_esp_longi_dalle_mixte, lbl_NbRows.Location.Y)
+            Me.lbl_EspacementLongi.Location = New Point(x_lbl_esp_longi_dalle_mixte, lbl_EspacementLongi.Location.Y)
+
+            Me.cmb_NbRow_I1.Location = New Point(x_txt_cmb_esp_longi_dalle_mixte, cmb_NbRow_I1.Location.Y)
+            Me.cmb_EspLongi_I1.Location = New Point(x_txt_cmb_esp_longi_dalle_mixte, cmb_EspLongi_I1.Location.Y)
+            Me.txt_EspLongi_I1.Location = New Point(x_txt_cmb_esp_longi_dalle_mixte, txt_EspLongi_I1.Location.Y)
+        Else
+            Me.lbl_NbRows.Location = New Point(x_lbl_esp_longi_dalle_pleine, lbl_NbRows.Location.Y)
+            Me.lbl_EspacementLongi.Location = New Point(x_lbl_esp_longi_dalle_pleine, lbl_EspacementLongi.Location.Y)
+
+            Me.cmb_NbRow_I1.Location = New Point(x_txt_cmb_longi_dalle_pleine, cmb_NbRow_I1.Location.Y)
+            Me.cmb_EspLongi_I1.Location = New Point(x_txt_cmb_longi_dalle_pleine, cmb_EspLongi_I1.Location.Y)
+            Me.txt_EspLongi_I1.Location = New Point(x_txt_cmb_longi_dalle_pleine, txt_EspLongi_I1.Location.Y)
+        End If
 
         'Gestion des valeurs de la poutre en cours
         With MyPoutreLoc
+            Me.cmb_NbRow_I1.SelectedIndex = .NombreGoujonsTransv(traveeEnCours, 0) - 1
 
-            Me.chk_AutomaticDesign.Checked = .lAutomaticDesign
-
-            If .NombreZones(traveeEnCours) >= 1 Then
-                Me.txt_Largeur_I1.Text = GetStringInUnit(.LongueurZone(traveeEnCours, 0), Enu_TypeVariable.Longueur, 4, 2, False)
-                Me.cmb_NbRow_I1.SelectedIndex = .NombreGoujonsTransv(traveeEnCours, 0) - 1
-
-                If Not lBacTransv Then
-                    Me.txt_EspLongi_I1.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 0), Enu_TypeVariable.Dimension, 4, 0, False)
-                Else
-                    Me.cmb_EspLongi_I1.SelectedIndex = .Espacement_Bac_TransZone(traveeEnCours, 0) - 1
-                End If
+            If Not lBacTransv Then
+                Me.txt_EspLongi_I1.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 0), Enu_TypeVariable.Dimension, 4, 0, False)
+            Else
+                Me.cmb_EspLongi_I1.SelectedIndex = .Espacement_Bac_TransZone(traveeEnCours, 0) - 1
             End If
 
-            If .NombreZones(traveeEnCours) >= 2 Then
-                Me.txt_Largeur_I2.Text = GetStringInUnit(.LongueurZone(traveeEnCours, 1), Enu_TypeVariable.Longueur, 4, 2, False)
-                Me.cmb_NbRow_I2.SelectedIndex = .NombreGoujonsTransv(traveeEnCours, 1) - 1
-
-                If Not lBacTransv Then
-                    Me.txt_EspLongi_I2.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 1), Enu_TypeVariable.Dimension, 4, 0, False)
-                Else
-                    Me.cmb_EspLongi_I2.SelectedIndex = .Espacement_Bac_TransZone(traveeEnCours, 1) - 1
-                End If
-            End If
-
-            If .NombreZones(traveeEnCours) >= 3 Then
-                Me.txt_Largeur_I3.Text = GetStringInUnit(.LongueurZone(traveeEnCours, 2), Enu_TypeVariable.Longueur, 4, 2, False)
-                Me.cmb_NbRow_I3.SelectedIndex = .NombreGoujonsTransv(traveeEnCours, 2) - 1
-
-                If Not lBacTransv Then
-                    Me.txt_EspLongi_I3.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 2), Enu_TypeVariable.Dimension, 4, 0, False)
-                Else
-                    Me.cmb_EspLongi_I3.SelectedIndex = .Espacement_Bac_TransZone(traveeEnCours, 2) - 1
-                End If
-            End If
-
-
-            'Me.cmb_NbRow_I1.SelectedItem = .NombreGoujonsTransv(traveeEnCours, 0)
-            'Me.cmb_NbRow_I2.SelectedItem = .NombreGoujonsTransv(traveeEnCours, 1)
-            'Me.cmb_NbRow_I3.SelectedItem = .NombreGoujonsTransv(traveeEnCours, 2)
-
-            'If lBacTransv Then
-            '    Me.cmb_EspLongi_I1.SelectedItem = .Espacement_Bac_Trans(traveeEnCours, 0)
-            '    Me.cmb_EspLongi_I2.SelectedItem = .Espacement_Bac_Trans(traveeEnCours, 1)
-            '    Me.cmb_EspLongi_I3.SelectedItem = .Espacement_Bac_Trans(traveeEnCours, 2)
-            'Else
-            '    Me.txt_EspLongi_I1.Text = GetStringInUnit(.Espacement(traveeEnCours, 0), Enu_TypeVariable.Dimension, 4, 0, False)
-            '    Me.txt_EspLongi_I2.Text = GetStringInUnit(.Espacement(traveeEnCours, 1), Enu_TypeVariable.Dimension, 4, 0, False)
-            '    Me.txt_EspLongi_I3.Text = GetStringInUnit(.Espacement(traveeEnCours, 2), Enu_TypeVariable.Dimension, 4, 0, False)
-            'End If
-
-            'Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonsTot(traveeEnCours) & " " & strStud
             Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonTot(traveeEnCours) & " " & strStud
 
         End With
@@ -537,7 +381,7 @@ Public Class Frm_ConnectionSlimFloor
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
         Dim lModif As Boolean = False
-        If ValideSaisieFenetre() Or Me.chk_AutomaticDesign.Checked Then
+        If ValideSaisieFenetre() Then
 
             TransfertSaisie(lModif)
 
@@ -561,21 +405,12 @@ Public Class Frm_ConnectionSlimFloor
     Private Function ValideSaisieFenetre() As Boolean
         Dim lFrm_Valide As Boolean = True
 
-        'Vérification des textbox au cas où
         Dim list_txtbox As New List(Of TextBox)
         list_txtbox.Add(Me.txt_hsc)
         list_txtbox.Add(Me.txt_d)
-        'list_txtbox.Add(Me.txt_fy)
-        'list_txtbox.Add(Me.txt_fu)
-
-        If MyPoutreLoc.NombreZones(traveeEnCours) >= 1 Then list_txtbox.Add(Me.txt_Largeur_I1)
-        If MyPoutreLoc.NombreZones(traveeEnCours) >= 2 Then list_txtbox.Add(Me.txt_Largeur_I2)
-        If MyPoutreLoc.NombreZones(traveeEnCours) >= 3 Then list_txtbox.Add(Me.txt_Largeur_I3)
 
         If Not lBacTransv Then
             If MyPoutreLoc.NombreZones(traveeEnCours) >= 1 Then list_txtbox.Add(Me.txt_EspLongi_I1)
-            If MyPoutreLoc.NombreZones(traveeEnCours) >= 2 Then list_txtbox.Add(Me.txt_EspLongi_I2)
-            If MyPoutreLoc.NombreZones(traveeEnCours) >= 3 Then list_txtbox.Add(Me.txt_EspLongi_I3)
         End If
 
         Dim ValeurUI As Decimal
@@ -598,102 +433,37 @@ Public Class Frm_ConnectionSlimFloor
 
             GereTransfertValeur(MyPoutreLoc.lAutomaticDesign, .lAutomaticDesign, lModif)
 
-            If Not Me.chk_AutomaticDesign.Checked Then
-
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom, .Dalle.ConnecteurGoujonSoude.nom, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, .Dalle.ConnecteurGoujonSoude.hsc, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d, .Dalle.ConnecteurGoujonSoude.d, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy, .Dalle.ConnecteurGoujonSoude.Fy, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu, .Dalle.ConnecteurGoujonSoude.Fu, lModif)
+            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom, .Dalle.ConnecteurGoujonSoude.nom, lModif)
+            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, .Dalle.ConnecteurGoujonSoude.hsc, lModif)
+            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d, .Dalle.ConnecteurGoujonSoude.d, lModif)
+            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy, .Dalle.ConnecteurGoujonSoude.Fy, lModif)
+            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu, .Dalle.ConnecteurGoujonSoude.Fu, lModif)
 
 
-                For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
+            For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
 
-                    GereTransfertValeur(MyPoutreLoc.NombreZones(i), .NombreZones(i), lModif)
-                    'GereTransfertValeur(MyPoutreLoc.NombreGoujonsTot(i), .NombreGoujonsTot(i), lModif)
+                GereTransfertValeur(MyPoutreLoc.NombreZones(i), .NombreZones(i), lModif)
+                'GereTransfertValeur(MyPoutreLoc.NombreGoujonsTot(i), .NombreGoujonsTot(i), lModif)
 
-                    For j As Integer = 0 To .NombreZones(i) - 1
+                For j As Integer = 0 To .NombreZones(i) - 1
 
-                        GereTransfertValeur(MyPoutreLoc.LongueurZone(i, j), .LongueurZone(i, j), lModif)
-                        GereTransfertValeur(MyPoutreLoc.NombreGoujonsTransv(i, j), .NombreGoujonsTransv(i, j), lModif)
+                    GereTransfertValeur(MyPoutreLoc.LongueurZone(i, j), .LongueurZone(i, j), lModif)
+                    GereTransfertValeur(MyPoutreLoc.NombreGoujonsTransv(i, j), .NombreGoujonsTransv(i, j), lModif)
 
-                        If lBacTransv Then
-                            GereTransfertValeur(MyPoutreLoc.Espacement_Bac_TransZone(i, j), .Espacement_Bac_TransZone(i, j), lModif)
-                            .EspacementZone(i, j) = .Espacement_Bac_TransZone(i, j) * .Dalle.Bac.Ep
+                    If lBacTransv Then
+                        GereTransfertValeur(MyPoutreLoc.Espacement_Bac_TransZone(i, j), .Espacement_Bac_TransZone(i, j), lModif)
+                        .EspacementZone(i, j) = .Espacement_Bac_TransZone(i, j) * .Dalle.Bac.Ep
 
-                        Else
-                            GereTransfertValeur(MyPoutreLoc.EspacementZone(i, j), .EspacementZone(i, j), lModif)
-                        End If
-                    Next
-
+                    Else
+                        GereTransfertValeur(MyPoutreLoc.EspacementZone(i, j), .EspacementZone(i, j), lModif)
+                    End If
                 Next
 
-            End If
+            Next
+
         End With
 
     End Sub
-
-
-    'Private Sub TransfertSaisie(ByRef lModif As Boolean)
-    '    With MyProjet.Poutres(MyProjet.IndEnCours)
-
-    '        If .lAutomaticDesign <> MyPoutreLoc.lAutomaticDesign Then
-    '            lModif = True
-    '            .lAutomaticDesign = MyPoutreLoc.lAutomaticDesign
-    '        End If
-
-    '        If Not Me.chk_AutomaticDesign.Checked Then
-
-    '            If .Dalle.Connecteur.nom <> MyPoutreLoc.Dalle.Connecteur.nom Then
-    '                lModif = True
-    '                .Dalle.Connecteur.nom = MyPoutreLoc.Dalle.Connecteur.nom
-    '                .Dalle.Connecteur.Caracteristiques_Goujons()
-    '            End If
-
-    '            For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
-
-    '                If .NombreZone(i) <> MyPoutreLoc.NombreZone(i) Then
-    '                    lModif = True
-    '                    .NombreZone(i) = MyPoutreLoc.NombreZone(i)
-    '                End If
-
-    '                If .NombreGoujonsTot(i) <> MyPoutreLoc.NombreGoujonsTot(i) Then
-    '                    lModif = True
-    '                    .NombreGoujonsTot(i) = MyPoutreLoc.NombreGoujonsTot(i)
-    '                End If
-
-    '                For j As Integer = 0 To .NombreZone(i) - 1
-    '                    If .Longueur_Zone(i, j) <> MyPoutreLoc.Longueur_Zone(i, j) Then
-    '                        lModif = True
-    '                        .Longueur_Zone(i, j) = MyPoutreLoc.Longueur_Zone(i, j)
-    '                    End If
-
-    '                    If .NombreGoujonsTransv(i, j) <> MyPoutreLoc.NombreGoujonsTransv(i, j) Then
-    '                        lModif = True
-    '                        .NombreGoujonsTransv(i, j) = MyPoutreLoc.NombreGoujonsTransv(i, j)
-    '                    End If
-
-    '                    If lBacTransv Then
-    '                        If .Espacement_Bac_Trans(i, j) <> MyPoutreLoc.Espacement_Bac_Trans(i, j) Then
-    '                            lModif = True
-    '                            .Espacement_Bac_Trans(i, j) = MyPoutreLoc.Espacement_Bac_Trans(i, j)
-    '                            .Espacement(i, j) = .Espacement_Bac_Trans(i, j) * .Dalle.Bac.Ep
-    '                        End If
-    '                    Else
-    '                        If .Espacement(i, j) <> MyPoutreLoc.Espacement(i, j) Then
-    '                            lModif = True
-    '                            .Espacement(i, j) = MyPoutreLoc.Espacement(i, j)
-    '                        End If
-    '                    End If
-    '                Next
-
-    '            Next
-
-    '        End If
-    '    End With
-
-
-    'End Sub
 
 
 #End Region
@@ -754,16 +524,13 @@ Public Class Frm_ConnectionSlimFloor
 
     End Sub
 
-    Private Sub DessinConnection(sender As Object, e As PaintEventArgs) Handles img_Connection.Paint
-        DessinFrmConnection_Connection(e.Graphics, MyPoutreLoc, Me.img_Connection.ClientRectangle.Width, Me.img_Connection.ClientRectangle.Height, 1, traveeEnCours, Not MyPoutreLoc.lAutomaticDesign, strStud)
+    Private Sub DessinConnecteurs(sender As Object, e As PaintEventArgs) Handles img_Stud.Paint
+        DessineDalleConnectionSlimfloor(e.Graphics, Me.img_Stud.ClientRectangle.Width, Me.img_Stud.ClientRectangle.Height,
+            MyPoutreLoc, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire)
     End Sub
 
-    Private Sub DessinConnecteurs(sender As Object, e As PaintEventArgs) Handles img_Stud.Paint
-        DessinFrmConnection_Connecteurs(e.Graphics, Me.img_Stud.ClientRectangle.Width, Me.img_Stud.ClientRectangle.Height, 1, MyPoutreLoc)
-    End Sub
 
 #End Region
-
 #Region " Evènements "
     ''' <summary>
     ''' Met à jour les valeurs limites en fonction des données renseignées
@@ -797,17 +564,6 @@ Public Class Frm_ConnectionSlimFloor
         Next
         If nb_goujons_trans_max >= 2 Then Diametre_Goujon_MAX = Math.Min(2.5 * MyPoutreLoc.Section.ProfilA.Tfs, Diametre_Goujon_MAX)
 
-        'Définition des valeurs limites pour les caractéristiques longitudinales
-        Longueur_Zone_MIN = Math.Min(1, MyPoutreLoc.LongueurTravee(traveeEnCours))
-        Longueur_Zone_MAX = MyPoutreLoc.LongueurTravee(traveeEnCours)
-        Nb_Zones_MIN = 1
-
-        If traveeEnCours = 0 Or traveeEnCours = MyPoutreLoc.IndiceTraveeConsoleDroite Then
-            Nb_Zones_MAX = 1 'dans le cas de consoles, on impose une seule zone de connection 
-        Else 'cas d'une travée courante
-            Nb_Zones_MAX = Math.Min(Math.Floor(MyPoutreLoc.LongueurTravee(traveeEnCours) / Longueur_Zone_MIN), 3)
-        End If
-
         Espacement_Longi_MIN = 5 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
         Espacement_Longi_MAX = Math.Min(800 / 1000, 6 * MyPoutreLoc.Dalle.Ep_td)
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
@@ -825,6 +581,7 @@ Public Class Frm_ConnectionSlimFloor
         End If
         b_app_min = OptionsSlimFloor.bappmin
         Nb_TransV_Row_MIN = 1
+
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
             If MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu Then
                 Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * b_app_min - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1)
@@ -835,55 +592,9 @@ Public Class Frm_ConnectionSlimFloor
             Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1)
         End If
 
+        Nb_TransV_Row_MAX = Math.Max(Nb_TransV_Row_MAX, Nb_TransV_Row_MIN)
 
-    End Sub
 
-    ''' <summary>
-    ''' Met à jour la fenêtre lorsque l'option automatic design est sélectionnée
-    ''' </summary>
-    Private Sub MAJ_AutomaticDesign()
-        With MyPoutreLoc
-
-            Me.txt_Portee.Enabled = Not .lAutomaticDesign
-            Me.cmb_Travee.Enabled = Not .lAutomaticDesign
-
-            Me.txt_Indice.Enabled = Not .lAutomaticDesign
-            Me.txt_I1.Enabled = Not .lAutomaticDesign
-            Me.txt_I2.Enabled = Not .lAutomaticDesign
-            Me.txt_I3.Enabled = Not .lAutomaticDesign
-
-            Me.txt_Largeur.Enabled = Not .lAutomaticDesign
-            Me.txt_Largeur_I1.Enabled = Not .lAutomaticDesign
-            Me.txt_Largeur_I2.Enabled = Not .lAutomaticDesign
-            Me.txt_Largeur_I3.Enabled = Not .lAutomaticDesign
-
-            Me.txt_NbRows.Enabled = Not .lAutomaticDesign
-            Me.cmb_NbRow_I1.Enabled = Not .lAutomaticDesign
-            Me.cmb_NbRow_I2.Enabled = Not .lAutomaticDesign
-            Me.cmb_NbRow_I3.Enabled = Not .lAutomaticDesign
-
-            Me.txt_EspacementLongi.Enabled = Not .lAutomaticDesign
-            Me.cmb_EspLongi_I1.Enabled = Not .lAutomaticDesign
-            Me.cmb_EspLongi_I2.Enabled = Not .lAutomaticDesign
-            Me.cmb_EspLongi_I3.Enabled = Not .lAutomaticDesign
-
-            Me.txt_EspLongi_I1.Enabled = Not .lAutomaticDesign
-            Me.txt_EspLongi_I2.Enabled = Not .lAutomaticDesign
-            Me.txt_EspLongi_I3.Enabled = Not .lAutomaticDesign
-
-            If .lAutomaticDesign Then
-                Me.btn_Ajouter.Enabled = Not .lAutomaticDesign
-                Me.btn_Supprimer.Enabled = Not .lAutomaticDesign
-            Else
-                Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MAX
-                Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MIN
-            End If
-
-            Me.etq_Somme.Visible = Not .lAutomaticDesign
-
-            Me.img_Connection.Invalidate()
-
-        End With
     End Sub
 
     ''' <summary>
@@ -903,252 +614,59 @@ Public Class Frm_ConnectionSlimFloor
     Private Sub MAJ_affichage_txt_cmb_connection()
         lMAJAffichage = True
 
-        'Met à jours la visibilité des txtbox
-
-        Me.txt_Largeur_I1.ReadOnly = MyPoutreLoc.NombreZones(traveeEnCours) = 1
-
-        Me.txt_I2.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 2
-        Me.txt_Largeur_I2.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 2
-        Me.cmb_NbRow_I2.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 2
-        Me.cmb_EspLongi_I2.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 2 And lBacTransv
-        Me.txt_EspLongi_I2.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 2 And Not lBacTransv
-
-        Me.txt_I3.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 3
-        Me.txt_Largeur_I3.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 3
-        Me.cmb_NbRow_I3.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 3
-        Me.cmb_EspLongi_I3.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 3 And lBacTransv
-        Me.txt_EspLongi_I3.Visible = MyPoutreLoc.NombreZones(traveeEnCours) >= 3 And Not lBacTransv
-
         'Met à jour les valeurs dans les txtbox ou cmbbox 
 
-        If Not ltxt_Largeur_I1Enter Or lBtnAjouterSupprimer Then Me.txt_Largeur_I1.Text = GetStringInUnit(MyPoutreLoc.LongueurZone(traveeEnCours, 0), Enu_TypeVariable.Longueur, 4, 2, False)
-        If Not ltxt_Largeur_I2Enter Or lBtnAjouterSupprimer Then Me.txt_Largeur_I2.Text = GetStringInUnit(MyPoutreLoc.LongueurZone(traveeEnCours, 1), Enu_TypeVariable.Longueur, 4, 2, False)
-        If Not ltxt_Largeur_I3Enter Or lBtnAjouterSupprimer Then Me.txt_Largeur_I3.Text = GetStringInUnit(MyPoutreLoc.LongueurZone(traveeEnCours, 2), Enu_TypeVariable.Longueur, 4, 2, False)
-
         Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) - 1
-        Me.cmb_NbRow_I2.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 1) - 1
-        Me.cmb_NbRow_I3.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 2) - 1
 
         If lBacTransv Then
             Me.cmb_EspLongi_I1.SelectedIndex = MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0) - 1
-            Me.cmb_EspLongi_I2.SelectedIndex = MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 1) - 1
-            Me.cmb_EspLongi_I3.SelectedIndex = MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 2) - 1
         Else
             Me.txt_EspLongi_I1.Text = GetStringInUnit(MyPoutreLoc.EspacementZone(traveeEnCours, 0), Enu_TypeVariable.Dimension, 4, 0, False)
-            Me.txt_EspLongi_I2.Text = GetStringInUnit(MyPoutreLoc.EspacementZone(traveeEnCours, 1), Enu_TypeVariable.Dimension, 4, 0, False)
-            Me.txt_EspLongi_I3.Text = GetStringInUnit(MyPoutreLoc.EspacementZone(traveeEnCours, 2), Enu_TypeVariable.Dimension, 4, 0, False)
         End If
 
         lMAJAffichage = False
-    End Sub
-
-    ''' <summary>
-    ''' Indique dans quel textbox on se situe
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    Private Sub txt_Largeur_I1_I2_I3_Enter(sender As Object, e As EventArgs) Handles txt_Largeur_I1.Enter, txt_Largeur_I2.Enter, txt_Largeur_I3.Enter
-        If lBuild Or lMAJAffichage Then Exit Sub
-
-        ltxt_Largeur_I1Enter = sender.name = txt_Largeur_I1.Name
-        ltxt_Largeur_I2Enter = sender.name = txt_Largeur_I2.Name
-        ltxt_Largeur_I3Enter = sender.name = txt_Largeur_I3.Name
-
-    End Sub
-
-    Private Sub txt_Largeur_EspLongi_I1_I2_I3_Leave(sender As Object, e As EventArgs) Handles txt_Largeur_I1.Leave, txt_Largeur_I2.Leave, txt_Largeur_I3.Leave
-        ltxt_Largeur_I1Enter = sender.name = txt_Largeur_I1.Name
-        ltxt_Largeur_I2Enter = sender.name = txt_Largeur_I2.Name
-        ltxt_Largeur_I3Enter = sender.name = txt_Largeur_I3.Name
-        MAJ_affichage_txt_cmb_connection()
     End Sub
 
 #End Region
 
 #Region " Evènements saisie "
 
-    Private Sub GestionNavigation(sender As Object, e As EventArgs) Handles btn_Suivant.Click, btn_Precedent.Click
-        Dim Index As Integer = Me.cmb_Travee.SelectedIndex
-        Select Case sender.name
-            Case Me.btn_Precedent.Name
-                Me.cmb_Travee.SelectedIndex = Math.Max(0, Index - 1)
-            Case Me.btn_Suivant.Name
-                Me.cmb_Travee.SelectedIndex = Math.Min(NbTravees - 1, Index + 1)
-        End Select
-        MAJI_BtnNavigation()
-    End Sub
-
-
-    Private Sub btn_Ajouter_Click(sender As Object, e As EventArgs) Handles btn_Ajouter.Click
-        If lBuild Then Exit Sub
-
-        lBtnAjouterSupprimer = True
-
-        If MyPoutreLoc.NombreZones(traveeEnCours) <= Nb_Zones_MAX - 1 Then MyPoutreLoc.NombreZones(traveeEnCours) += 1
-        Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MAX
-        Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MIN
-        MAJ_Nb_Zone()
-        MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb_connection()
-
-        ValideSaisieFenetre()
-
-        lBtnAjouterSupprimer = False
-    End Sub
-
-    Private Sub btn_Supprimer_Click(sender As Object, e As EventArgs) Handles btn_Supprimer.Click
-        If lBuild Then Exit Sub
-
-        lBtnAjouterSupprimer = True
-
-        If MyPoutreLoc.NombreZones(traveeEnCours) >= Nb_Zones_MIN + 1 Then MyPoutreLoc.NombreZones(traveeEnCours) -= 1
-        Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MAX
-        Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MIN
-        MAJ_Nb_Zone()
-        MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb_connection()
-
-        ValideSaisieFenetre()
-
-        lBtnAjouterSupprimer = False
-    End Sub
-
-    Sub MAJ_Nb_Zone()
-
-        'MAJ des longueurs de zone suite à un clique Ajouter ou Supprimer
-        If lBuild Then Exit Sub
-        Select Case MyPoutreLoc.NombreZones(traveeEnCours)
-            Case 1
-                MyPoutreLoc.LongueurZone(traveeEnCours, 0) = MyPoutreLoc.LongueurTravee(traveeEnCours)
-                MyPoutreLoc.LongueurZone(traveeEnCours, 1) = 0
-                MyPoutreLoc.LongueurZone(traveeEnCours, 2) = 0
-            Case 2
-                MyPoutreLoc.LongueurZone(traveeEnCours, 0) = MyPoutreLoc.LongueurTravee(traveeEnCours) / 2
-                MyPoutreLoc.LongueurZone(traveeEnCours, 1) = MyPoutreLoc.LongueurTravee(traveeEnCours) / 2
-                MyPoutreLoc.LongueurZone(traveeEnCours, 2) = 0
-            Case 3
-                MyPoutreLoc.LongueurZone(traveeEnCours, 0) = MyPoutreLoc.LongueurTravee(traveeEnCours) / 3
-                MyPoutreLoc.LongueurZone(traveeEnCours, 1) = MyPoutreLoc.LongueurTravee(traveeEnCours) / 3
-                MyPoutreLoc.LongueurZone(traveeEnCours, 2) = MyPoutreLoc.LongueurTravee(traveeEnCours) / 3
-        End Select
-
-
-    End Sub
-
     Private Sub MAJ_SommeGoujons()
-        'MAJ du calcul de la somme des goujons après les modifications des valeurs
-
-        'MyPoutreLoc.NombreGoujonsTot(traveeEnCours) = 0
-        'For i As Integer = 0 To 2
-        '    MyPoutreLoc.NombreGoujonsTot(traveeEnCours) += Math.Floor(MyPoutreLoc.ZoneNombreGoujonsTransv(traveeEnCours, i) * MyPoutreLoc.ZoneLongueur(traveeEnCours, i) / MyPoutreLoc.ZoneEspacement(traveeEnCours, i))
-        'Next
-
-        'Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonsTot(traveeEnCours) & " " & strStud
         Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonTot(traveeEnCours) & " " & strStud
+    End Sub
 
-        Me.img_Connection.Invalidate()
+    Private Sub cmb_NbRow_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbRow_I1.SelectedIndexChanged
+        If lBuild Or lMAJAffichage Then Exit Sub
 
+        MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) = cmb_NbRow_I1.SelectedIndex + 1
+
+        MAJ_SommeGoujons()
+        MAJ_affichage_txt_cmb_connection()
+
+        img_Stud.Invalidate()
     End Sub
 
 
-    Private Sub txt_Largeur_I1_I2_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_Largeur_I1.TextChanged, txt_Largeur_I2.TextChanged, txt_Largeur_I3.TextChanged
+
+    Private Sub cmb_EspLongi_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_EspLongi_I1.SelectedIndexChanged
+        If lBuild Or lMAJAffichage Then Exit Sub
+
+        MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0) = cmb_EspLongi_I1.SelectedIndex + 1
+        MyPoutreLoc.EspacementZone(traveeEnCours, 0) = MyPoutreLoc.Esp_longi_bac * MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0)
+
+        MAJ_SommeGoujons()
+        MAJ_affichage_txt_cmb_connection()
+
+    End Sub
+
+    Private Sub txt_EspLongi_I1_I2_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_EspLongi_I1.TextChanged
         If lBuild Or lMAJAffichage Then Exit Sub
 
         Dim ValeurUI As Decimal
 
         If VerificationSaisie(sender, ValeurUI) Then
 
-            Dim kUnit As Decimal = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-
-            Select Case sender.name
-                Case txt_Largeur_I1.Name
-                    If Not ltxt_Largeur_I1Enter Then Exit Sub
-                    MyPoutreLoc.LongueurZone(traveeEnCours, 0) = ValeurUI
-
-                    Select Case MyPoutreLoc.NombreZones(traveeEnCours)
-                        Case 1
-                            MyPoutreLoc.LongueurZone(traveeEnCours, 1) = 0
-                            MyPoutreLoc.LongueurZone(traveeEnCours, 2) = 0
-                        Case 2
-                            MyPoutreLoc.LongueurZone(traveeEnCours, 1) = MyPoutreLoc.LongueurTravee(traveeEnCours) - MyPoutreLoc.LongueurZone(traveeEnCours, 0)
-                            MyPoutreLoc.LongueurZone(traveeEnCours, 2) = 0
-                        Case 3
-                            MyPoutreLoc.LongueurZone(traveeEnCours, 1) = (MyPoutreLoc.LongueurTravee(traveeEnCours) - MyPoutreLoc.LongueurZone(traveeEnCours, 0)) / 2
-                            MyPoutreLoc.LongueurZone(traveeEnCours, 2) = (MyPoutreLoc.LongueurTravee(traveeEnCours) - MyPoutreLoc.LongueurZone(traveeEnCours, 0)) / 2
-                    End Select
-
-                Case txt_Largeur_I2.Name
-                    If Not ltxt_Largeur_I2Enter Then Exit Sub
-                    MyPoutreLoc.LongueurZone(traveeEnCours, 1) = ValeurUI
-
-                    If MyPoutreLoc.NombreZones(traveeEnCours) = 2 Then
-                        MyPoutreLoc.LongueurZone(traveeEnCours, 0) = MyPoutreLoc.LongueurTravee(traveeEnCours) - MyPoutreLoc.LongueurZone(traveeEnCours, 1)
-                        MyPoutreLoc.LongueurZone(traveeEnCours, 2) = 0
-                    Else '3 zones
-                        MyPoutreLoc.LongueurZone(traveeEnCours, 2) = MyPoutreLoc.LongueurTravee(traveeEnCours) - MyPoutreLoc.LongueurZone(traveeEnCours, 0) - MyPoutreLoc.LongueurZone(traveeEnCours, 1)
-                    End If
-
-                Case txt_Largeur_I3.Name
-                    If Not ltxt_Largeur_I3Enter Then Exit Sub
-                    MyPoutreLoc.LongueurZone(traveeEnCours, 2) = ValeurUI
-                    MyPoutreLoc.LongueurZone(traveeEnCours, 0) = MyPoutreLoc.LongueurTravee(traveeEnCours) - MyPoutreLoc.LongueurZone(traveeEnCours, 1) - MyPoutreLoc.LongueurZone(traveeEnCours, 2)
-            End Select
-            MAJ_SommeGoujons()
-            MAJ_affichage_txt_cmb_connection()
-
-        End If
-    End Sub
-
-    Private Sub cmb_NbRow_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbRow_I1.SelectedIndexChanged, cmb_NbRow_I2.SelectedIndexChanged, cmb_NbRow_I3.SelectedIndexChanged
-        If lBuild Or lMAJAffichage Then Exit Sub
-
-        Select Case sender.name
-            Case cmb_NbRow_I1.Name
-                MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) = cmb_NbRow_I1.SelectedIndex + 1
-            Case cmb_NbRow_I2.Name
-                MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 1) = cmb_NbRow_I2.SelectedIndex + 1
-            Case cmb_NbRow_I3.Name
-                MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 2) = cmb_NbRow_I3.SelectedIndex + 1
-        End Select
-
-        MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb_connection()
-    End Sub
-
-
-
-    Private Sub cmb_EspLongi_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_EspLongi_I1.SelectedIndexChanged, cmb_EspLongi_I2.SelectedIndexChanged, cmb_EspLongi_I3.SelectedIndexChanged
-        If lBuild Or lMAJAffichage Then Exit Sub
-        Select Case sender.name
-            Case cmb_EspLongi_I1.Name
-                MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0) = cmb_EspLongi_I1.SelectedIndex + 1
-                MyPoutreLoc.EspacementZone(traveeEnCours, 0) = MyPoutreLoc.Esp_longi_bac * MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0)
-            Case cmb_EspLongi_I2.Name
-                MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 1) = cmb_EspLongi_I2.SelectedIndex + 1
-                MyPoutreLoc.EspacementZone(traveeEnCours, 1) = MyPoutreLoc.Esp_longi_bac * MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 1)
-            Case cmb_EspLongi_I3.Name
-                MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 2) = cmb_EspLongi_I3.SelectedIndex + 1
-                MyPoutreLoc.EspacementZone(traveeEnCours, 2) = MyPoutreLoc.Esp_longi_bac * MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 2)
-        End Select
-        MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb_connection()
-    End Sub
-
-    Private Sub txt_EspLongi_I1_I2_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_EspLongi_I1.TextChanged, txt_EspLongi_I2.TextChanged, txt_EspLongi_I3.TextChanged
-        If lBuild Or lMAJAffichage Then Exit Sub
-
-        Dim ValeurUI As Decimal
-
-        If VerificationSaisie(sender, ValeurUI) Then
-
-            Select Case sender.name
-                Case txt_EspLongi_I1.Name
-                    MyPoutreLoc.EspacementZone(traveeEnCours, 0) = ValeurUI
-                Case txt_EspLongi_I2.Name
-                    MyPoutreLoc.EspacementZone(traveeEnCours, 1) = ValeurUI
-                Case txt_EspLongi_I3.Name
-                    MyPoutreLoc.EspacementZone(traveeEnCours, 2) = ValeurUI
-            End Select
+            MyPoutreLoc.EspacementZone(traveeEnCours, 0) = ValeurUI
             MAJ_SommeGoujons()
 
         End If
@@ -1159,7 +677,6 @@ Public Class Frm_ConnectionSlimFloor
 
         Dim iStud As Integer = cmb_goujons.SelectedIndex
         MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom = tabLabelGoujons(iStud)
-        'MyPoutreLoc.Dalle.Connecteur.Caracteristiques_Goujons()
         MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc = BaseGoujons(iStud).hsc
         MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d = BaseGoujons(iStud).d
         MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy = BaseGoujons(iStud).Fy
@@ -1194,99 +711,34 @@ Public Class Frm_ConnectionSlimFloor
                         lMAJ_cmb_EspLongi = True
                     End If
                 Else
-
-
                     ValeurUI = Me.txt_EspLongi_I1.Text
                     VerificationSaisie(Me.txt_EspLongi_I1, ValeurUI, False)
 
-                    ValeurUI = Me.txt_EspLongi_I2.Text
-                    VerificationSaisie(Me.txt_EspLongi_I2, ValeurUI, False)
-
-                    ValeurUI = Me.txt_EspLongi_I3.Text
-                    VerificationSaisie(Me.txt_EspLongi_I3, ValeurUI, False)
                 End If
             Next
         Next
 
         If lMAJ_cmb_NbRow Then
             Me.cmb_NbRow_I1.Items.Clear()
-            Me.cmb_NbRow_I2.Items.Clear()
-            Me.cmb_NbRow_I3.Items.Clear()
 
             For i As Integer = Nb_TransV_Row_MIN To Nb_TransV_Row_MAX
                 Me.cmb_NbRow_I1.Items.Add(i)
-                Me.cmb_NbRow_I2.Items.Add(i)
-                Me.cmb_NbRow_I3.Items.Add(i)
             Next
 
             Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) - 1
-            Me.cmb_NbRow_I2.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 1) - 1
-            Me.cmb_NbRow_I3.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 2) - 1
         End If
 
         If lMAJ_cmb_EspLongi Then
             Me.cmb_EspLongi_I1.Items.Clear()
-            Me.cmb_EspLongi_I2.Items.Clear()
-            Me.cmb_EspLongi_I3.Items.Clear()
 
             For i As Integer = Nb_Ondes_MIN To Nb_Ondes_MAX
                 Me.cmb_EspLongi_I1.Items.Add(i & " " & strRib)
-                Me.cmb_EspLongi_I2.Items.Add(i & " " & strRib)
-                Me.cmb_EspLongi_I3.Items.Add(i & " " & strRib)
             Next
 
             Me.cmb_EspLongi_I1.SelectedIndex = MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0) - 1
-            Me.cmb_EspLongi_I2.SelectedIndex = MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 1) - 1
-            Me.cmb_EspLongi_I3.SelectedIndex = MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 2) - 1
         End If
 
 
-    End Sub
-
-    Private Sub cmb_Travee_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Travee.SelectedIndexChanged
-        If lBuild Then Exit Sub
-
-        If ValideSaisieFenetre() Then
-
-            Old_SelectedIndex_cmbTravee = cmb_Travee.SelectedIndex
-
-            'permet de mettre à jour les variables locales qui tracent l'indice de la travée en cours 
-
-            Select Case cmb_Travee.Text
-                Case strTypeTravee_ConsoleGauche
-                    traveeEnCours = 0
-
-                Case strTypeTravee_TraveeCentrale
-                    traveeEnCours = 1
-
-                Case strTypeTravee_ConsoleDroite
-                    traveeEnCours = MyPoutreLoc.IndiceTraveeConsoleDroite
-            End Select
-
-            'Réinitialise les boutons Ajouter/Supprimer
-
-            MAJ_Valeurs_Limites()
-
-            Me.btn_Ajouter.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MAX
-            Me.btn_Supprimer.Enabled = Not MyPoutreLoc.NombreZones(traveeEnCours) = Nb_Zones_MIN
-
-            MAJ_SommeGoujons()
-            MAJ_affichage_txt_cmb_connection()
-            MAJI_BtnNavigation()
-
-        Else
-
-            If Not cmb_Travee.SelectedIndex = Old_SelectedIndex_cmbTravee Then MsgBox(WarningMessage_CmbTravee)
-            cmb_Travee.SelectedIndex = Old_SelectedIndex_cmbTravee
-
-        End If
-
-    End Sub
-
-    Private Sub chk_AutomaticDesign_CheckedChanged(sender As Object, e As EventArgs) Handles chk_AutomaticDesign.CheckedChanged
-        If lBuild Then Exit Sub
-        MyPoutreLoc.lAutomaticDesign = chk_AutomaticDesign.Checked
-        MAJ_AutomaticDesign()
     End Sub
 
 
@@ -1318,13 +770,7 @@ Public Class Frm_ConnectionSlimFloor
                 ValMin = Diametre_Goujon_MIN / kUnit
                 ValMax = Diametre_Goujon_MAX / kUnit
 
-            Case Me.txt_Largeur_I1.Name, Me.txt_Largeur_I2.Name, Me.txt_Largeur_I3.Name
-                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-
-                ValMin = Longueur_Zone_MIN / kUnit
-                ValMax = Longueur_Zone_MAX / kUnit
-
-            Case Me.txt_EspLongi_I1.Name, Me.txt_EspLongi_I2.Name, Me.txt_EspLongi_I3.Name
+            Case Me.txt_EspLongi_I1.Name
                 kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
 
                 ValMin = Espacement_Longi_MIN / kUnit
@@ -1350,25 +796,20 @@ Public Class Frm_ConnectionSlimFloor
         Return lOk
     End Function
 
-    Private Sub Panel1_Paint(sender As Object, e As PaintEventArgs) Handles Panel1.Paint
-
+    Private Sub cmb_TypeConnection_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_TypeConnection.SelectedIndexChanged
+        Select Case cmb_TypeConnection.SelectedItem
+            Case strGoujonSemelle
+                MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
+            Case strGoujonAme
+                MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
+            Case strArmatureAme
+                MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.ArmatureAme
+        End Select
+        img_Stud.Invalidate()
     End Sub
 
-    Private Sub etq_Somme_Click(sender As Object, e As EventArgs) Handles etq_Somme.Click
-
-    End Sub
-
-    Private Sub txt_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_I3.TextChanged
-
-    End Sub
-
-    Private Sub txt_I2_TextChanged(sender As Object, e As EventArgs) Handles txt_I2.TextChanged
-
-    End Sub
 
 #End Region
-
-
 
 #End Region
 

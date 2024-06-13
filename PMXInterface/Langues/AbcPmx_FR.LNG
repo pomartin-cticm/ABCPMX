@@ -242,6 +242,10 @@ WIDTH					= Largeur
 WARNING_CMBTRAVEE		= L'ensemble des informations renseignées doit être correct pour sélectionner une autre travée
 ADD						= Ajouter
 DELETE					= Supprimer
+FLANGE_STUD			= Goujon soudé sur la semelle supérieure
+WEB_STUD				= Goujon soudé sur l'âme
+WEB_REINF				= Armature traversant l'âme
+
 
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)

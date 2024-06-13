@@ -282,7 +282,7 @@ Public Class Frm_Connection
                 'End If
 
                 Me.txt_Largeur.Text = Bloc("WIDTH") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
-                Me.txt_NbRows.Text = Bloc("ROW_NUMBER") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
+                Me.txt_NbRows.Text = Bloc("ROW_NUMBER")
                 If lBacTransv Then
                     Me.txt_EspacementLongi.Text = Bloc("DISPOSITION_LON_BAC_TR")
                 Else
