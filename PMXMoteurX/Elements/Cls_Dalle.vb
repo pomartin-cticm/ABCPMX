@@ -15,6 +15,11 @@
     Public type As Enum_TypeDalle
 
     ''' <summary>
+    ''' Type de connecteur
+    ''' </summary>
+    Public typeConnecteur As Enum_TypeConnecteur
+
+    ''' <summary>
     ''' épaisseur totale de la dalle (hors renformis)
     ''' </summary>
     Public Ep_td As Decimal
@@ -129,6 +134,12 @@
         Mixte
         PartiellementPrefabriquee
         CompletementPrefabriquee            ' Plancher Cofradalle pour le slim floor uniquement ??
+    End Enum
+
+    Public Enum Enum_TypeConnecteur
+        GoujonSoudeSemelleSup
+        GoujonSoudeAme
+        ArmatureAme
     End Enum
 
 #End Region
@@ -585,6 +596,7 @@
     Sub New()
 
         Me.type = Enum_TypeDalle.Pleine
+        Me.typeConnecteur = Enum_TypeConnecteur.GoujonSoudeSemelleSup
 
         'Me.Beff = 1
         Me.Ep_td = 0.12

@@ -470,6 +470,7 @@ Public Class cls_Projet
                         Lines.Add("   Dp      =  " & .dp)
                         Lines.Add("   Msurf      =  " & .msurf)
                         Lines.Add("   lCustom      =  " & .lCustom)
+                        Lines.Add("")
 
                     End With
 
@@ -501,9 +502,9 @@ Public Class cls_Projet
                     End With
 
 
-                    '==[ Classe Connecteur Dalle ]=================================================================
+                    '==[ Classe Connecteur Goujon Dalle ]=================================================================
                     With .ConnecteurGoujonSoude
-                        Lines.Add("BLOCK CONNECTEUR_DALLE")
+                        Lines.Add("BLOCK CONNECTEUR_DALLE_GOUJON")
 
                         Lines.Add("   nom            =  " & .nom)
                         Lines.Add("   hsc            =  " & .hsc)
@@ -512,6 +513,28 @@ Public Class cls_Projet
                         Lines.Add("   fu              =  " & .Fu)
                         Lines.Add("")
                     End With
+
+                    '==[ Classe Connecteur Armature Dalle ]=================================================================
+                    With .ConnecteurArmature
+                        Lines.Add("BLOCK CONNECTEUR_DALLE_ARMATURE")
+
+                        Lines.Add("   ds            =  " & .ds)
+                        Lines.Add("   dhs            =  " & .dhs)
+                        Lines.Add("   ahv              =  " & .ahv)
+                        Lines.Add("   Ls              =  " & .Ls)
+                        Lines.Add("")
+                    End With
+
+                    '==[ Classe Acier Connecteur Armature Dalle ]=================================================================
+                    With .ConnecteurArmature.Acier
+                        Lines.Add("BLOCK ACIER_CONNECTEUR_DALLE_ARMATURE")
+
+                        Lines.Add("   Classe         =  " & .Classe)
+                        Lines.Add("   Fsk            =  " & .FsK)
+                        Lines.Add("   Es             =  " & .Es)
+                        Lines.Add("")
+                    End With
+
                 End With
 
                 '==[ Classe Options Calculs ]=================================================================
@@ -685,8 +708,8 @@ Public Class cls_Projet
 
         If Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("POUTRE") And Not ListeBlocCle.Contains("MAINTIENS") And Not ListeBlocCle.Contains("MAINT_BAC") And Not ListeBlocCle.Contains("SECTION") And
            Not ListeBlocCle.Contains("PROFILA") And Not ListeBlocCle.Contains("ACIER_PROFILA") And Not ListeBlocCle.Contains("ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") And
-           Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("COFRADAL") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE") And
-           Not ListeBlocCle.Contains("OPT_CALCULS") And 'And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE")
+           Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("COFRADAL") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE_GOUJON") And
+           Not ListeBlocCle.Contains("CONNECTEUR_DALLE_ARMATURE") And Not ListeBlocCle.Contains("ACIER_CONNECTEUR_DALLE_ARMATURE") And Not ListeBlocCle.Contains("OPT_CALCULS") And 'And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE")
               Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then 'And Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("SECTION") 
 
             MsgBox("Fichier corrumpu | Corrupted file", MsgBoxStyle.Critical, "Cls_Projet/LectureFile")
@@ -805,14 +828,20 @@ Public Class cls_Projet
                 Case "ACIER_ARMATURE_DALLE"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim acier_armature_dalle As New cls_AcierArmature
-                    ReadBlocAcierArmatureDalle(acier_armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ReadBlocAcierArmature(acier_armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.AcierArmatures = acier_armature_dalle
 
-                Case "CONNECTEUR_DALLE"
+                Case "CONNECTEUR_DALLE_GOUJON"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim connecteur_dalle As New cls_ConnecteurGoujonSoude
-                    ReadBlocConnecteurDalle(connecteur_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ReadBlocConnecteurGoujonDalle(connecteur_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.ConnecteurGoujonSoude = connecteur_dalle
+
+                Case "ACIER_CONNECTEUR_DALLE_GOUJON"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim acier_armature_connecteur As New cls_AcierArmature
+                    ReadBlocAcierArmature(acier_armature_connecteur, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    ptre_en_cours.Dalle.ConnecteurArmature.Acier = acier_armature_connecteur
 
                 Case "OPT_CALCULS"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1710,7 +1739,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocAcierArmatureDalle(acier_armature_dalle As cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocAcierArmature(acier_armature_dalle As cls_AcierArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1743,12 +1772,12 @@ Public Class cls_Projet
 
 
     ''' <summary>
-    ''' Lecture du bloc Connecteur_Dalle
+    ''' Lecture du bloc Connecteur_Dalle_Goujon
     ''' </summary>
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocConnecteurDalle(connecteur_dalle As cls_ConnecteurGoujonSoude, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocConnecteurGoujonDalle(connecteur_dalle As cls_ConnecteurGoujonSoude, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
@@ -1778,6 +1807,45 @@ Public Class cls_Projet
                         Case "D" : .d = TraiteReal(Mots(nbMots))
                         Case "FY" : .Fy = TraiteReal(Mots(nbMots))
                         Case "FU" : .Fu = TraiteReal(Mots(nbMots))
+                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                    End Select
+                End With
+
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>
+    ''' Lecture du bloc Connecteur_Dalle_Armature
+    ''' </summary>
+    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
+    ''' <param name="Index0">indice du début de la lecture</param>
+    ''' <param name="IndexFin">indice de la fin de la lecture</param>
+    Private Sub ReadBlocConnecteurArmatureDalle(connecteur_dalle As Cls_ConnecteurArmature, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '==> Lecture du fichier pour initialiser les attributs
+
+        '--> Déclaration
+        Dim i, iFirst As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+
+
+                With connecteur_dalle
+                    Select Case MotCle
+                        Case "DS" : .ds = TraiteReal(Mots(nbMots))
+                        Case "DHS" : .dhs = TraiteReal(Mots(nbMots))
+                        Case "AHV" : .ahv = TraiteReal(Mots(nbMots))
+                        Case "LS" : .Ls = TraiteReal(Mots(nbMots))
+
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With
