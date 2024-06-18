@@ -991,6 +991,7 @@ Module Mod_NoteCalcul
 
         '=== Armatures longitudinales ======================================================================
 
+        If Not MyBeam.lSlimFloor Then _
         EditionParametresArmaLongiDalle(MyBeam)
 
         '=== Bac acier ==========================================================================
@@ -1187,48 +1188,82 @@ Module Mod_NoteCalcul
 
         AddTitreNdC(3, BlocG("CONNECTORS"))
 
-        With MyBeam.Dalle.ConnecteurGoujonSoude
-            'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
-            AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\=" & TABEGAL & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
-            AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d " & TABEGAL & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
-            AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\=" & TABEGAL & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
-            AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\=" & TABEGAL & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
+        If MyBeam.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup Or MyBeam.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme Then
 
-            Dim lGeneration1, lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
-            Dim nr_min, nr_max As Integer
-            Dim Ecm, Fck As Decimal
-            Dim gammaVs, gammaVc As Decimal
+            With MyBeam.Dalle.ConnecteurGoujonSoude
+                'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
+                AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\=" & TABEGAL & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d " & TABEGAL & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("FYSC_CONNECTORS") & TABAFF & "f\-ysc\=" & TABEGAL & GetStringInUnit(.Fy, Enu_TypeVariable.Contrainte, 4, 0, True))
+                AddLigneNDC(TABW2 & BlocG("FUSC_CONNECTORS") & TABAFF & "f\-usc\=" & TABEGAL & GetStringInUnit(.Fu, Enu_TypeVariable.Contrainte, 4, 0, True))
 
-            lGeneration1 = MyBeam.Param.lGeneration1
-            lDallePleine = (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
-            lPerp = (MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+                Dim lGeneration1, lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
+                Dim nr_min, nr_max As Integer
+                Dim Ecm, Fck As Decimal
+                Dim gammaVs, gammaVc As Decimal
 
-            nr_min = MyBeam.nr_min
-            nr_max = MyBeam.nr_max
+                lGeneration1 = MyBeam.Param.lGeneration1
+                lDallePleine = (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
+                lPerp = (MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
 
-            Ecm = MyBeam.Dalle.beton.Ecm
-            Fck = MyBeam.Dalle.beton.Fck
+                nr_min = MyBeam.nr_min
+                nr_max = MyBeam.nr_max
 
-            gammaVs = MyBeam.Param.Gamma.GammaVs
-            gammaVc = MyBeam.Param.Gamma.GammaVc
+                Ecm = MyBeam.Dalle.beton.Ecm
+                Fck = MyBeam.Dalle.beton.Fck
 
-            If lDallePleine Then
-                AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
-            Else 'dalle mixte
-                If lPerp Then
-                    For nr_boucle As Integer = nr_min To nr_max
-                        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True) & " (n\-r\= = " & nr_boucle & ")")
-                        ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
-                        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True) & " (n\-r\= = " & nr_boucle & ")")
-                    Next
-                Else 'dalle parallèlle
-                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
-                    ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
-                    AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True))
+                gammaVs = MyBeam.Param.Gamma.GammaVs
+                gammaVc = MyBeam.Param.Gamma.GammaVc
+
+                If lDallePleine Then
+                    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
+                Else 'dalle mixte
+                    If lPerp Then
+                        For nr_boucle As Integer = nr_min To nr_max
+                            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True) & " (n\-r\= = " & nr_boucle & ")")
+                            ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                            AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True) & " (n\-r\= = " & nr_boucle & ")")
+                        Next
+                    Else 'dalle parallèlle
+                        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
+                        ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
+                        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True))
+                    End If
                 End If
-            End If
 
-        End With
+            End With
+
+        Else
+
+            With MyBeam.Dalle.ConnecteurArmature
+                AddLigneNDC(TABW2 & BlocG("D_ARMA") & TABAFF & "d " & TABEGAL & GetStringInUnit(.ds, Enu_TypeVariable.Dimension, 4, 0, True))
+
+                Dim lDallePleine, lPerp As Boolean 'Déclaration des variables locales qui serviront dans la fonction ResistancePRd
+
+                lDallePleine = (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) Or (MyBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee)
+                lPerp = (MyBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+
+                AddLigneNDC("/!\ A COMPLETER /!\")
+
+                'If lDallePleine Then
+                '    AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\= =" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
+                'Else 'dalle mixte
+                '    If lPerp Then
+                '        For nr_boucle As Integer = nr_min To nr_max
+                '            AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_boucle, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True) & " (n\-r\= = " & nr_boucle & ")")
+                '            ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-t\= =" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True) & " (n\-r\= = " & nr_boucle & ")")
+                '            AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-t\=" & TABEGAL & GetStringInUnit(.CoefkT(nr_boucle, MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True) & " (n\-r\= = " & nr_boucle & ")")
+                '        Next
+                '    Else 'dalle parallèlle
+                '        AddLigneNDC(TABW2 & BlocG("PRD_CONNECTORS") & TABAFF & "P\-Rd\=" & TABEGAL & GetStringInUnit(.ResistancePRd(lGeneration1, lDallePleine, lPerp, MyBeam.Dalle.Bac, nr_min, Fck, Ecm, gammaVs, gammaVc), Enu_TypeVariable.Effort, 4, 1, True))
+                '        ' AddLigneNDC(TABW2 & BlocG("KL_CONNECTORS") & TABAFF & "k\-l\= =" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 0, True))
+                '        AddLigneNDC(TABW2 & BlocG("REDUCTIONFACTOR") & TABAFF & "k\-l\=" & TABEGAL & GetStringInUnit(.CoefkL(MyBeam.Dalle.Bac), Enu_TypeVariable.SansType, 4, 2, True))
+                '    End If
+                'End If
+
+            End With
+
+        End If
 
     End Sub
 

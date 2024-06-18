@@ -245,6 +245,8 @@ DELETE					= Delete
 FLANGE_STUD			= Stud welded on the upper flange
 WEB_STUD				= Stud welded on the web
 WEB_REINF				= Dowels
+CLASS					= Class
+REINFORCEMENTS			= Reinforcements
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)

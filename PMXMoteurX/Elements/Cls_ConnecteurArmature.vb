@@ -22,13 +22,14 @@
     '''' </summary>
     'Public Ls As Decimal
 
-    Public Acier As New cls_AcierArmature
+    Public Acier As cls_AcierArmature
 
 #End Region
 
 #Region " Constructeurs "
     Sub New()
-        Me.ds = 20 / 1000
+        Me.ds = 25 / 1000
+        Acier = New cls_AcierArmature
     End Sub
 #End Region
 
@@ -37,9 +38,9 @@
         Return Me.MemberwiseClone()
     End Function
 
-    Public Sub DeepClone(ArmaSource As Cls_ConnecteurArmature, ArmaCible As Cls_ConnecteurArmature)
-        ArmaCible = ArmaSource.Clone
-        ArmaCible.Acier = ArmaSource.Acier.Clone
+    Public Shared Sub DeepClone(ByVal ArmaSource As Cls_ConnecteurArmature, ByRef ArmaCible As Cls_ConnecteurArmature)
+        ArmaCible = ArmaSource.Clone()
+        ArmaCible.Acier = ArmaSource.Acier.Clone()
     End Sub
 
 #End Region

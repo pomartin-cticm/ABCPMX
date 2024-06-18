@@ -88,11 +88,6 @@ Public Class Frm_Connection
     Dim lBtnAjouterSupprimer As Boolean
 
     ''' <summary>
-    ''' Donne le nombre de goujons max
-    ''' </summary>
-    Dim nb_goujons_trans_max As Integer
-
-    ''' <summary>
     ''' Permet de garder en mémoire l'ancien indice du combobox travee
     ''' </summary>
     Dim Old_SelectedIndex_cmbTravee As Integer
@@ -791,12 +786,6 @@ Public Class Frm_Connection
         Else
             Diametre_Goujon_MAX = 25 / 1000 'Valeur arbitraire (25 mm), je me suis basé sur la clause 6.6.1.2(1) de l'EC4 actuel
         End If
-
-        nb_goujons_trans_max = 0
-        For i As Integer = 0 To MyPoutreLoc.NombreZones(traveeEnCours) - 1
-            nb_goujons_trans_max = Math.Max(nb_goujons_trans_max, MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, i))
-        Next
-        If nb_goujons_trans_max >= 2 Then Diametre_Goujon_MAX = Math.Min(2.5 * MyPoutreLoc.Section.ProfilA.Tfs, Diametre_Goujon_MAX)
 
         'Définition des valeurs limites pour les caractéristiques longitudinales
         Longueur_Zone_MIN = Math.Min(1, MyPoutreLoc.LongueurTravee(traveeEnCours))

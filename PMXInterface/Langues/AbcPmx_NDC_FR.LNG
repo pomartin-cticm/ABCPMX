@@ -209,6 +209,7 @@ CONNECTORS				= Connecteurs
 NAME_CONNECTORS			= Nom
 HSC_CONNECTORS			= Hauteur d'un goujon
 D_CONNECTORS			= Diamètre du corps du goujon
+D_ARMA					= Diamètre de l'armature
 FYSC_CONNECTORS			= Limite d'élasticité
 FUSC_CONNECTORS			= Résistance ultime à la traction
 PRD_CONNECTORS			= Résistance au cisaillement 

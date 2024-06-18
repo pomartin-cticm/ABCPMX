@@ -17,7 +17,7 @@ Public Class Frm_ConnectionSlimFloor
     Dim MyPoutreLoc As New cls_Poutre()
 
     ''' <summary>
-    ''' Définition d'une liste de string pour remplir le cmb_
+    ''' Définition d'une liste de string pour remplir le cmb_TypeConnection
     ''' </summary>
     Dim strTypeConnection As String()
 
@@ -42,30 +42,26 @@ Public Class Frm_ConnectionSlimFloor
     Dim tabLabelGoujonsAff() As String
 
     ''' <summary>
+    ''' Définition d'une liste de string pour remplir le cmb_Acier
+    ''' </summary>
+    Dim ClasseAcierArma() As String = cls_AcierArmature.tabClasseAcierArma
+
+    ''' <summary>
     ''' variable locale qui informe quelle travée est affichée à l'écran
     ''' 1er item: donne la nature de la travée
     ''' 2nd item: donne l'indice de la travée selectionnée
     ''' </summary>
     Dim traveeEnCours As Integer = 1
 
-    Dim x_lbl_esp_longi_dalle_mixte As Decimal = -20
-    Dim x_lbl_esp_longi_dalle_pleine As Decimal = 13
-
-    Dim x_txt_cmb_esp_longi_dalle_mixte As Decimal = 135
-    Dim x_txt_cmb_longi_dalle_pleine As Decimal = 168
-
-    Dim y_txt_cmb_esp_longi_actif As Decimal = 40
-    Dim y_txt_cmb_esp_longi_passif As Decimal = 61
-
-    ''' <summary>
-    ''' Indique la présence d'un bac disposé transversalement (=True) ou non (=False)
-    ''' </summary>
-    Dim lBacTransv As Boolean
-
     ''' <summary>
     ''' Permet de stocker localement le mot clé associé aux goujons 
     ''' </summary>
     Dim strStud As String
+
+    ''' <summary>
+    ''' Permet de stocker localement le mot clé associé aux aramtures 
+    ''' </summary>
+    Dim strReinf As String
 
     ''' <summary>
     ''' Permet de stocker localement le message à afficher lorque la valeur dépasse celle conseillée (message non bloquant)
@@ -88,24 +84,18 @@ Public Class Frm_ConnectionSlimFloor
     ''' </summary>
     Dim lMAJAffichage As Boolean
 
-    ''' <summary>
-    ''' Donne le nombre de goujons max
-    ''' </summary>
-    Dim nb_goujons_trans_max As Integer
-
-
     'Définition des valeurs limites pour les caractéristiques des goujons
     Dim Hauteur_Goujon_MIN As Decimal
     Dim Hauteur_Goujon_MAX_CONSEILLEE As Decimal 'valeur conseillée à ne pas dépasser 
     Dim Hauteur_Goujon_MAX As Decimal 'valeur à ne pas dépasser dans tous les cas 
     Dim Diametre_Goujon_MIN As Decimal
     Dim Diametre_Goujon_MAX As Decimal
+    Dim Diametre_Arma_MIN As Decimal
+    Dim Diametre_Arma_MAX As Decimal
 
     'Définition des valeurs limites pour les caractéristiques longitudinales
     Dim Espacement_Longi_MIN As Decimal 'sxi,min dans les ST
     Dim Espacement_Longi_MAX As Decimal 'sxi,max dans les ST
-    Dim Nb_Ondes_MIN As Integer
-    Dim Nb_Ondes_MAX As Integer
 
     'Définition des valeurs limites pour les caractéristiques transversales
     Dim Espacement_Trans_MIN As Decimal
@@ -114,8 +104,11 @@ Public Class Frm_ConnectionSlimFloor
     Dim Nb_TransV_Row_MIN As Integer
     Dim Nb_TransV_Row_MAX As Integer
 
-    Dim NbTravees As Integer
-
+    Private ReadOnly Property lGoujonsSoudes As Boolean
+        Get
+            lGoujonsSoudes = MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup Or MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
+        End Get
+    End Property
 
     '== POM
     Dim tabDiam() As Decimal
@@ -131,15 +124,18 @@ Public Class Frm_ConnectionSlimFloor
 
     Public Sub InitialiserFenetre()
         lBuild = True
+
         InitialiserVariables()
         GestionLangues()
         GestionStyle()
         GestionUnites()
         RemplirComboBox()
         AfficherPoutreEnCours()
+        MAJ_TLPanGauche()
         MAJ_SommeGoujons()
         MAJ_affichage_txt_connecteurs()
         MAJ_affichage_txt_cmb_connection()
+
         lBuild = False
     End Sub
 
@@ -149,19 +145,9 @@ Public Class Frm_ConnectionSlimFloor
     Private Sub InitialiserVariables()
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
 
-        NbTravees = MyPoutreLoc.NbTravees
-
-        'Par défaut on affiche la première travée sur deux appuis
-        traveeEnCours = 1
-
+        traveeEnCours = 1 'Dans le cas des Slimfloors, il n'y a qu'une travée
 
         MAJ_Valeurs_Limites()
-
-        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
-            lBacTransv = True
-        Else
-            lBacTransv = False
-        End If
 
         'Corrige les valeurs de certaines variables si nécessaire (utile en cas d'un changement de certaines valeurs dans les fenêtres précédentes)
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
@@ -169,33 +155,11 @@ Public Class Frm_ConnectionSlimFloor
                 If Not (MyPoutreLoc.NombreGoujonsTransv(i, j) >= Nb_TransV_Row_MIN And MyPoutreLoc.NombreGoujonsTransv(i, j) <= Nb_TransV_Row_MAX) Then
                     MyPoutreLoc.NombreGoujonsTransv(i, j) = Nb_TransV_Row_MIN
                 End If
-
-                If lBacTransv Then
-                    If Not (MyPoutreLoc.Espacement_Bac_TransZone(i, j) >= Nb_Ondes_MIN And MyPoutreLoc.Espacement_Bac_TransZone(i, j) <= Nb_Ondes_MAX) Then
-                        MyPoutreLoc.Espacement_Bac_TransZone(i, j) = Nb_Ondes_MIN
-                    End If
-                End If
             Next
         Next
 
-        'Il y'a toujours au moins 1 zone 
-        Me.cmb_NbRow_I1.Visible = True
-        Me.cmb_EspLongi_I1.Visible = lBacTransv
-        Me.txt_EspLongi_I1.Visible = Not lBacTransv
-
         ltxt_Largeur_I1Enter = False
         lMAJAffichage = False
-
-        '--> Initialisation table des variables goujons
-
-        Dim nbStuds As Integer = BaseGoujons.Count
-        ReDim tabLabelGoujons(nbStuds - 1)
-        ReDim tabLabelGoujonsAff(nbStuds - 1)
-
-        For iStud As Integer = 0 To nbStuds - 1
-            tabLabelGoujons(iStud) = BaseGoujons(iStud).nom
-            tabLabelGoujonsAff(iStud) = PrefixeG & BaseGoujons(iStud).nom
-        Next
 
     End Sub
 
@@ -228,21 +192,29 @@ Public Class Frm_ConnectionSlimFloor
 
                 strValMaxConseillee = Bloc("RECMAXVALUE")
 
+                '--> Initialisation table des variables goujons
+
+                Dim nbStuds As Integer = BaseGoujons.Count
+                ReDim tabLabelGoujons(nbStuds - 1)
+                ReDim tabLabelGoujonsAff(nbStuds - 1)
+
+                For iStud As Integer = 0 To nbStuds - 1
+                    tabLabelGoujons(iStud) = BaseGoujons(iStud).nom
+                    tabLabelGoujonsAff(iStud) = PrefixeG & BaseGoujons(iStud).nom
+                Next
+
+                Me.lbl_ClasseA.Text = Bloc("CLASS")
 
                 '=== MENU CONNECTION ==============================================================='
 
                 Me.lbl_Connection.Text = Bloc("CONNECTION")
 
                 Me.lbl_NbRows.Text = Bloc("ROW_NUMBER")
-                If lBacTransv Then
-                    Me.lbl_EspacementLongi.Text = Bloc("DISPOSITION_LON_BAC_TR")
-                Else
-                    Me.lbl_EspacementLongi.Text = Bloc("DISPOSITION_LON_NO_BAC") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")"
-                End If
+
+                Me.lbl_EspacementLongi.Text = Bloc("DISPOSITION_LON_NO_BAC") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension) & ")"
 
                 strStud = Bloc("STUDS")
-                strRib = Bloc("RIB")
-                strRibs = Bloc("RIBS")
+                strReinf = Bloc("REINFORCEMENTS")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
@@ -256,17 +228,22 @@ Public Class Frm_ConnectionSlimFloor
 
     Private Sub GestionUnites()
 
+        '--> Etiquettes unités partie goujons soudés
         Me.etq_UnitD.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitHsc.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
         Me.etq_UnitFy.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
         Me.etq_UnitFu.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
+
+
+        '--> Etiquettes unités partie armatures 
+        Me.etq_UnitPhiS.Text = LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
+        Me.etq_UnitFsk.Text = LogicielInfo.Unit_Contraintes(LogicielOptions.IndUnitContraintes)
 
     End Sub
 
     Private Sub RemplirComboBox()
         Dim index As Integer = 0
 
-        NbTravees = MyPoutreLoc.NbTravees
         Dim lCentral As Boolean = (MyPoutreLoc.NombreTraveesDeuxAppuis = 1)
 
         For i As Integer = 1 To MyPoutreLoc.NombreTraveesDeuxAppuis
@@ -281,6 +258,10 @@ Public Class Frm_ConnectionSlimFloor
         Me.cmb_goujons.Items.AddRange(tabLabelGoujonsAff)
         Me.cmb_goujons.SelectedIndex = 0
 
+        Me.cmb_Acier.Items.Clear()
+        Me.cmb_Acier.Items.AddRange(ClasseAcierArma)
+        Me.cmb_Acier.SelectedIndex = 0
+
         Me.cmb_NbRow_I1.Items.Clear()
 
         For i As Integer = Nb_TransV_Row_MIN To Nb_TransV_Row_MAX
@@ -288,17 +269,6 @@ Public Class Frm_ConnectionSlimFloor
         Next
 
         Me.cmb_NbRow_I1.SelectedIndex = 0
-
-
-        If lBacTransv Then
-            Me.cmb_EspLongi_I1.Items.Clear()
-
-            For i As Integer = Nb_Ondes_MIN To Nb_Ondes_MAX
-                Me.cmb_EspLongi_I1.Items.Add(i & " " & strRib)
-            Next
-
-            Me.cmb_EspLongi_I1.SelectedIndex = 0
-        End If
 
     End Sub
 
@@ -327,46 +297,31 @@ Public Class Frm_ConnectionSlimFloor
     ''' </summary>
     Private Sub AfficherPoutreEnCours()
 
-        'Gestion de l'affichage en fonction de la présence ou non d'un bac transversal
-        If lBacTransv Then
-            cmb_EspLongi_I1.Location = New Point(cmb_EspLongi_I1.Location.X, y_txt_cmb_esp_longi_actif)
-            txt_EspLongi_I1.Location = New Point(txt_EspLongi_I1.Location.X, y_txt_cmb_esp_longi_passif)
+        'Type connecteur
+        Select Case MyPoutreLoc.Dalle.typeConnecteur
+            Case cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
+                cmb_TypeConnection.SelectedItem = strGoujonSemelle
+            Case cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
+                cmb_TypeConnection.SelectedItem = strGoujonAme
+            Case cls_Dalle.Enum_TypeConnecteur.ArmatureAme
+                cmb_TypeConnection.SelectedItem = strArmatureAme
+        End Select
+
+        Me.txt_PhiS.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurArmature.ds, Enu_TypeVariable.Dimension, 3, 0, False)
+
+        'Classe de l'acier
+        If Me.ClasseAcierArma.Contains(MyPoutreLoc.Dalle.ConnecteurArmature.Acier.Classe) Then
+            Me.cmb_Acier.SelectedIndex = Array.IndexOf(Me.ClasseAcierArma, MyPoutreLoc.Dalle.ConnecteurArmature.Acier.Classe)
         Else
-            cmb_EspLongi_I1.Location = New Point(cmb_EspLongi_I1.Location.X, y_txt_cmb_esp_longi_passif)
-            txt_EspLongi_I1.Location = New Point(txt_EspLongi_I1.Location.X, y_txt_cmb_esp_longi_actif)
+            Me.cmb_Acier.SelectedIndex = 0
         End If
 
-        cmb_EspLongi_I1.Visible = lBacTransv
-        txt_EspLongi_I1.Visible = Not lBacTransv
-
-        'Gestion de l'affichage en fonction de la présence d'une dalle mixte ou non
-        If MyPoutreLoc.Dalle.lMixte Then
-            Me.lbl_NbRows.Location = New Point(x_lbl_esp_longi_dalle_mixte, lbl_NbRows.Location.Y)
-            Me.lbl_EspacementLongi.Location = New Point(x_lbl_esp_longi_dalle_mixte, lbl_EspacementLongi.Location.Y)
-
-            Me.cmb_NbRow_I1.Location = New Point(x_txt_cmb_esp_longi_dalle_mixte, cmb_NbRow_I1.Location.Y)
-            Me.cmb_EspLongi_I1.Location = New Point(x_txt_cmb_esp_longi_dalle_mixte, cmb_EspLongi_I1.Location.Y)
-            Me.txt_EspLongi_I1.Location = New Point(x_txt_cmb_esp_longi_dalle_mixte, txt_EspLongi_I1.Location.Y)
-        Else
-            Me.lbl_NbRows.Location = New Point(x_lbl_esp_longi_dalle_pleine, lbl_NbRows.Location.Y)
-            Me.lbl_EspacementLongi.Location = New Point(x_lbl_esp_longi_dalle_pleine, lbl_EspacementLongi.Location.Y)
-
-            Me.cmb_NbRow_I1.Location = New Point(x_txt_cmb_longi_dalle_pleine, cmb_NbRow_I1.Location.Y)
-            Me.cmb_EspLongi_I1.Location = New Point(x_txt_cmb_longi_dalle_pleine, cmb_EspLongi_I1.Location.Y)
-            Me.txt_EspLongi_I1.Location = New Point(x_txt_cmb_longi_dalle_pleine, txt_EspLongi_I1.Location.Y)
-        End If
+        MAJI_ProprietesAcier()
 
         'Gestion des valeurs de la poutre en cours
         With MyPoutreLoc
             Me.cmb_NbRow_I1.SelectedIndex = .NombreGoujonsTransv(traveeEnCours, 0) - 1
-
-            If Not lBacTransv Then
-                Me.txt_EspLongi_I1.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 0), Enu_TypeVariable.Dimension, 4, 0, False)
-            Else
-                Me.cmb_EspLongi_I1.SelectedIndex = .Espacement_Bac_TransZone(traveeEnCours, 0) - 1
-            End If
-
-            Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonTot(traveeEnCours) & " " & strStud
+            Me.txt_EspLongi_I1.Text = GetStringInUnit(.EspacementZone(traveeEnCours, 0), Enu_TypeVariable.Dimension, 4, 0, False)
 
         End With
     End Sub
@@ -406,11 +361,14 @@ Public Class Frm_ConnectionSlimFloor
         Dim lFrm_Valide As Boolean = True
 
         Dim list_txtbox As New List(Of TextBox)
-        list_txtbox.Add(Me.txt_hsc)
-        list_txtbox.Add(Me.txt_d)
 
-        If Not lBacTransv Then
-            If MyPoutreLoc.NombreZones(traveeEnCours) >= 1 Then list_txtbox.Add(Me.txt_EspLongi_I1)
+
+        If lGoujonsSoudes Then
+            list_txtbox.Add(Me.txt_hsc)
+            list_txtbox.Add(Me.txt_d)
+            list_txtbox.Add(Me.txt_EspLongi_I1)
+        Else
+            list_txtbox.Add(Me.txt_PhiS)
         End If
 
         Dim ValeurUI As Decimal
@@ -431,35 +389,25 @@ Public Class Frm_ConnectionSlimFloor
 
             lModif = False
 
-            GereTransfertValeur(MyPoutreLoc.lAutomaticDesign, .lAutomaticDesign, lModif)
+            If MyPoutreLoc.Dalle.typeConnecteur <> .Dalle.typeConnecteur Then
+                .Dalle.typeConnecteur = MyPoutreLoc.Dalle.typeConnecteur
+                lModif = True
+            End If
 
-            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom, .Dalle.ConnecteurGoujonSoude.nom, lModif)
-            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, .Dalle.ConnecteurGoujonSoude.hsc, lModif)
-            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d, .Dalle.ConnecteurGoujonSoude.d, lModif)
-            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy, .Dalle.ConnecteurGoujonSoude.Fy, lModif)
-            GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu, .Dalle.ConnecteurGoujonSoude.Fu, lModif)
+            If lGoujonsSoudes Then
+                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom, .Dalle.ConnecteurGoujonSoude.nom, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, .Dalle.ConnecteurGoujonSoude.hsc, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d, .Dalle.ConnecteurGoujonSoude.d, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy, .Dalle.ConnecteurGoujonSoude.Fy, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu, .Dalle.ConnecteurGoujonSoude.Fu, lModif)
+            Else
+                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.ds, .Dalle.ConnecteurArmature.ds, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.Acier.Classe, .Dalle.ConnecteurArmature.Acier.Classe, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.Acier.FsK, .Dalle.ConnecteurArmature.Acier.FsK, lModif)
+            End If
 
-
-            For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
-
-                GereTransfertValeur(MyPoutreLoc.NombreZones(i), .NombreZones(i), lModif)
-                'GereTransfertValeur(MyPoutreLoc.NombreGoujonsTot(i), .NombreGoujonsTot(i), lModif)
-
-                For j As Integer = 0 To .NombreZones(i) - 1
-
-                    GereTransfertValeur(MyPoutreLoc.LongueurZone(i, j), .LongueurZone(i, j), lModif)
-                    GereTransfertValeur(MyPoutreLoc.NombreGoujonsTransv(i, j), .NombreGoujonsTransv(i, j), lModif)
-
-                    If lBacTransv Then
-                        GereTransfertValeur(MyPoutreLoc.Espacement_Bac_TransZone(i, j), .Espacement_Bac_TransZone(i, j), lModif)
-                        .EspacementZone(i, j) = .Espacement_Bac_TransZone(i, j) * .Dalle.Bac.Ep
-
-                    Else
-                        GereTransfertValeur(MyPoutreLoc.EspacementZone(i, j), .EspacementZone(i, j), lModif)
-                    End If
-                Next
-
-            Next
+            GereTransfertValeur(MyPoutreLoc.NombreGoujonsTransv(1, 0), .NombreGoujonsTransv(1, 0), lModif)
+            GereTransfertValeur(MyPoutreLoc.EspacementZone(1, 0), .EspacementZone(1, 0), lModif)
 
         End With
 
@@ -470,7 +418,7 @@ Public Class Frm_ConnectionSlimFloor
 
 #Region " Dessins "
 
-    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_d.Paint, img_hsc.Paint, img_fy.Paint, img_fu.Paint
+    Private Sub AffichageSymboles(sender As Object, e As PaintEventArgs) Handles img_d.Paint, img_hsc.Paint, img_fy.Paint, img_fu.Paint, img_PhiS.Paint, img_Fsk.Paint
 
         '--> Déclarations
 
@@ -504,7 +452,6 @@ Public Class Frm_ConnectionSlimFloor
                 strIndice = "  "
 
 
-
             Case Me.img_fy.Name
 
                 strSymbol = "f"
@@ -514,6 +461,18 @@ Public Class Frm_ConnectionSlimFloor
 
                 strSymbol = "f"
                 strIndice = "u "
+
+            Case Me.img_PhiS.Name
+
+                strSymbol = "f"
+                strIndice = "s"
+
+                lGrec = True
+
+            Case Me.img_Fsk.Name
+
+                strSymbol = "f"
+                strIndice = "sk"
 
         End Select
 
@@ -531,7 +490,9 @@ Public Class Frm_ConnectionSlimFloor
 
 
 #End Region
+
 #Region " Evènements "
+
     ''' <summary>
     ''' Met à jour les valeurs limites en fonction des données renseignées
     ''' </summary>
@@ -540,58 +501,31 @@ Public Class Frm_ConnectionSlimFloor
 
         'Définition des valeurs limites pour les caractéristiques des goujons
         Hauteur_Goujon_MIN = 3 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
-        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
-            Hauteur_Goujon_MIN = Math.Max(Hauteur_Goujon_MIN, MyPoutreLoc.Dalle.Bac.Hp + 2 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d)
-        End If
-        Hauteur_Goujon_MAX_CONSEILLEE = MyPoutreLoc.Dalle.Ep_td - 20 / 1000
-        Hauteur_Goujon_MAX = MyPoutreLoc.Dalle.Ep_td
+        Hauteur_Goujon_MAX_CONSEILLEE = Math.Max(0, MyPoutreLoc.Dalle.Ep_td - MyPoutreLoc.Section.ProfilA.zRefAraseSup - 20 / 1000)
+        Hauteur_Goujon_MAX = Math.Max(0, MyPoutreLoc.Dalle.Ep_td - MyPoutreLoc.Section.ProfilA.zRefAraseSup)
 
         Diametre_Goujon_MIN = 16 / 1000 'Valeur arbitraire (16 mm), je me suis basé sur la clause 6.6.1.2(1) de l'EC4 actuel
         Diametre_Goujon_MAX = 0
-        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire And (MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus Or MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.BetonSeulContinu) Then
-            If MyPoutreLoc.Dalle.Bac.lPreperce Then
-                Diametre_Goujon_MAX = 22 / 1000
-            Else
-                Diametre_Goujon_MAX = 20 / 1000
-            End If
+        Diametre_Goujon_MAX = 25 / 1000 'Valeur arbitraire (25 mm), je me suis basé sur la clause 6.6.1.2(1) de l'EC4 actuel
+
+        Diametre_Arma_MIN = 25 / 1000
+        Diametre_Arma_MAX = 40 / 1000
+
+        If lGoujonsSoudes Then
+            Espacement_Longi_MIN = 5 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
+            Espacement_Longi_MAX = Math.Min(800 / 1000, 6 * MyPoutreLoc.Dalle.Ep_td)
         Else
-            Diametre_Goujon_MAX = 25 / 1000 'Valeur arbitraire (25 mm), je me suis basé sur la clause 6.6.1.2(1) de l'EC4 actuel
-        End If
-
-        nb_goujons_trans_max = 0
-        For i As Integer = 0 To MyPoutreLoc.NombreZones(traveeEnCours) - 1
-            nb_goujons_trans_max = Math.Max(nb_goujons_trans_max, MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, i))
-        Next
-        If nb_goujons_trans_max >= 2 Then Diametre_Goujon_MAX = Math.Min(2.5 * MyPoutreLoc.Section.ProfilA.Tfs, Diametre_Goujon_MAX)
-
-        Espacement_Longi_MIN = 5 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
-        Espacement_Longi_MAX = Math.Min(800 / 1000, 6 * MyPoutreLoc.Dalle.Ep_td)
-        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
-            Nb_Ondes_MIN = 1
-            Nb_Ondes_MAX = Math.Floor(Espacement_Longi_MAX / MyPoutreLoc.Dalle.Bac.Ep)
+            Espacement_Longi_MIN = 0
+            Espacement_Longi_MAX = 125 / 1000
         End If
 
         'Définition des valeurs limites pour les caractéristiques transversales
 
         Pince_Trans_MIN = 20 / 1000
-        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
-            Espacement_Trans_MIN = 4 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
-        Else 'dalle pleine ou préfa
-            Espacement_Trans_MIN = 2.5 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
-        End If
-        b_app_min = OptionsSlimFloor.bappmin
+        Espacement_Trans_MIN = 2.5 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
+
         Nb_TransV_Row_MIN = 1
-
-        If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
-            If MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu Then
-                Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * b_app_min - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1)
-            Else
-                Nb_TransV_Row_MAX = Math.Min(2, Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1))
-            End If
-        Else
-            Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1)
-        End If
-
+        Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1)
         Nb_TransV_Row_MAX = Math.Max(Nb_TransV_Row_MAX, Nb_TransV_Row_MIN)
 
 
@@ -616,13 +550,8 @@ Public Class Frm_ConnectionSlimFloor
 
         'Met à jour les valeurs dans les txtbox ou cmbbox 
 
-        Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) - 1
-
-        If lBacTransv Then
-            Me.cmb_EspLongi_I1.SelectedIndex = MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0) - 1
-        Else
-            Me.txt_EspLongi_I1.Text = GetStringInUnit(MyPoutreLoc.EspacementZone(traveeEnCours, 0), Enu_TypeVariable.Dimension, 4, 0, False)
-        End If
+        Me.cmb_NbRow_I1.Enabled = MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
+        If Not MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup Then cmb_NbRow_I1.SelectedItem = 1
 
         lMAJAffichage = False
     End Sub
@@ -631,8 +560,65 @@ Public Class Frm_ConnectionSlimFloor
 
 #Region " Evènements saisie "
 
+    Private Sub cmb_TypeConnection_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_TypeConnection.SelectedIndexChanged
+        If lBuild Then Exit Sub
+
+        Select Case cmb_TypeConnection.SelectedItem
+            Case strGoujonSemelle
+                MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
+            Case strGoujonAme
+                MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
+            Case strArmatureAme
+                MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.ArmatureAme
+        End Select
+
+        img_Stud.Invalidate()
+
+        MAJ_TLPanGauche()
+        MAJ_affichage_txt_cmb_connection()
+        MAJ_Valeurs_Limites()
+    End Sub
+
+    Private Sub MAJ_TLPanGauche()
+
+
+        Select Case MyPoutreLoc.Dalle.typeConnecteur
+            Case cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup, cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
+                Me.TLPan_Gauche.RowStyles.Item(2).Height = 170
+                Me.TLPan_Gauche.RowStyles.Item(3).Height = 0
+
+                Me.Height = 590 - 120
+
+            Case cls_Dalle.Enum_TypeConnecteur.ArmatureAme
+                Me.TLPan_Gauche.RowStyles.Item(2).Height = 0
+                Me.TLPan_Gauche.RowStyles.Item(3).Height = 120
+
+                Me.Height = 590 - 170
+
+        End Select
+
+    End Sub
+
+    Private Sub cmb_Acier_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Acier.SelectedIndexChanged
+        If lBuild Then Exit Sub
+        MyPoutreLoc.Dalle.ConnecteurArmature.Acier.Classe = Me.ClasseAcierArma(Me.cmb_Acier.SelectedIndex)
+        MAJI_ProprietesAcier()
+
+        Me.img_Stud.Invalidate()
+    End Sub
+
+
+    Private Sub MAJI_ProprietesAcier()
+        MyPoutreLoc.Dalle.ConnecteurArmature.Acier.MAJProprietes()
+        Me.txt_Fsk.Text = GetStringNoUnit(MyPoutreLoc.Dalle.ConnecteurArmature.Acier.FsK, Enu_TypeVariable.Contrainte)
+    End Sub
+
     Private Sub MAJ_SommeGoujons()
-        Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonTot(traveeEnCours) & " " & strStud
+        If lGoujonsSoudes Then
+            Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonTot(traveeEnCours) & " " & strStud
+        Else
+            Me.etq_Somme.Text = MyPoutreLoc.NombreGoujonTot(traveeEnCours) & " " & strReinf
+        End If
     End Sub
 
     Private Sub cmb_NbRow_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbRow_I1.SelectedIndexChanged
@@ -644,19 +630,6 @@ Public Class Frm_ConnectionSlimFloor
         MAJ_affichage_txt_cmb_connection()
 
         img_Stud.Invalidate()
-    End Sub
-
-
-
-    Private Sub cmb_EspLongi_I1_I2_I3_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_EspLongi_I1.SelectedIndexChanged
-        If lBuild Or lMAJAffichage Then Exit Sub
-
-        MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0) = cmb_EspLongi_I1.SelectedIndex + 1
-        MyPoutreLoc.EspacementZone(traveeEnCours, 0) = MyPoutreLoc.Esp_longi_bac * MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0)
-
-        MAJ_SommeGoujons()
-        MAJ_affichage_txt_cmb_connection()
-
     End Sub
 
     Private Sub txt_EspLongi_I1_I2_I3_TextChanged(sender As Object, e As EventArgs) Handles txt_EspLongi_I1.TextChanged
@@ -695,7 +668,6 @@ Public Class Frm_ConnectionSlimFloor
         VerificationSaisie(Me.txt_hsc, ValeurUI, False) 'Vérification de la hauteur du goujon
 
         Dim lMAJ_cmb_NbRow As Boolean = False
-        Dim lMAJ_cmb_EspLongi As Boolean = False
 
 
         For i As Integer = MyPoutreLoc.IndicePremiereTravee To MyPoutreLoc.IndiceDerniereTravee
@@ -705,16 +677,8 @@ Public Class Frm_ConnectionSlimFloor
                     lMAJ_cmb_NbRow = True
                 End If
 
-                If lBacTransv Then
-                    If Not (MyPoutreLoc.Espacement_Bac_TransZone(i, j) >= Nb_Ondes_MIN And MyPoutreLoc.Espacement_Bac_TransZone(i, j) <= Nb_Ondes_MAX) Then
-                        MyPoutreLoc.Espacement_Bac_TransZone(i, j) = Nb_Ondes_MIN
-                        lMAJ_cmb_EspLongi = True
-                    End If
-                Else
-                    ValeurUI = Me.txt_EspLongi_I1.Text
-                    VerificationSaisie(Me.txt_EspLongi_I1, ValeurUI, False)
-
-                End If
+                ValeurUI = Me.txt_EspLongi_I1.Text
+                VerificationSaisie(Me.txt_EspLongi_I1, ValeurUI, False)
             Next
         Next
 
@@ -728,17 +692,16 @@ Public Class Frm_ConnectionSlimFloor
             Me.cmb_NbRow_I1.SelectedIndex = MyPoutreLoc.NombreGoujonsTransv(traveeEnCours, 0) - 1
         End If
 
-        If lMAJ_cmb_EspLongi Then
-            Me.cmb_EspLongi_I1.Items.Clear()
+    End Sub
 
-            For i As Integer = Nb_Ondes_MIN To Nb_Ondes_MAX
-                Me.cmb_EspLongi_I1.Items.Add(i & " " & strRib)
-            Next
+    Private Sub txt_PhiS_TextChanged(sender As Object, e As EventArgs) Handles txt_PhiS.TextChanged
+        If lBuild Then Exit Sub
 
-            Me.cmb_EspLongi_I1.SelectedIndex = MyPoutreLoc.Espacement_Bac_TransZone(traveeEnCours, 0) - 1
+        Dim ValeurUI As Decimal
+
+        If VerificationSaisie(sender, ValeurUI) Then
+            MyPoutreLoc.Dalle.ConnecteurArmature.ds = ValeurUI
         End If
-
-
     End Sub
 
 
@@ -776,7 +739,14 @@ Public Class Frm_ConnectionSlimFloor
                 ValMin = Espacement_Longi_MIN / kUnit
                 ValMax = Espacement_Longi_MAX / kUnit
 
+            Case Me.txt_PhiS.Name
+                kUnit = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+
+                ValMin = Diametre_Arma_MIN / kUnit
+                ValMax = Diametre_Arma_MAX / kUnit
+
         End Select
+
         iErreur = ValideSaisieNombre(MyTxt.Text, lValMin, ValMin, lValMax, ValMax)
 
         If iErreur <> 0 Then
@@ -786,28 +756,19 @@ Public Class Frm_ConnectionSlimFloor
             ValeurUI = TraiteReal(MyTxt.Text) * kUnit
 
             If VerifValConseillee And lValMaxConseillee And ValeurUI > ValMaxConseillee Then
-                MsgBox(strValMaxConseillee & "hsc > td - 20 mm")
+                If lGoujonsSoudes Then
+                    MsgBox(strValMaxConseillee & "hsc > td - 20 mm")
+                Else
+                    MsgBox(strValMaxConseillee & "hsc > td - h - 20 mm")
+                End If
             End If
 
-            'ErrorProvider_Frm_Connection.Clear()
-        End If
+                'ErrorProvider_Frm_Connection.Clear()
+            End If
 
         lOk = (iErreur = 0)
         Return lOk
     End Function
-
-    Private Sub cmb_TypeConnection_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_TypeConnection.SelectedIndexChanged
-        Select Case cmb_TypeConnection.SelectedItem
-            Case strGoujonSemelle
-                MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup
-            Case strGoujonAme
-                MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme
-            Case strArmatureAme
-                MyPoutreLoc.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.ArmatureAme
-        End Select
-        img_Stud.Invalidate()
-    End Sub
-
 
 #End Region
 

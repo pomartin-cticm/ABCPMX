@@ -690,7 +690,7 @@
         DalleCible.AcierArmatures = DalleSource.AcierArmatures.Clone()
         DalleCible.ConnecteurGoujonSoude = DalleSource.ConnecteurGoujonSoude.Clone()
 
-        DalleCible.ConnecteurArmature.DeepClone(DalleSource.ConnecteurArmature, DalleCible.ConnecteurArmature)
+        Cls_ConnecteurArmature.DeepClone(DalleSource.ConnecteurArmature, DalleCible.ConnecteurArmature)
     End Sub
 
 #End Region

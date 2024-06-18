@@ -209,6 +209,7 @@ CONNECTORS				= Connectors
 NAME_CONNECTORS			= Name
 HSC_CONNECTORS			= Height of the stud
 D_CONNECTORS			= Diameter of the shank
+D_ARMA					= Diameter of the reinforcement
 FYSC_CONNECTORS			= Yield strength 
 FUSC_CONNECTORS			= Ultimate strength
 PRD_CONNECTORS			= Shear resistance 
