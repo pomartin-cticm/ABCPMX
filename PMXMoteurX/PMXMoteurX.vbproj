@@ -95,6 +95,7 @@
     <Compile Include="Classes Verifications\cls_VerificationsELS.vb" />
     <Compile Include="Classes Verifications\cls_VerificationSlimAcier.vb" />
     <Compile Include="Classes Verifications\cls_VerificationsMixtes.vb" />
+    <Compile Include="Classes Verifications\cls_VerificationsSlimMixtes.vb" />
     <Compile Include="Classes\cls_Gamma.vb" />
     <Compile Include="Classes\cls_MaintienBac.vb" />
     <Compile Include="Classes Incendie\cls_OptionsFeu.vb" />

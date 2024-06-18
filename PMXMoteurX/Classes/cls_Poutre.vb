@@ -512,6 +512,9 @@ Public Class cls_Poutre
     Public VerifAcier() As cls_VerificationsAcier                   ' Classe pour la vérification des poutres acier (ou phase de construction)
     Public VerifMixte() As cls_VerificationsMixtes                  ' Classe pour la vérification des poutres mixtes (phase finale)
 
+    Public VerifSlimAcier() As cls_VerificationSlimAcier                   ' Classe pour la vérification des poutres acier (ou phase de construction)
+    Public VerifSlimMixte() As cls_VerificationsSlimMixtes                  ' Classe pour la vérification des poutres mixtes (phase finale)
+
     Public VerifELS As cls_VerificationsELS                         ' Classe pour la vérification aux ELS (quel que soit le type de poutre)
 
     Public VerifFeuAcier As cls_VerifFeuAcier                       ' Classe pour la vérification au feu des poutres acier seul
@@ -5298,6 +5301,7 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 ReDim Me.VerifAcier(0)
                 Me.VerifAcier(0) = New cls_VerificationsAcier
+
             Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
                 ReDim Me.VerifMixte(0)
                 Me.VerifMixte(0) = New cls_VerificationsMixtes
@@ -5306,6 +5310,15 @@ Public Class cls_Poutre
                     ReDim Me.VerifAcier(0)
                     Me.VerifAcier(0) = New cls_VerificationsAcier
                 End If
+
+            Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
+                ReDim Me.VerifSlimAcier(0)
+                Me.VerifSlimAcier(0) = New cls_VerificationSlimAcier
+
+            Case cls_Section.Enum_TypeSection.SFBmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte
+                ReDim Me.VerifSlimMixte(0)
+                Me.VerifSlimMixte(0) = New cls_VerificationsSlimMixtes
+
         End Select
 
         '# ELS

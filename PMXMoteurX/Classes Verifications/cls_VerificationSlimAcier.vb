@@ -7,9 +7,9 @@
 
     Public CritereM As cls_Critere                  ' Resistance à la flexion
     Public CritereV As cls_Critere                  ' Resistance effort tranchant
-    'Public CritereVb As cls_Critere                 ' Pas de voilement par cisaillement
+    'Public CritereVb As cls_Critere                 ' Pas de voilement par cisaillement pour les slimfloors
     Public CritereMV As cls_Critere                 ' Résistance à l'interacion MV
-    'Public CritereMVb As cls_Critere                ' Résistance à l'interacion M+voilement par cisaillement
+    'Public CritereMVb As cls_Critere                ' Pas d'interacion M+voilement par cisaillement
     Public CritereSigmaA As cls_Critere             ' Critère de résistance en flexion  / Contrainte normale dans le profilé
     Public CritereTauA As cls_Critere               ' Critère de contrainte de cisaillement élastique
     Public CritereSigmaVM As cls_Critere            ' Critère de contrainte élastique équivalente de Von Mises
@@ -124,14 +124,12 @@
         Dim zANP(,) As Decimal = Nothing
         Dim MelRd(,) As Decimal = Nothing
         Dim zANE(,) As Decimal = Nothing
-        'Dim MelRd(,), zANE(,) As Decimal
         Dim zANPMV(,) As Decimal = Nothing                ' Position ANP, tenant compte de l'interaction avec l'effort tranchant 
         Dim MVRd(,) As Decimal = Nothing               ' Moment plastique, tenant compte de l'interaction avec l'effort tranchant 
         Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
         Dim ClasseP, ClasseM As Integer 'Classes de la section en flexion positive et négative
         Dim lClasse4 As Boolean
         Dim InertieY_SectionBrute, zANE_SectionBrute, MelRd_SectionBrute, zANP_SectionBrute, MplRd_SectionBrute As Decimal 'Position des axes neutres uniquement pour le calcul de la classe 
-        ' Dim lSigma As Boolean
         Dim SigmaELU(,,) As Decimal = Nothing           ' Contraintes normales sous 1 combinaison ELU
         Dim SigmaCas(,,,) As Decimal = Nothing          ' Contraintes normales pour les cas de charges
         Dim TauELU(,,) As Decimal = Nothing             ' Contraintes de cisaillement sous 1 combinaison ELU
@@ -141,7 +139,7 @@
         Dim lSoudure As Boolean                         ' Indique si un calcul de soudure est nécessaire 
         Dim lRetraitElastique As Boolean = True
         Dim lVerifElastic As Boolean                    ' Indique si on doit effectuer une verification élastique des sections
-        Dim EpsilonW As Decimal
+        'Dim EpsilonW As Decimal
         'Dim lEnrob As Boolean = myBeam.lEnrobage
         'Dim lproPRS As Boolean = Not myBeam.Section.lLamine
 
