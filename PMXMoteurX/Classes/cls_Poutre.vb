@@ -520,6 +520,8 @@ Public Class cls_Poutre
     Public VerifFeuAcier As cls_VerifFeuAcier                       ' Classe pour la vérification au feu des poutres acier seul
     Public VerifFeuMixte As cls_VerifFeuMixte                       ' Classe pour la vérification au feu des poutres mixtes
     Public VerifFeuEnrob As cls_VerifFeuEnrobe                      ' Classe pour la vérification au feu des poutres acier ou mixtes avec enrobage partiel
+    Public VerifFeuSlimAcier As cls_VerifFeuSlimAcier               ' Classe pour la vérification au feu des poutres slimfloors acier
+    Public VerifFeuSlimMixte As cls_VerifFeuSlimMixte               ' Classe pour la vérification au feu des poutres slimfloors mixtes
 
 #End Region
 
@@ -5335,6 +5337,10 @@ Public Class cls_Poutre
                 Me.VerifFeuEnrob = New cls_VerifFeuEnrobe
             Case cls_Section.Enum_TypeSection.Mixte
                 Me.VerifFeuMixte = New cls_VerifFeuMixte(Me.ParamFeu.MethodTempArma)
+            Case cls_Section.Enum_TypeSection.SFB, cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SAB
+                Me.VerifFeuSlimAcier = New cls_VerifFeuSlimAcier
+            Case cls_Section.Enum_TypeSection.SFBmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SABmixte
+                Me.VerifFeuSlimMixte = New cls_VerifFeuSlimMixte
         End Select
 
         '--> Initialisation des calculs
@@ -5361,6 +5367,13 @@ Public Class cls_Poutre
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 Me.VerifAcier(0).Z_VerificationELU(Me, False)
 
+            Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SFB
+                Me.VerifSlimAcier(0).Z_VerificationELU(Me, False)
+
+            Case cls_Section.Enum_TypeSection.SABmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SFBmixte
+                Me.VerifSlimMixte(0).Z_VerificationELU(Me)
+                Me.VerifSlimAcier(0).Z_VerificationELU(Me, True)
+
         End Select
 
         '--> Vérifications aux ELS
@@ -5377,6 +5390,10 @@ Public Class cls_Poutre
                     Me.VerifFeuEnrob.Z_VerifFeu(Me)
                 Case cls_Section.Enum_TypeSection.Mixte
                     Me.VerifFeuMixte.Z_VerifFeu(Me)
+                Case cls_Section.Enum_TypeSection.SAB, cls_Section.Enum_TypeSection.IFB_A, cls_Section.Enum_TypeSection.IFB_B, cls_Section.Enum_TypeSection.SFB
+                    Me.VerifFeuSlimAcier.Z_VerifFeu(Me)
+                Case cls_Section.Enum_TypeSection.SABmixte, cls_Section.Enum_TypeSection.IFB_Amixte, cls_Section.Enum_TypeSection.IFB_Bmixte, cls_Section.Enum_TypeSection.SFBmixte
+                    Me.VerifFeuSlimMixte.Z_VerifFeu(Me)
             End Select
         End If
 

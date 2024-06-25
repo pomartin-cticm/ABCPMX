@@ -311,7 +311,7 @@ Public Class Frm_DalleSlimFloor
                 Me.cmb_TypeDalle.SelectedIndex = 1
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 Me.cmb_TypeDalle.SelectedIndex = 2
-            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
                 Me.cmb_TypeDalle.SelectedIndex = 3
         End Select
 
@@ -627,7 +627,7 @@ Public Class Frm_DalleSlimFloor
             Case 0 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Pleine
             Case 1 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.Mixte
             Case 2 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
-            Case 3 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+            Case 3 : MyDalleLoc.type = cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
         End Select
 
         MAJI_TypeDalle()
@@ -699,7 +699,7 @@ Public Class Frm_DalleSlimFloor
 
                 Me.Width = 930
 
-            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
                 Me.pan_Bac.Enabled = False
 
                 Me.pan_Predalle.Visible = False
@@ -845,7 +845,7 @@ Public Class Frm_DalleSlimFloor
                         ValMin = OptionsScope.EpDallePleineMin / kUnit
                     Case cls_Dalle.Enum_TypeDalle.Mixte
                         ValMin = (OptionsScope.EpDalleMixteMin + HPMINI) / kUnit
-                    Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+                    Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
                         ValMin = OptionsScope.EpDallePleineMin / kUnit
                 End Select
 

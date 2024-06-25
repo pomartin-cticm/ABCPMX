@@ -178,7 +178,7 @@ Public Module Mod_Dessins
 
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 DessinDallePreFab_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, EntraxeD2, MyPoutre.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
-            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
                 DessinDalleComplementePrefa_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, EntraxeD2, MyPoutre.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
         End Select
 
@@ -1693,7 +1693,7 @@ Public Module Mod_Dessins
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 DessinDallePreFab(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
 
-            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
                 DessinDalleCompletementPrefa(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushCofra, Beff)
 
         End Select
@@ -1878,7 +1878,7 @@ Public Module Mod_Dessins
 
         '# Cofradal
 
-        If MyPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee Then
+        If MyPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.PlancherPrefabrique Then
             MyColor = StyleCouleur(iSelect, 11)
             MyPen.Color = MyColor
 
@@ -5880,7 +5880,7 @@ Public Module Mod_Dessins
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
                 DessinDallePreFab(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
 
-            Case cls_Dalle.Enum_TypeDalle.CompletementPrefabriquee
+            Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
                 DessinDalleCompletementPrefa(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushCofra, Beff)
 
         End Select

@@ -66,7 +66,7 @@
             tc = Me.Ep_td - Me.Bac.Hp
             Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
 
-        ElseIf Me.type = Enum_TypeDalle.PartiellementPrefabriquee Or Me.type = Enum_TypeDalle.CompletementPrefabriquee Then
+        ElseIf Me.type = Enum_TypeDalle.PartiellementPrefabriquee Or Me.type = Enum_TypeDalle.PlancherPrefabrique Then
             Ac = dc * Ep_td
         Else
             'dalle pleine, avec ou sans dalle préfa
@@ -133,7 +133,7 @@
         Pleine
         Mixte
         PartiellementPrefabriquee
-        CompletementPrefabriquee            ' Plancher Cofradalle pour le slim floor uniquement ??
+        PlancherPrefabrique            ' Plancher Cofradalle pour le slim floor uniquement ??
     End Enum
 
     Public Enum Enum_TypeConnecteur
@@ -236,9 +236,9 @@
                 Ac = b_dispo * Me.Ep_td
                 perimU = 2 * b_dispo - b
 
-            Case Enum_TypeDalle.CompletementPrefabriquee 'dans ce cas, la section est nécessairement une slimfloor
+            Case Enum_TypeDalle.PlancherPrefabrique 'dans ce cas, la section est nécessairement une slimfloor
                 Ac = b_dispo * Me.EpaisseurActive + b * Me.Cofradal.dp
-                perimU = 2 * b_dispo - b
+                perimU = b_dispo
 
         End Select
 
@@ -416,7 +416,7 @@
                     Ep = Me.Ep_td
                 Case Enum_TypeDalle.PartiellementPrefabriquee
                     Ep = Me.Ep_td - Me.preDalle_ep + Me.preDalle_tjoint
-                Case Enum_TypeDalle.CompletementPrefabriquee
+                Case Enum_TypeDalle.PlancherPrefabrique
                     Ep = Me.Ep_td - Me.Cofradal.dp
             End Select
             Return Ep

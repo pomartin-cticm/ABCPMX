@@ -85,6 +85,8 @@
     <Compile Include="Classes Incendie\cls_VerifFeuAcier.vb" />
     <Compile Include="Classes Incendie\cls_VerifFeuEnrobe.vb" />
     <Compile Include="Classes Incendie\cls_VerifFeuMixte.vb" />
+    <Compile Include="Classes Incendie\cls_VerifFeuSlimAcier.vb" />
+    <Compile Include="Classes Incendie\cls_VerifFeuSlimMixte.vb" />
     <Compile Include="Classes Materiaux\cls_Acier.vb" />
     <Compile Include="Classes Materiaux\cls_AcierArmature.vb" />
     <Compile Include="Classes Materiaux\cls_Beton.vb" />
