@@ -2851,6 +2851,7 @@ Public Class cls_Poutre
                 End If
                 pMyElts.InertieY(iElt) = InertieY
                 pMyElts.Aire(iElt) = Aire
+                pMyElts.zANE(iElt) = zANe
 
             Next
 
@@ -2898,7 +2899,8 @@ Public Class cls_Poutre
 
                 If lCalcul Then
                     InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, zANe)
-                    Aire = Me.Section.ProfilA.Aire      ' A changer pour aire homgonénéisée
+                    'Aire = Me.Section.ProfilA.Aire      ' A changer pour aire homgonénéisée
+                    Aire = Me.Section.ProfilA.Aire + Beff * Me.Dalle.EpaisseurActive / nEqDal
 
                     pMyElts.InertieY(iElt) = InertieY
                     BeffPrec = Beff
@@ -2906,6 +2908,7 @@ Public Class cls_Poutre
                 End If
                 pMyElts.InertieY(iElt) = InertieY
                 pMyElts.Aire(iElt) = Aire
+                pMyElts.zANE(iElt) = zANe
 
             Next
 
