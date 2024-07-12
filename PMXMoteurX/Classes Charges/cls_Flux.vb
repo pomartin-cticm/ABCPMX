@@ -67,7 +67,7 @@
         Dim NbNodes As Integer = MyPoutre.Nodes.nbNodes
         Dim NbCas As Integer = MyPoutre.ChargesA.Count
         Dim iCas As Integer
-        Dim lCasMixte As Boolean
+        'Dim lCasMixte As Boolean
 
         '--> Initialisation
 
@@ -77,9 +77,10 @@
 
         For iCas = 0 To NbCas - 1
 
-            lCasMixte = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).lMixte
+            'lCasMixte = MyPoutre.Elements(MyPoutre.ChargesA(iCas).IndElts).lMixte -> variable utilisée dans la fonction CalculFluxSectionMixte
 
-            If MyPoutre.ChargesA(iCas).lRunCalcul And lCasMixte Then
+            'If MyPoutre.ChargesA(iCas).lRunCalcul And lCasMixte Then 'Modif GUD: il faut lancer la routine 
+            If MyPoutre.ChargesA(iCas).lRunCalcul Then
 
                 Me.CalculFluxFSectionsMixte(MyPoutre, bEff, iCas, FluxF)
 
@@ -111,10 +112,12 @@
         Dim nEqDalle As Decimal
         Dim MomStat As Decimal
         Dim zANE As Decimal
+        Dim lCasMixte As Boolean
 
         '-> Initialisation
 
         nEqDalle = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).nEqDalle
+        lCasMixte = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).lMixte
 
         '--> Traitement
 
@@ -129,13 +132,18 @@
 
                 For iPts = iDeb To iFin
 
-                    InertieY = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).InertieY(iElt)
-                    zANE = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).zANE(iElt)
+                    If iPts = iDeb And Not lCasMixte Then
+                        FluxF(iCas, iPts, iNode, k) = 0 'dans le cas non mixte, il n'y a pas de flux de cisaillement dans les connecteurs mais il y en a quand même au droit des soudures
+                    Else
+                        InertieY = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).InertieY(iElt)
+                        zANE = myBeam.Elements(myBeam.ChargesA(iCas).IndElts).zANE(iElt)
 
-                    MomStat = Me.MomentStatiqueMixte(myBeam, iPts, nEqDalle, bEff(iNode), zane)
 
-                    VEd = myBeam.ChargesA(iCas).VZ(iNode, k)
-                    FluxF(iCas, iPts, iNode, k) = VEd * MomStat / InertieY
+                        MomStat = Me.MomentStatiqueMixte(myBeam, iPts, nEqDalle, bEff(iNode), zANE)
+
+                        VEd = myBeam.ChargesA(iCas).VZ(iNode, k)
+                        FluxF(iCas, iPts, iNode, k) = VEd * MomStat / InertieY
+                    End If
 
                 Next
 
@@ -176,16 +184,23 @@
 
             Case 1
                 '== Liaison semelle supérieure
-                Tc = myBeam.Dalle.EpaisseurActive
-                zI = myBeam.Dalle.zTop - Tc / 2
-                MomStat = mybEff * Tc / nEqDalle * (zANE - zI)
+                'Tc = myBeam.Dalle.EpaisseurActive
+                'zI = myBeam.Dalle.zTop - Tc / 2
+                'MomStat = mybEff * Tc / nEqDalle * (zANE - zI)
 
-                zII = -myBeam.Section.ProfilA.Tfs / 2
-                MomStat += myBeam.Section.ProfilA.AireFs * (zANE - zI)
+                'zII = -myBeam.Section.ProfilA.Tfs / 2
+                'MomStat += myBeam.Section.ProfilA.AireFs * (zANE - zI)
+
+                '--> Calcul en considérant la partie inférieure , ce qui permet d'éviter de faire intervenir la dalle et la division par nEq dans le cas non mixte
+                zI = myBeam.Section.ProfilA.zRefAraseSup - myBeam.Section.ProfilA.Tfs - myBeam.Section.ProfilA.HauteurAmeHw / 2
+                MomStat = myBeam.Section.ProfilA.HauteurAmeHw * myBeam.Section.ProfilA.Tw * (zANE - zI)
+
+                zII = myBeam.Section.ProfilA.zRefAraseSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi / 2
+                MomStat += myBeam.Section.ProfilA.AireFi * (zANE - zII)
 
             Case 2
                 '== Liaison de semelle inférieure
-                zI = -myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi / 2
+                zI = myBeam.Section.ProfilA.zRefAraseSup - myBeam.Section.ProfilA.ha + myBeam.Section.ProfilA.Tfi / 2
                 MomStat = myBeam.Section.ProfilA.AireFi * (zANE - zI)
 
         End Select

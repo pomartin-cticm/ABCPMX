@@ -371,6 +371,13 @@ COMPOSITE				= Mixte
 STEELENCASED			= Profilé+Enrobabe
 CONSTRUCTIONP			= Durant la phase de construction
 COMPOSITEP				= Durant la phase finale
+BETAMPLASTIC			= Facteur de réduction inclus
+ACCORDINGTO				= selon
+REFEN1994G1				= EN 1994-1-1:2005, 6.2.1.2 (2) et Figure 6.3
+REFEN1994G2				= prEN 1994-1-1:2024, Figure 8.3
+FORZSURH				= Pour
+RATIOZHABOVELIMIT		= Le ratio z / H (= $) est au-dessus de la limite pour le calcul plastique
+RATIOZHLIM				= Valeur limite
 
 #NDC_ANALYSE
 ANALYSIS				= Analyse - Efforts internes

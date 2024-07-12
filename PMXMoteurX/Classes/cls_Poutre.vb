@@ -2899,8 +2899,14 @@ Public Class cls_Poutre
 
                 If lCalcul Then
                     InertieY = Me.Section.InertieYY(pSigneM(iElt), False, Me.Param.Gamma, nEqEc, lMixte, nEqDal, Beff, Me.Dalle, zANe)
+
+                    If lMixte Then
+                        Aire = Me.Section.ProfilA.Aire + Beff * Me.Dalle.EpaisseurActive / nEqDal
+                    Else
+                        Aire = Me.Section.ProfilA.Aire
+                    End If
                     'Aire = Me.Section.ProfilA.Aire      ' A changer pour aire homgonénéisée
-                    Aire = Me.Section.ProfilA.Aire + Beff * Me.Dalle.EpaisseurActive / nEqDal
+
 
                     pMyElts.InertieY(iElt) = InertieY
                     BeffPrec = Beff
