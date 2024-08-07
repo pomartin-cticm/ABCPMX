@@ -73,9 +73,9 @@ Module Mod_OutilsGraph
         Select Case HAlign
             Case HorizontalAlignment.Center
                 xDecal = SizeChaine.Width / 2
-            Case HorizontalAlignment.Right
-                xDecal = 0
             Case HorizontalAlignment.Left
+                xDecal = 0
+            Case HorizontalAlignment.Right
                 xDecal = SizeChaine.Width
         End Select
         Select Case VAlign

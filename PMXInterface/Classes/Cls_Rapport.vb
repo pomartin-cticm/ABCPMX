@@ -1190,7 +1190,10 @@ Public Class Cls_Rapport
 
                 Case "PROFIL_ACIER"
 
-                    DessinProfileAcier(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, sWiImg, sHiImg, FontBase, 0.9, True, False, -1, xLeftImg, YPen)
+                    If MyProjet.Poutres(MyProjet.IndEnCours).lSlimFloor Then
+                    Else
+                        DessinProfileAcierN(MyGr, MyProjet.Poutres(MyProjet.IndEnCours).Section, sWiImg, sHiImg, PoliceEnCours, 0.9, True, False, -1, xLeftImg, YPen)
+                    End If
 
                 Case "PROFIL_ACIER_DATABASE"
 
@@ -1208,7 +1211,7 @@ Public Class Cls_Rapport
                     myProfileLoc.ProfilA.Rcs = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
                     myProfileLoc.ProfilA.Rci = MyCatalogue.Series(Gamme).Profiles(Profile).Rc
 
-                    DessinProfileAcier(MyGr, myProfileLoc, sWiImg, sHiImg, FontBase, 0.9, True, False, -1, xLeftImg, YPen)
+                    DessinProfileAcier(MyGr, myProfileLoc, sWiImg, sHiImg, PoliceEnCours, 0.9, True, False, -1, xLeftImg, YPen)
 
                 Case "PARTIAL_ENCASEMENT"
 

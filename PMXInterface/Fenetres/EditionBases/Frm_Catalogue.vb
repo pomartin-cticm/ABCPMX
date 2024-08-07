@@ -9,7 +9,8 @@ Public Class Frm_Catalogue
 
 #End Region
 
-#Region "   Variable  "
+#Region "   Variables  "
+
     Const RATIOHIGAMME As Double = 0.45
     Dim ColorGridHI As Color = Color.Blue
 
@@ -41,6 +42,9 @@ Public Class Frm_Catalogue
     Dim Propriete As New List(Of String)
     Dim Titre As New List(Of String)
     '******************************************************************************************************************
+
+    Dim SizeFont As Single = 8
+    Dim FontFrm As Font
 
 #End Region
 
@@ -146,16 +150,9 @@ Public Class Frm_Catalogue
     Private Sub InitialisationFenetre()
         lBuild = True
         Me.Icon = Frm_PMX.Icon
+        FontFrm = New Font(Me.lbl_A.Font.Name, SizeFont)
 
-        '--> Initialisation pour le dessin de la section
-        'Me.img_Section.Width = Me.grp_Draw.Width - 2 * Me.img_Section.Left
-        'Me.img_Section.Dock = DockStyle.Fill
-        'Me.img_Section.BorderStyle = BorderStyle.None
-
-        'sHI = Me.img_Section.ClientRectangle.Height
-        'sWI = Me.img_Section.ClientRectangle.Width
-
-        'lSmartBeam = (tabPoutres(iPoutreEnCours).Decoupe = Cls_Beam.Enu_TypeDecoupe.SmartBeam)
+        '--> 
 
         MyPoutreLoc = New cls_Poutre()
         MyPoutreLoc.Section.ProfilA.aW = 0
@@ -388,8 +385,8 @@ Public Class Frm_Catalogue
 #Region "   Dessin de la section "
 
     Private Sub img_Section_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles img_Section.Paint
-        DessinProfileAcier(e.Graphics, MyPoutreLoc.Section, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                           FontBase, kAdjust, True, False, iSelect)
+        DessinProfileAcierN(e.Graphics, MyPoutreLoc.Section, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+                            Fontfrm, kAdjust, True, False, iSelect)
 
     End Sub
 

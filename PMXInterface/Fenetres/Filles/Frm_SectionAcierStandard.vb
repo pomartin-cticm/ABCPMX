@@ -62,6 +62,9 @@ Public Class Frm_SectionAcierStandard
     Dim lNuancePossible As Boolean
     Dim NuancesExclues() As String = {"S235", "S275"}
 
+    Dim SizeFont As Single = 8
+    Dim FontFrm As Font
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -157,6 +160,8 @@ Public Class Frm_SectionAcierStandard
 
         Me.img_Section.Dock = DockStyle.Fill
         Me.img_ReductionCurve.Dock = DockStyle.Fill
+
+        FontFrm = New Font(Me.lbl_Acier.Font.Name, SizeFont)
 
         '== Preparation des options disponibles en fonctions du maitre d'ouvrage
 
@@ -552,8 +557,10 @@ Public Class Frm_SectionAcierStandard
 
     Private Sub img_Section_Paint(sender As Object, e As PaintEventArgs) Handles img_Section.Paint
 
-        DessinProfileAcier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
-                           FontBase, kAdjust, True, False, iSelect)
+        DessinProfileAcierN(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+                            FontFrm, kAdjust, True, False, iSelect)
+        'DessinProfileAcier(e.Graphics, MySectionLoc, Me.img_Section.ClientRectangle.Width, Me.img_Section.ClientRectangle.Height,
+        '                    FontBase, kAdjust, True, False, iSelect)
 
     End Sub
 
