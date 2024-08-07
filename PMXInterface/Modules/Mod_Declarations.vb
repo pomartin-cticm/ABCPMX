@@ -465,6 +465,7 @@ Public Module Mod_Declarations
     Public FontSymbolGrec As New Font("Symbol", 10) 'GUD: modif, avant 8.25
 
     Public FontBase As New Font("Arial", 10) 'GUD: modif, avant 8.25
+    Public Const SizeFontFrm As Single = 8
 
     Public CouleurAcierNormal As Color = Color.DarkSlateGray
     Public CouleurAcierSelect As Color = BleuCTICM

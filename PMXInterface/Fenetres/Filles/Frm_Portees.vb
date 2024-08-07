@@ -20,6 +20,8 @@ Public Class Frm_Portees
 
     Const formatLONGUEUR As String = "0.00"
 
+    Dim FontFrm As Font
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -126,6 +128,8 @@ Public Class Frm_Portees
     End Sub
 
     Private Sub AfficherPoutreEnCours()
+
+        FontFrm = New Font(Me.lbl_Entraxe.Font.Name, SizeFontFrm)
 
         With MyProjet.Poutres(MyProjet.IndEnCours)
 
@@ -291,14 +295,14 @@ Public Class Frm_Portees
 
     Private Sub img_Coupe_Paint(sender As Object, e As PaintEventArgs) Handles img_Coupe.Paint
 
-        DessinFrmCoupe(e.Graphics, MyPoutreLoc, Me.img_Coupe.ClientRectangle.Width, Me.img_Coupe.ClientRectangle.Height, 1, iSelect, True)
+        DessinFrmCoupe(e.Graphics, MyPoutreLoc, FontFrm, Me.img_Coupe.ClientRectangle.Width, Me.img_Coupe.ClientRectangle.Height, 1, iSelect, True)
 
     End Sub
 
 
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Portees.Paint
 
-        DessinFrmPortee(e.Graphics, MyPoutreLoc, Me.img_Portees.ClientRectangle.Width, Me.img_Portees.ClientRectangle.Height, 1, iSelect, True)
+        DessinFrmPortee(e.Graphics, MyPoutreLoc, fontfrm, Me.img_Portees.ClientRectangle.Width, Me.img_Portees.ClientRectangle.Height, 1, iSelect, True)
 
     End Sub
 

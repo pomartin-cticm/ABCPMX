@@ -43,7 +43,7 @@ Public Class Frm_Catalogue
     Dim Titre As New List(Of String)
     '******************************************************************************************************************
 
-    Dim SizeFont As Single = 8
+    Dim SizeFont As Single = SizeFontFrm
     Dim FontFrm As Font
 
 #End Region

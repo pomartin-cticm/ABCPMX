@@ -1182,11 +1182,11 @@ Public Class Cls_Rapport
 
                 Case "PORTEE"
 
-                    DessinFrmPortee(MyGr, MyProjet.Poutres(MyProjet.IndEnCours), sWiImg, sHiImg, 0.9, -1, True, xLeftImg, YPen)
+                    DessinFrmPortee(MyGr, MyProjet.Poutres(MyProjet.IndEnCours), PoliceEnCours, sWiImg, sHiImg, 0.9, -1, True, xLeftImg, YPen)
 
                 Case "PORTEE_COUPE"
 
-                    DessinFrmCoupe(MyGr, MyProjet.Poutres(MyProjet.IndEnCours), sWiImg, sHiImg, 0.9, -1, True, xLeftImg, YPen)
+                    DessinFrmCoupe(MyGr, MyProjet.Poutres(MyProjet.IndEnCours), PoliceEnCours, sWiImg, sHiImg, 0.9, -1, True, xLeftImg, YPen)
 
                 Case "PROFIL_ACIER"
 
@@ -1200,7 +1200,6 @@ Public Class Cls_Rapport
                     Dim Gamme As String = Mots(6)
                     Dim Profile As String = String.Join(" ", From Mot In Mots Where Array.IndexOf(Mots, Mot) >= 6)
                     Dim myProfileLoc As New PMXMoteur2.cls_Section
-
 
                     myProfileLoc.ProfilA.ha = MyCatalogue.Series(Gamme).Profiles(Profile).Ht
                     myProfileLoc.ProfilA.Bfs = MyCatalogue.Series(Gamme).Profiles(Profile).Bf
