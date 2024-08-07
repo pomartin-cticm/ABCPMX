@@ -197,10 +197,10 @@
     <Compile Include="Fenetres\Options\Frm_OptionsCalculSlimFloor.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPCasDeCharge.Designer.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPCasDeCharge.Designer.vb">
       <DependentUpon>Frm_PPCasDeCharge.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPCasDeCharge.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPCasDeCharge.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_Chargement.Designer.vb">
@@ -281,16 +281,16 @@
     <Compile Include="Fenetres\Filles\Frm_InformationPP.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPHivoss.Designer.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPHivoss.Designer.vb">
       <DependentUpon>Frm_PPHivoss.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPHivoss.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPHivoss.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPLargeurEfficace.Designer.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPLargeurEfficace.Designer.vb">
       <DependentUpon>Frm_PPLargeurEfficace.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPLargeurEfficace.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPLargeurEfficace.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_Maintiens.Designer.vb">
@@ -305,22 +305,22 @@
     <Compile Include="Fenetres\Filles\Frm_Portees.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPCombinaison.Designer.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPCombinaison.Designer.vb">
       <DependentUpon>Frm_PPCombinaison.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPCombinaison.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPCombinaison.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPModePropre.Designer.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPModePropre.Designer.vb">
       <DependentUpon>Frm_PPModePropre.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPModePropre.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPModePropre.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPVerifications.Designer.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPVerifications.Designer.vb">
       <DependentUpon>Frm_PPVerifications.vb</DependentUpon>
     </Compile>
-    <Compile Include="Fenetres\PP\Frm_PPVerifications.vb">
+    <Compile Include="Fenetres\PostProcess\Frm_PPVerifications.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Fenetres\Filles\Frm_SectionAcierStandard.Designer.vb">
@@ -529,7 +529,7 @@
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculSlimFloor.resx">
       <DependentUpon>Frm_OptionsCalculSlimFloor.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fenetres\PP\Frm_PPCasDeCharge.resx">
+    <EmbeddedResource Include="Fenetres\PostProcess\Frm_PPCasDeCharge.resx">
       <DependentUpon>Frm_PPCasDeCharge.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Chargement.resx">
@@ -572,10 +572,10 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_InformationPP.resx">
       <DependentUpon>Frm_InformationPP.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fenetres\PP\Frm_PPHivoss.resx">
+    <EmbeddedResource Include="Fenetres\PostProcess\Frm_PPHivoss.resx">
       <DependentUpon>Frm_PPHivoss.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fenetres\PP\Frm_PPLargeurEfficace.resx">
+    <EmbeddedResource Include="Fenetres\PostProcess\Frm_PPLargeurEfficace.resx">
       <DependentUpon>Frm_PPLargeurEfficace.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_Maintiens.resx">
@@ -585,13 +585,13 @@
     <EmbeddedResource Include="Fenetres\Filles\Frm_Portees.resx">
       <DependentUpon>Frm_Portees.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fenetres\PP\Frm_PPCombinaison.resx">
+    <EmbeddedResource Include="Fenetres\PostProcess\Frm_PPCombinaison.resx">
       <DependentUpon>Frm_PPCombinaison.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fenetres\PP\Frm_PPModePropre.resx">
+    <EmbeddedResource Include="Fenetres\PostProcess\Frm_PPModePropre.resx">
       <DependentUpon>Frm_PPModePropre.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Fenetres\PP\Frm_PPVerifications.resx">
+    <EmbeddedResource Include="Fenetres\PostProcess\Frm_PPVerifications.resx">
       <DependentUpon>Frm_PPVerifications.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_SectionAcierStandard.resx">

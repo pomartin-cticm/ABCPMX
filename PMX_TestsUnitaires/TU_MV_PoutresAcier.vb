@@ -6,7 +6,7 @@ Imports PMXMoteur2
 
 <TestClass()> Public Class TU_MV_PoutresAcier
 
-    <TestMethod()> Public Sub TU_MV_PoutreAcierLamineConsole()
+    <TestMethod()> Public Sub TU_MV_TEST05_PoutreAcierLamineConsole()
 
         ' Vérification d'une poutre acier seule (cas test de base)
         ' Vérification selon l'EN 1993-1-1
@@ -27,7 +27,7 @@ Imports PMXMoteur2
 
 #Region " Renseignement des données "
 
-        'GEOMETRIE
+        '# GEOMETRIE
         myPoutre.lTraveeConsoleGauche = True
         myPoutre.lTraveeConsoleDroite = True
         myPoutre.LongueurTravee(0) = 3      ' console gauche
@@ -47,10 +47,10 @@ Imports PMXMoteur2
             .Ep_th = 0
         End With
 
-        'MATERIAUX
+        '# MATERIAUX
         myPoutre.Section.Acier.InitialiseAcierS275EC3()
 
-        'CHARGES
+        '# CHARGES
         myPoutre.InitialisePoidsPropres() 'Valeur calculée à la main: qPP = 9.72 kN/ml
         For i As Integer = 0 To 2
             myPoutre.ChargesU("G1").QSurf(i) = 2 * 1000
@@ -58,7 +58,7 @@ Imports PMXMoteur2
         Next
 
 
-        'COEFFICIENTS PARTIELS
+        '# COEFFICIENTS PARTIELS
         myPoutre.Initialise_CoefficientsCombinaisons()          ' Initialise les coefficients par défaut 
         myPoutre.lCombELU(0) = True                             ' activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
         myPoutre.lCombELS(0) = True                             ' activation de la première combinaison ELS par défaut (G + Q)
@@ -163,7 +163,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Verification de l'analyse de la poutre "
+#Region " VALIDATION : Analyse de la poutre "
 
         Valeur = MEdAppuiMax
         ValRef = 529.497 * 10 ^ 3
@@ -179,7 +179,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la classification de la section (ELU)"
+#Region " VALIDATION : Classification de la section (ELU)"
 
         Valeur = myPoutre.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(False, myPoutre.Param.lGeneration1)
         ValRef = 1
@@ -187,7 +187,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la résistance à la flexion (ELU)"
+#Region " VALIDATION : Résistance à la flexion (ELU)"
 
         'A L'ELU
 
@@ -211,7 +211,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la résistance au déversement"
+#Region " VALIDATION : Résistance au déversement"
 
         Dim Mcr, MbRd As Decimal
 
@@ -236,7 +236,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la résistance à l'effort tranchant (ELU)"
+#Region " VALIDATION : Résistance à l'effort tranchant (ELU)"
 
         'A L'ELU
 
@@ -259,12 +259,12 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la résistance au voilement (ELU)"
+#Region " VALIDATION : Résistance au voilement (ELU)"
 
         Assert.IsTrue(myPoutre.Section.IsVoilementParCisaillement(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 #End Region
 
-#Region "Verification de la résistance à l'interaction MV"
+#Region " VALIDATION : Résistance à l'interaction MV"
 
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
@@ -284,7 +284,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification des propriétés élastiques (ELS)"
+#Region " VALIDATION : Propriétés élastiques (ELS)"
 
         '--> Propriétés en phase de coulage, poutre non etayée
 
@@ -305,7 +305,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification du calcul des fleches (ELS)"
+#Region " VALIDATION : Calcul des fleches (ELS)"
 
         '--> Fleches due à G1
 
@@ -333,7 +333,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Fréquence propre (ELS)"
+#Region " VALIDATION : Fréquence propre (ELS)"
 
         myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
         Valeur = myPoutre.Modal.Frequence

@@ -607,6 +607,7 @@ EDIT					= Edit
 EDITPROFILES			= Edit ArcelorMittal profiles
 EDITSTUDS				= Edit Studs
 EDITDECKS				= Edit Steel profiled sheetings
+WELDEDSEC				= Welded
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Modular ratio tool

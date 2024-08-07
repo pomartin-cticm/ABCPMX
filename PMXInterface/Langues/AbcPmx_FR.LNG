@@ -607,6 +607,7 @@ EDIT					= Editer
 EDITPROFILES			= Editer les profilés ArcelorMittal
 EDITSTUDS				= Editer les goujons
 EDITDECKS				= Editer les bacs acier
+WELDEDSEC				= PRS
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Options coefficient d'équivalence 

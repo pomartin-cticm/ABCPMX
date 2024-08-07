@@ -17,8 +17,9 @@ Public Module Mod_Dessins
 
 #End Region
 
-#Region "Dessins pour la fenetre principale (FRM_MAIN)"
-    Public Sub DessinFrmMain_Coupe(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre, lZoomPlus As Boolean, lCotation As Boolean,
+#Region " Dessins pour la fenetre principale (FRM_MAIN) "
+    Public Sub DessinFrmMain_Coupe(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, myBeam As cls_Poutre,
+                                   lZoomPlus As Boolean, lCotation As Boolean, strPRS As String,
                                    ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   26/06/23 :  Version 1.00
@@ -26,11 +27,11 @@ Public Module Mod_Dessins
         '   Dessin du Bac Acier
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
-        '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
-        '   MyDalle     [E] :   Dalle à dessiner
-        '   MySection   [E] :   Section à laquelle la dalle est rattachée
-        '   iSelect     [E] :   Indice de la cote selectionnée
-        '   strMsg      [E] :   Messages issus du fichier langue
+        '   pWi, pHi    [E] :   Largeur et hauteur de la zone de dessin
+        '   myBeam      [E] :   Poutre à dessiner
+        '   lZoomPlus   [E] :   Indique si zoom
+        '   lCotation   [E] :   Indique si affichage cotation
+        '   strPRS      [E] :   Message pour section soudée
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
         '-----------------------------------------------------------------------------------------------
         '   iSelect:    0 épaisseur de la dalle
@@ -39,8 +40,8 @@ Public Module Mod_Dessins
 
         '--> Declarations
 
-        Dim MySection As cls_Section = MyPoutre.Section
-        Dim MyDalle As cls_Dalle = MyPoutre.Dalle
+        Dim MySection As cls_Section = myBeam.Section
+        Dim MyDalle As cls_Dalle = myBeam.Dalle
 
         Dim MyParAff As Struc_Affichage
         Dim xMin, yMin, xMax, yMax As Double
@@ -63,7 +64,7 @@ Public Module Mod_Dessins
         Dim lCofraplus220 As Boolean
 
         'Partie qui concene la cotation 
-        Dim Chaine As String
+        Dim Chaine As String = ""
         Dim xo_cotes, xe_cotes, yo_cotes, ye_cotes As Decimal
         Dim MyPen As New Pen(Color.Black, 1) 'Pen utilise pour les fleches/cotations 
         Dim MyFontNormal As Font = FontBase
@@ -71,8 +72,6 @@ Public Module Mod_Dessins
         Dim CouleurTremie As Color = CouleurTremieNormal
         Dim myBrushT As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), CouleurTremie, CouleurTremie)
         Dim yInfTremieG, ySupTremieG, yInfTremieD, ySupTremieD As Decimal
-
-
 
         '--> Initialisation
 
@@ -82,8 +81,8 @@ Public Module Mod_Dessins
         lCofraplus220 = MyDalle.Bac.lCofraplus220
         lSlimfloor = MySection.lSlimFloor
 
-        EntraxeD1 = MyPoutre.EntraxeD1
-        EntraxeD2 = MyPoutre.EntraxeD2
+        EntraxeD1 = myBeam.EntraxeD1
+        EntraxeD2 = myBeam.EntraxeD2
         EntraxeTot = EntraxeD1 + EntraxeD2
         EntraxeMax = Math.Max(EntraxeD1, EntraxeD2)
 
@@ -153,7 +152,6 @@ Public Module Mod_Dessins
         myBrushA(0) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorArmatures(0), ColorArmatures(0))
         myBrushA(1) = New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), ColorArmatures(1), ColorArmatures(1))
 
-
         '--> Dessin de la dalle
 
         'If lMixte Then 
@@ -162,74 +160,52 @@ Public Module Mod_Dessins
 
         Select Case MyDalle.type
             Case cls_Dalle.Enum_TypeDalle.Pleine
-                DessinDallePleine_Frm_Main(myGr, MyPoutre, Ha, Bfs, MyParAff, myBrushB, EntraxeD2, MyPoutre.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
+                DessinDallePleine_Frm_Main(myGr, myBeam, Ha, Bfs, MyParAff, myBrushB, EntraxeD2, myBeam.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 Select Case MyDalle.Bac.Orientation
                     Case cls_Bac.Enum_Orientation.Parallele
-                        DessineDalleMixteParallele_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, EntraxeD2, MyPoutre.lIntermediaire, EntraxeD1, EntraxeMax)
+                        DessineDalleMixteParallele_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, EntraxeD2, myBeam.lIntermediaire, EntraxeD1, EntraxeMax)
                     Case cls_Bac.Enum_Orientation.Perpendiculaire
                         If lCofraplus220 Then
                             'If True Then 'GuD: Utile pour vérifier que la fonction marche correctement omme le cofraplus 220 n'est pas encore implémenté
-                            DessineDalleMixtePerpendiculaireCfp220_Frm_Main(myGr, MyPoutre, MyParAff, myBrushB, EntraxeD2, MyPoutre.lIntermediaire, EntraxeD1, EntraxeMax)
+                            DessineDalleMixtePerpendiculaireCfp220_Frm_Main(myGr, myBeam, MyParAff, myBrushB, EntraxeD2, myBeam.lIntermediaire, EntraxeD1, EntraxeMax)
                         Else
-                            DessineDalleMixtePerpendiculaire_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, EntraxeD2, MyPoutre.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
+                            DessineDalleMixtePerpendiculaire_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, EntraxeD2, myBeam.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
                         End If
                 End Select
 
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
-                DessinDallePreFab_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, EntraxeD2, MyPoutre.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
+                DessinDallePreFab_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, EntraxeD2, myBeam.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
             Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
-                DessinDalleComplementePrefa_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, EntraxeD2, MyPoutre.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
+                DessinDalleComplementePrefa_Frm_Main(myGr, MyDalle, Ha, Bfs, MyParAff, myBrushB, myBrushPref, EntraxeD2, myBeam.lIntermediaire, MySection.ProfilA, EntraxeD1, EntraxeMax)
         End Select
 
         ''# Armatures
 
-        DessinLitArmaDalle_Frm_Main(myGr, MyDalle, 0, MySection.ProfilA.ha, MyParAff, myBrushA(0), EntraxeD2, MyPoutre.lIntermediaire, EntraxeD1, EntraxeMax)
-        DessinLitArmaDalle_Frm_Main(myGr, MyDalle, 1, MySection.ProfilA.ha, MyParAff, myBrushA(0), EntraxeD2, MyPoutre.lIntermediaire, EntraxeD1, EntraxeMax)
+        DessinLitArmaDalle_Frm_Main(myGr, MyDalle, 0, MySection.ProfilA.ha, MyParAff, myBrushA(0), EntraxeD2, myBeam.lIntermediaire, EntraxeD1, EntraxeMax)
+        DessinLitArmaDalle_Frm_Main(myGr, MyDalle, 1, MySection.ProfilA.ha, MyParAff, myBrushA(0), EntraxeD2, myBeam.lIntermediaire, EntraxeD1, EntraxeMax)
 
         '--> Dessin de la poutre de gauche
 
-        If MyPoutre.lIntermediaire Then
-            If lEnrob Then
-                'Dessin du béton
-                DessinEnrobagePartielBeton(myGr, MySection.ProfilA, MySection.Enrobage.Ratio_bc, MyParAff, myBrushB, -EntraxeD1)
-                'Dessin des étriers
-                DessinEtriers(myGr, MySection.ProfilA, MySection.Enrobage, MyParAff, myBrushE, zREF, -EntraxeD1)
-            End If
+        If myBeam.lIntermediaire Then
 
-            ' Dessin de la section acier
-            DessinProfileMetal(myGr, MySection.ProfilA, myBrushP, MyParAff, zREF, -EntraxeD1)
+            DessinFrmMainCoupeProfile(myGr, MySection, lEnrob, -EntraxeD1, False, zREF, MyParAff, myBrushB, myBrushE, myBrushP)
 
         End If
 
         '--> Dessin de la poutre intermédaire 
-        If lEnrob Then
-            'Dessin du béton
-            DessinEnrobagePartielBeton(myGr, MySection.ProfilA, MySection.Enrobage.Ratio_bc, MyParAff, myBrushB, 0)
-            'Dessin des étriers
-            DessinEtriers(myGr, MySection.ProfilA, MySection.Enrobage, MyParAff, myBrushE, zREF, 0)
-        End If
 
-        ' Dessin de la section acier
-        DessinProfileMetal(myGr, MySection.ProfilA, myBrushP, MyParAff, zREF, 0, Not MyPoutre.lIntermediaire)
+        DessinFrmMainCoupeProfile(myGr, MySection, lEnrob, 0, True, zREF, MyParAff, myBrushB, myBrushE, myBrushP, myBeam.lIntermediaire)
 
         '--> Dessin de la poutre droite 
-        If lEnrob Then
-            'Dessin du béton
-            DessinEnrobagePartielBeton(myGr, MySection.ProfilA, MySection.Enrobage.Ratio_bc, MyParAff, myBrushB, EntraxeD2)
-            'Dessin des étriers
-            DessinEtriers(myGr, MySection.ProfilA, MySection.Enrobage, MyParAff, myBrushE, zREF, EntraxeD2)
-        End If
 
-        ' Dessin de la section acier
-        DessinProfileMetal(myGr, MySection.ProfilA, myBrushP, MyParAff, zREF, EntraxeD2)
-
+        DessinFrmMainCoupeProfile(myGr, MySection, lEnrob, EntraxeD2, False, zREF, MyParAff, myBrushB, myBrushE, myBrushP)
 
         '--> Dessin des cotations pour les profilés
 
         If lCotation And Not lZoomPlus Then
 
-            If Not lSlimfloor Or MyPoutre.lIntermediaire Then
+            If Not lSlimfloor Or myBeam.lIntermediaire Then
                 'cotation à gauche 
                 xo_cotes = -EntraxeD1
                 xe_cotes = 0
@@ -263,13 +239,15 @@ Public Module Mod_Dessins
 
         End If
 
-        ' Affichage du nom du profilé
-        If (Not MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym Or Not MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym) And lCotation Then
+        '--( Affichage du nom du profilé
+
+        'If (Not MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym Or Not MySection.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym) And lCotation Then
+        If lCotation Then
             Dim horAlignement As HorizontalAlignment
 
             If lSlimfloor Then
                 horAlignement = HorizontalAlignment.Left
-                xo_cotes = Math.Max(MyPoutre.Section.ProfilA.Bfs / 2, Math.Max(MyPoutre.Section.ProfilA.Bfi / 2, MyPoutre.Section.ProfilA.Plat_b / 2))
+                xo_cotes = Math.Max(myBeam.Section.ProfilA.Bfs / 2, Math.Max(myBeam.Section.ProfilA.Bfi / 2, myBeam.Section.ProfilA.Plat_b / 2))
                 If lZoomPlus Then
                     xo_cotes += dCar / 4
                 Else
@@ -281,7 +259,7 @@ Public Module Mod_Dessins
 
                 Chaine = MySection.ProfilA.NomProfile
             Else
-                xo_cotes = MyPoutre.Section.ProfilA.Bfs / 2
+                xo_cotes = myBeam.Section.ProfilA.Bfs / 2
                 If lZoomPlus Then
                     xo_cotes += dCar / 4
                 Else
@@ -291,9 +269,14 @@ Public Module Mod_Dessins
                 yo_cotes = zREF
                 ye_cotes = yo_cotes - MySection.ProfilA.ha
 
-                Chaine = MySection.ProfilA.NomProfile
+                If lLamine Then
+                    Chaine = MySection.ProfilA.NomProfile
+                Else
+                    Chaine = strPRS
+                End If
 
                 horAlignement = HorizontalAlignment.Center
+
             End If
 
             Select Case MySection.ProfilA.typeProfileAcier
@@ -311,39 +294,38 @@ Public Module Mod_Dessins
 
         End If
 
-
         '--> Dessins des connecteurs
 
-        If MyPoutre.lMixte Then DessinConnecteurs_Frm_Main(myGr, MyPoutre, MyParAff, myBrushC, EntraxeD2, MyPoutre.lIntermediaire, EntraxeD1)
+        If myBeam.lMixte Then DessinConnecteurs_Frm_Main(myGr, myBeam, MyParAff, myBrushC, EntraxeD2, myBeam.lIntermediaire, EntraxeD1)
 
         '# Dessin tremies
 
-        If MyPoutre.lTremieGauche Or MyPoutre.lTremieDroite Then
+        If myBeam.lTremieGauche Or myBeam.lTremieDroite Then
             If lCofraplus220 Then
                 yInfTremieG = zREF - MyDalle.Bac.Hp - MySection.ProfilA.Tfs
-                ySupTremieG = zREF + MyPoutre.Dalle.Ep_td + MySection.ProfilA.Tfs
+                ySupTremieG = zREF + myBeam.Dalle.Ep_td + MySection.ProfilA.Tfs
 
                 yInfTremieD = yInfTremieG
                 ySupTremieD = ySupTremieG
             ElseIf MyDalle.type = cls_Dalle.Enum_TypeDalle.Pleine Then
-                If MyPoutre.DistanceDsl1 <= MyPoutre.Section.ProfilA.Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd) Then
+                If myBeam.DistanceDsl1 <= myBeam.Section.ProfilA.Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd) Then
                     yInfTremieG = zREF
-                    ySupTremieG = zREF + MyPoutre.Dalle.Ep_td + MyPoutre.Dalle.Ep_th + MySection.ProfilA.Tfs
+                    ySupTremieG = zREF + myBeam.Dalle.Ep_td + myBeam.Dalle.Ep_th + MySection.ProfilA.Tfs
                 Else
-                    yInfTremieG = zREF + MyPoutre.Dalle.Ep_th - MySection.ProfilA.Tfs
-                    ySupTremieG = zREF + MyPoutre.Dalle.Ep_td + MyPoutre.Dalle.Ep_th + MySection.ProfilA.Tfs
+                    yInfTremieG = zREF + myBeam.Dalle.Ep_th - MySection.ProfilA.Tfs
+                    ySupTremieG = zREF + myBeam.Dalle.Ep_td + myBeam.Dalle.Ep_th + MySection.ProfilA.Tfs
                 End If
 
-                If MyPoutre.DistanceDsl2 <= MyPoutre.Section.ProfilA.Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd) Then
+                If myBeam.DistanceDsl2 <= myBeam.Section.ProfilA.Bfs / 2 + MyDalle.Ep_th * Math.Tan(MyDalle.ThetaRd) Then
                     yInfTremieD = zREF
-                    ySupTremieD = zREF + MyPoutre.Dalle.Ep_td + MyPoutre.Dalle.Ep_th + MySection.ProfilA.Tfs
+                    ySupTremieD = zREF + myBeam.Dalle.Ep_td + myBeam.Dalle.Ep_th + MySection.ProfilA.Tfs
                 Else
-                    yInfTremieD = zREF + MyPoutre.Dalle.Ep_th - MySection.ProfilA.Tfs
-                    ySupTremieD = zREF + MyPoutre.Dalle.Ep_td + MyPoutre.Dalle.Ep_th + MySection.ProfilA.Tfs
+                    yInfTremieD = zREF + myBeam.Dalle.Ep_th - MySection.ProfilA.Tfs
+                    ySupTremieD = zREF + myBeam.Dalle.Ep_td + myBeam.Dalle.Ep_th + MySection.ProfilA.Tfs
                 End If
             Else
                 yInfTremieG = zREF - MySection.ProfilA.Tfs
-                ySupTremieG = zREF + MyPoutre.Dalle.Ep_td + MySection.ProfilA.Tfs
+                ySupTremieG = zREF + myBeam.Dalle.Ep_td + MySection.ProfilA.Tfs
 
                 yInfTremieD = yInfTremieG
                 ySupTremieD = ySupTremieG
@@ -353,25 +335,25 @@ Public Module Mod_Dessins
         End If
 
         '--> Trémie gauche
-        If MyPoutre.lTremieGauche Then
-            AddRectanglePlein(myGr, myBrushT, MyPenContour, -MyPoutre.EntraxeD1 + MyPoutre.DistanceDsl1, yInfTremieG, -MyPoutre.DistanceDsl1, ySupTremieG, MyParAff, True, True, True, False, False)
+        If myBeam.lTremieGauche Then
+            AddRectanglePlein(myGr, myBrushT, MyPenContour, -myBeam.EntraxeD1 + myBeam.DistanceDsl1, yInfTremieG, -myBeam.DistanceDsl1, ySupTremieG, MyParAff, True, True, True, False, False)
 
             If lCotation And Not lZoomPlus Then
 
                 'cotation de l'axe au bord
-                xo_cotes = -MyPoutre.DistanceDsl1
+                xo_cotes = -myBeam.DistanceDsl1
                 xe_cotes = 0
                 yo_cotes = ySupTremieG + dCar / 4
                 ye_cotes = yo_cotes
 
                 AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
-                Chaine = GetStringNoUnit(MyPoutre.DistanceDsl1, Enu_TypeVariable.Dimension)
+                Chaine = GetStringNoUnit(myBeam.DistanceDsl1, Enu_TypeVariable.Dimension)
                 AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
 
                 'cotation de la tremie gauche
-                xo_cotes = -EntraxeD1 + MyPoutre.DistanceDsl1
-                xe_cotes = -MyPoutre.DistanceDsl1
+                xo_cotes = -EntraxeD1 + myBeam.DistanceDsl1
+                xe_cotes = -myBeam.DistanceDsl1
 
                 AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
                 Chaine = GetStringNoUnit(Math.Abs(xe_cotes - xo_cotes), Enu_TypeVariable.Dimension)
@@ -382,24 +364,24 @@ Public Module Mod_Dessins
         End If
 
         '--> Trémie droite  
-        If MyPoutre.lTremieDroite Then
-            AddRectanglePlein(myGr, myBrushT, MyPenContour, MyPoutre.DistanceDsl2, yInfTremieD, MyPoutre.EntraxeD2 - MyPoutre.DistanceDsl2, ySupTremieD, MyParAff, True, True, True, False, False)
+        If myBeam.lTremieDroite Then
+            AddRectanglePlein(myGr, myBrushT, MyPenContour, myBeam.DistanceDsl2, yInfTremieD, myBeam.EntraxeD2 - myBeam.DistanceDsl2, ySupTremieD, MyParAff, True, True, True, False, False)
 
             If lCotation And Not lZoomPlus Then
 
                 'cotationde l'axe au bord droit 
                 xo_cotes = 0
-                xe_cotes = MyPoutre.DistanceDsl2
+                xe_cotes = myBeam.DistanceDsl2
                 yo_cotes = ySupTremieD + dCar / 4
                 ye_cotes = yo_cotes
 
                 AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
-                Chaine = GetStringNoUnit(MyPoutre.DistanceDsl2, Enu_TypeVariable.Dimension)
+                Chaine = GetStringNoUnit(myBeam.DistanceDsl2, Enu_TypeVariable.Dimension)
                 AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 'cotation de la tremie gauche
-                xo_cotes = MyPoutre.DistanceDsl2
-                xe_cotes = EntraxeD2 - MyPoutre.DistanceDsl2
+                xo_cotes = myBeam.DistanceDsl2
+                xe_cotes = EntraxeD2 - myBeam.DistanceDsl2
 
                 AddFleche(myGr, MyPen, xo_cotes, yo_cotes, xe_cotes, ye_cotes, MyParAff, True, True)
                 Chaine = GetStringNoUnit(Math.Abs(xe_cotes - xo_cotes), Enu_TypeVariable.Dimension)
@@ -414,7 +396,7 @@ Public Module Mod_Dessins
 
         'Affichage nom du goujon disposé, le cas écheant
 
-        If MyPoutre.lMixte And lCotation Then
+        If myBeam.lMixte And lCotation Then
             'Cotation
             'If lZoomPlus Then
             '    xo_cotes = -myBeam.Section.ProfilA.Bfs / 2 - dCar / 4
@@ -432,14 +414,52 @@ Public Module Mod_Dessins
             xo_cotes = 0
             xe_cotes = xo_cotes
 
-            yo_cotes = zREF + MyPoutre.Dalle.Ep_td + dCar / 8
+            yo_cotes = zREF + myBeam.Dalle.Ep_td + dCar / 8
             ye_cotes = yo_cotes
 
-            Chaine = MyPoutre.Dalle.ConnecteurGoujonSoude.nom
+            Chaine = myBeam.Dalle.ConnecteurGoujonSoude.nom
             AddTexteFond(myGr, New SolidBrush(MyPen.Color), Chaine, MyFontNormal, (xo_cotes + xe_cotes) / 2, (yo_cotes + ye_cotes) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
         End If
 
     End Sub
+
+    Private Sub DessinFrmMainCoupeProfile(myGr As Graphics, mySection As cls_Section, lEnrob As Boolean,
+                                          yPos As Decimal, lPrincipal As Boolean, zRef As Decimal,
+                                          myParAff As Struc_Affichage, myBrushB As Brush, myBrushE As Brush, myBrushP As Brush,
+                                          Optional lInter As Boolean = False)
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   10/11/23    :   Création - POM 
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   Représentation d'un profilé - Frm_Main
+        '---------------------------------------------------------------------------------------------------------------------------
+        '   MyGr        [E] :   Graphics
+        '   mySection   [E] :   Section du profilé
+        '   lEnrob      [E] :   Indique si profilé partiellement enrobé
+        '   lPrincipal  [E] :   Indique si profilé étudié
+        '   yPos        [E] :   Position du profilé
+        '   zRef        [E] :   Position z de référence
+        '   lInter      [E] :   Indique si poutre intermédiaire ou de rive
+        '   myParAff    [E] :   Paramètres d'affichage
+        '   myBrushB    [E] :   Pinceau pour le béton d'enrobage
+        '   myBrushE    [E] :   Pinceau pour les armatures d'enrobage
+        '   myBrushP    [E] :   Pinceau pour le profilé
+        '---------------------------------------------------------------------------------------------------------------------------
+
+        '--( Traitement de l'enrobage
+
+        If lEnrob Then
+            'Dessin du béton
+            DessinEnrobagePartielBeton(myGr, mySection.ProfilA, mySection.Enrobage.Ratio_bc, myParAff, myBrushB, yPos)
+            'Dessin des étriers
+            DessinEtriers(myGr, mySection.ProfilA, mySection.Enrobage, myParAff, myBrushE, zRef, yPos)
+        End If
+
+        '--( Dessin de la section acier
+
+        DessinProfileMetal(myGr, mySection.ProfilA, myBrushP, myParAff, zRef, yPos, Not lInter)
+
+    End Sub
+
 
     Private Sub DessinDallePleine_Frm_Main(ByRef MyGr As Graphics, MyPoutre As cls_Poutre, Ha As Decimal, Bfs As Decimal, MyParAffA As Struc_Affichage, MyBrushDP As Brush, EntraxeD2 As Decimal, lIntermediaire As Boolean, profilA As cls_ProfilA,
                                    Optional EntraxeD1 As Decimal = 0, Optional dCar As Decimal = 0)
@@ -5964,7 +5984,8 @@ Public Module Mod_Dessins
     End Sub
 
 #End Region
-#Region "Dessin pour les maintiens (FRM_MAINTIENS)"
+
+#Region " Dessin pour les maintiens (FRM_MAINTIENS) "
 
     Public Sub DessinFrmMaintiens(MyGr As Graphics, MyPoutre As cls_Poutre,
                                 ByVal pWi As Decimal, ByVal pHi As Decimal,

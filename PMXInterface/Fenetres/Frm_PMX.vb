@@ -31,6 +31,7 @@ Public Class Frm_PMX
     Dim strMsgFermetureFrm As String
     Dim strTSbtn_IFB_A As String
     Dim strTSbtn_IFB_B As String
+    Dim strPRS As String
 
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
@@ -298,6 +299,8 @@ Public Class Frm_PMX
                 Str_WarningFile = "Probleme lecture fichier"
 
                 strMsgFermetureFrm = Bloc("SAVEBEFORECLOSE")
+
+                strPRS = Bloc("WELDEDSEC")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangue")
@@ -1787,7 +1790,9 @@ Public Class Frm_PMX
 #Region "Dessins"
 
     Private Sub img_Main_Paint(sender As Object, e As PaintEventArgs) Handles img_Main.Paint
-        If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(e.Graphics, Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height, MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation)
+        If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(e.Graphics,
+                                                                   Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height,
+                                                                   MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, strprs)
     End Sub
 
     Private Sub Frm_PMX_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize

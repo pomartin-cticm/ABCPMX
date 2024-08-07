@@ -28,7 +28,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Renseignement des données de l'article "
+#Region " Renseignement des paramètres de la poutre "
 
         'GEOMETRIE
         myPoutre.lTraveeConsoleGauche = False
@@ -44,10 +44,8 @@ Imports PMXMoteur2
 
         myPoutre.Section.ProfilA.InitialiseProprietes()
 
-        With myPoutre.Dalle
-            .type = cls_Dalle.Enum_TypeDalle.Mixte
-            .Ep_td = 120 / 1000
-        End With
+        myPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte
+        myPoutre.Dalle.Ep_td = 120 / 1000
 
         For i As Integer = 0 To myPoutre.Dalle.LitArma.Count - 1 'on ne prend pas en compte les armatures dans le calcul dans l'exemple traité 
             myPoutre.Dalle.LitArma(i).lActive = False
@@ -55,10 +53,8 @@ Imports PMXMoteur2
 
         myPoutre.Dalle.Bac.InitialiseCofraPlus60_075()
 
-        With myPoutre.Dalle.Bac
-            .Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
-            .AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus      'permet de prendre en compte le bac pour le calcul des armatures transversales
-        End With
+        myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
+            myPoutre.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus      'permet de prendre en compte le bac pour le calcul des armatures transversales
 
         With myPoutre.Dalle.ConnecteurGoujonSoude
             .hsc = 100 / 1000
@@ -72,7 +68,7 @@ Imports PMXMoteur2
         myPoutre.LongueurZone(myPoutre.IndicePremiereTravee, 0) = myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee)
         myPoutre.lAutomaticDesign = False
 
-        'MATERIAUX
+        '# MATERIAUX
         myPoutre.Section.Acier.InitialiseAcierS275EC3()
 
         With myPoutre.Dalle.beton
@@ -82,14 +78,14 @@ Imports PMXMoteur2
 
         myPoutre.Dalle.ConnecteurGoujonSoude.Fu = 450
 
-        'CHARGES
+        '# CHARGES
         myPoutre.InitialisePoidsPropres()
         myPoutre.ChargesU("G2").QSurf(myPoutre.IndicePremiereTravee) = 1.4 * 1000
         myPoutre.ChargesU("Q1").QSurf(myPoutre.IndicePremiereTravee) = 2.5 * 1000
         myPoutre.ChargesU("QC").QSurf(myPoutre.IndicePremiereTravee) = 0.5 * 1000
         myPoutre.ChargesU("QC").FReparties(myPoutre.IndicePremiereTravee).Add(New cls_ForceRepartie(14 / 2 - 3 / 2, 1 * 3 * 1000, 14 / 2 + 3 / 2, 1 * 3 * 1000, 0)) '1 kN/m2 répartie s/ 3mx3m et centré à mi-travée
 
-        'COEFFICIENTS PARTIELS
+        '# COEFFICIENTS PARTIELS
         myPoutre.Initialise_CoefficientsCombinaisons()      ' Initialise les coefficients par défaut 
         myPoutre.lCombELU(0) = True                         ' activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
         myPoutre.lCombELS(0) = True                         ' activation de la première combinaison ELS par défaut (G + Q)
@@ -107,7 +103,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Lancement des calculs"
+#Region " Lancement des calculs "
 
         Dim NomChargesA(), strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
         ReDim NomChargesA(9)
@@ -128,7 +124,7 @@ Imports PMXMoteur2
         strRacineELUC = "ULS_C"
         strRacineELSC = "SLS_C"
 
-        'INITIALISATION DES TABLEAUX DES VERIFICATION
+        '# INITIALISATION DES TABLEAUX DES VERIFICATION
         Select Case myPoutre.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 ReDim myPoutre.VerifAcier(0)
@@ -143,7 +139,7 @@ Imports PMXMoteur2
                 End If
         End Select
 
-        'INITIALISATION DES CALCULS
+        '# INITIALISATION DES CALCULS
         myPoutre.InitialiseCalculs(NomChargesA)
         myPoutre.AAA_CalculMNVInternesN()
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, myPoutre.lCombELU, myPoutre.CoefCombELU, strRacineELU, myPoutre.CombiA_ELU)
@@ -152,7 +148,7 @@ Imports PMXMoteur2
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myPoutre.lCombELCURules, myPoutre.CoefCombELCU, strRacineELUC, myPoutre.CombiA_ELCU)
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
 
-        'COMBINAISON DES EFFORTS A L'ELU
+        '# COMBINAISON DES EFFORTS A L'ELU
         Dim MEd(,) As Decimal = Nothing
         Dim MEdMax, MEdMin, iNodeMMin, iNodeMMax As Decimal
 
@@ -165,7 +161,7 @@ Imports PMXMoteur2
         EnveloppeTableauEfforts(MEd, myPoutre.Nodes.nbNodes, MEdMax, MEdMin, iNodeMMax, iNodeMMin)
         EnveloppeTableauEfforts(VEd, myPoutre.Nodes.nbNodes, VEdMax, VEdMin, iNodeVMax, iNodeVMin)
 
-        'COMBINAISON DES EFFORTS A L'ELU CONSTRUCTION
+        '# COMBINAISON DES EFFORTS A L'ELU CONSTRUCTION
         Dim MEdConstruction(,) As Decimal = Nothing
         Dim MEdMaxConstruction, MEdMinConstruction, iNodeMMinConstruction, iNodeMMaxConstruction As Decimal
 
@@ -178,16 +174,16 @@ Imports PMXMoteur2
         EnveloppeTableauEfforts(MEdConstruction, myPoutre.Nodes.nbNodes, MEdMaxConstruction, MEdMinConstruction, iNodeMMaxConstruction, iNodeMMinConstruction)
         EnveloppeTableauEfforts(VEdConstruction, myPoutre.Nodes.nbNodes, VEdMaxConstruction, VEdMinConstruction, iNodeVMaxConstruction, iNodeVMinConstruction)
 
-        'VERIFICATION DE LA POUTRE 
+        '# VERIFICATION DE LA POUTRE 
 
         myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True) 'Poutre seul durant la phase de construction
         myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre) 'Poutre mixte
 
 #End Region
 
-#Region "Verification de l'analyse de la poutre"
+#Region " VALIDATION : analyse de la poutre"
 
-        'VERIFICATION DES EFFORTS A L'ELU
+        '# VERIFICATION DES EFFORTS A L'ELU
 
         Valeur = MEdMax
         ValRef = 654.395 * 10 ^ 3 'A NOTER: 655 kN.m est une valeur arrondie de l'article, une valeur plus proche (mais non exacte) serait 654.395 kN.m par exemple
@@ -197,7 +193,7 @@ Imports PMXMoteur2
         ValRef = 187 * 10 ^ 3
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
-        'VERIFICATION DES EFFORTS A L'ELU CONSTRUCTION
+        '# VERIFICATION DES EFFORTS A L'ELU CONSTRUCTION
 
         Valeur = MEdMaxConstruction
         ValRef = 337 * 10 ^ 3 'A NOTER: 655 kN.m est une valeur arrondie de l'article, une valeur plus proche (mais non exacte) serait 654.395 kN.m par exemple
@@ -209,7 +205,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la classification de la section (ELU)"
+#Region " VALIDATION : classification de la section (ELU)"
 
         Valeur = myPoutre.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(False, myPoutre.Param.lGeneration1)
         ValRef = 1
@@ -217,7 +213,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la résistance des connecteurs (ELU)"
+#Region " VALIDATION : résistance des connecteurs (ELU)"
 
         Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
         ValRef = 81.7 * 1000
@@ -252,7 +248,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification du degré de connection minimal (ELU)"
+#Region " VALIDATION : degré de connection minimal (ELU)"
 
         Valeur = myPoutre.VerifMixte(0).DegConnexMin(myPoutre.IndicePremiereTravee)
         ValRef = 0.574
@@ -260,7 +256,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification du dimensionnement de la connection (ELU)"
+#Region " VALIDATION : dimensionnement de la connection (ELU)"
 
 
         Valeur = myPoutre.Section.ResistanceTractionProfile(myPoutre.Param.Gamma.GammaM0)
@@ -284,7 +280,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la résistance à la flexion (ELU)"
+#Region " VALIDATION : Résistance à la flexion (ELU)"
 
         'A L'ELU
 
@@ -315,7 +311,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la résistance à l'effort tranchant (ELU)"
+#Region " VALIDATION : Résistance à l'effort tranchant (ELU)"
 
         'A L'ELU
 
@@ -353,12 +349,12 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la résistance au voilement (ELU)"
+#Region " VALIDATION : Résistance au voilement (ELU)"
 
         Assert.IsTrue(myPoutre.Section.IsVoilementParCisaillement(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 #End Region
 
-#Region "Verification de la résistance à l'interaction MV"
+#Region " VALIDATION : Résistance à l'interaction MV"
 
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
@@ -379,7 +375,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification du dimensionnement des armatures transversales (ELU)"
+#Region " VALIDATION : Dimensionnement des armatures transversales (ELU)"
 
         ' myPoutre.VerifMixte(0).CalculArmaturesTransversales()
 
@@ -405,7 +401,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification des propriétés élastiques (ELS)"
+#Region " VALIDATION : Propriétés élastiques (ELS)"
 
         '--> Coefficient d'équivalence à court terme n0
 
@@ -541,7 +537,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification du calcul des fleches (ELS)"
+#Region " VALIDATION : Calcul des fleches (ELS)"
 
         '--> Fleches due à G1
 
@@ -578,7 +574,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Fréquence propre (ELS)"
+#Region " VALIDATION : Fréquence propre (ELS)"
 
         myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
         Valeur = myPoutre.Modal.Frequence
@@ -602,8 +598,9 @@ Imports PMXMoteur2
         ' Correspond au TEST 02 du MV
         '
         ' "Résistance au déversement d'une solive de plancher en phase de construction"
+        ' Correspond au cas test 01 en phase de construction
 
-#Region "Initialisation de la poutre"
+#Region " Initialisation de la poutre "
 
         Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
         NomChargements = NomCas
@@ -618,9 +615,9 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Renseignement des données de l'article"
+#Region " Renseignement des paramètres"
 
-        'GEOMETRIE
+        '# GEOMETRIE
         myPoutre.lTraveeConsoleGauche = False
         myPoutre.lTraveeConsoleDroite = False
         myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) = 14 '14 m
@@ -657,7 +654,7 @@ Imports PMXMoteur2
         myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
         myPoutre.lAutomaticDesign = False
 
-        'MATERIAUX
+        '# MATERIAUX
 
         myPoutre.Section.Acier.InitialiseAcierS275EC3()
 
@@ -668,19 +665,19 @@ Imports PMXMoteur2
 
         myPoutre.Dalle.ConnecteurGoujonSoude.Fu = 450
 
-        'CHARGES
+        '# CHARGES
         myPoutre.InitialisePoidsPropres()
         'myPoutre.ChargesU("G2").QSurf(myPoutre.IndicePremiereTravee) = 1.4 * 1000
         'myPoutre.ChargesU("Q1").QSurf(myPoutre.IndicePremiereTravee) = 2.5 * 1000
         myPoutre.ChargesU("QC").QSurf(myPoutre.IndicePremiereTravee) = 0.5 * 1000
         myPoutre.ChargesU("QC").FReparties(myPoutre.IndicePremiereTravee).Add(New cls_ForceRepartie(14 / 2 - 3 / 2, 1 * 3 * 1000, 14 / 2 + 3 / 2, 1 * 3 * 1000, 0)) '1 kN/m2 répartie s/ 3mx3m et centré à mi-travée
 
-        'COEFFICIENTS PARTIELS
-        myPoutre.Initialise_CoefficientsCombinaisons() 'Initialise les coefficients par défaut 
-        myPoutre.lCombELU(0) = True 'activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
-        myPoutre.lCombELS(0) = True 'activation de la première combinaison ELS par défaut (G + Q)
-        myPoutre.lCombELCURules(0) = True 'activation de la première combinaison ELU pendant la phase de construction activée 
-        myPoutre.lCombELCSRules(0) = True 'activation de la première combinaison ELS pendant la phase de construction activée 
+        '# COEFFICIENTS PARTIELS
+        myPoutre.Initialise_CoefficientsCombinaisons()      'Initialise les coefficients par défaut 
+        myPoutre.lCombELU(0) = True                         'activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
+        myPoutre.lCombELS(0) = True                         'activation de la première combinaison ELS par défaut (G + Q)
+        myPoutre.lCombELCURules(0) = True                   'activation de la première combinaison ELU pendant la phase de construction activée 
+        myPoutre.lCombELCSRules(0) = True                   'activation de la première combinaison ELS pendant la phase de construction activée 
 
         With myPoutre.Param.Gamma
             .GammaM0 = 1
@@ -693,7 +690,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Lancement des calculs"
+#Region " Lancement des calculs"
 
 
         Dim NomChargesA(), strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
@@ -772,9 +769,9 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Verification de l'analyse de la poutre"
+#Region " VALIDATION : Analyse de la poutre"
 
-        'VERIFICATION DES EFFORTS A L'ELU CONSTRUCTION
+        '# VERIFICATION DES EFFORTS A L'ELU CONSTRUCTION
 
         Valeur = MEdMaxConstruction
         ValRef = 337 * 10 ^ 3 'A NOTER: 655 kN.m est une valeur arrondie de l'article, une valeur plus proche (mais non exacte) serait 654.395 kN.m par exemple
@@ -782,7 +779,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Vérification de la résistance au déversement SANS prise en compte du bac"
+#Region " VALIDATION : Résistance au déversement SANS prise en compte du bac"
 
         Dim Mcr, MbRd As Decimal
 
@@ -799,7 +796,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la résistance au déversement AVEC prise en compte du bac "
+#Region " VALIDATION : Résistance au déversement AVEC prise en compte du bac "
 
         With myPoutre.MaintienBac
             .lMaintienBac = True
@@ -830,7 +827,7 @@ Imports PMXMoteur2
 
     End Sub
 
-    <TestMethod()> Public Sub TU_MV_TTEST0xx_RCM_2023_3()
+    <TestMethod()> Public Sub TU_MV_TEST03_RCM_2023_3()
 
         'Cas test issu de la revue RCM (2023-3):
         '
@@ -852,9 +849,9 @@ Imports PMXMoteur2
         myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage
 #End Region
 
-#Region " Renseignement des données de l'article "
+#Region " Renseignement des paramètres "
 
-        'GEOMETRIE
+        '# GEOMETRIE
         myPoutre.lTraveeConsoleGauche = False
         myPoutre.lTraveeConsoleDroite = False
         myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) = 12.5 '12.5m
@@ -922,7 +919,7 @@ Imports PMXMoteur2
         myPoutre.EspacementZone(myPoutre.IndicePremiereTravee, 0) = 0.207
         myPoutre.lAutomaticDesign = False
 
-        'MATERIAUX
+        '# MATERIAUX
         myPoutre.Section.Acier.InitialiseAcierS355EC3()
 
         With myPoutre.Dalle.beton
@@ -930,13 +927,13 @@ Imports PMXMoteur2
             .Ecm = 31000
         End With
 
-        'CHARGES
+        '# CHARGES
         myPoutre.InitialisePoidsPropres() '/!\ Les valeurs calculées par le logiciel ne sont pas exactement les mêmes que dans l'article. Elles seront recalculées à la main
         myPoutre.ChargesU("G1").QSurf(myPoutre.IndicePremiereTravee) = 26 * 0.00972 * 1000  ' *2.5 = 0.6318 kN/ml - > charge permanente supplémentaire induit par l'effet de marrre (cf article)
         myPoutre.ChargesU("QC").QSurf(myPoutre.IndicePremiereTravee) = 0.75 * 1000
         myPoutre.ChargesU("QC").FReparties(myPoutre.IndicePremiereTravee).Add(New cls_ForceRepartie(12.5 / 2 - 3 / 2, (2.925 - 1.875) * 1000, 12.5 / 2 + 3 / 2, (2.925 - 1.875) * 1000, 0)) '1 kN/m2 répartie s/ 3mx3m et centré à mi-travée
 
-        'COEFFICIENTS PARTIELS
+        '# COEFFICIENTS PARTIELS
         myPoutre.Initialise_CoefficientsCombinaisons() 'Initialise les coefficients par défaut 
         myPoutre.lCombELU(0) = True 'activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
         myPoutre.lCombELS(0) = True 'activation de la première combinaison ELS par défaut (G + Q)
@@ -1019,7 +1016,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Verification de l'analyse de la poutre "
+#Region " VALIDATION : Analyse de la poutre "
 
         'VERIFICATION DES EFFORTS A L'ELU CONSTRUCTION
 
@@ -1033,7 +1030,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la classification de la section (ELU) "
+#Region " VALIDATION : Classification de la section (ELU) "
 
         Valeur = myPoutre.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(False, myPoutre.Param.lGeneration1)
         ValRef = 1
@@ -1041,7 +1038,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la résistance à la flexion (ELU) "
+#Region " VALIDATION : Résistance à la flexion (ELU) "
 
         'A L'ELU CONSTRUCTION
 
@@ -1055,7 +1052,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la résistance à l'effort tranchant (ELU) "
+#Region " VALIDATION : Résistance à l'effort tranchant (ELU) "
 
         'A L'ELU CONSTRUCTION
 
@@ -1078,13 +1075,13 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la résistance au voilement (ELU) "
+#Region " VALIDATION : Résistance au voilement (ELU) "
 
         Assert.IsTrue(myPoutre.Section.IsVoilementParCisaillement(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 
 #End Region
 
-#Region " Verification de la résistance à l'interaction MV (ELU) "
+#Region " VALIDATION : Résistance à l'interaction MV (ELU) "
 
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
@@ -1098,7 +1095,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la résistance au déversement (ELU) "
+#Region " VALIDATION : Résistance au déversement (ELU) "
 
         'Recalcul à la main du Mcr avec le logiciel LTBeam 
 
@@ -1123,7 +1120,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification des propriétés élastiques (ELS) "
+#Region " VALIDATION : Propriétés élastiques (ELS) "
 
         '        '--> Coefficient d'équivalence à court terme n0
 
@@ -1164,7 +1161,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification du calcul des fleches (ELS) "
+#Region " VALIDATION : Calcul des fleches (ELS) "
 
         '--> Fleches due à G1
 
@@ -1183,10 +1180,9 @@ Imports PMXMoteur2
 
 #End Region
 
-
     End Sub
 
-    <TestMethod()> Public Sub TestMethodLTB_RCM2023no3()
+    <TestMethod()> Public Sub TU_MV_TEST03_LTB_RCM2023no3()
 
         '=======================================
         '
@@ -1436,13 +1432,12 @@ Imports PMXMoteur2
 
     End Sub
 
-    <TestMethod()> Public Sub Test_RCM_2023_4()
+    <TestMethod()> Public Sub TU_MV_TEST04_RCM_2023_4()
 
         'Cas test issu de la revue RCM (2023-4):
         '
         '
         '"Vérification d'une poutre mixte acier-béton enrobée pendant la phase finale"
-
 
 #Region " Initialisation de la poutre "
 
@@ -1459,9 +1454,9 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Renseignement des données de l'article "
+#Region " Renseignement des paramètres "
 
-        'GEOMETRIE
+        '# GEOMETRIE
         myPoutre.lTraveeConsoleGauche = False
         myPoutre.lTraveeConsoleDroite = False
         myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee) = 12.5 '12.5m
@@ -1542,7 +1537,7 @@ Imports PMXMoteur2
         myPoutre.LongueurZone(myPoutre.IndicePremiereTravee, 0) = myPoutre.LongueurTravee(myPoutre.IndicePremiereTravee)
         myPoutre.lAutomaticDesign = False
 
-        'MATERIAUX
+        '# MATERIAUX
         myPoutre.Section.Acier.InitialiseAcierS355EC3()
 
         With myPoutre.Dalle.beton
@@ -1555,13 +1550,13 @@ Imports PMXMoteur2
         myPoutre.Dalle.Bac.msurf = 8.53 '8.53 kg/m2
         myPoutre.Dalle.Bac.fyp = 350
 
-        'CHARGES
+        '# CHARGES
         myPoutre.InitialisePoidsPropres() '/!\ Les valeurs calculées par le logiciel ne sont pas exactement les mêmes que dans l'article. Elles seront recalculées à la main
         myPoutre.ChargesU("G1").QSurf(myPoutre.IndicePremiereTravee) = 25 * 0.0097 * 1000  ' *2.5 = 0.6318 kN/ml - > charge permanente supplémentaire induit par l'effet de marrre (cf article)
         myPoutre.ChargesU("G2").QSurf(myPoutre.IndicePremiereTravee) = 1 * 1000
         myPoutre.ChargesU("Q1").QSurf(myPoutre.IndicePremiereTravee) = 2.5 * 1000
 
-        'COEFFICIENTS PARTIELS
+        '# COEFFICIENTS PARTIELS
         myPoutre.Initialise_CoefficientsCombinaisons() 'Initialise les coefficients par défaut 
         myPoutre.lCombELU(0) = True 'activation de la première combinaison ELU par défaut (1.35G + 1.5Q)
         myPoutre.lCombELS(0) = True 'activation de la première combinaison ELS par défaut (G + Q)
@@ -1601,7 +1596,7 @@ Imports PMXMoteur2
         strRacineELUC = "ULS_C"
         strRacineELSC = "SLS_C"
 
-        'INITIALISATION DES TABLEAUX DES VERIFICATION
+        '# INITIALISATION DES TABLEAUX DES VERIFICATION
         Select Case myPoutre.Section.TypeSection
             Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
                 ReDim myPoutre.VerifAcier(0)
@@ -1616,7 +1611,7 @@ Imports PMXMoteur2
                 End If
         End Select
 
-        'INITIALISATION DES CALCULS
+        '# INITIALISATION DES CALCULS
         myPoutre.InitialiseCalculs(NomChargesA)
         myPoutre.AAA_CalculMNVInternesN()
         myPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, myPoutre.lCombELU, myPoutre.CoefCombELU, strRacineELU, myPoutre.CombiA_ELU)
@@ -1625,7 +1620,7 @@ Imports PMXMoteur2
         'myPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myPoutre.lCombELCURules, myPoutre.CoefCombELCU, strRacineELUC, myPoutre.CombiA_ELCU)
         'myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
 
-        'COMBINAISON DES EFFORTS A L'ELU
+        '# COMBINAISON DES EFFORTS A L'ELU
         Dim MEd(,) As Decimal = Nothing
         Dim MEdMax, MEdMin, iNodeMMin, iNodeMMax As Decimal
 
@@ -1638,13 +1633,13 @@ Imports PMXMoteur2
         EnveloppeTableauEfforts(MEd, myPoutre.Nodes.nbNodes, MEdMax, MEdMin, iNodeMMax, iNodeMMin)
         EnveloppeTableauEfforts(VEd, myPoutre.Nodes.nbNodes, VEdMax, VEdMin, iNodeVMax, iNodeVMin)
 
-        'VERIFICATION DE LA POUTRE 
+        '# VERIFICATION DE LA POUTRE 
 
         myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre) 'Vérification durant la phase finale -> Voir Cas test 2023 n°4
 
 #End Region
 
-#Region " Verification de l'analyse de la poutre "
+#Region " VALIDATION : Analyse de la poutre "
 
         'VERIFICATION DES EFFORTS A L'ELU
 
@@ -1703,7 +1698,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la classification de la section (ELU) "
+#Region " VALIDATION : Classification de la section (ELU) "
 
         Valeur = myPoutre.Section.ClasseProfilAcierSeulCompressionPureFlexionPure(False, myPoutre.Param.lGeneration1)
         ValRef = 1
@@ -1711,7 +1706,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la résistance des connecteurs (ELU) "
+#Region " VALIDATION : Résistance des connecteurs (ELU) "
 
         Valeur = myPoutre.Dalle.ConnecteurGoujonSoude.PRdDallePleineG1G2Acier(myPoutre.Param.Gamma.GammaVs)
         ValRef = 81.7 * 1000
@@ -1739,7 +1734,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification du degré de connection minimal (ELU) "
+#Region " VALIDATION : Degré de connection minimal (ELU) "
 
         Valeur = myPoutre.VerifMixte(0).DegConnexMin(myPoutre.IndicePremiereTravee)
         ValRef = 0.625
@@ -1747,7 +1742,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification du dimensionnement de la connection (ELU) "
+#Region " VALIDATION : Dimensionnement de la connection (ELU) "
 
 
         Valeur = myPoutre.Section.ResistanceTractionProfile(myPoutre.Param.Gamma.GammaM0)
@@ -1771,7 +1766,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la résistance à la flexion (ELU) "
+#Region " VALIDATION : Résistance à la flexion (ELU) "
 
         'A L'ELU
 
@@ -1787,7 +1782,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la résistance à l'effort tranchant (ELU) "
+#Region " VALIDATION : Résistance à l'effort tranchant (ELU) "
 
         'A L'ELU
 
@@ -1810,13 +1805,13 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification de la résistance au voilement (ELU) "
+#Region " VALIDATION : Résistance au voilement (ELU) "
 
         Assert.IsTrue(myPoutre.Section.IsVoilementParCisaillement(myPoutre.Param.EtaW) = False) '--> Vérification de la résistance au voilement non nécessaire 
 
 #End Region
 
-#Region " Verification de la résistance à l'interaction MV "
+#Region " VALIDATION : Résistance à l'interaction MV "
 
         '--> Sans objet, on doit retrouver les mêmes résultats que pour la résistance à la flexion simple
 
@@ -1832,7 +1827,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification du dimensionnement des armatures transversales (ELU) "
+#Region " VALIDATION : Dimensionnement des armatures transversales (ELU) "
 
         'myPoutre.CalculArmaturesTransversales()
 
@@ -1862,7 +1857,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification des propriétés élastiques (ELS) "
+#Region " VALIDATION : Propriétés élastiques (ELS) "
 
         '--> Coefficient d'équivalence à court terme n0
 
@@ -2082,7 +2077,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Vérification du calcul des fleches (ELS) "
+#Region " VALIDATION : Calcul des fleches (ELS) "
 
         '--> Fleches due à G1
         myPoutre.Section.ProprietesElastiquesMixteMyy(1, True, myPoutre.Param.Gamma, 23.68, 1, 0, myPoutre.Dalle, zANE, InertieY, Mel)
@@ -2123,7 +2118,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region " Fréquence propre (ELS) "
+#Region " VALIDATION : Fréquence propre (ELS) "
 
         myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
         Valeur = myPoutre.Modal.Frequence
@@ -2132,7 +2127,6 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
 #End Region
-
 
     End Sub
 

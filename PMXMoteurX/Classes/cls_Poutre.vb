@@ -3576,7 +3576,8 @@ Public Class cls_Poutre
                     Select Case Me.ChargesA(i).Type
                         Case cls_CasDeCharge.EnuType.Permanente
                             If (MyCombi.Equals(CombiA_ELCU) Or MyCombi.Equals(CombiA_ELCS)) Then
-                                If Me.ChargesA(i).Symbol = "G1" Then TabCoef(i) = CoefCombi(iCombi)(4)
+                                If Me.ChargesA(i).Symbol = "G1" _
+                                Or Me.ChargesA(i).Symbol = "G1pp" Then TabCoef(i) = CoefCombi(iCombi)(4)
                             Else
                                 TabCoef(i) = CoefCombi(iCombi)(0)
                             End If
