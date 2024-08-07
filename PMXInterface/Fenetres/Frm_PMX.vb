@@ -38,6 +38,8 @@ Public Class Frm_PMX
     ''' </summary>
     Dim lZoomPlus, lCotation As Boolean
 
+    Dim FontFrm As Font
+
 #End Region
 
 #Region " Variables locales pour btnPoutres "
@@ -329,6 +331,8 @@ Public Class Frm_PMX
         Me.TSbtn_PPLoadCases.Visible = False
         Me.TSbtn_PPVerifications.Visible = False
         'Me.TSbtn_PPCombi.Visible = False
+
+        FontFrm = New Font(Me.TSBbtn_NewN.Font.Name, SizeFontFrm)
     End Sub
 
 #End Region
@@ -1792,7 +1796,7 @@ Public Class Frm_PMX
     Private Sub img_Main_Paint(sender As Object, e As PaintEventArgs) Handles img_Main.Paint
         If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(e.Graphics,
                                                                    Me.img_Main.ClientRectangle.Width, Me.img_Main.ClientRectangle.Height,
-                                                                   MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, strprs)
+                                                                   MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, strPRS, FontFrm)
     End Sub
 
     Private Sub Frm_PMX_Resize(sender As Object, e As EventArgs) Handles MyBase.Resize
