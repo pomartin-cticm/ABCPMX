@@ -77,6 +77,8 @@ Public Class Frm_NoteCalcul
 
                 Me.Text = Bloc("TITLE")
 
+                Me.TSbtn_Fermer.ToolTipText = Bloc("CLOSE")
+
                 '--> Déplacement dans la NDC
                 Me.Btn_PageDeb.ToolTipText = Bloc("FIRST")
                 Me.Btn_PagePrec.ToolTipText = Bloc("PREVIOUS")
@@ -353,8 +355,13 @@ Public Class Frm_NoteCalcul
 
 #Region " Gestion Menu ToolStrip "
 
+    Private Sub TSbtn_Fermer_Click(sender As Object, e As EventArgs) Handles TSbtn_Fermer.Click
+        Me.Close()
+    End Sub
+
     Private Sub GestionClickBarreOutils(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-        Handles Btn_Imprimer.Click, Btn_PageSuiv.Click, Btn_PagePrec.Click, Btn_PageFin.Click, Btn_PageDeb.Click, Btn_ToPDF.Click, Btn_Zoomer.Click, Btn_Dezoomer.Click
+        Handles Btn_Imprimer.Click, Btn_PageSuiv.Click, Btn_PagePrec.Click, Btn_PageFin.Click,
+        Btn_PageDeb.Click, Btn_ToPDF.Click, Btn_Zoomer.Click, Btn_Dezoomer.Click
 
         Dim ScrollValue As Single = Me.VScrollBar_NDC.Value
 
@@ -1010,6 +1017,8 @@ Public Class Frm_NoteCalcul
         LocationForm = New Point(SystemInformation.WorkingArea.Width / 2 - WidthForm / 2, SystemInformation.WorkingArea.Height / 2 - HeightForm / 2)
 
     End Sub
+
+
 
 #End Region
 

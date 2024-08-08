@@ -62,7 +62,7 @@ Public Class Frm_SectionAcierStandard
     Dim lNuancePossible As Boolean
     Dim NuancesExclues() As String = {"S235", "S275"}
 
-    Dim SizeFont As Single = 8
+    Dim SizeFont As Single = SizeFontFrm
     Dim FontFrm As Font
 
 #End Region
@@ -161,8 +161,6 @@ Public Class Frm_SectionAcierStandard
         Me.img_Section.Dock = DockStyle.Fill
         Me.img_ReductionCurve.Dock = DockStyle.Fill
 
-        FontFrm = New Font(Me.lbl_Acier.Font.Name, SizeFont)
-
         '== Preparation des options disponibles en fonctions du maitre d'ouvrage
 
         Select Case LogicielInfo.Maitre
@@ -226,6 +224,8 @@ Public Class Frm_SectionAcierStandard
 
         'Me.pan_Gauche.AutoScroll = False
         Me.TLpan_Gauche.Height = 410
+
+        FontFrm = New Font(FontBase.Name, SizeFont)
 
     End Sub
 
@@ -606,7 +606,7 @@ Public Class Frm_SectionAcierStandard
 
         Dim MyPen As Pen 'New Pen(ColorPen)
         Dim MyBrush As Brush 'New SolidBrush(ColorPen)
-        Dim MyFont As New Font(FontBase.Name, 8, FontStyle.Bold)
+        Dim myFont As New Font(FontBase.Name, 8, FontStyle.Bold)
         Dim MyBrushTitre As Brush   'New SolidBrush(Color.DarkRed)
 
         Dim zBoni, xBoni As Double
@@ -689,8 +689,8 @@ Public Class Frm_SectionAcierStandard
         AddFleche(MyGr, MyPen, 0, 0, xMax, 0, RCParAff, False, True)
         AddFleche(MyGr, MyPen, 0, 0, 0, yMax, RCParAff, False, True)
 
-        AddTexte(MyGr, MyBrush, ChaineFy, MyFont, 0, yMax, RCParAff, HorizontalAlignment.Right, VerticalAlignement.Middle)
-        AddTexte(MyGr, MyBrush, ChaineT, MyFont, xMax, 0, RCParAff, HorizontalAlignment.Left, VerticalAlignement.Bottom)
+        AddTexte(MyGr, MyBrush, ChaineFy, myFont, 0, yMax, RCParAff, HorizontalAlignment.Left, VerticalAlignement.Middle)
+        AddTexte(MyGr, MyBrush, ChaineT, myFont, xMax, 0, RCParAff, HorizontalAlignment.Right, VerticalAlignement.Bottom)
 
         '--( Représentation des courbes
 
@@ -716,7 +716,7 @@ Public Class Frm_SectionAcierStandard
                 End If
 
                 If lSelect Then
-                    DrawReductionCurve(MyGr, RCParAff, kFact, lSelect, kvpSteel.Value.EpMax, kvpSteel.Value.Plages, MyColor, iEp, lNuanceOK)
+                    DrawReductionCurve(MyGr, RCParAff, myFont, kFact, lSelect, kvpSteel.Value.EpMax, kvpSteel.Value.Plages, MyColor, iEp, lNuanceOK)
                 End If
             Next
 
@@ -734,7 +734,6 @@ Public Class Frm_SectionAcierStandard
             DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPRSw, FyPRSw, xBoni, zBoni, MyFont, lNuanceOK, False)
             DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPRSfi, FyPRSfi, xBoni, zBoni, MyFont, lNuanceOK, False)
             DrawEpEtFyCalcul(MyGr, RCParAff, kFact, EpPlagesMax, EpPRSMax, FyPRSMin, xBoni, zBoni, MyFont, lNuanceOK, True, True)
-
         End If
 
         '--( Titre
@@ -763,10 +762,13 @@ Public Class Frm_SectionAcierStandard
         MyBrush.Dispose()
         MyFontTitre.Dispose()
         MyBrushTitre.Dispose()
+
     End Sub
 
-    Private Sub DrawReductionCurve(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, ByVal kFact As Double, ByVal lSelect As Boolean,
-                                   ByVal EpMax As Double, ByVal Plages As List(Of cls_Acier.strucPlage), ByVal MyColor As Color, ByVal iEp As Integer, ByVal lNuanceOK As Boolean)
+    Private Sub DrawReductionCurve(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, myFont As Font,
+                                   ByVal kFact As Double, ByVal lSelect As Boolean,
+                                   ByVal EpMax As Double, ByVal Plages As List(Of cls_Acier.strucPlage),
+                                   ByVal MyColor As Color, ByVal iEp As Integer, ByVal lNuanceOK As Boolean)
         '----------------------------------------------------------------------------------------------
         '
         '   21/09/12 :  Création - Version 3.00
@@ -779,8 +781,13 @@ Public Class Frm_SectionAcierStandard
         '
         '   MyGr        [E] :   Graphics dans lequel on dessine
         '   RcParAff    [E] :   Paramètre d'affichage
+        '   myFont      [E] :   Police utilisée pour affichage
         '   kFact       [E] :   Facteur d'affichage des valeurs fy
-        '
+        '   lSelect     [E] :   
+        '   EpMax,Plages[E] :   Paramètres décrivant la fonction fy-t
+        '   MyColor     [E] :   Couleur d'affichage
+        '   iEp         [E] :   Epaisseur du trait
+        '   lNuanceOK   [E] :   ?
         '----------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -831,23 +838,23 @@ Public Class Frm_SectionAcierStandard
             For i As Integer = 0 To NbPlages - 2
                 'Chaine = GetStringInUnit(Plages(i).Fy, Enu_TypeVariable.Contrainte, 3, 0, False)
                 Chaine = GetStringInUnit(Plages(i).Fy, Enu_TypeVariable.SansType, 3, 0, False)
-                AddTexte(MyGr, New SolidBrush(MyColor), Chaine, FontBase, (Plages(i).Ep + Plages(i + 1).Ep) / 2, kFact * Plages(i).Fy, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+                AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, (Plages(i).Ep + Plages(i + 1).Ep) / 2, kFact * Plages(i).Fy, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
             Next
             Chaine = GetStringInUnit(Plages(NbPlages - 1).Fy, Enu_TypeVariable.SansType, 3, 0, False)
-            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, FontBase, (EpMax + Plages(NbPlages - 1).Ep) / 2, kFact * Plages(NbPlages - 1).Fy, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, (EpMax + Plages(NbPlages - 1).Ep) / 2, kFact * Plages(NbPlages - 1).Fy, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
             For i As Integer = 0 To NbPlages - 1
                 Chaine = GetStringInUnit(Plages(i).Ep, Enu_TypeVariable.Dimension, 3, 0, False)
-                AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, FontBase, Plages(i).Ep, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
+                AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, myFont, Plages(i).Ep, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
             Next
             Chaine = GetStringInUnit(EpMax, Enu_TypeVariable.Dimension, 3, 0, False)
-            AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, FontBase, EpMax, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
+            AddTexte(MyGr, New SolidBrush(MyColorBlack), Chaine, myFont, EpMax, 0, RcParAff, HorizontalAlignment.Right, VerticalAlignement.Top)
         End If
 
     End Sub
 
     Private Sub DrawEpEtFyCalcul(ByVal MyGr As Graphics, ByVal RcParAff As Struc_Affichage, ByVal kFact As Double,
                                  ByVal EpPlagesMax As Double, ByVal EpProf As Double, ByVal FyCalcul As Double, ByVal xBoni As Double, ByVal zBoni As Double,
-                                 ByVal MyFont As Font, ByVal lNuanceOK As Boolean, Optional ByVal lLegende As Boolean = True, Optional ByVal lPRS As Boolean = False)
+                                 ByVal myFont As Font, ByVal lNuanceOK As Boolean, Optional ByVal lLegende As Boolean = True, Optional ByVal lPRS As Boolean = False)
         '----------------------------------------------------------------------------------------------
         '
         '   21/09/12 :  Création - Version 3.00
@@ -895,7 +902,7 @@ Public Class Frm_SectionAcierStandard
 
         If lLegende Then
             Chaine = GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, False)
-            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, MyFont, EpProf, 0, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, EpProf, 0, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Bottom)
         End If
 
         AddLigne(MyGr, MyPenProf, EpProf, 0, EpProf, kFact * FyCalcul, RcParAff)
@@ -909,7 +916,7 @@ Public Class Frm_SectionAcierStandard
             Else
                 Chaine = "t = " & GetStringInUnit(EpProf, Enu_TypeVariable.Dimension, 3, 1, True) & "   -  fy = " & GetStringInUnit(FyCalcul, Enu_TypeVariable.SansType, 3, 0, False) & " MPa"
             End If
-            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, MyFont, xBoni, zBoni, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
+            AddTexte(MyGr, New SolidBrush(MyColor), Chaine, myFont, xBoni, zBoni, RcParAff, HorizontalAlignment.Center, VerticalAlignement.Top)
         End If
 
         MyPen.Dispose()

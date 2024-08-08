@@ -157,7 +157,6 @@ Public Class cls_Acier
 
     End Function
 
-
     Public Function LimiteFu(ByVal Epaisseur As Double) As Double
         '--------------------------------------------------------------------------------
         '

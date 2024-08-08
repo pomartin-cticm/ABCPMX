@@ -71,6 +71,8 @@ Partial Class Frm_NoteCalcul
         Me.PrintDocument = New System.Drawing.Printing.PrintDocument()
         Me.PrintDialog = New System.Windows.Forms.PrintDialog()
         Me.SaveFileDialog_PDF = New System.Windows.Forms.SaveFileDialog()
+        Me.TSbtn_Fermer = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStrip_Menu.SuspendLayout()
         Me.StatusStrip_InfoZoom.SuspendLayout()
         Me.Panel_NDC.SuspendLayout()
@@ -89,7 +91,7 @@ Partial Class Frm_NoteCalcul
         '
         Me.ToolStrip_Menu.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Menu.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.Btn_PageDeb, Me.Btn_PagePrec, Me.Btn_PageSuiv, Me.Btn_PageFin, Me.ToolStripSeparator2, Me.Btn_Dezoomer, Me.Btn_Zoomer, Me.ToolStripSeparator1, Me.Btn_Navigation, Me.ToolStripSeparator6, Me.Btn_Imprimer, Me.Btn_ToPDF, Me.ToolStripSeparator3, Me.Btn_Langue, Me.ToolStripSeparator4, Me.Btn_Sommaire, Me.ToolStripSeparator5, Me.Btn_Options, Me.Btn_Logo, Me.Btn_Correct, Me.Btn_Error})
+        Me.ToolStrip_Menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Fermer, Me.ToolStripSeparator7, Me.Btn_PageDeb, Me.Btn_PagePrec, Me.Btn_PageSuiv, Me.Btn_PageFin, Me.ToolStripSeparator2, Me.Btn_Dezoomer, Me.Btn_Zoomer, Me.ToolStripSeparator1, Me.Btn_Navigation, Me.ToolStripSeparator6, Me.Btn_Imprimer, Me.Btn_ToPDF, Me.ToolStripSeparator3, Me.Btn_Langue, Me.ToolStripSeparator4, Me.Btn_Sommaire, Me.ToolStripSeparator5, Me.Btn_Options, Me.Btn_Logo, Me.Btn_Correct, Me.Btn_Error})
         Me.ToolStrip_Menu.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Menu.Name = "ToolStrip_Menu"
         Me.ToolStrip_Menu.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -371,7 +373,7 @@ Partial Class Frm_NoteCalcul
         '
         Me.SplitContainer_NDC.Panel1.BackColor = System.Drawing.SystemColors.Control
         Me.SplitContainer_NDC.Panel1.Controls.Add(Me.Panel_Nav)
-        Me.SplitContainer_NDC.Panel1.Padding = New System.Windows.Forms.Padding(5, 5, 5, 5)
+        Me.SplitContainer_NDC.Panel1.Padding = New System.Windows.Forms.Padding(5)
         Me.SplitContainer_NDC.Panel1MinSize = 50
         '
         'SplitContainer_NDC.Panel2
@@ -433,7 +435,7 @@ Partial Class Frm_NoteCalcul
         Me.Button_FermerNav.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Button_FermerNav.Image = CType(resources.GetObject("Button_FermerNav.Image"), System.Drawing.Image)
         Me.Button_FermerNav.Location = New System.Drawing.Point(164, 2)
-        Me.Button_FermerNav.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button_FermerNav.Margin = New System.Windows.Forms.Padding(2)
         Me.Button_FermerNav.Name = "Button_FermerNav"
         Me.Button_FermerNav.Size = New System.Drawing.Size(22, 22)
         Me.Button_FermerNav.TabIndex = 1
@@ -477,7 +479,7 @@ Partial Class Frm_NoteCalcul
         Me.Button_OuvrirNav.Dock = System.Windows.Forms.DockStyle.Left
         Me.Button_OuvrirNav.Image = CType(resources.GetObject("Button_OuvrirNav.Image"), System.Drawing.Image)
         Me.Button_OuvrirNav.Location = New System.Drawing.Point(2, 2)
-        Me.Button_OuvrirNav.Margin = New System.Windows.Forms.Padding(2, 2, 2, 2)
+        Me.Button_OuvrirNav.Margin = New System.Windows.Forms.Padding(2)
         Me.Button_OuvrirNav.Name = "Button_OuvrirNav"
         Me.Button_OuvrirNav.Size = New System.Drawing.Size(22, 19)
         Me.Button_OuvrirNav.TabIndex = 1
@@ -543,6 +545,20 @@ Partial Class Frm_NoteCalcul
         'PrintDialog
         '
         Me.PrintDialog.UseEXDialog = True
+        '
+        'TSbtn_Fermer
+        '
+        Me.TSbtn_Fermer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Fermer.Image = CType(resources.GetObject("TSbtn_Fermer.Image"), System.Drawing.Image)
+        Me.TSbtn_Fermer.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Fermer.Name = "TSbtn_Fermer"
+        Me.TSbtn_Fermer.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Fermer.Text = "ToolStripButton1"
+        '
+        'ToolStripSeparator7
+        '
+        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(6, 31)
         '
         'Frm_NoteCalcul
         '
@@ -630,4 +646,6 @@ Partial Class Frm_NoteCalcul
     Friend WithEvents Btn_Correct As ToolStripButton
     Friend WithEvents Btn_Error As ToolStripButton
     Friend WithEvents Btn_Sommaire As ToolStripDropDownButton
+    Friend WithEvents TSbtn_Fermer As ToolStripButton
+    Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
 End Class

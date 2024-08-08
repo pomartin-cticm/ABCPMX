@@ -6,7 +6,7 @@ Imports PMXMoteur2
 
 <TestClass()> Public Class TU_MV_PoutresAcier
 
-    <TestMethod()> Public Sub TU_MV_TEST05_PoutreAcierLamineConsole()
+    <TestMethod()> Public Sub TU_MV_TESTS01_PoutreAcierLamineConsole()
 
         ' Vérification d'une poutre acier seule (cas test de base)
         ' Vérification selon l'EN 1993-1-1
@@ -74,6 +74,7 @@ Imports PMXMoteur2
             .GammaVs = 1.25
         End With
 
+        myPoutre.Param.EtaW = 1
 #End Region
 
 #Region " Lancement des calculs "
@@ -240,7 +241,7 @@ Imports PMXMoteur2
 
         'A L'ELU
 
-        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0)
+        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0, myPoutre.Param.EtaW)
         ValRef = 950.564 * 1000 'Av  = 5 987 cm2 VplRd = 950.564 kN
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à l'effort tranchant
 
@@ -357,7 +358,7 @@ Imports PMXMoteur2
         ' Vérification d'une poutre acier seule (cas test de base)
         ' Vérification selon l'EN 1993-1-1
 
-#Region "Initialisation de la poutre"
+#Region " Initialisation de la poutre"
 
         Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
         NomChargements = NomCas
@@ -371,7 +372,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Renseignement des données"
+#Region " Renseignement des données"
 
         'GEOMETRIE
         myPoutre.lTraveeConsoleGauche = False
@@ -425,10 +426,10 @@ Imports PMXMoteur2
             .GammaVc = 1.25
             .GammaVs = 1.25
         End With
-
+        myPoutre.Param.EtaW = 1
 #End Region
 
-#Region "Lancement des calculs"
+#Region " Lancement des calculs"
 
         Dim NomChargesA(), strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
         ReDim NomChargesA(9)
@@ -493,7 +494,7 @@ Imports PMXMoteur2
 
 #End Region
 
-#Region "Verification de l'analyse de la poutre"
+#Region " Verification de l'analyse de la poutre"
 
         'VERIFICATION DES EFFORTS A L'ELU
 
@@ -560,7 +561,7 @@ Imports PMXMoteur2
 
         'A L'ELU
 
-        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0)
+        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0, myPoutre.Param.EtaW)
         ValRef = 950.564 * 1000 'Av  = 5 987 cm2 VplRd = 950.564 kN
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à l'effort tranchant
 

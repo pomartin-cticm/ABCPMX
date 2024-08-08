@@ -957,12 +957,19 @@ Public Class cls_Section
         End Get
     End Property
 
-
-    Public Function VplRd(GammaM0 As Decimal) As Decimal
+    Public Function VplRd(GammaM0 As Decimal, EtaW As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------------
+        '   08/08/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Renvoit la résistance à l'effort tranchant du profilé
+        '---------------------------------------------------------------------------------------------------------
+        '   GammaM0     [E] :   Coefficient partiel
+        '   EtaW        [E] :   Coefficient EN 1993-1-5
+        '---------------------------------------------------------------------------------------------------------
 
         Dim MyVRd As Decimal = 0
 
-        MyVRd = Me.AireAv * Me.FyW / (Math.Sqrt(3) * GammaM0) * kConvMPaPa
+        MyVRd = Me.AireAv(EtaW) * Me.FyW / (Math.Sqrt(3) * GammaM0) * kConvMPaPa
 
         Return MyVRd
     End Function
@@ -1039,27 +1046,32 @@ Public Class cls_Section
         Return MyVbRd
     End Function
 
-    Public ReadOnly Property AireAv As Decimal
-        Get
-            Return Me.ProfilA.AireAv
-        End Get
-    End Property
-
-    Public Function RhoInteractionMV(VEd As Decimal, GammaM0 As Decimal) As Decimal
-
-        Dim Rho As Decimal
-        Dim VRd As Decimal = Me.VplRd(GammaM0)
-
-        Dim VEdAbs As Decimal = Math.Abs(VEd)
-
-        If VEdAbs > 0.5 * VRd Then
-            Rho = Math.Min(1, (2 * VEd / VRd - 1) ^ 2)
-        Else
-            Rho = 0
-        End If
-
-        Return Rho
+    Public Function AireAv(Eta As Decimal) As Decimal
+        '---------------------------------------------------------------------------------------------------------------------
+        '   08/08/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------------------
+        '   Aire de cisaillement de la section 
+        '---------------------------------------------------------------------------------------------------------------------
+        '   Eta     [E] :   Eta pour la résistance à l'effort tranchant
+        '---------------------------------------------------------------------------------------------------------------------
+        Return Me.ProfilA.AireAv(Eta)
     End Function
+
+    'Public Function RhoInteractionMV(VEd As Decimal, GammaM0 As Decimal, EtaW As Decimal) As Decimal
+
+    '    Dim Rho As Decimal
+    '    Dim VRd As Decimal = Me.VplRd(GammaM0, EtaW)
+
+    '    Dim VEdAbs As Decimal = Math.Abs(VEd)
+
+    '    If VEdAbs > 0.5 * VRd Then
+    '        Rho = Math.Min(1, (2 * VEd / VRd - 1) ^ 2)
+    '    Else
+    '        Rho = 0
+    '    End If
+
+    '    Return Rho
+    'End Function
 
     ''' <summary>
     ''' Fonction qui calcul si l'ame du profilé étudié est sensible au voilement par cisaillement (True) ou non (False)
@@ -1088,6 +1100,75 @@ Public Class cls_Section
 #End Region
 
 #Region " Propriétés matériaux "
+
+    ''' <summary>
+    ''' Résistance ultime à la traction de la semelle supérieure
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property FuSup As Decimal
+        Get
+            Dim MyFu As Decimal
+
+            If Me.lUser Then '--[ Acier défini directement par l'utilisateur
+                'MyFu = Me.f
+
+            Else '--[ Acier de la base de donnée : Recherche dans les plages
+                If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                    MyFu = Me.Acier.LimiteFu(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
+                Else
+                    MyFu = Me.Acier.LimiteFu(Me.ProfilA.Tfs)
+                End If
+            End If
+
+            Return MyFu
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Résistance ultime à la traction de la semelle inférieure
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property FuInf As Decimal
+        Get
+            Dim MyFu As Decimal
+
+            If Me.lUser Then '--[ Acier défini directement par l'utilisateur
+                'MyFu = Me.f
+
+            Else '--[ Acier de la base de donnée : Recherche dans les plages
+                If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                    MyFu = Me.Acier.LimiteFu(Math.Max(Me.ProfilA.Tfi, Me.ProfilA.Tw))
+                Else
+                    MyFu = Me.Acier.LimiteFu(Me.ProfilA.Tfi)
+                End If
+            End If
+
+            Return MyFu
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Résistance ultime à la traction de l'âme
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property FuW As Decimal
+        Get
+            Dim MyFu As Decimal
+
+            If Me.lUser Then '--[ Acier défini directement par l'utilisateur
+                'MyFu = Me.f
+
+            Else '--[ Acier de la base de donnée : Recherche dans les plages
+                If Me.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine Then
+                    MyFu = Me.Acier.LimiteFu(Math.Max(Me.ProfilA.Tfs, Me.ProfilA.Tw))
+                Else
+                    MyFu = Me.Acier.LimiteFu(Me.ProfilA.Tw)
+                End If
+            End If
+
+            Return MyFu
+        End Get
+    End Property
 
     ''' <summary>
     ''' Limite d'élasticité de la semelle supérieure

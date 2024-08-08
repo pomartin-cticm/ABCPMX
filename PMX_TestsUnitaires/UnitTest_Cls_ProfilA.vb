@@ -8,6 +8,13 @@ Imports PMXMoteur2
     '   CLASSE POUR LES PROPRIETES DES PROFILES ACIER
     '========================================================================================================================================
 
+#Region " Variables locales "
+
+    Const ETAW As Decimal = 1
+
+#End Region
+
+
 #Region " Profiles laminés "
 
     <TestMethod()> Public Sub TestUnit_ProprietesProfileAcierLamine()
@@ -35,7 +42,7 @@ Imports PMXMoteur2
 
         ValRef = 25.7 * 10 ^ (-4)
 
-        Assert.IsTrue(IsEqual(MyProfil.AireAv, ValRef))
+        Assert.IsTrue(IsEqual(MyProfil.AireAv(ETAW), ValRef))
 
         '# Hauteur d'âme entre semelles
 
@@ -170,7 +177,7 @@ Imports PMXMoteur2
         '# Aire de cisaillement
 
         ValRef = 76.5 * 10 ^ (-4)
-        DeltaV = (MyProfil.AireAv - ValRef) / ValRef
+        DeltaV = (MyProfil.AireAv(ETAW) - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Aire 
@@ -347,7 +354,7 @@ Imports PMXMoteur2
         '# Aire de cisaillement
 
         ValRef = ((2 * 15 + 7.1) * 10.7 / 2 + 203.1 + 244 * 7.1) * 10 ^ (-6)
-        DeltaV = (MyProfil.AireAv - ValRef) / ValRef
+        DeltaV = (MyProfil.AireAv(ETAW) - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Aire 
@@ -434,7 +441,7 @@ Imports PMXMoteur2
         '# Aire de cisaillement
 
         ValRef = ((2 * 15 + 7.1) * 10.7 / 2 + 203.1 + 244 * 7.1) * 10 ^ (-6)
-        DeltaV = (MyProfil.AireAv - ValRef) / ValRef
+        DeltaV = (MyProfil.AireAv(ETAW) - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Aire 
@@ -514,7 +521,7 @@ Imports PMXMoteur2
         '# Aire de cisaillement
 
         ValRef = 25.7 * 10 ^ (-4)
-        DeltaV = (MyProfil.AireAv - ValRef) / ValRef
+        DeltaV = (MyProfil.AireAv(ETAW) - ValRef) / ValRef
         Assert.IsTrue(Math.Abs(DeltaV) <= DeltaVMAx)
 
         '# Aire 

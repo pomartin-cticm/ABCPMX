@@ -332,7 +332,8 @@ Public Class Frm_PMX
         Me.TSbtn_PPVerifications.Visible = False
         'Me.TSbtn_PPCombi.Visible = False
 
-        FontFrm = New Font(Me.TSBbtn_NewN.Font.Name, SizeFontFrm)
+        FontFrm = New Font(FontBase.Name, SizeFontFrm)
+
     End Sub
 
 #End Region

@@ -88,6 +88,8 @@ Public Class Frm_Portees
 
         Me.Icon = Frm_PMX.Icon
 
+        FontFrm = New Font(FontBase.Name, SizeFontFrm)
+
         Me.lbl_Portees.BackColor = CouleurBackBandeaux
         Me.lbl_Portees.ForeColor = CouleurForeBandeaux
         Me.lbl_Entraxe.BackColor = CouleurBackBandeaux
@@ -128,8 +130,6 @@ Public Class Frm_Portees
     End Sub
 
     Private Sub AfficherPoutreEnCours()
-
-        FontFrm = New Font(Me.lbl_Entraxe.Font.Name, SizeFontFrm)
 
         With MyProjet.Poutres(MyProjet.IndEnCours)
 

@@ -114,6 +114,7 @@ CRACKWIDTH				= Limit of crack width
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
+CLOSE					= Close
 FIRST					= First page
 PREVIOUS				= Previous page
 NEXT					= Next page

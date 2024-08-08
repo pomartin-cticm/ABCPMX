@@ -1,0 +1,351 @@
+﻿'-----------------------------------------------'
+'PropMix software - CTICM - Version 1.0
+'PROJECT USER FILE
+'-----------------------------------------------'
+'       /!\   Don't modify this file   /!\
+'       /!\ Ne pas modifier ce fichier /!\
+'-----------------------------------------------'
+
+BLOCK IDENTIFICATION
+   Utilisateur   = 
+   Entreprise    = 
+   NomProjet     = Validation
+
+BLOCK POUTRE
+   BeaIden           =  CASE S02
+   Commentaire       =  
+   ConsoleGauche  =  False
+   ConsoleDroite  =  False
+   DalleContGauche  =  False
+   DalleContDroite  =  False
+   lTremieGauche  =  False
+   lTremieDroite  =  False
+   NbTravee       =  1
+   LongueurTravee =  {3/15/3}
+   TypeTravee     =  {0/2/1}
+   TypeEtaiement  =  0
+   EtaisConsG     =  False
+   EtaisConsD  =  False
+   NbPropping     =  0
+   TypeMaintien   =  2
+   D1             =  2
+   D2             =  2
+   Dsl1           =  1
+   Dsl2           =  1
+   lIntermediaire =  True
+   lDefautPortee  =  True
+   lDefautEnroba  =  True
+   lDefautEtaiem  =  True
+   lDefautDalle   =  False
+   lCombELU    =  {True/True/False/False/False/False}
+   CoefELU    =  {1,40/1,6/1,12/0/0}+{1,40/1,12/1,6/0/0}+{1,0/1,6/1,12/0/0}+{1,0/1,12/1,6/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   lCombELS    =  {True/True/False/False/False/False}
+   CoefELS    =  {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   lCombELF    =  {False/False/False/False/False}
+   CoefELF    =  {1/0,3/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,3/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   lCombELCU    =  {False/False}
+   CoefELCU    =  {0/0/0/1,6/1,40}+{0/0/0/0/0}
+   lCombELCS    =  {False/False}
+   CoefELCS    =  {0/0/0/1/1}+{0/0/0/0/0}
+
+BLOCK MAINTIENS
+   indTravee      =  1
+   xloc           =  5
+   lMaintSemSup   =  True
+   lMaintSemInf   =  True
+
+BLOCK MAINTIENS
+   indTravee      =  1
+   xloc           =  10
+   lMaintSemSup   =  True
+   lMaintSemInf   =  True
+
+BLOCK MAINT_BAC
+   NT            =  2
+   M            =  2
+   Transition            =  1
+   FixNervuresMod            =  0
+   FixnervuresTyp            =  2
+   EC            =  0,5
+   FixCoutureType            =  0
+   lMaintienBac            =  False
+   lTheta            =  False
+BLOCK SECTION
+   Nom            =  Nom
+   lDalleBeton    =  False
+   lDatabase      =  False
+   typeSection    =  0
+   lUser      =  False
+   f_y_fs         =  235
+   f_y_w          =  235
+   f_y_fi         =  235
+
+BLOCK PROFILA
+   Gamme          =  IPE
+   NomProfile     =  IPE 300
+   ha             =  0,84
+   hb             =  0
+   bfs            =  0,3
+   tfs            =  0,02
+   bfi            =  0,3
+   tfi            =  0,02
+   rcs            =  0
+   rci            =  0
+   tw             =  0,012
+   soudure_a      =  0
+   typeProfil     =  2
+   Platb          =  0
+   Platt          =  0
+   IndStand       =  {1/1/0/1/1/1/0/1/0/0/1/0/0/1/0}
+
+BLOCK ACIER_PROFILA
+   Nuance         =  S355
+   Qualite        =  JR/J0/J2/K2
+   Reduction      =  EN 10025-2
+   NormeProduit   =  EN 10025-2 : 2019
+   EpMax          =  0,150000005960464
+   iBase          =  1
+   iTabStand      =  0
+   iStandard      =  1
+
+BLOCK ENROBAGE_PROFILA
+   lArmaConst     =  False
+   ConstPhi       =  0,008
+   Ratio_bc       =  1
+   Etrier_Type    =  0
+   Etrier_Phi     =  0,006
+   Etrier_CY  =  0,01
+   Etrier_CZ  =  0,01
+
+BLOCK ARMATURE_ENROBAGE_PROFILA
+   indLit         =  0
+   PhiExt         =  0,008
+   NbExt          =  1
+   lActExt          =  True
+   PhiMil         =  0,008
+   NbMil          =  0
+   PhiInt         =  0,008
+   NbInt          =  1
+   lActInt          =  True
+
+   indLit         =  1
+   PhiExt         =  0,008
+   NbExt          =  1
+   lActExt          =  True
+   PhiMil         =  0,008
+   NbMil          =  0
+   PhiInt         =  0,008
+   NbInt          =  1
+   lActInt          =  True
+   zPosRatio      =  0,5
+
+   indLit         =  2
+   PhiExt         =  0,008
+   NbExt          =  1
+   lActExt          =  True
+   PhiMil         =  0,008
+   NbMil          =  0
+   PhiInt         =  0,008
+   NbInt          =  1
+   lActInt          =  True
+
+BLOCK ACIER_ARMATURE_ENROBAGE_PROFILA
+   Classe         =  B500
+   FsK            =  500
+   Es             =  210000
+
+BLOCK BETON_ENROBAGE_PROFILA
+   Leger          =  False
+   Classe         =  C20/25
+   RhoC         =  2500
+   Fck            =  20
+   Fcm            =  28
+   Fctm           =  2,21041889918423
+   Ecm            =  29961,9510546403
+   lCrackLimit    =  True
+   wk_max         =  0,0004
+
+BLOCK DALLE
+   Type           =  0
+   td             =  0,12
+   th             =  0
+   preDalle_ep    =  0,06
+   preDalle_tjoi  =  0,05
+
+BLOCK BETON_DALLE
+   Leger           =  False
+   Classe         =  C20/25
+   RhoC         =  2500
+   Fck            =  20
+   Fcm            =  20
+   Fctm           =  2,21041889918423
+   Ecm            =  29961,9510546403
+   lCrackLimit    =  True
+   wk_max         =  0,0004
+
+BLOCK BAC_DALLE
+   Etiquette      =  Cofraplus_60 1.00
+   Producteur     =  ArcelorMittal
+   lDatabase      =  True
+   h_rs           =  0
+   h_p            =  0,058
+   b_b            =  0,062
+   b_t            =  0,101
+   e_p            =  0,207
+   tp             =  0,001
+   orientation    =  1
+   msurf          =  11,37
+   fyp            =  350
+   LargeurModule  =  1,035
+   Ieff           =  0,0000006008
+   lPreperce      =  True
+   AppuiT         =  2
+   AppuiL         =  0
+
+BLOCK COFRADAL
+   Nom      =  Cofradal 200 PAC
+   Dp      =  0,125
+   Msurf      =  525
+   lCustom      =  False
+
+BLOCK ARMATURE_DALLE
+   indLit         =  0
+   EspBar         =  0,2
+   PhiS           =  0,012
+   z_s            =  0,032
+   n_s            =  0
+   lActive        =  True
+
+BLOCK ACIER_ARMATURE_DALLE
+   Classe         =  B500
+   Fsk            =  500
+   Es             =  210000
+
+BLOCK CONNECTEUR_DALLE_GOUJON
+   nom            =  19-100
+   hsc            =  0,100000001490116
+   d              =  0,0190000012516975
+   fy              =  350
+   fu              =  450
+
+BLOCK CONNECTEUR_DALLE_ARMATURE
+   ds            =  0,025
+
+BLOCK ACIER_CONNECTEUR_DALLE_ARMATURE
+   Classe         =  B500
+   Fsk            =  500
+   Es             =  210000
+
+BLOCK OPT_CALCULS
+   RH            = 50
+   Norme            = 0
+   EtaW            = 1,2
+   lLarEffSimp            = False
+   lCompArma            = False
+   dMaxNodes            = 1,0
+   nbMinNodesTr            = 100
+   nbMinNodesCo            = 50
+   epsSH            = 0,000325
+   lRetraitEnr            = False
+   ArmaYoung            = 210000
+   Gravite            = 9,81
+   PsiLPerm            = 1,10
+   PsiLRetrait            = 0,55
+   AgeT0G1_0            = 28
+   AgeT0G1_1            = 56
+   AgeT0G2_0            = 28
+   AgeT0G2_1            = 56
+   AgeT0SH_0            = 1
+   AgeT0SH_1            = 1
+   AgeTCalc            = 18250
+   lElasticDesign            = False
+   lMaitFissure            = False
+
+BLOCK OPT_CALCULS_GAMMA
+   GammaM0       = 1,05
+   GammaM1       = 1,10
+   GammaM2       = 1,25
+   GammaC        = 1,5
+   GammaVs       = 1,25
+   GammaVc       = 1,25
+   lGammaVuni    = True
+   GammaS        = 1,15
+   GammaP        = 1,0
+   GammaM_fi     = 1,0
+   GammaC_fi     = 1,0
+   GammaS_fi   = 1,0
+   GammaV_fi     = 1,0
+   GammaG_sup    = 1,40
+   GammaG_inf    = 1,0
+   GammaQ        = 1,6
+   Psi0_Q1       = 0,7
+   Psi1_Q1       = 0,3
+   Psi2_Q1       = 0,3
+   Psi0_Q2       = 0,7
+   Psi1_Q2       = 0,3
+   Psi2_Q2       = 0,3
+
+BLOCK OPT_CALCULS_HIVOSS
+   lHivossMethod = True
+   RatioQ        = 0,2
+   ChoixQ        = 0
+   UtilPlancher  = 4
+   lFreqDalle  = False
+   Mobilier      = 0
+   lFauxPlafond  = False
+   lChappeFlottante  = False
+   AmortD1       = 0,01
+   AmortD2       = 0,02
+   AmortD3       = 0
+   AmortDtot     = 0,03
+
+BLOCK CHGTU_QSURF
+   CleDic      =  G1
+   indTravee      =  1
+   QSurf      =  0
+
+BLOCK CHGTU_FREPAR
+   CleDic      =  G1
+   indTravee      =  1
+   F0      =  4450
+   F1      =  4450
+   xPosT0      =  0
+   xPosT1      =  15
+   xGaucheT      =  0
+
+BLOCK CHGTU_QSURF
+   CleDic      =  G2
+   indTravee      =  1
+   QSurf      =  0
+
+BLOCK CHGTU_QSURF
+   CleDic      =  Q1
+   indTravee      =  1
+   QSurf      =  0
+
+BLOCK CHGTU_FREPAR
+   CleDic      =  Q1
+   indTravee      =  1
+   F0      =  20000
+   F1      =  20000
+   xPosT0      =  0
+   xPosT1      =  15
+   xGaucheT      =  0
+
+BLOCK CHGTU_QSURF
+   CleDic      =  Q2
+   indTravee      =  1
+   QSurf      =  0
+
+BLOCK CHGTU_FORCE
+   CleDic      =  Q2
+   indTravee      =  1
+   Force      =  15000
+   xPosT      =  7,5
+   xGaucheT   =  0
+
+BLOCK CHGTU_QSURF
+   CleDic      =  QC
+   indTravee      =  1
+   QSurf      =  0
+

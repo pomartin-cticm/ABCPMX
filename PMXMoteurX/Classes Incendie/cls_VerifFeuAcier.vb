@@ -149,7 +149,7 @@ Public Class cls_VerifFeuAcier
         '# Propriétés à froid
 
         myBeam.ProprietesVerifAcier(True, MplRd0, zANP0, MelRd0, zANE0)
-        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi)
+        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW)
 
         '# Classes de la section
 

@@ -114,6 +114,7 @@ CRACKWIDTH				= Limite d'ouverture des fissures
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs
+CLOSE					= Fermer
 FIRST					= Première page
 PREVIOUS				= Page précédente
 NEXT					= Page suivante

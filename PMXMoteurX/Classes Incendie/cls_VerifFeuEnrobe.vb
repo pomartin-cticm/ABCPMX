@@ -91,7 +91,7 @@ Public Class cls_VerifFeuEnrobe
             MaillagePropPlastiquesMixtes(myBeam, Beff, 1, cls_VerifFeuEnrobe.TimeSteps(iStep), MRdPos, zPos)
             MaillagePropPlastiquesMixtes(myBeam, Beff, -1, cls_VerifFeuEnrobe.TimeSteps(iStep), MRdNeg, zNeg)
 
-            VRd = ResistanceEffortTranchant(myBeam.Section.ProfilA, myBeam.Section.FyW, myBeam.Section.Enrobage.Ratio_bc,
+            VRd = ResistanceEffortTranchant(myBeam.Section.ProfilA, myBeam.Section.FyW, myBeam.Param.EtaW, myBeam.Section.Enrobage.Ratio_bc,
                                             myBeam.Param.Gamma.GammaM_fi, cls_VerifFeuEnrobe.TimeSteps(iStep))
 
             '# Boucle sur les combinaisons de calcul
@@ -271,7 +271,8 @@ Public Class cls_VerifFeuEnrobe
 
 #Region " Propriétés en cisaillement "
 
-    Private Function ResistanceEffortTranchant(myProfile As cls_ProfilA, FyW As Decimal, Ratio_Bc As Decimal, GammaM As Decimal, Time As Decimal) As Decimal
+    Private Function ResistanceEffortTranchant(myProfile As cls_ProfilA, FyW As Decimal, Eta As Decimal,
+                                               Ratio_Bc As Decimal, GammaM As Decimal, Time As Decimal) As Decimal
         '---------------------------------------------------------------------------------------
         '   18/04/24 :  Création - POM
         '---------------------------------------------------------------------------------------
@@ -279,6 +280,8 @@ Public Class cls_VerifFeuEnrobe
         '---------------------------------------------------------------------------------------
         '   myProfile   [E] :   Profilé
         '   FyW         [E] :   Limite d'élasticité de l'âme
+        '   Eta         [E] :   Coefficient Eta pour la résistance au cisaillement
+        '   RatioBc     [E] :   Ratio définissant la largeur de béton de l'enrobage partiel
         '   GammaM      [E] :   Coefficient partiel
         '   Time        [E] :   Temps du calcul
         '---------------------------------------------------------------------------------------
@@ -300,7 +303,7 @@ Public Class cls_VerifFeuEnrobe
 
         kRedV = 1 + Hwl * (ReducKa - 1) / (2 * Hw)
 
-        VRd = FyW / (GammaM * Math.Sqrt(3)) * myProfile.AireAv * kRedV * kConvMPaPa
+        VRd = FyW / (GammaM * Math.Sqrt(3)) * myProfile.AireAv(Eta) * kRedV * kConvMPaPa
 
         Return VRd
 

@@ -213,8 +213,7 @@
 
         myBeam.MaillageBeff(lSimple, False, bEff)
 
-        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi)
-
+        VRd0 = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM_fi, myBeam.Param.EtaW)
 
         '--( Préparation du maillage de la dalle
 

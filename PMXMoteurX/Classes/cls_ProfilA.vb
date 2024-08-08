@@ -146,7 +146,6 @@ Public Class cls_ProfilA
                     pAire = Me.AireFi + Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2) / 2 + Me.Plat_b * Me.Plat_t
             End Select
 
-
             Return pAire
         End Get
     End Property
@@ -275,30 +274,69 @@ Public Class cls_ProfilA
         End Get
     End Property
 
-    ''' <summary>
-    ''' Aire de cisaillement
-    ''' </summary>
-    ''' <returns></returns>
-    Public ReadOnly Property AireAv As Decimal
-        Get
-            Dim Av As Decimal = 0
-            Select Case Me.typeProfileAcier
-                Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.LamineSlimSAB, Enum_TypeSectionAcier.LamineSlimSFB
-                    Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2 + Me.Rci ^ 2) / 2 _
-                       + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2 _
-                       + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
-                Case Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym
-                    Av = Me.HauteurAmeHw * Me.Tw
-                Case Enum_TypeSectionAcier.LamineSlimIFBA
-                    Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2) / 2 _
-                       + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2
-                Case Enum_TypeSectionAcier.LamineSlimIFBB
-                    Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2) / 2 _
-                       + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
-            End Select
-            Return Av
-        End Get
-    End Property
+    '''' <summary>
+    '''' Aire de cisaillement
+    '''' </summary>
+    '''' <returns></returns>
+    'Public ReadOnly Property AireAv As Decimal
+    '    Get
+    '        Dim Av As Decimal = 0
+    '        Select Case Me.typeProfileAcier
+    '            Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.LamineSlimSAB, Enum_TypeSectionAcier.LamineSlimSFB
+    '                Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2 + Me.Rci ^ 2) / 2 _
+    '                   + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2 _
+    '                   + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
+    '            Case Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym
+    '                Av = Me.HauteurAmeHw * Me.Tw
+    '            Case Enum_TypeSectionAcier.LamineSlimIFBA
+    '                Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2) / 2 _
+    '                   + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2
+    '            Case Enum_TypeSectionAcier.LamineSlimIFBB
+    '                Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2) / 2 _
+    '                   + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
+    '        End Select
+    '        Return Av
+    '    End Get
+    'End Property
+
+    Public Function AireAv(Eta As Double) As Decimal
+        '-----------------------------------------------------------------------------------------
+        '   08/08/24 :  Création - POM
+        '-----------------------------------------------------------------------------------------
+        '   Retourne l'aire de cisaillement du profilé
+        '-----------------------------------------------------------------------------------------
+        '   Eta     [E] :   Coefficient Eta EN 1993-1-5 et EN 1993-1-1 (NA)
+        '-----------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim Av As Decimal = 0
+        Dim AvMin As Decimal
+
+        '--( Traitement
+
+        Select Case Me.typeProfileAcier
+            '------------------------------------------------------------------------------------------------------------
+            Case Enum_TypeSectionAcier.Lamine, Enum_TypeSectionAcier.LamineSlimSAB, Enum_TypeSectionAcier.LamineSlimSFB
+                Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2 + Me.Rci ^ 2) / 2 _
+                   + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2 _
+                   + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
+                AvMin = Eta * Me.HauteurAmeHw * Me.Tw
+                Av = Math.Max(AvMin, Av)
+                 '------------------------------------------------------------------------------------------------------------
+            Case Enum_TypeSectionAcier.PRS_Mono_Sym, Enum_TypeSectionAcier.PRS_Bi_Sym
+                Av = Eta * Me.HauteurAmeHw * Me.Tw
+                  '------------------------------------------------------------------------------------------------------------
+            Case Enum_TypeSectionAcier.LamineSlimIFBA
+                Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rcs ^ 2) / 2 _
+                   + Me.Tfs * (2 * Me.Rcs + Me.Tw) / 2
+                   '------------------------------------------------------------------------------------------------------------
+            Case Enum_TypeSectionAcier.LamineSlimIFBB
+                Av = Me.HauteurAmeHw * Me.Tw + (4 - Math.PI) * (Me.Rci ^ 2) / 2 _
+                   + Me.Tfi * (2 * Me.Rci + Me.Tw) / 2
+        End Select
+        Return Av
+    End Function
 
     ''' <summary>
     ''' Hauteur de l'âme entre le nu intérieur des semelles
@@ -455,12 +493,42 @@ Public Class cls_ProfilA
     End Property
 
     ''' <summary>
+    ''' Rayon de giration du profilé selon l'axe y-y
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property GirationY As Decimal
+        Get
+            Return Math.Sqrt(Me.pInertieY / Me.Aire)
+        End Get
+    End Property
+
+    ''' <summary>
     ''' Moment d'inertie du profilé selon l'axe y-y
     ''' </summary>
     ''' <returns></returns>
     Public ReadOnly Property InertieY As Decimal
         Get
             Return pInertieY
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Renvoie la position z du CdG
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property zG As Decimal
+        Get
+            Return pzCdG
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Renvoie la position z du centre de cisaillement
+    ''' </summary>
+    ''' <returns></returns>
+    Public ReadOnly Property zS As Decimal
+        Get
+            Return pzS
         End Get
     End Property
 

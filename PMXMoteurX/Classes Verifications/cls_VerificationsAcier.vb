@@ -167,7 +167,7 @@ Public Class cls_VerificationsAcier
 
         '# Tranchant résistant
 
-        VplRd = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM0)
+        VplRd = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM0, myBeam.Param.EtaW)
 
         '# Résistance au voilement par cisaillement
 

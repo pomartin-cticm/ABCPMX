@@ -5,7 +5,7 @@ Imports PMXMoteur2
 
 <TestClass()> Public Class TU_MV_PoutresMixtes
 
-    <TestMethod()> Public Sub TU_MV_TEST01_RCM_2018_2()
+    <TestMethod()> Public Sub TU_MV_TESTC01_RCM_2018_2()
 
         'Cas test issu de la revue RCM (2008-2):
         'Correspondant au test 01 du MV
@@ -54,7 +54,7 @@ Imports PMXMoteur2
         myPoutre.Dalle.Bac.InitialiseCofraPlus60_075()
 
         myPoutre.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire
-            myPoutre.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus      'permet de prendre en compte le bac pour le calcul des armatures transversales
+        myPoutre.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.NervureEtBacContinus      'permet de prendre en compte le bac pour le calcul des armatures transversales
 
         With myPoutre.Dalle.ConnecteurGoujonSoude
             .hsc = 100 / 1000
@@ -100,6 +100,7 @@ Imports PMXMoteur2
             .GammaVc = 1.25
             .GammaVs = 1.25
         End With
+        myPoutre.Param.EtaW = 1
 
 #End Region
 
@@ -315,7 +316,7 @@ Imports PMXMoteur2
 
         'A L'ELU
 
-        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0)
+        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0, myPoutre.Param.EtaW)
         ValRef = 807 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à l'effort tranchant
 
@@ -592,7 +593,7 @@ Imports PMXMoteur2
     End Sub
 
 
-    <TestMethod()> Public Sub TU_MV_TEST02_RCM_2022_3()
+    <TestMethod()> Public Sub TU_MV_TESTC02_RCM_2022_3()
 
         ' Cas test issu de la revue RCM (2022-3):
         ' Correspond au TEST 02 du MV
@@ -827,7 +828,7 @@ Imports PMXMoteur2
 
     End Sub
 
-    <TestMethod()> Public Sub TU_MV_TEST03_RCM_2023_3()
+    <TestMethod()> Public Sub TU_MV_TESTC03_RCM_2023_3()
 
         'Cas test issu de la revue RCM (2023-3):
         '
@@ -1182,7 +1183,7 @@ Imports PMXMoteur2
 
     End Sub
 
-    <TestMethod()> Public Sub TU_MV_TEST03_LTB_RCM2023no3()
+    <TestMethod()> Public Sub TU_MV_TESTC03_LTB_RCM2023no3()
 
         '=======================================
         '
@@ -1432,7 +1433,7 @@ Imports PMXMoteur2
 
     End Sub
 
-    <TestMethod()> Public Sub TU_MV_TEST04_RCM_2023_4()
+    <TestMethod()> Public Sub TU_MV_TESTC04_RCM_2023_4()
 
         'Cas test issu de la revue RCM (2023-4):
         '
@@ -1571,7 +1572,7 @@ Imports PMXMoteur2
             .GammaVc = 1.25
             .GammaVs = 1.25
         End With
-
+        myPoutre.Param.EtaW = 1
 #End Region
 
 #Region " Lancement des calculs "
@@ -1786,7 +1787,7 @@ Imports PMXMoteur2
 
         'A L'ELU
 
-        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0)
+        Valeur = myPoutre.Section.VplRd(myPoutre.Param.Gamma.GammaM0, myPoutre.Param.EtaW)
         ValRef = 1033 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification du calcul de la résistance à l'effort tranchant
 

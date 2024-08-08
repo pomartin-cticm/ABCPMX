@@ -107,6 +107,8 @@ Public Class Frm_Maintiens
 
     Dim NbTravees As Integer
 
+    Dim FontFrm As Font
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -256,6 +258,7 @@ Public Class Frm_Maintiens
     End Sub
 
     Private Sub GestionStyle()
+
         Me.Icon = Frm_PMX.Icon
 
         Me.lbl_ControlDessin.BackColor = CouleurBackBandeaux
@@ -270,6 +273,8 @@ Public Class Frm_Maintiens
         Me.img_Maintiens.BorderStyle = BorderStyle.FixedSingle
 
         Me.txt_Cotations.Visible = False
+
+        FontFrm = New Font(Me.rad_FullyRestrain.Font.Name, SizeFontFrm)
 
     End Sub
 
@@ -349,8 +354,6 @@ Public Class Frm_Maintiens
 
             Next
 
-
-
         End With
     End Sub
 
@@ -359,7 +362,8 @@ Public Class Frm_Maintiens
 #Region " Dessins "
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Maintiens.Paint
 
-        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height, 1, iSelect, True, positionCotesInferieuresDessin, positionMaintiensDessin, EpaisseurSemelleDessin)
+        DessinFrmMaintiens(e.Graphics, MyPoutreLoc, FontFrm, Me.img_Maintiens.ClientRectangle.Width, Me.img_Maintiens.ClientRectangle.Height,
+                           1, iSelect, True, positionCotesInferieuresDessin, positionMaintiensDessin, EpaisseurSemelleDessin)
 
     End Sub
 

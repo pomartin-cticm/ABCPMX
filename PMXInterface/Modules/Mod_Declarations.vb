@@ -421,6 +421,8 @@ Public Module Mod_Declarations
 
     Public Const DELTASAISIE As Double = 0.001       ' Tolérance sur les bornes de saisie  (issu d'ACB+)
 
+    Public Const ETA_Catalogue As Decimal = 1
+
 #End Region
 
 #Region " Paramétrage Logiciel "

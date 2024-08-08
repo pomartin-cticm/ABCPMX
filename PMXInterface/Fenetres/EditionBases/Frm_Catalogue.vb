@@ -150,7 +150,7 @@ Public Class Frm_Catalogue
     Private Sub InitialisationFenetre()
         lBuild = True
         Me.Icon = Frm_PMX.Icon
-        FontFrm = New Font(Me.lbl_A.Font.Name, SizeFont)
+        FontFrm = New Font(FontBase.Name, SizeFont)
 
         '--> 
 
@@ -368,7 +368,7 @@ Public Class Frm_Catalogue
         lbl_val_Wely.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWelY, Enu_TypeVariable.ModuleCM3, 4, 3, False)
         lbl_val_Wply.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWplY, Enu_TypeVariable.ModuleCM3, 4, 3, False)
         lbl_val_iy2.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.RayonGirationiY, Enu_TypeVariable.LongueurCM, 4, 3, False)
-        lbl_val_Avz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.AireAv, Enu_TypeVariable.AireCM2, 4, 3, False)
+        lbl_val_Avz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.AireAv(ETA_Catalogue), Enu_TypeVariable.AireCM2, 4, 3, False)
         lbl_val_Iz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.InertieZ, Enu_TypeVariable.InertieCM4, 4, 3, False)
         lbl_val_Welz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWelZ, Enu_TypeVariable.ModuleCM3, 4, 3, False)
         lbl_val_Wplz.Text = GetStringInUnit(MyPoutreLoc.Section.ProfilA.ModuleWplz, Enu_TypeVariable.ModuleCM3, 4, 3, False)
