@@ -1538,8 +1538,8 @@ Public Module Mod_Dessins
 
     End Sub
 
-    Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, MyPoutre As cls_Poutre,
-                             lIntermediaire As Boolean, iSelect As Integer, strMsg() As String, ByVal lCote As Boolean,
+    Public Sub DessineDalle(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, myBeam As cls_Poutre, myFont As Font,
+                            lIntermediaire As Boolean, iSelect As Integer, strMsg() As String, ByVal lCote As Boolean,
                             ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '-----------------------------------------------------------------------------------------------
         '   26/06/23 :  Version 1.00
@@ -1548,8 +1548,8 @@ Public Module Mod_Dessins
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
-        '   MyDalle     [E] :   Dalle à dessiner
-        '   MySection   [E] :   Section à laquelle la dalle est rattachée
+        '   myBeam      [E] :   Poutre dont la dalle est à dessiner
+        '   myFont      [E] :   Police pour les cotes
         '   iSelect     [E] :   Indice de la cote selectionnée
         '   strMsg      [E] :   Messages issus du fichier langue
         '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
@@ -1583,58 +1583,58 @@ Public Module Mod_Dessins
 
         '--> Initialisation
 
-        lMixte = MyPoutre.Section.lMixte
-        lEnrob = MyPoutre.Section.lEnrobage
-        lLamine = MyPoutre.Section.lLamine
-        lCofraplus220 = MyPoutre.Dalle.Bac.lCofraplus220
+        lMixte = myBeam.Section.lMixte
+        lEnrob = myBeam.Section.lEnrobage
+        lLamine = myBeam.Section.lLamine
+        lCofraplus220 = myBeam.Dalle.Bac.lCofraplus220
 
         ' A REVOIR ====
-        Beff = LargeurDalleDessin(MyPoutre.Section.ProfilA)
+        Beff = LargeurDalleDessin(myBeam.Section.ProfilA)
         BeffG = Beff / 2
         BeffD = Beff / 2
 
-        Ha = MyPoutre.Section.ProfilA.ha
+        Ha = myBeam.Section.ProfilA.ha
 
-        If lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
-            Bfs = MyPoutre.Section.ProfilA.Bfs
+        If lIntermediaire Or Not myBeam.Section.lSlimFloor Then
+            Bfs = myBeam.Section.ProfilA.Bfs
             LargeurProfil = Bfs
         Else
-            Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+            Select Case myBeam.Section.ProfilA.typeProfileAcier
                 Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                    Bfs = MyPoutre.Section.ProfilA.Bfs
+                    Bfs = myBeam.Section.ProfilA.Bfs
                     LargeurProfil = Bfs
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                    Bfs = MyPoutre.Section.ProfilA.Bfs
-                    LargeurProfil = MyPoutre.Section.ProfilA.Plat_b - Bfs / 2
+                    Bfs = myBeam.Section.ProfilA.Bfs
+                    LargeurProfil = myBeam.Section.ProfilA.Plat_b - Bfs / 2
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                    Bfs = MyPoutre.Section.ProfilA.Bfs
-                    LargeurProfil = MyPoutre.Section.ProfilA.Plat_b - Bfs / 2
+                    Bfs = myBeam.Section.ProfilA.Bfs
+                    LargeurProfil = myBeam.Section.ProfilA.Plat_b - Bfs / 2
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                    Bfs = MyPoutre.Section.ProfilA.Bfi
+                    Bfs = myBeam.Section.ProfilA.Bfi
                     LargeurProfil = Bfs / 2
                 Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                    Bfs = MyPoutre.Section.ProfilA.Bfi
+                    Bfs = myBeam.Section.ProfilA.Bfi
                     LargeurProfil = Bfs / 2
             End Select
         End If
 
-        Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+        Select Case myBeam.Section.ProfilA.typeProfileAcier
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                zREF = MyPoutre.Section.ProfilA.hb
+                zREF = myBeam.Section.ProfilA.hb
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                zREF = MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Plat_t
+                zREF = myBeam.Section.ProfilA.ha - myBeam.Section.ProfilA.Plat_t
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                zREF = MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Tfi
+                zREF = myBeam.Section.ProfilA.ha - myBeam.Section.ProfilA.Tfi
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                zREF = MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Tfi
+                zREF = myBeam.Section.ProfilA.ha - myBeam.Section.ProfilA.Tfi
             Case Else
                 zREF = 0
         End Select
 
         '--> Preparation de la zone d'affichage - Calcul de ParAff
-        dCar = Math.Sqrt(Beff ^ 2 + (Ha + MyPoutre.Dalle.zTop) ^ 2) / 10
+        dCar = Math.Sqrt(Beff ^ 2 + (Ha + myBeam.Dalle.zTop) ^ 2) / 10
 
-        If lIntermediaire Or Not MyPoutre.Section.lSlimFloor Then
+        If lIntermediaire Or Not myBeam.Section.lSlimFloor Then
             xMin = -Beff / 2 - 2 * dCar
             xMax = -xMin
         Else
@@ -1642,18 +1642,17 @@ Public Module Mod_Dessins
             xMax = Beff / 2 + 2 * dCar
         End If
 
-
-        If MyPoutre.Section.lSlimFloor Then
+        If myBeam.Section.lSlimFloor Then
             If lIntermediaire Then
-                yMin = -MyPoutre.Section.ProfilA.Plat_t
-                yMax = MyPoutre.Dalle.zTop + dCar
+                yMin = -myBeam.Section.ProfilA.Plat_t
+                yMax = myBeam.Dalle.zTop + dCar
             Else
-                yMin = -MyPoutre.Section.ProfilA.Plat_t - 0.8 * dCar
-                yMax = MyPoutre.Dalle.zTop + 0.8 * dCar
+                yMin = -myBeam.Section.ProfilA.Plat_t - 0.8 * dCar
+                yMax = myBeam.Dalle.zTop + 0.8 * dCar
             End If
         Else
-            yMin = -MyPoutre.Section.ProfilA.ha
-            yMax = MyPoutre.Dalle.zTop + dCar
+            yMin = -myBeam.Section.ProfilA.ha
+            yMax = myBeam.Dalle.zTop + dCar
         End If
 
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kADJUST)
@@ -1693,7 +1692,7 @@ Public Module Mod_Dessins
         '--> Dessin de béton
 
         If lEnrob Then _
-        DessinEnrobagePartielBeton(myGr, MyPoutre.Section.ProfilA, MyPoutre.Section.Enrobage.Ratio_bc, MyParAff, myBrushB)
+        DessinEnrobagePartielBeton(myGr, myBeam.Section.ProfilA, myBeam.Section.Enrobage.Ratio_bc, MyParAff, myBrushB)
 
         '--> Dessin de la dalle
 
@@ -1701,65 +1700,67 @@ Public Module Mod_Dessins
 
         '# Dalle béton
 
-        Select Case MyPoutre.Dalle.type
+        Select Case myBeam.Dalle.type
             Case cls_Dalle.Enum_TypeDalle.Pleine
-                DessinDallePleine(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
+                DessinDallePleine(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
             Case cls_Dalle.Enum_TypeDalle.Mixte
-                Select Case MyPoutre.Dalle.Bac.Orientation
+                Select Case myBeam.Dalle.Bac.Orientation
                     Case cls_Bac.Enum_Orientation.Parallele
-                        DessineDalleMixteParallele(myGr, MyPoutre.Dalle, Ha, Bfs, MyParAff, myBrushB, Beff)
+                        DessineDalleMixteParallele(myGr, myBeam.Dalle, Ha, Bfs, MyParAff, myBrushB, Beff)
                     Case cls_Bac.Enum_Orientation.Perpendiculaire
                         If lCofraplus220 Then
-                            DessineDalleMixtePerpendiculaireCfp220(myGr, MyPoutre, MyParAff, myBrushB, Beff)
+                            DessineDalleMixtePerpendiculaireCfp220(myGr, myBeam, MyParAff, myBrushB, Beff)
                         Else
-                            DessineDalleMixtePerpendiculaire(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
+                            DessineDalleMixtePerpendiculaire(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, Beff)
                         End If
                 End Select
 
             Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
-                DessinDallePreFab(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
+                DessinDallePreFab(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushPref, Beff)
 
             Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
-                DessinDalleCompletementPrefa(myGr, MyPoutre, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushCofra, Beff)
+                DessinDalleCompletementPrefa(myGr, myBeam, lIntermediaire, Ha, Bfs, MyParAff, myBrushB, myBrushCofra, Beff)
 
         End Select
 
         '# Armatures
 
-        DessinLitArmaDalle(myGr, MyPoutre.Dalle, Beff, 0, MyPoutre.Section.ProfilA.ha, iSelect, MyParAff, myBrushA(0))
-        DessinLitArmaDalle(myGr, MyPoutre.Dalle, Beff, 1, MyPoutre.Section.ProfilA.ha, iSelect, MyParAff, myBrushA(1))
+        DessinLitArmaDalle(myGr, myBeam.Dalle, Beff, 0, myBeam.Section.ProfilA.ha, iSelect, MyParAff, myBrushA(0))
+        DessinLitArmaDalle(myGr, myBeam.Dalle, Beff, 1, myBeam.Section.ProfilA.ha, iSelect, MyParAff, myBrushA(1))
 
         'End If
 
         '--> Dessin de la section acier
 
-        Dim lRepresentationPoutreExtremite As Boolean = Not lIntermediaire And MyPoutre.Section.lSlimFloor
+        Dim lRepresentationPoutreExtremite As Boolean = Not lIntermediaire And myBeam.Section.lSlimFloor
 
-        DessinProfileMetal(myGr, MyPoutre.Section.ProfilA, myBrushP, MyParAff, zREF, 0, lRepresentationPoutreExtremite)
+        DessinProfileMetal(myGr, myBeam.Section.ProfilA, myBrushP, MyParAff, zREF, 0, lRepresentationPoutreExtremite)
 
         '--> Dessin des étriers
 
         If lEnrob Then _
-        DessinEtriers(myGr, MyPoutre.Section.ProfilA, MyPoutre.Section.Enrobage, MyParAff, myBrushE, zREF)
+        DessinEtriers(myGr, myBeam.Section.ProfilA, myBeam.Section.Enrobage, MyParAff, myBrushE, zREF)
 
         If lCote Then
 
-            If Not lIntermediaire And MyPoutre.Section.lSlimFloor Then BeffG = Bfs / 2
-            DessinCoteFrmDalle(myGr, MyPoutre, lIntermediaire, LargeurProfil, iSelect, MyParAff, dCar, BeffG, BeffD, strMsg, zREF)
+            If Not lIntermediaire And myBeam.Section.lSlimFloor Then BeffG = Bfs / 2
+            DessinCoteFrmDalle(myGr, myBeam, myFont, lIntermediaire, LargeurProfil, iSelect, MyParAff, dCar, BeffG, BeffD, strMsg, zREF)
 
         End If
     End Sub
 
-    Private Sub DessinCoteFrmDalle(ByRef MyGr As Graphics, MyPoutre As cls_Poutre, lIntermediaire As Boolean, LargeurProfil As Decimal, iSelect As Integer,
-                                   MyParAffA As Struc_Affichage, dCar As Decimal, BeffG As Decimal, BeffD As Decimal, strMsg() As String, ZREF As Decimal)
+    Private Sub DessinCoteFrmDalle(ByRef MyGr As Graphics, myBeam As cls_Poutre, myFont As Font,
+                                   lIntermediaire As Boolean, LargeurProfil As Decimal, iSelect As Integer,
+                                   MyParAffA As Struc_Affichage, dCar As Decimal,
+                                   BeffG As Decimal, BeffD As Decimal, strMsg() As String, ZREF As Decimal)
         '-----------------------------------------------------------------------------------------------
         '   07/07/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
         '   Dessin des cotes de la dalle
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
-        '   MyDalle     [E] :   Dalle à dessiner
-        '   MySection   [E] :   Section à laquelle la dalle est rattachée
+        '   myBeam      [E] :   Poutre dont la dalle est à dessiner
+        '   myFont      [E] :   Police pour les cotes
         '   iSelect     [E] :   Indice de la cote selectionnée
         '   MyParAffA   [E] :   Paramètres d'affichage
         '   dCar        [E] :   Dimension pour l'affichage
@@ -1784,11 +1785,11 @@ Public Module Mod_Dessins
         Dim MyColor As Color
 
         Dim lContour As Boolean = lCONTOURCOTE
-        Dim MyFontNormal As Font = FontBase
+        Dim MyFontNormal As Font = myFont
 
         Dim Chaine As String
-        Dim lDalleMixte As Boolean = (MyPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
-        Dim dCar2 As Decimal = MyPoutre.Dalle.Bac.Hp / 2
+        Dim lDalleMixte As Boolean = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte)
+        Dim dCar2 As Decimal = myBeam.Dalle.Bac.Hp / 2
 
         '--> Cotations
 
@@ -1798,16 +1799,16 @@ Public Module Mod_Dessins
         MyPen.Color = MyColor
 
 
-        If MyPoutre.Section.lSlimFloor Then
+        If myBeam.Section.lSlimFloor Then
             yo = ZREF
             ye = 0
         Else
-            yo = -MyPoutre.Section.ProfilA.ha
+            yo = -myBeam.Section.ProfilA.ha
             ye = 0
         End If
 
         Dim xCoteProfile As Decimal
-        If MyPoutre.Section.lSlimFloor Then
+        If myBeam.Section.lSlimFloor Then
             xCoteProfile = BeffD + dCar
         Else
             xCoteProfile = xCoteZ
@@ -1815,17 +1816,17 @@ Public Module Mod_Dessins
 
         AddFleche(MyGr, MyPen, xCoteProfile, yo, xCoteProfile, ye, MyParAffA, True, True)
 
-        Select Case MyPoutre.Section.ProfilA.typeProfileAcier
+        Select Case myBeam.Section.ProfilA.typeProfileAcier
             Case cls_ProfilA.Enum_TypeSectionAcier.Lamine, cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym, cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
-                Chaine = GetStringNoUnit(MyPoutre.Section.ProfilA.ha, Enu_TypeVariable.Dimension)
+                Chaine = GetStringNoUnit(myBeam.Section.ProfilA.ha, Enu_TypeVariable.Dimension)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
-                Chaine = GetStringNoUnit(MyPoutre.Section.ProfilA.hb, Enu_TypeVariable.Dimension)
+                Chaine = GetStringNoUnit(myBeam.Section.ProfilA.hb, Enu_TypeVariable.Dimension)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
-                Chaine = GetStringNoUnit(MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Plat_t, Enu_TypeVariable.Dimension)
+                Chaine = GetStringNoUnit(myBeam.Section.ProfilA.ha - myBeam.Section.ProfilA.Plat_t, Enu_TypeVariable.Dimension)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
-                Chaine = GetStringNoUnit(MyPoutre.Section.ProfilA.ha - MyPoutre.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension)
+                Chaine = GetStringNoUnit(myBeam.Section.ProfilA.ha - myBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension)
             Case cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
-                Chaine = GetStringNoUnit(MyPoutre.Section.ProfilA.hb, Enu_TypeVariable.Dimension)
+                Chaine = GetStringNoUnit(myBeam.Section.ProfilA.hb, Enu_TypeVariable.Dimension)
         End Select
         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteProfile, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
@@ -1834,23 +1835,23 @@ Public Module Mod_Dessins
         MyColor = StyleCouleur(iSelect, 0)
         MyPen.Color = MyColor
 
-        yo = MyPoutre.Dalle.EpRenformis
-        ye = MyPoutre.Dalle.zTop
+        yo = myBeam.Dalle.EpRenformis
+        ye = myBeam.Dalle.zTop
 
         AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
         Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, (yo + ye) / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
-        If Not lIntermediaire And MyPoutre.Section.lSlimFloor Then xCoteZ = LargeurProfil + 0.3 * dCar
+        If Not lIntermediaire And myBeam.Section.lSlimFloor Then xCoteZ = LargeurProfil + 0.3 * dCar
 
         '# Hauteur du renformis
 
-        If (MyPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) And (MyPoutre.Dalle.Ep_th > 0) Then
+        If (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine) And (myBeam.Dalle.Ep_th > 0) Then
 
             MyColor = StyleCouleur(iSelect, 1)
             MyPen.Color = MyColor
 
-            yo = MyPoutre.Dalle.EpRenformis
+            yo = myBeam.Dalle.EpRenformis
             ye = 0
 
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
@@ -1861,15 +1862,15 @@ Public Module Mod_Dessins
 
         '# Prédalle
 
-        If (MyPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee) And (MyPoutre.Dalle.preDalle_ep > 0) Then
+        If (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee) And (myBeam.Dalle.preDalle_ep > 0) Then
 
             MyColor = StyleCouleur(iSelect, 10)
             MyPen.Color = MyColor
 
             yo = 0
-            ye = MyPoutre.Dalle.preDalle_ep
+            ye = myBeam.Dalle.preDalle_ep
 
-            If Not lIntermediaire And MyPoutre.Section.lSlimFloor Then
+            If Not lIntermediaire And myBeam.Section.lSlimFloor Then
                 xCoteZ = LargeurProfil + 1.0 * dCar
             Else
                 xCoteZ = -BeffG + 0.5 * dCar
@@ -1880,14 +1881,14 @@ Public Module Mod_Dessins
             Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
             AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, xCoteZ, yo - dCar2 / 2, MyParAffA, HorizontalAlignment.Center, VerticalAlignement.Top, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
-            If (MyPoutre.Dalle.preDalle_tjoint > 0) Then
+            If (myBeam.Dalle.preDalle_tjoint > 0) Then
                 MyColor = StyleCouleur(iSelect, 11)
                 MyPen.Color = MyColor
 
-                yo = MyPoutre.Dalle.preDalle_ep
-                ye = MyPoutre.Dalle.preDalle_ep - MyPoutre.Dalle.preDalle_tjoint
+                yo = myBeam.Dalle.preDalle_ep
+                ye = myBeam.Dalle.preDalle_ep - myBeam.Dalle.preDalle_tjoint
 
-                If Not lIntermediaire And MyPoutre.Section.lSlimFloor Then
+                If Not lIntermediaire And myBeam.Section.lSlimFloor Then
                     xCoteZ = LargeurProfil + 0.5 * dCar
                 Else
                     xCoteZ = -BeffG + 1.0 * dCar
@@ -1904,14 +1905,14 @@ Public Module Mod_Dessins
 
         '# Cofradal
 
-        If MyPoutre.Dalle.type = cls_Dalle.Enum_TypeDalle.PlancherPrefabrique Then
+        If myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.PlancherPrefabrique Then
             MyColor = StyleCouleur(iSelect, 11)
             MyPen.Color = MyColor
 
             yo = 0
-            ye = MyPoutre.Dalle.Cofradal.dp
+            ye = myBeam.Dalle.Cofradal.dp
 
-            If Not lIntermediaire And MyPoutre.Section.lSlimFloor Then
+            If Not lIntermediaire And myBeam.Section.lSlimFloor Then
                 xCoteZ = LargeurProfil + 0.5 * dCar
             Else
                 xCoteZ = -BeffG + 1.0 * dCar
@@ -1932,15 +1933,15 @@ Public Module Mod_Dessins
             MyColor = StyleCouleur(iSelect, 2)
             MyPen.Color = MyColor
 
-            If Not lIntermediaire And MyPoutre.Section.lSlimFloor Then
+            If Not lIntermediaire And myBeam.Section.lSlimFloor Then
                 xCoteZ = LargeurProfil + 0.3 * dCar
             Else
                 xCoteZ = -BeffG + dCar
             End If
 
 
-            yo = MyPoutre.Dalle.Bac.Hp
-            ye = MyPoutre.Dalle.zTop
+            yo = myBeam.Dalle.Bac.Hp
+            ye = myBeam.Dalle.zTop
 
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
             AddLigne(MyGr, MyPen, xCoteZ, ye, xCoteZ, ye + dCar / 2, MyParAffA)
@@ -1954,7 +1955,7 @@ Public Module Mod_Dessins
             MyPen.Color = MyColor
 
             yo = 0
-            ye = MyPoutre.Dalle.Bac.Hp
+            ye = myBeam.Dalle.Bac.Hp
 
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
             AddLigne(MyGr, MyPen, xCoteZ, yo - dCar / 2, xCoteZ, yo, MyParAffA)
@@ -1966,15 +1967,15 @@ Public Module Mod_Dessins
 
         '# Hauteur totale de la section + dalle
 
-        If Not MyPoutre.Section.lSlimFloor Then
+        If Not myBeam.Section.lSlimFloor Then
 
             MyColor = StyleCouleur(iSelect, -2)
             MyPen.Color = MyColor
 
             xCoteZ = -BeffG - 2 * dCar
 
-            yo = -MyPoutre.Section.ProfilA.ha
-            ye = MyPoutre.Dalle.zTop
+            yo = -myBeam.Section.ProfilA.ha
+            ye = myBeam.Dalle.zTop
 
             AddFleche(MyGr, MyPen, xCoteZ, yo, xCoteZ, ye, MyParAffA, True, True)
             Chaine = GetStringNoUnit(ye - yo, Enu_TypeVariable.Dimension)
@@ -1994,11 +1995,11 @@ Public Module Mod_Dessins
             Dim strBeton As String = strMsg(0).Trim & " "      ' "Concrete "
 
             lsChaine.Clear()
-            lsChaine.Add(strBeton & MyPoutre.Dalle.beton.Classe)
-            lsChaine.Add("fck" & " = " & GetStringInUnit(MyPoutre.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 3, 1, True))
-            lsChaine.Add("Ecm" & " = " & GetStringInUnit(MyPoutre.Dalle.beton.Ecm, Enu_TypeVariable.ModuleY, 3, 1, True))
-            lsChaine.Add("n0" & " = " & GetStringInUnit(cls_Acier.EYACIER / MyPoutre.Dalle.beton.Ecm, Enu_TypeVariable.SansType, 3, 2, True))
-            lsChaine.Add("RhoC" & " = " & GetStringInUnit(MyPoutre.Dalle.beton.RhoC, Enu_TypeVariable.SansType, 3, 2, False) & " kg/m3")
+            lsChaine.Add(strBeton & myBeam.Dalle.beton.Classe)
+            lsChaine.Add("fck" & " = " & GetStringInUnit(myBeam.Dalle.beton.Fck, Enu_TypeVariable.Contrainte, 3, 1, True))
+            lsChaine.Add("Ecm" & " = " & GetStringInUnit(myBeam.Dalle.beton.Ecm, Enu_TypeVariable.ModuleY, 3, 1, True))
+            lsChaine.Add("n0" & " = " & GetStringInUnit(cls_Acier.EYACIER / myBeam.Dalle.beton.Ecm, Enu_TypeVariable.SansType, 3, 2, True))
+            lsChaine.Add("RhoC" & " = " & GetStringInUnit(myBeam.Dalle.beton.RhoC, Enu_TypeVariable.SansType, 3, 2, False) & " kg/m3")
 
             xo = 0
 
@@ -2017,12 +2018,12 @@ Public Module Mod_Dessins
             Dim strRebar As String = strMsg(1).Trim & " "       ' "Steel reinforcement "
 
             lsChaine.Clear()
-            lsChaine.Add(strRebar & MyPoutre.Dalle.AcierArmatures.Classe)
-            lsChaine.Add("fsk" & " = " & GetStringInUnit(MyPoutre.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 3, 1, True))
-            lsChaine.Add("Es" & " = " & GetStringInUnit(MyPoutre.Dalle.AcierArmatures.Es, Enu_TypeVariable.ModuleY, 3, 1, True))
+            lsChaine.Add(strRebar & myBeam.Dalle.AcierArmatures.Classe)
+            lsChaine.Add("fsk" & " = " & GetStringInUnit(myBeam.Dalle.AcierArmatures.FsK, Enu_TypeVariable.Contrainte, 3, 1, True))
+            lsChaine.Add("Es" & " = " & GetStringInUnit(myBeam.Dalle.AcierArmatures.Es, Enu_TypeVariable.ModuleY, 3, 1, True))
 
             xo = 0
-            yo = MyPoutre.Dalle.zTop - MyPoutre.Dalle.LitArma(0).z_s - 1.5 * MyPoutre.Dalle.LitArma(0).PhiS
+            yo = myBeam.Dalle.zTop - myBeam.Dalle.LitArma(0).z_s - 1.5 * myBeam.Dalle.LitArma(0).PhiS
 
             AddTabTextFond(MyGr, New SolidBrush(MyColor), lsChaine, MyFontNormal, xo, yo, MyParAffA, HorizontalAlignment.Center, HorizontalAlignment.Left, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen)
 

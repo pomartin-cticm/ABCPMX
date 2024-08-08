@@ -30,7 +30,7 @@ Public Class cls_VerificationsAcier
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
     Public AlphaCrLTB() As Decimal                  ' Alpha critique pour le déversement élastique
-    Public McrLTB(,) As Decimal                     ' Moment critique pour le déversement (en travée)
+    Public McrLTB(,) As Decimal                     ' Moment critique pour le déversement (en travée) (indice de combi, indice de travée)
 
     Public ShearB As strucShearBuckling             ' Paramètres du voilement par cisaillement
 

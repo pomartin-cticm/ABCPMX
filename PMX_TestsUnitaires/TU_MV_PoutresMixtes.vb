@@ -592,7 +592,6 @@ Imports PMXMoteur2
 
     End Sub
 
-
     <TestMethod()> Public Sub TU_MV_TESTC02_RCM_2022_3()
 
         ' Cas test issu de la revue RCM (2022-3):

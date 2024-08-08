@@ -1219,7 +1219,7 @@ Public Class Cls_Rapport
                 Case "SLAB"
 
                     Dim msgDessin(1) As String
-                    DessineDalle(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, -1, msgDessin, False, xLeftImg, YPen)
+                    DessineDalle(MyGr, sWiImg, sHiImg, MyProjet.Poutres(MyProjet.IndEnCours), PoliceEnCours, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, -1, msgDessin, False, xLeftImg, YPen)
 
                 Case "HIVOSS"
 

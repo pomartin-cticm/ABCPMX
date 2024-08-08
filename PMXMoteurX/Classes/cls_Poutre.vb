@@ -2233,16 +2233,16 @@ Public Class cls_Poutre
     '    lPerp = (Me.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
     '    Ecm = Me.Dalle.beton.Ecm
     '    Fck = Me.Dalle.beton.Fck
-    '    Fcd = Me.Dalle.beton.Fck / Me.Param.Gamma.GammaC
-    '    fypd = Me.Dalle.Bac.fyp / Me.Param.Gamma.GammaP
-    '    fsd = Me.Dalle.AcierArmatures.FsK / Me.Param.Gamma.GammaS
+    '    Fcd = Me.Dalle.beton.Fck / Me.Param.myGamma.GammaC
+    '    fypd = Me.Dalle.Bac.fyp / Me.Param.myGamma.GammaP
+    '    fsd = Me.Dalle.AcierArmatures.FsK / Me.Param.myGamma.GammaS
     '    If Me.Param.lGeneration1 Then
     '        nu = 0.6 * (1 - Fck / 250)
     '    Else
     '        nu = 0.5
     '    End If
-    '    gammaVs = Me.Param.Gamma.GammaVs
-    '    gammaVc = Me.Param.Gamma.GammaVc
+    '    gammaVs = Me.Param.myGamma.GammaVs
+    '    gammaVc = Me.Param.myGamma.GammaVc
     '    LargeurParticipante(0, 0) = 0 'initialisation avec une valeur quelconque pour pas que le tableau soit considéré comme Nothing dans la fonction BeffDalle
 
     '    thetaf_min_pos = 27 / 180 * Math.PI 'angle min de la bielle en zone de flexion positive
@@ -3076,7 +3076,7 @@ Public Class cls_Poutre
         ReDim InertieY(Me.Nodes.nbNodes - 1, 1)
         ReDim zANE(Me.Nodes.nbNodes - 1, 1)
         If lNonMixte Then
-            'Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, p_zANE, pInertieY, pMelRd)
+            'Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.myGamma, p_zANE, pInertieY, pMelRd)
             Me.Section.ProprietesElastiquesMyy(1, lValRd, Me.Param.Gamma, 0, p_zANE, pInertieY, pMelRd, True)
         End If
 
@@ -3187,13 +3187,27 @@ Public Class cls_Poutre
         '   MfRd        [S] :   Moment plastique MfRd
         '------------------------------------------------------------------------------
 
-        '--( Déclaration
+        '--( Déclarations
 
-        Dim zANP As Decimal
+        Dim FySup As Decimal = Me.Section.FySup
+        Dim FyInf As Decimal = Me.Section.FyInf
+        Dim Hf As Decimal
+        Dim myGamma As Decimal
+
+        '--( Initialisations
+
+        Hf = Me.Section.ProfilA.ha - (Me.Section.ProfilA.Tfs + Me.Section.ProfilA.Tfi) / 2
+        If lValRd Then
+            myGamma = Me.Param.Gamma.GammaM0
+        Else
+            myGamma = 1
+        End If
 
         '--( Calcul
 
-        Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.Gamma, 1, zANP, MfRd)
+        'Me.Section.ProprietesPlastiquesMyy(1, lValRd, Me.Param.myGamma, 1, zANP, MfRd)
+
+        MfRd = Math.Min(Me.Section.ProfilA.AireFs * FySup, Me.Section.ProfilA.AireFi * FyInf) * Hf * kConvMPaPa / myGamma
 
     End Sub
 
@@ -3220,7 +3234,7 @@ Public Class cls_Poutre
 
         '# Elastiques
 
-        'Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.Gamma, zANE, InertieY, MelRd)
+        'Me.Section.ProprietesElastiquesAcierMyy(lValRd, Me.Param.myGamma, zANE, InertieY, MelRd)
         Me.Section.ProprietesElastiquesMyy(1, lValRd, Me.Param.Gamma, 0, zANE, InertieY, MelRd, True)
 
         '# Plastiques
@@ -3378,27 +3392,27 @@ Public Class cls_Poutre
     '    '# ELU 01
 
     '    i = 0
-    '    Me.CoefCombELU(i)(0) = Me.Param.Gamma.GammaG_sup
-    '    Me.CoefCombELU(i)(1) = Me.Param.Gamma.GammaQ
-    '    Me.CoefCombELU(i)(2) = Me.Param.Gamma.GammaQ * Me.Param.Gamma.Psi0_Q2
+    '    Me.CoefCombELU(i)(0) = Me.Param.myGamma.GammaG_sup
+    '    Me.CoefCombELU(i)(1) = Me.Param.myGamma.GammaQ
+    '    Me.CoefCombELU(i)(2) = Me.Param.myGamma.GammaQ * Me.Param.myGamma.Psi0_Q2
     '    Me.CoefCombELU(i)(3) = 0
 
     '    i = 1
-    '    Me.CoefCombELU(i)(0) = Me.Param.Gamma.GammaG_sup
-    '    Me.CoefCombELU(i)(1) = Me.Param.Gamma.GammaQ * Me.Param.Gamma.Psi0_Q1
-    '    Me.CoefCombELU(i)(2) = Me.Param.Gamma.GammaQ
+    '    Me.CoefCombELU(i)(0) = Me.Param.myGamma.GammaG_sup
+    '    Me.CoefCombELU(i)(1) = Me.Param.myGamma.GammaQ * Me.Param.myGamma.Psi0_Q1
+    '    Me.CoefCombELU(i)(2) = Me.Param.myGamma.GammaQ
     '    Me.CoefCombELU(i)(3) = 0
 
     '    i = 2
-    '    Me.CoefCombELU(i)(0) = Me.Param.Gamma.GammaG_inf
-    '    Me.CoefCombELU(i)(1) = Me.Param.Gamma.GammaQ
-    '    Me.CoefCombELU(i)(2) = Me.Param.Gamma.GammaQ * Me.Param.Gamma.Psi0_Q2
+    '    Me.CoefCombELU(i)(0) = Me.Param.myGamma.GammaG_inf
+    '    Me.CoefCombELU(i)(1) = Me.Param.myGamma.GammaQ
+    '    Me.CoefCombELU(i)(2) = Me.Param.myGamma.GammaQ * Me.Param.myGamma.Psi0_Q2
     '    Me.CoefCombELU(i)(3) = 0
 
     '    i = 3
-    '    Me.CoefCombELU(i)(0) = Me.Param.Gamma.GammaG_inf
-    '    Me.CoefCombELU(i)(1) = Me.Param.Gamma.GammaQ * Me.Param.Gamma.Psi0_Q1
-    '    Me.CoefCombELU(i)(2) = Me.Param.Gamma.GammaQ
+    '    Me.CoefCombELU(i)(0) = Me.Param.myGamma.GammaG_inf
+    '    Me.CoefCombELU(i)(1) = Me.Param.myGamma.GammaQ * Me.Param.myGamma.Psi0_Q1
+    '    Me.CoefCombELU(i)(2) = Me.Param.myGamma.GammaQ
     '    Me.CoefCombELU(i)(3) = 0
 
 
@@ -4117,7 +4131,10 @@ Public Class cls_Poutre
         Dim ChaineEx As String
         Me.lMultiQ = {False, False, False}
 
-        For iq As Integer = 0 To 2
+        Dim iQFin As Integer
+        If lMixte Then iQFin = 2 Else iQFin = 1
+
+        For iq As Integer = 0 To iQfin
             lMultiT = Me.ChargesU(LabelQ(iq)).EstMultiTravee(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
             Me.lMultiQ(iq) = lMultiT
             ChaineEx = strExploitation & " " & CStr(iq + 1)

@@ -183,8 +183,8 @@ Public Class cls_Section
 
     Public Sub ProprietesPlastiquesMyy(Signe As Decimal, lValeurRd As Boolean, Gammas As cls_Gamma, RhoV As Decimal,
                                        ByRef zANP As Decimal, ByRef MplRd As Decimal, Optional ByVal lProfileAcierUniquement As Boolean = False,
-                                        Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
-                                        Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
+                                       Optional Psi_fi As Decimal = 1, Optional rho_t_fi As Decimal = 1, Optional Psi_y_fi As Decimal = 1,
+                                       Optional Psi_spd As Decimal = 1, Optional rho_t_spd As Decimal = 1, Optional Psi_y_spd As Decimal = 1)
         '-------------------------------------------------------------------------------------------------------------------
         '   11/07/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------------------

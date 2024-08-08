@@ -54,6 +54,8 @@ Public Class Frm_Dalle
     End Enum
     Dim DefEpMixte As Enu_DefEpMixte = Enu_DefEpMixte.Totale
 
+    Dim FontFrm As Font
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -215,6 +217,8 @@ Public Class Frm_Dalle
     Private Sub GestionStyle()
 
         Me.Icon = Frm_PMX.Icon
+
+        FontFrm = New Font(FontBase.Name, SizeFontFrm)
 
         Me.rtxt_Configuration.BorderStyle = BorderStyle.None
 
@@ -574,7 +578,7 @@ Public Class Frm_Dalle
 
     Private Sub img_Dalle_Paint(sender As Object, e As PaintEventArgs) Handles img_Dalle.Paint
         DessineDalle(e.Graphics, Me.img_Dalle.ClientRectangle.Width, Me.img_Dalle.ClientRectangle.Height,
-                    MyPoutreLoc, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
+                     MyPoutreLoc, fontfrm, MyProjet.Poutres(MyProjet.IndEnCours).lIntermediaire, iSelect, msgDessin, lCote)
     End Sub
 
     '==== A METTRE DANS LE MODULE DESSIN ================================================================

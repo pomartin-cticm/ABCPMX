@@ -1461,6 +1461,41 @@ Public Class cls_ProfilA
 
     End Sub
 
+    Public Sub GenerePRS(mBfs As Decimal, mTfs As Decimal, mHw As Decimal, mTw As Decimal, Optional mBfi As Decimal = -1, Optional mTfi As Decimal = -1)
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   08/08/24 :  Création POM
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   Génération d'un profilé PRS
+        '----------------------------------------------------------------------------------------------------------------------------------
+        '   mBfs, mTfs  [E] :   Dimensions de la semelle supérieure
+        '   mHw, mTw    [E] :   Dimensions de l'âme
+        '   mBfi, mTfi  [E] :   Dimensions de la semelle inférieure
+        '----------------------------------------------------------------------------------------------------------------------------------
+
+        Me.Bfs = mBfs
+        Me.Tfs = mTfs
+
+        If IsEqual(mTfi, -1) Then
+            Me.Tfi = mTfs
+        Else
+            Me.Tfi = mTfi
+        End If
+
+        If IsEqual(mBfi, -1) Then
+            Me.Bfi = mBfs
+        Else
+            Me.Bfi = mBfi
+        End If
+
+        Me.Tw = mTw
+        Me.ha = mHw + Me.Tfs + Me.Tfi
+
+        Me.Rci = 0
+        Me.Rcs = 0
+        Me.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym
+
+    End Sub
+
 #End Region
 
 #Region " Fonctions de copie "
