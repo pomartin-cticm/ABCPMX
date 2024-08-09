@@ -640,7 +640,6 @@ Imports PMXMoteur2
 
 #End Region
 
-
 #Region " Renseignement des données "
 
         myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
@@ -711,10 +710,187 @@ Imports PMXMoteur2
 
 #End Region
 
+#Region " Lancement des calculs "
 
+        Dim strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
+        Dim NomChargesA() As String = gNomChargesA
+
+        strRacineELU = "ULS"
+        strRacineELS = "SLS"
+        strRacineELF = "FLS"
+        strRacineELUC = "ULS_C"
+        strRacineELSC = "SLS_C"
+
+        'INITIALISATION DES TABLEAUX DES VERIFICATION
+        Select Case myPoutre.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                ReDim myPoutre.VerifAcier(0)
+                myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                ReDim myPoutre.VerifMixte(0)
+                myPoutre.VerifMixte(0) = New cls_VerificationsMixtes
+                If myPoutre.TypeEtaiement <> cls_Poutre.EnuTypeEtaiement.FullyPropped Then
+                    ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
+                    ReDim myPoutre.VerifAcier(0)
+                    myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+                End If
+        End Select
+
+        'INITIALISATION DES CALCULS
+        myPoutre.InitialiseCalculs(NomChargesA)
+        myPoutre.AAA_CalculMNVInternesN()
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, myPoutre.lCombELU, myPoutre.CoefCombELU, strRacineELU, myPoutre.CombiA_ELU)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, myPoutre.lCombELS, myPoutre.CoefCombELS, strRacineELS, myPoutre.CombiA_ELS)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombFeu, myPoutre.lCombFeu, myPoutre.CoefCombFeu, strRacineELF, myPoutre.CombiA_ELF)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myPoutre.lCombELCURules, myPoutre.CoefCombELCU, strRacineELUC, myPoutre.CombiA_ELCU)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
+
+        'COMBINAISON DES EFFORTS A L'ELU
+        Dim MEd1(,) As Decimal = Nothing
+        Dim MEd2(,) As Decimal = Nothing
+        Dim MEdMax1, MEdMin1, iNodeMMin1, iNodeMMax1 As Decimal
+        Dim MEdMax2, MEdMin2, iNodeMMin2, iNodeMMax2 As Decimal
+        Dim MEdMiTravee As Decimal
+
+        Dim VEd1(,) As Decimal = Nothing
+        Dim VEd2(,) As Decimal = Nothing
+        Dim VEdMax1, VEdMin1, iNodeVMin1, iNodeVMax1 As Decimal
+        Dim VEdMax2, VEdMin2, iNodeVMin2, iNodeVMax2 As Decimal
+        Dim VEdAppui As Decimal
+
+        myPoutre.CombiA_ELU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd1, False)   ' Combinaison des moments pour la combinaison 0
+        myPoutre.CombiA_ELU.CombineMoments(1, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd2, False)   ' Combinaison des moments pour la combinaison 1
+        myPoutre.CombiA_ELU.CombineEffortsT(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd1, False)  ' Combinaison des tranchants pour la combinaison 0
+        myPoutre.CombiA_ELU.CombineEffortsT(1, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd2, False)  ' Combinaison des tranchants pour la combinaison 0
+
+        EnveloppeTableauEfforts(MEd1, myPoutre.Nodes.nbNodes, MEdMax1, MEdMin1, iNodeMMax1, iNodeMMin1)
+        EnveloppeTableauEfforts(MEd2, myPoutre.Nodes.nbNodes, MEdMax2, MEdMin2, iNodeMMax2, iNodeMMin2)
+        EnveloppeTableauEfforts(VEd1, myPoutre.Nodes.nbNodes, VEdMax1, VEdMin1, iNodeVMax1, iNodeVMin1)
+        EnveloppeTableauEfforts(VEd2, myPoutre.Nodes.nbNodes, VEdMax2, VEdMin2, iNodeVMax2, iNodeVMin2)
+
+        MEdMiTravee = Math.Max(MEdMax1, MEdMax2)
+        'MEdMiTravee = Math.Min(MEdMin1, MEdMin2)
+        VEdAppui = Math.Max(VEdMax1, VEdMax2)
+
+        'VERIFICATION DE LA POUTRE 
+
+        myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, False)
+
+#End Region
+
+#Region " VALIDATION : Analyse de la poutre "
+
+        Valeur = MEdMiTravee
+        ValRef = 1498.5 * 10 ^ 3
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        Valeur = VEdAppui
+        ValRef = 382.8 * 10 ^ 3
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+#End Region
+
+#Region " VALIDATION : Résistance à la flexion (ELU)"
+
+        Dim zANE, MRd As Decimal
+        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRd)
+
+        Valeur = MRd
+        ValRef = 2903 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du calcul de la résistance plastique à la flexion simple du profilé
+
+        Valeur = myPoutre.VerifAcier(0).CritereM.Resistance(iNodeMMax1)
+        ValRef = 2524 * 1000
+        'Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du calcul de la résistance élastique à la flexion simple de la section
+
+        Valeur = myPoutre.VerifAcier(0).CritereM.CritereMax
+        ValRef = 0.594
+        Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du critère de la résistance à la flexion
+
+#End Region
+
+#Region " VALIDATION : Résistance à l'effort tranchant (ELU)"
+
+        '-- Resistance plastique
+
+        Valeur = myPoutre.VerifAcier(0).CritereV.Resistance(iNodeVMax1)
+        ValRef = 2913.8 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du calcul de la résistance à l'effort tranchant
+
+        Valeur = myPoutre.VerifAcier(0).CritereV.CritereMax
+        ValRef = 0.131
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 5 * DeltaVMAx))   'Vérification du critère de la résistance à l'effort tranchant
+
+        '-- Résistance voilement
+
+        Valeur = myPoutre.VerifAcier(0).CritereVb.Resistance(iNodeVMax1)
+        ValRef = 1782.55 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du calcul de la résistance au voilement par cisaillement
+
+        Valeur = myPoutre.VerifAcier(0).CritereVb.CritereMax
+        ValRef = 0.2147
+        Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du critère de la résistance au voilement par cisaillement
+
+#End Region
+
+#Region " VALIDATION : Déversement (ELU)"
+
+        Valeur = myPoutre.VerifAcier(0).CritereLTB.CritereMax
+        ValRef = 1.068
+        'Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx)  'Vérification du critère de la résistance au déversement
+        Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du critère de la résistance au déversement
+
+        '-- Moment critique
+
+        Valeur = myPoutre.VerifAcier(0).McrLTB(0, 1)
+        ValRef = 4189 * 1000
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+#End Region
+
+#Region " VALIDATION : Flèches (ELS)"
+
+        '--> Fleches due à G1
+
+        Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
+        ValRef = 14.89
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> Fleches due à Q1
+
+        Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
+        ValRef = 24.82
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        '--> Fleches due à Q2
+
+        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
+        ValRef = 3.97
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+#End Region
+
+#Region " VALIDATION : Fréquence propre (ELS)"
+
+        myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
+        Valeur = myPoutre.Modal.Frequence
+
+        ValRef = 3.98
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 5 * DeltaVMAx))
+
+        Valeur = myPoutre.Modal.MassTotal
+        ValRef = 12232 * 2
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        ' Valeur = myPoutre.Modal.MassModal
+        ' ValRef = 12232
+        ' Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+#End Region
     End Sub
-
-
 
 
     <TestMethod()> Public Sub TU_MV_PoutreAcierPRS()
