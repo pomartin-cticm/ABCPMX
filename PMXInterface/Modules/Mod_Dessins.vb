@@ -2235,7 +2235,8 @@ Public Module Mod_Dessins
 
 #Region " Dessins pour la définition du bac (FRM_BACN) "
 
-    Public Sub DessineBac(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, MyBac As cls_Bac,
+    Public Sub DessineBac(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, myFont As Font,
+                          MyBac As cls_Bac,
                           ByVal EpDalle As Double, ByRef iCote As Integer,
                           ByVal lCotation As Boolean, ByVal lCotEpTot As Boolean,
                           ByVal lTitre As Boolean,
@@ -2243,22 +2244,20 @@ Public Module Mod_Dessins
         '-----------------------------------------------------------------------------------------------
         '   24/06/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
-        '   Dessin du Bac Acier
+        '   Dessin du Bac Acier (un seul module)
         '-----------------------------------------------------------------------------------------------
         '   myGr        [E] :   Graphics dans lequel on dessine
         '   Img         [E] :   Image dans laquelle on dessine
         '   sWi, sHi    [E] :   Largeur et hauteur de la zone de dessin
-        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
+        '   myBac       [E] :   Bac à dessiner
+        '   myFont      [E] :   Police de caractères 
         '   EpDalle     [E] :   Epaisseur de la dalle béton
+        '   iCote       [E] :   Indice de la cote sélectionnée (?)
         '   VariableBac [E] :   Parametre du bac sélectionné (pour affichage en rouge)
-        '   nbOndes     [E] :   Nombre d'ondes sur lequel on représente le bac
         '   lCotation   [E] :   Indique si on met les cotations sur le dessin
         '   lCotEpTot   [E] :   Indique si cotation epaisseur bac+dalle
         '   lTitre      [E] :   Indique si affichage du titre du bac
-        '   ParAff      [S] :   Paramètres d'Affichage
-        '   lMemb       [E] :   Indique si on représente la semelle sup de la memb sup
-        '   tfSup       [E] :   Epasseur semelle de la membrure superieure
-        '   hMax        [E] :   Epaisseur maximale à considérer pour le dessin de la dalle
+        '   xLeft, yTop [E] :   Position Gauche et Haute de la zone de dessin dans l'objet
         '-----------------------------------------------------------------------------------------------
 
         '--> Declarations
@@ -2273,7 +2272,7 @@ Public Module Mod_Dessins
         Dim MyPenRedBrush As New SolidBrush(ColorRedPen)
         Dim MyPen As New Pen(ColorPen)
         Dim MyPenRed As New Pen(ColorRedPen)
-        Dim MyFontNormal As Font = FontBase
+        Dim MyFontNormal As Font = myFont
 
         Dim xMin, yMin, xMax, yMax As Double
 
@@ -2338,18 +2337,26 @@ Public Module Mod_Dessins
 
         If lCotation Then
 
-            CotationBacUn(myGr, MyParAff, MyBac, dCar, iCote)
+            CotationBacUn(myGr, MyParAff, myFont, MyBac, dCar, iCote)
 
         End If
 
 
     End Sub
 
-    Private Sub CotationBacUn(ByRef myGr As Graphics, MyParAffC As Struc_Affichage, MyBac As cls_Bac, dCar As Decimal, iSelect As Integer)
+    Private Sub CotationBacUn(ByRef myGr As Graphics, MyParAffC As Struc_Affichage, myFont As Font,
+                              MyBac As cls_Bac, dCar As Decimal, iSelect As Integer)
         '-----------------------------------------------------------------------------------------------
         '   24/06/23 :  Version 1.00
         '-----------------------------------------------------------------------------------------------
         '   Cotation d'une nervure de bac
+        '-----------------------------------------------------------------------------------------------
+        '   myGr        [E] :   Graphics
+        '   myParAffC   [E] :   Paramètres d'affichage
+        '   myFont      [E] :   Police
+        '   myBac       [E] :   Bac
+        '   dCar        [E] :   Dimension caractéristique
+        '   iSelect     [E] :   Indice de la variable sélectionnée
         '-----------------------------------------------------------------------------------------------
         '   iSelect :   1 : hg
         '               2 : hpg
@@ -2365,7 +2372,7 @@ Public Module Mod_Dessins
         Dim xe, ye As Double
         Dim MyPenNormal As New Pen(ColorNonSelect, 1)
         Dim MyPenSelect As New Pen(ColorSelect, 1)
-        Dim MyFontNormal As Font = FontBase
+        Dim MyFontNormal As Font = myFont
         Dim MyColor As Color
         Dim Chaine As String
         Dim lAffSymbol As Boolean = False
@@ -2410,8 +2417,8 @@ Public Module Mod_Dessins
         xo = -bbP / 2
         xe = -xo
 
-        yo = 0 + dCar / 2
-        ye = 0 + dCar / 2
+        yo = 0 + dCar / 2 * 1.05
+        ye = 0 + dCar / 2 * 1.05
 
         AddFleche(myGr, MyPen, xo, yo, xe, ye, MyParAffC, True, True)
 
@@ -2490,6 +2497,12 @@ Public Module Mod_Dessins
         If lAffSymbol Then Chaine = "tp" Else Chaine = GetStringNoUnit(tP, Enu_TypeVariable.Dimension)
         AddTexteFond(myGr, New SolidBrush(MyColor), Chaine, MyFontNormal, (xo + xe) / 2, ye, MyParAffC, HorizontalAlignment.Center, VerticalAlignement.Bottom, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
+        '# Fin
+
+        MyPenNormal.Dispose()
+        MyPenSelect.Dispose()
+        MyFontNormal.Dispose()
+        MyPen.Dispose()
     End Sub
 
 #End Region

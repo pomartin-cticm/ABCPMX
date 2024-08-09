@@ -9,7 +9,6 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 
 Public Class Frm_BacN
 
-
 #Region " Variables locales "
 
     Dim lBuild As Boolean = True
@@ -31,6 +30,9 @@ Public Class Frm_BacN
     Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
 
     Dim iSelect As Integer = -1
+
+    Dim FontFrm As Font
+
 #End Region
 
 #Region "===OUVERTURE==="
@@ -155,6 +157,8 @@ Public Class Frm_BacN
 
         Me.lbl_Dimensions.BackColor = CouleurBackBandeaux
         Me.lbl_Dimensions.ForeColor = CouleurForeBandeaux
+
+        FontFrm = New Font(FontBase.Name, SizeFontFrm)
 
     End Sub
 
@@ -439,7 +443,7 @@ Public Class Frm_BacN
 
     Private Sub img_Bac_Paint(sender As Object, e As PaintEventArgs) Handles img_Bac.Paint
 
-        DessineBac(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, kADJUST, MyBac,
+        DessineBac(e.Graphics, Me.img_Bac.ClientRectangle.Width, Me.img_Bac.ClientRectangle.Height, kADJUST, FontFrm, MyBac,
                    MyBac.Hauteur_hpg * 1.75, iSelect, True, True, True)
 
     End Sub
