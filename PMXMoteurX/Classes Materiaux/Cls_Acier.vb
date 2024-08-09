@@ -456,7 +456,7 @@ Public Class cls_Acier
 
         Me.Plages.Clear()
 
-        Me.Nuance = "S275"
+        Me.Nuance = "S460"
         Me.Qualite = "JR/J0/J2"
         Me.EpMax = 0.15
 
@@ -483,6 +483,39 @@ Public Class cls_Acier
         MyPlage.Ep = 0.08
         MyPlage.Fu = 550
         MyPlage.Fy = 390
+        Me.Plages.Add(MyPlage)
+
+    End Sub
+
+
+    Public Sub InitialiseAcierS460EC3()
+        '------------------------------------------------------------------------------------------
+        '   09/08/24 :  Création - POM
+        '------------------------------------------------------------------------------------------
+        '   Initialisation d'un acier S460 JR pour les tests unitaires (pas d'accès à la base de données)
+        '------------------------------------------------------------------------------------------
+        '------------------------------------------------------------------------------------------
+
+        '--> Déclarations
+
+        Dim MyPlage As strucPlage
+
+        '--> Initialisations
+
+        Me.Plages.Clear()
+
+        Me.Nuance = "S460"
+        Me.Qualite = "EC3"
+        Me.EpMax = 0.08
+
+        MyPlage.Ep = 0.003
+        MyPlage.Fu = 540
+        MyPlage.Fy = 460
+        Me.Plages.Add(MyPlage)
+
+        MyPlage.Ep = 0.04
+        MyPlage.Fu = 530
+        MyPlage.Fy = 430
         Me.Plages.Add(MyPlage)
 
     End Sub
