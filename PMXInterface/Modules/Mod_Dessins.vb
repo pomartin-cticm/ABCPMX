@@ -8051,7 +8051,7 @@ Public Module Mod_Dessins
 
     Public Sub DessinFrmTypeSection(ByRef MyGr As Graphics, ByVal MyPoutre As cls_Poutre, lIntermediaire As Boolean,
                                     ByVal pWi As Decimal, ByVal pHi As Decimal, ByVal MyFont As Font,
-                                    kAdjust As Double, lSelect As Boolean,
+                                    kAdjust As Double, lSelect As Boolean, lDispo As Boolean, strNonDispo As String,
                                     ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
         '------------------------------------------------------------------------------------------------------------------
         '   31/05/23 :  Création - POM
@@ -8063,6 +8063,8 @@ Public Module Mod_Dessins
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   MyFont      [E] :   
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
+        '   lSelect     [E] :   Indique si section sélectionnée
+        '   lDispo      [E] :   Indique si section disponible
         '------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -8078,6 +8080,7 @@ Public Module Mod_Dessins
         Dim CouleurAcier As Color
         Dim CouleurBeton As Color
         Dim CouleurArma As Color
+        Dim CouleurNonDispo As Color = Color.LightGray
 
         '--> Initialisations
 
@@ -8085,14 +8088,20 @@ Public Module Mod_Dessins
 
         '--> Couleur
 
-        If lSelect Then
-            CouleurAcier = CouleurAcierSelect
-            CouleurBeton = CouleurBetonSelect
-            CouleurArma = CouleurArmaSelect
+        If lDispo Then
+            If lSelect Then
+                CouleurAcier = CouleurAcierSelect
+                CouleurBeton = CouleurBetonSelect
+                CouleurArma = CouleurArmaSelect
+            Else
+                CouleurAcier = CouleurAcierNormal
+                CouleurBeton = CouleurBetonNormal
+                CouleurArma = CouleurArmaNormal
+            End If
         Else
-            CouleurAcier = CouleurAcierNormal
-            CouleurBeton = CouleurBetonNormal
-            CouleurArma = CouleurArmaNormal
+            CouleurAcier = CouleurNonDispo
+            CouleurBeton = CouleurNonDispo
+            CouleurArma = CouleurNonDispo
         End If
 
         '--> Initialisation des paramètres d'affichage
@@ -8134,6 +8143,23 @@ Public Module Mod_Dessins
                 DessinFrmTypeSAB(MyGr, MyPoutre, MyParAff, myBrushP, myBrushB, myBrushA)
 
         End Select
+
+        '--> Gestion des sections non disponibles
+
+        If Not lDispo Then
+            Dim myColor As Color
+            Dim Chaine As String = ""
+
+            If lSelect Then
+                myColor = ColorSelect
+                Chaine = strNonDispo
+            Else
+                myColor = ColorNonSelect
+            End If
+
+            AddTexte(MyGr, New SolidBrush(myColor), Chaine, MyFont, (xMin + xMax) / 2, (yMin + yMax) / 2, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle)
+
+        End If
 
         '--> Fin
 

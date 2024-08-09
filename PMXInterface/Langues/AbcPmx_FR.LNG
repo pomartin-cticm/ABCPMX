@@ -73,6 +73,7 @@ SLIMFLOORIFB_B			= Section dalle mince IFB-B non mixte
 SLIMFLOORIFB_BCOMPO		= Section dalle mince IFB-B mixte
 SLIMFLOORSAB			= Section dalle mince SAB non mixte
 SLIMFLOORSABCOMPO		= Section dalle mince SAB mixte
+NOTAVAILABLE			= non disponible dans cette version
 
 #FRM_BEAMOPTIONS
 TITLE					= Options de calcul de la poutre
@@ -629,7 +630,6 @@ SHORTTERM_N				= Coefficient d'équivalence pour les charges d'exploitation
 RCOMPRESSION			= Résistance à la compression
 RTENSION				= Résistance à la traction							   
 
-
 #FRM_OUVERTURE
 BROWSEFILES				= Parcourir
 CREATEASSEMBLY			= Créer une nouvelle section
@@ -638,6 +638,7 @@ OK						= Ok
 OPENPROJECT				= Ouvrir un projet
 RECENTFILES				= Fichiers récents
 FILE					= Fichier
+NOTAVAILABLE			= Section non disponible dans cette version du logiciel
 
 #FRM_PPLOADCASE
 TITLE					= Cas de charge

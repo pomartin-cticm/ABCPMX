@@ -27,29 +27,6 @@ Public Class Frm_AjoutePP
     Dim MyPoutreIFB_Bmixte As New cls_Poutre(NomChargements)
     Dim MyPoutreSABmixte As New cls_Poutre(NomChargements)
 
-    'Dim MySectionAcier As cls_Section = MyPoutreAcier.Section
-    'Dim MySectionAcierEnrobe As cls_Section = MyPoutreAcierEnrobe.Section
-    'Dim MySectionMixte As cls_Section = MyPoutreMixte.Section
-    'Dim MySectionMixteEnrobe As cls_Section = MyPoutreMixteEnrobe.Section
-    'Dim MySectionSFB As cls_Section = MyPoutreSFB.Section
-    'Dim MySectionIFB_A As cls_Section = MyPoutreIFB_A.Section
-    'Dim MySectionIFB_B As cls_Section = MyPoutreIFB_B.Section
-    'Dim MySectionSAB As cls_Section = MyPoutreSAB.Section
-    'Dim MySectionSFBmixte As cls_Section = MyPoutreSFBmixte.Section
-    'Dim MySectionIFB_Amixte As cls_Section = MyPoutreIFB_Amixte.Section
-    'Dim MySectionIFB_Bmixte As cls_Section = MyPoutreIFB_Bmixte.Section
-    'Dim MySectionSABmixte As cls_Section = MyPoutreSABmixte.Section
-
-
-    'Dim MySectionAcier As New cls_Section
-    'Dim MySectionAcierEnrobe As New cls_Section
-    'Dim MySectionMixte As New cls_Section
-    'Dim MySectionMixteEnrobe As New cls_Section
-    'Dim MySectionSFB As New cls_Section
-    'Dim MySectionSAB As New cls_Section
-    'Dim MySectionSFBmixte As New cls_Section
-    'Dim MySectionSABmixte As New cls_Section
-
     'Dim CouleurAcierNormal As Color = Color.DarkSlateBlue
     'Dim CouleurAcierSelect As Color = Color.DarkOrange
 
@@ -59,6 +36,10 @@ Public Class Frm_AjoutePP
     Dim tabType As New Dictionary(Of cls_Section.Enum_TypeSection, String)
 
     Public lOuverture As Boolean = False    ' Indique si appel depuis la fenêtre ouverture
+
+    Const lSlimDispo As Boolean = False
+
+    Dim strNonDispo As String = ""
 
 #End Region
 
@@ -116,6 +97,8 @@ Public Class Frm_AjoutePP
 
                 Me.lbl_TypeSection.Text = Bloc("SECTIONTYPE")
                 strType = Bloc("SECTIONTYPE")
+
+                strNonDispo = Bloc("NOTAVAILABLE")
 
                 'Me.chk_SectionAcier.Text = "Section non mixte"
                 'Me.chk_SectionAcierEnrobe.Text = "Section acier avec enrobage partiel"
@@ -405,97 +388,70 @@ Public Class Frm_AjoutePP
 
 #Region " DESSINS "
 
-    Private Sub PaintBoutons(sender As Object, e As PaintEventArgs) Handles chk_SectionAcier.Paint, chk_SectionAcierEnrobe.Paint, chk_SectionMixteEnrobe.Paint, chk_SectionMixte.Paint, chk_SFBAcier.Paint, chk_SFBMixte.Paint, chk_SABMixte.Paint, chk_SABAcier.Paint, chk_IFB_B_Acier.Paint, chk_IFB_A_Mixte.Paint, chk_IFB_B_Mixte.Paint, chk_IFB_A_Acier.Paint
+    Private Sub PaintBoutons(sender As Object, e As PaintEventArgs) _
+        Handles chk_SectionAcier.Paint, chk_SectionAcierEnrobe.Paint, chk_SectionMixteEnrobe.Paint,
+                chk_SectionMixte.Paint,
+                chk_SFBAcier.Paint, chk_SFBMixte.Paint, chk_SABMixte.Paint, chk_SABAcier.Paint,
+                chk_IFB_B_Acier.Paint, chk_IFB_A_Mixte.Paint, chk_IFB_B_Mixte.Paint, chk_IFB_A_Acier.Paint
+        '------------------------------------------------------------------------------------------------------------------------------------------
+        '   Représentation des sections dans les boutons
+        '------------------------------------------------------------------------------------------------------------------------------------------
 
         Const kAdjust As Single = 0.9
         Const kAdjustMixte As Single = 0.95
-        Dim MyFont As New Font("Arial", 8)
+        Dim MyFont As New Font(FontBase.Name, 8)
+        Dim lAfficheSlim As Boolean = lSlimDispo Or LogicielOptions.lExpert
 
         Select Case sender.name
             Case Me.chk_SectionAcier.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreAcier, MyPoutreAcier.lIntermediaire, Me.chk_SectionAcier.ClientRectangle.Width, Me.chk_SectionAcier.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierSeul)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierSeul, True, strNonDispo)
 
             Case Me.chk_SectionAcierEnrobe.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreAcierEnrobe, MyPoutreAcierEnrobe.lIntermediaire, Me.chk_SectionAcierEnrobe.ClientRectangle.Width, Me.chk_SectionAcierEnrobe.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage, True, strNonDispo)
 
             Case Me.chk_SectionMixte.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreMixte, MyPoutreMixte.lIntermediaire, Me.chk_SectionMixte.ClientRectangle.Width, Me.chk_SectionMixte.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.Mixte)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.Mixte, True, strNonDispo)
 
             Case Me.chk_SectionMixteEnrobe.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreMixteEnrobe, MyPoutreMixteEnrobe.lIntermediaire, Me.chk_SectionMixteEnrobe.ClientRectangle.Width, Me.chk_SectionMixteEnrobe.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage, True, strNonDispo)
 
             Case Me.chk_SFBAcier.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreSFB, MyPoutreSFB.lIntermediaire, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB, lAfficheSlim, strNonDispo)
 
             Case Me.chk_SFBMixte.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreSFBmixte, MyPoutreSFBmixte.lIntermediaire, Me.chk_SFBMixte.ClientRectangle.Width, Me.chk_SFBMixte.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.SFBmixte)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.SFBmixte, lAfficheSlim, strNonDispo)
 
             Case Me.chk_IFB_A_Acier.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreIFB_A, MyPoutreIFB_A.lIntermediaire, Me.chk_IFB_A_Acier.ClientRectangle.Width, Me.chk_IFB_A_Acier.Height,
-                MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_A)
+                MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_A, lAfficheSlim, strNonDispo)
 
             Case Me.chk_IFB_A_Mixte.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreIFB_Amixte, MyPoutreIFB_Amixte.lIntermediaire, Me.chk_IFB_A_Mixte.ClientRectangle.Width, Me.chk_IFB_A_Mixte.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte, lAfficheSlim, strNonDispo)
 
             Case Me.chk_IFB_B_Acier.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreIFB_B, MyPoutreIFB_B.lIntermediaire, Me.chk_IFB_B_Acier.ClientRectangle.Width, Me.chk_IFB_B_Acier.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_B)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.IFB_B, lAfficheSlim, strNonDispo)
 
             Case Me.chk_IFB_B_Mixte.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreIFB_Bmixte, MyPoutreIFB_Bmixte.lIntermediaire, Me.chk_IFB_B_Mixte.ClientRectangle.Width, Me.chk_IFB_B_Mixte.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte, lAfficheSlim, strNonDispo)
 
             Case Me.chk_SABAcier.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreSAB, MyPoutreSAB.lIntermediaire, Me.chk_SABAcier.ClientRectangle.Width, Me.chk_SABAcier.Height,
-                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SAB)
+                                     MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SAB, lAfficheSlim, strNonDispo)
 
             Case Me.chk_SABMixte.Name
                 DessinFrmTypeSection(e.Graphics, MyPoutreSABmixte, MyPoutreSABmixte.lIntermediaire, Me.chk_SABMixte.ClientRectangle.Width, Me.chk_SABMixte.Height,
-                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.SABmixte)
+                                     MyFont, kAdjustMixte, TypeSection = cls_Section.Enum_TypeSection.SABmixte, lAfficheSlim, strNonDispo)
 
         End Select
-
-        'Select Case sender.name
-        '    Case Me.chk_SectionAcier.Name
-        '        DessinFrmTypeSection(e.Graphics, MySectionAcier, MySectionAcier.Dalle, Me.chk_SectionAcier.ClientRectangle.Width, Me.chk_SectionAcier.Height,
-        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.Acier)
-
-        '    Case Me.chk_SectionAcierEnrobe.Name
-        '        DessinFrmTypeSection(e.Graphics, MySectionAcierEnrobe, MySectionAcierEnrobe.Dalle, Me.chk_SectionAcierEnrobe.ClientRectangle.Width, Me.chk_SectionAcierEnrobe.Height,
-        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.AcierEnrobage)
-
-        '    Case Me.chk_SectionMixte.Name
-        '        DessinFrmTypeSection(e.Graphics, MySectionMixte, MySectionMixte.Dalle, Me.chk_SectionMixte.ClientRectangle.Width, Me.chk_SectionMixte.Height,
-        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.Mixte)
-
-        '    Case Me.chk_SectionMixteEnrobe.Name
-        '        DessinFrmTypeSection(e.Graphics, MySectionMixteEnrobe, MySectionMixteEnrobe.Dalle, Me.chk_SectionMixteEnrobe.ClientRectangle.Width, Me.chk_SectionMixteEnrobe.Height,
-        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage)
-
-        '    Case Me.chk_SFBAcier.Name
-        '        DessinFrmTypeSection(e.Graphics, MySectionSFB, MySectionSFB.Dalle, Me.chk_SFBAcier.ClientRectangle.Width, Me.chk_SFBAcier.Height,
-        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFB)
-
-        '    Case Me.chk_SABAcier.Name
-        '        DessinFrmTypeSection(e.Graphics, MySectionSAB, MySectionSAB.Dalle, Me.chk_SABAcier.ClientRectangle.Width, Me.chk_SABAcier.Height,
-        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SAB)
-
-        '    Case Me.chk_SFBMixte.Name
-        '        DessinFrmTypeSection(e.Graphics, MySectionSFBmixte, MySectionSFBmixte.Dalle, Me.chk_SFBMixte.ClientRectangle.Width, Me.chk_SFBMixte.Height,
-        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SFBmixte)
-
-        '    Case Me.chk_SABMixte.Name
-        '        DessinFrmTypeSection(e.Graphics, MySectionSABmixte, MySectionSABmixte.Dalle, Me.chk_SABMixte.ClientRectangle.Width, Me.chk_SABMixte.Height,
-        '                             MyFont, kAdjust, TypeSection = cls_Section.Enum_TypeSection.SABmixte)
-
-        'End Select
 
     End Sub
 
@@ -564,10 +520,17 @@ Public Class Frm_AjoutePP
     'End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
-        TraitementSaisie()
+        Dim lOk As Boolean
+        TraitementSaisie(lOk)
+        If lOk Then
+            Me.DialogResult = DialogResult.OK
+            Me.Close()
+        Else
+            MsgBox(strNonDispo)
+        End If
     End Sub
 
-    Public Sub TraitementSaisie()
+    Public Sub TraitementSaisie(ByRef lOKAdd As Boolean)
 
         Dim lAjout As Boolean = False
         Dim lOK As Boolean
@@ -576,97 +539,205 @@ Public Class Frm_AjoutePP
         Dim NomPoutre As String = Me.txt_NomNouvellePoutre.Text
         Dim typeProfilA As cls_ProfilA.Enum_TypeSectionAcier
 
-        If Me.chk_NouvellePoutre.Checked Then
+        Dim TypeSection As cls_Section.Enum_TypeSection
+        Dim lOKPoutre As Boolean = True
 
+        If Me.chk_NouvellePoutre.Checked Then
             If Me.chk_SectionAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+                TypeSection = cls_Section.Enum_TypeSection.AcierSeul
             End If
 
             If Me.chk_SectionAcierEnrobe.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+                TypeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage
             End If
 
             If Me.chk_SectionMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+                TypeSection = cls_Section.Enum_TypeSection.Mixte
             End If
 
             If Me.chk_SectionMixteEnrobe.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.MixteEnrobage, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+                TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage
             End If
 
             If Me.chk_SFBAcier.Checked Then
-                lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+                lOKPoutre = lSlimDispo
+                lAjout = lSlimDispo
+                TypeSection = cls_Section.Enum_TypeSection.SFB
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
             End If
 
             If Me.chk_SFBMixte.Checked Then
-                lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+                lOKPoutre = lSlimDispo
+                lAjout = lSlimDispo
+                TypeSection = cls_Section.Enum_TypeSection.SFBmixte
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
             End If
 
             If Me.chk_IFB_A_Acier.Checked Then
-                lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+                lOKPoutre = lSlimDispo
+                lAjout = lSlimDispo
+                TypeSection = cls_Section.Enum_TypeSection.IFB_A
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
             End If
 
             If Me.chk_IFB_A_Mixte.Checked Then
-                lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+                lOKPoutre = lSlimDispo
+                lAjout = lSlimDispo
+                TypeSection = cls_Section.Enum_TypeSection.IFB_Amixte
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
             End If
 
             If Me.chk_IFB_B_Acier.Checked Then
-                lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+                lOKPoutre = lSlimDispo
+                lAjout = lSlimDispo
+                TypeSection = cls_Section.Enum_TypeSection.IFB_B
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
             End If
 
             If Me.chk_IFB_B_Mixte.Checked Then
-                lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+                lOKPoutre = lSlimDispo
+                lAjout = lSlimDispo
+                TypeSection = cls_Section.Enum_TypeSection.IFB_Bmixte
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
             End If
 
             If Me.chk_SABAcier.Checked Then
-                lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+                lOKPoutre = lSlimDispo
+                lAjout = lSlimDispo
+                TypeSection = cls_Section.Enum_TypeSection.SAB
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
             End If
 
             If Me.chk_SABMixte.Checked Then
-                lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+                lOKPoutre = lSlimDispo
+                lAjout = lSlimDispo
+                TypeSection = cls_Section.Enum_TypeSection.SABmixte
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
             End If
 
-            InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
-            InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)
-            InitialiseGoujonDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.ConnecteurGoujonSoude, lTrouve)
+            If lOKPoutre And lAjout Then
 
-            InitialiseDalleDefault(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle, typeProfilA)
+                MyProjet.Poutres.Add(New cls_Poutre(TypeSection, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
 
-            MyProjet.Poutres(MyProjet.Poutres.Count - 1).Initialise_CoefficientsCombinaisons()
-            MyProjet.Poutres(MyProjet.Poutres.Count - 1).InitialisePoidsPropres()
+                InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
+                InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)
+                InitialiseGoujonDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.ConnecteurGoujonSoude, lTrouve)
+
+                InitialiseDalleDefault(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle, typeProfilA)
+
+                MyProjet.Poutres(MyProjet.Poutres.Count - 1).Initialise_CoefficientsCombinaisons()
+                MyProjet.Poutres(MyProjet.Poutres.Count - 1).InitialisePoidsPropres()
+
+                MyProjet.IndEnCours = MyProjet.Poutres.Count - 1
+                MyProjet.Nom = Me.txt_NomNouveauProjet.Text
+
+            End If
 
         End If
 
-        If lAjout Then
-            MyProjet.IndEnCours = MyProjet.Poutres.Count - 1
-            MyProjet.Nom = Me.txt_NomNouveauProjet.Text
-        End If
-        Me.DialogResult = DialogResult.OK
-        Me.Close()
+        lOKAdd = lOKPoutre
+
+        'If Me.chk_NouvellePoutre.Checked Then
+
+        '    If Me.chk_SectionAcier.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+        '    End If
+
+        '    If Me.chk_SectionAcierEnrobe.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+        '    End If
+
+        '    If Me.chk_SectionMixte.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+        '    End If
+
+        '    If Me.chk_SectionMixteEnrobe.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.MixteEnrobage, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
+        '    End If
+
+        '    If Me.chk_SFBAcier.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+        '    End If
+
+        '    If Me.chk_SFBMixte.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
+        '    End If
+
+        '    If Me.chk_IFB_A_Acier.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+        '    End If
+
+        '    If Me.chk_IFB_A_Mixte.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
+        '    End If
+
+        '    If Me.chk_IFB_B_Acier.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+        '    End If
+
+        '    If Me.chk_IFB_B_Mixte.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
+        '    End If
+
+        '    If Me.chk_SABAcier.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+        '    End If
+
+        '    If Me.chk_SABMixte.Checked Then
+        '        lAjout = True
+        '        MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
+        '        typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
+        '    End If
+
+        '    InitialisePoutreDeBases(MyProjet.Poutres(MyProjet.Poutres.Count - 1), lOK)
+        '    InitialiseBacDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.Bac, lTrouve)
+        '    InitialiseGoujonDeBase(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle.ConnecteurGoujonSoude, lTrouve)
+
+        '    InitialiseDalleDefault(MyProjet.Poutres(MyProjet.Poutres.Count - 1).Dalle, typeProfilA)
+
+        '    MyProjet.Poutres(MyProjet.Poutres.Count - 1).Initialise_CoefficientsCombinaisons()
+        '    MyProjet.Poutres(MyProjet.Poutres.Count - 1).InitialisePoidsPropres()
+
+        'End If
+
+        'If lAjout Then
+        '    MyProjet.IndEnCours = MyProjet.Poutres.Count - 1
+        '    MyProjet.Nom = Me.txt_NomNouveauProjet.Text
+        'End If
+
+
+
+
     End Sub
 
 #End Region

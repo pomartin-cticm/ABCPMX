@@ -3,9 +3,10 @@ Imports PMXMoteur2
 
 Public Class Frm_Ouverture
 
-#Region "Variables locales"
+#Region " Variables locales "
 
     Dim strFiltresExtension As String
+    Dim strNonDispo As String
 
 #End Region
 
@@ -49,6 +50,8 @@ Public Class Frm_Ouverture
                 Me.Label_RecentFiles.Text = Bloc("RECENTFILES")
 
                 Me.Button_Valider.Text = Bloc("OK")
+
+                strNonDispo = Bloc("NOTAVAILABLE")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_Ouverture/GestionLangue")
@@ -95,7 +98,7 @@ Public Class Frm_Ouverture
 
 #End Region
 
-#Region " Gestion Evenement "
+#Region " Gestion Evenements "
 
     Private Sub Button_OpenProject_Click(sender As Object, e As EventArgs) Handles Button_OpenProject.Click
 
@@ -148,18 +151,25 @@ Public Class Frm_Ouverture
 
         If TabPage_NewProject.Visible Then          '==> NOUVEAU PROJET
 
+            Dim lOK As Boolean
+
             '--> Ajout de la nouvelle poutre
 
-            Frm_AjoutePP.TraitementSaisie()
+            Frm_AjoutePP.TraitementSaisie(lok)
 
             '--> Affichage de la soudure créee
             '   Frm_MAIN.AffichageFenetreFille()
 
-            '--> Mise à jour du TreeView
-            Frm_PMX.AffichageTViewChk()
+            If lOK Then
+                '--> Mise à jour du TreeView
+                Frm_PMX.AffichageTViewChk()
 
-            '--> Fermeture
-            Me.Close()
+                '--> Fermeture
+                Me.Close()
+            Else
+                MsgBox(strnondispo)
+            End If
+
 
         ElseIf TabPage_OpenProject.Visible Then     '==> OUVRIR PROJET
 

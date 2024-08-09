@@ -73,6 +73,7 @@ SLIMFLOORIFB_B			= Non composite slim floor IFB-B
 SLIMFLOORIFB_BCOMPO		= Composite slim floor IFB-B
 SLIMFLOORSAB			= Non composite slim floor SAB
 SLIMFLOORSABCOMPO		= Composite slim floor SAB
+NOTAVAILABLE			= Not available in this version
 
 #FRM_BEAMOPTIONS
 TITLE					= Beam calculation options
@@ -629,7 +630,6 @@ SHORTTERM_N				= Modular ratio for live loads
 RCOMPRESSION			= Resistances to compression
 RTENSION				= Resistance to tension
 
-
 #FRM_OUVERTURE
 BROWSEFILES				= Browse
 CREATEBEAM				= Create a new beam
@@ -637,7 +637,8 @@ NEWPROJECT				= New project
 OK						= Ok
 OPENPROJECT				= Open a project
 RECENTFILES				= Recent Files
-FILE					= Fichier
+FILE					= File
+NOTAVAILABLE			= Section not available for this version of the software
 
 #FRM_PPLOADCASE
 TITLE					= Load cases
@@ -730,7 +731,6 @@ FROMDATABASE			= From the database
 FROMDIM					= From dimensions
 NAME					= Name
 PROPERTIES				= Dimensions and properties
-
 
 #FRM_SLAB
 TITLE					= Definition of the slab
