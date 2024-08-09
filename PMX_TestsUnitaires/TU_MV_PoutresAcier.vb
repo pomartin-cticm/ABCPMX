@@ -514,11 +514,13 @@ Imports PMXMoteur2
 
         Valeur = MEdMiTravee
         ValRef = 1435.5 * 10 ^ 3
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
 
         Valeur = VEdAppui
         ValRef = 374.4 * 10 ^ 3
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
 
 #End Region
 
@@ -529,15 +531,18 @@ Imports PMXMoteur2
 
         Valeur = MRd
         ValRef = 2266 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))   'Vérification du calcul de la résistance à la flexion simple du profilé 
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du calcul de la résistance à la flexion simple du profilé
 
         Valeur = myPoutre.VerifAcier(0).CritereM.Resistance(iNodeMMax1)
         ValRef = 2266 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))   'Vérification du calcul de la résistance à la flexion simple de la section
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du calcul de la résistance à la flexion simple de la section
 
         Valeur = myPoutre.VerifAcier(0).CritereM.CritereMax
         ValRef = 0.634
-        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à la flexion
+        'Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx)
+        Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du critère de la résistance à la flexion
 
 #End Region
 
@@ -547,30 +552,33 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.VerifAcier(0).CritereV.Resistance(iNodeVMax1)
         ValRef = 2248.7 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))   'Vérification du calcul de la résistance à l'effort tranchant
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du calcul de la résistance à l'effort tranchant
 
         Valeur = myPoutre.VerifAcier(0).CritereV.CritereMax
         ValRef = 0.166
-        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance à l'effort tranchant
+        'Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx)
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 5 * DeltaVMAx))                  'Vérification du critère de la résistance à l'effort tranchant
 
         '-- Résistance voilement
 
         Valeur = myPoutre.VerifAcier(0).CritereVb.Resistance(iNodeVMax1)
         ValRef = 1565.65 * 1000
-        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))   'Vérification du calcul de la résistance au voilement par cisaillement
+        'Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+        Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du calcul de la résistance au voilement par cisaillement
 
         Valeur = myPoutre.VerifAcier(0).CritereVb.CritereMax
         ValRef = 0.239
-        Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance au voilement par cisaillement
+        'Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx)
+        Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du critère de la résistance au voilement par cisaillement
 
 #End Region
-
 
 #Region " VALIDATION : Déversement (ELU)"
 
         Valeur = myPoutre.VerifAcier(0).CritereLTB.CritereMax
         ValRef = 1.093
-        'Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx) 'Vérification du critère de la résistance au déversement
+        'Assert.IsTrue(Math.Abs(Valeur - ValRef) <= DeltaCMAx)  'Vérification du critère de la résistance au déversement
         Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du critère de la résistance au déversement
 
         '-- Moment critique
@@ -582,8 +590,71 @@ Imports PMXMoteur2
 
 #End Region
 
+#Region " VALIDATION : Flèches (ELS)"
+
+        '--> Fleches due à G1
+
+        Valeur = myPoutre.ChargesA(0).FlecheMax * 1000
+        ValRef = 14.9
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '--> Fleches due à Q1
+
+        Valeur = myPoutre.ChargesA(1).FlecheMax * 1000
+        ValRef = 24.8
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+        '--> Fleches due à Q2
+
+        Valeur = myPoutre.ChargesA(2).FlecheMax * 1000
+        ValRef = 1.99
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+#End Region
+
+#Region " VALIDATION : Fréquence propre (ELS)"
+
+        myPoutre.Modal.Analyse(myPoutre, 0.2, myPoutre.Hivoss.IndexQ)
+        Valeur = myPoutre.Modal.Frequence
+
+        ValRef = 3.98
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 5 * DeltaVMAx))
+
+        Valeur = myPoutre.Modal.MassTotal
+        ValRef = 12232 * 2
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        ' Valeur = myPoutre.Modal.MassModal
+        ' ValRef = 12232
+        ' Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+#End Region
 
     End Sub
+
+    <TestMethod()> Public Sub TU_MV_TESTS02B_PoutreAcierPRS()
+
+#Region " Initialisation de la poutre "
+
+        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
+        NomChargements = NomCas
+
+        Dim myPoutre As New cls_Poutre()
+        Dim ValRef, Valeur As Decimal
+        Const DeltaVMAx As Decimal = 1 / 1000   ' Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
+        Const DeltaCMAx As Decimal = 1 / 100    ' Valeur utilisée pour comparer les valeurs des critères 
+        Const Portee As Decimal = 15
+
+        Dim qAdd, F As Decimal
+
+        myPoutre.Initialise_CoefficientsCombinaisons()
+
+#End Region
+
+
+    End Sub
+
+
 
 
     <TestMethod()> Public Sub TU_MV_PoutreAcierPRS()
