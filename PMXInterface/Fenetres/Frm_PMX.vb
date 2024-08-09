@@ -432,7 +432,7 @@ Public Class Frm_PMX
     End Sub
 
     Private Sub DupliquerPoutre()
-        Dim NouvellePoutre As New cls_Poutre
+        Dim NouvellePoutre As New cls_Poutre(NomChargements)
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), NouvellePoutre)
 
         If MyProjet.Poutres(MyProjet.IndEnCours).BeamID.Contains(strCopy) Then
@@ -1385,7 +1385,7 @@ Public Class Frm_PMX
 
         '--> Lecture du fichier
         MyProjet = New cls_Projet
-        MyProjet.RecuperationFile(FileName, Str_WarningFile)
+        MyProjet.RecuperationFile(FileName, Str_WarningFile, NomChargements)
         MyProjet.IndEnCours = 0
 
         Dim lTrouve As Boolean

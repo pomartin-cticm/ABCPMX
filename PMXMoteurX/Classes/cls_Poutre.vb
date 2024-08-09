@@ -610,20 +610,20 @@ Public Class cls_Poutre
 
 #Region " CONSTRUCTEURS "
 
-    Private Sub InitialiseChargements()
+    Private Sub InitialiseChargements(vNomCharges() As String)
         '-------------------------------------------------------------------------------------------------------
         '   00/10/23 :  Création - POM
         '-------------------------------------------------------------------------------------------------------
         '   Initialisation des cas de charges utilisateur
         '-------------------------------------------------------------------------------------------------------
-        '   MsgChargements  [E] :   Nom des cas de charges dans la langue utilisateur
+        '   vNomCharges     [E] :   Nom des cas de charges dans la langue utilisateur
         '-------------------------------------------------------------------------------------------------------
 
-        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(NomChargements(0), Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(NomChargements(1), Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(NomChargements(2) & " 1", Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(NomChargements(2) & " 2", Me.IndiceTraveeConsoleDroite))
-        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(NomChargements(3), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("G1", New cls_ChargementUtilisateur(vNomCharges(0), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("G2", New cls_ChargementUtilisateur(vNomCharges(1), Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("Q1", New cls_ChargementUtilisateur(vNomCharges(2) & " 1", Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("Q2", New cls_ChargementUtilisateur(vNomCharges(2) & " 2", Me.IndiceTraveeConsoleDroite))
+        Me.ChargesU.Add("QC", New cls_ChargementUtilisateur(vNomCharges(3), Me.IndiceTraveeConsoleDroite))
 
     End Sub
 
@@ -671,18 +671,20 @@ Public Class cls_Poutre
         If Me.lMixte Then lCombELCSRules(0) = True
     End Sub
 
-    Public Sub New()
+    Public Sub New(NomChargesU() As String)
 
         Me.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
         ParametresGenerauxDefaut()
         PoutreDefautAcier()
-        InitialiseChargements()
+        InitialiseChargements(NomChargesU)
         InitialiseTablesCombi()
         InitialisePoidsPropres()
 
     End Sub
 
-    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection, NomPoutre As String, OptionsLogiciels As Struc_OptionsLogiciel, OptionsCalcul As Struc_OptionsCalcul)
+    Public Sub New(MyTypeSection As cls_Section.Enum_TypeSection,
+                   NomPoutre As String, OptionsLogiciels As Struc_OptionsLogiciel, OptionsCalcul As Struc_OptionsCalcul,
+                   NomCasChargesU() As String)
 
         Me.Section.TypeSection = MyTypeSection
 
@@ -709,14 +711,13 @@ Public Class cls_Poutre
 
         PoutreDefautAcier()
 
-        InitialiseChargements()
+        InitialiseChargements(NomCasChargesU)
         InitialiseTablesCombi()
         InitialisePoidsPropres()
 
         'Copie des options de calculs
         Me.Param.Gamma = OptionsLogiciels.Gamma.Clone()
         Me.TransfertOptionsCalculs(OptionsCalcul)
-
 
     End Sub
 

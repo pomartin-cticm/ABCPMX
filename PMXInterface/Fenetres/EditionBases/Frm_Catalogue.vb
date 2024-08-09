@@ -154,7 +154,7 @@ Public Class Frm_Catalogue
 
         '--> 
 
-        MyPoutreLoc = New cls_Poutre()
+        MyPoutreLoc = New cls_Poutre(NomChargements)
         MyPoutreLoc.Section.ProfilA.aW = 0
         MyPoutreLoc.Section.ProfilA.Plat_b = 0
         MyPoutreLoc.Section.ProfilA.Plat_t = 0

@@ -7,7 +7,7 @@ Public Class Frm_Gamma
 
     Dim lBuild As Boolean = True
 
-    Dim MyPoutreLoc As New cls_Poutre()
+    Dim MyPoutreLoc As New cls_Poutre(NomChargements)
 
     'Permet la gestion de l'activation ou non du checkbox
 

@@ -24,7 +24,7 @@ Public Class Frm_Maintiens
     ''' <summary>
     ''' Définition d'une poutre_loc afin d'enregistrer les actions de l'utilisateur
     ''' </summary>
-    Dim MyPoutreLoc As New cls_Poutre()
+    Dim MyPoutreLoc As New cls_Poutre(NomChargements)
 
     ''' <summary>
     ''' Définition d'une liste de string pour remplir le cmb_travee

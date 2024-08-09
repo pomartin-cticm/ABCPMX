@@ -14,18 +14,18 @@ Public Class Frm_AjoutePP
 
     'MODIF GUD car Dalle n'est plus dans la Cls_Section
 
-    Dim MyPoutreAcier As New cls_Poutre()
-    Dim MyPoutreAcierEnrobe As New cls_Poutre()
-    Dim MyPoutreMixte As New cls_Poutre()
-    Dim MyPoutreMixteEnrobe As New cls_Poutre()
-    Dim MyPoutreSFB As New cls_Poutre()
-    Dim MyPoutreIFB_A As New cls_Poutre()
-    Dim MyPoutreIFB_B As New cls_Poutre()
-    Dim MyPoutreSAB As New cls_Poutre()
-    Dim MyPoutreSFBmixte As New cls_Poutre()
-    Dim MyPoutreIFB_Amixte As New cls_Poutre()
-    Dim MyPoutreIFB_Bmixte As New cls_Poutre()
-    Dim MyPoutreSABmixte As New cls_Poutre()
+    Dim MyPoutreAcier As New cls_Poutre(NomChargements)
+    Dim MyPoutreAcierEnrobe As New cls_Poutre(NomChargements)
+    Dim MyPoutreMixte As New cls_Poutre(NomChargements)
+    Dim MyPoutreMixteEnrobe As New cls_Poutre(NomChargements)
+    Dim MyPoutreSFB As New cls_Poutre(NomChargements)
+    Dim MyPoutreIFB_A As New cls_Poutre(NomChargements)
+    Dim MyPoutreIFB_B As New cls_Poutre(NomChargements)
+    Dim MyPoutreSAB As New cls_Poutre(NomChargements)
+    Dim MyPoutreSFBmixte As New cls_Poutre(NomChargements)
+    Dim MyPoutreIFB_Amixte As New cls_Poutre(NomChargements)
+    Dim MyPoutreIFB_Bmixte As New cls_Poutre(NomChargements)
+    Dim MyPoutreSABmixte As New cls_Poutre(NomChargements)
 
     'Dim MySectionAcier As cls_Section = MyPoutreAcier.Section
     'Dim MySectionAcierEnrobe As cls_Section = MyPoutreAcierEnrobe.Section
@@ -580,73 +580,73 @@ Public Class Frm_AjoutePP
 
             If Me.chk_SectionAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeul, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
             End If
 
             If Me.chk_SectionAcierEnrobe.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.AcierSeulEnrobage, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
             End If
 
             If Me.chk_SectionMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
             End If
 
             If Me.chk_SectionMixteEnrobe.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.MixteEnrobage, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.MixteEnrobage, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.Lamine
             End If
 
             If Me.chk_SFBAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFB, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
             End If
 
             If Me.chk_SFBMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SFBmixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSFB
             End If
 
             If Me.chk_IFB_A_Acier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_A, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
             End If
 
             If Me.chk_IFB_A_Mixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Amixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBA
             End If
 
             If Me.chk_IFB_B_Acier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_B, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
             End If
 
             If Me.chk_IFB_B_Mixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.IFB_Bmixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimIFBB
             End If
 
             If Me.chk_SABAcier.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SAB, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
             End If
 
             If Me.chk_SABMixte.Checked Then
                 lAjout = True
-                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, LogicielOptions, OptionsCalcul))
+                MyProjet.Poutres.Add(New cls_Poutre(cls_Section.Enum_TypeSection.SABmixte, NomPoutre, LogicielOptions, OptionsCalcul, NomChargements))
                 typeProfilA = cls_ProfilA.Enum_TypeSectionAcier.LamineSlimSAB
             End If
 

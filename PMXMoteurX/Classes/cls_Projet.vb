@@ -658,14 +658,15 @@ Public Class cls_Projet
 
     End Sub
 
-    Public Sub RecuperationFile(ByVal FileName As String, ByVal str_warning_file As String)
+    Public Sub RecuperationFile(ByVal FileName As String, ByVal str_warning_file As String, NomCasChargesU() As String)
         '---------------------------------------------------------------------------------------------------------
         '   09/08/23 :  Création
         '---------------------------------------------------------------------------------------------------------
         '   Initialisation d'un projet à partir d'un fichier de données
         '---------------------------------------------------------------------------------------------------------
-        '   FileName    [E] :   Nom du fichier
-        '   str_warning [E] :   Message d'avertissement
+        '   FileName        [E] :   Nom du fichier
+        '   str_warning     [E] :   Message d'avertissement
+        '   NomCasChargesU  [E] :   Nom des cas de charges utilisateur dans la langue interface
         '---------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -729,7 +730,7 @@ Public Class cls_Projet
                     ReadBloc_Identification(Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
                 Case "POUTRE"
-                    Dim ptre_en_cours As New cls_Poutre
+                    Dim ptre_en_cours As New cls_Poutre(NomCasChargesU)
                     ReadBlocPoutre(ptre_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     Me.Poutres.Add(ptre_en_cours)
 

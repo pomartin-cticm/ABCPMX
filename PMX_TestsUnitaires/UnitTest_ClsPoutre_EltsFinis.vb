@@ -29,8 +29,8 @@ Imports PMXMoteur2
         NomChargements = NomCharges
 
         Dim lOk As Boolean
-        ' Dim pPoutre As New cls_Poutre(NomCharges)
-        Dim pPoutre As New cls_Poutre()
+        Dim pPoutre As New cls_Poutre(NomCharges)
+        'Dim pPoutre As New cls_Poutre()
         Const ChargeRep As Decimal = 10000
         Dim Longueur As Decimal = 10
         Dim Aire, zANE, zANP, InertieY, MelRd, MplRd As Decimal
@@ -137,8 +137,8 @@ Imports PMXMoteur2
         NomChargements = NomCharges
 
         Dim lOk As Boolean
-        'Dim pPoutre As New cls_Poutre(NomCharges)
-        Dim pPoutre As New cls_Poutre()
+        Dim pPoutre As New cls_Poutre(NomCharges)
+
         Const pForce As Decimal = 10000
 
         Dim Longueur As Decimal = 8
@@ -245,11 +245,9 @@ Imports PMXMoteur2
 
         '--> Déclarations
 
-        NomChargements = NomCharges
-
         Dim lOk As Boolean
         'Dim pPoutre As New cls_Poutre(NomCharges)
-        Dim pPoutre As New cls_Poutre()
+        Dim pPoutre As New cls_Poutre(NomCharges)
         Const QSurf As Decimal = 10000 / 5
         Dim ChargeRep As Decimal
         Dim Longueur As Decimal = 8

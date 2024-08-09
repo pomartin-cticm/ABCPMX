@@ -15,7 +15,7 @@ Public Class Frm_Dalle
     Dim ClasseBetonLeger() As String = cls_Beton.TabClasseBetonLeger
     Dim ClasseAcierArma() As String = cls_AcierArmature.tabClasseAcierArma
 
-    Public MyPoutreLoc As New cls_Poutre
+    Public MyPoutreLoc As New cls_Poutre(NomChargements)
     Public MyDalleLoc As New cls_Dalle
     'Dim COULEURTXTREADONLY As Color = SystemColors.ControlDark
     Const kADJUST As Decimal = 0.95

@@ -5,6 +5,15 @@ Imports PMXMoteur2
 
 <TestClass()> Public Class TU_MV_PoutresMixtes
 
+#Region " Variables communes "
+
+    Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
+    Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
+    Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 
+
+#End Region
+
+
     <TestMethod()> Public Sub TU_MV_TESTC01_RCM_2018_2()
 
         'Cas test issu de la revue RCM (2008-2):
@@ -14,13 +23,8 @@ Imports PMXMoteur2
 
 #Region " Initialisation de la poutre "
 
-        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
-        NomChargements = NomCas
-
-        Dim myPoutre As New cls_Poutre()
+        Dim myPoutre As New cls_Poutre(NomCas)
         Dim ValRef, Valeur As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000       ' Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
-        Const DeltaCMAx As Decimal = 1 / 100        ' Valeur utilisée pour comparer les valeurs des critères 
 
         myPoutre.Initialise_CoefficientsCombinaisons()
 
@@ -602,13 +606,8 @@ Imports PMXMoteur2
 
 #Region " Initialisation de la poutre "
 
-        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
-        NomChargements = NomCas
-
-        Dim myPoutre As New cls_Poutre()
+        Dim myPoutre As New cls_Poutre(NomCas)
         Dim ValRef, Valeur As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000           ' Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
-        Const DeltaCMAx As Decimal = 1 / 100            ' Valeur utilisée pour comparer les valeurs des critères 
 
         myPoutre.Initialise_CoefficientsCombinaisons()
         myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.Mixte
@@ -837,13 +836,8 @@ Imports PMXMoteur2
 
 #Region " Initialisation de la poutre "
 
-        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
-        NomChargements = NomCas
-
-        Dim myPoutre As New cls_Poutre()
+        Dim myPoutre As New cls_Poutre(NomCas)
         Dim ValRef, Valeur As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
-        Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 
 
         myPoutre.Initialise_CoefficientsCombinaisons()
         myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeulEnrobage
@@ -1441,13 +1435,8 @@ Imports PMXMoteur2
 
 #Region " Initialisation de la poutre "
 
-        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
-        NomChargements = NomCas
-
-        Dim myPoutre As New cls_Poutre()
+        Dim myPoutre As New cls_Poutre(NomCas)
         Dim ValRef, Valeur As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
-        Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 
 
         myPoutre.Initialise_CoefficientsCombinaisons()
         myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.MixteEnrobage

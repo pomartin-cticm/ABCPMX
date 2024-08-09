@@ -16,7 +16,7 @@ Public Class Frm_Portees
 
     Const iFRMPORTEES As Integer = 1
 
-    Dim MyPoutreLoc As New cls_Poutre()
+    Dim MyPoutreLoc As New cls_Poutre(NomChargements)
 
     Const formatLONGUEUR As String = "0.00"
 

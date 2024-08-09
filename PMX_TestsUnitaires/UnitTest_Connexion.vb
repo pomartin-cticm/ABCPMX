@@ -18,9 +18,6 @@ Imports PMXInterface
 
         Dim EtaMin, Valref As Decimal
 
-        'Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", NomCharges)
-        NomChargements = NomCharges
-
         '--> Gamma coefficients partiels
 
         LogicielOptions.Gamma = New cls_Gamma
@@ -59,7 +56,7 @@ Imports PMXInterface
         InitialiseOptionsScope()
         InitialiseOptionsCalcul()
 
-        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", LogicielOptions, OptionsCalcul)
+        Dim myPoutre As New cls_Poutre(cls_Section.Enum_TypeSection.Mixte, "TU", LogicielOptions, OptionsCalcul, NomCharges)
 
         ReDim myPoutre.VerifMixte(0)
         myPoutre.VerifMixte(0) = New cls_VerificationsMixtes()

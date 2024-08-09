@@ -16,6 +16,10 @@ Imports PMXMoteur2
                                     "Live loads", "Conf. no",
                                     "Shrinkage of the slab", "Shrinkage of the encasement",
                                     "Construction loads"}
+    Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
+
+    Const DeltaVMAx As Decimal = 1 / 1000   ' Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
+    Const DeltaCMAx As Decimal = 1 / 100    ' Valeur utilisée pour comparer les valeurs des critères 
 
 #End Region
 
@@ -27,13 +31,8 @@ Imports PMXMoteur2
 
 #Region " Initialisation de la poutre "
 
-        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
-        NomChargements = NomCas
-
-        Dim myPoutre As New cls_Poutre()
+        Dim myPoutre As New cls_Poutre(NomCas)
         Dim ValRef, Valeur As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000   ' Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
-        Const DeltaCMAx As Decimal = 1 / 100    ' Valeur utilisée pour comparer les valeurs des critères 
 
         myPoutre.Initialise_CoefficientsCombinaisons()
 
@@ -357,13 +356,8 @@ Imports PMXMoteur2
 
 #Region " Initialisation de la poutre "
 
-        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
-        NomChargements = NomCas
-
-        Dim myPoutre As New cls_Poutre()
+        Dim myPoutre As New cls_Poutre(NomCas)
         Dim ValRef, Valeur As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000   ' Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
-        Const DeltaCMAx As Decimal = 1 / 100    ' Valeur utilisée pour comparer les valeurs des critères 
         Const Portee As Decimal = 15
 
         Dim qAdd, F As Decimal
@@ -403,7 +397,7 @@ Imports PMXMoteur2
         myPoutre.Section.Acier.InitialiseAcierS355MML()
 
         '# CHARGES
-        myPoutre.InitialisePoidsPropres() 'Valeur calculée à la main: qPP = 9.72 kN/ml
+        myPoutre.InitialisePoidsPropres()
 
         qAdd = 12 * 10 ^ 3 - myPoutre.ChargesU("G1").FReparties(1)(0).Force(0)
 
@@ -636,16 +630,82 @@ Imports PMXMoteur2
 
 #Region " Initialisation de la poutre "
 
-        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
-        NomChargements = NomCas
-
-        Dim myPoutre As New cls_Poutre()
+        Dim myPoutre As New cls_Poutre(NomCas)
         Dim ValRef, Valeur As Decimal
-        Const DeltaVMAx As Decimal = 1 / 1000   ' Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
-        Const DeltaCMAx As Decimal = 1 / 100    ' Valeur utilisée pour comparer les valeurs des critères 
         Const Portee As Decimal = 15
 
         Dim qAdd, F As Decimal
+
+        myPoutre.Initialise_CoefficientsCombinaisons()
+
+#End Region
+
+
+#Region " Renseignement des données "
+
+        myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
+
+        '# GEOMETRIE
+
+        myPoutre.lTraveeConsoleGauche = False
+        myPoutre.lTraveeConsoleDroite = False
+
+        myPoutre.LongueurTravee(1) = Portee     ' travée centrale
+
+        myPoutre.lIntermediaire = True
+
+        myPoutre.Section.ProfilA.GenerePRS(0.3, 0.02, 0.8, 0.012)
+
+        With myPoutre.Dalle
+            .type = cls_Dalle.Enum_TypeDalle.Pleine
+            .Ep_td = 120 / 1000
+            .Ep_th = 0
+        End With
+
+        '# MAINTIENS LATERAUX
+
+        myPoutre.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.PointRestrained
+        myPoutre.Maintiens(1).Add(New cls_Maintiens(1 * Portee / 3, True, True, False))
+        myPoutre.Maintiens(1).Add(New cls_Maintiens(2 * Portee / 3, True, True, False))
+
+        '# MATERIAUX
+        myPoutre.Section.Acier.InitialiseAcierS460JR()
+
+        '# CHARGES
+        myPoutre.InitialisePoidsPropres()
+
+        qAdd = 12 * 10 ^ 3 - myPoutre.ChargesU("G1").FReparties(1)(0).Force(0)
+
+        myPoutre.ChargesU("G1").FReparties(1).Add(New cls_ForceRepartie(0, qAdd, Portee, qAdd, 0))
+
+        qAdd = 20 * 10 ^ 3
+        myPoutre.ChargesU("Q1").FReparties(1).Add(New cls_ForceRepartie(0, qAdd, Portee, qAdd, 0))
+
+        F = 30 * 1000
+        myPoutre.ChargesU("Q2").Forces(1).Add(New cls_Force(Portee / 2, F, 0))
+
+        '# COEFFICIENTS PARTIELS
+        myPoutre.Initialise_CoefficientsCombinaisons()          ' Initialise les coefficients par défaut 
+        myPoutre.lCombELU(0) = True                             ' activation de la première combinaison ELU par défaut (1.35G + 1.5Q1+Psi0Q2)
+        myPoutre.lCombELU(1) = True                             ' activation de la seconde combinaison ELU par défaut (1.35G + 1.5Q2+psi0Q1)
+        myPoutre.lCombELS(0) = True                             ' activation de la première combinaison ELS par défaut (G + Q)
+        myPoutre.lCombELCURules(0) = False                      ' activation de la première combinaison ELU pendant la phase de construction activée 
+        myPoutre.lCombELCSRules(0) = False                      ' activation de la première combinaison ELS pendant la phase de construction activée 
+
+        With myPoutre.Param.Gamma
+            .GammaG_sup = 1.4
+            .GammaQ = 1.6
+            .GammaM0 = 1.05
+            .GammaM1 = 1.1
+            .GammaC = 1.5
+            .lGammaV_unique = True
+            .GammaVc = 1.25
+            .GammaVs = 1.25
+            .Psi0_Q1 = 0.7
+            .Psi0_Q2 = 0.7
+        End With
+
+        myPoutre.Param.EtaW = 1.2
 
         myPoutre.Initialise_CoefficientsCombinaisons()
 
@@ -667,10 +727,7 @@ Imports PMXMoteur2
 
 #Region " Initialisation de la poutre"
 
-        Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
-        NomChargements = NomCas
-
-        Dim myPoutre As New cls_Poutre()
+        Dim myPoutre As New cls_Poutre(NomCas)
         Dim ValRef, Valeur As Decimal
         Const DeltaVMAx As Decimal = 1 / 1000 'Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
         Const DeltaCMAx As Decimal = 1 / 100 'Valeur utilisée pour comparer les valeurs des critères 

@@ -11,7 +11,7 @@ Public Class Frm_OptionsFeu
 
     Dim strTempRebars(2)
 
-    Dim MyPoutreLoc As New cls_Poutre
+    Dim MyPoutreLoc As New cls_Poutre(NomChargements)
 
     Dim list_txtbox As New List(Of TextBox) 'liste des textboxs donc l'utilisateur peut changer la valeur 
 
