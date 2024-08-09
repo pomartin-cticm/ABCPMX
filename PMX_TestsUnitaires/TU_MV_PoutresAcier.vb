@@ -21,6 +21,12 @@ Imports PMXMoteur2
     Const DeltaVMAx As Decimal = 1 / 1000   ' Valeur utilisée pour comparer les valeurs entre elles (ex: aire, moments etc.)
     Const DeltaCMAx As Decimal = 1 / 100    ' Valeur utilisée pour comparer les valeurs des critères 
 
+    Const strRacineELU As String = "ULS"
+    Const strRacineELS As String = "SLS"
+    Const strRacineELF As String = "FLS"
+    Const strRacineELUC As String = "ULS_C"
+    Const strRacineELSC As String = "SLS_C"
+
 #End Region
 
 
@@ -93,14 +99,7 @@ Imports PMXMoteur2
 
 #Region " Lancement des calculs "
 
-        Dim strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
         Dim NomChargesA() As String = gNomChargesA
-
-        strRacineELU = "ULS"
-        strRacineELS = "SLS"
-        strRacineELF = "FLS"
-        strRacineELUC = "ULS_C"
-        strRacineELSC = "SLS_C"
 
         'INITIALISATION DES TABLEAUX DES VERIFICATION
         Select Case myPoutre.Section.TypeSection
@@ -438,14 +437,14 @@ Imports PMXMoteur2
 
 #Region " Lancement des calculs "
 
-        Dim strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
+        'Dim strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
         Dim NomChargesA() As String = gNomChargesA
 
-        strRacineELU = "ULS"
-        strRacineELS = "SLS"
-        strRacineELF = "FLS"
-        strRacineELUC = "ULS_C"
-        strRacineELSC = "SLS_C"
+        'strRacineELU = "ULS"
+        'strRacineELS = "SLS"
+        'strRacineELF = "FLS"
+        'strRacineELUC = "ULS_C"
+        'strRacineELSC = "SLS_C"
 
         'INITIALISATION DES TABLEAUX DES VERIFICATION
         Select Case myPoutre.Section.TypeSection
@@ -712,14 +711,14 @@ Imports PMXMoteur2
 
 #Region " Lancement des calculs "
 
-        Dim strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
+        'Dim strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC As String
         Dim NomChargesA() As String = gNomChargesA
 
-        strRacineELU = "ULS"
-        strRacineELS = "SLS"
-        strRacineELF = "FLS"
-        strRacineELUC = "ULS_C"
-        strRacineELSC = "SLS_C"
+        'strRacineELU = "ULS"
+        'strRacineELS = "SLS"
+        'strRacineELF = "FLS"
+        'strRacineELUC = "ULS_C"
+        'strRacineELSC = "SLS_C"
 
         'INITIALISATION DES TABLEAUX DES VERIFICATION
         Select Case myPoutre.Section.TypeSection
@@ -890,8 +889,476 @@ Imports PMXMoteur2
         ' Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
 
 #End Region
+
     End Sub
 
+
+    <TestMethod()> Public Sub TU_MV_TESTS03_PoutreAcierPRS_InteractionMV()
+
+#Region " Initialisation de la poutre "
+
+        Dim myPoutre As New cls_Poutre(NomCas)
+        Dim ValRef, Valeur As Decimal
+        Const Portee As Decimal = 9
+        Const Console As Decimal = 2.5
+        Const iConsole As Integer = 0
+
+        Dim qAdd, F As Decimal
+
+        myPoutre.Initialise_CoefficientsCombinaisons()
+
+#End Region
+
+#Region " Renseignement des données "
+
+        myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
+
+        '# GEOMETRIE
+
+        myPoutre.lTraveeConsoleGauche = True
+        myPoutre.lTraveeConsoleDroite = False
+
+        myPoutre.LongueurTravee(iConsole) = Console
+        myPoutre.LongueurTravee(1) = Portee     ' travée centrale
+
+        myPoutre.lIntermediaire = True
+
+        myPoutre.Section.ProfilA.GenerePRS(0.15, 0.018, 0.28, 0.006, 0.15, 0.022)
+
+        With myPoutre.Dalle
+            .type = cls_Dalle.Enum_TypeDalle.Pleine
+            .Ep_td = 120 / 1000
+            .Ep_th = 0
+        End With
+
+        '# MAINTIENS LATERAUX
+
+        myPoutre.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
+
+        '# MATERIAUX
+        myPoutre.Section.Acier.InitialiseAcierS275EC3()
+
+        '# CHARGES
+        myPoutre.InitialisePoidsPropres()
+
+        qAdd = 75 * 10 ^ 3
+        myPoutre.ChargesU("Q1").FReparties(iConsole).Add(New cls_ForceRepartie(0, qAdd, Console, qAdd, 0))
+
+        '# COEFFICIENTS PARTIELS
+        myPoutre.Initialise_CoefficientsCombinaisons()          ' Initialise les coefficients par défaut 
+        myPoutre.lCombELU(0) = False
+        myPoutre.lCombELU(1) = False
+        myPoutre.lCombELU(2) = False
+        myPoutre.lCombELU(3) = False
+        myPoutre.lCombELU(4) = True
+        myPoutre.lCombELS(0) = True                             ' activation de la première combinaison ELS par défaut (G + Q)
+        myPoutre.lCombELCURules(0) = False                      ' activation de la première combinaison ELU pendant la phase de construction activée 
+        myPoutre.lCombELCSRules(0) = False                      ' activation de la première combinaison ELS pendant la phase de construction activée 
+
+        With myPoutre.Param.Gamma
+            .GammaG_sup = 1
+            .GammaQ = 1
+            .GammaM0 = 1
+            .GammaM1 = 1
+            .GammaC = 1.5
+            .lGammaV_unique = True
+            .GammaVc = 1.25
+            .GammaVs = 1.25
+            .Psi0_Q1 = 0.7
+            .Psi0_Q2 = 0.7
+        End With
+
+        myPoutre.Param.EtaW = 1
+
+        myPoutre.Initialise_CoefficientsCombinaisons()
+
+        Const iCombi As Integer = 4
+
+        myPoutre.CoefCombELU(iCombi)(0) = 0
+        myPoutre.CoefCombELU(iCombi)(1) = 1
+        myPoutre.CoefCombELU(iCombi)(2) = 0
+        myPoutre.CoefCombELU(iCombi)(3) = 0
+        myPoutre.CoefCombELU(iCombi)(4) = 0
+
+#End Region
+
+#Region " Lancement des calculs "
+
+        Dim NomChargesA() As String = gNomChargesA
+
+        'INITIALISATION DES TABLEAUX DES VERIFICATION
+        Select Case myPoutre.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                ReDim myPoutre.VerifAcier(0)
+                myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                ReDim myPoutre.VerifMixte(0)
+                myPoutre.VerifMixte(0) = New cls_VerificationsMixtes
+                If myPoutre.TypeEtaiement <> cls_Poutre.EnuTypeEtaiement.FullyPropped Then
+                    ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
+                    ReDim myPoutre.VerifAcier(0)
+                    myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+                End If
+        End Select
+
+        'INITIALISATION DES CALCULS
+        myPoutre.InitialiseCalculs(NomChargesA)
+        myPoutre.AAA_CalculMNVInternesN()
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, myPoutre.lCombELU, myPoutre.CoefCombELU, strRacineELU, myPoutre.CombiA_ELU)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, myPoutre.lCombELS, myPoutre.CoefCombELS, strRacineELS, myPoutre.CombiA_ELS)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombFeu, myPoutre.lCombFeu, myPoutre.CoefCombFeu, strRacineELF, myPoutre.CombiA_ELF)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myPoutre.lCombELCURules, myPoutre.CoefCombELCU, strRacineELUC, myPoutre.CombiA_ELCU)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
+
+        'COMBINAISON DES EFFORTS A L'ELU
+        Dim MEd1(,) As Decimal = Nothing
+        Dim MEdMax1, MEdMin1, iNodeMMin1, iNodeMMax1 As Decimal
+        Dim MEdAppui As Decimal
+
+        Dim VEd1(,) As Decimal = Nothing
+        Dim VEdMax1, VEdMin1, iNodeVMin1, iNodeVMax1 As Decimal
+        Dim VEdAppui As Decimal
+
+        myPoutre.CombiA_ELU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd1, False)
+        myPoutre.CombiA_ELU.CombineEffortsT(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd1, False)
+
+        EnveloppeTableauEfforts(MEd1, myPoutre.Nodes.nbNodes, MEdMax1, MEdMin1, iNodeMMax1, iNodeMMin1)
+        EnveloppeTableauEfforts(VEd1, myPoutre.Nodes.nbNodes, VEdMax1, VEdMin1, iNodeVMax1, iNodeVMin1)
+
+        MEdAppui = MEdMin1
+        VEdAppui = VEdMax1
+
+        'VERIFICATION DE LA POUTRE 
+
+        myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, False)
+
+#End Region
+
+#Region " VALIDATION : Analyse de la poutre "
+
+        Valeur = MEdAppui
+        ValRef = -234.375 * 10 ^ 3
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        Valeur = VEdAppui
+        ValRef = 187.5 * 10 ^ 3
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+#End Region
+
+#Region " VALIDATION : Résistance à la flexion (ELU)"
+
+        Dim zANE, MRd As Decimal
+        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRd)
+
+        Valeur = MRd
+        ValRef = 275.9 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du calcul de la résistance plastique à la flexion simple du profilé
+
+        Valeur = myPoutre.VerifAcier(0).CritereM.Resistance(iNodeMMax1)
+        ValRef = 275.9 * 1000
+        'Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du calcul de la résistance élastique à la flexion simple de la section
+
+        Valeur = myPoutre.VerifAcier(0).CritereM.CritereMax
+        ValRef = 0.85
+        Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du critère de la résistance à la flexion
+
+#End Region
+
+#Region " VALIDATION : Résistance à l'effort tranchant (ELU)"
+
+        '-- Resistance plastique
+
+        Valeur = myPoutre.VerifAcier(0).CritereV.Resistance(iNodeVMax1)
+        ValRef = 266.74 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du calcul de la résistance à l'effort tranchant
+
+        Valeur = myPoutre.VerifAcier(0).CritereV.CritereMax
+        ValRef = 0.703
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 5 * DeltaVMAx))   'Vérification du critère de la résistance à l'effort tranchant
+
+#End Region
+
+#Region " VALIDATION : Résistance à l'interaction MV (ELU)"
+
+        '-- Interaction
+
+        Valeur = myPoutre.VerifAcier(0).CritereMV.CritereMax
+        ValRef = 0.869
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 5 * DeltaVMAx))   'Vérification du critère de la résistance à l'effort tranchant
+
+#End Region
+
+#Region " VALIDATION : Déversement (ELU)"
+
+        Valeur = myPoutre.VerifAcier(0).CritereLTB.CritereMax
+        ValRef = 1.808
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))                  'Vérification du critère de la résistance au déversement
+
+        '-- Moment critique
+
+        Valeur = myPoutre.VerifAcier(0).McrLTB(0, iConsole)
+        ValRef = 279 * 1000
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+#End Region
+
+#Region " VALIDATION : Flèches (ELS)"
+
+        '--> Fleches 
+
+        Dim fMax, fMin As Decimal
+
+        myPoutre.ChargesA(1).EnveloppesFleche(fMax, fMin)
+
+        '# flèche de la console
+        Valeur = Math.Abs(fMin * 1000)
+        ValRef = 69.67
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '# flèche de la travée
+        Valeur = fMax * 1000
+        ValRef = 39.95
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+#End Region
+
+    End Sub
+
+
+    <TestMethod()> Public Sub TU_MV_TESTS03b_PoutreAcierPRS_InteractionMV()
+
+#Region " Initialisation de la poutre "
+
+        Dim myPoutre As New cls_Poutre(NomCas)
+        Dim ValRef, Valeur As Decimal
+        Const Portee As Decimal = 9
+        Const Console As Decimal = 2.5
+        Const iConsole As Integer = 2
+
+        Dim qAdd, F As Decimal
+
+        myPoutre.Initialise_CoefficientsCombinaisons()
+
+#End Region
+
+#Region " Renseignement des données "
+
+        myPoutre.Section.TypeSection = cls_Section.Enum_TypeSection.AcierSeul
+
+        '# GEOMETRIE
+
+        myPoutre.lTraveeConsoleGauche = False
+        myPoutre.lTraveeConsoleDroite = True
+
+        myPoutre.LongueurTravee(iConsole) = Console
+        myPoutre.LongueurTravee(1) = Portee     ' travée centrale
+
+        myPoutre.lIntermediaire = True
+
+        myPoutre.Section.ProfilA.GenerePRS(0.15, 0.018, 0.28, 0.006, 0.15, 0.022)
+
+        With myPoutre.Dalle
+            .type = cls_Dalle.Enum_TypeDalle.Pleine
+            .Ep_td = 120 / 1000
+            .Ep_th = 0
+        End With
+
+        '# MAINTIENS LATERAUX
+
+        myPoutre.TypeMaintien = cls_Poutre.EnuTypeMaintiensPoutre.NotRestrained
+
+        '# MATERIAUX
+        myPoutre.Section.Acier.InitialiseAcierS275EC3()
+
+        '# CHARGES
+        myPoutre.InitialisePoidsPropres()
+
+        qAdd = 75 * 10 ^ 3
+        myPoutre.ChargesU("Q1").FReparties(iConsole).Add(New cls_ForceRepartie(0, qAdd, Console, qAdd, 0))
+
+        '# COEFFICIENTS PARTIELS
+        myPoutre.Initialise_CoefficientsCombinaisons()          ' Initialise les coefficients par défaut 
+        myPoutre.lCombELU(0) = False
+        myPoutre.lCombELU(1) = False
+        myPoutre.lCombELU(2) = False
+        myPoutre.lCombELU(3) = False
+        myPoutre.lCombELU(4) = True
+        myPoutre.lCombELS(0) = True                             ' activation de la première combinaison ELS par défaut (G + Q)
+        myPoutre.lCombELCURules(0) = False                      ' activation de la première combinaison ELU pendant la phase de construction activée 
+        myPoutre.lCombELCSRules(0) = False                      ' activation de la première combinaison ELS pendant la phase de construction activée 
+
+        With myPoutre.Param.Gamma
+            .GammaG_sup = 1
+            .GammaQ = 1
+            .GammaM0 = 1
+            .GammaM1 = 1
+            .GammaC = 1.5
+            .lGammaV_unique = True
+            .GammaVc = 1.25
+            .GammaVs = 1.25
+            .Psi0_Q1 = 0.7
+            .Psi0_Q2 = 0.7
+        End With
+
+        myPoutre.Param.EtaW = 1
+
+        myPoutre.Initialise_CoefficientsCombinaisons()
+
+        Const iCombi As Integer = 4
+
+        myPoutre.CoefCombELU(iCombi)(0) = 0
+        myPoutre.CoefCombELU(iCombi)(1) = 1
+        myPoutre.CoefCombELU(iCombi)(2) = 0
+        myPoutre.CoefCombELU(iCombi)(3) = 0
+        myPoutre.CoefCombELU(iCombi)(4) = 0
+
+#End Region
+
+#Region " Lancement des calculs "
+
+        Dim NomChargesA() As String = gNomChargesA
+
+        'INITIALISATION DES TABLEAUX DES VERIFICATION
+        Select Case myPoutre.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                ReDim myPoutre.VerifAcier(0)
+                myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                ReDim myPoutre.VerifMixte(0)
+                myPoutre.VerifMixte(0) = New cls_VerificationsMixtes
+                If myPoutre.TypeEtaiement <> cls_Poutre.EnuTypeEtaiement.FullyPropped Then
+                    ' Quand on est pas totalement étayé, on ajoute la vérification en phase de construction
+                    ReDim myPoutre.VerifAcier(0)
+                    myPoutre.VerifAcier(0) = New cls_VerificationsAcier
+                End If
+        End Select
+
+        'INITIALISATION DES CALCULS
+        myPoutre.InitialiseCalculs(NomChargesA)
+        myPoutre.AAA_CalculMNVInternesN()
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELU, myPoutre.lCombELU, myPoutre.CoefCombELU, strRacineELU, myPoutre.CombiA_ELU)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELS, myPoutre.lCombELS, myPoutre.CoefCombELS, strRacineELS, myPoutre.CombiA_ELS)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombFeu, myPoutre.lCombFeu, myPoutre.CoefCombFeu, strRacineELF, myPoutre.CombiA_ELF)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELUConstruction, myPoutre.lCombELCURules, myPoutre.CoefCombELCU, strRacineELUC, myPoutre.CombiA_ELCU)
+        myPoutre.InitialiseCombiA(cls_Poutre.nbCombELSConstruction, myPoutre.lCombELCSRules, myPoutre.CoefCombELCS, strRacineELSC, myPoutre.CombiA_ELCS)
+
+        'COMBINAISON DES EFFORTS A L'ELU
+        Dim MEd1(,) As Decimal = Nothing
+        Dim MEdMax1, MEdMin1, iNodeMMin1, iNodeMMax1 As Decimal
+        Dim MEdAppui As Decimal
+
+        Dim VEd1(,) As Decimal = Nothing
+        Dim VEdMax1, VEdMin1, iNodeVMin1, iNodeVMax1 As Decimal
+        Dim VEdAppui As Decimal
+
+        myPoutre.CombiA_ELU.CombineMoments(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, MEd1, False)
+        myPoutre.CombiA_ELU.CombineEffortsT(0, myPoutre.Nodes.nbNodes, myPoutre.ChargesA, VEd1, False)
+
+        EnveloppeTableauEfforts(MEd1, myPoutre.Nodes.nbNodes, MEdMax1, MEdMin1, iNodeMMax1, iNodeMMin1)
+        EnveloppeTableauEfforts(VEd1, myPoutre.Nodes.nbNodes, VEdMax1, VEdMin1, iNodeVMax1, iNodeVMin1)
+
+        MEdAppui = MEdMin1
+        VEdAppui = Math.Max(Math.Abs(VEdMin1), VEdMax1)
+
+        'VERIFICATION DE LA POUTRE 
+
+        myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, False)
+
+#End Region
+
+#Region " VALIDATION : Analyse de la poutre "
+
+        Valeur = MEdAppui
+        ValRef = -234.375 * 10 ^ 3
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+        Valeur = VEdAppui
+        ValRef = 187.5 * 10 ^ 3
+        Assert.IsTrue(IsEqual(Valeur, ValRef))
+
+#End Region
+
+#Region " VALIDATION : Résistance à la flexion (ELU)"
+
+        Dim zANE, MRd As Decimal
+        myPoutre.Section.ProprietesPlastiquesMyy(1, True, myPoutre.Param.Gamma, 0, zANE, MRd)
+
+        Valeur = MRd
+        ValRef = 275.9 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du calcul de la résistance plastique à la flexion simple du profilé
+
+        Valeur = myPoutre.VerifAcier(0).CritereM.Resistance(iNodeMMax1)
+        ValRef = 275.9 * 1000
+        'Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du calcul de la résistance élastique à la flexion simple de la section
+
+        Valeur = myPoutre.VerifAcier(0).CritereM.CritereMax
+        ValRef = 0.85
+        Assert.IsTrue(IsEqual(Valeur, ValRef))              'Vérification du critère de la résistance à la flexion
+
+#End Region
+
+#Region " VALIDATION : Résistance à l'effort tranchant (ELU)"
+
+        '-- Resistance plastique
+
+        Valeur = myPoutre.VerifAcier(0).CritereV.Resistance(iNodeVMax1)
+        ValRef = 266.74 * 1000
+        Assert.IsTrue(IsEqual(Valeur, ValRef))                  'Vérification du calcul de la résistance à l'effort tranchant
+
+        Valeur = myPoutre.VerifAcier(0).CritereV.CritereMax
+        ValRef = 0.703
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 5 * DeltaVMAx))   'Vérification du critère de la résistance à l'effort tranchant
+
+#End Region
+
+#Region " VALIDATION : Résistance à l'interaction MV (ELU)"
+
+        '-- Interaction
+
+        Valeur = myPoutre.VerifAcier(0).CritereMV.CritereMax
+        ValRef = 0.869
+        Assert.IsTrue(IsEqual(Valeur, ValRef, 5 * DeltaVMAx))   'Vérification du critère de la résistance à l'effort tranchant
+
+#End Region
+
+#Region " VALIDATION : Déversement (ELU)"
+
+        Valeur = myPoutre.VerifAcier(0).CritereLTB.CritereMax
+        ValRef = 1.808
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))                  'Vérification du critère de la résistance au déversement
+
+        '-- Moment critique
+
+        Valeur = myPoutre.VerifAcier(0).McrLTB(0, iConsole)
+        ValRef = 279 * 1000
+
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
+
+#End Region
+
+#Region " VALIDATION : Flèches (ELS)"
+
+        '--> Fleches 
+
+        Dim fMax, fMin As Decimal
+
+        myPoutre.ChargesA(1).EnveloppesFleche(fMax, fMin)
+
+        '# flèche de la console
+        Valeur = Math.Abs(fMin * 1000)
+        ValRef = 69.67
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+        '# flèche de la travée
+        Valeur = fMax * 1000
+        ValRef = 39.95
+        Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx))
+
+#End Region
+
+    End Sub
 
     <TestMethod()> Public Sub TU_MV_PoutreAcierPRS()
 
