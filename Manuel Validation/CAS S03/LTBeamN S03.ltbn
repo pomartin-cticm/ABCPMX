@@ -171,5 +171,5 @@ NBITERATIONSMAX        = 100
 NBMODES                = 1
 MOMENT BLOCKED        = 0
 AXIALFORCE BLOCKED    = 0
-CALCULATE              = 0
+CALCULATE              = 1
 

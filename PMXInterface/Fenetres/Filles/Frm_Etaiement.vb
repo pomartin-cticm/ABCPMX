@@ -6,25 +6,29 @@ Public Class Frm_Etaiement
 #Region " Variables locales "
 
     Dim lBuild As Boolean = True
-
+    Dim lOuvert As Boolean = False
     Dim MyPoutreLoc As New cls_Poutre(NomChargements)
 
     Const iFRMETAIEMENT As Integer = 2
+
+    Dim FontFrm As Font
 
 #End Region
 
 #Region "===OUVERTURE==="
     Private Sub Frm_Etaiement_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        InitialiserFenetre(sender, e)
+        InitialiserFenetre()
     End Sub
 
-    Public Sub InitialiserFenetre(sender As Object, e As EventArgs)
+    Public Sub InitialiserFenetre()
         lBuild = True
         GestionLangues()
         InitialiserVariables()
         GestionStyle()
         GestionUnites()
         AfficherPoutreEnCours()
+        MAJI_BtnPlusMoins()
+        PrepareFenetre()
         lBuild = False
     End Sub
 
@@ -83,8 +87,7 @@ Public Class Frm_Etaiement
         Me.img_Etaiement.Dock = DockStyle.Fill
         Me.img_Etaiement.BorderStyle = BorderStyle.FixedSingle
 
-        Me.chk_EtaisConsoleGauche.Enabled = MyPoutreLoc.lTraveeConsoleGauche
-        Me.chk_EtaisConsoleDroite.Enabled = MyPoutreLoc.lTraveeConsoleDroite
+        FontFrm = New Font(FontBase.Name, SizeFontFrm)
 
     End Sub
 
@@ -92,14 +95,35 @@ Public Class Frm_Etaiement
 
     End Sub
 
+    Private Sub PrepareFenetre()
+
+        Dim lConsole As Boolean = MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleDroite
+
+        Me.chk_EtaisConsoleGauche.Visible = MyPoutreLoc.lTraveeConsoleGauche
+        Me.chk_EtaisConsoleDroite.Visible = MyPoutreLoc.lTraveeConsoleDroite
+
+        Me.pan_Consoles.Visible = lConsole
+
+        If Not lConsole Then
+            Dim DeltaZ As Single = 56 - 5
+            Me.pan_Nombre.Top = 5
+            Me.pan_PositionCharges.Top = 114 - DeltaZ
+        ElseIf lOuvert Then
+
+            Me.pan_Nombre.Top = 56
+            Me.pan_PositionCharges.Top = 114
+        End If
+
+    End Sub
+
     Private Sub InitialiserVariables()
         cls_Poutre.DeepClone(MyProjet.Poutres(MyProjet.IndEnCours), MyPoutreLoc)
 
-        Me.cmb_NbPoint.Items.Clear()
+        Me.cmb_NbPoints.Items.Clear()
         For i As Integer = NBPROPPINGMIN To OptionsScope.NbMaxiEtaisP
-            Me.cmb_NbPoint.Items.Add(i)
+            Me.cmb_NbPoints.Items.Add(i)
         Next
-        Me.cmb_NbPoint.SelectedIndex = 0
+        Me.cmb_NbPoints.SelectedIndex = 0
 
         Me.rad_UnderBeam.Checked = True
 
@@ -132,7 +156,7 @@ Public Class Frm_Etaiement
                         Me.chk_EtaisConsoleGauche.Checked = .lEtaisConsoleGauche
                     End If
 
-                    Me.cmb_NbPoint.SelectedItem = .NbEtaiement
+                    Me.cmb_NbPoints.SelectedItem = .NbEtaiement
 
                     If .lEtaisSousProfileAcier Then
                         'Me.cmb_LocPP.SelectedIndex = 0
@@ -166,6 +190,7 @@ Public Class Frm_Etaiement
     End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
+
         If ValideSaisieFenetre() Then
 
             Dim lModif As Boolean = False
@@ -180,6 +205,10 @@ Public Class Frm_Etaiement
 
             Me.Close()
         End If
+    End Sub
+
+    Private Sub Frm_Etaiement_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
+        Me.lOuvert = True
     End Sub
 
     Private Function ValideSaisieFenetre() As Boolean
@@ -239,7 +268,7 @@ Public Class Frm_Etaiement
 
     Private Sub DessinPoutre(sender As Object, e As PaintEventArgs) Handles img_Etaiement.Paint
 
-        DessinFrmEtaiement(e.Graphics, MyPoutreLoc, Me.img_Etaiement.ClientRectangle.Width, Me.img_Etaiement.ClientRectangle.Height, 1, True)
+        DessinFrmEtaiement(e.Graphics, MyPoutreLoc, fontfrm, Me.img_Etaiement.ClientRectangle.Width, Me.img_Etaiement.ClientRectangle.Height, 1, True)
 
     End Sub
 
@@ -318,9 +347,11 @@ Public Class Frm_Etaiement
         img_Etaiement.Invalidate()
     End Sub
 
-    Private Sub cmb_NbPoint_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbPoint.TextChanged
+    Private Sub cmb_NbPoints_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_NbPoints.SelectedIndexChanged
         If lBuild Then Exit Sub
-        MyPoutreLoc.NbEtaiement = cmb_NbPoint.SelectedItem
+        MyPoutreLoc.NbEtaiement = cmb_NbPoints.SelectedItem
+
+        MAJI_BtnPlusMoins()
 
         img_Etaiement.Invalidate()
     End Sub
@@ -334,6 +365,39 @@ Public Class Frm_Etaiement
         img_Etaiement.Invalidate()
 
     End Sub
+
+    Private Sub MAJI_BtnPlusMoins()
+        '===POM
+        'If (NbTravees > 1) Then
+        If Me.cmb_NbPoints.SelectedIndex = 0 Then
+            Me.btn_Precedent.Image = imgList_PlusMoins.Images("MoinsNonDispo")
+        Else
+            Me.btn_Precedent.Image = imgList_PlusMoins.Images("Moins")
+        End If
+        If Me.cmb_NbPoints.SelectedIndex = Me.cmb_NbPoints.Items.Count - 1 Then
+            Me.btn_Suivant.Image = imgList_PlusMoins.Images("PlusNonDispo")
+        Else
+            Me.btn_Suivant.Image = imgList_PlusMoins.Images("Plus")
+        End If
+        'End If
+    End Sub
+
+    Private Sub GestionNavigation(sender As Object, e As EventArgs) Handles btn_Suivant.Click, btn_Precedent.Click
+        Dim Index As Integer = Me.cmb_NbPoints.SelectedIndex
+        Select Case sender.name
+            Case Me.btn_Precedent.Name
+                Me.cmb_NbPoints.SelectedIndex = Math.Max(0, Index - 1)
+            Case Me.btn_Suivant.Name
+                Me.cmb_NbPoints.SelectedIndex = Math.Min(Me.cmb_NbPoints.Items.Count - 1, Index + 1)
+        End Select
+        'MAJI_BtnPlusMoins()
+    End Sub
+
+    Private Sub Frm_Etaiement_Shown(sender As Object, e As EventArgs) Handles Me.Shown
+        'If lOuvert Then MsgBox("toto")
+        If lOuvert Then InitialiserFenetre()
+    End Sub
+
 
 #End Region
 

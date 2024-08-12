@@ -22,6 +22,8 @@ Partial Class Frm_Etaiement
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_Etaiement))
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
@@ -37,14 +39,21 @@ Partial Class Frm_Etaiement
         Me.rad_FullyPropped = New System.Windows.Forms.RadioButton()
         Me.rad_UnPropped = New System.Windows.Forms.RadioButton()
         Me.pan_PointProps = New System.Windows.Forms.Panel()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btn_Precedent = New System.Windows.Forms.Button()
+        Me.btn_Suivant = New System.Windows.Forms.Button()
+        Me.cmb_NbPoints = New System.Windows.Forms.ComboBox()
         Me.rad_UnderSlab = New System.Windows.Forms.RadioButton()
         Me.rad_UnderBeam = New System.Windows.Forms.RadioButton()
-        Me.cmb_NbPoint = New System.Windows.Forms.ComboBox()
         Me.lbl_LocPP = New System.Windows.Forms.Label()
         Me.chk_EtaisConsoleDroite = New System.Windows.Forms.CheckBox()
         Me.lbl_NbPP = New System.Windows.Forms.Label()
         Me.chk_EtaisConsoleGauche = New System.Windows.Forms.CheckBox()
         Me.img_Etaiement = New System.Windows.Forms.PictureBox()
+        Me.imgList_PlusMoins = New System.Windows.Forms.ImageList(Me.components)
+        Me.pan_Consoles = New System.Windows.Forms.Panel()
+        Me.pan_Nombre = New System.Windows.Forms.Panel()
+        Me.pan_PositionCharges = New System.Windows.Forms.Panel()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -54,7 +63,11 @@ Partial Class Frm_Etaiement
         Me.TLPan_Gauche.SuspendLayout()
         Me.pan_SaisieEtaiement.SuspendLayout()
         Me.pan_PointProps.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         CType(Me.img_Etaiement, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Consoles.SuspendLayout()
+        Me.pan_Nombre.SuspendLayout()
+        Me.pan_PositionCharges.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
@@ -241,22 +254,62 @@ Partial Class Frm_Etaiement
         'pan_PointProps
         '
         Me.pan_PointProps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.pan_PointProps.Controls.Add(Me.rad_UnderSlab)
-        Me.pan_PointProps.Controls.Add(Me.rad_UnderBeam)
-        Me.pan_PointProps.Controls.Add(Me.cmb_NbPoint)
-        Me.pan_PointProps.Controls.Add(Me.lbl_LocPP)
-        Me.pan_PointProps.Controls.Add(Me.chk_EtaisConsoleDroite)
-        Me.pan_PointProps.Controls.Add(Me.lbl_NbPP)
-        Me.pan_PointProps.Controls.Add(Me.chk_EtaisConsoleGauche)
+        Me.pan_PointProps.Controls.Add(Me.pan_Nombre)
+        Me.pan_PointProps.Controls.Add(Me.pan_PositionCharges)
+        Me.pan_PointProps.Controls.Add(Me.pan_Consoles)
         Me.pan_PointProps.Location = New System.Drawing.Point(8, 105)
         Me.pan_PointProps.Name = "pan_PointProps"
-        Me.pan_PointProps.Size = New System.Drawing.Size(232, 202)
+        Me.pan_PointProps.Size = New System.Drawing.Size(232, 193)
         Me.pan_PointProps.TabIndex = 8
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.btn_Precedent)
+        Me.Panel1.Controls.Add(Me.btn_Suivant)
+        Me.Panel1.Controls.Add(Me.cmb_NbPoints)
+        Me.Panel1.Location = New System.Drawing.Point(49, 23)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(136, 26)
+        Me.Panel1.TabIndex = 12
+        '
+        'btn_Precedent
+        '
+        Me.btn_Precedent.Image = CType(resources.GetObject("btn_Precedent.Image"), System.Drawing.Image)
+        Me.btn_Precedent.Location = New System.Drawing.Point(76, 1)
+        Me.btn_Precedent.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Precedent.Name = "btn_Precedent"
+        Me.btn_Precedent.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Precedent.TabIndex = 10
+        Me.btn_Precedent.TabStop = False
+        Me.btn_Precedent.UseVisualStyleBackColor = True
+        '
+        'btn_Suivant
+        '
+        Me.btn_Suivant.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_Suivant.Image = CType(resources.GetObject("btn_Suivant.Image"), System.Drawing.Image)
+        Me.btn_Suivant.Location = New System.Drawing.Point(98, 1)
+        Me.btn_Suivant.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_Suivant.Name = "btn_Suivant"
+        Me.btn_Suivant.Size = New System.Drawing.Size(23, 23)
+        Me.btn_Suivant.TabIndex = 9
+        Me.btn_Suivant.TabStop = False
+        Me.btn_Suivant.UseVisualStyleBackColor = True
+        '
+        'cmb_NbPoints
+        '
+        Me.cmb_NbPoints.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmb_NbPoints.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_NbPoints.FormattingEnabled = True
+        Me.cmb_NbPoints.Location = New System.Drawing.Point(3, 2)
+        Me.cmb_NbPoints.Name = "cmb_NbPoints"
+        Me.cmb_NbPoints.Size = New System.Drawing.Size(71, 21)
+        Me.cmb_NbPoints.TabIndex = 4
         '
         'rad_UnderSlab
         '
         Me.rad_UnderSlab.AutoSize = True
-        Me.rad_UnderSlab.Location = New System.Drawing.Point(68, 167)
+        Me.rad_UnderSlab.Location = New System.Drawing.Point(45, 49)
         Me.rad_UnderSlab.Name = "rad_UnderSlab"
         Me.rad_UnderSlab.Size = New System.Drawing.Size(96, 17)
         Me.rad_UnderSlab.TabIndex = 8
@@ -267,7 +320,7 @@ Partial Class Frm_Etaiement
         '
         Me.rad_UnderBeam.AutoSize = True
         Me.rad_UnderBeam.Checked = True
-        Me.rad_UnderBeam.Location = New System.Drawing.Point(68, 141)
+        Me.rad_UnderBeam.Location = New System.Drawing.Point(45, 26)
         Me.rad_UnderBeam.Name = "rad_UnderBeam"
         Me.rad_UnderBeam.Size = New System.Drawing.Size(102, 17)
         Me.rad_UnderBeam.TabIndex = 8
@@ -275,19 +328,10 @@ Partial Class Frm_Etaiement
         Me.rad_UnderBeam.Text = "rad_UnderBeam"
         Me.rad_UnderBeam.UseVisualStyleBackColor = True
         '
-        'cmb_NbPoint
-        '
-        Me.cmb_NbPoint.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmb_NbPoint.FormattingEnabled = True
-        Me.cmb_NbPoint.Location = New System.Drawing.Point(68, 94)
-        Me.cmb_NbPoint.Name = "cmb_NbPoint"
-        Me.cmb_NbPoint.Size = New System.Drawing.Size(111, 21)
-        Me.cmb_NbPoint.TabIndex = 3
-        '
         'lbl_LocPP
         '
         Me.lbl_LocPP.AutoSize = True
-        Me.lbl_LocPP.Location = New System.Drawing.Point(1, 119)
+        Me.lbl_LocPP.Location = New System.Drawing.Point(4, 4)
         Me.lbl_LocPP.Name = "lbl_LocPP"
         Me.lbl_LocPP.Size = New System.Drawing.Size(55, 13)
         Me.lbl_LocPP.TabIndex = 6
@@ -296,7 +340,7 @@ Partial Class Frm_Etaiement
         'chk_EtaisConsoleDroite
         '
         Me.chk_EtaisConsoleDroite.AutoSize = True
-        Me.chk_EtaisConsoleDroite.Location = New System.Drawing.Point(4, 44)
+        Me.chk_EtaisConsoleDroite.Location = New System.Drawing.Point(4, 28)
         Me.chk_EtaisConsoleDroite.Name = "chk_EtaisConsoleDroite"
         Me.chk_EtaisConsoleDroite.Size = New System.Drawing.Size(139, 17)
         Me.chk_EtaisConsoleDroite.TabIndex = 7
@@ -306,7 +350,7 @@ Partial Class Frm_Etaiement
         'lbl_NbPP
         '
         Me.lbl_NbPP.AutoSize = True
-        Me.lbl_NbPP.Location = New System.Drawing.Point(1, 75)
+        Me.lbl_NbPP.Location = New System.Drawing.Point(4, 5)
         Me.lbl_NbPP.Name = "lbl_NbPP"
         Me.lbl_NbPP.Size = New System.Drawing.Size(51, 13)
         Me.lbl_NbPP.TabIndex = 6
@@ -315,7 +359,7 @@ Partial Class Frm_Etaiement
         'chk_EtaisConsoleGauche
         '
         Me.chk_EtaisConsoleGauche.AutoSize = True
-        Me.chk_EtaisConsoleGauche.Location = New System.Drawing.Point(4, 21)
+        Me.chk_EtaisConsoleGauche.Location = New System.Drawing.Point(4, 5)
         Me.chk_EtaisConsoleGauche.Name = "chk_EtaisConsoleGauche"
         Me.chk_EtaisConsoleGauche.Size = New System.Drawing.Size(149, 17)
         Me.chk_EtaisConsoleGauche.TabIndex = 5
@@ -331,6 +375,43 @@ Partial Class Frm_Etaiement
         Me.img_Etaiement.Size = New System.Drawing.Size(100, 50)
         Me.img_Etaiement.TabIndex = 1
         Me.img_Etaiement.TabStop = False
+        '
+        'imgList_PlusMoins
+        '
+        Me.imgList_PlusMoins.ImageStream = CType(resources.GetObject("imgList_PlusMoins.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imgList_PlusMoins.TransparentColor = System.Drawing.Color.Transparent
+        Me.imgList_PlusMoins.Images.SetKeyName(0, "Moins")
+        Me.imgList_PlusMoins.Images.SetKeyName(1, "MoinsNonDispo")
+        Me.imgList_PlusMoins.Images.SetKeyName(2, "Plus")
+        Me.imgList_PlusMoins.Images.SetKeyName(3, "PlusNonDispo")
+        '
+        'pan_Consoles
+        '
+        Me.pan_Consoles.Controls.Add(Me.chk_EtaisConsoleGauche)
+        Me.pan_Consoles.Controls.Add(Me.chk_EtaisConsoleDroite)
+        Me.pan_Consoles.Location = New System.Drawing.Point(0, 5)
+        Me.pan_Consoles.Name = "pan_Consoles"
+        Me.pan_Consoles.Size = New System.Drawing.Size(230, 48)
+        Me.pan_Consoles.TabIndex = 13
+        '
+        'pan_Nombre
+        '
+        Me.pan_Nombre.Controls.Add(Me.lbl_NbPP)
+        Me.pan_Nombre.Controls.Add(Me.Panel1)
+        Me.pan_Nombre.Location = New System.Drawing.Point(0, 56)
+        Me.pan_Nombre.Name = "pan_Nombre"
+        Me.pan_Nombre.Size = New System.Drawing.Size(230, 55)
+        Me.pan_Nombre.TabIndex = 14
+        '
+        'pan_PositionCharges
+        '
+        Me.pan_PositionCharges.Controls.Add(Me.lbl_LocPP)
+        Me.pan_PositionCharges.Controls.Add(Me.rad_UnderBeam)
+        Me.pan_PositionCharges.Controls.Add(Me.rad_UnderSlab)
+        Me.pan_PositionCharges.Location = New System.Drawing.Point(0, 114)
+        Me.pan_PositionCharges.Name = "pan_PositionCharges"
+        Me.pan_PositionCharges.Size = New System.Drawing.Size(230, 77)
+        Me.pan_PositionCharges.TabIndex = 14
         '
         'Frm_Etaiement
         '
@@ -357,8 +438,14 @@ Partial Class Frm_Etaiement
         Me.pan_SaisieEtaiement.ResumeLayout(False)
         Me.pan_SaisieEtaiement.PerformLayout()
         Me.pan_PointProps.ResumeLayout(False)
-        Me.pan_PointProps.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
         CType(Me.img_Etaiement, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Consoles.ResumeLayout(False)
+        Me.pan_Consoles.PerformLayout()
+        Me.pan_Nombre.ResumeLayout(False)
+        Me.pan_Nombre.PerformLayout()
+        Me.pan_PositionCharges.ResumeLayout(False)
+        Me.pan_PositionCharges.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -378,7 +465,6 @@ Partial Class Frm_Etaiement
     Friend WithEvents rad_UnPropped As RadioButton
     Friend WithEvents rad_PointPropped As RadioButton
     Friend WithEvents rad_FullyPropped As RadioButton
-    Friend WithEvents cmb_NbPoint As ComboBox
     Friend WithEvents chk_EtaisConsoleGauche As CheckBox
     Friend WithEvents lbl_NbPP As Label
     Friend WithEvents chk_EtaisConsoleDroite As CheckBox
@@ -386,4 +472,12 @@ Partial Class Frm_Etaiement
     Friend WithEvents lbl_LocPP As Label
     Friend WithEvents rad_UnderSlab As RadioButton
     Friend WithEvents rad_UnderBeam As RadioButton
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents btn_Precedent As Button
+    Friend WithEvents btn_Suivant As Button
+    Friend WithEvents cmb_NbPoints As ComboBox
+    Friend WithEvents imgList_PlusMoins As ImageList
+    Friend WithEvents pan_Consoles As Panel
+    Friend WithEvents pan_Nombre As Panel
+    Friend WithEvents pan_PositionCharges As Panel
 End Class

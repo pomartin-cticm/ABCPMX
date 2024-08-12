@@ -7085,7 +7085,7 @@ Public Module Mod_Dessins
 
 #Region " Dessins pour la définition de l'étaiement (FRM_ETAIEMENT)"
 
-    Public Sub DessinFrmEtaiement(MyGr As Graphics, MyPoutre As cls_Poutre,
+    Public Sub DessinFrmEtaiement(MyGr As Graphics, myBeam As cls_Poutre, myFont As Font,
                                   ByVal pWi As Decimal, ByVal pHi As Decimal,
                                   kAdjust As Double, lCote As Boolean,
                                   ByVal Optional xLeft As Decimal = 0, ByVal Optional yTop As Decimal = 0)
@@ -7095,7 +7095,8 @@ Public Module Mod_Dessins
         '   Affichage du plancher en longitudinal
         '------------------------------------------------------------------------------------------------------------------
         '   MyGr        [E] :   Graphics
-        '   section     [E] :   Poutre à dessiner
+        '   myBeam      [E] :   Poutre à dessiner
+        '   myFont      [E] :   Police de caractères
         '   pWi, pHi    [E] :   Dimensions del'objet dans lequel on dessine
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   iSelect     [E] :   Indique quel est la travée sélectionnée
@@ -7122,17 +7123,17 @@ Public Module Mod_Dessins
         Dim myBrushB As New LinearGradientBrush(New PointF(0, 0), New PointF(pHi, pWi), Color.DarkGray, CouleurBeton)
         Const lAffSymbol As Boolean = False
         Dim Chaine As String
-        Dim MyFontNormal As Font = FontBase
+        Dim MyFontNormal As Font = myFont
         Dim lTotal As Boolean = False
         Dim lContour As Boolean = lCONTOURCOTE
-        Dim lPointProp As Boolean = (MyPoutre.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.PointPropped)
+        Dim lPointProp As Boolean = (myBeam.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.PointPropped)
 
         '--> Initialisations
 
-        LongueurPoutre = MyPoutre.LongueurTotale
-        HauteurPoutre = MyPoutre.HauteurTotale
-        LongueurDalle = MyPoutre.LongueurTotale
-        HauteurDalle = MyPoutre.Dalle.Ep_td
+        LongueurPoutre = myBeam.LongueurTotale
+        HauteurPoutre = myBeam.HauteurTotale
+        LongueurDalle = myBeam.LongueurTotale
+        HauteurDalle = myBeam.Dalle.Ep_td
         dCar = Math.Sqrt(LongueurPoutre ^ 2 + HauteurPoutre ^ 2) / 20
         dCarApp = HauteurPoutre / 2
 
@@ -7143,13 +7144,13 @@ Public Module Mod_Dessins
         yMin = -dCar - dCarApp
         yMax = HauteurPoutre + dCar
 
-        If MyPoutre.lEtaisSousProfileAcier Then
+        If myBeam.lEtaisSousProfileAcier Then
             yPosEtais = 0
         Else
             yPosEtais = HauteurPoutre
         End If
 
-        If MyPoutre.NbTravees > 1 Then yMin -= dCar
+        If myBeam.NbTravees > 1 Then yMin -= dCar
         ParametresAffichage(MyParAff, xMin, yMin, xMax - xMin, yMax - yMin, pWi, pHi, xLeft, yTop, kAdjust)
 
         '--> Représentation de la poutre 
@@ -7158,41 +7159,41 @@ Public Module Mod_Dessins
         yo = 0
         ye = HauteurPoutre
 
-        For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
+        For i As Integer = myBeam.IndicePremiereTravee To myBeam.IndiceDerniereTravee
 
             xo = xe
-            xe = xo + MyPoutre.LongueurTravee(i)
+            xe = xo + myBeam.LongueurTravee(i)
 
             AddRectanglePlein(MyGr, MyBrushA, MyPenContour, xo, yo, xe, ye, MyParAff, True, True)
         Next
 
         '--> Représentation des appuis
 
-        For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
+        For i As Integer = 1 To myBeam.NombreTraveesDeuxAppuis
 
-            xo = MyPoutre.xPositionAppui(True, i)
+            xo = myBeam.xPositionAppui(True, i)
             DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
         Next
 
-        xo = MyPoutre.xPositionAppui(False, MyPoutre.NombreTraveesDeuxAppuis)
+        xo = myBeam.xPositionAppui(False, myBeam.NombreTraveesDeuxAppuis)
         DessineAppui(MyGr, xo, dCarApp, MyParAff)
 
         '--> Représentation des étais d'extrémité
 
-        If lPointProp And MyPoutre.lEtaisConsoleGauche Then
+        If lPointProp And myBeam.lEtaisConsoleGauche Then
 
-            If MyPoutre.lTraveeConsoleGauche Then
-                xo = MyPoutre.xPositionAppui(True, 0)
+            If myBeam.lTraveeConsoleGauche Then
+                xo = myBeam.xPositionAppui(True, 0)
                 DessineEtais(MyGr, xo, yPosEtais, dCarApp, MyParAff)
             End If
 
         End If
 
-        If lPointProp And MyPoutre.lEtaisConsoleDroite Then
+        If lPointProp And myBeam.lEtaisConsoleDroite Then
 
-            If MyPoutre.lTraveeConsoleDroite Then
-                xo = MyPoutre.xPositionAppui(False, MyPoutre.IndiceDerniereTravee)
+            If myBeam.lTraveeConsoleDroite Then
+                xo = myBeam.xPositionAppui(False, myBeam.IndiceDerniereTravee)
                 DessineEtais(MyGr, xo, yPosEtais, 0.75 * dCarApp, MyParAff)
             End If
 
@@ -7200,11 +7201,11 @@ Public Module Mod_Dessins
 
         '--> Représentation des étais intermédiaires
 
-        If lPointProp And MyPoutre.NbEtaiement <> 0 Then
+        If lPointProp And myBeam.NbEtaiement <> 0 Then
 
-            For i As Integer = 1 To MyPoutre.IndiceTraveeConsoleDroite - 1
-                For j As Integer = 1 To MyPoutre.NbEtaiement
-                    xo = MyPoutre.xPositionAppui(True, i) + j * MyPoutre.LongueurTravee(i) / (MyPoutre.NbEtaiement + 1)
+            For i As Integer = 1 To myBeam.IndiceTraveeConsoleDroite - 1
+                For j As Integer = 1 To myBeam.NbEtaiement
+                    xo = myBeam.xPositionAppui(True, i) + j * myBeam.LongueurTravee(i) / (myBeam.NbEtaiement + 1)
                     DessineEtais(MyGr, xo, yPosEtais, 0.75 * dCarApp, MyParAff)
                 Next
             Next
@@ -7215,14 +7216,14 @@ Public Module Mod_Dessins
         Dim Longueur, LongueurMax, DeltaX As Decimal
         Dim NbPts As Integer
 
-        If (MyPoutre.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.FullyPropped) Then
-            LongueurMax = MyPoutre.LongueurTraveeMax
+        If (myBeam.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.FullyPropped) Then
+            LongueurMax = myBeam.LongueurTraveeMax
             DeltaX = LongueurMax / 25
 
-            For i As Integer = MyPoutre.IndicePremiereTravee To MyPoutre.IndiceDerniereTravee
+            For i As Integer = myBeam.IndicePremiereTravee To myBeam.IndiceDerniereTravee
 
-                xo = MyPoutre.xPositionAppui(True, i)
-                Longueur = MyPoutre.LongueurTravee(i)
+                xo = myBeam.xPositionAppui(True, i)
+                Longueur = myBeam.LongueurTravee(i)
 
                 NbPts = Math.Floor(Longueur / DeltaX) - 1
 
@@ -7255,17 +7256,17 @@ Public Module Mod_Dessins
 
             ' Travée console gauche
 
-            If MyPoutre.lTraveeConsoleGauche Then
+            If myBeam.lTraveeConsoleGauche Then
 
                 MyColor = StyleCouleur(iSelect, 0)
                 MyPen.Color = MyColor
 
                 xo = 0
-                xe = MyPoutre.LongueurTravee(0)
+                xe = myBeam.LongueurTravee(0)
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "Lg" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(0), Enu_TypeVariable.Longueur)
+                If lAffSymbol Then Chaine = "Lg" Else Chaine = GetStringNoUnit(myBeam.LongueurTravee(0), Enu_TypeVariable.Longueur)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 lTotal = True
@@ -7273,31 +7274,31 @@ Public Module Mod_Dessins
 
             ' Travées principales
 
-            For i As Integer = 1 To MyPoutre.NombreTraveesDeuxAppuis
+            For i As Integer = 1 To myBeam.NombreTraveesDeuxAppuis
 
-                xe = MyPoutre.xPositionAppui(True, i)
+                xe = myBeam.xPositionAppui(True, i)
                 MyColor = StyleCouleur(iSelect, i)
                 MyPen.Color = MyColor
 
                 If lPointProp Then
-                    For j As Integer = 1 To MyPoutre.NbEtaiement + 1
+                    For j As Integer = 1 To myBeam.NbEtaiement + 1
 
                         xo = xe
-                        xe += MyPoutre.LongueurTravee(i) / (MyPoutre.NbEtaiement + 1)
+                        xe += myBeam.LongueurTravee(i) / (myBeam.NbEtaiement + 1)
 
                         AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                        If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i) / (MyPoutre.NbEtaiement + 1), Enu_TypeVariable.Longueur)
+                        If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(myBeam.LongueurTravee(i) / (myBeam.NbEtaiement + 1), Enu_TypeVariable.Longueur)
                         AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                     Next
                 Else
                     xo = xe
-                    xe += MyPoutre.LongueurTravee(i)
+                    xe += myBeam.LongueurTravee(i)
 
                     AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                    If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(i), Enu_TypeVariable.Longueur)
+                    If lAffSymbol Then Chaine = "Lpp" Else Chaine = GetStringNoUnit(myBeam.LongueurTravee(i), Enu_TypeVariable.Longueur)
                     AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 End If
@@ -7306,17 +7307,17 @@ Public Module Mod_Dessins
 
             ' Travée console droite
 
-            If MyPoutre.lTraveeConsoleDroite Then
+            If myBeam.lTraveeConsoleDroite Then
 
                 MyColor = StyleCouleur(iSelect, 99)
                 MyPen.Color = MyColor
 
                 xo = xe
-                xe += MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite)
+                xe += myBeam.LongueurTravee(myBeam.IndiceTraveeConsoleDroite)
 
                 AddFleche(MyGr, MyPen, xo, yCote, xe, yCote, MyParAff, True, True)
 
-                If lAffSymbol Then Chaine = "Ld" Else Chaine = GetStringNoUnit(MyPoutre.LongueurTravee(MyPoutre.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur)
+                If lAffSymbol Then Chaine = "Ld" Else Chaine = GetStringNoUnit(myBeam.LongueurTravee(myBeam.IndiceTraveeConsoleDroite), Enu_TypeVariable.Longueur)
                 AddTexteFond(MyGr, New SolidBrush(MyColor), Chaine, MyFontNormal, 0.5 * (xo + xe), yCote, MyParAff, HorizontalAlignment.Center, VerticalAlignement.Middle, New SolidBrush(SystemColors.ControlLightLight), MyPen, lContour)
 
                 lTotal = True
