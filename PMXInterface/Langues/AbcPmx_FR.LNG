@@ -618,6 +618,8 @@ EDITPROFILES			= Editer les profilés ArcelorMittal
 EDITSTUDS				= Editer les goujons
 EDITDECKS				= Editer les bacs acier
 WELDEDSEC				= PRS
+FIRENOTAVAIL			= Le calcul au feu n'est pas disponible dans cette version de $.
+FIRELATER				= Il sera fourni dans une future version.
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Options coefficient d'équivalence 
@@ -637,16 +639,6 @@ LONGTERM_N				= Coefficient d'équivalence pour les charges permanentes
 SHORTTERM_N				= Coefficient d'équivalence pour les charges d'exploitation
 RCOMPRESSION			= Résistance à la compression
 RTENSION				= Résistance à la traction							   
-
-#FRM_OUVERTURE
-BROWSEFILES				= Parcourir
-CREATEASSEMBLY			= Créer une nouvelle section
-NEWPROJECT				= Nouveau projet
-OK						= Ok
-OPENPROJECT				= Ouvrir un projet
-RECENTFILES				= Fichiers récents
-FILE					= Fichier
-NOTAVAILABLE			= Section non disponible dans cette version du logiciel
 
 #FRM_PPLOADCASE
 TITLE					= Cas de charge
@@ -728,7 +720,6 @@ PROPPINGLOC				= Position de l'étaiement
 UNDERSTEELBEAM			= Sous la poutre acier
 UNDERSLAB				= Sous la dalle béton
 
-
 #FRM_PSHEETING
 TITLE					= Definition du bac acier
 OK						= OK
@@ -740,7 +731,6 @@ FROMDATABASE			= Depuis la base de données
 FROMDIM					= Depuis les dimensions
 NAME					= Nom
 PROPERTIES				= Dimensions et propriétés
-
 
 #FRM_SLAB
 TITLE					= Définition de la dalle
@@ -828,6 +818,17 @@ UPPERF					= Semelle supérieure
 WEB						= Âme 
 WELDEDSYM				= PRS bisymétrique
 WELDEDP					= PRS mono-symétrique
+
+#FRM_START
+BROWSEFILES				= Parcourir
+CREATEASSEMBLY			= Créer une nouvelle section
+NEWPROJECT				= Nouveau projet
+OK						= Ok
+OPENPROJECT				= Ouvrir un projet
+RECENTFILES				= Fichiers récents
+FILE					= Fichier
+NOTAVAILABLE			= Section non disponible dans cette version du logiciel
+LATER 					= Les sections de plancher minces seront disponibles dans une future version de $.
 
 #FRM_SFBSECTIONS
 CANCEL					= Annuler

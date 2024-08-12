@@ -32,7 +32,7 @@ Public Class Frm_Ouverture
 
         If File.Exists(LogicielFichiers.Langue) Then
             Dim Bloc As New Dictionary(Of String, String)
-            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_OUVERTURE")
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_START")
             BlocLine.CreationBloc(Bloc)
 
             Try
@@ -51,7 +51,7 @@ Public Class Frm_Ouverture
 
                 Me.Button_Valider.Text = Bloc("OK")
 
-                strNonDispo = Bloc("NOTAVAILABLE")
+                strNonDispo = Bloc("NOTAVAILABLE") & Chr(13) & RemplaceDollar(Bloc("LATER"), LogicielInfo.Racine)
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")

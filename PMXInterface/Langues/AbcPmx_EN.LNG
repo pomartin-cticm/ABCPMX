@@ -618,6 +618,8 @@ EDITPROFILES			= Edit ArcelorMittal profiles
 EDITSTUDS				= Edit Studs
 EDITDECKS				= Edit Steel profiled sheetings
 WELDEDSEC				= Welded
+FIRENOTAVAIL			= Fire calculation is not available in this version of $.
+FIRELATER				= It will be released in a future version.
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Modular ratio tool
@@ -637,16 +639,6 @@ LONGTERM_N				= Modular ratio for permanent loads
 SHORTTERM_N				= Modular ratio for live loads
 RCOMPRESSION			= Resistances to compression
 RTENSION				= Resistance to tension
-
-#FRM_OUVERTURE
-BROWSEFILES				= Browse
-CREATEBEAM				= Create a new beam
-NEWPROJECT				= New project
-OK						= Ok
-OPENPROJECT				= Open a project
-RECENTFILES				= Recent Files
-FILE					= File
-NOTAVAILABLE			= Section not available for this version of the software
 
 #FRM_PPLOADCASE
 TITLE					= Load cases
@@ -826,6 +818,17 @@ UPPERF					= Upper flange
 WEB						= Web 
 WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
+
+#FRM_START
+BROWSEFILES				= Browse
+CREATEBEAM				= Create a new beam
+NEWPROJECT				= New project
+OK						= Ok
+OPENPROJECT				= Open a project
+RECENTFILES				= Recent Files
+FILE					= File
+NOTAVAILABLE			= Section not available for this version of the software
+LATER					= Slim floor section will be available in a future version of $
 
 #FRM_SFBSECTIONS
 CANCEL					= Cancel

@@ -33,6 +33,8 @@ Public Class Frm_PMX
     Dim strTSbtn_IFB_B As String
     Dim strPRS As String
 
+    Dim strFeuNonDispo As String
+
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
     ''' </summary>
@@ -167,6 +169,8 @@ Public Class Frm_PMX
                 strRacineELSC = Bloc("SLSC")                                ' "SLS_C"
 
                 strCopy = Bloc("COPY")
+
+                strFeuNonDispo = Bloc("FIRENOTAVAIL") & Chr(13) & Str("FIRELATER")
 
             Catch ex As Exception
                 MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangueMessagesGeneraux")
@@ -674,7 +678,17 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.PPVerifications
 
             Case Me.TSbtn_OptionsIncendie.Name
-                FilleEnCours = EnuFenetres.OptionsIncendie
+
+                If lFIRE Then
+
+                    FilleEnCours = EnuFenetres.OptionsIncendie
+
+                Else
+
+                    GestionErrorsPMX("", "", strfeunondispo, False)
+
+                End If
+
 
             Case Me.TSbtn_MaintienBac.Name
                 FilleEnCours = EnuFenetres.Test

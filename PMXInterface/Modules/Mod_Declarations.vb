@@ -2,6 +2,13 @@
 
 Public Module Mod_Declarations
 
+#Region " Gestion des fonctionnalités avec les versions "
+
+    Public Const lSLIM As Boolean = False              ' Indique si les sections slim floors sont disponibles dans le logiciel
+    Public Const lFIRE As Boolean = False              ' Indique si le calcul au feu est disponible dans le logiciel
+
+#End Region
+
 #Region " Variables globales environnement du logiciel "
 
     Public LogicielFichiers As Struc_Fichiers
