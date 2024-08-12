@@ -62,26 +62,33 @@ Public Class Frm_CombinaisonsConstruction
     End Sub
 
     Private Sub GestionLangues(ByVal MyBloc As Dictionary(Of String, String))
+        If File.Exists(LogicielFichiers.Langue) Then
+            Try
 
-        Try
+                '=== COMBINAISONS
 
-            '=== COMBINAISONS
+                Me.lbl_ELU.Text = MyBloc("ULSTATES")
+                Me.lbl_ELS.Text = MyBloc("SLSTATES")
 
-            Me.lbl_ELU.Text = MyBloc("ULSTATES")
-            Me.lbl_ELS.Text = MyBloc("SLSTATES")
+                '=== Textes
 
-            '=== Textes
-
-            str_Combinaison = MyBloc("COMBINATION")
-            strELU = MyBloc("ULS") & "-C"
-            strELS = MyBloc("SLS") & "-C"
-            strNb = MyBloc("NUMBER")
+                str_Combinaison = MyBloc("COMBINATION")
+                strELU = MyBloc("ULS") & "-C"
+                strELS = MyBloc("SLS") & "-C"
+                strNb = MyBloc("NUMBER")
 
 
-        Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
-        Finally
-        End Try
+            Catch ex As Exception
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+            Finally
+            End Try
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
+
+        End If
+
 
     End Sub
 

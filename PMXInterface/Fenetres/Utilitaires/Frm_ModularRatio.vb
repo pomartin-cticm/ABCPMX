@@ -132,7 +132,8 @@ Public Class Frm_ModularRatio
                 Me.lbl_CoefficientAnnexB.Text = Bloc("COEFANNEXB")
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_ModularRatio/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_ModularRatio/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
@@ -350,7 +351,6 @@ Public Class Frm_ModularRatio
 
 #End Region
 
-
 #Region " Dessin des symboles "
 
     Private Sub PaintSymbol(sender As Object, e As PaintEventArgs) Handles img_PsiL.Paint, img_RH.Paint, img_H0.Paint, img_AgeT0.Paint, img_AgeT.Paint, img_Fctm.Paint, img_Fcm.Paint, img_Fck.Paint, img_Ecm.Paint, img_nL.Paint, img_n0.Paint
@@ -434,7 +434,6 @@ Public Class Frm_ModularRatio
 
 
 #End Region
-
 
 #Region " Dessin des expressions (symboles) "
 

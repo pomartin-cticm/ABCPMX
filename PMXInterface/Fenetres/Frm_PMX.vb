@@ -305,10 +305,15 @@ Public Class Frm_PMX
                 strPRS = Bloc("WELDEDSEC")
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
+
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
 

@@ -1740,7 +1740,7 @@ Module Mod_Outils
 
 #End Region
 
-#Region " Gestion des erreurs"
+#Region " Gestion des ErrorProvider "
 
     Sub PrepareErreurTextBox(ByVal MyErrPo As ErrorProvider, ByVal MyTxtBox As TextBox, ByVal lGauche As Boolean)
         '
@@ -1767,5 +1767,83 @@ Module Mod_Outils
     End Sub
 
 #End Region
+
+#Region " Gestion des erreurs et notifications dans le logiciel "
+
+    Public Sub GestionErrorsPMX(ModSource As String, Routine As String, myMessage As String, lError As Boolean)
+        '-------------------------------------------------------------------------------------------------------------
+        '   12/08/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------
+        '   Gestion de l'affichage des erreurs et notifications du logiciel
+        '-------------------------------------------------------------------------------------------------------------
+        '   ModSource   [E] :   Module ou fenêtre à l'origine de l'appel
+        '   Routine     [E] :   Routine appelante
+        '   myMessage   [E] :   Message à afficher
+        '   lError      [E] :   Indique si erreur ou notification
+        '-------------------------------------------------------------------------------------------------------------
+
+        Dim mySource As String = ""
+        If ModSource <> "" Then mySource = ModSource
+        If Routine <> "" Then
+            If ModSource <> "" Then mySource += " | "
+            mySource += Routine
+        End If
+
+        Frm_ErreursMessages.Source = mySource
+        Frm_ErreursMessages.Message = myMessage
+
+        Frm_ErreursMessages.lError = lError
+
+        Frm_ErreursMessages.ShowDialog()
+        Frm_ErreursMessages.Dispose()
+
+    End Sub
+
+    Public Sub GestionErreurAffichageLangue(ModSource As String, Routine As String)
+        '-------------------------------------------------------------------------------------------------------------
+        '   12/08/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------
+        '   Gestion de l'affichage des erreurs lors de l'affichage des fichiers langue
+        '-------------------------------------------------------------------------------------------------------------
+        '   ModSource   [E] :   Module ou fenêtre à l'origine de l'appel
+        '   Routine     [E] :   Routine appelante
+        '-------------------------------------------------------------------------------------------------------------
+
+        Dim myMsg As String
+
+        If LogicielInfo.Maitre = EnuMaitre.CTICM Then
+            myMsg = "Erreur affichage du fichier langue :" & Chr(13) & " Contactez le support !"
+        Else
+            myMsg = "Error display language:" & Chr(13) & " Contact support "
+        End If
+
+        GestionErrorsPMX(ModSource, Routine, myMsg, True)
+
+    End Sub
+
+    Public Sub GestionFichierLangueAbsent(ModSource As String, Routine As String)
+        '-------------------------------------------------------------------------------------------------------------
+        '   12/08/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------
+        '   Gestion de l'erreur si fichier langue pas trouvé
+        '-------------------------------------------------------------------------------------------------------------
+        '   ModSource   [E] :   Module ou fenêtre à l'origine de l'appel
+        '   Routine     [E] :   Routine appelante
+        '-------------------------------------------------------------------------------------------------------------
+
+        Dim myMsg As String
+
+        If LogicielInfo.Maitre = EnuMaitre.CTICM Then
+            myMsg = "Fichier langue absent :" & Chr(13) & LogicielFichiers.Langue & Chr(13) & " Contactez le support !"
+        Else
+            myMsg = "Language file is missing:" & Chr(13) & LogicielFichiers.Langue & Chr(13) & " Contact support "
+        End If
+
+        GestionErrorsPMX(ModSource, Routine, myMsg, True)
+
+    End Sub
+
+#End Region
+
 
 End Module

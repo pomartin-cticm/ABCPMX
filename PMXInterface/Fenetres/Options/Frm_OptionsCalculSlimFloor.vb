@@ -37,7 +37,8 @@ Public Class Frm_OptionsCalculSlimFloor
             Me.lbl_tpinfmin.Text = MyBloc("THICKNESSMIN")
 
         Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+            'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
         Finally
         End Try
     End Sub
@@ -200,4 +201,5 @@ Public Class Frm_OptionsCalculSlimFloor
     End Sub
 
 #End Region
+
 End Class

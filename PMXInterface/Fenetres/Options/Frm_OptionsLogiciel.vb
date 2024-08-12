@@ -1,4 +1,5 @@
 ﻿Imports PMXMoteur2
+Imports System.IO
 
 Public Class Frm_OptionsLogiciel
 
@@ -92,7 +93,7 @@ Public Class Frm_OptionsLogiciel
         lBuild = True
         ComWindow = enu_ComWindow.Cancel
         InitialiseParametresLocaux()
-        ChargesBlocsLangues()
+        ChargeBlocsLangues()
         GestionLangues(BlocLangues(BALISE))
         GestionStyle()
         'GestionUnites()
@@ -101,61 +102,70 @@ Public Class Frm_OptionsLogiciel
         lBuild = False
     End Sub
 
-    Public Sub ChargesBlocsLangues()
+    Public Sub ChargeBlocsLangues()
         '----------------------------------------------------------------------------------------
         '   Récupération des blocs langues pour toutes les fenêtres fille
         '----------------------------------------------------------------------------------------
 
-        '--> Déclaration
+        If File.Exists(LogicielFichiers.Langue) Then
 
-        Dim Lines As Cls_LinesOfFile
-        Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTDATABASES", "OPTSOFTDIRECTORIES", "OPTSOFTEXPERT", "OPTSOFTGENERAL", "OPTSOFTUNITS", "OPTSOFTCALCULSHEET"}
-        Dim lBlocEnCours As Boolean = False
-        Dim BlocEnCours As String = Nothing
-        Dim MotCle, Argument As String
-        Dim MyBloc As Dictionary(Of String, String) = Nothing
-        Dim Index As Integer
+            '--> Déclaration
 
-        '--> Initialisation
+            Dim Lines As Cls_LinesOfFile
+            Dim BlocALire() As String = {"OPTSOFTMAIN", "OPTSOFTDATABASES", "OPTSOFTDIRECTORIES", "OPTSOFTEXPERT", "OPTSOFTGENERAL", "OPTSOFTUNITS", "OPTSOFTCALCULSHEET"}
+            Dim lBlocEnCours As Boolean = False
+            Dim BlocEnCours As String = Nothing
+            Dim MotCle, Argument As String
+            Dim MyBloc As Dictionary(Of String, String) = Nothing
+            Dim Index As Integer
 
-        InitialiseLNGFileName(pLocalLogicielOptions.IndLangue, pFichierLangue)
-        Lines = New Cls_LinesOfFile(pFichierLangue, True)
+            '--> Initialisation
 
-        BlocLangues = New Dictionary(Of String, Dictionary(Of String, String))
+            InitialiseLNGFileName(pLocalLogicielOptions.IndLangue, pFichierLangue)
+            Lines = New Cls_LinesOfFile(pFichierLangue, True)
 
-        '--> Boucle sur les lignes
+            BlocLangues = New Dictionary(Of String, Dictionary(Of String, String))
 
-        For i As Integer = 0 To Lines.Lines.Count - 1
+            '--> Boucle sur les lignes
 
-            If Lines.Lines(i).Trim.IndexOf("#") = 0 Then
-                MotCle = Lines.Lines(i).Trim.ToUpper.Substring(1)
-                If (Array.IndexOf(BlocALire, MotCle) > -1) Then
-                    lBlocEnCours = True
-                    BlocEnCours = MotCle
-                    MyBloc = New Dictionary(Of String, String)
-                    MyBloc.Clear()
+            For i As Integer = 0 To Lines.Lines.Count - 1
+
+                If Lines.Lines(i).Trim.IndexOf("#") = 0 Then
+                    MotCle = Lines.Lines(i).Trim.ToUpper.Substring(1)
+                    If (Array.IndexOf(BlocALire, MotCle) > -1) Then
+                        lBlocEnCours = True
+                        BlocEnCours = MotCle
+                        MyBloc = New Dictionary(Of String, String)
+                        MyBloc.Clear()
+                    End If
+                ElseIf Lines.Lines(i).Trim.Length = 0 Then
+                    If lBlocEnCours Then
+                        BlocLangues.Add(BlocEnCours, MyBloc)
+                    End If
+                    lBlocEnCours = False
+                ElseIf lBlocEnCours Then
+                    Index = Lines.Lines(i).IndexOf("=")
+                    If Index > -1 Then
+                        MotCle = Lines.Lines(i).Substring(0, Index).Trim
+                        Argument = Lines.Lines(i).Substring(Index + 1).Trim
+                        MyBloc.Add(MotCle, Argument)
+                    End If
+
                 End If
-            ElseIf Lines.Lines(i).Trim.Length = 0 Then
-                If lBlocEnCours Then
-                    BlocLangues.Add(BlocEnCours, MyBloc)
-                End If
-                lBlocEnCours = False
-            ElseIf lBlocEnCours Then
-                Index = Lines.Lines(i).IndexOf("=")
-                If Index > -1 Then
-                    MotCle = Lines.Lines(i).Substring(0, Index).Trim
-                    Argument = Lines.Lines(i).Substring(Index + 1).Trim
-                    MyBloc.Add(MotCle, Argument)
-                End If
 
+            Next
+
+            If lBlocEnCours Then
+                BlocLangues.Add(BlocEnCours, MyBloc)
             End If
+            lBlocEnCours = False
 
-        Next
+        Else
 
-        If lBlocEnCours Then
-            BlocLangues.Add(BlocEnCours, MyBloc)
+            GestionFichierLangueAbsent(Me.Name, "ChargeBlocsLangues")
+
         End If
-        lBlocEnCours = False
+
 
     End Sub
 
@@ -182,7 +192,8 @@ Public Class Frm_OptionsLogiciel
             Me.lbl_ExpertMode.Text = MyBloc("EXPERTMODEACTIVE")
 
         Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+            'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
         Finally
         End Try
 

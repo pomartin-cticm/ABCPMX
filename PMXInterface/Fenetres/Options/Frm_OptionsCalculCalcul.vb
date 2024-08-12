@@ -67,7 +67,8 @@ Public Class Frm_OptionsCalculCalcul
             Me.lbl_ShearBuckling.Text = MyBloc("ETAW")
 
         Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+            'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
         Finally
         End Try
     End Sub

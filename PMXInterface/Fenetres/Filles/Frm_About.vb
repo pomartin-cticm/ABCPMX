@@ -22,6 +22,9 @@ Public Class Frm_About
     End Sub
 
     Private Sub GestionLangues()
+
+        Dim myMsg As String
+
         If File.Exists(LogicielFichiers.Langue) Then
 
             Dim Bloc As New Dictionary(Of String, String)
@@ -35,14 +38,18 @@ Public Class Frm_About
                 Me.Text = Bloc("TITLE")
                 Me.btn_OK.Text = Bloc("OK")
 
-
-
-
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
+
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
 
@@ -124,6 +131,9 @@ Public Class Frm_About
 
     End Sub
 
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        GestionErrorsPMX("", "", "Gestion des erreurs", True)
+    End Sub
 
 #End Region
 

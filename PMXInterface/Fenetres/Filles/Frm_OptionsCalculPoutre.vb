@@ -94,10 +94,15 @@ Public Class Frm_OptionsCalculPoutre
                 Me.lbl_GraviteG.Text = Bloc("GFORCE")
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
+
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
 

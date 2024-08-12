@@ -249,26 +249,30 @@ Module Mod_NoteCalcul
         '   Initilisation des blocs de la NdC dans la langue d'édition de la Note
         '---------------------------------------------------------------------------------------------------
 
-        Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_MAIN")
-        BlocLine.CreationBloc(BlocG)
+        Try
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_MAIN")
+            BlocLine.CreationBloc(BlocG)
 
-        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_SECTIONPROP")
-        BlocLine.CreationBloc(BlocSP)
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_SECTIONPROP")
+            BlocLine.CreationBloc(BlocSP)
 
-        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_ANALYSE")
-        BlocLine.CreationBloc(BlocAnalyse)
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_ANALYSE")
+            BlocLine.CreationBloc(BlocAnalyse)
 
-        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSULS")
-        BlocLine.CreationBloc(BlocELU)
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSULS")
+            BlocLine.CreationBloc(BlocELU)
 
-        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSSLS")
-        BlocLine.CreationBloc(BlocELS)
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSSLS")
+            BlocLine.CreationBloc(BlocELS)
 
-        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSFIRE")
-        BlocLine.CreationBloc(BlocFEU)
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_VERIFICATIONSFIRE")
+            BlocLine.CreationBloc(BlocFEU)
 
-        BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_HIVOSS")
-        BlocLine.CreationBloc(BlocHiVoss)
+            BlocLine = New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_HIVOSS")
+            BlocLine.CreationBloc(BlocHiVoss)
+        Catch ex As Exception
+            GestionErreurAffichageLangue("Mod_NoteCalcul", "InitialiseBlocNDC")
+        End Try
 
     End Sub
 

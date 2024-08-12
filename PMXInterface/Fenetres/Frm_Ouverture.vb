@@ -54,10 +54,15 @@ Public Class Frm_Ouverture
                 strNonDispo = Bloc("NOTAVAILABLE")
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_Ouverture/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_Ouverture/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
+
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
 
@@ -167,7 +172,10 @@ Public Class Frm_Ouverture
                 '--> Fermeture
                 Me.Close()
             Else
-                MsgBox(strnondispo)
+                'MsgBox(strNonDispo)
+
+                GestionErrorsPMX("", "", strNonDispo, False)
+
             End If
 
 

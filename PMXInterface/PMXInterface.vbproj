@@ -191,6 +191,12 @@
     <Compile Include="Fenetres\Filles\Frm_SectionSFB.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Fenetres\Frm_ErreursMessages.Designer.vb">
+      <DependentUpon>Frm_ErreursMessages.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Fenetres\Frm_ErreursMessages.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Fenetres\Options\Frm_OptionsCalculSlimFloor.Designer.vb">
       <DependentUpon>Frm_OptionsCalculSlimFloor.vb</DependentUpon>
     </Compile>
@@ -525,6 +531,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Filles\Frm_SectionSFB.resx">
       <DependentUpon>Frm_SectionSFB.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Fenetres\Frm_ErreursMessages.resx">
+      <DependentUpon>Frm_ErreursMessages.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Fenetres\Options\Frm_OptionsCalculSlimFloor.resx">
       <DependentUpon>Frm_OptionsCalculSlimFloor.vb</DependentUpon>

@@ -256,26 +256,6 @@ Public Class Frm_Connection
                 strTypeTravee_ConsoleDroite = Bloc("RIGHTCANT")
                 strSpan = Bloc("SPAN")
 
-                'If MyPoutreLoc.lTraveeConsoleGauche Or MyPoutreLoc.lTraveeConsoleDroite Then
-                '    If MyPoutreLoc.lTraveeConsoleGauche And MyPoutreLoc.lTraveeConsoleDroite Then
-                '        ReDim strTypeTravee(2)
-                '    Else
-                '        ReDim strTypeTravee(1)
-                '    End If
-                'Else
-                '    ReDim strTypeTravee(0)
-                'End If
-
-                'strTypeTravee(0) = strTypeTravee_TraveeCentrale
-                'If MyPoutreLoc.lTraveeConsoleGauche Then strTypeTravee(1) = strTypeTravee_ConsoleGauche
-                'If MyPoutreLoc.lTraveeConsoleDroite Then
-                '    If MyPoutreLoc.lTraveeConsoleGauche Then
-                '        strTypeTravee(2) = strTypeTravee_ConsoleDroite
-                '    Else
-                '        strTypeTravee(1) = strTypeTravee_ConsoleDroite
-                '    End If
-                'End If
-
                 Me.txt_Largeur.Text = Bloc("WIDTH") & " (" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & ")"
                 Me.txt_NbRows.Text = Bloc("ROW_NUMBER")
                 If lBacTransv Then
@@ -295,10 +275,14 @@ Public Class Frm_Connection
 
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
 

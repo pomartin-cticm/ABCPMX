@@ -388,6 +388,14 @@ UPPERLAYER				= Nappe supérieure
 WIDTH					= Largeur
 ACTIVEREBARS			= Armatures actives		
 
+#FRM_ERRORS
+TITLE					= Notification
+OK						= OK
+ORIGIN					= Origine 
+CONTACT					= Contactez le suppor logiciel
+ERROR					= Erreur logiciel
+INFORMATION				= Information
+
 #FRM_FIREOPTIONS
 TITLE					= Options calcul incendie
 CANCEL					= Annuler

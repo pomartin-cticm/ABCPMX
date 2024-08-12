@@ -35,7 +35,8 @@
             Me.lbl_UserName.Text = MyBloc("USERNAME")
 
         Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+            'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
         Finally
         End Try
     End Sub
@@ -119,7 +120,7 @@
             Case Me.lst_LangueGUI.Name
 
                 Frm_OptionsLogiciel.pLocalLogicielOptions.IndLangue = Me.lst_LangueGUI.SelectedIndex
-                Frm_OptionsLogiciel.ChargesBlocsLangues()
+                Frm_OptionsLogiciel.ChargeBlocsLangues()
                 Frm_OptionsLogiciel.ReinitLangues()
                 GestionLangue(Frm_OptionsLogiciel.BlocLangues(BALISE))
 

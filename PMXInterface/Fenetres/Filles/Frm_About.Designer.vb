@@ -47,6 +47,7 @@ Partial Class Frm_About
         Me.lbk_SupportAM = New System.Windows.Forms.LinkLabel()
         Me.pic_Arcelor = New System.Windows.Forms.PictureBox()
         Me.ImgList_logos = New System.Windows.Forms.ImageList(Me.components)
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -217,6 +218,7 @@ Partial Class Frm_About
         'pan_CTICM
         '
         Me.pan_CTICM.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_CTICM.Controls.Add(Me.Button1)
         Me.pan_CTICM.Controls.Add(Me.pic_cticm)
         Me.pan_CTICM.Controls.Add(Me.txt_cticm)
         Me.pan_CTICM.Controls.Add(Me.lbk_SupportCTICM)
@@ -342,6 +344,16 @@ Partial Class Frm_About
         Me.ImgList_logos.Images.SetKeyName(0, "CTICM_logo.jpg")
         Me.ImgList_logos.Images.SetKeyName(1, "ARCELORMITTAL_logo.png")
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(192, 243)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 18
+        Me.Button1.Text = "Test Errors"
+        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
+        '
         'Frm_About
         '
         Me.AcceptButton = Me.btn_OK
@@ -398,4 +410,5 @@ Partial Class Frm_About
     Friend WithEvents TLpan_SepHorizontal As TableLayoutPanel
     Friend WithEvents pan_Entete As Panel
     Friend WithEvents TLpan_SepEntreprises As TableLayoutPanel
+    Friend WithEvents Button1 As Button
 End Class

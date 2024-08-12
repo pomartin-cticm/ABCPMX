@@ -155,10 +155,15 @@ Public Class Frm_AjoutePP
                 Me.chk_SABMixte.Text = ""
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_AjoutePP/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_AjoutePP/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
+
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
 
@@ -502,8 +507,6 @@ Public Class Frm_AjoutePP
 
     End Sub
 
-
-
 #End Region
 
 #Region "===FERMETURE==="
@@ -515,10 +518,6 @@ Public Class Frm_AjoutePP
         'MsgBox("pom2")
     End Sub
 
-    'Private Sub Frm_AjoutePP_Deactivate(sender As Object, e As EventArgs) Handles MyBase.Deactivate
-    '    MsgBox("pom")
-    'End Sub
-
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click
         Dim lOk As Boolean
         TraitementSaisie(lOk)
@@ -526,7 +525,8 @@ Public Class Frm_AjoutePP
             Me.DialogResult = DialogResult.OK
             Me.Close()
         Else
-            MsgBox(strNonDispo)
+            'MsgBox(strNonDispo)
+            GestionErrorsPMX("", "", strNonDispo, False)
         End If
     End Sub
 

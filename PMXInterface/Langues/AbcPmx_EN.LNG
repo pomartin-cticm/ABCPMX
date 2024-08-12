@@ -388,6 +388,14 @@ UPPERLAYER				= Upper layer
 WIDTH					= Width
 ACTIVEREBARS			= Active rebars
 
+#FRM_ERRORS
+TITLE					= Notification
+OK						= OK
+ORIGIN					= Origin 
+CONTACT					= Contact software support
+ERROR					= Software error
+INFORMATION				= Information
+
 #FRM_FIREOPTIONS
 TITLE					= Fire calculation options
 CANCEL					= Cancel

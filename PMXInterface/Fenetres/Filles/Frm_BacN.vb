@@ -83,10 +83,14 @@ Public Class Frm_BacN
                 strTous = Bloc("ALL")
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
             Finally
                 Bloc.Clear()
             End Try
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
 

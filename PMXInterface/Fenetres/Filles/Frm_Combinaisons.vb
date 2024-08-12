@@ -108,25 +108,35 @@ Public Class Frm_Combinaisons
 
     Private Sub GestionLangues(ByVal MyBloc As Dictionary(Of String, String))
 
-        Try
+        If File.Exists(LogicielFichiers.Langue) Then
+            Try
 
-            '=== GENERAL ======================================================================
+                '=== GENERAL ======================================================================
 
-            Me.Text = MyBloc("TITLE")
-            Me.btn_OK.Text = MyBloc("OK")
-            Me.btn_Annuler.Text = MyBloc("CANCEL")
+                Me.Text = MyBloc("TITLE")
+                Me.btn_OK.Text = MyBloc("OK")
+                Me.btn_Annuler.Text = MyBloc("CANCEL")
 
-            '=== CHOIX EL ==============================================================='
+                '=== CHOIX EL ==============================================================='
 
-            Me.rdb_ELU.Text = MyBloc("ULSTATES")
-            Me.rdb_ELS.Text = MyBloc("SLSTATES")
-            Me.rdb_ELFire.Text = MyBloc("FLSTATES")
-            Me.rdb_Construction.Text = MyBloc("CONSTRUCTIONSTAGE")
+                Me.rdb_ELU.Text = MyBloc("ULSTATES")
+                Me.rdb_ELS.Text = MyBloc("SLSTATES")
+                Me.rdb_ELFire.Text = MyBloc("FLSTATES")
+                Me.rdb_Construction.Text = MyBloc("CONSTRUCTIONSTAGE")
 
-        Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
-        Finally
-        End Try
+            Catch ex As Exception
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            Finally
+            End Try
+
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
+
+        End If
+
+
 
     End Sub
 

@@ -83,7 +83,7 @@ Public Class Frm_PPCasDeCharge
                 Me.btn_EditModel.Text = Bloc("EDITMODEL")           ' "Editer le modèle"
 
             Catch ex As Exception
-
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
             End Try
         End If
 

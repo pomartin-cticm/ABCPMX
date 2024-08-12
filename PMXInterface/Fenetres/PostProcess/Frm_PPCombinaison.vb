@@ -170,7 +170,7 @@ Public Class Frm_PPCombinaison
                 strNoCombiELF = Bloc("NOCOMBINATIONFORFLS")             ' "No defined combinations for fire limite state"
                 strNoCombiELS = Bloc("NOCOMBINATIONFORSLS")             ' "No defined combinations for serviceability limite state"
             Catch ex As Exception
-
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
             End Try
 
         End If

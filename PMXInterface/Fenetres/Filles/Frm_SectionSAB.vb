@@ -116,10 +116,15 @@ Public Class Frm_SectionSAB
                 strDeliveryConditions = Bloc("DELIVERYCOND")
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
+
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
 
@@ -1642,4 +1647,5 @@ Public Class Frm_SectionSAB
     End Sub
 
 #End Region
+
 End Class

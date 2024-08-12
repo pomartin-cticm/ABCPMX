@@ -1,5 +1,6 @@
 ﻿Imports System.Drawing.Drawing2D
 Imports PMXMoteur2
+Imports System.IO
 
 Public Class Frm_MaintienBac
 
@@ -39,7 +40,6 @@ Public Class Frm_MaintienBac
     Dim strDessin As String
 
 #End Region
-
 
 #Region "===OUVERTURE==="
 
@@ -123,98 +123,107 @@ Public Class Frm_MaintienBac
 
     Private Sub GestionLangues()
 
-        Dim Bloc As New Dictionary(Of String, String)
-        Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_DECKRESTRAINT")
-        BlocLine.CreationBloc(Bloc)
+        If File.Exists(LogicielFichiers.Langue) Then
+            Dim Bloc As New Dictionary(Of String, String)
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.Langue, "#FRM_DECKRESTRAINT")
+            BlocLine.CreationBloc(Bloc)
 
-        Try
+            Try
 
-            '=== GENERAL ======================================================================
+                '=== GENERAL ======================================================================
 
-            Me.Text = Bloc("TITLE")
-            Me.btn_OK.Text = Bloc("OK")
-            Me.btn_Annuler.Text = Bloc("CANCEL")
+                Me.Text = Bloc("TITLE")
+                Me.btn_OK.Text = Bloc("OK")
+                Me.btn_Annuler.Text = Bloc("CANCEL")
 
-            '=== PLANCHER ===============================================================
+                '=== PLANCHER ===============================================================
 
-            Me.chk_PriseEnCompteBac.Text = Bloc("RESTRAINTBYTHEDECK")
-            Me.lbl_Floor.Text = Bloc("FLOORDEF")
-            Me.lbl_NbSheetsTransverse.Text = Bloc("NBSHEETSTRANSVERSE")
+                Me.chk_PriseEnCompteBac.Text = Bloc("RESTRAINTBYTHEDECK")
+                Me.lbl_Floor.Text = Bloc("FLOORDEF")
+                Me.lbl_NbSheetsTransverse.Text = Bloc("NBSHEETSTRANSVERSE")
 
-            Me.lbl_DimensionsGlobales.Text = Bloc("FLOORDIMENSIONS")
-            Me.lbl_Portee.Text = Bloc("FLOORLENGTH")
-            Me.lbl_Largeur.Text = Bloc("FLOORWIDTH")
+                Me.lbl_DimensionsGlobales.Text = Bloc("FLOORDIMENSIONS")
+                Me.lbl_Portee.Text = Bloc("FLOORLENGTH")
+                Me.lbl_Largeur.Text = Bloc("FLOORWIDTH")
 
-            Me.lbl_Transition.Text = Bloc("TRANSITION")
-            strTransitionOptions(0) = Bloc("OVERLAPPING")
-            strTransitionOptions(1) = Bloc("ADJACENTNOGAP")
-            strTransitionOptions(2) = Bloc("FLANGEEDGES")
+                Me.lbl_Transition.Text = Bloc("TRANSITION")
+                strTransitionOptions(0) = Bloc("OVERLAPPING")
+                strTransitionOptions(1) = Bloc("ADJACENTNOGAP")
+                strTransitionOptions(2) = Bloc("FLANGEEDGES")
 
 
-            '=== PANNEAU ELEMENTAIRE ==========================================================
+                '=== PANNEAU ELEMENTAIRE ==========================================================
 
-            Me.lbl_Panneau.Text = Bloc("INDIVIDUALSHEET")
-            Me.lbl_NbSpans.Text = Bloc("NUMBERSPANS")
-            Me.lbl_IndSheetDimensions.Text = Bloc("DIMENSIONS")
-            Me.lbl_SheetLength.Text = Bloc("SHEETLENGTH")
-            Me.lbl_SheetWidth.Text = Bloc("SHEETWIDTH")
+                Me.lbl_Panneau.Text = Bloc("INDIVIDUALSHEET")
+                Me.lbl_NbSpans.Text = Bloc("NUMBERSPANS")
+                Me.lbl_IndSheetDimensions.Text = Bloc("DIMENSIONS")
+                Me.lbl_SheetLength.Text = Bloc("SHEETLENGTH")
+                Me.lbl_SheetWidth.Text = Bloc("SHEETWIDTH")
 
-            '=== FIXATIONS AUX POUTRES ========================================================
+                '=== FIXATIONS AUX POUTRES ========================================================
 
-            Me.lbl_FixationSolive.Text = Bloc("BEAMFASTENING")
-            Me.lbl_Fixation.Text = Bloc("FASTENING")
-            strFastening(0) = Bloc("EVERYRIB")
-            strFastening(1) = Bloc("EVERY2RIBS")
+                Me.lbl_FixationSolive.Text = Bloc("BEAMFASTENING")
+                Me.lbl_Fixation.Text = Bloc("FASTENING")
+                strFastening(0) = Bloc("EVERYRIB")
+                strFastening(1) = Bloc("EVERY2RIBS")
 
-            Me.lbl_TypeFixation.Text = Bloc("TYPEFASTENER")
-            strTypeFixation(0) = Bloc("SELFSCREWNORMAL")
-            strTypeFixation(1) = Bloc("SELFSCREWNEOPRENE")
-            strTypeFixation(2) = Bloc("FIREDPINS")
-            strDiametreFixation(0) = Bloc("DIASCREWS")
-            strDiametreFixation(1) = Bloc("DIASCREWS")
-            strDiametreFixation(2) = Bloc("DIAPINS")
+                Me.lbl_TypeFixation.Text = Bloc("TYPEFASTENER")
+                strTypeFixation(0) = Bloc("SELFSCREWNORMAL")
+                strTypeFixation(1) = Bloc("SELFSCREWNEOPRENE")
+                strTypeFixation(2) = Bloc("FIREDPINS")
+                strDiametreFixation(0) = Bloc("DIASCREWS")
+                strDiametreFixation(1) = Bloc("DIASCREWS")
+                strDiametreFixation(2) = Bloc("DIAPINS")
 
-            Me.lbl_Diametre.Text = Bloc("DIAMETER") & ": "
-            Me.lbl_Glissement.Text = Bloc("SLIP")
+                Me.lbl_Diametre.Text = Bloc("DIAMETER") & ": "
+                Me.lbl_Glissement.Text = Bloc("SLIP")
 
-            strSlipFixation(0) = GetStringInUnit(localMaitienBac.FixNervuresSlip(cls_MaintienBac.Enu_FixNervuresType.VisNormale) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
-            strSlipFixation(1) = GetStringInUnit(localMaitienBac.FixNervuresSlip(cls_MaintienBac.Enu_FixNervuresType.VisNeoprene) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
-            strSlipFixation(2) = GetStringInUnit(localMaitienBac.FixNervuresSlip(cls_MaintienBac.Enu_FixNervuresType.Pistolet) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
+                strSlipFixation(0) = GetStringInUnit(localMaitienBac.FixNervuresSlip(cls_MaintienBac.Enu_FixNervuresType.VisNormale) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
+                strSlipFixation(1) = GetStringInUnit(localMaitienBac.FixNervuresSlip(cls_MaintienBac.Enu_FixNervuresType.VisNeoprene) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
+                strSlipFixation(2) = GetStringInUnit(localMaitienBac.FixNervuresSlip(cls_MaintienBac.Enu_FixNervuresType.Pistolet) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
 
-            '=== COUTURAGE =====================================================================
+                '=== COUTURAGE =====================================================================
 
-            Me.lbl_Couturage.Text = Bloc("SEAMFASTENING")
-            Me.lbl_TypeCouturage.Text = Bloc("TYPEFASTENER")
+                Me.lbl_Couturage.Text = Bloc("SEAMFASTENING")
+                Me.lbl_TypeCouturage.Text = Bloc("TYPEFASTENER")
 
-            Me.lbl_DiaS.Text = Bloc("DIAMETER") & ": "
-            Me.lbl_GlisseS.Text = Bloc("SLIP") & ": "
+                Me.lbl_DiaS.Text = Bloc("DIAMETER") & ": "
+                Me.lbl_GlisseS.Text = Bloc("SLIP") & ": "
 
-            strTypeCouturage(0) = Bloc("SELFSCREW")
-            strTypeCouturage(1) = Bloc("RIVET")
+                strTypeCouturage(0) = Bloc("SELFSCREW")
+                strTypeCouturage(1) = Bloc("RIVET")
 
-            strDiametreCouturage(0) = Bloc("DIASCREWS_SEAM")
-            strDiametreCouturage(1) = Bloc("DIAPINS_SEAM")
+                strDiametreCouturage(0) = Bloc("DIASCREWS_SEAM")
+                strDiametreCouturage(1) = Bloc("DIAPINS_SEAM")
 
-            strSlipCouturage(0) = GetStringInUnit(localMaitienBac.FixCoutureSlip(cls_MaintienBac.Enu_CoutureType.Vis) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
-            strSlipCouturage(1) = GetStringInUnit(localMaitienBac.FixCoutureSlip(cls_MaintienBac.Enu_CoutureType.Rivet) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
+                strSlipCouturage(0) = GetStringInUnit(localMaitienBac.FixCoutureSlip(cls_MaintienBac.Enu_CoutureType.Vis) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
+                strSlipCouturage(1) = GetStringInUnit(localMaitienBac.FixCoutureSlip(cls_MaintienBac.Enu_CoutureType.Rivet) * kUnitSlip, Enu_TypeVariable.SansType, 3, 2, False) & " mm/kN"
 
-            Me.lbl_EspCouturage.Text = Bloc("SPACING")
+                Me.lbl_EspCouturage.Text = Bloc("SPACING")
 
-            '=== CALCULS =======================================================================
+                '=== CALCULS =======================================================================
 
-            Me.lbl_Calculs.Text = Bloc("PARAMETERS")
-            Me.lbl_BendingRigidity.Text = Bloc("BENDINGSTIFF")
-            Me.chk_Theta.Text = Bloc("THETA")
-            Me.lbl_ShearRigidity.Text = Bloc("SHEARSTIFF")
+                Me.lbl_Calculs.Text = Bloc("PARAMETERS")
+                Me.lbl_BendingRigidity.Text = Bloc("BENDINGSTIFF")
+                Me.chk_Theta.Text = Bloc("THETA")
+                Me.lbl_ShearRigidity.Text = Bloc("SHEARSTIFF")
 
-            strResultats = Bloc("PARAMETERS")
-            strDessin = Bloc("DRAWING")
+                strResultats = Bloc("PARAMETERS")
+                strDessin = Bloc("DRAWING")
 
-        Catch ex As Exception
-            MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
-        Finally
-            Bloc.Clear()
-        End Try
+            Catch ex As Exception
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, Me.Name & "/GestionLangue")
+            Finally
+                Bloc.Clear()
+            End Try
+
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
+
+        End If
+
 
     End Sub
 

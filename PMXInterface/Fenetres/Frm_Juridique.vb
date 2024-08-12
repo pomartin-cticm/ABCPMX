@@ -59,10 +59,15 @@ Public Class Frm_Juridique
                 Me.Label_InfoJuridique.Text += Chr(13) & Bloc("TEXT4")
 
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_Juridique/GestionLangue")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangues")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_Juridique/GestionLangue")
             Finally
                 Bloc.Clear()
             End Try
+
+        Else
+
+            GestionFichierLangueAbsent(Me.Name, "GestionLangues")
 
         End If
 
@@ -75,7 +80,6 @@ Public Class Frm_Juridique
 
         Me.lbl_Juridique.BackColor = CouleurBackBandeaux
         Me.lbl_Juridique.ForeColor = CouleurForeBandeaux
-
 
     End Sub
 
