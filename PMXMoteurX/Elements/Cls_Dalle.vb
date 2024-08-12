@@ -29,9 +29,9 @@
     ''' </summary>
     Public Ep_th As Decimal
 
-    ''' <summary>
-    ''' lageur efficace de la dalle ??
-    ''' </summary>
+    '''' <summary>
+    '''' lageur efficace de la dalle ??
+    '''' </summary>
     'Public Beff As Decimal
 
     ''' <summary>
@@ -118,7 +118,7 @@
     ''' <summary>
     ''' Connecteur acier-béton entre dalle et profilé avec des goujons soudés
     ''' </summary>
-    Public ConnecteurGoujonSoude As New cls_ConnecteurGoujonSoude
+    Public Goujons As New cls_GoujonSoude
 
     ''' <summary>
     ''' Connecteur acier-béton entre dalle et profilé avec des armatures (utile pour les slimfloor)
@@ -688,7 +688,7 @@
         Next
 
         DalleCible.AcierArmatures = DalleSource.AcierArmatures.Clone()
-        DalleCible.ConnecteurGoujonSoude = DalleSource.ConnecteurGoujonSoude.Clone()
+        DalleCible.Goujons = DalleSource.Goujons.Clone()
 
         Cls_ConnecteurArmature.DeepClone(DalleSource.ConnecteurArmature, DalleCible.ConnecteurArmature)
     End Sub

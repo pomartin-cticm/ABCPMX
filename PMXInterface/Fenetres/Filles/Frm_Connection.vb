@@ -123,7 +123,7 @@ Public Class Frm_Connection
 
     Dim NbTravees As Integer
 
-
+    Dim FontFrm As Font
 
     '== POM
     Dim tabDiam() As Decimal
@@ -395,6 +395,8 @@ Public Class Frm_Connection
     Private Sub GestionStyle()
         Me.Icon = Frm_PMX.Icon
 
+        FontFrm = New Font(FontBase.Name, SizeFontFrm)
+
         Me.lbl_Connecteurs.BackColor = CouleurBackBandeaux
         Me.lbl_Connecteurs.ForeColor = CouleurForeBandeaux
 
@@ -580,11 +582,11 @@ Public Class Frm_Connection
 
             If Not Me.chk_AutomaticDesign.Checked Then
 
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom, .Dalle.ConnecteurGoujonSoude.nom, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, .Dalle.ConnecteurGoujonSoude.hsc, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d, .Dalle.ConnecteurGoujonSoude.d, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy, .Dalle.ConnecteurGoujonSoude.Fy, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu, .Dalle.ConnecteurGoujonSoude.Fu, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.nom, .Dalle.Goujons.nom, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.hsc, .Dalle.Goujons.hsc, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.d, .Dalle.Goujons.d, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.Fy, .Dalle.Goujons.Fy, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.Fu, .Dalle.Goujons.Fu, lModif)
 
 
                 For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
@@ -735,7 +737,7 @@ Public Class Frm_Connection
     End Sub
 
     Private Sub DessinConnection(sender As Object, e As PaintEventArgs) Handles img_Connection.Paint
-        DessinFrmConnection_Connection(e.Graphics, MyPoutreLoc, Me.img_Connection.ClientRectangle.Width, Me.img_Connection.ClientRectangle.Height, 1, traveeEnCours, Not MyPoutreLoc.lAutomaticDesign, strStud)
+        DessinFrmConnection_Connection(e.Graphics, MyPoutreLoc, fontfrm, Me.img_Connection.ClientRectangle.Width, Me.img_Connection.ClientRectangle.Height, 1, traveeEnCours, Not MyPoutreLoc.lAutomaticDesign, strStud)
     End Sub
 
     Private Sub DessinConnecteurs(sender As Object, e As PaintEventArgs) Handles img_Stud.Paint
@@ -752,9 +754,9 @@ Public Class Frm_Connection
         'Valeurs en mètres
 
         'Définition des valeurs limites pour les caractéristiques des goujons
-        Hauteur_Goujon_MIN = 3 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
+        Hauteur_Goujon_MIN = 3 * MyPoutreLoc.Dalle.Goujons.d
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
-            Hauteur_Goujon_MIN = Math.Max(Hauteur_Goujon_MIN, MyPoutreLoc.Dalle.Bac.Hp + 2 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d)
+            Hauteur_Goujon_MIN = Math.Max(Hauteur_Goujon_MIN, MyPoutreLoc.Dalle.Bac.Hp + 2 * MyPoutreLoc.Dalle.Goujons.d)
         End If
         Hauteur_Goujon_MAX_CONSEILLEE = MyPoutreLoc.Dalle.Ep_td - 20 / 1000
         Hauteur_Goujon_MAX = MyPoutreLoc.Dalle.Ep_td
@@ -782,7 +784,7 @@ Public Class Frm_Connection
             Nb_Zones_MAX = Math.Min(Math.Floor(MyPoutreLoc.LongueurTravee(traveeEnCours) / Longueur_Zone_MIN), 3)
         End If
 
-        Espacement_Longi_MIN = 5 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
+        Espacement_Longi_MIN = 5 * MyPoutreLoc.Dalle.Goujons.d
         Espacement_Longi_MAX = Math.Min(800 / 1000, 6 * MyPoutreLoc.Dalle.Ep_td)
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
             Nb_Ondes_MIN = 1
@@ -793,20 +795,20 @@ Public Class Frm_Connection
 
         Pince_Trans_MIN = 20 / 1000
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte Then
-            Espacement_Trans_MIN = 4 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
+            Espacement_Trans_MIN = 4 * MyPoutreLoc.Dalle.Goujons.d
         Else 'dalle pleine ou préfa
-            Espacement_Trans_MIN = 2.5 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
+            Espacement_Trans_MIN = 2.5 * MyPoutreLoc.Dalle.Goujons.d
         End If
         b_app_min = OptionsSlimFloor.bappmin
         Nb_TransV_Row_MIN = 1
         If MyPoutreLoc.Dalle.type = cls_Dalle.Enum_TypeDalle.Mixte And MyPoutreLoc.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire Then
             If MyPoutreLoc.Dalle.Bac.AppuiT = cls_Bac.EnuConfigTAppui.Discontinu Then
-                Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * b_app_min - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1)
+                Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * b_app_min - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.Goujons.d) / Espacement_Trans_MIN + 1)
             Else
-                Nb_TransV_Row_MAX = Math.Min(2, Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1))
+                Nb_TransV_Row_MAX = Math.Min(2, Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.Goujons.d) / Espacement_Trans_MIN + 1))
             End If
         Else
-            Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1)
+            Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.Goujons.d) / Espacement_Trans_MIN + 1)
         End If
 
 
@@ -864,11 +866,11 @@ Public Class Frm_Connection
     ''' MAJ des textboxs et comboboxs dans la zone des connecteurs
     ''' </summary>
     Private Sub MAJ_affichage_txt_connecteurs()
-        Me.cmb_goujons.SelectedIndex = Array.IndexOf(tabLabelGoujons, MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom)
-        Me.txt_hsc.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, Enu_TypeVariable.Dimension, 4, 0, False)
-        Me.txt_d.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d, Enu_TypeVariable.Dimension, 4, 0, False)
-        Me.txt_fy.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy, Enu_TypeVariable.Contrainte, 4, 0, False)
-        Me.txt_fu.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu, Enu_TypeVariable.Contrainte, 4, 0, False)
+        Me.cmb_goujons.SelectedIndex = Array.IndexOf(tabLabelGoujons, MyPoutreLoc.Dalle.Goujons.nom)
+        Me.txt_hsc.Text = GetStringInUnit(MyPoutreLoc.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 0, False)
+        Me.txt_d.Text = GetStringInUnit(MyPoutreLoc.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 0, False)
+        Me.txt_fy.Text = GetStringInUnit(MyPoutreLoc.Dalle.Goujons.Fy, Enu_TypeVariable.Contrainte, 4, 0, False)
+        Me.txt_fu.Text = GetStringInUnit(MyPoutreLoc.Dalle.Goujons.Fu, Enu_TypeVariable.Contrainte, 4, 0, False)
     End Sub
 
     ''' <summary>
@@ -1132,12 +1134,12 @@ Public Class Frm_Connection
         If lBuild Then Exit Sub
 
         Dim iStud As Integer = cmb_goujons.SelectedIndex
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom = tabLabelGoujons(iStud)
+        MyPoutreLoc.Dalle.Goujons.nom = tabLabelGoujons(iStud)
         'MyPoutreLoc.Dalle.Connecteur.Caracteristiques_Goujons()
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc = BaseGoujons(iStud).hsc
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d = BaseGoujons(iStud).d
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy = BaseGoujons(iStud).Fy
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu = BaseGoujons(iStud).Fu
+        MyPoutreLoc.Dalle.Goujons.hsc = BaseGoujons(iStud).hsc
+        MyPoutreLoc.Dalle.Goujons.d = BaseGoujons(iStud).d
+        MyPoutreLoc.Dalle.Goujons.Fy = BaseGoujons(iStud).Fy
+        MyPoutreLoc.Dalle.Goujons.Fu = BaseGoujons(iStud).Fu
 
         MAJ_affichage_txt_connecteurs()
         img_Stud.Invalidate()

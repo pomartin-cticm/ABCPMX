@@ -49,6 +49,7 @@ Partial Class Frm_PMX
         Me.TSbtn_SectionSAB = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Enrobage = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Connexion = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_ConnexionSlimfloor = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator31 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Maintiens = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Etaiement = New System.Windows.Forms.ToolStripButton()
@@ -99,7 +100,7 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator24 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Calcul = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator25 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_NoteCalcul = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_NoteSynthese = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_OptionsLogiciel = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator26 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_OptionsCalcul = New System.Windows.Forms.ToolStripButton()
@@ -151,7 +152,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
-        Me.TSbtn_ConnexionSlimfloor = New System.Windows.Forms.ToolStripButton()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -466,6 +466,15 @@ Partial Class Frm_PMX
         Me.TSbtn_Connexion.Name = "TSbtn_Connexion"
         Me.TSbtn_Connexion.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Connexion.Text = "TSbtn_Connexion"
+        '
+        'TSbtn_ConnexionSlimfloor
+        '
+        Me.TSbtn_ConnexionSlimfloor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_ConnexionSlimfloor.Image = CType(resources.GetObject("TSbtn_ConnexionSlimfloor.Image"), System.Drawing.Image)
+        Me.TSbtn_ConnexionSlimfloor.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_ConnexionSlimfloor.Name = "TSbtn_ConnexionSlimfloor"
+        Me.TSbtn_ConnexionSlimfloor.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_ConnexionSlimfloor.Text = "TSbtn_ConnexionSlimfloor"
         '
         'ToolStripSeparator31
         '
@@ -802,7 +811,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Main.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Main.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Main.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Main.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSBbtn_NewN, Me.TSbtn_OpenN, Me.TSbtn_SaveN, Me.ToolStripSeparator23, Me.TSbtn_AddBeamN, Me.TSbtn_SupprBeam, Me.TSbtn_DupBeam, Me.ToolStripSeparator24, Me.TSbtn_Calcul, Me.ToolStripSeparator25, Me.TSbtn_NoteCalcul, Me.TSbtn_OptionsLogiciel, Me.ToolStripSeparator26, Me.TSbtn_OptionsCalcul, Me.ToolStripButton11, Me.ToolStripButton12})
+        Me.ToolStrip_Main.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSBbtn_NewN, Me.TSbtn_OpenN, Me.TSbtn_SaveN, Me.ToolStripSeparator23, Me.TSbtn_AddBeamN, Me.TSbtn_SupprBeam, Me.TSbtn_DupBeam, Me.ToolStripSeparator24, Me.TSbtn_Calcul, Me.ToolStripSeparator25, Me.TSbtn_NoteSynthese, Me.TSbtn_OptionsLogiciel, Me.ToolStripSeparator26, Me.TSbtn_OptionsCalcul, Me.ToolStripButton11, Me.ToolStripButton12})
         Me.ToolStrip_Main.Location = New System.Drawing.Point(0, 25)
         Me.ToolStrip_Main.Name = "ToolStrip_Main"
         Me.ToolStrip_Main.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -889,13 +898,13 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator25.Name = "ToolStripSeparator25"
         Me.ToolStripSeparator25.Size = New System.Drawing.Size(6, 35)
         '
-        'TSbtn_NoteCalcul
+        'TSbtn_NoteSynthese
         '
-        Me.TSbtn_NoteCalcul.AutoToolTip = False
-        Me.TSbtn_NoteCalcul.Image = CType(resources.GetObject("TSbtn_NoteCalcul.Image"), System.Drawing.Image)
-        Me.TSbtn_NoteCalcul.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_NoteCalcul.Name = "TSbtn_NoteCalcul"
-        Me.TSbtn_NoteCalcul.Size = New System.Drawing.Size(28, 32)
+        Me.TSbtn_NoteSynthese.AutoToolTip = False
+        Me.TSbtn_NoteSynthese.Image = CType(resources.GetObject("TSbtn_NoteSynthese.Image"), System.Drawing.Image)
+        Me.TSbtn_NoteSynthese.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_NoteSynthese.Name = "TSbtn_NoteSynthese"
+        Me.TSbtn_NoteSynthese.Size = New System.Drawing.Size(28, 32)
         '
         'TSbtn_OptionsLogiciel
         '
@@ -1306,15 +1315,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
         '
-        'TSbtn_ConnexionSlimfloor
-        '
-        Me.TSbtn_ConnexionSlimfloor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_ConnexionSlimfloor.Image = CType(resources.GetObject("TSbtn_ConnexionSlimfloor.Image"), System.Drawing.Image)
-        Me.TSbtn_ConnexionSlimfloor.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_ConnexionSlimfloor.Name = "TSbtn_ConnexionSlimfloor"
-        Me.TSbtn_ConnexionSlimfloor.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_ConnexionSlimfloor.Text = "TSbtn_ConnexionSlimfloor"
-        '
         'Frm_PMX
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1383,7 +1383,7 @@ Partial Class Frm_PMX
     Friend WithEvents ToolStripSeparator24 As ToolStripSeparator
     Friend WithEvents TSbtn_Calcul As ToolStripButton
     Friend WithEvents ToolStripSeparator25 As ToolStripSeparator
-    Friend WithEvents TSbtn_NoteCalcul As ToolStripButton
+    Friend WithEvents TSbtn_NoteSynthese As ToolStripButton
     Friend WithEvents TSbtn_OptionsLogiciel As ToolStripButton
     Friend WithEvents ToolStripSeparator26 As ToolStripSeparator
     Friend WithEvents TSbtn_OptionsCalcul As ToolStripButton

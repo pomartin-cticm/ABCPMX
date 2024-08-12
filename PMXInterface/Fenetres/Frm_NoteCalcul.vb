@@ -744,7 +744,7 @@ Public Class Frm_NoteCalcul
             InitialiseLNGFileName_NDC()
 
             '--> Rechargement du contenu de la NDC
-            AAA_GenereNOTEdeCALCUL(MyProjet)
+            AAA_GenereNOTEdeCALCUL_poutre(MyProjet)
 
             '--> Sommaire
             Me.Btn_Sommaire.DropDownItems.Clear()
@@ -811,7 +811,7 @@ Public Class Frm_NoteCalcul
             iPageEncours = 0
 
             '--> Rechargement du contenu de la NDC
-            AAA_GenereNOTEdeCALCUL(MyProjet)
+            AAA_GenereNOTEdeCALCUL_poutre(MyProjet)
 
             Me.Btn_Sommaire.DropDownItems.Clear() 'R 21-014 - Bed - 24/09/21
             ActiveSommaire()

@@ -392,7 +392,7 @@ ACTIVEREBARS			= Active rebars
 TITLE					= Notification
 OK						= OK
 ORIGIN					= Origin 
-CONTACT					= Contact software support
+CONTACT					= Contact software support at:
 ERROR					= Software error
 INFORMATION				= Information
 

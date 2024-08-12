@@ -1,3 +1,32 @@
+#NDC_PROJECTSYNTHESIS
+TITLE					= Calculation report
+USER					= User
+SOCIETE					= Company
+PROJET					= Project
+FOOTNOTE				= Software use conditions apply
+BEAM 					= Beam
+PARAMETERS				= Parameters
+INTERSTEEL				= Intermediate steel beam
+INTERSTEELENC			= Intermediate steel beam with partially encased profile
+INTERCOMPOSITE			= Intermediate composite beam
+INTERCOMPENC			= Intermediate composite beam with partially encased profile
+EDGESTEEL				= Edge steel beam
+EDGESTEELENC			= Edge steel beam with partially encased profile
+EDGECOMPOSITE			= Edge composite beam
+EDGECOMPENC				= Edge composite beam with partially encased profile
+SPANLENGTH				= Span length
+SPANLENGTHS				= Span lengths
+ULS						= Ultimate limit states
+ULSCOMPOSITE			= Ultimate limit states in normal situation (composite stage)
+ULSCONSTRUCTION			= Ultimate limit states in construction stage
+ULSFIRE					= Ultimate limit states in fire situation 
+SLS						= Serviceability limit states
+TYPE 					= Type
+PROFILE					= Profile
+WELDEDS					= Welded section
+CONNECTION				= Connection
+STUDS					= Studs
+
 #NDC_MAIN
 TITLE					= Calculation report
 USER					= User

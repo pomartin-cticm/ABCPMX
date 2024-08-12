@@ -555,7 +555,7 @@ Partial Class Frm_AjoutePP
         Me.CancelButton = Me.btn_Annuler
         Me.ClientSize = New System.Drawing.Size(753, 459)
         Me.Controls.Add(Me.pan_Main)
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "Frm_AjoutePP"

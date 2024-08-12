@@ -23,7 +23,7 @@ Imports PMXMoteur2
         With poutre
 
             '--> Définition des caractéristiques de la poutre test 
-            .Dalle.ConnecteurGoujonSoude.nom = "19-100"
+            .Dalle.Goujons.nom = "19-100"
             '.Dalle.Connecteur.Caracteristiques_Goujons() 'calcul de hsc, d, fy et fu une fois que le nom est renseigné
 
             .Param.Gamma.GammaVs = 1.25

@@ -101,7 +101,7 @@ Module Mod_NoteCalcul
 
 #Region "==>GESTION D'ENSEMBLE<================================================= "
 
-    Public Sub AAA_EditionNOTEdeCALCUL(ByVal lEdite As Boolean)
+    Public Sub AAA_EditionNOTEdeCALCUL(ByVal lEdite As Boolean, lProjet As Boolean)
         '----------------------------------------------------------------------------------------------
         '
         '   17/01/08 :  Création - Version 1.00 - POM
@@ -111,13 +111,8 @@ Module Mod_NoteCalcul
         '   Routine générale pilotant la Création et l'Edition de la Note de Calcul
         '
         '----------------------------------------------------------------------------------------------
-        '
-        '                       Ou si elle est deja ouverte (lCreation=False)
-        '
-        '----------------------------------------------------------------------------------------------
-        '
         '   lEdite      [E] :   Indique si on ouvre la fenetre ou pas
-        '
+        '   lProjet     [E] :   Indique si note globale projet ou note particulière d'une poutre
         '----------------------------------------------------------------------------------------------
 
         '--[ Initialisations
@@ -127,7 +122,11 @@ Module Mod_NoteCalcul
 
         '--[ Création de la Note
 
-        AAA_GenereNOTEdeCALCUL(MyProjet)
+        If lProjet Then
+            AAA_GenereNOTEdeCALCUL_projet(MyProjet)
+        Else
+            AAA_GenereNOTEdeCALCUL_poutre(MyProjet)
+        End If
 
         '--[ Edition de la Note dans l'Editeur
 
@@ -142,19 +141,46 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Public Sub AAA_GenereNOTEdeCALCUL(ByVal MyPrjt As cls_Projet)
+    Public Sub AAA_GenereNOTEdeCALCUL_projet(ByVal myPro As cls_Projet)
         '----------------------------------------------------------------------------------------------
-        '
-        '   17/01/08 :  Création - Version 1.00 - POM
-        '
+        '   17/01/24 :  Création - Version 1.00 - POM
         '----------------------------------------------------------------------------------------------
-        '
         '   Routine générale pilotant la Création et l'Edition de la Note de Calcul
-        '
         '----------------------------------------------------------------------------------------------
-        '
-        '   MyPrjt      [E] :   Projet traité
-        '
+        '   myPro      [E] :   Projet traité
+        '----------------------------------------------------------------------------------------------
+
+        '--[ Initialisation
+
+        InitialiseBlocNDC_synthese()
+
+        InitialiseNote(myPro)
+
+        '--|=========================================
+        '--| PAGE DE GARDE
+        '--|=========================================
+
+        EditionPageDeGarde(myPro.Nom, "")
+
+        '--|=========================================
+        '--| Resultats pour chaque poutre
+        '--|=========================================
+
+        For iPoutre As Integer = 0 To myPro.Poutres.Count - 1
+
+            EditionSyntheseResultatsPoutre(myPro.Poutres(iPoutre))
+
+        Next
+
+    End Sub
+
+    Public Sub AAA_GenereNOTEdeCALCUL_poutre(ByVal myPro As cls_Projet)
+        '----------------------------------------------------------------------------------------------
+        '   17/01/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Routine générale pilotant la Création et l'Edition de la Note de Calcul
+        '----------------------------------------------------------------------------------------------
+        '   myPro      [E] :   Projet traité
         '----------------------------------------------------------------------------------------------
 
         'Dim lControleOK As Boolean
@@ -171,6 +197,63 @@ Module Mod_NoteCalcul
 
         '--[ Initialisation
 
+        InitialiseNote(myPro)
+
+        '--|=========================================
+        '--| PAGE DE GARDE
+        '--|=========================================
+
+        EditionPageDeGarde(myPro.Nom, myPro.Poutres(myPro.IndEnCours).BeamID)
+
+        '--|=========================================
+        '--| PARAMETRES
+        '--|=========================================
+        '--[ Paramètres
+
+        EditionParametres(myPro.Poutres(myPro.IndEnCours))
+
+        '--|=========================================
+        '--| PROPRIETES DES SECTIONS
+        '--|=========================================
+
+        EditionProprietesSection(myPro.Poutres(myPro.IndEnCours))
+
+        '--|=========================================
+        '--| ANALYSE DE LA POUTRE
+        '--|=========================================
+
+        EditionAnalysePoutre(myPro.Poutres(myPro.IndEnCours))
+        EditionAnalysePoutreSigma(myPro.Poutres(myPro.IndEnCours))
+
+        '--|=========================================
+        '--| VERIFICATION DES CRITERES ELU
+        '--|=========================================
+
+        ACC_EditionVerificationsELU(myPro.Poutres(myPro.IndEnCours))
+
+        '--|=========================================
+        '--| VERIFICATION DES CRITERES ELS
+        '--|=========================================
+
+        ACC_EditionVerificationsELS(myPro.Poutres(myPro.IndEnCours))
+
+        '--|=========================================
+        '--| VERIFICATION DES CRITERES AU FEU
+        '--|=========================================
+
+        ACC_EditionVerificationsFEU(myPro.Poutres(myPro.IndEnCours))
+
+    End Sub
+
+    Private Sub InitialiseNote(ByVal myPro As cls_Projet)
+        '----------------------------------------------------------------------------------------------
+        '   11/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Initilialisation de la Note de Calcul
+        '----------------------------------------------------------------------------------------------
+        '   myPro      [E] :   Projet traité
+        '----------------------------------------------------------------------------------------------
+
         MyNote.Clear()
 
         'Initialiser les indices
@@ -178,67 +261,23 @@ Module Mod_NoteCalcul
             MyNote.IndTitre(I) = 0
         Next
 
-        If MyPrjt.Entreprise.Trim = "" Then
-            MyNote.EntetePrincipal = MyPrjt.Utilisateur
+        If myPro.Entreprise.Trim = "" Then
+            MyNote.EntetePrincipal = myPro.Utilisateur
         Else
-            MyNote.EntetePrincipal = MyPrjt.Entreprise & " - " & MyPrjt.Utilisateur
+            MyNote.EntetePrincipal = myPro.Entreprise & " - " & myPro.Utilisateur
         End If
-        MyNote.EnteteSecond = MyPrjt.Nom
+        MyNote.EnteteSecond = myPro.Nom
 
         MyNote.EtiquetteLigne(0, 0) = BlocG("USER")
         MyNote.EtiquetteLigne(1, 0) = BlocG("SOCIETE")
         MyNote.EtiquetteLigne(2, 0) = BlocG("PROJET")
 
         Const DPTS As String = ":  "
-        MyNote.EtiquetteLigne(0, 1) = DPTS & MyPrjt.Utilisateur
-        MyNote.EtiquetteLigne(1, 1) = DPTS & MyPrjt.Entreprise
-        MyNote.EtiquetteLigne(2, 1) = DPTS & MyPrjt.Nom
+        MyNote.EtiquetteLigne(0, 1) = DPTS & myPro.Utilisateur
+        MyNote.EtiquetteLigne(1, 1) = DPTS & myPro.Entreprise
+        MyNote.EtiquetteLigne(2, 1) = DPTS & myPro.Nom
 
         MyNote.FootNote = BlocG("FOOTNOTE")
-
-        '--|=========================================
-        '--| PAGE DE GARDE
-        '--|=========================================
-
-        EditionPageDeGarde(MyPrjt.Nom)
-
-        '--|=========================================
-        '--| PARAMETRES
-        '--|=========================================
-        '--[ Paramètres
-
-        EditionParametres(MyPrjt.Poutres(MyPrjt.IndEnCours))
-
-        '--|=========================================
-        '--| PROPRIETES DES SECTIONS
-        '--|=========================================
-
-        EditionProprietesSection(MyPrjt.Poutres(MyPrjt.IndEnCours))
-
-        '--|=========================================
-        '--| ANALYSE DE LA POUTRE
-        '--|=========================================
-
-        EditionAnalysePoutre(MyPrjt.Poutres(MyPrjt.IndEnCours))
-        EditionAnalysePoutreSigma(MyPrjt.Poutres(MyPrjt.IndEnCours))
-
-        '--|=========================================
-        '--| VERIFICATION DES CRITERES ELU
-        '--|=========================================
-
-        ACC_EditionVerificationsELU(MyPrjt.Poutres(MyPrjt.IndEnCours))
-
-        '--|=========================================
-        '--| VERIFICATION DES CRITERES ELS
-        '--|=========================================
-
-        ACC_EditionVerificationsELS(MyPrjt.Poutres(MyPrjt.IndEnCours))
-
-        '--|=========================================
-        '--| VERIFICATION DES CRITERES AU FEU
-        '--|=========================================
-
-        ACC_EditionVerificationsFeu(MyPrjt.Poutres(MyPrjt.IndEnCours))
 
     End Sub
 
@@ -276,7 +315,220 @@ Module Mod_NoteCalcul
 
     End Sub
 
+    Private Sub InitialiseBlocNDC_synthese()
+
+        Try
+            Dim BlocLine As New Cls_LinesOfFile(LogicielFichiers.LangueNDC, "#NDC_PROJECTSYNTHESIS")
+            BlocLine.CreationBloc(BlocG)
+
+        Catch ex As Exception
+            GestionErreurAffichageLangue("Mod_NoteCalcul", "InitialiseBlocNDC_synthese")
+        End Try
+
+    End Sub
+
 #End Region
+
+#Region "***Synthèse des poutre du projet***"
+
+    Private Sub EditionSyntheseResultatsPoutre(myBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   12/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des paramètres d'une poutre
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lMixte As Boolean = myBeam.lMixte
+
+        '==== PREPARATION
+
+        SautePage()
+
+        AddTitreNdC(1, BlocG("BEAM") & " " & myBeam.BeamID)
+
+        '==== PARAMETRES
+
+        TitreEncadre(BlocG("PARAMETERS"))
+
+        EditeParametresPoutrePourSynthese(myBeam)
+
+        '==== ELU normal
+
+        If lMixte Then
+            TitreEncadre(BlocG("ULSCOMPOSITE"))
+        Else
+            TitreEncadre(BlocG("ULS"))
+        End If
+
+        '==== ELS
+
+        TitreEncadre(BlocG("SLS"))
+
+    End Sub
+
+    Private Sub TitreEncadre(myTitre As String)
+        '----------------------------------------------------------------------------------------------
+        '   12/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Pour la synthèse, titre non numéroté encadré
+        '----------------------------------------------------------------------------------------------
+
+        Const POSTITRE As Integer = 10
+        Const NCOL = 1
+
+        AddLigneNDC("\TABLEAU " & CStr(POSTITRE))
+
+        '--> Entête
+
+        InitialiseLigne(NCOL, HLIGNEENTETE, False)
+
+        AddCelluleFond(100 - 2 * POSTITRE, Bordures.Tous, PositionTexteInCell.Centre, myTitre)
+
+        FinTableau()
+    End Sub
+
+    Private Sub EditeParametresPoutrePourSynthese(myBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   12/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des paramètres d'une poutre
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Const TABS1 As String = "\T30"
+        Const TABS2 As String = "\T50"
+        Dim TypeBeam As String = ""
+        Dim indDeb, indFin As Integer
+        Dim iTravee As Integer
+        Dim Chaine As String = ""
+        Dim Acier As String = ""
+        Dim ChainePRd As String = ""
+        Dim lMixte As Boolean = myBeam.lMixte
+        Dim lMulti As Boolean = myBeam.lMultiSpan
+        Dim PRd As Decimal
+
+        '--( Affichage du type
+
+        If myBeam.lIntermediaire Then
+            Select Case myBeam.Section.TypeSection
+                Case cls_Section.Enum_TypeSection.AcierSeul
+                    TypeBeam = BlocG("INTERSTEEL")
+                Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                    TypeBeam = BlocG("INTERSTEELENC")
+                Case cls_Section.Enum_TypeSection.Mixte
+                    TypeBeam = BlocG("INTERCOMPOSITE")
+                Case cls_Section.Enum_TypeSection.MixteEnrobage
+                    TypeBeam = BlocG("INTERCOMPENC")
+            End Select
+        Else
+            Select Case myBeam.Section.TypeSection
+                Case cls_Section.Enum_TypeSection.AcierSeul
+                    TypeBeam = BlocG("EDGESTEEL")
+                Case cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                    TypeBeam = BlocG("EDGESTEELENC")
+                Case cls_Section.Enum_TypeSection.Mixte
+                    TypeBeam = BlocG("EDGECOMPOSITE")
+                Case cls_Section.Enum_TypeSection.MixteEnrobage
+                    TypeBeam = BlocG("EDGECOMPENC")
+            End Select
+        End If
+
+        AddLigneNDC(TABW1 & BlocG("TYPE") & TABS1 & typebeam)
+
+        '--( Portée(s)
+
+        If myBeam.lMultiSpan Then
+            indDeb = myBeam.IndicePremiereTravee
+            indFin = myBeam.IndiceDerniereTravee
+
+            For iTravee = indDeb To indFin
+                Chaine = Chaine & GetStringInUnitN(myBeam.LongueurTravee(iTravee), Enu_TypeVariable.Longueur, 4, 3, True, True)
+
+                If iTravee < indFin Then
+                    Chaine = Chaine & " | "
+                End If
+            Next
+            AddLigneNDC(TABW1 & BlocG("SPANLENGTHS") & TABS1 & Chaine)
+
+        Else
+            AddLigneNDC(TABW1 & BlocG("SPANLENGTH") & TABS1 & GetStringInUnitN(myBeam.LongueurTravee(1), Enu_TypeVariable.Longueur, 4, 3, True, True))
+        End If
+
+
+        '--( Profilé
+
+        Acier = myBeam.Section.Acier.Nuance & " " & myBeam.Section.Acier.Qualite & " (" & myBeam.Section.Acier.NormeProduit & ")"
+        If myBeam.Section.lLamine Then
+            '# Laminé
+            Chaine = myBeam.Section.ProfilA.NomProfile
+
+            AddLigneNDC(TABW1 & BlocG("PROFILE") _
+                      & TABS1 & Chaine _
+                      & TABS2 & Acier)
+        Else
+            '# PRS
+            Chaine = " "
+
+            '-- Semelle sup
+            Chaine = Chaine _
+                   & GetStringInUnitN(myBeam.Section.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 3, False, True) & "x" _
+                   & GetStringInUnitN(myBeam.Section.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 3, False, True)
+
+            '-- âme
+            Chaine = Chaine & " | " _
+                   & GetStringInUnitN(myBeam.Section.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 4, 3, False, True) & "x" _
+                   & GetStringInUnitN(myBeam.Section.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 3, False, True)
+
+            '-- semelle inf
+            If myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym Then
+                Chaine = Chaine & " | " _
+                       & GetStringInUnitN(myBeam.Section.ProfilA.Bfi, Enu_TypeVariable.Dimension, 4, 3, False, True) & "x" _
+                       & GetStringInUnitN(myBeam.Section.ProfilA.Tfi, Enu_TypeVariable.Dimension, 4, 3, False, True)
+
+            End If
+
+            AddLigneNDC(TABW1 & BlocG("PROFILE") _
+                      & TABS1 & BlocG("WELDEDS") & Chaine)
+
+            AddLigneNDC(TABS1 & Acier)
+
+        End If
+
+        '--( Dalle
+
+        '--( Connexion
+
+        If lMixte Then
+            If lMulti Then
+            Else
+                Chaine = CStr(myBeam.NombreGoujonTot(1)) & " " & BlocG("STUDS") & " " _
+                       & GetStringInUnitN(myBeam.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 3, False, True) & "x" _
+                       & GetStringInUnitN(myBeam.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 3, False, True)
+            End If
+
+
+            ' PRd = myBeam.Dalle.Goujons.ResistancePRd(myBeam.Param.lGeneration1,)
+            ChainePRd = "P\-Rd\= " & GetStringInUnitN(prd, Enu_TypeVariable.Effort, 4, 3, True, True)
+
+            AddLigneNDC(TABW1 & BlocG("CONNECTION") _
+                      & TABS1 & Chaine & " (" & ChainePRd & ")")
+        End If
+
+        '--( Masses
+
+        '--( Charges
+
+        '--( 
+
+        SauteLigne()
+
+    End Sub
+
+#End Region
+
 
 #Region "***Edition des paramètres***"
 
@@ -1324,7 +1576,7 @@ Module Mod_NoteCalcul
 
         If MyBeam.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeSemelleSup Or MyBeam.Dalle.typeConnecteur = cls_Dalle.Enum_TypeConnecteur.GoujonSoudeAme Then
 
-            With MyBeam.Dalle.ConnecteurGoujonSoude
+            With MyBeam.Dalle.Goujons
                 'AddLigneNDC(TABW2 & BlocG("NAME_CONNECTORS") & TABAFF & .nom)
                 AddLigneNDC(TABW2 & BlocG("HSC_CONNECTORS") & TABAFF & "h\-sc\=" & TABEGAL & GetStringInUnit(.hsc, Enu_TypeVariable.Dimension, 4, 0, True))
                 AddLigneNDC(TABW2 & BlocG("D_CONNECTORS") & TABAFF & "d " & TABEGAL & GetStringInUnit(.d, Enu_TypeVariable.Dimension, 4, 0, True))
@@ -8322,7 +8574,7 @@ Module Mod_NoteCalcul
 
 #Region "   Page de garde "
 
-    Private Sub EditionPageDeGarde(ByVal projectName As String)
+    Private Sub EditionPageDeGarde(ByVal projectName As String, beamName As String)
         '---------------------------------------------------------------------------------------------
         '
         '   22/10/19 : Création BD
@@ -8344,9 +8596,11 @@ Module Mod_NoteCalcul
         SauteLigne()
         SauteLigne()
 
-
         AddTitreDoc(0, BlocG("TITLE").ToUpper)
         AddTitreDoc(1, projectName)
+        If beamName <> "" Then
+            AddTitreDoc(1, beamName)
+        End If
 
         SauteLigne()
         SauteLigne()
@@ -9120,7 +9374,7 @@ Module Mod_NoteCalcul
         '--| PAGE DE GARDE
         '--|=========================================
 
-        EditionPageDeGarde(MyProjet.Nom)
+        EditionPageDeGarde(MyProjet.Nom, MyProjet.Poutres(MyProjet.IndEnCours).BeamID)
 
         '--|=========================================
         '--| PARAMETRES

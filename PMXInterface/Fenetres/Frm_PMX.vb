@@ -170,11 +170,12 @@ Public Class Frm_PMX
 
                 strCopy = Bloc("COPY")
 
-                strFeuNonDispo = Bloc("FIRENOTAVAIL") & Chr(13) & Str("FIRELATER")
-
             Catch ex As Exception
-                MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangueMessagesGeneraux")
+                'MsgBox("Erreur affichage langue | Error display language", MsgBoxStyle.Critical, "Frm_PMX/GestionLangueMessagesGeneraux")
+                GestionErreurAffichageLangue(Me.Name, "GestionLangueMessagesGeneraux")
             End Try
+        Else
+            GestionFichierLangueAbsent(Me.Name, "GestionLangueMessagesGeneraux")
         End If
     End Sub
 
@@ -240,7 +241,7 @@ Public Class Frm_PMX
                 Me.TSbtn_SupprBeam.ToolTipText = Bloc("DELBEAM")
                 Me.TSbtn_DupBeam.ToolTipText = Bloc("DUPBEAM")
                 Me.TSbtn_Calcul.ToolTipText = Bloc("CALCULATION")
-                Me.TSbtn_NoteCalcul.Text = Bloc("CALCULATIONREPORT")
+                Me.TSbtn_NoteSynthese.Text = Bloc("CALCULATIONREPORT")
 
                 Me.TSbtn_OptionsCalcul.ToolTipText = Bloc("CALCULOPTIONS")
                 Me.TSbtn_OptionsLogiciel.ToolTipText = Bloc("SOFTOPT")
@@ -307,6 +308,8 @@ Public Class Frm_PMX
                 strMsgFermetureFrm = Bloc("SAVEBEFORECLOSE")
 
                 strPRS = Bloc("WELDEDSEC")
+
+                strFeuNonDispo = RemplaceDollar(Bloc("FIRENOTAVAIL"), LogicielInfo.Racine) & Chr(13) & Bloc("FIRELATER")
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -490,7 +493,11 @@ Public Class Frm_PMX
         DupliquerPoutre()
     End Sub
 
-    Private Sub TSbtn_NoteCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_NoteCalcul.Click, TSbtn_NdcPoutre.Click
+    Private Sub TSbtn_NoteSynthese_Click(sender As Object, e As EventArgs) Handles TSbtn_NoteSynthese.Click
+        SyntheseNdC()
+    End Sub
+
+    Private Sub TSbtn_NoteCalcul_Click(sender As Object, e As EventArgs) Handles TSbtn_NdcPoutre.Click
         CalculsEtNdC()
     End Sub
 
@@ -503,6 +510,38 @@ Public Class Frm_PMX
 #End Region
 
 #Region " Note de calculs "
+
+    Private Sub SyntheseNdC()
+        '--------------------------------------------------------------------------------------------------
+        '   12/08/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------
+        '   NdC synthèse de toutes les poutres du projet
+        '--------------------------------------------------------------------------------------------------
+        '--------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iPoutre As Integer
+        Dim lOK As Boolean
+
+        '--( Boucle sur les poutres du projet : calculs
+
+        For iPoutre = 0 To MyProjet.Poutres.Count - 1
+
+            lOK = MaPoutreOKpourleCalcul(MyProjet.Poutres(iPoutre))
+
+            If lOK Then
+                MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA,
+                                                                        strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
+            End If
+
+        Next
+
+        '--( Edition de la synthèse
+
+        AAA_EditionNOTEdeCALCUL(True, True)
+
+    End Sub
 
     Private Sub CalculsEtNdC()
         '--------------------------------------------------------------------------------------------------
@@ -525,13 +564,13 @@ Public Class Frm_PMX
 
         If lOK Then
             MyProjet.Poutres(MyProjet.IndEnCours).AAA_Verifications(NomChargesA, strRacineELU, strRacineELS, strRacineELF, strRacineELUC, strRacineELSC)
-            MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()         ' ???
+            'MyProjet.Poutres(MyProjet.IndEnCours).Initialise_CoefficientsCombinaisons()         ' ???
             'MyProjet.Poutres(MyProjet.IndEnCours).CalculArmaturesTransversales()
         End If
 
         '--[ Edition de la note de calcul
 
-        AAA_EditionNOTEdeCALCUL(True)
+        AAA_EditionNOTEdeCALCUL(True, False)
 
     End Sub
 
@@ -611,6 +650,8 @@ Public Class Frm_PMX
                 TSbtn_Gamma.Click, TSbtn_PPLargeurEfficace.Click, TSbtn_Combinaisons.Click, TSbtn_PPLoadCases.Click, TSbtn_Chargements.Click,
                 TSbtn_PPCombi.Click, TSbtn_PPVerifications.Click, TSbtn_OptionsCalculPoutre.Click, TSbtn_OptionsIncendie.Click, TSbtn_MaintienBac.Click
 
+        Dim lAffiche As Boolean = True
+
         Select Case sender.name
 
             Case Me.TSbtn_Identification.Name
@@ -665,8 +706,17 @@ Public Class Frm_PMX
                 FilleEnCours = EnuFenetres.Hivoss
 
             Case Me.TSbtn_OptionsIncendie.Name
-                FilleEnCours = EnuFenetres.Incendie
+                'FilleEnCours = EnuFenetres.Incendie
+                If lFIRE Then
 
+                    FilleEnCours = EnuFenetres.OptionsIncendie
+
+                Else
+
+                    GestionErrorsPMX("", "", strFeuNonDispo, False)
+                    lAffiche = False
+
+                End If
             Case Me.TSbtn_PPLargeurEfficace.Name
                 FilleEnCours = EnuFenetres.PPLargeurEfficace
 
@@ -677,24 +727,25 @@ Public Class Frm_PMX
             Case Me.TSbtn_PPVerifications.Name
                 FilleEnCours = EnuFenetres.PPVerifications
 
-            Case Me.TSbtn_OptionsIncendie.Name
+            'Case Me.TSbtn_OptionsIncendie.Name
 
-                If lFIRE Then
+            '    If lFIRE Then
 
-                    FilleEnCours = EnuFenetres.OptionsIncendie
+            '        FilleEnCours = EnuFenetres.OptionsIncendie
 
-                Else
+            '    Else
 
-                    GestionErrorsPMX("", "", strfeunondispo, False)
+            '        GestionErrorsPMX("", "", strFeuNonDispo, False)
+            '        lAffiche = False
 
-                End If
+            '    End If
 
 
             Case Me.TSbtn_MaintienBac.Name
                 FilleEnCours = EnuFenetres.Test
 
         End Select
-        AfficheFenetreEnCours()
+        If lAffiche Then AfficheFenetreEnCours()
 
     End Sub
 
@@ -1025,7 +1076,7 @@ Public Class Frm_PMX
         Me.ToolStripSeparator24.Visible = Not lNothing
         Me.TSbtn_Calcul.Visible = Not lNothing
         Me.ToolStripSeparator25.Visible = Not lNothing
-        Me.TSbtn_NoteCalcul.Visible = Not lNothing
+        Me.TSbtn_NoteSynthese.Visible = Not lNothing
 
         Me.SaveToolStripMenuItemN.Visible = Not lNothing
         Me.SaveAsToolStripMenuItemN.Visible = Not lNothing
@@ -1350,7 +1401,7 @@ Public Class Frm_PMX
             If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then
                 If Not EnregistrerAvantFermeture() Then OuvrirFichier(FileName)
             Else
-                    OuvrirFichier(FileName)
+                OuvrirFichier(FileName)
             End If
 
         End If
@@ -1404,7 +1455,7 @@ Public Class Frm_PMX
 
         '--> Lecture du fichier
         MyProjet = New cls_Projet
-        MyProjet.RecuperationFile(FileName, Str_WarningFile, NomChargements)
+        MyProjet.ReadFile(FileName, Str_WarningFile, NomChargements)
         MyProjet.IndEnCours = 0
 
         Dim lTrouve As Boolean

@@ -346,7 +346,7 @@ Public Class Frm_AddGoujon
 
             If lAdd Then
                 Frm_EditGoujons.AddGoujonDansTables(Etiquette, HTotal, PhiTige, HTete, PhiTete, Fy, Fu, True)
-                Frm_EditGoujons.ListGoujons.Add(New cls_ConnecteurGoujonSoude(Etiquette, HTotal, PhiTige, PhiTete, HTete, Fy, Fu))
+                Frm_EditGoujons.ListGoujons.Add(New cls_GoujonSoude(Etiquette, HTotal, PhiTige, PhiTete, HTete, Fy, Fu))
                 Frm_EditGoujons.ListGoujons(Frm_EditGoujons.ListGoujons.Count - 1).lCustom = True
             Else
                 Frm_EditGoujons.ListGoujons(iStud).nom = Etiquette

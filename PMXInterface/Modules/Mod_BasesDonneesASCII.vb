@@ -9,7 +9,7 @@ Public Module Mod_BasesDonneesASCII
     Public BaseBacs As New Dictionary(Of String, cls_Bac)
 
     'Public BaseGoujons As (String, Decimal, Decimal, Decimal, Decimal, Decimal, Decimal, Boolean)() = Nothing
-    Public BaseGoujons As New List(Of cls_ConnecteurGoujonSoude)
+    Public BaseGoujons As New List(Of cls_GoujonSoude)
 
 #End Region
 
@@ -159,7 +159,7 @@ Public Module Mod_BasesDonneesASCII
 
 #Region " Base de données des connecteurs "
 
-    Public Sub GetDataBaseStuds(ByRef ListeStud As List(Of cls_ConnecteurGoujonSoude))
+    Public Sub GetDataBaseStuds(ByRef ListeStud As List(Of cls_GoujonSoude))
         '---------------------------------------------------------------------------------
         '
         '   27/11/23 :  Ajout GUD (issu d'ACB+)
@@ -193,7 +193,7 @@ Public Module Mod_BasesDonneesASCII
     End Sub
 
     Private Sub LireBaseGoujons(FileG As String, ByVal lCustom As Boolean,
-                                ByRef ListeStud As List(Of cls_ConnecteurGoujonSoude))
+                                ByRef ListeStud As List(Of cls_GoujonSoude))
         '---------------------------------------------------------------------------------
         '   09/08/23 :  Création - POM
         '---------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ Public Module Mod_BasesDonneesASCII
                 fy = CSng(TraiteReal(Mots(5)))
                 fu = CSng(TraiteReal(Mots(6)))
 
-                ListeStud.Add(New cls_ConnecteurGoujonSoude(Etiquette, Htot, PhiTige, PhiTete, HTete, fy, fu))
+                ListeStud.Add(New cls_GoujonSoude(Etiquette, Htot, PhiTige, PhiTete, HTete, fy, fu))
 
                 'AjouteGoujonsBase(Etiquette, Htot, PhiTige, PhiTete, HTete, fy, fu, lCustom, MyBaseG)
 

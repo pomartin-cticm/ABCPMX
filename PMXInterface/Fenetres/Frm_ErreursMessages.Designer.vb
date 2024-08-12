@@ -133,10 +133,10 @@ Partial Class Frm_ErreursMessages
         Me.pan_Lien.Controls.Add(Me.lbl_ContactSupport)
         Me.pan_Lien.Controls.Add(Me.lbk_Support)
         Me.pan_Lien.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.pan_Lien.Location = New System.Drawing.Point(0, 142)
-        Me.pan_Lien.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_Lien.Location = New System.Drawing.Point(0, 143)
+        Me.pan_Lien.Margin = New System.Windows.Forms.Padding(0, 1, 0, 0)
         Me.pan_Lien.Name = "pan_Lien"
-        Me.pan_Lien.Size = New System.Drawing.Size(509, 60)
+        Me.pan_Lien.Size = New System.Drawing.Size(509, 59)
         Me.pan_Lien.TabIndex = 2
         '
         'lbl_ContactSupport

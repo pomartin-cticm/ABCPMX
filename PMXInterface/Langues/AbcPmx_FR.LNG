@@ -392,7 +392,7 @@ ACTIVEREBARS			= Armatures actives
 TITLE					= Notification
 OK						= OK
 ORIGIN					= Origine 
-CONTACT					= Contactez le suppor logiciel
+CONTACT					= Contactez le support logiciel à l'adresse courriel :
 ERROR					= Erreur logiciel
 INFORMATION				= Information
 

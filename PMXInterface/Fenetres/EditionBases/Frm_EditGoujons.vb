@@ -12,7 +12,7 @@ Public Class Frm_EditGoujons
         Dim Info() As Integer
     End Structure
 
-    Public ListGoujons As List(Of cls_ConnecteurGoujonSoude)
+    Public ListGoujons As List(Of cls_GoujonSoude)
 
     Dim tabModif As List(Of TableMod)
     Dim tabErreurs As Dictionary(Of String, String)
@@ -56,7 +56,7 @@ Public Class Frm_EditGoujons
     End Sub
 
     Private Sub InitialisationVariables()
-        ListGoujons = New List(Of cls_ConnecteurGoujonSoude)
+        ListGoujons = New List(Of cls_GoujonSoude)
         tabModif = New List(Of TableMod)
         tabErreurs = New Dictionary(Of String, String)
     End Sub
@@ -187,7 +187,7 @@ Public Class Frm_EditGoujons
 
 #Region "Gestion Ajout et Suppression de connecteurs dans les tables"
 
-    Private Sub AddGoujonDansGrille(ByVal MyBaseG_loc As cls_ConnecteurGoujonSoude)
+    Private Sub AddGoujonDansGrille(ByVal MyBaseG_loc As cls_GoujonSoude)
         '-----------------------------------------------------------------------------------------------
         '
         '   On rajoute un connecteur dans la grille d'affichage

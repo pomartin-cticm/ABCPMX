@@ -400,11 +400,11 @@ Public Class Frm_ConnectionSlimFloor
             End If
 
             If lGoujonsSoudes Then
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom, .Dalle.ConnecteurGoujonSoude.nom, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, .Dalle.ConnecteurGoujonSoude.hsc, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d, .Dalle.ConnecteurGoujonSoude.d, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy, .Dalle.ConnecteurGoujonSoude.Fy, lModif)
-                GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu, .Dalle.ConnecteurGoujonSoude.Fu, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.nom, .Dalle.Goujons.nom, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.hsc, .Dalle.Goujons.hsc, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.d, .Dalle.Goujons.d, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.Fy, .Dalle.Goujons.Fy, lModif)
+                GereTransfertValeur(MyPoutreLoc.Dalle.Goujons.Fu, .Dalle.Goujons.Fu, lModif)
             Else
                 GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.ds, .Dalle.ConnecteurArmature.ds, lModif)
                 GereTransfertValeur(MyPoutreLoc.Dalle.ConnecteurArmature.Acier.Classe, .Dalle.ConnecteurArmature.Acier.Classe, lModif)
@@ -505,7 +505,7 @@ Public Class Frm_ConnectionSlimFloor
         'Valeurs en mètres
 
         'Définition des valeurs limites pour les caractéristiques des goujons
-        Hauteur_Goujon_MIN = 3 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
+        Hauteur_Goujon_MIN = 3 * MyPoutreLoc.Dalle.Goujons.d
         Hauteur_Goujon_MAX_CONSEILLEE = Math.Max(0, MyPoutreLoc.Dalle.Ep_td - MyPoutreLoc.Section.ProfilA.zRefAraseSup - 20 / 1000)
         Hauteur_Goujon_MAX = Math.Max(0, MyPoutreLoc.Dalle.Ep_td - MyPoutreLoc.Section.ProfilA.zRefAraseSup)
 
@@ -517,7 +517,7 @@ Public Class Frm_ConnectionSlimFloor
         Diametre_Arma_MAX = 40 / 1000
 
         If lGoujonsSoudes Then
-            Espacement_Longi_MIN = 5 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
+            Espacement_Longi_MIN = 5 * MyPoutreLoc.Dalle.Goujons.d
             Espacement_Longi_MAX = Math.Min(800 / 1000, 6 * MyPoutreLoc.Dalle.Ep_td)
         Else
             Espacement_Longi_MIN = 0
@@ -527,10 +527,10 @@ Public Class Frm_ConnectionSlimFloor
         'Définition des valeurs limites pour les caractéristiques transversales
 
         Pince_Trans_MIN = 20 / 1000
-        Espacement_Trans_MIN = 2.5 * MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d
+        Espacement_Trans_MIN = 2.5 * MyPoutreLoc.Dalle.Goujons.d
 
         Nb_TransV_Row_MIN = 1
-        Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d) / Espacement_Trans_MIN + 1)
+        Nb_TransV_Row_MAX = Math.Floor((MyPoutreLoc.Section.ProfilA.Bfs - 2 * Pince_Trans_MIN - MyPoutreLoc.Dalle.Goujons.d) / Espacement_Trans_MIN + 1)
         Nb_TransV_Row_MAX = Math.Max(Nb_TransV_Row_MAX, Nb_TransV_Row_MIN)
 
 
@@ -540,11 +540,11 @@ Public Class Frm_ConnectionSlimFloor
     ''' MAJ des textboxs et comboboxs dans la zone des connecteurs
     ''' </summary>
     Private Sub MAJ_affichage_txt_connecteurs()
-        Me.cmb_goujons.SelectedIndex = Array.IndexOf(tabLabelGoujons, MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom)
-        Me.txt_hsc.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc, Enu_TypeVariable.Dimension, 4, 0, False)
-        Me.txt_d.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d, Enu_TypeVariable.Dimension, 4, 0, False)
-        Me.txt_fy.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy, Enu_TypeVariable.Contrainte, 4, 0, False)
-        Me.txt_fu.Text = GetStringInUnit(MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu, Enu_TypeVariable.Contrainte, 4, 0, False)
+        Me.cmb_goujons.SelectedIndex = Array.IndexOf(tabLabelGoujons, MyPoutreLoc.Dalle.Goujons.nom)
+        Me.txt_hsc.Text = GetStringInUnit(MyPoutreLoc.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 0, False)
+        Me.txt_d.Text = GetStringInUnit(MyPoutreLoc.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 0, False)
+        Me.txt_fy.Text = GetStringInUnit(MyPoutreLoc.Dalle.Goujons.Fy, Enu_TypeVariable.Contrainte, 4, 0, False)
+        Me.txt_fu.Text = GetStringInUnit(MyPoutreLoc.Dalle.Goujons.Fu, Enu_TypeVariable.Contrainte, 4, 0, False)
     End Sub
 
     ''' <summary>
@@ -654,11 +654,11 @@ Public Class Frm_ConnectionSlimFloor
         If lBuild Then Exit Sub
 
         Dim iStud As Integer = cmb_goujons.SelectedIndex
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.nom = tabLabelGoujons(iStud)
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.hsc = BaseGoujons(iStud).hsc
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.d = BaseGoujons(iStud).d
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fy = BaseGoujons(iStud).Fy
-        MyPoutreLoc.Dalle.ConnecteurGoujonSoude.Fu = BaseGoujons(iStud).Fu
+        MyPoutreLoc.Dalle.Goujons.nom = tabLabelGoujons(iStud)
+        MyPoutreLoc.Dalle.Goujons.hsc = BaseGoujons(iStud).hsc
+        MyPoutreLoc.Dalle.Goujons.d = BaseGoujons(iStud).d
+        MyPoutreLoc.Dalle.Goujons.Fy = BaseGoujons(iStud).Fy
+        MyPoutreLoc.Dalle.Goujons.Fu = BaseGoujons(iStud).Fu
 
         MAJ_affichage_txt_connecteurs()
         img_Stud.Invalidate()

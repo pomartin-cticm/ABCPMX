@@ -246,7 +246,7 @@ Public Class cls_Poutre
         '--( Calcul
 
         Nr = Me.NombreGoujonsTransv(iTravee, iZone)
-        PRd = Me.Dalle.ConnecteurGoujonSoude.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, Nr, FcK, Ecm, GammaVs, GammaVc)
+        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, Nr, FcK, Ecm, GammaVs, GammaVc)
         sX = Me.EntraxeLongiGoujons(iTravee, iZone)
         myFluxRd = Nr * PRd / sX
 
@@ -296,7 +296,7 @@ Public Class cls_Poutre
             If Me.Dalle.lMixte Then
                 NbLayer = 1
             Else
-                If Me.Dalle.ConnecteurGoujonSoude.hsc - 70 / 1000 <= Me.Dalle.Ep_th Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
+                If Me.Dalle.Goujons.hsc - 70 / 1000 <= Me.Dalle.Ep_th Then 'espace suffisant pour disposer 3 lits d'armatures transversales 
                     NbLayer = 3
                 Else
                     NbLayer = 2
@@ -2833,7 +2833,7 @@ Public Class cls_Poutre
 
                         nR = Me.NombreGoujonsTransv(iTravee, IndZoneConnex(iElt))
                         sX = Me.EntraxeLongiGoujons(iTravee, IndZoneConnex(iElt))
-                        PRd = Me.Dalle.ConnecteurGoujonSoude.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
+                        PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
                         kSc = 0.7 * PRd / DeltaD
 
                         cStiff = nR * kSc / sX
@@ -4135,7 +4135,7 @@ Public Class cls_Poutre
         Dim iQFin As Integer
         If lMixte Then iQFin = 2 Else iQFin = 1
 
-        For iq As Integer = 0 To iQfin
+        For iq As Integer = 0 To iQFin
             lMultiT = Me.ChargesU(LabelQ(iq)).EstMultiTravee(Me.IndicePremiereTravee, Me.IndiceDerniereTravee)
             Me.lMultiQ(iq) = lMultiT
             ChaineEx = strExploitation & " " & CStr(iq + 1)
@@ -5699,7 +5699,7 @@ Public Class cls_Poutre
                 pEspace = Me.EntraxeLongiGoujons(iTravee, iZone)
 
                 nR = Me.NombreGoujonsTransv(iTravee, iZone)
-                PRd = Me.Dalle.ConnecteurGoujonSoude.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
+                PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
 
                 Me.DensiteConnexionZone(iTravee, iZone) = PRd * nR / pEspace
 

@@ -503,7 +503,7 @@ Public Class cls_Projet
 
 
                     '==[ Classe Connecteur Goujon Dalle ]=================================================================
-                    With .ConnecteurGoujonSoude
+                    With .Goujons
                         Lines.Add("BLOCK CONNECTEUR_DALLE_GOUJON")
 
                         Lines.Add("   nom            =  " & .nom)
@@ -658,7 +658,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Public Sub RecuperationFile(ByVal FileName As String, ByVal str_warning_file As String, NomCasChargesU() As String)
+    Public Sub ReadFile(ByVal FileName As String, ByVal str_warning_file As String, NomCasChargesU() As String)
         '---------------------------------------------------------------------------------------------------------
         '   09/08/23 :  Création
         '---------------------------------------------------------------------------------------------------------
@@ -667,6 +667,7 @@ Public Class cls_Projet
         '   FileName        [E] :   Nom du fichier
         '   str_warning     [E] :   Message d'avertissement
         '   NomCasChargesU  [E] :   Nom des cas de charges utilisateur dans la langue interface
+        '   lFR             [E] :   Indique si les messages de plantage sont en français
         '---------------------------------------------------------------------------------------------------------
 
         '--> Déclaration
@@ -676,13 +677,16 @@ Public Class cls_Projet
         Dim ListeBlocIndex As New List(Of Integer)
         Dim ListeBlocCle As New List(Of String)
         Dim IndexFin As Integer
+        Dim myMsg As String = ""
 
         '--> Initialisation
+
         If File.Exists(FileName) Then
             Lines = New Cls_LinesOfFile(FileName)
             Me.lSaved = True
             Me.FileName = FileName
         Else
+
             MsgBox("Fichier n'existe pas | File not exist : " & FileName, MsgBoxStyle.Critical, "Cls_Projet/RecuperationFile")
             Exit Sub
         End If
@@ -714,6 +718,8 @@ Public Class cls_Projet
               Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then 'And Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("SECTION") 
 
             MsgBox("Fichier corrumpu | Corrupted file", MsgBoxStyle.Critical, "Cls_Projet/LectureFile")
+
+
 
         End If
 
@@ -834,9 +840,9 @@ Public Class cls_Projet
 
                 Case "CONNECTEUR_DALLE_GOUJON"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim connecteur_dalle As New cls_ConnecteurGoujonSoude
+                    Dim connecteur_dalle As New cls_GoujonSoude
                     ReadBlocConnecteurGoujonDalle(connecteur_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Dalle.ConnecteurGoujonSoude = connecteur_dalle
+                    ptre_en_cours.Dalle.Goujons = connecteur_dalle
 
                 Case "ACIER_CONNECTEUR_DALLE_GOUJON"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1778,7 +1784,7 @@ Public Class cls_Projet
     ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
     ''' <param name="Index0">indice du début de la lecture</param>
     ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocConnecteurGoujonDalle(connecteur_dalle As cls_ConnecteurGoujonSoude, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocConnecteurGoujonDalle(connecteur_dalle As cls_GoujonSoude, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration

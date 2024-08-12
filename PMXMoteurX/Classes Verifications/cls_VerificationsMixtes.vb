@@ -909,9 +909,9 @@
         thetaf_max = Math.PI / 4
 
         If myBeam.Dalle.lMixte Then
-            b0min = 4 * myBeam.Dalle.ConnecteurGoujonSoude.d
+            b0min = 4 * myBeam.Dalle.Goujons.d
         Else
-            b0min = 2.5 * myBeam.Dalle.ConnecteurGoujonSoude.d
+            b0min = 2.5 * myBeam.Dalle.Goujons.d
         End If
 
         'Stockage local des abscisses afin de ne pas faire tourner plusieurs fois les calculs des proprietes myBeam.xDebutZone et myBeam.xFinZone
@@ -938,11 +938,11 @@
                 'Calcul de hf qui correspond à la longueur developpe de la surface de ruine 
                 hf_aa = myBeam.Dalle.EpaisseurActive
                 If nr = 1 Then
-                    hf_bb = 2 * myBeam.Dalle.ConnecteurGoujonSoude.hsc + myBeam.Dalle.ConnecteurGoujonSoude.d 'GUD: a confirmyPoutrer avec les corrections apportées dans le MT 
+                    hf_bb = 2 * myBeam.Dalle.Goujons.hsc + myBeam.Dalle.Goujons.d 'GUD: a confirmyPoutrer avec les corrections apportées dans le MT 
                 Else
-                    hf_bb = 2 * myBeam.Dalle.ConnecteurGoujonSoude.hsc + b0
+                    hf_bb = 2 * myBeam.Dalle.Goujons.hsc + b0
                 End If
-                hf_dd = b0 + 2 * (myBeam.Section.ProfilA.Bfs - b0 + myBeam.Dalle.ConnecteurGoujonSoude.hsc * Math.Tan(myBeam.Dalle.ThetaRd)) / Math.Sqrt(1 + Math.Tan(myBeam.Dalle.ThetaRd) ^ 2)
+                hf_dd = b0 + 2 * (myBeam.Section.ProfilA.Bfs - b0 + myBeam.Dalle.Goujons.hsc * Math.Tan(myBeam.Dalle.ThetaRd)) / Math.Sqrt(1 + Math.Tan(myBeam.Dalle.ThetaRd) ^ 2)
 
                 Select Case i_travee
                     Case 0 'on est dans le cas de la console gauche

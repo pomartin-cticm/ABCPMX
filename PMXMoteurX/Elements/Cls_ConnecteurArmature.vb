@@ -1,5 +1,9 @@
 ﻿Public Class Cls_ConnecteurArmature
 
+    '================================================================================================================
+    '= Classe pour traiter la connexion des slims floors par goujons soudés
+    '================================================================================================================
+
 #Region " Attributs "
 
     ''' <summary>

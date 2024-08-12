@@ -1,4 +1,32 @@
-﻿#NDC_MAIN
+﻿#NDC_PROJECTSYNTHESIS
+TITLE					= Note de calculs
+USER					= Utilisateur
+SOCIETE					= Entreprise
+PROJET					= Projet
+FOOTNOTE				= Voir les conditions d'utilisation du logiciel
+BEAM 					= Poutre
+PARAMETERS				= Paramètres
+INTERSTEEL				= Poutre acier intermédiaire
+INTERSTEELENC			= Poutre acier intermédiaire, avec profilé partiellement enrobé
+INTERCOMPOSITE			= Poutre mixte intermédiaire
+INTERCOMPENC			= Poutre mixte intermédiaire, avec profilé partiellement enrobé
+EDGESTEEL				= Poutre acier de rive
+EDGESTEELENC			= Poutre acier de rive, avec profilé partiellement enrobé
+EDGECOMPOSITE			= Poutre mixte de rive
+EDGECOMPENC				= Poutre mixte de rive, avec profilé partiellement enrobé
+SPANLENGTH				= Portée
+SPANLENGTHS				= Portées
+ULS						= États limites ultimes
+ULSCOMPOSITE			= États limites ultimes en situation normale (phase mixte)
+ULSCONSTRUCTION			= États limites ultimes en phase de construction
+ULSFIRE					= États limites ultimes à l'incendie 
+SLS						= États limites de service
+TYPE 					= Type
+PROFILE					= Profilé
+WELDEDS					= Reconstitué par soudage
+CONNECTION				= Connexion
+
+#NDC_MAIN
 TITLE					= Note de calculs
 USER					= Utilisateur
 SOCIETE					= Entreprise
