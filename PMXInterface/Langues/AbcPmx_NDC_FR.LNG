@@ -23,8 +23,22 @@ ULSFIRE					= États limites ultimes à l'incendie
 SLS						= États limites de service
 TYPE 					= Type
 PROFILE					= Profilé
+MASS 					= Masse
 WELDEDS					= Reconstitué par soudage
 CONNECTION				= Connexion
+SLABSOLID				= Dalle pleine
+SLABCOMPOSITE			= Dalle mixte
+SLABPREF				= Dalle pleine partiellement prefabriquée
+CHAUNCH					= Renformis
+RIBSLONGI				= Nervures parallèles
+RIBSTRANS				= Nervures perpendiculaires
+CONCRETE				= Béton
+SLSDEFLECTIONS			= Flèches maximales
+SLSHIVOSS				= Confort vibratoire
+CZONE					= Zone de confort
+CRECOMMENDED			= Recommandé
+CCRITICAL				= Critique
+CNOTRECOMMENDED			= Non recommandé
 
 #NDC_MAIN
 TITLE					= Note de calculs

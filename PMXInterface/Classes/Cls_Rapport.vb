@@ -62,7 +62,7 @@ Public Class Cls_Rapport
     Dim HIndiceExposant As Single   'Hauteur de décalage pour exposants et indices
     Dim YDecal As Single = 0
     Dim YBalise As Single = 0
-    Dim HReference As Single = 0      'Hauteur de reference
+    Dim HReference As Single = 0    'Hauteur de reference
     Dim lRetourCharriot As Boolean  'Indique si retour chariot à la fin de la ligne
 
     '--[ Variables physique de l'imprimante utilisée
@@ -1129,7 +1129,7 @@ Public Class Cls_Rapport
     End Sub
 
     Private Sub DrawDessin(ByRef MyGr As Graphics, ByVal Ligne As String,
-                           ByVal sWi As Single, ByVal sHI As Single)
+                           ByVal sWi As Single, ByVal sHI As Single, ByRef lSauteLigne As Boolean)
         '----------------------------------------------------------------------------------
         '
         '   14/01/08 :  Creation - Version 1.00
@@ -1143,6 +1143,7 @@ Public Class Cls_Rapport
         '   MyGr        [E] :   Graphics dans lequel on affiche
         '   Ligne       [E] :   Chaine de caractères contenant les instructions du dessin
         '   sWi, sHI    [E] :   Largeur et hauteur de l'objet recevant le dessin
+        '   lSauteLigne [E] :   Indique si saut de ligne à la fin du dessin
         '
         '----------------------------------------------------------------------------------
 
@@ -1155,7 +1156,11 @@ Public Class Cls_Rapport
 
         '--> Initialisation
 
+        lSauteLigne = True
+
         DecomposeLine(Ligne, SEPARATEURS_NDC, Mots, nMots)
+
+        If Mots(nMots).ToUpper = "\NOS" Then lSauteLigne = False
 
         '--> Traitement
 
@@ -1272,7 +1277,8 @@ Public Class Cls_Rapport
                     MyGr.DrawRectangle(Pens.Black, xLeftImg, YPen, sWiImg, sHiImg)
                 End If
             End If
-            YPen += sHiImg
+
+            If lSauteLigne Then YPen += sHiImg
 
         End If
 
@@ -1770,7 +1776,7 @@ Public Class Cls_Rapport
             '--> Traitement du mot clé
 
             Cle = Ligne.Substring(Indice + 1, Math.Min(3, Length - Indice - 1)).ToUpper
-            Dim lSuite As Boolean   'Indicateur pour savoir si il faut traiter la suite comme une ligne
+            Dim lSuite As Boolean   'Indicateur pour savoir si il faut traiter la suite comme une ligne, c'est à dire, que l'on va à la ligne si c'est vrai
             Dim iMotCle As Integer
 
             Select Case Cle
@@ -1794,15 +1800,12 @@ Public Class Cls_Rapport
                     YPen = YBalise
                 Case "IMG"                          'Affichage d'un dessin
                     lSuite = False
-                    Me.DrawDessin(MyGr, Ligne.Substring(4), sWi, sHI)
-                'Case "DIA" 'Ajout GUD pour l'affichage des diagrammes 
-                '    Me.DrawDiagramme(MyGr, Ligne.Substring(4), sWi, sHI)
-                '    lSuite = False
+                    Me.DrawDessin(MyGr, Ligne.Substring(4), sWi, sHI, lRetourCharriot)
                 Case "IMF"                          'Affichage d'un dessin à une position forcée
                     lSuite = False                  'sur la dernière balise
                     Dim YPenBack As Single = YPen
                     YPen = YBalise
-                    Me.DrawDessin(MyGr, Ligne.Substring(4), sWi, sHI)
+                    Me.DrawDessin(MyGr, Ligne.Substring(4), sWi, sHI, lRetourCharriot)
                     YPen = Math.Max(YPenBack, YPen + HLigne)
                     HLigne = 0
 

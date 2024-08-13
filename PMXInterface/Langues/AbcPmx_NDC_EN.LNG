@@ -23,9 +23,23 @@ ULSFIRE					= Ultimate limit states in fire situation
 SLS						= Serviceability limit states
 TYPE 					= Type
 PROFILE					= Profile
+MASS					= Mass
 WELDEDS					= Welded section
 CONNECTION				= Connection
 STUDS					= Studs
+SLABSOLID				= Solid slab
+SLABCOMPOSITE			= Composite slab
+SLABPREF				= Partially prefabricated slab
+CHAUNCH					= Haunch
+RIBSLONGI				= Longitudinal ribs
+RIBSTRANS				= Perpendicular ribs
+CONCRETE				= Concrete
+SLSDEFLECTIONS			= Maximum SLS deflections
+SLSHIVOSS				= Vibratory comfort
+CZONE					= Comfort zone
+CRECOMMENDED			= Recommended
+CCRITICAL				= Critical
+CNOTRECOMMENDED			= Not recommended
 
 #NDC_MAIN
 TITLE					= Calculation report

@@ -447,10 +447,10 @@
         '---------------------------------------------------------------------------------------------------
         '   Calcul de la frequence propre de la dalle
         '---------------------------------------------------------------------------------------------------
-        '   LPoutre     [E] :   Longueur de la poutre
-        '   PorteeDalle [E] :   Portée de la dalle
-        '   LargInfleunce[E] :  Largeur d'influence des charges sur la dalle
-        '   MasseProfile[E] :   Masse du profilé acier
+        '   LPoutre         [E] :   Longueur de la poutre
+        '   PorteeDalle     [E] :   Portée de la dalle
+        '   LargInfleunce   [E] :   Largeur d'influence des charges sur la dalle
+        '   MasseProfile    [E] :   Masse du profilé acier
         '---------------------------------------------------------------------------------------------------
 
         '--> Déclarations

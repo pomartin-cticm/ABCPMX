@@ -711,51 +711,19 @@ Module Mod_Outils
 
         Select Case Type
 
-            Case Enu_TypeVariable.Longueur
+            Case Enu_TypeVariable.AireCM2
 
-                kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 2
+                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+2\="
 
-            Case Enu_TypeVariable.LongueurCM
+            Case Enu_TypeVariable.AireMM2
 
-                kUnitU = LogicielInfo.Transfert_Longueur(1)
-                Unite = SEP & LogicielInfo.Unit_Longueur(1)
-
-            Case Enu_TypeVariable.Dimension
-
-                kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
-                Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
-
-            Case Enu_TypeVariable.Rigidite
-
-                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-
-            Case Enu_TypeVariable.Effort
-
-                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
-                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
+                kUnitU = LogicielInfo.Transfert_Longueur(0) ^ 2
+                Unite = SEP & LogicielInfo.Unit_Longueur(0) & "\+2\="
 
             Case Enu_TypeVariable.ChargeSurfacique
                 kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur) ^ 2
                 Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur) & "\+2\="
-
-            Case Enu_TypeVariable.ForceRepartie
-                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
-                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
-
-            Case Enu_TypeVariable.Frequence
-                kUnitU = 1
-                Unite = SEP & "Hz"
-
-            Case Enu_TypeVariable.Moment
-
-                kUnitU = LogicielInfo.Transfert_Moment(LogicielOptions.IndUnitMoment)
-                Unite = SEP & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment)
-
-            Case Enu_TypeVariable.ModuleY
-                kUnitU = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
-                Unite = SEP & LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
 
             Case Enu_TypeVariable.Contrainte
                 kUnitU = LogicielInfo.Transfert_Contraintes(LogicielOptions.IndUnitContraintes)
@@ -771,20 +739,28 @@ Module Mod_Outils
                 kUnitU = 1000
                 Unite = SEP & "GPa"
 
-            'Case Enu_TypeVariable.Degre
+            Case Enu_TypeVariable.Dimension
 
-            '    kUnitU = 1
-            '    Unite = "°"
+                kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitDimension)
+                Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitDimension)
 
-            'Case Enu_TypeVariable.RadianToDegre
+            Case Enu_TypeVariable.Effort
 
-            '    kUnitU = Math.PI / 180
-            '    Unite = "°"
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort)
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort)
 
-            Case Enu_TypeVariable.SansType
-
+            Case Enu_TypeVariable.Frequence
                 kUnitU = 1
-                Unite = ""
+                Unite = SEP & "Hz"
+
+            Case Enu_TypeVariable.ForceRepartie
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+            Case Enu_TypeVariable.Inertie
+
+                kUnitU = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
+                Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
 
             Case Enu_TypeVariable.InertieCM4
 
@@ -796,30 +772,50 @@ Module Mod_Outils
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 6
                 Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+6\="
 
-            Case Enu_TypeVariable.Inertie
+            Case Enu_TypeVariable.Longueur
 
-                kUnitU = LogicielInfo.Transfert_Inerties(LogicielOptions.IndUnitInerties)
-                Unite = SEP & LogicielInfo.Unit_Inerties(LogicielOptions.IndUnitInerties)
+                kUnitU = LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                Unite = SEP & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+            Case Enu_TypeVariable.LongueurCM
+
+                kUnitU = LogicielInfo.Transfert_Longueur(1)
+                Unite = SEP & LogicielInfo.Unit_Longueur(1)
+
+            Case Enu_TypeVariable.Masse
+
+                kUnitU = 1
+                Unite = "kg"
+
+            Case Enu_TypeVariable.ModuleY
+                kUnitU = LogicielInfo.Transfert_ModulesY(LogicielOptions.IndUnitModulesY)
+                Unite = SEP & LogicielInfo.Unit_ModulesY(LogicielOptions.IndUnitModulesY)
 
             Case Enu_TypeVariable.ModuleCM3
 
                 kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 3
                 Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+3\="
 
-            Case Enu_TypeVariable.AireCM2
-
-                kUnitU = LogicielInfo.Transfert_Longueur(1) ^ 2
-                Unite = SEP & LogicielInfo.Unit_Longueur(1) & "\+2\="
-
-            Case Enu_TypeVariable.AireMM2
-
-                kUnitU = LogicielInfo.Transfert_Longueur(0) ^ 2
-                Unite = SEP & LogicielInfo.Unit_Longueur(0) & "\+2\="
-
             Case Enu_TypeVariable.Millimetre
 
                 kUnitU = LogicielInfo.Transfert_Longueur(0)
                 Unite = SEP & LogicielInfo.Unit_Longueur(0)
+
+            Case Enu_TypeVariable.Moment
+
+                kUnitU = LogicielInfo.Transfert_Moment(LogicielOptions.IndUnitMoment)
+                Unite = SEP & LogicielInfo.Unit_Moment(LogicielOptions.IndUnitMoment)
+
+            Case Enu_TypeVariable.Rigidite
+
+                kUnitU = LogicielInfo.Transfert_Effort(LogicielOptions.IndUnitEffort) / LogicielInfo.Transfert_Longueur(LogicielOptions.IndUnitLongueur)
+                Unite = SEP & LogicielInfo.Unit_Effort(LogicielOptions.IndUnitEffort) & "/" & LogicielInfo.Unit_Longueur(LogicielOptions.IndUnitLongueur)
+
+
+            Case Enu_TypeVariable.SansType
+
+                kUnitU = 1
+                Unite = ""
 
             Case Enu_TypeVariable.Temperature
 

@@ -1,6 +1,5 @@
 ﻿Imports System.Xml
 
-
 Public Class cls_MethodHivoss
 
 #Region " Enumérations "
@@ -99,6 +98,17 @@ Public Class cls_MethodHivoss
     Public AmortiTotal_Dtot As Decimal
 
     Public lFreqDalle As Boolean                    ' Indique si on prend en compte la frequence propre de la dalle
+
+    Public Frequence As Decimal                     ' Fréquence propre de la poutre
+    Public MassModale As Decimal                    ' Masse modale
+    Public Amortissement As Decimal                 ' Amortissement
+
+    Public FreqDalle As Decimal                     ' Frequence propre dalle seule
+    Public FreqPoutre As Decimal                    ' Frequence propre profilé seul
+
+    Public HCategorie As String                     ' Resultat de l'analyse Hivoss (A, B ...)
+    Public OsRMS As Decimal                         ' Valeur du paramètre OS RMS issue de l'analyse Hivoss
+    Public indConfort As Integer                    ' Indice de confort (0 pour recommended ; 1 pour critical ; 2 pour not recommended)
 
 #End Region
 
@@ -792,7 +802,65 @@ Public Class cls_MethodHivoss
 
 #End Region
 
-#Region " CALCUL "
+#Region "===Application générale de la méthode==="
+
+    Public Function ApplicationMethode(myBeam As cls_Poutre, lFreqDalle As Boolean)
+        '------------------------------------------------------------------------------------------------------------------------
+        '   13/08/24 :  Création - V1.00 - POM
+        '------------------------------------------------------------------------------------------------------------------------
+        '   Gestion globale de l'application de la méthode
+        '------------------------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre traitée
+        '   lFreqDalle  [E] :   Indique si on prend en compte la fréquence propre de la dalle
+        '------------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lMixte As Boolean
+        Dim AllFloorVibration As New Dictionary(Of Integer, cls_MethodHivoss.strHivossTable)
+        Dim MasseProfil As Decimal
+        Dim PorteeDalle As Decimal
+
+        Const kPC As Decimal = 100
+
+        '--( Initialisations
+
+        lMixte = myBeam.lMixte
+
+        Me.CalculAmortissement()
+
+        Me.Amortissement = myBeam.Hivoss.AmortiTotal_Dtot
+
+        Me.ChargerValeursHivoss(AllFloorVibration)
+
+        myBeam.Modal.Analyse(myBeam, Me.ratioQ, Me.IndexQ)
+        Me.Frequence = myBeam.Modal.Frequence
+
+        Me.MassModale = myBeam.Modal.MassTotal / 2              ' A MODIFIER ? pour les multispan
+
+        ''--[ Prise en compte de la fréquence propre de dalle pour les poutres mixtes:
+
+        If lFreqDalle Then
+            MasseProfil = myBeam.Section.ProfilA.Aire * cls_Acier.RHOACIER
+            PorteeDalle = myBeam.PorteeDalle
+
+            Me.FreqDalle = myBeam.Dalle.FrequenceDalle(myBeam.LongueurTravee(1), PorteeDalle, myBeam.LargeurInfluence, MasseProfil, myBeam.Param.GraviteG)
+            Me.FreqPoutre = Me.Frequence
+            Me.Frequence = CDec(1 / Math.Sqrt(1 / Me.FreqPoutre ^ 2 + 1 / Me.FreqDalle ^ 2))
+        End If
+
+        ''--[ Calcul Hivoss
+
+        myBeam.Hivoss.CalculMethodHivoss(CInt(Me.Amortissement * kPC), Me.Frequence, Me.MassModale, Me.HCategorie, Me.OsRMS)
+        Me.indConfort = myBeam.Hivoss.ConfortAssessment(Me.HCategorie)
+
+
+    End Function
+
+
+#End Region
+
+#Region "===CALCUL du OS RMS==="
 
     Public Sub CalculMethodHivoss(ByVal Pourcent As Integer, ByVal MyFreq As Decimal, ByVal MyMasse As Decimal, ByRef ResultText As String, ByRef ResultVal As Decimal)
         '---------------------------------------------------------------------------------------------------------------
@@ -1135,7 +1203,6 @@ Public Class cls_MethodHivoss
         Return Indice
 
     End Function
-
 
 #End Region
 

@@ -2,6 +2,7 @@
 Imports System.Reflection
 Imports System.Reflection.Emit
 Imports System.Runtime.InteropServices
+Imports System.Security.Policy
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement
 Imports Microsoft.VisualBasic.Logging
 Imports PMXMoteur2
@@ -329,7 +330,7 @@ Module Mod_NoteCalcul
 
 #End Region
 
-#Region "***Synthèse des poutre du projet***"
+#Region "***Synthèse des poutres du projet***"
 
     Private Sub EditionSyntheseResultatsPoutre(myBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
@@ -362,9 +363,16 @@ Module Mod_NoteCalcul
             TitreEncadre(BlocG("ULS"))
         End If
 
+        EditionSyntheseResultatsELU(myBeam)
+
         '==== ELS
 
-        TitreEncadre(BlocG("SLS"))
+        If (myBeam.CombiA_ELS.nbCombi <> 0) Or myBeam.Hivoss.lHivossMethod Then
+            TitreEncadre(BlocG("SLS"))
+
+            EditionSyntheseELS(myBeam)
+        End If
+
 
     End Sub
 
@@ -400,15 +408,18 @@ Module Mod_NoteCalcul
 
         Const TABS1 As String = "\T30"
         Const TABS2 As String = "\T50"
+        Const TABS3 As String = "\T75"
         Dim TypeBeam As String = ""
         Dim indDeb, indFin As Integer
         Dim iTravee As Integer
         Dim Chaine As String = ""
         Dim Acier As String = ""
+        Dim Masse As String = ""
         Dim ChainePRd As String = ""
         Dim lMixte As Boolean = myBeam.lMixte
         Dim lMulti As Boolean = myBeam.lMultiSpan
         Dim PRd As Decimal
+        Dim nSum As Decimal
 
         '--( Affichage du type
 
@@ -436,7 +447,7 @@ Module Mod_NoteCalcul
             End Select
         End If
 
-        AddLigneNDC(TABW1 & BlocG("TYPE") & TABS1 & typebeam)
+        AddLigneNDC(TABW1 & BlocG("TYPE") & TABS1 & TypeBeam)
 
         '--( Portée(s)
 
@@ -461,13 +472,16 @@ Module Mod_NoteCalcul
         '--( Profilé
 
         Acier = myBeam.Section.Acier.Nuance & " " & myBeam.Section.Acier.Qualite & " (" & myBeam.Section.Acier.NormeProduit & ")"
+        Masse = BlocG("MASS") & ": " & GetStringInUnitN(myBeam.MasseTotalePoutre, Enu_TypeVariable.Masse, 4, 3, True, True)
+
         If myBeam.Section.lLamine Then
             '# Laminé
             Chaine = myBeam.Section.ProfilA.NomProfile
 
             AddLigneNDC(TABW1 & BlocG("PROFILE") _
                       & TABS1 & Chaine _
-                      & TABS2 & Acier)
+                      & TABS2 & Acier _
+                      & TABS3 & masse)
         Else
             '# PRS
             Chaine = " "
@@ -493,25 +507,81 @@ Module Mod_NoteCalcul
             AddLigneNDC(TABW1 & BlocG("PROFILE") _
                       & TABS1 & BlocG("WELDEDS") & Chaine)
 
-            AddLigneNDC(TABS1 & Acier)
+            AddLigneNDC(TABS1 & Acier & TABS2 & Masse)
 
         End If
 
         '--( Dalle
 
+        Select Case myBeam.Dalle.type
+            Case cls_Dalle.Enum_TypeDalle.Pleine
+                Chaine = BlocG("SLABSOLID") & TABS1 & "t\-d\= = " & GetStringInUnitN(myBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 3, True, True)
+                If Not IsEqual(myBeam.Dalle.Ep_th, 0) Then
+                    Chaine = Chaine & TABS2 & BlocG("CHAUNCH") & " t\-h\= = " & GetStringInUnitN(myBeam.Dalle.Ep_th, Enu_TypeVariable.Dimension, 4, 3, True, True)
+                End If
+            Case cls_Dalle.Enum_TypeDalle.Mixte
+                Chaine = BlocG("SLABCOMPOSITE")
+                Select Case myBeam.Dalle.Bac.Orientation
+                    Case cls_Bac.Enum_Orientation.Parallele
+                        Chaine = Chaine & TABS2 & BlocG("RIBSLONGI")
+                    Case cls_Bac.Enum_Orientation.Perpendiculaire
+                        Chaine = Chaine & TABS2 & BlocG("RIBSTRANS")
+                End Select
+            Case cls_Dalle.Enum_TypeDalle.PartiellementPrefabriquee
+                Chaine = BlocG("SLABPREF") & TABS2 & "t\-d\= = " & GetStringInUnitN(myBeam.Dalle.Ep_td, Enu_TypeVariable.Dimension, 4, 3, True, True)
+
+        End Select
+        AddLigneNDC(TABS1 & Chaine)
+
+        '--( Béton
+
+        If lMixte Then
+            AddLigneNDC(TABS1 & BlocG("CONCRETE") & " : " & myBeam.Dalle.beton.Classe _
+                      & TABS2 & "f\-sk\= = " & GetStringInUnitN(myBeam.Dalle.beton.Fck, Enu_TypeVariable.ContrainteMPa, 4, 3, True, True))
+        End If
+
         '--( Connexion
 
         If lMixte Then
+
             If lMulti Then
+                nSum = 0
+                For iTravee = indDeb To indFin
+                    nSum += myBeam.NombreGoujonTot(iTravee)
+                Next
+
+                Chaine = CStr(nSum) & " " & " ("
+
+                For iTravee = indDeb To indFin
+                    Chaine = Chaine & CStr(myBeam.NombreGoujonTot(iTravee))
+                    If iTravee < indFin Then
+                        Chaine = Chaine & "|"
+                    End If
+                Next
+
+                Chaine = Chaine & ") " & BlocG("STUDS") & " "
+
             Else
-                Chaine = CStr(myBeam.NombreGoujonTot(1)) & " " & BlocG("STUDS") & " " _
-                       & GetStringInUnitN(myBeam.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 3, False, True) & "x" _
-                       & GetStringInUnitN(myBeam.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 3, False, True)
+                Chaine = CStr(myBeam.NombreGoujonTot(1)) & " " & BlocG("STUDS") & " "
             End If
 
+            Chaine = Chaine & GetStringInUnitN(myBeam.Dalle.Goujons.d, Enu_TypeVariable.Dimension, 4, 3, False, True) & "x" _
+                            & GetStringInUnitN(myBeam.Dalle.Goujons.hsc, Enu_TypeVariable.Dimension, 4, 3, False, True)
 
-            ' PRd = myBeam.Dalle.Goujons.ResistancePRd(myBeam.Param.lGeneration1,)
-            ChainePRd = "P\-Rd\= " & GetStringInUnitN(prd, Enu_TypeVariable.Effort, 4, 3, True, True)
+            Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
+            Dim lDalleP As Boolean = (myBeam.Dalle.type = cls_Dalle.Enum_TypeDalle.Pleine)
+            Dim lPerp As Boolean = (myBeam.Dalle.Bac.Orientation = cls_Bac.Enum_Orientation.Perpendiculaire)
+            Dim FcK As Decimal = myBeam.Dalle.beton.Fck
+            Dim GammaVs As Decimal = myBeam.Param.Gamma.GammaVs
+            Dim GammaVc As Decimal = myBeam.Param.Gamma.GammaVc
+            Dim Ecm As Decimal = myBeam.Dalle.beton.Ecm
+            Dim Nr As Integer = myBeam.NombreGoujonsTransv(1, 0)
+
+            PRd = myBeam.Dalle.Goujons.ResistancePRd(lGeneration1, lDalleP, lPerp, myBeam.Dalle.Bac, Nr, FcK, Ecm, GammaVs, GammaVc)
+            ChainePRd = "P\-Rd\= " & GetStringInUnitN(PRd, Enu_TypeVariable.Effort, 4, 3, True, True)
+            If Not lDalleP Then
+                ChainePRd = ChainePRd & " - n\-r\= = " & CStr(Nr)
+            End If
 
             AddLigneNDC(TABW1 & BlocG("CONNECTION") _
                       & TABS1 & Chaine & " (" & ChainePRd & ")")
@@ -527,8 +597,314 @@ Module Mod_NoteCalcul
 
     End Sub
 
-#End Region
+    Private Sub EditionSyntheseResultatsELU(myBeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   12/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des résultats ELU d'une poutre
+        '----------------------------------------------------------------------------------------------
 
+        'Const TABS1 As String = "\T30"
+        'Const TABS2 As String = "\T50"
+        'Const TABS3 As String = "\T75"
+
+        Select Case myBeam.Section.TypeSection
+            Case cls_Section.Enum_TypeSection.AcierSeul, cls_Section.Enum_TypeSection.AcierSeulEnrobage
+                EditionSyntheseResultatsELU_ACIER(myBeam, 0)
+            Case cls_Section.Enum_TypeSection.Mixte, cls_Section.Enum_TypeSection.MixteEnrobage
+                'If lConstruction Then
+                '    EditionVerificationsELUSummaryACIER(myBeam, 0)
+                'Else
+                EditionSyntheseResultatsELU_MIXTE(myBeam, 0)
+                'End If
+        End Select
+
+    End Sub
+
+    Private Sub EditionSyntheseResultatsELU_MIXTE(myBeam As cls_Poutre, iVerif As Integer)
+        '----------------------------------------------------------------------------------------------
+        '   13/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des résultats ELU d'une poutre mixte
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim myTab() As Integer = {11, 31, 51, 71}
+        Dim iTab As Integer
+        Dim lEnrob As Boolean = myBeam.lEnrobage
+        Dim lLamine As Boolean = (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
+        Dim lMulti As Boolean = myBeam.lMultiSpan
+
+        '--( Traitement
+
+        If myBeam.VerifMixte(iVerif).lCalculPlastic Then
+            '------------------------------------------------------------------------------------------------------------
+            '--> Calcul Plastique
+            '------------------------------------------------------------------------------------------------------------
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereM.CritereMax, myTab(0), "M", False)
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereV.CritereMax, myTab(1), "V", False)
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereMV.CritereMax, myTab(2), "MV", True)
+
+            If myBeam.VerifMixte(iVerif).ShearB.lCheckRequired Then
+
+                AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereVb.CritereMax, myTab(0), "Vb", False)
+                AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereMVb.CritereMax, myTab(1), "MVb", True)
+
+            End If
+
+            'EditionVerificationsELUSummaryMIXTEDegConnexion(myBeam, iVerif)
+
+        ElseIf myBeam.Param.lElasticDesignVM Then
+            '------------------------------------------------------------------------------------------------------------
+            '--> Calcul élastique imposé avec critère de Von Mises
+            '------------------------------------------------------------------------------------------------------------
+
+            '# Contraintes normales
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereSigmaA.CritereMax, myTab(0), "\Ss\s,a", False)
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereSigmaC.CritereMax, myTab(1), "\Ss\s,c", Not lMulti)
+
+            iTab = 2
+
+            If lMulti Then
+                AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereSigmaArmaC.CritereMax, myTab(iTab), "\Ss\s,s", True)
+                iTab += 1
+            End If
+
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereTauA.CritereMax, myTab(0), "\St\s", False)
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereSigmaVM.CritereMax, myTab(1), "\Ss\s,eq", True)
+
+            If lEnrob Then
+
+                AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereSigmaE.CritereMax, myTab(0), "\St\s,ce", False)
+                AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereSigmaArmaE.CritereMax, myTab(1), "\Ss\s,se", True)
+
+            End If
+
+            '# Connexion 
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereConnex.CritereMax, myTab(0), "connex", True)
+
+        Else
+
+            '------------------------------------------------------------------------------------------------------------
+            '--> Calcul élastique classe 3
+            '------------------------------------------------------------------------------------------------------------
+
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereM.CritereMax, myTab(0), "M", False)
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereV.CritereMax, myTab(1), "V", False)
+            iTab = 2
+            If myBeam.VerifMixte(iVerif).ShearB.lCheckRequired Then
+                AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereVb.CritereMax, myTab(iTab), "Vb", False)
+                iTab += 1
+            End If
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereMV.CritereMax, myTab(iTab), "MV", True)
+
+            '# Connexion 
+            AfficheCritereRptProjet(myBeam.VerifMixte(iVerif).CritereConnex.CritereMax, myTab(0), "connex", True)
+
+        End If
+
+        '==( Calcul des soudures pour les PRS
+
+        If Not myBeam.Section.lLamine Then
+
+            ' EditionGorgesSoudures(myBeam.VerifMixte(iVerif).GorgesSoudures, myBeam.VerifMixte(iVerif).GorgesSouduresMini)
+
+        End If
+
+        SauteLigne()
+    End Sub
+
+    Private Sub EditionSyntheseResultatsELU_ACIER(myBeam As cls_Poutre, iVerif As Integer)
+        '----------------------------------------------------------------------------------------------
+        '   13/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des résultats ELU d'une poutre acier
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim myTab() As Integer = {11, 31, 51, 71}
+        Dim iTabNext As Integer
+        Dim lEnrob As Boolean = myBeam.lEnrobage
+        Dim lLamine As Boolean = (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
+
+        '--( Traitement
+
+        If myBeam.VerifAcier(iVerif).lCalculPlastic Then
+            '--> Calcul plastique
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereM.CritereMax, myTab(0), "M", False)
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereV.CritereMax, myTab(1), "V", False)
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereMV.CritereMax, myTab(2), "MV", True)
+
+            iTabNext = (0)
+            If myBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
+                AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereVb.CritereMax, myTab(1), "Vb", False)
+                AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereMVb.CritereMax, myTab(2), "MVb", False)
+                iTabNext = (2)
+            End If
+
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereLTB.CritereMax, myTab(iTabNext), "LT", lLamine)
+
+        ElseIf myBeam.Param.lElasticDesignVM Then
+            '--> Calcul élastique imposé
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereSigmaA.CritereMax, myTab(0), "\Ss\s", False)
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereTauA.CritereMax, myTab(1), "\St\s", False)
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereSigmaVM.CritereMax, myTab(2), "\Ss\seq", True)
+
+            iTabNext = 0
+            If lEnrob Then
+                AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereSigmaE.CritereMax, myTab(0), "\Ss\s,ce", False)
+                AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereSigmaArmaE.CritereMax, myTab(1), "\Ss\s,se", lLamine)
+                iTabNext = 2
+            End If
+
+        Else
+            '--> Calcul élastique en raison de la classe des sections
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereM.CritereMax, myTab(0), "M", False)
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereV.CritereMax, myTab(1), "V", False)
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereMV.CritereMax, myTab(2), "MV", True)
+
+            iTabNext = (0)
+            If myBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
+                AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereVb.CritereMax, myTab(1), "Vb", False)
+                AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereMVb.CritereMax, myTab(2), "MVb", False)
+                iTabNext = (2)
+            End If
+
+            AfficheCritereRptProjet(myBeam.VerifAcier(iVerif).CritereLTB.CritereMax, myTab(iTabNext), "LT", lLamine)
+
+        End If
+
+        If Not lLamine Then
+            iTabNext += 1
+            Dim myGoS, myGoI As Decimal
+            myGoS = Math.Max(myBeam.VerifAcier(iVerif).GorgesSoudures(0), myBeam.VerifAcier(iVerif).GorgesSouduresMini(0))
+            myGoI = Math.Max(myBeam.VerifAcier(iVerif).GorgesSoudures(1), myBeam.VerifAcier(iVerif).GorgesSouduresMini(1))
+
+            AddLigneNDC("\T" & CStr(myTab(iTabNext)) & "a\-w\= = " &
+                        GetStringInUnitN(Math.Max(myGoS, myGoI), Enu_TypeVariable.Dimension, 4, 3, True, True))
+        End If
+
+        SauteLigne()
+
+    End Sub
+
+    Private Sub AfficheCritereRptProjet(Critere As Decimal, myTab As Integer, Symbol As String, Optional lRetour As Boolean = True)
+        '----------------------------------------------------------------------------------------------
+        '   13/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Affichage d'un critère (ELU) dans la note de synthèse du projet
+        '----------------------------------------------------------------------------------------------
+        '   Critere     [E] :   Valeur du critère
+        '   myTab       [E] :   Tabulation pour positionner le critère
+        '   Symbol      [E] :   Symbol du critere
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim strGras As String = ""
+        Dim strFinGras As String = ""
+        Dim KeyImg As String = "CORRECT"
+        Dim TabulC As String = "\T" & CStr(myTab)
+        Dim TabulI As String = "\T" & CStr(myTab + 10)
+        Dim SymbolG As String = "\SG\s\-" & Symbol & "\= = "
+        '--( Préparation
+
+        If IsGreater(Critere, 1) Then
+            strGras = "\G"
+            strFinGras = "\g"
+            KeyImg = "ERROR"
+        End If
+
+        '--( Affichage
+
+        AddligneNoRetour(TabulC & strGras & SymbolG & GetStringInUnit(Critere, Enu_TypeVariable.SansType, 4, 3, False) & strFinGras)
+
+        If lRetour Then
+            AddLigneNDC("\IMG " & KeyImg & " " & CStr(myTab + 10) & " 2 0 Nocadre")
+        Else
+            AddligneNoRetour("\IMG " & KeyImg & " " & CStr(myTab + 10) & " 2 0 Nocadre")
+        End If
+
+    End Sub
+
+    Private Sub EditionSyntheseELS(mybeam As cls_Poutre)
+        '----------------------------------------------------------------------------------------------
+        '   13/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Edition des résultats ELS d'une poutre
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim lETA As Boolean = mybeam.Param.lFlechesETA
+        Dim myFleches() As Decimal
+        Dim iTravD, iTravF As Integer
+        Dim iCombi, iTravee As Integer
+        Dim Chaine As String = ""
+        Dim lMulti, lMixte As Boolean
+        Dim myTab() As Integer = {30, 50, 70}
+        Dim mySymbT() As String = {"LC", "MS", "RC"}
+        Dim AllFloorVibration As New Dictionary(Of Integer, cls_MethodHivoss.strHivossTable)
+
+        '--( Initialisation
+
+        iTravD = mybeam.IndicePremiereTravee
+        iTravF = mybeam.IndiceDerniereTravee
+
+        ReDim myFleches(iTravF)
+
+        lMulti = mybeam.lMultiSpan
+        lMixte = mybeam.lMixte
+
+        '--( Flèches sous ELS
+
+        For iCombi = 0 To mybeam.CombiA_ELS.nbCombi - 1
+            For iTravee = iTravD To iTravF
+                If lETA And lmixte Then
+                    myFleches(iTravee) = Math.Max(myFleches(iTravee), Math.Abs(mybeam.VerifELS.FlechesMaxCombiETA(iCombi, iTravee)))
+                Else
+                    myFleches(iTravee) = Math.Max(myFleches(iTravee), Math.Abs(mybeam.VerifELS.FlechesMaxCombi(iCombi, iTravee)))
+                End If
+            Next
+        Next
+
+        If lMulti Then
+
+            For iTravee = iTravD To iTravF
+                Chaine = Chaine _
+                       & "\T" & myTab(iTravee - iTravD) & mySymbT(iTravee - iTravD) & ": " _
+                       & GetStringInUnitN(myFleches(iTravee), Enu_TypeVariable.Dimension, 4, 3, True, True)
+            Next
+
+        Else
+            Chaine = "\T" & myTab(0) & GetStringInUnitN(myFleches(1), Enu_TypeVariable.Dimension, 4, 3, True, True)
+        End If
+
+        AddLigneNDC("\T11" & BlocG("SLSDEFLECTIONS") & chaine)
+
+        '# Critère Hivoss
+
+        If mybeam.Hivoss.lHivossMethod Then
+
+            mybeam.Hivoss.ApplicationMethode(mybeam, mybeam.Hivoss.lFreqDalle And LogicielOptions.lExpert)
+            Select Case mybeam.Hivoss.indConfort
+                Case 0 : Chaine = BlocG("CRECOMMENDED")
+                Case 1 : Chaine = BlocG("CCRITICAL")
+                Case 2 : Chaine = BlocG("CNOTRECOMMENDED")
+            End Select
+
+            AddLigneNDC("\T11" & BlocG("SLSHIVOSS") _
+                      & "\T" & CStr(myTab(0)) & "f = " & GetStringInUnitN(mybeam.Hivoss.Frequence, Enu_TypeVariable.Frequence, 3, 2, True, True) _
+                      & "\T" & CStr(myTab(1)) & "m\-mod\= = " & GetStringInUnitN(mybeam.Hivoss.MassModale, Enu_TypeVariable.Masse, 3, 2, True, True) _
+                      & "\T" & CStr(myTab(2)) & "d = " & GetStringInUnitN(mybeam.Hivoss.Amortissement, Enu_TypeVariable.SansType, 3, 2, False, True) & "%")
+            AddLigneNDC("\T" & CStr(myTab(0)) & BlocG("CZONE") & ": " & mybeam.Hivoss.HCategorie & "\T" & CStr(myTab(1)) & "=> " & Chaine)
+        End If
+
+    End Sub
+
+#End Region
 
 #Region "***Edition des paramètres***"
 
@@ -982,7 +1358,7 @@ Module Mod_NoteCalcul
         AddLigneNDC(TABW2 & BlocG("IY_PROFILE") & TABAFF & "I\-y\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.InertieY, Enu_TypeVariable.InertieCM4, 4, 0, True))
         AddLigneNDC(TABW2 & BlocG("ZCENTROID") & TABAFF & "z\-G\=" & TABEGAL & GetStringInUnitN(-MyBeam.Section.ProfilA.zG, Enu_TypeVariable.Dimension, 4, 3, True, True))
         If Not lSymetric Then
-            AddLigneNDC(TABW2 & BlocG("ZSHEAR") & TABAFF & "z\-S\=" & TABEGAL & GetStringInUnitN(-MyBeam.Section.ProfilA.zs, Enu_TypeVariable.Dimension, 4, 3, True, True))
+            AddLigneNDC(TABW2 & BlocG("ZSHEAR") & TABAFF & "z\-S\=" & TABEGAL & GetStringInUnitN(-MyBeam.Section.ProfilA.zS, Enu_TypeVariable.Dimension, 4, 3, True, True))
         End If
         AddLigneNDC(TABW2 & BlocG("RGYRATION") & TABAFF & "i\-y\=" & TABEGAL & GetStringInUnitN(MyBeam.Section.ProfilA.GirationY, Enu_TypeVariable.Dimension, 4, 3, True, True))
 
@@ -6583,10 +6959,10 @@ Module Mod_NoteCalcul
             AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
             AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA"))
 
-            If MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
+            If MyBeam.VerifMixte(iVerif).ShearB.lCheckRequired Then
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"))
                 If Not IsEqual(MyBeam.VerifMixte(iVerif).CritereMVb.CritereMax, 0) Then
-                    AfficheSyntheseCritere(MyBeam.VerifAcier(iVerif).CritereMVb, "\SG\s\-MVb\=", BlocELU("MVB_CRITERIA") & " (3)")
+                    AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereMVb, "\SG\s\-MVb\=", BlocELU("MVB_CRITERIA") & " (3)")
                     lAff3 = True
                 Else
                     AddLigneNDC(TABW3 & BlocELU("NO_MVBINTERACTION"))
@@ -6595,7 +6971,7 @@ Module Mod_NoteCalcul
 
             SauteLigne()
             AddLigneNDC(TABW2 & "(1): " & BlocELU("PLASTICDESIGNCLASS12"))
-            If MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
+            If MyBeam.VerifMixte(iVerif).ShearB.lCheckRequired Then
                 AddLigneNDC(TABW2 & "(2): " & BlocELU("BUCKLINGRESISTANCEV"))
             Else
                 AddLigneNDC(TABW2 & "(2): " & BlocELU("PLASTICRESISTANCEV"))
@@ -6662,7 +7038,7 @@ Module Mod_NoteCalcul
             AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereM, "\SG\s\-M\=", BlocELU("M_CRITERIA") & " (1)")
             AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereV, "\SG\s\-V\=", BlocELU("V_CRITERIA"))
 
-            If MyBeam.VerifAcier(iVerif).ShearB.lCheckRequired Then
+            If MyBeam.VerifMixte(iVerif).ShearB.lCheckRequired Then
                 AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereVb, "\SG\s\-Vb\=", BlocELU("VB_CRITERIA"))
             End If
             AfficheSyntheseCritere(MyBeam.VerifMixte(iVerif).CritereMV, "\SG\s\-MV\=", BlocELU("MV_CRITERIA") & " (2)")
@@ -7552,7 +7928,7 @@ Module Mod_NoteCalcul
 
 #Region "***Edition des calculs aux ELS***"
 
-    Private Sub ACC_EditionVerificationsELS(MyBeam As cls_Poutre)
+    Private Sub ACC_EditionVerificationsELS(myBeam As cls_Poutre)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -7569,21 +7945,22 @@ Module Mod_NoteCalcul
 
         '# Edition des flèches
 
-        EditionELSFleches(MyBeam)
+        EditionELSFleches(myBeam)
 
         '# Edtion des fréquences propres
 
-        EditionELSFrequencesPropres(MyBeam)
+        EditionELSFrequencesPropres(myBeam)
 
         '# Edition de la méthode Hivoss
 
-        If MyBeam.Hivoss.lHivossMethod Then
-            EditionMethodeHivoss(MyBeam)
+        If myBeam.Hivoss.lHivossMethod Then
+            'EditionMethodeHivoss(myBeam)
+            EditionMethodeHivossN(myBeam)
         End If
 
         '# Maîtrise de la fissuration
 
-        EditionMaitriseFissuration(MyBeam)
+        EditionMaitriseFissuration(myBeam)
 
     End Sub
 
@@ -8412,80 +8789,38 @@ Module Mod_NoteCalcul
 
 #Region "   Edition ELS méthode HIVOSS "
 
-
-    'Private Structure strHivossTable
-
-    '    Public nbLigne As Integer
-    '    Public listeLigneMasse As Ligne()
-    '    Public listeFrequence As Decimal()
-
-    'End Structure
-
-    Private Sub EditionMethodeHivoss(ByVal MyBeam As cls_Poutre) ', ByVal MyFreq(,) As Double, ByVal FlechesCasElem(,) As Double)
+    Private Sub EditionMethodeHivossN(ByVal MyBeam As cls_Poutre)
         '----------------------------------------------------------------------------------------------
-        '   23/11/23 :  Création - Version 1 - POM
+        '   13/08/24 :  Création - Version 1 - POM
         '----------------------------------------------------------------------------------------------
         '   Edition des résultats de la méthode Hivoss
         '----------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre traitée
-        '   MyFreq          [E] :   Table des frequences propres pour les combinaisons de masse
-        '   FlecheCasElem   [E] :   Table des flèches verticales sous charges élémentaires
         '----------------------------------------------------------------------------------------------
 
-        '--[ Déclarations
+        '--( Déclarations
 
-        Const pTABVAR As String = "\T45"
-        Const kPC As Decimal = 100
-        Dim AllFloorVibration As New Dictionary(Of Integer, cls_MethodHivoss.strHivossTable)
-        'Const TABVAR As String = " :\T45"
-        Const DFORMAT As String = "0"
-        Dim Frequency, ModalMass As Decimal
-        Dim HResult As String = ""
-        Dim HVal As Decimal
-        'Dim Reactions() As Decimal
-        Dim IndConfort As Integer
         Dim TableConfort(2) As String
-        Dim PorteeDalle As Decimal
-        Dim MasseProfil As Decimal
-
-        'Dim lDefini() As Boolean
-        Dim lMixte As Boolean = MyBeam.lMixte
-        Dim FreqDalle, FreqBeam As Decimal
-        Dim MySymb As String = ""
+        Const kPC As Decimal = 100
+        Const DFORMAT As String = "0"
         Dim Chaine As String = ""
+        Const pTABVAR As String = "\T45"
+        Dim mySymb As String = ""
 
-        '--[ Titre
-
-        SautePage()
-        AddTitreNdC(2, BlocHiVoss("HIVOSSTITLE"))
-
-        '--[ Initialisations
-
-        lMixte = MyBeam.lMixte
+        '--( Initialisations
 
         TableConfort(0) = BlocHiVoss("CRECOMMENDED")
         TableConfort(1) = BlocHiVoss("CCRITICAL")
         TableConfort(2) = BlocHiVoss("CNOTRECOMMENDED")
 
-        MyBeam.Hivoss.CalculAmortissement()
+        '--( Application du calcul Hivoss
 
-        MyBeam.Hivoss.ChargerValeursHivoss(AllFloorVibration)
+        MyBeam.Hivoss.ApplicationMethode(MyBeam, MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert)
 
-        MyBeam.Modal.Analyse(MyBeam, MyBeam.Hivoss.ratioQ, MyBeam.Hivoss.IndexQ)
-        Frequency = MyBeam.Modal.Frequence
+        '--( Titre
 
-        ModalMass = MyBeam.Modal.MassTotal / 2              ' A MODIFIER ? pour les multispan
-
-        ''--[ Prise en compte de la fréquence propre de dalle pour les poutres mixtes:
-
-        If MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert Then
-            MasseProfil = MyBeam.Section.ProfilA.Aire * cls_Acier.RHOACIER
-            PorteeDalle = MyBeam.PorteeDalle
-
-            MyBeam.Dalle.FrequenceDalle(MyBeam.LongueurTravee(1), PorteeDalle, MyBeam.LargeurInfluence, MasseProfil, MyBeam.Param.GraviteG)
-            FreqBeam = Frequency
-            Frequency = CDec(1 / Math.Sqrt(1 / FreqBeam ^ 2 + 1 / FreqDalle ^ 2))
-        End If
+        SautePage()
+        AddTitreNdC(2, BlocHiVoss("HIVOSSTITLE"))
 
         ''--[ Affichages des données
 
@@ -8512,63 +8847,176 @@ Module Mod_NoteCalcul
 
         AddLigneNDC(TABW2 & BlocHiVoss("COMBIMASS") & pTABVAR & "G + " & GetStringInUnit(MyBeam.Hivoss.ratioQ, Enu_TypeVariable.SansType, 3, 1, False) & " Q" & Format(MyBeam.Hivoss.IndexQ, "0"))
 
-        'MyBeam.ChargementsDefinis(lDefini)
-        'If MyBeam.HivossParam.IndCombiQ > 0 Then
-        '    If lDefini(MyBeam.HivossParam.IndChargeQ + 1) Then
-        '        If Not (FlecheMaxQ(FlechesCasElem, MyBeam.nSec, MyBeam.HivossParam.IndChargeQ + 1) > 0) Then
-        '            AddLigneNDC(TABW2 & RemplaceDollar(BlocELS("WARNNOQ3"), CStr(MyBeam.HivossParam.IndChargeQ + 1)))
-        '            AddLigneNDC(TABW2 & BlocELS("WARNNOQ2"))
-        '        End If
-        '    Else
-        '        AddLigneNDC(TABW2 & RemplaceDollar(BlocELS("WARNNOQ1"), CStr(MyBeam.HivossParam.IndChargeQ + 1)))
-        '        AddLigneNDC(TABW2 & BlocELS("WARNNOQ2"))
-        '    End If
-        'End If
-
         '--[ Affichage des fréquences propres et de la masse modale
 
         SauteLigne()
         If MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert Then
-            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFB") & pTABVAR & GetStringInUnit(FreqBeam, Enu_TypeVariable.Frequence, 3, 2, True))
-            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFS") & pTABVAR & GetStringInUnit(FreqDalle, Enu_TypeVariable.Frequence, 3, 2, True))
-            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFC") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 2, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFB") & pTABVAR & GetStringInUnit(MyBeam.Hivoss.FreqPoutre, Enu_TypeVariable.Frequence, 3, 2, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFS") & pTABVAR & GetStringInUnit(MyBeam.Hivoss.FreqDalle, Enu_TypeVariable.Frequence, 3, 2, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENFC") & pTABVAR & GetStringInUnit(MyBeam.Hivoss.Frequence, Enu_TypeVariable.Frequence, 3, 2, True))
         Else
-            AddLigneNDC(TABW2 & BlocHiVoss("EIGENF") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 2, True))
+            AddLigneNDC(TABW2 & BlocHiVoss("EIGENF") & pTABVAR & GetStringInUnit(MyBeam.Hivoss.Frequence, Enu_TypeVariable.Frequence, 3, 2, True))
         End If
         SauteLigne()
-        AddLigneNDC(TABW2 & BlocHiVoss("MODALMASS") & pTABVAR & GetStringInUnit(ModalMass, Enu_TypeVariable.SansType, 3, 0, False) & " kg")
+        AddLigneNDC(TABW2 & BlocHiVoss("MODALMASS") & pTABVAR & GetStringInUnit(MyBeam.Hivoss.MassModale, Enu_TypeVariable.SansType, 3, 0, False) & " kg")
 
-        ''--[ Calcul Hivoss
+        '--[ Affichage résultats
 
-        MyBeam.Hivoss.CalculMethodHivoss(CInt(MyBeam.Hivoss.AmortiTotal_Dtot * kPC), Frequency, ModalMass, HResult, HVal)
-        IndConfort = MyBeam.Hivoss.ConfortAssessment(HResult)
-
-        SauteLigne()
-        If HResult = "A" Then
+        If MyBeam.Hivoss.HCategorie = "A" Then
             MySymb = "<"
-        ElseIf HResult = "!" Then
+        ElseIf MyBeam.Hivoss.HCategorie = "!" Then
             MySymb = ">"
         Else
             MySymb = "="
         End If
 
-        AddLigneNDC(TABW2 & BlocHiVoss("OSRMS") & pTABVAR & "OS-RMS\-90\= " & MySymb & " " & GetStringInUnit(HVal, Enu_TypeVariable.SansType, 3, 1, False) & " m/s")
-        AddLigneNDC(TABW2 & BlocHiVoss("CPERCEPTION") & pTABVAR & HResult)
-        AddLigneNDC(TABW2 & BlocHiVoss("COMFORTASS") & pTABVAR & TableConfort(IndConfort))
+        AddLigneNDC(TABW2 & BlocHiVoss("OSRMS") & pTABVAR & "OS-RMS\-90\= " & mySymb & " " & GetStringInUnit(MyBeam.Hivoss.OsRMS, Enu_TypeVariable.SansType, 3, 1, False) & " m/s")
+        AddLigneNDC(TABW2 & BlocHiVoss("CPERCEPTION") & pTABVAR & MyBeam.Hivoss.HCategorie)
+        AddLigneNDC(TABW2 & BlocHiVoss("COMFORTASS") & pTABVAR & TableConfort(MyBeam.Hivoss.indConfort))
 
         If OptionsNdC.lShowHivossCurve Then
             SautePage()
 
             MyNote.AddLigneInRapport("\IMG HIVOSS 5 85 80 NoCadre " _
                                    & Format(MyBeam.Hivoss.AmortiTotal_Dtot * kPC, DFORMAT) & " " _
-                                   & Format(Frequency, "0.00") & " " _
-                                   & Format(ModalMass, "0.00") & " " _
+                                   & Format(MyBeam.Hivoss.Frequence, "0.00") & " " _
+                                   & Format(MyBeam.Hivoss.MassModale, "0.00") & " " _
                                    & BlocHiVoss("DAMPING"))
         End If
 
-
-
     End Sub
+
+    'Private Sub EditionMethodeHivoss(ByVal MyBeam As cls_Poutre) ', ByVal MyFreq(,) As Double, ByVal FlechesCasElem(,) As Double)
+    '    '----------------------------------------------------------------------------------------------
+    '    '   23/11/23 :  Création - Version 1 - POM
+    '    '----------------------------------------------------------------------------------------------
+    '    '   Edition des résultats de la méthode Hivoss
+    '    '----------------------------------------------------------------------------------------------
+    '    '   MyBeam          [E] :   Poutre traitée
+    '    '   MyFreq          [E] :   Table des frequences propres pour les combinaisons de masse
+    '    '   FlecheCasElem   [E] :   Table des flèches verticales sous charges élémentaires
+    '    '----------------------------------------------------------------------------------------------
+
+    '    '--[ Déclarations
+
+    '    Const pTABVAR As String = "\T45"
+    '    Const kPC As Decimal = 100
+    '    Dim AllFloorVibration As New Dictionary(Of Integer, cls_MethodHivoss.strHivossTable)
+    '    'Const TABVAR As String = " :\T45"
+    '    Const DFORMAT As String = "0"
+    '    Dim Frequency, ModalMass As Decimal
+    '    Dim HResult As String = ""
+    '    Dim HVal As Decimal
+    '    'Dim Reactions() As Decimal
+    '    Dim IndConfort As Integer
+    '    Dim TableConfort(2) As String
+    '    Dim PorteeDalle As Decimal
+    '    Dim MasseProfil As Decimal
+
+    '    'Dim lDefini() As Boolean
+
+    '    Dim FreqDalle, FreqBeam As Decimal
+    '    Dim MySymb As String = ""
+    '    Dim Chaine As String = ""
+
+    '    '--[ Titre
+
+    '    SautePage()
+    '    AddTitreNdC(2, BlocHiVoss("HIVOSSTITLE"))
+
+    '    '--[ Initialisations
+
+    '    TableConfort(0) = BlocHiVoss("CRECOMMENDED")
+    '    TableConfort(1) = BlocHiVoss("CCRITICAL")
+    '    TableConfort(2) = BlocHiVoss("CNOTRECOMMENDED")
+
+    '    MyBeam.Hivoss.CalculAmortissement()
+
+    '    MyBeam.Hivoss.ChargerValeursHivoss(AllFloorVibration)
+
+    '    MyBeam.Modal.Analyse(MyBeam, MyBeam.Hivoss.ratioQ, MyBeam.Hivoss.IndexQ)
+    '    Frequency = MyBeam.Modal.Frequence
+
+    '    ModalMass = MyBeam.Modal.MassTotal / 2              ' A MODIFIER ? pour les multispan
+
+    '    ''--[ Prise en compte de la fréquence propre de dalle pour les poutres mixtes:
+
+    '    If MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert Then
+    '        MasseProfil = MyBeam.Section.ProfilA.Aire * cls_Acier.RHOACIER
+    '        PorteeDalle = MyBeam.PorteeDalle
+
+    '        MyBeam.Dalle.FrequenceDalle(MyBeam.LongueurTravee(1), PorteeDalle, MyBeam.LargeurInfluence, MasseProfil, MyBeam.Param.GraviteG)
+    '        FreqBeam = Frequency
+    '        Frequency = CDec(1 / Math.Sqrt(1 / FreqBeam ^ 2 + 1 / FreqDalle ^ 2))
+    '    End If
+
+    '    ''--[ Affichages des données
+
+    '    Select Case MyBeam.Hivoss.UtilisationPlancher
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.Bureau : Chaine = BlocHiVoss("UOFFICE")
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.Education : Chaine = BlocHiVoss("USCHOOL")
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.Hotel : Chaine = BlocHiVoss("UHOTEL")
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.Industriel : Chaine = BlocHiVoss("UINDUSTRIAL")
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.MaisonRetraite : Chaine = BlocHiVoss("USENIOR")
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.Residentiel : Chaine = BlocHiVoss("URESIDENTIAL")
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.Reunion : Chaine = BlocHiVoss("UMEETING")
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.Sante : Chaine = BlocHiVoss("UHOSPITAL")
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.Sports : Chaine = BlocHiVoss("USPORTS")
+    '        Case cls_MethodHivoss.Enu_UtilisationPlancher.ZoneSensible : Chaine = BlocHiVoss("UCRITICAL")
+    '    End Select
+    '    AddLigneNDC(TABW2 & BlocHiVoss("USAGE") & pTABVAR & Chaine)
+    '    SauteLigne()
+    '    AddLigneNDC(TABW2 & BlocHiVoss("DSTRUC") & pTABVAR & "D1 = " & Format(MyBeam.Hivoss.AmortiStructure_D1 * kPC, DFORMAT) & " %")
+    '    AddLigneNDC(TABW2 & BlocHiVoss("DFURNITURE") & pTABVAR & "D2 = " & Format(MyBeam.Hivoss.AmortiMobilier_D2 * kPC, DFORMAT) & " %")
+    '    AddLigneNDC(TABW2 & BlocHiVoss("DFINISHING") & pTABVAR & "D3 = " & Format(MyBeam.Hivoss.AmortiFinition_D3 * kPC, DFORMAT) & " %")
+    '    AddLigneNDC(TABW2 & BlocHiVoss("DTOTAL") & pTABVAR & "D = " & Format(MyBeam.Hivoss.AmortiTotal_Dtot * kPC, DFORMAT) & " %")
+
+    '    SauteLigne()
+
+    '    AddLigneNDC(TABW2 & BlocHiVoss("COMBIMASS") & pTABVAR & "G + " & GetStringInUnit(MyBeam.Hivoss.ratioQ, Enu_TypeVariable.SansType, 3, 1, False) & " Q" & Format(MyBeam.Hivoss.IndexQ, "0"))
+
+    '    '--[ Affichage des fréquences propres et de la masse modale
+
+    '    SauteLigne()
+    '    If MyBeam.Hivoss.lFreqDalle And LogicielOptions.lExpert Then
+    '        AddLigneNDC(TABW2 & BlocHiVoss("EIGENFB") & pTABVAR & GetStringInUnit(FreqBeam, Enu_TypeVariable.Frequence, 3, 2, True))
+    '        AddLigneNDC(TABW2 & BlocHiVoss("EIGENFS") & pTABVAR & GetStringInUnit(FreqDalle, Enu_TypeVariable.Frequence, 3, 2, True))
+    '        AddLigneNDC(TABW2 & BlocHiVoss("EIGENFC") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 2, True))
+    '    Else
+    '        AddLigneNDC(TABW2 & BlocHiVoss("EIGENF") & pTABVAR & GetStringInUnit(Frequency, Enu_TypeVariable.Frequence, 3, 2, True))
+    '    End If
+    '    SauteLigne()
+    '    AddLigneNDC(TABW2 & BlocHiVoss("MODALMASS") & pTABVAR & GetStringInUnit(ModalMass, Enu_TypeVariable.SansType, 3, 0, False) & " kg")
+
+    '    ''--[ Calcul Hivoss
+
+    '    MyBeam.Hivoss.CalculMethodHivoss(CInt(MyBeam.Hivoss.AmortiTotal_Dtot * kPC), Frequency, ModalMass, HResult, HVal)
+    '    IndConfort = MyBeam.Hivoss.ConfortAssessment(HResult)
+
+    '    SauteLigne()
+    '    If HResult = "A" Then
+    '        MySymb = "<"
+    '    ElseIf HResult = "!" Then
+    '        MySymb = ">"
+    '    Else
+    '        MySymb = "="
+    '    End If
+
+    '    AddLigneNDC(TABW2 & BlocHiVoss("OSRMS") & pTABVAR & "OS-RMS\-90\= " & MySymb & " " & GetStringInUnit(HVal, Enu_TypeVariable.SansType, 3, 1, False) & " m/s")
+    '    AddLigneNDC(TABW2 & BlocHiVoss("CPERCEPTION") & pTABVAR & HResult)
+    '    AddLigneNDC(TABW2 & BlocHiVoss("COMFORTASS") & pTABVAR & TableConfort(IndConfort))
+
+    '    If OptionsNdC.lShowHivossCurve Then
+    '        SautePage()
+
+    '        MyNote.AddLigneInRapport("\IMG HIVOSS 5 85 80 NoCadre " _
+    '                               & Format(MyBeam.Hivoss.AmortiTotal_Dtot * kPC, DFORMAT) & " " _
+    '                               & Format(Frequency, "0.00") & " " _
+    '                               & Format(ModalMass, "0.00") & " " _
+    '                               & BlocHiVoss("DAMPING"))
+    '    End If
+
+    'End Sub
 
 #End Region
 
@@ -8764,7 +9212,7 @@ Module Mod_NoteCalcul
     End Sub
 
     Private Sub AddligneNoRetour(ByVal Ligne As String)
-        MyNote.AddLigneInRapport(Ligne & "\NOS")
+        MyNote.AddLigneInRapport(Ligne & " \NOS")
     End Sub
 
     Private Sub SauteLigne()

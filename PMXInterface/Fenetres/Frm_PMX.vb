@@ -241,7 +241,7 @@ Public Class Frm_PMX
                 Me.TSbtn_SupprBeam.ToolTipText = Bloc("DELBEAM")
                 Me.TSbtn_DupBeam.ToolTipText = Bloc("DUPBEAM")
                 Me.TSbtn_Calcul.ToolTipText = Bloc("CALCULATION")
-                Me.TSbtn_NoteSynthese.Text = Bloc("CALCULATIONREPORT")
+                Me.TSbtn_NoteSynthese.ToolTipText = Bloc("CALCULATIONREPORT")
 
                 Me.TSbtn_OptionsCalcul.ToolTipText = Bloc("CALCULOPTIONS")
                 Me.TSbtn_OptionsLogiciel.ToolTipText = Bloc("SOFTOPT")

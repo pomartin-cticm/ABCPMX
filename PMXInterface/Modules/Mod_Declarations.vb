@@ -333,6 +333,7 @@ Public Module Mod_Declarations
         InertieWCM6
         Longueur
         LongueurCM
+        Masse
         Millimetre
         ModuleCM3
         ModuleY
