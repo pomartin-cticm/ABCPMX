@@ -631,10 +631,17 @@ Module Mod_NoteCalcul
         '--( Déclarations
 
         Dim myTab() As Integer = {11, 31, 51, 71}
+        Dim myTabC() As Integer = {11, 41, 71}
         Dim iTab As Integer
         Dim lEnrob As Boolean = myBeam.lEnrobage
         Dim lLamine As Boolean = (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.Lamine)
         Dim lMulti As Boolean = myBeam.lMultiSpan
+        Dim iTravee, iSigne As Integer
+        Dim indDeb, indFin As Integer
+        Dim DegreMin As Decimal
+        Dim SigneM As Integer
+
+        Dim tabSigneM() As Integer = {-1, 1, -1}
 
         '--( Traitement
 
@@ -653,7 +660,21 @@ Module Mod_NoteCalcul
 
             End If
 
-            'EditionVerificationsELUSummaryMIXTEDegConnexion(myBeam, iVerif)
+            indDeb=myBeam.IndicePremiereTravee
+            indFin = myBeam.IndiceDerniereTravee
+
+            For iTravee = indDeb To indFin
+
+                If iTravee = 1 Then
+                    DegreMin = myBeam.VerifMixte(iVerif).DegConnexMin(iTravee)
+                Else
+                    DegreMin = 1
+                End If
+                SigneM = tabSigneM(iTravee)
+
+                AfficheCritereRptProjetDegreConnexion(myBeam.VerifMixte(iVerif).DegConnex(iTravee, iSigne), DegreMin,
+                                                      iTravee, SigneM, myTabC(iTravee - indDeb), iTravee = indFin)
+            Next
 
         ElseIf myBeam.Param.lElasticDesignVM Then
             '------------------------------------------------------------------------------------------------------------
@@ -790,6 +811,61 @@ Module Mod_NoteCalcul
 
     End Sub
 
+
+    Private Sub AfficheCritereRptProjetDegreConnexion(DegreC As Decimal, DegreMin As Decimal, iTravee As Integer, SigneM As Integer,
+                                                      myTab As String, Optional lRetour As Boolean = True)
+        '----------------------------------------------------------------------------------------------
+        '   13/08/24 :  Création - Version 1.00 - POM
+        '----------------------------------------------------------------------------------------------
+        '   Affichage d'un critère (ELU) dans la note de synthèse du projet
+        '----------------------------------------------------------------------------------------------
+        '   DegreC      [E] :   Degre de connexion
+        '   DegreMin    [E] :   Degre minimal de connexion
+        '   iTravee     [E] :   Travée concernée
+        '   SigneM      [E] :   Signe du moment
+        '   myTab       [E] :   Tabulation pour positionner le critère
+        '----------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim strGras As String = ""
+        Dim strFinGras As String = ""
+        Dim KeyImg As String = "CORRECT"
+        Dim TabulC As String = "\T" & CStr(myTab)
+        'Dim TabulI As String = "\T" & CStr(myTab + 15)
+        Dim iTabulI As String = myTab + 20
+        Dim SymbEta As String = "\Sh\s = "
+        Dim SymbEtaMin As String = "\Sh\s\-min\= = "
+        Dim Comp As String = " >= "
+
+        Dim SymbT As String = "(MS) "
+
+        '--( Préparation
+
+        If IsSmaller(DegreC, DegreMin) Then
+            strGras = "\G"
+            strFinGras = "\g"
+            KeyImg = "ERROR"
+            Comp = " < "
+        End If
+
+        If iTravee = 0 Then SymbT = "(LC) "
+        If iTravee = 2 Then SymbT = "(RC) "
+
+        '--( Affichage
+
+        AddligneNoRetour(TabulC & SymbT & strGras & SymbEta & GetStringInUnitN(DegreC, Enu_TypeVariable.SansType, 3, 2, False, True) _
+                       & Comp & SymbEtaMin & GetStringInUnitN(DegreMin, Enu_TypeVariable.SansType, 3, 2, False, True) & strFinGras)
+
+        If lRetour Then
+            AddLigneNDC("\IMG " & KeyImg & " " & CStr(iTabulI) & " 2 0 Nocadre")
+        Else
+            AddligneNoRetour("\IMG " & KeyImg & " " & CStr(myTab + 10) & " 2 0 Nocadre")
+        End If
+
+    End Sub
+
+
     Private Sub AfficheCritereRptProjet(Critere As Decimal, myTab As Integer, Symbol As String, Optional lRetour As Boolean = True)
         '----------------------------------------------------------------------------------------------
         '   13/08/24 :  Création - Version 1.00 - POM
@@ -809,6 +885,7 @@ Module Mod_NoteCalcul
         Dim TabulC As String = "\T" & CStr(myTab)
         Dim TabulI As String = "\T" & CStr(myTab + 10)
         Dim SymbolG As String = "\SG\s\-" & Symbol & "\= = "
+
         '--( Préparation
 
         If IsGreater(Critere, 1) Then
@@ -898,7 +975,7 @@ Module Mod_NoteCalcul
             AddLigneNDC("\T11" & BlocG("SLSHIVOSS") _
                       & "\T" & CStr(myTab(0)) & "f = " & GetStringInUnitN(mybeam.Hivoss.Frequence, Enu_TypeVariable.Frequence, 3, 2, True, True) _
                       & "\T" & CStr(myTab(1)) & "m\-mod\= = " & GetStringInUnitN(mybeam.Hivoss.MassModale, Enu_TypeVariable.Masse, 3, 2, True, True) _
-                      & "\T" & CStr(myTab(2)) & "d = " & GetStringInUnitN(mybeam.Hivoss.Amortissement, Enu_TypeVariable.SansType, 3, 2, False, True) & "%")
+                      & "\T" & CStr(myTab(2)) & "d = " & GetStringInUnitN(mybeam.Hivoss.Amortissement * 100, Enu_TypeVariable.SansType, 3, 2, False, True) & "%")
             AddLigneNDC("\T" & CStr(myTab(0)) & BlocG("CZONE") & ": " & mybeam.Hivoss.HCategorie & "\T" & CStr(myTab(1)) & "=> " & Chaine)
         End If
 
@@ -9058,7 +9135,14 @@ Module Mod_NoteCalcul
         SauteLigne()
 
         '--> Logo du CTICM
-        MyNote.AddLigneInRapport("\IMG CTICM 40 20 0 NoCadre")
+
+        Select Case LogicielInfo.Maitre
+            Case EnuMaitre.ArcelorMittal
+                MyNote.AddLigneInRapport("\IMG ARCELORMITTAL 40 20 0 NoCadre")
+            Case EnuMaitre.CTICM
+                MyNote.AddLigneInRapport("\IMG CTICM 40 20 0 NoCadre")
+        End Select
+
 
         MyNote.lPageGarde = True
 

@@ -61,9 +61,9 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator5 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_OptionsCalculPoutre = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Hivoss = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_NdcPoutre = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_OptionsIncendie = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_NdcPoutre = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_PostT = New System.Windows.Forms.ToolStripSplitButton()
         Me.TSmenuPPLargeurEfficace = New System.Windows.Forms.ToolStripMenuItem()
@@ -83,6 +83,7 @@ Partial Class Frm_PMX
         Me.TSbtn_ZoomMoins = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Cotations = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_CopieImage = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_ExpertMode = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn3D = New System.Windows.Forms.ToolStripButton()
@@ -349,7 +350,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Poutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Poutre.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_DalleSlimFloor, Me.TSbtn_SectionA, Me.TSbtn_SectionSFB, Me.TSbtn_SectionIFB, Me.TSbtn_SectionSAB, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.TSbtn_ConnexionSlimfloor, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.TSbtn_MaintienBac, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.ToolStripSeparator5, Me.TSbtn_OptionsCalculPoutre, Me.TSbtn_Hivoss, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.TSbtn_NdcPoutre, Me.ToolStripSeparator8, Me.TSbtn_PostT, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PPVerifications})
+        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_DalleSlimFloor, Me.TSbtn_SectionA, Me.TSbtn_SectionSFB, Me.TSbtn_SectionIFB, Me.TSbtn_SectionSAB, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.TSbtn_ConnexionSlimfloor, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.TSbtn_MaintienBac, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.ToolStripSeparator5, Me.TSbtn_OptionsCalculPoutre, Me.TSbtn_Hivoss, Me.TSbtn_NdcPoutre, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.ToolStripSeparator8, Me.TSbtn_PostT, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PPVerifications})
         Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
         Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -564,6 +565,15 @@ Partial Class Frm_PMX
         Me.TSbtn_Hivoss.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Hivoss.Text = "TSbtn_Hivoss"
         '
+        'TSbtn_NdcPoutre
+        '
+        Me.TSbtn_NdcPoutre.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_NdcPoutre.Image = CType(resources.GetObject("TSbtn_NdcPoutre.Image"), System.Drawing.Image)
+        Me.TSbtn_NdcPoutre.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_NdcPoutre.Name = "TSbtn_NdcPoutre"
+        Me.TSbtn_NdcPoutre.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_NdcPoutre.Text = "TSbtn_NdcPoutre"
+        '
         'TSbtn_OptionsIncendie
         '
         Me.TSbtn_OptionsIncendie.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
@@ -577,15 +587,6 @@ Partial Class Frm_PMX
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 31)
-        '
-        'TSbtn_NdcPoutre
-        '
-        Me.TSbtn_NdcPoutre.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_NdcPoutre.Image = CType(resources.GetObject("TSbtn_NdcPoutre.Image"), System.Drawing.Image)
-        Me.TSbtn_NdcPoutre.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_NdcPoutre.Name = "TSbtn_NdcPoutre"
-        Me.TSbtn_NdcPoutre.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_NdcPoutre.Text = "TSbtn_NdcPoutre"
         '
         'ToolStripSeparator8
         '
@@ -695,17 +696,18 @@ Partial Class Frm_PMX
         'TSGestionImagePoutre
         '
         Me.TSGestionImagePoutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.TSGestionImagePoutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator7, Me.TSbtn_ZoomPlus, Me.TSbtn_ZoomMoins, Me.ToolStripSeparator6, Me.TSbtn_Cotations, Me.ToolStripSeparator4, Me.TSbtn_ExpertMode, Me.TSbtn3D})
+        Me.TSGestionImagePoutre.ImageScalingSize = New System.Drawing.Size(24, 24)
+        Me.TSGestionImagePoutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator7, Me.TSbtn_ZoomPlus, Me.TSbtn_ZoomMoins, Me.ToolStripSeparator6, Me.TSbtn_Cotations, Me.TSbtn_CopieImage, Me.ToolStripSeparator4, Me.TSbtn_ExpertMode, Me.TSbtn3D})
         Me.TSGestionImagePoutre.Location = New System.Drawing.Point(0, 441)
         Me.TSGestionImagePoutre.Name = "TSGestionImagePoutre"
-        Me.TSGestionImagePoutre.Size = New System.Drawing.Size(975, 25)
+        Me.TSGestionImagePoutre.Size = New System.Drawing.Size(975, 31)
         Me.TSGestionImagePoutre.TabIndex = 7
         Me.TSGestionImagePoutre.Text = "TSGestionImagePoutre"
         '
         'ToolStripSeparator7
         '
         Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(6, 31)
         '
         'TSbtn_ZoomPlus
         '
@@ -713,7 +715,7 @@ Partial Class Frm_PMX
         Me.TSbtn_ZoomPlus.Image = CType(resources.GetObject("TSbtn_ZoomPlus.Image"), System.Drawing.Image)
         Me.TSbtn_ZoomPlus.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.TSbtn_ZoomPlus.Name = "TSbtn_ZoomPlus"
-        Me.TSbtn_ZoomPlus.Size = New System.Drawing.Size(23, 22)
+        Me.TSbtn_ZoomPlus.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_ZoomPlus.Text = "TSbtn_ZoomPlus"
         '
         'TSbtn_ZoomMoins
@@ -722,13 +724,13 @@ Partial Class Frm_PMX
         Me.TSbtn_ZoomMoins.Image = CType(resources.GetObject("TSbtn_ZoomMoins.Image"), System.Drawing.Image)
         Me.TSbtn_ZoomMoins.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.TSbtn_ZoomMoins.Name = "TSbtn_ZoomMoins"
-        Me.TSbtn_ZoomMoins.Size = New System.Drawing.Size(23, 22)
+        Me.TSbtn_ZoomMoins.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_ZoomMoins.Text = "TSbtn_ZoomMoins"
         '
         'ToolStripSeparator6
         '
         Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator6.Size = New System.Drawing.Size(6, 31)
         '
         'TSbtn_Cotations
         '
@@ -736,13 +738,22 @@ Partial Class Frm_PMX
         Me.TSbtn_Cotations.Image = CType(resources.GetObject("TSbtn_Cotations.Image"), System.Drawing.Image)
         Me.TSbtn_Cotations.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.TSbtn_Cotations.Name = "TSbtn_Cotations"
-        Me.TSbtn_Cotations.Size = New System.Drawing.Size(23, 22)
+        Me.TSbtn_Cotations.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_Cotations.Text = "TSbtn_Cotations"
+        '
+        'TSbtn_CopieImage
+        '
+        Me.TSbtn_CopieImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_CopieImage.Image = CType(resources.GetObject("TSbtn_CopieImage.Image"), System.Drawing.Image)
+        Me.TSbtn_CopieImage.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_CopieImage.Name = "TSbtn_CopieImage"
+        Me.TSbtn_CopieImage.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_CopieImage.Text = "ToolStripButton1"
         '
         'ToolStripSeparator4
         '
         Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 25)
+        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 31)
         '
         'TSbtn_ExpertMode
         '
@@ -750,7 +761,7 @@ Partial Class Frm_PMX
         Me.TSbtn_ExpertMode.Image = CType(resources.GetObject("TSbtn_ExpertMode.Image"), System.Drawing.Image)
         Me.TSbtn_ExpertMode.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.TSbtn_ExpertMode.Name = "TSbtn_ExpertMode"
-        Me.TSbtn_ExpertMode.Size = New System.Drawing.Size(23, 22)
+        Me.TSbtn_ExpertMode.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_ExpertMode.Text = "ToolStripButton1"
         '
         'TSbtn3D
@@ -759,7 +770,7 @@ Partial Class Frm_PMX
         Me.TSbtn3D.Image = CType(resources.GetObject("TSbtn3D.Image"), System.Drawing.Image)
         Me.TSbtn3D.ImageTransparentColor = System.Drawing.Color.Magenta
         Me.TSbtn3D.Name = "TSbtn3D"
-        Me.TSbtn3D.Size = New System.Drawing.Size(23, 22)
+        Me.TSbtn3D.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn3D.Text = "ToolStripButton1"
         Me.TSbtn3D.Visible = False
         '
@@ -1247,6 +1258,9 @@ Partial Class Frm_PMX
         Me.ContainerLogo.ImageStream = CType(resources.GetObject("ContainerLogo.ImageStream"), System.Windows.Forms.ImageListStreamer)
         Me.ContainerLogo.TransparentColor = System.Drawing.Color.Transparent
         Me.ContainerLogo.Images.SetKeyName(0, "logo_CTICM")
+        Me.ContainerLogo.Images.SetKeyName(1, "Logo_CTICM_2024")
+        Me.ContainerLogo.Images.SetKeyName(2, "Logo_ARCELORMITTAL")
+        Me.ContainerLogo.Images.SetKeyName(3, "Logo_CTICM_2024_S")
         '
         'ToolStripContainer1
         '
@@ -1489,4 +1503,5 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_DalleSlimFloor As ToolStripButton
     Friend WithEvents TSbtn3D As ToolStripButton
     Friend WithEvents TSbtn_ConnexionSlimfloor As ToolStripButton
+    Friend WithEvents TSbtn_CopieImage As ToolStripButton
 End Class

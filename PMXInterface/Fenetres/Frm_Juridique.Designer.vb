@@ -22,6 +22,7 @@ Partial Class Frm_Juridique
     'Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_Juridique))
         Me.TableLayoutPanel_Contenu = New System.Windows.Forms.TableLayoutPanel()
         Me.Btn_Accepter = New System.Windows.Forms.Button()
@@ -34,12 +35,13 @@ Partial Class Frm_Juridique
         Me.Panel_Juridique = New System.Windows.Forms.Panel()
         Me.Label_InfoJuridique = New System.Windows.Forms.Label()
         Me.Btn_Quitter = New System.Windows.Forms.Button()
-        Me.PictureBox_CTICM = New System.Windows.Forms.PictureBox()
+        Me.img_LOGO = New System.Windows.Forms.PictureBox()
+        Me.ImageList1 = New System.Windows.Forms.ImageList(Me.components)
         Me.TableLayoutPanel_Contenu.SuspendLayout()
         Me.Panel_Langue.SuspendLayout()
         Me.TableLayoutPanel_Langue.SuspendLayout()
         Me.Panel_Juridique.SuspendLayout()
-        CType(Me.PictureBox_CTICM, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.img_LOGO, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'TableLayoutPanel_Contenu
@@ -52,7 +54,7 @@ Partial Class Frm_Juridique
         Me.TableLayoutPanel_Contenu.Controls.Add(Me.Panel_Langue, 1, 0)
         Me.TableLayoutPanel_Contenu.Controls.Add(Me.Panel_Juridique, 0, 2)
         Me.TableLayoutPanel_Contenu.Controls.Add(Me.Btn_Quitter, 0, 3)
-        Me.TableLayoutPanel_Contenu.Controls.Add(Me.PictureBox_CTICM, 0, 0)
+        Me.TableLayoutPanel_Contenu.Controls.Add(Me.img_LOGO, 0, 0)
         Me.TableLayoutPanel_Contenu.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel_Contenu.Location = New System.Drawing.Point(0, 0)
         Me.TableLayoutPanel_Contenu.Margin = New System.Windows.Forms.Padding(3, 0, 3, 3)
@@ -201,19 +203,25 @@ Partial Class Frm_Juridique
         Me.Btn_Quitter.Text = "btn_Quitter"
         Me.Btn_Quitter.UseVisualStyleBackColor = True
         '
-        'PictureBox_CTICM
+        'img_LOGO
         '
-        Me.PictureBox_CTICM.BackColor = System.Drawing.Color.White
-        Me.PictureBox_CTICM.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.PictureBox_CTICM.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.PictureBox_CTICM.Image = CType(resources.GetObject("PictureBox_CTICM.Image"), System.Drawing.Image)
-        Me.PictureBox_CTICM.Location = New System.Drawing.Point(6, 6)
-        Me.PictureBox_CTICM.Margin = New System.Windows.Forms.Padding(6, 6, 3, 3)
-        Me.PictureBox_CTICM.Name = "PictureBox_CTICM"
-        Me.PictureBox_CTICM.Size = New System.Drawing.Size(305, 152)
-        Me.PictureBox_CTICM.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.PictureBox_CTICM.TabIndex = 3
-        Me.PictureBox_CTICM.TabStop = False
+        Me.img_LOGO.BackColor = System.Drawing.Color.White
+        Me.img_LOGO.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_LOGO.Dock = System.Windows.Forms.DockStyle.Top
+        Me.img_LOGO.Image = CType(resources.GetObject("img_LOGO.Image"), System.Drawing.Image)
+        Me.img_LOGO.Location = New System.Drawing.Point(6, 6)
+        Me.img_LOGO.Margin = New System.Windows.Forms.Padding(6, 6, 3, 3)
+        Me.img_LOGO.Name = "img_LOGO"
+        Me.img_LOGO.Size = New System.Drawing.Size(305, 152)
+        Me.img_LOGO.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.img_LOGO.TabIndex = 3
+        Me.img_LOGO.TabStop = False
+        '
+        'ImageList1
+        '
+        Me.ImageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit
+        Me.ImageList1.ImageSize = New System.Drawing.Size(16, 16)
+        Me.ImageList1.TransparentColor = System.Drawing.Color.Transparent
         '
         'Frm_Juridique
         '
@@ -235,7 +243,7 @@ Partial Class Frm_Juridique
         Me.TableLayoutPanel_Langue.ResumeLayout(False)
         Me.Panel_Juridique.ResumeLayout(False)
         Me.Panel_Juridique.PerformLayout()
-        CType(Me.PictureBox_CTICM, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.img_LOGO, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -251,5 +259,6 @@ Partial Class Frm_Juridique
     Friend WithEvents Panel_Juridique As Panel
     Friend WithEvents Label_InfoJuridique As Label
     Friend WithEvents Btn_Quitter As Button
-    Friend WithEvents PictureBox_CTICM As PictureBox
+    Friend WithEvents img_LOGO As PictureBox
+    Friend WithEvents ImageList1 As ImageList
 End Class

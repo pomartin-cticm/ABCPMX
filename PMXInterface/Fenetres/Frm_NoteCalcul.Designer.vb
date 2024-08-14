@@ -24,6 +24,8 @@ Partial Class Frm_NoteCalcul
     Private Sub InitializeComponent()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_NoteCalcul))
         Me.ToolStrip_Menu = New System.Windows.Forms.ToolStrip()
+        Me.TSbtn_Fermer = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.Btn_PageDeb = New System.Windows.Forms.ToolStripButton()
         Me.Btn_PagePrec = New System.Windows.Forms.ToolStripButton()
         Me.Btn_PageSuiv = New System.Windows.Forms.ToolStripButton()
@@ -71,8 +73,6 @@ Partial Class Frm_NoteCalcul
         Me.PrintDocument = New System.Drawing.Printing.PrintDocument()
         Me.PrintDialog = New System.Windows.Forms.PrintDialog()
         Me.SaveFileDialog_PDF = New System.Windows.Forms.SaveFileDialog()
-        Me.TSbtn_Fermer = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStrip_Menu.SuspendLayout()
         Me.StatusStrip_InfoZoom.SuspendLayout()
         Me.Panel_NDC.SuspendLayout()
@@ -98,6 +98,20 @@ Partial Class Frm_NoteCalcul
         Me.ToolStrip_Menu.Size = New System.Drawing.Size(734, 31)
         Me.ToolStrip_Menu.TabIndex = 2
         Me.ToolStrip_Menu.Text = "ToolStrip_Menu"
+        '
+        'TSbtn_Fermer
+        '
+        Me.TSbtn_Fermer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_Fermer.Image = CType(resources.GetObject("TSbtn_Fermer.Image"), System.Drawing.Image)
+        Me.TSbtn_Fermer.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Fermer.Name = "TSbtn_Fermer"
+        Me.TSbtn_Fermer.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_Fermer.Text = "ToolStripButton1"
+        '
+        'ToolStripSeparator7
+        '
+        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
+        Me.ToolStripSeparator7.Size = New System.Drawing.Size(6, 31)
         '
         'Btn_PageDeb
         '
@@ -545,20 +559,6 @@ Partial Class Frm_NoteCalcul
         'PrintDialog
         '
         Me.PrintDialog.UseEXDialog = True
-        '
-        'TSbtn_Fermer
-        '
-        Me.TSbtn_Fermer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_Fermer.Image = CType(resources.GetObject("TSbtn_Fermer.Image"), System.Drawing.Image)
-        Me.TSbtn_Fermer.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_Fermer.Name = "TSbtn_Fermer"
-        Me.TSbtn_Fermer.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_Fermer.Text = "ToolStripButton1"
-        '
-        'ToolStripSeparator7
-        '
-        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(6, 31)
         '
         'Frm_NoteCalcul
         '

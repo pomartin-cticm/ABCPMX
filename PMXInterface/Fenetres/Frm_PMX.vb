@@ -250,6 +250,7 @@ Public Class Frm_PMX
                 Me.TSbtn_ZoomMoins.ToolTipText = Bloc("ZOOMOUT")
                 Me.TSbtn_Cotations.ToolTipText = Bloc("COTATIONS")
                 Me.TSbtn_ExpertMode.ToolTipText = Bloc("EXPERT")
+                Me.TSbtn_CopieImage.ToolTipText = Bloc("COPYIMAGE")
 
                 '=== BARRE d'OUTILS POUR LES POUTRES
 
@@ -332,8 +333,10 @@ Public Class Frm_PMX
 
         Select Case LogicielInfo.Maitre
             Case EnuMaitre.CTICM
-                Me.img_Logo.Image = Me.ContainerLogo.Images("Logo_CTICM")
-
+                'Me.img_Logo.Image = Me.ContainerLogo.Images("Logo_CTICM")
+                Me.img_Logo.Image = Me.ContainerLogo.Images("Logo_CTICM_2024_S")
+            Case EnuMaitre.ArcelorMittal
+                Me.img_Logo.Image = Me.ContainerLogo.Images("Logo_Arcelormittal")
         End Select
 
         Me.TLPan_Main.RowStyles(3).Height = 0
@@ -1133,6 +1136,7 @@ Public Class Frm_PMX
             EnregistrerOptionsLogiciel()
             MAJI_BOBasse()
             GestionLangue() 'Permet de MAJ la langue de la fenetre principale 
+            GestionStyle()
         End If
 
     End Sub
@@ -1907,6 +1911,21 @@ Public Class Frm_PMX
         '--( Enregistrement des paramètres d'environnement, y compris les fichiers récents
 
         EnregistrerOptionsLogiciel(True)
+    End Sub
+
+    Private Sub TSbtn_CopieImage_Click(sender As Object, e As EventArgs) Handles TSbtn_CopieImage.Click
+
+        Dim ImageSize As New System.Drawing.Size(Me.img_Main.Width, Me.img_Main.Height)     '// Taille de l'image
+        Dim Image As System.Drawing.Image = New System.Drawing.Bitmap(ImageSize.Width, ImageSize.Height) '// Crée l'image
+        Dim MyGr As System.Drawing.Graphics = System.Drawing.Graphics.FromImage(Image)  '// Extrait le Graphics de l'image
+        MyGr.Clear(System.Drawing.Color.White)
+
+        If Not MyProjet.Poutres.Count = 0 Then DessinFrmMain_Coupe(MyGr, ImageSize.Width, ImageSize.Height,
+                                                                   MyProjet.Poutres(MyProjet.IndEnCours), lZoomPlus, lCotation, strPRS, FontFrm)
+
+        My.Computer.Clipboard.SetImage(Image)
+        MyGr.Dispose()
+        Image.Dispose()
     End Sub
 
     Private Sub TSbtn_Cotations_Click(sender As Object, e As EventArgs) Handles TSbtn_Cotations.Click

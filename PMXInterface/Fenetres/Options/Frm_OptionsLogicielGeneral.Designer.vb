@@ -23,7 +23,7 @@ Partial Class Frm_OptionsLogicielGeneral
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.pan_General = New System.Windows.Forms.Panel()
-        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.pan_Identification = New System.Windows.Forms.Panel()
         Me.lbl_UserName = New System.Windows.Forms.Label()
         Me.txt_UserName = New System.Windows.Forms.TextBox()
         Me.lbl_Firm = New System.Windows.Forms.Label()
@@ -36,15 +36,21 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_LangueGUI = New System.Windows.Forms.Label()
         Me.lst_LangueGUI = New System.Windows.Forms.ListBox()
         Me.lbl_Langues = New System.Windows.Forms.Label()
+        Me.pan_Version = New System.Windows.Forms.Panel()
+        Me.lbl_Version2 = New System.Windows.Forms.Label()
+        Me.lbl_Version = New System.Windows.Forms.Label()
+        Me.cmb_Maitre = New System.Windows.Forms.ComboBox()
         Me.pan_General.SuspendLayout()
-        Me.Panel1.SuspendLayout()
+        Me.pan_Identification.SuspendLayout()
         Me.pan_Langues.SuspendLayout()
+        Me.pan_Version.SuspendLayout()
         Me.SuspendLayout()
         '
         'pan_General
         '
         Me.pan_General.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_General.Controls.Add(Me.Panel1)
+        Me.pan_General.Controls.Add(Me.pan_Version)
+        Me.pan_General.Controls.Add(Me.pan_Identification)
         Me.pan_General.Controls.Add(Me.pan_Langues)
         Me.pan_General.Location = New System.Drawing.Point(83, 30)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
@@ -52,19 +58,19 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.pan_General.Size = New System.Drawing.Size(739, 472)
         Me.pan_General.TabIndex = 1
         '
-        'Panel1
+        'pan_Identification
         '
-        Me.Panel1.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.pan_Identification.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel1.Controls.Add(Me.lbl_UserName)
-        Me.Panel1.Controls.Add(Me.txt_UserName)
-        Me.Panel1.Controls.Add(Me.lbl_Firm)
-        Me.Panel1.Controls.Add(Me.txt_Firm)
-        Me.Panel1.Controls.Add(Me.lbl_Identification)
-        Me.Panel1.Location = New System.Drawing.Point(1, 144)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(737, 96)
-        Me.Panel1.TabIndex = 101
+        Me.pan_Identification.Controls.Add(Me.lbl_UserName)
+        Me.pan_Identification.Controls.Add(Me.txt_UserName)
+        Me.pan_Identification.Controls.Add(Me.lbl_Firm)
+        Me.pan_Identification.Controls.Add(Me.txt_Firm)
+        Me.pan_Identification.Controls.Add(Me.lbl_Identification)
+        Me.pan_Identification.Location = New System.Drawing.Point(1, 144)
+        Me.pan_Identification.Name = "pan_Identification"
+        Me.pan_Identification.Size = New System.Drawing.Size(737, 86)
+        Me.pan_Identification.TabIndex = 101
         '
         'lbl_UserName
         '
@@ -86,7 +92,7 @@ Partial Class Frm_OptionsLogicielGeneral
         '
         Me.lbl_Firm.Location = New System.Drawing.Point(6, 32)
         Me.lbl_Firm.Name = "lbl_Firm"
-        Me.lbl_Firm.Size = New System.Drawing.Size(117, 20)
+        Me.lbl_Firm.Size = New System.Drawing.Size(105, 20)
         Me.lbl_Firm.TabIndex = 98
         Me.lbl_Firm.Text = "lbl_Firm"
         Me.lbl_Firm.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
@@ -184,6 +190,48 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.lbl_Langues.Text = "lbl_Langues"
         Me.lbl_Langues.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'pan_Version
+        '
+        Me.pan_Version.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.pan_Version.Controls.Add(Me.cmb_Maitre)
+        Me.pan_Version.Controls.Add(Me.lbl_Version2)
+        Me.pan_Version.Controls.Add(Me.lbl_Version)
+        Me.pan_Version.Location = New System.Drawing.Point(1, 235)
+        Me.pan_Version.Name = "pan_Version"
+        Me.pan_Version.Size = New System.Drawing.Size(737, 67)
+        Me.pan_Version.TabIndex = 102
+        '
+        'lbl_Version2
+        '
+        Me.lbl_Version2.Location = New System.Drawing.Point(6, 32)
+        Me.lbl_Version2.Name = "lbl_Version2"
+        Me.lbl_Version2.Size = New System.Drawing.Size(105, 20)
+        Me.lbl_Version2.TabIndex = 98
+        Me.lbl_Version2.Text = "lbl_Version"
+        Me.lbl_Version2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'lbl_Version
+        '
+        Me.lbl_Version.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.lbl_Version.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.lbl_Version.Location = New System.Drawing.Point(0, 0)
+        Me.lbl_Version.Name = "lbl_Version"
+        Me.lbl_Version.Size = New System.Drawing.Size(737, 23)
+        Me.lbl_Version.TabIndex = 96
+        Me.lbl_Version.Text = "lbl_Version"
+        Me.lbl_Version.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'cmb_Maitre
+        '
+        Me.cmb_Maitre.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmb_Maitre.FormattingEnabled = True
+        Me.cmb_Maitre.Location = New System.Drawing.Point(117, 31)
+        Me.cmb_Maitre.Name = "cmb_Maitre"
+        Me.cmb_Maitre.Size = New System.Drawing.Size(189, 21)
+        Me.cmb_Maitre.TabIndex = 99
+        '
         'Frm_OptionsLogicielGeneral
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -194,16 +242,17 @@ Partial Class Frm_OptionsLogicielGeneral
         Me.Name = "Frm_OptionsLogicielGeneral"
         Me.Text = "Frm_OptionsLogicielGeneral"
         Me.pan_General.ResumeLayout(False)
-        Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
+        Me.pan_Identification.ResumeLayout(False)
+        Me.pan_Identification.PerformLayout()
         Me.pan_Langues.ResumeLayout(False)
         Me.pan_Langues.PerformLayout()
+        Me.pan_Version.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents pan_General As Panel
-    Friend WithEvents Panel1 As Panel
+    Friend WithEvents pan_Identification As Panel
     Friend WithEvents lbl_UserName As Label
     Friend WithEvents txt_UserName As TextBox
     Friend WithEvents lbl_Firm As Label
@@ -216,4 +265,8 @@ Partial Class Frm_OptionsLogicielGeneral
     Friend WithEvents lst_LangueGUI As ListBox
     Friend WithEvents lbl_Langues As Label
     Friend WithEvents lstbox_Test As ListBox
+    Friend WithEvents pan_Version As Panel
+    Friend WithEvents lbl_Version2 As Label
+    Friend WithEvents lbl_Version As Label
+    Friend WithEvents cmb_Maitre As ComboBox
 End Class

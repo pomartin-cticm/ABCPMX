@@ -867,6 +867,7 @@ Public Class Cls_Rapport
 
         If lNormal Then
 
+            '### Traitement d'une page normale
 
             'affichage du logo logiciel
             yTrait = kECH * (BORDURE + YTop + Respiration / 2)
@@ -898,6 +899,8 @@ Public Class Cls_Rapport
             MyGr.DrawString(EnteteSecond, PoliceVersion, Brushes.Black, xPos, yPos)
 
         Else
+
+            '### Traitement de la page de garde
 
             yTrait = kECH * (RAPPORTA4 * sWi - BORDURE - 4 * TaillePied + YTop)
             MyGr.DrawLine(MyPenTrait, kECH * BORDURE, yTrait, kECH * (sWi - BORDURE), yTrait)
@@ -1175,15 +1178,24 @@ Public Class Cls_Rapport
 
             Select Case Mots(1).ToUpper
 
-                Case "CTICM"
+                Case "ARCELORMITTAL"
 
                     Dim MyPicture As Image
-                    'MyPicture = Image.FromFile(My.Application.Info.DirectoryPath & "\CTICM_logo.jpg")
-                    MyPicture = Image.FromFile(LogicielRep.Images & "\CTICM_logo.jpg")
+
+                    MyPicture = Image.FromFile(LogicielRep.Images & "\Logo_ARCELORMITTAL.jpg")
                     sHiImg = sWiImg * MyPicture.Height / MyPicture.Width
                     MyGr.DrawImage(MyPicture, xLeftImg, YPen, sWiImg, sHiImg)
                     MyPicture.Dispose()
 
+                Case "CTICM"
+
+                    Dim MyPicture As Image
+                    'MyPicture = Image.FromFile(My.Application.Info.DirectoryPath & "\CTICM_logo.jpg")
+                    'MyPicture = Image.FromFile(LogicielRep.Images & "\CTICM_logo.jpg")
+                    MyPicture = Image.FromFile(LogicielRep.Images & "\Logo_CTICM_HR.jpg")
+                    sHiImg = sWiImg * MyPicture.Height / MyPicture.Width
+                    MyGr.DrawImage(MyPicture, xLeftImg, YPen, sWiImg, sHiImg)
+                    MyPicture.Dispose()
 
                 Case "PORTEE"
 

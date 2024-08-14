@@ -43,6 +43,7 @@ Public Module Mod_Demarrage
         '--> Récupération des informations générales du logociel - Non modifiable par l'utilisateur
 
         LogicielInfo.Maitre = EnuMaitre.CTICM
+        LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
         LogicielOptions.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
         LogicielOptions.lDebug = False
 

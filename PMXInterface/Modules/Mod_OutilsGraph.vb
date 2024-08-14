@@ -1330,9 +1330,13 @@ Module Mod_OutilsGraph
             wTotal = MyGr.MeasureString(LogicielInfo.NomLogiciel, MyFontTitre).Width
             height = MyGr.MeasureString(LogicielInfo.NomLogiciel, MyFontTitre).Height
             xChaine = xPos - wTotal / 2
-            Dim premierePartieMot As Single = MyGr.MeasureString(LogicielInfo.NomLogiciel.Substring(0, 3), MyFontTitre).Width
-            MyGr.DrawString(LogicielInfo.NomLogiciel.Substring(0, 4), MyFontTitre, BrushBleuCTICM, xChaine, yPos)
-            MyGr.DrawString(" Mix", MyFontTitre, BrushGrisCTICM, xChaine + premierePartieMot, yPos)
+            Const iSep As Integer = 3
+            Dim premierePartieMot As Single = MyGr.MeasureString(LogicielInfo.NomLogiciel.Substring(0, iSep), MyFontTitre,
+                                                                 New PointF(0, 0), StringFormat.GenericTypographic).Width
+
+            MyGr.DrawString(LogicielInfo.NomLogiciel.Substring(0, iSep), MyFontTitre, BrushBleuCTICM, xChaine, yPos)
+            'MyGr.DrawString(" Mix", MyFontTitre, BrushGrisCTICM, xChaine + premierePartieMot, yPos)
+            MyGr.DrawString(LogicielInfo.NomLogiciel.Substring(iSep), MyFontTitre, BrushGrisCTICM, xChaine + premierePartieMot, yPos)
         End If
 
         '--[ Version

@@ -31,6 +31,7 @@ Public Class Frm_Juridique
 
         GestionLangue()
         GestionStyle()
+        GestionLogo()
 
     End Sub
 
@@ -80,6 +81,19 @@ Public Class Frm_Juridique
 
         Me.lbl_Juridique.BackColor = CouleurBackBandeaux
         Me.lbl_Juridique.ForeColor = CouleurForeBandeaux
+
+    End Sub
+
+    Private Sub GestionLogo()
+
+        Select Case LogicielInfo.Maitre
+            Case EnuMaitre.CTICM
+                'Me.img_Logo.Image = Me.ContainerLogo.Images("Logo_CTICM")
+                'Me.img_LOGO.Image = Frm_PMX.ContainerLogo.Images("Logo_CTICM_2024 HR")
+                Me.img_LOGO.Image = Image.FromFile(LogicielRep.Images & "\Logo_CTICM_HR.jpg")
+            Case EnuMaitre.ArcelorMittal
+                Me.img_LOGO.Image = Image.FromFile(LogicielRep.Images & "\Logo_ARCELORMITTAL.jpg")
+        End Select
 
     End Sub
 

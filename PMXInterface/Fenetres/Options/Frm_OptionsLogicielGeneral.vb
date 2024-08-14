@@ -15,9 +15,9 @@
         lBuild = True
         GestionLangue(Frm_OptionsLogiciel.BlocLangues(BALISE))
         GestionStyle()
-        'GestionUnites()
-        'InitialiseLangues("ACBPlus", Me.lst_LangueGUI, tabAbbrGUI, LogicielInfo.Langue)
-        remplirTest()
+        RemplirCmbVersion()
+        GestionVersions()
+        'remplirTest()
 
         AfficherOptionsEnCours()
         lBuild = False
@@ -33,6 +33,9 @@
             Me.lbl_Identification.Text = MyBloc("IDENTIFICATION")
             Me.lbl_Firm.Text = MyBloc("FIRM")
             Me.lbl_UserName.Text = MyBloc("USERNAME")
+
+            Me.lbl_Version.Text = MyBloc("VERSION")
+            Me.lbl_Version2.Text = MyBloc("VERSION")
 
         Catch ex As Exception
             GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -51,8 +54,28 @@
         Me.lbl_Langues.BackColor = CouleurBackBandeaux
         Me.lbl_Langues.ForeColor = CouleurForeBandeaux
 
+        Me.lbl_Version.BackColor = CouleurBackBandeaux
+        Me.lbl_Version.ForeColor = CouleurForeBandeaux
 
         ' Me.lst_LangueNdC.Items(Me.lst_LangueNdC.SelectedIndex)
+    End Sub
+
+    Private Sub GestionVersions()
+        'Me.pan_Version.Visible = LogicielOptions.lExpert
+        Me.pan_Version.Visible = Frm_OptionsLogiciel.pLocalLogicielOptions.lExpert
+    End Sub
+
+    Private Sub RemplirCmbVersion()
+
+        Me.cmb_Maitre.Items.Clear()
+        Me.cmb_Maitre.Items.Add("CTICM")
+        Me.cmb_Maitre.Items.Add("ARCELORMITTAL")
+
+        Select Case LogicielInfo.Maitre
+            Case EnuMaitre.ArcelorMittal : Me.cmb_Maitre.SelectedIndex = 1
+            Case EnuMaitre.CTICM : Me.cmb_Maitre.SelectedIndex = 0
+        End Select
+
     End Sub
 
     Private Sub AfficherOptionsEnCours()
@@ -84,17 +107,17 @@
 
     End Sub
 
-    Private Sub remplirTest()
+    'Private Sub remplirTest()
 
-        Me.lstbox_Test.Items.Clear()
+    '    Me.lstbox_Test.Items.Clear()
 
-        Me.lstbox_Test.Items.Add("Auto")
-        Me.lstbox_Test.Items.Add("Avion")
-        Me.lstbox_Test.Items.Add("Train")
+    '    Me.lstbox_Test.Items.Add("Auto")
+    '    Me.lstbox_Test.Items.Add("Avion")
+    '    Me.lstbox_Test.Items.Add("Train")
 
-        Me.lstbox_Test.SelectedIndex = 0
+    '    Me.lstbox_Test.SelectedIndex = 0
 
-    End Sub
+    'End Sub
 
 #End Region
 
@@ -131,6 +154,13 @@
                 Me.lst_LangueNdC.Invalidate()
         End Select
 
+    End Sub
+
+    Private Sub cmb_Maitre_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cmb_Maitre.SelectedIndexChanged
+        Select Case Me.cmb_Maitre.SelectedIndex
+            Case 0 : LogicielInfo.Maitre = EnuMaitre.CTICM
+            Case 1 : LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
+        End Select
     End Sub
 
 #End Region

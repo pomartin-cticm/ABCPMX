@@ -613,6 +613,7 @@ ZOOMIN					= Zoom in
 ZOOMOUT					= Zoom out
 COTATIONS				= Display dimensions
 EXPERT					= Expert mode
+COPYIMAGE				= Copy the main image
 EDIT					= Edit
 EDITPROFILES			= Edit ArcelorMittal profiles
 EDITSTUDS				= Edit Studs
@@ -1082,6 +1083,8 @@ IDENTIFICATION			= Identification
 USERNAME				= User name
 FIRM					= Firm
 INTERNETCHECKS			= Internet checks
+VERSION					= Version
+
 
 #OPTSOFTUNITS
 TITLE					= Units
