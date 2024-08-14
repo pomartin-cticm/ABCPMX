@@ -1934,10 +1934,6 @@ Public Class Frm_PMX
         img_Main.Invalidate()
     End Sub
 
-
-
-
 #End Region
-
 
 End Class
