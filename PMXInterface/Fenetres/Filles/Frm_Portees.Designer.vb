@@ -171,8 +171,7 @@ Partial Class Frm_Portees
         '
         'pan_Main
         '
-        Me.pan_Main.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.pan_Main.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pan_Main.BackColor = System.Drawing.SystemColors.Control
         Me.pan_Main.Controls.Add(Me.TLPan_Portees)
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
@@ -193,7 +192,7 @@ Partial Class Frm_Portees
         Me.TLPan_Portees.Name = "TLPan_Portees"
         Me.TLPan_Portees.RowCount = 1
         Me.TLPan_Portees.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Portees.Size = New System.Drawing.Size(946, 380)
+        Me.TLPan_Portees.Size = New System.Drawing.Size(948, 382)
         Me.TLPan_Portees.TabIndex = 0
         '
         'pan_Gauche
@@ -204,7 +203,7 @@ Partial Class Frm_Portees
         Me.pan_Gauche.Location = New System.Drawing.Point(0, 0)
         Me.pan_Gauche.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Gauche.Name = "pan_Gauche"
-        Me.pan_Gauche.Size = New System.Drawing.Size(250, 380)
+        Me.pan_Gauche.Size = New System.Drawing.Size(250, 382)
         Me.pan_Gauche.TabIndex = 0
         '
         'TLPan_Gauche
@@ -258,6 +257,7 @@ Partial Class Frm_Portees
         '
         'pan_SaisiePortee
         '
+        Me.pan_SaisiePortee.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_SaisiePortee.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_SaisiePortee.Controls.Add(Me.chk_ContinuiteDalleAppDroit)
         Me.pan_SaisiePortee.Controls.Add(Me.chk_ContinuiteDalleAppGauche)
@@ -409,6 +409,7 @@ Partial Class Frm_Portees
         '
         'pan_Coupe
         '
+        Me.pan_Coupe.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Coupe.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_Coupe.Controls.Add(Me.etq_UnitL5)
         Me.pan_Coupe.Controls.Add(Me.txt_D2)
@@ -522,11 +523,12 @@ Partial Class Frm_Portees
         Me.TLpan_Droite.RowCount = 2
         Me.TLpan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200.0!))
         Me.TLpan_Droite.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_Droite.Size = New System.Drawing.Size(696, 380)
+        Me.TLpan_Droite.Size = New System.Drawing.Size(698, 382)
         Me.TLpan_Droite.TabIndex = 1
         '
         'img_Portees
         '
+        Me.img_Portees.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_Portees.Location = New System.Drawing.Point(1, 0)
         Me.img_Portees.Margin = New System.Windows.Forms.Padding(1, 0, 0, 1)
         Me.img_Portees.Name = "img_Portees"
@@ -547,13 +549,14 @@ Partial Class Frm_Portees
         Me.TLPan_Tremies.Name = "TLPan_Tremies"
         Me.TLPan_Tremies.RowCount = 1
         Me.TLPan_Tremies.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLPan_Tremies.Size = New System.Drawing.Size(696, 180)
+        Me.TLPan_Tremies.Size = New System.Drawing.Size(698, 182)
         Me.TLPan_Tremies.TabIndex = 2
         '
         'img_Coupe
         '
+        Me.img_Coupe.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.img_Coupe.Location = New System.Drawing.Point(251, 0)
-        Me.img_Coupe.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
+        Me.img_Coupe.Margin = New System.Windows.Forms.Padding(1, 0, 0, 2)
         Me.img_Coupe.Name = "img_Coupe"
         Me.img_Coupe.Size = New System.Drawing.Size(100, 50)
         Me.img_Coupe.TabIndex = 2
@@ -567,7 +570,7 @@ Partial Class Frm_Portees
         Me.pan_Milieu.Location = New System.Drawing.Point(1, 0)
         Me.pan_Milieu.Margin = New System.Windows.Forms.Padding(1, 0, 0, 0)
         Me.pan_Milieu.Name = "pan_Milieu"
-        Me.pan_Milieu.Size = New System.Drawing.Size(249, 180)
+        Me.pan_Milieu.Size = New System.Drawing.Size(249, 182)
         Me.pan_Milieu.TabIndex = 4
         '
         'TLpan_Milieu
@@ -603,6 +606,7 @@ Partial Class Frm_Portees
         '
         'pan_Tremies
         '
+        Me.pan_Tremies.BackColor = System.Drawing.SystemColors.ControlLightLight
         Me.pan_Tremies.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pan_Tremies.Controls.Add(Me.etq_UnitL7)
         Me.pan_Tremies.Controls.Add(Me.etq_UnitL6)

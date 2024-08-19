@@ -87,7 +87,7 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_ExpertMode = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn3D = New System.Windows.Forms.ToolStripButton()
-        Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+        Me.TLpan_OrganisationMenuBO = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
         Me.TLPan_Menus = New System.Windows.Forms.TableLayoutPanel()
         Me.ToolStrip_Main = New System.Windows.Forms.ToolStrip()
@@ -166,7 +166,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.SuspendLayout()
         CType(Me.img_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TSGestionImagePoutre.SuspendLayout()
-        Me.TableLayoutPanel1.SuspendLayout()
+        Me.TLpan_OrganisationMenuBO.SuspendLayout()
         CType(Me.img_Logo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TLPan_Menus.SuspendLayout()
         Me.ToolStrip_Main.SuspendLayout()
@@ -181,7 +181,7 @@ Partial Class Frm_PMX
         Me.TLPan_Main.ColumnCount = 1
         Me.TLPan_Main.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLPan_Main.Controls.Add(Me.Split_Main, 0, 2)
-        Me.TLPan_Main.Controls.Add(Me.TableLayoutPanel1, 0, 0)
+        Me.TLPan_Main.Controls.Add(Me.TLpan_OrganisationMenuBO, 0, 0)
         Me.TLPan_Main.Controls.Add(Me.Panel2, 0, 1)
         Me.TLPan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TLPan_Main.Location = New System.Drawing.Point(0, 0)
@@ -774,21 +774,21 @@ Partial Class Frm_PMX
         Me.TSbtn3D.Text = "ToolStripButton1"
         Me.TSbtn3D.Visible = False
         '
-        'TableLayoutPanel1
+        'TLpan_OrganisationMenuBO
         '
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
-        Me.TableLayoutPanel1.Controls.Add(Me.img_Logo, 1, 0)
-        Me.TableLayoutPanel1.Controls.Add(Me.TLPan_Menus, 0, 0)
-        Me.TableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(0, 0)
-        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(0)
-        Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
-        Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1123, 60)
-        Me.TableLayoutPanel1.TabIndex = 5
+        Me.TLpan_OrganisationMenuBO.ColumnCount = 2
+        Me.TLpan_OrganisationMenuBO.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_OrganisationMenuBO.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100.0!))
+        Me.TLpan_OrganisationMenuBO.Controls.Add(Me.img_Logo, 1, 0)
+        Me.TLpan_OrganisationMenuBO.Controls.Add(Me.TLPan_Menus, 0, 0)
+        Me.TLpan_OrganisationMenuBO.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TLpan_OrganisationMenuBO.Location = New System.Drawing.Point(0, 0)
+        Me.TLpan_OrganisationMenuBO.Margin = New System.Windows.Forms.Padding(0)
+        Me.TLpan_OrganisationMenuBO.Name = "TLpan_OrganisationMenuBO"
+        Me.TLpan_OrganisationMenuBO.RowCount = 1
+        Me.TLpan_OrganisationMenuBO.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TLpan_OrganisationMenuBO.Size = New System.Drawing.Size(1123, 60)
+        Me.TLpan_OrganisationMenuBO.TabIndex = 5
         '
         'img_Logo
         '
@@ -1357,7 +1357,7 @@ Partial Class Frm_PMX
         CType(Me.img_Main, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TSGestionImagePoutre.ResumeLayout(False)
         Me.TSGestionImagePoutre.PerformLayout()
-        Me.TableLayoutPanel1.ResumeLayout(False)
+        Me.TLpan_OrganisationMenuBO.ResumeLayout(False)
         CType(Me.img_Logo, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TLPan_Menus.ResumeLayout(False)
         Me.TLPan_Menus.PerformLayout()
@@ -1383,7 +1383,7 @@ Partial Class Frm_PMX
     Friend WithEvents Label_Nav_Poutre As Label
     Friend WithEvents Panel_NomProjet As Panel
     Friend WithEvents TLPan_ListPoutres As TableLayoutPanel
-    Friend WithEvents TableLayoutPanel1 As TableLayoutPanel
+    Friend WithEvents TLpan_OrganisationMenuBO As TableLayoutPanel
     Friend WithEvents img_Logo As PictureBox
     Friend WithEvents TLPan_Menus As TableLayoutPanel
     Friend WithEvents ToolStrip_Main As ToolStrip

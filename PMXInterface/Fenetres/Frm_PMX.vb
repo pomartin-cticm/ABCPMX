@@ -349,6 +349,8 @@ Public Class Frm_PMX
 
         FontFrm = New Font(FontBase.Name, SizeFontFrm)
 
+        Me.TLpan_OrganisationMenuBO.ColumnStyles(1).Width = 0
+
     End Sub
 
 #End Region

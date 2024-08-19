@@ -37,7 +37,7 @@ Public Class Frm_AjoutePP
 
     Public lOuverture As Boolean = False    ' Indique si appel depuis la fenêtre ouverture
 
-    Dim lSlimDispo As Boolean = lSLIM
+    Dim lSlimDispo As Boolean = lSLIM Or LogicielOptions.lExpert
 
     Dim strNonDispo As String = ""
 
