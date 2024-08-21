@@ -44,10 +44,10 @@ Public Class Frm_Ouverture
                 Me.TabPage_NewProject.Text = Bloc("NEWPROJECT")
                 Me.TabPage_OpenProject.Text = Bloc("OPENPROJECT")
 
-                Me.Label_OpenFile.Text = Bloc("OPENPROJECT")
+                Me.lbl_OpenFile.Text = Bloc("OPENPROJECT")
                 Me.Button_OpenProject.Text = Bloc("BROWSEFILES")
 
-                Me.Label_RecentFiles.Text = Bloc("RECENTFILES")
+                Me.lbl_RecentFiles.Text = Bloc("RECENTFILES")
 
                 Me.Button_Valider.Text = Bloc("OK")
 
@@ -73,6 +73,8 @@ Public Class Frm_Ouverture
         '   Initialisation de la fenêtre avec des paramètres par défaut
         '--------------------------------------------------------------------
 
+        GestionStyle()
+
         '==> Nouveau Projet
 
         '  Frm_AjoutSectionN.InitialiserFenetre()
@@ -83,6 +85,16 @@ Public Class Frm_Ouverture
 
         '==> Ouvrir Projet
         RemplirListe_RecentFiles()
+
+    End Sub
+
+    Private Sub GestionStyle()
+
+        Me.lbl_OpenFile.BackColor = CouleurBackBandeaux
+        Me.lbl_OpenFile.ForeColor = CouleurForeBandeaux
+
+        Me.lbl_RecentFiles.BackColor = CouleurBackBandeaux
+        Me.lbl_RecentFiles.ForeColor = CouleurForeBandeaux
 
     End Sub
 

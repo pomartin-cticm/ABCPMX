@@ -37,6 +37,7 @@ Partial Class Frm_About
         Me.lbl_Verification = New System.Windows.Forms.Label()
         Me.TLpan_SepEntreprises = New System.Windows.Forms.TableLayoutPanel()
         Me.pan_CTICM = New System.Windows.Forms.Panel()
+        Me.Button1 = New System.Windows.Forms.Button()
         Me.pic_cticm = New System.Windows.Forms.PictureBox()
         Me.txt_cticm = New System.Windows.Forms.TextBox()
         Me.lbk_SupportCTICM = New System.Windows.Forms.LinkLabel()
@@ -47,7 +48,6 @@ Partial Class Frm_About
         Me.lbk_SupportAM = New System.Windows.Forms.LinkLabel()
         Me.pic_Arcelor = New System.Windows.Forms.PictureBox()
         Me.ImgList_logos = New System.Windows.Forms.ImageList(Me.components)
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -229,13 +229,23 @@ Partial Class Frm_About
         Me.pan_CTICM.Size = New System.Drawing.Size(280, 272)
         Me.pan_CTICM.TabIndex = 19
         '
+        'Button1
+        '
+        Me.Button1.Location = New System.Drawing.Point(192, 243)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(75, 23)
+        Me.Button1.TabIndex = 18
+        Me.Button1.Text = "Test Errors"
+        Me.Button1.UseVisualStyleBackColor = True
+        Me.Button1.Visible = False
+        '
         'pic_cticm
         '
         Me.pic_cticm.BackgroundImage = CType(resources.GetObject("pic_cticm.BackgroundImage"), System.Drawing.Image)
         Me.pic_cticm.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom
-        Me.pic_cticm.Location = New System.Drawing.Point(68, 18)
+        Me.pic_cticm.Location = New System.Drawing.Point(16, 3)
         Me.pic_cticm.Name = "pic_cticm"
-        Me.pic_cticm.Size = New System.Drawing.Size(120, 50)
+        Me.pic_cticm.Size = New System.Drawing.Size(251, 65)
         Me.pic_cticm.TabIndex = 17
         Me.pic_cticm.TabStop = False
         '
@@ -244,6 +254,7 @@ Partial Class Frm_About
         Me.txt_cticm.BackColor = System.Drawing.SystemColors.Window
         Me.txt_cticm.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.txt_cticm.Font = New System.Drawing.Font("Arial", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txt_cticm.ForeColor = System.Drawing.SystemColors.WindowText
         Me.txt_cticm.Location = New System.Drawing.Point(16, 74)
         Me.txt_cticm.Multiline = True
         Me.txt_cticm.Name = "txt_cticm"
@@ -343,16 +354,6 @@ Partial Class Frm_About
         Me.ImgList_logos.TransparentColor = System.Drawing.Color.Transparent
         Me.ImgList_logos.Images.SetKeyName(0, "CTICM_logo.jpg")
         Me.ImgList_logos.Images.SetKeyName(1, "ARCELORMITTAL_logo.png")
-        '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(192, 243)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(75, 23)
-        Me.Button1.TabIndex = 18
-        Me.Button1.Text = "Test Errors"
-        Me.Button1.UseVisualStyleBackColor = True
-        Me.Button1.Visible = False
         '
         'Frm_About
         '

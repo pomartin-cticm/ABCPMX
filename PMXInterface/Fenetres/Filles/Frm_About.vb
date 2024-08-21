@@ -23,7 +23,7 @@ Public Class Frm_About
 
     Private Sub GestionLangues()
 
-        Dim myMsg As String
+        'Dim myMsg As String
 
         If File.Exists(LogicielFichiers.Langue) Then
 
@@ -71,24 +71,17 @@ Public Class Frm_About
         Me.lbl_Verification.BackColor = CouleurBackBandeaux
         Me.lbl_Verification.ForeColor = CouleurForeBandeaux
 
-        'Me.lbl_Information.BackColor = CouleurBackBandeaux
-        'Me.lbl_Information.ForeColor = CouleurForeBandeaux
+        If lCTICM Then
 
-        'Me.lbl_Maitre.BackColor = CouleurBackBandeaux
-        'Me.lbl_Maitre.ForeColor = CouleurForeBandeaux
+            Me.txt_cticm.ForeColor = SystemColors.WindowText
+            Me.txt_Arcelor.ForeColor = SystemColors.GrayText
 
+        Else
 
-        'Me.img_CTICM.Visible = lCTICM
-        'Me.img_AM.Visible = Not lCTICM
+            Me.txt_Arcelor.ForeColor = SystemColors.WindowText
+            Me.txt_cticm.ForeColor = SystemColors.GrayText
 
-        'If lCTICM Then
-        '    Me.img_AM.Dock = DockStyle.None
-        '    Me.img_CTICM.Dock = DockStyle.Fill
-        'Else
-        '    Me.img_CTICM.Dock = DockStyle.None
-        '    Me.img_AM.Dock = DockStyle.Fill
-
-        'End If
+        End If
 
     End Sub
 

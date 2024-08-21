@@ -2235,8 +2235,8 @@ Public Module Mod_Dessins
 
 #Region " Dessins pour la définition du bac (FRM_BACN) "
 
-    Public Sub DessineBac(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, myFont As Font,
-                          MyBac As cls_Bac,
+    Public Sub DessineBac(ByRef myGr As Graphics, ByVal pWi As Single, ByVal pHi As Single, kAdjust As Double, ByVal myFont As Font,
+                          ByVal MyBac As cls_Bac,
                           ByVal EpDalle As Double, ByRef iCote As Integer,
                           ByVal lCotation As Boolean, ByVal lCotEpTot As Boolean,
                           ByVal lTitre As Boolean,
@@ -2272,7 +2272,7 @@ Public Module Mod_Dessins
         Dim MyPenRedBrush As New SolidBrush(ColorRedPen)
         Dim MyPen As New Pen(ColorPen)
         Dim MyPenRed As New Pen(ColorRedPen)
-        Dim MyFontNormal As Font = myFont
+        Dim MyFontNormal As New Font(myFont.Name, myFont.Size)
 
         Dim xMin, yMin, xMax, yMax As Double
 
@@ -2372,7 +2372,7 @@ Public Module Mod_Dessins
         Dim xe, ye As Double
         Dim MyPenNormal As New Pen(ColorNonSelect, 1)
         Dim MyPenSelect As New Pen(ColorSelect, 1)
-        Dim MyFontNormal As Font = myFont
+        Dim MyFontNormal As New Font(myFont.Name, myFont.Size)
         Dim MyColor As Color
         Dim Chaine As String
         Dim lAffSymbol As Boolean = False
@@ -5416,7 +5416,7 @@ Public Module Mod_Dessins
         Dim MyColor As Color
         Const lAffSymbol As Boolean = False
         Dim Chaine As String
-        Dim myFontNormal As Font = myFont
+        Dim myFontNormal As New Font(myFont.Name, myFont.Size)
         Dim lContour As Boolean = lCONTOURCOTE
 
         If myBeam.Section.lSlimFloor Then
@@ -5965,7 +5965,7 @@ Public Module Mod_Dessins
         '   kAdjust     [E] :   Paramètre d'ajustement de l'échelle (1 pour plein écran)
         '   indTravee   [E] :   Indique quel est la travée sélectionnée
         '   lCote       [E] :   Indique si affichage de la cote
-        '   strStuds       [E] :   Indique la traduction associée au mot "goujons"
+        '   strStuds    [E] :   Indique la traduction associée au mot "goujons"
         '------------------------------------------------------------------------------------------------------------------
 
 

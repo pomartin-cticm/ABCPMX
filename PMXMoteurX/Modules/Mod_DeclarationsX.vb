@@ -1,4 +1,4 @@
-﻿Public Module Mod_Declarations
+﻿Public Module Mod_DeclarationsX
 
 #Region " Paramètres généraux logiciels "
 
@@ -52,7 +52,6 @@
         Public lUpdateStart As Boolean              'Vérification des mises à jour au démarrage du logiciel
 
         Public lFenetres As Boolean                 'Fenêtres indépendantes
-        Public lNoS235 As Boolean                   'Indique si on applique le filtre empechant la sélection de nuance S235/S275 en mode normal 
 
         Public Gamma As cls_Gamma
 
@@ -74,7 +73,7 @@
         Public TimeT0G1() As Decimal                    ' Temps au chargement du béton, cas de charge G1, 0 pour la dalle, 1 pour l'enrobage
         Public TimeT0G2() As Decimal                    ' Temps au chargement du béton, cas de charge G2, 0 pour la dalle, 1 pour l'enrobage
         Public TimeT0SH() As Decimal                    ' Temps au chargement du béton, cas de charge SH, 0 pour la dalle, 1 pour l'enrobage
-        Public EtaW As Decimal                      ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
+        Public EtaW As Decimal                          ' Valeur utilisée dans le calcul du voilement par cisaillement de l'âme des profilés métalliques
     End Structure
 
     Public Structure Struc_OptionsSlimFloor

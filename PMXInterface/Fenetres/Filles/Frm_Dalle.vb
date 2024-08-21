@@ -150,11 +150,17 @@ Public Class Frm_Dalle
 
                 '=== MESSAGES =====================================================================
 
-                strAppuiTcontinus = "Nervure et bac continus"
-                strAppuiTRibContinu = "Nervure continue"
-                strAppuiTBacNonContinu = "Bac discontinu"
+                'strAppuiTcontinus = "Nervure et bac continus"
+                strAppuiTcontinus = Bloc("CONTINUOUSRIBANDDECK")
 
-                strAppuiTDiscontinus = "Nervure et bac discontinus"
+                'strAppuiTRibContinu = "Nervure continue"
+                strAppuiTRibContinu = Bloc("CONTINUOUSRIB")
+                'strAppuiTBacNonContinu = "Bac discontinu"
+                strAppuiTBacNonContinu = Bloc("DISCONTINUOUSDECK")
+
+                'strAppuiTDiscontinus = "Nervure et bac discontinus"
+                strAppuiTDiscontinus = Bloc("DISCONTINUOUSRIBDECK")
+
                 strAppuiLbacUncut = "Uncut deck"
                 strAppuiLbacCut1 = "Cut deck"
                 strAppuiLbacCut2 = "the width of the concrete through is equal to the width of the deck through"

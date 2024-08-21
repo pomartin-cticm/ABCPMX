@@ -1596,7 +1596,7 @@ Public Class Frm_SectionIFB
         lTrouve = False
         iGrad = -1
 
-        If LogicielOptions.lNoS235 Then
+        If LogicielReglages.lNoS235 Then
             Do While (Not lTrouve) And (iGrad < NuancesExclues.GetUpperBound(0))
                 iGrad += 1
                 lTrouve = (MyNuance = NuancesExclues(iGrad))

@@ -103,7 +103,7 @@
     ''' </summary>
     ''' <param name="nomloc"></param>
     Public Function AjouteCofradalBDD(nomloc As String) As Boolean
-        Dim cofradal As (Decimal, Decimal, Boolean) = Mod_Declarations.Get_Cofradal(nomloc)
+        Dim cofradal As (Decimal, Decimal, Boolean) = Mod_DeclarationsX.Get_Cofradal(nomloc)
 
         If cofradal.Item3 Then
             m_nom = nomloc

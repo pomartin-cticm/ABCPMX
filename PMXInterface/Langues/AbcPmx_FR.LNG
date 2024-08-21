@@ -780,6 +780,10 @@ THICKNESS				= Epaisseur
 THROUGHDECKW			= Soudure à travers le bac									 
 TYPE					= Type
 USER					= Utilisateur
+CONTINUOUSRIBANDDECK	= Nervure et bac continus
+CONTINUOUSRIB			= Nervure béton continue
+DISCONTINUOUSDECK		= Bac discontinu
+DISCONTINUOUSRIBDECK	= Nervure et bac discontinus
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre

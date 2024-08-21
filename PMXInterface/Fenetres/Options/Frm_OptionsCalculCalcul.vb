@@ -107,8 +107,10 @@ Public Class Frm_OptionsCalculCalcul
         '--> Norme
 
         Select Case LocalOptionsCalcul.Norme
-            Case cls_OptionsCalcul.Enu_Normes.EurocodesG1 : Me.cmb_Norme.SelectedIndex = 0
-            Case cls_OptionsCalcul.Enu_Normes.EurocodesG2 : Me.cmb_Norme.SelectedIndex = 1
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG1
+                Me.cmb_Norme.SelectedIndex = 0
+            Case cls_OptionsCalcul.Enu_Normes.EurocodesG2
+                Me.cmb_Norme.SelectedIndex = Math.Min(1, Me.cmb_Norme.Items.Count - 1)
         End Select
 
         '--> Modélisation
@@ -144,11 +146,14 @@ Public Class Frm_OptionsCalculCalcul
 
     Private Sub RemplirCombos()
         Me.cmb_Norme.Items.Clear()
-        Me.cmb_Norme.Items.AddRange(tabNorme)
+        'Me.cmb_Norme.Items.AddRange(tabNorme)
+        Me.cmb_Norme.Items.Add(tabNorme(0))
+        If LogicielReglages.lG2 Or LogicielOptions.lExpert Then
+            Me.cmb_Norme.Items.Add(tabNorme(1))
+        End If
+
         Me.cmb_Norme.SelectedIndex = 0
     End Sub
-
-
 
 #End Region
 

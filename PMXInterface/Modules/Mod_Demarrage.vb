@@ -31,6 +31,16 @@ Public Module Mod_Demarrage
 
     End Sub
 
+    Public Sub InitialiseReglagesLogiciel()
+
+        LogicielReglages.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
+        LogicielReglages.lPRS = (LogicielInfo.Maitre = EnuMaitre.CTICM)
+        LogicielReglages.lDelivery = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
+
+        LogicielReglages.lG2 = False
+
+    End Sub
+
     Public Sub InitialiseLogiciel()
         '---------------------------------------------------------------------------------------------------------------
         '   25/05/2023 :    POM - Création
@@ -39,12 +49,15 @@ Public Module Mod_Demarrage
         '---------------------------------------------------------------------------------------------------------------
         '---------------------------------------------------------------------------------------------------------------
 
-
-        '--> Récupération des informations générales du logociel - Non modifiable par l'utilisateur
+        '--> Réglages CTICM/AM
 
         LogicielInfo.Maitre = EnuMaitre.CTICM
         LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
-        LogicielOptions.lNoS235 = (LogicielInfo.Maitre = EnuMaitre.ArcelorMittal)
+
+        InitialiseReglagesLogiciel()
+
+        '--> Récupération des informations générales du logociel - Non modifiable par l'utilisateur
+
         LogicielOptions.lDebug = False
 
         LogicielInfo.NomLogiciel = "ABCPMX-II"

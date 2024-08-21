@@ -1404,10 +1404,13 @@ Public Class cls_Poutre
         End Get
     End Property
 
-    Public Function BeffDalle(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean, Optional TypeLargeur As EnuTypeLargeurParticipante = EnuTypeLargeurParticipante.LargeurTotale, Optional ByRef LargeursParticipantes(,) As Decimal = Nothing) As Decimal
+    Public Function BeffDalle(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean,
+                              Optional TypeLargeur As EnuTypeLargeurParticipante = EnuTypeLargeurParticipante.LargeurTotale,
+                              Optional ByRef LargeursParticipantes(,) As Decimal = Nothing) As Decimal
 
         '------------------------------------------------------------------------------------------------------------------
         '   16/06/23 :  Création - GuD
+        '   21/08/24 :  Modif - POM - Beta ne s'applique pas sur un appui de console
         '------------------------------------------------------------------------------------------------------------------
         '   Calcul la largeur de la dalle participante à une position donnée
         '   Selon NF EN 1994-1-1 § 5
@@ -1417,7 +1420,7 @@ Public Class cls_Poutre
         '   lSimplifiedModel    [E] :   Indique si on considère un modèle simplifié pour le calcul de la largeur participante (=True)
         '   lAnalysisModel      [E] :   Si lSimplifiedModel = True, indique si on considère le modèle pour l'analyse de la poutre (lAnalysisModel = True) ou la vérification de la section (lAnalysisModel = False)
         '   TypeLargeur         [E] :   Permet d'indiquer si on souhaite retourner la largeur participante à gauche de la poutre, à droite ou la largeur totale (par défaut)
-        '   beff                [S] :   Retourne la valeur de la largeur participante
+        '   LargeursParticipantes[S] :  Retourne la valeur de la largeur participante et les paramètres associés 
         '------------------------------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -1496,8 +1499,11 @@ Public Class cls_Poutre
             be1_s_A = Math.Min(Le_s_A / 8, b1)
             be2_s_A = Math.Min(Le_s_A / 8, b2)
 
-            beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
-            beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
+            '# POM 21/08/24 : on n'applique beta en console
+            'beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
+            'beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
+            beta_1_A = 1
+            beta_2_A = 1
 
             Select Case TypeLargeur
                 Case EnuTypeLargeurParticipante.LargeurGauche
@@ -1523,15 +1529,18 @@ Public Class cls_Poutre
 
             Return beff_s_A
 
-        ElseIf i_travee = IndiceTraveeConsoleDroite Then 'on est dans la console de droite
+        ElseIf i_travee = Me.IndiceTraveeConsoleDroite Then 'on est dans la console de droite
 
             Le_s_B = 2 * LongueurTravee(IndiceTraveeConsoleDroite)
 
             be1_s_B = Math.Min(Le_s_B / 8, b1)
             be2_s_B = Math.Min(Le_s_B / 8, b2)
 
-            beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
-            beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
+            '# POM 21/08/24 : on n'applique beta en console
+            'beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
+            'beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
+            beta_1_B = 1
+            beta_2_B = 1
 
             Select Case TypeLargeur
                 Case EnuTypeLargeurParticipante.LargeurGauche
@@ -1563,8 +1572,8 @@ Public Class cls_Poutre
 
             Select Case NombreTraveesDeuxAppuis
                 Case 1
-                    If lTraveeConsoleGauche Or lTraveeConsoleDroite Then
-                        If lTraveeConsoleGauche And lTraveeConsoleDroite Then
+                    If Me.lTraveeConsoleGauche Or Me.lTraveeConsoleDroite Then
+                        If Me.lTraveeConsoleGauche And Me.lTraveeConsoleDroite Then
                             Le_m = 0.7 * LongueurTravee(i_travee)
                         Else
                             Le_m = 0.85 * LongueurTravee(i_travee)
@@ -1574,13 +1583,13 @@ Public Class cls_Poutre
                     End If
                 Case 2
                     If i_travee = 1 Then
-                        If lTraveeConsoleGauche Then
+                        If Me.lTraveeConsoleGauche Then
                             Le_m = 0.7 * LongueurTravee(i_travee)
                         Else
                             Le_m = 0.85 * LongueurTravee(i_travee)
                         End If
                     Else 'i_travee = 2
-                        If lTraveeConsoleDroite Then
+                        If Me.lTraveeConsoleDroite Then
                             Le_m = 0.7 * LongueurTravee(i_travee)
                         Else
                             Le_m = 0.85 * LongueurTravee(i_travee)
@@ -1588,13 +1597,13 @@ Public Class cls_Poutre
                     End If
                 Case Else
                     If i_travee = 1 Then
-                        If lTraveeConsoleGauche Then
+                        If Me.lTraveeConsoleGauche Then
                             Le_m = 0.7 * LongueurTravee(i_travee)
                         Else
                             Le_m = 0.85 * LongueurTravee(i_travee)
                         End If
                     ElseIf i_travee = IndiceTraveeConsoleDroite - 1 Then
-                        If lTraveeConsoleDroite Then
+                        If Me.lTraveeConsoleDroite Then
                             Le_m = 0.7 * LongueurTravee(i_travee)
                         Else
                             Le_m = 0.85 * LongueurTravee(i_travee)
@@ -1617,19 +1626,18 @@ Public Class cls_Poutre
                     beff_m = be1_m + be2_m
             End Select
 
-
             '----- Calcul de la largeur participante sur appui gauche (appui A) -----
 
             Select Case NombreTraveesDeuxAppuis
                 Case 1
-                    If lTraveeConsoleGauche Then
+                    If Me.lTraveeConsoleGauche Then
                         Le_s_A = 2 * LongueurTravee(0)
                     Else
                         Le_s_A = Le_m
                     End If
                 Case Else
                     If i_travee = 1 Then
-                        If lTraveeConsoleGauche Then
+                        If Me.lTraveeConsoleGauche Then
                             Le_s_A = 2 * LongueurTravee(0)
                         Else
                             Le_s_A = Le_m
@@ -1643,8 +1651,14 @@ Public Class cls_Poutre
             be1_s_A = Math.Min(Le_s_A / 8, b1)
             be2_s_A = Math.Min(Le_s_A / 8, b2)
 
-            beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
-            beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
+            '# POM 21/08/24 : on n'applique beta pour un appui avec une console
+            If i_travee = 1 And Not Me.lTraveeConsoleGauche Then
+                beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
+                beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
+            Else
+                beta_1_A = 1
+                beta_2_A = 1
+            End If
 
             Select Case TypeLargeur
                 Case EnuTypeLargeurParticipante.LargeurGauche
@@ -1655,25 +1669,24 @@ Public Class cls_Poutre
                     beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
             End Select
 
-
             '----- Calcul de la largeur participante sur appui droite (appui B) -----
 
-            Select Case NombreTraveesDeuxAppuis
+            Select Case Me.NombreTraveesDeuxAppuis
                 Case 1
-                    If lTraveeConsoleDroite Then
-                        Le_s_B = 2 * LongueurTravee(IndiceTraveeConsoleDroite)
+                    If Me.lTraveeConsoleDroite Then
+                        Le_s_B = 2 * Me.LongueurTravee(Me.IndiceTraveeConsoleDroite)
                     Else
                         Le_s_B = Le_m
                     End If
                 Case Else
-                    If i_travee = IndiceTraveeConsoleDroite - 1 Then
-                        If lTraveeConsoleDroite Then
-                            Le_s_B = 2 * LongueurTravee(IndiceTraveeConsoleDroite)
+                    If i_travee = Me.IndiceTraveeConsoleDroite - 1 Then
+                        If Me.lTraveeConsoleDroite Then
+                            Le_s_B = 2 * Me.LongueurTravee(Me.IndiceTraveeConsoleDroite)
                         Else
                             Le_s_B = Le_m
                         End If
                     Else
-                        Le_s_B = 0.25 * (LongueurTravee(i_travee) + LongueurTravee(i_travee + 1))
+                        Le_s_B = 0.25 * (Me.LongueurTravee(i_travee) + Me.LongueurTravee(i_travee + 1))
                     End If
 
             End Select
@@ -1681,8 +1694,14 @@ Public Class cls_Poutre
             be1_s_B = Math.Min(Le_s_B / 8, b1)
             be2_s_B = Math.Min(Le_s_B / 8, b2)
 
-            beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
-            beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
+            '# POM 21/08/24 : on n'applique beta pour un appui avec une console
+            If (i_travee = Me.NombreTraveesDeuxAppuis) And Me.lTraveeConsoleDroite Then
+                beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
+                beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
+            Else
+                beta_1_B = 1
+                beta_2_B = 1
+            End If
 
             Select Case TypeLargeur
                 Case EnuTypeLargeurParticipante.LargeurGauche
@@ -5519,6 +5538,91 @@ Public Class cls_Poutre
 
     End Sub
 
+    Public Sub MaillageRConnexion(ByRef DeltaRd(,) As List(Of Decimal))
+        '------------------------------------------------------------------------------------------------------------------
+        '    21/08/24 : Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Calcul de la resistance de connexion le long de la barre (au droit des noeuds du maillage), par rapport aux appuis
+        '------------------------------------------------------------------------------------------------------------------
+        '   DeltaRd     [S] :   Somme des résistances des connecteurs entre le noeud et le point de moment nul
+        '------------------------------------------------------------------------------------------------------------------
+        '   Indice(i,j)(k) :    i : indice travée
+        '                       j : indice appui gauche ou droite
+        '                       k : indice du noeud
+        '------------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iTravee, iNode As Integer
+        Dim iNodDeb, INodFin As Integer
+        Dim xAppuiG, xNodeT As Decimal
+
+        '--( Initialisations
+
+        ReDim DeltaRd(Me.IndiceDerniereTravee, 1)
+        For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+            DeltaRd(iTravee, 0) = New List(Of Decimal)
+            DeltaRd(iTravee, 1) = New List(Of Decimal)
+        Next
+        Me.InitialiseDensiteConnexion()
+
+        '--( Traitement des travées
+
+        For iTravee = Me.IndicePremiereTravee To Me.IndiceDerniereTravee
+            iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+            xAppuiG = Me.xPositionAppui(True, iTravee)
+
+            For iNode = iNodDeb To INodFin
+                xNodeT = Me.Nodes.xGlobal(iNode) - xAppuiG
+                DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, xNodeT, 0))
+                DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, xNodeT, Me.LongueurTravee(iTravee)))
+            Next
+        Next
+
+        Exit Sub
+
+        '--( Traitement travée en console; à gauche
+
+        If Me.lTraveeConsoleGauche Then
+            iTravee = 0
+            iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iNodDeb To INodFin
+                DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
+                DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(0)))
+            Next
+        End If
+
+        '--( Traitement travée en console; à droite
+
+        If Me.lTraveeConsoleDroite Then
+            iTravee = Me.IndiceDerniereTravee
+            iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iNodDeb To INodFin
+                DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
+                DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(iTravee)))
+            Next
+        End If
+
+        '--( Traitement travées sur deux appuis
+
+        For iTravee = 1 To Me.NombreTraveesDeuxAppuis
+            iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+            INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+
+            For iNode = iNodDeb To INodFin
+                DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
+                DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(iTravee)))
+            Next
+        Next
+
+
+    End Sub
+
     Public Sub MaillageRConnexion(xMZero(,) As Decimal, ByRef DeltaRd() As List(Of Decimal))
         '------------------------------------------------------------------------------------------------------------------
         '    31/10/23 : Création - POM
@@ -5672,6 +5776,8 @@ Public Class cls_Poutre
         Dim nR As Integer
         Dim pEspace As Decimal
         Dim lBacNervuresPerpContinues As Boolean
+        Dim LongZone As Decimal
+        Dim NbCZone As Integer
 
         '--> Initialisation
 
@@ -5701,15 +5807,16 @@ Public Class cls_Poutre
                 nR = Me.NombreGoujonsTransv(iTravee, iZone)
                 PRd = Me.Dalle.Goujons.ResistancePRd(lGeneration1, lDallePleine, lPerp, Me.Dalle.Bac, nR, Fck, Ecm, gammaVs, gammaVc)
 
-                Me.DensiteConnexionZone(iTravee, iZone) = PRd * nR / pEspace
+                NbCZone = Me.NombreGoujonTotParZone(iTravee, iZone)
+                LongZone = Me.LongueurZone(iTravee, iZone)
+
+                'Me.DensiteConnexionZone(iTravee, iZone) = PRd * nR / pEspace
+                Me.DensiteConnexionZone(iTravee, iZone) = PRd * NbCZone / LongZone
 
             Next
         Next
 
-
     End Sub
-
-
 
 #End Region
 

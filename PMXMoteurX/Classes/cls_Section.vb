@@ -1392,7 +1392,7 @@ Public Class cls_Section
 
         If Enrobage.Beton.lCrackingLimitation Then
             Dim phi_max As Decimal = Enrobage.Get_Phi_Max()
-            sigma_s = Mod_Declarations.Get_sigma_S1_Ds(Enrobage.Beton.wk_max, phi_max)
+            sigma_s = Mod_DeclarationsX.Get_sigma_S1_Ds(Enrobage.Beton.wk_max, phi_max)
         Else
             sigma_s = Enrobage.AcierArmatures.FsK
         End If

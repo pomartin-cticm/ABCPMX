@@ -35,7 +35,7 @@ Public Class Frm_AjoutePP
     Dim strType As String
     Dim tabType As New Dictionary(Of cls_Section.Enum_TypeSection, String)
 
-    Public lOuverture As Boolean = False    ' Indique si appel depuis la fenêtre ouverture
+    Public lOuverture As Boolean = False    ' Indique si appel depuis la fenêtre ouverture (démarrage du programme)
 
     Dim lSlimDispo As Boolean = lSLIM Or LogicielOptions.lExpert
 
@@ -175,7 +175,11 @@ Public Class Frm_AjoutePP
         indProjetN = 1
         indPoutreN = MyProjet.Poutres.Count + 1
 
-        Me.txt_NomNouveauProjet.Text = strProjet & " Pr#" & CStr(indProjetN)
+        If lOuverture Then
+            Me.txt_NomNouveauProjet.Text = strProjet & " Pr#" & CStr(indProjetN)
+        Else
+            Me.txt_NomNouveauProjet.Text = MyProjet.Nom
+        End If
         Me.txt_NomNouvellePoutre.Text = strPoutre & " B#" & CStr(indPoutreN)
 
         Me.chk_NouveauProjet.Checked = True

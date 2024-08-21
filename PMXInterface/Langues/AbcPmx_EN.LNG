@@ -780,6 +780,11 @@ THICKNESS				= Thickness
 THROUGHDECKW			= Through deck welding
 TYPE					= Type		
 USER					= User
+CONTINUOUSRIBANDDECK	= Continuous concrete rib and steel deck
+CONTINUOUSRIB			= Continuous concrete rib
+DISCONTINUOUSDECK		= Discontinuous steel deck
+DISCONTINUOUSRIBDECK	= Discontinuous concrete rib and steel deck
+
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam

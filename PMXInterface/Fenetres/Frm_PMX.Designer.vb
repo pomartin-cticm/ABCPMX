@@ -78,15 +78,15 @@ Partial Class Frm_PMX
         Me.TSbtn_PPVerifications = New System.Windows.Forms.ToolStripButton()
         Me.img_Main = New System.Windows.Forms.PictureBox()
         Me.TSGestionImagePoutre = New System.Windows.Forms.ToolStrip()
-        Me.ToolStripSeparator7 = New System.Windows.Forms.ToolStripSeparator()
+        Me.sep_bas_0 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_ZoomPlus = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_ZoomMoins = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator6 = New System.Windows.Forms.ToolStripSeparator()
+        Me.sep_bas_1 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_Cotations = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_CopieImage = New System.Windows.Forms.ToolStripButton()
-        Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
+        Me.sep_bas_2 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_ExpertMode = New System.Windows.Forms.ToolStripButton()
-        Me.TSbtn3D = New System.Windows.Forms.ToolStripButton()
+        Me.TSbtn_Maitre = New System.Windows.Forms.ToolStripButton()
         Me.TLpan_OrganisationMenuBO = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
         Me.TLPan_Menus = New System.Windows.Forms.TableLayoutPanel()
@@ -153,6 +153,7 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
+        Me.sep_bas_3 = New System.Windows.Forms.ToolStripSeparator()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -697,17 +698,17 @@ Partial Class Frm_PMX
         '
         Me.TSGestionImagePoutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.TSGestionImagePoutre.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.TSGestionImagePoutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator7, Me.TSbtn_ZoomPlus, Me.TSbtn_ZoomMoins, Me.ToolStripSeparator6, Me.TSbtn_Cotations, Me.TSbtn_CopieImage, Me.ToolStripSeparator4, Me.TSbtn_ExpertMode, Me.TSbtn3D})
+        Me.TSGestionImagePoutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.sep_bas_0, Me.TSbtn_ZoomPlus, Me.TSbtn_ZoomMoins, Me.sep_bas_1, Me.TSbtn_Cotations, Me.TSbtn_CopieImage, Me.sep_bas_2, Me.TSbtn_Maitre, Me.sep_bas_3, Me.TSbtn_ExpertMode})
         Me.TSGestionImagePoutre.Location = New System.Drawing.Point(0, 441)
         Me.TSGestionImagePoutre.Name = "TSGestionImagePoutre"
         Me.TSGestionImagePoutre.Size = New System.Drawing.Size(975, 31)
         Me.TSGestionImagePoutre.TabIndex = 7
         Me.TSGestionImagePoutre.Text = "TSGestionImagePoutre"
         '
-        'ToolStripSeparator7
+        'sep_bas_0
         '
-        Me.ToolStripSeparator7.Name = "ToolStripSeparator7"
-        Me.ToolStripSeparator7.Size = New System.Drawing.Size(6, 31)
+        Me.sep_bas_0.Name = "sep_bas_0"
+        Me.sep_bas_0.Size = New System.Drawing.Size(6, 31)
         '
         'TSbtn_ZoomPlus
         '
@@ -727,10 +728,10 @@ Partial Class Frm_PMX
         Me.TSbtn_ZoomMoins.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_ZoomMoins.Text = "TSbtn_ZoomMoins"
         '
-        'ToolStripSeparator6
+        'sep_bas_1
         '
-        Me.ToolStripSeparator6.Name = "ToolStripSeparator6"
-        Me.ToolStripSeparator6.Size = New System.Drawing.Size(6, 31)
+        Me.sep_bas_1.Name = "sep_bas_1"
+        Me.sep_bas_1.Size = New System.Drawing.Size(6, 31)
         '
         'TSbtn_Cotations
         '
@@ -750,10 +751,10 @@ Partial Class Frm_PMX
         Me.TSbtn_CopieImage.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_CopieImage.Text = "ToolStripButton1"
         '
-        'ToolStripSeparator4
+        'sep_bas_2
         '
-        Me.ToolStripSeparator4.Name = "ToolStripSeparator4"
-        Me.ToolStripSeparator4.Size = New System.Drawing.Size(6, 31)
+        Me.sep_bas_2.Name = "sep_bas_2"
+        Me.sep_bas_2.Size = New System.Drawing.Size(6, 31)
         '
         'TSbtn_ExpertMode
         '
@@ -764,15 +765,14 @@ Partial Class Frm_PMX
         Me.TSbtn_ExpertMode.Size = New System.Drawing.Size(28, 28)
         Me.TSbtn_ExpertMode.Text = "ToolStripButton1"
         '
-        'TSbtn3D
+        'TSbtn_Maitre
         '
-        Me.TSbtn3D.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn3D.Image = CType(resources.GetObject("TSbtn3D.Image"), System.Drawing.Image)
-        Me.TSbtn3D.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn3D.Name = "TSbtn3D"
-        Me.TSbtn3D.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn3D.Text = "ToolStripButton1"
-        Me.TSbtn3D.Visible = False
+        Me.TSbtn_Maitre.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.TSbtn_Maitre.Image = CType(resources.GetObject("TSbtn_Maitre.Image"), System.Drawing.Image)
+        Me.TSbtn_Maitre.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_Maitre.Name = "TSbtn_Maitre"
+        Me.TSbtn_Maitre.Size = New System.Drawing.Size(80, 28)
+        Me.TSbtn_Maitre.Text = "TSbtn_Maitre"
         '
         'TLpan_OrganisationMenuBO
         '
@@ -1329,6 +1329,11 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
         '
+        'sep_bas_3
+        '
+        Me.sep_bas_3.Name = "sep_bas_3"
+        Me.sep_bas_3.Size = New System.Drawing.Size(6, 31)
+        '
         'Frm_PMX
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1487,21 +1492,22 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_EditBacs As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator3 As ToolStripSeparator
     Friend WithEvents TSbtn_EditProfiles As ToolStripMenuItem
-    Friend WithEvents ToolStripSeparator4 As ToolStripSeparator
+    Friend WithEvents sep_bas_2 As ToolStripSeparator
     Friend WithEvents TSbtn_ExpertMode As ToolStripButton
     Friend WithEvents ToolStripSeparator5 As ToolStripSeparator
     Friend WithEvents TSbtn_OptionsCalculPoutre As ToolStripButton
     Friend WithEvents TSMenuPP_Hivoss As ToolStripMenuItem
     Friend WithEvents TSbtn_Cotations As ToolStripButton
     Friend WithEvents TSbtn_MaintienBac As ToolStripButton
-    Friend WithEvents ToolStripSeparator6 As ToolStripSeparator
+    Friend WithEvents sep_bas_1 As ToolStripSeparator
     Friend WithEvents ToolStripSeparator8 As ToolStripSeparator
-    Friend WithEvents ToolStripSeparator7 As ToolStripSeparator
+    Friend WithEvents sep_bas_0 As ToolStripSeparator
     Friend WithEvents TSbtn_SectionSFB As ToolStripButton
     Friend WithEvents TSbtn_SectionSAB As ToolStripButton
     Friend WithEvents TSbtn_SectionIFB As ToolStripButton
     Friend WithEvents TSbtn_DalleSlimFloor As ToolStripButton
-    Friend WithEvents TSbtn3D As ToolStripButton
+    Friend WithEvents TSbtn_Maitre As ToolStripButton
     Friend WithEvents TSbtn_ConnexionSlimfloor As ToolStripButton
     Friend WithEvents TSbtn_CopieImage As ToolStripButton
+    Friend WithEvents sep_bas_3 As ToolStripSeparator
 End Class

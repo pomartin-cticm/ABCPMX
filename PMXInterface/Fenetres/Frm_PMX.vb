@@ -762,115 +762,91 @@ Public Class Frm_PMX
                 AffichageTViewChk() 'Ajout GuD: MAJ du volet gauche. A voir si c'est pertinent
 
             Case EnuFenetres.Portees
-                If LogicielOptions.lFenetres Then
-                    Frm_Portees.ShowDialog()
-                Else
-                    Frm_Portees.InitialiserFenetre()
-                    Me.TLPan_ZoneDeSaisie.Controls.Add(Frm_Portees.pan_Main, 0, 1)
-                End If
+                'If LogicielOptions.lFenetres Then
+                Frm_Portees.ShowDialog()
+                'Else
+                '    Frm_Portees.InitialiserFenetre()
+                '    Me.TLPan_ZoneDeSaisie.Controls.Add(Frm_Portees.pan_Main, 0, 1)
+                'End If
 
-            Case EnuFenetres.Dalle
-                If LogicielOptions.lFenetres Then
-                    Frm_Dalle.ShowDialog()
+                    Case EnuFenetres.Dalle
 
-                End If
+                Frm_Dalle.ShowDialog()
+
+
             Case EnuFenetres.DalleN
 
 
 
             Case EnuFenetres.DalleSlimFloor
-                If LogicielOptions.lFenetres Then
-                    Frm_DalleSlimFloor.ShowDialog()
 
-                End If
+                Frm_DalleSlimFloor.ShowDialog()
+
 
             Case EnuFenetres.SectionAcier
-                If LogicielOptions.lFenetres Then
-                    Frm_SectionAcierStandard.ShowDialog()
-                Else
 
-                End If
+                Frm_SectionAcierStandard.ShowDialog()
 
             Case EnuFenetres.SectionSFB
-                If LogicielOptions.lFenetres Then
-                    Frm_SectionSFB.ShowDialog()
-                Else
 
-                End If
+                Frm_SectionSFB.ShowDialog()
+
 
             Case EnuFenetres.SectionIFB
-                If LogicielOptions.lFenetres Then
-                    Frm_SectionIFB.ShowDialog()
-                Else
 
-                End If
+                Frm_SectionIFB.ShowDialog()
+
 
             Case EnuFenetres.SectionSAB
-                If LogicielOptions.lFenetres Then
-                    Frm_SectionSAB.ShowDialog()
-                Else
 
-                End If
+                Frm_SectionSAB.ShowDialog()
+
 
             Case EnuFenetres.Enrobage
-                If LogicielOptions.lFenetres Then
-                    Frm_Enrobage.ShowDialog()
-                Else
 
-                End If
+                Frm_Enrobage.ShowDialog()
+
 
             Case EnuFenetres.Connexion
-                If LogicielOptions.lFenetres Then
-                    Frm_Connection.ShowDialog()
-                Else
 
-                End If
+                Frm_Connection.ShowDialog()
+
 
             Case EnuFenetres.ConnexionSlimfloor
-                If LogicielOptions.lFenetres Then
-                    Frm_ConnectionSlimFloor.ShowDialog()
-                Else
 
-                End If
+                Frm_ConnectionSlimFloor.ShowDialog()
+
 
             Case EnuFenetres.Maintiens
-                If LogicielOptions.lFenetres Then
-                    Frm_Maintiens.ShowDialog()
-                Else
 
-                End If
+                Frm_Maintiens.ShowDialog()
+
 
             Case EnuFenetres.Etaiement
-                If LogicielOptions.lFenetres Then
-                    Frm_Etaiement.ShowDialog()
-                Else
 
-                End If
+                Frm_Etaiement.ShowDialog()
+
 
             Case EnuFenetres.Chargements
-                If LogicielOptions.lFenetres Then
-                    Frm_Chargement.ShowDialog()
-                Else
 
-                End If
+                Frm_Chargement.ShowDialog()
+
 
             Case EnuFenetres.Gamma
-                If LogicielOptions.lFenetres Then
-                    Frm_Gamma.ShowDialog()
-                End If
+
+                Frm_Gamma.ShowDialog()
+
 
             Case EnuFenetres.Combinaisons
-                If LogicielOptions.lFenetres Then
-                    Frm_Combinaisons.ShowDialog()
-                End If
+
+                Frm_Combinaisons.ShowDialog()
+
 
             Case EnuFenetres.Hivoss
-                If LogicielOptions.lFenetres Then
-                    iFrmAppel = EnuFenetres.Main
-                    Frm_Hivoss.ShowDialog()
-                Else
 
-                End If
+                iFrmAppel = EnuFenetres.Main
+                    Frm_Hivoss.ShowDialog()
+
 
             Case EnuFenetres.Incendie
                 Frm_OptionsFeu.ShowDialog()
@@ -1126,6 +1102,16 @@ Public Class Frm_PMX
 
         Me.TSbtn_ExpertMode.Visible = LogicielOptions.lExpert
         Me.TSbtn_ExpertMode.Checked = LogicielOptions.lExpert
+        Me.sep_bas_3.Visible = LogicielOptions.lExpert
+
+        Select Case LogicielInfo.Maitre
+            Case EnuMaitre.ArcelorMittal
+                Me.TSbtn_Maitre.Text = "ARCELORMITTAL"
+
+            Case EnuMaitre.CTICM
+                Me.TSbtn_Maitre.Text = "CTICM"
+
+        End Select
 
     End Sub
 
@@ -1139,6 +1125,7 @@ Public Class Frm_PMX
             MAJI_BOBasse()
             GestionLangue() 'Permet de MAJ la langue de la fenetre principale 
             GestionStyle()
+            InitialiseReglagesLogiciel()
         End If
 
     End Sub

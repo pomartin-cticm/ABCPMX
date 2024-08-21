@@ -27,8 +27,8 @@ Partial Class Frm_Ouverture
         Me.TabPage_NewProject = New System.Windows.Forms.TabPage()
         Me.TabPage_OpenProject = New System.Windows.Forms.TabPage()
         Me.TableLayoutPanel_OpenProject = New System.Windows.Forms.TableLayoutPanel()
-        Me.Label_OpenFile = New System.Windows.Forms.Label()
-        Me.Label_RecentFiles = New System.Windows.Forms.Label()
+        Me.lbl_OpenFile = New System.Windows.Forms.Label()
+        Me.lbl_RecentFiles = New System.Windows.Forms.Label()
         Me.ListBox_RecentFiles = New System.Windows.Forms.ListBox()
         Me.Button_OpenProject = New System.Windows.Forms.Button()
         Me.TableLayoutPanel_NewProject = New System.Windows.Forms.TableLayoutPanel()
@@ -84,9 +84,9 @@ Partial Class Frm_Ouverture
         Me.TableLayoutPanel_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 146.0!))
         Me.TableLayoutPanel_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15.0!))
-        Me.TableLayoutPanel_OpenProject.Controls.Add(Me.Label_OpenFile, 1, 1)
-        Me.TableLayoutPanel_OpenProject.Controls.Add(Me.Label_RecentFiles, 1, 5)
+        Me.TableLayoutPanel_OpenProject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 16.0!))
+        Me.TableLayoutPanel_OpenProject.Controls.Add(Me.lbl_OpenFile, 1, 1)
+        Me.TableLayoutPanel_OpenProject.Controls.Add(Me.lbl_RecentFiles, 1, 5)
         Me.TableLayoutPanel_OpenProject.Controls.Add(Me.ListBox_RecentFiles, 1, 7)
         Me.TableLayoutPanel_OpenProject.Controls.Add(Me.Button_OpenProject, 2, 3)
         Me.TableLayoutPanel_OpenProject.Dock = System.Windows.Forms.DockStyle.Fill
@@ -105,35 +105,35 @@ Partial Class Frm_Ouverture
         Me.TableLayoutPanel_OpenProject.Size = New System.Drawing.Size(733, 386)
         Me.TableLayoutPanel_OpenProject.TabIndex = 1
         '
-        'Label_OpenFile
+        'lbl_OpenFile
         '
-        Me.Label_OpenFile.AutoEllipsis = True
-        Me.Label_OpenFile.BackColor = System.Drawing.Color.Gold
-        Me.Label_OpenFile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TableLayoutPanel_OpenProject.SetColumnSpan(Me.Label_OpenFile, 3)
-        Me.Label_OpenFile.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label_OpenFile.Location = New System.Drawing.Point(15, 37)
-        Me.Label_OpenFile.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label_OpenFile.Name = "Label_OpenFile"
-        Me.Label_OpenFile.Size = New System.Drawing.Size(702, 26)
-        Me.Label_OpenFile.TabIndex = 4
-        Me.Label_OpenFile.Text = "Label_OpenFile"
-        Me.Label_OpenFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_OpenFile.AutoEllipsis = True
+        Me.lbl_OpenFile.BackColor = System.Drawing.Color.Gold
+        Me.lbl_OpenFile.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TableLayoutPanel_OpenProject.SetColumnSpan(Me.lbl_OpenFile, 3)
+        Me.lbl_OpenFile.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_OpenFile.Location = New System.Drawing.Point(15, 37)
+        Me.lbl_OpenFile.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_OpenFile.Name = "lbl_OpenFile"
+        Me.lbl_OpenFile.Size = New System.Drawing.Size(702, 26)
+        Me.lbl_OpenFile.TabIndex = 4
+        Me.lbl_OpenFile.Text = "lbl_OpenFile"
+        Me.lbl_OpenFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'Label_RecentFiles
+        'lbl_RecentFiles
         '
-        Me.Label_RecentFiles.AutoEllipsis = True
-        Me.Label_RecentFiles.BackColor = System.Drawing.Color.Gold
-        Me.Label_RecentFiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.TableLayoutPanel_OpenProject.SetColumnSpan(Me.Label_RecentFiles, 3)
-        Me.Label_RecentFiles.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.Label_RecentFiles.Location = New System.Drawing.Point(15, 148)
-        Me.Label_RecentFiles.Margin = New System.Windows.Forms.Padding(0)
-        Me.Label_RecentFiles.Name = "Label_RecentFiles"
-        Me.Label_RecentFiles.Size = New System.Drawing.Size(702, 26)
-        Me.Label_RecentFiles.TabIndex = 2
-        Me.Label_RecentFiles.Text = "Label_RecentFiles"
-        Me.Label_RecentFiles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lbl_RecentFiles.AutoEllipsis = True
+        Me.lbl_RecentFiles.BackColor = System.Drawing.Color.Gold
+        Me.lbl_RecentFiles.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TableLayoutPanel_OpenProject.SetColumnSpan(Me.lbl_RecentFiles, 3)
+        Me.lbl_RecentFiles.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbl_RecentFiles.Location = New System.Drawing.Point(15, 148)
+        Me.lbl_RecentFiles.Margin = New System.Windows.Forms.Padding(0)
+        Me.lbl_RecentFiles.Name = "lbl_RecentFiles"
+        Me.lbl_RecentFiles.Size = New System.Drawing.Size(702, 26)
+        Me.lbl_RecentFiles.TabIndex = 2
+        Me.lbl_RecentFiles.Text = "lbl_RecentFiles"
+        Me.lbl_RecentFiles.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'ListBox_RecentFiles
         '
@@ -218,8 +218,8 @@ Partial Class Frm_Ouverture
     Friend WithEvents TabPage_NewProject As TabPage
     Friend WithEvents TabPage_OpenProject As TabPage
     Friend WithEvents TableLayoutPanel_OpenProject As TableLayoutPanel
-    Friend WithEvents Label_OpenFile As Label
-    Friend WithEvents Label_RecentFiles As Label
+    Friend WithEvents lbl_OpenFile As Label
+    Friend WithEvents lbl_RecentFiles As Label
     Friend WithEvents ListBox_RecentFiles As ListBox
     Friend WithEvents Button_OpenProject As Button
     Friend WithEvents OpenFileDialog_Project As OpenFileDialog

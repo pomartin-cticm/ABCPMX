@@ -15,6 +15,7 @@ Public Module Mod_Declarations
     Public LogicielRep As Struc_RepertoireLogiciel
     Public LogicielInfo As Struc_InformationLogiciel
     Public LogicielOptions As Struc_OptionsLogiciel
+    Public LogicielReglages As struc_ReglagesLogiciel
     Public OptionsScope As Struc_OptionsScope
     Public LocalOptionsScope As Struc_OptionsScope          ' Pour la saisie des paramètres dans la fenêtre des options de calcul
     Public OptionsCalcul As Struc_OptionsCalcul
@@ -231,6 +232,13 @@ Public Module Mod_Declarations
         Public EpDalleMixteMin As Decimal       ' Epaisseur de dalle mixte mini (au dessus du bac)
         Public RhoCBetonLegerMax As Decimal     ' Masse volumique maximale d'un béton léger
         Public RhoCBetonLegerMin As Decimal     ' Masse volumique minimale d'un béton léger
+    End Structure
+
+    Public Structure struc_ReglagesLogiciel
+        Public lNoS235 As Boolean                   'Indique si on applique le filtre empechant la sélection de nuance S235/S275 en mode normal 
+        Public lPRS As Boolean                      'Indique si version accessible aux PRS
+        Public lDelivery As Boolean                 'Indique si on affiche les conditions de livraison des laminés
+        Public lG2 As Boolean                       'Indique si Génération 2 des Eurocodes accessible en mode normal
     End Structure
 
     Public Enum Enu_Normes

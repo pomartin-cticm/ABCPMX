@@ -23,6 +23,7 @@ Partial Class Frm_SectionAcierStandard
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Frm_SectionAcierStandard))
         Me.pan_General = New System.Windows.Forms.Panel()
         Me.TLpan_Main = New System.Windows.Forms.TableLayoutPanel()
         Me.TLPan_PartieBasse = New System.Windows.Forms.TableLayoutPanel()
@@ -90,9 +91,12 @@ Partial Class Frm_SectionAcierStandard
         Me.rdb_PRS_symetrique = New System.Windows.Forms.RadioButton()
         Me.rdb_Lamine = New System.Windows.Forms.RadioButton()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
-        Me.img_ReductionCurve = New System.Windows.Forms.PictureBox()
         Me.img_Section = New System.Windows.Forms.PictureBox()
+        Me.pan_Acier = New System.Windows.Forms.Panel()
+        Me.btn_FyFu = New System.Windows.Forms.Button()
+        Me.img_ReductionCurve = New System.Windows.Forms.PictureBox()
         Me.ErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
+        Me.imgList_UY = New System.Windows.Forms.ImageList(Me.components)
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -117,8 +121,9 @@ Partial Class Frm_SectionAcierStandard
         CType(Me.Grid_ProfilesSup, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pan_TypeSection.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
-        CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pan_Acier.SuspendLayout()
+        CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -811,9 +816,9 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_TypeSection.Controls.Add(Me.rdb_Lamine)
         Me.pan_TypeSection.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_TypeSection.Location = New System.Drawing.Point(0, 30)
-        Me.pan_TypeSection.Margin = New System.Windows.Forms.Padding(0)
+        Me.pan_TypeSection.Margin = New System.Windows.Forms.Padding(0, 0, 0, 1)
         Me.pan_TypeSection.Name = "pan_TypeSection"
-        Me.pan_TypeSection.Size = New System.Drawing.Size(336, 90)
+        Me.pan_TypeSection.Size = New System.Drawing.Size(336, 89)
         Me.pan_TypeSection.TabIndex = 2
         '
         'rdb_PRS
@@ -853,8 +858,8 @@ Partial Class Frm_SectionAcierStandard
         '
         Me.TableLayoutPanel2.ColumnCount = 1
         Me.TableLayoutPanel2.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel2.Controls.Add(Me.img_ReductionCurve, 0, 1)
         Me.TableLayoutPanel2.Controls.Add(Me.img_Section, 0, 0)
+        Me.TableLayoutPanel2.Controls.Add(Me.pan_Acier, 0, 1)
         Me.TableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanel2.Location = New System.Drawing.Point(353, 0)
         Me.TableLayoutPanel2.Margin = New System.Windows.Forms.Padding(0)
@@ -864,17 +869,6 @@ Partial Class Frm_SectionAcierStandard
         Me.TableLayoutPanel2.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
         Me.TableLayoutPanel2.Size = New System.Drawing.Size(300, 410)
         Me.TableLayoutPanel2.TabIndex = 2
-        '
-        'img_ReductionCurve
-        '
-        Me.img_ReductionCurve.BackColor = System.Drawing.SystemColors.ControlLightLight
-        Me.img_ReductionCurve.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.img_ReductionCurve.Location = New System.Drawing.Point(1, 205)
-        Me.img_ReductionCurve.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
-        Me.img_ReductionCurve.Name = "img_ReductionCurve"
-        Me.img_ReductionCurve.Size = New System.Drawing.Size(100, 50)
-        Me.img_ReductionCurve.TabIndex = 1
-        Me.img_ReductionCurve.TabStop = False
         '
         'img_Section
         '
@@ -887,9 +881,48 @@ Partial Class Frm_SectionAcierStandard
         Me.img_Section.TabIndex = 0
         Me.img_Section.TabStop = False
         '
+        'pan_Acier
+        '
+        Me.pan_Acier.Controls.Add(Me.btn_FyFu)
+        Me.pan_Acier.Controls.Add(Me.img_ReductionCurve)
+        Me.pan_Acier.Location = New System.Drawing.Point(1, 205)
+        Me.pan_Acier.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
+        Me.pan_Acier.Name = "pan_Acier"
+        Me.pan_Acier.Size = New System.Drawing.Size(245, 141)
+        Me.pan_Acier.TabIndex = 1
+        '
+        'btn_FyFu
+        '
+        Me.btn_FyFu.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btn_FyFu.Image = CType(resources.GetObject("btn_FyFu.Image"), System.Drawing.Image)
+        Me.btn_FyFu.Location = New System.Drawing.Point(214, 3)
+        Me.btn_FyFu.Margin = New System.Windows.Forms.Padding(0)
+        Me.btn_FyFu.Name = "btn_FyFu"
+        Me.btn_FyFu.Size = New System.Drawing.Size(28, 28)
+        Me.btn_FyFu.TabIndex = 2
+        Me.btn_FyFu.UseVisualStyleBackColor = True
+        '
+        'img_ReductionCurve
+        '
+        Me.img_ReductionCurve.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.img_ReductionCurve.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.img_ReductionCurve.Location = New System.Drawing.Point(34, 23)
+        Me.img_ReductionCurve.Margin = New System.Windows.Forms.Padding(1, 0, 1, 0)
+        Me.img_ReductionCurve.Name = "img_ReductionCurve"
+        Me.img_ReductionCurve.Size = New System.Drawing.Size(100, 34)
+        Me.img_ReductionCurve.TabIndex = 1
+        Me.img_ReductionCurve.TabStop = False
+        '
         'ErrorProvider
         '
         Me.ErrorProvider.ContainerControl = Me
+        '
+        'imgList_UY
+        '
+        Me.imgList_UY.ImageStream = CType(resources.GetObject("imgList_UY.ImageStream"), System.Windows.Forms.ImageListStreamer)
+        Me.imgList_UY.TransparentColor = System.Drawing.Color.Transparent
+        Me.imgList_UY.Images.SetKeyName(0, "Fu")
+        Me.imgList_UY.Images.SetKeyName(1, "Fy")
         '
         'Frm_SectionAcierStandard
         '
@@ -934,8 +967,9 @@ Partial Class Frm_SectionAcierStandard
         Me.pan_TypeSection.ResumeLayout(False)
         Me.pan_TypeSection.PerformLayout()
         Me.TableLayoutPanel2.ResumeLayout(False)
-        CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.img_Section, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pan_Acier.ResumeLayout(False)
+        CType(Me.img_ReductionCurve, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ErrorProvider, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -1011,4 +1045,7 @@ Partial Class Frm_SectionAcierStandard
     Friend WithEvents lbl_Delivery As Label
     Friend WithEvents img_ReductionCurve As PictureBox
     Friend WithEvents ErrorProvider As ErrorProvider
+    Friend WithEvents pan_Acier As Panel
+    Friend WithEvents btn_FyFu As Button
+    Friend WithEvents imgList_UY As ImageList
 End Class
