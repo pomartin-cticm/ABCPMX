@@ -318,7 +318,6 @@ Imports PMXMoteur2
             ValCal = .BeffDalle(xPos, 0, True, False, cls_Poutre.EnuTypeLargeurParticipante.Totale)
             Assert.IsTrue(IsEqual(ValCal, ValRef))
 
-
             xPos = 0
 
             ValCal = .BeffDalle(xPos, 1, True, False, cls_Poutre.EnuTypeLargeurParticipante.Totale)

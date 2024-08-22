@@ -275,7 +275,8 @@ Imports PMXMoteur2
         ValRef = 2635 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Nc,Rd à mi travée
 
-        Valeur = myPoutre.VerifMixte(0).DegConnex(myPoutre.IndicePremiereTravee, 0)
+        'Valeur = myPoutre.VerifMixte(0).DegConnex(myPoutre.IndicePremiereTravee, 0)
+        Valeur = myPoutre.VerifMixte(0).EtaEnveloppe(myPoutre.CombiA_ELU.nbCombi, myPoutre.IndicePremiereTravee)
         ValRef = 1 * (7 / 0.207) * 52.516 * 1000 / (2636 * 1000) '= 0.674
         ValRef = 67 * 52.92 / 2 / 2635
 
@@ -1750,7 +1751,8 @@ Imports PMXMoteur2
         ValRef = 2904 * 1000
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Nc,Rd à mi travée
 
-        Valeur = myPoutre.VerifMixte(0).DegConnex(myPoutre.IndicePremiereTravee, 0)
+        'Valeur = myPoutre.VerifMixte(0).DegConnex(myPoutre.IndicePremiereTravee, 0)
+        Valeur = myPoutre.VerifMixte(0).EtaEnveloppe(myPoutre.CombiA_ELU.nbCombi, myPoutre.IndicePremiereTravee)
         ValRef = 30.19 * 2 * 37.1 / 2904 '= 0.771 -> Valeur recalculée à la main pour tenir compte de la linéarisation de la résistance des connecteurs
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 

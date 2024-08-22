@@ -28,7 +28,7 @@
 
     Public lCalculPlastic As Boolean                ' Indique si le dimensionnement est suivant la théorie plastique
 
-    Public DegConnex(,) As Decimal = Nothing        ' Degré de connexion : 1er indice : travée, 2eme indice : 0 pour M>0 et 1 pour M<0
+    Public DegConnex(,,) As Decimal = Nothing       ' Degré de connexion : 1er indice : combinaison; 2eme indice : travée, 3eme indice : 0 pour M>0 et 1 pour M<0
     Public DegConnexMin() As Decimal = Nothing      ' Degré minimal de connexion en moment positif (indice de la travée)
 
     Public ShearB As strucShearBuckling             ' Paramètres du voilement par cisaillement
@@ -212,14 +212,14 @@
         lCombiClass3 = False
         lCombiClass4 = False
         lEnrob = myBeam.lEnrobage
+        nbCombi = myBeam.CombiA_ELU.nbCombi
 
         '# Degré de connexion
 
-        Me.InitialiseDegreConnexion(myBeam.IndiceDerniereTravee)
+        Me.InitialiseDegreConnexion(nbCombi, myBeam.IndiceDerniereTravee)
 
         '# Critères
 
-        nbCombi = myBeam.CombiA_ELU.nbCombi
         Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombi, myBeam.IndiceDerniereTravee)
         Me.InitialiseRhoV(nbCombi, myBeam.Nodes.nbNodes)
 
@@ -336,7 +336,7 @@
                 '# Degré de connexion
 
                 If Me.lCalculPlastic And (Not (lClasse3 Or lClasse4)) Then
-                    Me.CheckDegreConnexionMPlus(myBeam, DeltaRd, iNodeMmax, iNodeZero)
+                    Me.CheckDegreConnexionMPlus(myBeam, DeltaRd, iNodeMmax, iNodeZero, iCombi)
                 End If
 
                 '# Calcul des propriétés plastiques le long de la barre,
@@ -438,295 +438,295 @@
 
     End Sub
 
-    Public Sub Z_VerificationELUOLD(myBeam As cls_Poutre)
-        '----------------------------------------------------------------------------------------------------------
-        '   05/10/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU d'une poutre mixte acier béton
-        '----------------------------------------------------------------------------------------------------------
-        '   myBeam      [E] :   Poutre vérifiée
-        '----------------------------------------------------------------------------------------------------------
-
-        '--> Déclarations
-
-        Dim iCombi As Integer
-        Dim MEd(,) As Decimal = Nothing
-        Dim VEd(,) As Decimal = Nothing
-        Dim VplRd As Decimal                            ' Effort tranchant résistant (a priori constant le long de la poutre)
-        Dim VbRd As Decimal                             ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
-        Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
-        Dim MplRdPlus() As Decimal = {0}                ' Moments plastiques positifs
-        Dim MplRdMoins() As Decimal = {0}               ' Moments plastiques négatifs
-        Dim zANPPlus() As Decimal = {0}                 ' Position des ANP sous moment > 0
-        Dim zANPMoins() As Decimal = {0}                ' Position des ANP sous moment < 0
-        Dim zANE(,) As Decimal = Nothing                ' Position des ANE sous moment 
-        Dim lRElastiqueImpose As Boolean = False        ' Vérification élastique imposée
-        'Dim lRElastique As Boolean
-        Dim ClasseSection(,) As Integer = Nothing       ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite)
-        Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
-        Dim lSimple As Boolean = False
-        '   Dim ClasseP(), ClasseM() As Integer         ' Tableau des classes de section en flexion poisitive et négative
-        Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
-
-        Dim iNodeMmax() As Integer = Nothing
-        Dim Mmax() As Decimal = Nothing
-        Dim xMZero(,) As Decimal = Nothing
-        Dim lTraveeMomNeg() As Boolean = Nothing
-
-        Dim SigmaP(,,,) As Decimal = Nothing            ' Contraintes normales dans l'hypothèse d'un moment positif
-        Dim SigmaM(,,,) As Decimal = Nothing            ' Contraintes normales dans l'hypothèse d'un moment négatif
-        Dim SigmaELU(,,) As Decimal = Nothing           ' Contraintes normales sous 1 combinaison ELU
-        Dim TauELU(,,) As Decimal = Nothing             ' Contraintes de cisaillement sous 1 combinaison ELU
-        Dim TauCas(,,,) As Decimal = Nothing            ' Contraintes de cisaillement pour les cas de charges
-        Dim lRetraitElastique As Boolean = True
-
-        Dim lClasse3, lClasse4 As Boolean               ' Indique si présence d'au moins une section de classe 3 ou de classe 4
-        Dim DeltaRd() As List(Of Decimal) = Nothing
-
-        Dim zANP(,) As Decimal = Nothing                ' Position ANP, tenant compte de MEd et du degré de connexion
-        Dim zANPMV(,) As Decimal = Nothing              ' Position ANP, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
-        Dim MplRd(,) As Decimal = Nothing               ' Moments plastiques, tenant compte de MEd et du degré de connexion
-        Dim MVRd(,) As Decimal = Nothing                ' Moments plastiques, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
-        Dim MfRd(,) As Decimal = Nothing                ' Moments plastiques, des semelles seules
-
-        Dim EpsilonW As Decimal
-        Dim lEnrob As Boolean
-        Dim lCont As Boolean
-        Dim lCombiClass3 As Boolean                     ' Indique s'il existe au moins une combinaison avec classe 3
-        Dim lCombiClass4 As Boolean                     ' Indique s'il existe au moins une combinaison avec classe 4
-        Dim lFirst As Boolean = True
-        Dim nbCombi As Integer
-        Dim lproPRS As Boolean = Not myBeam.Section.lLamine
+    'Public Sub Z_VerificationELUOLD(myBeam As cls_Poutre)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   05/10/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Vérification aux ELU d'une poutre mixte acier béton
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   myBeam      [E] :   Poutre vérifiée
+    '    '----------------------------------------------------------------------------------------------------------
+
+    '    '--> Déclarations
+
+    '    Dim iCombi As Integer
+    '    Dim MEd(,) As Decimal = Nothing
+    '    Dim VEd(,) As Decimal = Nothing
+    '    Dim VplRd As Decimal                            ' Effort tranchant résistant (a priori constant le long de la poutre)
+    '    Dim VbRd As Decimal                             ' Résistance au voilement par cisaillement (a priori constant le long de la poutre)
+    '    Dim lTwoAdjacentCantilevers As Boolean          ' indique la présence de deux travées adjacentes en consoles (True) ou non
+    '    Dim MplRdPlus() As Decimal = {0}                ' Moments plastiques positifs
+    '    Dim MplRdMoins() As Decimal = {0}               ' Moments plastiques négatifs
+    '    Dim zANPPlus() As Decimal = {0}                 ' Position des ANP sous moment > 0
+    '    Dim zANPMoins() As Decimal = {0}                ' Position des ANP sous moment < 0
+    '    Dim zANE(,) As Decimal = Nothing                ' Position des ANE sous moment 
+    '    Dim lRElastiqueImpose As Boolean = False        ' Vérification élastique imposée
+    '    'Dim lRElastique As Boolean
+    '    Dim ClasseSection(,) As Integer = Nothing       ' Tableau dimensions (NbNodes, 0 ou 1 pour gauche ou droite)
+    '    Dim Beff() As Decimal = {0}                     ' Largeurs participantes de la dalle
+    '    Dim lSimple As Boolean = False
+    '    '   Dim ClasseP(), ClasseM() As Integer         ' Tableau des classes de section en flexion poisitive et négative
+    '    Dim lGeneration1 As Boolean = myBeam.Param.lGeneration1
+
+    '    Dim iNodeMmax() As Integer = Nothing
+    '    Dim Mmax() As Decimal = Nothing
+    '    Dim xMZero(,) As Decimal = Nothing
+    '    Dim lTraveeMomNeg() As Boolean = Nothing
+
+    '    Dim SigmaP(,,,) As Decimal = Nothing            ' Contraintes normales dans l'hypothèse d'un moment positif
+    '    Dim SigmaM(,,,) As Decimal = Nothing            ' Contraintes normales dans l'hypothèse d'un moment négatif
+    '    Dim SigmaELU(,,) As Decimal = Nothing           ' Contraintes normales sous 1 combinaison ELU
+    '    Dim TauELU(,,) As Decimal = Nothing             ' Contraintes de cisaillement sous 1 combinaison ELU
+    '    Dim TauCas(,,,) As Decimal = Nothing            ' Contraintes de cisaillement pour les cas de charges
+    '    Dim lRetraitElastique As Boolean = True
+
+    '    Dim lClasse3, lClasse4 As Boolean               ' Indique si présence d'au moins une section de classe 3 ou de classe 4
+    '    Dim DeltaRd() As List(Of Decimal) = Nothing
+
+    '    Dim zANP(,) As Decimal = Nothing                ' Position ANP, tenant compte de MEd et du degré de connexion
+    '    Dim zANPMV(,) As Decimal = Nothing              ' Position ANP, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
+    '    Dim MplRd(,) As Decimal = Nothing               ' Moments plastiques, tenant compte de MEd et du degré de connexion
+    '    Dim MVRd(,) As Decimal = Nothing                ' Moments plastiques, tenant compte de MEd, du degré de connexion et de l'interaction avec l'effort tranchant 
+    '    Dim MfRd(,) As Decimal = Nothing                ' Moments plastiques, des semelles seules
+
+    '    Dim EpsilonW As Decimal
+    '    Dim lEnrob As Boolean
+    '    Dim lCont As Boolean
+    '    Dim lCombiClass3 As Boolean                     ' Indique s'il existe au moins une combinaison avec classe 3
+    '    Dim lCombiClass4 As Boolean                     ' Indique s'il existe au moins une combinaison avec classe 4
+    '    Dim lFirst As Boolean = True
+    '    Dim nbCombi As Integer
+    '    Dim lproPRS As Boolean = Not myBeam.Section.lLamine
 
-        Dim FluxCas(,,,) As Decimal = Nothing           ' Flux de cisaillement dans les soudures de PRS et dans la connection par cas de charges
-        Dim FluxELU(,,) As Decimal = Nothing            ' Flux de cisaillement dans les soudures de PRS et dans la connection aux ELU
-        Dim FluxRd(,) As Decimal = Nothing              ' Résistance de la connexion / u longueur le long de la barre
-        Dim lPlastOK() As Boolean = {True, True}
+    '    Dim FluxCas(,,,) As Decimal = Nothing           ' Flux de cisaillement dans les soudures de PRS et dans la connection par cas de charges
+    '    Dim FluxELU(,,) As Decimal = Nothing            ' Flux de cisaillement dans les soudures de PRS et dans la connection aux ELU
+    '    Dim FluxRd(,) As Decimal = Nothing              ' Résistance de la connexion / u longueur le long de la barre
+    '    Dim lPlastOK() As Boolean = {True, True}
 
-        '--> Initialisations
+    '    '--> Initialisations
 
-        lCombiClass3 = False
-        lCombiClass4 = False
-        lEnrob = myBeam.lEnrobage
+    '    lCombiClass3 = False
+    '    lCombiClass4 = False
+    '    lEnrob = myBeam.lEnrobage
 
-        '# Degré de connexion
+    '    '# Degré de connexion
 
-        Me.InitialiseDegreConnexion(myBeam.IndiceDerniereTravee)
+    '    Me.InitialiseDegreConnexion(myBeam.IndiceDerniereTravee)
 
-        '# Critères
+    '    '# Critères
 
-        nbCombi = myBeam.CombiA_ELU.nbCombi
-        Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombi, myBeam.IndiceDerniereTravee)
-        Me.InitialiseRhoV(nbCombi, myBeam.Nodes.nbNodes)
+    '    nbCombi = myBeam.CombiA_ELU.nbCombi
+    '    Me.InitialiseCriteres(myBeam.Nodes.nbNodes, nbCombi, myBeam.IndiceDerniereTravee)
+    '    Me.InitialiseRhoV(nbCombi, myBeam.Nodes.nbNodes)
 
-        '# Largeurs participantes
+    '    '# Largeurs participantes
 
-        lSimple = myBeam.Param.lLargeurEfficaceSimplifiee
-        myBeam.MaillageBeff(lSimple, False, Beff)
+    '    lSimple = myBeam.Param.lLargeurEfficaceSimplifiee
+    '    myBeam.MaillageBeff(lSimple, False, Beff)
 
-        '# Tranchant résistant
+    '    '# Tranchant résistant
 
-        VplRd = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM0, myBeam.Param.EtaW)
+    '    VplRd = myBeam.Section.VplRd(myBeam.Param.Gamma.GammaM0, myBeam.Param.EtaW)
 
-        '# Résistance au voilement par cisaillement
+    '    '# Résistance au voilement par cisaillement
 
-        lTwoAdjacentCantilevers = myBeam.lTraveeConsoleGauche And myBeam.lTraveeConsoleDroite
+    '    lTwoAdjacentCantilevers = myBeam.lTraveeConsoleGauche And myBeam.lTraveeConsoleDroite
 
-        VbRd = myBeam.Section.VbRd(myBeam.Param.Gamma.GammaM1, myBeam.Param.EtaW, lTwoAdjacentCantilevers)
+    '    VbRd = myBeam.Section.VbRd(myBeam.Param.Gamma.GammaM1, myBeam.Param.EtaW, lTwoAdjacentCantilevers)
 
-        EpsilonW = Math.Sqrt(235 / myBeam.Section.FyW)
-        Me.ShearB.ElancementW = myBeam.Section.ProfilA.ElancementAme
-        If lEnrob Then
-            Me.ShearB.LimiteElancementW = 124 * EpsilonW
-        Else
-            Me.ShearB.LimiteElancementW = 72 * EpsilonW / myBeam.Param.EtaW
-        End If
-        Me.ShearB.lCheckRequired = IsGreater(Me.ShearB.ElancementW, Me.ShearB.LimiteElancementW)
+    '    EpsilonW = Math.Sqrt(235 / myBeam.Section.FyW)
+    '    Me.ShearB.ElancementW = myBeam.Section.ProfilA.ElancementAme
+    '    If lEnrob Then
+    '        Me.ShearB.LimiteElancementW = 124 * EpsilonW
+    '    Else
+    '        Me.ShearB.LimiteElancementW = 72 * EpsilonW / myBeam.Param.EtaW
+    '    End If
+    '    Me.ShearB.lCheckRequired = IsGreater(Me.ShearB.ElancementW, Me.ShearB.LimiteElancementW)
 
-        '# Moments plastiques 
+    '    '# Moments plastiques 
 
-        myBeam.MaillagePropPlastiquesMixtes(Beff, 1, True, lGeneration1, True, MplRdPlus, zANPPlus, lPlastOK(0))
-        myBeam.MaillagePropPlastiquesMixtes(Beff, -1, True, lGeneration1, False, MplRdMoins, zANPMoins, lPlastOK(1))
+    '    myBeam.MaillagePropPlastiquesMixtes(Beff, 1, True, lGeneration1, True, MplRdPlus, zANPPlus, lPlastOK(0))
+    '    myBeam.MaillagePropPlastiquesMixtes(Beff, -1, True, lGeneration1, False, MplRdMoins, zANPMoins, lPlastOK(1))
 
-        '# Calcul des contraintes normales élastiques pour les cas de charges
+    '    '# Calcul des contraintes normales élastiques pour les cas de charges
 
-        myBeam.PtsSigma.Initialise(myBeam)
-        myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaP)
-        myBeam.PtsSigma.CalculContraintesCharges(myBeam, -1, SigmaM)
+    '    myBeam.PtsSigma.Initialise(myBeam)
+    '    myBeam.PtsSigma.CalculContraintesCharges(myBeam, 1, SigmaP)
+    '    myBeam.PtsSigma.CalculContraintesCharges(myBeam, -1, SigmaM)
 
-        '# Calcul des contraintes de cisaillement pour un calcul élastique
-        If myBeam.Param.lElasticDesignVM Then
-            Me.Tau = New cls_Tau(myBeam.Section.TypeSection)
-            Me.Tau.CalculContraintesChargesMIXTE(myBeam, TauCas)
-        End If
+    '    '# Calcul des contraintes de cisaillement pour un calcul élastique
+    '    If myBeam.Param.lElasticDesignVM Then
+    '        Me.Tau = New cls_Tau(myBeam.Section.TypeSection)
+    '        Me.Tau.CalculContraintesChargesMIXTE(myBeam, TauCas)
+    '    End If
 
-        '# Flux de cisaillement des PRS
-        If lproPRS Then
-            myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
-        End If
+    '    '# Flux de cisaillement des PRS
+    '    If lproPRS Then
+    '        myBeam.Section.ProfilA.InitialiseSoudureMini(Me.GorgesSouduresMini)
+    '    End If
 
-        '   On calcule le flux de cisaillement tout le temps, car on ne sait pas si on va en avoir besoin, si section de classe 4
-        Me.FluxF = New cls_Flux
-        Me.FluxF.InitialiseCalculMixte(myBeam)
-        Me.FluxF.CalculFluxChargesMIXTE(myBeam, Beff, FluxCas)
+    '    '   On calcule le flux de cisaillement tout le temps, car on ne sait pas si on va en avoir besoin, si section de classe 4
+    '    Me.FluxF = New cls_Flux
+    '    Me.FluxF.InitialiseCalculMixte(myBeam)
+    '    Me.FluxF.CalculFluxChargesMIXTE(myBeam, Beff, FluxCas)
 
-        '# Résistance élastique de la connexion / u longueur
-        Me.InitialiseCriteresVM(myBeam.Nodes.nbNodes, myBeam.lEnrobage, nbCombi, myBeam.IndiceDerniereTravee)
-        Me.InitialiseResistanceElastiqueConnexion(myBeam, FluxRd)
+    '    '# Résistance élastique de la connexion / u longueur
+    '    Me.InitialiseCriteresVM(myBeam.Nodes.nbNodes, myBeam.lEnrobage, nbCombi, myBeam.IndiceDerniereTravee)
+    '    Me.InitialiseResistanceElastiqueConnexion(myBeam, FluxRd)
 
-        '--> Boucle sur les combinaisons
+    '    '--> Boucle sur les combinaisons
 
-        lCont = True
-        Me.lCalculPlastic = (Not myBeam.Param.lElasticDesignVM) And (Not myBeam.Param.lElasticDesignCl3)
+    '    lCont = True
+    '    Me.lCalculPlastic = (Not myBeam.Param.lElasticDesignVM) And (Not myBeam.Param.lElasticDesignCl3)
 
-        Do While lCont
+    '    Do While lCont
 
-            lFirst = True
-            For iCombi = 0 To myBeam.CombiA_ELU.nbCombi - 1
+    '        lFirst = True
+    '        For iCombi = 0 To myBeam.CombiA_ELU.nbCombi - 1
 
-                '# Combinaisons des moments, efforts tranchants
+    '            '# Combinaisons des moments, efforts tranchants
 
-                myBeam.CombiA_ELU.CombineMoments(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd, Not Me.lCalculPlastic)
+    '            myBeam.CombiA_ELU.CombineMoments(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, MEd, Not Me.lCalculPlastic)
 
-                '# Combinaison des efforts tranchants
+    '            '# Combinaison des efforts tranchants
 
-                myBeam.CombiA_ELU.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, Not Me.lCalculPlastic)
+    '            myBeam.CombiA_ELU.CombineEffortsT(iCombi, myBeam.Nodes.nbNodes, myBeam.ChargesA, VEd, Not Me.lCalculPlastic)
 
-                '# Combinaison des contraintes normales élastiques
+    '            '# Combinaison des contraintes normales élastiques
 
-                ' On prend en compte le retrait dans le cas d'un calcul élastique
-                myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, myBeam.PtsSigma.zPos.Count, myBeam.Nodes.nbNodes,
-                                                     myBeam.ChargesA, MEd, SigmaP, SigmaM, lRetraitElastique, SigmaELU)
-                myBeam.PtsSigma.AjusteContraintes(myBeam, SigmaELU)
+    '            ' On prend en compte le retrait dans le cas d'un calcul élastique
+    '            myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, myBeam.PtsSigma.zPos.Count, myBeam.Nodes.nbNodes,
+    '                                                 myBeam.ChargesA, MEd, SigmaP, SigmaM, lRetraitElastique, SigmaELU)
+    '            myBeam.PtsSigma.AjusteContraintes(myBeam, SigmaELU)
 
-                '# Combinaison des contraintes de cisaillement élastiques
+    '            '# Combinaison des contraintes de cisaillement élastiques
 
-                If myBeam.Param.lElasticDesignVM Then
-                    myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, Me.Tau.NbPts, myBeam.Nodes.nbNodes,
-                                                         myBeam.ChargesA, TauCas, lRetraitElastique, TauELU)
-                End If
+    '            If myBeam.Param.lElasticDesignVM Then
+    '                myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, Me.Tau.NbPts, myBeam.Nodes.nbNodes,
+    '                                                     myBeam.ChargesA, TauCas, lRetraitElastique, TauELU)
+    '            End If
 
-                '# Combinaison des flux de cisaillement si calcul élastique (pour la connexion) ou si PRS (pour les soudures)
+    '            '# Combinaison des flux de cisaillement si calcul élastique (pour la connexion) ou si PRS (pour les soudures)
 
-                If lproPRS Or (Not Me.lCalculPlastic) Then
-                    myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, cls_Flux.NbPTS, myBeam.Nodes.nbNodes,
-                                                         myBeam.ChargesA, FluxCas, lRetraitElastique, FluxELU)
-                End If
+    '            If lproPRS Or (Not Me.lCalculPlastic) Then
+    '                myBeam.CombiA_ELU.CombineContraintes(iCombi, myBeam.ChargesA.Count, cls_Flux.NbPTS, myBeam.Nodes.nbNodes,
+    '                                                     myBeam.ChargesA, FluxCas, lRetraitElastique, FluxELU)
+    '            End If
 
-                '# Position de l'ANE en fonction des contraintes dans le profilé
+    '            '# Position de l'ANE en fonction des contraintes dans le profilé
 
-                myBeam.RechercheANEFromSigma(SigmaELU, MEd, myBeam.Nodes.nbNodes, zANE)
+    '            myBeam.RechercheANEFromSigma(SigmaELU, MEd, myBeam.Nodes.nbNodes, zANE)
 
-                '# Analyse du diagramme de moment
+    '            '# Analyse du diagramme de moment
 
-                myBeam.AnalyseDiagrammeMoments(MEd, iNodeMmax, Mmax, xMZero, lTraveeMomNeg)
+    '            myBeam.AnalyseDiagrammeMoments(MEd, iNodeMmax, Mmax, xMZero, lTraveeMomNeg)
 
-                '# Calcul des propriétés plastiques le long de la barre,
-                ' avec prise en compte de la connection,
-                ' sans prise en compte de la réduction induit par l'effort tranchant 
+    '            '# Calcul des propriétés plastiques le long de la barre,
+    '            ' avec prise en compte de la connection,
+    '            ' sans prise en compte de la réduction induit par l'effort tranchant 
 
-                myBeam.MaillageRConnexion(xMZero, DeltaRd)
+    '            myBeam.MaillageRConnexion(xMZero, DeltaRd)
 
-                Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANP, MplRd)
+    '            Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANP, MplRd)
 
-                '# Classes des sections
+    '            '# Classes des sections
 
-                Me.CalculeClasseSectionsMaillage(myBeam, MEd, zANE, zANP, ClasseSection, lClasse3, lClasse4)
-                'lCombiClass3 = lCombiClass3 And lClasse3
-                'lCombiClass4 = lCombiClass4 And lClasse4
+    '            Me.CalculeClasseSectionsMaillage(myBeam, MEd, zANE, zANP, ClasseSection, lClasse3, lClasse4)
+    '            'lCombiClass3 = lCombiClass3 And lClasse3
+    '            'lCombiClass4 = lCombiClass4 And lClasse4
 
-                '/!\ MODIF GUD: A VERIFIER
-                lCombiClass3 = lCombiClass3 Or lClasse3
-                lCombiClass4 = lCombiClass4 Or lClasse4
+    '            '/!\ MODIF GUD: A VERIFIER
+    '            lCombiClass3 = lCombiClass3 Or lClasse3
+    '            lCombiClass4 = lCombiClass4 Or lClasse4
 
-                '# Degré de connexion
+    '            '# Degré de connexion
 
-                If Me.lCalculPlastic And (Not (lClasse3 Or lClasse4)) Then
-                    Me.CheckDegreConnexion(myBeam, DeltaRd, iNodeMmax)
-                End If
+    '            If Me.lCalculPlastic And (Not (lClasse3 Or lClasse4)) Then
+    '                Me.CheckDegreConnexion(myBeam, DeltaRd, iNodeMmax)
+    '            End If
 
-                '# Vérification de la connexion en calcul élastique
+    '            '# Vérification de la connexion en calcul élastique
 
-                If (Not Me.lCalculPlastic) Then
-                    Me.RunCalculElastiqueConnexion(myBeam, iCombi, FluxELU, FluxRd)
-                End If
+    '            If (Not Me.lCalculPlastic) Then
+    '                Me.RunCalculElastiqueConnexion(myBeam, iCombi, FluxELU, FluxRd)
+    '            End If
 
-                '# Vérification sous moment fléchissant
+    '            '# Vérification sous moment fléchissant
 
-                Me.RunCritereMoments(myBeam, lFirst, iCombi, Me.lCalculPlastic, lClasse3, MEd, SigmaELU, MplRd)
+    '            Me.RunCritereMoments(myBeam, lFirst, iCombi, Me.lCalculPlastic, lClasse3, MEd, SigmaELU, MplRd)
 
-                '# Vérification sous effort tranchant
+    '            '# Vérification sous effort tranchant
 
-                If myBeam.Param.lElasticDesignVM Then
-                    '# Vérification élastique du cisaillement dans l'âme du profilé
-                    Me.RunCritereCisaillementElastic(myBeam, iCombi, TauELU)
-                    '# Contrainte equivalente de VM
-                    Me.RunCritereInteractionMVElastiqueVonMises(myBeam, iCombi, SigmaELU, TauELU)
-                Else
-                    '# Critère de résistance plastique
-                    Me.RunCritereTranchants(myBeam, iCombi, VEd, VplRd)
-                End If
+    '            If myBeam.Param.lElasticDesignVM Then
+    '                '# Vérification élastique du cisaillement dans l'âme du profilé
+    '                Me.RunCritereCisaillementElastic(myBeam, iCombi, TauELU)
+    '                '# Contrainte equivalente de VM
+    '                Me.RunCritereInteractionMVElastiqueVonMises(myBeam, iCombi, SigmaELU, TauELU)
+    '            Else
+    '                '# Critère de résistance plastique
+    '                Me.RunCritereTranchants(myBeam, iCombi, VEd, VplRd)
+    '            End If
 
-                '# Vérification du voilement par cisaillement
+    '            '# Vérification du voilement par cisaillement
 
-                If Me.ShearB.lCheckRequired Then _
-                    Me.RunCritereVoilementCisaillement(myBeam, iCombi, VEd, VbRd)
+    '            If Me.ShearB.lCheckRequired Then _
+    '                Me.RunCritereVoilementCisaillement(myBeam, iCombi, VEd, VbRd)
 
-                '# En fonction de l'élancement de l'âme (à voir ce que l'on fait pour le cas du calcul élastique VM)
+    '            '# En fonction de l'élancement de l'âme (à voir ce que l'on fait pour le cas du calcul élastique VM)
 
-                If Me.ShearB.lCheckRequired Or Not (lCalculPlastic) Then
+    '            If Me.ShearB.lCheckRequired Or Not (lCalculPlastic) Then
 
-                    '# Calcul des moments plastiques  MfRd
-                    Me.MaillageProprietesMfRd(myBeam, MEd, DeltaRd, Beff, MfRd)
+    '                '# Calcul des moments plastiques  MfRd
+    '                Me.MaillageProprietesMfRd(myBeam, MEd, DeltaRd, Beff, MfRd)
 
-                    '# Interaction MV pour le voilement par cisaillement
-                    Me.RunCritereInteractionMVoilementCisaillement(myBeam, iCombi, MEd, VEd, VbRd, MplRd, MfRd)
+    '                '# Interaction MV pour le voilement par cisaillement
+    '                Me.RunCritereInteractionMVoilementCisaillement(myBeam, iCombi, MEd, VEd, VbRd, MplRd, MfRd)
 
-                Else
+    '            Else
 
-                    '# Calcul du critère d'interaction rhoV
+    '                '# Calcul du critère d'interaction rhoV
 
-                    Me.CalculRhoV(iCombi, myBeam)
+    '                Me.CalculRhoV(iCombi, myBeam)
 
-                    '# Calcul des propriétés plastiques le long de la barre,
-                    ' avec prise en compte de la connection,
-                    ' sans prise en compte de la réduction induit par l'effort tranchant 
+    '                '# Calcul des propriétés plastiques le long de la barre,
+    '                ' avec prise en compte de la connection,
+    '                ' sans prise en compte de la réduction induit par l'effort tranchant 
 
-                    Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANPMV, MVRd, Me.RhoV)
+    '                Me.MaillageProprietesPlastiques(iCombi, myBeam, MEd, DeltaRd, Beff, zANPMV, MVRd, Me.RhoV)
 
-                    '# Vérification sous interaction MV
+    '                '# Vérification sous interaction MV
 
-                    Me.RunCriteresInteractionMV(myBeam, iCombi, MEd, MVRd)
-                End If
+    '                Me.RunCriteresInteractionMV(myBeam, iCombi, MEd, MVRd)
+    '            End If
 
-                '# Calcul des soudures des PRS
+    '            '# Calcul des soudures des PRS
 
-                If lproPRS Then
-                    Me.RunDimensionSouduresAmeSemelle(myBeam, iCombi, FluxELU, Me.GorgesSoudures)
-                End If
+    '            If lproPRS Then
+    '                Me.RunDimensionSouduresAmeSemelle(myBeam, iCombi, FluxELU, Me.GorgesSoudures)
+    '            End If
 
-            Next
+    '        Next
 
-            '# Doit on refaire un boucle sur les combinaisons
+    '        '# Doit on refaire un boucle sur les combinaisons
 
-            If Me.lCalculPlastic Then
-                If lCombiClass3 Then
-                    lCont = True
-                    Me.lCalculPlastic = False
-                Else
-                    lCont = False
-                End If
-            Else
-                lCont = False
-            End If
+    '        If Me.lCalculPlastic Then
+    '            If lCombiClass3 Then
+    '                lCont = True
+    '                Me.lCalculPlastic = False
+    '            Else
+    '                lCont = False
+    '            End If
+    '        Else
+    '            lCont = False
+    '        End If
 
-        Loop
+    '    Loop
 
-        '# Calcul armatures transversales
+    '    '# Calcul armatures transversales
 
-        Me.CalculArmaturesTransversales(myBeam, 0)
+    '    Me.CalculArmaturesTransversales(myBeam, 0)
 
-    End Sub
+    'End Sub
 
     Private Sub MaillageProprietesPlastiquesN(iCombi As Integer, myBeam As cls_Poutre, MEd(,) As Decimal, DeltaRd(,) As List(Of Decimal),
                                               bEff() As Decimal, iNodeZero(,) As Integer,
@@ -2276,7 +2276,7 @@
 
 #Region " Degré de connexion "
 
-    Private Sub InitialiseDegreConnexion(iTravFin As Integer)
+    Private Sub InitialiseDegreConnexion(nbCombi As Integer, iTravFin As Integer)
         '----------------------------------------------------------------------------------------------------------
         '   14/12/23 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
@@ -2285,12 +2285,14 @@
         '   iTravFin    [E] :   Indice de la dernière travée
         '----------------------------------------------------------------------------------------------------------
 
-        ReDim DegConnex(iTravFin, 1)
+        ReDim DegConnex(nbCombi - 1, iTravFin, 1)
         ReDim DegConnexMin(iTravFin)
 
-        For i As Integer = 0 To iTravFin
-            DegConnex(i, 0) = -1
-            DegConnex(i, 1) = -1
+        For icombi As Integer = 0 To nbCombi - 1
+            For i As Integer = 0 To iTravFin
+                DegConnex(icombi, i, 0) = -1
+                DegConnex(icombi, i, 1) = -1
+            Next
         Next
 
     End Sub
@@ -2342,7 +2344,7 @@
 
             iNode = myBeam.Nodes.iNodeExtTrav(0, 1)
             Eta = DeltaRd(0, 0)(iNode) / NConnex
-            EnregistreDegreConnex(DegConnex(0, 1), Eta)
+            EnregistreDegreConnex(DegConnex(0, 0, 1), Eta)
             iNodeZero(0, 1) = 0
         End If
 
@@ -2355,7 +2357,7 @@
 
             iNode = 0 'myBeam.Nodes.iNodeExtTrav(iTravFin, 0)
             Eta = DeltaRd(iTravFin, 1)(iNode) / NConnex
-            EnregistreDegreConnex(DegConnex(iTravFin, 1), Eta)
+            EnregistreDegreConnex(DegConnex(0, iTravFin, 1), Eta)
             iNodeZero(iTravFin, 0) = myBeam.Nodes.nbNodes - 1
         End If
 
@@ -2385,7 +2387,7 @@
                 Loop
 
                 Eta = DeltaRd(iTravee, 0)(iReq) / NConnex
-                EnregistreDegreConnex(DegConnex(iTravee, 1), Eta)
+                EnregistreDegreConnex(DegConnex(0, iTravee, 1), Eta)
                 iNodeZero(iTravee, 0) = iNode0 + iReq
             Else
                 iNodeZero(iTravee, 0) = iNode0
@@ -2412,7 +2414,7 @@
                 Loop
 
                 Eta = DeltaRd(iTravee, 1)(iReq) / NConnex
-                EnregistreDegreConnex(DegConnex(iTravee, 1), Eta)
+                EnregistreDegreConnex(DegConnex(0, iTravee, 1), Eta)
                 iNodeZero(iTravee, 1) = iNode0 + nbNodesT - 1 - iReq
             Else
                 iNodeZero(iTravee, 1) = iNode0 + nbNodesT - 1
@@ -2423,15 +2425,17 @@
     End Sub
 
     Private Sub CheckDegreConnexionMPlus(myBeam As cls_Poutre, DeltaRd(,) As List(Of Decimal),
-                                         iNodeMmax() As Integer, iNodeZero(,) As Integer)
+                                         iNodeMmax() As Integer, iNodeZero(,) As Integer, iCombi As Integer)
         '----------------------------------------------------------------------------------------------------------
         '   21/08/24 :  Création - POM
         '----------------------------------------------------------------------------------------------------------
         '   Vérification aux ELU d'une poutre mixte acier béton - degré de connexion des zones en moment > 0
         '----------------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :
         '   DeltaRd     [E] :   Somme des PRd entre les points du maillage et les appuis
         '   iNodeMMax   [E] :   Indice des noeuds de moment >0 max
-        '   iNodeZero   [S] :   Indice des noeuds de travées sur 2 appuis à partir desquels on peut utiliser les connecteurs pour le moment >0
+        '   iNodeZero   [E] :   Indice des noeuds de travées sur 2 appuis à partir desquels on peut utiliser les connecteurs pour le moment >0
+        '   iCombi      [E] :   Indice de la combinaison
         '----------------------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -2489,7 +2493,7 @@
 
             Eta = Math.Min(RConnexG, RConnexD) / NConnex
 
-            EnregistreDegreConnex(DegConnex(iTravee, 0), Eta)
+            EnregistreDegreConnex(DegConnex(iCombi, iTravee, 0), Eta)
 
             '---| Degré de connexion mini en zone de moment positif
             Le = myBeam.LongueurTravee(iTravee)
@@ -2501,161 +2505,162 @@
 
     End Sub
 
-    Private Sub CheckDegreConnexion(MyPoutre As cls_Poutre, DeltaRd() As List(Of Decimal), iNodeMmax() As Integer)
-        '----------------------------------------------------------------------------------------------------------
-        '   05/10/23 :  Création - POM
-        '----------------------------------------------------------------------------------------------------------
-        '   Vérification aux ELU d'une poutre mixte acier béton - dégré de connexion
-        '----------------------------------------------------------------------------------------------------------
-        '   DeltaRd     [E] :   Somme des PRd entre les points du maillage et les points de moments nuls
-        '   iNodeMMax   [E] :   Indice des neouds de moment >0 max
-        '   DegConnex   [E] :   Degré de connexion, par travée, en moment >0 et moment <0
-        '----------------------------------------------------------------------------------------------------------
+    'Private Sub CheckDegreConnexion(MyPoutre As cls_Poutre, DeltaRd() As List(Of Decimal), iNodeMmax() As Integer)
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   05/10/23 :  Création - POM
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   Vérification aux ELU d'une poutre mixte acier béton - dégré de connexion
+    '    '----------------------------------------------------------------------------------------------------------
+    '    '   DeltaRd     [E] :   Somme des PRd entre les points du maillage et les points de moments nuls
+    '    '   iNodeMMax   [E] :   Indice des neouds de moment >0 max
+    '    '   DegConnex   [E] :   Degré de connexion, par travée, en moment >0 et moment <0
+    '    '----------------------------------------------------------------------------------------------------------
 
-        '--> Déclaration
+    '    '--> Déclaration
 
-        Dim NArmaDalle, NDalle, NProfile, NEnrobage, NArmaEnrobage As Decimal
-        Dim NConnex As Decimal
-        Dim iNode, iNode0 As Integer
-        Dim Beff As Decimal
-        Dim lSimple As Decimal = MyPoutre.Param.lLargeurEfficaceSimplifiee
-        Dim gammaS As Decimal = MyPoutre.Param.Gamma.GammaS
-        Dim gammaM0 As Decimal = MyPoutre.Param.Gamma.GammaM0
-        Dim gammaC As Decimal = MyPoutre.Param.Gamma.GammaC
-        Dim iTravee As Integer
-        Dim iTravDeb, iTravFin As Integer
-        Dim Fy As Decimal ' = Math.Max(myBeam)
-        Dim AfSup, AfInf As Decimal
-        Dim Le As Decimal
+    '    Dim NArmaDalle, NDalle, NProfile, NEnrobage, NArmaEnrobage As Decimal
+    '    Dim NConnex As Decimal
+    '    Dim iNode, iNode0 As Integer
+    '    Dim Beff As Decimal
+    '    Dim lSimple As Decimal = MyPoutre.Param.lLargeurEfficaceSimplifiee
+    '    Dim gammaS As Decimal = MyPoutre.Param.Gamma.GammaS
+    '    Dim gammaM0 As Decimal = MyPoutre.Param.Gamma.GammaM0
+    '    Dim gammaC As Decimal = MyPoutre.Param.Gamma.GammaC
+    '    Dim iTravee As Integer
+    '    Dim iTravDeb, iTravFin As Integer
+    '    Dim Fy As Decimal ' = Math.Max(myBeam)
+    '    Dim AfSup, AfInf As Decimal
+    '    Dim Le As Decimal
+    '    Dim Eta As Decimal
 
-        '--> Initialisation
+    '    '--> Initialisation
 
-        iTravDeb = MyPoutre.IndicePremiereTravee
-        iTravFin = MyPoutre.IndiceDerniereTravee
+    '    iTravDeb = MyPoutre.IndicePremiereTravee
+    '    iTravFin = MyPoutre.IndiceDerniereTravee
 
-        '##ZZZ A compléter dans le cas des profilés enrobés
-        NProfile = MyPoutre.Section.ResistanceTractionProfile(gammaM0)
-        If MyPoutre.Section.lEnrobage Then
-            NEnrobage = MyPoutre.Section.NResistanceCompressionEnrobage(gammaC)
-            NArmaEnrobage = MyPoutre.Section.NResistanceArmaturesEnrobage(gammaS)
-        End If
+    '    '##ZZZ A compléter dans le cas des profilés enrobés
+    '    NProfile = MyPoutre.Section.ResistanceTractionProfile(gammaM0)
+    '    If MyPoutre.Section.lEnrobage Then
+    '        NEnrobage = MyPoutre.Section.NResistanceCompressionEnrobage(gammaC)
+    '        NArmaEnrobage = MyPoutre.Section.NResistanceArmaturesEnrobage(gammaS)
+    '    End If
 
-        AfSup = MyPoutre.Section.ProfilA.AireFs
-        AfInf = MyPoutre.Section.ProfilA.AireFi
-        Fy = Math.Max(MyPoutre.Section.FySup, MyPoutre.Section.FyInf)
+    '    AfSup = MyPoutre.Section.ProfilA.AireFs
+    '    AfInf = MyPoutre.Section.ProfilA.AireFi
+    '    Fy = Math.Max(MyPoutre.Section.FySup, MyPoutre.Section.FyInf)
 
-        '--> Boucle sur les travées
+    '    '--> Boucle sur les travées
 
-        '# Travée console gauche (moment négatif)
+    '    '# Travée console gauche (moment négatif)
 
-        If MyPoutre.lTraveeConsoleGauche Then
-            iNode = MyPoutre.Nodes.iNodeExtTrav(0, 1)
-            Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(0), 0, lSimple, False)
-            NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-            NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
-            DegConnex(0, 1) = DeltaRd(0)(iNode) / NConnex
-            EnregistreDegreConnex(DegConnex(0, 1), DeltaRd(0)(iNode) / NConnex)
-            DegConnex(0, 0) = -1
-        End If
+    '    If MyPoutre.lTraveeConsoleGauche Then
+    '        iNode = MyPoutre.Nodes.iNodeExtTrav(0, 1)
+    '        Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(0), 0, lSimple, False)
+    '        NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+    '        NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
+    '        Eta = DeltaRd(0)(iNode) / NConnex
+    '        EnregistreDegreConnex(DegConnex(0, 0, 1), eta)
+    '        DegConnex(0, 0, 0) = -1
+    '    End If
 
-        '# Travée console droite (moment négatif)
+    '    '# Travée console droite (moment négatif)
 
-        If MyPoutre.lTraveeConsoleDroite Then
+    '    If MyPoutre.lTraveeConsoleDroite Then
 
-            iNode = MyPoutre.Nodes.iNodeExtTrav(iTravFin, 0)
-            Beff = MyPoutre.BeffDalle(0, iTravFin, lSimple, False)
-            NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-            NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
-            DegConnex(iTravFin, 1) = DeltaRd(iTravFin)(0) / NConnex
-            EnregistreDegreConnex(DegConnex(iTravFin, 1), DeltaRd(iTravFin)(0) / NConnex)
-            DegConnex(iTravFin, 0) = -1
-        End If
+    '        iNode = MyPoutre.Nodes.iNodeExtTrav(iTravFin, 0)
+    '        Beff = MyPoutre.BeffDalle(0, iTravFin, lSimple, False)
+    '        NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+    '        NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
+    '        Eta = DeltaRd(iTravFin)(0) / NConnex
+    '        EnregistreDegreConnex(DegConnex(0, iTravFin, 1), Eta)
+    '        DegConnex(0, iTravFin, 0) = -1
+    '    End If
 
-        '# Boucle sur les travées intermédiaires
+    '    '# Boucle sur les travées intermédiaires
 
-        Dim nbNodesT As Integer
-        Dim iReqG, iReqD As Integer
-        Dim lCont As Boolean
-        Dim RConnexG, RConnexD As Decimal
+    '    Dim nbNodesT As Integer
+    '    Dim iReqG, iReqD As Integer
+    '    Dim lCont As Boolean
+    '    Dim RConnexG, RConnexD As Decimal
 
-        For iTravee = 1 To MyPoutre.NombreTraveesDeuxAppuis
-            iNode0 = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
-            nbNodesT = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1) - iNode0 + 1
+    '    For iTravee = 1 To MyPoutre.NombreTraveesDeuxAppuis
+    '        iNode0 = MyPoutre.Nodes.iNodeExtTrav(iTravee, 0)
+    '        nbNodesT = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1) - iNode0 + 1
 
-            '# Appui gauche ###################################################################################
+    '        '# Appui gauche ###################################################################################
 
-            If iTravee > iTravDeb Then
-                '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
-                Beff = MyPoutre.BeffDalle(0, iTravee, lSimple, False)
-                NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-                NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
+    '        If iTravee > iTravDeb Then
+    '            '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
+    '            Beff = MyPoutre.BeffDalle(0, iTravee, lSimple, False)
+    '            NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+    '            NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
 
-                ''## Nombre de noeuds requis pour connexion totale sur appui
-                'lCont = True
-                'iReqG = 0
-                'Do While lCont
-                '    iReqG += 1
-                '    lCont = (IsGreaterOrEqual(DeltaRd(iTravee)(iReqG), NConnex)) And (iReqG < (iNodeMmax(iTravee) - iNode0))
-                'Loop
+    '            ''## Nombre de noeuds requis pour connexion totale sur appui
+    '            'lCont = True
+    '            'iReqG = 0
+    '            'Do While lCont
+    '            '    iReqG += 1
+    '            '    lCont = (IsGreaterOrEqual(DeltaRd(iTravee)(iReqG), NConnex)) And (iReqG < (iNodeMmax(iTravee) - iNode0))
+    '            'Loop
 
-                'DegConnex(iTravee, 1) = DeltaRd(iTravee)(iReqG) / NConnex
-                DegConnex(iTravee, 1) = DeltaRd(iTravee)(0)
-                EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(0) / NConnex)
-            End If
+    '            'DegConnex(iTravee, 1) = DeltaRd(iTravee)(iReqG) / NConnex
+    '            DegConnex(iTravee, 1) = DeltaRd(iTravee)(0)
+    '            EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(0) / NConnex)
+    '        End If
 
-            '# Appui droite ####################################################################################
+    '        '# Appui droite ####################################################################################
 
-            If iTravee < iTravFin Then
-                '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
-                iNode = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
-                Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(iTravee), iTravee, lSimple, False)
-                NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
-                NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
+    '        If iTravee < iTravFin Then
+    '            '# Cas d'un appui gauche avec continuité => On suppose un moment négatif
+    '            iNode = MyPoutre.Nodes.iNodeExtTrav(iTravee, 1)
+    '            Beff = MyPoutre.BeffDalle(MyPoutre.LongueurTravee(iTravee), iTravee, lSimple, False)
+    '            NArmaDalle = MyPoutre.Dalle.NResistanceArmatures(Beff, gammaS)
+    '            NConnex = Math.Min(NArmaDalle, NProfile + NEnrobage)
 
-                '## Nombre de noeuds requis pour connexion totale sur appui
-                lCont = True
-                iReqD = nbNodesT
-                Do While lCont
-                    iReqD -= 1
-                    lCont = (IsGreaterOrEqual(DeltaRd(iTravee)(iReqD), NConnex)) And (iReqD > (iNodeMmax(iTravee) - iNode0))
-                Loop
+    '            '## Nombre de noeuds requis pour connexion totale sur appui
+    '            lCont = True
+    '            iReqD = nbNodesT
+    '            Do While lCont
+    '                iReqD -= 1
+    '                lCont = (IsGreaterOrEqual(DeltaRd(iTravee)(iReqD), NConnex)) And (iReqD > (iNodeMmax(iTravee) - iNode0))
+    '            Loop
 
-                'If (iTravee > iTravDeb) Then
-                '    DegConnex(iTravee, 1) = Math.Min(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
-                'Else
-                '    DegConnex(iTravee, 1) = DeltaRd(iTravee)(iNode - iNode0) / NConnex
-                'End If
+    '            'If (iTravee > iTravDeb) Then
+    '            '    DegConnex(iTravee, 1) = Math.Min(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
+    '            'Else
+    '            '    DegConnex(iTravee, 1) = DeltaRd(iTravee)(iNode - iNode0) / NConnex
+    '            'End If
 
-                DegConnex(iTravee, 1) = DeltaRd(iTravee)(iReqD) / NConnex
+    '            DegConnex(iTravee, 1) = DeltaRd(iTravee)(iReqD) / NConnex
 
-                EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
-            End If
+    '            EnregistreDegreConnex(DegConnex(iTravee, 1), DeltaRd(iTravee)(iNode - iNode0) / NConnex)
+    '        End If
 
-            '# En travée ######################################################################################
+    '        '# En travée ######################################################################################
 
-            '---| Degré de connexion en zone de moment positif
-            Beff = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(iNodeMmax(iTravee)), iTravee, lSimple, False)
-            NDalle = MyPoutre.Dalle.NResistanceCompressionDalle(Beff, gammaC)
-            NConnex = Math.Min(NDalle, NProfile + NArmaEnrobage)
+    '        '---| Degré de connexion en zone de moment positif
+    '        Beff = MyPoutre.BeffDalle(MyPoutre.Nodes.xTravee(iNodeMmax(iTravee)), iTravee, lSimple, False)
+    '        NDalle = MyPoutre.Dalle.NResistanceCompressionDalle(Beff, gammaC)
+    '        NConnex = Math.Min(NDalle, NProfile + NArmaEnrobage)
 
-            '----> Résistance de la connexion disponible à gauche et à droite
-            RConnexG = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) - DeltaRd(iTravee)(iReqG)
-            RConnexD = DeltaRd(iTravee)(iReqD) - DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) - DeltaRd(iTravee)(iReqG)
+    '        '----> Résistance de la connexion disponible à gauche et à droite
+    '        RConnexG = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) - DeltaRd(iTravee)(iReqG)
+    '        RConnexD = DeltaRd(iTravee)(iReqD) - DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) - DeltaRd(iTravee)(iReqG)
 
-            '----> Degré de connexion
-            'DegConnex(iTravee, 0) = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex
-            DegConnex(iTravee, 0) = Math.Min(RConnexG, RConnexD) / NConnex
+    '        '----> Degré de connexion
+    '        'DegConnex(iTravee, 0) = DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex
+    '        DegConnex(iTravee, 0) = Math.Min(RConnexG, RConnexD) / NConnex
 
-            EnregistreDegreConnex(DegConnex(iTravee, 0), DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex)
+    '        EnregistreDegreConnex(DegConnex(iTravee, 0), DeltaRd(iTravee)(iNodeMmax(iTravee) - iNode0) / NConnex)
 
-            '---| Degré de connexion mini en zone de moment positif
-            Le = MyPoutre.LongueurTravee(iTravee)
-            If iTravee > iTravDeb Then Le -= 0.15 * Le
-            If iTravee < iTravFin Then Le -= 0.15 * Le
-            DegConnexMin(iTravee) = Me.EtaMinFlanges(Fy, Le, AfSup, AfInf)
+    '        '---| Degré de connexion mini en zone de moment positif
+    '        Le = MyPoutre.LongueurTravee(iTravee)
+    '        If iTravee > iTravDeb Then Le -= 0.15 * Le
+    '        If iTravee < iTravFin Then Le -= 0.15 * Le
+    '        DegConnexMin(iTravee) = Me.EtaMinFlanges(Fy, Le, AfSup, AfInf)
 
-        Next
-    End Sub
+    '    Next
+    'End Sub
 
     Private Sub EnregistreDegreConnex(ByRef ValTable As Decimal, ValCalcul As Decimal)
         '----------------------------------------------------------------------------------------------------------
@@ -2777,6 +2782,32 @@
         Eta = EtaEqualF + (EtaInEqualF - EtaEqualF) / 2 * (RatioAire - 1)
         Return Eta
     End Function
+
+    Public Function EtaEnveloppe(nbCombi As Integer, iTravee As Integer) As Decimal
+        '----------------------------------------------------------------------------------------------------------------
+        '   22/08/24 :  Création - POM
+        '----------------------------------------------------------------------------------------------------------------
+        '   Extrait le degré de connexion de la poutre le plus défavorable
+        '   Uniquement en moment > 0
+        '----------------------------------------------------------------------------------------------------------------
+        '   nbCombi     [E] :   Nombre de combinaisons ELU traitée
+        '   iTravee     [E] :   Indice de la travée
+        '----------------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim Eta As Decimal = Me.DegConnex(0, iTravee, 0)
+
+        '--( Boucle sur les combinaisons
+
+        For iCombi As Integer = 1 To nbCombi - 1
+            Eta = Math.Min(Eta, Me.DegConnex(iCombi, iTravee, 0))
+        Next
+
+        Return Eta
+
+    End Function
+
 
 #End Region
 

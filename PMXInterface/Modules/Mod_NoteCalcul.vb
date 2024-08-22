@@ -642,6 +642,9 @@ Module Mod_NoteCalcul
         Dim SigneM As Integer
 
         Dim tabSigneM() As Integer = {-1, 1, -1}
+        Dim Eta As Decimal
+
+        Dim nbCombi As Integer = myBeam.CombiA_ELU.nbCombi
 
         '--( Traitement
 
@@ -667,12 +670,14 @@ Module Mod_NoteCalcul
 
                 If iTravee = 1 Then
                     DegreMin = myBeam.VerifMixte(iVerif).DegConnexMin(iTravee)
+                    Eta = myBeam.VerifMixte(iVerif).EtaEnveloppe(nbCombi, iTravee)
                 Else
                     DegreMin = 1
+                    Eta = myBeam.VerifMixte(iVerif).DegConnex(0, iTravee, 1)
                 End If
                 SigneM = tabSigneM(iTravee)
 
-                AfficheCritereRptProjetDegreConnexion(myBeam.VerifMixte(iVerif).DegConnex(iTravee, iSigne), DegreMin,
+                AfficheCritereRptProjetDegreConnexion(Eta, DegreMin,
                                                       iTravee, SigneM, myTabC(iTravee - indDeb), iTravee = indFin)
             Next
 
@@ -811,13 +816,12 @@ Module Mod_NoteCalcul
 
     End Sub
 
-
     Private Sub AfficheCritereRptProjetDegreConnexion(DegreC As Decimal, DegreMin As Decimal, iTravee As Integer, SigneM As Integer,
                                                       myTab As String, Optional lRetour As Boolean = True)
         '----------------------------------------------------------------------------------------------
         '   13/08/24 :  Création - Version 1.00 - POM
         '----------------------------------------------------------------------------------------------
-        '   Affichage d'un critère (ELU) dans la note de synthèse du projet
+        '   Affichage du critère de degré de connexion dans la note de synthèse du projet
         '----------------------------------------------------------------------------------------------
         '   DegreC      [E] :   Degre de connexion
         '   DegreMin    [E] :   Degre minimal de connexion
@@ -7298,12 +7302,15 @@ Module Mod_NoteCalcul
         Dim iDebTrav, iFinTrav As Integer
         Dim lMulti As Boolean
         Const TVAR1 As String = "\T20"
+        Dim Eta As Decimal
+        Dim nbCombi As Integer
 
         '--> Initialisations
 
         iDebTrav = MyBeam.IndicePremiereTravee
         iFinTrav = MyBeam.IndiceDerniereTravee
         lMulti = (iFinTrav > iDebTrav)
+        nbCombi = MyBeam.CombiA_ELU.nbCombi
 
         '--> Traitement
 
@@ -7316,7 +7323,7 @@ Module Mod_NoteCalcul
 
             AddLigneNDC(TVAR1 & "\U" & BlocG("LEFTCANTILEVER") & "\u")
 
-            AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(0, 1), 1, -1)
+            AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(0, 0, 1), 1, -1)
 
         End If
 
@@ -7332,9 +7339,10 @@ Module Mod_NoteCalcul
                 End If
             End If
 
-            AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(iTravee, 0), MyBeam.VerifMixte(iVerif).DegConnexMin(iTravee), 1)
+            Eta = MyBeam.VerifMixte(iVerif).EtaEnveloppe(nbCombi, iTravee)
+            AfficheDegreConnexion(Eta, MyBeam.VerifMixte(iVerif).DegConnexMin(iTravee), 1)
             If lMulti Then
-                AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(iTravee, 1), 1, -1)
+                AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(0, iTravee, 1), 1, -1)
             End If
         Next
 
@@ -7344,7 +7352,7 @@ Module Mod_NoteCalcul
 
             AddLigneNDC(TVAR1 & "\U" & BlocG("RIGHTCANTILEVER") & "\u")
 
-            AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(iFinTrav, 1), 1, -1)
+            AfficheDegreConnexion(MyBeam.VerifMixte(iVerif).DegConnex(0, iFinTrav, 1), 1, -1)
 
         End If
 
