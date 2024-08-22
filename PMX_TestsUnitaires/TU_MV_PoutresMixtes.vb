@@ -16,7 +16,7 @@ Imports PMXMoteur2
 
     <TestMethod()> Public Sub TU_MV_TESTC01_RCM_2018_2()
 
-        'Cas test issu de la revue RCM (2008-2):
+        'Cas test issu de la revue RCM (2018-2):
         'Correspondant au test 01 du MV
         '
         '"Calcul d'une poutre mixte sur appuis simples suivant l'EN 1994-1-1"
@@ -181,8 +181,8 @@ Imports PMXMoteur2
 
         '# VERIFICATION DE LA POUTRE 
 
-        myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True) 'Poutre seul durant la phase de construction
-        myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre) 'Poutre mixte
+        myPoutre.VerifAcier(0).Z_VerificationELU(myPoutre, True)    'Vérification Poutrelle acier seule durant la phase de construction
+        myPoutre.VerifMixte(0).Z_VerificationELU(myPoutre)          'Vérification Poutre mixte
 
 #End Region
 
@@ -277,6 +277,7 @@ Imports PMXMoteur2
 
         Valeur = myPoutre.VerifMixte(0).DegConnex(myPoutre.IndicePremiereTravee, 0)
         ValRef = 1 * (7 / 0.207) * 52.516 * 1000 / (2636 * 1000) '= 0.674
+        ValRef = 67 * 52.92 / 2 / 2635
 
         '/!\ J'ai corrigé la valeur de l'article car la valeur de PRd n'est pas exactement la même du fait que la valeur de Ecm n'est pas identique
         '   (31 GPa dans l'article est directement calculée dans le logiciel) + la valeur du nombre de connecteurs n'est pas identique non plus (arrondi au premier entier inférieur dans 

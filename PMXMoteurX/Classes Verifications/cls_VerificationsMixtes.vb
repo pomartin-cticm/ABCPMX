@@ -1332,7 +1332,7 @@
 
                 b0 = (nr - 1) * b0min
 
-                myBeam.BeffDalle(myBeam.LongueurTravee(i_travee) / 2, i_travee, False, False, cls_Poutre.EnuTypeLargeurParticipante.LargeurTotale, LargeurParticipante)
+                myBeam.BeffDalle(myBeam.LongueurTravee(i_travee) / 2, i_travee, False, False, cls_Poutre.EnuTypeLargeurParticipante.Totale, LargeurParticipante)
 
                 'Calcul de hf qui correspond à la longueur developpe de la surface de ruine 
                 hf_aa = myBeam.Dalle.EpaisseurActive

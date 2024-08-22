@@ -64,7 +64,6 @@ Partial Class Frm_PMX
         Me.TSbtn_NdcPoutre = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_OptionsIncendie = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
-        Me.ToolStripSeparator8 = New System.Windows.Forms.ToolStripSeparator()
         Me.TSbtn_PostT = New System.Windows.Forms.ToolStripSplitButton()
         Me.TSmenuPPLargeurEfficace = New System.Windows.Forms.ToolStripMenuItem()
         Me.TSmenuPPChargements = New System.Windows.Forms.ToolStripMenuItem()
@@ -85,8 +84,9 @@ Partial Class Frm_PMX
         Me.TSbtn_Cotations = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_CopieImage = New System.Windows.Forms.ToolStripButton()
         Me.sep_bas_2 = New System.Windows.Forms.ToolStripSeparator()
-        Me.TSbtn_ExpertMode = New System.Windows.Forms.ToolStripButton()
         Me.TSbtn_Maitre = New System.Windows.Forms.ToolStripButton()
+        Me.sep_bas_3 = New System.Windows.Forms.ToolStripSeparator()
+        Me.TSbtn_ExpertMode = New System.Windows.Forms.ToolStripButton()
         Me.TLpan_OrganisationMenuBO = New System.Windows.Forms.TableLayoutPanel()
         Me.img_Logo = New System.Windows.Forms.PictureBox()
         Me.TLPan_Menus = New System.Windows.Forms.TableLayoutPanel()
@@ -153,7 +153,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu = New System.Windows.Forms.ImageList(Me.components)
         Me.OpenFileDialog_Project = New System.Windows.Forms.OpenFileDialog()
         Me.SaveFileDialog_Project = New System.Windows.Forms.SaveFileDialog()
-        Me.sep_bas_3 = New System.Windows.Forms.ToolStripSeparator()
         Me.TLPan_Main.SuspendLayout()
         CType(Me.Split_Main, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Split_Main.Panel1.SuspendLayout()
@@ -351,7 +350,7 @@ Partial Class Frm_PMX
         Me.ToolStrip_Poutre.GripMargin = New System.Windows.Forms.Padding(0)
         Me.ToolStrip_Poutre.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
         Me.ToolStrip_Poutre.ImageScalingSize = New System.Drawing.Size(24, 24)
-        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_DalleSlimFloor, Me.TSbtn_SectionA, Me.TSbtn_SectionSFB, Me.TSbtn_SectionIFB, Me.TSbtn_SectionSAB, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.TSbtn_ConnexionSlimfloor, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.TSbtn_MaintienBac, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.ToolStripSeparator5, Me.TSbtn_OptionsCalculPoutre, Me.TSbtn_Hivoss, Me.TSbtn_NdcPoutre, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.ToolStripSeparator8, Me.TSbtn_PostT, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PPVerifications})
+        Me.ToolStrip_Poutre.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.TSbtn_Identification, Me.ToolStripSeparator27, Me.TSbtn_Portees, Me.ToolStripSeparator30, Me.TSbtn_Dalle, Me.TSbtn_DalleN, Me.TSbtn_DalleSlimFloor, Me.TSbtn_SectionA, Me.TSbtn_SectionSFB, Me.TSbtn_SectionIFB, Me.TSbtn_SectionSAB, Me.TSbtn_Enrobage, Me.TSbtn_Connexion, Me.TSbtn_ConnexionSlimfloor, Me.ToolStripSeparator31, Me.TSbtn_Maintiens, Me.TSbtn_Etaiement, Me.TSbtn_MaintienBac, Me.ToolStripSeparator32, Me.TSbtn_Chargements, Me.TSbtn_Gamma, Me.TSbtn_Combinaisons, Me.ToolStripSeparator5, Me.TSbtn_OptionsCalculPoutre, Me.TSbtn_Hivoss, Me.TSbtn_NdcPoutre, Me.TSbtn_OptionsIncendie, Me.ToolStripSeparator1, Me.TSbtn_PostT, Me.TSbtn_PPLargeurEfficace, Me.TSbtn_PPLoadCases, Me.TSbtn_PPCombi, Me.TSbtn_PPVerifications})
         Me.ToolStrip_Poutre.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip_Poutre.Name = "ToolStrip_Poutre"
         Me.ToolStrip_Poutre.Padding = New System.Windows.Forms.Padding(3, 0, 1, 0)
@@ -589,11 +588,6 @@ Partial Class Frm_PMX
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(6, 31)
         '
-        'ToolStripSeparator8
-        '
-        Me.ToolStripSeparator8.Name = "ToolStripSeparator8"
-        Me.ToolStripSeparator8.Size = New System.Drawing.Size(6, 31)
-        '
         'TSbtn_PostT
         '
         Me.TSbtn_PostT.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
@@ -608,42 +602,42 @@ Partial Class Frm_PMX
         '
         Me.TSmenuPPLargeurEfficace.Image = CType(resources.GetObject("TSmenuPPLargeurEfficace.Image"), System.Drawing.Image)
         Me.TSmenuPPLargeurEfficace.Name = "TSmenuPPLargeurEfficace"
-        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPLargeurEfficace.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPLargeurEfficace.Text = "Largeur efficace"
         '
         'TSmenuPPChargements
         '
         Me.TSmenuPPChargements.Image = CType(resources.GetObject("TSmenuPPChargements.Image"), System.Drawing.Image)
         Me.TSmenuPPChargements.Name = "TSmenuPPChargements"
-        Me.TSmenuPPChargements.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPChargements.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPChargements.Text = "Chargements"
         '
         'TSmenuPPCombinaisons
         '
         Me.TSmenuPPCombinaisons.Image = CType(resources.GetObject("TSmenuPPCombinaisons.Image"), System.Drawing.Image)
         Me.TSmenuPPCombinaisons.Name = "TSmenuPPCombinaisons"
-        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPCombinaisons.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPCombinaisons.Text = "Combinaisons"
         '
         'TSmenuPPVerifications
         '
         Me.TSmenuPPVerifications.Image = CType(resources.GetObject("TSmenuPPVerifications.Image"), System.Drawing.Image)
         Me.TSmenuPPVerifications.Name = "TSmenuPPVerifications"
-        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPVerifications.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPVerifications.Text = "Vérifications"
         '
         'TSmenuPPModePropre
         '
         Me.TSmenuPPModePropre.Image = CType(resources.GetObject("TSmenuPPModePropre.Image"), System.Drawing.Image)
         Me.TSmenuPPModePropre.Name = "TSmenuPPModePropre"
-        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(158, 22)
+        Me.TSmenuPPModePropre.Size = New System.Drawing.Size(188, 30)
         Me.TSmenuPPModePropre.Text = "Mode propre"
         '
         'TSMenuPP_Hivoss
         '
         Me.TSMenuPP_Hivoss.Image = CType(resources.GetObject("TSMenuPP_Hivoss.Image"), System.Drawing.Image)
         Me.TSMenuPP_Hivoss.Name = "TSMenuPP_Hivoss"
-        Me.TSMenuPP_Hivoss.Size = New System.Drawing.Size(158, 22)
+        Me.TSMenuPP_Hivoss.Size = New System.Drawing.Size(188, 30)
         Me.TSMenuPP_Hivoss.Text = "Hivoss"
         '
         'TSbtn_PPLargeurEfficace
@@ -756,15 +750,6 @@ Partial Class Frm_PMX
         Me.sep_bas_2.Name = "sep_bas_2"
         Me.sep_bas_2.Size = New System.Drawing.Size(6, 31)
         '
-        'TSbtn_ExpertMode
-        '
-        Me.TSbtn_ExpertMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
-        Me.TSbtn_ExpertMode.Image = CType(resources.GetObject("TSbtn_ExpertMode.Image"), System.Drawing.Image)
-        Me.TSbtn_ExpertMode.ImageTransparentColor = System.Drawing.Color.Magenta
-        Me.TSbtn_ExpertMode.Name = "TSbtn_ExpertMode"
-        Me.TSbtn_ExpertMode.Size = New System.Drawing.Size(28, 28)
-        Me.TSbtn_ExpertMode.Text = "ToolStripButton1"
-        '
         'TSbtn_Maitre
         '
         Me.TSbtn_Maitre.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
@@ -773,6 +758,20 @@ Partial Class Frm_PMX
         Me.TSbtn_Maitre.Name = "TSbtn_Maitre"
         Me.TSbtn_Maitre.Size = New System.Drawing.Size(80, 28)
         Me.TSbtn_Maitre.Text = "TSbtn_Maitre"
+        '
+        'sep_bas_3
+        '
+        Me.sep_bas_3.Name = "sep_bas_3"
+        Me.sep_bas_3.Size = New System.Drawing.Size(6, 31)
+        '
+        'TSbtn_ExpertMode
+        '
+        Me.TSbtn_ExpertMode.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.TSbtn_ExpertMode.Image = CType(resources.GetObject("TSbtn_ExpertMode.Image"), System.Drawing.Image)
+        Me.TSbtn_ExpertMode.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.TSbtn_ExpertMode.Name = "TSbtn_ExpertMode"
+        Me.TSbtn_ExpertMode.Size = New System.Drawing.Size(28, 28)
+        Me.TSbtn_ExpertMode.Text = "ToolStripButton1"
         '
         'TLpan_OrganisationMenuBO
         '
@@ -1329,11 +1328,6 @@ Partial Class Frm_PMX
         Me.ImgList_Menu.Images.SetKeyName(1, "Enregistrer_OK")
         Me.ImgList_Menu.Images.SetKeyName(2, "EnregistrerVierge")
         '
-        'sep_bas_3
-        '
-        Me.sep_bas_3.Name = "sep_bas_3"
-        Me.sep_bas_3.Size = New System.Drawing.Size(6, 31)
-        '
         'Frm_PMX
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1500,7 +1494,6 @@ Partial Class Frm_PMX
     Friend WithEvents TSbtn_Cotations As ToolStripButton
     Friend WithEvents TSbtn_MaintienBac As ToolStripButton
     Friend WithEvents sep_bas_1 As ToolStripSeparator
-    Friend WithEvents ToolStripSeparator8 As ToolStripSeparator
     Friend WithEvents sep_bas_0 As ToolStripSeparator
     Friend WithEvents TSbtn_SectionSFB As ToolStripButton
     Friend WithEvents TSbtn_SectionSAB As ToolStripButton

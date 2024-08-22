@@ -157,9 +157,9 @@
         '--( Calcul
 
         If lAppGauche Then
-            bEff = myBeam.BeffDalle(0, 1, myBeam.Param.lLargeurEfficaceSimplifiee, True, cls_Poutre.EnuTypeLargeurParticipante.LargeurTotale)
+            bEff = myBeam.BeffDalle(0, 1, myBeam.Param.lLargeurEfficaceSimplifiee, True, cls_Poutre.EnuTypeLargeurParticipante.Totale)
         Else
-            bEff = myBeam.BeffDalle(myBeam.LongueurTravee(1), 1, myBeam.Param.lLargeurEfficaceSimplifiee, True, cls_Poutre.EnuTypeLargeurParticipante.LargeurTotale)
+            bEff = myBeam.BeffDalle(myBeam.LongueurTravee(1), 1, myBeam.Param.lLargeurEfficaceSimplifiee, True, cls_Poutre.EnuTypeLargeurParticipante.Totale)
         End If
         NeqEnrob = myBeam.Section.Enrobage.Beton.CoefficientEquivalenceCT
         NeqDalle = myBeam.Dalle.beton.CoefficientEquivalenceCT
@@ -493,7 +493,7 @@
                 Beta = {1, 0.9}
         End Select
 
-        Alpha = Me.InitialiseAlphaFactors(Nuance)
+        Alpha = Me.InitialiseAlphaFactors(pNuanceFy)
 
         '--( Calcul
 

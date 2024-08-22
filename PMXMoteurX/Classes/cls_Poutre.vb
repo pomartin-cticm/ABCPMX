@@ -34,9 +34,9 @@ Public Class cls_Poutre
     End Enum
 
     Enum EnuTypeLargeurParticipante
-        LargeurGauche
-        LargeurDroite
-        LargeurTotale
+        aGauche
+        aDroite
+        Totale
     End Enum
 
 #End Region
@@ -1405,7 +1405,7 @@ Public Class cls_Poutre
     End Property
 
     Public Function BeffDalle(xPositionSection As Decimal, i_travee As Integer, lSimplifiedModel As Boolean, lAnalysisModel As Boolean,
-                              Optional TypeLargeur As EnuTypeLargeurParticipante = EnuTypeLargeurParticipante.LargeurTotale,
+                              Optional TypeLargeur As EnuTypeLargeurParticipante = EnuTypeLargeurParticipante.Totale,
                               Optional ByRef LargeursParticipantes(,) As Decimal = Nothing) As Decimal
 
         '------------------------------------------------------------------------------------------------------------------
@@ -1506,11 +1506,11 @@ Public Class cls_Poutre
             beta_2_A = 1
 
             Select Case TypeLargeur
-                Case EnuTypeLargeurParticipante.LargeurGauche
+                Case EnuTypeLargeurParticipante.aGauche
                     beff_s_A = beta_1_A * be1_s_A
-                Case EnuTypeLargeurParticipante.LargeurDroite
+                Case EnuTypeLargeurParticipante.aDroite
                     beff_s_A = beta_2_A * be2_s_A
-                Case EnuTypeLargeurParticipante.LargeurTotale
+                Case EnuTypeLargeurParticipante.Totale
                     beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
             End Select
 
@@ -1543,11 +1543,11 @@ Public Class cls_Poutre
             beta_2_B = 1
 
             Select Case TypeLargeur
-                Case EnuTypeLargeurParticipante.LargeurGauche
+                Case EnuTypeLargeurParticipante.aGauche
                     beff_s_B = beta_1_B * be1_s_B
-                Case EnuTypeLargeurParticipante.LargeurDroite
+                Case EnuTypeLargeurParticipante.aDroite
                     beff_s_B = beta_2_B * be2_s_B
-                Case EnuTypeLargeurParticipante.LargeurTotale
+                Case EnuTypeLargeurParticipante.Totale
                     beff_s_B = beta_1_B * be1_s_B + beta_2_B * be2_s_B
             End Select
 
@@ -1618,11 +1618,11 @@ Public Class cls_Poutre
             be2_m = Math.Min(Le_m / 8, b2)
 
             Select Case TypeLargeur
-                Case EnuTypeLargeurParticipante.LargeurGauche
+                Case EnuTypeLargeurParticipante.aGauche
                     beff_m = be1_m
-                Case EnuTypeLargeurParticipante.LargeurDroite
+                Case EnuTypeLargeurParticipante.aDroite
                     beff_m = be2_m
-                Case EnuTypeLargeurParticipante.LargeurTotale
+                Case EnuTypeLargeurParticipante.Totale
                     beff_m = be1_m + be2_m
             End Select
 
@@ -1652,7 +1652,7 @@ Public Class cls_Poutre
             be2_s_A = Math.Min(Le_s_A / 8, b2)
 
             '# POM 21/08/24 : on n'applique beta pour un appui avec une console
-            If i_travee = 1 And Not Me.lTraveeConsoleGauche Then
+            If i_travee = 1 And (Not Me.lTraveeConsoleGauche) Then
                 beta_1_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be1_s_A)
                 beta_2_A = Math.Min(1, 0.55 + 0.025 * Le_s_A / be2_s_A)
             Else
@@ -1661,11 +1661,11 @@ Public Class cls_Poutre
             End If
 
             Select Case TypeLargeur
-                Case EnuTypeLargeurParticipante.LargeurGauche
+                Case EnuTypeLargeurParticipante.aGauche
                     beff_s_A = beta_1_A * be1_s_A
-                Case EnuTypeLargeurParticipante.LargeurDroite
+                Case EnuTypeLargeurParticipante.aDroite
                     beff_s_A = beta_2_A * be2_s_A
-                Case EnuTypeLargeurParticipante.LargeurTotale
+                Case EnuTypeLargeurParticipante.Totale
                     beff_s_A = beta_1_A * be1_s_A + beta_2_A * be2_s_A
             End Select
 
@@ -1695,7 +1695,7 @@ Public Class cls_Poutre
             be2_s_B = Math.Min(Le_s_B / 8, b2)
 
             '# POM 21/08/24 : on n'applique beta pour un appui avec une console
-            If (i_travee = Me.NombreTraveesDeuxAppuis) And Me.lTraveeConsoleDroite Then
+            If (i_travee = Me.NombreTraveesDeuxAppuis) And (Not Me.lTraveeConsoleDroite) Then
                 beta_1_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be1_s_B)
                 beta_2_B = Math.Min(1, 0.55 + 0.025 * Le_s_B / be2_s_B)
             Else
@@ -1704,16 +1704,15 @@ Public Class cls_Poutre
             End If
 
             Select Case TypeLargeur
-                Case EnuTypeLargeurParticipante.LargeurGauche
+                Case EnuTypeLargeurParticipante.aGauche
                     beff_s_B = beta_1_B * be1_s_B
-                Case EnuTypeLargeurParticipante.LargeurDroite
+                Case EnuTypeLargeurParticipante.aDroite
                     beff_s_B = beta_2_B * be2_s_B
-                Case EnuTypeLargeurParticipante.LargeurTotale
+                Case EnuTypeLargeurParticipante.Totale
                     beff_s_B = beta_1_B * be1_s_B + beta_2_B * be2_s_B
             End Select
 
             '----- Calcul de la largeur participante pour une section quelconque -----
-
 
             If lSimplifiedModel Then 'Modèle simplifié pour le calcul de la largeur participante
                 If lAnalysisModel Then 'Calcul de la largeur participante pour l'analyse
@@ -1722,14 +1721,27 @@ Public Class cls_Poutre
 
                     Dim epsilon As Decimal = 10 ^ (-6) 'GuD: On définit une petite valeur pour pouvoir renvoyer la valeur la plus faible entre beff_s et beff_m lorsqu'on est proche de 0.15 ou 0.85
 
-                    Select Case xPositionSection / LongueurTravee(i_travee)
-                        Case <= 0.15 + epsilon
-                            beff = beff_s_A
-                        Case >= 0.85 - epsilon
-                            beff = beff_s_B
-                        Case Else
-                            beff = beff_m
-                    End Select
+                    '#### Largeur sur appui uniquement en zone de moment négatif #### POM
+
+                    Dim RatioX As Decimal = xPositionSection / LongueurTravee(i_travee)
+
+                    If (i_travee = 1) And Me.lTraveeConsoleGauche And IsSmallerOrEqual(RatioX, 0.15, epsilon) Then
+                        beff = beff_s_A
+                    ElseIf (i_travee = Me.NombreTraveesDeuxAppuis) And Me.lTraveeConsoleDroite _
+                        And IsGreaterOrEqual(RatioX, 0.85, epsilon) Then
+                        beff = beff_s_B
+                    Else
+                        beff = beff_m
+                    End If
+
+                    'Select Case xPositionSection / LongueurTravee(i_travee)
+                    '    Case <= 0.15 + epsilon
+                    '        beff = beff_s_A
+                    '    Case >= 0.85 - epsilon
+                    '        beff = beff_s_B
+                    '    Case Else
+                    '        beff = beff_m
+                    'End Select
                 End If
 
             Else 'Modèle non simplifié
@@ -2294,7 +2306,7 @@ Public Class cls_Poutre
 
     '            b0 = (nr - 1) * b0min
 
-    '            Me.BeffDalle(Me.LongueurTravee(i_travee) / 2, i_travee, False, False, EnuTypeLargeurParticipante.LargeurTotale, LargeurParticipante)
+    '            Me.BeffDalle(Me.LongueurTravee(i_travee) / 2, i_travee, False, False, EnuTypeLargeurParticipante.Totale, LargeurParticipante)
 
     '            'Calcul de hf qui correspond à la longueur developpe de la surface de ruine 
     '            hf_aa = Me.Dalle.EpaisseurActive
@@ -3933,7 +3945,7 @@ Public Class cls_Poutre
 
         '--> Calcul des propriétés à mi-travée
 
-        Beff = Me.BeffDalle(Me.LongueurTravee(iTrav) / 2, iTrav, lSimpleM, True, cls_Poutre.EnuTypeLargeurParticipante.LargeurTotale)
+        Beff = Me.BeffDalle(Me.LongueurTravee(iTrav) / 2, iTrav, lSimpleM, True, cls_Poutre.EnuTypeLargeurParticipante.Totale)
         Tc = Me.Dalle.EpaisseurActive
         Me.Section.ProprietesElastiquesMixteMyy(1, True, Me.Param.Gamma, nEqEc, nEqDal, Beff, Me.Dalle, zANe, InertieY, MelRd)
         DeltaZ = Me.Dalle.zTop - Tc / 2 - zANe
@@ -5321,7 +5333,7 @@ Public Class cls_Poutre
     Public Function NombreGoujonTotParZone(indTravee As Integer, indZone As Integer)
         Dim resultat As Integer = 0
 
-        resultat += NombreGoujonsTransv(indTravee, indZone) * LongueurZone(indTravee, indZone) / EspacementZone(indTravee, indZone)
+        resultat += Math.Floor(NombreGoujonsTransv(indTravee, indZone) * LongueurZone(indTravee, indZone) / EspacementZone(indTravee, indZone))
 
         Return resultat
 

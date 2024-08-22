@@ -1081,6 +1081,9 @@ Public Class Frm_PMX
                 Me.TSbtn_SectionIFB.ToolTipText = strTSbtn_IFB_B
             End If
         End If
+
+        Me.TSbtn_PostT.Visible = LogicielOptions.lExpert
+
     End Sub
 
     Private Sub MAJVoletGauche()
@@ -1126,10 +1129,10 @@ Public Class Frm_PMX
             GestionLangue() 'Permet de MAJ la langue de la fenetre principale 
             GestionStyle()
             InitialiseReglagesLogiciel()
+            MAJToolBarPoutre()
         End If
 
     End Sub
-
 
     Private Sub TSbtn_OpenN_Click(sender As Object, e As EventArgs) Handles TSbtn_OpenN.Click
 
@@ -1894,6 +1897,7 @@ Public Class Frm_PMX
     Private Sub TSbtn_ExpertMode_Click(sender As Object, e As EventArgs) Handles TSbtn_ExpertMode.Click
         LogicielOptions.lExpert = Not LogicielOptions.lExpert
         Me.TSbtn_ExpertMode.Checked = LogicielOptions.lExpert
+        MAJToolBarPoutre()
     End Sub
 
     Private Sub Frm_PMX_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
