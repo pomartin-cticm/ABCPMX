@@ -2406,7 +2406,7 @@
 
                 '## Nombre de noeuds requis pour connexion totale sur appui
                 lCont = True
-                iReq = nbNodesT
+                iReq = nbNodesT - 1
                 Do While lCont
                     iReq -= 1
                     lCont = (IsSmaller(DeltaRd(iTravee, 1)(iReq), NConnex)) _
@@ -2415,7 +2415,7 @@
 
                 Eta = DeltaRd(iTravee, 1)(iReq) / NConnex
                 EnregistreDegreConnex(DegConnex(0, iTravee, 1), Eta)
-                iNodeZero(iTravee, 1) = iNode0 + nbNodesT - 1 - iReq
+                iNodeZero(iTravee, 1) = iNode0 + iReq
             Else
                 iNodeZero(iTravee, 1) = iNode0 + nbNodesT - 1
             End If

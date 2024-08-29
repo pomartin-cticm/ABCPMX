@@ -1113,18 +1113,18 @@ Public Class cls_ModeleP
 
         '--> Déclaration
 
-        Dim NArma As Decimal
+        Dim NDalle As Decimal
         Dim Tc As Decimal = myDalle.EpaisseurActive
         Dim Aire As Decimal
         Dim kPlDalle As Decimal = 0.85
 
         '--> Initialisation
 
-        NArma = myDalle.NResistanceCompressionDalle(bEff, GammaC)
+        NDalle = myDalle.NResistanceCompressionDalle(bEff, GammaC)
 
         '--> Maillage
 
-        Tc = Math.Min(NArma, DeltaPRd) / (bEff * kPlDalle * myDalle.beton.Fck * kConvMPaPa / GammaC)
+        Tc = Math.Min(NDalle, DeltaPRd) / (bEff * kPlDalle * myDalle.beton.Fck * kConvMPaPa / GammaC)
         Aire = bEff * Tc
         Me.AddMaille(Aire, Tc, myDalle.zTop - Tc / 2, 0, 1, nEqDalle, myDalle.beton.Fck, 0.85, GammaC)
 

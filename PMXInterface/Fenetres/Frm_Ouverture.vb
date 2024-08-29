@@ -83,6 +83,7 @@ Public Class Frm_Ouverture
         Frm_AjoutePP.InitialiseFromOutside()
         TabPage_NewProject.Controls.Add(Frm_AjoutePP.pan_Choix)
 
+
         '==> Ouvrir Projet
         RemplirListe_RecentFiles()
 
@@ -95,6 +96,11 @@ Public Class Frm_Ouverture
 
         Me.lbl_RecentFiles.BackColor = CouleurBackBandeaux
         Me.lbl_RecentFiles.ForeColor = CouleurForeBandeaux
+
+        Me.TLpan_OpenProject.RowStyles(6).Height = 0
+        Me.TLpan_OpenProject.RowStyles(8).Height = 0
+        Me.TLpan_OpenProject.ColumnStyles(0).Width = 0
+        Me.TLpan_OpenProject.ColumnStyles(4).Width = 0
 
     End Sub
 
@@ -238,6 +244,7 @@ Public Class Frm_Ouverture
         Frm_AjoutePP.Close()
 
     End Sub
+
 
 #End Region
 

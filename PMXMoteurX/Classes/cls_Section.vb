@@ -306,7 +306,6 @@ Public Class cls_Section
 
         End If
 
-
         '--> Recherche de l'axe neutre plastique
 
         MyModele.RechercheANP(Signe, zANP, lValeurRd)
