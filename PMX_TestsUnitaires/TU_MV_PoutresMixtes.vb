@@ -2477,7 +2477,7 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Nc,Rd à mi travée
 
         Valeur = myPoutre.VerifMixte(0).EtaEnveloppe(myPoutre.CombiA_ELU.nbCombi, 1)
-        ValRef = 0.4463
+        ValRef = 0.428
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
 #End Region
@@ -2908,7 +2908,7 @@ Imports PMXMoteur2
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaVMAx)) 'Vérification de la valeur de Nc,Rd à mi travée
 
         Valeur = myPoutre.VerifMixte(0).EtaEnveloppe(myPoutre.CombiA_ELU.nbCombi, 1)
-        ValRef = 0.4463
+        ValRef = 0.428
         Assert.IsTrue(IsEqual(Valeur, ValRef, DeltaCMAx))
 
 #End Region

@@ -5164,6 +5164,7 @@ Public Class cls_Poutre
         Dim iT1, iT2 As Integer
         Dim pMmax As Decimal = 0
         Dim kFin As Integer
+        Const EPSILON As Decimal = 0.0001
 
         '--> Initialisation
 
@@ -5182,11 +5183,11 @@ Public Class cls_Poutre
 
             If iNode = iFin Then kFin = 0
             For k = 0 To kFin
-                If IsGreater(MEd(iNode, k), pMmax) Then
+                If (MEd(iNode, k) > pMmax) Then
                     pMmax = MEd(iNode, k)
                     iT1 = iNode
                     iT2 = iNode
-                ElseIf IsEqual(MEd(iNode, k), pMmax) Then
+                ElseIf IsEqual(MEd(iNode, k), pMmax, EPSilon) Then
                     iT2 = iNode
                 Else
 
@@ -5594,43 +5595,43 @@ Public Class cls_Poutre
 
         Exit Sub
 
-        '--( Traitement travée en console; à gauche
+        ''--( Traitement travée en console; à gauche
 
-        If Me.lTraveeConsoleGauche Then
-            iTravee = 0
-            iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
-            INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+        'If Me.lTraveeConsoleGauche Then
+        '    iTravee = 0
+        '    iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+        '    INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For iNode = iNodDeb To INodFin
-                DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
-                DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(0)))
-            Next
-        End If
+        '    For iNode = iNodDeb To INodFin
+        '        DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
+        '        DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(0)))
+        '    Next
+        'End If
 
-        '--( Traitement travée en console; à droite
+        ''--( Traitement travée en console; à droite
 
-        If Me.lTraveeConsoleDroite Then
-            iTravee = Me.IndiceDerniereTravee
-            iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
-            INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+        'If Me.lTraveeConsoleDroite Then
+        '    iTravee = Me.IndiceDerniereTravee
+        '    iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+        '    INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For iNode = iNodDeb To INodFin
-                DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
-                DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(iTravee)))
-            Next
-        End If
+        '    For iNode = iNodDeb To INodFin
+        '        DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
+        '        DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(iTravee)))
+        '    Next
+        'End If
 
-        '--( Traitement travées sur deux appuis
+        ''--( Traitement travées sur deux appuis
 
-        For iTravee = 1 To Me.NombreTraveesDeuxAppuis
-            iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
-            INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
+        'For iTravee = 1 To Me.NombreTraveesDeuxAppuis
+        '    iNodDeb = Me.Nodes.iNodeExtTrav(iTravee, 0)
+        '    INodFin = Me.Nodes.iNodeExtTrav(iTravee, 1)
 
-            For iNode = iNodDeb To INodFin
-                DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
-                DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(iTravee)))
-            Next
-        Next
+        '    For iNode = iNodDeb To INodFin
+        '        DeltaRd(iTravee, 0).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), 0))
+        '        DeltaRd(iTravee, 1).Add(Me.DeltaRdX(iTravee, Me.Nodes.xTravee(iNode), Me.LongueurTravee(iTravee)))
+        '    Next
+        'Next
 
 
     End Sub

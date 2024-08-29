@@ -134,7 +134,8 @@
         'iNodeValMax = 0
         'iNodeValMin = 0
 
-        If IsGreater(MyTab(0, 1), MyTab(NbNodes - 1, 0)) Then 'Ajout GUD : induit un BUG quand la val max se trouve au droit des appuis d extremités 
+        'If IsGreater(MyTab(0, 1), MyTab(NbNodes - 1, 0)) Then 'Ajout GUD : induit un BUG quand la val max se trouve au droit des appuis d extremités 
+        If (MyTab(0, 1) >= MyTab(NbNodes - 1, 0)) Then 'Ajout GUD : induit un BUG quand la val max se trouve au droit des appuis d extremités 
             ValMax = MyTab(0, 1)
             ValMin = MyTab(NbNodes - 1, 0)
             iNodeValMax = 0
@@ -147,11 +148,13 @@
         End If
         For i As Integer = 1 To NbNodes - 2
             For j = 0 To 1
-                If IsGreater(MyTab(i, j), ValMax) Then
+                'If IsGreater(MyTab(i, j), ValMax) Then
+                If (MyTab(i, j) > ValMax) Then
                     ValMax = MyTab(i, j)
                     iNodeValMax = i
                 End If
-                If IsSmaller(MyTab(i, j), ValMin) Then
+                'If IsSmaller(MyTab(i, j), ValMin) Then
+                If (MyTab(i, j) < ValMin) Then
                     ValMin = MyTab(i, j)
                     iNodeValMin = i
                 End If

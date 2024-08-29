@@ -49,6 +49,10 @@ Module Mod_NoteCalcul
     'Nom de l'imprimante virtuelle pour créer un PDF
     Public Const PrintPDFName As String = "Microsoft Print to PDF"
 
+
+    Const NBSIGN_ANALYSE As Integer = 4
+    Const NBDIGI_ANALYSE As Integer = 3
+
     '--------------------------------------------------------------------------
     '   Paramètres de la fenêtre NDC - Ajout BD - 05/02/20
     '--------------------------------------------------------------------------
@@ -4380,8 +4384,8 @@ Module Mod_NoteCalcul
 
                 LigneTableauMVCombiExtremite(lMultispan, True, NCol, PosTab, iNode, iTraveeAffichee, myPoutre.Nodes.xTravee(iNode), myPoutre.Nodes.xGlobal(iNode),
                                              VEd(0, 1), MEd(0, 1),
-                                        Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
-                                        Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
+                                             Mmin, Mmax, iNodeMinMoment, iNodeMaxMoment,
+                                             Vmin, Vmax, iNodeMinTranchant, iNodeMaxTranchant)
                 'iCompteur += 1
 
             End If
@@ -4617,10 +4621,10 @@ Module Mod_NoteCalcul
 
         '# Effort tranchant
 
-        stringVEd = GetStringInUnit(VEd, Enu_TypeVariable.Effort, 3, 2, False)
+        stringVEd = GetStringInUnitN(VEd, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
 
         If iNode = iNodeMinTranchant Or iNode = iNodeMaxTranchant Then
-            If VEd = Vmin Or VEd = Vmax Then
+            If IsEqual(VEd, Vmin) Or IsEqual(VEd, Vmax) Then
                 stringVEd = "\G" & stringVEd & "\g" 'on met le texte en gras
             End If
         End If
@@ -4635,10 +4639,10 @@ Module Mod_NoteCalcul
 
         '# Moment fléchissant
 
-        stringMEd = GetStringInUnit(MEd, Enu_TypeVariable.Effort, 3, 2, False)
+        stringMEd = GetStringInUnitN(MEd, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
 
         If iNode = iNodeMinMoment Or iNode = iNodeMaxMoment Then
-            If MEd = Mmin Or MEd = Mmax Then
+            If IsEqual(MEd, Mmin) Or IsEqual(MEd, Mmax) Then
                 stringMEd = "\G" & stringMEd & "\g" 'on met le texte en gras
             End If
         End If
@@ -4656,8 +4660,8 @@ Module Mod_NoteCalcul
     Private Sub LigneTableauMVCombiAppui(NCol As Integer, Pos As Integer,
                                          iNode As Integer, iTravee As Integer, xPosT As Decimal, xPosG As Decimal,
                                          VEdG As Decimal, VEdd As Decimal, MEdG As Decimal, MEdD As Decimal,
-                                             Mmin As Decimal, Mmax As Decimal, iNodeMinMoment As Integer, iNodeMaxMoment As Integer,
-                                             Vmin As Decimal, Vmax As Decimal, iNodeMinTranchant As Integer, iNodeMaxTranchant As Integer)
+                                         Mmin As Decimal, Mmax As Decimal, iNodeMinMoment As Integer, iNodeMaxMoment As Integer,
+                                         Vmin As Decimal, Vmax As Decimal, iNodeMinTranchant As Integer, iNodeMaxTranchant As Integer)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -4703,11 +4707,11 @@ Module Mod_NoteCalcul
 
         '# Effort tranchant
 
-        stringVEdG = GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False)
-        stringVEdD = GetStringInUnit(VEdd, Enu_TypeVariable.Effort, 3, 2, False)
+        stringVEdG = GetStringInUnit(VEdG, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
+        stringVEdD = GetStringInUnit(VEdd, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
 
         If iNode = iNodeMinTranchant Or iNode = iNodeMaxTranchant Then
-            If VEdG = Vmin Or VEdG = Vmax Then
+            If IsEqual(VEdG, Vmin) Or IsEqual(VEdG, Vmax) Then
                 stringVEdG = "\G" & stringVEdG & "\g" 'on met le texte en gras
             End If
 
@@ -4726,11 +4730,11 @@ Module Mod_NoteCalcul
 
         '# Moment fléchissant
 
-        stringMEdG = GetStringInUnit(MEdG, Enu_TypeVariable.Effort, 3, 2, False)
-        stringMEdD = GetStringInUnit(MEdD, Enu_TypeVariable.Effort, 3, 2, False)
+        stringMEdG = GetStringInUnit(MEdG, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
+        stringMEdD = GetStringInUnit(MEdD, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
 
         If iNode = iNodeMinMoment Or iNode = iNodeMaxMoment Then
-            If MEdG = Mmin Or MEdG = Mmax Then
+            If IsEqual(MEdG, Mmin) Or IsEqual(MEdG, Mmax) Then
                 stringMEdG = "\G" & stringMEdG & "\g" 'on met le texte en gras
             End If
 
@@ -4754,7 +4758,7 @@ Module Mod_NoteCalcul
                                     iNode As Integer, iTravee As Integer, xPosG As Decimal, xPosT As Decimal,
                                     VEdG As Decimal, VEdd As Decimal, MEdG As Decimal, MEdD As Decimal,
                                     Mmin As Decimal, Mmax As Decimal, iNodeMinMoment As Integer, iNodeMaxMoment As Integer,
-                                      Vmin As Decimal, Vmax As Decimal, iNodeMinTranchant As Integer, iNodeMaxTranchant As Integer)
+                                    Vmin As Decimal, Vmax As Decimal, iNodeMinTranchant As Integer, iNodeMaxTranchant As Integer)
         '-------------------------------------------------------------------------------------------
         '   18/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -4805,11 +4809,11 @@ Module Mod_NoteCalcul
 
         '# Effort tranchant
 
-        stringVEdG = GetStringInUnit(VEdG, Enu_TypeVariable.Effort, 3, 2, False)
-        stringVEdD = GetStringInUnit(VEdd, Enu_TypeVariable.Effort, 3, 2, False)
+        stringVEdG = GetStringInUnit(VEdG, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
+        stringVEdD = GetStringInUnit(VEdd, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
 
         If iNode = iNodeMinTranchant Or iNode = iNodeMaxTranchant Then
-            If VEdG = Vmin Or VEdG = Vmax Then
+            If IsEqual(VEdG, Vmin) Or IsEqual(VEdG, Vmax) Then
                 stringVEdG = "\G" & stringVEdG & "\g" 'on met le texte en gras
             End If
 
@@ -4828,11 +4832,11 @@ Module Mod_NoteCalcul
 
         '# Moment fléchissant
 
-        stringMEdG = GetStringInUnit(MEdG, Enu_TypeVariable.Effort, 3, 2, False)
-        stringMEdD = GetStringInUnit(MEdD, Enu_TypeVariable.Effort, 3, 2, False)
+        stringMEdG = GetStringInUnit(MEdG, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
+        stringMEdD = GetStringInUnit(MEdD, Enu_TypeVariable.Effort, NBSIGN_ANALYSE, NBDIGI_ANALYSE, False)
 
         If iNode = iNodeMinMoment Or iNode = iNodeMaxMoment Then
-            If MEdG = Mmin Or MEdG = Mmax Then
+            If IsEqual(MEdG, Mmin) Or IsEqual(MEdG, Mmax) Then
                 stringMEdG = "\G" & stringMEdG & "\g" 'on met le texte en gras
             End If
 
@@ -7395,11 +7399,11 @@ Module Mod_NoteCalcul
         End If
 
         AddLigneNDC(TABW2 & BlocELU("DEGREEOFSHEARCONNEC") & infoM & TABAFF & strGras &
-                    Symbol & TABEGAL & GetStringInUnit(Eta, Enu_TypeVariable.SansType, 3, 2, False) &
+                    Symbol & TABEGAL & GetStringInUnitN(Eta, Enu_TypeVariable.SansType, 4, 3, False, True) &
                     TABOK & strFinGras & "\BAL")
         AfficheBalise(lOK)
         AddLigneNDC(TABW2 & BlocELU("MINDEGREE") & TABAFF & strGras &
-                    SymbolMin & TABEGAL & GetStringInUnit(EtaMin, Enu_TypeVariable.SansType, 3, 2, False) &
+                    SymbolMin & TABEGAL & GetStringInUnitN(EtaMin, Enu_TypeVariable.SansType, 4, 3, False, True) &
                     strFinGras)
 
     End Sub
