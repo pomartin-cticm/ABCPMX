@@ -9,10 +9,10 @@
 BLOCK IDENTIFICATION
    Utilisateur   = 
    Entreprise    = 
-   NomProjet     = Project Pr#1
+   NomProjet     = VALIDATION
 
 BLOCK POUTRE
-   BeaIden           =  Beam B#1
+   BeaIden           =  Test C02
    Commentaire       =  
    ConsoleGauche  =  False
    ConsoleDroite  =  False
@@ -40,18 +40,18 @@ BLOCK POUTRE
    lAutoDesign    =  False
    NombreZones    =  {1/1/1}
    LongueurZone    =  {3/14/3}+{0/0/0}+{0/0/0}
-   EspaZone    =  {0,2/0,2/0,2}+{0,2/0,2/0,2}+{0,2/0,2/0,2}
+   EspaZone    =  {0,2/0,207/0,2}+{0,2/0,2/0,2}+{0,2/0,2/0,2}
    EspaBacTransZone    =  {1/1/1}+{1/1/1}+{1/1/1}
    NbGoujonTrans    =  {1/1/1}+{1/1/1}+{1/1/1}
-   lCombELU    =  {True/False/False/False/False/False}
+   lCombELU    =  {False/False/False/False/False/False}
    CoefELU    =  {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1,0/1,5/1,05/0/0}+{1,0/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
-   lCombELS    =  {True/False/False/False/False/False}
+   lCombELS    =  {False/False/False/False/False/False}
    CoefELS    =  {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    lCombELF    =  {False/False/False/False/False}
    CoefELF    =  {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    lCombELCU    =  {True/False}
    CoefELCU    =  {0/0/0/1,5/1,35}+{0/0/0/0/0}
-   lCombELCS    =  {True/False}
+   lCombELCS    =  {False/False}
    CoefELCS    =  {0/0/0/1/1}+{0/0/0/0/0}
 
 BLOCK MAINT_BAC
@@ -62,8 +62,8 @@ BLOCK MAINT_BAC
    FixnervuresTyp            =  2
    EC            =  0,5
    FixCoutureType            =  0
-   lMaintienBac            =  False
-   lTheta            =  False
+   lMaintienBac            =  True
+   lTheta            =  True
 BLOCK SECTION
    Nom            =  Nom
    lDalleBeton    =  False
@@ -97,10 +97,10 @@ BLOCK ACIER_PROFILA
    Qualite        =  EC3
    Reduction      =  Table 3.1
    NormeProduit   =  EN 1993-1-1
-   EpMax          =  0,150000005960464
+   EpMax          =  0,0800000056624413
    iBase          =  1
-   iTabStand      =  3
-   iStandard      =  4
+   iTabStand      =  13
+   iStandard      =  20
 
 BLOCK ENROBAGE_PROFILA
    lArmaConst     =  False
@@ -170,10 +170,10 @@ BLOCK BETON_DALLE
    Leger           =  False
    Classe         =  C25/30
    RhoC         =  2500
-   Fck            =  20
-   Fcm            =  20
-   Fctm           =  2,21041889918423
-   Ecm            =  29961,9510546403
+   Fck            =  25
+   Fcm            =  25
+   Fctm           =  2,56496392001504
+   Ecm            =  31475,8062100193
    lCrackLimit    =  True
    wk_max         =  0,0004
 
@@ -193,7 +193,7 @@ BLOCK BAC_DALLE
    LargeurModule  =  1,035
    Ieff           =  0,0000004437
    lPreperce      =  True
-   AppuiT         =  1
+   AppuiT         =  2
    AppuiL         =  0
 
 BLOCK COFRADAL
@@ -201,6 +201,7 @@ BLOCK COFRADAL
    Dp      =  0,125
    Msurf      =  525
    lCustom      =  False
+
 BLOCK ARMATURE_DALLE
    indLit         =  0
    EspBar         =  0,2
@@ -214,17 +215,25 @@ BLOCK ACIER_ARMATURE_DALLE
    Fsk            =  500
    Es             =  210000
 
-BLOCK CONNECTEUR_DALLE
+BLOCK CONNECTEUR_DALLE_GOUJON
    nom            =  19-100
-   hsc            =  0,100000001490116
-   d              =  0,0190000012516975
+   hsc            =  0,1
+   d              =  0,019
    fy              =  350
    fu              =  450
+
+BLOCK CONNECTEUR_DALLE_ARMATURE
+   ds            =  0,025
+
+BLOCK ACIER_CONNECTEUR_DALLE_ARMATURE
+   Classe         =  B500
+   Fsk            =  500
+   Es             =  210000
 
 BLOCK OPT_CALCULS
    RH            = 50
    Norme            = 0
-   EtaW            = 1,00
+   EtaW            = 1,2
    lLarEffSimp            = False
    lCompArma            = False
    dMaxNodes            = 1,0
@@ -272,7 +281,7 @@ BLOCK OPT_CALCULS_GAMMA
 
 BLOCK OPT_CALCULS_HIVOSS
    lHivossMethod = True
-   RatioQ        = 0
+   RatioQ        = 0,1
    ChoixQ        = 0
    UtilPlancher  = 4
    lFreqDalle  = False
@@ -292,12 +301,12 @@ BLOCK CHGTU_QSURF
 BLOCK CHGTU_QSURF
    CleDic      =  G2
    indTravee      =  1
-   QSurf      =  1400
+   QSurf      =  0
 
 BLOCK CHGTU_QSURF
    CleDic      =  Q1
    indTravee      =  1
-   QSurf      =  2500
+   QSurf      =  0
 
 BLOCK CHGTU_QSURF
    CleDic      =  Q2

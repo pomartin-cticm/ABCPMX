@@ -282,12 +282,12 @@ Module Mod_Outils
 
         '--> Remplissage du mail en fonction de la langue (que français ou anglais)
         If LogicielOptions.IndLangue = 1 Then '--> Français
-            objet = "Bug(s) détecté(s) dans le logiciel " & LogicielInfo.NomLogiciel & " - Version " & LogicielInfo.Version
+            objet = "Bug(s) détecté(s) dans le logiciel " & LogicielInfo.NomLogiciel & " - Version " & LogicielInfo.Version.Label
 
             corps = "Bonjour,%0A"
             corps += "%0A"
             corps += "Nous sommes l'entreprise [Insérer le nom de votre entreprise].%0A"
-            corps += "Nous avons détecté un ou des bugs dans le logiciel " & LogicielInfo.NomLogiciel & " (Version " & LogicielInfo.Version & ").%0A"
+            corps += "Nous avons détecté un ou des bugs dans le logiciel " & LogicielInfo.NomLogiciel & " (Version " & LogicielInfo.Version.Label & ").%0A"
             corps += "Description du problème :%0A"
             corps += "%0A"
             corps += "[Si c'est possible, merci d'attacher au mail une capture d'écran du problème et le fichier '*." & LogicielInfo.Extension & "' de votre projet]%0A"
@@ -296,12 +296,12 @@ Module Mod_Outils
             corps += "%0A"
             corps += "[Votre nom]%0A"
         Else '--> Anglais
-            objet = "Bug detected in " & LogicielInfo.NomLogiciel & " software - Version " & LogicielInfo.Version
+            objet = "Bug detected in " & LogicielInfo.NomLogiciel & " software - Version " & LogicielInfo.Version.Label
 
             corps = "Hello,%0A"
             corps += "%0A"
             corps += "We are the company [Insert your company name].%0A"
-            corps += "We detected a bug in " & LogicielInfo.NomLogiciel & " software (Version " & LogicielInfo.Version & ").%0A"
+            corps += "We detected a bug in " & LogicielInfo.NomLogiciel & " software (Version " & LogicielInfo.Version.Label & ").%0A"
             corps += "Description of the problem :%0A"
             corps += "%0A"
             corps += "[If it's possible, please attach to the email a screenshot of the problem and the file '*." & LogicielInfo.Extension & "' of your project]%0A"
@@ -1066,7 +1066,8 @@ Module Mod_Outils
 
                         If nbMots > 0 Then
                             If Mots(1) = "VERSION" Then                 '--> Nouvelle version du logiciel disponible
-                                If Mots(2) > LogicielInfo.Version Then
+                                'If Mots(2) > LogicielInfo.Version Then
+                                If Mots(2) > LabelVersion() Then
                                     NewVersionAvailable = True
                                 End If
                             ElseIf Mots(1) = "LINK" Then                '--> Récupération du lien de la page du logiciel

@@ -94,7 +94,7 @@
             Dim Lines As New List(Of String)
 
             '--> Ecriture de toutes les données
-            MyProjet.EcrireFile(Lines, LogicielInfo.Version)
+            MyProjet.EcrireFile(Lines, LogicielInfo.Version.Label)
 
             '--> Aucune modification par rapport au fichier enregistré
             'MyProject.Modif = False

@@ -73,6 +73,7 @@ SLIMFLOORIFB_B			= Section dalle mince IFB-B non mixte
 SLIMFLOORIFB_BCOMPO		= Section dalle mince IFB-B mixte
 SLIMFLOORSAB			= Section dalle mince SAB non mixte
 SLIMFLOORSABCOMPO		= Section dalle mince SAB mixte
+NOTAVAILABLE			= non disponible dans cette version
 
 #FRM_BEAMOPTIONS
 TITLE					= Options de calcul de la poutre
@@ -114,6 +115,7 @@ CRACKWIDTH				= Limite d'ouverture des fissures
 
 #FRM_CALCULATIONSHEET
 TITLE					= Note de calculs
+CLOSE					= Fermer
 FIRST					= Première page
 PREVIOUS				= Page précédente
 NEXT					= Page suivante
@@ -242,6 +244,11 @@ WIDTH					= Largeur
 WARNING_CMBTRAVEE		= L'ensemble des informations renseignées doit être correct pour sélectionner une autre travée
 ADD						= Ajouter
 DELETE					= Supprimer
+FLANGE_STUD				= Goujon soudé sur la semelle supérieure
+WEB_STUD				= Goujon soudé sur l'âme
+WEB_REINF				= Armature traversant l'âme
+CLASS					= Classe
+REINFORCEMENTS			= Armatures
 
 #FRM_DECKRESTRAINT
 TITLE					= Maintien de la poutre par le bac (phase de construction uniquement)
@@ -379,7 +386,68 @@ TRIPLE					= Trois
 TYPEE					= Type 
 UPPERLAYER				= Nappe supérieure
 WIDTH					= Largeur
-ACTIVEREBARS			= Armatures actives							  
+ACTIVEREBARS			= Armatures actives		
+
+#FRM_ERRORS
+TITLE					= Notification
+OK						= OK
+ORIGIN					= Origine 
+CONTACT					= Contactez le support logiciel à l'adresse courriel :
+ERROR					= Erreur logiciel
+INFORMATION				= Information
+
+#FRM_FIREOPTIONS
+TITLE					= Options calcul incendie
+CANCEL					= Annuler
+OK						= Ok
+BEAMPARAM				= Paramètres de la poutre
+CALCULPARAM				= Paramètres de calcul
+CALCULOPTIONS			= Options de calcul
+FIRECALCULATION			= Calcul au feu
+SURFACETYPE				= Type de surface
+PROTECTED				= Protégé
+UNPROTECTED				= Non protégé
+GALVANISED				= Galvanisé
+PROTECTIONTYPE			= Type de protection
+SPRAY					= Flocage
+INTUMESCENTPAINT		= Peinture intumescente
+BOARDS					= Caisson
+INSULATIONTYPE			= Type d'isolation
+MINERALFIBRES			= Fibres minérales
+VERMICULITE				= Vermiculite
+PERLITECEMENT			= Perlite avec du ciment
+PERLITEPLASTER			= Perlite avec du plâtre
+VERMICULITEPERLITE		= Vermiculite ou perlite avec du ciment
+SILICATE				= Fibre de silicate
+FIBROCEMENT				= Fibro-ciment
+PLASTER					= Plâtre
+DENSITY					= Densité
+THERMALCONDUC			= Conductivité thermique
+SPECIFICHEAT			= Chaleur spécifique 
+CONCRETEREDUC250		= Résistance du béton réduire pour une température inférieure à 250°
+ARMAFROID				= Armatures formées à froid
+ARMACOMP				= Armatures comprimées prises en compte
+DALLEFEM				= Echauffement de la dalle calculé par différences finies
+TDALLEFEM				= Epaisseur max des éléments finis 
+BOLTZMANN				= Constante de Boltzmann 
+TIMEINCREMENT			= Incrément de temps
+REFERENCETEMP			= Température de référence 
+MAXTEMP					= Température maximale 
+FORMFACTOR				= Facteur de forme
+EMISSIVITYSTEELSURF		= Emissivité de l'acier
+EMISSIVITYFIRE			= Emissivité du feu
+EMISSIVITYCONCRETE		= Emissivité du béton
+CONVECTIONFACTOR		= Facteur de transfert thermique par convection
+BELOWSLAB				= Sous la dalle
+ABOVESLAB				= Au-dessus de la dalle
+SHADOWEFFECT			= Effet d'ombre
+CONCRETEFACTOR			= Résistance plastique de la dalle	
+PROTECTIONTH			= Épaisseur			
+PROTECTEDSTEEL			= Profilé métallique avec protection thermique
+TEMPREBARS				= Température des armatures égale à la
+AVERAGETEMP				= température moyenne
+MAXTEMP2				= température maximale
+AXISTEMP				= température à l'axe
 
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Coefficients d'accompagnement
@@ -479,7 +547,7 @@ ABOUT					= A propos
 ADDBEAM					= Ajouter une poutre
 CALCULATION				= Options coefficient d'équivalence 
 CALCULOPTIONS			= Options de calcul
-CALCULATIONREPORT		= Note de calculs
+CALCULATIONREPORT		= Synthèse projet
 SOFTOPT					= Options du logiciel					  
 COPYPICTURE				= Copier l'image
 DELBEAM					= Supprimer la poutre
@@ -545,10 +613,14 @@ ZOOMIN					= Zoom avant
 ZOOMOUT					= Zoom arrière
 COTATIONS				= Afficher les dimensions
 EXPERT					= Mode expert
+COPYIMAGE				= Copier l'image
 EDIT					= Editer
 EDITPROFILES			= Editer les profilés ArcelorMittal
 EDITSTUDS				= Editer les goujons
 EDITDECKS				= Editer les bacs acier
+WELDEDSEC				= PRS
+FIRENOTAVAIL			= Le calcul au feu n'est pas disponible dans cette version de $.
+FIRELATER				= Il sera fourni dans une future version.
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Options coefficient d'équivalence 
@@ -568,16 +640,6 @@ LONGTERM_N				= Coefficient d'équivalence pour les charges permanentes
 SHORTTERM_N				= Coefficient d'équivalence pour les charges d'exploitation
 RCOMPRESSION			= Résistance à la compression
 RTENSION				= Résistance à la traction							   
-
-
-#FRM_OUVERTURE
-BROWSEFILES				= Parcourir
-CREATEASSEMBLY			= Créer une nouvelle section
-NEWPROJECT				= Nouveau projet
-OK						= Ok
-OPENPROJECT				= Ouvrir un projet
-RECENTFILES				= Fichiers récents
-FILE					= Fichier
 
 #FRM_PPLOADCASE
 TITLE					= Cas de charge
@@ -659,7 +721,6 @@ PROPPINGLOC				= Position de l'étaiement
 UNDERSTEELBEAM			= Sous la poutre acier
 UNDERSLAB				= Sous la dalle béton
 
-
 #FRM_PSHEETING
 TITLE					= Definition du bac acier
 OK						= OK
@@ -672,7 +733,6 @@ FROMDIM					= Depuis les dimensions
 NAME					= Nom
 PROPERTIES				= Dimensions et propriétés
 
-
 #FRM_SLAB
 TITLE					= Définition de la dalle
 OK						= OK
@@ -680,6 +740,8 @@ CANCEL					= Annuler
 ADDLAYER				= Ajouter une nappe d'armatures
 ALL						= Tous
 CLASS					= Classe
+COFRADAL				= Cofradal
+COFRANOTFOUND			= Attention: le cofradal spécifié n'a pas été trouvé dans la base de données. Veuillez contacter le support.
 COMPOSITESLAB			= Dalle mixte
 CONCRETE				= Béton
 CONNECTORANDSHEET		= Placement des connecteurs 
@@ -693,6 +755,7 @@ JOINT					= Joint béton
 LIGHTCONCRETE			= Béton léger								
 LOCATION				= Position
 MODIFYSH				= Modifier le bac acier
+MSURF					= Poids surfacique 
 NAME					= Nom
 PARALLEL				= Parallèle
 PERPENDICULAR			= Perpendicular							   
@@ -716,6 +779,11 @@ SPACING					= Entraxe
 THICKNESS				= Epaisseur
 THROUGHDECKW			= Soudure à travers le bac									 
 TYPE					= Type
+USER					= Utilisateur
+CONTINUOUSRIBANDDECK	= Nervure et bac continus
+CONTINUOUSRIB			= Nervure béton continue
+DISCONTINUOUSDECK		= Bac discontinu
+DISCONTINUOUSRIBDECK	= Nervure et bac discontinus
 
 #FRM_SPANLENGHTS
 TITLE					= Definition de la poutre
@@ -755,6 +823,17 @@ UPPERF					= Semelle supérieure
 WEB						= Âme 
 WELDEDSYM				= PRS bisymétrique
 WELDEDP					= PRS mono-symétrique
+
+#FRM_START
+BROWSEFILES				= Parcourir
+CREATEASSEMBLY			= Créer une nouvelle section
+NEWPROJECT				= Nouveau projet
+OK						= Ok
+OPENPROJECT				= Ouvrir un projet
+RECENTFILES				= Fichiers récents
+FILE					= Fichier
+NOTAVAILABLE			= Section non disponible dans cette version du logiciel
+LATER 					= Les sections de plancher minces seront disponibles dans une future version de $.
 
 #FRM_SFBSECTIONS
 CANCEL					= Annuler
@@ -849,6 +928,7 @@ SECTIONPROP				= Propriétés des sections
 COMPRESSIONREBARS		= Armatures comprimées prises en compte
 SIMPLIFIEDEFFW			= Répartition simplifiée de la largeur efficace de dalle
 YOUNGSREBAR				= Module d'Young des armatures
+DELTACDEV				= Marge de calcul pour les tolérances d'exécution
 MODEL					= Paramètres pour la modélisation numérique
 NODESPACING				= Distance entre noeuds
 NBNODES					= Nombre de noeuds
@@ -990,6 +1070,7 @@ IDENTIFICATION			= Identification
 USERNAME				= Nom de l'utilisateur
 FIRM					= Entreprise
 INTERNETCHECKS			= Contrôles internet
+VERSION					= Version
 
 #OPTSOFTUNITS
 TITLE					= Unités

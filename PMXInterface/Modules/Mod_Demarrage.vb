@@ -41,6 +41,57 @@ Public Module Mod_Demarrage
 
     End Sub
 
+    Private Sub InitialiseVersion()
+        '---------------------------------------------------------------------------------------------------------------
+        '   30/08/2024 :    POM - Création
+        '---------------------------------------------------------------------------------------------------------------
+        '   Initialisation des paramètres de version
+        '---------------------------------------------------------------------------------------------------------------
+
+        LogicielInfo.Version.Annee = 2024
+        LogicielInfo.Version.Principal = 1
+        LogicielInfo.Version.Indice = 0
+        LogicielInfo.Version.Beta = 2
+
+        Dim Chaine As String = ""
+
+        If LogicielInfo.Version.Indice < 10 Then
+            Chaine = "0" & CStr(LogicielInfo.Version.Indice)
+        Else
+            Chaine = CStr(LogicielInfo.Version.Indice)
+        End If
+
+        LogicielInfo.Version.Label = CStr(LogicielInfo.Version.Principal) & "." & Chaine
+
+        If LogicielInfo.Version.Beta > 0 Then
+            Chaine = " beta " & CStr(LogicielInfo.Version.Beta)
+            LogicielInfo.Version.Label += Chaine
+        End If
+
+    End Sub
+
+    Private Function LabelMaitre() As String
+        Dim Label As String = ""
+        Select Case LogicielInfo.Maitre
+            Case EnuMaitre.CTICM : Label = "CTICM"
+            Case EnuMaitre.ArcelorMittal : Label = "ARCELORMITTAL"
+        End Select
+        Return Label
+    End Function
+    Public Function LabelVersion() As String
+        Dim Chaine As String = ""
+        Dim Label As String = ""
+
+        If LogicielInfo.Version.Indice < 10 Then
+            Chaine = "0" & CStr(LogicielInfo.Version.Indice)
+        Else
+            Chaine = CStr(LogicielInfo.Version.Indice)
+        End If
+
+        Label = CStr(LogicielInfo.Version.Principal) & "." & Chaine
+        Return Label
+    End Function
+
     Public Sub InitialiseLogiciel()
         '---------------------------------------------------------------------------------------------------------------
         '   25/05/2023 :    POM - Création
@@ -52,17 +103,16 @@ Public Module Mod_Demarrage
         '--> Réglages CTICM/AM
 
         LogicielInfo.Maitre = EnuMaitre.CTICM
-        LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
+        'LogicielInfo.Maitre = EnuMaitre.ArcelorMittal
 
         InitialiseReglagesLogiciel()
+        InitialiseVersion()
 
         '--> Récupération des informations générales du logociel - Non modifiable par l'utilisateur
 
         LogicielOptions.lDebug = False
 
         LogicielInfo.NomLogiciel = "ABCPMX-II"
-        LogicielInfo.Version = "1.0"
-        LogicielInfo.AnneeVersion = "2024"
 
         Select Case LogicielInfo.Maitre
             Case EnuMaitre.ArcelorMittal : LogicielInfo.MailSupport = EMAIL_ARCELORMITTAL
@@ -73,9 +123,9 @@ Public Module Mod_Demarrage
         LogicielInfo.Extension = "pmx"
         LogicielInfo.Racine = "ABCPMX"
 
-
         LogicielRep.Install = Application.StartupPath
-        LogicielRep.Config = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\CTICM\" & LogicielInfo.NomLogiciel & "\ConfigV" & LogicielInfo.Version
+        LogicielRep.Config = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) & "\" & LabelMaitre() & "\" _
+                                                     & LogicielInfo.NomLogiciel & "\ConfigV" & LabelVersion()
 
         LastIndexW.OptionsCalcul = Enu_OptionsCalcul.Gamma
         LastIndexW.OptionsLogiciel = Enu_OptionsLogiciel.General

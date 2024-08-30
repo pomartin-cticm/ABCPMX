@@ -18,6 +18,7 @@ Public Class Frm_About
         GestionLangues()
         GestionStyle(lCTICM)
         AfficherInfoEnCours()
+        AfficheNomLogiciel()
         lBuild = False
     End Sub
 
@@ -88,6 +89,10 @@ Public Class Frm_About
     Private Sub AfficherInfoEnCours()
         Me.lbk_SupportAM.Text = EMAIL_ARCELORMITTAL
         Me.lbk_SupportCTICM.Text = EMAIL_CTICM
+    End Sub
+
+    Private Sub AfficheNomLogiciel()
+        Me.lbl_NomLogiciel.Text = LogicielInfo.Racine & " V" & LogicielInfo.Version.Label & " (@ " & CStr(LogicielInfo.Version.Annee) & ")"
     End Sub
 
     Private Sub btn_OK_Click(sender As Object, e As EventArgs) Handles btn_OK.Click

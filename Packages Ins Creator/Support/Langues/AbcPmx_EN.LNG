@@ -73,6 +73,7 @@ SLIMFLOORIFB_B			= Non composite slim floor IFB-B
 SLIMFLOORIFB_BCOMPO		= Composite slim floor IFB-B
 SLIMFLOORSAB			= Non composite slim floor SAB
 SLIMFLOORSABCOMPO		= Composite slim floor SAB
+NOTAVAILABLE			= Not available in this version
 
 #FRM_BEAMOPTIONS
 TITLE					= Beam calculation options
@@ -114,6 +115,7 @@ CRACKWIDTH				= Limit of crack width
 
 #FRM_CALCULATIONSHEET
 TITLE					= Calculation report
+CLOSE					= Close
 FIRST					= First page
 PREVIOUS				= Previous page
 NEXT					= Next page
@@ -242,6 +244,11 @@ WIDTH					= Width
 WARNING_CMBTRAVEE		= All the input data must be correct to select an other the span
 ADD						= Add
 DELETE					= Delete
+FLANGE_STUD			= Stud welded on the upper flange
+WEB_STUD				= Stud welded on the web
+WEB_REINF				= Dowels
+CLASS					= Class
+REINFORCEMENTS			= Reinforcements
 
 #FRM_DECKRESTRAINT
 TITLE					= Restraint of the beam by the steel deck (construction phase only)
@@ -381,6 +388,67 @@ UPPERLAYER				= Upper layer
 WIDTH					= Width
 ACTIVEREBARS			= Active rebars
 
+#FRM_ERRORS
+TITLE					= Notification
+OK						= OK
+ORIGIN					= Origin 
+CONTACT					= Contact software support at:
+ERROR					= Software error
+INFORMATION				= Information
+
+#FRM_FIREOPTIONS
+TITLE					= Fire calculation options
+CANCEL					= Cancel
+OK						= Ok
+BEAMPARAM				= Beam parameters
+CALCULPARAM				= Calculation parameters
+CALCULOPTIONS			= Calculation options
+FIRECALCULATION			= Fire calculation
+SURFACETYPE				= Surface type
+PROTECTED				= Protected
+UNPROTECTED				= Unprotected
+GALVANISED				= Hot-dip galvanised steel
+PROTECTIONTYPE			= Protection type
+SPRAY					= Spray
+INTUMESCENTPAINT		= Intumescent paint
+BOARDS					= Boards
+INSULATIONTYPE			= Insulation type
+MINERALFIBRES			= Mineral fibres
+VERMICULITE				= Vermiculite
+PERLITECEMENT			= Perlite with cement
+PERLITEPLASTER			= Perlite with plaster
+VERMICULITEPERLITE		= Vermiculite or perlite with cement
+SILICATE				= Silicate fibre
+FIBROCEMENT				= Fibro-cement
+PLASTER					= Plaster
+DENSITY					= Density
+THERMALCONDUC			= Thermal conductivity
+SPECIFICHEAT			= Specific heat
+CONCRETEREDUC250		= Concrete strength reduced for temperature below 250°
+ARMAFROID				= Cold worked reinforcements
+ARMACOMP				= Compressed reinforcements taken into account
+DALLEFEM				= Heating of the slab obtained by FDM
+TDALLEFEM				= Maximal thickness of finite elements
+BOLTZMANN				= Boltzmann constant
+TIMEINCREMENT			= Time increment
+REFERENCETEMP			= Reference temperature 
+MAXTEMP					= Maximal temperature
+FORMFACTOR				= Form factor
+EMISSIVITYSTEELSURF		= Emissivity of steel
+EMISSIVITYFIRE			= Emissivity of fire
+EMISSIVITYCONCRETE		= Emissivity of concrete
+CONVECTIONFACTOR		= Factor of thermal transfer by convection
+BELOWSLAB				= Below the slab
+ABOVESLAB				= Above the slab
+SHADOWEFFECT			= Shadow effect
+CONCRETEFACTOR			= Plastic resistance of the slab
+PROTECTIONTH			= Thickness
+PROTECTEDSTEEL			= Steel profile with thermal protection
+TEMPREBARS				= Temperature of rebars equal to the
+AVERAGETEMP				= average temperature
+MAXTEMP2				= maximal temperature
+AXISTEMP				= temperature at axis
+
 #FRM_GAMMA
 ACCOMPAGNEMENT			= Combination factors
 CANCEL					= Cancel
@@ -479,7 +547,7 @@ ABOUT					= About
 ADDBEAM					= Add beam
 CALCULATION				= Modular ratio tool
 CALCULOPTIONS			= Calculation options
-CALCULATIONREPORT		= Calculation report
+CALCULATIONREPORT		= Project summary
 SOFTOPT					= Software options
 COPYPICTURE				= Copy picture
 DELBEAM					= Delete beam
@@ -545,10 +613,14 @@ ZOOMIN					= Zoom in
 ZOOMOUT					= Zoom out
 COTATIONS				= Display dimensions
 EXPERT					= Expert mode
+COPYIMAGE				= Copy the main image
 EDIT					= Edit
 EDITPROFILES			= Edit ArcelorMittal profiles
 EDITSTUDS				= Edit Studs
 EDITDECKS				= Edit Steel profiled sheetings
+WELDEDSEC				= Welded
+FIRENOTAVAIL			= Fire calculation is not available in this version of $.
+FIRELATER				= It will be released in a future version.
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Modular ratio tool
@@ -568,16 +640,6 @@ LONGTERM_N				= Modular ratio for permanent loads
 SHORTTERM_N				= Modular ratio for live loads
 RCOMPRESSION			= Resistances to compression
 RTENSION				= Resistance to tension
-
-
-#FRM_OUVERTURE
-BROWSEFILES				= Browse
-CREATEBEAM				= Create a new beam
-NEWPROJECT				= New project
-OK						= Ok
-OPENPROJECT				= Open a project
-RECENTFILES				= Recent Files
-FILE					= Fichier
 
 #FRM_PPLOADCASE
 TITLE					= Load cases
@@ -659,7 +721,6 @@ PROPPINGLOC				= Propping location
 UNDERSTEELBEAM			= Under the steel beam
 UNDERSLAB				= Under the concrete slab
 
-
 #FRM_PSHEETING
 TITLE					= Definition of the steel profiled sheeting
 OK						= OK
@@ -672,7 +733,6 @@ FROMDIM					= From dimensions
 NAME					= Name
 PROPERTIES				= Dimensions and properties
 
-
 #FRM_SLAB
 TITLE					= Definition of the slab
 OK						= OK
@@ -680,6 +740,8 @@ CANCEL					= Cancel
 ADDLAYER				= Add a layer of reinforcement
 ALL						= All
 CLASS					= Class
+COFRADAL				= Cofradal
+COFRANOTFOUND			= Warning: the specified cofradal has not been find in the database. Please contact the support.
 COMPOSITESLAB			= Composite slab
 CONCRETE				= Concrete
 CONNECTORANDSHEET		= Placement of the connectors
@@ -693,6 +755,7 @@ JOINT					= Concrete joint
 LIGHTCONCRETE			= Light concrete
 LOCATION				= Location
 MODIFYSH				= Modify the steel sheeting
+MSURF					= Weight
 NAME					= Name
 PARALLEL				= Parallel
 PERPENDICULAR			= Perpendicular
@@ -716,6 +779,12 @@ SPACING					= Spacing
 THICKNESS				= Thickness
 THROUGHDECKW			= Through deck welding
 TYPE					= Type		
+USER					= User
+CONTINUOUSRIBANDDECK	= Continuous concrete rib and steel deck
+CONTINUOUSRIB			= Continuous concrete rib
+DISCONTINUOUSDECK		= Discontinuous steel deck
+DISCONTINUOUSRIBDECK	= Discontinuous concrete rib and steel deck
+
 
 #FRM_SPANLENGHTS
 TITLE					= Definition of the beam
@@ -756,6 +825,17 @@ WEB						= Web
 WELDEDSYM				= Bi-symmetrical welded section
 WELDEDP					= Mono-symmetrical welded section
 
+#FRM_START
+BROWSEFILES				= Browse
+CREATEBEAM				= Create a new beam
+NEWPROJECT				= New project
+OK						= Ok
+OPENPROJECT				= Open a project
+RECENTFILES				= Recent Files
+FILE					= File
+NOTAVAILABLE			= Section not available for this version of the software
+LATER					= Slim floor section will be available in a future version of $
+
 #FRM_SFBSECTIONS
 CANCEL					= Cancel
 DELIVERYCOND			= Delivery conditions for $
@@ -794,6 +874,22 @@ WEBHEIGHT				= Web height
 THICKNESS				= Thickness
 IFBSECTION				= IFB section
 
+#FRM_SABSECTIONS
+CANCEL					= Cancel
+DELIVERYCOND			= Delivery conditions for $
+HOTROLLED				= Hot rolled profile
+OK						= OK
+PROFILE					= Profile
+PROFILES				= Profiles 
+QUALITY					= Quality 
+REDUCTIONCURVE			= Reduction curve
+SERIAL					= Serial
+STEEL					= Steel
+STEELGRADE				= Steel grade
+TITLE					= Definition of the steel profile
+SABSECTION				= SAB section
+WIDTH					= Width
+
 #FRM_SFBSECTIONS
 CANCEL					= Cancel
 DELIVERYCOND			= Delivery conditions for $
@@ -824,8 +920,8 @@ SHRINKAGEENCASEMENT		= Shrinkage of the encasement
 ULS						= ULS
 SLS						= SLS
 FLS						= FLS
-ULSC					= ULS_C
-SLSC					= SLS_C
+ULSC					= ULS-C
+SLSC					= SLS-C
 COPY                    = Copy
 
 #OPTCALCULMAIN
@@ -849,6 +945,7 @@ SECTIONPROP				= Properties of cross-sections
 COMPRESSIONREBARS		= Rebars in compression taken into account
 SIMPLIFIEDEFFW			= Simplified distribution of the effective of the concrete flange
 YOUNGSREBAR				= Young's modulus of reinforcements
+DELTACDEV				= Allowance for the deviation of rebars
 MODEL					= Numerical model parameters
 NODESPACING				= Distance between nodes
 NBNODES					= Number of nodes
@@ -991,6 +1088,8 @@ IDENTIFICATION			= Identification
 USERNAME				= User name
 FIRM					= Firm
 INTERNETCHECKS			= Internet checks
+VERSION					= Version
+
 
 #OPTSOFTUNITS
 TITLE					= Units

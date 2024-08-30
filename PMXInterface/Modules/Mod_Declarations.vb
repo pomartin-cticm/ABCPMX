@@ -41,6 +41,14 @@ Public Module Mod_Declarations
         ArcelorMittal
     End Enum
 
+    Public Structure struc_Version
+        Public Label As String
+        Public Principal As Integer
+        Public Indice As Integer
+        Public Beta As String
+        Public Annee As Integer
+    End Structure
+
     Public Structure Struc_Fichiers
 
         ''' <summary>
@@ -128,22 +136,11 @@ Public Module Mod_Declarations
 
         Public Maitre As EnuMaitre
 
-        ''' <summary>
-        ''' Nom du logiciel
-        ''' </summary>
         Public NomLogiciel As String
 
         Public Racine As String
 
-        ''' <summary>
-        ''' Version du logiciel
-        ''' </summary>
-        Public Version As String
-
-        ''' <summary>
-        ''' Année de la dernière version deployee
-        ''' </summary>
-        Public AnneeVersion As String
+        Public Version As struc_Version
 
         ''' <summary>
         ''' Adresse mail du support à contacter
@@ -171,50 +168,50 @@ Public Module Mod_Declarations
         Public ListeNorme() As String
 
         '--> Unités de longueur
-        Public Unit_Longueur() As String              'pour les textes
-        Public Transfert_Longueur() As Decimal        'pour les conversions
-        Public Format_Longueur() As String            'pour l'affichage - précision
-        Public NbDigitMax_Longueur() As Integer     'nombre maxi de decimale pour l'affichage         
+        Public Unit_Longueur() As String                'pour les textes
+        Public Transfert_Longueur() As Decimal          'pour les conversions
+        Public Format_Longueur() As String              'pour l'affichage - précision
+        Public NbDigitMax_Longueur() As Integer         'nombre maxi de decimale pour l'affichage         
 
         '--> Unités d'effort
-        Public Unit_Effort() As String              'pour les textes
-        Public Transfert_Effort() As Decimal        'pour les conversions
-        Public Format_Effort() As String            'pour l'affichage - précision
-        Public NbDigitMax_Effort() As Integer       'nombre maxi de decimale pour l'affichage    
+        Public Unit_Effort() As String                  'pour les textes
+        Public Transfert_Effort() As Decimal            'pour les conversions
+        Public Format_Effort() As String                'pour l'affichage - précision
+        Public NbDigitMax_Effort() As Integer           'nombre maxi de decimale pour l'affichage    
 
         '--> Unités de moment
-        Public Unit_Moment() As String              'pour les textes
-        Public Transfert_Moment() As Decimal        'pour les conversions
-        Public Format_Moment() As String            'pour l'affichage - précision
-        Public NbDigitMax_Moment() As Integer       'nombre maxi de decimale pour l'affichage    
+        Public Unit_Moment() As String                  'pour les textes
+        Public Transfert_Moment() As Decimal            'pour les conversions
+        Public Format_Moment() As String                'pour l'affichage - précision
+        Public NbDigitMax_Moment() As Integer           'nombre maxi de decimale pour l'affichage    
 
         '--> Unités pour les modules de flexion
-        Public Unit_ModuleW() As String            'pour les textes
-        Public Transfert_ModuleW() As Decimal      'pour les conversions
-        Public Format_ModuleW() As String          'pour l'affichage - précision
-        Public NbDigitMax_ModuleW() As Integer     'nombre maxi de decimale pour l'affichage   
+        Public Unit_ModuleW() As String                 'pour les textes
+        Public Transfert_ModuleW() As Decimal           'pour les conversions
+        Public Format_ModuleW() As String               'pour l'affichage - précision
+        Public NbDigitMax_ModuleW() As Integer          'nombre maxi de decimale pour l'affichage   
 
         '--> Unités pour les inerties
-        Public Unit_Inerties() As String            'pour les textes
-        Public Transfert_Inerties() As Decimal      'pour les conversions
-        Public Format_Inerties() As String          'pour l'affichage - précision
-        Public NbDigitMax_Inerties() As Integer     'nombre maxi de decimale pour l'affichage    
+        Public Unit_Inerties() As String                'pour les textes
+        Public Transfert_Inerties() As Decimal          'pour les conversions
+        Public Format_Inerties() As String              'pour l'affichage - précision
+        Public NbDigitMax_Inerties() As Integer         'nombre maxi de decimale pour l'affichage    
 
         '--> Unités pour les contraintes
-        Public Unit_Contraintes() As String         'pour les textes
-        Public Transfert_Contraintes() As Decimal   'pour les conversions
-        Public Format_Contraintes() As String       'pour l'affichage - précision
-        Public NbDigitMax_Contraintes() As Integer  'nombre maxi de decimale pour l'affichage    
+        Public Unit_Contraintes() As String             'pour les textes
+        Public Transfert_Contraintes() As Decimal       'pour les conversions
+        Public Format_Contraintes() As String           'pour l'affichage - précision
+        Public NbDigitMax_Contraintes() As Integer      'nombre maxi de decimale pour l'affichage    
 
         '--> Unités pour les modules d'élasticité
-        Public Unit_ModulesY() As String            'pour les textes
-        Public Transfert_ModulesY() As Decimal      'pour les conversions
-        Public Format_ModulesY() As String          'pour l'affichage - précision
-        Public NbDigitMax_ModulesY() As Integer     'nombre maxi de decimale pour l'affichage    
+        Public Unit_ModulesY() As String                'pour les textes
+        Public Transfert_ModulesY() As Decimal          'pour les conversions
+        Public Format_ModulesY() As String              'pour l'affichage - précision
+        Public NbDigitMax_ModulesY() As Integer         'nombre maxi de decimale pour l'affichage    
 
         'Les unites internes pour les contraintes sont en MPa
 
-        Public DetailNDC As Enum_NiveauDetailNDC    'Niveau de détails de la NDC - synthèse et complète
+        Public DetailNDC As Enum_NiveauDetailNDC        'Niveau de détails de la NDC - synthèse et complète
 
     End Structure
 

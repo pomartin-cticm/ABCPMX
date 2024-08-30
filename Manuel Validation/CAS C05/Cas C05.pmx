@@ -1,5 +1,5 @@
 ﻿'-----------------------------------------------'
-'PropMix software - CTICM - Version 1.0
+'PropMix software - CTICM - Version 1.00 beta 2
 'PROJECT USER FILE
 '-----------------------------------------------'
 '       /!\   Don't modify this file   /!\
@@ -170,10 +170,10 @@ BLOCK BETON_DALLE
    Leger           =  False
    Classe         =  C35/45
    RhoC         =  2500
-   Fck            =  20
-   Fcm            =  20
-   Fctm           =  2,21041889918423
-   Ecm            =  29961,9510546403
+   Fck            =  35
+   Fcm            =  35
+   Fctm           =  3,20996244169524
+   Ecm            =  34077,1461991893
    lCrackLimit    =  True
    wk_max         =  0,0004
 
@@ -233,7 +233,7 @@ BLOCK ACIER_CONNECTEUR_DALLE_ARMATURE
 BLOCK OPT_CALCULS
    RH            = 50
    Norme            = 0
-   EtaW            = 1,00
+   EtaW            = 1,2
    lLarEffSimp            = False
    lCompArma            = False
    dMaxNodes            = 1,0

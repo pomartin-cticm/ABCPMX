@@ -48,6 +48,7 @@ Partial Class Frm_About
         Me.lbk_SupportAM = New System.Windows.Forms.LinkLabel()
         Me.pic_Arcelor = New System.Windows.Forms.PictureBox()
         Me.ImgList_logos = New System.Windows.Forms.ImageList(Me.components)
+        Me.lbl_NomLogiciel = New System.Windows.Forms.Label()
         Me.pan_General.SuspendLayout()
         Me.TLpan_Main.SuspendLayout()
         Me.TLPan_PartieBasse.SuspendLayout()
@@ -70,7 +71,7 @@ Partial Class Frm_About
         Me.pan_General.Location = New System.Drawing.Point(0, 0)
         Me.pan_General.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_General.Name = "pan_General"
-        Me.pan_General.Size = New System.Drawing.Size(581, 468)
+        Me.pan_General.Size = New System.Drawing.Size(581, 498)
         Me.pan_General.TabIndex = 3
         '
         'TLpan_Main
@@ -85,7 +86,7 @@ Partial Class Frm_About
         Me.TLpan_Main.RowCount = 2
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
         Me.TLpan_Main.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-        Me.TLpan_Main.Size = New System.Drawing.Size(581, 468)
+        Me.TLpan_Main.Size = New System.Drawing.Size(581, 498)
         Me.TLpan_Main.TabIndex = 0
         '
         'TLPan_PartieBasse
@@ -98,7 +99,7 @@ Partial Class Frm_About
         Me.TLPan_PartieBasse.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
         Me.TLPan_PartieBasse.Controls.Add(Me.btn_OK, 1, 0)
         Me.TLPan_PartieBasse.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 431)
+        Me.TLPan_PartieBasse.Location = New System.Drawing.Point(3, 461)
         Me.TLPan_PartieBasse.Name = "TLPan_PartieBasse"
         Me.TLPan_PartieBasse.RowCount = 1
         Me.TLPan_PartieBasse.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
@@ -122,7 +123,7 @@ Partial Class Frm_About
         Me.pan_Main.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Main.Location = New System.Drawing.Point(3, 3)
         Me.pan_Main.Name = "pan_Main"
-        Me.pan_Main.Size = New System.Drawing.Size(575, 422)
+        Me.pan_Main.Size = New System.Drawing.Size(575, 452)
         Me.pan_Main.TabIndex = 1
         '
         'TLPan_PartieHaute
@@ -136,7 +137,7 @@ Partial Class Frm_About
         Me.TLPan_PartieHaute.Name = "TLPan_PartieHaute"
         Me.TLPan_PartieHaute.RowCount = 1
         Me.TLPan_PartieHaute.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 419.0!))
-        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(575, 422)
+        Me.TLPan_PartieHaute.Size = New System.Drawing.Size(575, 452)
         Me.TLPan_PartieHaute.TabIndex = 0
         '
         'pan_AffichageInfo
@@ -148,7 +149,7 @@ Partial Class Frm_About
         Me.pan_AffichageInfo.Location = New System.Drawing.Point(1, 1)
         Me.pan_AffichageInfo.Margin = New System.Windows.Forms.Padding(1)
         Me.pan_AffichageInfo.Name = "pan_AffichageInfo"
-        Me.pan_AffichageInfo.Size = New System.Drawing.Size(573, 420)
+        Me.pan_AffichageInfo.Size = New System.Drawing.Size(573, 450)
         Me.pan_AffichageInfo.TabIndex = 5
         '
         'TLpan_SepHorizontal
@@ -162,20 +163,21 @@ Partial Class Frm_About
         Me.TLpan_SepHorizontal.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_SepHorizontal.Name = "TLpan_SepHorizontal"
         Me.TLpan_SepHorizontal.RowCount = 2
-        Me.TLpan_SepHorizontal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 140.0!))
+        Me.TLpan_SepHorizontal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 170.0!))
         Me.TLpan_SepHorizontal.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-        Me.TLpan_SepHorizontal.Size = New System.Drawing.Size(571, 418)
+        Me.TLpan_SepHorizontal.Size = New System.Drawing.Size(571, 448)
         Me.TLpan_SepHorizontal.TabIndex = 0
         '
         'pan_Entete
         '
+        Me.pan_Entete.Controls.Add(Me.lbl_NomLogiciel)
         Me.pan_Entete.Controls.Add(Me.pan_ImageEntete)
         Me.pan_Entete.Controls.Add(Me.lbl_Verification)
         Me.pan_Entete.Dock = System.Windows.Forms.DockStyle.Fill
         Me.pan_Entete.Location = New System.Drawing.Point(0, 0)
         Me.pan_Entete.Margin = New System.Windows.Forms.Padding(0)
         Me.pan_Entete.Name = "pan_Entete"
-        Me.pan_Entete.Size = New System.Drawing.Size(571, 140)
+        Me.pan_Entete.Size = New System.Drawing.Size(571, 170)
         Me.pan_Entete.TabIndex = 19
         '
         'pan_ImageEntete
@@ -207,7 +209,7 @@ Partial Class Frm_About
         Me.TLpan_SepEntreprises.Controls.Add(Me.pan_CTICM, 1, 0)
         Me.TLpan_SepEntreprises.Controls.Add(Me.Pan_ArcelorMittal, 0, 0)
         Me.TLpan_SepEntreprises.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TLpan_SepEntreprises.Location = New System.Drawing.Point(0, 140)
+        Me.TLpan_SepEntreprises.Location = New System.Drawing.Point(0, 170)
         Me.TLpan_SepEntreprises.Margin = New System.Windows.Forms.Padding(0)
         Me.TLpan_SepEntreprises.Name = "TLpan_SepEntreprises"
         Me.TLpan_SepEntreprises.RowCount = 1
@@ -355,12 +357,23 @@ Partial Class Frm_About
         Me.ImgList_logos.Images.SetKeyName(0, "CTICM_logo.jpg")
         Me.ImgList_logos.Images.SetKeyName(1, "ARCELORMITTAL_logo.png")
         '
+        'lbl_NomLogiciel
+        '
+        Me.lbl_NomLogiciel.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lbl_NomLogiciel.ForeColor = System.Drawing.SystemColors.ControlDarkDark
+        Me.lbl_NomLogiciel.Location = New System.Drawing.Point(3, 141)
+        Me.lbl_NomLogiciel.Name = "lbl_NomLogiciel"
+        Me.lbl_NomLogiciel.Size = New System.Drawing.Size(565, 23)
+        Me.lbl_NomLogiciel.TabIndex = 19
+        Me.lbl_NomLogiciel.Text = "lbl_NomLogiciel"
+        Me.lbl_NomLogiciel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'Frm_About
         '
         Me.AcceptButton = Me.btn_OK
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(581, 468)
+        Me.ClientSize = New System.Drawing.Size(581, 498)
         Me.Controls.Add(Me.pan_General)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle
         Me.MaximizeBox = False
@@ -412,4 +425,5 @@ Partial Class Frm_About
     Friend WithEvents pan_Entete As Panel
     Friend WithEvents TLpan_SepEntreprises As TableLayoutPanel
     Friend WithEvents Button1 As Button
+    Friend WithEvents lbl_NomLogiciel As Label
 End Class

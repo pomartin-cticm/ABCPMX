@@ -1,5 +1,5 @@
 ﻿'-----------------------------------------------'
-'PropMix software - CTICM - Version 1.0
+'PropMix software - CTICM - Version 1.00 beta 2
 'PROJECT USER FILE
 '-----------------------------------------------'
 '       /!\   Don't modify this file   /!\
@@ -9,10 +9,10 @@
 BLOCK IDENTIFICATION
    Utilisateur   = 
    Entreprise    = 
-   NomProjet     = Project Pr#1
+   NomProjet     = VALIDATION
 
 BLOCK POUTRE
-   BeaIden           =  Beam B#1
+   BeaIden           =  TEST C04 - mixte
    Commentaire       =  
    ConsoleGauche  =  False
    ConsoleDroite  =  False
@@ -37,15 +37,21 @@ BLOCK POUTRE
    lDefautEnroba  =  False
    lDefautEtaiem  =  True
    lDefautDalle   =  False
+   lAutoDesign    =  False
+   NombreZones    =  {1/1/1}
+   LongueurZone    =  {3/12,5/3}+{0/0/0}+{0/0/0}
+   EspaZone    =  {0,2/0,207/0,2}+{0,2/0,2/0,2}+{0,2/0,2/0,2}
+   EspaBacTransZone    =  {1/1/1}+{1/1/1}+{1/1/1}
+   NbGoujonTrans    =  {1/2/1}+{1/1/1}+{1/1/1}
    lCombELU    =  {True/False/False/False/False/False}
    CoefELU    =  {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1,0/1,5/1,05/0/0}+{1,0/1,05/1,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    lCombELS    =  {True/False/False/False/False/False}
    CoefELS    =  {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
    lCombELF    =  {False/False/False/False/False}
    CoefELF    =  {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
-   lCombELCU    =  {False/False}
+   lCombELCU    =  {True/False}
    CoefELCU    =  {0/0/0/1,5/1,35}+{0/0/0/0/0}
-   lCombELCS    =  {False/False}
+   lCombELCS    =  {True/False}
    CoefELCS    =  {0/0/0/1/1}+{0/0/0/0/0}
 
 BLOCK MAINT_BAC
@@ -62,7 +68,7 @@ BLOCK SECTION
    Nom            =  Nom
    lDalleBeton    =  False
    lDatabase      =  False
-   typeSection    =  1
+   typeSection    =  3
    lUser      =  False
    f_y_fs         =  235
    f_y_w          =  235
@@ -88,13 +94,13 @@ BLOCK PROFILA
 
 BLOCK ACIER_PROFILA
    Nuance         =  S355
-   Qualite        =  M/ML
-   Reduction      =  EN 10025-4
-   NormeProduit   =  EN 10025-4 : 2019
-   EpMax          =  0,150000005960464
-   iBase          =  1
-   iTabStand      =  3
-   iStandard      =  4
+   Qualite        =  EC3
+   Reduction      =  Table 3.1
+   NormeProduit   =  EN 1993-1-1
+   EpMax          =  0,0800000056624413
+   iBase          =  0
+   iTabStand      =  13
+   iStandard      =  20
 
 BLOCK ENROBAGE_PROFILA
    lArmaConst     =  False
@@ -107,23 +113,23 @@ BLOCK ENROBAGE_PROFILA
 
 BLOCK ARMATURE_ENROBAGE_PROFILA
    indLit         =  0
-   PhiExt         =  0,008
+   PhiExt         =  0,012
    NbExt          =  1
    lActExt          =  True
    PhiMil         =  0,008
    NbMil          =  0
-   PhiInt         =  0,012
+   PhiInt         =  0,008
    NbInt          =  1
    lActInt          =  True
 
    indLit         =  1
    PhiExt         =  0,008
-   NbExt          =  0
+   NbExt          =  1
    lActExt          =  False
    PhiMil         =  0,008
    NbMil          =  0
    PhiInt         =  0,008
-   NbInt          =  0
+   NbInt          =  1
    lActInt          =  False
    zPosRatio      =  0,5
 
@@ -195,6 +201,7 @@ BLOCK COFRADAL
    Dp      =  0,125
    Msurf      =  525
    lCustom      =  False
+
 BLOCK ARMATURE_DALLE
    indLit         =  0
    EspBar         =  0,2
@@ -208,17 +215,25 @@ BLOCK ACIER_ARMATURE_DALLE
    Fsk            =  500
    Es             =  210000
 
-BLOCK CONNECTEUR_DALLE
+BLOCK CONNECTEUR_DALLE_GOUJON
    nom            =  19-100
-   hsc            =  0,100000001490116
-   d              =  0,0190000012516975
+   hsc            =  0,1
+   d              =  0,019
    fy              =  350
    fu              =  450
+
+BLOCK CONNECTEUR_DALLE_ARMATURE
+   ds            =  0,025
+
+BLOCK ACIER_CONNECTEUR_DALLE_ARMATURE
+   Classe         =  B500
+   Fsk            =  500
+   Es             =  210000
 
 BLOCK OPT_CALCULS
    RH            = 50
    Norme            = 0
-   EtaW            = 1,2
+   EtaW            = 1,00
    lLarEffSimp            = False
    lCompArma            = False
    dMaxNodes            = 1,0
@@ -286,30 +301,12 @@ BLOCK CHGTU_QSURF
 BLOCK CHGTU_QSURF
    CleDic      =  G2
    indTravee      =  1
-   QSurf      =  0
+   QSurf      =  1000
 
 BLOCK CHGTU_QSURF
    CleDic      =  Q1
    indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_FREPAR
-   CleDic      =  Q1
-   indTravee      =  1
-   F0      =  1880
-   F1      =  1880
-   xPosT0      =  0
-   xPosT1      =  12,5
-   xGaucheT      =  0
-
-BLOCK CHGTU_FREPAR
-   CleDic      =  Q1
-   indTravee      =  1
-   F0      =  1050
-   F1      =  1050
-   xPosT0      =  4,75
-   xPosT1      =  7,75
-   xGaucheT      =  0
+   QSurf      =  2500
 
 BLOCK CHGTU_QSURF
    CleDic      =  Q2
@@ -320,4 +317,22 @@ BLOCK CHGTU_QSURF
    CleDic      =  QC
    indTravee      =  1
    QSurf      =  0
+
+BLOCK CHGTU_FREPAR
+   CleDic      =  QC
+   indTravee      =  1
+   F0      =  1880
+   F1      =  1880
+   xPosT0      =  0
+   xPosT1      =  12,5
+   xGaucheT      =  0
+
+BLOCK CHGTU_FREPAR
+   CleDic      =  QC
+   indTravee      =  1
+   F0      =  1050
+   F1      =  1050
+   xPosT0      =  4,75
+   xPosT1      =  7,75
+   xGaucheT      =  0
 

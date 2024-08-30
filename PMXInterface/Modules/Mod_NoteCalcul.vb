@@ -1525,10 +1525,10 @@ Module Mod_NoteCalcul
                 End If
             Else
                 If Not MyBeam.Section.IsVoilementParCisaillement(MyBeam.Param.EtaW) Then
-                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " ≤ 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False))
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeHw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " ≤ 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False))
                     AddLigneNDC(TABW2 & TABVAR5 & BlocG("NO_NEED_CHECK_WB"))
                 Else
-                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & TABEGAL & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeDw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " > 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False))
+                    AddLigneNDC(TABW2 & BlocG("SHEAR_BUC_RES") & TABAFF & "h\-w\=/t\-w\= = " & TABEGAL & GetStringInUnit((MyBeam.Section.ProfilA.HauteurAmeHw / MyBeam.Section.ProfilA.Tw), Enu_TypeVariable.SansType, 3, 1, False) & " > 72\Se\s/\Sh\s = " & GetStringInUnit(72 * MyBeam.Section.Epsilon_W / MyBeam.Param.EtaW, Enu_TypeVariable.SansType, 3, 1, False))
                     AddLigneNDC(TABW2 & TABVAR5 & BlocG("NEED_CHECK_WB"))
                 End If
             End If
@@ -5938,40 +5938,43 @@ Module Mod_NoteCalcul
         Dim lMixte As Boolean = MyBeam.lMixte
         Dim lEtaiement As Boolean = (MyBeam.TypeEtaiement = cls_Poutre.EnuTypeEtaiement.FullyPropped)
 
-        '--> Initialisation
+        '--( Traitement des combinaisons ELU générales
 
-        SautePage()
+        If MyBeam.CombiA_ELU.nbCombi > 0 Then
+            '--> Initialisation
+            SautePage()
 
-        If MyBeam.lMixte Then
-            AddTitreNdC(1, BlocELU("ULS_CHECKS_FINAL"))
-        Else
-            AddTitreNdC(1, BlocELU("ULS_CHECKS"))
+            If MyBeam.lMixte Then
+                AddTitreNdC(1, BlocELU("ULS_CHECKS_FINAL"))
+            Else
+                AddTitreNdC(1, BlocELU("ULS_CHECKS"))
+            End If
+
+            If Not MyBeam.VerificationsELUDispo(MyBeam.lMixte) Then Exit Sub
+            'If (Not MyBeam.lMixte) And MyBeam.lEnrobage Then Exit Sub
+
+            '--> Traitement
+
+            '# Synthèse des critères
+
+            EditionVerificationsELUSynthese(MyBeam)
+
+            '# Calcul détaillé des critères sous combinaisons ELU
+
+            EditionVerificationsELUCombi(MyBeam, 0, False)
+
+            '# Informations additionnelles
+
+            EditionVerifELUAdditionel(MyBeam)
+
+            '# Poutres mixtes : ferraillage transversal
+
+            If MyBeam.lMixte Then
+                EditionFerraillageTransversal(MyBeam)
+            End If
         End If
 
-        If Not MyBeam.VerificationsELUDispo(MyBeam.lMixte) Then Exit Sub
-        'If (Not MyBeam.lMixte) And MyBeam.lEnrobage Then Exit Sub
-
-        '--> Traitement
-
-        '# Synthèse des critères
-
-        EditionVerificationsELUSynthese(MyBeam)
-
-        '# Calcul détaillé des critères sous combinaisons ELU
-
-        EditionVerificationsELUCombi(MyBeam, 0, False)
-
-        '# Informations additionnelles
-
-        EditionVerifELUAdditionel(MyBeam)
-
-        '# Poutres mixtes : ferraillage transversal
-
-        If MyBeam.lMixte Then
-            EditionFerraillageTransversal(MyBeam)
-        End If
-
-        '--> Phase de construction pour les poutres mixtes
+        '--( Phase de construction pour les poutres mixtes
 
         If MyBeam.lMixte And (Not lEtaiement) And Not (MyBeam.CombiA_ELCU.nbCombi = 0) Then
 

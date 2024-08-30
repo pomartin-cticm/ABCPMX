@@ -1343,9 +1343,9 @@ Module Mod_OutilsGraph
         Dim txtVersion As String
 
         If PetitLogo Then
-            txtVersion = "PMX " & LogicielInfo.Version
+            txtVersion = "PMX " & LogicielInfo.Version.Label
         Else
-            txtVersion = LogicielInfo.Version
+            txtVersion = LogicielInfo.Version.Label
         End If
 
         wTotal = MyGr.MeasureString(txtVersion, MyFontVersion).Width

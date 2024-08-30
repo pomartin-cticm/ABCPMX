@@ -1,4 +1,46 @@
-﻿#NDC_MAIN
+﻿#NDC_PROJECTSYNTHESIS
+TITLE					= Note de calculs
+USER					= Utilisateur
+SOCIETE					= Entreprise
+PROJET					= Projet
+FOOTNOTE				= Voir les conditions d'utilisation du logiciel
+BEAM 					= Poutre
+PARAMETERS				= Paramètres
+INTERSTEEL				= Poutre acier intermédiaire
+INTERSTEELENC			= Poutre acier intermédiaire, avec profilé partiellement enrobé
+INTERCOMPOSITE			= Poutre mixte intermédiaire
+INTERCOMPENC			= Poutre mixte intermédiaire, avec profilé partiellement enrobé
+EDGESTEEL				= Poutre acier de rive
+EDGESTEELENC			= Poutre acier de rive, avec profilé partiellement enrobé
+EDGECOMPOSITE			= Poutre mixte de rive
+EDGECOMPENC				= Poutre mixte de rive, avec profilé partiellement enrobé
+SPANLENGTH				= Portée
+SPANLENGTHS				= Portées
+ULS						= États limites ultimes
+ULSCOMPOSITE			= États limites ultimes en situation normale (phase mixte)
+ULSCONSTRUCTION			= États limites ultimes en phase de construction
+ULSFIRE					= États limites ultimes à l'incendie 
+SLS						= États limites de service
+TYPE 					= Type
+PROFILE					= Profilé
+MASS 					= Masse
+WELDEDS					= Reconstitué par soudage
+CONNECTION				= Connexion
+SLABSOLID				= Dalle pleine
+SLABCOMPOSITE			= Dalle mixte
+SLABPREF				= Dalle pleine partiellement prefabriquée
+CHAUNCH					= Renformis
+RIBSLONGI				= Nervures parallèles
+RIBSTRANS				= Nervures perpendiculaires
+CONCRETE				= Béton
+SLSDEFLECTIONS			= Flèches maximales
+SLSHIVOSS				= Confort vibratoire
+CZONE					= Zone de confort
+CRECOMMENDED			= Recommandé
+CCRITICAL				= Critique
+CNOTRECOMMENDED			= Non recommandé
+
+#NDC_MAIN
 TITLE					= Note de calculs
 USER					= Utilisateur
 SOCIETE					= Entreprise
@@ -82,6 +124,10 @@ TP_PROFILE				= Epaisseur du plat inférieur
 AWELD_PROFILE			= Gorge du cordon de soudure
 A_PROFILE				= Aire de la section transversale
 AV_PROFILE				= Aire de cisaillement
+ZCENTROID				= Position cdg
+ZSHEAR					= Position centre de cisaillement
+ZPLASTIC				= Position axe neutre plastique
+RGYRATION				= Rayon de giration
 IY_PROFILE				= Moment d'inertie selon l'axe y-y
 IZ_PROFILE				= Moment d'inertie selon l'axe z-z
 IT_PROFILE				= Inertie de torsion
@@ -120,6 +166,11 @@ FYFS_PROFILE			= Limite d'élasticité de la semelle supérieure
 FYFI_PROFILE			= Limite d'élasticité de la semelle inférieure
 FYW_PROFILE				= Limite d'élasticité de l'âme
 FY_PROFILE				= Limite d'élasticité								  
+FU_PROFILE				= Résistance ultime à la traction
+FLANGES					= Semelles
+WEB						= Âme
+UFLANGE					= Semelle supérieure
+LFLANGE					= Semelle inférieure								  
 PARTIAL_ENCASEMENT		= Enrobage partiel
 GEOMETRY_PART_ENC		= Géométrie de l'enrobage partiel
 RATIO_BC_PART_ENC		= Ratio de la largeur d'enrobage sur la largeur des semelles
@@ -209,6 +260,7 @@ CONNECTORS				= Connecteurs
 NAME_CONNECTORS			= Nom
 HSC_CONNECTORS			= Hauteur d'un goujon
 D_CONNECTORS			= Diamètre du corps du goujon
+D_ARMA					= Diamètre de l'armature
 FYSC_CONNECTORS			= Limite d'élasticité
 FUSC_CONNECTORS			= Résistance ultime à la traction
 PRD_CONNECTORS			= Résistance au cisaillement 
@@ -370,6 +422,13 @@ COMPOSITE				= Mixte
 STEELENCASED			= Profilé+Enrobabe
 CONSTRUCTIONP			= Durant la phase de construction
 COMPOSITEP				= Durant la phase finale
+BETAMPLASTIC			= Facteur de réduction inclus
+ACCORDINGTO				= selon
+REFEN1994G1				= EN 1994-1-1:2005, 6.2.1.2 (2) et Figure 6.3
+REFEN1994G2				= prEN 1994-1-1:2024, Figure 8.3
+FORZSURH				= Pour
+RATIOZHABOVELIMIT		= Le ratio z / H (= $) est au-dessus de la limite pour le calcul plastique
+RATIOZHLIM				= Valeur limite
 
 #NDC_ANALYSE
 ANALYSIS				= Analyse - Efforts internes
@@ -492,7 +551,7 @@ MINVALUE				= Valeur minimum
 MINIACCTOREF			= Valeurs minimum d'après les Recommendations BNCM / CNC2M N0175
 
 #NDC_VERIFICATIONSSLS
-SLS_CHECKS				= Etat limite de service
+SLS_CHECKS				= Etats limites de service
 DEFLECTIONS				= Flèche
 DEFLECTIONS_LOADCASES	= Sous cas de charges élémentaires
 DEFLECTIONS_COMBI		= Sous combinaisons ELS$
@@ -514,8 +573,28 @@ MINIREINFORCEMENT		= Section d'armature minimale
 EFFECTREINFORCEMENT		= Section d'armature effective
 CONTROLCRACKINGNODIRECT	= Maîtrise de la fissuration en l'absence de contraintes directes
 REF1CONTROLCRACKING		= D'après l'article 7.4.2 de la NF EN 1994-1-1:2005
+REF2CONTROLCRACKING		= D'après l'article 7.4.3 de la NF EN 1994-1-1:2005
+REF1CONTROLCRACKINGG2	= D'après l'article 9.4.2 de la prEN 1994-1-1:2024
+REF2CONTROLCRACKINGG2	= D'après l'article 9.4.3 de la prEN 1994-1-1:2024
 ADDREINFSUPP			= Des armatures longitudinales complémentaires sont nécessaires sur les appuis
 REINFSUPPDETAIL			= Pour les détails constructifs, voir EN 1994-1-1: 2005, 7.4.1 (4) 
+CONTROLCRACKDIRECTSIGMA	= Maîtrise de la fissuration sous contraite directe
+DIAMAXI					= Diamètre maxi des barres
+ESPMAXI					= Espacement maxi des barres
+DELTASIGMA				= y compris l'effet de rigidité du béton
+COMBIREBAR				= Pour la combinaison
+FREQG					= Fréquence propre pour la combinaison 
+
+#NDC_VERIFICATIONSFIRE
+FIRE_CHECKS				= Etats limites ultime en situation d'incendie
+FIRE_CHECKS_SYMMARY		= Synthèse des résultats
+FIRE_CHECKS_DETAIL		= Résultats détaillés
+TIMERESISTANCE			= Résistance au feu
+TIMESTEP				= Durée d'exposition
+TEMPSTEEL				= Températures dans le profilé métallique
+TEMPSLAB				= Températures dans la dalle
+TEMPPARTS				= Températures dans les éléments de la poutre
+CRITERIA				= Critères
 
 #NDC_HIVOSS
 HIVOSSTITLE				= Evaluation des vibrations du plancher
