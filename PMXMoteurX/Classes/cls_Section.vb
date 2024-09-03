@@ -2189,7 +2189,7 @@ Public Class cls_Section
 
 #Region " Ecriture/Lecture  - Fichier "
 
-    'Public Sub EcrireFile(ByRef Lines As List(Of String))
+    'Public Sub SaveFile(ByRef Lines As List(Of String))
     '    '-------------------------------------------------------------------------------------
     '    '   Ecriture des attributs pour enregistrement dans un fichier 
     '    '   --> 20/02/20 v.1 
@@ -2216,16 +2216,16 @@ Public Class cls_Section
     '    'Lines.Add("   R             = " & Me.r_cs)
 
     '    '--> Acier
-    '    Me.Acier.EcrireFile(Lines)
+    '    Me.Acier.SaveFile(Lines)
 
     '    '--> Enrobage
-    '    Me.Enrobage.EcrireFile(Lines)
+    '    Me.Enrobage.SaveFile(Lines)
 
     '    ''--> Dalle de béton
-    '    'Me.dalle.EcrireFile(Lines)
+    '    'Me.dalle.SaveFile(Lines)
 
     '    ''--> Options de calcul
-    '    'Me.Param.EcrireFile(Lines)
+    '    'Me.Param.SaveFile(Lines)
 
     '    Lines.Add("")
 

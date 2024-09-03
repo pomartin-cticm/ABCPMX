@@ -6390,11 +6390,16 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub AffichageTableauAlphaCr(MyBeam As cls_Poutre, ByRef NCOL As Integer, iCombi As Integer)
+    Private Sub AffichageTableauAlphaCr(MyBeam As cls_Poutre, NCOL As Integer, iCombi As Integer, lConstrucP As Boolean)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Affichage dans le tableau des critères ELU des résultats pour une combinaison
+        '-------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre
+        '   NCOL        [E] :   Nombre de colonnes dans le tableau
+        '   iCombi      [E] :   Indice de la combinaison
+        '   lConstrucP  [E] :   Indique si phase de construction
         '-------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -6406,16 +6411,22 @@ Module Mod_NoteCalcul
         Dim lElastic As Boolean = MyBeam.Param.lElasticDesignVM
         Dim lMixte As Boolean = MyBeam.lMixte
         Const iVerif As Integer = 0
+        Dim ChaineU As String = ""
 
         '--> Initialisation
 
         MyBord = Bordures.Tous
 
+        If lConstrucP Then
+            ChaineU = MyBeam.CombiA_ELCU.Symbole(iCombi)
+        Else
+            ChaineU = MyBeam.CombiA_ELU.Symbole(iCombi)
+        End If
+
         '--> Traitement
 
-
         InitialiseLigne(NCOL, HLIGNE, False)
-        AddCellule(LC3, MyBord, PositionTexteInCell.Centre, MyBeam.CombiA_ELU.Symbole(iCombi))
+        AddCellule(LC3, MyBord, PositionTexteInCell.Centre, ChaineU)
         AddCellule(LC3, MyBord, PositionTexteInCell.Centre, GetStringInUnit(MyBeam.VerifAcier(iVerif).AlphaCrLTB(iCombi), Enu_TypeVariable.SansType, 4, 3, False))
 
         For i = iTraveeDeb To iTraveeFin
@@ -7582,6 +7593,7 @@ Module Mod_NoteCalcul
         '   Affichage détaillé des critères ELU par combinaison
         '-------------------------------------------------------------------------------------------
         '   MyBeam          [E] :   Poutre
+        '   iVerif          [E] :   
         '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
         '-------------------------------------------------------------------------------------------
 
@@ -7609,9 +7621,9 @@ Module Mod_NoteCalcul
         '--> Tableau des critères de résistance / combinaison
 
         If lElastic Then
-            TableauCritereCombiELU_AcierElasticVM(MyBeam, iVerif, nbCombi)
+            TableauCritereCombiELU_AcierElasticVM(MyBeam, iVerif, nbCombi, lConstructionP)
         Else
-            TableauCritereCombiELU_AcierPlasticOuClass3(MyBeam, iVerif, nbCombi)
+            TableauCritereCombiELU_AcierPlasticOuClass3(MyBeam, iVerif, nbCombi, lConstructionP)
         End If
 
         '--> Combinaison des charges et moment critiques de déversement élastique
@@ -7620,7 +7632,7 @@ Module Mod_NoteCalcul
             EnteteTableauAlphaCr(MyBeam, NCOL)
 
             For iCombi = 0 To nbCombi - 1
-                AffichageTableauAlphaCr(MyBeam, NCOL, iCombi)
+                AffichageTableauAlphaCr(MyBeam, NCOL, iCombi, lConstructionP)
             Next
 
             FinTableau()
@@ -7629,7 +7641,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub TableauCritereCombiELU_AcierElasticVM(MyBeam As cls_Poutre, iVerif As Integer, nbCombi As Integer)
+    Private Sub TableauCritereCombiELU_AcierElasticVM(MyBeam As cls_Poutre, iVerif As Integer, nbCombi As Integer, lConstructionP As Boolean)
         '-------------------------------------------------------------------------------------------
         '   14/03/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -7639,6 +7651,7 @@ Module Mod_NoteCalcul
         '   MyBeam          [E] :   Poutre
         '   iVerif          [E] :   
         '   nbCombi         [E] :   Nombre de combinaisons traitée
+        '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
         '-------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -7666,7 +7679,7 @@ Module Mod_NoteCalcul
                 EnteteTableauCriteresELU_ACIER_ElasticVM(MyBeam, iVerif, NCOL)
             End If
 
-            LigneTableauCriteresELU_AcierElasticVM(MyBeam, (NbTravees > 1), NCOL, iCombi, iVerif)
+            LigneTableauCriteresELU_AcierElasticVM(MyBeam, (NbTravees > 1), NCOL, iCombi, iVerif, lConstructionP)
 
         Next
 
@@ -7674,7 +7687,7 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub TableauCritereCombiELU_AcierPlasticOuClass3(MyBeam As cls_Poutre, iVerif As Integer, nbCombi As Integer)
+    Private Sub TableauCritereCombiELU_AcierPlasticOuClass3(MyBeam As cls_Poutre, iVerif As Integer, nbCombi As Integer, lConstructionP As Boolean)
         '-------------------------------------------------------------------------------------------
         '   14/03/24 :  Création - POM
         '-------------------------------------------------------------------------------------------
@@ -7684,6 +7697,7 @@ Module Mod_NoteCalcul
         '   MyBeam          [E] :   Poutre
         '   iVerif          [E] :   
         '   nbCombi         [E] :   Nombre de combinaisons traitée
+        '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
         '-------------------------------------------------------------------------------------------
 
         '--( Déclarations
@@ -7710,7 +7724,7 @@ Module Mod_NoteCalcul
                 EnteteTableauCriteresELU_ACIER_PlasticOuClass3(MyBeam, iVerif, NCOL)
             End If
 
-            LigneTableauCriteresELU_AcierPlasticOuClass3(MyBeam, (MyBeam.NbTravees > 1), NCOL, iCombi, iVerif)
+            LigneTableauCriteresELU_AcierPlasticOuClass3(MyBeam, (MyBeam.NbTravees > 1), NCOL, iCombi, iVerif, lConstructionP)
 
         Next
 
@@ -7718,18 +7732,20 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub LigneTableauCriteresELU_AcierPlasticOuClass3(MyBeam As cls_Poutre, lMultiSpan As Boolean, ByRef NCOL As Integer, iCombi As Integer, iVerif As Integer)
+    Private Sub LigneTableauCriteresELU_AcierPlasticOuClass3(MyBeam As cls_Poutre, lMultiSpan As Boolean, ByRef NCOL As Integer,
+                                                             iCombi As Integer, iVerif As Integer, lConstructionP As Boolean)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Affichage d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
         '   Cas d'une poutre acier en calcul plastique ou élastique classe 3
         '-------------------------------------------------------------------------------------------
-        '   MyBeam      [E] :   Poutre traitée
-        '   lMultiSpan  [E] :   Si poutre à plusieurs travées
-        '   NCOL        [E] :   Nombre de colonnes du tableau
-        '   iCombi      [E] :   Indice de la combinaison
-        '   iVerif      [E] :   Indice du bloc de vérification
+        '   MyBeam          [E] :   Poutre traitée
+        '   lMultiSpan      [E] :   Si poutre à plusieurs travées
+        '   NCOL            [E] :   Nombre de colonnes du tableau
+        '   iCombi          [E] :   Indice de la combinaison
+        '   iVerif          [E] :   Indice du bloc de vérification
+        '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
         '-------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -7743,6 +7759,7 @@ Module Mod_NoteCalcul
         Dim lMixte As Boolean = MyBeam.lMixte
         Dim lEnrob As Boolean = MyBeam.lEnrobage
         Dim lInterMV, lShearB, lInterMVb As Boolean
+        Dim ChaineU As String = ""
 
         '--> Initialisation
 
@@ -7765,7 +7782,12 @@ Module Mod_NoteCalcul
             InitialiseLigne(NCOL, HLIGNE, False)
 
             If i = iTraveeDeb Then
-                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, MyBeam.CombiA_ELU.Symbole(iCombi))
+                If lConstructionP Then
+                    ChaineU = MyBeam.CombiA_ELCU.Symbole(iCombi)
+                Else
+                    ChaineU = MyBeam.CombiA_ELU.Symbole(iCombi)
+                End If
+                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, ChaineU)
             Else
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, "")
             End If
@@ -7799,18 +7821,20 @@ Module Mod_NoteCalcul
 
     End Sub
 
-    Private Sub LigneTableauCriteresELU_AcierElasticVM(MyBeam As cls_Poutre, lMultiSpan As Boolean, ByRef NCOL As Integer, iCombi As Integer, iVerif As Integer)
+    Private Sub LigneTableauCriteresELU_AcierElasticVM(MyBeam As cls_Poutre, lMultiSpan As Boolean, ByRef NCOL As Integer,
+                                                       iCombi As Integer, iVerif As Integer, lConstructionP As Boolean)
         '-------------------------------------------------------------------------------------------
         '   22/11/23 :  Création - POM
         '-------------------------------------------------------------------------------------------
         '   Affichage d'une combinaison dans le tableau des critères ELU des résultats pour une combinaison
         '   Cas d'une poutre acier en calcul elastique VM
         '-------------------------------------------------------------------------------------------
-        '   MyBeam      [E] :   Poutre traitée
-        '   lMultiSpan  [E] :   Si poutre à plusieurs travées
-        '   NCOL        [E] :   Nombre de colonnes du tableau
-        '   iCombi      [E] :   Indice de la combinaison
-        '   iVerif      [E] :   Indice du bloc de vérification
+        '   MyBeam          [E] :   Poutre traitée
+        '   lMultiSpan      [E] :   Si poutre à plusieurs travées
+        '   NCOL            [E] :   Nombre de colonnes du tableau
+        '   iCombi          [E] :   Indice de la combinaison
+        '   iVerif          [E] :   Indice du bloc de vérification
+        '   lConstructionP  [E] :   Indique si phase de construction, pour les poutres mixtes
         '-------------------------------------------------------------------------------------------
 
         '--> Déclarations
@@ -7823,6 +7847,7 @@ Module Mod_NoteCalcul
         Dim iNodeD, iNodeF As Integer
         Dim lMixte As Boolean = MyBeam.lMixte
         Dim lEnrob As Boolean = MyBeam.lEnrobage
+        Dim ChaineU As String = ""
 
         '--> Initialisation
 
@@ -7840,7 +7865,12 @@ Module Mod_NoteCalcul
 
             InitialiseLigne(NCOL, HLIGNE, False)
             If i = iTraveeDeb Then
-                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, MyBeam.CombiA_ELU.Symbole(iCombi))
+                If lConstructionP Then
+                    ChaineU = MyBeam.CombiA_ELCU.Symbole(iCombi)
+                Else
+                    ChaineU = MyBeam.CombiA_ELU.Symbole(iCombi)
+                End If
+                AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, ChaineU)
             Else
                 AddCellule(LC3, MyBordures(i), PositionTexteInCell.Centre, "")
             End If

@@ -481,10 +481,13 @@ Public Class Frm_PMX
         Me.img_Main.Invalidate()
     End Sub
 
-
 #End Region
 
 #Region " Gestion des barres d'outils "
+
+    Private Sub TSbtn_AddPoutreFromFile_Click(sender As Object, e As EventArgs) Handles TSbtn_AddPoutreFromFile.Click
+
+    End Sub
 
     Private Sub Btn_AddSection_Click(sender As Object, e As EventArgs) Handles TSbtn_AddBeamN.Click
         AjouterPoutre()

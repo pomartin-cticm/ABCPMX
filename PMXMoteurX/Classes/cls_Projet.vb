@@ -4,6 +4,12 @@ Imports System.Net.Mime.MediaTypeNames
 
 Public Class cls_Projet
 
+#Region " Déclarations "
+    Const BkINDENT As String = "IDENTIFICATION"
+    Const BkPOUTRE As String = "BEAM"
+
+#End Region
+
 #Region " Attributs "
 
     '--> Paramètres générals
@@ -133,7 +139,7 @@ Public Class cls_Projet
 
 #Region " Ecriture / Lecture - Fichier "
 
-    Public Sub EcrireFile(ByRef Lines As List(Of String), ByVal version As String)
+    Public Sub SaveFile(ByRef Lines As List(Of String), ByVal version As String)
         '-------------------------------------------------------------------------------------
         '   Ecriture des attributs pour enregistrement dans un fichier 
         '-------------------------------------------------------------------------------------
@@ -149,10 +155,15 @@ Public Class cls_Projet
         Lines.Add("")
 
         '==[ Identification ]=================================================================
-        Lines.Add("BLOCK IDENTIFICATION")
-        Lines.Add("   Utilisateur   = " & Me.Utilisateur)
-        Lines.Add("   Entreprise    = " & Me.Entreprise)
-        Lines.Add("   NomProjet     = " & Me.Nom)
+
+        Lines.Add("BLOCK " & BkINDENT)
+        AjouteLigneFrmt(Lines, "Utilisateur", Me.Utilisateur)
+        AjouteLigneFrmt(Lines, "Entreprise", Me.Entreprise)
+        AjouteLigneFrmt(Lines, "NomProjet", Me.Nom)
+
+        'Lines.Add("   Utilisateur   = " & Me.Utilisateur)
+        'Lines.Add("   Entreprise    = " & Me.Entreprise)
+        'Lines.Add("   NomProjet     = " & Me.Nom)
         Lines.Add("")
 
         '==[ Nuances d'acier utilisateur ]=================================================================
@@ -172,489 +183,511 @@ Public Class cls_Projet
 
         ''==[ Sections ]==================================================================================
         'For Each s In List_Section
-        '    s.EcrireFile(Lines)
+        '    s.SaveFile(Lines)
         'Next
 
         '==[ Classe Poutre ]=================================================================
-        For Each ptre As cls_Poutre In Me.Poutres
+        For Each pTre As cls_Poutre In Me.Poutres
 
-            With ptre
+            'With pTre
 
-                Lines.Add("BLOCK POUTRE")
-                Lines.Add("   BeaIden           =  " & .BeamID)
-                Lines.Add("   Commentaire       =  " & .Commentaire)
-                'Lines.Add("   TypeSection   =  " & .TypeSection)
-                Lines.Add("   ConsoleGauche  =  " & .lTraveeConsoleGauche)
-                Lines.Add("   ConsoleDroite  =  " & .lTraveeConsoleDroite)
-                Lines.Add("   DalleContGauche  =  " & .lDalleContinueGauche)
-                Lines.Add("   DalleContDroite  =  " & .lDalleContinueDroite)
-                Lines.Add("   lTremieGauche  =  " & .lTremieGauche)
-                Lines.Add("   lTremieDroite  =  " & .lTremieDroite)
-                Lines.Add("   NbTravee       =  " & .NombreTraveesDeuxAppuis)
-                Lines.Add("   LongueurTravee =  " & ConvertListDecimalToString(.LongueurTravee))
+            Lines.Add("BLOCK " & BkPOUTRE)
+            AjouteLigneFrmt(Lines, "BeaIden", pTre.BeamID)
+            AjouteLigneFrmt(Lines, "Commentaire", pTre.Commentaire)
+            AjouteLigneFrmt(Lines, "ConsoleGauche", pTre.lTraveeConsoleGauche)
+            AjouteLigneFrmt(Lines, "ConsoleDroite", pTre.lTraveeConsoleDroite)
+            AjouteLigneFrmt(Lines, "DalleContGauche", pTre.lDalleContinueGauche)
+            AjouteLigneFrmt(Lines, "DalleContDroite", pTre.lDalleContinueDroite)
+            AjouteLigneFrmt(Lines, "lTremieGauche", pTre.lTremieGauche)
+            AjouteLigneFrmt(Lines, "lTremieDroite", pTre.lTremieDroite)
 
-                Dim listTypTravee(.TypTravee.Count - 1) As Integer
+            AjouteLigneFrmt(Lines, "NbTravee", pTre.NombreTraveesDeuxAppuis)
+            AjouteLigneFrmt(Lines, "LongueurTravee", ConvertListDecimalToString(pTre.LongueurTravee))
 
-                For i As Integer = 0 To listTypTravee.Count - 1
-                    listTypTravee(i) = .TypTravee(i)
+            Dim listTypTravee(pTre.TypTravee.Count - 1) As Integer
+
+            For i As Integer = 0 To listTypTravee.Count - 1
+                listTypTravee(i) = pTre.TypTravee(i)
+            Next
+
+            AjouteLigneFrmt(Lines, "TypeTravee", ConvertListIntegerToString(listTypTravee))
+            AjouteLigneFrmt(Lines, "TypeEtaiement", pTre.TypeEtaiement)
+            AjouteLigneFrmt(Lines, "EtaisConsG", pTre.lEtaisConsoleGauche)
+            AjouteLigneFrmt(Lines, "EtaisConsD", pTre.lEtaisConsoleDroite)
+            AjouteLigneFrmt(Lines, "NbPropping", pTre.NbEtaiement)
+
+            AjouteLigneFrmt(Lines, "TypeMaintien", pTre.TypeMaintien)
+
+            AjouteLigneFrmt(Lines, "D1", pTre.EntraxeD1)
+            AjouteLigneFrmt(Lines, "D2", pTre.EntraxeD2)
+            AjouteLigneFrmt(Lines, "Dsl1", pTre.DistanceDsl1)
+            AjouteLigneFrmt(Lines, "Dsl2", pTre.DistanceDsl2)
+
+            AjouteLigneFrmt(Lines, "lIntermediaire", pTre.lIntermediaire)
+            AjouteLigneFrmt(Lines, "lDefautPortee", pTre.lDefautPortee)
+            AjouteLigneFrmt(Lines, "lDefautEnroba", pTre.lDefautEnrobage)
+            AjouteLigneFrmt(Lines, "lDefautEtaiem", pTre.lDefautEtaiement)
+            AjouteLigneFrmt(Lines, "lDefautDalle", pTre.lDefautDalle)
+
+            If pTre.lMixte Then
+                AjouteLigneFrmt(Lines, "lAutoDesign", pTre.lAutomaticDesign)
+                AjouteLigneFrmt(Lines, "NombreZones", ConvertListIntegerToString(pTre.NombreZones))
+                AjouteLigneFrmt(Lines, "LongueurZone", ConvertListDecimalToString(pTre.LongueurZone))
+                AjouteLigneFrmt(Lines, "EspaZone", ConvertListDecimalToString(pTre.EspacementZone))
+                AjouteLigneFrmt(Lines, "EspaBacTransZone", ConvertListIntegerToString(pTre.Espacement_Bac_TransZone))
+                AjouteLigneFrmt(Lines, "NbGoujonTrans", ConvertListIntegerToString(pTre.NombreGoujonsTransv))
+            End If
+
+            AjouteLigneFrmt(Lines, "lCombELU", ConvertListBooleanToString(pTre.lCombELU))
+            AjouteLigneFrmt(Lines, "CoefELU", ConvertListDecimalToString(pTre.CoefCombELU))
+            AjouteLigneFrmt(Lines, "lCombELS", ConvertListBooleanToString(pTre.lCombELS))
+            AjouteLigneFrmt(Lines, "CoefELS", ConvertListDecimalToString(pTre.CoefCombELS))
+            AjouteLigneFrmt(Lines, "lCombELF", ConvertListBooleanToString(pTre.lCombFeu))
+            AjouteLigneFrmt(Lines, "CoefELF", ConvertListDecimalToString(pTre.CoefCombFeu))
+
+            AjouteLigneFrmt(Lines, "lCombELCU", ConvertListBooleanToString(pTre.lCombELCSRules))
+            AjouteLigneFrmt(Lines, "CoefELCU", ConvertListDecimalToString(pTre.CoefCombELCU))
+            AjouteLigneFrmt(Lines, "lCombELCS", ConvertListBooleanToString(pTre.lCombELCSRules))
+            AjouteLigneFrmt(Lines, "CoefELCS", ConvertListDecimalToString(pTre.CoefCombELCS))
+
+            Lines.Add("")
+
+            '==[ Classe Maintien ]=================================================================
+            For i As Integer = 0 To pTre.Maintiens.Count - 1
+                For Each maint In pTre.Maintiens(i)
+
+                    ' If maint IsNot Nothing Then
+                    With maint
+
+                        Lines.Add("BLOCK MAINTIENS")
+                        AjouteLigneFrmt(Lines, "indTravee", CStr(i))
+                        AjouteLigneFrmt(Lines, "xLoc", .x_Loc)
+                        AjouteLigneFrmt(Lines, "lMaintSemSup", .lMaintienSemelleSup)
+                        AjouteLigneFrmt(Lines, "lMaintSemInf", .lMaintienSemelleInf)
+
+                        Lines.Add("")
+                    End With
+                    ' End If
+
                 Next
-                Lines.Add("   TypeTravee     =  " & ConvertListIntegerToString(listTypTravee))
+            Next
 
-                Lines.Add("   TypeEtaiement  =  " & .TypeEtaiement)
-                Lines.Add("   EtaisConsG     =  " & .lEtaisConsoleGauche)
-                Lines.Add("   EtaisConsD  =  " & .lEtaisConsoleDroite)
-                Lines.Add("   NbPropping     =  " & .NbEtaiement)
-                'Lines.Add("   NbRestrain     =  " & ConvertListIntegerToString(.NbMaintiens))
+            '==[ Classe maintien par le bac ]==================================================
 
-                'Dim listTypeMaintien(.TypeMaintien.Count - 1) As Integer
+            With pTre.MaintienBac
 
-                'For i As Integer = 0 To listTypeMaintien.Count - 1
-                '    listTypeMaintien(i) = .TypeMaintien(i)
-                'Next
-                Lines.Add("   TypeMaintien   =  " & .TypeMaintien)
+                Lines.Add("BLOCK MAINT_BAC")
 
-                Lines.Add("   D1             =  " & .EntraxeD1)
-                Lines.Add("   D2             =  " & .EntraxeD2)
-                Lines.Add("   Dsl1           =  " & .DistanceDsl1)
-                Lines.Add("   Dsl2           =  " & .DistanceDsl2)
-                Lines.Add("   lIntermediaire =  " & .lIntermediaire)
-                Lines.Add("   lDefautPortee  =  " & .lDefautPortee)
-                Lines.Add("   lDefautEnroba  =  " & .lDefautEnrobage)
-                Lines.Add("   lDefautEtaiem  =  " & .lDefautEtaiement)
-                Lines.Add("   lDefautDalle   =  " & .lDefautDalle)
-                'Lines.Add("   lDonneesSauv   =  " & .lDonneesSauvees)
-                'Lines.Add("   lNouvPoutre    =  " & .NouvellePoutre)
-                If .lMixte Then
-                    Lines.Add("   lAutoDesign    =  " & .lAutomaticDesign)
-                    Lines.Add("   NombreZones    =  " & ConvertListIntegerToString(.NombreZones))
-                    Lines.Add("   LongueurZone    =  " & ConvertListDecimalToString(.LongueurZone))
-                    Lines.Add("   EspaZone    =  " & ConvertListDecimalToString(.EspacementZone))
-                    Lines.Add("   EspaBacTransZone    =  " & ConvertListIntegerToString(.Espacement_Bac_TransZone))
-                    Lines.Add("   NbGoujonTrans    =  " & ConvertListIntegerToString(.NombreGoujonsTransv))
-                End If
+                AjouteLigneFrmt(Lines, "NT", CStr(.nt))
+                AjouteLigneFrmt(Lines, "M", CStr(.m))
+                AjouteLigneFrmt(Lines, "Transition", (.Transition))
+                AjouteLigneFrmt(Lines, "FixNervuresMod", (.FixNervuresMod))
+                AjouteLigneFrmt(Lines, "FixnervuresTyp", (.FixnervuresTyp))
+                AjouteLigneFrmt(Lines, "EC", (.ec))
+                AjouteLigneFrmt(Lines, "FixCoutureType", (.FixCoutureType))
+                AjouteLigneFrmt(Lines, "lMaintienBac", (.lMaintienBac))
+                AjouteLigneFrmt(Lines, "lTheta", (.lTheta))
 
-                Lines.Add("   lCombELU    =  " & ConvertListBooleanToString(.lCombELU))
-                Lines.Add("   CoefELU    =  " & ConvertListDecimalToString(.CoefCombELU))
-                Lines.Add("   lCombELS    =  " & ConvertListBooleanToString(.lCombELS))
-                Lines.Add("   CoefELS    =  " & ConvertListDecimalToString(.CoefCombELS))
-                Lines.Add("   lCombELF    =  " & ConvertListBooleanToString(.lCombFeu))
-                Lines.Add("   CoefELF    =  " & ConvertListDecimalToString(.CoefCombFeu))
-                Lines.Add("   lCombELCU    =  " & ConvertListBooleanToString(.lCombELCURules))
-                Lines.Add("   CoefELCU    =  " & ConvertListDecimalToString(.CoefCombELCU))
-                Lines.Add("   lCombELCS    =  " & ConvertListBooleanToString(.lCombELCSRules))
-                Lines.Add("   CoefELCS    =  " & ConvertListDecimalToString(.CoefCombELCS))
+            End With
+
+
+
+            '==[ Classe Section ]=================================================================
+            With pTre.Section
+
+                Lines.Add("BLOCK SECTION")
+
+                AjouteLigneFrmt(Lines, "Nom", .Nom)
+                AjouteLigneFrmt(Lines, "lDalleBeton", .lDalleBeton)
+                AjouteLigneFrmt(Lines, "lDatabase", .lDatabase)
+                AjouteLigneFrmt(Lines, "typeSection", .TypeSection)
+                AjouteLigneFrmt(Lines, "lUser", .lUser)
+                AjouteLigneFrmt(Lines, "f_y_fs", .f_y.fs)
+                AjouteLigneFrmt(Lines, "f_y_w", .f_y.w)
+                AjouteLigneFrmt(Lines, "f_y_fi", .f_y.fi)
 
                 Lines.Add("")
 
+                '==[ Classe ProfilA ]=================================================================
+                With .ProfilA
+                    Lines.Add("BLOCK PROFILA")
+                    Lines.Add("   Gamme          =  " & .Gamme)
 
+                    Lines.Add("   NomProfile     =  " & .NomProfile)
+                    Lines.Add("   ha             =  " & .ha)
+                    Lines.Add("   hb             =  " & .hb)
+                    Lines.Add("   bfs            =  " & .Bfs)
+                    Lines.Add("   tfs            =  " & .Tfs)
+                    Lines.Add("   bfi            =  " & .Bfi)
+                    Lines.Add("   tfi            =  " & .Tfi)
+                    Lines.Add("   rcs            =  " & .Rcs)
+                    Lines.Add("   rci            =  " & .Rci)
+                    'Lines.Add("   hw             =  " & .h_w)
+                    Lines.Add("   tw             =  " & .Tw)
+                    Lines.Add("   soudure_a      =  " & .aW)
+                    Lines.Add("   typeProfil     =  " & .typeProfileAcier)
+                    Lines.Add("   Platb          =  " & .Plat_b)
+                    Lines.Add("   Platt          =  " & .Plat_t)
+                    If .IndDeliv IsNot Nothing Then Lines.Add("   IndDeliv       =  " & ConvertListShortToString(.IndDeliv))
+                    Lines.Add("   IndStand       =  " & ConvertListShortToString(.IndStandart))
+                    Lines.Add("")
 
-                '==[ Classe Maintien ]=================================================================
-                For i As Integer = 0 To .Maintiens.Count - 1
-                    For Each maint In .Maintiens(i)
+                End With
 
-                        ' If maint IsNot Nothing Then
-                        With maint
+                '==[ Classe Acier ProfilA ]=================================================================
+                With .Acier
+                    Lines.Add("BLOCK ACIER_PROFILA")
 
-                            Lines.Add("BLOCK MAINTIENS")
-                            Lines.Add("   indTravee      =  " & i)
-                            Lines.Add("   xloc           =  " & .x_Loc)
-                            Lines.Add("   lMaintSemSup   =  " & .lMaintienSemelleSup)
-                            Lines.Add("   lMaintSemInf   =  " & .lMaintienSemelleInf)
-                            Lines.Add("")
-                        End With
-                        ' End If
-
-                    Next
-                Next
-
-                '==[ Classe maintien par le bac ]==================================================
-
-                With .MaintienBac
-                    Lines.Add("BLOCK MAINT_BAC")
-
-                    'Lines.Add("   AP            =  " & .ap)
-                    'Lines.Add("   BP            =  " & .bp)
-                    Lines.Add("   NT            =  " & .nt)
-                    Lines.Add("   M            =  " & .m)
-                    Lines.Add("   Transition            =  " & .Transition)
-                    Lines.Add("   FixNervuresMod            =  " & .FixNervuresMod)
-                    Lines.Add("   FixnervuresTyp            =  " & .FixnervuresTyp)
-                    Lines.Add("   EC            =  " & .ec)
-                    Lines.Add("   FixCoutureType            =  " & .FixCoutureType)
-                    Lines.Add("   lMaintienBac            =  " & .lMaintienBac)
-                    Lines.Add("   lTheta            =  " & .lTheta)
+                    Lines.Add("   Nuance         =  " & .Nuance)
+                    Lines.Add("   Qualite        =  " & .Qualite)
+                    Lines.Add("   Reduction      =  " & .Reduction)
+                    Lines.Add("   NormeProduit   =  " & .NormeProduit)
+                    Lines.Add("   EpMax          =  " & .EpMax)
+                    Lines.Add("   iBase          =  " & .iBase)
+                    Lines.Add("   iTabStand      =  " & .iTabStandart)
+                    Lines.Add("   iStandard      =  " & .iStandart)
+                    'Lines.Add("   lUser      =  " & .lUser)
+                    'Lines.Add("   f_y_fs         =  " & .f_y.fs)
+                    'Lines.Add("   f_y_w          =  " & .f_y.w)
+                    'Lines.Add("   f_y_fi         =  " & .f_y.fi)
+                    Lines.Add("")
                 End With
 
 
+                '==[ Classe Enrobage Partiel ProfilA ]=================================================================
+                With .Enrobage
+                    Lines.Add("BLOCK ENROBAGE_PROFILA")
 
-                '==[ Classe Section ]=================================================================
-                With .Section
-                    Lines.Add("BLOCK SECTION")
+                    AjouteLigneFrmt(Lines, "lArmaConst", .lArmaConst)
+                    AjouteLigneFrmt(Lines, "ConstPhi", .ConstPhi)
+                    AjouteLigneFrmt(Lines, "Ratio_bc", .Ratio_bc)
+                    AjouteLigneFrmt(Lines, "Etrier_Type", .Etriers_Type)
+                    AjouteLigneFrmt(Lines, "Etrier_Phi", .Etriers_Phi)
+                    AjouteLigneFrmt(Lines, "Etrier_CY", .Etriers_EnrobageY)
+                    AjouteLigneFrmt(Lines, "Etrier_CZ", .Etriers_EnrobageZ)
 
-                    Lines.Add("   Nom            =  " & .Nom)
-                    Lines.Add("   lDalleBeton    =  " & .lDalleBeton)
-                    Lines.Add("   lDatabase      =  " & .lDatabase)
-                    Lines.Add("   typeSection    =  " & .TypeSection)
-                    Lines.Add("   lUser      =  " & .lUser)
-                    Lines.Add("   f_y_fs         =  " & .f_y.fs)
-                    Lines.Add("   f_y_w          =  " & .f_y.w)
-                    Lines.Add("   f_y_fi         =  " & .f_y.fi)
                     Lines.Add("")
 
-                    '==[ Classe ProfilA ]=================================================================
-                    With .ProfilA
-                        Lines.Add("BLOCK PROFILA")
-                        Lines.Add("   Gamme          =  " & .Gamme)
+                    '==[ Classe Armature Enrobage Partiel ProfilA ]=================================================================
+                    Lines.Add("BLOCK ARMATURE_ENROBAGE_PROFILA")
 
-                        Lines.Add("   NomProfile     =  " & .NomProfile)
-                        Lines.Add("   ha             =  " & .ha)
-                        Lines.Add("   hb             =  " & .hb)
-                        Lines.Add("   bfs            =  " & .Bfs)
-                        Lines.Add("   tfs            =  " & .Tfs)
-                        Lines.Add("   bfi            =  " & .Bfi)
-                        Lines.Add("   tfi            =  " & .Tfi)
-                        Lines.Add("   rcs            =  " & .Rcs)
-                        Lines.Add("   rci            =  " & .Rci)
-                        'Lines.Add("   hw             =  " & .h_w)
-                        Lines.Add("   tw             =  " & .Tw)
-                        Lines.Add("   soudure_a      =  " & .aW)
-                        Lines.Add("   typeProfil     =  " & .typeProfileAcier)
-                        Lines.Add("   Platb          =  " & .Plat_b)
-                        Lines.Add("   Platt          =  " & .Plat_t)
-                        If .IndDeliv IsNot Nothing Then Lines.Add("   IndDeliv       =  " & ConvertListShortToString(.IndDeliv))
-                        Lines.Add("   IndStand       =  " & ConvertListShortToString(.IndStandart))
-                        Lines.Add("")
-
-                    End With
-
-                    '==[ Classe Acier ProfilA ]=================================================================
-                    With .Acier
-                        Lines.Add("BLOCK ACIER_PROFILA")
-
-                        Lines.Add("   Nuance         =  " & .Nuance)
-                        Lines.Add("   Qualite        =  " & .Qualite)
-                        Lines.Add("   Reduction      =  " & .Reduction)
-                        Lines.Add("   NormeProduit   =  " & .NormeProduit)
-                        Lines.Add("   EpMax          =  " & .EpMax)
-                        Lines.Add("   iBase          =  " & .iBase)
-                        Lines.Add("   iTabStand      =  " & .iTabStandart)
-                        Lines.Add("   iStandard      =  " & .iStandart)
-                        'Lines.Add("   lUser      =  " & .lUser)
-                        'Lines.Add("   f_y_fs         =  " & .f_y.fs)
-                        'Lines.Add("   f_y_w          =  " & .f_y.w)
-                        'Lines.Add("   f_y_fi         =  " & .f_y.fi)
-                        Lines.Add("")
-                    End With
-
-
-                    '==[ Classe Enrobage Partiel ProfilA ]=================================================================
-                    With .Enrobage
-                        Lines.Add("BLOCK ENROBAGE_PROFILA")
-
-                        Lines.Add("   lArmaConst     =  " & .lArmaConst)
-                        Lines.Add("   ConstPhi       =  " & .ConstPhi)
-                        Lines.Add("   Ratio_bc       =  " & .Ratio_bc)
-                        Lines.Add("   Etrier_Type    =  " & .Etriers_Type)
-                        Lines.Add("   Etrier_Phi     =  " & .Etriers_Phi)
-                        Lines.Add("   Etrier_CY  =  " & .Etriers_EnrobageY)
-                        Lines.Add("   Etrier_CZ  =  " & .Etriers_EnrobageZ)
-                        Lines.Add("")
-
-                        '==[ Classe Armature Enrobage Partiel ProfilA ]=================================================================
-                        Lines.Add("BLOCK ARMATURE_ENROBAGE_PROFILA")
-
-                        For i As Integer = 0 To .LitArma.Length - 1
-                            With .LitArma(i)
-                                Lines.Add("   indLit         =  " & i)
-                                Lines.Add("   PhiExt         =  " & .PhiExt)
-                                Lines.Add("   NbExt          =  " & .NbExt)
-                                Lines.Add("   lActExt          =  " & .lActiveExt)
-                                Lines.Add("   PhiMil         =  " & .PhiMil)
-                                Lines.Add("   NbMil          =  " & .NbMil)
-                                Lines.Add("   PhiInt         =  " & .PhiInt)
-                                Lines.Add("   NbInt          =  " & .NbInt)
-                                Lines.Add("   lActInt          =  " & .lActiveInt)
-                                If i = 1 Then Lines.Add("   zPosRatio      =  " & .zPosRatio)
-                                Lines.Add("")
-                            End With
-                        Next
-
-                        '==[ Classe Acier Armature Enrobage Partiel ProfilA ]=================================================================
-                        Lines.Add("BLOCK ACIER_ARMATURE_ENROBAGE_PROFILA")
-                        With .AcierArmatures
-                            Lines.Add("   Classe         =  " & .Classe)
-                            Lines.Add("   FsK            =  " & .FsK)
-                            Lines.Add("   Es             =  " & .Es)
+                    For i As Integer = 0 To .LitArma.Length - 1
+                        With .LitArma(i)
+                            Lines.Add("   indLit         =  " & i)
+                            Lines.Add("   PhiExt         =  " & .PhiExt)
+                            Lines.Add("   NbExt          =  " & .NbExt)
+                            Lines.Add("   lActExt          =  " & .lActiveExt)
+                            Lines.Add("   PhiMil         =  " & .PhiMil)
+                            Lines.Add("   NbMil          =  " & .NbMil)
+                            Lines.Add("   PhiInt         =  " & .PhiInt)
+                            Lines.Add("   NbInt          =  " & .NbInt)
+                            Lines.Add("   lActInt          =  " & .lActiveInt)
+                            If i = 1 Then Lines.Add("   zPosRatio      =  " & .zPosRatio)
                             Lines.Add("")
-                        End With
-
-                        '==[ Classe Béton Enrobage Partiel ProfilA ]=================================================================
-                        Lines.Add("BLOCK BETON_ENROBAGE_PROFILA")
-                        With .Beton
-                            Lines.Add("   Leger          =  " & .lLeger)
-                            Lines.Add("   Classe         =  " & .Classe)
-                            Lines.Add("   RhoC         =  " & .RhoC)
-                            Lines.Add("   Fck            =  " & .Fck)
-                            Lines.Add("   Fcm            =  " & .Fcm)
-                            Lines.Add("   Fctm           =  " & .Fctm)
-                            Lines.Add("   Ecm            =  " & .Ecm)
-                            Lines.Add("   lCrackLimit    =  " & .lCrackingLimitation)
-                            Lines.Add("   wk_max         =  " & .wk_max)
-                            Lines.Add("")
-                        End With
-                    End With
-                End With
-
-                '==[ Classe Dalle ]=================================================================
-                With .Dalle
-                    Lines.Add("BLOCK DALLE")
-
-                    Lines.Add("   Type           =  " & .type)
-                    Lines.Add("   td             =  " & .Ep_td)
-                    Lines.Add("   th             =  " & .Ep_th)
-                    'Lines.Add("   Beff           =  " & .Beff)
-                    'Lines.Add("   lArmInf        =  " & .lArma_Inf)
-                    'Lines.Add("   lArmSup        =  " & .lArma_Sup)
-                    Lines.Add("   preDalle_ep    =  " & .preDalle_ep)
-                    Lines.Add("   preDalle_tjoi  =  " & .preDalle_tjoint)
-                    'Lines.Add("   theta_h        =  " & .pTheta_h)
-                    Lines.Add("")
-
-                    '==[ Classe Béton Dalle ]=================================================================
-                    With .beton
-                        Lines.Add("BLOCK BETON_DALLE")
-
-                        Lines.Add("   Leger           =  " & .lLeger)
-                        Lines.Add("   Classe         =  " & .Classe)
-                        Lines.Add("   RhoC         =  " & .RhoC)
-                        Lines.Add("   Fck            =  " & .Fck)
-                        Lines.Add("   Fcm            =  " & .Fck)
-                        Lines.Add("   Fctm           =  " & .Fctm)
-                        Lines.Add("   Ecm            =  " & .Ecm)
-                        Lines.Add("   lCrackLimit    =  " & .lCrackingLimitation)
-                        Lines.Add("   wk_max         =  " & .wk_max)
-                        Lines.Add("")
-                    End With
-
-                    '==[ Classe Bac Dalle ]=================================================================
-                    With .Bac
-
-                        Lines.Add("BLOCK BAC_DALLE")
-
-                        Lines.Add("   Etiquette      =  " & .Etiquette)
-                        Lines.Add("   Producteur     =  " & .Producteur)
-                        Lines.Add("   lDatabase      =  " & .lDatabase)
-                        Lines.Add("   h_rs           =  " & .h_rs)
-                        Lines.Add("   h_p            =  " & .Hp)
-                        Lines.Add("   b_b            =  " & .Bb)
-                        Lines.Add("   b_t            =  " & .Bt)
-                        Lines.Add("   e_p            =  " & .Ep)
-                        Lines.Add("   tp             =  " & .Tp)
-                        Lines.Add("   orientation    =  " & .Orientation)
-                        Lines.Add("   msurf          =  " & .msurf)
-                        Lines.Add("   fyp            =  " & .fyp)
-                        Lines.Add("   LargeurModule  =  " & .LargeurModule)
-                        Lines.Add("   Ieff           =  " & .Ieff)
-                        Lines.Add("   lPreperce      =  " & .lPreperce)
-                        Lines.Add("   AppuiT         =  " & .AppuiT)
-                        Lines.Add("   AppuiL         =  " & .AppuiL)
-                        Lines.Add("")
-                    End With
-
-                    '==[ Classe Cofradal Dalle ]=================================================================
-                    With .Cofradal
-
-                        Lines.Add("BLOCK COFRADAL")
-
-                        Lines.Add("   Nom      =  " & .nom)
-                        Lines.Add("   Dp      =  " & .dp)
-                        Lines.Add("   Msurf      =  " & .msurf)
-                        Lines.Add("   lCustom      =  " & .lCustom)
-                        Lines.Add("")
-
-                    End With
-
-                    '==[ Classe Armature Dalle ]=================================================================
-                    For Each arma_longi As Cls_Armatures_Longi In .LitArma
-                        With arma_longi
-                            If ptre.Dalle.LitArma.IndexOf(arma_longi) = 0 Or (.lActive And ptre.Dalle.LitArma.IndexOf(arma_longi) = 1) Then
-                                Lines.Add("BLOCK ARMATURE_DALLE")
-                                Lines.Add("   indLit         =  " & ptre.Dalle.LitArma.IndexOf(arma_longi))
-                                Lines.Add("   EspBar         =  " & .EspBar)
-                                Lines.Add("   PhiS           =  " & .PhiS)
-                                Lines.Add("   z_s            =  " & .z_s)
-                                Lines.Add("   n_s            =  " & .n_s)
-                                'Lines.Add("   c_s            =  " & .c_s)
-                                Lines.Add("   lActive        =  " & .lActive)
-                                Lines.Add("")
-                            End If
                         End With
                     Next
 
-                    '==[ Classe Acier Armature Dalle ]=================================================================
+                    '==[ Classe Acier Armature Enrobage Partiel ProfilA ]=================================================================
+                    Lines.Add("BLOCK ACIER_ARMATURE_ENROBAGE_PROFILA")
                     With .AcierArmatures
-                        Lines.Add("BLOCK ACIER_ARMATURE_DALLE")
+                        AjouteLigneFrmt(Lines, "Classe", .Classe)
+                        AjouteLigneFrmt(Lines, "FsK", .FsK)
+                        AjouteLigneFrmt(Lines, "Es", .Es)
 
-                        Lines.Add("   Classe         =  " & .Classe)
-                        Lines.Add("   Fsk            =  " & .FsK)
-                        Lines.Add("   Es             =  " & .Es)
                         Lines.Add("")
                     End With
 
+                    '==[ Classe Béton Enrobage Partiel ProfilA ]=================================================================
+                    Lines.Add("BLOCK BETON_ENROBAGE_PROFILA")
+                    With .Beton
 
-                    '==[ Classe Connecteur Goujon Dalle ]=================================================================
-                    With .Goujons
-                        Lines.Add("BLOCK CONNECTEUR_DALLE_GOUJON")
+                        AjouteLigneFrmt(Lines, "Leger", .lLeger)
+                        AjouteLigneFrmt(Lines, "Classe", .Classe)
+                        AjouteLigneFrmt(Lines, "RhoC", .RhoC)
+                        AjouteLigneFrmt(Lines, "Fck", .Fck)
+                        AjouteLigneFrmt(Lines, "Fcm", .Fcm)
+                        AjouteLigneFrmt(Lines, "Fctm", .Fctm)
+                        AjouteLigneFrmt(Lines, "Ecm", .Ecm)
+                        AjouteLigneFrmt(Lines, "lCrackLimit", .lCrackingLimitation)
+                        AjouteLigneFrmt(Lines, "wk_max", .wk_max)
 
-                        Lines.Add("   nom            =  " & .nom)
-                        Lines.Add("   hsc            =  " & .hsc)
-                        Lines.Add("   d              =  " & .d)
-                        Lines.Add("   fy              =  " & .Fy)
-                        Lines.Add("   fu              =  " & .Fu)
                         Lines.Add("")
                     End With
-
-                    '==[ Classe Connecteur Armature Dalle ]=================================================================
-                    With .ConnecteurArmature
-                        Lines.Add("BLOCK CONNECTEUR_DALLE_ARMATURE")
-
-                        Lines.Add("   ds            =  " & .ds)
-                        'Lines.Add("   dhs            =  " & .dhs)
-                        'Lines.Add("   ahv              =  " & .ahv)
-                        'Lines.Add("   Ls              =  " & .Ls)
-                        Lines.Add("")
-                    End With
-
-                    '==[ Classe Acier Connecteur Armature Dalle ]=================================================================
-                    With .ConnecteurArmature.Acier
-                        Lines.Add("BLOCK ACIER_CONNECTEUR_DALLE_ARMATURE")
-
-                        Lines.Add("   Classe         =  " & .Classe)
-                        Lines.Add("   Fsk            =  " & .FsK)
-                        Lines.Add("   Es             =  " & .Es)
-                        Lines.Add("")
-                    End With
-
                 End With
+            End With
 
-                '==[ Classe Options Calculs ]=================================================================
-                With .Param
+            '==[ Classe Dalle ]=================================================================
 
-                    Lines.Add("BLOCK OPT_CALCULS")
-                    Lines.Add("   RH            = " & .RH)
-                    Lines.Add("   Norme            = " & .Norme)
-                    Lines.Add("   EtaW            = " & .EtaW)
-                    Lines.Add("   lLarEffSimp            = " & .lLargeurEfficaceSimplifiee)
-                    Lines.Add("   lCompArma            = " & .lCompressionArma)
-                    Lines.Add("   dMaxNodes            = " & .dMaxNodes)
-                    Lines.Add("   nbMinNodesTr            = " & .nbMinNodesTravee)
-                    Lines.Add("   nbMinNodesCo            = " & .nbMinNodesConsole)
-                    Lines.Add("   epsSH            = " & .EpsilonSH)
-                    Lines.Add("   lRetraitEnr            = " & .lRetraitEnrobage)
-                    Lines.Add("   ArmaYoung            = " & .ArmaYoung)
-                    Lines.Add("   Gravite            = " & .GraviteG)
-                    Lines.Add("   PsiLPerm            = " & .PsiLPermanent)
-                    Lines.Add("   PsiLRetrait            = " & .PsiLRetrait)
-                    Lines.Add("   AgeT0G1_0            = " & .AgeT0G1(0))
-                    Lines.Add("   AgeT0G1_1            = " & .AgeT0G1(1))
-                    Lines.Add("   AgeT0G2_0            = " & .AgeT0G2(0))
-                    Lines.Add("   AgeT0G2_1            = " & .AgeT0G2(1))
-                    Lines.Add("   AgeT0SH_0            = " & .AgeT0SH(0))
-                    Lines.Add("   AgeT0SH_1            = " & .AgeT0SH(1))
-                    Lines.Add("   AgeTCalc            = " & .AgeT)
-                    Lines.Add("   lElasticDesign            = " & .lElasticDesignVM)
-                    Lines.Add("   lMaitFissure            = " & .lMaitriseFissuration)
+            With pTre.Dalle
+                Lines.Add("BLOCK DALLE")
 
+                AjouteLigneFrmt(Lines, "Type", .type)
+                AjouteLigneFrmt(Lines, "td", .Ep_td)
+                AjouteLigneFrmt(Lines, "th", .Ep_th)
+                AjouteLigneFrmt(Lines, "preDalle_ep", .preDalle_ep)
+                AjouteLigneFrmt(Lines, "preDalle_tjoi", .preDalle_tjoint)
 
-                    Lines.Add("")
+                Lines.Add("")
 
-                    '==[ Classe Gamma ]=================================================================
-                    With .Gamma
-                        Lines.Add("BLOCK OPT_CALCULS_GAMMA")
+                '==[ Classe Béton Dalle ]=================================================================
+                With .beton
+                    Lines.Add("BLOCK BETON_DALLE")
 
-                        Lines.Add("   GammaM0       = " & .GammaM0)
-                        Lines.Add("   GammaM1       = " & .GammaM1)
-                        Lines.Add("   GammaM2       = " & .GammaM2)
-                        Lines.Add("   GammaC        = " & .GammaC)
-                        Lines.Add("   GammaVs       = " & .GammaVs)
-                        Lines.Add("   GammaVc       = " & .GammaVc)
-                        Lines.Add("   lGammaVuni    = " & .lGammaV_unique)
-                        Lines.Add("   GammaS        = " & .GammaS)
-                        Lines.Add("   GammaP        = " & .GammaP)
-                        Lines.Add("   GammaM_fi     = " & .GammaM_fi)
-                        Lines.Add("   GammaC_fi     = " & .GammaC_fi)
-                        Lines.Add("   GammaS_fi   = " & .GammaS_fi)
-                        Lines.Add("   GammaV_fi     = " & .GammaV_fi)
-                        Lines.Add("   GammaG_sup    = " & .GammaG_sup)
-                        Lines.Add("   GammaG_inf    = " & .GammaG_inf)
-                        Lines.Add("   GammaQ        = " & .GammaQ)
-                        Lines.Add("   Psi0_Q1       = " & .Psi0_Q1)
-                        Lines.Add("   Psi1_Q1       = " & .Psi1_Q1)
-                        Lines.Add("   Psi2_Q1       = " & .Psi2_Q1)
-                        Lines.Add("   Psi0_Q2       = " & .Psi0_Q2)
-                        Lines.Add("   Psi1_Q2       = " & .Psi1_Q2)
-                        Lines.Add("   Psi2_Q2       = " & .Psi2_Q2)
-                        Lines.Add("")
-                    End With
-
-                End With
-                '==[ Classe Hivoss ]=================================================================
-                With .Hivoss
-                    Lines.Add("BLOCK OPT_CALCULS_HIVOSS")
-
-                    Lines.Add("   lHivossMethod = " & .lHivossMethod)
-                    Lines.Add("   RatioQ        = " & .ratioQ)
-                    Lines.Add("   ChoixQ        = " & .choixQ)
-                    Lines.Add("   UtilPlancher  = " & .UtilisationPlancher)
-                    Lines.Add("   lFreqDalle  = " & .lFreqDalle)
-                    Lines.Add("   Mobilier      = " & .Mobilier)
-                    Lines.Add("   lFauxPlafond  = " & .lFauxPlafond)
-                    Lines.Add("   lChappeFlottante  = " & .lChappeFlottante)
-                    Lines.Add("   AmortD1       = " & .AmortiStructure_D1)
-                    Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
-                    Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
-                    Lines.Add("   AmortDtot     = " & .AmortiTotal_Dtot)
+                    Lines.Add("   Leger           =  " & .lLeger)
+                    Lines.Add("   Classe         =  " & .Classe)
+                    Lines.Add("   RhoC         =  " & .RhoC)
+                    Lines.Add("   Fck            =  " & .Fck)
+                    Lines.Add("   Fcm            =  " & .Fck)
+                    Lines.Add("   Fctm           =  " & .Fctm)
+                    Lines.Add("   Ecm            =  " & .Ecm)
+                    Lines.Add("   lCrackLimit    =  " & .lCrackingLimitation)
+                    Lines.Add("   wk_max         =  " & .wk_max)
                     Lines.Add("")
                 End With
 
-                '==[ Classe ChargementU ]=================================================================
-                For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In .ChargesU
-                    For i As Integer = .IndicePremiereTravee To .IndiceDerniereTravee
-                        Lines.Add("BLOCK CHGTU_QSURF")
-                        Lines.Add("   CleDic      =  " & elemnts.Key)
-                        Lines.Add("   indTravee      =  " & i)
-                        Lines.Add("   QSurf      =  " & elemnts.Value.QSurf(i))
-                        Lines.Add("")
+                '==[ Classe Bac Dalle ]=================================================================
+                With .Bac
 
-                        For Each force As cls_Force In elemnts.Value.Forces(i)
-                            Lines.Add("BLOCK CHGTU_FORCE")
-                            Lines.Add("   CleDic      =  " & elemnts.Key)
-                            Lines.Add("   indTravee      =  " & i)
-                            Lines.Add("   Force      =  " & force.Force)
-                            Lines.Add("   xPosT      =  " & force.xPosT)
-                            Lines.Add("   xGaucheT   =  " & force.xGaucheT)
+                    Lines.Add("BLOCK BAC_DALLE")
+
+                    Lines.Add("   Etiquette      =  " & .Etiquette)
+                    Lines.Add("   Producteur     =  " & .Producteur)
+                    Lines.Add("   lDatabase      =  " & .lDatabase)
+                    Lines.Add("   h_rs           =  " & .h_rs)
+                    Lines.Add("   h_p            =  " & .Hp)
+                    Lines.Add("   b_b            =  " & .Bb)
+                    Lines.Add("   b_t            =  " & .Bt)
+                    Lines.Add("   e_p            =  " & .Ep)
+                    Lines.Add("   tp             =  " & .Tp)
+                    Lines.Add("   orientation    =  " & .Orientation)
+                    Lines.Add("   msurf          =  " & .msurf)
+                    Lines.Add("   fyp            =  " & .fyp)
+                    Lines.Add("   LargeurModule  =  " & .LargeurModule)
+                    Lines.Add("   Ieff           =  " & .Ieff)
+                    Lines.Add("   lPreperce      =  " & .lPreperce)
+                    Lines.Add("   AppuiT         =  " & .AppuiT)
+                    Lines.Add("   AppuiL         =  " & .AppuiL)
+                    Lines.Add("")
+                End With
+
+                '==[ Classe Cofradal Dalle ]=================================================================
+                With .Cofradal
+
+                    Lines.Add("BLOCK COFRADAL")
+
+                    Lines.Add("   Nom      =  " & .nom)
+                    Lines.Add("   Dp      =  " & .dp)
+                    Lines.Add("   Msurf      =  " & .msurf)
+                    Lines.Add("   lCustom      =  " & .lCustom)
+                    Lines.Add("")
+
+                End With
+
+                '==[ Classe Armature Dalle ]=================================================================
+                For Each arma_longi As Cls_Armatures_Longi In .LitArma
+                    With arma_longi
+                        If pTre.Dalle.LitArma.IndexOf(arma_longi) = 0 Or (.lActive And pTre.Dalle.LitArma.IndexOf(arma_longi) = 1) Then
+                            Lines.Add("BLOCK ARMATURE_DALLE")
+                            Lines.Add("   indLit         =  " & pTre.Dalle.LitArma.IndexOf(arma_longi))
+                            Lines.Add("   EspBar         =  " & .EspBar)
+                            Lines.Add("   PhiS           =  " & .PhiS)
+                            Lines.Add("   z_s            =  " & .z_s)
+                            Lines.Add("   n_s            =  " & .n_s)
+                            'Lines.Add("   c_s            =  " & .c_s)
+                            Lines.Add("   lActive        =  " & .lActive)
                             Lines.Add("")
-                        Next
-
-                        For Each frepart As cls_ForceRepartie In elemnts.Value.FReparties(i)
-                            If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = cls_Poutre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
-                                Lines.Add("BLOCK CHGTU_FREPAR")
-                                Lines.Add("   CleDic      =  " & elemnts.Key)
-                                Lines.Add("   indTravee      =  " & i)
-                                Lines.Add("   F0      =  " & frepart.Force(0))
-                                Lines.Add("   F1      =  " & frepart.Force(1))
-                                Lines.Add("   xPosT0      =  " & frepart.xPosT(0))
-                                Lines.Add("   xPosT1      =  " & frepart.xPosT(1))
-                                Lines.Add("   xGaucheT      =  " & frepart.xGaucheT)
-                                Lines.Add("")
-                            End If
-                        Next
-                    Next
+                        End If
+                    End With
                 Next
+
+                '==[ Classe Acier Armature Dalle ]=================================================================
+                With .AcierArmatures
+                    Lines.Add("BLOCK ACIER_ARMATURE_DALLE")
+
+                    Lines.Add("   Classe         =  " & .Classe)
+                    Lines.Add("   Fsk            =  " & .FsK)
+                    Lines.Add("   Es             =  " & .Es)
+                    Lines.Add("")
+                End With
+
+
+                '==[ Classe Connecteur Goujon Dalle ]=================================================================
+                With .Goujons
+                    Lines.Add("BLOCK CONNECTEUR_DALLE_GOUJON")
+
+                    Lines.Add("   nom            =  " & .nom)
+                    Lines.Add("   hsc            =  " & .hsc)
+                    Lines.Add("   d              =  " & .d)
+                    Lines.Add("   fy              =  " & .Fy)
+                    Lines.Add("   fu              =  " & .Fu)
+                    Lines.Add("")
+                End With
+
+                '==[ Classe Connecteur Armature Dalle ]=================================================================
+                With .ConnecteurArmature
+                    Lines.Add("BLOCK CONNECTEUR_DALLE_ARMATURE")
+
+                    Lines.Add("   ds            =  " & .ds)
+                    'Lines.Add("   dhs            =  " & .dhs)
+                    'Lines.Add("   ahv              =  " & .ahv)
+                    'Lines.Add("   Ls              =  " & .Ls)
+                    Lines.Add("")
+                End With
+
+                '==[ Classe Acier Connecteur Armature Dalle ]=================================================================
+                With .ConnecteurArmature.Acier
+                    Lines.Add("BLOCK ACIER_CONNECTEUR_DALLE_ARMATURE")
+
+                    Lines.Add("   Classe         =  " & .Classe)
+                    Lines.Add("   Fsk            =  " & .FsK)
+                    Lines.Add("   Es             =  " & .Es)
+                    Lines.Add("")
+                End With
 
             End With
+
+            '==[ Classe Options Calculs ]=================================================================
+            With pTre.Param
+
+                Lines.Add("BLOCK OPT_CALCULS")
+                Lines.Add("   RH            = " & .RH)
+                Lines.Add("   Norme            = " & .Norme)
+                Lines.Add("   EtaW            = " & .EtaW)
+                Lines.Add("   lLarEffSimp            = " & .lLargeurEfficaceSimplifiee)
+                Lines.Add("   lCompArma            = " & .lCompressionArma)
+                Lines.Add("   dMaxNodes            = " & .dMaxNodes)
+                Lines.Add("   nbMinNodesTr            = " & .nbMinNodesTravee)
+                Lines.Add("   nbMinNodesCo            = " & .nbMinNodesConsole)
+                Lines.Add("   epsSH            = " & .EpsilonSH)
+                Lines.Add("   lRetraitEnr            = " & .lRetraitEnrobage)
+                Lines.Add("   ArmaYoung            = " & .ArmaYoung)
+                Lines.Add("   Gravite            = " & .GraviteG)
+                Lines.Add("   PsiLPerm            = " & .PsiLPermanent)
+                Lines.Add("   PsiLRetrait            = " & .PsiLRetrait)
+                Lines.Add("   AgeT0G1_0            = " & .AgeT0G1(0))
+                Lines.Add("   AgeT0G1_1            = " & .AgeT0G1(1))
+                Lines.Add("   AgeT0G2_0            = " & .AgeT0G2(0))
+                Lines.Add("   AgeT0G2_1            = " & .AgeT0G2(1))
+                Lines.Add("   AgeT0SH_0            = " & .AgeT0SH(0))
+                Lines.Add("   AgeT0SH_1            = " & .AgeT0SH(1))
+                Lines.Add("   AgeTCalc            = " & .AgeT)
+                Lines.Add("   lElasticDesign            = " & .lElasticDesignVM)
+                Lines.Add("   lMaitFissure            = " & .lMaitriseFissuration)
+
+                Lines.Add("")
+
+                '==[ Classe Gamma ]=================================================================
+                With .Gamma
+                    Lines.Add("BLOCK OPT_CALCULS_GAMMA")
+
+                    Lines.Add("   GammaM0       = " & .GammaM0)
+                    Lines.Add("   GammaM1       = " & .GammaM1)
+                    Lines.Add("   GammaM2       = " & .GammaM2)
+                    Lines.Add("   GammaC        = " & .GammaC)
+                    Lines.Add("   GammaVs       = " & .GammaVs)
+                    Lines.Add("   GammaVc       = " & .GammaVc)
+                    Lines.Add("   lGammaVuni    = " & .lGammaV_unique)
+                    Lines.Add("   GammaS        = " & .GammaS)
+                    Lines.Add("   GammaP        = " & .GammaP)
+                    Lines.Add("   GammaM_fi     = " & .GammaM_fi)
+                    Lines.Add("   GammaC_fi     = " & .GammaC_fi)
+                    Lines.Add("   GammaS_fi   = " & .GammaS_fi)
+                    Lines.Add("   GammaV_fi     = " & .GammaV_fi)
+                    Lines.Add("   GammaG_sup    = " & .GammaG_sup)
+                    Lines.Add("   GammaG_inf    = " & .GammaG_inf)
+                    Lines.Add("   GammaQ        = " & .GammaQ)
+                    Lines.Add("   Psi0_Q1       = " & .Psi0_Q1)
+                    Lines.Add("   Psi1_Q1       = " & .Psi1_Q1)
+                    Lines.Add("   Psi2_Q1       = " & .Psi2_Q1)
+                    Lines.Add("   Psi0_Q2       = " & .Psi0_Q2)
+                    Lines.Add("   Psi1_Q2       = " & .Psi1_Q2)
+                    Lines.Add("   Psi2_Q2       = " & .Psi2_Q2)
+                    Lines.Add("")
+                End With
+
+            End With
+            '==[ Classe Hivoss ]=================================================================
+            With pTre.Hivoss
+                Lines.Add("BLOCK OPT_CALCULS_HIVOSS")
+
+                Lines.Add("   lHivossMethod = " & .lHivossMethod)
+                Lines.Add("   RatioQ        = " & .ratioQ)
+                Lines.Add("   ChoixQ        = " & .choixQ)
+                Lines.Add("   UtilPlancher  = " & .UtilisationPlancher)
+                Lines.Add("   lFreqDalle  = " & .lFreqDalle)
+                Lines.Add("   Mobilier      = " & .Mobilier)
+                Lines.Add("   lFauxPlafond  = " & .lFauxPlafond)
+                Lines.Add("   lChappeFlottante  = " & .lChappeFlottante)
+                Lines.Add("   AmortD1       = " & .AmortiStructure_D1)
+                Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
+                Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
+                Lines.Add("   AmortDtot     = " & .AmortiTotal_Dtot)
+                Lines.Add("")
+            End With
+
+            '==[ Classe ChargementU ]=================================================================
+            For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In pTre.ChargesU
+                For i As Integer = pTre.IndicePremiereTravee To pTre.IndiceDerniereTravee
+                    Lines.Add("BLOCK CHGTU_QSURF")
+                    Lines.Add("   CleDic      =  " & elemnts.Key)
+                    Lines.Add("   indTravee      =  " & i)
+                    Lines.Add("   QSurf      =  " & elemnts.Value.QSurf(i))
+                    Lines.Add("")
+
+                    For Each force As cls_Force In elemnts.Value.Forces(i)
+                        Lines.Add("BLOCK CHGTU_FORCE")
+                        Lines.Add("   CleDic      =  " & elemnts.Key)
+                        Lines.Add("   indTravee      =  " & i)
+                        Lines.Add("   Force      =  " & force.Force)
+                        Lines.Add("   xPosT      =  " & force.xPosT)
+                        Lines.Add("   xGaucheT   =  " & force.xGaucheT)
+                        Lines.Add("")
+                    Next
+
+                    For Each frepart As cls_ForceRepartie In elemnts.Value.FReparties(i)
+                        If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = cls_Poutre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
+                            Lines.Add("BLOCK CHGTU_FREPAR")
+                            Lines.Add("   CleDic      =  " & elemnts.Key)
+                            Lines.Add("   indTravee      =  " & i)
+                            Lines.Add("   F0      =  " & frepart.Force(0))
+                            Lines.Add("   F1      =  " & frepart.Force(1))
+                            Lines.Add("   xPosT0      =  " & frepart.xPosT(0))
+                            Lines.Add("   xPosT1      =  " & frepart.xPosT(1))
+                            Lines.Add("   xGaucheT      =  " & frepart.xGaucheT)
+                            Lines.Add("")
+                        End If
+                    Next
+                Next
+            Next
+
         Next
 
+
+    End Sub
+
+    Private Sub AjouteLigneFrmt(ByRef Lines As List(Of String), Cle As String, Argument As String, Optional MARGE As Integer = 3)
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   03/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   Ajout d'une ligne Cle + argument, avec un format commun
+        '-------------------------------------------------------------------------------------------------------------------------------
+        '   Lines       [E/S] : Lignes dans lesquelles on ajoute une nouvelle ligne
+        '   Cle         [E] :   Clé
+        '   Argument    [E] :
+        '-------------------------------------------------------------------------------------------------------------------------------
+
+        '--> Déclaration 
+
+        'Const MARGE As Integer = 3
+        Const EGAL As String = "= "
+        Const posEGAL As Integer = 25
+
+        Dim ChaineCle As String
+
+        '--( Préparation
+
+        ChaineCle = LSet(Space(MARGE) & Cle, posEGAL)
+        Lines.Add(ChaineCle & EGAL & Argument)
 
     End Sub
 
@@ -711,15 +744,14 @@ Public Class cls_Projet
             MsgBox("Erreur lecture fichier | Error read file", MsgBoxStyle.Critical, "Cls_Project/RecuperationFile")
         End Try
 
-        If Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("POUTRE") And Not ListeBlocCle.Contains("MAINTIENS") And Not ListeBlocCle.Contains("MAINT_BAC") And Not ListeBlocCle.Contains("SECTION") And
+        If Not ListeBlocCle.Contains(BkINDENT) And Not ListeBlocCle.Contains(BkPOUTRE) _
+        And Not ListeBlocCle.Contains("MAINTIENS") And Not ListeBlocCle.Contains("MAINT_BAC") And Not ListeBlocCle.Contains("SECTION") And
            Not ListeBlocCle.Contains("PROFILA") And Not ListeBlocCle.Contains("ACIER_PROFILA") And Not ListeBlocCle.Contains("ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") And
            Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("COFRADAL") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE_GOUJON") And
            Not ListeBlocCle.Contains("CONNECTEUR_DALLE_ARMATURE") And Not ListeBlocCle.Contains("ACIER_CONNECTEUR_DALLE_ARMATURE") And Not ListeBlocCle.Contains("OPT_CALCULS") And 'And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE")
               Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then 'And Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("SECTION") 
 
             MsgBox("Fichier corrumpu | Corrupted file", MsgBoxStyle.Critical, "Cls_Projet/LectureFile")
-
-
 
         End If
 
@@ -732,10 +764,10 @@ Public Class cls_Projet
             If i = ListeBlocIndex.Count - 1 Then IndexFin = Lines.Lines.Count - 1 Else IndexFin = ListeBlocIndex(i + 1) - 1
             Select Case ListeBlocCle(i)
 
-                Case "IDENTIFICATION"
+                Case BkINDENT
                     ReadBloc_Identification(Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
-                Case "POUTRE"
+                Case BkPOUTRE
                     Dim ptre_en_cours As New cls_Poutre(NomCasChargesU)
                     ReadBlocPoutre(ptre_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     Me.Poutres.Add(ptre_en_cours)
