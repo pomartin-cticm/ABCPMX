@@ -1,5 +1,5 @@
 ﻿'-----------------------------------------------'
-'PropMix software - CTICM - Version 1.0
+'PropMix software - CTICM - Version 1.00 beta 2
 'PROJECT USER FILE
 '-----------------------------------------------'
 '       /!\   Don't modify this file   /!\
@@ -7,103 +7,115 @@
 '-----------------------------------------------'
 
 BLOCK IDENTIFICATION
-   Utilisateur   = 
-   Entreprise    = 
-   NomProjet     = Validation
+   Utilisateur           = 
+   Entreprise            = 
+   NomProjet             = Validation
 
 BLOCK POUTRE
-   BeaIden           =  CAS S03
-   Commentaire       =  
-   ConsoleGauche  =  True
-   ConsoleDroite  =  False
-   DalleContGauche  =  False
-   DalleContDroite  =  False
-   lTremieGauche  =  False
-   lTremieDroite  =  False
-   NbTravee       =  1
-   LongueurTravee =  {2,5/9/3}
-   TypeTravee     =  {0/2/1}
-   TypeEtaiement  =  0
-   EtaisConsG     =  False
-   EtaisConsD  =  False
-   NbPropping     =  0
-   TypeMaintien   =  0
-   D1             =  2
-   D2             =  2
-   Dsl1           =  1
-   Dsl2           =  1
-   lIntermediaire =  True
-   lDefautPortee  =  True
-   lDefautEnroba  =  True
-   lDefautEtaiem  =  True
-   lDefautDalle   =  False
-   lCombELU    =  {False/False/False/False/True/False}
-   CoefELU    =  {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1,0/1,5/1,05/0/0}+{1,0/1,05/1,5/0/0}+{0/1/0/0/0}+{0/0/0/0/0}
-   lCombELS    =  {False/False/False/False/True/False}
-   CoefELS    =  {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/1/0/0/0}+{0/0/0/0/0}
-   lCombELF    =  {False/False/False/False/False}
-   CoefELF    =  {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
-   lCombELCU    =  {False/False}
-   CoefELCU    =  {0/0/0/1,5/1,35}+{0/0/0/0/0}
-   lCombELCS    =  {False/False}
-   CoefELCS    =  {0/0/0/1/1}+{0/0/0/0/0}
+   BeaIden               = CAS S03
+   Commentaire           = 
+   ConsoleGauche         = True
+   ConsoleDroite         = False
+   DalleContGauche       = False
+   DalleContDroite       = False
+   lTremieGauche         = False
+   lTremieDroite         = False
+   NbTravee              = 1
+   LongueurTravee        = {2,5/9/3}
+   TypeTravee            = {0/2/1}
+   TypeEtaiement         = 0
+   EtaisConsG            = False
+   EtaisConsD            = False
+   NbPropping            = 0
+   TypeMaintien          = 2
+   D1                    = 2
+   D2                    = 2
+   Dsl1                  = 1
+   Dsl2                  = 1
+   lIntermediaire        = True
+   lDefautPortee         = True
+   lDefautEnroba         = True
+   lDefautEtaiem         = True
+   lDefautDalle          = False
+   lCombELU              = {False/False/False/False/True/False}
+   CoefELU               = {1,35/1,5/1,05/0/0}+{1,35/1,05/1,5/0/0}+{1,0/1,5/1,05/0/0}+{1,0/1,05/1,5/0/0}+{0/1/0/0/0}+{0/0/0/0/0}
+   lCombELS              = {False/False/False/False/True/False}
+   CoefELS               = {1/1/0/0/0}+{1/1/0,7/0/0}+{1/0/1/0/0}+{1/0,7/1/0/0}+{0/1/0/0/0}+{0/0/0/0/0}
+   lCombELF              = {False/False/False/False/False}
+   CoefELF               = {1/0,5/0,3/0/0}+{1/0,7/0,3/0/0}+{1/0,3/0,5/0/0}+{0/0/0/0/0}+{0/0/0/0/0}
+   lCombELCU             = {False/False}
+   CoefELCU              = {0/0/0/1,5/1,35}+{0/0/0/0/0}
+   lCombELCS             = {False/False}
+   CoefELCS              = {0/0/0/1/1}+{0/0/0/0/0}
+
+BLOCK MAINTIENS
+   indTravee             = 1
+   xLoc                  = 3
+   lMaintSemSup          = True
+   lMaintSemInf          = True
+
+BLOCK MAINTIENS
+   indTravee             = 1
+   xLoc                  = 6
+   lMaintSemSup          = True
+   lMaintSemInf          = True
 
 BLOCK MAINT_BAC
-   NT            =  2
-   M            =  2
-   Transition            =  1
-   FixNervuresMod            =  0
-   FixnervuresTyp            =  2
-   EC            =  0,5
-   FixCoutureType            =  0
-   lMaintienBac            =  False
-   lTheta            =  False
+   NT                    = 2
+   M                     = 2
+   Transition            = 1
+   FixNervuresMod        = 0
+   FixnervuresTyp        = 2
+   EC                    = 0,5
+   FixCoutureType        = 0
+   lMaintienBac          = False
+   lTheta                = False
 BLOCK SECTION
-   Nom            =  Nom
-   lDalleBeton    =  False
-   lDatabase      =  False
-   typeSection    =  0
-   lUser      =  False
-   f_y_fs         =  235
-   f_y_w          =  235
-   f_y_fi         =  235
+   Nom                   = Nom
+   lDalleBeton           = False
+   lDatabase             = False
+   typeSection           = 0
+   lUser                 = False
+   f_y_fs                = 235
+   f_y_w                 = 235
+   f_y_fi                = 235
 
 BLOCK PROFILA
-   Gamme          =  IPE
-   NomProfile     =  IPE 300
-   ha             =  0,320
-   hb             =  0
-   bfs            =  0,150
-   tfs            =  0,018
-   bfi            =  0,150
-   tfi            =  0,022
-   rcs            =  0
-   rci            =  0
-   tw             =  0,006
-   soudure_a      =  0
-   typeProfil     =  1
-   Platb          =  0
-   Platt          =  0
-   IndStand       =  {1/1/0/1/1/1/0/1/0/0/1/0/0/1/0}
+   Gamme                 = IPE
+   NomProfile            = IPE 300
+   ha                    = 0,320
+   hb                    = 0
+   bfs                   = 0,150
+   tfs                   = 0,018
+   bfi                   = 0,150
+   tfi                   = 0,022
+   rcs                   = 0
+   rci                   = 0
+   tw                    = 0,006
+   soudure_a             = 0
+   typeProfil            = 1
+   PlatB                 = 0
+   PlatT                 = 0
+   IndStand              = {1/1/0/1/1/1/0/1/0/0/1/0/0/1/0}
 
 BLOCK ACIER_PROFILA
-   Nuance         =  S275
-   Qualite        =  EC3
-   Reduction      =  Table 3.1
-   NormeProduit   =  EN 1993-1-1
-   EpMax          =  0,150000005960464
+   Nuance                = S275
+   Qualite               = EC3
+   Reduction             = Table 3.1
+   NormeProduit          = EN 1993-1-1
+   EpMax          =  0,0800000056624413
    iBase          =  1
-   iTabStand      =  3
-   iStandard      =  4
+   iTabStand      =  13
+   iStandard      =  20
 
 BLOCK ENROBAGE_PROFILA
-   lArmaConst     =  False
-   ConstPhi       =  0,008
-   Ratio_bc       =  1
-   Etrier_Type    =  0
-   Etrier_Phi     =  0,006
-   Etrier_CY  =  0,01
-   Etrier_CZ  =  0,01
+   lArmaConst            = False
+   ConstPhi              = 0,008
+   Ratio_bc              = 1
+   Etrier_Type           = 0
+   Etrier_Phi            = 0,006
+   Etrier_CY             = 0,01
+   Etrier_CZ             = 0,01
 
 BLOCK ARMATURE_ENROBAGE_PROFILA
    indLit         =  0
@@ -138,27 +150,27 @@ BLOCK ARMATURE_ENROBAGE_PROFILA
    lActInt          =  True
 
 BLOCK ACIER_ARMATURE_ENROBAGE_PROFILA
-   Classe         =  B500
-   FsK            =  500
-   Es             =  210000
+   Classe                = B500
+   FsK                   = 500
+   Es                    = 210000
 
 BLOCK BETON_ENROBAGE_PROFILA
-   Leger          =  False
-   Classe         =  C20/25
-   RhoC         =  2500
-   Fck            =  20
-   Fcm            =  28
-   Fctm           =  2,21041889918423
-   Ecm            =  29961,9510546403
-   lCrackLimit    =  True
-   wk_max         =  0,0004
+   Leger                 = False
+   Classe                = C20/25
+   RhoC                  = 2500
+   Fck                   = 20
+   Fcm                   = 28
+   Fctm                  = 2,21041889918423
+   Ecm                   = 29961,9510546403
+   lCrackLimit           = True
+   wk_max                = 0,0004
 
 BLOCK DALLE
-   Type           =  0
-   td             =  0,12
-   th             =  0
-   preDalle_ep    =  0,06
-   preDalle_tjoi  =  0,05
+   Type                  = 0
+   td                    = 0,12
+   th                    = 0
+   preDalle_ep           = 0,06
+   preDalle_tjoi         = 0,05
 
 BLOCK BETON_DALLE
    Leger           =  False

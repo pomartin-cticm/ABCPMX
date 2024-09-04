@@ -23,6 +23,14 @@ VERSION					= Version
 SUPPORT					= Support :
 YEARVERSION				= Year :
 
+#FRM_ADDBEAMFILE
+TITLE					= Add a beam
+OK						= OK
+CANCEL					= Cancel
+CLOSE					= Close
+PROJECT					= Project $
+ADDBEAM					= Add the following beams in the project
+
 #FRMADDSTUD
 TITLEADD				= Add a new stud
 TITLEMODIFY				= Modify the stud

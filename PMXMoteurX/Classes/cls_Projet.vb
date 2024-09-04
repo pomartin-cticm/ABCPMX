@@ -7,6 +7,28 @@ Public Class cls_Projet
 #Region " Déclarations "
     Const BkINDENT As String = "IDENTIFICATION"
     Const BkPOUTRE As String = "BEAM"
+    Const BkSECTION As String = "SECTION"
+    Const BkPROFILA As String = "PROFIL"
+    Const BkACIERP As String = "ACIER_PROFILA"
+    Const BkENROBAGE As String = "ENCASEMENT"
+    Const BkARMAENROB As String = "ENCASEMENT_REINFORCEMENT"
+    Const BkACIERARMAE As String = "ACIER_ARMATURE_ENROBAGE_PROFILA"
+    Const BkDALLE As String = "SLAB"
+    Const BkARMADALLE As String = "SLAB_REINFORCEMENT"
+    Const BkACIERARMADALLE As String = "ACIER_ARMATURE_DALLE"
+    Const BkBAC As String = "STEELDECK"
+    Const BkCOFRADAL As String = "COFRADAL"
+    Const BkBETONDALLE As String = "SLABCONCRETE"
+    Const BkMAINTIENS As String = "MAINTIENS"
+    Const BkMAINTIENBAC As String = "DECKRESTRAINT"
+    Const BkBETONENROB As String = "ENCASEMENT_CONCRETE"
+
+    Const BkGOUJON As String = "STUD"
+    Const BkARMATRANS As String = "CONNECTEUR_DALLE_ARMATURE"
+
+    Const BkOPTIONS As String = "OPTIONS"
+    Const BkGAMMA As String = "GAMMA"
+    Const BkHIVOSS As String = "HIVOSS"
 
 #End Region
 
@@ -137,6 +159,366 @@ Public Class cls_Projet
 
 #End Region
 
+#Region " Fonctions support pour écriture du fichier de sauvegarde projet "
+
+    Private Sub SaveFileBlocPoutre(myBeam As cls_Poutre, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc POUTRE
+        '-------------------------------------------------------------------------------------
+
+        Lines.Add("BLOCK " & BkPOUTRE)
+        AjouteLigneFrmt(Lines, "BeaIden", myBeam.BeamID)
+        AjouteLigneFrmt(Lines, "Comment", myBeam.Commentaire)
+        AjouteLigneFrmt(Lines, "LCantilever", myBeam.lTraveeConsoleGauche)
+        AjouteLigneFrmt(Lines, "RCantilever", myBeam.lTraveeConsoleDroite)
+        AjouteLigneFrmt(Lines, "LContSlab", myBeam.lDalleContinueGauche)
+        AjouteLigneFrmt(Lines, "RContSlab", myBeam.lDalleContinueDroite)
+        AjouteLigneFrmt(Lines, "LSlabOpen", myBeam.lTremieGauche)
+        AjouteLigneFrmt(Lines, "RSlabOpen", myBeam.lTremieDroite)
+
+        AjouteLigneFrmt(Lines, "NbSpan", myBeam.NombreTraveesDeuxAppuis)
+        AjouteLigneFrmt(Lines, "SpanLengths", ConvertListDecimalToString(myBeam.LongueurTravee))
+
+        Dim listTypTravee(myBeam.TypTravee.Count - 1) As Integer
+
+        For i As Integer = 0 To listTypTravee.Count - 1
+            listTypTravee(i) = myBeam.TypTravee(i)
+        Next
+
+        AjouteLigneFrmt(Lines, "SpanType", ConvertListIntegerToString(listTypTravee))
+        AjouteLigneFrmt(Lines, "Propping", myBeam.TypeEtaiement)
+        AjouteLigneFrmt(Lines, "LeftPropping", myBeam.lEtaisConsoleGauche)
+        AjouteLigneFrmt(Lines, "RightPropping", myBeam.lEtaisConsoleDroite)
+        AjouteLigneFrmt(Lines, "NbPropping", myBeam.NbEtaiement)
+
+        AjouteLigneFrmt(Lines, "TypeRestraint", myBeam.TypeMaintien)
+
+        AjouteLigneFrmt(Lines, "LSpacing", myBeam.EntraxeD1)
+        AjouteLigneFrmt(Lines, "RSpacing", myBeam.EntraxeD2)
+        AjouteLigneFrmt(Lines, "LDSlOp", myBeam.DistanceDsl1)
+        AjouteLigneFrmt(Lines, "RDSlOp", myBeam.DistanceDsl2)
+
+        AjouteLigneFrmt(Lines, "Intermediate", myBeam.lIntermediaire)
+        AjouteLigneFrmt(Lines, "lDefSpan", myBeam.lDefautPortee)
+        AjouteLigneFrmt(Lines, "lDefEncas", myBeam.lDefautEnrobage)
+        AjouteLigneFrmt(Lines, "lDefProp", myBeam.lDefautEtaiement)
+        AjouteLigneFrmt(Lines, "lDefSlab", myBeam.lDefautDalle)
+
+        If myBeam.lMixte Then
+            AjouteLigneFrmt(Lines, "lAutoDesign", myBeam.lAutomaticDesign)
+            AjouteLigneFrmt(Lines, "ZoneNb", ConvertListIntegerToString(myBeam.NombreZones))
+            AjouteLigneFrmt(Lines, "ZoneLengths", ConvertListDecimalToString(myBeam.LongueurZone))
+            AjouteLigneFrmt(Lines, "ZoneSpacings", ConvertListDecimalToString(myBeam.EspacementZone))
+            AjouteLigneFrmt(Lines, "ZoneTroughSp", ConvertListIntegerToString(myBeam.Espacement_Bac_TransZone))
+            AjouteLigneFrmt(Lines, "ZoneNy", ConvertListIntegerToString(myBeam.NombreGoujonsTransv))
+        End If
+
+        AjouteLigneFrmt(Lines, "ULSlComb", ConvertListBooleanToString(myBeam.lCombELU))
+        AjouteLigneFrmt(Lines, "ULSCoef", ConvertListDecimalToString(myBeam.CoefCombELU))
+        AjouteLigneFrmt(Lines, "SLSlComb", ConvertListBooleanToString(myBeam.lCombELS))
+        AjouteLigneFrmt(Lines, "SLSCoef", ConvertListDecimalToString(myBeam.CoefCombELS))
+        AjouteLigneFrmt(Lines, "FLSlComb", ConvertListBooleanToString(myBeam.lCombFeu))
+        AjouteLigneFrmt(Lines, "FLSCoef", ConvertListDecimalToString(myBeam.CoefCombFeu))
+
+        AjouteLigneFrmt(Lines, "CULSlComb", ConvertListBooleanToString(myBeam.lCombELCSRules))
+        AjouteLigneFrmt(Lines, "CULSCoef", ConvertListDecimalToString(myBeam.CoefCombELCU))
+        AjouteLigneFrmt(Lines, "CSLSlComb", ConvertListBooleanToString(myBeam.lCombELCSRules))
+        AjouteLigneFrmt(Lines, "CSLSCoef", ConvertListDecimalToString(myBeam.CoefCombELCS))
+
+        Lines.Add("")
+
+    End Sub
+
+    Private Sub SaveFileBlocMaintienBac(MaintienBac As cls_MaintienBac, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif au maitien par le bac
+        '-------------------------------------------------------------------------------------
+
+        With MaintienBac
+
+            Lines.Add("BLOCK " & BkMAINTIENBAC)
+
+            AjouteLigneFrmt(Lines, "NT", CStr(.nt))
+            AjouteLigneFrmt(Lines, "M", CStr(.m))
+            AjouteLigneFrmt(Lines, "Transition", (.Transition))
+            AjouteLigneFrmt(Lines, "FixNervuresMod", (.FixNervuresMod))
+            AjouteLigneFrmt(Lines, "FixnervuresTyp", (.FixnervuresTyp))
+            AjouteLigneFrmt(Lines, "EC", (.ec))
+            AjouteLigneFrmt(Lines, "FixCoutureType", (.FixCoutureType))
+            AjouteLigneFrmt(Lines, "lMaintienBac", (.lMaintienBac))
+            AjouteLigneFrmt(Lines, "lTheta", (.lTheta))
+
+        End With
+    End Sub
+
+    Private Sub SaveFileBlocDalle(myDalle As cls_Dalle, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif à la dalle
+        '-------------------------------------------------------------------------------------
+
+        Lines.Add("BLOCK " & BkDALLE)
+
+        With myDalle
+
+            AjouteLigneFrmt(Lines, "Type", .type)
+            AjouteLigneFrmt(Lines, "td", .Ep_td)
+            AjouteLigneFrmt(Lines, "th", .Ep_th)
+            AjouteLigneFrmt(Lines, "preDalle_ep", .preDalle_ep)
+            AjouteLigneFrmt(Lines, "preDalle_tjoi", .preDalle_tjoint)
+        End With
+
+        Lines.Add("")
+
+    End Sub
+
+    Private Sub SaveFileBlocBac(myBac As cls_Bac, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif au bac
+        '-------------------------------------------------------------------------------------
+
+        Lines.Add("BLOCK " & BkBAC)
+
+        With myBac
+            AjouteLigneFrmt(Lines, "Etiquette", .Etiquette)
+            AjouteLigneFrmt(Lines, "Producteur", .Producteur)
+            AjouteLigneFrmt(Lines, "lDatabase", .lDatabase)
+
+            AjouteLigneFrmt(Lines, "h_rs", .h_rs)
+            AjouteLigneFrmt(Lines, "h_p", .Hp)
+            AjouteLigneFrmt(Lines, "b_b", .Bb)
+            AjouteLigneFrmt(Lines, "b_t", .Bt)
+            AjouteLigneFrmt(Lines, "e_p", .Ep)
+            AjouteLigneFrmt(Lines, "tp", .Tp)
+            AjouteLigneFrmt(Lines, "orientation", .Orientation)
+            AjouteLigneFrmt(Lines, "msurf", .msurf)
+            AjouteLigneFrmt(Lines, "fyp", .fyp)
+            AjouteLigneFrmt(Lines, "LargeurModule", .LargeurModule)
+            AjouteLigneFrmt(Lines, "Ieff", .Ieff)
+            AjouteLigneFrmt(Lines, "lPreperce", .lPreperce)
+            AjouteLigneFrmt(Lines, "AppuiT", .AppuiT)
+            AjouteLigneFrmt(Lines, "Appuil", .AppuiL)
+        End With
+
+        Lines.Add("")
+
+    End Sub
+
+    Private Sub SaveFileBlocCofraDalle(myCofraDal As cls_Cofradal, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif au plancher préfabrique Cofradal
+        '-------------------------------------------------------------------------------------
+
+        Lines.Add("BLOCK " & BkCOFRADAL)
+
+        With myCofraDal
+            AjouteLigneFrmt(Lines, "Nom", .nom)
+            AjouteLigneFrmt(Lines, "Dp", .dp)
+            AjouteLigneFrmt(Lines, "Msurf", .msurf)
+            AjouteLigneFrmt(Lines, "lCustom", .lCustom)
+        End With
+
+        Lines.Add("")
+
+    End Sub
+
+    Private Sub SaveFileBlocOptions(myParam As cls_OptionsCalcul, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif aux options de calcul
+        '-------------------------------------------------------------------------------------
+
+        Lines.Add("BLOCK " & BkOPTIONS)
+
+        With myParam
+            AjouteLigneFrmt(Lines, "RH", .RH)
+            AjouteLigneFrmt(Lines, "Norme", .Norme)
+            AjouteLigneFrmt(Lines, "EtaW", .EtaW)
+            AjouteLigneFrmt(Lines, "lLarEffSimp", .lLargeurEfficaceSimplifiee)
+            AjouteLigneFrmt(Lines, "lCompArma", .lCompressionArma)
+            AjouteLigneFrmt(Lines, "dMaxNodes", .dMaxNodes)
+            AjouteLigneFrmt(Lines, "nbMinNodesTr", .nbMinNodesTravee)
+            AjouteLigneFrmt(Lines, "nbMinNodesCo", .nbMinNodesConsole)
+            AjouteLigneFrmt(Lines, "epsSH", .EpsilonSH)
+
+            AjouteLigneFrmt(Lines, "lRetraitEnr", .lRetraitEnrobage)
+            AjouteLigneFrmt(Lines, "ArmaYoung", .ArmaYoung)
+            AjouteLigneFrmt(Lines, "Gravite", .GraviteG)
+            AjouteLigneFrmt(Lines, "PsiLPerm", .PsiLPermanent)
+            AjouteLigneFrmt(Lines, "PsiLRetrait", .PsiLRetrait)
+
+            AjouteLigneFrmt(Lines, "AgeT0G1_0", .AgeT0G1(0))
+            AjouteLigneFrmt(Lines, "AgeT0G1_1", .AgeT0G1(1))
+            AjouteLigneFrmt(Lines, "AgeT0G2_0", .AgeT0G2(0))
+            AjouteLigneFrmt(Lines, "AgeT0G2_1", .AgeT0G2(1))
+            AjouteLigneFrmt(Lines, "AgeT0SH_0", .AgeT0SH(0))
+            AjouteLigneFrmt(Lines, "AgeT0SH_1", .AgeT0SH(1))
+
+            AjouteLigneFrmt(Lines, "AgeTCalc", .AgeT)
+
+            AjouteLigneFrmt(Lines, "lElasticDesign", .lElasticDesignVM)
+            AjouteLigneFrmt(Lines, "lMaitFissure", .lMaitriseFissuration)
+
+        End With
+
+        Lines.Add("")
+
+    End Sub
+
+    Private Sub SaveFileBlocProfile(myProfil As cls_ProfilA, mySteel As cls_Acier, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif au profilé acier
+        '-------------------------------------------------------------------------------------
+
+        Lines.Add("BLOCK " & BkPROFILA)
+
+        With myProfil
+            AjouteLigneFrmt(Lines, "Serie", .Gamme)
+            AjouteLigneFrmt(Lines, "Name", .NomProfile)
+            AjouteLigneFrmt(Lines, "Type", .typeProfileAcier)
+            AjouteLigneFrmt(Lines, "ha", .ha)
+            AjouteLigneFrmt(Lines, "hb", .hb)
+            AjouteLigneFrmt(Lines, "bfs", .Bfs)
+            AjouteLigneFrmt(Lines, "tfs", .Tfs)
+            AjouteLigneFrmt(Lines, "bfi", .Bfi)
+            AjouteLigneFrmt(Lines, "tfi", .Tfi)
+            AjouteLigneFrmt(Lines, "rcs", .Rcs)
+            AjouteLigneFrmt(Lines, "rci", .Rci)
+            AjouteLigneFrmt(Lines, "tw", .Tw)
+            AjouteLigneFrmt(Lines, "Welda", .aW)
+            AjouteLigneFrmt(Lines, "PlatB", .Plat_b)
+            AjouteLigneFrmt(Lines, "PlatT", .Plat_t)
+            'AjouteLigneFrmt(Lines, "IndStand", ConvertListShortToString(.IndStandart))
+            'If .IndDeliv IsNot Nothing Then
+            '    AjouteLigneFrmt(Lines, "IndDeliv", ConvertListShortToString(.IndDeliv))
+            'End If
+        End With
+
+        With mySteel
+            AjouteLigneFrmt(Lines, "Grade", .Nuance)
+            AjouteLigneFrmt(Lines, "QualitY", .Qualite)
+            AjouteLigneFrmt(Lines, "Reduction", .Reduction)
+            AjouteLigneFrmt(Lines, "Standart", .NormeProduit)
+        End With
+
+        Lines.Add("")
+
+    End Sub
+
+    Private Sub SaveFileBlocSection(mySection As cls_Section, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif à la section
+        '-------------------------------------------------------------------------------------
+
+        Lines.Add("BLOCK " & BkSECTION)
+
+        With mySection
+            AjouteLigneFrmt(Lines, "Name", .Nom)
+            AjouteLigneFrmt(Lines, "SlabDefined", .lDalleBeton)
+            AjouteLigneFrmt(Lines, "Database", .lDatabase)
+            AjouteLigneFrmt(Lines, "Type", .TypeSection)
+            AjouteLigneFrmt(Lines, "UserDefined", .lUser)
+            AjouteLigneFrmt(Lines, "f_y_fs", .f_y.fs)
+            AjouteLigneFrmt(Lines, "f_y_w", .f_y.w)
+            AjouteLigneFrmt(Lines, "f_y_fi", .f_y.fi)
+        End With
+        Lines.Add("")
+
+    End Sub
+
+
+
+
+    Private Sub SaveFileBlocGamma(myGamma As cls_Gamma, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif aux paramètres Gamma
+        '-------------------------------------------------------------------------------------
+
+        With myGamma
+            Lines.Add("BLOCK " & BkGAMMA)
+
+            AjouteLigneFrmt(Lines, "GammaM0", .GammaM0)
+            AjouteLigneFrmt(Lines, "GammaM1", .GammaM1)
+            AjouteLigneFrmt(Lines, "GammaM2", .GammaM2)
+            AjouteLigneFrmt(Lines, "GammaC", .GammaC)
+            AjouteLigneFrmt(Lines, "GammaVs", .GammaVs)
+            AjouteLigneFrmt(Lines, "GammaVc", .GammaVc)
+            AjouteLigneFrmt(Lines, "lGammaVuni", .lGammaV_unique)
+
+            AjouteLigneFrmt(Lines, "GammaS", .GammaS)
+            AjouteLigneFrmt(Lines, "GammaP", .GammaP)
+
+            AjouteLigneFrmt(Lines, "GammaM_fi", .GammaM_fi)
+            AjouteLigneFrmt(Lines, "GammaS_fi", .GammaS_fi)
+            AjouteLigneFrmt(Lines, "GammaV_fi", .GammaV_fi)
+            AjouteLigneFrmt(Lines, "GammaC_fi", .GammaC_fi)
+
+            Lines.Add("")
+
+            AjouteLigneFrmt(Lines, "GammaG_sup", .GammaG_sup)
+            AjouteLigneFrmt(Lines, "GammaG_inf", .GammaG_inf)
+            AjouteLigneFrmt(Lines, "GammaQ", .GammaQ)
+            AjouteLigneFrmt(Lines, "Psi0_Q1", .Psi0_Q1)
+            AjouteLigneFrmt(Lines, "Psi1_Q1", .Psi1_Q1)
+            AjouteLigneFrmt(Lines, "Psi2_Q1", .Psi2_Q1)
+            AjouteLigneFrmt(Lines, "Psi0_Q2", .Psi0_Q2)
+            AjouteLigneFrmt(Lines, "Psi1_Q2", .Psi1_Q2)
+            AjouteLigneFrmt(Lines, "Psi2_Q2", .Psi2_Q2)
+
+            Lines.Add("")
+        End With
+
+
+    End Sub
+
+    Private Sub SaveFileBlocHivoss(myHivoss As cls_MethodHivoss, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif aux paramètres du calcul Hivoss
+        '-------------------------------------------------------------------------------------
+
+        With myHivoss
+            Lines.Add("BLOCK " & BkHIVOSS)
+
+            Lines.Add("   lHivossMethod = " & .lHivossMethod)
+            Lines.Add("   RatioQ        = " & .ratioQ)
+            Lines.Add("   ChoixQ        = " & .choixQ)
+            Lines.Add("   UtilPlancher  = " & .UtilisationPlancher)
+            Lines.Add("   lFreqDalle  = " & .lFreqDalle)
+            Lines.Add("   Mobilier      = " & .Mobilier)
+            Lines.Add("   lFauxPlafond  = " & .lFauxPlafond)
+            Lines.Add("   lChappeFlottante  = " & .lChappeFlottante)
+            Lines.Add("   AmortD1       = " & .AmortiStructure_D1)
+            Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
+            Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
+            Lines.Add("   AmortDtot     = " & .AmortiTotal_Dtot)
+            Lines.Add("")
+
+        End With
+
+    End Sub
+
+
+
+#End Region
+
 #Region " Ecriture / Lecture - Fichier "
 
     Public Sub SaveFile(ByRef Lines As List(Of String), ByVal version As String)
@@ -169,88 +551,13 @@ Public Class cls_Projet
         '==[ Nuances d'acier utilisateur ]=================================================================
         Dim nuancesSave As New List(Of String)
 
-        'For Each s In List_Section
-
-        '    If s.acier.qualite = "USER" And Not nuancesSave.Contains(s.acier.nuance) Then
-        '        Lines.Add("BLOCK NUANCEACIER")
-        '        Lines.Add("   Nuance        = " & s.acier.nuance)
-        '        Lines.Add("   Fy            = " & s.acier.f_y.w)
-        '        Lines.Add("")
-        '        nuancesSave.Add(s.acier.nuance)
-        '    End If
-
-        'Next
-
-        ''==[ Sections ]==================================================================================
-        'For Each s In List_Section
-        '    s.SaveFile(Lines)
-        'Next
 
         '==[ Classe Poutre ]=================================================================
         For Each pTre As cls_Poutre In Me.Poutres
 
             'With pTre
 
-            Lines.Add("BLOCK " & BkPOUTRE)
-            AjouteLigneFrmt(Lines, "BeaIden", pTre.BeamID)
-            AjouteLigneFrmt(Lines, "Commentaire", pTre.Commentaire)
-            AjouteLigneFrmt(Lines, "ConsoleGauche", pTre.lTraveeConsoleGauche)
-            AjouteLigneFrmt(Lines, "ConsoleDroite", pTre.lTraveeConsoleDroite)
-            AjouteLigneFrmt(Lines, "DalleContGauche", pTre.lDalleContinueGauche)
-            AjouteLigneFrmt(Lines, "DalleContDroite", pTre.lDalleContinueDroite)
-            AjouteLigneFrmt(Lines, "lTremieGauche", pTre.lTremieGauche)
-            AjouteLigneFrmt(Lines, "lTremieDroite", pTre.lTremieDroite)
-
-            AjouteLigneFrmt(Lines, "NbTravee", pTre.NombreTraveesDeuxAppuis)
-            AjouteLigneFrmt(Lines, "LongueurTravee", ConvertListDecimalToString(pTre.LongueurTravee))
-
-            Dim listTypTravee(pTre.TypTravee.Count - 1) As Integer
-
-            For i As Integer = 0 To listTypTravee.Count - 1
-                listTypTravee(i) = pTre.TypTravee(i)
-            Next
-
-            AjouteLigneFrmt(Lines, "TypeTravee", ConvertListIntegerToString(listTypTravee))
-            AjouteLigneFrmt(Lines, "TypeEtaiement", pTre.TypeEtaiement)
-            AjouteLigneFrmt(Lines, "EtaisConsG", pTre.lEtaisConsoleGauche)
-            AjouteLigneFrmt(Lines, "EtaisConsD", pTre.lEtaisConsoleDroite)
-            AjouteLigneFrmt(Lines, "NbPropping", pTre.NbEtaiement)
-
-            AjouteLigneFrmt(Lines, "TypeMaintien", pTre.TypeMaintien)
-
-            AjouteLigneFrmt(Lines, "D1", pTre.EntraxeD1)
-            AjouteLigneFrmt(Lines, "D2", pTre.EntraxeD2)
-            AjouteLigneFrmt(Lines, "Dsl1", pTre.DistanceDsl1)
-            AjouteLigneFrmt(Lines, "Dsl2", pTre.DistanceDsl2)
-
-            AjouteLigneFrmt(Lines, "lIntermediaire", pTre.lIntermediaire)
-            AjouteLigneFrmt(Lines, "lDefautPortee", pTre.lDefautPortee)
-            AjouteLigneFrmt(Lines, "lDefautEnroba", pTre.lDefautEnrobage)
-            AjouteLigneFrmt(Lines, "lDefautEtaiem", pTre.lDefautEtaiement)
-            AjouteLigneFrmt(Lines, "lDefautDalle", pTre.lDefautDalle)
-
-            If pTre.lMixte Then
-                AjouteLigneFrmt(Lines, "lAutoDesign", pTre.lAutomaticDesign)
-                AjouteLigneFrmt(Lines, "NombreZones", ConvertListIntegerToString(pTre.NombreZones))
-                AjouteLigneFrmt(Lines, "LongueurZone", ConvertListDecimalToString(pTre.LongueurZone))
-                AjouteLigneFrmt(Lines, "EspaZone", ConvertListDecimalToString(pTre.EspacementZone))
-                AjouteLigneFrmt(Lines, "EspaBacTransZone", ConvertListIntegerToString(pTre.Espacement_Bac_TransZone))
-                AjouteLigneFrmt(Lines, "NbGoujonTrans", ConvertListIntegerToString(pTre.NombreGoujonsTransv))
-            End If
-
-            AjouteLigneFrmt(Lines, "lCombELU", ConvertListBooleanToString(pTre.lCombELU))
-            AjouteLigneFrmt(Lines, "CoefELU", ConvertListDecimalToString(pTre.CoefCombELU))
-            AjouteLigneFrmt(Lines, "lCombELS", ConvertListBooleanToString(pTre.lCombELS))
-            AjouteLigneFrmt(Lines, "CoefELS", ConvertListDecimalToString(pTre.CoefCombELS))
-            AjouteLigneFrmt(Lines, "lCombELF", ConvertListBooleanToString(pTre.lCombFeu))
-            AjouteLigneFrmt(Lines, "CoefELF", ConvertListDecimalToString(pTre.CoefCombFeu))
-
-            AjouteLigneFrmt(Lines, "lCombELCU", ConvertListBooleanToString(pTre.lCombELCSRules))
-            AjouteLigneFrmt(Lines, "CoefELCU", ConvertListDecimalToString(pTre.CoefCombELCU))
-            AjouteLigneFrmt(Lines, "lCombELCS", ConvertListBooleanToString(pTre.lCombELCSRules))
-            AjouteLigneFrmt(Lines, "CoefELCS", ConvertListDecimalToString(pTre.CoefCombELCS))
-
-            Lines.Add("")
+            SaveFileBlocPoutre(pTre, Lines)
 
             '==[ Classe Maintien ]=================================================================
             For i As Integer = 0 To pTre.Maintiens.Count - 1
@@ -259,7 +566,7 @@ Public Class cls_Projet
                     ' If maint IsNot Nothing Then
                     With maint
 
-                        Lines.Add("BLOCK MAINTIENS")
+                        Lines.Add("BLOCK " & bkMAINTIENS)
                         AjouteLigneFrmt(Lines, "indTravee", CStr(i))
                         AjouteLigneFrmt(Lines, "xLoc", .x_Loc)
                         AjouteLigneFrmt(Lines, "lMaintSemSup", .lMaintienSemelleSup)
@@ -274,121 +581,65 @@ Public Class cls_Projet
 
             '==[ Classe maintien par le bac ]==================================================
 
-            With pTre.MaintienBac
+            If pTre.lMixte Then
+                SaveFileBlocMaintienBac(pTre.MaintienBac, Lines)
+            End If
 
-                Lines.Add("BLOCK MAINT_BAC")
-
-                AjouteLigneFrmt(Lines, "NT", CStr(.nt))
-                AjouteLigneFrmt(Lines, "M", CStr(.m))
-                AjouteLigneFrmt(Lines, "Transition", (.Transition))
-                AjouteLigneFrmt(Lines, "FixNervuresMod", (.FixNervuresMod))
-                AjouteLigneFrmt(Lines, "FixnervuresTyp", (.FixnervuresTyp))
-                AjouteLigneFrmt(Lines, "EC", (.ec))
-                AjouteLigneFrmt(Lines, "FixCoutureType", (.FixCoutureType))
-                AjouteLigneFrmt(Lines, "lMaintienBac", (.lMaintienBac))
-                AjouteLigneFrmt(Lines, "lTheta", (.lTheta))
-
-            End With
+            '==[ Bloc Section ]=================================================================
 
 
+
+            '==[ Bloc ProfilA ]=================================================================
+
+            SaveFileBlocProfile(pTre.Section.ProfilA, pTre.Section.Acier, Lines)
 
             '==[ Classe Section ]=================================================================
             With pTre.Section
 
-                Lines.Add("BLOCK SECTION")
 
-                AjouteLigneFrmt(Lines, "Nom", .Nom)
-                AjouteLigneFrmt(Lines, "lDalleBeton", .lDalleBeton)
-                AjouteLigneFrmt(Lines, "lDatabase", .lDatabase)
-                AjouteLigneFrmt(Lines, "typeSection", .TypeSection)
-                AjouteLigneFrmt(Lines, "lUser", .lUser)
-                AjouteLigneFrmt(Lines, "f_y_fs", .f_y.fs)
-                AjouteLigneFrmt(Lines, "f_y_w", .f_y.w)
-                AjouteLigneFrmt(Lines, "f_y_fi", .f_y.fi)
+
+            End With
+
+
+            '==[ Classe Enrobage Partiel ProfilA ]=================================================================
+            With .Enrobage
+                Lines.Add("BLOCK " & BkENROBAGE)
+
+                AjouteLigneFrmt(Lines, "lArmaConst", .lArmaConst)
+                AjouteLigneFrmt(Lines, "ConstPhi", .ConstPhi)
+                AjouteLigneFrmt(Lines, "Ratio_bc", .Ratio_bc)
+                AjouteLigneFrmt(Lines, "Etrier_Type", .Etriers_Type)
+                AjouteLigneFrmt(Lines, "Etrier_Phi", .Etriers_Phi)
+                AjouteLigneFrmt(Lines, "Etrier_CY", .Etriers_EnrobageY)
+                AjouteLigneFrmt(Lines, "Etrier_CZ", .Etriers_EnrobageZ)
 
                 Lines.Add("")
 
-                '==[ Classe ProfilA ]=================================================================
-                With .ProfilA
-                    Lines.Add("BLOCK PROFILA")
-                    Lines.Add("   Gamme          =  " & .Gamme)
+                '==[ Classe Armature Enrobage Partiel ProfilA ]=================================================================
+                Lines.Add("BLOCK " & BkARMAENROB)
 
-                    Lines.Add("   NomProfile     =  " & .NomProfile)
-                    Lines.Add("   ha             =  " & .ha)
-                    Lines.Add("   hb             =  " & .hb)
-                    Lines.Add("   bfs            =  " & .Bfs)
-                    Lines.Add("   tfs            =  " & .Tfs)
-                    Lines.Add("   bfi            =  " & .Bfi)
-                    Lines.Add("   tfi            =  " & .Tfi)
-                    Lines.Add("   rcs            =  " & .Rcs)
-                    Lines.Add("   rci            =  " & .Rci)
-                    'Lines.Add("   hw             =  " & .h_w)
-                    Lines.Add("   tw             =  " & .Tw)
-                    Lines.Add("   soudure_a      =  " & .aW)
-                    Lines.Add("   typeProfil     =  " & .typeProfileAcier)
-                    Lines.Add("   Platb          =  " & .Plat_b)
-                    Lines.Add("   Platt          =  " & .Plat_t)
-                    If .IndDeliv IsNot Nothing Then Lines.Add("   IndDeliv       =  " & ConvertListShortToString(.IndDeliv))
-                    Lines.Add("   IndStand       =  " & ConvertListShortToString(.IndStandart))
-                    Lines.Add("")
+                For i As Integer = 0 To .LitArma.Length - 1
+                    With .LitArma(i)
+                        AjouteLigneFrmt(Lines, "indLit", CStr(i))
+                        AjouteLigneFrmt(Lines, "PhiExt", .PhiExt)
+                        AjouteLigneFrmt(Lines, "NbExt", .NbExt)
+                        AjouteLigneFrmt(Lines, "lActExt", .lActiveExt)
+                        AjouteLigneFrmt(Lines, "PhiMil", .PhiMil)
+                        AjouteLigneFrmt(Lines, "NbMil", .NbMil)
+                        AjouteLigneFrmt(Lines, "PhiInt", .PhiInt)
+                        AjouteLigneFrmt(Lines, "NbInt", .NbInt)
+                        AjouteLigneFrmt(Lines, "lActInt", .lActiveInt)
+                        If i = 1 Then
+                            AjouteLigneFrmt(Lines, "zPosRatio", .zPosRatio)
+                        End If
 
-                End With
+                        Lines.Add("")
+                    End With
+                Next
+            End With
 
-                '==[ Classe Acier ProfilA ]=================================================================
-                With .Acier
-                    Lines.Add("BLOCK ACIER_PROFILA")
-
-                    Lines.Add("   Nuance         =  " & .Nuance)
-                    Lines.Add("   Qualite        =  " & .Qualite)
-                    Lines.Add("   Reduction      =  " & .Reduction)
-                    Lines.Add("   NormeProduit   =  " & .NormeProduit)
-                    Lines.Add("   EpMax          =  " & .EpMax)
-                    Lines.Add("   iBase          =  " & .iBase)
-                    Lines.Add("   iTabStand      =  " & .iTabStandart)
-                    Lines.Add("   iStandard      =  " & .iStandart)
-                    'Lines.Add("   lUser      =  " & .lUser)
-                    'Lines.Add("   f_y_fs         =  " & .f_y.fs)
-                    'Lines.Add("   f_y_w          =  " & .f_y.w)
-                    'Lines.Add("   f_y_fi         =  " & .f_y.fi)
-                    Lines.Add("")
-                End With
-
-
-                '==[ Classe Enrobage Partiel ProfilA ]=================================================================
-                With .Enrobage
-                    Lines.Add("BLOCK ENROBAGE_PROFILA")
-
-                    AjouteLigneFrmt(Lines, "lArmaConst", .lArmaConst)
-                    AjouteLigneFrmt(Lines, "ConstPhi", .ConstPhi)
-                    AjouteLigneFrmt(Lines, "Ratio_bc", .Ratio_bc)
-                    AjouteLigneFrmt(Lines, "Etrier_Type", .Etriers_Type)
-                    AjouteLigneFrmt(Lines, "Etrier_Phi", .Etriers_Phi)
-                    AjouteLigneFrmt(Lines, "Etrier_CY", .Etriers_EnrobageY)
-                    AjouteLigneFrmt(Lines, "Etrier_CZ", .Etriers_EnrobageZ)
-
-                    Lines.Add("")
-
-                    '==[ Classe Armature Enrobage Partiel ProfilA ]=================================================================
-                    Lines.Add("BLOCK ARMATURE_ENROBAGE_PROFILA")
-
-                    For i As Integer = 0 To .LitArma.Length - 1
-                        With .LitArma(i)
-                            Lines.Add("   indLit         =  " & i)
-                            Lines.Add("   PhiExt         =  " & .PhiExt)
-                            Lines.Add("   NbExt          =  " & .NbExt)
-                            Lines.Add("   lActExt          =  " & .lActiveExt)
-                            Lines.Add("   PhiMil         =  " & .PhiMil)
-                            Lines.Add("   NbMil          =  " & .NbMil)
-                            Lines.Add("   PhiInt         =  " & .PhiInt)
-                            Lines.Add("   NbInt          =  " & .NbInt)
-                            Lines.Add("   lActInt          =  " & .lActiveInt)
-                            If i = 1 Then Lines.Add("   zPosRatio      =  " & .zPosRatio)
-                            Lines.Add("")
-                        End With
-                    Next
-
-                    '==[ Classe Acier Armature Enrobage Partiel ProfilA ]=================================================================
-                    Lines.Add("BLOCK ACIER_ARMATURE_ENROBAGE_PROFILA")
+            '==[ Classe Acier Armature Enrobage Partiel ProfilA ]=================================================================
+            Lines.Add("BLOCK " & BkACIERARMAE)
                     With .AcierArmatures
                         AjouteLigneFrmt(Lines, "Classe", .Classe)
                         AjouteLigneFrmt(Lines, "FsK", .FsK)
@@ -398,7 +649,7 @@ Public Class cls_Projet
                     End With
 
                     '==[ Classe Béton Enrobage Partiel ProfilA ]=================================================================
-                    Lines.Add("BLOCK BETON_ENROBAGE_PROFILA")
+                    Lines.Add("BLOCK " & BkBETONENROB)
                     With .Beton
 
                         AjouteLigneFrmt(Lines, "Leger", .lLeger)
@@ -418,76 +669,42 @@ Public Class cls_Projet
 
             '==[ Classe Dalle ]=================================================================
 
+            SaveFileBlocDalle(pTre.Dalle, Lines)
+
+            '==[ Classe Bac Dalle ]=================================================================
+
+            Select Case pTre.Dalle.type
+                Case cls_Dalle.Enum_TypeDalle.Mixte
+                    SaveFileBlocBac(pTre.Dalle.Bac, Lines)
+                Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
+                    SaveFileBlocCofraDalle(pTre.Dalle.Cofradal, Lines)
+            End Select
+
             With pTre.Dalle
-                Lines.Add("BLOCK DALLE")
 
-                AjouteLigneFrmt(Lines, "Type", .type)
-                AjouteLigneFrmt(Lines, "td", .Ep_td)
-                AjouteLigneFrmt(Lines, "th", .Ep_th)
-                AjouteLigneFrmt(Lines, "preDalle_ep", .preDalle_ep)
-                AjouteLigneFrmt(Lines, "preDalle_tjoi", .preDalle_tjoint)
-
-                Lines.Add("")
 
                 '==[ Classe Béton Dalle ]=================================================================
                 With .beton
-                    Lines.Add("BLOCK BETON_DALLE")
+                    Lines.Add("BLOCK " & BkBETONDALLE)
 
-                    Lines.Add("   Leger           =  " & .lLeger)
-                    Lines.Add("   Classe         =  " & .Classe)
-                    Lines.Add("   RhoC         =  " & .RhoC)
-                    Lines.Add("   Fck            =  " & .Fck)
-                    Lines.Add("   Fcm            =  " & .Fck)
-                    Lines.Add("   Fctm           =  " & .Fctm)
-                    Lines.Add("   Ecm            =  " & .Ecm)
-                    Lines.Add("   lCrackLimit    =  " & .lCrackingLimitation)
-                    Lines.Add("   wk_max         =  " & .wk_max)
+                    AjouteLigneFrmt(Lines, "Leger", .lLeger)
+                    AjouteLigneFrmt(Lines, "Classe", .Classe)
+                    AjouteLigneFrmt(Lines, "RhoC", .RhoC)
+                    AjouteLigneFrmt(Lines, "Fck", .Fck)
+                    AjouteLigneFrmt(Lines, "Fcm", .Fcm)
+                    AjouteLigneFrmt(Lines, "Fctm", .Fctm)
+                    AjouteLigneFrmt(Lines, "Ecm", .Ecm)
+                    AjouteLigneFrmt(Lines, "lCrackLimit", .lCrackingLimitation)
+                    AjouteLigneFrmt(Lines, "wk_max", .wk_max)
+
                     Lines.Add("")
-                End With
-
-                '==[ Classe Bac Dalle ]=================================================================
-                With .Bac
-
-                    Lines.Add("BLOCK BAC_DALLE")
-
-                    Lines.Add("   Etiquette      =  " & .Etiquette)
-                    Lines.Add("   Producteur     =  " & .Producteur)
-                    Lines.Add("   lDatabase      =  " & .lDatabase)
-                    Lines.Add("   h_rs           =  " & .h_rs)
-                    Lines.Add("   h_p            =  " & .Hp)
-                    Lines.Add("   b_b            =  " & .Bb)
-                    Lines.Add("   b_t            =  " & .Bt)
-                    Lines.Add("   e_p            =  " & .Ep)
-                    Lines.Add("   tp             =  " & .Tp)
-                    Lines.Add("   orientation    =  " & .Orientation)
-                    Lines.Add("   msurf          =  " & .msurf)
-                    Lines.Add("   fyp            =  " & .fyp)
-                    Lines.Add("   LargeurModule  =  " & .LargeurModule)
-                    Lines.Add("   Ieff           =  " & .Ieff)
-                    Lines.Add("   lPreperce      =  " & .lPreperce)
-                    Lines.Add("   AppuiT         =  " & .AppuiT)
-                    Lines.Add("   AppuiL         =  " & .AppuiL)
-                    Lines.Add("")
-                End With
-
-                '==[ Classe Cofradal Dalle ]=================================================================
-                With .Cofradal
-
-                    Lines.Add("BLOCK COFRADAL")
-
-                    Lines.Add("   Nom      =  " & .nom)
-                    Lines.Add("   Dp      =  " & .dp)
-                    Lines.Add("   Msurf      =  " & .msurf)
-                    Lines.Add("   lCustom      =  " & .lCustom)
-                    Lines.Add("")
-
                 End With
 
                 '==[ Classe Armature Dalle ]=================================================================
                 For Each arma_longi As Cls_Armatures_Longi In .LitArma
                     With arma_longi
                         If pTre.Dalle.LitArma.IndexOf(arma_longi) = 0 Or (.lActive And pTre.Dalle.LitArma.IndexOf(arma_longi) = 1) Then
-                            Lines.Add("BLOCK ARMATURE_DALLE")
+                            Lines.Add("BLOCK " & bkarmadalle)
                             Lines.Add("   indLit         =  " & pTre.Dalle.LitArma.IndexOf(arma_longi))
                             Lines.Add("   EspBar         =  " & .EspBar)
                             Lines.Add("   PhiS           =  " & .PhiS)
@@ -502,7 +719,7 @@ Public Class cls_Projet
 
                 '==[ Classe Acier Armature Dalle ]=================================================================
                 With .AcierArmatures
-                    Lines.Add("BLOCK ACIER_ARMATURE_DALLE")
+                    Lines.Add("BLOCK " & BkACIERARMADALLE)
 
                     Lines.Add("   Classe         =  " & .Classe)
                     Lines.Add("   Fsk            =  " & .FsK)
@@ -510,10 +727,9 @@ Public Class cls_Projet
                     Lines.Add("")
                 End With
 
-
                 '==[ Classe Connecteur Goujon Dalle ]=================================================================
                 With .Goujons
-                    Lines.Add("BLOCK CONNECTEUR_DALLE_GOUJON")
+                    Lines.Add("BLOCK " & BkGOUJON)
 
                     Lines.Add("   nom            =  " & .nom)
                     Lines.Add("   hsc            =  " & .hsc)
@@ -525,12 +741,10 @@ Public Class cls_Projet
 
                 '==[ Classe Connecteur Armature Dalle ]=================================================================
                 With .ConnecteurArmature
-                    Lines.Add("BLOCK CONNECTEUR_DALLE_ARMATURE")
+                    Lines.Add("BLOCK " & BkARMATRANS)
 
                     Lines.Add("   ds            =  " & .ds)
-                    'Lines.Add("   dhs            =  " & .dhs)
-                    'Lines.Add("   ahv              =  " & .ahv)
-                    'Lines.Add("   Ls              =  " & .Ls)
+
                     Lines.Add("")
                 End With
 
@@ -547,83 +761,16 @@ Public Class cls_Projet
             End With
 
             '==[ Classe Options Calculs ]=================================================================
-            With pTre.Param
 
-                Lines.Add("BLOCK OPT_CALCULS")
-                Lines.Add("   RH            = " & .RH)
-                Lines.Add("   Norme            = " & .Norme)
-                Lines.Add("   EtaW            = " & .EtaW)
-                Lines.Add("   lLarEffSimp            = " & .lLargeurEfficaceSimplifiee)
-                Lines.Add("   lCompArma            = " & .lCompressionArma)
-                Lines.Add("   dMaxNodes            = " & .dMaxNodes)
-                Lines.Add("   nbMinNodesTr            = " & .nbMinNodesTravee)
-                Lines.Add("   nbMinNodesCo            = " & .nbMinNodesConsole)
-                Lines.Add("   epsSH            = " & .EpsilonSH)
-                Lines.Add("   lRetraitEnr            = " & .lRetraitEnrobage)
-                Lines.Add("   ArmaYoung            = " & .ArmaYoung)
-                Lines.Add("   Gravite            = " & .GraviteG)
-                Lines.Add("   PsiLPerm            = " & .PsiLPermanent)
-                Lines.Add("   PsiLRetrait            = " & .PsiLRetrait)
-                Lines.Add("   AgeT0G1_0            = " & .AgeT0G1(0))
-                Lines.Add("   AgeT0G1_1            = " & .AgeT0G1(1))
-                Lines.Add("   AgeT0G2_0            = " & .AgeT0G2(0))
-                Lines.Add("   AgeT0G2_1            = " & .AgeT0G2(1))
-                Lines.Add("   AgeT0SH_0            = " & .AgeT0SH(0))
-                Lines.Add("   AgeT0SH_1            = " & .AgeT0SH(1))
-                Lines.Add("   AgeTCalc            = " & .AgeT)
-                Lines.Add("   lElasticDesign            = " & .lElasticDesignVM)
-                Lines.Add("   lMaitFissure            = " & .lMaitriseFissuration)
+            SaveFileBlocOptions(pTre.Param, Lines)
 
-                Lines.Add("")
+            '==[ Classe Gamma ]=================================================================
 
-                '==[ Classe Gamma ]=================================================================
-                With .Gamma
-                    Lines.Add("BLOCK OPT_CALCULS_GAMMA")
+            SaveFileBlocGamma(pTre.Param.Gamma, Lines)
 
-                    Lines.Add("   GammaM0       = " & .GammaM0)
-                    Lines.Add("   GammaM1       = " & .GammaM1)
-                    Lines.Add("   GammaM2       = " & .GammaM2)
-                    Lines.Add("   GammaC        = " & .GammaC)
-                    Lines.Add("   GammaVs       = " & .GammaVs)
-                    Lines.Add("   GammaVc       = " & .GammaVc)
-                    Lines.Add("   lGammaVuni    = " & .lGammaV_unique)
-                    Lines.Add("   GammaS        = " & .GammaS)
-                    Lines.Add("   GammaP        = " & .GammaP)
-                    Lines.Add("   GammaM_fi     = " & .GammaM_fi)
-                    Lines.Add("   GammaC_fi     = " & .GammaC_fi)
-                    Lines.Add("   GammaS_fi   = " & .GammaS_fi)
-                    Lines.Add("   GammaV_fi     = " & .GammaV_fi)
-                    Lines.Add("   GammaG_sup    = " & .GammaG_sup)
-                    Lines.Add("   GammaG_inf    = " & .GammaG_inf)
-                    Lines.Add("   GammaQ        = " & .GammaQ)
-                    Lines.Add("   Psi0_Q1       = " & .Psi0_Q1)
-                    Lines.Add("   Psi1_Q1       = " & .Psi1_Q1)
-                    Lines.Add("   Psi2_Q1       = " & .Psi2_Q1)
-                    Lines.Add("   Psi0_Q2       = " & .Psi0_Q2)
-                    Lines.Add("   Psi1_Q2       = " & .Psi1_Q2)
-                    Lines.Add("   Psi2_Q2       = " & .Psi2_Q2)
-                    Lines.Add("")
-                End With
-
-            End With
             '==[ Classe Hivoss ]=================================================================
-            With pTre.Hivoss
-                Lines.Add("BLOCK OPT_CALCULS_HIVOSS")
 
-                Lines.Add("   lHivossMethod = " & .lHivossMethod)
-                Lines.Add("   RatioQ        = " & .ratioQ)
-                Lines.Add("   ChoixQ        = " & .choixQ)
-                Lines.Add("   UtilPlancher  = " & .UtilisationPlancher)
-                Lines.Add("   lFreqDalle  = " & .lFreqDalle)
-                Lines.Add("   Mobilier      = " & .Mobilier)
-                Lines.Add("   lFauxPlafond  = " & .lFauxPlafond)
-                Lines.Add("   lChappeFlottante  = " & .lChappeFlottante)
-                Lines.Add("   AmortD1       = " & .AmortiStructure_D1)
-                Lines.Add("   AmortD2       = " & .AmortiMobilier_D2)
-                Lines.Add("   AmortD3       = " & .AmortiFinition_D3)
-                Lines.Add("   AmortDtot     = " & .AmortiTotal_Dtot)
-                Lines.Add("")
-            End With
+            SaveFileBlocHivoss(pTre.Hivoss, Lines)
 
             '==[ Classe ChargementU ]=================================================================
             For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In pTre.ChargesU
@@ -691,6 +838,342 @@ Public Class cls_Projet
 
     End Sub
 
+    Public Shared Sub ReadLineFile(ByVal FileName As String, ByRef Lines As List(Of String), ByRef lOK As Boolean)
+        '---------------------------------------------------------------------------------------------------------
+        '   04/09/24 :  Création
+        '---------------------------------------------------------------------------------------------------------
+        '   Récupération des lignes d'un fichier projet
+        '---------------------------------------------------------------------------------------------------------
+        '   FileName    [E] :   Nom du fichier
+        '   Lines       [S] :   Liste de lignes contenues dans le fichier
+        '---------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim myLines As Cls_LinesOfFile
+
+        '--( Récupération
+
+        Try
+            If File.Exists(FileName) Then
+                myLines = New Cls_LinesOfFile(FileName)
+                lOK = True
+
+                Lines = myLines.Lines
+                'For i = 0 To myLines.LineNumber - 1
+                '    Lines.Add(myLines.Lines(i))
+                'Next
+
+            Else
+                lOK = False
+                MsgBox("Fichier n'existe pas | File not exist : " & FileName, MsgBoxStyle.Critical, "Cls_Projet/RecuperationFile")
+
+            End If
+        Catch ex As Exception
+            lOK = False
+        End Try
+
+    End Sub
+
+    Public Shared Sub AnalyseFichier(Lines As List(Of String), ByRef myBeams As List(Of String), ByRef IndLigneBeams As List(Of Integer))
+        '---------------------------------------------------------------------------------------------------------
+        '   04/09/24 :  Création
+        '---------------------------------------------------------------------------------------------------------
+        '   Récupération des lignes d'un fichier projet
+        '---------------------------------------------------------------------------------------------------------
+        '   Lines           [E] :   Lignes contenues dans le fichier
+        '   myBeams         [S] :   Nom des poutres contenues dans le fichier
+        '   IndLigneBeams   [S] :   Indice de la ligne ou débute chaque poutre
+        '---------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim i As Integer
+        Dim Mots() As String = Nothing
+        Dim nbMots As Integer
+        Dim MotCle As String = ""
+        Dim Argument As String = ""
+        Dim lChercheN As Boolean = False
+        Dim iBlocB As Integer
+
+        '--( Traitement
+
+        myBeams.Clear()
+        IndLigneBeams.Clear()
+
+        For i = 0 To Lines.Count - 1
+
+            DecomposeLine(Lines(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(6, Mots(1).Length)).ToUpper
+                If nbMots > 1 Then Argument = Mots(2).ToUpper
+
+                If MotCle = "BLOCK" And Argument = BkPOUTRE Then
+
+                    lChercheN = True
+                    iBlocB = i
+
+                ElseIf lChercheN And MotCle = "BEAIDE" Then
+
+                    If nbMots > 1 Then
+                        Dim iStar As Integer = Lines(i).IndexOf("=")
+                        If iStar > 0 Then
+                            myBeams.Add(Lines(i).Substring(iStar + 1).Trim)
+
+                        End If
+                    Else
+                        myBeams.Add("Beam no " & CStr(i))
+                    End If
+                    IndLigneBeams.Add(iBlocB)
+
+                ElseIf lChercheN And MotCle = "BLOCK" And Not (Argument = BkPOUTRE) Then
+
+                    lChercheN = False
+
+                End If
+            End If
+
+        Next
+
+    End Sub
+
+    Public Sub AddBeamFromFile(Lines As List(Of String), NomCasChargesU() As String, iStart As Integer, iLineStop As Integer)
+        '---------------------------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Ajout d'une nouvelle poutre dans le projet à partir d'un fichier
+        '---------------------------------------------------------------------------------------------------------
+        '   Lines           [E] :   Lignes contenues dans le fichier
+        '   NomCasChargesU  [E] :   Nom des cas de charges utilisateur dans la langue interface
+        '   iLineStop       [E] :   Indice de la ligne à ne pas dépasser
+        '   iStart          [E] :   Indice de la ligne à partir de laquelle on charge la poutre
+        '---------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Blocs As New List(Of String)
+        Dim indBlocs As New List(Of Integer)
+
+        '--( Identification des blocs à traiter
+
+        RepereLignesBlocPoutre(Lines, Blocs, indBlocs, iStart)
+
+        '--( Chargement de la poutre
+
+        ChargePoutreDeFile(Lines, Blocs, indBlocs, NomCasChargesU, iLineStop)
+
+    End Sub
+
+    Private Sub RepereLignesBlocPoutre(Lines As List(Of String), ByRef Bloc As List(Of String), ByRef indBloc As List(Of Integer), Optional iStart As Integer = 0)
+        '---------------------------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Identification des lignes d'une poutre contenant de bloc
+        '---------------------------------------------------------------------------------------------------------
+        '   Lignes      [E] :   Lignes extraites du fichier
+        '   Bloc        [S] :   Liste des blocs définissant la poutre
+        '   indBloc     [S] :   Indice des lignes définissant les blocs
+        '   iStart      [E] :   Indice de la ligne d'où on démarre l'analyse
+        '---------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim iLine, nbLines As Integer
+
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+        Dim lCont As Integer = True
+
+        Dim lPoutre As Boolean = False
+
+        '--( Initilisation
+
+        nbLines = Lines.Count
+        iLine = iStart - 1
+
+        Do While lCont And iLine < nbLines - 1
+            iLine += 1
+
+            DecomposeLine(Lines(iLine), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(4, Mots(1).Length)).ToUpper
+
+                If MotCle = "BLOC" Then
+                    If (Mots(2).ToUpper = BkPOUTRE) Then
+                        If lPoutre Then
+                            lCont = False
+                        Else
+                            lPoutre = True
+                        End If
+
+                        If lPoutre Then
+                            Bloc.Add(BkPOUTRE)
+                            indBloc.Add(iLine)
+                        End If
+
+                    Else
+                        Bloc.Add(Mots(2))
+                        indBloc.Add(iLine)
+                    End If
+                End If
+            End If
+        Loop
+
+    End Sub
+
+    Private Sub ChargePoutreDeFile(Lines As List(Of String), Blocs As List(Of String), indBlocs As List(Of Integer),
+                                   NomCasChargesU() As String, iLineStop As Integer)
+        '---------------------------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '---------------------------------------------------------------------------------------------------------
+        '   Ajout d'une nouvelle poutre dans le projet à partir d'un fichier
+        '---------------------------------------------------------------------------------------------------------
+        '   Lines           [E] :   Lignes contenues dans le fichier
+        '   Blocs           [E] :   Liste des blocs à traiter
+        '   indBlocs        [E] :   Indices de la poisition des blocs dans les lignes de fichier
+        '   NomCasChargesU  [E] :   Nom des cas de charges utilisateur dans la langue interface
+        '   iLineStop       [E] :   Indice de la ligne à ne pas dépasser
+        '---------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim iBloc, nbBlocs As Integer
+        Dim iFin As Integer
+
+        '--( Initialisation
+
+        Me.Poutres.Add(New cls_Poutre(NomCasChargesU))
+        nbBlocs = Blocs.Count
+
+        '--( Boucle sur les blocs
+
+        For iBloc = 0 To nbBlocs - 1
+
+            If iBloc = nbBlocs - 1 Then iFin = iLineStop Else iFin = indBlocs(iBloc + 1) - 1
+
+            Select Case Blocs(iBloc)
+                Case BkPOUTRE
+
+                    ReadBlocPoutre(Me.Poutres.Last, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkMAINTIENS
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim maintien_en_cours As New cls_Maintiens
+                    Dim ind_travee As Integer
+                    ReadBlocMaintiens(maintien_en_cours, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
+                    ptre_en_cours.Maintiens(ind_travee).Add(maintien_en_cours)
+
+                Case BkMAINTIENBAC
+
+                    ReadBlocMaintienParLeBac(Me.Poutres.Last.MaintienBac, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkSECTION
+
+                    ReadBlocSection(Me.Poutres.Last.Section, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkPROFILA
+
+                    ReadBlocProfilA(Me.Poutres.Last.Section.ProfilA, Me.Poutres.Last.Section.Acier, Lines, indBlocs(iBloc) + 1, iFin)
+
+                'Case BkACIERP
+
+                    'ReadBlocAcierProfilA(Me.Poutres.Last.Section.Acier, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkENROBAGE
+
+                    ReadBlocEnrobageProfilA(Me.Poutres.Last.Section.Enrobage, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkARMAENROB
+
+                    ReadBlocArmatureEnrobageProfilA(Me.Poutres.Last.Section.Enrobage.LitArma, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkACIERARMAE
+
+                    ReadBlocAcierArmatureEnrobageProfilA(Me.Poutres.Last.Section.Enrobage.AcierArmatures, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkBETONENROB
+
+                    ReadBlocBetonEnrobageProfilA(Me.Poutres.Last.Section.Enrobage.Beton, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkDALLE
+
+                    ReadBlocDalle(Me.Poutres.Last.Dalle, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkBETONDALLE
+
+                    ReadBlocBetonDalle(Me.Poutres.Last.Dalle.beton, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkBAC
+
+                    ReadBlocBacDalle(Me.Poutres.Last.Dalle.Bac, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkCOFRADAL
+
+                    ReadBlocCofradal(Me.Poutres.Last.Dalle.Cofradal, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkARMADALLE
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim armature_dalle As New Cls_Armatures_Longi
+                    Dim ind_travee As Integer
+                    ReadBlocArmatureDalle(armature_dalle, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
+                    ptre_en_cours.Dalle.LitArma(ind_travee) = armature_dalle
+
+                Case BkACIERARMADALLE
+
+                    ReadBlocAcierArmature(Me.Poutres.Last.Dalle.AcierArmatures, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case Bkgoujon
+
+                    ReadBlocConnecteurGoujonDalle(Me.Poutres.Last.Dalle.Goujons, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case "ACIER_CONNECTEUR_DALLE_GOUJON"
+
+                    ReadBlocAcierArmature(Me.Poutres.Last.Dalle.ConnecteurArmature.Acier, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkOPTIONS
+
+                    ReadBlocOptionsCalculs(Me.Poutres.Last.Param, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case BkGamma
+
+                    ReadBlocGammaOptionsCalculs(Me.Poutres.Last.Param.Gamma, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case "OPT_CALCULS_HIVOSS"
+
+                    ReadBlocHivossOptionsCalculs(Me.Poutres.Last.Hivoss, Lines, indBlocs(iBloc) + 1, iFin)
+
+                Case "CHGTU_QSURF"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim QSurf_en_cours As Decimal
+                    Dim cle_dic As String = ""
+                    Dim ind_travee As Integer
+                    ReadBlocQSurf(QSurf_en_cours, cle_dic, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
+                    ptre_en_cours.ChargesU(cle_dic).QSurf(ind_travee) = QSurf_en_cours
+
+                Case "CHGTU_FORCE"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim force_en_cours As New cls_Force
+                    Dim cle_dic As String = ""
+                    Dim ind_travee As Integer
+                    ReadBlocForce(force_en_cours, cle_dic, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
+                    ptre_en_cours.ChargesU(cle_dic).Forces(ind_travee).Add(force_en_cours)
+
+                Case "CHGTU_FREPAR"
+                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    Dim frepart_en_cours As New cls_ForceRepartie
+                    Dim cle_dic As String = ""
+                    Dim ind_travee As Integer
+                    ReadBlocFRepartie(frepart_en_cours, cle_dic, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
+                    ptre_en_cours.ChargesU(cle_dic).FReparties(ind_travee).Add(frepart_en_cours)
+
+            End Select
+
+        Next
+
+    End Sub
+
     Public Sub ReadFile(ByVal FileName As String, ByVal str_warning_file As String, NomCasChargesU() As String)
         '---------------------------------------------------------------------------------------------------------
         '   09/08/23 :  Création
@@ -744,19 +1227,22 @@ Public Class cls_Projet
             MsgBox("Erreur lecture fichier | Error read file", MsgBoxStyle.Critical, "Cls_Project/RecuperationFile")
         End Try
 
-        If Not ListeBlocCle.Contains(BkINDENT) And Not ListeBlocCle.Contains(BkPOUTRE) _
-        And Not ListeBlocCle.Contains("MAINTIENS") And Not ListeBlocCle.Contains("MAINT_BAC") And Not ListeBlocCle.Contains("SECTION") And
-           Not ListeBlocCle.Contains("PROFILA") And Not ListeBlocCle.Contains("ACIER_PROFILA") And Not ListeBlocCle.Contains("ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("ACIER_ARMATURE_ENROBAGE_PROFILA") And Not ListeBlocCle.Contains("BETON_ENROBAGE_PROFILA") And
-           Not ListeBlocCle.Contains("DALLE") And Not ListeBlocCle.Contains("BETON_DALLE") And Not ListeBlocCle.Contains("BAC_DALLE") And Not ListeBlocCle.Contains("COFRADAL") And Not ListeBlocCle.Contains("ARMATURE_DALLE") And Not ListeBlocCle.Contains("ACIER_ARMATURE_DALLE") And Not ListeBlocCle.Contains("CONNECTEUR_DALLE_GOUJON") And
-           Not ListeBlocCle.Contains("CONNECTEUR_DALLE_ARMATURE") And Not ListeBlocCle.Contains("ACIER_CONNECTEUR_DALLE_ARMATURE") And Not ListeBlocCle.Contains("OPT_CALCULS") And 'And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_ENROBAGE") And Not ListeBlocCle.Contains("OPT_CALCULS_PROP_ELAST_DALLE")
-              Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then 'And Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("SECTION") 
+        'If Not ListeBlocCle.Contains(BkINDENT) And Not ListeBlocCle.Contains(BkPOUTRE) _
+        'And Not ListeBlocCle.Contains(BkMAINTIENS) And Not ListeBlocCle.Contains(BkMAINTIENBAC) _
+        'And Not ListeBlocCle.Contains(BkSECTION) And Not ListeBlocCle.Contains(BkPROFILA) _
+        'And Not ListeBlocCle.Contains(BkACIERP) And Not ListeBlocCle.Contains(BkENROBAGE) _
+        'And Not ListeBlocCle.Contains(BkARMAENROB) And Not ListeBlocCle.Contains(BkACIERARMAE) And Not ListeBlocCle.Contains(BkBETONENROB) _
+        'And Not ListeBlocCle.Contains(BkDALLE) And Not ListeBlocCle.Contains(BkBETONDALLE) And Not ListeBlocCle.Contains(BkBAC) _
+        'And Not ListeBlocCle.Contains(BkCOFRADAL) And Not ListeBlocCle.Contains(BkARMADALLE) And Not ListeBlocCle.Contains(BkACIERARMADALLE) _
+        'And Not ListeBlocCle.Contains(BkGOUJON) And Not ListeBlocCle.Contains(BkARMATRANS) _
+        'And Not ListeBlocCle.Contains("ACIER_CONNECTEUR_DALLE_ARMATURE") And Not ListeBlocCle.Contains(BkOPTIONS) _
+        'And Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then 'And Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("SECTION") 
 
-            MsgBox("Fichier corrumpu | Corrupted file", MsgBoxStyle.Critical, "Cls_Projet/LectureFile")
+        '    MsgBox("Fichier corrumpu | Corrupted file", MsgBoxStyle.Critical, "Cls_Projet/LectureFile")
 
-        End If
+        'End If
 
         Dim oldFichier As Boolean = False
-        'Dim NomCas() As String = {"G1", "G2", "Q", "QC"}
 
         '--> Traitement des blocks
 
@@ -772,45 +1258,45 @@ Public Class cls_Projet
                     ReadBlocPoutre(ptre_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     Me.Poutres.Add(ptre_en_cours)
 
-                Case "MAINTIENS"
+                Case BkMAINTIENS
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim maintien_en_cours As New cls_Maintiens
                     Dim ind_travee As Integer
                     ReadBlocMaintiens(maintien_en_cours, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Maintiens(ind_travee).Add(maintien_en_cours)
 
-                Case "MAINT_BAC"
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim maintien_bac As New cls_MaintienBac
-                    ReadBlocMaintienParLeBac(maintien_bac, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.MaintienBac = maintien_bac
+                Case BkMAINTIENBAC
+                    'Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    'Dim maintien_bac As New cls_MaintienBac
+                    'ReadBlocMaintienParLeBac(maintien_bac, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    'ptre_en_cours.MaintienBac = maintien_bac
+                    ReadBlocMaintienParLeBac(Me.Poutres.Last.MaintienBac, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
-
-                Case "SECTION"
+                Case BkSECTION
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim section_en_cours As New cls_Section
                     ReadBlocSection(section_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section = section_en_cours
 
-                Case "PROFILA"
+                Case BkPROFILA
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim profilA_en_cours As New cls_ProfilA
                     ReadBlocProfilA(profilA_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.ProfilA = profilA_en_cours
 
-                Case "ACIER_PROFILA"
+                Case BkACIERP
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim acier_profilA As New cls_Acier
                     ReadBlocAcierProfilA(acier_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.Acier = acier_profilA
 
-                Case "ENROBAGE_PROFILA"
+                Case BkENROBAGE
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim enrobage_profilA As New cls_Enrobage_Partiel
                     ReadBlocEnrobageProfilA(enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.Enrobage = enrobage_profilA
 
-                Case "ARMATURE_ENROBAGE_PROFILA"
+                Case BkARMAENROB
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim armature_enrobage_profilA(2) As cls_ArmatureEnrobage
 
@@ -821,60 +1307,63 @@ Public Class cls_Projet
                     ReadBlocArmatureEnrobageProfilA(armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.Enrobage.LitArma = armature_enrobage_profilA
 
-                Case "ACIER_ARMATURE_ENROBAGE_PROFILA"
+                Case BkACIERARMAE
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim acier_armature_enrobage_profilA As New cls_AcierArmature
                     ReadBlocAcierArmatureEnrobageProfilA(acier_armature_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.Enrobage.AcierArmatures = acier_armature_enrobage_profilA
 
-                Case "BETON_ENROBAGE_PROFILA"
+                Case BkBETONENROB
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim beton_enrobage_profilA As New cls_Beton
                     ReadBlocBetonEnrobageProfilA(beton_enrobage_profilA, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Section.Enrobage.Beton = beton_enrobage_profilA
 
-                Case "DALLE"
+                Case BkDALLE
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim dalle_en_cours As New cls_Dalle
                     ReadBlocDalle(dalle_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle = dalle_en_cours
 
-                Case "BETON_DALLE"
+                Case BkBETONDALLE
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim beton_dalle As New cls_Beton
                     ReadBlocBetonDalle(beton_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.beton = beton_dalle
 
-                Case "BAC_DALLE"
+                Case BkBAC
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim bac_en_cours As New cls_Bac
                     ReadBlocBacDalle(bac_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.Bac = bac_en_cours
 
-                Case "COFRADAL"
+                Case BkCOFRADAL
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim cofradal_en_cours As New cls_Cofradal
                     ReadBlocCofradal(cofradal_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.Cofradal = cofradal_en_cours
 
-                Case "ARMATURE_DALLE"
+                Case BkARMADALLE
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim armature_dalle As New Cls_Armatures_Longi
                     Dim ind_travee As Integer
                     ReadBlocArmatureDalle(armature_dalle, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.LitArma(ind_travee) = armature_dalle
 
-                Case "ACIER_ARMATURE_DALLE"
+                Case BkACIERARMADALLE
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim acier_armature_dalle As New cls_AcierArmature
                     ReadBlocAcierArmature(acier_armature_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.AcierArmatures = acier_armature_dalle
 
-                Case "CONNECTEUR_DALLE_GOUJON"
+                Case BkGOUJON
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim connecteur_dalle As New cls_GoujonSoude
                     ReadBlocConnecteurGoujonDalle(connecteur_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.Goujons = connecteur_dalle
+
+                Case BkARMATRANS
+                    MsgBox("Non couvert " & BkARMATRANS)
 
                 Case "ACIER_CONNECTEUR_DALLE_GOUJON"
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -882,32 +1371,19 @@ Public Class cls_Projet
                     ReadBlocAcierArmature(acier_armature_connecteur, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.ConnecteurArmature.Acier = acier_armature_connecteur
 
-                Case "OPT_CALCULS"
+                Case BkOPTIONS
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim opt_calculs_en_cours As New cls_OptionsCalcul
                     ReadBlocOptionsCalculs(opt_calculs_en_cours, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param = opt_calculs_en_cours
 
-
-                'Case "OPT_CALCULS_PROP_ELAST_ENROBAGE"
-                '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                '    Dim prop_elast_enrob_opt_calculs As Cls_Prop_Elastique
-                '    ReadBlocPropElastEnrobageOptionsCalculs(prop_elast_enrob_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                '    ptre_en_cours.Param.Prop_Elastique_Enrobage = prop_elast_enrob_opt_calculs
-
-                'Case "OPT_CALCULS_PROP_ELAST_DALLE"
-                '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                '    Dim prop_elast_dalle_opt_calculs As Cls_Prop_Elastique
-                '    ReadBlocPropElastDalleOptionsCalculs(prop_elast_dalle_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                '    ptre_en_cours.Param.Prop_Elastique_Dalle = prop_elast_dalle_opt_calculs
-
-                Case "OPT_CALCULS_GAMMA"
+                Case BkGAMMA
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim gamma_opt_calculs As New cls_Gamma
                     ReadBlocGammaOptionsCalculs(gamma_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Param.Gamma = gamma_opt_calculs
 
-                Case "OPT_CALCULS_HIVOSS"
+                Case BkHIVOSS
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
                     Dim hivoss_opt_calculs As New cls_MethodHivoss
                     ReadBlocHivossOptionsCalculs(hivoss_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
@@ -937,6 +1413,18 @@ Public Class cls_Projet
                     ReadBlocFRepartie(frepart_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.ChargesU(cle_dic).FReparties(ind_travee).Add(frepart_en_cours)
 
+
+                    'Case "OPT_CALCULS_PROP_ELAST_ENROBAGE"
+                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    '    Dim prop_elast_enrob_opt_calculs As Cls_Prop_Elastique
+                    '    ReadBlocPropElastEnrobageOptionsCalculs(prop_elast_enrob_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    '    ptre_en_cours.Param.Prop_Elastique_Enrobage = prop_elast_enrob_opt_calculs
+
+                    'Case "OPT_CALCULS_PROP_ELAST_DALLE"
+                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    '    Dim prop_elast_dalle_opt_calculs As Cls_Prop_Elastique
+                    '    ReadBlocPropElastDalleOptionsCalculs(prop_elast_dalle_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    '    ptre_en_cours.Param.Prop_Elastique_Dalle = prop_elast_dalle_opt_calculs
                     'Case "IDENTIFICATION"
                     '    Me.ReadBloc_Indentification(Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
@@ -1008,19 +1496,26 @@ Public Class cls_Projet
 
     End Sub
 
-    ''' <summary>
-    ''' Lecture du bloc Poutre
-    ''' </summary>
-    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
-    ''' <param name="Index0">indice du début de la lecture</param>
-    ''' <param name="IndexFin">indice de la fin de la lecture</param>
     Private Sub ReadBlocPoutre(poutre_en_cours As cls_Poutre, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Lecture du bloc POUTRE
+        '-------------------------------------------------------------------------------------
+        '   myProfil    [S] :   Profilé à definir
+        '   mySteel     [S] :   Acier à definir
+        '   Lignes      [E] :   lignes extraites du fichier de données
+        '   Index0      [E] :   Indice de la première ligne du bloc
+        '   IndexFin    [E] :   Indice la dernière ligne du bloc
+        '-------------------------------------------------------------------------------------
+
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
         Dim i, iFirst As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
+        Const NBCAR As Integer = 6
 
         '--> Traitement
         With poutre_en_cours
@@ -1028,17 +1523,17 @@ Public Class cls_Projet
                 DecomposeLine(Lignes(i), Mots, nbMots)
 
                 If nbMots > 0 Then
-                    MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+                    MotCle = Mots(1).Substring(0, Math.Min(NBCAR, Mots(1).Length)).ToUpper
 
                     Select Case MotCle
-                        Case "BEAIDEN"
+                        Case "BEAIDE"
                             If nbMots >= 2 Then
                                 iFirst = InStr(Lignes(i), Mots(2))
                                 .BeamID = Lignes(i).Substring(iFirst - 1)
                             Else
                                 .BeamID = ""
                             End If
-                        Case "COMMENTAIR"
+                        Case "COMMEN"
                             If nbMots >= 2 Then
                                 iFirst = InStr(Lignes(i), Mots(2))
                                 .Commentaire = Lignes(i).Substring(iFirst - 1)
@@ -1046,48 +1541,52 @@ Public Class cls_Projet
                                 .Commentaire = ""
                             End If
                         'Case "TYPESECTIO" : .TypeSection = Mots(nbMots)
-                        Case "CONSOLEGAU" : .lTraveeConsoleGauche = Mots(nbMots)
-                        Case "CONSOLEDRO" : .lTraveeConsoleDroite = Mots(nbMots)
-                        Case "DALLECONTG" : .lDalleContinueGauche = Mots(nbMots)
-                        Case "DALLECONTD" : .lDalleContinueDroite = Mots(nbMots)
-                        Case "LTREMIEGAU" : .lTremieGauche = Mots(nbMots)
-                        Case "LTREMIEDRO" : .lTremieDroite = Mots(nbMots)
-                        Case "NBTRAVEE" : .NombreTraveesDeuxAppuis = TraiteReal(Mots(nbMots))
-                        Case "LONGUEURTR" : .LongueurTravee = ConvertStringToListDecimal(Mots(nbMots))
-                        Case "TYPETRAVEE" : .TypTravee = ConvertStringToListInteger(Mots(nbMots))
-                        Case "TYPEETAIEM" : .TypeEtaiement = TraiteReal(Mots(nbMots))
-                        Case "ETAISCONSG" : .lEtaisConsoleGauche = Mots(nbMots)
-                        Case "ETAISCONSD" : .lEtaisConsoleDroite = Mots(nbMots)
-                        Case "NBPROPPING" : .NbEtaiement = Mots(nbMots)
-                        'Case "NBRESTRAIN" : .NbMaintiens = ConvertStringToListInteger(Mots(nbMots))
-                        Case "TYPEMAINTI" : .TypeMaintien = Mots(nbMots)
-                        Case "D1" : .EntraxeD1 = TraiteReal(Mots(nbMots))
-                        Case "D2" : .EntraxeD2 = TraiteReal(Mots(nbMots))
-                        Case "DSL1" : .DistanceDsl1 = TraiteReal(Mots(nbMots))
-                        Case "DSL2" : .DistanceDsl2 = TraiteReal(Mots(nbMots))
-                        Case "LINTERMEDI" : .lIntermediaire = Mots(nbMots)
-                        Case "LDEFAUTPOR" : .lDefautPortee = Mots(nbMots)
-                        Case "LDEFAUTENR" : .lDefautEnrobage = Mots(nbMots)
-                        Case "LDEFAUTETA" : .lDefautEtaiement = Mots(nbMots)
-                        Case "LDEFAUTDAL" : .lDefautDalle = Mots(nbMots)
-                        'Case "LDONNEESSA" : .lDonneesSauvees = Mots(nbMots)
-                        'Case "LNOUVPOUTR" : .NouvellePoutre = Mots(nbMots)
-                        Case "LAUTODESIG" : .lAutomaticDesign = Mots(nbMots)
-                        Case "NOMBREZONE" : .NombreZones = ConvertStringToListInteger(Mots(nbMots))
-                        Case "LONGUEURZO" : .LongueurZone = ConvertStringToListDecimalDim2(Mots(nbMots))
-                        Case "ESPAZONE" : .EspacementZone = ConvertStringToListDecimalDim2(Mots(nbMots))
-                        Case "ESPABACTRA" : .Espacement_Bac_TransZone = ConvertStringToListIntegerDim2(Mots(nbMots))
-                        Case "NBGOUJONTR" : .NombreGoujonsTransv = ConvertStringToListIntegerDim2(Mots(nbMots))
-                        Case "LCOMBELU" : .lCombELU = ConvertStringToListBoolean(Mots(nbMots))
-                        Case "COEFELU" : .CoefCombELU = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
-                        Case "LCOMBELS" : .lCombELS = ConvertStringToListBoolean(Mots(nbMots))
-                        Case "COEFELS" : .CoefCombELS = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
-                        Case "LCOMBELF" : .lCombFeu = ConvertStringToListBoolean(Mots(nbMots))
-                        Case "COEFELF" : .CoefCombFeu = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
-                        Case "LCOMBELCU" : .lCombELCURules = ConvertStringToListBoolean(Mots(nbMots))
-                        Case "COEFELCU" : .CoefCombELCU = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
-                        Case "LCOMBELCS" : .lCombELCSRules = ConvertStringToListBoolean(Mots(nbMots))
-                        Case "COEFELCS" : .CoefCombELCS = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
+                        Case "LCANTI" : .lTraveeConsoleGauche = Mots(nbMots)
+                        Case "RCANTI" : .lTraveeConsoleDroite = Mots(nbMots)
+                        Case "LCONTS" : .lDalleContinueGauche = Mots(nbMots)
+                        Case "RCONTS" : .lDalleContinueDroite = Mots(nbMots)
+                        Case "LSLABO" : .lTremieGauche = Mots(nbMots)
+                        Case "RSLABO" : .lTremieDroite = Mots(nbMots)
+
+                        Case "NBSPAN" : .NombreTraveesDeuxAppuis = TraiteReal(Mots(nbMots))
+                        Case "SPANLE" : .LongueurTravee = ConvertStringToListDecimal(Mots(nbMots))
+
+                        Case "SPANTY" : .TypTravee = ConvertStringToListInteger(Mots(nbMots))
+
+                        Case "PROPPI" : .TypeEtaiement = TraiteReal(Mots(nbMots))
+                        Case "LPROPP" : .lEtaisConsoleGauche = Mots(nbMots)
+                        Case "RPROPP" : .lEtaisConsoleDroite = Mots(nbMots)
+                        Case "NBPROP" : .NbEtaiement = Mots(nbMots)
+
+                        Case "TYPERE" : .TypeMaintien = Mots(nbMots)
+                        Case "LSPACI" : .EntraxeD1 = TraiteReal(Mots(nbMots))
+                        Case "RSPACI" : .EntraxeD2 = TraiteReal(Mots(nbMots))
+                        Case "LDSLOP" : .DistanceDsl1 = TraiteReal(Mots(nbMots))
+                        Case "RDSPOP" : .DistanceDsl2 = TraiteReal(Mots(nbMots))
+
+                        Case "INTERM" : .lIntermediaire = Mots(nbMots)
+                        Case "LDEFSP" : .lDefautPortee = Mots(nbMots)
+                        Case "LDEFEN" : .lDefautEnrobage = Mots(nbMots)
+                        Case "LDEFPR" : .lDefautEtaiement = Mots(nbMots)
+                        Case "LDEFSL" : .lDefautDalle = Mots(nbMots)
+
+                        Case "LAUTOD" : .lAutomaticDesign = Mots(nbMots)
+                        Case "ZONENB" : .NombreZones = ConvertStringToListInteger(Mots(nbMots))
+                        Case "ZONELE" : .LongueurZone = ConvertStringToListDecimalDim2(Mots(nbMots))
+                        Case "ZONESP" : .EspacementZone = ConvertStringToListDecimalDim2(Mots(nbMots))
+                        Case "ZONETR" : .Espacement_Bac_TransZone = ConvertStringToListIntegerDim2(Mots(nbMots))
+                        Case "ZONENY" : .NombreGoujonsTransv = ConvertStringToListIntegerDim2(Mots(nbMots))
+
+                        Case "ULSLCO" : .lCombELU = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "ULSCOE" : .CoefCombELU = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
+                        Case "SLSLCO" : .lCombELS = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "SLSCOE" : .CoefCombELS = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
+                        Case "FLSLCO" : .lCombFeu = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "FLSCOE" : .CoefCombFeu = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
+                        Case "CULSLC" : .lCombELCURules = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "CULSCO" : .CoefCombELCU = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
+                        Case "CSLSLC" : .lCombELCSRules = ConvertStringToListBoolean(Mots(nbMots))
+                        Case "CSLSCO" : .CoefCombELCS = ConvertStringToListDecimalDim2Bis(Mots(nbMots))
                         Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
@@ -1176,19 +1675,26 @@ Public Class cls_Projet
 
     End Sub
 
-    ''' <summary>
-    ''' Lecture du bloc Section
-    ''' </summary>
-    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
-    ''' <param name="Index0">indice du début de la lecture</param>
-    ''' <param name="IndexFin">indice de la fin de la lecture</param>
     Private Sub ReadBlocSection(section As cls_Section, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Lecture du bloc Section
+        '-------------------------------------------------------------------------------------
+        '   section     [S] :   Section à definir
+        '   Lignes      [E] :   lignes extraites du fichier de données
+        '   Index0      [E] :   Indice de la première ligne du bloc
+        '   IndexFin    [E] :   Indice la dernière ligne du bloc
+        '-------------------------------------------------------------------------------------
+
+
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
         Dim i As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
+        Const NBCAR As Integer = 6
 
         '--> Traitement
         With section
@@ -1196,14 +1702,14 @@ Public Class cls_Projet
                 DecomposeLine(Lignes(i), Mots, nbMots)
 
                 If nbMots > 0 Then
-                    MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+                    MotCle = Mots(1).Substring(0, Math.Min(NBCAR, Mots(1).Length)).ToUpper
 
                     Select Case MotCle
-                        Case "NOM" : .Nom = Mots(nbMots)
-                        Case "LDALLEBETO" : .lDalleBeton = Mots(nbMots)
-                        Case "LDATABASE" : .lDatabase = Mots(nbMots)
-                        Case "TYPESECTIO" : .TypeSection = Mots(nbMots)
-                        Case "LUSER" : .lUser = Mots(nbMots)
+                        Case "NAME" : .Nom = Mots(nbMots)
+                        Case "SLABDE" : .lDalleBeton = Mots(nbMots)
+                        Case "DATABA" : .lDatabase = Mots(nbMots)
+                        Case "TYPE" : .TypeSection = Mots(nbMots)
+                        Case "USERDE" : .lUser = Mots(nbMots)
                         Case "F_Y_FS" : .f_y.fs = TraiteReal(Mots(nbMots))
                         Case "F_Y_W" : .f_y.w = TraiteReal(Mots(nbMots))
                         Case "F_Y_FI" : .f_y.fi = TraiteReal(Mots(nbMots))
@@ -1216,57 +1722,68 @@ Public Class cls_Projet
 
     End Sub
 
-    ''' <summary>
-    ''' Lecture du bloc ProfilA
-    ''' </summary>
-    ''' <param name="Lignes">Liste de lignes contenant les paramètres</param>
-    ''' <param name="Index0">indice du début de la lecture</param>
-    ''' <param name="IndexFin">indice de la fin de la lecture</param>
-    Private Sub ReadBlocProfilA(profilA As cls_ProfilA, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocProfilA(ByRef myProfil As cls_ProfilA, ByRef mySteel As cls_Acier,
+                                ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Lecture du bloc PROFILE
+        '-------------------------------------------------------------------------------------
+        '   myProfil    [S] :   Profilé à definir
+        '   mySteel     [S] :   Acier à definir
+        '   Lignes      [E] :   lignes extraites du fichier de données
+        '   Index0      [E] :   Indice de la première ligne du bloc
+        '   IndexFin    [E] :   Indice la dernière ligne du bloc
+        '-------------------------------------------------------------------------------------
+
         '==> Lecture du fichier pour initialiser les attributs
 
         '--> Déclaration
         Dim i, iFirst As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
+        Const NBCAR As Integer = 6
 
         '--> Traitement
-        With profilA
-            For i = Index0 To IndexFin
+
+        For i = Index0 To IndexFin
                 DecomposeLine(Lignes(i), Mots, nbMots)
 
                 If nbMots > 0 Then
-                    MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
+                    MotCle = Mots(1).Substring(0, Math.Min(NBCAR, Mots(1).Length)).ToUpper
 
                     Select Case MotCle
-                        Case "GAMME"
+                        Case "SERIE"
                             iFirst = InStr(Lignes(i), Mots(2))
-                            .Gamme = Lignes(i).Substring(iFirst - 1)
-                        Case "NOMPROFILE"
+                        myProfil.Gamme = Lignes(i).Substring(iFirst - 1)
+                    Case "NAME"
                             iFirst = InStr(Lignes(i), Mots(2))
-                            .NomProfile = Lignes(i).Substring(iFirst - 1)
-                        Case "HA" : .ha = TraiteReal(Mots(nbMots))
-                        Case "HB" : .hb = TraiteReal(Mots(nbMots))
-                        Case "BFS" : .Bfs = TraiteReal(Mots(nbMots))
-                        Case "TFS" : .Tfs = TraiteReal(Mots(nbMots))
-                        Case "BFI" : .Bfi = TraiteReal(Mots(nbMots))
-                        Case "TFI" : .Tfi = TraiteReal(Mots(nbMots))
-                        Case "RCS" : .Rcs = TraiteReal(Mots(nbMots))
-                        Case "RCI" : .Rci = TraiteReal(Mots(nbMots))
-                        'Case "HW" : .h_w = TraiteReal(Mots(nbMots))
-                        Case "TW" : .Tw = TraiteReal(Mots(nbMots))
-                        Case "SOUDURE_A" : .aW = TraiteReal(Mots(nbMots))
-                        Case "TYPEPROFIL" : .typeProfileAcier = Mots(nbMots)
-                        Case "PLATB" : .Plat_b = TraiteReal(Mots(nbMots))
-                        Case "PLATT" : .Plat_t = TraiteReal(Mots(nbMots))
-                        Case "INDDELIV" : .IndDeliv = ConvertStringToListShort(Mots(nbMots))
-                        Case "INDSTAND" : .IndStandart = ConvertStringToListShort(Mots(nbMots))
-                        Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
+                        myProfil.NomProfile = Lignes(i).Substring(iFirst - 1)
+                    Case "HA" : myProfil.ha = TraiteReal(Mots(nbMots))
+                    Case "HB" : myProfil.hb = TraiteReal(Mots(nbMots))
+                    Case "BFS" : myProfil.Bfs = TraiteReal(Mots(nbMots))
+                    Case "TFS" : myProfil.Tfs = TraiteReal(Mots(nbMots))
+                    Case "BFI" : myProfil.Bfi = TraiteReal(Mots(nbMots))
+                    Case "TFI" : myProfil.Tfi = TraiteReal(Mots(nbMots))
+                    Case "RCS" : myProfil.Rcs = TraiteReal(Mots(nbMots))
+                    Case "RCI" : myProfil.Rci = TraiteReal(Mots(nbMots))
+                    Case "TW" : myProfil.Tw = TraiteReal(Mots(nbMots))
+                    Case "WELDA" : myProfil.aW = TraiteReal(Mots(nbMots))
+                    Case "TYPE" : myProfil.typeProfileAcier = Mots(nbMots)
+                    Case "PLATB" : myProfil.Plat_b = TraiteReal(Mots(nbMots))
+                    Case "PLATT" : myProfil.Plat_t = TraiteReal(Mots(nbMots))
+                            'Case "INDDELIV" : .IndDeliv = ConvertStringToListShort(Mots(nbMots))
+                            'Case "INDSTAND" : .IndStandart = ConvertStringToListShort(Mots(nbMots))
+
+                    Case "GRADE" : mySteel.Nuance = Mots(2)
+                    Case "QUALIT" : mySteel.Qualite = Mots(2)
+                    Case "REDUCT" : mySteel.Reduction = Mots(2)
+                    Case "STANDA" : mySteel.NormeProduit = Mots(2)
+
+                    Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
             Next
-
-        End With
 
     End Sub
 

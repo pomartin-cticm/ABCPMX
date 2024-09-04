@@ -377,8 +377,6 @@ Public Class Frm_Portees
 
     End Sub
 
-
-
 #End Region
 
 #Region " Evènements "

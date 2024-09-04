@@ -486,7 +486,7 @@ Public Class Frm_PMX
 #Region " Gestion des barres d'outils "
 
     Private Sub TSbtn_AddPoutreFromFile_Click(sender As Object, e As EventArgs) Handles TSbtn_AddPoutreFromFile.Click
-
+        ExtrairePoutreFichier()
     End Sub
 
     Private Sub Btn_AddSection_Click(sender As Object, e As EventArgs) Handles TSbtn_AddBeamN.Click
@@ -1376,6 +1376,45 @@ Public Class Frm_PMX
         '-----------------------------------------------------------------------------------
 
         '--> Déclaration
+        Dim FileName As String = OpenFileName()
+
+        ''# Contrôle sauvegarde du projet en cours
+
+        ''# Demande nom fichier
+
+        ''--> Préparation de la boite de dialogue OpenFile
+
+        'Me.OpenFileDialog_Project.InitialDirectory = LogicielOptions.RepertoireTravail
+        ''Me.OpenFileDialog_Project.DefaultExt = LogicielInfo.Extension
+        'Me.OpenFileDialog_Project.Filter = strFiltresExtension & " (*." & LogicielInfo.Extension & ")|*." & LogicielInfo.Extension
+        'Me.OpenFileDialog_Project.FileName = ""
+        'Me.OpenFileDialog_Project.ShowDialog()
+
+        'FileName = Me.OpenFileDialog_Project.FileName
+
+        '# Ouverture
+
+        '--> Gestion du résultat de la boite de dialogue
+        If FileName <> "" Then
+
+            If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then
+                If Not EnregistrerAvantFermeture() Then OuvrirFichier(FileName)
+            Else
+                OuvrirFichier(FileName)
+            End If
+
+        End If
+
+    End Sub
+
+    Private Function OpenFileName() As String
+        '-----------------------------------------------------------------------------------
+        '   04/09/24 :  Création - Version 1.00
+        '-----------------------------------------------------------------------------------
+        '   Gestion de la demande du fichier à ouvrir
+        '-----------------------------------------------------------------------------------
+
+        '--> Déclaration
         Dim FileName As String
 
         '# Contrôle sauvegarde du projet en cours
@@ -1392,18 +1431,33 @@ Public Class Frm_PMX
 
         FileName = Me.OpenFileDialog_Project.FileName
 
-        '# Ouverture
+        Return FileName
 
-        '--> Gestion du résultat de la boite de dialogue
+    End Function
+
+    Private Sub ExtrairePoutreFichier()
+        '-----------------------------------------------------------------------------------
+        '   04/09/24 :  Création - Version 1.00
+        '-----------------------------------------------------------------------------------
+        '   Récupération d'une ou plusieurs poutre depuis un fichier
+        '-----------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim FileName As String = OpenFileName()
+
         If FileName <> "" Then
+            Frm_AjoutPoutreDeFichier.FileName = FileName
+            Frm_AjoutPoutreDeFichier.ShowDialog()
 
-            If Not MyProjet.lSaved And Not MyProjet.lNouvellePoutre Then
-                If Not EnregistrerAvantFermeture() Then OuvrirFichier(FileName)
-            Else
-                OuvrirFichier(FileName)
-            End If
+            AffichageTViewChk()
+            MAJToolBarPoutre()
+            MAJMainToolBar()
+            Me.img_Main.Invalidate()
+            Me.img_Main.Invalidate()
 
         End If
+
 
     End Sub
 

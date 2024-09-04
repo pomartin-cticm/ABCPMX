@@ -23,6 +23,14 @@ VERSION					= Version
 SUPPORT					= Support :
 YEARVERSION				= Année :
 
+#FRM_ADDBEAMFILE
+TITLE					= Ajouter une poutre
+OK						= OK
+CANCEL					= Annuler
+CLOSE					= Fermer
+PROJECT					= Projet $
+ADDBEAM					= Ajouter les poutres suivantes dans le projet
+
 #FRMADDSTUD
 TITLEADD				= Ajouter un nouveau goujon
 TITLEMODIFY				= Modifier le goujon

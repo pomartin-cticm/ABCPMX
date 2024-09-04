@@ -36,8 +36,8 @@ Public Class cls_Acier
     Public iTabStandart, iStandart As Short
 
     '-------------------------------------------------------------------------
-    ' iStandart : no de norme dans la base acier, entre 1 et 20
-    ' iTabStandart : no de norme dans la table interne, entre 1 et nStandart
+    ' iStandart :       no de norme dans la base acier, entre 1 et 20
+    ' iTabStandart :    no de norme dans la table interne, entre 1 et nStandart
     '-------------------------------------------------------------------------
 
     Public Plages As List(Of strucPlage)
