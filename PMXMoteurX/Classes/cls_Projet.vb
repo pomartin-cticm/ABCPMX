@@ -587,22 +587,15 @@ Public Class cls_Projet
 
             '==[ Bloc Section ]=================================================================
 
-
+            SaveFileBlocSection(pTre.Section, Lines)
 
             '==[ Bloc ProfilA ]=================================================================
 
             SaveFileBlocProfile(pTre.Section.ProfilA, pTre.Section.Acier, Lines)
 
-            '==[ Classe Section ]=================================================================
-            With pTre.Section
-
-
-
-            End With
-
 
             '==[ Classe Enrobage Partiel ProfilA ]=================================================================
-            With .Enrobage
+            With pTre.Section.Enrobage
                 Lines.Add("BLOCK " & BkENROBAGE)
 
                 AjouteLigneFrmt(Lines, "lArmaConst", .lArmaConst)
@@ -640,31 +633,29 @@ Public Class cls_Projet
 
             '==[ Classe Acier Armature Enrobage Partiel ProfilA ]=================================================================
             Lines.Add("BLOCK " & BkACIERARMAE)
-                    With .AcierArmatures
-                        AjouteLigneFrmt(Lines, "Classe", .Classe)
-                        AjouteLigneFrmt(Lines, "FsK", .FsK)
-                        AjouteLigneFrmt(Lines, "Es", .Es)
+            With pTre.Section.Enrobage.AcierArmatures
+                AjouteLigneFrmt(Lines, "Classe", .Classe)
+                AjouteLigneFrmt(Lines, "FsK", .FsK)
+                AjouteLigneFrmt(Lines, "Es", .Es)
 
-                        Lines.Add("")
-                    End With
+                Lines.Add("")
+            End With
 
-                    '==[ Classe Béton Enrobage Partiel ProfilA ]=================================================================
-                    Lines.Add("BLOCK " & BkBETONENROB)
-                    With .Beton
+            '==[ Classe Béton Enrobage Partiel ProfilA ]=================================================================
+            Lines.Add("BLOCK " & BkBETONENROB)
+            With pTre.Section.Enrobage.Beton
 
-                        AjouteLigneFrmt(Lines, "Leger", .lLeger)
-                        AjouteLigneFrmt(Lines, "Classe", .Classe)
-                        AjouteLigneFrmt(Lines, "RhoC", .RhoC)
-                        AjouteLigneFrmt(Lines, "Fck", .Fck)
-                        AjouteLigneFrmt(Lines, "Fcm", .Fcm)
-                        AjouteLigneFrmt(Lines, "Fctm", .Fctm)
-                        AjouteLigneFrmt(Lines, "Ecm", .Ecm)
-                        AjouteLigneFrmt(Lines, "lCrackLimit", .lCrackingLimitation)
-                        AjouteLigneFrmt(Lines, "wk_max", .wk_max)
+                AjouteLigneFrmt(Lines, "Leger", .lLeger)
+                AjouteLigneFrmt(Lines, "Classe", .Classe)
+                AjouteLigneFrmt(Lines, "RhoC", .RhoC)
+                AjouteLigneFrmt(Lines, "Fck", .Fck)
+                AjouteLigneFrmt(Lines, "Fcm", .Fcm)
+                AjouteLigneFrmt(Lines, "Fctm", .Fctm)
+                AjouteLigneFrmt(Lines, "Ecm", .Ecm)
+                AjouteLigneFrmt(Lines, "lCrackLimit", .lCrackingLimitation)
+                AjouteLigneFrmt(Lines, "wk_max", .wk_max)
 
-                        Lines.Add("")
-                    End With
-                End With
+                Lines.Add("")
             End With
 
             '==[ Classe Dalle ]=================================================================
