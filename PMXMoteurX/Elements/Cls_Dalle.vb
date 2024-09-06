@@ -98,16 +98,9 @@
     ''' </summary>
     Public Cofradal As New cls_Cofradal
 
-    '''' <summary>
-    '''' Armatures longitudinales supérieur
-    '''' </summary>
-    'Public arma_longi_sup As New Cls_Armatures_Longi
-
-    '''' <summary>
-    '''' Armatures longitudinales inférieur
-    '''' </summary>
-    'Public arma_longi_inf As New Cls_Armatures_Longi
-
+    ''' <summary>
+    ''' Lits d'armatures dans la dalle
+    ''' </summary>
     Public LitArma As New List(Of Cls_Armatures_Longi)
 
     ''' <summary>
