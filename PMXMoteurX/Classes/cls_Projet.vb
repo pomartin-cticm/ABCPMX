@@ -1777,7 +1777,7 @@ Public Class cls_Projet
         Dim MotCle As String
         Const NBCAR As Integer = 6
 
-        '--> Traitement
+        '--> Traitement  
 
         For i = Index0 To IndexFin
             DecomposeLine(Lignes(i), Mots, nbMots)
