@@ -1926,4 +1926,35 @@ Public Class cls_Bac
 
 #End Region
 
+#Region " Fonctions de transfert "
+
+    Public Sub TransfertFrom(myBacS As cls_Bac)
+        '------------------------------------------------------------------------------------------------------------------
+        '   12/09/24 :  Création - POM
+        '------------------------------------------------------------------------------------------------------------------
+        '   Transfert les paramètres d'un bac à l'autre
+        '------------------------------------------------------------------------------------------------------------------
+        '   myBacS  [E] :   Bac dont on récupère les paramètres
+        '------------------------------------------------------------------------------------------------------------------
+
+        Me.Bb = myBacS.Bb
+        Me.Bt = myBacS.Bt
+        Me.AppuiL = myBacS.AppuiL
+        Me.AppuiT = myBacS.AppuiT
+        Me.Ep = myBacS.Ep
+        Me.fyp = myBacS.fyp
+        Me.Hp = myBacS.fyp
+        Me.h_rs = myBacS.h_rs
+        Me.Ieff = myBacS.Ieff
+        Me.LargeurModule = myBacS.LargeurModule
+        Me.lPreperce = myBacS.lPreperce
+        Me.msurf = myBacS.msurf
+        Me.Orientation = myBacS.Orientation
+        Me.Producteur = myBacS.Producteur
+        Me.Tp = myBacS.Tp
+
+    End Sub
+
+#End Region
+
 End Class

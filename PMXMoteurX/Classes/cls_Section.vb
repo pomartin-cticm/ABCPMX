@@ -911,7 +911,9 @@ Public Class cls_Section
     ''' </summary>
     Public ReadOnly Property lMixte As Boolean
         Get
-            Return (Me.TypeSection = Enum_TypeSection.Mixte) Or (Me.TypeSection = Enum_TypeSection.MixteEnrobage) Or (Me.TypeSection = Enum_TypeSection.IFB_Amixte) Or (Me.TypeSection = Enum_TypeSection.IFB_Bmixte)
+            Return (Me.TypeSection = Enum_TypeSection.Mixte) Or (Me.TypeSection = Enum_TypeSection.MixteEnrobage) _
+                Or (Me.TypeSection = Enum_TypeSection.IFB_Amixte) Or (Me.TypeSection = Enum_TypeSection.IFB_Bmixte) _
+                Or (Me.TypeSection = Enum_TypeSection.SABmixte) Or (Me.TypeSection = Enum_TypeSection.SFBmixte)
         End Get
     End Property
 

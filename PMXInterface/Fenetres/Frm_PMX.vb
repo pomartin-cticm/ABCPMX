@@ -35,6 +35,9 @@ Public Class Frm_PMX
 
     Dim strFeuNonDispo As String
 
+
+    Dim msgErreur As New Dictionary(Of String, String)
+
     ''' <summary>
     ''' Booleens utilisés pour les controles du dessin
     ''' </summary>
@@ -311,6 +314,11 @@ Public Class Frm_PMX
                 strPRS = Bloc("WELDEDSEC")
 
                 strFeuNonDispo = RemplaceDollar(Bloc("FIRENOTAVAIL"), LogicielInfo.Racine) & Chr(13) & Bloc("FIRELATER")
+
+                '=== MESSAGES d'ERREUR
+
+                msgErreur.Add("BACABSENT", Bloc("ERRMISSINGDECK"))
+
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -1471,7 +1479,9 @@ Public Class Frm_PMX
         '----------------------------------------------------------------------------------------------------
 
         '--> Lecture du fichier
+
         ReadInFile(FileName)
+        MiseAJourProjet(MyProjet, msgErreur)
         AffichageTViewChk()
         MAJToolBarPoutre()
         MAJMainToolBar()
@@ -1484,6 +1494,7 @@ Public Class Frm_PMX
 
         '--> MAJ fichier recent
         Me.AffichageRecentFiles()
+
     End Sub
 
     Public Sub ReadInFile(ByVal FileName As String)

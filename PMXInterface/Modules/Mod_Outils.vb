@@ -1842,5 +1842,82 @@ Module Mod_Outils
 
 #End Region
 
+#Region " Mise à jour des poutres d'un projet après chargement (base de données) "
+
+    Public Sub MiseAJourProjet(ByRef proJet As cls_Projet, msgErreurs As Dictionary(Of String, String))
+        '--------------------------------------------------------------------------------------------------------
+        '   12/09/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------
+        '   Mise à jour des paramètres d'une poutre 
+        '   en cherchant les infos dans les bases de données
+        '--------------------------------------------------------------------------------------------------------
+        '   proJet  [E] :   Projet à mettre à jour
+        '--------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        '--( Traitement
+
+        For Each ptre In MyProjet.Poutres
+
+            MiseAJourPoutre(ptre, msgErreurs)
+
+        Next
+
+
+    End Sub
+
+    Public Sub MiseAJourPoutre(ByRef myBeam As cls_Poutre, msgErreurs As Dictionary(Of String, String))
+        '--------------------------------------------------------------------------------------------------------
+        '   12/09/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------
+        '   Mise à jour des paramètres d'une poutre 
+        '   en cherchant les infos dans les bases de données
+        '--------------------------------------------------------------------------------------------------------
+        '   myBeam  [E] :   Poutre à mettre à jour
+        '--------------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        'Dim lMixte As Boolean
+
+        '--( Traitement
+
+        Select Case myBeam.Dalle.type
+            Case cls_Dalle.Enum_TypeDalle.Mixte
+                MiseAJourBac(myBeam.Dalle.Bac, msgErreurs)
+            Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
+        End Select
+    End Sub
+
+    Private Sub MiseAJourBac(ByRef myBac As cls_Bac, msgErreurs As Dictionary(Of String, String))
+        '--------------------------------------------------------------------------------------------------------
+        '   12/09/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------
+        '   Mise à jour des paramètres d'un bac
+        '   en cherchant les infos dans la base de données
+        '--------------------------------------------------------------------------------------------------------
+        '   myBac   [E] :   Bac à mettre à jour
+        '--------------------------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        '--( Recherche du bac dans la base
+
+        If myBac.lDatabase Then
+
+            If BaseBacs.ContainsKey(myBac.Etiquette) Then
+                myBac.TransfertFrom(BaseBacs(myBac.Etiquette))
+            Else
+                GestionErrorsPMX("", "", RemplaceDollar(msgErreurs("BACABSENT"), myBac.Etiquette), False)
+            End If
+
+        End If
+
+    End Sub
+
+#End Region
+
+
 
 End Module

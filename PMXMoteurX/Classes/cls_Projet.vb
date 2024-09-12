@@ -26,7 +26,7 @@ Public Class cls_Projet
     Const BkMAINTIENS As String = "MAINTIENS"
 
     Const BkGOUJON As String = "STUD"
-    Const BkARMATRANS As String = "CONNECTEUR_DALLE_ARMATURE"
+    Const BkARMACONNEX As String = "R_CONNEXION"
 
     Const BkOPTIONS As String = "OPTIONS"
     Const BkGAMMA As String = "GAMMA"
@@ -255,6 +255,32 @@ Public Class cls_Projet
         End With
     End Sub
 
+    Private Sub SaveFileBlocArmaTrans(myArma As Cls_ConnecteurArmature, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   05/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif au armatures transversales
+        '-------------------------------------------------------------------------------------
+
+
+        '==[ Classe Connecteur Armature Dalle ]=================================================================
+        With myArma
+            Lines.Add("BLOCK " & BkARMACONNEX)
+            AjouteLigneFrmt(Lines, "ds", .ds)
+
+        End With
+
+        '==[ Classe Acier Connecteur Armature Dalle ]=================================================================
+        With myArma.Acier
+
+            AjouteLigneFrmt(Lines, "Classe", .Classe)
+            AjouteLigneFrmt(Lines, "Fsk", .FsK)
+            AjouteLigneFrmt(Lines, "Es", .Es)
+
+        End With
+
+    End Sub
+
     Private Sub SaveFileBlocArmaDalle(LitArma As List(Of Cls_Armatures_Longi), mySteelR As cls_AcierArmature, ByRef Lines As List(Of String))
         '-------------------------------------------------------------------------------------
         '   05/09/24 :  Création - POM
@@ -337,6 +363,9 @@ Public Class cls_Projet
         '-------------------------------------------------------------------------------------
         '   Ecriture du bloc relatif au bac
         '-------------------------------------------------------------------------------------
+        '-------------------------------------------------------------------------------------
+
+
 
         Lines.Add("BLOCK " & BkBAC)
 
@@ -362,6 +391,8 @@ Public Class cls_Projet
         End With
 
         Lines.Add("")
+
+
 
     End Sub
 
@@ -671,7 +702,7 @@ Public Class cls_Projet
         '--( Déclaration
 
 
-        Dim lMixte, lEnrob As Boolean
+        Dim lMixte, lEnrob, lSlimMixte As Boolean
 
 
 
@@ -708,6 +739,7 @@ Public Class cls_Projet
 
             lMixte = pTre.lMixte
             lEnrob = pTre.lEnrobage
+            lSlimMixte = pTre.lSlimFloor And lMixte
 
             SaveFileBlocPoutre(pTre, Lines)
 
@@ -775,31 +807,10 @@ Public Class cls_Projet
             If lMixte Then _
             SaveFileBlocGoujon(pTre.Dalle.Goujons, Lines)
 
+            '==[ Bloc des armatures de connexion pour la connexion des slim floors
 
-
-            With pTre.Dalle
-
-
-                '==[ Classe Connecteur Armature Dalle ]=================================================================
-                With .ConnecteurArmature
-                    Lines.Add("BLOCK " & BkARMATRANS)
-
-                    Lines.Add("   ds            =  " & .ds)
-
-                    Lines.Add("")
-                End With
-
-                '==[ Classe Acier Connecteur Armature Dalle ]=================================================================
-                With .ConnecteurArmature.Acier
-                    Lines.Add("BLOCK ACIER_CONNECTEUR_DALLE_ARMATURE")
-
-                    Lines.Add("   Classe         =  " & .Classe)
-                    Lines.Add("   Fsk            =  " & .FsK)
-                    Lines.Add("   Es             =  " & .Es)
-                    Lines.Add("")
-                End With
-
-            End With
+            If lSlimMixte Then _
+            SaveFileBlocArmaTrans(pTre.Dalle.ConnecteurArmature, Lines)
 
             '==[ Classe Options Calculs ]=================================================================
 
@@ -1002,7 +1013,7 @@ Public Class cls_Projet
 
         '--( Chargement de la poutre
 
-        ChargePoutreDeFile(Lines, Blocs, indBlocs, NomCasChargesU, iLineStop)
+        ReadPoutreDansFichier(Lines, Blocs, indBlocs, NomCasChargesU, iLineStop)
 
     End Sub
 
@@ -1064,7 +1075,7 @@ Public Class cls_Projet
 
     End Sub
 
-    Private Sub ChargePoutreDeFile(Lines As List(Of String), Blocs As List(Of String), indBlocs As List(Of Integer),
+    Private Sub ReadPoutreDansFichier(Lines As List(Of String), Blocs As List(Of String), indBlocs As List(Of Integer),
                                    NomCasChargesU() As String, iLineStop As Integer)
         '---------------------------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
@@ -1163,6 +1174,10 @@ Public Class cls_Projet
 
                     ReadBlocGoujon(Me.Poutres.Last.Dalle.Goujons, Lines, indBlocs(iBloc) + 1, iFin)
 
+                Case BkARMACONNEX
+
+                    ReadBlocArmaConnexion(Me.Poutres.Last.Dalle.ConnecteurArmature, Lines, indBlocs(iBloc) + 1, iFin)
+
                 Case BkOPTIONS
 
                     ReadBlocOptionsCalculs(Me.Poutres.Last.Param, Lines, indBlocs(iBloc) + 1, iFin)
@@ -1171,7 +1186,7 @@ Public Class cls_Projet
 
                     ReadBlocGamma(Me.Poutres.Last.Param.Gamma, Lines, indBlocs(iBloc) + 1, iFin)
 
-                Case "OPT_CALCULS_HIVOSS"
+                Case BkHIVOSS
 
                     ReadBlocHivoss(Me.Poutres.Last.Hivoss, Lines, indBlocs(iBloc) + 1, iFin)
 
@@ -1384,8 +1399,9 @@ Public Class cls_Projet
                     ReadBlocGoujon(connecteur_dalle, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Dalle.Goujons = connecteur_dalle
 
-                Case BkARMATRANS
-                    MsgBox("Non couvert " & BkARMATRANS)
+                Case BkARMACONNEX
+
+                    ReadBlocArmaConnexion(Me.Poutres.Last.Dalle.ConnecteurArmature, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
                 Case BkOPTIONS
                     Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1564,7 +1580,7 @@ Public Class cls_Projet
                         Case "LSLABO" : .lTremieGauche = Mots(nbMots)
                         Case "RSLABO" : .lTremieDroite = Mots(nbMots)
 
-                        Case "NBSPAN" : .NombreTraveesDeuxAppuis = TraiteReal(Mots(nbMots))
+                        Case "NBSPAN" : .NombreTraveesDeuxAppuis = CInt(TraiteReal(Mots(nbMots)))
                         Case "SPANLE" : .LongueurTravee = ConvertStringToListDecimal(Mots(nbMots))
 
                         Case "SPANTY" : .TypTravee = ConvertStringToListInteger(Mots(nbMots))
@@ -1575,10 +1591,10 @@ Public Class cls_Projet
                         Case "NBPROP" : .NbEtaiement = Mots(nbMots)
 
                         Case "TYPERE" : .TypeMaintien = Mots(nbMots)
-                        Case "LSPACI" : .EntraxeD1 = TraiteReal(Mots(nbMots))
-                        Case "RSPACI" : .EntraxeD2 = TraiteReal(Mots(nbMots))
-                        Case "LDSLOP" : .DistanceDsl1 = TraiteReal(Mots(nbMots))
-                        Case "RDSLOP" : .DistanceDsl2 = TraiteReal(Mots(nbMots))
+                        Case "LSPACI" : .EntraxeD1 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "RSPACI" : .EntraxeD2 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "LDSLOP" : .DistanceDsl1 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "RDSLOP" : .DistanceDsl2 = CDec(TraiteReal(Mots(nbMots)))
 
                         Case "INTERM" : .lIntermediaire = Mots(nbMots)
                         Case "LDEFSP" : .lDefautPortee = Mots(nbMots)
@@ -1646,8 +1662,8 @@ Public Class cls_Projet
                     MotCle = Mots(1).Substring(0, Math.Min(10, Mots(1).Length)).ToUpper
 
                     Select Case MotCle
-                        Case "INDTRAVEE" : ind_travee = TraiteReal(Mots(nbMots))
-                        Case "XLOC" : .x_Loc = TraiteReal(Mots(nbMots))
+                        Case "INDTRAVEE" : ind_travee = CInt(TraiteReal(Mots(nbMots)))
+                        Case "XLOC" : .x_Loc = CDec(TraiteReal(Mots(nbMots)))
                         Case "LMAINTSEMS" : .lMaintienSemelleSup = Mots(nbMots)
                         Case "LMAINTSEMI" : .lMaintienSemelleInf = Mots(nbMots)
                         Case Else : MsgBox("BLOC " & BkMAINTIENS & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
@@ -1743,9 +1759,9 @@ Public Class cls_Projet
                         Case "DATABA" : .lDatabase = Mots(nbMots)
                         Case "TYPE" : .TypeSection = Mots(nbMots)
                         Case "USERDE" : .lUser = Mots(nbMots)
-                        Case "F_Y_FS" : .f_y.fs = TraiteReal(Mots(nbMots))
-                        Case "F_Y_W" : .f_y.w = TraiteReal(Mots(nbMots))
-                        Case "F_Y_FI" : .f_y.fi = TraiteReal(Mots(nbMots))
+                        Case "F_Y_FS" : .f_y.fs = CDec(TraiteReal(Mots(nbMots)))
+                        Case "F_Y_W" : .f_y.w = CDec(TraiteReal(Mots(nbMots)))
+                        Case "F_Y_FI" : .f_y.fi = CDec(TraiteReal(Mots(nbMots)))
                         Case Else : MsgBox("BLOC " & BkSECTION & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End If
@@ -1792,26 +1808,26 @@ Public Class cls_Projet
                     Case "NAME"
                         iFirst = InStr(Lignes(i), Mots(2))
                         myProfil.NomProfile = Lignes(i).Substring(iFirst - 1)
-                    Case "HA" : myProfil.ha = TraiteReal(Mots(nbMots))
-                    Case "HB" : myProfil.hb = TraiteReal(Mots(nbMots))
-                    Case "BFS" : myProfil.Bfs = TraiteReal(Mots(nbMots))
-                    Case "TFS" : myProfil.Tfs = TraiteReal(Mots(nbMots))
-                    Case "BFI" : myProfil.Bfi = TraiteReal(Mots(nbMots))
-                    Case "TFI" : myProfil.Tfi = TraiteReal(Mots(nbMots))
-                    Case "RCS" : myProfil.Rcs = TraiteReal(Mots(nbMots))
-                    Case "RCI" : myProfil.Rci = TraiteReal(Mots(nbMots))
-                    Case "TW" : myProfil.Tw = TraiteReal(Mots(nbMots))
-                    Case "WELDA" : myProfil.aW = TraiteReal(Mots(nbMots))
+                    Case "HA" : myProfil.ha = CDec(TraiteReal(Mots(nbMots)))
+                    Case "HB" : myProfil.hb = CDec(TraiteReal(Mots(nbMots)))
+                    Case "BFS" : myProfil.Bfs = CDec(TraiteReal(Mots(nbMots)))
+                    Case "TFS" : myProfil.Tfs = CDec(TraiteReal(Mots(nbMots)))
+                    Case "BFI" : myProfil.Bfi = CDec(TraiteReal(Mots(nbMots)))
+                    Case "TFI" : myProfil.Tfi = CDec(TraiteReal(Mots(nbMots)))
+                    Case "RCS" : myProfil.Rcs = CDec(TraiteReal(Mots(nbMots)))
+                    Case "RCI" : myProfil.Rci = CDec(TraiteReal(Mots(nbMots)))
+                    Case "TW" : myProfil.Tw = CDec(TraiteReal(Mots(nbMots)))
+                    Case "WELDA" : myProfil.aW = CDec(TraiteReal(Mots(nbMots)))
                     Case "TYPE" : myProfil.typeProfileAcier = Mots(nbMots)
-                    Case "PLATB" : myProfil.Plat_b = TraiteReal(Mots(nbMots))
-                    Case "PLATT" : myProfil.Plat_t = TraiteReal(Mots(nbMots))
+                    Case "PLATB" : myProfil.Plat_b = CDec(TraiteReal(Mots(nbMots)))
+                    Case "PLATT" : myProfil.Plat_t = CDec(TraiteReal(Mots(nbMots)))
                             'Case "INDDELIV" : .IndDeliv = ConvertStringToListShort(Mots(nbMots))
                             'Case "INDSTAND" : .IndStandart = ConvertStringToListShort(Mots(nbMots))
 
-                    Case "GRADE" : mySteel.Nuance = Mots(2)
-                    Case "QUALIT" : mySteel.Qualite = Mots(2)
-                    Case "REDUCT" : mySteel.Reduction = Mots(2)
-                    Case "STANDA" : mySteel.NormeProduit = Mots(2)
+                    Case "GRADE" : If nbMots > 1 Then mySteel.Nuance = Mots(2)
+                    Case "QUALIT" : If nbMots > 1 Then mySteel.Qualite = Mots(2)
+                    Case "REDUCT" : If nbMots > 1 Then mySteel.Reduction = Mots(2)
+                    Case "STANDA" : If nbMots > 1 Then mySteel.NormeProduit = Mots(2) Else mySteel.NormeProduit = ""
 
                     Case Else : MsgBox("BLOC " & BkPROFILA & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                 End Select
@@ -1908,7 +1924,7 @@ Public Class cls_Projet
                         Case "LARMAC" : .lArmaConst = Mots(nbMots)
                         Case "CONSTP" : .ConstPhi = CDec(TraiteReal(Mots(nbMots)))
                         Case "RATIO_" : .Ratio_bc = CDec(TraiteReal(Mots(nbMots)))
-                        Case "TYPSTI" : .Etriers_Type = Mots(nbMots)
+                        Case "TYPEST" : .Etriers_Type = Mots(nbMots)
                         Case "PHISTI" : .Etriers_Phi = CDec(TraiteReal(Mots(nbMots)))
                         Case "CYSTIR" : .Etriers_EnrobageY = CDec(TraiteReal(Mots(nbMots)))
                         Case "CZSTIR" : .Etriers_EnrobageZ = CDec(TraiteReal(Mots(nbMots)))
@@ -1966,7 +1982,7 @@ Public Class cls_Projet
                     Case "NBEXT"
                         ind_lit = CInt(TraiteReal(Mots(2)))
                         myLits(ind_lit).NbExt = TraiteReal(Mots(nbMots))
-                    Case "LACTEXT"
+                    Case "LACTEX"
                         ind_lit = CInt(TraiteReal(Mots(2)))
                         myLits(ind_lit).lActiveExt = Mots(nbMots)
                     Case "PHIMIL"
@@ -1981,10 +1997,10 @@ Public Class cls_Projet
                     Case "NBINT"
                         ind_lit = CInt(TraiteReal(Mots(2)))
                         myLits(ind_lit).NbInt = TraiteReal(Mots(nbMots))
-                    Case "LACTINT"
+                    Case "LACTIN"
                         ind_lit = CInt(TraiteReal(Mots(2)))
                         myLits(ind_lit).lActiveInt = Mots(nbMots)
-                    Case "ZPOSRATIO"
+                    Case "ZPOSRA"
                         myLits(1).zPosRatio = TraiteReal(Mots(nbMots))
                     Case Else : MsgBox("BLOC " & BkARMAENROB & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                 End Select
@@ -2026,13 +2042,13 @@ Public Class cls_Projet
                 With myDalle
                     Select Case MotCle
                         Case "TYPE" : .type = Mots(nbMots)
-                        Case "TD" : .Ep_td = TraiteReal(Mots(nbMots))
-                        Case "TH" : .Ep_th = TraiteReal(Mots(nbMots))
+                        Case "TD" : .Ep_td = CDec(TraiteReal(Mots(nbMots)))
+                        Case "TH" : .Ep_th = CDec(TraiteReal(Mots(nbMots)))
                         'Case "BEFF" : .Beff = TraiteReal(Mots(nbMots))
                         'Case "LARMINF" : .lArma_Inf = Mots(nbMots)
                         'Case "LARMSUP" : .lArma_Sup = Mots(nbMots)
-                        Case "PREDALLE_E" : .preDalle_ep = TraiteReal(Mots(nbMots))
-                        Case "PREDALLE_T" : .preDalle_tjoint = TraiteReal(Mots(nbMots))
+                        Case "PREDALLE_E" : .preDalle_ep = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PREDALLE_T" : .preDalle_tjoint = CDec(TraiteReal(Mots(nbMots)))
                         Case Else : MsgBox("BLOC " & BkDALLE & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With
@@ -2041,7 +2057,8 @@ Public Class cls_Projet
         Next
     End Sub
 
-    Private Sub ReadBlocBeton(myBeton As cls_Beton, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocBeton(myBeton As cls_Beton, ByVal Lignes As List(Of String),
+                              ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '-------------------------------------------------------------------------------------
         '   05/09/24 :  Création - POM
         '-------------------------------------------------------------------------------------
@@ -2079,16 +2096,18 @@ Public Class cls_Projet
                         'Case "FCTM" : .Fctm = TraiteReal(Mots(nbMots))
                         'Case "ECM" : .Ecm = TraiteReal(Mots(nbMots))
                         Case "LCRACK" : .lCrackingLimitation = Mots(nbMots)
-                        Case "WK_MAX" : .wk_max = TraiteReal(Mots(nbMots))
+                        Case "WK_MAX" : .wk_max = CDec(TraiteReal(Mots(nbMots)))
                         Case Else : MsgBox("BLOC " & BkBETONDALLE & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With
 
             End If
         Next
+
     End Sub
 
-    Private Sub ReadBlocBac(myBac As cls_Bac, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+    Private Sub ReadBlocBac(myBac As cls_Bac, ByVal Lignes As List(Of String),
+                            ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '-------------------------------------------------------------------------------------
         '   05/09/24 :  Création - POM
         '-------------------------------------------------------------------------------------
@@ -2109,6 +2128,7 @@ Public Class cls_Projet
         Const NBCAR As Integer = 6
 
         '--> Traitement
+
         For i = Index0 To IndexFin
             DecomposeLine(Lignes(i), Mots, nbMots)
 
@@ -2132,17 +2152,17 @@ Public Class cls_Projet
                                 .Producteur = ""
                             End If
                         Case "LDATAB" : .lDatabase = Mots(nbMots)
-                        Case "H_RS" : .h_rs = TraiteReal(Mots(nbMots))
-                        Case "H_P" : .Hp = TraiteReal(Mots(nbMots))
-                        Case "B_B" : .Bb = TraiteReal(Mots(nbMots))
-                        Case "B_T" : .Bt = TraiteReal(Mots(nbMots))
-                        Case "E_P" : .Ep = TraiteReal(Mots(nbMots))
-                        Case "TP" : .Tp = TraiteReal(Mots(nbMots))
+                        Case "H_RS" : .h_rs = CDec(TraiteReal(Mots(nbMots)))
+                        Case "H_P" : .Hp = CDec(TraiteReal(Mots(nbMots)))
+                        Case "B_B" : .Bb = CDec(TraiteReal(Mots(nbMots)))
+                        Case "B_T" : .Bt = CDec(TraiteReal(Mots(nbMots)))
+                        Case "E_P" : .Ep = CDec(TraiteReal(Mots(nbMots)))
+                        Case "TP" : .Tp = CDec(TraiteReal(Mots(nbMots)))
                         Case "ORIENT" : .Orientation = Mots(nbMots)
-                        Case "MSURF" : .msurf = TraiteReal(Mots(nbMots))
-                        Case "FYP" : .fyp = TraiteReal(Mots(nbMots))
-                        Case "MODULE" : .LargeurModule = TraiteReal(Mots(nbMots))
-                        Case "IEFF" : .Ieff = TraiteReal(Mots(nbMots))
+                        Case "MSURF" : .msurf = CDec(TraiteReal(Mots(nbMots)))
+                        Case "FYP" : .fyp = CDec(TraiteReal(Mots(nbMots)))
+                        Case "MODULE" : .LargeurModule = CDec(TraiteReal(Mots(nbMots)))
+                        Case "IEFF" : .Ieff = CDec(TraiteReal(Mots(nbMots)))
                         Case "LPUNCH" : .lPreperce = Mots(nbMots)
                         Case "APPUIT" : .AppuiT = Mots(nbMots)
                         Case "APPUIL" : .AppuiL = Mots(nbMots)
@@ -2191,9 +2211,9 @@ Public Class cls_Projet
                             Else
                                 .nom = ""
                             End If
-                        Case "DP" : .dp = Mots(nbMots)
-                        Case "MSURF" : .msurf = TraiteReal(Mots(nbMots))
-                        Case "LCUSTO" : .lCustom = TraiteReal(Mots(nbMots))
+                        Case "DP" : .dp = CDec(TraiteReal(Mots(nbMots)))
+                        Case "MSURF" : .msurf = CDec(TraiteReal(Mots(nbMots)))
+                        Case "LCUSTO" : .lCustom = (Mots(nbMots))
 
                         Case Else : MsgBox("BLOC " & BkCOFRADAL & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
@@ -2274,6 +2294,45 @@ Public Class cls_Projet
 
     End Sub
 
+    Private Sub ReadBlocArmaConnexion(ByRef myArma As Cls_ConnecteurArmature, ByVal Lignes As List(Of String),
+                                      ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '-------------------------------------------------------------------------------------
+        '   12/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Lecture du bloc ARMATURES transversales pour la connexion des slim floors
+        '-------------------------------------------------------------------------------------
+        '   myArma      [S] :   Connexion à definir
+        '   Lignes      [E] :   lignes extraites du fichier de données
+        '   Index0      [E] :   Indice de la première ligne du bloc
+        '   IndexFin    [E] :   Indice la dernière ligne du bloc
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+
+        Dim i, iFirst As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+        Const NBCAR As Integer = 6
+
+        '--> Traitement
+        For i = Index0 To IndexFin
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+                MotCle = Mots(1).Substring(0, Math.Min(NBCAR, Mots(1).Length)).ToUpper
+
+                Select Case MotCle
+                    Case "DS" : myArma.ds = CDec(TraiteReal(Mots(nbMots)))
+                    Case "CLASSE" : myArma.Acier.Classe = Mots(nbMots)
+                    Case "FSK" : myArma.Acier.FsK = CDec(TraiteReal(Mots(nbMots)))
+                    Case "ES" : myArma.Acier.Es = CDec(TraiteReal(Mots(nbMots)))
+                End Select
+
+            End If
+        Next
+
+    End Sub
+
     Private Sub ReadBlocGoujon(myStud As cls_GoujonSoude, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '-------------------------------------------------------------------------------------
         '   05/09/24 :  Création - POM
@@ -2286,9 +2345,8 @@ Public Class cls_Projet
         '   IndexFin    [E] :   Indice la dernière ligne du bloc
         '-------------------------------------------------------------------------------------
 
-        '==> Lecture du fichier pour initialiser les attributs
-
         '--> Déclaration
+
         Dim i, iFirst As Integer
         Dim Mots(0) As String, nbMots As Integer
         Dim MotCle As String
@@ -2311,10 +2369,10 @@ Public Class cls_Projet
                             Else
                                 .nom = ""
                             End If
-                        Case "HEIGHT" : .hsc = TraiteReal(Mots(nbMots))
-                        Case "DIAMET" : .d = TraiteReal(Mots(nbMots))
-                        Case "FY" : .Fy = TraiteReal(Mots(nbMots))
-                        Case "FU" : .Fu = TraiteReal(Mots(nbMots))
+                        Case "HEIGHT" : .hsc = CDec(TraiteReal(Mots(nbMots)))
+                        Case "DIAMET" : .d = CDec(TraiteReal(Mots(nbMots)))
+                        Case "FY" : .Fy = CDec(TraiteReal(Mots(nbMots)))
+                        Case "FU" : .Fu = CDec(TraiteReal(Mots(nbMots)))
                         Case Else : MsgBox("BLOC " & BkGOUJON & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With
@@ -2354,27 +2412,27 @@ Public Class cls_Projet
                 With myParam
                     Select Case MotCle
 
-                        Case "RH" : .RH = TraiteReal(Mots(nbMots))
+                        Case "RH" : .RH = CDec(TraiteReal(Mots(nbMots)))
                         Case "NORME" : .Norme = Mots(nbMots)
-                        Case "ETAW" : .EtaW = TraiteReal(Mots(nbMots))
+                        Case "ETAW" : .EtaW = CDec(TraiteReal(Mots(nbMots)))
                         Case "LLAREF" : .lLargeurEfficaceSimplifiee = Mots(nbMots)
                         Case "LCOMPA" : .lCompressionArma = Mots(nbMots)
-                        Case "DMAXNO" : .dMaxNodes = TraiteReal(Mots(nbMots))
-                        Case "SPNBMI" : .nbMinNodesTravee = TraiteReal(Mots(nbMots))
-                        Case "CANBMI" : .nbMinNodesConsole = TraiteReal(Mots(nbMots))
-                        Case "EPSSH" : .EpsilonSH = TraiteReal(Mots(nbMots))
+                        Case "DMAXNO" : .dMaxNodes = CDec(TraiteReal(Mots(nbMots)))
+                        Case "SPNBMI" : .nbMinNodesTravee = CDec(TraiteReal(Mots(nbMots)))
+                        Case "CANBMI" : .nbMinNodesConsole = CDec(TraiteReal(Mots(nbMots)))
+                        Case "EPSSH" : .EpsilonSH = CDec(TraiteReal(Mots(nbMots)))
                         Case "LSHENC" : .lRetraitEnrobage = Mots(nbMots)
-                        Case "ARMAYO" : .ArmaYoung = TraiteReal(Mots(nbMots))
-                        Case "GRAVIT" : .GraviteG = TraiteReal(Mots(nbMots))
-                        Case "PSILPE" : .PsiLPermanent = TraiteReal(Mots(nbMots))
-                        Case "PSILSH" : .PsiLRetrait = TraiteReal(Mots(nbMots))
-                        Case "T0G1_0" : .AgeT0G1(0) = TraiteReal(Mots(nbMots))
-                        Case "T0G1_1" : .AgeT0G1(1) = TraiteReal(Mots(nbMots))
-                        Case "T0G2_0" : .AgeT0G2(0) = TraiteReal(Mots(nbMots))
-                        Case "T0G2_1" : .AgeT0G2(1) = TraiteReal(Mots(nbMots))
-                        Case "T0SH_0" : .AgeT0SH(0) = TraiteReal(Mots(nbMots))
-                        Case "T0SH_1" : .AgeT0SH(1) = TraiteReal(Mots(nbMots))
-                        Case "AGETCA" : .AgeT = TraiteReal(Mots(nbMots))
+                        Case "REINFY" : .ArmaYoung = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GRAVIT" : .GraviteG = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PSILPE" : .PsiLPermanent = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PSILSH" : .PsiLRetrait = CDec(TraiteReal(Mots(nbMots)))
+                        Case "T0G1_0" : .AgeT0G1(0) = CDec(TraiteReal(Mots(nbMots)))
+                        Case "T0G1_1" : .AgeT0G1(1) = CDec(TraiteReal(Mots(nbMots)))
+                        Case "T0G2_0" : .AgeT0G2(0) = CDec(TraiteReal(Mots(nbMots)))
+                        Case "T0G2_1" : .AgeT0G2(1) = CDec(TraiteReal(Mots(nbMots)))
+                        Case "T0SH_0" : .AgeT0SH(0) = CDec(TraiteReal(Mots(nbMots)))
+                        Case "T0SH_1" : .AgeT0SH(1) = CDec(TraiteReal(Mots(nbMots)))
+                        Case "AGETCA" : .AgeT = CDec(TraiteReal(Mots(nbMots)))
                         Case "LELAST" : .lElasticDesignVM = Mots(nbMots)
                         Case "LCONTR" : .lMaitriseFissuration = Mots(nbMots)
                         Case Else : MsgBox("BLOC " & BkOPTIONS & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
@@ -2383,7 +2441,6 @@ Public Class cls_Projet
 
             End If
         Next
-
 
     End Sub
 
@@ -2416,28 +2473,28 @@ Public Class cls_Projet
 
                 With myGamma
                     Select Case MotCle
-                        Case "GAMMAM0" : .GammaM0 = TraiteReal(Mots(nbMots))
-                        Case "GAMMAM1" : .GammaM1 = TraiteReal(Mots(nbMots))
-                        Case "GAMMAM2" : .GammaM2 = TraiteReal(Mots(nbMots))
-                        Case "GAMMAC" : .GammaC = TraiteReal(Mots(nbMots))
-                        Case "GAMMAVS" : .GammaVs = TraiteReal(Mots(nbMots))
-                        Case "GAMMAVC" : .GammaVc = TraiteReal(Mots(nbMots))
+                        Case "GAMMAM0" : .GammaM0 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAM1" : .GammaM1 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAM2" : .GammaM2 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAC" : .GammaC = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAVS" : .GammaVs = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAVC" : .GammaVc = CDec(TraiteReal(Mots(nbMots)))
                         Case "LGAMMAVUNI" : .lGammaV_unique = Mots(nbMots)
-                        Case "GAMMAS" : .GammaS = TraiteReal(Mots(nbMots))
-                        Case "GAMMAP" : .GammaP = TraiteReal(Mots(nbMots))
-                        Case "GAMMAM_FI" : .GammaM_fi = TraiteReal(Mots(nbMots))
-                        Case "GAMMAC_FI" : .GammaC_fi = TraiteReal(Mots(nbMots))
-                        Case "GAMMAS_FI" : .GammaS_fi = TraiteReal(Mots(nbMots))
-                        Case "GAMMAV_FI" : .GammaV_fi = TraiteReal(Mots(nbMots))
-                        Case "GAMMAG_SUP" : .GammaG_sup = TraiteReal(Mots(nbMots))
-                        Case "GAMMAG_INF" : .GammaG_inf = TraiteReal(Mots(nbMots))
-                        Case "GAMMAQ" : .GammaQ = TraiteReal(Mots(nbMots))
-                        Case "PSI0_Q1" : .Psi0_Q1 = TraiteReal(Mots(nbMots))
-                        Case "PSI1_Q1" : .Psi1_Q1 = TraiteReal(Mots(nbMots))
-                        Case "PSI2_Q1" : .Psi2_Q1 = TraiteReal(Mots(nbMots))
-                        Case "PSI0_Q2" : .Psi0_Q2 = TraiteReal(Mots(nbMots))
-                        Case "PSI1_Q2" : .Psi1_Q2 = TraiteReal(Mots(nbMots))
-                        Case "PSI2_Q2" : .Psi2_Q2 = TraiteReal(Mots(nbMots))
+                        Case "GAMMAS" : .GammaS = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAP" : .GammaP = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAM_FI" : .GammaM_fi = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAC_FI" : .GammaC_fi = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAS_FI" : .GammaS_fi = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAV_FI" : .GammaV_fi = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAG_SUP" : .GammaG_sup = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAG_INF" : .GammaG_inf = CDec(TraiteReal(Mots(nbMots)))
+                        Case "GAMMAQ" : .GammaQ = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PSI0_Q1" : .Psi0_Q1 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PSI1_Q1" : .Psi1_Q1 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PSI2_Q1" : .Psi2_Q1 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PSI0_Q2" : .Psi0_Q2 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PSI1_Q2" : .Psi1_Q2 = CDec(TraiteReal(Mots(nbMots)))
+                        Case "PSI2_Q2" : .Psi2_Q2 = CDec(TraiteReal(Mots(nbMots)))
                         Case Else : MsgBox("BLOC " & BkOPTIONS & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                     End Select
                 End With
@@ -2477,7 +2534,7 @@ Public Class cls_Projet
                 With myHivoss
                     Select Case MotCle
                         Case "LHIVOS" : .lHivossMethod = Mots(nbMots)
-                        Case "RATIOQ" : .ratioQ = TraiteReal(Mots(nbMots))
+                        Case "RATIOQ" : .ratioQ = CDec(TraiteReal(Mots(nbMots)))
                         Case "VARIAB" : .choixQ = Mots(nbMots)
                         Case "FLOORU" : .UtilisationPlancher = Mots(nbMots)
                         Case "LFREQS" : .lFreqDalle = Mots(nbMots)
@@ -2522,8 +2579,8 @@ Public Class cls_Projet
 
                 Select Case MotCle
                     Case "CLEDIC" : cle_dictionnaire = Mots(nbMots)
-                    Case "INDTRAVEE" : ind_travee = TraiteReal(Mots(nbMots))
-                    Case "QSURF" : QSurf_en_cours = TraiteReal(Mots(nbMots))
+                    Case "INDTRAVEE" : ind_travee = CInt(TraiteReal(Mots(nbMots)))
+                    Case "QSURF" : QSurf_en_cours = CDec(TraiteReal(Mots(nbMots)))
                     Case Else : MsgBox("Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                 End Select
 
@@ -2556,7 +2613,7 @@ Public Class cls_Projet
 
                 Select Case MotCle
                     Case "CLEDIC" : cle_dictionnaire = Mots(nbMots)
-                    Case "INDTRAVEE" : ind_travee = TraiteReal(Mots(nbMots))
+                    Case "INDTRAVEE" : ind_travee = CInt(TraiteReal(Mots(nbMots)))
                     Case "FORCE" : force_en_cours.Force = TraiteReal(Mots(nbMots))
                     Case "XPOST" : force_en_cours.xPosT = TraiteReal(Mots(nbMots))
                     Case "XGAUCHET" : force_en_cours.xGaucheT = TraiteReal(Mots(nbMots))

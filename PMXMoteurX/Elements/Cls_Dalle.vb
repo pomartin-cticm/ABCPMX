@@ -51,35 +51,6 @@
 
 #End Region
 
-#Region " Propriétés "
-    ''' <summary>
-    '''  surface par unité de largeur (m²/m)
-    ''' </summary>
-    ''' <param name="dc">largeur de calcul de l'aire</param>
-    ''' <param name="bfs">largeur de la semelle supérieure</param>
-    ''' <returns></returns>
-    Public Function Aire(dc As Decimal, bfs As Decimal) As Decimal
-        Dim Ac As Decimal
-
-        If Me.type = cls_Dalle.Enum_TypeDalle.Mixte Then
-            Dim tc As Decimal
-            tc = Me.Ep_td - Me.Bac.Hp
-            Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
-
-        ElseIf Me.type = Enum_TypeDalle.PartiellementPrefabriquee Or Me.type = Enum_TypeDalle.PlancherPrefabrique Then
-            Ac = dc * Ep_td
-        Else
-            'dalle pleine, avec ou sans dalle préfa
-            Ac = dc * Ep_td + Ep_th * (bfs + Ep_th * Math.Tan(ThetaRd) / 2)
-
-        End If
-
-        Return Ac
-
-    End Function
-
-#End Region
-
 #Region " Elements de la dalle "
 
     ''' <summary>
@@ -138,6 +109,31 @@
 #End Region
 
 #Region " Propriétés "
+    ''' <summary>
+    '''  surface par unité de largeur (m²/m)
+    ''' </summary>
+    ''' <param name="dc">largeur de calcul de l'aire</param>
+    ''' <param name="bfs">largeur de la semelle supérieure</param>
+    ''' <returns></returns>
+    Public Function Aire(dc As Decimal, bfs As Decimal) As Decimal
+        Dim Ac As Decimal
+
+        If Me.type = cls_Dalle.Enum_TypeDalle.Mixte Then
+            Dim tc As Decimal
+            tc = Me.Ep_td - Me.Bac.Hp
+            Ac = dc * tc * (1 + Me.Bac.LargeurBmoyenne * Me.Bac.Hp / (Me.Bac.Ep * tc))
+
+        ElseIf Me.type = Enum_TypeDalle.PartiellementPrefabriquee Or Me.type = Enum_TypeDalle.PlancherPrefabrique Then
+            Ac = dc * Ep_td
+        Else
+            'dalle pleine, avec ou sans dalle préfa
+            Ac = dc * Ep_td + Ep_th * (bfs + Ep_th * Math.Tan(ThetaRd) / 2)
+
+        End If
+
+        Return Ac
+
+    End Function
 
     Public Function DiametreMaxiArma() As Decimal
         '---------------------------------------------------------------------------------------

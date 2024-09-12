@@ -629,6 +629,7 @@ EDITDECKS				= Edit Steel profiled sheetings
 WELDEDSEC				= Welded
 FIRENOTAVAIL			= Fire calculation is not available in this version of $.
 FIRELATER				= It will be released in a future version.
+ERRMISSINGDECK			= Steel deck $ is missing in the database
 
 #FRM_MODULARRATIOTOOL
 TITLE					= Modular ratio tool
