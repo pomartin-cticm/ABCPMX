@@ -1928,30 +1928,34 @@ Public Class cls_Bac
 
 #Region " Fonctions de transfert "
 
-    Public Sub TransfertFrom(myBacS As cls_Bac)
+    Public Sub TransfertFrom(myBacS As cls_Bac, Optional lDonneeBase As Boolean = True)
         '------------------------------------------------------------------------------------------------------------------
         '   12/09/24 :  Création - POM
         '------------------------------------------------------------------------------------------------------------------
         '   Transfert les paramètres d'un bac à l'autre
         '------------------------------------------------------------------------------------------------------------------
-        '   myBacS  [E] :   Bac dont on récupère les paramètres
+        '   myBacS          [E] :   Bac dont on récupère les paramètres
+        '   lDonneesBase    [E] :   Indique si on ne transfere que les données contenues dans la base  
         '------------------------------------------------------------------------------------------------------------------
 
         Me.Bb = myBacS.Bb
         Me.Bt = myBacS.Bt
-        Me.AppuiL = myBacS.AppuiL
-        Me.AppuiT = myBacS.AppuiT
         Me.Ep = myBacS.Ep
         Me.fyp = myBacS.fyp
-        Me.Hp = myBacS.fyp
+        Me.Hp = myBacS.Hp
         Me.h_rs = myBacS.h_rs
         Me.Ieff = myBacS.Ieff
         Me.LargeurModule = myBacS.LargeurModule
-        Me.lPreperce = myBacS.lPreperce
         Me.msurf = myBacS.msurf
-        Me.Orientation = myBacS.Orientation
         Me.Producteur = myBacS.Producteur
         Me.Tp = myBacS.Tp
+        If Not lDonneeBase Then
+            Me.AppuiL = myBacS.AppuiL
+            Me.AppuiT = myBacS.AppuiT
+            Me.lPreperce = myBacS.lPreperce
+            Me.Orientation = myBacS.Orientation
+        End If
+
 
     End Sub
 

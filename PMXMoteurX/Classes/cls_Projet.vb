@@ -2207,9 +2207,9 @@ Public Class cls_Projet
                         Case "LABEL"
                             If nbMots >= 2 Then
                                 iFirst = InStr(Lignes(i), Mots(2))
-                                .nom = Lignes(i).Substring(iFirst - 1)
+                                .Nom = Lignes(i).Substring(iFirst - 1)
                             Else
-                                .nom = ""
+                                .Nom = ""
                             End If
                         Case "DP" : .dp = CDec(TraiteReal(Mots(nbMots)))
                         Case "MSURF" : .msurf = CDec(TraiteReal(Mots(nbMots)))

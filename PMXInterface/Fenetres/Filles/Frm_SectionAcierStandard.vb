@@ -278,22 +278,13 @@ Public Class Frm_SectionAcierStandard
             MySectionLoc.ProfilA.Tfi = MySectionLoc.ProfilA.Tfs
         End If
 
-        Me.txt_Ha.Text = GetStringInUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False)
-        Me.txt_Hw.Text = GetStringInUnit(MySectionLoc.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 4, 1, False)
-        Me.txt_Bfi.Text = GetStringInUnit(MySectionLoc.ProfilA.Bfi, Enu_TypeVariable.Dimension, 4, 1, False)
-        Me.txt_Bfs.Text = GetStringInUnit(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 1, False)
-        Me.txt_Tfi.Text = GetStringInUnit(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension, 4, 1, False)
-        Me.txt_Tfs.Text = GetStringInUnit(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, False)
-        Me.txt_Tw.Text = GetStringInUnit(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 1, False)
-
-        'Me.txt_Ha.Text = GetStringNoUnit(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension)
-        'Me.txt_Hw.Text = GetStringNoUnit(MySectionLoc.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension)
-        'Me.txt_Bfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.Bfi, Enu_TypeVariable.Dimension)
-        'Me.txt_Bfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension)
-        'Me.txt_Tfi.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension)
-        'Me.txt_Tfs.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension)
-        'Me.txt_Tw.Text = GetStringNoUnit(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension)
-
+        Me.txt_Ha.Text = GetStringInUnitN(MySectionLoc.ProfilA.ha, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        Me.txt_Hw.Text = GetStringInUnitN(MySectionLoc.ProfilA.HauteurAmeHw, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        Me.txt_Bfi.Text = GetStringInUnitN(MySectionLoc.ProfilA.Bfi, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        Me.txt_Bfs.Text = GetStringInUnitN(MySectionLoc.ProfilA.Bfs, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        Me.txt_Tfi.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tfi, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        Me.txt_Tfs.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tfs, Enu_TypeVariable.Dimension, 4, 1, False, True)
+        Me.txt_Tw.Text = GetStringInUnitN(MySectionLoc.ProfilA.Tw, Enu_TypeVariable.Dimension, 4, 1, False, True)
 
     End Sub
 
@@ -373,7 +364,6 @@ Public Class Frm_SectionAcierStandard
             Me.GridAciers(0, Me.GridAciers.Rows.Count - 1).Selected = True
         End If
         GetAcierFromGrid()
-
 
     End Sub
 
@@ -1314,7 +1304,6 @@ Public Class Frm_SectionAcierStandard
                 Me.TLpan_Gauche.RowStyles(2).Height = 0
                 Me.TLpan_Gauche.RowStyles(3).Height = 200
 
-
         End Select
 
     End Sub
@@ -1893,7 +1882,7 @@ Public Class Frm_SectionAcierStandard
 
         '--> Calcul
 
-        Return SteelIsToCompatibleToProfile(EpMax, IndStd, SteelBase, MyCatalogue.CorIndStd, Nuance, Qualite, Norm, ChoiceAcier, lIsNuanceCompatibleProfile)
+        Return SteelisCompatibleToProfile(EpMax, IndStd, SteelBase, MyCatalogue.CorIndStd, Nuance, Qualite, Norm, ChoiceAcier, lIsNuanceCompatibleProfile)
 
     End Function
 

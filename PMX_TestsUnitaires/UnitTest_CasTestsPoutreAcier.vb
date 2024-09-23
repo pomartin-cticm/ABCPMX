@@ -209,7 +209,7 @@ Imports PMXMoteur2
 
     '        'myPoutre.Dalle.Connecteur.Fu = 450
 
-    '        'myPoutre.Dalle.Bac.msurf = 8.53 '8.53 kg/m2
+    '        'myPoutre.Dalle.Bac.mSurf = 8.53 '8.53 kg/m2
     '        'myPoutre.Dalle.Bac.fyp = 350
 
     '        'CHARGES

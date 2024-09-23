@@ -849,7 +849,7 @@ Public Module Mod_BasesDonneesBinaires
 
     End Sub
 
-    Public Function SteelIsToCompatibleToProfile(ByVal EpMax As Single, ByVal IndStd() As Short, ByVal SteelBase As strucBaseAciers, ByVal CorIndStd As Dictionary(Of Short, Short),
+    Public Function SteelisCompatibleToProfile(ByVal EpMax As Single, ByVal IndStd() As Short, ByVal SteelBase As strucBaseAciers, ByVal CorIndStd As Dictionary(Of Short, Short),
                                                  ByVal Nuance As String, ByVal Qualite As String, ByVal Norm As String, ByVal ChoiceAcier As EnuChoiceAcier,
                                                  ByRef lIsNuanceCompatibleProfile As Boolean) As Boolean
         '----------------------------------------------------------------------------------------------------------------------------------------

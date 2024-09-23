@@ -1695,7 +1695,7 @@ Public Class Frm_SectionIFB
 
         '--> Calcul
 
-        Return SteelIsToCompatibleToProfile(EpMax, IndStd, SteelBase, MyCatalogue.CorIndStd, Nuance, Qualite, Norm, ChoiceAcier, lIsNuanceCompatibleProfile)
+        Return SteelisCompatibleToProfile(EpMax, IndStd, SteelBase, MyCatalogue.CorIndStd, Nuance, Qualite, Norm, ChoiceAcier, lIsNuanceCompatibleProfile)
 
     End Function
 

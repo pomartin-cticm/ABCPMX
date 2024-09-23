@@ -318,7 +318,7 @@ Public Class Frm_PMX
                 '=== MESSAGES d'ERREUR
 
                 msgErreur.Add("BACABSENT", Bloc("ERRMISSINGDECK"))
-
+                msgErreur.Add("COFRAABSENT", Bloc("ERRMISSINGPSLAB"))
 
             Catch ex As Exception
                 GestionErreurAffichageLangue(Me.Name, "GestionLangues")
@@ -1525,7 +1525,8 @@ Public Class Frm_PMX
         Dim lTrouve As Boolean
 
         For Each MyPoutre As cls_Poutre In MyProjet.Poutres
-            AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve, True)
+            InitialiseParametresSectionBase(MyPoutre, lTrouve)
+
         Next
 
         '--> Aucune modification par rapport au fichier ouvert

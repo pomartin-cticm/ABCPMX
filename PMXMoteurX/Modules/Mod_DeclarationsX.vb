@@ -222,7 +222,7 @@
 
 #End Region
 
-#Region "Tableau Cofradal"
+#Region " Tableau Cofradal "
 
     ''' <summary>
     ''' Fonction qui renvoi la hauteur (item1) et la masse surfacique (item2) du cofradal dont le nom est passé en argument
@@ -276,6 +276,7 @@
 
         Return retour
     End Function
+
     ''' <summary>
     ''' Tableau des cofradals
     ''' item1: nom du cofradal

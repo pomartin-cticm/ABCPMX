@@ -1887,7 +1887,31 @@ Module Mod_Outils
             Case cls_Dalle.Enum_TypeDalle.Mixte
                 MiseAJourBac(myBeam.Dalle.Bac, msgErreurs)
             Case cls_Dalle.Enum_TypeDalle.PlancherPrefabrique
+                MiseAJourPlancherPrefa(myBeam.Dalle.Cofradal, msgErreurs)
+
+
         End Select
+    End Sub
+
+    Private Sub MiseAJourPlancherPrefa(mySlab As cls_Cofradal, msgErreurs As Dictionary(Of String, String))
+        '--------------------------------------------------------------------------------------------------------
+        '   12/09/24 :  Création - POM
+        '--------------------------------------------------------------------------------------------------------
+        '   Mise à jour des paramètres d'un bac
+        '   en cherchant les infos dans la base de données
+        '--------------------------------------------------------------------------------------------------------
+        '   mySlab  [E] :   Plancher préfa à mettre à jour
+        '--------------------------------------------------------------------------------------------------------
+
+        If Not mySlab.lCustom Then
+
+            If Not mySlab.AjouteCofradalBDD(mySlab.Nom) Then
+                GestionErrorsPMX("", "", RemplaceDollar(msgErreurs("COFRAABSENT"), mySlab.Nom), False)
+            End If
+
+        End If
+
+
     End Sub
 
     Private Sub MiseAJourBac(ByRef myBac As cls_Bac, msgErreurs As Dictionary(Of String, String))

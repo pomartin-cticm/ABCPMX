@@ -1,43 +1,43 @@
 ﻿Public Class cls_Cofradal
 
-#Region "Attributs"
+#Region " Attributs privés "
 
     ''' <summary>
     ''' nom du cofradal
     ''' </summary>
-    Private m_nom As String
+    Private p_nom As String
 
     ''' <summary>
     ''' Hauteur du cofradal
     ''' </summary>
-    Private m_dp As Decimal
+    Private p_dp As Decimal
 
     ''' <summary>
     ''' masse surfacique du cofradal
     ''' </summary>
-    Private m_msurf As Decimal
+    Private p_msurf As Decimal
 
     ''' <summary>
     ''' indique si les données sont renseignées par l'utilisateur (True) ou si elles sont issues de la BDD (False)
     ''' </summary>
-    Private m_lCustom As Boolean
+    Private p_lCustom As Boolean
 
 #End Region
 
-#Region "Propriétés"
+#Region " Propriétés "
 
     ''' <summary>
     ''' Renvoi le nom du cofradal
     ''' En cas de modification, lCustom = True 
     ''' </summary>
     ''' <returns></returns>
-    Public Property nom As String
+    Public Property Nom As String
         Get
-            Return Me.m_nom
+            Return Me.p_nom
         End Get
         Set(value As String)
-            Me.m_nom = value
-            Me.m_lCustom = True
+            Me.p_nom = value
+            Me.p_lCustom = True
         End Set
     End Property
 
@@ -48,11 +48,11 @@
     ''' <returns></returns>
     Public Property dp As Decimal
         Get
-            Return Me.m_dp
+            Return Me.p_dp
         End Get
         Set(value As Decimal)
-            Me.m_dp = value
-            Me.m_lCustom = True
+            Me.p_dp = value
+            Me.p_lCustom = True
         End Set
     End Property
 
@@ -61,40 +61,40 @@
     ''' En cas de modification, lCustom = True 
     ''' </summary>
     ''' <returns></returns>
-    Public Property msurf As Decimal
+    Public Property mSurf As Decimal
         Get
-            Return Me.m_msurf
+            Return Me.p_msurf
         End Get
         Set(value As Decimal)
-            Me.m_msurf = value
-            Me.m_lCustom = True
+            Me.p_msurf = value
+            Me.p_lCustom = True
         End Set
     End Property
 
     Public Property lCustom As Boolean
         Get
-            Return Me.m_lCustom
+            Return Me.p_lCustom
         End Get
         Set(value As Boolean)
-            Me.m_lCustom = value
+            Me.p_lCustom = value
         End Set
     End Property
 
 
 #End Region
 
-#Region "Constructeur"
+#Region " Constructeur "
     ''' <summary>
     ''' Constructeur qui renvoi un cofradal 200 PAC par défaut
     ''' </summary>
     Public Sub New()
-        Me.m_nom = "Cofradal 200 PAC"
-        AjouteCofradalBDD(Me.m_nom)
+        Me.p_nom = "Cofradal 200 PAC"
+        AjouteCofradalBDD(Me.p_nom)
     End Sub
 
 #End Region
 
-#Region "Setters"
+#Region " Outils "
 
     ''' <summary>
     ''' Permet de définir un cofradal par rapport au nom renseigné (la hauteur et la masse surfacique sont lues dans la BDD)
@@ -106,11 +106,11 @@
         Dim cofradal As (Decimal, Decimal, Boolean) = Mod_DeclarationsX.Get_Cofradal(nomloc)
 
         If cofradal.Item3 Then
-            m_nom = nomloc
-            m_dp = cofradal.Item1
-            m_msurf = cofradal.Item2
+            p_nom = nomloc
+            p_dp = cofradal.Item1
+            p_msurf = cofradal.Item2
 
-            m_lCustom = False
+            p_lCustom = False
         End If
 
         Return cofradal.Item3
@@ -118,7 +118,7 @@
 
 #End Region
 
-#Region "Fonctions de copie"
+#Region " Fonctions de copie "
     Public Function Clone() '--> Utilisé pour dupliquer une soudure
         Return Me.MemberwiseClone()
     End Function

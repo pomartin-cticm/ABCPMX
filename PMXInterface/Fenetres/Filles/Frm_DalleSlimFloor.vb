@@ -494,7 +494,7 @@ Public Class Frm_DalleSlimFloor
 
         GereTransfertValeur(MyDalleLoc.Cofradal.nom, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Cofradal.nom, lModif)
         GereTransfertValeur(MyDalleLoc.Cofradal.dp, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Cofradal.dp, lModif)
-        GereTransfertValeur(MyDalleLoc.Cofradal.msurf, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Cofradal.msurf, lModif)
+        GereTransfertValeur(MyDalleLoc.Cofradal.mSurf, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Cofradal.mSurf, lModif)
         GereTransfertValeur(MyDalleLoc.Cofradal.lCustom, MyProjet.Poutres(MyProjet.IndEnCours).Dalle.Cofradal.lCustom, lModif)
 
     End Sub
@@ -776,7 +776,7 @@ Public Class Frm_DalleSlimFloor
 
         Me.txt_NameCustomCofra.Text = MyDalleLoc.Cofradal.nom
         Me.txt_dp.Text = GetStringInUnit(MyDalleLoc.Cofradal.dp, Enu_TypeVariable.Dimension, 4, 3, False)
-        Me.txt_mupf.Text = GetStringInUnit(MyDalleLoc.Cofradal.msurf, Enu_TypeVariable.ChargeSurfacique, 4, 3, False)
+        Me.txt_mupf.Text = GetStringInUnit(MyDalleLoc.Cofradal.mSurf, Enu_TypeVariable.ChargeSurfacique, 4, 3, False)
     End Sub
 
     Private Sub SaisieTextChanged(sender As Object, e As EventArgs) Handles txt_RhoC.TextChanged, txt_Td2.TextChanged, txt_Tc.TextChanged, txt_Hd.TextChanged, txt_EpPredalle.TextChanged, txt_EpJoint.TextChanged, txt_dp.TextChanged, txt_mupf.TextChanged
@@ -818,7 +818,7 @@ Public Class Frm_DalleSlimFloor
                     If cmb_Cofradal.SelectedIndex = 0 Then MyDalleLoc.Cofradal.dp = Valeur
 
                 Case Me.txt_mupf.Name
-                    If cmb_Cofradal.SelectedIndex = 0 Then MyDalleLoc.Cofradal.msurf = Valeur
+                    If cmb_Cofradal.SelectedIndex = 0 Then MyDalleLoc.Cofradal.mSurf = Valeur
 
             End Select
 

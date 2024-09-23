@@ -612,7 +612,6 @@ Public Module Mod_Demarrage
             plat_t_loc = .Plat_t
         End With
 
-
         With MyPoutre.Section.ProfilA
             Select Case .typeProfileAcier
                 Case cls_ProfilA.Enum_TypeSectionAcier.Lamine
@@ -833,6 +832,34 @@ Public Module Mod_Demarrage
 
     End Sub
 
+    Public Sub InitialiseParametresSectionBase(myBeam As cls_Poutre, ByRef lOK As Boolean)
+        '-------------------------------------------------------------------------------------------------
+        '   23/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------------------
+        '   Récupération des paramètres d'une section à partir de la base de données
+        '-------------------------------------------------------------------------------------------------
+        '   myBeam      [E] :   Poutre à initialiser
+        '-------------------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim lTrouve As Boolean
+        Dim lLamine As Boolean
+
+        '--( Initialisation
+
+        lLamine = (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym) _
+               Or (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)
+
+        '--( Traitement
+
+        If lLamine Then
+            TransfertProfileDeBase(myBeam.Section.ProfilA, myBeam.Section.ProfilA.Gamme, myBeam.Section.ProfilA.NomProfile, lOK)
+            AssocieAcierCompatible(myBeam, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve, True)
+        End If
+
+    End Sub
+
     Public Sub AssocieAcierCompatible(MyPoutre As cls_Poutre, ByVal FileSteels As String, ByVal FileProfiles As String, ByRef lTrouve As Boolean, Optional ByVal lRecupererPremierAcierCompatible As Boolean = False)
         '--------------------------------------------------------------------------------
         '
@@ -1020,7 +1047,7 @@ Public Module Mod_Demarrage
 
                 For Each kvpSteel As KeyValuePair(Of String, strucReduction) In kvpQualite.Value.ReductionCurv
 
-                    lCompatible = SteelIsToCompatibleToProfile(EpMax, iStandard, SteelBase, CorIndStd, kvpGrade.Key, kvpQualite.Key, kvpSteel.Key, OptionsDatabase.ChoiceSteel, lIsNuanceCompatibleProfile)
+                    lCompatible = SteelisCompatibleToProfile(EpMax, iStandard, SteelBase, CorIndStd, kvpGrade.Key, kvpQualite.Key, kvpSteel.Key, OptionsDatabase.ChoiceSteel, lIsNuanceCompatibleProfile)
 
                     If lCompatible Then
                         SteelLoc.Nuance = kvpGrade.Key
