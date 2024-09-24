@@ -712,6 +712,8 @@ Public Module Mod_Demarrage
         'Fin Ajout GUD
 
         AssocieAcierCompatible(MyPoutre, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve)
+        If MyPoutre.lSlimFloor Then _
+        InitialiseAcierPlats(MyPoutre.Section.AcierSPD)
 
         MyPoutre.Dalle.ThetaRd = OptionsScope.ThetaH
 
@@ -797,6 +799,27 @@ Public Module Mod_Demarrage
 
     End Sub
 
+    Private Sub UpdateProfilPRS(ByRef myProfile As cls_ProfilA, nbStd As Integer)
+        '----------------------------------------------------------------------------
+        '   24/09/24 :  Création - POM 
+        '----------------------------------------------------------------------------
+        '   Mets à les données d'une profilé PRS après rechargement
+        '----------------------------------------------------------------------------
+        '   myProfile   [E] :   Profilé à mettre à jour
+        '   nbStd       [E] :   Nombre de normes produit gérées par le catalogue
+        '----------------------------------------------------------------------------
+
+        If nbStd > 0 Then
+            ReDim myProfile.IndStandart(nbStd - 1)
+            For i As Integer = 0 To nbStd - 1
+                myProfile.IndStandart(i) = i
+            Next
+        Else
+            GestionErrorsPMX("Mod_demmarage", "UpdateProfilPRS", "Erreur", True)
+        End If
+
+    End Sub
+
     Private Sub TransfertProfileDeBase(MyProfile As cls_ProfilA, ByVal Gamme As String, ByVal Profile As String, ByRef lOK As Boolean)
         '----------------------------------------------------------------------------
         '
@@ -848,19 +871,22 @@ Public Module Mod_Demarrage
 
         '--( Initialisation
 
-        lLamine = (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym) _
-               Or (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)
+        lLamine = Not ((myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym) _
+                    Or (myBeam.Section.ProfilA.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym))
 
         '--( Traitement
 
         If lLamine Then
             TransfertProfileDeBase(myBeam.Section.ProfilA, myBeam.Section.ProfilA.Gamme, myBeam.Section.ProfilA.NomProfile, lOK)
             AssocieAcierCompatible(myBeam, LogicielFichiers.Base_Aciers, LogicielFichiers.Base_Sections, lTrouve, True)
+        Else
+            UpdateProfilPRS(myBeam.Section.ProfilA, MyCatalogue.nbStandard)
         End If
 
     End Sub
 
-    Public Sub AssocieAcierCompatible(MyPoutre As cls_Poutre, ByVal FileSteels As String, ByVal FileProfiles As String, ByRef lTrouve As Boolean, Optional ByVal lRecupererPremierAcierCompatible As Boolean = False)
+    Public Sub AssocieAcierCompatible(MyPoutre As cls_Poutre, ByVal FileSteels As String, ByVal FileProfiles As String,
+                                      ByRef lTrouve As Boolean, Optional ByVal lRecupererPremierAcierCompatible As Boolean = False)
         '--------------------------------------------------------------------------------
         '
         '   06/12/12 :  Création - POM - V3.00
@@ -890,13 +916,20 @@ Public Module Mod_Demarrage
         Dim MySteels As New List(Of strucAcierLocal)
         Dim iStd As Short
         Dim EpMax As Decimal = Math.Max(MyPoutre.Section.ProfilA.Tfs, MyPoutre.Section.ProfilA.Tw)
+        Dim strMsg As String = ""
+
+        '--( Traitement
 
         ExtraireAciersCompatibles(EpMax, MyPoutre.Section.ProfilA.IndStandart, MySteels)
 
         If lRecupererPremierAcierCompatible Then 'On récupère l'acier exacte (utile lors de la lecture d'un fichier sauvegarde)
             AnalyseAciersListe(MySteels, True, "", lTrouve, iAcier, True, MyPoutre)
 
-            If Not lTrouve Then MsgBox("Erreur récupération nuance d'acier | Steel grade recovery error")
+            'If Not lTrouve Then MsgBox("Erreur récupération nuance d'acier | Steel grade recovery error")
+            If Not lTrouve Then
+                strMsg = MyPoutre.Section.Acier.Nuance & Space(1) & MyPoutre.Section.Acier.Qualite & Space(1) & MyPoutre.Section.Acier.Reduction
+                GestionErrorsPMX("Mod_demmarage", "AssocieAcierCompatible", strMsg & ": " & "Erreur récupération nuance d'acier | Steel grade recovery error", True)
+            End If
         Else 'on récupère le premier acier S355 disponible (utile lors du lancement du logiciel)
             AnalyseAciersListe(MySteels, True, cls_Acier.NUANCEDEFAULT, lTrouve, iAcier)
 
@@ -925,38 +958,50 @@ Public Module Mod_Demarrage
             Next
         End If
 
+    End Sub
 
-        'Renseignement des nuances pour les plats soudés (utile pour les slimfloors)
+    Public Sub InitialiseAcierPlats(ByRef myAcier As cls_Acier)
+        '--------------------------------------------------------------------------------
+        '   24/09/24 :  Création - POM
+        '--------------------------------------------------------------------------------
+        '   Initialisation de l'acier pour les plats de slimfoors
+        '--------------------------------------------------------------------------------
+        '   myAcier     [S] :   Acier à initialiser
+        '--------------------------------------------------------------------------------
+
+        '--( Déclarations
 
         Dim Nuance, Qualite, Reduction As String
+        Dim iStd As Integer
+
+        '--( Traitement
+
         Nuance = "S235"
         Qualite = "EC3"
         Reduction = "Table 3.1"
 
-        MyPoutre.Section.AcierSPD.Nuance = Nuance
-        MyPoutre.Section.AcierSPD.Qualite = Qualite
-        MyPoutre.Section.AcierSPD.Reduction = Reduction
+        myAcier.Nuance = Nuance
+        myAcier.Qualite = Qualite
+        myAcier.Reduction = Reduction
 
-        MyPoutre.Section.AcierSPD.EpMax = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).EpMax
+        myAcier.EpMax = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).EpMax
 
-        MyPoutre.Section.AcierSPD.iBase = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).iBase
-        MyPoutre.Section.AcierSPD.iStandart = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex
+        myAcier.iBase = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).iBase
+        myAcier.iStandart = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex
 
-        MyPoutre.Section.AcierSPD.Plages.Clear()
+        myAcier.Plages.Clear()
         Dim MyPlage As cls_Acier.strucPlage
         For i As Integer = 0 To SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages.Count - 1
             MyPlage.Ep = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Ep
             MyPlage.Fy = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fy
             MyPlage.Fu = SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).Plages(i).Fu
-            MyPoutre.Section.AcierSPD.Plages.Add(MyPlage)
+            myAcier.Plages.Add(MyPlage)
         Next
-
-
 
         iStd = SteelBase.IndexStd.IndexOf(SteelBase.Grades(Nuance).Qualites(Qualite).ReductionCurv(Reduction).StIndex)
         If iStd > -1 Then
-            MyPoutre.Section.AcierSPD.NormeProduit = SteelBase.NormeStd(iStd)
-            MyPoutre.Section.AcierSPD.iTabStandart = iStd
+            myAcier.NormeProduit = SteelBase.NormeStd(iStd)
+            myAcier.iTabStandart = iStd
         End If
 
     End Sub

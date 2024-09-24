@@ -14,7 +14,6 @@ Public Class cls_Poutre
     Const NBPROPPINGDEFAUT As Integer = 0
     Public Const KEYPP As String = "G1"
 
-
     Enum EnuTypeTravee
         ConsoleGauche
         ConsoleDroite

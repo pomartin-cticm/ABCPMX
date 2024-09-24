@@ -1,6 +1,7 @@
 ﻿Imports System.Collections.Specialized.BitVector32
 Imports System.IO
 Imports System.Net.Mime.MediaTypeNames
+Imports System.Reflection
 Imports System.Windows.Forms.MonthCalendar
 
 Public Class cls_Projet
@@ -31,6 +32,8 @@ Public Class cls_Projet
     Const BkOPTIONS As String = "OPTIONS"
     Const BkGAMMA As String = "GAMMA"
     Const BkHIVOSS As String = "HIVOSS"
+
+    Const BkCharges As String = "LOADS_"
 
 #End Region
 
@@ -231,6 +234,36 @@ Public Class cls_Projet
 
     End Sub
 
+    Private Sub SaveFileBlocMaintiens(myPtre As cls_Poutre, ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   24/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif aux maitiens
+        '-------------------------------------------------------------------------------------
+
+        Dim Chaine As String
+        Dim SP As String = Space(1)
+
+        Lines.Add("BLOCK " & BkMAINTIENS)
+
+        For i As Integer = 0 To myPtre.Maintiens.Count - 1
+            For Each maint In myPtre.Maintiens(i)
+
+                ' If maint IsNot Nothing Then
+                With maint
+
+                    Chaine = CStr(i) & SP & CStr(.x_Loc) & SP & CStr(.lMaintienSemelleSup) & SP & CStr(.lMaintienSemelleInf)
+                    AjouteLigneFrmt(Lines, "Lrest", Chaine)
+
+                End With
+                ' End If
+
+            Next
+        Next
+
+        Lines.Add("")
+    End Sub
+
     Private Sub SaveFileBlocMaintienBac(MaintienBac As cls_MaintienBac, ByRef Lines As List(Of String))
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
@@ -424,6 +457,47 @@ Public Class cls_Projet
 
     End Sub
 
+    Private Sub SaveFileBlocCharges(ChargesU As Dictionary(Of String, cls_ChargementUtilisateur), iTDeb As Integer, iTFin As Integer,
+                                    ByRef Lines As List(Of String))
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Ecriture du bloc relatif aux chargements définis par l'utilisateur
+        '-------------------------------------------------------------------------------------
+
+        '--( Déclarations
+
+        Dim Chaine As String = ""
+
+
+        '--( Traitement
+
+        For Each Ch As KeyValuePair(Of String, cls_ChargementUtilisateur) In ChargesU
+
+            '==( Nom du bloc
+
+            Select Case Ch.Key
+                Case "G1" : Chaine = BkCharges & "G"
+                Case "G2" : Chaine = BkCharges & "G2"
+                Case "Q1" : Chaine = BkCharges & "Q1"
+                Case "Q2" : Chaine = BkCharges & "Q2"
+                Case "QC" : Chaine = BkCharges & "QC"
+
+            End Select
+
+            '==( Charges surfaciques
+
+            For itravee As Integer = iTDeb To iTFin
+
+
+
+            Next
+
+        Next
+
+
+    End Sub
+
     Private Sub SaveFileBlocCofraDalle(myCofraDal As cls_Cofradal, ByRef Lines As List(Of String))
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
@@ -432,11 +506,10 @@ Public Class cls_Projet
         '-------------------------------------------------------------------------------------
 
         Lines.Add("BLOCK " & BkCOFRADAL)
-
         With myCofraDal
-            AjouteLigneFrmt(Lines, "Label", .nom)
+            AjouteLigneFrmt(Lines, "Label", .Nom)
             AjouteLigneFrmt(Lines, "Dp", .dp)
-            AjouteLigneFrmt(Lines, "Msurf", .msurf)
+            AjouteLigneFrmt(Lines, "Msurf", .mSurf)
             AjouteLigneFrmt(Lines, "lCustom", .lCustom)
         End With
 
@@ -635,8 +708,11 @@ Public Class cls_Projet
         Lines.Add("BLOCK " & BkPROFILA)
 
         With myProfil
-            AjouteLigneFrmt(Lines, "Serie", .Gamme)
-            AjouteLigneFrmt(Lines, "Name", .NomProfile)
+            If Not ((.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Bi_Sym) _
+                 Or (.typeProfileAcier = cls_ProfilA.Enum_TypeSectionAcier.PRS_Mono_Sym)) Then
+                AjouteLigneFrmt(Lines, "Serie", .Gamme)
+                AjouteLigneFrmt(Lines, "Name", .NomProfile)
+            End If
             AjouteLigneFrmt(Lines, "Type", .typeProfileAcier)
             AjouteLigneFrmt(Lines, "ha", .ha)
             AjouteLigneFrmt(Lines, "hb", .hb)
@@ -703,7 +779,7 @@ Public Class cls_Projet
 
 
         Dim lMixte, lEnrob, lSlimMixte As Boolean
-
+        Dim lUn As Boolean = True
 
 
         '==[ Entete ]=========================================================================
@@ -735,6 +811,14 @@ Public Class cls_Projet
         '==[ Classe Poutre ]=================================================================
         For Each pTre As cls_Poutre In Me.Poutres
 
+            If Not lUn Then
+
+                Lines.Add("==================================================================================")
+
+            Else
+                lUn = False
+            End If
+
             'With pTre
 
             lMixte = pTre.lMixte
@@ -744,24 +828,8 @@ Public Class cls_Projet
             SaveFileBlocPoutre(pTre, Lines)
 
             '==[ Classe Maintien ]=================================================================
-            For i As Integer = 0 To pTre.Maintiens.Count - 1
-                For Each maint In pTre.Maintiens(i)
 
-                    ' If maint IsNot Nothing Then
-                    With maint
-
-                        Lines.Add("BLOCK " & BkMAINTIENS)
-                        AjouteLigneFrmt(Lines, "indTravee", CStr(i))
-                        AjouteLigneFrmt(Lines, "xLoc", .x_Loc)
-                        AjouteLigneFrmt(Lines, "lMaintSemSup", .lMaintienSemelleSup)
-                        AjouteLigneFrmt(Lines, "lMaintSemInf", .lMaintienSemelleInf)
-
-                        Lines.Add("")
-                    End With
-                    ' End If
-
-                Next
-            Next
+            SaveFileBlocMaintiens(pTre, Lines)
 
             '==[ Classe maintien par le bac ]==================================================
 
@@ -825,6 +893,9 @@ Public Class cls_Projet
             SaveFileBlocHivoss(pTre.Hivoss, Lines)
 
             '==[ Classe ChargementU ]=================================================================
+
+            SaveFileBlocCharges(pTre.ChargesU, Lines)
+
             For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In pTre.ChargesU
                 For i As Integer = pTre.IndicePremiereTravee To pTre.IndiceDerniereTravee
                     Lines.Add("BLOCK CHGTU_QSURF")
@@ -1111,11 +1182,13 @@ Public Class cls_Projet
                     ReadBlocPoutre(Me.Poutres.Last, Lines, indBlocs(iBloc) + 1, iFin)
 
                 Case BkMAINTIENS
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim maintien_en_cours As New cls_Maintiens
-                    Dim ind_travee As Integer
-                    ReadBlocMaintiens(maintien_en_cours, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
-                    ptre_en_cours.Maintiens(ind_travee).Add(maintien_en_cours)
+                    'Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    'Dim maintien_en_cours As New cls_Maintiens
+                    'Dim ind_travee As Integer
+                    'ReadBlocMaintiens(maintien_en_cours, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
+                    'ptre_en_cours.Maintiens(ind_travee).Add(maintien_en_cours)
+
+                    ReadBlocMaintiensN(Me.Poutres.Last.Maintiens, Lines, indBlocs(iBloc) + 1, iFin)
 
                 Case BkMAINTIENBAC
 
@@ -1305,11 +1378,8 @@ Public Class cls_Projet
                     Me.Poutres.Add(ptre_en_cours)
 
                 Case BkMAINTIENS
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim maintien_en_cours As New cls_Maintiens
-                    Dim ind_travee As Integer
-                    ReadBlocMaintiens(maintien_en_cours, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.Maintiens(ind_travee).Add(maintien_en_cours)
+
+                    ReadBlocMaintiensN(Me.Poutres.Last.Maintiens, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
                 Case BkMAINTIENBAC
                     'Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
@@ -1675,11 +1745,64 @@ Public Class cls_Projet
 
     End Sub
 
+    Private Sub ReadBlocMaintiensN(ByRef myRest() As List(Of cls_Maintiens), ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '-------------------------------------------------------------------------------------
+        '   04/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Lecture du bloc MAINTIENS
+        '-------------------------------------------------------------------------------------
+        '   myRestB     [S] :   Paramètres de maintien par le bac
+        '   Lignes      [E] :   lignes extraites du fichier de données
+        '   Index0      [E] :   Indice de la première ligne du bloc
+        '   IndexFin    [E] :   Indice la dernière ligne du bloc
+        '-------------------------------------------------------------------------------------
+
+        '--> Déclaration
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+        Const NBCAR As Integer = 6
+        Dim xLoc As Decimal
+        Dim iTravee, nbR As Integer
+        Dim lSup, lInf As Boolean
+
+        For i = Index0 To IndexFin
+
+            DecomposeLine(Lignes(i), Mots, nbMots)
+
+            If nbMots > 0 Then
+
+                MotCle = Mots(1).Substring(0, Math.Min(NBCAR, Mots(1).Length)).ToUpper
+
+                Select Case MotCle
+                    Case "LREST"
+
+                        iTravee = CInt(TraiteReal(Mots(2)))
+                        xLoc = CDec(TraiteReal(Mots(3)))
+                        lSup = Mots(4)
+                        lInf = Mots(5)
+
+                        myRest(iTravee).Add(New cls_Maintiens)
+
+                        nbR = myRest(iTravee).Count
+
+                        myRest(iTravee)(nbR - 1).x_Loc = xLoc
+                        myRest(iTravee)(nbR - 1).lMaintienSemelleSup = lSup
+                        myRest(iTravee)(nbR - 1).lMaintienSemelleInf = lInf
+
+                End Select
+            End If
+
+        Next
+
+    End Sub
+
+
     Private Sub ReadBlocMaintienBac(myRestB As cls_MaintienBac, ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
         '-------------------------------------------------------------------------------------
         '   04/09/24 :  Création - POM
         '-------------------------------------------------------------------------------------
-        '   Lecture du bloc POUTRE
+        '   Lecture du bloc MAINTIEN PAR LE BAC
         '-------------------------------------------------------------------------------------
         '   myRestB     [S] :   Paramètres de maintien par le bac
         '   Lignes      [E] :   lignes extraites du fichier de données
@@ -1824,10 +1947,28 @@ Public Class cls_Projet
                             'Case "INDDELIV" : .IndDeliv = ConvertStringToListShort(Mots(nbMots))
                             'Case "INDSTAND" : .IndStandart = ConvertStringToListShort(Mots(nbMots))
 
-                    Case "GRADE" : If nbMots > 1 Then mySteel.Nuance = Mots(2)
-                    Case "QUALIT" : If nbMots > 1 Then mySteel.Qualite = Mots(2)
-                    Case "REDUCT" : If nbMots > 1 Then mySteel.Reduction = Mots(2)
-                    Case "STANDA" : If nbMots > 1 Then mySteel.NormeProduit = Mots(2) Else mySteel.NormeProduit = ""
+                    Case "GRADE"
+                        If nbMots > 1 Then
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            mySteel.Nuance = Lignes(i).Substring(iFirst - 1).Trim
+                        End If
+                    Case "QUALIT"
+                        If nbMots > 1 Then
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            mySteel.Qualite = Lignes(i).Substring(iFirst - 1).Trim
+                        End If
+                    Case "REDUCT"
+                        If nbMots > 1 Then
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            mySteel.Reduction = Lignes(i).Substring(iFirst - 1).Trim
+                        End If
+                    Case "STANDA"
+                        If nbMots > 1 Then
+                            iFirst = InStr(Lignes(i), Mots(2))
+                            mySteel.NormeProduit = Lignes(i).Substring(iFirst - 1).Trim
+                        Else
+                            mySteel.NormeProduit = ""
+                        End If
 
                     Case Else : MsgBox("BLOC " & BkPROFILA & " : Le mot clé/The keyword " & MotCle & " n'est pas traité/isn't treated")
                 End Select

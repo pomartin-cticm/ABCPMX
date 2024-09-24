@@ -1481,7 +1481,7 @@ Public Class Frm_PMX
         '--> Lecture du fichier
 
         ReadInFile(FileName)
-        MiseAJourProjet(MyProjet, msgErreur)
+
         AffichageTViewChk()
         MAJToolBarPoutre()
         MAJMainToolBar()
@@ -1522,12 +1522,15 @@ Public Class Frm_PMX
         MyProjet.ReadFile(FileName, Str_WarningFile, NomChargements)
         MyProjet.IndEnCours = 0
 
+        '--( Mise à jour des données après lecture
+
         Dim lTrouve As Boolean
 
         For Each MyPoutre As cls_Poutre In MyProjet.Poutres
             InitialiseParametresSectionBase(MyPoutre, lTrouve)
-
         Next
+
+        MiseAJourProjet(MyProjet, msgErreur)
 
         '--> Aucune modification par rapport au fichier ouvert
         MyProjet.lSaved = False
