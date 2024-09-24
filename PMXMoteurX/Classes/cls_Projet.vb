@@ -468,6 +468,8 @@ Public Class cls_Projet
         '--( Déclarations
 
         Dim Chaine As String = ""
+        Dim SP As String = Space(1)
+        Const StRealF As String = "0.000"
 
 
         '--( Traitement
@@ -476,25 +478,56 @@ Public Class cls_Projet
 
             '==( Nom du bloc
 
-            Select Case Ch.Key
-                Case "G1" : Chaine = BkCharges & "G"
-                Case "G2" : Chaine = BkCharges & "G2"
-                Case "Q1" : Chaine = BkCharges & "Q1"
-                Case "Q2" : Chaine = BkCharges & "Q2"
-                Case "QC" : Chaine = BkCharges & "QC"
-
-            End Select
+            Lines.Add("BLOCK " & BkCharges & Ch.Key)
 
             '==( Charges surfaciques
 
+            Chaine = ""
             For itravee As Integer = iTDeb To iTFin
 
-
+                If itravee > iTDeb Then Chaine = Chaine & sp
+                Chaine = Chaine & CStr(Ch.Value.QSurf(itravee))
 
             Next
 
-        Next
+            AjouteLigneFrmt(Lines, "QSurf", Chaine)
 
+            '==( Charges linéiques
+
+            For itravee As Integer = iTDeb To iTFin
+
+                Chaine = CStr(itravee)
+
+                For iLin As Integer = 0 To Ch.Value.FReparties(itravee).Count - 1
+                    Chaine = Chaine & SP & CStr(Ch.Value.FReparties(itravee)(iLin).xPosT(0))
+                    Chaine = Chaine & SP & CStr(Format(Ch.Value.FReparties(itravee)(iLin).Force(0), StRealF))
+
+                    Chaine = Chaine & SP & CStr(Ch.Value.FReparties(itravee)(iLin).xPosT(1))
+                    Chaine = Chaine & SP & CStr(Format(Ch.Value.FReparties(itravee)(iLin).Force(1), StRealF))
+
+                    AjouteLigneFrmt(Lines, "qDist", Chaine)
+                Next
+
+            Next
+
+            '==( Charges concentrées
+
+            For itravee As Integer = iTDeb To iTFin
+
+                For iForce As Integer = 0 To Ch.Value.Forces(itravee).Count - 1
+
+                    Chaine = CStr(itravee)
+                    Chaine = Chaine & SP & CStr(Ch.Value.Forces(itravee)(iForce).xPosT)
+                    Chaine = Chaine & SP & CStr(Ch.Value.Forces(itravee)(iForce).Force)
+
+                    AjouteLigneFrmt(Lines, "Force", Chaine)
+
+                Next
+
+            Next
+
+            Lines.Add(" ")
+        Next
 
     End Sub
 
@@ -894,7 +927,7 @@ Public Class cls_Projet
 
             '==[ Classe ChargementU ]=================================================================
 
-            SaveFileBlocCharges(pTre.ChargesU, Lines)
+            SaveFileBlocCharges(pTre.ChargesU, pTre.IndicePremiereTravee, pTre.IndiceDerniereTravee, Lines)
 
             For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In pTre.ChargesU
                 For i As Integer = pTre.IndicePremiereTravee To pTre.IndiceDerniereTravee
@@ -1491,29 +1524,34 @@ Public Class cls_Projet
                     ReadBlocHivoss(hivoss_opt_calculs, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
                     ptre_en_cours.Hivoss = hivoss_opt_calculs
 
-                Case "CHGTU_QSURF"
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim QSurf_en_cours As Decimal
-                    Dim cle_dic As String = ""
-                    Dim ind_travee As Integer
-                    ReadBlocQSurf(QSurf_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.ChargesU(cle_dic).QSurf(ind_travee) = QSurf_en_cours
+                Case BkCharges & "G1", BkCharges & "G2", BkCharges & "Q1", BkCharges & "Q2", BkCharges & "QC"
 
-                Case "CHGTU_FORCE"
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim force_en_cours As New cls_Force
-                    Dim cle_dic As String = ""
-                    Dim ind_travee As Integer
-                    ReadBlocForce(force_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.ChargesU(cle_dic).Forces(ind_travee).Add(force_en_cours)
+                    Dim KeyCh As String = ListeBlocCle(i).Substring(BkCharges.Length)
+                    ReadBlocCharges(Me.Poutres.Last, KeyCh, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
 
-                Case "CHGTU_FREPAR"
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim frepart_en_cours As New cls_ForceRepartie
-                    Dim cle_dic As String = ""
-                    Dim ind_travee As Integer
-                    ReadBlocFRepartie(frepart_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
-                    ptre_en_cours.ChargesU(cle_dic).FReparties(ind_travee).Add(frepart_en_cours)
+                    'Case "CHGTU_QSURF"
+                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    '    Dim QSurf_en_cours As Decimal
+                    '    Dim cle_dic As String = ""
+                    '    Dim ind_travee As Integer
+                    '    ReadBlocQSurf(QSurf_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    '    ptre_en_cours.ChargesU(cle_dic).QSurf(ind_travee) = QSurf_en_cours
+
+                    'Case "CHGTU_FORCE"
+                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    '    Dim force_en_cours As New cls_Force
+                    '    Dim cle_dic As String = ""
+                    '    Dim ind_travee As Integer
+                    '    ReadBlocForce(force_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    '    ptre_en_cours.ChargesU(cle_dic).Forces(ind_travee).Add(force_en_cours)
+
+                    'Case "CHGTU_FREPAR"
+                    '    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
+                    '    Dim frepart_en_cours As New cls_ForceRepartie
+                    '    Dim cle_dic As String = ""
+                    '    Dim ind_travee As Integer
+                    '    ReadBlocFRepartie(frepart_en_cours, cle_dic, ind_travee, Lines.Lines, ListeBlocIndex(i) + 1, IndexFin)
+                    '    ptre_en_cours.ChargesU(cle_dic).FReparties(ind_travee).Add(frepart_en_cours)
 
 
                     'Case "OPT_CALCULS_PROP_ELAST_ENROBAGE"
@@ -2313,6 +2351,77 @@ Public Class cls_Projet
 
             End If
         Next
+
+    End Sub
+
+    Private Sub ReadBlocCharges(myPtre As cls_Poutre, KeyCh As String,
+                                ByVal Lignes As List(Of String), ByVal Index0 As Integer, ByVal IndexFin As Integer)
+        '-------------------------------------------------------------------------------------
+        '   05/09/24 :  Création - POM
+        '-------------------------------------------------------------------------------------
+        '   Lecture du bloc sur les charges définies par l'utilisateur
+        '-------------------------------------------------------------------------------------
+        '   ChargesU    [S] :   Charges définies par l'utilisateur
+        '   KeyCh       [E] :   Indice du cas de charge
+        '   iTravDeb    [E] :   Indice de la première travée
+        '   Lignes      [E] :   lignes extraites du fichier de données
+        '   Index0      [E] :   Indice de la première ligne du bloc
+        '   IndexFin    [E] :   Indice la dernière ligne du bloc
+        '-------------------------------------------------------------------------------------
+
+        '--( Déclaration
+
+        Dim i As Integer
+        Dim Mots(0) As String, nbMots As Integer
+        Dim MotCle As String
+        Const NBCAR As Integer = 6
+        Dim iMot As Integer
+        Dim pQsurf, pForce As Decimal
+        Dim iTravee As Integer
+        Dim qRep(1) As Decimal
+        Dim xPos(1) As Decimal
+        Dim xGauche As Decimal
+        Dim iTravDeb As Integer = myPtre.IndicePremiereTravee
+
+        '--( Traitement
+
+        If Not myPtre.ChargesU.ContainsKey(KeyCh) Then
+            GestionErreur("cls_Projet", "ReadBlocCharges", KeyCh & " is not a valid key for load cases")
+        Else
+            For i = Index0 To IndexFin
+                DecomposeLine(Lignes(i), Mots, nbMots)
+
+                If nbMots > 0 Then
+                    MotCle = Mots(1).Substring(0, Math.Min(NBCAR, Mots(1).Length)).ToUpper
+
+                    Select Case MotCle
+                        Case "QSURF"
+                            For iMot = 2 To nbMots
+                                pQsurf = CDec(TraiteReal(Mots(iMot)))
+                                myPtre.ChargesU(KeyCh).QSurf(iTravDeb + iMot - 2) = pQsurf
+                            Next
+                        Case "QDIST"
+                            If nbMots >= 6 Then
+                                iTravee = CInt(TraiteReal(Mots(2)))
+                                xPos(0) = CDec(TraiteReal(Mots(3)))
+                                qRep(0) = CDec(TraiteReal(Mots(4)))
+                                xPos(1) = CDec(TraiteReal(Mots(5)))
+                                qRep(1) = CDec(TraiteReal(Mots(6)))
+                                xGauche = myPtre.xPositionAppui(True, iTravee)
+                                myPtre.ChargesU(KeyCh).FReparties(iTravee).Add(New cls_ForceRepartie(xPos(0), qRep(0), xPos(1), qRep(1), xGauche))
+                            End If
+                        Case "FORCE"
+                            If nbMots >= 4 Then
+                                iTravee = CInt(TraiteReal(Mots(2)))
+                                xPos(0) = CDec(TraiteReal(Mots(3)))
+                                pForce = CDec(TraiteReal(Mots(4)))
+                                xGauche = myPtre.xPositionAppui(True, iTravee)
+                                myPtre.ChargesU(KeyCh).Forces(iTravee).Add(New cls_Force(xPos(0), pForce, xGauche))
+                            End If
+                    End Select
+                End If
+            Next
+        End If
 
     End Sub
 

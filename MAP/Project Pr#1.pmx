@@ -243,6 +243,17 @@ BLOCK HIVOSS
    Ceiling               = False
    Screed                = False
 
+BLOCK LOADS_G1
+   QSurf                 = 0 0
+   qDist                 = 1 0 6911,00324849510924850 10 6911,00324849510924850
+BLOCK LOADS_G2
+   QSurf                 = 0 0
+BLOCK LOADS_Q1
+   QSurf                 = 0 0
+BLOCK LOADS_Q2
+   QSurf                 = 0 0
+BLOCK LOADS_QC
+   QSurf                 = 0 0
 BLOCK CHGTU_QSURF
    CleDic      =  G1
    indTravee      =  0
@@ -503,6 +514,17 @@ BLOCK HIVOSS
    Ceiling               = False
    Screed                = False
 
+BLOCK LOADS_G1
+   QSurf                 = 0
+   qDist                 = 1 0 6911,00324849510924850 10 6911,00324849510924850
+BLOCK LOADS_G2
+   QSurf                 = 0
+BLOCK LOADS_Q1
+   QSurf                 = 0
+BLOCK LOADS_Q2
+   QSurf                 = 0
+BLOCK LOADS_QC
+   QSurf                 = 0
 BLOCK CHGTU_QSURF
    CleDic      =  G1
    indTravee      =  1
@@ -533,7 +555,7 @@ BLOCK BEAM
    BeaIden               = PRS acier
    Comment               = 
    LCantilever           = False
-   RCantilever           = False
+   RCantilever           = True
    LContSlab             = False
    RContSlab             = False
    LSlabOpen             = False
@@ -691,10 +713,38 @@ BLOCK HIVOSS
    Ceiling               = False
    Screed                = False
 
+BLOCK LOADS_G1
+   QSurf                 = 0 0
+   qDist                 = 1 0 4947,8257017708695652173913031 10 4947,8257017708695652173913031
+   qDist                 = 2 0 4947,8257017708695652173913031 3 4947,8257017708695652173913031
+   Force                 = 2 2 1000
+BLOCK LOADS_G2
+   QSurf                 = 0 0
+BLOCK LOADS_Q1
+   QSurf                 = 0 0
+   qDist                 = 1 0 1000 10 1000
+   Force                 = 1 5 1000
+BLOCK LOADS_Q2
+   QSurf                 = 0 0
+   qDist                 = 2 0 1000 3 1000
+BLOCK LOADS_QC
+   QSurf                 = 0 0
 BLOCK CHGTU_QSURF
    CleDic      =  G1
    indTravee      =  1
    QSurf      =  0
+
+BLOCK CHGTU_QSURF
+   CleDic      =  G1
+   indTravee      =  2
+   QSurf      =  0
+
+BLOCK CHGTU_FORCE
+   CleDic      =  G1
+   indTravee      =  2
+   Force      =  1000
+   xPosT      =  2
+   xGaucheT   =  10
 
 BLOCK CHGTU_QSURF
    CleDic      =  G2
@@ -702,8 +752,34 @@ BLOCK CHGTU_QSURF
    QSurf      =  0
 
 BLOCK CHGTU_QSURF
+   CleDic      =  G2
+   indTravee      =  2
+   QSurf      =  0
+
+BLOCK CHGTU_QSURF
    CleDic      =  Q1
    indTravee      =  1
+   QSurf      =  0
+
+BLOCK CHGTU_FORCE
+   CleDic      =  Q1
+   indTravee      =  1
+   Force      =  1000
+   xPosT      =  5
+   xGaucheT   =  0
+
+BLOCK CHGTU_FREPAR
+   CleDic      =  Q1
+   indTravee      =  1
+   F0      =  1000
+   F1      =  1000
+   xPosT0      =  0
+   xPosT1      =  10
+   xGaucheT      =  0
+
+BLOCK CHGTU_QSURF
+   CleDic      =  Q1
+   indTravee      =  2
    QSurf      =  0
 
 BLOCK CHGTU_QSURF
@@ -712,7 +788,26 @@ BLOCK CHGTU_QSURF
    QSurf      =  0
 
 BLOCK CHGTU_QSURF
+   CleDic      =  Q2
+   indTravee      =  2
+   QSurf      =  0
+
+BLOCK CHGTU_FREPAR
+   CleDic      =  Q2
+   indTravee      =  2
+   F0      =  1000
+   F1      =  1000
+   xPosT0      =  0
+   xPosT1      =  3
+   xGaucheT      =  10
+
+BLOCK CHGTU_QSURF
    CleDic      =  QC
    indTravee      =  1
+   QSurf      =  0
+
+BLOCK CHGTU_QSURF
+   CleDic      =  QC
+   indTravee      =  2
    QSurf      =  0
 
