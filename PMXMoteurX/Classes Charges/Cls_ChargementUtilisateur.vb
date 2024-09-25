@@ -7,7 +7,6 @@
     Public Titre As String                             ' Titre du cas de charge dans la langue utilisateur 
 
     Public QSurf() As Decimal                           ' Charge par unité de surface sur chaque travée
-    'Public WSurf() As Decimal                           ' Largeur d'application de la charge surfacique sur chaque travée
     Public Forces() As List(Of cls_Force)               ' Liste des efforts ponctuels sur chaque travée
     Public FReparties() As List(Of cls_ForceRepartie)   ' Liste des charges réparties sur chaque travée
 
@@ -20,7 +19,6 @@
         Me.Titre = pTitre
 
         ReDim Me.QSurf(IndiceDerniereTravee)
-        'ReDim Me.WSurf(IndiceDerniereTravee + 1)
         ReDim Me.Forces(IndiceDerniereTravee)
         ReDim Me.FReparties(IndiceDerniereTravee)
 
@@ -29,8 +27,6 @@
             FReparties(i) = New List(Of cls_ForceRepartie)
         Next
 
-
-        '== Je ne comprends pas le plus 1
     End Sub
 
 #End Region

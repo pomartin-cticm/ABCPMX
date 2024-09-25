@@ -245,65 +245,21 @@ BLOCK HIVOSS
 
 BLOCK LOADS_G1
    QSurf                 = 0 0
-   qDist                 = 1 0 6911,00324849510924850 10 6911,00324849510924850
+   qDist                 = 1 0 6911,003 10 6911,003
+   Force                 = 0 2 1000
+ 
 BLOCK LOADS_G2
    QSurf                 = 0 0
+ 
 BLOCK LOADS_Q1
    QSurf                 = 0 0
+ 
 BLOCK LOADS_Q2
    QSurf                 = 0 0
+ 
 BLOCK LOADS_QC
    QSurf                 = 0 0
-BLOCK CHGTU_QSURF
-   CleDic      =  G1
-   indTravee      =  0
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G1
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G2
-   indTravee      =  0
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G2
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q1
-   indTravee      =  0
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q1
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q2
-   indTravee      =  0
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q2
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  QC
-   indTravee      =  0
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  QC
-   indTravee      =  1
-   QSurf      =  0
-
+ 
 ==================================================================================
 BLOCK BEAM
    BeaIden               = CAS XXX
@@ -515,41 +471,25 @@ BLOCK HIVOSS
    Screed                = False
 
 BLOCK LOADS_G1
-   QSurf                 = 0
-   qDist                 = 1 0 6911,00324849510924850 10 6911,00324849510924850
+   QSurf                 = 3500
+   qDist                 = 1 0 5770,322 10 5770,322
+   qDist                 = 1 1 3000,000 9 2000,000
+   Force                 = 1 5 1000
+ 
 BLOCK LOADS_G2
    QSurf                 = 0
+ 
 BLOCK LOADS_Q1
    QSurf                 = 0
+   Force                 = 1 4 2000
+   Force                 = 1 6 3000
+ 
 BLOCK LOADS_Q2
    QSurf                 = 0
+ 
 BLOCK LOADS_QC
    QSurf                 = 0
-BLOCK CHGTU_QSURF
-   CleDic      =  G1
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G2
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q1
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q2
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  QC
-   indTravee      =  1
-   QSurf      =  0
-
+ 
 ==================================================================================
 BLOCK BEAM
    BeaIden               = PRS acier
@@ -715,99 +655,22 @@ BLOCK HIVOSS
 
 BLOCK LOADS_G1
    QSurf                 = 0 0
-   qDist                 = 1 0 4947,8257017708695652173913031 10 4947,8257017708695652173913031
-   qDist                 = 2 0 4947,8257017708695652173913031 3 4947,8257017708695652173913031
+   qDist                 = 1 0 6911,003 10 6911,003
+   qDist                 = 2 0 4947,826 3 4947,826
    Force                 = 2 2 1000
+ 
 BLOCK LOADS_G2
    QSurf                 = 0 0
+ 
 BLOCK LOADS_Q1
    QSurf                 = 0 0
-   qDist                 = 1 0 1000 10 1000
+   qDist                 = 1 0 1000,000 10 1000,000
    Force                 = 1 5 1000
+ 
 BLOCK LOADS_Q2
    QSurf                 = 0 0
-   qDist                 = 2 0 1000 3 1000
+   qDist                 = 2 0 1000,000 3 1000,000
+ 
 BLOCK LOADS_QC
    QSurf                 = 0 0
-BLOCK CHGTU_QSURF
-   CleDic      =  G1
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G1
-   indTravee      =  2
-   QSurf      =  0
-
-BLOCK CHGTU_FORCE
-   CleDic      =  G1
-   indTravee      =  2
-   Force      =  1000
-   xPosT      =  2
-   xGaucheT   =  10
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G2
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  G2
-   indTravee      =  2
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q1
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_FORCE
-   CleDic      =  Q1
-   indTravee      =  1
-   Force      =  1000
-   xPosT      =  5
-   xGaucheT   =  0
-
-BLOCK CHGTU_FREPAR
-   CleDic      =  Q1
-   indTravee      =  1
-   F0      =  1000
-   F1      =  1000
-   xPosT0      =  0
-   xPosT1      =  10
-   xGaucheT      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q1
-   indTravee      =  2
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q2
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  Q2
-   indTravee      =  2
-   QSurf      =  0
-
-BLOCK CHGTU_FREPAR
-   CleDic      =  Q2
-   indTravee      =  2
-   F0      =  1000
-   F1      =  1000
-   xPosT0      =  0
-   xPosT1      =  3
-   xGaucheT      =  10
-
-BLOCK CHGTU_QSURF
-   CleDic      =  QC
-   indTravee      =  1
-   QSurf      =  0
-
-BLOCK CHGTU_QSURF
-   CleDic      =  QC
-   indTravee      =  2
-   QSurf      =  0
-
+ 

@@ -496,9 +496,9 @@ Public Class cls_Projet
 
             For itravee As Integer = iTDeb To iTFin
 
-                Chaine = CStr(itravee)
-
                 For iLin As Integer = 0 To Ch.Value.FReparties(itravee).Count - 1
+                    Chaine = CStr(itravee)
+
                     Chaine = Chaine & SP & CStr(Ch.Value.FReparties(itravee)(iLin).xPosT(0))
                     Chaine = Chaine & SP & CStr(Format(Ch.Value.FReparties(itravee)(iLin).Force(0), StRealF))
 
@@ -929,39 +929,39 @@ Public Class cls_Projet
 
             SaveFileBlocCharges(pTre.ChargesU, pTre.IndicePremiereTravee, pTre.IndiceDerniereTravee, Lines)
 
-            For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In pTre.ChargesU
-                For i As Integer = pTre.IndicePremiereTravee To pTre.IndiceDerniereTravee
-                    Lines.Add("BLOCK CHGTU_QSURF")
-                    Lines.Add("   CleDic      =  " & elemnts.Key)
-                    Lines.Add("   indTravee      =  " & i)
-                    Lines.Add("   QSurf      =  " & elemnts.Value.QSurf(i))
-                    Lines.Add("")
+            'For Each elemnts As KeyValuePair(Of String, cls_ChargementUtilisateur) In pTre.ChargesU
+            '    For i As Integer = pTre.IndicePremiereTravee To pTre.IndiceDerniereTravee
+            '        Lines.Add("BLOCK CHGTU_QSURF")
+            '        Lines.Add("   CleDic      =  " & elemnts.Key)
+            '        Lines.Add("   indTravee      =  " & i)
+            '        Lines.Add("   QSurf      =  " & elemnts.Value.QSurf(i))
+            '        Lines.Add("")
 
-                    For Each force As cls_Force In elemnts.Value.Forces(i)
-                        Lines.Add("BLOCK CHGTU_FORCE")
-                        Lines.Add("   CleDic      =  " & elemnts.Key)
-                        Lines.Add("   indTravee      =  " & i)
-                        Lines.Add("   Force      =  " & force.Force)
-                        Lines.Add("   xPosT      =  " & force.xPosT)
-                        Lines.Add("   xGaucheT   =  " & force.xGaucheT)
-                        Lines.Add("")
-                    Next
+            '        For Each force As cls_Force In elemnts.Value.Forces(i)
+            '            Lines.Add("BLOCK CHGTU_FORCE")
+            '            Lines.Add("   CleDic      =  " & elemnts.Key)
+            '            Lines.Add("   indTravee      =  " & i)
+            '            Lines.Add("   Force      =  " & force.Force)
+            '            Lines.Add("   xPosT      =  " & force.xPosT)
+            '            Lines.Add("   xGaucheT   =  " & force.xGaucheT)
+            '            Lines.Add("")
+            '        Next
 
-                    For Each frepart As cls_ForceRepartie In elemnts.Value.FReparties(i)
-                        If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = cls_Poutre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
-                            Lines.Add("BLOCK CHGTU_FREPAR")
-                            Lines.Add("   CleDic      =  " & elemnts.Key)
-                            Lines.Add("   indTravee      =  " & i)
-                            Lines.Add("   F0      =  " & frepart.Force(0))
-                            Lines.Add("   F1      =  " & frepart.Force(1))
-                            Lines.Add("   xPosT0      =  " & frepart.xPosT(0))
-                            Lines.Add("   xPosT1      =  " & frepart.xPosT(1))
-                            Lines.Add("   xGaucheT      =  " & frepart.xGaucheT)
-                            Lines.Add("")
-                        End If
-                    Next
-                Next
-            Next
+            '        For Each frepart As cls_ForceRepartie In elemnts.Value.FReparties(i)
+            '            If Not (elemnts.Value.FReparties(i).IndexOf(frepart) = 0 And elemnts.Key = cls_Poutre.KEYPP) Then 'le premier cas de charge de FRepartie concerne le PP que l'on ne veut pas enregistrer car calculer automatiquement
+            '                Lines.Add("BLOCK CHGTU_FREPAR")
+            '                Lines.Add("   CleDic      =  " & elemnts.Key)
+            '                Lines.Add("   indTravee      =  " & i)
+            '                Lines.Add("   F0      =  " & frepart.Force(0))
+            '                Lines.Add("   F1      =  " & frepart.Force(1))
+            '                Lines.Add("   xPosT0      =  " & frepart.xPosT(0))
+            '                Lines.Add("   xPosT1      =  " & frepart.xPosT(1))
+            '                Lines.Add("   xGaucheT      =  " & frepart.xGaucheT)
+            '                Lines.Add("")
+            '            End If
+            '        Next
+            '    Next
+            'Next
 
         Next
 
@@ -1215,11 +1215,6 @@ Public Class cls_Projet
                     ReadBlocPoutre(Me.Poutres.Last, Lines, indBlocs(iBloc) + 1, iFin)
 
                 Case BkMAINTIENS
-                    'Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    'Dim maintien_en_cours As New cls_Maintiens
-                    'Dim ind_travee As Integer
-                    'ReadBlocMaintiens(maintien_en_cours, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
-                    'ptre_en_cours.Maintiens(ind_travee).Add(maintien_en_cours)
 
                     ReadBlocMaintiensN(Me.Poutres.Last.Maintiens, Lines, indBlocs(iBloc) + 1, iFin)
 
@@ -1234,10 +1229,6 @@ Public Class cls_Projet
                 Case BkPROFILA
 
                     ReadBlocProfilA(Me.Poutres.Last.Section.ProfilA, Me.Poutres.Last.Section.Acier, Lines, indBlocs(iBloc) + 1, iFin)
-
-                'Case BkACIERP
-
-                    'ReadBlocAcierProfilA(Me.Poutres.Last.Section.Acier, Lines, indBlocs(iBloc) + 1, iFin)
 
                 Case BkENROBAGE
 
@@ -1296,29 +1287,10 @@ Public Class cls_Projet
 
                     ReadBlocHivoss(Me.Poutres.Last.Hivoss, Lines, indBlocs(iBloc) + 1, iFin)
 
-                Case "CHGTU_QSURF"
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim QSurf_en_cours As Decimal
-                    Dim cle_dic As String = ""
-                    Dim ind_travee As Integer
-                    ReadBlocQSurf(QSurf_en_cours, cle_dic, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
-                    ptre_en_cours.ChargesU(cle_dic).QSurf(ind_travee) = QSurf_en_cours
+                Case BkCharges & "G1", BkCharges & "G2", BkCharges & "Q1", BkCharges & "Q2", BkCharges & "QC"
 
-                Case "CHGTU_FORCE"
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim force_en_cours As New cls_Force
-                    Dim cle_dic As String = ""
-                    Dim ind_travee As Integer
-                    ReadBlocForce(force_en_cours, cle_dic, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
-                    ptre_en_cours.ChargesU(cle_dic).Forces(ind_travee).Add(force_en_cours)
-
-                Case "CHGTU_FREPAR"
-                    Dim ptre_en_cours As cls_Poutre = Me.Poutres.Last
-                    Dim frepart_en_cours As New cls_ForceRepartie
-                    Dim cle_dic As String = ""
-                    Dim ind_travee As Integer
-                    ReadBlocFRepartie(frepart_en_cours, cle_dic, ind_travee, Lines, indBlocs(iBloc) + 1, iFin)
-                    ptre_en_cours.ChargesU(cle_dic).FReparties(ind_travee).Add(frepart_en_cours)
+                    Dim KeyCh As String = Blocs(iBloc).Substring(BkCharges.Length)
+                    ReadBlocCharges(Me.Poutres.Last, KeyCh, Lines, indBlocs(iBloc) + 1, iFin)
 
             End Select
 
@@ -1379,20 +1351,6 @@ Public Class cls_Projet
             MsgBox("Erreur lecture fichier | Error read file", MsgBoxStyle.Critical, "Cls_Project/RecuperationFile")
         End Try
 
-        'If Not ListeBlocCle.Contains(BkINDENT) And Not ListeBlocCle.Contains(BkPOUTRE) _
-        'And Not ListeBlocCle.Contains(BkMAINTIENS) And Not ListeBlocCle.Contains(BkMAINTIENBAC) _
-        'And Not ListeBlocCle.Contains(BkSECTION) And Not ListeBlocCle.Contains(BkPROFILA) _
-        'And Not ListeBlocCle.Contains(BkACIERP) And Not ListeBlocCle.Contains(BkENROBAGE) _
-        'And Not ListeBlocCle.Contains(BkARMAENROB) And Not ListeBlocCle.Contains(BkACIERARMAE) And Not ListeBlocCle.Contains(BkBETONENROB) _
-        'And Not ListeBlocCle.Contains(BkDALLE) And Not ListeBlocCle.Contains(BkBETONDALLE) And Not ListeBlocCle.Contains(BkBAC) _
-        'And Not ListeBlocCle.Contains(BkCOFRADAL) And Not ListeBlocCle.Contains(BkARMADALLE) And Not ListeBlocCle.Contains(BkACIERARMADALLE) _
-        'And Not ListeBlocCle.Contains(BkGOUJON) And Not ListeBlocCle.Contains(BkARMATRANS) _
-        'And Not ListeBlocCle.Contains("ACIER_CONNECTEUR_DALLE_ARMATURE") And Not ListeBlocCle.Contains(BkOPTIONS) _
-        'And Not ListeBlocCle.Contains("OPT_CALCULS_GAMMA") And Not ListeBlocCle.Contains("OPT_CALCULS_HIVOSS") And Not ListeBlocCle.Contains("CHGTU_QSURF") And Not ListeBlocCle.Contains("CHGTU_FORCE") And Not ListeBlocCle.Contains("CHGTU_FREPAR") Then 'And Not ListeBlocCle.Contains("IDENTIFICATION") And Not ListeBlocCle.Contains("SECTION") 
-
-        '    MsgBox("Fichier corrumpu | Corrupted file", MsgBoxStyle.Critical, "Cls_Projet/LectureFile")
-
-        'End If
 
         Dim oldFichier As Boolean = False
 
@@ -2382,6 +2340,7 @@ Public Class cls_Projet
         Dim xPos(1) As Decimal
         Dim xGauche As Decimal
         Dim iTravDeb As Integer = myPtre.IndicePremiereTravee
+        Dim lPoidsP As Boolean = (KeyCh = "G1")
 
         '--( Traitement
 
@@ -2402,13 +2361,18 @@ Public Class cls_Projet
                             Next
                         Case "QDIST"
                             If nbMots >= 6 Then
-                                iTravee = CInt(TraiteReal(Mots(2)))
-                                xPos(0) = CDec(TraiteReal(Mots(3)))
-                                qRep(0) = CDec(TraiteReal(Mots(4)))
-                                xPos(1) = CDec(TraiteReal(Mots(5)))
-                                qRep(1) = CDec(TraiteReal(Mots(6)))
-                                xGauche = myPtre.xPositionAppui(True, iTravee)
-                                myPtre.ChargesU(KeyCh).FReparties(iTravee).Add(New cls_ForceRepartie(xPos(0), qRep(0), xPos(1), qRep(1), xGauche))
+                                If lPoidsP Then
+                                    lPoidsP = False
+                                Else
+                                    iTravee = CInt(TraiteReal(Mots(2)))
+                                    xPos(0) = CDec(TraiteReal(Mots(3)))
+                                    qRep(0) = CDec(TraiteReal(Mots(4)))
+                                    xPos(1) = CDec(TraiteReal(Mots(5)))
+                                    qRep(1) = CDec(TraiteReal(Mots(6)))
+                                    xGauche = myPtre.xPositionAppui(True, iTravee)
+                                    myPtre.ChargesU(KeyCh).FReparties(iTravee).Add(New cls_ForceRepartie(xPos(0), qRep(0), xPos(1), qRep(1), xGauche))
+                                End If
+
                             End If
                         Case "FORCE"
                             If nbMots >= 4 Then
